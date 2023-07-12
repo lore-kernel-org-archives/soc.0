@@ -1,116 +1,262 @@
-Return-Path: <SRS0=Fkhw=C6=microchip.com=Conor.Dooley@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A14AFC0015E
-	for <soc@archiver.kernel.org>; Wed, 12 Jul 2023 12:35:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80359EB64DA
+	for <soc@archiver.kernel.org>; Wed, 12 Jul 2023 18:44:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 658C8C433C9; Wed, 12 Jul 2023 12:35:41 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 60A8DC433C7
-	for <soc@kernel.org>; Wed, 12 Jul 2023 12:35:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60A8DC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1689165339; x=1720701339;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XAbpANE/Fng5ECm20P1cz/dS/we/2gWEgl+TdS/1S6M=;
-  b=vLcFR4AwRliir+ZbiMJjkVYbjN4ka+wbl2l71TVunwSCTBslnimUCO4a
-   wSBXk/dQ9/o7q4ReyWZ4xG5HmhAxkLFYsr6x1TU5XuzMF/bqB3w0hJbKX
-   84Q+WSOnjmQ315nwBM1GP0FBpppMQaEnX1Sd5XawbLB49p6wPqDk9YJCk
-   dATOzueQZNergW6OksBqNhFf7LVP3KyvgCbuJzZtSzUaKRF8BGxvfqVE8
-   FyXG9VRZClU/ahMpfHB+ECuSmS3OE9fpwkNbJe/tRxLQm31oBJjlIlg32
-   gzPH2PGblsIEviXzssb9NiCnPX/8kGFZ+j9IVMrCV9jAgVJh4C6J0VgxB
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="asc'?scan'208";a="220004003"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2023 05:35:36 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Jul 2023 05:35:35 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 12 Jul 2023 05:35:34 -0700
-Date: Wed, 12 Jul 2023 13:34:57 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 4D156C433C9; Wed, 12 Jul 2023 18:44:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09371C433C7;
+	Wed, 12 Jul 2023 18:43:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689187440;
+	bh=PsAlULJuH6UW5kcZkyXQ5TrHE5voEJmX75wGwCU1vfM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=ceENPspyTjxTjkoOwe6Ni7m3xIHohGqvL044yTOeeyIGgTEjIQFH/WuQIGdC0KJaZ
+	 OoFoZ05z2oBb0/gU6V/eTmbjflJqdEbLqFtni5HTz2r+77Cpokg8UN5EfzS3MT2Tsr
+	 nr9pXC4+19QhNYb7OYolcbZT7AcazgZ4zBzWwO9uylgXCnYaHevAg3CQZn6TlENvsg
+	 ntKvY7VcmVND9wQEvrlQnd97PxTwo5wsKN9jCCm8inp9CUgCpgqZpFpQPKgyTwNkzn
+	 j58woJ/zMpounWqE4d0ebnYKL8UsSUlQaSH3NEK/96NrU2DQIJnUp4yY4j4s/lgB2X
+	 jJa0VmAXYMt3w==
+Date: Wed, 12 Jul 2023 19:43:51 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Durai Manickam KR <durai.manickamkr@microchip.com>
 List-Id: <soc.lore.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<soc@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	<linux-arm-kernel@lists.infradead.org>, <workflows@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Documentation/process: maintainer-soc: document
- dtbs_check requirement for Samsung
-Message-ID: <20230712-unfasten-trespass-d57b3ff1f134@wendy>
-References: <20230712084131.127982-1-krzysztof.kozlowski@linaro.org>
- <20230712-skier-ribcage-0d82be7e16fd@wendy>
- <da79ac87-f112-be43-52b2-2293e1a99d9b@linaro.org>
+Cc: Hari.PrasathGE@microchip.com, balamanikandan.gunasundar@microchip.com,
+	manikandan.m@microchip.com, varshini.rajendran@microchip.com,
+	dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+	balakrishnan.s@microchip.com, cristian.birsan@microchip.com,
+	nicolas.ferre@microchip.com, krzysztof.kozlowski@linaro.org,
+	alexandre.belloni@bootlin.com, davem@davemloft.net, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Kavyasree.Kotagiri@microchip.com, Horatiu.Vultur@microchip.com,
+	robh+dt@kernel.org, andrew@lunn.ch, michael@walle.cc,
+	jerry.ray@microchip.com, conor+dt@kernel.org,
+	jesper.nilsson@axis.com, sergiu.moga@microchip.com,
+	andre.przywara@arm.com, ada@thorsis.com
+Subject: Re: [PATCH] ARM: dts: at91: sam9x60: fix the SOC detection
+Message-ID: <20230712-dweeb-suspend-27d0f7292a2d@spud>
+References: <20230712100042.317856-1-durai.manickamkr@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="oZupxwsk8vse9QyQ"
+	protocol="application/pgp-signature"; boundary="WylxPJXq69Bocws8"
 Content-Disposition: inline
-In-Reply-To: <da79ac87-f112-be43-52b2-2293e1a99d9b@linaro.org>
+In-Reply-To: <20230712100042.317856-1-durai.manickamkr@microchip.com>
 
---oZupxwsk8vse9QyQ
+
+--WylxPJXq69Bocws8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 12, 2023 at 01:46:20PM +0200, Krzysztof Kozlowski wrote:
-> On 12/07/2023 11:48, Conor Dooley wrote:
-> > On Wed, Jul 12, 2023 at 10:41:31AM +0200, Krzysztof Kozlowski wrote:
-> >> Samsung ARM/ARM64 SoCs (except legacy S5PV210) are also expected not to
-> >> bring any new dtbs_check warnings.  In fact this have been already
-> >> enforced and tested since few release.
-> >>
-> >> Cc: Conor Dooley <conor.dooley@microchip.com>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> ---
-> >=20
-> >> Not sure where to document this. Creating new maintainer profile for
-> >> Samsung SoC would be an overkill. OTOH, more SoCs might want to grow
-> >> this list, so this also scales poor.
-> >=20
-> > To me, this portion of the document was "information to the
-> > submaintainer", which would be you, not information to the contributors
-> > to the platform. Adding the comment about Samsung SoC seems aimed at
-> > contributors?
+Hey,
+
+On Wed, Jul 12, 2023 at 03:30:42PM +0530, Durai Manickam KR wrote:
+> Remove the dbgu compatible strings in the UART submodule of the
+> flexcom for the proper SOC detection.
+
+I am afraid that I do not understand what this means. The first
+compatible, before and after your patch, is a sam9x60 one, so I don't
+see how the SoC comes into it. Grepping to try and understand:
+rg microchip,sam9x60-usart drivers/
+
+rg microchip,sam9x60-dbgu drivers/
+
+rg atmel,at91sam9260-dbgu drivers/
+drivers/soc/atmel/soc.c
+259:					     "atmel,at91sam9260-dbgu");
+
+rg atmel,at91sam9260-usart drivers/
+drivers/tty/serial/atmel_serial.c
+2723:OF_EARLYCON_DECLARE(atmel_serial, "atmel,at91sam9260-usart",
+
+drivers/mfd/at91-usart.c
+50:	{ .compatible =3D "atmel,at91sam9260-usart" },
+
+It looks like you are trying to avoid the atmel soc driver from
+detecting the atmel,at91sam9260-dbgu compatible?
+Is this not actually compatible with the sam9260's debug uart?
+
+Please try to explain things in more detail so that people unfamiliar
+with at91 hardware are not confused. As an outsider, removing
+compatibles to fix detection seems like it would not work - the sam9x60
+compatibles are first in the list. To me it seems like this removes,
+rather than fixes detection, and to fix detection you would need to
+make some changes to the driver?
+
+Also, the binding says:
+      - items:
+          - const: microchip,sam9x60-dbgu
+          - const: microchip,sam9x60-usart
+          - const: atmel,at91sam9260-dbgu
+          - const: atmel,at91sam9260-usart
+
+Your patch here makes the dts non-compliant with the bindings, as far as
+I can tell, so you will need to go and modify the bindings to do this
+either way.
+
+Thanks,
+Conor.
+
 >=20
-> Yes, I want to document it for contributors, so they won't be surprised.
-> Any hints where to store it? I could put it in the "About" tab of my
-> kernel.org repo, but no one checks this for contribution guidelines.
+> Fixes: 99c808335877 (ARM: dts: at91: sam9x60: Add missing flexcom definit=
+ions)
+> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+> ---
+>  arch/arm/boot/dts/microchip/sam9x60.dtsi | 26 ++++++++++++------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/arch/arm/boot/dts/microchip/sam9x60.dtsi b/arch/arm/boot/dts=
+/microchip/sam9x60.dtsi
+> index 8b53997675e7..73d570a17269 100644
+> --- a/arch/arm/boot/dts/microchip/sam9x60.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sam9x60.dtsi
+> @@ -172,7 +172,7 @@ flx4: flexcom@f0000000 {
+>  				status =3D "disabled";
+> =20
+>  				uart4: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <13 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -240,7 +240,7 @@ flx5: flexcom@f0004000 {
+>  				status =3D "disabled";
+> =20
+>  				uart5: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					atmel,usart-mode =3D <AT91_USART_MODE_SERIAL>;
+>  					interrupts =3D <14 IRQ_TYPE_LEVEL_HIGH 7>;
+> @@ -370,7 +370,7 @@ flx11: flexcom@f0020000 {
+>  				status =3D "disabled";
+> =20
+>  				uart11: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <32 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -419,7 +419,7 @@ flx12: flexcom@f0024000 {
+>  				status =3D "disabled";
+> =20
+>  				uart12: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <33 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -576,7 +576,7 @@ flx6: flexcom@f8010000 {
+>  				status =3D "disabled";
+> =20
+>  				uart6: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <9 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -625,7 +625,7 @@ flx7: flexcom@f8014000 {
+>  				status =3D "disabled";
+> =20
+>  				uart7: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <10 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -674,7 +674,7 @@ flx8: flexcom@f8018000 {
+>  				status =3D "disabled";
+> =20
+>  				uart8: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <11 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -723,7 +723,7 @@ flx0: flexcom@f801c000 {
+>  				status =3D "disabled";
+> =20
+>  				uart0: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <5 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -791,7 +791,7 @@ flx1: flexcom@f8020000 {
+>  				status =3D "disabled";
+> =20
+>  				uart1: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <6 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -859,7 +859,7 @@ flx2: flexcom@f8024000 {
+>  				status =3D "disabled";
+> =20
+>  				uart2: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -927,7 +927,7 @@ flx3: flexcom@f8028000 {
+>  				status =3D "disabled";
+> =20
+>  				uart3: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -1050,7 +1050,7 @@ flx9: flexcom@f8040000 {
+>  				status =3D "disabled";
+> =20
+>  				uart9: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <15 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> @@ -1099,7 +1099,7 @@ flx10: flexcom@f8044000 {
+>  				status =3D "disabled";
+> =20
+>  				uart10: serial@200 {
+> -					compatible =3D "microchip,sam9x60-dbgu", "microchip,sam9x60-usart",=
+ "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible =3D "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg =3D <0x200 0x200>;
+>  					interrupts =3D <16 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas =3D <&dma0
+> --=20
+> 2.25.1
+>=20
 
-I've not got a better suggestion for where to put this, but under
-something labelled as "Information for (new) Submaintainers" isn't
-where I would be looking as a contributor.
-Is adding to the generic DT documentation that dtbs_check should not add
-any new warnings at W=3D1 too extreme?
-writing-schema.rst has the instructions about how to run dtbs_check while
-writing dt-binding patches, but we don't seem to have any docs about
-running dtbs_check for dts/dtsi changes.
-
---oZupxwsk8vse9QyQ
+--WylxPJXq69Bocws8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK6d8QAKCRB4tDGHoIJi
-0lwSAQDBl5SejPpAFmt5bv2VhK+0qeUjxPKk2oF8smIN4o1SmAEA0svDs8omMe+R
-WsZHkfgbSn5tEDE4rofWHvQ8e/QKrgM=
-=b8RU
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK70ZwAKCRB4tDGHoIJi
+0u1zAQCGmPL3fkn4rP5lSZjtwEmp2x2fJUQPdOzrgXto64agngEAsN7FRlqn90re
+HKgHFtenCcDTAs+4ynoLhjUYJ9uZewU=
+=aKXP
 -----END PGP SIGNATURE-----
 
---oZupxwsk8vse9QyQ--
+--WylxPJXq69Bocws8--
