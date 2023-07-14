@@ -1,106 +1,117 @@
-Return-Path: <SRS0=wmLW=C7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=ffi7=DA=wiwynn.com=Delphine_CC_Chiu@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEACCEB64DD
-	for <soc@archiver.kernel.org>; Thu, 13 Jul 2023 10:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40364EB64DD
+	for <soc@archiver.kernel.org>; Fri, 14 Jul 2023 02:35:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 87D4DC433CC; Thu, 13 Jul 2023 10:43:14 +0000 (UTC)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 031E9C433C9; Fri, 14 Jul 2023 02:35:14 +0000 (UTC)
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2069.outbound.protection.outlook.com [40.107.215.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5A89BC433C7
-	for <soc@kernel.org>; Thu, 13 Jul 2023 10:43:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A89BC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3094910b150so683679f8f.0
-        for <soc@kernel.org>; Thu, 13 Jul 2023 03:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689244991; x=1691836991;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vjSQrGgpifABN2+Tqa28IPOmkn8g3hXtcUjb3gjMzpE=;
-        b=g5GkO/ls/kYH9vWlBFZrSm+lN6F5ll50WGXLMxcUf0uESccn6r+sqGeZZZkcCF4762
-         0vk6djImGyZBdB4RhUsWdpRXzOQAAytOD+W+bOm3VElr/zv9KecSNq0SUBWcornzKG70
-         suRx4XdHuPMnELtb2s2VSYkrL5bnRzMQh9NpOpiOy9Lwi8qsaOIpOnYyf/YLTEf0lBY3
-         +PNiys4Oqs+Y3tYuRwccE+3b3zoipoaWVQi75OP1EnihbQRfn4vNDBjEJaMRyFp5O3OG
-         YebU/exORsqOI70tHQmpBbebBsMI0t+WfOq4dn4V09XuTtc4ebWGFDG10cXbDYPPgYYn
-         bvqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689244991; x=1691836991;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vjSQrGgpifABN2+Tqa28IPOmkn8g3hXtcUjb3gjMzpE=;
-        b=kiLkKU/6iO2LcTI2Y769FL90JwG1Wx8PjUuRO3LPYpDg9wT3eGV6Qn0fPgGEAcnhsH
-         jXO0Zd+gvHCmfCryu5WM75bpSr6Mek0cGpuY5YmXvqOn/mEKzzu9abiHalHC5U+BFitX
-         nBp8dMHtCE3NnGP5keea3/oBsQp++d+sx3Kp5YWp4tStamynGg6ORcJ/sl/PaJvmPheQ
-         /Sw1UNo+RgxZni0e5mtl1MoFv2bt9I1/qjr31X9uTwr2EYJqZoCv6nloY2whzawJE35U
-         lhZKXyjshcBtd8b6VHjEgcAhKWWQo2JVjKYVHY+MTadpScX7jViXrxvIaRZxTovdRWgd
-         m2hQ==
-X-Gm-Message-State: ABy/qLarl7WCtsZ0vFhHD0bpyr9dmFVP6PlFe3eHX+2ZpUtwHx4nc+4v
-	mmys1hfSZfwgCxYuDQTeTfGq3Q==
-X-Google-Smtp-Source: APBJJlEPziON1PD3aE57V4CJY4W5KzhUlKzeMzf4BNM8sBOOvTnEwKfgIq9PPdsa/SEsivNw3tYFFw==
-X-Received: by 2002:a05:6000:11c3:b0:313:f29f:5eb3 with SMTP id i3-20020a05600011c300b00313f29f5eb3mr1206111wrx.32.1689244991501;
-        Thu, 13 Jul 2023 03:43:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id k3-20020a5d66c3000000b00314398e4dd4sm7562311wrw.54.2023.07.13.03.43.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 03:43:10 -0700 (PDT)
-Message-ID: <4fdc7ee1-e612-9be2-55b7-bb8ee9cdb161@linaro.org>
-Date: Thu, 13 Jul 2023 12:43:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCHv2 2/2] ARM: dts: at91: sam9x60: fix the SOC detection
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 8675DC433C8;
+	Fri, 14 Jul 2023 02:35:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8675DC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lw/WtHV7Lb7uvnICBhiufMQ4gs9dwcDKSOXwTGzFmig/QWwnGfJ5FyG+AguE2GgC+/B5Om8ei1n8kxrN5PJeVdxDvziEpYja7Vq+/x36rQocRTubc+a1L66ZvoGBZg52LPCTNeHYYnaQxU7yJcwpIb8mrqLX6j266sRfE79k14ON9RdwWukN4VfqRHIXTD87idaUj0R7ZHOto7JQtk4P3uMO1uB8nhF9QqZJ/F1Q3Yjqr5KMSyGIt3w5kNinzryGX07q4K12mOYf8iONB7X6wp93Wfh9zx6nanFfeXo7eVTpqNVICg2cYDguX/7gakycbTgGzQw19knwmCLsl9PmPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hRvFUOLRDG7CJiHMBjPEqlghbHz+dZewv7fdI22by4I=;
+ b=Q/Ovr67L8ht7s2u/MI2UGeQhxaqzrfKlXEDueoVlDg/HvN+7LJx3ArN1Xq9lZEX748JL7VtbbvAwRkUnqmGQb38i2xchUrLFnZAFFxoykik/NKJdF8YaLErPa/cH5nfl3O26Y2E8ox1xq+vrdFA5/3Sq7T7vc2P5TWI6nRutwi9QYtgyPuPKAekazIrubYfypHv05/Q0bR/U944jtY0IywmFyWsVSdFfv/kBdwTnMJLzhIhArZ9tNZmRXtIE0c7oGR8Eod3QWXBIyBR8LtpZZFW09oPo8AQ4iJ4eVkPsUCB8+qUe49LrIPgjgKsjilnxey5XFaweONDo4KbsHhwAGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hRvFUOLRDG7CJiHMBjPEqlghbHz+dZewv7fdI22by4I=;
+ b=fV1eHdJLVX0KVHU0dp34K/AYhNB6adnGZ9iGzdOg3r2dTePOrFNc4Dc1cgkD4nFfiV8ZXhBK23kCnrJhubpDRXLVFGv2cYrEz94Xt8iB7H64FAhLUnbtwXS1WBND1XN12+N2seYbFZNn/PpA8cKHuLJQ8nD6qh3aTX3barwbI0dNvKUggZOxPGJYr1kp2Lo4AnP4LdHDfkXA7D30FzSXlkvI9T0wREhkwuyK2RBoZGkJS+iKFngp0KB6w+GlQtQMFmXVuxVw6gGJ7bjhoWXEEAwmKtnQS2JTlUTiqrymqBV2La0vlYO3O4PI5wXsIuRQMQJuNRemKq4MsmUMshw6QQ==
+Received: from SG2PR04CA0162.apcprd04.prod.outlook.com (2603:1096:4::24) by
+ TYZPR04MB4495.apcprd04.prod.outlook.com (2603:1096:400:5e::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.27; Fri, 14 Jul 2023 02:35:08 +0000
+Received: from SG2APC01FT0057.eop-APC01.prod.protection.outlook.com
+ (2603:1096:4:0:cafe::aa) by SG2PR04CA0162.outlook.office365.com
+ (2603:1096:4::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.25 via Frontend
+ Transport; Fri, 14 Jul 2023 02:35:07 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ SG2APC01FT0057.mail.protection.outlook.com (10.13.36.138) with Microsoft SMTP
+ Server id 15.20.6609.14 via Frontend Transport; Fri, 14 Jul 2023 02:35:06
+ +0000
+From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+To: patrick@stwcx.xyz
 List-Id: <soc.lore.kernel.org>
-To: Durai.ManickamKR@microchip.com, Hari.PrasathGE@microchip.com,
- Balamanikandan.Gunasundar@microchip.com, Manikandan.M@microchip.com,
- Varshini.Rajendran@microchip.com, Dharma.B@microchip.com,
- Nayabbasha.Sayed@microchip.com, Balakrishnan.S@microchip.com,
- Cristian.Birsan@microchip.com, Nicolas.Ferre@microchip.com,
- alexandre.belloni@bootlin.com, davem@davemloft.net, arnd@arndb.de,
- olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Kavyasree.Kotagiri@microchip.com, Horatiu.Vultur@microchip.com,
- robh+dt@kernel.org, andrew@lunn.ch, michael@walle.cc,
- Jerry.Ray@microchip.com, conor+dt@kernel.org, jesper.nilsson@axis.com,
- andre.przywara@arm.com, ada@thorsis.com, radu_nicolae.pirea@upb.ro,
- richard.genoud@gmail.com, gregkh@linuxfoundation.org,
- linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20230713095111.335346-1-durai.manickamkr@microchip.com>
- <20230713095111.335346-3-durai.manickamkr@microchip.com>
- <204ad135-5358-35d0-2df2-9495acf0432d@linaro.org>
- <9a29d928-d1e6-ea55-c5dc-0a884978b8df@microchip.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9a29d928-d1e6-ea55-c5dc-0a884978b8df@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add Facebook Yosemite V4 (AST2600) BMC
+Date: Fri, 14 Jul 2023 10:34:58 +0800
+Message-Id: <20230714023502.3225096-1-Delphine_CC_Chiu@wiwynn.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230712073752.54624-3-Delphine_CC_Chiu@wiwynn.com>
+References: <20230712073752.54624-3-Delphine_CC_Chiu@wiwynn.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2APC01FT0057:EE_|TYZPR04MB4495:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 2917e836-f4e0-4ecc-471d-08db8412f01c
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	KSzN7y5zp9pZYxYKqwuRW1eZ22dKgK8gaZ+6UYafCrAx4ve8EfJnEbOYzgjFPMEJwtnW8U7/NlYGAVjRNMd3y29dEDEMOtw7UcXNR0nF9yjzKSqEjDKleELgGDgWpJuOX7MK9rjbjZe+k+vL9mpuEUAP4ffSlicTYnbnwhG1/25r7VTd60Wq49aTXWRF9UXNvhHN6SefRihlHU+8YjMB/q23QMHGh8PQdflTXkB4ibXQvWuvfoBo4amKKnLULht0lIeVl5jtz1pcFsj+vzBP6g55bRdJqYdBZ2DJXtLt6BY+Y8PFGVe4SPk0GPKAHH7hCaKtzele0WksVbSqMeLCGsyB3s8fWbSM1rwbJ6c0LeJ7va4JPMoLTVdeOpJTstxihNzzgM3OGrYmaD2arjMNhGwblStQjm0/kGS6VPjs6fnOqAKc1dYPiwXdynRXuaLwpfxYjqs3iP8t+Ge0i3SndfMPjzAHU0jDTEVhCr3fX97z8KjwTZ5ce1DUMlg/Z/GgAjaFbHy6s32OtXTf6ulv9Iowv3UZMImppBPc1H3dEtY35qzUWiDSY3sCNBwsAndtQJEL2mCPr/PW/bGdtaWj7cM52akNz57RYKkLAFyt949222mIaO39ViMjPtEX+dfeMrw8vwVI7LumsQToNHL6aTvqEnzpD0vZHXw0XoSZac/JznxQJvKpc2WJKXgrdzBj++VrPAdpnr+3+dcn90qNwQ==
+X-Forefront-Antispam-Report:
+	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230028)(6069001)(4636009)(396003)(376002)(346002)(136003)(39850400004)(47680400002)(451199021)(36840700001)(46966006)(54906003)(41300700001)(40480700001)(7416002)(4326008)(70586007)(70206006)(6916009)(478600001)(4744005)(5660300002)(2906002)(8936002)(36736006)(316002)(8676002)(6666004)(6486002)(6512007)(356005)(86362001)(82740400003)(1076003)(26005)(6506007)(186003)(336012)(36860700001)(47076005)(9316004)(2616005)(82310400005)(956004)(36756003)(81166007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2023 02:35:06.7282
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2917e836-f4e0-4ecc-471d-08db8412f01c
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SG2APC01FT0057.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB4495
 
-On 13/07/2023 12:28, Durai.ManickamKR@microchip.com wrote:
-> 
-> On 13/07/23 15:33, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 13/07/2023 11:51, Durai Manickam KR wrote:
->>> Remove the dbgu compatible strings in the UART submodule of the
->>> flexcom for the proper SOC detection.
->> Why?
->>
->>> Fixes: 99c808335877 (ARM: dts: at91: sam9x60: Add missing flexcom definitions)
->> If this is a bugfix, then please clearly describe the bug and its impact.
-> Please check the coverletter (PATCHv2 0/2) for the real problem. But 
-> will try to explain the bug a bit more in the next set of patches.
+v2 - Add Facebook Yosemite V4 (AST2600) BMC
 
-Commit should stand on its own. Cover letters are usually not part of
-the commits.
+Delphine CC Chiu (2):
+  dt-bindings: arm: aspeed: add Facebook Yosemite V4 board
+  ARM: dts: aspeed: yosemitev4: add Facebook Yosemite V4 BMC
 
-Best regards,
-Krzysztof
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/aspeed-bmc-facebook-yosemitev4.dts    | 577 ++++++++++++++++++
+ 3 files changed, 579 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev4.dts
+
+-- 
+2.25.1
 
