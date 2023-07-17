@@ -1,61 +1,106 @@
-Return-Path: <krzk@kernel.org>
+Return-Path: <SRS0=XTPk=DD=bootlin.com=luca.ceresoli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75FACEB64DC
-	for <soc@archiver.kernel.org>; Mon, 17 Jul 2023 12:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F612C00528
+	for <soc@archiver.kernel.org>; Mon, 17 Jul 2023 12:26:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 41CBFC433C9; Mon, 17 Jul 2023 12:06:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198E1C433C7;
-	Mon, 17 Jul 2023 12:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689595607;
-	bh=8kAhdmLLNHB9doyGZkqOmneZEeUfLeR8MeMQhmEjB5Y=;
-	h=Date:Subject:To:List-Id:Cc:References:From:In-Reply-To:From;
-	b=AJ7hqwSDdPQrwQJbEPOUWaCUZtOvVVPBAlW06b5rHZxyX1GkFp5acvdeC9XM6bMXw
-	 L20VbZUtDmp+rqdNt0UZuFLeUqKdxUllafwNteGRRsPkrTbjy/hT2o2UrTq4z7Y/sU
-	 4xZowdf8VOlTJ1n1/VDZrz0E2OyX1ddXX9zdFHeJaeff8zky8Ezn/2xM2gjDUUE/NK
-	 6vxJOTmPvMN03E8teQyIWWpavR0wK3os/378VWCuHDTYXaiX7N6zgnn3a1V7DeEYoO
-	 qRHzs7vMS4Z1ORVNrP5kggOOuMS326C6jfi9IslJsd1fqlDU9LW/xlYmYz/Nz5Vp7N
-	 lAaUSrTlcFwDQ==
-Message-ID: <3e106062-9ceb-eb51-70ba-32734c769bd5@kernel.org>
-Date: Mon, 17 Jul 2023 14:06:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 0/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Content-Language: en-US
-To: "lihuisong (C)" <lihuisong@huawei.com>, andersson@kernel.org,
- matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
- shawnguo@kernel.org, arnd@arndb.de, sudeep.holla@arm.com
+	id 6202AC433CD; Mon, 17 Jul 2023 12:26:36 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id BBA2FC433C7;
+	Mon, 17 Jul 2023 12:26:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BBA2FC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BE0D32000C;
+	Mon, 17 Jul 2023 12:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1689596788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xfIQQUGuk2YngWOS8fdrYDdOu8Z6QhNBtgynXxqIkxI=;
+	b=pu6DLejjSYrxTONDk5/XdeXoNmahir1eSWyr0IAyC5+CzV+z7kVIv0SIU1WMmF5on1CgqD
+	KQMv7HISFwBD83UgHXeIYvA6rMs4zilESREno4fIl9tHoG5j8KuMGef30GXaJomEjoNSXB
+	b27ZnZ9I2DkJ16lt7XoMqFe9mN2ip4prfSVsj2SpNBgHGroLTT9anwzmDU7ZmjHgcKavfM
+	YT6a5qXXuO8iNNI928PNokmiYbnOK1bsbfPyiXo6MfvnS5M/07LrFJlHjhELObDmMRCvQo
+	UvLPoo3HQls1bUDPug12g+YVs2SccW7y5VCvmnwJJIZUaBWuD6j/7/vLgvzENw==
+Date: Mon, 17 Jul 2023 14:26:14 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, soc@kernel.org, wanghuiqiang@huawei.com,
- tanxiaofei@huawei.com, liuyonglong@huawei.com
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230530112746.2767-1-lihuisong@huawei.com>
- <02f74b25-2ade-5b87-b316-ab902f08ead2@huawei.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <02f74b25-2ade-5b87-b316-ab902f08ead2@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Andreas =?UTF-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+ Manivannan Sadhasivam <mani@kernel.org>, Eugeniy Paltsev
+ <Eugeniy.Paltsev@synopsys.com>, Florian Fainelli
+ <florian.fainelli@broadcom.com>, Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott
+ Branden <sbranden@broadcom.com>, Joel Stanley <joel@jms.id.au>, Andrew
+ Jeffery <andrew@aj.id.au>, Neil Armstrong <neil.armstrong@linaro.org>,
+ Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi
+ <cristian.marussi@arm.com>, Alex Helms <alexander.helms.jy@renesas.com>,
+ Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, Shawn Guo
+ <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
+ Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ NXP Linux Team <linux-imx@nxp.com>, Nishanth Menon <nm@ti.com>, Tero Kristo
+ <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>, Matthias
+ Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Jerome Brunet
+ <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>, Andrew Lunn
+ <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian
+ Hesselbarth <sebastian.hesselbarth@gmail.com>, Andy Gross
+ <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
+ <konrad.dybcio@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Heiko Stuebner <heiko@sntech.de>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Sylwester Nawrocki
+ <s.nawrocki@samsung.com>, Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Dinh Nguyen <dinguyen@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+ Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, Orson Zhai
+ <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan
+ Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>, Hal
+ Feng <hal.feng@starfivetech.com>, Chen-Yu Tsai <wens@csie.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ Emilio =?UTF-8?Q?L=C3=B3pez?= <emilio@elopez.com.ar>, Peter De Schrijver
+ <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, Thierry
+ Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-actions@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-oxnas@groups.io,
+ linux-mediatek@lists.infradead.org, linux-amlogic@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] clk: Explicitly include correct DT includes
+Message-ID: <20230717142614.78db5c4e@booty>
+In-Reply-To: <20230714174342.4052882-1-robh@kernel.org>
+References: <20230714174342.4052882-1-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On 14/07/2023 08:17, lihuisong (C) wrote:
-> Hi all,
-> 
-> Can you take a look at this series?
+On Fri, 14 Jul 2023 11:43:29 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-People you listed in "To:" field are not maintainers of HiSilicon, so
-why pinging us?
+>  drivers/clk/clk-versaclock5.c                    | 1 -
 
-HiSilicon DTS has numerous issues, so if you want to increase the
-chances anyone cares about your patch, please contribute to fixing and
-improving your company DTS. See for example commit b2bbc8687 which is
-bad (underscores are not allowed) or 1860a51823 which is just wrong. The
-latter one is being fixed, although I do not see the fix being picked
-up... my feelings are the platform is just dead.
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com> # versaclock5
 
-Best regards,
-Krzysztof
-
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
