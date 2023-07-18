@@ -1,94 +1,119 @@
-Return-Path: <SRS0=5hFP=DE=huawei.com=xuwei5@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26B24EB64DC
-	for <soc@archiver.kernel.org>; Tue, 18 Jul 2023 11:01:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56ED7EB64DA
+	for <soc@archiver.kernel.org>; Tue, 18 Jul 2023 11:13:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0F01FC433C9; Tue, 18 Jul 2023 11:01:23 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3F3D7C433C8;
-	Tue, 18 Jul 2023 11:01:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F3D7C433C8
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.56])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4R4wsb0svdztRTs;
-	Tue, 18 Jul 2023 18:58:11 +0800 (CST)
-Received: from [10.67.103.39] (10.67.103.39) by kwepemi500011.china.huawei.com
- (7.221.188.124) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 18 Jul
- 2023 19:01:16 +0800
-Message-ID: <64B670FB.6080703@hisilicon.com>
-Date: Tue, 18 Jul 2023 19:01:15 +0800
-From: Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
-MIME-Version: 1.0
-To: "lihuisong (C)" <lihuisong@huawei.com>, Krzysztof Kozlowski
-	<krzk@kernel.org>, "xuwei (O)" <xuwei5@huawei.com>
+	id 3AEB5C433C7; Tue, 18 Jul 2023 11:13:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BF7C433C8;
+	Tue, 18 Jul 2023 11:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689678780;
+	bh=LoaeTrLEb/GlXeN6zGTPzQT45QYJf0N2Cp3U2wUVPOM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=N9b0INbeAqUMk7FdJK5yjxH2zJx34m9LRSXrZ7lyMmIg4zIzd+gQE1taN+FTm5T33
+	 RBjrep/PTdB4iHwOwX1armBfGyQTa3NvlrT6uQ4Ox9OgwVtuhl9F2papPKErlmlmeQ
+	 cqRhqdQYVzCH8Rfip6mz0SxUFulmECw6MZwaJGTsHbypqWz3tC9fKCJ3rHsaAo5IQb
+	 wJxV5XhoeGLbaWZRB5of340peXnNZlXLkSgxTciu/lR1/huJF/4BRxXZGzs+Fk2IXx
+	 Tj+Hpg1Syix7D0Dt/aqavPcN26j0xOCz0EBV8tMJ8muT1qOWdXjAlaQ5ljBNC7sL1h
+	 nMMM0YQSPWStw==
+Date: Tue, 18 Jul 2023 12:12:50 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Durai Manickam KR <durai.manickamkr@microchip.com>
 List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>, <liuyonglong@huawei.com>,
-	<andersson@kernel.org>, <matthias.bgg@gmail.com>,
-	<angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
-	<arnd@arndb.de>, <sudeep.holla@arm.com>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 0/2] soc: hisilicon: Support HCCS driver on Kunpeng
- SoC
-References: <20230424073020.4039-1-lihuisong@huawei.com> <20230530112746.2767-1-lihuisong@huawei.com> <02f74b25-2ade-5b87-b316-ab902f08ead2@huawei.com> <3e106062-9ceb-eb51-70ba-32734c769bd5@kernel.org> <2cc391ce-0e87-040f-6a45-d3e128a988f0@huawei.com>
-In-Reply-To: <2cc391ce-0e87-040f-6a45-d3e128a988f0@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.39]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500011.china.huawei.com (7.221.188.124)
-X-CFilter-Loop: Reflected
+Cc: Hari.PrasathGE@microchip.com, balamanikandan.gunasundar@microchip.com,
+	manikandan.m@microchip.com, varshini.rajendran@microchip.com,
+	dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+	balakrishnan.s@microchip.com, cristian.birsan@microchip.com,
+	nicolas.ferre@microchip.com, krzysztof.kozlowski@linaro.org,
+	alexandre.belloni@bootlin.com, davem@davemloft.net, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Kavyasree.Kotagiri@microchip.com, Horatiu.Vultur@microchip.com,
+	robh+dt@kernel.org, andrew@lunn.ch, michael@walle.cc,
+	jerry.ray@microchip.com, conor+dt@kernel.org,
+	jesper.nilsson@axis.com, andre.przywara@arm.com, ada@thorsis.com,
+	radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+	gregkh@linuxfoundation.org, linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCHv3 1/2] dt-bindings: serial: atmel,at91-usart: update
+ compatible for sam9x60
+Message-ID: <20230718-confidant-good-b85bad860beb@spud>
+References: <20230718065735.10187-1-durai.manickamkr@microchip.com>
+ <20230718065735.10187-2-durai.manickamkr@microchip.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="OC4nvGxE2VKL0zEq"
+Content-Disposition: inline
+In-Reply-To: <20230718065735.10187-2-durai.manickamkr@microchip.com>
 
-Hi Krzysztof,
 
-On 2023/7/18 16:07, lihuisong (C) wrote:
-> Hi Krzysztof,
-> 
-> Thank you for your reply.
-> 
-> 
-> 在 2023/7/17 20:06, Krzysztof Kozlowski 写道:
->> On 14/07/2023 08:17, lihuisong (C) wrote:
->>> Hi all,
->>>
->>> Can you take a look at this series?
->> People you listed in "To:" field are not maintainers of HiSilicon, so
->> why pinging us?
-> This "To:" field are from the get_maintainer.pl script.
-> ./scripts/get_maintainer.pl -f ./drivers/soc/
-> The hisilicon in drivers/soc/ is created for the first time. So there are no maintainer of HiSilicon.
-> 
-> Thanks for reminder.
-> add HiSilicon SOC maintainer Wei Xu.
->>
->> HiSilicon DTS has numerous issues, so if you want to increase the
->> chances anyone cares about your patch, please contribute to fixing and
->> improving your company DTS. See for example commit b2bbc8687 which is
->> bad (underscores are not allowed) or 1860a51823 which is just wrong. The
->> latter one is being fixed, although I do not see the fix being picked
+--OC4nvGxE2VKL0zEq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, it seems wrong of the commit 1860a51823 which changed the clock pin.
-I have checked the mail list but did not find the bug fix for it.
-Could you please kindly share the subject of the patch?
-Or I can simply revert it. 
-Thanks!
+On Tue, Jul 18, 2023 at 12:27:34PM +0530, Durai Manickam KR wrote:
+> There is only one debug unit in the sam9x60 SOC and it has the chipid
+> register. So, the dbgu compatible strings are valid only for debug usart.
+> Defining these dbgu compatible strings are not valid for flexcom usart.
+> So adding the items which is valid only for flexcom usart and removing
+> the microchip,sam9x60-usart compatible string from the enum list as no
+> usart node defines only this specific compatible string.
 
-Best Regards,
-Wei
+It may have been worth pointing out that had any DTS used the compatible
+that is being disallowed in isolation after this change, no driver in
+Linux would have bound to it anyway.
 
->> up... my feelings are the platform is just dead.
-> The HCCS driver has nothing to do with HiSilicon DTS.
-> So I cannot understand why you say DTS.
-> 
-> /Huisong
-> .
-> 
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+>=20
+> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+> ---
+>  .../devicetree/bindings/serial/atmel,at91-usart.yaml          | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.ya=
+ml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> index 30b2131b5860..65cb2e5c5eee 100644
+> --- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> @@ -16,13 +16,15 @@ properties:
+>        - enum:
+>            - atmel,at91rm9200-usart
+>            - atmel,at91sam9260-usart
+> -          - microchip,sam9x60-usart
+>        - items:
+>            - const: atmel,at91rm9200-dbgu
+>            - const: atmel,at91rm9200-usart
+>        - items:
+>            - const: atmel,at91sam9260-dbgu
+>            - const: atmel,at91sam9260-usart
+> +      - items:
+> +          - const: microchip,sam9x60-usart
+> +          - const: atmel,at91sam9260-usart
+>        - items:
+>            - const: microchip,sam9x60-dbgu
+>            - const: microchip,sam9x60-usart
+> --=20
+> 2.25.1
+>=20
+
+--OC4nvGxE2VKL0zEq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZLZzsgAKCRB4tDGHoIJi
+0vkRAPoDZkPGjuUic3vZ6lriKyzgw0zYDGG4wGUAgLAF4nZlDQEA4INVjnz7f5v+
+zqyUvgBeOGUAy4+bLYeTHjO3IzoJ4Ao=
+=e0i6
+-----END PGP SIGNATURE-----
+
+--OC4nvGxE2VKL0zEq--
