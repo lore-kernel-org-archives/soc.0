@@ -1,224 +1,167 @@
-Return-Path: <SRS0=Ao5Q=DF=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=r9aA=DF=gmail.com=festevam@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7F80C0015E
-	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 19:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B181C001B0
+	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 19:32:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 90971C433CB; Wed, 19 Jul 2023 19:24:25 +0000 (UTC)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	id C7018C433C8; Wed, 19 Jul 2023 19:32:34 +0000 (UTC)
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 28231C433C8
-	for <soc@kernel.org>; Wed, 19 Jul 2023 19:24:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28231C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3141fa31c2bso6454718f8f.2
-        for <soc@kernel.org>; Wed, 19 Jul 2023 12:24:23 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id C5ADFC433C7;
+	Wed, 19 Jul 2023 19:32:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5ADFC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-55b78bf0423so410513a12.0;
+        Wed, 19 Jul 2023 12:32:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689794662; x=1692386662;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+blPZKyB9kQFw2yoby4zINVsIsHNl22npZY9ACzq+7M=;
-        b=bk8lvJ6g3z6EPgXbtKn2Fzd23CEOBNs5B1l2gctQmMUF7pzcwOKdqAWXywZ2qlO7Zs
-         KZzMKMmfo8R16jLokoMrLIoWfIK/sQCjrsHJgrN40ivwJoeT1TrqcpbDzqDWvTweDkTL
-         xJbOQNl8Zd07wwRany4lpu7oJJ9YB7Ff7Wsalr5En8vLMJNti0/m0E5bawSpG0CdndEh
-         x4/QDJlDfCPB1gcsIwcB8GnipJUR4Dvq3xLMLbjDvgOcT1lyJxFO234K/82SS5fWLJdp
-         PCGwe5bHlKCoFZi1MVy+rMZ89QxOsG5LWxf5XXIJh+xa5dG6Y7dWwlf7sas/pzNs0P+Z
-         32tA==
+        d=gmail.com; s=20221208; t=1689795153; x=1692387153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JgIpzoU0VyQgL0NkVcRHfS3NqAECcKE/nlvXM/xlG+M=;
+        b=h/Rc6xYRpJRL80HYp/Qg/Vf5WIp3rIkulUvx5EI0vtSzDl5SuUL5lXqyJTmlvq/Drg
+         nGmkeNdHbOnfPBs0pHIoGxMpMm++ePmxrF0txPoCrIvQoj8g+1ZkkT860MrA6Mex/a9z
+         Rez08BJTdM0buF9FOhAdvyTkIb31qJ/x9R357vJz2yUkYRmksEuwrg64aOsHMhb+1S5F
+         oOFU3NexOR4rdOCmxJ7yHjhCdLTaTmnkAGATqTd0C5v0C/ot3DXmMujQYq2n1DUyW/vZ
+         LVlaC5GroqcdfmbIZotE9X6NqlunqYQ4wPeQkeydIJCPMNYAm49Z+ajt2vnGL34F8lWI
+         Ejaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689794662; x=1692386662;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+blPZKyB9kQFw2yoby4zINVsIsHNl22npZY9ACzq+7M=;
-        b=KFH+KqMkNKCuodwnF9NhiMwNKiG9vPCnHaAZmqtCspE2R5lKBgGLN8w0TAWBynXJbU
-         DtG4tHCJs0QTc4lCEqLazmc2L2WTuDgtOQgDtvMraTIYUMJpF0zXAz+9UZ1YpLjYZX/e
-         QEhTrnvIWvXca1w3R3Zfm1YbnNlg11ZIn6jUwrzT7Gum8R4eF1YYFtctoLw8cgi1YOJL
-         WR/6nVrYsN3CM6EQ00xgvZXGwSZPYLW3nnVrUFJu9IyvX4VLlKO+zLKkEKU2BPPziLRk
-         9BeDvYX7x9/9uIW+kj0gH6YH+NElI3I8FW1W7S4zmh/jT7opxIEV6+R2UF84vGntW2Jo
-         +PNQ==
-X-Gm-Message-State: ABy/qLZU3VFk15SmHH7QwjSs1F1ZpNrDDi8mq/P3sYN7Ya0zx32Mj8Bw
-	tWmXBWai/Bi22wtBdTxrfdIYcA==
-X-Google-Smtp-Source: APBJJlG/IP1yeppp6oYFbXTEcgn9BuyhttF9KKLqZS7LmXAJAfIbTTU894byU/ZqPDkhiyIy/y8yOQ==
-X-Received: by 2002:a5d:538d:0:b0:314:4915:689 with SMTP id d13-20020a5d538d000000b0031449150689mr642273wrv.34.1689794662315;
-        Wed, 19 Jul 2023 12:24:22 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id p1-20020adff201000000b003141f3843e6sm6005395wro.90.2023.07.19.12.24.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 12:24:21 -0700 (PDT)
-Message-ID: <792641d2-3a27-4f87-fa90-2490a302685e@linaro.org>
-Date: Wed, 19 Jul 2023 21:24:19 +0200
+        d=1e100.net; s=20221208; t=1689795153; x=1692387153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JgIpzoU0VyQgL0NkVcRHfS3NqAECcKE/nlvXM/xlG+M=;
+        b=NA2bfrNNqL9o5f0hKohxlO9ebkq0Y4UyxsjzsKFCR2imAkSVafG1iPjuCF/c/cUfRq
+         5Psk5Z4q9PVrsqNdZedzAFKfd+NRKgfRKRzPG+vNGCyEt3uzNxnWxQOHuwi2EDiX13Lg
+         8/ZGKvFietkzCmX+vF6OuxUCCNS9K4/i+93i1+deKM0ibIqwviKP9RYgLLj8JI5L+ssT
+         lzOrP1YLavXIT9F9gx2sZh9Hpwf0G2VQPkf0g6MieK8k+8YWC/UD5eySqBRu1G2MZlei
+         eh3JFGAqyBhc3cIy89cmZDqRG8Ux7Ng0EfLM8hxUdKfRSc/vVmCcgimhFQiAV112IOrp
+         SKww==
+X-Gm-Message-State: ABy/qLbw8NgubVB0/syzZglKUSM8T78qjQlil+J28lX/yZOfBjJlyWdo
+	9jrHHGYrIlyjq4eYGQQO14si9YhsmMJH+lwwK4g=
+X-Google-Smtp-Source: APBJJlFQl3zbsRGAKqJGd4h0afkfwXib7FZqWkCfiL9xu+3C9/loC7Gq+fzEIDjgESruY8JcSm6o30/KrThsBUyIdYA=
+X-Received: by 2002:a17:90a:3e05:b0:25b:88bc:bb6b with SMTP id
+ j5-20020a17090a3e0500b0025b88bcbb6bmr193123pjc.2.1689795153073; Wed, 19 Jul
+ 2023 12:32:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/2] ARM: dts: imx6qdl: Add Variscite VAR-SOM-MX6 SoM
- support
-Content-Language: en-US
+References: <20230719160048.2737423-1-james.hilliard1@gmail.com> <20230719160048.2737423-2-james.hilliard1@gmail.com>
+In-Reply-To: <20230719160048.2737423-2-james.hilliard1@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 19 Jul 2023 16:32:21 -0300
+Message-ID: <CAOMZO5C_BFm+P=9uizL0buSJ9a33PM6hNgG5OcZ3B4YxD=h_6w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: dts: imx6q: Add Variscite MX6 Custom board support
 To: James Hilliard <james.hilliard1@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Gregory CLEMENT
- <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230719160048.2737423-1-james.hilliard1@gmail.com>
- <03748443-0459-c925-ce76-33ec134a303d@linaro.org>
- <CADvTj4pgA_XjYZyU+D+J2QdC4NPFTxPSBCvrpK8WNjFkzkz-KQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CADvTj4pgA_XjYZyU+D+J2QdC4NPFTxPSBCvrpK8WNjFkzkz-KQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: devicetree@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19/07/2023 20:57, James Hilliard wrote:
-> On Wed, Jul 19, 2023 at 11:16 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
+Hi James,
 
+On Wed, Jul 19, 2023 at 1:01=E2=80=AFPM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> This patch adds support for the Variscite MX6 SoM Carrier Board.
+>
+> This Carrier-Board has the following :
+> - LVDS interface for the VLCD-CAP-GLD-LVDS 7" LCD 800 x 480 touch display
+> - HDMI Connector
+> - USB Host + USB OTG Connector
+> - 10/100/1000 Mbps Ethernet
+> - miniPCI-Express slot
+> - SD Card connector
+> - Audio Headphone/Line In jack connectors
+> - S-ATA
+> - On-board DMIC
+> - RS485 Header
+> - CAN bus header
+> - SPI header
+> - Camera Interfaces header
+> - OnBoard RTC with Coin Backup battery socket
+> - RS232 Debug Header (IDC10)
+> - RS232 DTE
 
->>> +
->>> +/ {
->>> +     model = "Variscite i.MX6 QUAD/DUAL VAR-SOM-MX6";
->>> +     compatible = "fsl,imx6q";
->>
->> That's not correct compatible. It's not Imx6 soc. It's a som.
-> 
-> I'm confused, AFAIU the VAR-SOM-MX6 uses an imx6q SoC.
+Good, but what exactly has been tested?
 
-True, I should say - that's incomplete compatible. You claim here this
-is imx6q. Not that it uses imx6q... Add your own compatible and document
-all of them.
+> Product Page : https://www.variscite.com/product/single-board-computers/v=
+ar-mx6customboard
+>
+> The dts file based on the ones provided by Variscite on their own
+> kernel, but adapted for mainline.
+>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-> 
->>
->>> +...
->>> +
->>> +     sound: sound {
->>> +             compatible = "simple-audio-card";
->>> +             simple-audio-card,name = "var-som-audio";
->>> +             simple-audio-card,format = "i2s";
->>> +             simple-audio-card,bitclock-master = <&sound_codec>;
->>> +             simple-audio-card,frame-master = <&sound_codec>;
->>> +             simple-audio-card,widgets = "Headphone", "Headphone Jack",
->>> +                                         "Line", "Line In", "Microphone", "Mic Jack";
->>> +             simple-audio-card,routing = "Headphone Jack", "HPLOUT",
->>> +                                         "Headphone Jack", "HPROUT",
->>> +                                         "LINE1L", "Line In",
->>> +                                         "LINE1R", "Line In";
->>> +
->>> +             sound_cpu: simple-audio-card,cpu {
->>> +                     sound-dai = <&ssi2>;
->>> +             };
->>> +
->>> +             sound_codec: simple-audio-card,codec {
->>> +                     sound-dai = <&tlv320aic3106>;
->>> +                     clocks = <&clks IMX6QDL_CLK_CKO>;
->>> +             };
->>> +     };
->>> +
->>> +     wlan_bt_rfkill {
->>
->> No underscores in node names.
->>
->> Just "rfkill"
->>
->>
->>> +             compatible = "rfkill-gpio";
->>> +             name = "wlan_bt_rfkill";
->>> +             type = <2>;     /* bluetooth */
->>> +             gpios = <&gpio6 18 GPIO_ACTIVE_HIGH>;
->>> +     };
->>> +};
->>> +
->>
->> ...
->>
->>> +     tlv320aic3106: codec@1b {
->>> +             compatible = "ti,tlv320aic3106";
->>> +             reg = <0x1b>;
->>> +             #sound-dai-cells = <0>;
->>> +             DRVDD-supply = <&reg_3p3v>;
->>> +             AVDD-supply = <&reg_3p3v>;
->>> +             IOVDD-supply = <&reg_3p3v>;
->>> +             DVDD-supply = <&reg_3p3v>;
->>> +             ai3x-ocmv = <0>;
->>> +             reset-gpios = <&gpio4 5 GPIO_ACTIVE_LOW>;
->>> +             ai3x-gpio-func = <
->>> +                     0 /* AIC3X_GPIO1_FUNC_DISABLED */
->>> +                     5 /* AIC3X_GPIO2_FUNC_DIGITAL_MIC_INPUT */
->>> +             >;
->>> +     };
->>> +};
->>> +
->>> +&iomuxc {
->>> +     pinctrl-names = "default";
->>> +     pinctrl-0 = <&pinctrl_hog>;
->>> +
->>> +     imx6qdl-var-som-mx6 {
->>> +             pinctrl_hog: hoggrp {
->>> +                     fsl,pins = <
->>> +                             /* CTW6120 IRQ */
->>> +                             MX6QDL_PAD_EIM_DA7__GPIO3_IO07          0x80000000
->>> +                             /* SDMMC2 CD/WP */
->>> +                             MX6QDL_PAD_KEY_COL4__GPIO4_IO14         0x80000000
->>> +                             MX6QDL_PAD_KEY_ROW4__GPIO4_IO15         0x80000000
->>> +                     >;
->>> +             };
->>> +
->>> +             pinctrl_audmux: audmux {
->>
->> It does not look like you tested the DTS against bindings. Please run
->> `make dtbs_check` (see
->> Documentation/devicetree/bindings/writing-schema.rst or
->> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
->> for instructions).
->>
->> AFAIR, all of them end with grp
-> 
-> Ah, that's def throwing a bunch of warnings, although quite a few look
-> to be existing
-> issues in dependent dtsi files. I'll clean up what I can there.
-> 
->>
->>
->> ...
->>
->>> +
->>> +&usdhc3 {
->>> +     pinctrl-names = "default", "state_100mhz", "state_200mhz";
->>> +     pinctrl-0 = <&pinctrl_usdhc3>;
->>> +     pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
->>> +     pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
->>> +     bus-width = <4>;
->>> +     vmmc-supply = <&reg_wl18xx_vmmc>;
->>> +     non-removable;
->>> +     wakeup-source;
->>> +     keep-power-in-suspend;
->>> +     cap-power-off-card;
->>> +     #address-cells = <1>;
->>> +     #size-cells = <0>;
->>> +     status = "okay";
->>> +
->>> +     wlcore: wlcore@0 {
->>
->> Generic node names. Is this wifi?
-> 
-> I think it also supports bluetooth technically, although that might be
-> under a different node.
-> 
+Is this patch from you or Gregory? If Gregory is the author, then his
+name should appear in the From: line.
 
-Bluetooths are usually under serial, so this is just wifi.
+> +&iomuxc {
+> +       imx6qdl-var-som-mx6 {
 
-Best regards,
-Krzysztof
+This ' imx6qdl-var-som-mx6' should be dropped.
 
+> +
+> +               pinctrl_ipu1: ipu1grp {
+> +                       fsl,pins =3D <
+> +                               MX6QDL_PAD_DI0_DISP_CLK__IPU1_DI0_DISP_CL=
+K      0x10
+> +                               MX6QDL_PAD_DI0_PIN15__IPU1_DI0_PIN15     =
+       0x10
+> +                               MX6QDL_PAD_DI0_PIN2__IPU1_DI0_PIN02      =
+       0x10
+> +                               MX6QDL_PAD_DI0_PIN3__IPU1_DI0_PIN03      =
+       0x10
+> +                               MX6QDL_PAD_DI0_PIN4__IPU1_DI0_PIN04      =
+       0x80000000
+
+No 0x80000000 please. Use the real pad ctl value instead.
+This applies globally.
+
+&mipi_csi {
+> +       status =3D "okay";
+> +       ipu_id =3D <0>;
+> +       csi_id =3D <1>;
+> +       v_channel =3D <0>;
+> +       lanes =3D <2>;
+
+These are all NXP vendor devicetree properties. They do not exist upstream.
+
+> +       lvds-channel@0 {
+> +               fsl,data-mapping =3D "spwg";
+> +               fsl,data-width =3D <24>;
+> +               status =3D "okay";
+> +               primary;
+
+This property does not exist upstream.
+
+> +       lvds-channel@1 {
+> +               fsl,data-mapping =3D "spwg";
+> +               fsl,data-width =3D <24>;
+> +               status =3D "okay";
+> +               primary;
+
+Ditto.
+
+> +&usbphy1 {
+> +       tx-d-cal =3D <0x5>;
+
+In upstream it is called fsl,tx-d-cal.
+
+> +};
+> +
+> +&usbphy2 {
+> +       tx-d-cal =3D <0x5>;
+
+Ditto.
