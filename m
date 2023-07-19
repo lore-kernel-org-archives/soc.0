@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC678EB64DA
-	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 14:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8287C0015E
+	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 14:33:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B1336C433C7; Wed, 19 Jul 2023 14:33:20 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	id 9D223C433CB; Wed, 19 Jul 2023 14:33:22 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6525FC433CA
-	for <soc@kernel.org>; Wed, 19 Jul 2023 14:33:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6525FC433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 0C02DC433C7
+	for <soc@kernel.org>; Wed, 19 Jul 2023 14:33:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C02DC433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-992af8b3b1bso954025466b.1
-        for <soc@kernel.org>; Wed, 19 Jul 2023 07:33:19 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51e5e4c6026so9886836a12.0
+        for <soc@kernel.org>; Wed, 19 Jul 2023 07:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689777197; x=1692369197;
+        d=linaro.org; s=google; t=1689777199; x=1692369199;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/v1Uf60tNTGfAfR1+MaSMHHKItd8uNKnfMyyizLcMis=;
-        b=JxURig7FBAAC/3I9yT3aHiTqXeWWAq0k+MGxx7xZ1vdG66aZ7E/pUW+2Vufm3nF5nt
-         PQRijfFThwLLN+R5vZT+cepzhH9bJqUTHAarRy2saW3hXq0sJ+TgQOkCl+S7betr+2r4
-         I1Zsk8Y7AgA3q1gZu0RQooyDAQxZjPz6YNJQzKEERCq/hVknWzKJFTWLjFxbal365wUH
-         higiPiWNIGJF2pPpBfQgRyGJaMGwb1cxsbX9puXisiBFXZQrdHTSdqFzuFAunWwO7ky5
-         n2Ptixa7nFwWUw+pilJzQBH9JRPhhLbsxRKczXkhgBHDa0LDjyKeZ5DgA9xVDlY0EP/t
-         jfRg==
+        bh=me1tA/8BMNe18uM5MYD2lF7qBGxRDWqKn8M9Ck3Z2Ac=;
+        b=QVGAL3gwk97MJMgiDHCYJ8wjpSiVzT/mtr7lB1Q5/tvSt/KyR4gsS3WsYQTVagh2dg
+         riRAJotPhzkb+aEJMq2ZUEaSL881W1eP+plGKUKWLpwRGT6fj0CLLa5aoSAn41rdyiTB
+         kuvBO+Flz2HEQZAt9XYvK3XFuZO5E+oXxanE46xzU1h/nEYWVoYT24X30bYmihoFhf7F
+         ql9JkL19h2im+NWFI06TVvE18e+OhCNI3BAXvpbiTh+en0Fx8GOD6Kdi61NXaPoaGFkf
+         RQPa4QxYSCpCkwrBdHKofMR3sDxgjK9rMCnHWXcVC0QcQzG3x8uLiIL17TwGQzn8hSdt
+         hpQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689777197; x=1692369197;
+        d=1e100.net; s=20221208; t=1689777199; x=1692369199;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/v1Uf60tNTGfAfR1+MaSMHHKItd8uNKnfMyyizLcMis=;
-        b=FqnSuWrAoBLHF75O4sZ5Ov+Uof6pQVp9uIdypSpFXucvIAY11KqkaI8lxCIfPTKwmM
-         W/ZLfVTqbuyPnf6A7mlaC7l59t1q+a+MgEHscp/AKPIIF5mUjA/ud+/M1sq8zBNhaGzZ
-         1u5pQRxy5ksenuxG/sjR/oGJX+qU/TWsLi7jubBmY6Nl7zQ+hTjnrr03wrkaUNjdkqK4
-         eXQRhClnB3jjZgAKxnslQmXpCC9nAWQLDNlkv6Vfoprwg3fhhOL/paO/Z4S6Rv8+787U
-         L0fOSDWyy7L5HpvGAO9zTE/VVbbshbNH+zSq4CchlDIb/FH0illOPAD7KAIppcC0flMV
-         Uw+g==
-X-Gm-Message-State: ABy/qLbtbkjRYoMO15zKkHNGFjqGbYhxK9XlvY+eT3Hd0ewV2NH7FUHu
-	TqN3+g4QyOUL9nFHynLuasTPxQ==
-X-Google-Smtp-Source: APBJJlF+JcEt0XZP2Tw59JukE7GuYig+Z35mtFzxo15uZB8/KXGNf8iKMl16iFRTuItUUfVn/5VsyA==
-X-Received: by 2002:a17:906:77cf:b0:993:d47f:3c84 with SMTP id m15-20020a17090677cf00b00993d47f3c84mr2864253ejn.7.1689777197337;
-        Wed, 19 Jul 2023 07:33:17 -0700 (PDT)
+        bh=me1tA/8BMNe18uM5MYD2lF7qBGxRDWqKn8M9Ck3Z2Ac=;
+        b=kvHCH3ECjjWm3ohXwYfoEFhlMoqjNMRKPqAk+UqC2L7jBQrFOH5z8jPs4P0LUpnfr3
+         VWkUWWC7qLUhomfFzM8QX+tbcSf9AA3DbmtnaVKrrNN30ZMZiifBEQrjywvSl/A+dMmD
+         ADhprYpi3DA3l/1A7WLU02gVkIMduBzDmCqtmzmgR2Gt3z6pgHjLZH8gwVQM96V3jIeA
+         OjCus1Q27W9xF3tg3cwr7Y7989EM4Of2UTXPHUKxCruvX4EgwiIS3g0q6ueUJZ5efaYL
+         kzQ4O8Dje1cMPP61Bdo4bsiqYC08v2M5Vq4emfT+PokuPWFzOz/588qVYqrBW5Py3/jo
+         c5Ew==
+X-Gm-Message-State: ABy/qLbD25v74Xu4PSuW7NIq0dAz5BXQtnpTRL+IbkOtToaWBnG/wEnM
+	OhlR26M3CDyzM1K5Aq7DOX3dqw==
+X-Google-Smtp-Source: APBJJlHjqimEB9KgibSCvGrF+kWBxeRpB0ykcHOFq2/ua4YG+ANhFtH7/tsnMuNURi7d9m1BNiZeaw==
+X-Received: by 2002:a17:906:8603:b0:992:54dc:9cf2 with SMTP id o3-20020a170906860300b0099254dc9cf2mr2040726ejx.62.1689777199268;
+        Wed, 19 Jul 2023 07:33:19 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id e9-20020a170906374900b009893650453fsm2454597ejc.173.2023.07.19.07.33.15
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906374900b009893650453fsm2454597ejc.173.2023.07.19.07.33.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 07:33:16 -0700 (PDT)
+        Wed, 19 Jul 2023 07:33:18 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Rob Herring <robh+dt@kernel.org>,
@@ -73,93 +73,42 @@ To: Rob Herring <robh+dt@kernel.org>,
 	workflows@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	arm@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 2/3] Documentation/process: maintainer-soc: add clean platforms profile
-Date: Wed, 19 Jul 2023 16:33:08 +0200
-Message-Id: <20230719143309.204766-2-krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 3/3] MAINTAINER: samsung: document dtbs_check requirement for Samsung
+Date: Wed, 19 Jul 2023 16:33:09 +0200
+Message-Id: <20230719143309.204766-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230719143309.204766-1-krzysztof.kozlowski@linaro.org>
 References: <20230719143309.204766-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some SoC platforms require that commits must not bring any new
-dtbs_check warnings.  Maintainers of such platforms usually have some
-automation set, so any new warning will be spotted sooner or later.
-Worst case: they run the tests themselves.  Document requirements for
-such platforms, so contributors can expect their patches being dropped
-or ignored, if they bring new warnings for existing boards.
+Samsung ARM/ARM64 SoCs (including legacy S3C64xx and S5PV210) are also
+expected not to bring any new dtbs_check warnings.  In fact this have
+been already enforced and tested since few release.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 ---
 
 Changes in v2:
-1. Add Rb tag.
-2. Implement Conor's feedback: change doc title, follow->should follow,
-   minor style changes.
+1. None
 ---
- .../process/maintainer-handbooks.rst          |  1 +
- .../process/maintainer-soc-clean-dts.rst      | 23 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 25 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/process/maintainer-soc-clean-dts.rst
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/process/maintainer-handbooks.rst b/Documentation/process/maintainer-handbooks.rst
-index 9992bfd7eaa3..976391cec528 100644
---- a/Documentation/process/maintainer-handbooks.rst
-+++ b/Documentation/process/maintainer-handbooks.rst
-@@ -17,5 +17,6 @@ Contents:
- 
-    maintainer-netdev
-    maintainer-soc
-+   maintainer-soc-clean-dts
-    maintainer-tip
-    maintainer-kvm-x86
-diff --git a/Documentation/process/maintainer-soc-clean-dts.rst b/Documentation/process/maintainer-soc-clean-dts.rst
-new file mode 100644
-index 000000000000..c460923f39be
---- /dev/null
-+++ b/Documentation/process/maintainer-soc-clean-dts.rst
-@@ -0,0 +1,23 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==============================================
-+SoC Platforms with DTS Compliance Requirements
-+==============================================
-+
-+Overview
-+--------
-+
-+SoC platforms or subarchitectures should follow all the rules from
-+Documentation/process/maintainer-soc.rst.  However platforms referencing
-+this document impose additional requirements listed below.
-+
-+Strict DTS DT Schema Compliance
-+-------------------------------
-+
-+No changes to the SoC platform Devicetree sources (DTS files) should introduce
-+new ``make dtbs_check W=1`` warnings.  The platform maintainers have automation
-+in place which should point out any new warnings.
-+
-+If a commit introducing new warning gets accepted somehow, the resulting issues
-+shall be fixed in reasonable time (e.g. within one release) or the commit
-+reverted.
 diff --git a/MAINTAINERS b/MAINTAINERS
-index ba5e7344f30e..a70c32790427 100644
+index a70c32790427..e7b923d2fd55 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -1573,7 +1573,7 @@ S:	Maintained
- P:	Documentation/process/maintainer-soc.rst
- C:	irc://irc.libera.chat/armlinux
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
--F:	Documentation/process/maintainer-soc.rst
-+F:	Documentation/process/maintainer-soc*.rst
- F:	arch/arm/boot/dts/Makefile
- F:	arch/arm64/boot/dts/Makefile
- 
+@@ -2646,6 +2646,7 @@ R:	Alim Akhtar <alim.akhtar@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
++P:	Documentation/process/maintainer-soc-clean-dts.rst
+ Q:	https://patchwork.kernel.org/project/linux-samsung-soc/list/
+ B:	mailto:linux-samsung-soc@vger.kernel.org
+ C:	irc://irc.libera.chat/linux-exynos
 -- 
 2.34.1
 
