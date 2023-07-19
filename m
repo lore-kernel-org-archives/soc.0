@@ -1,148 +1,277 @@
-Return-Path: <SRS0=Sz/F=DF=sberdevices.ru=DDRokosov@kernel.org>
+Return-Path: <SRS0=mIJF=DF=gmail.com=james.hilliard1@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E40C001B0
-	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 18:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A147CC0015E
+	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 18:57:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6A196C43395; Wed, 19 Jul 2023 18:39:49 +0000 (UTC)
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 86305C433C8; Wed, 19 Jul 2023 18:57:51 +0000 (UTC)
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 08AF0C433B9;
-	Wed, 19 Jul 2023 18:39:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08AF0C433B9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sberdevices.ru
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sberdevices.ru
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 660A412007A;
-	Wed, 19 Jul 2023 21:39:33 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 660A412007A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-	s=mail; t=1689791973;
-	bh=sc+94aLvgVUxBUEzSPbWOsr9WhtmbJCsOLteFFzOoLU=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-	b=ftS9UdnFVupfX9JxONl46s/RGEHl80jPk77NDDqzvRlD1qSq1jhJ6yXhfHaSPewnr
-	 LEQ6tu0ClcfcCUU9btQ8pcnKoaAO2EJBXjugGbhFMHWzBlTJxypP0F3af+WF7YnUcT
-	 qwRJV+UdIg9Tq/ng5S2MnxsHFZSDjXsqkqprkZ/FAn6+PAzMRaUZQlMaszmoB8jzPf
-	 AAU7c/jMuvSi1AM8yvRzt0m4L7ILTyWgBLaRMTnYKOJhuMJljph7thz7MAefNZECdm
-	 ASZdS2Hm97OvI4aj7PSdUXrCYM7KLsHLwhBPeZ4VRaDC7sbNbBsJ+UEFUFLlGc1JiM
-	 1mc7vWHZzj6DA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Wed, 19 Jul 2023 21:39:33 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 19 Jul
- 2023 21:39:33 +0300
-Date: Wed, 19 Jul 2023 21:39:27 +0300
-From: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To: Rob Herring <robh@kernel.org>
-List-Id: <soc.lore.kernel.org>
-CC: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
-	<sboyd@kernel.org>, Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>, Eugeniy Paltsev
-	<Eugeniy.Paltsev@synopsys.com>, Florian Fainelli
-	<florian.fainelli@broadcom.com>, Broadcom internal kernel review list
-	<bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott
- Branden <sbranden@broadcom.com>, Joel Stanley <joel@jms.id.au>, Andrew
- Jeffery <andrew@aj.id.au>, Neil Armstrong <neil.armstrong@linaro.org>, Sudeep
- Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Alex Helms
-	<alexander.helms.jy@renesas.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan
-	<peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
-	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
-	Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, Santosh
- Shilimkar <ssantosh@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Jerome
- Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, Martin
- Blumenstingl <martin.blumenstingl@googlemail.com>, Andrew Lunn
-	<andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian
- Hesselbarth <sebastian.hesselbarth@gmail.com>, Andy Gross
-	<agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
-	<konrad.dybcio@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko Stuebner <heiko@sntech.de>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Sylwester Nawrocki
-	<s.nawrocki@samsung.com>, Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi
-	<cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, Dinh
- Nguyen <dinguyen@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Shiraz
- Hashim <shiraz.linux.kernel@gmail.com>, <soc@kernel.org>, Orson Zhai
-	<orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan
- Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>, Hal
- Feng <hal.feng@starfivetech.com>, Chen-Yu Tsai <wens@csie.org>, Jernej
- Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
-	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Peter De Schrijver
-	<pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, Thierry
- Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu
-	<mhiramat@kernel.org>, Michal Simek <michal.simek@amd.com>,
-	<devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-actions@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-rpi-kernel@lists.infradead.org>,
-	<linux-aspeed@lists.ozlabs.org>, <linux-oxnas@groups.io>,
-	<linux-mediatek@lists.infradead.org>, <linux-amlogic@lists.infradead.org>,
-	<linux-arm-msm@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-	<linux-rockchip@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
-	<linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] clk: Explicitly include correct DT includes
-Message-ID: <20230719183927.c4ykdjw3iekmugzy@CAB-WSD-L081021>
-References: <20230714174342.4052882-1-robh@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 52E00C433C7;
+	Wed, 19 Jul 2023 18:57:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52E00C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6b9d16c1f3bso3145274a34.2;
+        Wed, 19 Jul 2023 11:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689793069; x=1692385069;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dO/Ro82esZ77c8U9Ji2AYs62+OJdWI2aXZlK6bvNYHg=;
+        b=U3KBhCNE+sq9QfBOgAvwnyfdnuf1HZ7C3xQesvpESjpZH9B0LlM9cnnZLbzTDg6t4W
+         mCinuYgj1G3I0hZy9eKMIgVxY+vr+rURl/6iKQaZ/FRSr8KIX77HbkUJeWApXmwGX1RM
+         Mh4kLMMxTcWeFHnW4SLU8gOHQ4Kq0/R5yGlI/BbcrleNr45AXtLXzAMUvwDCxf7+TnJl
+         6bTHOkI9OTo3JVD0xKMdZu1pQ6K6EqhX8/Hffl9Q4Ii3qg8g9W0kcQEPIXdccUr8VMl0
+         9NRJSbUeJyUzBMhjpJ+IsrZYp8yGtryiwEPcc94z1be/waXOMs+diSR7kJLkMU11qyjR
+         jQOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689793069; x=1692385069;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dO/Ro82esZ77c8U9Ji2AYs62+OJdWI2aXZlK6bvNYHg=;
+        b=LCiRY0lTCfWi49hdU6w6JktG25wSsgbUZVobBN3bbaNIBi7lKbvAq+e9hjPuOGgfV6
+         Rqg5jDK3C7iOudEcv2IONQ39+aST6yT/XlmdZtE+EMlOQ6kSFFua2OJpaNDMVVcP70Ib
+         9Lg+bLfVcJkL1Fw6xfQQ4M9n8Vgv00qszlXheKIQVLHCaN0P78BAdlQNNQw7Xc8RP/LA
+         VDiLx+N4RmWDCNIU2SynJ4t7nCWhK6E8T5SyAHOo2yO+RLBbOkqqJ9XJ7F4BzzINoiSL
+         VxuJwYInzm6QenDTlJ/CYMq9MK6UoG87SB9KXp0m0PRv7DQXox39Z6R4u7IsJFGchwuD
+         Nd9A==
+X-Gm-Message-State: ABy/qLakx06PqsWlLaOD4f6RspN0UemeMFDUp94d9H1CpBvdwmh6FNZW
+	njjblmT6GnCxX8ztfXtzGmwMB0djA3KVLCdWyMA=
+X-Google-Smtp-Source: APBJJlEYyE3r6HXrGx1zx4tohMxFwu8wFsBcEYB9ItkrjV2qOwltCGuOtZBu2WwGOrgJAqlJLxnVq6O+x6dPnc+d0r0=
+X-Received: by 2002:a05:6870:b6a5:b0:1ba:b9ae:8d2c with SMTP id
+ cy37-20020a056870b6a500b001bab9ae8d2cmr5670110oab.41.1689793069132; Wed, 19
+ Jul 2023 11:57:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230714174342.4052882-1-robh@kernel.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178730 [Jul 19 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 524 524 9753033d6953787301affc41bead8ed49c47b39d, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/19 15:29:00 #21641898
-X-KSMG-AntiVirus-Status: Clean, skipped
+References: <20230719160048.2737423-1-james.hilliard1@gmail.com> <03748443-0459-c925-ce76-33ec134a303d@linaro.org>
+In-Reply-To: <03748443-0459-c925-ce76-33ec134a303d@linaro.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 19 Jul 2023 12:57:36 -0600
+Message-ID: <CADvTj4pgA_XjYZyU+D+J2QdC4NPFTxPSBCvrpK8WNjFkzkz-KQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ARM: dts: imx6qdl: Add Variscite VAR-SOM-MX6 SoM support
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: devicetree@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 14, 2023 at 11:43:29AM -0600, Rob Herring wrote:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it as merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+On Wed, Jul 19, 2023 at 11:16=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 19/07/2023 18:00, James Hilliard wrote:
+> > This patch adds support for the Variscite VAR_SOM-MX6 SoM with :
+> > - i.MX6 Quad or Dual Lite SoC
+> > - 256 =E2=80=93 4096 MB DDR3
+> > - 4-64 GB eMMC
+> > - 128 =E2=80=93 1024 MB SLC NAND
+> > - Camera Interface
+> > - HDMI+CEC interface
+> > - LVDS / DSI / Parallel RGB interfaces
+> > - Ethernet RGMII interface
+> > - On-SoM Wi-Fi/Bluetooth with WiLink wl183x SDIO Module
+> > - SD/MMC/SDIO interface
+> > - USB Host + USB OTG interface
+> > - I2C interfaces
+> > - SPI interfaces
+> > - PCI-Express 2.0 interface
+> > - on-SoM Audio Codec with HP/Line-In interfaces + DMIC interface
+> > - Digital Audio interface
+> > - S/PDIF interface
+> >
+> > Product website : https://www.variscite.com/product/system-on-module-so=
+m/cortex-a9/var-som-mx6-cpu-freescale-imx6/
+> >
+> > Support is handled with a SoM-centric dtsi exporting the default interf=
+aces
+> > along the default pinmuxing to be enabled by the board dts file.
+> >
+> > This file is based on the one provided by Variscite on their own
+> > kernel, but adapted for mainline.
+> >
+> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  arch/arm/boot/dts/imx6qdl-var-som.dtsi | 547 +++++++++++++++++++++++++
+> >  1 file changed, 547 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/imx6qdl-var-som.dtsi
+> >
+> > diff --git a/arch/arm/boot/dts/imx6qdl-var-som.dtsi b/arch/arm/boot/dts=
+/imx6qdl-var-som.dtsi
+> > new file mode 100644
+> > index 000000000000..e93dae59624e
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+> > @@ -0,0 +1,547 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Support for Variscite VAR-SOM-MX6 Module
+> > + *
+> > + * Copyright 2011 Linaro Ltd.
+> > + * Copyright 2012 Freescale Semiconductor, Inc.
+> > + * Copyright (C) 2014-2016 Variscite, Ltd.
+> > + * Author: Donio Ron <ron.d@variscite.com>
+> > + * Copyright 2022 Bootlin
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "imx6q.dtsi"
+> > +#include <dt-bindings/clock/imx6qdl-clock.h>
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/sound/fsl-imx-audmux.h>
+> > +
+> > +/ {
+> > +     model =3D "Variscite i.MX6 QUAD/DUAL VAR-SOM-MX6";
+> > +     compatible =3D "fsl,imx6q";
+>
+> That's not correct compatible. It's not Imx6 soc. It's a som.
 
-[...]
+I'm confused, AFAIU the VAR-SOM-MX6 uses an imx6q SoC.
 
-For
+>
+> > +...
+> > +
+> > +     sound: sound {
+> > +             compatible =3D "simple-audio-card";
+> > +             simple-audio-card,name =3D "var-som-audio";
+> > +             simple-audio-card,format =3D "i2s";
+> > +             simple-audio-card,bitclock-master =3D <&sound_codec>;
+> > +             simple-audio-card,frame-master =3D <&sound_codec>;
+> > +             simple-audio-card,widgets =3D "Headphone", "Headphone Jac=
+k",
+> > +                                         "Line", "Line In", "Microphon=
+e", "Mic Jack";
+> > +             simple-audio-card,routing =3D "Headphone Jack", "HPLOUT",
+> > +                                         "Headphone Jack", "HPROUT",
+> > +                                         "LINE1L", "Line In",
+> > +                                         "LINE1R", "Line In";
+> > +
+> > +             sound_cpu: simple-audio-card,cpu {
+> > +                     sound-dai =3D <&ssi2>;
+> > +             };
+> > +
+> > +             sound_codec: simple-audio-card,codec {
+> > +                     sound-dai =3D <&tlv320aic3106>;
+> > +                     clocks =3D <&clks IMX6QDL_CLK_CKO>;
+> > +             };
+> > +     };
+> > +
+> > +     wlan_bt_rfkill {
+>
+> No underscores in node names.
+>
+> Just "rfkill"
+>
+>
+> > +             compatible =3D "rfkill-gpio";
+> > +             name =3D "wlan_bt_rfkill";
+> > +             type =3D <2>;     /* bluetooth */
+> > +             gpios =3D <&gpio6 18 GPIO_ACTIVE_HIGH>;
+> > +     };
+> > +};
+> > +
+>
+> ...
+>
+> > +     tlv320aic3106: codec@1b {
+> > +             compatible =3D "ti,tlv320aic3106";
+> > +             reg =3D <0x1b>;
+> > +             #sound-dai-cells =3D <0>;
+> > +             DRVDD-supply =3D <&reg_3p3v>;
+> > +             AVDD-supply =3D <&reg_3p3v>;
+> > +             IOVDD-supply =3D <&reg_3p3v>;
+> > +             DVDD-supply =3D <&reg_3p3v>;
+> > +             ai3x-ocmv =3D <0>;
+> > +             reset-gpios =3D <&gpio4 5 GPIO_ACTIVE_LOW>;
+> > +             ai3x-gpio-func =3D <
+> > +                     0 /* AIC3X_GPIO1_FUNC_DISABLED */
+> > +                     5 /* AIC3X_GPIO2_FUNC_DIGITAL_MIC_INPUT */
+> > +             >;
+> > +     };
+> > +};
+> > +
+> > +&iomuxc {
+> > +     pinctrl-names =3D "default";
+> > +     pinctrl-0 =3D <&pinctrl_hog>;
+> > +
+> > +     imx6qdl-var-som-mx6 {
+> > +             pinctrl_hog: hoggrp {
+> > +                     fsl,pins =3D <
+> > +                             /* CTW6120 IRQ */
+> > +                             MX6QDL_PAD_EIM_DA7__GPIO3_IO07          0=
+x80000000
+> > +                             /* SDMMC2 CD/WP */
+> > +                             MX6QDL_PAD_KEY_COL4__GPIO4_IO14         0=
+x80000000
+> > +                             MX6QDL_PAD_KEY_ROW4__GPIO4_IO15         0=
+x80000000
+> > +                     >;
+> > +             };
+> > +
+> > +             pinctrl_audmux: audmux {
+>
+> It does not look like you tested the DTS against bindings. Please run
+> `make dtbs_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst or
+> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sou=
+rces-with-the-devicetree-schema/
+> for instructions).
+>
+> AFAIR, all of them end with grp
 
->  drivers/clk/meson/a1-peripherals.c               | 2 +-
->  drivers/clk/meson/a1-pll.c                       | 2 +-
+Ah, that's def throwing a bunch of warnings, although quite a few look
+to be existing
+issues in dependent dtsi files. I'll clean up what I can there.
 
-Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>
+>
+> ...
+>
+> > +
+> > +&usdhc3 {
+> > +     pinctrl-names =3D "default", "state_100mhz", "state_200mhz";
+> > +     pinctrl-0 =3D <&pinctrl_usdhc3>;
+> > +     pinctrl-1 =3D <&pinctrl_usdhc3_100mhz>;
+> > +     pinctrl-2 =3D <&pinctrl_usdhc3_200mhz>;
+> > +     bus-width =3D <4>;
+> > +     vmmc-supply =3D <&reg_wl18xx_vmmc>;
+> > +     non-removable;
+> > +     wakeup-source;
+> > +     keep-power-in-suspend;
+> > +     cap-power-off-card;
+> > +     #address-cells =3D <1>;
+> > +     #size-cells =3D <0>;
+> > +     status =3D "okay";
+> > +
+> > +     wlcore: wlcore@0 {
+>
+> Generic node names. Is this wifi?
 
-[...]
+I think it also supports bluetooth technically, although that might be
+under a different node.
 
--- 
-Thank you,
-Dmitry
+>
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-device=
+tree-basics.html#generic-names-recommendation
+>
+> > +             compatible =3D "ti,wl1835";
+> > +             reg =3D <2>;
+>
+>
+> Best regards,
+> Krzysztof
+>
