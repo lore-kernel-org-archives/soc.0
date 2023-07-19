@@ -1,114 +1,669 @@
-Return-Path: <SRS0=Ao5Q=DF=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=mIJF=DF=gmail.com=james.hilliard1@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8287C0015E
-	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 14:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5779EB64DA
+	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 16:01:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9D223C433CB; Wed, 19 Jul 2023 14:33:22 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	id A3EB4C433CB; Wed, 19 Jul 2023 16:01:41 +0000 (UTC)
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0C02DC433C7
-	for <soc@kernel.org>; Wed, 19 Jul 2023 14:33:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C02DC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51e5e4c6026so9886836a12.0
-        for <soc@kernel.org>; Wed, 19 Jul 2023 07:33:20 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D571BC433C7;
+	Wed, 19 Jul 2023 16:01:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D571BC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-345f3e28082so35556425ab.1;
+        Wed, 19 Jul 2023 09:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689777199; x=1692369199;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=me1tA/8BMNe18uM5MYD2lF7qBGxRDWqKn8M9Ck3Z2Ac=;
-        b=QVGAL3gwk97MJMgiDHCYJ8wjpSiVzT/mtr7lB1Q5/tvSt/KyR4gsS3WsYQTVagh2dg
-         riRAJotPhzkb+aEJMq2ZUEaSL881W1eP+plGKUKWLpwRGT6fj0CLLa5aoSAn41rdyiTB
-         kuvBO+Flz2HEQZAt9XYvK3XFuZO5E+oXxanE46xzU1h/nEYWVoYT24X30bYmihoFhf7F
-         ql9JkL19h2im+NWFI06TVvE18e+OhCNI3BAXvpbiTh+en0Fx8GOD6Kdi61NXaPoaGFkf
-         RQPa4QxYSCpCkwrBdHKofMR3sDxgjK9rMCnHWXcVC0QcQzG3x8uLiIL17TwGQzn8hSdt
-         hpQg==
+        d=gmail.com; s=20221208; t=1689782499; x=1692374499;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9l6enltr2hidwHdXBUroo3NQQQpJxgBj0DcpGuxgSiU=;
+        b=cCuff9cNHLhxYeRl+rJsBk2knc0uKJEBZRtTMl0tgvdYpDVy9p8egoAc86iMz6SN1i
+         vdX/k9GZsVnxFGfxjE9TQE8s/SYBYlAhY3RU6jCjh/d6JACTwKQNeXKPc3mgURumpGFZ
+         M3FFcr24OgMMCbvzxT/CBU7Pfjr4TSZMtUlDa9UkLeWnBzfnzDFhOAwzvcZscXdgl8oM
+         eI9GXx5Y4dZByujrQpKEh7CFB7PCifuHuZHIH9faql8ifbROngO1ZH1CqrUocLkQmBEi
+         fF9S8W4GYhFoazCbbjZtHf63j3OJpjDfNhfvtlr6+soyl1KIa078SPrXwotJqnuPLEFo
+         2t7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689777199; x=1692369199;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=me1tA/8BMNe18uM5MYD2lF7qBGxRDWqKn8M9Ck3Z2Ac=;
-        b=kvHCH3ECjjWm3ohXwYfoEFhlMoqjNMRKPqAk+UqC2L7jBQrFOH5z8jPs4P0LUpnfr3
-         VWkUWWC7qLUhomfFzM8QX+tbcSf9AA3DbmtnaVKrrNN30ZMZiifBEQrjywvSl/A+dMmD
-         ADhprYpi3DA3l/1A7WLU02gVkIMduBzDmCqtmzmgR2Gt3z6pgHjLZH8gwVQM96V3jIeA
-         OjCus1Q27W9xF3tg3cwr7Y7989EM4Of2UTXPHUKxCruvX4EgwiIS3g0q6ueUJZ5efaYL
-         kzQ4O8Dje1cMPP61Bdo4bsiqYC08v2M5Vq4emfT+PokuPWFzOz/588qVYqrBW5Py3/jo
-         c5Ew==
-X-Gm-Message-State: ABy/qLbD25v74Xu4PSuW7NIq0dAz5BXQtnpTRL+IbkOtToaWBnG/wEnM
-	OhlR26M3CDyzM1K5Aq7DOX3dqw==
-X-Google-Smtp-Source: APBJJlHjqimEB9KgibSCvGrF+kWBxeRpB0ykcHOFq2/ua4YG+ANhFtH7/tsnMuNURi7d9m1BNiZeaw==
-X-Received: by 2002:a17:906:8603:b0:992:54dc:9cf2 with SMTP id o3-20020a170906860300b0099254dc9cf2mr2040726ejx.62.1689777199268;
-        Wed, 19 Jul 2023 07:33:19 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id e9-20020a170906374900b009893650453fsm2454597ejc.173.2023.07.19.07.33.17
+        d=1e100.net; s=20221208; t=1689782499; x=1692374499;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9l6enltr2hidwHdXBUroo3NQQQpJxgBj0DcpGuxgSiU=;
+        b=bgpA3aiaYtleveEQP9mlR/f1q8jVvlZg4m5bhD6OCXOufMlAF6SVln+sLS7K0BEjT6
+         p9A/14xRHdA/uOYUumjQsO9EDoSknjTZRZ8cJr4aWbIy+usLV8afXpRxBsnYnhhatTfh
+         XUnh72Mjf090/Xrx1yqedvCUInVY5ogROGJzMjPubJ3QbZdZGay/PpbJQwjIZt4OAhKq
+         0F1JU43LhFH+EfgT5oF/wRz4Kaq8vKm1Sb2Ci0UlOU3RJ2KdKljORTGblamUUkku0Uem
+         fdljR3EduROJ9C9zJnQ8uWWroI0KLVnWcmw+fkDeViHUygkTD0rSRRFlTmd/o4qiaQl5
+         DfLg==
+X-Gm-Message-State: ABy/qLZ/9JAb0MYuJGDZUjI7JEIL0dD9ICqnOS5Dr5snek/GQuI1Yi65
+	Nokg/m2JxdLy7geZWZwc3Gc=
+X-Google-Smtp-Source: APBJJlHQNrm3Jg7FEr1c/6oOoCdimaYqB5w9/r8irBTRMZEtXPGMyseO/3EZ0boph7AF08ylTRRwUQ==
+X-Received: by 2002:a92:c549:0:b0:345:d284:5c49 with SMTP id a9-20020a92c549000000b00345d2845c49mr6465012ilj.5.1689782498560;
+        Wed, 19 Jul 2023 09:01:38 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-225-212.hlrn.qwest.net. [71.218.225.212])
+        by smtp.gmail.com with ESMTPSA id x9-20020a92d309000000b00342f537e3c3sm1494293ila.2.2023.07.19.09.01.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 07:33:18 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Wed, 19 Jul 2023 09:01:37 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: devicetree@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	soc@kernel.org,
-	workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	arm@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] MAINTAINER: samsung: document dtbs_check requirement for Samsung
-Date: Wed, 19 Jul 2023 16:33:09 +0200
-Message-Id: <20230719143309.204766-3-krzysztof.kozlowski@linaro.org>
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] ARM: dts: imx6qdl: Add Variscite VAR-SOM-MX6 SoM support
+Date: Wed, 19 Jul 2023 10:00:45 -0600
+Message-Id: <20230719160048.2737423-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230719143309.204766-1-krzysztof.kozlowski@linaro.org>
-References: <20230719143309.204766-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Samsung ARM/ARM64 SoCs (including legacy S3C64xx and S5PV210) are also
-expected not to bring any new dtbs_check warnings.  In fact this have
-been already enforced and tested since few release.
+This patch adds support for the Variscite VAR_SOM-MX6 SoM with :
+- i.MX6 Quad or Dual Lite SoC
+- 256 – 4096 MB DDR3
+- 4-64 GB eMMC
+- 128 – 1024 MB SLC NAND
+- Camera Interface
+- HDMI+CEC interface
+- LVDS / DSI / Parallel RGB interfaces
+- Ethernet RGMII interface
+- On-SoM Wi-Fi/Bluetooth with WiLink wl183x SDIO Module
+- SD/MMC/SDIO interface
+- USB Host + USB OTG interface
+- I2C interfaces
+- SPI interfaces
+- PCI-Express 2.0 interface
+- on-SoM Audio Codec with HP/Line-In interfaces + DMIC interface
+- Digital Audio interface
+- S/PDIF interface
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Product website : https://www.variscite.com/product/system-on-module-som/cortex-a9/var-som-mx6-cpu-freescale-imx6/
 
+Support is handled with a SoM-centric dtsi exporting the default interfaces
+along the default pinmuxing to be enabled by the board dts file.
+
+This file is based on the one provided by Variscite on their own
+kernel, but adapted for mainline.
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
+ arch/arm/boot/dts/imx6qdl-var-som.dtsi | 547 +++++++++++++++++++++++++
+ 1 file changed, 547 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6qdl-var-som.dtsi
 
-Changes in v2:
-1. None
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a70c32790427..e7b923d2fd55 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2646,6 +2646,7 @@ R:	Alim Akhtar <alim.akhtar@samsung.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
-+P:	Documentation/process/maintainer-soc-clean-dts.rst
- Q:	https://patchwork.kernel.org/project/linux-samsung-soc/list/
- B:	mailto:linux-samsung-soc@vger.kernel.org
- C:	irc://irc.libera.chat/linux-exynos
+diff --git a/arch/arm/boot/dts/imx6qdl-var-som.dtsi b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+new file mode 100644
+index 000000000000..e93dae59624e
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+@@ -0,0 +1,547 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Support for Variscite VAR-SOM-MX6 Module
++ *
++ * Copyright 2011 Linaro Ltd.
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright (C) 2014-2016 Variscite, Ltd.
++ * Author: Donio Ron <ron.d@variscite.com>
++ * Copyright 2022 Bootlin
++ */
++
++/dts-v1/;
++
++#include "imx6q.dtsi"
++#include <dt-bindings/clock/imx6qdl-clock.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/sound/fsl-imx-audmux.h>
++
++/ {
++	model = "Variscite i.MX6 QUAD/DUAL VAR-SOM-MX6";
++	compatible = "fsl,imx6q";
++
++	chosen {
++		stdout-path = &uart1;
++	};
++
++	memory@10000000 {
++		device_type = "memory";
++		reg = <0x10000000 0x40000000>;
++	};
++
++	reg_audio: regulator-audio {
++		compatible = "regulator-fixed";
++		regulator-name = "tlv320aic3x-supply";
++		enable-active-high;
++	};
++
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-name = "3P3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++	};
++
++	touch_3v3_regulator: touch_3v3_regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "touch_3v3_supply";
++		regulator-always-on;
++		status = "okay";
++	};
++
++	reg_wl18xx_vmmc: regulator-wl18xx {
++		compatible = "regulator-fixed";
++		regulator-name = "vwl1807";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		gpio = <&gpio7 8 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		startup-delay-us = <70000>;
++	};
++
++	sound: sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "var-som-audio";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,bitclock-master = <&sound_codec>;
++		simple-audio-card,frame-master = <&sound_codec>;
++		simple-audio-card,widgets = "Headphone", "Headphone Jack",
++					    "Line", "Line In", "Microphone", "Mic Jack";
++		simple-audio-card,routing = "Headphone Jack", "HPLOUT",
++					    "Headphone Jack", "HPROUT",
++					    "LINE1L", "Line In",
++					    "LINE1R", "Line In";
++
++		sound_cpu: simple-audio-card,cpu {
++			sound-dai = <&ssi2>;
++		};
++
++		sound_codec: simple-audio-card,codec {
++			sound-dai = <&tlv320aic3106>;
++			clocks = <&clks IMX6QDL_CLK_CKO>;
++		};
++	};
++
++	wlan_bt_rfkill {
++		compatible = "rfkill-gpio";
++		name = "wlan_bt_rfkill";
++		type = <2>;     /* bluetooth */
++		gpios = <&gpio6 18 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&cpu0 {
++	operating-points = <
++		/* kHz    uV */
++		1200000 1350000
++		996000  1250000
++		852000  1250000
++		792000  1175000
++		396000  1175000
++	>;
++
++	fsl,soc-operating-points = <
++		/* ARM kHz  SOC-PU uV */
++		1200000 1275000
++		996000	1250000
++		852000	1250000
++		792000	1250000
++		396000	1250000
++	>;
++};
++
++&audmux {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_audmux>;
++	status = "okay";
++
++	ssi2 {
++		fsl,audmux-port = <1>;
++		fsl,port-config = <
++			(IMX_AUDMUX_V2_PTCR_SYN |
++			IMX_AUDMUX_V2_PTCR_TFSDIR |
++			IMX_AUDMUX_V2_PTCR_TFSEL(2) |
++			IMX_AUDMUX_V2_PTCR_TCLKDIR |
++			IMX_AUDMUX_V2_PTCR_TCSEL(2))
++			IMX_AUDMUX_V2_PDCR_RXDSEL(2)
++		>;
++	};
++
++	aud3 {
++		fsl,audmux-port = <2>;
++		fsl,port-config = <
++			IMX_AUDMUX_V2_PTCR_SYN
++			IMX_AUDMUX_V2_PDCR_RXDSEL(1)
++		>;
++	};
++};
++
++&ecspi3 {
++	fsl,spi-num-chipselects = <1>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ecspi3>;
++	cs-gpios = <&gpio4 24 GPIO_ACTIVE_HIGH>;
++	status = "okay";
++};
++
++&fec {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enet>;
++	phy-mode = "rgmii";
++	phy-reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
++	fsl,magic-packet;
++	status = "okay";
++};
++
++&gpc {
++	fsl,ldo-bypass = <1>;
++};
++
++&i2c2 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	status = "okay";
++
++	pmic@8 {
++		pinctrl-names = "default";
++		compatible = "fsl,pfuze100";
++		reg = <0x08>;
++
++		regulators {
++			sw1a_reg: sw1ab {
++				regulator-min-microvolt = <300000>;
++				regulator-max-microvolt = <1875000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <6250>;
++			};
++
++			sw1c_reg: sw1c {
++				regulator-min-microvolt = <300000>;
++				regulator-max-microvolt = <1875000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <6250>;
++			};
++
++			sw2_reg: sw2 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			sw3a_reg: sw3a {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			sw3b_reg: sw3b {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			sw4_reg: sw4 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3950000>;
++			};
++
++			snvs_reg: vsnvs {
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <3000000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			vref_reg: vrefddr {
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			vgen1_reg: vgen1 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1550000>;
++			};
++
++			vgen2_reg: vgen2 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1550000>;
++			};
++
++			vgen3_reg: vgen3 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			vgen4_reg: vgen4 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			vgen5_reg: vgen5 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			vgen6_reg: vgen6 {
++				regulator-min-microvolt = <2800000>;
++				regulator-max-microvolt = <2800000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++		};
++	};
++
++	tlv320aic3106: codec@1b {
++		compatible = "ti,tlv320aic3106";
++		reg = <0x1b>;
++		#sound-dai-cells = <0>;
++		DRVDD-supply = <&reg_3p3v>;
++		AVDD-supply = <&reg_3p3v>;
++		IOVDD-supply = <&reg_3p3v>;
++		DVDD-supply = <&reg_3p3v>;
++		ai3x-ocmv = <0>;
++		reset-gpios = <&gpio4 5 GPIO_ACTIVE_LOW>;
++		ai3x-gpio-func = <
++			0 /* AIC3X_GPIO1_FUNC_DISABLED */
++			5 /* AIC3X_GPIO2_FUNC_DIGITAL_MIC_INPUT */
++		>;
++	};
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++
++	imx6qdl-var-som-mx6 {
++		pinctrl_hog: hoggrp {
++			fsl,pins = <
++				/* CTW6120 IRQ */
++				MX6QDL_PAD_EIM_DA7__GPIO3_IO07		0x80000000
++				/* SDMMC2 CD/WP */
++				MX6QDL_PAD_KEY_COL4__GPIO4_IO14		0x80000000
++				MX6QDL_PAD_KEY_ROW4__GPIO4_IO15		0x80000000
++			>;
++		};
++
++		pinctrl_audmux: audmux {
++			fsl,pins = <
++				MX6QDL_PAD_CSI0_DAT7__AUD3_RXD		0x130b0
++				MX6QDL_PAD_CSI0_DAT4__AUD3_TXC		0x130b0
++				MX6QDL_PAD_CSI0_DAT5__AUD3_TXD		0x110b0
++				MX6QDL_PAD_CSI0_DAT6__AUD3_TXFS		0x130b0
++				/* Audio Clock */
++				MX6QDL_PAD_GPIO_0__CCM_CLKO1		0x130b0
++			>;
++		};
++
++		pinctrl_bt: bt {
++			fsl,pins = <
++				/* Bluetooth/wifi enable */
++				MX6QDL_PAD_SD3_DAT6__GPIO6_IO18		0x1b0b1
++				/* Wifi Slow Clock */
++				MX6QDL_PAD_ENET_RXD0__OSC32K_32K_OUT	0x000b0
++			>;
++		};
++
++		pinctrl_ecspi3: ecspi3grp {
++			fsl,pins = <
++				MX6QDL_PAD_DISP0_DAT2__ECSPI3_MISO	0x100b1
++				MX6QDL_PAD_DISP0_DAT1__ECSPI3_MOSI	0x100b1
++				MX6QDL_PAD_DISP0_DAT0__ECSPI3_SCLK	0x100b1
++			>;
++		};
++
++		pinctrl_enet: enetgrp {
++			fsl,pins = <
++				MX6QDL_PAD_ENET_MDIO__ENET_MDIO		0x1b0b0
++				MX6QDL_PAD_ENET_MDC__ENET_MDC		0x1b0b0
++				MX6QDL_PAD_RGMII_TXC__RGMII_TXC		0x1b0b0
++				MX6QDL_PAD_RGMII_TD0__RGMII_TD0		0x1b0b0
++				MX6QDL_PAD_RGMII_TD1__RGMII_TD1		0x1b0b0
++				MX6QDL_PAD_RGMII_TD2__RGMII_TD2		0x1b0b0
++				MX6QDL_PAD_RGMII_TD3__RGMII_TD3		0x1b0b0
++				MX6QDL_PAD_RGMII_TX_CTL__RGMII_TX_CTL	0x1b0b0
++				MX6QDL_PAD_ENET_REF_CLK__ENET_TX_CLK	0x1b0b0
++				MX6QDL_PAD_RGMII_RXC__RGMII_RXC		0x1b0b0
++				MX6QDL_PAD_RGMII_RD0__RGMII_RD0		0x1b0b0
++				MX6QDL_PAD_RGMII_RD1__RGMII_RD1		0x1b0b0
++				MX6QDL_PAD_RGMII_RD2__RGMII_RD2		0x1b0b0
++				MX6QDL_PAD_RGMII_RD3__RGMII_RD3		0x1b0b0
++				MX6QDL_PAD_RGMII_RX_CTL__RGMII_RX_CTL	0x1b0b0
++			>;
++		};
++
++		pinctrl_enet_irq: enetirqgrp {
++			fsl,pins = <
++				MX6QDL_PAD_GPIO_6__ENET_IRQ	0x000b1
++			>;
++		};
++
++		pinctrl_i2c1: i2c1grp {
++			fsl,pins = <
++				MX6QDL_PAD_CSI0_DAT8__I2C1_SDA	0x4001b8b1
++				MX6QDL_PAD_CSI0_DAT9__I2C1_SCL	0x4001b8b1
++			>;
++		};
++
++		pinctrl_i2c2: i2c2grp {
++			fsl,pins = <
++				MX6QDL_PAD_KEY_COL3__I2C2_SCL	0x4001b8b1
++				MX6QDL_PAD_KEY_ROW3__I2C2_SDA	0x4001b8b1
++			>;
++		};
++
++		pinctrl_i2c3: i2c3grp {
++			fsl,pins = <
++				MX6QDL_PAD_GPIO_5__I2C3_SCL	0x4001b8b1
++				MX6QDL_PAD_GPIO_16__I2C3_SDA	0x4001b8b1
++			>;
++		};
++
++		pinctrl_pmic: pmicgrp {
++			fsl,pins = <
++				/* PMIC INT */
++				MX6QDL_PAD_GPIO_17__GPIO7_IO12	0x80000000
++			>;
++		};
++
++		pinctrl_pwm2: pwm2grp {
++			fsl,pins = <
++				MX6QDL_PAD_DISP0_DAT9__PWM2_OUT	0x1b0b1
++			>;
++		};
++
++		pinctrl_uart1: uart1grp {
++			fsl,pins = <
++				MX6QDL_PAD_CSI0_DAT10__UART1_TX_DATA 0x1b0b1
++				MX6QDL_PAD_CSI0_DAT11__UART1_RX_DATA 0x1b0b1
++			>;
++		};
++
++		pinctrl_uart2: uart2grp {
++			fsl,pins = <
++				MX6QDL_PAD_SD3_DAT4__UART2_RX_DATA	0x1b0b1
++				MX6QDL_PAD_SD3_DAT5__UART2_TX_DATA	0x1b0b1
++				MX6QDL_PAD_EIM_D28__UART2_CTS_B		0x1b0b1
++				MX6QDL_PAD_EIM_D29__UART2_RTS_B		0x1b0b1
++			>;
++		};
++
++		pinctrl_usdhc3: usdhc3grp {
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD	0x17069
++				MX6QDL_PAD_SD3_CLK__SD3_CLK	0x10069
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0	0x17069
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1	0x17069
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2	0x17069
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3	0x17069
++				/* WL_EN */
++				MX6QDL_PAD_SD3_DAT7__GPIO6_IO17 0x13059
++				/* WL_IRQ */
++				MX6QDL_PAD_SD3_RST__GPIO7_IO08  0x13059
++			>;
++		};
++
++		pinctrl_usdhc3_100mhz: usdhc3grp100mhz {
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD	0x170B9
++				MX6QDL_PAD_SD3_CLK__SD3_CLK	0x100B9
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0	0x170B9
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1	0x170B9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3	0x170B9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3	0x170B9
++				/* WL_EN */
++				MX6QDL_PAD_SD3_DAT7__GPIO6_IO17 0x130B9
++				/* WL_IRQ */
++				MX6QDL_PAD_SD3_RST__GPIO7_IO08  0x130B9
++			>;
++		};
++
++		pinctrl_usdhc3_200mhz: usdhc3grp200mhz {
++			fsl,pins = <
++				MX6QDL_PAD_SD3_CMD__SD3_CMD	0x170F9
++				MX6QDL_PAD_SD3_CLK__SD3_CLK	0x100F9
++				MX6QDL_PAD_SD3_DAT0__SD3_DATA0	0x170F9
++				MX6QDL_PAD_SD3_DAT1__SD3_DATA1	0x170F9
++				MX6QDL_PAD_SD3_DAT2__SD3_DATA2	0x170F9
++				MX6QDL_PAD_SD3_DAT3__SD3_DATA3	0x170F9
++				/* WL_EN */
++				MX6QDL_PAD_SD3_DAT7__GPIO6_IO17 0x130F9
++				/* WL_IRQ */
++				MX6QDL_PAD_SD3_RST__GPIO7_IO08  0x130F9
++			>;
++		};
++
++		pinctrl_gpmi_nand: gpminandgrp {
++			fsl,pins = <
++				MX6QDL_PAD_NANDF_CLE__NAND_CLE		0xb0b1
++				MX6QDL_PAD_NANDF_ALE__NAND_ALE		0xb0b1
++				MX6QDL_PAD_NANDF_CS0__NAND_CE0_B	0xb0b1
++				MX6QDL_PAD_NANDF_CS1__NAND_CE1_B	0xb0b1
++				MX6QDL_PAD_NANDF_RB0__NAND_READY_B	0xb0b1
++				MX6QDL_PAD_NANDF_D0__NAND_DATA00	0xb0b1
++				MX6QDL_PAD_NANDF_D1__NAND_DATA01	0xb0b1
++				MX6QDL_PAD_NANDF_D2__NAND_DATA02	0xb0b1
++				MX6QDL_PAD_NANDF_D3__NAND_DATA03	0xb0b1
++				MX6QDL_PAD_NANDF_D4__NAND_DATA04	0xb0b1
++				MX6QDL_PAD_NANDF_D5__NAND_DATA05	0xb0b1
++				MX6QDL_PAD_NANDF_D6__NAND_DATA06	0xb0b1
++				MX6QDL_PAD_NANDF_D7__NAND_DATA07	0xb0b1
++				MX6QDL_PAD_SD4_CMD__NAND_RE_B		0xb0b1
++				MX6QDL_PAD_SD4_CLK__NAND_WE_B		0xb0b1
++				MX6QDL_PAD_NANDF_WP_B__NAND_WP_B	0xb0b1
++			>;
++		};
++	};
++};
++
++&pwm2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm2>;
++	status = "okay";
++};
++
++&reg_arm {
++	vin-supply = <&sw1a_reg>;
++};
++
++&reg_pu {
++	vin-supply = <&sw1c_reg>;
++};
++
++&reg_soc {
++	vin-supply = <&sw1c_reg>;
++};
++
++&snvs_poweroff {
++	status = "okay";
++};
++
++&ssi2 {
++	fsl,mode = "i2s-slave";
++	status = "okay";
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++	status = "okay";
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2 &pinctrl_bt>;
++	uart-has-rtscts;
++	status = "okay";
++};
++
++&gpmi {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpmi_nand>;
++	status = "okay";
++};
++
++&usdhc3 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	bus-width = <4>;
++	vmmc-supply = <&reg_wl18xx_vmmc>;
++	non-removable;
++	wakeup-source;
++	keep-power-in-suspend;
++	cap-power-off-card;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	wlcore: wlcore@0 {
++		compatible = "ti,wl1835";
++		reg = <2>;
++		interrupt-parent = <&gpio6>;
++		interrupts = <17 IRQ_TYPE_EDGE_RISING>;
++		ref-clock-frequency = <38400000>;
++	};
++};
++
++&reg_vdd1p1 {
++	vin-supply = <&vgen5_reg>;
++};
++
++&reg_vdd2p5 {
++	vin-supply = <&vgen5_reg>;
++};
 -- 
 2.34.1
 
