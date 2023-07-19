@@ -1,181 +1,148 @@
-Return-Path: <SRS0=Ao5Q=DF=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Sz/F=DF=sberdevices.ru=DDRokosov@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D803C001DE
-	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 17:56:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E40C001B0
+	for <soc@archiver.kernel.org>; Wed, 19 Jul 2023 18:39:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C1A65C433C8; Wed, 19 Jul 2023 17:56:04 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 6A196C43395; Wed, 19 Jul 2023 18:39:49 +0000 (UTC)
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8FAF0C433CC
-	for <soc@kernel.org>; Wed, 19 Jul 2023 17:56:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8FAF0C433CC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3fbfcc6daa9so67003285e9.3
-        for <soc@kernel.org>; Wed, 19 Jul 2023 10:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689789360; x=1692381360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q+5oaw2J5+G3GYFPR3to60Ow5YDUAwCVY4MtrYxrWzo=;
-        b=O5tdpOzllo11N68hbvqat1rL/4izSOZ0mS/2NFq3W6QpoHAAtnacEgIE/ney42oTv2
-         baG9U7DhaLclF5umoDw473TrB85LBTE4niFhYh71kp24dX/IN8IpfpLtVSNPiSNmk0Dx
-         ELKwjMmadFYml++d7mnvFvKSqrYKNyNROBtMVaoH+dgbYgQRa4NtT2p8yv3hAfaKipVP
-         yy6b/5ssaNPZeA+Fct6luOsGclO3j1r2EQSsUwxf7NvfgxrmXZZxznrl1KpZMg4/Iu9x
-         bA8Z4+a5tUdsu+6ZBbRGVBvC749z6UrX7ZbxxkgUHeCO5P4QVhijnULOlpui+1R/d/3A
-         MUeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689789360; x=1692381360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q+5oaw2J5+G3GYFPR3to60Ow5YDUAwCVY4MtrYxrWzo=;
-        b=Mn5GcRrM37r1mwAif8KbAJLLj/5vbhm0+ohaMjNSPAEgLXmlJZUeKyckKspzmdmwAE
-         uaCwmm+ARuArbBFrLsncLRCRTjq0uyqD2qCyeU3G/AwonRSFOS16fjWtXejk5FFvOQla
-         kRF0fzZWnwH6WBQdTvAysoBWPV1eHleJkRG3nGIjZn2HKTXMEZxIqz6X9WPPyxcwdiSV
-         F3TspniWzMf6HPLyTmyIRGTMGerGOEuGcdoUvqjTTfsNdmwRf9w3hzigDme55hb4MhQq
-         /ssQuEJ+YenqPe5Io37M24iW6pLEUzScyEwlRrIGEU48KpZb2E5cGzrO3i2viO7dvYr1
-         cUGg==
-X-Gm-Message-State: ABy/qLZFLBbWGgQ7+1sQLSPEy2K8OOJyTVV88nxL/t4Vrn8xkjiejhVR
-	vXUwNCHgs1mbyrxf4s9pjHvVkQ==
-X-Google-Smtp-Source: APBJJlGJWPVncsHecZCDgmX0fdTLwFLC8Wokgg9i2konxqVAbiNqQMmWxybL1xsSOpnBwDHWUMyY6A==
-X-Received: by 2002:a05:600c:20f:b0:3fb:ab76:164b with SMTP id 15-20020a05600c020f00b003fbab76164bmr2552075wmi.13.1689789360496;
-        Wed, 19 Jul 2023 10:56:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id y9-20020a7bcd89000000b003fbb1a9586esm2232470wmj.15.2023.07.19.10.55.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 10:56:00 -0700 (PDT)
-Message-ID: <71f2c286-c205-13b8-885a-240eae4131e3@linaro.org>
-Date: Wed, 19 Jul 2023 19:55:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 2/3] Documentation/process: maintainer-soc: add clean
- platforms profile
-Content-Language: en-US
-To: Rob Herring <robh+dt@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 08AF0C433B9;
+	Wed, 19 Jul 2023 18:39:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08AF0C433B9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sberdevices.ru
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sberdevices.ru
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 660A412007A;
+	Wed, 19 Jul 2023 21:39:33 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 660A412007A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+	s=mail; t=1689791973;
+	bh=sc+94aLvgVUxBUEzSPbWOsr9WhtmbJCsOLteFFzOoLU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=ftS9UdnFVupfX9JxONl46s/RGEHl80jPk77NDDqzvRlD1qSq1jhJ6yXhfHaSPewnr
+	 LEQ6tu0ClcfcCUU9btQ8pcnKoaAO2EJBXjugGbhFMHWzBlTJxypP0F3af+WF7YnUcT
+	 qwRJV+UdIg9Tq/ng5S2MnxsHFZSDjXsqkqprkZ/FAn6+PAzMRaUZQlMaszmoB8jzPf
+	 AAU7c/jMuvSi1AM8yvRzt0m4L7ILTyWgBLaRMTnYKOJhuMJljph7thz7MAefNZECdm
+	 ASZdS2Hm97OvI4aj7PSdUXrCYM7KLsHLwhBPeZ4VRaDC7sbNbBsJ+UEFUFLlGc1JiM
+	 1mc7vWHZzj6DA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Wed, 19 Jul 2023 21:39:33 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 19 Jul
+ 2023 21:39:33 +0300
+Date: Wed, 19 Jul 2023 21:39:27 +0300
+From: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, arm@kernel.org,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20230719143309.204766-1-krzysztof.kozlowski@linaro.org>
- <20230719143309.204766-2-krzysztof.kozlowski@linaro.org>
- <CAL_JsqLXanpk+cMG0b8Ze9WAfmRqcu6-5EsdKVKG3TKCOwnm7A@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqLXanpk+cMG0b8Ze9WAfmRqcu6-5EsdKVKG3TKCOwnm7A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+CC: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+	<sboyd@kernel.org>, Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>, Eugeniy Paltsev
+	<Eugeniy.Paltsev@synopsys.com>, Florian Fainelli
+	<florian.fainelli@broadcom.com>, Broadcom internal kernel review list
+	<bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott
+ Branden <sbranden@broadcom.com>, Joel Stanley <joel@jms.id.au>, Andrew
+ Jeffery <andrew@aj.id.au>, Neil Armstrong <neil.armstrong@linaro.org>, Sudeep
+ Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Alex Helms
+	<alexander.helms.jy@renesas.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan
+	<peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+	Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, Santosh
+ Shilimkar <ssantosh@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Jerome
+ Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>, Andrew Lunn
+	<andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian
+ Hesselbarth <sebastian.hesselbarth@gmail.com>, Andy Gross
+	<agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
+	<konrad.dybcio@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>, Sylwester Nawrocki
+	<s.nawrocki@samsung.com>, Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi
+	<cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, Dinh
+ Nguyen <dinguyen@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Shiraz
+ Hashim <shiraz.linux.kernel@gmail.com>, <soc@kernel.org>, Orson Zhai
+	<orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan
+ Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>, Hal
+ Feng <hal.feng@starfivetech.com>, Chen-Yu Tsai <wens@csie.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Peter De Schrijver
+	<pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, Thierry
+ Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu
+	<mhiramat@kernel.org>, Michal Simek <michal.simek@amd.com>,
+	<devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-actions@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-rpi-kernel@lists.infradead.org>,
+	<linux-aspeed@lists.ozlabs.org>, <linux-oxnas@groups.io>,
+	<linux-mediatek@lists.infradead.org>, <linux-amlogic@lists.infradead.org>,
+	<linux-arm-msm@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+	<linux-rockchip@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
+	<linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] clk: Explicitly include correct DT includes
+Message-ID: <20230719183927.c4ykdjw3iekmugzy@CAB-WSD-L081021>
+References: <20230714174342.4052882-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230714174342.4052882-1-robh@kernel.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178730 [Jul 19 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 524 524 9753033d6953787301affc41bead8ed49c47b39d, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/19 15:29:00 #21641898
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On 19/07/2023 19:40, Rob Herring wrote:
-> On Wed, Jul 19, 2023 at 8:33 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Some SoC platforms require that commits must not bring any new
->> dtbs_check warnings.  Maintainers of such platforms usually have some
->> automation set, so any new warning will be spotted sooner or later.
->> Worst case: they run the tests themselves.  Document requirements for
->> such platforms, so contributors can expect their patches being dropped
->> or ignored, if they bring new warnings for existing boards.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->>
->> ---
->>
->> Changes in v2:
->> 1. Add Rb tag.
->> 2. Implement Conor's feedback: change doc title, follow->should follow,
->>    minor style changes.
->> ---
->>  .../process/maintainer-handbooks.rst          |  1 +
->>  .../process/maintainer-soc-clean-dts.rst      | 23 +++++++++++++++++++
->>  MAINTAINERS                                   |  2 +-
->>  3 files changed, 25 insertions(+), 1 deletion(-)
->>  create mode 100644 Documentation/process/maintainer-soc-clean-dts.rst
->>
->> diff --git a/Documentation/process/maintainer-handbooks.rst b/Documentation/process/maintainer-handbooks.rst
->> index 9992bfd7eaa3..976391cec528 100644
->> --- a/Documentation/process/maintainer-handbooks.rst
->> +++ b/Documentation/process/maintainer-handbooks.rst
->> @@ -17,5 +17,6 @@ Contents:
->>
->>     maintainer-netdev
->>     maintainer-soc
->> +   maintainer-soc-clean-dts
->>     maintainer-tip
->>     maintainer-kvm-x86
->> diff --git a/Documentation/process/maintainer-soc-clean-dts.rst b/Documentation/process/maintainer-soc-clean-dts.rst
->> new file mode 100644
->> index 000000000000..c460923f39be
->> --- /dev/null
->> +++ b/Documentation/process/maintainer-soc-clean-dts.rst
->> @@ -0,0 +1,23 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +==============================================
->> +SoC Platforms with DTS Compliance Requirements
->> +==============================================
->> +
->> +Overview
->> +--------
->> +
->> +SoC platforms or subarchitectures should follow all the rules from
->> +Documentation/process/maintainer-soc.rst.  However platforms referencing
->> +this document impose additional requirements listed below.
+On Fri, Jul 14, 2023 at 11:43:29AM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
 > 
-> I would make it clear how platforms reference this doc:
-> this document in MAINTAINERS impose...
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Sure.
+[...]
 
-> 
->> +
->> +Strict DTS DT Schema Compliance
-> 
-> Schema and dtc
-Ack
+For
 
-> 
-> 
->> +-------------------------------
->> +
->> +No changes to the SoC platform Devicetree sources (DTS files) should introduce
->> +new ``make dtbs_check W=1`` warnings.  The platform maintainers have automation
->> +in place which should point out any new warnings.
-> 
-> If a soc.dtsi file has warnings a new board.dts will duplicate all
-> those warnings. I imagine those are okay? 
+>  drivers/clk/meson/a1-peripherals.c               | 2 +-
+>  drivers/clk/meson/a1-pll.c                       | 2 +-
 
-This. I would assume that these were existing warnings, so new board
-does not add anything new. Different question if new board comes with
-the same warning for compatible in TXT (not DT schema).
+Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-> Or are we assuming soc.dtsi
-> is warning free? Or do we need to distinguish both cases?
+[...]
 
-Warning free, or at least not many warnings, should be implied,
-otherwise I don't think it is possible to spot new warnings.
-
-
-> 
-> I would like to see a build target for the warning free platforms, so
-> we can easily run it and check for no warnings. Just hasn't been
-> enough platforms yet to do that.
-> 
-Best regards,
-Krzysztof
-
+-- 
+Thank you,
+Dmitry
