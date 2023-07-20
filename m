@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 914A0C3DA50
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D93BC3DA4A
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 840E7C4E67B; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C66EC00939;
-	Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
+	id 3D3CBC4E66C; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F31BBC00921;
+	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1689841799;
-	bh=D0zmWfpY4Zxds3pI9qoqO5QwtVSarYugW4yFNdti8Q0=;
+	bh=7ySSkKjStDzOOF2fqFcYk8v1kG5xvtpuW9ZxOz+/+PE=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=Jv7h+tlB1D4diowhIg135C6ImPqAa+Cmjeq4JsjWftAmW2n7sBmFcAmbXIzL8Ym9y
-	 BRnM7ZZ6DoiLmhbYWpNAmgW8KDDfclYLD8FRZj21ThtsS97ueB5/1HS8a03lP/0flN
-	 mIV9lxFJrOcvLZcjqMupIt/NaX7j/b8fkAoaSbJF1dRce6WMrKQfYEEQLi6XUHS1NQ
-	 3PndgRFBDmbaAJpM5FNo0MdpgiyoEmpErY/PUPUvcVTJmZS4qyrWGe3OMMXjPH8Z9a
-	 qGaMRvaJ3vGhiDYQGcKw/+g6ugY5B9zue42n4xvXXR+WkdxqFhCLfJaZO0Lu2PHSRu
-	 MyPrBlOv5m+dQ==
+	b=EBu/f4nvd1aICvh0l2w6wjA3aJ7njEIKCsMcdvowSGog2SZTG8FaeQ/FVKxBC9iMW
+	 5RfHyMvmqZcjSNn1fh8V10dwG0Mab30+GeS2TZb0vvsdtvTbxaA1uJWfLzasdqvEku
+	 CuWPBs3hcw4s8YhPGYp8BH8L9FpneIvvj7iCOZLz46AEF0taYDeUGGXLy9dewbsLkl
+	 H8U1/JIDQ5ARfwBCNdMZ/nQCc8pHOJ2R3OoiG9OkrEk/KS1dE8htCy03wrKVyZoijr
+	 jSiLCvCBG9Az/VKZvsZx2s1JPn7H1zJsOQ7ngQ+zO7M28arDVeI3J3VZNcX/FDJSiT
+	 sompFe8ZL6cqA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C81C10F19;
-	Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D59E1C3DA49;
+	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:42 +0300
-Subject: [PATCH v3 42/42] ASoC: cirrus: edb93xx: Delete driver
+Date: Thu, 20 Jul 2023 14:29:38 +0300
+Subject: [PATCH v3 38/42] ata: pata_ep93xx: remove legacy pinctrl use
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-42-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-38-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=4962;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=5097;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=K42b6S3Gkw/OZtsjmZjMwv/18r4+mbuwFRUMVcpcY+I=; =?utf-8?q?b=3DIGZ2FeCPE78X?=
- =?utf-8?q?cF95Zy3oR8xxaO6xwqnalDqB5TnbzsJf8QwYoyPEiTB3t8yvZZ1/Rzsu5n/5Wq+d?=
- NvVfE54nAYukLYe2jXVfWiK7KxIOWkgx8kBBnHCzn8co5COdM7XY
+ bh=Yfth7RCqN3bk1KCE0VD4AFUcLhcPkJPGr6wnRBug0VU=; =?utf-8?q?b=3DW+4pFo+57mpE?=
+ =?utf-8?q?IkWI1WzLCkq37SkZsYf4y7isLCOQvX/Ldu6/JyH2OIR89vTIxSjEltpb3VQc3pyS?=
+ qGEHOS81BAaTyJ/XxCrpq82upkbLGgt0aSedWJ1W7uOJj3KQJ2ru
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -85,171 +85,176 @@ X-Endpoint-Received:
 X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
 Reply-To: <nikita.shubin@maquefel.me>
 
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Can be replaced with "simple-audio-card" for the rates up to 50kHz, refer
-to commit "ARM: dts: ep93xx: Add EDB9302 DT".
+Drop legacy acquire/release since we are using pinctrl for this now.
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- sound/soc/cirrus/Kconfig   |   9 ----
- sound/soc/cirrus/Makefile  |   4 --
- sound/soc/cirrus/edb93xx.c | 117 ---------------------------------------------
- 3 files changed, 130 deletions(-)
+ arch/arm/mach-ep93xx/core.c       | 72 ---------------------------------------
+ drivers/ata/pata_ep93xx.c         | 25 ++++----------
+ include/linux/soc/cirrus/ep93xx.h |  4 ---
+ 3 files changed, 6 insertions(+), 95 deletions(-)
 
-diff --git a/sound/soc/cirrus/Kconfig b/sound/soc/cirrus/Kconfig
-index 38a83c4dcc2d..97def4e53fbc 100644
---- a/sound/soc/cirrus/Kconfig
-+++ b/sound/soc/cirrus/Kconfig
-@@ -31,12 +31,3 @@ config SND_EP93XX_SOC_I2S_WATCHDOG
+diff --git a/arch/arm/mach-ep93xx/core.c b/arch/arm/mach-ep93xx/core.c
+index 9afc6095d1c1..66dba9b4a6f9 100644
+--- a/arch/arm/mach-ep93xx/core.c
++++ b/arch/arm/mach-ep93xx/core.c
+@@ -778,78 +778,6 @@ void __init ep93xx_register_ide(void)
+ 	platform_device_register(&ep93xx_ide_device);
+ }
  
- endif # if SND_EP93XX_SOC_I2S
- 
--config SND_EP93XX_SOC_EDB93XX
--	tristate "SoC Audio support for Cirrus Logic EDB93xx boards"
--	depends on SND_EP93XX_SOC && (MACH_EDB9301 || MACH_EDB9302 || MACH_EDB9302A || MACH_EDB9307A || MACH_EDB9315A)
--	select SND_EP93XX_SOC_I2S
--	select SND_SOC_CS4271_I2C if I2C
--	select SND_SOC_CS4271_SPI if SPI_MASTER
--	help
--	  Say Y or M here if you want to add support for I2S audio on the
--	  Cirrus Logic EDB93xx boards.
-diff --git a/sound/soc/cirrus/Makefile b/sound/soc/cirrus/Makefile
-index 19a86daad660..5916c03888cb 100644
---- a/sound/soc/cirrus/Makefile
-+++ b/sound/soc/cirrus/Makefile
-@@ -6,7 +6,3 @@ snd-soc-ep93xx-i2s-objs	 			:= ep93xx-i2s.o
- obj-$(CONFIG_SND_EP93XX_SOC)			+= snd-soc-ep93xx.o
- obj-$(CONFIG_SND_EP93XX_SOC_I2S)		+= snd-soc-ep93xx-i2s.o
- 
--# EP93XX Machine Support
--snd-soc-edb93xx-objs				:= edb93xx.o
--
--obj-$(CONFIG_SND_EP93XX_SOC_EDB93XX)		+= snd-soc-edb93xx.o
-diff --git a/sound/soc/cirrus/edb93xx.c b/sound/soc/cirrus/edb93xx.c
-deleted file mode 100644
-index f49caab21a25..000000000000
---- a/sound/soc/cirrus/edb93xx.c
-+++ /dev/null
-@@ -1,117 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * SoC audio for EDB93xx
-- *
-- * Copyright (c) 2010 Alexander Sverdlin <subaparts@yandex.ru>
-- *
-- * This driver support CS4271 codec being master or slave, working
-- * in control port mode, connected either via SPI or I2C.
-- * The data format accepted is I2S or left-justified.
-- * DAPM support not implemented.
-- */
--
--#include <linux/platform_device.h>
--#include <linux/gpio.h>
--#include <linux/module.h>
--#include <linux/soc/cirrus/ep93xx.h>
--#include <sound/core.h>
--#include <sound/pcm.h>
--#include <sound/soc.h>
--#include <asm/mach-types.h>
--
--static int edb93xx_hw_params(struct snd_pcm_substream *substream,
--			     struct snd_pcm_hw_params *params)
+-int ep93xx_ide_acquire_gpio(struct platform_device *pdev)
 -{
--	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
--	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
--	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
 -	int err;
--	unsigned int mclk_rate;
--	unsigned int rate = params_rate(params);
+-	int i;
 -
--	/*
--	 * According to CS4271 datasheet we use MCLK/LRCK=256 for
--	 * rates below 50kHz and 128 for higher sample rates
--	 */
--	if (rate < 50000)
--		mclk_rate = rate * 64 * 4;
--	else
--		mclk_rate = rate * 64 * 2;
+-	err = gpio_request(EP93XX_GPIO_LINE_EGPIO2, dev_name(&pdev->dev));
+-	if (err)
+-		return err;
+-	err = gpio_request(EP93XX_GPIO_LINE_EGPIO15, dev_name(&pdev->dev));
+-	if (err)
+-		goto fail_egpio15;
+-	for (i = 2; i < 8; i++) {
+-		err = gpio_request(EP93XX_GPIO_LINE_E(i), dev_name(&pdev->dev));
+-		if (err)
+-			goto fail_gpio_e;
+-	}
+-	for (i = 4; i < 8; i++) {
+-		err = gpio_request(EP93XX_GPIO_LINE_G(i), dev_name(&pdev->dev));
+-		if (err)
+-			goto fail_gpio_g;
+-	}
+-	for (i = 0; i < 8; i++) {
+-		err = gpio_request(EP93XX_GPIO_LINE_H(i), dev_name(&pdev->dev));
+-		if (err)
+-			goto fail_gpio_h;
+-	}
 -
--	err = snd_soc_dai_set_sysclk(codec_dai, 0, mclk_rate,
--				     SND_SOC_CLOCK_IN);
+-	/* GPIO ports E[7:2], G[7:4] and H used by IDE */
+-	ep93xx_devcfg_clear_bits(EP93XX_SYSCON_DEVCFG_EONIDE |
+-				 EP93XX_SYSCON_DEVCFG_GONIDE |
+-				 EP93XX_SYSCON_DEVCFG_HONIDE);
+-	return 0;
+-
+-fail_gpio_h:
+-	for (--i; i >= 0; --i)
+-		gpio_free(EP93XX_GPIO_LINE_H(i));
+-	i = 8;
+-fail_gpio_g:
+-	for (--i; i >= 4; --i)
+-		gpio_free(EP93XX_GPIO_LINE_G(i));
+-	i = 8;
+-fail_gpio_e:
+-	for (--i; i >= 2; --i)
+-		gpio_free(EP93XX_GPIO_LINE_E(i));
+-	gpio_free(EP93XX_GPIO_LINE_EGPIO15);
+-fail_egpio15:
+-	gpio_free(EP93XX_GPIO_LINE_EGPIO2);
+-	return err;
+-}
+-EXPORT_SYMBOL(ep93xx_ide_acquire_gpio);
+-
+-void ep93xx_ide_release_gpio(struct platform_device *pdev)
+-{
+-	int i;
+-
+-	for (i = 2; i < 8; i++)
+-		gpio_free(EP93XX_GPIO_LINE_E(i));
+-	for (i = 4; i < 8; i++)
+-		gpio_free(EP93XX_GPIO_LINE_G(i));
+-	for (i = 0; i < 8; i++)
+-		gpio_free(EP93XX_GPIO_LINE_H(i));
+-	gpio_free(EP93XX_GPIO_LINE_EGPIO15);
+-	gpio_free(EP93XX_GPIO_LINE_EGPIO2);
+-
+-
+-	/* GPIO ports E[7:2], G[7:4] and H used by GPIO */
+-	ep93xx_devcfg_set_bits(EP93XX_SYSCON_DEVCFG_EONIDE |
+-			       EP93XX_SYSCON_DEVCFG_GONIDE |
+-			       EP93XX_SYSCON_DEVCFG_HONIDE);
+-}
+-EXPORT_SYMBOL(ep93xx_ide_release_gpio);
+-
+ /*************************************************************************
+  * EP93xx ADC
+  *************************************************************************/
+diff --git a/drivers/ata/pata_ep93xx.c b/drivers/ata/pata_ep93xx.c
+index a88824dfc5fa..22f9852715f1 100644
+--- a/drivers/ata/pata_ep93xx.c
++++ b/drivers/ata/pata_ep93xx.c
+@@ -928,28 +928,18 @@ static int ep93xx_pata_probe(struct platform_device *pdev)
+ 	void __iomem *ide_base;
+ 	int err;
+ 
+-	err = ep93xx_ide_acquire_gpio(pdev);
 -	if (err)
 -		return err;
 -
--	return snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_rate,
--				      SND_SOC_CLOCK_OUT);
--}
--
--static const struct snd_soc_ops edb93xx_ops = {
--	.hw_params	= edb93xx_hw_params,
--};
--
--SND_SOC_DAILINK_DEFS(hifi,
--	DAILINK_COMP_ARRAY(COMP_CPU("ep93xx-i2s")),
--	DAILINK_COMP_ARRAY(COMP_CODEC("spi0.0", "cs4271-hifi")),
--	DAILINK_COMP_ARRAY(COMP_PLATFORM("ep93xx-i2s")));
--
--static struct snd_soc_dai_link edb93xx_dai = {
--	.name		= "CS4271",
--	.stream_name	= "CS4271 HiFi",
--	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
--			  SND_SOC_DAIFMT_CBC_CFC,
--	.ops		= &edb93xx_ops,
--	SND_SOC_DAILINK_REG(hifi),
--};
--
--static struct snd_soc_card snd_soc_edb93xx = {
--	.name		= "EDB93XX",
--	.owner		= THIS_MODULE,
--	.dai_link	= &edb93xx_dai,
--	.num_links	= 1,
--};
--
--static int edb93xx_probe(struct platform_device *pdev)
--{
--	struct snd_soc_card *card = &snd_soc_edb93xx;
--	int ret;
--
--	ret = ep93xx_i2s_acquire();
--	if (ret)
--		return ret;
--
--	card->dev = &pdev->dev;
--
--	ret = snd_soc_register_card(card);
--	if (ret) {
--		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
--			ret);
--		ep93xx_i2s_release();
+ 	/* INT[3] (IRQ_EP93XX_EXT3) line connected as pull down */
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		err = irq;
+-		goto err_rel_gpio;
 -	}
--
--	return ret;
--}
--
--static void edb93xx_remove(struct platform_device *pdev)
--{
--	struct snd_soc_card *card = platform_get_drvdata(pdev);
--
--	snd_soc_unregister_card(card);
--	ep93xx_i2s_release();
--}
--
--static struct platform_driver edb93xx_driver = {
--	.driver		= {
--		.name	= "edb93xx-audio",
--	},
--	.probe		= edb93xx_probe,
--	.remove_new	= edb93xx_remove,
--};
--
--module_platform_driver(edb93xx_driver);
--
--MODULE_AUTHOR("Alexander Sverdlin <subaparts@yandex.ru>");
--MODULE_DESCRIPTION("ALSA SoC EDB93xx");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:edb93xx-audio");
++	if (irq < 0)
++		return irq;
+ 
+ 	ide_base = devm_platform_get_and_ioremap_resource(pdev, 0, &mem_res);
+-	if (IS_ERR(ide_base)) {
+-		err = PTR_ERR(ide_base);
+-		goto err_rel_gpio;
+-	}
++	if (IS_ERR(ide_base))
++		return PTR_ERR(ide_base);
+ 
+ 	drv_data = devm_kzalloc(&pdev->dev, sizeof(*drv_data), GFP_KERNEL);
+-	if (!drv_data) {
+-		err = -ENOMEM;
+-		goto err_rel_gpio;
+-	}
++	if (!drv_data)
++		return -ENXIO;
+ 
+ 	drv_data->pdev = pdev;
+ 	drv_data->ide_base = ide_base;
+@@ -1006,8 +996,6 @@ static int ep93xx_pata_probe(struct platform_device *pdev)
+ 
+ err_rel_dma:
+ 	ep93xx_pata_release_dma(drv_data);
+-err_rel_gpio:
+-	ep93xx_ide_release_gpio(pdev);
+ 	return err;
+ }
+ 
+@@ -1019,7 +1007,6 @@ static int ep93xx_pata_remove(struct platform_device *pdev)
+ 	ata_host_detach(host);
+ 	ep93xx_pata_release_dma(drv_data);
+ 	ep93xx_pata_clear_regs(drv_data->ide_base);
+-	ep93xx_ide_release_gpio(pdev);
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/soc/cirrus/ep93xx.h b/include/linux/soc/cirrus/ep93xx.h
+index ed94e4390b98..77490fe466c6 100644
+--- a/include/linux/soc/cirrus/ep93xx.h
++++ b/include/linux/soc/cirrus/ep93xx.h
+@@ -12,15 +12,11 @@ struct regmap;
+ #define EP93XX_CHIP_REV_E2	7
+ 
+ #if defined(CONFIG_EP93XX_SOC_COMMON)
+-int ep93xx_ide_acquire_gpio(struct platform_device *pdev);
+-void ep93xx_ide_release_gpio(struct platform_device *pdev);
+ int ep93xx_i2s_acquire(void);
+ void ep93xx_i2s_release(void);
+ unsigned int ep93xx_chip_revision(void);
+ 
+ #else
+-static inline int ep93xx_ide_acquire_gpio(struct platform_device *pdev) { return 0; }
+-static inline void ep93xx_ide_release_gpio(struct platform_device *pdev) {}
+ static inline int ep93xx_i2s_acquire(void) { return 0; }
+ static inline void ep93xx_i2s_release(void) {}
+ 
 
 -- 
 2.39.2
