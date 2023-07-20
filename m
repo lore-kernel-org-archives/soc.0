@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC327C25B75
-	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A40C3DA4D
+	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A81F8C58334; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 835E9C568BD;
-	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+	id 592DFC01207; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22EFFC00936;
+	Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689841798;
-	bh=0O4XaD7hqsnlsi2+/cns72bJJxVQuyLr5nMDr7PCcE4=;
+	s=k20201202; t=1689841799;
+	bh=Rn85mdJ/ubzChlkyTdaJIEQMNcdiS2eD3d6eKeixrwY=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=Ffr8aZl6rN3VojIRxQu1rgqtxKa152MaK5vBFG93QHd5nRs6crxfz2K57pmEKexC0
-	 WyQomccqujeqaF7jDSEsbUNE+E13KN727cR5pH0zpHMuV/b1XbnKmhtO0kjzBENvoL
-	 uOmk48vTJCnay4NZWLPPRV56O1hTQD0vUDyInGa8WAaDShAI61EiJ9y/6LTPJKzSyz
-	 qDMhudddE4J+kpUlKgGTp1MbCXMcLEXXU312sg36AqaFul5wrrUz88JoZSYgiL95Jc
-	 WZBbKW6wGnZtZrq8sBNaySuoFJhxkUpJzeUyLkh9VrWS5BN3MWVCyUZOx92e/RoErl
-	 50YEgXtGd7zRg==
+	b=WAM+gjNO2TOxrg2bHfy4hQC6J5Yy1mao9ey4t60yy5Sd8paDf7taVO7PO+9scuBb6
+	 y0d24CXTbV5g/MueOgTtMMAiMUNHgjJ2fvQQ3wwed4ngJYvMJX6/EgKHwSrZmHrKyS
+	 2owDM0u3XWWjW5+o2TVMi/2zGAItja4mg2xK9dpD2jW20u61Jj3JKmiUCBKLwtKuYE
+	 WXShzeIqez3ddEO/zxCzrwqpJ2OW1v6q13t4Xow8FT18bkDWe+aRdHEt6PPq/ScQ4N
+	 E9WRGb/wmUQ1ngiWVoBfObdg3Uln4OuNCYvX+s548U8Fd57mRM34Oz4H5qsRSHhHgy
+	 52OTAGmeGJ3JQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70207C25B5F;
-	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 079D1C3DA4A;
+	Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:31 +0300
-Subject: [PATCH v3 31/42] dt-bindings: wdt: Add ts72xx
+Date: Thu, 20 Jul 2023 14:29:40 +0300
+Subject: [PATCH v3 40/42] ARM: ep93xx: soc: drop defines
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-31-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-40-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=1621;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=3461;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=+iYdXLpj952sAwmYjKp/GVeiFhMZU99T9LpFVI9aGx0=; =?utf-8?q?b=3DPYSrwjwZv3XM?=
- =?utf-8?q?UrmUJ9Az9NVYoHn7v8/AorkIYoItE7iogjVur0EJBmY3tfD/koJ6+KDVHoBUk+kM?=
- k0IoLxwnDZgB/qsuAZxmKuToLG10AKjeCt/JSJTZIho3VrzkJ2eT
+ bh=/0hu0wNyYry9eR46z/4lIsm3+iKNRxnRunuFsPli+8o=; =?utf-8?q?b=3Dt8Gn2nV56UbD?=
+ =?utf-8?q?luRJPQc3FRT4VxEEMl7OaEwz+VnOlVqplWzIXprCGjvnSxKqTmm6TVGiAxU3uE3Z?=
+ hOjGjomdBuHASZBWo5WDu100TssjQmqkye26+BwegESTc7k8aeLG
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,65 +87,107 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add DT binding for Technologic Systems TS-72xx watchdog.
+Remove unnecessary defines, as we dropped board files.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- .../bindings/watchdog/technologic,ts7200-wdt.yaml  | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ include/linux/platform_data/eth-ep93xx.h    | 10 ---------
+ include/linux/platform_data/keypad-ep93xx.h | 32 -----------------------------
+ include/linux/soc/cirrus/ep93xx.h           | 13 ------------
+ 3 files changed, 55 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml b/Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml
-new file mode 100644
-index 000000000000..4f7f004ffdd3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/technologic,ts7200-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Technologic Systems TS-72xx based SBCs watchdog
-+
-+maintainers:
-+  - Nikita Shubin <nikita.shubin@maquefel.me>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: technologic,ts7200-wdt
-+      - items:
-+          - enum:
-+              - technologic,ts7300-wdt
-+              - technologic,ts7260-wdt
-+              - technologic,ts7250-wdt
-+          - const: technologic,ts7200-wdt
-+
-+  reg:
-+    items:
-+      - description: control register
-+      - description: feed register
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@23800000 {
-+      compatible = "technologic,ts7200-wdt";
-+      reg = <0x23800000 0x01>, <0x23c00000 0x01>;
-+      timeout-sec = <30>;
-+    };
-+
-+...
-+
+diff --git a/include/linux/platform_data/eth-ep93xx.h b/include/linux/platform_data/eth-ep93xx.h
+deleted file mode 100644
+index 8eef637a804d..000000000000
+--- a/include/linux/platform_data/eth-ep93xx.h
++++ /dev/null
+@@ -1,10 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _LINUX_PLATFORM_DATA_ETH_EP93XX
+-#define _LINUX_PLATFORM_DATA_ETH_EP93XX
+-
+-struct ep93xx_eth_data {
+-	unsigned char	dev_addr[6];
+-	unsigned char	phy_id;
+-};
+-
+-#endif
+diff --git a/include/linux/platform_data/keypad-ep93xx.h b/include/linux/platform_data/keypad-ep93xx.h
+deleted file mode 100644
+index 3054fced8509..000000000000
+--- a/include/linux/platform_data/keypad-ep93xx.h
++++ /dev/null
+@@ -1,32 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __KEYPAD_EP93XX_H
+-#define __KEYPAD_EP93XX_H
+-
+-struct matrix_keymap_data;
+-
+-/* flags for the ep93xx_keypad driver */
+-#define EP93XX_KEYPAD_DISABLE_3_KEY	(1<<0)	/* disable 3-key reset */
+-#define EP93XX_KEYPAD_DIAG_MODE		(1<<1)	/* diagnostic mode */
+-#define EP93XX_KEYPAD_BACK_DRIVE	(1<<2)	/* back driving mode */
+-#define EP93XX_KEYPAD_TEST_MODE		(1<<3)	/* scan only column 0 */
+-#define EP93XX_KEYPAD_AUTOREPEAT	(1<<4)	/* enable key autorepeat */
+-
+-/**
+- * struct ep93xx_keypad_platform_data - platform specific device structure
+- * @keymap_data:	pointer to &matrix_keymap_data
+- * @debounce:		debounce start count; terminal count is 0xff
+- * @prescale:		row/column counter pre-scaler load value
+- * @flags:		see above
+- */
+-struct ep93xx_keypad_platform_data {
+-	struct matrix_keymap_data *keymap_data;
+-	unsigned int	debounce;
+-	unsigned int	prescale;
+-	unsigned int	flags;
+-	unsigned int	clk_rate;
+-};
+-
+-#define EP93XX_MATRIX_ROWS		(8)
+-#define EP93XX_MATRIX_COLS		(8)
+-
+-#endif	/* __KEYPAD_EP93XX_H */
+diff --git a/include/linux/soc/cirrus/ep93xx.h b/include/linux/soc/cirrus/ep93xx.h
+index 77490fe466c6..89ce4867df3a 100644
+--- a/include/linux/soc/cirrus/ep93xx.h
++++ b/include/linux/soc/cirrus/ep93xx.h
+@@ -2,7 +2,6 @@
+ #ifndef _SOC_EP93XX_H
+ #define _SOC_EP93XX_H
+ 
+-struct platform_device;
+ struct regmap;
+ 
+ #define EP93XX_CHIP_REV_D0	3
+@@ -11,15 +10,6 @@ struct regmap;
+ #define EP93XX_CHIP_REV_E1	6
+ #define EP93XX_CHIP_REV_E2	7
+ 
+-#if defined(CONFIG_EP93XX_SOC_COMMON)
+-int ep93xx_i2s_acquire(void);
+-void ep93xx_i2s_release(void);
+-unsigned int ep93xx_chip_revision(void);
+-
+-#else
+-static inline int ep93xx_i2s_acquire(void) { return 0; }
+-static inline void ep93xx_i2s_release(void) {}
+-
+ #if defined(CONFIG_EP93XX_SOC)
+ void ep93xx_syscon_swlocked_write(struct regmap *map, unsigned int reg, unsigned int val);
+ void ep93xx_devcfg_set_clear(struct regmap *map, unsigned int set_bits, unsigned int clear_bits);
+@@ -33,9 +23,6 @@ static inline void ep93xx_devcfg_set_clear(struct regmap *map, unsigned int set_
+ 
+ void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
+ 				unsigned int mask, unsigned int val) { }
+-static inline unsigned int ep93xx_chip_revision(void) { return 0; }
+-#endif
+-
+ #endif
+ 
+ #endif
 
 -- 
 2.39.2
