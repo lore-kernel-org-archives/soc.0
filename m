@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2D15C3DA46
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75DBCC25B73
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B61DFC4AF75; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 91824C4166B;
+	id 68866C56898; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 411BDC4163D;
 	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1689841798;
-	bh=12/I5mxTK2I183F2Uca3FzP5Zq+MwR1BSDbbTPa7mNU=;
+	bh=rEDCpXmOkCDtSG8mRHGhhuSIhl1uhn9gwQojgpWpdXE=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=SWq24cLFdmcHlrESY+25el1BtSug83/0tV/FxXtqLs0k81SGYYFiFnSmtpou6wLOT
-	 a8FGrWmBoEVM3ZBGBMBiHyIeF1N8hgnqbDXBpdwD3AHo9zlhB088xKiurgvLnrb34c
-	 Py8xoufQzOE5PqzEHXYrhw69gn+kBu0qNM/4T8TReFm6IsFRStFXfUG4FxzrXQG/k1
-	 va41I8AWj7/bBqofw7yNnjdPQnyzskkn5VY5zUGX4s8JvoBB6kXJmvP2tzVFv4B3gd
-	 N/RoPvBk6xY7jJv60GE8cMZvz698bkh/Fykut3SL9Xi7yd/OF2sMDra0DoCEvi97F/
-	 91sWsZNdCgA3w==
+	b=fQV6w/7JIzAXic8rHU/5ftSVY2WAoVIu2kQyvmctJxfjmSLjD8/6755dd22zy7XMM
+	 LtRUdJPZW7L6e3vgzg4y0QjmhOl7vPQkxj1525PsuhS729OScDmAI/4I+js328Pxfc
+	 miOdXJ373akY6/WTQFzW1r9hdA96wHZEtB1kGhR2Dd8xGpEHdH44BJu5J2Onp2I1J0
+	 rmJIUe32rv2CR92muEn6dc3YLhTQMI4OiUFqGVftB7/R3kKTajLcxNSJhaiECznOkU
+	 +96PIh0gXoFdHCsH6p3n3aSH1VUHOhYHV4YQrQKsdlSE2NmssPoyp+6WJt6zcA3zEx
+	 Cskh9OCtO85eA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E321C3DA46;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DA46C05053;
 	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:32 +0300
-Subject: [PATCH v3 32/42] wdt: ts72xx: add DT support for ts72xx
+Date: Thu, 20 Jul 2023 14:29:27 +0300
+Subject: [PATCH v3 27/42] dt-bindings: input: Add Cirrus EP93xx keypad
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-32-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-27-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=1025;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=3019;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=/pFUHJmR8DUvfiw1Xz02EuXbI462fkIA+hdLJYGTYiA=; =?utf-8?q?b=3DM3Wqmsi/7579?=
- =?utf-8?q?i7J2GmgDeoutVdTKMlSiRw3XikhI9+UmnTQ6CCCyDOK5PkSYehbZgMpn5MdhjPKq?=
- VG/8YZ6XC/Y39kKPNCogijp3J6krn6Z+WVWsRQFU1SEQBm3v0QSa
+ bh=g0MUCZkg2rX+GKJDRd4qYqHcSTO79UgcgnWDEBlcpgs=; =?utf-8?q?b=3DSoq9yCs9gqZ4?=
+ =?utf-8?q?jcR50fZ/ujDjbxFtrJNBCjnYwgzlSG3lrE9fWcFzviCIYGa/ieHN5cQ5/DAdzE6C?=
+ og338hrCCKAjHuPVnoyz1kGLUiQbgyVHWp04Yi5IIOrBcXqDYghV
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,43 +87,106 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add OF ID match table.
+Add YAML bindings for ep93xx SoC keypad.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/watchdog/ts72xx_wdt.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../bindings/input/cirrus,ep9307-keypad.yaml       | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
-index 3d57670befe1..ac709dc31a65 100644
---- a/drivers/watchdog/ts72xx_wdt.c
-+++ b/drivers/watchdog/ts72xx_wdt.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/watchdog.h>
- #include <linux/io.h>
-@@ -160,10 +161,17 @@ static int ts72xx_wdt_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id ts72xx_wdt_of_ids[] = {
-+	{ .compatible = "technologic,ts7200-wdt" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ts72xx_wdt_of_ids);
+diff --git a/Documentation/devicetree/bindings/input/cirrus,ep9307-keypad.yaml b/Documentation/devicetree/bindings/input/cirrus,ep9307-keypad.yaml
+new file mode 100644
+index 000000000000..8b6be0c5a688
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/cirrus,ep9307-keypad.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/cirrus,ep9307-keypad.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static struct platform_driver ts72xx_wdt_driver = {
- 	.probe		= ts72xx_wdt_probe,
- 	.driver		= {
- 		.name	= "ts72xx-wdt",
-+		.of_match_table = ts72xx_wdt_of_ids,
- 	},
- };
- 
++title: Cirrus ep93xx keypad
++
++maintainers:
++  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++
++allOf:
++  - $ref: /schemas/input/matrix-keymap.yaml#
++
++description:
++  The KPP is designed to interface with a keypad matrix with 2-point contact
++  or 3-point contact keys. The KPP is designed to simplify the software task
++  of scanning a keypad matrix. The KPP is capable of detecting, debouncing,
++  and decoding one or multiple keys pressed simultaneously on a keypad.
++
++properties:
++  compatible:
++    oneOf:
++      - const: cirrus,ep9307-keypad
++      - items:
++          - enum:
++              - cirrus,ep9312-keypad
++              - cirrus,ep9315-keypad
++          - const: cirrus,ep9307-keypad
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  debounce-delay-ms:
++    description: |
++          Time in microseconds that key must be pressed or
++          released for state change interrupt to trigger.
++
++  cirrus,prescale:
++    description: row/column counter pre-scaler load value
++    $ref: /schemas/types.yaml#/definitions/uint16
++    maximum: 1023
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - linux,keymap
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
++    #include <dt-bindings/input/input.h>
++    keypad@800f0000 {
++      compatible = "cirrus,ep9307-keypad";
++      reg = <0x800f0000 0x0c>;
++      interrupt-parent = <&vic0>;
++      interrupts = <29>;
++      clocks = <&syscon EP93XX_CLK_KEYPAD>;
++      pinctrl-names = "default";
++      pinctrl-0 = <&keypad_default_pins>;
++      linux,keymap = <KEY_UP>,
++                     <KEY_DOWN>,
++                     <KEY_VOLUMEDOWN>,
++                     <KEY_HOME>,
++                     <KEY_RIGHT>,
++                     <KEY_LEFT>,
++                     <KEY_ENTER>,
++                     <KEY_VOLUMEUP>,
++                     <KEY_F6>,
++                     <KEY_F8>,
++                     <KEY_F9>,
++                     <KEY_F10>,
++                     <KEY_F1>,
++                     <KEY_F2>,
++                     <KEY_F3>,
++                     <KEY_POWER>;
++    };
 
 -- 
 2.39.2
