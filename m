@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65398C3DA41
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C0E5C04FE1
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5916CC611B9; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A477C611B4;
+	id 6B697C0737F; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 48C26C4E756;
 	Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1689841797;
-	bh=PIAVRsubooNT/IoJh/5r833VlR5IHIMSLPb5V8bEVII=;
+	bh=va5J4/46mslygu3t42hp70oLRRlw+7Nts0Jc01mkQvw=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=GW7dRRbwvOz7TaDqncBe1fFXCnmtnpDYVLig9vxrEUmnbcjABWKXz7lucQ/kIEHlp
-	 mD9FwyxmmH2lDXenNynOsTUNwNcmLD1eew3OFOe7YIc9qH2xxwQnpGPWEgm4y1+tjY
-	 SPp6WqRUmwpPwz7Sfl/btlmT0LxjbNe+9okf6rsdnQQmdrYB9VX4tjsuEhUk/BdCH2
-	 mSBjcWXaf1IYFv5zyh0NKv/bxVVGX+bZLJoDOVfUpL8qc2Re5PWCQyFVx5x+eVHEpn
-	 1gj62fBBcox5kdwurmN95YupwpNGLFivfepGdjrxv5gBSPSDaPeLlXt+SdEZw9Q+Oq
-	 F8PKN9m6++JMQ==
+	b=AQ49xFI0ByGPbrW8u7ICBVAigwt0IuBUth2XS6fwL3YmnAw/Cqiw65p/deJfpQIwT
+	 zGnn0gLKgr2o+lM4cOXL7zTpykav86EN/3xjOQlMUokVK03kM5vm+xjXLJzAXjc0cs
+	 Ao2psvuoqN98OqmOqiGTSxDXTBWTPZpZ34b44vrDF2/SiNRtnvZgyu3pa0p6yp1S+O
+	 +reDE8gThsD4jQOSSQDhlsv+ic4amaFCXh1ZUBaIqCisSBuo4wsSXkrTqMW345yqta
+	 vMo4KFccQ4j+GuLReZnhPJwlFpaSld1cyIWniU1xrnadzvSP483z6tcNgDu86xEbj5
+	 BzkugKkL12kNg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2872AC04FE2;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 369B2C04A6A;
 	Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:11 +0300
-Subject: [PATCH v3 11/42] rtc: ep93xx: add DT support for Cirrus EP93xx
+Date: Thu, 20 Jul 2023 14:29:12 +0300
+Subject: [PATCH v3 12/42] dt-bindings: watchdog: Add Cirrus EP93x
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-11-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-12-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -71,14 +71,13 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, 
  netdev@vger.kernel.org, dmaengine@vger.kernel.org, 
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
- linux-input@vger.kernel.org, alsa-devel@alsa-project.org, 
- Andy Shevchenko <andy.shevchenko@gmail.com>
+ linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=1082;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=1654;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=p80xCnz+NiYVYSqsKWTadEzof+wILB6tYu5g6z/UQHM=; =?utf-8?q?b=3DBcttpirmmzHj?=
- =?utf-8?q?TKf7/ziXxsMLFnU2/ynwMO775xwHs6b/cIqGiyxsCZSXe0P+SPrFlPYVb22S7Pvh?=
- yfYaQ8ItAZ6KsS9LRAeIVF6YQW6UhK3I/ZkU4WmCpYM4eZnHlM4/
+ bh=OW3jB/Bw/Sytk4KvRrNgrPhxfNJ5V/D9v8TTy8Da/Ik=; =?utf-8?q?b=3DqS75CvpwleSk?=
+ =?utf-8?q?zjIANVVSAWQfIraAEyXihorhY16EaIFa+NGw83nPYPqthQ6lCbf7tg00gyEzPkri?=
+ 5IStgF5uAPwysWIo6O6YOhub9RuDu5AhcmWNAfjfeZUY/hVQ5ut0
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -88,43 +87,66 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add OF ID match table.
+This adds device tree bindings for the Cirrus Logic EP93xx
+watchdog block used in these SoCs.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/rtc/rtc-ep93xx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../bindings/watchdog/cirrus,ep9301-wdt.yaml       | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/rtc/rtc-ep93xx.c b/drivers/rtc/rtc-ep93xx.c
-index acae7f16808f..1fdd20d01560 100644
---- a/drivers/rtc/rtc-ep93xx.c
-+++ b/drivers/rtc/rtc-ep93xx.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/rtc.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-@@ -148,9 +149,16 @@ static int ep93xx_rtc_probe(struct platform_device *pdev)
- 	return devm_rtc_register_device(ep93xx_rtc->rtc);
- }
- 
-+static const struct of_device_id ep93xx_rtc_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-rtc" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_rtc_of_ids);
+diff --git a/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml b/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
+new file mode 100644
+index 000000000000..d54595174a12
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/cirrus,ep9301-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static struct platform_driver ep93xx_rtc_driver = {
- 	.driver		= {
- 		.name	= "ep93xx-rtc",
-+		.of_match_table = ep93xx_rtc_of_ids,
- 	},
- 	.probe		= ep93xx_rtc_probe,
- };
++title: Cirrus Logic EP93xx Watchdog Timer
++
++maintainers:
++  - Nikita Shubin <nikita.shubin@maquefel.me>
++  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++
++description:
++  Cirrus Logic EP93xx SoC family has it's own watchdog implementation
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: cirrus,ep9301-wdt
++      - items:
++          - enum:
++              - cirrus,ep9302-wdt
++              - cirrus,ep9307-wdt
++              - cirrus,ep9312-wdt
++              - cirrus,ep9315-wdt
++          - const: cirrus,ep9301-wdt
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@80940000 {
++        compatible = "cirrus,ep9301-wdt";
++        reg = <0x80940000 0x08>;
++    };
++
 
 -- 
 2.39.2
