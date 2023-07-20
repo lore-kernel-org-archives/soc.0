@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D968C3DA4C
-	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E40C3DA48
+	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4ECFEC4AF73; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4549C0091C;
+	id 96C4AC58332; Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 72505C43215;
 	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689841799;
-	bh=Jwb+NIIyfhlr04cBvj4QbShaBQondg1D/B6oWBJYado=;
+	s=k20201202; t=1689841798;
+	bh=uJJGrLInovzzXUd3VI0hpNZckJsauxx8iSDbPseYllU=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=slZUc4n5c34/I8/5je4GOexeeECLoJ8+l4TO4l8UQxDpjKohPzPBWrs1eNKYkK+sa
-	 VE/ax+SCXoP+AHzt2sk7G9yLzjw/naG0HkOV8YzRgKTvpsbH75M8Yj0J2rrwbMZ1Ug
-	 LWciIAwAbH6K6PHWG29odPMGCK61PgVbKMytkqjV1G80z+S9Npu5JpGFpr6gJs23Pt
-	 tBNCgfY4rcNSMhR53W0UvFJoBJ5qtjICzGlmGyOa1U1hbyiE5mCFXaNsbSyIgwH05k
-	 mG++S+8JRzbxDv+HOXqKo5Retjwebeztf6/2o1I7ofCFzn2FygOX0ZIFpA4bkWItgP
-	 wYeQoJK0mX8sQ==
+	b=FQjplkSXI4rYDH/o89EgQWCh1w2hD+CFr3kaFZL9LbyZ6H6ZoV7LShCfj88Zl54un
+	 GvAlyC7WCQKxzMmNKkb+P7B0o4NAWhx6DIuYUXkA9RTe4N8jgIW537NeURKzEcIsHr
+	 iBb9MGfDnEC1J5Rkv+fR7d4Sr5cEyfNxlv88bdmSLcajj6Ktjkc432FHI61b2RhTpg
+	 2o+vlMe31trs3LEKt0xLOAJAVEDSrA4a7t/q0ambP5MbPvz0upV9iRtwvt177WzEUY
+	 oLBXuQLjOQn7lkOWl6LOqROGtSctXl7ODPoUfPJd9ONHIu32429EFpPBWD1OstD2A0
+	 Qhr9l04QVwYeA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7E9AC10F19;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60513C3DA40;
 	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:37 +0300
-Subject: [PATCH v3 37/42] pwm: ep93xx: drop legacy pinctrl
+Date: Thu, 20 Jul 2023 14:29:30 +0300
+Subject: [PATCH v3 30/42] rtc: m48t86: add DT support for m48t86
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230605-ep93xx-v3-37-3d63a5f1103e@maquefel.me>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230605-ep93xx-v3-30-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=4334;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=1084;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=WBzTz0y9WETmbwEPUNlS3vfiPeT6Yq9Stg5hAL8clMU=; =?utf-8?q?b=3DnNg8cNkDVXnF?=
- =?utf-8?q?soK72XlvRIwEWps36Li8bfOpmvDiUHH0efPgenKhJQcZelGD4ChSs+Uw+hR8Jbq8?=
- y+R6UivIAmvCscuMj8oUcEpbo5aFvY6lp65Ppw+qptddRIyC2hFf
+ bh=ehFfMUFPSDk+3aqtlEGp6k1Cn9nX+Zuoc/v7Lg62J6w=; =?utf-8?q?b=3DQ238e2fSIiIG?=
+ =?utf-8?q?4LxbRXPl9BVz0A7fMIFNSLQhjud/iwbjRvKKrpwpjnng97SWbloCe6t6MpeoXXkn?=
+ jjZc3wP8DMKx8SCCQlCyET5yYeXmGD2ZrnAkJxVsc3NuIPs7VAev
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,135 +87,44 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Drop legacy gpio request/free since we are using
-pinctrl for this now.
+Add OF ID match table.
 
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- arch/arm/mach-ep93xx/core.c       | 42 ---------------------------------------
- drivers/pwm/pwm-ep93xx.c          | 18 -----------------
- include/linux/soc/cirrus/ep93xx.h |  4 ----
- 3 files changed, 64 deletions(-)
+ drivers/rtc/rtc-m48t86.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm/mach-ep93xx/core.c b/arch/arm/mach-ep93xx/core.c
-index c60a9d3632dd..9afc6095d1c1 100644
---- a/arch/arm/mach-ep93xx/core.c
-+++ b/arch/arm/mach-ep93xx/core.c
-@@ -576,48 +576,6 @@ void __init ep93xx_register_pwm(int pwm0, int pwm1)
- 		platform_device_register(&ep93xx_pwm1_device);
+diff --git a/drivers/rtc/rtc-m48t86.c b/drivers/rtc/rtc-m48t86.c
+index 481c9525b1dd..dd4a62e2d39c 100644
+--- a/drivers/rtc/rtc-m48t86.c
++++ b/drivers/rtc/rtc-m48t86.c
+@@ -11,6 +11,7 @@
+  */
+ 
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/rtc.h>
+ #include <linux/platform_device.h>
+ #include <linux/bcd.h>
+@@ -269,9 +270,16 @@ static int m48t86_rtc_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--int ep93xx_pwm_acquire_gpio(struct platform_device *pdev)
--{
--	int err;
--
--	if (pdev->id == 0) {
--		err = 0;
--	} else if (pdev->id == 1) {
--		err = gpio_request(EP93XX_GPIO_LINE_EGPIO14,
--				   dev_name(&pdev->dev));
--		if (err)
--			return err;
--		err = gpio_direction_output(EP93XX_GPIO_LINE_EGPIO14, 0);
--		if (err)
--			goto fail;
--
--		/* PWM 1 output on EGPIO[14] */
--		ep93xx_devcfg_set_bits(EP93XX_SYSCON_DEVCFG_PONG);
--	} else {
--		err = -ENODEV;
--	}
--
--	return err;
--
--fail:
--	gpio_free(EP93XX_GPIO_LINE_EGPIO14);
--	return err;
--}
--EXPORT_SYMBOL(ep93xx_pwm_acquire_gpio);
--
--void ep93xx_pwm_release_gpio(struct platform_device *pdev)
--{
--	if (pdev->id == 1) {
--		gpio_direction_input(EP93XX_GPIO_LINE_EGPIO14);
--		gpio_free(EP93XX_GPIO_LINE_EGPIO14);
--
--		/* EGPIO[14] used for GPIO */
--		ep93xx_devcfg_clear_bits(EP93XX_SYSCON_DEVCFG_PONG);
--	}
--}
--EXPORT_SYMBOL(ep93xx_pwm_release_gpio);
--
--
- /*************************************************************************
-  * EP93xx video peripheral handling
-  *************************************************************************/
-diff --git a/drivers/pwm/pwm-ep93xx.c b/drivers/pwm/pwm-ep93xx.c
-index 361984ef4c0b..ac08bd0e7572 100644
---- a/drivers/pwm/pwm-ep93xx.c
-+++ b/drivers/pwm/pwm-ep93xx.c
-@@ -27,8 +27,6 @@
- 
- #include <asm/div64.h>
- 
--#include <linux/soc/cirrus/ep93xx.h>	/* for ep93xx_pwm_{acquire,release}_gpio() */
--
- #define EP93XX_PWMx_TERM_COUNT	0x00
- #define EP93XX_PWMx_DUTY_CYCLE	0x04
- #define EP93XX_PWMx_ENABLE	0x08
-@@ -45,20 +43,6 @@ static inline struct ep93xx_pwm *to_ep93xx_pwm(struct pwm_chip *chip)
- 	return container_of(chip, struct ep93xx_pwm, chip);
- }
- 
--static int ep93xx_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct platform_device *pdev = to_platform_device(chip->dev);
--
--	return ep93xx_pwm_acquire_gpio(pdev);
--}
--
--static void ep93xx_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct platform_device *pdev = to_platform_device(chip->dev);
--
--	ep93xx_pwm_release_gpio(pdev);
--}
--
- static int ep93xx_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 			    const struct pwm_state *state)
- {
-@@ -157,8 +141,6 @@ static int ep93xx_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- }
- 
- static const struct pwm_ops ep93xx_pwm_ops = {
--	.request = ep93xx_pwm_request,
--	.free = ep93xx_pwm_free,
- 	.apply = ep93xx_pwm_apply,
- 	.owner = THIS_MODULE,
++static const struct of_device_id m48t86_rtc_of_ids[] = {
++	{ .compatible = "st,m48t86" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, m48t86_rtc_of_ids);
++
+ static struct platform_driver m48t86_rtc_platform_driver = {
+ 	.driver		= {
+ 		.name	= "rtc-m48t86",
++		.of_match_table = m48t86_rtc_of_ids,
+ 	},
+ 	.probe		= m48t86_rtc_probe,
  };
-diff --git a/include/linux/soc/cirrus/ep93xx.h b/include/linux/soc/cirrus/ep93xx.h
-index 43b1f11526e4..ed94e4390b98 100644
---- a/include/linux/soc/cirrus/ep93xx.h
-+++ b/include/linux/soc/cirrus/ep93xx.h
-@@ -12,8 +12,6 @@ struct regmap;
- #define EP93XX_CHIP_REV_E2	7
- 
- #if defined(CONFIG_EP93XX_SOC_COMMON)
--int ep93xx_pwm_acquire_gpio(struct platform_device *pdev);
--void ep93xx_pwm_release_gpio(struct platform_device *pdev);
- int ep93xx_ide_acquire_gpio(struct platform_device *pdev);
- void ep93xx_ide_release_gpio(struct platform_device *pdev);
- int ep93xx_i2s_acquire(void);
-@@ -21,8 +19,6 @@ void ep93xx_i2s_release(void);
- unsigned int ep93xx_chip_revision(void);
- 
- #else
--static inline int ep93xx_pwm_acquire_gpio(struct platform_device *pdev) { return 0; }
--static inline void ep93xx_pwm_release_gpio(struct platform_device *pdev) {}
- static inline int ep93xx_ide_acquire_gpio(struct platform_device *pdev) { return 0; }
- static inline void ep93xx_ide_release_gpio(struct platform_device *pdev) {}
- static inline int ep93xx_i2s_acquire(void) { return 0; }
 
 -- 
 2.39.2
