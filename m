@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C89C04E69
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B24F2EB64DD
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 745FAC611A7; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 49576C43142;
+	id A447AC4AF73; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 869FCC4AF7C;
 	Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1689841796;
-	bh=SWANImK5LyAGHfVz8OSVB+5O+0HC2M5GflJbDMWWmR8=;
+	bh=H6C2TrU2IejdmwPIRyjNVqsg2WK5gX9egNFXm4Ppjug=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=r7uT+BHZ40PVmUkRuC08W8WpWIOVHdMQPPp05cPcNakY8/rITsW9AZYUyNhuB9PWD
-	 630MjJWPQ5rvNor1p066elR3NvdMIU96HvPy5bPmGDO9UZL+3GBWUs/C7Kb3beXiAL
-	 uwpEFgROUozQye4sZ0HZFEcv5kSO2ePwW7cztIS2WkwmMoCMOi0hv+Paq5FJqoQhPS
-	 hBSM3AdGk1TS7+qaflKqo21Ale7jv+4YvxjoW4598ETpuayjqgQyUw+zBe4fPI7FU9
-	 RsHxJaA+7I8voDTEFlAqrozVeBCjiv03H6q/ofNUgd6FpQsJcPTa6OMrC1MDQepBED
-	 WsThDZw65wFDA==
+	b=QMJfbfxIx5OEatPCy9ODNf1qH8z7Y5yrckFJoJnQJL+1iWXQL/x5OLdMIdwK4XYGv
+	 vv234frJcvFy4WuNAJwtkzHn86K+y74OXHa9XIxk33HdNGSBuMRYqV7qU0XRyTu8pv
+	 M6zvZ4iKGtkJnaCClMmXPluFh88kC2GX8EVKI2fKrKTFGd0OnM4lkGpeZLuZmprlIc
+	 qEsI5sApbA9EnS0maAvknb7plownGLxQxt43v0QDx89oTv+ZpSXbycUB8fNbp93CKF
+	 5cuZ42Vg8VRxXaMkS4DGomiqDgWMzMDfJXMTH67OaTzHIgrcxGsPQmxyFUG/8/xT5M
+	 JUI4jGpOM+5DQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 302FCC001DF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68F2AEB64DD;
 	Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:04 +0300
-Subject: [PATCH v3 04/42] dt-bindings: pinctrl: Add Cirrus EP93xx
+Date: Thu, 20 Jul 2023 14:29:06 +0300
+Subject: [PATCH v3 06/42] dt-bindings: soc: Add Cirrus EP93xx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-4-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-6-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=2118;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=3489;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=0bfilaQTlamAAN7q/pI3s+D7Hc6fTINJMbrfah67Qak=; =?utf-8?q?b=3DKkxhAu+U4VC3?=
- =?utf-8?q?NDbwqu053PMpf3CGcyTfw1FFK32bsDAJYeHg4jgrNMF5yqUNA7+1cwQZ346f/xAg?=
- AMJ1cJzjC/tp7Cb52Jo8cYoWTwMoKuGhZtD3olRkNBbQSPRMW5tl
+ bh=OWJWPRWMvpS6HB+Cwu+1cfevgL3x5U4PGkX8U7MbL+I=; =?utf-8?q?b=3DoWGjSz6YzCMT?=
+ =?utf-8?q?bvWsXhpEAVE2Jo0Zk8oEmFbE5aTNOWg69Zs4ajuy58LWNJK0b6tvbs+lK4O1cvhU?=
+ KQ10AJFuBXBt3gDH/bJPVZtiAKChoE1b/exF2GqOMgewB//eQMGK
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,77 +87,123 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add YAML bindings for ep93xx SoC pinctrl.
+This adds device tree bindings for the Cirrus Logic EP93xx.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- .../bindings/pinctrl/cirrus,ep9301-pinctrl.yaml    | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ .../bindings/arm/cirrus/ep9301-syscon.yaml         | 59 ++++++++++++++++++++++
+ .../devicetree/bindings/arm/cirrus/ep9301.yaml     | 39 ++++++++++++++
+ 2 files changed, 98 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
+diff --git a/Documentation/devicetree/bindings/arm/cirrus/ep9301-syscon.yaml b/Documentation/devicetree/bindings/arm/cirrus/ep9301-syscon.yaml
 new file mode 100644
-index 000000000000..d5682531b0da
+index 000000000000..77fbe1f006fd
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/arm/cirrus/ep9301-syscon.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/pinctrl/cirrus,ep9301-pinctrl.yaml#
++$id: http://devicetree.org/schemas/arm/cirrus/ep9301-syscon.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Cirrus ep93xx pins mux controller
++title: Cirrus Logic EP93xx Platforms System Controller
 +
 +maintainers:
-+  - Nikita Shubin <nikita.shubin@maquefel.me>
 +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++  - Nikita Shubin <nikita.shubin@maquefel.me>
 +
 +properties:
 +  compatible:
 +    oneOf:
-+      - const: cirrus,ep9301-pinctrl
 +      - items:
 +          - enum:
-+              - cirrus,ep9302-pinctrl
-+              - cirrus,ep9307-pinctrl
-+              - cirrus,ep9312-pinctrl
-+              - cirrus,ep9315-pinctrl
-+          - const: cirrus,ep9301-pinctrl
++              - cirrus,ep9302-syscon
++              - cirrus,ep9307-syscon
++              - cirrus,ep9312-syscon
++              - cirrus,ep9315-syscon
++          - const: cirrus,ep9301-syscon
++          - const: syscon
++          - const: simple-mfd
++      - items:
++          - const: cirrus,ep9301-syscon
++          - const: syscon
++          - const: simple-mfd
 +
-+patternProperties:
-+  '^pins-':
++  reg:
++    maxItems: 1
++
++  reboot:
 +    type: object
-+    description: pin node
-+    $ref: pinmux-node.yaml#
-+
 +    properties:
-+      function:
-+        enum: [ spi, ac97, i2s, pwm, keypad, pata, lcd, gpio ]
++      compatible:
++        const: cirrus,ep9301-reboot
 +
-+      groups:
-+        enum: [ ssp, ac97, i2s_on_ssp, i2s_on_ac97, pwm1, gpio1agrp,
-+                gpio2agrp, gpio3agrp, gpio4agrp, gpio6agrp, gpio7agrp,
-+                rasteronsdram0grp, rasteronsdram3grp, keypadgrp, idegrp ]
++  clock-controller:
++    type: object
++    $ref: ../../clock/cirrus,ep9301-clk.yaml
 +
-+    required:
-+      - function
-+      - groups
++  pinctrl:
++    type: object
++    $ref: ../../pinctrl/cirrus,ep9301-pinctrl.yaml
 +
 +required:
 +  - compatible
++  - reg
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    pinctrl {
-+      compatible = "cirrus,ep9312-pinctrl", "cirrus,ep9301-pinctrl";
-+      spi_default_pins: pins-spi {
-+        function = "spi";
-+        groups = "ssp";
-+      };
++    syscon@80930000 {
++      compatible = "cirrus,ep9301-syscon",
++                   "syscon", "simple-mfd";
++      reg = <0x80930000 0x1000>;
 +    };
+diff --git a/Documentation/devicetree/bindings/arm/cirrus/ep9301.yaml b/Documentation/devicetree/bindings/arm/cirrus/ep9301.yaml
+new file mode 100644
+index 000000000000..6087784e93fb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/cirrus/ep9301.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/cirrus/ep9301.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cirrus Logic EP93xx platforms
++
++description:
++  The EP93xx SoC is a ARMv4T-based with 200 MHz ARM9 CPU.
++
++maintainers:
++  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++  - Nikita Shubin <nikita.shubin@maquefel.me>
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++      - description: The TS-7250 is a compact, full-featured Single Board Computer (SBC)
++          based upon the Cirrus EP9302 ARM9 CPU
++        items:
++          - const: technologic,ts7250
++          - const: cirrus,ep9301
++
++      - description: The Liebherr BK3 is a derivate from ts7250 board
++        items:
++          - const: liebherr,bk3
++          - const: cirrus,ep9301
++
++      - description: EDB302 is an evaluation board by Cirrus Logic,
++          based on a Cirrus Logic EP9302 CPU
++        items:
++          - const: cirrus,edb9302
++          - const: cirrus,ep9301
++
++additionalProperties: true
 +
 
 -- 
