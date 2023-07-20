@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD8D6C16B13
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F293DC04A6A
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ACB8FC36AE6; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A7D8C116A3;
+	id CE5C2C116B7; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A9D3FC43397;
 	Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1689841797;
-	bh=kAt8817iBUWjVxWMBOqzROB0TJ1eW00HgMPsspiwX+E=;
+	bh=pQAR+pyrK4gN3o3XWt9qgN/Bx9cfFrie8nL4VUM8QyM=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=nN6pikFpzsIDuGRkY5iMvURnaLjLmclRkmFjQJ6/p61ymLs5zgmKZhm8Y6OZqDvhz
-	 rnx2Sx0lY1HFfPunY/duteWXNBZrYJM0yABFx7aiKu9iIlVTD0gLQaZ4rumzrRJoUt
-	 kicOlWUnK1cbzMFjJoS9RQdAlZotEUQ5EDQ5EKpR5LHd6PxeDQUdsbvuTZ1fThDIYF
-	 FihT1I32yb0R6reWgJne4Hq/M6a6TDa9rllTesuZnjPd8grpKEMkdZVHn9yS9YhDKB
-	 P+TRf4asV9al5oDpT/As8R+JV6eQDo5cQpO+MX8zWTjuKMiehJDnywINqzTnDDGvT7
-	 6T1C1Yfs2K+rw==
+	b=jG9Hg0br7owOibTHMo2pRybBxRELQ9pIuCkF9IlfhUOAzRMGJhmggvdFct/auapfv
+	 WgjS25bKoO3Q8PTCpg8RokFYp6Hn9fJbOT2ZoDxy30EF8GE8sS/a3KJQHL2mKhbgbf
+	 B/ahYJp2OvwaGF3BnXkKuMuI6hIGhaa9EfqcVZNFQ1fd90YYOmbL59dH3TqLpNh4cx
+	 Va3K1Bui/+ktXBbBTDosY9gd/r8YuerhHfB5Z5I7JBpUd27RiBqf1wR9paTB+M76V5
+	 rReX/I255BRrOJvA2w4VoG47km+rZaWAz12OSOf/YYmhiu1taZdIIwT9m4exutmFOK
+	 VoWNW0muKJRtg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 767DAC04A6A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9553BC10F00;
 	Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:16 +0300
-Subject: [PATCH v3 16/42] pwm: ep93xx: add DT support for Cirrus EP93xx
+Date: Thu, 20 Jul 2023 14:29:18 +0300
+Subject: [PATCH v3 18/42] spi: ep93xx: add DT support for Cirrus EP93xx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-16-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=985;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=2702;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=q6xBgC7li0n86IdULKMuNEoQ+2zcC5ZGWjR9L/JodCY=; =?utf-8?q?b=3DNqRoH9iO91J/?=
- =?utf-8?q?4/FGlvS3NyiVVQpXymSTDGvwcpr7rm1+v6F5eJi63KyGAjnLUIyYE6PETMNoh0dD?=
- PvzLLUYKA7niK3hcd5meK50V9Kl8+K9EWyQWRsertTugyQ6wqkgR
+ bh=ZWn5JZLALLuK4G847aw+YC2k8LjRei15o646pYI1xGQ=; =?utf-8?q?b=3DoP2gssSO03Zn?=
+ =?utf-8?q?arhhtGnE6//94HCpOZFh+Aeo3rlZZJA0clEjabXLBxXYXouw6WQ54InIctWc5Z0f?=
+ sZfeTcBZDwbSQ0FeDL8QVnLI/DIV+fm/zdBwKiYA1DbI1e2iFVD9
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,42 +87,89 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add OF ID match table.
+- add OF ID match table
 
+Instead of platform use_dma flag - check if DT dmas property is present to
+decide to use dma ot not.
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/pwm/pwm-ep93xx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/spi/spi-ep93xx.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pwm/pwm-ep93xx.c b/drivers/pwm/pwm-ep93xx.c
-index c45a75e65c86..361984ef4c0b 100644
---- a/drivers/pwm/pwm-ep93xx.c
-+++ b/drivers/pwm/pwm-ep93xx.c
-@@ -17,6 +17,7 @@
-  */
- 
+diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
+index 1615fd22f9a2..f93cd506bf17 100644
+--- a/drivers/spi/spi-ep93xx.c
++++ b/drivers/spi/spi-ep93xx.c
+@@ -22,6 +22,7 @@
+ #include <linux/bitops.h>
+ #include <linux/interrupt.h>
  #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
++#include <linux/property.h>
  #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/clk.h>
-@@ -190,9 +191,16 @@ static int ep93xx_pwm_probe(struct platform_device *pdev)
- 	return 0;
+ #include <linux/sched.h>
+ #include <linux/scatterlist.h>
+@@ -644,6 +645,23 @@ static void ep93xx_spi_release_dma(struct ep93xx_spi *espi)
+ 		free_page((unsigned long)espi->zeropage);
  }
  
-+static const struct of_device_id ep93xx_pwm_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-pwm" },
-+	{ /* sentinel */}
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_pwm_of_ids);
++#ifdef CONFIG_OF
++static struct ep93xx_spi_info dt_spi_info;
 +
- static struct platform_driver ep93xx_pwm_driver = {
- 	.driver = {
- 		.name = "ep93xx-pwm",
-+		.of_match_table = ep93xx_pwm_of_ids,
++static struct ep93xx_spi_info *ep93xx_spi_get_platdata(struct platform_device *pdev)
++{
++	if (device_property_present(&pdev->dev, "dmas"))
++		dt_spi_info.use_dma = 1;
++
++	return &dt_spi_info;
++}
++#else
++static struct ep93xx_spi_info *ep93xx_spi_get_platdata(struct platform_device *pdev)
++{
++	return dev_get_platdata(&pdev->dev);
++}
++#endif
++
+ static int ep93xx_spi_probe(struct platform_device *pdev)
+ {
+ 	struct spi_master *master;
+@@ -653,7 +671,7 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
+ 	int irq;
+ 	int error;
+ 
+-	info = dev_get_platdata(&pdev->dev);
++	info = ep93xx_spi_get_platdata(pdev);
+ 	if (!info) {
+ 		dev_err(&pdev->dev, "missing platform data\n");
+ 		return -EINVAL;
+@@ -726,6 +744,7 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
+ 	/* make sure that the hardware is disabled */
+ 	writel(0, espi->mmio + SSPCR1);
+ 
++	device_set_node(&master->dev, dev_fwnode(&pdev->dev));
+ 	error = devm_spi_register_master(&pdev->dev, master);
+ 	if (error) {
+ 		dev_err(&pdev->dev, "failed to register SPI master\n");
+@@ -753,9 +772,16 @@ static void ep93xx_spi_remove(struct platform_device *pdev)
+ 	ep93xx_spi_release_dma(espi);
+ }
+ 
++static const struct of_device_id ep93xx_spi_of_ids[] = {
++	{ .compatible = "cirrus,ep9301-spi" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, ep93xx_spi_of_ids);
++
+ static struct platform_driver ep93xx_spi_driver = {
+ 	.driver		= {
+ 		.name	= "ep93xx-spi",
++		.of_match_table = ep93xx_spi_of_ids,
  	},
- 	.probe = ep93xx_pwm_probe,
- };
+ 	.probe		= ep93xx_spi_probe,
+ 	.remove_new	= ep93xx_spi_remove,
 
 -- 
 2.39.2
