@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EDFEC001E0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C89C04E69
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 50C44C4AF1E; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DF26C4339A;
+	id 745FAC611A7; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 49576C43142;
 	Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1689841796;
-	bh=xHFqGn/KVspE6DtaBu0kUVJymWNV6FzrvFMW+ty+9BM=;
+	bh=SWANImK5LyAGHfVz8OSVB+5O+0HC2M5GflJbDMWWmR8=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=BIw0xWSeECybeHoq3ZR62ODj4BOH5nEfFFBK6p3r1I+kYcyfrLMK3E3nnhTUNazId
-	 Y2BH5hsSQZZsL3oXSheXF2Rf/fJEKgpbUsl2BMDj4FOmFFMZn3mt3kYqZYjDxFaXfi
-	 cSwf/uXg4nNKX7uGlZvJgZR02hhIHJJw4MaUXzJcX7rdrIkMgiMzJYQRZkI3wqPVw0
-	 imNrpO/eF7fTW2h0nOGZpLHgeAIdbg1Ka+gYbCk6Ny1wuqjSl7m2EycXsCpr19oaOD
-	 K4KOtkpcTN+nqir9ovlZCbecc76qr1Zg8hJ/2+ypTS84otUuXRMXrC5rWiH7Cm2jIH
-	 eN2omeWWq743g==
+	b=r7uT+BHZ40PVmUkRuC08W8WpWIOVHdMQPPp05cPcNakY8/rITsW9AZYUyNhuB9PWD
+	 630MjJWPQ5rvNor1p066elR3NvdMIU96HvPy5bPmGDO9UZL+3GBWUs/C7Kb3beXiAL
+	 uwpEFgROUozQye4sZ0HZFEcv5kSO2ePwW7cztIS2WkwmMoCMOi0hv+Paq5FJqoQhPS
+	 hBSM3AdGk1TS7+qaflKqo21Ale7jv+4YvxjoW4598ETpuayjqgQyUw+zBe4fPI7FU9
+	 RsHxJaA+7I8voDTEFlAqrozVeBCjiv03H6q/ofNUgd6FpQsJcPTa6OMrC1MDQepBED
+	 WsThDZw65wFDA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8DB3C0015E;
-	Thu, 20 Jul 2023 08:29:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 302FCC001DF;
+	Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:02 +0300
-Subject: [PATCH v3 02/42] dt-bindings: clock: Add Cirrus EP93xx
+Date: Thu, 20 Jul 2023 14:29:04 +0300
+Subject: [PATCH v3 04/42] dt-bindings: pinctrl: Add Cirrus EP93xx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-2-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-4-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=2996;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=2118;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=EbpLLhgOdlzi42v0HhzMU4hUER0yYIZWVBtRqrAV9bg=; =?utf-8?q?b=3Diqo5fZDwNJlA?=
- =?utf-8?q?A5U8uQbmiq3VlhW6FowgUfUMH8tiN9OPFWWPQjy/q97IGg/0iNk1icOrmpvN3x/c?=
- LlTLhXYuCJx5Ns2GKg/5gzIgjixhquXqnGn7X9YLLA211F8eWFb5
+ bh=0bfilaQTlamAAN7q/pI3s+D7Hc6fTINJMbrfah67Qak=; =?utf-8?q?b=3DKkxhAu+U4VC3?=
+ =?utf-8?q?NDbwqu053PMpf3CGcyTfw1FFK32bsDAJYeHg4jgrNMF5yqUNA7+1cwQZ346f/xAg?=
+ AMJ1cJzjC/tp7Cb52Jo8cYoWTwMoKuGhZtD3olRkNBbQSPRMW5tl
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,28 +87,27 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-This adds device tree bindings for the Cirrus Logic EP93xx
-clock block used in these SoCs.
+Add YAML bindings for ep93xx SoC pinctrl.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- .../bindings/clock/cirrus,ep9301-clk.yaml          | 46 ++++++++++++++++++++++
- include/dt-bindings/clock/cirrus,ep93xx-clock.h    | 41 +++++++++++++++++++
- 2 files changed, 87 insertions(+)
+ .../bindings/pinctrl/cirrus,ep9301-pinctrl.yaml    | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/cirrus,ep9301-clk.yaml b/Documentation/devicetree/bindings/clock/cirrus,ep9301-clk.yaml
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
 new file mode 100644
-index 000000000000..111e016601fb
+index 000000000000..d5682531b0da
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/cirrus,ep9301-clk.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/clock/cirrus,ep9301-clk.yaml#
++$id: http://devicetree.org/schemas/pinctrl/cirrus,ep9301-pinctrl.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Cirrus Logic ep93xx SoC's clock controller
++title: Cirrus ep93xx pins mux controller
 +
 +maintainers:
 +  - Nikita Shubin <nikita.shubin@maquefel.me>
@@ -117,84 +116,49 @@ index 000000000000..111e016601fb
 +properties:
 +  compatible:
 +    oneOf:
-+      - const: cirrus,ep9301-clk
++      - const: cirrus,ep9301-pinctrl
 +      - items:
 +          - enum:
-+              - cirrus,ep9302-clk
-+              - cirrus,ep9307-clk
-+              - cirrus,ep9312-clk
-+              - cirrus,ep9315-clk
-+          - const: cirrus,ep9301-clk
++              - cirrus,ep9302-pinctrl
++              - cirrus,ep9307-pinctrl
++              - cirrus,ep9312-pinctrl
++              - cirrus,ep9315-pinctrl
++          - const: cirrus,ep9301-pinctrl
 +
-+  "#clock-cells":
-+    const: 1
++patternProperties:
++  '^pins-':
++    type: object
++    description: pin node
++    $ref: pinmux-node.yaml#
 +
-+  clocks:
-+    items:
-+      - description: reference clock
++    properties:
++      function:
++        enum: [ spi, ac97, i2s, pwm, keypad, pata, lcd, gpio ]
++
++      groups:
++        enum: [ ssp, ac97, i2s_on_ssp, i2s_on_ac97, pwm1, gpio1agrp,
++                gpio2agrp, gpio3agrp, gpio4agrp, gpio6agrp, gpio7agrp,
++                rasteronsdram0grp, rasteronsdram3grp, keypadgrp, idegrp ]
++
++    required:
++      - function
++      - groups
 +
 +required:
 +  - compatible
-+  - "#clock-cells"
-+  - clocks
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    clock-controller {
-+      compatible = "cirrus,ep9301-clk";
-+      #clock-cells = <1>;
-+      clocks = <&xtali>;
++    pinctrl {
++      compatible = "cirrus,ep9312-pinctrl", "cirrus,ep9301-pinctrl";
++      spi_default_pins: pins-spi {
++        function = "spi";
++        groups = "ssp";
++      };
 +    };
-+...
-diff --git a/include/dt-bindings/clock/cirrus,ep93xx-clock.h b/include/dt-bindings/clock/cirrus,ep93xx-clock.h
-new file mode 100644
-index 000000000000..3cd053c0fdea
---- /dev/null
-+++ b/include/dt-bindings/clock/cirrus,ep93xx-clock.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-+#ifndef DT_BINDINGS_CIRRUS_EP93XX_CLOCK_H
-+#define DT_BINDINGS_CIRRUS_EP93XX_CLOCK_H
 +
-+#define EP93XX_CLK_UART1	0
-+#define EP93XX_CLK_UART2	1
-+#define EP93XX_CLK_UART3	2
-+
-+#define EP93XX_CLK_ADC		3
-+#define EP93XX_CLK_ADC_EN	4
-+
-+#define EP93XX_CLK_KEYPAD   5
-+
-+#define EP93XX_CLK_VIDEO	6
-+
-+#define EP93XX_CLK_I2S_MCLK	7
-+#define EP93XX_CLK_I2S_SCLK	8
-+#define EP93XX_CLK_I2S_LRCLK	9
-+
-+#define EP93XX_CLK_UART		10
-+#define EP93XX_CLK_SPI		11
-+#define EP93XX_CLK_PWM		12
-+#define EP93XX_CLK_USB		13
-+
-+#define EP93XX_CLK_M2M0		14
-+#define EP93XX_CLK_M2M1		15
-+
-+#define EP93XX_CLK_M2P0		16
-+#define EP93XX_CLK_M2P1		17
-+#define EP93XX_CLK_M2P2		18
-+#define EP93XX_CLK_M2P3		19
-+#define EP93XX_CLK_M2P4		20
-+#define EP93XX_CLK_M2P5		21
-+#define EP93XX_CLK_M2P6		22
-+#define EP93XX_CLK_M2P7		23
-+#define EP93XX_CLK_M2P8		24
-+#define EP93XX_CLK_M2P9		25
-+
-+#define EP93XX_CLK_END      26
-+
-+#endif /* DT_BINDINGS_CIRRUS_EP93XX_CLOCK_H */
 
 -- 
 2.39.2
