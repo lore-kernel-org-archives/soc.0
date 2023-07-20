@@ -4,34 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1431C0015E
-	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 499B6C04FDF
+	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C5628C611AD; Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A8169C611AB;
-	Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
+	id 32295C4E69D; Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13A97C4E687;
+	Thu, 20 Jul 2023 08:29:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689841796;
-	bh=Icc0A/kj6yGqYeaOj4SJjOewb0mc8Woa4wczTJOoFwo=;
+	s=k20201202; t=1689841797;
+	bh=oVNeIVS24ovp4Bk+ISFEomvXaLIJWv1HRJzkQJqBfRQ=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=e0uKYqNVqnMW7v1S4ZnwZbhakubhgeHsmxXOi4ur2uoAlIYAkT6QLG4SU9UhgdAe0
-	 kAGXAGkii9/ECrZAG7pdHHgYJc2tjp6V3pfiVsq7pnxSkfpd3+17mEdK/YxN7icYCU
-	 6Yl34bzaDwTEcALvrAJR8NvlBgjIAqQQn2UjMd1TBU3n7ysTOQYaX16/VWTwq1UUN0
-	 F+Uv2iWEMD76OgsGdznqwiGHxw35O4LvzkMBM5ELL5DdLolxsRQvEilozTb1BWf+pL
-	 n2uReCm8+Mdgek2VJVr1nse92N8XS1gdz+2owMIO/+xZ0gKQsIoxLOfEXN0W9bIu20
-	 fRBY+TfeQfnqA==
+	b=KCBY6T8jZoZJxHtceySUtnED/DFBapt8mwpRyoidcLAoN7En07izu678qZgF+7Z27
+	 l298VIcjgw6HWMmYeaeoiL8qN9y3mWe3SrOQcBH9AkSGodUo8zlaDZ2zOencSM6yHN
+	 qDwFFJ2Rj53K0vohrq9R7vznDbrBEwMwVmazzWkRD0nYMkV5ZY89ZSaWbzKNJCYpf9
+	 BB0V3+aWNf/6nB/hUEMVBncSNtbtxAzZSLSrNhHJQKQewLE7SueZZAoGYNnLjAC2Bd
+	 DK+gA81+4QX3bLGBxAFCeip/zJODwjwNyvBJk94QYpoBjvVoSp6FuDAckjNvsIkkKG
+	 kF6NDoGYNsIGQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8557FC0015E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4A0CC04A6A;
 	Thu, 20 Jul 2023 08:29:56 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:07 +0300
-Subject: [PATCH v3 07/42] soc: Add SoC driver for Cirrus ep93xx
+Date: Thu, 20 Jul 2023 14:29:09 +0300
+Subject: [PATCH v3 09/42] clocksource: ep93xx: Add driver for Cirrus Logic
+ EP93xx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-7-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-9-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -73,11 +74,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=11384;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852590; l=7745;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=hdAydcSmJdWTCsh9yNDgwo1kPIf17UX/m4OJVEY7qN4=; =?utf-8?q?b=3DKIYngc1oJbho?=
- =?utf-8?q?J3zNeKRkvNqM18Cfr+rAd7yueRxLazdHd5qw4z/g9gwaK3HzDy8suoitNbUl5g62?=
- ka3ygVV1Bu1FV4rg5Oo2ge6sFuLM4xCaEEj8JqCEvqdoxGml93VB
+ bh=91Q5aMzQnMojBq/wb/TN2iHaQ2aIwhcgyrmryexjCyI=; =?utf-8?q?b=3DHp6WdlCpm0lC?=
+ =?utf-8?q?cc/mcEspfz8iFJawc6l5cUt94y0Gy1DG3lV2KIP6JxJWk7f1PGp0vyp+MKaNfnu+?=
+ XsyKVE8GDkT67OsMAjVMY51W60b8iRTCuQc9hjnYXmJXzEKEfhMU
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -87,356 +88,248 @@ Reply-To: <nikita.shubin@maquefel.me>
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-This adds an SoC driver for the ep93xx. Currently there
-is only one thing not fitting into any other framework,
-and that is the swlock setting.
+This us a rewrite of EP93xx timer driver in
+arch/arm/mach-ep93xx/timer-ep93xx.c trying to do everything
+the device tree way:
 
-It's used for clock settings and restart.
+- Make every IO-access relative to a base address and dynamic
+  so we can do a dynamic ioremap and get going.
+- Find register range and interrupt from the device tree.
 
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/soc/Kconfig               |   1 +
- drivers/soc/Makefile              |   1 +
- drivers/soc/cirrus/Kconfig        |  12 ++
- drivers/soc/cirrus/Makefile       |   2 +
- drivers/soc/cirrus/soc-ep93xx.c   | 231 ++++++++++++++++++++++++++++++++++++++
- include/linux/soc/cirrus/ep93xx.h |  18 ++-
- 6 files changed, 264 insertions(+), 1 deletion(-)
+ drivers/clocksource/Kconfig        |  11 +++
+ drivers/clocksource/Makefile       |   1 +
+ drivers/clocksource/timer-ep93xx.c | 190 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 202 insertions(+)
 
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index 4e176280113a..16327b63b773 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -8,6 +8,7 @@ source "drivers/soc/aspeed/Kconfig"
- source "drivers/soc/atmel/Kconfig"
- source "drivers/soc/bcm/Kconfig"
- source "drivers/soc/canaan/Kconfig"
-+source "drivers/soc/cirrus/Kconfig"
- source "drivers/soc/fsl/Kconfig"
- source "drivers/soc/fujitsu/Kconfig"
- source "drivers/soc/imx/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 3b0f9fb3b5c8..b76a03fe808e 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -9,6 +9,7 @@ obj-y				+= aspeed/
- obj-$(CONFIG_ARCH_AT91)		+= atmel/
- obj-y				+= bcm/
- obj-$(CONFIG_SOC_CANAAN)	+= canaan/
-+obj-$(CONFIG_EP93XX_SOC)        += cirrus/
- obj-$(CONFIG_ARCH_DOVE)		+= dove/
- obj-$(CONFIG_MACH_DOVE)		+= dove/
- obj-y				+= fsl/
-diff --git a/drivers/soc/cirrus/Kconfig b/drivers/soc/cirrus/Kconfig
-new file mode 100644
-index 000000000000..408f3343a265
---- /dev/null
-+++ b/drivers/soc/cirrus/Kconfig
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+if ARCH_EP93XX
-+
-+config EP93XX_SOC
-+	bool "Cirrus EP93xx chips SoC"
-+	select SOC_BUS
-+	default y if !EP93XX_SOC_COMMON
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index c4d671a5a13d..f1b84b05b281 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -739,4 +739,15 @@ config GOLDFISH_TIMER
+ 	help
+ 	  Support for the timer/counter of goldfish-rtc
+ 
++config EP93XX_TIMER
++	bool "Cirrus Logic ep93xx timer driver" if COMPILE_TEST
++	depends on ARCH_EP93XX
++	depends on GENERIC_CLOCKEVENTS
++	depends on HAS_IOMEM
++	select CLKSRC_MMIO
++	select TIMER_OF
 +	help
-+	  Support SoC for Cirrus EP93xx chips.
++	  Enables support for the Cirrus Logic timer block
++	  EP93XX.
 +
-+endif
-diff --git a/drivers/soc/cirrus/Makefile b/drivers/soc/cirrus/Makefile
+ endmenu
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index 5d93c9e3fc55..b6a3cf1f5b9d 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -90,3 +90,4 @@ obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+ obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
+ obj-$(CONFIG_GXP_TIMER)			+= timer-gxp.o
+ obj-$(CONFIG_CLKSRC_LOONGSON1_PWM)	+= timer-loongson1-pwm.o
++obj-$(CONFIG_EP93XX_TIMER)		+= timer-ep93xx.o
+diff --git a/drivers/clocksource/timer-ep93xx.c b/drivers/clocksource/timer-ep93xx.c
 new file mode 100644
-index 000000000000..ed6752844c6f
+index 000000000000..bc0ca6e12334
 --- /dev/null
-+++ b/drivers/soc/cirrus/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-y	+= soc-ep93xx.o
-diff --git a/drivers/soc/cirrus/soc-ep93xx.c b/drivers/soc/cirrus/soc-ep93xx.c
-new file mode 100644
-index 000000000000..2fd48d900f24
---- /dev/null
-+++ b/drivers/soc/cirrus/soc-ep93xx.c
-@@ -0,0 +1,231 @@
++++ b/drivers/clocksource/timer-ep93xx.c
+@@ -0,0 +1,190 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * SoC driver for Cirrus EP93xx chips.
-+ * Copyright (C) 2022 Nikita Shubin <nikita.shubin@maquefel.me>
++ * Cirrus Logic EP93xx timer driver.
++ * Copyright (C) 2021 Nikita Shubin <nikita.shubin@maquefel.me>
 + *
-+ * Based on a rewrite of arch/arm/mach-ep93xx/core.c
-+ * Copyright (C) 2006 Lennert Buytenhek <buytenh@wantstofly.org>
-+ * Copyright (C) 2007 Herbert Valerio Riedel <hvr@gnu.org>
-+ *
-+ * Thanks go to Michael Burian and Ray Lehtiniemi for their key
-+ * role in the ep93xx Linux community
++ * Based on a rewrite of arch/arm/mach-ep93xx/timer.c:
 + */
 +
-+#include <linux/clk-provider.h>
++#include <linux/clockchips.h>
++#include <linux/clocksource.h>
 +#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/irq.h>
 +#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/of.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/sys_soc.h>
-+#include <linux/soc/cirrus/ep93xx.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++#include <linux/sched_clock.h>
 +
-+#define EP93XX_EXT_CLK_RATE		14745600
++#include <asm/mach/time.h>
 +
-+#define EP93XX_SYSCON_DEVCFG		0x80
-+
-+#define EP93XX_SWLOCK_MAGICK		0xaa
-+#define EP93XX_SYSCON_SWLOCK		0xc0
-+#define EP93XX_SYSCON_SYSCFG		0x9c
-+#define EP93XX_SYSCON_SYSCFG_REV_MASK	0xf0000000
-+#define EP93XX_SYSCON_SYSCFG_REV_SHIFT	28
-+
-+#define EP93XX_SYSCON_CLKSET1		0x20
-+#define EP93XX_SYSCON_CLKSET1_NBYP1	BIT(23)
-+#define EP93XX_SYSCON_CLKSET2		0x24
-+#define EP93XX_SYSCON_CLKSET2_NBYP2	BIT(19)
-+#define EP93XX_SYSCON_CLKSET2_PLL2_EN	BIT(18)
-+
-+static DEFINE_SPINLOCK(ep93xx_swlock);
-+
-+/* EP93xx System Controller software locked register write */
-+void ep93xx_syscon_swlocked_write(struct regmap *map, unsigned int reg, unsigned int val)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&ep93xx_swlock, flags);
-+
-+	regmap_write(map, EP93XX_SYSCON_SWLOCK, EP93XX_SWLOCK_MAGICK);
-+	regmap_write(map, reg, val);
-+
-+	spin_unlock_irqrestore(&ep93xx_swlock, flags);
-+}
-+EXPORT_SYMBOL_NS_GPL(ep93xx_syscon_swlocked_write, EP93XX_SOC);
-+
-+void ep93xx_devcfg_set_clear(struct regmap *map, unsigned int set_bits, unsigned int clear_bits)
-+{
-+	unsigned long flags;
-+	unsigned int val;
-+
-+	spin_lock_irqsave(&ep93xx_swlock, flags);
-+
-+	regmap_read(map, EP93XX_SYSCON_DEVCFG, &val);
-+	val &= ~clear_bits;
-+	val |= set_bits;
-+	regmap_write(map, EP93XX_SYSCON_SWLOCK, EP93XX_SWLOCK_MAGICK);
-+	regmap_write(map, EP93XX_SYSCON_DEVCFG, val);
-+
-+	spin_unlock_irqrestore(&ep93xx_swlock, flags);
-+}
-+EXPORT_SYMBOL_NS_GPL(ep93xx_devcfg_set_clear, EP93XX_SOC);
-+
-+void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
-+				 unsigned int mask, unsigned int val)
-+{
-+	unsigned long flags;
-+	unsigned int tmp, orig;
-+
-+	spin_lock_irqsave(&ep93xx_swlock, flags);
-+
-+	regmap_read(map, EP93XX_SYSCON_DEVCFG, &orig);
-+	tmp = orig & ~mask;
-+	tmp |= val & mask;
-+	if (tmp != orig) {
-+		regmap_write(map, EP93XX_SYSCON_SWLOCK, EP93XX_SWLOCK_MAGICK);
-+		regmap_write(map, reg, tmp);
-+	}
-+
-+	spin_unlock_irqrestore(&ep93xx_swlock, flags);
-+}
-+EXPORT_SYMBOL_NS_GPL(ep93xx_swlocked_update_bits, EP93XX_SOC);
-+
-+unsigned int __init ep93xx_chip_revision(struct regmap *map)
-+{
-+	unsigned int val;
-+
-+	regmap_read(map, EP93XX_SYSCON_SYSCFG, &val);
-+	val &= EP93XX_SYSCON_SYSCFG_REV_MASK;
-+	val >>= EP93XX_SYSCON_SYSCFG_REV_SHIFT;
-+	return val;
-+}
-+
-+static const char __init *ep93xx_get_soc_rev(struct regmap *map)
-+{
-+	int rev = ep93xx_chip_revision(map);
-+
-+	switch (rev) {
-+	case EP93XX_CHIP_REV_D0:
-+		return "D0";
-+	case EP93XX_CHIP_REV_D1:
-+		return "D1";
-+	case EP93XX_CHIP_REV_E0:
-+		return "E0";
-+	case EP93XX_CHIP_REV_E1:
-+		return "E1";
-+	case EP93XX_CHIP_REV_E2:
-+		return "E2";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
-+/*
-+ * PLL rate = 14.7456 MHz * (X1FBD + 1) * (X2FBD + 1) / (X2IPD + 1) / 2^PS
++/*************************************************************************
++ * Timer handling for EP93xx
++ *************************************************************************
++ * The ep93xx has four internal timers.  Timers 1, 2 (both 16 bit) and
++ * 3 (32 bit) count down at 508 kHz, are self-reloading, and can generate
++ * an interrupt on underflow.  Timer 4 (40 bit) counts down at 983.04 kHz,
++ * is free-running, and can't generate interrupts.
++ *
++ * The 508 kHz timers are ideal for use for the timer interrupt, as the
++ * most common values of HZ divide 508 kHz nicely.  We pick the 32 bit
++ * timer (timer 3) to get as long sleep intervals as possible when using
++ * CONFIG_NO_HZ.
++ *
++ * The higher clock rate of timer 4 makes it a better choice than the
++ * other timers for use as clock source and for sched_clock(), providing
++ * a stable 40 bit time base.
++ *************************************************************************
 + */
-+static unsigned long __init calc_pll_rate(u64 rate, u32 config_word)
-+{
-+	rate *= ((config_word >> 11) & GENMASK(4, 0)) + 1;	/* X1FBD */
-+	rate *= ((config_word >> 5) & GENMASK(5, 0)) + 1;	/* X2FBD */
-+	do_div(rate, (config_word & GENMASK(4, 0)) + 1);	/* X2IPD */
-+	rate >>= ((config_word >> 16) & 3);			/* PS */
 +
-+	return rate;
++#define EP93XX_TIMER1_LOAD		0x00
++#define EP93XX_TIMER1_VALUE		0x04
++#define EP93XX_TIMER1_CONTROL		0x08
++#define EP93XX_TIMER123_CONTROL_ENABLE	BIT(7)
++#define EP93XX_TIMER123_CONTROL_MODE	BIT(6)
++#define EP93XX_TIMER123_CONTROL_CLKSEL	BIT(3)
++#define EP93XX_TIMER1_CLEAR		0x0c
++#define EP93XX_TIMER2_LOAD		0x20
++#define EP93XX_TIMER2_VALUE		0x24
++#define EP93XX_TIMER2_CONTROL		0x28
++#define EP93XX_TIMER2_CLEAR		0x2c
++/*
++ * This read-only register contains the low word of the time stamp debug timer
++ * ( Timer4). When this register is read, the high byte of the Timer4 counter is
++ * saved in the Timer4ValueHigh register.
++ */
++#define EP93XX_TIMER4_VALUE_LOW		0x60
++#define EP93XX_TIMER4_VALUE_HIGH	0x64
++#define EP93XX_TIMER4_VALUE_HIGH_ENABLE	BIT(8)
++#define EP93XX_TIMER3_LOAD		0x80
++#define EP93XX_TIMER3_VALUE		0x84
++#define EP93XX_TIMER3_CONTROL		0x88
++#define EP93XX_TIMER3_CLEAR		0x8c
++
++#define EP93XX_TIMER123_RATE		508469
++#define EP93XX_TIMER4_RATE		983040
++
++struct ep93xx_tcu {
++	void __iomem *base;
++};
++
++static struct ep93xx_tcu *ep93xx_tcu;
++
++static u64 ep93xx_clocksource_read(struct clocksource *c)
++{
++	struct ep93xx_tcu *tcu = ep93xx_tcu;
++
++	return lo_hi_readq(tcu->base + EP93XX_TIMER4_VALUE_LOW) & GENMASK_ULL(39, 0);
 +}
 +
-+static int __init ep93xx_soc_init(void)
++static u64 notrace ep93xx_read_sched_clock(void)
 +{
-+	struct soc_device_attribute *attrs;
-+	struct soc_device *soc_dev;
-+	struct device_node *np;
-+	struct regmap *map;
-+	struct clk_hw *hw;
-+	unsigned long clk_pll1_rate, clk_pll2_rate;
-+	unsigned int clk_f_div, clk_h_div, clk_p_div, clk_usb_div;
-+	const char fclk_divisors[] = { 1, 2, 4, 8, 16, 1, 1, 1 };
-+	const char hclk_divisors[] = { 1, 2, 4, 5, 6, 8, 16, 32 };
-+	const char pclk_divisors[] = { 1, 2, 4, 8 };
-+	const char *machine = NULL;
-+	u32 value;
++	return ep93xx_clocksource_read(NULL);
++}
 +
-+	/* Multiplatform guard, only proceed on ep93xx */
-+	if (!of_machine_is_compatible("cirrus,ep9301"))
-+		return 0;
++static int ep93xx_clkevt_set_next_event(unsigned long next,
++					struct clock_event_device *evt)
++{
++	struct ep93xx_tcu *tcu = ep93xx_tcu;
++	/* Default mode: periodic, off, 508 kHz */
++	u32 tmode = EP93XX_TIMER123_CONTROL_MODE |
++	EP93XX_TIMER123_CONTROL_CLKSEL;
 +
-+	map = syscon_regmap_lookup_by_compatible("cirrus,ep9301-syscon");
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
++	/* Clear timer */
++	writel(tmode, tcu->base + EP93XX_TIMER3_CONTROL);
 +
-+	/* Determine the bootloader configured pll1 rate */
-+	regmap_read(map, EP93XX_SYSCON_CLKSET1, &value);
-+	if (!(value & EP93XX_SYSCON_CLKSET1_NBYP1))
-+		clk_pll1_rate = EP93XX_EXT_CLK_RATE;
-+	else
-+		clk_pll1_rate = calc_pll_rate(EP93XX_EXT_CLK_RATE, value);
++	/* Set next event */
++	writel(next, tcu->base + EP93XX_TIMER3_LOAD);
++	writel(tmode | EP93XX_TIMER123_CONTROL_ENABLE,
++	       tcu->base + EP93XX_TIMER3_CONTROL);
++	return 0;
++}
 +
-+	hw = clk_hw_register_fixed_rate(NULL, "pll1", "xtali", 0, clk_pll1_rate);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	/* Initialize the pll1 derived clocks */
-+	clk_f_div = fclk_divisors[(value >> 25) & 0x7];
-+	clk_h_div = hclk_divisors[(value >> 20) & 0x7];
-+	clk_p_div = pclk_divisors[(value >> 18) & 0x3];
-+
-+	hw = clk_hw_register_fixed_factor(NULL, "fclk", "pll1", 0, 1, clk_f_div);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	hw = clk_hw_register_fixed_factor(NULL, "hclk", "pll1", 0, 1, clk_h_div);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	hw = clk_hw_register_fixed_factor(NULL, "pclk", "hclk", 0, 1, clk_p_div);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	/* Determine the bootloader configured pll2 rate */
-+	regmap_read(map, EP93XX_SYSCON_CLKSET2, &value);
-+	if (!(value & EP93XX_SYSCON_CLKSET2_NBYP2))
-+		clk_pll2_rate = EP93XX_EXT_CLK_RATE;
-+	else if (value & EP93XX_SYSCON_CLKSET2_PLL2_EN)
-+		clk_pll2_rate = calc_pll_rate(EP93XX_EXT_CLK_RATE, value);
-+	else
-+		clk_pll2_rate = 0;
-+
-+	hw = clk_hw_register_fixed_rate(NULL, "pll2", "xtali", 0, clk_pll2_rate);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	regmap_read(map, EP93XX_SYSCON_CLKSET2, &value);
-+	clk_usb_div = (((value >> 28) & GENMASK(3, 0)) + 1);
-+	hw = clk_hw_register_fixed_factor(NULL, "usb_clk", "pll2", 0, 1, clk_usb_div);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	attrs = kzalloc(sizeof(*attrs), GFP_KERNEL);
-+	if (!attrs)
-+		return -ENOMEM;
-+
-+	np = of_find_node_by_path("/");
-+	of_property_read_string(np, "model", &machine);
-+	if (machine)
-+		attrs->machine = kstrdup(machine, GFP_KERNEL);
-+	of_node_put(np);
-+
-+	attrs->family = "Cirrus Logic EP93xx";
-+	attrs->revision = ep93xx_get_soc_rev(map);
-+
-+	soc_dev = soc_device_register(attrs);
-+	if (IS_ERR(soc_dev)) {
-+		kfree(attrs->soc_id);
-+		kfree(attrs->serial_number);
-+		kfree(attrs);
-+		return PTR_ERR(soc_dev);
-+	}
-+
-+	pr_info("EP93xx SoC revision %s\n", attrs->revision);
++static int ep93xx_clkevt_shutdown(struct clock_event_device *evt)
++{
++	struct ep93xx_tcu *tcu = ep93xx_tcu;
++	/* Disable timer */
++	writel(0, tcu->base + EP93XX_TIMER3_CONTROL);
 +
 +	return 0;
 +}
-+core_initcall(ep93xx_soc_init);
-diff --git a/include/linux/soc/cirrus/ep93xx.h b/include/linux/soc/cirrus/ep93xx.h
-index 56fbe2dc59b1..f38937a6f08c 100644
---- a/include/linux/soc/cirrus/ep93xx.h
-+++ b/include/linux/soc/cirrus/ep93xx.h
-@@ -3,6 +3,7 @@
- #define _SOC_EP93XX_H
- 
- struct platform_device;
-+struct regmap;
- 
- #define EP93XX_CHIP_REV_D0	3
- #define EP93XX_CHIP_REV_D1	4
-@@ -10,7 +11,7 @@ struct platform_device;
- #define EP93XX_CHIP_REV_E1	6
- #define EP93XX_CHIP_REV_E2	7
- 
--#ifdef CONFIG_ARCH_EP93XX
-+#if defined(CONFIG_EP93XX_SOC_COMMON)
- int ep93xx_pwm_acquire_gpio(struct platform_device *pdev);
- void ep93xx_pwm_release_gpio(struct platform_device *pdev);
- int ep93xx_ide_acquire_gpio(struct platform_device *pdev);
-@@ -30,7 +31,22 @@ static inline int ep93xx_keypad_acquire_gpio(struct platform_device *pdev) { ret
- static inline void ep93xx_keypad_release_gpio(struct platform_device *pdev) {}
- static inline int ep93xx_i2s_acquire(void) { return 0; }
- static inline void ep93xx_i2s_release(void) {}
 +
-+#if defined(CONFIG_EP93XX_SOC)
-+void ep93xx_syscon_swlocked_write(struct regmap *map, unsigned int reg, unsigned int val);
-+void ep93xx_devcfg_set_clear(struct regmap *map, unsigned int set_bits, unsigned int clear_bits);
-+void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
-+				 unsigned int mask, unsigned int val);
-+#else
-+static inline void ep93xx_syscon_swlocked_write(struct regmap *map, unsigned int reg,
-+						unsigned int val) { }
-+static inline void ep93xx_devcfg_set_clear(struct regmap *map, unsigned int set_bits,
-+						unsigned int clear_bits) { }
++static struct clock_event_device ep93xx_clockevent = {
++	.name			= "timer1",
++	.features		= CLOCK_EVT_FEAT_ONESHOT,
++	.set_state_shutdown	= ep93xx_clkevt_shutdown,
++	.set_state_oneshot	= ep93xx_clkevt_shutdown,
++	.tick_resume		= ep93xx_clkevt_shutdown,
++	.set_next_event		= ep93xx_clkevt_set_next_event,
++	.rating			= 300,
++};
 +
-+void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
-+				unsigned int mask, unsigned int val) { }
- static inline unsigned int ep93xx_chip_revision(void) { return 0; }
-+#endif
- 
- #endif
- 
++static irqreturn_t ep93xx_timer_interrupt(int irq, void *dev_id)
++{
++	struct ep93xx_tcu *tcu = ep93xx_tcu;
++	struct clock_event_device *evt = dev_id;
++
++	/* Writing any value clears the timer interrupt */
++	writel(1, tcu->base + EP93XX_TIMER3_CLEAR);
++
++	evt->event_handler(evt);
++
++	return IRQ_HANDLED;
++}
++
++static int __init ep93xx_timer_of_init(struct device_node *np)
++{
++	int irq;
++	unsigned long flags = IRQF_TIMER | IRQF_IRQPOLL;
++	struct ep93xx_tcu *tcu;
++	int ret;
++
++	tcu = kzalloc(sizeof(*tcu), GFP_KERNEL);
++	if (!tcu)
++		return -ENOMEM;
++
++	tcu->base = of_iomap(np, 0);
++	if (!tcu->base) {
++		pr_err("Can't remap registers\n");
++		ret = -ENXIO;
++		goto out_free;
++	}
++
++	ep93xx_tcu = tcu;
++
++	irq = irq_of_parse_and_map(np, 0);
++	if (irq == 0)
++		irq = -EINVAL;
++	if (irq < 0) {
++		pr_err("EP93XX Timer Can't parse IRQ %d", irq);
++		goto out_free;
++	}
++
++	/* Enable and register clocksource and sched_clock on timer 4 */
++	writel(EP93XX_TIMER4_VALUE_HIGH_ENABLE,
++	       tcu->base + EP93XX_TIMER4_VALUE_HIGH);
++	clocksource_mmio_init(NULL, "timer4",
++				EP93XX_TIMER4_RATE, 200, 40,
++				ep93xx_clocksource_read);
++	sched_clock_register(ep93xx_read_sched_clock, 40,
++			     EP93XX_TIMER4_RATE);
++
++	/* Set up clockevent on timer 3 */
++	if (request_irq(irq, ep93xx_timer_interrupt, flags, "ep93xx timer",
++		&ep93xx_clockevent))
++		pr_err("Failed to request irq %d (ep93xx timer)\n", irq);
++
++	clockevents_config_and_register(&ep93xx_clockevent,
++				EP93XX_TIMER123_RATE,
++				1,
++				UINT_MAX);
++
++	return 0;
++
++out_free:
++	kfree(tcu);
++	return ret;
++}
++TIMER_OF_DECLARE(ep93xx_timer, "cirrus,ep9301-timer", ep93xx_timer_of_init);
 
 -- 
 2.39.2
