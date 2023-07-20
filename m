@@ -4,35 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49F03C3DA4B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 914A0C3DA50
 	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1FF5EC00930; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4275C00915;
-	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+	id 840E7C4E67B; Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C66EC00939;
+	Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689841798;
-	bh=x1b/Kn4xAh0mSF7S+pKuRE6+qHyJYw+n6Z+ETzmtY78=;
+	s=k20201202; t=1689841799;
+	bh=D0zmWfpY4Zxds3pI9qoqO5QwtVSarYugW4yFNdti8Q0=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=EvKIYlioIP68yzd/YxVZ7lnQDh1sIkxB+vWyAhqHxqVMCxQTmNIIUulu7PA3cSHB0
-	 mwSeq6gWqyLSy4vwIxOO8oQh7LKit1Uu+4elv/aIpk+Ppx15FN/YEpFKIIZV0nnQ3m
-	 2rj34f9tplCOcQQgAuUNoGi2crS6M5+QtlmwFAgbhH1pAuJZc/sBbhVSd7KqSr5xoo
-	 EEor9bMoZUtbI7wiu2+SML/n29ySCsufAggSzeBHDKmEKtR+x4WqevHq1lRXfhIlYk
-	 1EtmmYVxLetoLNJ2W7uLAbDTy2RU54NGDFWmcgaGMV29TYJOyjJl1ArsPH8bh24SGY
-	 wLbmhiryYBv1g==
+	b=Jv7h+tlB1D4diowhIg135C6ImPqAa+Cmjeq4JsjWftAmW2n7sBmFcAmbXIzL8Ym9y
+	 BRnM7ZZ6DoiLmhbYWpNAmgW8KDDfclYLD8FRZj21ThtsS97ueB5/1HS8a03lP/0flN
+	 mIV9lxFJrOcvLZcjqMupIt/NaX7j/b8fkAoaSbJF1dRce6WMrKQfYEEQLi6XUHS1NQ
+	 3PndgRFBDmbaAJpM5FNo0MdpgiyoEmpErY/PUPUvcVTJmZS4qyrWGe3OMMXjPH8Z9a
+	 qGaMRvaJ3vGhiDYQGcKw/+g6ugY5B9zue42n4xvXXR+WkdxqFhCLfJaZO0Lu2PHSRu
+	 MyPrBlOv5m+dQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9C90C25B74;
-	Thu, 20 Jul 2023 08:29:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C81C10F19;
+	Thu, 20 Jul 2023 08:29:59 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Thu, 20 Jul 2023 14:29:36 +0300
-Subject: [PATCH v3 36/42] ARM: ep93xx: DT for the Cirrus ep93xx SoC
- platforms
+Date: Thu, 20 Jul 2023 14:29:42 +0300
+Subject: [PATCH v3 42/42] ASoC: cirrus: edb93xx: Delete driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-ep93xx-v3-36-3d63a5f1103e@maquefel.me>
+Message-Id: <20230605-ep93xx-v3-42-3d63a5f1103e@maquefel.me>
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
 List-Id: <soc.lore.kernel.org>
@@ -74,11 +73,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=3077;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689852591; l=4962;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=LUqUfEyd9NJUel2yKVUkZUKAloLn0lR2WIXsqjtamgw=; =?utf-8?q?b=3Dzjs1scrJJBZA?=
- =?utf-8?q?VcanfJF1vglijajwtHzebC2iAdKdPKRDQVOGSj1v+asIrAwOuwDRiN/0IgMnnfjg?=
- 7fD8dlz+CJh/ZtZzDAO6Qa8hRKLvPkvdTge59bPVyVJCCy/ZekCU
+ bh=K42b6S3Gkw/OZtsjmZjMwv/18r4+mbuwFRUMVcpcY+I=; =?utf-8?q?b=3DIGZ2FeCPE78X?=
+ =?utf-8?q?cF95Zy3oR8xxaO6xwqnalDqB5TnbzsJf8QwYoyPEiTB3t8yvZZ1/Rzsu5n/5Wq+d?=
+ NvVfE54nAYukLYe2jXVfWiK7KxIOWkgx8kBBnHCzn8co5COdM7XY
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -86,107 +85,171 @@ X-Endpoint-Received:
 X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
 Reply-To: <nikita.shubin@maquefel.me>
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-This adds compulsory device tree support to the Cirrus ep93xx ARMv4
-platform.
+Can be replaced with "simple-audio-card" for the rates up to 50kHz, refer
+to commit "ARM: dts: ep93xx: Add EDB9302 DT".
 
-- We select PINCTRL_EP93xx
-- We select COMMON_CLK_EP93XX, as clock driver moved out of platform
-  code
-- We select ARCH_HAS_RESET_CONTROLLER
-
-And also we need ARM_ATAG_DTB_COMPAT to update device tree with
-information about memory passed from bootloader.
-
-We have to leave all MACH options as they are used for board checking
-before decomp, to turn off watchdog and ethernet DMA.
-
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- arch/arm/Makefile             |  1 -
- arch/arm/mach-ep93xx/Kconfig  | 20 ++++++++++----------
- arch/arm/mach-ep93xx/Makefile | 11 -----------
- 3 files changed, 10 insertions(+), 22 deletions(-)
+ sound/soc/cirrus/Kconfig   |   9 ----
+ sound/soc/cirrus/Makefile  |   4 --
+ sound/soc/cirrus/edb93xx.c | 117 ---------------------------------------------
+ 3 files changed, 130 deletions(-)
 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 547e5856eaa0..0e3d637cae6c 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -179,7 +179,6 @@ machine-$(CONFIG_ARCH_CLPS711X)		+= clps711x
- machine-$(CONFIG_ARCH_DAVINCI)		+= davinci
- machine-$(CONFIG_ARCH_DIGICOLOR)	+= digicolor
- machine-$(CONFIG_ARCH_DOVE)		+= dove
--machine-$(CONFIG_ARCH_EP93XX)		+= ep93xx
- machine-$(CONFIG_ARCH_EXYNOS)		+= exynos
- machine-$(CONFIG_ARCH_FOOTBRIDGE)	+= footbridge
- machine-$(CONFIG_ARCH_GEMINI)		+= gemini
-diff --git a/arch/arm/mach-ep93xx/Kconfig b/arch/arm/mach-ep93xx/Kconfig
-index 703f3d232a60..812b71dcf60e 100644
---- a/arch/arm/mach-ep93xx/Kconfig
-+++ b/arch/arm/mach-ep93xx/Kconfig
-@@ -3,27 +3,27 @@ menuconfig ARCH_EP93XX
- 	bool "EP93xx-based"
- 	depends on ATAGS
- 	depends on ARCH_MULTI_V4T
-+	# CONFIG_ARCH_MULTI_V7 is not set
- 	depends on CPU_LITTLE_ENDIAN
-+	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_SPARSEMEM_ENABLE
- 	select ARM_AMBA
- 	select ARM_VIC
-+	select ARM_APPENDED_DTB # Old Redboot bootloaders deployed
-+	select ARM_ATAG_DTB_COMPAT # we need this to update dt memory node
-+	select COMMON_CLK_EP93XX
-+	select EP93XX_TIMER
- 	select CLKSRC_MMIO
- 	select CPU_ARM920T
- 	select GPIOLIB
-+	select PINCTRL
-+	select PINCTRL_EP93XX
- 	help
- 	  This enables support for the Cirrus EP93xx series of CPUs.
+diff --git a/sound/soc/cirrus/Kconfig b/sound/soc/cirrus/Kconfig
+index 38a83c4dcc2d..97def4e53fbc 100644
+--- a/sound/soc/cirrus/Kconfig
++++ b/sound/soc/cirrus/Kconfig
+@@ -31,12 +31,3 @@ config SND_EP93XX_SOC_I2S_WATCHDOG
  
- if ARCH_EP93XX
+ endif # if SND_EP93XX_SOC_I2S
  
--menu "Cirrus EP93xx Implementation Options"
+-config SND_EP93XX_SOC_EDB93XX
+-	tristate "SoC Audio support for Cirrus Logic EDB93xx boards"
+-	depends on SND_EP93XX_SOC && (MACH_EDB9301 || MACH_EDB9302 || MACH_EDB9302A || MACH_EDB9307A || MACH_EDB9315A)
+-	select SND_EP93XX_SOC_I2S
+-	select SND_SOC_CS4271_I2C if I2C
+-	select SND_SOC_CS4271_SPI if SPI_MASTER
+-	help
+-	  Say Y or M here if you want to add support for I2S audio on the
+-	  Cirrus Logic EDB93xx boards.
+diff --git a/sound/soc/cirrus/Makefile b/sound/soc/cirrus/Makefile
+index 19a86daad660..5916c03888cb 100644
+--- a/sound/soc/cirrus/Makefile
++++ b/sound/soc/cirrus/Makefile
+@@ -6,7 +6,3 @@ snd-soc-ep93xx-i2s-objs	 			:= ep93xx-i2s.o
+ obj-$(CONFIG_SND_EP93XX_SOC)			+= snd-soc-ep93xx.o
+ obj-$(CONFIG_SND_EP93XX_SOC_I2S)		+= snd-soc-ep93xx-i2s.o
+ 
+-# EP93XX Machine Support
+-snd-soc-edb93xx-objs				:= edb93xx.o
 -
--config EP93XX_SOC_COMMON
--	bool
--	default y
--	select SOC_BUS
--	select LEDS_GPIO_REGISTER
--
--comment "EP93xx Platforms"
-+# menu "EP93xx Platforms"
- 
- config MACH_BK3
- 	bool "Support Liebherr BK3.1"
-@@ -103,6 +103,6 @@ config MACH_VISION_EP9307
- 	  Say 'Y' here if you want your kernel to support the
- 	  Vision Engraving Systems EP9307 SoM.
- 
--endmenu
-+# endmenu
- 
- endif
-diff --git a/arch/arm/mach-ep93xx/Makefile b/arch/arm/mach-ep93xx/Makefile
+-obj-$(CONFIG_SND_EP93XX_SOC_EDB93XX)		+= snd-soc-edb93xx.o
+diff --git a/sound/soc/cirrus/edb93xx.c b/sound/soc/cirrus/edb93xx.c
 deleted file mode 100644
-index 62e37403df14..000000000000
---- a/arch/arm/mach-ep93xx/Makefile
+index f49caab21a25..000000000000
+--- a/sound/soc/cirrus/edb93xx.c
 +++ /dev/null
-@@ -1,11 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--#
--# Makefile for the linux kernel.
--#
--obj-y			:= core.o clock.o timer-ep93xx.o
+@@ -1,117 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * SoC audio for EDB93xx
+- *
+- * Copyright (c) 2010 Alexander Sverdlin <subaparts@yandex.ru>
+- *
+- * This driver support CS4271 codec being master or slave, working
+- * in control port mode, connected either via SPI or I2C.
+- * The data format accepted is I2S or left-justified.
+- * DAPM support not implemented.
+- */
 -
--obj-$(CONFIG_EP93XX_DMA)	+= dma.o
+-#include <linux/platform_device.h>
+-#include <linux/gpio.h>
+-#include <linux/module.h>
+-#include <linux/soc/cirrus/ep93xx.h>
+-#include <sound/core.h>
+-#include <sound/pcm.h>
+-#include <sound/soc.h>
+-#include <asm/mach-types.h>
 -
--obj-$(CONFIG_MACH_EDB93XX)	+= edb93xx.o
--obj-$(CONFIG_MACH_TS72XX)	+= ts72xx.o
--obj-$(CONFIG_MACH_VISION_EP9307)+= vision_ep9307.o
+-static int edb93xx_hw_params(struct snd_pcm_substream *substream,
+-			     struct snd_pcm_hw_params *params)
+-{
+-	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+-	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
+-	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
+-	int err;
+-	unsigned int mclk_rate;
+-	unsigned int rate = params_rate(params);
+-
+-	/*
+-	 * According to CS4271 datasheet we use MCLK/LRCK=256 for
+-	 * rates below 50kHz and 128 for higher sample rates
+-	 */
+-	if (rate < 50000)
+-		mclk_rate = rate * 64 * 4;
+-	else
+-		mclk_rate = rate * 64 * 2;
+-
+-	err = snd_soc_dai_set_sysclk(codec_dai, 0, mclk_rate,
+-				     SND_SOC_CLOCK_IN);
+-	if (err)
+-		return err;
+-
+-	return snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_rate,
+-				      SND_SOC_CLOCK_OUT);
+-}
+-
+-static const struct snd_soc_ops edb93xx_ops = {
+-	.hw_params	= edb93xx_hw_params,
+-};
+-
+-SND_SOC_DAILINK_DEFS(hifi,
+-	DAILINK_COMP_ARRAY(COMP_CPU("ep93xx-i2s")),
+-	DAILINK_COMP_ARRAY(COMP_CODEC("spi0.0", "cs4271-hifi")),
+-	DAILINK_COMP_ARRAY(COMP_PLATFORM("ep93xx-i2s")));
+-
+-static struct snd_soc_dai_link edb93xx_dai = {
+-	.name		= "CS4271",
+-	.stream_name	= "CS4271 HiFi",
+-	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
+-			  SND_SOC_DAIFMT_CBC_CFC,
+-	.ops		= &edb93xx_ops,
+-	SND_SOC_DAILINK_REG(hifi),
+-};
+-
+-static struct snd_soc_card snd_soc_edb93xx = {
+-	.name		= "EDB93XX",
+-	.owner		= THIS_MODULE,
+-	.dai_link	= &edb93xx_dai,
+-	.num_links	= 1,
+-};
+-
+-static int edb93xx_probe(struct platform_device *pdev)
+-{
+-	struct snd_soc_card *card = &snd_soc_edb93xx;
+-	int ret;
+-
+-	ret = ep93xx_i2s_acquire();
+-	if (ret)
+-		return ret;
+-
+-	card->dev = &pdev->dev;
+-
+-	ret = snd_soc_register_card(card);
+-	if (ret) {
+-		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
+-			ret);
+-		ep93xx_i2s_release();
+-	}
+-
+-	return ret;
+-}
+-
+-static void edb93xx_remove(struct platform_device *pdev)
+-{
+-	struct snd_soc_card *card = platform_get_drvdata(pdev);
+-
+-	snd_soc_unregister_card(card);
+-	ep93xx_i2s_release();
+-}
+-
+-static struct platform_driver edb93xx_driver = {
+-	.driver		= {
+-		.name	= "edb93xx-audio",
+-	},
+-	.probe		= edb93xx_probe,
+-	.remove_new	= edb93xx_remove,
+-};
+-
+-module_platform_driver(edb93xx_driver);
+-
+-MODULE_AUTHOR("Alexander Sverdlin <subaparts@yandex.ru>");
+-MODULE_DESCRIPTION("ALSA SoC EDB93xx");
+-MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:edb93xx-audio");
 
 -- 
 2.39.2
