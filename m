@@ -1,99 +1,174 @@
-Return-Path: <SRS0=NRsb=DG=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=a1zb=DG=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BED1EB64DA
-	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 12:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9D67EB64DA
+	for <soc@archiver.kernel.org>; Thu, 20 Jul 2023 13:28:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F224EC433C9; Thu, 20 Jul 2023 12:43:39 +0000 (UTC)
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 81827C433C8; Thu, 20 Jul 2023 13:28:37 +0000 (UTC)
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 04B16C433C8;
-	Thu, 20 Jul 2023 12:43:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 04B16C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R6C2Q2gHMzNmWD;
-	Thu, 20 Jul 2023 20:40:14 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 20 Jul 2023 20:43:34 +0800
-Message-ID: <ec39e8e2-be33-583c-d685-c088f427e9f2@huawei.com>
-Date: Thu, 20 Jul 2023 20:43:33 +0800
+	by smtp.kernel.org (Postfix) with ESMTPS id 4EE82C433C7;
+	Thu, 20 Jul 2023 13:28:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4EE82C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1b852785a65so6073945ad.0;
+        Thu, 20 Jul 2023 06:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689859715; x=1690464515;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3o5zfhOrGvbkMhIZNHbLcgV0VOFO8KOUPcq8qPlAWh4=;
+        b=II3kNkpXwPdcCl5YHO4c2SdZlaof4sRkgoc/bpxKmFONK+AnVHwT1l7cn4fep4l2pZ
+         RKQPLK4YtMeQSGR5iqY/qohmxFaLzZ1ClUnoBaAnXkyj8ZtgLGPZrxlSRrbXTRR6JuFE
+         1/XRgM2FIIeAEdO8c6Bnsmo11XN81iFNABpU1uWMfxl2AT70aV2t6lD+Lvsz3z0sVruD
+         Uow4lWraZWjlX9pw2usWm2WakkdaoKw1c6bRllOiAPjWueKo+tDHsJogOPb38guW70UF
+         VU2sVcwD6/G14KhffAcn6pAqokkebSFot2kkwvOG6VTqnh2LdN7nEmxQT8ylWbgSo4Lq
+         gfBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689859715; x=1690464515;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3o5zfhOrGvbkMhIZNHbLcgV0VOFO8KOUPcq8qPlAWh4=;
+        b=L0GjADIGftflJQimT5cQwZMAdyWgdTfMh4xEUzjvFz/aDMya4rsVxC1OK7hg0z3JbZ
+         tsT6xRwW4JiPslzG2+DZ0Q1bqlvwc4oynURq15nwrD/+oK7iz+PQXtuynUEPIgnymcgJ
+         Qa7I7v8MzUIQckTCe9ke66/GbIE8hECwWs+dM3r+t4bXl4jmgkJhxFFllsk/FT6+Lgjm
+         DWhrx81VFrmDK3x1/u8Zu6h0pUcSbUq0nCJ2q1+tcFG7D2UCqkzPYmXXIhvwxxVhx5nz
+         p3b9T7Wie0NGHQgtiNt6R9sj5hUyswotof/sCuJNY+0DW/nIdaYMjwiIAI8EHCxSD0iw
+         ZSCw==
+X-Gm-Message-State: ABy/qLZOnJU6Nbk3os0//Rbe3jwKKCQJ/yYbULmVpAMHu/5icQmC3xgO
+	1E14yHviQpplNYtJ05ns/XU=
+X-Google-Smtp-Source: APBJJlHUPUivfHOgoXJP79qDNd5D4J3nF3SUABKNXv3IzHnbDE0pcAqJjXDoFhMrl2kqZtr0UmSiBg==
+X-Received: by 2002:a17:902:c94c:b0:1b7:ca9c:4f5c with SMTP id i12-20020a170902c94c00b001b7ca9c4f5cmr6694496pla.28.1689859715396;
+        Thu, 20 Jul 2023 06:28:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jc15-20020a17090325cf00b001b5247cac3dsm1346340plb.110.2023.07.20.06.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 06:28:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <def5b29c-3318-2db1-a7fa-612ed1e81be6@roeck-us.net>
+Date: Thu, 20 Jul 2023 06:28:31 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 0/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: <arnd@arndb.de>, <sudeep.holla@arm.com>, <krzk@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 12/42] dt-bindings: watchdog: Add Cirrus EP93x
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>, <liuyonglong@huawei.com>,
-	<xuwei5@hisilicon.com>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230530112746.2767-1-lihuisong@huawei.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230530112746.2767-1-lihuisong@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+To: nikita.shubin@maquefel.me, Hartley Sweeten
+ <hsweeten@visionengravers.com>, Lennert Buytenhek <kernel@wantstofly.org>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Alessandro Zummo
+ <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Sebastian Reichel
+ <sre@kernel.org>, Thierry Reding <thierry.reding@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+ Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Andy Shevchenko <andy@kernel.org>,
+ Michael Peters <mpeters@embeddedTS.com>, Kris Bahnsen <kris@embeddedTS.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+ linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-12-3d63a5f1103e@maquefel.me>
+From: Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230605-ep93xx-v3-12-3d63a5f1103e@maquefel.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi All,
-
-Now I add HiSilicon SOC maintainer Wei Xu attributing to Krzysztof's 
-reminder.
-
-Thanks for your review. All comments have been closed.
-Could you please kindly confirm my modifications for your comments?
-If it is ok for you. In order to go on smoothly, can you reply?😁
-
-Best regards,
-Huisong
-
-
-在 2023/5/30 19:27, Huisong Li 写道:
-> This series add HCCS driver to query the health status and port information
-> of HCCS on Kunpeng SoC as well as document all sysfs entries provided by
-> this driver.
->
+On 7/20/23 04:29, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> This adds device tree bindings for the Cirrus Logic EP93xx
+> watchdog block used in these SoCs.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 > ---
->   v3:
->    - replace "using_status" with "enable" attribute.
->    - fix some comments in codes.
->
-> ---
->   v2:
->    - Document all sysfs entries provided by driver.
->    - drop 'pcc_type' and 'intr_mode' in struct hccs_dev.
->    - using _CRS with PCC GAS to get channel ID instead of _DSD.
->    - replace readw_relaxed_poll_timeout with readw_poll_timeout.
->    - use sysfs_emit() instead of sprintf().
->    - drop ACPI_PTR in hccs_driver.
->    - drop useless log during the probe phase.
->
-> Huisong Li (2):
->    soc: hisilicon: Support HCCS driver on Kunpeng SoC
->    doc: soc: hisilicon: Add Kunpeng HCCS driver documentation
->
->   .../sysfs-devices-platform-kunpeng_hccs       |   76 +
->   MAINTAINERS                                   |    7 +
->   drivers/soc/Kconfig                           |    1 +
->   drivers/soc/Makefile                          |    1 +
->   drivers/soc/hisilicon/Kconfig                 |   19 +
->   drivers/soc/hisilicon/Makefile                |    2 +
->   drivers/soc/hisilicon/kunpeng_hccs.c          | 1288 +++++++++++++++++
->   drivers/soc/hisilicon/kunpeng_hccs.h          |  196 +++
->   8 files changed, 1590 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
->   create mode 100644 drivers/soc/hisilicon/Kconfig
->   create mode 100644 drivers/soc/hisilicon/Makefile
->   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
->   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
->
+>   .../bindings/watchdog/cirrus,ep9301-wdt.yaml       | 46 ++++++++++++++++++++++
+>   1 file changed, 46 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml b/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
+> new file mode 100644
+> index 000000000000..d54595174a12
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/cirrus,ep9301-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus Logic EP93xx Watchdog Timer
+> +
+> +maintainers:
+> +  - Nikita Shubin <nikita.shubin@maquefel.me>
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +description:
+> +  Cirrus Logic EP93xx SoC family has it's own watchdog implementation
+> +
+
+Odd description. Isn't that true for pretty much every devicetree
+bindings file, and pretty much every hardware driver ?
+
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: cirrus,ep9301-wdt
+> +      - items:
+> +          - enum:
+> +              - cirrus,ep9302-wdt
+> +              - cirrus,ep9307-wdt
+> +              - cirrus,ep9312-wdt
+> +              - cirrus,ep9315-wdt
+> +          - const: cirrus,ep9301-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog@80940000 {
+> +        compatible = "cirrus,ep9301-wdt";
+> +        reg = <0x80940000 0x08>;
+> +    };
+> +
+> 
+
