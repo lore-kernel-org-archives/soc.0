@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CF8FEB64DC
-	for <soc@archiver.kernel.org>; Fri, 21 Jul 2023 14:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DD63C001DC
+	for <soc@archiver.kernel.org>; Fri, 21 Jul 2023 14:10:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 545D4C43391; Fri, 21 Jul 2023 14:08:47 +0000 (UTC)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	id 03016C433C7; Fri, 21 Jul 2023 14:10:16 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 07B08C43395
-	for <soc@kernel.org>; Fri, 21 Jul 2023 14:08:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 07B08C43395
+	by smtp.kernel.org (Postfix) with ESMTPS id 60CF2C43395
+	for <soc@kernel.org>; Fri, 21 Jul 2023 14:10:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60CF2C43395
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso3306306e87.0
-        for <soc@kernel.org>; Fri, 21 Jul 2023 07:08:44 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3fba8e2aa52so17541565e9.1
+        for <soc@kernel.org>; Fri, 21 Jul 2023 07:10:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689948523; x=1690553323;
+        d=linaro.org; s=google; t=1689948611; x=1690553411;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QdCDvX2ENQQi+dpK3c6L7rSwh7ZxpQvyjeSTayf+l4A=;
-        b=mKpa85MjZm0wM2/mDCVf9XYQEXqHnC0zrrCUULJJt2k97Ivcladhym49AqIJy7+Cl6
-         M68rFARHi81TAQJXWEUS1FYzNXin0hZbhFEFSIzyz0akk/YVbt8GKI7i1JU6Wbhd2lqU
-         QOxvFaJcPysmvURITXByzqQERED004zQDaoA/oKyBTElV1S52Qd2ZHxnkLx+wr7VyRv3
-         Aw8GSkEJP3SExUtN/YZgkoBVcRyf5/bJ61snewbba4LU6Pe0oAAHNa6hFgRSvTV30hyz
-         TujMWvjygIWFj2lESeXLXp5/tCCPHd4jXPTfUK933o8JRD3N8BQjMsDSwwNVnhYuu5Vs
-         LxBg==
+        bh=D5JLK7sX6TvMY9QYtE4PR7dOD/ZFiOCarXTzuRrPI5c=;
+        b=t5k3pZhoG+AYBoSzaTLpzlAUsBlHUl7lB78CDzsmHwjdVVGmyTqDM89ObvufvjSo7f
+         hpww35uNlXvCiXjR8Z3Kcy+N16aszSPxdmSW5dXU//lN8o77O3wzYas7eBkvmDyuTUT7
+         sy82OO7WlVgpwfI60hPRR6eC7iKohOsXJIAPgLYw0aB9/CoM3vvTnVBOsIhDGWbjAxE4
+         jhkNh/RncJk8+BPjG2UwVOec3N1akRHOj8/cli14A3cccbFg1vqKASTYTytAzKfrss4t
+         3mJgMR1n+1HqY3oqR8HhDhElYOwuyc2qwRsyyrmAmT2CnaWXqaPG173zYgCNrCSCs7I4
+         H4Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689948523; x=1690553323;
+        d=1e100.net; s=20221208; t=1689948611; x=1690553411;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QdCDvX2ENQQi+dpK3c6L7rSwh7ZxpQvyjeSTayf+l4A=;
-        b=i5oYRUqmcwUn9L/Ncct1pQIDbqYacADB6iwsB4JG47hFd4AIhlsqjuvk7xqPL+E+Ji
-         Ihd8Ky5O7+hkaal58hesfksifciZIquxX6ChnH8jok1eKBkIaLPzQGeyBknsYrcJrkn0
-         1NYR98RLMFngcPdDvekz4Lajrnw5+B01pDlEcvl8wPNXJ52qWTIf9FHjfzgQ63cXhLJo
-         YJ6tXFL0OADjyHmhnpfYMh1EIaSGqtmhR6u6Szo4ErUggkuWXW9TreiDiqsHwwnUNDQv
-         74PPHwccMahv6vR6JF4tgcvo21xTngbm2HL5r1ngYwQIDTCp9Cmg/7tGAC/k61W0kfJv
-         7RKw==
-X-Gm-Message-State: ABy/qLY8daLDv/rBRy1UlPgO37J4GgXx/fU7Q+7S/dB3V6siHYmCkjBg
-	bU77vXKAzdwzw5oTdKooCoyI4Q==
-X-Google-Smtp-Source: APBJJlGitP6YdoZI8bIFpNGAsIBqr0u+J3Lfy5UXxN6m18CjoA/M+91KX09TKjqALw4XfrZGY2rXuA==
-X-Received: by 2002:a05:6512:3054:b0:4fb:b11:c99e with SMTP id b20-20020a056512305400b004fb0b11c99emr1401012lfb.56.1689948522863;
-        Fri, 21 Jul 2023 07:08:42 -0700 (PDT)
+        bh=D5JLK7sX6TvMY9QYtE4PR7dOD/ZFiOCarXTzuRrPI5c=;
+        b=bNvfmBqydHs0ikeodNifuETxLM1/vS8LBeATM4+LoSWS7zSql0bxWHm2RSCXpqxuki
+         qUCYU9Yj6T7xaGUGuk45gB5/iHyEmO2Nr1/FdITkzmEEsTgvWMpAki1ewKyqn7r7zvT5
+         9SDfg2w9A8LDUaE58xo8U9dYvFuUy+ynrCNaOPQBWVUCRIjB/K8CLCNm42sUNEw7cXl8
+         MJpx0Y1+Utmii9DMw9l4jkqbTFFOH85+qI8lMez9lFABNgJ2439zXF5qKLzg6ehoQwKn
+         7aBIypJgtzlzZ8lEkVmE9FDDzXN9rHVHcX4amSryAshzuSojjqhGpZ0UZyI95toxjW61
+         5PSQ==
+X-Gm-Message-State: ABy/qLb+/My7nL4tVUQuOQIXq51VVwQvJuC/8XfV7qbVqWg804ia3u+G
+	w2CSLaf7IryV1SjQttFixGQvqA==
+X-Google-Smtp-Source: APBJJlFb081tRb9TVYsQzjk8z6FX0fbV9IvQdPA+a6dM+X5vTsqrlNWUMOAY9EDzlSX92P91b/1I9w==
+X-Received: by 2002:a5d:5145:0:b0:314:14ea:e2de with SMTP id u5-20020a5d5145000000b0031414eae2demr1529517wrt.0.1689948611406;
+        Fri, 21 Jul 2023 07:10:11 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id r1-20020adfce81000000b0031128382ed0sm4321269wrn.83.2023.07.21.07.08.37
+        by smtp.gmail.com with ESMTPSA id x10-20020adff0ca000000b00314367cf43asm4284464wro.106.2023.07.21.07.10.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jul 2023 07:08:41 -0700 (PDT)
-Message-ID: <22521abf-db55-aec6-fb96-fdb585ef6132@linaro.org>
-Date: Fri, 21 Jul 2023 16:08:36 +0200
+        Fri, 21 Jul 2023 07:10:10 -0700 (PDT)
+Message-ID: <d8df7f07-ea8d-d382-d3ef-c1f1fb6ccbc8@linaro.org>
+Date: Fri, 21 Jul 2023 16:10:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 12/42] dt-bindings: watchdog: Add Cirrus EP93x
+Subject: Re: [PATCH v3 29/42] dt-bindings: rtc: Add ST M48T86
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: nikita.shubin@maquefel.me, Hartley Sweeten
@@ -96,23 +96,19 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-12-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-29-3d63a5f1103e@maquefel.me>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605-ep93xx-v3-12-3d63a5f1103e@maquefel.me>
+In-Reply-To: <20230605-ep93xx-v3-29-3d63a5f1103e@maquefel.me>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
 > From: Nikita Shubin <nikita.shubin@maquefel.me>
 > 
-> This adds device tree bindings for the Cirrus Logic EP93xx
+> Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
+> 
 
-Every patch:
-
-Please do not use "This commit/patch", but imperative mood. See longer
-explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
+This shouldn't really be part of this patchset. It's not part of your SoC.
 
 Best regards,
 Krzysztof
