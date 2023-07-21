@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 857BFEB64DC
-	for <soc@archiver.kernel.org>; Fri, 21 Jul 2023 14:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83458EB64DC
+	for <soc@archiver.kernel.org>; Fri, 21 Jul 2023 14:04:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 687E1C433C9; Fri, 21 Jul 2023 14:01:48 +0000 (UTC)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	id 44AE3C433C7; Fri, 21 Jul 2023 14:04:44 +0000 (UTC)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E3536C43391
-	for <soc@kernel.org>; Fri, 21 Jul 2023 14:01:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3536C43391
+	by smtp.kernel.org (Postfix) with ESMTPS id A06B5C43395
+	for <soc@kernel.org>; Fri, 21 Jul 2023 14:04:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A06B5C43395
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fbc244d307so17395235e9.1
-        for <soc@kernel.org>; Fri, 21 Jul 2023 07:01:45 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3fbfcc6daa9so16401565e9.3
+        for <soc@kernel.org>; Fri, 21 Jul 2023 07:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689948104; x=1690552904;
+        d=linaro.org; s=google; t=1689948280; x=1690553080;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kGZ5LqU0Zryf5RXxHBpf5dofqREFTyZTeFWlFYPBfA8=;
-        b=ZiVB2hHSTZRmiaMmbMREaMhbawMx/KUt3cg1qeF1gBfCQQAGIBGPHjWK50hX362tpU
-         fMapfTUkHNiMW2EcbBz3SgWGkAp6pnHxDhqm4HHqfVuIIfYvxWb4ogcWbai4vpYhJADI
-         nWulY7lsgECJ57xXy/eajLo129aMmkczTVRAjkIe0wiSagmvvtOEMM8dttszF+P0remm
-         RGTV8zYGxv0/wyu9CCIL2fyYMd0tbEu3edlaV1yZeI84Bkx+jEwwKA/R03nUuupkA/DL
-         bFjJcVPJ1Os8KPfwF5c406w0MGIwcfg3il9N5GJ9UXq+jvImjTaQ3Zov5AQGHQM9OcQ+
-         H5mg==
+        bh=i0hqft4rLykA1Qm+aWWngJrri1KXMWVHpmrflE+PpLU=;
+        b=PuGwprqKdpq8LkzNLASjiLmbz8p+yLCZy03ATCdJs8insWuhZan57oKC4jNZCzS4ND
+         E7w8hDj2JEk/yaK001S70oJdFPQrhUiTFfWV3ga4MQCxDAA5JM/JTtabf+JXMWw8QZqr
+         uoSOVXGMsahKvU4F69owM+VtHTiwZXV4Sac3eBA92YtCWMRlMuuTlEdryO1jsFqitT9q
+         Y1i7MCt3snL55MX8kx8uOg3fD3m9IlBurQS/nGi/qx0D8zW2mRSuqw3P0325+pIM+Zak
+         ouue3EcgaEHjRHxqHf3v/fAkDRZkz6EaGTuc3CsJGpLhr2+Jc9UQriimeNAwdK1RDAD2
+         VUsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689948104; x=1690552904;
+        d=1e100.net; s=20221208; t=1689948280; x=1690553080;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kGZ5LqU0Zryf5RXxHBpf5dofqREFTyZTeFWlFYPBfA8=;
-        b=aLrEppDRfh+T3pspimq0dud+qFB7UIb6Zqjxp4+sLa0MPVTxAVrLwGZMsEoN5NplHF
-         bV0Z5Qj+Wk7t2xgt0JZqvAfgaSFaD0FQHtc2Do8sRd35jQT02PIYlOyw8arV+JZTSE1I
-         0pDTaxwapLHk5KHEsdrKuaDvfMpcgoRQd17soLuII8jTY7jMLKg5u4/SMH3aaX7x5vd5
-         asUEJwFnmXx6Rb+A+6Olx7F1SGzRDHMdck0rs78FolfRsyEAlLeQ4FoXWD1gOzGQ3J4t
-         0vRG3nFIeqGY13zxToQwpLm1YIv0J8Aj0JpPwXya2qT692+2Njc0qo9mjQNTX08JtauD
-         ksXg==
-X-Gm-Message-State: ABy/qLZXGQqjaeuz+2REonDkxFJiddiqEyWsJo0VhwXHhcJBPL05Nq4Q
-	pWTWdMY6niyVCRSxmpbbPnw3cQ==
-X-Google-Smtp-Source: APBJJlFl0X021T0an8cBRN2rsT+BJ+nZ0MYlRyFEpg2gd2RFuh46KGFuFZP+LfRCosw99RkgkE80Jg==
-X-Received: by 2002:adf:ea50:0:b0:314:2732:e81e with SMTP id j16-20020adfea50000000b003142732e81emr1636390wrn.8.1689948103685;
-        Fri, 21 Jul 2023 07:01:43 -0700 (PDT)
+        bh=i0hqft4rLykA1Qm+aWWngJrri1KXMWVHpmrflE+PpLU=;
+        b=PmRYKSjgrLR1+YB0ab3289MtTlyagwG9OOUNqQO1fsERIhMm1VnTZ0y85cWQ9lw2bt
+         AiZOkIha8ByCoxORy/Polh1PsEOuzOD0m/2dKGhXsPolt+GMQjCZW4XDuzvuUL/AyCil
+         wjsDRn+3fff3oZha2OFy944AlNsBc/VvRnG1YkPjBp8IVQEF/Ubkh/6bofzf+V21VgJF
+         w849QKPrr5Zd/4pfvKO1VewgV7FGpcBaAvz/4aYpSKyFyrjf3Hk6DfcPulytijpIWp6c
+         /JpXR5e0UOn2S7rebVlO2A2ZbCKOvim8eD4pNUwjxDm/TfmJnjJfR/0yF5c5xSGezs5S
+         I5Cg==
+X-Gm-Message-State: ABy/qLa9l4nT93bJK0NcuLKfsffzFmBcU0Lam1I5YAN+3aLc5xrvmr0b
+	DFvrbLqPfwDjXhOtYJ/2NfrWVQ==
+X-Google-Smtp-Source: APBJJlEsMYe5JQ+pU4AezELFYdRQHmI7TefsDs6cDm78/h68oOlcICdvW129lDjtJ/t6VHgFfG467Q==
+X-Received: by 2002:adf:fc03:0:b0:314:1634:491e with SMTP id i3-20020adffc03000000b003141634491emr1269926wrr.20.1689948279591;
+        Fri, 21 Jul 2023 07:04:39 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id r5-20020adff105000000b003145521f4e5sm4278545wro.116.2023.07.21.07.01.39
+        by smtp.gmail.com with ESMTPSA id x8-20020a1c7c08000000b003f90b9b2c31sm6142028wmc.28.2023.07.21.07.04.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jul 2023 07:01:42 -0700 (PDT)
-Message-ID: <66fba798-c6ef-1105-656a-5d593a056448@linaro.org>
-Date: Fri, 21 Jul 2023 16:01:38 +0200
+        Fri, 21 Jul 2023 07:04:38 -0700 (PDT)
+Message-ID: <5603264e-2efe-48ce-b025-797501f29fde@linaro.org>
+Date: Fri, 21 Jul 2023 16:04:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 04/42] dt-bindings: pinctrl: Add Cirrus EP93xx
+Subject: Re: [PATCH v3 06/42] dt-bindings: soc: Add Cirrus EP93xx
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: nikita.shubin@maquefel.me, Hartley Sweeten
@@ -96,62 +96,109 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
  linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-4-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-6-3d63a5f1103e@maquefel.me>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605-ep93xx-v3-4-3d63a5f1103e@maquefel.me>
+In-Reply-To: <20230605-ep93xx-v3-6-3d63a5f1103e@maquefel.me>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
 > From: Nikita Shubin <nikita.shubin@maquefel.me>
 > 
-> Add YAML bindings for ep93xx SoC pinctrl.
+> This adds device tree bindings for the Cirrus Logic EP93xx.
 > 
 > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->  .../bindings/pinctrl/cirrus,ep9301-pinctrl.yaml    | 58 ++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
+>  .../bindings/arm/cirrus/ep9301-syscon.yaml         | 59 ++++++++++++++++++++++
+
+syscon goes to soc directory. Also, please add vendor prefix to the
+filenames.
+
+>  .../devicetree/bindings/arm/cirrus/ep9301.yaml     | 39 ++++++++++++++
+>  2 files changed, 98 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
+> diff --git a/Documentation/devicetree/bindings/arm/cirrus/ep9301-syscon.yaml b/Documentation/devicetree/bindings/arm/cirrus/ep9301-syscon.yaml
 > new file mode 100644
-> index 000000000000..d5682531b0da
+> index 000000000000..77fbe1f006fd
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/arm/cirrus/ep9301-syscon.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/pinctrl/cirrus,ep9301-pinctrl.yaml#
+> +$id: http://devicetree.org/schemas/arm/cirrus/ep9301-syscon.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Cirrus ep93xx pins mux controller
+> +title: Cirrus Logic EP93xx Platforms System Controller
 > +
 > +maintainers:
-> +  - Nikita Shubin <nikita.shubin@maquefel.me>
 > +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +  - Nikita Shubin <nikita.shubin@maquefel.me>
 > +
 > +properties:
 > +  compatible:
 > +    oneOf:
-> +      - const: cirrus,ep9301-pinctrl
 > +      - items:
 > +          - enum:
-> +              - cirrus,ep9302-pinctrl
-> +              - cirrus,ep9307-pinctrl
-> +              - cirrus,ep9312-pinctrl
-> +              - cirrus,ep9315-pinctrl
-> +          - const: cirrus,ep9301-pinctrl
+> +              - cirrus,ep9302-syscon
+> +              - cirrus,ep9307-syscon
+> +              - cirrus,ep9312-syscon
+> +              - cirrus,ep9315-syscon
+> +          - const: cirrus,ep9301-syscon
+> +          - const: syscon
+> +          - const: simple-mfd
+> +      - items:
+> +          - const: cirrus,ep9301-syscon
+> +          - const: syscon
+> +          - const: simple-mfd
 > +
-> +patternProperties:
-> +  '^pins-':
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reboot:
 > +    type: object
-> +    description: pin node
-> +    $ref: pinmux-node.yaml#
+> +    properties:
+> +      compatible:
+> +        const: cirrus,ep9301-reboot
 
-You need:
-unevaluatedProperties: false
+Patch introducing it should be before this one. Also, do not use
+different styles for your child nodes. Your other nodes use $ref.
 
+> +
+> +  clock-controller:
+> +    type: object
+> +    $ref: ../../clock/cirrus,ep9301-clk.yaml
+
+Absolute path, so /schemas/clock/cirrus.....
+
+> +
+> +  pinctrl:
+> +    type: object
+> +    $ref: ../../pinctrl/cirrus,ep9301-pinctrl.yaml
+
+Ditto
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    syscon@80930000 {
+> +      compatible = "cirrus,ep9301-syscon",
+> +                   "syscon", "simple-mfd";
+> +      reg = <0x80930000 0x1000>;
+
+Incomplete example.
+
+> +    };
+> diff --git a/Documentation/devicetree/bindings/arm/cirrus/ep9301.yaml b/Documentation/devicetree/bindings/arm/cirrus/ep9301.yaml
+> new file mode 100644
+> index 000000000000..6087784e93fb
+> --- /dev/null
 
 
 Best regards,
