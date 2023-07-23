@@ -1,119 +1,114 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <SRS0=Cgkb=DJ=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA149EB64DC
-	for <soc@archiver.kernel.org>; Fri, 21 Jul 2023 16:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A74C001B0
+	for <soc@archiver.kernel.org>; Sun, 23 Jul 2023 13:19:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BFDD1C43391; Fri, 21 Jul 2023 16:43:15 +0000 (UTC)
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 280CDC433D9; Sun, 23 Jul 2023 13:19:36 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 90CEAC433C7;
-	Fri, 21 Jul 2023 16:43:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 90CEAC433C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="351946348"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="351946348"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 09:42:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="728169179"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="728169179"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Jul 2023 09:42:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andy@kernel.org>)
-	id 1qMtDF-00Cx3r-2P;
-	Fri, 21 Jul 2023 19:42:41 +0300
-Date: Fri, 21 Jul 2023 19:42:41 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Nikita Shubin <nikita.shubin@maquefel.me>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2D0FCC433CA
+	for <soc@kernel.org>; Sun, 23 Jul 2023 13:19:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D0FCC433CA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-31297125334so2055127f8f.0
+        for <soc@kernel.org>; Sun, 23 Jul 2023 06:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690118372; x=1690723172;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZxKGN5SUivNz+ligYrmWT0BW3UDY3UHFVrq/Gy6pOrM=;
+        b=TeXKvpfxHyL7htn+rjDHaupCyknovawCuk5PA1SA7Ntp1u56kIUN32nOA+OjXR5gTT
+         aRObbBarli+wBusROTpJiJ9KCfw7rk/o5+UPpjPW3PpNBO8Pmjc0CrVMmT99JBBXSjaJ
+         QJyuxUMo/UZtCdEOMlkeqP/QnyYzAGaNwKAq6f7phiRg77CA6fP8L5DXlLCOCVXW0KbP
+         5eLrrY08w6kdUWvnu/wVx9JshN+guajvNrH/NiKYd27lCEhyPjIPmhuqWcUDjBvXr7qW
+         VatjF02Ai2Y57EcOEhcToGa96XqRmahPBCc9uxMbHg4sIQnm0w0f9BX0I+kYKbrpBzgk
+         Fc9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690118372; x=1690723172;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZxKGN5SUivNz+ligYrmWT0BW3UDY3UHFVrq/Gy6pOrM=;
+        b=kK+4l++U8t7RtxVaSbVjPKARLCPejzFBgXHdwYuHs62tGOH7QaC3vDsjKzxR+TggsU
+         +YeAbpxCHwf7ivsRojxH/ZEPqmYnIk3g1D+JV9mLnl85Sg70R6hIcdL3vELJP9zA5cZx
+         30MYvva5NFBLaPg+ydZnTnAD30ZEaXVaveRlzhesV6LvyNTWRixDqf0EFnNGAXnh8sbT
+         vMnEjJTxoSXmbI//VaSPaw4AS79ocPUcZaLcCu/OGLCw/UGYWJKF10b9YEnvVNjq0H4g
+         CFCstkpIZcedUhMjm3h92BJi/SD9geGLoHAr9a3pMZxkbHcmAQUEqxZAMIvmTWN21w1g
+         afqg==
+X-Gm-Message-State: ABy/qLaJnnD/kDBFRSzpHNwPPH1eA6QhKHd94wjk22lXhZg2teRZx5Rp
+	TrKr0W0VzKJJx8hXct+mRIBlSg==
+X-Google-Smtp-Source: APBJJlG7G2NBT/RCN58YIlYPpGzshVCKmMSd3YJ5rW+vc1J8zD/+ky6sxLp75IuhRiCGEBhUE8JiCw==
+X-Received: by 2002:a5d:4eca:0:b0:314:2736:ba3e with SMTP id s10-20020a5d4eca000000b003142736ba3emr9328519wrv.3.1690118372184;
+        Sun, 23 Jul 2023 06:19:32 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id t15-20020a5d49cf000000b003143765e207sm9700257wrs.49.2023.07.23.06.19.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jul 2023 06:19:31 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
-	Lennert Buytenhek <kernel@wantstofly.org>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Lukasz Majewski <lukma@denx.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Rob Herring <robh+dt@kernel.org>,
+To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sebastian Reichel <sre@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Mark Brown <broonie@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Michael Peters <mpeters@embeddedts.com>,
-	Kris Bahnsen <kris@embeddedts.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-	linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 18/42] spi: ep93xx: add DT support for Cirrus EP93xx
-Message-ID: <ZLq1gQKWWE/2WCYd@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	arm@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v3 1/3] MAINTAINERS: soc: reference maintainer profile
+Date: Sun, 23 Jul 2023 15:19:22 +0200
+Message-Id: <20230723131924.78190-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 20, 2023 at 02:29:18PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> - add OF ID match table
-> 
-> Instead of platform use_dma flag - check if DT dmas property is present to
-> decide to use dma ot not.
+Mention the SoC maintainer profile in P: entry.
 
-...
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-> +#ifdef CONFIG_OF
+---
 
-Why ifdeffery?
+Changes in v3:
+1. None
 
-Can't it be first checked for firmware provided info and fell back to platdata?
+Changes in v2:
+1. Add Rb tag.
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +static struct ep93xx_spi_info dt_spi_info;
-
-...
-
-> +#endif
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3dfa40abc885..7624eb231b65 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1570,6 +1570,7 @@ M:	Olof Johansson <olof@lixom.net>
+ M:	soc@kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
++P:	Documentation/process/maintainer-soc.rst
+ C:	irc://irc.libera.chat/armlinux
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+ F:	Documentation/process/maintainer-soc.rst
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
