@@ -1,131 +1,64 @@
-Return-Path: <SRS0=qS34=DK=bootlin.com=miquel.raynal@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765F7C04A6A
-	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 07:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4104C41513
+	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 39657C43215; Mon, 24 Jul 2023 07:09:25 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C1B2EC433D9;
-	Mon, 24 Jul 2023 07:09:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C1B2EC433D9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C2E524000E;
-	Mon, 24 Jul 2023 07:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1690182552;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0OTdgWQ6Vo/4tl1ZM7En0YdjITPLKGIP2IIxkkPFJRM=;
-	b=iC5ZIY44VFrCSUNoeMIdYmOyqSrlrW7N4tyY+Hq53oXBVph3jCQ5ij8fsDynsYh6NybKfF
-	47iBUwR964ggu52YB13yaU1E18wok2aDQAXdbpXfZnCVzqeybMcvNBEm04M8MJv49vz912
-	60p20TKBhztddQMV6EZbSo0vTLzFb3Ok+FWErn92iDiDFjDyPmqRh1JKdYw5xT3hwpwVlV
-	u4k2GthKUnBFuRNrRP/XoPSerupU1HIaiVySzO/QpWk35FaiLI3dwdIhQ2brWGTyOPPUCM
-	8E3/Ier83smwYkYCv/LsZ20OWFpB5I2g8A5epoX659Pa/Omr3Rckh60nqnZ+5A==
-Date: Mon, 24 Jul 2023 09:09:02 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Andy Shevchenko <andy@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: nikita.shubin@maquefel.me, Hartley Sweeten
- <hsweeten@visionengravers.com>, Lennert Buytenhek <kernel@wantstofly.org>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King
- <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Rob
- Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas
- Gleixner <tglx@linutronix.de>, Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, Sebastian
- Reichel <sre@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>, Mark
- Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>, Richard
- Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Damien
- Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry
- Torokhov <dmitry.torokhov@gmail.com>, Arnd Bergmann <arnd@arndb.de>, Olof
- Johansson <olof@lixom.net>, soc@kernel.org, Liam Girdwood
- <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
- <tiwai@suse.com>, Michael Peters <mpeters@embeddedts.com>, Kris Bahnsen
- <kris@embeddedts.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-spi@vger.kernel.org, netdev@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
- alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 24/42] mtd: nand: add support for ts72xx
-Message-ID: <20230724090902.679ea56d@xps-13>
-In-Reply-To: <ZLqx+Osn3gcHjUph@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
-	<20230605-ep93xx-v3-24-3d63a5f1103e@maquefel.me>
-	<ZLqx+Osn3gcHjUph@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	id 72605C433C7; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58112C433C8;
+	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690207549;
+	bh=GA615cikx096lpqa8SgVA8LydMX1MHlL0g7hCuSR/2w=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=lJotEQVhG+iyVXt7zvkA4xZJpTlkkV1qE4s5S8qzVxgXD7JquXLhiFd3rkbnVxBWr
+	 ENysFCUonRzmcI+IxTngYYBdhTmqHDy3wZiIRJ/TxL5s5R2YmE7ryPz4MPjemJ4rzr
+	 BbCL3oC71ElCDZ3XBsR/ZGL+PfzCkTHN0u8p0FLYSjuIoL1amgpcDjelSympuc6QGD
+	 +Swn/wwpiOzntBj0O4G+V/k9AY2uR7XDm9kItf+cRu1bTtupAmvGACXJBDJbbZTPLr
+	 0pjPXq/XGwswpxW1MbAZ/eSMoQiQWr1WZWm3CCGFIXGGWGtiCHcmhGGS5V7Q41wTUs
+	 WcmTIHtjec66g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30727E21EDD;
+	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ARM: dts: at91: sam9x60: fix the SOC detection
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <169020754919.21041.8506507719200449216.git-patchwork-notify@kernel.org>
+Date: Mon, 24 Jul 2023 14:05:49 +0000
+References: <20230712100042.317856-1-durai.manickamkr@microchip.com>
+In-Reply-To: <20230712100042.317856-1-durai.manickamkr@microchip.com>
+To: Durai Manickam KR <durai.manickamkr@microchip.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Hi Andy,
+Hello:
 
-> > +static int ts72xx_nand_attach_chip(struct nand_chip *chip)
-> > +{
-> > +	switch (chip->ecc.engine_type) {
-> > +	case NAND_ECC_ENGINE_TYPE_SOFT:
-> > +		if (chip->ecc.algo =3D=3D NAND_ECC_ALGO_UNKNOWN)
-> > +			chip->ecc.algo =3D NAND_ECC_ALGO_HAMMING;
-> > +		break;
-> > +	case NAND_ECC_ENGINE_TYPE_ON_HOST:
-> > +		return -EINVAL;
-> > +	default: =20
->=20
-> > +		break; =20
->=20
-> Here it will return 0, is it a problem?
+This patch was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Seems ok, there are two other situations: on-die ECC engine and no ECC
-engine, both do not require any specific handling on the controller
-side.
+On Wed, 12 Jul 2023 15:30:42 +0530 you wrote:
+> Remove the dbgu compatible strings in the UART submodule of the
+> flexcom for the proper SOC detection.
+> 
+> Fixes: 99c808335877 (ARM: dts: at91: sam9x60: Add missing flexcom definitions)
+> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+> ---
+>  arch/arm/boot/dts/microchip/sam9x60.dtsi | 26 ++++++++++++------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
 
->=20
-> > +	}
-> > +
-> > +	return 0;
-> > +} =20
->=20
-> ...
->=20
-> > +static void ts72xx_nand_remove(struct platform_device *pdev)
-> > +{
-> > +	struct ts72xx_nand_data *data =3D platform_get_drvdata(pdev);
-> > +	struct nand_chip *chip =3D &data->chip;
-> > +	int ret;
-> > +
-> > +	ret =3D mtd_device_unregister(nand_to_mtd(chip)); =20
->=20
-> > +	WARN_ON(ret); =20
->=20
-> Why?!  Is it like this in other MTD drivers?
+Here is the summary with links:
+  - ARM: dts: at91: sam9x60: fix the SOC detection
+    https://git.kernel.org/soc/soc/c/f6ad3c13f1b8
 
-Yes, we did not yet change the internal machinery to return void, and
-we don't want people to think getting errors there is normal.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> > +	nand_cleanup(chip);
-> > +} =20
->=20
 
-Thanks,
-Miqu=C3=A8l
