@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3F19C00528
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADFCFC04A94
 	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79023C433D9; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 635DFC433CB;
+	id 7F072C43395; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 650AEC433CD;
 	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1690207549;
-	bh=LXUXaC90wAzZtDNGOJLjmOXc1nGWsMDI35VLhonoq90=;
+	bh=aEF1irvc12hmjRBn/0qNOyKUi18X8w5ZLTQD28k2ro0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Pau+gkAkWeaMP7dIfdzFzX0IHpJzplGh06XOZQo9vg2VtWO5outXUl1ZgBf6aY/xl
-	 egqq8DPvh1zICJLEFCWAbzVF0oekO8aZEye/Z3vFCrBGDL/SjF7vorsaABzFHPbaJi
-	 LYvp6iGtBRZATzEnjr3E/J5beDP/hBJAQb4TEcLzuk27Qj/Qq1SQVca+X9Ko+m5uhk
-	 5dQkLZhkaWFr6NOGM3YX401B+b2lieSSrvWuBO+mHR+lu2AkKO2YNwFjOOOjfaj9ZM
-	 gYxFJDzttdF2tLUQWC2OD5t9RsFG0y67aF2mm/5nv0WEXnNgVfZH2JeD8GlYQTx+JI
-	 cZWrsCAmpmD5Q==
+	b=QXVumAuwVUNqRVdVQgk30mtSuZLBpDmrO3nUqrp/bl8uHAb8Ffdgjvu5diLBTCqb8
+	 yw2e5GgXdt5z1nBcpcsDyhrwGAg3WZOFqqtnziAv8oC4FPQCMgFqfc2JEEgNtTtiNS
+	 8U8BKkWcG+lx10wNdxaUNBqfEfbeWR3+cOC9pyVb8gBy4PuWLge1R+rKa4NrYOZjVW
+	 1d4Tq3bj7oY+OJ9UJ4porhIXO3qICYD233w0cry7s2r9bu/uq4Ob2xgLeOHydiOpOi
+	 i/Li4tBHXJU88mBhSfRotitdyMDGgBAInakCMVJcRp3RFMAcwmIvGoBgSjlaiWBv0i
+	 UW4uJSspnhJ7g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36795E1F658;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43AAEE21EDE;
 	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv3 0/2] update at91 usart compatible for sam9x60
+Subject: Re: [PATCH] ARM: dts: nspire: Fix arm primecell compatible string
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169020754922.21041.4056845278265067382.git-patchwork-notify@kernel.org>
+ <169020754927.21041.3445115145132956532.git-patchwork-notify@kernel.org>
 Date: Mon, 24 Jul 2023 14:05:49 +0000
-References: <20230718065735.10187-1-durai.manickamkr@microchip.com>
-In-Reply-To: <20230718065735.10187-1-durai.manickamkr@microchip.com>
-To: Durai Manickam KR <durai.manickamkr@microchip.com>
+References: <20230711092617.1412815-1-sudeep.holla@arm.com>
+In-Reply-To: <20230711092617.1412815-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 18 Jul 2023 12:27:33 +0530 you wrote:
-> There is only one debug unit in the sam9x60 SOC and it has the chipid
-> register. So defining these dbgu compatible strings to the flexcom usart
-> is not correct and causes the SOC detection failure. So removing these
-> dbgu compatible strings defined under the flexcom usart and updating
-> the yaml file accordingly.
-> ---
-> v2 changes:
-> 1. Updating the dt-bindings documentation and send one more patch for
-> the yaml file.
+On Tue, 11 Jul 2023 10:26:17 +0100 you wrote:
+> Commit c44e0503e5fd ("docs: dt: fix documented Primecell compatible string")
+> removed the last occurrence of incorrect "arm,amba-primecell" compatible
+> string, but somehow one occurrence of the same is left in the nspire platform.
+> 
+> Fix the same by replacing it with the correct "arm,primecell" compatible.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [PATCHv3,1/2] dt-bindings: serial: atmel,at91-usart: update compatible for sam9x60
-    https://git.kernel.org/soc/soc/c/92d39d018347
-  - [PATCHv3,2/2] ARM: dts: at91: sam9x60: fix the SOC detection
-    https://git.kernel.org/soc/soc/c/f6ad3c13f1b8
+  - ARM: dts: nspire: Fix arm primecell compatible string
+    https://git.kernel.org/soc/soc/c/b44c11d86b7a
 
 You are awesome, thank you!
 -- 
