@@ -4,78 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90ADFC001B0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD6DFC001DF
 	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 65012C433CA; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E3B5C433C7
-	for <soc@kernel.org>; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+	id 952ADC4339A; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A16DC43391;
+	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1690207549;
-	bh=GEO7N0Bpl/9cGex3ogPRqmH/aBp9qyHVLH2h6Kn+otA=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=NiJbq6YQPe1CcCpzmYTKvZ9jLu2NddxP7PC97TwAR7RRq5xotzZgBcWYTKVUgv7W8
-	 YvUGMSVegJ04yvsYYl1RRNjz/p2cSSt3qGqFHr3WAEApQaFxY6DnpvOxyKHH2B8IqZ
-	 mtmXtIzpJtioO6OPit8WTadRqa2mehv2mpfTK+q4fsLjGZ5RaKmO7DABLT0S+RLYxl
-	 Ba5zxJ/vqPcZ4lOObs818WWc4MBHeZNDfeotwUiLylYi5UeDcLsh05zOVSeZsIHno3
-	 8JTlgV39YYlGRm8uGpX6AX7CIqyIvFgi7i2sZvcLvfAna/cejxWBK/+DLgJccyGfRr
-	 km+ZFa6iM231A==
+	bh=g+QGH7wRUBnsufDLozzIUUli/tsare2rBqOIQ6/cLEw=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=M44/X9UKoffJHMWKygSMXCr9nmKq+NJKfERsdBgs4yKEh6XyXsEanW1kGeqDNYDWv
+	 NyqYCy7aI3RcFh1HdctizU9dsWQ3Xi1N1hIIyLcD6igI5FR5Hnmv+B9r54NL+b3S4/
+	 jKPOKzLdVvsPCWohrJqwFpd+He4Hw+7rr4pWSNklPb7y2slihXQE7A4RSbskZd11kq
+	 rlp5V7yJm63MKbaeff905dhbo0iqFAn8NU7JSsWH4KppBcDhl5swH22EWD6qz7fAHl
+	 JZPaMnOvDlJKfpHui8qDvWLzrGTGqz8WTcHxm0Q5ix+98ATAluN9kWE/EfzGfl2Js5
+	 tX/gK38soYYkw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 28635E1F65A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 49A5EE49FA9;
 	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] firmware: arm_scmi/smccc: Fixes for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169020754907.21041.17461525690863730592.git-patchwork-summary@kernel.org>
+ <169020754929.21041.7103948956454919837.git-patchwork-notify@kernel.org>
 Date: Mon, 24 Jul 2023 14:05:49 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20230721114052.3371923-1-sudeep.holla@arm.com>
+In-Reply-To: <20230721114052.3371923-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: ARM: dts: at91: sam9x60: fix the SOC detection
-  Submitter: Durai Manickam KR <durai.manickamkr@microchip.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=764770
-  Lore link: https://lore.kernel.org/r/20230712100042.317856-1-durai.manickamkr@microchip.com
+On Fri, 21 Jul 2023 12:40:52 +0100 you wrote:
+> Hi ARM SoC Team,
+> 
+> Please pull ! Please note I have included one SMCCC fix as part of my
+> normal SCMI pull request as SMCCC is extremely low traffic normally.
+> 
+> Regards,
+> Sudeep
+> 
+> [...]
 
-Series: update at91 usart compatible for sam9x60
-  Submitter: Durai Manickam KR <durai.manickamkr@microchip.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=766796
-  Lore link: https://lore.kernel.org/r/20230718065735.10187-1-durai.manickamkr@microchip.com
-    Patches: [PATCHv3,1/2] dt-bindings: serial: atmel,at91-usart: update compatible for sam9x60
-             [PATCHv3,2/2] ARM: dts: at91: sam9x60: fix the SOC detection
+Here is the summary with links:
+  - [GIT,PULL] firmware: arm_scmi/smccc: Fixes for v6.5
+    https://git.kernel.org/soc/soc/c/1b64daa6020c
 
-Patch: [GIT,PULL] arm64: dts: juno/vexpress: Fix for v6.5
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=768223
-  Lore link: https://lore.kernel.org/r/20230721112359.3369716-1-sudeep.holla@arm.com
-
-Patch: ARM: dts: nspire: Fix arm primecell compatible string
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=764340
-  Lore link: https://lore.kernel.org/r/20230711092617.1412815-1-sudeep.holla@arm.com
-
-Patch: [GIT,PULL] firmware: arm_scmi/smccc: Fixes for v6.5
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=768230
-  Lore link: https://lore.kernel.org/r/20230721114052.3371923-1-sudeep.holla@arm.com
-
-
-Total patches: 6
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
