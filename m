@@ -1,77 +1,116 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=wCLc=DK=robh_at_kernel.org=rob@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE424EB64DD
-	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 18:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF2F4C001DE
+	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 20:55:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 88098C433CB; Mon, 24 Jul 2023 18:31:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79276C433C8;
-	Mon, 24 Jul 2023 18:31:21 +0000 (UTC)
+	id 93D11C433C7; Mon, 24 Jul 2023 20:55:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0476DC433C8;
+	Mon, 24 Jul 2023 20:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690223485;
-	bh=Zozk2DM+YhlD+xi7yWMefeHAyWOc1Wz/LPyy1fz/0O4=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=GRKUcSeVZn2/sb91jEw7SCPkuFaVMULd/F4e8fcHXnM7UKrwYNToVbohHrLzmWD+y
-	 PVIn/N7AgZgUd+qVpVO8YIegdJpDgVuVSb9WDe9HJw11IrW2+AOItBQcL3MuFqjR/Q
-	 ucyopmMpz4IMO4fNfA2jCfbRmjjWx4GXdQamC04lZEsHuHcVpTcf6xhAxtuJPcfJRM
-	 MsCXWWRTebMJvspMBEBPhBvMGqkaJ2fb8lKMvwOwAhKDzuLPGYgnp9NYrSVi1hPVEH
-	 bZJy0qHqXXNs6Oh6AzPmNxMS4myxwJ3bNYQIY4ZDZU3u5gf3qNpB5LVZ0djHJ/ebl9
-	 QtTQ6olteliCw==
-Date: Mon, 24 Jul 2023 19:31:19 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	s=k20201202; t=1690232157;
+	bh=sj1kweh2LpsGQOuIcSQfoiRzu3VVJ8qGje7Q06bYrI8=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=CbrcTxIG7fZgkh/q4lnmrf/sk2/DyMjd0fD3k1uiiIkDRdTDcES0ew1WyhqJUkGjj
+	 1iBbTvlOReHmmQ3ypuXZW+qDGxwV0HUknxMI3vaD+mz011tGowe6JiqaoCe3Jc4tWS
+	 /NX6kCpDxfjrnuaHyns5xiwe6JKd0wb7SDi3HYF3VDl2yKuVQpRbirYzYj9iOtD0GP
+	 Cg3KATDESJe+VpGTPFurgzUq2z6ikbV2qICmS03xkULxRp6U1ve1UvNU2morIKMMyM
+	 ffd3JU0YRLdJP8jlgLxj6CvT4n6gasvftttUt/mOTyMjyfB9IOH1Lezkq8IU1OuNgl
+	 uy/jIqRz6DvXg==
+Received: (nullmailer pid 768905 invoked by uid 1000);
+	Mon, 24 Jul 2023 20:55:55 -0000
+From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org, arm@kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v3 1/3] MAINTAINERS: soc: reference maintainer profile
-Message-ID: <20230724-guzzler-grueling-4c69348d02e9@spud>
-References: <20230723131924.78190-1-krzysztof.kozlowski@linaro.org>
+To: soc@kernel.org, Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>
+Cc: linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] soc: fsl: Explicitly include correct DT includes
+Date: Mon, 24 Jul 2023 14:55:51 -0600
+Message-Id: <20230724205551.768767-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9++3k7xAY/ioan4N"
-Content-Disposition: inline
-In-Reply-To: <20230723131924.78190-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
 
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
---9++3k7xAY/ioan4N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Rob Herring <robh@kernel.org>
 
-On Sun, Jul 23, 2023 at 03:19:22PM +0200, Krzysztof Kozlowski wrote:
-> Mention the SoC maintainer profile in P: entry.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+---
+v2:
+ - Add qe.c
+---
+ drivers/soc/fsl/dpaa2-console.c | 3 ++-
+ drivers/soc/fsl/qe/qe.c         | 3 ++-
+ drivers/soc/fsl/qe/qe_common.c  | 1 -
+ drivers/soc/fsl/qe/qe_tdm.c     | 4 +---
+ 4 files changed, 5 insertions(+), 6 deletions(-)
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+diff --git a/drivers/soc/fsl/dpaa2-console.c b/drivers/soc/fsl/dpaa2-console.c
+index 53917410f2bd..1dca693b6b38 100644
+--- a/drivers/soc/fsl/dpaa2-console.c
++++ b/drivers/soc/fsl/dpaa2-console.c
+@@ -9,9 +9,10 @@
+ #define pr_fmt(fmt) "dpaa2-console: " fmt
+ 
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/miscdevice.h>
++#include <linux/platform_device.h>
+ #include <linux/uaccess.h>
+ #include <linux/slab.h>
+ #include <linux/fs.h>
+diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
+index b3c226eb5292..95168b574627 100644
+--- a/drivers/soc/fsl/qe/qe.c
++++ b/drivers/soc/fsl/qe/qe.c
+@@ -25,7 +25,8 @@
+ #include <linux/iopoll.h>
+ #include <linux/crc32.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ #include <soc/fsl/qe/immap_qe.h>
+ #include <soc/fsl/qe/qe.h>
+ 
+diff --git a/drivers/soc/fsl/qe/qe_common.c b/drivers/soc/fsl/qe/qe_common.c
+index a0cb8e746879..9729ce86db59 100644
+--- a/drivers/soc/fsl/qe/qe_common.c
++++ b/drivers/soc/fsl/qe/qe_common.c
+@@ -16,7 +16,6 @@
+ #include <linux/genalloc.h>
+ #include <linux/init.h>
+ #include <linux/list.h>
+-#include <linux/of_device.h>
+ #include <linux/spinlock.h>
+ #include <linux/export.h>
+ #include <linux/of.h>
+diff --git a/drivers/soc/fsl/qe/qe_tdm.c b/drivers/soc/fsl/qe/qe_tdm.c
+index 7d7d78d3ee50..a3b691875c8e 100644
+--- a/drivers/soc/fsl/qe/qe_tdm.c
++++ b/drivers/soc/fsl/qe/qe_tdm.c
+@@ -9,9 +9,7 @@
+  */
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+-#include <linux/of_address.h>
+-#include <linux/of_irq.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
+ #include <soc/fsl/qe/qe_tdm.h>
+ 
+ static int set_tdm_framer(const char *tdm_framer_type)
+-- 
+2.40.1
 
-Thanks for fixing this up.
-
---9++3k7xAY/ioan4N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZL7DdwAKCRB4tDGHoIJi
-0r0NAQDweREBYiW4sb7uiOTKpnf2oPEgUdQ7KJLAfn1MTVXKogEAz1dG0dmg2c/Y
-MezTk/pu3hr+kuIMaCb+o1f5m3R16go=
-=0iyE
------END PGP SIGNATURE-----
-
---9++3k7xAY/ioan4N--
