@@ -1,111 +1,58 @@
-Return-Path: <SRS0=wCLc=DK=robh_at_kernel.org=rob@kernel.org>
+Return-Path: <dinguyen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38E11C0015E
-	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A553C001B0
+	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:56:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D528C433CA; Mon, 24 Jul 2023 14:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D98C433C7;
-	Mon, 24 Jul 2023 14:41:51 +0000 (UTC)
+	id 1481DC433CA; Mon, 24 Jul 2023 14:56:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8550CC433C8;
+	Mon, 24 Jul 2023 14:56:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690209713;
-	bh=txBdFKbR3IV1PZ1tQF3/Ou9D7VYqMBmXYKsG1fJKTpw=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=VEFgBBTPg4kGQt8aXuskfaRNNAam4X2B7p1bFhi+mhQysF8fYyxxWHFeyDUclt+GV
-	 kFBY0wS/XmwNoAnFQr8dJRriS5IeVHMQUE0bPLLF/fhcGf5kSLN0ep5Dmrzvygze+l
-	 Px9aTAXfMxD96RwV3RWVzf+fYCCdL91hJiYWrVqNLUZl2eDRgcKyjq47umBu7+3C+3
-	 eXbuOjaB60OQPKkk6oWD3vkx83P5pY3tUHXm7/uomNkPTdZMyusWxnT8CoRmHTzgP2
-	 cUhjt7peSFOhJ4x9ezFxispJdvPZQlHLPlVvFSnaUa0v57U/VMh3veZzy/G/dBVmGV
-	 w8JpUev8F0vVw==
-Received: (nullmailer pid 3446916 invoked by uid 1000);
-	Mon, 24 Jul 2023 14:41:50 -0000
-Date: Mon, 24 Jul 2023 08:41:50 -0600
-From: Rob Herring <robh@kernel.org>
-To: Jacky Huang <ychuang570808@gmail.com>
+	s=k20201202; t=1690210580;
+	bh=FDIdDonfArv71fnnE8bQrYLKjDf8gkDRgvRZl7jpfeI=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=ILrwZsOLDD0o7z3LKqPN1XV2mN12Vvh50j8x/ojiSZhnX+YNgQ4Ht2XRcq6B+9aHp
+	 QESH+Pj0OZFphd5wYV/yNmIONfYH4KWzB4hq+b9NtoqV5pt+Dit9Ipvbh/CUHN7M9R
+	 2krVLfn8TVl8tv9TYRaArSOkhHgcyz0MuxELwPssC5WeqjVUKWT0+dnHXPnQqxjySY
+	 CJIWYU+nMYovJaUg4E2sKGJkCtniWn7TayJep/FxkTik07372Ia3QcNUIPeO1+J9IG
+	 YrG84WtbZfUW4wpb1wFi4rS/a1g/pBC7j9KOc93Rrx2a02iEGEHS0mLUd9GQDcjr7Z
+	 nyHK1yhGCXyDw==
+From: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@kernel.org, mjchen@nuvoton.com, schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: Document nuvoton ma35d1 rtc driver
-Message-ID: <20230724144150.GA3444052-robh@kernel.org>
-References: <20230720012826.430026-1-ychuang570808@gmail.com>
- <20230720012826.430026-2-ychuang570808@gmail.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: dinguyen@kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] arm64: dts: socfpga: fix i2c signal property for v6.5
+Date: Mon, 24 Jul 2023 09:56:17 -0500
+Message-Id: <20230724145617.887443-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720012826.430026-2-ychuang570808@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 20, 2023 at 01:28:24AM +0000, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> Add documentation to describe nuvoton ma35d1 rtc driver.
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-Bindings describe h/w, not drivers.
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-For the subject: dt-bindings: rtc: Add Nuvoton ma35d1 rtc
+are available in the Git repository at:
 
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  .../bindings/rtc/nuvoton,ma35d1-rtc.yaml      | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,ma35d1-rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/nuvoton,ma35d1-rtc.yaml b/Documentation/devicetree/bindings/rtc/nuvoton,ma35d1-rtc.yaml
-> new file mode 100644
-> index 000000000000..08c30f3018fb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/nuvoton,ma35d1-rtc.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/nuvoton,ma35d1-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton MA35D1 Read Time Clock
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_fix_for_v6.5
 
-s/Read/Real/
+for you to fetch changes up to db66795f61354c373ecdadbdae1ed253a96c47cb:
 
-> +
-> +maintainers:
-> +  - Min-Jen Chen <mjchen@nuvoton.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,ma35d1-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
-> +    rtc@40410000 {
-> +        compatible = "nuvoton,ma35d1-rtc";
-> +        reg = <0x40410000 0x200>;
-> +        interrupts = <GIC_SPI 5 IRQ_TYPE_EDGE_RISING>;
-> +        clocks = <&clk RTC_GATE>;
-> +    };
-> +
-> +...
-> -- 
-> 2.34.1
-> 
+  arm64: dts: stratix10: fix incorrect I2C property for SCL signal (2023-07-11 15:48:41 -0500)
+
+----------------------------------------------------------------
+SoCFPGA dts fix for v6.5
+- Fix incorrect I2C property for SCL signal
+
+----------------------------------------------------------------
+Dinh Nguyen (1):
+      arm64: dts: stratix10: fix incorrect I2C property for SCL signal
+
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts      | 2 +-
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk_nand.dts | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
