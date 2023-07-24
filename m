@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE0D5C3DA40
-	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A69F2C001DF
+	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 14:10:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7F388C43397; Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62207C433C9;
-	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+	id 8D675C433CA; Mon, 24 Jul 2023 14:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 701D2C433C8;
+	Mon, 24 Jul 2023 14:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690207549;
-	bh=Tjg8AuSwD8vLKjcuwdDIqY+jtwLXVwLUgZ6XuWKXlkA=;
+	s=k20201202; t=1690207821;
+	bh=K+DdvJrsGqvIQYGwl/tS6pJW0Sbrgk+vBAdLNRH0OQE=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tiQYBMSmnAWs3y7PJ6amYvqAM70Vgo29Wa+wQm7v+CXGQ9B2jr+fKPs1EiJIVrPRI
-	 KAhEGZfABcsurMIFfKeEytITEhlaI2HU10M8iHlHJ3XvbBOQF9hFAPuRtwzNC5LyHh
-	 eHzT+YBY8byF8ID+LPZxkyLtWN1juOMGEpmdgOgKnyPYjl+ZFdVVwTNtru9Ej1sAzp
-	 6Fy53Lc5R4CKhSiJLMwBZ1xV2Ky9/z0dT+vCv2n7KyUC/vURAX/VZVfZ5D1mVKoOmq
-	 Nm/L69b2Spvyd4sh9XA6P77VSGtiNcbJN+ynZwcYkxdYsYZkZgZMd0ZvDyeNbEy5ex
-	 NinzPi1MRj7uQ==
+	b=Uy6m05g+9jB+NPF58mnnw2cp0UZ8mM9ubGExDcNvofG2TC/1HbY+7Xue4Ul6uhssG
+	 ps0M1Xas2GNKVUFF7BqNQF+DJvli6L3xOJ3v0VI3iHxzs2Ne7X5mTDWTfLsClHyBtf
+	 LmY+NLy5Tkk8ohoAJ8S0ZJ8F8Ci4EwTf0UJ6IIJpHD7DUuzBxmgymD1kijDrBIkSK0
+	 x0yaVvffk3G8IMz5xqLWIn6WzxuV2ZX4TBkF0KA92AVbKMrMADHH5Qa2ET1yv5WZ+r
+	 D9SVV+n3QemIwtxCLYxKgjhCpL3Okz6HEIRWgG2ww+up+cWdvnHUauqQcxjgJkrrUy
+	 dvr58NLkQoP9g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D62AE21EE0;
-	Mon, 24 Jul 2023 14:05:49 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CE18E1F658;
+	Mon, 24 Jul 2023 14:10:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Subject: Re: [GIT PULL] arm64: dts: juno/vexpress: Fix for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169020754924.21041.5133327493643453540.git-patchwork-notify@kernel.org>
-Date: Mon, 24 Jul 2023 14:05:49 +0000
+ <169020782137.21041.16388052294600194721.git-patchwork-notify@kernel.org>
+Date: Mon, 24 Jul 2023 14:10:21 +0000
 References: <20230721112359.3369716-1-sudeep.holla@arm.com>
 In-Reply-To: <20230721112359.3369716-1-sudeep.holla@arm.com>
 To: Sudeep Holla <Sudeep.Holla@arm.com>
@@ -39,7 +39,7 @@ Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
 On Fri, 21 Jul 2023 12:23:59 +0100 you wrote:
