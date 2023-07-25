@@ -1,116 +1,94 @@
-Return-Path: <SRS0=wCLc=DK=robh_at_kernel.org=rob@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF2F4C001DE
-	for <soc@archiver.kernel.org>; Mon, 24 Jul 2023 20:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31351C001DF
+	for <soc@archiver.kernel.org>; Tue, 25 Jul 2023 07:58:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 93D11C433C7; Mon, 24 Jul 2023 20:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0476DC433C8;
-	Mon, 24 Jul 2023 20:55:56 +0000 (UTC)
+	id DD64DC433CA; Tue, 25 Jul 2023 07:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39EE0C433C8;
+	Tue, 25 Jul 2023 07:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690232157;
-	bh=sj1kweh2LpsGQOuIcSQfoiRzu3VVJ8qGje7Q06bYrI8=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=CbrcTxIG7fZgkh/q4lnmrf/sk2/DyMjd0fD3k1uiiIkDRdTDcES0ew1WyhqJUkGjj
-	 1iBbTvlOReHmmQ3ypuXZW+qDGxwV0HUknxMI3vaD+mz011tGowe6JiqaoCe3Jc4tWS
-	 /NX6kCpDxfjrnuaHyns5xiwe6JKd0wb7SDi3HYF3VDl2yKuVQpRbirYzYj9iOtD0GP
-	 Cg3KATDESJe+VpGTPFurgzUq2z6ikbV2qICmS03xkULxRp6U1ve1UvNU2morIKMMyM
-	 ffd3JU0YRLdJP8jlgLxj6CvT4n6gasvftttUt/mOTyMjyfB9IOH1Lezkq8IU1OuNgl
-	 uy/jIqRz6DvXg==
-Received: (nullmailer pid 768905 invoked by uid 1000);
-	Mon, 24 Jul 2023 20:55:55 -0000
-From: Rob Herring <robh@kernel.org>
+	s=k20201202; t=1690271929;
+	bh=NfGM/BrvYpH5oYeMuLyKNCNu5EccECS+fUp9enwUCAI=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=mb9myKfAMxbxhDCNBteWgcS+p1ZtT1P9A/nshC7xd0GAiWQVbiXq7l35JfEF0gXqn
+	 PGZBAs17fxa9kb83smKvA7o5HPwCVTzO2NbzoZ3xXxjyQzeYLo1s84fyrJ9If/oDZh
+	 AcOeArRhd8MaOSH3OtFxjpVNDgEgCu2XUWzLG+J7TJkR/3V0LWVW9H8L7z4DPmrQ0T
+	 5Eu9j09H0uwHF+qjlY9tu/B+BrgA4OftJMILolDGOA5y1uvEUzrk/PgKqu+Md6mHzg
+	 YYesiXaE67RGaBrgg2Fm7raoqOOTLw3ZVpyKuwo50KcpSOcFn9iVnXM+VUUWrsdk3X
+	 7nRFA97KGV+UA==
+Date: Tue, 25 Jul 2023 15:58:37 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] soc: fsl: Explicitly include correct DT includes
-Date: Mon, 24 Jul 2023 14:55:51 -0600
-Message-Id: <20230724205551.768767-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.5
+Message-ID: <20230725075837.GR151430@dragon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The DT of_device.h and of_platform.h date back to the separate
-of_platform_bus_type before it as merged into the regular platform bus.
-As part of that merge prepping Arm DT support 13 years ago, they
-"temporarily" include each other. They also include platform_device.h
-and of.h. As a result, there's a pretty much random mix of those include
-files used throughout the tree. In order to detangle these headers and
-replace the implicit includes with struct declarations, users need to
-explicitly include the correct includes.
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
----
-v2:
- - Add qe.c
----
- drivers/soc/fsl/dpaa2-console.c | 3 ++-
- drivers/soc/fsl/qe/qe.c         | 3 ++-
- drivers/soc/fsl/qe/qe_common.c  | 1 -
- drivers/soc/fsl/qe/qe_tdm.c     | 4 +---
- 4 files changed, 5 insertions(+), 6 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/soc/fsl/dpaa2-console.c b/drivers/soc/fsl/dpaa2-console.c
-index 53917410f2bd..1dca693b6b38 100644
---- a/drivers/soc/fsl/dpaa2-console.c
-+++ b/drivers/soc/fsl/dpaa2-console.c
-@@ -9,9 +9,10 @@
- #define pr_fmt(fmt) "dpaa2-console: " fmt
- 
- #include <linux/module.h>
--#include <linux/of_device.h>
-+#include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/miscdevice.h>
-+#include <linux/platform_device.h>
- #include <linux/uaccess.h>
- #include <linux/slab.h>
- #include <linux/fs.h>
-diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
-index b3c226eb5292..95168b574627 100644
---- a/drivers/soc/fsl/qe/qe.c
-+++ b/drivers/soc/fsl/qe/qe.c
-@@ -25,7 +25,8 @@
- #include <linux/iopoll.h>
- #include <linux/crc32.h>
- #include <linux/mod_devicetable.h>
--#include <linux/of_platform.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <soc/fsl/qe/immap_qe.h>
- #include <soc/fsl/qe/qe.h>
- 
-diff --git a/drivers/soc/fsl/qe/qe_common.c b/drivers/soc/fsl/qe/qe_common.c
-index a0cb8e746879..9729ce86db59 100644
---- a/drivers/soc/fsl/qe/qe_common.c
-+++ b/drivers/soc/fsl/qe/qe_common.c
-@@ -16,7 +16,6 @@
- #include <linux/genalloc.h>
- #include <linux/init.h>
- #include <linux/list.h>
--#include <linux/of_device.h>
- #include <linux/spinlock.h>
- #include <linux/export.h>
- #include <linux/of.h>
-diff --git a/drivers/soc/fsl/qe/qe_tdm.c b/drivers/soc/fsl/qe/qe_tdm.c
-index 7d7d78d3ee50..a3b691875c8e 100644
---- a/drivers/soc/fsl/qe/qe_tdm.c
-+++ b/drivers/soc/fsl/qe/qe_tdm.c
-@@ -9,9 +9,7 @@
-  */
- #include <linux/io.h>
- #include <linux/kernel.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/of_platform.h>
-+#include <linux/of.h>
- #include <soc/fsl/qe/qe_tdm.h>
- 
- static int set_tdm_framer(const char *tdm_framer_type)
--- 
-2.40.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.5
 
+for you to fetch changes up to 53cab4d871690c49fac87c657cbf459e39c5b93b:
+
+  soc: imx: imx8mp-blk-ctrl: register HSIO PLL clock as bus_power_dev child (2023-07-19 15:44:02 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 6.5:
+
+- A couple of ARM DTS fixes for i.MX6SLL usbphy and supported CPU
+  frequency of sk-imx53 board
+- Add missing pull-up for imx8mn-var-som onboard PHY reset pinmux
+- A couple of imx8mm-venice fixes from Tim Harvey to diable disp_blk_ctrl
+- A couple of phycore-imx8mm fixes from Yashwanth Varakala to correct
+  VPU label and gpio-line-names
+- Fix imx8mp-blk-ctrl driver to register HSIO PLL clock as bus_power_dev
+  child, so that runtime PM can translate into the necessary GPC power
+  domain action
+
+----------------------------------------------------------------
+Benjamin Gaignard (1):
+      arm64: dts: freescale: Fix VPU G2 clock
+
+Dmitry Baryshkov (1):
+      ARM: dts: nxp/imx: limit sk-imx53 supported frequencies
+
+Hugo Villeneuve (1):
+      arm64: dts: imx8mn-var-som: add missing pull-up for onboard PHY reset pinmux
+
+Lucas Stach (1):
+      soc: imx: imx8mp-blk-ctrl: register HSIO PLL clock as bus_power_dev child
+
+Tim Harvey (2):
+      arm64: dts: imx8mm-venice-gw7903: disable disp_blk_ctrl
+      arm64: dts: imx8mm-venice-gw7904: disable disp_blk_ctrl
+
+Xu Yang (1):
+      ARM: dts: nxp/imx6sll: fix wrong property name in usbphy node
+
+Yashwanth Varakala (2):
+      arm64: dts: phycore-imx8mm: Label typo-fix of VPU
+      arm64: dts: phycore-imx8mm: Correction in gpio-line-names
+
+ arch/arm/boot/dts/nxp/imx/imx53-sk-imx53.dts                | 10 ++++++++++
+ arch/arm/boot/dts/nxp/imx/imx6sll.dtsi                      |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dts |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-phycore-som.dtsi       |  4 ++--
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts      |  4 ++++
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts      |  4 ++++
+ arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi           |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi                   |  2 +-
+ drivers/soc/imx/imx8mp-blk-ctrl.c                           |  2 +-
+ 9 files changed, 25 insertions(+), 7 deletions(-)
