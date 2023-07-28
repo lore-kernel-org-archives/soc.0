@@ -1,76 +1,138 @@
-Return-Path: <SRS0=GdFq=DO=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=TZV+=DO=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8F6C04E69
-	for <soc@archiver.kernel.org>; Fri, 28 Jul 2023 11:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D708DC04A6A
+	for <soc@archiver.kernel.org>; Fri, 28 Jul 2023 15:59:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 60781C433C9; Fri, 28 Jul 2023 11:57:13 +0000 (UTC)
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 8F6CBC433C9; Fri, 28 Jul 2023 15:59:48 +0000 (UTC)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B3534C433C7
-	for <soc@kernel.org>; Fri, 28 Jul 2023 11:57:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3534C433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:12b0:7b7e:d1ff:7873])
-	by albert.telenet-ops.be with bizsmtp
-	id Sbx62A0010d1nm806bx63U; Fri, 28 Jul 2023 13:57:09 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1qPM5U-002mIh-Mq;
-	Fri, 28 Jul 2023 13:57:05 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1qPM5h-00AqNj-RN;
-	Fri, 28 Jul 2023 13:57:05 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id 98CD7C433C7;
+	Fri, 28 Jul 2023 15:59:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 98CD7C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 42D155C00BE;
+	Fri, 28 Jul 2023 11:59:45 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 28 Jul 2023 11:59:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1690559985; x=1690646385; bh=qe
+	prRb5ewEtA801/sByp5QkC5fP6Mty2WClCI4vUDyY=; b=GQgIcy4Pj5IML3N/U+
+	muKPT/yi2mD0T9FSsMKqUPLjbTKA/2rj9ALRX8jCqneWSJM36GXeopCXKNSVXBzq
+	Nu2zUEJCHDPQ2O2/yx0yWPHy4ikGSfMT3VXOZSCwEY46P/UNAjDSsac4bXlkHvNE
+	MNXQ9hwmYVAHtkRmF7MiHR/rXa3HiG/KdOSusFIMeTClTXrrgaayaL4L0DO9izQm
+	vJA7XKrN74xm4y2qXGDjrq06Rn7+OfRPYXIYyyk6eQxrhv9669kTMu0q74z37Pzf
+	n6dVzAyANj4suvYmcNIys2HmTUeNl7EeZ4sI3JcxCnY3ZsP85mBEnWmSYaRNxIOI
+	mGYg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1690559985; x=1690646385; bh=qeprRb5ewEtA8
+	01/sByp5QkC5fP6Mty2WClCI4vUDyY=; b=fqd+s0ENlYsKTRcjseNDnt5Za3Fxp
+	r+wf+9KV/9zCpAPXpDD0r9bKp2LsJY8PGLgeHZ1crURsURghk4PFGfioDGq14SRX
+	q0fcHkLQaHjvMqYpddp+xdbJlN7i1uUyC8FzigDrWahYAqVUD/b3Ej2aDDbPgfmz
+	1eYOfhZuRucmnbgNsReFyniIlwwvsBykugsbWzjeC+FO3bReIvZGR6Ypj/yLXUVa
+	UHvyB4ebn5p5j8xRpUiKJ6EVEjZ31qNWW2Vu1skcH0eiqkhlNAx7clHh2bo+INlp
+	+ZyP/PO+eRjJ1qUD1BPlpy91/kEYFfUUNPZcb45JcKe9Pey6v2ckoaTZA==
+X-ME-Sender: <xms:8OXDZAWfjZKaeFGK9DxQo2r5IelHq7-EXGnliym7ZC1j0MlCEdYLaQ>
+    <xme:8OXDZElPvdmk2uyEBiHAEMKvcC5N9mgZk-OMx4OEM4yXiaRVf2WR-SKuH87Ejcu92
+    ROd7yiIKJGLnZONJ5g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrieeigdelvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:8OXDZEawgidolfxWA1zuJA-NjZvZ9DTXiwcUqy3Y-b0GAasNoQR5bQ>
+    <xmx:8OXDZPVdb7bc06N5Jc4FRQ6c2jY8Jeh_G3C0My5ieDI_mVqo3YQAmQ>
+    <xmx:8OXDZKnj9Auv7CKFQuB0xS406pKEqQj2t1HnjDKNJ6hPOT204DObKA>
+    <xmx:8eXDZNGgebKPDnDW7VjiBpIHriNK8L5WWfqVUbRBa6skv3tyx9m_-Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id F3CC1B60089; Fri, 28 Jul 2023 11:59:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+Mime-Version: 1.0
+Message-Id: <0808604b-a26e-43b8-83da-2c3dc12446d2@app.fastmail.com>
+In-Reply-To: <20230517154525.ljoamjlfhpejtizm@viti.kaiser.cx>
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-6-arnd@kernel.org>
+ <CAOMZO5B0stW2X6YqPTTKDpCOAzPDvm=4HT8jfBAgbTy11gnKgg@mail.gmail.com>
+ <4e026f08-d733-4b01-ab47-e921d041e74e@app.fastmail.com>
+ <20230517154525.ljoamjlfhpejtizm@viti.kaiser.cx>
+Date: Fri, 28 Jul 2023 17:59:20 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Martin Kaiser" <martin@kaiser.cx>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/3] Renesas ARM defconfig updates for v6.6
-Date: Fri, 28 Jul 2023 13:57:00 +0200
-Message-Id: <cover.1690545141.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1690545139.git.geert+renesas@glider.be>
-References: <cover.1690545139.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc: "Fabio Estevam" <festevam@gmail.com>, "Arnd Bergmann" <arnd@kernel.org>,
+ soc@kernel.org, "Russell King" <linux@armlinux.org.uk>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Hartley Sweeten" <hsweeten@visionengravers.com>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Andre Przywara" <andre.przywara@arm.com>,
+ "Shawn Guo" <shawnguo@kernel.org>,
+ "Sascha Hauer" <s.hauer@pengutronix.de>,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+ "NXP Linux Team" <linux-imx@nxp.com>,
+ "Vladimir Zapolskiy" <vz@mleia.com>,
+ "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+ "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+ "Tony Lindgren" <tony@atomide.com>, "Andrew Lunn" <andrew@lunn.ch>,
+ "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+ "Gregory Clement" <gregory.clement@bootlin.com>,
+ "Daniel Mack" <daniel@zonque.org>,
+ "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+ "Robert Jarzmik" <robert.jarzmik@free.fr>,
+ "Viresh Kumar" <vireshk@kernel.org>,
+ "Shiraz Hashim" <shiraz.linux.kernel@gmail.com>,
+ "Sudeep Holla" <sudeep.holla@arm.com>,
+ "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Alan Stern" <stern@rowland.harvard.edu>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Linux-OMAP <linux-omap@vger.kernel.org>, linux-clk@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Subject: Re: [PATCH 05/13] ARM: imx: remove unused mx25_revision()
+Content-Type: text/plain
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+On Wed, May 17, 2023, at 17:45, Martin Kaiser wrote:
+> Thus wrote Arnd Bergmann (arnd@arndb.de):
+>
+>> I think either way is ok to address the warning. If we wanted to do this
+>> properly, the mx{25,27,31,35,5}_revision functions could all be removed
+>> and the logic hooked up to imx_set_soc_revision() in the same way that
+>> they already use mxc_set_cpu_type() for drivers/soc/imx/soc-imx.c.
+>
+>> I'll leave it up to you, if you want to merge Martin's patches or
+>> a replacement for the soc-imx driver through the imx tree for 6.5,
+>> I'll drop my patch from this series, otherwise I'll keep it for now
+>> and we can still do it better at later point.
+>
+> I suggest we merge my patches for imx25 first and then clean up all the
+> older imx families to use the common functions.
+>
+> I've just rebased the patches against today's linux-next. My understanding
+> is that they have to go through the clk tree.
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+This never happened, right? I see that mx25_revision() is still in the
+tree without any users, so I can't easily turn on the warning by default
+yet. Should I just go ahead and remove it for 5.6, or do you expect to
+have your patch ready in time for the merge window?
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.6-tag1
-
-for you to fetch changes up to 0bfe5475f6b9fc766aa1fabb0a90c88b882c2f70:
-
-  arm64: defconfig: Enable PMIC RAA215300 and RTC ISL 1208 configs (2023-07-10 09:29:21 +0200)
-
-----------------------------------------------------------------
-Renesas ARM defconfig updates for v6.6
-
-  - Enable CSI driver support for Renesas RZ/V2M based platforms,
-  - Enable MTU3a PWM and RAA215300 PMIC/RTC driver support, as used on
-    Renesas RZ/{G2L,G2LC,G2UL,V2L} SMARC EVKs.
-
-----------------------------------------------------------------
-Biju Das (2):
-      arm64: defconfig: Enable Renesas MTU3a PWM config
-      arm64: defconfig: Enable PMIC RAA215300 and RTC ISL 1208 configs
-
-Fabrizio Castro (1):
-      arm64: defconfig: Enable Renesas RZ/V2M CSI driver
-
- arch/arm64/configs/defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+       Arnd
