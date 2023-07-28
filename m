@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A678EC001DE
-	for <soc@archiver.kernel.org>; Fri, 28 Jul 2023 09:41:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D7CC04E69
+	for <soc@archiver.kernel.org>; Fri, 28 Jul 2023 09:41:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7019FC433CA; Fri, 28 Jul 2023 09:41:36 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	id 26432C433C9; Fri, 28 Jul 2023 09:41:38 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 80BFFC433C7;
-	Fri, 28 Jul 2023 09:41:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80BFFC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 1DEBBC433C8;
+	Fri, 28 Jul 2023 09:41:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1DEBBC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-52256241c50so2750984a12.3;
-        Fri, 28 Jul 2023 02:41:35 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-986d8332f50so265334366b.0;
+        Fri, 28 Jul 2023 02:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690537293; x=1691142093;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E3R4wjBnDBMtOFENnE25FnGBV6r3mcWK08y5v73y74o=;
-        b=rqARx47UfymMOYmczBXyKBnvWA0E2hC+5Dah5oW3rOCSMSmhd6Y49Y6f+E6u83ZxXm
-         2vRj+AN93RZ1WnpAwDUXECvBF1Q4jYyv0B+I7XD4/9Wtirp2g5eyG4tWWijoar0gJazF
-         8iTsaL86sOBbj5mEkUmPRIvaIpNCgMyiCaDAzscy2U5GnCCAD8yf8/mVgKSgal3Co9hI
-         7UTLFgI2iVr1hALUKPuyFjFy6iY3hyIhXakNjT+SefSXggdT8sK9qahS5jAmmDWwHxm5
-         PPjejlGjmn3hWPbb92wvbEBXQwdqdCjQMZnRfdx9+XzZuK9yD1v5wvmjxnpkpbb13HEH
-         yx8w==
+        d=gmail.com; s=20221208; t=1690537295; x=1691142095;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Cw3X31p7xwohwKPSgl7qyRMBhhgQ8jBbnhgkogYtkU=;
+        b=CxmCL2zjp5pfCKKvAlLDFJ+zF+o/gFr27DGJr3txPTEejzw0c6gDQFrRS+2mqjLa0H
+         XD3os3+IcJo+KeNX7FP+WsgHxJhZ0ycUfvxWxioc7Xy2VPugFXMHJ4pcmPrLIGFntCjb
+         kuSiKxi5OL2kjDT5CCcP0Hyksdcz6ARrh3Pn5Gir3V0MvaIxtuqqY3Yr2bq0fUyvJFR8
+         mAdFHmLcd+8Lph/yr65863a6OYaGUV8/tyc4Sk8Jk/4vVKdCmkEBdCZdK2DYmMabG4NT
+         +w9fWEwPfcubjNHDQo5xl5ILWQve53YARhR10Gcve5reij+tQUDeQIazJCYZ/oNtY89J
+         Ujxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690537293; x=1691142093;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E3R4wjBnDBMtOFENnE25FnGBV6r3mcWK08y5v73y74o=;
-        b=WdWqxjGuMrm12ehEmjwB4vUs7WzfbkyDjzmq7zUvWGFkfmlfboUyRTOEGJf7lu7OJh
-         51MXMOAVRAXf7MlTUv2Id39hR1gvtsOEtiQqggzIqrOgOw+2BZaVX9F9Wb/oVTdyy/vg
-         hzxEDKi1TV8q1uoYOvwsKRWssRSEElmJ8tAViCwg8J8ZzxmFHYaAI4FQEXz+xtAD9ncY
-         EPBT++uIlJegnO94I+IFxqbmjTg3xsoHxNqUn9z1PTS0DNbo4N9Ge9OuxISNgtbdBdKN
-         JLZpEuyKPC6hXy6UEqWq8b9Zx38xZ7q1PnbiS2PwCJwSfIbjtEEXQ3azHo+t7eI8dDPF
-         Vkpw==
-X-Gm-Message-State: ABy/qLYcrkdhFzluSEFHz1UmB2Z+IMI38CoGHHQnp2rnFyzFfvKiUDlo
-	PQzIv37+T9d7Px0ps2GWYCyxVxrDoHs=
-X-Google-Smtp-Source: APBJJlEDOX6YqWMymx/XeVyFp1/FBsxAmn1xCe5AQCPwQYymOBAKKg/VrTTWbk2IsdMQ7Uq2tQkVpA==
-X-Received: by 2002:a05:6402:10c1:b0:522:200f:cc50 with SMTP id p1-20020a05640210c100b00522200fcc50mr1795924edu.19.1690537292887;
-        Fri, 28 Jul 2023 02:41:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690537295; x=1691142095;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+Cw3X31p7xwohwKPSgl7qyRMBhhgQ8jBbnhgkogYtkU=;
+        b=QZQje7mxPdXoUp7EYgdkhSSiOS/nRaZxfOUC39hk95qBB/YBiemte3ov4QYRVZsIj8
+         CqAAQWLrdcWYOB81P9pscbyKJ48OGEZ7L0NWRc1yMwpQLWTJN5BdjlXXdod1DwufSKR9
+         buk7EnMdGDUXD+F526UeX1xFDgca1imFyla3EIloxmDq3gtHl7blvyCsbsxyWfS8Jgi8
+         ZfDtNPVNi4hsWaP7b9kSixlDkOmlaJeypL7BSw+6dy+MQTSKu8pdfqaZpSV73oiy8xhP
+         0+AJae+XcHbEMnJPhIIB0f+Xv4qVEwob7tdxQIMiArHR41UkXNRK9hyGcc16SE8IZxNr
+         IxRw==
+X-Gm-Message-State: ABy/qLZXwpO1j0WL8cmCX83mN/su3zUxmdLDqDAdka5tCQYXUbIczLXH
+	S2UK5mCBCP8vBimDv6QCDLedgjVpsIw=
+X-Google-Smtp-Source: APBJJlGHMcjlSyB3jSLWLcP/PXcMAo854eth9XZNWEik076oTphMXnqKi7PQkX18s6T5lHwxI99vTw==
+X-Received: by 2002:a17:907:7618:b0:99b:c0da:5028 with SMTP id jx24-20020a170907761800b0099bc0da5028mr1388846ejc.62.1690537294774;
+        Fri, 28 Jul 2023 02:41:34 -0700 (PDT)
 Received: from localhost (p200300e41f1bd600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1b:d600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id u19-20020aa7d993000000b005222aee9ef9sm1567322eds.97.2023.07.28.02.41.32
+        by smtp.gmail.com with ESMTPSA id s13-20020a1709060c0d00b009930042510csm1823558ejf.222.2023.07.28.02.41.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jul 2023 02:41:32 -0700 (PDT)
+        Fri, 28 Jul 2023 02:41:34 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -59,10 +60,12 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/4] soc/tegra: Changes for v6.6-rc1
-Date: Fri, 28 Jul 2023 11:41:25 +0200
-Message-ID: <20230728094129.3587109-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/4] ARM: tegra: Device tree changes for v6.6-rc1
+Date: Fri, 28 Jul 2023 11:41:27 +0200
+Message-ID: <20230728094129.3587109-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230728094129.3587109-1-thierry.reding@gmail.com>
+References: <20230728094129.3587109-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,40 +78,67 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.6-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.6-arm-dt
 
-for you to fetch changes up to 10f975f8b0e8e563bf1e5c2f5e4ebada29fa7edc:
+for you to fetch changes up to c9a706ab227ef59cc49923358513251ca4965563:
 
-  soc/tegra: cbb: Remove unnecessary print function dev_err() (2023-07-27 18:46:37 +0200)
+  ARM: tegra: Provide specific compatible string for Nexus 7 panel (2023-07-27 17:15:43 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Changes for v6.6-rc1
+ARM: tegra: Device tree changes for v6.6-rc1
 
-This contains a selection of minor cleanups.
+This contains various fixes for DT schema validation and the Pegatron
+Chagall and Nexus 7 get specific compatible strings for the panels that
+they use.
 
 ----------------------------------------------------------------
-Jiapeng Chong (1):
-      soc/tegra: cbb: Remove unnecessary print function dev_err()
+Thierry Reding (6):
+      ARM: tegra: Remove dmas and dma-names for debug UART
+      ARM: tegra: Remove reset-names for UART devices
+      ARM: tegra: Add missing reset-names for Tegra HS UART
+      ARM: tegra: Reuse I2C3 for NVEC
+      ARM: tegra: Use Hannstar HSD101PWW2 on Pegatron Chagall
+      ARM: tegra: Provide specific compatible string for Nexus 7 panel
 
-Rob Herring (1):
-      soc/tegra: Explicitly include correct DT includes
-
-Thierry Reding (1):
-      soc/tegra: fuse: Sort includes alphabetically
-
-Yangtao Li (2):
-      soc/tegra: fuse: Use devm_platform_get_and_ioremap_resource()
-      bus: tegra-gmi: Convert to devm_platform_ioremap_resource()
-
- drivers/bus/tegra-gmi.c                |  4 +---
- drivers/soc/tegra/cbb/tegra-cbb.c      | 12 ++----------
- drivers/soc/tegra/cbb/tegra194-cbb.c   |  4 +---
- drivers/soc/tegra/cbb/tegra234-cbb.c   |  3 ---
- drivers/soc/tegra/fuse/fuse-tegra.c    |  9 +++------
- drivers/soc/tegra/fuse/fuse-tegra20.c  |  2 +-
- drivers/soc/tegra/fuse/fuse-tegra30.c  |  2 --
- drivers/soc/tegra/fuse/tegra-apbmisc.c |  4 ++--
- 8 files changed, 10 insertions(+), 30 deletions(-)
+ arch/arm/boot/dts/nvidia/tegra114-asus-tf701t.dts  |  2 ++
+ arch/arm/boot/dts/nvidia/tegra114-dalmore.dts      |  2 ++
+ arch/arm/boot/dts/nvidia/tegra114-roth.dts         |  2 ++
+ arch/arm/boot/dts/nvidia/tegra114-tn7.dts          |  2 ++
+ arch/arm/boot/dts/nvidia/tegra114.dtsi             |  4 ----
+ arch/arm/boot/dts/nvidia/tegra124-apalis-eval.dts  |  2 ++
+ .../boot/dts/nvidia/tegra124-apalis-v1.2-eval.dts  |  2 ++
+ arch/arm/boot/dts/nvidia/tegra124-apalis-v1.2.dtsi |  3 +++
+ arch/arm/boot/dts/nvidia/tegra124-apalis.dtsi      |  3 +++
+ arch/arm/boot/dts/nvidia/tegra124-jetson-tk1.dts   |  4 ++++
+ arch/arm/boot/dts/nvidia/tegra124-nyan.dtsi        |  2 ++
+ arch/arm/boot/dts/nvidia/tegra124-venice2.dts      |  2 ++
+ arch/arm/boot/dts/nvidia/tegra124.dtsi             |  4 ----
+ .../boot/dts/nvidia/tegra20-acer-a500-picasso.dts  |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-asus-tf101.dts    |  4 ++++
+ .../boot/dts/nvidia/tegra20-colibri-eval-v3.dts    |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-colibri-iris.dts  |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-colibri.dtsi      |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-harmony.dts       |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-paz00.dts         | 23 ++++++++++++----------
+ arch/arm/boot/dts/nvidia/tegra20-seaboard.dts      |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-tamonten.dtsi     |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-trimslice.dts     |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20-ventana.dts       |  2 ++
+ arch/arm/boot/dts/nvidia/tegra20.dtsi              |  5 -----
+ arch/arm/boot/dts/nvidia/tegra30-apalis-eval.dts   |  2 ++
+ .../boot/dts/nvidia/tegra30-apalis-v1.1-eval.dts   |  2 ++
+ arch/arm/boot/dts/nvidia/tegra30-apalis-v1.1.dtsi  |  3 +++
+ arch/arm/boot/dts/nvidia/tegra30-apalis.dtsi       |  3 +++
+ .../nvidia/tegra30-asus-nexus7-grouper-common.dtsi | 14 ++++++-------
+ .../nvidia/tegra30-asus-transformer-common.dtsi    |  2 ++
+ arch/arm/boot/dts/nvidia/tegra30-beaver.dts        |  2 ++
+ arch/arm/boot/dts/nvidia/tegra30-cardhu.dtsi       |  3 +++
+ .../boot/dts/nvidia/tegra30-colibri-eval-v3.dts    |  2 ++
+ arch/arm/boot/dts/nvidia/tegra30-colibri.dtsi      |  2 ++
+ arch/arm/boot/dts/nvidia/tegra30-ouya.dts          |  3 +++
+ .../boot/dts/nvidia/tegra30-pegatron-chagall.dts   |  4 +++-
+ arch/arm/boot/dts/nvidia/tegra30.dtsi              |  5 -----
+ 38 files changed, 94 insertions(+), 37 deletions(-)
