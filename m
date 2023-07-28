@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4165C001E0
-	for <soc@archiver.kernel.org>; Fri, 28 Jul 2023 11:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C378C00528
+	for <soc@archiver.kernel.org>; Fri, 28 Jul 2023 11:57:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5FA0AC433D9; Fri, 28 Jul 2023 11:57:12 +0000 (UTC)
+	id 11E91C433D9; Fri, 28 Jul 2023 11:57:13 +0000 (UTC)
 Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 26314C433CB
+	by smtp.kernel.org (Postfix) with ESMTPS id 26245C433C9
 	for <soc@kernel.org>; Fri, 28 Jul 2023 11:57:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26314C433CB
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26245C433C9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:12b0:7b7e:d1ff:7873])
 	by laurent.telenet-ops.be with bizsmtp
-	id Sbx62A0020d1nm801bx66X; Fri, 28 Jul 2023 13:57:07 +0200
+	id Sbx62A0060d1nm801bx66Z; Fri, 28 Jul 2023 13:57:07 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1qPM5U-002mIg-Mr;
+	id 1qPM5U-002mIj-Mv;
 	Fri, 28 Jul 2023 13:57:05 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1qPM5h-00AqNg-QH;
+	id 1qPM5h-00AqNm-S1;
 	Fri, 28 Jul 2023 13:57:05 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -36,49 +36,35 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/3] Renesas SoC updates for v6.6
-Date: Fri, 28 Jul 2023 13:56:59 +0200
-Message-Id: <cover.1690545139.git.geert+renesas@glider.be>
+Subject: [GIT PULL 2/3] Renesas ARM SoC updates for v6.6
+Date: Fri, 28 Jul 2023 13:57:01 +0200
+Message-Id: <cover.1690545142.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1690545139.git.geert+renesas@glider.be>
+References: <cover.1690545139.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-This is my first pull request for the inclusion of Renesas SoC updates
-for v6.5.
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-It consists of 3 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/3] Renesas ARM defconfig updates for v6.6
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-soc-for-v6.6-tag1
 
-    - Enable CSI driver support for Renesas RZ/V2M based platforms,
-    - Enable MTU3a PWM and RAA215300 PMIC/RTC driver support, as used on
-      Renesas RZ/{G2L,G2LC,G2UL,V2L} SMARC EVKs.
+for you to fetch changes up to bfb345a7bdc186ebbf2b9c53215f0f7b9bdba9fd:
 
-  [GIT PULL 2/3] Renesas ARM SoC updates for v6.6
+  ARM: shmobile: rcar-gen2: Drop unused OF includes (2023-07-25 11:11:42 +0200)
 
-    -   Drop unused OF includes.
+----------------------------------------------------------------
+Renesas ARM SoC updates for v6.6
 
-  [GIT PULL 3/3] Renesas DTS updates for v6.6
+  -   Drop unused OF includes.
 
-    - Add Clocked Serial Interface (CSI) support for the RZ/V2M SoC,
-    - Add PMIC, RTC, and PWM support for the RZ/G2L, RZ/G2LC, and RZ/V2L
-      SMARC EVK development boards,
-    - Add PWM (MTU3a) support for the RZ/G2UL and RZ/Five SoCs,
-    - Add External interrupt (INTC-EX) support for the R-Car S4-8 SoC,
-    - Add LED support for the Spider development board,
-    - Miscellaneous fixes and improvements.
+----------------------------------------------------------------
+Rob Herring (1):
+      ARM: shmobile: rcar-gen2: Drop unused OF includes
 
-Thanks for pulling!
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ arch/arm/mach-shmobile/setup-rcar-gen2.c | 1 -
+ 1 file changed, 1 deletion(-)
