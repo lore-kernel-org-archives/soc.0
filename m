@@ -4,104 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E4EAC001DE
-	for <soc@archiver.kernel.org>; Tue,  1 Aug 2023 01:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76787C001DE
+	for <soc@archiver.kernel.org>; Tue,  1 Aug 2023 02:44:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DCBBAC433C9; Tue,  1 Aug 2023 01:30:36 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	id 3CBD2C433C7; Tue,  1 Aug 2023 02:44:06 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 19A30C433C7;
-	Tue,  1 Aug 2023 01:30:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 19A30C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id B24A4C433CA;
+	Tue,  1 Aug 2023 02:44:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B24A4C433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RFHXG1z7cztRl9;
-	Tue,  1 Aug 2023 09:27:10 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.54])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RFKBy0q8mzVjjk;
+	Tue,  1 Aug 2023 10:42:18 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
  kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 1 Aug 2023 09:30:30 +0800
-Message-ID: <d7da8a14-6d37-1e6f-6db2-fb57a68a9b12@huawei.com>
-Date: Tue, 1 Aug 2023 09:30:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Randy Dunlap <rdunlap@infradead.org>, <xuwei5@hisilicon.com>,
-	<arnd@arndb.de>, <krzk@kernel.org>, <sudeep.holla@arm.com>
+ 15.1.2507.27; Tue, 1 Aug 2023 10:44:00 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <xuwei5@hisilicon.com>, <arnd@arndb.de>, <krzk@kernel.org>,
+	<sudeep.holla@arm.com>, <rdunlap@infradead.org>
 List-Id: <soc.lore.kernel.org>
 CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <wanghuiqiang@huawei.com>,
 	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH v6 0/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Date: Tue, 1 Aug 2023 10:41:17 +0800
+Message-ID: <20230801024119.37215-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20230424073020.4039-1-lihuisong@huawei.com>
 References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230729082632.43224-1-lihuisong@huawei.com>
- <20230729082632.43224-2-lihuisong@huawei.com>
- <fcf22ecc-858a-43d2-9b4b-78e3bc02ef68@infradead.org>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <fcf22ecc-858a-43d2-9b4b-78e3bc02ef68@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemm600004.china.huawei.com (7.193.23.242)
 X-CFilter-Loop: Reflected
 
+This series add HCCS driver to query the health status and port information
+of HCCS on Kunpeng SoC as well as document all sysfs entries provided by
+this driver.
 
-在 2023/7/30 6:43, Randy Dunlap 写道:
-> Hi--
->
-> On 7/29/23 01:26, Huisong Li wrote:
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index d73c9e97a237..c9e302c3ff48 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -9488,6 +9488,12 @@ S:	Maintained
->>   F:	Documentation/ABI/testing/debugfs-hisi-zip
->>   F:	drivers/crypto/hisilicon/zip/
->>   
-> This new entry should be between
-> HISILICON I2C CONTROLLER DRIVER
-> and
-> HISILICON LPC BUS DRIVER
-> to keep the MAINTAINERS file in alphabetical order.
-ok, will fix in v6. thanks.
->> +HISILICON KUNPENG SOC HCCS DRIVER
->> +M:	Huisong Li <lihuisong@huawei.com>
->> +S:	Maintained
->> +F:	drivers/soc/hisilicon/kunpeng_hccs.c
->> +F:	drivers/soc/hisilicon/kunpeng_hccs.h
->> +
->>   HMM - Heterogeneous Memory Management
->>   M:	Jérôme Glisse <jglisse@redhat.com>
->>   L:	linux-mm@kvack.org
->> diff --git a/drivers/soc/hisilicon/Kconfig b/drivers/soc/hisilicon/Kconfig
->> new file mode 100644
->> index 000000000000..73a99b8156c9
->> --- /dev/null
->> +++ b/drivers/soc/hisilicon/Kconfig
->> @@ -0,0 +1,20 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +menu "Hisilicon SoC drivers"
->> +	depends on ARCH_HISI || COMPILE_TEST
->> +
->> +config KUNPENG_HCCS
->> +	tristate "HCCS driver on Kunpeng SoC"
->> +	depends on ACPI
->> +	depends on ARM64 || COMPILE_TEST
->> +	help
->> +	  The Huawei Cache Coherence System (HCCS) is a multi-chip
->> +	  interconnection bus protocol.
->> +	  The performance of application may be affected if some hccs
-> s/hccs/HCCS/ for consistency.
-Ack
->
->> +	  ports are not in full lane status, have a large number of CRC
->> +	  errors and so on.
->> +
->> +	  Say M here if you want to include support for querying the
->> +	  health status and port information of HCCS on Kunpeng SoC.
-> thanks.
->
+---
+ v6:
+ - fix the new entry in MAINTAINERS file to keep alphabetical order
+
+ v5:
+ - fix document format to eliminate warning of making htmldocs.
+
+ v4:
+ - remove useless header and reorder linux header.
+ - use __ATTR_RO to replace __ATTR for port attributes.
+ - add MODULE_DEVICE_TABLE to autoload the driver.
+ - update the date to "November 2023".
+ - fix some comments about HCCS description.
+
+ v3:
+  - replace "using_status" with "enable" attribute.
+  - fix some comments in codes.
+
+ v2:
+  - Document all sysfs entries provided by driver.
+  - drop 'pcc_type' and 'intr_mode' in struct hccs_dev.
+  - using _CRS with PCC GAS to get channel ID instead of _DSD.
+  - replace readw_relaxed_poll_timeout with readw_poll_timeout.
+  - use sysfs_emit() instead of sprintf().
+  - drop ACPI_PTR in hccs_driver.
+  - drop useless log during the probe phase.
+
+Huisong Li (2):
+  soc: hisilicon: Support HCCS driver on Kunpeng SoC
+  doc: soc: hisilicon: Add Kunpeng HCCS driver documentation
+
+ .../sysfs-devices-platform-kunpeng_hccs       |   81 ++
+ MAINTAINERS                                   |    7 +
+ drivers/soc/Kconfig                           |    1 +
+ drivers/soc/Makefile                          |    1 +
+ drivers/soc/hisilicon/Kconfig                 |   20 +
+ drivers/soc/hisilicon/Makefile                |    2 +
+ drivers/soc/hisilicon/kunpeng_hccs.c          | 1282 +++++++++++++++++
+ drivers/soc/hisilicon/kunpeng_hccs.h          |  196 +++
+ 8 files changed, 1590 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
+ create mode 100644 drivers/soc/hisilicon/Kconfig
+ create mode 100644 drivers/soc/hisilicon/Makefile
+ create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+ create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
+
+-- 
+2.33.0
+
