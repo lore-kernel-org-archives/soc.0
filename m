@@ -1,65 +1,107 @@
-Return-Path: <SRS0=XU9I=DR=lwn.net=corbet@kernel.org>
+Return-Path: <SRS0=PQgt=DS=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52728C001DC
-	for <soc@archiver.kernel.org>; Mon, 31 Jul 2023 16:23:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E4EAC001DE
+	for <soc@archiver.kernel.org>; Tue,  1 Aug 2023 01:30:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 18257C433C7; Mon, 31 Jul 2023 16:23:20 +0000 (UTC)
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	id DCBBAC433C9; Tue,  1 Aug 2023 01:30:36 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A6D7FC433C8;
-	Mon, 31 Jul 2023 16:23:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A6D7FC433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lwn.net
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id AA2B02C5;
-	Mon, 31 Jul 2023 16:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net AA2B02C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1690820597; bh=yFSfFyUQXT4DT++sxUWwAVT0WoQ6QyQTZaoT9AgNIvo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Ru3FR0Ekg1gFV8rnHsCa289Fm+t2lemULUPWgU0OBPUqHBb0cX5+t91PdIKIxqQXi
-	 UnD3psVJrhfeNBShkC6Rr9BGZCV0fYyST7yWz7fEO34BCv/a4ECniDKDIMfGJlt8Y4
-	 c/IpuvyFTykpBy9+3Hv71ns/wX328fRUGSQP5x+/YzepM9sqnYBTqtojGHBclwn1v5
-	 HDzQxgTqbehGT9Ri4skj8w5fzfCXaUfGf721/SF1TfVFt+xSj0cavFfdWa3Dz7TccC
-	 Ko0oCeZAJodwZSGFoMmHBYwnEzqTpYxc45CGHlDs08S0XlgfnCoCb2b9zlb8fUGkXk
-	 83MhZs3vc+j5w==
-From: Jonathan Corbet <corbet@lwn.net>
-List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
- <konrad.dybcio@linaro.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, Arnd Bergmann
- <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, arm@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Randy Dunlap
- <rdunlap@infradead.org>
-Subject: Re: [PATCH v3 1/3] MAINTAINERS: soc: reference maintainer profile
-In-Reply-To: <20230723131924.78190-1-krzysztof.kozlowski@linaro.org>
-References: <20230723131924.78190-1-krzysztof.kozlowski@linaro.org>
-Date: Mon, 31 Jul 2023 10:23:17 -0600
-Message-ID: <87y1iwcaoa.fsf@meer.lwn.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id 19A30C433C7;
+	Tue,  1 Aug 2023 01:30:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 19A30C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RFHXG1z7cztRl9;
+	Tue,  1 Aug 2023 09:27:10 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 1 Aug 2023 09:30:30 +0800
+Message-ID: <d7da8a14-6d37-1e6f-6db2-fb57a68a9b12@huawei.com>
+Date: Tue, 1 Aug 2023 09:30:22 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v5 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To: Randy Dunlap <rdunlap@infradead.org>, <xuwei5@hisilicon.com>,
+	<arnd@arndb.de>, <krzk@kernel.org>, <sudeep.holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <wanghuiqiang@huawei.com>,
+	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <lihuisong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230729082632.43224-1-lihuisong@huawei.com>
+ <20230729082632.43224-2-lihuisong@huawei.com>
+ <fcf22ecc-858a-43d2-9b4b-78e3bc02ef68@infradead.org>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <fcf22ecc-858a-43d2-9b4b-78e3bc02ef68@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-> Mention the SoC maintainer profile in P: entry.
+在 2023/7/30 6:43, Randy Dunlap 写道:
+> Hi--
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-I've applied this series, thanks.
-
-jon
+> On 7/29/23 01:26, Huisong Li wrote:
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index d73c9e97a237..c9e302c3ff48 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -9488,6 +9488,12 @@ S:	Maintained
+>>   F:	Documentation/ABI/testing/debugfs-hisi-zip
+>>   F:	drivers/crypto/hisilicon/zip/
+>>   
+> This new entry should be between
+> HISILICON I2C CONTROLLER DRIVER
+> and
+> HISILICON LPC BUS DRIVER
+> to keep the MAINTAINERS file in alphabetical order.
+ok, will fix in v6. thanks.
+>> +HISILICON KUNPENG SOC HCCS DRIVER
+>> +M:	Huisong Li <lihuisong@huawei.com>
+>> +S:	Maintained
+>> +F:	drivers/soc/hisilicon/kunpeng_hccs.c
+>> +F:	drivers/soc/hisilicon/kunpeng_hccs.h
+>> +
+>>   HMM - Heterogeneous Memory Management
+>>   M:	Jérôme Glisse <jglisse@redhat.com>
+>>   L:	linux-mm@kvack.org
+>> diff --git a/drivers/soc/hisilicon/Kconfig b/drivers/soc/hisilicon/Kconfig
+>> new file mode 100644
+>> index 000000000000..73a99b8156c9
+>> --- /dev/null
+>> +++ b/drivers/soc/hisilicon/Kconfig
+>> @@ -0,0 +1,20 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +menu "Hisilicon SoC drivers"
+>> +	depends on ARCH_HISI || COMPILE_TEST
+>> +
+>> +config KUNPENG_HCCS
+>> +	tristate "HCCS driver on Kunpeng SoC"
+>> +	depends on ACPI
+>> +	depends on ARM64 || COMPILE_TEST
+>> +	help
+>> +	  The Huawei Cache Coherence System (HCCS) is a multi-chip
+>> +	  interconnection bus protocol.
+>> +	  The performance of application may be affected if some hccs
+> s/hccs/HCCS/ for consistency.
+Ack
+>
+>> +	  ports are not in full lane status, have a large number of CRC
+>> +	  errors and so on.
+>> +
+>> +	  Say M here if you want to include support for querying the
+>> +	  health status and port information of HCCS on Kunpeng SoC.
+> thanks.
+>
