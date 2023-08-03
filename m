@@ -1,54 +1,115 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=iWum=DU=loongson.cn=zhuyinbo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECE7C001DE
-	for <soc@archiver.kernel.org>; Thu,  3 Aug 2023 01:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A84A4C0015E
+	for <soc@archiver.kernel.org>; Thu,  3 Aug 2023 06:37:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D3D93C433C7; Thu,  3 Aug 2023 01:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3766C433C8;
-	Thu,  3 Aug 2023 01:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691026657;
-	bh=5mI36UUnIoZG+8J0xxGREo6gFFGKpijTTL/s2BopTu4=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=DOFBrh4juzx+KzBhsQZr+28LgnTckuAKEqr3V+CXVZ98VQS8F4DLrLtX94y86iBGR
-	 KuhLluqZcKaiajrHAQpfikWEfQhGcAxu+3EanIpPfo8ctaQ4xUaXodvaj7I/z1aD0T
-	 kUOj1shj6/G1/m6aILEzjVZYMCu1DlHU8TxJkRalc2GNpAzgPJTd4fYlfwUpIbrO3I
-	 ZMXyuoKNfATivSzDpe2kfY7laqXzCus3obppAplq7NKqspGjP3xWVo3t43mTAxBIbc
-	 /oSDKG68BNe5o0uj4Tvgns7oehW7iUr6H8BsxOErGEufcF2QBDjGzA32FF6VJWrNaj
-	 /ZmII+XNFI28g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0B89C6445B;
-	Thu,  3 Aug 2023 01:37:37 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.5, part 2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <b547178f-fe00-4270-bcc8-98131fc5e0b6@app.fastmail.com>
-References: <b547178f-fe00-4270-bcc8-98131fc5e0b6@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <b547178f-fe00-4270-bcc8-98131fc5e0b6@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.5-2
-X-PR-Tracked-Commit-Id: d21afb098c510739a2f5dd27aed5d3198816d8dc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ec351c8f2e6211054e51e661589cddd1fe856425
-Message-Id: <169102665765.28352.16747903850188275180.pr-tracker-bot@kernel.org>
-Date: Thu, 03 Aug 2023 01:37:37 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id 5F635C433CB; Thu,  3 Aug 2023 06:37:25 +0000 (UTC)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.kernel.org (Postfix) with ESMTP id D0AAAC433C8;
+	Thu,  3 Aug 2023 06:37:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0AAAC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.201])
+	by gateway (Coremail) with SMTP id _____8BxyeogS8tkDIYPAA--.26577S3;
+	Thu, 03 Aug 2023 14:37:20 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.20.42.201])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF80aS8tkMsZGAA--.49295S2;
+	Thu, 03 Aug 2023 14:37:17 +0800 (CST)
+From: Yinbo Zhu <zhuyinbo@loongson.cn>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To: Arnd Bergmann <arnd@arndb.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Jianmin Lv <lvjianmin@loongson.cn>,
+	wanghongliang@loongson.cn,
+	Liu Peibao <liupeibao@loongson.cn>,
+	loongson-kernel@lists.loongnix.cn,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	loongarch@lists.linux.dev,
+	Liu Yun <liuyun@loongson.cn>
+Subject: [PATCH v6 0/2] soc: loongson2_pm: add power management support
+Date: Thu,  3 Aug 2023 14:37:01 +0800
+Message-Id: <20230803063703.5659-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8CxF80aS8tkMsZGAA--.49295S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-The pull request you sent on Wed, 02 Aug 2023 23:44:58 +0200:
+Loongson-2 platform support Power Management Controller (ACPI) and this
+series patch was to add PM driver that base on dts and PM binding support.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.5-2
+Change in v6:
+		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
+		   pm interfaces" had been merged into mainline tree in v6.5-rc1
+		   thus this v6 series patch need drop it and need depend on it
+		   and it's patch link was:
+https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
+		2. Adding Ulf Hansson to Cc.
+		3. Adding soc@kernel.org to Cc.
+		4. Keep indented with one tab +2 spaces in Kconfig help text.
+Change in v5:
+		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
+		   pm interfaces" had been merged into linux-next tree thus this
+		   v4 series patch need drop it and need depend on it and it's
+		   patch link was:
+https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
+		2. Swap the positions of compatible for 2k1000 and 2k0500.
+Change in v4:
+		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
+		   pm interfaces" had been merged into linux-next tree thus this
+		   v4 series patch need drop it and need depend on it and it's
+		   patch link was:
+https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
+		2. Remove the pmc label in dt-binding patch.
+		3. Add the Co-developed-by for driver patch.
+		4. Simplify the loongson2_suspend_valid_state that "return
+		   (state == PM_SUSPEND_MEM)".
+		5. Use Using loongson2_pm_irq_enable() to replace.
+		   loongson2_power_button_irq_enable().
+		6. Remove the "oneOf" in dt-bindings patch.
+		7. Replace "suspend-address" that use "loongson,suspend-address".
+		8. Use u64 type that for "loongson,suspend-address".
+		9. Rename "pm" to "power-mangement" in dt-bindings patch.
+		10. Add the reivewed-by for dt-bindings patch.
+Change in v3:
+		1. Reword the [1/3] patch commit log and title.
+		2. Use the old naming for suspend interface for the [1/3] and
+		   [3/3] patch.
+		3. Combine some small function in the driver patch.
+		4. Rename 'pwrbt' to 'button' in the driver patch.
+		5. Use the specific compatible in yaml file.
+Change in v2:
+		1. Fixup the "suspend-address" description.
+		2. Remove the "return -EINVAL" in PM driver probe when firmware
+		   no configure "suspend-address" property in dts in oder to
+		   other PM state to work.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ec351c8f2e6211054e51e661589cddd1fe856425
+Yinbo Zhu (2):
+  soc: dt-bindings: add loongson-2 pm
+  soc: loongson2_pm: add power management support
 
-Thank you!
+ .../soc/loongson/loongson,ls2k-pmc.yaml       |  52 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/soc/loongson/Kconfig                  |  10 +
+ drivers/soc/loongson/Makefile                 |   1 +
+ drivers/soc/loongson/loongson2_pm.c           | 215 ++++++++++++++++++
+ 5 files changed, 285 insertions(+)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.20.1
+
