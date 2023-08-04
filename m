@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AD68C001DE
-	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 06:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F22B8C04A6A
+	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 06:31:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1E6C4C433CC; Fri,  4 Aug 2023 06:24:46 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	id D5C26C433CA; Fri,  4 Aug 2023 06:31:05 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 87A79C433C8;
-	Fri,  4 Aug 2023 06:24:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87A79C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 2B8B4C433C7;
+	Fri,  4 Aug 2023 06:31:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2B8B4C433C7
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.53])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RHFyq18wyzrS70;
-	Fri,  4 Aug 2023 14:23:31 +0800 (CST)
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RHG5M2WXwzVjgX;
+	Fri,  4 Aug 2023 14:29:11 +0800 (CST)
 Received: from [10.67.103.39] (10.67.103.39) by kwepemi500011.china.huawei.com
  (7.221.188.124) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 4 Aug
- 2023 14:24:35 +0800
-Message-ID: <64CC99A3.5030701@hisilicon.com>
-Date: Fri, 4 Aug 2023 14:24:35 +0800
+ 2023 14:30:57 +0800
+Message-ID: <64CC9B21.70907@hisilicon.com>
+Date: Fri, 4 Aug 2023 14:30:57 +0800
 From: Wei Xu <xuwei5@hisilicon.com>
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
@@ -35,13 +35,13 @@ CC: <linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>,
 	<zhangyi.ac@huawei.com>, <tangkunshan@huawei.com>, <daniel.shen@huawei.com>,
 	<huangdaode@huawei.com>, <liguozhu@hisilicon.com>,
 	<Jonathan.Cameron@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, David Yang <mmyangfl@gmail.com>
-Subject: [GIT,PULL] arm64: dts: hisilicon dts updates for v6.6
+	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>, Rob Herring
+	<robh@kernel.org>
+Subject: [GIT,PULL] arm: dts: hisilicon dts updates for v6.6
 Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.67.103.39]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemi500011.china.huawei.com (7.221.188.124)
 X-CFilter-Loop: Reflected
 
@@ -61,28 +61,21 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-  https://github.com/hisilicon/linux-hisi.git tags/hisi-arm64-dt-for-6.6
+  https://github.com/hisilicon/linux-hisi.git tags/hisi-arm32-dt-for-6.6
 
-for you to fetch changes up to dc8cbdd9c68d1e840aec926bee714c38f5e315a5:
+for you to fetch changes up to e0d64db2a8c298990f3c1436b3ffd45e73c6dcb1:
 
-  arm64: dts: hi3798cv200: Fix clocks order of sd0 (2023-08-03 12:37:20 +0000)
-
-----------------------------------------------------------------
-ARM64: DT: HiSilicon ARM64 DT updates for v6.6
-
-- Miscellaneous fixes according the DTS coding style
-- Correct the clocks order of the sd0 for the hi3798cv200
+  ARM: dts: hisilicon: Fix "status" values (2023-07-19 06:18:24 +0000)
 
 ----------------------------------------------------------------
-David Yang (1):
-      arm64: dts: hi3798cv200: Fix clocks order of sd0
+ARM: DT: HiSilicon ARM32 DT updates for v6.6
 
-Krzysztof Kozlowski (2):
-      arm64: dts: hisilicon: minor whitespace cleanup around '='
-      arm64: dts: hisilicon: add missing space before {
+- Fix "status" values
 
- arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi |  4 ++--
- arch/arm64/boot/dts/hisilicon/hi6220.dtsi      | 24 ++++++++++++------------
- arch/arm64/boot/dts/hisilicon/hip06.dtsi       |  8 ++++----
- arch/arm64/boot/dts/hisilicon/hip07.dtsi       |  8 ++++----
- 4 files changed, 22 insertions(+), 22 deletions(-)
+----------------------------------------------------------------
+Rob Herring (1):
+      ARM: dts: hisilicon: Fix "status" values
+
+ arch/arm/boot/dts/hisilicon/hi3519.dtsi | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
