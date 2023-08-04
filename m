@@ -1,80 +1,99 @@
-Return-Path: <SRS0=P5IO=DV=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=DfUx=DV=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55675C00528
-	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 12:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A5BC04A94
+	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 13:16:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3BCB6C433CA; Fri,  4 Aug 2023 12:32:37 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 2BA52C433C7;
-	Fri,  4 Aug 2023 12:32:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2BA52C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D2CE1007;
-	Fri,  4 Aug 2023 05:33:17 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 38EA63F5A1;
-	Fri,  4 Aug 2023 05:32:33 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.6
-Date: Fri,  4 Aug 2023 13:32:31 +0100
-Message-ID: <20230804123231.3258141-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.41.0
+	id 8E29BC433CB; Fri,  4 Aug 2023 13:16:08 +0000 (UTC)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8375FC433C8
+	for <soc@kernel.org>; Fri,  4 Aug 2023 13:16:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8375FC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b9cbaee7a9so34126701fa.0
+        for <soc@kernel.org>; Fri, 04 Aug 2023 06:16:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691154965; x=1691759765;
+        h=content-transfer-encoding:organization:content-language:cc:to
+         :reply-to:subject:from:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BqwP0XPoCGxv1DyF+/pXW97MbtedeRPSq5uwRhfwuyA=;
+        b=DPOlCivjwpo+wG0cRO+q5wXSanDAa8/WFp+I4t3iZr5lqzwLrt5g+1ofeHfS0RhyFl
+         zceTXXe7Nozk8pSRtyytLs6oJkdJovaYHEXsa2+KYBeHlz8tD38PYur2jd0UHQ+JvLw1
+         xebk8fScggz7RpdAYlR5lLFKix/oK8QM9rTo5VqjOjmbovcqLEAcIFvil46Eks54BInd
+         EUaADo7dK96I/JTTMRL1Eb7MYyG5fPdd0tLjrGTag5n1X5r6c6J1hyHmeABkvWpcGwu9
+         sn+WCQTzL3lgvlp6hYdWJ6Yezkiv4T3L6o8yB1kI9kxQ+113K9EPWPTuWnuek8aZSS06
+         SENQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691154965; x=1691759765;
+        h=content-transfer-encoding:organization:content-language:cc:to
+         :reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BqwP0XPoCGxv1DyF+/pXW97MbtedeRPSq5uwRhfwuyA=;
+        b=KW2Sv5ZARmKG2hz6jO6z3WA1MijpbdihEC+auA7nuz3atzCnIIyp97g8elYpYvt3JJ
+         9edI2+qpNBBtXAWFYzebhpAIB0J3gLAfziqTbgM2ZZI0NPpvyKRd5B4P09tbOSaWEL9s
+         h1ycnFdGzxbCArJIig0K4nyANgHAhz6dIxbK3fAPTqHL7BhcSW8/jLCRFHSEqZpygufu
+         5FaclRaMvJt9xQdZWwNScspQIqteqG24gHITCoFgCH6QXMLRkIV5VS5M+E02KZZRYFIk
+         gUQyCCfFp+9MAtydo4X+hLANDTGnNZ2O7P8ZZyeJyYeLiiOjvyC0whQfE1JoAqdHqm94
+         D2UQ==
+X-Gm-Message-State: AOJu0Yy7YgvlCYyQRFDc0fb8PHjudyvcIu2kKbiFUx3HWHkjL4GHv2Ix
+	ZozY+QxE8CXixmbSJxfb4e/bafd7LMZNnImkhE2pAQ==
+X-Google-Smtp-Source: AGHT+IHPND3VJLO1sWp/nInpN8wScTigvcoXLwR2LA+1uQD5hq06OqA/ChaVNWrWXsVlsFDvCaW/GQ==
+X-Received: by 2002:a2e:998c:0:b0:2b7:2ea:33c3 with SMTP id w12-20020a2e998c000000b002b702ea33c3mr1804912lji.22.1691154965276;
+        Fri, 04 Aug 2023 06:16:05 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:62a2:ed99:fec9:25cc? ([2a01:e0a:982:cbb0:62a2:ed99:fec9:25cc])
+        by smtp.gmail.com with ESMTPSA id l22-20020a7bc456000000b003fc06169ab3sm6671279wmi.20.2023.08.04.06.16.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Aug 2023 06:16:04 -0700 (PDT)
+Message-ID: <bbdfc9d4-6e02-a1aa-7871-b24f9da3419b@linaro.org>
+Date: Fri, 4 Aug 2023 15:16:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM updates for v6.6
+Reply-To: neil.armstrong@linaro.org
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Organization: Linaro Developer Services
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi ARM SoC Team,
+Hi,
 
-Please pull !
+Here's an Amlogic ARM change for v6.6, Drop unused DT includes in mach-meson.
 
-Regards,
-Sudeep
-
--->8
+Neil
 
 The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.6
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm-mach-for-v6.6
 
-for you to fetch changes up to 31c7c1397a33d4c7ad1e06aa6ea9fc6148554b29:
+for you to fetch changes up to b5bd2ccac2d5b2830c1d59e759e5e35e50639b99:
 
-  firmware: arm_scmi: Add v3.2 perf level indexing mode support (2023-08-04 12:17:19 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.6
-
-The main addition this time is the support for SCMI v3.2 perf level
-indexing mode. SCMI v3.2 adds support for hardware which works on
-performance indices, instead of levels. Certain platforms use indices
-to identify performance levels. Level Indexing Mode is used to describe
-such platform behavior. All commands which utilize performance level
-as a parameter need to specify the corresponding level index instead of
-the performance level when Level Indexing Mode is used.
-
-While at it, these changes also include hardening of all the internal
-accesses to the performance domain information.
+   ARM: meson: Drop unused includes (2023-07-31 11:58:18 +0200)
 
 ----------------------------------------------------------------
-Cristian Marussi (2):
-      firmware: arm_scmi: Harden perf domain info access
-      firmware: arm_scmi: Add v3.2 perf level indexing mode support
+Amlogic ARM mach-meson changes for v6.6:
+- Drop unused DT includes in mach-meson
 
- drivers/firmware/arm_scmi/perf.c | 430 +++++++++++++++++++++++++++++++--------
- 1 file changed, 348 insertions(+), 82 deletions(-)
+----------------------------------------------------------------
+Rob Herring (1):
+       ARM: meson: Drop unused includes
+
+  arch/arm/mach-meson/meson.c | 1 -
+  1 file changed, 1 deletion(-)
+
