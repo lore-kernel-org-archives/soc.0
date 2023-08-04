@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DBE7C001DB
-	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 11:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84CD8C001DF
+	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 11:30:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2C084C433C7; Fri,  4 Aug 2023 11:22:38 +0000 (UTC)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	id 3D88AC433C9; Fri,  4 Aug 2023 11:30:29 +0000 (UTC)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3E06DC433C8
-	for <soc@kernel.org>; Fri,  4 Aug 2023 11:22:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E06DC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 11C92C433C7
+	for <soc@kernel.org>; Fri,  4 Aug 2023 11:30:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 11C92C433C7
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3fe426b86a8so11898995e9.3
-        for <soc@kernel.org>; Fri, 04 Aug 2023 04:22:35 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3177163aa97so1721473f8f.0
+        for <soc@kernel.org>; Fri, 04 Aug 2023 04:30:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1691148153; x=1691752953;
+        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1691148624; x=1691753424;
         h=content-transfer-encoding:subject:from:cc:to:content-language
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vt9MIkmpgHbpgvEyNBt/LpTCD7wlcJKGef4PNrlE7n8=;
-        b=r3wfZayTHBPavG2GgRFvIYLhNwsgAFRVRFO4BBMjdU4ysRuiE2Xo40fye4adBytESC
-         4VSK41CUpgQqS/APM5JVENaGikHQRKAZNkpfyHn2lCIJdbO0EJ/bMcgVgt0Hc1MG5Scl
-         CO0RIePGgpYTSQfAefrMRyWT0gmT/ccNU47bhi8vj31XulODXeW+Cdz2ib/UPWsPO80K
-         FEjiysMv6t7I5u6P3UlIVqKBg89Xvf5BCZ1fXy/FdekrcoJCeacUl11Gn/sK1qJlr/m4
-         54KkYoQH0Z/zNU//yUXBlTm6JbsxqOw6I0Y4LUOMLIPrBXqa5fwVI1ZPjGWeycM7VUXh
-         Ywkw==
+        bh=BYXVbXx7ztoLwFgFiFC7F0f1verzCs/lA0nQFmDbtak=;
+        b=b94+1RsofV1BzNaU2GokLWJa6Vwbx7WOmviSEzMH4Vhq7bEJyz241N5tgv+jpqd3T6
+         bXpFjcczsxrvutqbdSj0ZpxXmBemfNhy12f/IzrTzh/NqhK41/KYnue5wCr0LF6E0mOx
+         MxD/goWZdXQUtlCN0lagXvj0mUXEZO7mqcMLoyfXRqsmlWEZIcslwD7JnghgYVTOwBWm
+         VdzV4dXr7uZLukDYbZdOk2fxZw11g5oF8Z71eU3HnLRXkWkGrXJGIES9MCkgQpRsV/c2
+         6TejjwlgJVPH0rO9PIf7Lmejx2OvCP+r/0MV6mCLAeZNAZREQycSCgb58Wod28Awq/hr
+         0SoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691148153; x=1691752953;
+        d=1e100.net; s=20221208; t=1691148624; x=1691753424;
         h=content-transfer-encoding:subject:from:cc:to:content-language
          :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Vt9MIkmpgHbpgvEyNBt/LpTCD7wlcJKGef4PNrlE7n8=;
-        b=I6wvG90rWNR46qtN4z7/Pr7J69/Fi/Vb2fFSAaGIlCR4hIxd0yYMSLBKNgTeAbGVXT
-         KfNo1kwdg5ARWiM6xsw3SDYly/lEv7lgqMAxewtD++6ILP6HnJi6Xrps7BhboxLwRN9M
-         kqX9+XOQAQMO2PUbwbOIsTteoF5vdI4CzMc2vOXs66+29VdY3y+O6NyU3HWFwgeR2kPq
-         JfOXs3agi5FspaT7deZtugskIM6ljZZ7eTrxeFdeBurw7wg8jaGXa6+JjKyetfnfnFC0
-         tQ/cGUuXMAlENBEb531+7N+G7hHVM0byYpbiQ/V/BcIpo5YaX4RnliBf7TmwKAQIH3O5
-         agtg==
-X-Gm-Message-State: AOJu0YzvideL4xhwvNkcgPgvZPUgBFLs2vKv/Ynb39yk9dg0H/Dz3UaU
-	7ExcM+baLMR3ujhNnvI7jeA1uoASLPxs997HqPU=
-X-Google-Smtp-Source: AGHT+IEkhqewa85nBqXaKPLcbwFtDonZKi/qRmcWRDl1cYbR4gYd5UCCKEZAxBU49wWJe6oS57T8eQ==
-X-Received: by 2002:a05:600c:291:b0:3fe:22fd:1b23 with SMTP id 17-20020a05600c029100b003fe22fd1b23mr1363353wmk.34.1691148153391;
-        Fri, 04 Aug 2023 04:22:33 -0700 (PDT)
+        bh=BYXVbXx7ztoLwFgFiFC7F0f1verzCs/lA0nQFmDbtak=;
+        b=AaQUr8l4FA4XjN4HHBhe+pbX4dbTZ7S2YIbYPc7foLVc1ZzJ7rZ8flBIxT3Q8OUPd6
+         5JtXLo1eJiYDIg4pdcgC7A9syUOY53DcLRSyVLz1fRCbJeSt444fT9vqg9sqrqvnYkIr
+         pobmxQjMr/OPFhnWb43HI/pSXb/EAghFOjWjvnEzHsoYAp5p8mksJ+/ixxZCctTSzXn1
+         dozmfqhFApNwKglbX0Y+EzvB+EbmnJUWKy4BV/OXz8spRgiYPGWpsz+eyj+9nDo0zRKZ
+         itra7nG5Q4HS7H3ZmtHkUmpUjtqz1Vym/fHrLlqhYnA1bXMQH8XXSnPvxpXbk/8VKoKC
+         3FwQ==
+X-Gm-Message-State: AOJu0YwqG1hqACAFwssd1c/mxWJIuq9kCYZD3Cbod9bzwMxi5UTX9ep1
+	0kkFC1CETcPE4h7UVulF0K0ONcUH4Hu/5JQAVV8=
+X-Google-Smtp-Source: AGHT+IGCZKo/xe6z9U4rY+mIDwRG4bdt93RlATbLb0o93F9s/S0HwecHq97EMj3St7tT1X4OmShwyQ==
+X-Received: by 2002:adf:dd85:0:b0:313:ded8:f346 with SMTP id x5-20020adfdd85000000b00313ded8f346mr1337705wrl.22.1691148623879;
+        Fri, 04 Aug 2023 04:30:23 -0700 (PDT)
 Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id k14-20020adfd84e000000b003177e9b2e64sm2264600wrl.90.2023.08.04.04.22.32
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d4fca000000b0031751d7d8a6sm2302324wrw.18.2023.08.04.04.30.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Aug 2023 04:22:32 -0700 (PDT)
-Message-ID: <fde6d7b4-c751-219d-3ec5-04e5bad2aa17@monstr.eu>
-Date: Fri, 4 Aug 2023 13:22:32 +0200
+        Fri, 04 Aug 2023 04:30:23 -0700 (PDT)
+Message-ID: <399efa45-df0a-4ec7-e25c-774bb8bf6fb4@monstr.eu>
+Date: Fri, 4 Aug 2023 13:30:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
-Cc: "git (AMD-Xilinx)" <git@amd.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 From: Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v6.6
+Subject: [GIT PULL] arm64: soc: ZynqMP SoC changes for v6.6
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 Hi,
 
-please pull these changes to your tree.
+please pull these 3 patches to your tree.
 
 Thanks,
 Michal
@@ -80,58 +79,33 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-   https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-6.6
+   https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-6.6
 
-for you to fetch changes up to cf0e27cd011775f63001e1e925969106c9464fca:
+for you to fetch changes up to 746db5d0b6d2a4bce0bc972bffd8428c606106cd:
 
-   arm64: zynqmp: Describe interrupts by using macros (2023-07-27 08:29:50 +0200)
-
-----------------------------------------------------------------
-arm64: ZynqMP DT changes for v6.6
-
-- Describe caches
-- Fix i2c gpio recovery description
-- Setting up default i2c frequency
-- Describe GEM TSU clock and assigned rates for SOMs
-- Reserved 1MB for internal firmware usage
-- Fix dwc3 IRQ description
-- Describe interrupts by using macros
+   soc: xilinx: Do not check for 0 return after calling platform_get_irq() 
+(2023-08-04 08:53:21 +0200)
 
 ----------------------------------------------------------------
-Harini Katakam (1):
-       arm64: zynqmp: Assign TSU clock frequency for GEMs
+arm64: ZynqMP SoC changes for 6.6
 
-Manikanta Guntupalli (1):
-       arm64: zynqmp: Fix open drain warning on ZynqMP
+- Cleanup remove callback in event driver
+- Explicitly include correct DT header in power driver
+- Fix logic around irq = 0 in power driver
 
-Michal Simek (2):
-       arm64: zynqmp: Fix dwc3 usb interrupt description
-       arm64: zynqmp: Describe interrupts by using macros
+----------------------------------------------------------------
+Rob Herring (1):
+       soc: xilinx: Explicitly include correct DT includes
 
-Radhey Shyam Pandey (1):
-       arm64: zynqmp: Add L2 cache nodes
+Ruan Jinjie (1):
+       soc: xilinx: Do not check for 0 return after calling platform_get_irq()
 
-Sharath Kumar Dasari (1):
-       arm64: zynqmp: Add memory reserved node for k26 Kria SOM board
+Uwe Kleine-König (1):
+       driver: soc: xilinx: Convert to platform remove callback returning void
 
-Varalaxmi Bingi (1):
-       arm64: zynqmp: Setting default i2c clock frequency to 400kHz
-
-  arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi         |   4 +
-  arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso   |   5 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso   |   5 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts      |  15 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts |   4 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts |   4 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts |   8 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts      |   4 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      |   8 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      |   4 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      |   4 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      |   8 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      |   8 +-
-  arch/arm64/boot/dts/xilinx/zynqmp.dtsi                 | 201 ++++++++++++--------
-  14 files changed, 173 insertions(+), 109 deletions(-)
+  drivers/soc/xilinx/xlnx_event_manager.c | 6 ++----
+  drivers/soc/xilinx/zynqmp_power.c       | 5 +++--
+  2 files changed, 5 insertions(+), 6 deletions(-)
 
 -- 
 Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
