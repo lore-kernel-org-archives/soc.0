@@ -1,141 +1,80 @@
-Return-Path: <zenghui.yu@linux.dev>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01971C0015E
-	for <soc@archiver.kernel.org>; Sun,  6 Aug 2023 15:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D334C001DF
+	for <soc@archiver.kernel.org>; Sun,  6 Aug 2023 18:05:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ACC41C433C8; Sun,  6 Aug 2023 15:10:11 +0000 (UTC)
-Received: from out-113.mta0.migadu.com (out-113.mta0.migadu.com [91.218.175.113])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2C728C433CB
-	for <soc@kernel.org>; Sun,  6 Aug 2023 15:10:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2C728C433CB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <b8512626-2174-ff08-5b6d-4256d9e59093@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1691334606;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F1RkAidIwdKp4fDPLFkoMthHjebqwooDc7ZtuGTIlE8=;
-	b=xpnUy8p2tN3i9v9Z9V50+sI3vgEZPIN2wAC7f+x7DZ1OGiRN2RnpZa+Silwo7yUhitX/iY
-	++U1iHIYwlgMWWzPPecnj0lB7c/RG0rBVG0NkipMDcxjNNXBYpkwrtjvMojf6dT+S/MHdp
-	EGvwTL0DIOFWva3OxcYeB+PcsJfx0jM=
-Date: Sun, 6 Aug 2023 23:09:36 +0800
-MIME-Version: 1.0
-Subject: Re: [PATCH v6 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Content-Language: en-US
-To: Huisong Li <lihuisong@huawei.com>, xuwei5@hisilicon.com, arnd@arndb.de,
- krzk@kernel.org, sudeep.holla@arm.com, rdunlap@infradead.org
+	id C9064C433CA; Sun,  6 Aug 2023 18:05:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E7BC433C7;
+	Sun,  6 Aug 2023 18:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691345150;
+	bh=qIxqAICGpKfnAqV7j1VEaT95XeAMT+WWsugf9Men4Dc=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=bCTTek7nQC8ZID9Csgc7mR6HTMynXFXr83U3zmPs2klCgagM2xFvevBNIzB/WWHJD
+	 RjmpLvoPZkhU3z0cW10hCsjnA3HHcuOc90ENNJcdJWc7+7tDSJqT5HeTMITMWY9hKL
+	 AYKlskQG6X6VbuHWBY4PX8MY7Kgh9L3BZEbnbg27hyKHIl3xNndons05j4GV3g9K3g
+	 srLLQM39DJw6jW9gSQ/phsB+Hu+q8mKN+3D06gk1mboOZFiG/GQDjI04LkJYH+1aQR
+	 qpSa82ue5+ZmbeQmshNRANmhUrFeoPrYI0dVziNJNmzPhRxwvslzQhonHDWrhQ1cza
+	 IGrLkACq7vg/g==
+Date: Sun, 6 Aug 2023 20:05:46 +0200
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, wanghuiqiang@huawei.com,
- tanxiaofei@huawei.com, liuyonglong@huawei.com
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230801024119.37215-1-lihuisong@huawei.com>
- <20230801024119.37215-2-lihuisong@huawei.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <20230801024119.37215-2-lihuisong@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner device tree changes for 6.6
+Message-ID: <20230806180546.GA127039@jernej-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A few trivial comments inline.
+Hi!
 
-On 2023/8/1 10:41, Huisong Li wrote:
-> The Huawei Cache Coherence System (HCCS) is a multi-chip interconnection
-> bus protocol. The performance of the application may be affected if some
-> HCCS ports on platform are not in full lane status, have a large number
-> of CRC errors and so on.
-> 
-> This driver provides the query interface of the health status and
-> port information of HCCS on Kunpeng SoC.
-> 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+Please pull following DT changes for 6.6.
 
-[...]
+Best regards,
+Jernej
 
-> +static int hccs_query_all_port_info_on_platform(struct hccs_dev *hdev)
-> +{
-> +
-> +	struct device *dev = hdev->dev;
-> +	struct hccs_chip_info *chip;
-> +	struct hccs_die_info *die;
-> +	u8 i, j;
-> +	int ret;
-> +
-> +	for (i = 0; i < hdev->chip_num; i++) {
-> +		chip = &hdev->chips[i];
-> +		for (j = 0; j < chip->die_num; j++) {
-> +			die = &chip->dies[j];
-> +			if (!die->port_num)
-> +				continue;
-> +
-> +			die->ports = devm_kzalloc(dev,
-> +				die->port_num * sizeof(struct hccs_port_info),
-> +				GFP_KERNEL);
-> +			if (!die->ports) {
-> +				dev_err(dev, "allocate ports memory on chip%u/die%u failed.\n",
-> +					i, die->die_id);
-> +				return -ENOMEM;
-> +			}
-> +
-> +			ret = hccs_get_all_port_info_on_die(hdev, die);
-> +			if (ret) {
-> +				dev_err(dev, "get die(%u) info on chip%u failed, ret = %d.\n",
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-"get *port* info failed"?
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-> +static int hccs_get_die_all_link_status(struct hccs_dev *hdev,
-> +					const struct hccs_die_info *die,
-> +					u8 *all_linked)
-> +{
-> +	struct hccs_die_comm_req_param *req_param;
-> +	struct hccs_desc desc;
-> +	int ret;
-> +
-> +	if (die->port_num == 0) {
-> +		*all_linked = 1;
-> +		return 0;
-> +	}
-> +
-> +	hccs_init_req_desc(&desc);
-> +	req_param = (struct hccs_die_comm_req_param *)desc.req.data;
-> +	req_param->chip_id = die->chip->chip_id;
-> +	req_param->die_id = die->die_id;
-> +	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_PORTS_LANE_STA, &desc);
+are available in the Git repository at:
 
-Typo? Looks like we intend to send a HCCS_GET_DIE_PORTS_LINK_STA
-command.
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.6-1
 
-> +/*
-> + * This value cannot be 255, otherwise the loop of the multi-BD communication
-> + * case cannot end.
-> + */
-> +#define HCCS_DIE_MAX_PORT_ID	254
+for you to fetch changes up to 0801a3a9f35854c91f1f3ab8e879c3d14912d214:
 
-This looks weird. Isn't the "max port id" depends on your HW
-implementation?
+  arm: dts: Enable device-tree overlay support for sun8i-h3 pi devices (2023-08-06 13:56:55 +0200)
 
-> +#define hccs_get_field(origin, mask, shift) \
-> +	(((origin) & (mask)) >> (shift))
-> +#define hccs_get_bit(origin, shift) \
-> +	hccs_get_field((origin), (0x1UL << (shift)), (shift))
+----------------------------------------------------------------
+- Add D1 GPADC node
+- Introduce support for OrangePi Zero 3 SBC
+- Enable DT overlay support for Allwinner H3 boards
 
-Unused macroes.
+----------------------------------------------------------------
+Andre Przywara (3):
+      arm64: dts: allwinner: h616: Split Orange Pi Zero 2 DT
+      dt-bindings: arm: sunxi: document Orange Pi Zero 3 board name
+      arm64: dts: allwinner: h616: Add OrangePi Zero 3 board support
 
-P.S., I'd personally prefer splitting this patch in 2 to ease other
-reviewer's work:
+Felix Moessbauer (1):
+      arm: dts: Enable device-tree overlay support for sun8i-h3 pi devices
 
-- deal with the HCCS HW (chip/die/port) probing
-- focus on the sysfs/query things
+Maksim Kiselev (1):
+      riscv: dts: allwinner: d1: Add GPADC node
 
-Zenghui
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |   5 +
+ arch/arm/boot/dts/allwinner/Makefile               |  19 +++
+ arch/arm64/boot/dts/allwinner/Makefile             |   1 +
+ .../dts/allwinner/sun50i-h616-orangepi-zero.dtsi   | 134 +++++++++++++++++++++
+ .../dts/allwinner/sun50i-h616-orangepi-zero2.dts   | 119 +-----------------
+ .../dts/allwinner/sun50i-h618-orangepi-zero3.dts   |  94 +++++++++++++++
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |  10 ++
+ 7 files changed, 264 insertions(+), 118 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero.dtsi
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero3.dts
