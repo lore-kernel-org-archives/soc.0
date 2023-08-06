@@ -1,73 +1,117 @@
-Return-Path: <SRS0=+SEu=DV=robh_at_kernel.org=rob@kernel.org>
+Return-Path: <jszhang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D3FC00528
-	for <soc@archiver.kernel.org>; Fri,  4 Aug 2023 23:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEAE9C001DE
+	for <soc@archiver.kernel.org>; Sun,  6 Aug 2023 09:37:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EED51C433C9; Fri,  4 Aug 2023 23:04:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C0DC433C7;
-	Fri,  4 Aug 2023 23:04:34 +0000 (UTC)
+	id 60522C433D9; Sun,  6 Aug 2023 09:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07DBFC433C7;
+	Sun,  6 Aug 2023 09:37:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691190275;
-	bh=10xI+HjYOYbP7/HZy6qa0eDd3rO5r9dGZDks2kyrxE0=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=B0EVsNRZtz+8yQpyUje12rZJUflCilAdoN3VAcgm7gvsr46t1+FysJed1KvgGN4S3
-	 U9JbN0rSyaC331hEW1wNF4aeDcMz6GZ8uXvBL/qgIb5kETy8g/UmESoKFOvxmKkwos
-	 SOrCuQcjeeet99Ys6aH0X2VOz0xebTCmQP05wzK7MlGvfMPI9UQZP02F9rW09S7JTE
-	 8t5kOG10C/k/bdIqgikri+7rOfHERunKv3EF/uNm2VDB1kEOJxup63feEQFg15ZTjS
-	 M96Qb00ltglGDfRcX/1MGci7YlxxTOyhyFl6xYxLsM5rCHT4BqTPO8sMEN44/DCgcd
-	 vTFczCfLaxeZw==
-Received: (nullmailer pid 23766 invoked by uid 1000);
-	Fri, 04 Aug 2023 23:04:33 -0000
-From: Rob Herring <robh@kernel.org>
+	s=k20201202; t=1691314678;
+	bh=eVpmHvQ+el5oYnGHhCSpJ5MEq+qn7dtrQFEijdKMa8E=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=hVSQsnl40hPx5Hzzj5zBBPn+ff8r3wDMB4k07G0sRzVhqsLlZsELCofYkyX1vHEH9
+	 03ftiNg9xoj/PdueOZCPd4+FYwDyorhR9keodEEfyj9p9KA4/h9hFsiKMDTw1wM7lf
+	 //8t24an4y9cxraswJL0vsj9Y8Zk5jSE5vPvdgX9dinzZrLvJvcZVXFm6si+6Nq2rF
+	 1Tt8WY1cesvzjLLo4dNhnZQZE5teSMdzrfqdtaOHt49D6vcGVyzszm2dZZYrfboNVH
+	 m6uPs5ND889+AtHQvdUCRX8b03lZtROnjo0oDt7LRhtMcC0TWq4ZFRWob1DxWot5kb
+	 F1CL31Cx36ztg==
+Date: Sun, 6 Aug 2023 17:26:09 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Alexandre Mergnat <amergnat@baylibre.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: [RESEND PATCH] arm64: dts: mediatek: Fix "status" values
-Date: Fri,  4 Aug 2023 16:58:13 -0600
-Message-Id: <20230804225813.12493-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
+Cc: soc@kernel.org, Patrice Chotard <patrice.chotard@foss.st.com>,
+	Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+	Antoine Tenart <atenart@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Jean-Marie Verdun <verdun@hpe.com>,
+	Nick Hawkins <nick.hawkins@hpe.com>,
+	Lubomir Rintel <lkundrak@v3.sk>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Heiko Stuebner <heiko@sntech.de>, Liviu Dudau <liviu.dudau@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Has him <shiraz.linux.kernel@gmail.com>,
+	Stuart Yoder <stuyoder@gmail.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+	Jay Fang <f.fangjian@huawei.com>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Michal Simek <michal.simek@amd.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Ulf Hansson <ulf.hansson@linaro.org>, Li Yang <leoyang.li@nxp.com>,
+	Qiang Zhao <qiang.zhao@nxp.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org, linux-rockchip@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/23] ARM: berlin: Drop unused includes
+Message-ID: <ZM9nMTHTFEY8JcC/@xhacker>
+References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org>
+ <20230803-dt-header-cleanups-for-soc-v2-4-d8de2cc88bff@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-4-d8de2cc88bff@kernel.org>
 
-The defined value for "status" is "disabled", not "disable".
+On Thu, Aug 03, 2023 at 04:42:44PM -0600, Rob Herring wrote:
+> Several includes are not needed, so drop them.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-Arnd, Please take this directly I guess. I think Mediatek maintainership 
-needs some help. Maybe AngeloGioacchino should be co-maintainer as 
-that's the only response I seem to be getting.
+Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
 
-I think for future .dts patches I will not bother splitting them up by
-sub-arch because it's a pain to chase down the maintainers to apply
-stuff in a timely manner. /rant
+Thanks!
 
- arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-index e4605d23fdc8..86cedb0bf1a9 100644
---- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-@@ -585,11 +585,11 @@ &pwrap {
- };
- 
- &sata {
--	status = "disable";
-+	status = "disabled";
- };
- 
- &sata_phy {
--	status = "disable";
-+	status = "disabled";
- };
- 
- &spi0 {
--- 
-2.40.1
-
+PS: what would be the better merge path? Arnd take it directly with each
+sub-maintainers' ack or something else?
+> ---
+>  arch/arm/mach-berlin/berlin.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/arch/arm/mach-berlin/berlin.c b/arch/arm/mach-berlin/berlin.c
+> index 2424ad40190c..13d5c899f09e 100644
+> --- a/arch/arm/mach-berlin/berlin.c
+> +++ b/arch/arm/mach-berlin/berlin.c
+> @@ -8,11 +8,6 @@
+>   *  (c) Marvell International Ltd.
+>   */
+>  
+> -#include <linux/init.h>
+> -#include <linux/io.h>
+> -#include <linux/kernel.h>
+> -#include <linux/of_platform.h>
+> -#include <asm/hardware/cache-l2x0.h>
+>  #include <asm/mach/arch.h>
+>  
+>  static const char * const berlin_dt_compat[] = {
+> 
+> -- 
+> 2.40.1
+> 
