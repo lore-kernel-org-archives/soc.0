@@ -1,167 +1,124 @@
-Return-Path: <SRS0=JvIS=DY=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=XTBZ=DY=prexma.co=robert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5941C001DE
-	for <soc@archiver.kernel.org>; Mon,  7 Aug 2023 01:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 135B4C001DE
+	for <soc@archiver.kernel.org>; Mon,  7 Aug 2023 04:43:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B772C433C9; Mon,  7 Aug 2023 01:41:20 +0000 (UTC)
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id CA661C433C9; Mon,  7 Aug 2023 04:43:09 +0000 (UTC)
+Received: from srv.prexma.co (srv.prexma.co [162.0.231.230])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DB65EC433C7;
-	Mon,  7 Aug 2023 01:41:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB65EC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.55])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RJzXH5b8Rz1KCJn;
-	Mon,  7 Aug 2023 09:39:59 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 7 Aug 2023 09:41:07 +0800
-Message-ID: <d6bd6abd-4330-a753-ad11-e5a78a826bb4@huawei.com>
-Date: Mon, 7 Aug 2023 09:41:06 +0800
+	by smtp.kernel.org (Postfix) with ESMTPS id 73949C433C7
+	for <soc@kernel.org>; Mon,  7 Aug 2023 04:43:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73949C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=prexma.co
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=prexma.co
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=prexma.co; s=default;
+	t=1691383386; bh=HDsSQMYQlCZ9i8VItO1akIt/7uo2XIna1TU0Q9BRxLo=;
+	h=Date:Subject:From:To:Reply-To:List-Unsubscribe:From;
+	b=xLRiNWwVqUaWgAIxSNjpJV0qlC+RvkMW0FgLqKL5lTV5o0AtjOTFwLRke9N9cmfIc
+	 vKKw2I4udEMbTN0vsQuzY73e1Rmgc42Fg0yzQq2UQ3A7skRcdXp0FryumlnoPEgsu2
+	 QAwkOfABQnOiwUGRauUJWDw3eKwOukoslE7Y8Qs5qM5yHRVusB4y/kuwaH2Yqs4b/5
+	 PAvRq0MRN3CsPVigbI467/2o25lvV4WZnwNWsn0sDxki5a+CKW692NyH7MsF77Tl2x
+	 JNzSOWaBdpB3KdRr2gXvwsy4IFwn1ce4Pk7kpm+GZb21BlXdxhwIoPWhgwvzW8CP2l
+	 ytQ7jE7JcqiNg==
+Received: from [172.31.9.72] (ec2-34-208-247-100.us-west-2.compute.amazonaws.com [34.208.247.100])
+	(Authenticated sender: contact@prexma.co)
+	by mail.prexma.co (Postfix) with ESMTPSA id 3B735B9682
+	for <soc@kernel.org>; Mon,  7 Aug 2023 04:43:06 +0000 (UTC)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v6 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Zenghui Yu <zenghui.yu@linux.dev>, <xuwei5@hisilicon.com>,
-	<arnd@arndb.de>, <krzk@kernel.org>, <sudeep.holla@arm.com>,
-	<rdunlap@infradead.org>
+Date: Mon, 07 Aug 2023 04:43:06 +0000
+Message-ID: <b8afe267f03b4d39a0202654937bacc8_CAF39_WJKnfakLOuKUuCX7xUy+6wXqptdTycGZ93nKWS-rUjuBg@mail.gmail.com>
+Subject: Earn Money Using the Power of Social Media - Explore Lucrative Job
+ Opportunities!
+From: Robert <robert@prexma.co>
+Content-Type: multipart/alternative; boundary="000000000000b523a00601f90922"
 List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <wanghuiqiang@huawei.com>,
-	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <lihuisong@huawei.com>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230801024119.37215-1-lihuisong@huawei.com>
- <20230801024119.37215-2-lihuisong@huawei.com>
- <b8512626-2174-ff08-5b6d-4256d9e59093@linux.dev>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <b8512626-2174-ff08-5b6d-4256d9e59093@linux.dev>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+To: soc@kernel.org
+Reply-To: info@prexma.co
+List-Unsubscribe: =?utf-8?q?=3Chttp=3A=2F=2Fec2-52-37-229-113=2Eus-west-2=2Ecompute=2Eamazonaws=2Ecom=2Fx=2Fu?=
+ =?utf-8?q?=3Fu=3D7d56a151-379d-43f8-9585-7dc338ac588d&s=3Dh=3E=2C?=
+ <mailto:7d56a151379d43f895857dc338ac588d@unsub.gmss.ly>
 
-Hi Zenghui,
+--000000000000b523a00601f90922
+Content-Type: text/plain; charset=utf-8
 
-Please ignore the previous email and take a look at this.
+Are you looking to make money leveraging the potential of social media? Are 
+you interested in earning an income from home by utilizing your social 
+media skills? This intriguing and innovative way of making money has been 
+garnering a lot of attention online.
 
+Imagine being able to earn income by sharing, liking, and commenting on 
+social media platforms. This is not just a dream, but a reality for many 
+people worldwide. Now, you can discover paying job opportunities related to 
+social media usage.
 
-在 2023/8/6 23:09, Zenghui Yu 写道:
-> A few trivial comments inline.
-Many thanks for reviewing my patch carefully.😁
->
-> On 2023/8/1 10:41, Huisong Li wrote:
->> The Huawei Cache Coherence System (HCCS) is a multi-chip interconnection
->> bus protocol. The performance of the application may be affected if some
->> HCCS ports on platform are not in full lane status, have a large number
->> of CRC errors and so on.
->>
->> This driver provides the query interface of the health status and
->> port information of HCCS on Kunpeng SoC.
->>
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->
-> [...]
->
->> +static int hccs_query_all_port_info_on_platform(struct hccs_dev *hdev)
->> +{
->> +
->> +    struct device *dev = hdev->dev;
->> +    struct hccs_chip_info *chip;
->> +    struct hccs_die_info *die;
->> +    u8 i, j;
->> +    int ret;
->> +
->> +    for (i = 0; i < hdev->chip_num; i++) {
->> +        chip = &hdev->chips[i];
->> +        for (j = 0; j < chip->die_num; j++) {
->> +            die = &chip->dies[j];
->> +            if (!die->port_num)
->> +                continue;
->> +
->> +            die->ports = devm_kzalloc(dev,
->> +                die->port_num * sizeof(struct hccs_port_info),
->> +                GFP_KERNEL);
->> +            if (!die->ports) {
->> +                dev_err(dev, "allocate ports memory on chip%u/die%u 
->> failed.\n",
->> +                    i, die->die_id);
->> +                return -ENOMEM;
->> +            }
->> +
->> +            ret = hccs_get_all_port_info_on_die(hdev, die);
->> +            if (ret) {
->> +                dev_err(dev, "get die(%u) info on chip%u failed, ret 
->> = %d.\n",
->
-> "get *port* info failed"?
-Yes, this is more exact.
-Will be fixed to "get port info on chip%u/die%u failed".
->
->> +static int hccs_get_die_all_link_status(struct hccs_dev *hdev,
->> +                    const struct hccs_die_info *die,
->> +                    u8 *all_linked)
->> +{
->> +    struct hccs_die_comm_req_param *req_param;
->> +    struct hccs_desc desc;
->> +    int ret;
->> +
->> +    if (die->port_num == 0) {
->> +        *all_linked = 1;
->> +        return 0;
->> +    }
->> +
->> +    hccs_init_req_desc(&desc);
->> +    req_param = (struct hccs_die_comm_req_param *)desc.req.data;
->> +    req_param->chip_id = die->chip->chip_id;
->> +    req_param->die_id = die->die_id;
->> +    ret = hccs_pcc_cmd_send(hdev, HCCS_GET_DIE_PORTS_LANE_STA, &desc);
->
-> Typo? Looks like we intend to send a HCCS_GET_DIE_PORTS_LINK_STA
-> command.
-Yes, you are right. It's my fault.
-Appreciate you so much for pointing it out.
-I will also check other commands again.
->
->> +/*
->> + * This value cannot be 255, otherwise the loop of the multi-BD 
->> communication
->> + * case cannot end.
->> + */
->> +#define HCCS_DIE_MAX_PORT_ID    254
->
-> This looks weird. Isn't the "max port id" depends on your HW
-> implementation?
-The "max port id" normally depends on HW implementation.
-And there are no so many numbers of port on one die.
-But HW implementation specification is possiable to change in furture SoC.
-Driver should be compatible with it.
-So "max port id" here comes from the communication interface and way 
-with firmware.
->
->> +#define hccs_get_field(origin, mask, shift) \
->> +    (((origin) & (mask)) >> (shift))
->> +#define hccs_get_bit(origin, shift) \
->> +    hccs_get_field((origin), (0x1UL << (shift)), (shift))
->
-> Unused macroes.
-This macroes were used in previous version.
-Later, the place where it is used was deleted, now it is unused indeed.
-will delete it.
->
-> P.S., I'd personally prefer splitting this patch in 2 to ease other
-> reviewer's work:
->
-> - deal with the HCCS HW (chip/die/port) probing
-> - focus on the sysfs/query things
-Ok, I will split this patch in next version. Thanks.
-> .
-/Huisong
+This site <https://prexma.co/l/somejobs> offers you the chance to find 
+these lucrative work opportunities. On the website, you can explore various 
+roles that involve social media management, marketing, and content 
+creation. You can find freelance gigs or even full-time positions with 
+companies in need of social media experts.
+
+Through this platform, you can discover job openings on different platforms 
+such as Facebook, Instagram, Twitter, and LinkedIn. You can be part of 
+marketing campaigns, manage company social media profiles, and create 
+engaging content to attract followers.
+
+This site <https://prexma.co/l/somejobs> also provides resources and tips 
+to help you enhance your social media skills and thrive in the industry. 
+You can learn how to create compelling content, grow your follower base, 
+and effectively leverage social media channels.
+
+If you are interested in becoming a social media professional and earning 
+money through your social media prowess, it's worth exploring This site 
+<https://prexma.co/l/somejobs>. There, you can find job opportunities that 
+you may not have known existed.
+
+Don't miss out on the opportunity to earn money through the power of social 
+media. Seize the chance and embark on your journey towards becoming a 
+successful social media professional at This site 
+<https://prexma.co/l/somejobs>!
+
+--000000000000b523a00601f90922
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Are you looking to make money leveraging the potentia=
+l of social media? Are you interested in earning an income from home b=
+y utilizing your social media skills? This intriguing and innovative w=
+ay of making money has been garnering a lot of attention online.<br><b=
+r>Imagine being able to earn income by sharing, liking, and commenting=
+ on social media platforms. This is not just a dream, but a reality fo=
+r many people worldwide. Now, you can discover paying job opportunitie=
+s related to social media usage.<br><br><a href=3D"https://prexma.co/l=
+/somejobs" target=3D"_blank">This site</a>=C2=A0offers you the chance =
+to find these lucrative work opportunities. On the website, you can ex=
+plore various roles that involve social media management, marketing, a=
+nd content creation. You can find freelance gigs or even full-time pos=
+itions with companies in need of social media experts.<br><br>Through =
+this platform, you can discover job openings on different platforms su=
+ch as Facebook, Instagram, Twitter, and LinkedIn. You can be part of m=
+arketing campaigns, manage company social media profiles, and create e=
+ngaging content to attract followers.<br><br><a href=3D"https://prexma=
+.co/l/somejobs" target=3D"_blank">This site</a>=C2=A0also provides res=
+ources and tips to help you enhance your social media skills and thriv=
+e in the industry. You can learn how to create compelling content, gro=
+w your follower base, and effectively leverage social media channels.<=
+br><br>If you are interested in becoming a social media professional a=
+nd earning money through your social media prowess, it&#39;s worth exp=
+loring=C2=A0<a href=3D"https://prexma.co/l/somejobs" target=3D"_blank"=
+>This site</a>. There, you can find job opportunities that you may not=
+ have known existed.<br><br>Don&#39;t miss out on the opportunity to e=
+arn money through the power of social media. Seize the chance and emba=
+rk on your journey towards becoming a successful social media professi=
+onal at=C2=A0<a href=3D"https://prexma.co/l/somejobs" target=3D"_blank=
+">This site</a>!<br></div>
+<img src=3D"http://ec2-52-41-167-28.us-west-2.compute.amazonaws.com/z0=
+Th6OAJooO6kUWmP3WzYDRtBi6YolBhedpoY4amnLL0CDLRnqpahoPZVh-9QBufG37XPu3O=
+yNMitJrBsggXIJ9-YayeGy_XlyaarR6V2Sdta5G70kskrfqIjRaaROVADugLRQ9BwE8M5x=
+pMIrk7OYRymNyxeP1Y46ZH-D8pjaIajgmFlGfyRknvrjzkXrEqFQOgFZQ1VHmuWlvIGx">
+--000000000000b523a00601f90922--
