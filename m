@@ -1,120 +1,108 @@
-Return-Path: <SRS0=TIcY=DZ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Ha5J=DZ=pengutronix.de=p.zabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5BD2C001DB
-	for <soc@archiver.kernel.org>; Tue,  8 Aug 2023 14:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2839DC001B0
+	for <soc@archiver.kernel.org>; Tue,  8 Aug 2023 14:59:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A17B7C433CB; Tue,  8 Aug 2023 14:55:26 +0000 (UTC)
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	id 0C958C433C9; Tue,  8 Aug 2023 14:59:57 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C7E99C433C8;
-	Tue,  8 Aug 2023 14:55:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7E99C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 92B0432007F1;
-	Tue,  8 Aug 2023 10:55:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 08 Aug 2023 10:55:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1691506522; x=1691592922; bh=qM
-	9p1VvgDQ68BCFOyyrSFNt07dndXA3zR/iN+rXNXdE=; b=EGvnh+3YW6raxmHExk
-	l+oplb/Rkv4u8bnBVVIcjFu0rID8pDt3FBe2kyXloio02v/T9zaVNJxY2sBnlsK8
-	GFxVzE08v6CIZ9RZ0MUZ8vP/vAztFKNM8pGkWBPTZGQeLuEkvolxOfuVQZGlqy9b
-	WTBQfgJqeofF2qeCRrcXdCmPiuAcc3jcQJbssNnsx8ifl3hlXSLqpkoXiF/PE/Wp
-	/LiSQXnH4YSxWIRLN5HhfgJJijd19hloeFviZklGXKvo4/nxaPUz3rV5d5NFlaTI
-	3i91aP7VkQdDAwDRORO0bBpNCwrV2OZZFiUL/Ph+/QswHuVbXcWEh6Q2Uu863IlJ
-	HNgQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1691506522; x=1691592922; bh=qM9p1VvgDQ68B
-	CFOyyrSFNt07dndXA3zR/iN+rXNXdE=; b=iiAxVSVeGknxHB2f4jAZeQExin81r
-	4FSRXd4RztPI9LtZbwVufhsvY8z34Hw5Cgq9LQEiaU+B9NGk+6u6Z8UVQGjIO+cp
-	YIMpPs6nfMl+NLnIiTnDnwZRihb40DmaA47cg0HJZBBunIlhh0v1tk7cI4ktMhfB
-	zeotgq0FTeTfgnZeT/wwWi7JMKVv62ozjPpftlpmE1aizCi0DXK7V3ZNqi8xXHel
-	WRNbaHePp4CmPNIWkWT7TVCtq+PsSWArSISk/Nwz8d/8tDXyAq/yeUzgKYr2j/Jk
-	RKKwMflAoXoX5/qaxulswaz2c/pXyXKGjz2/l0qQtRrjwM53xed4VPYrg==
-X-ME-Sender: <xms:WFfSZFn8QXJQBZxWujkpLrCDAvk8i7qOs4jyV1N-xjOY16_67vtKFg>
-    <xme:WFfSZA2E0gb7XUYmwJuW4BGgfSzZMpyd3OoA967QQBGTRN4iajSjU_h7NYlxZhryO
-    dtbRANsvnI0bY-76kM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledvgdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:WFfSZLo_ogOFHX6UVKrYjJM2u8mal53AaC42v-l3zX-woAB6nYHNaA>
-    <xmx:WFfSZFmqsaEYE3OM4ZAiuW-lYv4KcxeEgU2YkrdEZibHMa-25xC2Gw>
-    <xmx:WFfSZD1CAeyZjgxeehOdtm1TwIDclaDKbNgPzZdnVWSFucjQnqg6pQ>
-    <xmx:WlfSZBOhyzm43yCApWoWXfPZxu-tKzrSHCK0a3Tgrn40b4obY5epqw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 9C683B60089; Tue,  8 Aug 2023 10:55:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <8e6dce33-980a-4e63-9a8b-b681e3f9bf83@app.fastmail.com>
-In-Reply-To: 
- <CAPDyKFo7p=aEWWrW2OGbhN1tFjHanpqjLApzCMipdPSzE+NknQ@mail.gmail.com>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-3-zhuyinbo@loongson.cn>
- <4fef9725-7aea-43fb-b8ef-d20a4c6d9a68@app.fastmail.com>
- <CAPDyKFo7p=aEWWrW2OGbhN1tFjHanpqjLApzCMipdPSzE+NknQ@mail.gmail.com>
-Date: Tue, 08 Aug 2023 16:55:00 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ulf Hansson" <ulf.hansson@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 88DB0C433C7
+	for <soc@kernel.org>; Tue,  8 Aug 2023 14:59:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88DB0C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1qTOBb-00089J-Ly; Tue, 08 Aug 2023 16:59:51 +0200
+From: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org,
- "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
- "Liu Peibao" <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
- loongarch@lists.linux.dev, "Liu Yun" <liuyun@loongson.cn>
-Subject: Re: [PATCH v6 2/2] soc: loongson2_pm: add power management support
-Content-Type: text/plain
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller updates for v6.6
+Date: Tue,  8 Aug 2023 16:59:50 +0200
+Message-Id: <20230808145950.3057250-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-On Tue, Aug 8, 2023, at 16:42, Ulf Hansson wrote:
-> On Thu, 3 Aug 2023 at 09:03, Arnd Bergmann <arnd@arndb.de> wrote:
->>
->> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
->> > The Loongson-2's power management controller was ACPI, supports ACPI
->> > S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
->> > Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
->> > (USB, GMAC, PWRBTN, etc.). This driver was to add power management
->> > controller support that base on dts for Loongson-2 series SoCs.
->> >
->> > Co-developed-by: Liu Yun <liuyun@loongson.cn>
->> > Signed-off-by: Liu Yun <liuyun@loongson.cn>
->> > Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
->> > Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->> > Cc: soc@kernel.org
->> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
->> > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>
->> I'm still waiting for Ulf to take a look here to see whether
->> this should be in drivers/genpd instead, but he might still
->> be on vacation.
->
-> I don't think this belongs in drivers/genpd/ as it's not a genpd
-> provider. Besides that, no further comments from me at this point.
+Dear arm-soc maintainers,
 
-Ok, thanks!
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-Let's try to finish discussing the suspend-address question
-and merge it through the soc tree once that is resolved then.
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-     Arnd
+are available in the Git repository at:
+
+  git://git.pengutronix.de/pza/linux.git tags/reset-for-v6.6
+
+for you to fetch changes up to 417a3a5ae44a14b4eeb3df514b2c006b19771f82:
+
+  reset: ti: syscon: remove unneeded call to platform_set_drvdata() (2023-08-08 15:31:00 +0200)
+
+----------------------------------------------------------------
+Reset controller updates for v6.6
+
+Clean up DT includes and remove unneeded platform_set_drvdata() calls
+across reset drivers, add support for the Versal NET platform to the
+zynqmp driver, and let the hisilicon driver use dev_err_probe().
+
+----------------------------------------------------------------
+Andrei Coardos (10):
+      reset: ath79: remove unneeded call to platform_set_drvdata()
+      reset: bcm6345: remove unneeded call to platform_set_drvdata()
+      reset: lantiq: remove unneeded call to platform_set_drvdata()
+      reset: lpc18xx: remove unneeded call to platform_set_drvdata()
+      reset: meson: remove unneeded call to platform_set_drvdata()
+      reset: npcm: remove unneeded call to platform_set_drvdata()
+      reset: uniphier-glue: remove unneeded call to platform_set_drvdata()
+      reset: zynq: remove unneeded call to platfrom_set_drvdata()
+      reset: zynqmp: removed unneeded call to platform_set_drvdata()
+      reset: ti: syscon: remove unneeded call to platform_set_drvdata()
+
+Piyush Mehta (2):
+      dt-bindings: reset: Updated binding for Versal-NET reset driver
+      reset: reset-zynqmp: add support for Versal NET platform
+
+Rob Herring (1):
+      reset: Explicitly include correct DT includes
+
+Wang Ming (1):
+      reset: hisilicon: Use dev_err_probe instead of dev_err
+
+ Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml |  1 +
+ drivers/reset/hisilicon/hi6220_reset.c                         |  1 -
+ drivers/reset/hisilicon/reset-hi3660.c                         |  6 +++---
+ drivers/reset/reset-ath79.c                                    |  2 --
+ drivers/reset/reset-bcm6345.c                                  |  2 --
+ drivers/reset/reset-imx7.c                                     |  2 +-
+ drivers/reset/reset-intel-gw.c                                 |  2 +-
+ drivers/reset/reset-k210.c                                     |  1 -
+ drivers/reset/reset-lantiq.c                                   |  1 -
+ drivers/reset/reset-lpc18xx.c                                  |  2 --
+ drivers/reset/reset-meson-audio-arb.c                          |  3 ++-
+ drivers/reset/reset-meson.c                                    |  3 ---
+ drivers/reset/reset-microchip-sparx5.c                         |  3 ++-
+ drivers/reset/reset-mpfs.c                                     |  1 +
+ drivers/reset/reset-npcm.c                                     |  2 --
+ drivers/reset/reset-qcom-aoss.c                                |  2 +-
+ drivers/reset/reset-qcom-pdc.c                                 |  2 +-
+ drivers/reset/reset-simple.c                                   |  1 -
+ drivers/reset/reset-ti-syscon.c                                |  2 --
+ drivers/reset/reset-uniphier-glue.c                            |  4 +---
+ drivers/reset/reset-uniphier.c                                 |  1 -
+ drivers/reset/reset-zynq.c                                     |  1 -
+ drivers/reset/reset-zynqmp.c                                   | 10 +++++++---
+ 23 files changed, 21 insertions(+), 34 deletions(-)
