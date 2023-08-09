@@ -1,468 +1,86 @@
-Return-Path: <SRS0=f40L=D2=gmail.com=ychuang570808@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67EDFEB64DD
-	for <soc@archiver.kernel.org>; Wed,  9 Aug 2023 08:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12BDBEB64DD
+	for <soc@archiver.kernel.org>; Wed,  9 Aug 2023 10:00:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 25AC5C433CA; Wed,  9 Aug 2023 08:13:01 +0000 (UTC)
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B909FC433C9;
-	Wed,  9 Aug 2023 08:12:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B909FC433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1bc3bec2c95so4745085ad.0;
-        Wed, 09 Aug 2023 01:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691568779; x=1692173579;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HGi+I0X98yYTQWfLVJqeABIuTLMwNChc7qAz4vbozrE=;
-        b=IL9596BVQqIVfbjlbPd34w3eRFt3rh4Kv+NvcuWWW26YXruQiRqRMMUgQh1WyajqCt
-         U40St3d3Dje6oVKKTO2YZnnuy4bmCzm0duvZdRES93hAe1w6N5RdZa7inChx2Zav+4DA
-         OTMM+OCx87fG+PFM2osD7oOvC8yYukAp9mXpT5+/Mtr6sf4jqsCjnp/MYoKxRtCl3KjO
-         Sl7NESq922ku7SfjfSa8ComEcGucHm3Awbw7fL+/pTAia5/3Quq9KP6pgOvvSq0hra/J
-         veyh4m7071BR00S3Y6tQZ7U7OCGQqbQSOQUORyIhsMUmOZHe0Khzz2YRTknBsrHZ8zwY
-         f5Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691568779; x=1692173579;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HGi+I0X98yYTQWfLVJqeABIuTLMwNChc7qAz4vbozrE=;
-        b=l1ZB+YXAlS03yGFWoVuk0UgU7Fd7vaAdhhUeB7rcBTzJAlkxE8LGp2rT2f6MelePSF
-         A2xcXPOfXBEzyZ6//E56RGY8kSCJ4lhZH01mxDPtrNKJKNfVdShnSF6DpFKZeN8tG1ox
-         naDNJ1D5JHpz3gO3imFoA/eAvVWMIbCRphYMKR4d6WVMyU4NR/cc0kFi/vvX/nrq7RBj
-         Srz1RIlThwPdP9gXxvXoOXazG483RQaQkFLIjg93EdNLAzmIHIa+M9PNPX62hEWe7YEF
-         MG+J2oI5KDdKl8ntAPA/89XIJot/lJDC5gkRe9/jaoyPgbFJLS24DH6rcHu/y5XlE6hL
-         nMQg==
-X-Gm-Message-State: AOJu0YxNghsnuPiXaoSd5IIJwRc0bciN4O/I3WzYQdZBy8Myclttie5y
-	6mGBkzRzBEUvvWr40eDs0io=
-X-Google-Smtp-Source: AGHT+IFDcLD09vqfO+TJnS2tTZ6ux/nNDoNRIxEJ7PROsKAlQQyu8im4YuAi7ttOxBqcdhKLWZ6xIg==
-X-Received: by 2002:a17:903:32c6:b0:1ae:6947:e63b with SMTP id i6-20020a17090332c600b001ae6947e63bmr2817181plr.16.1691568778702;
-        Wed, 09 Aug 2023 01:12:58 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id c7-20020a170902d48700b001bb9b87ac95sm10472777plg.103.2023.08.09.01.12.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Aug 2023 01:12:58 -0700 (PDT)
-Message-ID: <426130f6-7b8a-91f9-559b-afc5afdc656e@gmail.com>
-Date: Wed, 9 Aug 2023 16:12:54 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [RESEND PATCH v2 3/3] rtc: Add driver for Nuvoton ma35d1 rtc
- controller
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+	id B847DC433CA; Wed,  9 Aug 2023 10:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57195C433C8;
+	Wed,  9 Aug 2023 10:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691575245;
+	bh=31JHN1rxKC/BwEUDeiuKU353RZNtav81QeiPyYQm7bc=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=ZF9VOD1NcJw/0kidVUOn736v1+Q/76QryF0t9yrYbwx52vtd66zroFAuE60XsCsX/
+	 de25N/rp3AyeOqK3rOU+2O5UWWLY5yv+ET5468Rcc2xaIXexF1zC3kN5XTvy0otOqc
+	 pCPc8Eujb0+Fefnba8ig14iz2eI1eFXwKh+dencCJcw/LPxBAXka58ZS7PJ9Qy0Udw
+	 Bpl0+64Y5ECqZmQ4td9tRB4Y17458nAGKTwHT0yLeJJ7p1gnmxn5vSOqfNNJtde+cl
+	 ZDsNWbxc1NckNbx/AR/Jrv02vtNYSEvS2Ared2mSsYdCyRINDXkkMW31Qm7wkKTf4r
+	 mi6zZo3b418Ug==
+Date: Wed, 9 Aug 2023 18:00:34 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: a.zummo@towertech.it, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@kernel.org, mjchen@nuvoton.com, schung@nuvoton.com,
- Jacky Huang <ychuang3@nuvoton.com>
-References: <20230809011542.429945-1-ychuang570808@gmail.com>
- <20230809011542.429945-4-ychuang570808@gmail.com>
- <20230809021025a7c0daec@mail.local>
-Content-Language: en-US
-From: Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <20230809021025a7c0daec@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.5, 2nd round
+Message-ID: <20230809100034.GS151430@dragon>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit 53cab4d871690c49fac87c657cbf459e39c5b93b:
 
+  soc: imx: imx8mp-blk-ctrl: register HSIO PLL clock as bus_power_dev child (2023-07-19 15:44:02 +0800)
 
-On 2023/8/9 上午 10:10, Alexandre Belloni wrote:
-> Hello,
->
-> On 09/08/2023 01:15:42+0000, Jacky Huang wrote:
->> +
->> +struct ma35_bcd_time {
->> +	int bcd_sec;
->> +	int bcd_min;
->> +	int bcd_hour;
->> +	int bcd_mday;
->> +	int bcd_mon;
->> +	int bcd_year;
->> +};
-> I don't get why this struct is useful.
+are available in the Git repository at:
 
-I will remove this and modify code.
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.5-2
 
+for you to fetch changes up to 78e869dd8b2ba19765ac9b05cdea3e432d1dc188:
 
->> +
->> +static irqreturn_t ma35d1_rtc_interrupt(int irq, void *data)
->> +{
->> +	struct ma35_rtc *rtc = (struct ma35_rtc *)data;
->> +	unsigned long events = 0, rtc_irq;
->> +
->> +	rtc_irq = rtc_reg_read(rtc, MA35_REG_RTC_INTSTS);
->> +
->> +	if (rtc_irq & RTC_INTSTS_ALMIF) {
->> +		rtc_reg_write(rtc, MA35_REG_RTC_INTSTS, RTC_INTSTS_ALMIF);
->> +		events |= RTC_AF | RTC_IRQF;
->> +	}
->> +
->> +	if (rtc_irq & RTC_INTSTS_TICKIF) {
->> +		rtc_reg_write(rtc, MA35_REG_RTC_INTSTS, RTC_INTSTS_TICKIF);
->> +		events |= RTC_UF | RTC_IRQF;
-> How did you test this path?
+  arm64: dts: imx93: Fix anatop node size (2023-08-06 11:50:04 +0800)
 
-We use BusyBox 'date' command to observe the time changed.
-In addition, we wrote a simple code to test it.
-(https://github.com/OpenNuvoton/MA35D1_Linux_Applications/tree/master/examples/rtc)
+----------------------------------------------------------------
+i.MX fixes for 6.5, 2nd round:
 
->> +	}
->> +
->> +	rtc_update_irq(rtc->rtcdev, 1, events);
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static int ma35d1_rtc_init(struct ma35_rtc *rtc, u32 ms_timeout)
->> +{
->> +	const unsigned long timeout = jiffies + msecs_to_jiffies(ms_timeout);
->> +
->> +	do {
->> +		if (rtc_reg_read(rtc, MA35_REG_RTC_INIT) & RTC_INIT_ACTIVE)
->> +			return 0;
->> +
->> +		rtc_reg_write(rtc, MA35_REG_RTC_INIT, RTC_INIT_MAGIC_CODE);
->> +
->> +		mdelay(1);
->> +
->> +	} while (time_before(jiffies, timeout));
->> +
->> +	return -ETIMEDOUT;
->> +}
->> +
->> +static int ma35d1_rtc_bcd2bin(u32 time, u32 cal, u32 wday, struct rtc_time *tm)
->> +{
->> +	tm->tm_mday	= bcd2bin(cal >> 0);
->> +	tm->tm_mon	= bcd2bin(cal >> 8);
->> +	tm->tm_mon	= tm->tm_mon - 1;
->> +	tm->tm_year	= bcd2bin(cal >> 16) + 100;
->> +
->> +	tm->tm_sec	= bcd2bin(time >> 0);
->> +	tm->tm_min	= bcd2bin(time >> 8);
->> +	tm->tm_hour	= bcd2bin(time >> 16);
->> +
->> +	tm->tm_wday = wday;
->> +
->> +	return rtc_valid_tm(tm);
->> +}
->> +
->> +static int ma35d1_rtc_alarm_bcd2bin(u32 talm, u32 calm, struct rtc_time *tm)
->> +{
->> +	tm->tm_mday	= bcd2bin(calm >> 0);
->> +	tm->tm_mon	= bcd2bin(calm >> 8);
->> +	tm->tm_mon	= tm->tm_mon - 1;
->> +	tm->tm_year	= bcd2bin(calm >> 16) + 100;
->> +
->> +	tm->tm_sec	= bcd2bin(talm >> 0);
->> +	tm->tm_min	= bcd2bin(talm >> 8);
->> +	tm->tm_hour	= bcd2bin(talm >> 16);
->> +
->> +	return rtc_valid_tm(tm);
->> +}
->> +
->> +static void ma35d1_rtc_bin2bcd(struct device *dev, struct rtc_time *settm,
->> +			       struct ma35_bcd_time *gettm)
->> +{
->> +	gettm->bcd_mday = bin2bcd(settm->tm_mday) << 0;
->> +	gettm->bcd_mon  = bin2bcd((settm->tm_mon + 1)) << 8;
->> +
->> +	if (settm->tm_year < 100) {
->> +		dev_warn(dev, "The year will be between 1970-1999, right?\n");
-> No, don't do that, properly set the rtc hardware range and let the user
-> choose their time offset/window.
+- Fix i.MX93 ANATOP 'reg' resource size to avoid overlapping with TMU
+  memory area.
+- Fix RTC interrupt level on imx6qdl-phytec-mira board.
+- Remove LDB endpoint from from the common imx6sx.dtsi as it causes
+  regression for boards that has the LCDIF connected directly to
+  a parallel display.
+- Drop CSI1 PHY reference clock configuration from i.MX8MM/N device tree
+  to avoid overclocking.
+- Set a proper default tuning step for i.MX6SX and i.MX7D uSDHC to fix
+  a tuning failure seen with some SD cards.
 
-We will modify the code as:
+----------------------------------------------------------------
+Alexander Stein (1):
+      arm64: dts: imx93: Fix anatop node size
 
-#define MA35_BASE_YEAR 2000 /* assume 20YY not 19YY */
+Andrej Picej (1):
+      ARM: dts: imx6: phytec: fix RTC interrupt level
 
-int year;
+Fabio Estevam (2):
+      ARM: dts: imx6sx: Remove LDB endpoint
+      arm64: dts: imx8mm: Drop CSI1 PHY reference clock configuration
 
-year = tm->tm_year + 1900 – MA35_BASE_YEAR;
-if (year < 0) {
-     dev_err(dev, "invalid year: %d\n", year);
-     return -EINVAL;
-}
+Marek Vasut (1):
+      arm64: dts: imx8mn: Drop CSI1 PHY reference clock configuration
 
+Xiaolei Wang (2):
+      ARM: dts: imx: Set default tuning step for imx7d usdhc
+      ARM: dts: imx: Set default tuning step for imx6sx usdhc
 
->> +		gettm->bcd_year = bin2bcd(settm->tm_year) << 16;
->> +	} else {
->> +		gettm->bcd_year = bin2bcd(settm->tm_year - 100) << 16;
->> +	}
->> +
->> +	gettm->bcd_sec  = bin2bcd(settm->tm_sec) << 0;
->> +	gettm->bcd_min  = bin2bcd(settm->tm_min) << 8;
->> +	gettm->bcd_hour = bin2bcd(settm->tm_hour) << 16;
->> +}
-> Those functions are only used once, simply put them in their call site.
-
-Sure, I will remove this function and put the code in their call site
-
-
->> +
->> +static int ma35d1_alarm_irq_enable(struct device *dev, u32 enabled)
->> +{
->> +	struct ma35_rtc *rtc = dev_get_drvdata(dev);
->> +	u32 reg_ien;
->> +
->> +	reg_ien = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->> +
->> +	if (enabled)
->> +		rtc_reg_write(rtc, MA35_REG_RTC_INTEN, reg_ien | RTC_INTEN_ALMIEN);
->> +	else
->> +		rtc_reg_write(rtc, MA35_REG_RTC_INTEN, reg_ien & ~RTC_INTEN_ALMIEN);
->> +
->> +	return 0;
->> +}
->> +
->> +static int ma35d1_rtc_read_time(struct device *dev, struct rtc_time *tm)
->> +{
->> +	struct ma35_rtc *rtc = dev_get_drvdata(dev);
->> +	u32 time, cal, wday;
->> +
->> +	time = rtc_reg_read(rtc, MA35_REG_RTC_TIME);
->> +	cal  = rtc_reg_read(rtc, MA35_REG_RTC_CAL);
->> +	wday = rtc_reg_read(rtc, MA35_REG_RTC_WEEKDAY);
-> Are the registers properly latched when reading? How do you ensure that
-> MA35_REG_RTC_TIME didn't change before reading MA35_REG_RTC_CAL ?
-
-We will update the code as
-
-do {
-     time = rtc_reg_read(rtc, MA35_REG_RTC_TIME);
-     cal  = rtc_reg_read(rtc, MA35_REG_RTC_CAL);
-     wday = rtc_reg_read(rtc, MA35_REG_RTC_WEEKDAY);
-} while ((time != rtc_reg_read(rtc, MA35_REG_RTC_TIME)) ||
-          (cal != rtc_reg_read(rtc, MA35_REG_RTC_CAL)) ||
-          (wday != = rtc_reg_read(rtc, MA35_REG_RTC_WEEKDAY)) );
-
-
->> +
->> +	return ma35d1_rtc_bcd2bin(time, cal, wday, tm);
->> +}
->> +
->> +static int ma35d1_rtc_set_time(struct device *dev, struct rtc_time *tm)
->> +{
->> +	struct ma35_rtc *rtc = dev_get_drvdata(dev);
->> +	struct ma35_bcd_time gettm;
->> +	u32 val;
->> +
->> +	ma35d1_rtc_bin2bcd(dev, tm, &gettm);
->> +
->> +	val = gettm.bcd_mday | gettm.bcd_mon | gettm.bcd_year;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_CAL, val);
->> +
->> +	val = gettm.bcd_sec | gettm.bcd_min | gettm.bcd_hour;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_TIME, val);
->> +
-> Same question about latching, shouldn't you stop the rtc while doing
-> this?
-
-In fact, once enabled, the RTC hardware of MA35D1 cannot be stopped; 
-this is how the hardware is designed.
-Inside the MA35D1 RTC, there's an internal counter that advances by 128 
-counts per second.
-When the time or date register is updated, the internal counter of the 
-RTC hardware will automatically reset to 0,
-so there is no need to worry about memory latch issues.
-
-
->> +	val = tm->tm_wday;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_WEEKDAY, val);
->> +
->> +	return 0;
->> +}
->> +
->> +static int ma35d1_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
->> +{
->> +	struct ma35_rtc *rtc = dev_get_drvdata(dev);
->> +	struct ma35_bcd_time tm;
->> +	unsigned long val;
->> +
->> +	ma35d1_rtc_bin2bcd(dev, &alrm->time, &tm);
->> +
->> +	val = tm.bcd_mday | tm.bcd_mon | tm.bcd_year;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_CALM, val);
->> +
->> +	val = tm.bcd_sec | tm.bcd_min | tm.bcd_hour;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_TALM, val);
->> +
-> What about handling alrm.enabled here?
-
-The MA35D1 RTC hardware design does not have an alarm enable/disable bit.
-The decision to utilize the alarm can only be made through enabling or 
-disabling the alarm interrupt.
-
->> +	return 0;
->> +}
->> +
->> +static const struct rtc_class_ops ma35d1_rtc_ops = {
->> +	.read_time = ma35d1_rtc_read_time,
->> +	.set_time = ma35d1_rtc_set_time,
->> +	.read_alarm = ma35d1_rtc_read_alarm,
->> +	.set_alarm = ma35d1_rtc_set_alarm,
->> +	.alarm_irq_enable = ma35d1_alarm_irq_enable,
->> +};
->> +
->> +static int ma35d1_rtc_probe(struct platform_device *pdev)
->> +{
->> +	struct ma35_rtc *rtc;
->> +	struct clk *clk;
->> +	u32 regval;
->> +	int err;
->> +
->> +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
->> +	if (!rtc)
->> +		return -ENOMEM;
->> +
->> +	rtc->rtc_reg = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(rtc->rtc_reg))
->> +		return PTR_ERR(rtc->rtc_reg);
->> +
->> +	clk = of_clk_get(pdev->dev.of_node, 0);
->> +	if (IS_ERR(clk))
->> +		return dev_err_probe(&pdev->dev, PTR_ERR(clk), "failed to find rtc clock\n");
->> +
->> +	err = clk_prepare_enable(clk);
->> +	if (err)
->> +		return -ENOENT;
->> +
->> +	platform_set_drvdata(pdev, rtc);
->> +
->> +	rtc->rtcdev = devm_rtc_device_register(&pdev->dev, pdev->name,
->> +					       &ma35d1_rtc_ops, THIS_MODULE);
->> +	if (IS_ERR(rtc->rtcdev))
->> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtcdev),
->> +				     "failed to register rtc device\n");
-> This MUST be done last in probe, else you open a race with userspace.
->
-
-Yes, I will moved it to last in probe.
-
-
->> +
->> +	err = ma35d1_rtc_init(rtc, RTC_INIT_TIMEOUT);
->> +	if (err)
->> +		return err;
->> +
-> I don't believe you should do this on every probe but only when this
-> hasn't been done yet.
->
->> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_CLKFMT);
->> +	regval |= RTC_CLKFMT_24HEN;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_CLKFMT, regval);
->> +
-> ditto
-
-I will modify them as:
-
-If (!(rtc_reg_read(rtc, MA35_REG_RTC_INIT) & RTC_INIT_ACK)) {
-     err = ma35d1_rtc_init(rtc, RTC_INIT_TIMEOUT);
-     if (err)
-         return err;
-     regval = rtc_reg_read(rtc, MA35_REG_RTC_CLKFMT);
-     regval |= RTC_CLKFMT_24HEN;
-     rtc_reg_write(rtc, MA35_REG_RTC_CLKFMT, regval);}
-}
-
-
->> +	rtc->irq_num = platform_get_irq(pdev, 0);
->> +
->> +	err = devm_request_irq(&pdev->dev, rtc->irq_num, ma35d1_rtc_interrupt,
->> +			       IRQF_NO_SUSPEND, "ma35d1rtc", rtc);
->> +	if (err)
->> +		return dev_err_probe(&pdev->dev, err, "Failed to request rtc irq\n");
->> +
->> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->> +	regval |= RTC_INTEN_TICKIEN;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
->> +
->> +	device_init_wakeup(&pdev->dev, true);
->> +
-> You must set the rtc range here.
-
-I will add:
-ma35d1_rtc->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
-ma35d1_rtc->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
-
-
->> +	return 0;
->> +}
->> +
->> +static int ma35d1_rtc_suspend(struct platform_device *pdev, pm_message_t state)
->> +{
->> +	struct ma35_rtc *rtc = platform_get_drvdata(pdev);
->> +	u32 regval;
->> +
->> +	if (device_may_wakeup(&pdev->dev))
->> +		enable_irq_wake(rtc->irq_num);
->> +
->> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->> +	regval &= ~RTC_INTEN_TICKIEN;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
-> This is not what the user is asking, don't do this. Also, how was this
-> tested?
-
-Sure, I will remove these three lines of code.
-
-We test it with "echo mem > /sys/power/state".
-
->> +
->> +	return 0;
->> +}
->> +
->> +static int ma35d1_rtc_resume(struct platform_device *pdev)
->> +{
->> +	struct ma35_rtc *rtc = platform_get_drvdata(pdev);
->> +	u32 regval;
->> +
->> +	if (device_may_wakeup(&pdev->dev))
->> +		disable_irq_wake(rtc->irq_num);
->> +
->> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->> +	regval |= RTC_INTEN_TICKIEN;
->> +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id ma35d1_rtc_of_match[] = {
->> +	{ .compatible = "nuvoton,ma35d1-rtc", },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, ma35d1_rtc_of_match);
->> +
->> +static struct platform_driver ma35d1_rtc_driver = {
->> +	.suspend    = ma35d1_rtc_suspend,
->> +	.resume     = ma35d1_rtc_resume,
->> +	.probe      = ma35d1_rtc_probe,
->> +	.driver		= {
->> +		.name	= "rtc-ma35d1",
->> +		.of_match_table = ma35d1_rtc_of_match,
->> +	},
->> +};
->> +
->> +module_platform_driver(ma35d1_rtc_driver);
->> +
->> +MODULE_AUTHOR("Min-Jen Chen <mjchen@nuvoton.com>");
->> +MODULE_DESCRIPTION("MA35D1 RTC driver");
->> +MODULE_LICENSE("GPL");
->> -- 
->> 2.34.1
->>
-
-
-Best Regards,
-Jacky Huang
-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-phytec-mira.dtsi |  2 +-
+ arch/arm/boot/dts/nxp/imx/imx6sx.dtsi              | 14 ++++++++------
+ arch/arm/boot/dts/nxp/imx/imx7s.dtsi               |  6 ++++++
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  7 +++----
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  6 ++----
+ arch/arm64/boot/dts/freescale/imx93.dtsi           |  2 +-
+ 6 files changed, 21 insertions(+), 16 deletions(-)
