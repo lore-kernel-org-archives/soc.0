@@ -1,437 +1,127 @@
-Return-Path: <SRS0=VGpV=D3=gmail.com=ychuang570808@kernel.org>
+Return-Path: <SRS0=K1Bu=D3=bootlin.com=alexandre.belloni@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07963C001B0
-	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 07:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BD8C001DE
+	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 07:30:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C4914C433C9; Thu, 10 Aug 2023 07:21:54 +0000 (UTC)
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 83376C433C9; Thu, 10 Aug 2023 07:30:27 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 58BCEC433C8;
-	Thu, 10 Aug 2023 07:21:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 58BCEC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b9c5e07c1bso5797365ad.2;
-        Thu, 10 Aug 2023 00:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691652112; x=1692256912;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oMXI6kTVHPxuRl+9l/keZ7XvudCxl6pTTJO/Mk4iK5I=;
-        b=PMtCNdYX/cUbPbFvOJNQorAyZG8d+0gVK0ec85K7ToAj9D7wEMyo8aIYvWKdFMMRTO
-         DIKdzAF5L1uMK351ZC5QV9WDr5PeZQi6/l6+9iRlZDsRZgSJOm51Bwrp6xB6DofqW+DL
-         KrSVk5lME250ueWWkdLydJCjNL8wry1I1/9T0IpUYHsTo12JEpiQmYqL66gfbhChEUAw
-         HO10Xq4ttk30ndwx0e6angG4MxrmtFOYe7R3BumOCJHo2o/GqMN6Vgi9xRO9fbbYAd9N
-         1r+I8vTL07CAHLlBnVeS4od3XUkWqLQ6LJotTw3YqNAcw0mJEC5EQj+KEN0X6LoVTI8r
-         9Wkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691652112; x=1692256912;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMXI6kTVHPxuRl+9l/keZ7XvudCxl6pTTJO/Mk4iK5I=;
-        b=ivXpYQQziMlcsW/odhGwmGzV3eMbVxv4lzl0ue1zWVs0R5loq345QcMV9eyfy7HOAT
-         wLq5EcHzeTJWOqqYI9PW8glfYknrV0h6Bz3ZvWdvZMRXt1K6tJFtPvmf00HDm92zoag9
-         MYthw1+BywCM447QGl8LDkg3Gq43OHd7QKgGDGmkA1CRzfFXS4IP3Vm51fpmtHcMBMFo
-         apemSDPPUNrvT26rgzpygLpjvnaPTvX0OX8G/NFZeYwyrsF6SwwsM8nFBCI7dSEgT9dw
-         Vir4M+uJvVaDQaVKDTySgvyJWVzEwYpQA1sKg3C7DIw/sdhbUUdU2YDExsAXJ5giCYh7
-         3oIg==
-X-Gm-Message-State: AOJu0YwJskHJA51nB7idPDJviO0x99lmqvh9MPv4sWPSJ90OJZHnyOT0
-	i3AU0HpzSQ6rPPgCdZoxWfI=
-X-Google-Smtp-Source: AGHT+IFW163EGmWvkpVnmKqAq23ut6gjOXWOT/PTXKFunpEYWbUnnsyG8OtoKetxK9h+JY8mIdRrkA==
-X-Received: by 2002:a17:902:f7ce:b0:1bd:a50a:e32d with SMTP id h14-20020a170902f7ce00b001bda50ae32dmr527359plw.68.1691652112361;
-        Thu, 10 Aug 2023 00:21:52 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170902d50100b001bc445e249asm877783plg.124.2023.08.10.00.21.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 00:21:51 -0700 (PDT)
-Message-ID: <347cf148-bda8-852b-768c-fa2b57ce5bcb@gmail.com>
-Date: Thu, 10 Aug 2023 15:21:47 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [RESEND PATCH v2 3/3] rtc: Add driver for Nuvoton ma35d1 rtc
- controller
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 9F15DC433C8;
+	Thu, 10 Aug 2023 07:30:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F15DC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3E8A3C000C;
+	Thu, 10 Aug 2023 07:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1691652616;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iuypy1p6ook3tCaKkFtNgD/qaSVZXlKQHOWGSdH8/vs=;
+	b=O8+LzBWAp0Cie7swpzb3xVJSTCbbwdVDbCDyoIuO62ahqPrcNZfg9CD2+MRXGXF1u5ku3x
+	sC+GxVNAkSZex6QwVABp0u6reTfOB+OKgUfqEAC7JXfvrKgeSw/sRyXT4AioYJG0Yn9WId
+	vKZPoKQELeD68eQJpAaKfpY0iq3pXjesTqgJrlXRxlKnZVKLqBBwYT4p6zNjQ9hzmxuquU
+	Ye3LE3ozc1xr8xZrrgTJkyEPSbPL2V4POcKLD5cfFBgME2wyIKtPZIMbqsT7UeGnld0TTS
+	1D8X/fQ6W28aO615atqWv2kgdELriff5TnE852M/5gnfBfEZn0R4GKP4eTgBug==
+Date: Thu, 10 Aug 2023 09:30:15 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Jacky Huang <ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: a.zummo@towertech.it, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@kernel.org, mjchen@nuvoton.com, schung@nuvoton.com,
- Jacky Huang <ychuang3@nuvoton.com>
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	soc@kernel.org, mjchen@nuvoton.com, schung@nuvoton.com,
+	Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [RESEND PATCH v2 3/3] rtc: Add driver for Nuvoton ma35d1 rtc
+ controller
+Message-ID: <20230810073015d5545903@mail.local>
 References: <20230809011542.429945-1-ychuang570808@gmail.com>
  <20230809011542.429945-4-ychuang570808@gmail.com>
  <20230809021025a7c0daec@mail.local>
  <426130f6-7b8a-91f9-559b-afc5afdc656e@gmail.com>
  <2023080922515326db190e@mail.local>
-Content-Language: en-US
-From: Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <2023080922515326db190e@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <347cf148-bda8-852b-768c-fa2b57ce5bcb@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <347cf148-bda8-852b-768c-fa2b57ce5bcb@gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
+
+On 10/08/2023 15:21:47+0800, Jacky Huang wrote:
+> > > > > +	return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static int ma35d1_rtc_suspend(struct platform_device *pdev, pm_message_t state)
+> > > > > +{
+> > > > > +	struct ma35_rtc *rtc = platform_get_drvdata(pdev);
+> > > > > +	u32 regval;
+> > > > > +
+> > > > > +	if (device_may_wakeup(&pdev->dev))
+> > > > > +		enable_irq_wake(rtc->irq_num);
+> > > > > +
+> > > > > +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
+> > > > > +	regval &= ~RTC_INTEN_TICKIEN;
+> > > > > +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
+> > > > This is not what the user is asking, don't do this. Also, how was this
+> > > > tested?
+> > > Sure, I will remove these three lines of code.
+> > > 
+> > > We test it with "echo mem > /sys/power/state".
+> > > 
+> > Yes, my point is that if UIE is enabled, then the user wants to be woken
+> > up every second. If this is not what is wanted, then UIE has to be
+> > disabled before going to suspend.
+> > 
+> > My question is why are you enabling RTC_INTEN_TICKIEN in probe? I don't
+> > expect anyone to use an actual hardware tick interrupt, unless the alarm
+> > is broken and can't be set every second. This is why I questioned the
+> > RTC_UF path because I don't expect it to be taken at all.
+> 
+> Yes, we will remove TICKIEN from probe and modify ma35d1_alarm_irq_enable().
+> TICKIEN will be enabled only if UIE is enabled.
+> 
+> static int ma35d1_alarm_irq_enable(struct device *dev, unsigned int enabled)
+> {
+>     struct ma35d1_rtc *rtc = dev_get_drvdata(dev);
+> 
+>     if (enabled) {
+>         if (rtc->rtc->uie_rtctimer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc,
+> NVT_RTC_INTEN)|(RTC_INTEN_TICKIEN)));
 
 
+Don't do that unless the regular alarm can't be set every second. Simply
+always use ALMIEN, then check rtctest is passing properly.
 
-On 2023/8/10 ä¸Šåˆ 06:51, Alexandre Belloni wrote:
-> On 09/08/2023 16:12:54+0800, Jacky Huang wrote:
->>
->> On 2023/8/9 ä¸Šåˆ 10:10, Alexandre Belloni wrote:
->>> Hello,
->>>
->>> On 09/08/2023 01:15:42+0000, Jacky Huang wrote:
->>>> +
->>>> +struct ma35_bcd_time {
->>>> +	int bcd_sec;
->>>> +	int bcd_min;
->>>> +	int bcd_hour;
->>>> +	int bcd_mday;
->>>> +	int bcd_mon;
->>>> +	int bcd_year;
->>>> +};
->>> I don't get why this struct is useful.
->> I will remove this and modify code.
->>
->>
->>>> +
->>>> +static irqreturn_t ma35d1_rtc_interrupt(int irq, void *data)
->>>> +{
->>>> +	struct ma35_rtc *rtc = (struct ma35_rtc *)data;
->>>> +	unsigned long events = 0, rtc_irq;
->>>> +
->>>> +	rtc_irq = rtc_reg_read(rtc, MA35_REG_RTC_INTSTS);
->>>> +
->>>> +	if (rtc_irq & RTC_INTSTS_ALMIF) {
->>>> +		rtc_reg_write(rtc, MA35_REG_RTC_INTSTS, RTC_INTSTS_ALMIF);
->>>> +		events |= RTC_AF | RTC_IRQF;
->>>> +	}
->>>> +
->>>> +	if (rtc_irq & RTC_INTSTS_TICKIF) {
->>>> +		rtc_reg_write(rtc, MA35_REG_RTC_INTSTS, RTC_INTSTS_TICKIF);
->>>> +		events |= RTC_UF | RTC_IRQF;
->>> How did you test this path?
->> We use BusyBox 'date' command to observe the time changed.
->> In addition, we wrote a simple code to test it.
->> (https://github.com/OpenNuvoton/MA35D1_Linux_Applications/tree/master/examples/rtc)
->>
-> You should probably run rtctest:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/rtc/rtctest.c
+>         if (rtc->rtc->aie_timer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc,
+> NVT_RTC_INTEN)|(RTC_INTEN_ALMIEN)));
+>     } else {
+>         if (rtc->rtc->uie_rtctimer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc, NVT_RTC_INTEN) &
+> (~RTC_INTEN_TICKIEN)));
+>         if (rtc->rtc->aie_timer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc, NVT_RTC_INTEN) &
+> (~RTC_INTEN_ALMIEN)));
+>     }
+>     return 0;
+> }
+> 
 
-Thank you for providing this information.
-We will run this test before submitting the next version.
-
->
->>>> +	if (settm->tm_year < 100) {
->>>> +		dev_warn(dev, "The year will be between 1970-1999, right?\n");
->>> No, don't do that, properly set the rtc hardware range and let the user
->>> choose their time offset/window.
->> We will modify the code as:
->>
->> #define MA35_BASE_YEAR 2000 /* assume 20YY not 19YY */
->>
->> int year;
->>
->> year = tm->tm_year + 1900 â€“ MA35_BASE_YEAR;
->> if (year < 0) {
->>  Â Â Â  dev_err(dev, "invalid year: %d\n", year);
->>  Â Â Â  return -EINVAL;
->> }
-> This is not needed as the rtc core is going to check the value is in the
-> range once you set it.
-
-OK, I will drop the "if (year < 0)" check.
-
->>>> +	time = rtc_reg_read(rtc, MA35_REG_RTC_TIME);
->>>> +	cal  = rtc_reg_read(rtc, MA35_REG_RTC_CAL);
->>>> +	wday = rtc_reg_read(rtc, MA35_REG_RTC_WEEKDAY);
->>> Are the registers properly latched when reading? How do you ensure that
->>> MA35_REG_RTC_TIME didn't change before reading MA35_REG_RTC_CAL ?
->> We will update the code as
->>
->> do {
->>  Â Â  Â time = rtc_reg_read(rtc, MA35_REG_RTC_TIME);
->>  Â Â  Â calÂ  = rtc_reg_read(rtc, MA35_REG_RTC_CAL);
->>  Â Â  Â wday = rtc_reg_read(rtc, MA35_REG_RTC_WEEKDAY);
->> } while ((time != rtc_reg_read(rtc, MA35_REG_RTC_TIME)) ||
->>  Â Â  Â Â Â Â Â  (cal != rtc_reg_read(rtc, MA35_REG_RTC_CAL)) ||
->>  Â Â  Â Â Â Â Â  (wday != = rtc_reg_read(rtc, MA35_REG_RTC_WEEKDAY)) );
-> Ok, so this mean your hardware doesn't do latching. I don't think it is
-> necessary to check MA35_REG_RTC_WEEKDAY.
-
-OK, I will remove the MA35_REG_RTC_WEEKDAY check.
->>
->>>> +
->>>> +	return ma35d1_rtc_bcd2bin(time, cal, wday, tm);
->>>> +}
->>>> +
->>>> +static int ma35d1_rtc_set_time(struct device *dev, struct rtc_time *tm)
->>>> +{
->>>> +	struct ma35_rtc *rtc = dev_get_drvdata(dev);
->>>> +	struct ma35_bcd_time gettm;
->>>> +	u32 val;
->>>> +
->>>> +	ma35d1_rtc_bin2bcd(dev, tm, &gettm);
->>>> +
->>>> +	val = gettm.bcd_mday | gettm.bcd_mon | gettm.bcd_year;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_CAL, val);
->>>> +
->>>> +	val = gettm.bcd_sec | gettm.bcd_min | gettm.bcd_hour;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_TIME, val);
->>>> +
->>> Same question about latching, shouldn't you stop the rtc while doing
->>> this?
->> In fact, once enabled, the RTC hardware of MA35D1 cannot be stopped; this is
->> how the hardware is designed.
->> Inside the MA35D1 RTC, there's an internal counter that advances by 128
->> counts per second.
->> When the time or date register is updated, the internal counter of the RTC
->> hardware will automatically reset to 0,
->> so there is no need to worry about memory latch issues.
-> Ok, great
->
->>
->>>> +	val = tm->tm_wday;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_WEEKDAY, val);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int ma35d1_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
->>>> +{
->>>> +	struct ma35_rtc *rtc = dev_get_drvdata(dev);
->>>> +	struct ma35_bcd_time tm;
->>>> +	unsigned long val;
->>>> +
->>>> +	ma35d1_rtc_bin2bcd(dev, &alrm->time, &tm);
->>>> +
->>>> +	val = tm.bcd_mday | tm.bcd_mon | tm.bcd_year;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_CALM, val);
->>>> +
->>>> +	val = tm.bcd_sec | tm.bcd_min | tm.bcd_hour;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_TALM, val);
->>>> +
->>> What about handling alrm.enabled here?
->> The MA35D1 RTC hardware design does not have an alarm enable/disable bit.
->> The decision to utilize the alarm can only be made through enabling or
->> disabling the alarm interrupt.
-> Exactly, you should use alrm.enabled to enable or disable the alarm
-> interrupt. You can simply call ma35d1_alarm_irq_enable, many drivers are
-> doing this.
-
-OK, we will use irq enable/disable to support alrm.enabled.
-
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static const struct rtc_class_ops ma35d1_rtc_ops = {
->>>> +	.read_time = ma35d1_rtc_read_time,
->>>> +	.set_time = ma35d1_rtc_set_time,
->>>> +	.read_alarm = ma35d1_rtc_read_alarm,
->>>> +	.set_alarm = ma35d1_rtc_set_alarm,
->>>> +	.alarm_irq_enable = ma35d1_alarm_irq_enable,
->>>> +};
->>>> +
->>>> +static int ma35d1_rtc_probe(struct platform_device *pdev)
->>>> +{
->>>> +	struct ma35_rtc *rtc;
->>>> +	struct clk *clk;
->>>> +	u32 regval;
->>>> +	int err;
->>>> +
->>>> +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
->>>> +	if (!rtc)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	rtc->rtc_reg = devm_platform_ioremap_resource(pdev, 0);
->>>> +	if (IS_ERR(rtc->rtc_reg))
->>>> +		return PTR_ERR(rtc->rtc_reg);
->>>> +
->>>> +	clk = of_clk_get(pdev->dev.of_node, 0);
->>>> +	if (IS_ERR(clk))
->>>> +		return dev_err_probe(&pdev->dev, PTR_ERR(clk), "failed to find rtc clock\n");
->>>> +
->>>> +	err = clk_prepare_enable(clk);
->>>> +	if (err)
->>>> +		return -ENOENT;
->>>> +
->>>> +	platform_set_drvdata(pdev, rtc);
->>>> +
->>>> +	rtc->rtcdev = devm_rtc_device_register(&pdev->dev, pdev->name,
->>>> +					       &ma35d1_rtc_ops, THIS_MODULE);
->>>> +	if (IS_ERR(rtc->rtcdev))
->>>> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtcdev),
->>>> +				     "failed to register rtc device\n");
->>> This MUST be done last in probe, else you open a race with userspace.
->>>
->> Yes, I will moved it to last in probe.
->>
->>
->>>> +
->>>> +	err = ma35d1_rtc_init(rtc, RTC_INIT_TIMEOUT);
->>>> +	if (err)
->>>> +		return err;
->>>> +
->>> I don't believe you should do this on every probe but only when this
->>> hasn't been done yet.
->>>
->>>> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_CLKFMT);
->>>> +	regval |= RTC_CLKFMT_24HEN;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_CLKFMT, regval);
->>>> +
->>> ditto
->> I will modify them as:
->>
->> If (!(rtc_reg_read(rtc, MA35_REG_RTC_INIT) & RTC_INIT_ACK)) {
->>  Â Â  Â err = ma35d1_rtc_init(rtc, RTC_INIT_TIMEOUT);
->>  Â Â  Â if (err)
->>  Â Â  Â Â Â Â  return err;
->>  Â Â  Â regval = rtc_reg_read(rtc, MA35_REG_RTC_CLKFMT);
->>  Â Â  Â regval |= RTC_CLKFMT_24HEN;
->>  Â Â  Â rtc_reg_write(rtc, MA35_REG_RTC_CLKFMT, regval);}
->> }
->>
->>
->>>> +	rtc->irq_num = platform_get_irq(pdev, 0);
->>>> +
->>>> +	err = devm_request_irq(&pdev->dev, rtc->irq_num, ma35d1_rtc_interrupt,
->>>> +			       IRQF_NO_SUSPEND, "ma35d1rtc", rtc);
->>>> +	if (err)
->>>> +		return dev_err_probe(&pdev->dev, err, "Failed to request rtc irq\n");
->>>> +
->>>> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->>>> +	regval |= RTC_INTEN_TICKIEN;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
->>>> +
->>>> +	device_init_wakeup(&pdev->dev, true);
->>>> +
->>> You must set the rtc range here.
->> I will add:
->> ma35d1_rtc->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
->> ma35d1_rtc->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
->>
-> Perfect. Maybe you should run rtc-range to check for proper operation in
-> the range:
-> https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/tree/rtc-range.c
-
-We will run this test.
-Thanks for providing this information.
-
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int ma35d1_rtc_suspend(struct platform_device *pdev, pm_message_t state)
->>>> +{
->>>> +	struct ma35_rtc *rtc = platform_get_drvdata(pdev);
->>>> +	u32 regval;
->>>> +
->>>> +	if (device_may_wakeup(&pdev->dev))
->>>> +		enable_irq_wake(rtc->irq_num);
->>>> +
->>>> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->>>> +	regval &= ~RTC_INTEN_TICKIEN;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
->>> This is not what the user is asking, don't do this. Also, how was this
->>> tested?
->> Sure, I will remove these three lines of code.
->>
->> We test it with "echo mem > /sys/power/state".
->>
-> Yes, my point is that if UIE is enabled, then the user wants to be woken
-> up every second. If this is not what is wanted, then UIE has to be
-> disabled before going to suspend.
->
-> My question is why are you enabling RTC_INTEN_TICKIEN in probe? I don't
-> expect anyone to use an actual hardware tick interrupt, unless the alarm
-> is broken and can't be set every second. This is why I questioned the
-> RTC_UF path because I don't expect it to be taken at all.
-
-Yes, we will remove TICKIEN from probe and modify ma35d1_alarm_irq_enable().
-TICKIEN will be enabled only if UIE is enabled.
-
-static int ma35d1_alarm_irq_enable(struct device *dev, unsigned int enabled)
-{
- Â Â  Â struct ma35d1_rtc *rtc = dev_get_drvdata(dev);
-
- Â Â  Â if (enabled) {
- Â Â  Â Â Â Â  if (rtc->rtc->uie_rtctimer.enabled)
- Â Â  Â Â Â Â  Â Â Â  rtc_reg_write(rtc, NVT_RTC_INTEN,
- Â Â  Â Â Â Â  Â Â Â  Â Â Â  Â Â Â Â Â  (rtc_reg_read(rtc, 
-NVT_RTC_INTEN)|(RTC_INTEN_TICKIEN)));
- Â Â  Â Â Â Â  if (rtc->rtc->aie_timer.enabled)
- Â Â  Â Â Â Â  Â Â Â  rtc_reg_write(rtc, NVT_RTC_INTEN,
- Â Â  Â Â Â Â  Â Â Â  Â Â Â  Â Â Â Â Â  (rtc_reg_read(rtc, 
-NVT_RTC_INTEN)|(RTC_INTEN_ALMIEN)));
- Â Â  Â } else {
- Â Â  Â Â Â Â  if (rtc->rtc->uie_rtctimer.enabled)
- Â Â  Â Â Â Â  Â Â Â  rtc_reg_write(rtc, NVT_RTC_INTEN,
- Â Â  Â Â Â Â  Â Â Â  Â Â Â  Â Â Â Â Â  (rtc_reg_read(rtc, NVT_RTC_INTEN) & 
-(~RTC_INTEN_TICKIEN)));
- Â Â  Â Â Â Â  if (rtc->rtc->aie_timer.enabled)
- Â Â  Â Â Â Â  Â Â Â  rtc_reg_write(rtc, NVT_RTC_INTEN,
- Â Â  Â Â Â Â  Â Â Â  Â Â Â  Â Â Â Â Â  (rtc_reg_read(rtc, NVT_RTC_INTEN) & 
-(~RTC_INTEN_ALMIEN)));
- Â Â  Â }
- Â Â  Â return 0;
-}
-
-
-
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int ma35d1_rtc_resume(struct platform_device *pdev)
->>>> +{
->>>> +	struct ma35_rtc *rtc = platform_get_drvdata(pdev);
->>>> +	u32 regval;
->>>> +
->>>> +	if (device_may_wakeup(&pdev->dev))
->>>> +		disable_irq_wake(rtc->irq_num);
->>>> +
->>>> +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
->>>> +	regval |= RTC_INTEN_TICKIEN;
->>>> +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static const struct of_device_id ma35d1_rtc_of_match[] = {
->>>> +	{ .compatible = "nuvoton,ma35d1-rtc", },
->>>> +	{},
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, ma35d1_rtc_of_match);
->>>> +
->>>> +static struct platform_driver ma35d1_rtc_driver = {
->>>> +	.suspend    = ma35d1_rtc_suspend,
->>>> +	.resume     = ma35d1_rtc_resume,
->>>> +	.probe      = ma35d1_rtc_probe,
->>>> +	.driver		= {
->>>> +		.name	= "rtc-ma35d1",
->>>> +		.of_match_table = ma35d1_rtc_of_match,
->>>> +	},
->>>> +};
->>>> +
->>>> +module_platform_driver(ma35d1_rtc_driver);
->>>> +
->>>> +MODULE_AUTHOR("Min-Jen Chen <mjchen@nuvoton.com>");
->>>> +MODULE_DESCRIPTION("MA35D1 RTC driver");
->>>> +MODULE_LICENSE("GPL");
->>>> -- 
->>>> 2.34.1
->>>>
->>
->> Best Regards,
->> Jacky Huang
->>
-
-Best Regards,
-Jacky Huang
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
