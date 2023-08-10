@@ -4,144 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62F57C001DB
-	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 12:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6531C001DB
+	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 12:29:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2D4C0C433C7; Thu, 10 Aug 2023 12:28:13 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id 722B9C433C7; Thu, 10 Aug 2023 12:29:54 +0000 (UTC)
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3C25FC433C8
-	for <soc@kernel.org>; Thu, 10 Aug 2023 12:28:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3C25FC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 7581AC433C8
+	for <soc@kernel.org>; Thu, 10 Aug 2023 12:29:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7581AC433C8
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-99c1d03e124so119756766b.2
-        for <soc@kernel.org>; Thu, 10 Aug 2023 05:28:10 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-686b91c2744so613965b3a.0
+        for <soc@kernel.org>; Thu, 10 Aug 2023 05:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1691670488; x=1692275288;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zVnE64GF5JkTluD6xr4hJ+bYfY9RuuI4BGvlCOpCCMU=;
-        b=VDAxragmobNCNMxFQz2XyiCW5yU5RkNvh6MRyvrfKJcSaTk/3rFuOSPMhDd1m+FXhN
-         9sn6b8zuiCpSFUGwDcZ5DZwOrdViqe1Oed+fMur1cPZsXWuvuVgNxU2Q8HXl7yxNU2aJ
-         zqhz8aHrIQZRY4zcmS4dfoJbN491rxT64lw2U=
+        d=gmail.com; s=20221208; t=1691670592; x=1692275392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CmYdZ6Nb6Jq/o5TomN55yrTMIaLqhz3TfJB9u+dvC2U=;
+        b=GdMr7IADvbeOiwEWzbZYZflpJ/tXDl8UmXwqGiprz6+3qzK/LIrRtVdem/2eHGryP4
+         ICmbW+0cWIzpvkG67ZOmTQn5KiUgDPhqkT3eiiLirqfarok5V1w5BEaY5Lg7OTSrIzZA
+         JWdafFvlpKk3mxNIk/p1e6rmIEUG5KP6Tr3hpWFzqqwzvn4DUNQ1oWtxsonanL0kAlvq
+         HrvgrTd5YFhaLWtkA1APbDy5TZCHOqWTHJvPdoo+Sq8t+BWzVz30EitpdwF9oOljM8fz
+         9KlU8TBC4Xs/BXzAws6GtYpkJNOPru3irNtgwcHtdMgWPbFJqRKCk9bbqNx3uC0CbWln
+         vBOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691670488; x=1692275288;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zVnE64GF5JkTluD6xr4hJ+bYfY9RuuI4BGvlCOpCCMU=;
-        b=OCwxD1mnggaelrtUDp23FVyTiOa9qPXcaL67lIbr4xJ1a3b7McOjC4hK8VvTjKEDst
-         QshFTLYwu4odwzlQxglm3Z3+XF2ctDDpiOUfJcIwIHoSkkET/GTpS7aPqX7d3pkK5CHg
-         qLWEm/4dsrpPmHT5f9E9lWykL0oSHNARiLFVmHzGchiVZA2pbiDityYaol0dbLQlXpf1
-         ICccM5jI/TQVccCBg9NPGKi6xJmMhSkbkL4iGqzyf80ZQrRun9hOzqjBSNwLyuaJGoXK
-         2wpYQFSgEV6lbHUE50gw8ZflSdQGnsn+07BU6IJuBSfw0fP1tc08xGR/2ALvoqV1L/xq
-         08ig==
-X-Gm-Message-State: AOJu0YxI8cNwtxY8ZnVYsg464SNRdIn1mcCB8WXRZAl9n1nJUxH/2An+
-	1uaFWBspb60gEivnohTub1h4s+/cdwTO9zgVBGxhCdM6QbQ=
-X-Google-Smtp-Source: AGHT+IGNA+TXbCwNm9jkM37jKrm+NtIht8GpC02YTUKWnLMrvEr/qay2O650NoPdj03fbiDH1o7GifDtMY0AT9BdH+k=
-X-Received: by 2002:a17:906:9d1:b0:99c:5056:4e2e with SMTP id
- r17-20020a17090609d100b0099c50564e2emr1636720eje.31.1691670488193; Thu, 10
- Aug 2023 05:28:08 -0700 (PDT)
-MIME-Version: 1.0
+        d=1e100.net; s=20221208; t=1691670592; x=1692275392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CmYdZ6Nb6Jq/o5TomN55yrTMIaLqhz3TfJB9u+dvC2U=;
+        b=XSvrOKDllt5G1qPONSXWVIb28NVYRwJYRXk+G4kp+p2R5xF9Zwj0X/gy6/yP84jZcZ
+         079YFzu5Zvt4H7OmYylzDuiqhmg3oXoBtTHLp5aA96q6DCUOEzm3n+DR/74jDeQGsVpz
+         hfPSMnv6+5ymFE+gMV57l8oCEw9YL3NA0iejkBLsFnMuEH3LbU/vo0iaC5/5IHCB2fxd
+         Fbu2Dk5OqVkK0oXE/LEfD3s7qePq2lllZGmypzcnyYPYJDbfbFukSYAZbU744nf6Ualg
+         NGFlZDxSxHWGaJwlfboJIRDc5WuwXJyxYyfOA2BJey6D7gQJGbe95sduVDJrrcKB42TZ
+         eb/w==
+X-Gm-Message-State: AOJu0YzjRW94eJto5WN57CFxZQSFkpcmz6iN53XXkjXsiOP6Zu4AQ7OI
+	rEU55szNlUgEYFlJV6KyobDUHKKQuC8=
+X-Google-Smtp-Source: AGHT+IFImLjg/jF8UZQs34pKfQBl70btvoPmavsEddmcOI3pUTUkKT46FhUlx7OI7750EzZ4m9ij1A==
+X-Received: by 2002:a05:6a20:ce84:b0:11f:6dc:4f38 with SMTP id if4-20020a056a20ce8400b0011f06dc4f38mr2079265pzb.55.1691670591946;
+        Thu, 10 Aug 2023 05:29:51 -0700 (PDT)
+Received: from voyager.ibm.com (region97.lnk.telstra.net. [110.143.27.102])
+        by smtp.gmail.com with ESMTPSA id e18-20020a62ee12000000b006870ff20254sm1402210pfi.125.2023.08.10.05.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 05:29:51 -0700 (PDT)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
 From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 10 Aug 2023 12:27:55 +0000
-Message-ID: <CACPK8Xc76O5kLEAXRtbFXZcP=ObrKR0Kpez_er+zV2vZffZe7A@mail.gmail.com>
-Subject: [GIT PULL] ARM: aspeed: devicetree changes for 6.6
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
-Content-Type: text/plain; charset="UTF-8"
+To: soc@kernel.org
+Cc: Zev Weiss <zev@bewilderbeest.net>
+Subject: [PATCH] soc: aspeed: uart-routing: Use __sysfs_match_string
+Date: Thu, 10 Aug 2023 21:59:41 +0930
+Message-Id: <20230810122941.231085-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Soc team,
+From: Zev Weiss <zev@bewilderbeest.net>
 
-Here are the aspeed device tree changes for v6.6.
+The existing use of match_string() caused it to reject 'echo foo' due
+to the implicitly appended newline, which was somewhat ergonomically
+awkward and inconsistent with typical sysfs behavior.  Using the
+__sysfs_* variant instead provides more convenient and consistent
+linefeed-agnostic behavior.
 
-The tag has a -2 as I had a typo in the first tag. I removed that tag
-from the repo.
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Fixes: c6807970c3bc ("soc: aspeed: Add UART routing support")
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+Link: https://lore.kernel.org/r/20230628083735.19946-2-zev@bewilderbeest.net
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+Soc maintainers, can we please get this one applied as a fix for 6.5?
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+ drivers/soc/aspeed/aspeed-uart-routing.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+diff --git a/drivers/soc/aspeed/aspeed-uart-routing.c b/drivers/soc/aspeed/aspeed-uart-routing.c
+index ef8b24fd1851..59123e1f27ac 100644
+--- a/drivers/soc/aspeed/aspeed-uart-routing.c
++++ b/drivers/soc/aspeed/aspeed-uart-routing.c
+@@ -524,7 +524,7 @@ static ssize_t aspeed_uart_routing_store(struct device *dev,
+ 	struct aspeed_uart_routing_selector *sel = to_routing_selector(attr);
+ 	int val;
+ 
+-	val = match_string(sel->options, -1, buf);
++	val = __sysfs_match_string(sel->options, -1, buf);
+ 	if (val < 0) {
+ 		dev_err(dev, "invalid value \"%s\"\n", buf);
+ 		return -EINVAL;
+-- 
+2.40.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/aspeed-6.6-devicetree-2
-
-for you to fetch changes up to 32b7343226e622e36c7b241f3c6513f396a5a185:
-
-  ARM: dts: aspeed: Add AST2600 I3C control pins (2023-08-10 21:39:42 +0930)
-
-----------------------------------------------------------------
-ASPEED device tree updates for 6.6
-
- - New machines
-
-  * Inventec's Starscream AST2600 BMC, for a x86 server platform
-  * Meta's Yossemite 4 AST2600 BMC, for a multi-node server platform
-
- - Big device tree rework for IBM's Power10 BMC platforms
-
- - Updates for wedge400 and Mt Mitchell
-
- - AST2600 I3C and VUART descriptions
-
-----------------------------------------------------------------
-Chanh Nguyen (3):
-      ARM: dts: aspeed: mtmitchell: Enable the BMC UART8 and UART9
-      ARM: dts: aspeed: mtmitchell: Update ADC sensors for Mt.Mitchell
-DVT systems
-      ARM: dts: aspeed: mtmitchell: Add MCTP
-
-Chen PJ (2):
-      dt-bindings: arm: aspeed: add Inventec starscream-bmc
-      ARM: dts: aspeed: Adding Inventec Starscream BMC
-
-Delphine CC Chiu (2):
-      dt-bindings: arm: aspeed: add Facebook Yosemite 4 board
-      ARM: dts: aspeed: yosemite4: add Facebook Yosemite 4 BMC
-
-Dylan Hung (1):
-      ARM: dts: aspeed: Add AST2600 I3C control pins
-
-Eddie James (3):
-      ARM: dts: aspeed: bonnell: Add DIMM SPD
-      ARM: dts: aspeed: Add P10 FSI descriptions
-      ARM: dts: aspeed: everest: Reorganise FSI description
-
-Joel Stanley (4):
-      ARM: dts: aspeed: Add AST2600 VUARTs
-      ARM: dts: aspeed: bonnell: Reorganise FSI description
-      ARM: dts: aspeed: rainier: Reorganise FSI description
-      ARM: dts: aspeed: everest: Move common devices up
-
-Lakshmi Yadlapati (1):
-      ARM: dts: aspeed: rainier: Remove TPM device
-
-Tao Ren (3):
-      ARM: dts: aspeed: Update spi alias in Facebook AST2500 Common dtsi
-      ARM: dts: aspeed: wedge400: Enable more ADC channels
-      ARM: dts: aspeed: wedge400: Set eMMC max frequency
-
- .../devicetree/bindings/arm/aspeed/aspeed.yaml     |    2 +
- arch/arm/boot/dts/aspeed/Makefile                  |    2 +
- .../dts/aspeed/aspeed-bmc-ampere-mtmitchell.dts    |  129 +-
- .../dts/aspeed/aspeed-bmc-facebook-wedge400.dts    |    4 +-
- .../dts/aspeed/aspeed-bmc-facebook-yosemite4.dts   |  624 +++++++
- .../arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts |  364 +---
- .../arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts | 1837 ++++++++++++--------
- .../arm/boot/dts/aspeed/aspeed-bmc-ibm-rainier.dts |  683 +-------
- .../dts/aspeed/aspeed-bmc-inventec-starscream.dts  |  389 +++++
- arch/arm/boot/dts/aspeed/aspeed-g6-pinctrl.dtsi    |   10 +
- arch/arm/boot/dts/aspeed/aspeed-g6.dtsi            |   20 +
- .../dts/aspeed/ast2500-facebook-netbmc-common.dtsi |    4 +
- arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi     |  380 ++++
- arch/arm/boot/dts/aspeed/ibm-power10-quad.dtsi     | 1305 ++++++++++++++
- 14 files changed, 3924 insertions(+), 1829 deletions(-)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-yosemite4.dts
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-inventec-starscream.dts
- create mode 100644 arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
- create mode 100644 arch/arm/boot/dts/aspeed/ibm-power10-quad.dtsi
