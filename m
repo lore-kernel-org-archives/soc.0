@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D1DAC001DB
-	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 08:18:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FAA1C001B0
+	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 08:19:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1B51AC433C8; Thu, 10 Aug 2023 08:18:47 +0000 (UTC)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	id 56398C43391; Thu, 10 Aug 2023 08:19:20 +0000 (UTC)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D021DC433CB
-	for <soc@kernel.org>; Thu, 10 Aug 2023 08:18:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D021DC433CB
+	by smtp.kernel.org (Postfix) with ESMTPS id 37213C433CA
+	for <soc@kernel.org>; Thu, 10 Aug 2023 08:19:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37213C433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-58969d4f1b6so8337327b3.2
-        for <soc@kernel.org>; Thu, 10 Aug 2023 01:18:45 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-d4b74a4a6daso591861276.2
+        for <soc@kernel.org>; Thu, 10 Aug 2023 01:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691655524; x=1692260324;
+        d=linaro.org; s=google; t=1691655558; x=1692260358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N1S3yE96sxZWitB4oiJ30vpkB3MWLEMpL6UDMSJWZXU=;
-        b=sKRwat/bRypjQs0GDj+E5aX6U0l+rdH2Ppp7jgbUiwQQsqjEaK0abvIScLRA0wD+XB
-         V+k33vveoWCeS1c6XgCqjjXWr//cl1HyFtdD8ttwfDC6tU5h0yWEtUhgAWWlSrBAqi9t
-         tXTEm4YMv0WM1uBDtQtenVY2VwUD4UxTzpZEwHsGCFe7Z/2lAj6TisZ1wfKRqkKtHkMv
-         q4kQ3tqQ3kjjJBlQFVfvfmjVGvTI9ZG6qPa9xIgWc3cwJulHzC1kKt6V4uv2UEb2aMy8
-         OAS7Hff9YtpzqDV058P27LVyQvRktH36oLc1Ux2VOWBYO61uLfbyzTdGhTV/qpGrAtF8
-         glUQ==
+        bh=78OX4fId0Em709uz0mp6uxgk8bb4IwlDXBz/uTj2fjY=;
+        b=YAetKf4q0nZa/dO71z7++J7KKpe1E1CC7O3ahafQ7APpHv5jmvyn5BBv2mwDpYC5is
+         aCqkyV5eahWJcbkNVk0H4ZuATN+jOIeGgJTiNul2i5t9tXVMigNJA6VlxX/a8OMvNSIA
+         YaLs/IE+usEOobqLkPYKtN3CknTSd/aP7iBrjDMEftqOkGi4Hzn8W27JugL/elhtZAtS
+         lvN5G1ptPirqDO85jdOp47BWA9MJm/z4Kcuzuh6yVL2pnLpcF/Uw4mERq/Siv1vZ2eMQ
+         WGKJAkQHqeDReRN5me9rxTKini4wIOwCZjirxG0wunRnpyvqVfZs1EDQzXiZjCK8xLxA
+         VFLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691655524; x=1692260324;
+        d=1e100.net; s=20221208; t=1691655558; x=1692260358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N1S3yE96sxZWitB4oiJ30vpkB3MWLEMpL6UDMSJWZXU=;
-        b=F0FIpaIy5M2s/ZoSWJOLoc4McKocQv6HnBl1YU+FsnkbyuZkmPT9gnMXLk8Aii4yxs
-         Le2BZA/zVUJJSFYZcjJAeFd20QXCqfsKZUf50ehBSQw2iA9qcvEph8o5UdvyhQO1WiYT
-         /3usYeG828WdeuwQFqFu4o6LxYVrFOwcTj2w29pO4q0y9fbsPjw4W/SonTzdB57l9+/n
-         sgFKicXJ9IzR7fGXCkKoViplGFQXXOpty4An8Jp4WeqGI43T90ft038geJ0DpvoR2Wav
-         Gl22yJiMNp3c5Xtg20P08t78asS1GK8OXspaeYCfs9aA2Mz3D+BCc9r/xEQGfUnlcgtK
-         zY3Q==
-X-Gm-Message-State: AOJu0YzaQ/hltZukR8lv+AG9WroN1ODgSuxlQvZ0nRu9vHz/16u7suDT
-	5ZOVGI5ZL/cuwAUGZuXDtyR9ROOFUNXq9q7UiqoPMA==
-X-Google-Smtp-Source: AGHT+IE+UnSxHykLJJfIQch1e5QQ0u1bPECfUCUFUDCntbpI1NXH0v2rJAWr/evYDXltegUQu7z4Swu4ag0Zr1/V/sw=
-X-Received: by 2002:a25:3611:0:b0:d4c:aa71:8294 with SMTP id
- d17-20020a253611000000b00d4caa718294mr1849966yba.33.1691655524705; Thu, 10
- Aug 2023 01:18:44 -0700 (PDT)
+        bh=78OX4fId0Em709uz0mp6uxgk8bb4IwlDXBz/uTj2fjY=;
+        b=AQH0NZHA7xToM6xiJ1zElLx6OyBPUhxHQXWlHOGViopMHKrZKHwOOuR9t8DRL1bZzX
+         Zts4Cr1Y2WW8i/FuCUce717hl+ihBJAi1xLUqrZ+7P5kEApg3nS0WEYyzfigHz3y+p1i
+         1MitmEFWEWFFyy9caKr4VFnjgUSQOifWp0S+AJsOeER3q1mWZpsZAx9qYz+aLni+FvAX
+         TTvLNRtwVMOOCoZPUfmUBWOy6ELOunQvmUePo8M/xRYt33pUFRg2SG/2I3eHYeBRiCWv
+         VcJ3wHwYMwi1GaSsPFp5V8Ca+L1SwTCS9E7t5o+6hM9CyjwKx7JVRuraLG1SqKK+Znhh
+         bcgw==
+X-Gm-Message-State: AOJu0YyFebxAe7Y1eIpm5wH+EyqRQaH6hooomG2fCQW30R3eq5QeNK89
+	cY0hSsWurcdPtp+3tuo0j0wmXo8qdz2Bm7DLc7bzPA==
+X-Google-Smtp-Source: AGHT+IG5aWoH89NQGXx33HlD2q+rxamc3JsaObqeeE5H8gH+u446bjvEEFYnXEHJg1VQn5y6v1yXRNGsOkfTWSlQZaU=
+X-Received: by 2002:a25:d711:0:b0:d1a:b59c:502d with SMTP id
+ o17-20020a25d711000000b00d1ab59c502dmr1894292ybg.18.1691655558135; Thu, 10
+ Aug 2023 01:19:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org> <20230803-dt-header-cleanups-for-soc-v2-8-d8de2cc88bff@kernel.org>
-In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-8-d8de2cc88bff@kernel.org>
+References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org> <20230803-dt-header-cleanups-for-soc-v2-13-d8de2cc88bff@kernel.org>
+In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-13-d8de2cc88bff@kernel.org>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 10 Aug 2023 10:18:33 +0200
-Message-ID: <CACRpkdaX=nABoxGMAK+3uEHOt1imucK6LXXRrNuAYFiH3-jt7g@mail.gmail.com>
-Subject: Re: [PATCH v2 08/23] ARM: nomadik: Drop unused includes
+Date: Thu, 10 Aug 2023 10:19:07 +0200
+Message-ID: <CACRpkdYsdKCrQpfoXZFv1XqT-o1skX=TDY-WJ1CSpgavMb+UrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 13/23] ARM: versatile: Drop unused includes
 To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, Patrice Chotard <patrice.chotard@foss.st.com>, 
@@ -91,18 +91,14 @@ Cc: soc@kernel.org, Patrice Chotard <patrice.chotard@foss.st.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 4, 2023 at 12:44=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+On Fri, Aug 4, 2023 at 12:43=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
 :
 
 > Several includes are not needed, so drop them.
 >
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
-Thanks for cleaning out this.
-
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Will you funnel this to ARM SoC with the rest?
 
 Yours,
 Linus Walleij
