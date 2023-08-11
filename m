@@ -1,97 +1,108 @@
-Return-Path: <SRS0=VREI=D3=prexma.co=robert@kernel.org>
+Return-Path: <SRS0=Jrji=D4=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D92C001B0
-	for <soc@archiver.kernel.org>; Thu, 10 Aug 2023 19:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2486FEB64DD
+	for <soc@archiver.kernel.org>; Fri, 11 Aug 2023 07:00:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EE055C433C9; Thu, 10 Aug 2023 19:19:16 +0000 (UTC)
-Received: from srv.prexma.co (unknown [162.0.231.230])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id CE457C433C7; Fri, 11 Aug 2023 07:00:13 +0000 (UTC)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8BB40C433C7
-	for <soc@kernel.org>; Thu, 10 Aug 2023 19:19:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8BB40C433C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=prexma.co
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=prexma.co
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=prexma.co; s=default;
-	t=1691695122; bh=rd+d6q0DLRfHOwLtRX0qafbdy6Y/2wqfMNqkB9NiJ1s=;
-	h=Date:Subject:From:To:Reply-To:List-Unsubscribe:From;
-	b=n1SCkVchIWglq9zn8oZxLFEdxElJLj+wI37Bn9XPS4gwQKb54uEsipAQm2QUdSmhL
-	 7K7U0fxqewhpjKUj278Lx5zNX/VghQ3LjfmWgOw2LOWq3RR8mpHMTicbCBe8xbu2Jx
-	 c4Rd6QvW4nMFuKBrQcbPhJdamCyauq2UfV5PLlVcBKAxcgAheSGY+GImORN097flQ5
-	 QQL/YXF+Cd+lJngVQ2K28hlNCNoRW+PEXz1feKPtkZar9hbKD0QBlnY4/nCvT7sTt7
-	 HGTr5PWh+5JMvwxlGSWR4kU7fgWryLZ4a2In9XV+5yltKqnjJCenle3yEC4GtpC9+0
-	 kIlpcxokY1ZRQ==
-Received: from [172.31.11.186] (ec2-34-215-85-189.us-west-2.compute.amazonaws.com [34.215.85.189])
-	(Authenticated sender: info@prexma.co)
-	by mail.prexma.co (Postfix) with ESMTPSA id C5CBC170EA8
-	for <soc@kernel.org>; Thu, 10 Aug 2023 19:18:42 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id CDA73C433C8
+	for <soc@kernel.org>; Fri, 11 Aug 2023 07:00:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CDA73C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4fe45da0a89so3244313e87.1
+        for <soc@kernel.org>; Fri, 11 Aug 2023 00:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691737210; x=1692342010;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZO+0t0pyCEILeWF9yOM0xEMb/3t8jNC2CHSy3xR9ZNo=;
+        b=k213CQ0AdKd3A0ljiBUC9tNyrWo9vEYG/IWew7Gnux21rG8xC+JddPm5FESpiDar3d
+         B/nUU7K4ldKuDYgGAnbK128kwozH7aBil+0ccmI7Kjc1YLSQcUJjte0PQ8LdLkEZujSK
+         pTAScrsTnC7SelelxKPs6KoM7UHsXU+x20lW/d0cPme+QwDyT6uyj33Wby4Y7WFo83NS
+         1S5t3Ezs9ahLy5Fxo1uo+r/jtFRD45l9ktweGmDohzdtZTncnMMDDFmZE8fqI9m99yPw
+         Hnr+V9sbez0WhuWFeS9XLOu3swF0Q+JhN/qTvbnQY1YnMomvYjzskbRaMspSBHgWvjod
+         rf9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691737210; x=1692342010;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZO+0t0pyCEILeWF9yOM0xEMb/3t8jNC2CHSy3xR9ZNo=;
+        b=gmnszwp7cdR0GBTK34U8bUsBxBusAUS0AeGVldlqGXU/bgR4yEx04F03/Uf+j8Slix
+         lDK/85eVrk5CsUBGQzDe93dpaaJf3fxQ95JCX+D4+2o/tgCv1jYvMJPGGx3DAIxbnKo3
+         34LMcJkXQ+ja9B/vZZ/3e+We/gnYYNHGtT6tTxTeRb9rglAS6YJrjSD8Xn3XjjMVkH9I
+         JZBvWGTU0t5M2stdYRG6hwFf5ZDNyZusWnnlUrhAYhJwgRX7faIltUJPHd+K0knz7bIz
+         H1+0Jnikdb/9ANRH83gbUi0iSOnfW9uROuZ6UapL0H+8xOncFUifz2gXs5hCvOvU6XR/
+         tWPQ==
+X-Gm-Message-State: AOJu0Yyzow9WB8f7CGDP43aj0Tn1CAyd7sWgCJinImVC+1DlFSJhQDpW
+	r/RHq5oxN0RVQ6nU2IFew9qcNg==
+X-Google-Smtp-Source: AGHT+IHL7DVVZChwcnoi9LN1Ihztgw830qsj9gy9QaJ8sihKBISU2+VNNcGWnfTCtaBezwfbYbVH3Q==
+X-Received: by 2002:a05:6512:3111:b0:4fb:8938:48ab with SMTP id n17-20020a056512311100b004fb893848abmr379814lfb.16.1691737210600;
+        Fri, 11 Aug 2023 00:00:10 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id c27-20020ac244bb000000b004fb85ffc82csm606425lfm.10.2023.08.11.00.00.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 00:00:09 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 11 Aug 2023 09:00:06 +0200
+Subject: [PATCH] ARM: dts: integrator: fix PCI bus dtc warnings
 MIME-Version: 1.0
-Date: Thu, 10 Aug 2023 19:18:42 +0000
-Message-ID: <4cd5f57f969947e68d45d5b1eaf8e5a2_CAF39_WJenGsH996s-hUARC+y+=xHvWJSW9O0a1Vvf3qqxHXy5A@mail.gmail.com>
-Subject: Chat for cash? Join the livechat revolution!
-From: Robert <robert@prexma.co>
-Content-Type: multipart/alternative; boundary="00000000000088e79906022ca96c"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230811-versatile-dts-v6-6-v1-1-d8cb9d1947ed@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAHXc1WQC/x3MQQqAIBBA0avErBvQoqyuEi0sxxqICkckiO6et
+ HyL/x8QCkwCQ/FAoMTC55GhywKWzR4rIbtsqFRVq05rTBTERt4JXRRMLbborFlmr2zfOAM5vAJ
+ 5vv/pOL3vBy7XghBkAAAA
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Reply-To: info@prexma.co
-List-Unsubscribe: =?utf-8?q?=3Chttp=3A=2F=2Fec2-52-37-229-113=2Eus-west-2=2Ecompute=2Eamazonaws=2Ecom=2Fx=2Fu?=
- =?utf-8?q?=3Fu=3D15e3df9d-5646-4a64-8a97-ada17faec647&s=3Dh=3E=2C?=
- <mailto:15e3df9d56464a648a97ada17faec647@unsub.gmss.ly>
+To: arm@kernel.org, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ Lin Yujun <linyujun809@huawei.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.3
 
---00000000000088e79906022ca96c
-Content-Type: text/plain; charset=utf-8
+From: Lin Yujun <linyujun809@huawei.com>
 
-Do you want to take your online job from virtual to reality? Now is your 
-chance if you are looking for a fun and rewarding way to make money from 
-home. Live chat assistants are in huge demand worldwide right now.
+An warning is reported when allmodconfig is used to compile the kernel of the ARM architecture:
 
-These are no ordinary jobs as they involve answering customer questions, 
-providing sales links, and offering discounts, which means a lot of 
-opportunities for growth in this field. The hours will vary each week, so 
-there are always times when it would fit your schedule, even if you already 
-have another job!
+arch/arm/boot/dts/arm/integratorap.dts:161.22-206.4: Warning (pci_bridge): /pciv3@62000000: node name is not "pci" or "pcie"
 
- We don't require any qualifications other than a device that can access 
-business chat functions such as social media and website chat functions 
-like phones, tablets, or laptops. As long as you can follow instructions 
-and work independently, have a reliable internet connection, and work from 
-your country, this could be the perfect opportunity for you.
+Change the node name to pci to clear the build warning.
 
-Complete your application here. 
-<https://sites.google.com/view/chatforcash2023/>
+Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ arch/arm/boot/dts/arm/integratorap.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best Wishes,
-Robert
+diff --git a/arch/arm/boot/dts/arm/integratorap.dts b/arch/arm/boot/dts/arm/integratorap.dts
+index 5b52d75bc6be..d9927d3181dc 100644
+--- a/arch/arm/boot/dts/arm/integratorap.dts
++++ b/arch/arm/boot/dts/arm/integratorap.dts
+@@ -158,7 +158,7 @@ pic: pic@14000000 {
+ 		valid-mask = <0x003fffff>;
+ 	};
+ 
+-	pci: pciv3@62000000 {
++	pci: pci@62000000 {
+ 		compatible = "arm,integrator-ap-pci", "v3,v360epc-pci";
+ 		device_type = "pci";
+ 		#interrupt-cells = <1>;
 
---00000000000088e79906022ca96c
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230811-versatile-dts-v6-6-da7cbf0a95d7
 
-<div dir=3D"ltr">Do you want to take your online job from virtual to r=
-eality? Now is your chance if you are looking for a fun and rewarding =
-way to make money from home. Live chat assistants are in huge demand w=
-orldwide right now.<br><br>These are no ordinary jobs as they involve =
-answering customer questions, providing sales links, and offering disc=
-ounts, which means a lot of opportunities for growth in this field. Th=
-e hours will vary each week, so there are always times when it would f=
-it your schedule, even if you already have another job!<br><br>=C2=A0W=
-e don&#39;t require any qualifications other than a device that can ac=
-cess business chat functions such as social media and website chat fun=
-ctions like phones, tablets, or laptops. As long as you can follow ins=
-tructions and work independently, have a reliable internet connection,=
- and work from your country, this could be the perfect opportunity for=
- you.<br><br><a href=3D"http://ec2-52-37-229-113.us-west-2.compute.ama=
-zonaws.com/x/d?c=3D34081198&l=3Daf8fcccb-c684-4dd5-9acc-7950ccfcd65d&r=
-=3D15e3df9d-5646-4a64-8a97-ada17faec647" target=3D"_blank">Complete yo=
-ur application here.</a><br><div><br></div><div>Best Wishes,</div><div=
->Robert</div></div>
-<img src=3D"http://ec2-52-41-167-28.us-west-2.compute.amazonaws.com/bZ=
-gl7Mzc1No-h6ToxKzTq54ccmVlTnO4EpdkQfrNqM1erhK16DwUA1ZKaZ3gDc-sAduEnuYv=
-YwgjDJKf4Eh1w-FUtA8AwFDE8wKUE_nouullsjcIvVCthnxguU-QTMqLG1a1NI5ccXkeQE=
-YenshjnjKjEqJgwx2APH4mqtUczU4ajgmWxAxfJ5">
---00000000000088e79906022ca96c--
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
+
