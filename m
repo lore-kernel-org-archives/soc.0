@@ -4,61 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 977E2C3DA40
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FED8C04FE2
 	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 09:14:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5AF01C433B6; Sat, 12 Aug 2023 09:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4370BC43395;
+	id 88D23C43140; Sat, 12 Aug 2023 09:14:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 72D16C433BA;
 	Sat, 12 Aug 2023 09:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1691831689;
-	bh=wUHVT4x8WToPk6KvIEerz1ZNfyytW6myT4SVGg0zbO8=;
+	bh=OsB4kcPEYrnPsDFIv7eaVUtuWJumav4DM2n8SagLieA=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=brpIDdMSNDDSPwB1e5L262zTB7ivqDCGl/Um9wPPPYKNyNUl0vnjloiQoj7ou/hL4
-	 6lX61MKgimR+L0gSzmP2Mvpggleaeej5lJJSxaqOxbixRX6ng4H5/f5wZzCxx7kilE
-	 xHMD0nGqy4tuvrFLL9Tjgu3FCJPVYfKfP5Kv5fFnNtEW5jSDURT0jXnLI7WqWYVWH2
-	 o5CjeUMDsVW4xQ7r384wQTVLojMvM3lZWQCoANSYIX6I6X/a8pthcEXw1OskFtDr79
-	 IG8EZJVpy7QYya3Jgc/Zvcpwf8b/yvaAFGtYikjj6GdbPszODqSC9N5U8HP2T2miRA
-	 uPMTgWGGTV58Q==
+	b=AxzTezlVa+ez2BcIZenQMLczyEDPbJtifrUmRjEQfad3qSB/tiNCCJuW15NLQjOGc
+	 tX22/VvLTIjpFTUqGvegb8YSHdtBH1Dv5cv5ZjI+8EMH2b7nAluNT/KMWbRSeRgFE0
+	 53pJAGk8qcZSFfq2SzzBU5dX3hEDyufrKBJHWjHNJF5gr4+jaJu5GUDC5PQy0xBkp8
+	 kCcYN4abK+CUEparWnPzgZEJL+VpxeJ9JoUBWdYfwHM3OdgRlYjS+u92bR/LDW113b
+	 4OdK823KqWmq4QkyZf7gaYkupWUEcbZ1+R3XuJDw9TAyYnfAW11bpadT4RPUX56Xsq
+	 A1QKDP4yCWadg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 25D4FE3308E;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5F071E1CF31;
 	Sat, 12 Aug 2023 09:14:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v6.6
+Subject: Re: [PATCH v2] soc: fsl: Explicitly include correct DT includes
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169183168915.30475.3726261531711803462.git-patchwork-notify@kernel.org>
+ <169183168938.30475.6184214277029877132.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Aug 2023 09:14:49 +0000
-References: <cover.1690545139.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1690545139.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20230724205551.768767-1-robh@kernel.org>
+In-Reply-To: <20230724205551.768767-1-robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 28 Jul 2023 13:56:59 +0200 you wrote:
-> Hi SoC folks,
-> 
-> This is my first pull request for the inclusion of Renesas SoC updates
-> for v6.5.
-> 
-> It consists of 3 parts:
+On Mon, 24 Jul 2023 14:55:51 -0600 you wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] Renesas ARM defconfig updates for v6.6
-    (no matching commit)
-  - [GIT,PULL,2/3] Renesas ARM SoC updates for v6.6
-    https://git.kernel.org/soc/soc/c/d69ba6fe6677
-  - [GIT,PULL,3/3] Renesas DTS updates for v6.6
-    https://git.kernel.org/soc/soc/c/8be4ee0ee081
+  - [v2] soc: fsl: Explicitly include correct DT includes
+    https://git.kernel.org/soc/soc/c/5df5b2e04749
 
 You are awesome, thank you!
 -- 
