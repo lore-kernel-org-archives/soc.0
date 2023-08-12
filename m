@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 971E4C41513
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADCD4C04A94
 	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5B668C433CA; Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 44337C433C7;
+	id 737BCC433CD; Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A3DBC433C8;
 	Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1691828596;
-	bh=/bKZoDE7XOmvuRznlIM7VjTR+Bne0GaSPotK+N3/RNQ=;
+	bh=xRmYqGop7BxFSGTglSlUoBRBgmjw+BGPBO9CPqHgpj0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=bblBmLSeveVZwZe9LZQWe0eGPyTPmvEP0806wOdOnC84meluOeJUxAKjtmi2UxgfL
-	 Ve5KNCe17dRFHX+wKgwe6No5qh2xaCZZtRqTHzV0gnnjq6yqIwssjhpFFTSIME3PPY
-	 5JpXyyrljsYFDqsDyzpsEjTVwfRuB7CRq6Kg2SraWta0CtuzywloD82N8DYdOXac3T
-	 LXV2WthpX0V7CDT4sL9GcUIw1dd33P+X9TX5DDYuItapsKtgQIOXWr3hdDovPGz+95
-	 7wiloHgYrTow7R2W+sytkLbhInoOe0oXcY1VFoGi3bvZaq8qBnPTQjM3ZoI2M1xGPj
-	 IHdJMzJBRq9/Q==
+	b=GZ2eVYl0VPAsd9WJJC3knThIkmnuGiu8JPaLuu3u1Aiqal/a0V0CyzuBDIGhqvX0n
+	 XLyR+eP5DR7j7e8tef8VXsaKd+C2sd8SlenJ82gBwzBObLdP0Fj8u8bzjE4a5Xo9X+
+	 dwvZjVes7hbNnUUTsu7ARJDVAh8l+lMU/6+1bZZyaAomjzSmQAWqGndUmgHbnYXgi0
+	 FiU8CbHhewAVzLXZVZndrEs34IFd1TXvREeNbal/L4fTRX/RffxWQRFxSIHVxfC9Kx
+	 39/o2/Zkk9WDu0zEGr94JsT4tPVfrlAhPeuREyYvmptd23BajxagsAKRuNjndRj+q2
+	 3lmFAplR2no4g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1ECB0C595D0;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3143CE3308D;
 	Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: integrator: fix PCI bus dtc warnings
+Subject: Re: [GIT PULL] ARM: soc: Zynq SoC changes for v6.6
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169182859612.22229.1559473889662917570.git-patchwork-notify@kernel.org>
+ <169182859619.22229.3162832775412926642.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Aug 2023 08:23:16 +0000
-References: <20230811-versatile-dts-v6-6-v1-1-d8cb9d1947ed@linaro.org>
-In-Reply-To: <20230811-versatile-dts-v6-6-v1-1-d8cb9d1947ed@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <a56457a0-7e5a-df46-2c86-3f2ace578984@monstr.eu>
+In-Reply-To: <a56457a0-7e5a-df46-2c86-3f2ace578984@monstr.eu>
+To: Michal Simek <monstr@monstr.eu>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 11 Aug 2023 09:00:06 +0200 you wrote:
-> From: Lin Yujun <linyujun809@huawei.com>
+On Fri, 4 Aug 2023 13:13:16 +0200 you wrote:
+> Hi,
 > 
-> An warning is reported when allmodconfig is used to compile the kernel of the ARM architecture:
+> please pull this one Rob's patch to your tree,
 > 
-> arch/arm/boot/dts/arm/integratorap.dts:161.22-206.4: Warning (pci_bridge): /pciv3@62000000: node name is not "pci" or "pcie"
-> 
-> Change the node name to pci to clear the build warning.
+> Thanks,
+> Michal
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: dts: integrator: fix PCI bus dtc warnings
-    https://git.kernel.org/soc/soc/c/42ff49a1967a
+  - [GIT,PULL] ARM: soc: Zynq SoC changes for v6.6
+    https://git.kernel.org/soc/soc/c/d842f4dc68a0
 
 You are awesome, thank you!
 -- 
