@@ -4,59 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA795C04FE2
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D02DFC3DA40
 	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 10:20:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B24C8C433AD; Sat, 12 Aug 2023 10:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9BF2EC43397;
+	id C402EC433B6; Sat, 12 Aug 2023 10:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AD9A4C433AB;
 	Sat, 12 Aug 2023 10:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1691835627;
-	bh=3cbYVrlGiARYZ2Zj85dRhDY8dZPUOqbw7L0F/2CZIug=;
+	bh=hfqgN025bW20OnVOFx8CgBBXVtllTZuNQ/4hJOYbzBU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Xi8QpV3slEte06YZYqSVZegARjFgvii/dyx0k5TNFelsFmn8QEMBByl0UlKxP8oNL
-	 smieN8/XmyfPFdBGTw+hau0F3m6YZr3JAEXv218CDWRW13TG9WDtQASEC0fyboZP16
-	 SLZM6OttseF/Z7VSyeZRNaWT2sVdusZwIQ9CoLV/eS/0SFOJcdmMMlAzEHMamn+Cz9
-	 GWYFWsjNgp/6qkD8W2oBCmKQaH83MVMQZhTnl20/9y2nYamayoCuPo+T1XLjqQgKcZ
-	 bsVbLtiZFHXGrvPsh6W8crk/KiA5412JvYr9quDi93JsUPSIRRsIL3OGrOG72fbq3d
-	 4jNk28hW2iy7g==
+	b=lljPwhN5vdrjPS8ghP9IkO/UrPMJfX7X1OkIOMBHut/V08Ccs9qfy4YyhoUNWCrh1
+	 ldmVKgNw1HtcrUBotJxunvZUV6UpHInOatBBnGubyIF3LEn8UDbLxSg6i77PPVb4rl
+	 2x0gSp6yC3ZiK5oCdHOKQiZmNUG5eBZmqmDa/TTQGuXuKT9l9pv0fzbEsgR9Tre0gI
+	 bBkWuaGJLsvswhRY24zuhvnmfELGEd2rW7YkwzpQBRkgDOAQNB6zhNT2d4yGzLiCxN
+	 MpR0SQD3Vk+qTuRznXdVza0bprb1p30T9kk2uvJSwQezXTzP2k6trGvIdPPudqhRJ3
+	 uFp8ylOspi5og==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8AA1EC3274B;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9BF50E505D5;
 	Sat, 12 Aug 2023 10:20:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND] ARM: multi_v7_defconfig: Enable TLV320AIC3x
+Subject: Re: [GIT PULL] Allwinner drivers changes for 6.6
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169183562756.32343.5324812065118860996.git-patchwork-notify@kernel.org>
+ <169183562763.32343.18044876012485267141.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Aug 2023 10:20:27 +0000
-References: <20230731-arm-tlv320aic31xx-config-v1-1-013c8c321dad@kernel.org>
-In-Reply-To: <20230731-arm-tlv320aic31xx-config-v1-1-013c8c321dad@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+References: <20230806180650.GA127142@jernej-laptop>
+In-Reply-To: <20230806180650.GA127142@jernej-laptop>
+To: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 31 Jul 2023 12:53:27 +0100 you wrote:
-> A number of TI based platforms use TLV320AIC3x since it was their
-> standard audio CODEC for quite some time, including the Beagle X15.
-> Enable it multi_v7_defconfig to improve test coverage.
+On Sun, 6 Aug 2023 20:06:50 +0200 you wrote:
+> Hi!
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm/configs/multi_v7_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+> Please pull following driver changes for 6.6.
+> 
+> Best regards,
+> Jernej
 > 
 > [...]
 
 Here is the summary with links:
-  - [RESEND] ARM: multi_v7_defconfig: Enable TLV320AIC3x
-    https://git.kernel.org/soc/soc/c/a1fdf44bfd88
+  - [GIT,PULL] Allwinner drivers changes for 6.6
+    https://git.kernel.org/soc/soc/c/347cdfc86b0c
 
 You are awesome, thank you!
 -- 
