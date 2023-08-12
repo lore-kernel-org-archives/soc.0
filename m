@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADCD4C04A94
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0B08C0015E
 	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 737BCC433CD; Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A3DBC433C8;
+	id 64777C433CC; Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D466C433C9;
 	Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1691828596;
-	bh=xRmYqGop7BxFSGTglSlUoBRBgmjw+BGPBO9CPqHgpj0=;
+	bh=SgKmJBnaGqyQk5yUuxzYV6zoCTxHL+UochkoG8mH6FI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=GZ2eVYl0VPAsd9WJJC3knThIkmnuGiu8JPaLuu3u1Aiqal/a0V0CyzuBDIGhqvX0n
-	 XLyR+eP5DR7j7e8tef8VXsaKd+C2sd8SlenJ82gBwzBObLdP0Fj8u8bzjE4a5Xo9X+
-	 dwvZjVes7hbNnUUTsu7ARJDVAh8l+lMU/6+1bZZyaAomjzSmQAWqGndUmgHbnYXgi0
-	 FiU8CbHhewAVzLXZVZndrEs34IFd1TXvREeNbal/L4fTRX/RffxWQRFxSIHVxfC9Kx
-	 39/o2/Zkk9WDu0zEGr94JsT4tPVfrlAhPeuREyYvmptd23BajxagsAKRuNjndRj+q2
-	 3lmFAplR2no4g==
+	b=D7n66BVgaMO6t1ADtHDvwuRcutSBHQXXLzTa/xIOhwoAtjH4QARECee20oOP1OxYr
+	 plpUJn5Foe7NHZpwccEGGGdStv097JdBnBhhnCTD3j2o9vQIQ94notD6tR2vaefVdw
+	 jI7uTW8D89d0J1bGIvAWkqCPauXvqgtFJRQcV7OXRYyGehQwGYL5LEMsOnGQNVfGFG
+	 XpJDr56kjQtRPfeGwWgpzCVsthXzuIz6GeQyQq11kRRPRZ3rCAjxu4ztqLBclvjAaC
+	 9byj6vjmeQ1lW/cnAEtcMWFnNnxevBsD+aHmj1N8IMKxTasDxkiLHeDKWohvsQGgRR
+	 HxBiFJ1xmyebA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3143CE3308D;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 279F6E505D5;
 	Sat, 12 Aug 2023 08:23:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: soc: Zynq SoC changes for v6.6
+Subject: Re: [GIT PULL] i.MX fixes for 6.5, 2nd round
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169182859619.22229.3162832775412926642.git-patchwork-notify@kernel.org>
+ <169182859615.22229.17401258822804679279.git-patchwork-notify@kernel.org>
 Date: Sat, 12 Aug 2023 08:23:16 +0000
-References: <a56457a0-7e5a-df46-2c86-3f2ace578984@monstr.eu>
-In-Reply-To: <a56457a0-7e5a-df46-2c86-3f2ace578984@monstr.eu>
-To: Michal Simek <monstr@monstr.eu>
+References: <20230809100034.GS151430@dragon>
+In-Reply-To: <20230809100034.GS151430@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 4 Aug 2023 13:13:16 +0200 you wrote:
-> Hi,
+On Wed, 9 Aug 2023 18:00:34 +0800 you wrote:
+> The following changes since commit 53cab4d871690c49fac87c657cbf459e39c5b93b:
 > 
-> please pull this one Rob's patch to your tree,
+>   soc: imx: imx8mp-blk-ctrl: register HSIO PLL clock as bus_power_dev child (2023-07-19 15:44:02 +0800)
 > 
-> Thanks,
-> Michal
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.5-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: soc: Zynq SoC changes for v6.6
-    https://git.kernel.org/soc/soc/c/d842f4dc68a0
+  - [GIT,PULL] i.MX fixes for 6.5, 2nd round
+    https://git.kernel.org/soc/soc/c/991e0d9dbbd0
 
 You are awesome, thank you!
 -- 
