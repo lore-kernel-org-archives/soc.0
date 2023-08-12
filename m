@@ -1,158 +1,67 @@
-Return-Path: <SRS0=I3jL=D5=arndb.de=arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74DB7C0015E
-	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 12:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D222C001B0
+	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 12:50:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2ADBDC433CB; Sat, 12 Aug 2023 12:25:31 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 21189C433C8;
-	Sat, 12 Aug 2023 12:25:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21189C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id D7A935C00F2;
-	Sat, 12 Aug 2023 08:25:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 12 Aug 2023 08:25:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1691843127; x=1691929527; bh=+DE7K+FkDwlmdeL3CpVV/dlir8qOYF4EGSw
-	DTQ8Iztc=; b=JArr1yVWNA+hyM/8PmwyBL5cCOeyn7ppUeMvEj3q6erbi0eVawO
-	867hmjCwtRzshjj2II9l4BZKRuGGCWLMkuP/Tz/OAalpUsmZM1BJGT78l2AG0a7d
-	gIR73l20BuTSrI5WwqBqiou8kAjZCn4k+C8idCsQE+gb5gn6UUA9mKj46tB92fj5
-	esXxYeS5cZLNSKqyZBfQM8S5e4522oHRV0grJaSo3Y7WR0DwZXZ02YsllhwdAwrP
-	Q0IflLIBUqovRLVQ784WxamIL05exxJ5WruA/DK7ljvJndImRdIqE9o+MMDk+YKp
-	vAXNEpdE8rvzXzC1CM81oyXljQQcVSJi+mw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1691843127; x=1691929527; bh=+DE7K+FkDwlmdeL3CpVV/dlir8qOYF4EGSw
-	DTQ8Iztc=; b=Az+t/QSiqKmMPqKtoziHfe7jvt4TJZzOE1fILZdhkcUAndG4fn8
-	eAreGmEkLX/xwFMV0GsoLrVMOhFDfXCIJD3LJ/0phyC2Q8PDF1n7Cxq1tuE4L7G3
-	9sDzitcmlA8w8LoYLCUxLxF+YLQj6fDGzTSfNN8Axz7WJbkXKFqHM5OEoTyzLQek
-	Ff+9ZflUFUQmEyZNs5D0IUgSCQeLiABn/iMNOpkAPEE8DxrbtuihPDk8qR1qEjN5
-	Y+tjaINHK7bM0/uSb3RlrvuJJb/KXXMGdOBsej/cCwkKqyy3sW7mLqKaZET0DGhf
-	gQoJPttwz9jPteAjvxC47AVo3AX0ZLrLjGg==
-X-ME-Sender: <xms:NnrXZIzvzHGDioQfqPjdOYWvVqV7l4pnddLNQ9kqdvM7IZ5lS267EQ>
-    <xme:NnrXZMTifxguaVpAQlXXwXslDwd56SoT_D1BJsSPRC08gVTabjHd5tg5qWZAMTTAM
-    13ktE_tmuUa2w22Pxo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddttddghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeettedttdefhfekueduvedutdejudetgfekgfegfefhjeejteegveehtdeh
-    veejgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhlihhnuhigqdhmihhpshdroh
-    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegr
-    rhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:NnrXZKX9P1BhvMJDQMMiY_IYIPZHOeNBSEWK5rOrNIWPbKu4bpWFiA>
-    <xmx:NnrXZGipINhmUz8Wv4-kl9WFBgJe4FtJ4ccxqF68HUAyxkE0vI43KQ>
-    <xmx:NnrXZKBVP_aSNVnYmUKzXmng-IlmF0BY_vpf_iyUsGyelQuMHLJVrg>
-    <xmx:N3rXZGzh1zo1LBJT5Oeh7YcR2sxGyGV06W2jhv1PJY6SUMznMbBNsg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A7436B60089; Sat, 12 Aug 2023 08:25:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
-In-Reply-To: <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-2-zhuyinbo@loongson.cn>
- <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
- <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
-Date: Sat, 12 Aug 2023 14:25:05 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
+	id 2487CC433CC; Sat, 12 Aug 2023 12:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 04DE5C433C8;
+	Sat, 12 Aug 2023 12:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691844622;
+	bh=CeRGI4jDNsRUN3GRF+Ivar9msoeswdRObED0SiUi5Aw=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=BePXhKSdw/ZiuXkWXySZLv007ZaPctXKf4MC5qJSbXfGNIErZSBBrSQBwi6kq3IIq
+	 EBX5V4+r9azYGZQIPuVEpEskhoIHeQKZ9q1UCZXLDT3xGeMjNrtm+r2SRmJ84pDDgu
+	 0KnNsYw2MGBaXpZCJF95YaQXRQTpLySmLPjesusD67jgV+4EoOegn0BNEIta8MJmKZ
+	 Ix05n1oZ5piqS8btQQHQlxx8Al3ApIFNLWPXZejKPg6MYlts5CtIfpAP4meVth1sWg
+	 4KOo7bYei/roz+IA+weUk89bN3s0ndBNY+VzENSuIOlHZoQvGxdV91+SRDgZkDYlz2
+	 s5fHJKdZ4wzTQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D67B2C3274B;
+	Sat, 12 Aug 2023 12:50:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 resend] ARM: dts: nuvoton: Fix pca954x i2c-mux node names
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <169184462186.4542.11097462968188045123.git-patchwork-notify@kernel.org>
+Date: Sat, 12 Aug 2023 12:50:21 +0000
+References: <0e5625985cecd70e0f766da8eace6c6f7ae3192e.1689600667.git.geert+renesas@glider.be>
+In-Reply-To: <0e5625985cecd70e0f766da8eace6c6f7ae3192e.1689600667.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-To: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org,
- "Ulf Hansson" <ulf.hansson@linaro.org>
-Cc: "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
- "Liu Peibao" <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
- loongarch@lists.linux.dev, "Liu Yun" <liuyun@loongson.cn>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Cc: soc@kernel.org
 
-On Fri, Aug 4, 2023, at 04:54, Yinbo Zhu wrote:
-> =E5=9C=A8 2023/8/3 =E4=B8=8B=E5=8D=883:44, Arnd Bergmann =E5=86=99=E9=81=
-=93:
->> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
->>=20
->>> +  loongson,suspend-address:
->>> +    $ref: /schemas/types.yaml#/definitions/uint64
->>> +    description:
->>> +      The "loongson,suspend-address" is a deep sleep state (Suspend=
- To
->>> +      RAM) firmware entry address which was jumped from kernel and =
-it's
->>> +      value was dependent on specific platform firmware code. In
->>> +      addition, the PM need according to it to indicate that current
->>> +      SoC whether support Suspend To RAM.
->>> +
->>=20
->> I just commented on this in the driver patch, assuming this
->> was an MMIO address, but I'm even more confused now, since
->> we try hard to not rely on being able to just interface with
->> firmware like this.
->>=20
->> If this is executable code, where does this actually reside?
->
->
-> Pmon firmware code.
->
->> Is this some SRAM that needs to execute the suspend logic
->> in order to shut down memory and cache controllers?=20
->
->
-> Yes, The suspend-to-ram after into pmon firmware code and set
-> self-refresh mode in memory controller and ensure that memory data is
-> not lost then shut down memory controller.
+Hello:
 
-I'm sorry I missed your reply earlier, getting back to the
-thread now. So it's clear that this code needs to run in a
-special memory from your description, but I'm still trying
-to understand the details better.
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-I found https://github.com/loongson-community/pmon source
-code, and a reference to its origin at LSI Logic at
-https://www.linux-mips.org/wiki/PMON but otherwise have
-no idea about what this actually is, or how it relates
-to your UEFI firmware. Did you add UEFI support to PMON,
-or do you use it as a first stage loader that loads
-the actual UEFI implementation (EDK2 or u-boot, I guess)?
+On Mon, 17 Jul 2023 15:32:13 +0200 you wrote:
+> "make dtbs_check":
+> 
+>     arch/arm/boot/dts/nuvoton-npcm730-gbs.dtb: i2c-switch@71: $nodename:0: 'i2c-switch@71' does not match '^(i2c-?)?mux'
+> 	    From schema: Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+>     ...
+> 
+> Fix this by renaming PCA954x nodes to "i2c-mux", to match the I2C bus
+> multiplexer/switch DT bindings and the Generic Names Recommendation in
+> the Devicetree Specification.
+> 
+> [...]
 
->> Or is
->> this a runtime firmware interface similar to how UEFI handles
->> its runtime services to keep the implementation out of
->> the kernel?
->
->
-> No, The main cpu and other cpu will offline that after into firmware a=
-nd
-> finished Corresponding operations, the pmon firmware will not run.
+Here is the summary with links:
+  - [v2,resend] ARM: dts: nuvoton: Fix pca954x i2c-mux node names
+    https://git.kernel.org/soc/soc/c/bc924997c750
 
-I'm still trying to understand your explanations here.
-You say that pmon no longer runs, but that seems to contradict
-what you said earlier about branching into pmon firmware code
-for suspend.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Is this executing directly from ROM then?
 
-       Arnd
