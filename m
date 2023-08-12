@@ -1,65 +1,80 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=FUiy=D5=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694BAC3DA41
-	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 12:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74AD2C0015E
+	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 21:24:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E017C433C9; Sat, 12 Aug 2023 12:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1866EC433CA;
-	Sat, 12 Aug 2023 12:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691844622;
-	bh=NqEsHYvNDkgRtvX2h+5s33lk16Bb+/Rw1GBk11hqq0U=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=nyMUwgsAwAksQHKw5sr4L/DyPNAt4y+NuEyGLpPq9e56QD72kuPZLrI2lTWGLzh6A
-	 R78T268erbK3/SnSHHTcuU8q2oR0LEPpoP2ZktBUjLr37qNqSFETvIn5nLzVQnexoh
-	 vqzIUvwV/wC8J1uIi0jAljoRY6GHl/2PcVMaE7hSgWUPW+MF7M8aVDFLSZTu4E+3p7
-	 dkt08ilGUhlmL7TsfTMtDMldgPYWIlqeMD79Uc4MxVdajtq5PXYPuucVAJKxLZVJiZ
-	 NDY7UWTp5BGxHG4aTxdBbuOfwAWEjZ4h3H3qvA4aS27OrPt1lK75WBMLEF+F7QGCqQ
-	 8OAx33vG9MZqg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3796C64459;
-	Sat, 12 Aug 2023 12:50:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Documentation/process: maintainer-soc: document dtbs_check
- requirement for Samsung
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <169184462192.4542.3504542470520322277.git-patchwork-notify@kernel.org>
-Date: Sat, 12 Aug 2023 12:50:21 +0000
-References: <20230712084131.127982-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230712084131.127982-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 36C3BC433CA; Sat, 12 Aug 2023 21:24:32 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 045F2C433C7;
+	Sat, 12 Aug 2023 21:24:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 045F2C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DD3720003;
+	Sat, 12 Aug 2023 21:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1691875466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=fJK5m69TEgMRKl5CNdDDuhjBwZhgd9GgfEtaTWo9xKA=;
+	b=NpTVLSu5oWmYXMq75XNn2W4aTzZ4aIovV1q2gI7x1gllKsm/7L8hRVO4nzDrQA2vvmj8Iw
+	egq/DH3XkLyPRRI3K89SYcnL0gePyGqmeJuN6gbdrtXuBf+M0pBsV+Ztq7CUZEraC231Wr
+	wQElzbwbCvzWbXvxx+OQVPYeZKWIMbzlJ0WKs6xrx3g5PIHt+1rd+2bXVK+eXZ1h7PtU4m
+	R4Ul35lI2x/MdCTFbysEpTaAI5AnZw6sIGBGFdCmg6bEUNKf1FdV1JSTFJYfThI8V58zxN
+	/6ypqm5Trr4y0KVMYwVWlAdXY9NhVm1yIlCJ9j67KGuW4q5i1dcU/h8OMXXm+w==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: arm for v6.6 (#1)
+Date: Sat, 12 Aug 2023 23:24:25 +0200
+Message-ID: <87jzu0t0mu.fsf@BL-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-GND-Sasl: gregory.clement@bootlin.com
 
-Hello:
+Hi,
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Here is the first pull request for arm for mvebu for v6.6.
 
-On Wed, 12 Jul 2023 10:41:31 +0200 you wrote:
-> Samsung ARM/ARM64 SoCs (except legacy S5PV210) are also expected not to
-> bring any new dtbs_check warnings.  In fact this have been already
-> enforced and tested since few release.
-> 
-> Cc: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> [...]
+Gregory
 
-Here is the summary with links:
-  - Documentation/process: maintainer-soc: document dtbs_check requirement for Samsung
-    https://git.kernel.org/soc/soc/c/38d0e83b9656
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-You are awesome, thank you!
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-arm-6.6-1
+
+for you to fetch changes up to 693d28730db31cbd6f57ab7591950ca734a7bf1d:
+
+  ARM: dove: Drop unused includes (2023-08-12 17:00:30 +0200)
+
+----------------------------------------------------------------
+mvebu arm for 6.6 (part 1)
+
+DT related headers clean-up
+
+----------------------------------------------------------------
+Rob Herring (2):
+      ARM: mvebu: Explicitly include correct DT includes
+      ARM: dove: Drop unused includes
+
+ arch/arm/mach-dove/common.c    | 2 --
+ arch/arm/mach-mvebu/kirkwood.c | 1 +
+ arch/arm/mach-mvebu/pmsu.c     | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
