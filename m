@@ -1,51 +1,52 @@
-Return-Path: <SRS0=FUiy=D5=bootlin.com=gregory.clement@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8E06C0015E
-	for <soc@archiver.kernel.org>; Sat, 12 Aug 2023 21:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FC0C001DB
+	for <soc@archiver.kernel.org>; Sun, 13 Aug 2023 10:26:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BFC3FC433CA; Sat, 12 Aug 2023 21:25:58 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1F455C433C8;
-	Sat, 12 Aug 2023 21:25:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1F455C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A205D40004;
-	Sat, 12 Aug 2023 21:25:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1691875548;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=Ud1VmrcGNGTAcXuZjrh56qlPvKEMQq5BDd/w2Pd2f9I=;
-	b=Zghb/txT3oHVYRGeImgaAERQ6lnkoZ0FI7COm/ftbUosrCCC4sfkTjvhNH+n1V+/sPt4Kd
-	M/SX7FELm5LyqOWEfAXmP1nYWI87NyokqTEN8BOANoh1qofWw6DiluuOd5rfJraVIFpt3y
-	te6dL8BCMlybDmfVJjFJOPjUS1DdraES5c32+EKb+F7Mi4d/YME8NESaXHmGIztyC42yQb
-	jL82U6A8GAMpRI4Smp23atePpXQtDqtyX1HIj3n1fr4Y7N0uIscbquWNUC7F0rTyxL4KJm
-	OdacQUtLou0TJM1aFkWKI6uM0eCHrM8i/BLrYKw96fj6P/9+8E9fzdSG5zpDDA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+	id D12C3C433C9; Sun, 13 Aug 2023 10:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEBE9C433C8;
+	Sun, 13 Aug 2023 10:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691922362;
+	bh=uETOSNzKInr29sNq+hJMMvyUIpPd95CKHHZMib7LtuE=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=OIQ2uojDoJdFGm/AQFeWMSjkSTPVf1QXPARrML7CUoawTGwd/6LrOedQroFb05PIQ
+	 hB5HuS6eJ6S860FNH5zii9wCYPVP30bV4qbfAiNMmS3Zs9YJ2oUrTNQ4EJd/FAoeD+
+	 psnDXnR0xgqMJUIj0Ummi0o1soiFV8Iys6xbpbGlCCEmr1O434CukNAPzyVF829LqR
+	 D9Sf8qPcP2LtOYHypPbhOv2Y+oQm/DVD81pHeUkt9cAr9r5yCL6AmNk+p8XnTWAkuY
+	 nhU3h1amj5/P8ICFO+k41SiY54FFqj1XJVjYOc4u+ImrnP8A0Pmz6a61dFdAKg8gQL
+	 n+/OyKy4TQbUA==
+Date: Sun, 13 Aug 2023 11:25:59 +0100
+From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v6.6 (#1)
-Date: Sat, 12 Aug 2023 23:25:46 +0200
-Message-ID: <87edk8t0kl.fsf@BL-laptop>
+To: soc@kernel.org
+Cc: conor@kernel.org, palmer@dabbelt.com, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V Devicetrees for v6.6
+Message-ID: <20230813-naturist-fragment-ac7d10c453ba@spud>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="oSUQ6CKENUuimYrJ"
+Content-Disposition: inline
 
-Hi,
 
-Here is the first pull request for dt64 for mvebu for v6.6.
+--oSUQ6CKENUuimYrJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Gregory
+Hey Arnd,
+
+Please pull what is entirely StarFive related changes for v6.6.
+I noticed this morning that I had an s/0xf/15/ change sitting unstaged
+on my system, hence the recency of the top-most commit in the branch.
+
+The rest of this has been in linux-next and all that jazz.
+
+Thanks,
+Conor.
 
 The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
@@ -53,30 +54,107 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-6.6-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.6
 
-for you to fetch changes up to 58fe732052196777112fdba536fb9db5cdd42ec6:
+for you to fetch changes up to f331eb1f5454123f3cec51c18a3d86c2a53bddb9:
 
-  arm64: dts: marvell: Add NAND flash controller to AC5 (2023-07-13 10:58:51 +0200)
-
-----------------------------------------------------------------
-mvebu dt64 for 6.6 (part 1)
-
-Add the NAND Flash Controller on the AC5/AC5X SOC device tree
-Fix style issue
+  riscv: dts: starfive: jh7110: Fix GMAC configuration (2023-08-13 11:12:20 +0100)
 
 ----------------------------------------------------------------
-Chris Packham (1):
-      arm64: dts: marvell: Add NAND flash controller to AC5
+RISC-V Devicetrees for v6.6
 
-Krzysztof Kozlowski (1):
-      arm64: dts: marvell: add missing space before {
+StarFive:
+There's only StarFive stuff this time around, starting with some
+bindings to get clock ID defines out of the binding headers. Getting
+these (and the syscon bindings) in unblocked a swathe of stuff sitting
+on the list. Added are: new clock controllers and sycons, ethernet
+support, thermal sensors, USB and PCIe PHYs, hwrng, mmc and a few more
+besides for the VisionFive v2. The original VisionFive and BeagleV
+Starlight got some the thermal sensor support too, as that is supported
+by the same driver. These changes make the board actually usable with
+something other than an initramfs.
+Overlay support by way of the -@ flag set during dtb building, is added
+also.
 
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi        | 20 ++++++++++++++++++--
- arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts |  2 +-
- 2 files changed, 19 insertions(+), 3 deletions(-)
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+----------------------------------------------------------------
+Conor Dooley (1):
+      Merge tag 'clk-starfive-bindings' into riscv-dt-for-next
+
+Felix Moessbauer (1):
+      riscv: dts: Enable device-tree overlay support for starfive devices
+
+Hal Feng (2):
+      riscv: dts: starfive: jh7100: Add temperature sensor node and thermal-zones
+      riscv: dts: starfive: jh7110: Add temperature sensor node and thermal-zones
+
+Jia Jie Ho (2):
+      riscv: dts: starfive - Add crypto and DMA node for JH7110
+      riscv: dts: starfive - Add hwrng node for JH7110 SoC
+
+Minda Chen (2):
+      riscv: dts: starfive: Add USB and PCIe PHY nodes for JH7110
+      riscv: dts: starfive: Add USB dts node for JH7110
+
+Samin Guo (3):
+      riscv: dts: starfive: jh7110: Add ethernet device nodes
+      riscv: dts: starfive: visionfive 2: Add configuration of gmac and phy
+      riscv: dts: starfive: jh7110: Fix GMAC configuration
+
+Walker Chen (2):
+      riscv: dts: starfive: jh7110: add dma controller node
+      riscv: dts: starfive: jh7110: add the node and pins configuration for tdm
+
+William Qiu (6):
+      dt-bindings: soc: starfive: Add StarFive syscon module
+      riscv: dts: starfive: jh7110: Add syscon nodes
+      riscv: dts: starfive: Add spi node and pins configuration
+      riscv: dts: starfive: Add QSPI controller node for StarFive JH7110 SoC
+      riscv: dts: starfive: enable DCDC1&ALDO4 node in axp15060
+      riscv: dts: starfive: Add mmc nodes on VisionFive 2 board
+
+Xingyu Wu (8):
+      dt-bindings: clock: Add StarFive JH7110 PLL clock generator
+      dt-bindings: clock: jh7110-syscrg: Add PLL clock inputs
+      dt-bindings: clock: Add StarFive JH7110 System-Top-Group clock and reset generator
+      dt-bindings: clock: Add StarFive JH7110 Image-Signal-Process clock and reset generator
+      dt-bindings: clock: Add StarFive JH7110 Video-Output clock and reset generator
+      riscv: dts: starfive: jh7110: Add DVP and HDMI TX pixel external clocks
+      riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
+      riscv: dts: starfive: jh7110: Add PLL clocks source in SYSCRG node
+
+ .../bindings/clock/starfive,jh7110-ispcrg.yaml     |  87 ++++
+ .../bindings/clock/starfive,jh7110-pll.yaml        |  46 ++
+ .../bindings/clock/starfive,jh7110-stgcrg.yaml     |  82 ++++
+ .../bindings/clock/starfive,jh7110-syscrg.yaml     |  18 +-
+ .../bindings/clock/starfive,jh7110-voutcrg.yaml    |  90 ++++
+ .../soc/starfive/starfive,jh7110-syscon.yaml       |  93 ++++
+ MAINTAINERS                                        |   7 +
+ arch/riscv/boot/dts/starfive/Makefile              |   6 +
+ arch/riscv/boot/dts/starfive/jh7100.dtsi           |  37 ++
+ .../jh7110-starfive-visionfive-2-v1.2a.dts         |  13 +
+ .../jh7110-starfive-visionfive-2-v1.3b.dts         |  31 ++
+ .../dts/starfive/jh7110-starfive-visionfive-2.dtsi | 284 ++++++++++++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi           | 503 ++++++++++++++++++++-
+ include/dt-bindings/clock/starfive,jh7110-crg.h    |  80 ++++
+ include/dt-bindings/reset/starfive,jh7110-crg.h    |  60 +++
+ 15 files changed, 1433 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-voutcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+
+--oSUQ6CKENUuimYrJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNivtwAKCRB4tDGHoIJi
+0k3oAQD4cBqqRsWiMErnX1Bk6HCncJk1Nw3PiALfYxbY+vRu/AD8CDILYW9pty8J
+ex9yYTy9fSsHqOTOYy5QKd+Yx0QW7gs=
+=S8UO
+-----END PGP SIGNATURE-----
+
+--oSUQ6CKENUuimYrJ--
