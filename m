@@ -1,185 +1,108 @@
-Return-Path: <SRS0=BoVD=D7=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=0kd7=D7=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 709C9C001DB
-	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 08:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86996EB64DD
+	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 08:32:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3612BC433C8; Mon, 14 Aug 2023 08:20:15 +0000 (UTC)
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 45843C433C8; Mon, 14 Aug 2023 08:32:37 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 80A5CC433C7;
-	Mon, 14 Aug 2023 08:20:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80A5CC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 6DAED5C0114;
-	Mon, 14 Aug 2023 04:20:12 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 14 Aug 2023 04:20:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1692001212; x=1692087612; bh=B51Onwh3iWBAAPtdsNjfOqvNOpKIaP2W3tR
-	msFA0aKE=; b=TMH+OHpgzNCd4Six7k9m/+K7EdFcOikfRALEuZrd/RvwI0OVLFF
-	vx/PNfza3P6C452k1Iz+k2BxPQH7WkLH+4jt37cmZIgfB9peL/4fg5ebNAaYvxfb
-	kbM0cK3pQ/cmBi1oXKj/vi341jAR0rHUe50LCBdizobNlC0T0MyxX4rMrYwFR993
-	xCw1KndzQlg/4e2FVGDyzA1s3ip+GU+JjDq5kdRsNoY46a6o8qaq207GywGpS7Ms
-	th5ZvtLzAwroyCZcmEEmF9GuQBLTnzXAutfM7dB9QDUG94MnvwlqZqRP2YwHEkCU
-	lCGkBLJjTNTAzBTFO058sowVJ3ZGu7ZxRdQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1692001212; x=1692087612; bh=B51Onwh3iWBAAPtdsNjfOqvNOpKIaP2W3tR
-	msFA0aKE=; b=MJkvaMv0Ijx/vjESlu3NDBeAKtTKYM/jAgwOhIBurbT7jBxo38e
-	Qo+kVTfavZImHEFdvhcShCxgznhcdDFjPrQQiWerFxLyGUqQ0/5YGJy/jxrOBPTP
-	SonEY5TfhdDnVncCgrpMcCFUbI/cbOonlA/ZXsVzg5Sk37IuEIGoNHxkS0XcU42g
-	GSy6OFI+C41MJbC4oWCg/geQvFWoog5p6ee+YMjHtQ7X4CimNLgVDYb8G/IrLlci
-	00jtuzjrWfMY+CbqxVUEEjPblzXIaeEaNPFGPMG0oxRyUfp+EeYJqe2ujgiaQgco
-	jNUBtWeeG0cbxZ6cdctD6m+WuR3k88zm2uw==
-X-ME-Sender: <xms:u-PZZK6Vv_mMrP4elr-XUPlX1OEQt4BoQTl1mBsuQZ4ZiKjZveYG2g>
-    <xme:u-PZZD4ra58VdJIjnH9x-dN_fwI-4PbtOibrUPPi2JwD1y9TilC_mrc5oWjxEbsAN
-    _XtW-w29lrqHsl1lWU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddtgedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeettedttdefhfekueduvedutdejudetgfekgfegfefhjeejteegveehtdeh
-    veejgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhlihhnuhigqdhmihhpshdroh
-    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegr
-    rhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:u-PZZJd1A8KNHsZsQV6ydlMx6A41uEN6W268ArxUt2kjybCeiCDFlg>
-    <xmx:u-PZZHInNlWjmB3NQwLTiQX9NVBzi4BwJgXV0AZ6IHvg-O5iQ5rU9g>
-    <xmx:u-PZZOL72mS2HRU-guEhimaq_Tyhk6StEFW-7Izd07mqXATvBYv7Jw>
-    <xmx:vOPZZJZ0ucCZ5qCMB0aL-BRyEFaODwgEbRPKP2u42lrXDwJ8lBS5nQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6D7CFB60089; Mon, 14 Aug 2023 04:20:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <19feb595-e22a-4304-9b88-b5cb55949cd8@app.fastmail.com>
-In-Reply-To: <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-2-zhuyinbo@loongson.cn>
- <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
- <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
- <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
- <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
-Date: Mon, 14 Aug 2023 10:19:51 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2E722C433C9
+	for <soc@kernel.org>; Mon, 14 Aug 2023 08:32:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E722C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-31972944f30so944934f8f.0
+        for <soc@kernel.org>; Mon, 14 Aug 2023 01:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692001954; x=1692606754;
+        h=content-transfer-encoding:organization:reply-to:content-language:cc
+         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PNZQqo4ZyBJ6uD5xvDvqRAAFxsgCDJevt+fCQXqqKbM=;
+        b=Q+Pex536L3molux4sK8DDSGu+CXwccqwirDZBktMhMBsQyyIi4lME088Ow7X8HbgfN
+         4OfRJXH/52czUhOHz9P9zTpc67BjDNiUROHdMqzgjx89gedCVcMT4LH7aIrPVgjVxpij
+         djHljCOoNUJIcDNXuxVc+CJgiHCQlybC92WhCLBoluxEcHArYz8ljHBob1XkTprAoSqy
+         Xu1pJuIEFqf8/SKRu1nKFgTMLEsTGPc2A+lTJogPREw+cicz9Tz4OoCCQlfLMZ4I+/IK
+         fLcJEY+Kj/8+uidrL/Q5oW3WxVngx2Nd+0qQkFZa29+2/wxt44cYF7yUaz8aS7u1oxRN
+         EifQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692001954; x=1692606754;
+        h=content-transfer-encoding:organization:reply-to:content-language:cc
+         :to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PNZQqo4ZyBJ6uD5xvDvqRAAFxsgCDJevt+fCQXqqKbM=;
+        b=LObfnsiDuKqbNCsa8Fb2QPMX+dt1BApE4qSAOzq54gfggau/A/4posa211RLJg95LD
+         X6FriF6ejuPgfYenf3uLOhFBFKqe5eqMN1h9o/fyUu5Ij13O2PHz0FheGY/hQ0QuVXqa
+         jD7IKX3Kpg4QrdmzSolj5NVrpQCmV5F8WUr8SyEv1P4Me593LZy6/seJ/zFnKrJztngl
+         Mef5+JTVrAWk9sm1yMjQFyb7RKYpRMf0bM/uxcNmLT5kG55e+RnM1WI4rCHIkoa9MENi
+         UyzINBhx1toiCetMF3NQLxM1nJtxfxC5XcU9ak7Lt2E+e6cCCWzKw3Q0XGDT864Uyzt6
+         pWVA==
+X-Gm-Message-State: AOJu0YzXnZyYcPxUW+/H0A7fWBFE9Q/ZxNs3A+wkF8dRJWWcezE4bwpX
+	8mcESAdT0Y04gLMGiLzBH5TPmwYKxw3eXQk9EPOOKg==
+X-Google-Smtp-Source: AGHT+IFpw2UevV0b66D8HHVQNNr1pcT09ia8HTpKoynucTBVV5Nx3qd0Lh17y+eOCUKa/X7KaevLbQ==
+X-Received: by 2002:adf:e288:0:b0:319:6288:e4dd with SMTP id v8-20020adfe288000000b003196288e4ddmr4689591wri.71.1692001954294;
+        Mon, 14 Aug 2023 01:32:34 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0? ([2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0])
+        by smtp.gmail.com with ESMTPSA id i5-20020adff305000000b0031980294e9fsm16538wro.116.2023.08.14.01.32.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 01:32:33 -0700 (PDT)
+Message-ID: <3f91bb89-bf7b-d967-a302-2a8e1b0c3b01@linaro.org>
+Date: Mon, 14 Aug 2023 10:32:33 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PULL] final oxnas removal for 6.6
 List-Id: <soc.lore.kernel.org>
-To: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org,
- "Ulf Hansson" <ulf.hansson@linaro.org>
-Cc: "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
- "Liu Peibao" <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
- loongarch@lists.linux.dev, "Liu Yun" <liuyun@loongson.cn>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Reply-To: neil.armstrong@linaro.org
+Organization: Linaro Developer Services
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 14, 2023, at 09:57, Yinbo Zhu wrote:
-> =E5=9C=A8 2023/8/12 =E4=B8=8B=E5=8D=888:25, Arnd Bergmann =E5=86=99=E9=
-=81=93:
->> On Fri, Aug 4, 2023, at 04:54, Yinbo Zhu wrote:
->>> =E5=9C=A8 2023/8/3 =E4=B8=8B=E5=8D=883:44, Arnd Bergmann =E5=86=99=E9=
-=81=93:
->>>> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
->>>
->>>> Is this some SRAM that needs to execute the suspend logic
->>>> in order to shut down memory and cache controllers?
->>>
->>>
->>> Yes, The suspend-to-ram after into pmon firmware code and set
->>> self-refresh mode in memory controller and ensure that memory data is
->>> not lost then shut down memory controller.
->>=20
->> I'm sorry I missed your reply earlier, getting back to the
->> thread now. So it's clear that this code needs to run in a
->> special memory from your description, but I'm still trying
->> to understand the details better.
->>=20
->> I found https://github.com/loongson-community/pmon source
->> code, and a reference to its origin at LSI Logic at
->> https://www.linux-mips.org/wiki/PMON but otherwise have
->> no idea about what this actually is, or how it relates
->> to your UEFI firmware. Did you add UEFI support to PMON,
->> or do you use it as a first stage loader that loads
->> the actual UEFI implementation (EDK2 or u-boot, I guess)?
->
->
-> Pmon and uefi are two different firmware, and there is no connection
-> between them.
+Hi,
 
-It sounds like we still have problems with terminology.
+Please pull this PR to remove all the remaining files for OXNAS support.
 
-I don't think categorizing UEFI as a firmware is correct,
-it's the interface used by various firmware implementations
-to load the operating system. As far as I understand,
-loongarch currently mandates the use of UEFI in whichever
-firmware is used, so if you have Pmon installed in ROM,
-and Pmon does not itself implement UEFI, it would have
-to load some other firmware such as u-boot in order to
-load a kernel through the UEFI protocol, right?
+The other patches have been merged by the respective maintainers, Mark acked
+for routing the irq-versatile changes via a SoC PR.
 
-Has the assumption that loongarch requires UEFI changed?
+Thanks,
+Neil
 
->>>> Or is
->>>> this a runtime firmware interface similar to how UEFI handles
->>>> its runtime services to keep the implementation out of
->>>> the kernel?
->>>
->>>
->>> No, The main cpu and other cpu will offline that after into firmware=
- and
->>> finished Corresponding operations, the pmon firmware will not run.
->>=20
->> I'm still trying to understand your explanations here.
->> You say that pmon no longer runs, but that seems to contradict
->> what you said earlier about branching into pmon firmware code
->> for suspend.
->
->
-> It's not contradictory.  The suspend-to-ram is that from kernel goto to
-> pmon firmware code, then pmon finished corresponding operations, which
-> was to set self-refresh mode in memory controller, then memory HW will
-> maintain its own data and no longer requires software processing, pmon
-> firmware will not run.
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-That is what I mean with a "runtime firmware interface", i.e. you
-jump into firmware in order to request services from it. Clearly the
-firmware itself does not run while the OS is executing code, but it is
-still there and waiting to be called here, which is similar to
-things like UEFI runtime services, PowerPC RTAS, Arm EL3/trustzone
-based firmware or x86 SMM firmware, except that this is much less
-formalized and only consists of an entry point with undocument
-calling conventions.
+   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
->> Is this executing directly from ROM then?
->
-> Yes.
+are available in the Git repository at:
 
-Is this the only runtime call into the firmware, or are there
-others that are either already called from mainline kernels
-or in your downsteam implementation?
+   https://git.kernel.org/pub/scm/linux/kernel/git/narmstrong/linux-oxnas.git tags/oxnas-final-for-6.6
 
-How do you ensure that the DTB matches the actual ROM code
-after rebuilding Pmon? Does Pmon itself fill that field with
-the correct address, or do you rely on it being a hardcoded
-constant?
+for you to fetch changes up to b1627ad5f457c8cea08bb2ab6b24d1c0381fbe30:
 
-     Arnd
+   MAINTAINERS: remove OXNAS entry (2023-08-14 10:26:56 +0200)
+
+----------------------------------------------------------------
+Final OXNAS removal PR for v6.6:
+- Remove irq-versatile-fpga compatible entry
+- Mark irq-versatile-fpga oxnas compatible as deprecated
+- Remove OXNAS maintainers entry
+
+----------------------------------------------------------------
+Neil Armstrong (3):
+       irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
+       dt-bindings: interrupt-controller: arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+       MAINTAINERS: remove OXNAS entry
+
+  .../bindings/interrupt-controller/arm,versatile-fpga-irq.txt   |  4 +++-
+  MAINTAINERS                                                    | 10 ----------
+  drivers/irqchip/irq-versatile-fpga.c                           |  1 -
+  3 files changed, 3 insertions(+), 12 deletions(-)
