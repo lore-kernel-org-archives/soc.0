@@ -4,61 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4051BC04FE0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 623F8C04FE2
 	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 17:10:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 200CFC433AD; Mon, 14 Aug 2023 17:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A966C43397;
+	id 2AC34C433B7; Mon, 14 Aug 2023 17:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0DA87C433AB;
 	Mon, 14 Aug 2023 17:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1692033027;
-	bh=DYoXWqqdLGTaNhjIY9L7Wi9Gk4Rw8Q5xLQl5+NVDwxU=;
+	bh=Hlo/TgtSke+aClxfT18FqQqT6RRaem2AT5tX0cQ/tX0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=dj8/AE1XZcNK3VM8XCoeMCaqUggzHwZ67pVLIFpl9UUQzeiyxsdKASwGB604DrAfX
-	 gic03CL2p6FnP3UixiIMsDQyH2Nc/5+GqS5MNoDpXhW2KGi5HNWNwvUy6VHp57YC8B
-	 4G7QVAoT18tZjRkdFsgShqPYdUCN+hfBWS6nS3luPJ64ZHwGf22kLvmhEq/dcVgnQF
-	 qewZY9mnWBJhu5WiERkynOdj/qwHjjJ/SscXenrqAKGaplS0f5wQ9tXZX4AHvnOW4j
-	 a6LHtmPCqKk+KzG/aiUzaqfSrr8BT/TleUZUAaca1XFG6Xg+WOgE+rrhP210u7/g7I
-	 hp7cNHiVmmjPA==
+	b=JXp983QLyYbUosg5dQX3shAJSBgan26+V6esFM7XUQZPNvDH/cdsdSwICpMwp/wwY
+	 SWPBzfpXTU2Oj6RQUzT7BngKmeqPQmc/9N8dagsuztkGzOZgF8JZWJt7kGs/4GhaMy
+	 KGCeSKgwVIbyCqhp0daf67FzkpG+ryRFE/r77gI6/btTvnR5N+PHTWy6FKIw7YcC4d
+	 Q53+vNJJxuV/NB515quQLewJFV9zf6waFYK9sJSqwMi1xReftaqoqSEZEECf9qN9VE
+	 kgq+usZ4uK9A9aeRb7sgBo87yeZQV7VxbigRqzHo/xYlbuEivoKc/uZTqcl8Jsy8PZ
+	 tEIuYdapMO4aQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DF131E93B38;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EFD79E93B3B;
 	Mon, 14 Aug 2023 17:10:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH PULL] ARM: s5pv210: Explicitly include correct DT includes
+Subject: Re: [GIT PULL] ARM: mvebu: dt for v6.6 (#1)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169203302690.15030.17834825068754621772.git-patchwork-notify@kernel.org>
+ <169203302697.15030.13892184464494896013.git-patchwork-notify@kernel.org>
 Date: Mon, 14 Aug 2023 17:10:26 +0000
-References: <20230814114051.25840-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230814114051.25840-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <87h6p4t0lv.fsf@BL-laptop>
+In-Reply-To: <87h6p4t0lv.fsf@BL-laptop>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 14 Aug 2023 13:40:51 +0200 you wrote:
-> From: Rob Herring <robh@kernel.org>
+On Sat, 12 Aug 2023 23:25:00 +0200 you wrote:
+> Hi,
 > 
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it was merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
+> Here is the first pull request for dt for mvebu for v6.6.
+> 
+> Gregory
+> 
+> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 > 
 > [...]
 
 Here is the summary with links:
-  - [PULL] ARM: s5pv210: Explicitly include correct DT includes
-    https://git.kernel.org/soc/soc/c/8787bc51a7e2
+  - [GIT,PULL] ARM: mvebu: dt for v6.6 (#1)
+    https://git.kernel.org/soc/soc/c/eeb751c41060
 
 You are awesome, thank you!
 -- 
