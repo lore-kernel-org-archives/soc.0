@@ -1,152 +1,189 @@
-Return-Path: <SRS0=SbT8=D7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=BoVD=D7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AE8FC001B0
-	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 12:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC59C001DB
+	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 13:42:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1E712C433C8; Mon, 14 Aug 2023 12:00:59 +0000 (UTC)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 555A9C433C9; Mon, 14 Aug 2023 13:42:11 +0000 (UTC)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 42D03C433CA
-	for <soc@kernel.org>; Mon, 14 Aug 2023 12:00:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 42D03C433CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-99c93638322so876122766b.1
-        for <soc@kernel.org>; Mon, 14 Aug 2023 05:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692014455; x=1692619255;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QUdIDf7zWkQ1oZDqOD5DaWZEhwUPDaqe+wZ5bmsclQw=;
-        b=BVCX5P+if0bPpKH4BJKmo4xu6FxdU8+GfcMcPXOd6In2+meECsJErTt9nSwuUCAlsu
-         zFIerEZDcMMtL1iCIyhTn+/qhNOSwB/QOtaJVRMZXoK4LB/3DZkMR+EYQxqLcxO7Lw4H
-         f0Hx9IGlFgOKU/I30JlC2ay6pZEN/6sCEGkrgz/lIHFJehP6iUJOgPruGgf0VqDwg9yA
-         1blr9himQBipW54+lAFFL7N8wwjSejADbyc2UhkMzo6sal0Mtwq2pTAZ/B4qQ8eVsKLh
-         lXjETXvHp9AwKkeqGMSW2QMlaUKxSyhJz+v4d/GZxzRrIyhB3JgHE1shvYabOoCoRSut
-         /3xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692014455; x=1692619255;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QUdIDf7zWkQ1oZDqOD5DaWZEhwUPDaqe+wZ5bmsclQw=;
-        b=BQriBb3hZsSoDxPI0VkbwatFRruG7sX4We1uIyR8I8iZcT3rAX67sUJ4UECxKIFgMJ
-         OmycUz1L4kOKyMuy/Rb0RfL80+SVkdi2blhTCv7xLQ2ed40E9L9erR/Ejf9qGL4QbRqW
-         ckVUBC1hR6AMzkbR528d5DOm3geI7hpJkDtQ66cv3ph++97aGw0leF+qIuwXPeozTRyX
-         aAxbMgNLQg9bIWJw9y1pm3FQd9nNNQVbnCeCLI2+uAfBT6h2atL5+8BeO0S4ImKQkZky
-         0wsDSWeY2yQu2LPAiZCBSo+Fv6pk43z1UaoB3lTP4L2oucANXgz+YSPNOInNgq4Gq0sp
-         Vtxw==
-X-Gm-Message-State: AOJu0YxarJ2HtCLSbwThpAYe0x+zz1gYHP8cDTvbh5cXYS+WTr5jlVte
-	kMaKKsjTTK6Y+cGRQyM546Joqg==
-X-Google-Smtp-Source: AGHT+IEIPxRWYGp5QGk28mUiSI7xgxjdFBG2ZwHkOcklXyO3RRtc06fihc+rBvtalMHVsb02wJR+cA==
-X-Received: by 2002:a17:907:2c59:b0:99c:ae54:6654 with SMTP id hf25-20020a1709072c5900b0099cae546654mr10285817ejc.14.1692014455190;
-        Mon, 14 Aug 2023 05:00:55 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090622cc00b009929d998abcsm5582034eja.209.2023.08.14.05.00.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 05:00:54 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4C62FC433C7;
+	Mon, 14 Aug 2023 13:42:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C62FC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 102A65C0072;
+	Mon, 14 Aug 2023 09:42:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 14 Aug 2023 09:42:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1692020528; x=1692106928; bh=JtLQE1XjIOUZcTeTsP5whAkN0vSfae5cywo
+	2KZQ9oJA=; b=Hu8nMt5o8LJapF9LALNUvc6uTUsBVbRUOS7ySwTg+z7NHo6rqpF
+	/LN875sB3oFHQTsFvw9CPGWU+u7FopQZ6CiQNZe3dzZvsDF0UYimGNIfXCQ/SVet
+	a//79hYibjZnoaYwsVix0301198piZ7hyLZE6r6p3p/CnGzXj5CoQtV1y1yhPd60
+	+3utgJ7Hc8mEyzkdj4BOd2JB0SwI+qaKT9SqSnbfvBxRUq0Bkoa/H96WHAz34JLJ
+	9k/W71Che1sm8cn0otOaC7iK9q2EkG401/fjuS7SQgIDx6vhzZ4p9ttcELkXZ63k
+	do6aQ1vUlLQ02pXcr4HqMkuR8xl1JBP2VaQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1692020528; x=1692106928; bh=JtLQE1XjIOUZcTeTsP5whAkN0vSfae5cywo
+	2KZQ9oJA=; b=01YlBOWjN+e1GbWAOx3Ax+EupWSIxIfqoSedd53cZvYGLAvuH/A
+	QjGCbYul5IctD6w9a3kd8K6lM3SIEPyEYTYB1jmpGcsUk1qcSCU8YyJkFuz7tq33
+	ehRMmZsA+ogfmBgyalmyhnHHlC/B2zegZzYJe9p+6/kV8dazEhznKCTvABTpOUtH
+	G/VQOSBjjXbLPi6yolCaStLDedP7fsW0kY0BdQyx3qylxJDegdYYdmuGl5Ev1OHi
+	4bA/CE1H9DX+iCl3bhnwIj1RUdveoHFVWycEOudU14tbhkWsXCmDP9ZbFq0mMiRJ
+	SqkME+1SLo3IJp4aOYVtTdzTrDVOuTi9w3Q==
+X-ME-Sender: <xms:Ly_aZA6FBRQG91ir1YblSsCKmlE0GAAuNXnXuebFzT1IHe4lSvqm0A>
+    <xme:Ly_aZB5XwpC8OI8RPOMPkNvAGjfu1RMJNmp4qMvq4-cXLxYIphSHYk1576oaRYkPm
+    FdO_-w5NZTv4nO2jjk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddtgedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeettedttdefhfekueduvedutdejudetgfekgfegfefhjeejteegveehtdeh
+    veejgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhlihhnuhigqdhmihhpshdroh
+    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegr
+    rhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Ly_aZPdjDIjzWkp91VBvj4_-RGiPcA7UlyBa2Vooy8vUKT24gOScsQ>
+    <xmx:Ly_aZFLmra1lC_zMbs0Ahvyc-j2KfEBjYn__eaOq1z08kGSDWsyBXg>
+    <xmx:Ly_aZEKB1NsYWLJnm8L_5SXCD3D9YBczegVJOzwtGXJsPUWZutVdyQ>
+    <xmx:MC_aZHY5T_hJwz4SLQ_AEy7fOWE5fcSiiwatXkIqV3DV3yE7br7jIA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 032FFB6008D; Mon, 14 Aug 2023 09:42:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <e04cf26e-2e38-4e87-b7b4-23dafadee00d@app.fastmail.com>
+In-Reply-To: <71c53c37-a0a6-6b11-31d5-4455d2309927@loongson.cn>
+References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
+ <20230803063703.5659-2-zhuyinbo@loongson.cn>
+ <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
+ <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
+ <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
+ <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
+ <19feb595-e22a-4304-9b88-b5cb55949cd8@app.fastmail.com>
+ <71c53c37-a0a6-6b11-31d5-4455d2309927@loongson.cn>
+Date: Mon, 14 Aug 2023 15:41:37 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.6
-Date: Mon, 14 Aug 2023 14:00:52 +0200
-Message-Id: <20230814120052.27485-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org,
+ "Ulf Hansson" <ulf.hansson@linaro.org>
+Cc: "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+ "Liu Peibao" <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
+ loongarch@lists.linux.dev, "Liu Yun" <liuyun@loongson.cn>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Aug 14, 2023, at 13:57, Yinbo Zhu wrote:
+> =E5=9C=A8 2023/8/14 =E4=B8=8B=E5=8D=884:19, Arnd Bergmann =E5=86=99=E9=
+=81=93:
+>> On Mon, Aug 14, 2023, at 09:57, Yinbo Zhu wrote:
+>>> =E5=9C=A8 2023/8/12 =E4=B8=8B=E5=8D=888:25, Arnd Bergmann =E5=86=99=E9=
+=81=93:
+>>>> I found https://github.com/loongson-community/pmon source
+>>>> code, and a reference to its origin at LSI Logic at
+>>>> https://www.linux-mips.org/wiki/PMON but otherwise have
+>>>> no idea about what this actually is, or how it relates
+>>>> to your UEFI firmware. Did you add UEFI support to PMON,
+>>>> or do you use it as a first stage loader that loads
+>>>> the actual UEFI implementation (EDK2 or u-boot, I guess)?
+>>>
+>>>
+>>> Pmon and uefi are two different firmware, and there is no connection
+>>> between them.
+>>=20
+>> It sounds like we still have problems with terminology. >
+>> I don't think categorizing UEFI as a firmware is correct,
+>
+>
+> Sorry to have confused you, uefi firmware is our internal name, which =
+is
+> actually what you referred to as EDK2, the EDK2 need use UEFI.
 
-On top of my previous fixes pull (tag: memory-controller-drv-fixes-6.5),
-because of code dependency.
+Ok
 
-The memory-controller-drv-fixes-6.5 includes two commits not listed in below
-git-pull-diff:
+>> it's the interface used by various firmware implementations
+>> to load the operating system. As far as I understand,
+>> loongarch currently mandates the use of UEFI in whichever
+>> firmware is used, so if you have Pmon installed in ROM > and Pmon doe=
+s not itself implement UEFI, it would have
+>> to load some other firmware such as u-boot in order to
+>> load a kernel through the UEFI protocol, right?
+>
+>
+> PMON is an independent firmware and loader that can directly load the
+> operating system and it does not require the use of UEFI.
+>>=20
+>> Has the assumption that loongarch requires UEFI changed?
+>
+>
+> LoongArch embedded board was use Pmon firmware, The other one uses UEFI
+> firmware (EDK2) on LoongArch platform.
 
-      memory: tegra: make icc_set_bw return zero if BWMGR not supported
-      memory: tegra: Add dummy implementation on Tegra194
+I'm pretty sure we discussed this when the loongarch port
+was originally merged, with the decisionto just use UEFI for
+booting any kernel, as the legacy entry point for the ACPI
+based environment was not really well-defined and the UEFI
+stub was an easy alternative to have more commonality
+with other architectures.
 
-Best regards,
-Krzysztof
+I see this was already extended for embedded CPUs to use
+the uefi stub with DT in commit 88d4d957edc70 ("LoongArch: Add
+FDT booting support from efi system table"), which seems like
+the right direction.
 
+Can you explain why this board would want yet another method
+for entering the kernel? Is there any documentation for the
+boot protocol?
 
-The following changes since commit faafd6ca7e6e7100d21d3f43ec17674f36c9f843:
+>>>> Is this executing directly from ROM then?
+>>>
+>>> Yes.
+>>=20
+>> Is this the only runtime call into the firmware,=20
+>
+>
+> Only when suspend-to-ram occurs, the kernel will call into the firmwar=
+e.
+> No other case.
 
-  memory: tegra: make icc_set_bw return zero if BWMGR not supported (2023-07-25 22:09:20 +0200)
+Ok
 
-are available in the Git repository at:
+>> or are there
+>> others that are either already called from mainline kernels
+>> or in your downsteam implementation?
+>>=20
+>> How do you ensure that the DTB matches the actual ROM code
+>> after rebuilding Pmon? Does Pmon itself fill that field with
+>> the correct address, or do you rely on it being a hardcoded
+>> constant?
+>
+>
+> Use Pmon, firmware team will always ensure that DTB matches the actual
+> ROM code.  The "suspend-address" of dtb and pmon entry address will
+> synchronized modification by firmware team.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.6
+Ok.  So it's linked against libfdt to fill the dtb information,
+or do you have to provide a dtb blob that matches the firmware?
 
-for you to fetch changes up to 35bd78cf252245f11dd1c9d5f1b414c25e727b5a:
-
-  memory: tegra: add MC client for Tegra234 GPU (2023-08-05 09:01:31 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.6
-
-1. Tegra:
- - Extend support for Tegra234 SoC Memory Controllers with DRM and GPU
-   clients.
- - Tegra186: Skip MRQ DVFS where it is not supported and do not fail
-   probe.
-2. Wide cleanup of DT includes.
-3. Devicetree bindings:
- - Reference common peripheral (client) properties in Ingenic NEMC and
-   TI GPMC.
- - Convert Davicom DM9000 to DT schema.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (3):
-      dt-bindings: memory-controllers: ingenic,nemc: reference peripheral properties
-      dt-bindings: memory-controllers: reference TI GPMC peripheral properties
-      dt-bindings: net: davicom,dm9000: convert to DT schema
-
-Rob Herring (1):
-      memory: Explicitly include correct DT includes
-
-Sumit Gupta (4):
-      memory: tegra: sort tegra234_mc_clients table as per register offsets
-      memory: tegra: Add clients used by DRM in Tegra234
-      memory: tegra: add check if MRQ_EMC_DVFS_LATENCY is supported
-      memory: tegra: add MC client for Tegra234 GPU
-
-Thierry Reding (1):
-      memory: tegra: Prefer octal over symbolic permissions
-
- .../bindings/memory-controllers/ingenic,nemc.yaml  |   1 +
- .../memory-controllers/mc-peripheral-props.yaml    |   2 +
- .../devicetree/bindings/net/davicom,dm9000.yaml    |  59 ++
- .../devicetree/bindings/net/davicom-dm9000.txt     |  27 -
- drivers/memory/brcmstb_dpfe.c                      |   3 +-
- drivers/memory/da8xx-ddrctl.c                      |   1 -
- drivers/memory/fsl_ifc.c                           |   2 +-
- drivers/memory/jz4780-nemc.c                       |   1 -
- drivers/memory/pl353-smc.c                         |   1 +
- drivers/memory/renesas-rpc-if.c                    |   1 -
- drivers/memory/samsung/exynos5422-dmc.c            |   2 +-
- drivers/memory/stm32-fmc2-ebi.c                    |   2 +
- drivers/memory/tegra/mc.c                          |   2 +-
- drivers/memory/tegra/tegra124.c                    |   2 +-
- drivers/memory/tegra/tegra186-emc.c                | 136 ++---
- drivers/memory/tegra/tegra186.c                    |   3 +-
- drivers/memory/tegra/tegra20.c                     |   3 +-
- drivers/memory/tegra/tegra210-emc-core.c           |   4 +-
- drivers/memory/tegra/tegra234.c                    | 620 +++++++++++++--------
- drivers/memory/tegra/tegra30-emc.c                 |   2 +-
- drivers/memory/tegra/tegra30.c                     |   2 +-
- 21 files changed, 526 insertions(+), 350 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9000.yaml
- delete mode 100644 Documentation/devicetree/bindings/net/davicom-dm9000.txt
+      Arnd
