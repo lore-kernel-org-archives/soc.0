@@ -1,189 +1,149 @@
-Return-Path: <SRS0=BoVD=D7=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=UDJN=D7=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC59C001DB
-	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 13:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7166FC001B0
+	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 16:06:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 555A9C433C9; Mon, 14 Aug 2023 13:42:11 +0000 (UTC)
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 4792CC433CA; Mon, 14 Aug 2023 16:06:41 +0000 (UTC)
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4C62FC433C7;
-	Mon, 14 Aug 2023 13:42:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C62FC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 102A65C0072;
-	Mon, 14 Aug 2023 09:42:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 14 Aug 2023 09:42:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1692020528; x=1692106928; bh=JtLQE1XjIOUZcTeTsP5whAkN0vSfae5cywo
-	2KZQ9oJA=; b=Hu8nMt5o8LJapF9LALNUvc6uTUsBVbRUOS7ySwTg+z7NHo6rqpF
-	/LN875sB3oFHQTsFvw9CPGWU+u7FopQZ6CiQNZe3dzZvsDF0UYimGNIfXCQ/SVet
-	a//79hYibjZnoaYwsVix0301198piZ7hyLZE6r6p3p/CnGzXj5CoQtV1y1yhPd60
-	+3utgJ7Hc8mEyzkdj4BOd2JB0SwI+qaKT9SqSnbfvBxRUq0Bkoa/H96WHAz34JLJ
-	9k/W71Che1sm8cn0otOaC7iK9q2EkG401/fjuS7SQgIDx6vhzZ4p9ttcELkXZ63k
-	do6aQ1vUlLQ02pXcr4HqMkuR8xl1JBP2VaQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1692020528; x=1692106928; bh=JtLQE1XjIOUZcTeTsP5whAkN0vSfae5cywo
-	2KZQ9oJA=; b=01YlBOWjN+e1GbWAOx3Ax+EupWSIxIfqoSedd53cZvYGLAvuH/A
-	QjGCbYul5IctD6w9a3kd8K6lM3SIEPyEYTYB1jmpGcsUk1qcSCU8YyJkFuz7tq33
-	ehRMmZsA+ogfmBgyalmyhnHHlC/B2zegZzYJe9p+6/kV8dazEhznKCTvABTpOUtH
-	G/VQOSBjjXbLPi6yolCaStLDedP7fsW0kY0BdQyx3qylxJDegdYYdmuGl5Ev1OHi
-	4bA/CE1H9DX+iCl3bhnwIj1RUdveoHFVWycEOudU14tbhkWsXCmDP9ZbFq0mMiRJ
-	SqkME+1SLo3IJp4aOYVtTdzTrDVOuTi9w3Q==
-X-ME-Sender: <xms:Ly_aZA6FBRQG91ir1YblSsCKmlE0GAAuNXnXuebFzT1IHe4lSvqm0A>
-    <xme:Ly_aZB5XwpC8OI8RPOMPkNvAGjfu1RMJNmp4qMvq4-cXLxYIphSHYk1576oaRYkPm
-    FdO_-w5NZTv4nO2jjk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddtgedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeettedttdefhfekueduvedutdejudetgfekgfegfefhjeejteegveehtdeh
-    veejgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhlihhnuhigqdhmihhpshdroh
-    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegr
-    rhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Ly_aZPdjDIjzWkp91VBvj4_-RGiPcA7UlyBa2Vooy8vUKT24gOScsQ>
-    <xmx:Ly_aZFLmra1lC_zMbs0Ahvyc-j2KfEBjYn__eaOq1z08kGSDWsyBXg>
-    <xmx:Ly_aZEKB1NsYWLJnm8L_5SXCD3D9YBczegVJOzwtGXJsPUWZutVdyQ>
-    <xmx:MC_aZHY5T_hJwz4SLQ_AEy7fOWE5fcSiiwatXkIqV3DV3yE7br7jIA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 032FFB6008D; Mon, 14 Aug 2023 09:42:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <e04cf26e-2e38-4e87-b7b4-23dafadee00d@app.fastmail.com>
-In-Reply-To: <71c53c37-a0a6-6b11-31d5-4455d2309927@loongson.cn>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-2-zhuyinbo@loongson.cn>
- <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
- <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
- <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
- <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
- <19feb595-e22a-4304-9b88-b5cb55949cd8@app.fastmail.com>
- <71c53c37-a0a6-6b11-31d5-4455d2309927@loongson.cn>
-Date: Mon, 14 Aug 2023 15:41:37 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id AA043C433C8;
+	Mon, 14 Aug 2023 16:06:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA043C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37EG6XiI027678;
+	Mon, 14 Aug 2023 11:06:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1692029193;
+	bh=ZNQJo806xcMlqEDUrZ0eN5yXZDBMlZETHefxKr8T9e4=;
+	h=Date:From:To:CC:Subject;
+	b=tCG7OaUznYM/NXFrl9BBSlUKyYpQGjLyODUAY+YnVVLMsAw4Ae4Oz/8IPEYQaDoU3
+	 k/DbimvpIG7h9/tIQLRbVUzkMYEhTSzhe3kSU/VRRcvqUhOzr1+XcW68tm2SV9ECjl
+	 R3GiCO1LVyrYwteWbrQwLpxYbNFzIhWZxJPP1JNM=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37EG6XJU077070
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 14 Aug 2023 11:06:33 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 14
+ Aug 2023 11:06:33 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 14 Aug 2023 11:06:33 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+	by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37EG6Xdb001740;
+	Mon, 14 Aug 2023 11:06:33 -0500
+Date: Mon, 14 Aug 2023 11:06:33 -0500
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org,
- "Ulf Hansson" <ulf.hansson@linaro.org>
-Cc: "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
- "Liu Peibao" <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
- loongarch@lists.linux.dev, "Liu Yun" <liuyun@loongson.cn>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
-Content-Type: text/plain;charset=utf-8
+To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony
+ Lindgren <tony@atomide.com>
+Subject: [GIT PULL 1/4] soc: ti: Driver updates for v6.6
+Message-ID: <20230814160633.my3xbk5k2pxkvjyi@degrease>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cyhyynyyddn4vzug"
+Content-Disposition: inline
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+
+--cyhyynyyddn4vzug
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 14, 2023, at 13:57, Yinbo Zhu wrote:
-> =E5=9C=A8 2023/8/14 =E4=B8=8B=E5=8D=884:19, Arnd Bergmann =E5=86=99=E9=
-=81=93:
->> On Mon, Aug 14, 2023, at 09:57, Yinbo Zhu wrote:
->>> =E5=9C=A8 2023/8/12 =E4=B8=8B=E5=8D=888:25, Arnd Bergmann =E5=86=99=E9=
-=81=93:
->>>> I found https://github.com/loongson-community/pmon source
->>>> code, and a reference to its origin at LSI Logic at
->>>> https://www.linux-mips.org/wiki/PMON but otherwise have
->>>> no idea about what this actually is, or how it relates
->>>> to your UEFI firmware. Did you add UEFI support to PMON,
->>>> or do you use it as a first stage loader that loads
->>>> the actual UEFI implementation (EDK2 or u-boot, I guess)?
->>>
->>>
->>> Pmon and uefi are two different firmware, and there is no connection
->>> between them.
->>=20
->> It sounds like we still have problems with terminology. >
->> I don't think categorizing UEFI as a firmware is correct,
->
->
-> Sorry to have confused you, uefi firmware is our internal name, which =
-is
-> actually what you referred to as EDK2, the EDK2 need use UEFI.
+Hi,
 
-Ok
+Please pull:
 
->> it's the interface used by various firmware implementations
->> to load the operating system. As far as I understand,
->> loongarch currently mandates the use of UEFI in whichever
->> firmware is used, so if you have Pmon installed in ROM > and Pmon doe=
-s not itself implement UEFI, it would have
->> to load some other firmware such as u-boot in order to
->> load a kernel through the UEFI protocol, right?
->
->
-> PMON is an independent firmware and loader that can directly load the
-> operating system and it does not require the use of UEFI.
->>=20
->> Has the assumption that loongarch requires UEFI changed?
->
->
-> LoongArch embedded board was use Pmon firmware, The other one uses UEFI
-> firmware (EDK2) on LoongArch platform.
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-I'm pretty sure we discussed this when the loongarch port
-was originally merged, with the decisionto just use UEFI for
-booting any kernel, as the legacy entry point for the ACPI
-based environment was not really well-defined and the UEFI
-stub was an easy alternative to have more commonality
-with other architectures.
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
-I see this was already extended for embedded CPUs to use
-the uefi stub with DT in commit 88d4d957edc70 ("LoongArch: Add
-FDT booting support from efi system table"), which seems like
-the right direction.
+are available in the Git repository at:
 
-Can you explain why this board would want yet another method
-for entering the kernel? Is there any documentation for the
-boot protocol?
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
+er-soc-for-v6.6
 
->>>> Is this executing directly from ROM then?
->>>
->>> Yes.
->>=20
->> Is this the only runtime call into the firmware,=20
->
->
-> Only when suspend-to-ram occurs, the kernel will call into the firmwar=
-e.
-> No other case.
+for you to fetch changes up to 443012dd31e5939cb53bc9c5713d32d87321b0d8:
 
-Ok
+  soc: ti: k3-socinfo.c: Add JTAG ID for AM62PX (2023-08-11 16:01:09 -0500)
 
->> or are there
->> others that are either already called from mainline kernels
->> or in your downsteam implementation?
->>=20
->> How do you ensure that the DTB matches the actual ROM code
->> after rebuilding Pmon? Does Pmon itself fill that field with
->> the correct address, or do you rely on it being a hardcoded
->> constant?
->
->
-> Use Pmon, firmware team will always ensure that DTB matches the actual
-> ROM code.  The "suspend-address" of dtb and pmon entry address will
-> synchronized modification by firmware team.
+----------------------------------------------------------------
+TI SoC driver updates for v6.6
 
-Ok.  So it's linked against libfdt to fill the dtb information,
-or do you have to provide a dtb blob that matches the firmware?
+- Generic fixups: Explicitly include correct DT include.
+- omap_prm: Cosmetic fixups for using devm_ api for ioremap_resource
+- ti_sci: Documentation fixups, Using system_state to determine if
+  polling is needed.
+- k3-ringcc: Documentation fixups, cleanup of log messages, using
+  devm_ to handle ioremap_resource.
+- k3-socinfo: Add AM62PX detection.
 
-      Arnd
+----------------------------------------------------------------
+Jayesh Choudhary (1):
+      soc: ti: k3-ringacc: remove non-fatal probe deferral log
+
+Nishanth Menon (3):
+      firmware: ti_sci: Use system_state to determine polling
+      firmware: ti_sci: Fixup documentation errors
+      soc: ti: k3-ringacc: Fixup documentation errors
+
+Rob Herring (1):
+      soc: ti: Explicitly include correct DT includes
+
+Vignesh Raghavendra (1):
+      soc: ti: k3-socinfo.c: Add JTAG ID for AM62PX
+
+Yangtao Li (1):
+      soc: ti: omap-prm: Use devm_platform_get_and_ioremap_resource()
+
+Zhang Zekun (1):
+      soc: ti: Use devm_platform_ioremap_resource_byname simplify logic
+
+ drivers/firmware/ti_sci.c        | 49 ++++++++----------------------------=
+----
+ drivers/soc/ti/k3-ringacc.c      | 31 +++++++++----------------
+ drivers/soc/ti/k3-socinfo.c      |  1 +
+ drivers/soc/ti/omap_prm.c        | 13 ++++-------
+ drivers/soc/ti/pruss.c           |  4 +++-
+ drivers/soc/ti/ti_sci_inta_msi.c |  3 ++-
+ 6 files changed, 30 insertions(+), 71 deletions(-)
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--cyhyynyyddn4vzug
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmTaUQEACgkQ3bWEnRc2
+JJ2B9hAApsvr/ZgVT2TXkGx+lA3lBcv4RMyXW1ib1SVFbJh33IYRPz+2IDUgd0la
+zlYWIIIDAwAKsLWqsP+BJsPZP3wMp7Tp6QdMUk4o4S/rSPOJza1SoHdVAnS1sXt5
+wx4+gRHdyhkEqd+CMiAyfUh4AZDP70LBFP1Cxp7f7e33KxU7XiNH+eOEUJC/R53b
+AZ8OHXSBYXoZIv3s4gg5Q64wlEiQwgHy4uBJtCjT7qmW5xrlVLKi3H0MURFXmd53
+TB0oREazBUvanXrICSVaR42GFcLvLS6urqt0f9A3LQEYJh/D9XdEFPbkQb4RHdpw
+/6jQZ82pXIioI868Ko9yCQnedFOFpz/PuCD1DJecdKZw/SgsH6zoGde9smmaja2F
+Nkpttv1Hx6Joth+WvQ06/YFvwsFirbXwU/K6/ShpGnp3W7X26H9buOJwYpXYvpO7
+hNOAxCflqwwnvBaDUKdJb23NNxzDOOWMDqdkkRSAgMWNC1WfZ15gucPQtAZ08/Ae
+/vlyzupEYPM7ZQQPpczr6Gy1/ZjrWD8+QqfGxB9YdtYjSd3jBexFjdEzfemNbjHd
+m/IkYbnAxf71ySzqWH72wtFjDbxSOivHRi7H7ogrlpHqCjnzqHTTosyzZutBiydt
+TIZZsm1hh9w/DRLytnMOvo5l33WlXnRpLUbMa09/C5iJZVxcbZw=
+=gZa2
+-----END PGP SIGNATURE-----
+
+--cyhyynyyddn4vzug--
