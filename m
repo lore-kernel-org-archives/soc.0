@@ -1,127 +1,101 @@
-Return-Path: <MAILER-DAEMON>
+Return-Path: <SRS0=SbT8=D7=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38476EB64DD
-	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 10:19:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B324C001DB
+	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 11:41:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 17218C433C9; Mon, 14 Aug 2023 10:19:45 +0000 (UTC)
-Received: from chg.server2.ideacentral.com (unknown [108.163.232.234])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 12A5CC433C8; Mon, 14 Aug 2023 11:41:10 +0000 (UTC)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5A9DAC433C7
-	for <soc@kernel.org>; Mon, 14 Aug 2023 10:19:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A9DAC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ns-196.awsdns-24.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.helo=chg.server2.ideacentral.com
-Received: from mailnull by ns-196.awsdns-24.com with local (Exim 4.96)
-	id 1qVUfn-004sTC-1c
-	for soc@kernel.org;
-	Mon, 14 Aug 2023 05:19:43 -0500
-X-Failed-Recipients: soc@kernel.org
-Auto-Submitted: auto-replied
-From: Mail Delivery System <Mailer-Daemon@ns-196.awsdns-24.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E1DEDC433C9
+	for <soc@kernel.org>; Mon, 14 Aug 2023 11:41:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E1DEDC433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4fe457ec6e7so6670530e87.3
+        for <soc@kernel.org>; Mon, 14 Aug 2023 04:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692013266; x=1692618066;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4lWNijrQfWmRWOHz4Gyb5anJXxKlZtHDWGQoXSDm4EU=;
+        b=mjWW53JZkhIjgJfVXm5P6VSskYfsPXV5SIiz59tntKW3ocgiEY39RzlTZ7WALrxbKF
+         95ZqOgtBp8PaLnxX37+K0bhkmmi67I9mKqgZeoYdOzmMcXy/hvBEdejq2joxuee8tJqV
+         Bh5uo2FU4+8S7jCnQ+45his8Bxi1S2g/uYnSbu+iqY9t8lI7mHiGuqNaEnwLNlck/QMT
+         WVTRsVTFy+9Iu62m/CJ3rcYf+ZPiJB3kObrNtZJr4w76pDgo4g4SF41cVUeZBQERSZBM
+         Ln+GOjS+5xw4F8Qbl8zVmp1zcxp0nMJqQVOgGdxCde1huMNbCI1PlD3KqQ4a2H9fkY5m
+         Ya9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692013266; x=1692618066;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4lWNijrQfWmRWOHz4Gyb5anJXxKlZtHDWGQoXSDm4EU=;
+        b=M3X2NFi+2C+YLElHMD36b4XsRuk8Wv+XwlAw7VFaW7YoBAqygmuXF3LFFAvBYAqaQT
+         +UxaMCUm+tvmx02lv7IQxNTDqGPYVhWy9/J53Kj44Cx4ZkXzqoxBy7e2zyOWwtW7oPhm
+         h4quSbWDdqIZSspS/btiOmqmfvswkn6sMd2BiYZ01Zv+XEywyOOoGxZ4aI/FRz6ZFvmT
+         UmhB5M42Z2f9mEI3oNvdofrGsvg2xMvl48lAXwI7gAvDgYszkyuXog9qk9OX+J5MzFWU
+         kUE0+2JBcuWcLFr3fi0Km5lF2wAJZ5ist3Ih0nU9/1E4DsfP9uMIzYn2ghYNs2u/m/3x
+         iSRg==
+X-Gm-Message-State: AOJu0YyFS98Gcc6VH58GVcqZVw7XtIiapfgGv41LfzbaboRoc1uXVjMr
+	2+eHAbFMuxftxo8LyYHc34yWfw==
+X-Google-Smtp-Source: AGHT+IHTN6Vp9JDKr7T3XtFmKhNbxj94kt9wg4IAgyJR9rWB9eL1SbWoZqAF2mdsnrmeOezj3CcqKw==
+X-Received: by 2002:a05:6512:3d16:b0:4f7:55e4:4665 with SMTP id d22-20020a0565123d1600b004f755e44665mr8634707lfv.56.1692013266577;
+        Mon, 14 Aug 2023 04:41:06 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id d15-20020a056402516f00b005256771db39sm1020463ede.58.2023.08.14.04.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 04:41:06 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-References: <20230814111940.870716D17901B27D@kernel.org>
-Content-Type: multipart/report; report-type=delivery-status; boundary=1692008383-eximdsn-2903352
+To: arm@kernel.org,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH PULL] ARM: s5pv210: Explicitly include correct DT includes
+Date: Mon, 14 Aug 2023 13:40:51 +0200
+Message-Id: <20230814114051.25840-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Mail delivery failed: returning message to sender
-Message-Id: <E1qVUfn-004sTC-1c@ns-196.awsdns-24.com>
-Date: Mon, 14 Aug 2023 05:19:43 -0500
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - ns-196.awsdns-24.com
-X-AntiAbuse: Original Domain - kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - 
-X-Get-Message-Sender-Via: ns-196.awsdns-24.com: sender_ident via received_protocol == local: mailnull/primary_hostname/system user
-X-Authenticated-Sender: ns-196.awsdns-24.com: mailnull
+Content-Transfer-Encoding: 8bit
 
---1692008383-eximdsn-2903352
-Content-type: text/plain; charset=us-ascii
+From: Rob Herring <robh@kernel.org>
 
-This message was created automatically by mail delivery software.
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it was merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-A message that you sent could not be delivered to one or more of its
-recipients. This is a permanent error. The following address(es) failed:
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20230720172751.2918776-1-robh@kernel.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/mach-s5pv210/s5pv210.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  soc@kernel.org
-    host smtp2.kernel.org [35.85.114.177]
-    SMTP error from remote mail server after end of data:
-    550 5.7.1 Blocked by SpamAssassin
+diff --git a/arch/arm/mach-s5pv210/s5pv210.c b/arch/arm/mach-s5pv210/s5pv210.c
+index a21ed3bb992a..7d4a10184160 100644
+--- a/arch/arm/mach-s5pv210/s5pv210.c
++++ b/arch/arm/mach-s5pv210/s5pv210.c
+@@ -7,7 +7,7 @@
+ // Tomasz Figa <t.figa@samsung.com>
+ 
+ #include <linux/of_fdt.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ 
+ #include <asm/mach/arch.h>
+ #include <asm/mach/map.h>
+-- 
+2.34.1
 
---1692008383-eximdsn-2903352
-Content-type: message/delivery-status
-
-Reporting-MTA: dns; ns-196.awsdns-24.com
-
-Action: failed
-Final-Recipient: rfc822;soc@kernel.org
-Status: 5.0.0
-Remote-MTA: dns; smtp2.kernel.org
-Diagnostic-Code: smtp; 550 5.7.1 Blocked by SpamAssassin
-
---1692008383-eximdsn-2903352
-Content-type: message/rfc822
-
-Return-path: <soc@kernel.org>
-Received: from v-104-153-108-120.unman-vds.premium-chicago.nfoservers.com ([104.153.108.120]:57358)
-	by ns-196.awsdns-24.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <soc@kernel.org>)
-	id 1qVUfl-004rVg-1X
-	for soc@kernel.org;
-	Mon, 14 Aug 2023 05:19:41 -0500
-From: kernel.orgAdministrator<soc@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: =?UTF-8?B?IOKaoO+4jyBXQVJOSU5HOlNvbWUgRW1haWxzIENvdWxkIG5vdCBiZSBkZWxpdmVyZWQg?=
-Date: 14 Aug 2023 11:19:40 +0100
-Message-ID: <20230814111940.870716D17901B27D@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/html
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE html>
-
-<html><head><title></title>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.19003">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><span style=3D"background-color: rgb(204, 204, 204);"><b><i><font col=
-or=3D"#ff0000">Some Emails Could not be Delivered , Action Required</font><=
-/i></b>.</span><div><br><font color=3D"#3d85c6"><font size=3D"4"><b>Quarant=
-ined Messages Report</b> </font>&nbsp;</font><br>soc@kernel.org<div>14-08-2=
-023, 08:00AM <br>&nbsp;<br>Dear soc,</div><div><br>
-4 messages addressed to you are currently on hold awaiting your further act=
-ion. You can release all of your held messages and permit or block future e=
-mails from the senders, or manage messages individually.<br><br>
-<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPa=
-nxX?clientID=3Dsoc@kernel.org" target=3D"_blank" data-saferedirecturl=3D"ht=
-tps://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%5D&amp=
-;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-xB2LHr=
-k7CvessvAOsg">Review all</a>
-&nbsp; &nbsp;<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGb=
-cFJkycxN8DaPanxX?clientID=3Dsoc@kernel.org" target=3D"_blank" data-saferedi=
-recturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Ema=
-il-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFw=
-LZWfJX-xB2LHrk7CvessvAOsg">Release all</a>
-&nbsp; &nbsp; <a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRG=
-bcFJkycxN8DaPanxX?clientID=3Dsoc@kernel.org" target=3D"_blank" data-safered=
-irecturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Em=
-ail-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFF=
-wLZWfJX-xB2LHrk7CvessvAOsg">Block all</a><br><br>Further Information: <br>
-To view your entire quarantine inbox or manage your preferences, <a href=3D=
-"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPanxX?client=
-ID=3Dsoc@kernel.org" target=3D"_blank" data-saferedirecturl=3D"https://www.=
-google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%5D&amp;source=3D=
-gmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-xB2LHrk7CvessvAO=
-sg">Click Here</a><br><br>The system generated this notice on 14-08-2023, a=
-t 09:00AM<br>Do not reply to this automated message.<br>
-&copy; 2023 kernel.org. All rights reserved.</div></div>
-</body></html>
-
---1692008383-eximdsn-2903352--
