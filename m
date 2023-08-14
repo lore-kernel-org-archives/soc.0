@@ -1,108 +1,127 @@
-Return-Path: <SRS0=0kd7=D7=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <MAILER-DAEMON>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86996EB64DD
-	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 08:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38476EB64DD
+	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 10:19:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 45843C433C8; Mon, 14 Aug 2023 08:32:37 +0000 (UTC)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 17218C433C9; Mon, 14 Aug 2023 10:19:45 +0000 (UTC)
+Received: from chg.server2.ideacentral.com (unknown [108.163.232.234])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2E722C433C9
-	for <soc@kernel.org>; Mon, 14 Aug 2023 08:32:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E722C433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-31972944f30so944934f8f.0
-        for <soc@kernel.org>; Mon, 14 Aug 2023 01:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692001954; x=1692606754;
-        h=content-transfer-encoding:organization:reply-to:content-language:cc
-         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PNZQqo4ZyBJ6uD5xvDvqRAAFxsgCDJevt+fCQXqqKbM=;
-        b=Q+Pex536L3molux4sK8DDSGu+CXwccqwirDZBktMhMBsQyyIi4lME088Ow7X8HbgfN
-         4OfRJXH/52czUhOHz9P9zTpc67BjDNiUROHdMqzgjx89gedCVcMT4LH7aIrPVgjVxpij
-         djHljCOoNUJIcDNXuxVc+CJgiHCQlybC92WhCLBoluxEcHArYz8ljHBob1XkTprAoSqy
-         Xu1pJuIEFqf8/SKRu1nKFgTMLEsTGPc2A+lTJogPREw+cicz9Tz4OoCCQlfLMZ4I+/IK
-         fLcJEY+Kj/8+uidrL/Q5oW3WxVngx2Nd+0qQkFZa29+2/wxt44cYF7yUaz8aS7u1oxRN
-         EifQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692001954; x=1692606754;
-        h=content-transfer-encoding:organization:reply-to:content-language:cc
-         :to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PNZQqo4ZyBJ6uD5xvDvqRAAFxsgCDJevt+fCQXqqKbM=;
-        b=LObfnsiDuKqbNCsa8Fb2QPMX+dt1BApE4qSAOzq54gfggau/A/4posa211RLJg95LD
-         X6FriF6ejuPgfYenf3uLOhFBFKqe5eqMN1h9o/fyUu5Ij13O2PHz0FheGY/hQ0QuVXqa
-         jD7IKX3Kpg4QrdmzSolj5NVrpQCmV5F8WUr8SyEv1P4Me593LZy6/seJ/zFnKrJztngl
-         Mef5+JTVrAWk9sm1yMjQFyb7RKYpRMf0bM/uxcNmLT5kG55e+RnM1WI4rCHIkoa9MENi
-         UyzINBhx1toiCetMF3NQLxM1nJtxfxC5XcU9ak7Lt2E+e6cCCWzKw3Q0XGDT864Uyzt6
-         pWVA==
-X-Gm-Message-State: AOJu0YzXnZyYcPxUW+/H0A7fWBFE9Q/ZxNs3A+wkF8dRJWWcezE4bwpX
-	8mcESAdT0Y04gLMGiLzBH5TPmwYKxw3eXQk9EPOOKg==
-X-Google-Smtp-Source: AGHT+IFpw2UevV0b66D8HHVQNNr1pcT09ia8HTpKoynucTBVV5Nx3qd0Lh17y+eOCUKa/X7KaevLbQ==
-X-Received: by 2002:adf:e288:0:b0:319:6288:e4dd with SMTP id v8-20020adfe288000000b003196288e4ddmr4689591wri.71.1692001954294;
-        Mon, 14 Aug 2023 01:32:34 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0? ([2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0])
-        by smtp.gmail.com with ESMTPSA id i5-20020adff305000000b0031980294e9fsm16538wro.116.2023.08.14.01.32.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 01:32:33 -0700 (PDT)
-Message-ID: <3f91bb89-bf7b-d967-a302-2a8e1b0c3b01@linaro.org>
-Date: Mon, 14 Aug 2023 10:32:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PULL] final oxnas removal for 6.6
+	by smtp.kernel.org (Postfix) with ESMTPS id 5A9DAC433C7
+	for <soc@kernel.org>; Mon, 14 Aug 2023 10:19:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A9DAC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ns-196.awsdns-24.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.helo=chg.server2.ideacentral.com
+Received: from mailnull by ns-196.awsdns-24.com with local (Exim 4.96)
+	id 1qVUfn-004sTC-1c
+	for soc@kernel.org;
+	Mon, 14 Aug 2023 05:19:43 -0500
+X-Failed-Recipients: soc@kernel.org
+Auto-Submitted: auto-replied
+From: Mail Delivery System <Mailer-Daemon@ns-196.awsdns-24.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US
-Reply-To: neil.armstrong@linaro.org
-Organization: Linaro Developer Services
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: soc@kernel.org
+References: <20230814111940.870716D17901B27D@kernel.org>
+Content-Type: multipart/report; report-type=delivery-status; boundary=1692008383-eximdsn-2903352
+MIME-Version: 1.0
+Subject: Mail delivery failed: returning message to sender
+Message-Id: <E1qVUfn-004sTC-1c@ns-196.awsdns-24.com>
+Date: Mon, 14 Aug 2023 05:19:43 -0500
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - ns-196.awsdns-24.com
+X-AntiAbuse: Original Domain - kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - 
+X-Get-Message-Sender-Via: ns-196.awsdns-24.com: sender_ident via received_protocol == local: mailnull/primary_hostname/system user
+X-Authenticated-Sender: ns-196.awsdns-24.com: mailnull
 
-Hi,
+--1692008383-eximdsn-2903352
+Content-type: text/plain; charset=us-ascii
 
-Please pull this PR to remove all the remaining files for OXNAS support.
+This message was created automatically by mail delivery software.
 
-The other patches have been merged by the respective maintainers, Mark acked
-for routing the irq-versatile changes via a SoC PR.
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
 
-Thanks,
-Neil
+  soc@kernel.org
+    host smtp2.kernel.org [35.85.114.177]
+    SMTP error from remote mail server after end of data:
+    550 5.7.1 Blocked by SpamAssassin
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+--1692008383-eximdsn-2903352
+Content-type: message/delivery-status
 
-   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+Reporting-MTA: dns; ns-196.awsdns-24.com
 
-are available in the Git repository at:
+Action: failed
+Final-Recipient: rfc822;soc@kernel.org
+Status: 5.0.0
+Remote-MTA: dns; smtp2.kernel.org
+Diagnostic-Code: smtp; 550 5.7.1 Blocked by SpamAssassin
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/narmstrong/linux-oxnas.git tags/oxnas-final-for-6.6
+--1692008383-eximdsn-2903352
+Content-type: message/rfc822
 
-for you to fetch changes up to b1627ad5f457c8cea08bb2ab6b24d1c0381fbe30:
+Return-path: <soc@kernel.org>
+Received: from v-104-153-108-120.unman-vds.premium-chicago.nfoservers.com ([104.153.108.120]:57358)
+	by ns-196.awsdns-24.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <soc@kernel.org>)
+	id 1qVUfl-004rVg-1X
+	for soc@kernel.org;
+	Mon, 14 Aug 2023 05:19:41 -0500
+From: kernel.orgAdministrator<soc@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+Subject: =?UTF-8?B?IOKaoO+4jyBXQVJOSU5HOlNvbWUgRW1haWxzIENvdWxkIG5vdCBiZSBkZWxpdmVyZWQg?=
+Date: 14 Aug 2023 11:19:40 +0100
+Message-ID: <20230814111940.870716D17901B27D@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-   MAINTAINERS: remove OXNAS entry (2023-08-14 10:26:56 +0200)
+<!DOCTYPE html>
 
-----------------------------------------------------------------
-Final OXNAS removal PR for v6.6:
-- Remove irq-versatile-fpga compatible entry
-- Mark irq-versatile-fpga oxnas compatible as deprecated
-- Remove OXNAS maintainers entry
+<html><head><title></title>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.19003">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><span style=3D"background-color: rgb(204, 204, 204);"><b><i><font col=
+or=3D"#ff0000">Some Emails Could not be Delivered , Action Required</font><=
+/i></b>.</span><div><br><font color=3D"#3d85c6"><font size=3D"4"><b>Quarant=
+ined Messages Report</b> </font>&nbsp;</font><br>soc@kernel.org<div>14-08-2=
+023, 08:00AM <br>&nbsp;<br>Dear soc,</div><div><br>
+4 messages addressed to you are currently on hold awaiting your further act=
+ion. You can release all of your held messages and permit or block future e=
+mails from the senders, or manage messages individually.<br><br>
+<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPa=
+nxX?clientID=3Dsoc@kernel.org" target=3D"_blank" data-saferedirecturl=3D"ht=
+tps://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%5D&amp=
+;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-xB2LHr=
+k7CvessvAOsg">Review all</a>
+&nbsp; &nbsp;<a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGb=
+cFJkycxN8DaPanxX?clientID=3Dsoc@kernel.org" target=3D"_blank" data-saferedi=
+recturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Ema=
+il-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFw=
+LZWfJX-xB2LHrk7CvessvAOsg">Release all</a>
+&nbsp; &nbsp; <a href=3D"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRG=
+bcFJkycxN8DaPanxX?clientID=3Dsoc@kernel.org" target=3D"_blank" data-safered=
+irecturl=3D"https://www.google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Em=
+ail-%5D%5D&amp;source=3Dgmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFF=
+wLZWfJX-xB2LHrk7CvessvAOsg">Block all</a><br><br>Further Information: <br>
+To view your entire quarantine inbox or manage your preferences, <a href=3D=
+"https://ipfs.io/ipfs/Qmak1oxePK5rUrFTQbZYckBAUWmRGbcFJkycxN8DaPanxX?client=
+ID=3Dsoc@kernel.org" target=3D"_blank" data-saferedirecturl=3D"https://www.=
+google.com/url?q=3Dhttps://bentdree.ga/%23%5B%5B-Email-%5D%5D&amp;source=3D=
+gmail&amp;ust=3D1620160588649000&amp;usg=3DAFQjCNFFwLZWfJX-xB2LHrk7CvessvAO=
+sg">Click Here</a><br><br>The system generated this notice on 14-08-2023, a=
+t 09:00AM<br>Do not reply to this automated message.<br>
+&copy; 2023 kernel.org. All rights reserved.</div></div>
+</body></html>
 
-----------------------------------------------------------------
-Neil Armstrong (3):
-       irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
-       dt-bindings: interrupt-controller: arm,versatile-fpga-irq: mark oxnas compatible as deprecated
-       MAINTAINERS: remove OXNAS entry
-
-  .../bindings/interrupt-controller/arm,versatile-fpga-irq.txt   |  4 +++-
-  MAINTAINERS                                                    | 10 ----------
-  drivers/irqchip/irq-versatile-fpga.c                           |  1 -
-  3 files changed, 3 insertions(+), 12 deletions(-)
+--1692008383-eximdsn-2903352--
