@@ -1,116 +1,99 @@
-Return-Path: <SRS0=D9Mn=EA=huawei.com=lihuisong@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 678A2C001DB
-	for <soc@archiver.kernel.org>; Tue, 15 Aug 2023 12:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42C04C0015E
+	for <soc@archiver.kernel.org>; Tue, 15 Aug 2023 14:17:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 265D2C433C9; Tue, 15 Aug 2023 12:55:33 +0000 (UTC)
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24944C433C7;
-	Tue, 15 Aug 2023 12:55:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24944C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RQB4Y0Q1tzFqdL;
-	Tue, 15 Aug 2023 20:52:29 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Tue, 15 Aug 2023 20:55:25 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <xuwei5@hisilicon.com>, <arnd@arndb.de>, <arnd@kernel.org>
+	id EF74BC433C9; Tue, 15 Aug 2023 14:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A0B2C433C8;
+	Tue, 15 Aug 2023 14:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692109076;
+	bh=8H+Ix9u6R4jKNhzJV4kCYb04IzeHa0E4rpcSvSDmZjI=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=mnjBZbTRwwUF8K6XAA3wngoSOUDbRt/bvLgxaGATTXZ0crtGz9PaEo8XGlgPMi1mE
+	 07QjyafwLIYwUH+rgP+SpPbGL1pyZdds6H2M2+z3amirV4GTgIJHEbAqaVg1k74RUC
+	 P75heIF9cqkOXWFILfy3/BNXCKl160jNESrVtR5+nPKe8DaYV1TRlvLXNo/X3Iyng7
+	 Yah8JhYwLow3IfA1+2ZQ4NlAPwelmLyBnb+C5DF6dVk605KygVfi/np2kshCoDeEyU
+	 n7WQbutn7ztTf8saQ0VjSWh16i9Lpw3zYy76ToQ9JyMoLBjhmCzrOPm9HNjPyQniAy
+	 W9jkdTCv8kdIQ==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <liuyonglong@huawei.com>,
-	<lihuisong@huawei.com>
-Subject: [PATCH] soc: kunpeng_hccs: fix some sparse warnings about incorrect type
-Date: Tue, 15 Aug 2023 20:52:33 +0800
-Message-ID: <20230815125233.65469-1-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.33.0
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Naveen Kumar Goud Arepalli <quic_narepall@quicinc.com>
+Subject: [GIT PULL] Qualcomm ARM64 fixes for v6.5
+Date: Tue, 15 Aug 2023 07:20:41 -0700
+Message-ID: <20230815142042.2459048-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
 
-This patch fixes some sparse warnings about incorrect type.
-The address about PCC communication space should use '__iomem' tag.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202308151142.dH5Muhva-lkp@intel.com/
-Fixes: 886bdf9c883b ("soc: hisilicon: Support HCCS driver on Kunpeng SoC")
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/soc/hisilicon/kunpeng_hccs.c | 13 +++++++------
- drivers/soc/hisilicon/kunpeng_hccs.h |  2 +-
- 2 files changed, 8 insertions(+), 7 deletions(-)
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
-diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-index 0d6f6bacd3f6..4e94753ab0f7 100644
---- a/drivers/soc/hisilicon/kunpeng_hccs.c
-+++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-@@ -156,8 +156,8 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
- 	}
- 
- 	if (pcc_chan->shmem_base_addr) {
--		cl_info->pcc_comm_addr = (void __force *)ioremap(
--			pcc_chan->shmem_base_addr, pcc_chan->shmem_size);
-+		cl_info->pcc_comm_addr = ioremap(pcc_chan->shmem_base_addr,
-+						 pcc_chan->shmem_size);
- 		if (!cl_info->pcc_comm_addr) {
- 			dev_err(dev, "Failed to ioremap PCC communication region for channel-%d.\n",
- 				hdev->chan_id);
-@@ -177,7 +177,8 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
- static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
- {
- 	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
--	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
-+	struct acpi_pcct_shared_memory __iomem *comm_base =
-+							cl_info->pcc_comm_addr;
- 	u16 status;
- 	int ret;
- 
-@@ -199,8 +200,8 @@ static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
- 			     struct hccs_desc *desc)
- {
- 	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
--	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
--	void *comm_space = (void *)(comm_base + 1);
-+	void __iomem *comm_space = (u8 *)cl_info->pcc_comm_addr +
-+					sizeof(struct acpi_pcct_shared_memory);
- 	struct hccs_fw_inner_head *fw_inner_head;
- 	struct acpi_pcct_shared_memory tmp = {0};
- 	u16 comm_space_size;
-@@ -212,7 +213,7 @@ static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
- 	tmp.command = cmd;
- 	/* Clear cmd complete bit */
- 	tmp.status = 0;
--	memcpy_toio(comm_base, (void *)&tmp,
-+	memcpy_toio(cl_info->pcc_comm_addr, (void *)&tmp,
- 			sizeof(struct acpi_pcct_shared_memory));
- 
- 	/* Copy the message to the PCC comm space */
-diff --git a/drivers/soc/hisilicon/kunpeng_hccs.h b/drivers/soc/hisilicon/kunpeng_hccs.h
-index 9d71fb78443f..6012d2776028 100644
---- a/drivers/soc/hisilicon/kunpeng_hccs.h
-+++ b/drivers/soc/hisilicon/kunpeng_hccs.h
-@@ -50,7 +50,7 @@ struct hccs_mbox_client_info {
- 	struct mbox_chan *mbox_chan;
- 	struct pcc_mbox_chan *pcc_chan;
- 	u64 deadline_us;
--	void *pcc_comm_addr;
-+	void __iomem *pcc_comm_addr;
- };
- 
- struct hccs_dev {
--- 
-2.33.0
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.5
+
+for you to fetch changes up to 6d4cc57630a867a944483fdf7f8a060d2bbebdb9:
+
+  arm64: dts: qcom: sc7180: Fix DSI0_PHY reg-names (2023-07-31 09:09:41 -0700)
+
+----------------------------------------------------------------
+Qualcomm ARM64 fixes for v6.5
+
+This corrects the invalid path specifier for L3 interconnects in the CPU
+nodes of SM8150 and SM8250. It corrects the compatible of the SC8180X L3
+node, to pass the binding check.
+
+The crypto core, and its DMA controller, is disabled on SM8350 to avoid
+the system from crashing at boot while the issue is diagnosed.
+
+A thermal zone node name conflict is resolved for PM8150L, on the RB5
+board.
+
+The UFS vccq voltage is corrected on the SA877P Ride platform, to
+address observed stability issues.
+
+The reg-names of the DSI phy on SC7180 are restored after an accidental
+search-and-replace update.
+
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+      arm64: dts: qcom: qrb5165-rb5: fix thermal zone conflict
+
+Konrad Dybcio (1):
+      arm64: dts: qcom: sc7180: Fix DSI0_PHY reg-names
+
+Krzysztof Kozlowski (4):
+      arm64: dts: qcom: sm8150: Fix OSM L3 interconnect cells
+      arm64: dts: qcom: sm8250: Fix EPSS L3 interconnect cells
+      arm64: dts: qcom: sc8180x: Fix OSM L3 compatible
+      arm64: dts: qcom: sm8350: fix BAM DMA crash and reboot
+
+Naveen Kumar Goud Arepalli (1):
+      arm64: dts: qcom: sa8775p-ride: Update L4C parameters
+
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts  |  2 +-
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts |  4 ++--
+ arch/arm64/boot/dts/qcom/sc7180.dtsi      |  4 ++--
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi     |  2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi      | 18 +++++++++---------
+ arch/arm64/boot/dts/qcom/sm8250.dtsi      | 18 +++++++++---------
+ arch/arm64/boot/dts/qcom/sm8350.dtsi      |  4 ++++
+ 7 files changed, 28 insertions(+), 24 deletions(-)
