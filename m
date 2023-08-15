@@ -1,64 +1,165 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=9T+L=EA=loongson.cn=zhuyinbo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39CECC04FE0
-	for <soc@archiver.kernel.org>; Mon, 14 Aug 2023 22:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9C7DC001DB
+	for <soc@archiver.kernel.org>; Tue, 15 Aug 2023 04:08:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F1BBEC43391; Mon, 14 Aug 2023 22:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DC13EC433CA;
-	Mon, 14 Aug 2023 22:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692051635;
-	bh=0LfW5+AmuFdCo3d5g+hoIy7hab2yKFG73004vIqkPOA=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=C6GJLRswbAXedKeICIG96uyy2OhL6HZAkBRF8EVdAkuisK9uoEnxxw/f7saNvPlJb
-	 QTm0OuhDmLwes4qNMl3aMwzsIDOwu/jS0Y/D8u57Pk019hfEkFU9yx4vvsHfUwn1Vk
-	 fdj24dmvIwVLHiOCObadeYhApdqb6kblsRDLw7njwgoqvJl2ycW+nUKHGrJvztCXAh
-	 f9/70kJQT0Cy3sNHAb2jOkBb0RMmkIGViN9nfeQV6DS1F3CkBzg+9O/9HfSYEn4t6/
-	 jbiTYodn+0r9E+2X1xpIP7i/Zp08crBUW1IGJPHKH2/TE5X3R6fWrS7Vaj1KvVSNu9
-	 L5k4YlbrhXKrw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AFAA1C395C5;
-	Mon, 14 Aug 2023 22:20:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: various cleanup for v6.6
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <169205163571.23017.11245345080244624617.git-patchwork-notify@kernel.org>
-Date: Mon, 14 Aug 2023 22:20:35 +0000
-References: <20230814114154.26017-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230814114154.26017-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 9D0F3C433C8; Tue, 15 Aug 2023 04:08:47 +0000 (UTC)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.kernel.org (Postfix) with ESMTP id 0D0B2C433B6;
+	Tue, 15 Aug 2023 04:08:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D0B2C433B6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.201])
+	by gateway (Coremail) with SMTP id _____8DxqOpJ+tpktZ4YAA--.40987S3;
+	Tue, 15 Aug 2023 12:08:41 +0800 (CST)
+Received: from [10.20.42.201] (unknown [10.20.42.201])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHCNH+tpkc+BaAA--.7836S3;
+	Tue, 15 Aug 2023 12:08:39 +0800 (CST)
+Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ zhuyinbo@loongson.cn, Conor Dooley <conor+dt@kernel.org>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, soc@kernel.org,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+ Liu Peibao <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
+ loongarch@lists.linux.dev, Liu Yun <liuyun@loongson.cn>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
+ <20230803063703.5659-2-zhuyinbo@loongson.cn>
+ <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
+ <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
+ <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
+ <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
+ <19feb595-e22a-4304-9b88-b5cb55949cd8@app.fastmail.com>
+ <71c53c37-a0a6-6b11-31d5-4455d2309927@loongson.cn>
+ <e04cf26e-2e38-4e87-b7b4-23dafadee00d@app.fastmail.com>
+From: Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <753d10b9-3b33-e7ef-a3d3-78090d67d648@loongson.cn>
+Date: Tue, 15 Aug 2023 12:08:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <e04cf26e-2e38-4e87-b7b4-23dafadee00d@app.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxHCNH+tpkc+BaAA--.7836S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 14 Aug 2023 13:41:54 +0200 you wrote:
-> Hi,
+在 2023/8/14 下午9:41, Arnd Bergmann 写道:
+> On Mon, Aug 14, 2023, at 13:57, Yinbo Zhu wrote:
+>> 在 2023/8/14 下午4:19, Arnd Bergmann 写道:
+>>> On Mon, Aug 14, 2023, at 09:57, Yinbo Zhu wrote:
+>>>> 在 2023/8/12 下午8:25, Arnd Bergmann 写道:
+>>>>> I found https://github.com/loongson-community/pmon source
+>>>>> code, and a reference to its origin at LSI Logic at
+>>>>> https://www.linux-mips.org/wiki/PMON but otherwise have
+>>>>> no idea about what this actually is, or how it relates
+>>>>> to your UEFI firmware. Did you add UEFI support to PMON,
+>>>>> or do you use it as a first stage loader that loads
+>>>>> the actual UEFI implementation (EDK2 or u-boot, I guess)?
+>>>>
+>>>>
+>>>> Pmon and uefi are two different firmware, and there is no connection
+>>>> between them.
+>>>
+>>> It sounds like we still have problems with terminology. >
+>>> I don't think categorizing UEFI as a firmware is correct,
+>>
+>>
+>> Sorry to have confused you, uefi firmware is our internal name, which is
+>> actually what you referred to as EDK2, the EDK2 need use UEFI.
 > 
-> Not much this time - I just two patches.
+> Ok
 > 
-> Best regards,
-> Krzysztof
+>>> it's the interface used by various firmware implementations
+>>> to load the operating system. As far as I understand,
+>>> loongarch currently mandates the use of UEFI in whichever
+>>> firmware is used, so if you have Pmon installed in ROM > and Pmon does not itself implement UEFI, it would have
+>>> to load some other firmware such as u-boot in order to
+>>> load a kernel through the UEFI protocol, right?
+>>
+>>
+>> PMON is an independent firmware and loader that can directly load the
+>> operating system and it does not require the use of UEFI.
+>>>
+>>> Has the assumption that loongarch requires UEFI changed?
+>>
+>>
+>> LoongArch embedded board was use Pmon firmware, The other one uses UEFI
+>> firmware (EDK2) on LoongArch platform.
 > 
-> [...]
+> I'm pretty sure we discussed this when the loongarch port
+> was originally merged, with the decisionto just use UEFI for
+> booting any kernel, as the legacy entry point for the ACPI
+> based environment was not really well-defined and the UEFI
+> stub was an easy alternative to have more commonality
+> with other architectures.
+> 
+> I see this was already extended for embedded CPUs to use
+> the uefi stub with DT in commit 88d4d957edc70 ("LoongArch: Add
+> FDT booting support from efi system table"), which seems like
+> the right direction. >
+> Can you explain why this board would want yet another method
+> for entering the kernel? Is there any documentation for the
+> boot protocol?
 
-Here is the summary with links:
-  - [GIT,PULL] arm64: dts: various cleanup for v6.6
-    https://git.kernel.org/soc/soc/c/1298d0dd31b2
+Yes, you're right, the latest PMON does indeed support UEFI, the PMON
+used in the product code is still outdated and does not support UEFI.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Actually, whether using EDK2, Pmon firmware, or other firmware, the
+LoongArch platform's s3 (suspend-to-ram) requires a suspend-address to
+be defined, if dts is supported, it is defined in dts, and if acpi table
+is supported, it is defined in acpi table.
 
+> 
+>>>>> Is this executing directly from ROM then?
+>>>>
+>>>> Yes.
+>>>
+>>> Is this the only runtime call into the firmware,
+>>
+>>
+>> Only when suspend-to-ram occurs, the kernel will call into the firmware.
+>> No other case.
+> 
+> Ok
+> 
+>>> or are there
+>>> others that are either already called from mainline kernels
+>>> or in your downsteam implementation?
+>>>
+>>> How do you ensure that the DTB matches the actual ROM code
+>>> after rebuilding Pmon? Does Pmon itself fill that field with
+>>> the correct address, or do you rely on it being a hardcoded
+>>> constant?
+>>
+>>
+>> Use Pmon, firmware team will always ensure that DTB matches the actual
+>> ROM code.  The "suspend-address" of dtb and pmon entry address will
+>> synchronized modification by firmware team.
+> 
+> Ok.  So it's linked against libfdt to fill the dtb information,
+> or do you have to provide a dtb blob that matches the firmware?
+
+
+For pmon firmware, the dtb was as part of firmware, the firmware has
+defined the address of the DTB's suspend and the address of the firmware
+entry, and is consistent.
+
+Thanks,
+Yinbo
 
