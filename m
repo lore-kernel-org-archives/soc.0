@@ -1,165 +1,73 @@
-Return-Path: <SRS0=9T+L=EA=loongson.cn=zhuyinbo@kernel.org>
+Return-Path: <SRS0=wG93=EA=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9C7DC001DB
-	for <soc@archiver.kernel.org>; Tue, 15 Aug 2023 04:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22286C001B0
+	for <soc@archiver.kernel.org>; Tue, 15 Aug 2023 06:07:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9D0F3C433C8; Tue, 15 Aug 2023 04:08:47 +0000 (UTC)
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.kernel.org (Postfix) with ESMTP id 0D0B2C433B6;
-	Tue, 15 Aug 2023 04:08:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D0B2C433B6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.201])
-	by gateway (Coremail) with SMTP id _____8DxqOpJ+tpktZ4YAA--.40987S3;
-	Tue, 15 Aug 2023 12:08:41 +0800 (CST)
-Received: from [10.20.42.201] (unknown [10.20.42.201])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHCNH+tpkc+BaAA--.7836S3;
-	Tue, 15 Aug 2023 12:08:39 +0800 (CST)
-Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
+	id D6589C433C9; Tue, 15 Aug 2023 06:07:38 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by smtp.kernel.org (Postfix) with ESMTP id AC55DC433C7;
+	Tue, 15 Aug 2023 06:07:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC55DC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
+Received: from localhost (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTPS id 7A8A180E0;
+	Tue, 15 Aug 2023 06:07:30 +0000 (UTC)
+Date: Tue, 15 Aug 2023 09:07:29 +0300
+From: Tony Lindgren <tony@atomide.com>
+To: Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- zhuyinbo@loongson.cn, Conor Dooley <conor+dt@kernel.org>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, soc@kernel.org,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
- Liu Peibao <liupeibao@loongson.cn>, loongson-kernel@lists.loongnix.cn,
- loongarch@lists.linux.dev, Liu Yun <liuyun@loongson.cn>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-2-zhuyinbo@loongson.cn>
- <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
- <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
- <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
- <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
- <19feb595-e22a-4304-9b88-b5cb55949cd8@app.fastmail.com>
- <71c53c37-a0a6-6b11-31d5-4455d2309927@loongson.cn>
- <e04cf26e-2e38-4e87-b7b4-23dafadee00d@app.fastmail.com>
-From: Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <753d10b9-3b33-e7ef-a3d3-78090d67d648@loongson.cn>
-Date: Tue, 15 Aug 2023 12:08:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Cc: soc@kernel.org, =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] ARM: multi_v7_defconfig: Enable TLV320AIC3x
+Message-ID: <20230815060729.GR11676@atomide.com>
+References: <20230731-arm-tlv320aic31xx-config-v1-1-013c8c321dad@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <e04cf26e-2e38-4e87-b7b4-23dafadee00d@app.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxHCNH+tpkc+BaAA--.7836S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-	nUUI43ZEXa7xR_UUUUUUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230731-arm-tlv320aic31xx-config-v1-1-013c8c321dad@kernel.org>
 
+Hi,
 
-
-在 2023/8/14 下午9:41, Arnd Bergmann 写道:
-> On Mon, Aug 14, 2023, at 13:57, Yinbo Zhu wrote:
->> 在 2023/8/14 下午4:19, Arnd Bergmann 写道:
->>> On Mon, Aug 14, 2023, at 09:57, Yinbo Zhu wrote:
->>>> 在 2023/8/12 下午8:25, Arnd Bergmann 写道:
->>>>> I found https://github.com/loongson-community/pmon source
->>>>> code, and a reference to its origin at LSI Logic at
->>>>> https://www.linux-mips.org/wiki/PMON but otherwise have
->>>>> no idea about what this actually is, or how it relates
->>>>> to your UEFI firmware. Did you add UEFI support to PMON,
->>>>> or do you use it as a first stage loader that loads
->>>>> the actual UEFI implementation (EDK2 or u-boot, I guess)?
->>>>
->>>>
->>>> Pmon and uefi are two different firmware, and there is no connection
->>>> between them.
->>>
->>> It sounds like we still have problems with terminology. >
->>> I don't think categorizing UEFI as a firmware is correct,
->>
->>
->> Sorry to have confused you, uefi firmware is our internal name, which is
->> actually what you referred to as EDK2, the EDK2 need use UEFI.
+* Mark Brown <broonie@kernel.org> [230731 11:53]:
+> A number of TI based platforms use TLV320AIC3x since it was their
+> standard audio CODEC for quite some time, including the Beagle X15.
+> Enable it multi_v7_defconfig to improve test coverage.
 > 
-> Ok
-> 
->>> it's the interface used by various firmware implementations
->>> to load the operating system. As far as I understand,
->>> loongarch currently mandates the use of UEFI in whichever
->>> firmware is used, so if you have Pmon installed in ROM > and Pmon does not itself implement UEFI, it would have
->>> to load some other firmware such as u-boot in order to
->>> load a kernel through the UEFI protocol, right?
->>
->>
->> PMON is an independent firmware and loader that can directly load the
->> operating system and it does not require the use of UEFI.
->>>
->>> Has the assumption that loongarch requires UEFI changed?
->>
->>
->> LoongArch embedded board was use Pmon firmware, The other one uses UEFI
->> firmware (EDK2) on LoongArch platform.
-> 
-> I'm pretty sure we discussed this when the loongarch port
-> was originally merged, with the decisionto just use UEFI for
-> booting any kernel, as the legacy entry point for the ACPI
-> based environment was not really well-defined and the UEFI
-> stub was an easy alternative to have more commonality
-> with other architectures.
-> 
-> I see this was already extended for embedded CPUs to use
-> the uefi stub with DT in commit 88d4d957edc70 ("LoongArch: Add
-> FDT booting support from efi system table"), which seems like
-> the right direction. >
-> Can you explain why this board would want yet another method
-> for entering the kernel? Is there any documentation for the
-> boot protocol?
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Yes, you're right, the latest PMON does indeed support UEFI, the PMON
-used in the product code is still outdated and does not support UEFI.
+Looks like this is still pending, I don't have any defconfig changes to queue,
+so I've added Arnd to Cc:
 
-Actually, whether using EDK2, Pmon firmware, or other firmware, the
-LoongArch platform's s3 (suspend-to-ram) requires a suspend-address to
-be defined, if dts is supported, it is defined in dts, and if acpi table
-is supported, it is defined in acpi table.
+Reviewed-by: Tony Lindgren <tony@atomide.com>
 
+> ---
+>  arch/arm/configs/multi_v7_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->>>>> Is this executing directly from ROM then?
->>>>
->>>> Yes.
->>>
->>> Is this the only runtime call into the firmware,
->>
->>
->> Only when suspend-to-ram occurs, the kernel will call into the firmware.
->> No other case.
+> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+> index f0800f806b5f..00e95220e08d 100644
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@ -825,6 +825,7 @@ CONFIG_SND_SOC_SGTL5000=m
+>  CONFIG_SND_SOC_STI_SAS=m
+>  CONFIG_SND_SOC_TLV320AIC32X4=m
+>  CONFIG_SND_SOC_TLV320AIC32X4_I2C=m
+> +CONFIG_SND_SOC_TLV320AIC3X_I2C=m
+>  CONFIG_SND_SOC_WM8960=m
+>  CONFIG_SND_SOC_WM8962=m
+>  CONFIG_SND_SOC_WM8978=m
 > 
-> Ok
+> ---
+> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+> change-id: 20230707-arm-tlv320aic31xx-config-f52a886647db
 > 
->>> or are there
->>> others that are either already called from mainline kernels
->>> or in your downsteam implementation?
->>>
->>> How do you ensure that the DTB matches the actual ROM code
->>> after rebuilding Pmon? Does Pmon itself fill that field with
->>> the correct address, or do you rely on it being a hardcoded
->>> constant?
->>
->>
->> Use Pmon, firmware team will always ensure that DTB matches the actual
->> ROM code.  The "suspend-address" of dtb and pmon entry address will
->> synchronized modification by firmware team.
+> Best regards,
+> -- 
+> Mark Brown <broonie@kernel.org>
 > 
-> Ok.  So it's linked against libfdt to fill the dtb information,
-> or do you have to provide a dtb blob that matches the firmware?
-
-
-For pmon firmware, the dtb was as part of firmware, the firmware has
-defined the address of the DTB's suspend and the address of the firmware
-entry, and is consistent.
-
-Thanks,
-Yinbo
-
