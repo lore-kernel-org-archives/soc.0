@@ -4,64 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B857C2FC1F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DAB0C2FC20
 	for <soc@archiver.kernel.org>; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 60B9EC433CA; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4ABBCC433C8
-	for <soc@kernel.org>; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
+	id 75D62C433C9; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F92EC433C7;
+	Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1692276628;
-	bh=wTFA/Xav0D4haE+Sv6sG5yLlDIDd8koUm98pIKxrW38=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=ggyd4q2n4VSCFblM0aFIQhRJ9lQpBbjD9LTgEq5Xq0ixWwV18s6xnEEYsDOZdNipi
-	 Ttib+NH1JLD29TlgZ6VxZImSm7NSAMAiy3dUU9t0nEww48hISN0DXLa5Z2R0PS1BoR
-	 vueOdv3j7ogmrjV72eiOVtFY72qTCQ4JHvnMBTB3iNBqrSkaqdybln4GlX9mJ6SPTM
-	 mptxwdrCvRQK8FGAxbrya8erWOoi4Az/zv2wzRmc5WY5BXsRsaTOnqqjpEtVceVu1A
-	 TWN8JFtM9IEPUAk39iKzwtDxoOVxymOJczxKX74eZ1VkWaQfdUPFFGntTUuzxsXkLr
-	 2rHsbF/H28hIw==
+	bh=HUUY12bnROW2hO7fDqGcOuRIAxNHsc9Fxu/JOnI69kk=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=saldJXmBPsG8cvNYeSj+Ew7ro9zihV6gs+AxzPJPCqws0Bc8TK8rhmqqFdSjfIO69
+	 neovBlmCwBjP4goE17xFwPQJDmwxMagJrnfQb2at54NkffJLzR38PJ7fFV8eSFqyqI
+	 f9XQ6r2hVZuHemQB2IRzv0GHEoalR3fj9g7kTzvMxEADJx/mVcjreBXnEnYY2/lZ+W
+	 3d0PqSd8ouF3xJDfLiTiW10nwVl967Ye8w6b+EywRJtEETpazYM3AAJWnzjT/zid/i
+	 kOSKT3uLwGo3Otf5vsyfGdXc3yk7x3lsLRgMZXI+wJadjXm+O2NlylwyycvAAKukyD
+	 ZclW/QtOT7+zw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3678FC59A4C;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4AC94C395C5;
 	Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Rockchip dts fixes for 6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169227662822.28155.8974298924260429908.git-patchwork-summary@kernel.org>
+ <169227662829.28155.12729274354170941968.git-patchwork-notify@kernel.org>
 Date: Thu, 17 Aug 2023 12:50:28 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <4519945.8hzESeGDPO@phil>
+In-Reply-To: <4519945.8hzESeGDPO@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Qualcomm ARM64 fixes for v6.5
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=776302
-  Lore link: https://lore.kernel.org/r/20230815142042.2459048-1-andersson@kernel.org
+On Thu, 17 Aug 2023 00:02:04 +0200 you wrote:
+> Hi Arnd, Kevin, Olof,
+> 
+> please find a below a collection of fixes for the current release 6.5
+> cycle.
+> 
+> Please pull
+> 
+> [...]
 
-Patch: [GIT,PULL] Rockchip dts fixes for 6.5
-  Submitter: Heiko Stuebner <heiko@sntech.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=776794
-  Lore link: https://lore.kernel.org/r/4519945.8hzESeGDPO@phil
+Here is the summary with links:
+  - [GIT,PULL] Rockchip dts fixes for 6.5
+    https://git.kernel.org/soc/soc/c/e7c12167a294
 
-Patch: [GIT,PULL] Fixes for omaps
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=776484
-  Lore link: https://lore.kernel.org/r/pull-1692158536-457318@atomide.com
-
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
