@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A1AAC2FC14
-	for <soc@archiver.kernel.org>; Thu, 17 Aug 2023 12:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81042C2FC22
+	for <soc@archiver.kernel.org>; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DC6C1C433C7; Thu, 17 Aug 2023 12:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6BCAC433C8;
-	Thu, 17 Aug 2023 12:50:25 +0000 (UTC)
+	id 6BE50C433CB; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55B08C433C9;
+	Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692276625;
-	bh=djXx1cxSgUFLzh0jwQOttazL2UgHwfT7LguWHqOHuvw=;
+	s=k20201202; t=1692276628;
+	bh=JLmozRWf46UgyBjc6h3TFb8/V5XIRpT4woEIimqJLGw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=RYLrSdPVvz+qXz7W0x0hhstn+cTArCjiJzp0DYMl9DJWyGypcSwR8zqkr+8zdkPxl
-	 OH/LYGiiOWsKkWY9wFu+vmESYiSYBl6cozb2N1ZC1pl8CoKNxHuzGEoOWgv01w9/hV
-	 drDOKDbQ/UcZmnzc+tGpCd8dR33mP3WbShRhFPAQ0Mti7u0w6EiDp4vDorCnRRiErO
-	 xQkrP14KgU+SOc2wGYqYp5qqnrCR1YH4g91B+inWpyFKdB/Cy3JoD2nG8LkBQLF2+x
-	 QdbU3pHclieHWuo5qrIlKadxn5LfLFL7n7HSAFciW9p6NgjImxHzpoX6jnC2OZg6ep
-	 fgUuXnyiqB5mQ==
+	b=Ick3hg0Ga5hK2DX1y1Ivn9138wlkaCcZoqYNYPZDA+wN1hRGNEEeaLBiie/lb+/K+
+	 clGLxOqc2RrJmGtKb3hqCh3AUrypFeyFEZt1ukAN9DrIBM9dTJUu4SLa9oYBBciN3w
+	 gygHI2lF7Y4aXoEOSQFw114I5retUuACGKL28HFTOGTfwfqjAkIrLUwCNH/XUc026A
+	 H0hcA0j21IWX7ZPStJnHWmfN3JbjT5z+mtvnake5EqG4pbw/i/uZpiLMKUxD16CvEP
+	 XAdzD42NunhsR77mH2z7QiHTofaocM78Y9A5FYeOI1/0X1mx628iz+7PfOdgGTsVOT
+	 1XBzv874haBjA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A5256E1F65A;
-	Thu, 17 Aug 2023 12:50:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4062AE1F65A;
+	Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Subject: Re: [GIT PULL] Qualcomm ARM64 fixes for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169227662567.28155.15027852846091856519.git-patchwork-notify@kernel.org>
-Date: Thu, 17 Aug 2023 12:50:25 +0000
+ <169227662826.28155.16052561822167667022.git-patchwork-notify@kernel.org>
+Date: Thu, 17 Aug 2023 12:50:28 +0000
 References: <20230815142042.2459048-1-andersson@kernel.org>
 In-Reply-To: <20230815142042.2459048-1-andersson@kernel.org>
 To: Bjorn Andersson <andersson@kernel.org>
@@ -39,7 +39,7 @@ Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
 On Tue, 15 Aug 2023 07:20:41 -0700 you wrote:
