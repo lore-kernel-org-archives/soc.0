@@ -1,65 +1,88 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=VFTi=ED=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98AD8C2FC23
-	for <soc@archiver.kernel.org>; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88F23C71132
+	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 01:39:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7E254C433D9; Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67E86C433C8;
-	Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692276628;
-	bh=4dbTHeQU/HjBUVsY8TvGKQrMBUhJ9pIyMV69rgXAKMo=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UfwtYtk0QnSjLJLLGNv2esegjd6FouLA7uF5BhSsgV8uMBcaofzlrLq73vfY/pPdl
-	 6NzQ7vq0ctpOIrpAta6vAn8hrCSIF8990uYiyJkap+3d7qpJk4xXoqKoAEyfy61syK
-	 cjcCac8lCzY9mTiY1iTZcm7uM8BkIUUHLne2eT3gtuwRk9rOtpLTbh/zMlPKf7gLG0
-	 3ZbgYo6LMWCBj74Gi8fV9j/DkgmXSe/na8V/tif6CIx2TZ9CgI5J70q0TGvqfaDynw
-	 mlqAVgYt+7reH+0k0KsEIjbl68K1ixS7f00ksWsE4R6RJP+IiCBAmCnK3R5XwgbH4U
-	 ABAc/RRkLJd+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5504CE26D3A;
-	Thu, 17 Aug 2023 12:50:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 407B0C433C7; Fri, 18 Aug 2023 01:39:05 +0000 (UTC)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A6BE5C433C8;
+	Fri, 18 Aug 2023 01:39:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A6BE5C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RRkyT4BfPz1GDHl;
+	Fri, 18 Aug 2023 09:37:37 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
+ (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
+ 2023 09:38:59 +0800
+Message-ID: <584734f7-3eb7-961f-10a2-3707cf03819c@huawei.com>
+Date: Fri, 18 Aug 2023 09:38:36 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fixes for omaps
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <169227662834.28155.18168849535247797716.git-patchwork-notify@kernel.org>
-Date: Thu, 17 Aug 2023 12:50:28 +0000
-References: <pull-1692158536-457318@atomide.com>
-In-Reply-To: <pull-1692158536-457318@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] soc: kunpeng_hccs: fix some sparse warnings about
+ incorrect type
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
-
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Wed, 16 Aug 2023 07:02:41 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
-> 
-> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
-> 
->   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
-> 
-> are available in the Git repository at:
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] Fixes for omaps
-    https://git.kernel.org/soc/soc/c/17fd01a243b4
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <liuyonglong@huawei.com>,
+	<xuwei5@hisilicon.com>, <lihuisong@huawei.com>
+References: <20230815125233.65469-1-lihuisong@huawei.com>
+ <74f99c2f-fd9d-4cb9-a541-b699b79b928c@app.fastmail.com>
+ <15c26edc-eb4f-a90c-d52c-dd532c9d12ea@huawei.com>
+ <4f72b1d7-00b4-4318-b3c3-50d11e4a233c@app.fastmail.com>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <4f72b1d7-00b4-4318-b3c3-50d11e4a233c@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.121.59]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
 
+在 2023/8/17 19:54, Arnd Bergmann 写道:
+> On Thu, Aug 17, 2023, at 03:37, lihuisong (C) wrote:
+>> 在 2023/8/16 21:17, Arnd Bergmann 写道:
+>>> On Tue, Aug 15, 2023, at 14:52, Huisong Li wrote:
+>>>> @@ -199,8 +200,8 @@ static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
+>>>>    			     struct hccs_desc *desc)
+>>>>    {
+>>>>    	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>>>> -	struct acpi_pcct_shared_memory *comm_base = cl_info->pcc_comm_addr;
+>>>> -	void *comm_space = (void *)(comm_base + 1);
+>>>> +	void __iomem *comm_space = (u8 *)cl_info->pcc_comm_addr +
+>>>> +					sizeof(struct acpi_pcct_shared_memory);
+>>>>    	struct hccs_fw_inner_head *fw_inner_head;
+>>>>    	struct acpi_pcct_shared_memory tmp = {0};
+>>>>    	u16 comm_space_size;
+>>> The cast still looks wrong, while both comm_space and ->pcc_comm_addr
+>>> are __iomem pointers, casting to a non-__iomem u8 pointer should
+>>> still produce that warning. I'd suggest casting to (u8 __iomem *)
+>>> or (void __iomem *), I assume you still need a cast here to get
+>>> the correct address.
+>> Thanks Arnd.
+>>
+>> You are right. So I modify it by dropping (u8 *) here in patch v2.
+>> Please take a look at this again.
+> Right, if pcc_comm_addr is already a u8 __iomem* or void*, that
+> works, I though the cast was needed since it points to a larger
+> object, which would throw off the calculation.
+This pcc_comm_addr is already defined "void __iomem *" type in patch v2.
+So that works well, right?
+
+/Huisong
+>
+>> If it is ok for you, can you apply this patch to soc/soc.git?
+> Yes, of course.
+>
+>         Arnd
+> .
