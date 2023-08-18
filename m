@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BF9C71133
-	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 02:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 173DDC71133
+	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 02:46:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0822BC433C8; Fri, 18 Aug 2023 02:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCD6C433C9;
-	Fri, 18 Aug 2023 02:34:08 +0000 (UTC)
+	id BCD32C433CA; Fri, 18 Aug 2023 02:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E195C433C7;
+	Fri, 18 Aug 2023 02:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692326049;
-	bh=hIg/Sfi4ezo9hjT06HqBsqWkjiTtOTk464INXUPJDtU=;
+	s=k20201202; t=1692326806;
+	bh=rrmOz5+jYbfouiFcI8t9QGZjmet3CgzpcllRz3n2ynA=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=lOLqar6snPuFNFQHLjNxvc0VK2q8LyhW+GKOFEaep50zQ7wuIpH1vxUPFc1tkDp8+
-	 oYLuTCcby6FCcq/ayZaZ0eMz7MbnP/SDS9/9c1yjHgc0yEhesFKBSw+RD/x06JSdUI
-	 VJtdpWCiwYarUiuQ3hTV+Yhb4XKkl+1eAmg5ds90/M2+y6ziP3qbxHuh8DEFQ9x5vw
-	 Kde691h1dMeMASWndwIs6G4ZPEd3b8wdJAkE7TFIVcMDgha5gnY+3j2Q4bm7ecK4pw
-	 UO1IyEAzdHLERo94ILSaZn1D617qA1gqY69nHz18iTbuzpdtKlOp8lO1vOH/4sIe82
-	 01P6DfVM2kjsA==
+	b=HSS2WijaOPKgBuaAOUduOmFKpMNnhUsLYojez2n6w5i5KxqHmY6+i2v0sG6Qe3IHU
+	 Hsaj/tYzYK/D6auU99kmZ51eWp12pI90UqPdPzyyLWAS6vB95mGMtHNgpOGKyMkRul
+	 QQJel9TEFYIaR6u2AOhcEFaEAcDsPNlGKfOtRV4q4SXM6BBYHH0OOJlljAjD9dtOAW
+	 FrA7uWeFdDYQs2zigc7wRKCTvW1kFiyTh6mccQRsxfcKuEHGX4E6BpBOK0MojorWpX
+	 TEunaLeZx4PYeqb6eLI7+VyV8cvz7XkP4ggssMv3d1fFCL6VwZlF1g+FydUWIxyONt
+	 8wsVbokDwlLXg==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -30,13 +30,17 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Subject: [GIT PULL] Qualcomm ARM64 defconfig updates for v6.6
-Date: Thu, 17 Aug 2023 19:36:50 -0700
-Message-ID: <20230818023651.2484774-1-andersson@kernel.org>
+	Luca Weiss <luca@z3ntu.xyz>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	David Heidelberg <david@ixit.cz>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [GIT PULL] Qualcomm ARM32 DeviceTree updates for v6.6
+Date: Thu, 17 Aug 2023 19:49:27 -0700
+Message-ID: <20230818024928.2485173-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,32 +52,92 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.6
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-6.6
 
-for you to fetch changes up to 7f0c87348fb52d575295d16d4656ecd4c00bad87:
+for you to fetch changes up to 3cfa5569cedf1e5d125b62e690c1915d6b757a47:
 
-  arm64: defconfig: Enable IPQ5018 SoC base configs (2023-08-11 13:04:15 -0700)
-
-----------------------------------------------------------------
-Qualcomm ARM64 defconfig updates for v6.6
-
-This marks the MSM8996 global clock controller as buildin, to avoid boot
-issues. The SC8280XP GPU clock controller is enabled, to enable GPU
-support. A series of drivers needed to boot the IPQ5018 platform is
-enabled, and the ethernet PHY to enable Ethernet on SA8775P is enabled.
+  ARM: dts: qcom: apq8064: add support to gsbi4 uart (2023-08-17 19:40:23 -0700)
 
 ----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      arm64: defconfig: enable the SerDes PHY for Qualcomm DWMAC
+Qualcomm ARM32 DeviceTree updates for v6.6
 
-Bjorn Andersson (1):
-      arm64: defconfig: Enable Qualcomm SC8280XP GPUCC
+GCC and LCC clock controller parent clocks are introduced on MDM9615.
 
-Dmitry Baryshkov (1):
-      arm64: defconfig: enable Qualcomm MSM8996 Global Clock Controller as built-in
+The newly introduced RPM representation is introduced across multiple
+platforms.
 
-Sricharan Ramabadhran (1):
-      arm64: defconfig: Enable IPQ5018 SoC base configs
+Voltage ADC channel names are corrected across multiple platforms.
 
- arch/arm64/configs/defconfig | 6 ++++++
- 1 file changed, 6 insertions(+)
+APQ8064 gains a definition for GSBI4.
+
+The XO clock for SDHCI is corrected, as is the USB node name, on
+IPQ4019. USB node name is also corrected for SDX55.
+
+The correct PMIC is included on SDX65 MTP.
+
+The incorrect spi-max-frequency property is removed from controllers on
+IPQ8064 and MSM8960.
+
+OCMEM and the display subsystem are added to MSM8226.
+
+Reset line is added to the PM8941 and the APQ8074 Dragonboard, while a
+few properties of the Sony Xperia Z2 Tablet touchscreen are corrected.
+
+----------------------------------------------------------------
+David Heidelberg (1):
+      ARM: dts: qcom: apq8064: add support to gsbi4 uart
+
+Dmitry Baryshkov (4):
+      ARM: dts: qcom-pm8941: add resin support
+      ARM: dts: qcom: apq8074-dragonboard: add resin
+      ARM: dts: qcom-mdm9615: specify clocks for the lcc device
+      ARM: dts: qcom-mdm9615: specify gcc clocks
+
+Krzysztof Kozlowski (8):
+      ARM: dts: qcom: ipq4019: use generic node names for USB
+      ARM: dts: qcom: sdx55: use generic node names for USB
+      ARM: dts: qcom: ipq8064: drop spi-max-frequency from controller
+      ARM: dts: qcom: msm8960: drop spi-max-frequency from controller
+      ARM: dts: qcom: minor whitespace cleanup around '='
+      ARM: dts: qcom: msm8974pro-castor: correct inverted X of touchscreen
+      ARM: dts: qcom: msm8974pro-castor: correct touchscreen function names
+      ARM: dts: qcom: msm8974pro-castor: correct touchscreen syna,nosleep-mode
+
+Luca Weiss (2):
+      ARM: dts: qcom: msm8226: Add mdss nodes
+      ARM: dts: qcom: msm8226: Add ocmem
+
+Marijn Suijten (1):
+      ARM: dts: qcom: Use labels with generic node names for ADC channels
+
+Robert Marko (1):
+      ARM: dts: qcom: ipq4019: correct SDHCI XO clock
+
+Rohit Agarwal (1):
+      ARM: dts: qcom: sdx65-mtp: Update the pmic used in sdx65
+
+Stephan Gerhold (2):
+      ARM: dts: qcom: Add rpm-proc node for SMD platforms
+      ARM: dts: qcom: apq8064: Drop redundant /smd node
+
+ arch/arm/boot/dts/qcom/qcom-apq8064-pins.dtsi      |  16 ++
+ arch/arm/boot/dts/qcom/qcom-apq8064.dtsi           |  52 ++----
+ .../arm/boot/dts/qcom/qcom-apq8074-dragonboard.dts |   5 +
+ arch/arm/boot/dts/qcom/qcom-apq8084.dtsi           |   6 +-
+ arch/arm/boot/dts/qcom/qcom-ipq4018-ap120c-ac.dtsi |   7 +-
+ arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi           |  43 ++---
+ arch/arm/boot/dts/qcom/qcom-ipq8064-rb3011.dts     |   1 -
+ arch/arm/boot/dts/qcom/qcom-ipq8064-v1.0.dtsi      |   1 -
+ arch/arm/boot/dts/qcom/qcom-mdm9615.dtsi           |  19 ++-
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           | 182 ++++++++++++++++++---
+ arch/arm/boot/dts/qcom/qcom-msm8960.dtsi           |   1 -
+ arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |  44 ++---
+ .../dts/qcom/qcom-msm8974pro-fairphone-fp2.dts     |   2 +-
+ .../qcom-msm8974pro-sony-xperia-shinano-castor.dts |   8 +-
+ arch/arm/boot/dts/qcom/qcom-pm8226.dtsi            |  12 +-
+ arch/arm/boot/dts/qcom/qcom-pm8941.dtsi            |  36 ++--
+ arch/arm/boot/dts/qcom/qcom-pma8084.dtsi           |  12 +-
+ arch/arm/boot/dts/qcom/qcom-pmx55.dtsi             |   8 +-
+ arch/arm/boot/dts/qcom/qcom-sdx55.dtsi             |   2 +-
+ arch/arm/boot/dts/qcom/qcom-sdx65-mtp.dts          |   2 +-
+ 20 files changed, 313 insertions(+), 146 deletions(-)
