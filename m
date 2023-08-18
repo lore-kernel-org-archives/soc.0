@@ -4,82 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2E81C71159
-	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 16:45:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76EDCC7EE2C
+	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 16:45:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A5324C433C8; Fri, 18 Aug 2023 16:45:51 +0000 (UTC)
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	id 2E90FC433D9; Fri, 18 Aug 2023 16:45:52 +0000 (UTC)
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6B97CC433C7
-	for <soc@kernel.org>; Fri, 18 Aug 2023 16:45:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B97CC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 01264C433C9
+	for <soc@kernel.org>; Fri, 18 Aug 2023 16:45:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01264C433C9
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-688787570ccso926699b3a.2
-        for <soc@kernel.org>; Fri, 18 Aug 2023 09:45:49 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-68872ca740bso928475b3a.2
+        for <soc@kernel.org>; Fri, 18 Aug 2023 09:45:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1692377148; x=1692981948;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3nqyaIKlS3+7cl8Rhwxy25of98DZZkRzljBsIJVGe+I=;
-        b=A+dqpK1b/pxX9r14Crh6Rz782tfhYaDhEDEug6lOAgNteErDrSu0ytw/urNNk9Vd7j
-         hkiQSODn4BANE3gBTNL/+YsELvkMduHwlROIz/9lQeqO6WDBa7EI7vj+zEJv9qR0S3oy
-         ndp6Zw1UowAaRU7jmeAAEJybsKOYK1BFoCjnM=
+        d=broadcom.com; s=google; t=1692377150; x=1692981950;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oQC7bTAk5w+Lo8u16qVfCAnklFuvc7qfi+4DfSzXeEQ=;
+        b=LOx5as48Aco8MCpg8vwkfSh1l8pjGnkhDi1R2Tlw32yvlhyhbsmDaAMx75NhDqncvC
+         8JQTACE1lx8HKDC+ztFfI1FOVdHzPBi56CTrhtYzGWpNKDOY8NVBcCn/uwRP0w8kA9LV
+         Ng/2OPIfrSG1HZu7rmgNfQ9xyZA9mam52FljU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692377148; x=1692981948;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3nqyaIKlS3+7cl8Rhwxy25of98DZZkRzljBsIJVGe+I=;
-        b=JVutALHJq5ETpfUr+SRaDq0YWU2oURlvsCEsqmnqWS5BfQ2EfuJE7EaIg4Tl7qAtGn
-         molOVcRjfCYRFFpPyLtRpcWz8eCl2NQ+ANtZR+yna9STNu4u5JFxLCKmqUcGKvYykgGn
-         EKjeIuxMahN18tB32ZO0fQ/CwEvuIQ+leX8c1JcSsoFZDVkcsEx5qgK8F+Icht2pl7XE
-         exrLxfJDYFfu+TfpWJSUd41SxTJDuJUAA3J2kOWkvvw/0BHjJR1SJgYgU9IfMkU5r4WN
-         ziPj2sUzVuv0G8dBSnjDtF3ojhbdg/C3NWRwil74nvn0OW/nGLdYmR3/C7tarq+1CPlb
-         qvLw==
-X-Gm-Message-State: AOJu0YyuO1iOO1kk+cpkM5zHorkk+Pr5lZM2G+DYG0qr9svL6XSSlLjY
-	kroy3FHGq8fQgdeK/NuYoFqwQg/CT/SyQqh05UjCMrNND6U/HlEjCWZzbReScl6nUxhaRZE/PPZ
-	Uz7TRg/Fnvb+LzQ2CuZF7Q61WfaF6EV+FT4isU+hB1bS+SEpuspqfg/VRztAnJNiUUqpdaA7Jz2
-	w=
-X-Google-Smtp-Source: AGHT+IFd2xqKDZan1Wpk2BrZ/QB4Pf7HW1c6OuTUOBn/GuduDKF5AawLs7JxhoOVIJWZ/R1g8gv+/g==
-X-Received: by 2002:a05:6a20:72a6:b0:145:8e82:4eec with SMTP id o38-20020a056a2072a600b001458e824eecmr3986931pzk.37.1692377148054;
-        Fri, 18 Aug 2023 09:45:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692377150; x=1692981950;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oQC7bTAk5w+Lo8u16qVfCAnklFuvc7qfi+4DfSzXeEQ=;
+        b=QuJqoz9DVSgRO0avdDcRj4YkkWiiqn09jCcdIZIKlI9ROTCQjf9t6QlOv5tid9M809
+         nc4uNpEYBXASzJn+3QRcbOlJPJulVf78tVUFZMwaJrnulesz0EuArovpBAIbWWMv+i7u
+         e1BMItSws2+KLtxKXek1MoPXM+EGUXfyL3znYGaXLTkJ6EHbv18HmIQGWWQYnRW5VeTH
+         nhSuCNkl+420JNDQ4XN1qVaCrY67VflwU58qzbhitDSg/Xm7wz6PaDIzY5MawG+p5str
+         jc+D9myXPS4OJA3Wwkb3mQ/yI8buPDKvTi8G1GYE7YseBAP9Vr8Cik33+ZeuC7aazFjO
+         /3Bw==
+X-Gm-Message-State: AOJu0YyDhPc4S2dU6SsCBzJB1QTaz6OE3/nxnvKYUzZutUSyGFJBgC2p
+	WjUrXxQpqgUl88Jx3weP4aPlLWaopChdgM7CTqREmHsI4dLEKPWxuKJnUlUuf+cTT1rl88Glrcn
+	+UKz7WxhBRk6wnYvZc7SUK6mhUdGV/xLD0f/0PVyxnw2ITu1E3dlzD29g8Ilq7hxhqG0XsX5uv9
+	c=
+X-Google-Smtp-Source: AGHT+IFLNN/lBViOgEa2PXAlsWbv7Tp0R6l9qu+ppetEa18EIwJPqio6W2TTxfh7c/bR/zC1o4i6Kg==
+X-Received: by 2002:a05:6a21:329c:b0:133:7276:324b with SMTP id yt28-20020a056a21329c00b001337276324bmr4569585pzb.23.1692377149622;
+        Fri, 18 Aug 2023 09:45:49 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e21-20020aa78c55000000b00666912d8a52sm1755761pfd.197.2023.08.18.09.45.45
+        by smtp.gmail.com with ESMTPSA id e21-20020aa78c55000000b00666912d8a52sm1755761pfd.197.2023.08.18.09.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 09:45:46 -0700 (PDT)
+        Fri, 18 Aug 2023 09:45:49 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Stanislav Jakubek <stano.jakubek@gmail.com>,
-	Aleksey Nasibulin <alealexpro100@ya.ru>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Dan Haab <dan.haab@luxul.com>,
-	Stefan Wahren <stefan.wahren@i2se.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/4] Broadcom devicetree changes for 6.6
-Date: Fri, 18 Aug 2023 09:45:36 -0700
-Message-Id: <20230818164539.2871539-1-florian.fainelli@broadcom.com>
+Subject: [GIT PULL 2/4] Broadcom devicetree-arm64 changes for 6.6
+Date: Fri, 18 Aug 2023 09:45:37 -0700
+Message-Id: <20230818164539.2871539-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230818164539.2871539-1-florian.fainelli@broadcom.com>
+References: <20230818164539.2871539-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c4396b060335422a"
+	boundary="000000000000da3e1906033542cd"
 
---000000000000c4396b060335422a
-Content-Type: text/plain; charset=UTF-8
+--000000000000da3e1906033542cd
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
@@ -88,127 +78,28 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.6/devicetree
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.6/devicetree-arm64
 
-for you to fetch changes up to 2900083269f7c0f0ff430bffc6ced2038aed9b6b:
+for you to fetch changes up to a3660e59a9e49c4c1b8042185e7d39ec4a70f287:
 
-  ARM: dts: BCM5301X: Add DT for ASUS RT-AC3100 (2023-08-04 10:08:49 -0700)
+  arm64: dts: broadcom: add missing space before { (2023-07-12 10:20:13 -0700)
 
 ----------------------------------------------------------------
-This pull request contains Broadcom ARM-based Device Tree changes for
+This pull request contains Broadcom ARM64-based Device Tree changes for
 6.6, please pull the following:
 
-- Arinc adds support for the Asus RT-AC3100 router based upon the
-  BCM47094 SoC
-
-- Krzysztof splits interrupt properties per cell such that they are mode
-  readable and adds missing spaces in front of node names/labels
-
-- Rafal updates the BCM5301X DTS to correct PCIe, SPI over GPIO
-  properties. He describes the Ethernet links to internal switch ports
-  and then updates the BCM53573 binding and Ethernet properties by
-  declaring the BCM53125 external switch on port 5, add Ethernet links
-and
-  disables the second Ethernet MAC on Luxul devices.
-
-- Dan describes the Wi-Fi regulatory mappings for Luxul devices
-
-- Stanislav updates the bcm28155 DTS to use node labels
-
-- Linus adds SEAMA compatible properties to MTD partitions
-
-- Aleksey updates the Linksys EA6500 v2 to have the full 256MiB of DRAM
-  available
-
-- Stefan updates a number of BCM283x nodes to confirm to DTS schema:
-  pinctrl, DMA controllers and PWM cells.
+- Krzysztof adds missing spaces between node names/labels
 
 ----------------------------------------------------------------
-Aleksey Nasibulin (1):
-      ARM: dts: BCM5301X: Extend RAM to full 256MB for Linksys EA6500 V2
+Krzysztof Kozlowski (1):
+      arm64: dts: broadcom: add missing space before {
 
-Arınç ÜNAL (2):
-      dt-bindings: arm: bcm: add bindings for ASUS RT-AC3100
-      ARM: dts: BCM5301X: Add DT for ASUS RT-AC3100
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi    | 2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts | 2 +-
+ arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Dan Haab (1):
-      ARM: dts: BCM5301X: Add Wi-Fi regulatory mappings for Luxul devices
-
-Krzysztof Kozlowski (2):
-      ARM: dts: broadcom: add missing space before {
-      ARM: dts: broadcom: split interrupts per cells
-
-Linus Walleij (1):
-      ARM: dts: bcm5301x: Add SEAMA compatibles
-
-Rafał Miłecki (12):
-      ARM: dts: BCM5301X: Add Ethernet interfaces links
-      ARM: dts: BCM53573: Drop nonexistent "default-off" LED trigger
-      ARM: dts: BCM53573: Drop nonexistent #usb-cells
-      ARM: dts: BCM53573: Add cells sizes to PCIe node
-      ARM: dts: BCM53573: Use updated "spi-gpio" binding properties
-      dt-bindings: arm: bcm: add BCM53573 SoCs family binding
-      ARM: dts: BCM53573: Fix Ethernet info for Luxul devices
-      ARM: dts: BCM53573: Fix Tenda AC9 switch CPU port
-      ARM: dts: BCM53573: Describe BCM53125 switch ports in the main DTS
-      ARM: dts: BCM53573: Add BCM53125 switch port 5
-      ARM: dts: BCM53573: Add Ethernet interfaces links
-      ARM: dts: BCM53573: Disable second Ethernet on Luxul devices
-
-Stanislav Jakubek (1):
-      ARM: dts: bcm28155-ap: use node labels
-
-Stefan Wahren (3):
-      ARM: dts: bcm283x: Fix pinctrl groups
-      ARM: dts: bcm2835: adjust DMA node names
-      ARM: dts: bcm283x: Increase pwm-cells
-
- .../devicetree/bindings/arm/bcm/brcm,bcm4708.yaml  |   1 +
- .../devicetree/bindings/arm/bcm/brcm,bcm53573.yaml |  39 +++++
- arch/arm/boot/dts/broadcom/Makefile                |   1 +
- arch/arm/boot/dts/broadcom/bcm-hr2.dtsi            |   4 +-
- arch/arm/boot/dts/broadcom/bcm-ns.dtsi             |  18 +++
- arch/arm/boot/dts/broadcom/bcm-nsp.dtsi            |   4 +-
- arch/arm/boot/dts/broadcom/bcm11351.dtsi           |  13 +-
- arch/arm/boot/dts/broadcom/bcm21664.dtsi           |   9 +-
- arch/arm/boot/dts/broadcom/bcm23550.dtsi           |   9 +-
- arch/arm/boot/dts/broadcom/bcm2711.dtsi            |   4 +-
- arch/arm/boot/dts/broadcom/bcm28155-ap.dts         |  94 ++++++------
- arch/arm/boot/dts/broadcom/bcm2835-common.dtsi     |   2 +-
- arch/arm/boot/dts/broadcom/bcm2835-rpi-a-plus.dts  |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-a.dts       |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-b-plus.dts  |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-b-rev2.dts  |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-b.dts       |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-cm1-io1.dts |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-zero-w.dts  |   2 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi-zero.dts    |   1 +
- arch/arm/boot/dts/broadcom/bcm2835-rpi.dtsi        |   2 -
- arch/arm/boot/dts/broadcom/bcm2836-rpi-2-b.dts     |   1 +
- arch/arm/boot/dts/broadcom/bcm2837-rpi-cm3-io3.dts |   1 +
- .../arm/boot/dts/broadcom/bcm2837-rpi-zero-2-w.dts |   2 +
- arch/arm/boot/dts/broadcom/bcm283x.dtsi            |   2 +-
- .../dts/broadcom/bcm4708-linksys-ea6500-v2.dts     |   3 +-
- .../boot/dts/broadcom/bcm47094-asus-rt-ac3100.dts  |  23 +++
- .../boot/dts/broadcom/bcm47094-asus-rt-ac3100.dtsi | 163 +++++++++++++++++++++
- .../boot/dts/broadcom/bcm47094-asus-rt-ac88u.dts   | 155 +-------------------
- .../boot/dts/broadcom/bcm47094-dlink-dir-885l.dts  |   1 +
- .../boot/dts/broadcom/bcm47094-dlink-dir-890l.dts  |   1 +
- .../dts/broadcom/bcm47094-linksys-panamera.dts     |   2 +-
- .../boot/dts/broadcom/bcm47094-luxul-xap-1610.dts  |  37 +++++
- .../dts/broadcom/bcm47094-luxul-xwr-3150-v1.dts    |  36 +++++
- arch/arm/boot/dts/broadcom/bcm47094-phicomm-k3.dts |   2 +-
- .../boot/dts/broadcom/bcm47189-luxul-xap-1440.dts  |  20 ++-
- .../boot/dts/broadcom/bcm47189-luxul-xap-810.dts   |  21 ++-
- arch/arm/boot/dts/broadcom/bcm47189-tenda-ac9.dts  |   9 +-
- arch/arm/boot/dts/broadcom/bcm53573.dtsi           |  53 ++++++-
- arch/arm/boot/dts/broadcom/bcm947189acdbmr.dts     |   6 +-
- 40 files changed, 501 insertions(+), 246 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcm53573.yaml
- create mode 100644 arch/arm/boot/dts/broadcom/bcm47094-asus-rt-ac3100.dts
- create mode 100644 arch/arm/boot/dts/broadcom/bcm47094-asus-rt-ac3100.dtsi
-
---000000000000c4396b060335422a
+--000000000000da3e1906033542cd
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -279,14 +170,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILf0yOHNFStIqvwg
-ZwHAxCdAfNIrOcDlf6savuFY5n66MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDgxODE2NDU0OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBBI078FYJ2yzkBG
+vI6dEHtzSUeUEWziz2auQv/43xHVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDgxODE2NDU1MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDwxyjSEK3xjD2sXj88wZ7JHvnL2u7j9f7/
-mAuVBtOdAILosQkdDFnm9DJHBwxfHVu/ivJv1LH/Ff8c89ObEa4ZF6JtiBAzxgoH0jW4Pasu/nRG
-EnAsYR8h6bMUyvRtaSb0Pu6/F5jZjttQOUAgTSv8OPUdMA2wCGDDBMGGGdF5bNgYYSKlMIiPsCb0
-7alCkGTm9MDIuLWAm35INV89O9Mu0TYEbD1i/k3IN2uUN8Ya4D/rHUhzd1xA/gzl3SAeZmFl8Xbk
-Mc1q3yQ8MSbU2nx+JEGtJ3DoYVxYRAr7m+hevyo+iUkIIzrB9DU3CwKTBhZByqXEHVi4SB+TJpI5
-Uj5T
---000000000000c4396b060335422a--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAKQ9P/qtW2Oygea0A/yAyYPb0Lj3rhABLP
+/QsADgdikPWwQK0nbFIf+ngTL0SEIbwqriqY+3A9xCv/1UA5UZIyyqri9pePKwVzB2kUPMqGAwyW
+ypHV/JLLdtBD8KGMixgs1B11zUk5LXlp8/qdCdBEZNhyzpcCM9ng+VvsU8XmNrOuF1CMzjtyVIqp
+U9TFwIH05yP8RGqE3phtWgAifFfjoZH3EIWdMpEm4E4JdkGHE3LXwgdVRjjCuDKygm6CMHR1TCJQ
+DZpSkn3+x1ywyLziJJX1Zv2qhFYS2yqZHW8JQaPt8OtA2eiEV7FmvwaoyW1l/ITztFHerVdIhwnQ
+d121
+--000000000000da3e1906033542cd--
