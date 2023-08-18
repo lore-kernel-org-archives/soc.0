@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76EDCC7EE2C
-	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 16:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68942C7EE2A
+	for <soc@archiver.kernel.org>; Fri, 18 Aug 2023 16:45:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E90FC433D9; Fri, 18 Aug 2023 16:45:52 +0000 (UTC)
+	id 51AFFC433CB; Fri, 18 Aug 2023 16:45:54 +0000 (UTC)
 Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01264C433C9
-	for <soc@kernel.org>; Fri, 18 Aug 2023 16:45:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01264C433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id 51AB7C433CC
+	for <soc@kernel.org>; Fri, 18 Aug 2023 16:45:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51AB7C433CC
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-68872ca740bso928475b3a.2
-        for <soc@kernel.org>; Fri, 18 Aug 2023 09:45:50 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-68866e64bceso928257b3a.3
+        for <soc@kernel.org>; Fri, 18 Aug 2023 09:45:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1692377150; x=1692981950;
+        d=broadcom.com; s=google; t=1692377151; x=1692981951;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQC7bTAk5w+Lo8u16qVfCAnklFuvc7qfi+4DfSzXeEQ=;
-        b=LOx5as48Aco8MCpg8vwkfSh1l8pjGnkhDi1R2Tlw32yvlhyhbsmDaAMx75NhDqncvC
-         8JQTACE1lx8HKDC+ztFfI1FOVdHzPBi56CTrhtYzGWpNKDOY8NVBcCn/uwRP0w8kA9LV
-         Ng/2OPIfrSG1HZu7rmgNfQ9xyZA9mam52FljU=
+        bh=Jxz4RXaT167YPlhOcNKuksP2ww3IUF/5dfD4KgBHF94=;
+        b=EunMpqCvrXs5JuLmD9TZYLRNXyXOuVdidi31UKPil6rvxZqHUhw4y0n6eailqR7Mih
+         xDUcUCfwx1Tl3PqHawbLYRj/5SNdurJ9JMpYOR5gGoZuw6A9tk18xDi/A57ESLspZtnu
+         Njl7xjAukm5Rnzt2mLQwM4efSwcujuCf4CAOg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692377150; x=1692981950;
+        d=1e100.net; s=20221208; t=1692377151; x=1692981951;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQC7bTAk5w+Lo8u16qVfCAnklFuvc7qfi+4DfSzXeEQ=;
-        b=QuJqoz9DVSgRO0avdDcRj4YkkWiiqn09jCcdIZIKlI9ROTCQjf9t6QlOv5tid9M809
-         nc4uNpEYBXASzJn+3QRcbOlJPJulVf78tVUFZMwaJrnulesz0EuArovpBAIbWWMv+i7u
-         e1BMItSws2+KLtxKXek1MoPXM+EGUXfyL3znYGaXLTkJ6EHbv18HmIQGWWQYnRW5VeTH
-         nhSuCNkl+420JNDQ4XN1qVaCrY67VflwU58qzbhitDSg/Xm7wz6PaDIzY5MawG+p5str
-         jc+D9myXPS4OJA3Wwkb3mQ/yI8buPDKvTi8G1GYE7YseBAP9Vr8Cik33+ZeuC7aazFjO
-         /3Bw==
-X-Gm-Message-State: AOJu0YyDhPc4S2dU6SsCBzJB1QTaz6OE3/nxnvKYUzZutUSyGFJBgC2p
-	WjUrXxQpqgUl88Jx3weP4aPlLWaopChdgM7CTqREmHsI4dLEKPWxuKJnUlUuf+cTT1rl88Glrcn
-	+UKz7WxhBRk6wnYvZc7SUK6mhUdGV/xLD0f/0PVyxnw2ITu1E3dlzD29g8Ilq7hxhqG0XsX5uv9
-	c=
-X-Google-Smtp-Source: AGHT+IFLNN/lBViOgEa2PXAlsWbv7Tp0R6l9qu+ppetEa18EIwJPqio6W2TTxfh7c/bR/zC1o4i6Kg==
-X-Received: by 2002:a05:6a21:329c:b0:133:7276:324b with SMTP id yt28-20020a056a21329c00b001337276324bmr4569585pzb.23.1692377149622;
-        Fri, 18 Aug 2023 09:45:49 -0700 (PDT)
+        bh=Jxz4RXaT167YPlhOcNKuksP2ww3IUF/5dfD4KgBHF94=;
+        b=aIL2ikoqvCJGToMKdGe2xRBBglhx4VnF690dAecYDHLag9lyKJNpspQR59SDmWshed
+         xSfDaPVfOckW6ZYvv9dSWZL1vmKtaMDTp4+mrOUtS2SPd5GwK6j4B5k+OxZS+60A9M4K
+         jtDANmwDQvQgyW+hKL9E/LLinFJ5fI3YTtb5kFPeeFutnbGAwkmib1CsfF54sVjOekXl
+         V7QQvwXZnS88qcqwYKjPCyVUqrqYVdWmbZQnmEjwKXyydmAl1YA4cizBdgI0Qy4dPDrn
+         FeBcQbM3YE9fMj5Rtjwyw0o17MH55P4jwglf3yDyaK7fQEhF8M8TjJfZ1msuMcCtJIxh
+         4kFQ==
+X-Gm-Message-State: AOJu0Yxvpv/5oTu1eTj1wgZnpSplVwnIfPsYd/B/iG0rTnskdztD4y2O
+	JotWxxLQzrnvjj9hfjfVFjwK3vX+QnBtxrghMTHsW8Vt26ZQC5UD56Tm+wdrI2iYVt70C+zlLqU
+	51uLRUZ61HomUCoTLKswM51H7ZKBThrdrz3WfjGZ5Pxa7Ne+1rjybbbp4Vwoc1S/1HG3bzRO0VN
+	0=
+X-Google-Smtp-Source: AGHT+IE0371gTIUrq6IJBvfwl7eGKOBw3icORRFQ07lLLMb6llIkzF/v67tNnGlEOQ6NqjaGRRJbXw==
+X-Received: by 2002:a05:6a00:1a87:b0:682:7d8a:f891 with SMTP id e7-20020a056a001a8700b006827d8af891mr3924835pfv.20.1692377151251;
+        Fri, 18 Aug 2023 09:45:51 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e21-20020aa78c55000000b00666912d8a52sm1755761pfd.197.2023.08.18.09.45.48
+        by smtp.gmail.com with ESMTPSA id e21-20020aa78c55000000b00666912d8a52sm1755761pfd.197.2023.08.18.09.45.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 09:45:49 -0700 (PDT)
+        Fri, 18 Aug 2023 09:45:50 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc: Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 2/4] Broadcom devicetree-arm64 changes for 6.6
-Date: Fri, 18 Aug 2023 09:45:37 -0700
-Message-Id: <20230818164539.2871539-2-florian.fainelli@broadcom.com>
+Subject: [GIT PULL 3/4] Broadcom drivers changes for 6.6
+Date: Fri, 18 Aug 2023 09:45:38 -0700
+Message-Id: <20230818164539.2871539-3-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230818164539.2871539-1-florian.fainelli@broadcom.com>
 References: <20230818164539.2871539-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000da3e1906033542cd"
+	boundary="000000000000f33ef10603354267"
 
---000000000000da3e1906033542cd
+--000000000000f33ef10603354267
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
@@ -78,28 +79,28 @@ The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.6/devicetree-arm64
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.6/drivers
 
-for you to fetch changes up to a3660e59a9e49c4c1b8042185e7d39ec4a70f287:
+for you to fetch changes up to 57e493aff59529b0ed503ec1540e6125c84f9053:
 
-  arm64: dts: broadcom: add missing space before { (2023-07-12 10:20:13 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based Device Tree changes for
-6.6, please pull the following:
-
-- Krzysztof adds missing spaces between node names/labels
+  soc: bcm: Explicitly include correct DT includes (2023-07-28 10:33:48 -0700)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      arm64: dts: broadcom: add missing space before {
+This pull request contains Broadcom SoCs drivers changes for 6.6, please
+pull the following:
 
- arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi    | 2 +-
- arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts | 2 +-
- arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+- Rob updates the Broadcom SoC drivers to use the correct DT includes
 
---000000000000da3e1906033542cd
+----------------------------------------------------------------
+Rob Herring (1):
+      soc: bcm: Explicitly include correct DT includes
+
+ drivers/soc/bcm/bcm63xx/bcm-pmb.c       | 1 -
+ drivers/soc/bcm/bcm63xx/bcm63xx-power.c | 1 -
+ drivers/soc/bcm/raspberrypi-power.c     | 2 +-
+ 3 files changed, 1 insertion(+), 3 deletions(-)
+
+--000000000000f33ef10603354267
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -170,14 +171,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBBI078FYJ2yzkBG
-vI6dEHtzSUeUEWziz2auQv/43xHVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDgxODE2NDU1MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICN60Fds6jC5K9v6
+Itz90DgYqSMjHpwnhVl1f1wflznPMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDgxODE2NDU1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAKQ9P/qtW2Oygea0A/yAyYPb0Lj3rhABLP
-/QsADgdikPWwQK0nbFIf+ngTL0SEIbwqriqY+3A9xCv/1UA5UZIyyqri9pePKwVzB2kUPMqGAwyW
-ypHV/JLLdtBD8KGMixgs1B11zUk5LXlp8/qdCdBEZNhyzpcCM9ng+VvsU8XmNrOuF1CMzjtyVIqp
-U9TFwIH05yP8RGqE3phtWgAifFfjoZH3EIWdMpEm4E4JdkGHE3LXwgdVRjjCuDKygm6CMHR1TCJQ
-DZpSkn3+x1ywyLziJJX1Zv2qhFYS2yqZHW8JQaPt8OtA2eiEV7FmvwaoyW1l/ITztFHerVdIhwnQ
-d121
---000000000000da3e1906033542cd--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAzRmK5gUrIQItugwAuFpBA7b0o0E4EKlx9
+9JLvZOlIkD/iysOUcPausPTCfnTlbZP4IsuO/4wdowa9WQmRiwAT9GpHS3BX5904U2AFXTuBT4WM
+la2KbsnniGxMxGR2V1hr6Qqd8+b6SYuyr8lssffcnLbjeWhj+DBpu0Y9VwDDJITN0A49IxuiQtpz
+3+fq42Qy0vIxM4JDd2FJ/6TaeXR8goPB0Qdo8+LxMwpGP2S8OgjY67gWl0R9QErTb+IxIzYLkzOW
+iuws/8RZRTFlYRLRX3vDIPG0ZJqeZ8HQRwrCMQKjhkHeEquen/+RBD9ewcU/+erjVVsuzsgNnwHx
+dUKS
+--000000000000f33ef10603354267--
