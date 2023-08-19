@@ -1,110 +1,92 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <dinguyen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A2A5EE4993
-	for <soc@archiver.kernel.org>; Sat, 19 Aug 2023 09:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D70BEE4993
+	for <soc@archiver.kernel.org>; Sat, 19 Aug 2023 16:14:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E7A55C433C9; Sat, 19 Aug 2023 09:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A28A9C433C7;
-	Sat, 19 Aug 2023 09:00:36 +0000 (UTC)
+	id 5EAA3C433CA; Sat, 19 Aug 2023 16:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E279EC433C8;
+	Sat, 19 Aug 2023 16:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692435637;
-	bh=BvLLtPHmuVn5jXoaUEc5QwpHH/VMreVnaclIg/9H7VI=;
-	h=Date:From:List-Id:To:List-Id:Cc:Subject:From;
-	b=POIAZ7rYBOL08BxML3S0bWrzDqZeA8eR+usM0Lxc3W1wtByMTCXkam5hJZ+G2OjpV
-	 hwoSPHGdx5k/r+4AlCcyaFs1C8TH0DIfWOqUAe+LJ84OYFJv71KmzaLPK9eNG7/WpJ
-	 3bjyppQ1lSFJyekQ7x/k8nOYxLjXvy3g98AhyXhCrghP14HBu8MGUt5LeW5uoEeNjY
-	 KG9t7vapjivhu60KXsh0PoL+WYQynWFp394udTlHGsMsNL+JhWjjHKB8HF5egXOusi
-	 shfhm1+MBcf/6xo3MXBiefIFZ06TsqGoVbWMn1895ruEtMJ0WoZA/Yzq2sBvkII0eO
-	 43xB/9HLSn9+Q==
-Date: Sat, 19 Aug 2023 10:00:34 +0100
-From: Conor Dooley <conor@kernel.org>
+	s=k20201202; t=1692461660;
+	bh=PcxL3EleiskJvl8zHGtsDqdtxJz02DfzQXf/CRXYQB4=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=Re3tuOvuw4LHhojdd0VtE8jzJBZpqu1bQncog8O4igOvtEhL/bbdwuvVRmnMk+VVs
+	 AAfHVWNkVZZ0Ui/tzcebhMGoeODYD+ynj4TR1ClSbB1/zHMNE7B8BUgByhhZ2LUM/P
+	 xZiCxNLcn1mJS6JdCBGnu2fjoECZO406w7X2cmWkRqKXB3ASd84VMefNdoYr4LIi1A
+	 ZPT+olzKYPNI0q3qoQbAKdZnGmsDa7iUVLHmOGs4X0DeF+ORvswul6ovS4RMeTmAGS
+	 x/fVdMiTaeEA44lQ2bM1QNv7MpInZ1gCrlk1hvGlyWswOaUq/r8B2njJXjxJPREEBQ
+	 h38U9lEv2hX9w==
+From: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: conor@kernel.org, palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+To: arm@kernel.org,
 	soc@kernel.org
-Subject: [GIT PULL] RISC-V Devicetrees for v6.6-pt2
-Message-ID: <20230819-unwieldy-railing-9bba2b176aa7@spud>
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL] arm64: dts: socfpga: updates for v6.6
+Date: Sat, 19 Aug 2023 11:14:18 -0500
+Message-ID: <20230819161418.931258-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YbUXnae9IuboxlbM"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
---YbUXnae9IuboxlbM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey Arnd,
-
-If it's not too late, could you please take this part 2? There's not too
-much in here, mainly another minimal th1520-based devicetree for the
-BeagleV Ahead.
-
-Thanks,
-Conor.
-
-The following changes since commit f331eb1f5454123f3cec51c18a3d86c2a53bddb9:
-
-  riscv: dts: starfive: jh7110: Fix GMAC configuration (2023-08-13 11:12:20 +0100)
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.6-pt2
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.6
 
-for you to fetch changes up to a3ce3ff28385c7c0f8503e83f5d42d2083e16390:
+for you to fetch changes up to 2d599bc43813cbcceeb6b0bfe864671ab517c207:
 
-  riscv: dts: change TH1520 files to dual license (2023-08-16 18:59:30 +0100)
-
-----------------------------------------------------------------
-RISC-V Devicetrees for v6.6 Part 2
-
-T-Head:
-Add a second minimal devicetree for the second board using the th1520
-SoC, the BeagleV Ahead. As with the Lichee Pi 4a, this is sufficient
-only for booting to a console, with work on the mmc, clocks and ethernet
-sides of things under way. A relicense to a dual licence for the
-existing devicetree files is also done, for good measure.
-RISC-V Devicetrees for v6.6-pt2
-
-StarFive:
-Fix the sort order of some nodes that I resolved incorrectly during a
-merge conflict.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  arm64: dts: agilex5: add initial support for Intel Agilex5 SoCFPGA (2023-08-14 05:33:41 -0500)
 
 ----------------------------------------------------------------
-Conor Dooley (1):
-      riscv: dts: starfive: fix jh7110 qspi sort order
+SoCFPGA DTS updates for v6.6
+- Fix dtbs_check warnings for usbphy, sram, rstmgr, memory, partitions
+- Updated "stmmaceth-ocp" reset-names to "ahb" for stmmac ethernet
+- Add initial support for Agilex5
 
-Drew Fustini (3):
-      dt-bindings: riscv: Add BeagleV Ahead board compatibles
-      riscv: dts: thead: add BeagleV Ahead board device tree
-      riscv: dts: change TH1520 files to dual license
+----------------------------------------------------------------
+Alif Zakuan Yuslaimi (1):
+      arm64: dts: agilex/stratix10: Updated QSPI Flash layout for UBIFS
 
- Documentation/devicetree/bindings/riscv/thead.yaml |  4 ++
- arch/riscv/boot/dts/starfive/jh7110.dtsi           | 38 +++++++-------
- arch/riscv/boot/dts/thead/Makefile                 |  2 +-
- arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 61 ++++++++++++++++++++++
- .../boot/dts/thead/th1520-lichee-module-4a.dtsi    |  2 +-
- arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts  |  2 +-
- arch/riscv/boot/dts/thead/th1520.dtsi              |  2 +-
- 7 files changed, 88 insertions(+), 23 deletions(-)
- create mode 100644 arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
+Dinh Nguyen (6):
+      arm64: dts: socfpga: agilex/stratix10: fix dtbs_check warnings for sram
+      arm64: dts: socfpga: stratix10: fix dtbs_check warning for usbphy
+      arm64: dts: stratix10/agilex/n5x: fix dtbs_check warning for memory node
+      arm64: dts: agilex/stratix10/n5x: fix dtbs_check for rstmgr
+      arm64: dts: socfpga: n5x/stratix10: fix dtbs_check warning for partitions
+      arm64: dts: socfpga: change the reset-name of "stmmaceth-ocp" to "ahb"
 
---YbUXnae9IuboxlbM
-Content-Type: application/pgp-signature; name="signature.asc"
+Niravkumar L Rabara (4):
+      dt-bindings: intel: Add Intel Agilex5 compatible
+      dt-bindings: reset: add reset IDs for Agilex5
+      dt-bindings: clock: add Intel Agilex5 clock manager
+      arm64: dts: agilex5: add initial support for Intel Agilex5 SoCFPGA
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZOCEsgAKCRB4tDGHoIJi
-0nwpAP97ZJZHIF7AkudTpUPS3lAKv0jhD/WkAb3okaY9O8A7CAEA1jcwLI64e+NO
-NxOLJ9HqChVyq2BWbJeF9Uh/IXbupQo=
-=BjEr
------END PGP SIGNATURE-----
-
---YbUXnae9IuboxlbM--
+ .../devicetree/bindings/arm/intel,socfpga.yaml     |   5 +
+ .../bindings/clock/intel,agilex5-clkmgr.yaml       |  40 ++
+ .../boot/dts/intel/socfpga/socfpga_arria10.dtsi    |   6 +-
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |  20 +-
+ .../boot/dts/altera/socfpga_stratix10_socdk.dts    |  12 +-
+ .../dts/altera/socfpga_stratix10_socdk_nand.dts    |   8 +-
+ .../boot/dts/altera/socfpga_stratix10_swvp.dts     |   2 +-
+ arch/arm64/boot/dts/intel/Makefile                 |   1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  13 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 468 +++++++++++++++++++++
+ .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts |  39 ++
+ arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts |   4 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |  12 +-
+ .../boot/dts/intel/socfpga_agilex_socdk_nand.dts   |   4 +-
+ arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |   6 +-
+ include/dt-bindings/clock/intel,agilex5-clkmgr.h   | 100 +++++
+ include/dt-bindings/reset/altr,rst-mgr-s10.h       |   5 +-
+ 17 files changed, 703 insertions(+), 42 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/intel,agilex5-clkmgr.yaml
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk.dts
+ create mode 100644 include/dt-bindings/clock/intel,agilex5-clkmgr.h
