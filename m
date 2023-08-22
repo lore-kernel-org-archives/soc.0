@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B93F8EE49B7
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C183AEE49B8
 	for <soc@archiver.kernel.org>; Tue, 22 Aug 2023 02:31:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 77059C433BC; Tue, 22 Aug 2023 02:31:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6163BC433AD;
+	id 88BF7C116A1; Tue, 22 Aug 2023 02:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 72914C116A0;
 	Tue, 22 Aug 2023 02:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1692671476;
-	bh=xqRb7PhM0+YZ6iVVexXpcgFmx7sHo7S2gfvLM/foQjY=;
+	bh=NB1w8PmYvg1S7Q7EhQ5udzsKqFbE2AeiymnZ/XEYTP8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Ulf3q//6pj51yplc2pSoIkRMcuZxVj6JC6092ryll5rF8pmXgXuM2FEBcIkrwhNV/
-	 8pe7DMsvdIZv8luLCb5gC1f9xQzVk2iFJNk/Pbw5I2cRLRgiUtbY3G9qQVJNg+PEzp
-	 kCFcjvY64zlMzY66ybuQnsLac1Lb4esDHzXbPgeK6BEOxv8hTkoL/hb5oyBbciMKv9
-	 v33gMIGeAxpPHyogx6tvQE4z3sIjx00w/aoCGqt31BAU+93sz04w/xwMTGLI5MXO16
-	 RBHyVdBaaCQS48MjLhAgywqbLwAM2CLnu0M+lPsDHoMQpN1EjlxB1sqlDvWVL9xfx0
-	 EeTPXGdcydb6g==
+	b=IxyQIi9jPb1yz5vCmjdZil6sYPjHt8d1IR3o+GUirNK61AKfjcJFliijU+H9VOYNX
+	 cD1/t10hkFRSoJCIMAcVkbUC3col6wDE+cYQeEFDN7HhmHVpxIHBlCmJ+8MXnfOcYX
+	 zV8IaPk5ozDh4Xb2vnmgwMqOnNKb7RhDncLvwm+47pkj5Nf1RxE9HTheRwCQl6tzqj
+	 sE4qgzAnNY1nUhyivl+dMH6atWi3rHXRHqo8iWn1nwzVpxIT/HmM4tBDVT5f13dzPp
+	 iqMXvsQZYj0A8toWbXYJw455Q0u2bw40YIuZvOl8xzcH688FYWhDGmHVqR5CW3lsbo
+	 Mi34g6U1Srjqg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4DCDFE4EAF9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5FD1CE21EE9;
 	Tue, 22 Aug 2023 02:31:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Driver changes for omaps for v6.6
+Subject: Re: [PATCH v2] soc: kunpeng_hccs: fix some sparse warnings about
+ incorrect type
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169267147631.32531.17747488352315225978.git-patchwork-notify@kernel.org>
+ <169267147638.32531.13517831572097065300.git-patchwork-notify@kernel.org>
 Date: Tue, 22 Aug 2023 02:31:16 +0000
-References: <pull-1692158857-597450@atomide.com>
-In-Reply-To: <pull-1692158857-597450@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <20230816073706.33297-1-lihuisong@huawei.com>
+In-Reply-To: <20230816073706.33297-1-lihuisong@huawei.com>
+To: lihuisong (C) <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 18 Aug 2023 06:03:27 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Wed, 16 Aug 2023 15:37:06 +0800 you wrote:
+> This patch fixes some sparse warnings about incorrect type.
+> The address about PCC communication space should use '__iomem' tag.
 > 
-> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
-> 
->   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
-> 
-> are available in the Git repository at:
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202308151142.dH5Muhva-lkp@intel.com/
+> Fixes: 886bdf9c883b ("soc: hisilicon: Support HCCS driver on Kunpeng SoC")
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Driver changes for omaps for v6.6
-    https://git.kernel.org/soc/soc/c/6681618814b4
+  - [v2] soc: kunpeng_hccs: fix some sparse warnings about incorrect type
+    https://git.kernel.org/soc/soc/c/7d6612834d17
 
 You are awesome, thank you!
 -- 
