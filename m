@@ -1,172 +1,126 @@
-Return-Path: <SRS0=yzNC=EI=robh_at_kernel.org=rob@kernel.org>
+Return-Path: <SRS0=75W9=EI=gmail.com=jernej.skrabec@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5950AC3DA6F
-	for <soc@archiver.kernel.org>; Wed, 23 Aug 2023 19:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72319C3DA6F
+	for <soc@archiver.kernel.org>; Wed, 23 Aug 2023 19:14:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1777BC433C8; Wed, 23 Aug 2023 19:11:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCA1C433C7;
-	Wed, 23 Aug 2023 19:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692817919;
-	bh=s4YOnmi9JvRPm07nshzPHn1qcbZ938a4sogEi3pqxiE=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=C3uwE0IbDEGfWHsFRUbOovf5gJNgXIYDy4U+Vsp2Gh8xvsJqUiUskwc7k1yFsTZ2j
-	 j3a6PzKviaJRaS6N0g8kj/AmZQZ76kMXdBjBkaQagGz/5T+NHPc+JHzsvGWhq7bu9E
-	 R2p1uXYYi1YifzKrb3CB8vNKWlbziiTMHteDCobscDeNgar7sGRDlBB0OM8f4TU/RM
-	 2v4i80QZyRUBWhJ25ThImnUb65Fn9cKgmrEQzLg/K32l7Y3xk/kcrZqTpH6YcCYozS
-	 BUeZmL6xfhmmO0ClI6mSCN8C00LMo2gaAmiEVqBywOMWEezC3JmPPDuuuo19dPRFdK
-	 hO8xr9zu4PK0w==
-Received: (nullmailer pid 2732794 invoked by uid 1000);
-	Wed, 23 Aug 2023 19:11:57 -0000
-From: Rob Herring <robh@kernel.org>
+	id 57D82C433CA; Wed, 23 Aug 2023 19:14:05 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5EDAAC433C7;
+	Wed, 23 Aug 2023 19:14:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5EDAAC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-99bcf2de59cso778013166b.0;
+        Wed, 23 Aug 2023 12:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692818042; x=1693422842;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OCIrAxFDF25mzcKHeRcgDzkO8YOJQLUfVKMU+Ywn+CI=;
+        b=F0m1dC0r1D9CfIev6pc24EaKzGxk0UuGNnqavKUqIieO1QM7EZ7130J/Dl71vD6cck
+         b4tEURRXTFB8K8kYrJunVHW9jBttCV6oOn8MVoJC79gH1IKNI19yDUYtMafAbmCqjXGD
+         jVl603iPiqILuA4/TICEL/jjU1Zfbn8GRo7IvKdaiiAVALYvHyo8QXpiqsHXR3TLXa0H
+         BMTTH8pb0RyPS7pzI0xuKr4OWTzNw+a/EX5nYDengR5UprSeu/PNWdOWKKpalqT87OfD
+         yS2EFWh9G3CbcUle03vyDcSzD2TgQgsnuyYnmsRhV0Z/we7N8WB/AHWK+LsXaMGpdm0x
+         eX7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692818042; x=1693422842;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OCIrAxFDF25mzcKHeRcgDzkO8YOJQLUfVKMU+Ywn+CI=;
+        b=WFIrjmjgLToca2IRon0wHG8CEnevwleQ9HmjtIuYZW81fBjTSRah7FB+mNpOnWIc9E
+         WgRMip7CDIBzQTzfgSPeCeKVNt4kvosBCDXOoaprdS11tVmTyI/7TLuhXvFeaib4OwdU
+         FDLkJi33MFViUZqYgRbAq7yIMK9ziTPP6yu6dBu/dKMn0oVIaFhXefM0Va8v1Q/9IOKV
+         VZHz5dHBfvvU473ityEWJXsPwJzmR3o0R5jDzG3BW0gmLgYlHUi6Y8dOrtiVSKCr5UQy
+         v6gO2thNp/ET13oyp1iCuw1j5tjX/AyzBoLFaIv1fHp0qZVxfheGfcOM2Q1708y/xEqn
+         XMTA==
+X-Gm-Message-State: AOJu0YzD4fgw2ooXA6RCgBKHMd1ohdyiIAFJZhlLCvA9mpzZSVATcuWQ
+	/q/8/BedZ2v1Mv/kiKFosSk=
+X-Google-Smtp-Source: AGHT+IFbojcSnWWb57HEiIyw8RL+IR9XS37Wm62sPrbcTpWpKP2WmF6c9EcbiBXGI99RpkWM2z7iJQ==
+X-Received: by 2002:a17:906:cc2:b0:99d:f560:5d3c with SMTP id l2-20020a1709060cc200b0099df5605d3cmr11357511ejh.23.1692818042131;
+        Wed, 23 Aug 2023 12:14:02 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170906084f00b0099cf9bf4c98sm10059758ejd.8.2023.08.23.12.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Aug 2023 12:14:01 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Stuart Yoder <stuyoder@gmail.com>, Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] bus: fsl-mc: Use common ranges functions
-Date: Wed, 23 Aug 2023 14:09:42 -0500
-Message-Id: <20230823190958.2717267-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-renesas-soc@vger.kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject:
+ Re: [PATCH 1/2] ARM: dts: use capital "OR" for multiple licenses in SPDX
+Date: Wed, 23 Aug 2023 21:13:59 +0200
+Message-ID: <4504114.LvFx2qVVIh@jernej-laptop>
+In-Reply-To: <20230823085146.113562-1-krzysztof.kozlowski@linaro.org>
+References: <20230823085146.113562-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Since commit 3d5089c4263d ("of/address: Add support for 3 address cell
-bus"), the DT address functions can handle translating buses with 3
-address cells. Replace the custom code with the for_each_of_range()
-iterator.
+Dne sreda, 23. avgust 2023 ob 10:51:45 CEST je Krzysztof Kozlowski napisal(a):
+> Documentation/process/license-rules.rst and checkpatch expect the SPDX
+> identifier syntax for multiple licenses to use capital "OR".  Correct it
+> to keep consistent format and avoid copy-paste issues.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Rebased on next-20230822, so might not apply cleanly.  What does not
+> apply, can be skipped and I will fix it after next RC.
+> ---
+>  arch/arm/boot/dts/allwinner/sun8i-t113s-mangopi-mq-r-t113.dts | 2 +-
+>  arch/arm/boot/dts/allwinner/sun8i-t113s.dtsi                  | 2 +-
+>  arch/arm/boot/dts/allwinner/sunxi-d1s-t113-mangopi-mq-r.dtsi  | 2 +-
 
-The original code had fallbacks to get "#address-cells"/"#size-cells"
-from the bus parent node if they are missing. This is non-standard
-behavior, and AFAICT the upstream .dts files never relied on that.
+For Allwinner:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Reviewed-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Tested-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2: Add tags
+Best regards,
+Jernej
 
-Arnd, Please apply this directly.
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b105pv2.dts                  | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b105v2.dts                   | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b125pv2.dts                  | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b125v2.dts                   | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b155v2.dts                   | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b1x5pv2.dtsi                 | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-b1x5v2.dtsi                  | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-emcon-avari.dts              | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6dl-qmx6.dtsi                    | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6q-emcon-avari.dts               | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6qdl-emcon-avari.dtsi            | 2 +-
+>  arch/arm/boot/dts/nxp/imx/imx6qdl-emcon.dtsi                  | 2 +-
+>  arch/arm/boot/dts/st/stm32mp157c-emsbc-argon.dts              | 2 +-
+>  arch/arm/boot/dts/st/stm32mp157c-emstamp-argon.dtsi           | 2 +-
 
- drivers/bus/fsl-mc/fsl-mc-bus.c | 90 +++++----------------------------
- 1 file changed, 13 insertions(+), 77 deletions(-)
 
-diff --git a/drivers/bus/fsl-mc/fsl-mc-bus.c b/drivers/bus/fsl-mc/fsl-mc-bus.c
-index 7c57e7d2ff55..2f6d5002e43d 100644
---- a/drivers/bus/fsl-mc/fsl-mc-bus.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-bus.c
-@@ -995,75 +995,18 @@ struct fsl_mc_device *fsl_mc_get_endpoint(struct fsl_mc_device *mc_dev,
- }
- EXPORT_SYMBOL_GPL(fsl_mc_get_endpoint);
- 
--static int parse_mc_ranges(struct device *dev,
--			   int *paddr_cells,
--			   int *mc_addr_cells,
--			   int *mc_size_cells,
--			   const __be32 **ranges_start)
--{
--	const __be32 *prop;
--	int range_tuple_cell_count;
--	int ranges_len;
--	int tuple_len;
--	struct device_node *mc_node = dev->of_node;
--
--	*ranges_start = of_get_property(mc_node, "ranges", &ranges_len);
--	if (!(*ranges_start) || !ranges_len) {
--		dev_warn(dev,
--			 "missing or empty ranges property for device tree node '%pOFn'\n",
--			 mc_node);
--		return 0;
--	}
--
--	*paddr_cells = of_n_addr_cells(mc_node);
--
--	prop = of_get_property(mc_node, "#address-cells", NULL);
--	if (prop)
--		*mc_addr_cells = be32_to_cpup(prop);
--	else
--		*mc_addr_cells = *paddr_cells;
--
--	prop = of_get_property(mc_node, "#size-cells", NULL);
--	if (prop)
--		*mc_size_cells = be32_to_cpup(prop);
--	else
--		*mc_size_cells = of_n_size_cells(mc_node);
--
--	range_tuple_cell_count = *paddr_cells + *mc_addr_cells +
--				 *mc_size_cells;
--
--	tuple_len = range_tuple_cell_count * sizeof(__be32);
--	if (ranges_len % tuple_len != 0) {
--		dev_err(dev, "malformed ranges property '%pOFn'\n", mc_node);
--		return -EINVAL;
--	}
--
--	return ranges_len / tuple_len;
--}
--
- static int get_mc_addr_translation_ranges(struct device *dev,
- 					  struct fsl_mc_addr_translation_range
- 						**ranges,
- 					  u8 *num_ranges)
- {
--	int ret;
--	int paddr_cells;
--	int mc_addr_cells;
--	int mc_size_cells;
--	int i;
--	const __be32 *ranges_start;
--	const __be32 *cell;
--
--	ret = parse_mc_ranges(dev,
--			      &paddr_cells,
--			      &mc_addr_cells,
--			      &mc_size_cells,
--			      &ranges_start);
--	if (ret < 0)
--		return ret;
-+	struct fsl_mc_addr_translation_range *r;
-+	struct of_range_parser parser;
-+	struct of_range range;
- 
--	*num_ranges = ret;
--	if (!ret) {
-+	of_range_parser_init(&parser, dev->of_node);
-+	*num_ranges = of_range_count(&parser);
-+	if (!*num_ranges) {
- 		/*
- 		 * Missing or empty ranges property ("ranges;") for the
- 		 * 'fsl,qoriq-mc' node. In this case, identity mapping
-@@ -1079,20 +1022,13 @@ static int get_mc_addr_translation_ranges(struct device *dev,
- 	if (!(*ranges))
- 		return -ENOMEM;
- 
--	cell = ranges_start;
--	for (i = 0; i < *num_ranges; ++i) {
--		struct fsl_mc_addr_translation_range *range = &(*ranges)[i];
--
--		range->mc_region_type = of_read_number(cell, 1);
--		range->start_mc_offset = of_read_number(cell + 1,
--							mc_addr_cells - 1);
--		cell += mc_addr_cells;
--		range->start_phys_addr = of_read_number(cell, paddr_cells);
--		cell += paddr_cells;
--		range->end_mc_offset = range->start_mc_offset +
--				     of_read_number(cell, mc_size_cells);
--
--		cell += mc_size_cells;
-+	r = *ranges;
-+	for_each_of_range(&parser, &range) {
-+		r->mc_region_type = range.flags;
-+		r->start_mc_offset = range.bus_addr;
-+		r->end_mc_offset = range.bus_addr + range.size;
-+		r->start_phys_addr = range.cpu_addr;
-+		r++;
- 	}
- 
- 	return 0;
--- 
-2.40.1
 
