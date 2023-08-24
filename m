@@ -1,108 +1,151 @@
-Return-Path: <cixi.geng@linux.dev>
+Return-Path: <krzk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE10C71145
-	for <soc@archiver.kernel.org>; Thu, 24 Aug 2023 06:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63DA5C3DA6F
+	for <soc@archiver.kernel.org>; Thu, 24 Aug 2023 07:37:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C87D9C433C7; Thu, 24 Aug 2023 06:27:49 +0000 (UTC)
-Received: from out-30.mta1.migadu.com (out-30.mta1.migadu.com [95.215.58.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CCA31C433C9
-	for <soc@kernel.org>; Thu, 24 Aug 2023 06:27:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCA31C433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	id 1952CC433CA; Thu, 24 Aug 2023 07:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A81C433C8;
+	Thu, 24 Aug 2023 07:37:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692862648;
+	bh=uXfJs8fNdLRO8D3RiWH0qzEO3rhXZ1J5dH+3rBtPqkw=;
+	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
+	b=MFcN0WjUw/HN+MZp5H7K1KZAf9481+16hUvl7S9+TNG0ny1TnJNQkAWbu7aMW1rvh
+	 /bA74fd3eGTTneRmWd/iY6T0H0H/QCyeO4bRvJnyJaJKoYMDJYM9/eM0RbVVALWioF
+	 Eh2Kx20N2906OgUOks6m05vw72ewsW1oAO+B8slEdV6UOhk0i9h/4kBgrykWlBDqZN
+	 yyOo13JR7F0p2T43dSvQLA9I9161cein9VvMXfynvBRUdWYlaROdukxphPIwTxf4BK
+	 26Kuw6yPEgSZ8UFhYy65SU4jvzSQFBLOE2uCS0o2JrI9rpAAPDPPg5mlZFjXLQXD0L
+	 Mxp2gJa/fSbFQ==
+Message-ID: <7213dd0d-5783-cda7-6d49-8bf442e81921@kernel.org>
+Date: Thu, 24 Aug 2023 09:37:23 +0200
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1692858465;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l6IxgWmKRKi+I5lqpm5Wgd0S2sdauV2HZZ0NQlY4DP4=;
-	b=dfhY3alx1/XKkgAfnlq82B8EZDL1jL9RntK0zdUXmkn83OszAv5QKemGoodf/iCuojCiwN
-	a8HtZWrVsq377brYfWITHfS2t/IEFOkz6vWPlYLutMoYu3slrPeYSdKeN4QuP5p65ZAwWI
-	DtIo3mDR00VnADl5HMeppCF5Tjg7WtI=
-Date: Thu, 24 Aug 2023 06:27:44 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: cixi.geng@linux.dev
-Message-ID: <2aeec29689a56fcfa60aa499f73f9a10f783c4ec@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH] arm64: dts: sprd: fix the cpu node for UMS512
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 1/4] dt-bindings: arm: add cznic,turris-omnia-mcu binding
 List-Id: <soc.lore.kernel.org>
-To: "Chunyan Zhang" <zhang.lyra@gmail.com>, "SoC Team" <soc@kernel.org>,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc: conor+dt@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
- arnd@arndb.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- cixi.geng1@unisoc.com
-In-Reply-To:
- <CAAfSe-sorWk5zhzevAoxwbiyk2YoDU9d47FLXcT43q1ZwHdvdg@mail.gmail.com>
-References:
- <CAAfSe-sorWk5zhzevAoxwbiyk2YoDU9d47FLXcT43q1ZwHdvdg@mail.gmail.com>
- <20230711162346.5978-1-cixi.geng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+To: =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
+ <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+ Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20230823161012.6986-1-kabel@kernel.org>
+ <20230823161012.6986-2-kabel@kernel.org>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230823161012.6986-2-kabel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-August 17, 2023 at 4:26 PM, "Chunyan Zhang" <zhang.lyra@gmail.com> wrote:
+On 23/08/2023 18:10, Marek Behún wrote:
+> Add binding for cznic,turris-omnia-mcu, the device-tree node
+> representing the system-controller features provided by the MCU on the
+> Turris Omnia router.
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC (and consider --no-git-fallback argument). It might
+happen, that command when run on an older kernel, gives you outdated
+entries. Therefore please be sure you base your patches on recent Linux
+kernel.
+
+> ---
+>  .../bindings/arm/cznic,turris-omnia-mcu.yaml  | 72 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml b/Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+> new file mode 100644
+> index 000000000000..055485847e71
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+
+ARM directory is only for top-level bindings, so this should go to soc.
+
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/cznic,turris-omnia-mcu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CZ.NIC's Turris Omnia MCU
+> +
+> +maintainers:
+> +  - Marek Behún <kabel@kernel.org>
+> +
+> +description:
+> +  The MCU on Turris Omnia acts as a system controller providing additional
+> +  GPIOs, interrupts, watchdog, system power off and wakeup configuration.
+> +
+> +properties:
+> +  compatible:
+> +    const: cznic,turris-omnia-mcu
+> +
+> +  reg:
+> +    description: MCU I2C slave address
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - gpio-controller
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    ic: interrupt-controller {
+> +        interrupt-controller;
+> +        #interrupt-cells = <2>;
+> +    };
+
+Drop this node, not relevant.
+
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        system-controller@2a {
+> +            compatible = "cznic,turris-omnia-mcu";
+> +            reg = <0x2a>;
+> +
+> +            interrupt-parent = <&ic>;
+> +            interrupts = <11 IRQ_TYPE_NONE>;
+
+Are you sure interrupt is type none?
+
+> +
+> +            gpio-controller;
+> +            #gpio-cells = <2>;
+> +
+> +            interrupt-controller;
+> +            #interrupt-cells = <2>;
+> +        };
 
 
->=20
->=20On Wed, 12 Jul 2023 at 00:24, Cixi Geng <cixi.geng@linux.dev> wrote:
->=20
->=20>=20
->=20> From: Cixi Geng <cixi.geng1@unisoc.com>
-> >=20
->=20>  The UMS512 Socs have 8 cores contains 6 a55 and 2 a75.
-> >  modify the cpu nodes to correct information.
-> >=20
->=20>  Fixes: 2b4881839a39 ("arm64: dts: sprd: Add support for Unisoc's U=
-MS512")
-> >  Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> >=20
->=20
-> Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
->=20
->=20Thanks,
-> Chunyan
->=20
-Hi=20All=EF=BC=8C
-please help to review this patch=EF=BC=8C If there are no issues, I hope =
-to apply as soon as possible=EF=BC=8Cthanks=EF=BC=81
-> >=20
->=20> ---
-> >  arch/arm64/boot/dts/sprd/ums512.dtsi | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
->=20>  diff --git a/arch/arm64/boot/dts/sprd/ums512.dtsi b/arch/arm64/boo=
-t/dts/sprd/ums512.dtsi
-> >  index 024be594c47d..97ac550af2f1 100644
-> >  --- a/arch/arm64/boot/dts/sprd/ums512.dtsi
-> >  +++ b/arch/arm64/boot/dts/sprd/ums512.dtsi
-> >  @@ -96,7 +96,7 @@ CPU5: cpu@500 {
-> >=20
->=20>  CPU6: cpu@600 {
-> >  device_type =3D "cpu";
-> >  - compatible =3D "arm,cortex-a55";
-> >  + compatible =3D "arm,cortex-a75";
-> >  reg =3D <0x0 0x600>;
-> >  enable-method =3D "psci";
-> >  cpu-idle-states =3D <&CORE_PD>;
-> >  @@ -104,7 +104,7 @@ CPU6: cpu@600 {
-> >=20
->=20>  CPU7: cpu@700 {
-> >  device_type =3D "cpu";
-> >  - compatible =3D "arm,cortex-a55";
-> >  + compatible =3D "arm,cortex-a75";
-> >  reg =3D <0x0 0x700>;
-> >  enable-method =3D "psci";
-> >  cpu-idle-states =3D <&CORE_PD>;
-> >  --
-> >  2.34.1
-> >
->
+Best regards,
+Krzysztof
+
