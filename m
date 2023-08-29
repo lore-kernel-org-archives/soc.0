@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17587C6FA8F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 180ECC83F18
 	for <soc@archiver.kernel.org>; Tue, 29 Aug 2023 20:20:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE678C433CC; Tue, 29 Aug 2023 20:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8A86C433CA;
+	id D951CC433CD; Tue, 29 Aug 2023 20:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C36C6C433C8;
 	Tue, 29 Aug 2023 20:20:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1693340423;
-	bh=l9vEpIWKiCgS6Ro8iD4YROUmAMuk9Hp92l3s6Kkvj4E=;
+	bh=tzJ2XdxPJs8El0jWcmvBr4Rp5N5699vCbZSLXhjQRwU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=lyYbRS01nkeo74vryvsuRFCxzC3KqeqbM71FtTMIx+CGYNWAls24eMlogQMQjetmE
-	 1FTsVzth3fKCfefbhG64PNv6GqbOFSk+Oy7oYpp85ATsMsOPFsrGIcLV1XWmQVqhFf
-	 k4Nzh36lnuj+NQ1ZIZGFUaxty9wh1IYqeuk+S+busweDCJ/u5nTPntZiIP29P7jW4f
-	 xeS5kjATzLcD1D/FRCUkuwLB6GzFgL8/Oz5IyMStPhQHFCwLBHhG4I8AdTYL7uYnx9
-	 yWHQOU6We3JOqs1htJy/Cl9bpnpuzLs1tJJMM4yt3EsXiLd2bPK4xuPUBkM2MVYlqn
-	 Y6p+XvGQMSbHA==
+	b=PqML/A7rVgkTATLh6H8dE2hsm9gtNwsk5O3PG+Uvxds52bpTtpEUkQc3y7nHVQ2Na
+	 kU/2lXeRldctB/e/uOGIxhbu9fosrxoPmKJV6gG3yLXyYO0fy6A8zYKEhEZ4qNm5Pz
+	 XRt3ueLjpLCkH4rPDty6d0weX0QCjLfcu4/Z42fTX2H/nmxY8qiZ7tsMV2gTC3GC7L
+	 OM2lF0AuXe232OsHL1qeBADISIkyPbZeZwOrmOQO7cXmTBmfpVbKR+FHYLg5x32aRZ
+	 vtAlVGRdsNvkLfLN91ET1xSZ5vTR+QuxuNQHv0UMlQ8AcT/zmgIr6YZ3exzlmSZjIe
+	 z0KzPUb2FnPeA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9813C3959E;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A03F9E26D49;
 	Tue, 29 Aug 2023 20:20:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: socfpga: update for v6.6
+Subject: Re: [PATCH 1/2] ARM: dts: use capital "OR" for multiple licenses in SPDX
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169334042368.18037.1218921465364251853.git-patchwork-notify@kernel.org>
+ <169334042365.18037.11722839932477703284.git-patchwork-notify@kernel.org>
 Date: Tue, 29 Aug 2023 20:20:23 +0000
-References: <20230823021810.958072-1-dinguyen@kernel.org>
-In-Reply-To: <20230823021810.958072-1-dinguyen@kernel.org>
-To: Dinh Nguyen <dinguyen@kernel.org>
+References: <20230823085146.113562-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230823085146.113562-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 22 Aug 2023 21:18:10 -0500 you wrote:
-> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+On Wed, 23 Aug 2023 10:51:45 +0200 you wrote:
+> Documentation/process/license-rules.rst and checkpatch expect the SPDX
+> identifier syntax for multiple licenses to use capital "OR".  Correct it
+> to keep consistent format and avoid copy-paste issues.
 > 
->   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_update_for_v6.6
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: socfpga: update for v6.6
-    https://git.kernel.org/soc/soc/c/c888d347acc9
+  - [1/2] ARM: dts: use capital "OR" for multiple licenses in SPDX
+    https://git.kernel.org/soc/soc/c/79f74d4c83fb
+  - [2/2] arm64: dts: use capital "OR" for multiple licenses in SPDX
+    https://git.kernel.org/soc/soc/c/05c618f39089
 
 You are awesome, thank you!
 -- 
