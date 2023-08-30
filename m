@@ -1,129 +1,115 @@
-Return-Path: <SRS0=IGMu=EP=linaro.org=ulf.hansson@kernel.org>
+Return-Path: <SRS0=dB9Q=EP=gmail.com=peteryin.openbmc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21261C83F14
-	for <soc@archiver.kernel.org>; Wed, 30 Aug 2023 08:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE41C6FA8F
+	for <soc@archiver.kernel.org>; Wed, 30 Aug 2023 09:04:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D841FC433C8; Wed, 30 Aug 2023 08:34:16 +0000 (UTC)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	id 5986BC433C9; Wed, 30 Aug 2023 09:04:24 +0000 (UTC)
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A5F09C433C9
-	for <soc@kernel.org>; Wed, 30 Aug 2023 08:34:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5F09C433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-d7485d37283so5081491276.1
-        for <soc@kernel.org>; Wed, 30 Aug 2023 01:34:14 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7E483C433C8;
+	Wed, 30 Aug 2023 09:04:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7E483C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-48cfdfa7893so2328606e0c.0;
+        Wed, 30 Aug 2023 02:04:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693384453; x=1693989253; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtdiwzQL21GYKlHw5/D0J/VmrjrErWbcUTzSWFrSXes=;
-        b=fbaw/nrKBfe1073s9sHlfBwPXxMrEGDgwt65VpUwxea//26i2FPTh2HxPFz4UIXawP
-         NnLgC6O0NiT7gNPxwcQglUd/gcKg3ikuvTfsW1kYPsZb6Auv2ngwUeNZBX2bo30hbEEx
-         5xvhdl0dQ9E1rIFOJoak4xpBkTwLKoHTA4i5yfbXKFKnGboxfhF2QIEYmvO67C+GYsw7
-         gTHerZZm0bBrzFbKAvRjbX84YDxW5qGgj517K2uiXmCyufUqTWmYfPJ+r6TUyzecZl1w
-         fIGVMjNZEABQI4FTU/6Eng0801N67pilzEV82Bgp6L66pa4UbU3ngnT8FO7opqUJlKMM
-         Oslg==
+        d=gmail.com; s=20221208; t=1693386262; x=1693991062; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zRFnOrEZvLN5kMlEOUmKO68YNnlEwR47/rOgrclL5cI=;
+        b=oHjenqkJusiTlKdRwzyllDsCciqMaZC/oee/AkgpkZKxeOghH5y5Vv9EIrKfBBv+nc
+         tASvMBPVTRL6L0vV5h/rD8kcMroCll2CviAWdkhVP+6Qtok/zkAiouS0BIL7Xeb4qBJF
+         GcJOW3DRAAtkjj+DtyJIgS4KXOcAEeLfhUeU+xBVEDuYuwfEzcyTjmULC5EO7kEcKqRf
+         U/9Y1E7ZMu8Uf42EEvQdx42lSfvVwDhZvYjhknEtEMxHdg1J70ewilxo0MVeWOKScrmv
+         NUwTOBjJYS70mZYX/aZl/7ZbxAW16YhgXXkfWuT/qRatzXTQPGBpdAnzTd9aeAd70MHF
+         6mqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693384453; x=1693989253;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1693386262; x=1693991062;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xtdiwzQL21GYKlHw5/D0J/VmrjrErWbcUTzSWFrSXes=;
-        b=Ls8ZwCPUpbuBNtu4AXwMrdkUjJOLfn8BEzwmf71vPTY5B1uN+4aV/GQAgTTBdf9/0C
-         p8NDrzzgCj3inPiGXgBUO9Mcz9XfOS0UsTQfei1/FFMJKMBRg1YhDm1MAVOHhvopHFOF
-         wyx6ix+zSew0oae8KnAJrsHEp8w7ERtIeHW7e8EfHlTC2ravbl58E//HobCwLDXHQbJJ
-         YD5W3y9SaUrl00cbYsrkLOlOrQQTpL+qlJXqeZ9wqqveMjXTjnBE5Qa8SieeVZO0K3+a
-         xxU0b3uDShojr4Wkad0ebm14L3tVZtCZXIBn0t0o7YweB+cM7IZI5nzbbZ0bvTemYXzC
-         7IuA==
-X-Gm-Message-State: AOJu0YzEY7U7QOT/xVeiFId4rUpUMkaSDtvUclnUPAprOor1pu+JMCXq
-	w43xbyVPqDBFN7tnSQSNL+UvLDx1H1+se1sCPqzxdVFDjKVvoCQmxVxZUg==
-X-Google-Smtp-Source: AGHT+IGtJWftzWF4BAzABxuDQ6HGZfR/UnHG8Az6ZEx5vM7b+S86qvW3j5sh8nuhOsKgT8Zm9TWVIp5MYnP+H44iMh4=
-X-Received: by 2002:a25:6944:0:b0:d53:f98f:8018 with SMTP id
- e65-20020a256944000000b00d53f98f8018mr1490963ybc.65.1693384453468; Wed, 30
- Aug 2023 01:34:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
-In-Reply-To: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 30 Aug 2023 10:33:37 +0200
-Message-ID: <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>
+        bh=zRFnOrEZvLN5kMlEOUmKO68YNnlEwR47/rOgrclL5cI=;
+        b=ZOGfp0rKnNP2XzqoBmXbafgwngzaMx7Qq+dlZjbm+UbcANRYcHkUI7QMFfOlRw/9Jt
+         e4sx4FHr0TwseoJoUVshrY/tocjTlnV9et5taPezAANs5sbCRInpPNx2uX3pq2PRxO49
+         P6ZobCrEbWZg45xEXP9i/VWo+rtWmwbCqDruCFFnDSJgGYJfQZk4cVBPo5Gw3+EbU9k0
+         VTfr308FW+cEEf/GaQTNqdFAQ9jYoOwLTnmZCqr2KepI1/+UyxbO2f/cJVoEDpWVBfmx
+         jkOpAtais7fvDi2G1h1AVytzHTuNMu5SOE4VlFY7n9quvdPZhIs0AwDoMhFFxpocd2MD
+         Q24w==
+X-Gm-Message-State: AOJu0YwYZlkTfs70wkG/2y5N2YM6nCYdpENqqUzk2hf3VUqAOvv6TCzi
+	DfX1OlORgvhel1m+kT5zOug=
+X-Google-Smtp-Source: AGHT+IFRF/QDUiw8HkrwOVzahLlEG5guebup/jA0oCLgscvJyaeOR/MUVQPM2c8W1nVG0Tzyudffzw==
+X-Received: by 2002:a1f:4a02:0:b0:48d:4b:66df with SMTP id x2-20020a1f4a02000000b0048d004b66dfmr1520456vka.0.1693386262097;
+        Wed, 30 Aug 2023 02:04:22 -0700 (PDT)
+Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id x4-20020a656aa4000000b00553dcfc2179sm9263226pgu.52.2023.08.30.02.04.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 02:04:21 -0700 (PDT)
+From: peteryin <peteryin.openbmc@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, "Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To: patrick@stwcx.xyz,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Cc: cosmo.chou@quantatw.com,
+	potin.lai@quantatw.com,
+	daniel-hsu@quantatw.com,
+	peteryin <peteryin.openbmc@gmail.com>
+Subject: [PATCH v4 0/2] ARM: dts: aspeed:Minerva:
+Date: Wed, 30 Aug 2023 17:02:09 +0800
+Message-Id: <20230830090212.3880559-1-peteryin.openbmc@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > How about moving it to drivers/power/domain/ instead?
->
-> That sounds like a sensible name and would seem to fit logically with
-> our existing tree structure quite well.
+v1 link : https://lore.kernel.org/all/fb09f5e6-8381-312f-2f1e-f2b471cec68a@linaro.org/
+v2 link : https://lore.kernel.org/lkml/9f499fe5-db59-f4c8-6a50-93725b7287fd@linaro.org/
+v3 line : https://lore.kernel.org/lkml/20230830025133.3756506-1-peteryin.openbmc@gmail.com/
 
-I am sincerely sorry if I have annoyed you with picking the name
-"genpd" as the directory-name - and especially without further
-explanation. The genpd thing certainly deserves to be documented
-better, I will try to get some time to do this soon. Anyway, me and
-many others in the power/performance areas that have been working with
-the genpd interface, have simply gotten comfortable using the "genpd"
-acronym. Hence, the naming was a no-brainer to me.
+Change log:
 
-That said, if you feel that the above directory-path/name is a better
-fit I can certainly move it over there, np! Although, before you make
-the final decision I want to point out a few things for you to
-consider.
+v4:
+    1.seprate dts document.
 
-*) The new subsystem is solely intended for the generic PM domain
-providers. Other PM domains providers, like the ACPI PM domains for
-example (drivers/acpi/*), don't really belong here, at least in my
-opinion. So, maybe "domain" isn't specific enough? Although, if not
-using "genpd", I have no better suggestion.
+v3:
+    1.Fixed commit description.
+    2.Add sgpio line name to sgpioP.
+    3.Add ipmb debug card bus.
 
-**) Please keep in mind that we have several other power/performance
-related subsystems that don't live under drivers/power/*. Moving more
-things in there is not really going to help the people that work on
-these things. No matter where and what the name of the subsystem is,
-one simply needs to dive into the details anyway. Moreover, in this
-case, "genpd" isn't just about "power" (idle management) but
-performance management too.
+v2:
+    1.Add facebook,minerva-bmc in aspeed.yaml
+    2.Use stdout-path
+    3.Add Makefile
 
->
-> > I don't think we can easily rename the interfaces that have been
-> > in use for the past 12 years
->
-> I actually think the interface names are much less of an issue, since
-> anybody using them is presumably familiar with the naming.
->
-> It was only with the directory structure that I reacted to it, because
-> that kind of exposes the naming to people who definitely are *not*
-> familiar with it (ie me, but presumably anybody else who sees the
-> diffstats etc fly past).
->
-> And yes, we have a number of other pretty obscure driver names in our
-> tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
-> and I don't tend to love them either, but at least they tend to be
-> industry / vendor names.
+v1:
+    1. Create minerva dts file.
 
-I get your point. I was indeed trying to obey the current naming
-strategy, but I think it's not entirely easy to understand what is
-prefered.
+*** BLURB HERE ***
 
-Please advise me on how to move forward.
+peteryin (2):
+  ARM: dts: aspeed: Minerva: Add Facebook Minerva (AST2600) BMC
+  dt-bindings: arm: aspeed: add Meta Minerva board
 
-Kind regards
-Uffe
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-facebook-minerva.dts  | 385 ++++++++++++++++++
+ 3 files changed, 387 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-minerva.dts
+
+-- 
+2.25.1
+
