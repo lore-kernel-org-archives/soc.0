@@ -1,120 +1,98 @@
-Return-Path: <SRS0=TYq2=EP=arndb.de=arnd@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E658C83F12
-	for <soc@archiver.kernel.org>; Wed, 30 Aug 2023 00:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF2EC83F12
+	for <soc@archiver.kernel.org>; Wed, 30 Aug 2023 01:20:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 137E9C433C9; Wed, 30 Aug 2023 00:48:02 +0000 (UTC)
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 83ABDC433CA; Wed, 30 Aug 2023 01:20:18 +0000 (UTC)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6396AC433C7;
-	Wed, 30 Aug 2023 00:48:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6396AC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 7E488320094B;
-	Tue, 29 Aug 2023 20:47:58 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 29 Aug 2023 20:47:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1693356478; x=1693442878; bh=uB
-	VoM3kwg2LnNnne4tXK5d6hJs34FxnDPqZqQuGBRXk=; b=omSpel1dMon5IJIDg0
-	H50dhNo8FiLEyYohprC+qPJJWoJYseB4Uah5LFxOO4PhVFx6b8xbbyXkRJQ8bL53
-	QkLHWeNjG0Hg8HXxC4mruB3BxyJuG6PN8DaARgmIJd89yru9mE/bk79JuZgYMrYJ
-	rY8UqohSsBP6aq7BaauDpESKV0HNwd52MnxWCYBpfDMA86tcdQUQJvHc6tbcmTUb
-	qkhfvLsOiTkqtdpkiSbOWswBd+hVgZ5k8UpSA2IW7MFw1wK00+Nto1ryIfw08d0L
-	Ghe2UAgPufDPGGIvsVpnsPfsHgQPvXwJ+FWXsDV15rgGANEkA5htAc89Xac1bwo3
-	WbNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1693356478; x=1693442878; bh=uBVoM3kwg2LnN
-	nne4tXK5d6hJs34FxnDPqZqQuGBRXk=; b=BRSubTu7WPGeSRyCbt1hx4AjagFAg
-	5Q7kNDUzOCzGZJ0Sex4BwUZ6rAhZOPZ/MVVF6ggvpzNAVatBslj2jbBTmBvDrLgz
-	xPCsGZvtx2lv4RilvQySdDnDxoX0qEM/vqLQGpEkyyt8052oBM79CdIajwPfxppL
-	XvufURNBHXB/+4BeCUBDufnkHQSnwivzcvVXOrByrK5b/2j3giQVvosKqv87X1y+
-	5AX7MA9CWHiMXVMliufTSvd1lUI1xE+GLR7AHnMUkCkiM9FZZrkh8RdtbOItyxvA
-	U5hatwE/F7CWqEsCGMw1mkajatIPm+0JKzUOodwET8JHw19zhlUnX/WPw==
-X-ME-Sender: <xms:vZHuZMFOl9iyV9zsKlqAACpcoARHFki3NqfRQJ9Zvf4QnYysgieu3w>
-    <xme:vZHuZFUKEGloq5iUDhViTz7_lUSa_zXuG0f_hhYw08ij-9aDuVM6qysnMdFNXKDz5
-    QUmUmYnzFThjDqvKRk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefjedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:vZHuZGIc2ViUA68sZ2asEkwB6YrV06mi2JLcKlOb-mtgme9N5amO6w>
-    <xmx:vZHuZOGNLE86EpwDRBKSItM59npxEbiPrPQk5lo981XjTIt4kOe4Gw>
-    <xmx:vZHuZCVTIOOK3x6Ozs0lsR4j3r3Nyx7kvQbEyRwRFJe1ctg2WpSfEA>
-    <xmx:vpHuZELm6edu0clWPTfg0KrMwhLrT_DBm4mZ4RFnF0nynaDWwPWESg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 8A517B60089; Tue, 29 Aug 2023 20:47:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-701-g9b2f44d3ee-fm-20230823.001-g9b2f44d3
-Mime-Version: 1.0
-Message-Id: <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2E4CAC433C9
+	for <soc@kernel.org>; Wed, 30 Aug 2023 01:20:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E4CAC433C9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4ff09632194so8078782e87.2
+        for <soc@kernel.org>; Tue, 29 Aug 2023 18:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1693358415; x=1693963215; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=61Qie5c2kDF2Zc0oY6tB5adEIVm20BboiMQ31ckJkUM=;
+        b=UO/GRc4WEERV+oetUR43nwUxm5wC/iXdYPqh3X1SoR31jH4aAdPmsAniL2Z4F6I5Pc
+         emhXyme6lw3mZReUFh9cVcquybEBxV2bJfLKgTK+oTsZ7nK8WRkxE0MPrN0GawlJDEwz
+         36Nc/Z3oOWGPRoujswTkKgP7ujpRWHw6AqDgU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693358415; x=1693963215;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=61Qie5c2kDF2Zc0oY6tB5adEIVm20BboiMQ31ckJkUM=;
+        b=FIYvDlN4CRMjrL8hEd/3dBpqc2sJzZpDBfF+wnIs91VApCXsY76Q9OA+yGl/WoXzpE
+         7fal5wPJBkAI/1eA6gdlUDH7QSddj6AxLamq2+cjHDl6Uo82dNzjfHlNZ+ZRH46mL0+J
+         kqStJEwXFWhM650khD1GWrBSMl1O4blU0VyMMNfARCSEULpXLy+4YtyOlJ7/5pOpJTcY
+         iokjzCiA7AKUb298KKBO0lAlDC9tzNZxR9Dma/0dre0rxkGO7vFAa5+1mDTcHu+JYF0Y
+         BMXtQbnwYM0Wshwu8tMVbDEtmjciC8xUAWatp8r7xtaqK+YlZIm3lu/5cLci0D0RN8df
+         UWGg==
+X-Gm-Message-State: AOJu0YyZArpCEwWnraIbX2S/HKfUKmaF69I30xQ4f4Mdy+XmswddwR+8
+	rZn40UPabT/byairp3rUlQyjVYMjJN0OWme624FduaKL
+X-Google-Smtp-Source: AGHT+IFdb9ogVynpfGAmyoU1NviiL4NDAVpoAhN+KO4PYa8v7SicmrlEFexJNkgJ59PS5SqHFansmg==
+X-Received: by 2002:a05:6512:3291:b0:4fc:df79:3781 with SMTP id p17-20020a056512329100b004fcdf793781mr371987lfe.66.1693358414713;
+        Tue, 29 Aug 2023 18:20:14 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id p8-20020aa7d308000000b005288f0e547esm6233718edq.55.2023.08.29.18.20.13
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Aug 2023 18:20:13 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so6512608a12.2
+        for <soc@kernel.org>; Tue, 29 Aug 2023 18:20:13 -0700 (PDT)
+X-Received: by 2002:a17:907:9687:b0:99c:85af:7aa6 with SMTP id
+ hd7-20020a170907968700b0099c85af7aa6mr547689ejc.28.1693358412962; Tue, 29 Aug
+ 2023 18:20:12 -0700 (PDT)
+MIME-Version: 1.0
 References: <20230829213441.310655-1-ulf.hansson@linaro.org>
  <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
-Date: Tue, 29 Aug 2023 20:47:37 -0400
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Ulf Hansson" <ulf.hansson@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org,
- "Sebastian Reichel" <sebastian.reichel@collabora.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com> <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
+In-Reply-To: <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 29 Aug 2023 18:19:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+Message-ID: <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
 Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-Content-Type: text/plain
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Aug 29, 2023, at 20:31, Linus Torvalds wrote:
-> On Tue, 29 Aug 2023 at 17:18, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> Please don't use random letter combinations that have absolutely
->> no meaning to anybody else, and that aren't even explained.
+On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Side note: at least to me, 'gen' is short for 'generate'. Looking at
-> existing kernel naming, that's how we've used it (lots of examples of
-> that from different areas).
->
-> Do we also have "generic"? Yes. And because 'gen' does not mean
-> 'generic' to anybody, we've typically spelled it out - as in
-> asm-generic, but also 'sound/soc/generic', or in fact a _lot_ of other
-> examples.
+> How about moving it to drivers/power/domain/ instead?
 
-How about moving it to drivers/power/domain/ instead? We already
-have some only loosely connected subsystems under drivers/power
-today (reset and supply, both maintained by Sebastian Reichel),
-moving it there is probably less confusing.
+That sounds like a sensible name and would seem to fit logically with
+our existing tree structure quite well.
 
-It looks like there are only a couple of dev_pm_domain providers
-that are not of the "genpd" variant, so I think drivers/power/domain
-can just be the location for the generic drivers without making
-that part of the name.
+> I don't think we can easily rename the interfaces that have been
+> in use for the past 12 years
 
-I don't think we can easily rename the interfaces that have been
-in use for the past 12 years, but the directory (and MAINTAINERS
-file references to it) could easily be changed with another
-patch on top of Ulf's series, without interfering with my
-pull requests.
+I actually think the interface names are much less of an issue, since
+anybody using them is presumably familiar with the naming.
 
-       Arnd
+It was only with the directory structure that I reacted to it, because
+that kind of exposes the naming to people who definitely are *not*
+familiar with it (ie me, but presumably anybody else who sees the
+diffstats etc fly past).
+
+And yes, we have a number of other pretty obscure driver names in our
+tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
+and I don't tend to love them either, but at least they tend to be
+industry / vendor names.
+
+            Linus
