@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE41C6FA8F
-	for <soc@archiver.kernel.org>; Wed, 30 Aug 2023 09:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2215CC83F01
+	for <soc@archiver.kernel.org>; Wed, 30 Aug 2023 09:05:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5986BC433C9; Wed, 30 Aug 2023 09:04:24 +0000 (UTC)
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+	id DE1B9C433C8; Wed, 30 Aug 2023 09:05:47 +0000 (UTC)
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7E483C433C8;
-	Wed, 30 Aug 2023 09:04:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7E483C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 9EC1BC433C7;
+	Wed, 30 Aug 2023 09:05:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9EC1BC433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-48cfdfa7893so2328606e0c.0;
-        Wed, 30 Aug 2023 02:04:23 -0700 (PDT)
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5711f6dff8cso3112721eaf.3;
+        Wed, 30 Aug 2023 02:05:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693386262; x=1693991062; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zRFnOrEZvLN5kMlEOUmKO68YNnlEwR47/rOgrclL5cI=;
-        b=oHjenqkJusiTlKdRwzyllDsCciqMaZC/oee/AkgpkZKxeOghH5y5Vv9EIrKfBBv+nc
-         tASvMBPVTRL6L0vV5h/rD8kcMroCll2CviAWdkhVP+6Qtok/zkAiouS0BIL7Xeb4qBJF
-         GcJOW3DRAAtkjj+DtyJIgS4KXOcAEeLfhUeU+xBVEDuYuwfEzcyTjmULC5EO7kEcKqRf
-         U/9Y1E7ZMu8Uf42EEvQdx42lSfvVwDhZvYjhknEtEMxHdg1J70ewilxo0MVeWOKScrmv
-         NUwTOBjJYS70mZYX/aZl/7ZbxAW16YhgXXkfWuT/qRatzXTQPGBpdAnzTd9aeAd70MHF
-         6mqg==
+        d=gmail.com; s=20221208; t=1693386345; x=1693991145; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=271U2jn1bqk5vL1cDgUVfI2CpxpE7QGD304qXVGmMGE=;
+        b=XsITaLSVQ/xgiHW4SwoG1T0Rn9flSjA4E9vG7yWJ3dRQYsmlsRrjb94r0zQkgYwfSs
+         F5jbFHXg2shp4f+ImxhJ2gvc+hkQJesj+QH4hOJ7gyBbAaJ1ZmD/aSf3UVoHBG+Hhixn
+         uzW7RGllG+qpMoOxV8cy9iajS61T8FRA3nSkqiSh6QxYNjxu0I1u8MmwKuMQeVG1rrfl
+         CeQ+p9xPhtOf2ACradfUHCZqfdYP/yUNkT25WRUMqlXbdqILaDnFe7zljBGaU/DAjA1Z
+         hD0OeTtecZPGFORIirTEJIPhmDbJ4L9GGqG560IPCbGwh0z2dePBjlNWwLqjGQhOXLhm
+         2UdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693386262; x=1693991062;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zRFnOrEZvLN5kMlEOUmKO68YNnlEwR47/rOgrclL5cI=;
-        b=ZOGfp0rKnNP2XzqoBmXbafgwngzaMx7Qq+dlZjbm+UbcANRYcHkUI7QMFfOlRw/9Jt
-         e4sx4FHr0TwseoJoUVshrY/tocjTlnV9et5taPezAANs5sbCRInpPNx2uX3pq2PRxO49
-         P6ZobCrEbWZg45xEXP9i/VWo+rtWmwbCqDruCFFnDSJgGYJfQZk4cVBPo5Gw3+EbU9k0
-         VTfr308FW+cEEf/GaQTNqdFAQ9jYoOwLTnmZCqr2KepI1/+UyxbO2f/cJVoEDpWVBfmx
-         jkOpAtais7fvDi2G1h1AVytzHTuNMu5SOE4VlFY7n9quvdPZhIs0AwDoMhFFxpocd2MD
-         Q24w==
-X-Gm-Message-State: AOJu0YwYZlkTfs70wkG/2y5N2YM6nCYdpENqqUzk2hf3VUqAOvv6TCzi
-	DfX1OlORgvhel1m+kT5zOug=
-X-Google-Smtp-Source: AGHT+IFRF/QDUiw8HkrwOVzahLlEG5guebup/jA0oCLgscvJyaeOR/MUVQPM2c8W1nVG0Tzyudffzw==
-X-Received: by 2002:a1f:4a02:0:b0:48d:4b:66df with SMTP id x2-20020a1f4a02000000b0048d004b66dfmr1520456vka.0.1693386262097;
-        Wed, 30 Aug 2023 02:04:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693386345; x=1693991145;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=271U2jn1bqk5vL1cDgUVfI2CpxpE7QGD304qXVGmMGE=;
+        b=NyvDkgK1IYrTnwxy9odrQ1+LH1Jha9oPdfzSUn3M6sV3ZqOdNGd6sVTnSOKpYO6ylD
+         C3nvBFf9M4S6rvFe72FwY33HY2vdUMBA9zmEWgtpJGSlKbiZrAnkgYI0cHDTB+hiWdNq
+         OQts4RKh9cUM4ukcnTiDFyOvejB9bnKIuJQ/1VplUUBwdd5F1TOyOY7xedSXP5ssQ85M
+         2EWXyJec3B4hNH/DE3j8xXi2N7q8B5MVWuUnIVCSzchwT0o9gY77a6Cg5Eo5UZrwD8rm
+         AVeTZ6YCiMBcG86ncv4zl6uXZcvNEgv+bgbk3r1RAl73+Ecr4d69+Kx0EeIglGd7ajIc
+         TSNA==
+X-Gm-Message-State: AOJu0Yz2GqZGDvncMy+MOCdTbBxsB++yC0szfysvkmYfx5D0PKWWs4j4
+	gyVxw7MvowOV3yalHhLMRKa/8f3jndj8uw==
+X-Google-Smtp-Source: AGHT+IF4ddVBYAGpkCN6qWlgT/1SRbV3jfj1DTmKEJ1GQijmK48/527aEwZEkZ2EC4ZW2/fGsgACew==
+X-Received: by 2002:a05:6358:918e:b0:135:99fa:a118 with SMTP id j14-20020a056358918e00b0013599faa118mr1395048rwa.4.1693386345314;
+        Wed, 30 Aug 2023 02:05:45 -0700 (PDT)
 Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id x4-20020a656aa4000000b00553dcfc2179sm9263226pgu.52.2023.08.30.02.04.18
+        by smtp.gmail.com with ESMTPSA id x4-20020a656aa4000000b00553dcfc2179sm9263226pgu.52.2023.08.30.02.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 02:04:21 -0700 (PDT)
+        Wed, 30 Aug 2023 02:05:44 -0700 (PDT)
 From: peteryin <peteryin.openbmc@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: patrick@stwcx.xyz,
@@ -69,47 +70,428 @@ Cc: cosmo.chou@quantatw.com,
 	potin.lai@quantatw.com,
 	daniel-hsu@quantatw.com,
 	peteryin <peteryin.openbmc@gmail.com>
-Subject: [PATCH v4 0/2] ARM: dts: aspeed:Minerva:
-Date: Wed, 30 Aug 2023 17:02:09 +0800
-Message-Id: <20230830090212.3880559-1-peteryin.openbmc@gmail.com>
+Subject: [PATCH v4 1/2] ARM: dts: aspeed: Minerva: Add Facebook Minerva (AST2600) BMC
+Date: Wed, 30 Aug 2023 17:02:10 +0800
+Message-Id: <20230830090212.3880559-2-peteryin.openbmc@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230830090212.3880559-1-peteryin.openbmc@gmail.com>
+References: <20230830090212.3880559-1-peteryin.openbmc@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v1 link : https://lore.kernel.org/all/fb09f5e6-8381-312f-2f1e-f2b471cec68a@linaro.org/
-v2 link : https://lore.kernel.org/lkml/9f499fe5-db59-f4c8-6a50-93725b7287fd@linaro.org/
-v3 line : https://lore.kernel.org/lkml/20230830025133.3756506-1-peteryin.openbmc@gmail.com/
+Add linux device tree entry related to
+Minerva specific devices connected to BMC SoC.
 
-Change log:
-
-v4:
-    1.seprate dts document.
-
-v3:
-    1.Fixed commit description.
-    2.Add sgpio line name to sgpioP.
-    3.Add ipmb debug card bus.
-
-v2:
-    1.Add facebook,minerva-bmc in aspeed.yaml
-    2.Use stdout-path
-    3.Add Makefile
-
-v1:
-    1. Create minerva dts file.
-
-*** BLURB HERE ***
-
-peteryin (2):
-  ARM: dts: aspeed: Minerva: Add Facebook Minerva (AST2600) BMC
-  dt-bindings: arm: aspeed: add Meta Minerva board
-
- .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+Signed-off-by: peteryin <peteryin.openbmc@gmail.com>
+---
  arch/arm/boot/dts/Makefile                    |   1 +
  .../boot/dts/aspeed-bmc-facebook-minerva.dts  | 385 ++++++++++++++++++
- 3 files changed, 387 insertions(+)
+ 2 files changed, 386 insertions(+)
  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-minerva.dts
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 9e1d7bf3cff6..edb0b2105333 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1604,6 +1604,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-facebook-wedge400.dtb \
+ 	aspeed-bmc-facebook-yamp.dtb \
+ 	aspeed-bmc-facebook-yosemitev2.dtb \
++	aspeed-bmc-facebook-minerva.dtb \
+ 	aspeed-bmc-ibm-bonnell.dtb \
+ 	aspeed-bmc-ibm-everest.dtb \
+ 	aspeed-bmc-ibm-rainier.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-minerva.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-minerva.dts
+new file mode 100644
+index 000000000000..42087764e9e9
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-minerva.dts
+@@ -0,0 +1,385 @@
++// SPDX-License-Identifier: GPL-2.0+
++// Copyright (c) 2023 Facebook Inc.
++/dts-v1/;
++
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/i2c/i2c.h>
++
++/ {
++	model = "Facebook Minerva";
++	compatible = "facebook,minerva-bmc", "aspeed,ast2600";
++
++	aliases {
++		serial0 = &uart1;
++		serial4 = &uart5;
++	};
++
++	chosen {
++		stdout-path = &uart5;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x80000000>;
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++			<&adc1 2>;
++	};
++
++};
++
++// HOST BIOS Debug
++&uart1 {
++	status = "okay";
++};
++
++
++// SOL Host Console
++&uart2 {
++	status = "okay";
++	pinctrl-0 = <>;
++
++};
++
++// SOL BMC Console
++&uart4 {
++	status = "okay";
++	pinctrl-0 = <>;
++};
++
++// BMC Debug Console
++&uart5 {
++	status = "okay";
++};
++
++//MTIA
++&uart6 {
++	status = "okay";
++};
++
++&uart_routing {
++	status = "okay";
++};
++
++&vuart1 {
++	status = "okay";
++	virtual;
++	port=<0x3e8>;
++	sirq = <7>;
++	sirq-polarity = <0>;
++	dma-mode;
++	dma-channel = <12>;
++};
++
++&wdt1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdtrst1_default>;
++	aspeed,reset-type = "soc";
++	aspeed,external-signal;
++	aspeed,ext-push-pull;
++	aspeed,ext-active-high;
++	aspeed,ext-pulse-duration = <256>;
++};
++
++
++&mac3 {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rmii4_default>;
++	no-hw-checksum;
++	use-ncsi;
++	ncsi-ctrl,start-redo-probe;
++	ncsi-ctrl,no-channel-monitor;
++	mlx,multi-host;
++	ncsi-package = <1>;
++	ncsi-channel = <1>;
++	ncsi-rexmit = <1>;
++	ncsi-timeout = <2>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		spi-max-frequency = <50000000>;
++#include "openbmc-flash-layout-128.dtsi"
++	};
++	flash@1 {
++		status = "okay";
++		m25p,fast-read;
++		label = "alt-bmc";
++		spi-max-frequency = <50000000>;
++	};
++};
++
++
++//BIOS Flash
++&spi2 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi2_default>;
++
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "pnor";
++		spi-max-frequency = <12000000>;
++		spi-tx-bus-width = <2>;
++		spi-rx-bus-width = <2>;
++	};
++};
++
++
++&kcs2 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0xca8>;
++};
++
++&kcs3 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0xca2>;
++};
++
++
++&lpc_snoop {
++	status = "okay";
++	snoop-ports = <0x80>;
++};
++
++&peci0 {
++	status = "okay";
++	clock-frequency = <1000000>;
++};
++
++
++&i2c0 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++	tmp75@4B {
++		compatible = "ti,tmp75";
++		reg = <0x4B>;
++	};
++};
++
++&i2c2 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	status = "okay";
++};
++
++&i2c9 {
++	status = "okay";
++};
++
++&i2c11 {
++	status = "okay";
++};
++
++&i2c12 {
++	status = "okay";
++};
++
++&i2c13 {
++	status = "okay";
++};
++
++// To Debug card
++&i2c14 {
++	status = "okay";
++	multi-master;
++
++	ipmb@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c15 {
++	status = "okay";
++	// SCM FRU
++	eeprom@50 {
++		compatible = "atmel,24c64";
++		reg = <0x50>;
++	};
++	// BSM FRU
++	eeprom@56 {
++		compatible = "atmel,24c64";
++		reg = <0x56>;
++	};
++};
++
++&adc0 {
++	ref_voltage = <2500>;
++	status = "okay";
++
++	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
++		&pinctrl_adc2_default &pinctrl_adc3_default
++		&pinctrl_adc4_default &pinctrl_adc5_default
++		&pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++	ref_voltage = <2500>;
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc10_default>;
++};
++
++&jtag1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_jtagm_default>;
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&gpio0 {
++	pinctrl-names = "default";
++	gpio-line-names =
++	/*A0-A7*/	"","","","","","","","",
++	/*B0-B7*/	"","","","","","FM_ID_LED_N","","",
++	/*C0-C7*/	"","","","","","","","",
++	/*D0-D7*/	"","","SOL_UART_SET","","","","","",
++	/*E0-E7*/	"","","","","","","","",
++	/*F0-F7*/	"","","","","","","","",
++	/*G0-G7*/	"","","","","","","","",
++	/*H0-H7*/	"","","","","","","","",
++	/*I0-I7*/	"","","","","","","","",
++	/*J0-J7*/	"","","","","","","","",
++	/*K0-K7*/	"","","","","","","","",
++	/*L0-L7*/	"","","","","","","","",
++	/*M0-M7*/	"","","","","","","","",
++	/*N0-N7*/	"LED_POSTCODE_0","LED_POSTCODE_1",
++			"LED_POSTCODE_2","LED_POSTCODE_3",
++			"LED_POSTCODE_4","LED_POSTCODE_5",
++			"LED_POSTCODE_6","LED_POSTCODE_7",
++	/*O0-O7*/	"","","","","","","","",
++	/*P0-P7*/	"FP_SYS_PWRBTN_IN_N","BMC_SYS_PWRBTN_OUT_N",
++			"FP_RST_BTN_IN_N","","","","","",
++	/*Q0-Q7*/	"","","","","","","","",
++	/*R0-R7*/	"","","","","","","","",
++	/*S0-S7*/	"","","","","","","","",
++	/*T0-T7*/	"","","","","","","","",
++	/*U0-U7*/	"","","","","","","","",
++	/*V0-V7*/	"","","","","","","","",
++	/*W0-W7*/	"","","","","","","","",
++	/*X0-X7*/	"","","","","","","","",
++	/*Y0-Y7*/	"","","","","","","","",
++	/*Z0-Z7*/	"","","","","","","","";
++};
++
++&sgpiom0 {
++	status = "okay";
++	max-ngpios = <128>;
++	ngpios = <128>;
++	bus-frequency = <2000000>;
++	gpio-line-names =
++	/*in - out - in - out */
++	/*A0-A3 line 0-7*/
++	"","","","","","ENABLE_SENSORS","","",
++	/*A4-A7 line 8-15*/
++	"","","","","","","","",
++	/*B0-B3 line 16-23*/
++	"","","","","","BMC_RST_BTN_OUT_N","","",
++	/*B4-B7 line 24-31*/
++	"","","","","","","","",
++	/*C0-C3 line 32-39*/
++	"","","","","","","","",
++	/*C4-C7 line 40-47*/
++	"","","","","","","","",
++	/*D0-D3 line 48-55*/
++	"","","","","","","","",
++	/*D4-D7 line 56-63*/
++	"","","","","","","","",
++	/*E0-E3 line 64-71*/
++	"","","","","","","","",
++	/*E4-E7 line 72-79*/
++	"","","","","","","","",
++	/*F0-F3 line 80-87*/
++	"","","","","","","","",
++	/*F4-F7 line 88-95*/
++	"","","","","","","","",
++	/*G0-G3 line 96-103*/
++	"","","","","","","","",
++	/*G4-G7 line 104-111*/
++	"","","","","","","","",
++	/*H0-H3 line 112-119*/
++	"","","","","PLD_SYS_POWER_GOOD","","","",
++	/*H4-H7 line 120-127*/
++	"","","","","","","","",
++	/*I0-I3 line 128-135*/
++	"","","","","","","","",
++	/*I4-I7 line 136-143*/
++	"","","","","","","","",
++	/*J0-J3 line 144-151*/
++	"","","PLD_BIOS_POST_CMPLT_N","","","","","",
++	/*J4-J7 line 152-159*/
++	"","","","","","","","",
++	/*K0-K3 line 160-167*/
++	"","","","","","","","",
++	/*K4-K7 line 168-175*/
++	"","","","","","","","",
++	/*L0-L3 line 176-183*/
++	"","","","","","","","",
++	/*L4-L7 line 184-191*/
++	"","","","","","","","",
++	/*M0-M3 line 192-199*/
++	"","","","","","","","",
++	/*M4-M7 line 200-207*/
++	"","","","","","","","",
++	/*N0-N3 line 208-215*/
++	"","","","","","","","",
++	/*N4-N7 line 216-223*/
++	"","","","","","","","",
++	/*O0-O3 line 224-231*/
++	"","","","","","","","",
++	/*O4-O7 line 232-239*/
++	"","","","","","","","",
++	/*P0-P3 line 240-247*/
++	"","","","","","","","",
++	/*P4-P7 line 248-255*/
++	"","","","","","","","";
++};
++
 -- 
 2.25.1
 
