@@ -1,54 +1,119 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=mcdX=EQ=gmail.com=peteryin.openbmc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D0A6C83F14
-	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 00:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB7AC83F10
+	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 05:52:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 70569C433CC; Thu, 31 Aug 2023 00:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F173C433C8;
-	Thu, 31 Aug 2023 00:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693440617;
-	bh=+BEJJh0cUutSZhbjQKhq5ZLUX9z4rl0b/KnzuWrUKaU=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=ZKqw5Hjq+3AiWcn2M3YXGgpOWUWShVMUko12JCUVCU0ValFKdW2O/mL/lpslyGZhI
-	 grotY3X9bw78ZJopzQIfMcAgNqjF65f7d2HhSVMHk42nyKoOyGF1qVQD5mWu8h2mn0
-	 HkLl89P5ePiSz9oemFRw5SQdSyXz7ar4wnwy5gMxN++HWVhGUJ6v3QU5MPm17v7PaW
-	 j9onsNF/OScDhHj77rMsbzPsojOCrUlMdi7wmoueNTqO0LfzJG/fC1KwDx9IVVzOk+
-	 kJe12RdbN6vz3YMoLrCcAQsCfighxFfFvtXHRMzHRK2lo79TsvlmpJGhwtyqw/DMLv
-	 r6+zAcXRJPg+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3BDDBE29F34;
-	Thu, 31 Aug 2023 00:10:17 +0000 (UTC)
-Subject: Re: [GIT PULL 2/4] ARM: defconfig updates for 6.6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <48c2b819-153a-495c-8f36-2d6bc1a74793@app.fastmail.com>
-References: <4f60d13e-f060-491a-88c7-6f25323a48f8@app.fastmail.com> <48c2b819-153a-495c-8f36-2d6bc1a74793@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <48c2b819-153a-495c-8f36-2d6bc1a74793@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.6
-X-PR-Tracked-Commit-Id: d2dff8d84df22b8f5e88d86d9f412ae0c01ad796
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 47ca50600efcf994adb62a9a4e75c77d91bd0781
-Message-Id: <169344061723.21437.6760948162765799113.pr-tracker-bot@kernel.org>
-Date: Thu, 31 Aug 2023 00:10:17 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id CA8FAC433C7; Thu, 31 Aug 2023 05:52:55 +0000 (UTC)
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id DD45BC433C8;
+	Thu, 31 Aug 2023 05:52:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DD45BC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-68a3e271491so296488b3a.0;
+        Wed, 30 Aug 2023 22:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693461174; x=1694065974; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y3cZF7dX+T51M1ilFDTmCciuWPN/WaDzWfsb09z2eis=;
+        b=fCqx6moteGfy7cUDZUdCJeNlDngi4zPTh+CxEsKkQltBOyjnl4p84yqoZJlmLQsysX
+         lQv6gYSaV7SyS03jFUDieuAhA9Eo1bd+UBm/Od8fhUvndYeHEVs7+7j5G0Z+FSQ/xLdr
+         iFq73oHysuajl+9Sfpq/MOoXsfjPrng2HIZ1qlkHWoohufAY7h3Y9P/djhqNmW1WLkEh
+         FNWnps4sDZFXxyw9PWLnDxN41TMiqvShD/dqYUxIAAvSL9VaJriQo+MrB99GIZZhDXBx
+         VRWZPKKlwWvxuc5+TYTRIje6RDoMaOZdj7Fovi+fh5RUsfNuWkrDjqWuZQ7gPiXIXPCK
+         Km1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693461174; x=1694065974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y3cZF7dX+T51M1ilFDTmCciuWPN/WaDzWfsb09z2eis=;
+        b=aMnS3y0ZPQeIf4flU6mbJ2Y6GpvmBtky4Bs4q/GsCTsncifex0Z8IyN4TUkW18gOXQ
+         042DWcLBFoBho1dQ8tVzECQoHfpNcqoD3cgUwSG5CGyVzsD80qoH+/y4hzJGicQje/du
+         ssHNhEtfaE/mq2QMh9+YX/0rNIzTBs/E8AzzPyynZbb4X6i7W0UUJFe4U6IOyRK5IWG+
+         OLTTgBV50QGWoaqMPtvu9BVdfx2oSM3emazwZiykJ45zajY8oGt8JLtybFHBskxZZvhE
+         VtwpDo5bcit0m1pQ2BusTriP25eHO+6KGrgWf3t9E1qO14ENfBUy1HRfef2S+sOI+nv5
+         LhVg==
+X-Gm-Message-State: AOJu0Yw7xKkfg15IMVh8QvI3Cm/94+hNXAAX5t72d1nuiF5/JcvZzfYT
+	0w9qJgbhAvE0PL3wTtn0Ffs=
+X-Google-Smtp-Source: AGHT+IEdJynyF1sPM1LXLbG7Nu+SIfBmaDaQ/AiHeUYK7hqPLOD64a5I0ezeV+XxRtQWw59aoXR+mA==
+X-Received: by 2002:a05:6a00:850:b0:68b:fb93:5b4e with SMTP id q16-20020a056a00085000b0068bfb935b4emr4938014pfk.26.1693461174104;
+        Wed, 30 Aug 2023 22:52:54 -0700 (PDT)
+Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id e22-20020aa78256000000b0068c97a4eb0fsm506731pfn.210.2023.08.30.22.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 22:52:53 -0700 (PDT)
+From: Peter Yin <peteryin.openbmc@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, soc@kernel.org
+To: patrick@stwcx.xyz,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Cc: cosmo.chou@quantatw.com,
+	potin.lai@quantatw.com,
+	daniel-hsu@quantatw.com,
+	Peter Yin <peteryin.openbmc@gmail.com>
+Subject: [PATCH v5 0/2] *** Add Facebook Minerva (AST2600) BMC ***
+Date: Thu, 31 Aug 2023 13:50:27 +0800
+Message-Id: <20230831055030.3958798-1-peteryin.openbmc@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Tue, 29 Aug 2023 17:52:18 -0400:
+v1 link : https://lore.kernel.org/all/fb09f5e6-8381-312f-2f1e-f2b471cec68a@linaro.org/
+v2 link : https://lore.kernel.org/lkml/9f499fe5-db59-f4c8-6a50-93725b7287fd@linaro.org/
+v3 link : https://lore.kernel.org/lkml/20230830025133.3756506-1-peteryin.openbmc@gmail.com/
+v4 link : https://lore.kernel.org/all/1d531692-5455-fbfd-0775-50856bf0fbc7@linaro.org/
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.6
+Change log:
+v5: 1.remove redundant blank line.
+    2.Correcting the arrangement order in document.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/47ca50600efcf994adb62a9a4e75c77d91bd0781
+v4:
+    1.seprate dts document.
 
-Thank you!
+v3:
+    1.Fixed commit description.
+    2.Add sgpio line name to sgpioP.
+    3.Add ipmb debug card bus.
+
+v2:
+    1.Add facebook,minerva-bmc in aspeed.yaml
+    2.Use stdout-path
+    3.Add Makefile
+
+v1:
+    1. Create minerva dts file.
+
+
+*** BLURB HERE ***
+
+Peter Yin (2):
+  ARM: dts: aspeed: Minerva: Add Facebook Minerva (AST2600) BMC
+  dt-bindings: arm: aspeed: add Meta Minerva board
+
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-facebook-minerva.dts  | 377 ++++++++++++++++++
+ 3 files changed, 379 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-minerva.dts
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
