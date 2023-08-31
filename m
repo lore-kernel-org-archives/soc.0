@@ -1,100 +1,135 @@
-Return-Path: <SRS0=mcdX=EQ=gmail.com=peteryin.openbmc@kernel.org>
+Return-Path: <SRS0=tk8r=EQ=gmail.com=rjwysocki@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E5A4C83F2E
-	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 08:30:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7241C83F10
+	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 09:33:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 32FB9C43215; Thu, 31 Aug 2023 08:30:43 +0000 (UTC)
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	id A3CECC433C7; Thu, 31 Aug 2023 09:33:12 +0000 (UTC)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 338DDC433B7;
-	Thu, 31 Aug 2023 08:30:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 338DDC433B7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 36964C433C8
+	for <soc@kernel.org>; Thu, 31 Aug 2023 09:33:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36964C433C8
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-68a3f1d8be2so453793b3a.3;
-        Thu, 31 Aug 2023 01:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693470638; x=1694075438; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A7qrHrxv+tQmHkxgkfHoWgymD/z9+utSjFBhVwcl5B4=;
-        b=DyA+ZufWgsUFfO4clHRk8SBYT7GaoRCJcgj0lOHrpAoOy6nsHav4yVoL+KdDrIV9yW
-         fQFAHfsfEvZZd34UDnFQenpvINIw2+r/czP3ZKH2xoWN6cYa+NRFzfbGjDAyb66iq36p
-         vFHzsr+cV8q4D7aLicKe3DjfIRO81JS6QAtWG2XfNHpy/BP9GJtVwg+BxIl5XTLsj8XT
-         WOTY1jz0yY24jvtQxwgJl4G7vAQoLJjJFZe9MQBfWVicDZeGROZgIcq5EO6VCqrwBtOx
-         lyl0/8a0FB6BN83pjDnFGUm/CRxriupnpIsCHeiBAXmv12TYa7QkBcrLeCJzQH4PUH5Y
-         GQfw==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6bca018afe8so228969a34.0
+        for <soc@kernel.org>; Thu, 31 Aug 2023 02:33:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693470638; x=1694075438;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1693474390; x=1694079190;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A7qrHrxv+tQmHkxgkfHoWgymD/z9+utSjFBhVwcl5B4=;
-        b=cfHW0bW2m572zfkNMlwRNupAa4Oa1RUzmMb0QksnlbAokyQY5D/v5ZVa4ffqViXEmq
-         BCIL1o8AE8z0OD1oDrSid3OPF/4vtd9yT9SFz6kk9BqiOOnKWOtROP0QvAm/fRyjt/T+
-         wGdGeGheopfPQqzWFvTmEXUzVBe23FXRfeJJ5qKWHqpxJnM1LHllo3JDk4EMVGQqmbLZ
-         D8jODqfWVEFPqnckzFc0YO6UYdrj1k2CSVX4ZPwr5srvHc5KdRvu137xvdd+HhvrzInb
-         NO3TYW6zjV8tZlOnWcm6WpXxrFVfgt+tnvckKOmvGUeuERI7LT3q1H4D1WKUBvq9ipTI
-         sc8w==
-X-Gm-Message-State: AOJu0YwDZekGs+Z6TPo5hmYphQhuL+FalYsVh9PETtIb+4LzzDqldru7
-	1sj3bDThlRcUNrklTcU1X+I=
-X-Google-Smtp-Source: AGHT+IGJ0sJH/K/tzzupjuyRlTkxXV5KC1GX2bDuoSlnYE5+YMUZE9wWtazb3sOipXp4chWI3AmNYA==
-X-Received: by 2002:a05:6a21:3d83:b0:14c:d5e9:211e with SMTP id bj3-20020a056a213d8300b0014cd5e9211emr4640510pzc.35.1693470637972;
-        Thu, 31 Aug 2023 01:30:37 -0700 (PDT)
-Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id a17-20020a62e211000000b0068a46cd4120sm812253pfi.199.2023.08.31.01.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Aug 2023 01:30:37 -0700 (PDT)
-From: Peter Yin <peteryin.openbmc@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: patrick@stwcx.xyz,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Cc: Peter Yin <peteryin.openbmc@gmail.com>
-Subject: [PATCH v7 2/2] dt-bindings: arm: aspeed: add Meta Minerva board
-Date: Thu, 31 Aug 2023 16:28:18 +0800
-Message-Id: <20230831082819.4000425-3-peteryin.openbmc@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230831082819.4000425-1-peteryin.openbmc@gmail.com>
-References: <20230831082819.4000425-1-peteryin.openbmc@gmail.com>
+        bh=Nl1K4yYAIDgYQbgietNrYp754cjHjZdTyKlafeP/4n8=;
+        b=RwjBvpMEmw4vDtbR2zIBiRG7/cFutWBZ+nG0uVn2j4YUI2mQ3ag7v0vO7+fhEk4UIF
+         pkIphNyfi/OssCJGqTNg2SFcjlvxe1y4lCLhH1w9+oYGMUimWFKXLQgbzgCFDwbuKaT3
+         l08DpLMgRAS9Yh+cmM9L1WKEBsGZi1EIMGwdpHkGQFbUHHHCma++UZ8YemGQiU3zucUW
+         f8mKxoSzjRLS/BpaDA3wLC/y+LMjFMvmEn+u1zvNAulaA0vmxnjGoUclLTU4oA4JNeHS
+         kBWk2TxKuCMNcgjP8zvX0A2d+9YxfCabLz/xCEf82GX0AP9azVf/hvVingrbJbAxvwiH
+         L5bw==
+X-Gm-Message-State: AOJu0YzL0t2h23EgJL8W7hTbaL9CH/oO9rPVw+WVFBA1udWNuzbtBA74
+	AnOQ+aRJGonpYhi3WaWOIfEGulMZnvtq6Y68Hl8=
+X-Google-Smtp-Source: AGHT+IGTX1BhrCY8B/1eA+vI1+888PczPza8yfMwZBebL/g+Y6xUSxGjKfo4zaOwCE0xXYnXdxYsp9+w7W2j7y4/gLE=
+X-Received: by 2002:a05:6820:1b18:b0:56e:94ed:c098 with SMTP id
+ bv24-20020a0568201b1800b0056e94edc098mr4892136oob.0.1693474389861; Thu, 31
+ Aug 2023 02:33:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+ <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
+ <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
+ <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
+ <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
+In-Reply-To: <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 31 Aug 2023 11:32:57 +0200
+Message-ID: <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+To: Ulf Hansson <ulf.hansson@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document the new compatibles used on Meta Minerva.
+On Wed, Aug 30, 2023 at 10:34=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
+>
+> On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > How about moving it to drivers/power/domain/ instead?
+> >
+> > That sounds like a sensible name and would seem to fit logically with
+> > our existing tree structure quite well.
+>
+> I am sincerely sorry if I have annoyed you with picking the name
+> "genpd" as the directory-name - and especially without further
+> explanation. The genpd thing certainly deserves to be documented
+> better, I will try to get some time to do this soon. Anyway, me and
+> many others in the power/performance areas that have been working with
+> the genpd interface, have simply gotten comfortable using the "genpd"
+> acronym. Hence, the naming was a no-brainer to me.
+>
+> That said, if you feel that the above directory-path/name is a better
+> fit I can certainly move it over there, np! Although, before you make
+> the final decision I want to point out a few things for you to
+> consider.
+>
+> *) The new subsystem is solely intended for the generic PM domain
+> providers. Other PM domains providers, like the ACPI PM domains for
+> example (drivers/acpi/*), don't really belong here, at least in my
+> opinion. So, maybe "domain" isn't specific enough? Although, if not
+> using "genpd", I have no better suggestion.
+>
+> **) Please keep in mind that we have several other power/performance
+> related subsystems that don't live under drivers/power/*. Moving more
+> things in there is not really going to help the people that work on
+> these things. No matter where and what the name of the subsystem is,
+> one simply needs to dive into the details anyway. Moreover, in this
+> case, "genpd" isn't just about "power" (idle management) but
+> performance management too.
+>
+> >
+> > > I don't think we can easily rename the interfaces that have been
+> > > in use for the past 12 years
+> >
+> > I actually think the interface names are much less of an issue, since
+> > anybody using them is presumably familiar with the naming.
+> >
+> > It was only with the directory structure that I reacted to it, because
+> > that kind of exposes the naming to people who definitely are *not*
+> > familiar with it (ie me, but presumably anybody else who sees the
+> > diffstats etc fly past).
+> >
+> > And yes, we have a number of other pretty obscure driver names in our
+> > tree (I end up having to remind myself what "ntb" and "hsi" etc mean),
+> > and I don't tend to love them either, but at least they tend to be
+> > industry / vendor names.
+>
+> I get your point. I was indeed trying to obey the current naming
+> strategy, but I think it's not entirely easy to understand what is
+> prefered.
+>
+> Please advise me on how to move forward.
 
-Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
----
- Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
- 1 file changed, 1 insertion(+)
+If I may suggest something, I would call this "pmdomain" instead of
+"genpd".  I don't think that /drivers/power/ is a particularly
+suitable location for it, because it doesn't really have much to do
+with power supplies and more to do with device PM.
 
-diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-index 6b0a6683ccae..3b93bae4f43a 100644
---- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-+++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-@@ -79,6 +79,7 @@ properties:
-               - facebook,elbert-bmc
-               - facebook,fuji-bmc
-               - facebook,greatlakes-bmc
-+              - facebook,minerva-bmc
-               - facebook,yosemite4-bmc
-               - ibm,everest-bmc
-               - ibm,rainier-bmc
--- 
-2.25.1
+Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
+(and rename it to something like core.c), because it would be a better
+location for that fiile IMO.
 
+I can also handle future pull requests for this if that's fine with everyon=
+e.
+
+Cheers!
