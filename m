@@ -1,103 +1,101 @@
-Return-Path: <SRS0=fF9g=EQ=loongson.cn=zhoubinbin@kernel.org>
+Return-Path: <SRS0=f61G=EQ=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19E1DC83F32
-	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 11:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC00C83F32
+	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 12:38:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 01751C43395; Thu, 31 Aug 2023 11:43:34 +0000 (UTC)
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.kernel.org (Postfix) with ESMTP id 294D9C433C9;
-	Thu, 31 Aug 2023 11:43:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 294D9C433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [112.20.109.102])
-	by gateway (Coremail) with SMTP id _____8AxXOrhfPBkX28dAA--.33013S3;
-	Thu, 31 Aug 2023 19:43:29 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.109.102])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTSPffPBkbxJoAA--.36689S3;
-	Thu, 31 Aug 2023 19:43:29 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Yinbo Zhu <zhuyinbo@loongson.cn>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	loongson-kernel@lists.loongnix.cn,
-	soc@kernel.org,
-	devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Xuerui Wang <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v2 5/5] soc: loongson: loongson_pm2: Populate children syscon nodes
-Date: Thu, 31 Aug 2023 19:43:25 +0800
-Message-Id: <967f837de873706686438cdcf7c71ed8828de31c.1693474728.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <cover.1693474728.git.zhoubinbin@loongson.cn>
-References: <cover.1693474728.git.zhoubinbin@loongson.cn>
+	id 1726DC433CA; Thu, 31 Aug 2023 12:38:07 +0000 (UTC)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 14D93C433C8
+	for <soc@kernel.org>; Thu, 31 Aug 2023 12:38:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 14D93C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-99bed101b70so83680466b.3
+        for <soc@kernel.org>; Thu, 31 Aug 2023 05:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693485484; x=1694090284; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oi/kPn02IZFct2zYJEPtTAuOz/cjkMO9segcjaWjsPU=;
+        b=wFdO9aTn2VFN1t2LU87cY5syr+JwVoWI46CBF2LyQBWCf0JBNEEOc6VIu1A1E/but6
+         kVrhoRNbfoumZ47Moy2AjH5XVZR89PU2OpHccTff72n6XtbrMwmm8qEVbdrxSOlV/kRd
+         Qev6X3xcfO8UmDsnIM3p0V99q389kI4ZZZmQxNW/HL4kL6lzVAOU6qxjiVU8nbV0QM+5
+         6vP1TrIR7er81x123LpHl6t06etVcJ7bqxW/rQne9JVUGY/X9AWvCRm2bHpTpVicCwoI
+         KRB7ZC5/yxhTLROY2prCuqcgyUw2DiXTbg2bOucbqG1BzlXiT3w1WldffMWFeU2grizT
+         Z/CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693485484; x=1694090284;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oi/kPn02IZFct2zYJEPtTAuOz/cjkMO9segcjaWjsPU=;
+        b=I3mgXcm2vytL20+5T9DQ4UVl2DnWZ350Vg+3SWu6vSfZbgT2aNkQ8O5vRKh81PHyBj
+         8sbwlA2//aWeJIhRUk57Pm7PRk5LK67sUmoIoJS6sE/XL55+7LpnUdxxOwH+ykZSFsdk
+         OyikkDUBltjuvLQ24YHV+Hj+/MIU5z2AXqaYVmufuTxqrIFQr7nYLIzYMfspwBePBw08
+         7362fjJyJUWUcBUqEdMPMWuFj7Xvblmcu9MYy4iGBhp0UrI90FKwl0qk4uacq+kgY6hV
+         CpCfc2X0CEEqCVMne1TYByW85lKizGfIxyCCDTLqcW2wkZbMsTd/AZ030mqI3GXNPhiQ
+         qiqQ==
+X-Gm-Message-State: AOJu0YwlEw54keRMI/TjG6vzNaw2zc78RXHJ9vrGIQbD/9XMWqsYughD
+	KMuDqF0rB5y0jEC9UUuK6ZIRUw==
+X-Google-Smtp-Source: AGHT+IG66AMgUP5PIYRzzikgOWnqFE+4vnEiMaeZV40mxCPYbDRmK8oHkefsRLF75BkzCPNNJnRbmw==
+X-Received: by 2002:a17:906:2d9:b0:9a1:d79a:4193 with SMTP id 25-20020a17090602d900b009a1d79a4193mr4105717ejk.23.1693485484212;
+        Thu, 31 Aug 2023 05:38:04 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id p27-20020a17090635db00b009a168ab6ee2sm701844ejb.164.2023.08.31.05.38.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Aug 2023 05:38:03 -0700 (PDT)
+Message-ID: <7b241edd-4775-afbc-e5a1-63f5ecfce331@linaro.org>
+Date: Thu, 31 Aug 2023 14:38:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8AxTSPffPBkbxJoAA--.36689S3
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7XF13WFy3tryUXr43AFy3KFX_yoWkKwc_u3
-	W29r48Cr1UJFnIy398Zw13Ar9Fgrn5u3W8uF1Dtw1Iq3WUt3sxJFyUArnrGF17WF4Syrn8
-	Z3y0gw1Ikw1rCosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb2xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUsZqXUUUUU
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v7 2/2] dt-bindings: arm: aspeed: add Meta Minerva board
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org
+References: <20230831082819.4000425-1-peteryin.openbmc@gmail.com>
+ <20230831082819.4000425-3-peteryin.openbmc@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230831082819.4000425-3-peteryin.openbmc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The syscon poweroff and reboot nodes logically belong to the Power
-Management Unit so populate possible children.
+On 31/08/2023 10:28, Peter Yin wrote:
+> Document the new compatibles used on Meta Minerva.
+> 
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
 
-Without it, the reboot/poweroff feature becomes unavailable.
+This is a friendly reminder during the review process.
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/soc/loongson/loongson2_pm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+It looks like you received a tag and forgot to add it.
 
-diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
-index 5ffb77afd9eb..b8e5e1e3528a 100644
---- a/drivers/soc/loongson/loongson2_pm.c
-+++ b/drivers/soc/loongson/loongson2_pm.c
-@@ -11,6 +11,7 @@
- #include <linux/input.h>
- #include <linux/suspend.h>
- #include <linux/interrupt.h>
-+#include <linux/of_platform.h>
- #include <linux/pm_wakeirq.h>
- #include <linux/platform_device.h>
- #include <asm/bootinfo.h>
-@@ -192,6 +193,11 @@ static int loongson2_pm_probe(struct platform_device *pdev)
- 	if (loongson_sysconf.suspend_addr)
- 		suspend_set_ops(&loongson2_suspend_ops);
- 
-+	/* Populate children */
-+	retval = devm_of_platform_populate(dev);
-+	if (retval)
-+		dev_err(dev, "Error populating children, reboot and poweroff might not work properly\n");
-+
- 	return 0;
- }
- 
--- 
-2.39.3
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state why and what changed.
+
+Best regards,
+Krzysztof
 
