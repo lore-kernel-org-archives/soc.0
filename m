@@ -1,166 +1,105 @@
-Return-Path: <SRS0=XNXb=EQ=linaro.org=ulf.hansson@kernel.org>
+Return-Path: <SRS0=fF9g=EQ=loongson.cn=zhoubinbin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 798BEC83F10
-	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 11:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E8A6C83F37
+	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 11:43:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3C290C433C9; Thu, 31 Aug 2023 11:37:42 +0000 (UTC)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D7AFBC433C7
-	for <soc@kernel.org>; Thu, 31 Aug 2023 11:37:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D7AFBC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-d7d15e6884dso459547276.0
-        for <soc@kernel.org>; Thu, 31 Aug 2023 04:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693481859; x=1694086659; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lypt1ExDbkEeEChHfWqa/VhxnyCI/TkoTn/TCNMR5X8=;
-        b=mLrar26ZjPHMhERJYZU69WgJLqSC+4Xs6SOibmK2+ry14T/dzCYY150IFZWRtenIpr
-         2C/6pY9dEhbMbnsScDpNXohlglWkHV7UvykRZ9swSofVJrzlpCSR1MKH2eGxGPCyQ4cp
-         xaxgOiEwNFg0nN19lCab76/Rg9u+litobTMTeZH4jrBkhuB7OM0mJ9AeRB0uBokP/LjN
-         4oMJrfbmkzA3gXXFZZaL9jQ0EftMBOTjespqSc15YgjaP9dxiQ90cvUV7tT1f1kGuZ7f
-         9ip6u8e3LfvG0FGF7x18fd5ZCUroOj5WqMxSeaCpVcZrgdXFE1fvcAr56lIILAG3kuSd
-         0+tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693481859; x=1694086659;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lypt1ExDbkEeEChHfWqa/VhxnyCI/TkoTn/TCNMR5X8=;
-        b=lcJj6wkRX1aBY1m+PbO5xOPdOpTKsHHCfoSzdVz5Dr7VCU/0VQ/rGh3RSkG9GrNnzn
-         +BeIRlmib4LHhYpleHtkSNuHmsCyrJRM8PfZYhsahd4DmyAs7kROvPt8i3T/I9J1ypAj
-         +o0eudr4rPLHc92feXysiv9Pux45SFjApyTmYD1RXhxkpgqGqubcT6d75h76lu5z2U01
-         MPRUjbWiuG7OgbHDALs2+CLexqym9Kz88NIe99rIqxXlNASXpTceZ23+xwRZ75XdSpmy
-         NYSOHmNz1EQAr7npj3cnvbgh9oXHxDI1ZGIafeoSd3BBdJvHzReOu8L23+bLP4LcsV63
-         0ceA==
-X-Gm-Message-State: AOJu0YyvC36Cx5j/ZVwCUn/CWtB1wRpbp+tsqpV59o9NHaOzxmxJ2p/Q
-	Sfg/hyyblBH21tcYMpHP2qHXtaCwn11lU6RBxempSQ==
-X-Google-Smtp-Source: AGHT+IGBvK3EVwNwH9rlAiV5YEc2n1O3boSOPFtTlRByjOV/DKA4yqbSCqz3ilp2WwhzpF6hM6wL2mYOd3TXCTemySw=
-X-Received: by 2002:a25:fc21:0:b0:d0e:99be:5da2 with SMTP id
- v33-20020a25fc21000000b00d0e99be5da2mr4719634ybd.65.1693481859667; Thu, 31
- Aug 2023 04:37:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com> <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 31 Aug 2023 13:37:03 +0200
-Message-ID: <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To: "Rafael J. Wysocki" <rafael@kernel.org>
+	id 8895DC4AF1E; Thu, 31 Aug 2023 11:43:25 +0000 (UTC)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.kernel.org (Postfix) with ESMTP id A0A1EC433CA;
+	Thu, 31 Aug 2023 11:43:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A0A1EC433CA
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.109.102])
+	by gateway (Coremail) with SMTP id _____8CxtPDXfPBkHW8dAA--.60982S3;
+	Thu, 31 Aug 2023 19:43:19 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.109.102])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxniPTfPBkVxJoAA--.14619S3;
+	Thu, 31 Aug 2023 19:43:18 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	loongson-kernel@lists.loongnix.cn,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2 1/5] soc: loongson: loongson_pm2: Add dependency for INPUT
+Date: Thu, 31 Aug 2023 19:43:11 +0800
+Message-Id: <13f54f2119b99f967c18c6671d7b80c62264d7ef.1693474728.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <cover.1693474728.git.zhoubinbin@loongson.cn>
+References: <cover.1693474728.git.zhoubinbin@loongson.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxniPTfPBkVxJoAA--.14619S3
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KF43tFy7Gr17CFykWF4xXwc_yoW5Jrykpa
+	savryxKr4UXrW5Zrn8J348uFy5ZF97X3sIga9rG345WF9rAa4kuasrJFyfZFsrZ34vqFW0
+	vry8GrW5uasrGrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
 
-On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Aug 30, 2023 at 10:34=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
-> >
-> > On Wed, 30 Aug 2023 at 03:20, Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > On Tue, 29 Aug 2023 at 17:48, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > >
-> > > > How about moving it to drivers/power/domain/ instead?
-> > >
-> > > That sounds like a sensible name and would seem to fit logically with
-> > > our existing tree structure quite well.
-> >
-> > I am sincerely sorry if I have annoyed you with picking the name
-> > "genpd" as the directory-name - and especially without further
-> > explanation. The genpd thing certainly deserves to be documented
-> > better, I will try to get some time to do this soon. Anyway, me and
-> > many others in the power/performance areas that have been working with
-> > the genpd interface, have simply gotten comfortable using the "genpd"
-> > acronym. Hence, the naming was a no-brainer to me.
-> >
-> > That said, if you feel that the above directory-path/name is a better
-> > fit I can certainly move it over there, np! Although, before you make
-> > the final decision I want to point out a few things for you to
-> > consider.
-> >
-> > *) The new subsystem is solely intended for the generic PM domain
-> > providers. Other PM domains providers, like the ACPI PM domains for
-> > example (drivers/acpi/*), don't really belong here, at least in my
-> > opinion. So, maybe "domain" isn't specific enough? Although, if not
-> > using "genpd", I have no better suggestion.
-> >
-> > **) Please keep in mind that we have several other power/performance
-> > related subsystems that don't live under drivers/power/*. Moving more
-> > things in there is not really going to help the people that work on
-> > these things. No matter where and what the name of the subsystem is,
-> > one simply needs to dive into the details anyway. Moreover, in this
-> > case, "genpd" isn't just about "power" (idle management) but
-> > performance management too.
-> >
-> > >
-> > > > I don't think we can easily rename the interfaces that have been
-> > > > in use for the past 12 years
-> > >
-> > > I actually think the interface names are much less of an issue, since
-> > > anybody using them is presumably familiar with the naming.
-> > >
-> > > It was only with the directory structure that I reacted to it, becaus=
-e
-> > > that kind of exposes the naming to people who definitely are *not*
-> > > familiar with it (ie me, but presumably anybody else who sees the
-> > > diffstats etc fly past).
-> > >
-> > > And yes, we have a number of other pretty obscure driver names in our
-> > > tree (I end up having to remind myself what "ntb" and "hsi" etc mean)=
-,
-> > > and I don't tend to love them either, but at least they tend to be
-> > > industry / vendor names.
-> >
-> > I get your point. I was indeed trying to obey the current naming
-> > strategy, but I think it's not entirely easy to understand what is
-> > prefered.
-> >
-> > Please advise me on how to move forward.
->
-> If I may suggest something, I would call this "pmdomain" instead of
-> "genpd".  I don't think that /drivers/power/ is a particularly
-> suitable location for it, because it doesn't really have much to do
-> with power supplies and more to do with device PM.
+Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
+support"), the Loongson-2K PM driver was added, but it didn't update the
+Kconfig entry for the INPUT dependency, leading to build errors, so
+update the Kconfig entry to depend on INPUT.
 
-"pmdomain" is probably giving a reasonable good hint of what goes on
-in this subsystem. This works fine for me, thanks!
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
 
->
-> Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
-> (and rename it to something like core.c), because it would be a better
-> location for that fiile IMO.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+---
+ drivers/soc/loongson/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-We could certainly do that, let's discuss it a bit more.
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+index 314e13bb3e01..368344943a93 100644
+--- a/drivers/soc/loongson/Kconfig
++++ b/drivers/soc/loongson/Kconfig
+@@ -20,6 +20,7 @@ config LOONGSON2_GUTS
+ config LOONGSON2_PM
+ 	bool "Loongson-2 SoC Power Management Controller Driver"
+ 	depends on LOONGARCH && OF
++	depends on INPUT=y
+ 	help
+ 	  The Loongson-2's power management controller was ACPI, supports ACPI
+ 	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+-- 
+2.39.3
 
-Although, at this point I want to focus on the genpd providers, as to
-release some of the burden from arm-soc maintainers.
-
->
-> I can also handle future pull requests for this if that's fine with every=
-one.
-
-Thanks a lot for your offer! However, if a re-route is preferred (I
-think not?), this is probably better suited via arm-soc, as most
-changes are going to be arm platform specific.
-
-Kind regards
-Uffe
