@@ -1,106 +1,96 @@
-Return-Path: <SRS0=tk8r=EQ=gmail.com=rjwysocki@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85383C83F01
-	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 12:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5961AC83F2E
+	for <soc@archiver.kernel.org>; Thu, 31 Aug 2023 15:15:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4E2DAC433CA; Thu, 31 Aug 2023 12:59:01 +0000 (UTC)
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 68CACC433C7;
-	Thu, 31 Aug 2023 12:59:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 68CACC433C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-573128cd77dso68830eaf.0;
-        Thu, 31 Aug 2023 05:59:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693486739; x=1694091539;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0uNl6jFskdrLBmjyS7+9CIbwuUHiMSI+rI9yedXX/qQ=;
-        b=jM0ewuRtiiuNniEgTyf0Sj8I1pLVrGm654cpj5SkGuioHroOFErEhPsuNTrC78Y0Ra
-         PptPaRTViEbrQ2KAgPgDJFsuLrMB6vPaeG9vtcISXRqMBpi2ODgB2MYDdumzzSDmA2u0
-         GgGDKnkVhOeYPRWGfR4VXLOyzak88lOgTjMqZ1PGOQ0X7XwfdBTwcG0GOLg6HNYiUTHc
-         AhIpdgEq69cBSeFQWyWJ0h/2Qi9jRCsPLxp+lwC8fEEfK7XHH9xHlEaUtlEFVoIgxBAx
-         taak2KKYWSJ7cIjxHj/EK/VoCObge0lRY0tOCUf1FF2S+oFCMAwMpPl1a2WX0v5hFTFl
-         go3g==
-X-Gm-Message-State: AOJu0YxF6WyRVmYrTHhQpwwX+aakME7xIL7XztwwI9BgybdV1dobmBcW
-	u/VUU08/p4zmvjOjtbvE5UHHzheLjGNGDYDGI6A=
-X-Google-Smtp-Source: AGHT+IEmGYX9g/ETXL3g53lOPMLKPSoIb0ND1MPTFYNli229Abq6tXAuUZTAqX6cK/rNN33pZ3n/43SiMLCKfy8PE1o=
-X-Received: by 2002:a4a:b4c5:0:b0:56e:6532:467a with SMTP id
- g5-20020a4ab4c5000000b0056e6532467amr5345539ooo.1.1693486739131; Thu, 31 Aug
- 2023 05:58:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
- <CAHk-=wg0gc4Cc90OL29Vr5gDtd4mnsKD+TxtoNtQbAryaWHkZQ@mail.gmail.com>
- <CAHk-=wjLO=Jsdk2prq0piznMMCk+V0_fRaFRHEPuaALpF8J=hw@mail.gmail.com>
- <96bb0de0-06d9-46f8-b02f-dc924afff13c@app.fastmail.com> <CAHk-=wi5Lh-NG_rvcx3Zyqd2Uhj76G4V73tWCFULhVzOU6e1xg@mail.gmail.com>
- <CAPDyKFrJH-1uaPCwnWZDPi4MRtOm=N2CHSRyvjXRDbQ1y-oOrw@mail.gmail.com>
- <CAJZ5v0hqWYnkNXVju3U3n-9i8eqtjs197tLLNWv8Qa_N9T=KEw@mail.gmail.com> <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
-In-Reply-To: <CAPDyKFpXLj_2HAgyV_VJf+GPQVmxb_iiDe77Q2MY17MDNqy9fA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 31 Aug 2023 14:58:47 +0200
-Message-ID: <CAJZ5v0j52eotamMABZpu3-L3mmW=MwJEtTHCu3j8tAA0dZJzzA@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
-To: Ulf Hansson <ulf.hansson@linaro.org>
+	id 08ABFC433C8; Thu, 31 Aug 2023 15:15:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070A3C433C7;
+	Thu, 31 Aug 2023 15:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1693494899;
+	bh=drKObaEb9gV+rZiPSJgjphZLs8Xj+k/DszgLWr3JQuA=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=pciIGaiLWplDzGQgMmawJ0ZSkAS63X4DnEf39kLy6fM1HAXIVR9LHOkNUs+Vcv8xB
+	 kVoTFnS2wOAGvR82oGeX5BSUvYy4kBfGf0v8cNwpcCmUgP2TWfb7zas8bE65PUp7wQ
+	 YA+X9oHA2bhrvpxMu0y8nnhxWpK7Zx1kjaWOSid/NksMe5d8MbBKCsf1fpA40rXuQC
+	 BHPSKBY+YiG3YXwFVk1CV1wG7K+K7YvTSV7vJGD9t8Wq0nupeGQJrqyt3nnUEabUZ9
+	 8fgXvYnQ/X50mRRIBDE5j5JMtbxN5LOTJA8PcB93rAe+0n938BvrWHzGfTOPJ9z65i
+	 KHPHRAoRcIq6Q==
+Date: Thu, 31 Aug 2023 16:14:54 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Binbin Zhou <zhoubinbin@loongson.cn>
 List-Id: <soc.lore.kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	loongson-kernel@lists.loongnix.cn, soc@kernel.org,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
+Subject: Re: [PATCH v2 3/5] soc: loongson: loongson_pm2: Drop useless
+ of_device_id compatible
+Message-ID: <20230831-ambition-refusing-08e63b345573@spud>
+References: <cover.1693474728.git.zhoubinbin@loongson.cn>
+ <bf09b11ec6a0102f85dc2b3289d003271304e24d.1693474728.git.zhoubinbin@loongson.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="6P/Vao00H/hDkcQp"
+Content-Disposition: inline
+In-Reply-To: <bf09b11ec6a0102f85dc2b3289d003271304e24d.1693474728.git.zhoubinbin@loongson.cn>
+
+
+--6P/Vao00H/hDkcQp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 31, 2023 at 1:37=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Thu, 31 Aug 2023 at 11:33, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Wed, Aug 30, 2023 at 10:34=E2=80=AFAM Ulf Hansson <ulf.hansson@linar=
-o.org> wrote:
+On Thu, Aug 31, 2023 at 07:43:13PM +0800, Binbin Zhou wrote:
+> Now, "loongson,ls2k0500-pmc" is used as fallback compatible, so the
+> ls2k1000 compatible in the driver can be dropped directly.
+>=20
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  drivers/soc/loongson/loongson2_pm.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/l=
+oongson2_pm.c
+> index 796add6e8b63..5ffb77afd9eb 100644
+> --- a/drivers/soc/loongson/loongson2_pm.c
+> +++ b/drivers/soc/loongson/loongson2_pm.c
+> @@ -197,7 +197,6 @@ static int loongson2_pm_probe(struct platform_device =
+*pdev)
+> =20
+>  static const struct of_device_id loongson2_pm_match[] =3D {
+>  	{ .compatible =3D "loongson,ls2k0500-pmc", },
+> -	{ .compatible =3D "loongson,ls2k1000-pmc", },
 
-[cut]
+What about older devicetrees that do not have the fallback? Aren't you
+going to remove support for those?
 
-> > > Please advise me on how to move forward.
-> >
-> > If I may suggest something, I would call this "pmdomain" instead of
-> > "genpd".  I don't think that /drivers/power/ is a particularly
-> > suitable location for it, because it doesn't really have much to do
-> > with power supplies and more to do with device PM.
->
-> "pmdomain" is probably giving a reasonable good hint of what goes on
-> in this subsystem. This works fine for me, thanks!
->
-> >
-> > Also, I would move drivers/base/power/domain.c to drivers/pmdomain/
-> > (and rename it to something like core.c), because it would be a better
-> > location for that fiile IMO.
->
-> We could certainly do that, let's discuss it a bit more.
->
-> Although, at this point I want to focus on the genpd providers, as to
-> release some of the burden from arm-soc maintainers.
+>  	{},
+>  };
+> =20
+> --=20
+> 2.39.3
+>=20
 
-That's fine, it's just a suggestion.
+--6P/Vao00H/hDkcQp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The rationale is that the "core" code is used by the providers, so
-putting it next to them would be more convenient in case it needs to
-be modified along with the providers, for example.
+-----BEGIN PGP SIGNATURE-----
 
-> >
-> > I can also handle future pull requests for this if that's fine with eve=
-ryone.
->
-> Thanks a lot for your offer! However, if a re-route is preferred (I
-> think not?), this is probably better suited via arm-soc, as most
-> changes are going to be arm platform specific.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZPCubgAKCRB4tDGHoIJi
+0lRYAP0a8nAMuLBKh3MT3QCSnpm4FLHph15ATK7tEqoF62ABTQEAr+uxYj0cqwWt
+pYjaLukjJVBk29zMaCi3je3x2pVo1Q4=
+=utge
+-----END PGP SIGNATURE-----
 
-Whichever works for you better.
+--6P/Vao00H/hDkcQp--
