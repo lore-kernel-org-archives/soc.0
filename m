@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2384CA0FE6
-	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 10:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F3B9CA0FE8
+	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 10:17:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9EDCDC433CB; Fri,  1 Sep 2023 10:17:51 +0000 (UTC)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	id 4AD5EC433C7; Fri,  1 Sep 2023 10:17:52 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C00BEC433C9;
-	Fri,  1 Sep 2023 10:17:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C00BEC433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id 5DF97C433CA;
+	Fri,  1 Sep 2023 10:17:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5DF97C433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2bcb89b4767so29663941fa.3;
-        Fri, 01 Sep 2023 03:17:49 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-99bc9e3cbf1so372619966b.0;
+        Fri, 01 Sep 2023 03:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693563468; x=1694168268; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nYg8l6Jyfp1iBKfTo4myl31mihhTTXccbSjg7R4uzxI=;
-        b=Wyc09Bn6QXpbbXqaCPr8Vtcv+dnHLIlT+RKxDJ80oGob6x0QmJ9kc1Z05JZGOQRl9X
-         XIXqdvUPrWvJFSoENJ6vnwfhce8vIC2uA0WF5X9ZAlHxHD6ZxY8wWFTk3KMvYbfMfoxP
-         krtNjRx7QKvwQqvlVC5PKNccrIaHidE4dfrgJsm2di8sz/feiCos2SSXHpGJl+niEBJw
-         h6j/dPJSvILmnP9H4oTIwhPTJk06sZf/E4Q4nDaZlZHFw8zVWWIrmEeVDc87Ud0y/ZLo
-         DAsUP6P974a/C095HmPUpC7sc1WiMpf7RGf8ulVBx9hoM66cfV6q2kL4+PofpQjweMxW
-         04xQ==
+        d=gmail.com; s=20221208; t=1693563469; x=1694168269; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sEUJ9dGTWHYlfawb2VxJeWDhFCdnxgU0Kgh1CdlV0lo=;
+        b=YcRNokojZ7ZZkP9EQAxUNn/aG4MoLxWi5KHhjUY5JpV+lJsIfKc8rAJmz1Lfy/MhJg
+         KFsWL51c6VtSamk2xHmXdId5o9TYWXxd1rBshU40MgOdEnfmvsdGI66EvgE2Tj7kZuYz
+         Pf2DkfYk70L/UerE3qvBfXB4L9XlBFY1+OD3nWZJqXhOPMnO0oqh7xWMflpu/FPujus1
+         BonkDZ29mdiawIES3OFpRrtygOASAf10myb9QJB7HXc6veZP8OFR7i8QP/UCpabehQYv
+         VJo0OcavICvH5VbWsNGB+bERjgZWbxlTnjV6NQxQgkReo5OnBY2Li9ZRjL+1rIJp2+8G
+         hmug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693563468; x=1694168268;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nYg8l6Jyfp1iBKfTo4myl31mihhTTXccbSjg7R4uzxI=;
-        b=X+NAnYq4AwflD0ibr6I82juKU3NE0Rhe3Ipw5xbx/T86gHig/eOaJ1BhUVBNuIyXpg
-         8IEz+pRblWkbcvKZQs7ncML1B32jy+2V7NUDhGTNxZRr2zOe7H7lUw6j7SGVrt/ffz68
-         Mf1mNQqHgYQrmj08qMvT7ql4u6T6eK0p0doUTte3aRTeoIovCtbclpUBt99Bp91yCPDg
-         OSiPXFnHebfy49DbpsP0NwwSDFiQek3LJwCYmkoB2FLkDyQrJ5fo85Ix36kZIRCwLojV
-         A85Im0v3RgfbFM/nUMNbEHLsxxyA7TRYv0bIq5xRln1GTTVzlBz5Le1uDsnM8K7Hg0Xo
-         pQFQ==
-X-Gm-Message-State: AOJu0Yzd3nvodL4ArlwE3m9+jQH6yE0mzCGo5fVCUjKVK3KvT+ej2jlg
-	6FiXQuzoM6DjteXhKWPMg1qbgTS1t6Q=
-X-Google-Smtp-Source: AGHT+IFkAG3fG76w4qNUIzW19jbYrK07Oj1yWuRbsFhuuKlkDeLerwPOKJ01T068DSHKL5Z9R8w5uA==
-X-Received: by 2002:a19:2d17:0:b0:500:9a45:636 with SMTP id k23-20020a192d17000000b005009a450636mr1157658lfj.13.1693563466598;
-        Fri, 01 Sep 2023 03:17:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693563469; x=1694168269;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sEUJ9dGTWHYlfawb2VxJeWDhFCdnxgU0Kgh1CdlV0lo=;
+        b=K8Oda4xVgBvr650GU2so4hpWHIQt10qPz7Iex8JrtcLTLDNMd5bImuV7qh4nkVjFZD
+         nQD9jeRB3zoj7ISBKyUJ0SMNgHR0X9MqMT+vBci/nNjVjCQbOMJgZrvv641fdmxoz5EK
+         jGs4wCHELBVOULJ+LnBBB/DGozzxDJBogVv7q41rk4V9BeySYA+RMiqkJ0wgl06lO1p7
+         1fSVYGvQD0kmrfgggWQuD2VdBXbiZdK6jb0kYZB0B7bnhhg81RWthV6sgW9xapbu6mUQ
+         0aM8Y9C55NwUJJbwgriBEKRYveI1ARqDf4CMDkJJegDjQiBldO1rUiSOgr3i57wt2Vti
+         R5yg==
+X-Gm-Message-State: AOJu0YyitmzcbN+UEnwBkwyYBV+RhYRFJCw45jv3IiW7kUTrp0fwhGMa
+	nKyThu2C1k4bC7bpBRQgO4QeM9MWGAk=
+X-Google-Smtp-Source: AGHT+IHEpjnCKl2scwsxKg6+R3OIwiUl7xKK7TbtKEI80NY66k3gP9vC5Eu9FxriU6AISgnz/dfKeg==
+X-Received: by 2002:a17:906:749c:b0:993:eee4:e704 with SMTP id e28-20020a170906749c00b00993eee4e704mr2693077ejl.38.1693563468969;
+        Fri, 01 Sep 2023 03:17:48 -0700 (PDT)
 Received: from localhost (p200300e41f1bd600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1b:d600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id bo9-20020a0564020b2900b0052889d090bfsm1876647edb.79.2023.09.01.03.17.46
+        by smtp.gmail.com with ESMTPSA id g24-20020a170906395800b00992e265495csm1803299eje.212.2023.09.01.03.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 03:17:46 -0700 (PDT)
+        Fri, 01 Sep 2023 03:17:48 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -59,27 +60,29 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL v2 1/2] dt-bindings: Changes for v6.6-rc1
-Date: Fri,  1 Sep 2023 12:17:40 +0200
-Message-ID: <20230901101742.1871434-1-thierry.reding@gmail.com>
+Subject: [GIT PULL v2 2/2] arm64: tegra: Device tree changes for v6.6-rc1
+Date: Fri,  1 Sep 2023 12:17:41 +0200
+Message-ID: <20230901101742.1871434-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230901101742.1871434-1-thierry.reding@gmail.com>
+References: <20230901101742.1871434-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Hi ARM SoC maintainers,
 
-The following changes since commit 72738fdeccd172210539a786e23b09b67565d509:
+The following changes since commit d7fb6468ec9f18db52ef3c84eb44a9025021c830:
 
-  dt-bindings: firmware: Add support for tegra186-bpmp DRAM MRQ GSCs (2023-07-26 18:23:42 +0200)
+  arm64: tegra: Add blank lines for better readability (2023-07-27 16:48:25 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.6-dt-bindings-v2
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.6-arm64-dt-v2
 
-for you to fetch changes up to 9d697e4b743080f560e3eee54599853e8ee8fa25:
+for you to fetch changes up to 112aead4e3d08b455723fa49c17119fbbb4f6e6d:
 
-  dt-bindings: arm: tegra: pmc: Relicense and move into soc/tegra directory (2023-08-16 18:19:53 +0200)
+  arm64: tegra: Mark Tegra234 SPI as compatible with Tegra114 (2023-08-18 17:24:51 +0200)
 
 As discussed previously, here are some late updates for the Tegra tree.
 
@@ -87,22 +90,37 @@ Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v6.6-rc1
+arm64: tegra: Device tree changes for v6.6-rc1
 
-This the conversion of one more DT binding to json-schema.
+Contains a bunch of improvements for DT validation as well as some fixes
+for P3767. This also contains the addition of display support for Smaug
+and enablement of the IOMMU for host1x on Tegra132 (Nexus 9).
 
 ----------------------------------------------------------------
-Thierry Reding (7):
-      dt-bindings: arm: tegra: pmc: Improve property descriptions
-      dt-bindings: arm: tegra: pmc: Remove useless boilerplate descriptions
-      dt-bindings: arm: tegra: pmc: Move additionalProperties
-      dt-bindings: arm: tegra: pmc: Increase maximum number of clocks per powergate
-      dt-bindings: arm: tegra: pmc: Restructure pad configuration node schema
-      dt-bindings: arm: tegra: pmc: Reformat example
-      dt-bindings: arm: tegra: pmc: Relicense and move into soc/tegra directory
+Brad Griffis (2):
+      arm64: tegra: Fix P3767 card detect polarity
+      arm64: tegra: Fix P3767 QSPI speed
 
- .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml     | 393 -------------------
- .../bindings/soc/tegra/nvidia,tegra20-pmc.yaml     | 416 +++++++++++++++++++++
- 2 files changed, 416 insertions(+), 393 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/tegra/nvidia,tegra20-pmc.yaml
+Diogo Ivo (3):
+      arm64: tegra: Add DSI/CSI regulator on Smaug
+      arm64: tegra: Add backlight node on Smaug
+      arm64: tegra: Add display panel node on Smaug
+
+Rayyan Ansari (1):
+      arm64: tegra: Enable IOMMU for host1x on Tegra132
+
+Thierry Reding (5):
+      arm64: tegra: Add missing current-speed for SBSA UART
+      arm64: tegra: Remove duplicate nodes on Jetson Orin NX
+      arm64: tegra: Use correct format for clocks property
+      arm64: tegra: Add dmas and dma-names for Tegra234 UARTE
+      arm64: tegra: Mark Tegra234 SPI as compatible with Tegra114
+
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi           |  2 +
+ arch/arm64/boot/dts/nvidia/tegra210-smaug.dts      | 66 ++++++++++++++++++++++
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |  1 +
+ arch/arm64/boot/dts/nvidia/tegra234-p3767.dtsi     |  4 +-
+ .../dts/nvidia/tegra234-p3768-0000+p3767-0000.dts  | 13 -----
+ .../arm64/boot/dts/nvidia/tegra234-p3768-0000.dtsi |  1 +
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi           | 40 ++++++-------
+ 7 files changed, 93 insertions(+), 34 deletions(-)
