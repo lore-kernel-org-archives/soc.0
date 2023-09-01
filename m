@@ -1,123 +1,106 @@
-Return-Path: <SRS0=qJwL=ER=gmail.com=zhoubb.aaron@kernel.org>
+Return-Path: <SRS0=/3lf=ER=gmail.com=peteryin.openbmc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CC74CA0FE2
-	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 03:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37207CA0FE2
+	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 03:22:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 580E0C433CC; Fri,  1 Sep 2023 03:05:26 +0000 (UTC)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	id CB03BC433CA; Fri,  1 Sep 2023 03:22:53 +0000 (UTC)
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3F59EC433C7;
-	Fri,  1 Sep 2023 03:05:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F59EC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id DD91AC433C8;
+	Fri,  1 Sep 2023 03:22:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DD91AC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-58cd9d9dbf5so20274047b3.0;
-        Thu, 31 Aug 2023 20:05:25 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-68becf931d0so1265842b3a.3;
+        Thu, 31 Aug 2023 20:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693537524; x=1694142324; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CzzhdRRz+84nDeWWLMEXfVPuhXA1oo9sQKDIU2jXLKE=;
-        b=i78FWybyNZCQkMRxeQhjC2eyyX+YFKZMpn1SVILwaJaWB2ihM2d4PA3PN1CaI+Npsx
-         hMidVScE4JuznQChprNDLN7lZ5R++xqvXLKvJWc+W9p8T4By+G7rsZJ7nVyQAA/o5oOV
-         e8xKoU7aOPFjcG70BwgWSgTtKXKYOeRUK80rssVHx4sF5dsOfnbhHmmtbqrwcumZrgVu
-         4sSlXR2yDvZRTRO4K35BeQA1RxNs3uZv1QK+28B7Mn4gkvGal0seQLblpzpLePAvxzUP
-         7cYLxoEFfO1cHo/UHYAXxki6R+2zrhFmjs52EMI6Fi1gqh8Ag5QzUMs3PoHEu+jwbBIU
-         9tEw==
+        d=gmail.com; s=20221208; t=1693538572; x=1694143372; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qBLPQzPIWAWSC+qsvJbFVdMdGKth1jrainH5lRp8kgI=;
+        b=iHmSIBy2Tm5IzYYD/TuQGhDz09pUNk2BDMWDK30sgWcF4KBL5VylNokj1dKZyeL1Kn
+         MjvsqhBXmQ4uCzK0fHj7RDcXi6GD2MIyjtPLt2J8NxG5V+f7OYjNLmcCJP+T2rhn7cD6
+         P0AE9Eunoeu1TgUfcxxmnPN0q+6I8HbPAMmbQ6g0mBJhHm8Aq28Q97dMuNtz1cpIrwfb
+         x/OAEdSy00eLMGJJmySYSmLklr0h9WND8BPm66yeNL62LughHKZYq0nhFOFf26EwuFJ2
+         /ianVihkaNTF3XNgrchwhkqgIkCwceZk7azMLG5w8HbkppnybmYcv3VBu6pVXGCvw1QV
+         2IxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693537524; x=1694142324;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CzzhdRRz+84nDeWWLMEXfVPuhXA1oo9sQKDIU2jXLKE=;
-        b=c+2TQW9n10Oapu1jcI7K4QaIEkAOeJIjtDtjfuWAcpsgQquJptsHCLpMIv7FuT0Znk
-         buiOFc85Cp+5dwZIl0qp//Hl9KCpCbrCW9A/mV9zVHWOWj1ig2YZq9sMyo1rOXmbj+lv
-         kD4ql26WryBJankQ3fD0bPorXVgiUbpemEgw/YChBREKsoKZC1EGAqgkD2BZKR59NkZX
-         6/DwDFkyw9dZWHJ6mkQPZAgHim00eONp6wbU/O/WYekhQpeSTnB+p3CoPRzCrTy7RhGl
-         qjMrJT9xEYrw4Jy0R6xDwnTQK5XKmCQCwT2nviqNmuzY0fsaf5U6aM18XDt8gSeLxY1w
-         kUKA==
-X-Gm-Message-State: AOJu0YyIh+VOR5ZkgL0past2kNAEZCyWPyZIi5VzyUMTA57P4RzOkZBZ
-	ObX3xN4e506BK5IFWKNFJdTCfvQ18dy2x6uP5CxT46pIPlZkzrSbTIE=
-X-Google-Smtp-Source: AGHT+IEJQ/UnswWklefCzgEHvWHAJOerPe/H2CzyND+TNL/LPrnmDHwD+//eG8lI6MC/fhA9o6DMv8wR+lP5bYqvsro=
-X-Received: by 2002:a0d:d605:0:b0:56c:f0c7:7d72 with SMTP id
- y5-20020a0dd605000000b0056cf0c77d72mr2225622ywd.4.1693537523953; Thu, 31 Aug
- 2023 20:05:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693538572; x=1694143372;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qBLPQzPIWAWSC+qsvJbFVdMdGKth1jrainH5lRp8kgI=;
+        b=bsiwkXq/H+0xGyQEx9I+Ppts6SNlm+av/0c0KOI5SodmnmpoToArlIAY47OK4pgpXg
+         Oqg8dBOzYZQkfzZrTR5pvN+zC4Eg/NQsdVGXFgjW855wedfcJI3nn5+AmUCWbif2wxY0
+         ctIi6UcvUX1YqIZbt1znmVcCmTs7KwGHceNzEsVxeGSG5LR4AWBRBFNnyT90EA6vgPXd
+         xQMfwBSgW4kKtuAroLMb2MxkKWs1GJ4C8DXg+JQSUcNszm6alqOCopBP9AFi5wjjnXfy
+         +GRfTiS7ZS3UZA0wBtdhoROkAzfiaDgoGzQ/SVvf/A/Tku+h5KusI0rPZ6xpv+OSNzba
+         2S3w==
+X-Gm-Message-State: AOJu0YwlVVRqpNK65x3U2U4ZmWZJIzTyNfpx1Lif8s1mF06pkil5S+c4
+	EO49xYWlF36Zppn/pF3TdrI=
+X-Google-Smtp-Source: AGHT+IF5ywUa7Qg+xJbjyDPhgXCzWKPknLqcwuD2RE4g0BKWwqAHqS2Q0t52zJrFjKRYQwdObFdUrw==
+X-Received: by 2002:a05:6a20:6710:b0:14d:5580:8ff0 with SMTP id q16-20020a056a20671000b0014d55808ff0mr1193033pzh.25.1693538572050;
+        Thu, 31 Aug 2023 20:22:52 -0700 (PDT)
+Received: from [10.10.14.80] (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902fe8200b001bdf45eb5b6sm1908358plm.284.2023.08.31.20.22.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Aug 2023 20:22:51 -0700 (PDT)
+Message-ID: <ffe1aff7-5216-ce3c-d57a-1163731d1158@gmail.com>
+Date: Fri, 1 Sep 2023 11:20:37 +0800
 MIME-Version: 1.0
-References: <cover.1693474728.git.zhoubinbin@loongson.cn> <bf09b11ec6a0102f85dc2b3289d003271304e24d.1693474728.git.zhoubinbin@loongson.cn>
- <20230831-ambition-refusing-08e63b345573@spud>
-In-Reply-To: <20230831-ambition-refusing-08e63b345573@spud>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Fri, 1 Sep 2023 11:05:12 +0800
-Message-ID: <CAMpQs4JbUx9N4MmfM6vRsdQBHyUcU9UHGX23UewL5Matt6iXnQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] soc: loongson: loongson_pm2: Drop useless
- of_device_id compatible
-To: Conor Dooley <conor@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v7 2/2] dt-bindings: arm: aspeed: add Meta Minerva board
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, loongson-kernel@lists.loongnix.cn, soc@kernel.org, 
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, patrick@stwcx.xyz,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org
+References: <20230831082819.4000425-1-peteryin.openbmc@gmail.com>
+ <20230831082819.4000425-3-peteryin.openbmc@gmail.com>
+ <7b241edd-4775-afbc-e5a1-63f5ecfce331@linaro.org>
+From: PeterYin <peteryin.openbmc@gmail.com>
+In-Reply-To: <7b241edd-4775-afbc-e5a1-63f5ecfce331@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Conor:
 
-Thanks for your reply.
-
-On Thu, Aug 31, 2023 at 11:15=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
-ote:
+On 8/31/23 20:38, Krzysztof Kozlowski wrote:
+> On 31/08/2023 10:28, Peter Yin wrote:
+>> Document the new compatibles used on Meta Minerva.
+>>
+>> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> This is a friendly reminder during the review process.
 >
-> On Thu, Aug 31, 2023 at 07:43:13PM +0800, Binbin Zhou wrote:
-> > Now, "loongson,ls2k0500-pmc" is used as fallback compatible, so the
-> > ls2k1000 compatible in the driver can be dropped directly.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  drivers/soc/loongson/loongson2_pm.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson=
-/loongson2_pm.c
-> > index 796add6e8b63..5ffb77afd9eb 100644
-> > --- a/drivers/soc/loongson/loongson2_pm.c
-> > +++ b/drivers/soc/loongson/loongson2_pm.c
-> > @@ -197,7 +197,6 @@ static int loongson2_pm_probe(struct platform_devic=
-e *pdev)
-> >
-> >  static const struct of_device_id loongson2_pm_match[] =3D {
-> >       { .compatible =3D "loongson,ls2k0500-pmc", },
-> > -     { .compatible =3D "loongson,ls2k1000-pmc", },
+> It looks like you received a tag and forgot to add it.
 >
-> What about older devicetrees that do not have the fallback? Aren't you
-> going to remove support for those?
-
-This driver was just merged in during the v6.6 window, and no release
-will use it until now.
-
-commit 67694c076bd7 soc: loongson2_pm: add power management support
-commit 6054a676e969 soc: dt-bindings: add loongson-2 pm
-
-Of course, it was our mistake not to make better use of fallback
-compatible when submitting the driver, and we hope to fix this mistake
-soon.
-Also, this driver will only be used by the LoongArch architecture, no
-need to worry about other architectures.
-
-Thanks.
-Binbin
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions, under or above your Signed-off-by tag. Tag is "received", when
+> provided in a message replied to you on the mailing list. Tools like b4
+> can help here. However, there's no need to repost patches *only* to add
+> the tags. The upstream maintainer will do that for tags received on the
+> version they apply.
 >
-> >       {},
-> >  };
-> >
-> > --
-> > 2.39.3
-> >
+> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+>
+> If a tag was not added on purpose, please state why and what changed.
+
+Thank you for kindly providing me with the information. It has been helpful.
+
+
+> Best regards,
+> Krzysztof
+>
