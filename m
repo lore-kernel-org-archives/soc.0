@@ -1,95 +1,151 @@
-Return-Path: <SRS0=edI6=ER=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=mLpU=ER=samsung.com=alim.akhtar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9373CA0FE1
-	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 11:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA39CCA0FE4
+	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 15:35:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 72AB6C433C8; Fri,  1 Sep 2023 11:57:38 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id A7E1FC433C7; Fri,  1 Sep 2023 15:35:10 +0000 (UTC)
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 856C9C433C7
-	for <soc@kernel.org>; Fri,  1 Sep 2023 11:57:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 856C9C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-99df431d4bfso227863966b.1
-        for <soc@kernel.org>; Fri, 01 Sep 2023 04:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693569455; x=1694174255; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6aAmuXWpK9R9ONwjhEFCz2euSxwTZnw/oAWjomMKyvU=;
-        b=wzOLYHvPH+Ao6yLyKkDcWi3ZmTOqRpf8qATG4MqdF1FKorSGqjHxYy+XT9GhYmpVcX
-         8Xwkj/5M3mRBf6yTlBxlg8msPpFukusq59m9n2zGEHhY2DLZnX38sNc0OKcPEyVEcZXG
-         L9pjxGi9JaCR8KgeQ/WtUZHc6ZTcd4kydOSJ7oPJboqe+3Grij0btuP3SgG0IofgPSdl
-         diBJPBNEw+pQP2WZfzgI0e+maGI7Kf68Y/Gn9zt1K7DKCKd7PSBHwBNt1h/3jFdKCh1A
-         BTMUEwTdA1Op6aFBHpqOI5lAfU6nJcC6hFCst+9L3GvaL+mvlt8+iSi9iHzP77A5oVAd
-         i7sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693569455; x=1694174255;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6aAmuXWpK9R9ONwjhEFCz2euSxwTZnw/oAWjomMKyvU=;
-        b=WmSNVVHyEr8oZqrvbDi64De9gXjHjFgOrLlqzQptViovl+xcw2WV5qL8VbIUtbiP6N
-         A6DGlz5A+n27cE26ZW/SmkDA3Mqyt7QKWoMbeGMmROoR/fB8Kya9mYMx8PSthDHaBPZg
-         HpaBAp3UJi7MJKhRMVc2E9k1uRC5uDZvdGqtoPd5BwkaCj0FGJjJWtccE9KZr7CVUR4j
-         ldZDmZVsc/sTJ2lZOWYy8PKW+EzzjFZqDfk6zb9EQZFmSXXpuh1ZeWLJHMIno1ZaCQiY
-         /tbMWUo8YwIcC76UIhc6FZtJMUZvqs4xPeGuJkKdCxMtDD9DVSkvoBSe2qgBxdvkt0NV
-         q5AA==
-X-Gm-Message-State: AOJu0Yz4bHzyr8DAMf93VtzK9vD4HJMp7EDCii3obeV/W7iKoFxMwt2s
-	cBN7tygExiH0Mhsv3pf3SY1wTw==
-X-Google-Smtp-Source: AGHT+IE53YnDzQDCbFDcC3Zu5aY62S51MDsbpqPyeKqbHf/Q/JagOF915pEdB+ulrN7nuS6tYG750g==
-X-Received: by 2002:a17:907:a068:b0:9a1:cbe5:758c with SMTP id ia8-20020a170907a06800b009a1cbe5758cmr1591640ejc.7.1693569455460;
-        Fri, 01 Sep 2023 04:57:35 -0700 (PDT)
-Received: from krzk-bin.. (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id h23-20020a1709063c1700b0099d45ed589csm1881248ejg.125.2023.09.01.04.57.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 04:57:34 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6FDBEC433C8
+	for <soc@kernel.org>; Fri,  1 Sep 2023 15:35:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6FDBEC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230901153503epoutp03dcb7fa12b1018938afffe144cb778593~A0FBwTdxs1142011420epoutp03V
+	for <soc@kernel.org>; Fri,  1 Sep 2023 15:35:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230901153503epoutp03dcb7fa12b1018938afffe144cb778593~A0FBwTdxs1142011420epoutp03V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1693582503;
+	bh=aOlYQ5cBte/JzMksONmfKqcJOHs9+CZOZVn/iaN6WH4=;
+	h=From:To:In-Reply-To:Subject:Date:References:From;
+	b=vSkYCJGS2SMIRWzDwqM06OlpKWy7bycCBSVUoGvRtxbNGYCCAWqbyfvkOlcqkkUXJ
+	 jQQjHOgaimckx3G3sn6CvRoE32nNpPR/GzAhbUaRn43S6Ybk6yGC2dkKMomFv7QdjV
+	 fDEARxgKqEGqaFlQHikjx7TeFj/yMkLmc9l4GxF8=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20230901153503epcas5p17aada13e7e175c5d6358b274d0e96509~A0FBdLNAd2796027960epcas5p12;
+	Fri,  1 Sep 2023 15:35:03 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.174]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4RchtG2gYYz4x9Pr; Fri,  1 Sep
+	2023 15:35:02 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	9A.E6.09949.6A402F46; Sat,  2 Sep 2023 00:35:02 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20230901153501epcas5p471785b05f3bdb4acdb27ff402cf3f331~A0E-ap-3V2822928229epcas5p45;
+	Fri,  1 Sep 2023 15:35:01 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20230901153501epsmtrp24014501e2a47447fb5e3085742fe4549~A0E-X_SLI2406224062epsmtrp2S;
+	Fri,  1 Sep 2023 15:35:01 +0000 (GMT)
+X-AuditID: b6c32a49-bd9f8700000026dd-4d-64f204a676dc
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	3B.A2.08788.5A402F46; Sat,  2 Sep 2023 00:35:01 +0900 (KST)
+Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20230901153459epsmtip214e46d6101a491878b35aeda8143695d~A0E_Ds1bQ1862818628epsmtip2U;
+	Fri,  1 Sep 2023 15:34:59 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
 List-Id: <soc.lore.kernel.org>
-To: Alim Akhtar <alim.akhtar@samsung.com>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	arm@kernel.org,
-	soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: defconfig: enable syscon-poweroff driver
-Date: Fri,  1 Sep 2023 13:57:32 +0200
-Message-Id: <20230901115732.45854-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<arm@kernel.org>, <soc@kernel.org>, "'Arnd Bergmann'" <arnd@arndb.de>,
+	"'Olof Johansson'" <olof@lixom.net>
+In-Reply-To: <20230901115732.45854-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH] arm64: defconfig: enable syscon-poweroff driver
+Date: Fri, 1 Sep 2023 21:04:58 +0530
+Message-ID: <000401d9dce9$ded545f0$9c7fd1d0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJpw2blY2KnWiSxJ1DezFvi/M20/AGXv2sKrtmOvbA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmhu4ylk8pBtemCFsc+7KFzeLvpGPs
+	FvOPnGO12Pt6K7vFpsfXWC0u75rDZjHj/D4mi1PXP7NZPL7+h82B0+P3r0mMHptWdbJ53Lm2
+	h81j85J6jysnmlg9Pm+SC2CLyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LI
+	S8xNtVVy8QnQdcvMATpKSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgUqBXnJhb
+	XJqXrpeXWmJlaGBgZApUmJCdMedXF1vBE66KR4v2MzUwruXsYuTkkBAwkWhvvMDWxcjFISSw
+	m1Gid/YVFgjnE6PEk7f7mSGcb4wSM669YoVpefBpBxOILSSwl1Hi/fREiKKXjBKfbrYygyTY
+	BHQldixuA5srIrCbSeLzxw3sIAlOAReJXduXgBUJA9lfJ3wFm8oioCKxuOkYC4jNK2ApcXHR
+	SSYIW1Di5MwnYHFmAXmJ7W/nMENcoSDx8+kysF4RASuJ3bduMkLUiEu8PHqEHaJmIYfEw99c
+	ELaLxO6Du6B6hSVeHd8CVSMl8fndXqBDOYBsD4lFf6QgwhkSb5evZ4Sw7SUOXJnDAlLCLKAp
+	sX6XPsQmPone30+YIDp5JTrahCCqVSWa311lgbClJSZ2d0ODzUNiU/M0aEhPZ5RY1H+CZQKj
+	wiwkT85C8uQsJM/MQti8gJFlFaNkakFxbnpqsWmBYV5qOTy+k/NzNzGCk6yW5w7Guw8+6B1i
+	ZOJgPMQowcGsJMIba/YuRYg3JbGyKrUoP76oNCe1+BCjKTDkJzJLiSbnA9N8Xkm8oYmlgYmZ
+	mZmJpbGZoZI47+vWuSlCAumJJanZqakFqUUwfUwcnFINTJV3lq6emy1z2l5jwZFOHddtIpPZ
+	zc4uX3hi5srpoTd/spyNScrneR4WI/NY+srmLZPCDqpHr98uNzE69uDJL+afYhf++ZA0M9lr
+	afcqv8Yinu/t7zZ93lgWYdFdoOSiMKNerOWo/0P1OinhdXVrb7AvFBBs3e8S7XXZ99+Hy/kr
+	li+5Ytbgvz5/zjq+rixdr+7T6QrxzNmBO25+tecWbJX+5lny9Mnvwl/fd9sLRMWobd/scGft
+	JP4b35WcY7ynyfPURrmv4mowY879tv60/3LV69dY14rvvnrfTGqFmY7zmgezeNb2yy2bbjBP
+	aOe2s5836jiWqtelps0zeXiV0zVo9rMHW6xSn1s0VhZZ2SuxFGckGmoxFxUnAgBGyLLsOwQA
+	AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42LZdlhJXncpy6cUg+vP2C2OfdnCZvF30jF2
+	i/lHzrFa7H29ld1i0+NrrBaXd81hs5hxfh+Txanrn9ksHl//w+bA6fH71yRGj02rOtk87lzb
+	w+axeUm9x5UTTawenzfJBbBFcdmkpOZklqUW6dslcGXM+dXFVvCEq+LRov1MDYxrObsYOTkk
+	BEwkHnzawQRiCwnsZpRY89gNIi4tcX3jBHYIW1hi5b/nQDYXUM1zRolZf26ygCTYBHQldixu
+	YwNJiAgcZpLobbjOClE1lVFi/dftrCBVnAIuEru2L2EGsYWB7K8TvoLFWQRUJBY3HQObxCtg
+	KXFx0UkmCFtQ4uTMJ0BxDg5mAT2Jto2MIGFmAXmJ7W/nMENcpCDx8+kysDEiAlYSu2/dhKoR
+	l3h59Aj7BEahWUgmzUKYNAvJpFlIOhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/d
+	xAiOKC2tHYx7Vn3QO8TIxMF4iFGCg1lJhDfW7F2KEG9KYmVValF+fFFpTmrxIUZpDhYlcd5v
+	r3tThATSE0tSs1NTC1KLYLJMHJxSDUzq3wPXLzzzc6LDi6ka34uZmK59WezeHtTy++60U6ev
+	F3/SXn9ad/WUbdkbXyztEXu0db8Rv/0EFSEpzT9f+UMXFc/mb33U1bfmX9mJ+ZJNaXESn2Sd
+	shJN4y5ocDEruK9RlrGUfms0/4bXl2lf22t+beh92vw80CpsxZw/MqmN5t8iah+Zb78aOTeU
+	5YCO55577bfUD2QHVS3Mmxr57ET0XY+NC7pWnGq4JFmm8CvIg9t5tulN1uOl1uc2vGScxv3T
+	io0lcsHe7l85152nNCXmcxzmDHt0kV8knOWqS+POe3Ii2lnZW3Z+smR7Zy/c+zSoKibkRa1C
+	jszl7TKvE5a/z7qQqbC2gl/6yRVd3pdKLMUZiYZazEXFiQBKg3yKFwMAAA==
+X-CMS-MailID: 20230901153501epcas5p471785b05f3bdb4acdb27ff402cf3f331
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230901115741epcas5p185b55c93ec71163e618a5a70b141800c
+References: <CGME20230901115741epcas5p185b55c93ec71163e618a5a70b141800c@epcas5p1.samsung.com>
+	<20230901115732.45854-1-krzysztof.kozlowski@linaro.org>
 
-Enable the generic syscon-poweroff driver used on all Exynos ARM64 SoCs
-(e.g. Exynos5433) and few APM SoCs.
+Hello Krzysztof,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Sent: Friday, September 1, 2023 5:28 PM
+> To: Alim Akhtar <alim.akhtar@samsung.com>; devicetree@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org;
+> linux-kernel@vger.kernel.org; arm@kernel.org; soc@kernel.org; Arnd
+> Bergmann <arnd@arndb.de>; Olof Johansson <olof@lixom.net>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Subject: [PATCH] arm64: defconfig: enable syscon-poweroff driver
+> 
+> Enable the generic syscon-poweroff driver used on all Exynos ARM64 SoCs
+> (e.g. Exynos5433) and few APM SoCs.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5315789f4868..ec59174b14db 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -636,6 +636,7 @@ CONFIG_POWER_RESET_MSM=y
- CONFIG_POWER_RESET_QCOM_PON=m
- CONFIG_POWER_RESET_XGENE=y
- CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
- CONFIG_SYSCON_REBOOT_MODE=y
- CONFIG_NVMEM_REBOOT_MODE=m
- CONFIG_BATTERY_SBS=m
--- 
-2.34.1
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 5315789f4868..ec59174b14db 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -636,6 +636,7 @@ CONFIG_POWER_RESET_MSM=y
+> CONFIG_POWER_RESET_QCOM_PON=m  CONFIG_POWER_RESET_XGENE=y
+> CONFIG_POWER_RESET_SYSCON=y
+> +CONFIG_POWER_RESET_SYSCON_POWEROFF=y
+>  CONFIG_SYSCON_REBOOT_MODE=y
+>  CONFIG_NVMEM_REBOOT_MODE=m
+>  CONFIG_BATTERY_SBS=m
+> --
+> 2.34.1
+
 
