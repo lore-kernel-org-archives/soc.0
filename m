@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDDCCA1002
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3F98CA1001
 	for <soc@archiver.kernel.org>; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A827FC433C9; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
+	id 70A79C433CD; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.kernel.org (Postfix) with ESMTP id 2E2D7C433CC;
-	Sat,  2 Sep 2023 08:47:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E2D7C433CC
+	by smtp.kernel.org (Postfix) with ESMTP id 366F7C433C9;
+	Sat,  2 Sep 2023 08:47:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 366F7C433C9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [112.20.109.102])
-	by gateway (Coremail) with SMTP id _____8DxPOut9vJk2_4dAA--.55941S3;
-	Sat, 02 Sep 2023 16:47:41 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8AxJuiq9vJkwP4dAA--.2240S3;
+	Sat, 02 Sep 2023 16:47:39 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.109.102])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrM6n9vJkZY1pAA--.58262S5;
-	Sat, 02 Sep 2023 16:47:41 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrM6n9vJkZY1pAA--.58262S2;
+	Sat, 02 Sep 2023 16:47:36 +0800 (CST)
 From: Binbin Zhou <zhoubinbin@loongson.cn>
 To: Binbin Zhou <zhoubb.aaron@gmail.com>,
 	Huacai Chen <chenhuacai@loongson.cn>,
@@ -37,54 +37,96 @@ Cc: Huacai Chen <chenhuacai@kernel.org>,
 	Xuerui Wang <kernel@xen0n.name>,
 	loongarch@lists.linux.dev,
 	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v3 3/5] soc: loongson: loongson2_pm: Drop useless of_device_id compatible
-Date: Sat,  2 Sep 2023 16:47:29 +0800
-Message-Id: <59b2df91e60af0822813d4e8f3fea0f7d169dcab.1693623752.git.zhoubinbin@loongson.cn>
+Subject: [PATCH v3 0/5] soc: loongson: Fix some issues about loongson2_pm
+Date: Sat,  2 Sep 2023 16:47:26 +0800
+Message-Id: <cover.1693623752.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.39.3
-In-Reply-To: <cover.1693623752.git.zhoubinbin@loongson.cn>
-References: <cover.1693623752.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxrM6n9vJkZY1pAA--.58262S5
+X-CM-TRANSID:AQAAf8BxrM6n9vJkZY1pAA--.58262S2
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Xry5XF1kZrW7JFyDKw1fKrX_yoWfGrb_Za
-	42qr48ur1rAF13J345Zw43Zr9F9FyYv3WFkF1vqw1rXw42vr13JrWj9r13GFy3XrW5Xasx
-	Xw48Wr10yw1rJosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
+X-Coremail-Antispam: 1Uk129KBj93XoW7Kr1DXrW8XF1xJry3Kr17Jwc_yoW8CFW7pr
+	9xC3s8GF45Xry7ZrsxJFy8WF4Fq3yrAasrJF4ftw17uryDJw1jv3yrtF4jvrZxCryfJaya
+	vrs7GrW8WF17urcCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
 
-Now, "loongson,ls2k0500-pmc" is used as fallback compatible, so the
-ls2k1000 compatible in the driver can be dropped directly.
+Hi all:
 
-Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/soc/loongson/loongson2_pm.c | 1 -
- 1 file changed, 1 deletion(-)
+Since commit 67694c076bd7 ("soc: loongson2_pm: add power management support"),
+the Loongson-2K PM driver was added, some issues have been found and
+this patchset is planned to fix these issues.
 
-diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
-index 796add6e8b63..5ffb77afd9eb 100644
---- a/drivers/soc/loongson/loongson2_pm.c
-+++ b/drivers/soc/loongson/loongson2_pm.c
-@@ -197,7 +197,6 @@ static int loongson2_pm_probe(struct platform_device *pdev)
- 
- static const struct of_device_id loongson2_pm_match[] = {
- 	{ .compatible = "loongson,ls2k0500-pmc", },
--	{ .compatible = "loongson,ls2k1000-pmc", },
- 	{},
- };
- 
+Specific:
+Patch 1: Compilation error found by Randy;
+Patch 2/3: Rewriting the ls2k-pmc compatible attribute with fallback
+compatible;
+Patch 4/5: Add Loongson-2K SoC reboot/shutdown support as part of power
+management.
+
+Thanks.
+
+-----
+V3:
+- Changes "loongson_pm2" to "loongson2_pm" in all subject lines.
+  Sorry, it was a clerical error.
+patch 1:
+  - Add Fixes tag;
+  - Update commit message.
+patch 2:
+  - Add Fixes and Acked-by tag.
+patch 3:
+  - Add Fixes tag;
+patch 4:
+  - Add Reviewed-by tag.
+
+Link to V2:
+https://lore.kernel.org/all/cover.1693474728.git.zhoubinbin@loongson.cn/
+
+V2:
+patch 1:
+ - Change "depends on INPUT" to "depends on INPUT=y", because the
+   compilation error still exists when "INPUT=m".
+patch 2:
+  - Use ls2k0500 as the fallback compatible;
+  - Add ls2k2000 compatible.
+patch 3:
+ - Drop ls2k1000 compatible, for ls2k0500 is used as the fallback
+   compatible.
+patch 4:
+  - Drop label;
+  - Drop regmap property in syscon-reboot, for it's deprecated;
+  - Add missing space.
+
+Link to V1:
+https://lore.kernel.org/all/cover.1693218539.git.zhoubinbin@loongson.cn/
+
+Binbin Zhou (5):
+  soc: loongson: loongson2_pm: Add dependency for INPUT
+  dt-bindings: soc: loongson,ls2k-pmc: Use fallbacks for ls2k-pmc
+    compatible
+  soc: loongson: loongson2_pm: Drop useless of_device_id compatible
+  dt-bindings: soc: loongson,ls2k-pmc: Allow
+    syscon-reboot/syscon-poweroff as child
+  soc: loongson: loongson2_pm: Populate children syscon nodes
+
+ .../soc/loongson/loongson,ls2k-pmc.yaml       | 43 ++++++++++++++++---
+ drivers/soc/loongson/Kconfig                  |  1 +
+ drivers/soc/loongson/loongson2_pm.c           |  7 ++-
+ 3 files changed, 44 insertions(+), 7 deletions(-)
+
 -- 
 2.39.3
 
