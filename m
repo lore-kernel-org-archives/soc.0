@@ -1,151 +1,109 @@
-Return-Path: <SRS0=mLpU=ER=samsung.com=alim.akhtar@kernel.org>
+Return-Path: <SRS0=fh0W=ES=loongson.cn=zhoubinbin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA39CCA0FE4
-	for <soc@archiver.kernel.org>; Fri,  1 Sep 2023 15:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D04CA0FFF
+	for <soc@archiver.kernel.org>; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A7E1FC433C7; Fri,  1 Sep 2023 15:35:10 +0000 (UTC)
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6FDBEC433C8
-	for <soc@kernel.org>; Fri,  1 Sep 2023 15:35:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6FDBEC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230901153503epoutp03dcb7fa12b1018938afffe144cb778593~A0FBwTdxs1142011420epoutp03V
-	for <soc@kernel.org>; Fri,  1 Sep 2023 15:35:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230901153503epoutp03dcb7fa12b1018938afffe144cb778593~A0FBwTdxs1142011420epoutp03V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1693582503;
-	bh=aOlYQ5cBte/JzMksONmfKqcJOHs9+CZOZVn/iaN6WH4=;
-	h=From:To:In-Reply-To:Subject:Date:References:From;
-	b=vSkYCJGS2SMIRWzDwqM06OlpKWy7bycCBSVUoGvRtxbNGYCCAWqbyfvkOlcqkkUXJ
-	 jQQjHOgaimckx3G3sn6CvRoE32nNpPR/GzAhbUaRn43S6Ybk6yGC2dkKMomFv7QdjV
-	 fDEARxgKqEGqaFlQHikjx7TeFj/yMkLmc9l4GxF8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20230901153503epcas5p17aada13e7e175c5d6358b274d0e96509~A0FBdLNAd2796027960epcas5p12;
-	Fri,  1 Sep 2023 15:35:03 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.174]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4RchtG2gYYz4x9Pr; Fri,  1 Sep
-	2023 15:35:02 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	9A.E6.09949.6A402F46; Sat,  2 Sep 2023 00:35:02 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20230901153501epcas5p471785b05f3bdb4acdb27ff402cf3f331~A0E-ap-3V2822928229epcas5p45;
-	Fri,  1 Sep 2023 15:35:01 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20230901153501epsmtrp24014501e2a47447fb5e3085742fe4549~A0E-X_SLI2406224062epsmtrp2S;
-	Fri,  1 Sep 2023 15:35:01 +0000 (GMT)
-X-AuditID: b6c32a49-bd9f8700000026dd-4d-64f204a676dc
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	3B.A2.08788.5A402F46; Sat,  2 Sep 2023 00:35:01 +0900 (KST)
-Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20230901153459epsmtip214e46d6101a491878b35aeda8143695d~A0E_Ds1bQ1862818628epsmtip2U;
-	Fri,  1 Sep 2023 15:34:59 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
+	id 72D76C116A2; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.kernel.org (Postfix) with ESMTP id 366C5C433C7;
+	Sat,  2 Sep 2023 08:47:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 366C5C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.109.102])
+	by gateway (Coremail) with SMTP id _____8CxfOqr9vJkyP4dAA--.34218S3;
+	Sat, 02 Sep 2023 16:47:39 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.109.102])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrM6n9vJkZY1pAA--.58262S3;
+	Sat, 02 Sep 2023 16:47:38 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<arm@kernel.org>, <soc@kernel.org>, "'Arnd Bergmann'" <arnd@arndb.de>,
-	"'Olof Johansson'" <olof@lixom.net>
-In-Reply-To: <20230901115732.45854-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH] arm64: defconfig: enable syscon-poweroff driver
-Date: Fri, 1 Sep 2023 21:04:58 +0530
-Message-ID: <000401d9dce9$ded545f0$9c7fd1d0$@samsung.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	loongson-kernel@lists.loongnix.cn,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
+Date: Sat,  2 Sep 2023 16:47:27 +0800
+Message-Id: <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <cover.1693623752.git.zhoubinbin@loongson.cn>
+References: <cover.1693623752.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJpw2blY2KnWiSxJ1DezFvi/M20/AGXv2sKrtmOvbA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmhu4ylk8pBtemCFsc+7KFzeLvpGPs
-	FvOPnGO12Pt6K7vFpsfXWC0u75rDZjHj/D4mi1PXP7NZPL7+h82B0+P3r0mMHptWdbJ53Lm2
-	h81j85J6jysnmlg9Pm+SC2CLyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LI
-	S8xNtVVy8QnQdcvMATpKSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgUqBXnJhb
-	XJqXrpeXWmJlaGBgZApUmJCdMedXF1vBE66KR4v2MzUwruXsYuTkkBAwkWhvvMDWxcjFISSw
-	m1Gid/YVFgjnE6PEk7f7mSGcb4wSM669YoVpefBpBxOILSSwl1Hi/fREiKKXjBKfbrYygyTY
-	BHQldixuA5srIrCbSeLzxw3sIAlOAReJXduXgBUJA9lfJ3wFm8oioCKxuOkYC4jNK2ApcXHR
-	SSYIW1Di5MwnYHFmAXmJ7W/nMENcoSDx8+kysF4RASuJ3bduMkLUiEu8PHqEHaJmIYfEw99c
-	ELaLxO6Du6B6hSVeHd8CVSMl8fndXqBDOYBsD4lFf6QgwhkSb5evZ4Sw7SUOXJnDAlLCLKAp
-	sX6XPsQmPone30+YIDp5JTrahCCqVSWa311lgbClJSZ2d0ODzUNiU/M0aEhPZ5RY1H+CZQKj
-	wiwkT85C8uQsJM/MQti8gJFlFaNkakFxbnpqsWmBYV5qOTy+k/NzNzGCk6yW5w7Guw8+6B1i
-	ZOJgPMQowcGsJMIba/YuRYg3JbGyKrUoP76oNCe1+BCjKTDkJzJLiSbnA9N8Xkm8oYmlgYmZ
-	mZmJpbGZoZI47+vWuSlCAumJJanZqakFqUUwfUwcnFINTJV3lq6emy1z2l5jwZFOHddtIpPZ
-	zc4uX3hi5srpoTd/spyNScrneR4WI/NY+srmLZPCDqpHr98uNzE69uDJL+afYhf++ZA0M9lr
-	afcqv8Yinu/t7zZ93lgWYdFdoOSiMKNerOWo/0P1OinhdXVrb7AvFBBs3e8S7XXZ99+Hy/kr
-	li+5Ytbgvz5/zjq+rixdr+7T6QrxzNmBO25+tecWbJX+5lny9Mnvwl/fd9sLRMWobd/scGft
-	JP4b35WcY7ynyfPURrmv4mowY879tv60/3LV69dY14rvvnrfTGqFmY7zmgezeNb2yy2bbjBP
-	aOe2s5836jiWqtelps0zeXiV0zVo9rMHW6xSn1s0VhZZ2SuxFGckGmoxFxUnAgBGyLLsOwQA
-	AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42LZdlhJXncpy6cUg+vP2C2OfdnCZvF30jF2
-	i/lHzrFa7H29ld1i0+NrrBaXd81hs5hxfh+Txanrn9ksHl//w+bA6fH71yRGj02rOtk87lzb
-	w+axeUm9x5UTTawenzfJBbBFcdmkpOZklqUW6dslcGXM+dXFVvCEq+LRov1MDYxrObsYOTkk
-	BEwkHnzawQRiCwnsZpRY89gNIi4tcX3jBHYIW1hi5b/nQDYXUM1zRolZf26ygCTYBHQldixu
-	YwNJiAgcZpLobbjOClE1lVFi/dftrCBVnAIuEru2L2EGsYWB7K8TvoLFWQRUJBY3HQObxCtg
-	KXFx0UkmCFtQ4uTMJ0BxDg5mAT2Jto2MIGFmAXmJ7W/nMENcpCDx8+kysDEiAlYSu2/dhKoR
-	l3h59Aj7BEahWUgmzUKYNAvJpFlIOhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/d
-	xAiOKC2tHYx7Vn3QO8TIxMF4iFGCg1lJhDfW7F2KEG9KYmVValF+fFFpTmrxIUZpDhYlcd5v
-	r3tThATSE0tSs1NTC1KLYLJMHJxSDUzq3wPXLzzzc6LDi6ka34uZmK59WezeHtTy++60U6ev
-	F3/SXn9ad/WUbdkbXyztEXu0db8Rv/0EFSEpzT9f+UMXFc/mb33U1bfmX9mJ+ZJNaXESn2Sd
-	shJN4y5ocDEruK9RlrGUfms0/4bXl2lf22t+beh92vw80CpsxZw/MqmN5t8iah+Zb78aOTeU
-	5YCO55577bfUD2QHVS3Mmxr57ET0XY+NC7pWnGq4JFmm8CvIg9t5tulN1uOl1uc2vGScxv3T
-	io0lcsHe7l85152nNCXmcxzmDHt0kV8knOWqS+POe3Ii2lnZW3Z+smR7Zy/c+zSoKibkRa1C
-	jszl7TKvE5a/z7qQqbC2gl/6yRVd3pdKLMUZiYZazEXFiQBKg3yKFwMAAA==
-X-CMS-MailID: 20230901153501epcas5p471785b05f3bdb4acdb27ff402cf3f331
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230901115741epcas5p185b55c93ec71163e618a5a70b141800c
-References: <CGME20230901115741epcas5p185b55c93ec71163e618a5a70b141800c@epcas5p1.samsung.com>
-	<20230901115732.45854-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxrM6n9vJkZY1pAA--.58262S3
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxJF4fJw1kXFWUKw17ZrWUtrc_yoW5Gw13pa
+	savr97KrWUXrW5Zrn8J34UuFy5ZF97X3sIga9rG345WF9rAa4ku3ZrJFyfZFsrZryvvFW0
+	vry8GrW5uasrGrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
+	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcCD7UUUUU
 
-Hello Krzysztof,
+Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
+support"), the Loongson-2K PM driver was added, but it didn't update the
+Kconfig entry for the INPUT dependency, leading to build errors:
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Sent: Friday, September 1, 2023 5:28 PM
-> To: Alim Akhtar <alim.akhtar@samsung.com>; devicetree@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org;
-> linux-kernel@vger.kernel.org; arm@kernel.org; soc@kernel.org; Arnd
-> Bergmann <arnd@arndb.de>; Olof Johansson <olof@lixom.net>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Subject: [PATCH] arm64: defconfig: enable syscon-poweroff driver
-> 
-> Enable the generic syscon-poweroff driver used on all Exynos ARM64 SoCs
-> (e.g. Exynos5433) and few APM SoCs.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
 
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 5315789f4868..ec59174b14db 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -636,6 +636,7 @@ CONFIG_POWER_RESET_MSM=y
-> CONFIG_POWER_RESET_QCOM_PON=m  CONFIG_POWER_RESET_XGENE=y
-> CONFIG_POWER_RESET_SYSCON=y
-> +CONFIG_POWER_RESET_SYSCON_POWEROFF=y
->  CONFIG_SYSCON_REBOOT_MODE=y
->  CONFIG_NVMEM_REBOOT_MODE=m
->  CONFIG_BATTERY_SBS=m
-> --
-> 2.34.1
+Also, since this driver can only be built-in, it fails to link when the
+INPUT is in a loadable module, so we should update the Kconfig entry to
+depend on INPUT=y.
 
+Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+---
+ drivers/soc/loongson/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+index 314e13bb3e01..368344943a93 100644
+--- a/drivers/soc/loongson/Kconfig
++++ b/drivers/soc/loongson/Kconfig
+@@ -20,6 +20,7 @@ config LOONGSON2_GUTS
+ config LOONGSON2_PM
+ 	bool "Loongson-2 SoC Power Management Controller Driver"
+ 	depends on LOONGARCH && OF
++	depends on INPUT=y
+ 	help
+ 	  The Loongson-2's power management controller was ACPI, supports ACPI
+ 	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+-- 
+2.39.3
 
