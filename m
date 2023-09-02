@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D04CA0FFF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDDCCA1002
 	for <soc@archiver.kernel.org>; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 72D76C116A2; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
+	id A827FC433C9; Sat,  2 Sep 2023 08:47:46 +0000 (UTC)
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.kernel.org (Postfix) with ESMTP id 366C5C433C7;
-	Sat,  2 Sep 2023 08:47:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 366C5C433C7
+	by smtp.kernel.org (Postfix) with ESMTP id 2E2D7C433CC;
+	Sat,  2 Sep 2023 08:47:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E2D7C433CC
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [112.20.109.102])
-	by gateway (Coremail) with SMTP id _____8CxfOqr9vJkyP4dAA--.34218S3;
-	Sat, 02 Sep 2023 16:47:39 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8DxPOut9vJk2_4dAA--.55941S3;
+	Sat, 02 Sep 2023 16:47:41 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.109.102])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrM6n9vJkZY1pAA--.58262S3;
-	Sat, 02 Sep 2023 16:47:38 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxrM6n9vJkZY1pAA--.58262S5;
+	Sat, 02 Sep 2023 16:47:41 +0800 (CST)
 From: Binbin Zhou <zhoubinbin@loongson.cn>
 To: Binbin Zhou <zhoubb.aaron@gmail.com>,
 	Huacai Chen <chenhuacai@loongson.cn>,
@@ -36,74 +36,55 @@ Cc: Huacai Chen <chenhuacai@kernel.org>,
 	linux-pm@vger.kernel.org,
 	Xuerui Wang <kernel@xen0n.name>,
 	loongarch@lists.linux.dev,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
-Date: Sat,  2 Sep 2023 16:47:27 +0800
-Message-Id: <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH v3 3/5] soc: loongson: loongson2_pm: Drop useless of_device_id compatible
+Date: Sat,  2 Sep 2023 16:47:29 +0800
+Message-Id: <59b2df91e60af0822813d4e8f3fea0f7d169dcab.1693623752.git.zhoubinbin@loongson.cn>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <cover.1693623752.git.zhoubinbin@loongson.cn>
 References: <cover.1693623752.git.zhoubinbin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxrM6n9vJkZY1pAA--.58262S3
+X-CM-TRANSID:AQAAf8BxrM6n9vJkZY1pAA--.58262S5
 X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxJF4fJw1kXFWUKw17ZrWUtrc_yoW5Gw13pa
-	savr97KrWUXrW5Zrn8J34UuFy5ZF97X3sIga9rG345WF9rAa4ku3ZrJFyfZFsrZryvvFW0
-	vry8GrW5uasrGrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcCD7UUUUU
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Xry5XF1kZrW7JFyDKw1fKrX_yoWfGrb_Za
+	42qr48ur1rAF13J345Zw43Zr9F9FyYv3WFkF1vqw1rXw42vr13JrWj9r13GFy3XrW5Xasx
+	Xw48Wr10yw1rJosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
 
-Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
-support"), the Loongson-2K PM driver was added, but it didn't update the
-Kconfig entry for the INPUT dependency, leading to build errors:
-
-/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
-/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
-/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
-/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
-/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
-/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
-/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
-
-Also, since this driver can only be built-in, it fails to link when the
-INPUT is in a loadable module, so we should update the Kconfig entry to
-depend on INPUT=y.
+Now, "loongson,ls2k0500-pmc" is used as fallback compatible, so the
+ls2k1000 compatible in the driver can be dropped directly.
 
 Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
 ---
- drivers/soc/loongson/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/soc/loongson/loongson2_pm.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
-index 314e13bb3e01..368344943a93 100644
---- a/drivers/soc/loongson/Kconfig
-+++ b/drivers/soc/loongson/Kconfig
-@@ -20,6 +20,7 @@ config LOONGSON2_GUTS
- config LOONGSON2_PM
- 	bool "Loongson-2 SoC Power Management Controller Driver"
- 	depends on LOONGARCH && OF
-+	depends on INPUT=y
- 	help
- 	  The Loongson-2's power management controller was ACPI, supports ACPI
- 	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
+index 796add6e8b63..5ffb77afd9eb 100644
+--- a/drivers/soc/loongson/loongson2_pm.c
++++ b/drivers/soc/loongson/loongson2_pm.c
+@@ -197,7 +197,6 @@ static int loongson2_pm_probe(struct platform_device *pdev)
+ 
+ static const struct of_device_id loongson2_pm_match[] = {
+ 	{ .compatible = "loongson,ls2k0500-pmc", },
+-	{ .compatible = "loongson,ls2k1000-pmc", },
+ 	{},
+ };
+ 
 -- 
 2.39.3
 
