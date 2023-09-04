@@ -1,109 +1,71 @@
-Return-Path: <SRS0=ndLW=ES=infradead.org=rdunlap@kernel.org>
+Return-Path: <MAILER-DAEMON>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D47C3C83F2C
-	for <soc@archiver.kernel.org>; Sat,  2 Sep 2023 15:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB3CDC83F2C
+	for <soc@archiver.kernel.org>; Mon,  4 Sep 2023 16:04:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 983EFC433C8; Sat,  2 Sep 2023 15:43:57 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id C543DC433CA; Mon,  4 Sep 2023 16:04:25 +0000 (UTC)
+Received: from mail-skype.top (mail-skype.top [185.81.128.214])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 30667C433C7;
-	Sat,  2 Sep 2023 15:43:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30667C433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=OI7BJO+ZJALq3UZuaDfs583qm49QoWB+dj6di5RNwhA=; b=pSoXvhBWh3kByyoYDq+FsjDoxa
-	Oj4rVzzPvRuSqDbQnFNAd8ndXdFAAkdDjTlK1RN0R+n5yl9devylYzqRTW6ucQe6y6ViqdbE//fTb
-	XncJKZbxLDpXos9/i4g2r7J/H3PLDlahphziBGaX9sJDkNunop1GbRcft0mlQ0QJlB+JoQYGGyaeV
-	dSCQG6EBjXB1GKNC8/qkbWxtaxAKCH4fVz+CKDMLDEpgDi58V3UWWCEEMLsSQxP1zfD5s2rXyJ3Dq
-	looCVp1sqngcHTIuiUGanqeNBGXSNc0k8zrjnlXJRJkvraU5rylVt45mbQSvQ1Dfodva3A7dkwWF5
-	VW6CzKNg==;
-Received: from [2601:1c2:980:9ec0::2764]
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1qcSmq-001ZBJ-1a;
-	Sat, 02 Sep 2023 15:43:48 +0000
-Message-ID: <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
-Date: Sat, 2 Sep 2023 08:43:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for
- INPUT
-Content-Language: en-US
-To: Binbin Zhou <zhoubinbin@loongson.cn>, Binbin Zhou
- <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>,
- Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id C36CCC433C7
+	for <soc@kernel.org>; Mon,  4 Sep 2023 16:04:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C36CCC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail-skype.top
+Authentication-Results: smtp.kernel.org; spf=pass smtp.helo=mail-skype.top
+Date: Mon, 4 Sep 2023 19:04:25 +0300
+From: postmaster@mail-skype.top
+Subject: Delivery report
 List-Id: <soc.lore.kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, loongson-kernel@lists.loongnix.cn,
- soc@kernel.org, devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
-References: <cover.1693623752.git.zhoubinbin@loongson.cn>
- <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: soc@kernel.org
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+    boundary="report64F60009@mail-skype.top"
+Message-Id: <20230904160424.C36CCC433C7@smtp.kernel.org>
 
 
+--report64F60009@mail-skype.top
+Content-Type: text/plain
 
-On 9/2/23 01:47, Binbin Zhou wrote:
-> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
-> support"), the Loongson-2K PM driver was added, but it didn't update the
-> Kconfig entry for the INPUT dependency, leading to build errors:
-> 
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-> drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
-> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld:
-> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
-> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
-> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
-> 
-> Also, since this driver can only be built-in, it fails to link when the
-> INPUT is in a loadable module, so we should update the Kconfig entry to
-> depend on INPUT=y.
-> 
-> Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Hello, this is the mail server on mail-skype.top.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+I am sending you this message to inform you on the delivery status of a
+message you previously sent.  Immediately below you will find a list of
+the affected recipients;  also attached is a Delivery Status Notification
+(DSN) report in standard format, as well as the headers of the original
+message.
 
-Thanks.
+  <soc@kernel.org>  delivery failed; will not continue trying
 
-> ---
->  drivers/soc/loongson/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
-> index 314e13bb3e01..368344943a93 100644
-> --- a/drivers/soc/loongson/Kconfig
-> +++ b/drivers/soc/loongson/Kconfig
-> @@ -20,6 +20,7 @@ config LOONGSON2_GUTS
->  config LOONGSON2_PM
->  	bool "Loongson-2 SoC Power Management Controller Driver"
->  	depends on LOONGARCH && OF
-> +	depends on INPUT=y
->  	help
->  	  The Loongson-2's power management controller was ACPI, supports ACPI
->  	  S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+--report64F60009@mail-skype.top
+Content-Type: message/delivery-status
 
--- 
-~Randy
+Reporting-MTA: dns;mail-skype.top
+X-PowerMTA-VirtualMTA: web1
+Received-From-MTA: dns;kernel.org (193.42.32.239)
+Arrival-Date: Mon, 4 Sep 2023 14:57:42 +0300
+
+Final-Recipient: rfc822;soc@kernel.org
+Action: failed
+Status: 5.7.1 (delivery not authorized)
+Remote-MTA: dns;smtp2.kernel.org (35.85.114.177)
+Diagnostic-Code: smtp;550 5.7.1 Blocked by SpamAssassin
+X-PowerMTA-BounceCategory: spam-related
+
+--report64F60009@mail-skype.top
+Content-Type: text/rfc822-headers
+
+From: kernel.org <soc@kernel.org>
+To: soc@kernel.org
+Subject: Five (5) Unread Important Messages to 
+Date: 04 Sep 2023 13:56:39 +0200
+Message-ID: <20230904135638.33E40B732FDFC5D7@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+--report64F60009@mail-skype.top--
