@@ -1,65 +1,95 @@
-Return-Path: <SRS0=wGUo=E6=collabora.com=angelogioacchino.delregno@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7651FEDE99E
-	for <soc@archiver.kernel.org>; Thu, 14 Sep 2023 10:11:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB5ABCD37BB
+	for <soc@archiver.kernel.org>; Sat, 16 Sep 2023 11:40:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E6DAC433CD; Thu, 14 Sep 2023 10:11:24 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 208B6C433C7;
-	Thu, 14 Sep 2023 10:11:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 208B6C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id DCF5A66072FF;
-	Thu, 14 Sep 2023 11:11:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1694686281;
-	bh=pW2fXhgYd087DAThEUGlhnW+L8Z4AHCYWNF2WJy/EZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ehERT+FWUklXi+FT5EU8D6a6jQO1npQRKvZDNsX6gcJ/nXM5nD/+SOy0+kHzyF/P1
-	 mx2zrYmsVi/tBxoeUF8JcFpobPeNT9/ZE8SLdQNIwKCUnjm/RT95E3aHChghGMeeS+
-	 lBQf519TMsRvXvYpiYSO5bM6SzhXDhJF+gWgcYBw/q+voNW8r6+lxoQcQa+H8PiLcK
-	 lamJoO8SVkKvJVmaziELiW61vps5Xrco0+/rwh1c4Qd1TDS6FytJHO+twrW9FNJ/E4
-	 efBr/h6j9/Q3OTE91fkmd0KPtHJP1yFLw7BBrfxb+T4e1h72Cy5oreVoMyKbc9W5Fh
-	 2JMyXr21QbHCQ==
-Message-ID: <33789243-6774-bc80-6967-dfd2bc2ec9d6@collabora.com>
-Date: Thu, 14 Sep 2023 12:11:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] arm64: dts: mediatek: Fix "mediatek,merge-mute" and
- "mediatek,merge-fifo-en" types
-Content-Language: en-US
+	id AC5B8C433CA; Sat, 16 Sep 2023 11:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4849CC433C8;
+	Sat, 16 Sep 2023 11:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694864414;
+	bh=cHMPcuPh8+Za+hDzq8C00lnzde6XX7qIJ9RyXmaUUh8=;
+	h=Date:From:List-Id:To:List-Id:Cc:Subject:From;
+	b=jcRZmLLGwZ6Lf5bKBSxzxKccFZCNOyhveRcIOPWof8VTHN0rbmm+DLMJxzXO/0r8k
+	 U2rb6XtCaCmMgimVjrkf+1D7Y5l9MpWI6NT0Luc+PwywyaLEbH4agj2duIhpic0ir/
+	 Nr8qeFzHGJ0eKyyuB+ICdGISg6A0ncT+murGHEzCnKR2p2svjA3zGoJOwBiVfnacfw
+	 sce9QNeXoTKcORHwgTZAodC6w78rNgrG/X3G9RNrYBWwykgFcf3mj6f4NmGHyvai5u
+	 vjl1LzfkdSIhp9dKKIQlmNsOXt0tNSjkMWXXGc2Zi7jO8z+SxGl421hJG6rnr2mYcZ
+	 ZkMLMsA+iVCvA==
+Date: Sat, 16 Sep 2023 12:40:10 +0100
+From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh@kernel.org>, soc@kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20230830195650.704737-1-robh@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230830195650.704737-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Il 30/08/23 21:56, Rob Herring ha scritto:
-> "mediatek,merge-mute" and "mediatek,merge-fifo-en" properties are defined
-> and used as boolean properties which in DT have no value.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: conor@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+	linux-riscv@lists.infradead.org, soc@kernel.org
+Subject: [GIT PULL] RISC-V Devicetree fixes for v6.6-rc3
+Message-ID: <20230916-previous-oversold-9d30891ac6cf@spud>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="dDqUBxu6tEVz3/8G"
+Content-Disposition: inline
 
 
+--dDqUBxu6tEVz3/8G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hey Arnd,
+
+Please pull some fixes for the Starfive devicetrees, been sitting around
+since before the mw (but after my last PR), so figured I'd get them out
+sooner rather than later.
+
+Thanks!
+
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt-fixes-for-v6.6-rc3
+
+for you to fetch changes up to 1558209533f140624a00408bdab796ab3f309450:
+
+  riscv: dts: starfive: visionfive 2: Fix uart0 pins sort order (2023-09-13 14:24:56 +0100)
+
+----------------------------------------------------------------
+RISC-V Devicetree fixes for v6.6-rc3
+
+Starfive:
+A fix for the size of the NOR flash that was causing complaints from the
+MTD subsystem during boot & two issues that a certain someone introduced
+while resolving merge conflicts. Of the latter, one is a cosmetic
+ordering change & the other lead to the usb controller being disabled.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+Aurelien Jarno (1):
+      riscv: dts: starfive: fix NOR flash reserved-data partition size
+
+Hal Feng (2):
+      riscv: dts: starfive: visionfive 2: Enable usb0
+      riscv: dts: starfive: visionfive 2: Fix uart0 pins sort order
+
+ .../dts/starfive/jh7110-starfive-visionfive-2.dtsi | 51 +++++++++++-----------
+ 1 file changed, 26 insertions(+), 25 deletions(-)
+
+--dDqUBxu6tEVz3/8G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQWUGgAKCRB4tDGHoIJi
+0kqfAP4kEKCUZ1FF4QNq9Uh2Zbg+JEc4kthnW91iNSWANbWO0gEAjtcWhnLmEgvM
+sBhAN/4oH2p76ENwsod6nkM2u4q9hgk=
+=6Dnk
+-----END PGP SIGNATURE-----
+
+--dDqUBxu6tEVz3/8G--
