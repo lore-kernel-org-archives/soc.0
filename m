@@ -1,71 +1,108 @@
-Return-Path: <MAILER-DAEMON>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3D53C46CA1
-	for <soc@archiver.kernel.org>; Mon, 18 Sep 2023 16:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 815C1CD54B0
+	for <soc@archiver.kernel.org>; Tue, 19 Sep 2023 10:38:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 990DEC433C9; Mon, 18 Sep 2023 16:14:37 +0000 (UTC)
-Received: from mail-mark.top (mail-mark.top [106.75.93.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 12762C433CD
-	for <soc@kernel.org>; Mon, 18 Sep 2023 16:14:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12762C433CD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail-mark.top
-Authentication-Results: smtp.kernel.org; spf=pass smtp.helo=mail-mark.top
-Date: Tue, 19 Sep 2023 00:14:36 +0800
-From: postmaster@mail-mark.top
-Subject: Delivery report
+	id 440EFC433D9; Tue, 19 Sep 2023 10:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F41C433C7;
+	Tue, 19 Sep 2023 10:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695119902;
+	bh=Gkr5rArFwD9ZFW+s7UGeG65VF4lv2F9rQQnXUqefg8c=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=a93wZNf1Vd+g13F94BO6VOjIc4ainr7T6GMB2vc6fw1NulFOPwfZjuajtYX7TdN9t
+	 MMal76u7TxIU85c3RMJOZ3M9rIGbIvQZslTZ/FFBUuF/ROIBxnj1kyFrsBy9IytYm+
+	 xaw1diBqghL+yN5OYtXCwmBO9MdVKvobuT5EKRbbXY9r17ylZ6g1gRhAcdMglpZj/S
+	 0/HXMAbqebOT0f0wZPfMtvYpdsp5RHszJbhw8SMjiDAjf9yib9XymYmowVwF7XMnmf
+	 vMY8ajrf66Cpd5VlSyoLnOobwfd/4YtFahfuMBnGEdj0XtXtn56imkylYilczbL3R2
+	 LxmAzsxLDgAeg==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	devicetree@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH v2 0/7] Turris Omnia MCU driver
+Date: Tue, 19 Sep 2023 12:38:08 +0200
+Message-ID: <20230919103815.16818-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/report; report-type=delivery-status;
-    boundary="report6508776C@mail-mark.top"
-Message-Id: <20230918161436.12762C433CD@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hello Arnd, Gregorgy and others,
 
---report6508776C@mail-mark.top
-Content-Type: text/plain
+this is v2 of series adding support for Turris Omnia MCU. See the cover
+letter from v1:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
 
-Hello, this is the mail server on mail-mark.top.
+I am also sending this to specific subsystem maintainers as requested by
+Krzysztof.
 
-I am sending you this message to inform you on the delivery status of a
-message you previously sent.  Immediately below you will find a list of
-the affected recipients;  also attached is a Delivery Status Notification
-(DSN) report in standard format, as well as the headers of the original
-message.
+Changes since v1:
+- incorporated small changes requested by Krzysztof Kozlowski
+- in order to make reviewing simpler, I split the second patch, which
+  implements the MCU driver, into four incremental patches:
+  - patch 2/7 adds basic driver skeleton
+  - patch 3/7 adds GPIO support
+  - patch 4/7 adds board poweroff and wakeup support
+  - patch 5/7 adds MCU watchdog support
 
-  <soc@kernel.org>  delivery failed; will not continue trying
+Marek
 
---report6508776C@mail-mark.top
-Content-Type: message/delivery-status
+Marek Behún (7):
+  dt-bindings: arm: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
 
-Reporting-MTA: dns;mail-mark.top
-X-PowerMTA-VirtualMTA: web1
-Received-From-MTA: dns;kernel.org (193.42.32.239)
-Arrival-Date: Tue, 19 Sep 2023 00:04:02 +0800
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  77 ++
+ .../bindings/arm/cznic,turris-omnia-mcu.yaml  |  67 ++
+ MAINTAINERS                                   |   4 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |  35 +-
+ drivers/platform/Kconfig                      |   2 +
+ drivers/platform/Makefile                     |   1 +
+ drivers/platform/cznic/Kconfig                |  47 +
+ drivers/platform/cznic/Makefile               |   7 +
+ .../platform/cznic/turris-omnia-mcu-base.c    | 273 +++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 971 ++++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   | 245 +++++
+ .../cznic/turris-omnia-mcu-watchdog.c         | 126 +++
+ drivers/platform/cznic/turris-omnia-mcu.h     | 164 +++
+ include/linux/turris-omnia-mcu-interface.h    | 194 ++++
+ 14 files changed, 2212 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
-Final-Recipient: rfc822;soc@kernel.org
-Action: failed
-Status: 5.7.1 (delivery not authorized)
-Remote-MTA: dns;smtp2.kernel.org (35.85.114.177)
-Diagnostic-Code: smtp;550 5.7.1 Blocked by SpamAssassin
-X-PowerMTA-BounceCategory: spam-related
+-- 
+2.41.0
 
---report6508776C@mail-mark.top
-Content-Type: text/rfc822-headers
-
-From: kernel.org <soc@kernel.org>
-To: soc@kernel.org
-Subject: Validate Your Password soc
-Date: 18 Sep 2023 18:02:55 +0200
-Message-ID: <20230918180255.C3C3D3BD6DA4F9B1@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
---report6508776C@mail-mark.top--
