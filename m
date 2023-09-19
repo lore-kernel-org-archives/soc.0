@@ -1,195 +1,541 @@
-Return-Path: <SRS0=YgfF=FD=gmail.com=twoerner@kernel.org>
+Return-Path: <andy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A440CD5BAD
-	for <soc@archiver.kernel.org>; Tue, 19 Sep 2023 12:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC65CD5BB3
+	for <soc@archiver.kernel.org>; Tue, 19 Sep 2023 13:00:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6162CC433C8; Tue, 19 Sep 2023 12:51:19 +0000 (UTC)
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 14B26C433CA; Tue, 19 Sep 2023 13:00:50 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7AAC4C433C9
-	for <soc@kernel.org>; Tue, 19 Sep 2023 12:51:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7AAC4C433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-76ef6d98d7eso343556785a.0
-        for <soc@kernel.org>; Tue, 19 Sep 2023 05:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695127877; x=1695732677; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aUSFGHFYd5WcIYIhM1XDG+I8py/W3+tKiKFLrkCLv8U=;
-        b=MaXA5BbOMOv/N7HXuAIgvR0YLqqkky1m6EbF7nZiskSkPg7fW8gASoNe0HY7W4WBTh
-         1UM9VMAGsoSAokB0tN9FseZ5ax0citFLGqsmop5+p6rhANs6QFAW7I6tf5puWSA1B4FD
-         2zzhg471gxHZ+MlR7+33GFz/hcVgEADZB8Ni3giYXq7Z+CFow1EeeSx6J+wI6M+4q9uh
-         QlGacV7JkAq6LFV+78KUd/305PZOc6al3cSrrygj4rIKqGSGgl+8gfIjcIFSMWpUezbw
-         O/sOyhMvGKllsM8qjKIIzPgDj5NsMXyubyGzVGtW6Ln1x2z937/ytkF/nMO6vt2fAROs
-         N8Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695127877; x=1695732677;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aUSFGHFYd5WcIYIhM1XDG+I8py/W3+tKiKFLrkCLv8U=;
-        b=eI1b0T5G0v5TOBwj9Kk769ViKqjtK14e5U9eBcA+pDJtxZL6UcM/v03W/VIevHofN8
-         Su4SZ9oK1hsX5iw3jkVqko4uDK9QF+F9/g2NsznIt0Is/e/b+Wc+77ArTIvsM5hxHMCO
-         Av1eow4s4axsXyKAg7Ckj74hadEdphIJdreM0kB++mF8XvF4gcKA4F28sOYhG9eU9kPe
-         UyCyh4VlX+BQYlIvZOwh0x4coZ9cKFQhrmyir7k3YE3566O7KRTSuLnCuazouin+7GYV
-         gUYngCIhqhiCUffuKKMnrM9sf3lhqB19ElopEK0vcepMpHtMAs4qzYcMEu30gZ4Z0Q3F
-         w8JQ==
-X-Gm-Message-State: AOJu0YzXdb4tvOcw84duMlP/B9LVE00LISDf3cQ7/EL7AhfDjDeK0hUw
-	ZBrI+gO1grB5FMT4G1b7oos=
-X-Google-Smtp-Source: AGHT+IGDc+JnxgDWxiIhBYGrddjqysKVcRLkpOZcaIESpnxdkgGjemG9SnH5wVjMz8KjrhwM7ESjzQ==
-X-Received: by 2002:a05:620a:4544:b0:768:1db5:d9d1 with SMTP id u4-20020a05620a454400b007681db5d9d1mr12315999qkp.5.1695127877328;
-        Tue, 19 Sep 2023 05:51:17 -0700 (PDT)
-Received: from localhost.localdomain (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id y7-20020a37e307000000b007676f3859fasm3936508qki.30.2023.09.19.05.51.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Sep 2023 05:51:16 -0700 (PDT)
-From: Trevor Woerner <twoerner@gmail.com>
-To: linux-kernel@vger.kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	Tony Lindgren <tony@atomide.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F652C433C8;
+	Tue, 19 Sep 2023 13:00:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F652C433C8
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="359325053"
+X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
+   d="scan'208";a="359325053"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 06:00:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="749471043"
+X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
+   d="scan'208";a="749471043"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 06:00:43 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+	(envelope-from <andy@kernel.org>)
+	id 1qiaLI-00000001Nr1-03SD;
+	Tue, 19 Sep 2023 16:00:40 +0300
+Date: Tue, 19 Sep 2023 16:00:39 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org
-Subject: [PATCH v4 1/1] ARM: defconfig: cleanup orphaned CONFIGs
-Date: Tue, 19 Sep 2023 08:51:11 -0400
-Message-ID: <20230919125112.15515-2-twoerner@gmail.com>
-X-Mailer: git-send-email 2.41.0.327.gaa9166bcc0ba
-In-Reply-To: <20230919125112.15515-1-twoerner@gmail.com>
-References: <20230919125112.15515-1-twoerner@gmail.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <ZQmbd211FzPjA97r@smile.fi.intel.com>
+References: <20230919103815.16818-1-kabel@kernel.org>
+ <20230919103815.16818-4-kabel@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230919103815.16818-4-kabel@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Drop CONFIG_NF_LOG_NETDEV as it was removed in commit 1510618e45cb
-("netfilter: nf_log_netdev: merge with nf_log_syslog").
+On Tue, Sep 19, 2023 at 12:38:11PM +0200, Marek Behún wrote:
+> Add support for GPIOs connected to the MCU on the Turris Omnia board.
+> 
+> This include:
 
-Drop CONFIG_NFT_COUNTER as it was removed in commit 023223dfbfb3
-("netfilter: nf_tables: make counter support built-in").
+includes
 
-Drop CONFIG_NF_FLOW_TABLE_IPV6 and CONFIG_NF_FLOW_TABLE_IPV4 as they were
-removed in commit c42ba4290b21 ("netfilter: flowtable: remove ipv4/ipv6
-modules").
+> - front button pin
+> - enable pins for USB regulators
+> - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
+> - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
+> - on board revisions 32+ also various peripheral resets and another
+>   voltage regulator enable pin
 
-Drop CONFIG_NF_LOG_BRIDGE as it was removed in commit 77ccee96a674
-("netfilter: nf_log_bridge: merge with nf_log_syslog").
+Can the main driver provide a regmap and all other use it?
 
-Drop CONFIG_IP_NF_TARGET_CLUSTERIP from any remaining arm defconfigs as it
-was removed in commit 9db5d918e2c0 ("netfilter: ip_tables: remove clusterip
-target").
+...
 
-Drop CONFIG_USB_MUSB_AM35X as it was removed in commit 57f8e00d8a82 ("usb:
-musb: Drop old unused am35x glue layer").
+> +Date:		August 2023
+> +KernelVersion:	6.6
 
-Drop CONFIG_NFT_OBJREF as it was removed in commit d037abc2414b
-("netfilter: nft_objref: make it builtin").
+Same as per previous patch review.
 
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
----
- arch/arm/configs/keystone_defconfig  | 1 -
- arch/arm/configs/multi_v7_defconfig  | 1 -
- arch/arm/configs/omap2plus_defconfig | 8 --------
- 3 files changed, 10 deletions(-)
+...
 
-diff --git a/arch/arm/configs/keystone_defconfig b/arch/arm/configs/keystone_defconfig
-index d95686d19401..59c4835ffc97 100644
---- a/arch/arm/configs/keystone_defconfig
-+++ b/arch/arm/configs/keystone_defconfig
-@@ -98,7 +98,6 @@ CONFIG_IP_NF_MATCH_TTL=y
- CONFIG_IP_NF_FILTER=y
- CONFIG_IP_NF_TARGET_REJECT=y
- CONFIG_IP_NF_MANGLE=y
--CONFIG_IP_NF_TARGET_CLUSTERIP=y
- CONFIG_IP_NF_TARGET_ECN=y
- CONFIG_IP_NF_TARGET_TTL=y
- CONFIG_IP_NF_RAW=y
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 23fc49f23d25..9d280a6d9bfe 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -857,7 +857,6 @@ CONFIG_USB_MUSB_HDRC=m
- CONFIG_USB_MUSB_SUNXI=m
- CONFIG_USB_MUSB_TUSB6010=m
- CONFIG_USB_MUSB_OMAP2PLUS=m
--CONFIG_USB_MUSB_AM35X=m
- CONFIG_USB_MUSB_DSPS=m
- CONFIG_USB_MUSB_UX500=m
- CONFIG_USB_UX500_DMA=y
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index b685018dcf54..b2f0862f4bd9 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -78,7 +78,6 @@ CONFIG_IP_PNP_BOOTP=y
- CONFIG_IP_PNP_RARP=y
- CONFIG_NETFILTER=y
- CONFIG_NF_CONNTRACK=m
--CONFIG_NF_LOG_NETDEV=m
- CONFIG_NF_CONNTRACK_ZONES=y
- CONFIG_NF_CONNTRACK_EVENTS=y
- CONFIG_NF_CONNTRACK_TIMEOUT=y
-@@ -92,7 +91,6 @@ CONFIG_NF_TABLES_INET=y
- CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -100,7 +98,6 @@ CONFIG_NFT_MASQ=m
- CONFIG_NFT_REDIR=m
- CONFIG_NFT_NAT=m
- CONFIG_NFT_TUNNEL=m
--CONFIG_NFT_OBJREF=m
- CONFIG_NFT_QUEUE=m
- CONFIG_NFT_QUOTA=m
- CONFIG_NFT_REJECT=m
-@@ -179,7 +176,6 @@ CONFIG_NETFILTER_XT_MATCH_TIME=m
- CONFIG_NETFILTER_XT_MATCH_U32=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
- CONFIG_IP_NF_MATCH_AH=m
- CONFIG_IP_NF_MATCH_ECN=m
-@@ -193,14 +189,12 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
- CONFIG_IP_NF_SECURITY=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -225,7 +219,6 @@ CONFIG_IP6_NF_TARGET_NPT=m
- CONFIG_NF_TABLES_BRIDGE=m
- CONFIG_NFT_BRIDGE_META=m
- CONFIG_NFT_BRIDGE_REJECT=m
--CONFIG_NF_LOG_BRIDGE=m
- CONFIG_BRIDGE=m
- CONFIG_BRIDGE_VLAN_FILTERING=y
- CONFIG_VLAN_8021Q=m
-@@ -560,7 +553,6 @@ CONFIG_USB_STORAGE=m
- CONFIG_USB_MUSB_HDRC=m
- CONFIG_USB_MUSB_TUSB6010=m
- CONFIG_USB_MUSB_OMAP2PLUS=m
--CONFIG_USB_MUSB_AM35X=m
- CONFIG_USB_MUSB_DSPS=m
- CONFIG_USB_INVENTRA_DMA=y
- CONFIG_USB_TI_CPPI41_DMA=y
+> +	ret = omnia_mcu_register_gpiochip(mcu);
+> +	if (ret)
+> +		return ret;
+> +
+>  	return 0;
+
+	return ..._gpiochip(...);
+
+?
+
+...
+
+> +	switch (cmd) {
+> +	case CMD_GENERAL_CONTROL:
+> +		buf[1] = val;
+> +		buf[2] = mask;
+> +		len = 3;
+> +		break;
+> +
+> +	case CMD_EXT_CONTROL:
+> +		put_unaligned_le16(val, &buf[1]);
+> +		put_unaligned_le16(mask, &buf[3]);
+> +		len = 5;
+> +		break;
+> +
+> +	default:
+> +		unreachable();
+
+You meant BUG_ON()?
+
+> +	}
+
+...
+
+> +static int omnia_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+> +
+> +	if (offset == OMNIA_GPIO_PHY_SFP_OFFSET) {
+> +		int val;
+> +
+> +		mutex_lock(&mcu->lock);
+> +		val = omnia_cmd_read_bit(mcu->client,
+> +					 CMD_GET_EXT_CONTROL_STATUS,
+> +					 EXT_CTL_PHY_SFP_AUTO);
+> +		mutex_unlock(&mcu->lock);
+> +
+> +		if (val < 0)
+> +			return val;
+> +
+> +		if (val)
+> +			return GPIO_LINE_DIRECTION_IN;
+
+> +		else
+
+Redundant 'else'.
+
+> +			return GPIO_LINE_DIRECTION_OUT;
+> +	}
+> +
+> +	if (omnia_gpios[offset].ctl_cmd)
+> +		return GPIO_LINE_DIRECTION_OUT;
+
+> +	else
+
+Ditto.
+
+> +		return GPIO_LINE_DIRECTION_IN;
+> +}
+
+...
+
+> +	if (offset == OMNIA_GPIO_PHY_SFP_OFFSET)
+> +		return omnia_ctl_cmd(mcu, CMD_EXT_CONTROL, EXT_CTL_PHY_SFP_AUTO,
+> +				     EXT_CTL_PHY_SFP_AUTO);
+> +
+> +	if (gpio->ctl_cmd)
+> +		return -EOPNOTSUPP;
+
+I believe internally we use ENOTSUPP.
+Ditto for all cases like this.
+
+...
+
+> +	uint16_t val, mask;
+
+So, why uintXX_t out of a sudden?
+
+...
+
+> +	if (gpio->ctl_cmd)
+> +		return omnia_ctl_cmd(mcu, gpio->ctl_cmd, val, mask);
+> +	else
+
+Redundant 'else'.
+
+> +		return -EOPNOTSUPP;
+> +}
+
+...
+
+> +static void omnia_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
+> +{
+> +	const struct omnia_gpio *gpio = &omnia_gpios[offset];
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+> +	u16 val, mask;
+
+> +	int err = 0;
+
+Redundant assignment.
+
+> +	if (!gpio->ctl_cmd)
+> +		return;
+> +
+> +	mask = gpio->ctl_bit;
+> +	val = value ? mask : 0;
+> +
+> +	err = omnia_ctl_cmd(mcu, gpio->ctl_cmd, val, mask);
+> +	if (err)
+> +		dev_err(&mcu->client->dev, "Cannot set GPIO %u: %d\n",
+> +			offset, err);
+> +}
+
+...
+
+> +	mutex_lock(&mcu->lock);
+> +
+> +	if (ctl_mask)
+> +		err = omnia_ctl_cmd_unlocked(mcu, CMD_GENERAL_CONTROL, ctl,
+> +					     ctl_mask);
+
+> +	if (!err && ext_ctl_mask)
+> +		err = omnia_ctl_cmd_unlocked(mcu, CMD_EXT_CONTROL, ext_ctl,
+> +					     ext_ctl_mask);
+
+Can it be
+
+	if (err)
+		goto out_unlock;
+
+	if (_mask)
+		...
+
+?
+
+> +	mutex_unlock(&mcu->lock);
+
+> +	if (err)
+> +		dev_err(&mcu->client->dev, "Cannot set GPIOs: %d\n", err);
+
+How is useful this one?
+
+...
+
+> +static bool omnia_gpio_available(struct omnia_mcu *mcu,
+> +				 const struct omnia_gpio *gpio)
+> +{
+> +	if (gpio->feat_mask)
+> +		return (mcu->features & gpio->feat_mask) == gpio->feat;
+> +	else if (gpio->feat)
+> +		return mcu->features & gpio->feat;
+> +	else
+
+Redundant 'else':s.
+
+> +		return true;
+> +}
+
+...
+
+> +static int omnia_gpio_init_valid_mask(struct gpio_chip *gc,
+> +				      unsigned long *valid_mask,
+> +				      unsigned int ngpios)
+> +{
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+
+> +	bitmap_zero(valid_mask, ngpios);
+
+No need.
+
+Also do you have bitops.h included?
+
+> +	for (int i = 0; i < ngpios; ++i) {
+> +		const struct omnia_gpio *gpio = &omnia_gpios[i];
+> +
+> +		if (!gpio->cmd && !gpio->int_bit)
+> +			continue;
+
+Use clear_bit() here...
+
+> +		if (omnia_gpio_available(mcu, gpio))
+> +			set_bit(i, valid_mask);
+
+...and assign_bit() here.
+
+> +	}
+> +
+> +	return 0;
+> +}
+
+...
+
+> +	dev_dbg(&mcu->client->dev,
+> +		"set int mask %02x %02x %02x %02x %02x %02x %02x %02x\n",
+> +		cmd[1], cmd[2], cmd[3], cmd[4], cmd[5], cmd[6], cmd[7], cmd[8]);
+
+%8ph
+
+...
+
+> +	/*
+> +	 * Remember which GPIOs have both rising and falling interrupts enabled.
+> +	 * For those we will cache their value so that .get() method is faster.
+> +	 * We also need to forget cached values of GPIOs that aren't cached
+> +	 * anymore.
+> +	 */
+> +	if (!err) {
+
+	if (err)
+		goto out_unlock;
+
+> +		mcu->both = rising & falling;
+> +		mcu->is_cached &= mcu->both;
+> +	}
+> +
+> +	mutex_unlock(&mcu->lock);
+
+...
+
+> +static void omnia_irq_init_valid_mask(struct gpio_chip *gc,
+> +				      unsigned long *valid_mask,
+> +				      unsigned int ngpios)
+> +{
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+
+> +	bitmap_zero(valid_mask, ngpios);
+
+No need (see above how).
+
+> +	for (int i = 0; i < ngpios; ++i) {
+> +		const struct omnia_gpio *gpio = &omnia_gpios[i];
+> +
+> +		if (!gpio->int_bit)
+> +			continue;
+> +
+> +		if (omnia_gpio_available(mcu, gpio))
+> +			set_bit(i, valid_mask);
+> +	}
+> +}
+
+...
+
+> +	u8 cmd[9] = {};
+
+Magic number in a few places. Please, use self-explanatory pre-defined constant
+instead.
+
+...
+
+
+> +		dev_err(&mcu->client->dev, "Cannot read pending IRQs: %d\n",
+> +			err);
+
+In all functions with help of
+
+	struct device *dev = &mcu->client->dev;
+
+you can make code shorter.
+
+...
+
+> +	rising = reply[0] | (reply[2] << 8) | (reply[4] << 16) |
+> +		 (reply[6] << 24);
+> +	falling = reply[1] | (reply[3] << 8) | (reply[5] << 16) |
+> +		  (reply[7] << 24);
+
+With a help of two masks, you can access to the both edges as to 64-bit value
+and simplify the code.
+
+...
+
+> +	int ret = omnia_cmd_read_u16(mcu->client, CMD_GET_STATUS_WORD);
+
+Please, split this for better maintenance.
+
+> +	if (ret < 0)
+> +		return ret;
+
+...
+
+> +static irqreturn_t omnia_irq_thread_handler(int irq, void *dev_id)
+> +{
+> +	struct omnia_mcu *mcu = dev_id;
+> +	irqreturn_t res = IRQ_NONE;
+> +	unsigned long pending;
+> +	int i;
+> +
+> +	if (!omnia_irq_read_pending(mcu, &pending))
+> +		return IRQ_NONE;
+> +
+> +	for_each_set_bit(i, &pending, 32) {
+> +		unsigned int nested_irq =
+> +			irq_find_mapping(mcu->gc.irq.domain,
+> +					 omnia_int_to_gpio_idx[i]);
+
+It's much better to read in a form
+
+		unsigned int nested_irq;
+		domain = ...
+
+		nested_irq = irq_find_mapping(domain, omnia_int_to_gpio_idx[i]);
+
+(exactly 80 characters, btw).
+
+> +		handle_nested_irq(nested_irq);
+
+> +		res = IRQ_HANDLED;
+
+No need.
+
+> +	}
+
+> +	return res;
+
+	return IRQ_RETVAL(pending);
+
+> +}
+
+...
+
+> +static ssize_t front_button_mode_show(struct device *dev,
+> +				      struct device_attribute *a, char *buf)
+> +{
+> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
+> +	int val;
+> +
+> +	if (mcu->features & FEAT_NEW_INT_API)
+> +		val = omnia_cmd_read_bit(mcu->client, CMD_GET_STATUS_WORD,
+> +					 STS_BUTTON_MODE);
+> +	else
+> +		val = !!(mcu->last_status & STS_BUTTON_MODE);
+
+> +	if (val < 0)
+
+Can be true only in one case, why to check for the second oner?/
+
+> +		return val;
+
+> +	return sysfs_emit(buf, "%s\n", val ? "cpu" : "mcu");
+
+With a static const array of string literals...
+
+> +}
+
+...
+
+> +	if (sysfs_streq(buf, "mcu"))
+> +		val = 0;
+> +	else if (sysfs_streq(buf, "cpu"))
+> +		val = mask;
+> +	else
+> +		return -EINVAL;
+
+...and help of sysfs_match_string() you can simplify the code.
+
+...
+
+> +static struct attribute *omnia_mcu_gpio_attrs[] = {
+> +	&dev_attr_front_button_mode.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group omnia_mcu_gpio_group = {
+> +	.attrs = omnia_mcu_gpio_attrs,
+> +};
+
+ATTRIBUTE_GROUPS() ?
+
+...
+
+> +	err = devm_gpiochip_add_data(dev, &mcu->gc, mcu);
+> +	if (err) {
+> +		dev_err(dev, "Cannot add GPIO chip: %d\n", err);
+> +		return err;
+
+		return dev_err_probe(...);
+
+Ditto for other places like this in the probe stage.
+
+> +	}
+
+...
+
+> +	err = devm_device_add_group(dev, &omnia_mcu_gpio_group);
+
+No way, no-one should use the API scheduled for removal.
+What's wrong with .dev_groups ?
+
+...
+
+> +void omnia_mcu_unregister_gpiochip(struct omnia_mcu *mcu)
+> +{
+> +	if (!(mcu->features & FEAT_NEW_INT_API))
+> +		cancel_delayed_work_sync(&mcu->button_release_emul_work);
+> +
+> +	mutex_destroy(&mcu->lock);
+
+Wrong order?
+
+> +}
+
+...
+
+>  struct omnia_mcu {
+>  	struct i2c_client *client;
+>  	const char *type;
+>  	u16 features;
+> +
+> +	/* GPIO chip */
+> +	struct gpio_chip gc;
+
+Making this a first member may lead to the better code. Check with bloat-o-meter.
+
+> +	struct mutex lock;
+> +	u32 mask, rising, falling, both, cached, is_cached;
+
+> +	/* Old MCU firmware handling needs the following */
+> +	u16 last_status;
+> +	struct delayed_work button_release_emul_work;
+
+Swapping these two may free a few bytes. Check with pahole tool.
+
+> +	bool button_pressed_emul;
+>  };
+
+...
+
+> +	if (!bits) {
+> +		*reply = 0;
+> +		return 0;
+> +	}
+> +
+> +	ret = omnia_cmd_read(client, cmd, reply, (ilog2(bits) >> 3) + 1);
+
+> +
+
+Redundant blank line.
+
+> +	if (ret >= 0)
+
+> +		*reply = le32_to_cpu(*reply) & bits;
+
+Huh?! Please, check your code with sparse like
+
+	make W=1 C=1 CF=-D__CHECK_ENDIAN__ ...
+
+> +	return ret < 0 ? ret : 0;
+
 -- 
-2.41.0.327.gaa9166bcc0ba
+With Best Regards,
+Andy Shevchenko
+
 
