@@ -1,166 +1,257 @@
-Return-Path: <chenhuacai@kernel.org>
+Return-Path: <andy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF6E7CE79A8
-	for <soc@archiver.kernel.org>; Tue, 19 Sep 2023 16:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92906CE79A8
+	for <soc@archiver.kernel.org>; Tue, 19 Sep 2023 18:27:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6521CC4339A; Tue, 19 Sep 2023 16:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A60EC433D9;
-	Tue, 19 Sep 2023 16:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695140151;
-	bh=l+nvWlCRLD6m7tXJtYKPxQ5GcwH9Qne96/LVVg2mIYA=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=kApe79fhQVxUGaQ4mry/0tf8D1oVtpPxdAG1GwmMRBqc5wMgTBSRgE8mD+jlNNOr9
-	 oPN4DgB4BH/ydIfZsPapRpCdpdOW50epQTWCIcOTYi//Nzv3S4z+BIOLzxFQGU1DyX
-	 rKRWJbnrGyZ44to8v2aNzlb9b5X6hNFBXhX8QlZvR5piD14oxTcXogCf73oAvnccSf
-	 m4mtMhzAyq6FbJGNSPTCVEz/Jy0hY07CXJrLzYWejTf25FfibgpIB+2L94lymeE8sY
-	 Xljh00FpFiZ8Wdg74ybMbNeBmW/zfabsCFy5tWCWP7HjOQHyTAvKZ9CMFMkUulyK9W
-	 ppnT2ym8WIm5w==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-532e6f8125cso166897a12.3;
-        Tue, 19 Sep 2023 09:15:51 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yy4LCcpX4Yq76f0Cqj0zrSds7xaFTFuhDGOUrdVf+GOz0OX3gmo
-	BysbgLl1/hmDJ/5cJApgNyS/h2O4fHA2AqfZX1o=
-X-Google-Smtp-Source: AGHT+IEFJubbNL2v5ghbEClmcqFm+vzvdHtJ9q0Txb0CWZ9yQWMjHzNbleb2RTNpe6zd6z5Vm/CB0fTzeW0QjbrjNOI=
-X-Received: by 2002:aa7:c708:0:b0:52f:6641:4ecd with SMTP id
- i8-20020aa7c708000000b0052f66414ecdmr11595083edq.37.1695140149689; Tue, 19
- Sep 2023 09:15:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1693623752.git.zhoubinbin@loongson.cn> <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
- <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org> <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
- <20230919-9ce82588fccdd641574b468c@fedora>
-In-Reply-To: <20230919-9ce82588fccdd641574b468c@fedora>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 20 Sep 2023 00:15:39 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
-Message-ID: <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
-To: Conor Dooley <conor@kernel.org>
+	id 57A15C433C8; Tue, 19 Sep 2023 18:27:17 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E2087C433C7;
+	Tue, 19 Sep 2023 18:27:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E2087C433C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="382772288"
+X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
+   d="scan'208";a="382772288"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 11:27:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="861654643"
+X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
+   d="scan'208";a="861654643"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 11:27:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+	(envelope-from <andy@kernel.org>)
+	id 1qifRA-0000000BuCz-3EUB;
+	Tue, 19 Sep 2023 21:27:04 +0300
+Date: Tue, 19 Sep 2023 21:27:04 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Binbin Zhou <zhoubinbin@loongson.cn>, 
-	Binbin Zhou <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	loongson-kernel@lists.loongnix.cn, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <ZQnn+Gi0xVlsGCYA@smile.fi.intel.com>
+References: <20230919103815.16818-1-kabel@kernel.org>
+ <20230919103815.16818-3-kabel@kernel.org>
+ <ZQmUFPvIx91+ps6k@smile.fi.intel.com>
+ <20230919171638.19bc1619@dellmb>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230919171638.19bc1619@dellmb>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi, Conor,
+On Tue, Sep 19, 2023 at 05:16:38PM +0200, Marek Behún wrote:
+> On Tue, 19 Sep 2023 15:29:08 +0300
+> Andy Shevchenko <andy@kernel.org> wrote:
+> > On Tue, Sep 19, 2023 at 12:38:10PM +0200, Marek Behún wrote:
 
-On Tue, Sep 19, 2023 at 11:48=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
-ote:
->
-> On Tue, Sep 19, 2023 at 08:36:50AM -0700, Randy Dunlap wrote:
-> > Hi--
-> >
-> > On 9/2/23 08:43, Randy Dunlap wrote:
-> > >
-> > >
-> > > On 9/2/23 01:47, Binbin Zhou wrote:
-> > >> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management
-> > >> support"), the Loongson-2K PM driver was added, but it didn't update=
- the
-> > >> Kconfig entry for the INPUT dependency, leading to build errors:
-> > >>
-> > >> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-l=
-inux-ld:
-> > >> drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_bu=
-tton_init':
-> > >> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/l=
-oongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_dev=
-ice'
-> > >> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-l=
-inux-ld:
-> > >> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/l=
-oongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capabili=
-ty'
-> > >> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-l=
-inux-ld:
-> > >> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/l=
-oongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_dev=
-ice'
-> > >> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-l=
-inux-ld:
-> > >> /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/l=
-oongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
-> > >> /opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-l=
-inux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key=
-':
-> > >> /work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:=
-425:(.text+0x58c): undefined reference to `input_event'
-> > >>
-> > >> Also, since this driver can only be built-in, it fails to link when =
-the
-> > >> INPUT is in a loadable module, so we should update the Kconfig entry=
- to
-> > >> depend on INPUT=3Dy.
-> > >>
-> > >> Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management suppor=
-t")
-> > >> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > >> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > >
-> > > Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Tested-by: Randy Dunlap <rdunlap@infradead.org>
-> > >
-> > > Thanks.
-> >
-> > What's the status of this patch?
-> > linux-next builds are still failing without this patch.
->
-> Likely suffering (still) from:
->
-> https://lore.kernel.org/all/58500dc7-af1b-4edb-bb2b-93be454ec151@app.fast=
-mail.com/
->
-> :)
->
-> Seemingly this was sent again in isolation 2 weeks ago, but neither the
-> maintainer (Huacai) nor soc@kernel.org were on cc:
->
-> https://lore.kernel.org/all/20230905123629.4510-1-zhuyinbo@loongson.cn/
-v3 indeed cc-ed soc@kernel.org. :)
+...
 
-Arnd, could you please take this series to the soc tree? And also this seri=
-es:
-https://lore.kernel.org/loongarch/cover.1693534134.git.zhoubinbin@loongson.=
-cn/T/#t
+> > >  obj-$(CONFIG_GOLDFISH)		+= goldfish/
+> > >  obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
+> > >  obj-$(CONFIG_SURFACE_PLATFORMS)	+= surface/
+> > > +obj-$(CONFIG_CZNIC_PLATFORMS)	+= cznic/  
+> > 
+> > Why not ordered (to some extent) here (as you did in the other file)?
+> 
+> Where should I put it? The other entries are not ordered, see
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/platform/Makefile?h=v6.6-rc2
 
-Thanks,
-Huacai
+With the visible context above, at least after chrome already much better, no?
 
->
-> /shrug
-> Conor.
->
-> >
-> > Thanks.
-> >
-> > >
-> > >> ---
-> > >>  drivers/soc/loongson/Kconfig | 1 +
-> > >>  1 file changed, 1 insertion(+)
-> > >>
-> > >> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kco=
-nfig
-> > >> index 314e13bb3e01..368344943a93 100644
-> > >> --- a/drivers/soc/loongson/Kconfig
-> > >> +++ b/drivers/soc/loongson/Kconfig
-> > >> @@ -20,6 +20,7 @@ config LOONGSON2_GUTS
-> > >>  config LOONGSON2_PM
-> > >>    bool "Loongson-2 SoC Power Management Controller Driver"
-> > >>    depends on LOONGARCH && OF
-> > >> +  depends on INPUT=3Dy
-> > >>    help
-> > >>      The Loongson-2's power management controller was ACPI, supports=
- ACPI
-> > >>      S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Su=
-spend To
-> > >
-> >
-> > --
-> > ~Randy
+...
+
+> > > +turris-omnia-mcu-objs		:= turris-omnia-mcu-base.o  
+> > 
+> > objs is for user space tools. Kernel code should use m,y.
+> 
+> I don't understand. There are plenty driver using -objs. The driver
+> consists of multiple C source files. I thought this should be done as
+>   obj-$(CONFIG_XXX) += xxx.o
+>   xxx-objs := xxx-a.o xxx-b.o xxx-c.o
+> 
+> If you choose CONFIG_XXX = y, then the driver will be compiled into
+> kernel, if you choose CONFIG_XXX = m, then the driver will be a module
+> xxx.ko.
+
+Hmm... Maybe I mixed something... Let me check.
+For now than it's okay.
+
+...
+
+> > > +#include <linux/hex.h>
+> > > +#include <linux/module.h>  
+> > 
+> > Missing types.h, sysfs.h, mod_devicetable.h, i2c.h, ...
+> 
+> i2c.h comes from turris-omnia-mcu.h. The others I will fix. Does the
+> the .c file also include all those headers if it includes a local
+> header already?
+
+For generic ones, yes.
+
+...
+
+> > > +	if (ret < 0)  
+> > 
+> > Can it return positive value? What would be the meaning of it?
+> 
+> Originally I had it return 0 on success, but recently I've had a
+> discussion about this same thing with LED subsystem maintainer about
+> some LED patches, Lee Jones, who requested the _read function to return
+> number of bytes read on success. See at
+>   https://lore.kernel.org/linux-leds/20230821122644.GJ1380343@google.com/
+> where he says:
+>   Read and write APIs, even abstracted ones such as these generally
+>   return the number of bytes successfully read and written respectively.
+>   If you are going to normalise, then please do so against this
+>   standard.
+> I do not agree with him, since this is a local command accessor which
+> only succeeds if all the bytes are read/written as requested. But I
+> adjusted my code as per his request since he is the maintainer.
+
+This is strange. For example, regmap APIs never returns amount of data written
+or read. I think it's solely depends on the API. It might be useful for i²c
+APIs, in case you can do something about it. but if you have wrappers on top
+of that already (meaning not using directly the i2c_*() calls, I dunno the
+positive return is anyhow useful.
+
+> I will change the code back so that it returns 0 on success instead of
+> the number of bytes written.
+
+> > > +		return ret;  
+
+...
+
+> > > +	version[40] = '\0';  
+> > 
+> > How do you know the version has enough space?
+> 
+> The function is only use within the file, and both users know how much
+> space it needs. But ok, I shall enforce it with the static keyword as
+>   static int
+>   omnia_get_version_hash(...,
+> 			 u8 version[static 2*OMNIA_FW_VERSION_LEN + 1]);
+> Would that be okay?
+
+Perhaps, it's a thing in a category "TIL", and it seems we have so few callers
+of that.
+
+...
+
+> > > +	int err;  
+> > 
+> > In two near functions you already inconsistent in the naming of the
+> > return code variable. Be consistent across all your code, i.e. choose
+> > one name and use it everywhere.
+> 
+> I use
+>   ret - when the return value can also be positive and mean something
+>   err - when the return value is either 0 (no error) or negative errno
+> Is this inconsistent?
+
+TBH sounds good, but I close to never had heard about such a distinction in
+a Linux kernel source file(s).
+
+...
+
+> > > +	int status;  
+> > 
+> > My gosh, it's a _third_ name for the same!
+> 
+> The variable holds value of the status register, which is needed at
+> another point in this function. I thought naming it just "ret" would
+> cause confusions... Do you really propose to rename it such?
+
+It's not bad per se, just put yourself on the place of somebody who would like
+to understand the semantics of all these variables. Maybe you can add a comment
+on top explaining that (in short)?
+
+...
+
+> > > +	for (int i = 0; i < ARRAY_SIZE(features); ++i) {  
+> > 
+> > Why signed?
+> 
+> Because it is shorter and makes no difference and there are tons of
+>   for (int i = 0; i < ARRAY_SIZE(x); i++)
+> in the kernel already. But if you really want, I can change it. Please
+> let me know.
+
+It just makes harder to get the code, because of possible unneeded questions
+like "if it's a signed type, maybe it's on purpose?"
+
+> > Why pre-increment?
+> 
+> Again, it makes no difference, is widely used in the kernel and I
+> personally prefer it. But I will change it if you want.
+
+Pre-increment usually also a sign of something special about the iterator
+variable. In non-special cases we use post-increment. And if you count
+the use of each you will see the difference.
+
+...
+
+> > > +		dev_info(dev,
+> > > +			 "Consider upgrading MCU firmware with the
+> > > omnia-mcutool utility.\n");  
+> > 
+> > You have so-o many dev_info() calls, are you sure you not abusing use
+> > of that?
+> 
+> I want the users to upgrade the MCU firmware. These infos are only
+> printed during probe time, and won't be printed at all if the firmware
+> is upgraded. Is this a problem?
+
+Depends how really useful they are. If you think it's way to go, go for it.
+
+...
+
+> > > +	if (likely(ret == ARRAY_SIZE(msgs)))  
+> > 
+> > Why likely()? Please, justify.
+> 
+> Becuase it is unlikely the I2C transaction will fail. In most cases, it
+> does not.
+
+Yes, but why likely() is needed? So, i.o.w. what's the benefit in _this_ case?
+
+> > > +		return len;  
+
+...
+
+> > > +enum commands_e {  
+> > 
+> > Are you sure the name is unique enough / properly namespaced?
+> > Same Q to all enums.
+> 
+> I can change it. I wanted it to be compatible with the header in the
+> firmware repository.
+
+Are these being generated, or also statically written in that repo?
+If the latter, I think better to use more unique naming schema in
+the kernel.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
