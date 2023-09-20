@@ -1,446 +1,90 @@
-Return-Path: <SRS0=iCAz=FE=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=FoZ9=FE=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 598E4CE79D0
-	for <soc@archiver.kernel.org>; Wed, 20 Sep 2023 11:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E733CCE79D1
+	for <soc@archiver.kernel.org>; Wed, 20 Sep 2023 12:37:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2013FC433CB; Wed, 20 Sep 2023 11:58:52 +0000 (UTC)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	id AD8E9C433CD; Wed, 20 Sep 2023 12:37:10 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B73F1C433C8
-	for <soc@kernel.org>; Wed, 20 Sep 2023 11:58:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B73F1C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id B8C83C433CB
+	for <soc@kernel.org>; Wed, 20 Sep 2023 12:37:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8C83C433CB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-59e6ebdf949so11973707b3.0
-        for <soc@kernel.org>; Wed, 20 Sep 2023 04:58:50 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-9ae22bf33a0so195397766b.0
+        for <soc@kernel.org>; Wed, 20 Sep 2023 05:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695211129; x=1695815929; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=28NVMB+0dlMbpsiwqiZj7l1HrZYCzPyDliFSimomypc=;
-        b=fZ17ebyiN+12L6Ew5y3GyuFWScUQXtL6sF0oEm+tn2Ln8ShlwbOwWMNfDSjNxq7p91
-         +ANRgjbzhnVqoJsxkOii2JFNrgra0PTMNoEBGJQffpUVAegvpEWcwdT3Q97PTTSC2j4/
-         qF3s9DASlhM5ekYiZdJU/fyzjx/bww+rSHSsVB2yAvIqGP6NnllR9aPLofjbQCRXGT6/
-         nbPeTEMywdWwONgHWsTeIyLIOgw+jePBhtBN3M2iQJ0mj1k6uJJkEwNBbFCVLXgEaRSp
-         nqv6h4QvSfy+a4OGSwDrT9hcxMq7gi36Zji3AmptDMc0tTYleDLMVOkb/nJsYcBqGQPc
-         LxwA==
+        d=linaro.org; s=google; t=1695213428; x=1695818228; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UexnMi5oMmhAE5dFwT3NNBL/IAHUolyTmmXUsGhprA0=;
+        b=qPHRc/gVhmNzNZp9E20hColaNZBMmypDs19+vgtUvfhGvsQ05nlNoq9jzBhdixoEED
+         O1+DEJtJc8SiFhop4XhTcMn03PnqrnVgNQOB5tlSYFGzHP3+rLNSl9YlmhmlhnGC/GdU
+         9ffA5uiPo85tqoMuX7IvhKHtbuAmvCftmWRz0t3QjPqIBfJtv76ytdV2vboQ4vhVoaR0
+         SuxsqSvK6sqSJDC6tN2UcSL+0q3lZz+Ocwt/7CMK5yl7sn1gUFH5VYiur9gvNzOvH6dw
+         SqWBx9xIjVK8SzYKvhtObsHVOYlxtgyyQqoplPROKYXHoBMuC04Khwht8MwRn8SUCrMS
+         bo8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695211129; x=1695815929;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=28NVMB+0dlMbpsiwqiZj7l1HrZYCzPyDliFSimomypc=;
-        b=SYNpdok9zVHezPSoqT6Lh2n0UQ7J6yXhVxUZ6eROJpttQ5gxrw9pT/e3uF0RPGWikQ
-         0dnio/xuAt+WaNYOIm1muasV5yKAD4IxQw+ina5pksVh2cC28fake7Y3qsw74xRVMa7r
-         E73kERdzWLt/brfi9RS/twYH2DxBpQLyLoAKJLeVQrBzs1rLCA8LJx3vmoXvSUftDkMk
-         teWfWcgAIpWBT3OtKRCoHrJyXQ5zJE1dJJD+cmVwFRugn0yeyaTm1lgrqQQYoKHoUXXr
-         +pqpscCIjeRRqf/t3Wq00qKq+P0E/7d9OLnHjvV8J+PMV3xikqwzwUXf9nvPSxBNxqUK
-         G7jA==
-X-Gm-Message-State: AOJu0YwnEjN0ON/YBKn1tFcG5QndnRFnrRywT45WNs5sxisgx6Yc3kEo
-	dqLd3c7M024nSF5o30GsKxEr/BTujJBWVv/O/zYBnA==
-X-Google-Smtp-Source: AGHT+IE8vbmM9gsNvv5eIK7aReOFyJncsBadXLPvwPfbNKN5u+xyybv4rzhWNk7saer3TTfXdFvrofeVpAKmyQrcfCo=
-X-Received: by 2002:a81:8301:0:b0:59b:d5eb:3a83 with SMTP id
- t1-20020a818301000000b0059bd5eb3a83mr5393467ywf.16.1695211129552; Wed, 20 Sep
- 2023 04:58:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695213428; x=1695818228;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UexnMi5oMmhAE5dFwT3NNBL/IAHUolyTmmXUsGhprA0=;
+        b=L8m2/Pk/Vrms7rtFCuEPD4DEeO1QGNNzOkHf87WchapilwUut/aI2smkBqutyH/ajw
+         ppkY6iaLKPCRTrOofVIYpG0J4QW0r32vX85SI+vfxLFOAb96nguATccxY9Pc1g32pKBY
+         3Ri9iDHrNJguCJgw+fNHTwIIh5BMEUwohrMohIg9LjkiSsDFNgaKXTuax5ZS8dFjGHnO
+         J06eAEyTOQftdInmBC4usAnmvIEVk19K5mMsc5v7VRtYrh03GRaLwqXNq0Wyfu2N8y5N
+         ToMNJc8TGBSQC6ZCvCYqFoK01+D7KCrZdtxitFOnanJaQQ5PmJhbTdcDa+WJa3XmLIkV
+         gMRA==
+X-Gm-Message-State: AOJu0YwonDjcCwIX3NDFo6B/3sS5vRI/zHGRCDNkuaKA/037YISKq3SR
+	64xC0Vtr1RQ1M0ycNTiRAzls9w==
+X-Google-Smtp-Source: AGHT+IEmMtyXrNNzSSn0HyiVCQ+Z5CoZ545SWjv06Pe9u9ELrbWcaGNwoswFbs0oC4SKP+a/Ov7VFw==
+X-Received: by 2002:a17:907:7206:b0:9a5:c38d:6b75 with SMTP id dr6-20020a170907720600b009a5c38d6b75mr6982252ejc.15.1695213428032;
+        Wed, 20 Sep 2023 05:37:08 -0700 (PDT)
+Received: from [172.20.24.238] (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
+        by smtp.gmail.com with ESMTPSA id xo23-20020a170907bb9700b0099290e2c163sm9140375ejc.204.2023.09.20.05.37.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Sep 2023 05:37:07 -0700 (PDT)
+Message-ID: <41e5dbe7-61e7-cf72-7479-c33c95e439df@linaro.org>
+Date: Wed, 20 Sep 2023 14:37:06 +0200
 MIME-Version: 1.0
-References: <20230919103815.16818-1-kabel@kernel.org> <20230919103815.16818-4-kabel@kernel.org>
-In-Reply-To: <20230919103815.16818-4-kabel@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 20 Sep 2023 13:58:37 +0200
-Message-ID: <CACRpkdY8GcDYEDg=w4_ggY7O7kj-_X4ejpXni-t8M3yMivU88Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support for
- MCU connected GPIOs
-To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2 1/7] dt-bindings: arm: add cznic,turris-omnia-mcu
+ binding
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
-	arm@kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
-	linux-gpio@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
+ <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org
+References: <20230919103815.16818-1-kabel@kernel.org>
+ <20230919103815.16818-2-kabel@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230919103815.16818-2-kabel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Marek,
-
-thanks for your patch! This is a very interesting hardware.
-
-On Tue, Sep 19, 2023 at 12:38=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org=
-> wrote:
-
-> Add support for GPIOs connected to the MCU on the Turris Omnia board.
->
-> This include:
-> - front button pin
-> - enable pins for USB regulators
-> - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
-> - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
-> - on board revisions 32+ also various peripheral resets and another
->   voltage regulator enable pin
->
-> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
-
-OK all pretty straight-forward devices built on top of GPIO
-in something like device tree or ACPI etc.
-
-> --- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-> +++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-> @@ -1,3 +1,19 @@
-> +What:          /sys/bus/i2c/devices/<mcu_device>/front_button_mode
-> +Date:          August 2023
-> +KernelVersion: 6.6
-> +Contact:       Marek Beh=C3=BAn <kabel@kernel.org>
-> +Description:   (RW) The front button on the Turris Omnia router can be
-> +               configured either to change the intensity of all the LEDs=
- on the
-> +               front panel, or to send the press event to the CPU as an
-> +               interrupt.
-> +
-> +               This file switches between these two modes:
-> +               - "mcu" makes the button press event be handled by the MC=
-U to
-> +                 change the LEDs panel intensity.
-> +               - "cpu" makes the button press event be handled by the CP=
-U.
-> +
-> +               Format: %s.
-
-I understand what this does, but why does this have to be configured
-at runtime from userspace sysfs? Why can't this just be a property in
-device tree or ACPI (etc)? I don't imagine a user is going to change
-this back and forth are they? They likely want one or another.
-
-> --- a/drivers/platform/cznic/turris-omnia-mcu-base.c
-> +++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-> @@ -222,9 +222,20 @@ static int omnia_mcu_probe(struct i2c_client *client=
-)
->                 return -ENODATA;
->         }
->
-> +       ret =3D omnia_mcu_register_gpiochip(mcu);
-> +       if (ret)
-> +               return ret;
-
-I guess it's OK to have a GPIOchip with the rest of the stuff, there
-are a few precedents, such as drivers/bcma.
-
-> +static const char * const omnia_mcu_gpio_names[64] =3D {
-
-I would name these _templates since it is not the final names
-that will be used. Very nice with all debug names though!
-
-> +#define _DEF_GPIO(_cmd, _ctl_cmd, _bit, _ctl_bit, _int_bit, _feat, _feat=
-_mask) \
-> +       {                                                               \
-> +               .cmd =3D _cmd,                                           =
- \
-> +               .ctl_cmd =3D _ctl_cmd,                                   =
- \
-> +               .bit =3D _bit,                                           =
- \
-> +               .ctl_bit =3D _ctl_bit,                                   =
- \
-> +               .int_bit =3D _int_bit,                                   =
- \
-> +               .feat =3D _feat,                                         =
- \
-> +               .feat_mask =3D _feat_mask,                               =
- \
-> +       }
-> +#define _DEF_GPIO_STS(_name) \
-> +       _DEF_GPIO(CMD_GET_STATUS_WORD, 0, STS_ ## _name, 0, INT_ ## _name=
-, 0, 0)
-> +#define _DEF_GPIO_CTL(_name) \
-> +       _DEF_GPIO(CMD_GET_STATUS_WORD, CMD_GENERAL_CONTROL, STS_ ## _name=
-, \
-> +                 CTL_ ## _name, 0, 0, 0)
-> +#define _DEF_GPIO_EXT_STS(_name, _feat) \
-> +       _DEF_GPIO(CMD_GET_EXT_STATUS_DWORD, 0, EXT_STS_ ## _name, 0, \
-> +                 INT_ ## _name, FEAT_ ## _feat | FEAT_EXT_CMDS, \
-> +                 FEAT_ ## _feat | FEAT_EXT_CMDS)
-> +#define _DEF_GPIO_EXT_STS_LED(_name, _ledext) \
-> +       _DEF_GPIO(CMD_GET_EXT_STATUS_DWORD, 0, EXT_STS_ ## _name, 0, \
-> +                 INT_ ## _name, FEAT_LED_STATE_ ## _ledext, \
-> +                 FEAT_LED_STATE_EXT_MASK)
-> +#define _DEF_GPIO_EXT_STS_LEDALL(_name) \
-> +       _DEF_GPIO(CMD_GET_EXT_STATUS_DWORD, 0, EXT_STS_ ## _name, 0, \
-> +                 INT_ ## _name, FEAT_LED_STATE_EXT_MASK, 0)
-> +#define _DEF_GPIO_EXT_CTL(_name, _feat) \
-> +       _DEF_GPIO(CMD_GET_EXT_CONTROL_STATUS, CMD_EXT_CONTROL, \
-> +                 EXT_CTL_ ## _name, EXT_CTL_ ## _name, 0, \
-> +                 FEAT_ ## _feat | FEAT_EXT_CMDS, \
-> +                 FEAT_ ## _feat | FEAT_EXT_CMDS)
-> +#define _DEF_INT(_name) \
-> +       _DEF_GPIO(0, 0, 0, 0, INT_ ## _name, 0, 0)
-
-Ugh that's really hard to read and understand, but I can't think of
-anything better
-so I guess we live with it.
+On 19/09/2023 12:38, Marek Behún wrote:
+> Add binding for cznic,turris-omnia-mcu, the device-tree node
+> representing the system-controller features provided by the MCU on the
+> Turris Omnia router.
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+> ---
 
 
-> +static const struct omnia_gpio {
-> +       u8 cmd, ctl_cmd;
-> +       u32 bit, ctl_bit;
-> +       u32 int_bit;
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-If they are really just ONE bit I would actually use an int, encode
-the bit number rather than the mask, and then use BIT( ..->int_bit)
-from <linux/bits.h> everywhere I need a mask. No strong preference
-though.
+Best regards,
+Krzysztof
 
-> +/* mapping from interrupts to indexes of GPIOs in the omnia_gpios array =
-*/
-> +static const unsigned int omnia_int_to_gpio_idx[32] =3D {
-> +       [ilog2(INT_CARD_DET)]           =3D 4,
-> +       [ilog2(INT_MSATA_IND)]          =3D 5,
-> +       [ilog2(INT_USB30_OVC)]          =3D 6,
-
-ilog2 is a bit unituitive for a programmer, are you a schooled mathematicia=
-n
-Marek? ;)
-
-It is also a consequence of using a bitmask rather than a bit number in
-the struct, all ilog2 does is fls-1. So what about just putting the bit num=
-ber
-in the struct and then all of these assignments will look natural as well.
-
-> +/* index of PHY_SFP GPIO in the omnia_gpios array */
-> +enum {
-> +       OMNIA_GPIO_PHY_SFP_OFFSET =3D 54,
-> +};
-
-I would just use a define for this, the enum isn't very useful for
-singular values.
-
-> +static int omnia_ctl_cmd(struct omnia_mcu *mcu, u8 cmd, u16 val, u16 mas=
-k)
-> +{
-> +       int err;
-> +
-> +       mutex_lock(&mcu->lock);
-> +       err =3D omnia_ctl_cmd_unlocked(mcu, cmd, val, mask);
-
-We just discussed this on an unrelated topic: *_unlocked means it should
-be called without need for the appropriate mutex to be locked, since it cle=
-arly
-requires &mcu->lock to be taken, this should be
-omnia_ctl_cmd_locked() as in "call this with the lock held".
-
-I did a quick grep _locked to convince myself about this.
-Obvious exampled include wait_event_interruptible_locked_irq()
-or wake_up_locked() in the core kernel infrastructure that clearly states
-(include/linux/wait.h for wait_event_interruptible_locked():
-"It must be called with wq.lock being held."
-
-> +static int omnia_gpio_get(struct gpio_chip *gc, unsigned int offset)
-> +{
-(...)
-> +       if (gpio->cmd =3D=3D CMD_GET_STATUS_WORD &&
-> +           !(mcu->features & FEAT_NEW_INT_API))
-> +               return !!(mcu->last_status & gpio->bit);
-
-So I expect something like return !!(mcu->last_status & BIT(gpio->bit));
-
-> +static int omnia_gpio_get_multiple(struct gpio_chip *gc, unsigned long *=
-mask,
-> +                                  unsigned long *bits)
-> +{
-> +       mutex_lock(&mcu->lock);
-(...)
-> +               if (err)
-> +                       goto err_unlock;
-(...)
-> +       if (err)
-> +               goto err_unlock;
-(...)
-> +       if (err)
-> +               goto err_unlock;
-> +
-> +       mutex_unlock(&mcu->lock);
-
-This function is kind of a good example of where using scoped guards
-from <linux/cleanup.h> can simplify the code. After the initial lock you
-can just return on error and let the cleanup handler unlock the mutex,
-just guard(mutex)(&mcu->lock);
-
-In the beginning and then it's done, the lock will be held until the
-function is exited.
-
-> +static void omnia_gpio_set_multiple(struct gpio_chip *gc, unsigned long =
-*mask,
-> +                                   unsigned long *bits)
-> +{
-(...)
-
-same here.
-
-> +static int omnia_gpio_init_valid_mask(struct gpio_chip *gc,
-> +                                     unsigned long *valid_mask,
-> +                                     unsigned int ngpios)
-> +{
-> +       struct omnia_mcu *mcu =3D gpiochip_get_data(gc);
-> +
-> +       bitmap_zero(valid_mask, ngpios);
-> +
-> +       for (int i =3D 0; i < ngpios; ++i) {
-> +               const struct omnia_gpio *gpio =3D &omnia_gpios[i];
-> +
-> +               if (!gpio->cmd && !gpio->int_bit)
-> +                       continue;
-> +
-> +               if (omnia_gpio_available(mcu, gpio))
-> +                       set_bit(i, valid_mask);
-
-Speaking of locks, isn't this where you should use __set_bit()
-rather than set_bit()?
-
-__set_bit() is incomprehensible shorthand for "set_bit_nonatomic".
-
-> +static void omnia_irq_shutdown(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gc =3D irq_data_get_irq_chip_data(d);
-> +       struct omnia_mcu *mcu =3D gpiochip_get_data(gc);
-> +       irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
-> +       u32 bit =3D omnia_gpios[hwirq].int_bit;
-> +
-> +       mcu->rising &=3D ~bit;
-> +       mcu->falling &=3D ~bit;
-
-Yeah so here it would be BIT(bit) etc.
-
-> +       if (type & IRQ_TYPE_EDGE_RISING)
-> +               mcu->rising |=3D bit;
-> +       else
-> +               mcu->rising &=3D ~bit;
-
-And with bits in place of bitmasks these would be
-
-if ()
-  __set_bit(bit, mcu->rising);
-else
-  __clear_bit(bit, mcu->rising);
-
-etc
-
-> +static void omnia_irq_init_valid_mask(struct gpio_chip *gc,
-> +                                     unsigned long *valid_mask,
-> +                                     unsigned int ngpios)
-> +{
-> +       struct omnia_mcu *mcu =3D gpiochip_get_data(gc);
-> +
-> +       bitmap_zero(valid_mask, ngpios);
-> +
-> +       for (int i =3D 0; i < ngpios; ++i) {
-> +               const struct omnia_gpio *gpio =3D &omnia_gpios[i];
-> +
-> +               if (!gpio->int_bit)
-> +                       continue;
-> +
-> +               if (omnia_gpio_available(mcu, gpio))
-> +                       set_bit(i, valid_mask);
-
-__set_bit()
-
-> +static bool omnia_irq_read_pending_new(struct omnia_mcu *mcu,
-> +                                      unsigned long *pending)
-> +{
-> +       u32 rising, falling;
-> +       u8 reply[8] =3D {};
-> +       size_t len;
-> +       int err;
-> +
-> +       /*
-> +        * Determine how many bytes we need to read from the reply to the
-> +        * CMD_GET_INT_AND_CLEAR command in order to retrieve all unmaske=
-d
-> +        * interrupts.
-> +        */
-> +       len =3D max(((ilog2(mcu->rising & mcu->mask) >> 3) << 1) + 1,
-> +                 ((ilog2(mcu->falling & mcu->mask) >> 3) << 1) + 2);
-
-Really hard to read, and again easier if we store the bit number
-rather than the bitmask.
-
-> +       mutex_lock(&mcu->lock);
-
-Scoped guard?
-
-> +static void button_release_emul_fn(struct work_struct *work)
-> +{
-> +       struct omnia_mcu *mcu =3D container_of(to_delayed_work(work),
-> +                                            struct omnia_mcu,
-> +                                            button_release_emul_work);
-> +
-> +       mcu->button_pressed_emul =3D false;
-> +       generic_handle_irq_safe(mcu->client->irq);
-> +}
-(...)
-> +       /*
-> +        * The old firmware triggers an interrupt whenever status word ch=
-anges,
-> +        * but does not inform about which bits rose or fell. We need to =
-compute
-> +        * this here by comparing with the last status word value.
-> +        *
-> +        * The STS_BUTTON_PRESSED bit needs special handling, because the=
- old
-> +        * firmware clears the STS_BUTTON_PRESSED bit on successful compl=
-etion
-> +        * of the CMD_GET_STATUS_WORD command, resulting in another inter=
-rupt:
-> +        * - first we get an interrupt, we read the status word where
-> +        *   STS_BUTTON_PRESSED is present,
-> +        * - MCU clears the STS_BUTTON_PRESSED bit because we read the st=
-atus
-> +        *   word,
-> +        * - we get another interrupt because the status word changed aga=
-in
-> +        *   (STS_BUTTON_PRESSED was cleared).
-> +        *
-> +        * The gpiolib-cdev, gpiolib-sysfs and gpio-keys input driver all=
- call
-> +        * the gpiochip's .get() method after an edge event on a requeste=
-d GPIO
-> +        * occurs.
-> +        *
-> +        * We ensure that the .get() method reads 1 for the button GPIO f=
-or some
-> +        * time.
-> +        */
-> +
-> +       if (status & STS_BUTTON_PRESSED) {
-> +               mcu->button_pressed_emul =3D true;
-> +               mod_delayed_work(system_wq, &mcu->button_release_emul_wor=
-k,
-> +                                msecs_to_jiffies(50));
-> +       } else if (mcu->button_pressed_emul) {
-> +               status |=3D STS_BUTTON_PRESSED;
-> +       }
-
-I feel a bit icky about this, would be best if Dmitry Torokhov review
-such input subsystem-related things.
-
-It looks like a reimplementation of drivers/input/keyboard/gpio_keys.c
-so why not just connect a gpio-keys device using either device tree
-or a software node? (Dmitry knows all about how to create proper
-software nodes for stuff like this, DT is self-evident.)
-
-> +       mcu->gc.names =3D omnia_mcu_gpio_names;
-
-Do we really support format strings in these names? I don't
-think so, or I'm wrong about my own code... (Which wouldn't
-be the first time.)
-
->  #include <asm/byteorder.h>
-> +#include <linux/gpio/driver.h>
->  #include <linux/i2c.h>
-> +#include <linux/log2.h>
-
-I think we want to get rid of log2.h from this driver.
-
-Yours,
-Linus Walleij
