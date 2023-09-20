@@ -1,79 +1,87 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <SRS0=JPZ9=FE=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABF1CCE79D1
-	for <soc@archiver.kernel.org>; Wed, 20 Sep 2023 13:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEB69CE79D1
+	for <soc@archiver.kernel.org>; Wed, 20 Sep 2023 14:11:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7E44EC433CA; Wed, 20 Sep 2023 13:37:04 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5CCE0C433C7;
-	Wed, 20 Sep 2023 13:37:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5CCE0C433C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444314316"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="444314316"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 06:37:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="740212810"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="740212810"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 06:36:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qixNv-0000000DkxF-1arK;
-	Wed, 20 Sep 2023 16:36:55 +0300
-Date: Wed, 20 Sep 2023 16:36:55 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+	id AB980C433C7; Wed, 20 Sep 2023 14:11:53 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id AC2E1C433C8;
+	Wed, 20 Sep 2023 14:11:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC2E1C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EBD11FB;
+	Wed, 20 Sep 2023 07:12:28 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 994813F5A1;
+	Wed, 20 Sep 2023 07:11:49 -0700 (PDT)
+Date: Wed, 20 Sep 2023 15:11:47 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Huisong Li <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
-Message-ID: <ZQr1d3ugdxX52hI1@smile.fi.intel.com>
-References: <20230919103815.16818-1-kabel@kernel.org>
- <20230919103815.16818-4-kabel@kernel.org>
- <CACRpkdY8GcDYEDg=w4_ggY7O7kj-_X4ejpXni-t8M3yMivU88Q@mail.gmail.com>
+Cc: rafael@kernel.org, rafael.j.wysocki@intel.com, xuwei5@hisilicon.com,
+	Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, liuyonglong@huawei.com
+Subject: Re: [PATCH v2 2/2] soc: kunpeng_hccs: add the check for PCC subspace
+ type
+Message-ID: <20230920141147.bq7cjiqjk6c36t6d@bogus>
+References: <20230914115753.9064-1-lihuisong@huawei.com>
+ <20230920064703.23543-1-lihuisong@huawei.com>
+ <20230920064703.23543-3-lihuisong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdY8GcDYEDg=w4_ggY7O7kj-_X4ejpXni-t8M3yMivU88Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20230920064703.23543-3-lihuisong@huawei.com>
 
-On Wed, Sep 20, 2023 at 01:58:37PM +0200, Linus Walleij wrote:
-> On Tue, Sep 19, 2023 at 12:38 PM Marek Behún <kabel@kernel.org> wrote:
-
-...
-
-> > +       if (type & IRQ_TYPE_EDGE_RISING)
-> > +               mcu->rising |= bit;
-> > +       else
-> > +               mcu->rising &= ~bit;
+On Wed, Sep 20, 2023 at 02:47:03PM +0800, Huisong Li wrote:
+> Currently, HCCS driver directly uses Generic Communications Channel Shared
+> Memory Region which is used in type0/1/2 to communicate with platform,
+> but actually doesn't support type3/4/5.
+> So this patch adds the check for PCC subspace type.
 > 
-> And with bits in place of bitmasks these would be
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  drivers/soc/hisilicon/kunpeng_hccs.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> if ()
->   __set_bit(bit, mcu->rising);
-> else
->   __clear_bit(bit, mcu->rising);
+> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+> index f3810d9d1caa..4ba3bfd45a01 100644
+> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
+> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+> @@ -174,6 +174,19 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
+>  	return rc;
+>  }
+>  
+> +static int hccs_check_pcc_info(struct hccs_dev *hdev)
+> +{
+> +	struct pcc_mbox_chan *pcc_chan = hdev->cl_info.pcc_chan;
+> +
+> +	if (pcc_chan->type >= ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE) {
+> +		dev_err(hdev->dev, "unsupport for subspace type%u.\n",
+> +			pcc_chan->type);
+> +		return -EOPNOTSUPP;
+> +	}
+ 
+Is this the only use of the PCC type information you have or do you plan to
+use it for something other than the validation.
 
-More precisely __assign_bit() in this case.
+Just for sake of argument, I can say all users of PCC must then do the
+similar validation. I don't know where to draw the line here.
+
+Ideally I would expect the driver to make this transparent and give error
+during transmit if not supported.
+
+The driver must be able to work with different PCC type to support variety
+of platforms TBH. What is the issue exactly here ? Is this to prevent the
+use of Type 4 ? I think we must do something better but I don't know what
+that is yet.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Sudeep
