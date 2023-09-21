@@ -1,210 +1,139 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <SRS0=ScSP=FF=lakka.kapsi.fi=mcfrisk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78DF8E70703
-	for <soc@archiver.kernel.org>; Thu, 21 Sep 2023 09:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AF7EE71085
+	for <soc@archiver.kernel.org>; Thu, 21 Sep 2023 14:57:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4636FC4AF69; Thu, 21 Sep 2023 09:55:16 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 0646BC4E75C; Thu, 21 Sep 2023 14:57:49 +0000 (UTC)
+Received: from mail.kapsi.fi (mail.kapsi.fi [91.232.154.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5F29C32785;
-	Thu, 21 Sep 2023 09:55:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5F29C32785
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="446947504"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="446947504"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 02:55:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723676393"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="723676393"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 02:55:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qjGOr-0000000Gr7S-1QmO;
-	Thu, 21 Sep 2023 12:55:09 +0300
-Date: Thu, 21 Sep 2023 12:55:08 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8C045C4E75E;
+	Thu, 21 Sep 2023 14:57:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8C045C4E75E
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lakka.kapsi.fi
+Received: from kapsi.fi ([2001:67c:1be8::11] helo=lakka.kapsi.fi)
+	by mail.kapsi.fi with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mcfrisk@lakka.kapsi.fi>)
+	id 1qjL7R-00CSWK-0T;
+	Thu, 21 Sep 2023 17:57:29 +0300
+Received: from mcfrisk by lakka.kapsi.fi with local (Exim 4.94.2)
+	(envelope-from <mcfrisk@lakka.kapsi.fi>)
+	id 1qjL7Q-00964k-Sq; Thu, 21 Sep 2023 17:57:28 +0300
+From: mikko.rapeli@linaro.org
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
-Message-ID: <ZQwS/DXBt/kyyU5r@smile.fi.intel.com>
-References: <20230919103815.16818-1-kabel@kernel.org>
- <20230919103815.16818-4-kabel@kernel.org>
- <ZQmbd211FzPjA97r@smile.fi.intel.com>
- <20230920190818.50b2018b@dellmb>
+To: soc@kernel.org
+Cc: Olof Johansson <olof@lixom.net>,
+	Mikko Rapeli <mikko.rapeli@linaro.org>,
+	stable@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Bruce Ashfield <bruce.ashfield@gmail.com>,
+	Jon Mason <jon.mason@arm.com>,
+	Jon Mason <jdmason@kudzu.us>,
+	Ross Burton <ross@burtonini.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2] arm64: defconfig: remove CONFIG_COMMON_CLK_NPCM8XX=y
+Date: Thu, 21 Sep 2023 17:57:22 +0300
+Message-Id: <20230921145723.2167927-1-mikko.rapeli@linaro.org>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230920190818.50b2018b@dellmb>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Rspam-Score: 0.1 (/)
+X-Rspam-Report: Action: no action
+ Symbol: ARC_NA(0.00)
+ Symbol: DMARC_POLICY_SOFTFAIL(0.10)
+ Symbol: FROM_NEQ_ENVFROM(0.00)
+ Symbol: RCVD_TLS_LAST(0.00)
+ Symbol: TO_DN_SOME(0.00)
+ Symbol: R_MISSING_CHARSET(0.50)
+ Symbol: FREEMAIL_ENVRCPT(0.00)
+ Symbol: TAGGED_RCPT(0.00)
+ Symbol: R_SPF_ALLOW(-0.20)
+ Symbol: MIME_GOOD(-0.10)
+ Symbol: TO_MATCH_ENVRCPT_ALL(0.00)
+ Symbol: BAYES_HAM(-3.00)
+ Symbol: FROM_NO_DN(0.00)
+ Symbol: RCPT_COUNT_TWELVE(0.00)
+ Symbol: NEURAL_HAM(0.00)
+ Symbol: MID_CONTAINS_FROM(1.00)
+ Symbol: FORGED_SENDER(0.30)
+ Symbol: R_DKIM_NA(0.00)
+ Symbol: MIME_TRACE(0.00)
+ Symbol: ASN(0.00)
+ Symbol: FREEMAIL_CC(0.00)
+ Symbol: SUSPICIOUS_RECIPS(1.50)
+ Symbol: RCVD_COUNT_TWO(0.00)
+ Message-ID: 20230921145723.2167927-1-mikko.rapeli@linaro.org
+X-SA-Exim-Connect-IP: 2001:67c:1be8::11
+X-SA-Exim-Mail-From: mcfrisk@lakka.kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 
-On Wed, Sep 20, 2023 at 07:08:18PM +0200, Marek Behún wrote:
-> On Tue, 19 Sep 2023 16:00:39 +0300
-> Andy Shevchenko <andy@kernel.org> wrote:
-> > On Tue, Sep 19, 2023 at 12:38:11PM +0200, Marek Behún wrote:
+From: Mikko Rapeli <mikko.rapeli@linaro.org>
 
+There is no code for this config option and enabling it in defconfig
+causes warnings from tools which are detecting unused and obsolete
+kernel config flags since the flag will be completely missing from
+effective build config after "make olddefconfig".
+
+Fixes yocto kernel recipe build time warning:
+
+WARNING: [kernel config]: This BSP contains fragments with warnings:
 ...
+[INFO]: the following symbols were not found in the active
+configuration:
+     - CONFIG_COMMON_CLK_NPCM8XX
 
-> > Ditto for all cases like this.
-> 
-> checkpatch warns: 
->   ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+The flag was added with commit 45472f1e5348c7b755b4912f2f529ec81cea044b
+v5.19-rc4-15-g45472f1e5348 so 6.1 and 6.4 stable kernel trees are
+affected.
 
-So, fix checkpatch then. It has false positives, because it doesn't know
-if the actual error code will sneak outside the kernel or not. But in
-the subsystem we internally use ENOTSUPP.
+Fixes: 45472f1e5348c7b755b4912f2f529ec81cea044b ("arm64: defconfig: Add Nuvoton NPCM family support")
+Cc: stable@kernel.org
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Tomer Maimon <tmaimon77@gmail.com>
+Cc: Bruce Ashfield <bruce.ashfield@gmail.com>
+Cc: Jon Mason <jon.mason@arm.com>
+Cc: Jon Mason <jdmason@kudzu.us>
+Cc: Ross Burton <ross@burtonini.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Mikko Rapeli <mikko.rapeli@linaro.org>
+---
+ arch/arm64/configs/defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-...
+v2: sending to soc list, added maintainers to Cc after discussion with Arnd
 
-> Linus suggested using guards, so I will refactor this away.
+v1: https://lore.kernel.org/linux-arm-kernel/20230815073656.507651-1-mikko.rapeli@linaro.org/
 
-Even better.
-
-...
-
-> > > +		dev_err(&mcu->client->dev, "Cannot set GPIOs:
-> > >   %d\n", err);  
-> > 
-> > How is useful this one?
-> 
-> The function does not return, this way we will know something has gone
-> wrong. I am used to do this from the networking subsystem, where people
-> at least from mv88e6xxx wanted such behavior. Do you want me to drop
-> this?
-
-You are the developer and owner of the specific hardware, if you have a good
-justification for this message _in production_, then leave it, otherwise drop.
-
-...
-
-> > > +	bitmap_zero(valid_mask, ngpios);  
-> > 
-> > No need.
-> > 
-> > Also do you have bitops.h included?
-> 
-> bitmap.h actually for this
-
-Right, but I already thought a step forward, when you drop bitmap APIs,
-the bitops are still in place.
-
-...
-
-> > > +	rising = reply[0] | (reply[2] << 8) | (reply[4] << 16) |
-> > > +		 (reply[6] << 24);
-> > > +	falling = reply[1] | (reply[3] << 8) | (reply[5] << 16) |
-> > > +		  (reply[7] << 24);  
-> > 
-> > With a help of two masks, you can access to the both edges as to
-> >   64-bit value and simplify the code.
-> 
-> Huh? As in
->   rising = reply & 0x00ff00ff00ff00ff;
->   falling = reply & 0xff00ff00ff00ff00;
-> ?
-> But then I can't or the rising bit with the corresponding falling bit
-> to get pending...
-> Or I guess i can with:
->   pending = rising & (pending >> 8);
-> 
-> Am I understanding you correctly?
-> 
-> But then I would need to store the mask in driver data as a 64-bit
-> value with half the data not used. Also the CPU is 32-bit.
-
-If you use proper bitmaps, perhaps this will be easier. You can use one for
-each and merge them whenever you want (with bitmap_or() call) or split (with
-bitmap_and() respectively):
-
-	bitmap_or(full, raising, failing); // merge
-	bitmap_and(raising, full, rasing_mask); // split
-
-...
-
-> > ATTRIBUTE_GROUPS() ?
-> 
-> I only want to create ane attribute_group. (I am using
-> devm_device_add_group(), not devm_device_add_groups()).
-
-...and you should not use that APIs.
-
-> > > +	err = devm_device_add_group(dev, &omnia_mcu_gpio_group);  
-> > 
-> > No way, no-one should use the API scheduled for removal.
-> > What's wrong with .dev_groups ?
-> 
-> Can I add them conditionally? GPIO chip is always created, but the
-> patch 4/7 only adds the attributes conditionally. Is it possible via
-> .dev_groups?
-
-Yes. You use __ATTRIBUTE_GROUPS() and .is_visible callback.
-
-...
-
-> > > +void omnia_mcu_unregister_gpiochip(struct omnia_mcu *mcu)
-> > > +{
-> > > +	if (!(mcu->features & FEAT_NEW_INT_API))
-> > > +
-> > >   cancel_delayed_work_sync(&mcu->button_release_emul_work); +
-> > > +	mutex_destroy(&mcu->lock);  
-> > 
-> > Wrong order?
-> 
-> No, the mutex may be used in the work. Can't destroy it first. Or am I
-> misunderstanding something?
-
-I mean you are using a lot of devm(), can mutex be used in IRQ or whatever
-that can be triggered after this call?
-
-...
-
-> > >  	struct i2c_client *client;
-> > >  	const char *type;
-> > >  	u16 features;
-> > > +
-> > > +	/* GPIO chip */
-> > > +	struct gpio_chip gc;  
-> > 
-> > Making this a first member may lead to the better code. Check with
-> >   bloat-o-meter.
-> 
-> kabel@dellmb ~/linux $ ./scripts/bloat-o-meter \
->   turris-omnia-mcu.o turris-omnia-mcu-gpiochip-first.o
-> add/remove: 0/0 grow/shrink: 9/0 up/down: 52/0 (52)
-> Function                                     old     new   delta
-> omnia_mcu_register_gpiochip                  840     852     +12
-> omnia_mcu_probe                              696     708     +12
-> omnia_mcu_unregister_gpiochip                 20      24      +4
-> omnia_irq_bus_sync_unlock                    256     260      +4
-> omnia_irq_bus_lock                            36      40      +4
-> omnia_gpio_get_multiple                      872     876      +4
-> omnia_gpio_get                               372     376      +4
-> fw_features_show                              28      32      +4
-> front_button_mode_show                       260     264      +4
-> Total: Before=10468, After=10520, chg +0.50%
-> 
-> Seems the code grew when I swapped it.
-
-Thanks for checking! It means that access to client pointer is needed
-more often.
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 5315789f4868..24531891c7be 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1175,7 +1175,6 @@ CONFIG_COMMON_CLK_S2MPS11=y
+ CONFIG_COMMON_CLK_PWM=y
+ CONFIG_COMMON_CLK_RS9_PCIE=y
+ CONFIG_COMMON_CLK_VC5=y
+-CONFIG_COMMON_CLK_NPCM8XX=y
+ CONFIG_COMMON_CLK_BD718XX=m
+ CONFIG_CLK_RASPBERRYPI=m
+ CONFIG_CLK_IMX8MM=y
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
