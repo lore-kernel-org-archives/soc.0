@@ -1,71 +1,210 @@
-Return-Path: <MAILER-DAEMON>
+Return-Path: <andy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64C93E706F4
-	for <soc@archiver.kernel.org>; Thu, 21 Sep 2023 08:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78DF8E70703
+	for <soc@archiver.kernel.org>; Thu, 21 Sep 2023 09:55:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3490CC193E8; Thu, 21 Sep 2023 08:56:47 +0000 (UTC)
-Received: from mail-mark.top (mail-mark.top [106.75.93.82])
+	id 4636FC4AF69; Thu, 21 Sep 2023 09:55:16 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2EF15C116D6
-	for <soc@kernel.org>; Thu, 21 Sep 2023 08:56:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2EF15C116D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail-mark.top
-Authentication-Results: smtp.kernel.org; spf=pass smtp.helo=mail-mark.top
-Date: Thu, 21 Sep 2023 16:56:46 +0800
-From: postmaster@mail-mark.top
-Subject: Delivery report
+	by smtp.kernel.org (Postfix) with ESMTPS id E5F29C32785;
+	Thu, 21 Sep 2023 09:55:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5F29C32785
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="446947504"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="446947504"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 02:55:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723676393"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="723676393"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 02:55:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+	(envelope-from <andy@kernel.org>)
+	id 1qjGOr-0000000Gr7S-1QmO;
+	Thu, 21 Sep 2023 12:55:09 +0300
+Date: Thu, 21 Sep 2023 12:55:08 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <ZQwS/DXBt/kyyU5r@smile.fi.intel.com>
+References: <20230919103815.16818-1-kabel@kernel.org>
+ <20230919103815.16818-4-kabel@kernel.org>
+ <ZQmbd211FzPjA97r@smile.fi.intel.com>
+ <20230920190818.50b2018b@dellmb>
 MIME-Version: 1.0
-Content-Type: multipart/report; report-type=delivery-status;
-    boundary="report650C054E@mail-mark.top"
-Message-Id: <20230921085646.2EF15C116D6@smtp.kernel.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230920190818.50b2018b@dellmb>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+
+On Wed, Sep 20, 2023 at 07:08:18PM +0200, Marek Behún wrote:
+> On Tue, 19 Sep 2023 16:00:39 +0300
+> Andy Shevchenko <andy@kernel.org> wrote:
+> > On Tue, Sep 19, 2023 at 12:38:11PM +0200, Marek Behún wrote:
+
+...
+
+> > Ditto for all cases like this.
+> 
+> checkpatch warns: 
+>   ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+
+So, fix checkpatch then. It has false positives, because it doesn't know
+if the actual error code will sneak outside the kernel or not. But in
+the subsystem we internally use ENOTSUPP.
+
+...
+
+> Linus suggested using guards, so I will refactor this away.
+
+Even better.
+
+...
+
+> > > +		dev_err(&mcu->client->dev, "Cannot set GPIOs:
+> > >   %d\n", err);  
+> > 
+> > How is useful this one?
+> 
+> The function does not return, this way we will know something has gone
+> wrong. I am used to do this from the networking subsystem, where people
+> at least from mv88e6xxx wanted such behavior. Do you want me to drop
+> this?
+
+You are the developer and owner of the specific hardware, if you have a good
+justification for this message _in production_, then leave it, otherwise drop.
+
+...
+
+> > > +	bitmap_zero(valid_mask, ngpios);  
+> > 
+> > No need.
+> > 
+> > Also do you have bitops.h included?
+> 
+> bitmap.h actually for this
+
+Right, but I already thought a step forward, when you drop bitmap APIs,
+the bitops are still in place.
+
+...
+
+> > > +	rising = reply[0] | (reply[2] << 8) | (reply[4] << 16) |
+> > > +		 (reply[6] << 24);
+> > > +	falling = reply[1] | (reply[3] << 8) | (reply[5] << 16) |
+> > > +		  (reply[7] << 24);  
+> > 
+> > With a help of two masks, you can access to the both edges as to
+> >   64-bit value and simplify the code.
+> 
+> Huh? As in
+>   rising = reply & 0x00ff00ff00ff00ff;
+>   falling = reply & 0xff00ff00ff00ff00;
+> ?
+> But then I can't or the rising bit with the corresponding falling bit
+> to get pending...
+> Or I guess i can with:
+>   pending = rising & (pending >> 8);
+> 
+> Am I understanding you correctly?
+> 
+> But then I would need to store the mask in driver data as a 64-bit
+> value with half the data not used. Also the CPU is 32-bit.
+
+If you use proper bitmaps, perhaps this will be easier. You can use one for
+each and merge them whenever you want (with bitmap_or() call) or split (with
+bitmap_and() respectively):
+
+	bitmap_or(full, raising, failing); // merge
+	bitmap_and(raising, full, rasing_mask); // split
+
+...
+
+> > ATTRIBUTE_GROUPS() ?
+> 
+> I only want to create ane attribute_group. (I am using
+> devm_device_add_group(), not devm_device_add_groups()).
+
+...and you should not use that APIs.
+
+> > > +	err = devm_device_add_group(dev, &omnia_mcu_gpio_group);  
+> > 
+> > No way, no-one should use the API scheduled for removal.
+> > What's wrong with .dev_groups ?
+> 
+> Can I add them conditionally? GPIO chip is always created, but the
+> patch 4/7 only adds the attributes conditionally. Is it possible via
+> .dev_groups?
+
+Yes. You use __ATTRIBUTE_GROUPS() and .is_visible callback.
+
+...
+
+> > > +void omnia_mcu_unregister_gpiochip(struct omnia_mcu *mcu)
+> > > +{
+> > > +	if (!(mcu->features & FEAT_NEW_INT_API))
+> > > +
+> > >   cancel_delayed_work_sync(&mcu->button_release_emul_work); +
+> > > +	mutex_destroy(&mcu->lock);  
+> > 
+> > Wrong order?
+> 
+> No, the mutex may be used in the work. Can't destroy it first. Or am I
+> misunderstanding something?
+
+I mean you are using a lot of devm(), can mutex be used in IRQ or whatever
+that can be triggered after this call?
+
+...
+
+> > >  	struct i2c_client *client;
+> > >  	const char *type;
+> > >  	u16 features;
+> > > +
+> > > +	/* GPIO chip */
+> > > +	struct gpio_chip gc;  
+> > 
+> > Making this a first member may lead to the better code. Check with
+> >   bloat-o-meter.
+> 
+> kabel@dellmb ~/linux $ ./scripts/bloat-o-meter \
+>   turris-omnia-mcu.o turris-omnia-mcu-gpiochip-first.o
+> add/remove: 0/0 grow/shrink: 9/0 up/down: 52/0 (52)
+> Function                                     old     new   delta
+> omnia_mcu_register_gpiochip                  840     852     +12
+> omnia_mcu_probe                              696     708     +12
+> omnia_mcu_unregister_gpiochip                 20      24      +4
+> omnia_irq_bus_sync_unlock                    256     260      +4
+> omnia_irq_bus_lock                            36      40      +4
+> omnia_gpio_get_multiple                      872     876      +4
+> omnia_gpio_get                               372     376      +4
+> fw_features_show                              28      32      +4
+> front_button_mode_show                       260     264      +4
+> Total: Before=10468, After=10520, chg +0.50%
+> 
+> Seems the code grew when I swapped it.
+
+Thanks for checking! It means that access to client pointer is needed
+more often.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---report650C054E@mail-mark.top
-Content-Type: text/plain
-
-Hello, this is the mail server on mail-mark.top.
-
-I am sending you this message to inform you on the delivery status of a
-message you previously sent.  Immediately below you will find a list of
-the affected recipients;  also attached is a Delivery Status Notification
-(DSN) report in standard format, as well as the headers of the original
-message.
-
-  <soc@kernel.org>  delivery failed; will not continue trying
-
---report650C054E@mail-mark.top
-Content-Type: message/delivery-status
-
-Reporting-MTA: dns;mail-mark.top
-X-PowerMTA-VirtualMTA: web1
-Received-From-MTA: dns;kernel.org (193.42.32.239)
-Arrival-Date: Thu, 21 Sep 2023 16:56:40 +0800
-
-Final-Recipient: rfc822;soc@kernel.org
-Action: failed
-Status: 5.7.1 (delivery not authorized)
-Remote-MTA: dns;smtp2.kernel.org (35.85.114.177)
-Diagnostic-Code: smtp;550 5.7.1 Blocked by SpamAssassin
-X-PowerMTA-BounceCategory: spam-related
-
---report650C054E@mail-mark.top
-Content-Type: text/rfc822-headers
-
-From: kernel.org/Service <soc@kernel.org>
-To: soc@kernel.org
-Subject: kernel.org Service Notification To soc@kernel.org
-Date: 21 Sep 2023 10:55:33 +0200
-Message-ID: <20230921105533.9E63DA830C174CB1@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
---report650C054E@mail-mark.top--
