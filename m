@@ -1,217 +1,127 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=z2jn=FF=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6C2CC04AAF
-	for <soc@archiver.kernel.org>; Wed, 20 Sep 2023 17:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE8BCD493F
+	for <soc@archiver.kernel.org>; Thu, 21 Sep 2023 02:27:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 96CB1C433C9; Wed, 20 Sep 2023 17:08:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D793BC433C8;
-	Wed, 20 Sep 2023 17:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695229703;
-	bh=8b/ZUw047gnfc1wP817cudin9xoY2s1SOSFeNtD98s4=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=vL6wIc7nKwuLthF3tM2G8ZydPofg+XchjyKSt7pJhMPl4tvq+1LuGFaIdCvzw8lpa
-	 DhU+W2NUNFS9KDp1iuGXdsX1BJqpJ7HDkDPKnJcKmQk7qZOCpGwUT+HoCfpbn5cN/3
-	 mgJF4vw0e4Rta91VkuaxWpHpdPERSo7M3fKxZ7CApN9TkAIQh/EiqqkhnSDoIz0Ar3
-	 OyrhRiFt8mCph37mq3QYddwafo8x/HJ2+yzwMHR8DoDoJt0v5r5T6ibG5O71lSHSJh
-	 BEPmNJ2mshMnBOECnYTUqfvdEGldCLHDJII40n43pe79fIn+JVBxJccBn72pFGmDEP
-	 eiK50jQbsLM9Q==
-Date: Wed, 20 Sep 2023 19:08:18 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
-Message-ID: <20230920190818.50b2018b@dellmb>
-In-Reply-To: <ZQmbd211FzPjA97r@smile.fi.intel.com>
-References: <20230919103815.16818-1-kabel@kernel.org>
-	<20230919103815.16818-4-kabel@kernel.org>
-	<ZQmbd211FzPjA97r@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	id BB88BC433C9; Thu, 21 Sep 2023 02:27:43 +0000 (UTC)
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 190FBC433C7;
+	Thu, 21 Sep 2023 02:27:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 190FBC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.54])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RrfNK44YSzMlhR;
+	Thu, 21 Sep 2023 10:24:01 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
+ (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 21 Sep
+ 2023 10:27:36 +0800
+Message-ID: <1b05f595-b485-5a7e-ad31-b19f462fe43f@huawei.com>
+Date: Thu, 21 Sep 2023 10:27:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Andy,
-
-I'm sending reply to some of your comments. For those to which I do not
-reply I will simply incorporate your suggestions.
-
-On Tue, 19 Sep 2023 16:00:39 +0300
-Andy Shevchenko <andy@kernel.org> wrote:
-
-> On Tue, Sep 19, 2023 at 12:38:11PM +0200, Marek Beh=C3=BAn wrote:
-> > - front button pin
-> > - enable pins for USB regulators
-> > - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
-> > - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
-> > - on board revisions 32+ also various peripheral resets and another
-> >   voltage regulator enable pin =20
->=20
-> Can the main driver provide a regmap and all other use it?
-
-It can't. These are not registers accessible via I2C at specific
-addresses, but commands with different-length arguments. This was
-already discussed 4 years ago with Jacek, see
-  https://www.spinics.net/lists/linux-leds/msg11587.html
-There, Jacek suggested writing regmap API for the leds-turris-omnia
-driver (the MCU is also a LED controller and has same command
-interface, only at different I2C address).
-
-> > +	if (gpio->ctl_cmd)
-> > +		return -EOPNOTSUPP; =20
->=20
-> I believe internally we use ENOTSUPP.
-> Ditto for all cases like this.
-
-checkpatch warns:=20
-  ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-
-> > +	mutex_lock(&mcu->lock);
-> > +
-> > +	if (ctl_mask)
-> > +		err =3D omnia_ctl_cmd_unlocked(mcu,
-> >   CMD_GENERAL_CONTROL, ctl,
-> > +					     ctl_mask); =20
->=20
-> > +	if (!err && ext_ctl_mask)
-> > +		err =3D omnia_ctl_cmd_unlocked(mcu, CMD_EXT_CONTROL,
-> >   ext_ctl,
-> > +					     ext_ctl_mask); =20
->=20
-> Can it be
->=20
-> 	if (err)
-> 		goto out_unlock;
->=20
-> 	if (_mask)
-> 		...
-
-Linus suggested using guards, so I will refactor this away.
-
-> > +	mutex_unlock(&mcu->lock); =20
->=20
-> > +	if (err)
-> > +		dev_err(&mcu->client->dev, "Cannot set GPIOs:
-> >   %d\n", err); =20
->=20
-> How is useful this one?
-
-The function does not return, this way we will know something has gone
-wrong. I am used to do this from the networking subsystem, where people
-at least from mv88e6xxx wanted such behavior. Do you want me to drop
-this?
-
-> > +static int omnia_gpio_init_valid_mask(struct gpio_chip *gc,
-> > +				      unsigned long *valid_mask,
-> > +				      unsigned int ngpios)
-> > +{
-> > +	struct omnia_mcu *mcu =3D gpiochip_get_data(gc); =20
->=20
-> > +	bitmap_zero(valid_mask, ngpios); =20
->=20
-> No need.
->=20
-> Also do you have bitops.h included?
-
-bitmap.h actually for this
-
-> > +	rising =3D reply[0] | (reply[2] << 8) | (reply[4] << 16) |
-> > +		 (reply[6] << 24);
-> > +	falling =3D reply[1] | (reply[3] << 8) | (reply[5] << 16) |
-> > +		  (reply[7] << 24); =20
->=20
-> With a help of two masks, you can access to the both edges as to
->   64-bit value and simplify the code.
-
-Huh? As in
-  rising =3D reply & 0x00ff00ff00ff00ff;
-  falling =3D reply & 0xff00ff00ff00ff00;
-?
-But then I can't or the rising bit with the corresponding falling bit
-to get pending...
-Or I guess i can with:
-  pending =3D rising & (pending >> 8);
-
-Am I understanding you correctly?
-
-But then I would need to store the mask in driver data as a 64-bit
-value with half the data not used. Also the CPU is 32-bit.
-
-> > +static struct attribute *omnia_mcu_gpio_attrs[] =3D {
-> > +	&dev_attr_front_button_mode.attr,
-> > +	NULL,
-> > +};
-> > +
-> > +static const struct attribute_group omnia_mcu_gpio_group =3D {
-> > +	.attrs =3D omnia_mcu_gpio_attrs,
-> > +}; =20
->=20
-> ATTRIBUTE_GROUPS() ?
-
-I only want to create ane attribute_group. (I am using
-devm_device_add_group(), not devm_device_add_groups()).
-
-> > +	err =3D devm_device_add_group(dev, &omnia_mcu_gpio_group); =20
->=20
-> No way, no-one should use the API scheduled for removal.
-> What's wrong with .dev_groups ?
-
-Can I add them conditionally? GPIO chip is always created, but the
-patch 4/7 only adds the attributes conditionally. Is it possible via
-.dev_groups?
-
->=20
-> ...
->=20
-> > +void omnia_mcu_unregister_gpiochip(struct omnia_mcu *mcu)
-> > +{
-> > +	if (!(mcu->features & FEAT_NEW_INT_API))
-> > +
-> >   cancel_delayed_work_sync(&mcu->button_release_emul_work); +
-> > +	mutex_destroy(&mcu->lock); =20
->=20
-> Wrong order?
-
-No, the mutex may be used in the work. Can't destroy it first. Or am I
-misunderstanding something?
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 2/2] soc: kunpeng_hccs: add the check for PCC subspace
+ type
+To: Sudeep Holla <sudeep.holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+CC: <rafael@kernel.org>, <rafael.j.wysocki@intel.com>, <xuwei5@hisilicon.com>,
+	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<soc@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<liuyonglong@huawei.com>, <lihuisong@huawei.com>
+References: <20230914115753.9064-1-lihuisong@huawei.com>
+ <20230920064703.23543-1-lihuisong@huawei.com>
+ <20230920064703.23543-3-lihuisong@huawei.com>
+ <20230920141147.bq7cjiqjk6c36t6d@bogus>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230920141147.bq7cjiqjk6c36t6d@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.121.59]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
 
-> >  struct omnia_mcu {
-> >  	struct i2c_client *client;
-> >  	const char *type;
-> >  	u16 features;
-> > +
-> > +	/* GPIO chip */
-> > +	struct gpio_chip gc; =20
->=20
-> Making this a first member may lead to the better code. Check with
->   bloat-o-meter.
+在 2023/9/20 22:11, Sudeep Holla 写道:
+> On Wed, Sep 20, 2023 at 02:47:03PM +0800, Huisong Li wrote:
+>> Currently, HCCS driver directly uses Generic Communications Channel Shared
+>> Memory Region which is used in type0/1/2 to communicate with platform,
+>> but actually doesn't support type3/4/5.
+>> So this patch adds the check for PCC subspace type.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   drivers/soc/hisilicon/kunpeng_hccs.c | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> index f3810d9d1caa..4ba3bfd45a01 100644
+>> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
+>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> @@ -174,6 +174,19 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
+>>   	return rc;
+>>   }
+>>   
+>> +static int hccs_check_pcc_info(struct hccs_dev *hdev)
+>> +{
+>> +	struct pcc_mbox_chan *pcc_chan = hdev->cl_info.pcc_chan;
+>> +
+>> +	if (pcc_chan->type >= ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE) {
+>> +		dev_err(hdev->dev, "unsupport for subspace type%u.\n",
+>> +			pcc_chan->type);
+>> +		return -EOPNOTSUPP;
+>> +	}
+>   
+> Is this the only use of the PCC type information you have or do you plan to
+> use it for something other than the validation.
+Yeah, it is just validation now. we want to plan this driver can support 
+more types.
+>
+> Just for sake of argument, I can say all users of PCC must then do the
+> similar validation. I don't know where to draw the line here.
 
-kabel@dellmb ~/linux $ ./scripts/bloat-o-meter \
-  turris-omnia-mcu.o turris-omnia-mcu-gpiochip-first.o
-add/remove: 0/0 grow/shrink: 9/0 up/down: 52/0 (52)
-Function                                     old     new   delta
-omnia_mcu_register_gpiochip                  840     852     +12
-omnia_mcu_probe                              696     708     +12
-omnia_mcu_unregister_gpiochip                 20      24      +4
-omnia_irq_bus_sync_unlock                    256     260      +4
-omnia_irq_bus_lock                            36      40      +4
-omnia_gpio_get_multiple                      872     876      +4
-omnia_gpio_get                               372     376      +4
-fw_features_show                              28      32      +4
-front_button_mode_show                       260     264      +4
-Total: Before=3D10468, After=3D10520, chg +0.50%
+If export PCC type, it is good for the user of PCC to be more universal 
+and more compatible.
 
-Seems the code grew when I swapped it.
+>
+> Ideally I would expect the driver to make this transparent and give error
+> during transmit if not supported.
+I understand you.
+I just check this type only once during the initializing phase.
+Otherwise, every once need to verify it when send PCC command.
+>
+> The driver must be able to work with different PCC type to support variety
+> of platforms TBH. What is the issue exactly here ? Is this to prevent the
+Agree more with you.
+IMO, the user of PCC has the ability to support variety of platforms if 
+they can get PCC type.
+In this case, to prevent type 4 is necessary if driver cannot act as a 
+slave.
+on the other hand, If one driver acts as a slave, platform must supply 
+slave subspace for them.
+> use of Type 4 ? I think we must do something better but I don't know what
+> that is yet.
 
+Yes, we can try to do it better. I have a concern, like below.
 
-Marek
+You know that the use of PCC can use polling mode and interrupt mode to 
+communicate with platform.
+I'm not sure if the obtaining of the polling mode and interrupt mode is 
+an issue to prevent driver to be more universal.
+But this driver can know if they support interrupt mode based on struct 
+mbox_chan::struct mbox_controller::txdone_irq after requesting PCC channel.
+Because I'm not sure it's a better way.
+You know that drivers used interrupt mode need to fill the rx_callback 
+function into mbx_client when register PCC channel.
+And drivers used polling mode don't do it.
+If we use this way, drivers that both support the two mode have to 
+modify the rx_callback pointer after requesting PCC channel.
+>
