@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA759E6FE2F
-	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 14:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C99E6FE36
+	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 14:19:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 63116C433CC; Fri, 22 Sep 2023 14:14:18 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	id 60538C433C7; Fri, 22 Sep 2023 14:19:09 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 234F3C433C7;
-	Fri, 22 Sep 2023 14:14:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 234F3C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id EF85DC433C8;
+	Fri, 22 Sep 2023 14:19:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF85DC433C8
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="360216622"
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="361089089"
 X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="360216622"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:14:16 -0700
+   d="scan'208";a="361089089"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:19:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="750859290"
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="921176897"
 X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="750859290"
+   d="scan'208";a="921176897"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:14:13 -0700
+  by orsmga005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:18:59 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
 	(envelope-from <andy@kernel.org>)
-	id 1qjgv4-0000000HCii-3bDE;
-	Fri, 22 Sep 2023 17:14:10 +0300
-Date: Fri, 22 Sep 2023 17:14:10 +0300
+	id 1qjgzg-0000000HCoY-1iXu;
+	Fri, 22 Sep 2023 17:18:56 +0300
+Date: Fri, 22 Sep 2023 17:18:56 +0300
 From: Andy Shevchenko <andy@kernel.org>
 To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
@@ -41,96 +41,98 @@ Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
 Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
  for MCU connected GPIOs
-Message-ID: <ZQ2hMkRENs97zOr+@smile.fi.intel.com>
+Message-ID: <ZQ2iULDcH6kdk7cJ@smile.fi.intel.com>
 References: <20230919103815.16818-1-kabel@kernel.org>
  <20230919103815.16818-4-kabel@kernel.org>
  <ZQmbd211FzPjA97r@smile.fi.intel.com>
- <20230921204243.19c48136@thinkpad>
+ <20230920190818.50b2018b@dellmb>
+ <ZQwS/DXBt/kyyU5r@smile.fi.intel.com>
+ <20230921222453.4b3bdb4c@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230921204243.19c48136@thinkpad>
+In-Reply-To: <20230921222453.4b3bdb4c@thinkpad>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Sep 21, 2023 at 08:42:43PM +0200, Marek Behún wrote:
-> On Tue, 19 Sep 2023 16:00:39 +0300
+On Thu, Sep 21, 2023 at 10:25:01PM +0200, Marek Behún wrote:
+> On Thu, 21 Sep 2023 12:55:08 +0300
 > Andy Shevchenko <andy@kernel.org> wrote:
 
 ...
 
-> > > +	mutex_lock(&mcu->lock);
-> > > +
-> > > +	if (ctl_mask)
-> > > +		err = omnia_ctl_cmd_unlocked(mcu, CMD_GENERAL_CONTROL, ctl,
-> > > +					     ctl_mask);  
+> > > > > +	rising = reply[0] | (reply[2] << 8) | (reply[4] << 16) |
+> > > > > +		 (reply[6] << 24);
+> > > > > +	falling = reply[1] | (reply[3] << 8) | (reply[5] << 16) |
+> > > > > +		  (reply[7] << 24);    
+> > > > 
+> > > > With a help of two masks, you can access to the both edges as to
+> > > >   64-bit value and simplify the code.  
+> > > 
+> > > Huh? As in
+> > >   rising = reply & 0x00ff00ff00ff00ff;
+> > >   falling = reply & 0xff00ff00ff00ff00;
+> > > ?
+> > > But then I can't or the rising bit with the corresponding falling bit
+> > > to get pending...
+> > > Or I guess i can with:
+> > >   pending = rising & (pending >> 8);
+> > > 
+> > > Am I understanding you correctly?
+> > > 
+> > > But then I would need to store the mask in driver data as a 64-bit
+> > > value with half the data not used. Also the CPU is 32-bit.  
 > > 
-> > > +	if (!err && ext_ctl_mask)
-> > > +		err = omnia_ctl_cmd_unlocked(mcu, CMD_EXT_CONTROL, ext_ctl,
-> > > +					     ext_ctl_mask);  
+> > If you use proper bitmaps, perhaps this will be easier. You can use one for
+> > each and merge them whenever you want (with bitmap_or() call) or split (with
+> > bitmap_and() respectively):
 > > 
-> > Can it be
+> > 	bitmap_or(full, raising, failing); // merge
+> > 	bitmap_and(raising, full, rasing_mask); // split
+> 
+> Hmm. But then what? I or the result and use it as pending interrupt
+> bitmap, to be iterated over. The indexes of the bits correspond to the
+> constants in the MCU API.
+> 
+> So after your suggestion I have rising and falling containgin
+>   rising = 00rr00rr00rr00rr; /* r means rising bits */
+>   falling = 00ff00ff00ff00ff; /* f means falling bits */
+>   pending = rising | falling;
+> which means:
+>   pending = pp00pp00pp00pp; /* p means pending bits */
+> But these bit positions do not correspond to the interrupt number
+> anymore.
+> 
+> I still think the de-interleaving of the buffer from
+>   rr ff rr ff rr ff rr ff
+> into two words:
+>   rising = rrrrrrrr;
+>   falling = ffffffff;
+> is simpler...
+
+There are two sides of this: OS and hardware. See Xilinx GPIO driver how it's
+made there. But before going that way, check on
+https://lore.kernel.org/all/ZOMmuZuhdjA6mdIG@smile.fi.intel.com/
+That APIs you would need I am pretty sure.
+
+...
+
+> > > > > +	if (!(mcu->features & FEAT_NEW_INT_API))
+> > > > > +
+> > > > >   cancel_delayed_work_sync(&mcu->button_release_emul_work); +
+> > > > > +	mutex_destroy(&mcu->lock);    
+> > > > 
+> > > > Wrong order?  
+> > > 
+> > > No, the mutex may be used in the work. Can't destroy it first. Or am I
+> > > misunderstanding something?  
 > > 
-> > 	if (err)
-> > 		goto out_unlock;
-> > 
-> > 	if (_mask)
-> > 		...
-> > 
-> > ?
+> > I mean you are using a lot of devm(), can mutex be used in IRQ or whatever
+> > that can be triggered after this call?
 > 
-> Hi Andy,
-> 
-> so I am refactoring this to use guard(mutex), but now I have this:
-> 
-> 	guard(mutex, &mcu->lock);
-> 
-> 	if (ctl_mask) {
-> 		err = ...;
-> 		if (err)
-> 			goto out_err;
-> 	}
-> 
-> 	if (ext_ctl_mask) {
-> 		err = ...;
-> 		if (err)
-> 			goto out_err;
-> 	}
-> 
-> 	return;
-> out_err:
-> 	dev_err(dev, "Cannot set GPIOs: %d\n", err);
-> 
-> which clearly is not any better... or at least the original
+> OK, I think I need to free the irq before canceling the work. Thank you!
 
-...which rather means that the design of above is not so good, i.e.
-why do you need the same message in the different situations?
-
->   if (!err && ext_ctl_mask)
-> is better IMO.
-
-I disagree.
-
-> Compare with:
-> 
-> 	guard(mutex, &mcu->lock);
-> 
-> 	if (ctl_mask)
-> 		err = ...;
-> 
-> 	if (!err && ext_ctl_mask)
-> 		err = ...;
-> 
-> 	if (err)
-> 		dev_err(dev, "Cannot set GPIOs: %d\n", err);
-> 
-> 
-> Do you have a better suggestion?
-
-Use different messages (if even needed) for different situations.
-
-With cleanup.h in place you shouldn't supposed to have goto:s
-(in simple cases like yours).
+Can you rather switch everything to be devm managed?
 
 -- 
 With Best Regards,
