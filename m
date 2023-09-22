@@ -1,74 +1,121 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <SRS0=MdWL=FG=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF9BE6FE36
-	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 14:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC4AE6FE3D
+	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 14:43:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D9E3BC433CA; Fri, 22 Sep 2023 14:21:43 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id B6222C433C8; Fri, 22 Sep 2023 14:43:17 +0000 (UTC)
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC247C433C7;
-	Fri, 22 Sep 2023 14:21:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC247C433C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="384674914"
-X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="384674914"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:21:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="817793937"
-X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="817793937"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:21:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qjh28-0000000HCq5-3dHg;
-	Fri, 22 Sep 2023 17:21:28 +0300
-Date: Fri, 22 Sep 2023 17:21:28 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
-Message-ID: <ZQ2i6MQ0DrsHwedq@smile.fi.intel.com>
-References: <20230919103815.16818-1-kabel@kernel.org>
- <20230919103815.16818-4-kabel@kernel.org>
- <CACRpkdY8GcDYEDg=w4_ggY7O7kj-_X4ejpXni-t8M3yMivU88Q@mail.gmail.com>
- <20230921214541.0dae4d62@thinkpad>
- <20230921221409.4a01f541@thinkpad>
+	by smtp.kernel.org (Postfix) with ESMTPS id 97633C433C9;
+	Fri, 22 Sep 2023 14:43:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 97633C433C9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 67BD85C01A8;
+	Fri, 22 Sep 2023 10:43:14 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 22 Sep 2023 10:43:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1695393794; x=1695480194; bh=cX3BFEpcSwAI2RdCFAWOh+RUcIcSLZQQw+L
+	ux7UIf5E=; b=byVnIw0riDP04n+Z8z/RKs8pC9p7MfrSAwZuzyK46OTg2vYywMC
+	LckrWBrRWrN7DcJrLn/kJslgl59T+X/O2gubjWaov4OBG1L20byPOAXry6H5Gg1c
+	msiJMw5AqV1TzmDf4uNENqnrbN4eoP90hnWFYq5OPtQZCBcgb1QQ1Z0VQ4SyH9dT
+	ZO/GhMFAIL57iljL8UmtNM9vTKGXx53iNfAqpQO38w0/xZbx9/dJTJeqqe89FZTF
+	oy/FcLL7fV1Gfdp6fGnRt2HId563GMip9XgDtSzHSSYH0WgW4nsKjkCFLxSF3DxS
+	ZUw1b/7w8dTtdR/SrFwoOlzCCKlYD77ASpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1695393794; x=1695480194; bh=cX3BFEpcSwAI2RdCFAWOh+RUcIcSLZQQw+L
+	ux7UIf5E=; b=anUc5YEGEsbPQOjR6H0SbIN+3S+WwzQhj8B2WuwNKGntAArp4q9
+	f13HbRek4d+QV9bWqHq/lxH3UnP581s0QHQSj6M0HUYdzNBRpFZ2LISDIPLYvw/0
+	JhFInQNt2xyukBUbbTT7hUanvvfos6DcQd7PkGpH1aOj2rWhgr4h9LPCk3V09dqg
+	NoFCVkZUHiflLWlVHfWUADJbGEXI8Ujy5+eKbzERP4BjiqJzLZxcgh5EDjhI28+w
+	tTesag4GeQF771BCKVEEr21DiNsoGtjorF8Z7SNqvlPxvb3dnbUobZW6WmlvPEFy
+	t0rspIHcmRk3OKmmrIVSD3wGxkO8XHAmbow==
+X-ME-Sender: <xms:AKgNZZY6RHRwuWC2y8pkz1-CRypBt8bojZXgsVALd2swGQeGiXmYtg>
+    <xme:AKgNZQbS7Su86Jlv4dX87tAoQ9pyimlOV1vhU7ZkQ0U2DnZHUVgRMz9xV7bemNhEr
+    blajbTDOfR-mBkBl68>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekkedgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:AKgNZb8o3CcQxKVCcRK_Rp3Xs0nd8JPIpwNLwvPjRL0YJWpJxOKiBw>
+    <xmx:AKgNZXpfUDyvsH_GXBRUjW7EqrsWFts73MM-cNleiI1Nt9WrVVauIw>
+    <xmx:AKgNZUoHvPDmZBhUSsw7yfkqr-zFl-vpZLMwG6Enwtu3I-89hzKmQA>
+    <xmx:AqgNZR5XzzbiNWX3fYcKTkSSxS6wDcyiBMw8FGsaxiYYlNBSBqkPpg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 62A8CB60089; Fri, 22 Sep 2023 10:43:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230921221409.4a01f541@thinkpad>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Message-Id: <ea9ee2dd-b71a-4c97-a347-20536d7ad424@app.fastmail.com>
+In-Reply-To: 
+ <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
+References: <cover.1693623752.git.zhoubinbin@loongson.cn>
+ <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
+ <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
+ <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
+ <20230919-9ce82588fccdd641574b468c@fedora>
+ <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
+Date: Fri, 22 Sep 2023 10:42:51 -0400
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Huacai Chen" <chenhuacai@kernel.org>, "Conor Dooley" <conor@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: "Randy Dunlap" <rdunlap@infradead.org>,
+ "Binbin Zhou" <zhoubinbin@loongson.cn>,
+ "Binbin Zhou" <zhoubb.aaron@gmail.com>,
+ "Huacai Chen" <chenhuacai@loongson.cn>, "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, loongson-kernel@lists.loongnix.cn,
+ soc@kernel.org, devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ "WANG Xuerui" <kernel@xen0n.name>, loongarch@lists.linux.dev
+Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 21, 2023 at 10:14:09PM +0200, Marek Behún wrote:
-> On Thu, 21 Sep 2023 21:45:57 +0200
-> Marek Behún <kabel@kernel.org> wrote:
-> 
-> > I could use ffs(x) instead of ilog2(x) + 1.
-> 
-> Pardon me, I meant fls(). Or maybe get_bitmask_order() from
-> linux/bitops.h.
+On Tue, Sep 19, 2023, at 12:15, Huacai Chen wrote:
+> On Tue, Sep 19, 2023 at 11:48=E2=80=AFPM Conor Dooley <conor@kernel.or=
+g> wrote:
+>> On Tue, Sep 19, 2023 at 08:36:50AM -0700, Randy Dunlap wrote:
+>>
+>> Seemingly this was sent again in isolation 2 weeks ago, but neither t=
+he
+>> maintainer (Huacai) nor soc@kernel.org were on cc:
+>>
+>> https://lore.kernel.org/all/20230905123629.4510-1-zhuyinbo@loongson.c=
+n/
+> v3 indeed cc-ed soc@kernel.org. :)
+>
+> Arnd, could you please take this series to the soc tree? And also this=20
+> series:
+> https://lore.kernel.org/loongarch/cover.1693534134.git.zhoubinbin@loon=
+gson.cn/T/#t
 
-In any case it's bitops.h APIs that you will need and I think it's fine and
-Linus will approve that.
+Sorry, I have been traveling and not pushed out the tree yet.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Can you confirm that the input dependency is required for 6.6
+and the other series can wait until 6.7? When you send patches
+to soc@kernel.org, please always mention which tree you intend
+them for. I might disagree, but it's better than having to guess.
 
-
+     Arnd
