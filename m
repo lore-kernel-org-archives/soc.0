@@ -1,121 +1,78 @@
-Return-Path: <SRS0=MdWL=FG=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=uAer=FG=bewilderbeest.net=zev@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC4AE6FE3D
-	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 14:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26075CE7A86
+	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 22:34:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B6222C433C8; Fri, 22 Sep 2023 14:43:17 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	id D8FECC433C7; Fri, 22 Sep 2023 22:34:18 +0000 (UTC)
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 97633C433C9;
-	Fri, 22 Sep 2023 14:43:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 97633C433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 67BD85C01A8;
-	Fri, 22 Sep 2023 10:43:14 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 22 Sep 2023 10:43:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1695393794; x=1695480194; bh=cX3BFEpcSwAI2RdCFAWOh+RUcIcSLZQQw+L
-	ux7UIf5E=; b=byVnIw0riDP04n+Z8z/RKs8pC9p7MfrSAwZuzyK46OTg2vYywMC
-	LckrWBrRWrN7DcJrLn/kJslgl59T+X/O2gubjWaov4OBG1L20byPOAXry6H5Gg1c
-	msiJMw5AqV1TzmDf4uNENqnrbN4eoP90hnWFYq5OPtQZCBcgb1QQ1Z0VQ4SyH9dT
-	ZO/GhMFAIL57iljL8UmtNM9vTKGXx53iNfAqpQO38w0/xZbx9/dJTJeqqe89FZTF
-	oy/FcLL7fV1Gfdp6fGnRt2HId563GMip9XgDtSzHSSYH0WgW4nsKjkCFLxSF3DxS
-	ZUw1b/7w8dTtdR/SrFwoOlzCCKlYD77ASpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1695393794; x=1695480194; bh=cX3BFEpcSwAI2RdCFAWOh+RUcIcSLZQQw+L
-	ux7UIf5E=; b=anUc5YEGEsbPQOjR6H0SbIN+3S+WwzQhj8B2WuwNKGntAArp4q9
-	f13HbRek4d+QV9bWqHq/lxH3UnP581s0QHQSj6M0HUYdzNBRpFZ2LISDIPLYvw/0
-	JhFInQNt2xyukBUbbTT7hUanvvfos6DcQd7PkGpH1aOj2rWhgr4h9LPCk3V09dqg
-	NoFCVkZUHiflLWlVHfWUADJbGEXI8Ujy5+eKbzERP4BjiqJzLZxcgh5EDjhI28+w
-	tTesag4GeQF771BCKVEEr21DiNsoGtjorF8Z7SNqvlPxvb3dnbUobZW6WmlvPEFy
-	t0rspIHcmRk3OKmmrIVSD3wGxkO8XHAmbow==
-X-ME-Sender: <xms:AKgNZZY6RHRwuWC2y8pkz1-CRypBt8bojZXgsVALd2swGQeGiXmYtg>
-    <xme:AKgNZQbS7Su86Jlv4dX87tAoQ9pyimlOV1vhU7ZkQ0U2DnZHUVgRMz9xV7bemNhEr
-    blajbTDOfR-mBkBl68>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekkedgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:AKgNZb8o3CcQxKVCcRK_Rp3Xs0nd8JPIpwNLwvPjRL0YJWpJxOKiBw>
-    <xmx:AKgNZXpfUDyvsH_GXBRUjW7EqrsWFts73MM-cNleiI1Nt9WrVVauIw>
-    <xmx:AKgNZUoHvPDmZBhUSsw7yfkqr-zFl-vpZLMwG6Enwtu3I-89hzKmQA>
-    <xmx:AqgNZR5XzzbiNWX3fYcKTkSSxS6wDcyiBMw8FGsaxiYYlNBSBqkPpg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 62A8CB60089; Fri, 22 Sep 2023 10:43:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
-MIME-Version: 1.0
-Message-Id: <ea9ee2dd-b71a-4c97-a347-20536d7ad424@app.fastmail.com>
-In-Reply-To: 
- <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
-References: <cover.1693623752.git.zhoubinbin@loongson.cn>
- <16a37f6ad3cc9417b6638c2cd532d88c79468eb1.1693623752.git.zhoubinbin@loongson.cn>
- <885eab85-2c11-cf20-9187-55cd647fbe9f@infradead.org>
- <c7604f6c-4da7-47c4-abe9-e626b3efc665@infradead.org>
- <20230919-9ce82588fccdd641574b468c@fedora>
- <CAAhV-H73kp8zWJD7AKUvknmxow=f_cPBw9jctpmced6o_QCF6w@mail.gmail.com>
-Date: Fri, 22 Sep 2023 10:42:51 -0400
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Huacai Chen" <chenhuacai@kernel.org>, "Conor Dooley" <conor@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id DDE42C433C8
+	for <soc@kernel.org>; Fri, 22 Sep 2023 22:34:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DDE42C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: zev)
+	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id B1DAD2A7;
+	Fri, 22 Sep 2023 15:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+	s=thorn; t=1695422055;
+	bh=SR6ct5+JL0dEXT4O5ECDzYTJHdV/6UCZxQ2VxnCoFyc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZpWXNwJysebO4YbhezPo4NePDVw0cGmN71HnyVyHijGzAmRwPGLCM9DrB2pD6Fsey
+	 axp8JC3LWma82589HLLwwjpvjc7I91w1Fi7ExaTnhbwVJDyDlBKPV7l7Bz0SfqUFxz
+	 X59H1z2kOksBEDSX404RR43d5LqsP8EvzgIzr8fs=
+From: Zev Weiss <zev@bewilderbeest.net>
 List-Id: <soc.lore.kernel.org>
-Cc: "Randy Dunlap" <rdunlap@infradead.org>,
- "Binbin Zhou" <zhoubinbin@loongson.cn>,
- "Binbin Zhou" <zhoubb.aaron@gmail.com>,
- "Huacai Chen" <chenhuacai@loongson.cn>, "Yinbo Zhu" <zhuyinbo@loongson.cn>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>, loongson-kernel@lists.loongnix.cn,
- soc@kernel.org, devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- "WANG Xuerui" <kernel@xen0n.name>, loongarch@lists.linux.dev
-Subject: Re: [PATCH v3 1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-aspeed@lists.ozlabs.org
+Cc: Zev Weiss <zev@bewilderbeest.net>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] MAINTAINERS: aspeed: Update git tree URL
+Date: Fri, 22 Sep 2023 15:34:06 -0700
+Message-ID: <20230922223405.24717-2-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 19, 2023, at 12:15, Huacai Chen wrote:
-> On Tue, Sep 19, 2023 at 11:48=E2=80=AFPM Conor Dooley <conor@kernel.or=
-g> wrote:
->> On Tue, Sep 19, 2023 at 08:36:50AM -0700, Randy Dunlap wrote:
->>
->> Seemingly this was sent again in isolation 2 weeks ago, but neither t=
-he
->> maintainer (Huacai) nor soc@kernel.org were on cc:
->>
->> https://lore.kernel.org/all/20230905123629.4510-1-zhuyinbo@loongson.c=
-n/
-> v3 indeed cc-ed soc@kernel.org. :)
->
-> Arnd, could you please take this series to the soc tree? And also this=20
-> series:
-> https://lore.kernel.org/loongarch/cover.1693534134.git.zhoubinbin@loon=
-gson.cn/T/#t
+The description for joel/aspeed.git on git.kernel.org currently says:
 
-Sorry, I have been traveling and not pushed out the tree yet.
+    Old Aspeed tree. Please see joel/bmc.git
 
-Can you confirm that the input dependency is required for 6.6
-and the other series can wait until 6.7? When you send patches
-to soc@kernel.org, please always mention which tree you intend
-them for. I might disagree, but it's better than having to guess.
+Let's update MAINTAINERS accordingly.
 
-     Arnd
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Acked-by: Joel Stanley <joel@jms.id.au>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4b8a9749cb0b..b54f2a42a898 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1968,7 +1968,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Supported
+ Q:	https://patchwork.ozlabs.org/project/linux-aspeed/list/
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joel/aspeed.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
+ F:	Documentation/devicetree/bindings/arm/aspeed/
+ F:	arch/arm/boot/dts/aspeed/
+ F:	arch/arm/mach-aspeed/
+-- 
+2.42.0
+
