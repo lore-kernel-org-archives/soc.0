@@ -1,68 +1,139 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <andy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C5EC04AAB
-	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 11:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA759E6FE2F
+	for <soc@archiver.kernel.org>; Fri, 22 Sep 2023 14:14:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B3AC6C433C9; Fri, 22 Sep 2023 11:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B0FC433C8;
-	Fri, 22 Sep 2023 11:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695383220;
-	bh=V/qr2SZplWfADHpWHxntKDDdGnthWkaZQS1mjpAoveU=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=fdmHR/N2CKRGTsstlvdEff93vNsTPkVYUuZ+/Gr1YSFSO7eQV+TKFYdVZ4RMfZIHm
-	 Mr7CzFAWSOgT4GsgMwLHXPCE3gxUxmE3Fr0teTK/vu/y7RomhfkLAI2SLPnt/Jkw+c
-	 MNSP1xZPZ5oFTv02Tk1xlfi308XfdTIw1MHniYM3hiykLeH78A9CD1cBxGMNVZjIrh
-	 E0a+jqqMqbZEDSXkAXgymFu0g5LD5w5sC5zLiJeNlLsxWJLTd9S2Nl2SH2A5kgjJf5
-	 /yFbTSADMRTpZaKuU1ByMCvYqxZT0RVRxyPS7VZlztTf+aQBZjYOtjZCIWs9eUK+Iu
-	 WSvDvc9m25Idw==
-Date: Fri, 22 Sep 2023 13:46:56 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
+	id 63116C433CC; Fri, 22 Sep 2023 14:14:18 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 234F3C433C7;
+	Fri, 22 Sep 2023 14:14:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 234F3C433C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="360216622"
+X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
+   d="scan'208";a="360216622"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:14:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10841"; a="750859290"
+X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
+   d="scan'208";a="750859290"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 07:14:13 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+	(envelope-from <andy@kernel.org>)
+	id 1qjgv4-0000000HCii-3bDE;
+	Fri, 22 Sep 2023 17:14:10 +0300
+Date: Fri, 22 Sep 2023 17:14:10 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Wim Van Sebroeck
- <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] platform: cznic: turris-omnia-mcu: Add support
- for MCU watchdog
-Message-ID: <20230922134656.23171869@dellmb>
-In-Reply-To: <5940424f-ebaf-a73b-4157-fc3fb7fa7d3c@roeck-us.net>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <ZQ2hMkRENs97zOr+@smile.fi.intel.com>
 References: <20230919103815.16818-1-kabel@kernel.org>
-	<20230919103815.16818-6-kabel@kernel.org>
-	<5940424f-ebaf-a73b-4157-fc3fb7fa7d3c@roeck-us.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+ <20230919103815.16818-4-kabel@kernel.org>
+ <ZQmbd211FzPjA97r@smile.fi.intel.com>
+ <20230921204243.19c48136@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230921204243.19c48136@thinkpad>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-> > +static int omnia_wdt_start(struct watchdog_device *wdt)
-> > +{
-> > +	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
-> > +
-> > +	/*
-> > +	 * The MCU also implements LED controller, and the LED driver may in
-> > +	 * some cases require more I2C bandwidth. In order to prevent stealing
-> > +	 * that bandwidth from the LED driver, configure minimum time between
-> > +	 * pings to 10% of the configured timeout (for 120 second timeout we
-> > +	 * will be pinging at most every 12 seconds).
-> > +	 */
-> > +	mcu->wdt.min_hw_heartbeat_ms = 100 * mcu->wdt.timeout;  
+On Thu, Sep 21, 2023 at 08:42:43PM +0200, Marek Behún wrote:
+> On Tue, 19 Sep 2023 16:00:39 +0300
+> Andy Shevchenko <andy@kernel.org> wrote:
+
+...
+
+> > > +	mutex_lock(&mcu->lock);
+> > > +
+> > > +	if (ctl_mask)
+> > > +		err = omnia_ctl_cmd_unlocked(mcu, CMD_GENERAL_CONTROL, ctl,
+> > > +					     ctl_mask);  
+> > 
+> > > +	if (!err && ext_ctl_mask)
+> > > +		err = omnia_ctl_cmd_unlocked(mcu, CMD_EXT_CONTROL, ext_ctl,
+> > > +					     ext_ctl_mask);  
+> > 
+> > Can it be
+> > 
+> > 	if (err)
+> > 		goto out_unlock;
+> > 
+> > 	if (_mask)
+> > 		...
+> > 
+> > ?
 > 
-> This is not what min_hw_heartbeat_ms is supposed to be used for, and it is
-> an abuse of the API which is not guaranteed to work. The value is exopected
-> to be set at registration time, and it is not supposed to change dynamically.
-> It is also competely unnecessary since no sane watchdog daemon will ping
-> at such a high rate. Please drop.
+> Hi Andy,
+> 
+> so I am refactoring this to use guard(mutex), but now I have this:
+> 
+> 	guard(mutex, &mcu->lock);
+> 
+> 	if (ctl_mask) {
+> 		err = ...;
+> 		if (err)
+> 			goto out_err;
+> 	}
+> 
+> 	if (ext_ctl_mask) {
+> 		err = ...;
+> 		if (err)
+> 			goto out_err;
+> 	}
+> 
+> 	return;
+> out_err:
+> 	dev_err(dev, "Cannot set GPIOs: %d\n", err);
+> 
+> which clearly is not any better... or at least the original
 
-Hello Guenter, thanks for the review.
+...which rather means that the design of above is not so good, i.e.
+why do you need the same message in the different situations?
 
-Sorry about this, I thought this was correct cause rti_wdt driver and
-feared that watchdog daemons would actually ping at such rate.
+>   if (!err && ext_ctl_mask)
+> is better IMO.
 
-I will drop it in the next version of the series.
+I disagree.
 
-Marek
+> Compare with:
+> 
+> 	guard(mutex, &mcu->lock);
+> 
+> 	if (ctl_mask)
+> 		err = ...;
+> 
+> 	if (!err && ext_ctl_mask)
+> 		err = ...;
+> 
+> 	if (err)
+> 		dev_err(dev, "Cannot set GPIOs: %d\n", err);
+> 
+> 
+> Do you have a better suggestion?
+
+Use different messages (if even needed) for different situations.
+
+With cleanup.h in place you shouldn't supposed to have goto:s
+(in simple cases like yours).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
