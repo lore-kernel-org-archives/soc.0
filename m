@@ -1,95 +1,165 @@
-Return-Path: <SRS0=ZQjm=FJ=linaro.org=linus.walleij@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CB4CCE7A81
-	for <soc@archiver.kernel.org>; Mon, 25 Sep 2023 09:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D04DECE7A94
+	for <soc@archiver.kernel.org>; Mon, 25 Sep 2023 10:04:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C71FBC433C9; Mon, 25 Sep 2023 09:21:58 +0000 (UTC)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D55E0C433C7
-	for <soc@kernel.org>; Mon, 25 Sep 2023 09:21:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D55E0C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-d865854ef96so4016286276.2
-        for <soc@kernel.org>; Mon, 25 Sep 2023 02:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695633717; x=1696238517; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=N7arRfZeBtT497ax2pL4SYDLXkrDcIcThCXauWvah8w=;
-        b=NnrJCg4vF/OIH9YQg8AaXdEzZ9nB5OsNupczw68MMHZB5nWF4Pof9h8m66ZTErkZEd
-         kOieVSspvG0EgKQ0Kc8rqF3JzGLu86ZPcg8OPrgRQKos/rzQnJEfmTf0LRc2tlvg3xvQ
-         Wv0CSMnCssPHwd0Mko3jLaKEDHVtIk+vCaXzrLowy3cxJqWHct3bhv/G/D9av1OgkQ3M
-         3N/UpOm7kyYRtorXkSXruzIgtxBGZRcnlyhWQ3szNnmx8N9PGYv6R+nWC86KXKGFIJeK
-         xd5cctV6H5ZxBTX9EBfZLgVIbMfEP8q02w3dR/Xo4M4Jjr2c8k/WRKiQCn+QUplPJRpH
-         XGDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695633717; x=1696238517;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N7arRfZeBtT497ax2pL4SYDLXkrDcIcThCXauWvah8w=;
-        b=d86+SBUgaMInVHeY76EAu5f5JRk9TUNjdZu38AiDOEgVRSgxqyso0hmFCX/L/i9c4X
-         87YqL5Gp2QtvDRTjMmtKlCKTGZ0SgiQaGMV9HVLffEc2ls2oRdNzgXN2oQPWN1YHnp5o
-         mG+zGmhUDbT/5N2jLw0y9ANWbUu7RMG4YtUt7sVnp8eHjJW1SAt7fPHer0cdr/k2leY4
-         917JwkkDIq0Apu84C0Oer8ZqP4PiHNsVgIwcsqIoVRxfVHJ9JQFhPhp9joBorWfwZ/P8
-         M6Q6Dpd5lFwrxB9ii3L+4y4BVc3oUGganLf24Qfiz/iZ2ItkPSFswd57wZCXmRrmKLoa
-         8HFQ==
-X-Gm-Message-State: AOJu0YxwgQX/qNnZm6wbe/nIuN5wsy1/h9SZ7m9myrIpJaoMHNMM3lW1
-	aJgrVsOWAj82F/j8zLLB49O2EHibdBmdcwKL5uU7VaI6faj9h3/8iAE=
-X-Google-Smtp-Source: AGHT+IHBy0xil4yXUo4nkohG8CJeFTHkseROgR9cppE/mWegSpZxQWeWOdf2+72IKLQ1kxo1nthvEQmHna2GXgBl1v0=
-X-Received: by 2002:a25:d795:0:b0:d80:c94:3ea6 with SMTP id
- o143-20020a25d795000000b00d800c943ea6mr5491473ybg.34.1695633716792; Mon, 25
- Sep 2023 02:21:56 -0700 (PDT)
-MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 25 Sep 2023 11:21:46 +0200
-Message-ID: <CACRpkdZc5Yzsos2+gRPtCT-+ohmaV69ew5YFJLakD+9VFkrkfQ@mail.gmail.com>
-Subject: [GIT PULL] Ux500 DT updates for v6.7
+	id 88940C433CB; Mon, 25 Sep 2023 10:04:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85FCC433C9;
+	Mon, 25 Sep 2023 10:03:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695636241;
+	bh=pMlsWxZ5fP3XWaQChC2GU/7Nwmgz0TSVALACEgH5SD4=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=O4X+1OzjYEQOGWjGz7lJxo8KQticbWTt7LhRisi8537WulLHkyujwSnhJdE69U/7Z
+	 CegXWnZtoFlrZvPz8/WMiJdL/aN7oy4qqhMUOdS635DFpPXLBZydvF20kIDgsz/olc
+	 XNSsqNxOargcC6Sc/CAiiJcOLa8Z7VLbNVWWjAv1k3SWqUGap0728Qt3c2xlx8tolb
+	 Uq7n22ajpZzkkUAr0OoixfXbV5Iej7wTEBOOeqnVcz7Bg3a+6G1+SLH+hCfnR4smI/
+	 WVWU/rIdKnV8J8YiM5cZ/eA86qArk+GIFIuoICHY6KA5l0nhP0w+LjWuH/RXPJ8Ru4
+	 j1e1J6la5nZXQ==
+Date: Mon, 25 Sep 2023 12:03:56 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
+ <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <20230925120356.52bcd639@dellmb>
+In-Reply-To: <ZQ2iULDcH6kdk7cJ@smile.fi.intel.com>
+References: <20230919103815.16818-1-kabel@kernel.org>
+	<20230919103815.16818-4-kabel@kernel.org>
+	<ZQmbd211FzPjA97r@smile.fi.intel.com>
+	<20230920190818.50b2018b@dellmb>
+	<ZQwS/DXBt/kyyU5r@smile.fi.intel.com>
+	<20230921222453.4b3bdb4c@thinkpad>
+	<ZQ2iULDcH6kdk7cJ@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi ARM SoC folks,
+On Fri, 22 Sep 2023 17:18:56 +0300
+Andy Shevchenko <andy@kernel.org> wrote:
 
-please pull in the following fixes from Krzysztof for Ux500
-device trees.
+> On Thu, Sep 21, 2023 at 10:25:01PM +0200, Marek Beh=C3=BAn wrote:
+> > On Thu, 21 Sep 2023 12:55:08 +0300
+> > Andy Shevchenko <andy@kernel.org> wrote: =20
+>=20
+> ...
+>=20
+> > > > > > +	rising =3D reply[0] | (reply[2] << 8) | (reply[4] << 16) |
+> > > > > > +		 (reply[6] << 24);
+> > > > > > +	falling =3D reply[1] | (reply[3] << 8) | (reply[5] << 16) |
+> > > > > > +		  (reply[7] << 24);     =20
+> > > > >=20
+> > > > > With a help of two masks, you can access to the both edges as to
+> > > > >   64-bit value and simplify the code.   =20
+> > > >=20
+> > > > Huh? As in
+> > > >   rising =3D reply & 0x00ff00ff00ff00ff;
+> > > >   falling =3D reply & 0xff00ff00ff00ff00;
+> > > > ?
+> > > > But then I can't or the rising bit with the corresponding falling b=
+it
+> > > > to get pending...
+> > > > Or I guess i can with:
+> > > >   pending =3D rising & (pending >> 8);
+> > > >=20
+> > > > Am I understanding you correctly?
+> > > >=20
+> > > > But then I would need to store the mask in driver data as a 64-bit
+> > > > value with half the data not used. Also the CPU is 32-bit.   =20
+> > >=20
+> > > If you use proper bitmaps, perhaps this will be easier. You can use o=
+ne for
+> > > each and merge them whenever you want (with bitmap_or() call) or spli=
+t (with
+> > > bitmap_and() respectively):
+> > >=20
+> > > 	bitmap_or(full, raising, failing); // merge
+> > > 	bitmap_and(raising, full, rasing_mask); // split =20
+> >=20
+> > Hmm. But then what? I or the result and use it as pending interrupt
+> > bitmap, to be iterated over. The indexes of the bits correspond to the
+> > constants in the MCU API.
+> >=20
+> > So after your suggestion I have rising and falling containgin
+> >   rising =3D 00rr00rr00rr00rr; /* r means rising bits */
+> >   falling =3D 00ff00ff00ff00ff; /* f means falling bits */
+> >   pending =3D rising | falling;
+> > which means:
+> >   pending =3D pp00pp00pp00pp; /* p means pending bits */
+> > But these bit positions do not correspond to the interrupt number
+> > anymore.
+> >=20
+> > I still think the de-interleaving of the buffer from
+> >   rr ff rr ff rr ff rr ff
+> > into two words:
+> >   rising =3D rrrrrrrr;
+> >   falling =3D ffffffff;
+> > is simpler... =20
+>=20
+> There are two sides of this: OS and hardware. See Xilinx GPIO driver how =
+it's
+> made there. But before going that way, check on
+> https://lore.kernel.org/all/ZOMmuZuhdjA6mdIG@smile.fi.intel.com/
+> That APIs you would need I am pretty sure.
 
-Yours,
-Linus Walleij
+Andy, thank you for patience in reviewing this.
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+Hmm. I like the names, scatter and gather. In the firmware, I used
+interleave and deinterleave, see
+  https://gitlab.nic.cz/turris/hw/omnia_hw_ctrl/-/blob/master/src/drivers/i=
+2c_iface.c#L360
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+But those functions work bit-wise. I realize that the I2C transfers in
+the driver are so slow that such bit-wise cycling over a bitmap won't
+matter much, but I still find my original proposal more simple and
+straight-forward. But I will cave if you insist. Please let me know
+(and can I then send your local patch in the series?)
 
-are available in the Git repository at:
+> > > > > > +	if (!(mcu->features & FEAT_NEW_INT_API))
+> > > > > > +
+> > > > > >   cancel_delayed_work_sync(&mcu->button_release_emul_work); +
+> > > > > > +	mutex_destroy(&mcu->lock);     =20
+> > > > >=20
+> > > > > Wrong order?   =20
+> > > >=20
+> > > > No, the mutex may be used in the work. Can't destroy it first. Or a=
+m I
+> > > > misunderstanding something?   =20
+> > >=20
+> > > I mean you are using a lot of devm(), can mutex be used in IRQ or wha=
+tever
+> > > that can be triggered after this call? =20
+> >=20
+> > OK, I think I need to free the irq before canceling the work. Thank you=
+! =20
+>=20
+> Can you rather switch everything to be devm managed?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ux500-dts-for-armsoc
+There are no devm_ calls for mutex and work initialization. Are you
+suggesting that I should write a release function for the gpio
+sub-driver? Something like
 
-for you to fetch changes up to 374a69427f2e6a675cb0ec871d9cfb8152008a3f:
+static void omnia_gpiochip_release(dev, res)
+{
+  cancel_work();
+  mutex_destroy();
+}
 
-  ARM: dts: st: href-tvk1281618: correct touchscreen syna,nosleep-mode
-(2023-09-25 11:11:50 +0200)
+int omnia_mcu_register_gpiochip(mcu)
+{
+  ...
+  x =3D devres_alloc(omnia_gpiochip_release);
+  devres_add(dev, x);
+  ...
+}
 
-----------------------------------------------------------------
-Ux500 device tree updates for v6.7:
-
-- Two fixes from Krzysztof fixing up DT properties
-  on the touchscreen.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      ARM: dts: st: href-tvk1281618: fix touchscreen VIO supply
-      ARM: dts: st: href-tvk1281618: correct touchscreen syna,nosleep-mode
-
- arch/arm/boot/dts/st/ste-href-tvk1281618-r2.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Marek
