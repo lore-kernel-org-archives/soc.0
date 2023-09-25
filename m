@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EFB8CD54BF
-	for <soc@archiver.kernel.org>; Mon, 25 Sep 2023 19:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9F7CD54BE
+	for <soc@archiver.kernel.org>; Mon, 25 Sep 2023 19:57:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B080FC433C8; Mon, 25 Sep 2023 19:56:42 +0000 (UTC)
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2063.outbound.protection.outlook.com [40.107.243.63])
+	id 2F518C433C7; Mon, 25 Sep 2023 19:57:26 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 28124C433C7;
-	Mon, 25 Sep 2023 19:56:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28124C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 80C69C433C8;
+	Mon, 25 Sep 2023 19:57:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80C69C433C8
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P0Xa9nmmTYg7HqaBX1X6mxq8ghxurij1eFsOYF17SaOp1WUvu6MBlJHE+PZrDT7OOtF+FC+yyj5OV0AySZbg306ajfp9+I+Z2knM+F6adRSPDizj1d99YmAnbKYVNn5ZE0K7bjSqYEq11fCMgdP/9Oic1Zt7YRb7RLY0ytNE1Bw51kA9R1Z+PNiKsbSoFfcx8v3jiF5C/8K3cRDEaZFUUJhJvukVp7+YVMUAzpump5MR/rrq6AwwF5U5Uu0nRIdmZ+hyUrmo766FoysSNrbVfov+38ocfWxe1Mdoy7cG3ZAyCBp29N55PXxEhrI+hQkUsu8PYFLXoEbOFkoeVkvf0A==
+ b=WLHbm6DXT7LLCwuBfyogBMfr4hf315WEyQxnshqLwnTRMk2mG+VyyFMMkEKYPYifUx5X4URfaIv7H3FGAHMHkaU/kXvyKkkpIFBKOi+IMQH3UEmoXS3bUVSaPcs9bPcmOw/NDAhos4WzypbZXvh950K6UuYAzPWeHbrP81RYpvzB0dEaCx/2qRb5QDKHGObbnbiJM/tqIuROwoaaEv51IWXYz8biaYfNB/2lHGSgpQY7qgV9F/EENK98uE4w85PvCWT9NyxiGsLn284gNsRIXBzNHSt136Pb3XsHinwHUYv2LcMJ1lJ1oIJKlO1NOpW7yBk1rbK4UcXBDsdU6Co9Ig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TRkTpnGFSHf02xpiHVwi9sW83aFUkpqJ/Rho0zIxNaY=;
- b=JpO9MPxdFSb7P4PQfFwCZ0F5vitvap6zwPvWZu1wBtyZpL+gKPJ3B3C9vUW0e5XMfvOmKGBjkd9XcfBLzubNXU00ppiEZPNY+DEArJly6Yt/2cTch/fO25G0JSJHUYaOPnLpD5bctMk6b6b5bsHjL7BT0Vja4S2Hyw7LyNYMkKPVzEVqPX7S1CFDurt0FXxtUJAEgTVadrOUqxdx6z3LHyUob+vJUJCSuUMwe6KHd9SEzXu98TIBptY/MoQt5VIngeRRAU9JMuKd6zqGVkfOh2B4WcMMPeD9x17JN8mXG7kzvYWyGoz1dbSTcsIOwfMg77CAjEat8q9yMLJ1o4yEzQ==
+ bh=dy28TcdtatfE39iP7KmaaFwO5+MCnCgUUyAylO9Y+RE=;
+ b=Sjc1DZjgrqsY1iauVHWohUQtJ5MCvi78NnUJclG6PL0Kd3tRlVFCU1n+jcUSBjPtCB5XWy0+N58oezSrgjSKagjX1oBb5PAFTC78Yh3+8mXlM9Bxc8SYcZUnYCX04gZpjxOqupndvByB26w+APIz2tb8RDA9IUxi0dSiG++EdSZ0eNGT6Z8jBr27Lb8h5ncb8ifmXd0J+L468l3sj3Yppp9sSNqoLWATNlYM+DTtJyBTe0ZN9PCfX6gcCA0+5zFL/Wbsj5pccF2TUvKujm7SSGEHdeZmW0fDBX0PP8ulgkpGMLkyosT50Gs1foIZOEI244u0h6LVSUoVTnv5d3i/gw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TRkTpnGFSHf02xpiHVwi9sW83aFUkpqJ/Rho0zIxNaY=;
- b=lr4yvLpH84/zGFjuCCV+WBMubfA0lAqdeuch9xYifhVxg+fVU+FC8w7ogArDIeEnDkLRrhFoY0SDhPOGSajSUgqKXdIka0HNfFzn7mMeKwYD6f7JNfv/xq6/eVlnksKmF3fS06AZgyKYChR4QYbK2ae+VWuiE2wW0cb/TGq8kPU=
-Received: from SA0PR12CA0019.namprd12.prod.outlook.com (2603:10b6:806:6f::24)
- by SJ2PR12MB8133.namprd12.prod.outlook.com (2603:10b6:a03:4af::15) with
+ bh=dy28TcdtatfE39iP7KmaaFwO5+MCnCgUUyAylO9Y+RE=;
+ b=EkUkrVc0yke0hoy6eOiCIELZvt15yZ3/m+Ry4ybsmTc9o1MQweT5lIHqCyeiopvdE9n6MAmn+waodkmOaRpyPejNZj5EoT7JtQXZB+RfE2Evh2FMyrTLwCh3sGUPlR3yYRy+My26tc+V/l2gS70T7Ulh4UjA7K3PyhdRt6MPMKY=
+Received: from SN6PR08CA0008.namprd08.prod.outlook.com (2603:10b6:805:66::21)
+ by MN0PR12MB5809.namprd12.prod.outlook.com (2603:10b6:208:375::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.33; Mon, 25 Sep
- 2023 19:56:36 +0000
-Received: from SA2PEPF0000150A.namprd04.prod.outlook.com
- (2603:10b6:806:6f:cafe::bf) by SA0PR12CA0019.outlook.office365.com
- (2603:10b6:806:6f::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Mon, 25 Sep
+ 2023 19:57:20 +0000
+Received: from SA2PEPF00001507.namprd04.prod.outlook.com
+ (2603:10b6:805:66:cafe::8c) by SN6PR08CA0008.outlook.office365.com
+ (2603:10b6:805:66::21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
- Transport; Mon, 25 Sep 2023 19:56:35 +0000
+ Transport; Mon, 25 Sep 2023 19:57:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,13 +48,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF0000150A.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SA2PEPF00001507.mail.protection.outlook.com (10.167.242.39) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.14 via Frontend Transport; Mon, 25 Sep 2023 19:56:35 +0000
+ 15.20.6838.14 via Frontend Transport; Mon, 25 Sep 2023 19:57:20 +0000
 Received: from platform-dev1.pensando.io (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 25 Sep 2023 14:56:32 -0500
+ 15.1.2507.27; Mon, 25 Sep 2023 14:56:42 -0500
 From: Brad Larson <blarson@amd.com>
 List-Id: <soc.lore.kernel.org>
 To: <soc@kernel.org>
@@ -73,10 +73,12 @@ CC: <linux-arm-kernel@lists.infradead.org>, <adrian.hunter@intel.com>,
 	<ulf.hansson@linaro.org>, <vaishnav.a@ti.com>,
 	<walker.chen@starfivetech.com>, <will@kernel.org>, <zhuyinbo@loongson.cn>,
 	<devicetree@vger.kernel.org>
-Subject: [PATCH 0/4] Add AMD Pensando Elba Device Tree 
-Date: Mon, 25 Sep 2023 12:56:06 -0700
-Message-ID: <20230925195610.47971-1-blarson@amd.com>
+Subject: [PATCH 1/4] dt-bindings: arm: add AMD Pensando boards
+Date: Mon, 25 Sep 2023 12:56:07 -0700
+Message-ID: <20230925195610.47971-2-blarson@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230925195610.47971-1-blarson@amd.com>
+References: <20230925195610.47971-1-blarson@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.180.168.240]
@@ -84,86 +86,68 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF0000150A:EE_|SJ2PR12MB8133:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4087f47e-4383-4ae3-0f03-08dbbe018619
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001507:EE_|MN0PR12MB5809:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9f9c683-91d1-4a67-e15b-08dbbe01a0bb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	TZWYxbIRjsnNO/WX+q6rv/UaGy+CDchGbsUxW8CwKdOwH9d4456OAuxzP60L0Ipq7Y0SbXuVyDbyiURgEiHFxZPvhPGmdTk2PASRM+H8jifS5wPCcMq8vX4InGKG88n9see5ul9ycU+NnHLim48DTLA2DHpN6yiWYSbxTFgKDN1p8Wg5c6U/YMehIGHVi4oC9ZQDdiUcy4JjGfwkUi4FYJIhHzgE+Xp7seBT7lcnijm/JK3po+a31t+yMbQN2X3Os5+vPwHEZZAV9jk3iFpPdkGmfVz6wH0NFzz0n+JHulRVd4kB2BUtKFH8XvDojY/WX7ms5Ho9TyWPvDOFk4I/h2qVRK7Nm6hS74UeN7xy1uLzeMsX85a8k4N1DAFrE6nDTMVTAWQNgkABkyxaM0GTmiAFXzruArWvAcNrhK9hyvhmz1EKwuLF5GxnHn8nr4krB4MWS34KiaYe2TeP/Cq15YhTlC5uQOGHGbywBysObTaLLjQzHhfh4Byp9uSgYBuT3U1US/CPddMOXM+HtPdy2Gd/439hzCT20mtiphY11HwNPP5avzyYxE9FKmAeKhPUX7GYjYMVsOPndYEJCJS4tMsBLCRbL3f5J4d8jM1/bC7rhqx5wC2M53+Q+zbhc8aHudtEEMVK9fL3klKrWWPOxxgg08kGXqF1KqxHPCDQBbljJ8a2Wp3SV7yYv+kJlAVPbTBWL/XDh4gnqclaj4WDWr/qAvWYhAfNtOYddHKy7LRLyClY0YnpmG0KlU9VeHG0tWygZ787Mzks2ojNo18m+Q==
+	lssGVWTst/+Tos+Sga7ISAZIaWZILYX4Rh0ReqQkkVyKEuPbBZgFk91p4WcDxSdqAhnYC3nPd9B0aKvU53bBRKB7S8FNBwq00Wvndta3uipg0JHXl2PmP+KaizUyk82e6EqP40oskr5pRKbnijdA53XQEUh2ZI77GRYJcP7NAyKR42RsMvFC2WDx1M2sIFWBdf6kLpNKBkjr+U+xXP2EeJhm07PsPbXrrBxQr3mLaE3gRXNs8dWHeFkEpXEDJq66pCl5s/fTbPiVXi3HpowEGh4Hkh7VxMkszSUjR92zX+SegqviqUHYp9F/lcysgOTKcG3UFcua7ZFdJDz4WXDRM5uckD117hszlX7H7tOn5G9pImAk5TQh6XJ51GZbkzYRMaPkO1q1fIYAWkSB5AtX6tQYYbmTUbMCrhHBptcBYzAFPYpiPy+KYvQdE1amEcIiaFOKgR/gd+u5T09YkiZdPEYoes5XsDUcUy/YXAJen/l32gBLEeFEAuBcYyqhUL3VH/ymgqeyPT5cFANsTFBT9l36++uKxqyfC8BDoii2MBksY1NtZXlUhXn3ioojbeJcEuZnu3Lc81/7GXtV/FjHVFxYOpK/v+kQdx/xdgWhON5criZrgxg+xxDol3IHznF28QgWmtHbZ3vLxn8S04y32n7bJgpzwylHMQE/3KL5lNS8pp98bhZJCeS0MezybSt0lpyX9jUP2BlPlmsC0RNyD0M/TimNxfkr+Vr2A6KiLSMdPhM64FsNYR25mVRZqYjKCg5t/WYhokG4bKWZ6bH31IpTZPrXBdKXgY/7LHJ+PHo=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(396003)(136003)(39860400002)(230922051799003)(186009)(1800799009)(82310400011)(451199024)(40470700004)(36840700001)(46966006)(5660300002)(6666004)(4743002)(26005)(478600001)(7416002)(2616005)(1076003)(426003)(7406005)(70586007)(2906002)(70206006)(16526019)(316002)(41300700001)(336012)(4326008)(47076005)(54906003)(82740400003)(36756003)(36860700001)(40460700003)(6916009)(8936002)(83380400001)(356005)(8676002)(40480700001)(81166007)(36900700001);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(396003)(346002)(136003)(39860400002)(230922051799003)(451199024)(1800799009)(186009)(82310400011)(36840700001)(46966006)(40470700004)(6666004)(16526019)(966005)(40480700001)(1076003)(356005)(40460700003)(336012)(82740400003)(36756003)(36860700001)(81166007)(2616005)(4326008)(26005)(8936002)(5660300002)(47076005)(478600001)(426003)(8676002)(41300700001)(7406005)(70586007)(316002)(7416002)(6916009)(70206006)(2906002)(54906003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2023 19:56:35.6466
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2023 19:57:20.3031
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4087f47e-4383-4ae3-0f03-08dbbe018619
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9f9c683-91d1-4a67-e15b-08dbbe01a0bb
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF0000150A.namprd04.prod.outlook.com
+	SA2PEPF00001507.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8133
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5809
 
-The Elba System Controller is dropped from this patch series.  The
-following Elba enablement patches have been merged.
+Document the compatible for AMD Pensando Elba SoC boards.
 
-f2156989bf30 spi: cdns: Add compatible for AMD Pensando Elba SoC
-f5c2f9f95843 spi: cadence-quadspi: Add compatible for AMD Pensando Elba SoC
-2c8606040a80 spi: dw: Add support for AMD Pensando Elba SoC
-6282a6ceef62 spi: dw: Add AMD Pensando Elba SoC SPI Controller
-aad53d4ee756 mmc: sdhci-cadence: Support mmc hardware reset
-b5dbcf1f1d1a mmc: sdhci-cadence: Add AMD Pensando Elba SoC support
-e095b78ef2db mmc: sdhci-cadence: Support device specific init during probe
-d3e32f847891 mmc: sdhci-cadence: Enable device specific override of writel()
-82e4726b00e9 dt-bindings: mmc: cdns: Add AMD Pensando Elba SoC
-8e993c5888fa dt-bindings: mfd: syscon: Add amd,pensando-elba-syscon compatible
-
-The relevant DT changes from the previous series is below.  That series is
-being split into two.  The first is this series with the device tree and
-what is missing for enablement.  The second for TBD Elba system controller
-support.
-
-v15-0006-arm64-dts-Add-AMD-Pensando-Elba-SoC-support.patch
-- The first cell in the cpu reg property is always zero.  Change
-  address-cells to <1> and dropped the leading zero from all cpu* reg<>
-- Added read-only and spare partitions to flash0
-
-v14-0006-arm64-dts-Add-AMD-Pensando-Elba-SoC-support.patch
-- Fix dtbs_check l2-cache* property issue by adding required
-  cache-level and cache-unified properties
-- Observed the issue after updating dtschema from 2023.1 to 2023.4
-  and yamllint from 1.26.3 to 1.30.0
-
-v6-0010-arm64-dts-Add-AMD-Pensando-Elba-SoC-support
-- Update node names and add amd,pensando-elba-syscon
-
-
-Brad Larson (4):
-  dt-bindings: arm: add AMD Pensando boards
-  MAINTAINERS: Add entry for AMD PENSANDO
-  arm64: Add config for AMD Pensando SoC platforms
-  arm64: dts: Add AMD Pensando Elba SoC support
-
- .../devicetree/bindings/arm/amd,pensando.yaml |  26 +++
- MAINTAINERS                                   |   7 +
- arch/arm64/Kconfig.platforms                  |  12 ++
- arch/arm64/boot/dts/amd/Makefile              |   1 +
- arch/arm64/boot/dts/amd/elba-16core.dtsi      | 197 ++++++++++++++++++
- arch/arm64/boot/dts/amd/elba-asic-common.dtsi |  70 +++++++
- arch/arm64/boot/dts/amd/elba-asic.dts         |  28 +++
- arch/arm64/boot/dts/amd/elba-flash-parts.dtsi | 117 +++++++++++
- arch/arm64/boot/dts/amd/elba.dtsi             | 191 +++++++++++++++++
- 9 files changed, 649 insertions(+)
+Signed-off-by: Brad Larson <blarson@amd.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/arm/amd,pensando.yaml | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/arm/amd,pensando.yaml
- create mode 100644 arch/arm64/boot/dts/amd/elba-16core.dtsi
- create mode 100644 arch/arm64/boot/dts/amd/elba-asic-common.dtsi
- create mode 100644 arch/arm64/boot/dts/amd/elba-asic.dts
- create mode 100644 arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
- create mode 100644 arch/arm64/boot/dts/amd/elba.dtsi
 
-
-base-commit: 7bc675554773f09d88101bf1ccfc8537dc7c0be9
+diff --git a/Documentation/devicetree/bindings/arm/amd,pensando.yaml b/Documentation/devicetree/bindings/arm/amd,pensando.yaml
+new file mode 100644
+index 000000000000..e5c2591834a8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/amd,pensando.yaml
+@@ -0,0 +1,26 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/amd,pensando.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: AMD Pensando SoC Platforms
++
++maintainers:
++  - Brad Larson <blarson@amd.com>
++
++properties:
++  $nodename:
++    const: "/"
++  compatible:
++    oneOf:
++
++      - description: Boards with Pensando Elba SoC
++        items:
++          - enum:
++              - amd,pensando-elba-ortano
++          - const: amd,pensando-elba
++
++additionalProperties: true
++
++...
 -- 
 2.17.1
 
