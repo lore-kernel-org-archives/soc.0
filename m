@@ -4,59 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55CE9E7F12F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD38E7F131
 	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3F60AC433BF; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2879CC433BC;
+	id 20EBEC433BB; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A61CC433B6;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1695762233;
-	bh=l8FMSbJMWm14tUdxd4qvXfoeJG0T+RoB61SZnxrTyK0=;
+	bh=BuyhOsIujBEWzUVZT1NMgF2CX+Qpl8Yv1kLQxSk3+eU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=hq1fw46obaHHw0zJ9nu1DHeJI+jUCCsmt3zUeJ24S/IE2HYYbPOtQ4JsRvuPrRwsU
-	 IgSypzhYsxwUU3L3Gv6y/d4+ccNLH7BGeudfGufSCOYUj/c6aSZq5wQeUX8FBOH2tj
-	 CN9cjV8rUW+0jduGeHVo69ztr3qFNS4os1Yvwad92op8/gx1BlOn6YkbnQ/fj1MT4R
-	 DcbucjZlOl2r2kJwo244/mQuetLmCq61QxwuOIfGoOob4ZdK2EuVMKifUaS+ijNrcx
-	 OYzFx5VfxOWZFnVs3YJ1x8Nz3D0i8T9UPVoGjbXx6UaEeTkpho6O0zOAviIv6MKOOR
-	 zRtChyApM7cZg==
+	b=cvjt6zTXtpD4pmQqrloHPjbNOjoVuUc9w9FGBUkPHYPExOW54kh40zb9TI4zG8rjy
+	 +pNTqGyc1+srdHmnxZRx9i9nphYxBXbfzkcuf1c4E/PpRpjIF8XOx+dTo+wWwmwNF0
+	 suaSvqnt3RxmUbgu/jpccmCwfJRA9MioUTOIkOmh4iTx1aQ7zE5r70v3s9bOJh/Vk+
+	 ouIfFKqRRtYpfX6B6UfIl4y9zN6bjwmKMAHfTx3YQd/HEWuGiDT5ASSGHpyEuE7V0J
+	 CTQuN5uTvpYxXeR1e6BHPWhLyisLHjjVjNTXBK3QpGxE5q/c29FclDqlpyg9QtAwmL
+	 FTA5L1YJ7Zp2g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 160E8E29AFF;
-	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E852CC6445B;
+	Tue, 26 Sep 2023 21:03:52 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
+Subject: Re: [PATCH v3 0/5] soc: loongson: Fix some issues about loongson2_pm
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169576223308.24546.18328084654401701051.git-patchwork-notify@kernel.org>
-Date: Tue, 26 Sep 2023 21:03:53 +0000
-References: <20230829213441.310655-1-ulf.hansson@linaro.org>
-In-Reply-To: <20230829213441.310655-1-ulf.hansson@linaro.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
+ <169576223294.24546.12344311220911037360.git-patchwork-notify@kernel.org>
+Date: Tue, 26 Sep 2023 21:03:52 +0000
+References: <cover.1693623752.git.zhoubinbin@loongson.cn>
+In-Reply-To: <cover.1693623752.git.zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubinbin@loongson.cn>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+This series was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 29 Aug 2023 23:34:41 +0200 you wrote:
-> Hi Linus,
+On Sat,  2 Sep 2023 16:47:26 +0800 you wrote:
+> Hi all:
 > 
-> Here's a pull-request that introduces the genpd provider subsystem.
+> Since commit 67694c076bd7 ("soc: loongson2_pm: add power management support"),
+> the Loongson-2K PM driver was added, some issues have been found and
+> this patchset is planned to fix these issues.
 > 
-> Most of the changes have been shared via an immutable branch/tag, which has
-> been pulled in by Arnd Bergmann into the soc tree. However, as I have also
-> queued up a couple of additional changes on top, I am sending this pull request
-> for you.
+> Specific:
+> Patch 1: Compilation error found by Randy;
+> Patch 2/3: Rewriting the ls2k-pmc compatible attribute with fallback
+> compatible;
+> Patch 4/5: Add Loongson-2K SoC reboot/shutdown support as part of power
+> management.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: SoC/genpd driver updates for v6.6
-    https://git.kernel.org/soc/soc/c/c66403f62717
+  - [v3,1/5] soc: loongson: loongson2_pm: Add dependency for INPUT
+    https://git.kernel.org/soc/soc/c/9a7c9c7e34ac
+  - [v3,2/5] dt-bindings: soc: loongson,ls2k-pmc: Use fallbacks for ls2k-pmc compatible
+    https://git.kernel.org/soc/soc/c/8e5f17483ab4
+  - [v3,3/5] soc: loongson: loongson2_pm: Drop useless of_device_id compatible
+    https://git.kernel.org/soc/soc/c/59598d7ba6a8
+  - [v3,4/5] dt-bindings: soc: loongson,ls2k-pmc: Allow syscon-reboot/syscon-poweroff as child
+    https://git.kernel.org/soc/soc/c/019d79fe6c3d
+  - [v3,5/5] soc: loongson: loongson2_pm: Populate children syscon nodes
+    https://git.kernel.org/soc/soc/c/4e7b558e320a
 
 You are awesome, thank you!
 -- 
