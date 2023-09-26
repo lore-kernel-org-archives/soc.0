@@ -1,90 +1,83 @@
-Return-Path: <SRS0=klY5=FK=infradead.org=rdunlap@kernel.org>
+Return-Path: <SRS0=0sGH=FK=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6084E6FE31
-	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 00:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D207EE7D24E
+	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 08:11:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 73A3AC433C9; Tue, 26 Sep 2023 00:35:54 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 35712C433C8;
-	Tue, 26 Sep 2023 00:35:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35712C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=0J8nTsTynSvtRpFuXVxSLl94WdD3f0MuLFh/eUmRVV0=; b=DlB5Q353F68F2fmcQ8R+0Ju7fA
-	pt6pqnxYC2NjEgW3x5HCNlTVlhKXSta//DowPWwqlt0y0x30Uu3hX7ovZpwXYwRQcn+EE+t3rs9ZB
-	pobZ5lho8uQqIZS8OjodGVwCGSwzwuILddPlZ8hHbZZ3LmGa6J7/dXd+q1PR4PVI7ISEQt57twQOV
-	NAf0BdaAKEo1dmPwuHfkDfQk5wvhzrx2xF6kIWr/N0siAfywwUA/NhOooGnUsxXMD/zJtbZcZyuRK
-	c38lXaiq9f8XeE4kvbEbKc+QVLE7cSFMSxYMZC2ykywL7jAHT+bmRbgRlYKFpTdsavrMnOEHrhzZp
-	xX1ymeXQ==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1qkw3J-00FIWV-1I;
-	Tue, 26 Sep 2023 00:35:49 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
+	id 92489C433CA; Tue, 26 Sep 2023 08:11:56 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by smtp.kernel.org (Postfix) with ESMTP id 3C565C433C8;
+	Tue, 26 Sep 2023 08:11:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3C565C433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id 83BE980A3;
+	Tue, 26 Sep 2023 08:11:52 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	kernel test robot <lkp@intel.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH] ARM: uniphier: fix cache kernel-doc warnings
-Date: Mon, 25 Sep 2023 17:35:48 -0700
-Message-ID: <20230926003548.22066-1-rdunlap@infradead.org>
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Fixes for omaps and ti-sysc
+Date: Tue, 26 Sep 2023 11:11:47 +0300
+Message-ID: <pull-1695715881-95183@atomide.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Fix kernel-doc warning(s) as reported by lkp:
+From: "Tony Lindgren" <tony@atomide.com>
 
-arch/arm/mm/cache-uniphier.c:72: warning: cannot understand function prototype: 'struct uniphier_cache_data '
-cache-uniphier.c:82: warning: Function parameter or member 'way_ctrl_base' not described in 'uniphier_cache_data'
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-Fixes: e7ecbc057bc5 ("ARM: uniphier: add outer cache support")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: lore.kernel.org/r/202309260130.Uvwh8ceE-lkp@intel.com # fixes only one item
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Olof Johansson <olof@lixom.net>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
----
- arch/arm/mm/cache-uniphier.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-diff -- a/arch/arm/mm/cache-uniphier.c b/arch/arm/mm/cache-uniphier.c
---- a/arch/arm/mm/cache-uniphier.c
-+++ b/arch/arm/mm/cache-uniphier.c
-@@ -58,11 +58,13 @@
- 		((op & UNIPHIER_SSCOQM_S_MASK) == UNIPHIER_SSCOQM_S_RANGE)
- 
- /**
-- * uniphier_cache_data - UniPhier outer cache specific data
-+ * struct uniphier_cache_data - UniPhier outer cache specific data
-  *
-  * @ctrl_base: virtual base address of control registers
-  * @rev_base: virtual base address of revision registers
-  * @op_base: virtual base address of operation registers
-+ * @way_ctrl_base: virtual address of the way control registers for this
-+ *	SoC revision
-  * @way_mask: each bit specifies if the way is present
-  * @nsets: number of associativity sets
-  * @line_size: line size in bytes
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.6/fixes-signed
+
+for you to fetch changes up to 06f114cf7cbe96a07c51c47114d79e9654275919:
+
+  Merge branches 'fixes-mapphone' and 'fixes-ti-sysc' into fixes (2023-09-13 11:11:11 +0300)
+
+----------------------------------------------------------------
+Fixes for omaps and ti-sysc
+
+Fixes for several ti-sysc interconnect target module driver issues for
+external abort on non-linefetch, am35x soc match, and uart module quirks
+handling needed for devices to work and to allow device wake-up to work.
+
+Fixes for droid4 boot time errors and warnings as noticed after boot doing
+dmesg -lerr,warn. Let's also cut down the debug uart noise by using
+overrun-throttle-ms, and downgrade the u-boot version warnings to
+debug statements to further reduce the boot time noise with warnings.
+
+----------------------------------------------------------------
+Adam Ford (1):
+      bus: ti-sysc: Fix missing AM35xx SoC matching
+
+Julien Panis (1):
+      bus: ti-sysc: Use fsleep() instead of usleep_range() in sysc_reset()
+
+Tony Lindgren (6):
+      ARM: dts: ti: omap: Fix bandgap thermal cells addressing for omap3/4
+      ARM: dts: ti: omap: motorola-mapphone: Fix abe_clkctrl warning on boot
+      ARM: dts: ti: omap: Fix noisy serial with overrun-throttle-ms for mapphone
+      ARM: omap2+: Downgrade u-boot version warnings to debug statements
+      bus: ti-sysc: Fix SYSC_QUIRK_SWSUP_SIDLE_ACT handling for uart wake-up
+      Merge branches 'fixes-mapphone' and 'fixes-ti-sysc' into fixes
+
+ .../boot/dts/ti/omap/motorola-mapphone-common.dtsi |  5 ++--
+ arch/arm/boot/dts/ti/omap/omap3-cpu-thermal.dtsi   |  3 +--
+ arch/arm/boot/dts/ti/omap/omap4-cpu-thermal.dtsi   |  5 +++-
+ arch/arm/boot/dts/ti/omap/omap443x.dtsi            |  1 +
+ arch/arm/boot/dts/ti/omap/omap4460.dtsi            |  1 +
+ arch/arm/mach-omap2/pm44xx.c                       |  4 +--
+ drivers/bus/ti-sysc.c                              | 31 +++++++++++++++-------
+ 7 files changed, 34 insertions(+), 16 deletions(-)
