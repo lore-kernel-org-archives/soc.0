@@ -4,57 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E4E0E7F133
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78D0CE7F132
 	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5ECE5C116CA; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 48643C4166B;
+	id 6A015C116CB; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54505C43140;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1695762233;
-	bh=M/Q1AbzlOg1IvPqG0Rt96Bs/0kOisjdZA3+QMiD3/X0=;
+	bh=GB0pLSXgJ7eCCTQuj4akVkLblmpNBdAX/Jj3s5xOjgc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=GoCc7zeTVbTus4M3gtkgXWQUN6j5KBuyOcViBfZjPszNnphDOFvKrSQk855maf/Pq
-	 1eUrfwzEdSiZV4Xe5v4QEkUKP9xyLNS23/wpFhuf0Ksu9xFIuXP7V5YTm641r8Hse+
-	 MdHJAp7EPDXp9JOFa1/9JeLkJ+wN4q+J+IdI1puRsqhLva5GpQ1dMCJi9cOKrusF23
-	 5aaJh9kJNfIpeeCi3Pj41dXZaMu3ayxP9dCiP+7Gto2zImMVHEY01qzJe/x4RbXKIw
-	 m56RAD0NrpDJNmXMDc6GIgT0BZnY+jGybHgXsdRo/h5tsmhH0YS/+oSOY1VxVmgfAV
-	 1aiOjXV05Aj+w==
+	b=ttFCwhnfKAl1Kk/iX+lTWJsHrvYxUZaHo9SxXGOE5O9uCpy2xtb4T0PWO47UYS19Y
+	 kw1MLuXiDn+dzIocIX/Er4eJlDF80eYjZAg+tb4zSO1ByEmJnPDcFnQJCK41q8NXyJ
+	 Pe/H9itXomSxGW/kdslvPmLoQHkk2jKQQHBjxxCoY/P6T2kjLv0/da2WnjnWjvlcQU
+	 wrdaXQ2T3Lb0bQpZblbMQRbjE7SuNnZ/NG/R0QNNNJr3eOKGVMPorKKj5wM+JsOp6H
+	 SGYO6sv/6rhTKv4KRUBIKb9LhEhpV/8EOElYqLs11McPtHKz5s85KcorqRj/uLh6xJ
+	 Lq+xUyfF1ChKA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36601C73FE2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40539E29AFF;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] aspeed: Maintainers updates for v6.6
+Subject: Re: [PATCH RESEND] MAINTAINERS: aspeed: Update git tree URL
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169576223321.24546.11676704780882239871.git-patchwork-notify@kernel.org>
+ <169576223325.24546.9071411759240019798.git-patchwork-notify@kernel.org>
 Date: Tue, 26 Sep 2023 21:03:53 +0000
-References: <CACPK8Xc+D=YBc2Dhk-6-gOuvKN0xGgZYNop6oJVa=VNgaEYOHw@mail.gmail.com>
-In-Reply-To: <CACPK8Xc+D=YBc2Dhk-6-gOuvKN0xGgZYNop6oJVa=VNgaEYOHw@mail.gmail.com>
-To: Joel Stanley <joel@jms.id.au>
+References: <20230922223405.24717-2-zev@bewilderbeest.net>
+In-Reply-To: <20230922223405.24717-2-zev@bewilderbeest.net>
+To: Zev Weiss <zev@bewilderbeest.net>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+This patch was applied to soc/soc.git (arm/fixes)
+by Joel Stanley <joel@jms.id.au>:
 
-On Tue, 26 Sep 2023 11:21:27 +0000 you wrote:
-> Hi Arnd,
+On Fri, 22 Sep 2023 15:34:06 -0700 you wrote:
+> The description for joel/aspeed.git on git.kernel.org currently says:
 > 
-> Can we get these merged for 6.6? It's not critical, but best to have
-> the correct information in place sooner rather than later.
+>     Old Aspeed tree. Please see joel/bmc.git
 > 
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+> Let's update MAINTAINERS accordingly.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Acked-by: Joel Stanley <joel@jms.id.au>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] aspeed: Maintainers updates for v6.6
-    https://git.kernel.org/soc/soc/c/894a88a03bb2
+  - [RESEND] MAINTAINERS: aspeed: Update git tree URL
+    https://git.kernel.org/soc/soc/c/534c673b4e02
 
 You are awesome, thank you!
 -- 
