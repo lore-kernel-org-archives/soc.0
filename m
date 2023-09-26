@@ -4,37 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93697E7F137
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DE36E7F134
 	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8545DC116D3; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 702BEC4163D;
+	id 727B2C43142; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5CF89C07618;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1695762233;
-	bh=3P8e+DehayF+MM3X9ZUtuL2mD1ol5+fldL+h79A0xjM=;
+	bh=61s8Emtgg7vL52csivvBajyg9Uxp+6PTIeA+ORl7pzU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=KEtB3Ahkq/JhBMRbu4laMt2YDt9VQMgwkDpfz178mng+yYY6ulNkv8k6Fvg9+ESua
-	 C5qK9uz+BZCJK/nQdx09jz/7bHG5/TocLRvAEgAbkUuLAmLGvDJofQT1cai08POxx4
-	 FR7QZMRC2QeSbxSGn1eoK2VUssTChFFZuP9j5Obv6pGlfA9Wyi+esHprhsbOCUQrjH
-	 D07Oyqa0wol1uvqIGNm7NyX5vsY1al+0sWTq+RtfGTnMoenAw6ZftdmCjeBZKr1dK3
-	 T3j5XOo3j5YrygnIFTYqThTAwLOv2hwaZu6IXBUHuN+KIvjKlfn34nVe78UQiaRHwz
-	 xC4B2Q5nw1ukA==
+	b=IcLJDahvUqX58fafObXN79Ztl2BMWfFe8ZqhTdXeG69tIudKDn/VL3Hz6pZN3qtO3
+	 8afvhO0xItY/2y3A9emlibVIqdWwRhgLn/NeE5iqqKxlzBIp67t/tH4VC/TbKlcwR5
+	 Goix87xlQbsatPrEoDtyc6kjs+AxfxIbWpajvoBV/I+LxJWFAcFDbGtuH4kFazQXBZ
+	 zXijonoPgXejeBVPx5x86PzpcmokofSR12CTEgOspRrYLplSKbL1ZjpgtNuB18o6SK
+	 j9Myw8OWVWv3RGohqkXg535FE6/g1ohQfPtFm0NbU6SYyMO0O0ox8JRWlunuKyND0Y
+	 d413vd5+uYV1w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5EF19C691EF;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B88BC73FE9;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: dts: mediatek: Fix "mediatek,merge-mute" and
- "mediatek,merge-fifo-en" types
+Subject: Re: [PATCH] ARM: uniphier: fix cache kernel-doc warnings
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169576223338.24546.10454059403943686840.git-patchwork-notify@kernel.org>
+ <169576223330.24546.17567297510676281201.git-patchwork-notify@kernel.org>
 Date: Tue, 26 Sep 2023 21:03:53 +0000
-References: <20230830195650.704737-1-robh@kernel.org>
-In-Reply-To: <20230830195650.704737-1-robh@kernel.org>
-To: Rob Herring <robh@kernel.org>
+References: <20230926003548.22066-1-rdunlap@infradead.org>
+In-Reply-To: <20230926003548.22066-1-rdunlap@infradead.org>
+To: Randy Dunlap <rdunlap@infradead.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,18 +42,29 @@ Hello:
 This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 30 Aug 2023 14:56:34 -0500 you wrote:
-> "mediatek,merge-mute" and "mediatek,merge-fifo-en" properties are defined
-> and used as boolean properties which in DT have no value.
+On Mon, 25 Sep 2023 17:35:48 -0700 you wrote:
+> Fix kernel-doc warning(s) as reported by lkp:
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> arch/arm/mm/cache-uniphier.c:72: warning: cannot understand function prototype: 'struct uniphier_cache_data '
+> cache-uniphier.c:82: warning: Function parameter or member 'way_ctrl_base' not described in 'uniphier_cache_data'
+> 
+> Fixes: e7ecbc057bc5 ("ARM: uniphier: add outer cache support")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: lore.kernel.org/r/202309260130.Uvwh8ceE-lkp@intel.com # fixes only one item
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Olof Johansson <olof@lixom.net>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: soc@kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> [...]
 
 Here is the summary with links:
-  - arm64: dts: mediatek: Fix "mediatek,merge-mute" and "mediatek,merge-fifo-en" types
-    https://git.kernel.org/soc/soc/c/5f8456b1faef
+  - ARM: uniphier: fix cache kernel-doc warnings
+    https://git.kernel.org/soc/soc/c/361be2db8e8d
 
 You are awesome, thank you!
 -- 
