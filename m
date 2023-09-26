@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51014E7F12E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F684E7F12D
 	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3806EC43215; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 218FDC433BD;
+	id 4F625C4167D; Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 397BDC43140;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1695762233;
-	bh=3yLvg6LKXWjnzcQG1mvRsNdhVpbR95n8t/cMs6a+ZRY=;
+	bh=Hr8SIqzfjd01VHRbI9i4pHmvX12SQNMjL8XdBMfeKqY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=b2HhX32VSlXhNutiZ1sFvuGrsQUZ2zpnhWSihpax1aS7gCbGFYNTs91SXKhlQRi0N
-	 bNOEagMHpMrSGKcTG2oEzWi1+k6VjrORRdktJ5Sm8IOOjvlhLbGXsy+fmM7Z2SkrXG
-	 nNLTPPcZ2n9woYc6HgXNqnLxBeXlZMtaam/2aO51WG2vMsjO8GWHQf3d1dvnHScHnw
-	 IuLvAqgVCmpd/IKaXMDZgrrpdzzGxKKa1TDSKREM1L9xSU5rvuZZXceZ1WtelF9KZc
-	 BWvkHZ49E5cKspjBwn+skK17WUfHgJp9tIf5yqZrHciql8u49+Ldvuy1MZVFSYem42
-	 b+a0Vu44Th2bA==
+	b=DZ0TrVGkpH6be4q5pPD+E/vlHgDRGoNaNB3zQd0EBAqXVJIJbdrDt4IAuwgb/7bdu
+	 I6OglwDm7Zok1HnlbpOx2eRhXKQQ2a68VASROV1q9BEV0BEECBpZI/a/p1k8GD6+n6
+	 t+5XNI6lIyD7X7mOquDJtFoKWs1zGDd6TEEjCQU0wh/mqOOvwl1RGgV/qfpuopz/Sw
+	 PbDvpCM2UEFRKc7nI3266LVoiN7F6Gh+QDraBlXjImGez9l4t0L82wpzF8j9wOPOSx
+	 luWRghqaXs8fgXDHZZXdmPi1ma/vV8Vu7G3xkXaeeMlWtTxWTvWVNsQLF+zgFUtj+F
+	 JTI2Jcj7sQhRQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 094F1C73FE9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1FB4BC691EF;
 	Tue, 26 Sep 2023 21:03:53 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL v2 1/2] dt-bindings: Changes for v6.6-rc1
+Subject: Re: [GIT PULL] i.MX fixes for 6.6
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169576223303.24546.9138850777752827397.git-patchwork-notify@kernel.org>
+ <169576223312.24546.12807520415266125477.git-patchwork-notify@kernel.org>
 Date: Tue, 26 Sep 2023 21:03:53 +0000
-References: <20230901101742.1871434-1-thierry.reding@gmail.com>
-In-Reply-To: <20230901101742.1871434-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+References: <20230926123710.GT7231@dragon>
+In-Reply-To: <20230926123710.GT7231@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,22 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri,  1 Sep 2023 12:17:40 +0200 you wrote:
-> Hi ARM SoC maintainers,
+On Tue, 26 Sep 2023 20:37:10 +0800 you wrote:
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 > 
-> The following changes since commit 72738fdeccd172210539a786e23b09b67565d509:
-> 
->   dt-bindings: firmware: Add support for tegra186-bpmp DRAM MRQ GSCs (2023-07-26 18:23:42 +0200)
+>   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 > 
 > are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.6
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,v2,1/2] dt-bindings: Changes for v6.6-rc1
-    https://git.kernel.org/soc/soc/c/e85a757dd400
-  - [GIT,PULL,v2,2/2] arm64: tegra: Device tree changes for v6.6-rc1
-    https://git.kernel.org/soc/soc/c/d64f140476d2
+  - [GIT,PULL] i.MX fixes for 6.6
+    https://git.kernel.org/soc/soc/c/b0ed7eeee0ee
 
 You are awesome, thank you!
 -- 
