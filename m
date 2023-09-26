@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A2C0E7F12F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C46FE7F130
 	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 44AA9C4936D; Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24E31C4163C;
+	id 39E99C116A4; Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22A7BC4167D;
 	Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1695763280;
-	bh=ykhAV/SqbF/ewv/dTVwGzmYR0sue6HXkPRC4Tr8m7pg=;
+	bh=AMYDQo4gFnC4huX4QtOi7YuECGpADdopRKrlQMlRG+E=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Ah85fLzcEOpi+c+SioZWsT//3OtFUeYAtiw8P2q37vJNeNefhJVSU5a2Fg2NVqdxL
-	 fy70abqM2mul6SCrL90y9LEnHqi1my9tyT6UHh+NMTASSZ+I0E5b9MlDbFh2hBE+0k
-	 a5KMM7lhgSIpafUklmoo7ipohHr3A+PDhoZXQ9vAyJGrBqL7ajKOMr8wPHw6L9+aOV
-	 1HzltYB9UBE3GyUvCodJHQTvzFUamJKAbGmYph87FypqKVJCFsV4e2l24XGdqbDymT
-	 hEPSjJqExVUNbEndI8XFlefMM8mIN018Cu130z2lcBHInJ7kJecxYRc2SiicXVo36f
-	 eS6vQppbnYGNw==
+	b=ZIlA7AIn2BOQJej72aeLUtohe9nBHQmjFu3WGjJhSszP+byans89T1zjDDul0bZdH
+	 ZOJMeAU7eYmotX930Xx05o8iSspq7i/K5IVy7B/FxvpaGbyfwnllK4uN+kqe2PI1Et
+	 4AwgN2Y84TKKiYThtgv8hV1/VMKg9F0B6iTIM6QVso8+pb+C753kEWOorrFl1qoLmU
+	 qX5WauEb7nJKGdzHrHFeTdQb+VKy1FlXc6V2YfsCu6R22Qa1r7cyHADZRB6dQbr6u0
+	 UF1WfF9rmCLUdmD0aT5QFoppZgQv6719Grrfnq38+5OImKBPA5TE6Vr2/2LDdrTETn
+	 NXraEDFCsyTFQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09A25C73FE2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 00EEEC64459;
 	Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.6
+Subject: Re: [GIT PULL] ARM: SoC/genpd driver updates for v6.6
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169576328003.24546.12076323056628959040.git-patchwork-notify@kernel.org>
+ <169576328000.24546.6968948012147835571.git-patchwork-notify@kernel.org>
 Date: Tue, 26 Sep 2023 21:21:20 +0000
-References: <20230926123710.GT7231@dragon>
-In-Reply-To: <20230926123710.GT7231@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+References: <20230829213441.310655-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230829213441.310655-1-ulf.hansson@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
 This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-On Tue, 26 Sep 2023 20:37:10 +0800 you wrote:
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+On Tue, 29 Aug 2023 23:34:41 +0200 you wrote:
+> Hi Linus,
 > 
->   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+> Here's a pull-request that introduces the genpd provider subsystem.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.6
+> Most of the changes have been shared via an immutable branch/tag, which has
+> been pulled in by Arnd Bergmann into the soc tree. However, as I have also
+> queued up a couple of additional changes on top, I am sending this pull request
+> for you.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.6
-    https://git.kernel.org/soc/soc/c/b0ed7eeee0ee
+  - [GIT,PULL] ARM: SoC/genpd driver updates for v6.6
+    https://git.kernel.org/soc/soc/c/c66403f62717
 
 You are awesome, thank you!
 -- 
