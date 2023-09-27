@@ -1,65 +1,72 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=hXAh=FL=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3A35E7F134
-	for <soc@archiver.kernel.org>; Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50D9CE810DA
+	for <soc@archiver.kernel.org>; Wed, 27 Sep 2023 12:16:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5F0A7C116D3; Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 40AEEC116CB;
-	Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695763280;
-	bh=KywSzeB5+83fzraJN2IN/FNHB+xXmxp3PE2wy16h99s=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Pnfs5ibEAvLsHBlCDdVHAQqWnVa7PV4AChqASIuNmhMoEzy5o6q9y2qF+5Fs/00zX
-	 eEQMDuPrIYkgDrTCC8BerttTmDjPYmv3PwtZ1WLLoNYn7PRZODia7AtalylGPHJKmC
-	 WS8w8FnP/gB5NynYIoZOMvGidXMQsOF1kKsaF19p7K6cUHjfx+fIp74JjUnt51xx4C
-	 5mEFyDzM5VZlK+z0xUgAtYzL7A+toto519B+gx/T+Jod+kkdwgV1KA8MUc0Ua/O/2C
-	 YdnnWZr6qMpplNcNzsC0cnbVbSBU/5Ra48CKQdTcdYFt/ZjeKikd7KRNeuNc7aZ13S
-	 mtRbsGg6y97Uw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24792C73FE9;
-	Tue, 26 Sep 2023 21:21:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 22CA3C433CB; Wed, 27 Sep 2023 12:16:03 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id A0EB4C433C8;
+	Wed, 27 Sep 2023 12:16:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A0EB4C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96D511FB;
+	Wed, 27 Sep 2023 05:16:36 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9AB173F5A1;
+	Wed, 27 Sep 2023 05:15:57 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] firmware: arm_ffa: Fix for v6.6
+Date: Wed, 27 Sep 2023 13:15:55 +0100
+Message-ID: <20230927121555.158619-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fixes for omaps and ti-sysc
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <169576328014.24546.14896156586194986240.git-patchwork-notify@kernel.org>
-Date: Tue, 26 Sep 2023 21:21:20 +0000
-References: <pull-1695715881-95183@atomide.com>
-In-Reply-To: <pull-1695715881-95183@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+Hi ARM SoC Team,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Please pull !
 
-On Tue, 26 Sep 2023 11:11:47 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
-> 
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
-> 
->   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
-> 
-> are available in the Git repository at:
-> 
-> [...]
+Regards,
+Sudeep
 
-Here is the summary with links:
-  - [GIT,PULL] Fixes for omaps and ti-sysc
-    https://git.kernel.org/soc/soc/c/e99e2e8d1b12
+-->8
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fix-6.6
+
+for you to fetch changes up to 9dda1178479aa0a73fe0eaabfe2d9a1c603cfeed:
+
+  firmware: arm_ffa: Don't set the memory region attributes for MEM_LEND (2023-09-25 19:43:49 +0100)
+
+----------------------------------------------------------------
+Arm FF-A fix for v6.6
+
+It has been reported that the driver sets the memory region attributes
+for MEM_LEND operation when the specification clearly states not to. The
+fix here addresses the issue by ensuring the memory region attributes are
+cleared for the memory lending operation.
+
+----------------------------------------------------------------
+Sudeep Holla (1):
+      firmware: arm_ffa: Don't set the memory region attributes for MEM_LEND
+
+ drivers/firmware/arm_ffa/driver.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
