@@ -4,59 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B02DECE7B0C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 912E7CE7B05
 	for <soc@archiver.kernel.org>; Thu, 28 Sep 2023 08:01:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9866BC43391; Thu, 28 Sep 2023 08:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B050C433CD;
-	Thu, 28 Sep 2023 08:01:43 +0000 (UTC)
+	id 6BA9FC433CC; Thu, 28 Sep 2023 08:01:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 561CFC433C7
+	for <soc@kernel.org>; Thu, 28 Sep 2023 08:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1695888103;
-	bh=atyRE6/jGiixVty+wRLVobB3J1gHKHnzEBwE2rD+OAA=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=sDxDD5vma2y5DPX9l/QRw9qOMn42OscnoAuj7VmbK0P5b5QArTuVg9Qn7cthCwrnW
-	 qWLQrkBPOEj0hnGCcV847Lyoxnp8kbV0fMX7EV19+wJf0v5C2jKCe11W7WejFHoeEy
-	 prACip/A9sOiwg6DVV8+Ao3qTxACApxEAbN2xeKfyXuAcNGIq7gGzpqK4ADZD639tn
-	 4r5CW/s0++ESQG5oAmuI0aVVCb4BDgh7L3dYWduzw3v+2UwjZ2h07f95DqfK+82Lel
-	 k0h8OBQLkKyKs+z67dKYP1QXUVx5HuutViXIYeBxg4ilFBLAEUS0QyI6lstiQ9rhwf
-	 Yn7GDRrkWntJw==
+	bh=jcYLYKtNQwX9FmpSu87wfnx9TPaMF92a6fIEl20adao=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=cP5WGddvCMhO3A3U2CSBI+3jWXYsb4ZNd8ofNXsQo+lx1SczjQd6aC2aLShidnS37
+	 eRdyVE1pTIinsIkO6BFrkOgHXpsFeQ6smvDEkXRa4HPNR3VqhN9OFUaaTEKYgEZo/P
+	 oIHFrZF2+NjS8WvzE5TiT3T34wxyBcYcPotUhn6tb6GsD/woB/6OSzewwxh2AlAj3l
+	 HwZs+niPxSjOwdQ/HlUQPQwcLEwVELDvGrwVh/3mN52UxZ/LSmudlldtgmwYqE6AWn
+	 vuPOQgY5fNlFYjpiiWb3C1TCHU7BxewRWslokkqKoFSJVSCjZzVIqqkpYOv4kr9/c+
+	 7guD97DiC0Bog==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68B60E2A05E;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41C17E29AFE;
 	Thu, 28 Sep 2023 08:01:43 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Fix for v6.6
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169588810342.3136.8691993949480660585.git-patchwork-notify@kernel.org>
+ <169588810325.3136.4366560338713104625.git-patchwork-summary@kernel.org>
 Date: Thu, 28 Sep 2023 08:01:43 +0000
-References: <20230927121604.158645-1-sudeep.holla@arm.com>
-In-Reply-To: <20230927121604.158645-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Wed, 27 Sep 2023 13:16:04 +0100 you wrote:
-> Hi ARM SoC Team,
-> 
-> Please pull !
-> 
-> Regards,
-> Sudeep
-> 
-> [...]
+Patch: [GIT,PULL] firmware: arm_ffa: Fix for v6.6
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=788086
+  Lore link: https://lore.kernel.org/r/20230927121555.158619-1-sudeep.holla@arm.com
 
-Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Fix for v6.6
-    https://git.kernel.org/soc/soc/c/5106e65f23ce
+Series: Add AMD Pensando Elba Device Tree
+  Submitter: Brad Larson <blarson@amd.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=787404
+  Lore link: https://lore.kernel.org/r/20230925195610.47971-1-blarson@amd.com
+    Patches: [1/4] dt-bindings: arm: add AMD Pensando boards
+             [2/4] MAINTAINERS: Add entry for AMD PENSANDO
+             [3/4] arm64: Add config for AMD Pensando SoC platforms
+             [4/4] arm64: dts: Add AMD Pensando Elba SoC support
 
-You are awesome, thank you!
+Patch: ARM: defconfig: cleanup orphaned CONFIGs
+  Submitter: Trevor Woerner <twoerner@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=785614
+  Lore link: https://lore.kernel.org/r/20230919125112.15515-1-twoerner@gmail.com
+
+Patch: [GIT,PULL] firmware: arm_scmi: Fix for v6.6
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=788087
+  Lore link: https://lore.kernel.org/r/20230927121604.158645-1-sudeep.holla@arm.com
+
+
+Total patches: 7
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
