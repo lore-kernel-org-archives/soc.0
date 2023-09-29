@@ -1,232 +1,877 @@
-Return-Path: <SRS0=ZKeJ=FN=amd.com=Thomas.Lendacky@kernel.org>
+Return-Path: <SRS0=cJYV=FN=s4.acemsrvh.com=bounce-1707420-599-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 082EDE71D35
-	for <soc@archiver.kernel.org>; Fri, 29 Sep 2023 13:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C180E71D4F
+	for <soc@archiver.kernel.org>; Fri, 29 Sep 2023 15:18:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD145C433C9; Fri, 29 Sep 2023 13:29:11 +0000 (UTC)
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id F243DC433C9; Fri, 29 Sep 2023 15:18:36 +0000 (UTC)
+Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2652DC433C8;
-	Fri, 29 Sep 2023 13:29:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2652DC433C8
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EL+RDXWWSi2B7SPJ/IkjjUfH8snj4P+F7mKwWokaKbro0KWa2Qz5ZjBsyM69no3j9SMNPI+v4nxTrtW/VdAbCjAZeDVNUayi8/V7sHN+yHJuG0LXBnaKZTG6B7gHWW1cWfSq4+P0CFa0cp2J55+1GTXHodxoqsL9pVTFk7o/frLRwqdCUfi0d/5FXh0T9I5h+vcJQ4o3NBeVd2mhPaFq1dW7KuIOGZyUpk0xZ88c+GrK/kK8VQqbS3fiHx0OGbRMcdIHKNg8TwsUPSpwhpZrWX4rVMklGRgQez27hLrdeerOl/GL3RxNpFuZB65w2Cme0ECH3QnoGJZEB/VvKTNoOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v9Pq2+eoPVZCaISVG5xYIYcEuLvsbKIT9Iq5Xrg8EgY=;
- b=azfRQRpCnVPw6hH2sEvA1dHQ20NYijHxCy+flWoI6dz4M1glsE3NLBdelUS2k9j/xsKUf0B/mE6RyLfgMfoJmRzxwezHGq1sm8LdqMUPGNfKKKdrW7jxZg5RCBqvBIMikIYNsjJEyGHkrqGYV3Q/LFRQKsF+pG7KE9CLvp1Wg0pEjESmpbN6ZaZr4YTKqJO1BAVcIyu5ae7qrcv3Ehf7mWzdNDe9T7F1v4XZH+hQkTIdROuHbalkf987eBalZUa8VYU6SqVk7MxR7Tr4OPF4R0y3O3MzqNMvu4b3xtPyZh8fN1lm17AlPVea1r9b0NOYkZymwg+8nalu7riR4fJjXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v9Pq2+eoPVZCaISVG5xYIYcEuLvsbKIT9Iq5Xrg8EgY=;
- b=mEfcguh6W7cAkBz2JdU9BaKNTYhc5tF1pXM1dHMxE5BwBSUafahLGTVNj+nS8A4uS0aogu9r8K06PDEaAtmKYOP5dl/gGDZLMcDZEDGOsfgabbQ0r5u0n2nBGmzjesl0J0YMJMNaFj9HVCN4l1OVb40hVEXA8JWs14wfB9lyma0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DM6PR12MB4960.namprd12.prod.outlook.com (2603:10b6:5:1bc::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Fri, 29 Sep
- 2023 13:29:07 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::2b54:7ddf:9e2e:751c]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::2b54:7ddf:9e2e:751c%3]) with mapi id 15.20.6813.027; Fri, 29 Sep 2023
- 13:29:07 +0000
-Message-ID: <30e381f6-8f7c-a654-255f-ac8410d4fed0@amd.com>
-Date: Fri, 29 Sep 2023 08:29:03 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] arm/arm64: dts: Removed undocumented and unused
- "pl022,hierarchy" property
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 8D5B1C433C7
+	for <soc@kernel.org>; Fri, 29 Sep 2023 15:18:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8D5B1C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=insidecharitynews.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=s4.acemsrvh.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=insidecharitynews.org;
+ h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ List-Unsubscribe:List-Unsubscribe-Post:Message-ID;
+ i=team@insidecharitynews.org;
+ bh=oSCfN3zg4mKxs9JOqAcSFXYd/7mZAxcPiF1FlRSNKEg=;
+ b=E9lz8jUvgcJYZDr6Y/iHZ4umS11OVwC8U0KQGhxs9fdnVu+9ORa2apsA3mg2F7fYnP0KTrz6Ll1n
+   gwGQRmB62EaD0H6VPP/3Fe9dth9HnWf6N2jZl9qSK9TOnfthYLCBy3Om7IsYlUerQKF89xH1akru
+   0hzsrkpaJYwc+NqNOKled4fJSFECjg3GzDg5vz206+bgtmIt4lRoOmymCzTsf3KJik7+G33w1sr5
+   DW6K0UKumiYKPMa1dNF3eLloLnZcBaZJB7q0F3i8dZ0y6EpaJSbmN8L2CWaGjbZrm2B8+lRdd374
+   azXdw0lKQy4LiYSsxsVxrEQtTouEKcTFQKNtVQ==
+Received: by s4.acemsrvh.com id h2rlcm34rc8v for <soc@kernel.org>; Fri, 29 Sep 2023 15:18:33 +0000 (envelope-from <bounce-1707420-599-1076303-soc=kernel.org@s4.acemsrvh.com>)
+X-Mailer: ActiveCampaign Mailer
+CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh@kernel.org>, soc@kernel.org,
- Viresh Kumar <vireshk@kernel.org>,
- Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20230928190859.1072420-1-robh@kernel.org>
-From: Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230928190859.1072420-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0154.namprd04.prod.outlook.com
- (2603:10b6:806:125::9) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+To: soc@kernel.org
+From: "Inside Charity" <team@insidecharitynews.org>
+Subject: Louis Fawcett is RE-IMAGINING NONPROFITS
+Date: Fri, 29 Sep 2023 10:07:59 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|DM6PR12MB4960:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b65e35e-ed82-4942-95fd-08dbc0f00e88
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	cyIvrZezHKM26xqC/AaRRQXbtuCMrtFeD1N+8PwZSCB/3ngJpgVvs/1c+9qtvb4wYoSfjpIzqJ26f/8dLMBqS6VAz1S/62lz4uZum4KXneQXDczbVUNXSpv73y/XpfurDJjdh1otado4NIN+Wvgpq8YBm84U+8DssJGPJXIAmH7DApmRfq6q9KzFeAIPaS9yimbGyu7e+GLI5Qu0ZIiDGkWSXgCQxUA77zqfk7lWCiPXyD1Z2n//BjpS/rI02h9tEw1ZBI2hQ/v/JrYQ3kTLa+Ohz35BDaYfSOgZvh4zISRRcQAUau5TtfADBq7WW0cfw6o9dJ2hJFKg7WH8vW9m4eOjilGl/yVLlsA/NTXgpN8/TVnYdGbwoomYn+vQh+qn10Wi+6ekEmFYRNZqsr2GzCSLsN9DZYm1zmA0IeE+de1l/fksHqaasAwtwz3fD/u/o3O33+Oksw17JwwhzfN5t93r5P3k/j0bHD+f/jLO7IsTgRpYE2KBod1DPdg+g6/ynKZdJz6bWNDkmRffwNFdSAxhyAap7SVyQbu/jpFVv150BiisRvizxCAD1ACMmH/5zmy3bhg8Kr5KXpPK3HQrBO5Vwl692QWaZo0p6ybeV+jGt/UDcU+c2SFz/sWC7TSMRY52DyREkpefLwnkvrmP9lje0ZC3kKp7ABKvfdAVctM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(39860400002)(396003)(346002)(136003)(230922051799003)(1800799009)(64100799003)(451199024)(186009)(6506007)(6486002)(5660300002)(66946007)(6666004)(7416002)(83380400001)(38100700002)(316002)(921005)(6512007)(53546011)(66476007)(2616005)(26005)(66556008)(110136005)(4326008)(41300700001)(8936002)(478600001)(8676002)(31696002)(86362001)(2906002)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RCtYSzRnVEhLQ1MweTU5aDgvY3R3Y3ZtbFNUdjFLc1Q1SHJZQm1LbDRLM1Zn?=
- =?utf-8?B?Z2NKSFFiZnBvUzJDVi9xR0tWTGlPa3VTY3NBVnlHZEVXcmE0eUtEcGh2K1lw?=
- =?utf-8?B?cjRQZWpZTGtWOWFIS3FDb1h0ZzA3eVNGakExNGhaNWhVR0xCaXhNNldTOEdM?=
- =?utf-8?B?SzlwT2lZSE9XSGNjeXcvdDdhdTNsV1o5dXFWeGNudmlnUkJVdFVIOUgxLytH?=
- =?utf-8?B?SzhUbWF4OGJLOWFhcSt0dnZ4SHdhaGgwbHI5WVNhMUdnNVhvVXQzODRHM2NH?=
- =?utf-8?B?VjNRNUNxRzdqbFY1SzRXR1E2NDZNcFRTRitOTzliSDZtLzl4VDA1VytXdkxT?=
- =?utf-8?B?V0JaVmtMMHhTcm91QTltanRocjVCL29mMkpqUHVBS0o3WFJyRWJiSCtxcjlB?=
- =?utf-8?B?eldSOG5pS3AwdTdJWnNGeG0xWi9nTWtmb205amszY3QySFF3NEl3aXovK0RF?=
- =?utf-8?B?eWlRZVZjckdKQ0Z3eER1TkVKVDFuTlExaGZBNnIrNStmcWZZekVsaTh5UUZY?=
- =?utf-8?B?R1Rya0szWDdjdVJsTVZsQjV1OVdrQ2FaNkVSaUdvamVJaVdXcHBFMVZBSDc5?=
- =?utf-8?B?elhSeTdwSVV4TE1QM2VvSXltTmdqZzlRNUlhbzNobVZhRFVmSGR1U0RsYVo3?=
- =?utf-8?B?ZmU0eVJDVnd4UE1YR0lsR01nUkJMMEVaSXI1cURLNjlsSS9uMFNtMmMvYS9X?=
- =?utf-8?B?K0lvK0VCQ0xPU2M5UnZ5MDhPNmhHVDhhTDM0L09xeEN5ZVJFRlRQRHpzbkZ2?=
- =?utf-8?B?MU9CN1I3Q2xpMlVaOVVUOGl2em0yeTJMVlZ2TGhaRWttaW1qODdMcit3Sjhp?=
- =?utf-8?B?OGhyL3Q0cldLVmFXS1VHbWVoUS9FRTJkV3UvZWxYL2hnZkJDODVIeVhzSkxD?=
- =?utf-8?B?aStkUjdVWHdraGZlLzhhZ1BOWjc1VWFtc2Y2Qmd0bmtuYXowUUdZRmxLSnVZ?=
- =?utf-8?B?TjZPeTBYZ1RXNGxJWk1KenZzRk9hbTNxZUZZTmRzZTNpNVBReHVHM3l0Nksr?=
- =?utf-8?B?dkVNZ1BjZDdwamY3YmRGSU8raUF3MHNOK1dPUFBzaHNWR0hlZmtUUExyeG0z?=
- =?utf-8?B?aHdzYlRKRVB2WHErTGJ2MVBFbVY5R3dnM083Q1h4Ylh2cEFMalVLVHlNbjlS?=
- =?utf-8?B?cldBcWl0RW0ySVdROHBhbEF6Yk53dlRVeHVRYjJYUWh4UVlYNERsdTA0azFz?=
- =?utf-8?B?a1pSZFFLb0RzNFRKZGhVWFlXZkFwdFBibTB1SlhVN2hDNzZoZFp1R2Nsa1dO?=
- =?utf-8?B?Mjk4T1ZGZ2tjaHRpaEM4TDZTQ1NESUJiV29xRFB3T1dSYXZTRng1UWZKSm1w?=
- =?utf-8?B?M1pTMDNJc3VBSVkvMXgvZ0pWUno3OWJ2MEdVcVRVU2ZLNVJSWkR6Ymhhem1k?=
- =?utf-8?B?M2NiUnhaSURUSVhsUXk3Tm5yWlgvWS9xQlU5ZWRzOWdEM1pRL0tuOWhRUHRY?=
- =?utf-8?B?bkNQMmNjcHhoM3luM1JJWnFtZGIrYUY0bjA2LzRlUU0zWC9SL0UzbzgxMUxi?=
- =?utf-8?B?bnVpc2ZaTHRuTisvK3A4NDZoMUpLMUdhMlZ1U255ZTgxeWJjMnRDK3RzZDZG?=
- =?utf-8?B?bkhRdWE5OW9CUVh6bjFQVE1tZDVYZUV4UVhnUy9QSDJQRVp6cDJ4NUhwTUVm?=
- =?utf-8?B?VEY2VFZ4U2ZlNmZsVXF2VENOOW0vanBFVElDS1dLN2RVWVZIYXlFS1lucnFK?=
- =?utf-8?B?TmhvMmF0VzZEUDhkYkRJSDFYZ1ZBazNadHBNMEdpWTNOaERubDl3WXpSSWVL?=
- =?utf-8?B?a091VTdDWkRRcExua0d5cGNNMmc5WWpTVFp2VXJOYW9CckFrZlg5SjNNZVIy?=
- =?utf-8?B?MjlSU2dVMitkaEpBQ0xVYlJHZlRGYW1FQ1dOREVmb2FlRHlQdXprNVpCRHJy?=
- =?utf-8?B?eklyY00xRzZrL1orSWw1ekZocnQ5Y1dIcklOWmMrcm9FTTEwTDhHamRvVjcz?=
- =?utf-8?B?d0d6cnBuYVVsV1ZRUktCYlI3dExrOGV6cXcvbmdjU3hya0pHR2xvZDBNTFky?=
- =?utf-8?B?MUYwZm1GVFF3b3BlZU12NTl1M2NhRWFFbWQ4azJZV3FpMWNDTUlVTkdsSE15?=
- =?utf-8?B?RTNUdHFMdnZYWnkwVFpmVDNJdTk3NXRrQmw0Y2hHQUk1QkZxN1ZGZU9FUHNX?=
- =?utf-8?Q?Lk6R1ScN2UFiYwYEEKu1DICMW?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b65e35e-ed82-4942-95fd-08dbc0f00e88
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 13:29:07.3358
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y4I9HPnelxUHxBCGsSbvq1swmb3ntoULAdxXDlFFUAK48BPqvBGt3bUFjvpo9sba1vXU9zYeqLUTTH7/ONxfOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4960
+Content-Type: multipart/alternative;
+ boundary="_=_swift-18389813816516e84f4f13d1.76846121_=_"
+Content-Transfer-Encoding: 7bit
+X-DKIM-Options: s=acdkim1
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjNTk5ICwgbTEwNDIgLCBzNTI0
+x-virtual-mta: s4.acemsrvh.com
+Feedback-ID: 1707420:1707420.599:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-599
+List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-599-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
+ <http://jimmylarose.activehosted.com/box.php?nl=216&c=599&m=1042&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Message-ID: <20230929151833.17604.1084622395.swift@jimmylarose.activehosted.com>
 
-On 9/28/23 14:08, Rob Herring wrote:
-> The "pl022,hierarchy" is not documented, all instances use are 0 and
-> isn't handled in the kernel driver, so let's just remove it.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+--_=_swift-18389813816516e84f4f13d1.76846121_=_
+Content-Type: text/plain; charset=utf-8
 
-> ---
-> Arnd, Please apply this directly.
-> 
->   arch/arm/boot/dts/st/spear1310-evb.dts              | 2 --
->   arch/arm/boot/dts/st/spear1340-evb.dts              | 2 --
->   arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts    | 1 -
->   arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts    | 1 -
->   arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts | 2 --
->   5 files changed, 8 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/st/spear1310-evb.dts b/arch/arm/boot/dts/st/spear1310-evb.dts
-> index 05408df38203..18191a87f07c 100644
-> --- a/arch/arm/boot/dts/st/spear1310-evb.dts
-> +++ b/arch/arm/boot/dts/st/spear1310-evb.dts
-> @@ -352,7 +352,6 @@ stmpe610@0 {
->   					#size-cells = <0>;
->   					spi-max-frequency = <1000000>;
->   					spi-cpha;
-> -					pl022,hierarchy = <0>;
->   					pl022,interface = <0>;
->   					pl022,slave-tx-disable;
->   					pl022,com-mode = <0>;
-> @@ -385,7 +384,6 @@ flash@1 {
->   					spi-max-frequency = <12000000>;
->   					spi-cpol;
->   					spi-cpha;
-> -					pl022,hierarchy = <0>;
->   					pl022,interface = <0>;
->   					pl022,slave-tx-disable;
->   					pl022,com-mode = <0x2>;
-> diff --git a/arch/arm/boot/dts/st/spear1340-evb.dts b/arch/arm/boot/dts/st/spear1340-evb.dts
-> index 7700f2afc128..cea624fc745c 100644
-> --- a/arch/arm/boot/dts/st/spear1340-evb.dts
-> +++ b/arch/arm/boot/dts/st/spear1340-evb.dts
-> @@ -445,7 +445,6 @@ flash@0 {
->   					spi-max-frequency = <12000000>;
->   					spi-cpol;
->   					spi-cpha;
-> -					pl022,hierarchy = <0>;
->   					pl022,interface = <0>;
->   					pl022,slave-tx-disable;
->   					pl022,com-mode = <0x2>;
-> @@ -461,7 +460,6 @@ stmpe610@1 {
->   					spi-max-frequency = <1000000>;
->   					spi-cpha;
->   					reg = <1>;
-> -					pl022,hierarchy = <0>;
->   					pl022,interface = <0>;
->   					pl022,slave-tx-disable;
->   					pl022,com-mode = <0>;
-> diff --git a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts
-> index 21149acb6b31..1a65f1ec183d 100644
-> --- a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts
-> +++ b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts
-> @@ -64,7 +64,6 @@ sdcard0: sdcard@0 {
->   		reg = <0>;
->   		spi-max-frequency = <20000000>;
->   		voltage-ranges = <3200 3400>;
-> -		pl022,hierarchy = <0>;
->   		pl022,interface = <0>;
->   		pl022,com-mode = <0x0>;
->   		pl022,rx-level-trig = <0>;
-> diff --git a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts
-> index 99205ae1b46b..52f8d36295a8 100644
-> --- a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts
-> +++ b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts
-> @@ -76,7 +76,6 @@ sdcard0: sdcard@0 {
->   		reg = <0>;
->   		spi-max-frequency = <20000000>;
->   		voltage-ranges = <3200 3400>;
-> -		pl022,hierarchy = <0>;
->   		pl022,interface = <0>;
->   		pl022,com-mode = <0x0>;
->   		pl022,rx-level-trig = <0>;
-> diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
-> index fbf0392b8371..dec5a110f1e8 100644
-> --- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
-> +++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
-> @@ -113,7 +113,6 @@ slic@0 {
->   		spi-max-frequency = <5000000>;
->   		spi-cpha;
->   		spi-cpol;
-> -		pl022,hierarchy = <0>;
->   		pl022,interface = <0>;
->   		pl022,slave-tx-disable = <0>;
->   		pl022,com-mode = <0>;
-> @@ -137,7 +136,6 @@ at25@0 {
->   		at25,page-size = <64>;
->   		spi-cpha;
->   		spi-cpol;
-> -		pl022,hierarchy = <0>;
->   		pl022,interface = <0>;
->   		pl022,slave-tx-disable = <0>;
->   		pl022,com-mode = <0>;
+...TURNING YOUR MESS INTO A MASTERPIECE 
+ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
+
+Louis Fawcett is RE-IMAGINING NONPROFITS
+
+**...TURNING YOUR MESS INTO A MASTERPIECE**
+
+**(Because you work with Charitable Organizations)**VISIT HERE OR PRESS
+THE PHOTO BELOW FOR ARTICLE
+
+ 
+
+https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZpbnNpZGVjaGFyaXR5Lm9yZyUyRjIwMjMlMkYwOCUyRjE5JTJGbG91aXMtZmF3Y2V0dC1pcy1yZS1pbWFnaW5pbmctbm9ucHJvZml0cyUyRg==&sig=GWbcxxjfbgUdxNwKGza9ybr9YqgiUGJfwh2GaKxJmd64&iat=1696000713&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=jA0ti81ZA6BHVV9TESR3wCqs6vbTksfcAUiITpAV%3ACknFatySEzDAn%2FCORIn%2FR%2FJv9LuJm%2FWz&s=678f48a0e320c6856d0620aa2e024acb&i=599A1042A216A2397
+
+ 
+
+Dear Colleagues in Service,
+
+This is how bad things have gotten for the charitable sector:  
+
+****A country boy from Farmville, VA has to write a book about the
+brokenness of nonprofits.****
+
+**It's such a mess that all the ivory tower elites from Princeton,
+Harvard, Yale, Washington, DC, New York and Chicago can't fix it.** 
+In fact, ivory tower elites don't want to fix this mess because it's
+working perfectly for them!  The nonprofit establishment continues to
+perpetuate the nonprofit mess because it serves their interests. They
+maintain the authority, association dues, advertising dollars, and
+client contracts all the while promoting the status quo.  Yet, it's
+failing miserably.  While the establishment fiddles, the nonprofit
+sector burns.
+
+The nonprofit sector is charged with handling the most difficult
+problems in this world. 
+
+**Y**
+
+****et**, we are given the fewest resources to achieve heroic missions
+of scale.** I don't need to give you a list of stats about how many
+people need nonprofits.  You can turn on the news and see all the
+terrible things happening in our communities.
+
+The government sector defends our nation, maintains roads, manages
+monetary policies, and makes laws to help life be as fair as possible. 
+The corporate sector provides products and services to meet our needs: 
+cars, houses, restaurants, hotels, groceries, furniture,
+medicines...everything we want and need.  Yet, in spite of all the good
+work done by the government and the corporate sectors, there are
+millions of people who fall through the cracks and need help.  My
+help.  Your help.
+
+This is where the third sector, the nonprofit sector, comes into play. 
+We serve the hungry, the homeless, the orphans, the elderly, the neuro
+diverse, the trafficked, the veterans, those with addictions, the
+animals, the arts, the environment...and so many more needs that are not
+met by the government or corporate sectors.
+
+Here is the charge to the charitable sector - 
+
+**Find a need and meet it.  Make a promise and keep it.** This sounds
+like it should work fine, right?  Wrong, it's a mess.
+
+There are more than 14 million nonprofit professionals working every day
+in our communities to make life better for millions of people.  The
+best work in communities is done over the long term by people on the
+ground, working day in and day out to serve their neighbors.
+
+**But things aren't getting better, they're getting worse**...VISIT
+HERE TO READ ENTIRE ARTICLE
+
+ 
+
+Inside Charity is pleased to report that over 500,000 executives, staff,
+board members, ministry leaders and volunteers rely on Inside Charity
+for their nonprofit news. We're grateful to everyone who has
+participated and want to encourage as many as people as possible to
+continue to share their experiences. Your written comments and
+contributions have helped your colleagues navigate this process.
+
+Inside Charity is here to make sure receive the information you require
+to navigate unprecedented times.
+
+VISIT HERE
+
+TO SUBSCRIBE
+
+We look forward to hearing from you.
+
+Warmly,
+
+**Kathleen Robinson, Ph.D.**
+
+Senior Editor
+_________________
+
+Sent to soc@kernel.org
+
+Unsubscribe:
+http://jimmylarose.activehosted.com/proc.php?nl=216&amp;c=599&amp;m=1042&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
+
+National Development Institute, PO Box 1840, Lexington, SOUTH CAROLINA 29071, United States
+--_=_swift-18389813816516e84f4f13d1.76846121_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
+text/html; charset=3Dutf-8"><meta http-equiv=3D"Content-Language" content=
+=3D"en-us"><meta name=3D"format-detection" content=3D"telephone=3Dno"><meta=
+ name=3D"format-detection" content=3D"date=3Dno"><meta name=3D"format-detec=
+tion" content=3D"address=3Dno"><meta name=3D"format-detection" content=3D"e=
+mail=3Dno"><meta name=3D"viewport" content=3D"width=3Ddevice-width, minimal=
+-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalable=3D0;"><meta ht=
+tp-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><style data-ac-keep=3D"t=
+rue"> .ExternalClass { width: 100%; background: inherit; background-color: =
+inherit; } .ExternalClass, .ExternalClass p, .ExternalClass span, .External=
+Class font, .ExternalClass td, .ExternalClass div { line-height: 100%; } .E=
+xternalClass p, .ExternalClass ul, .ExternalClass ol { Margin: 0; } .undore=
+set div p, .undoreset p { margin-bottom: 20px; } div[class^=3D"aolmail_divb=
+ody"] { overflow: auto; } [owa] #ac-footer { padding: 20px 0px !important; =
+background:=0Ainherit; background-color: inherit; } a[x-apple-data-detector=
+s] { color: inherit !important; text-decoration: none !important; font-size=
+: inherit !important; font-family: inherit !important; font-weight: inherit=
+ !important; line-height: inherit !important; } @-ms-viewport { width: devi=
+ce-width; } </style><style data-ac-keep=3D"true">=0A@media only screen and =
+(max-width: 600px) { /*----------------------------------------------------=
+---------------------*\ Abandoned Cart widget \*---------------------------=
+---------------------------------------------*/ .td_abandoned-cart img {dis=
+play: block;padding-right: 0 !important;padding-bottom: 0 !important;width:=
+ 100% !important;max-width: 100% !important;height: auto !important;} body =
+{ padding: 0!important; font-size:1em!important; } * { -webkit-box-sizing: =
+border-box; -moz-box-sizing: border-box; box-sizing: border-box; } *[class]=
+.divbody {-webkit-text-size-adjust:none !important;} *[class].td_picture im=
+g {width:auto !important;} *[class].td_text { line-height: 110%; } *[class]=
+.td_button { width: auto; } /* Collapse all block elements */ :not(.body) t=
+able { display: block!important; float:none!important; border-collapse:coll=
+apse !important; width:100% !important; min-width:100% !important; clear:bo=
+th!important; } :not(.body) thead, :not(.body) tbody,=0A:not(.body) tr { di=
+splay:block!important; float:none!important; width:100% !important; } :not(=
+.body) th, :not(.body) td, :not(.body) p { display:block!important; float:n=
+one!important; width:100% !important; clear:both!important; } /* Remove bro=
+wser default styling for elements */ ul, ol { margin-left: 20px; margin-bot=
+tom: 10px; margin-top: 10px; -webkit-margin-before: 0; -webkit-margin-after=
+: 0; -webkit-padding-start: 0; } /* Set default height for spacer once coll=
+apse */ *[class].spacer { height: auto!important; } a[href^=3Ddate]{ color:=
+inherit !important; text-decoration:none !important;} a[href^=3Dtelephone]{=
+ color:inherit !important; text-decoration:none !important;} a[href^=3Daddr=
+ess]{ color:inherit !important; text-decoration:none !important;} a[href^=
+=3Demail]{ color:inherit !important; text-decoration:none !important;} /* D=
+efault table cell height */ /*---------------------------------------------=
+----------------------------*\ Product Widget=0A\*-------------------------=
+------------------------------------------------*/ .td_product div, .td_pro=
+duct .products-display { float: none !important; display: block !important;=
+ width: 100% !important; Margin-bottom: 20px !important; } .td_product img =
+{ width: 100% !important; max-width: 100% !important; } /* Default social i=
+cons */ *[class].ac-social-icon-16 {width:16px !important; height:16px !imp=
+ortant;} *[class].ac-social-icon-24 {width:24px !important; height:24px !im=
+portant;} *[class].ac-social-icon-28 {width:28px !important; height:28px !i=
+mportant;} *[class].__ac_social_icons { margin-right: 0px !important; } }=
+=0A</style><style data-ac-keep=3D"true"> @media only screen and (max-width:=
+ 320px) { #layout-row3608 img { width: 100% !important; height: auto !impor=
+tant; max-width: 320px !important; } #layout-row3610 .break-line { width: 1=
+00% !important; margin: auto !important; } div.divbody { padding: 20px !imp=
+ortant; } table, tbody, td, .divbody { display: table !important; width: 10=
+0% !important; max-width: 100% !important; } .td_rss .rss-item img.iphone_l=
+arge_image { width: auto !important; } u + .body { display: table !importan=
+t; width: 100vw !important; min-width: 100vw !important; } u + .body table =
+{ display: table !important; width: 100% !important; min-width: 100% !impor=
+tant; } u + .body td { display: block !important; width: 100% !important; m=
+in-width: 100% !important; } u + .body img { display: inline-block !importa=
+nt; margin: auto !important; width: auto !important; vertical-align: bottom=
+ !important; } u + .body center { display: block !important; margin: auto !=
+important;=0Awidth: 100% !important; min-width: 100% !important; text-align=
+: center !important; } u + .body table._ac_social_table, u + .body table._a=
+c_social_table td, u + .body table._ac_social_table div, u + .body table._a=
+c_social_table a { display: inline-block !important; margin: auto !importan=
+t; width: auto !important; min-width: auto !important; text-align: center !=
+important; } u + .body table._ac_social_table img { display: inline-block !=
+important; margin: auto !important; width: 32px !important; min-width: 32px=
+ !important; max-width: 32px !important; }=0A}=0A@media only screen and (ma=
+x-width: 375px) { #layout-row3608 img { width: 100% !important; height: aut=
+o !important; max-width: 375px !important; } #layout-row3610 .break-line { =
+width: 100% !important; margin: auto !important; } div.divbody { padding: 2=
+0px !important; } table, tbody, td, .divbody { display: table !important; w=
+idth: 100% !important; max-width: 100% !important; } .td_rss .rss-item img.=
+iphone_large_image { width: auto !important; } u + .body { display: table !=
+important; width: 100vw !important; min-width: 100vw !important; } u + .bod=
+y table { display: table !important; width: 100% !important; min-width: 100=
+% !important; } u + .body td { display: block !important; width: 100% !impo=
+rtant; min-width: 100% !important; } u + .body img { display: inline-block =
+!important; margin: auto !important; width: auto !important; vertical-align=
+: bottom !important; } u + .body center { display: block !important; margin=
+: auto !important; width: 100% !important; min-width:=0A100% !important; te=
+xt-align: center !important; } u + .body table._ac_social_table, u + .body =
+table._ac_social_table td, u + .body table._ac_social_table div, u + .body =
+table._ac_social_table a { display: inline-block !important; margin: auto !=
+important; width: auto !important; min-width: auto !important; text-align: =
+center !important; } u + .body table._ac_social_table img { display: inline=
+-block !important; margin: auto !important; width: 32px !important; min-wid=
+th: 32px !important; max-width: 32px !important; }=0A}=0A@media only screen=
+ and (max-width: 414px) { #layout-row3608 img { width: 100% !important; hei=
+ght: auto !important; max-width: 414px !important; } #layout-row3610 .break=
+-line { width: 100% !important; margin: auto !important; } div.divbody { pa=
+dding: 20px !important; } table, tbody, td, .divbody { display: table !impo=
+rtant; width: 100% !important; max-width: 100% !important; } .td_rss .rss-i=
+tem img.iphone_large_image { width: auto !important; } u + .body { display:=
+ table !important; width: 100vw !important; min-width: 100vw !important; } =
+u + .body table { display: table !important; width: 100% !important; min-wi=
+dth: 100% !important; } u + .body td { display: block !important; width: 10=
+0% !important; min-width: 100% !important; } u + .body img { display: inlin=
+e-block !important; margin: auto !important; width: auto !important; vertic=
+al-align: bottom !important; } u + .body center { display: block !important=
+; margin: auto !important; width: 100% !important; min-width:=0A100% !impor=
+tant; text-align: center !important; } u + .body table._ac_social_table, u =
++ .body table._ac_social_table td, u + .body table._ac_social_table div, u =
++ .body table._ac_social_table a { display: inline-block !important; margin=
+: auto !important; width: auto !important; min-width: auto !important; text=
+-align: center !important; } u + .body table._ac_social_table img { display=
+: inline-block !important; margin: auto !important; width: 32px !important;=
+ min-width: 32px !important; max-width: 32px !important; }=0A}=0A@media onl=
+y screen and (max-width: 667px) { #layout-row3608 img { width: 100% !import=
+ant; height: auto !important; max-width: 667px !important; } #layout-row361=
+0 .break-line { width: 100% !important; margin: auto !important; } div.divb=
+ody { padding: 20px !important; } table, tbody, td, .divbody { display: tab=
+le !important; width: 100% !important; max-width: 100% !important; } .td_rs=
+s .rss-item img.iphone_large_image { width: auto !important; } u + .body { =
+display: table !important; width: 100vw !important; min-width: 100vw !impor=
+tant; } u + .body table { display: table !important; width: 100% !important=
+; min-width: 100% !important; } u + .body td { display: block !important; w=
+idth: 100% !important; min-width: 100% !important; } u + .body img { displa=
+y: inline-block !important; margin: auto !important; width: auto !important=
+; vertical-align: bottom !important; } u + .body center { display: block !i=
+mportant; margin: auto !important; width: 100% !important; min-width:=0A100=
+% !important; text-align: center !important; } u + .body table._ac_social_t=
+able, u + .body table._ac_social_table td, u + .body table._ac_social_table=
+ div, u + .body table._ac_social_table a { display: inline-block !important=
+; margin: auto !important; width: auto !important; min-width: auto !importa=
+nt; text-align: center !important; } u + .body table._ac_social_table img {=
+ display: inline-block !important; margin: auto !important; width: 32px !im=
+portant; min-width: 32px !important; max-width: 32px !important; }=0A} </st=
+yle><!--[if !mso]><!-- webfonts --><!--<![endif]--><!--[if lt mso 12]> <![e=
+ndif]--><!--[if gte mso 9]>=0A<xml> <o:OfficeDocumentSettings> <o:AllowPNG/=
+> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings>=0A</xml=
+>=0A<![endif]--></head><body id=3D"ac-designer" class=3D"body" style=3D"fon=
+t-family: Arial; line-height: 1.1; margin: 0px; background-color: #ffffff; =
+width: 100%; text-align: center;">=09=09<div style=3D"display: none !import=
+ant; padding: 0; height: 1px; font-size: 1px; background-color: inherit !im=
+portant; opacity: 0; color: transparent; mso-line-height-rule: exactly; lin=
+e-height:1px; mso-hide:all;">=0A=09=09=09=E2=80=A6TURNING YOUR MESS INTO A =
+MASTERPIECE=0A=09=09=09<div style=3D"display: none; max-height: 0px; overfl=
+ow: hidden;">=0A=09=09=09=09&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=0A=09=09=09</div>=0A=
+=0A=09=09</div>=0A<div class=3D"divbody" style=3D"margin: 0px; outline: non=
+e; padding: 0px; color: #000000; font-family: arial; line-height: 1.1; widt=
+h: 100%; background-color: #ffffff; background: #ffffff; text-align: center=
+;"><table class=3D"template-table" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" width=3D"100%" align=3D"left" style=3D"-ms-text-size-adjust: auto;=
+ -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px=
+; min-width: auto; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background=
+-color: #ffffff; background: #ffffff;"><tr style=3D"mso-line-height-rule: e=
+xactly;"><td align=3D"center" valign=3D"top" width=3D"100%" style=3D"mso-li=
+ne-height-rule: exactly;"><table class=3D"template-table" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" width=3D"632" bgcolor=3D"#ffffff" style=3D"=
+-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse=
+: collapse; font-size: 14px; min-width: auto; mso-table-lspace: 0pt; mso-ta=
+ble-rspace: 0pt; max-width: 632px;"><tr=0Astyle=3D"mso-line-height-rule: ex=
+actly;"><td id=3D"layout_table_27adc05f82adabc55b9825c1252b103cd6b0294a" va=
+lign=3D"top" align=3D"center" width=3D"632" style=3D"mso-line-height-rule: =
+exactly;"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" class=3D"=
+layout layout-table root-table" width=3D"632" style=3D"-ms-text-size-adjust=
+: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
+e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
+r style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin3602"=
+ valign=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"><tab=
+le width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D=
+"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collaps=
+e: initial !important; font-size: 14px; min-width: 100%; mso-table-lspace: =
+0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3602" class=3D"layout layo=
+ut-row widget _widget_text style3602" style=3D"mso-line-height-rule: exactl=
+y; margin: 0;=0Apadding: 0;"><td id=3D"layout-row-padding3602" valign=3D"to=
+p" style=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"1=
+00%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-siz=
+e-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; =
+font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: =
+0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td id=3D"text_div3576" =
+class=3D"td_text td_block" valign=3D"top" align=3D"left" width=3D"612" styl=
+e=3D"mso-line-height-rule: exactly; margin: 0; outline: none; padding: 0; c=
+olor: inherit; font-size: 12px; font-weight: inherit; line-height: 1; text-=
+decoration: inherit; font-family: arial;"> <div style=3D"margin: 0; outline=
+: none; padding: 0; color: inherit; font-size: 16px; font-weight: inherit; =
+line-height: inherit; text-decoration: inherit;" class=3D""> <div style=3D"=
+margin: 0; outline: none; padding: 0; color: inherit; font-size: inherit; f=
+ont-weight: inherit; line-height: inherit;=0Atext-decoration: inherit; text=
+-align: center;" class=3D""> <span style=3D"color: #000000; font-size: inhe=
+rit; font-weight: inherit; line-height: inherit; text-decoration: inherit;"=
+ class=3D""><span style=3D'color: inherit; font-size: 16px; font-weight: 70=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal;' class=3D""> </span><div styl=
+e=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px;=
+ font-weight: inherit; line-height: inherit; text-decoration: inherit; font=
+-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; --tw-shad=
+ow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-w=
+idth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0=
+.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transp=
+arent; text-align: left;' class=3D""><div style=3D"margin: 0; outline: none=
+; padding: 0; color: inherit; font-size: inherit; font-weight:=0Ainherit; l=
+ine-height: inherit; text-decoration: inherit; text-align: center;" class=
+=3D""> </div>=0A</div>=0A <div style=3D"margin: 0; outline: none; padding: =
+0; color: #000000; font-size: 16px; font-weight: inherit; line-height: inhe=
+rit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inse=
+t: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: =
+#fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 t=
+ransparent; --tw-ring-shadow: 0 0 transparent; text-align: left;" class=3D"=
+"><div style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-=
+size: inherit; font-weight: inherit; line-height: inherit; text-decoration:=
+ inherit; text-align: center;" class=3D""><span style=3D'color: inherit; fo=
+nt-size: inherit; font-weight: inherit; line-height: inherit; text-decorati=
+on: inherit; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">=
+<strong style=3D'margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 tra=
+nsparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; =
+--tw-ring-offset-color: #fff;=0A--tw-ring-color: rgba(59,130,246,0.5); --tw=
+-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; co=
+lor: #000000; font-size: 19px; font-family: "trebuchet ms", tahoma, arial, =
+sans; font-style: normal;' class=3D""></strong> <div style=3D'margin: 0; ou=
+tline: none; padding: 0; color: #000000; font-size: 26px; font-weight: 400;=
+ line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms=
+", tahoma, arial, sans; font-style: normal; text-align: -webkit-center;' cl=
+ass=3D""><strong style=3D"margin: 0; outline: none; padding: 0; color: #000=
+000;" class=3D""><div style=3D'margin: 0; outline: none; padding: 0; color:=
+ #000000; font-size: inherit; font-weight: 400; line-height: inherit; text-=
+decoration: inherit; text-align: center; font-style: normal; font-family: "=
+trebuchet ms", tahoma, arial, sans;' class=3D""><span style=3D"color: #0000=
+00; font-size: inherit; font-weight: inherit; line-height: inherit; text-de=
+coration: inherit;" class=3D"">Louis Fawcett is=0ARE-IMAGINING NONPROFITS</=
+span></div>=0A</strong></div>=0A<div style=3D'margin: 0; outline: none; pad=
+ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
+herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
+, sans; text-align: -webkit-center;' class=3D""><em style=3D"margin: 0; out=
+line: none; padding: 0; font-size: 18px;" class=3D""><strong style=3D'margi=
+n: 0; outline: none; padding: 0; font-weight: 700; font-size: 18px; font-fa=
+mily: "trebuchet ms", tahoma, arial, sans; color: #000000;' class=3D"">=
+=E2=80=A6TURNING YOUR MESS INTO A MASTERPIECE</strong><br class=3D""><br cl=
+ass=3D""></em><em style=3D"margin: 0; outline: none; padding: 0; font-style=
+: normal; font-size: 18px;" class=3D"">(Because you work with Charitable Or=
+ganizations)<br class=3D""><br class=3D""></em><strong style=3D'margin: 0; =
+outline: none; padding: 0; font-style: normal; font-family: "trebuchet ms",=
+ tahoma, arial, sans; font-size: 18px; text-decoration: inherit;' class=3D"=
+"><a target=3D"_blank"=0Adata-cke-saved-href=3D"https://jimmylarose.lt.acem=
+lnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZpbnNpZGVjaGFyaXR=
+5Lm9yZyUyRjIwMjMlMkYwOSUyRjE3JTJGbm9ucHJvZml0cy1ub3J0aC1vZi1yaWNobW9uZC13LW=
+xvdWlzLWZhd2NldHQtamltbXktbGFyb3NlJTJG&sig=3DBEUJyhy8jaQux6jHeHfNXbHvBAQrGT=
+YNCHsfGNWCyu56&iat=3D1696000713&a=3D%7C%7C26605550%7C%7C&account=3Djimmylar=
+ose%2Eactivehosted%2Ecom&email=3DjA0ti81ZA6BHVV9TESR3wCqs6vbTksfcAUiITpAV%3=
+ACknFatySEzDAn%2FCORIn%2FR%2FJv9LuJm%2FWz&s=3D678f48a0e320c6856d0620aa2e024=
+acb&i=3D599A1042A216A2393" href=3D"https://jimmylarose.lt.acemlnd.com/Prod/=
+link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZpbnNpZGVjaGFyaXR5Lm9yZyUyRjIw=
+MjMlMkYwOCUyRjE5JTJGbG91aXMtZmF3Y2V0dC1pcy1yZS1pbWFnaW5pbmctbm9ucHJvZml0cyU=
+yRg=3D=3D&sig=3DGWbcxxjfbgUdxNwKGza9ybr9YqgiUGJfwh2GaKxJmd64&iat=3D16960007=
+13&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&emai=
+l=3DjA0ti81ZA6BHVV9TESR3wCqs6vbTksfcAUiITpAV%3ACknFatySEzDAn%2FCORIn%2FR%2F=
+Jv9LuJm%2FWz&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D599A1042A216A2397" st=
+yle=3D'margin: 0; outline: none; padding: 0; color: #0764ba; text-decoratio=
+n: underline; font-family: "trebuchet ms", tahoma, arial, sans;' data-ac-de=
+fault-color=3D"1" class=3D""><span style=3D"color: ; font-size: inherit; fo=
+nt-weight: inherit; line-height: inherit; text-decoration: inherit;">VISIT =
+HERE OR PRESS THE PHOTO BELOW FOR ARTICLE</span></a></strong></div>=0A</spa=
+n></div>=0A</div>=0A</span></div>=0A </div>=0A</td>=0A</tr>=0A</table>=0A</=
+td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule:=
+ exactly;"><td id=3D"layout-row-margin3603" valign=3D"top" style=3D"mso-lin=
+e-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size=
+-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%;=
+ mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3603" c=
+lass=3D"layout layout-row widget _widget_spacer " style=3D"mso-line-height-=
+rule: exactly;"><td id=3D"layout-row-padding3603" valign=3D"top" style=3D"m=
+so-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-tex=
+t-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width:=
+ 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line=
+-height-rule: exactly;"><td valign=3D"top" height=3D"15" style=3D"mso-line-=
+height-rule: exactly;"><div class=3D"spacer" style=3D"margin: 0; outline: n=
+one; padding: 0;=0Aheight: 15px;"><table cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" style=3D"-ms-text-size-adjust: auto; -webkit-=
+text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-wid=
+th: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-l=
+ine-height-rule: exactly;"><td class=3D"spacer-body" valign=3D"top" height=
+=3D"15" width=3D"632" style=3D"mso-line-height-rule: exactly;">=C2=A0</td>=
+=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<=
+/table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td =
+id=3D"layout-row-margin3608" valign=3D"top" style=3D"mso-line-height-rule: =
+exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%;=
+ border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lsp=
+ace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3608" class=3D"layout=
+ layout-row widget _widget_picture " align=3D"center" style=3D"mso-line-hei=
+ght-rule: exactly;"><td id=3D"layout-row-padding3608" valign=3D"top" style=
+=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webki=
+t-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-w=
+idth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso=
+-line-height-rule: exactly;"><td class=3D"image-td" align=3D"center" valign=
+=3D"top" width=3D"632" style=3D"mso-line-height-rule: exactly;"><a=0Ahref=
+=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0=
+cHMlM0ElMkYlMkZpbnNpZGVjaGFyaXR5Lm9yZyUyRjIwMjMlMkYwOCUyRjE5JTJGbG91aXMtZmF=
+3Y2V0dC1pcy1yZS1pbWFnaW5pbmctbm9ucHJvZml0cyUyRg=3D=3D&sig=3DGWbcxxjfbgUdxNw=
+KGza9ybr9YqgiUGJfwh2GaKxJmd64&iat=3D1696000713&a=3D%7C%7C26605550%7C%7C&acc=
+ount=3Djimmylarose%2Eactivehosted%2Ecom&email=3DjA0ti81ZA6BHVV9TESR3wCqs6vb=
+TksfcAUiITpAV%3ACknFatySEzDAn%2FCORIn%2FR%2FJv9LuJm%2FWz&s=3D678f48a0e320c6=
+856d0620aa2e024acb&i=3D599A1042A216A2397" style=3D"margin: 0; outline: none=
+; padding: 0; color: #0764ba; display: block; min-width: 100%;"><img src=3D=
+"https://content.app-us1.com/cdn-cgi/image/dpr=3D2,fit=3Dscale-down,format=
+=3Dauto,onerror=3Dredirect,width=3D650/ZvmyW/2023/09/26/e17e301c-c1ad-4b65-=
+b3a5-504df51b4bb5.jpeg?r=3D1818091683" width=3D"632" style=3D"border: none;=
+ display: block; outline: none; width: 632px; opacity: 1; max-width: 100%;"=
+></a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A=
+<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin360=
+4" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"=
+100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-si=
+ze-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse;=
+ font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace:=
+ 0pt;"><tr id=3D"layout-row3604" class=3D"layout layout-row widget _widget_=
+spacer " style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padd=
+ing3604" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table wid=
+th=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-t=
+ext-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: col=
+lapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-r=
+space: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td valign=3D"top=
+" height=3D"15" style=3D"mso-line-height-rule: exactly;"><div class=3D"spac=
+er" style=3D"margin: 0; outline: none; padding: 0;=0Aheight: 15px;"><table =
+cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-m=
+s-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: =
+collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-tabl=
+e-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"s=
+pacer-body" valign=3D"top" height=3D"15" width=3D"632" style=3D"mso-line-he=
+ight-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr=
+>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-=
+line-height-rule: exactly;"><td id=3D"layout-row-margin3607" valign=3D"top"=
+ style=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"100=
+%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-=
+adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: initial !imp=
+ortant; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-=
+rspace: 0pt;"><tr id=3D"layout-row3607" class=3D"layout layout-row widget _=
+widget_text style3607" style=3D"mso-line-height-rule: exactly; margin: 0; p=
+adding: 0;"><td id=3D"layout-row-padding3607" valign=3D"top" style=3D"mso-l=
+ine-height-rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -=
+webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; =
+min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=
+=3D"mso-line-height-rule: exactly;"><td id=3D"text_div3581" class=3D"td_tex=
+t td_block" valign=3D"top"=0Aalign=3D"left" width=3D"612" style=3D"line-hei=
+ght: 110%; mso-line-height-rule: exactly; margin: 0; outline: none; padding=
+: 0; color: inherit; font-size: 12px; font-weight: inherit; line-height: 1.=
+1; text-decoration: inherit; font-family: arial;"> <div style=3D"line-heigh=
+t: 110%; margin: 0; outline: none; padding: 0; color: inherit; font-size: 1=
+6px; font-weight: inherit; line-height: 1.1; text-decoration: inherit; mso-=
+line-height-rule: exactly;" class=3D"" data-line-height=3D"1.1"> <div class=
+=3D"" style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-s=
+ize: inherit; font-weight: inherit; line-height: inherit; text-decoration: =
+inherit;"> <div style=3D"margin: 0; outline: none; padding: 0; color: #0000=
+00; font-size: inherit; font-weight: inherit; line-height: inherit; text-de=
+coration: inherit; font-style: normal; text-align: start;" class=3D""></div=
+>=0A <div style=3D"margin: 0; outline: none; padding: 0; color: #000000; fo=
+nt-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inh=
+erit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent; font-style: normal; text-align: start;" class=3D""></=
+div>=0A <div style=3D"margin: 0; outline: none; padding: 0; color: #000000;=
+ font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: =
+inherit; font-style: normal; text-align: start;" class=3D""><span style=3D'=
+color: inherit; font-size: inherit; font-weight: inherit; line-height: inhe=
+rit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, =
+sans;' class=3D"">Dear Colleagues in Service,<br class=3D""><br class=3D"">=
+<span style=3D"color: #000000; font-size: 16px; font-weight: 400; line-heig=
+ht: inherit; text-decoration: inherit; font-style: normal; text-align: star=
+t; margin: 0;" class=3D"">This is how bad things have gotten for the charit=
+able sector:=C2=A0=C2=A0<strong style=3D"margin: 0; outline: none; padding:=
+ 0; font-style: inherit; font-weight: 700; font-size: 16px;" class=3D""><em=
+ style=3D"margin: 0; outline: none; padding: 0; font-style: italic; font-we=
+ight: inherit; font-size: 16px;" class=3D"">A country boy from Farmville, V=
+A has to write a book about the brokenness=0Aof nonprofits. <br class=3D"">=
+</em></strong></span><br class=3D""><span style=3D"color: #000000; font-siz=
+e: 16px; font-weight: 400; line-height: inherit; text-decoration: inherit; =
+font-style: normal; text-align: start; margin: 0;" class=3D""><em style=3D"=
+margin: 0; outline: none; padding: 0; font-style: italic; font-weight: inhe=
+rit; font-size: 16px;" class=3D""><strong style=3D"margin: 0; outline: none=
+; padding: 0; font-style: inherit; font-weight: 700; font-size: 16px;" clas=
+s=3D"">It=E2=80=99s such a mess that all the ivory tower elites from Prince=
+ton, Harvard, Yale, Washington, DC, New York and Chicago can=E2=80=99t fix =
+it.</strong> </em> In fact, ivory tower elites don=E2=80=99t want to fix th=
+is mess because it=E2=80=99s working perfectly for them!=C2=A0 The nonprofi=
+t establishment continues to perpetuate the nonprofit mess because it serve=
+s their interests. They maintain the authority, association dues, advertisi=
+ng dollars, and client contracts all the while promoting the status quo.=
+=C2=A0 Yet, it=E2=80=99s failing=0Amiserably.=C2=A0 While the establishment=
+ fiddles, the nonprofit sector burns.<br class=3D""></span><br class=3D""><=
+span style=3D"color: #000000; font-size: 16px; font-weight: 400; line-heigh=
+t: inherit; text-decoration: inherit; font-style: normal; text-align: start=
+; margin: 0;" class=3D"">The nonprofit sector is charged with handling the =
+most difficult problems in this world. <em style=3D"margin: 0; outline: non=
+e; padding: 0; font-style: italic; font-weight: inherit; font-size: 16px;" =
+class=3D""><strong style=3D"margin: 0; outline: none; padding: 0; font-styl=
+e: inherit; font-weight: 700; font-size: 16px;" class=3D"">Y</strong><stron=
+g style=3D"margin: 0; outline: none; padding: 0; font-style: inherit; font-=
+weight: 700; font-size: 16px;" class=3D""><em style=3D"margin: 0; outline: =
+none; padding: 0; font-style: italic; font-weight: inherit; font-size: 16px=
+;" class=3D"">et</em>, we are given the fewest resources to achieve heroic =
+missions of scale.</strong></em> I don=E2=80=99t need to give you a list=0A=
+of stats about how many people need nonprofits.=C2=A0 You can turn on the n=
+ews and see all the terrible things happening in our communities.<br class=
+=3D""><br class=3D""><span style=3D'color: #000000; font-size: 16px; font-w=
+eight: 400; line-height: inherit; text-decoration: inherit; font-style: nor=
+mal; font-family: "trebuchet ms", tahoma, arial, sans; text-align: start; m=
+argin: 0;' class=3D"">The government sector defends our nation, maintains r=
+oads, manages monetary policies, and makes laws to help life be as fair as =
+possible.=C2=A0 The corporate sector provides products and services to meet=
+ our needs:=C2=A0 cars, houses, restaurants, hotels, groceries, furniture, =
+medicines=E2=80=A6everything we want and need.=C2=A0 Yet, in spite of all t=
+he good work done by the government and the corporate sectors, there are mi=
+llions of people who fall through the cracks and need help.=C2=A0 My help.=
+=C2=A0 Your help.<br class=3D""></span><br class=3D""><span style=3D'color:=
+ #000000; font-size: 16px; font-weight: 400;=0Aline-height: inherit; text-d=
+ecoration: inherit; font-style: normal; font-family: "trebuchet ms", tahoma=
+, arial, sans; text-align: start; margin: 0;' class=3D"">This is where the =
+third sector, the nonprofit sector, comes into play.=C2=A0 We serve the hun=
+gry, the homeless, the orphans, the elderly, the neuro diverse, the traffic=
+ked, the veterans, those with addictions, the animals, the arts, the enviro=
+nment=E2=80=A6and so many more needs that are not met by the government or =
+corporate sectors.<br class=3D""></span><br class=3D""><span style=3D'color=
+: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-de=
+coration: inherit; font-style: normal; font-family: "trebuchet ms", tahoma,=
+ arial, sans; text-align: start; margin: 0;' class=3D"">Here is the charge =
+to the charitable sector =E2=80=94 <em style=3D'margin: 0; outline: none; p=
+adding: 0; font-style: italic; font-weight: inherit; font-size: 16px; font-=
+family: "trebuchet ms", tahoma, arial, sans;' class=3D""><strong style=3D'm=
+argin: 0;=0Aoutline: none; padding: 0; font-style: inherit; font-weight: 70=
+0; font-size: 16px; font-family: "trebuchet ms", tahoma, arial, sans;' clas=
+s=3D"">Find a need and meet it.=C2=A0 Make a promise and keep it. </strong>=
+</em> This sounds like it should work fine, right?=C2=A0 Wrong, it=E2=80=
+=99s a mess.<br class=3D""></span><br class=3D""><span style=3D'color: #000=
+000; font-size: 16px; font-weight: 400; line-height: inherit; text-decorati=
+on: inherit; font-style: normal; font-family: "trebuchet ms", tahoma, arial=
+, sans; text-align: start; margin: 0;' class=3D"">There are more than 14 mi=
+llion nonprofit professionals working every day in our communities to make =
+life better for millions of people.=C2=A0 The best work in communities is d=
+one over the long term by people on the ground, working day in and day out =
+to serve their neighbors.<br class=3D""></span><br class=3D""><em style=3D'=
+margin: 0; outline: none; padding: 0; font-style: italic; font-weight: inhe=
+rit; font-size: 16px; font-family: "trebuchet ms",=0Atahoma, arial, sans; c=
+olor: #000000; text-align: start;' class=3D""><strong style=3D'margin: 0; o=
+utline: none; padding: 0; font-style: inherit; font-weight: 700; font-size:=
+ 16px; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">But th=
+ings aren=E2=80=99t getting better, they=E2=80=99re getting worse</strong><=
+/em><strong style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --=
+tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; =
+font-style: normal; font-weight: 700; font-size: 16px; color: #000000;" cla=
+ss=3D""><a target=3D"_blank"=0Adata-cke-saved-href=3D"https://jimmylarose.l=
+t.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZpbnNpZGVja=
+GFyaXR5Lm9yZyUyRjIwMjMlMkYwOSUyRjE3JTJGbm9ucHJvZml0cy1ub3J0aC1vZi1yaWNobW9u=
+ZC13LWxvdWlzLWZhd2NldHQtamltbXktbGFyb3NlJTJG&sig=3DBEUJyhy8jaQux6jHeHfNXbHv=
+BAQrGTYNCHsfGNWCyu56&iat=3D1696000713&a=3D%7C%7C26605550%7C%7C&account=3Dji=
+mmylarose%2Eactivehosted%2Ecom&email=3DjA0ti81ZA6BHVV9TESR3wCqs6vbTksfcAUiI=
+TpAV%3ACknFatySEzDAn%2FCORIn%2FR%2FJv9LuJm%2FWz&s=3D678f48a0e320c6856d0620a=
+a2e024acb&i=3D599A1042A216A2393" href=3D"https://jimmylarose.lt.acemlnd.com=
+/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZpbnNpZGVjaGFyaXR5Lm9yZy=
+UyRjIwMjMlMkYwOCUyRjE5JTJGbG91aXMtZmF3Y2V0dC1pcy1yZS1pbWFnaW5pbmctbm9ucHJvZ=
+ml0cyUyRg=3D=3D&sig=3DGWbcxxjfbgUdxNwKGza9ybr9YqgiUGJfwh2GaKxJmd64&iat=3D16=
+96000713&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Eco=
+m&email=3DjA0ti81ZA6BHVV9TESR3wCqs6vbTksfcAUiITpAV%3ACknFatySEzDAn%2FCORIn%=
+2FR%2FJv9LuJm%2FWz&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D599A1042A216A23=
+97" data-ac-default-color=3D"1" style=3D"margin: 0; outline: none; padding:=
+ 0; color: #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weight=
+: inherit;=0Afont-size: 16px;" class=3D""><span style=3D"color: inherit; fo=
+nt-size: inherit; font-weight: inherit; line-height: inherit; text-decorati=
+on: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty,=
+ ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-co=
+lor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-r=
+ing-shadow: 0 0 transparent;" class=3D"">...VISIT HERE TO READ ENTIRE ARTIC=
+LE</span></a></strong></span></span></div>=0A</div>=0A </div>=0A<!--[if (gt=
+e mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D"=
+false"> #text_div3581, #text_div3581 div { line-height: 110% !important; };=
+=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</tabl=
+e>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D=
+"layout-row-margin3611" valign=3D"top" style=3D"mso-line-height-rule: exact=
+ly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; borde=
+r-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0=
+pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3611" class=3D"layout layou=
+t-row widget _widget_spacer " style=3D"mso-line-height-rule: exactly;"><td =
+id=3D"layout-row-padding3611" valign=3D"top" style=3D"mso-line-height-rule:=
+ exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%;=
+ border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lsp=
+ace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactl=
+y;"><td valign=3D"top" height=3D"10" style=3D"mso-line-height-rule: exactly=
+;"><div class=3D"spacer" style=3D"margin: 0; outline: none; padding: 0;=0Ah=
+eight: 10px;"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=
+=3D"100%" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 10=
+0%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-=
+lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exa=
+ctly;"><td class=3D"spacer-body" valign=3D"top" height=3D"10" width=3D"632"=
+ style=3D"mso-line-height-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A=
+</div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr=
+>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margi=
+n3610" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
+t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
+pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
+ace: 0pt;"><tr id=3D"layout-row3610" class=3D"layout layout-row widget _wid=
+get_break " style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-p=
+adding3610" valign=3D"top" style=3D"mso-line-height-rule: exactly; line-hei=
+ght: 0;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%;=
+ border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lsp=
+ace: 0pt; mso-table-rspace: 0pt; line-height: 0; mso-line-height-rule: exac=
+tly;"><tr style=3D"mso-line-height-rule: exactly;"><td height=3D"10" style=
+=3D"mso-line-height-rule: exactly; line-height: 0;"></td>=0A</tr>=0A<tr sty=
+le=3D"mso-line-height-rule: exactly;"><td align=3D"center" height=3D"1" wid=
+th=3D"632" style=3D"mso-line-height-rule: exactly; line-height: 0;"> <table=
+ align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" height=
+=3D"1" width=3D"632" style=3D"-ms-text-size-adjust: auto; -webkit-text-size=
+-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: auto!=
+important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; line-height: 0; ms=
+o-line-height-rule: exactly; width: 100%; max-width: 100%;"><tr style=3D"ms=
+o-line-height-rule: exactly;"><td class=3D"break-line" bgcolor=3D"#000000" =
+height=3D"1" width=3D"632" style=3D"mso-line-height-rule: exactly; line-hei=
+ght: 1px; height: 1px; width: 632px; background-color: #000000;"> </td>=0A =
+</tr>=0A</table>=0A</td>=0A </tr>=0A<tr style=3D"mso-line-height-rule: exac=
+tly;"><td height=3D"10" style=3D"mso-line-height-rule: exactly; line-height=
+: 0;"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=
+=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin=
+3609" valign=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"=
+><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-co=
+llapse: initial !important; font-size: 14px; min-width: 100%; mso-table-lsp=
+ace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3609" class=3D"layout=
+ layout-row widget _widget_text style3609" style=3D"mso-line-height-rule: e=
+xactly; margin: 0; padding: 0;"><td id=3D"layout-row-padding3609" valign=3D=
+"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
+t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
+pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
+ace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td id=3D"text_div3=
+583" class=3D"td_text td_block" valign=3D"top"=0Aalign=3D"left" width=3D"61=
+2" style=3D"line-height: 110%; mso-line-height-rule: exactly; margin: 0; ou=
+tline: none; padding: 0; color: inherit; font-size: 12px; font-weight: inhe=
+rit; line-height: 1.1; text-decoration: inherit; font-family: arial;"> <div=
+ style=3D'line-height: 110%; margin: 0; outline: none; padding: 0; color: #=
+000000; font-size: 16px; font-weight: inherit; line-height: 1.1; text-decor=
+ation: inherit; font-family: "trebuchet ms", tahoma, arial, sans; mso-line-=
+height-rule: exactly;' data-line-height=3D"1.1"> <span style=3D'color: #000=
+000; font-size: 16px; font-weight: 400; line-height: inherit; text-decorati=
+on: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow:=
+ 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-widt=
+h: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5)=
+; --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpare=
+nt; font-style: normal;'><span style=3D"color: inherit; font-size:=0Ainheri=
+t; font-weight: inherit; line-height: inherit; text-decoration: inherit; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;"><span style=3D"color: inherit; font-size: inherit; font-weig=
+ht: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0=
+ 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width:=
+ 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); =
+--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent=
+;">Inside Charity is pleased to report that over 500,000 executives, staff,=
+ board members, ministry leaders and volunteers rely on Inside Charity for =
+their nonprofit news. We're grateful to everyone who has participated and w=
+ant to encourage as many as people as possible to continue to share their=
+=0Aexperiences. Your written comments and contributions have helped your co=
+lleagues navigate this process.<br style=3D""><br style=3D""></span><span s=
+tyle=3D"color: inherit; font-size: inherit; font-weight: inherit; line-heig=
+ht: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><span na=
+me=3D"email_12" style=3D"color: #000000; font-size: inherit; font-weight: i=
+nherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tr=
+ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+ --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
+ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;">In=
+side Charity is here to make sure receive the information you require to na=
+vigate unprecedented=0Atimes.<br style=3D""><br style=3D""></span><strong s=
+tyle=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent;=
+ --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring=
+-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offse=
+t-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: i=
+nherit; font-weight: bolder; font-size: 16px; color: #000000;"><a href=3D"h=
+ttps://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM=
+0ElMkYlMkZpbnNpZGVjaGFyaXR5Lm9yZyUyRjIwMjMlMkYwOCUyRjE5JTJGbG91aXMtZmF3Y2V0=
+dC1pcy1yZS1pbWFnaW5pbmctbm9ucHJvZml0cyUyRg=3D=3D&sig=3DGWbcxxjfbgUdxNwKGza9=
+ybr9YqgiUGJfwh2GaKxJmd64&iat=3D1696000713&a=3D%7C%7C26605550%7C%7C&account=
+=3Djimmylarose%2Eactivehosted%2Ecom&email=3DjA0ti81ZA6BHVV9TESR3wCqs6vbTksf=
+cAUiITpAV%3ACknFatySEzDAn%2FCORIn%2FR%2FJv9LuJm%2FWz&s=3D678f48a0e320c6856d=
+0620aa2e024acb&i=3D599A1042A216A2397" data-ac-default-color=3D"1" target=3D=
+"_blank" style=3D"margin: 0; outline: none; padding: 0; color: #0764ba; tex=
+t-decoration: underline; --tw-shadow: 0 0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color:=0Argba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 trans=
+parent; --tw-ring-shadow: 0 0 transparent; font-weight: inherit;"><span sty=
+le=3D"color: inherit; font-size: inherit; font-weight: inherit; line-height=
+: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent;">VISIT HERE</span></a>=
+ </strong><span name=3D"email_13" style=3D"color: #000000; font-size: inher=
+it; font-weight: inherit; line-height: inherit; text-decoration: inherit; -=
+-tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-=
+offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,1=
+30,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 =
+0 transparent;">TO SUBSCRIBE<br style=3D""><br style=3D""></span><span name=
+=3D"email_14" style=3D"color: #000000;=0Afont-size: inherit; font-weight: i=
+nherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tr=
+ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+ --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
+ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;">We=
+ look forward to hearing from you.</span><span name=3D"email_15" style=3D"c=
+olor: #000000; font-size: inherit; font-weight: inherit; line-height: inher=
+it; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset=
+: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #=
+fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tr=
+ansparent; --tw-ring-shadow: 0 0 transparent;"><br style=3D""><br style=3D"=
+"></span></span></span><span style=3D"color: #000000; font-size: inherit; f=
+ont-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-s=
+hadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty,=0A); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 t=
+ransparent;" class=3D"">Warmly,<br style=3D""><br style=3D""></span></span>=
+<span style=3D"color: #000000; font-size: 16px; font-weight: 400; line-heig=
+ht: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;"=
+ class=3D""><span style=3D'color: inherit; font-size: 20px; font-weight: in=
+herit; line-height: inherit; text-decoration: inherit; font-family: georgia=
+, "times new roman";' class=3D""><b style=3D"margin: 0; outline: none; padd=
+ing: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
+=0Argba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-rin=
+g-shadow: 0 0 transparent;"><i style=3D"margin: 0; outline: none; padding: =
+0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
+ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
+59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
+: 0 0 transparent; font-style: italic;" class=3D"">Kathleen Robinson, Ph.D.=
+</i></b><br style=3D""></span><span name=3D"email_17" style=3D'color: #0000=
+00; font-size: inherit; font-weight: 400; line-height: inherit; text-decora=
+tion: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shado=
+w: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wi=
+dth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.=
+5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpa=
+rent; font-style: normal;'><br style=3D""><div style=3D"margin: 0; outline:=
+ none; padding: 0;=0Acolor: #000000; font-size: 16px; font-weight: 400; lin=
+e-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; =
+--tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-=
+offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset=
+-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: no=
+rmal; text-align: -webkit-left;"></div>=0A<div style=3D"margin: 0; outline:=
+ none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-=
+height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --=
+tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
+fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
+hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: norm=
+al; text-align: -webkit-left;"><span style=3D"color: inherit; font-size: 16=
+px; font-weight: inherit; line-height: inherit; text-decoration: inherit; -=
+-tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-=
+offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,1=
+30,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 =
+0 transparent;">Senior Editor</span></div>=0A</span></span> <br></div>=0A<!=
+--[if (gte mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-i=
+nline=3D"false"> #text_div3583, #text_div3583 div { line-height: 110% !impo=
+rtant; };=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=
+=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=
+=0A</tr>=0A</table>=0A</div>=0A<img src=3D"https://jimmylarose.lt.acemlnd.c=
+om/Prod/link-tracker?nl=3D216&c=3D599&m=3D1042&s=3D678f48a0e320c6856d0620aa=
+2e024acb&l=3Dopen&account=3Djimmylarose.activehosted.com&a=3D26605550" bord=
+er=3D"0" width=3D"1" height=3D"1" style=3D"display:block;width:1px!importan=
+t;min-width:1px!important;max-width:1px!important;height:1px!important;bord=
+er:0;overflow:hidden;" /><div id=3D"ac-footer" style=3D"clear:both;backgrou=
+nd-color:inherit;background:inherit;min-width:100%;mso-table-lspace:0pt;mso=
+-table-rspace:0pt;padding:20px;color:#000000;font-size:11px;font-family:ari=
+al,helvetica,sans-serif;line-height:140%;line-height:1.4;text-align:center;=
+box-sizing:border-box;"><center>Sent to: <span style=3D"font-size:11px;font=
+-family:arial,helvetica,sans-serif;font-weight:normal;text-decoration:none;=
+outline:none;">soc@kernel.org</span><br><br><a href=3D"http://jimmylarose.a=
+ctivehosted.com/proc.php?nl=3D216&c=3D599&m=3D1042&s=3D678f48a0e320c6856d06=
+20aa2e024acb&act=3Dunsub"=0Astyle=3D"font-size:11px;font-family:arial,helve=
+tica,sans-serif;font-weight:bold;text-decoration:underline;"><span style=3D=
+"font-weight:bold;text-decoration:underline;">Unsubscribe</span></a><br><br=
+>National Development Institute, PO Box 1840, Lexington, SOUTH CAROLINA 290=
+71, United States</center></div>=0A<br clear=3D"all" /></body>=0A</html>
+--_=_swift-18389813816516e84f4f13d1.76846121_=_--
+
