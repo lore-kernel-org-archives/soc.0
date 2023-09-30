@@ -1,109 +1,271 @@
-Return-Path: <SRS0=Iqg5=FN=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=2ZVK=FO=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83214E728D7
-	for <soc@archiver.kernel.org>; Fri, 29 Sep 2023 19:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA227E748E6
+	for <soc@archiver.kernel.org>; Sat, 30 Sep 2023 21:27:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2CD41C433C9; Fri, 29 Sep 2023 19:14:01 +0000 (UTC)
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+	id 50844C433C9; Sat, 30 Sep 2023 21:27:31 +0000 (UTC)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 85197C433C8
-	for <soc@kernel.org>; Fri, 29 Sep 2023 19:13:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 85197C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 243CBC433C8
+	for <soc@kernel.org>; Sat, 30 Sep 2023 21:27:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 243CBC433C8
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 0A44E320055E;
-	Fri, 29 Sep 2023 15:13:57 -0400 (EDT)
+	by mailout.nyi.internal (Postfix) with ESMTP id BA0655C0328;
+	Sat, 30 Sep 2023 17:27:27 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 29 Sep 2023 15:13:58 -0400
+  by compute6.internal (MEProxy); Sat, 30 Sep 2023 17:27:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1696014837; x=1696101237; bh=zZPTi9rC6WiqSpWMNCP3ybSRnhAovP9bviw
-	/z6BgAXQ=; b=E3letZpQ4ekkxzGazFRiLpwm7o2URG6Y+BYutSovQzMJ/bccR8z
-	ObvOPHn9wQ1auA/MB3qGtR2wUuh1mQ8tH7JRyDA4dG8u2zFhwEnAoZoFwooXEdx+
-	gTC3BIaJ3lYorRF/GvnsHUcd7ixu4mQOGzg+x7/G0Y6d8gYw8ilS1wB7sVCJ5zRI
-	9mCLk9cuQWxkZ2M9KH5KyMo0I0kclM6HJVXh9QHR2F16yHzTQQYrrv+D7+u54Rxd
-	Tm3oTuD8rGRxQe020F/FcGZCGgCL4gmrJNz8kyrsXWehCYQdiRkPoo8TVZISyww8
-	0l47/aJp1/V6ujE88y0UmgpwWM6BW6m24+g==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:sender:subject:subject:to:to; s=fm1; t=1696109247; x=
+	1696195647; bh=dtw0Eyy0R17VRbDGyjwG9+ncVoMk4C4upzNIEMsL+vs=; b=G
+	NUo+YHhJVvkn+71q5hspf5TdF09u56WjWYmTVi8OqeYNgV5Wze2QSH2jgmKMxDTm
+	0Z7k+/3TpZAnllgc0yDo66udItX8LFX5+zdHHcFTWrCdKRTjRdBDVhtu+0F8lnhd
+	nYE06N5lJri8wpMVCsBsXR1CL9OTD+J7zRzIPp+aSlp4/5cWR5eYNtlvfVue57X6
+	+u5wspp51DWk4TNw0xZPcRIwDdPZ177C3V6lnH79BYzjNlB3sWL6IBiA4ixopxjz
+	KGluLmh6l8LlwN/iPp3MaSXBE3F3L0tLvE390nmjrz39IecfiFZmX1uJEdOwhfSt
+	ipprRuNc0GF8tSFqPYrrQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1696014837; x=1696101237; bh=zZPTi9rC6WiqSpWMNCP3ybSRnhAovP9bviw
-	/z6BgAXQ=; b=kKbHxDsJ+iDXutFwP2fkVJlx2cxvoyFs19JgO6rvRgbcU69ZoV6
-	vJT3+bri5+9HTt6FfCe3GcUdGtILRam7L7LevToNenRKYgB4psiGUgkugxpf4x+T
-	J76vMoONub3XLMk4BRrkoJB5mYekP4qONNROCgNh4wKclItORCgQaJ4W8lqhA3Jk
-	nmSmUWb4DPpO0GXftadGL8EiaBEX9WA4tMWYANSE07Ap/Acx5Xh5daS/8QIjVhLg
-	X/f50ampDCTpwxrcICcUNgeSa/j67PJeoQ85VrRTUVio3nILk+wFoV4s8Id0F0A1
-	Wr/EQxTvGuQML+ISjoJ63C/nGSdFxHVFoXA==
-X-ME-Sender: <xms:9CEXZYht6wTLYYBw0DpelSK1A-M1l2nQE2C4ZHRMUvTsJx3vi6LwNw>
-    <xme:9CEXZRDv-80uc1081A_CHfOgUXdkvgR1JZ8XcJtdZwjrDl44R-eYvSosfY7Y6yURM
-    IiM9bDgIJKD4YoyCcQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrtddvgddufeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:9CEXZQGCLUfKgyXIN1HVffKtuhZC900lVE35msSD_ynCaX0L863iyA>
-    <xmx:9CEXZZSs_CxTTyRileYABBmzllPmgxoIAPknkCIDqGSTLf0InI5Giw>
-    <xmx:9CEXZVw3VtcS0oO3s90bg0WdWdtEuPUsqB0obopGVXRpiJJ-w4q6MA>
-    <xmx:9SEXZQ9Uli-nRCQFhrjQJwyGn-qm54H2iZu_9hb0oJzhUwPjTULaog>
+	:from:from:in-reply-to:message-id:mime-version:reply-to:sender
+	:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm2; t=1696109247; x=1696195647; bh=d
+	tw0Eyy0R17VRbDGyjwG9+ncVoMk4C4upzNIEMsL+vs=; b=o21p83bAe8Luf3TVf
+	WD/gVzWzBdt88dVZuekyzXpVjB7NQig1U+r0S2m2JA21C38tGhvzryOuPhx1Wpjr
+	dybbjOskxV+cTAttZccthb47d3ipenJDLXD3KYU+WMedTBsC9fOx7agqpovh6QMN
+	aOlpEJBjQZyRdAMlYhcrIcC/B/P5c6RdKwNuyNvQkeqTDBJjju56j+KQhD/VcTDD
+	jQfKLLkm8gyQMB97G8+f+J0knY8RJ/HdQHf0/9pI2IST17LeuX1gycK2l+ACR9FS
+	FmMNocoh4vlhRNLgiTTfEOUlLbcic50s0Fj56X/CKosSatn5FQc1uCRuc+WsLWvR
+	9Wt2Q==
+X-ME-Sender: <xms:v5IYZSC24DojVQ3qHBJx6yfvoPqp_F6nZO86pOzcU_Tfutd5yRGd7w>
+    <xme:v5IYZchnxOIWMCji1Wi9p3zCmXSl3GH5obKQppY20DJ0s1gvBVtoGn5ywZHkkDt2v
+    PFBXq0vopsWJD-UjPE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudefgdefhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepleekveevheekffdtiedthfeiffeugfdtgfetffffteejtdfgfeevheegtedvveeg
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhinhgrrhhordhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
+    uggsrdguvg
+X-ME-Proxy: <xmx:v5IYZVk4nhYXBbPch0B3OeWgkG_xqEbQJIvvEYs5QAVYoAaRtPUYzg>
+    <xmx:v5IYZQxg7Szy9Z-EF_MrR39CtfB3KPhJorEZyj8OKIxfkHhBDE_fDw>
+    <xmx:v5IYZXRxsJTH0-JSlzPH7GsnvD38KzlwOnqdRagEfmk_6yjaVWUSiA>
+    <xmx:v5IYZeLgU6oe4X0vrdAynJLn2eGnWITOqxpdKd9XTBcN6ADOnzq-FA>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id C9730B60089; Fri, 29 Sep 2023 15:13:56 -0400 (EDT)
+	id 3BECAB6008F; Sat, 30 Sep 2023 17:27:27 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Message-Id: <b0fdfb95-dcd9-4d63-9e72-5a985808de3f@app.fastmail.com>
-In-Reply-To: <20230929060114.zbex7z4atuzojs45@pengutronix.de>
-References: <20230928070652.2290946-1-u.kleine-koenig@pengutronix.de>
- <a5aadd2b-6c88-4a7e-a0e5-580dfe604c68@broadcom.com>
- <20230929060114.zbex7z4atuzojs45@pengutronix.de>
-Date: Fri, 29 Sep 2023 15:13:35 -0400
+Message-Id: <6425892a-8503-4f70-be45-e545cda59854@app.fastmail.com>
+Date: Sat, 30 Sep 2023 17:26:59 -0400
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- "Florian Fainelli" <florian.fainelli@broadcom.com>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: "Pengutronix Kernel Team" <kernel@pengutronix.de>, soc@kernel.org,
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Fix Florian Fainelli's email address
+Subject: [GIT PULL] ARM: SoC fixes for 6.6
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 29, 2023, at 02:01, Uwe Kleine-K=C3=B6nig wrote:
-> On Thu, Sep 28, 2023 at 11:21:50PM +0200, Florian Fainelli wrote:
->> On 9/28/2023 9:06 AM, Uwe Kleine-K=C3=B6nig wrote:
->> > Commit 31345a0f5901 ("MAINTAINERS: Replace my email address") added=
- 13
->> > instances of ...@broadcom.com and one of only ...@broadcom. I didn't
->> > double check if Broadcom really owns that TLD, but git send-email
->> > doesn't accept it, so add ".com" to that one bogous(?) instance.
->> >=20
->> > Fixes: 31345a0f5901 ("MAINTAINERS: Replace my email address")
->> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
-e>
->>=20
->> Embarrassing, thanks for fixing this Uwe!
->>=20
->> Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
->
-> Who picks this up? 31345a0f5901 went in via arm-soc. Arnd, will you?
->
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917=
+d1d:
 
-Yes, I've already included it in the arm/fixes branch now, doing
-some final testing on the branch before I send the PR.
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-       Arnd
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-f=
+ixes-6.6
+
+for you to fetch changes up to b0b88a585c27834223d2daf47faa57ca06dd9414:
+
+  MAINTAINERS: Fix Florian Fainelli's email address (2023-09-29 17:49:18=
+ -0400)
+
+----------------------------------------------------------------
+ARM: SoC fixes for 6.6
+
+These are teh latest bug fixes that have come up in the soc tree.
+Most of these are fairly minor. Most notably, the majority of
+changes this time are not for dts files as usual.
+
+ - Updates to the addresses of the broadcom and aspeed entries in the
+   MAINTAINERS file.
+
+ - Defconfig updates to address a regression on samsung and a build
+   warning from an unknown Kconfig symbol
+
+ - Build fixes for the StrongARM and Uniphier platforms
+
+ - Code fixes for SCMI and FF-A firmware drivers, both of which had
+   a simple bug that resulted in invalid data, and a lesser fix for
+   the optee firmware driver
+
+ - Multiple fixes for the recently added loongson/loongarch "guts"
+   soc driver
+
+ - Devicetree fixes for RISC-V on the startfive platform, addressing
+   issues with NOR flash, usb and uart.
+
+ - Multiple fixes for NXP i.MX8/i.MX9 dts files, fixing problems
+   with clock, gpio, hdmi settings and the Makefile
+
+ - Bug fixes for i.MX firmware code and the OCOTP soc driver
+
+ - Multiple fixes for the TI sysc bus driver
+
+ - Minor dts updates for TI omap dts files, to address boot
+   time warnings and errors
+
+----------------------------------------------------------------
+Adam Ford (3):
+      bus: ti-sysc: Fix missing AM35xx SoC matching
+      arm64: dts: imx8mp: Fix SDMA2/3 clocks
+      arm64: dts: imx8mp-beacon-kit: Fix audio_pll2 clock
+
+Alexander Stein (1):
+      arm64: dts: freescale: tqma9352: Fix gpio hog
+
+Andrew Jeffery (1):
+      MAINTAINERS: aspeed: Update Andrew's email address
+
+Arnd Bergmann (8):
+      Merge tag 'omap-for-v6.6/fixes-signed' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/tmlind/linux-omap into arm/fixes
+      Merge tag 'imx-fixes-6.6' of git://git.kernel.org/pub/scm/linux/ke=
+rnel/git/shawnguo/linux into arm/fixes
+      Merge tag 'riscv-dt-fixes-for-v6.6-rc3' of https://git.kernel.org/=
+pub/scm/linux/kernel/git/conor/linux into arm/fixes
+      Merge tag 'optee-for-for-v6.6' of https://git.linaro.org/people/je=
+ns.wiklander/linux-tee into arm/fixes
+      Merge tag 'aspeed-6.6-maintainers' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/joel/bmc into arm/fixes
+      Merge tag 'ffa-fix-6.6' of git://git.kernel.org/pub/scm/linux/kern=
+el/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'scmi-fix-6.6' of git://git.kernel.org/pub/scm/linux/ker=
+nel/git/sudeep.holla/linux into arm/fixes
+      ARM: locomo: fix locomolcd_power declaration
+
+Aurelien Jarno (1):
+      riscv: dts: starfive: fix NOR flash reserved-data partition size
+
+Binbin Zhou (5):
+      soc: loongson: loongson_pm2: Add dependency for INPUT
+      dt-bindings: soc: loongson,ls2k-pmc: Use fallbacks for ls2k-pmc co=
+mpatible
+      soc: loongson: loongson_pm2: Drop useless of_device_id compatible
+      dt-bindings: soc: loongson,ls2k-pmc: Allow syscon-reboot/syscon-po=
+weroff as child
+      soc: loongson: loongson_pm2: Populate children syscon nodes
+
+Christophe JAILLET (1):
+      firmware: imx-dsp: Fix an error handling path in imx_dsp_setup_cha=
+nnels()
+
+Dongliang Mu (1):
+      soc: loongson: loongson2_guts: Convert to devm_platform_ioremap_re=
+source()
+
+Hal Feng (2):
+      riscv: dts: starfive: visionfive 2: Enable usb0
+      riscv: dts: starfive: visionfive 2: Fix uart0 pins sort order
+
+Julien Panis (1):
+      bus: ti-sysc: Use fsleep() instead of usleep_range() in sysc_reset=
+()
+
+Krzysztof Kozlowski (1):
+      arm64: defconfig: enable syscon-poweroff driver
+
+Liu Ying (1):
+      arm64: dts: imx8mm-evk: Fix hdmi@3d node
+
+Mikko Rapeli (1):
+      arm64: defconfig: remove CONFIG_COMMON_CLK_NPCM8XX=3Dy
+
+Mingtong Bao (1):
+      soc: loongson: loongson2_guts: Remove unneeded semicolon
+
+Nathan Rossi (1):
+      soc: imx8m: Enable OCOTP clock for imx8mm before reading registers
+
+Randy Dunlap (1):
+      ARM: uniphier: fix cache kernel-doc warnings
+
+Rob Herring (2):
+      arm64: dts: mediatek: Fix "mediatek,merge-mute" and "mediatek,merg=
+e-fifo-en" types
+      arm64: dts: imx: Add imx8mm-prt8mm.dtb to build
+
+Sibi Sankar (1):
+      firmware: arm_scmi: Fixup perf power-cost/microwatt support
+
+Sudeep Holla (1):
+      firmware: arm_ffa: Don't set the memory region attributes for MEM_=
+LEND
+
+Tony Lindgren (6):
+      ARM: dts: ti: omap: Fix bandgap thermal cells addressing for omap3=
+/4
+      ARM: dts: ti: omap: motorola-mapphone: Fix abe_clkctrl warning on =
+boot
+      ARM: dts: ti: omap: Fix noisy serial with overrun-throttle-ms for =
+mapphone
+      ARM: omap2+: Downgrade u-boot version warnings to debug statements
+      bus: ti-sysc: Fix SYSC_QUIRK_SWSUP_SIDLE_ACT handling for uart wak=
+e-up
+      Merge branches 'fixes-mapphone' and 'fixes-ti-sysc' into fixes
+
+Uwe Kleine-K=C3=B6nig (1):
+      MAINTAINERS: Fix Florian Fainelli's email address
+
+Yue Haibing (1):
+      tee: Remove unused declarations
+
+Zev Weiss (1):
+      MAINTAINERS: aspeed: Update git tree URL
+
+ .../bindings/soc/loongson/loongson,ls2k-pmc.yaml   | 43 +++++++++++++++=
+---
+ MAINTAINERS                                        | 10 ++---
+ .../boot/dts/ti/omap/motorola-mapphone-common.dtsi |  5 ++-
+ arch/arm/boot/dts/ti/omap/omap3-cpu-thermal.dtsi   |  3 +-
+ arch/arm/boot/dts/ti/omap/omap4-cpu-thermal.dtsi   |  5 ++-
+ arch/arm/boot/dts/ti/omap/omap443x.dtsi            |  1 +
+ arch/arm/boot/dts/ti/omap/omap4460.dtsi            |  1 +
+ arch/arm/include/asm/hardware/locomo.h             |  2 +-
+ arch/arm/mach-omap2/pm44xx.c                       |  4 +-
+ arch/arm/mach-sa1100/include/mach/collie.h         |  2 -
+ arch/arm/mm/cache-uniphier.c                       |  4 +-
+ arch/arm64/boot/dts/freescale/Makefile             |  1 +
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi      | 32 +++++++++-----
+ .../arm64/boot/dts/freescale/imx8mp-beacon-kit.dts |  5 ++-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  6 +++
+ arch/arm64/boot/dts/freescale/imx93-tqma9352.dtsi  |  2 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi           | 10 ++---
+ arch/arm64/configs/defconfig                       |  2 +-
+ .../dts/starfive/jh7110-starfive-visionfive-2.dtsi | 51 +++++++++++----=
+-------
+ drivers/bus/ti-sysc.c                              | 31 +++++++++----
+ drivers/firmware/arm_ffa/driver.c                  | 16 ++++++-
+ drivers/firmware/arm_scmi/perf.c                   |  4 +-
+ drivers/firmware/imx/imx-dsp.c                     |  1 +
+ drivers/soc/imx/soc-imx8m.c                        | 10 +++++
+ drivers/soc/loongson/Kconfig                       |  1 +
+ drivers/soc/loongson/loongson2_guts.c              |  6 +--
+ drivers/soc/loongson/loongson2_pm.c                |  7 ++-
+ drivers/tee/optee/optee_private.h                  |  2 -
+ drivers/tee/tee_private.h                          |  2 -
+ 29 files changed, 179 insertions(+), 90 deletions(-)
