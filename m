@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1DD2E784B2
-	for <soc@archiver.kernel.org>; Mon,  2 Oct 2023 11:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 673B8E7849A
+	for <soc@archiver.kernel.org>; Mon,  2 Oct 2023 11:13:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7445FC433C8; Mon,  2 Oct 2023 11:12:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65931C433C9;
-	Mon,  2 Oct 2023 11:12:29 +0000 (UTC)
+	id 25B67C433C9; Mon,  2 Oct 2023 11:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C0FC433C7;
+	Mon,  2 Oct 2023 11:13:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696245152;
-	bh=oGi30cSXJQ1w7zskkydWheOMcPu6ZNpKlOmoLJaDTaA=;
+	s=k20201202; t=1696245220;
+	bh=w5N5ciJYCU3wjDtvTOAyjXeZe3bQKqiSF7IrXaaBMmA=;
 	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=arB1/ki4QfA3wxHvEqOtn0XN1F4QXyOgcOhL+Koy7h+MgBybDwsdHUt6brGY4HBXG
-	 lhHZYPOP9mwlt072JltNdkMoPaeJWsZumX0FA59AS8QFoDtVx5TrjLzKxX6LJXuzHZ
-	 BewQCJrBDPP9mZv0MzBiwXwBLUwZqGiAVo67EMcuWZw+wDw5hwi3F7gctYw0Mw9xHL
-	 bsA9r72MnL8UZKh6R6Q/sSYpgSkg9s3j1CM1DuHdlhjHWN3O+VlMOlkOJF4+Lki3Ch
-	 jEGVq33hoEcS4HRFlFkwf2p7/maWWK4vl4vQ1BhKm/NhjKOcPiKsy9d07vhcykqO7e
-	 zHthWcdc2Ji+A==
+	b=oI59V0oTibk8cT0U3ymz739XV1nLWMgbR1ybZ5m6p15Ty5iI1/6heoEDJh1FnNmtW
+	 N6tvShgyzVAlzRDubk4LFRvESM5dgwfi0gGG9f4W7FBV3PGpmD+fq0qqCMDv8YUCT/
+	 FEAkHqb0izAypy6GAv+eFqX7GduQIKxxoBa2KeLaIVIzIVzW63KlpIBLndNHbQlfp8
+	 oHHdS0kzy8f1A31ME7pgLMJsW+O/n0qmbXjC+rRcqBhKtKcq+qBw8VgVbdEj6Ni0K+
+	 9Qh/N4EKOyiybxagZhrYEM9AMa5QHOo9c7IfMYLQ5A7WX6BR9RLDFFqQElmg/zYTB4
+	 aOPoz7AZ9VtoQ==
 From: Sasha Levin <sashal@kernel.org>
 To: stable-commits@vger.kernel.org,
 	tglx@linutronix.de
@@ -49,9 +49,9 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Viresh Kumar <vireshk@kernel.org>,
 	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
 	soc@kernel.org
-Subject: Patch "treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)" has been added to the 5.15-stable tree
-Date: Mon,  2 Oct 2023 07:12:19 -0400
-Message-Id: <20231002111227.2996827-1-sashal@kernel.org>
+Subject: Patch "treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)" has been added to the 5.10-stable tree
+Date: Mon,  2 Oct 2023 07:13:27 -0400
+Message-Id: <20231002111335.2997479-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Patchwork-Hint: ignore
@@ -62,19 +62,19 @@ This is a note to let you know that I've just added the patch titled
 
     treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)
 
-to the 5.15-stable tree which can be found at:
+to the 5.10-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      treewide-replace-gplv2-boilerplate-reference-with-sp.patch
-and it can be found in the queue-5.15 subdirectory.
+and it can be found in the queue-5.10 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
 
-commit d9779078ab1fc2eb6944248c02e0da861021f65b
+commit 34db56dd1c0845ac8c4898f52bed7b12ab56d684
 Author: Thomas Gleixner <tglx@linutronix.de>
 Date:   Tue Jun 7 16:11:14 2022 +0200
 
@@ -101,7 +101,7 @@ Date:   Tue Jun 7 16:11:14 2022 +0200
     Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 diff --git a/arch/arm/boot/dts/am33xx.dtsi b/arch/arm/boot/dts/am33xx.dtsi
-index f6ec85d58dd12..f53695ecbb782 100644
+index f09a61cac2dc9..a8e8d54eb15b7 100644
 --- a/arch/arm/boot/dts/am33xx.dtsi
 +++ b/arch/arm/boot/dts/am33xx.dtsi
 @@ -1,11 +1,8 @@
@@ -135,7 +135,7 @@ index de33c4f89f33d..cb316135bc7c9 100644
  
  #include "omap3.dtsi"
 diff --git a/arch/arm/boot/dts/am4372.dtsi b/arch/arm/boot/dts/am4372.dtsi
-index 61a1d88f9df68..8613355bbd5ec 100644
+index 878406b120be6..03cd72207ec2b 100644
 --- a/arch/arm/boot/dts/am4372.dtsi
 +++ b/arch/arm/boot/dts/am4372.dtsi
 @@ -1,11 +1,8 @@
@@ -183,7 +183,7 @@ index 7702e048e110f..379abf90c765d 100644
  #include <dt-bindings/bus/ti-sysc.h>
  #include <dt-bindings/clock/dm814.h>
 diff --git a/arch/arm/boot/dts/dm816x.dtsi b/arch/arm/boot/dts/dm816x.dtsi
-index a9e7274806f46..ce62f1fa1faff 100644
+index 1825d912b8ab4..1faf68dbd8a4e 100644
 --- a/arch/arm/boot/dts/dm816x.dtsi
 +++ b/arch/arm/boot/dts/dm816x.dtsi
 @@ -1,8 +1,4 @@
@@ -262,7 +262,7 @@ index ccc2487d47ca9..2fda68f9d3f64 100644
  /dts-v1/;
  #include <dt-bindings/gpio/gpio.h>
 diff --git a/arch/arm/boot/dts/omap2.dtsi b/arch/arm/boot/dts/omap2.dtsi
-index 5750ca1233cc2..afabb36a8ac13 100644
+index f9c2a99388986..777e8c7fe3da4 100644
 --- a/arch/arm/boot/dts/omap2.dtsi
 +++ b/arch/arm/boot/dts/omap2.dtsi
 @@ -1,11 +1,8 @@
@@ -279,7 +279,7 @@ index 5750ca1233cc2..afabb36a8ac13 100644
  
  #include <dt-bindings/bus/ti-sysc.h>
 diff --git a/arch/arm/boot/dts/omap2420.dtsi b/arch/arm/boot/dts/omap2420.dtsi
-index bb529a2a295db..821da51cb8704 100644
+index 494bf6972005b..6f529e0656457 100644
 --- a/arch/arm/boot/dts/omap2420.dtsi
 +++ b/arch/arm/boot/dts/omap2420.dtsi
 @@ -1,11 +1,8 @@
@@ -296,7 +296,7 @@ index bb529a2a295db..821da51cb8704 100644
  
  #include "omap2.dtsi"
 diff --git a/arch/arm/boot/dts/omap2430.dtsi b/arch/arm/boot/dts/omap2430.dtsi
-index 23115ba61bc06..b9a9e6e45266f 100644
+index d19d8ba3b6070..e3ea9d6481b03 100644
 --- a/arch/arm/boot/dts/omap2430.dtsi
 +++ b/arch/arm/boot/dts/omap2430.dtsi
 @@ -1,11 +1,8 @@
@@ -330,7 +330,7 @@ index 1ed8378593745..1ba79932a79fc 100644
  
  #include <dt-bindings/thermal/thermal.h>
 diff --git a/arch/arm/boot/dts/omap3.dtsi b/arch/arm/boot/dts/omap3.dtsi
-index 64b7e6fddd1bc..825075ff0e342 100644
+index c5b9da0d7e6ce..744e878ef7b3e 100644
 --- a/arch/arm/boot/dts/omap3.dtsi
 +++ b/arch/arm/boot/dts/omap3.dtsi
 @@ -1,11 +1,8 @@
@@ -347,7 +347,7 @@ index 64b7e6fddd1bc..825075ff0e342 100644
  
  #include <dt-bindings/bus/ti-sysc.h>
 diff --git a/arch/arm/boot/dts/omap34xx.dtsi b/arch/arm/boot/dts/omap34xx.dtsi
-index 8b8451399784f..2eb73ae7ef3e7 100644
+index feaa43b785354..8ad68af655b06 100644
 --- a/arch/arm/boot/dts/omap34xx.dtsi
 +++ b/arch/arm/boot/dts/omap34xx.dtsi
 @@ -1,11 +1,8 @@
@@ -364,7 +364,7 @@ index 8b8451399784f..2eb73ae7ef3e7 100644
  
  #include <dt-bindings/bus/ti-sysc.h>
 diff --git a/arch/arm/boot/dts/omap36xx.dtsi b/arch/arm/boot/dts/omap36xx.dtsi
-index 22b33098b1a2d..32ac7924a1303 100644
+index 05fe5ed127b01..372f861dc929f 100644
 --- a/arch/arm/boot/dts/omap36xx.dtsi
 +++ b/arch/arm/boot/dts/omap36xx.dtsi
 @@ -1,11 +1,8 @@
@@ -399,7 +399,7 @@ index 03d054b2bf9af..4d7eeb133dadd 100644
  
  #include <dt-bindings/thermal/thermal.h>
 diff --git a/arch/arm/boot/dts/omap443x.dtsi b/arch/arm/boot/dts/omap443x.dtsi
-index 8466161197aef..238aceb799f89 100644
+index dd8ef58cbaed4..1095fc9011add 100644
 --- a/arch/arm/boot/dts/omap443x.dtsi
 +++ b/arch/arm/boot/dts/omap443x.dtsi
 @@ -1,11 +1,8 @@
@@ -416,7 +416,7 @@ index 8466161197aef..238aceb799f89 100644
  
  #include "omap4.dtsi"
 diff --git a/arch/arm/boot/dts/omap4460.dtsi b/arch/arm/boot/dts/omap4460.dtsi
-index 3d6db1db94e04..1b27a862ae810 100644
+index 2d3e54901b6ea..21ddff965c83e 100644
 --- a/arch/arm/boot/dts/omap4460.dtsi
 +++ b/arch/arm/boot/dts/omap4460.dtsi
 @@ -1,11 +1,8 @@
@@ -659,7 +659,7 @@ index 295e2e40151b1..4e493facaa317 100644
  
  #define CACHE_TAUROS2_PREFETCH_ON	(1 << 0)
 diff --git a/arch/arm/mach-davinci/board-da830-evm.c b/arch/arm/mach-davinci/board-da830-evm.c
-index 823c9cc98f18b..d820161445fa9 100644
+index a20ba12d876c6..bc8350c85e5ae 100644
 --- a/arch/arm/mach-davinci/board-da830-evm.c
 +++ b/arch/arm/mach-davinci/board-da830-evm.c
 @@ -1,13 +1,11 @@
@@ -736,7 +736,7 @@ index e475b2113e70f..7c8307d590a40 100644
  #include <linux/kernel.h>
  #include <linux/init.h>
 diff --git a/arch/arm/mach-davinci/board-dm644x-evm.c b/arch/arm/mach-davinci/board-dm644x-evm.c
-index cce3a621eb20b..92a92c4cef722 100644
+index 7755cccec550c..a3b8cf40f6bee 100644
 --- a/arch/arm/mach-davinci/board-dm644x-evm.c
 +++ b/arch/arm/mach-davinci/board-dm644x-evm.c
 @@ -1,12 +1,10 @@
@@ -755,7 +755,7 @@ index cce3a621eb20b..92a92c4cef722 100644
  #include <linux/kernel.h>
  #include <linux/init.h>
 diff --git a/arch/arm/mach-davinci/board-dm646x-evm.c b/arch/arm/mach-davinci/board-dm646x-evm.c
-index ee91d81ebbfdf..c62815535b863 100644
+index 952ddabc743e0..5beb6b256f903 100644
 --- a/arch/arm/mach-davinci/board-dm646x-evm.c
 +++ b/arch/arm/mach-davinci/board-dm646x-evm.c
 @@ -1,3 +1,4 @@
@@ -775,13 +775,13 @@ index ee91d81ebbfdf..c62815535b863 100644
   */
  
  /**************************************************************************
-@@ -873,4 +869,3 @@ MACHINE_START(DAVINCI_DM6467TEVM, "DaVinci DM6467T EVM")
+@@ -869,4 +865,3 @@ MACHINE_START(DAVINCI_DM6467TEVM, "DaVinci DM6467T EVM")
  	.init_late	= davinci_init_late,
  	.dma_zone_size	= SZ_128M,
  MACHINE_END
 -
 diff --git a/arch/arm/mach-davinci/board-mityomapl138.c b/arch/arm/mach-davinci/board-mityomapl138.c
-index 2127969beb965..a36365edfe20f 100644
+index 5205008c8061b..169ee82d35f5b 100644
 --- a/arch/arm/mach-davinci/board-mityomapl138.c
 +++ b/arch/arm/mach-davinci/board-mityomapl138.c
 @@ -1,11 +1,8 @@
@@ -1767,7 +1767,7 @@ index 2c4032e368bad..f05c59dad32ac 100644
   * an SMP kernel. The only thing we need to do is to add the CPU to
   * the coherency fabric by writing to 2 registers. Currently the base
 diff --git a/arch/arm/mach-mvebu/kirkwood.c b/arch/arm/mach-mvebu/kirkwood.c
-index 06b1706595f4c..8ff34753e7609 100644
+index ceaad6d5927e5..5ca2253a76d0e 100644
 --- a/arch/arm/mach-mvebu/kirkwood.c
 +++ b/arch/arm/mach-mvebu/kirkwood.c
 @@ -1,13 +1,10 @@
@@ -2497,7 +2497,7 @@ index eab1645bb4adb..60d0d14d4a0fe 100644
  
  #include <linux/linkage.h>
 diff --git a/arch/arm/mach-spear/generic.h b/arch/arm/mach-spear/generic.h
-index 8ec2b92dca192..43b7996ab7545 100644
+index 25b4c5e66e396..ab34d6c19d0c0 100644
 --- a/arch/arm/mach-spear/generic.h
 +++ b/arch/arm/mach-spear/generic.h
 @@ -1,13 +1,10 @@
@@ -2655,7 +2655,7 @@ index a212af90c0bc6..a391f154eff9b 100644
  
  #define pr_fmt(fmt) "SPEAr1340: " fmt
 diff --git a/arch/arm/mach-spear/spear13xx.c b/arch/arm/mach-spear/spear13xx.c
-index 74d1ca2a529a7..64087046dfff7 100644
+index 31c43cabf3623..e287873f5187f 100644
 --- a/arch/arm/mach-spear/spear13xx.c
 +++ b/arch/arm/mach-spear/spear13xx.c
 @@ -1,3 +1,4 @@
@@ -2715,7 +2715,7 @@ index 59e173dc85cf3..5ca325fc1b825 100644
  
  #define pr_fmt(fmt) "SPEAr310: " fmt
 diff --git a/arch/arm/mach-spear/spear320.c b/arch/arm/mach-spear/spear320.c
-index 926d5a243238a..991de88dfe4d3 100644
+index 0958f68a21e23..9b68fb9c3f000 100644
 --- a/arch/arm/mach-spear/spear320.c
 +++ b/arch/arm/mach-spear/spear320.c
 @@ -1,3 +1,4 @@
@@ -2735,7 +2735,7 @@ index 926d5a243238a..991de88dfe4d3 100644
  
  #define pr_fmt(fmt) "SPEAr320: " fmt
 diff --git a/arch/arm/mach-spear/spear3xx.c b/arch/arm/mach-spear/spear3xx.c
-index f83321d5e3538..cdaa41900a399 100644
+index 8537fcffe5a86..505f2ed5e42b1 100644
 --- a/arch/arm/mach-spear/spear3xx.c
 +++ b/arch/arm/mach-spear/spear3xx.c
 @@ -1,3 +1,4 @@
