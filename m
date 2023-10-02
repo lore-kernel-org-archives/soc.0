@@ -1,2830 +1,981 @@
-Return-Path: <sashal@kernel.org>
+Return-Path: <SRS0=t9YZ=FQ=s4.acemsrvh.com=bounce-1707420-594-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 673B8E7849A
-	for <soc@archiver.kernel.org>; Mon,  2 Oct 2023 11:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01850E784AD
+	for <soc@archiver.kernel.org>; Mon,  2 Oct 2023 14:16:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 25B67C433C9; Mon,  2 Oct 2023 11:13:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C0FC433C7;
-	Mon,  2 Oct 2023 11:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696245220;
-	bh=w5N5ciJYCU3wjDtvTOAyjXeZe3bQKqiSF7IrXaaBMmA=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=oI59V0oTibk8cT0U3ymz739XV1nLWMgbR1ybZ5m6p15Ty5iI1/6heoEDJh1FnNmtW
-	 N6tvShgyzVAlzRDubk4LFRvESM5dgwfi0gGG9f4W7FBV3PGpmD+fq0qqCMDv8YUCT/
-	 FEAkHqb0izAypy6GAv+eFqX7GduQIKxxoBa2KeLaIVIzIVzW63KlpIBLndNHbQlfp8
-	 oHHdS0kzy8f1A31ME7pgLMJsW+O/n0qmbXjC+rRcqBhKtKcq+qBw8VgVbdEj6Ni0K+
-	 9Qh/N4EKOyiybxagZhrYEM9AMa5QHOo9c7IfMYLQ5A7WX6BR9RLDFFqQElmg/zYTB4
-	 aOPoz7AZ9VtoQ==
-From: Sasha Levin <sashal@kernel.org>
-To: stable-commits@vger.kernel.org,
-	tglx@linutronix.de
+	id B0FF5C433C8; Mon,  2 Oct 2023 14:16:30 +0000 (UTC)
+Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6ABC8C433C7
+	for <soc@kernel.org>; Mon,  2 Oct 2023 14:16:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6ABC8C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nanoenonprofits.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=s4.acemsrvh.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=dk; d=nanoenonprofits.org;
+ h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ List-Unsubscribe:List-Unsubscribe-Post:Message-ID; i=team@nanoenonprofits.org;
+ bh=FKoD/JEOmay4VlsJeGnCfGPkv+QF5TkGA5Y4XL3tBpo=;
+ b=o5oTpwkV2oaTOvDfnJIZCAVGO7SZVPHsRd8GDleiEv5i8ErUCE5TXi6oPF3+Jxr0CTDIS+xcB6U4
+   5+hdF8dWJEvk44oHAVjxTIUugkq1Pl3A59nawMjGsLzluh9xK8ZqV8vHPoL4AWMdWVw+m2lZu8K/
+   vw/VT4/rN/2RrM8yoaI=
+Received: by s4.acemsrvh.com id h3b8bq34rc8o for <soc@kernel.org>; Mon, 2 Oct 2023 14:16:27 +0000 (envelope-from <bounce-1707420-594-1076303-soc=kernel.org@s4.acemsrvh.com>)
+X-Mailer: ActiveCampaign Mailer
+CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Kevin Hilman <khilman@kernel.org>,
-	Alexander Clouter <alex@digriz.org.uk>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	soc@kernel.org
-Subject: Patch "treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)" has been added to the 5.10-stable tree
-Date: Mon,  2 Oct 2023 07:13:27 -0400
-Message-Id: <20231002111335.2997479-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
+To: soc@kernel.org
+From: "NANOE Webinars" <team@nanoenonprofits.org>
+Subject: No Galas, No Auctions, No Golf, EVER AGAIN
+Date: Mon, 02 Oct 2023 09:03:50 -0500
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
-Content-Transfer-Encoding: 8bit
-
-This is a note to let you know that I've just added the patch titled
-
-    treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)
-
-to the 5.10-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-
-The filename of the patch is:
-     treewide-replace-gplv2-boilerplate-reference-with-sp.patch
-and it can be found in the queue-5.10 subdirectory.
-
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
+Content-Type: multipart/alternative;
+ boundary="_=_swift-1033463870651acdc673e2e0.92077421_=_"
+Content-Transfer-Encoding: 7bit
+X-DKIM-Options: s=dk
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjNTk0ICwgbTEwMTcgLCBzNTI1
+x-virtual-mta: s4.acemsrvh.com
+Feedback-ID: 1707420:1707420.594:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-594
+List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-594-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
+ <http://jimmylarose.activehosted.com/box.php?nl=219&c=594&m=1017&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Message-ID: <20231002141627.14259.943749759.swift@jimmylarose.activehosted.com>
 
 
+--_=_swift-1033463870651acdc673e2e0.92077421_=_
+Content-Type: text/plain; charset=utf-8
 
-commit 34db56dd1c0845ac8c4898f52bed7b12ab56d684
-Author: Thomas Gleixner <tglx@linutronix.de>
-Date:   Tue Jun 7 16:11:14 2022 +0200
+(Live Events For C-Suite Executives) 
+ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
 
-    treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)
-    
-    [ Upstream commit 0fdebc5ec2ca492d69df2d93a6a7abade4941aae ]
-    
-    Based on the normalized pattern:
-    
-        this file is licensed under the terms of the gnu general public
-        license version 2 this program is licensed as is without any warranty
-        of any kind whether express or implied
-    
-    extracted by the scancode license scanner the SPDX license identifier
-    
-        GPL-2.0-only
-    
-    has been chosen to replace the boilerplate/reference.
-    
-    Reviewed-by: Allison Randal <allison@lohutok.net>
-    Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Stable-dep-of: 6469b2feade8 ("ARM: dts: ti: omap: Fix bandgap thermal cells addressing for omap3/4")
-    Signed-off-by: Sasha Levin <sashal@kernel.org>
+NANOE Board of Governors' Conference Series (Last Day)
+Live Virtual Events For Senior Executives
 
-diff --git a/arch/arm/boot/dts/am33xx.dtsi b/arch/arm/boot/dts/am33xx.dtsi
-index f09a61cac2dc9..a8e8d54eb15b7 100644
---- a/arch/arm/boot/dts/am33xx.dtsi
-+++ b/arch/arm/boot/dts/am33xx.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for AM33XX SoC
-  *
-  * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/bus/ti-sysc.h>
-diff --git a/arch/arm/boot/dts/am3517.dtsi b/arch/arm/boot/dts/am3517.dtsi
-index de33c4f89f33d..cb316135bc7c9 100644
---- a/arch/arm/boot/dts/am3517.dtsi
-+++ b/arch/arm/boot/dts/am3517.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for am3517 SoC
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include "omap3.dtsi"
-diff --git a/arch/arm/boot/dts/am4372.dtsi b/arch/arm/boot/dts/am4372.dtsi
-index 878406b120be6..03cd72207ec2b 100644
---- a/arch/arm/boot/dts/am4372.dtsi
-+++ b/arch/arm/boot/dts/am4372.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for AM4372 SoC
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/bus/ti-sysc.h>
-diff --git a/arch/arm/boot/dts/artpec6-devboard.dts b/arch/arm/boot/dts/artpec6-devboard.dts
-index d20d95359b284..042a9cc920c67 100644
---- a/arch/arm/boot/dts/artpec6-devboard.dts
-+++ b/arch/arm/boot/dts/artpec6-devboard.dts
-@@ -1,10 +1,5 @@
--/*
-- * Axis ARTPEC-6 development board.
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Axis ARTPEC-6 development board.
- 
- /dts-v1/;
- #include "artpec6.dtsi"
-diff --git a/arch/arm/boot/dts/dm814x.dtsi b/arch/arm/boot/dts/dm814x.dtsi
-index 7702e048e110f..379abf90c765d 100644
---- a/arch/arm/boot/dts/dm814x.dtsi
-+++ b/arch/arm/boot/dts/dm814x.dtsi
-@@ -1,8 +1,4 @@
--/*
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
- 
- #include <dt-bindings/bus/ti-sysc.h>
- #include <dt-bindings/clock/dm814.h>
-diff --git a/arch/arm/boot/dts/dm816x.dtsi b/arch/arm/boot/dts/dm816x.dtsi
-index 1825d912b8ab4..1faf68dbd8a4e 100644
---- a/arch/arm/boot/dts/dm816x.dtsi
-+++ b/arch/arm/boot/dts/dm816x.dtsi
-@@ -1,8 +1,4 @@
--/*
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
- 
- #include <dt-bindings/bus/ti-sysc.h>
- #include <dt-bindings/clock/dm816.h>
-diff --git a/arch/arm/boot/dts/dra62x.dtsi b/arch/arm/boot/dts/dra62x.dtsi
-index cc4878aaa8ea8..cfefa670515cc 100644
---- a/arch/arm/boot/dts/dra62x.dtsi
-+++ b/arch/arm/boot/dts/dra62x.dtsi
-@@ -1,8 +1,4 @@
--/*
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
- 
- #include "dm814x.dtsi"
- 
-diff --git a/arch/arm/boot/dts/dra7-dspeve-thermal.dtsi b/arch/arm/boot/dts/dra7-dspeve-thermal.dtsi
-index e75569383dd80..747ff0db90c7d 100644
---- a/arch/arm/boot/dts/dra7-dspeve-thermal.dtsi
-+++ b/arch/arm/boot/dts/dra7-dspeve-thermal.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for DRA7x SoC DSPEVE thermal
-  *
-  * Copyright (C) 2016 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/thermal/thermal.h>
-diff --git a/arch/arm/boot/dts/dra7-iva-thermal.dtsi b/arch/arm/boot/dts/dra7-iva-thermal.dtsi
-index a7077321613f0..0a31313065df4 100644
---- a/arch/arm/boot/dts/dra7-iva-thermal.dtsi
-+++ b/arch/arm/boot/dts/dra7-iva-thermal.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for DRA7x SoC IVA thermal
-  *
-  * Copyright (C) 2016 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/thermal/thermal.h>
-diff --git a/arch/arm/boot/dts/imx6q-gk802.dts b/arch/arm/boot/dts/imx6q-gk802.dts
-index ccc2487d47ca9..2fda68f9d3f64 100644
---- a/arch/arm/boot/dts/imx6q-gk802.dts
-+++ b/arch/arm/boot/dts/imx6q-gk802.dts
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2013 Philipp Zabel
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2013 Philipp Zabel
- 
- /dts-v1/;
- #include <dt-bindings/gpio/gpio.h>
-diff --git a/arch/arm/boot/dts/omap2.dtsi b/arch/arm/boot/dts/omap2.dtsi
-index f9c2a99388986..777e8c7fe3da4 100644
---- a/arch/arm/boot/dts/omap2.dtsi
-+++ b/arch/arm/boot/dts/omap2.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP2 SoC
-  *
-  * Copyright (C) 2011 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/bus/ti-sysc.h>
-diff --git a/arch/arm/boot/dts/omap2420.dtsi b/arch/arm/boot/dts/omap2420.dtsi
-index 494bf6972005b..6f529e0656457 100644
---- a/arch/arm/boot/dts/omap2420.dtsi
-+++ b/arch/arm/boot/dts/omap2420.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP2420 SoC
-  *
-  * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include "omap2.dtsi"
-diff --git a/arch/arm/boot/dts/omap2430.dtsi b/arch/arm/boot/dts/omap2430.dtsi
-index d19d8ba3b6070..e3ea9d6481b03 100644
---- a/arch/arm/boot/dts/omap2430.dtsi
-+++ b/arch/arm/boot/dts/omap2430.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP243x SoC
-  *
-  * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include "omap2.dtsi"
-diff --git a/arch/arm/boot/dts/omap3-cpu-thermal.dtsi b/arch/arm/boot/dts/omap3-cpu-thermal.dtsi
-index 1ed8378593745..1ba79932a79fc 100644
---- a/arch/arm/boot/dts/omap3-cpu-thermal.dtsi
-+++ b/arch/arm/boot/dts/omap3-cpu-thermal.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP3 SoC CPU thermal
-  *
-  * Copyright (C) 2017 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/thermal/thermal.h>
-diff --git a/arch/arm/boot/dts/omap3.dtsi b/arch/arm/boot/dts/omap3.dtsi
-index c5b9da0d7e6ce..744e878ef7b3e 100644
---- a/arch/arm/boot/dts/omap3.dtsi
-+++ b/arch/arm/boot/dts/omap3.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP3 SoC
-  *
-  * Copyright (C) 2011 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/bus/ti-sysc.h>
-diff --git a/arch/arm/boot/dts/omap34xx.dtsi b/arch/arm/boot/dts/omap34xx.dtsi
-index feaa43b785354..8ad68af655b06 100644
---- a/arch/arm/boot/dts/omap34xx.dtsi
-+++ b/arch/arm/boot/dts/omap34xx.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP34xx/OMAP35xx SoC
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/bus/ti-sysc.h>
-diff --git a/arch/arm/boot/dts/omap36xx.dtsi b/arch/arm/boot/dts/omap36xx.dtsi
-index 05fe5ed127b01..372f861dc929f 100644
---- a/arch/arm/boot/dts/omap36xx.dtsi
-+++ b/arch/arm/boot/dts/omap36xx.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP3 SoC
-  *
-  * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/bus/ti-sysc.h>
-diff --git a/arch/arm/boot/dts/omap4-cpu-thermal.dtsi b/arch/arm/boot/dts/omap4-cpu-thermal.dtsi
-index 03d054b2bf9af..4d7eeb133dadd 100644
---- a/arch/arm/boot/dts/omap4-cpu-thermal.dtsi
-+++ b/arch/arm/boot/dts/omap4-cpu-thermal.dtsi
-@@ -1,12 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP4/5 SoC CPU thermal
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-  * Contact: Eduardo Valentin <eduardo.valentin@ti.com>
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/thermal/thermal.h>
-diff --git a/arch/arm/boot/dts/omap443x.dtsi b/arch/arm/boot/dts/omap443x.dtsi
-index dd8ef58cbaed4..1095fc9011add 100644
---- a/arch/arm/boot/dts/omap443x.dtsi
-+++ b/arch/arm/boot/dts/omap443x.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP443x SoC
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include "omap4.dtsi"
-diff --git a/arch/arm/boot/dts/omap4460.dtsi b/arch/arm/boot/dts/omap4460.dtsi
-index 2d3e54901b6ea..21ddff965c83e 100644
---- a/arch/arm/boot/dts/omap4460.dtsi
-+++ b/arch/arm/boot/dts/omap4460.dtsi
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP4460 SoC
-  *
-  * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- #include "omap4.dtsi"
- 
-diff --git a/arch/arm/boot/dts/omap5-core-thermal.dtsi b/arch/arm/boot/dts/omap5-core-thermal.dtsi
-index 02e76338bfbc0..e0d8e39a0014b 100644
---- a/arch/arm/boot/dts/omap5-core-thermal.dtsi
-+++ b/arch/arm/boot/dts/omap5-core-thermal.dtsi
-@@ -1,12 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP543x SoC CORE thermal
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-  * Contact: Eduardo Valentin <eduardo.valentin@ti.com>
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/thermal/thermal.h>
-diff --git a/arch/arm/boot/dts/omap5-gpu-thermal.dtsi b/arch/arm/boot/dts/omap5-gpu-thermal.dtsi
-index bf8fa9372e575..1b4b7d9136c84 100644
---- a/arch/arm/boot/dts/omap5-gpu-thermal.dtsi
-+++ b/arch/arm/boot/dts/omap5-gpu-thermal.dtsi
-@@ -1,12 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree Source for OMAP543x SoC GPU thermal
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-  * Contact: Eduardo Valentin <eduardo.valentin@ti.com>
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #include <dt-bindings/thermal/thermal.h>
-diff --git a/arch/arm/boot/dts/orion5x-lacie-d2-network.dts b/arch/arm/boot/dts/orion5x-lacie-d2-network.dts
-index 422958d13d42f..03471d30bfd95 100644
---- a/arch/arm/boot/dts/orion5x-lacie-d2-network.dts
-+++ b/arch/arm/boot/dts/orion5x-lacie-d2-network.dts
-@@ -1,10 +1,7 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright (C) 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  * Copyright (C) 2009 Simon Guinot <sguinot@lacie.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- /dts-v1/;
-diff --git a/arch/arm/boot/dts/orion5x-lacie-ethernet-disk-mini-v2.dts b/arch/arm/boot/dts/orion5x-lacie-ethernet-disk-mini-v2.dts
-index 0043e0040153c..f17e25ac98ddb 100644
---- a/arch/arm/boot/dts/orion5x-lacie-ethernet-disk-mini-v2.dts
-+++ b/arch/arm/boot/dts/orion5x-lacie-ethernet-disk-mini-v2.dts
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2012 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2012 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
- /*
-  * TODO: add Orion USB device port init when kernel.org support is added.
-diff --git a/arch/arm/boot/dts/orion5x-maxtor-shared-storage-2.dts b/arch/arm/boot/dts/orion5x-maxtor-shared-storage-2.dts
-index 0ca6208a267de..d57859998350d 100644
---- a/arch/arm/boot/dts/orion5x-maxtor-shared-storage-2.dts
-+++ b/arch/arm/boot/dts/orion5x-maxtor-shared-storage-2.dts
-@@ -1,10 +1,7 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright (C) 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  * Copyright (C) Sylver Bruneau <sylver.bruneau@googlemail.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- /dts-v1/;
-diff --git a/arch/arm/boot/dts/orion5x-mv88f5181.dtsi b/arch/arm/boot/dts/orion5x-mv88f5181.dtsi
-index f667012b26ca1..819f9efb7058d 100644
---- a/arch/arm/boot/dts/orion5x-mv88f5181.dtsi
-+++ b/arch/arm/boot/dts/orion5x-mv88f5181.dtsi
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2016 Jamie Lentin <jm@lentin.co.uk>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2016 Jamie Lentin <jm@lentin.co.uk>
- 
- #include "orion5x.dtsi"
- 
-diff --git a/arch/arm/boot/dts/orion5x-mv88f5182.dtsi b/arch/arm/boot/dts/orion5x-mv88f5182.dtsi
-index d1ed71c602096..86b87fb26dc9a 100644
---- a/arch/arm/boot/dts/orion5x-mv88f5182.dtsi
-+++ b/arch/arm/boot/dts/orion5x-mv88f5182.dtsi
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
- #include "orion5x.dtsi"
- 
-diff --git a/arch/arm/boot/dts/orion5x-netgear-wnr854t.dts b/arch/arm/boot/dts/orion5x-netgear-wnr854t.dts
-index ea081afa469d9..4f4888ec91380 100644
---- a/arch/arm/boot/dts/orion5x-netgear-wnr854t.dts
-+++ b/arch/arm/boot/dts/orion5x-netgear-wnr854t.dts
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2016 Jamie Lentin <jm@lentin.co.uk>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2016 Jamie Lentin <jm@lentin.co.uk>
- 
- /dts-v1/;
- 
-diff --git a/arch/arm/boot/dts/orion5x-rd88f5182-nas.dts b/arch/arm/boot/dts/orion5x-rd88f5182-nas.dts
-index 487324f7c54e7..fd78aa02a3c5b 100644
---- a/arch/arm/boot/dts/orion5x-rd88f5182-nas.dts
-+++ b/arch/arm/boot/dts/orion5x-rd88f5182-nas.dts
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
- /dts-v1/;
- 
-diff --git a/arch/arm/boot/dts/orion5x.dtsi b/arch/arm/boot/dts/orion5x.dtsi
-index 61e631b3fd8bb..2d41f5c166ee7 100644
---- a/arch/arm/boot/dts/orion5x.dtsi
-+++ b/arch/arm/boot/dts/orion5x.dtsi
-@@ -1,10 +1,5 @@
--/*
-- * Copyright (C) 2012 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2012 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
- #define MBUS_ID(target,attributes) (((target) << 24) | ((attributes) << 16))
- 
-diff --git a/arch/arm/include/asm/hardware/cache-aurora-l2.h b/arch/arm/include/asm/hardware/cache-aurora-l2.h
-index 39769ffa00512..9694808ee97ce 100644
---- a/arch/arm/include/asm/hardware/cache-aurora-l2.h
-+++ b/arch/arm/include/asm/hardware/cache-aurora-l2.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * AURORA shared L2 cache controller support
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Yehuda Yitschak <yehuday@marvell.com>
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ASM_ARM_HARDWARE_AURORA_L2_H
-diff --git a/arch/arm/include/asm/hardware/cache-feroceon-l2.h b/arch/arm/include/asm/hardware/cache-feroceon-l2.h
-index 12e1588dc4f13..eb2e7b7f70a87 100644
---- a/arch/arm/include/asm/hardware/cache-feroceon-l2.h
-+++ b/arch/arm/include/asm/hardware/cache-feroceon-l2.h
-@@ -1,13 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/include/asm/hardware/cache-feroceon-l2.h
-  *
-  * Copyright (C) 2008 Marvell Semiconductor
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- extern void __init feroceon_l2_init(int l2_wt_override);
- extern int __init feroceon_of_init(void);
--
-diff --git a/arch/arm/include/asm/hardware/cache-tauros2.h b/arch/arm/include/asm/hardware/cache-tauros2.h
-index 295e2e40151b1..4e493facaa317 100644
---- a/arch/arm/include/asm/hardware/cache-tauros2.h
-+++ b/arch/arm/include/asm/hardware/cache-tauros2.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/include/asm/hardware/cache-tauros2.h
-  *
-  * Copyright (C) 2008 Marvell Semiconductor
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define CACHE_TAUROS2_PREFETCH_ON	(1 << 0)
-diff --git a/arch/arm/mach-davinci/board-da830-evm.c b/arch/arm/mach-davinci/board-da830-evm.c
-index a20ba12d876c6..bc8350c85e5ae 100644
---- a/arch/arm/mach-davinci/board-da830-evm.c
-+++ b/arch/arm/mach-davinci/board-da830-evm.c
-@@ -1,13 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DA830/OMAP L137 EVM board
-  *
-  * Author: Mark A. Greer <mgreer@mvista.com>
-  * Derived from: arch/arm/mach-davinci/board-dm644x-evm.c
-  *
-- * 2007, 2009 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007, 2009 (c) MontaVista Software, Inc.
-  */
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
-index 7f7f6bae21c2d..1601a74261a67 100644
---- a/arch/arm/mach-davinci/board-da850-evm.c
-+++ b/arch/arm/mach-davinci/board-da850-evm.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DA850/OMAP-L138 EVM board
-  *
-@@ -6,10 +7,7 @@
-  * Derived from: arch/arm/mach-davinci/board-da830-evm.c
-  * Original Copyrights follow:
-  *
-- * 2007, 2009 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007, 2009 (c) MontaVista Software, Inc.
-  */
- #include <linux/console.h>
- #include <linux/delay.h>
-diff --git a/arch/arm/mach-davinci/board-dm355-evm.c b/arch/arm/mach-davinci/board-dm355-evm.c
-index 3c5a9e3c128ab..debc912b133fa 100644
---- a/arch/arm/mach-davinci/board-dm355-evm.c
-+++ b/arch/arm/mach-davinci/board-dm355-evm.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DaVinci EVM board support
-  *
-  * Author: Kevin Hilman, Deep Root Systems, LLC
-  *
-- * 2007 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) MontaVista Software, Inc.
-  */
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-davinci/board-dm355-leopard.c b/arch/arm/mach-davinci/board-dm355-leopard.c
-index e475b2113e70f..7c8307d590a40 100644
---- a/arch/arm/mach-davinci/board-dm355-leopard.c
-+++ b/arch/arm/mach-davinci/board-dm355-leopard.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * DM355 leopard board support
-  *
-  * Based on board-dm355-evm.c
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-davinci/board-dm644x-evm.c b/arch/arm/mach-davinci/board-dm644x-evm.c
-index 7755cccec550c..a3b8cf40f6bee 100644
---- a/arch/arm/mach-davinci/board-dm644x-evm.c
-+++ b/arch/arm/mach-davinci/board-dm644x-evm.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DaVinci EVM board support
-  *
-  * Author: Kevin Hilman, MontaVista Software, Inc. <source@mvista.com>
-  *
-- * 2007 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) MontaVista Software, Inc.
-  */
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-davinci/board-dm646x-evm.c b/arch/arm/mach-davinci/board-dm646x-evm.c
-index 952ddabc743e0..5beb6b256f903 100644
---- a/arch/arm/mach-davinci/board-dm646x-evm.c
-+++ b/arch/arm/mach-davinci/board-dm646x-evm.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DaVinci DM646X EVM board
-  *
-@@ -5,11 +6,6 @@
-  * Copyright (C) 2006 Texas Instruments.
-  *
-  * (C) 2007-2008, MontaVista Software, Inc.
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2. This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- *
-  */
- 
- /**************************************************************************
-@@ -869,4 +865,3 @@ MACHINE_START(DAVINCI_DM6467TEVM, "DaVinci DM6467T EVM")
- 	.init_late	= davinci_init_late,
- 	.dma_zone_size	= SZ_128M,
- MACHINE_END
--
-diff --git a/arch/arm/mach-davinci/board-mityomapl138.c b/arch/arm/mach-davinci/board-mityomapl138.c
-index 5205008c8061b..169ee82d35f5b 100644
---- a/arch/arm/mach-davinci/board-mityomapl138.c
-+++ b/arch/arm/mach-davinci/board-mityomapl138.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Critical Link MityOMAP-L138 SoM
-  *
-  * Copyright (C) 2010 Critical Link LLC - https://www.criticallink.com
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2. This program is licensed "as is" without any warranty of
-- * any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "MityOMAPL138: " fmt
-diff --git a/arch/arm/mach-davinci/board-neuros-osd2.c b/arch/arm/mach-davinci/board-neuros-osd2.c
-index b4843f68bb575..ae0bce8655b44 100644
---- a/arch/arm/mach-davinci/board-neuros-osd2.c
-+++ b/arch/arm/mach-davinci/board-neuros-osd2.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Neuros Technologies OSD2 board support
-  *
-@@ -18,10 +19,6 @@
-  *
-  * For more information please refer to
-  * 		http://wiki.neurostechnology.com/index.php/OSD_2.0_HD
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/platform_device.h>
- #include <linux/gpio.h>
-diff --git a/arch/arm/mach-davinci/board-omapl138-hawk.c b/arch/arm/mach-davinci/board-omapl138-hawk.c
-index 88df8011a4e6b..f3e85d16f56a8 100644
---- a/arch/arm/mach-davinci/board-omapl138-hawk.c
-+++ b/arch/arm/mach-davinci/board-omapl138-hawk.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Hawkboard.org based on TI's OMAP-L138 Platform
-  *
-  * Initial code: Syed Mohammed Khasim
-  *
-  * Copyright (C) 2009 Texas Instruments Incorporated - https://www.ti.com
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2. This program is licensed "as is" without any warranty of
-- * any kind, whether express or implied.
-  */
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-davinci/common.c b/arch/arm/mach-davinci/common.c
-index ae61d19f9b3af..5c2760723fcfb 100644
---- a/arch/arm/mach-davinci/common.c
-+++ b/arch/arm/mach-davinci/common.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Code commons to all DaVinci SoCs.
-  *
-  * Author: Mark A. Greer <mgreer@mvista.com>
-  *
-- * 2009 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2009 (c) MontaVista Software, Inc.
-  */
- #include <linux/module.h>
- #include <linux/io.h>
-diff --git a/arch/arm/mach-davinci/cpuidle.h b/arch/arm/mach-davinci/cpuidle.h
-index 0d9193aefab51..976d43073597e 100644
---- a/arch/arm/mach-davinci/cpuidle.h
-+++ b/arch/arm/mach-davinci/cpuidle.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * TI DaVinci cpuidle platform support
-  *
-  * 2009 (C) Texas Instruments, Inc. https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2. This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- #ifndef _MACH_DAVINCI_CPUIDLE_H
- #define _MACH_DAVINCI_CPUIDLE_H
-diff --git a/arch/arm/mach-davinci/da830.c b/arch/arm/mach-davinci/da830.c
-index 018ab4b549f1d..cd07415dc5350 100644
---- a/arch/arm/mach-davinci/da830.c
-+++ b/arch/arm/mach-davinci/da830.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DA830/OMAP L137 chip specific setup
-  *
-  * Author: Mark A. Greer <mgreer@mvista.com>
-  *
-- * 2009 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2009 (c) MontaVista Software, Inc.
-  */
- #include <linux/clk-provider.h>
- #include <linux/clk/davinci.h>
-diff --git a/arch/arm/mach-davinci/da850.c b/arch/arm/mach-davinci/da850.c
-index 68156e7239a68..aedf020b62ed1 100644
---- a/arch/arm/mach-davinci/da850.c
-+++ b/arch/arm/mach-davinci/da850.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DA850/OMAP-L138 chip specific setup
-  *
-@@ -6,10 +7,7 @@
-  * Derived from: arch/arm/mach-davinci/da830.c
-  * Original Copyrights follow:
-  *
-- * 2009 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2009 (c) MontaVista Software, Inc.
-  */
- 
- #include <linux/clk-provider.h>
-diff --git a/arch/arm/mach-davinci/dm355.c b/arch/arm/mach-davinci/dm355.c
-index 5de72d2fa8f09..a49151bf37c46 100644
---- a/arch/arm/mach-davinci/dm355.c
-+++ b/arch/arm/mach-davinci/dm355.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DaVinci DM355 chip specific setup
-  *
-  * Author: Kevin Hilman, Deep Root Systems, LLC
-  *
-- * 2007 (c) Deep Root Systems, LLC. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) Deep Root Systems, LLC.
-  */
- 
- #include <linux/clk-provider.h>
-diff --git a/arch/arm/mach-davinci/dm644x.c b/arch/arm/mach-davinci/dm644x.c
-index 24988939ae462..f9b82a6a16300 100644
---- a/arch/arm/mach-davinci/dm644x.c
-+++ b/arch/arm/mach-davinci/dm644x.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DaVinci DM644x chip specific setup
-  *
-  * Author: Kevin Hilman, Deep Root Systems, LLC
-  *
-- * 2007 (c) Deep Root Systems, LLC. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) Deep Root Systems, LLC.
-  */
- 
- #include <linux/clk-provider.h>
-diff --git a/arch/arm/mach-davinci/dm646x.c b/arch/arm/mach-davinci/dm646x.c
-index 4ffd028ed9978..d85d8e9e13715 100644
---- a/arch/arm/mach-davinci/dm646x.c
-+++ b/arch/arm/mach-davinci/dm646x.c
-@@ -1,12 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * TI DaVinci DM646x chip specific setup
-  *
-  * Author: Kevin Hilman, Deep Root Systems, LLC
-  *
-- * 2007 (c) Deep Root Systems, LLC. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) Deep Root Systems, LLC.
-  */
- 
- #include <linux/clk-provider.h>
-diff --git a/arch/arm/mach-davinci/include/mach/common.h b/arch/arm/mach-davinci/include/mach/common.h
-index 139b83de011d3..772b51e0ac5eb 100644
---- a/arch/arm/mach-davinci/include/mach/common.h
-+++ b/arch/arm/mach-davinci/include/mach/common.h
-@@ -1,12 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Header for code common to all DaVinci machines.
-  *
-  * Author: Kevin Hilman, MontaVista Software, Inc. <source@mvista.com>
-  *
-- * 2007 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) MontaVista Software, Inc.
-  */
- 
- #ifndef __ARCH_ARM_MACH_DAVINCI_COMMON_H
-diff --git a/arch/arm/mach-davinci/include/mach/cputype.h b/arch/arm/mach-davinci/include/mach/cputype.h
-index 1fc84e21664d2..81de85757a938 100644
---- a/arch/arm/mach-davinci/include/mach/cputype.h
-+++ b/arch/arm/mach-davinci/include/mach/cputype.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * DaVinci CPU type detection
-  *
-@@ -8,10 +9,7 @@
-  * compiled in to the kernel, the macros return 0 so that
-  * resulting code can be optimized out.
-  *
-- * 2009 (c) Deep Root Systems, LLC. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2009 (c) Deep Root Systems, LLC.
-  */
- #ifndef _ASM_ARCH_CPU_H
- #define _ASM_ARCH_CPU_H
-diff --git a/arch/arm/mach-davinci/include/mach/da8xx.h b/arch/arm/mach-davinci/include/mach/da8xx.h
-index 1618b30661a9b..f138f6d33d4aa 100644
---- a/arch/arm/mach-davinci/include/mach/da8xx.h
-+++ b/arch/arm/mach-davinci/include/mach/da8xx.h
-@@ -1,12 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Chip specific defines for DA8XX/OMAP L1XX SoC
-  *
-  * Author: Mark A. Greer <mgreer@mvista.com>
-  *
-- * 2007, 2009-2010 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007, 2009-2010 (c) MontaVista Software, Inc.
-  */
- #ifndef __ASM_ARCH_DAVINCI_DA8XX_H
- #define __ASM_ARCH_DAVINCI_DA8XX_H
-diff --git a/arch/arm/mach-davinci/include/mach/hardware.h b/arch/arm/mach-davinci/include/mach/hardware.h
-index 16bb42291d39d..7848b6a240b48 100644
---- a/arch/arm/mach-davinci/include/mach/hardware.h
-+++ b/arch/arm/mach-davinci/include/mach/hardware.h
-@@ -1,12 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Hardware definitions common to all DaVinci family processors
-  *
-  * Author: Kevin Hilman, Deep Root Systems, LLC
-  *
-- * 2007 (c) Deep Root Systems, LLC. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) Deep Root Systems, LLC.
-  */
- #ifndef __ASM_ARCH_HARDWARE_H
- #define __ASM_ARCH_HARDWARE_H
-diff --git a/arch/arm/mach-davinci/include/mach/serial.h b/arch/arm/mach-davinci/include/mach/serial.h
-index d4b4aa87964f0..85fda53ffd205 100644
---- a/arch/arm/mach-davinci/include/mach/serial.h
-+++ b/arch/arm/mach-davinci/include/mach/serial.h
-@@ -1,12 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * DaVinci serial device definitions
-  *
-  * Author: Kevin Hilman, MontaVista Software, Inc. <source@mvista.com>
-  *
-- * 2007 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) MontaVista Software, Inc.
-  */
- #ifndef __ASM_ARCH_SERIAL_H
- #define __ASM_ARCH_SERIAL_H
-diff --git a/arch/arm/mach-davinci/mux.c b/arch/arm/mach-davinci/mux.c
-index 6a2ff0a654a5b..0d8ac2f936617 100644
---- a/arch/arm/mach-davinci/mux.c
-+++ b/arch/arm/mach-davinci/mux.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Utility to set the DAVINCI MUX register from a table in mux.h
-  *
-@@ -8,10 +9,7 @@
-  *
-  * Written by Tony Lindgren
-  *
-- * 2007 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) MontaVista Software, Inc.
-  *
-  * Copyright (C) 2008 Texas Instruments.
-  */
-diff --git a/arch/arm/mach-davinci/mux.h b/arch/arm/mach-davinci/mux.h
-index 5aad1e7dd2103..558b9c1b32c06 100644
---- a/arch/arm/mach-davinci/mux.h
-+++ b/arch/arm/mach-davinci/mux.h
-@@ -1,12 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Pin-multiplex helper macros for TI DaVinci family devices
-  *
-  * Author: Vladimir Barinov, MontaVista Software, Inc. <source@mvista.com>
-  *
-- * 2007 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2007 (c) MontaVista Software, Inc.
-  *
-  * Copyright (C) 2008 Texas Instruments.
-  */
-diff --git a/arch/arm/mach-davinci/pm_domain.c b/arch/arm/mach-davinci/pm_domain.c
-index e251fd593bfd1..6b21d5bd999c6 100644
---- a/arch/arm/mach-davinci/pm_domain.c
-+++ b/arch/arm/mach-davinci/pm_domain.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Runtime PM support code for DaVinci
-  *
-  * Author: Kevin Hilman
-  *
-  * Copyright (C) 2012 Texas Instruments, Inc.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/init.h>
- #include <linux/pm_runtime.h>
-diff --git a/arch/arm/mach-dove/bridge-regs.h b/arch/arm/mach-dove/bridge-regs.h
-index ace0b0bfbf114..6fbc152d0950d 100644
---- a/arch/arm/mach-dove/bridge-regs.h
-+++ b/arch/arm/mach-dove/bridge-regs.h
-@@ -1,10 +1,5 @@
--/*
-- * Mbus-L to Mbus Bridge Registers
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Mbus-L to Mbus Bridge Registers */
- 
- #ifndef __ASM_ARCH_BRIDGE_REGS_H
- #define __ASM_ARCH_BRIDGE_REGS_H
-diff --git a/arch/arm/mach-dove/cm-a510.c b/arch/arm/mach-dove/cm-a510.c
-index 9f25c993d8637..beb532537c225 100644
---- a/arch/arm/mach-dove/cm-a510.c
-+++ b/arch/arm/mach-dove/cm-a510.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-dove/cm-a510.c
-  *
-@@ -5,10 +6,6 @@
-  * Konstantin Sinyuk <kostyas@compulab.co.il>
-  *
-  * Based on Marvell DB-MV88AP510-BP Development Board Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-dove/common.c b/arch/arm/mach-dove/common.c
-index dbe970e378953..cd4ae7e4768dd 100644
---- a/arch/arm/mach-dove/common.c
-+++ b/arch/arm/mach-dove/common.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-dove/common.c
-  *
-  * Core functions for Marvell Dove 88AP510 System On Chip
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/clk-provider.h>
-diff --git a/arch/arm/mach-dove/common.h b/arch/arm/mach-dove/common.h
-index 1d725224d1461..57ebc413d68c2 100644
---- a/arch/arm/mach-dove/common.h
-+++ b/arch/arm/mach-dove/common.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/mach-dove/common.h
-  *
-  * Core functions for Marvell Dove 88AP510 System On Chip
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ARCH_DOVE_COMMON_H
-diff --git a/arch/arm/mach-dove/dove-db-setup.c b/arch/arm/mach-dove/dove-db-setup.c
-index 418ab21b9d9b2..d5bf540405772 100644
---- a/arch/arm/mach-dove/dove-db-setup.c
-+++ b/arch/arm/mach-dove/dove-db-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-dove/dove-db-setup.c
-  *
-  * Marvell DB-MV88AP510-BP Development Board Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-dove/dove.h b/arch/arm/mach-dove/dove.h
-index 320ed1696abdc..e5054e3b0b782 100644
---- a/arch/arm/mach-dove/dove.h
-+++ b/arch/arm/mach-dove/dove.h
-@@ -1,10 +1,5 @@
--/*
-- * Generic definitions for Marvell Dove 88AP510 SoC
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Generic definitions for Marvell Dove 88AP510 SoC */
- 
- #ifndef __ASM_ARCH_DOVE_H
- #define __ASM_ARCH_DOVE_H
-diff --git a/arch/arm/mach-dove/irq.c b/arch/arm/mach-dove/irq.c
-index 31ccbcee26274..0c851a11183d2 100644
---- a/arch/arm/mach-dove/irq.c
-+++ b/arch/arm/mach-dove/irq.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-dove/irq.c
-  *
-  * Dove IRQ handling.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/init.h>
- #include <linux/irq.h>
-diff --git a/arch/arm/mach-dove/irqs.h b/arch/arm/mach-dove/irqs.h
-index a0742179faffe..5467098c70428 100644
---- a/arch/arm/mach-dove/irqs.h
-+++ b/arch/arm/mach-dove/irqs.h
-@@ -1,10 +1,5 @@
--/*
-- * IRQ definitions for Marvell Dove 88AP510 SoC
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* IRQ definitions for Marvell Dove 88AP510 SoC */
- 
- #ifndef __ASM_ARCH_IRQS_H
- #define __ASM_ARCH_IRQS_H
-diff --git a/arch/arm/mach-dove/mpp.c b/arch/arm/mach-dove/mpp.c
-index 6acd8488bb05f..93cb137da5f86 100644
---- a/arch/arm/mach-dove/mpp.c
-+++ b/arch/arm/mach-dove/mpp.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-dove/mpp.c
-  *
-  * MPP functions for Marvell Dove SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
-index ee91ac6b5ebf1..cff5c77aa7a6c 100644
---- a/arch/arm/mach-dove/pcie.c
-+++ b/arch/arm/mach-dove/pcie.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-dove/pcie.c
-  *
-  * PCIe functions for Marvell Dove 88AP510 SoC
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-dove/pm.h b/arch/arm/mach-dove/pm.h
-index 01267746d7072..a4c3aba1e2d0d 100644
---- a/arch/arm/mach-dove/pm.h
-+++ b/arch/arm/mach-dove/pm.h
-@@ -1,8 +1,4 @@
--/*
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
- 
- #ifndef __ASM_ARCH_PM_H
- #define __ASM_ARCH_PM_H
-diff --git a/arch/arm/mach-lpc18xx/board-dt.c b/arch/arm/mach-lpc18xx/board-dt.c
-index fdcee78d1bc4c..4729eb83401ae 100644
---- a/arch/arm/mach-lpc18xx/board-dt.c
-+++ b/arch/arm/mach-lpc18xx/board-dt.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree board file for NXP LPC18xx/43xx
-  *
-  * Copyright (C) 2015 Joachim Eastwood <manabian@gmail.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <asm/mach/arch.h>
-diff --git a/arch/arm/mach-lpc32xx/pm.c b/arch/arm/mach-lpc32xx/pm.c
-index b27fa1b9f56c1..2572bd89a5e8d 100644
---- a/arch/arm/mach-lpc32xx/pm.c
-+++ b/arch/arm/mach-lpc32xx/pm.c
-@@ -1,13 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-lpc32xx/pm.c
-  *
-  * Original authors: Vitaly Wool, Dmitry Chigirev <source@mvista.com>
-  * Modified by Kevin Wells <kevin.wells@nxp.com>
-  *
-- * 2005 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2005 (c) MontaVista Software, Inc.
-  */
- 
- /*
-diff --git a/arch/arm/mach-lpc32xx/suspend.S b/arch/arm/mach-lpc32xx/suspend.S
-index 3f0a8282ef6fd..a95c5e0e40384 100644
---- a/arch/arm/mach-lpc32xx/suspend.S
-+++ b/arch/arm/mach-lpc32xx/suspend.S
-@@ -1,13 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/mach-lpc32xx/suspend.S
-  *
-  * Original authors: Dmitry Chigirev, Vitaly Wool <source@mvista.com>
-  * Modified by Kevin Wells <kevin.wells@nxp.com>
-  *
-- * 2005 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2005 (c) MontaVista Software, Inc.
-  */
- #include <linux/linkage.h>
- #include <asm/assembler.h>
-diff --git a/arch/arm/mach-mv78xx0/bridge-regs.h b/arch/arm/mach-mv78xx0/bridge-regs.h
-index 2f54e1753d45e..d57ac967c4b39 100644
---- a/arch/arm/mach-mv78xx0/bridge-regs.h
-+++ b/arch/arm/mach-mv78xx0/bridge-regs.h
-@@ -1,8 +1,4 @@
--/*
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
- 
- #ifndef __ASM_ARCH_BRIDGE_REGS_H
- #define __ASM_ARCH_BRIDGE_REGS_H
-diff --git a/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c b/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-index e112f2e7cc9a9..9aa765d4cdc8a 100644
---- a/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-+++ b/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-  *
-  * Buffalo WXL (Terastation Duo) Setup routines
-  *
-  * sebastien requiem <sebastien@requiem.fr>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mv78xx0/common.c b/arch/arm/mach-mv78xx0/common.c
-index dd762d1b083fd..461a68945c26e 100644
---- a/arch/arm/mach-mv78xx0/common.c
-+++ b/arch/arm/mach-mv78xx0/common.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78xx0/common.c
-  *
-  * Core functions for Marvell MV78xx0 SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mv78xx0/common.h b/arch/arm/mach-mv78xx0/common.h
-index 6889af26077da..d8c6c2400e278 100644
---- a/arch/arm/mach-mv78xx0/common.h
-+++ b/arch/arm/mach-mv78xx0/common.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/mach-mv78xx0/common.h
-  *
-  * Core functions for Marvell MV78xx0 SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ARCH_MV78XX0_COMMON_H
-diff --git a/arch/arm/mach-mv78xx0/db78x00-bp-setup.c b/arch/arm/mach-mv78xx0/db78x00-bp-setup.c
-index cf16e08d4cf5b..da633a33a0c12 100644
---- a/arch/arm/mach-mv78xx0/db78x00-bp-setup.c
-+++ b/arch/arm/mach-mv78xx0/db78x00-bp-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78xx0/db78x00-bp-setup.c
-  *
-  * Marvell DB-78x00-BP Development Board Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mv78xx0/irq.c b/arch/arm/mach-mv78xx0/irq.c
-index 788569e960e15..da7a219e2ef55 100644
---- a/arch/arm/mach-mv78xx0/irq.c
-+++ b/arch/arm/mach-mv78xx0/irq.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78xx0/irq.c
-  *
-  * MV78xx0 IRQ handling.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mv78xx0/irqs.h b/arch/arm/mach-mv78xx0/irqs.h
-index 67e0fe730a13f..12b357d383d88 100644
---- a/arch/arm/mach-mv78xx0/irqs.h
-+++ b/arch/arm/mach-mv78xx0/irqs.h
-@@ -1,10 +1,5 @@
--/*
-- * IRQ definitions for Marvell MV78xx0 SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* IRQ definitions for Marvell MV78xx0 SoCs */
- 
- #ifndef __ASM_ARCH_IRQS_H
- #define __ASM_ARCH_IRQS_H
-diff --git a/arch/arm/mach-mv78xx0/mpp.c b/arch/arm/mach-mv78xx0/mpp.c
-index 72843c02e95ac..aff0e612cbba5 100644
---- a/arch/arm/mach-mv78xx0/mpp.c
-+++ b/arch/arm/mach-mv78xx0/mpp.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78x00/mpp.c
-  *
-  * MPP functions for Marvell MV78x00 SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mv78xx0/mpp.h b/arch/arm/mach-mv78xx0/mpp.h
-index 3752302ae2ee3..47db52f45546e 100644
---- a/arch/arm/mach-mv78xx0/mpp.h
-+++ b/arch/arm/mach-mv78xx0/mpp.h
-@@ -1,12 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * linux/arch/arm/mach-mv78xx0/mpp.h -- Multi Purpose Pins
-  *
-- *
-  * sebastien requiem <sebastien@requiem.fr>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MV78X00_MPP_H
-diff --git a/arch/arm/mach-mv78xx0/mv78xx0.h b/arch/arm/mach-mv78xx0/mv78xx0.h
-index c1a9a1d1b2957..3f19bef7d7ace 100644
---- a/arch/arm/mach-mv78xx0/mv78xx0.h
-+++ b/arch/arm/mach-mv78xx0/mv78xx0.h
-@@ -1,10 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Generic definitions for Marvell MV78xx0 SoC flavors:
-  *  MV781x0 and MV782x0.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ASM_ARCH_MV78XX0_H
-diff --git a/arch/arm/mach-mv78xx0/pcie.c b/arch/arm/mach-mv78xx0/pcie.c
-index 636d84b404664..c07f1641179bd 100644
---- a/arch/arm/mach-mv78xx0/pcie.c
-+++ b/arch/arm/mach-mv78xx0/pcie.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78xx0/pcie.c
-  *
-  * PCIe functions for Marvell MV78xx0 SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mv78xx0/rd78x00-masa-setup.c b/arch/arm/mach-mv78xx0/rd78x00-masa-setup.c
-index 308ab71ec8221..80ca8b1a81de2 100644
---- a/arch/arm/mach-mv78xx0/rd78x00-masa-setup.c
-+++ b/arch/arm/mach-mv78xx0/rd78x00-masa-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mv78x00/rd78x00-masa-setup.c
-  *
-  * Marvell RD-78x00-mASA Development Board Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mvebu/armada-370-xp.h b/arch/arm/mach-mvebu/armada-370-xp.h
-index 09413b6784099..c96ecdafe31f1 100644
---- a/arch/arm/mach-mvebu/armada-370-xp.h
-+++ b/arch/arm/mach-mvebu/armada-370-xp.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Generic definitions for Marvell Armada_370_XP SoCs
-  *
-@@ -6,10 +7,6 @@
-  * Lior Amsalem <alior@marvell.com>
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MACH_ARMADA_370_XP_H
-diff --git a/arch/arm/mach-mvebu/board-v7.c b/arch/arm/mach-mvebu/board-v7.c
-index d2df5ef9382b4..fd5d0c8ff6958 100644
---- a/arch/arm/mach-mvebu/board-v7.c
-+++ b/arch/arm/mach-mvebu/board-v7.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Device Tree support for Armada 370 and XP platforms.
-  *
-@@ -6,10 +7,6 @@
-  * Lior Amsalem <alior@marvell.com>
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-mvebu/coherency.c b/arch/arm/mach-mvebu/coherency.c
-index 49e3c8d20c2fa..883dab1b54f3d 100644
---- a/arch/arm/mach-mvebu/coherency.c
-+++ b/arch/arm/mach-mvebu/coherency.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Coherency fabric (Aurora) support for Armada 370, 375, 38x and XP
-  * platforms.
-@@ -8,10 +9,6 @@
-  * Gregory Clement <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * The Armada 370, 375, 38x and XP SOCs have a coherency fabric which is
-  * responsible for ensuring hardware coherency between all CPUs and between
-  * CPUs and I/O masters. This file initializes the coherency fabric and
-diff --git a/arch/arm/mach-mvebu/coherency.h b/arch/arm/mach-mvebu/coherency.h
-index 6067f14263f79..cae866ab48673 100644
---- a/arch/arm/mach-mvebu/coherency.h
-+++ b/arch/arm/mach-mvebu/coherency.h
-@@ -1,14 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/mach-mvebu/include/mach/coherency.h
-  *
-- *
-  * Coherency fabric (Aurora) support for Armada 370 and XP platforms.
-  *
-  * Copyright (C) 2012 Marvell
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MACH_370_XP_COHERENCY_H
-diff --git a/arch/arm/mach-mvebu/coherency_ll.S b/arch/arm/mach-mvebu/coherency_ll.S
-index a3a64bf972507..eb81656e32d47 100644
---- a/arch/arm/mach-mvebu/coherency_ll.S
-+++ b/arch/arm/mach-mvebu/coherency_ll.S
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Coherency fabric: low level functions
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * This file implements the assembly function to add a CPU to the
-  * coherency fabric. This function is called by each of the secondary
-  * CPUs during their early boot in an SMP kernel, this why this
-diff --git a/arch/arm/mach-mvebu/common.h b/arch/arm/mach-mvebu/common.h
-index 6b775492cfadc..fbfa3c4f30df7 100644
---- a/arch/arm/mach-mvebu/common.h
-+++ b/arch/arm/mach-mvebu/common.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Core functions for Marvell System On Chip
-  *
-@@ -6,10 +7,6 @@
-  * Lior Amsalem <alior@marvell.com>
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ARCH_MVEBU_COMMON_H
-diff --git a/arch/arm/mach-mvebu/cpu-reset.c b/arch/arm/mach-mvebu/cpu-reset.c
-index f33a31c6aff8b..66b6c0c6ce1de 100644
---- a/arch/arm/mach-mvebu/cpu-reset.c
-+++ b/arch/arm/mach-mvebu/cpu-reset.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright (C) 2014 Marvell
-  *
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "mvebu-cpureset: " fmt
-diff --git a/arch/arm/mach-mvebu/dove.c b/arch/arm/mach-mvebu/dove.c
-index d076c5771adc2..c938ba725d3e9 100644
---- a/arch/arm/mach-mvebu/dove.c
-+++ b/arch/arm/mach-mvebu/dove.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-mvebu/dove.c
-  *
-  * Marvell Dove 88AP510 System On Chip FDT Board
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/init.h>
-diff --git a/arch/arm/mach-mvebu/headsmp-a9.S b/arch/arm/mach-mvebu/headsmp-a9.S
-index b093a196e8017..df723cf85caec 100644
---- a/arch/arm/mach-mvebu/headsmp-a9.S
-+++ b/arch/arm/mach-mvebu/headsmp-a9.S
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * SMP support: Entry point for secondary CPUs of Marvell EBU
-  * Cortex-A9 based SOCs (Armada 375 and Armada 38x).
-@@ -6,10 +7,6 @@
-  *
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/linkage.h>
-diff --git a/arch/arm/mach-mvebu/headsmp.S b/arch/arm/mach-mvebu/headsmp.S
-index 2c4032e368bad..f05c59dad32ac 100644
---- a/arch/arm/mach-mvebu/headsmp.S
-+++ b/arch/arm/mach-mvebu/headsmp.S
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * SMP support: Entry point for secondary CPUs
-  *
-@@ -7,10 +8,6 @@
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * This file implements the assembly entry point for secondary CPUs in
-  * an SMP kernel. The only thing we need to do is to add the CPU to
-  * the coherency fabric by writing to 2 registers. Currently the base
-diff --git a/arch/arm/mach-mvebu/kirkwood.c b/arch/arm/mach-mvebu/kirkwood.c
-index ceaad6d5927e5..5ca2253a76d0e 100644
---- a/arch/arm/mach-mvebu/kirkwood.c
-+++ b/arch/arm/mach-mvebu/kirkwood.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright 2012 (C), Jason Cooper <jason@lakedaemon.net>
-  *
-  * arch/arm/mach-mvebu/kirkwood.c
-  *
-  * Flattened Device Tree board initialization
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/clk.h>
-diff --git a/arch/arm/mach-mvebu/kirkwood.h b/arch/arm/mach-mvebu/kirkwood.h
-index 89f3d1f516435..15135994ce2f2 100644
---- a/arch/arm/mach-mvebu/kirkwood.h
-+++ b/arch/arm/mach-mvebu/kirkwood.h
-@@ -1,12 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/mach-mvebu/kirkwood.h
-  *
-  * Generic definitions for Marvell Kirkwood SoC flavors:
-  * 88F6180, 88F6192 and 88F6281.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define KIRKWOOD_REGS_PHYS_BASE	0xf1000000
-diff --git a/arch/arm/mach-mvebu/mvebu-soc-id.c b/arch/arm/mach-mvebu/mvebu-soc-id.c
-index a99434bcee849..f436c7b8c7aee 100644
---- a/arch/arm/mach-mvebu/mvebu-soc-id.c
-+++ b/arch/arm/mach-mvebu/mvebu-soc-id.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * ID and revision information for mvebu SoCs
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * All the mvebu SoCs have information related to their variant and
-  * revision that can be read from the PCI control register. This is
-  * done before the PCI initialization to avoid any conflict. Once the
-diff --git a/arch/arm/mach-mvebu/mvebu-soc-id.h b/arch/arm/mach-mvebu/mvebu-soc-id.h
-index e124a0b82a3e7..225649b2288a2 100644
---- a/arch/arm/mach-mvebu/mvebu-soc-id.h
-+++ b/arch/arm/mach-mvebu/mvebu-soc-id.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Marvell EBU SoC ID and revision definitions.
-  *
-  * Copyright (C) 2014 Marvell Semiconductor
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __LINUX_MVEBU_SOC_ID_H
-diff --git a/arch/arm/mach-mvebu/platsmp-a9.c b/arch/arm/mach-mvebu/platsmp-a9.c
-index d715dec1c197d..785ee2af5baab 100644
---- a/arch/arm/mach-mvebu/platsmp-a9.c
-+++ b/arch/arm/mach-mvebu/platsmp-a9.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Symmetric Multi Processing (SMP) support for Marvell EBU Cortex-A9
-  * based SOCs (Armada 375/38x).
-@@ -6,10 +7,6 @@
-  *
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/init.h>
-diff --git a/arch/arm/mach-mvebu/platsmp.c b/arch/arm/mach-mvebu/platsmp.c
-index c130497dc6cc4..18384ea6862cf 100644
---- a/arch/arm/mach-mvebu/platsmp.c
-+++ b/arch/arm/mach-mvebu/platsmp.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Symmetric Multi Processing (SMP) support for Armada XP
-  *
-@@ -8,10 +9,6 @@
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * The Armada XP SoC has 4 ARMv7 PJ4B CPUs running in full HW coherency
-  * This file implements the routines for preparing the SMP infrastructure
-  * and waking up the secondary CPUs
-diff --git a/arch/arm/mach-mvebu/pm-board.c b/arch/arm/mach-mvebu/pm-board.c
-index 0705525116996..7fa1806acd659 100644
---- a/arch/arm/mach-mvebu/pm-board.c
-+++ b/arch/arm/mach-mvebu/pm-board.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Board-level suspend/resume support.
-  *
-  * Copyright (C) 2014-2015 Marvell
-  *
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/delay.h>
-diff --git a/arch/arm/mach-mvebu/pm.c b/arch/arm/mach-mvebu/pm.c
-index c487be61d6d8c..b149d9b775050 100644
---- a/arch/arm/mach-mvebu/pm.c
-+++ b/arch/arm/mach-mvebu/pm.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Suspend/resume support. Currently supporting Armada XP only.
-  *
-  * Copyright (C) 2014 Marvell
-  *
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/cpu_pm.h>
-diff --git a/arch/arm/mach-mvebu/pmsu.c b/arch/arm/mach-mvebu/pmsu.c
-index 73d5d72dfc3e5..af27a7156675a 100644
---- a/arch/arm/mach-mvebu/pmsu.c
-+++ b/arch/arm/mach-mvebu/pmsu.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Power Management Service Unit(PMSU) support for Armada 370/XP platforms.
-  *
-@@ -7,10 +8,6 @@
-  * Gregory Clement <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * The Armada 370 and Armada XP SOCs have a power management service
-  * unit which is responsible for powering down and waking up CPUs and
-  * other SOC units
-diff --git a/arch/arm/mach-mvebu/pmsu.h b/arch/arm/mach-mvebu/pmsu.h
-index ea79269c27023..1e847388e8dde 100644
---- a/arch/arm/mach-mvebu/pmsu.h
-+++ b/arch/arm/mach-mvebu/pmsu.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Power Management Service Unit (PMSU) support for Armada 370/XP platforms.
-  *
-  * Copyright (C) 2012 Marvell
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MACH_MVEBU_PMSU_H
-diff --git a/arch/arm/mach-mvebu/pmsu_ll.S b/arch/arm/mach-mvebu/pmsu_ll.S
-index 7aae9a25cfeb7..f7d21385fd88c 100644
---- a/arch/arm/mach-mvebu/pmsu_ll.S
-+++ b/arch/arm/mach-mvebu/pmsu_ll.S
-@@ -1,12 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Copyright (C) 2014 Marvell
-  *
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  * Gregory Clement <gregory.clement@free-electrons.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/linkage.h>
-diff --git a/arch/arm/mach-mvebu/system-controller.c b/arch/arm/mach-mvebu/system-controller.c
-index 04d9ebe6a90a0..48224b6ed6dc7 100644
---- a/arch/arm/mach-mvebu/system-controller.c
-+++ b/arch/arm/mach-mvebu/system-controller.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * System controller support for Armada 370, 375 and XP platforms.
-  *
-@@ -7,10 +8,6 @@
-  * Gregory CLEMENT <gregory.clement@free-electrons.com>
-  * Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * The Armada 370, 375 and Armada XP SoCs have a range of
-  * miscellaneous registers, that do not belong to a particular device,
-  * but rather provide system-level features. This basic
-diff --git a/arch/arm/mach-omap1/include/mach/mtd-xip.h b/arch/arm/mach-omap1/include/mach/mtd-xip.h
-index d09b2bc4920fe..b163b8a65605b 100644
---- a/arch/arm/mach-omap1/include/mach/mtd-xip.h
-+++ b/arch/arm/mach-omap1/include/mach/mtd-xip.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * MTD primitives for XIP support. Architecture specific functions.
-  *
-@@ -5,10 +6,7 @@
-  *
-  * Author: Vladimir Barinov <vbarinov@embeddedalley.com>
-  *
-- * (c) 2005 MontaVista Software, Inc.  This file is licensed under the
-- * terms of the GNU General Public License version 2.  This program is
-- * licensed "as is" without any warranty of any kind, whether express or
-- * implied.
-+ * (c) 2005 MontaVista Software, Inc.
-  */
- 
- #ifndef __ARCH_OMAP_MTD_XIP_H__
-diff --git a/arch/arm/mach-omap1/pm_bus.c b/arch/arm/mach-omap1/pm_bus.c
-index 667c1637ff919..c04619ac06312 100644
---- a/arch/arm/mach-omap1/pm_bus.c
-+++ b/arch/arm/mach-omap1/pm_bus.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Runtime PM support code for OMAP1
-  *
-  * Author: Kevin Hilman, Deep Root Systems, LLC
-  *
-  * Copyright (C) 2010 Texas Instruments, Inc.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/init.h>
- #include <linux/kernel.h>
-@@ -43,4 +40,3 @@ static int __init omap1_pm_runtime_init(void)
- 	return 0;
- }
- core_initcall(omap1_pm_runtime_init);
--
-diff --git a/arch/arm/mach-omap2/prcm43xx.h b/arch/arm/mach-omap2/prcm43xx.h
-index 899da0ae98000..31860ffd28abc 100644
---- a/arch/arm/mach-omap2/prcm43xx.h
-+++ b/arch/arm/mach-omap2/prcm43xx.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * AM43x PRCM defines
-  *
-  * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2.  This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-  */
- 
- #ifndef __ARCH_ARM_MACH_OMAP2_PRCM_43XX_H
-diff --git a/arch/arm/mach-omap2/vc.c b/arch/arm/mach-omap2/vc.c
-index 86f1ac4c24125..ea02d40405c4a 100644
---- a/arch/arm/mach-omap2/vc.c
-+++ b/arch/arm/mach-omap2/vc.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * OMAP Voltage Controller (VC) interface
-  *
-  * Copyright (C) 2011 Texas Instruments, Inc.
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/kernel.h>
- #include <linux/delay.h>
-@@ -895,4 +892,3 @@ void __init omap_vc_init_channel(struct voltagedomain *voltdm)
- 	else if (cpu_is_omap44xx())
- 		omap4_vc_init_channel(voltdm);
- }
--
-diff --git a/arch/arm/mach-orion5x/board-d2net.c b/arch/arm/mach-orion5x/board-d2net.c
-index a89376a5cd929..0297e302d7bc8 100644
---- a/arch/arm/mach-orion5x/board-d2net.c
-+++ b/arch/arm/mach-orion5x/board-d2net.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/board-d2net.c
-  *
-  * LaCie d2Network and Big Disk Network NAS setup
-  *
-  * Copyright (C) 2009 Simon Guinot <sguinot@lacie.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/board-dt.c b/arch/arm/mach-orion5x/board-dt.c
-index 3f651df3a71cf..be47492c6640d 100644
---- a/arch/arm/mach-orion5x/board-dt.c
-+++ b/arch/arm/mach-orion5x/board-dt.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Copyright 2012 (C), Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  *
-  * arch/arm/mach-orion5x/board-dt.c
-  *
-  * Flattened Device Tree board initialization
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/board-rd88f5182.c b/arch/arm/mach-orion5x/board-rd88f5182.c
-index b7b0f52f4c0a0..596601367989a 100644
---- a/arch/arm/mach-orion5x/board-rd88f5182.c
-+++ b/arch/arm/mach-orion5x/board-rd88f5182.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/rd88f5182-setup.c
-  *
-  * Marvell Orion-NAS Reference Design Setup
-  *
-  * Maintainer: Ronen Shitrit <rshitrit@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/bridge-regs.h b/arch/arm/mach-orion5x/bridge-regs.h
-index 305598eaaee15..fe85bc5b131fc 100644
---- a/arch/arm/mach-orion5x/bridge-regs.h
-+++ b/arch/arm/mach-orion5x/bridge-regs.h
-@@ -1,10 +1,5 @@
--/*
-- * Orion CPU Bridge Registers
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Orion CPU Bridge Registers */
- 
- #ifndef __ASM_ARCH_BRIDGE_REGS_H
- #define __ASM_ARCH_BRIDGE_REGS_H
-diff --git a/arch/arm/mach-orion5x/common.c b/arch/arm/mach-orion5x/common.c
-index 7bcb41137bbf6..2e711b7252c64 100644
---- a/arch/arm/mach-orion5x/common.c
-+++ b/arch/arm/mach-orion5x/common.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/common.c
-  *
-  * Core functions for Marvell Orion 5x SoCs
-  *
-  * Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/db88f5281-setup.c b/arch/arm/mach-orion5x/db88f5281-setup.c
-index 39eae10ac8def..fe1a4cef1ba2d 100644
---- a/arch/arm/mach-orion5x/db88f5281-setup.c
-+++ b/arch/arm/mach-orion5x/db88f5281-setup.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/db88f5281-setup.c
-  *
-  * Marvell Orion-2 Development Board Setup
-  *
-  * Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/irq.c b/arch/arm/mach-orion5x/irq.c
-index ac4af2283bef9..5b076eefe2b4a 100644
---- a/arch/arm/mach-orion5x/irq.c
-+++ b/arch/arm/mach-orion5x/irq.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/irq.c
-  *
-  * Core IRQ functions for Marvell Orion System On Chip
-  *
-  * Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/irqs.h b/arch/arm/mach-orion5x/irqs.h
-index 506c8e0b30c42..a70c47cfa6bcb 100644
---- a/arch/arm/mach-orion5x/irqs.h
-+++ b/arch/arm/mach-orion5x/irqs.h
-@@ -1,11 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * IRQ definitions for Orion SoC
-  *
-  *  Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-- *
-- *  This file is licensed under the terms of the GNU General Public
-- *  License version 2. This program is licensed "as is" without any
-- *  warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ASM_ARCH_IRQS_H
-diff --git a/arch/arm/mach-orion5x/kurobox_pro-setup.c b/arch/arm/mach-orion5x/kurobox_pro-setup.c
-index 83d43cff4bd77..acba066180801 100644
---- a/arch/arm/mach-orion5x/kurobox_pro-setup.c
-+++ b/arch/arm/mach-orion5x/kurobox_pro-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/kurobox_pro-setup.c
-  *
-  * Maintainer: Ronen Shitrit <rshitrit@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/ls_hgl-setup.c b/arch/arm/mach-orion5x/ls_hgl-setup.c
-index 47ba6e0502f59..af07f617465f7 100644
---- a/arch/arm/mach-orion5x/ls_hgl-setup.c
-+++ b/arch/arm/mach-orion5x/ls_hgl-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/ls_hgl-setup.c
-  *
-  * Maintainer: Zhu Qingsen <zhuqs@cn.fujitsu.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/mpp.c b/arch/arm/mach-orion5x/mpp.c
-index 19ef185944158..b9855dce6ba0a 100644
---- a/arch/arm/mach-orion5x/mpp.c
-+++ b/arch/arm/mach-orion5x/mpp.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/mpp.c
-  *
-  * MPP functions for Marvell Orion 5x SoCs
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/net2big-setup.c b/arch/arm/mach-orion5x/net2big-setup.c
-index bf6be4cfd2384..695cc683cd833 100644
---- a/arch/arm/mach-orion5x/net2big-setup.c
-+++ b/arch/arm/mach-orion5x/net2big-setup.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/net2big-setup.c
-  *
-  * LaCie 2Big Network NAS setup
-  *
-  * Copyright (C) 2009 Simon Guinot <sguinot@lacie.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-@@ -432,4 +429,3 @@ MACHINE_START(NET2BIG, "LaCie 2Big Network")
- 	.fixup		= tag_fixup_mem32,
- 	.restart	= orion5x_restart,
- MACHINE_END
--
-diff --git a/arch/arm/mach-orion5x/orion5x.h b/arch/arm/mach-orion5x/orion5x.h
-index 2b66120fba86c..26f1ccb8cb281 100644
---- a/arch/arm/mach-orion5x/orion5x.h
-+++ b/arch/arm/mach-orion5x/orion5x.h
-@@ -1,12 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * Generic definitions of Orion SoC flavors:
-  *  Orion-1, Orion-VoIP, Orion-NAS, Orion-2, and Orion-1-90.
-  *
-  * Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __ASM_ARCH_ORION5X_H
-diff --git a/arch/arm/mach-orion5x/pci.c b/arch/arm/mach-orion5x/pci.c
-index 76951bfbacf57..fa62add8cf8a6 100644
---- a/arch/arm/mach-orion5x/pci.c
-+++ b/arch/arm/mach-orion5x/pci.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/pci.c
-  *
-  * PCI and PCIe functions for Marvell Orion System On Chip
-  *
-  * Maintainer: Tzachi Perelstein <tzachi@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/rd88f5181l-fxo-setup.c b/arch/arm/mach-orion5x/rd88f5181l-fxo-setup.c
-index c65ab7db36ad9..432fc8357d9e1 100644
---- a/arch/arm/mach-orion5x/rd88f5181l-fxo-setup.c
-+++ b/arch/arm/mach-orion5x/rd88f5181l-fxo-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/rd88f5181l-fxo-setup.c
-  *
-  * Marvell Orion-VoIP FXO Reference Design Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/rd88f5181l-ge-setup.c b/arch/arm/mach-orion5x/rd88f5181l-ge-setup.c
-index 76b8138d9d79b..d4b1a9c3cd362 100644
---- a/arch/arm/mach-orion5x/rd88f5181l-ge-setup.c
-+++ b/arch/arm/mach-orion5x/rd88f5181l-ge-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/rd88f5181l-ge-setup.c
-  *
-  * Marvell Orion-VoIP GE Reference Design Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/rd88f5182-setup.c b/arch/arm/mach-orion5x/rd88f5182-setup.c
-index fe3e67c81fb82..6ffcfc6445e24 100644
---- a/arch/arm/mach-orion5x/rd88f5182-setup.c
-+++ b/arch/arm/mach-orion5x/rd88f5182-setup.c
-@@ -1,13 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/rd88f5182-setup.c
-  *
-  * Marvell Orion-NAS Reference Design Setup
-  *
-  * Maintainer: Ronen Shitrit <rshitrit@marvell.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/rd88f6183ap-ge-setup.c b/arch/arm/mach-orion5x/rd88f6183ap-ge-setup.c
-index 5f388a1ed1e4c..93f74fd6b4dac 100644
---- a/arch/arm/mach-orion5x/rd88f6183ap-ge-setup.c
-+++ b/arch/arm/mach-orion5x/rd88f6183ap-ge-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/rd88f6183-ap-ge-setup.c
-  *
-  * Marvell Orion-1-90 AP GE Reference Design Setup
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/gpio.h>
- #include <linux/kernel.h>
-diff --git a/arch/arm/mach-orion5x/ts78xx-setup.c b/arch/arm/mach-orion5x/ts78xx-setup.c
-index a39764faf2a01..af810e7ccd796 100644
---- a/arch/arm/mach-orion5x/ts78xx-setup.c
-+++ b/arch/arm/mach-orion5x/ts78xx-setup.c
-@@ -1,11 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-orion5x/ts78xx-setup.c
-  *
-  * Maintainer: Alexander Clouter <alex@digriz.org.uk>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-diff --git a/arch/arm/mach-orion5x/wnr854t-setup.c b/arch/arm/mach-orion5x/wnr854t-setup.c
-index 83589a28a4911..e5f327054dd33 100644
---- a/arch/arm/mach-orion5x/wnr854t-setup.c
-+++ b/arch/arm/mach-orion5x/wnr854t-setup.c
-@@ -1,10 +1,5 @@
--/*
-- * arch/arm/mach-orion5x/wnr854t-setup.c
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// arch/arm/mach-orion5x/wnr854t-setup.c
- #include <linux/gpio.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-orion5x/wrt350n-v2-setup.c b/arch/arm/mach-orion5x/wrt350n-v2-setup.c
-index cea08d4a25974..e6a2da6662df5 100644
---- a/arch/arm/mach-orion5x/wrt350n-v2-setup.c
-+++ b/arch/arm/mach-orion5x/wrt350n-v2-setup.c
-@@ -1,10 +1,5 @@
--/*
-- * arch/arm/mach-orion5x/wrt350n-v2-setup.c
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
-+// SPDX-License-Identifier: GPL-2.0-only
-+// arch/arm/mach-orion5x/wrt350n-v2-setup.c
- #include <linux/gpio.h>
- #include <linux/kernel.h>
- #include <linux/init.h>
-diff --git a/arch/arm/mach-pxa/eseries.c b/arch/arm/mach-pxa/eseries.c
-index f37c44b6139d7..b9e235cb5a073 100644
---- a/arch/arm/mach-pxa/eseries.c
-+++ b/arch/arm/mach-pxa/eseries.c
-@@ -1,13 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * Hardware definitions for the Toshiba eseries PDAs
-  *
-  * Copyright (c) 2003 Ian Molton <spyro@f2s.com>
-- *
-- * This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-- *
-  */
- 
- #include <linux/clkdev.h>
-diff --git a/arch/arm/mach-pxa/standby.S b/arch/arm/mach-pxa/standby.S
-index eab1645bb4adb..60d0d14d4a0fe 100644
---- a/arch/arm/mach-pxa/standby.S
-+++ b/arch/arm/mach-pxa/standby.S
-@@ -1,12 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * PXA27x standby mode
-  *
-  * Author: David Burrage
-  *
-- * 2005 (c) MontaVista Software, Inc. This file is licensed under
-- * the terms of the GNU General Public License version 2. This program
-- * is licensed "as is" without any warranty of any kind, whether express
-- * or implied.
-+ * 2005 (c) MontaVista Software, Inc.
-  */
- 
- #include <linux/linkage.h>
-diff --git a/arch/arm/mach-spear/generic.h b/arch/arm/mach-spear/generic.h
-index 25b4c5e66e396..ab34d6c19d0c0 100644
---- a/arch/arm/mach-spear/generic.h
-+++ b/arch/arm/mach-spear/generic.h
-@@ -1,13 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * spear machine family generic header file
-  *
-  * Copyright (C) 2009-2012 ST Microelectronics
-  * Rajeev Kumar <rajeev-dlh.kumar@st.com>
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MACH_GENERIC_H
-diff --git a/arch/arm/mach-spear/include/mach/misc_regs.h b/arch/arm/mach-spear/include/mach/misc_regs.h
-index cfaf7c665b588..12a789bd896e0 100644
---- a/arch/arm/mach-spear/include/mach/misc_regs.h
-+++ b/arch/arm/mach-spear/include/mach/misc_regs.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/mach-spear3xx/include/mach/misc_regs.h
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2009 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MACH_MISC_REGS_H
-diff --git a/arch/arm/mach-spear/include/mach/spear.h b/arch/arm/mach-spear/include/mach/spear.h
-index 5ed841ccf8a38..432efd407c763 100644
---- a/arch/arm/mach-spear/include/mach/spear.h
-+++ b/arch/arm/mach-spear/include/mach/spear.h
-@@ -1,13 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * SPEAr3xx/6xx Machine family specific definition
-  *
-  * Copyright (C) 2009,2012 ST Microelectronics
-  * Rajeev Kumar<rajeev-dlh.kumar@st.com>
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __MACH_SPEAR_H
-diff --git a/arch/arm/mach-spear/pl080.c b/arch/arm/mach-spear/pl080.c
-index b4529f3e0ee97..35c929de46755 100644
---- a/arch/arm/mach-spear/pl080.c
-+++ b/arch/arm/mach-spear/pl080.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/plat-spear/pl080.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/amba/pl08x.h>
-diff --git a/arch/arm/mach-spear/pl080.h b/arch/arm/mach-spear/pl080.h
-index 608dec6725aea..3732d940dbfb6 100644
---- a/arch/arm/mach-spear/pl080.h
-+++ b/arch/arm/mach-spear/pl080.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- /*
-  * arch/arm/plat-spear/include/plat/pl080.h
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #ifndef __PLAT_PL080_H
-diff --git a/arch/arm/mach-spear/restart.c b/arch/arm/mach-spear/restart.c
-index b4342155a7833..01f529675629f 100644
---- a/arch/arm/mach-spear/restart.c
-+++ b/arch/arm/mach-spear/restart.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/plat-spear/restart.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2009 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- #include <linux/io.h>
- #include <linux/amba/sp810.h>
-diff --git a/arch/arm/mach-spear/spear1310.c b/arch/arm/mach-spear/spear1310.c
-index a7d4f136836fa..020b27e65aea0 100644
---- a/arch/arm/mach-spear/spear1310.c
-+++ b/arch/arm/mach-spear/spear1310.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear13xx/spear1310.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr1310: " fmt
-diff --git a/arch/arm/mach-spear/spear1340.c b/arch/arm/mach-spear/spear1340.c
-index a212af90c0bc6..a391f154eff9b 100644
---- a/arch/arm/mach-spear/spear1340.c
-+++ b/arch/arm/mach-spear/spear1340.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear13xx/spear1340.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr1340: " fmt
-diff --git a/arch/arm/mach-spear/spear13xx.c b/arch/arm/mach-spear/spear13xx.c
-index 31c43cabf3623..e287873f5187f 100644
---- a/arch/arm/mach-spear/spear13xx.c
-+++ b/arch/arm/mach-spear/spear13xx.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear13xx/spear13xx.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr13xx: " fmt
-diff --git a/arch/arm/mach-spear/spear300.c b/arch/arm/mach-spear/spear300.c
-index 325b89579be10..490df8aaad90c 100644
---- a/arch/arm/mach-spear/spear300.c
-+++ b/arch/arm/mach-spear/spear300.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear3xx/spear300.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2009-2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr300: " fmt
-diff --git a/arch/arm/mach-spear/spear310.c b/arch/arm/mach-spear/spear310.c
-index 59e173dc85cf3..5ca325fc1b825 100644
---- a/arch/arm/mach-spear/spear310.c
-+++ b/arch/arm/mach-spear/spear310.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear3xx/spear310.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2009-2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr310: " fmt
-diff --git a/arch/arm/mach-spear/spear320.c b/arch/arm/mach-spear/spear320.c
-index 0958f68a21e23..9b68fb9c3f000 100644
---- a/arch/arm/mach-spear/spear320.c
-+++ b/arch/arm/mach-spear/spear320.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear3xx/spear320.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2009-2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr320: " fmt
-diff --git a/arch/arm/mach-spear/spear3xx.c b/arch/arm/mach-spear/spear3xx.c
-index 8537fcffe5a86..505f2ed5e42b1 100644
---- a/arch/arm/mach-spear/spear3xx.c
-+++ b/arch/arm/mach-spear/spear3xx.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear3xx/spear3xx.c
-  *
-@@ -5,10 +6,6 @@
-  *
-  * Copyright (C) 2009-2012 ST Microelectronics
-  * Viresh Kumar <vireshk@kernel.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #define pr_fmt(fmt) "SPEAr3xx: " fmt
-diff --git a/arch/arm/mach-spear/spear6xx.c b/arch/arm/mach-spear/spear6xx.c
-index c5fc110134ba6..11eb64a369807 100644
---- a/arch/arm/mach-spear/spear6xx.c
-+++ b/arch/arm/mach-spear/spear6xx.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mach-spear6xx/spear6xx.c
-  *
-@@ -7,10 +8,6 @@
-  * Rajeev Kumar<rajeev-dlh.kumar@st.com>
-  *
-  * Copyright 2012 Stefan Roese <sr@denx.de>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/amba/pl08x.h>
-diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
-index d1fdb6066f7bb..6baf952fa902f 100644
---- a/arch/arm/mach-spear/time.c
-+++ b/arch/arm/mach-spear/time.c
-@@ -1,12 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/plat-spear/time.c
-  *
-  * Copyright (C) 2010 ST Microelectronics
-  * Shiraz Hashim<shiraz.linux.kernel@gmail.com>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-  */
- 
- #include <linux/clk.h>
-diff --git a/arch/arm/mm/cache-feroceon-l2.c b/arch/arm/mm/cache-feroceon-l2.c
-index 5c1b7a7b9af63..25dbd84a1aafa 100644
---- a/arch/arm/mm/cache-feroceon-l2.c
-+++ b/arch/arm/mm/cache-feroceon-l2.c
-@@ -1,12 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mm/cache-feroceon-l2.c - Feroceon L2 cache controller support
-  *
-  * Copyright (C) 2008 Marvell Semiconductor
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * References:
-  * - Unified Layer 2 Cache for Feroceon CPU Cores,
-  *   Document ID MV-S104858-00, Rev. A, October 23 2007.
-diff --git a/arch/arm/mm/cache-tauros2.c b/arch/arm/mm/cache-tauros2.c
-index 88255bea65e41..b1e1aba602f7f 100644
---- a/arch/arm/mm/cache-tauros2.c
-+++ b/arch/arm/mm/cache-tauros2.c
-@@ -1,12 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * arch/arm/mm/cache-tauros2.c - Tauros2 L2 cache controller support
-  *
-  * Copyright (C) 2008 Marvell Semiconductor
-  *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- *
-  * References:
-  * - PJ1 CPU Core Datasheet,
-  *   Document ID MV-S104837-01, Rev 0.7, January 24 2008.
+90 Minutes $500,000 Signature Ask Events
+
+**Jimmy LaRose, Louis Fawcett & Amanda Stair - Oct 4, 2023 - 10am-1pm
+EST**
+
+**"We used to net $25,000 at our annual gala and auction. Those days are
+over! We raised $605,000 in 1.5 hours using Major Gifts Ramp-Up for a
+10th of the cost. We'll never go back!"**~ Roy Kramer, Central South
+Carolina Habitat for Humanity
+
+https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg==&sig=25cr6bVDaa8FxkaMpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=1696256187&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=MR4%2FVUNgUwZ2HaELWkU0uotFEtwl81Gmdv5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=678f48a0e320c6856d0620aa2e024acb&i=594A1017A219A2375 
+
+ 
+
+ 
+
+NANOE Board of Governors' Conference Series
+
+90 MINUTES $500,000 SIGNATURE ASK EVENTS
+
+Jimmy LaRose, Louis Fawcett & Amanda Stair - Oct 4th - 10am-1pm EST
+
+**MAJOR GIFTS RAMP-UP - FUND YOUR IMPORTANT MISSION**
+
+Jimmy LaRose, Hall Powell & Stefanie Stark - Oct 19th - 10am-1pm EST
+
+SUPERCONSULTING - WE NEED NONPROFIT EXPERTS
+
+Louis Fawcett, Jimmy LaRose & Carol Young - Nov 1st - 10am-1pm EST
+
+VISIT HERE TO MAKE YOUR RESERVATION
+
+**EVERYTHING YOU WANT TO TELL YOUR BOARD**
+
+Jimmy LaRose, Louis Fawcett & Amanda Stair - Dec 6th - 10am-1pm EST
+
+**FIVE SECRETS TO ATTRACTING FOUNDATION GIFTS**
+
+Louis Fawcett, Jimmy LaRose & Lauren Wilkie - Jan 17th - 10am-1pm EST
+
+VISIT HERE TO MAKE YOUR RESERVATION
+
+**ENDOWMENT CAMPAIGN MYTH**
+
+Louis Fawcett, Jimmy LaRose & Tim Burkhart - Jan 31th - 10am-1pm EST
+
+**SUPERCONSULTING - WE NEED NONPROFIT EXPERTS**
+
+Louis Fawcett, Jimmy LaRose & Carol Young - Feb 21 - 10am-1pm EST
+
+**MONETIZE EVERY HOUR RAISING MAJOR GIFTS**
+
+Louis Fawcett, Jimmy LaRose & Amanda Stair - Apr 18th - 10am-1pm EST
+
+"NANOE ensures nonprofits benefit from the same free-market enterprise
+principles we know work in the for-profit sector!" ~ Kathleen Robinson 
+
+ 
+
+Dear CEOs, CFOs, COO, CDOs, & Nonprofit Staff Members,
+
+NANOE Virtual Seminar Series tackles industry-wide issues facing the
+modern charitable executive. These events are hosted by NANOE's
+veteran administrators and will feature nationally renowned subject
+matter experts on nonprofit management topics. Join us for these tightly
+facilitated educational workshops that will encourage you both
+personally and professionally.
+
+VISIT HERE TO MAKE YOUR RESERVATION
+
+Here's your opportunity to experience what it's like to be a NANOE
+member firsthand. Come be our guest for NANOE's Board of Governors'
+Conference Series. This for senior leaders who are ready for a
+supercharged executive track.
+
+This event is "Invitation Only." REGISTRATION IS COMPLIMENTARY. We look
+forward to spending time with you to better understand your personal and
+professional goals. Meet the veteran fundraisers who have raised
+millions for charities across the United States and around the world.
+
+I look forward to meeting you personally.
+
+Sincerely Yours,
+
+Louis Fawcett, CNE
+
+President, NANOE
+
+P.S. We look forward to meeting you and your entire team.
+_________________
+
+Sent to soc@kernel.org
+
+Unsubscribe:
+http://jimmylarose.activehosted.com/proc.php?nl=219&amp;c=594&amp;m=1017&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
+
+National Association of Nonprofit Organizations & Executives, 712 H Street NE, Washington, DC 20002, United States
+--_=_swift-1033463870651acdc673e2e0.92077421_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
+text/html; charset=3Dutf-8"><meta http-equiv=3D"Content-Language" content=
+=3D"en-us"><meta name=3D"format-detection" content=3D"telephone=3Dno"><meta=
+ name=3D"format-detection" content=3D"date=3Dno"><meta name=3D"format-detec=
+tion" content=3D"address=3Dno"><meta name=3D"format-detection" content=3D"e=
+mail=3Dno"><meta name=3D"viewport" content=3D"width=3Ddevice-width, minimal=
+-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalable=3D0;"><meta ht=
+tp-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><style data-ac-keep=3D"t=
+rue"> .ExternalClass { width: 100%; background: inherit; background-color: =
+inherit; } .ExternalClass, .ExternalClass p, .ExternalClass span, .External=
+Class font, .ExternalClass td, .ExternalClass div { line-height: 100%; } .E=
+xternalClass p, .ExternalClass ul, .ExternalClass ol { Margin: 0; } .undore=
+set div p, .undoreset p { margin-bottom: 20px; } div[class^=3D"aolmail_divb=
+ody"] { overflow: auto; } [owa] #ac-footer { padding: 20px 0px !important; =
+background:=0Ainherit; background-color: inherit; } a[x-apple-data-detector=
+s] { color: inherit !important; text-decoration: none !important; font-size=
+: inherit !important; font-family: inherit !important; font-weight: inherit=
+ !important; line-height: inherit !important; } @-ms-viewport { width: devi=
+ce-width; } </style><style data-ac-keep=3D"true">=0A@media only screen and =
+(max-width: 600px) { /*----------------------------------------------------=
+---------------------*\ Abandoned Cart widget \*---------------------------=
+---------------------------------------------*/ .td_abandoned-cart img {dis=
+play: block;padding-right: 0 !important;padding-bottom: 0 !important;width:=
+ 100% !important;max-width: 100% !important;height: auto !important;} body =
+{ padding: 0!important; font-size:1em!important; } * { -webkit-box-sizing: =
+border-box; -moz-box-sizing: border-box; box-sizing: border-box; } *[class]=
+.divbody {-webkit-text-size-adjust:none !important;} *[class].td_picture im=
+g {width:auto !important;} *[class].td_text { line-height: 110%; } *[class]=
+.td_button { width: auto; } /* Collapse all block elements */ :not(.body) t=
+able { display: block!important; float:none!important; border-collapse:coll=
+apse !important; width:100% !important; min-width:100% !important; clear:bo=
+th!important; } :not(.body) thead, :not(.body) tbody,=0A:not(.body) tr { di=
+splay:block!important; float:none!important; width:100% !important; } :not(=
+.body) th, :not(.body) td, :not(.body) p { display:block!important; float:n=
+one!important; width:100% !important; clear:both!important; } /* Remove bro=
+wser default styling for elements */ ul, ol { margin-left: 20px; margin-bot=
+tom: 10px; margin-top: 10px; -webkit-margin-before: 0; -webkit-margin-after=
+: 0; -webkit-padding-start: 0; } /* Set default height for spacer once coll=
+apse */ *[class].spacer { height: auto!important; } a[href^=3Ddate]{ color:=
+inherit !important; text-decoration:none !important;} a[href^=3Dtelephone]{=
+ color:inherit !important; text-decoration:none !important;} a[href^=3Daddr=
+ess]{ color:inherit !important; text-decoration:none !important;} a[href^=
+=3Demail]{ color:inherit !important; text-decoration:none !important;} /* D=
+efault table cell height */ td[height=3D"12"]{height:12px!important;font-si=
+ze:12px!important;line-height:12px!important;}=0A/*------------------------=
+-------------------------------------------------*\ Product Widget \*------=
+-------------------------------------------------------------------*/ .td_p=
+roduct div, .td_product .products-display { float: none !important; display=
+: block !important; width: 100% !important; Margin-bottom: 20px !important;=
+ } .td_product img { width: 100% !important; max-width: 100% !important; } =
+/* Default social icons */ *[class].ac-social-icon-16 {width:16px !importan=
+t; height:16px !important;} *[class].ac-social-icon-24 {width:24px !importa=
+nt; height:24px !important;} *[class].ac-social-icon-28 {width:28px !import=
+ant; height:28px !important;} *[class].__ac_social_icons { margin-right: 0p=
+x !important; } }=0A</style><style data-ac-keep=3D"true"> @media only scree=
+n and (max-width: 320px) { #layout-row3564 .break-line { width: 100% !impor=
+tant; margin: auto !important; } #layout-row3565 .break-line { width: 100% =
+!important; margin: auto !important; } #layout-row3567 img { width: 100% !i=
+mportant; height: auto !important; max-width: 320px !important; } div.divbo=
+dy { padding: 20px !important; } table, tbody, td, .divbody { display: tabl=
+e !important; width: 100% !important; max-width: 100% !important; } .td_rss=
+ .rss-item img.iphone_large_image { width: auto !important; } u + .body { d=
+isplay: table !important; width: 100vw !important; min-width: 100vw !import=
+ant; } u + .body table { display: table !important; width: 100% !important;=
+ min-width: 100% !important; } u + .body td { display: block !important; wi=
+dth: 100% !important; min-width: 100% !important; } u + .body img { display=
+: inline-block !important; margin: auto !important; width: auto !important;=
+ vertical-align: bottom=0A!important; } u + .body center { display: block !=
+important; margin: auto !important; width: 100% !important; min-width: 100%=
+ !important; text-align: center !important; } u + .body table._ac_social_ta=
+ble, u + .body table._ac_social_table td, u + .body table._ac_social_table =
+div, u + .body table._ac_social_table a { display: inline-block !important;=
+ margin: auto !important; width: auto !important; min-width: auto !importan=
+t; text-align: center !important; } u + .body table._ac_social_table img { =
+display: inline-block !important; margin: auto !important; width: 32px !imp=
+ortant; min-width: 32px !important; max-width: 32px !important; }=0A}=0A@me=
+dia only screen and (max-width: 375px) { #layout-row3564 .break-line { widt=
+h: 100% !important; margin: auto !important; } #layout-row3565 .break-line =
+{ width: 100% !important; margin: auto !important; } #layout-row3567 img { =
+width: 100% !important; height: auto !important; max-width: 375px !importan=
+t; } div.divbody { padding: 20px !important; } table, tbody, td, .divbody {=
+ display: table !important; width: 100% !important; max-width: 100% !import=
+ant; } .td_rss .rss-item img.iphone_large_image { width: auto !important; }=
+ u + .body { display: table !important; width: 100vw !important; min-width:=
+ 100vw !important; } u + .body table { display: table !important; width: 10=
+0% !important; min-width: 100% !important; } u + .body td { display: block =
+!important; width: 100% !important; min-width: 100% !important; } u + .body=
+ img { display: inline-block !important; margin: auto !important; width: au=
+to !important; vertical-align: bottom !important; } u + .body center {=0Adi=
+splay: block !important; margin: auto !important; width: 100% !important; m=
+in-width: 100% !important; text-align: center !important; } u + .body table=
+._ac_social_table, u + .body table._ac_social_table td, u + .body table._ac=
+_social_table div, u + .body table._ac_social_table a { display: inline-blo=
+ck !important; margin: auto !important; width: auto !important; min-width: =
+auto !important; text-align: center !important; } u + .body table._ac_socia=
+l_table img { display: inline-block !important; margin: auto !important; wi=
+dth: 32px !important; min-width: 32px !important; max-width: 32px !importan=
+t; }=0A}=0A@media only screen and (max-width: 414px) { #layout-row3564 .bre=
+ak-line { width: 100% !important; margin: auto !important; } #layout-row356=
+5 .break-line { width: 100% !important; margin: auto !important; } #layout-=
+row3567 img { width: 100% !important; height: auto !important; max-width: 4=
+14px !important; } div.divbody { padding: 20px !important; } table, tbody, =
+td, .divbody { display: table !important; width: 100% !important; max-width=
+: 100% !important; } .td_rss .rss-item img.iphone_large_image { width: auto=
+ !important; } u + .body { display: table !important; width: 100vw !importa=
+nt; min-width: 100vw !important; } u + .body table { display: table !import=
+ant; width: 100% !important; min-width: 100% !important; } u + .body td { d=
+isplay: block !important; width: 100% !important; min-width: 100% !importan=
+t; } u + .body img { display: inline-block !important; margin: auto !import=
+ant; width: auto !important; vertical-align: bottom !important; } u + .body=
+ center {=0Adisplay: block !important; margin: auto !important; width: 100%=
+ !important; min-width: 100% !important; text-align: center !important; } u=
+ + .body table._ac_social_table, u + .body table._ac_social_table td, u + .=
+body table._ac_social_table div, u + .body table._ac_social_table a { displ=
+ay: inline-block !important; margin: auto !important; width: auto !importan=
+t; min-width: auto !important; text-align: center !important; } u + .body t=
+able._ac_social_table img { display: inline-block !important; margin: auto =
+!important; width: 32px !important; min-width: 32px !important; max-width: =
+32px !important; }=0A}=0A@media only screen and (max-width: 667px) { #layou=
+t-row3564 .break-line { width: 100% !important; margin: auto !important; } =
+#layout-row3565 .break-line { width: 100% !important; margin: auto !importa=
+nt; } #layout-row3567 img { width: 100% !important; height: auto !important=
+; max-width: 667px !important; } div.divbody { padding: 20px !important; } =
+table, tbody, td, .divbody { display: table !important; width: 100% !import=
+ant; max-width: 100% !important; } .td_rss .rss-item img.iphone_large_image=
+ { width: auto !important; } u + .body { display: table !important; width: =
+100vw !important; min-width: 100vw !important; } u + .body table { display:=
+ table !important; width: 100% !important; min-width: 100% !important; } u =
++ .body td { display: block !important; width: 100% !important; min-width: =
+100% !important; } u + .body img { display: inline-block !important; margin=
+: auto !important; width: auto !important; vertical-align: bottom !importan=
+t; } u + .body center {=0Adisplay: block !important; margin: auto !importan=
+t; width: 100% !important; min-width: 100% !important; text-align: center !=
+important; } u + .body table._ac_social_table, u + .body table._ac_social_t=
+able td, u + .body table._ac_social_table div, u + .body table._ac_social_t=
+able a { display: inline-block !important; margin: auto !important; width: =
+auto !important; min-width: auto !important; text-align: center !important;=
+ } u + .body table._ac_social_table img { display: inline-block !important;=
+ margin: auto !important; width: 32px !important; min-width: 32px !importan=
+t; max-width: 32px !important; }=0A} </style><!--[if !mso]><!-- webfonts --=
+><!--<![endif]--><!--[if lt mso 12]> <![endif]--><!--[if gte mso 9]>=0A<xml=
+> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPer=
+Inch> </o:OfficeDocumentSettings>=0A</xml>=0A<![endif]--></head><body id=3D=
+"ac-designer" class=3D"body" style=3D"font-family: Arial; line-height: 1.1;=
+ margin: 0px; background-color: #ffffff; width: 100%; text-align: center;">=
+=09=09<div style=3D"display: none !important; padding: 0; height: 1px; font=
+-size: 1px; background-color: inherit !important; opacity: 0; color: transp=
+arent; mso-line-height-rule: exactly; line-height:1px; mso-hide:all;">=0A=
+=09=09=09(Live Events For C-Suite Executives)=0A=09=09=09<div style=3D"disp=
+lay: none; max-height: 0px; overflow: hidden;">=0A=09=09=09=09&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C=0A=09=09=09</div>=0A=0A=09=09</div>=0A<div class=3D"divbody" styl=
+e=3D"margin: 0px; outline: none; padding: 0px; color: #000000; font-family:=
+ arial; line-height: 1.1; width: 100%; background-color: #ffffff; backgroun=
+d: #ffffff; text-align: center;"><table class=3D"template-table" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" align=3D"left" style=
+=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-coll=
+apse: collapse; font-size: 14px; min-width: auto; mso-table-lspace: 0pt; ms=
+o-table-rspace: 0pt; background-color: #ffffff; background: #ffffff;"><tr s=
+tyle=3D"mso-line-height-rule: exactly;"><td align=3D"center" valign=3D"top"=
+ width=3D"100%" style=3D"mso-line-height-rule: exactly;"><table class=3D"te=
+mplate-table" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"650=
+" bgcolor=3D"#ffffff" style=3D"-ms-text-size-adjust: auto; -webkit-text-siz=
+e-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: auto=
+; mso-table-lspace: 0pt; mso-table-rspace: 0pt; max-width: 650px;"><tr=0Ast=
+yle=3D"mso-line-height-rule: exactly;"><td id=3D"layout_table_5a254fda3bd39=
+c8f47ef865fc622727d69819bbb" valign=3D"top" align=3D"center" width=3D"650" =
+style=3D"mso-line-height-rule: exactly;"><table cellpadding=3D"0" cellspaci=
+ng=3D"0" border=3D"0" class=3D"layout layout-table root-table" width=3D"650=
+" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; bord=
+er-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: =
+0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><=
+td id=3D"layout-row-margin3559" valign=3D"top" style=3D"mso-line-height-rul=
+e: exactly; padding: 5px;"><table width=3D"100%" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-=
+size-adjust: 100%; border-collapse: initial !important; font-size: 14px; mi=
+n-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"lay=
+out-row3559" class=3D"layout layout-row widget _widget_text style3559" styl=
+e=3D"mso-line-height-rule: exactly; margin: 0;=0Apadding: 0;"><td id=3D"lay=
+out-row-padding3559" valign=3D"top" style=3D"mso-line-height-rule: exactly;=
+ padding: 5px;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: =
+100%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-tabl=
+e-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: e=
+xactly;"><td id=3D"text_div3533" class=3D"td_text td_block" valign=3D"top" =
+align=3D"left" width=3D"630" style=3D"line-height: 100%; mso-line-height-ru=
+le: exactly; margin: 0; outline: none; padding: 0; color: inherit; font-siz=
+e: 12px; font-weight: inherit; line-height: 1; text-decoration: inherit; fo=
+nt-family: arial;"> <div style=3D"line-height: 100%; margin: 0; outline: no=
+ne; padding: 0; color: inherit; font-size: inherit; font-weight: inherit; l=
+ine-height: 1; text-decoration: inherit; mso-line-height-rule: exactly;" da=
+ta-line-height=3D"1"> <div style=3D"margin: 0; outline: none; padding: 0; c=
+olor: #000000;=0Afont-size: 18px; font-weight: 400; line-height: inherit; t=
+ext-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpa=
+rent; --tw-ring-shadow: 0 0 transparent; font-style: normal; text-align: ce=
+nter;" class=3D""></div>=0A <div style=3D"margin: 0; outline: none; padding=
+: 0; color: #000000; font-size: 18px; font-weight: 400; line-height: inheri=
+t; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset:=
+ var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #f=
+ff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tra=
+nsparent; --tw-ring-shadow: 0 0 transparent; text-align: center;" class=3D"=
+"><span style=3D'color: #000000; font-size: 20px; font-weight: inherit; lin=
+e-height: inherit; text-decoration: inherit; font-style: normal; --tw-shado=
+w: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wi=
+dth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.=
+5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpa=
+rent; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D""><span s=
+tyle=3D"color: #000000; font-size: inherit; font-weight: bold; line-height:=
+ inherit; text-decoration: inherit;=0A--tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">NANOE Boa=
+rd of Governors' Conference Series (Last Day)<br style=3D"" class=3D""></sp=
+an><span style=3D"color: #000000; font-size: inherit; font-weight: bold; li=
+ne-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent;=
+ --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring=
+-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offse=
+t-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: i=
+talic;" class=3D"">Live Virtual Events For Senior Executives<br><br></span>=
+</span><strong class=3D"" style=3D'margin: 0; outline: none; padding: 0; fo=
+nt-family: "trebuchet ms", tahoma, arial, sans; font-size: 20px; font-style=
+: normal; text-decoration: inherit;'><b style=3D'margin: 0;=0Aoutline: none=
+; padding: 0; color: #0764ba; font-family: "trebuchet ms", tahoma, arial, s=
+ans;'><a target=3D"_blank" data-cke-saved-href=3D"https://jimmylarose.lt.ac=
+emlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclM=
+kZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D&sig=3D25cr6bVDaa8FxkaMpz3tJyPQsNVd5=
+oKWZhbPHkzGaBYc&iat=3D1696256187&a=3D%7C%7C26605550%7C%7C&account=3Djimmyla=
+rose%2Eactivehosted%2Ecom&email=3DMR4%2FVUNgUwZ2HaELWkU0uotFEtwl81Gmdv5Kszt=
+p%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=3D678f48a0e320c6856d0620aa2e024acb&i=
+=3D594A1017A219A2375" href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-=
+tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsL=
+WV2ZW50cyUyRg=3D=3D&sig=3D25cr6bVDaa8FxkaMpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=
+=3D1696256187&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted=
+%2Ecom&email=3DMR4%2FVUNgUwZ2HaELWkU0uotFEtwl81Gmdv5Ksztp%3AR5elE43eG6sNCTP=
+Hbkc0HNWweVtsq7Y3&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D594A1017A219A237=
+5" data-ac-default-color=3D"1" style=3D"margin: 0; outline: none; padding: =
+0; color: #0764ba; text-decoration: underline;"><span style=3D"color: ; fon=
+t-size: inherit; font-weight: inherit; line-height: inherit; text-decoratio=
+n: inherit;">90 Minutes $500,000 Signature Ask Events</span></a></b></stron=
+g><div style=3D"margin: 0; outline: none; padding: 0; color: inherit;=0Afon=
+t-size: inherit; font-weight: inherit; line-height: inherit; text-decoratio=
+n: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, =
+); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-col=
+or: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ri=
+ng-shadow: 0 0 transparent; text-align: center;" class=3D""><div style=3D'm=
+argin: 0; outline: none; padding: 0; color: #000000; font-size: 20px; font-=
+weight: 400; line-height: inherit; text-decoration: inherit; font-style: no=
+rmal; font-family: "trebuchet ms", tahoma, arial, sans; text-align: -webkit=
+-center; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); =
+--tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
+ rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-=
+shadow: 0 0 transparent;' class=3D""><em class=3D"" style=3D'margin: 0; out=
+line: none; padding: 0; font-family: "trebuchet ms", tahoma, arial, sans; f=
+ont-size:=0A18px; font-weight: 400; text-decoration: inherit;'><em style=3D=
+'margin: 0; outline: none; padding: 0; font-size: 16px; font-family: "trebu=
+chet ms", tahoma, arial, sans; font-weight: 400;'>Jimmy LaRose, Louis Fawce=
+tt & Amanda Stair - Oct 4, 2023 - 10am-1pm EST<br><br></em></em><em style=
+=3D'margin: 0; outline: none; padding: 0; font-family: "trebuchet ms", taho=
+ma, arial, sans; font-size: 16px; font-weight: 400; text-decoration: inheri=
+t;'>"We used to net $25,000 at our annual gala and auction. Those days are =
+over! We raised $605,000 in 1.5 hours using Major Gifts Ramp-Up for a 10th =
+of the cost. We'll never go back!" </em><span style=3D'color: #000000; font=
+-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inher=
+it; font-family: "trebuchet ms", tahoma, arial, sans;'>~ Roy Kramer, Centra=
+l South Carolina Habitat for Humanity</span></div>=0A</div>=0A</div>=0A <di=
+v style=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size:=
+ 12px; font-weight: 400; line-height: inherit; text-decoration: inherit; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent; text-align: center;" class=3D""></div>=0A </div>=0A<!--[if (g=
+te mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D=
+"false"> #text_div3533, #text_div3533 div { line-height: 100% !important; }=
+;=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</tab=
+le>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=
+=3D"layout-row-margin3567" valign=3D"top" style=3D"mso-line-height-rule: ex=
+actly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; bo=
+rder-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace=
+: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3567" class=3D"layout la=
+yout-row widget _widget_picture " align=3D"left" style=3D"mso-line-height-r=
+ule: exactly;"><td id=3D"layout-row-padding3567" valign=3D"top" style=3D"ms=
+o-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text=
+-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: =
+100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-=
+height-rule: exactly;"><td class=3D"image-td" align=3D"left" valign=3D"top"=
+ width=3D"650" style=3D"mso-line-height-rule: exactly;"><a=0Ahref=3D"https:=
+//jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMk=
+YlMkZuYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D&sig=3D25cr6bVDaa=
+8FxkaMpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=3D1696256187&a=3D%7C%7C26605550%7C%7=
+C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DMR4%2FVUNgUwZ2HaELWkU0=
+uotFEtwl81Gmdv5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=3D678f48a0e320c68=
+56d0620aa2e024acb&i=3D594A1017A219A2375" style=3D"margin: 0; outline: none;=
+ padding: 0; color: #0764ba; display: block; min-width: 100%;"><img src=3D"=
+https://content.app-us1.com/cdn-cgi/image/dpr=3D2,fit=3Dscale-down,format=
+=3Dauto,onerror=3Dredirect,width=3D650/ZvmyW/2023/07/25/58e40ddf-49ac-4e5b-=
+bfc0-1c769816ab26.jpeg?r=3D88154758" width=3D"650" style=3D"border: none; d=
+isplay: block; outline: none; width: 650px; opacity: 1; max-width: 100%;"><=
+/a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<t=
+r style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin3562"=
+ valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"10=
+0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size=
+-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; f=
+ont-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0=
+pt;"><tr id=3D"layout-row3562" class=3D"layout layout-row widget _widget_sp=
+acer " style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-paddin=
+g3562" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
+t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
+pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
+ace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td valign=3D"top" =
+height=3D"15" style=3D"mso-line-height-rule: exactly;"><div class=3D"spacer=
+" style=3D"margin: 0; outline: none; padding: 0;=0Aheight: 15px;"><table ce=
+llpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-ms-=
+text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: co=
+llapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-=
+rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"spa=
+cer-body" valign=3D"top" height=3D"15" width=3D"650" style=3D"mso-line-heig=
+ht-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=
+=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-l=
+ine-height-rule: exactly;"><td id=3D"layout-row-margin3568" valign=3D"top" =
+style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -=
+webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; =
+min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"l=
+ayout-row3568" class=3D"layout layout-row widget _widget_spacer " style=3D"=
+mso-line-height-rule: exactly;"><td id=3D"layout-row-padding3568" valign=3D=
+"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: a=
+uto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: =
+14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr s=
+tyle=3D"mso-line-height-rule: exactly;"><td valign=3D"top" height=3D"30" st=
+yle=3D"mso-line-height-rule: exactly;"><div class=3D"spacer" style=3D"margi=
+n: 0; outline: none; padding: 0;=0Aheight: 30px;"><table cellpadding=3D"0" =
+cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-ms-text-size-adjust=
+: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
+e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
+r style=3D"mso-line-height-rule: exactly;"><td class=3D"spacer-body" valign=
+=3D"top" height=3D"30" width=3D"650" style=3D"mso-line-height-rule: exactly=
+;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=0A</t=
+d>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: =
+exactly;"><td id=3D"layout-row-margin3566" valign=3D"top" style=3D"mso-line=
+-height-rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -web=
+kit-text-size-adjust: 100%; border-collapse: initial !important; font-size:=
+ 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr =
+id=3D"layout-row3566" class=3D"layout layout-row widget _widget_text style3=
+566" style=3D"mso-line-height-rule: exactly; margin: 0; padding: 0;"><td id=
+=3D"layout-row-padding3566" valign=3D"top" style=3D"mso-line-height-rule: e=
+xactly; padding: 5px;"><table width=3D"100%" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-a=
+djust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; m=
+so-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-=
+rule: exactly;"><td id=3D"text_div3540" class=3D"td_text td_block" valign=
+=3D"top"=0Aalign=3D"left" width=3D"630" style=3D"mso-line-height-rule: exac=
+tly; margin: 0; outline: none; padding: 0; color: inherit; font-size: 12px;=
+ font-weight: inherit; line-height: 1; text-decoration: inherit; font-famil=
+y: arial;"> <div style=3D"margin: 0; outline: none; padding: 0; color: #000=
+000; font-size: 12px; font-weight: inherit; line-height: inherit; text-deco=
+ration: inherit;" class=3D""> <div style=3D"margin: 0; outline: none; paddi=
+ng: 0; color: #000000; font-size: 20px; font-weight: 400; line-height: inhe=
+rit; text-decoration: inherit; font-family: arial; --tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-=
+offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-sty=
+le: normal; text-align: center;" class=3D""><span style=3D"color: #000000; =
+font-size: inherit; font-weight: 700; line-height: inherit; text-decoration=
+: inherit; --tw-shadow: 0 0=0Atransparent; --tw-ring-inset: var(--tw-empty,=
+ ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-co=
+lor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-r=
+ing-shadow: 0 0 transparent; font-family: arial;" class=3D"">NANOE Board of=
+ Governors' Conference Series<br><br><div style=3D"margin: 0; outline: none=
+; padding: 0; color: inherit; font-size: inherit; font-weight: inherit; lin=
+e-height: inherit; text-decoration: inherit; text-align: left;"><strong cla=
+ss=3D"" style=3D'margin: 0; outline: none; padding: 0; font-size: 20px; fon=
+t-style: normal; text-decoration: inherit; font-family: "trebuchet ms", tah=
+oma, arial, sans; text-align: -webkit-left;'><a href=3D"https://jimmylarose=
+.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5=
+vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D&sig=3D25cr6bVDaa8FxkaMpz3tJyP=
+QsNVd5oKWZhbPHkzGaBYc&iat=3D1696256187&a=3D%7C%7C26605550%7C%7C&account=3Dj=
+immylarose%2Eactivehosted%2Ecom&email=3DMR4%2FVUNgUwZ2HaELWkU0uotFEtwl81Gmd=
+v5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=3D678f48a0e320c6856d0620aa2e02=
+4acb&i=3D594A1017A219A2375" data-ac-default-color=3D"1" class=3D"" target=
+=3D"_blank"=0Astyle=3D"margin: 0; outline: none; padding: 0; color: #0764ba=
+; text-decoration: underline;"><span style=3D"color: ; font-size: inherit; =
+font-weight: inherit; line-height: inherit; text-decoration: inherit;">90 M=
+INUTES $500,000 SIGNATURE ASK EVENTS</span></a></strong></div>=0A</span></d=
+iv>=0A<span style=3D'color: inherit; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; font-family: "trebuchet=
+ ms", tahoma, arial, sans;' class=3D""><div style=3D'margin: 0; outline: no=
+ne; padding: 0; color: #000000; font-size: 20px; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma=
+, arial, sans; text-align: -webkit-left;' class=3D""><span class=3D"" style=
+=3D'color: inherit; font-size: 16px; font-weight: inherit; line-height: inh=
+erit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial,=
+ sans; font-style: italic;'>Jimmy LaRose, Louis Fawcett & Amanda Stair</spa=
+n><span style=3D'color: #000000; font-size: 16px; font-weight: 400; line-he=
+ight: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahom=
+a, arial, sans;' class=3D""> - Oct 4th - 10am-1pm EST<br><br></span><strong=
+ class=3D"" style=3D'margin: 0; outline: none; padding: 0; font-family: "tr=
+ebuchet ms", tahoma, arial,=0Asans; font-size: 20px; text-decoration: inher=
+it; font-style: normal;'>MAJOR GIFTS RAMP-UP - FUND YOUR IMPORTANT MISSION<=
+/strong></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color:=
+ #000000; font-size: 20px; font-weight: 400; line-height: inherit; text-dec=
+oration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; text-al=
+ign: -webkit-left;' class=3D""><span class=3D"" style=3D'color: inherit; fo=
+nt-size: 16px; font-weight: inherit; line-height: inherit; text-decoration:=
+ inherit; font-family: "trebuchet ms", tahoma, arial, sans;'><span style=3D=
+"color: inherit; font-size: inherit; font-weight: inherit; line-height: inh=
+erit; text-decoration: inherit; font-style: italic;" class=3D"">Jimmy LaRos=
+e, Hall Powell & Stefanie Stark</span> </span><span style=3D'color: #000000=
+; font-size: 16px; font-weight: 400; line-height: inherit; text-decoration:=
+ inherit; font-style: normal; font-family: "trebuchet ms", tahoma, arial, s=
+ans;' class=3D"">- Oct 19th - 10am-1pm EST<br><br></span><span style=3D'col=
+or: #000000; font-size: inherit; font-weight: 700; line-height: inherit; te=
+xt-decoration: inherit; font-family:=0A"trebuchet ms", tahoma, arial, sans;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent; font-style: inherit;' class=3D"">SUPERCONSULTING - WE NEED=
+ NONPROFIT EXPERTS</span></div>=0A<div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
+al, sans; text-align: -webkit-left;' class=3D""><span style=3D'color: inher=
+it; font-size: 16px; font-weight: inherit; line-height: inherit; text-decor=
+ation: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial,=
+ sans; text-align: -webkit-left; margin: 0;' class=3D""><span style=3D"colo=
+r: inherit; font-size: inherit; font-weight: inherit; line-height: inherit;=
+ text-decoration: inherit; font-style: italic;" class=3D"">Louis Fawcett, J=
+immy LaRose & Carol Young</span> - Nov 1st - 10am-1pm EST<br><br></span><a=
+=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=
+=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D=
+&sig=3D25cr6bVDaa8FxkaMpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=3D1696256187&a=3D%7=
+C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DMR4%2=
+FVUNgUwZ2HaELWkU0uotFEtwl81Gmdv5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=
+=3D678f48a0e320c6856d0620aa2e024acb&i=3D594A1017A219A2375" data-ac-default-=
+color=3D"1" target=3D"_blank" style=3D'margin: 0; outline: none; padding: 0=
+; color: #0764ba; text-decoration: underline; font-style: normal; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; font-size: 20px; font-weight: 700;=
+' class=3D""><span style=3D"color: ; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit;">VISIT HERE TO MAKE YOU=
+R RESERVATION</span></a></div>=0A<div style=3D'margin: 0; outline: none; pa=
+dding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: i=
+nherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, aria=
+l, sans; text-align: -webkit-left;' class=3D""><strong class=3D"" style=3D'=
+margin: 0; outline: none; padding: 0; font-family: "trebuchet ms", tahoma, =
+arial, sans; text-decoration: inherit; font-style: normal; font-size: 20px;=
+'> <br>EVERYTHING YOU WANT TO TELL YOUR BOARD</strong></div>=0A<div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; text-align: -webkit-left;' class=
+=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; font-style: italic;" cl=
+ass=3D""><span style=3D'color: #000000; font-size: inherit; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans;' class=3D"">Jimmy LaRose, Louis Fawcett &=C2=
+=A0</span><span class=3D"" style=3D'color: inherit; font-size: inherit; fon=
+t-weight: inherit; line-height: inherit; text-decoration: inherit; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans;'>Amanda Stair</span></span><span =
+style=3D'color: #000000; font-size: inherit; font-weight: 400; line-height:=
+ inherit; text-decoration: inherit; font-style: normal; font-family: "trebu=
+chet ms", tahoma, arial,=0Asans;' class=3D""> - Dec 6th - 10am-1pm EST<br><=
+br></span><strong class=3D"" style=3D'margin: 0; outline: none; padding: 0;=
+ font-family: "trebuchet ms", tahoma, arial, sans; font-size: 20px; text-de=
+coration: inherit; font-style: normal;'>FIVE SECRETS TO ATTRACTING FOUNDATI=
+ON GIFTS</strong></div>=0A<div style=3D'margin: 0; outline: none; padding: =
+0; color: #000000; font-size: 20px; font-weight: 400; line-height: inherit;=
+ text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans=
+; text-align: -webkit-left;' class=3D""><span style=3D"color: inherit; font=
+-size: inherit; font-weight: inherit; line-height: inherit; text-decoration=
+: inherit; font-style: italic;" class=3D""><span style=3D'color: #000000; f=
+ont-size: 16px; font-weight: 400; line-height: inherit; text-decoration: in=
+herit; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">Louis =
+Fawcett, Jimmy LaRose &=C2=A0</span><span class=3D"" style=3D'color: inheri=
+t; font-size: 16px; font-weight: inherit; line-height: inherit; text-decora=
+tion: inherit; font-family: "trebuchet ms", tahoma, arial, sans;'>Lauren Wi=
+lkie</span></span><span style=3D'color: #000000; font-size: 16px; font-weig=
+ht: 400; line-height: inherit; text-decoration: inherit; font-style: normal=
+; font-family: "trebuchet ms", tahoma, arial, sans;'=0Aclass=3D""> - Jan 17=
+th - 10am-1pm EST<br><br></span><b class=3D"" style=3D'margin: 0; outline: =
+none; padding: 0; font-family: "trebuchet ms", tahoma, arial, sans; text-de=
+coration: inherit;'><a target=3D"_blank" data-cke-saved-href=3D"https://jim=
+mylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZ=
+uYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D&sig=3D25cr6bVDaa8Fxka=
+Mpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=3D1696256187&a=3D%7C%7C26605550%7C%7C&acc=
+ount=3Djimmylarose%2Eactivehosted%2Ecom&email=3DMR4%2FVUNgUwZ2HaELWkU0uotFE=
+twl81Gmdv5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=3D678f48a0e320c6856d06=
+20aa2e024acb&i=3D594A1017A219A2375" href=3D"https://jimmylarose.lt.acemlnd.=
+com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5=
+vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D&sig=3D25cr6bVDaa8FxkaMpz3tJyPQsNVd5oKWZhb=
+PHkzGaBYc&iat=3D1696256187&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2=
+Eactivehosted%2Ecom&email=3DMR4%2FVUNgUwZ2HaELWkU0uotFEtwl81Gmdv5Ksztp%3AR5=
+elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D594=
+A1017A219A2375" data-ac-default-color=3D"1" class=3D"" style=3D"margin: 0; =
+outline: none; padding: 0; color: #0764ba; text-decoration: underline;"><sp=
+an style=3D"color: ; font-size: inherit; font-weight: inherit; line-height:=
+ inherit; text-decoration: inherit;">VISIT HERE TO MAKE YOUR=0ARESERVATION<=
+/span></a></b></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; =
+color: #000000; font-size: 20px; font-weight: 400; line-height: inherit; te=
+xt-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; t=
+ext-align: -webkit-left;' class=3D""><b class=3D"" style=3D'margin: 0; outl=
+ine: none; padding: 0; font-family: "trebuchet ms", tahoma, arial, sans; te=
+xt-decoration: inherit;'> <br>ENDOWMENT CAMPAIGN MYTH</b></div>=0A<div styl=
+e=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 20px;=
+ font-weight: 400; line-height: inherit; text-decoration: inherit; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans; text-align: -webkit-left;' class=
+=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; font-style: italic;" cl=
+ass=3D""><span style=3D'color: #000000; font-size: 16px; font-weight: 400; =
+line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms"=
+, tahoma, arial, sans;' class=3D"">Louis Fawcett, Jimmy LaRose &=C2=A0</spa=
+n><span class=3D"" style=3D'color: #000000; font-size: 16px; font-weight: 4=
+00; line-height: inherit; text-decoration: inherit; font-family: "trebuchet=
+ ms", tahoma, arial, sans;'>Tim Burkhart</span></span><span style=3D'color:=
+ #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-dec=
+oration: inherit; font-style: normal; font-family: "trebuchet ms", tahoma, =
+arial, sans;'=0Aclass=3D""> - Jan 31th - 10am-1pm EST<br><br></span><strong=
+ class=3D"" style=3D'margin: 0; outline: none; padding: 0; font-family: "tr=
+ebuchet ms", tahoma, arial, sans; text-decoration: inherit; font-style: nor=
+mal; font-size: 20px;'>SUPERCONSULTING - WE NEED NONPROFIT EXPERTS</strong>=
+</div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000=
+; font-size: 16px; font-weight: inherit; line-height: inherit; text-decorat=
+ion: inherit; font-family: "trebuchet ms", tahoma, arial, sans; text-align:=
+ -webkit-left;' class=3D""><span style=3D'color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; text-align: -webkit-left; margin: =
+0;' class=3D""><span style=3D"color: inherit; font-size: inherit; font-weig=
+ht: inherit; line-height: inherit; text-decoration: inherit; font-style: it=
+alic;" class=3D"">Louis Fawcett, Jimmy LaRose & Carol Young</span><span sty=
+le=3D"color: inherit; font-size: inherit; font-weight: inherit; line-height=
+: inherit; text-decoration: inherit; font-style: italic;" class=3D""> </spa=
+n>- Feb 21 - 10am-1pm EST<br><br></span><strong class=3D"" style=3D'margin:=
+ 0; outline: none; padding: 0; font-family: "trebuchet ms", tahoma, arial, =
+sans; font-size: 20px;=0Atext-decoration: inherit; font-style: normal;'>MON=
+ETIZE EVERY HOUR RAISING MAJOR GIFTS</strong></div>=0A<div style=3D'margin:=
+ 0; outline: none; padding: 0; color: #000000; font-size: 20px; font-weight=
+: 400; line-height: inherit; text-decoration: inherit; font-family: "trebuc=
+het ms", tahoma, arial, sans; text-align: -webkit-left;' class=3D""><span s=
+tyle=3D"color: inherit; font-size: inherit; font-weight: inherit; line-heig=
+ht: inherit; text-decoration: inherit; font-style: italic;" class=3D""><spa=
+n style=3D'color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
+al, sans;' class=3D"">Louis Fawcett, Jimmy LaRose &=C2=A0</span><span class=
+=3D"" style=3D'color: inherit; font-size: 16px; font-weight: inherit; line-=
+height: inherit; text-decoration: inherit; font-family: "trebuchet ms", tah=
+oma, arial, sans;'>Amanda Stair</span></span><span style=3D'color: #000000;=
+ font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: =
+inherit; font-style: normal; font-family: "trebuchet ms", tahoma, arial, sa=
+ns;'=0Aclass=3D""> - Apr 18th - 10am-1pm EST</span></div>=0A <div style=3D'=
+margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
+-weight: 400; line-height: inherit; text-decoration: inherit; font-family: =
+"trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -webki=
+t-left;' class=3D""></div>=0A <div style=3D'margin: 0; outline: none; paddi=
+ng: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inhe=
+rit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, =
+sans; font-style: normal; text-align: -webkit-left;' class=3D""></div>=0A</=
+span></div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=
+=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-ro=
+w-margin3564" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><tabl=
+e width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"=
+-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse=
+: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-ta=
+ble-rspace: 0pt;"><tr id=3D"layout-row3564" class=3D"layout layout-row widg=
+et _widget_break " style=3D"mso-line-height-rule: exactly;"><td id=3D"layou=
+t-row-padding3564" valign=3D"top" style=3D"mso-line-height-rule: exactly; l=
+ine-height: 0;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: =
+100%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-tabl=
+e-lspace: 0pt; mso-table-rspace: 0pt; line-height: 0; mso-line-height-rule:=
+ exactly;"><tr style=3D"mso-line-height-rule: exactly;"><td height=3D"10" s=
+tyle=3D"mso-line-height-rule: exactly; line-height: 0;"></td>=0A</tr>=0A<tr=
+ style=3D"mso-line-height-rule: exactly;"><td align=3D"center" height=3D"1"=
+ width=3D"650" style=3D"mso-line-height-rule: exactly; line-height: 0;"> <t=
+able align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" heig=
+ht=3D"1" width=3D"650" style=3D"-ms-text-size-adjust: auto; -webkit-text-si=
+ze-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: aut=
+o!important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; line-height: 0; =
+mso-line-height-rule: exactly; width: 100%; max-width: 100%;"><tr style=3D"=
+mso-line-height-rule: exactly;"><td class=3D"break-line" bgcolor=3D"#000000=
+" height=3D"1" width=3D"650" style=3D"mso-line-height-rule: exactly; line-h=
+eight: 1px; height: 1px; width: 650px; background-color: #000000;"> </td>=
+=0A </tr>=0A</table>=0A</td>=0A </tr>=0A<tr style=3D"mso-line-height-rule: =
+exactly;"><td height=3D"10" style=3D"mso-line-height-rule: exactly; line-he=
+ight: 0;"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</t=
+r>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-marg=
+in3563" valign=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px=
+;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-=
+collapse: initial !important; font-size: 14px; min-width: 100%; mso-table-l=
+space: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3563" class=3D"layo=
+ut layout-row widget _widget_text style3563" style=3D"mso-line-height-rule:=
+ exactly; margin: 0; padding: 0;"><td id=3D"layout-row-padding3563" valign=
+=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"><table widt=
+h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-te=
+xt-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: coll=
+apse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td id=3D"text_div=
+3537" class=3D"td_text td_block" valign=3D"top"=0Aalign=3D"left" width=3D"6=
+30" style=3D"mso-line-height-rule: exactly; margin: 0; outline: none; paddi=
+ng: 0; color: inherit; font-size: 12px; font-weight: inherit; line-height: =
+1; text-decoration: inherit; font-family: arial;"> <div style=3D"margin: 0;=
+ outline: none; padding: 0; color: #000000; font-size: 17px; font-weight: i=
+nherit; line-height: inherit; text-decoration: inherit; text-align: center;=
+"> <span style=3D'color: inherit; font-size: inherit; font-weight: inherit;=
+ line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms=
+", tahoma, arial, sans;' class=3D""><span style=3D"color: #000000; font-siz=
+e: 17px; font-weight: 400; line-height: inherit; text-decoration: inherit; =
+--tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring=
+-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,=
+130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
+ 0 transparent; font-style: italic;">"NANOE ensures nonprofits=0Abenefit fr=
+om the same free-market enterprise principles we know work in the for-profi=
+t sector!" </span><span style=3D"color: #000000; font-size: 17px; font-weig=
+ht: 400; line-height: inherit; text-decoration: inherit; font-style: normal=
+;">~ Kathleen Robinson</span></span> <br></div>=0A</td>=0A</tr>=0A</table>=
+=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-=
+rule: exactly;"><td id=3D"layout-row-margin3565" valign=3D"top" style=3D"ms=
+o-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text=
+-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: =
+100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row35=
+65" class=3D"layout layout-row widget _widget_break " style=3D"mso-line-hei=
+ght-rule: exactly;"><td id=3D"layout-row-padding3565" valign=3D"top" style=
+=3D"mso-line-height-rule: exactly; line-height: 0;"><table width=3D"100%" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adju=
+st: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-s=
+ize: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; l=
+ine-height: 0; mso-line-height-rule: exactly;"><tr style=3D"mso-line-height=
+-rule: exactly;"><td height=3D"10" style=3D"mso-line-height-rule: exactly; =
+line-height: 0;"></td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly=
+;"><td align=3D"center" height=3D"1" width=3D"650" style=3D"mso-line-height=
+-rule: exactly; line-height: 0;"> <table align=3D"center" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" height=3D"1" width=3D"650" style=3D"-ms-tex=
+t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
+pse; font-size: 14px; min-width: auto!important; mso-table-lspace: 0pt; mso=
+-table-rspace: 0pt; line-height: 0; mso-line-height-rule: exactly; width: 1=
+00%; max-width: 100%;"><tr style=3D"mso-line-height-rule: exactly;"><td cla=
+ss=3D"break-line" bgcolor=3D"#000000" height=3D"1" width=3D"650" style=3D"m=
+so-line-height-rule: exactly; line-height: 1px; height: 1px; width: 650px; =
+background-color: #000000;"> </td>=0A </tr>=0A</table>=0A</td>=0A </tr>=0A<=
+tr style=3D"mso-line-height-rule: exactly;"><td height=3D"10" style=3D"mso-=
+line-height-rule: exactly; line-height: 0;"></td>=0A</tr>=0A</table>=0A</td=
+>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: e=
+xactly;"><td id=3D"layout-row-margin3561" valign=3D"top" style=3D"mso-line-=
+height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-a=
+djust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; m=
+so-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3561" cla=
+ss=3D"layout layout-row widget _widget_spacer " style=3D"mso-line-height-ru=
+le: exactly;"><td id=3D"layout-row-padding3561" valign=3D"top" style=3D"mso=
+-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-=
+size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 1=
+00%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-h=
+eight-rule: exactly;"><td valign=3D"top" height=3D"17" style=3D"mso-line-he=
+ight-rule: exactly;"><div class=3D"spacer" style=3D"margin: 0; outline: non=
+e; padding: 0;=0Aheight: 17px;"><table cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" style=3D"-ms-text-size-adjust: auto; -webkit-te=
+xt-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width=
+: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-lin=
+e-height-rule: exactly;"><td class=3D"spacer-body" valign=3D"top" height=3D=
+"17" width=3D"650" style=3D"mso-line-height-rule: exactly;">=C2=A0</td>=0A<=
+/tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</tab=
+le>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=
+=3D"layout-row-margin3560" valign=3D"top" style=3D"mso-line-height-rule: ex=
+actly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; bo=
+rder-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace=
+: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row3560" class=3D"layout la=
+yout-row widget _widget_text " style=3D"mso-line-height-rule: exactly; marg=
+in: 0; padding: 0;"><td id=3D"layout-row-padding3560" valign=3D"top" style=
+=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webki=
+t-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-w=
+idth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso=
+-line-height-rule: exactly;"><td id=3D"text_div3534" class=3D"td_text td_bl=
+ock" valign=3D"top" align=3D"left" width=3D"650" style=3D"line-height: 140%=
+;=0Amso-line-height-rule: exactly; margin: 0; outline: none; padding: 0; co=
+lor: inherit; font-size: 12px; font-weight: inherit; line-height: 1.4; text=
+-decoration: inherit; font-family: arial;"> <div style=3D"line-height: 140%=
+; margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; fo=
+nt-weight: inherit; line-height: 1.4; text-decoration: inherit; mso-line-he=
+ight-rule: exactly;" class=3D"" data-line-height=3D"1.4"> <span style=3D'co=
+lor: inherit; font-size: 16px; font-weight: inherit; line-height: inherit; =
+text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent; font-style: normal;' class=3D"">Dear CEOs, CFOs, COO, CDOs=
+, & Nonprofit Staff Members,<br><br></span><span style=3D'color: inherit; f=
+ont-size: inherit;=0Afont-weight: inherit; line-height: inherit; text-decor=
+ation: inherit; font-family: "trebuchet ms", tahoma, arial, sans;'>NANOE Vi=
+rtual Seminar Series tackles industry-wide issues facing the modern charita=
+ble executive. These events are hosted by NANOE=E2=80=99s veteran administr=
+ators and will feature nationally renowned subject matter experts on nonpro=
+fit management topics. Join us for these tightly facilitated educational wo=
+rkshops that will encourage you both personally and professionally.<br><br>=
+</span><span style=3D'color: inherit; font-size: inherit; font-weight: inhe=
+rit; line-height: inherit; text-decoration: inherit; font-family: "trebuche=
+t ms", tahoma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
+var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #ff=
+f; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tran=
+sparent; --tw-ring-shadow: 0 0 transparent;'><a target=3D"_blank"=0Adata-ck=
+e-saved-href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redire=
+ctUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=
+=3D=3D&sig=3D25cr6bVDaa8FxkaMpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=3D1696256187&=
+a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=
+=3DMR4%2FVUNgUwZ2HaELWkU0uotFEtwl81Gmdv5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVt=
+sq7Y3&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D594A1017A219A2375" href=3D"h=
+ttps://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM=
+0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS12aXJ0dWFsLWV2ZW50cyUyRg=3D=3D&sig=3D25cr6=
+bVDaa8FxkaMpz3tJyPQsNVd5oKWZhbPHkzGaBYc&iat=3D1696256187&a=3D%7C%7C26605550=
+%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DMR4%2FVUNgUwZ2HaE=
+LWkU0uotFEtwl81Gmdv5Ksztp%3AR5elE43eG6sNCTPHbkc0HNWweVtsq7Y3&s=3D678f48a0e3=
+20c6856d0620aa2e024acb&i=3D594A1017A219A2375" data-ac-default-color=3D"1" s=
+tyle=3D'margin: 0; outline: none; padding: 0; color: #0764ba; text-decorati=
+on: underline; font-weight: bold; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet m=
+s", tahoma, arial, sans;'><span style=3D'color: inherit; font-size: inherit=
+;=0Afont-weight: inherit; line-height: inherit; text-decoration: inherit; -=
+-tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-=
+offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,1=
+30,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 =
+0 transparent; font-family: "trebuchet ms", tahoma, arial, sans;'>VISIT HER=
+E TO MAKE YOUR RESERVATION</span></a><span style=3D"color: inherit; font-si=
+ze: inherit; font-weight: bold; line-height: inherit; text-decoration: inhe=
+rit;"> </span><br><br>H<span style=3D'color: inherit; font-size: inherit; f=
+ont-weight: inherit; line-height: inherit; text-decoration: inherit; font-f=
+amily: "trebuchet ms", tahoma, arial, sans;'>ere's your opportunity to expe=
+rience what it's like to be a NANOE member firsthand. Come be our guest for=
+ NANOE's Board of Governors' Conference Series. This for senior leaders who=
+ are ready for a supercharged executive track.<br><br></span></span><span s=
+tyle=3D'color:=0Ainherit; font-size: inherit; font-weight: inherit; line-he=
+ight: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahom=
+a, arial, sans;'>This event is "Invitation Only." REGISTRATION IS COMPLIMEN=
+TARY. We look forward to spending time with you to better understand your p=
+ersonal and professional goals. Meet the veteran fundraisers who have raise=
+d millions for charities across the United States and around the world.<br>=
+<br></span><span style=3D'color: inherit; font-size: inherit; font-weight: =
+inherit; line-height: inherit; text-decoration: inherit; font-family: "treb=
+uchet ms", tahoma, arial, sans;'>I look forward to meeting you personally.<=
+br><br>Sincerely Yours,</span><br><br><span style=3D"color: inherit; font-s=
+ize: 20px; font-weight: inherit; line-height: inherit; text-decoration: inh=
+erit; font-style: italic; text-align: inherit;"><span style=3D'color: inher=
+it; font-size: 22px; font-weight: bold; line-height: inherit; text-decorati=
+on: inherit; font-family:=0Ageorgia, "times new roman";' class=3D"">Louis F=
+awcett, CNE</span><br></span><span style=3D'color: #000000; font-size: 16px=
+; font-weight: 400; line-height: inherit; text-decoration: inherit; font-fa=
+mily: "trebuchet ms", tahoma, arial, sans; font-style: normal;' class=3D"">=
+<br>President, NANOE<br><br></span><span style=3D'color: #000000; font-size=
+: 16px; font-weight: 400; line-height: inherit; text-decoration: inherit; f=
+ont-family: "trebuchet ms", tahoma, arial, sans; font-style: normal;' class=
+=3D"">P.S. We look forward to meeting you and your entire team.<br><br></sp=
+an> <div style=3D"margin: 0; outline: none; padding: 0; color: #000000; fon=
+t-size: 16px; font-weight: inherit; line-height: inherit; text-decoration: =
+inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); =
+--tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
+ rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-=
+shadow: 0 0 transparent; text-align: start;"=0Aclass=3D""></div>=0A <div st=
+yle=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size: 16p=
+x; font-weight: 400; line-height: inherit; text-decoration: inherit; --tw-s=
+hadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offse=
+t-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,24=
+6,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tra=
+nsparent; font-style: normal; text-align: start;" class=3D""></div>=0A </di=
+v>=0A<!--[if (gte mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" da=
+ta-ac-inline=3D"false"> #text_div3534, #text_div3534 div { line-height: 140=
+% !important; };=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=
+=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=
+=0A</td>=0A</tr>=0A</table>=0A</div>=0A<img src=3D"https://jimmylarose.lt.a=
+cemlnd.com/Prod/link-tracker?nl=3D219&c=3D594&m=3D1017&s=3D678f48a0e320c685=
+6d0620aa2e024acb&l=3Dopen&account=3Djimmylarose.activehosted.com&a=3D266055=
+50" border=3D"0" width=3D"1" height=3D"1" style=3D"display:block;width:1px!=
+important;min-width:1px!important;max-width:1px!important;height:1px!import=
+ant;border:0;overflow:hidden;" /><div id=3D"ac-footer" style=3D"clear:both;=
+background-color:inherit;background:inherit;min-width:100%;mso-table-lspace=
+:0pt;mso-table-rspace:0pt;padding:20px;color:#000000;font-size:11px;font-fa=
+mily:arial,helvetica,sans-serif;line-height:140%;line-height:1.4;text-align=
+:center;box-sizing:border-box;"><center>Sent to: <span style=3D"font-size:1=
+1px;font-family:arial,helvetica,sans-serif;font-weight:normal;text-decorati=
+on:none;outline:none;">soc@kernel.org</span><br><br><a href=3D"http://jimmy=
+larose.activehosted.com/proc.php?nl=3D219&c=3D594&m=3D1017&s=3D678f48a0e320=
+c6856d0620aa2e024acb&act=3Dunsub"=0Astyle=3D"font-size:11px;font-family:ari=
+al,helvetica,sans-serif;font-weight:bold;text-decoration:underline;"><span =
+style=3D"font-weight:bold;text-decoration:underline;">Unsubscribe</span></a=
+><br><br>National Association of Nonprofit Organizations & Executives, 712 =
+H Street NE, Washington, DC 20002, United States</center></div>=0A<br clear=
+=3D"all" /></body>=0A</html>
+--_=_swift-1033463870651acdc673e2e0.92077421_=_--
+
