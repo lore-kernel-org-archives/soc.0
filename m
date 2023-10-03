@@ -4,113 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC112E7544E
-	for <soc@archiver.kernel.org>; Tue,  3 Oct 2023 11:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD05E7544F
+	for <soc@archiver.kernel.org>; Tue,  3 Oct 2023 11:38:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D3CA2C433C9; Tue,  3 Oct 2023 11:14:00 +0000 (UTC)
+	id 450B4C433C8; Tue,  3 Oct 2023 11:38:02 +0000 (UTC)
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C5351C433CA;
-	Tue,  3 Oct 2023 11:13:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5351C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 26B7CC433C7;
+	Tue,  3 Oct 2023 11:38:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26B7CC433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 290616607330;
-	Tue,  3 Oct 2023 12:13:57 +0100 (BST)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E7316607313;
+	Tue,  3 Oct 2023 12:37:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1696331638;
-	bh=hIZCBWOdq56nnFmuMw8Yfx0EaOSNWmye+u5MsaxkvMk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=LGlEBYbuY63Hchodh7bTyq5hzODdZChQ/OdstXwzcxqLmt0ucGXdNpEzV6TIUZf9u
-	 ki6CZXIR1uAvPAV50mM5Ooqd6A5rjlLWqUpkF99k10n7UFrbrbfftrVibulI8qzVh3
-	 sEaz3sAGneEL9Ck3aSHOvAtnyxtfxc1WNPFwYR+EwrFrw6XJO4DHjxsWyyPfVPICQq
-	 DNuG1kZd1iMzb/FfdOQ/Oq7jHxVhT5bBLtlg7S1inH814KXZpfSFbHIuNMSAb9ZPGj
-	 bagR0BpDdi3FErFpd8gsvAflzNo8bOATDPl1xL5Sa+zFIxawFJjwDlVA1FE9Olm1Ea
-	 j8HZFvL/FDw9g==
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Date: Tue, 03 Oct 2023 13:13:47 +0200
-Subject: [PATCH 5/5] arm64: dts: mediatek: mt8195: Set DSU PMU status to
- fail
+	s=mail; t=1696333079;
+	bh=CBp8+gNkRzBEFZU964Z4m7S1kl7820hZYja9Nis+J5c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iV63/FouGYa1jsTZp6muZhX+6NhaklXSntSFMFCy/BeuPBWvJRtEy5MGFkKknJbRp
+	 5j/w4UtJ1yRneKZZqYtFqT8gjfdOr1EpSAaioLQZhjhfiz5LExJu4L6519eUojSLgq
+	 nNyrJAhVBozE1kOoMPuhhH2MVz3c3TiancKmYTSPv/htADbAEl/oKHtcnwvzR6OyZu
+	 045V3oOcP5T6zykG4hDpe7cP2+R4wEnUi/oXZ4VWviQPxls6tpp8CUc6XlWYIkBPAG
+	 btPp3OvnrhSCpdlx0GLEzI6FuDALfTm0ZsubS6v7xJVaKGqF1hZV1ZMn1vPWCx6GZE
+	 KSltA2GZpcZFA==
+Message-ID: <51a5e6e7-c583-2ecf-3928-24b2fc07aedb@collabora.com>
+Date: Tue, 3 Oct 2023 13:37:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231003-mediatek-fixes-v6-7-v1-5-dad7cd62a8ff@collabora.com>
-References: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
-In-Reply-To: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH 0/5] MediaTek: Update MAINTAINERS and dts fixes for v6.7
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Fabien Parent <fparent@baylibre.com>, 
- Miles Chen <miles.chen@mediatek.com>, 
- Macpaul Lin <macpaul.lin@mediatek.com>, 
- Chunfeng Yun <chunfeng.yun@mediatek.com>, Sam Shih <sam.shih@mediatek.com>, 
- Frank Wunderlich <frank-w@public-files.de>, 
- Jieyy Yang <jieyy.yang@mediatek.com>, 
- Tinghan Shen <tinghan.shen@mediatek.com>, 
+To: Matthias Brugger <matthias.bgg@gmail.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Fabien Parent <fparent@baylibre.com>,
+ Miles Chen <miles.chen@mediatek.com>, Macpaul Lin
+ <macpaul.lin@mediatek.com>, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+ Sam Shih <sam.shih@mediatek.com>, Frank Wunderlich
+ <frank-w@public-files.de>, Jieyy Yang <jieyy.yang@mediatek.com>,
+ Tinghan Shen <tinghan.shen@mediatek.com>,
  Seiya Wang <seiya.wang@mediatek.com>, soc@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1870;
- i=angelogioacchino.delregno@collabora.com; h=from:subject:message-id;
- bh=IZfn1ZaZiDCR69psn2/IYKM29jkr+w6U1WIz4R61yqQ=;
- b=owGbwMvMwCU2y4zl/NrpLRWMp9WSGFKlv+eXcT7jOS70uXRLdu9Lf9VuMcYHfR8OFWz/mDznn9/H
- wxrHOkpZGMS4GGTFFFnU79ZkP1+zkvFI+9kSmDmsTCBDGLg4BWAircaMDG84zh3bGHmkhNlz+4uQz8
- 9XxLzluLWr5p1g6leLrrNtlUIMf6VOWSr9EV1fsM48WLKz8PiyZ61Nrz+t6FxjOOVwolS1JTsA
-X-Developer-Key: i=angelogioacchino.delregno@collabora.com; a=openpgp;
- fpr=57152E620CAF29C5DBE574766833ABB5BEBAF7B7
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ stable@vger.kernel.org, Eugen Hristev <eugen.hristev@collabora.com>,
+ =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
+References: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: "Nícolas F. R. A. Prado" <nfraprado@collabora.com>
+Il 03/10/23 13:13, AngeloGioacchino Del Regno ha scritto:
+> Hello SoC maintainers,
+>      
+> As suggested by Arnd in [1], I am sending an update to the MAINTAINERS
+> file, adding myself to the MediaTek SoC maintainers, and some urgent
+> bugfixes for MediaTek devicetrees.
+>      
 
-The DSU PMU allows monitoring performance events in the DSU cluster,
-which is done by configuring and reading back values from the DSU PMU
-system registers. However, for write-access to be allowed by ELs lower
-than EL3, the EL3 firmware needs to update the setting on the ACTLR3_EL3
-register, as it is disallowed by default.
+Forgot to add....
 
-That configuration is not done on the firmware used by the MT8195 SoC,
-as a consequence, booting a MT8195-based machine like
-mt8195-cherry-tomato-r2 with CONFIG_ARM_DSU_PMU enabled hangs the kernel
-just as it writes to the CLUSTERPMOVSCLR_EL1 register, since the
-instruction faults to EL3, and BL31 apparently just re-runs the
-instruction over and over.
+[1]: https://lore.kernel.org/all/84b2de54-8337-42a3-a25c-a95cf2f3349f@app.fastmail.com/
 
-Mark the DSU PMU node in the Devicetree with status "fail", as the
-machine doesn't have a suitable firmware to make use of it from the
-kernel, and allowing its driver to probe would hang the kernel.
+...so doing that as a reply to this cover letter; sorry for the miss.
 
-Fixes: 37f2582883be ("arm64: dts: Add mediatek SoC mt8195 and evaluation board")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20230720200753.322133-1-nfraprado@collabora.com
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Cheers!
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 4dbbf8fdab75..43011bc41da7 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -313,6 +313,7 @@ dsu-pmu {
- 		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH 0>;
- 		cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
- 		       <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
-+		status = "fail";
- 	};
- 
- 	dmic_codec: dmic-codec {
-
--- 
-2.42.0
+> mt6358 PMIC
+>   - Bogus property dropped
+>      
+> mt7622/mt7986a
+>   - Fix dtbs_check for t-phy nodes
+>      
+> mt8195:
+>   - Fix early boot failure when DSU PMU enabled
+>   - Fix memory layout for demo board
+>      
+> Regards,
+> Angelo
+> 
+> ---
+> AngeloGioacchino Del Regno (1):
+>        MAINTAINERS: Add Angelo as MediaTek SoC co-maintainer
+> 
+> Eugen Hristev (1):
+>        arm64: dts: mediatek: fix t-phy unit name
+> 
+> Macpaul Lin (2):
+>        arm64: dts: mediatek: mt8195-demo: fix the memory size to 8GB
+>        arm64: dts: mediatek: mt8195-demo: update and reorder reserved memory regions
+> 
+> Nícolas F. R. A. Prado (1):
+>        arm64: dts: mediatek: mt8195: Set DSU PMU status to fail
+> 
+>   MAINTAINERS                                  |  2 +-
+>   arch/arm64/boot/dts/mediatek/mt7622.dtsi     |  2 +-
+>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi    |  2 +-
+>   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 39 ++++++++++++++++++++++------
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi     |  1 +
+>   5 files changed, 35 insertions(+), 11 deletions(-)
+> ---
+> base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+> change-id: 20231003-mediatek-fixes-v6-7-341b5cfdc07a
+> 
+> Best regards,
 
