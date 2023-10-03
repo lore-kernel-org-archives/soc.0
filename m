@@ -4,17 +4,17 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67E13E7544F
-	for <soc@archiver.kernel.org>; Tue,  3 Oct 2023 11:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DB3EE7544C
+	for <soc@archiver.kernel.org>; Tue,  3 Oct 2023 11:13:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4B54BC433CD; Tue,  3 Oct 2023 11:13:59 +0000 (UTC)
+	id B6C79C433C8; Tue,  3 Oct 2023 11:13:58 +0000 (UTC)
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 94FBDC433C9;
-	Tue,  3 Oct 2023 11:13:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 94FBDC433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id 7774EC433CD;
+	Tue,  3 Oct 2023 11:13:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7774EC433CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
@@ -22,28 +22,28 @@ Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 198696607327;
-	Tue,  3 Oct 2023 12:13:55 +0100 (BST)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id E024F6607324;
+	Tue,  3 Oct 2023 12:13:51 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1696331636;
-	bh=j7Uw1isEhuefKTYB2JUZzHIL25LZ8i+zJVR9YMoREJs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jw/Xk/7p22aC4onGuFU6Mv/+lrzoWuBkoGIZ1YKd7wWhBDgdbuvgpvM94LJ+/yIMY
-	 AYPi5zx8yXPzEw4tjcLZWxYr5NvkIW8nWMHxJ1ROXzeC6G8HO9c868tQLFiOg2/cKc
-	 2iRoaE4zrkJrinM96enXlRN8BuzMun7Kdu8FPLCHz1fa/89XAzKEb1Uh4yR7sw8HCe
-	 X+9znkMT7ubWQ3E0E/XM+6jBj6ILjz+ZW7KIEMjVp8cpjuKCCL8yYhrZy2uFr/7Qkt
-	 cSHOyKTnYA1dxmma11Ai12IScKnZXK74BK76nVQYHj9ZWT5PcP7VVUlKjBaCf+Rdsz
-	 4OtA+TIW/l7Qw==
+	s=mail; t=1696331632;
+	bh=ZIRAP2qm7XJoF1kXFQyj8XANIl0j4JfaME1N/oAEhmA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=NKdIB6BoXyaqPjYoZBhptnFNXxedY9hPj6uZn7PBF1h8SrjggM7C4P93cU5JVDnP4
+	 WK5iUR2Fw6HxFQSIKcoi4VtIHcMyoha0o+Xfs8vYE7YV+lLxwAwi9YVFp53KJkS6Tq
+	 Zc1E7GWuXKx1mI1EMhU6PSmE28BJaQj21iFDg024riBIubFUgzoIaAo+jFOndr/LR0
+	 7ph25s+MwZ3toIN0xA7/SicCUiDP54fnt4ZsPiRnq/bgJP+rKlOAyN0E2eCLZOYgCd
+	 NHbec9BbQ64U8EDaJvhLBGAHNTgLu2eOFaHNtrmne8dcAISN58qmN7eOM3sT6mnZ2k
+	 zZJ5BHQlN4xvA==
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Date: Tue, 03 Oct 2023 13:13:45 +0200
-Subject: [PATCH 3/5] arm64: dts: mediatek: mt8195-demo: update and reorder
- reserved memory regions
+Subject: [PATCH 0/5] MediaTek: Update MAINTAINERS and dts fixes for v6.7
+Date: Tue, 03 Oct 2023 13:13:42 +0200
+Message-Id: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231003-mediatek-fixes-v6-7-v1-3-dad7cd62a8ff@collabora.com>
-References: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
-In-Reply-To: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGb3G2UC/x3L0QqDMAxA0V+RPBto7TbBXxk+pG2cYa6OxslA/
+ PeFPd4L5wDlKqwwNAdU3kVlLRa+bSDNVB6Mkq2hc13wzgV8cRba+ImTfFlxv2GP4eLjNU05uZ7
+ AZCRljJVKms2Wz7LYfFf+Ezv38Tx/T+czfXoAAAA=
 List-Id: <soc.lore.kernel.org>
 To: Matthias Brugger <matthias.bgg@gmail.com>, 
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
@@ -59,98 +59,62 @@ To: Matthias Brugger <matthias.bgg@gmail.com>,
  Seiya Wang <seiya.wang@mediatek.com>, soc@kernel.org
 Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org, 
- stable@vger.kernel.org
+ stable@vger.kernel.org, Eugen Hristev <eugen.hristev@collabora.com>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2526;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1438;
  i=angelogioacchino.delregno@collabora.com; h=from:subject:message-id;
- bh=fmj9JCdJsykEJ4ILjg0BDPF2+rO6fiudNIe7PL2w/6g=;
- b=owGbwMvMwCU2y4zl/NrpLRWMp9WSGFKlv+ffSJ1lxD8loPuo0KEe+ZBZy/Tv7Tv84cxz/vZVKfOX
- zDo/u6OUhUGMi0FWTJFF/W5N9vM1KxmPtJ8tgZnDygQyhIGLUwAmclqA4Z+aianGty0W786nvX1sKl
- Lu8GexuFXR/6PpBzRO5T8xPpvJyLCqVEa05YrIttt3mBU7ciIW/Epw1v9tcPp6zgW7p7edOPgB
+ bh=ZIRAP2qm7XJoF1kXFQyj8XANIl0j4JfaME1N/oAEhmA=;
+ b=owGbwMvMwCU2y4zl/NrpLRWMp9WSGFKlv+d7zOy97b5a+fUXwat5zHEWRwO/8H/wOBMm91Kr8dpM
+ 293fOkpZGMS4GGTFFFnU79ZkP1+zkvFI+9kSmDmsTCBDGLg4BWAiEQcY/odt/DpHhnGdyHa/NV0xx5
+ aHrZ72t3rz9il17zn93V/G51kz/PfqrEniOKbzk+XWUymr5Il7UpaIHd9auvXFUsk007mlauwA
 X-Developer-Key: i=angelogioacchino.delregno@collabora.com; a=openpgp;
  fpr=57152E620CAF29C5DBE574766833ABB5BEBAF7B7
 
-From: Macpaul Lin <macpaul.lin@mediatek.com>
+Hello SoC maintainers,
+    
+As suggested by Arnd in [1], I am sending an update to the MAINTAINERS
+file, adding myself to the MediaTek SoC maintainers, and some urgent
+bugfixes for MediaTek devicetrees.
+    
+mt6358 PMIC
+ - Bogus property dropped
+    
+mt7622/mt7986a
+ - Fix dtbs_check for t-phy nodes
+    
+mt8195:
+ - Fix early boot failure when DSU PMU enabled
+ - Fix memory layout for demo board
+    
+Regards,
+Angelo
 
-The dts file of the MediaTek MT8195 demo board has been updated to include
-new reserved memory regions.
-These reserved memory regions are:
- - SCP
- - VPU,
- - Sound DMA
- - APU.
-
-These regions are defined with the "shared-dma-pool" compatible property.
-In addition, the existing reserved memory regions have been reordered by
-their addresses to improve readability and maintainability of the DTS
-file.
-
-Cc: stable@vger.kernel.org      # 6.1, 6.4, 6.5
-Fixes: e4a417520101 ("arm64: dts: mediatek: mt8195-demo: fix the memory size of node secmon")
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20230905034511.11232-2-macpaul.lin@mediatek.com
 ---
- arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 37 ++++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 7 deletions(-)
+AngeloGioacchino Del Regno (1):
+      MAINTAINERS: Add Angelo as MediaTek SoC co-maintainer
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-index ff363ab925e9..5d635085fe3f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-@@ -56,13 +56,8 @@ reserved-memory {
- 		#size-cells = <2>;
- 		ranges;
- 
--		/* 2 MiB reserved for ARM Trusted Firmware (BL31) */
--		bl31_secmon_reserved: secmon@54600000 {
--			no-map;
--			reg = <0 0x54600000 0x0 0x200000>;
--		};
--
--		/* 12 MiB reserved for OP-TEE (BL32)
-+		/*
-+		 * 12 MiB reserved for OP-TEE (BL32)
- 		 * +-----------------------+ 0x43e0_0000
- 		 * |      SHMEM 2MiB       |
- 		 * +-----------------------+ 0x43c0_0000
-@@ -75,6 +70,34 @@ optee_reserved: optee@43200000 {
- 			no-map;
- 			reg = <0 0x43200000 0 0x00c00000>;
- 		};
-+
-+		scp_mem: memory@50000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x50000000 0 0x2900000>;
-+			no-map;
-+		};
-+
-+		vpu_mem: memory@53000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x53000000 0 0x1400000>; /* 20 MB */
-+		};
-+
-+		/* 2 MiB reserved for ARM Trusted Firmware (BL31) */
-+		bl31_secmon_mem: memory@54600000 {
-+			no-map;
-+			reg = <0 0x54600000 0x0 0x200000>;
-+		};
-+
-+		snd_dma_mem: memory@60000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x60000000 0 0x1100000>;
-+			no-map;
-+		};
-+
-+		apu_mem: memory@62000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x62000000 0 0x1400000>; /* 20 MB */
-+		};
- 	};
- };
- 
+Eugen Hristev (1):
+      arm64: dts: mediatek: fix t-phy unit name
 
+Macpaul Lin (2):
+      arm64: dts: mediatek: mt8195-demo: fix the memory size to 8GB
+      arm64: dts: mediatek: mt8195-demo: update and reorder reserved memory regions
+
+Nícolas F. R. A. Prado (1):
+      arm64: dts: mediatek: mt8195: Set DSU PMU status to fail
+
+ MAINTAINERS                                  |  2 +-
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi     |  2 +-
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    |  2 +-
+ arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 39 ++++++++++++++++++++++------
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi     |  1 +
+ 5 files changed, 35 insertions(+), 11 deletions(-)
+---
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+change-id: 20231003-mediatek-fixes-v6-7-341b5cfdc07a
+
+Best regards,
 -- 
-2.42.0
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
