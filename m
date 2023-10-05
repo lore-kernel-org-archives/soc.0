@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F9ADE9272C
-	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 19:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9FCFE9272C
+	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 19:22:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DDBBC43391; Thu,  5 Oct 2023 19:21:53 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 733AEC433CD; Thu,  5 Oct 2023 19:22:45 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7D4DBC433CD
-	for <soc@kernel.org>; Thu,  5 Oct 2023 19:21:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D4DBC433CD
+	by smtp.kernel.org (Postfix) with ESMTPS id 90DE2C433C7
+	for <soc@kernel.org>; Thu,  5 Oct 2023 19:22:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 90DE2C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-9b974955474so250350166b.1
-        for <soc@kernel.org>; Thu, 05 Oct 2023 12:21:51 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-99de884ad25so246836566b.3
+        for <soc@kernel.org>; Thu, 05 Oct 2023 12:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696533709; x=1697138509; darn=kernel.org;
+        d=linaro.org; s=google; t=1696533763; x=1697138563; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zC5nmhOEkk98rezBT2eL5gPDYlMqNoJcj52hTWs3iUg=;
-        b=rsovL8SUV2zCGtnklJ5gS+5+FlH1XaDKn1qUEH1XTwhaGg4ZqvMrwR3PI9Q6tfSGjj
-         ez6ZoNv4H/u3l850zCyhoYv10geiHat05qybzNb/BXvs3GmBxLxYm4YJxwlZHilmPT7D
-         bMvHwIg3IdANKlMbSnC59nRt6RPFMZEQ6A18TBN3ozzAtrs401x/kPYQEcuFLl83xNiJ
-         KoE7umrG1FexeoDGKPfQFo8teqsXANB+moM4SBoelXW52Y5xhq6L3ZCXM2thedd+Df8d
-         vm+ghvBMXAx2g0cV3KaXaIHfw2iylyEeS6pQ2lfXJly5lBCwDQTuaEAxmxNdV4T3Q14z
-         M7HQ==
+        bh=H2RLmB7g+8qx4harkihCsHRe2Jxdu/epelEM4mwXVSM=;
+        b=q0jWlvghM+hsmxOz10eB3nsSVCPhf9MEkiiIgaro+DoUYrWOdfmEf/NyZkcxhX04Yi
+         V0yM9wQSNeMwdifmxkfPBkrMSNkcRtbJvOUMPsma3A4+pMpH4DthkK49h6oiz/cp4kdX
+         VkO3yf12oHwBkOA8L4jQBK3YrtFdEjlqqxb3fXtQYxKG79HGnYLbAhl6lHRFPfjro/E7
+         Fki3P0D2pRFakvP6zwrgDQ0/K5h2Ni1zZthuXR0Cdwk9kkMygCpLrIjMdPK1PaE5rugU
+         Lt2hccnJ8W82Voo0yNh3jS44ihbTzNqDX+JY4sZYvL7eFWqdR1Md7fJPlXwIkO6NFMtM
+         lmOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696533709; x=1697138509;
+        d=1e100.net; s=20230601; t=1696533763; x=1697138563;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zC5nmhOEkk98rezBT2eL5gPDYlMqNoJcj52hTWs3iUg=;
-        b=uXC9zDK3vW0PWUOy+O8a0YtI0XLHqGhfzT111ZNErLwIYu/fq/Ag5EYVC7cWadZcgx
-         wUy6+GUu2HkYJrwsRMn8xCC54iyrLDuvFlRXOtvsGtf9l8r+TibS1QJbJkALq3qlK4fV
-         36IJE3hi8W+xOv6B8Wm+0FSmv4/6Rdm86i+cI1YTvPvahiXFheQFI2+w+tyIBEObGQpn
-         26Q2qt1ZxBA5ljH/wkmFxqEuIpqQHzo7ADDStGUXoTmfAIJA4G/lSlY7RSHd4Vr2yFJp
-         7fPLnQZmlvF7fuJijDre4TS+IYsVPXIvrWp9ieIMUbAAJFNV6B5EJRSjIFGJCDqvSafq
-         pHkA==
-X-Gm-Message-State: AOJu0Yw3FEyvg4B0A0bmm1ZWXciE0S/v/ASl2deCOOfZ4C1OfkLTNtUv
-	rSBgAAiC3bZGTHs4trfCvlM5CQ==
-X-Google-Smtp-Source: AGHT+IEsAQS65ajEAkvqirYG2lP79o5Xp6M15XP9UKihrzfeVYblRVgcZVLCMPbVyNs07EDBpyOXGQ==
-X-Received: by 2002:a17:906:31c5:b0:9a2:5bf:8b14 with SMTP id f5-20020a17090631c500b009a205bf8b14mr6089768ejf.22.1696533709605;
-        Thu, 05 Oct 2023 12:21:49 -0700 (PDT)
+        bh=H2RLmB7g+8qx4harkihCsHRe2Jxdu/epelEM4mwXVSM=;
+        b=TNIwqqqTn1RwOEYx3Hg1OWefsPmk9XhECXzgzme9QVcot9z/Q7Hnr93Jgn49r5mD0c
+         K7AOCJXNiN5qzNLkMWN5rfzqxBqWfgwABCbb7RMOzfmbYLT5HChVKoU9IxWzLquwES7A
+         orSZDsQXQ/mBOiulXLC6jvsqhTmiEbIeBHHteYEiHxQ0ExgUezl8+3rC1ft7JwqZAtUD
+         rrzniZnDuRfmbzMXws22RnBms4p5Nmt9/6giSc6KakJfh1CiCdUn6Kx3RRnYbSS1CnUA
+         xh2MaTVuZqsQPoEnxrNiZWK5Jn7USOz5quLWqqDG3jvCTWn0dqTfKojJ4m/vpMAg0gl9
+         d7ww==
+X-Gm-Message-State: AOJu0Yz5r4U0uwEIbo7JA0GZo8hmmGGTB1RsCmY+9X9qWjxqURPipxwf
+	dlPLfygSKBQ/byjAy0STSDxuFg==
+X-Google-Smtp-Source: AGHT+IHzCMPH6GCYxav68JKuM4RFSuedz3bF6GTUfGGj4Q7LE6xtvJ+89OJMdsC5nnk7tPBAuRv26A==
+X-Received: by 2002:a17:906:2da:b0:9b7:1e26:e2ea with SMTP id 26-20020a17090602da00b009b71e26e2eamr5297358ejk.41.1696533762679;
+        Thu, 05 Oct 2023 12:22:42 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id rn4-20020a170906d92400b0099bc038eb2bsm1613889ejb.58.2023.10.05.12.21.47
+        by smtp.gmail.com with ESMTPSA id rn4-20020a170906d92400b0099bc038eb2bsm1613889ejb.58.2023.10.05.12.22.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 12:21:49 -0700 (PDT)
-Message-ID: <20c6070e-edeb-4a9d-863d-143abc840874@linaro.org>
-Date: Thu, 5 Oct 2023 21:21:46 +0200
+        Thu, 05 Oct 2023 12:22:42 -0700 (PDT)
+Message-ID: <db02684f-c32b-4e09-8752-8d07dcb518c3@linaro.org>
+Date: Thu, 5 Oct 2023 21:22:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC
@@ -140,76 +140,15 @@ On 05/10/2023 19:59, William McVicker wrote:
 >> It has been tested with a minimal busybox initramfs and boots to
 >> a shell.
 >>
->> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->> ---
->>  arch/arm64/Kconfig.platforms                  |    6 +
->>  arch/arm64/boot/dts/Makefile                  |    1 +
->>  arch/arm64/boot/dts/google/Makefile           |    6 +
->>  arch/arm64/boot/dts/google/gs101-oriole.dts   |   68 +
->>  arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1134 +++++++++++++++++
->>  arch/arm64/boot/dts/google/gs101-pinctrl.h    |   17 +
->>  arch/arm64/boot/dts/google/gs101.dtsi         |  501 ++++++++
->>  7 files changed, 1733 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/google/Makefile
->>  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
->>  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
->>  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
->>  create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
->>
->> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->> index 6069120199bb..a5ed1b719488 100644
->> --- a/arch/arm64/Kconfig.platforms
->> +++ b/arch/arm64/Kconfig.platforms
->> @@ -107,6 +107,12 @@ config ARCH_EXYNOS
->>  	help
->>  	  This enables support for ARMv8 based Samsung Exynos SoC family.
->>  
->> +config ARCH_GOOGLE_TENSOR
->> +	bool "Google Tensor SoC fmaily"
->> +	depends on ARCH_EXYNOS
->> +	help
->> +	  Support for ARMv8 based Google Tensor platforms.
-> 
-> I'd like to bring up this thread and discuss the option of not introducing
-> another ARCH_* config:
-> 
->   https://lore.kernel.org/all/20200306103652.GA3634389@kroah.com/
-> 
-> I especially don't like the "depends on ARCH_EXYNOS" because that forces one to
-> include all the other Exynos drivers that ARCH_EXYNOS selects that Google
 
-Since we are creating unified kernel images, having other drivers is not
-a problem.
+William,
 
-> Tensor SoCs don't need. Can we consider using SOC_GOOGLE instead and for all
+Please do not Cc non-existing mailboxes. You added Cc kernel-team and we
+all got awesome bounces now:
 
-SOC_GOOGLE will work exactly the same and depend on ARCH_EXYNOS or
-appear everywhere as ARCH_EXYNOS. We already had this talk with Tesla.
-
-
-> drivers that actually depend on the SoC hardware, we can just add "depends on
-> SOC_GOOGLE"?
-> 
-> The idea is that drivers should be tied to hardware -- not a specific vendor.
-
-And hardware is Exynos. Tesla FSD and Google Tensor is Exynos, even if
-you do no like calling it.
-
-> By making drivers depend on ARCH_*, you are introducing an arbitrary vendor
-> dependency and not a hardware dependency.
-
-There is no arbitrary dependency. We call it all Exynos hardware,
-because this is Exynos.
-
-I remember what you were pushing for removal of ARCH_EXYNOS and there
-waas clear feedback, not only from me: this is against communities goals.
-
-> 
-> Thanks,
-> Will
-
-Please trim the replies from unrelated context.
-
+"We're writing to let you know that the group you tried to contact
+(kernel-team) may not exist, or you may not have permission to post
+messages to the group. A few more details on why you weren't able to post:"
 
 Best regards,
 Krzysztof
