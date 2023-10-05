@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3775E92716
-	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 19:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F9ADE9272C
+	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 19:21:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6788EC433C7; Thu,  5 Oct 2023 19:18:56 +0000 (UTC)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	id 7DDBBC43391; Thu,  5 Oct 2023 19:21:53 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 648B8C433CB
-	for <soc@kernel.org>; Thu,  5 Oct 2023 19:18:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 648B8C433CB
+	by smtp.kernel.org (Postfix) with ESMTPS id 7D4DBC433CD
+	for <soc@kernel.org>; Thu,  5 Oct 2023 19:21:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D4DBC433CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-9b974955474so249876666b.1
-        for <soc@kernel.org>; Thu, 05 Oct 2023 12:18:53 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-9b974955474so250350166b.1
+        for <soc@kernel.org>; Thu, 05 Oct 2023 12:21:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696533532; x=1697138332; darn=kernel.org;
+        d=linaro.org; s=google; t=1696533709; x=1697138509; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4qB0MRjQu2gDg3qHLpkWFP7s0OV5hXqOG3V7yLFlR88=;
-        b=MuqUy9dAU5yq7xwrizCeiZioOnFn9cepgQ6vHnZ6ZiGSLOqdZbAWJXZUmsGi4prcX+
-         hhKb/iPhUm157AQjdqqWRRGdiH+6C4GJdYKRSReFztUHzPqu5nnezkRdchnH4u1F+3AX
-         eAaLYRURvNRIuz94L7+kTjfVOdi0yKWkTsPCyQy+1w17wQfnzE6mxeaU8pPsnsSQaVr4
-         LWOnsARpInJc5xTCx27BAiLdTx2itv4ELxfLCPr09YEKPX4Na7G69hWCYfH/dYfg9OjF
-         VZ8lnnoqV1hkR5jDy0MI1nIylCeZbvhmTUkSK0+rdqSuy8N5t6smYlM7DWeFIg1QL2py
-         914Q==
+        bh=zC5nmhOEkk98rezBT2eL5gPDYlMqNoJcj52hTWs3iUg=;
+        b=rsovL8SUV2zCGtnklJ5gS+5+FlH1XaDKn1qUEH1XTwhaGg4ZqvMrwR3PI9Q6tfSGjj
+         ez6ZoNv4H/u3l850zCyhoYv10geiHat05qybzNb/BXvs3GmBxLxYm4YJxwlZHilmPT7D
+         bMvHwIg3IdANKlMbSnC59nRt6RPFMZEQ6A18TBN3ozzAtrs401x/kPYQEcuFLl83xNiJ
+         KoE7umrG1FexeoDGKPfQFo8teqsXANB+moM4SBoelXW52Y5xhq6L3ZCXM2thedd+Df8d
+         vm+ghvBMXAx2g0cV3KaXaIHfw2iylyEeS6pQ2lfXJly5lBCwDQTuaEAxmxNdV4T3Q14z
+         M7HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696533532; x=1697138332;
+        d=1e100.net; s=20230601; t=1696533709; x=1697138509;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4qB0MRjQu2gDg3qHLpkWFP7s0OV5hXqOG3V7yLFlR88=;
-        b=E1isGPE3MKRjc5+BLvD7bXWlgiUOGVD41ogRtl7NAi4YLq+soRtGMa2CMabbtV4blV
-         o8RANzkECY9hMWFRiZZU7HAaTdHyNg1wrJXtCpIQFhCCFOSVYGYtUoEgLE61csOpupob
-         OeOgtKxwT2itd34jO2ehks3seMid52cfhY4w79219sis6ow7CRaIhe+ZMg2lun5vMUD7
-         2tuw4ulQqMkD0IgDF7+s7M2qj4aUBzZe4o/aSpt7MCQ7AE+sxPqCeYJM3akrCY2sAnSy
-         01LzGwHD+wN/NYPRtJeQvuv4oLpTulUVSsuaLpeleRzm0AsH4YdtInQ+EHsOMvaDnNdn
-         zL3g==
-X-Gm-Message-State: AOJu0Yz0LHJrUU8RGssZDB31jCwCuTWIzSyGapCLhLQpVVeuBPjcb7mT
-	J8lc3rYToBcP4ljTvJdzBVtpMA==
-X-Google-Smtp-Source: AGHT+IH/m/j7FZXDxfGp/9so2jUuXWCuW+onwFoyf9Rc+60NFRqcUXdu+UUeX2mcuEHPK0r8m8U3Dg==
-X-Received: by 2002:a17:906:3050:b0:9b2:be5e:7545 with SMTP id d16-20020a170906305000b009b2be5e7545mr4878651ejd.36.1696533532304;
-        Thu, 05 Oct 2023 12:18:52 -0700 (PDT)
+        bh=zC5nmhOEkk98rezBT2eL5gPDYlMqNoJcj52hTWs3iUg=;
+        b=uXC9zDK3vW0PWUOy+O8a0YtI0XLHqGhfzT111ZNErLwIYu/fq/Ag5EYVC7cWadZcgx
+         wUy6+GUu2HkYJrwsRMn8xCC54iyrLDuvFlRXOtvsGtf9l8r+TibS1QJbJkALq3qlK4fV
+         36IJE3hi8W+xOv6B8Wm+0FSmv4/6Rdm86i+cI1YTvPvahiXFheQFI2+w+tyIBEObGQpn
+         26Q2qt1ZxBA5ljH/wkmFxqEuIpqQHzo7ADDStGUXoTmfAIJA4G/lSlY7RSHd4Vr2yFJp
+         7fPLnQZmlvF7fuJijDre4TS+IYsVPXIvrWp9ieIMUbAAJFNV6B5EJRSjIFGJCDqvSafq
+         pHkA==
+X-Gm-Message-State: AOJu0Yw3FEyvg4B0A0bmm1ZWXciE0S/v/ASl2deCOOfZ4C1OfkLTNtUv
+	rSBgAAiC3bZGTHs4trfCvlM5CQ==
+X-Google-Smtp-Source: AGHT+IEsAQS65ajEAkvqirYG2lP79o5Xp6M15XP9UKihrzfeVYblRVgcZVLCMPbVyNs07EDBpyOXGQ==
+X-Received: by 2002:a17:906:31c5:b0:9a2:5bf:8b14 with SMTP id f5-20020a17090631c500b009a205bf8b14mr6089768ejf.22.1696533709605;
+        Thu, 05 Oct 2023 12:21:49 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170906230c00b009920e9a3a73sm1631698eja.115.2023.10.05.12.18.49
+        by smtp.gmail.com with ESMTPSA id rn4-20020a170906d92400b0099bc038eb2bsm1613889ejb.58.2023.10.05.12.21.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 12:18:51 -0700 (PDT)
-Message-ID: <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
-Date: Thu, 5 Oct 2023 21:18:48 +0200
+        Thu, 05 Oct 2023 12:21:49 -0700 (PDT)
+Message-ID: <20c6070e-edeb-4a9d-863d-143abc840874@linaro.org>
+Date: Thu, 5 Oct 2023 21:21:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC
  support
 Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>,
- William McVicker <willmcvicker@google.com>
+To: William McVicker <willmcvicker@google.com>,
+ Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
- andre.draszik@linaro.org, semen.protsenko@linaro.org, soc@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+ tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org,
+ wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
+ tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+ semen.protsenko@linaro.org, soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, gregkh@linuxfoundation.org,
  kernel-team@google.com
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
  <20231005155618.700312-19-peter.griffin@linaro.org>
- <ZR75cIvnQS2cqTT3@google.com> <2023100520-cleaver-sinless-fbae@gregkh>
+ <ZR75cIvnQS2cqTT3@google.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,94 +121,96 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <2023100520-cleaver-sinless-fbae@gregkh>
+In-Reply-To: <ZR75cIvnQS2cqTT3@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 05/10/2023 20:05, Greg KH wrote:
-> On Thu, Oct 05, 2023 at 10:59:12AM -0700, William McVicker wrote:
->> On 10/05/2023, Peter Griffin wrote:
->>> Google gs101 SoC is ARMv8 mobile SoC found in the Pixel 6,
->>> (oriole) Pixel 6a (bluejay) and Pixel 6 pro (raven) mobile
->>> phones. It features:
->>> * 4xA55 little cluster
->>> * 2xA76 Mid cluster
->>> * 2xX1 Big cluster
->>>
->>> This commit adds the basic device tree for gs101 (SoC) and oriole
->>> (pixel 6). Further platform support will be added over time.
->>>
->>> It has been tested with a minimal busybox initramfs and boots to
->>> a shell.
->>>
->>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->>> ---
->>>  arch/arm64/Kconfig.platforms                  |    6 +
->>>  arch/arm64/boot/dts/Makefile                  |    1 +
->>>  arch/arm64/boot/dts/google/Makefile           |    6 +
->>>  arch/arm64/boot/dts/google/gs101-oriole.dts   |   68 +
->>>  arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1134 +++++++++++++++++
->>>  arch/arm64/boot/dts/google/gs101-pinctrl.h    |   17 +
->>>  arch/arm64/boot/dts/google/gs101.dtsi         |  501 ++++++++
->>>  7 files changed, 1733 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/google/Makefile
->>>  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
->>>  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
->>>  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
->>>  create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
->>>
->>> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
->>> index 6069120199bb..a5ed1b719488 100644
->>> --- a/arch/arm64/Kconfig.platforms
->>> +++ b/arch/arm64/Kconfig.platforms
->>> @@ -107,6 +107,12 @@ config ARCH_EXYNOS
->>>  	help
->>>  	  This enables support for ARMv8 based Samsung Exynos SoC family.
->>>  
->>> +config ARCH_GOOGLE_TENSOR
->>> +	bool "Google Tensor SoC fmaily"
->>> +	depends on ARCH_EXYNOS
->>> +	help
->>> +	  Support for ARMv8 based Google Tensor platforms.
+On 05/10/2023 19:59, William McVicker wrote:
+> On 10/05/2023, Peter Griffin wrote:
+>> Google gs101 SoC is ARMv8 mobile SoC found in the Pixel 6,
+>> (oriole) Pixel 6a (bluejay) and Pixel 6 pro (raven) mobile
+>> phones. It features:
+>> * 4xA55 little cluster
+>> * 2xA76 Mid cluster
+>> * 2xX1 Big cluster
 >>
->> I'd like to bring up this thread and discuss the option of not introducing
->> another ARCH_* config:
+>> This commit adds the basic device tree for gs101 (SoC) and oriole
+>> (pixel 6). Further platform support will be added over time.
 >>
->>   https://lore.kernel.org/all/20200306103652.GA3634389@kroah.com/
+>> It has been tested with a minimal busybox initramfs and boots to
+>> a shell.
+>>
+>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+>> ---
+>>  arch/arm64/Kconfig.platforms                  |    6 +
+>>  arch/arm64/boot/dts/Makefile                  |    1 +
+>>  arch/arm64/boot/dts/google/Makefile           |    6 +
+>>  arch/arm64/boot/dts/google/gs101-oriole.dts   |   68 +
+>>  arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1134 +++++++++++++++++
+>>  arch/arm64/boot/dts/google/gs101-pinctrl.h    |   17 +
+>>  arch/arm64/boot/dts/google/gs101.dtsi         |  501 ++++++++
+>>  7 files changed, 1733 insertions(+)
+>>  create mode 100644 arch/arm64/boot/dts/google/Makefile
+>>  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
+>>  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
+>>  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
+>>  create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
+>>
+>> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+>> index 6069120199bb..a5ed1b719488 100644
+>> --- a/arch/arm64/Kconfig.platforms
+>> +++ b/arch/arm64/Kconfig.platforms
+>> @@ -107,6 +107,12 @@ config ARCH_EXYNOS
+>>  	help
+>>  	  This enables support for ARMv8 based Samsung Exynos SoC family.
+>>  
+>> +config ARCH_GOOGLE_TENSOR
+>> +	bool "Google Tensor SoC fmaily"
+>> +	depends on ARCH_EXYNOS
+>> +	help
+>> +	  Support for ARMv8 based Google Tensor platforms.
 > 
-> I agree, PLEASE don't add platform config options as that makes it
-> impossible to make a unified kernel image that works for more than one
-> platform at the same time.
+> I'd like to bring up this thread and discuss the option of not introducing
+> another ARCH_* config:
+> 
+>   https://lore.kernel.org/all/20200306103652.GA3634389@kroah.com/
+> 
+> I especially don't like the "depends on ARCH_EXYNOS" because that forces one to
+> include all the other Exynos drivers that ARCH_EXYNOS selects that Google
 
-There is no single problem in making unified image as we were doing
-since beginning of ARM64. The ARCH_* is not a obstacle for this.
+Since we are creating unified kernel images, having other drivers is not
+a problem.
+
+> Tensor SoCs don't need. Can we consider using SOC_GOOGLE instead and for all
+
+SOC_GOOGLE will work exactly the same and depend on ARCH_EXYNOS or
+appear everywhere as ARCH_EXYNOS. We already had this talk with Tesla.
+
+
+> drivers that actually depend on the SoC hardware, we can just add "depends on
+> SOC_GOOGLE"?
+> 
+> The idea is that drivers should be tied to hardware -- not a specific vendor.
+
+And hardware is Exynos. Tesla FSD and Google Tensor is Exynos, even if
+you do no like calling it.
+
+> By making drivers depend on ARCH_*, you are introducing an arbitrary vendor
+> dependency and not a hardware dependency.
+
+There is no arbitrary dependency. We call it all Exynos hardware,
+because this is Exynos.
+
+I remember what you were pushing for removal of ARCH_EXYNOS and there
+waas clear feedback, not only from me: this is against communities goals.
 
 > 
->> I especially don't like the "depends on ARCH_EXYNOS" because that forces one to
->> include all the other Exynos drivers that ARCH_EXYNOS selects that Google
->> Tensor SoCs don't need. Can we consider using SOC_GOOGLE instead and for all
->> drivers that actually depend on the SoC hardware, we can just add "depends on
->> SOC_GOOGLE"?
-> 
-> Why do any of this at all?  It should not be needed.
-> 
->> The idea is that drivers should be tied to hardware -- not a specific vendor.
-> 
-> And drivers should be auto-loaded.
-> 
-> All of these drivers are not vendor-specific at all, they are based on
-> the same IP blocks as others, so that is how they should be unified.
+> Thanks,
+> Will
 
-They are vendor specific. All of them are specifically for Exynos
-hardwre, because this is Exynos. We call it Google GS/Tensor SoC just
-for fancy convenience, but this just Exynos.
+Please trim the replies from unrelated context.
 
-> 
->> By making drivers depend on ARCH_*, you are introducing an arbitrary vendor
->> dependency and not a hardware dependency.
-> 
-> Totally agree, thanks for bringing this up.
-> 
+
 Best regards,
 Krzysztof
 
