@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06BC1E71D4F
-	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 16:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B06E3E71D4F
+	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 16:12:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE6C6C433AD; Thu,  5 Oct 2023 16:11:48 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	id 95BFEC433C7; Thu,  5 Oct 2023 16:12:05 +0000 (UTC)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 29991C433C9
-	for <soc@kernel.org>; Thu,  5 Oct 2023 16:11:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29991C433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id 1A3D4C433CA
+	for <soc@kernel.org>; Thu,  5 Oct 2023 16:12:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1A3D4C433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so1936057a12.2
-        for <soc@kernel.org>; Thu, 05 Oct 2023 09:11:45 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5363227cc80so1928080a12.3
+        for <soc@kernel.org>; Thu, 05 Oct 2023 09:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696522304; x=1697127104; darn=kernel.org;
+        d=linaro.org; s=google; t=1696522322; x=1697127122; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0O5FdMEjI2AitxA1SslmIPPgMaTqESzX6TEk7dD7d5k=;
-        b=wBDnYCCq9RPQsO3Jay7vaZzSGh7RapStvNU289cV7mshKvUQUk6yCJ2ALjcQD8aC2w
-         ayh4hTAbfbDzuuqmkoMKiWwJMQkHEmgBk6CY+pxkVO8Y4yn5J9qMhJC1X6L8zagjcKSE
-         kyq65ptKx5wjAkqSVOWaGIjbnm7WF30QJJyXt0S9R9Ohcn+54VaLGjdGRxXEQj2ua066
-         hkX/2ZtCqnzy4pcXgzZdFpTNVogOZbFtrG6TUpe7xhKlbDC7joax8YRsksCxImyK6Mja
-         Ru8UEmjUEAef6B6k8j9MyPBEcgWQsGgmZGMqMKnIu8xrLxm5+hGkF/iIHGARc2PAt4hg
-         BhoQ==
+        bh=9lxM4OiGaB4e3uq2pWffPreokXzaYO67D0mgzpzgon8=;
+        b=jHHvNxZSG+5A6GCtsI55gH/kYzq+u1thT8DwyhkTjbNHLIV5q/WKtSEoeRZDtfr35h
+         e/pq1eC+NINkcRiHF56GUr8Ol2LRwHQSBH8V10HQBDaScXSK0myczoXX1GmtbRpyHF67
+         7tRLdgJ+McDyDmZs5UF8FjzPXwugfTKFO804jkdYicea8pmAJ4sXEADEpfZ7pkIbro/4
+         3awBgk51fzGMc+w8LmuVdHHfnwne3tGBDYXIYZuw16msrB++d3UWfXLQrzD311hoGxLY
+         35OZ44hVojQ5EBqz9VNmHZqytVjlos4e6/allizQqx862/fN529JTmija6Zx7M/0KhGO
+         iCqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696522304; x=1697127104;
+        d=1e100.net; s=20230601; t=1696522322; x=1697127122;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0O5FdMEjI2AitxA1SslmIPPgMaTqESzX6TEk7dD7d5k=;
-        b=Ji5jzMM0/IvFvxKQErlpePYoOzvPODtsKF9rx6ZWHK7KmQU/J10W9iyAccngzdZXXe
-         kFQNGM4SyjP+kozW9Ion+RDZH8cpFXLWKaI8F7xUY1VQHI7QQ44IsxRqA02du/Qe6R2n
-         pb1cszWWYLPIlJhwwg33dK0YiKHjhZfjfVXpTGdVNJLLMRttYeG5w6UtmSGstFksmmVT
-         GTQgJsYhAaXYGdKU2ooSMzE4omXMfCJXENvPnggL/OQ8TPF4TAZueebqWs6CocJWaCGC
-         HhPI94zfGNziFbhrvN2iojH5MEmlRi8hRyzPPIKfhhTXMF9N8XsFNFJ8vAbfmnN3wL8W
-         PYXg==
-X-Gm-Message-State: AOJu0Yz437ocjjCUeZHx+iwvJg2/sdYzV4NncETmLVeGuuwXywYGeAGh
-	5wo6xmqPKMBFTq3abeTUjAru/Q==
-X-Google-Smtp-Source: AGHT+IG4MEtuagvRCLMRUpJlXPomS8iBJDxtG9g1tyH0aeTWICfB7VrkfDj0VNb+2+Lhgr78SQXt1A==
-X-Received: by 2002:aa7:d947:0:b0:531:9c1:8271 with SMTP id l7-20020aa7d947000000b0053109c18271mr5363562eds.14.1696522304327;
-        Thu, 05 Oct 2023 09:11:44 -0700 (PDT)
+        bh=9lxM4OiGaB4e3uq2pWffPreokXzaYO67D0mgzpzgon8=;
+        b=j3PvBdLwha+/WWOJ7/4MeV7qR/VOQxxfAhVCnjuasqtZ+2OL4R/OmBXRvB7pCKkJo6
+         SkGNligTvMEQZHFZjUGc8M0jRKGT+RdCoBDIK3Gl9rLWS1R0gpObd3j4rGc+CamKnrQ2
+         7MOpoW1b7frswibjuBZOYsKZyR/6EdqiMwiaDRibsuSj9+LMcf/+J6sSWtZqoVPCU1oJ
+         Vaj2wdgcDtJKTNNoovFBYp37CYfxbQXSBGupmc3unhDglmn5519ycLE5wUwZENCn45ie
+         6sLt8S+U1Vu3vH+OPXdzkonBi2Z7+LobpZY9QJpHrGRvjdzzRGCyFMasiOoSxXwtpa9o
+         CHgg==
+X-Gm-Message-State: AOJu0Yx879iQtS7pccegrmyUICarxt4JtE5QaO4hm9rK+/M56JJIkiJ9
+	OmIxdPnPC+9yshuLiSPmbolaAg==
+X-Google-Smtp-Source: AGHT+IFZJthaVaTYewEeZJtni3cSipAL+gy8tpIe3TbQsRdvHNdhR212iy3ddLH56ot/orPcub/dwg==
+X-Received: by 2002:aa7:db45:0:b0:533:520:a5a8 with SMTP id n5-20020aa7db45000000b005330520a5a8mr5184779edt.29.1696522322395;
+        Thu, 05 Oct 2023 09:12:02 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id u1-20020a05640207c100b005311e934765sm1278866edy.27.2023.10.05.09.11.41
+        by smtp.gmail.com with ESMTPSA id u1-20020a05640207c100b005311e934765sm1278866edy.27.2023.10.05.09.11.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 09:11:43 -0700 (PDT)
-Message-ID: <331ebdbd-bd38-4b64-9cc0-5bb75d983717@linaro.org>
-Date: Thu, 5 Oct 2023 18:11:41 +0200
+        Thu, 05 Oct 2023 09:12:01 -0700 (PDT)
+Message-ID: <103c7112-d469-48bf-bdbe-fb6608b97a64@linaro.org>
+Date: Thu, 5 Oct 2023 18:11:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/21] dt-bindings: clock: gs101: Add cmu_top clock
+Subject: Re: [PATCH 10/21] dt-bindings: clock: gs101: Add cmu_apm clock
  indices
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
@@ -72,7 +72,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-watchdog@vger.kernel.org
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-10-peter.griffin@linaro.org>
+ <20231005155618.700312-11-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -118,34 +118,21 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231005155618.700312-10-peter.griffin@linaro.org>
+In-Reply-To: <20231005155618.700312-11-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 05/10/2023 17:56, Peter Griffin wrote:
-> CMU_TOP geneerates clocks for all the other CMU units. Add clock
-> indices for those PLLs, muxes, dividers and gates.
+> CMU_APM generates clocks for the Active Power Management
+> controller. Add clock indices for those muxs, dividers and
+> gates.
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  include/dt-bindings/clock/gs101.h | 204 ++++++++++++++++++++++++++++++
->  1 file changed, 204 insertions(+)
->  create mode 100644 include/dt-bindings/clock/gs101.h
+>  include/dt-bindings/clock/gs101.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 
-This patch should be squashed with bindings for this clock. Header on
-its own makes little sense.
-
-Also, filename should match compatible (vendor prefix, Soc-clock etc).
-
-> 
-> diff --git a/include/dt-bindings/clock/gs101.h b/include/dt-bindings/clock/gs101.h
-> new file mode 100644
-> index 000000000000..d1e216a33aeb
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/gs101.h
-> @@ -0,0 +1,204 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
+Please squash it with previous patch.
 
 Best regards,
 Krzysztof
