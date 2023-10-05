@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E63D1E9271B
-	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 17:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 260E2E9271C
+	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 17:45:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C8CCFC433C9; Thu,  5 Oct 2023 17:43:39 +0000 (UTC)
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	id 0D2A2C433CA; Thu,  5 Oct 2023 17:45:09 +0000 (UTC)
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E7CBC433C7
-	for <soc@kernel.org>; Thu,  5 Oct 2023 17:43:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E7CBC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id BF43EC433CC
+	for <soc@kernel.org>; Thu,  5 Oct 2023 17:45:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BF43EC433CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1c6052422acso13945ad.1
-        for <soc@kernel.org>; Thu, 05 Oct 2023 10:43:36 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1c6185cafb3so13035ad.1
+        for <soc@kernel.org>; Thu, 05 Oct 2023 10:45:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696527816; x=1697132616; darn=kernel.org;
+        d=google.com; s=20230601; t=1696527905; x=1697132705; darn=kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=60HdR/gjr+ClSlC+M7zPKhkatv0oHCCn87pO3lsKx5I=;
-        b=LqlfGmdaC0SldM07gyTt3JR55zZDZWfjGB1+8PQT61KAdsD1pmtOb4bq6RyWsQekho
-         A/oIESxnoGk44nVWBmcLPVv2jipizWEhePEowWYuk6BIzgOY+qRrL4rCoaoWlp76JUSw
-         +cIcRE7UZ/0ZQZKkHGDbrOnY7t4dYTkohx/j+uUgAbPI98seAxtmKOr8UEeugbI3wcye
-         HE+AvMBgOKexaBHV6KgRuNsjnDZMLgO9SunhtjYPPO4mHh6b2ecJxOjZXxST+PeLWGNz
-         9DXkZXwIYHsPn0Qq9XVqisWOkcsQMyj+snv9F7xRR7vPOf30IVNI6hKel2o7d4CWqey7
-         tEwQ==
+        bh=bxWRh8BRaa8VEKxGZaugm2kd1aBscgPwwFJdYCN2qDk=;
+        b=3ibSsxrrCt7SBylmmfMPL2ltrSbkzDKDysXqBndZVjjI7mSDDcPNAtZ4HmY72YgQS2
+         VNjB+gcGE7PwFMXLsn8DAVM+6+9e8Vrc4FLkIpn09+TRCcMWbLYkXCuyb8zmB6wplBhZ
+         S40wOjkeFm6c49aO6IXtWf93CUiNsXCfs25rypwdcFPb6Xgjx2PQydtE+o8DqcKMRfVf
+         ZalmMTcaZ35ZoZlucONuKP/e4Yd8sL1vkyitpPJorffwip8ns2UKimtgAsbpMnFG9Y2u
+         /DLzSbb/68+CxyFblhK5gG2XaHRv7u6Z9ZTwoMQ3jbndNKsKV7ujHIEvOGokyULHSMsg
+         DEDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696527816; x=1697132616;
+        d=1e100.net; s=20230601; t=1696527905; x=1697132705;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=60HdR/gjr+ClSlC+M7zPKhkatv0oHCCn87pO3lsKx5I=;
-        b=AspCAunR5y+9xKEN35AESmMRpY6sCrCMAC9nqWzxfnt0D47olZDvZcagCQhkQDvoZn
-         eLpoSzYhMvgfMfRrPNZm8U8nuoEFACrrgbdN1ePSlrxKPGukMJZ3bSQspqAmAJ6bKfCM
-         uT0FinhBYZm7vdtTCUubd/kGvp+RQQhVVIKt+qg1IcEnBqrbgT3xIMs8PXUMggCLgQQz
-         mFpghmnLsnZqiUNImr05hViGh2Tg6zvLnPOP8gcqiUvQzIk/pbUdmSyyRXz2LS/JJmjh
-         Tf4YpJO9lUK0hlX0OPc8pNb2vQySBXbGFZLLJ6u3Bvq/ABQYgBRwCZIGNX+TiLwKdSnP
-         u/1w==
-X-Gm-Message-State: AOJu0Yy4b08xHy+G0oW7gYxq7kXMfHX3aWGeCjaioTozNCFml0+Vujrd
-	ovUkcM+YLAAFxyijz/szIvCuwg==
-X-Google-Smtp-Source: AGHT+IHkEphjNPyY0Ba9advfXP+UTZ/LmV0S52IPUtK95qHYj4uqa58dO6ukXUIyOrQzBy4kgUBmhg==
-X-Received: by 2002:a17:902:c794:b0:1c3:3649:1f6a with SMTP id w20-20020a170902c79400b001c336491f6amr164574pla.7.1696527815616;
-        Thu, 05 Oct 2023 10:43:35 -0700 (PDT)
+        bh=bxWRh8BRaa8VEKxGZaugm2kd1aBscgPwwFJdYCN2qDk=;
+        b=DaOnik3BUhWyi2IPs3sKMPUmQhy0VjXCFo0vu8Mr+FBwQMw32ov/utcqrRoYjAE3Ce
+         k6PFSlguFsthLKldZTKqoyS6f5ihueKY0hRQ8ODVpUPhJsYAjPJgy/araWCsflgjfHE7
+         Rk1g8Q8W1ntpZMmn8/Pt4VsbujHHCiVBHnvKWtsnIcDNwf+eIVyOVsqRMvFxbCuQ/hOh
+         ipZvyR+Eozz0yzbvElza5TuO2i0jVSFZqWeM6DF8wQwOTyT8RocehKH9I+cszc3PGZFe
+         61n0m/zoWQSURid86Gk8nic+aWnI7FxMuMLedy4RNYsaZ94ENv2xJL/jnpRzZDsl2cAC
+         PA7g==
+X-Gm-Message-State: AOJu0YyDVcmcrTqhKbQZW/43n5Km6PU8ASxZUTexA8oCadiZsANJz26H
+	lOc1A5c4Lc2Yf4CvzaweYij1mg==
+X-Google-Smtp-Source: AGHT+IFvde05nbhg5LTqUjenKdhiwDkfhFpMz3sG9kEY47JK21uv/T10QqKVXEqXoaGSCPv10+0/ug==
+X-Received: by 2002:a17:902:ce82:b0:1c7:1fbc:b9e8 with SMTP id f2-20020a170902ce8200b001c71fbcb9e8mr149344plg.10.1696527904755;
+        Thu, 05 Oct 2023 10:45:04 -0700 (PDT)
 Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id e8-20020a62ee08000000b00690fe1c928csm1702957pfi.147.2023.10.05.10.43.34
+        by smtp.gmail.com with ESMTPSA id u18-20020a170902e5d200b001c6052152fdsm2013863plf.50.2023.10.05.10.45.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 10:43:34 -0700 (PDT)
-Date: Thu, 5 Oct 2023 10:43:31 -0700
+        Thu, 05 Oct 2023 10:45:04 -0700 (PDT)
+Date: Thu, 5 Oct 2023 10:45:00 -0700
 From: William McVicker <willmcvicker@google.com>
 To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -68,7 +68,7 @@ Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
 	kernel-team@android.com
 Subject: Re: [PATCH 14/21] clk: samsung: clk-gs101: add CMU_APM support
-Message-ID: <ZR71w7r4kubJ_Ow4@google.com>
+Message-ID: <ZR72HLCIAbT03Wuu@google.com>
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
  <20231005155618.700312-15-peter.griffin@linaro.org>
 MIME-Version: 1.0
@@ -84,12 +84,6 @@ On 10/05/2023, Peter Griffin wrote:
 > 
 > One clock is marked CLK_IS_CRITICAL because the system
 > hangs is this clock is disabled.
-
-nit: hangs if this clock...
-
-Regards,
-Will
-
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
@@ -395,6 +389,12 @@ Will
 > +		.compatible = "google,gs101-cmu-apm",
 > +		.data = &apm_cmu_info,
 > +	},
+
+Missing terminating empty entry {}.
+
+Regards,
+Will
+
 > +};
 > +
 > +static struct platform_driver gs101_cmu_driver __refdata = {
