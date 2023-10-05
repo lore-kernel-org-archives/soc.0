@@ -1,122 +1,318 @@
-Return-Path: <gregkh@linuxfoundation.org>
+Return-Path: <SRS0=UxTF=FT=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33726E92723
-	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 18:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBDCAE92728
+	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 18:58:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E0BD5C433C8; Thu,  5 Oct 2023 18:06:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B713C433C7;
-	Thu,  5 Oct 2023 18:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696529160;
-	bh=3F/QHqu1nZgKxNeTmTMV+qJgLRsqzd8eazwINr7XUsI=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=DQYRnBuak7yuSY0Nc9KfDpzxPIVRAeBvRO01w6qvxxwzTXGLct1Mn9NgGWC6hnJN9
-	 feEdYhy/1Vm/65a7ythX2fPwVWtbriUrS60SOIHerQq12l5rxTBE35m+iGqd1b0e1e
-	 arsetgEMUhRx71PGlClnNQVRlsj9Xa2FG505fRE4=
-Date: Thu, 5 Oct 2023 20:05:58 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: William McVicker <willmcvicker@google.com>
+	id 9AAE5C433C9; Thu,  5 Oct 2023 18:58:44 +0000 (UTC)
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2BC22C433C8;
+	Thu,  5 Oct 2023 18:58:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2BC22C433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-351574aca7bso4900725ab.3;
+        Thu, 05 Oct 2023 11:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696532322; x=1697137122; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wDGfCRiOqj5Z3HHraurJSyCxNUD1/PMGQpNoTkQdn4g=;
+        b=SvaD6kC8MGumVvrUZNqoYtobWuMgigdWVZHbp7Vi3K93LTIdSBDMWIJgt2JT6lk9E2
+         ZZQSozLsIoavpFxnpZMRlDq1PPdT1TJ6opWAJcjZFdhIedAd2cjOBayWPbIFOn+8Qx4X
+         oykAV53Cqw1lOu1KYfpxmFahauyaPfJl8Fis9yHD9GCUIh1srrfD1lj/cnHVdr0OgcV2
+         gJMIaoDvlSyaNdK1c06KB3WNsmQrEXMOBeq8Lv4EYrK9/VaFP/025mS+3YQsFB+CZ4o7
+         U9th4tiqKNxjea0NHS3KWWVzv4HYfa3LKKHiiHPUx1lenVoKtk9ey0ImhyZdRtfG7ttE
+         siyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696532322; x=1697137122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wDGfCRiOqj5Z3HHraurJSyCxNUD1/PMGQpNoTkQdn4g=;
+        b=hvbhZpby1SlPo+HcqAf48P2tuSF0XH3wv8eWW9vuaROvO1aqTbqOZk0cWzZZl8FbJ9
+         Shd/0gg1iQTrGIln5Cpp+nDT4+muSHmsnQB+ZJDC6P8nS/tyvYPjSS8sZKmSe1Wo5ZVw
+         IYLaES/14KBIZtWINZhDpgJX95mvm5rwzPaZDJpomOx5FBG0u5O1Rx24leWPfKtfJNEG
+         f9rapYFUJfLFJRfyvmLi2AEmOLLnouk2pD9tVOMKdZveTAhgqLLWOx+5uTpYdf4OAhnt
+         2Eudn7KTG6nXq6Ys55HTjHthOZrzpor4M0xv8keC5GtNO5LDkZy3SNJD/El7ag68l2Zx
+         9AZw==
+X-Gm-Message-State: AOJu0YzV5kwygNk0gVnwYR3NLBnkrSCihyD+DlfTFuuBAH8dt+zmOfYx
+	QknxNrl+x5mQPjxgR2l/dPY=
+X-Google-Smtp-Source: AGHT+IH518BnH3XJmrVAOFzUNXyM2b6plwyvIDQm/MiW25fxONr6jJ0igjF7adeyGEuevyATk1JMRQ==
+X-Received: by 2002:a05:6e02:1a2e:b0:351:4f0c:b95d with SMTP id g14-20020a056e021a2e00b003514f0cb95dmr7192153ile.22.1696532322151;
+        Thu, 05 Oct 2023 11:58:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t14-20020a02ab8e000000b004290f6c15bfsm107409jan.145.2023.10.05.11.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 11:58:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 5 Oct 2023 11:58:40 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-	s.nawrocki@samsung.com, linus.walleij@linaro.org,
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
-	will@kernel.org, arnd@arndb.de, olof@lixom.net,
-	cw00.choi@samsung.com, tudor.ambarus@linaro.org,
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+	linus.walleij@linaro.org, wim@linux-watchdog.org,
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+	olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
 	andre.draszik@linaro.org, semen.protsenko@linaro.org,
 	soc@kernel.org, devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	kernel-team@google.com
-Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC
- support
-Message-ID: <2023100520-cleaver-sinless-fbae@gregkh>
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 17/21] watchdog: s3c2410_wdt: Add support for Google
+ tensor SoCs
+Message-ID: <734eb901-84cc-4a47-a3f6-2313273f79b2@roeck-us.net>
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-19-peter.griffin@linaro.org>
- <ZR75cIvnQS2cqTT3@google.com>
+ <20231005155618.700312-18-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZR75cIvnQS2cqTT3@google.com>
+In-Reply-To: <20231005155618.700312-18-peter.griffin@linaro.org>
 
-On Thu, Oct 05, 2023 at 10:59:12AM -0700, William McVicker wrote:
-> On 10/05/2023, Peter Griffin wrote:
-> > Google gs101 SoC is ARMv8 mobile SoC found in the Pixel 6,
-> > (oriole) Pixel 6a (bluejay) and Pixel 6 pro (raven) mobile
-> > phones. It features:
-> > * 4xA55 little cluster
-> > * 2xA76 Mid cluster
-> > * 2xX1 Big cluster
-> > 
-> > This commit adds the basic device tree for gs101 (SoC) and oriole
-> > (pixel 6). Further platform support will be added over time.
-> > 
-> > It has been tested with a minimal busybox initramfs and boots to
-> > a shell.
-> > 
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  arch/arm64/Kconfig.platforms                  |    6 +
-> >  arch/arm64/boot/dts/Makefile                  |    1 +
-> >  arch/arm64/boot/dts/google/Makefile           |    6 +
-> >  arch/arm64/boot/dts/google/gs101-oriole.dts   |   68 +
-> >  arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1134 +++++++++++++++++
-> >  arch/arm64/boot/dts/google/gs101-pinctrl.h    |   17 +
-> >  arch/arm64/boot/dts/google/gs101.dtsi         |  501 ++++++++
-> >  7 files changed, 1733 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/google/Makefile
-> >  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
-> >  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
-> >  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
-> >  create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
-> > 
-> > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> > index 6069120199bb..a5ed1b719488 100644
-> > --- a/arch/arm64/Kconfig.platforms
-> > +++ b/arch/arm64/Kconfig.platforms
-> > @@ -107,6 +107,12 @@ config ARCH_EXYNOS
-> >  	help
-> >  	  This enables support for ARMv8 based Samsung Exynos SoC family.
-> >  
-> > +config ARCH_GOOGLE_TENSOR
-> > +	bool "Google Tensor SoC fmaily"
-> > +	depends on ARCH_EXYNOS
-> > +	help
-> > +	  Support for ARMv8 based Google Tensor platforms.
+On Thu, Oct 05, 2023 at 04:56:14PM +0100, Peter Griffin wrote:
+> This patch adds the compatibles and drvdata for the Google
+> gs101 & gs201 SoCs found in Pixel 6 and Pixel 7 phones. Similar
+> to Exynos850 it has two watchdog instances, one for each cluster
+> and has some control bits in PMU registers.
 > 
-> I'd like to bring up this thread and discuss the option of not introducing
-> another ARCH_* config:
+> The watchdog IP found in gs101 SoCs also supports a few
+> additional bits/features in the WTCON register which we add
+> support for and an additional register detailed below.
 > 
->   https://lore.kernel.org/all/20200306103652.GA3634389@kroah.com/
+> dbgack-mask - Enables masking WDT interrupt and reset request
+> according to asserted DBGACK input
+> 
+> windowed-mode - Enabled Windowed watchdog mode
+> 
+> Windowed watchdog mode also has an additional register WTMINCNT.
+> If windowed watchdog is enabled and you reload WTCNT when the
+> value is greater than WTMINCNT, it prompts interrupt or reset
+> request as if the watchdog time has expired.
+> 
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+>  drivers/watchdog/s3c2410_wdt.c | 116 +++++++++++++++++++++++++++++----
+>  1 file changed, 105 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 0b4bd883ff28..4c23c7e6a3f1 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -31,12 +31,14 @@
+>  #define S3C2410_WTDAT		0x04
+>  #define S3C2410_WTCNT		0x08
+>  #define S3C2410_WTCLRINT	0x0c
+> -
+> +#define S3C2410_WTMINCNT	0x10
+>  #define S3C2410_WTCNT_MAXCNT	0xffff
+>  
+> -#define S3C2410_WTCON_RSTEN	(1 << 0)
+> -#define S3C2410_WTCON_INTEN	(1 << 2)
+> -#define S3C2410_WTCON_ENABLE	(1 << 5)
+> +#define S3C2410_WTCON_RSTEN		(1 << 0)
+> +#define S3C2410_WTCON_INTEN		(1 << 2)
+> +#define S3C2410_WTCON_ENABLE		(1 << 5)
+> +#define S3C2410_WTCON_DBGACK_MASK	(1 << 16)
+> +#define S3C2410_WTCON_WINDOWED_WD	(1 << 20)
+>  
+>  #define S3C2410_WTCON_DIV16	(0 << 3)
+>  #define S3C2410_WTCON_DIV32	(1 << 3)
+> @@ -61,12 +63,16 @@
+>  #define EXYNOS850_CLUSTER1_NONCPU_INT_EN	0x1644
+>  #define EXYNOSAUTOV9_CLUSTER1_NONCPU_OUT	0x1520
+>  #define EXYNOSAUTOV9_CLUSTER1_NONCPU_INT_EN	0x1544
+> -
+>  #define EXYNOS850_CLUSTER0_WDTRESET_BIT		24
+>  #define EXYNOS850_CLUSTER1_WDTRESET_BIT		23
+>  #define EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT	25
+>  #define EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT	24
+> -
+> +#define GS_CLUSTER0_NONCPU_OUT			0x1220
+> +#define GS_CLUSTER1_NONCPU_OUT			0x1420
+> +#define GS_CLUSTER0_NONCPU_INT_EN		0x1244
+> +#define GS_CLUSTER1_NONCPU_INT_EN		0x1444
+> +#define GS_CLUSTER2_NONCPU_INT_EN		0x1644
+> +#define GS_RST_STAT_REG_OFFSET			0x3B44
+>  /**
+>   * DOC: Quirk flags for different Samsung watchdog IP-cores
+>   *
+> @@ -106,6 +112,8 @@
+>  #define QUIRK_HAS_PMU_RST_STAT			(1 << 2)
+>  #define QUIRK_HAS_PMU_AUTO_DISABLE		(1 << 3)
+>  #define QUIRK_HAS_PMU_CNT_EN			(1 << 4)
+> +#define QUIRK_HAS_DBGACK_BIT			(1 << 5)
+> +#define QUIRK_HAS_WTMINCNT_REG			(1 << 6)
+>  
+>  /* These quirks require that we have a PMU register map */
+>  #define QUIRKS_HAVE_PMUREG \
+> @@ -263,6 +271,54 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
+>  		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
+>  };
+>  
+> +static const struct s3c2410_wdt_variant drv_data_gs101_cl0 = {
+> +	.mask_reset_reg = GS_CLUSTER0_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 0,
+> +	.cnt_en_reg = GS_CLUSTER0_NONCPU_OUT,
+> +	.cnt_en_bit = 8,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
+> +	.mask_reset_reg = GS_CLUSTER1_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 1,
+> +	.cnt_en_reg = GS_CLUSTER1_NONCPU_OUT,
+> +	.cnt_en_bit = 7,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs201_cl0 = {
+> +	.mask_reset_reg = GS_CLUSTER0_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 0,
+> +	.cnt_en_reg = GS_CLUSTER0_NONCPU_OUT,
+> +	.cnt_en_bit = 8,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs201_cl1 = {
+> +	.mask_reset_reg = GS_CLUSTER1_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 1,
+> +	.cnt_en_reg = GS_CLUSTER1_NONCPU_OUT,
+> +	.cnt_en_bit = 7,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+>  static const struct of_device_id s3c2410_wdt_match[] = {
+>  	{ .compatible = "samsung,s3c2410-wdt",
+>  	  .data = &drv_data_s3c2410 },
+> @@ -278,6 +334,10 @@ static const struct of_device_id s3c2410_wdt_match[] = {
+>  	  .data = &drv_data_exynos850_cl0 },
+>  	{ .compatible = "samsung,exynosautov9-wdt",
+>  	  .data = &drv_data_exynosautov9_cl0 },
+> +	{ .compatible = "google,gs101-wdt",
+> +	  .data = &drv_data_gs101_cl0 },
+> +	{ .compatible = "google,gs201-wdt",
+> +	  .data = &drv_data_gs201_cl0 },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
+> @@ -375,6 +435,21 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+>  	return 0;
+>  }
+>  
+> +static void s3c2410wdt_mask_dbgack(struct s3c2410_wdt *wdt, bool mask)
+> +{
+> +	unsigned long wtcon;
+> +
+> +	if (!(wdt->drv_data->quirks & QUIRK_HAS_DBGACK_BIT))
+> +		return;
+> +
+> +	wtcon = readl(wdt->reg_base + S3C2410_WTCON);
+> +	if (mask)
+> +		wtcon |= S3C2410_WTCON_DBGACK_MASK;
+> +	else
+> +		wtcon &= ~S3C2410_WTCON_DBGACK_MASK;
+> +	writel(wtcon, wdt->reg_base + S3C2410_WTCON);
+> +}
+> +
+>  static int s3c2410wdt_keepalive(struct watchdog_device *wdd)
+>  {
+>  	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
+> @@ -585,9 +660,11 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>  	}
+>  
+>  #ifdef CONFIG_OF
+> -	/* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster index */
+> +	/* Choose Exynos850/ExynosAutov9/gsx01 driver data w.r.t. cluster index */
+>  	if (variant == &drv_data_exynos850_cl0 ||
+> -	    variant == &drv_data_exynosautov9_cl0) {
+> +	    variant == &drv_data_exynosautov9_cl0 ||
+> +	    variant == &drv_data_gs101_cl0 ||
+> +	    variant == &drv_data_gs201_cl0) {
+>  		u32 index;
+>  		int err;
+>  
+> @@ -600,9 +677,14 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>  		case 0:
+>  			break;
+>  		case 1:
+> -			variant = (variant == &drv_data_exynos850_cl0) ?
+> -				&drv_data_exynos850_cl1 :
+> -				&drv_data_exynosautov9_cl1;
+> +			if (variant == &drv_data_exynos850_cl0)
+> +				variant = &drv_data_exynos850_cl1;
+> +			else if (variant == &drv_data_exynosautov9_cl0)
+> +				variant = &drv_data_exynosautov9_cl1;
+> +			else if (variant == &drv_data_gs101_cl0)
+> +				variant = &drv_data_gs101_cl1;
+> +			else if (variant == &drv_data_gs201_cl0)
+> +				variant = &drv_data_gs201_cl1;
+>  			break;
+>  		default:
+>  			return dev_err_probe(dev, -EINVAL, "wrong cluster index: %u\n", index);
+> @@ -700,6 +782,8 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>  	wdt->wdt_device.bootstatus = s3c2410wdt_get_bootstatus(wdt);
+>  	wdt->wdt_device.parent = dev;
+>  
+> +	s3c2410wdt_mask_dbgack(wdt, true);
+> +
+>  	/*
+>  	 * If "tmr_atboot" param is non-zero, start the watchdog right now. Also
+>  	 * set WDOG_HW_RUNNING bit, so that watchdog core can kick the watchdog.
+> @@ -712,6 +796,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>  		s3c2410wdt_start(&wdt->wdt_device);
+>  		set_bit(WDOG_HW_RUNNING, &wdt->wdt_device.status);
+>  	} else {
+> +		dev_info(dev, "stopping watchdog timer\n");
 
-I agree, PLEASE don't add platform config options as that makes it
-impossible to make a unified kernel image that works for more than one
-platform at the same time.
+I am not inclined to accept patches adding such noise.
 
-> I especially don't like the "depends on ARCH_EXYNOS" because that forces one to
-> include all the other Exynos drivers that ARCH_EXYNOS selects that Google
-> Tensor SoCs don't need. Can we consider using SOC_GOOGLE instead and for all
-> drivers that actually depend on the SoC hardware, we can just add "depends on
-> SOC_GOOGLE"?
+>  		s3c2410wdt_stop(&wdt->wdt_device);
+>  	}
+>  
+> @@ -738,6 +823,15 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>  		 (wtcon & S3C2410_WTCON_RSTEN) ? "en" : "dis",
+>  		 (wtcon & S3C2410_WTCON_INTEN) ? "en" : "dis");
+>  
+> +	if (wdt->drv_data->quirks & QUIRK_HAS_DBGACK_BIT)
+> +		dev_info(dev, "DBGACK %sabled\n",
+> +			 (wtcon & S3C2410_WTCON_DBGACK_MASK) ? "en" : "dis");
+> +
+> +	if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG)
+> +		dev_info(dev, "windowed watchdog %sabled, wtmincnt=%x\n",
+> +			 (wtcon & S3C2410_WTCON_WINDOWED_WD) ? "en" : "dis",
+> +			 readl(wdt->reg_base + S3C2410_WTMINCNT));
 
-Why do any of this at all?  It should not be needed.
+... and I really don't see its value.
 
-> The idea is that drivers should be tied to hardware -- not a specific vendor.
-
-And drivers should be auto-loaded.
-
-All of these drivers are not vendor-specific at all, they are based on
-the same IP blocks as others, so that is how they should be unified.
-
-> By making drivers depend on ARCH_*, you are introducing an arbitrary vendor
-> dependency and not a hardware dependency.
-
-Totally agree, thanks for bringing this up.
-
-greg k-h
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.42.0.582.g8ccd20d70d-goog
+> 
