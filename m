@@ -1,173 +1,273 @@
-Return-Path: <SRS0=0UKj=FT=google.com=willmcvicker@kernel.org>
+Return-Path: <SRS0=OAv5=FU=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9D38E92FCE
-	for <soc@archiver.kernel.org>; Thu,  5 Oct 2023 23:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD29E92FCD
+	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 04:17:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 67AC7C433CB; Thu,  5 Oct 2023 23:20:03 +0000 (UTC)
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id B7948C433C9; Fri,  6 Oct 2023 04:17:06 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4D99FC433CA
-	for <soc@kernel.org>; Thu,  5 Oct 2023 23:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D99FC433CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1c60128d3f6so71745ad.0
-        for <soc@kernel.org>; Thu, 05 Oct 2023 16:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696548000; x=1697152800; darn=kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g9+/T8jL1FueuqbJWbDBnW4JHhnHC6qNQT3btWThJAA=;
-        b=YAj1LeJy8CdKmsK9bmheVkWyPaWP5cMS48TYYn/2L8G2DDQFuRsP7YxCy22ll+8k5e
-         qRm2bHtVZ5NHG8h1Cr3keIMZtpBUUY/ulVAXMJop22aGMqYijVTetb2/iyFaA54xN2Lk
-         h91sDXjMh3lDA38IbwzF6tRatZOEW5LTz25Kt8609I8owBzG1dyjT/8RoFuLGSrG9o/e
-         zFfSHLWlB17V3MpQvvxz+hoEITG8YcbcbtPUNQuljiL33QCvGz+lJaoWSday3xj+gjA2
-         b5z8V+Lhvmcu8+JXZCg2PEdoIDLlOeoG63hZrFPqTwOTrENE9zC1IfgXvnA+/C6ywNCJ
-         VppA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696548000; x=1697152800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g9+/T8jL1FueuqbJWbDBnW4JHhnHC6qNQT3btWThJAA=;
-        b=NW4DPSZcN197A25Fi+Dv581x8vp73BHBitZqTrD8NGA1lWZKBqAT50JYZzfxlwkgSL
-         WBHXNoPTfKd82EqVW7vrqhYAvdI37PW1CIVi5lLwOFfOz6Yv+43WmK8UT/Cs09xpZXJi
-         EjBIRyEpHkWt5ffCpt7xYAA+yj72rIq4MjazPvUg1SeCr0IUgjV/d6L0ctPeJy1nd4Ln
-         0sTEfqP6LgF0wNPpP9mHBsDT3rX2REOdbZOHmhyUf7URxeCIu7OmYsNB+uTg85OazFG6
-         e6kI/RZszNN0brMIYl5wOf4b8FAcpqCEKugoWYBn+k3KRO2Xf/ZHNggsQMFl6OWa/YJo
-         a4vg==
-X-Gm-Message-State: AOJu0Ywa5EHtiy67kmL7yjCFqV/RD8jQ4j+MYS6KCu/rTX8RnjkNSsqQ
-	5FeFTVvkRYShoKeo8FcN0c6HJw==
-X-Google-Smtp-Source: AGHT+IG6SUbZdWjUlwVKgWGyn2h7w47kdQ+sEw89YZgLkBjRn4vrO6PiIxtJlw/+S61vF8DHpPNtxw==
-X-Received: by 2002:a17:902:d506:b0:1c4:4470:bfa7 with SMTP id b6-20020a170902d50600b001c44470bfa7mr232458plg.29.1696548000224;
-        Thu, 05 Oct 2023 16:20:00 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b0026d214a2b33sm4130541pjb.7.2023.10.05.16.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 16:19:59 -0700 (PDT)
-Date: Thu, 5 Oct 2023 16:19:56 -0700
-From: William McVicker <willmcvicker@google.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+	by smtp.kernel.org (Postfix) with ESMTPS id 1F6DEC433C7;
+	Fri,  6 Oct 2023 04:17:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1F6DEC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696565824; x=1728101824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+UzMQZ+ABsiq+qvcmT9/GjdcKv139ZXc6ACV/SBjYn4=;
+  b=NJsAcG6U0HibHibeod3BxZod0SYA4WIU57psfCJi/JtzRyblYET82j9X
+   aubo3ub/JxF4vj53Z4YAWEb6tKbegU4UTebjqBjpBwXKAty8QNEj6jXEj
+   NeF/bW2zsrd9zylT4rywEmqUKxylJojJ3kurF8bZpWVdDHBYL0Fzp1Oz3
+   szJvW5THjvTUOkkLD+/HGlSbmQSaDkbY/eLOwqNWGcqaEpdBFSvR8sdqh
+   +YKamJfTlaNCpqzzsFrIo37B6mMxnGuwTcZVTT/MIaTUNl/dN5wse4Yyj
+   igOaYVuBTqnxaGmixuobE59pju0RWqyJR304cs55ENmMORZyFXkt81dfw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="414659060"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="414659060"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 21:17:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="701916250"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="701916250"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Oct 2023 21:16:54 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qocGi-000MEu-0v;
+	Fri, 06 Oct 2023 04:16:52 +0000
+Date: Fri, 6 Oct 2023 12:16:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
 	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
 	s.nawrocki@samsung.com, linus.walleij@linaro.org,
 	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
 	will@kernel.org, arnd@arndb.de, olof@lixom.net,
-	cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org, semen.protsenko@linaro.org,
-	soc@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	cw00.choi@samsung.com
+List-Id: <soc.lore.kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, peter.griffin@linaro.org,
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+	semen.protsenko@linaro.org, soc@kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	kernel-team@android.com
-Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC
- support
-Message-ID: <ZR9EnFw3vB92vlYM@google.com>
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-19-peter.griffin@linaro.org>
- <ZR75cIvnQS2cqTT3@google.com>
- <2023100520-cleaver-sinless-fbae@gregkh>
- <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
- <2023100513-mashing-scrubber-ea59@gregkh>
- <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 13/21] clk: samsung: clk-gs101: Add cmu_top registers,
+ plls, mux and gates
+Message-ID: <202310061231.Awh3otY7-lkp@intel.com>
+References: <20231005155618.700312-14-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
+In-Reply-To: <20231005155618.700312-14-peter.griffin@linaro.org>
 
-On 10/05/2023, Krzysztof Kozlowski wrote:
-> On 05/10/2023 21:23, Greg KH wrote:
-> > On Thu, Oct 05, 2023 at 09:18:48PM +0200, Krzysztof Kozlowski wrote:
-> >>>> I'd like to bring up this thread and discuss the option of not introducing
-> >>>> another ARCH_* config:
-> >>>>
-> >>>>   https://lore.kernel.org/all/20200306103652.GA3634389@kroah.com/
-> >>>
-> >>> I agree, PLEASE don't add platform config options as that makes it
-> >>> impossible to make a unified kernel image that works for more than one
-> >>> platform at the same time.
-> >>
-> >> There is no single problem in making unified image as we were doing
-> >> since beginning of ARM64. The ARCH_* is not a obstacle for this.
-> > 
-> > Then why are the ARCH_* options needed at all?  What does this help out
-> > with?
-> 
-> It helps all the people and distros who do not want to build/package
-> drivers or modules for unrelated hardware or architectures.
-> 
-> Let's take Samsung Exynos UART driver. It will never, 100% never, work
-> on x86, x86_64. There is no single need to package it for kernels build
-> for these products. It will not work on nVidia Tegra ARM64, Qualcomm
-> ARM64 SoC, so if you do not want to run on Exynos, then you do no select
-> ARCH_EXYNOS and have significantly smaller image.
-> 
-> Now, there is no problem to have one kernel for nVidia Tegra + Qualcomm
-> + Samsung Exynos with everything you need. The ARCH_EXYNOS or SOC_EXYNOS
-> or SOC_GOOGLE serves only the purpose to allow distros and people
-> customize build for specific hardware.
-> 
-> It does not limit anyone on anything.
+Hi Peter,
 
-I'm glad you brought up Exynos UART because this is where one of the
-limitations is introduced. For example, if you want to modularize out all the
-vendor specific drivers from the core kernel to create a common arm64 kernel
-binary that works on all ARM64 devices, you will not be able to build in the
-early console UART drivers without enabling the respective ARCH_* configs.
-Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor
-specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very valuable for
-debugging early boot issues.
+kernel test robot noticed the following build warnings:
 
-I understand that ARCH_* configs are used to selectively pick which device tree
-blobs are built, but forcing developers to pick all or nothing is where I have
-a problem.
+[auto build test WARNING on krzk/for-next]
+[also build test WARNING on robh/for-next linus/master v6.6-rc4 next-20231005]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Regards,
-Will
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-interrupt-controller-Add-gs101-interrupt-controller/20231005-235922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20231005155618.700312-14-peter.griffin%40linaro.org
+patch subject: [PATCH 13/21] clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
+config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20231006/202310061231.Awh3otY7-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231006/202310061231.Awh3otY7-lkp@intel.com/reproduce)
 
-> 
-> 
-> 
-> > 
-> >>>> I especially don't like the "depends on ARCH_EXYNOS" because that forces one to
-> >>>> include all the other Exynos drivers that ARCH_EXYNOS selects that Google
-> >>>> Tensor SoCs don't need. Can we consider using SOC_GOOGLE instead and for all
-> >>>> drivers that actually depend on the SoC hardware, we can just add "depends on
-> >>>> SOC_GOOGLE"?
-> >>>
-> >>> Why do any of this at all?  It should not be needed.
-> >>>
-> >>>> The idea is that drivers should be tied to hardware -- not a specific vendor.
-> >>>
-> >>> And drivers should be auto-loaded.
-> >>>
-> >>> All of these drivers are not vendor-specific at all, they are based on
-> >>> the same IP blocks as others, so that is how they should be unified.
-> >>
-> >> They are vendor specific. All of them are specifically for Exynos
-> >> hardwre, because this is Exynos. We call it Google GS/Tensor SoC just
-> >> for fancy convenience, but this just Exynos.
-> > 
-> > Ok, then why is this ARCH_ option needed if these IP blocks really are
-> > from something else and are part of other drivers?
-> 
-> For the same reason above, because if I want to build kernel for
-> Qualcomm, I want to drop easily anything not related. If I want to build
-> kernel without I2C, I disable I2C bus which effectively disables all
-> drivers which work on I2C. If I want to build kernel without Exynos, I
-> disable ARCH_EXYNOS which effectively disables entire Exynos hardware.
-> 
-> Think of SoC as a bus or interface.
-> 
-> Best regards,
-> Krzysztof
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310061231.Awh3otY7-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/clk/samsung/clk-gs101.c:17:
+>> drivers/clk/samsung/clk-gs101.c:935:7: warning: 'mout_cmu_g2d_p' defined but not used [-Wunused-const-variable=]
+     935 | PNAME(mout_cmu_g2d_p)           = { "dout_shared0_div3", "fout_shared3_pll",
+         |       ^~~~~~~~~~~~~~
+   drivers/clk/samsung/clk.h:226:44: note: in definition of macro 'PNAME'
+     226 | #define PNAME(x) static const char * const x[] __initconst
+         |                                            ^
+>> drivers/clk/samsung/clk-gs101.c:888:7: warning: 'mout_cmu_boost_p' defined but not used [-Wunused-const-variable=]
+     888 | PNAME(mout_cmu_boost_p)         = { "dout_shared0_div4", "dout_shared1_div4",
+         |       ^~~~~~~~~~~~~~~~
+   drivers/clk/samsung/clk.h:226:44: note: in definition of macro 'PNAME'
+     226 | #define PNAME(x) static const char * const x[] __initconst
+         |                                            ^
+>> drivers/clk/samsung/clk-gs101.c:809:7: warning: 'mout_cmu_pdp_vra_p' defined but not used [-Wunused-const-variable=]
+     809 | PNAME(mout_cmu_pdp_vra_p)       = { "fout_shared2_pll", "dout_shared0_div3",
+         |       ^~~~~~~~~~~~~~~~~~
+   drivers/clk/samsung/clk.h:226:44: note: in definition of macro 'PNAME'
+     226 | #define PNAME(x) static const char * const x[] __initconst
+         |                                            ^
+
+
+vim +/mout_cmu_g2d_p +935 drivers/clk/samsung/clk-gs101.c
+
+   790	
+   791	PNAME(mout_cmu_hsi2_ufs_embd_p)	= { "oscclk", "dout_shared0_div4",
+   792					    "dout_shared2_div2", "fout_spare_pll" };
+   793	
+   794	PNAME(mout_cmu_hsi2_mmc_card_p)	= { "fout_shared2_pll", "fout_shared3_pll",
+   795					    "dout_shared0_div4", "fout_spare_pll" };
+   796	
+   797	/* List of parent clocks for Muxes in CMU_TOP: for CMU_CSIS */
+   798	PNAME(mout_cmu_csis_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   799					    "dout_shared1_div3", "dout_shared0_div4",
+   800					    "dout_shared1_div4", "dout_shared2_div2",
+   801					    "fout_spare_pll" };
+   802	
+   803	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PDP */
+   804	PNAME(mout_cmu_pdp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   805					    "dout_shared1_div3", "dout_shared0_div4",
+   806					    "dout_shared1_div4", "dout_shared2_div2",
+   807					    "fout_spare_pll" };
+   808	
+ > 809	PNAME(mout_cmu_pdp_vra_p)	= { "fout_shared2_pll", "dout_shared0_div3",
+   810					    "fout_shared3_pll", "dout_shared1_div3",
+   811					    "dout_shared0_div4", "dout_shared1_div4",
+   812					    "fout_spare_pll" };
+   813	
+   814	/* List of parent clocks for Muxes in CMU_TOP: for CMU_IPP */
+   815	PNAME(mout_cmu_ipp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   816					    "dout_shared1_div3", "dout_shared0_div4",
+   817					    "dout_shared1_div4", "dout_shared2_div2",
+   818					    "fout_spare_pll" };
+   819	
+   820	/* List of parent clocks for Muxes in CMU_TOP: for CMU_G3AA */
+   821	PNAME(mout_cmu_g3aa_p)		= { "dout_shared0_div3", "fout_shared3_pll",
+   822					    "dout_shared1_div3", "dout_shared0_div4",
+   823					    "dout_shared1_div4", "dout_shared2_div2",
+   824					    "fout_spare_pll" };
+   825	
+   826	/* List of parent clocks for Muxes in CMU_TOP: for CMU_ITP */
+   827	PNAME(mout_cmu_itp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   828					    "dout_shared1_div3", "dout_shared0_div4",
+   829					    "dout_shared1_div4", "dout_shared2_div2",
+   830					    "fout_spare_pll" };
+   831	
+   832	/* List of parent clocks for Muxes in CMU_TOP: for CMU_DNS */
+   833	PNAME(mout_cmu_dns_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   834					    "dout_shared1_div3", "dout_shared0_div4",
+   835					    "dout_shared1_div4", "dout_shared2_div2",
+   836					    "fout_spare_pll" };
+   837	
+   838	/* List of parent clocks for Muxes in CMU_TOP: for CMU_TNR */
+   839	PNAME(mout_cmu_tnr_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   840					    "dout_shared1_div3", "dout_shared0_div4",
+   841					    "dout_shared1_div4", "dout_shared2_div2",
+   842					    "fout_spare_pll" };
+   843	
+   844	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MCSC */
+   845	PNAME(mout_cmu_mcsc_itsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   846					    "dout_shared1_div3", "dout_shared0_div4",
+   847					    "dout_shared1_div4", "dout_shared2_div2",
+   848					    "fout_spare_pll" };
+   849	
+   850	PNAME(mout_cmu_mcsc_mcsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   851					    "dout_shared1_div3", "dout_shared0_div4",
+   852					    "dout_shared1_div4", "dout_shared2_div2",
+   853					    "fout_spare_pll" };
+   854	
+   855	/* List of parent clocks for Muxes in CMU_TOP: for CMU_GDC */
+   856	PNAME(mout_cmu_gdc_scsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   857					    "dout_shared1_div3", "dout_shared0_div4",
+   858					    "dout_shared1_div4", "dout_shared2_div2",
+   859					    "fout_spare_pll" };
+   860	
+   861	PNAME(mout_cmu_gdc_gdc0_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   862					    "dout_shared1_div3", "dout_shared0_div4",
+   863					    "dout_shared1_div4", "dout_shared2_div2",
+   864					    "fout_spare_pll" };
+   865	
+   866	PNAME(mout_cmu_gdc_gdc1_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   867					    "dout_shared1_div3", "dout_shared0_div4",
+   868					    "dout_shared1_div4", "dout_shared2_div2",
+   869					    "fout_spare_pll" };
+   870	
+   871	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MFC */
+   872	PNAME(mout_cmu_mfc_mfc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
+   873					    "dout_shared1_div3", "dout_shared0_div4",
+   874					    "dout_shared1_div4", "dout_shared2_div2",
+   875					    "fout_spare_pll" };
+   876	
+   877	/* List of parent clocks for Muxes in CMU_TOP: for DDRPHY0/1/2/3 */
+   878	
+   879	PNAME(mout_cmu_mif_switch_p)	= { "fout_shared0_pll", "fout_shared1_pll",
+   880					    "dout_shared0_div2", "dout_shared1_div2",
+   881					    "fout_shared2_pll", "dout_shared0_div3",
+   882					    "fout_shared3_pll", "fout_spare_pll" };
+   883	
+   884	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MIF0/1/2/3 */
+   885	PNAME(mout_cmu_mif_busp_p)	= { "dout_shared0_div4", "dout_shared1_div4",
+   886					    "dout_shared0_div5", "fout_spare_pll" };
+   887	
+ > 888	PNAME(mout_cmu_boost_p)		= { "dout_shared0_div4", "dout_shared1_div4",
+   889					    "dout_shared2_div2", "dout_shared3_div2" };
+   890	
+   891	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MISC */
+   892	PNAME(mout_cmu_misc_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   893					    "dout_shared3_div2", "fout_spare_pll" };
+   894	PNAME(mout_cmu_misc_sss_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   895					    "dout_shared3_div2", "fout_spare_pll" };
+   896	
+   897	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PERIC0 */
+   898	PNAME(mout_cmu_peric0_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   899					    "dout_shared3_div2", "fout_spare_pll" };
+   900	PNAME(mout_cmu_peric0_ip_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   901					    "dout_shared3_div2", "fout_spare_pll" };
+   902	
+   903	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PERIC1 */
+   904	PNAME(mout_cmu_peric1_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   905					    "dout_shared3_div2", "fout_spare_pll" };
+   906	PNAME(mout_cmu_peric1_ip_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   907					    "dout_shared3_div2", "fout_spare_pll" };
+   908	
+   909	/* List of parent clocks for Muxes in CMU_TOP: for CMU_TPU */
+   910	PNAME(mout_cmu_tpu_tpu_p)	= { "dout_shared0_div2", "dout_shared1_div2",
+   911					    "fout_shared2_pll", "fout_shared3_pll",
+   912					    "dout_shared0_div3", "dout_shared1_div3",
+   913					    "dout_shared0_div4", "fout_spare_pll" };
+   914	
+   915	PNAME(mout_cmu_tpu_tpuctl_p)	= { "dout_shared0_div2", "dout_shared1_div2",
+   916					    "fout_shared2_pll", "fout_shared3_pll",
+   917					    "dout_shared0_div3", "dout_shared1_div3",
+   918					    "dout_shared0_div4", "fout_spare_pll" };
+   919	
+   920	PNAME(mout_cmu_tpu_bus_p)	= { "dout_shared0_div2", "dout_shared1_div2",
+   921					    "fout_shared2_pll", "fout_shared3_pll",
+   922					    "dout_shared0_div3", "dout_shared1_div3",
+   923					    "dout_shared0_div4", "fout_spare_pll" };
+   924	
+   925	PNAME(mout_cmu_tpu_uart_p)	= { "dout_shared0_div4", "dout_shared2_div2",
+   926					    "dout_shared3_div2", "fout_spare_pll" };
+   927	
+   928	/* List of parent clocks for Muxes in CMU_TOP: for CMU_BO */
+   929	PNAME(mout_cmu_bo_bus_p)	= { "fout_shared2_pll", "dout_shared0_div3",
+   930					    "fout_shared3_pll", "dout_shared1_div3",
+   931					    "dout_shared0_div4", "dout_shared1_div4",
+   932					    "fout_spare_pll" };
+   933	
+   934	/* List of parent clocks for Muxes in CMU_TOP: for CMU_G2D */
+ > 935	PNAME(mout_cmu_g2d_p)		= { "dout_shared0_div3", "fout_shared3_pll",
+   936					    "dout_shared1_div3", "dout_shared0_div4",
+   937					    "dout_shared1_div4", "dout_shared2_div2",
+   938					    "fout_spare_pll" };
+   939	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
