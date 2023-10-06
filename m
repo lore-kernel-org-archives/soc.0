@@ -1,83 +1,155 @@
-Return-Path: <SRS0=yOxS=FU=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=JDi2=FU=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3C7E92FF4
-	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 07:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF504E92FF8
+	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 08:49:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3EE98C433C7; Fri,  6 Oct 2023 07:46:19 +0000 (UTC)
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 961A2C433CB; Fri,  6 Oct 2023 08:49:27 +0000 (UTC)
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24187C433CA
-	for <soc@kernel.org>; Fri,  6 Oct 2023 07:46:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24187C433CA
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:cb63:209b:6bfe:e326])
-	by albert.telenet-ops.be with bizsmtp
-	id uXm62A00G1BD6Ej06Xm6Dh; Fri, 06 Oct 2023 09:46:08 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1qofWl-005KIG-V1;
-	Fri, 06 Oct 2023 09:46:06 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1qofXC-0062Zl-7Z;
-	Fri, 06 Oct 2023 09:46:06 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas fixes for v6.6
-Date: Fri,  6 Oct 2023 09:46:04 +0200
-Message-Id: <cover.1696578170.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	by smtp.kernel.org (Postfix) with ESMTPS id D26C6C433C7;
+	Fri,  6 Oct 2023 08:49:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D26C6C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 553463200B27;
+	Fri,  6 Oct 2023 04:49:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 06 Oct 2023 04:49:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1696582161; x=1696668561; bh=fq
+	7jUTQDYY98nWZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=kBZzKMgJZsyJhJ4jkw
+	jQU20dAsOX6gV5+9PEwOC6EDKw7Yrab03w7x2jeKDOi5U8sb/zmQ8Do9RTmngNC8
+	yW1XTJd1bUm/rTmNlB9F9TExc3icsyP1glN07DJTwfqW+FzA7E339NrTeU5sRc/L
+	n3VnfG7n+yfSNcSvAHPhilUJEguUWvbqXhCccmjZaMBvxEY4yFK+ZSL9Gp0LtFha
+	cZ0A9UoKYcf32ekNsano2pLPsmc54RzW/g3tPBuRro7L3uPt90fH3hIN8BzDhNze
+	p9rH9D8bX843QRBOTm7lQAd41lszXDeeJikGphg72AEiyROyBJHPvmCE3IgtC1B8
+	I8xw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1696582161; x=1696668561; bh=fq7jUTQDYY98n
+	WZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=Z9wduYnbaSjO4hO9z4ThmB4lkJ+ww
+	qv48JvZetC68Oy7Cwu1FZTuWCiNrKWgPVlC3WfLZq9CQAtRwtR+Hgmm5hm7ogHvR
+	g0HhACHoO4MLD7fxHHWj2C3pZU6RASeeLf/9XyNP46PxJ9+Wl/0D6WC9DBYJNVUx
+	mtNhY7IAXC9PqRSim+iZ7rzPLHV0BIft9I6alaUUj3XxUqUv5l7FauuYS80Rf78F
+	T7iw5HeL/xcklmoBHAfAZMLxvFOyUulgeZzpl67xGf0yowfKAw8nWtTXzHAQ8HCE
+	psBkN+QRkt9PJmeDlBFt3h9VAeNTcJJeZFH8l8liepztop+DKATVvf2XQ==
+X-ME-Sender: <xms:EMofZT2i-9GISWVnjxgMhlfr_K0J1DDCikeZffdfaxxvS-c9ZvWmTA>
+    <xme:EMofZSH-GDrTlbKrOc09JAu6xzst-K08JW-bRaweoc7LuQJp4GgEj665KOBjFQo1J
+    Ga257VUxycRUUCsOyk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:EMofZT4ywgzN7LkzmXzXPySCJeAKjukN8v43qGhqwxizLsQRUilCXg>
+    <xmx:EMofZY2E3kF4qLgYpdHd4RbTBZENJnE3pcBjp3j1fIuAPC4cUrEcNA>
+    <xmx:EMofZWHiFKv5E0Dvozm7fdb71mAiOQ7Sue59rxI-niu4_MbVJRdtNw>
+    <xmx:EcofZZYKcoYBWJfaMLlaG0rL0xmTDuYDJQLE8dL3BH9l1IWy6uP6mQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id ABDB6B60089; Fri,  6 Oct 2023 04:49:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <e8b23683-36ac-4547-9386-935a1b211d7d@app.fastmail.com>
+In-Reply-To: <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
+References: <20231005155618.700312-1-peter.griffin@linaro.org>
+ <20231005155618.700312-19-peter.griffin@linaro.org>
+ <ZR75cIvnQS2cqTT3@google.com> <2023100520-cleaver-sinless-fbae@gregkh>
+ <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
+ <2023100513-mashing-scrubber-ea59@gregkh>
+ <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
+ <ZR9EnFw3vB92vlYM@google.com>
+ <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
+Date: Fri, 06 Oct 2023 10:48:58 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "William McVicker" <willmcvicker@google.com>
+List-Id: <soc.lore.kernel.org>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Peter Griffin" <peter.griffin@linaro.org>,
+ "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Stephen Boyd" <sboyd@kernel.org>,
+ "Tomasz Figa" <tomasz.figa@gmail.com>,
+ "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
+ "Chanwoo Choi" <cw00.choi@samsung.com>,
+ "Tudor Ambarus" <tudor.ambarus@linaro.org>, andre.draszik@linaro.org,
+ semen.protsenko@linaro.org, soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-watchdog@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC support
+Content-Type: text/plain
 
-	Hi SoC folks,
+On Fri, Oct 6, 2023, at 08:06, Krzysztof Kozlowski wrote:
+> On 06/10/2023 01:19, William McVicker wrote:
+>> On 10/05/2023, Krzysztof Kozlowski wrote:
+>>> On 05/10/2023 21:23, Greg KH wrote:
+>>
+>> Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor> specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very
+> valuable for
+>> debugging early boot issues.
+>
+> Really? How related? The drivers are independent. You describe some
+> out-of-tree development process which we never needed for upstream work.
+> And we did here quite a lot of upstream, specially if you look at ARCH_QCOM.
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+Right: in general, all drivers are independent of the platform
+besides the typical 'depends on ARCH_FOO || COMPILE_TEST' dependency,
+but I think it's worth mentioning the known exceptions, so Greg and
+Will can take that fight to the respective places rather than
+discussing it in the platform submission:
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+- Some subsystems are considered 'special' and the maintainers
+  prefer the drivers to be automatically selected based on the
+  ARCH_* settings instead of having user-visible options. This is
+  traditionally true for large chunks of drivers/irqchip,
+  drivers/clocksource and drivers/pinctrl, though it has gotten
+  better over time on all of them.
 
-are available in the Git repository at:
+- Some older 32-bit platforms are still not as modular as we'd
+  like them to be, especially the StrongARM (ARMv4) platforms that
+  require a custom kernel build, and some of ARMv4T and ARMv5
+  boards that are still missing DT support. These tend to require
+  drivers they directly link to from board code, so disabling
+  the drivers would cause a link failure until this gets
+  cleaned up.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v6.6-tag1
+- A couple of drivers are force-enabled based on the ARCH_*
+  options because booting without these drivers would risk
+  permanent damage to hardware, e.g. in overtemp or overcurrent
+  scenarios.
 
-for you to fetch changes up to c1ec4b450ab729e30d043e927fdfcc9f764f61b7:
+- ACPI based platforms require the PCI host bridge driver to
+  be built-in rather than a loadable module because ACPI
+  needs to probe PCI devices during early boot.
 
-  soc: renesas: Make ARCH_R9A07G043 (riscv version) depend on NONPORTABLE (2023-10-05 15:07:57 +0200)
+- Some subsystems (notably drivers/gpu/, but others as well)
+  have an excessive number of 'select' statements, so you
+  end up surprise-enabling a number of additional drivers
+  and subsystems by enabling certain less important platform
+  specific drivers.
 
-----------------------------------------------------------------
-Renesas fixes for v6.6
-
-  - Fix RISC-V multi-platform kernels by excluding RZ/Five.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Jisheng Zhang (1):
-      soc: renesas: Make ARCH_R9A07G043 (riscv version) depend on NONPORTABLE
-
- drivers/soc/renesas/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+      Arnd
