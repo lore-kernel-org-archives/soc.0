@@ -1,155 +1,117 @@
-Return-Path: <SRS0=JDi2=FU=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=u+Dz=FU=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF504E92FF8
-	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 08:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B835DE92FFA
+	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 09:28:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 961A2C433CB; Fri,  6 Oct 2023 08:49:27 +0000 (UTC)
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 7B901C433CD; Fri,  6 Oct 2023 09:28:29 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D26C6C433C7;
-	Fri,  6 Oct 2023 08:49:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D26C6C433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 553463200B27;
-	Fri,  6 Oct 2023 04:49:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 06 Oct 2023 04:49:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1696582161; x=1696668561; bh=fq
-	7jUTQDYY98nWZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=kBZzKMgJZsyJhJ4jkw
-	jQU20dAsOX6gV5+9PEwOC6EDKw7Yrab03w7x2jeKDOi5U8sb/zmQ8Do9RTmngNC8
-	yW1XTJd1bUm/rTmNlB9F9TExc3icsyP1glN07DJTwfqW+FzA7E339NrTeU5sRc/L
-	n3VnfG7n+yfSNcSvAHPhilUJEguUWvbqXhCccmjZaMBvxEY4yFK+ZSL9Gp0LtFha
-	cZ0A9UoKYcf32ekNsano2pLPsmc54RzW/g3tPBuRro7L3uPt90fH3hIN8BzDhNze
-	p9rH9D8bX843QRBOTm7lQAd41lszXDeeJikGphg72AEiyROyBJHPvmCE3IgtC1B8
-	I8xw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1696582161; x=1696668561; bh=fq7jUTQDYY98n
-	WZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=Z9wduYnbaSjO4hO9z4ThmB4lkJ+ww
-	qv48JvZetC68Oy7Cwu1FZTuWCiNrKWgPVlC3WfLZq9CQAtRwtR+Hgmm5hm7ogHvR
-	g0HhACHoO4MLD7fxHHWj2C3pZU6RASeeLf/9XyNP46PxJ9+Wl/0D6WC9DBYJNVUx
-	mtNhY7IAXC9PqRSim+iZ7rzPLHV0BIft9I6alaUUj3XxUqUv5l7FauuYS80Rf78F
-	T7iw5HeL/xcklmoBHAfAZMLxvFOyUulgeZzpl67xGf0yowfKAw8nWtTXzHAQ8HCE
-	psBkN+QRkt9PJmeDlBFt3h9VAeNTcJJeZFH8l8liepztop+DKATVvf2XQ==
-X-ME-Sender: <xms:EMofZT2i-9GISWVnjxgMhlfr_K0J1DDCikeZffdfaxxvS-c9ZvWmTA>
-    <xme:EMofZSH-GDrTlbKrOc09JAu6xzst-K08JW-bRaweoc7LuQJp4GgEj665KOBjFQo1J
-    Ga257VUxycRUUCsOyk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigddtjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:EMofZT4ywgzN7LkzmXzXPySCJeAKjukN8v43qGhqwxizLsQRUilCXg>
-    <xmx:EMofZY2E3kF4qLgYpdHd4RbTBZENJnE3pcBjp3j1fIuAPC4cUrEcNA>
-    <xmx:EMofZWHiFKv5E0Dvozm7fdb71mAiOQ7Sue59rxI-niu4_MbVJRdtNw>
-    <xmx:EcofZZYKcoYBWJfaMLlaG0rL0xmTDuYDJQLE8dL3BH9l1IWy6uP6mQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id ABDB6B60089; Fri,  6 Oct 2023 04:49:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
-MIME-Version: 1.0
-Message-Id: <e8b23683-36ac-4547-9386-935a1b211d7d@app.fastmail.com>
-In-Reply-To: <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-19-peter.griffin@linaro.org>
- <ZR75cIvnQS2cqTT3@google.com> <2023100520-cleaver-sinless-fbae@gregkh>
- <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
- <2023100513-mashing-scrubber-ea59@gregkh>
- <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
- <ZR9EnFw3vB92vlYM@google.com>
- <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
-Date: Fri, 06 Oct 2023 10:48:58 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "William McVicker" <willmcvicker@google.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 7BF5FC433C8
+	for <soc@kernel.org>; Fri,  6 Oct 2023 09:28:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7BF5FC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-9b9ad5760b9so329243666b.3
+        for <soc@kernel.org>; Fri, 06 Oct 2023 02:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696584507; x=1697189307; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9oMQ4sfKITrqglJ7HukYbUVCwdr/XxwFy7LQhh9sK4U=;
+        b=QG2mbrjHoLN6GhoAv6CN/W1XY/mpIW5dqLUnxRmjBsy39rgMagW+bHfHQK7B6DyZSM
+         01BsDGcHvLEvN/8CRE6WUCR5LC4fMxpQVC9pEn+Rdab7/dR4oisqbhEfDhk9sBZv53D2
+         gfznS5M8aPjScsB/+oIb7mVA/1o9OMNoezNzLUP4Z7TPYs3dH+JZG/bCcO3RkfS7/EXo
+         sUIvyrixWJ/TXArUrhOFLCgeHczsLQ4TTP1Ah9Gi3p92uVaHmXezRvNlDhlwb9BOnYzK
+         Ndno20wR4BPAZA9uYoB6wJovbdc7zkxXEqgVo8a3oavOLILvk0g6TEU9nHFlX6FkO1d0
+         QsvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696584507; x=1697189307;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9oMQ4sfKITrqglJ7HukYbUVCwdr/XxwFy7LQhh9sK4U=;
+        b=HmbMC3Sn2mzVc03GYDdef3SznQrW1h3MUDcoarhoGE9V7j11N27hhcW5gS3VVpQMIR
+         Hck826RNIHcZI15Pg+10RDIor8ErkNFhyNyqOaEpv/f7ze/EVVFT37ESdbyAk2UvbmEn
+         +Liop2Ixweaeo8Pj2FFbSdlE050hxP8SIeJTn844LOWx5T6A3O69+phkxZ2tf97kgFIH
+         Mtx4tsT53CPTVO7NWAdc/3i1pEN/Tsms7qeGkOOfa+3ife2oeVlVQdu4/IY0lrDH6URt
+         X7ulVKs3XuQYoPbzKaHjmVMZdGWji1MiTyp1/N+mI/kJbemEEFD5qn3nHzpo7FWsfqgr
+         MXrw==
+X-Gm-Message-State: AOJu0Yy07lmQ61V1Xg2JEzJdbLDGdOcaYTjr54vghNWZ57cvUY5qtikM
+	mjKVIkeonP+NIlTkYz0FCE/nFg==
+X-Google-Smtp-Source: AGHT+IGpxsusnlFnvTn4ZM0ktTcxxo0I0Dt559z6iS7MDTS1MwPqy0hAbGZ+L98X7zoY9l/NctcgWw==
+X-Received: by 2002:a17:906:1097:b0:9ad:be8a:a588 with SMTP id u23-20020a170906109700b009adbe8aa588mr6450602eju.1.1696584506696;
+        Fri, 06 Oct 2023 02:28:26 -0700 (PDT)
+Received: from krzk-bin.. (5-157-101-10.dyn.eolo.it. [5.157.101.10])
+        by smtp.gmail.com with ESMTPSA id u25-20020a1709063b9900b0099bc2d1429csm2573006ejf.72.2023.10.06.02.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 02:28:26 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Peter Griffin" <peter.griffin@linaro.org>,
- "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Conor Dooley" <conor+dt@kernel.org>, "Stephen Boyd" <sboyd@kernel.org>,
- "Tomasz Figa" <tomasz.figa@gmail.com>,
- "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
- "Chanwoo Choi" <cw00.choi@samsung.com>,
- "Tudor Ambarus" <tudor.ambarus@linaro.org>, andre.draszik@linaro.org,
- semen.protsenko@linaro.org, soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-watchdog@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC support
-Content-Type: text/plain
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] arm64: dts: minor cleanup for v6.7
+Date: Fri,  6 Oct 2023 11:28:22 +0200
+Message-Id: <20231006092823.94839-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 6, 2023, at 08:06, Krzysztof Kozlowski wrote:
-> On 06/10/2023 01:19, William McVicker wrote:
->> On 10/05/2023, Krzysztof Kozlowski wrote:
->>> On 05/10/2023 21:23, Greg KH wrote:
->>
->> Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor> specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very
-> valuable for
->> debugging early boot issues.
->
-> Really? How related? The drivers are independent. You describe some
-> out-of-tree development process which we never needed for upstream work.
-> And we did here quite a lot of upstream, specially if you look at ARCH_QCOM.
+Hi,
 
-Right: in general, all drivers are independent of the platform
-besides the typical 'depends on ARCH_FOO || COMPILE_TEST' dependency,
-but I think it's worth mentioning the known exceptions, so Greg and
-Will can take that fight to the respective places rather than
-discussing it in the platform submission:
+Few patches which were acked by maintainers or slipped through the cracks.
 
-- Some subsystems are considered 'special' and the maintainers
-  prefer the drivers to be automatically selected based on the
-  ARCH_* settings instead of having user-visible options. This is
-  traditionally true for large chunks of drivers/irqchip,
-  drivers/clocksource and drivers/pinctrl, though it has gotten
-  better over time on all of them.
+Best regards,
+Krzysztof
 
-- Some older 32-bit platforms are still not as modular as we'd
-  like them to be, especially the StrongARM (ARMv4) platforms that
-  require a custom kernel build, and some of ARMv4T and ARMv5
-  boards that are still missing DT support. These tend to require
-  drivers they directly link to from board code, so disabling
-  the drivers would cause a link failure until this gets
-  cleaned up.
 
-- A couple of drivers are force-enabled based on the ARCH_*
-  options because booting without these drivers would risk
-  permanent damage to hardware, e.g. in overtemp or overcurrent
-  scenarios.
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-- ACPI based platforms require the PCI host bridge driver to
-  be built-in rather than a loadable module because ACPI
-  needs to probe PCI devices during early boot.
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-- Some subsystems (notably drivers/gpu/, but others as well)
-  have an excessive number of 'select' statements, so you
-  end up surprise-enabling a number of additional drivers
-  and subsystems by enabling certain less important platform
-  specific drivers.
+are available in the Git repository at:
 
-      Arnd
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.7
+
+for you to fetch changes up to 12ca3ca8cf06d803b3690ef523ccf5ffd0b23a71:
+
+  arm64: dts: marvell: minor whitespace cleanup around '=' (2023-09-24 20:56:14 +0200)
+
+----------------------------------------------------------------
+Minor improvements in ARM64 DTS for v6.7
+
+Few cleanups and improvements: use lowercase hex for unit addresses
+(Bitmain), add missing spaces before '{' (APM, MediaTek) and cleanup
+whitespace around '=' (MediaTek, Marvell).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (5):
+      arm64: dts: bitmain: lowercase unit addresses
+      arm64: dts: apm: add missing space before {
+      arm64: dts: mediatek: add missing space before {
+      arm64: dts: mediatek: minor whitespace cleanup around '='
+      arm64: dts: marvell: minor whitespace cleanup around '='
+
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |  2 +-
+ arch/arm64/boot/dts/apm/apm-storm.dtsi             |  2 +-
+ arch/arm64/boot/dts/bitmain/bm1880.dtsi            |  6 +--
+ arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi      |  4 +-
+ .../boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts  |  6 +--
+ arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts       |  6 +--
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts        | 48 +++++++++++-----------
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     | 12 +++---
+ arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    | 12 +++---
+ arch/arm64/boot/dts/mediatek/mt8195-demo.dts       |  2 +-
+ 10 files changed, 50 insertions(+), 50 deletions(-)
