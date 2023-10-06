@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B84FE9411F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F159E94124
 	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 21:11:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 35E12C433C9; Fri,  6 Oct 2023 21:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A056C433C7;
-	Fri,  6 Oct 2023 21:11:25 +0000 (UTC)
+	id 3B328C433CD; Fri,  6 Oct 2023 21:11:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 21B5AC433C8
+	for <soc@kernel.org>; Fri,  6 Oct 2023 21:11:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1696626685;
-	bh=Opg5oT+jovKHcsRfx/RQbj2w52tpUAPMU88LDFCG4Ys=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=KDUIJ9QlRnr9cBstlbzoLQRvNdngzxkHb6tpGvfCzfChy20flTCDvmQ0fqPEKORsn
-	 4TCeZGLgSiOesxBwBPcPF+sKyv/fwGCjaAuXL53rqaJW5x9XpDtHKg6zgFXhblw6tf
-	 R6qAyUmeQW+Wbn1jO+0gUzPzpw7aq8FArOtnBJrggkMSuA5NuTe3WO2lt6qGDNCMrX
-	 UNGcZBuWWJ856F0CONjC42ye8apg4kyDIeTfdHsr7fee8BkL1vWJsBxCgrx1Azmw6C
-	 nJ03U3mm5OPQeld9aLaFXw5npQ0q8n2KGR4pP4i1h94GsiInREMDJ7WVzaRNxVKjO9
-	 8Xa8jRLAg8lgg==
+	bh=Px42cnRJqWtKCeK9NQjSU1IG1R/P5oIYU+UyWNHuoU8=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=XXuHE6XbD/U+WS68pCaYFL/gBoyHE8zhJM8yX3DotlM22XW9p9Foo6diFG/VvgcLa
+	 P+6zhKGu5h7uHdDzRkZSJjCwvz7ul3S6G+G6p06PopDY2+seC4cCp1ZBnjefbad0X5
+	 BoaXG3ZsH0OpQ95tyueRDn9OHTmnJHgI+6mqbT1wb4w3b3eo+jfca9fk65EkGFaILZ
+	 TlhM9j+zGyCLGPqoRtNefFSiA6IyPRzh0iNEOrGvD5ou3EXa54W0iwq8LjiDNcZ+Un
+	 Iv3zGsnE+Kol55p/GkGUaZeoD13AufSaSeJeDYuU31AZvvSONs5ZHO7AF0zmNXBXWk
+	 U14a1wDzFZ/+g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06199C41671;
-	Fri,  6 Oct 2023 21:11:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F3AD7E632D2;
+	Fri,  6 Oct 2023 21:11:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/5] MediaTek: Update MAINTAINERS and dts fixes for v6.7
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169662668502.6539.8371917147290355096.git-patchwork-notify@kernel.org>
-Date: Fri, 06 Oct 2023 21:11:25 +0000
-References: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
-In-Reply-To: <20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+ <169662668492.6539.9836191123048157182.git-patchwork-summary@kernel.org>
+Date: Fri, 06 Oct 2023 21:11:24 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Tue, 03 Oct 2023 13:13:42 +0200 you wrote:
-> Hello SoC maintainers,
-> 
-> As suggested by Arnd in [1], I am sending an update to the MAINTAINERS
-> file, adding myself to the MediaTek SoC maintainers, and some urgent
-> bugfixes for MediaTek devicetrees.
-> 
-> mt6358 PMIC
->  - Bogus property dropped
-> 
-> [...]
+Series: MediaTek: Update MAINTAINERS and dts fixes for v6.7
+  Submitter: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=789567
+  Lore link: https://lore.kernel.org/r/20231003-mediatek-fixes-v6-7-v1-0-dad7cd62a8ff@collabora.com
+    Patches: [1/5] MAINTAINERS: Add Angelo as MediaTek SoC co-maintainer
+             [2/5] arm64: dts: mediatek: mt8195-demo: fix the memory size to 8GB
+             [3/5] arm64: dts: mediatek: mt8195-demo: update and reorder reserved memory regions
+             [4/5] arm64: dts: mediatek: fix t-phy unit name
+             [5/5] arm64: dts: mediatek: mt8195: Set DSU PMU status to fail
 
-Here is the summary with links:
-  - [1/5] MAINTAINERS: Add Angelo as MediaTek SoC co-maintainer
-    https://git.kernel.org/soc/soc/c/cb3a7f63e99f
-  - [2/5] arm64: dts: mediatek: mt8195-demo: fix the memory size to 8GB
-    https://git.kernel.org/soc/soc/c/25389c03c21c
-  - [3/5] arm64: dts: mediatek: mt8195-demo: update and reorder reserved memory regions
-    https://git.kernel.org/soc/soc/c/6cd2a30b96a4
-  - [4/5] arm64: dts: mediatek: fix t-phy unit name
-    https://git.kernel.org/soc/soc/c/963c3b0c47ec
-  - [5/5] arm64: dts: mediatek: mt8195: Set DSU PMU status to fail
-    https://git.kernel.org/soc/soc/c/d192615c307e
+Patch: [GIT,PULL] Renesas fixes for v6.6
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=790513
+  Lore link: https://lore.kernel.org/r/cover.1696578170.git.geert+renesas@glider.be
 
-You are awesome, thank you!
+Patch: [GIT,PULL] AMDTEE fix for v6.6
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=789662
+  Lore link: https://lore.kernel.org/r/20231003171835.GA669924@rayden
+
+
+Total patches: 7
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
