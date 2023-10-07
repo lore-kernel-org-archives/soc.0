@@ -1,104 +1,179 @@
-Return-Path: <SRS0=XHl9=FU=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=gvZ/=FV=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5822E94125
-	for <soc@archiver.kernel.org>; Fri,  6 Oct 2023 21:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B543EE9413E
+	for <soc@archiver.kernel.org>; Sat,  7 Oct 2023 02:46:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A8673C433CD; Fri,  6 Oct 2023 21:52:57 +0000 (UTC)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 7CB31C433C9; Sat,  7 Oct 2023 02:46:06 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A531AC433C8
-	for <soc@kernel.org>; Fri,  6 Oct 2023 21:52:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A531AC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-59f7f2b1036so31370907b3.3
-        for <soc@kernel.org>; Fri, 06 Oct 2023 14:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696629175; x=1697233975; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1rPxjIeED0bawl/Zg89RjgWrJXCyV4Gh65dmdUfl1ys=;
-        b=mycYcxSGxsLD1MyPzakg0SMBGfi5ih5PVIDtmaC79KNgpdAQ61lWs6R7LiEAHGoR7m
-         Bt/4avCPzxtdSK7OLiQdisxFos5RDRXSpoaVUOh4CED4od32DW6KXUFb+Zo8rr2mdzuk
-         HXWQAIDAz0zAnSqKzAme6B26KEUxV4FiJAo+Zxfd0z8h3+2JafXksw3fSz/NnjS1si9x
-         CkJNSkl1819VymuFWRz3N2E9UKIi78IwbrjpB8GVOiLfcGGsTwgEFz+aDlpspH79tWaE
-         HBAfSeNwSnSgPDQUOnllYo5zx6ozi5CxKUYNVAWNZmXVQDCp8NjGUtJ4Uw8eJk+r2OBM
-         r+Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696629175; x=1697233975;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1rPxjIeED0bawl/Zg89RjgWrJXCyV4Gh65dmdUfl1ys=;
-        b=IPZz8s0iwB9H/57PBnWsxwoFEUM4hGR1/AMC0BHQFaP/UKZVALswh1UHeTYzdg8U/R
-         gYSCMWCDYdLI8wKNgKRuUGGkQE2J0vyU5xpwPVqFz5H4wgD6MTAC1wcTJEkPoIrw645q
-         /i9kHmEFh5mlk7Cs866+9wsGoXfygI3CMH3iLJBTO+eoiw0RM9LTxVwW/4sKGicEh0/b
-         5IayvPQt8N+RZeUUBX0qJIzpxLfc3Yh1qecMX3k9ubFXgSLmXgJ5kX6iv9+xkJox5ViJ
-         lzMv/2c2sZIjvvwguzQizxAmpHsv7vf3g1acCQhx1nnH6lVgEUCtkojnrFbBf2kekxHI
-         VVjw==
-X-Gm-Message-State: AOJu0Yzg40S6IHOSGZhiOJqvA7bx99ixhoyyv4+XK7cTYoSjIEAGdCWf
-	YRlpd5UJEs2xar3vV6UTt7jL5U20wjH8NrbgBNJoig==
-X-Google-Smtp-Source: AGHT+IFtX2fxe7d3k5oKKf0awkIPkKawjGVBLybPNlpLznR5lXwlZYsZkR+FwG2n0CD+MRFwqqi8iiuKTGPz9YDHAGY=
-X-Received: by 2002:a81:524f:0:b0:56d:2d82:63dc with SMTP id
- g76-20020a81524f000000b0056d2d8263dcmr10487001ywb.10.1696629175634; Fri, 06
- Oct 2023 14:52:55 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5727DC433C8;
+	Sat,  7 Oct 2023 02:46:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5727DC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm000004.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4S2V2N57KxzVlSD;
+	Sat,  7 Oct 2023 10:42:36 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm000004.china.huawei.com
+ (7.193.23.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sat, 7 Oct
+ 2023 10:45:59 +0800
+Message-ID: <8286dbfe-9807-5e68-533c-9bb321ee7855@huawei.com>
+Date: Sat, 7 Oct 2023 10:45:55 +0800
 MIME-Version: 1.0
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-2-peter.griffin@linaro.org> <419f823c-2476-4aec-b25d-7e6a2994555a@linaro.org>
-In-Reply-To: <419f823c-2476-4aec-b25d-7e6a2994555a@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 6 Oct 2023 23:52:44 +0200
-Message-ID: <CACRpkdbAFOm07ttP9gXasTkZOc0JC3DKv9wBsVYSV3rEfqi9iQ@mail.gmail.com>
-Subject: Re: [PATCH 01/21] dt-bindings: interrupt-controller: Add gs101
- interrupt controller
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 2/2] soc: kunpeng_hccs: add the check for PCC subspace
+ type
+To: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
-	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
-	s.nawrocki@samsung.com, wim@linux-watchdog.org, linux@roeck-us.net, 
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, olof@lixom.net, 
-	cw00.choi@samsung.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	semen.protsenko@linaro.org, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+CC: <rafael@kernel.org>, <rafael.j.wysocki@intel.com>, <xuwei5@hisilicon.com>,
+	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<soc@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<liuyonglong@huawei.com>
+References: <20230914115753.9064-1-lihuisong@huawei.com>
+ <20230920064703.23543-1-lihuisong@huawei.com>
+ <20230920064703.23543-3-lihuisong@huawei.com>
+ <20230920141147.bq7cjiqjk6c36t6d@bogus>
+ <1b05f595-b485-5a7e-ad31-b19f462fe43f@huawei.com>
+ <20230929112736.iribjiwzk5wszb4k@bogus>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230929112736.iribjiwzk5wszb4k@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.121.59]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm000004.china.huawei.com (7.193.23.18)
+X-CFilter-Loop: Reflected
 
-On Thu, Oct 5, 2023 at 6:04=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 05/10/2023 17:55, Peter Griffin wrote:
 
-> > Add the gs101 SoC interrupt header that provides human readable
-> > constants for all the IRQs in the SoC.
-> >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-
-> > +#define ITNO IRQ_TYPE_NONE
-> > +#define ITER IRQ_TYPE_EDGE_RISING
-> > +#define ITEF IRQ_TYPE_EDGE_FALLING
-> > +#define ITEB IRQ_TYPE_EDGE_BOTH
-> > +#define ITLH IRQ_TYPE_LEVEL_HIGH
-> > +#define ITLL IRQ_TYPE_LEVEL_LOW
+在 2023/9/29 19:27, Sudeep Holla 写道:
+> On Thu, Sep 21, 2023 at 10:27:36AM +0800, lihuisong (C) wrote:
+>> 在 2023/9/20 22:11, Sudeep Holla 写道:
+>>> On Wed, Sep 20, 2023 at 02:47:03PM +0800, Huisong Li wrote:
+>>>> Currently, HCCS driver directly uses Generic Communications Channel Shared
+>>>> Memory Region which is used in type0/1/2 to communicate with platform,
+>>>> but actually doesn't support type3/4/5.
+>>>> So this patch adds the check for PCC subspace type.
+>>>>
+>>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>>>> ---
+>>>>    drivers/soc/hisilicon/kunpeng_hccs.c | 17 +++++++++++++++++
+>>>>    1 file changed, 17 insertions(+)
+>>>>
+>>>> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+>>>> index f3810d9d1caa..4ba3bfd45a01 100644
+>>>> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
+>>>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+>>>> @@ -174,6 +174,19 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
+>>>>    	return rc;
+>>>>    }
+>>>> +static int hccs_check_pcc_info(struct hccs_dev *hdev)
+>>>> +{
+>>>> +	struct pcc_mbox_chan *pcc_chan = hdev->cl_info.pcc_chan;
+>>>> +
+>>>> +	if (pcc_chan->type >= ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE) {
+>>>> +		dev_err(hdev->dev, "unsupport for subspace type%u.\n",
+>>>> +			pcc_chan->type);
+>>>> +		return -EOPNOTSUPP;
+>>>> +	}
+>>> Is this the only use of the PCC type information you have or do you plan to
+>>> use it for something other than the validation.
+>> Yeah, it is just validation now. we want to plan this driver can support
+>> more types.
+> OK
 >
-> No, these are not bindings.
+>>> Just for sake of argument, I can say all users of PCC must then do the
+>>> similar validation. I don't know where to draw the line here.
+>> If export PCC type, it is good for the user of PCC to be more universal and
+>> more compatible.
+>>
+> I don't think it is a good idea to just export raw ACPI PCC type to the
+I understand you.
+But the format and size of type0-2, type3/4 and type5 are different.
+And all PCC client drivers need to know which PCC type they used and how 
+to fill
+the shared memory region header.
+Please notice that the type used by the client driver is fixed and 
+agreed with the platform in advance.
+> client drivers. What if the driver in the future needs to work on a DT
+> platform as well and need to work with non-PCC mailbox channel ?
+It's also an alternative path.
 >
-> > +
-> > +#define IRQ_ALIVE_EINT0              0
-> > +#define IRQ_ALIVE_EINT1              1
+> Also pushing the client PCC drivers to have more ACPI knowledge to understand
+> what each type means is also something I prefer to avoid. The real information
+Yeah, it is great that the PCC client drivers don't need to know which 
+PCC type is used.
+But it is inevitable according to above mentioned.
+> you want is whether this is an initiator(previously known master) channel or
+> responder(previously known as slave) channel. It boils down to unidirectional
+> vs bidirectional and what direction in bidirectional channels.
+not just for this.
 >
-> We do not keep interrupt numbers as bindings. Please drop entire file.
-
-Agree, but it should be fine to have as a SoC-specific .dtsi under
-arch/.../google/gs101-irq.dtsi though!
-
-Yours,
-Linus Walleij
+> It would be good if mbox framework can be taught that, or atleast make an
+> attempt to see what people think about it. Just patching it the way you are
+> proposing is just going to hide real issue here.
+>
+>>> Ideally I would expect the driver to make this transparent and give error
+>>> during transmit if not supported.
+>> I understand you.
+>> I just check this type only once during the initializing phase.
+>> Otherwise, every once need to verify it when send PCC command.
+> Agreed, but refer above for my concern on the solution proposed.
+>
+>>> The driver must be able to work with different PCC type to support variety
+>>> of platforms TBH. What is the issue exactly here ? Is this to prevent the
+>> Agree more with you.
+>> IMO, the user of PCC has the ability to support variety of platforms if they
+>> can get PCC type.
+>> In this case, to prevent type 4 is necessary if driver cannot act as a
+>> slave.
+>> on the other hand, If one driver acts as a slave, platform must supply slave
+>> subspace for them.
+>>> use of Type 4 ? I think we must do something better but I don't know what
+>>> that is yet.
+>> Yes, we can try to do it better. I have a concern, like below.
+>>
+> Thanks for agreeing.
+>
+>> You know that the use of PCC can use polling mode and interrupt mode to
+>> communicate with platform.
+>> I'm not sure if the obtaining of the polling mode and interrupt mode is an
+>> issue to prevent driver to be more universal.
+> Again this must be addressed at mailbox API level.
+Maybe it is ok.
+The harder thing to deal with is that the client driver needs to decide 
+if set rx_callback for the polling or
+interrupt mode before requesting PCC channel.
+because driver doesn't know whether platform supports interrupt.
+If we fully put PCC type and interrupt mode we discussed to mailbox API 
+or PCC driver, there are possibly
+many works should be done. I have no good idea to do it yet.
+>
+>> But this driver can know if they support interrupt mode based on struct
+>> mbox_chan::struct mbox_controller::txdone_irq after requesting PCC channel.
+> Agreed, I was about to ask the same.
+>
+>> Because I'm not sure it's a better way.
+> Again agreed.
+>
+>> You know that drivers used interrupt mode need to fill the rx_callback
+>> function into mbx_client when register PCC channel.
+>> And drivers used polling mode don't do it.
+>> If we use this way, drivers that both support the two mode have to modify
+>> the rx_callback pointer after requesting PCC channel.
+> I am not sure if I followed all the details here. May be a rough hack helps
+> to understand what you are proposing ? Ofcourse not for merging, just to
+> understand the issue better.
+please see the above reply😁
+>
+> --
+> Regards,
+> Sudeep
+>
+> .
