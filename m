@@ -1,76 +1,160 @@
-Return-Path: <SRS0=DBy+=FX=arm.com=robin.murphy@kernel.org>
+Return-Path: <SRS0=2/Qf=FX=google.com=willmcvicker@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A608CD610B
-	for <soc@archiver.kernel.org>; Mon,  9 Oct 2023 16:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D66CD612F
+	for <soc@archiver.kernel.org>; Mon,  9 Oct 2023 20:04:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EF4A4C433C8; Mon,  9 Oct 2023 16:46:08 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 28018C433C7
-	for <soc@kernel.org>; Mon,  9 Oct 2023 16:46:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28018C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A27161FB;
-	Mon,  9 Oct 2023 09:46:46 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29A853F762;
-	Mon,  9 Oct 2023 09:46:04 -0700 (PDT)
-Message-ID: <74e81490-1765-4f13-9fee-04b58696bbde@arm.com>
-Date: Mon, 9 Oct 2023 17:45:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH 1/6] dma-direct: add depdenencies to
- CONFIG_DMA_GLOBAL_POOL
-To: Christoph Hellwig <hch@lst.de>, Geert Uytterhoeven <geert@linux-m68k.org>
+	id 37A36C433CC; Mon,  9 Oct 2023 20:04:06 +0000 (UTC)
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 29046C433C9
+	for <soc@kernel.org>; Mon,  9 Oct 2023 20:04:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29046C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1c9ad9473d7so41005ad.1
+        for <soc@kernel.org>; Mon, 09 Oct 2023 13:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696881843; x=1697486643; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=792ACGhD6QjX3gm4sl6mN1ZnGztud0zoUVjrdn9K8C0=;
+        b=JqvPg2P7YJdQAILCXv9MfAmsD8Wm6V83H/EA4ZAblFbzlMqUQdPpAune7IDntHVhGJ
+         r6S9tq9SZAn2+mo/vKYFg15gxB4DAAJtUXT7lz8dlQd+l0+vucmhw+XXVwM/ftuu2/9I
+         KhcNxMlN56DS+LWvxknPn/H7fPkQ2gb5ag00OqAj0tHfW0crbwFFewUmjkyTUbXXY+tJ
+         WBBwnqo7tnKqnECC/bsOIT5CyvOVZ2tysLDo7xAzBBssxltZtorDcOd+f4HZNot3BlUP
+         7JQrAA5bvwQxV7qgUDVkYEgunxy/1JVZCn8xDzmMTkrJvoOn/3TUkJO8ACmTVrKgWwMC
+         lE/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696881843; x=1697486643;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=792ACGhD6QjX3gm4sl6mN1ZnGztud0zoUVjrdn9K8C0=;
+        b=Uref30sneyQfQ6A/P0EGPGnY7sTElRQhBr5/ioXZ9j2DngDYcQWGtHYOiPOf+zO6ZU
+         WLilH6+6yIRDedzkxVOUYS8TiiBwYNJw2+/WOOmBxACaw3+bw8uReI1ZPa1gpQg9yK+Q
+         6MIc7OinKFX77+CsHR6bvjJQmIySqBTJqSLBYaXQRihXoIveGoCfc080BAETQ6X8vbAG
+         zra8qlGHii+hz+2Lvms7mUTRcL9nDj/w7f8hUATmwrTs2Pobk1ODghq+c09e0zWmY8bq
+         Eq/VIOuUBnWZZq6ojoUFYtkWFFsQmjktrase3A8SNHFRgDqrHNMmDpsBwv6x16RXAGkB
+         s9HA==
+X-Gm-Message-State: AOJu0YyhFj8PjNnh3fS+ic0ZgqND0xVBb9KtkJyHLAtpbrFsiBxf78c7
+	Bcqe9nc6yD3+sLsD0fn8SPtwqQ==
+X-Google-Smtp-Source: AGHT+IGoDE0HuNMIvb5i2H0sYSVhJ0lPtrnwVtRl9vcbmzHn2Ebn09gMy1XHI6WbiXHnD9jwHuRR6Q==
+X-Received: by 2002:a17:902:ec8b:b0:1c6:c41:679c with SMTP id x11-20020a170902ec8b00b001c60c41679cmr803671plg.4.1696881843213;
+        Mon, 09 Oct 2023 13:04:03 -0700 (PDT)
+Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
+        by smtp.gmail.com with ESMTPSA id k3-20020a63ab43000000b0050f85ef50d1sm8838631pgp.26.2023.10.09.13.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 13:04:02 -0700 (PDT)
+Date: Mon, 9 Oct 2023 13:03:59 -0700
+From: William McVicker <willmcvicker@google.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: iommu@lists.linux.dev, Marek Szyprowski <m.szyprowski@samsung.com>,
- Wei Fang <wei.fang@nxp.com>, Shenwei Wang <shenwei.wang@nxp.com>,
- Clark Wang <xiaoning.wang@nxp.com>, NXP Linux Team <linux-imx@nxp.com>,
- linux-m68k@lists.linux-m68k.org, netdev@vger.kernel.org,
- Jim Quinlan <james.quinlan@broadcom.com>,
- linux-riscv <linux-riscv@lists.infradead.org>,
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
- "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- arm-soc <soc@kernel.org>
-References: <20231009074121.219686-1-hch@lst.de>
- <20231009074121.219686-2-hch@lst.de>
- <CAMuHMdWiYDQ5J7R7hPaVAYgXqJvpjdksoF6X-zHrJ_80Ly4XfQ@mail.gmail.com>
- <20231009091625.GB22463@lst.de>
- <CAMuHMdUZNewD-QC8J7MWSBP197Vc169meOjjK6=b7M11kVjUzg@mail.gmail.com>
- <20231009094330.GA24836@lst.de>
- <CAMuHMdV2FXdUHtjYW8JyXGBgHhR8De0vp3Ee77e6G8Vbs3gG8Q@mail.gmail.com>
- <1cd44af1-10ac-465a-8d20-e0aa268e036f@arm.com>
- <CAMuHMdXNX7+VLnSYhj=M9dTSTWLJqjS_WaT0ceMRUYoa5_MSeA@mail.gmail.com>
- <20231009124805.GA7042@lst.de>
-Content-Language: en-GB
-In-Reply-To: <20231009124805.GA7042@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+	s.nawrocki@samsung.com, linus.walleij@linaro.org,
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
+	will@kernel.org, arnd@arndb.de, olof@lixom.net,
+	cw00.choi@samsung.com, tudor.ambarus@linaro.org,
+	andre.draszik@linaro.org, semen.protsenko@linaro.org,
+	soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	kernel-team@android.com
+Subject: Re: [PATCH 19/21] google/gs101: Add dt overlay for oriole board
+Message-ID: <ZSRcr6JRbj-wZf7R@google.com>
+References: <20231005155618.700312-1-peter.griffin@linaro.org>
+ <20231005155618.700312-20-peter.griffin@linaro.org>
+ <7f2032c2-812a-46b5-8914-056cd53c37cb@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f2032c2-812a-46b5-8914-056cd53c37cb@linaro.org>
 
-On 09/10/2023 1:48 pm, Christoph Hellwig wrote:
-> On Mon, Oct 09, 2023 at 01:10:26PM +0200, Geert Uytterhoeven wrote:
->> RISCV_DMA_NONCOHERENT does not select DMA_GLOBAL_POOL,
->> ARCH_R9A07G043 selects DMA_GLOBAL_POOL.
->> RISCV_DMA_NONCOHERENT does select DMA_DIRECT_REMAP if MMU.
+On 10/05/2023, Krzysztof Kozlowski wrote:
+> On 05/10/2023 17:56, Peter Griffin wrote:
+> > The LK bootloader on Pixel6 searches for a dt overlay in the
+> > dtbo partition with a board_id and board_rev that matches
+> > what is baked into the device. If this overlay is not present
+> > then the phone will bootloop in fastboot and you can't boot
+> > the upstream kernel.
+> > 
+> > This commit adds a dtbo for the production oriole variant.
+> > The other pre-production board overlays are not included
+> > at this time.
+> > 
+> > Adding the dtbo here allows for a better experience when
+> > building/booting the upstream kernel on Pixel devices
+> > as all the DT required to boot the device will be created
+> > as part of the kernel build process. Rather than having to
+> > fetch the dtbo from some other repo.
+> > 
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/google/Makefile          |  1 +
+> >  arch/arm64/boot/dts/google/gs101-oriole.dtso | 21 ++++++++++++++++++++
+> >  2 files changed, 22 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dtso
+> > 
+> > diff --git a/arch/arm64/boot/dts/google/Makefile b/arch/arm64/boot/dts/google/Makefile
+> > index 6d2026a767d4..3f1761f8daa9 100644
+> > --- a/arch/arm64/boot/dts/google/Makefile
+> > +++ b/arch/arm64/boot/dts/google/Makefile
+> > @@ -2,5 +2,6 @@
+> >  
+> >  dtb-$(CONFIG_ARCH_GOOGLE_TENSOR) += \
+> >  	gs101-oriole.dtb \
+> > +	gs101-oriole.dtbo
+> >  
+> >  
+> > diff --git a/arch/arm64/boot/dts/google/gs101-oriole.dtso b/arch/arm64/boot/dts/google/gs101-oriole.dtso
+> > new file mode 100644
+> > index 000000000000..50832fd94204
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/google/gs101-oriole.dtso
+> > @@ -0,0 +1,21 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Oriole DVT Device Tree
+> > + *
+> > + * Copyright 2021-2023 Google,LLC
+> > + */
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +/ {
+> > +	board_id = <0x20304>;
+> > +	board_rev = <0x10000>;
+> 
+> Undocumented properties. Please propose bindings... Also, underscores
+> are not allowed, so in this form it is a no-go... although I understand
+> the pain of not being able to change the bootloader.
+> 
+> For reference:
+> https://lore.kernel.org/all/20220605150747.GA3465286-robh@kernel.org/
+> https://lore.kernel.org/all/20220610163343.GA1787330-robh@kernel.org/
 
-Bleh, guess I should have known better than to trust my Monday morning 
-memory without double-checking the code :)
+These names are actually arbitrary and don't depend on the bootloader. They are
+passed into the mkdtimg tool [1] using --id and --rev and used to create the
+dt_table_entries. The bootloader traverses the table and picks the overlay
+based on these properties. So we can use whatever property names we want
+without changing the bootloader.
 
-> Yeah, and we'll basically need to split RISCV_DMA_NONCOHERENT into
-> an option for each type of non-coherent support.  This is why we
-> should never have added support for any of the non-standard versions,
-> as it's turning into a giant mess.
-
-Indeed the main point I was trying to get at is for ARCH_R9A07G043 (or 
-rather possibly ERRATA_ANDES_CMO) to not select RISCV_DMA_NONCOHERENT in 
-its current form, since that ending up selecting DMA_DIRECT_REMAP on a 
-platform which can't support it is the thing that's most obviously wrong.
+[1] https://android.googlesource.com/platform/system/libufdt/+/refs/heads/main/utils/
 
 Thanks,
-Robin.
+Will
+
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
