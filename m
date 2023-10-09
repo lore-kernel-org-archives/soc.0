@@ -1,180 +1,81 @@
-Return-Path: <wens@kernel.org>
+Return-Path: <SRS0=BEuJ=FX=public-files.de=frank-w@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41458E95A8E
-	for <soc@archiver.kernel.org>; Mon,  9 Oct 2023 12:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F173E95A91
+	for <soc@archiver.kernel.org>; Mon,  9 Oct 2023 13:34:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 24599C43391; Mon,  9 Oct 2023 12:49:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6D1C433CB;
-	Mon,  9 Oct 2023 12:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696855763;
-	bh=RdL6X0IuEzq5DEkk1aRpGDbJ8Q3AWlt3Q8VCAAvNqO8=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:List-Id:Cc:
-	 From;
-	b=jsrw4uc2mS1Y+BHxwA1cXtrSn5LJ66eBKR+DweBzZ3RKITTXC/V/p+o650TDlfMyr
-	 TMnrN97zAidct8tJxgnqXR11mGUA1SuzbCnht1BYQl2HdVw6he77+meiDZ4wR8mEM5
-	 xjWRBwcQBCvX1GXNcUg5uq4me7/3tQoRSBLMVNrMlJU0tlLVgkhD9YEn5ZHWWVzhF9
-	 SEBykP4a31cFWyRXoIgQdX1k672a9zOkL7iixtKjF24Nux/lszFd0jQJkg1ne+KYt/
-	 b7HFoQ6fR4zgYpSsfvbELPs9qoxcdvGrNKfUIFdmotgQbF/tZ3xafs/TaNICte24cz
-	 BJGf7XLC8sl7A==
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2774f6943b1so3349266a91.0;
-        Mon, 09 Oct 2023 05:49:23 -0700 (PDT)
-X-Gm-Message-State: AOJu0YysfKOM1SzaYdHBvDzLVuMnrXZ37niTMrZd2D3E1UuDQqq17k9I
-	YstRzfcTPnBpIg/ob5IVMnmWLTnwFi+drwmO6wc=
-X-Google-Smtp-Source: AGHT+IEJPw/0KZYbTJdgEW1q+YmISj7VyjqzNA2U4u8ZeIq5MgOTrzeUi6ddE86G+8a3/ieeXbfmWIQMdiu7KQ1K8r8=
-X-Received: by 2002:a17:90b:3784:b0:276:ba43:a863 with SMTP id
- mz4-20020a17090b378400b00276ba43a863mr13678662pjb.41.1696855762601; Mon, 09
- Oct 2023 05:49:22 -0700 (PDT)
+	id D4222C433C7; Mon,  9 Oct 2023 13:34:05 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id D1720C433C9;
+	Mon,  9 Oct 2023 13:34:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1720C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=public-files.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=public-files.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+ s=s31663417; t=1696858422; x=1697463222; i=frank-w@public-files.de;
+ bh=ytxZPHe6tFONDf+5l4xYRtY+76c88p10P1MBcS5kg14=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=EwF2aOmzUfyYGAJ5PWznBQYEWjrJxre/BRBPGX7odNzHyDZ3G9B8dVLwCWzEVi/E6EiqdEoe7AS
+ cHlVLuql82R0MKYtCIC+Nht3j+dy9F6j8yQEDChceoBQ06IXNOLLHXFUjG/reJ4uyh5uDlbgSLSVN
+ 8QT5RbgaRRYchsLBBTAbZZbgyhlalHIPF2agOVps2agSBSNOPmHR2N2nIUdxstIdzWp8nXuYIuO3+
+ BXtm4pe+RsXlgPq+pH/NIuhsIcFM9R+WEcQTs4REgNQ8pA6h4kk6EuZXSgZjVt8YZT76WA015go6Q
+ Oazy3S8IwME8iP43GnGAgot0ReQCN2SlGtZw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.151.237] ([217.61.151.237]) by web-mail.gmx.net
+ (3c-app-gmx-bap21.server.lan [172.19.172.91]) (via HTTP); Mon, 9 Oct 2023
+ 15:33:42 +0200
 MIME-Version: 1.0
-References: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
-In-Reply-To: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Mon, 9 Oct 2023 21:49:12 +0900
-X-Gmail-Original-Message-ID: <CAGb2v64-9o7ukZqOtmDTDjngn62Rw6Nseg13LtZ=6O4dx=Hm5A@mail.gmail.com>
-Message-ID: <CAGb2v64-9o7ukZqOtmDTDjngn62Rw6Nseg13LtZ=6O4dx=Hm5A@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64: dts: mediatek: Updates for v6.7
+Message-ID: <trinity-67cbdf3b-6a3b-4f29-ae8b-c54e46378faa-1696858422016@3c-app-gmx-bap21>
+From: Frank Wunderlich <frank-w@public-files.de>
 To: Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Alexandre Mergnat <amergnat@baylibre.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
-	=?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "moderated list:ARM/Mediatek SoC
+ support" <linux-mediatek@lists.infradead.org>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Alexandre Mergnat
+ <amergnat@baylibre.com>, Chen-Yu Tsai <wens@csie.org>, Macpaul Lin
+ <macpaul.lin@mediatek.com>, =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?=
+ <nfraprado@collabora.com>
+Subject: Aw: [GIT PULL] arm64: dts: mediatek: Updates for v6.7
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 9 Oct 2023 15:33:42 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
+References: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:lCSM5Yw7IuQWy0+3+hYqGhefVjjNqGDemGoIw4ciA/4hYeXLF9rLLC2+AyhFfJPVWtaUs
+ ZsPa9j9RFR6r6wdffw6HgAc6sApX93yqUMBMC0oLzyDLkw1wzbfKbJXzsflbyuNqRARTtcb8iU5P
+ URfR/nn+RLIfi8d0Xc6Xrq+o9BU+GqunFYMFwAbKkR0UGN6e+dl0wmaa4QfshDNAJW6+YUFvySjy
+ EKvzDiPKFXlFK0HTXr+RzSFJNoqoWkaPHyAamBhc/fe73k9ISpIrU9QJH0P61hk81LyRO+mnFT0n
+ fw=
+UI-OutboundReport: notjunk:1;M01:P0:9UK90TlX0Xw=;1ZZJMwoEE1VoDa2+Ey/wwivrRD1
+ zhoM4igZ6ao5vEv4g23K+Q/eZ8atUnDr6hggbjfw63hsEvrKeo7ldt89YW43W8XtGSaJMUoxR
+ AoV6b42VX2ggNl2IIcY1Pfu73eBGbgVrd5fYsvwfjIkAhLJ0RMd6cX6p1BXKsSkDYghSz/eNv
+ uhpgknbOEU+mbbsBCOJIq81qP8D2mV6WwO04eIGLj2ng10PUu2i6xAG0StlcIhedOJz+iaApy
+ gEYCbwVfXLagGV7K2SrhnS8XeSY2jaK5oCIFwVae38A/Dp0Zrqg0gK92g6s3u/vzSEMIlPbqI
+ oEJYB6uRr6lfFI/EAi+xeeDCfm0PZpIr1teqaHoQiKl4nFF9yAf58ZEDUQgEWre47w01rPE1Z
+ 8Z/EVQCuOjDt1Xs5ybCm7kGNXt85roRBh40QS9/B2uD8/LTKqVSZO1bVFo4ztbZnC2ng/krZt
+ USWdx6aDkHDccLbOXQmiSTKKGMJWGQe3Xn4S21wbFee7dNidmQy6p3Y9fHl6W4XGOaUyriR67
+ 4tI7TN/bwIDVRKXtFxj/Zv2tvpy84beLXlKCe3wM0i2UVP6XBmvNvJIppFsHfU3yRTuusS+GQ
+ ScJMgLpoLWiMszmGwM8dHe1VVCkdcMSLB4INudvcJmpG9f6rT0wEjpHNS+rSB2+n2sW7dsZ/5
+ vdOtCji+6xUemzh+3Ruk3hKW5wB0RYsJzAFBJT79fVuA7Kbd4kSgC1we016bNGUapTEToLMzO
+ 2wtEdlRNWRxhQMyvdR7or8wlOykNmhXMcE5PQ1BzCyM11+B0ml5hima67vzmqY1cuNRIaimYM
+ 4r6I/V0SY36wsZYF0tRkZ4Qg==
 
-On Mon, Oct 9, 2023 at 7:35=E2=80=AFPM Matthias Brugger <matthias.bgg@gmail=
-.com> wrote:
->
-> Hi Arnd and Olof,
->
-> Please find below a few patches for the 64 bit DTS files targeted for v6.=
-7.
->
-> The patches were picked up with the help from Angelo.
-> With these changes we have now support for the Genio 1200 EVK board for I=
-oT
-> applications. Also the MT8365 from the same business line has much more s=
-upport
-> of peripherals.
-> Also support for the new 4th revision of the Acer Chromebook 514 was adde=
-d. The
-> difference with older board is the audio codec used.
-> On the Mobile phone side of things, support for the Helio X10, which is u=
-sed by
-> the Sony Xperia M5 got support for the display.
->
-> Happy merging,
-> Matthias
->
-> ---
-> The following changes since commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0=
-aa:
->
->    Linux 6.6-rc4 (2023-10-01 14:15:13 -0700)
->
-> are available in the Git repository at:
->
->    https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git=
-/
-> tags/v6.6-next-dts64
->
-> for you to fetch changes up to 252d6a178ee3df2984194b3579851b00cbe8cdbd:
->
->    arm64: dts: mediatek: cherry: Configure eDP and internal display (2023=
--10-06
-> 11:10:18 +0200)
->
-> ----------------------------------------------------------------
-> MediaTek ARM64 DTS updates for v6.7
->
-> - Add support for SMI/IOMMU/LARBs, power domains and multimedia
->    related subsystems for the MT8365 SoC
-> - Add support for MediaTek Genio 1200 IoT evaluation board
-> - Add support for newer revisions of MT8192 Chromebooks
-> - Add support for internal eDP display on MT8195 Cherry Chromebooks
-> - Add display and display backlight support for the Helio X10 SoC and
->    for the Sony Xperia M5 smartphone
->
-> ----------------------------------------------------------------
-> Alexandre Mergnat (7):
->        arm64: dts: mediatek: add mmsys support for mt8365 SoC
->        arm64: dts: mediatek: add camsys support for mt8365 SoC
->        arm64: dts: mediatek: add apu support for mt8365 SoC
->        arm64: dts: mediatek: add power domain support for mt8365 SoC
->        arm64: dts: mediatek: add smi support for mt8365 SoC
->        arm64: dts: mediatek: add larb support for mt8365 SoC
->        arm64: dts: mediatek: add iommu support for mt8365 SoC
->
-> AngeloGioacchino Del Regno (4):
->        arm64: dts: mediatek: mt6795: Add support for display blocks and D=
-PI/DSI
->        arm64: dts: mediatek: mt6795-xperia-m5: Add display backlight supp=
-ort
->        arm64: dts: mediatek: mt6795-xperia-m5: Add DSI Display and its vr=
-egs
->        arm64: dts: mediatek: cherry: Configure eDP and internal display
->
-> Chen-Yu Tsai (1):
->        arm64: dts: mediatek: mt8183-kukui: Add PMIC regulator supplies
+Hi,
 
-Could you also pick up the following patches?
+do you have these 2 series still in view?
 
-- arm64: dts: mediatek: mt6358: Merge ldo_vcn33_* regulators
-  https://lore.kernel.org/linux-mediatek/20230913084457.1638690-1-wenst@chr=
-omium.org/
-- arm64: dts: mt6358: Drop bogus "regulator-fixed" compatible properties
-  https://lore.kernel.org/linux-mediatek/20230928091415.3253698-1-wenst@chr=
-omium.org/
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=761293
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=777712
 
-
-Thanks
-
-
-> Macpaul Lin (2):
->        dt-bindings: arm64: mediatek: add mt8395-evk board
->        arm64: dts: mediatek: add device-tree for Genio 1200 EVK board
->
-> N=C3=ADcolas F. R. A. Prado (5):
->        dt-bindings: arm64: dts: mediatek: Add rev5-sku2 of hayato
->        dt-bindings: arm64: dts: mediatek: Add rev4 of spherion
->        arm64: dts: mediatek: Remove asurada-audio dtsi files
->        arm64: dts: mediatek: Add hayato-rev5-sku2
->        arm64: dts: mediatek: Add spherion-rev4
->
->   .../devicetree/bindings/arm/mediatek.yaml          |  16 +
->   arch/arm64/boot/dts/mediatek/Makefile              |   3 +
->   .../boot/dts/mediatek/mt6795-sony-xperia-m5.dts    | 101 +++
->   arch/arm64/boot/dts/mediatek/mt6795.dtsi           | 253 +++++-
->   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  28 +
->   .../mt8192-asurada-audio-rt1015p-rt5682.dtsi       |  19 -
->   .../dts/mediatek/mt8192-asurada-audio-rt1015p.dtsi |  26 -
->   .../dts/mediatek/mt8192-asurada-audio-rt5682.dtsi  |  21 -
->   .../boot/dts/mediatek/mt8192-asurada-hayato-r1.dts |  19 +-
->   .../dts/mediatek/mt8192-asurada-hayato-r5-sku2.dts |  64 ++
->   .../dts/mediatek/mt8192-asurada-spherion-r0.dts    |  19 +-
->   .../dts/mediatek/mt8192-asurada-spherion-r4.dts    |  77 ++
->   arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi   |  28 +
->   arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi    |  33 +
->   arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 210 +++++
->   .../boot/dts/mediatek/mt8395-genio-1200-evk.dts    | 901 ++++++++++++++=
-+++++++
->   16 files changed, 1749 insertions(+), 69 deletions(-)
->   delete mode 100644
-> arch/arm64/boot/dts/mediatek/mt8192-asurada-audio-rt1015p-rt5682.dtsi
->   delete mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-audio-rt=
-1015p.dtsi
->   delete mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-audio-rt=
-5682.dtsi
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r=
-5-sku2.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion=
--r4.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.d=
-ts
+regards Frank
