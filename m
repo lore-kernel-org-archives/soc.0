@@ -1,110 +1,138 @@
-Return-Path: <SRS0=F8+2=FY=tuxon.dev=claudiu.beznea@kernel.org>
+Return-Path: <SRS0=zUad=FY=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 123A5CD68EC
-	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 05:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896ACCD80B7
+	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 12:09:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BEDA6C433CB; Tue, 10 Oct 2023 05:00:01 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id 56080C433C9; Tue, 10 Oct 2023 12:09:45 +0000 (UTC)
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EA80EC433C9
-	for <soc@kernel.org>; Tue, 10 Oct 2023 04:59:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA80EC433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-99c1c66876aso944559966b.2
-        for <soc@kernel.org>; Mon, 09 Oct 2023 21:59:59 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8150AC433D9
+	for <soc@kernel.org>; Tue, 10 Oct 2023 12:09:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8150AC433D9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-66cfc96f475so1364136d6.3
+        for <soc@kernel.org>; Tue, 10 Oct 2023 05:09:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1696913998; x=1697518798; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i7NaDoDI8qOvV+4nnKqwVBkoAdHosDfS0rPHPzrt7zI=;
-        b=YpAd5gucPLMrTnIG0pt6MPGEghkp24ruT89bl079woIJQDZS5wj3Hyfz9vKF/sm5ho
-         8/UWZxwQDrXuWWGszxS6wo+IVc55gih1rJV1kzguUZuZuGFsUfagLRdslHaEJz6uGSkr
-         5WPIz6fuOatzsnxjfYiCWTlXR8Fe/IU7sfmCx0TJuW3wAhmE/dyR4OVMB2J0q2uV4aHf
-         Pd3F/qxPVQj4g9ZWCuG2rZqq7PHMauMiAT1obdFzAdhwi0+FQqzoUBZ9Pe4bYPcPaoX0
-         ividcV0oEFElPP9TIf1Xv/gpllj2682BoEp93xiQ9lMjCD35qU91EhRw0QukIBCVkXnR
-         jLuQ==
+        d=linaro.org; s=google; t=1696939782; x=1697544582; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DgSEBJcUi7PZ5OXedvwInXaFNURNqtsaL0h7wFFXk5g=;
+        b=McWeyHjgs6Egr0TkN1+7Y5Xd1i9dBKF07gO7s7vcEu2TT3042bNqUvFlQzq91idYeN
+         op7vaMZ38dD0HihiwOyew3q0EjKkldzGdYa0n9n1VivYIAh0yWOxVdDC+r5IPmbWIJI4
+         dpzpP/tDsTA7qQ1RFATOCLIgLdBGDVoOXickfynwSJLDLvB/TWYFgnQaNuOLWhMUl2PA
+         0FOVAG4g8N+j5VNsJPW2MAw0wUfcQBHvAbl7jXfjy8WDOtBujZcs4se9krDCYGNe/FTD
+         USmuAQJdCUiXluqLccUSrzO/b0CHgowrFWvCdW9DsLUqhzRfjaLpH2nvvG41k8G+R6PE
+         rL7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696913998; x=1697518798;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1696939782; x=1697544582;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i7NaDoDI8qOvV+4nnKqwVBkoAdHosDfS0rPHPzrt7zI=;
-        b=eHTVsBqTPSNbr3P6Ap86xe6n4tVal7epp68ULXNLUg7Cb40yh9YwGtooLA8MM6cHN1
-         yYnKFup2TfNHlUIRuV64/7iEiYVhic4apQyMQDY/Bz9Cbf1oAPYWMKEmj5IPbX/WeWHC
-         VfSjjmWML/RpQR82ch+N7Logy8A3LZU47FMMrMhp3IozE3ulHz2eB4G6DvgMGKLQvoS2
-         HzxkO927QrWwev0Ay758j9ju4vu0jhEeDBkMJRfhaoS8wqwHaZ/ks1IysirpZ8dguby5
-         U7u7gik68d7AI0PMRC/tn+epbCoFJMYufZI+HNJs2sDzS+LqHVDyIxMmnej3PzEyJ/Pe
-         l0CA==
-X-Gm-Message-State: AOJu0YwQoTDmgKl2ahD7Yrfke3nYGxJkEIj9Sr8wDKkioflh4dmRAzac
-	uJj1KA1zpHEzhhaEggmHLELPFw==
-X-Google-Smtp-Source: AGHT+IG4KAyijfW9zG+Vos6yiDuHH4ICn5vykN1f2tDW/U2Jj3lMCwVNIwmaxpqImYoGXMxnuhzkjg==
-X-Received: by 2002:a17:907:7788:b0:9ba:2fe3:c976 with SMTP id ky8-20020a170907778800b009ba2fe3c976mr2152769ejc.12.1696913997850;
-        Mon, 09 Oct 2023 21:59:57 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.152])
-        by smtp.gmail.com with ESMTPSA id lu22-20020a170906fad600b009944e955e19sm7811947ejb.30.2023.10.09.21.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 21:59:57 -0700 (PDT)
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-List-Id: <soc.lore.kernel.org>
-To: arnd@arndb.de,
-	olof@lixom.net,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
-	linux-arm-kernel@lists.infradead.org,
-	claudiu.beznea@tuxon.dev
-Subject: [GIT PULL] Microchip AT91 DT updates for v6.7
-Date: Tue, 10 Oct 2023 07:59:55 +0300
-Message-Id: <20231010045955.1259843-1-claudiu.beznea@tuxon.dev>
-X-Mailer: git-send-email 2.39.2
+        bh=DgSEBJcUi7PZ5OXedvwInXaFNURNqtsaL0h7wFFXk5g=;
+        b=mNvJ4PlfxssMxAaDKR84lXs0y8cfDblp+/w95maKBN7TFi1ybm9thQi7TJMmkt5/1M
+         IxbJJVR0qDXQZX2tOR3/8m4g41ejyxS5V13fQNi8vU0dGDjHoLxvIA8XgRHmEe7qgZlQ
+         gHX0a1RP98EHQTrx4pnMMVzfRN6M/aVedgU6YNrqW1xK0WJtC32oS3FjodpRwE4v5aYx
+         UOAq5l6pcu7r8vraNxSZR95eT6LmHvYfydk9mAQCmq+c3He1nNU2nImubjrBFagIDQqW
+         wHaArcm61OYXEXkZoQjVCFFQClecusReo5d0Z3VBwoa01B2eLDrrSi4UeeVdF/xmcCFB
+         cvzQ==
+X-Gm-Message-State: AOJu0YxpH/WqtRl69nNWVLWfwJG6JirI6QXJynu1e1hZU7ik1BFXgdIV
+	4zJa6xOy2ZIkhR7je0Ucmu3gE3qInN4yXNcPg27reA==
+X-Google-Smtp-Source: AGHT+IEkobWfRAv+hk9GeXAgYbAsdwwHInRJB4q4A/k6gLUZyJCTapOQUejfM/de0SvYVTlXeCdNVMlVoHapdH1mpY8=
+X-Received: by 2002:ad4:5cc7:0:b0:65d:dcc:9754 with SMTP id
+ iu7-20020ad45cc7000000b0065d0dcc9754mr22900149qvb.30.1696939782310; Tue, 10
+ Oct 2023 05:09:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231005155618.700312-1-peter.griffin@linaro.org>
+ <20231005155618.700312-20-peter.griffin@linaro.org> <20231006205204.GA269353-robh@kernel.org>
+In-Reply-To: <20231006205204.GA269353-robh@kernel.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Tue, 10 Oct 2023 13:09:31 +0100
+Message-ID: <CADrjBPpEFo4gRTsWau+xGoBAr2j7srhbxYefJGDer+PRu9QxBg@mail.gmail.com>
+Subject: Re: [PATCH 19/21] google/gs101: Add dt overlay for oriole board
+To: Rob Herring <robh@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
+	s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
+	olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org, 
+	andre.draszik@linaro.org, semen.protsenko@linaro.org, soc@kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+Hi Rob,
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+Thanks for your review!
 
-are available in the Git repository at:
+On Fri, 6 Oct 2023 at 21:52, Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Oct 05, 2023 at 04:56:16PM +0100, Peter Griffin wrote:
+> > The LK bootloader on Pixel6 searches for a dt overlay in the
+> > dtbo partition with a board_id and board_rev that matches
+> > what is baked into the device. If this overlay is not present
+> > then the phone will bootloop in fastboot and you can't boot
+> > the upstream kernel.
+> >
+> > This commit adds a dtbo for the production oriole variant.
+> > The other pre-production board overlays are not included
+> > at this time.
+> >
+> > Adding the dtbo here allows for a better experience when
+> > building/booting the upstream kernel on Pixel devices
+> > as all the DT required to boot the device will be created
+> > as part of the kernel build process. Rather than having to
+> > fetch the dtbo from some other repo.
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/google/Makefile          |  1 +
+> >  arch/arm64/boot/dts/google/gs101-oriole.dtso | 21 ++++++++++++++++++++
+> >  2 files changed, 22 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dtso
+> >
+> > diff --git a/arch/arm64/boot/dts/google/Makefile b/arch/arm64/boot/dts/google/Makefile
+> > index 6d2026a767d4..3f1761f8daa9 100644
+> > --- a/arch/arm64/boot/dts/google/Makefile
+> > +++ b/arch/arm64/boot/dts/google/Makefile
+> > @@ -2,5 +2,6 @@
+> >
+> >  dtb-$(CONFIG_ARCH_GOOGLE_TENSOR) += \
+> >       gs101-oriole.dtb \
+> > +     gs101-oriole.dtbo
+>
+> Overlays in the kernel must be able to be applied to a base DT in the
+> kernel. Add a rule to apply this (hint: a '-dtbs' variable does this
+> similar to -objs variables).
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.7
+Ok will do, thanks for the hint
 
-for you to fetch changes up to 3cec9514911c4400a4b4ab778b9e92b60a14c677:
+>
+> > diff --git a/arch/arm64/boot/dts/google/gs101-oriole.dtso b/arch/arm64/boot/dts/google/gs101-oriole.dtso
+> > new file mode 100644
+> > index 000000000000..50832fd94204
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/google/gs101-oriole.dtso
+> > @@ -0,0 +1,21 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Oriole DVT Device Tree
+>
+> Doesn't DVT mean pre-production?
 
-  ARM: dts: at91: sam9x60_curiosity: Add mandatory dt property for RTT (2023-09-29 22:29:04 +0300)
+Yes, DVT stands for Design Verification Testing. I can remove that
+DVT suffix for v2.
+I suppose that means there were no changes between DVT and production as this
+is the overlay used by the production devices.
 
-----------------------------------------------------------------
-Microchip AT91 device tree updates for 6.7
+regards,
 
-It contains:
-- the new Microchip SAMA5D29 Curiosity board
-- a typo fix in TDES node name for SAMA5D4 dtsi
-- enablement of RTT as RTC for SAM9X60 Curiosity board
-
-----------------------------------------------------------------
-Andrei Simion (1):
-      dt-bindings: ARM: at91: Document Microchip SAMA5D29 Curiosity
-
-Mihai Sain (1):
-      ARM: dts: at91: sama5d29_curiosity: Add device tree for sama5d29_curiosity board
-
-Nicolas Ferre (1):
-      ARM: dts: at91/trivial: fix typo in crypto DT naming
-
-Tudor Ambarus (1):
-      ARM: dts: at91: sam9x60_curiosity: Add mandatory dt property for RTT
-
- .../devicetree/bindings/arm/atmel-at91.yaml        |   7 +
- arch/arm/boot/dts/microchip/Makefile               |   2 +
- .../boot/dts/microchip/at91-sam9x60_curiosity.dts  |   4 +
- .../boot/dts/microchip/at91-sama5d29_curiosity.dts | 600 +++++++++++++++++++++
- arch/arm/boot/dts/microchip/sama5d4.dtsi           |   2 +-
- 5 files changed, 614 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/microchip/at91-sama5d29_curiosity.dts
+Peter
