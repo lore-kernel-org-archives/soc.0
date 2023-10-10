@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD1B8CD98CC
-	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 22:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B8FDCD98C0
+	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 22:50:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B4567C116AA; Tue, 10 Oct 2023 22:50:10 +0000 (UTC)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	id D60ECC116B8; Tue, 10 Oct 2023 22:50:17 +0000 (UTC)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 26697C433C9
-	for <soc@kernel.org>; Tue, 10 Oct 2023 22:50:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26697C433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id 9C201C43395
+	for <soc@kernel.org>; Tue, 10 Oct 2023 22:50:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9C201C43395
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3296b3f03e5so4197891f8f.2
-        for <soc@kernel.org>; Tue, 10 Oct 2023 15:50:03 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-325e9cd483eso5904518f8f.2
+        for <soc@kernel.org>; Tue, 10 Oct 2023 15:50:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696978202; x=1697583002; darn=kernel.org;
+        d=linaro.org; s=google; t=1696978209; x=1697583009; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1DR1ojZTb+IfmFcRuUQg18Yv0kzxewgqmRDrgaGCQGw=;
-        b=nghTWDWCTVN1nQPSsalnvK63um4TW5zYXQgA63UqFtkIulwMnyWgY2Tbdja3wRssAj
-         oncvjHh+5DvFZLqMc+7CZz7AmH2bAaJXw00BJQzE5XIJTKZffVfEY7vrHHpvIg39BBbB
-         B5bvlWoEf2q4xpyJ2EMdunAXTiTmFne8yP5lz6+dBrs+ffgy23bm/sJ9X/MpWFNtBfn5
-         cjWFKH6RBj8jE7wX5thBH+gChd5tjl7esk4o/u0hSOVaym8Tt+lrkzIyzwp5Fdv0uz/A
-         7ouLuklNb7DX+F0qYWCDnVMnRTOdm2tg3CG/3GeeQiOpNxWZOL655KENBnEZTiIJnPnY
-         ccSg==
+        bh=xYprZVFUFFzXb/GEC6qC9cNPUPhkcdvlPZq1XksyVt4=;
+        b=C2pmgMjl5H2WmrJafBXt3RZDUcT8Wq8r/V7MOxi3IX8LRlXHa6FvEjZ1iNU2qB8sqX
+         VR1tCOk9wEDgwsy0cPRm9QaQbZ/quge5xiFeqf4jWPaomO1ZhQpQj9wAmey8C0TYwIoJ
+         W2HAfZhk72w0Xsp8NkmpBKFsj9dPv+6u+EOHysAU3GLEzmrACu9oEWnF/y7VHveszm/F
+         2Latn4hIO6V2/X9dst+9PF+xlyWARdpDn+7MaOp4Vjq4MbZzHfVQxpAJTtgmRjtW+RmV
+         Nt9pJSsdzSYzAZIx2pr4bpu1uvxea5st+Ujk6ucCS57nnbgT+Q08pDwWaFNa1fsa8THI
+         OjpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696978202; x=1697583002;
+        d=1e100.net; s=20230601; t=1696978209; x=1697583009;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1DR1ojZTb+IfmFcRuUQg18Yv0kzxewgqmRDrgaGCQGw=;
-        b=Bs9iiFNI8DRwoOfZkSQr2rEKdtmo5phRlWYSsh9VTlDzJZl7R2SZ6a4WY4N8BCQNHG
-         Xl1U2sOB0vuNZSy9blF+OzBCzKJ8qRNTFphtGbUdL9+5NRUyIuuZWp4kIK2gk+y5EE5u
-         yxDwK2jMDTXV3GSfOiY+wF1DdpnibguZNjBiSmzKCjt54110XN1ckzva+AnjKwdmMCwd
-         rAOd2L6pqyQGTfY6UlU+rO8FnYWbIoPjKUAzxAIhW4EwDXPhQP8/zkGkgR99ZnCUZOTY
-         YLLcWPGRP3hCsxRROQncYuMH4lQBvRVLBzD+Ia4yrUsmKq5S7Lnrwg7haC22lN7HFIOc
-         nvdw==
-X-Gm-Message-State: AOJu0YwjjZJ4Wk1RwIyJjNWtjF1H34gR1MbIurL/R3ItXja/Efd6MvBJ
-	AADH+iRH83NAHZPPQjMsWW1SO5eWk9zI/6R5qY1c+Q==
-X-Google-Smtp-Source: AGHT+IF0O8i0ITUBNFfvJUoLyZxoTRJ5Uj2AUlY7ecJ4Q/Y4Cw2NO7t4xFvMZdO6C7ZfmgPMjIlcmw==
-X-Received: by 2002:adf:a792:0:b0:32c:bbfd:987c with SMTP id j18-20020adfa792000000b0032cbbfd987cmr2755496wrc.35.1696978202241;
-        Tue, 10 Oct 2023 15:50:02 -0700 (PDT)
+        bh=xYprZVFUFFzXb/GEC6qC9cNPUPhkcdvlPZq1XksyVt4=;
+        b=D4ggDtWS0pGk9PeJVjDRKV46+YmnAZE+NaZqc6DyIbqgLlRmewzF0fbQH3a4lMD5CG
+         mbLg3EhOXAdTnbO4kpxRv519YOIWOVo1CUDOYbO0z6mFeQ5s+0snFngdElt+I8MQDu41
+         gWL2ftwWYgRHHUr4PjmFK5URSeZChj3EIwKa4zU9UWk0KtNVPPH4slqU5NbuotIkBViV
+         kFBo8VuRZmPHKP0sh02eekYWkyHMPYG9iTYLHPVjxFwd6SQaKwF7JW2fH66ozLcqjPhy
+         ktYvVqpM718LBKbpE8tOF1eI/Tsw3oB+FJ3VEBZnhUomLsMkjyDoY96xBtfMuRp7Qe9H
+         PZNA==
+X-Gm-Message-State: AOJu0Yyj66hOOrIVgtdMRPhuuJ4J9BvPEIgWWkKX7sUObSzzrb7BVZZL
+	D0nxcJ0m2BP4n/CAFYqgzCO51w==
+X-Google-Smtp-Source: AGHT+IEeJhcbODxR8zPSq9gFQ6GybH3mc0pCQwSXlhSaLpJWvK2exY4QzZL5mkQKp2rXpPf5/YjZIA==
+X-Received: by 2002:a05:6000:1c5:b0:32d:83b7:bdb4 with SMTP id t5-20020a05600001c500b0032d83b7bdb4mr244753wrx.9.1696978209476;
+        Tue, 10 Oct 2023 15:50:09 -0700 (PDT)
 Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
-        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.00
+        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 15:50:01 -0700 (PDT)
+        Tue, 10 Oct 2023 15:50:08 -0700 (PDT)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -84,344 +84,67 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v2 11/20] clk: samsung: clk-gs101: add CMU_APM support
-Date: Tue, 10 Oct 2023 23:49:19 +0100
-Message-ID: <20231010224928.2296997-12-peter.griffin@linaro.org>
+Subject: [PATCH v2 16/20] tty: serial: samsung: Add gs101 compatible and SoC data
+Date: Tue, 10 Oct 2023 23:49:24 +0100
+Message-ID: <20231010224928.2296997-17-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
 In-Reply-To: <20231010224928.2296997-1-peter.griffin@linaro.org>
 References: <20231010224928.2296997-1-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds all the registers for the APM clock controller unit.
-
-We register all the muxes and dividers, but only a few of the
-gates currently for PMU and GPIO.
-
-One clock is marked CLK_IS_CRITICAL because the system
-hangs if this clock is disabled.
+Add serial driver data for Google Tensor gs101 SoC.
 
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- drivers/clk/samsung/clk-gs101.c | 301 ++++++++++++++++++++++++++++++++
- 1 file changed, 301 insertions(+)
+ drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-gs101.c
-index e2c62754b1eb..525f95e60665 100644
---- a/drivers/clk/samsung/clk-gs101.c
-+++ b/drivers/clk/samsung/clk-gs101.c
-@@ -19,6 +19,7 @@
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 07fb8a9dac63..79a1a184d5c1 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -2597,14 +2597,21 @@ static const struct s3c24xx_serial_drv_data exynos850_serial_drv_data = {
+ 	.fifosize = { 256, 64, 64, 64 },
+ };
  
- /* NOTE: Must be equal to the last clock ID increased by one */
- #define TOP_NR_CLK                     (CLK_GOUT_CMU_BOOST + 1)
-+#define APM_NR_CLK                     (CLK_APM_PLL_DIV16_APM + 1)
++static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
++	EXYNOS_COMMON_SERIAL_DRV_DATA(),
++	.fifosize = { 256, 64, 64, 64 },
++};
++
+ #define EXYNOS4210_SERIAL_DRV_DATA (&exynos4210_serial_drv_data)
+ #define EXYNOS5433_SERIAL_DRV_DATA (&exynos5433_serial_drv_data)
+ #define EXYNOS850_SERIAL_DRV_DATA (&exynos850_serial_drv_data)
++#define GS101_SERIAL_DRV_DATA (&gs101_serial_drv_data)
  
- /* ---- CMU_TOP ------------------------------------------------------------- */
+ #else
+ #define EXYNOS4210_SERIAL_DRV_DATA NULL
+ #define EXYNOS5433_SERIAL_DRV_DATA NULL
+ #define EXYNOS850_SERIAL_DRV_DATA NULL
++#define GS101_SERIAL_DRV_DATA NULL
+ #endif
  
-@@ -1549,3 +1550,303 @@ static void __init gs101_cmu_top_init(struct device_node *np)
- /* Register CMU_TOP early, as it's a dependency for other early domains */
- CLK_OF_DECLARE(gs101_cmu_top, "google,gs101-cmu-top",
- 	       gs101_cmu_top_init);
-+
-+/* ---- CMU_APM ------------------------------------------------------------- */
-+/* Register Offset definitions for CMU_APM (0x17400000) */
-+#define APM_CMU_APM_CONTROLLER_OPTION							0x0800
-+#define CLKOUT_CON_BLK_APM_CMU_APM_CLKOUT0						0x0810
-+#define CLK_CON_MUX_MUX_CLKCMU_APM_FUNC							0x1000
-+#define CLK_CON_MUX_MUX_CLKCMU_APM_FUNCSRC						0x1004
-+#define CLK_CON_DIV_DIV_CLK_APM_BOOST							0x1800
-+#define CLK_CON_DIV_DIV_CLK_APM_USI0_UART						0x1804
-+#define CLK_CON_DIV_DIV_CLK_APM_USI0_USI						0x1808
-+#define CLK_CON_DIV_DIV_CLK_APM_USI1_UART						0x180c
-+#define CLK_CON_GAT_CLK_BLK_APM_UID_APM_CMU_APM_IPCLKPORT_PCLK				0x2000
-+#define CLK_CON_GAT_CLK_BUS0_BOOST_OPTION1						0x2004
-+#define CLK_CON_GAT_CLK_CMU_BOOST_OPTION1						0x2008
-+#define CLK_CON_GAT_CLK_CORE_BOOST_OPTION1						0x200c
-+#define CLK_CON_GAT_GATE_CLKCMU_APM_FUNC						0x2010
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_GPIO_ALIVE_IPCLKPORT_PCLK			0x2014
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_GPIO_FAR_ALIVE_IPCLKPORT_PCLK		0x2018
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_PMU_ALIVE_IPCLKPORT_PCLK			0x201c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_RTC_IPCLKPORT_PCLK				0x2020
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_TRTC_IPCLKPORT_PCLK				0x2024
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_UART_IPCLKPORT_IPCLK			0x2028
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_UART_IPCLKPORT_PCLK			0x202c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_USI_IPCLKPORT_IPCLK			0x2030
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_USI_IPCLKPORT_PCLK			0x2034
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI1_UART_IPCLKPORT_IPCLK			0x2038
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI1_UART_IPCLKPORT_PCLK			0x203c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_D_TZPC_APM_IPCLKPORT_PCLK				0x2040
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_GPC_APM_IPCLKPORT_PCLK				0x2044
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_GREBEINTEGRATION_IPCLKPORT_HCLK			0x2048
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_INTMEM_IPCLKPORT_ACLK				0x204c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_INTMEM_IPCLKPORT_PCLK				0x2050
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_LHM_AXI_G_SWD_IPCLKPORT_I_CLK			0x2054
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_LHM_AXI_P_AOCAPM_IPCLKPORT_I_CLK			0x2058
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_LHM_AXI_P_APM_IPCLKPORT_I_CLK			0x205c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_LHS_AXI_D_APM_IPCLKPORT_I_CLK			0x2060
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_LHS_AXI_G_DBGCORE_IPCLKPORT_I_CLK			0x2064
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_LHS_AXI_G_SCAN2DRAM_IPCLKPORT_I_CLK		0x2068
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_AOC_IPCLKPORT_PCLK			0x206c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_AP_IPCLKPORT_PCLK			0x2070
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_GSA_IPCLKPORT_PCLK			0x2074
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_SWD_IPCLKPORT_PCLK			0x207c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_TPU_IPCLKPORT_PCLK			0x2080
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_AP_AOC_IPCLKPORT_PCLK			0x2084
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_AP_DBGCORE_IPCLKPORT_PCLK			0x2088
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_PMU_INTR_GEN_IPCLKPORT_PCLK			0x208c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_ROM_CRC32_HOST_IPCLKPORT_ACLK			0x2090
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_ROM_CRC32_HOST_IPCLKPORT_PCLK			0x2094
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_BUS_IPCLKPORT_CLK			0x2098
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_USI0_UART_IPCLKPORT_CLK		0x209c
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_USI0_USI_IPCLKPORT_CLK		0x20a0
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_USI1_UART_IPCLKPORT_CLK		0x20a4
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SPEEDY_APM_IPCLKPORT_PCLK				0x20a8
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SPEEDY_SUB_APM_IPCLKPORT_PCLK			0x20ac
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_D_APM_IPCLKPORT_ACLK				0x20b0
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_D_APM_IPCLKPORT_PCLK				0x20b4
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_G_DBGCORE_IPCLKPORT_ACLK			0x20b8
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_G_DBGCORE_IPCLKPORT_PCLK			0x20bc
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SS_DBGCORE_IPCLKPORT_SS_DBGCORE_IPCLKPORT_HCLK	0x20c0
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SYSMMU_D_APM_IPCLKPORT_CLK_S2			0x20c4
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_SYSREG_APM_IPCLKPORT_PCLK				0x20cc
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_APM_IPCLKPORT_ACLK				0x20d0
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_APM_IPCLKPORT_PCLK				0x20d4
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_DBGCORE_IPCLKPORT_ACLK			0x20d8
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_DBGCORE_IPCLKPORT_PCLK			0x20dc
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_G_SWD_IPCLKPORT_ACLK				0x20e0
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_G_SWD_IPCLKPORT_PCLK				0x20e4
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_AOCAPM_IPCLKPORT_ACLK			0x20e8
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_AOCAPM_IPCLKPORT_PCLK			0x20ec
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_APM_IPCLKPORT_ACLK				0x20f0
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_APM_IPCLKPORT_PCLK				0x20f4
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_WDT_APM_IPCLKPORT_PCLK				0x20f8
-+#define CLK_CON_GAT_GOUT_BLK_APM_UID_XIU_DP_APM_IPCLKPORT_ACLK				0x20fc
-+#define PCH_CON_LHM_AXI_G_SWD_PCH			0x3000
-+#define PCH_CON_LHM_AXI_P_AOCAPM_PCH			0x3004
-+#define PCH_CON_LHM_AXI_P_APM_PCH			0x3008
-+#define PCH_CON_LHS_AXI_D_APM_PCH			0x300c
-+#define PCH_CON_LHS_AXI_G_DBGCORE_PCH			0x3010
-+#define PCH_CON_LHS_AXI_G_SCAN2DRAM_PCH			0x3014
-+#define QCH_CON_APBIF_GPIO_ALIVE_QCH			0x3018
-+#define QCH_CON_APBIF_GPIO_FAR_ALIVE_QCH		0x301c
-+#define QCH_CON_APBIF_PMU_ALIVE_QCH			0x3020
-+#define QCH_CON_APBIF_RTC_QCH				0x3024
-+#define QCH_CON_APBIF_TRTC_QCH				0x3028
-+#define QCH_CON_APM_CMU_APM_QCH				0x302c
-+#define QCH_CON_APM_USI0_UART_QCH			0x3030
-+#define QCH_CON_APM_USI0_USI_QCH			0x3034
-+#define QCH_CON_APM_USI1_UART_QCH			0x3038
-+#define QCH_CON_D_TZPC_APM_QCH				0x303c
-+#define QCH_CON_GPC_APM_QCH				0x3040
-+#define QCH_CON_GREBEINTEGRATION_QCH_DBG		0x3044
-+#define QCH_CON_GREBEINTEGRATION_QCH_GREBE		0x3048
-+#define QCH_CON_INTMEM_QCH				0x304c
-+#define QCH_CON_LHM_AXI_G_SWD_QCH			0x3050
-+#define QCH_CON_LHM_AXI_P_AOCAPM_QCH			0x3054
-+#define QCH_CON_LHM_AXI_P_APM_QCH			0x3058
-+#define QCH_CON_LHS_AXI_D_APM_QCH			0x305c
-+#define QCH_CON_LHS_AXI_G_DBGCORE_QCH			0x3060
-+#define QCH_CON_LHS_AXI_G_SCAN2DRAM_QCH			0x3064
-+#define QCH_CON_MAILBOX_APM_AOC_QCH			0x3068
-+#define QCH_CON_MAILBOX_APM_AP_QCH			0x306c
-+#define QCH_CON_MAILBOX_APM_GSA_QCH			0x3070
-+#define QCH_CON_MAILBOX_APM_SWD_QCH			0x3078
-+#define QCH_CON_MAILBOX_APM_TPU_QCH			0x307c
-+#define QCH_CON_MAILBOX_AP_AOC_QCH			0x3080
-+#define QCH_CON_MAILBOX_AP_DBGCORE_QCH			0x3084
-+#define QCH_CON_PMU_INTR_GEN_QCH			0x3088
-+#define QCH_CON_ROM_CRC32_HOST_QCH			0x308c
-+#define QCH_CON_RSTNSYNC_CLK_APM_BUS_QCH_GREBE		0x3090
-+#define QCH_CON_RSTNSYNC_CLK_APM_BUS_QCH_GREBE_DBG	0x3094
-+#define QCH_CON_SPEEDY_APM_QCH				0x3098
-+#define QCH_CON_SPEEDY_SUB_APM_QCH			0x309c
-+#define QCH_CON_SSMT_D_APM_QCH				0x30a0
-+#define QCH_CON_SSMT_G_DBGCORE_QCH			0x30a4
-+#define QCH_CON_SS_DBGCORE_QCH_DBG			0x30a8
-+#define QCH_CON_SS_DBGCORE_QCH_GREBE			0x30ac
-+#define QCH_CON_SYSMMU_D_APM_QCH			0x30b0
-+#define QCH_CON_SYSREG_APM_QCH				0x30b8
-+#define QCH_CON_UASC_APM_QCH				0x30bc
-+#define QCH_CON_UASC_DBGCORE_QCH			0x30c0
-+#define QCH_CON_UASC_G_SWD_QCH				0x30c4
-+#define QCH_CON_UASC_P_AOCAPM_QCH			0x30c8
-+#define QCH_CON_UASC_P_APM_QCH				0x30cc
-+#define QCH_CON_WDT_APM_QCH				0x30d0
-+#define QUEUE_CTRL_REG_BLK_APM_CMU_APM			0x3c00
-+
-+static const unsigned long apm_clk_regs[] __initconst = {
-+	APM_CMU_APM_CONTROLLER_OPTION,
-+	CLKOUT_CON_BLK_APM_CMU_APM_CLKOUT0,
-+	CLK_CON_MUX_MUX_CLKCMU_APM_FUNC,
-+	CLK_CON_MUX_MUX_CLKCMU_APM_FUNCSRC,
-+	CLK_CON_DIV_DIV_CLK_APM_BOOST,
-+	CLK_CON_DIV_DIV_CLK_APM_USI0_UART,
-+	CLK_CON_DIV_DIV_CLK_APM_USI0_USI,
-+	CLK_CON_DIV_DIV_CLK_APM_USI1_UART,
-+	CLK_CON_GAT_CLK_BLK_APM_UID_APM_CMU_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_CLK_BUS0_BOOST_OPTION1,
-+	CLK_CON_GAT_CLK_CMU_BOOST_OPTION1,
-+	CLK_CON_GAT_CLK_CORE_BOOST_OPTION1,
-+	CLK_CON_GAT_GATE_CLKCMU_APM_FUNC,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_GPIO_ALIVE_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_GPIO_FAR_ALIVE_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_PMU_ALIVE_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_RTC_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_TRTC_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_UART_IPCLKPORT_IPCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_UART_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_USI_IPCLKPORT_IPCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI0_USI_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI1_UART_IPCLKPORT_IPCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_APM_USI1_UART_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_D_TZPC_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_GPC_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_GREBEINTEGRATION_IPCLKPORT_HCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_INTMEM_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_INTMEM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_LHM_AXI_G_SWD_IPCLKPORT_I_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_LHM_AXI_P_AOCAPM_IPCLKPORT_I_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_LHM_AXI_P_APM_IPCLKPORT_I_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_LHS_AXI_D_APM_IPCLKPORT_I_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_LHS_AXI_G_DBGCORE_IPCLKPORT_I_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_LHS_AXI_G_SCAN2DRAM_IPCLKPORT_I_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_AOC_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_AP_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_GSA_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_SWD_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_APM_TPU_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_AP_AOC_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_MAILBOX_AP_DBGCORE_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_PMU_INTR_GEN_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_ROM_CRC32_HOST_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_ROM_CRC32_HOST_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_BUS_IPCLKPORT_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_USI0_UART_IPCLKPORT_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_USI0_USI_IPCLKPORT_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_RSTNSYNC_CLK_APM_USI1_UART_IPCLKPORT_CLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SPEEDY_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SPEEDY_SUB_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_D_APM_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_D_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_G_DBGCORE_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SSMT_G_DBGCORE_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SS_DBGCORE_IPCLKPORT_SS_DBGCORE_IPCLKPORT_HCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SYSMMU_D_APM_IPCLKPORT_CLK_S2,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_SYSREG_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_APM_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_DBGCORE_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_DBGCORE_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_G_SWD_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_G_SWD_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_AOCAPM_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_AOCAPM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_APM_IPCLKPORT_ACLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_UASC_P_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_WDT_APM_IPCLKPORT_PCLK,
-+	CLK_CON_GAT_GOUT_BLK_APM_UID_XIU_DP_APM_IPCLKPORT_ACLK,
-+};
-+
-+PNAME(mout_apm_func_p)	= { "oscclk_apmgsa", "mout_apm_funcsrc", "pad_clk_apm" };
-+PNAME(mout_apm_funcsrc_p) = { "pll_alv_div2_apm", "pll_alv_div4_apm", "pll_alv_div16_apm" };
-+
-+static const struct samsung_fixed_rate_clock apm_fixed_clks[] __initconst = {
-+	FRATE(CLK_APM_PLL_DIV2_APM, "clk_apm_pll_div2_apm", NULL, 0, 393216000),
-+	FRATE(CLK_APM_PLL_DIV4_APM, "clk_apm_pll_div4_apm", NULL, 0, 196608000),
-+	FRATE(CLK_APM_PLL_DIV16_APM, "clk_apm_pll_div16_apm", NULL, 0, 49152000),
-+};
-+
-+static const struct samsung_mux_clock apm_mux_clks[] __initconst = {
-+	MUX(CLK_MOUT_APM_FUNC, "mout_apm_func", mout_apm_func_p,
-+	    CLK_CON_MUX_MUX_CLKCMU_APM_FUNC, 4, 1),
-+	MUX(CLK_MOUT_APM_FUNCSRC, "mout_apm_funcsrc", mout_apm_funcsrc_p,
-+	    CLK_CON_MUX_MUX_CLKCMU_APM_FUNCSRC, 3, 1),
-+};
-+
-+static const struct samsung_div_clock apm_div_clks[] __initconst = {
-+	DIV(CLK_DOUT_APM_BOOST, "dout_apm_boost", "gout_apm_func",
-+	    CLK_CON_DIV_DIV_CLK_APM_BOOST, 0, 1),
-+	DIV(CLK_DOUT_APM_USI0_UART, "dout_apm_usi0_uart", "gout_apm_func",
-+	    CLK_CON_DIV_DIV_CLK_APM_USI0_UART, 0, 7),
-+	DIV(CLK_DOUT_APM_USI0_USI, "dout_apm_usi0_usi", "gout_apm_func",
-+	    CLK_CON_DIV_DIV_CLK_APM_USI0_USI, 0, 7),
-+	DIV(CLK_DOUT_APM_USI1_UART, "dout_apm_usi1_uart", "gout_apm_func",
-+	    CLK_CON_DIV_DIV_CLK_APM_USI1_UART, 0, 7),
-+};
-+
-+static const struct samsung_gate_clock apm_gate_clks[] __initconst = {
-+	GATE(CLK_GOUT_APM_FUNC, "gout_apm_func", "mout_apm_func",
-+	     CLK_CON_GAT_GATE_CLKCMU_APM_FUNC, 21, 0, 0),
-+
-+	GATE(CLK_GOUT_APM_UID_APBIF_GPIO_ALIVE_IPCLKPORT_PCLK,
-+	     "gout_apm_gpio_alive_ipclkport_pclk", "gout_apm_func",
-+	     CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_GPIO_ALIVE_IPCLKPORT_PCLK,
-+	     21, 0, 0),
-+
-+	GATE(CLK_GOUT_APM_UID_APBIF_GPIO_FAR_ALIVE_IPCLKPORT_PCLK,
-+	     "gout_apm_gpio_far_alive_ipclkport_pclk", "gout_apm_func",
-+	     CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_GPIO_FAR_ALIVE_IPCLKPORT_PCLK,
-+	     21, 0, 0),
-+
-+	GATE(CLK_GOUT_APM_UID_APBIF_PMU_ALIVE_IPCLKPORT_PCLK,
-+	     "gout_apm_pmu_alive_ipclkport_pclk", "gout_apm_func",
-+	     CLK_CON_GAT_GOUT_BLK_APM_UID_APBIF_PMU_ALIVE_IPCLKPORT_PCLK,
-+	     21, CLK_IS_CRITICAL, 0),
-+
-+	GATE(CLK_GOUT_APM_UID_SYSREG_APM_IPCLKPORT_PCLK,
-+	     "gout_apm_sysreg_apm_ipclkport_pclk", "gout_apm_func",
-+	     CLK_CON_GAT_GOUT_BLK_APM_UID_SYSREG_APM_IPCLKPORT_PCLK,
-+	     21, 0, 0),
-+};
-+
-+static const struct samsung_cmu_info apm_cmu_info __initconst = {
-+	.mux_clks		= apm_mux_clks,
-+	.nr_mux_clks		= ARRAY_SIZE(apm_mux_clks),
-+	.div_clks		= apm_div_clks,
-+	.nr_div_clks		= ARRAY_SIZE(apm_div_clks),
-+	.gate_clks		= apm_gate_clks,
-+	.nr_gate_clks		= ARRAY_SIZE(apm_gate_clks),
-+	.fixed_clks		= apm_fixed_clks,
-+	.nr_fixed_clks		= ARRAY_SIZE(apm_fixed_clks),
-+	.nr_clk_ids		= APM_NR_CLK,
-+	.clk_regs		= apm_clk_regs,
-+	.nr_clk_regs		= ARRAY_SIZE(apm_clk_regs),
-+};
-+
-+/* ---- platform_driver ----------------------------------------------------- */
-+
-+static int __init gs101_cmu_probe(struct platform_device *pdev)
-+{
-+	const struct samsung_cmu_info *info;
-+	struct device *dev = &pdev->dev;
-+
-+	info = of_device_get_match_data(dev);
-+	exynos_arm64_register_cmu(dev, dev->of_node, info);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id gs101_cmu_of_match[] = {
-+	{
-+		.compatible = "google,gs101-cmu-apm",
-+		.data = &apm_cmu_info,
+ #ifdef CONFIG_ARCH_APPLE
+@@ -2688,6 +2695,9 @@ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
+ 	}, {
+ 		.name		= "artpec8-uart",
+ 		.driver_data	= (kernel_ulong_t)ARTPEC8_SERIAL_DRV_DATA,
 +	}, {
-+	},
-+};
-+
-+static struct platform_driver gs101_cmu_driver __refdata = {
-+	.driver	= {
-+		.name = "gs101-cmu",
-+		.of_match_table = gs101_cmu_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe = gs101_cmu_probe,
-+};
-+
-+static int __init gs101_cmu_init(void)
-+{
-+	return platform_driver_register(&gs101_cmu_driver);
-+}
-+core_initcall(gs101_cmu_init);
++		.name		= "gs101-uart",
++		.driver_data	= (kernel_ulong_t)GS101_SERIAL_DRV_DATA,
+ 	},
+ 	{ },
+ };
+@@ -2709,6 +2719,8 @@ static const struct of_device_id s3c24xx_uart_dt_match[] = {
+ 		.data = EXYNOS850_SERIAL_DRV_DATA },
+ 	{ .compatible = "axis,artpec8-uart",
+ 		.data = ARTPEC8_SERIAL_DRV_DATA },
++	{ .compatible = "google,gs101-uart",
++		.data =  GS101_SERIAL_DRV_DATA },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, s3c24xx_uart_dt_match);
 -- 
 2.42.0.609.gbb76f46606-goog
 
