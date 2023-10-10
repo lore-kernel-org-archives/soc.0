@@ -1,119 +1,230 @@
-Return-Path: <SRS0=/QGC=FY=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=zUad=FY=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88510CD80C1
-	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 12:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F0B4CD98C0
+	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 22:49:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6C21DC433CA; Tue, 10 Oct 2023 12:43:59 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 3EB1BC433C8;
-	Tue, 10 Oct 2023 12:43:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3EB1BC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F5511FB;
-	Tue, 10 Oct 2023 05:44:37 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F25813F7A6;
-	Tue, 10 Oct 2023 05:43:55 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	id ACC95C43397; Tue, 10 Oct 2023 22:49:49 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3D09CC433C9
+	for <soc@kernel.org>; Tue, 10 Oct 2023 22:49:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3D09CC433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-406618d0991so57371975e9.2
+        for <soc@kernel.org>; Tue, 10 Oct 2023 15:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696978186; x=1697582986; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sbuVfEELPjWRyHywl2N/5ORyt876lTLvJftRhFQgfeo=;
+        b=Okd8NiER7Zd5FuWbNODtynuqrGt7+8aoPEtoTp5mn7fpniKiMAUhomLFYAQJpzOROK
+         6eDo30KXHnun0z444lpPYA3UwxN0mvh5NUeB76T7Se/3o5UoVp68KJbToybF+l4eGWVC
+         zh+2J4hOZKQ9SCB6g/IiZsRoGazgj2Z1lcLMU6yionCXI1tfyyU3lOUIp+xXrt4hw8SP
+         YiNs+qZlPKGn7LmrmNlTuwNN+HTCMFhQyfijL1qrtnFvpNK8/OusnAMyF0QdCc60gg8h
+         4gDX70gojN54CnN2sy/kuEnjamv3l4OjuFW8riHWzsdT8vfWV+lJlTpgCnZ4YOHfwRmi
+         cBDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696978186; x=1697582986;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sbuVfEELPjWRyHywl2N/5ORyt876lTLvJftRhFQgfeo=;
+        b=Zty5VZrvDRuDIwsKEm4PCGKL7H/qvRbRCM+ztn7rT2AgAsNZ4QZY/nZPa5OATNQLNJ
+         eWXy/yTjdlX+qy+VuAEKNrJjrhmlCvgM86fSAwQDF9zjEnx5ymyXAHTQUZpbie5f2Kle
+         7jlNDsgtNqkuRGqWpFHzM/YsyhD/cEYy/DgfOYY5PqyIcl1yemfASPTSNO9QRvDGlTiB
+         EbZovRQylvwaDH8InW9Aia1+1uRAo/bd1coXRME21IpKEdRj5Ak6ffGcBiqqvRnWg81T
+         ygm2w//kzcA0CjTm6czaBhJ4Fw1exIG2kI2WiqJCazB8KHAAdtld2qlrGUulhNF0uFKT
+         BAIg==
+X-Gm-Message-State: AOJu0YzUWrmJ0zsSpkliWiVaNOKl0ctLz+GAUKjr30rqMNEqd3gnr3NZ
+	Ynw5pyjyp6h0uwxTtiDaLjj3AA==
+X-Google-Smtp-Source: AGHT+IHj8gB6UPf+MoFrcYoRWXiVyvEqaR26l4a3qKGlDqPVGTZQ3pdV81svnPyT+nUCQYXJMsPFNQ==
+X-Received: by 2002:a7b:ce89:0:b0:402:f07c:4b48 with SMTP id q9-20020a7bce89000000b00402f07c4b48mr16484655wmj.28.1696978186429;
+        Tue, 10 Oct 2023 15:49:46 -0700 (PDT)
+Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
+        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 15:49:45 -0700 (PDT)
+From: Peter Griffin <peter.griffin@linaro.org>
+To: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com,
+	conor+dt@kernel.org,
+	sboyd@kernel.org,
+	tomasz.figa@gmail.com,
+	s.nawrocki@samsung.com,
+	linus.walleij@linaro.org,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	cw00.choi@samsung.com
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_ffa: Updates for v6.7
-Date: Tue, 10 Oct 2023 13:43:54 +0100
-Message-ID: <20231010124354.1620064-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.42.0
+Cc: peter.griffin@linaro.org,
+	tudor.ambarus@linaro.org,
+	andre.draszik@linaro.org,
+	semen.protsenko@linaro.org,
+	saravanak@google.com,
+	willmcvicker@google.com,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	kernel-team@android.com,
+	linux-serial@vger.kernel.org
+Subject: [PATCH v2 00/20] Add minimal Tensor/GS101 SoC support and Oriole/Pixel6 board
+Date: Tue, 10 Oct 2023 23:49:08 +0100
+Message-ID: <20231010224928.2296997-1-peter.griffin@linaro.org>
+X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+Hi folks,
 
-There is a small change in KVM FF-A proxy implementation which is Acked
-by Marc and agreed to take it as part of the other changes.
+Firstly, thanks to everyone who reviewed the v1 series! V2 incorporates all
+the review feedback received so far.
 
-Please pull !
+This series adds initial SoC support for the GS101 SoC and also initial board
+support for Pixel 6 phone (Oriole).
 
-Regards,
-Sudeep
+The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
+(raven) phones. Currently DT is added for the gs101 SoC and Oriole.
+As you can see from the patches the SoC is based on a Samsung Exynos SoC,
+and therefore lots of the low level Exynos drivers can be re-used.
 
--->8
+The support added in this series consists of:
+* cpus
+* pinctrl
+* some CCF implementation
+* watchdog
+* uart
+* gpio
 
-The following changes since commit 9dda1178479aa0a73fe0eaabfe2d9a1c603cfeed:
+This is enough to boot through to a busybox initramfs and shell using an
+upstream kernel though :) More platform support will be added over the
+following weeks and months.
 
-  firmware: arm_ffa: Don't set the memory region attributes for MEM_LEND (2023-09-25 19:43:49 +0100)
+Note 1: I've removed the dtbo overlay from v2 submission and will re-submit once
+I have appropriate documentation for it.
 
-are available in the Git repository at:
+Note 2: I've left the bootargs in dts with earlycon for now, for two reasons.
+1) The bootloader hangs if bootargs isn't present in the dtb as it tries to
+re-write this with additional bootargs.
+2) there is a issue whereby the full serial console doesn't come up properly
+if earlycon isn't also specified. This issue needs further investigation.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-updates-6.7
+Note 3: In `dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible`
+I tried to narrow the interrupts check to google,gs101-pinctrl but I still see
+a warning:
+gs101-oriole.dtb: pinctrl@174d0000: interrupts: [[0, 0, 4],[..] is too long
 
-for you to fetch changes up to bcefd1bf63b1ec9bb08067021cf47f0fad96f395:
+If anyone can educate me on what I've done wrong here it would be most
+appreciated!
 
-  firmware: arm_ffa: Upgrade the driver version to v1.1 (2023-10-08 21:18:48 +0100)
+kind regards,
 
-----------------------------------------------------------------
-Arm FF-A updates for v6.7
+Peter.
 
-The main addition is the initial support for the notifications and
-memory transaction descriptor changes added in FF-A v1.1 specification.
+Changes since v1:
+ - Remove irq/gs101.h and replace macros with irq numbers globally
+ - exynos-pmu - keep alphabetical order
+ - add cmu_apm to clock bindings documentation
+ - sysreg bindings - remove superfluous `google,gs101-sysreg`
+ - watchdog bindings - Alphanumerical order, update gs201 comment
+ - samsung,pinctrl.yaml - add new "if:then:else:" to narrow for google SoC
+ - samsung,pinctrl-wakeup-interrupt.yaml - Alphanumerical order
+ - samsung,pinctrl- add google,gs101-wakeup-eint compatible
+ - clk-pll: fixup typos
+ - clk-gs101: fix kernel test robot warnings (add 2 new clocks,dividers,gate)
+ - clk-gs101: fix alphabetical order
+ - clk-gs101: cmu_apm: fixup typo and missing empty entry
+ - clk-gs101: cmu_misc: remove clocks that were being registerred twice
+ - pinctrl: filter sel: rename/reorder variables, add comment for FLTCON bitfield
+ - pinctrl: filter sel: avoid setting reserved bits by loop over FLTCON1 pins as well
+ - pinctrl: gs101: rename bank_type_6/7 structs to be more specific, split from filter
+ - watchdog: s3c2410_wdt: remove dev_info prints
+ - gs101.dtsi/oriole.dts: order by unit node, remove underscores from node name, blank lines
+   add SoC node, split dts and dtsi into separate patches, remove 'DVT' suffix
+ - gs101-oriole.dtso: Remove overlay until board_id is documented properly
+ - Add GS101_PIN_* macros to gs101-pinctrl.h instead of using Exynos ones
+ - gpio-keys: update linux,code to use input-event-code macros
+ - add dedicated gs101-uart compatible
 
-The notification mechanism enables a requester/sender endpoint to notify
-a service provider/receiver endpoint about an event with non-blocking
-semantics. A notification is akin to the doorbell between two endpoints
-in a communication protocol that is based upon the doorbell/mailbox
-mechanism.
+Peter Griffin (20):
+  dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+  dt-bindings: clock: Add Google gs101 clock management unit bindings
+  dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG
+    compatibles to GS101
+  dt-bindings: watchdog: Document Google gs101 & gs201 watchdog bindings
+  dt-bindings: arm: google: Add bindings for Google ARM platforms
+  dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
+  dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
+  dt-bindings: serial: samsung: Add google-gs101-uart compatible
+  clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+  clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
+  clk: samsung: clk-gs101: add CMU_APM support
+  clk: samsung: clk-gs101: Add support for CMU_MISC clock unit
+  pinctrl: samsung: Add filter selection support for alive banks
+  pinctrl: samsung: Add gs101 SoC pinctrl configuration
+  watchdog: s3c2410_wdt: Add support for Google tensor SoCs
+  tty: serial: samsung: Add gs101 compatible and SoC data
+  arm64: dts: google: Add initial Google gs101 SoC support
+  arm64: dts: google: Add initial Oriole/pixel 6 board support
+  arm64: defconfig: Enable Google Tensor SoC
+  MAINTAINERS: add entry for Google Tensor SoC
 
-The framework is responsible for the delivery of the notification from
-the ender to the receiver without blocking the sender. The receiver
-endpoint relies on the OS scheduler for allocation of CPU cycles to
-handle a notification.
+ .../devicetree/bindings/arm/google.yaml       |   46 +
+ .../bindings/clock/google,gs101-clock.yaml    |  125 +
+ .../samsung,pinctrl-wakeup-interrupt.yaml     |    2 +
+ .../bindings/pinctrl/samsung,pinctrl.yaml     |   19 +
+ .../bindings/serial/samsung_uart.yaml         |    2 +
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    2 +
+ .../soc/samsung/samsung,exynos-sysreg.yaml    |    6 +
+ .../bindings/watchdog/samsung-wdt.yaml        |   10 +-
+ MAINTAINERS                                   |   10 +
+ arch/arm64/Kconfig.platforms                  |    6 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/google/Makefile           |    4 +
+ arch/arm64/boot/dts/google/gs101-oriole.dts   |   79 +
+ arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1275 ++++++++++
+ arch/arm64/boot/dts/google/gs101-pinctrl.h    |   32 +
+ arch/arm64/boot/dts/google/gs101.dtsi         |  503 ++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/samsung/Kconfig                   |    9 +
+ drivers/clk/samsung/Makefile                  |    2 +
+ drivers/clk/samsung/clk-gs101.c               | 2164 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |    9 +-
+ drivers/clk/samsung/clk-pll.h                 |    3 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  163 ++
+ drivers/pinctrl/samsung/pinctrl-exynos.c      |   84 +-
+ drivers/pinctrl/samsung/pinctrl-exynos.h      |   41 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |    4 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |   24 +
+ drivers/tty/serial/samsung_tty.c              |   12 +
+ drivers/watchdog/s3c2410_wdt.c                |  104 +-
+ include/dt-bindings/clock/google,gs101.h      |  232 ++
+ 30 files changed, 4961 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/google/Makefile
+ create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
+ create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
+ create mode 100644 drivers/clk/samsung/clk-gs101.c
+ create mode 100644 include/dt-bindings/clock/google,gs101.h
 
-OS is referred as the receiver’s scheduler in the context of notifications.
-The framework is responsible for informing the receiver’s scheduler that
-the receiver must be run since it has a pending notification.
+-- 
+2.42.0.609.gbb76f46606-goog
 
-The series also includes support for the new format of memory transaction
-descriptors introduced in v1.1 specification.
-
-Apart from the main additions, it includes minor fixes to re-enable FF-A
-drivers usage of 32bit mode of messaging and kernel warning due to the
-missing assignment of IDR allocation ID to the FFA device. It also adds
-emitting 'modalias' to the base attribute of FF-A devices.
-
-----------------------------------------------------------------
-Sudeep Holla (20):
-      firmware: arm_ffa: Assign the missing IDR allocation ID to the FFA device
-      firmware: arm_ffa: Allow the FF-A drivers to use 32bit mode of messaging
-      firmware: arm_ffa: Emit modalias for FF-A devices
-      firmware: arm_ffa: Update the FF-A command list with v1.1 additions
-      firmware: arm_ffa: Implement notification bitmap create and destroy interfaces
-      firmware: arm_ffa: Implement the notification bind and unbind interface
-      firmware: arm_ffa: Implement the FFA_RUN interface
-      firmware: arm_ffa: Implement the FFA_NOTIFICATION_SET interface
-      firmware: arm_ffa: Implement the FFA_NOTIFICATION_GET interface
-      firmware: arm_ffa: Implement the NOTIFICATION_INFO_GET interface
-      firmware: arm_ffa: Initial support for scheduler receiver interrupt
-      firmware: arm_ffa: Add schedule receiver callback mechanism
-      firmware: arm_ffa: Add interfaces to request notification callbacks
-      firmware: arm_ffa: Add interface to send a notification to a given partition
-      firmware: arm_ffa: Add notification handling mechanism
-      firmware: arm_ffa: Simplify the computation of transmit and fragment length
-      KVM: arm64: FFA: Remove access of endpoint memory access descriptor array
-      firmware: arm_ffa: Switch to using ffa_mem_desc_offset() accessor
-      firmware: arm_ffa: Update memory descriptor to support v1.1 format
-      firmware: arm_ffa: Upgrade the driver version to v1.1
-
- arch/arm64/kvm/hyp/nvhe/ffa.c     |  10 +-
- drivers/firmware/arm_ffa/bus.c    |  16 +-
- drivers/firmware/arm_ffa/driver.c | 770 +++++++++++++++++++++++++++++++++++++-
- include/linux/arm_ffa.h           |  79 +++-
- 4 files changed, 840 insertions(+), 35 deletions(-)
