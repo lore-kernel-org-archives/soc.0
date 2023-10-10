@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4071DCD80C1
-	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 12:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88510CD80C1
+	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 12:43:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1E9D9C433CA; Tue, 10 Oct 2023 12:43:53 +0000 (UTC)
+	id 6C21DC433CA; Tue, 10 Oct 2023 12:43:59 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id DA5B6C433C8;
-	Tue, 10 Oct 2023 12:43:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DA5B6C433C8
+	by smtp.kernel.org (Postfix) with ESMTP id 3EB1BC433C8;
+	Tue, 10 Oct 2023 12:43:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3EB1BC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A43AC15;
-	Tue, 10 Oct 2023 05:44:31 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F5511FB;
+	Tue, 10 Oct 2023 05:44:37 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 746BC3F7A6;
-	Tue, 10 Oct 2023 05:43:49 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F25813F7A6;
+	Tue, 10 Oct 2023 05:43:55 -0700 (PDT)
 From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 To: ARM SoC Team <arm@kernel.org>,
@@ -27,21 +27,19 @@ To: ARM SoC Team <arm@kernel.org>,
 	ALKML <linux-arm-kernel@lists.infradead.org>
 Cc: Sudeep Holla <sudeep.holla@arm.com>,
 	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
 	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.7
-Date: Tue, 10 Oct 2023 13:43:47 +0100
-Message-ID: <20231010124347.1620040-1-sudeep.holla@arm.com>
+Subject: [GIT PULL] firmware: arm_ffa: Updates for v6.7
+Date: Tue, 10 Oct 2023 13:43:54 +0100
+Message-ID: <20231010124354.1620064-1-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Hi ARM SoC Team,
 
-Note that this pull request contains changes in the OPP, pmdomain and
-the clock drivers. They have been acked-by the maintainers agreeing to
-take these changes via Arm SoC tree. Also note the OPP changes are merged
-into SCMI using immutable branch shared with OPP tree.
+There is a small change in KVM FF-A proxy implementation which is Acked
+by Marc and agreed to take it as part of the other changes.
 
 Please pull !
 
@@ -50,139 +48,72 @@ Sudeep
 
 -->8
 
-The following changes since commit ce9ecca0238b140b88f43859b211c9fdfd8e5b70:
+The following changes since commit 9dda1178479aa0a73fe0eaabfe2d9a1c603cfeed:
 
-  Linux 6.6-rc2 (2023-09-17 14:40:24 -0700)
+  firmware: arm_ffa: Don't set the memory region attributes for MEM_LEND (2023-09-25 19:43:49 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.7
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-updates-6.7
 
-for you to fetch changes up to da405477e7670782241234ea6b4309f3224ecb63:
+for you to fetch changes up to bcefd1bf63b1ec9bb08067021cf47f0fad96f395:
 
-  firmware: arm_scmi: Add qcom smc/hvc transport support (2023-10-09 22:07:13 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.7
-
-Main additions this time include:
-
-1. SCMI v3.2 clock configuration support:
-   This helps to retrieve the enabled state of a clock as well as allow
-   to set OEM specific clock configurations.
-
-2. Support for generic performance scaling(DVFS):
-   The current SCMI DVFS support is limited to the CPUs in the kernel.
-   This extension enables it to used for all kind of devices and not
-   only for the CPUs. It updates the SCMI cpufreq to utilize the power
-   domain bindings. It also adds a more generic SCMI performance domain
-   based on the genpd framework that as be used for all the non-CPU
-   devices.
-
-3. Extend the generic performance scaling(DVFS) support for firmware
-   driver OPPs:
-   Consumer drivers for devices that are attached to the SCMI performance
-   domain can't make use of the current OPP library to scale performance
-   as the OPPs are firmware driven and often obtained from the firmware
-   rather than the device tree. These changes extend the generic OPP
-   and genpd PM domain frameworks to identify and utilise these firmware
-   driven OPPs.
-
-4. SCMI v3.2 clock parent support:
-   This enables the support for discovering and changing parent clocks
-   and extending the SCMI clk driver to use the same.
-
-5. Qualcom SMC/HVC transport support:
-   The Qualcomm virtual platforms require capability id in the hypervisor
-   call to identify which doorbell to assert when supporting multiple
-   SMC/HVC based SCMI transport channels. Extra parameter is added to
-   support the same and the same is obtained at the fixed address in the
-   shared memory which is initialised by the firmware.
-
-6. Move the existing SCMI power domain driver under drivers/pmdomain
-
-Apart from the above main changes, it also include couple of minor fixes
-and cosmetic reworks.
+  firmware: arm_ffa: Upgrade the driver version to v1.1 (2023-10-08 21:18:48 +0100)
 
 ----------------------------------------------------------------
-Cristian Marussi (6):
-      firmware: arm_scmi: Simplify enable/disable clock operations
-      firmware: arm_scmi: Add clock v3.2 CONFIG_SET support
-      firmware: arm_scmi: Add v3.2 clock CONFIG_GET support
-      firmware: arm_scmi: Add clock .state_get support to pre-v3.2
-      clk: scmi: Add support for .is_enabled clk_ops
-      firmware: arm_scmi: Add clock OEM config clock operations
+Arm FF-A updates for v6.7
 
-Nikunj Kela (2):
-      dt-bindings: arm: Add new compatible for smc/hvc transport for SCMI
-      firmware: arm_scmi: Add qcom smc/hvc transport support
+The main addition is the initial support for the notifications and
+memory transaction descriptor changes added in FF-A v1.1 specification.
 
-Peng Fan (2):
-      firmware: arm_scmi: Add support for clock parents
-      clk: scmi: Add support for clock {set,get}_parent
+The notification mechanism enables a requester/sender endpoint to notify
+a service provider/receiver endpoint about an event with non-blocking
+semantics. A notification is akin to the doorbell between two endpoints
+in a communication protocol that is based upon the doorbell/mailbox
+mechanism.
 
-Rob Herring (1):
-      firmware: arm_scpi: Use device_get_match_data()
+The framework is responsible for the delivery of the notification from
+the ender to the receiver without blocking the sender. The receiver
+endpoint relies on the OS scheduler for allocation of CPU cycles to
+handle a notification.
 
-Sudeep Holla (6):
-      firmware: arm_scmi: Move power-domain driver to the pmdomain dir
-      firmware: arm_scmi: Do not use !! on boolean when setting msg->flags
-      firmware: arm_scmi: Rename scmi_{msg_,}clock_config_{get,set}_{2,21}
-      Merge branch 'opp/pm-domain-scmi' of git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm into for-next/scmi/updates
-      clk: scmi: Free scmi_clk allocated when the clocks with invalid info are skipped
-      firmware: arm_scmi: Convert u32 to unsigned long to align with arm_smccc_1_1_invoke()
+OS is referred as the receiver’s scheduler in the context of notifications.
+The framework is responsible for informing the receiver’s scheduler that
+the receiver must be run since it has a pending notification.
 
-Ulf Hansson (21):
-      firmware: arm_scmi: Extend perf protocol ops to get number of domains
-      firmware: arm_scmi: Extend perf protocol ops to get information of a domain
-      cpufreq: scmi: Prepare to move OF parsing of domain-id to cpufreq
-      firmware: arm_scmi: Align perf ops to use domain-id as in-parameter
-      firmware: arm_scmi: Drop redundant ->device_domain_id() from perf ops
-      cpufreq: scmi: Avoid one OF parsing in scmi_get_sharing_cpus()
-      dt-bindings: arm: cpus: Add a power-domain-name for a performance-domain
-      dt-bindings: firmware: arm,scmi: Extend bindings for protocol@13
-      dt-bindings: power: Clarify performance capabilities of power-domains
-      cpufreq: scmi: Add support to parse domain-id using #power-domain-cells
-      PM: domains: Allow genpd providers to manage OPP tables directly by its FW
-      pmdomain: arm: Add the SCMI performance domain
-      PM: domains: Introduce dev_pm_domain_set_performance_state()
-      PM: domains: Implement the ->set_performance_state() callback for genpd
-      OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
-      OPP: Extend dev_pm_opp_data with a level
-      OPP: Switch to use dev_pm_domain_set_performance_state()
-      OPP: Extend support for the opp-level beyond required-opps
-      firmware: arm_scmi: Simplify error path in scmi_dvfs_device_opps_add()
-      firmware: arm_scmi: Specify the performance level when adding an OPP
-      firmware: arm_scmi: Add generic OPP support to the SCMI performance domain
+The series also includes support for the new format of memory transaction
+descriptors introduced in v1.1 specification.
 
- Documentation/devicetree/bindings/arm/cpus.yaml    |   4 +-
- .../devicetree/bindings/firmware/arm,scmi.yaml     |  15 +-
- .../devicetree/bindings/power/power-domain.yaml    |  17 +-
- MAINTAINERS                                        |   1 +
- drivers/base/power/common.c                        |  21 ++
- drivers/base/power/domain.c                        |  44 ++-
- drivers/clk/clk-scmi.c                             |  96 ++++-
- drivers/cpufreq/scmi-cpufreq.c                     |  52 ++-
- drivers/firmware/arm_scmi/Kconfig                  |  12 +
- drivers/firmware/arm_scmi/Makefile                 |   1 -
- drivers/firmware/arm_scmi/clock.c                  | 402 +++++++++++++++++++--
- drivers/firmware/arm_scmi/driver.c                 |   1 +
- drivers/firmware/arm_scmi/perf.c                   | 112 +++---
- drivers/firmware/arm_scmi/powercap.c               |   4 +-
- drivers/firmware/arm_scmi/smc.c                    |  35 +-
- drivers/firmware/arm_scpi.c                        |  13 +-
- drivers/opp/core.c                                 |  60 ++-
- drivers/opp/of.c                                   |  10 +-
- drivers/opp/opp.h                                  |   2 +-
- drivers/pmdomain/Makefile                          |   1 +
- drivers/pmdomain/arm/Makefile                      |   4 +
- drivers/pmdomain/arm/scmi_perf_domain.c            | 184 ++++++++++
- .../arm_scmi => pmdomain/arm}/scmi_pm_domain.c     |   0
- include/linux/pm.h                                 |   2 +
- include/linux/pm_domain.h                          |  11 +
- include/linux/pm_opp.h                             |  31 +-
- include/linux/scmi_protocol.h                      |  43 ++-
- 27 files changed, 994 insertions(+), 184 deletions(-)
- create mode 100644 drivers/pmdomain/arm/Makefile
- create mode 100644 drivers/pmdomain/arm/scmi_perf_domain.c
- rename drivers/{firmware/arm_scmi => pmdomain/arm}/scmi_pm_domain.c (100%)
+Apart from the main additions, it includes minor fixes to re-enable FF-A
+drivers usage of 32bit mode of messaging and kernel warning due to the
+missing assignment of IDR allocation ID to the FFA device. It also adds
+emitting 'modalias' to the base attribute of FF-A devices.
+
+----------------------------------------------------------------
+Sudeep Holla (20):
+      firmware: arm_ffa: Assign the missing IDR allocation ID to the FFA device
+      firmware: arm_ffa: Allow the FF-A drivers to use 32bit mode of messaging
+      firmware: arm_ffa: Emit modalias for FF-A devices
+      firmware: arm_ffa: Update the FF-A command list with v1.1 additions
+      firmware: arm_ffa: Implement notification bitmap create and destroy interfaces
+      firmware: arm_ffa: Implement the notification bind and unbind interface
+      firmware: arm_ffa: Implement the FFA_RUN interface
+      firmware: arm_ffa: Implement the FFA_NOTIFICATION_SET interface
+      firmware: arm_ffa: Implement the FFA_NOTIFICATION_GET interface
+      firmware: arm_ffa: Implement the NOTIFICATION_INFO_GET interface
+      firmware: arm_ffa: Initial support for scheduler receiver interrupt
+      firmware: arm_ffa: Add schedule receiver callback mechanism
+      firmware: arm_ffa: Add interfaces to request notification callbacks
+      firmware: arm_ffa: Add interface to send a notification to a given partition
+      firmware: arm_ffa: Add notification handling mechanism
+      firmware: arm_ffa: Simplify the computation of transmit and fragment length
+      KVM: arm64: FFA: Remove access of endpoint memory access descriptor array
+      firmware: arm_ffa: Switch to using ffa_mem_desc_offset() accessor
+      firmware: arm_ffa: Update memory descriptor to support v1.1 format
+      firmware: arm_ffa: Upgrade the driver version to v1.1
+
+ arch/arm64/kvm/hyp/nvhe/ffa.c     |  10 +-
+ drivers/firmware/arm_ffa/bus.c    |  16 +-
+ drivers/firmware/arm_ffa/driver.c | 770 +++++++++++++++++++++++++++++++++++++-
+ include/linux/arm_ffa.h           |  79 +++-
+ 4 files changed, 840 insertions(+), 35 deletions(-)
