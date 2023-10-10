@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E644BCD98D6
-	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 22:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D336CD98D2
+	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 22:50:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BCE4CC433C8; Tue, 10 Oct 2023 22:50:26 +0000 (UTC)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	id B11DEC43397; Tue, 10 Oct 2023 22:50:25 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 95179C4AF1E
-	for <soc@kernel.org>; Tue, 10 Oct 2023 22:50:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 95179C4AF1E
+	by smtp.kernel.org (Postfix) with ESMTPS id 3C621C43395
+	for <soc@kernel.org>; Tue, 10 Oct 2023 22:50:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3C621C43395
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40684f53d11so63507655e9.1
-        for <soc@kernel.org>; Tue, 10 Oct 2023 15:50:16 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-32d80ae19f8so568143f8f.2
+        for <soc@kernel.org>; Tue, 10 Oct 2023 15:50:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696978214; x=1697583014; darn=kernel.org;
+        d=linaro.org; s=google; t=1696978215; x=1697583015; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8meY4ujs++mlEMDCBMyLTigrPdJt2G7ihVPbm8apfRA=;
-        b=KYGWa4AXrE1tH6BTWRRmQW4Ccz15ueCuU/W6FG27MPFxKOIu3k4EYtW9r4W/ZoIW/A
-         CwQKzioojFJa+GgP5nMW0/4sNoXqbIqmLMiq9Jf0G77CyWXGo9FXXPy3uWpemSHnPeUT
-         q5xAOXMM2XqwhwNGex4i4OEODegdotOkOCuSZsFAFdUYqWSsh9CdrQjGx6oaqXERW1Tf
-         tDhaTQZpPOY/rYcj/cF+b8jKtJGfMkugMKDFSQdcPemYLn8/q5oRKak4N++A/qw84iRT
-         Re9F7841ykd/IjxWwKB7bBQbmfz/4nFgWDdSPGPWplsMisfwQ52IXoPgSC3YEHNM5vzL
-         1qzw==
+        bh=s37SUcPotioxZcjEHmhq7GzFTfw04ERbXr6RSb1B27c=;
+        b=oSUfgYS7pYbDl/+Fe3FlasOZfyp3604JLWl6air1QozBhYk+k+dOUSw4Cx5OE3oRBj
+         GrBjj2TSUXwFe9YW31Ir+zV+VDRDgaKtVCxi48w/s8f5NMsmuT5CREloEJwMCRbiX8t1
+         YzAGxUehn7WDMrh6weAet3FivPGqnn/U2FsnnjFbdm/TaY6kP3z2jouF/SrNDS2Z9ULY
+         Sk63kGtm22kcOjaQCabB7B/xCYxGL7ZDfXalrbPRFok+4aVmwegFpNBSXZ7H98XFakFU
+         8x9gQGyiPcN84K6yosp//12q8ciFENWUN5SbD5vQo/kzQZZOXx9ChI3n9rzPTSk59ZL0
+         3Ffw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696978214; x=1697583014;
+        d=1e100.net; s=20230601; t=1696978215; x=1697583015;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8meY4ujs++mlEMDCBMyLTigrPdJt2G7ihVPbm8apfRA=;
-        b=EkwOA09FG9ECmztGPdegO+GLiRSPgBPxlOoke0pjP51BHQJQtn0dteXW0f9xDtQMib
-         J8MRMSS4cEEIbGvYPxhicY1ebJUAFiZk30KSDMU1SdhalFsS5Qn+c5P9n6aQPg+OihCD
-         TjtOn0oIr8Md/YzK6pZ7wSKV3WwcIagS8mKQNyBylKZHiSno+0PIIQQj146pwsHTxrUf
-         3Qb5U640GYUdHJ0+gI2/pIQrTW7szmZpWe9I2zRfpl/LcfZNn6hP/824adQTt4ZrAHDV
-         1uGlneTzxBQ7qq6YY4JELQW+lnJCqmPw/HF5fZVSz1QRmNV5Mds7F7N2IAiZsYK8gdQO
-         10Hg==
-X-Gm-Message-State: AOJu0Yzutujnoc5BfgAjR7DfWLXqywq3jq07ashd7JPhaQ3LvZ+pCFue
-	VMI3yd6eu2E2VB87/O5T6O98Sg==
-X-Google-Smtp-Source: AGHT+IHVgNRfg9MJFj2fa8ZrT5Dql+nbZeDpWThiGHWgaXBzyVYZ59F732rF5W+8jo4YKOodKbt5oQ==
-X-Received: by 2002:a5d:680d:0:b0:319:83e4:bbbf with SMTP id w13-20020a5d680d000000b0031983e4bbbfmr18331182wru.20.1696978214311;
-        Tue, 10 Oct 2023 15:50:14 -0700 (PDT)
+        bh=s37SUcPotioxZcjEHmhq7GzFTfw04ERbXr6RSb1B27c=;
+        b=O/0F9PdNZZIIYAOJzHuRDaQopNDScS86zyiCbzOM3a5iclVIULe9IjLrvMbYsaDPUA
+         TLVos6r2bZX+jjXQlwlhKXTt0EvCztrCn+GmoZjq3JyYvlj3/HWmPUMbslBDvbHZyCds
+         sI8FFEkkhVVWzfdk+LI4XEYBc8BpuTGovDWjJzfYW0TDLyXdYHdTh8/IJXuUgiuszILD
+         AhuR691+gAxZZA8ae/XQJTFsBvw8oJ9lTON7B7j3H5SA63llaUGcXKuLittdKYR8GdUu
+         oaeikFJteZwQFSMbC2VFU+sIwkKXuQAKYxM1APoqTuybiCFlqfIkVZyAfh/2AH7GeEWm
+         Xw4Q==
+X-Gm-Message-State: AOJu0YyDWG5Qju1ArMdb8IehokVr8JTcbx5DVeY01Hi8JFwsrVysUahA
+	ZqiJNJwy7Tzzq1JqiLIuyVKBJg==
+X-Google-Smtp-Source: AGHT+IHJw3S0mLbaumsobRC5IL/pZDMQtHIFgcBqimA/C5vlsITA5NsDBJI4cgvehYn3duSLLOm7Lg==
+X-Received: by 2002:adf:f84e:0:b0:324:8353:6e51 with SMTP id d14-20020adff84e000000b0032483536e51mr18255367wrq.45.1696978215668;
+        Tue, 10 Oct 2023 15:50:15 -0700 (PDT)
 Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
-        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.12
+        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 15:50:13 -0700 (PDT)
+        Tue, 10 Oct 2023 15:50:15 -0700 (PDT)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -84,34 +84,44 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v2 19/20] arm64: defconfig: Enable Google Tensor SoC
-Date: Tue, 10 Oct 2023 23:49:27 +0100
-Message-ID: <20231010224928.2296997-20-peter.griffin@linaro.org>
+Subject: [PATCH v2 20/20] MAINTAINERS: add entry for Google Tensor SoC
+Date: Tue, 10 Oct 2023 23:49:28 +0100
+Message-ID: <20231010224928.2296997-21-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
 In-Reply-To: <20231010224928.2296997-1-peter.griffin@linaro.org>
 References: <20231010224928.2296997-1-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the Google Tensor SoC to the arm64 defconfig
+Add maintainers entry for the Google tensor SoC based
+platforms.
 
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5315789f4868..8a34603b1822 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -41,6 +41,7 @@ CONFIG_ARCH_BCMBCA=y
- CONFIG_ARCH_BRCMSTB=y
- CONFIG_ARCH_BERLIN=y
- CONFIG_ARCH_EXYNOS=y
-+CONFIG_ARCH_GOOGLE_TENSOR=y
- CONFIG_ARCH_SPARX5=y
- CONFIG_ARCH_K3=y
- CONFIG_ARCH_LG1K=y
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 90f13281d297..149a0c364309 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8836,6 +8836,16 @@ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
+ F:	drivers/firmware/google/
+ 
++GOOGLE TENSOR SoC SUPPORT
++M:	Peter Griffin <peter.griffin@linaro.org>
++L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
++L:	linux-samsung-soc@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
++F:	arch/arm64/boot/dts/google/
++F:	drivers/clk/samsung/clk-gs101.c
++F:	include/dt-bindings/clock/google,clk-gs101.h
++
+ GPD POCKET FAN DRIVER
+ M:	Hans de Goede <hdegoede@redhat.com>
+ L:	platform-driver-x86@vger.kernel.org
 -- 
 2.42.0.609.gbb76f46606-goog
 
