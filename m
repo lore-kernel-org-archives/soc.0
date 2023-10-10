@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72535CD98C0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8F0FCD98CD
 	for <soc@archiver.kernel.org>; Tue, 10 Oct 2023 22:50:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4AA31C4936D; Tue, 10 Oct 2023 22:50:21 +0000 (UTC)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	id 866BFC4163C; Tue, 10 Oct 2023 22:50:21 +0000 (UTC)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AC5C3C433AB
-	for <soc@kernel.org>; Tue, 10 Oct 2023 22:50:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC5C3C433AB
+	by smtp.kernel.org (Postfix) with ESMTPS id C8C29C433BC
+	for <soc@kernel.org>; Tue, 10 Oct 2023 22:50:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8C29C433BC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-32483535e51so6015926f8f.0
-        for <soc@kernel.org>; Tue, 10 Oct 2023 15:50:08 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-405524e6769so2137355e9.1
+        for <soc@kernel.org>; Tue, 10 Oct 2023 15:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696978207; x=1697583007; darn=kernel.org;
+        d=linaro.org; s=google; t=1696978204; x=1697583004; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AFKJbQAdg89bGQaJgiY6h+CzrVK629FNGGy9OYlwD3M=;
-        b=yrIKbv6xR4otNxqvELxQ7zuX9wBQUCxIcQScdkbxrKk1S301rjcpc6ueaPyWN2qdvR
-         hCqerzd7m0LVT04YyUOIOi4JmWfvfK0Qko18a5sKPcCnJYH4bjMDKB72lSlB+Ql6zdSE
-         /HK9x6iA7zbbMVeXJGyVdFBat65tlxoMiFv07AfHdYWu39Cy4fY0Sp1JSEHBScNqDOi+
-         6+blgmZ2y6SmQ8TRTWVQwMk3H6+oQ6TdFBqhPJ5rwGZoCpbMd1vWO/eMDXMxydfs7Fl7
-         iN94tE+UgkRzPiY8mZFHz401LwzpwZyOzDG7YxqhSbAMw3t+Q7V90ry8I6458u5ylAxY
-         G5eQ==
+        bh=69uODw7755mAVFXnVIR6yYQTzY8Z5OzgwKPuy4WKjsA=;
+        b=QLSNzkVLngkfCe+VRop5jNlM/aT1RVSc6r+vWkNJPeXzA/3Hs8r1dVR7bDzkSXnOz+
+         2Hjh6zM9NtALx4jp544+M82S1Zu+5PXwelBbYl33jcGW+Cy6oceOXqkX+q8WHlPuJCMN
+         /Oec+1LmD2MAnzjFljTUGGXc6RB2iLdTTiIktw/YA5f14JhQ4ceVyECrcCSVP6q4liky
+         qEhGx/aNGS8/ymJN8O9riOFYwHkF+Q1sRTu1wIIG8lCjS9LWNAHVfDyveViT+JpdrVWs
+         WMJk7VqHBMJ+q+VX6F+bu5wajIJVL4IvLrbvEOjVRf/doYFf8/do4dq1o7jjFOoqGe3S
+         kwSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696978207; x=1697583007;
+        d=1e100.net; s=20230601; t=1696978204; x=1697583004;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AFKJbQAdg89bGQaJgiY6h+CzrVK629FNGGy9OYlwD3M=;
-        b=lt1hnqmJzP/2Q5i0sPdLqZwSXs3+Eg92PjRHs6xekZltd9XGc6d+4V139DLzXZjLik
-         kN8rlR8JUgBc2ZlBHMuQLB1c0cDPaqrEynpMbS4dLEtC9kl8CQp6kj+h9d5PYLHcHW6H
-         1+vIBIx3ENtFltE6VENp2iGc+s5zNTVLiZpeLO/PNVtnnIUXDdfhC6b1pxtvPALdaZ+U
-         qXkDE23SLze8hwUfWFbvmUFsp+iNjE5e4holX70IZnL1Bu/Uvciot0DOs+UjpW502eBP
-         BkKPV8rUZxCsy0sXt8s/ZEGLm719CcLTxWPJ2qAGwNfqSCZAntX90jBW6rIdY9zghDrc
-         5iYQ==
-X-Gm-Message-State: AOJu0Yz6S9JllfFicv+OnxyKYwGgP8X7ibNUOcF3n1Dxzed0Id0F5Z8L
-	WVZjbAR7ZAgZgF7K+lSwy/Pisw==
-X-Google-Smtp-Source: AGHT+IES/PC7GBxMiEGQ2+1wWcRGkX+koLmho6hhi1GkB/QT53cBcZ9mLqWslX71jdsEZyFnAahydQ==
-X-Received: by 2002:a5d:6f08:0:b0:32d:14a4:ab3 with SMTP id ay8-20020a5d6f08000000b0032d14a40ab3mr3319768wrb.24.1696978206756;
-        Tue, 10 Oct 2023 15:50:06 -0700 (PDT)
+        bh=69uODw7755mAVFXnVIR6yYQTzY8Z5OzgwKPuy4WKjsA=;
+        b=rosJUJTkyEFMICFR6ncwY+OD7QBRTLdTaVrm42uDV/LSJtqtZv+3KOsKYuARWZaF39
+         dhSDp1WGfk1PWYDicNh9r7uRJ54gxXkKGPhQP6YOFQso4meXCAwMHUTsxUz5SMHm+pV1
+         HpiY7SoOZ9IqqgV6h3ee4DPJGk2Z4aIK9JMdRmSBomEN537G/eZdPDcJm3C0HTF2bAL+
+         zlu7P0ZYKy6vN+gj4Y/m7uGFbPfI9se5LsehFSLIMMt4gLyhbvIJA9PsrT1Mr1iFn+sT
+         ZYeYqOOTJ/bQWWCxJ1BkxCfeRJXK4cTnweAGB+tcdtFIVKkLcLvkS124HdXIrZK8Y40s
+         QORA==
+X-Gm-Message-State: AOJu0YxMI6t8av5YK7ES7WsWIJzGwF0yOH7suAjADD0GbCwq4q9A4jss
+	cv4Fy4/nNnNo8J45Daw1aEg2rA==
+X-Google-Smtp-Source: AGHT+IFdDJjs1oPowajiq41uZGFBtcsW+wX75edALiFN9P5T31zaIsk7ktCleJaApF7mO2G8oQS5yQ==
+X-Received: by 2002:a05:600c:3b27:b0:402:e68f:8a4f with SMTP id m39-20020a05600c3b2700b00402e68f8a4fmr15309153wms.0.1696978203968;
+        Tue, 10 Oct 2023 15:50:03 -0700 (PDT)
 Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
-        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.05
+        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 15:50:06 -0700 (PDT)
+        Tue, 10 Oct 2023 15:50:03 -0700 (PDT)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -84,281 +84,360 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v2 14/20] pinctrl: samsung: Add gs101 SoC pinctrl configuration
-Date: Tue, 10 Oct 2023 23:49:22 +0100
-Message-ID: <20231010224928.2296997-15-peter.griffin@linaro.org>
+Subject: [PATCH v2 12/20] clk: samsung: clk-gs101: Add support for CMU_MISC clock unit
+Date: Tue, 10 Oct 2023 23:49:20 +0100
+Message-ID: <20231010224928.2296997-13-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
 In-Reply-To: <20231010224928.2296997-1-peter.griffin@linaro.org>
 References: <20231010224928.2296997-1-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for the pin-controller found on the gs101 SoC used in
-Pixel 6 phones.
+CMU Misc clocks IPs such as Watchdog. Add support for the
+muxes, dividers and gates in this CMU.
 
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 163 ++++++++++++++++++
- drivers/pinctrl/samsung/pinctrl-exynos.c      |   2 +
- drivers/pinctrl/samsung/pinctrl-exynos.h      |  34 ++++
- drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
- drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
- 5 files changed, 202 insertions(+)
+ drivers/clk/samsung/clk-gs101.c | 312 ++++++++++++++++++++++++++++++++
+ 1 file changed, 312 insertions(+)
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-index cb965cf93705..db47001d1b35 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-@@ -796,3 +796,166 @@ const struct samsung_pinctrl_of_match_data fsd_of_data __initconst = {
- 	.ctrl		= fsd_pin_ctrl,
- 	.num_ctrl	= ARRAY_SIZE(fsd_pin_ctrl),
- };
-+
-+/*
-+ * bank type for non-alive type
-+ * (CON bit field: 4, DAT bit field: 1, PUD bit field: 4, DRV bit field: 4)
-+ * (CONPDN bit field: 2, PUDPDN bit field: 4)
-+ */
-+static struct samsung_pin_bank_type gs101_bank_type_off  = {
-+	.fld_width = { 4, 1, 4, 4, 2, 4, },
-+	.reg_offset = { 0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, },
-+};
-+
-+/*
-+ * bank type for alive type
-+ * (CON bit field: 4, DAT bit field: 1, PUD bit field: 4, DRV bit field: 4)
-+ */
-+static const struct samsung_pin_bank_type gs101_bank_type_alive = {
-+	.fld_width = { 4, 1, 4, 4, },
-+	.reg_offset = { 0x00, 0x04, 0x08, 0x0c, },
-+};
-+
-+/* pin banks of gs101 pin-controller (ALIVE) */
-+static const struct samsung_pin_bank_data gs101_pin_alive[] = {
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 8, 0x0, "gpa0", 0x00, 0x00, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 7, 0x20, "gpa1", 0x04, 0x08, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 5, 0x40, "gpa2", 0x08, 0x10, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 4, 0x60, "gpa3", 0x0c, 0x18, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 4, 0x80, "gpa4", 0x10, 0x1c, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 7, 0xa0, "gpa5", 0x14, 0x20, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 8, 0xc0, "gpa9", 0x18, 0x28, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 2, 0xe0, "gpa10", 0x1c, 0x30, FLT_SELECTABLE),
-+};
-+
-+/* pin banks of gs101 pin-controller (FAR_ALIVE) */
-+static const struct samsung_pin_bank_data gs101_pin_far_alive[] = {
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 8, 0x0, "gpa6", 0x00, 0x00, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 4, 0x20, "gpa7", 0x04, 0x08, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 8, 0x40, "gpa8", 0x08, 0x0c, FLT_SELECTABLE),
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 2, 0x60, "gpa11", 0x0c, 0x14, FLT_SELECTABLE),
-+};
-+
-+/* pin banks of gs101 pin-controller (GSACORE) */
-+static const struct samsung_pin_bank_data gs101_pin_gsacore[] = {
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x0, "gps0", 0x00, 0x00, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 8, 0x20, "gps1", 0x04, 0x04, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 3, 0x40, "gps2", 0x08, 0x0c, FLT_DEFAULT),
-+};
-+
-+/* pin banks of gs101 pin-controller (GSACTRL) */
-+static const struct samsung_pin_bank_data gs101_pin_gsactrl[] = {
-+	EXYNOS9_PIN_BANK_EINTW(gs101_bank_type_alive, 6, 0x0, "gps3", 0x00, 0x00, FLT_DEFAULT),
-+};
-+
-+/* pin banks of gs101 pin-controller (PERIC0) */
-+static const struct samsung_pin_bank_data gs101_pin_peric0[] = {
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 5, 0x0, "gpp0", 0x00, 0x00, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x20, "gpp1", 0x04, 0x08, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x40, "gpp2", 0x08, 0x0c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x60, "gpp3", 0x0c, 0x10, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x80, "gpp4", 0x10, 0x14, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0xa0, "gpp5", 0x14, 0x18, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0xc0, "gpp6", 0x18, 0x1c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0xe0, "gpp7", 0x1c, 0x20, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x100, "gpp8", 0x20, 0x24, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x120, "gpp9", 0x24, 0x28, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x140, "gpp10", 0x28, 0x2c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x160, "gpp11", 0x2c, 0x30, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x180, "gpp12", 0x30, 0x34, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x1a0, "gpp13", 0x34, 0x38, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x1c0, "gpp14", 0x38, 0x3c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x1e0, "gpp15", 0x3c, 0x40, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x200, "gpp16", 0x40, 0x44, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x220, "gpp17", 0x44, 0x48, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x240, "gpp18", 0x48, 0x4c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x260, "gpp19", 0x4c, 0x50, FLT_DEFAULT),
-+};
-+
-+/* pin banks of gs101 pin-controller (PERIC1) */
-+static const struct samsung_pin_bank_data gs101_pin_peric1[] = {
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 8, 0x0, "gpp20", 0x00, 0x00, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x20, "gpp21", 0x04, 0x08, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x40, "gpp22", 0x08, 0x0c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 8, 0x60, "gpp23", 0x0c, 0x10, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0x80, "gpp24", 0x10, 0x18, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0xa0, "gpp25", 0x14, 0x1c, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 5, 0xc0, "gpp26", 0x18, 0x20, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 4, 0xe0, "gpp27", 0x1c, 0x28, FLT_DEFAULT),
-+};
-+
-+/* pin banks of gs101 pin-controller (HSI1) */
-+static const struct samsung_pin_bank_data gs101_pin_hsi1[] = {
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 6, 0x0, "gph0", 0x00, 0x00, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 7, 0x20, "gph1", 0x04, 0x08, FLT_DEFAULT),
-+};
-+
-+/* pin banks of gs101 pin-controller (HSI2) */
-+static const struct samsung_pin_bank_data gs101_pin_hsi2[] = {
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 6, 0x0, "gph2", 0x00, 0x00, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 2, 0x20, "gph3", 0x04, 0x08, FLT_DEFAULT),
-+	EXYNOS9_PIN_BANK_EINTG(gs101_bank_type_off, 6, 0x40, "gph4", 0x08, 0x0c, FLT_DEFAULT),
-+};
-+
-+static const struct samsung_pin_ctrl gs101_pin_ctrl[] __initconst = {
-+	{
-+		/* pin banks of gs101 pin-controller (ALIVE) */
-+		.pin_banks	= gs101_pin_alive,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_alive),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+		.eint_wkup_init = exynos_eint_wkup_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin banks of gs101 pin-controller (FAR_ALIVE) */
-+		.pin_banks	= gs101_pin_far_alive,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_far_alive),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+		.eint_wkup_init = exynos_eint_wkup_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin banks of gs101 pin-controller (GSACORE) */
-+		.pin_banks	= gs101_pin_gsacore,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_gsacore),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+	}, {
-+		/* pin banks of gs101 pin-controller (GSACTRL) */
-+		.pin_banks	= gs101_pin_gsactrl,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_gsactrl),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+	}, {
-+		/* pin banks of gs101 pin-controller (PERIC0) */
-+		.pin_banks	= gs101_pin_peric0,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_peric0),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin banks of gs101 pin-controller (PERIC1) */
-+		.pin_banks	= gs101_pin_peric1,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_peric1),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume	= exynos_pinctrl_resume,
-+	}, {
-+		/* pin banks of gs101 pin-controller (HSI1) */
-+		.pin_banks	= gs101_pin_hsi1,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_hsi1),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin banks of gs101 pin-controller (HSI2) */
-+		.pin_banks	= gs101_pin_hsi2,
-+		.nr_banks	= ARRAY_SIZE(gs101_pin_hsi2),
-+		.eint_gpio_init = exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	},
-+};
-+
-+const struct samsung_pinctrl_of_match_data gs101_of_data __initconst = {
-+	.ctrl		= gs101_pin_ctrl,
-+	.num_ctrl	= ARRAY_SIZE(gs101_pin_ctrl),
-+};
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
-index 800831aa8357..014f0c37f97f 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
-@@ -533,6 +533,8 @@ static const struct of_device_id exynos_wkup_irq_ids[] = {
- 			.data = &exynos7_wkup_irq_chip },
- 	{ .compatible = "samsung,exynosautov9-wakeup-eint",
- 			.data = &exynos7_wkup_irq_chip },
-+	{ .compatible = "google,gs101-wakeup-eint",
-+			.data = &exynos7_wkup_irq_chip },
- 	{ }
+diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-gs101.c
+index 525f95e60665..bf2bd8cd39d0 100644
+--- a/drivers/clk/samsung/clk-gs101.c
++++ b/drivers/clk/samsung/clk-gs101.c
+@@ -20,6 +20,7 @@
+ /* NOTE: Must be equal to the last clock ID increased by one */
+ #define TOP_NR_CLK                     (CLK_GOUT_CMU_BOOST + 1)
+ #define APM_NR_CLK                     (CLK_APM_PLL_DIV16_APM + 1)
++#define MISC_NR_CLK                    (CLK_GOUT_MISC_WDT_CLUSTER1 + 1)
+ 
+ /* ---- CMU_TOP ------------------------------------------------------------- */
+ 
+@@ -1815,6 +1816,314 @@ static const struct samsung_cmu_info apm_cmu_info __initconst = {
+ 	.nr_clk_regs		= ARRAY_SIZE(apm_clk_regs),
  };
  
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
-index 63b2426ad5d6..0dd013654bd2 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.h
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
-@@ -147,6 +147,40 @@
- 		.name		= id				\
- 	}
++/* ---- CMU_MISC ------------------------------------------------------------- */
++/* Register Offset definitions for CMU_MISC (0x10010000) */
++#define PLL_CON0_MUX_CLKCMU_MISC_BUS_USER	0x0600
++#define PLL_CON1_MUX_CLKCMU_MISC_BUS_USER	0x0604
++#define PLL_CON0_MUX_CLKCMU_MISC_SSS_USER	0x0610
++#define PLL_CON1_MUX_CLKCMU_MISC_SSS_USER	0x0614
++#define MISC_CMU_MISC_CONTROLLER_OPTION		0x0800
++#define CLKOUT_CON_BLK_MISC_CMU_MISC_CLKOUT0	0x0810
++#define CLK_CON_MUX_MUX_CLK_MISC_GIC		0x1000
++#define CLK_CON_DIV_DIV_CLK_MISC_BUSP		0x1800
++#define CLK_CON_DIV_DIV_CLK_MISC_GIC		0x1804
++#define CLK_CON_GAT_CLK_BLK_MISC_UID_MISC_CMU_MISC_IPCLKPORT_PCLK		0x2000
++#define CLK_CON_GAT_CLK_BLK_MISC_UID_OTP_CON_BIRA_IPCLKPORT_I_OSCCLK		0x2004
++#define CLK_CON_GAT_CLK_BLK_MISC_UID_OTP_CON_BISR_IPCLKPORT_I_OSCCLK		0x2008
++#define CLK_CON_GAT_CLK_BLK_MISC_UID_OTP_CON_TOP_IPCLKPORT_I_OSCCLK		0x200c
++#define CLK_CON_GAT_CLK_BLK_MISC_UID_RSTNSYNC_CLK_MISC_OSCCLK_IPCLKPORT_CLK	0x2010
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_ADM_AHB_SSS_IPCLKPORT_HCLKM		0x2014
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_AD_APB_DIT_IPCLKPORT_PCLKM		0x2018
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_AD_APB_PUF_IPCLKPORT_PCLKM		0x201c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_DIT_IPCLKPORT_ICLKL2A			0x2020
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_D_TZPC_MISC_IPCLKPORT_PCLK		0x2024
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_GIC_IPCLKPORT_GICCLK			0x2028
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_GPC_MISC_IPCLKPORT_PCLK			0x202c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AST_ICC_CPUGIC_IPCLKPORT_I_CLK	0x2030
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AXI_D_SSS_IPCLKPORT_I_CLK		0x2034
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AXI_P_GIC_IPCLKPORT_I_CLK		0x2038
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AXI_P_MISC_IPCLKPORT_I_CLK		0x203c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHS_ACEL_D_MISC_IPCLKPORT_I_CLK		0x2040
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHS_AST_IRI_GICCPU_IPCLKPORT_I_CLK	0x2044
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_LHS_AXI_D_SSS_IPCLKPORT_I_CLK		0x2048
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_MCT_IPCLKPORT_PCLK			0x204c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_OTP_CON_BIRA_IPCLKPORT_PCLK		0x2050
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_OTP_CON_BISR_IPCLKPORT_PCLK		0x2054
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_OTP_CON_TOP_IPCLKPORT_PCLK		0x2058
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_PDMA_IPCLKPORT_ACLK			0x205c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_PPMU_DMA_IPCLKPORT_ACLK			0x2060
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_PPMU_MISC_IPCLKPORT_ACLK			0x2064
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_PPMU_MISC_IPCLKPORT_PCLK			0x2068
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_PUF_IPCLKPORT_I_CLK			0x206c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_DIT_IPCLKPORT_ACLK			0x2070
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_DIT_IPCLKPORT_PCLK			0x2074
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PDMA_IPCLKPORT_ACLK			0x2078
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PDMA_IPCLKPORT_PCLK			0x207c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PPMU_DMA_IPCLKPORT_ACLK		0x2080
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PPMU_DMA_IPCLKPORT_PCLK		0x2084
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_RTIC_IPCLKPORT_ACLK			0x2088
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_RTIC_IPCLKPORT_PCLK			0x208c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SPDMA_IPCLKPORT_ACLK			0x2090
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SPDMA_IPCLKPORT_PCLK			0x2094
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SSS_IPCLKPORT_ACLK			0x2098
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SSS_IPCLKPORT_PCLK			0x209c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_BUSD_IPCLKPORT_CLK	0x20a0
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_BUSP_IPCLKPORT_CLK	0x20a4
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_GIC_IPCLKPORT_CLK	0x20a8
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_SSS_IPCLKPORT_CLK	0x20ac
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_RTIC_IPCLKPORT_I_ACLK			0x20b0
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_RTIC_IPCLKPORT_I_PCLK			0x20b4
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SPDMA_IPCLKPORT_ACLK			0x20b8
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_DIT_IPCLKPORT_ACLK			0x20bc
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_DIT_IPCLKPORT_PCLK			0x20c0
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PDMA_IPCLKPORT_ACLK			0x20c4
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PDMA_IPCLKPORT_PCLK			0x20c8
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PPMU_DMA_IPCLKPORT_ACLK		0x20cc
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PPMU_DMA_IPCLKPORT_PCLK		0x20d0
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_RTIC_IPCLKPORT_ACLK			0x20d4
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_RTIC_IPCLKPORT_PCLK			0x20d8
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SPDMA_IPCLKPORT_ACLK			0x20dc
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SPDMA_IPCLKPORT_PCLK			0x20e0
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SSS_IPCLKPORT_ACLK			0x20e4
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SSS_IPCLKPORT_PCLK			0x20e8
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSS_IPCLKPORT_I_ACLK			0x20ec
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SSS_IPCLKPORT_I_PCLK			0x20f0
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSMMU_MISC_IPCLKPORT_CLK_S2		0x20f4
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSMMU_SSS_IPCLKPORT_CLK_S1		0x20f8
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSREG_MISC_IPCLKPORT_PCLK		0x20fc
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_TMU_SUB_IPCLKPORT_PCLK			0x2100
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_TMU_TOP_IPCLKPORT_PCLK			0x2104
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_WDT_CLUSTER0_IPCLKPORT_PCLK		0x2108
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_WDT_CLUSTER1_IPCLKPORT_PCLK		0x210c
++#define CLK_CON_GAT_GOUT_BLK_MISC_UID_XIU_D_MISC_IPCLKPORT_ACLK			0x2110
++#define DMYQCH_CON_PPMU_DMA_QCH			0x3000
++#define DMYQCH_CON_PUF_QCH			0x3004
++#define PCH_CON_LHM_AXI_D_SSS_PCH		0x300c
++#define PCH_CON_LHM_AXI_P_GIC_PCH		0x3010
++#define PCH_CON_LHM_AXI_P_MISC_PCH		0x3014
++#define PCH_CON_LHS_ACEL_D_MISC_PCH		0x3018
++#define PCH_CON_LHS_AST_IRI_GICCPU_PCH		0x301c
++#define PCH_CON_LHS_AXI_D_SSS_PCH		0x3020
++#define QCH_CON_ADM_AHB_SSS_QCH			0x3024
++#define QCH_CON_DIT_QCH				0x3028
++#define QCH_CON_GIC_QCH				0x3030
++#define QCH_CON_LHM_AST_ICC_CPUGIC_QCH		0x3038
++#define QCH_CON_LHM_AXI_D_SSS_QCH		0x303c
++#define QCH_CON_LHM_AXI_P_GIC_QCH		0x3040
++#define QCH_CON_LHM_AXI_P_MISC_QCH		0x3044
++#define QCH_CON_LHS_ACEL_D_MISC_QCH		0x3048
++#define QCH_CON_LHS_AST_IRI_GICCPU_QCH		0x304c
++#define QCH_CON_LHS_AXI_D_SSS_QCH		0x3050
++#define QCH_CON_MCT_QCH				0x3054
++#define QCH_CON_MISC_CMU_MISC_QCH		0x3058
++#define QCH_CON_OTP_CON_BIRA_QCH		0x305c
++#define QCH_CON_OTP_CON_BISR_QCH		0x3060
++#define QCH_CON_OTP_CON_TOP_QCH			0x3064
++#define QCH_CON_PDMA_QCH			0x3068
++#define QCH_CON_PPMU_MISC_QCH			0x306c
++#define QCH_CON_QE_DIT_QCH			0x3070
++#define QCH_CON_QE_PDMA_QCH			0x3074
++#define QCH_CON_QE_PPMU_DMA_QCH			0x3078
++#define QCH_CON_QE_RTIC_QCH			0x307c
++#define QCH_CON_QE_SPDMA_QCH			0x3080
++#define QCH_CON_QE_SSS_QCH			0x3084
++#define QCH_CON_RTIC_QCH			0x3088
++#define QCH_CON_SPDMA_QCH			0x308c
++#define QCH_CON_SSMT_DIT_QCH			0x3090
++#define QCH_CON_SSMT_PDMA_QCH			0x3094
++#define QCH_CON_SSMT_PPMU_DMA_QCH		0x3098
++#define QCH_CON_SSMT_RTIC_QCH			0x309c
++#define QCH_CON_SSMT_SPDMA_QCH			0x30a0
++#define QCH_CON_SSMT_SSS_QCH			0x30a4
++#define QCH_CON_SSS_QCH				0x30a8
++#define QCH_CON_SYSMMU_MISC_QCH			0x30ac
++#define QCH_CON_SYSMMU_SSS_QCH			0x30b0
++#define QCH_CON_SYSREG_MISC_QCH			0x30b4
++#define QCH_CON_TMU_SUB_QCH			0x30b8
++#define QCH_CON_TMU_TOP_QCH			0x30bc
++#define QCH_CON_WDT_CLUSTER0_QCH		0x30c0
++#define QCH_CON_WDT_CLUSTER1_QCH		0x30c4
++#define QUEUE_CTRL_REG_BLK_MISC_CMU_MISC	0x3c00
++
++static const unsigned long misc_clk_regs[] __initconst = {
++	PLL_CON0_MUX_CLKCMU_MISC_BUS_USER,
++	PLL_CON1_MUX_CLKCMU_MISC_BUS_USER,
++	PLL_CON0_MUX_CLKCMU_MISC_SSS_USER,
++	PLL_CON1_MUX_CLKCMU_MISC_SSS_USER,
++	MISC_CMU_MISC_CONTROLLER_OPTION,
++	CLKOUT_CON_BLK_MISC_CMU_MISC_CLKOUT0,
++	CLK_CON_MUX_MUX_CLK_MISC_GIC,
++	CLK_CON_DIV_DIV_CLK_MISC_BUSP,
++	CLK_CON_DIV_DIV_CLK_MISC_GIC,
++	CLK_CON_GAT_CLK_BLK_MISC_UID_MISC_CMU_MISC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_CLK_BLK_MISC_UID_OTP_CON_BIRA_IPCLKPORT_I_OSCCLK,
++	CLK_CON_GAT_CLK_BLK_MISC_UID_OTP_CON_BISR_IPCLKPORT_I_OSCCLK,
++	CLK_CON_GAT_CLK_BLK_MISC_UID_OTP_CON_TOP_IPCLKPORT_I_OSCCLK,
++	CLK_CON_GAT_CLK_BLK_MISC_UID_RSTNSYNC_CLK_MISC_OSCCLK_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_ADM_AHB_SSS_IPCLKPORT_HCLKM,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_AD_APB_DIT_IPCLKPORT_PCLKM,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_AD_APB_PUF_IPCLKPORT_PCLKM,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_DIT_IPCLKPORT_ICLKL2A,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_D_TZPC_MISC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_GIC_IPCLKPORT_GICCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_GPC_MISC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AST_ICC_CPUGIC_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AXI_D_SSS_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AXI_P_GIC_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHM_AXI_P_MISC_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHS_ACEL_D_MISC_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHS_AST_IRI_GICCPU_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_LHS_AXI_D_SSS_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_MCT_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_OTP_CON_BIRA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_OTP_CON_BISR_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_OTP_CON_TOP_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_PDMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_PPMU_DMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_PPMU_MISC_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_PPMU_MISC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_PUF_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_DIT_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_DIT_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PDMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PDMA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PPMU_DMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_PPMU_DMA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_RTIC_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_RTIC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SPDMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SPDMA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SSS_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_QE_SSS_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_BUSD_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_BUSP_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_GIC_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_RSTNSYNC_CLK_MISC_SSS_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_RTIC_IPCLKPORT_I_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_RTIC_IPCLKPORT_I_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SPDMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_DIT_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_DIT_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PDMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PDMA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PPMU_DMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_PPMU_DMA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_RTIC_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_RTIC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SPDMA_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SPDMA_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SSS_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSMT_SSS_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSS_IPCLKPORT_I_ACLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SSS_IPCLKPORT_I_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSMMU_MISC_IPCLKPORT_CLK_S2,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSMMU_SSS_IPCLKPORT_CLK_S1,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSREG_MISC_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_TMU_SUB_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_TMU_TOP_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_WDT_CLUSTER0_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_WDT_CLUSTER1_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_MISC_UID_XIU_D_MISC_IPCLKPORT_ACLK,
++	DMYQCH_CON_PPMU_DMA_QCH,
++	DMYQCH_CON_PUF_QCH,
++	PCH_CON_LHM_AXI_D_SSS_PCH,
++	PCH_CON_LHM_AXI_P_GIC_PCH,
++	PCH_CON_LHM_AXI_P_MISC_PCH,
++	PCH_CON_LHS_ACEL_D_MISC_PCH,
++	PCH_CON_LHS_AST_IRI_GICCPU_PCH,
++	PCH_CON_LHS_AXI_D_SSS_PCH,
++	QCH_CON_ADM_AHB_SSS_QCH,
++	QCH_CON_DIT_QCH,
++	QCH_CON_GIC_QCH,
++	QCH_CON_LHM_AST_ICC_CPUGIC_QCH,
++	QCH_CON_LHM_AXI_D_SSS_QCH,
++	QCH_CON_LHM_AXI_P_GIC_QCH,
++	QCH_CON_LHM_AXI_P_MISC_QCH,
++	QCH_CON_LHS_ACEL_D_MISC_QCH,
++	QCH_CON_LHS_AST_IRI_GICCPU_QCH,
++	QCH_CON_LHS_AXI_D_SSS_QCH,
++	QCH_CON_MCT_QCH,
++	QCH_CON_MISC_CMU_MISC_QCH,
++	QCH_CON_OTP_CON_BIRA_QCH,
++	QCH_CON_OTP_CON_BISR_QCH,
++	QCH_CON_OTP_CON_TOP_QCH,
++	QCH_CON_PDMA_QCH,
++	QCH_CON_PPMU_MISC_QCH,
++	QCH_CON_QE_DIT_QCH,
++	QCH_CON_QE_PDMA_QCH,
++	QCH_CON_QE_PPMU_DMA_QCH,
++	QCH_CON_QE_RTIC_QCH,
++	QCH_CON_QE_SPDMA_QCH,
++	QCH_CON_QE_SSS_QCH,
++	QCH_CON_RTIC_QCH,
++	QCH_CON_SPDMA_QCH,
++	QCH_CON_SSMT_DIT_QCH,
++	QCH_CON_SSMT_PDMA_QCH,
++	QCH_CON_SSMT_PPMU_DMA_QCH,
++	QCH_CON_SSMT_RTIC_QCH,
++	QCH_CON_SSMT_SPDMA_QCH,
++	QCH_CON_SSMT_SSS_QCH,
++	QCH_CON_SSS_QCH,
++	QCH_CON_SYSMMU_MISC_QCH,
++	QCH_CON_SYSMMU_SSS_QCH,
++	QCH_CON_SYSREG_MISC_QCH,
++	QCH_CON_TMU_SUB_QCH,
++	QCH_CON_TMU_TOP_QCH,
++	QCH_CON_WDT_CLUSTER0_QCH,
++	QCH_CON_WDT_CLUSTER1_QCH,
++	QUEUE_CTRL_REG_BLK_MISC_CMU_MISC,
++};
++
++/* List of parent clocks for Muxes in CMU_MISC */
++PNAME(mout_misc_bus_user_p)		= { "oscclk", "dout_cmu_misc_bus" };
++PNAME(mout_misc_sss_user_p)		= { "oscclk", "dout_cmu_misc_sss" };
++
++static const struct samsung_mux_clock misc_mux_clks[] __initconst = {
++	MUX(CLK_MOUT_MISC_BUS_USER, "mout_misc_bus_user", mout_misc_bus_user_p,
++	    PLL_CON0_MUX_CLKCMU_MISC_BUS_USER, 4, 1),
++	MUX(CLK_MOUT_MISC_SSS_USER, "mout_misc_sss_user", mout_misc_sss_user_p,
++	    PLL_CON0_MUX_CLKCMU_MISC_SSS_USER, 4, 1),
++};
++
++static const struct samsung_div_clock misc_div_clks[] __initconst = {
++	DIV(CLK_DOUT_MISC_BUSP, "dout_misc_busp", "mout_misc_bus_user",
++	    CLK_CON_DIV_DIV_CLK_MISC_BUSP, 0, 3),
++	DIV(CLK_DOUT_MISC_GIC, "dout_misc_gic", "mout_misc_bus_user",
++	    CLK_CON_DIV_DIV_CLK_MISC_GIC, 0, 3),
++};
++
++static const struct samsung_gate_clock misc_gate_clks[] __initconst = {
++	GATE(CLK_GOUT_MISC_PCLK, "gout_misc_pclk", "dout_misc_busp",
++	     CLK_CON_GAT_CLK_BLK_MISC_UID_MISC_CMU_MISC_IPCLKPORT_PCLK,
++	     21, 0, 0),
++
++	GATE(CLK_GOUT_MISC_SYSREG_PCLK, "gout_misc_sysreg_pclk", "dout_misc_busp",
++	     CLK_CON_GAT_GOUT_BLK_MISC_UID_SYSREG_MISC_IPCLKPORT_PCLK,
++	     21, 0, 0),
++
++	GATE(CLK_GOUT_MISC_WDT_CLUSTER0, "gout_misc_wdt_cluster0", "dout_misc_busp",
++	     CLK_CON_GAT_GOUT_BLK_MISC_UID_WDT_CLUSTER0_IPCLKPORT_PCLK,
++	     21, 0, 0),
++
++	GATE(CLK_GOUT_MISC_WDT_CLUSTER1, "gout_misc_wdt_cluster1", "dout_misc_busp",
++	     CLK_CON_GAT_GOUT_BLK_MISC_UID_WDT_CLUSTER1_IPCLKPORT_PCLK,
++	     21, 0, 0),
++
++};
++
++static const struct samsung_cmu_info misc_cmu_info __initconst = {
++	.mux_clks		= misc_mux_clks,
++	.nr_mux_clks		= ARRAY_SIZE(misc_mux_clks),
++	.div_clks		= misc_div_clks,
++	.nr_div_clks		= ARRAY_SIZE(misc_div_clks),
++	.gate_clks		= misc_gate_clks,
++	.nr_gate_clks		= ARRAY_SIZE(misc_gate_clks),
++	.nr_clk_ids		= MISC_NR_CLK,
++	.clk_regs		= misc_clk_regs,
++	.nr_clk_regs		= ARRAY_SIZE(misc_clk_regs),
++	.clk_name		= "dout_misc_bus",
++};
++
+ /* ---- platform_driver ----------------------------------------------------- */
  
-+#define EXYNOS9_PIN_BANK_EINTN(types, pins, reg, id)	\
-+	{						\
-+		.type		= &types,		\
-+		.pctl_offset	= reg,			\
-+		.nr_pins	= pins,			\
-+		.eint_type	= EINT_TYPE_NONE,	\
-+		.fltcon_type	= FLT_DEFAULT		\
-+		.name		= id			\
-+	}
-+
-+#define EXYNOS9_PIN_BANK_EINTG(types, pins, reg, id, offs, fltcon_offs, fltcontype) \
-+	{						\
-+		.type		= &types,		\
-+		.pctl_offset	= reg,			\
-+		.nr_pins	= pins,			\
-+		.eint_type	= EINT_TYPE_GPIO,	\
-+		.eint_offset	= offs,			\
-+		.fltcon_type    = fltcontype,		\
-+		.fltcon_offset	= fltcon_offs,		\
-+		.name		= id			\
-+	}
-+
-+#define EXYNOS9_PIN_BANK_EINTW(types, pins, reg, id, offs, fltcon_offs, fltcontype) \
-+	{						\
-+		.type		= &types,		\
-+		.pctl_offset	= reg,			\
-+		.nr_pins	= pins,			\
-+		.eint_type	= EINT_TYPE_WKUP,	\
-+		.eint_offset	= offs,			\
-+		.fltcon_type    = fltcontype,		\
-+		.fltcon_offset	= fltcon_offs,		\
-+		.name		= id			\
-+	}
-+
- /**
-  * struct exynos_weint_data: irq specific data for all the wakeup interrupts
-  * generated by the external wakeup interrupt controller.
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index 449f8109d8b5..12176f98440d 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -1321,6 +1321,8 @@ static const struct of_device_id samsung_pinctrl_dt_match[] = {
- 		.data = &exynosautov9_of_data },
- 	{ .compatible = "tesla,fsd-pinctrl",
- 		.data = &fsd_of_data },
-+	{ .compatible = "google,gs101-pinctrl",
-+		.data = &gs101_of_data },
- #endif
- #ifdef CONFIG_PINCTRL_S3C64XX
- 	{ .compatible = "samsung,s3c64xx-pinctrl",
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.h b/drivers/pinctrl/samsung/pinctrl-samsung.h
-index de2ca8e8b378..e62e909fb10d 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.h
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.h
-@@ -374,6 +374,7 @@ extern const struct samsung_pinctrl_of_match_data exynos7885_of_data;
- extern const struct samsung_pinctrl_of_match_data exynos850_of_data;
- extern const struct samsung_pinctrl_of_match_data exynosautov9_of_data;
- extern const struct samsung_pinctrl_of_match_data fsd_of_data;
-+extern const struct samsung_pinctrl_of_match_data gs101_of_data;
- extern const struct samsung_pinctrl_of_match_data s3c64xx_of_data;
- extern const struct samsung_pinctrl_of_match_data s3c2412_of_data;
- extern const struct samsung_pinctrl_of_match_data s3c2416_of_data;
+ static int __init gs101_cmu_probe(struct platform_device *pdev)
+@@ -1832,6 +2141,9 @@ static const struct of_device_id gs101_cmu_of_match[] = {
+ 	{
+ 		.compatible = "google,gs101-cmu-apm",
+ 		.data = &apm_cmu_info,
++	}, {
++		.compatible = "google,gs101-cmu-misc",
++		.data = &misc_cmu_info,
+ 	}, {
+ 	},
+ };
 -- 
 2.42.0.609.gbb76f46606-goog
 
