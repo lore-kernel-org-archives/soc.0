@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C21FCDB477
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 18:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BCB6CDB47A
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 18:49:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 147E5C4339A; Wed, 11 Oct 2023 18:49:23 +0000 (UTC)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	id 2C50AC433CC; Wed, 11 Oct 2023 18:49:24 +0000 (UTC)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ABF28C433C8
-	for <soc@kernel.org>; Wed, 11 Oct 2023 18:49:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ABF28C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 0745BC433C9
+	for <soc@kernel.org>; Wed, 11 Oct 2023 18:49:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0745BC433C9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40666aa674fso2361855e9.0
-        for <soc@kernel.org>; Wed, 11 Oct 2023 11:49:21 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-405524e6769so610305e9.1
+        for <soc@kernel.org>; Wed, 11 Oct 2023 11:49:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697050160; x=1697654960; darn=kernel.org;
+        d=linaro.org; s=google; t=1697050161; x=1697654961; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gwPgb0Vxa46C21WbpKo3fGsmmsstakxunKdlGSyuz/I=;
-        b=V4oN3Y/kyjd3nmW2liJk60igkTnisvlt1xhXU+VSUdDssnaLvhbBwd+ibQHqG5m8p4
-         IeYTTN4d/vrFYSwEwx1yTY/eoGvOPIVFZYhQUYz9aKls55rSn8c+/p4YFPhNvPy1COKd
-         LeoCjw2qPYfTfwGVMbVYFg26RlZBQa5yRGJFIGPNfpLRzpC4+V/FuB1I1W7qEWL0bVcx
-         iF5byMQ79ABNrLFkwN0f3b8U5mUmPo6WIs0mI8p/i4Q72FyWvH/d4YxfmVrz8kiYaZqk
-         GnCNaPcVCy4UW2/xVb8WPsYdajja4U/025GFMwcI/zBkTR7ns8aNSute8Ob8SBQYfaRr
-         r48g==
+        bh=yFhGX2ksyR6bl6kyiCZl+HBvDwsMQ5EUV+jwQV26TQk=;
+        b=d2D6MXFOEI0yr03D4MYyEsUzpk5fIDsR0d/N7j4PKxv8soLmsHyl3BCScKqb1McduE
+         mUzFGZnvkyTshWZ/fnFgY350EjQQN/bOHE5p9auFa5RDTDiNN18qW1BoxPxltaQaiDfX
+         EVottqKZQjcoCHaRkVdiiD52hHWdphOZ0j5GlKDIDb52zfmy/k1ZOLnazz6rdS4nu27v
+         dZndsgVNu3EA1nwqXb7oCjd9nQwdq1/VtcdO/n9UkamYZ46PA338xWYdXPkBrtHIdAMq
+         jQDRwS6E5S1gNJ0/H9acCmYH4xZhzyts6RqYW1bnXeRaBWDBwJI55Ym85EF+mIoO1e17
+         W9xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697050160; x=1697654960;
+        d=1e100.net; s=20230601; t=1697050161; x=1697654961;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gwPgb0Vxa46C21WbpKo3fGsmmsstakxunKdlGSyuz/I=;
-        b=lwB9lu7XRWADc5Aiy5v/5Kr9K1j42XjbvNTVFP5bMKeEXj+Zhne/tEN5ThjPlpAefC
-         7Gk6uDie8kX0fplQDMWs6G8UqENSIKvO7pJk8/vifeC3FmDOL1ZQC0qwRkc9Bywc4lqO
-         G9bvhiZMenM3E9tnQHQ9YaGA6XTHmro8pKrL0SHFx8oDwR/qGRkJKWsQX7KzcC56SD1w
-         h+szJh9Tom+MbxGlhA8MteBf9LRMDkcH27AkQ8lqE8902WD9A5+3H4cN+EPqM8iyrzMY
-         eofDGhYfpgMRMWlOkuZk0jYlI3eRPD/G7+zxpevbCtnj3d4DkEiW7b5j1FTgjJC5+oxN
-         Y1Wg==
-X-Gm-Message-State: AOJu0YysdecwPqnumTPKGDXCuOAX24ZbZTP5vBSuv2UnSgqhLP7h5g2b
-	QYI11JosOlekCvNRltcWMkMhDQ==
-X-Google-Smtp-Source: AGHT+IFxq973Ob/kOR6t1bmL2SP/if638Oo0uwRo3quVfL0DpoW+bXn2/XL7gAGw658ulQS/plNO0g==
-X-Received: by 2002:a5d:4a0b:0:b0:31a:b3aa:d19b with SMTP id m11-20020a5d4a0b000000b0031ab3aad19bmr19222081wrq.23.1697050159908;
-        Wed, 11 Oct 2023 11:49:19 -0700 (PDT)
+        bh=yFhGX2ksyR6bl6kyiCZl+HBvDwsMQ5EUV+jwQV26TQk=;
+        b=c2vdRY7m5Agz+T3wChV1Yqs7KZKLp3vvZegfcw1N0j9llzbQ2Dfrr4FrBmJ78jyhVy
+         4/Tg5Hlb2mu41pURsJabvkJ0+8MAoIFhp/8TUoF98i7DTyh5Vq4N0/q3zkObkxIjyXXu
+         Ny9H/lC7Mo2Sw5xKravAV3tOAMcJmAAiNHQQ35ww9stQkF4n/tsTE+gIN7lEk+RlntUB
+         66N/au6CODxPmbq0EfOJOKIHNiFfOdJPQBtQwvE+JPcENnKLI67pk2+CBDQ6KJeZBHPa
+         +tnrvhw4aReNXRmknbw18XIUb3Z8O1hlwr2JSPmfcAGz+tz4KFrQFy7IZWNEijyPqKdH
+         mYnQ==
+X-Gm-Message-State: AOJu0Yz3oXKrqTb5dU+/57QXj9mGUeFdRY6G/IduDlRpbpqEAtn8d7BR
+	9CPbRR4BZf2l1RjMyH5qPbh4JQ==
+X-Google-Smtp-Source: AGHT+IF9W+7AW/XlTQ7WDrQGflbC5JtDdmSRP62EIkSF11L7fYaLrR7J1qys5NGk48FiNmOh3TFgig==
+X-Received: by 2002:a7b:c84e:0:b0:3fe:1fd9:bedf with SMTP id c14-20020a7bc84e000000b003fe1fd9bedfmr16045843wml.11.1697050161221;
+        Wed, 11 Oct 2023 11:49:21 -0700 (PDT)
 Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
-        by smtp.gmail.com with ESMTPSA id v6-20020adff686000000b0031980294e9fsm16003875wrp.116.2023.10.11.11.49.18
+        by smtp.gmail.com with ESMTPSA id v6-20020adff686000000b0031980294e9fsm16003875wrp.116.2023.10.11.11.49.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 11:49:19 -0700 (PDT)
+        Wed, 11 Oct 2023 11:49:20 -0700 (PDT)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -85,73 +85,44 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v3 06/20] dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
-Date: Wed, 11 Oct 2023 19:48:09 +0100
-Message-ID: <20231011184823.443959-7-peter.griffin@linaro.org>
+Subject: [PATCH v3 07/20] dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
+Date: Wed, 11 Oct 2023 19:48:10 +0100
+Message-ID: <20231011184823.443959-8-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
 In-Reply-To: <20231011184823.443959-1-peter.griffin@linaro.org>
 References: <20231011184823.443959-1-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the "google,gs101-pinctrl" compatible to the dt-schema bindings
-documentation.
-
-Add maxItems of 50 for the interrupts property as gs101 can have
-multiple irqs.
+gs101 is similar to newer Exynos SoCs like Exynos850 and ExynosAutov9
+where more than one pin controller can do external wake-up interrupt.
+So add a dedicated compatible for it.
 
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- .../bindings/pinctrl/samsung,pinctrl.yaml     | 22 ++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-index 26614621774a..6dc648490668 100644
---- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-@@ -35,6 +35,7 @@ properties:
- 
+diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+index 1de91a51234d..7cddce761c46 100644
+--- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+@@ -29,6 +29,7 @@ description: |
+ properties:
    compatible:
      enum:
-+      - google,gs101-pinctrl
-       - samsung,s3c2412-pinctrl
-       - samsung,s3c2416-pinctrl
-       - samsung,s3c2440-pinctrl
-@@ -58,7 +59,8 @@ properties:
-   interrupts:
-     description:
-       Required for GPIO banks supporting external GPIO interrupts.
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 50
- 
-   power-domains:
-     maxItems: 1
-@@ -134,6 +136,24 @@ allOf:
-           minItems: 1
-           maxItems: 1
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: google,gs101-pinctrl
-+    then:
-+      properties:
-+        interrupts:
-+          description:
-+            Required for external wakeup interrupts. List all external
-+            wakeup interrupts supported by this bank.
-+          minItems: 1
-+          maxItems: 50
-+    else:
-+      properties:
-+        interrupts:
-+          maxItems: 1
-+
- additionalProperties: false
- 
- examples:
++      - google,gs101-wakeup-eint
+       - samsung,s3c2410-wakeup-eint
+       - samsung,s3c2412-wakeup-eint
+       - samsung,s3c64xx-wakeup-eint
+@@ -99,6 +100,7 @@ allOf:
+             enum:
+               - samsung,exynos850-wakeup-eint
+               - samsung,exynosautov9-wakeup-eint
++              - google,gs101-wakeup-eint
+     then:
+       properties:
+         interrupts: false
 -- 
 2.42.0.655.g421f12c284-goog
 
