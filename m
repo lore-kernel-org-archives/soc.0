@@ -1,111 +1,372 @@
-Return-Path: <SRS0=ubZ2=FZ=linaro.org=semen.protsenko@kernel.org>
+Return-Path: <SRS0=ik3l=FZ=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3562ECDB47A
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 18:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFE3CDB47E
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 21:20:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0E6EDC433CA; Wed, 11 Oct 2023 18:54:47 +0000 (UTC)
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	id 1B6DAC433C7; Wed, 11 Oct 2023 21:20:19 +0000 (UTC)
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 06624C433C8
-	for <soc@kernel.org>; Wed, 11 Oct 2023 18:54:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06624C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-58907163519so108676a12.1
-        for <soc@kernel.org>; Wed, 11 Oct 2023 11:54:45 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 731DDC433C8;
+	Wed, 11 Oct 2023 21:20:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 731DDC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-49d14708479so85904e0c.2;
+        Wed, 11 Oct 2023 14:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697050485; x=1697655285; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1yAITkA43oBRq5wNnpQLBgM5d0bUs6osx3goAerw1Zs=;
-        b=VEiYAV/BFXsir9T/SW+v04R7JgUGa/n7mhMrZOMmhabuo692QNSJrjEuYzgoIcATGK
-         xCi0wWNdipKtnQJ/yBXqQ8z85QiCw278CYLymFgJEMiK2nat009pRO2DpL7Gi25F7Y61
-         9WYeYNzGxmn/RaeCfwpBwXRp7hNXw/uGT/PWOlmg/8ZjuXXldFozTDHeBM+/w0yhFg55
-         NJgf2mFxF+DHCvMJK5FUW1XUG8PWhQXjy9B2kfMdS1X6OM3gKm5gAwUsWY9TP8eGXn6L
-         kFZKvB9CD68woJVKYUKAibuHiXaoV3yG6fI1ipbE5oLdLVIwZ92/BWhSQVNhp7BY/w0I
-         JExg==
+        d=gmail.com; s=20230601; t=1697059216; x=1697664016; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lhywIaYgyHV+8Wb5qCLR80dSpBUwcZQjWfKFyAdOsWk=;
+        b=c6XRfC/HiIVD/SgxJEs7Gl06bDh6qaiZRTCrSk8J135s6wgRWUpMdckd5guWAuIOUr
+         dYUAHQ4g3M1S0odgVlUtGbC+K/b6jwnesOIGhQrTDlGYXXbIUDFD67Z/x01GjeBd9ldz
+         aToQkBkaRhD/skdDIxoju5/e+AT76U72SJqZeHrS+j+fknCRUseRqAQjjWZFOD1J9wT+
+         7xpLSNPAu4a6EcsgU8QBHeeh+E6l/1wT5XOHHOGqnVB4vEmO0gmsJ9MajKBD5ouTZCvP
+         LRtyLQ+NbQr9RKc3qvshLSf0WnEfixQRtXtoBLSNSTAS+Gx4CsIkoGIhEBatT3rJG6+W
+         rcAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697050485; x=1697655285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1697059216; x=1697664016;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1yAITkA43oBRq5wNnpQLBgM5d0bUs6osx3goAerw1Zs=;
-        b=V2LL4or4pQ8oXnQxDhovLNxnpE7qbGFflAVnqsyy0PrtvUwob3lcv5ldyTBGiZHuTI
-         cQ22IjXX1IjLRBE7gxwwSpwbtS0MRB3Piz70SajndyDSdern8Bliw/2E38V3j5YMucG5
-         T8oFwdgY1je0QIKTTGbFySI9iIN+xJwFkn4lpUM0xLOCEEjd20UsdLa9lUScDF3/pITI
-         SiEHRPoP6IIWTXrAtyQVOzJ5ttErkdhvuHn7Yo2rGwNgyxaqS5cqw4bTsrAsmQMcS+eY
-         wDpXgzDbpvVkUFEhC6ZfB5FrqetkiDWNDUE1ys07tcBeUH7NCG+msHMb05QC9pd7w9Rm
-         vtgQ==
-X-Gm-Message-State: AOJu0YyhfQF52K02+WfA/F3z/g0bE8y1uXejZEmOjYHj4k9fQCFe8J69
-	d8lLsjhYFiGYLaNTuKQDw2lqfJPE6wrLo5RH2baL9A==
-X-Google-Smtp-Source: AGHT+IF2ZH9G5DtfhwrC1grow9snCHgNZ9i9qEm+hDBJbApMW0zlGdoIB5EmMSZ9fCki9SJLAlPeNOp5FVB21fst9pw=
-X-Received: by 2002:a17:90b:46c7:b0:277:4b68:b93c with SMTP id
- jx7-20020a17090b46c700b002774b68b93cmr20814772pjb.4.1697050485416; Wed, 11
- Oct 2023 11:54:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org> <20231011184823.443959-2-peter.griffin@linaro.org>
-In-Reply-To: <20231011184823.443959-2-peter.griffin@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Wed, 11 Oct 2023 13:54:34 -0500
-Message-ID: <CAPLW+4nipk9sae2UP6Jp_XXtHQMKbNpjGC4F7RW8GTuF3EtRBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 01/20] dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+        bh=lhywIaYgyHV+8Wb5qCLR80dSpBUwcZQjWfKFyAdOsWk=;
+        b=uMFndZySPQ9jwl/5MO5Y41R2YlLuoV9Eoy1ZGRvSAnLmWr6Z8MA/xswBenYA+MLq7L
+         NEh74qAv3NNOI7jT8DIb9i5i+145utcQuAN0CZdDtq/qmmD++wZgdinttcDQRCSGJFhs
+         ZKsxNrMtY9zX4goRYajgkphK+0++cZ+zycr1MuybJ9ZqyyWQDfdXohyl/dQCsDZipBEn
+         /pgO3Ww8MC8HPFx8yotcSqroUeVSLygEwzdqSsIjRVkvl3YmKsWLlPiQw8yaf5Y5GBy0
+         b9WEhLVbn0axxf7A+JnxjFD1ClWW65/MNgCMteCcEH+ktsRa5L2/jZtcNBn2lZq5XF7S
+         glhg==
+X-Gm-Message-State: AOJu0YzvaLamBQneEjdrCA5pH/t7u7zuBmiLSz8jchAj5LUZQt+/pDSw
+	pVvpQB3ZgGGEVG4hZ4IMdY0=
+X-Google-Smtp-Source: AGHT+IGftkULkb6AubRC6ZgI5xrsnD8uhx3YRI2APpn3ekErSGeIKoj0bn8ygO/93y1FvayCBIo+jA==
+X-Received: by 2002:a05:6102:34f6:b0:455:c426:1b22 with SMTP id bi22-20020a05610234f600b00455c4261b22mr21636570vsb.16.1697059216184;
+        Wed, 11 Oct 2023 14:20:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l29-20020ab053dd000000b007b5ff005318sm886292uaa.17.2023.10.11.14.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 14:20:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 11 Oct 2023 14:20:13 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	cw00.choi@samsung.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	saravanak@google.com, willmcvicker@google.com, soc@kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+	linus.walleij@linaro.org, wim@linux-watchdog.org,
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+	olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com,
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+	semen.protsenko@linaro.org, saravanak@google.com,
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
 	kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 15/20] watchdog: s3c2410_wdt: Add support for Google
+ tensor SoCs
+Message-ID: <36dd4a24-00a0-4901-b621-b50384b1020c@roeck-us.net>
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-16-peter.griffin@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231011184823.443959-16-peter.griffin@linaro.org>
 
-On Wed, Oct 11, 2023 at 1:49=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
->
-> Add gs101-pmu compatible to the bindings documentation.
->
+On Wed, Oct 11, 2023 at 07:48:18PM +0100, Peter Griffin wrote:
+> This patch adds the compatibles and drvdata for the Google
+> gs101 & gs201 SoCs found in Pixel 6 and Pixel 7 phones. Similar
+> to Exynos850 it has two watchdog instances, one for each cluster
+> and has some control bits in PMU registers.
+> 
+> The watchdog IP found in gs101 SoCs also supports a few
+> additional bits/features in the WTCON register which we add
+> support for and an additional register detailed below.
+> 
+> dbgack-mask - Enables masking WDT interrupt and reset request
+> according to asserted DBGACK input
+> 
+> windowed-mode - Enabled Windowed watchdog mode
+> 
+> Windowed watchdog mode also has an additional register WTMINCNT.
+> If windowed watchdog is enabled and you reload WTCNT when the
+> value is greater than WTMINCNT, it prompts interrupt or reset
+> request as if the watchdog time has expired.
+
+Sorry, I don't understand what the code is doing here.
+
+It looks like it enables window mode unconditionally (?). If so,
+what is the impact ? Does it mean that any code requesting multiple
+keepalives in a row on the affected hardware will now cause an
+immediate reset ? If so, what is the rationale ?
+
+Alternatively, if it enables window mode and configures it such
+that WTMINCNT is always equal or larger than WTCNT, what is the
+point of enabling window mode in the first place ?
+
+Thanks,
+Guenter
+
+> 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
-
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
->  Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yam=
-l b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-> index e1d716df5dfa..9e497c310532 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-> @@ -15,6 +15,7 @@ select:
->      compatible:
->        contains:
->          enum:
-> +          - google,gs101-pmu
->            - samsung,exynos3250-pmu
->            - samsung,exynos4210-pmu
->            - samsung,exynos4212-pmu
-> @@ -35,6 +36,7 @@ properties:
->      oneOf:
->        - items:
->            - enum:
-> +              - google,gs101-pmu
->                - samsung,exynos3250-pmu
->                - samsung,exynos4210-pmu
->                - samsung,exynos4212-pmu
-> --
+>  drivers/watchdog/s3c2410_wdt.c | 127 ++++++++++++++++++++++++++++++---
+>  1 file changed, 116 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 0b4bd883ff28..36c170047180 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -31,12 +31,14 @@
+>  #define S3C2410_WTDAT		0x04
+>  #define S3C2410_WTCNT		0x08
+>  #define S3C2410_WTCLRINT	0x0c
+> -
+> +#define S3C2410_WTMINCNT	0x10
+>  #define S3C2410_WTCNT_MAXCNT	0xffff
+>  
+> -#define S3C2410_WTCON_RSTEN	(1 << 0)
+> -#define S3C2410_WTCON_INTEN	(1 << 2)
+> -#define S3C2410_WTCON_ENABLE	(1 << 5)
+> +#define S3C2410_WTCON_RSTEN		(1 << 0)
+> +#define S3C2410_WTCON_INTEN		(1 << 2)
+> +#define S3C2410_WTCON_ENABLE		(1 << 5)
+> +#define S3C2410_WTCON_DBGACK_MASK	(1 << 16)
+> +#define S3C2410_WTCON_WINDOWED_WD	(1 << 20)
+>  
+>  #define S3C2410_WTCON_DIV16	(0 << 3)
+>  #define S3C2410_WTCON_DIV32	(1 << 3)
+> @@ -51,6 +53,7 @@
+>  
+>  #define S3C2410_WATCHDOG_ATBOOT		(0)
+>  #define S3C2410_WATCHDOG_DEFAULT_TIME	(15)
+> +#define S3C2410_WINDOW_MULTIPLIER	2
+>  
+>  #define EXYNOS5_RST_STAT_REG_OFFSET		0x0404
+>  #define EXYNOS5_WDT_DISABLE_REG_OFFSET		0x0408
+> @@ -67,6 +70,13 @@
+>  #define EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT	25
+>  #define EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT	24
+>  
+> +#define GS_CLUSTER0_NONCPU_OUT			0x1220
+> +#define GS_CLUSTER1_NONCPU_OUT			0x1420
+> +#define GS_CLUSTER0_NONCPU_INT_EN		0x1244
+> +#define GS_CLUSTER1_NONCPU_INT_EN		0x1444
+> +#define GS_CLUSTER2_NONCPU_INT_EN		0x1644
+> +#define GS_RST_STAT_REG_OFFSET			0x3B44
+> +
+>  /**
+>   * DOC: Quirk flags for different Samsung watchdog IP-cores
+>   *
+> @@ -106,6 +116,8 @@
+>  #define QUIRK_HAS_PMU_RST_STAT			(1 << 2)
+>  #define QUIRK_HAS_PMU_AUTO_DISABLE		(1 << 3)
+>  #define QUIRK_HAS_PMU_CNT_EN			(1 << 4)
+> +#define QUIRK_HAS_DBGACK_BIT			(1 << 5)
+> +#define QUIRK_HAS_WTMINCNT_REG			(1 << 6)
+>  
+>  /* These quirks require that we have a PMU register map */
+>  #define QUIRKS_HAVE_PMUREG \
+> @@ -263,6 +275,54 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
+>  		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
+>  };
+>  
+> +static const struct s3c2410_wdt_variant drv_data_gs101_cl0 = {
+> +	.mask_reset_reg = GS_CLUSTER0_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 0,
+> +	.cnt_en_reg = GS_CLUSTER0_NONCPU_OUT,
+> +	.cnt_en_bit = 8,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
+> +	.mask_reset_reg = GS_CLUSTER1_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 1,
+> +	.cnt_en_reg = GS_CLUSTER1_NONCPU_OUT,
+> +	.cnt_en_bit = 7,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs201_cl0 = {
+> +	.mask_reset_reg = GS_CLUSTER0_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 0,
+> +	.cnt_en_reg = GS_CLUSTER0_NONCPU_OUT,
+> +	.cnt_en_bit = 8,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs201_cl1 = {
+> +	.mask_reset_reg = GS_CLUSTER1_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 1,
+> +	.cnt_en_reg = GS_CLUSTER1_NONCPU_OUT,
+> +	.cnt_en_bit = 7,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> +		  QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_WTMINCNT_REG,
+> +};
+> +
+>  static const struct of_device_id s3c2410_wdt_match[] = {
+>  	{ .compatible = "samsung,s3c2410-wdt",
+>  	  .data = &drv_data_s3c2410 },
+> @@ -278,6 +338,10 @@ static const struct of_device_id s3c2410_wdt_match[] = {
+>  	  .data = &drv_data_exynos850_cl0 },
+>  	{ .compatible = "samsung,exynosautov9-wdt",
+>  	  .data = &drv_data_exynosautov9_cl0 },
+> +	{ .compatible = "google,gs101-wdt",
+> +	  .data = &drv_data_gs101_cl0 },
+> +	{ .compatible = "google,gs201-wdt",
+> +	  .data = &drv_data_gs201_cl0 },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
+> @@ -375,6 +439,21 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+>  	return 0;
+>  }
+>  
+> +static void s3c2410wdt_mask_dbgack(struct s3c2410_wdt *wdt, bool mask)
+> +{
+> +	unsigned long wtcon;
+> +
+> +	if (!(wdt->drv_data->quirks & QUIRK_HAS_DBGACK_BIT))
+> +		return;
+> +
+> +	wtcon = readl(wdt->reg_base + S3C2410_WTCON);
+> +	if (mask)
+> +		wtcon |= S3C2410_WTCON_DBGACK_MASK;
+> +	else
+> +		wtcon &= ~S3C2410_WTCON_DBGACK_MASK;
+> +	writel(wtcon, wdt->reg_base + S3C2410_WTCON);
+> +}
+> +
+>  static int s3c2410wdt_keepalive(struct watchdog_device *wdd)
+>  {
+>  	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
+> @@ -410,7 +489,7 @@ static int s3c2410wdt_stop(struct watchdog_device *wdd)
+>  
+>  static int s3c2410wdt_start(struct watchdog_device *wdd)
+>  {
+> -	unsigned long wtcon;
+> +	unsigned long wtcon, wtmincnt;
+>  	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
+>  	unsigned long flags;
+>  
+> @@ -432,6 +511,12 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
+>  	dev_dbg(wdt->dev, "Starting watchdog: count=0x%08x, wtcon=%08lx\n",
+>  		wdt->count, wtcon);
+>  
+> +	if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG) {
+> +		wtcon |= S3C2410_WTCON_WINDOWED_WD;
+> +		wtmincnt = wdt->count * S3C2410_WINDOW_MULTIPLIER;
+> +		writel(wtmincnt, wdt->reg_base + S3C2410_WTMINCNT);
+> +	}
+> +
+>  	writel(wdt->count, wdt->reg_base + S3C2410_WTDAT);
+>  	writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
+>  	writel(wtcon, wdt->reg_base + S3C2410_WTCON);
+> @@ -447,7 +532,7 @@ static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
+>  	unsigned long freq = s3c2410wdt_get_freq(wdt);
+>  	unsigned int count;
+>  	unsigned int divisor = 1;
+> -	unsigned long wtcon;
+> +	unsigned long wtcon, wtmincnt;
+>  
+>  	if (timeout < 1)
+>  		return -EINVAL;
+> @@ -478,6 +563,11 @@ static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
+>  	count = DIV_ROUND_UP(count, divisor);
+>  	wdt->count = count;
+>  
+> +	if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG) {
+> +		wtmincnt = count * S3C2410_WINDOW_MULTIPLIER;
+> +		writel(wtmincnt, wdt->reg_base + S3C2410_WTMINCNT);
+> +	}
+> +
+>  	/* update the pre-scaler */
+>  	wtcon = readl(wdt->reg_base + S3C2410_WTCON);
+>  	wtcon &= ~S3C2410_WTCON_PRESCALE_MASK;
+> @@ -496,14 +586,20 @@ static int s3c2410wdt_restart(struct watchdog_device *wdd, unsigned long action,
+>  {
+>  	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
+>  	void __iomem *wdt_base = wdt->reg_base;
+> +	unsigned long wtcon;
+>  
+>  	/* disable watchdog, to be safe  */
+>  	writel(0, wdt_base + S3C2410_WTCON);
+>  
+>  	/* put initial values into count and data */
+> +	if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG)
+> +		writel(0x100, wdt_base + S3C2410_WTMINCNT);
+>  	writel(0x80, wdt_base + S3C2410_WTCNT);
+>  	writel(0x80, wdt_base + S3C2410_WTDAT);
+>  
+> +	if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG)
+> +		wtcon |= S3C2410_WTCON_WINDOWED_WD;
+> +
+>  	/* set the watchdog to go and reset... */
+>  	writel(S3C2410_WTCON_ENABLE | S3C2410_WTCON_DIV16 |
+>  		S3C2410_WTCON_RSTEN | S3C2410_WTCON_PRESCALE(0x20),
+> @@ -585,9 +681,11 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>  	}
+>  
+>  #ifdef CONFIG_OF
+> -	/* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster index */
+> +	/* Choose Exynos850/ExynosAutov9/gsx01 driver data w.r.t. cluster index */
+>  	if (variant == &drv_data_exynos850_cl0 ||
+> -	    variant == &drv_data_exynosautov9_cl0) {
+> +	    variant == &drv_data_exynosautov9_cl0 ||
+> +	    variant == &drv_data_gs101_cl0 ||
+> +	    variant == &drv_data_gs201_cl0) {
+>  		u32 index;
+>  		int err;
+>  
+> @@ -600,9 +698,14 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>  		case 0:
+>  			break;
+>  		case 1:
+> -			variant = (variant == &drv_data_exynos850_cl0) ?
+> -				&drv_data_exynos850_cl1 :
+> -				&drv_data_exynosautov9_cl1;
+> +			if (variant == &drv_data_exynos850_cl0)
+> +				variant = &drv_data_exynos850_cl1;
+> +			else if (variant == &drv_data_exynosautov9_cl0)
+> +				variant = &drv_data_exynosautov9_cl1;
+> +			else if (variant == &drv_data_gs101_cl0)
+> +				variant = &drv_data_gs101_cl1;
+> +			else if (variant == &drv_data_gs201_cl0)
+> +				variant = &drv_data_gs201_cl1;
+>  			break;
+>  		default:
+>  			return dev_err_probe(dev, -EINVAL, "wrong cluster index: %u\n", index);
+> @@ -700,6 +803,8 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>  	wdt->wdt_device.bootstatus = s3c2410wdt_get_bootstatus(wdt);
+>  	wdt->wdt_device.parent = dev;
+>  
+> +	s3c2410wdt_mask_dbgack(wdt, true);
+> +
+>  	/*
+>  	 * If "tmr_atboot" param is non-zero, start the watchdog right now. Also
+>  	 * set WDOG_HW_RUNNING bit, so that watchdog core can kick the watchdog.
+> -- 
 > 2.42.0.655.g421f12c284-goog
->
+> 
