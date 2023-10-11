@@ -1,111 +1,92 @@
-Return-Path: <gregkh@linuxfoundation.org>
+Return-Path: <SRS0=nHfw=FZ=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75573CD98F6
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 07:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D555CD98F6
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 07:48:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 47EFFC433C8; Wed, 11 Oct 2023 07:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D3BC433C7;
-	Wed, 11 Oct 2023 07:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1697010425;
-	bh=TKxbMsBarpoZFO2cUw4PQl8DmB/FWYBI+aG4z8GcLa4=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=buVQLXMBcBM2AFFeDvDzvwW3yqrJzLaPTjAgJ7ilI0FD1DZ0n7ccYFaLfArL7o/Do
-	 1iyJgqJGH7CO7TK/G1qdSYq+bIWJHp9CyE/wttflXfvKsROFzT9uXBNRBlvzYjMg8J
-	 g3pza75bGZ/AOswHPHP5geZZGzAll5dKhsf7R2y4=
-Date: Wed, 11 Oct 2023 09:47:01 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Peter Griffin <peter.griffin@linaro.org>
+	id 6E992C433C8; Wed, 11 Oct 2023 07:48:36 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by smtp.kernel.org (Postfix) with ESMTP id 8CE7AC433C7;
+	Wed, 11 Oct 2023 07:48:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8CE7AC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id 19B7780E1;
+	Wed, 11 Oct 2023 07:48:30 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-	linus.walleij@linaro.org, wim@linux-watchdog.org,
-	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-	semen.protsenko@linaro.org, saravanak@google.com,
-	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org,
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 16/20] tty: serial: samsung: Add gs101 compatible and
- SoC data
-Message-ID: <2023101109-crispy-escapable-0801@gregkh>
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
- <20231010224928.2296997-17-peter.griffin@linaro.org>
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Devicetree changes for omaps for v6.7
+Date: Wed, 11 Oct 2023 10:48:26 +0300
+Message-ID: <pull-1697010475-119828@atomide.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231010224928.2296997-17-peter.griffin@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 10, 2023 at 11:49:24PM +0100, Peter Griffin wrote:
-> Add serial driver data for Google Tensor gs101 SoC.
-> 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index 07fb8a9dac63..79a1a184d5c1 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -2597,14 +2597,21 @@ static const struct s3c24xx_serial_drv_data exynos850_serial_drv_data = {
->  	.fifosize = { 256, 64, 64, 64 },
->  };
->  
-> +static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
-> +	EXYNOS_COMMON_SERIAL_DRV_DATA(),
-> +	.fifosize = { 256, 64, 64, 64 },
-> +};
+From: "Tony Lindgren" <tony@atomide.com>
 
-Why are you duplicating a structure that is already in the same file?
-What is the benifit here?
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
->  #define EXYNOS4210_SERIAL_DRV_DATA (&exynos4210_serial_drv_data)
->  #define EXYNOS5433_SERIAL_DRV_DATA (&exynos5433_serial_drv_data)
->  #define EXYNOS850_SERIAL_DRV_DATA (&exynos850_serial_drv_data)
-> +#define GS101_SERIAL_DRV_DATA (&gs101_serial_drv_data)
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-What is "GS101"?
+are available in the Git repository at:
 
->  #else
->  #define EXYNOS4210_SERIAL_DRV_DATA NULL
->  #define EXYNOS5433_SERIAL_DRV_DATA NULL
->  #define EXYNOS850_SERIAL_DRV_DATA NULL
-> +#define GS101_SERIAL_DRV_DATA NULL
->  #endif
->  
->  #ifdef CONFIG_ARCH_APPLE
-> @@ -2688,6 +2695,9 @@ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
->  	}, {
->  		.name		= "artpec8-uart",
->  		.driver_data	= (kernel_ulong_t)ARTPEC8_SERIAL_DRV_DATA,
-> +	}, {
-> +		.name		= "gs101-uart",
-> +		.driver_data	= (kernel_ulong_t)GS101_SERIAL_DRV_DATA,
->  	},
->  	{ },
->  };
-> @@ -2709,6 +2719,8 @@ static const struct of_device_id s3c24xx_uart_dt_match[] = {
->  		.data = EXYNOS850_SERIAL_DRV_DATA },
->  	{ .compatible = "axis,artpec8-uart",
->  		.data = ARTPEC8_SERIAL_DRV_DATA },
-> +	{ .compatible = "google,gs101-uart",
-> +		.data =  GS101_SERIAL_DRV_DATA },
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.7/dt-signed
 
-Why aren't you just listing this hardware as the same one above?  There
-doesn't need to be a new entry if you just fix up the DT for the board
-to declare it as the proper type of device.  No need to keep adding new
-entries that do the exact same thing, we don't normally like that at all
-for other bus types, why is DT different?
+for you to fetch changes up to ea1c1e67e631be14f6e6bc9a6e96219c47f31ed4:
 
-thanks,
+  ARM: dts: omap4-embt2ws: Fix pinctrl single node name warning (2023-10-07 10:33:20 +0300)
 
-greg k-h
+----------------------------------------------------------------
+Devicetree changes for omaps for v6.7 merge window
+
+Two non-urgent devicetree fixes for am371-evm led pinmux and a node name
+warning fix for omap4-epson-embt2ws, and updates for connected devices for
+various devices:
+
+- Device updates and enabling of pru support for am335x-pocketbeagle
+
+- Few more devices such as leds and iio for omap4-epson-embt2ws
+
+- Ethernet and led updates for am3517-evm
+
+- Modem sleep pins configuration for motorola-mapphone
+
+----------------------------------------------------------------
+Adam Ford (3):
+      ARM: dts: am3517-evm: Fix LED3/4 pinmux
+      ARM: dts: am3517-evm: Enable Ethernet PHY Interrupt
+      ARM: dts: am3517: Configure ethernet alias
+
+Andreas Kemnade (4):
+      ARM: dts: omap4: embt2ws: add LED
+      ARM: dts: omap: omap4-embt2ws: Let IMU driver handle Magnetometer internally
+      ARM: dts: omap: omap4-embt2ws: Add IMU at control unit
+      ARM: dts: omap3-gta04: Drop superfluous omap36xx compatible
+
+Tony Lindgren (2):
+      ARM: dts: motorola-mapphone: Add mdm6600 sleep pins
+      ARM: dts: omap4-embt2ws: Fix pinctrl single node name warning
+
+Trevor Woerner (4):
+      ARM: dts: am335x-pocketbeagle: update LED information
+      ARM: dts: am335x-pocketbeagle: remove dependency cycle
+      ARM: dts: am335x-pocketbeagle: enable pru
+      ARM: dts: am335x-pocketbeagle: add missing GPIO mux
+
+ arch/arm/boot/dts/ti/omap/am335x-pocketbeagle.dts  | 57 ++++++++++++++++++----
+ arch/arm/boot/dts/ti/omap/am3517-evm.dts           | 35 ++++++++++---
+ arch/arm/boot/dts/ti/omap/am3517.dtsi              |  1 +
+ .../boot/dts/ti/omap/motorola-mapphone-common.dtsi | 20 +++++++-
+ arch/arm/boot/dts/ti/omap/omap3-gta04.dtsi         |  2 +-
+ arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts  | 55 ++++++++++++++++-----
+ 6 files changed, 140 insertions(+), 30 deletions(-)
