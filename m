@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B284CDB47E
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 21:52:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02856C41513
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 21:53:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8184CC433C8; Wed, 11 Oct 2023 21:52:14 +0000 (UTC)
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	id B622CC433C9; Wed, 11 Oct 2023 21:53:09 +0000 (UTC)
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1BF8CC433CA
-	for <soc@kernel.org>; Wed, 11 Oct 2023 21:52:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1BF8CC433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id F35FCC433C8
+	for <soc@kernel.org>; Wed, 11 Oct 2023 21:53:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F35FCC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1c9b70b9671so27115ad.1
-        for <soc@kernel.org>; Wed, 11 Oct 2023 14:52:10 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1c9d4f08d7cso61405ad.0
+        for <soc@kernel.org>; Wed, 11 Oct 2023 14:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697061130; x=1697665930; darn=kernel.org;
+        d=google.com; s=20230601; t=1697061186; x=1697665986; darn=kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
         bh=2PmcXQ0mdd2fjr08gUutFL5TrBrbl9n8zgazyjOunRA=;
-        b=OtBeB/0/BcAlHS+Omocb8JASa8n52hmp+M7zg0HcRrazlfAv25fw9o8jIuywnYFhqk
-         wYBMtpurdUCXBrgbwBjwg5zX80oPWuC1QAQHG+Sz34IMYcydjEwRTs2+5jBTUgwwYm4g
-         x3eLNIR+dqqrFir6POLgMN8+Mw03cTCg0r2DRmp0ulFS03Q30L9XFc2Tz6Q3qOB4EKL5
-         0vUkhG7xamASKGlifZkOBt2QITcxhpC7qOoPcQYTju+QfZvOCqgPklqXoLbXoE7oyZX4
-         Nyj4KaDIASrFOkIpmTK4ht4t05pxknVj5HIIJrMZCV+k7ZHV1vP99aOJhsRn/EXh7YtX
-         WIDA==
+        b=hLUBA7uSsEzva5QuW06IVq7LhwKe0GTr90lfzGuq9tPy7AYw1oZu9ZFweGNBXSWPZN
+         vZ3AB5iEhAAbyrTEaLTXLLcQg/JdE6sWOMEooDuxWPHv5mb1gzq+wXjNjlhTrrrh+wX+
+         aHI5TB53EPxXT/UTjxW6CyvUqg01xf3pQUe5LPDRQ+kxzkBNCmnONqaKqOK5HPuNKFxw
+         KMSfgJGXYWG2jwYHxcjT4lwh/GQtYfO+HxgiG4JCIVq/AGQnO5do2j890wXk82LbHiAF
+         UMtFBx9dl+hkBLTA92yU82eiWLQp1pxIhFGz73wQjeRpdSNz8i1hO2AjoiteHB7KywYf
+         ucGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697061130; x=1697665930;
+        d=1e100.net; s=20230601; t=1697061186; x=1697665986;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
         bh=2PmcXQ0mdd2fjr08gUutFL5TrBrbl9n8zgazyjOunRA=;
-        b=BU+s6G9s/TwI7kmyXxBlQ+i8f1cVigwmS2loEG12+T6PI5cgHP1zgIb0c8MLAG30EG
-         YiopJfWVGXjRrJ+gy637SqlsLQeRtRWZ2LH14w5q1t5GuQOogYW6oL4YVmYDXmtS8vCY
-         SpBAdqS8Pbo2fdqNhMUilT6d4OvH504K6q2QGNNze9p7cpNtCxxtzuZmlvLzb52wMpfS
-         wBPNQhthYZvznAsS1VwXQki7Wriijnq3nzKfL2gQN0A/1lpotMK7zV0V9GvipVeeOJPw
-         bpWWBaDZUl1/CNVPk8BLL52WRm3heM/8Fhf8wfymgas3nac+1fdNyIF80lkRQDsx5rXR
-         Cfwg==
-X-Gm-Message-State: AOJu0YxMkfSoOW0+xwNncHsLw0tNI8wl6k7LOCfE32cx1h3HUY0eVNYh
-	CT7xcm7nMdAcPUHO0rqTaEJm3g==
-X-Google-Smtp-Source: AGHT+IGe013CnVnmhJmp+zhSawUy8VO5ZSj0A2/Kukg+lVArKQgWW9d0Gmq7bxgllBE09dqzGlmtOA==
-X-Received: by 2002:a17:902:f9d0:b0:1bd:b75a:e95f with SMTP id kz16-20020a170902f9d000b001bdb75ae95fmr362993plb.0.1697061130035;
-        Wed, 11 Oct 2023 14:52:10 -0700 (PDT)
+        b=BYJ/2jcvK2qIbemIprZTj8C5e4MoruZa23XN7+SF8ZlwZpto/iGpLpQa18p/jGraUK
+         tx+Ejq87d/lMAck8m4DW796yRhVDeHj62HXTs1RaDSZwMTSJwTeptF5l1vYgvphJdl2K
+         uV2hLnKZqr9q+GDxqXkRu0+yWAkrcUqUNW7gVeja8sHeTQGQh5IPJmriT2CnW21fL9tX
+         R4Sfuhf7DSkzRQXXGkeg5/+s+iz3qdO1u/v29RmWfXyW5ptzjwh3Hefd16Y2MTRcb6IS
+         tRrTRUEMRt6NmK3QmWL6lNh1GmWLZU7dbyX4AyVfGWPPLZOXH3+b5zI3osB4jiT1PnZI
+         3tag==
+X-Gm-Message-State: AOJu0YzSa7Q2+qu7KD0g67beSP0VJQiKgBN7NI84Ea9aJ0yn4lLt7tmc
+	CwalyCJYXswqh7RGBxSBHb3lqg==
+X-Google-Smtp-Source: AGHT+IETsYqem1IywYVaGoBv99oO2PNNSqnOYFfqteKpW8/yjwJCjGz76Y2GZW8cZaRKl9qk3jEipw==
+X-Received: by 2002:a17:903:228f:b0:1c3:976e:22e6 with SMTP id b15-20020a170903228f00b001c3976e22e6mr363213plh.12.1697061186005;
+        Wed, 11 Oct 2023 14:53:06 -0700 (PDT)
 Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id c5-20020a6566c5000000b0058988954686sm263715pgw.90.2023.10.11.14.52.08
+        by smtp.gmail.com with ESMTPSA id z21-20020a170902ee1500b001c8836a3795sm309662plb.271.2023.10.11.14.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 14:52:08 -0700 (PDT)
-Date: Wed, 11 Oct 2023 14:52:05 -0700
+        Wed, 11 Oct 2023 14:53:05 -0700 (PDT)
+Date: Wed, 11 Oct 2023 14:53:02 -0700
 From: William McVicker <willmcvicker@google.com>
 To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -70,7 +70,7 @@ Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 	kernel-team@android.com, linux-serial@vger.kernel.org
 Subject: Re: [PATCH v3 14/20] pinctrl: samsung: Add gs101 SoC pinctrl
  configuration
-Message-ID: <ZScZBbFmLUdhE1hD@google.com>
+Message-ID: <ZScZPstpJInZxwlD@google.com>
 References: <20231011184823.443959-1-peter.griffin@linaro.org>
  <20231011184823.443959-15-peter.griffin@linaro.org>
 MIME-Version: 1.0
