@@ -1,92 +1,78 @@
-Return-Path: <SRS0=nHfw=FZ=atomide.com=tony@kernel.org>
+Return-Path: <gregkh@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D555CD98F6
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 07:48:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1007BCD98F8
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 07:48:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6E992C433C8; Wed, 11 Oct 2023 07:48:36 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 8CE7AC433C7;
-	Wed, 11 Oct 2023 07:48:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8CE7AC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 19B7780E1;
-	Wed, 11 Oct 2023 07:48:30 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	id E1B87C433CB; Wed, 11 Oct 2023 07:48:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA45C433C8;
+	Wed, 11 Oct 2023 07:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1697010536;
+	bh=whI12s+xP/WyKhnwJghEvRm/9Q3iMkjAyASaMzjt4AU=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=xObSPjwT6VfjYAbLH/8/jrqrLSbVn2GhcgqCKQJICeoIdle5F7lQmaZHBMJa1k+Bv
+	 y+BGNJn32ARrr+jU0aLQNTMTZ+p1nSARRoXYzDPc5ViPMI/+XWLzrnZU87VvscwoP8
+	 WIQiiMd0/vdOkwQ1Arc+xsUBw5Iaj9x/6jpK33Gw=
+Date: Wed, 11 Oct 2023 09:48:53 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+	linus.walleij@linaro.org, wim@linux-watchdog.org,
+	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+	semen.protsenko@linaro.org, saravanak@google.com,
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Devicetree changes for omaps for v6.7
-Date: Wed, 11 Oct 2023 10:48:26 +0300
-Message-ID: <pull-1697010475-119828@atomide.com>
-X-Mailer: git-send-email 2.42.0
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	kernel-team@android.com, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add
+ google-gs101-uart compatible
+Message-ID: <2023101111-banknote-satin-1f77@gregkh>
+References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+ <20231010224928.2296997-9-peter.griffin@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231010224928.2296997-9-peter.griffin@linaro.org>
 
-From: "Tony Lindgren" <tony@atomide.com>
+On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
+> Add dedicated google-gs101-uart compatible to the dt-schema for
+> representing uart of the Google Tensor gs101 SoC.
+> 
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> index 8bd88d5cbb11..72471ebe5734 100644
+> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> @@ -19,11 +19,13 @@ properties:
+>    compatible:
+>      oneOf:
+>        - items:
+> +          - const: google,gs101-uart
+>            - const: samsung,exynosautov9-uart
+>            - const: samsung,exynos850-uart
+>        - enum:
+>            - apple,s5l-uart
+>            - axis,artpec8-uart
+> +          - google,gs101-uart
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+These shouldn't be needed, just declare the device as the same as what
+the chip really is (i.e. a samsung uart), that way no .yaml or kernel
+driver changes are needed at all.
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+thanks,
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.7/dt-signed
-
-for you to fetch changes up to ea1c1e67e631be14f6e6bc9a6e96219c47f31ed4:
-
-  ARM: dts: omap4-embt2ws: Fix pinctrl single node name warning (2023-10-07 10:33:20 +0300)
-
-----------------------------------------------------------------
-Devicetree changes for omaps for v6.7 merge window
-
-Two non-urgent devicetree fixes for am371-evm led pinmux and a node name
-warning fix for omap4-epson-embt2ws, and updates for connected devices for
-various devices:
-
-- Device updates and enabling of pru support for am335x-pocketbeagle
-
-- Few more devices such as leds and iio for omap4-epson-embt2ws
-
-- Ethernet and led updates for am3517-evm
-
-- Modem sleep pins configuration for motorola-mapphone
-
-----------------------------------------------------------------
-Adam Ford (3):
-      ARM: dts: am3517-evm: Fix LED3/4 pinmux
-      ARM: dts: am3517-evm: Enable Ethernet PHY Interrupt
-      ARM: dts: am3517: Configure ethernet alias
-
-Andreas Kemnade (4):
-      ARM: dts: omap4: embt2ws: add LED
-      ARM: dts: omap: omap4-embt2ws: Let IMU driver handle Magnetometer internally
-      ARM: dts: omap: omap4-embt2ws: Add IMU at control unit
-      ARM: dts: omap3-gta04: Drop superfluous omap36xx compatible
-
-Tony Lindgren (2):
-      ARM: dts: motorola-mapphone: Add mdm6600 sleep pins
-      ARM: dts: omap4-embt2ws: Fix pinctrl single node name warning
-
-Trevor Woerner (4):
-      ARM: dts: am335x-pocketbeagle: update LED information
-      ARM: dts: am335x-pocketbeagle: remove dependency cycle
-      ARM: dts: am335x-pocketbeagle: enable pru
-      ARM: dts: am335x-pocketbeagle: add missing GPIO mux
-
- arch/arm/boot/dts/ti/omap/am335x-pocketbeagle.dts  | 57 ++++++++++++++++++----
- arch/arm/boot/dts/ti/omap/am3517-evm.dts           | 35 ++++++++++---
- arch/arm/boot/dts/ti/omap/am3517.dtsi              |  1 +
- .../boot/dts/ti/omap/motorola-mapphone-common.dtsi | 20 +++++++-
- arch/arm/boot/dts/ti/omap/omap3-gta04.dtsi         |  2 +-
- arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts  | 55 ++++++++++++++++-----
- 6 files changed, 140 insertions(+), 30 deletions(-)
+greg k-h
