@@ -1,157 +1,111 @@
-Return-Path: <SRS0=DJAt=FZ=arndb.de=arnd@kernel.org>
+Return-Path: <gregkh@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3571CD6E53
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 09:30:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0BA9CD6E54
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 09:42:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 855CFC433CA; Wed, 11 Oct 2023 09:30:49 +0000 (UTC)
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F1F76C433C8;
-	Wed, 11 Oct 2023 09:30:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F1F76C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id E49215C0405;
-	Wed, 11 Oct 2023 05:30:46 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 11 Oct 2023 05:30:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1697016646; x=1697103046; bh=My
-	dUnUPnqP4XgOECsshcETx4T1rbtS5G02GTgyxloFc=; b=mR63FrpGWOxiA39bji
-	bL87POz/TU+oMIgdhC3BK7mten8GzqVq52WEAqA+B6YcFX91pfOwTwbK37r95Hh8
-	gFB4czJU64Tzgc8/0g38dQRMffuOwGH34XF825OBlX8BJrIrpFPStsTaK2fBYBFb
-	99SEeS76pskMXyf4JUubM/76GRmy/iRG3QZlUCnK+0RslQAxfpNecw3xI8RIV+VQ
-	DmXNEja3/6CumagKfAdxTXYMWsJ1dWKxPy1/nWgv0+qitSCGb0IgGFMeJVvlM+Ov
-	+b+lRMuazAQ2JX7kQtwHdE7cPThlLQEAPmHnf14X/zTBDdhb0lIEoeL455dcJlwD
-	Bd0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1697016646; x=1697103046; bh=MydUnUPnqP4Xg
-	OECsshcETx4T1rbtS5G02GTgyxloFc=; b=aAdpurWhi7zXAIQm4DOLBW1tUAkyE
-	BeXzteePaZRGMjQcsE+uFqK6IdI7k9WBxW4HSsoYiX4gIEd1X6TtkTHQkM0cHNwF
-	P2QRxVM5pEwKpWAojF8RCqscPqo7NaYKVJXoJ6sMae7BiXSBAnambeI839AZzLW9
-	37cBqeqnPxlgx05Y5zK5NbAYADks8ka4ckff8sXfabXitD1hTM3m56qnkBOXsl9P
-	N1q2/3mk3fu2tNyau6padx2H2Gpy6wbfeKV+pSpJQ8xRibwpuXdH6gUFcBuxa6VK
-	zbomiTpxU76dA8b2ktJ4+9p4NUQXwgJi8C+LBfscH040I1NMnHeMGF5/w==
-X-ME-Sender: <xms:RWsmZcWYRcc5bVYCJgHMljeVekRBQUXx0bK7R7LMrSKcXPYAt9RLIw>
-    <xme:RWsmZQkmdVOtIGPmYvR3UJfe2DR6drxpQwZnrSP0GCQYaXyRHd6tpAYdki44OkBsI
-    6q3VE0fQI0R3ugPadE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrheekgddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RWsmZQaguZ4L-9eHOW4iZOWUHxiQf6OcjyTYrLw-RVo3RKt6kpljdQ>
-    <xmx:RWsmZbXyOVkoK7A1DQ_KlTQj0ImogMiD-a2jyCtNjKtQJdiStbVjJA>
-    <xmx:RWsmZWm52v4WVDlloYrZITw4qh6QHXlNOhlgRWIgLycm9PMjeGZI3Q>
-    <xmx:RmsmZU2gZ8ZTHa8PLabbUfn3SI5NQ-zWu8H9Jv7AGOfoo0h6zYWD8A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A62E6B60089; Wed, 11 Oct 2023 05:30:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
-MIME-Version: 1.0
-Message-Id: <fe7cf585-622a-420e-8138-10de1cbca511@app.fastmail.com>
-In-Reply-To: <2023101137-fester-rerun-5c39@gregkh>
+	id 96379C433C7; Wed, 11 Oct 2023 09:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CADC433C9;
+	Wed, 11 Oct 2023 09:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1697017352;
+	bh=I6BUDFXTqdP5QiIJSn6tklq61ipwC+Dq6rKwc18P91U=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=aVFyjUF/hpsF7z0Z4dqSATlUj9NlaJXZyniaMXQG931Cy+ZYAtRpdz3DXYxAXFybG
+	 +3h1C5+Kg3QLnh0GzK6NPpz5yWZVVP1uhYdhex6pb2gKI1CK/Z3u1TIK8LBlBym4iE
+	 K5mp/ed7lrHq86kcy9LD7LfvJkYqEp1JJ8Ea2IFY=
+Date: Wed, 11 Oct 2023 11:42:29 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
+	Chanwoo Choi <cw00.choi@samsung.com>, andre.draszik@linaro.org,
+	semen.protsenko@linaro.org, saravanak@google.com,
+	William McVicker <willmcvicker@google.com>, soc@kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+	linux-watchdog@vger.kernel.org, kernel-team@android.com,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add
+ google-gs101-uart compatible
+Message-ID: <2023101126-stash-manor-7162@gregkh>
 References: <20231010224928.2296997-1-peter.griffin@linaro.org>
  <20231010224928.2296997-9-peter.griffin@linaro.org>
  <2023101111-banknote-satin-1f77@gregkh>
  <a6c57156-d3a5-4524-8ef8-6f27cf0a2c97@linaro.org>
  <2023101137-fester-rerun-5c39@gregkh>
-Date: Wed, 11 Oct 2023 11:30:25 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Tudor Ambarus" <tudor.ambarus@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: "Peter Griffin" <peter.griffin@linaro.org>,
- "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Conor Dooley" <conor+dt@kernel.org>, "Stephen Boyd" <sboyd@kernel.org>,
- "Tomasz Figa" <tomasz.figa@gmail.com>,
- "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
- "Chanwoo Choi" <cw00.choi@samsung.com>, andre.draszik@linaro.org,
- semen.protsenko@linaro.org, saravanak@google.com,
- "William McVicker" <willmcvicker@google.com>, soc@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-watchdog@vger.kernel.org, kernel-team@android.com,
- linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add google-gs101-uart
- compatible
-Content-Type: text/plain
+ <fe7cf585-622a-420e-8138-10de1cbca511@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe7cf585-622a-420e-8138-10de1cbca511@app.fastmail.com>
 
-On Wed, Oct 11, 2023, at 10:57, Greg KH wrote:
-> On Wed, Oct 11, 2023 at 09:49:07AM +0100, Tudor Ambarus wrote:
->> On 10/11/23 08:48, Greg KH wrote:
->> > On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
->> >> Add dedicated google-gs101-uart compatible to the dt-schema for
->> >> representing uart of the Google Tensor gs101 SoC.
->> >>
->> >> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->> >> ---
->> >>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
->> >>  1 file changed, 2 insertions(+)
->> >>
->> >>      oneOf:
->> >>        - items:
->> >> +          - const: google,gs101-uart
->> >>            - const: samsung,exynosautov9-uart
->> >>            - const: samsung,exynos850-uart
->> >>        - enum:
->> >>            - apple,s5l-uart
->> >>            - axis,artpec8-uart
->> >> +          - google,gs101-uart
->> > 
->> > These shouldn't be needed, just declare the device as the same as what
->> 
->> We should have SoC specific compatibles so that any further quirks or
->> incompatibilities can be easily addressed.
->
-> "further" work on quirks or incompatibilities can be added when they are
-> found and needed.  We don't add stuff for no good reason to the kernel.
->
->> It's not only the IP itself
->> that can differ, it's also the integration of the IP into the final
->> product that could have an influence on the behavior.
->
-> This is for the Pixel 6, a device that is no longer even shipping.  The
-> "final product" is long stable, so this should not be an issue.
+On Wed, Oct 11, 2023 at 11:30:25AM +0200, Arnd Bergmann wrote:
+> On Wed, Oct 11, 2023, at 10:57, Greg KH wrote:
+> > On Wed, Oct 11, 2023 at 09:49:07AM +0100, Tudor Ambarus wrote:
+> >> On 10/11/23 08:48, Greg KH wrote:
+> >> > On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
+> >> >> Add dedicated google-gs101-uart compatible to the dt-schema for
+> >> >> representing uart of the Google Tensor gs101 SoC.
+> >> >>
+> >> >> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> >> >> ---
+> >> >>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+> >> >>  1 file changed, 2 insertions(+)
+> >> >>
+> >> >>      oneOf:
+> >> >>        - items:
+> >> >> +          - const: google,gs101-uart
+> >> >>            - const: samsung,exynosautov9-uart
+> >> >>            - const: samsung,exynos850-uart
+> >> >>        - enum:
+> >> >>            - apple,s5l-uart
+> >> >>            - axis,artpec8-uart
+> >> >> +          - google,gs101-uart
+> >> > 
+> >> > These shouldn't be needed, just declare the device as the same as what
+> >> 
+> >> We should have SoC specific compatibles so that any further quirks or
+> >> incompatibilities can be easily addressed.
+> >
+> > "further" work on quirks or incompatibilities can be added when they are
+> > found and needed.  We don't add stuff for no good reason to the kernel.
+> >
+> >> It's not only the IP itself
+> >> that can differ, it's also the integration of the IP into the final
+> >> product that could have an influence on the behavior.
+> >
+> > This is for the Pixel 6, a device that is no longer even shipping.  The
+> > "final product" is long stable, so this should not be an issue.
+> 
+> The driver does have soc specific settings for each compatible
+> string, in this case it looks like it overrides the FIFO size
+> based on driver specific data and the order in which the
+> ports are probed [1]. I don't understand why the driver does
+> this, but my impression is that if we wanted to change it to no
+> longer rely on that data, we'd also need a new compatible
+> string.
 
-The driver does have soc specific settings for each compatible
-string, in this case it looks like it overrides the FIFO size
-based on driver specific data and the order in which the
-ports are probed [1]. I don't understand why the driver does
-this, but my impression is that if we wanted to change it to no
-longer rely on that data, we'd also need a new compatible
-string.
+As I reviewed that patch already, it is just duplicating an existing
+quirk/device that the driver already supports, so there is no need for
+any "new device type" to be added to that driver, just use the existing
+hardware description in the dt and all should be fine.
 
-Ideally, the actual compatible list in the DTB lists both the
-specific implementation (google,gs101-uart) in order to allow
-such hacks if needed, and a more generic string (e.g. 
-"samsung,exynos850-uart" for an older device that is entirely
-compatible) in order to not actually need driver changes.
+thanks,
 
-      Arnd
-
-[1] https://lore.kernel.org/linux-arm-kernel/20231010224928.2296997-17-peter.griffin@linaro.org/
+greg k-h
