@@ -4,70 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE5DCD6E5D
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 12:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 136C7CD6E61
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 12:09:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 136F1C433C8; Wed, 11 Oct 2023 12:07:58 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	id C2C36C433C7; Wed, 11 Oct 2023 12:09:13 +0000 (UTC)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 48DD8C433CA
-	for <soc@kernel.org>; Wed, 11 Oct 2023 12:07:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 48DD8C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id F2ED6C433CC
+	for <soc@kernel.org>; Wed, 11 Oct 2023 12:09:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2ED6C433CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4064876e8b8so66718295e9.0
-        for <soc@kernel.org>; Wed, 11 Oct 2023 05:07:56 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4054f790190so66591275e9.2
+        for <soc@kernel.org>; Wed, 11 Oct 2023 05:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697026074; x=1697630874; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zXRuIlwacuOdYyOFKIMg2z15au/UO9GrOGt9xxSfLUg=;
-        b=aoTiSZTzuXA03gEZt9/qybVELsndu1DCHsFP4jtYD4FvkrywSL/NI6GAWsH2D53pwu
-         Qjr4Q+r76glZnIFmODqhQ7FWIxyCo3L8Km1jLmVDAquk8oNJrdkgfvrIHstQRC6EO3NV
-         imf4F08rBuwYaxHlXG44qdnXmbBk2OXL4lfKZ15h669uZGJfzX6ESXlw+kC0/xOjSqbl
-         ruRs71qvsx3mZLAyl7QyEYB2QFeRAavPmhg+yvYogUAXJOqXxeyyURzPOYWbfiHoOmdc
-         F1Rsy5C0jdyQcnXLZprUFZ31IH8W2IqzEV56Wa1/pYJ6CJ7qedB7/1XoDubIVTy6tqXc
-         +wCQ==
+        d=linaro.org; s=google; t=1697026150; x=1697630950; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L1E2lRmOBg6aoXCFS4y3iLweaD9iag4McKGgCCSC38Y=;
+        b=fzzevP8phX4Ib0l8macK/VUXuKjmN6Plkuph1e6aZLFsjC3GQqLGJsPtLizUBwV4bB
+         yrz5ZFF50xwYtbdtqCPUPUvo58uNmQMpV2ul0c2wogWZG00XCwcp9IhpQkGu8q2VHZcl
+         Hx89TcDg8VMmkc4CZdv0BRhD/kiPIvpC8EoeeY1yJ5v5jsUaaU9xWh2ANyK8n8CFlWrv
+         XA7L1hN0x8P+cmQC+IAinK0AeYqgZ1oKr/4Sz+qvXCqSXhFzjeuYzwmJzPgzCxM9Tc+F
+         gfEv5uR4amoEcRxqSOJEKIRnhVpFfGjEFkUkSoWOIGaFM8rP5AaADuvnB6V5ZsC3QB2I
+         uiig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697026074; x=1697630874;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zXRuIlwacuOdYyOFKIMg2z15au/UO9GrOGt9xxSfLUg=;
-        b=qcEZDKD1WmmdPj3JQBO0E1n0UNXZdxkQxOgxo8THGrdvNIM3WUKpfNG7PYYi4UNR9i
-         bbO2feCfdunxEuOrnydaZLQGx1K8DvrkLSP8MxBKVGI9/2K22UWC5Ea142eYUWvVIQmB
-         VRnJQKhaL4NedvDFQnK62YuyjcuOIEK4NvtAw5jbEXxUxRZPXt5hx+TyApvIRvDbKVPS
-         KI299FbVpWMhO3ovhST+F6IubulmySZ0HZDastZsXgvVn4H7JquVRynkoXaX7288qwXO
-         YGir2nFDyT1ni9nVORKqwoMwSY/UjC/EjOYiyGgtVTYQPNgBhTJlkFDv6blEwwIXOWC/
-         QWmw==
-X-Gm-Message-State: AOJu0Yz6nj3G+R79Yc/8Ce+hZ7kxvxVRtXh4JCwy25t7i+xGkK557Chq
-	IeXtRcXfG6ZjJVueDUHR867AGg==
-X-Google-Smtp-Source: AGHT+IGjEutPppYkL0YhjPcCtpI9vIs+tY+Thj66MkeS8HxckWZbm+0GoHU8ZWsKs4frxVPm/OnS0Q==
-X-Received: by 2002:a7b:ca57:0:b0:405:34e4:14cf with SMTP id m23-20020a7bca57000000b0040534e414cfmr18886359wml.4.1697026074383;
-        Wed, 11 Oct 2023 05:07:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697026150; x=1697630950;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1E2lRmOBg6aoXCFS4y3iLweaD9iag4McKGgCCSC38Y=;
+        b=oG4w9Ue0ByRObefNtfW8fWJ1fjzbNssUpOObeLmJssqBL9bnyh+UH9FQo5+r0W+80R
+         0UlS+/xze82aROO09p+CtB+vp/5HbX2uRXCuRf7oDh6XEAPhbsgONDRusoLJGkFFxjm1
+         xIznKmXUIyqIGdXHCvW+jamgPrzc+6efvil3xXupMFblRX9lGoRuFtQldw0SAe4KcNr+
+         +ZD6Heiq81MxjX9dEkN07I/H3zu1YoSaf5bqoEw/0HcumFAzu1TZUR5ImyDYaq1hYi2X
+         AXBPjdde1CiYnLgn3vLlTGDZDWY4DcA1gpkCQyhNdSLGuK1I4+bvxEqhLh4kjqgMtV7h
+         htXg==
+X-Gm-Message-State: AOJu0Yxfb6JzAI5DkqVXP0Ce5i+ouGYsPWw7XLY0yC9znoHqQSF7bGMz
+	jXOffsFKrozE+8Fu3ZMIiGVZNA==
+X-Google-Smtp-Source: AGHT+IFnxPH3PwSQWtDJFnYjMvj2ffXSdpOTDsmYhaYuYy0XeIMrrml++5l5LQ9/uTeKVGxLRwHyCw==
+X-Received: by 2002:a7b:c391:0:b0:405:359a:c950 with SMTP id s17-20020a7bc391000000b00405359ac950mr17759383wmj.19.1697026150214;
+        Wed, 11 Oct 2023 05:09:10 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b004013797efb6sm18902138wme.9.2023.10.11.05.07.51
+        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b004013797efb6sm18902138wme.9.2023.10.11.05.09.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 05:07:53 -0700 (PDT)
-Message-ID: <513b1049-3cc5-43ad-9ab4-8b90d79d13e8@linaro.org>
-Date: Wed, 11 Oct 2023 14:07:50 +0200
+        Wed, 11 Oct 2023 05:09:09 -0700 (PDT)
+Message-ID: <1b7dcc34-1c9c-44cb-ae14-f63aca2317ea@linaro.org>
+Date: Wed, 11 Oct 2023 14:09:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add
  google-gs101-uart compatible
-To: Greg KH <gregkh@linuxfoundation.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+Content-Language: en-US
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
  conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
  s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
  linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- olof@lixom.net, cw00.choi@samsung.com, andre.draszik@linaro.org,
+ olof@lixom.net, cw00.choi@samsung.com
+List-Id: <soc.lore.kernel.org>
+Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
  soc@kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
@@ -76,10 +75,6 @@ Cc: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  linux-serial@vger.kernel.org
 References: <20231010224928.2296997-1-peter.griffin@linaro.org>
  <20231010224928.2296997-9-peter.griffin@linaro.org>
- <2023101111-banknote-satin-1f77@gregkh>
- <a6c57156-d3a5-4524-8ef8-6f27cf0a2c97@linaro.org>
- <2023101137-fester-rerun-5c39@gregkh>
-Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -125,57 +120,38 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <2023101137-fester-rerun-5c39@gregkh>
+In-Reply-To: <20231010224928.2296997-9-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/10/2023 10:57, Greg KH wrote:
-> On Wed, Oct 11, 2023 at 09:49:07AM +0100, Tudor Ambarus wrote:
->> Hi, Greg,
->>
->> On 10/11/23 08:48, Greg KH wrote:
->>> On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
->>>> Add dedicated google-gs101-uart compatible to the dt-schema for
->>>> representing uart of the Google Tensor gs101 SoC.
->>>>
->>>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->>>> ---
->>>>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
->>>>  1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->>>> index 8bd88d5cbb11..72471ebe5734 100644
->>>> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->>>> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
->>>> @@ -19,11 +19,13 @@ properties:
->>>>    compatible:
->>>>      oneOf:
->>>>        - items:
->>>> +          - const: google,gs101-uart
->>>>            - const: samsung,exynosautov9-uart
->>>>            - const: samsung,exynos850-uart
->>>>        - enum:
->>>>            - apple,s5l-uart
->>>>            - axis,artpec8-uart
->>>> +          - google,gs101-uart
->>>
->>> These shouldn't be needed, just declare the device as the same as what
->>
->> We should have SoC specific compatibles so that any further quirks or
->> incompatibilities can be easily addressed.
+On 11/10/2023 00:49, Peter Griffin wrote:
+> Add dedicated google-gs101-uart compatible to the dt-schema for
+> representing uart of the Google Tensor gs101 SoC.
 > 
-> "further" work on quirks or incompatibilities can be added when they are
-> found and needed.  We don't add stuff for no good reason to the kernel.
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> index 8bd88d5cbb11..72471ebe5734 100644
+> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> @@ -19,11 +19,13 @@ properties:
+>    compatible:
+>      oneOf:
+>        - items:
+> +          - const: google,gs101-uart
 
-With a Devicetree bindings maintainer hat:
-We expect the device-specific compatible in all bindings, followed by
-fallback. The fallback is used by the driver, the device-specific for
-any future needs.
+You just broke existing users.
 
-This is the practice we follow everywhere and recommend everywhere since
-some time. It is also documented here:
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check W=1` (see
+Documentation/devicetree/bindings/writing-schema.rst or
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+for instructions).
 
-https://elixir.bootlin.com/linux/v6.6-rc5/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+
 
 Best regards,
 Krzysztof
