@@ -1,71 +1,24 @@
-Return-Path: <SRS0=6caw=FZ=kroah.com=greg@kernel.org>
+Return-Path: <gregkh@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6FEACD98F7
-	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 07:45:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75573CD98F6
+	for <soc@archiver.kernel.org>; Wed, 11 Oct 2023 07:47:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7F9B7C433CA; Wed, 11 Oct 2023 07:45:00 +0000 (UTC)
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D900EC433C7;
-	Wed, 11 Oct 2023 07:44:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D900EC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 891765804C1;
-	Wed, 11 Oct 2023 03:44:57 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 11 Oct 2023 03:44:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1697010297; x=1697017497; bh=JZ
-	ToOnQlaLQI+R1OJZjMd5txCt25LannQJkkFemkr7A=; b=2I1Uee41GqQiS5mRa7
-	b+oLFHaHse24HaozrZAH5aB5O6tH1OPeNXTHMFgWUHQJ+EJrC95eZNw0k/kn8TZb
-	d6GCEPJJATP1hL/7LLiPs0dvVLy8RoNLfmxVDGtXO4ipZcHbiVIT1NI8sArIRDOi
-	YDGadkOLR5hnJyg7EPvK9G+ig7LRP5tS9geD5LCHiKDX6NUQw4JC1uWIZt65jSZK
-	8bRYsHbC42O24GL2BsXZKGaB7ycIUgDZ35VrUzyduSd68q8XBij2krCyq+GZQNYh
-	Kq6ZqaWI+slgetPhXhJo7c8WPDuI73LD4ayto3V5YDYrbx0gsQ5OfiDcVInJZ40p
-	0gYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1697010297; x=1697017497; bh=JZToOnQlaLQI+
-	R1OJZjMd5txCt25LannQJkkFemkr7A=; b=QQKKGB5UoVL3YQ4FtdrsWsjqKcufn
-	37TnvP56+FqTFex/vwIupr3qRdQVV6X2EN77rH/ZNuY6bb9D6MP4/rZPooCFVk0M
-	F3SPsWyKMjwEqeO3KolFnelceT5+rSaIEmm58c62wdJ9G1IURsJzIPoswNjDRAdI
-	173HETIxvG91z1fOkEvVRki7NY2I8XbVCOX5F/V/3gnuDO2SjoOHesDFb/8Q6Ey6
-	0kqrfdQ2i+Ntru8WNRY5wDWQFPgF0Hf/fChlcV2REkh171SUXjK3YlRDy0EYodqE
-	WHcNY7lzlv0ZeiyxZNbNcBJmmH7Nv72e+moVHzabqtZ631FoEb0nogqYw==
-X-ME-Sender: <xms:eFImZej4eHDXn_Ru6WgufJrf4kJLu_4wat-r3vbGWJUgjAli7pT8ww>
-    <xme:eFImZfCG-IC8RIx8_MLrdpmX8ABknJIFkLOnpp2QKfWhOnzcg-Iaj3U2K7p8oHRMs
-    k3Cx-zzzijiAw>
-X-ME-Received: <xmr:eFImZWFsra_F7BfmAimk0JZCBx8cgzCGV50sPziqXQC9edJzx9dShwXQ-JKfpVct_6WI9-87IMUeO-zHEUAuLxI_XpSraHxY-E5fMczONP4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrheejgdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:eFImZXS3hehWydKzE9FCS1Sofv1sITbomg94NeHwJ3ml1wLj3qFBvw>
-    <xmx:eFImZbwY9RZWoEXZgGd9ZlKbXYRoRshZv_o6MT-02QoNXjo085Itgw>
-    <xmx:eFImZV4My1BsUQZ15GES-Nc6HIUF3bbFldSh1_jvRjCuSEZbj6fhBw>
-    <xmx:eVImZTMd-gdYVE_hUjMN2G9PoVBnopKaS3wkDx9nBKgBmBcMR6ZgLw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 11 Oct 2023 03:44:55 -0400 (EDT)
-Date: Wed, 11 Oct 2023 09:44:52 +0200
-From: Greg KH <greg@kroah.com>
+	id 47EFFC433C8; Wed, 11 Oct 2023 07:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D3BC433C7;
+	Wed, 11 Oct 2023 07:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1697010425;
+	bh=TKxbMsBarpoZFO2cUw4PQl8DmB/FWYBI+aG4z8GcLa4=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=buVQLXMBcBM2AFFeDvDzvwW3yqrJzLaPTjAgJ7ilI0FD1DZ0n7ccYFaLfArL7o/Do
+	 1iyJgqJGH7CO7TK/G1qdSYq+bIWJHp9CyE/wttflXfvKsROFzT9uXBNRBlvzYjMg8J
+	 g3pza75bGZ/AOswHPHP5geZZGzAll5dKhsf7R2y4=
+Date: Wed, 11 Oct 2023 09:47:01 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
 To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -81,41 +34,78 @@ Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
 	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
 	kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 00/20] Add minimal Tensor/GS101 SoC support and
- Oriole/Pixel6 board
-Message-ID: <2023101101-mauve-underarm-1b48@gregkh>
+Subject: Re: [PATCH v2 16/20] tty: serial: samsung: Add gs101 compatible and
+ SoC data
+Message-ID: <2023101109-crispy-escapable-0801@gregkh>
 References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+ <20231010224928.2296997-17-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231010224928.2296997-1-peter.griffin@linaro.org>
+In-Reply-To: <20231010224928.2296997-17-peter.griffin@linaro.org>
 
-On Tue, Oct 10, 2023 at 11:49:08PM +0100, Peter Griffin wrote:
-> Hi folks,
+On Tue, Oct 10, 2023 at 11:49:24PM +0100, Peter Griffin wrote:
+> Add serial driver data for Google Tensor gs101 SoC.
 > 
-> Firstly, thanks to everyone who reviewed the v1 series! V2 incorporates all
-> the review feedback received so far.
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+>  drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> This series adds initial SoC support for the GS101 SoC and also initial board
-> support for Pixel 6 phone (Oriole).
-> 
-> The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
-> (raven) phones. Currently DT is added for the gs101 SoC and Oriole.
-> As you can see from the patches the SoC is based on a Samsung Exynos SoC,
-> and therefore lots of the low level Exynos drivers can be re-used.
-> 
-> The support added in this series consists of:
-> * cpus
-> * pinctrl
-> * some CCF implementation
-> * watchdog
-> * uart
-> * gpio
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index 07fb8a9dac63..79a1a184d5c1 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -2597,14 +2597,21 @@ static const struct s3c24xx_serial_drv_data exynos850_serial_drv_data = {
+>  	.fifosize = { 256, 64, 64, 64 },
+>  };
+>  
+> +static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
+> +	EXYNOS_COMMON_SERIAL_DRV_DATA(),
+> +	.fifosize = { 256, 64, 64, 64 },
+> +};
 
-So you have sent a patch series that crosses multiple subsystems, who is
-supposed to be taking these patches?  Or do you not want them actually
-merged?
+Why are you duplicating a structure that is already in the same file?
+What is the benifit here?
 
-confused,
+>  #define EXYNOS4210_SERIAL_DRV_DATA (&exynos4210_serial_drv_data)
+>  #define EXYNOS5433_SERIAL_DRV_DATA (&exynos5433_serial_drv_data)
+>  #define EXYNOS850_SERIAL_DRV_DATA (&exynos850_serial_drv_data)
+> +#define GS101_SERIAL_DRV_DATA (&gs101_serial_drv_data)
+
+What is "GS101"?
+
+>  #else
+>  #define EXYNOS4210_SERIAL_DRV_DATA NULL
+>  #define EXYNOS5433_SERIAL_DRV_DATA NULL
+>  #define EXYNOS850_SERIAL_DRV_DATA NULL
+> +#define GS101_SERIAL_DRV_DATA NULL
+>  #endif
+>  
+>  #ifdef CONFIG_ARCH_APPLE
+> @@ -2688,6 +2695,9 @@ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
+>  	}, {
+>  		.name		= "artpec8-uart",
+>  		.driver_data	= (kernel_ulong_t)ARTPEC8_SERIAL_DRV_DATA,
+> +	}, {
+> +		.name		= "gs101-uart",
+> +		.driver_data	= (kernel_ulong_t)GS101_SERIAL_DRV_DATA,
+>  	},
+>  	{ },
+>  };
+> @@ -2709,6 +2719,8 @@ static const struct of_device_id s3c24xx_uart_dt_match[] = {
+>  		.data = EXYNOS850_SERIAL_DRV_DATA },
+>  	{ .compatible = "axis,artpec8-uart",
+>  		.data = ARTPEC8_SERIAL_DRV_DATA },
+> +	{ .compatible = "google,gs101-uart",
+> +		.data =  GS101_SERIAL_DRV_DATA },
+
+Why aren't you just listing this hardware as the same one above?  There
+doesn't need to be a new entry if you just fix up the DT for the board
+to declare it as the proper type of device.  No need to keep adding new
+entries that do the exact same thing, we don't normally like that at all
+for other bus types, why is DT different?
+
+thanks,
 
 greg k-h
