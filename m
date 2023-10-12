@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9434CDB46E
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 06:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD35CDB482
+	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 06:28:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8CD5FC433C7; Thu, 12 Oct 2023 06:26:52 +0000 (UTC)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	id 63D89C433CD; Thu, 12 Oct 2023 06:28:36 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F68AC433CA
-	for <soc@kernel.org>; Thu, 12 Oct 2023 06:26:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F68AC433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 7433FC433C7
+	for <soc@kernel.org>; Thu, 12 Oct 2023 06:28:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7433FC433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4060b623e64so3253195e9.0
-        for <soc@kernel.org>; Wed, 11 Oct 2023 23:26:50 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3248ac76acbso502023f8f.1
+        for <soc@kernel.org>; Wed, 11 Oct 2023 23:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697092009; x=1697696809; darn=kernel.org;
+        d=linaro.org; s=google; t=1697092114; x=1697696914; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LjsE2t6ELCFO8sH0TGP1obiV0sk06XR9ZS8a0JKA5G4=;
-        b=KLQVeoTFbD2txBq1WzMSPSZMXBY1CXUtedY59dJ0xUWoo15GjyUncdd3LkZBYlvU0b
-         T7S8ORR490XTXnNmFS/J0hKA00JGLrVJWG5SS4HBylnXBxZY59Om3NiEldxai/wdaRWQ
-         Cv2AB/xzRUZb1M3q6ztNwxrAhtciGRIc077PC/hXnB6DN4sKq9SMbSeOlJPXZs3mVVPD
-         IwdUBcrUShMUbAJig0k+DDyDFEWC1f9O472Cxc+FYi7Ugg9NdcOXpSJxH+J3eLoN8qOU
-         FONG6vXtrsU9d36Q8XFfivV01t+Ozwf0VoONVhXf4jQL9smZ7GJhCzw9ypRrxtPIX1Ft
-         n0Lw==
+        bh=+iCEKYS2ccHLp/GyKz5ONEdyr7nqmtVJGXxA37VFaEo=;
+        b=QalrA5ZftN760BaV3Mhh06sJSSUrbeOjDafH+4ws24xnIhGTR/fijVMoRbyVgu2Rjk
+         Vj2mYsimMesNeEC+NLvBCkyrb9yu6caBJyo/DC2sBHDaZmTyOa9R3GPCW+grCx9TcqlL
+         Pq1REoTz8kHSpH/CnmL2lNEaAtcWHCmrLHLnZtldJspNg4sVk5r1R1wpIW0Uu/DykMYX
+         A8wAaXyhBXQY/OpQxSBUIvFTdgJrlQ2sQfY4bav2FbRY5J+AXaDcUhWY7jULG5DHiSn3
+         MWnNb1OzBBmulRluzwx/S8InLk5HvK2WLiQNnbLW20YjG/KQnF65KrqY5h2gGdpBd43c
+         U6fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697092009; x=1697696809;
+        d=1e100.net; s=20230601; t=1697092114; x=1697696914;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LjsE2t6ELCFO8sH0TGP1obiV0sk06XR9ZS8a0JKA5G4=;
-        b=uOErMwsU1E0v76PquTEQ5XLE8O0IaDQFO91KUtkdZJVR1P4Mz5+rFFYNbOMHmivfUA
-         Oy17KghU98HkXMW5mRGpiXQw9PuFiMpK0torCzRsnBEQAUL5a4aZsxZKb2D4tQur2tS2
-         04KiOYtlE7eLaI076vVGo4doSeQIHByrU8MfKV30fL4Sac5OpSYBymulxwDG02uBhDvE
-         HwENCltHPVWtdOM57u3I2/EiJAI+hQm1oYX9saf3/JkPIDgDC01hEGmiLSTfgjOkmCY1
-         e1ro+hwydfBlD5uT6DH4om02AX3XzQyk5+a7GTNPK4/tgDMaU3R4xAV55sSLVQVg/RjX
-         KG1g==
-X-Gm-Message-State: AOJu0YwNbS+TSOST7NyV0D7tpprO9ChhnKIU8bJuxK5HWalsBTuL23oC
-	RatMNoPrnk/JqDcIvz1R4smbqg==
-X-Google-Smtp-Source: AGHT+IFyhlmPm95kuFH6hVfWc5lm2kWJHz2sqpm/vYm4g1fqf2uat+UKBqwDiWRC22/3Id++kO3N4g==
-X-Received: by 2002:a05:600c:450a:b0:401:c7ec:b930 with SMTP id t10-20020a05600c450a00b00401c7ecb930mr15397460wmo.10.1697092008905;
-        Wed, 11 Oct 2023 23:26:48 -0700 (PDT)
+        bh=+iCEKYS2ccHLp/GyKz5ONEdyr7nqmtVJGXxA37VFaEo=;
+        b=i+u1J8wY1CXke3vDb76jQXOt1ogFFs0+0ELZkJAdRDVMSpcZoJfn2D18W3lUMt5A9K
+         hQVvSrIyfqOtiHazfAwjDlOZcdsvzEhbUU5tbbsG5BbKeQCAZf8kOK4uD+xO/NAqlyhi
+         O9QjFxGyTkw0/iC3Rc002p2T3NehmNGKp1QN8Iz3ks3Zb+SddAXT3p8Qk8FAtDhFQ51N
+         XBeg65fy6Cs5lmfNM3+dTHCOlsZ35BdukdiC1nlDRuIkNFe8tygQHRwye8OMttg1Yq5c
+         BpIKIIjvzfPQWWxaq6Nc6Sgw5YJ1dY0P4FBr/vjzEA/Wp/f3MsR0G3eZYD+33RsJWDH+
+         IJcg==
+X-Gm-Message-State: AOJu0YypCpZHB/nKS4k7ykQ/Sm+XRIic4cGhjvQJTKfwFvkcdJ0VnIrr
+	jnf3ID30Bwi3pDXemnxReL9Qrw==
+X-Google-Smtp-Source: AGHT+IEalyiyCChTdThvP6QAuWnboL41e5CsXq/YYKfUa989J347/tY1b6JvhWOOjbmNy/bKWSly8g==
+X-Received: by 2002:adf:cc8b:0:b0:313:f463:9d40 with SMTP id p11-20020adfcc8b000000b00313f4639d40mr18287954wrj.65.1697092113761;
+        Wed, 11 Oct 2023 23:28:33 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05600c21c900b003fefe70ec9csm20844025wmj.10.2023.10.11.23.26.46
+        by smtp.gmail.com with ESMTPSA id o9-20020a5d4749000000b0032d9523de65sm49982wrs.48.2023.10.11.23.28.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 23:26:48 -0700 (PDT)
-Message-ID: <ccd0d092-8ae5-4033-96cf-5ba37e175e0c@linaro.org>
-Date: Thu, 12 Oct 2023 08:26:45 +0200
+        Wed, 11 Oct 2023 23:28:33 -0700 (PDT)
+Message-ID: <e036b487-004c-45d4-9ce6-f8e0e1e518eb@linaro.org>
+Date: Thu, 12 Oct 2023 08:28:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 16/20] tty: serial: samsung: Add gs101 compatible and
- SoC data
+Subject: Re: [PATCH v3 00/20] Add minimal Tensor/GS101 SoC support and
+ Oriole/Pixel6 board
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -74,7 +74,6 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
  linux-serial@vger.kernel.org
 References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-17-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -120,38 +119,19 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231011184823.443959-17-peter.griffin@linaro.org>
+In-Reply-To: <20231011184823.443959-1-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/10/2023 20:48, Peter Griffin wrote:
-> Add serial driver data for Google Tensor gs101 SoC.
+> Hi folks,
 > 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  drivers/tty/serial/samsung_tty.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+> Firstly, thanks to everyone who reviewed the v2/V1 series! V3 incorporates
+> all the review feedback received so far.
 > 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index 07fb8a9dac63..26bc52e681a4 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -2597,14 +2597,22 @@ static const struct s3c24xx_serial_drv_data exynos850_serial_drv_data = {
->  	.fifosize = { 256, 64, 64, 64 },
->  };
->  
-> +static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
-> +	EXYNOS_COMMON_SERIAL_DRV_DATA(),
-> +	/* rely on samsung,uart-fifosize DT property for fifosize */
 
-It's an optional property, so you cannot rely on it.
-
-> +	.fifosize = { 0 },
-
-Looks like it is compatible with exynos850_serial_drv_data, so most
-likely it should be expressed as compatible in the bindings.
-
-
+patch:47: new blank line at EOF.
+patch:1321: new blank line at EOF.
 
 Best regards,
 Krzysztof
