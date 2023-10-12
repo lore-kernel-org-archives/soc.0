@@ -1,150 +1,196 @@
-Return-Path: <SRS0=H6g9=F2=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=EgCM=F2=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80973CDB46E
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 12:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E38ECDB46E
+	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 12:24:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 403F4C433C8; Thu, 12 Oct 2023 12:15:36 +0000 (UTC)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	id 33B93C433C9; Thu, 12 Oct 2023 12:24:45 +0000 (UTC)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CFA6AC433C7;
-	Thu, 12 Oct 2023 12:15:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CFA6AC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5a7c08b7744so10836157b3.3;
-        Thu, 12 Oct 2023 05:15:34 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 52312C433CD
+	for <soc@kernel.org>; Thu, 12 Oct 2023 12:24:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52312C433CD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-507973f3b65so29300e87.3
+        for <soc@kernel.org>; Thu, 12 Oct 2023 05:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697113481; x=1697718281; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=AJR9cDh+7ZTeuRSJ5Jio19eYIFYvTnyjLFRoPhLNrlY=;
+        b=d3pTBh/if5AYcTogsuTY/Yu+NbQ5sXMedC+EzdhQyMC52oCy+esa8J/0QepkXDVcUS
+         Za381hEGy10zGhEmgMPl/znuH083LmuVq7fV75Echptd0lQKRsDGnME9qLkbkLydbBNE
+         eAnvk9RIOV4QJ9q7w/8oCRecVorcjW5Bj0Uu3Yr3axQd9cCd4Jiz8HknJX3VF5nPP+30
+         9++KtcK1JxIIqUTj00mlN2L6ZnJj8XZuYbEt+Fqj4AMeKf2inVAmk93i2XzN3mr+wGvU
+         tQnuTRbbMrvg5lndKKcn0etHo2yDWjyXbZ3IVAxCCwiYg3wwsvb1rPKSlu3LwK6qWmYI
+         MQ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697112933; x=1697717733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wl3I/2bXbjqN636hLulYiW7jhp7Ro5bp+FnjB/CpQr8=;
-        b=CPMlvluXq4ErIKul2SAGbpQvFZB1l14gqqBVG4WsZgwtITEzcx0J6MRk+L3XTwk78P
-         GI3GSnaZjMiRYtMVXKf2eL11zrXZHURSXojEgx+hQpGkmvqzpdUbE4GaV3YSfYMAa1VN
-         4Flknsw3tq98QKxmc+HCzbcxjHRAyhfM6M/aQbXoaYiDREoJ7SxawDReFAf1yjYpXTwH
-         OB+iKNhjq2zaHFqW2X4guhQDEJRIjZms+QEjpDb9BSbd9BmJj78gTHLIxQWQQYF5+jka
-         CAKFpFrCprE2/IokzVdzueG1yFNYhahQxxuuNUuCVAkWgOGD4y4m552vSSmSP18ygGED
-         yocQ==
-X-Gm-Message-State: AOJu0YyQ3Is/YGMsiUk2H3Qs26fRPpltRgkKMRI0M9gFcwIy2zQ8VPG4
-	Et14CzvXmIWynp8kNv9oRBp4RLza97SIRg==
-X-Google-Smtp-Source: AGHT+IERolPXvQTgQhw9TRd4L32CSkta8hv2sOMDEXogIAmX6vo70hmx5s6CW/XfAhsjcw2Vs4qcmA==
-X-Received: by 2002:a25:d048:0:b0:d9a:49cd:8327 with SMTP id h69-20020a25d048000000b00d9a49cd8327mr8790972ybg.55.1697112933569;
-        Thu, 12 Oct 2023 05:15:33 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id z4-20020a254c04000000b00d9a36ded1besm2179414yba.6.2023.10.12.05.15.33
+        d=1e100.net; s=20230601; t=1697113481; x=1697718281;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AJR9cDh+7ZTeuRSJ5Jio19eYIFYvTnyjLFRoPhLNrlY=;
+        b=PBHmqzX9Pj53Qdwn0KwwacljH38N97VqQAc9mQQwRj2rAMP+2fBycdjqx2SFsc4chu
+         YLgcpzQxyi0DSF6tKi5I7aZrW4UePQscnQNhI69SqxhIRHfTCtUJUkCFdHUMGGBT6Zdx
+         ztvEoIjozcnSbomMV25ov6BmgPYKbh5BHY2kaeuyip5LOVW1EifUz11LRggN4rDTRLkA
+         4/EqOoM5eD6EuXDxSwj3OwJ/LsSa4+AgKJSETULEGM2WuTS+8WJvbmFug369VpIQHfyM
+         X7TEVeiCo+HJaFmSly4OCAJQ+s2yUjfjemf+pJJsdPFlUzgbMxJ8ACfa0hTEdnL51WJt
+         7cqg==
+X-Gm-Message-State: AOJu0YxypEJjykAuZx9NYRQlou66cwK1P/sVlHvGpxC6DcFZCNMzcqoq
+	TbTpTJfj0SGpnylSySCt7abv9A==
+X-Google-Smtp-Source: AGHT+IG+GYMxhr/eYhAVnr0fodfE2g5vbmrEIq8xkkc0liLatvRkwVuegQ0Og2Gv0azIxU/P9LpD7g==
+X-Received: by 2002:ac2:4ec7:0:b0:4ff:8863:be01 with SMTP id p7-20020ac24ec7000000b004ff8863be01mr17167717lfr.8.1697113481191;
+        Thu, 12 Oct 2023 05:24:41 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.100])
+        by smtp.gmail.com with ESMTPSA id l14-20020a5d480e000000b0031c5e9c2ed7sm18366425wrq.92.2023.10.12.05.24.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 05:15:33 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5a7dafb659cso11218417b3.0;
-        Thu, 12 Oct 2023 05:15:33 -0700 (PDT)
-X-Received: by 2002:a0d:d40f:0:b0:59b:fe46:82de with SMTP id
- w15-20020a0dd40f000000b0059bfe4682demr24538814ywd.18.1697112932799; Thu, 12
- Oct 2023 05:15:32 -0700 (PDT)
+        Thu, 12 Oct 2023 05:24:40 -0700 (PDT)
+Message-ID: <28bee37b-1d6d-433e-810f-da847635fcaf@linaro.org>
+Date: Thu, 12 Oct 2023 14:24:35 +0200
 MIME-Version: 1.0
-References: <20231012-pouch-parkway-7d26c04b3300@spud>
-In-Reply-To: <20231012-pouch-parkway-7d26c04b3300@spud>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 12 Oct 2023 14:15:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWRzoBgxxkF6kpxr4tpUM4BzHnMUmW3vDR_BrrXiKae5Q@mail.gmail.com>
-Message-ID: <CAMuHMdWRzoBgxxkF6kpxr4tpUM4BzHnMUmW3vDR_BrrXiKae5Q@mail.gmail.com>
-Subject: Re: [PATCH v2] soc: renesas: make ARCH_R9A07G043 depend on required options
-To: Conor Dooley <conor@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
+ plls, mux and gates
+To: Peter Griffin <peter.griffin@linaro.org>,
+ Sam Protsenko <semen.protsenko@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-renesas-soc@vger.kernel.org, 
-	Conor Dooley <conor.dooley@microchip.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+ tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org,
+ wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
+ cw00.choi@samsung.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+ saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel-team@android.com, linux-serial@vger.kernel.org
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-11-peter.griffin@linaro.org>
+ <CAPLW+4mO1dMjh1EDPbaL0QGe4EM0GnbQ1G7NsdtBaCcPzdmkPw@mail.gmail.com>
+ <CADrjBPqo8kKUr-EPay3zDQiF7XRwN+FDFN5W2tD5Aet50L2KUA@mail.gmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <CADrjBPqo8kKUr-EPay3zDQiF7XRwN+FDFN5W2tD5Aet50L2KUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Conor,
+On 12/10/2023 14:06, Peter Griffin wrote:
+> Hi Sam,
+> 
+> Thanks for the review.
+> 
+> On Thu, 12 Oct 2023 at 01:07, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+>>
+>> On Wed, Oct 11, 2023 at 1:49 PM Peter Griffin <peter.griffin@linaro.org> wrote:
+>>>
+>>> CMU_TOP is the top level clock management unit which contains PLLs, muxes
+>>> and gates that feed the other clock management units.
+>>>
+>>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+>>> ---
+>>>  drivers/clk/samsung/Kconfig     |    9 +
+>>>  drivers/clk/samsung/Makefile    |    2 +
+>>>  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++++
+>>>  3 files changed, 1562 insertions(+)
+>>>  create mode 100644 drivers/clk/samsung/clk-gs101.c
+>>>
+>>> diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+>>> index 76a494e95027..14362ec9c543 100644
+>>> --- a/drivers/clk/samsung/Kconfig
+>>> +++ b/drivers/clk/samsung/Kconfig
+>>> @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
+>>>         select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
+>>>         select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
+>>>         select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
+>>> +       select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
+>>>         select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
+>>>
+>>>  config S3C64XX_COMMON_CLK
+>>> @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
+>>>           status of the certains clocks from SoC, but it could also be tied to
+>>>           other devices as an input clock.
+>>>
+>>> +config GOOGLE_GS101_COMMON_CLK
+>>> +       bool "Google gs101 clock controller support" if COMPILE_TEST
+>>> +       depends on COMMON_CLK_SAMSUNG
+>>> +       depends on EXYNOS_ARM64_COMMON_CLK
+>>> +       help
+>>> +         Support for the clock controller present on the Google gs101 SoC.
+>>> +         Choose Y here only if you build for this SoC.
+>>> +
+>>
+>> Why is that new option needed? From the look of it, it could be just a
+>> part of EXYNOS_ARM64_COMMON_CLK. Like clk-exynos850 or
+>> clk-exynosautov9. Is there any particular feature that makes it SoC
+>> special?
+> 
+> No, it could also be added to EXYNOS_ARM64_COMMON_CLK. I was following
+> the example set by TESLA_FSD which is another custom Exynos based chipset
+> that added its own config option.
+> 
+> Krzysztof do you have any preference on this?
 
-On Thu, Oct 12, 2023 at 1:11=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Randy reported a randconfig build issue against linux-next:
-> WARNING: unmet direct dependencies detected for ERRATA_ANDES
->   Depends on [n]: RISCV_ALTERNATIVE [=3Dn] && RISCV_SBI [=3Dy]
->   Selected by [y]:
->   - ARCH_R9A07G043 [=3Dy] && SOC_RENESAS [=3Dy] && RISCV [=3Dy] && NONPOR=
-TABLE [=3Dy] && RISCV_SBI [=3Dy]
->
-> ../arch/riscv/errata/andes/errata.c:59:54: warning: 'struct alt_entry' de=
-clared inside parameter list will not be visible outside of this definition=
- or declaration
->    59 | void __init_or_module andes_errata_patch_func(struct alt_entry *b=
-egin, struct alt_entry *end,
->
-> On RISC-V, alternatives are not usable in XIP kernels, which this
-> randconfig happened to select. Rather than add a check for whether
-> alternatives are available before selecting the ERRATA_ANDES config
-> option, rework the R9A07G043 Kconfig entry to depend on the
-> configuration options required to support its non-standard cache
-> coherency implementation.
->
-> Without these options enabled, the SoC is effectively non-functional to
-> begin with, so there's an extra benefit in preventing the creation of
-> non-functional kernels.
->
-> The "if RISCV_DMA_NONCOHERENT" can be dropped, as ERRATA_ANDES_CMO will
-> select it.
->
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/09a6b0f0-76a1-45e3-ab52-329c47393d1d@=
-infradead.org/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->
-> I dropped Randy's t-b etc since this patch is quite different.
->
-> v2: drop the extra condition on the select of ERRATA_ANDES, move instead
-> to depending on required options.
+Usually there is only one image for several boards so long time ago we
+stopped adding per-SoC Kconfig entries. This has its own ARCH_xxx, just
+like Tesla, thus having separate Kconfig for all Google Tensor clock
+drivers makes sense. Maybe it should be just called a bit differently,
+e.g. GOOGLE_TENSOR_COMMON_CLK
 
-Thanks for the update!
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-fixes for v6.6.
 
-> --- a/drivers/soc/renesas/Kconfig
-> +++ b/drivers/soc/renesas/Kconfig
-> @@ -340,10 +340,12 @@ if RISCV
->  config ARCH_R9A07G043
->         bool "RISC-V Platform support for RZ/Five"
->         depends on NONPORTABLE
-> +       depends on RISCV_ALTERNATIVE
-> +       depends on RISCV_SBI
->         select ARCH_RZG2L
-> -       select AX45MP_L2_CACHE if RISCV_DMA_NONCOHERENT
-> +       select AX45MP_L2_CACHE
->         select DMA_GLOBAL_POOL
-> -       select ERRATA_ANDES if RISCV_SBI
-> +       select ERRATA_ANDES
->         select ERRATA_ANDES_CMO if ERRATA_ANDES
+Best regards,
+Krzysztof
 
-As ERRATA_ANDES is now selected unconditionally, the test
-for it can be removed.  I can do that while applying.
-
->         help
->           This enables support for the Renesas RZ/Five SoC.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
