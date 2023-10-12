@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE7EBCDB46E
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 06:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F24BCDB46E
+	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 06:44:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 84F6EC433C9; Thu, 12 Oct 2023 06:40:09 +0000 (UTC)
+	id 0243FC433C7; Thu, 12 Oct 2023 06:44:07 +0000 (UTC)
 Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0E2C6C433CA
-	for <soc@kernel.org>; Thu, 12 Oct 2023 06:40:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0E2C6C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id B7086C433C8
+	for <soc@kernel.org>; Thu, 12 Oct 2023 06:44:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7086C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-406609df1a6so6857725e9.3
-        for <soc@kernel.org>; Wed, 11 Oct 2023 23:40:06 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4064876e8b8so7640935e9.0
+        for <soc@kernel.org>; Wed, 11 Oct 2023 23:44:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697092805; x=1697697605; darn=kernel.org;
+        d=linaro.org; s=google; t=1697093043; x=1697697843; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NBr1hwHD25bRhBkWRPQylNtFUOku6GBNnWwm/nUebWM=;
-        b=OoYuj1VQjbtIswGubwMUFb2XP86nUzt0ZrPnLKaQgl5jPRv04GJj19Cf1eNuzOvWJH
-         T+uA1v8bLSk1PYTUV6Pl0z2E9EQVrnTRo/mXbJCOvPNY3g03JZHbd6f/2jXDug2d9QHy
-         Z+7qLjLnnSBZ5yABcyQu9IgK0VMs3079Y1CI5VjaND9UndKraKH0GQ/K3d1KL5bkXXAs
-         jzTI3V3dMCdvJzJxSv55l8/LB3GJpchJIMQS7wNVc03qppUXyEDJ6VClsd1JwXXCjAI1
-         ZCSFmmN9nvxfCgK1VAkVl0o2itoEdwqMLZlW0Lx1C5rDFqxPZSd6uYiVUVI0hpOtyxAs
-         cC4Q==
+        bh=kTJZAJxTV2pCq4kmCcHfnn+IzBwx/NyRgq6oPelk10w=;
+        b=nNBLuAmntiVoBZJ03eRrJNMPU1Yj/wbM481DxqijdhW+MNa8zEd2ZhF7+ylD7WE2DB
+         HyOTryJo7BDrdy0i5DXxPUzncXlgvbLf04a1P8crBszPegkZDz1ZuA6nJHMvgBPpPKAB
+         kRl+lHW7ZbAVxr2hMQflLG55/0cN+VVxY0povQSJIhKGY3zG4eptR/b1+AFcnah/QbhG
+         4u30n8E48H6ahvCG7MMr3axJ6TD/GMFgmxUJczshC6l+QdESBqk0P2/VmJVyYvmQzMrb
+         dRrJWMCsOsw1ET7Ncvna4WFg6L8jilfQR3QEMhmbSqTL4wQTOEKyXH84TWR++3fYqgzN
+         hk2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697092805; x=1697697605;
+        d=1e100.net; s=20230601; t=1697093043; x=1697697843;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBr1hwHD25bRhBkWRPQylNtFUOku6GBNnWwm/nUebWM=;
-        b=lcBtmyPSSECAjhYZMWvpRTky0UDfq+YjXWG3JUHvVlvorjru2rEwZ5a8tvKuuw9LF5
-         2qH3/d+El1vwcQgKoJRu2tHcGIkJ7SxCNeuM8we0sqK4sHW1d9WKW8IrhgOnszobNlvl
-         hcuCjGqtgLyGa7sjDVmnnecAuJfMKq29BBwvwBPTIjdUYV4YEHmAPa0GI6edpYYDZ7b/
-         Jd7E0Njm9Awm0+lX19f/JsF9+FmuKtwBgH4tfaER+cmJdpzIwopx0yZAiLd3p/VCNIuW
-         cFi6sxgf/DT0s7dqMfk+Rk5r6APqrNhEXPXbn5KrbfAjKBB00nNs0YFJHVCz7NaIt3hR
-         cocw==
-X-Gm-Message-State: AOJu0YzhBY7SOXTPvC9BsrDAR+HafR+n46dGC+VPowJ1Fk4UDx0Omaii
-	ZfMU/Peq5XCqEZ5nuVYqYDrLQg==
-X-Google-Smtp-Source: AGHT+IF37iFe5rzi/jVKKLSbSO2i7WhFnCibS5SIVqUiTGBtbLyFss5op3l5+7uXmT5b+Kdw/blj2Q==
-X-Received: by 2002:a05:600c:252:b0:402:f536:2d3e with SMTP id 18-20020a05600c025200b00402f5362d3emr19740466wmj.14.1697092805153;
-        Wed, 11 Oct 2023 23:40:05 -0700 (PDT)
+        bh=kTJZAJxTV2pCq4kmCcHfnn+IzBwx/NyRgq6oPelk10w=;
+        b=GdE4Ockz54WR5EVQaWLXU5LD8DGlNCoBn1NN2O6pRvPI2IUADgltQf+rWY+b5JBeMX
+         IdH/wEzlxnUk9CqcoVxQeJmvynhB2utMAO48B7t6CVM1qVWBCU/ti9S9RqnqBhtOe+ei
+         IG07HrNz5z1usD2hBz4R4PkPiixcN9kurNo7/8m7FwmBc9UhtJjfKmrT2PKeqpjUNc8y
+         NFt/ZDg+P3uOtu8MGQlMHlXA+FAeqGpT9OQ920QkfvMzpE73e8dFR23W02L55zHuH2H9
+         PCkeqMin8Jd83eKX8wt2QOWfUyPqmajAdYie34tjGIMOWbdi1+cWEJ/ElaPu8IxovN93
+         4b5Q==
+X-Gm-Message-State: AOJu0YxObRqaD40yNixtJGJq0wKYwj6i1NDaHiTlurSuJwmKgN1pQOlz
+	uwr8rhmRbH1R5HRGMM0aFCIN2w==
+X-Google-Smtp-Source: AGHT+IExWHjsipC3BNYJ640h9ZDfoiJMjH0GcsUC/jrkxHT86rY6crop2wEe7TRRHcYvFnf4jxppTQ==
+X-Received: by 2002:a7b:c851:0:b0:406:5301:4320 with SMTP id c17-20020a7bc851000000b0040653014320mr20657587wml.16.1697093043110;
+        Wed, 11 Oct 2023 23:44:03 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05600c21cb00b00405bbfd5d16sm18843678wmj.7.2023.10.11.23.40.03
+        by smtp.gmail.com with ESMTPSA id az41-20020a05600c602900b004068495910csm20974749wmb.23.2023.10.11.23.44.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 23:40:04 -0700 (PDT)
-Message-ID: <33fe3e2e-9d09-42ee-9472-25d3be09baf4@linaro.org>
-Date: Thu, 12 Oct 2023 08:40:02 +0200
+        Wed, 11 Oct 2023 23:44:02 -0700 (PDT)
+Message-ID: <ff91f9e7-6018-402e-935a-c9fa10ced9fd@linaro.org>
+Date: Thu, 12 Oct 2023 08:44:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 17/20] arm64: dts: google: Add initial Google gs101 SoC
@@ -125,245 +125,61 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/10/2023 20:48, Peter Griffin wrote:
+> Google gs101 SoC is ARMv8 mobile SoC found in the Pixel 6,
+> (oriole) Pixel 6a (bluejay) and Pixel 6 pro (raven) mobile
+> phones. It features:
+> * 4xA55 little cluster
+> * 2xA76 Mid cluster
+> * 2xX1 Big cluster
+> 
 
 ...
 
-> diff --git a/arch/arm64/boot/dts/google/gs101.dtsi b/arch/arm64/boot/dts/google/gs101.dtsi
-> new file mode 100644
-> index 000000000000..37fb0a4dc8d3
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/google/gs101.dtsi
-> @@ -0,0 +1,504 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * GS101 SoC
-> + *
-> + * Copyright 2019-2023 Google LLC
-> + *
-> + */
-> +
-> +#include <dt-bindings/clock/google,gs101.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +/ {
-> +	compatible = "google,gs101";
-> +	#address-cells = <2>;
-> +	#size-cells = <1>;
-> +
-> +	interrupt-parent = <&gic>;
-> +
-> +	aliases {
-> +		pinctrl0 = &pinctrl_0;
-> +		pinctrl1 = &pinctrl_1;
-> +		pinctrl2 = &pinctrl_2;
-> +		pinctrl3 = &pinctrl_3;
-> +		pinctrl4 = &pinctrl_4;
-> +		pinctrl5 = &pinctrl_5;
-> +		pinctrl6 = &pinctrl_6;
-> +		pinctrl7 = &pinctrl_7;
-> +		serial0 = &serial_0;
+> +	gpa10: gpa10-gpio-bank  {
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +		interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
+> +			   <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
 > +	};
 > +
-> +	arm-pmu {
+> +	uart15_bus: uart15-bus-pins {
+> +	       samsung,pins = "gpa2-3", "gpa2-4";
+> +	       samsung,pin-function = <2>;
 
-pmu-0
+GS101_PIN_FUNC_2
 
-> +		compatible = "arm,armv8-pmuv3";
-> +		interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
-> +	};
-> +
-> +	dsu-pmu-0 {
+> +	       samsung,pin-pud = <0>;
 
-pmu-1
-
-
-> +		compatible = "arm,dsu-pmu";
-> +		interrupts = <GIC_SPI 257 IRQ_TYPE_LEVEL_HIGH>;
-> +		cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
-> +		       <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
-> +	};
-> +
-> +	/* TODO replace with CCF clock */
-> +	dummy_clk: oscillator {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <12345>;
-> +		clock-output-names = "pclk";
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <2>;
-> +		#size-cells = <0>;
-> +
-> +		cpu-map {
-> +			cluster0 {
-> +				core0 {
-> +					cpu = <&cpu0>;
-> +				};
-> +				core1 {
-> +					cpu = <&cpu1>;
-> +				};
-> +				core2 {
-> +					cpu = <&cpu2>;
-> +				};
-> +				core3 {
-> +					cpu = <&cpu3>;
-> +				};
-> +			};
-> +
-> +			cluster1 {
-> +				core0 {
-> +					cpu = <&cpu4>;
-> +				};
-> +				core1 {
-> +					cpu = <&cpu5>;
-> +				};
-> +			};
-> +
-> +			cluster2 {
-> +				core0 {
-> +					cpu = <&cpu6>;
-> +				};
-> +				core1 {
-> +					cpu = <&cpu7>;
-> +				};
-> +			};
-> +		};
-> +
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0000>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&ANANKE_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <250>;
-> +			dynamic-power-coefficient = <70>;
-> +		};
-> +
-> +		cpu1: cpu@100 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0100>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&ANANKE_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <250>;
-> +			dynamic-power-coefficient = <70>;
-> +		};
-> +
-> +		cpu2: cpu@200 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0200>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&ANANKE_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <250>;
-> +			dynamic-power-coefficient = <70>;
-> +		};
-> +
-> +		cpu3: cpu@300 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0300>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&ANANKE_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <250>;
-> +			dynamic-power-coefficient = <70>;
-> +		};
-> +
-> +		cpu4: cpu@400 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0400>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&ENYO_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <620>;
-> +			dynamic-power-coefficient = <284>;
-> +		};
-> +
-> +		cpu5: cpu@500 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0500>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&ENYO_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <620>;
-> +			dynamic-power-coefficient = <284>;
-> +		};
-> +
-> +		cpu6: cpu@600 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0600>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&HERA_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <1024>;
-> +			dynamic-power-coefficient = <650>;
-> +		};
-> +
-> +		cpu7: cpu@700 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-> +			reg = <0x0 0x0700>;
-> +			enable-method = "psci";
-> +			cpu-idle-states =  <&HERA_CPU_SLEEP>;
-> +			capacity-dmips-mhz = <1024>;
-> +			dynamic-power-coefficient = <650>;
-> +		};
-> +
-> +		idle-states {
-> +			entry-method = "psci";
-> +
-> +			ANANKE_CPU_SLEEP: cpu-ananke-sleep {
-> +				idle-state-name = "c2";
-> +				compatible = "arm,idle-state";
-> +				arm,psci-suspend-param = <0x0010000>;
-> +				entry-latency-us = <70>;
-> +				exit-latency-us = <160>;
-> +				min-residency-us = <2000>;
-> +			};
-> +
-> +			ENYO_CPU_SLEEP: cpu-enyo-sleep {
-> +				idle-state-name = "c2";
-> +				compatible = "arm,idle-state";
-> +				arm,psci-suspend-param = <0x0010000>;
-> +				entry-latency-us = <150>;
-> +				exit-latency-us = <190>;
-> +				min-residency-us = <2500>;
-> +			};
-> +
-> +			HERA_CPU_SLEEP: cpu-hera-sleep {
-> +				idle-state-name = "c2";
-> +				compatible = "arm,idle-state";
-> +				arm,psci-suspend-param = <0x0010000>;
-> +				entry-latency-us = <235>;
-> +				exit-latency-us = <220>;
-> +				min-residency-us = <3500>;
-> +			};
-> +		};
-> +	};
-> +
-> +	/* bootloader requires ect node */
-> +	ect {
-
-This needs bindings.
-
-> +		parameter_address = <0x90000000>;
-
-No underscores in property names. Use hyphen.
-
-> +		parameter_size = <0x53000>;
-
-No underscores.
+GS101_PIN_PULL_NONE
 
 > +	};
 > +
-> +	ext_24_5m: clock-1 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <24576000>;
-> +		clock-output-names = "oscclk";
+> +	uart16_bus: uart16-bus-pins {
+> +	       samsung,pins = "gpa3-0", "gpa3-1", "gpa3-2", "gpa3-3";
+> +	       samsung,pin-function = <GS101_PIN_FUNC_2>;
+> +	       samsung,pin-pud = <GS101_PIN_PULL_NONE>;
+
+But here it is correct...
+
 > +	};
+> +
+> +	uart16_bus_rts: uart1-bus-rts-pins {
+> +		samsung,pins = "gpa3-2";
+> +		samsung,pin-function = <GS101_PIN_FUNC_OUTPUT>;
+> +		samsung,pin-pud = <GS101_PIN_PULL_NONE>;
+> +		samsung,pin-val = <1>;
+
+Why do you set UART RTS pin value?
+
+> +	};
+> +
+> +	uart16_bus_tx_dat: uart1-bus-tx-dat-pins {
+> +		samsung,pins = "gpa3-1";
+> +		samsung,pin-val = <1>;
+> +	};
+> +
 
 
 Best regards,
