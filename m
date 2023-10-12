@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E66CCDB46E
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 06:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C6F1CDB46E
+	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 06:13:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E2A5AC433CB; Thu, 12 Oct 2023 06:11:33 +0000 (UTC)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	id 478ECC433C7; Thu, 12 Oct 2023 06:13:15 +0000 (UTC)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DAD16C433CC
-	for <soc@kernel.org>; Thu, 12 Oct 2023 06:11:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DAD16C433CC
+	by smtp.kernel.org (Postfix) with ESMTPS id 185FAC433CC
+	for <soc@kernel.org>; Thu, 12 Oct 2023 06:13:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 185FAC433CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-9b9faf05f51so85619766b.2
-        for <soc@kernel.org>; Wed, 11 Oct 2023 23:11:31 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-991c786369cso93033666b.1
+        for <soc@kernel.org>; Wed, 11 Oct 2023 23:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697091090; x=1697695890; darn=kernel.org;
+        d=linaro.org; s=google; t=1697091192; x=1697695992; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=igF/5LmpmhE4gSuwaumzhHmJL2dxT6YCbgQzJaidc7k=;
-        b=atOCjBn4Gtl5/1a/6D+/e3iY5ixxlhTVuB2NtyhxEH1WOE7E5wKBQbR/8u6fewJ1Mi
-         hd/uQjhWoxGSGQk0nDl59jXmTQiCIz2UcsYQp+fzPEVw9zv7hvpywJTQkp9B/C+kSaLr
-         4En0CP6uOaCrgOmT3lS7gATlTGP4Tz32wcXFUitIjTTYY/5oGhMc7s3I4rPLrh/Frdm8
-         A3r+S9sm20mt0DFdkUMPUq3jeW/YlyazqLyiSuFupn0hnRkf302DV2GHi+9SdRDVh2Hn
-         Q0AMHChSYK4Ao/U1HmSrpIT6p0ggJKkAPaVOSAiBXgLqevZ/qKKI5PX2dzcSEMahHf4c
-         dT/w==
+        bh=OhZZQGuRw0I9KXiQ09fxvzGbRvso+4Z50pL+PcMCccQ=;
+        b=Ju98s1qOphbJsR7LF1HSsseMlrzrkxlMjurmuqrEvtvPrzoapjAmXGIl5N6peMbVXU
+         dL32ztkq5rgJWw7ic5ebt5X1+eA2cuukkPAvKmUARHsoM/L9/36Pls31gkizcWEWDl8L
+         z6qGGxn+QGXliwB8vl+j14VJ6yy9JmSrbHH+ENs4IZzkFiE14XzG1z7KxmJt3i5qjfuh
+         QS1ioUtZLrcUTIXlhu++aBCTJPUqipxMSERFaAUi0R9b9IamzMkOZTADdmZx/Y8zhbQ2
+         usgLZA0WI4334gJR6CnyR68oIMCGmWKcD/g75QTrykXbd3gd1HArk7xeRChfcnh7BsnF
+         6YHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697091090; x=1697695890;
+        d=1e100.net; s=20230601; t=1697091192; x=1697695992;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=igF/5LmpmhE4gSuwaumzhHmJL2dxT6YCbgQzJaidc7k=;
-        b=PbpkEsWIyvni6BfxmrVGb1P/Q1vlLhfgP9Q7TnwigQAcXpRbD2+IHDbijh9qnWVCHv
-         LaQ17+qoouDBMeiai1fbQgaEThvNPVgkibejZVybIHMGsZ0YUDamiTmI+PZ2JBLtteEf
-         fmxWhGMO7seFstYYjPAugMp0M5oL7HgUsPQ4RKlisLD9TMyPVtXnTxNJj6A/TGyzNxzi
-         0RdPUyE8+dL/DhJfkUiSsVR05tU47nM7wj1LbCuXPza2yveJIm9wXGEavyIeUkuK2ooi
-         fCZF+oeS2O0ATM4q4lFcK7EHGgo65eqGIaK9eOmNjhpwbo07HTG52ZDoCsktrwNh0vr2
-         YY/w==
-X-Gm-Message-State: AOJu0YxO8dLiYl072ZBu9Bw1BJnD1vXqZw11d+amZkQPLhZBUgHtD3vv
-	ncNwc76rqnLBhby+8sMQmAsMRA==
-X-Google-Smtp-Source: AGHT+IE6+AwCWc2CDeJ0y8HyTovv2nztpXF36aB4dc6fbttyYuN/Qoi2gkSxoHNp0elxx61whdAtZg==
-X-Received: by 2002:a17:907:78c3:b0:9a2:232f:6f85 with SMTP id kv3-20020a17090778c300b009a2232f6f85mr22371842ejc.52.1697091089986;
-        Wed, 11 Oct 2023 23:11:29 -0700 (PDT)
+        bh=OhZZQGuRw0I9KXiQ09fxvzGbRvso+4Z50pL+PcMCccQ=;
+        b=RskL/0N51R0t4ihkAlVT0iQzb1EI50Mmk5hCJMQUJdEJ6e+syp2XvBw6ZzRd7i12pg
+         c4UmVR5qwLszZ4I+u//2LbyQ3s/B2wf2fOKC7dTAq2FX06x1zZGre5rWpKeJ0Vyit0os
+         gNSm5DQhfbNTDBY3me8d+XUb+5cQUnHxtlbgJhq17agXzbZMzF4VfvvsLm399GRORAyh
+         tEpjbZimIrEenScLVExWkjOnrh8UVwOY0yKbkFkpCn5YePDR9k42zss47m2CgN5DzmAq
+         Kp2QklPzMOaxAyYzqJogBICBzqQVs7iuQNsB4eYnHEid1dRFxPgxGLmaE4Ti2kAeYMl3
+         Dt7A==
+X-Gm-Message-State: AOJu0Yw25N3mnKGrJl/ForQI85L3Mvibt6AqimQKXXWjwu8FwayVVlvW
+	tsGQpGapVWiHv8jvAGfskkj5Gg==
+X-Google-Smtp-Source: AGHT+IEAOINrmCat0eCOe+yx5EoLE0yjoOcGhYjwH7oHz7dPfHtt19dmjviuBA3iT4uoh5LzeA20Aw==
+X-Received: by 2002:a17:906:3282:b0:9a5:846d:d81f with SMTP id 2-20020a170906328200b009a5846dd81fmr19147827ejw.17.1697091191569;
+        Wed, 11 Oct 2023 23:13:11 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id l9-20020a170906230900b009928b4e3b9fsm10670872eja.114.2023.10.11.23.11.28
+        by smtp.gmail.com with ESMTPSA id l9-20020a170906230900b009928b4e3b9fsm10670872eja.114.2023.10.11.23.13.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 23:11:29 -0700 (PDT)
-Message-ID: <5907e2b3-9a0b-4871-be08-6ca42200b8ec@linaro.org>
-Date: Thu, 12 Oct 2023 08:11:27 +0200
+        Wed, 11 Oct 2023 23:13:11 -0700 (PDT)
+Message-ID: <3a9f7b51-6c59-42e5-93bf-bb43e07102b0@linaro.org>
+Date: Thu, 12 Oct 2023 08:13:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/20] dt-bindings: clock: Add Google gs101 clock
- management unit bindings
+Subject: Re: [PATCH v3 07/20] dt-bindings: pinctrl: samsung: add
+ gs101-wakeup-eint compatible
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -74,7 +74,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
  linux-serial@vger.kernel.org
 References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-3-peter.griffin@linaro.org>
+ <20231011184823.443959-8-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -120,103 +120,39 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231011184823.443959-3-peter.griffin@linaro.org>
+In-Reply-To: <20231011184823.443959-8-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/10/2023 20:48, Peter Griffin wrote:
-> Provide dt-schema documentation for Google gs101 SoC clock controller.
-> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
+> gs101 is similar to newer Exynos SoCs like Exynos850 and ExynosAutov9
+> where more than one pin controller can do external wake-up interrupt.
+> So add a dedicated compatible for it.
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  .../bindings/clock/google,gs101-clock.yaml    | 125 ++++++++++
->  include/dt-bindings/clock/google,gs101.h      | 232 ++++++++++++++++++
->  2 files changed, 357 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
->  create mode 100644 include/dt-bindings/clock/google,gs101.h
+>  .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-> new file mode 100644
-> index 000000000000..f74494594b3b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-> @@ -0,0 +1,125 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/google,gs101-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google GS101 SoC clock controller
-> +
-> +maintainers:
-> +  - Peter Griffin <peter.griffin@linaro.org>
-> +
-> +description: |
-> +  Google GS101 clock controller is comprised of several CMU units, generating
-> +  clocks for different domains. Those CMU units are modeled as separate device
-> +  tree nodes, and might depend on each other. The root clock in that clock tree
-> +  is OSCCLK (24.576 MHz). That external clock must be defined as a fixed-rate
-> +  clock in dts.
-> +
-> +  CMU_TOP is a top-level CMU, where all base clocks are prepared using PLLs and
-> +  dividers; all other leaf clocks (other CMUs) are usually derived from CMU_TOP.
-> +
-> +  Each clock is assigned an identifier and client nodes can use this identifier
-> +  to specify the clock which they consume. All clocks available for usage
-> +  in clock consumer nodes are defined as preprocessor macros in
-> +  'dt-bindings/clock/gs101.h' header.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - google,gs101-cmu-top
-> +      - google,gs101-cmu-apm
-> +      - google,gs101-cmu-misc
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  "#clock-cells":
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +allOf:
+> diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+> index 1de91a51234d..7cddce761c46 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+> @@ -29,6 +29,7 @@ description: |
+>  properties:
+>    compatible:
+>      enum:
+> +      - google,gs101-wakeup-eint
+>        - samsung,s3c2410-wakeup-eint
+>        - samsung,s3c2412-wakeup-eint
+>        - samsung,s3c64xx-wakeup-eint
+> @@ -99,6 +100,7 @@ allOf:
+>              enum:
+>                - samsung,exynos850-wakeup-eint
+>                - samsung,exynosautov9-wakeup-eint
+> +              - google,gs101-wakeup-eint
 
-No improvements here from v1.
-
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: google,gs101-cmu-top
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: External reference clock (24.576 MHz)
-> +
-> +        clock-names:
-> +          items:
-> +            - const: oscclk
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-
-enum:
-  - google,gs101-cmu-apm
-  - google,gs101-cmu-misc
+Please order alphabetically.
 
 
 Best regards,
