@@ -1,233 +1,156 @@
-Return-Path: <SRS0=M8Ud=F2=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=dFf3=F2=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1902CCDB46E
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 13:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB4A9CDB47E
+	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 13:52:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C7FB0C433C9; Thu, 12 Oct 2023 13:09:39 +0000 (UTC)
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id BF1B6C433C8; Thu, 12 Oct 2023 13:52:17 +0000 (UTC)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D83CDC433C7
-	for <soc@kernel.org>; Thu, 12 Oct 2023 13:09:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D83CDC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id A50803200949;
-	Thu, 12 Oct 2023 09:09:36 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 12 Oct 2023 09:09:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:sender:subject:subject:to:to; s=fm2; t=1697116176; x=
-	1697202576; bh=cZMmYkqHafcy9r9IqECYBJlSxMS9CljvUiH0C1OF7xE=; b=O
-	pT0mWlV8K32Yoa/bTIYumB/dRHc+0SddvVSKHKYAZI9OJjnEQGQLFxD98DwYFilO
-	oGW9rUmxvIe9XsoSqWuzPXwz+hjSlHbSftw45eWYG7KZ3pgxP5sB5P4uPVwyqGbT
-	hq8SXPjvIZDYUgB4v5dMkmRFNmmmhIyr8wGkQgTGhelePH4MZj70UqylbIe++ulf
-	yJfvhLh+WmOVYJAmV2fxax0qR3X0BGoQ/T0rqX1VGX/gbwsTj5mSarlGgg+Mjp8k
-	I+qcuDkrOcGoi/FF5nLXCgDqSj9Da8oIXhr2/5rYkDu3II/6kzrnOU0B1nkf0rZT
-	ncA7gQ6IXlRujRCsjeS/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:sender
-	:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1697116176; x=1697202576; bh=c
-	ZMmYkqHafcy9r9IqECYBJlSxMS9CljvUiH0C1OF7xE=; b=dUdOnIgaOd+BeQxhz
-	dbR5rLpI7Gnlpa4eBLDrLlBOla89T7aDrPnBUeLso8oBbdZLB3Tfrffw8FFYE5wH
-	Ckuf1hhQcAJhZgEPqPVK+1dswgFsdLT2x4IafrC/GKW0f1OUtELNqOCGuUintnwz
-	rWnUGwF5lIZ0v+oONktNyqKaynA0o4j73jBV4dehhUu5rlKgrsT2VYnp3pih/JWw
-	aBQN+PjlXg0iH2tBHJwjFLC7x5JYDHdFHvlYPRcRU76uLfzg2SewK9Ymp/qp5bxS
-	THuU0kbEOsZMGBMvoBj+aDFtKjxCm1dqGfhUhCf7CHN2GXv2EoHmUPAVIITGiJ5x
-	D3MOA==
-X-ME-Sender: <xms:D_AnZUFlAfslxS5HItdQlB9ZCPk5dyZ80am_YnocUKfCICVKB4Fwwg>
-    <xme:D_AnZdWech7XBt4RFrmnBoCuVcKN-wt6iEs3OR-4JZVC6PElVuU5awOirqH2qn3Xd
-    Hy_omtM1zJVvmUSxHg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedriedtgdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepleekveevheekffdtiedthfeiffeugfdtgfetffffteejtdfgfeevheegtedvveeg
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhinhgrrhhordhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
-    uggsrdguvg
-X-ME-Proxy: <xmx:D_AnZeJWPQtyq13UZwN-aTmn6sRXuGT8uHQyRrlW-G1DIklra-etwQ>
-    <xmx:D_AnZWF2aD4AcGMLRW_255TmfAC2BM9XQXpzpjW77nJofDAbRWDGIQ>
-    <xmx:D_AnZaVRhejCMrZccBEN-zxnTzCxlI6Bt6bsC3VWsLxsr-LE0Erh-g>
-    <xmx:EPAnZdeMWWOLvDfQfh1WP6c7nMx_dSn12EbHIXS4SCNmFAteMlzFTw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id BDBB7B60089; Thu, 12 Oct 2023 09:09:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
+	by smtp.kernel.org (Postfix) with ESMTPS id AEE78C433C7
+	for <soc@kernel.org>; Thu, 12 Oct 2023 13:52:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AEE78C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5a7fb84f6ceso9353967b3.1
+        for <soc@kernel.org>; Thu, 12 Oct 2023 06:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697118734; x=1697723534; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O2gG3fg3q52fvlTCT+QjsQd6tuCwnP38cEJE5IRE6jM=;
+        b=mGyWm6xx83WTpINnR1NRFBBzGubZbCjPRYpfO8ev+rUvyc+QFsMAvajH5Uk1JemS2x
+         C9aSkj8lm3ZksYQTsVHyZbgKPGvVHM6Y1cmlF5HrakLD3hgVvrHCaTeOaKlNJDDWu0g1
+         y0RwkJfUJD0tfncgIrc10owcU6rI46BrNLNDvfn2uomC0LiYOKohlIDTs3mALniZBW7H
+         Ypl7KZ2y6ZQptO2cByKFXoSpFC3T4gtosvOZlVzKOxMeqpyF2vMCZqsy7Ax30lOW4qVN
+         RdLXFeYsWEyeTzAgO0YzUqhO4gWAwDnBWr1cJ+fRBuVG2D4iWMUThqpLLAYcx7MZLSUY
+         MEOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697118734; x=1697723534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O2gG3fg3q52fvlTCT+QjsQd6tuCwnP38cEJE5IRE6jM=;
+        b=mSlYguQbgplsDV2SPOFwuRpQs1ibElkPdpaYnZ3qj1PKDn9HAsExpz9Q5v7JnDe1Q0
+         B1dCpC58zSuOoG25I+V2zleqZnmjDpFYKUQb3mQX88E8JFWGTYJjWJQiwZeoNmzha8sF
+         07YCKjcAF9HUzOlOeU4WKa5UwW8SpzTm+nhIpOGfkXPtRCzKrwDGpCx968fxM9OBqwX6
+         GCn8i+wrIrE1zWjSFHQgXfStqNezUrxccpOSAcJZ6e4EHuxJdTdfTbO0ZKfTeyj390ba
+         RX5zgwH7Bp2E0zwiFh00WWh4aS0dYAQ05xXmBC+e4sBLwHjWsWR8n7RIlh29iiBZ8p5X
+         uCMw==
+X-Gm-Message-State: AOJu0YyowLuMx//Q534sNpEo6fFvLxHHZkuFYN/5n3ZD8veq0H+KOhtZ
+	sXNo+8RqEXACcGEA3hZCqeZ5iRVkSHQHRibGHhx+rA==
+X-Google-Smtp-Source: AGHT+IEUixItd1kXxNUWqJ7YWtNJT7rR6hD0H/r/LT4Rvu2rvoR99SCGtsC+RPlcyYZVTc4zHe4JBltjz4OLDyvTd9I=
+X-Received: by 2002:a05:6902:1507:b0:d81:917c:69b with SMTP id
+ q7-20020a056902150700b00d81917c069bmr27103248ybu.10.1697118734615; Thu, 12
+ Oct 2023 06:52:14 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <36814910-2a98-4567-af7f-684318a1ebef@app.fastmail.com>
-Date: Thu, 12 Oct 2023 15:09:14 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-11-peter.griffin@linaro.org> <CAPLW+4mO1dMjh1EDPbaL0QGe4EM0GnbQ1G7NsdtBaCcPzdmkPw@mail.gmail.com>
+ <CADrjBPqo8kKUr-EPay3zDQiF7XRwN+FDFN5W2tD5Aet50L2KUA@mail.gmail.com> <28bee37b-1d6d-433e-810f-da847635fcaf@linaro.org>
+In-Reply-To: <28bee37b-1d6d-433e-810f-da847635fcaf@linaro.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Thu, 12 Oct 2023 14:52:02 +0100
+Message-ID: <CADrjBPoHu4d-WjgO3sQb0T784QBm7S8YFUnDANmMHkZqjgv90w@mail.gmail.com>
+Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
+ plls, mux and gates
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.6, part 2
-Content-Type: text/plain;charset=utf-8
+Cc: Sam Protsenko <semen.protsenko@linaro.org>, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
+	s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
+	olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com, 
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 6465e260f48790807eef06b583b38ca9789b6=
-072:
+Hi Krzysztof,
 
-  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
+On Thu, 12 Oct 2023 at 13:24, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 12/10/2023 14:06, Peter Griffin wrote:
+> > Hi Sam,
+> >
+> > Thanks for the review.
+> >
+> > On Thu, 12 Oct 2023 at 01:07, Sam Protsenko <semen.protsenko@linaro.org=
+> wrote:
+> >>
+> >> On Wed, Oct 11, 2023 at 1:49=E2=80=AFPM Peter Griffin <peter.griffin@l=
+inaro.org> wrote:
+> >>>
+> >>> CMU_TOP is the top level clock management unit which contains PLLs, m=
+uxes
+> >>> and gates that feed the other clock management units.
+> >>>
+> >>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> >>> ---
+> >>>  drivers/clk/samsung/Kconfig     |    9 +
+> >>>  drivers/clk/samsung/Makefile    |    2 +
+> >>>  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++=
+++
+> >>>  3 files changed, 1562 insertions(+)
+> >>>  create mode 100644 drivers/clk/samsung/clk-gs101.c
+> >>>
+> >>> diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfi=
+g
+> >>> index 76a494e95027..14362ec9c543 100644
+> >>> --- a/drivers/clk/samsung/Kconfig
+> >>> +++ b/drivers/clk/samsung/Kconfig
+> >>> @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
+> >>>         select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
+> >>>         select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
+> >>>         select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
+> >>> +       select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
+> >>>         select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
+> >>>
+> >>>  config S3C64XX_COMMON_CLK
+> >>> @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
+> >>>           status of the certains clocks from SoC, but it could also b=
+e tied to
+> >>>           other devices as an input clock.
+> >>>
+> >>> +config GOOGLE_GS101_COMMON_CLK
+> >>> +       bool "Google gs101 clock controller support" if COMPILE_TEST
+> >>> +       depends on COMMON_CLK_SAMSUNG
+> >>> +       depends on EXYNOS_ARM64_COMMON_CLK
+> >>> +       help
+> >>> +         Support for the clock controller present on the Google gs10=
+1 SoC.
+> >>> +         Choose Y here only if you build for this SoC.
+> >>> +
+> >>
+> >> Why is that new option needed? From the look of it, it could be just a
+> >> part of EXYNOS_ARM64_COMMON_CLK. Like clk-exynos850 or
+> >> clk-exynosautov9. Is there any particular feature that makes it SoC
+> >> special?
+> >
+> > No, it could also be added to EXYNOS_ARM64_COMMON_CLK. I was following
+> > the example set by TESLA_FSD which is another custom Exynos based chips=
+et
+> > that added its own config option.
+> >
+> > Krzysztof do you have any preference on this?
+>
+> Usually there is only one image for several boards so long time ago we
+> stopped adding per-SoC Kconfig entries. This has its own ARCH_xxx, just
+> like Tesla, thus having separate Kconfig for all Google Tensor clock
+> drivers makes sense. Maybe it should be just called a bit differently,
+> e.g. GOOGLE_TENSOR_COMMON_CLK
 
-are available in the Git repository at:
+Thanks, I will update the name in v4.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-f=
-ixes-6.6-2
-
-for you to fetch changes up to 26de14831cf6e6a6ff96609a0623e1266a636467:
-
-  IXP4xx MAINTAINERS entries (2023-10-12 13:11:30 +0200)
-
-----------------------------------------------------------------
-ARM: SoC fixes for 6.6, part 2
-
-AngeloGioacchino Del Regno is stepping in as co-maintainer for the
-MediaTek SoC platform and starts by sending some dts fixes for
-the mt8195 platform that had been pending for a while.
-
-On the ixp4xx platform, Krzysztof Halasa steps down as co-maintainer,
-reflecting that Linus Walleij has been handling this on his own
-for the past few years.
-
-Generic RISC-V kernels are now marked as incompatible with the
-RZ/Five platform that requires custom hacks both for managing
-its DMA bounce buffers and for addressing low virtual memory.
-
-Finally, there is one bugfix for the AMDTEE firmware driver
-to prevent a use-after-free bug.
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      MAINTAINERS: Add Angelo as MediaTek SoC co-maintainer
-
-Arnd Bergmann (2):
-      Merge tag 'amdtee-fix-for-v6.6' of https://git.linaro.org/people/j=
-ens.wiklander/linux-tee into arm/fixes
-      Merge tag 'renesas-fixes-for-v6.6-tag1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/geert/renesas-devel into arm/fixes
-
-Eugen Hristev (1):
-      arm64: dts: mediatek: fix t-phy unit name
-
-Jisheng Zhang (1):
-      soc: renesas: Make ARCH_R9A07G043 (riscv version) depend on NONPOR=
-TABLE
-
-Krzysztof Ha=C5=82asa (1):
-      IXP4xx MAINTAINERS entries
-
-Macpaul Lin (2):
-      arm64: dts: mediatek: mt8195-demo: fix the memory size to 8GB
-      arm64: dts: mediatek: mt8195-demo: update and reorder reserved mem=
-ory regions
-
-N=C3=ADcolas F. R. A. Prado (1):
-      arm64: dts: mediatek: mt8195: Set DSU PMU status to fail
-
-Rijo Thomas (1):
-      tee: amdtee: fix use-after-free vulnerability in amdtee_close_sess=
-ion
-
- MAINTAINERS                                  | 27 +++++++++------------=
-------
- arch/arm64/boot/dts/mediatek/mt7622.dtsi     |  2 +-
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    |  2 +-
- arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 39 +++++++++++++++++++++=
-++++++++++--------
- arch/arm64/boot/dts/mediatek/mt8195.dtsi     |  1 +
- drivers/soc/renesas/Kconfig                  |  1 +
- drivers/tee/amdtee/core.c                    | 10 ++++++----
- 7 files changed, 50 insertions(+), 32 deletions(-)
-arnd@studio:~/soc$ git request-pull mainline/master origin soc-fixes-6.6=
--2 | xclip
-Error: Can't open display: (null)
-arnd@studio:~/soc$ git request-pull mainline/master origin soc-fixes-6.6=
--2 | cat
-The following changes since commit 6465e260f48790807eef06b583b38ca9789b6=
-072:
-
-  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-f=
-ixes-6.6-2
-
-for you to fetch changes up to 26de14831cf6e6a6ff96609a0623e1266a636467:
-
-  IXP4xx MAINTAINERS entries (2023-10-12 13:11:30 +0200)
-
-----------------------------------------------------------------
-ARM: SoC fixes for 6.6, part 2
-
-AngeloGioacchino Del Regno is stepping in as co-maintainer for the
-MediaTek SoC platform and starts by sending some dts fixes for
-the mt8195 platform that had been pending for a while.
-
-On the ixp4xx platform, Krzysztof Halasa steps down as co-maintainer,
-reflecting that Linus Walleij has been handling this on his own
-for the past few years.
-
-Generic RISC-V kernels are now marked as incompatible with the
-RZ/Five platform that requires custom hacks both for managing
-its DMA bounce buffers and for addressing low virtual memory.
-
-Finally, there is one bugfix for the AMDTEE firmware driver
-to prevent a use-after-free bug.
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      MAINTAINERS: Add Angelo as MediaTek SoC co-maintainer
-
-Arnd Bergmann (2):
-      Merge tag 'amdtee-fix-for-v6.6' of https://git.linaro.org/people/j=
-ens.wiklander/linux-tee into arm/fixes
-      Merge tag 'renesas-fixes-for-v6.6-tag1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/geert/renesas-devel into arm/fixes
-
-Eugen Hristev (1):
-      arm64: dts: mediatek: fix t-phy unit name
-
-Jisheng Zhang (1):
-      soc: renesas: Make ARCH_R9A07G043 (riscv version) depend on NONPOR=
-TABLE
-
-Krzysztof Ha=C5=82asa (1):
-      IXP4xx MAINTAINERS entries
-
-Macpaul Lin (2):
-      arm64: dts: mediatek: mt8195-demo: fix the memory size to 8GB
-      arm64: dts: mediatek: mt8195-demo: update and reorder reserved mem=
-ory regions
-
-N=C3=ADcolas F. R. A. Prado (1):
-      arm64: dts: mediatek: mt8195: Set DSU PMU status to fail
-
-Rijo Thomas (1):
-      tee: amdtee: fix use-after-free vulnerability in amdtee_close_sess=
-ion
-
- MAINTAINERS                                  | 27 +++++++------------
- arch/arm64/boot/dts/mediatek/mt7622.dtsi     |  2 +-
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    |  2 +-
- arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 39 +++++++++++++++++++++=
-+------
- arch/arm64/boot/dts/mediatek/mt8195.dtsi     |  1 +
- drivers/soc/renesas/Kconfig                  |  1 +
- drivers/tee/amdtee/core.c                    | 10 ++++---
- 7 files changed, 50 insertions(+), 32 deletions(-)
+Peter.
