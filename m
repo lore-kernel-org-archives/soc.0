@@ -1,54 +1,64 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB988CDB483
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 21:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0527BCDB474
+	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 23:34:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6CA56C433CB; Thu, 12 Oct 2023 21:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09DADC433C9;
-	Thu, 12 Oct 2023 21:21:05 +0000 (UTC)
+	id C4650C433CA; Thu, 12 Oct 2023 23:34:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92540C433C7;
+	Thu, 12 Oct 2023 23:34:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697145665;
-	bh=gJgOxqZKU2S5nykfkjBui5vDAW1QIh5cKDaXm7LuTxw=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=HBy12xk2ZnRYys04Gpczn8X9wxUDs4LYhRrXG94p7CaWsFzBUpHS7ayKOnaisGkgm
-	 hGQfR6iBXdez6+Qm9MSdFCCqHTrIZcT7C0iG3EVICCDp+bf/eD7nWpYMo7elHqOw9F
-	 UuTBH4lGctm7EWTUBgJEw/OxxXALr7fbl62CanKyA77ypImyOCseB2JbTzCfd14qn8
-	 9AMTk/NiFBx8vDQgMNoPmlB9j9ChaF3/U9dxhSRRd13jTfrOogKZFrz8JuwG8sF/aX
-	 FXuzNU9RxlOKOIpmTmxpV2mpuVYOM7vhCBYWidaEOksjJMNMmXNFghw6apyYUeYbsr
-	 enl9npicbgVGg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E4EFAC595C3;
-	Thu, 12 Oct 2023 21:21:04 +0000 (UTC)
-Subject: Re: [GIT PULL] pmdomain fixes for v6.6-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20231012135638.52674-1-ulf.hansson@linaro.org>
-References: <20231012135638.52674-1-ulf.hansson@linaro.org>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <20231012135638.52674-1-ulf.hansson@linaro.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.6-rc1-2
-X-PR-Tracked-Commit-Id: 767881c470b3140c33795031c4e4d65572731c1c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9b1ad4ba57688ae8eb0d3bbe63c13dbd9854357a
-Message-Id: <169714566493.14457.17990229865901671660.pr-tracker-bot@kernel.org>
-Date: Thu, 12 Oct 2023 21:21:04 +0000
-To: Ulf Hansson <ulf.hansson@linaro.org>
+	s=k20201202; t=1697153656;
+	bh=2hOV/A99q7Vw2ihfrRngmpOQSr3R2rMB6q/KtChtdlQ=;
+	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
+	b=larpwYHwnfF14OohEdapHA//IHTxle4bwtbkVzm+Uv9W89nmUV9cZxDKb/k1gKxqW
+	 yfiRMP0zowW2HUFKSiqvLmqDd1QNyNBrnmvOmuy7QHonQDeOutX6zydQ7z1OxEd+Ko
+	 fYflCwCix/Bu/hX3PVdnByDzmL2HMRqCMLvlVj65elPs6HqPFWjePx9tNGVPzptPoi
+	 w+FCeSFtlkGYmEZJv3fMiZ+CLHh+J8fUTnfwlan9R2TfBMDc0F/HzDdZ0+k7OB6xoH
+	 rceaN+CLTEt0avfItppsYaLzdoGwOCs1TlWwJS+OCg6EATRRJ/yBSjcSRlt4th6Vtp
+	 Is0hG1yVLiP0w==
+Message-ID: <c99033583cb9dc33eff3c427cdb6fb3f.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231011184823.443959-3-peter.griffin@linaro.org>
+References: <20231011184823.443959-1-peter.griffin@linaro.org> <20231011184823.443959-3-peter.griffin@linaro.org>
+Subject: Re: [PATCH v3 02/20] dt-bindings: clock: Add Google gs101 clock management unit bindings
+From: Stephen Boyd <sboyd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Ulf Hansson <ulf.hansson@linaro.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: peter.griffin@linaro.org, tudor.ambarus@linaro.org, andre.draszik@linaro.org, semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, kernel-team@android.com, linux-serial@vger.kernel.org
+To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de, catalin.marinas@arm.com, conor+dt@kernel.org, cw00.choi@samsung.com, gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, linux@roeck-us.net, mturquette@baylibre.com, olof@lixom.net, robh+dt@kernel.org, s.nawrocki@samsung.com, tomasz.figa@gmail.com, will@kernel.org, wim@linux-watchdog.org
+Date: Thu, 12 Oct 2023 16:34:14 -0700
+User-Agent: alot/0.10
 
-The pull request you sent on Thu, 12 Oct 2023 15:56:38 +0200:
+Quoting Peter Griffin (2023-10-11 11:48:05)
+> diff --git a/Documentation/devicetree/bindings/clock/google,gs101-clock.y=
+aml b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+> new file mode 100644
+> index 000000000000..f74494594b3b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+> @@ -0,0 +1,125 @@
+[...]
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - google,gs101-cmu-top
+> +      - google,gs101-cmu-apm
+> +      - google,gs101-cmu-misc
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 2
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.6-rc1-2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9b1ad4ba57688ae8eb0d3bbe63c13dbd9854357a
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Can you remove clock-names from the binding and simply use the index of
+the clocks property? That means less string comparisons in the kernel.
+I'm not sure if other samsung clk drivers are doing this though so maybe
+clock-names is preferred for historical reasons.
