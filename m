@@ -1,83 +1,110 @@
-Return-Path: <sboyd@kernel.org>
+Return-Path: <SRS0=3x1w=F3=foss.st.com=prvs=8650ac4076=patrice.chotard@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333FFCDB47E
-	for <soc@archiver.kernel.org>; Thu, 12 Oct 2023 23:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B30FCDB47E
+	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 07:58:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F144AC433C8; Thu, 12 Oct 2023 23:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3051C433C7;
-	Thu, 12 Oct 2023 23:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697154346;
-	bh=tEqTqQdErxc85MNvTcwntt3VToH19q1ySiOXAqVp1bo=;
-	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
-	b=GG2EZ8ChFoHokrcV6Aa/yS5dZwQ6qftFITMB/sAiBFdWBKu1rphruGzmWTSfihORm
-	 ug7zJ5TbSJ3viAbSO12SAVv8hCpfBfXlL5GSv+pGs3W7WaN+WInSdJsFpF32dJUSfy
-	 kBzle2OTVVao82RAf0QsU+LASfe8pvPYj2HUlnpm/NniYTezqOBCVoNGG5tdaS4TK5
-	 /awHz9XUs1EIvahj2SquYubqoe/nUXWuzwC6YzOEJh8hh85zJgtsH4moR4BvsHWB+3
-	 bBvmtIaFdEO6l6Vxa4S8nzgVx9TodDgQjo8Kgp6H5la1PXIzyfdhwSEEsGWEmR2rSK
-	 AGL6KPYmJNpog==
-Message-ID: <27e5de286fd0c209fc0540df7f77355b.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	id 00094C433CA; Fri, 13 Oct 2023 07:58:48 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 43C1BC433C7;
+	Fri, 13 Oct 2023 07:58:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43C1BC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39D310oR011064;
+	Fri, 13 Oct 2023 09:58:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:to:cc:from:subject:content-type
+	:content-transfer-encoding; s=selector1; bh=VtaROO0xyCAbWB6ZaKUh
+	aDmUfXST8mXSRgk3vcmOUvs=; b=bGkNZ5pzA8ZpKzCw0Niuw+ht/0+pv6yYK7R7
+	Rn0JYIofWSYkcuFrRDHzzqKYSWlBRJczDHWB0pl3RCO9QC6nAir1QlR6ecFAAbBX
+	hMcHTbej70e8J5dZxUh9cgoinlSsW2/14ZabOojfk9JBT7nYZk5UgAyRbpHuNxEB
+	L/gJV3K97K/RRyn1qgX6XvHI7Mj57fXTE47imf7oyw0RmOYOlAg1wbXE/vVmmgsl
+	DvSQD2JPIgXooQzsoCqlkwRwnPO6C9wZ7Q/G4vgGdQoN094bH5KROlBPXJbludUs
+	vLEIsAaSUm9J6+/IGfdELPQToQafTMz7B9BDZQ3vp5d6tCDYHw==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkhjgqdr7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Oct 2023 09:58:35 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 53F2910004F;
+	Fri, 13 Oct 2023 09:58:34 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2C7B620F548;
+	Fri, 13 Oct 2023 09:58:34 +0200 (CEST)
+Received: from [10.252.11.99] (10.252.11.99) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 13 Oct
+ 2023 09:58:33 +0200
+Message-ID: <e6b975f2-9936-465a-8253-6fcead974006@foss.st.com>
+Date: Fri, 13 Oct 2023 09:58:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20231011184823.443959-19-peter.griffin@linaro.org>
-References: <20231011184823.443959-1-peter.griffin@linaro.org> <20231011184823.443959-19-peter.griffin@linaro.org>
-Subject: Re: [PATCH v3 18/20] arm64: dts: google: Add initial Oriole/pixel 6 board support
-From: Stephen Boyd <sboyd@kernel.org>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: peter.griffin@linaro.org, tudor.ambarus@linaro.org, andre.draszik@linaro.org, semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, kernel-team@android.com, linux-serial@vger.kernel.org
-To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de, catalin.marinas@arm.com, conor+dt@kernel.org, cw00.choi@samsung.com, gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, linux@roeck-us.net, mturquette@baylibre.com, olof@lixom.net, robh+dt@kernel.org, s.nawrocki@samsung.com, tomasz.figa@gmail.com, will@kernel.org, wim@linux-watchdog.org
-Date: Thu, 12 Oct 2023 16:45:44 -0700
-User-Agent: alot/0.10
+To: Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>,
+        olof
+ Johansson <olof@lixom.net>, "arm@kernel.org" <arm@kernel.org>,
+        <soc@kernel.org>
+CC: "moderated list:ARM/Microchip" <linux-arm-kernel@lists.infradead.org>,
+        <patrice.chotard@foss.st.com>
+From: Patrice CHOTARD <patrice.chotard@foss.st.com>
+Subject: [GIT PULL] STi DT changes for v6.7 #1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.11.99]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-13_03,2023-10-12_01,2023-05-22_02
 
-Quoting Peter Griffin (2023-10-11 11:48:21)
-> diff --git a/arch/arm64/boot/dts/google/gs101-oriole.dts b/arch/arm64/boo=
-t/dts/google/gs101-oriole.dts
-> new file mode 100644
-> index 000000000000..3bebca989d34
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/google/gs101-oriole.dts
-> @@ -0,0 +1,79 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Oriole Device Tree
-> + *
-> + * Copyright 2021-2023 Google,LLC
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include "gs101-pinctrl.h"
-> +#include "gs101.dtsi"
-> +
-> +/ {
-> +       model =3D "Oriole";
-> +       compatible =3D "google,gs101-oriole", "google,gs101";
-> +
-> +       chosen {
-> +               bootargs =3D "earlycon=3Dexynos4210,mmio32,0x10A00000 con=
-sole=3DttySAC0";
-> +       };
-> +
-> +       gpio-keys {
-> +               compatible =3D "gpio-keys";
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&key_voldown &key_volup &key_power>;
+Hi ARM SoC maintainers,
 
-When a phandle starts an array presumably the next element after it is
-some cell or "argument" for that phandle. In this case, &key_voldown
-doesn't have any cells (there isn't a #pinctrl-cells property) so we
-typically write it like this
+Please consider this first round of STi DT for v6.7 cycle
 
-		pinctrl-0 =3D <&key_voldown>, <&key_volup>, <&key_power>;
+Patrice
 
-so that the reader doesn't think the phandles are related. In the DTB
-nothing is different from how you have it in this patch. This is a super
-nitpick!
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti.git tags/sti-dt-for-v6.7-round1
+
+for you to fetch changes up to b2e847012cbc5476b0fa93351f74ea623e43e9c8:
+
+  dt-bindings: arm: sti: add STi boards and remove stih415/stih416 (2023-10-13 09:03:51 +0200)
+
+----------------------------------------------------------------
+STi DT for v6.7, round 1 :
+
+stih418-b2264: leds and serial fixes
+stih407: drop max-duty-cycle property
+stih415/416: remove boards from yaml
+stih407/410/418: add boards to yaml
+
+----------------------------------------------------------------
+Alain Volmat (5):
+      ARM: dts: st: correct serial alias in stih418-b2264.dts
+      ARM: dts: st: move leds out of soc in stih418-b2264.dts
+      ARM: dts: st: correct led level in stih418-b2264.dts
+      dt-bindings: soc: sti: add STi platform syscon
+      dt-bindings: arm: sti: add STi boards and remove stih415/stih416
+
+Krzysztof Kozlowski (1):
+      ARM: dts: st: stih407: drop max-duty-cycle
+
+ Documentation/devicetree/bindings/arm/sti.yaml               | 23 +++++++++++++++--------
+ Documentation/devicetree/bindings/soc/sti/st,sti-syscon.yaml | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/st/stih407-family.dtsi                     |  1 -
+ arch/arm/boot/dts/st/stih418-b2264.dts                       | 16 ++++++++--------
+ 4 files changed, 69 insertions(+), 17 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/sti/st,sti-syscon.yaml
