@@ -4,56 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBA1FCDB47E
-	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC1ECDB483
+	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9C89BC433CC; Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 81533C433C9;
-	Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
+	id 26315C43391; Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EB40C433C9;
+	Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697230827;
-	bh=aP4hgkyiualMdb0i1vMPK5Tq9Ge/cADk0PNOmxMf4T0=;
+	s=k20201202; t=1697230838;
+	bh=EJ0jKgdPKmUp0aFoEUhb80PVttsXyWWUsCARW8mXOjc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=JKTXi1GuH8OT7bfTsqpuqYXaFBnXNucc+nEZQ71tLa0zzAKEs2UP4cpDVbeu0hb0S
-	 H1V4wdi6XIFpPKyc24X+cMvwm8+uQdbUd4LmiXZJEkJaq4rsItNgUG45FstVZbgyhZ
-	 +rEtNdrr099DgAduH36V+9aZvvu+vF4iLT7yMEVCM9b0sGkYSOlPf4gi5W94cUXpJq
-	 KA+BJ+Yl4wGIrBMtRlpb7VhLZs8liG7zrF3RAJohhohdpJYmEWCzThH7vif5rOpUhz
-	 ZJdipGI4q8BFiZM4MRBnn0Wu3J0+r+n58VLpKTx1JDZIsV2EkmQRUyDRdclxmzYLA8
-	 2/AlHiMkNbtQA==
+	b=CSWux/6x0rcRi2yJ609n2jPl7Ylsm/El5H9oZza1gS5iLq7dklgXcgwlX5uOJccKY
+	 5BC13ljeQ0wKS/Sf4/K7qnxMTmRv+pHTsYEqkdq2X0vtLAv2qaamEKu3fTUtOzhwO8
+	 XzcAhh7bl/z9XrqRVmgfsFVLRchgiErMen2irPxN8StIYvgT4NSaJ1mILyADcXgCBw
+	 9/WDGCpz0OKFOFpbiK3D6fATozrFYLPt4H1zzKN4u1YaeST4F01w+LLV0BNMpVU7lK
+	 svN/HPdwkIb8xPcu7M/dYsyU5YY3Z8X6Wg6eXAZNhm/ybkbcqKENEqZMdUnLW2J7SF
+	 oG+XnRrEQL2MQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 664A0E1F669;
-	Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DFD51C691EF;
+	Fri, 13 Oct 2023 21:00:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] IXP4xx MAINTAINERS entries
+Subject: Re: [GIT PULL 1/2] arm64: dts: samsung: DTS for v6.7
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169723082741.14185.15137098705671601259.git-patchwork-notify@kernel.org>
-Date: Fri, 13 Oct 2023 21:00:27 +0000
-References: <m3ttqxu4ru.fsf@t19.piap.pl>
-In-Reply-To: <m3ttqxu4ru.fsf@t19.piap.pl>
-To: =?utf-8?q?Krzysztof_Ha=C5=82asa_=3Ckhalasa=40piap=2Epl=3E?=@ci.codeaurora.org
+ <169723083791.14185.12171172311534372828.git-patchwork-notify@kernel.org>
+Date: Fri, 13 Oct 2023 21:00:37 +0000
+References: <20231006093943.106002-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20231006093943.106002-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 11 Oct 2023 07:06:29 +0200 you wrote:
-> Update MAINTAINERS entries for Intel IXP4xx SoCs.
+On Fri,  6 Oct 2023 11:39:42 +0200 you wrote:
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 > 
-> Linus has been handling all IXP4xx stuff since 2019 or so.
+>   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 > 
-> Signed-off-by: Krzysztof Hałasa <khalasa@piap.pl>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Deepak Saxena <dsaxena@plexity.net>
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-6.7
+> 
+> [...]
 
 Here is the summary with links:
-  - IXP4xx MAINTAINERS entries
-    https://git.kernel.org/soc/soc/c/26de14831cf6
+  - [GIT,PULL,1/2] arm64: dts: samsung: DTS for v6.7
+    https://git.kernel.org/soc/soc/c/89ca0ec59f11
+  - [GIT,PULL,2/2] ARM: dts: samsung: DTS for v6.7
+    https://git.kernel.org/soc/soc/c/f358d6a5e6ae
 
 You are awesome, thank you!
 -- 
