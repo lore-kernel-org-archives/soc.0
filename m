@@ -1,100 +1,101 @@
-Return-Path: <SRS0=+TGo=F3=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=NGH2=F3=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E794DCDB482
-	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 12:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51A88CDB482
+	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 15:37:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CCC72C433C9; Fri, 13 Oct 2023 12:39:40 +0000 (UTC)
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 19762C433C9; Fri, 13 Oct 2023 15:37:28 +0000 (UTC)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4D1F0C433CC
-	for <soc@kernel.org>; Fri, 13 Oct 2023 12:39:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D1F0C433CC
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4S6R0K2Bpxz4x0WF
-	for <soc@kernel.org>; Fri, 13 Oct 2023 14:39:29 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f151:5551:1af6:b316])
-	by laurent.telenet-ops.be with bizsmtp
-	id xQfM2A00H56FAx301QfMfy; Fri, 13 Oct 2023 14:39:21 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1qrHRl-006GgZ-TO;
-	Fri, 13 Oct 2023 14:39:21 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1qrHRp-002Jnw-9y;
-	Fri, 13 Oct 2023 14:39:21 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id 47C36C433C8;
+	Fri, 13 Oct 2023 15:37:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 47C36C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-53e2308198eso2923322a12.1;
+        Fri, 13 Oct 2023 08:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697211445; x=1697816245; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7RR80S9VVoI26pp6PPSfkckIvUSInMqHwCFYPrN8cEo=;
+        b=b6lVllftWy4TopUpvMXwLpSnLvBW28B2pQVsVTN+fJqO+a+Y2J6DJRq4p8EAgVjQ94
+         NHWNXAPaiK6L8c3mrDEmySl9Lf/Yx2bZKxIj145uyKiy48FwneJA9XC0T9FcfeULpOK2
+         QCqMp2xC5ZNyQNB48ZleCT5Dd8wUKcJSO0UXIjGbZJa4MpouJg+FpshZtaLfpdsDdVuo
+         VSsXZVj/lWZt7X1AJkJVZ3r1kNyqero9DEdDvWqSLQ+g/ycX0ZrimmIwIO5jMKCNBoAL
+         LI+//uPTZo2Y0xhTcvPCcDJxz5LZeda2hASH8CLTJ+RTp8xUvVyEXjb4Uk5wi/wtIRaY
+         QoZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697211445; x=1697816245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7RR80S9VVoI26pp6PPSfkckIvUSInMqHwCFYPrN8cEo=;
+        b=DTVn3OXB2k1B2L7ndFtOCxcJ0EdluEf3hmLRZnUmxMHArL1+eHKZmMETz+mdb5KsuY
+         vvjxu3SSgGKu3CJoeipTvlg59wEShO3XgINpXzm6Azen8TJVTsIz3ax4wsUwKjSNuL3e
+         m5mlNbQia49tewVizypJG4Qj/C5IS5/YHVPEWPkTGDjRSgOYGWbmJCMsA/DZfJY+Rcrb
+         12j2+VRS6IV5UkwHnXGFtv+kXi3NHjhgMkQMKS9lUEAHcEHToi95voNPmYEVyIb3TO90
+         Lt/IX8y7J5TVuCoKuvHI4WWFP1DnUNjtVkg/E6P+mThMYOTvJW70iSiBnGO+qsosDtJG
+         KQ2Q==
+X-Gm-Message-State: AOJu0YzrNWrcZ+mwGwHdfRnJbiVpGXSNqzwG7zj/hAOp5kQ3hefkyQ4V
+	vfRtcQAhC5Y9IOArgcrlbD1PDva+KpM=
+X-Google-Smtp-Source: AGHT+IG5PxYwOsDh+FYajoOlxlehnSCwwf3OTVC3VUnLrvW1x5jPaopvsu6MPB+7CANkPirBN9MyDg==
+X-Received: by 2002:a05:6402:f25:b0:53d:d4e7:af5f with SMTP id i37-20020a0564020f2500b0053dd4e7af5fmr8435837eda.13.1697211444873;
+        Fri, 13 Oct 2023 08:37:24 -0700 (PDT)
+Received: from localhost (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id c25-20020aa7d619000000b0053622a35665sm11456083edr.66.2023.10.13.08.37.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Oct 2023 08:37:24 -0700 (PDT)
+From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/3] Renesas SoC updates for v6.7 (take two)
-Date: Fri, 13 Oct 2023 14:39:12 +0200
-Message-Id: <cover.1697200117.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/6] soc/tegra: Changes for v6.7-rc1
+Date: Fri, 13 Oct 2023 17:37:17 +0200
+Message-ID: <20231013153723.1729109-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.42.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+Hi ARM SoC maintainers,
 
-This is my second pull request for the inclusion of Renesas SoC updates
-for v6.7.
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-It consists of 3 parts:
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-  [GIT PULL 1/3] Renesas ARM defconfig updates for v6.7 (take two)
+are available in the Git repository at:
 
-    - Enable support for the Renesas RZ/G3S (R9A08G045) SoC in the arm64
-      defconfig.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.7-soc
 
-  [GIT PULL 2/3] Renesas DT binding updates for v6.7 (take two)
+for you to fetch changes up to cda263907a6f88c75fb97cf7adecffaafb6237ec:
 
-    - Document support for the Renesas RZ/G3S SMARC SoM and SMARC
-      Carrier-II EVK development boards,
-    - Document support for the Renesas R-Car S4 Starter Kit.
+  soc/tegra: pmc: Drop the ->opp_to_performance_state() callback (2023-10-13 13:58:36 +0200)
 
-  [GIT PULL 3/3] Renesas DTS updates for v6.7 (take two)
+Thanks,
+Thierry
 
-    - Improve audio clock accuracy on the RZ/{G2L,G2LC,V2L} SMARC EVK
-      development boards,
-    - Add FLASH support for the Renesas Bock-W development board,
-    - Add L2 cache and non-coherent DMA support on the RZ/Five SoC and the
-      RZ/Five SMARC development board,
-    - Add initial support for the RZ/G3S SoC and the RZ/G3S SMARC SoM and
-      SMARC Carrier-II EVK development boards,
-    - Add initial support for the R8A779F4 variant of the R-Car S4-8 SoC
-      and the R-Car S4 Starter Kit development board,
-    - Apply DT overlays to base DTBs to improve validation and usability.
+----------------------------------------------------------------
+soc/tegra: Changes for v6.7-rc1
 
-  Note that this includes:
-    - Tag clk-fixes-for-linus from the clock tree, which contains the
-      fixed Versa3 clock generator clock index handling that was merged
-      in v6.6-rc4,
-    - Tag renesas-r9a08g045-dt-binding-defs-tag, which contains clock
-      definitions for the Renesas RZ/G3S (R9A08G045) SoC, shared by the
-      clock driver and DT source files.
+This contains a few minor cleanups for PMC and CBB.
 
-Thanks for pulling!
+----------------------------------------------------------------
+Ulf Hansson (1):
+      soc/tegra: pmc: Drop the ->opp_to_performance_state() callback
 
-Gr{oetje,eeting}s,
+Uwe Kleine-König (1):
+      soc/tegra: cbb: tegra194-cbb: Convert to platform remove callback returning void
 
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ drivers/soc/tegra/cbb/tegra194-cbb.c | 6 ++----
+ drivers/soc/tegra/pmc.c              | 8 --------
+ 2 files changed, 2 insertions(+), 12 deletions(-)
