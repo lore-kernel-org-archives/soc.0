@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6443BCDB486
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E764CDB48B
 	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5694DC433BD; Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 40D41C433B6;
+	id 4D72BC433BB; Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37F51C433AD;
 	Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1697230838;
-	bh=y02e1HEsJT4UOKiKjaPgz55YdtkgHu5XjPPUF7jfdzU=;
+	bh=5pX8vmhrY8vGL1+r7AoDT7ikwWx/TyfaAjmM47S0SOw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=q2/VHBwabBLzAzCYitaLrykFFs19OVHMTC7oyCq/Z4rXPnYW6uAwY99pWm1O4XWQr
-	 ohFGV1b70VjIhGsi4OAe6BquKqfE2jO0IfYyswQYCRwDoU+h+IBxAo35wbHphtcsdX
-	 CMygoydVLQ8SRD6DmCzP7YhQenW4SxDHccZZvKmlKeDVLkQIfB5g2SPZZYMDu3XL9J
-	 WOVQ+FDvO8EHutAbgpMA1FvGtCn7nbA8z31L9KKnYY8j3DykMNEc7m333ysbRc5rwj
-	 hJelxgw2Rb4mmxxo7bZsMDTgf9xi+yiHteQelkfDKM9bJvp/r0pRGCFSfM2aXJtnmQ
-	 Qo1kYLcIO60HA==
+	b=m3kr3MIQIXcPHM2cZ5U0cu2nTXsRZLkq4/hTForyizA5ue/c2A5kRuXSVGVsXSmj/
+	 y9pWqXIN3TnU03jNK/8Mo+zT25NQ0cKN58e213+2KGXytZNU695S/07oOQFYlfxosc
+	 4HWDkrNSHW9TswH8QCkOZwt0NmijhAZEbmcL/cscs+dcgaGv8YouOT3p9OOdYI/Ftx
+	 d0jQkI02xTAdX+VqmZNJthucNsxr9vpWJE8zk/UH/B4fJ8NRnjLFW6ja2IWl7i4QfF
+	 HQs6m/oV0KB1Qb+92NZ/PyGPlCtF3oli+GUN1Drh6b/zzPx13BTRhDt4SAaS3HgVCU
+	 OTsJ0pj3uP01g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23969E1F675;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D4ABE1F669;
 	Fri, 13 Oct 2023 21:00:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Allwinner device tree changes for 6.7
+Subject: Re: [GIT PULL] IXP4xx DTS updates
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169723083814.14185.18292508712580178245.git-patchwork-notify@kernel.org>
+ <169723083811.14185.6796754734729286432.git-patchwork-notify@kernel.org>
 Date: Fri, 13 Oct 2023 21:00:38 +0000
-References: <20231013194203.GA2155816@jernej-laptop>
-In-Reply-To: <20231013194203.GA2155816@jernej-laptop>
-To: Jernej Skrabec <jernej@kernel.org>
+References: <CACRpkdZZ6W8uic97S9=Aa+S+s0-0k50TDw1e00u6gFcQfAVDdw@mail.gmail.com>
+In-Reply-To: <CACRpkdZZ6W8uic97S9=Aa+S+s0-0k50TDw1e00u6gFcQfAVDdw@mail.gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 13 Oct 2023 21:42:03 +0200 you wrote:
-> Hi!
+On Mon, 9 Oct 2023 22:53:10 +0200 you wrote:
+> Hi SoC maintainers,
 > 
-> Please pull following device tree changes for 6.7.
+> here are some updates to the Intel IXP4xx device tree files, and some
+> bindings that go with those updates.
 > 
-> Best regards,
-> Jernej
+> Please pull it in!
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Allwinner device tree changes for 6.7
-    https://git.kernel.org/soc/soc/c/37d01395d9c8
+  - [GIT,PULL] IXP4xx DTS updates
+    https://git.kernel.org/soc/soc/c/dcbd30f887d4
 
 You are awesome, thank you!
 -- 
