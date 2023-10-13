@@ -1,76 +1,43 @@
-Return-Path: <SRS0=NGH2=F3=gmail.com=thierry.reding@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 226CACDB485
-	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 15:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82C50CDB47E
+	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 19:42:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 08336C433CB; Fri, 13 Oct 2023 15:37:34 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17FBCC433C8;
-	Fri, 13 Oct 2023 15:37:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17FBCC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-53da72739c3so3914191a12.3;
-        Fri, 13 Oct 2023 08:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697211451; x=1697816251; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CNAgka3FvOAsw8o3RYXySdSDUfmIIBBX4anYSnIwdp0=;
-        b=G50tJwOdKjhsYrbSu2ZcPlxU3O8aDXvYi+1QNE1jSB5u3M7jz2gB5mthVaqSjkAikd
-         KvGRDqqZwkPDMBNzqcLc0ZcQTpVoIPpDMvmLm/o9umZBxuu5WI1wEB2IGxzIEgCyTl7U
-         Hhn0/fOSbhH0KzkhPr6PpWJPdNbX9vwc8HJogrdcDlHAzADKJKPLYp9dPdQvCEeU68v6
-         ktXZlCbt9uDzoVb1+kQ37qIuQJOxO6XFiB55O2UEJ9KQEz0ONcZ9ErZTwdf6di9NU82q
-         crx4WKPGpU4yvnFdCL8igzXQP5aXjZRu7hJidaDcpT2yZzqehkAEwfqexQDTLLEzh7oY
-         AneQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697211451; x=1697816251;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CNAgka3FvOAsw8o3RYXySdSDUfmIIBBX4anYSnIwdp0=;
-        b=gggJwRwfJqpRaPgYreHud5FEvENDFUjVo4M3/aCdfrieMD7/ueYWf6WNtfcXvm6r0a
-         u604gWO605vowZ09klYFRlBS+1ZdI6xp/y5IKQUSE6ofVJkG0mlLMcuj015vZaNoj0kp
-         x3Q5JjmVGja4uCL9pPBexezE8NHrP4So2ccW/PubuhI/XcPPZh9cpic6e+VX+ReoGr2D
-         5zYIanU2UJXEVUdZDXZH+Y1LAnj0GN5mN40mdmlInPnplKoD4w49qVUrIUdSThJTsc2i
-         fd/g4EIs/wMPAYN6RovfDqQPKUoNVBOCITVc/6NGz6h7HmpRqgfL+Bc43qNAZoOjH17n
-         Pt4Q==
-X-Gm-Message-State: AOJu0YzZcXF9mjo4DedOsl0Kh/YP9nWIA/oyE3uNJjPRR2sHid+QQ1PN
-	s7UrD54a8z69Z1792U7YtkZFmhL0KNg=
-X-Google-Smtp-Source: AGHT+IH8I+K28mrFHIIHCAnqmELBv3ZkkWnfIipzfeY38HXq0bgTnkvoJtmdtdo2llbVApAGXvhvqQ==
-X-Received: by 2002:a05:6402:b58:b0:53d:d4a0:3154 with SMTP id bx24-20020a0564020b5800b0053dd4a03154mr6293896edb.31.1697211451101;
-        Fri, 13 Oct 2023 08:37:31 -0700 (PDT)
-Received: from localhost (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05640217c900b0053d9a862e2csm4809094edy.56.2023.10.13.08.37.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 08:37:30 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
+	id 30C68C433CA; Fri, 13 Oct 2023 19:42:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58102C433C7;
+	Fri, 13 Oct 2023 19:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697226128;
+	bh=yFjcgfyV87BKrvcHoDa+1ShbWAW68Ug14kruJEKcHPM=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=eieYSk+Xxu7RVN4fIy437leAx7jmwvO1bjGm3FblMym8CcowHpdfhg6w3zAyvx5sW
+	 /3j5Yatp4Y5AWgi17RApBo5O8D6p6xfFJbI0tiLmGSlYZyBtaI5fbuE1qrotZYBSWb
+	 4/vP9NSQmaDVlEwWRZhiKBzg3VIUNf80AeyoeNZGRNKK0RWveioeI1LopDggbLCUjV
+	 Vw2SuZtZR/zzK1GxdkKG2aa3hS0QvX+YdyOnmIYPCgUzwCHFgL7UgaT7ggwx/Uf+TG
+	 wow1LL/ZSMeLUYbZlQXG4nTzIb+iD48aVEdSi89VXnJq8dO/07a5iJF5eCFUJEKXqD
+	 q1JaQ2xLdj86A==
+Date: Fri, 13 Oct 2023 21:42:03 +0200
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] arm64: tegra: Device tree changes for v6.7-rc1
-Date: Fri, 13 Oct 2023 17:37:22 +0200
-Message-ID: <20231013153723.1729109-6-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231013153723.1729109-1-thierry.reding@gmail.com>
-References: <20231013153723.1729109-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner device tree changes for 6.7
+Message-ID: <20231013194203.GA2155816@jernej-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi ARM SoC maintainers,
+Hi!
+
+Please pull following device tree changes for 6.7.
+
+Best regards,
+Jernej
 
 The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
@@ -78,56 +45,75 @@ The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.7-arm64-dt
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.7-1
 
-for you to fetch changes up to c0b80988eb78d6423249ab530bfbc6b238790a26:
+for you to fetch changes up to c3f7c14856ebbeb8e9e19439b9f5ec66f88744b9:
 
-  arm64: tegra: Use correct interrupts for Tegra234 TKE (2023-10-13 14:43:05 +0200)
-
-Thanks,
-Thierry
+  riscv: dts: allwinner: convert isa detection to new properties (2023-10-13 21:19:25 +0200)
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v6.7-rc1
-
-This contains some fixes for Tegra234 boards as well as some cleanups
-that will help with json-schema validation.
-
-For older devices, there's now support for display on Smaug (a.k.a.
-Pixel C) and the IOMMU for host1x is enabled on Tegra132, which should
-help with large memory allocations for display and multimedia.
+- Added V3s nodes for PWM pinctrl, EHCI and OHCI
+- RISC-V DT cleanups
+- Added new ISA property and PMU node to Allwinner D1
+- Added interconnect to R40 video codec node
+- New boards: Anbernic RG-Nano, BigTreeTech Pi, BigTreeTech CB1 SOM
 
 ----------------------------------------------------------------
-Brad Griffis (2):
-      arm64: tegra: Fix P3767 card detect polarity
-      arm64: tegra: Fix P3767 QSPI speed
+Chris Morgan (4):
+      arm: dts: sun8i: V3s: Add pinctrl for pwm
+      ARM: dts: sun8i: v3s: add EHCI and OHCI to v3s dts
+      dt-bindings: arm: sunxi: add Anbernic RG-Nano
+      ARM: dts: sunxi: add support for Anbernic RG-Nano
 
-Diogo Ivo (3):
-      arm64: tegra: Add DSI/CSI regulator on Smaug
-      arm64: tegra: Add backlight node on Smaug
-      arm64: tegra: Add display panel node on Smaug
+Conor Dooley (2):
+      riscv: dts: allwinner: remove address-cells from intc node
+      riscv: dts: allwinner: convert isa detection to new properties
 
-Jon Hunter (1):
-      arm64: tegra: Add power-sensors for Tegra234 boards
+Inochi Amaoto (1):
+      riscv: dts: allwinner: d1: Add PMU event node
 
-Rayyan Ansari (1):
-      arm64: tegra: Enable IOMMU for host1x on Tegra132
+Jernej Skrabec (1):
+      ARM: dts: sun8i-r40: Add interconnect to video-codec
 
-Thierry Reding (6):
-      arm64: tegra: Add missing current-speed for SBSA UART
-      arm64: tegra: Remove duplicate nodes on Jetson Orin NX
-      arm64: tegra: Use correct format for clocks property
-      arm64: tegra: Add dmas and dma-names for Tegra234 UARTE
-      arm64: tegra: Mark Tegra234 SPI as compatible with Tegra114
-      arm64: tegra: Use correct interrupts for Tegra234 TKE
+Krzysztof Kozlowski (1):
+      riscv: dts: use capital "OR" for multiple licenses in SPDX
 
- arch/arm64/boot/dts/nvidia/tegra132.dtsi           |  2 +
- arch/arm64/boot/dts/nvidia/tegra210-smaug.dts      | 66 ++++++++++++++++++++++
- .../arm64/boot/dts/nvidia/tegra234-p3701-0008.dtsi | 33 +++++++++++
- arch/arm64/boot/dts/nvidia/tegra234-p3701.dtsi     | 53 +++++++++++++++++
- .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |  1 +
- arch/arm64/boot/dts/nvidia/tegra234-p3767.dtsi     | 33 ++++++++++-
- .../dts/nvidia/tegra234-p3768-0000+p3767-0000.dts  | 13 -----
- .../arm64/boot/dts/nvidia/tegra234-p3768-0000.dtsi |  1 +
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           | 52 +++++++++--------
- 9 files changed, 214 insertions(+), 40 deletions(-)
+Martin Botka (6):
+      dt-bindings: nvmem: SID: Add binding for H616 SID controller
+      arm64: dts: allwinner: h616: Add SID controller node
+      dt-bindings: vendor-prefixes: Add BigTreeTech
+      dt-bindings: arm: sunxi: Add BigTreeTech boards
+      arm64: dts: allwinner: h616: Add BigTreeTech CB1 SoM & boards support
+      arm64: dts: allwinner: h616: Add BigTreeTech Pi support
+
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |  16 ++
+ .../bindings/nvmem/allwinner,sun4i-a10-sid.yaml    |   4 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm/boot/dts/allwinner/Makefile               |   1 +
+ arch/arm/boot/dts/allwinner/sun8i-r40.dtsi         |   2 +
+ .../dts/allwinner/sun8i-v3s-anbernic-rg-nano.dts   | 276 +++++++++++++++++++++
+ arch/arm/boot/dts/allwinner/sun8i-v3s.dtsi         |  35 +++
+ arch/arm64/boot/dts/allwinner/Makefile             |   2 +
+ .../sun50i-h616-bigtreetech-cb1-manta.dts          |  35 +++
+ .../dts/allwinner/sun50i-h616-bigtreetech-cb1.dtsi | 138 +++++++++++
+ .../dts/allwinner/sun50i-h616-bigtreetech-pi.dts   |  63 +++++
+ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     |   7 +
+ .../dts/allwinner/sun20i-common-regulators.dtsi    |   2 +-
+ .../dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts |   2 +-
+ .../sun20i-d1-lichee-rv-86-panel-480p.dts          |   2 +-
+ .../sun20i-d1-lichee-rv-86-panel-720p.dts          |   2 +-
+ .../allwinner/sun20i-d1-lichee-rv-86-panel.dtsi    |   2 +-
+ .../dts/allwinner/sun20i-d1-lichee-rv-dock.dts     |   2 +-
+ .../boot/dts/allwinner/sun20i-d1-lichee-rv.dts     |   2 +-
+ .../dts/allwinner/sun20i-d1-mangopi-mq-pro.dts     |   2 +-
+ arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts  |   2 +-
+ arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi       |   2 +-
+ .../boot/dts/allwinner/sun20i-d1s-mangopi-mq.dts   |   2 +-
+ arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi      |  45 +++-
+ arch/riscv/boot/dts/allwinner/sunxi-d1-t113.dtsi   |   2 +-
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |   2 +-
+ 26 files changed, 636 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v3s-anbernic-rg-nano.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-bigtreetech-cb1-manta.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-bigtreetech-cb1.dtsi
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-bigtreetech-pi.dts
