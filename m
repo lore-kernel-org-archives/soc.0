@@ -1,114 +1,57 @@
-Return-Path: <SRS0=29jm=F3=arndb.de=arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92210CDB47E
-	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 20:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCBC6C41513
+	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4264CC433CA; Fri, 13 Oct 2023 20:40:50 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2727EC433C8;
-	Fri, 13 Oct 2023 20:40:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2727EC433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id D07E95C00E5;
-	Fri, 13 Oct 2023 16:40:46 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 13 Oct 2023 16:40:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1697229646; x=1697316046; bh=06
-	mxbtZACsI2mVsJaW6iWZzyglMNLK41Ina8KQ/hz3Q=; b=a5cLWoeD6+VBwKuKKc
-	BeEzZSu9MaU1Nvn/JVAPtb8BlKUJAMkHd/SflSCJvR0Yj+xkMGmeD2z2ul717X3m
-	V2q1GGxyje9Q5JNYOAt5veH0TCIxe/Cc6XPMPevdnv5Z6B7i754B+vYajPMJkMXY
-	O5EgnvtCWt090WxE49g8YcG9b0vxNPvBFhrLOxrUZ3faukLlqexS1crs8mallkde
-	LMi4XqYBL2AIzjC8lghtUejmF0gBdTiwOcs+coG/sGaBZKRLRLEnjSe1U5O+utqj
-	NLGqzpVoLc5F5f4mTVTZDUsDC4t/676N69RtbJ+Rop8lAJHPZrLFCLq6UEUcjF8r
-	UNqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1697229646; x=1697316046; bh=06mxbtZACsI2m
-	VsJaW6iWZzyglMNLK41Ina8KQ/hz3Q=; b=bmgO8zJQvS07tKEapmtUHCrU6YQzK
-	gM8GiHzcsemm1nmFr1ch2890ov6ltYqo5MgUnw7wOdxgdYy3Z5Xvdb7fAtsntt4v
-	Jjbu6H/riZcMCYKxFZckz4+SwmDJX7EC7kr+jBlAV4G8EgJFoS9N3nhYSDJalepO
-	2vUaeVxZzIFA2aKwDfUrLQw8fWGjMLcETkGtxDnGS6lq4N7mERBBYwWuMJCfNc0T
-	o5eTHTP4teDong198h88yPItbQQEliB53YY9pBximD/2b0tC4/L80g8tIMP0g/n4
-	H4CfjM5IqdvVIcFrpfbODzENuiMXfI74jGGKEQjYFFjf65ybCxGBYIvlg==
-X-ME-Sender: <xms:TaspZSUfMd2VWe8fMwzwnuVtU_eKAt0EGuN0hXJbnxNYHLuasDrRNA>
-    <xme:TaspZemc92PHOpzKJXIxqsdkYA0r8q4zo6Q0XrMRhENVXkYx2cdOWZhVdMXSTdhp6
-    L-hBKWnxSQFHEgc2r8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrieefgdduvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:TaspZWZ9k7PGSQ1HsltnUKO-s-ggZGrzy3kAL9Ym4Lgm8TaSeKV4YA>
-    <xmx:TaspZZV0YUvciXFEuXekFbDtG2Rh8ajqgantqWHDNzbe5nIHTqIPZQ>
-    <xmx:TaspZclF3JLWrUPj9kD64Y_VBdVwXHHeyaMH9NUKkgws0wvrKLnfSw>
-    <xmx:TqspZWUzFr3wEPZ0QMw-4jWg-88E0u_Wx-IpWBL-TyC02xwfitnFcA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A2C0DB60089; Fri, 13 Oct 2023 16:40:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
+	id 99FADC433CB; Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 84AEBC433C8
+	for <soc@kernel.org>; Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697230827;
+	bh=0A9cV9SvZ66tPU7ineqPD63Gv4g30zE+1j6A6ItAFEU=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=KutRH1eIOBhFStDzS0FMZ/NzXNs1ECtQ/XbQiz1ewwT0StfX1CKYbbNFsFuBh9QSj
+	 Ci5wKUnri2wPkeyYbAHnIHsb+3dzjUNw2ZrQmfsJCYx6Ax7H2gUeHJHtIhLEunMVi6
+	 NPhYRFAxhbP3u+5AN3ZSjQQ5bpl1Oz4oMr/nBgoiwxaMILdslacy1kDltw62/e+gbi
+	 XjrP1nyS9R8Cm9t3mYF9RJPQEpO/ffXZ+cQ2juwwOkSMlWYjBHxaRY61POexjSUy9W
+	 gwriqtio6mhEhaabgZuooSgIoPWRVzlWrMgxxvIJYLg7HBtd2HNqb8v1pJsFx63aCJ
+	 v4G2bBzRC0Tyw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DAF8C73FEA;
+	Fri, 13 Oct 2023 21:00:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Message-Id: <ae62c7e0-3e72-403c-abb4-569573037980@app.fastmail.com>
-In-Reply-To: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
-References: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
-Date: Fri, 13 Oct 2023 22:40:25 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <169723082730.14185.14096185393524341795.git-patchwork-summary@kernel.org>
+Date: Fri, 13 Oct 2023 21:00:27 +0000
 List-Id: <soc.lore.kernel.org>
-To: "Matthias Brugger" <matthias.bgg@gmail.com>, arm <arm@kernel.org>,
- "SoC Team" <soc@kernel.org>
-Cc: 
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
- "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- "Alexandre Mergnat" <amergnat@baylibre.com>, "Chen-Yu Tsai" <wens@csie.org>,
- "Macpaul Lin" <macpaul.lin@mediatek.com>,
- =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Subject: Re: [GIT PULL] arm64: dts: mediatek: Updates for v6.7
-Content-Type: text/plain
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Mon, Oct 9, 2023, at 12:34, Matthias Brugger wrote:
-> Hi Arnd and Olof,
->
-> Please find below a few patches for the 64 bit DTS files targeted for v6.7.
->
-> The patches were picked up with the help from Angelo.
-> With these changes we have now support for the Genio 1200 EVK board for IoT 
-> applications. Also the MT8365 from the same business line has much more support 
-> of peripherals.
-> Also support for the new 4th revision of the Acer Chromebook 514 was added. The 
-> difference with older board is the audio codec used.
-> On the Mobile phone side of things, support for the Helio X10, which is used by 
-> the Sony Xperia M5 got support for the display.
+Hello:
 
-Hi Matthias,
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-The contents all look good and I'm happy to merge them, but I noticed that
-the branch is based on -rc4, while my soc/dt branch is based on -rc3.
+Patch: IXP4xx MAINTAINERS entries
+  Submitter: Krzysztof Hałasa <khalasa@piap.pl>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=792037
+  Lore link: https://lore.kernel.org/r/m3ttqxu4ru.fsf@t19.piap.pl
 
-Pulling it in would slightly mess up the git history and the 'git request-pull'
-output because of the backmerge of the mainline contents. Do you
-have a hard dependency on something that went into rc4, or can you
-rebase the branch to -rc3 or earlier?
 
-I usually recommend using -rc1 as a base unless there is an important
-dependency on something that was merged later.
+Total patches: 1
 
-      Arnd
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
