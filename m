@@ -4,30 +4,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2690FCDB47E
-	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 12:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52EA4CDB47E
+	for <soc@archiver.kernel.org>; Fri, 13 Oct 2023 12:39:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C6F43C433CB; Fri, 13 Oct 2023 12:26:58 +0000 (UTC)
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	id 06543C433CA; Fri, 13 Oct 2023 12:39:33 +0000 (UTC)
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1352AC433C7
-	for <soc@kernel.org>; Fri, 13 Oct 2023 12:26:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1352AC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id E9FD8C433C8
+	for <soc@kernel.org>; Fri, 13 Oct 2023 12:39:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E9FD8C433C8
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f151:5551:1af6:b316])
-	by michel.telenet-ops.be with bizsmtp
-	id xQSm2A00g56FAx306QSmrh; Fri, 13 Oct 2023 14:26:48 +0200
+	by xavier.telenet-ops.be with bizsmtp
+	id xQfM2A00G56FAx301QfMq9; Fri, 13 Oct 2023 14:39:23 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1qrHFb-006Gfe-5a;
-	Fri, 13 Oct 2023 14:26:46 +0200
+	id 1qrHRl-006Ggi-UP;
+	Fri, 13 Oct 2023 14:39:21 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1qrHFe-002JL0-Hn;
-	Fri, 13 Oct 2023 14:26:46 +0200
+	id 1qrHRp-002Jo7-C2;
+	Fri, 13 Oct 2023 14:39:21 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -36,52 +36,128 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas fixes for v6.6 (take two)
-Date: Fri, 13 Oct 2023 14:26:44 +0200
-Message-Id: <cover.1697199963.git.geert+renesas@glider.be>
+Subject: [GIT PULL 3/3] Renesas DTS updates for v6.7 (take two)
+Date: Fri, 13 Oct 2023 14:39:15 +0200
+Message-Id: <cover.1697200123.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1697200117.git.geert+renesas@glider.be>
+References: <cover.1697200117.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit d70be079c3cf34bd91e1c8f7b4bc760356c9150c:
 
-The following changes since commit c1ec4b450ab729e30d043e927fdfcc9f764f61b7:
-
-  soc: renesas: Make ARCH_R9A07G043 (riscv version) depend on NONPORTABLE (2023-10-05 15:07:57 +0200)
+  arm64: dts: renesas: ulcb/kf: Use multi Component sound (2023-09-25 09:25:04 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v6.6-tag2
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.7-tag2
 
-for you to fetch changes up to 1531309aa2092a96c092fa662863ffa53da3ba93:
+for you to fetch changes up to a09c3e105a208580b9d9c868bac630c9263ff564:
 
-  soc: renesas: Make ARCH_R9A07G043 depend on required options (2023-10-12 19:46:49 +0200)
+  arm64: dts: renesas: Apply overlays to base dtbs (2023-10-12 20:34:21 +0200)
 
 ----------------------------------------------------------------
-Renesas fixes for v6.6 (take two)
+Renesas DTS updates for v6.7 (take two)
 
-  - Fix build failures due to missing RZ/Five dependencies.
+  - Improve audio clock accuracy on the RZ/{G2L,G2LC,V2L} SMARC EVK
+    development boards,
+  - Add FLASH support for the Renesas Bock-W development board,
+  - Add L2 cache and non-coherent DMA support on the RZ/Five SoC and the
+    RZ/Five SMARC development board,
+  - Add initial support for the RZ/G3S SoC and the RZ/G3S SMARC SoM and
+    SMARC Carrier-II EVK development boards,
+  - Add initial support for the R8A779F4 variant of the R-Car S4-8 SoC
+    and the R-Car S4 Starter Kit development board,
+  - Apply DT overlays to base DTBs to improve validation and usability.
 
-Note that this conflicts with renesas-drivers-for-v6.7-tag1, which I
-have sent a PR for two weeks ago, but which you haven't merged yet.
-The proper solution is to take the ARCH_R9A07G043 section from
-renesas-fixes-for-v6.6-tag2.
-
-Thanks for pulling!
+Note that this includes:
+  - Tag clk-fixes-for-linus from the clock tree, which contains the
+    fixed Versa3 clock generator clock index handling that was merged
+    in v6.6-rc4,
+  - Tag renesas-r9a08g045-dt-binding-defs-tag, which contains clock
+    definitions for the Renesas RZ/G3S (R9A08G045) SoC, shared by the
+    clock driver and DT source files.
 ----------------------------------------------------------------
-Conor Dooley (1):
-      soc: renesas: Make ARCH_R9A07G043 depend on required options
+Biju Das (5):
+      dt-bindings: clock: versaclock3: Add description for #clock-cells property
+      clk: vc3: Fix 64 by 64 division
+      clk: vc3: Fix output clock mapping
+      clk: vc3: Make vc3_clk_mux enum values based on vc3_clk enum values
+      arm64: dts: renesas: rz-smarc: Use versa3 clk for audio mclk
 
- drivers/soc/renesas/Kconfig | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Claudiu Beznea (8):
+      dt-bindings: clock: renesas,rzg2l-cpg: Document RZ/G3S SoC
+      arm64: dts: renesas: Add initial DTSI for RZ/G3S SoC
+      arm64: dts: renesas: Add initial support for RZ/G3S SMARC SoM
+      arm64: dts: renesas: Add initial device tree for RZ SMARC Carrier-II Board
+      arm64: dts: renesas: Add initial device tree for RZ/G3S SMARC EVK board
+      arm64: dts: renesas: r9a08g045: Add nodes for SDHI1 and SDHI2
+      arm64: dts: renesas: r9a08g045: Add missing cache-level for L3 cache
+      arm64: dts: renesas: rzg3s-smarc-som: Spelling s/device-type/device_type/
 
-Gr{oetje,eeting}s,
+Geert Uytterhoeven (3):
+      Merge tag 'clk-fixes-for-linus' of https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux into renesas-dts-for-v6.7
+      ARM: dts: renesas: bockw: Add FLASH node
+      Merge tag 'renesas-r9a08g045-dt-binding-defs-tag' into renesas-dts-for-v6.7
 
-						Geert
+Kuninori Morimoto (2):
+      arm64: dts: renesas: Add Renesas R8A779F4 SoC support
+      arm64: dts: renesas: Add R-Car S4 Starter Kit support
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Lad Prabhakar (3):
+      riscv: dts: renesas: r9a07g043f: Add L2 cache node
+      riscv: dts: renesas: r9a07g043f: Add dma-noncoherent property
+      riscv: dts: renesas: rzfive-smarc: Enable the blocks which were explicitly disabled
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Marek Vasut (2):
+      clk: si521xx: Use REGCACHE_FLAT instead of NONE
+      clk: si521xx: Fix regmap write accessor
+
+Rob Herring (1):
+      arm64: dts: renesas: Apply overlays to base dtbs
+
+Timo Alho (1):
+      clk: tegra: fix error return case for recalc_rate
+
+Wolfram Sang (1):
+      arm64: dts: renesas: ebisu: Document Ebisu-4D support
+
+Zhifeng Tang (1):
+      clk: sprd: Fix thm_parents incorrect configuration
+
+ .../devicetree/bindings/clock/renesas,5p35023.yaml |  11 +-
+ .../bindings/clock/renesas,rzg2l-cpg.yaml          |   1 +
+ .../devicetree/bindings/soc/renesas/renesas.yaml   |   2 +-
+ arch/arm/boot/dts/renesas/r8a7778-bockw.dts        |  34 +++
+ arch/arm64/boot/dts/renesas/Makefile               |  38 ++++
+ arch/arm64/boot/dts/renesas/ebisu.dtsi             |   2 +-
+ arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts     |   2 +-
+ arch/arm64/boot/dts/renesas/r8a779f4-s4sk.dts      | 240 ++++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r8a779f4.dtsi          |  12 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi         | 170 +++++++++++++++
+ arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts |  18 ++
+ arch/arm64/boot/dts/renesas/r9a08g045s33.dtsi      |  14 ++
+ arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi   |  14 +-
+ arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |  20 ++
+ arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |  20 ++
+ arch/arm64/boot/dts/renesas/rzg2ul-smarc.dtsi      |  24 ++
+ arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   | 142 ++++++++++++
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi       |  28 +++
+ arch/riscv/boot/dts/renesas/r9a07g043f.dtsi        |  13 ++
+ arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi  |  23 --
+ arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi      |  56 -----
+ drivers/clk/clk-si521xx.c                          |   9 +-
+ drivers/clk/clk-versaclock3.c                      |  81 ++++---
+ drivers/clk/sprd/ums512-clk.c                      |   2 +-
+ drivers/clk/tegra/clk-bpmp.c                       |   2 +-
+ include/dt-bindings/clock/r9a08g045-cpg.h          | 242 +++++++++++++++++++++
+ 26 files changed, 1080 insertions(+), 140 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779f4-s4sk.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779f4.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a08g045s33.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi
+ create mode 100644 include/dt-bindings/clock/r9a08g045-cpg.h
