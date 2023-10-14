@@ -1,265 +1,245 @@
-Return-Path: <SRS0=oI0V=F4=intel.com=lkp@kernel.org>
+Return-Path: <SRS0=tTDN=F4=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA5B8CDB482
-	for <soc@archiver.kernel.org>; Sat, 14 Oct 2023 06:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E07EBCDB465
+	for <soc@archiver.kernel.org>; Sat, 14 Oct 2023 22:00:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B132EC433C7; Sat, 14 Oct 2023 06:37:17 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id AAFCEC433C7; Sat, 14 Oct 2023 22:00:08 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6B7F2C433C8;
-	Sat, 14 Oct 2023 06:37:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B7F2C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697265435; x=1728801435;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qTONI1fWdA+lqNPUY29CNOZIdwmpNPm69ZTN+9zKPhg=;
-  b=Xdk+oiBtd+sK/BpXMO2CKVGTMZawDhEnWAX6DfX8NRCW10XvwRVmSIOF
-   2CiEF2/hwVb8iSn1+9AoyPsPRpCAm9K30sP3yKxvkxUF4wtd+5ln5tqmF
-   H0XCnuYgYE2hEUX9kckKqnYRPcMW+nhr0fokSi+rmJFFipWypFAl8UfCu
-   TlyXK1r3iDVEO56KzPwFQ/f7HPbMbqxI9/XI+jiV8n1Cl51i3Daz/JjnA
-   m0SA1lB9HrTcWSf+i5iAwqqemTFfRNIDkqbTVBFwqqikqKXp07eQdgI8I
-   C4bJEYZPwvXgC0TmrJbTSJknNZx0r/GLTfmsrd4u7AeUpboaUpS1vAOaD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="375658893"
-X-IronPort-AV: E=Sophos;i="6.03,224,1694761200"; 
-   d="scan'208";a="375658893"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 23:37:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="790108731"
-X-IronPort-AV: E=Sophos;i="6.03,224,1694761200"; 
-   d="scan'208";a="790108731"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Oct 2023 23:37:07 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qrYGm-0005mp-1d;
-	Sat, 14 Oct 2023 06:37:04 +0000
-Date: Sat, 14 Oct 2023 14:37:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-	s.nawrocki@samsung.com, linus.walleij@linaro.org,
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
-	will@kernel.org, arnd@arndb.de, olof@lixom.net,
-	cw00.choi@samsung.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 53A14C433C8
+	for <soc@kernel.org>; Sat, 14 Oct 2023 22:00:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53A14C433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qrmfV-0001zq-2D; Sat, 14 Oct 2023 23:59:33 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qrmfI-001hum-RA; Sat, 14 Oct 2023 23:59:20 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qrmfI-00GSU5-Fm; Sat, 14 Oct 2023 23:59:20 +0200
+Date: Sat, 14 Oct 2023 23:59:18 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peter.griffin@linaro.org, tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org, semen.protsenko@linaro.org,
-	soc@kernel.org, devicetree@vger.kernel.org,
+To: soc@kernel.org
+Cc: Nishanth Menon <nm@ti.com>, Herve Codina <herve.codina@bootlin.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	"Conor.Dooley" <conor.dooley@microchip.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-riscv@lists.infradead.org,
+	Karol Gugala <kgugala@antmicro.com>,
+	Qiang Zhao <qiang.zhao@nxp.com>,
+	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+	Rob Herring <robh@kernel.org>, linux-samsung-soc@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org, Ruan Jinjie <ruanjinjie@huawei.com>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>, Jon Hunter <jonathanh@nvidia.com>,
+	linux-rockchip@lists.infradead.org,
+	Gabriel Somlo <gsomlo@gmail.com>, Andy Gross <agross@kernel.org>,
+	Huisong Li <lihuisong@huawei.com>, Joel Stanley <joel@jms.id.au>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	"zhang.songyi" <zhang.songyi@zte.com.cn>,
+	Zev Weiss <zev@bewilderbeest.net>, Arnd Bergmann <arnd@arndb.de>,
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Lubomir Rintel <lkundrak@v3.sk>, Krzysztof Halasa <khalasa@piap.pl>,
+	loongarch@lists.linux.dev, Santosh Shilimkar <ssantosh@kernel.org>,
+	linux-tegra@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 13/21] clk: samsung: clk-gs101: Add cmu_top registers,
- plls, mux and gates
-Message-ID: <202310141437.xBrLtPIH-lkp@intel.com>
-References: <20231005155618.700312-14-peter.griffin@linaro.org>
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	linux-kernel@vger.kernel.org,
+	Shang XiaoJing <shangxiaojing@huawei.com>,
+	Leo Li <leoyang.li@nxp.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	linux-mediatek@lists.infradead.org,
+	Nick Alcock <nick.alcock@oracle.com>, linuxppc-dev@lists.ozlabs.org
+Subject: [GIT PULL] Convert drivers/soc to struct
+ platform_driver::remove_new()
+Message-ID: <20231014215918.prqhkk7kp2vobe3a@pengutronix.de>
+References: <20230925095532.1984344-1-u.kleine-koenig@pengutronix.de>
+ <CACPK8XeROYz_XaB3TvUhdXm7Vm8fjC8yU+mfvA58=_FiDrBy-g@mail.gmail.com>
+ <1b2fddf8-c0a6-4afa-8ad0-f280dea1607f@app.fastmail.com>
+ <f4hvrslynlgmxu4a2gogc5idvumskhaalxgwildy56yqk2wz7d@lkh4swkv52mi>
+ <20230928061449.xxqhyyrg6e357dn2@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7gysnf7ldsm65nug"
 Content-Disposition: inline
-In-Reply-To: <20231005155618.700312-14-peter.griffin@linaro.org>
-
-Hi Peter,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on krzk/for-next]
-[also build test WARNING on robh/for-next linus/master pinctrl-samsung/for-next v6.6-rc5 next-20231013]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-interrupt-controller-Add-gs101-interrupt-controller/20231005-235922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231005155618.700312-14-peter.griffin%40linaro.org
-patch subject: [PATCH 13/21] clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231014/202310141437.xBrLtPIH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231014/202310141437.xBrLtPIH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310141437.xBrLtPIH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/clk/samsung/clk-gs101.c:809:7: warning: unused variable 'mout_cmu_pdp_vra_p' [-Wunused-const-variable]
-     809 | PNAME(mout_cmu_pdp_vra_p)       = { "fout_shared2_pll", "dout_shared0_div3",
-         |       ^
->> drivers/clk/samsung/clk-gs101.c:888:7: warning: unused variable 'mout_cmu_boost_p' [-Wunused-const-variable]
-     888 | PNAME(mout_cmu_boost_p)         = { "dout_shared0_div4", "dout_shared1_div4",
-         |       ^
->> drivers/clk/samsung/clk-gs101.c:935:7: warning: unused variable 'mout_cmu_g2d_p' [-Wunused-const-variable]
-     935 | PNAME(mout_cmu_g2d_p)           = { "dout_shared0_div3", "fout_shared3_pll",
-         |       ^
-   3 warnings generated.
+In-Reply-To: <20230928061449.xxqhyyrg6e357dn2@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
 
-vim +/mout_cmu_pdp_vra_p +809 drivers/clk/samsung/clk-gs101.c
+--7gysnf7ldsm65nug
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   790	
-   791	PNAME(mout_cmu_hsi2_ufs_embd_p)	= { "oscclk", "dout_shared0_div4",
-   792					    "dout_shared2_div2", "fout_spare_pll" };
-   793	
-   794	PNAME(mout_cmu_hsi2_mmc_card_p)	= { "fout_shared2_pll", "fout_shared3_pll",
-   795					    "dout_shared0_div4", "fout_spare_pll" };
-   796	
-   797	/* List of parent clocks for Muxes in CMU_TOP: for CMU_CSIS */
-   798	PNAME(mout_cmu_csis_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   799					    "dout_shared1_div3", "dout_shared0_div4",
-   800					    "dout_shared1_div4", "dout_shared2_div2",
-   801					    "fout_spare_pll" };
-   802	
-   803	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PDP */
-   804	PNAME(mout_cmu_pdp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   805					    "dout_shared1_div3", "dout_shared0_div4",
-   806					    "dout_shared1_div4", "dout_shared2_div2",
-   807					    "fout_spare_pll" };
-   808	
- > 809	PNAME(mout_cmu_pdp_vra_p)	= { "fout_shared2_pll", "dout_shared0_div3",
-   810					    "fout_shared3_pll", "dout_shared1_div3",
-   811					    "dout_shared0_div4", "dout_shared1_div4",
-   812					    "fout_spare_pll" };
-   813	
-   814	/* List of parent clocks for Muxes in CMU_TOP: for CMU_IPP */
-   815	PNAME(mout_cmu_ipp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   816					    "dout_shared1_div3", "dout_shared0_div4",
-   817					    "dout_shared1_div4", "dout_shared2_div2",
-   818					    "fout_spare_pll" };
-   819	
-   820	/* List of parent clocks for Muxes in CMU_TOP: for CMU_G3AA */
-   821	PNAME(mout_cmu_g3aa_p)		= { "dout_shared0_div3", "fout_shared3_pll",
-   822					    "dout_shared1_div3", "dout_shared0_div4",
-   823					    "dout_shared1_div4", "dout_shared2_div2",
-   824					    "fout_spare_pll" };
-   825	
-   826	/* List of parent clocks for Muxes in CMU_TOP: for CMU_ITP */
-   827	PNAME(mout_cmu_itp_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   828					    "dout_shared1_div3", "dout_shared0_div4",
-   829					    "dout_shared1_div4", "dout_shared2_div2",
-   830					    "fout_spare_pll" };
-   831	
-   832	/* List of parent clocks for Muxes in CMU_TOP: for CMU_DNS */
-   833	PNAME(mout_cmu_dns_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   834					    "dout_shared1_div3", "dout_shared0_div4",
-   835					    "dout_shared1_div4", "dout_shared2_div2",
-   836					    "fout_spare_pll" };
-   837	
-   838	/* List of parent clocks for Muxes in CMU_TOP: for CMU_TNR */
-   839	PNAME(mout_cmu_tnr_bus_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   840					    "dout_shared1_div3", "dout_shared0_div4",
-   841					    "dout_shared1_div4", "dout_shared2_div2",
-   842					    "fout_spare_pll" };
-   843	
-   844	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MCSC */
-   845	PNAME(mout_cmu_mcsc_itsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   846					    "dout_shared1_div3", "dout_shared0_div4",
-   847					    "dout_shared1_div4", "dout_shared2_div2",
-   848					    "fout_spare_pll" };
-   849	
-   850	PNAME(mout_cmu_mcsc_mcsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   851					    "dout_shared1_div3", "dout_shared0_div4",
-   852					    "dout_shared1_div4", "dout_shared2_div2",
-   853					    "fout_spare_pll" };
-   854	
-   855	/* List of parent clocks for Muxes in CMU_TOP: for CMU_GDC */
-   856	PNAME(mout_cmu_gdc_scsc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   857					    "dout_shared1_div3", "dout_shared0_div4",
-   858					    "dout_shared1_div4", "dout_shared2_div2",
-   859					    "fout_spare_pll" };
-   860	
-   861	PNAME(mout_cmu_gdc_gdc0_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   862					    "dout_shared1_div3", "dout_shared0_div4",
-   863					    "dout_shared1_div4", "dout_shared2_div2",
-   864					    "fout_spare_pll" };
-   865	
-   866	PNAME(mout_cmu_gdc_gdc1_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   867					    "dout_shared1_div3", "dout_shared0_div4",
-   868					    "dout_shared1_div4", "dout_shared2_div2",
-   869					    "fout_spare_pll" };
-   870	
-   871	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MFC */
-   872	PNAME(mout_cmu_mfc_mfc_p)	= { "dout_shared0_div3", "fout_shared3_pll",
-   873					    "dout_shared1_div3", "dout_shared0_div4",
-   874					    "dout_shared1_div4", "dout_shared2_div2",
-   875					    "fout_spare_pll" };
-   876	
-   877	/* List of parent clocks for Muxes in CMU_TOP: for DDRPHY0/1/2/3 */
-   878	
-   879	PNAME(mout_cmu_mif_switch_p)	= { "fout_shared0_pll", "fout_shared1_pll",
-   880					    "dout_shared0_div2", "dout_shared1_div2",
-   881					    "fout_shared2_pll", "dout_shared0_div3",
-   882					    "fout_shared3_pll", "fout_spare_pll" };
-   883	
-   884	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MIF0/1/2/3 */
-   885	PNAME(mout_cmu_mif_busp_p)	= { "dout_shared0_div4", "dout_shared1_div4",
-   886					    "dout_shared0_div5", "fout_spare_pll" };
-   887	
- > 888	PNAME(mout_cmu_boost_p)		= { "dout_shared0_div4", "dout_shared1_div4",
-   889					    "dout_shared2_div2", "dout_shared3_div2" };
-   890	
-   891	/* List of parent clocks for Muxes in CMU_TOP: for CMU_MISC */
-   892	PNAME(mout_cmu_misc_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   893					    "dout_shared3_div2", "fout_spare_pll" };
-   894	PNAME(mout_cmu_misc_sss_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   895					    "dout_shared3_div2", "fout_spare_pll" };
-   896	
-   897	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PERIC0 */
-   898	PNAME(mout_cmu_peric0_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   899					    "dout_shared3_div2", "fout_spare_pll" };
-   900	PNAME(mout_cmu_peric0_ip_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   901					    "dout_shared3_div2", "fout_spare_pll" };
-   902	
-   903	/* List of parent clocks for Muxes in CMU_TOP: for CMU_PERIC1 */
-   904	PNAME(mout_cmu_peric1_bus_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   905					    "dout_shared3_div2", "fout_spare_pll" };
-   906	PNAME(mout_cmu_peric1_ip_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   907					    "dout_shared3_div2", "fout_spare_pll" };
-   908	
-   909	/* List of parent clocks for Muxes in CMU_TOP: for CMU_TPU */
-   910	PNAME(mout_cmu_tpu_tpu_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-   911					    "fout_shared2_pll", "fout_shared3_pll",
-   912					    "dout_shared0_div3", "dout_shared1_div3",
-   913					    "dout_shared0_div4", "fout_spare_pll" };
-   914	
-   915	PNAME(mout_cmu_tpu_tpuctl_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-   916					    "fout_shared2_pll", "fout_shared3_pll",
-   917					    "dout_shared0_div3", "dout_shared1_div3",
-   918					    "dout_shared0_div4", "fout_spare_pll" };
-   919	
-   920	PNAME(mout_cmu_tpu_bus_p)	= { "dout_shared0_div2", "dout_shared1_div2",
-   921					    "fout_shared2_pll", "fout_shared3_pll",
-   922					    "dout_shared0_div3", "dout_shared1_div3",
-   923					    "dout_shared0_div4", "fout_spare_pll" };
-   924	
-   925	PNAME(mout_cmu_tpu_uart_p)	= { "dout_shared0_div4", "dout_shared2_div2",
-   926					    "dout_shared3_div2", "fout_spare_pll" };
-   927	
-   928	/* List of parent clocks for Muxes in CMU_TOP: for CMU_BO */
-   929	PNAME(mout_cmu_bo_bus_p)	= { "fout_shared2_pll", "dout_shared0_div3",
-   930					    "fout_shared3_pll", "dout_shared1_div3",
-   931					    "dout_shared0_div4", "dout_shared1_div4",
-   932					    "fout_spare_pll" };
-   933	
-   934	/* List of parent clocks for Muxes in CMU_TOP: for CMU_G2D */
- > 935	PNAME(mout_cmu_g2d_p)		= { "dout_shared0_div3", "fout_shared3_pll",
-   936					    "dout_shared1_div3", "dout_shared0_div4",
-   937					    "dout_shared1_div4", "dout_shared2_div2",
-   938					    "fout_spare_pll" };
-   939	
+Hello Arnd,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+the following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+
+are available in the Git repository at:
+
+  https://git.pengutronix.de/git/ukl/linux tags/platform-remove-void-soc-fo=
+r-6.7-rc
+
+for you to fetch changes up to e77e6e3e909d33361c58af848a96e1f7f71ba7e4:
+
+  soc/pxa: ssp: Convert to platform remove callback returning void (2023-10=
+-14 23:27:34 +0200)
+
+----------------------------------------------------------------
+Convert drivers/soc to struct platform_driver::remove_new()
+
+This PR contains the patches I sent in the series available at
+https://lore.kernel.org/all/20230925095532.1984344-1-u.kleine-koenig@pengut=
+ronix.de
+that were not yet picked up in next as of next-20231013.
+
+It converts all drivers below drivers/soc to let their remove callback
+return void. See commit 5c5a7680e67b ("platform: Provide a remove
+callback that returns no value") for the rationale.
+
+----------------------------------------------------------------
+
+On Thu, Sep 28, 2023 at 08:14:49AM +0200, Uwe Kleine-K=F6nig wrote:
+> On Wed, Sep 27, 2023 at 04:01:58PM -0700, Bjorn Andersson wrote:
+> > On Wed, Sep 27, 2023 at 10:43:16AM +0200, Arnd Bergmann wrote:
+> > > On Wed, Sep 27, 2023, at 04:25, Joel Stanley wrote:
+> > > > On Mon, 25 Sept 2023 at 09:55, Uwe Kleine-K=F6nig <u.kleine-koenig@=
+pengutronix.de> wrote:
+> > > >>
+> > > >> this series converts all platform drivers below drivers/soc to use
+> > > >> .remove_new(). The motivation is to get rid of an integer return c=
+ode
+> > > >> that is (mostly) ignored by the platform driver core and error pro=
+ne on
+> > > >> the driver side.
+> > > >>
+> > > >> See commit 5c5a7680e67b ("platform: Provide a remove callback that
+> > > >> returns no value") for an extended explanation and the eventual go=
+al.
+> > > >>
+> > > >> As there is no single maintainer team for drivers/soc, I suggest t=
+he
+> > > >> individual maintainers to pick up "their" patches.
+> > > >
+> > > > I'd be happy if Arnd merged the lot at once. Arnd, what do you thin=
+k?
+> > > >
+> > > > If that will be too messy then I understand. I have queued the aspe=
+ed
+> > > > ones locally and will push that out if we decide that's the best way
+> > > > to go.
+> > >=20
+> > > The main downside of merging it all at once through the soc tree
+> > > is that there may be patches that conflict with other work going on
+> > > in individual drivers.
+> > >=20
+> > > What I'd suggest doing here is:
+> > >=20
+> > > - have platform maintainers pick up patches for their drivers
+> > >   if that is their preference for any reason
+> >=20
+> > I'd prefer this for the qcom drivers at least, please let me know if you
+> > would like me to proceed.
+>
+> I can send a pull request as Arnd suggested. So iff you want the qcom
+> drivers not be a part of that PR, just make sure they appear in next
+> during the next week. :-)
+>
+> > > - get a pull request from Uwe for the soc tree for anything that has
+> > >  not been picked up in one or two weeks from now
+
+Here comes the promised PR. The qcom patches are among the set of
+patches dropped here as they are already in next.
+
+To state the obvious: This is merge window material and the idea is that
+it's pulled into armsoc and then included in the armsoc v6.7-rc1 PR to
+Linus Torvalds. I hope it's not too late for that already.
+
+Best regards and thanks
+Uwe
+
+Uwe Kleine-K=F6nig (12):
+      soc/fsl: dpaa2-console: Convert to platform remove callback returning=
+ void
+      soc/fsl: cpm: qmc: Convert to platform remove callback returning void
+      soc/fsl: cpm: tsa: Convert to platform remove callback returning void
+      soc/fujitsu: a64fx-diag: Convert to platform remove callback returnin=
+g void
+      soc/hisilicon: kunpeng_hccs: Convert to platform remove callback retu=
+rning void
+      soc/ixp4xx: ixp4xx-npe: Convert to platform remove callback returning=
+ void
+      soc/ixp4xx: ixp4xx-qmgr: Convert to platform remove callback returnin=
+g void
+      soc/litex: litex_soc_ctrl: Convert to platform remove callback return=
+ing void
+      soc/loongson: loongson2_guts: Convert to platform remove callback ret=
+urning void
+      soc/mediatek: mtk-devapc: Convert to platform remove callback returni=
+ng void
+      soc/mediatek: mtk-mmsys: Convert to platform remove callback returnin=
+g void
+      soc/pxa: ssp: Convert to platform remove callback returning void
+
+ drivers/soc/fsl/dpaa2-console.c       | 6 ++----
+ drivers/soc/fsl/qe/qmc.c              | 6 ++----
+ drivers/soc/fsl/qe/tsa.c              | 5 ++---
+ drivers/soc/fujitsu/a64fx-diag.c      | 6 ++----
+ drivers/soc/hisilicon/kunpeng_hccs.c  | 6 ++----
+ drivers/soc/ixp4xx/ixp4xx-npe.c       | 6 ++----
+ drivers/soc/ixp4xx/ixp4xx-qmgr.c      | 5 ++---
+ drivers/soc/litex/litex_soc_ctrl.c    | 5 ++---
+ drivers/soc/loongson/loongson2_guts.c | 6 ++----
+ drivers/soc/mediatek/mtk-devapc.c     | 6 ++----
+ drivers/soc/mediatek/mtk-mmsys.c      | 6 ++----
+ drivers/soc/pxa/ssp.c                 | 6 ++----
+ 12 files changed, 24 insertions(+), 45 deletions(-)
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7gysnf7ldsm65nug
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUrDzUACgkQj4D7WH0S
+/k5j4gf/bF9kgxVuSiift0gAwVEYG58vErpILxnhavoGUJkIvS/2rxDkuHmTNQ5X
+QalfUGigAoE8LztKGVtaC0Xx+ie+VRIk5mw7tId7GP1bfzJnrekEsnRe0feT2zy4
+2d7Jc3JZ2H+C31SObKtmKNcav5jLzXd8vN/RS+w/tj9/nE/paVB+kcHIX17ZPGE2
+zIumGo0OqOAmN6fNwoqyqQuy22i5ECmPHi9DAJkeOg4/Hu017wBfW2V/FvHA+eee
+KpnkXofsyZDqGCLvlNHd4qBQG/88+W7qcVxbCoDebo18y86tj2IbgeeFfbihxKLO
+lcwKEm4ptKtWDPzYdLgO7nELl73FRw==
+=h2pz
+-----END PGP SIGNATURE-----
+
+--7gysnf7ldsm65nug--
