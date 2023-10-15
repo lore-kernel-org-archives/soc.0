@@ -1,44 +1,43 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF827CDB47E
-	for <soc@archiver.kernel.org>; Sun, 15 Oct 2023 13:23:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1855ACDB47E
+	for <soc@archiver.kernel.org>; Sun, 15 Oct 2023 17:57:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D3847C433CA; Sun, 15 Oct 2023 13:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2218FC433C7;
-	Sun, 15 Oct 2023 13:23:39 +0000 (UTC)
+	id CE47EC433CA; Sun, 15 Oct 2023 17:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164AFC433C7;
+	Sun, 15 Oct 2023 17:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697376225;
-	bh=PzYIh5x4stgxeOhHQOki/wbHVz41qHzFHJHGdIOAtsU=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JQwR453FEfsrTi+mjFxPluWuMRUNMxJrMTZNDL+DZZUaT04NbTIrFT0NjjqRM+mcr
-	 hk30GrlUGV6j42z/r+FAbtNS0IKbspAEzX0gM8vGr9KoxHUscBwAIODwyw2YTtNuDc
-	 RPz+usxkAfVAoF8oGD8HkSNqd0/WBz8SS7fG+rM2csSBQUKVFIpQE/Ndab3aMSqRNL
-	 e9IlPOMQEMlDvPT9JIfoSn/qBeKbii3DMvhFK7x5aMCJ8TLai2Otno08eZ5UeLXov7
-	 qPLxlTUxRWMFrWZ6R8AG7BB+enYRFzZHBkg6GYLvTkiWwmCzVRJLf2e4I/T4vrgAa2
-	 0nkVwHypq638g==
-From: Shawn Guo <shawnguo@kernel.org>
+	s=k20201202; t=1697392642;
+	bh=gQBz/tywLI6khoYjXkhndlRjY2WPkIkOHJnm5mSqvoQ=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=HnjTiS0rYToXY/MroH9bOXX2Oje6kjpUfIAtcNriw01FtdpKEiNnwg2Jqs0KMRrrM
+	 O71NNQo3VJGw3B0RS+JoR/t9lExeTSdPA83h61Q0L6S2a8jBYPtB12Jyj5xaN3Z2sq
+	 ChscWyMWLiU0PFyJm3IKrRmYPLoZniAGQktWqw5xDmutiVRKxPWqsyfowb6rEm6dCr
+	 9lO2kKiepgs2TIurt/dNhixj4Hz2DELLa5TThug158JZEpxkWX4oRnnGKfPiIpUzcO
+	 izpdzpWcuI6+mXrscuBGkhd2UkBMwtOGYB8UrxYqCRURARQzWVfqFvJD79CToSgmOQ
+	 aomufAGwPz33A==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>,
-	kernel@pengutronix.de,
-	linux-imx@nxp.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/4] i.MX defconfig changes for 6.7
-Date: Sun, 15 Oct 2023 21:23:00 +0800
-Message-Id: <20231015132300.2268016-4-shawnguo@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231015132300.2268016-1-shawnguo@kernel.org>
-References: <20231015132300.2268016-1-shawnguo@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] Qualcomm ARM64 DeviceTree fixes for v6.6
+Date: Sun, 15 Oct 2023 11:01:10 -0700
+Message-ID: <20231015180112.853805-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
 
 The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
@@ -46,24 +45,28 @@ The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-6.7
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-fixes-for-6.6
 
-for you to fetch changes up to f5f1783784193feee847071ce1443545b53da3d4:
+for you to fetch changes up to 725f593692ceedeab639b661298955b6f9ba8ec3:
 
-  arm64: defconfig: Enable Samsung DSIM driver (2023-09-25 08:19:51 +0800)
-
-----------------------------------------------------------------
-i.MX defconfig changes for 6.7:
-
-- Enable Samsung DSIM DRM bridge driver and USB mass storage support
-  in arm64 defconfig
+  arm64: dts: qcom: msm8996-xiaomi: fix missing clock populate (2023-09-19 20:05:57 -0700)
 
 ----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: defconfig: Enable Samsung DSIM driver
+Qualcomm ARM64 DeviceTree fixes for v6.6
 
-Fabio Estevam (1):
-      arm64: defconfig: Enable CONFIG_USB_MASS_STORAGE
+This fixes an error with an incorrect gpio-ranges preventing the PMIC
+GPIO instances from being registered on SA877P, and fixes a regression
+from a refactoring of the top-level clocks node that caused divclocks to
+no longer probe on a few of the MSM8996 devices.
 
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      arm64: dts: qcom: sa8775p: correct PMIC GPIO label in gpio-ranges
+      arm64: dts: qcom: apq8096-db820c: fix missing clock populate
+      arm64: dts: qcom: msm8996-xiaomi: fix missing clock populate
+
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts        | 32 ++++++++++------------
+ .../arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi | 32 ++++++++++------------
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts | 18 ++++++------
+ arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi        |  2 +-
+ 4 files changed, 39 insertions(+), 45 deletions(-)
