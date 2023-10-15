@@ -1,85 +1,79 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5804CDB47E
-	for <soc@archiver.kernel.org>; Sun, 15 Oct 2023 12:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35574CDB47E
+	for <soc@archiver.kernel.org>; Sun, 15 Oct 2023 13:23:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A2626C433C7; Sun, 15 Oct 2023 12:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81BAC433C8;
-	Sun, 15 Oct 2023 12:26:49 +0000 (UTC)
+	id D7261C433CB; Sun, 15 Oct 2023 13:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CD9C433C7;
+	Sun, 15 Oct 2023 13:23:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697372810;
-	bh=zBwZ22WhA8Pm7lbRFNqudT/MXBkLzektixBt5qpzImA=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=didLG8HHLROsbpRWbIbViWWz0dYGhc8QliEqOZTHjz1qQufOYPFmOkFDgMUu6QaS7
-	 Rt3i8WLVyBMYowBKeNJv1PYX7rmk59n6x8bTYdVF53LG0DEMdOZlJde4AwHx4ywEsX
-	 VfGQ3w/bQSQdxFGXj2fvi0LyGp66g+HPWcQ83CgDM6/cm60vCP6zHmal9Re9evqQrV
-	 66ZGuD+FVVUh4I6a7Ooeu4jupA4Q+7/WdLsJ5/6S50ktqvfMtWKOUNWLnCMOB/UZBu
-	 gimpE55OHMzXC+DhMcIRiAttZ9hgGDct50mkavham9wbChW/4Mt5sncK5L0+5Rej2Y
-	 /v6+odLfJMWCA==
-Date: Sun, 15 Oct 2023 13:26:47 +0100
-From: Conor Dooley <conor@kernel.org>
+	s=k20201202; t=1697376207;
+	bh=r+5+8Ov+or5whqk2pH4sKVTobvJ2w6jckTWYqYUqMUo=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=PXeXTATKPEc6sas7VYIGuhNmcoOGI6sHD37T9HhZExirdPn7ydokHzox/77PtmvMx
+	 l1REl+gkM3xwZ8c6dM/B9wElX7mOkf7FGb2DZAFl1Fo82/s18DOZkxWkBK/xoiV3o3
+	 D1o/PetqVv4bYJZcx36eZ1amOkQ2GS2AsuyYrQGUzuS0cfZeTaMKIDGIRbsACoYiXt
+	 qxJT7keM+IAawMeRTbijdVNj9PTWK9eAvVMRSFtZ0QwTlp85qj8EEbRoqirsSmS7TD
+	 3unEDb/mrxejwgXGhTj+m+ANkq0UAN5mfozKuBOnqdzeGlYIj2/1D3wAqTgl9KMKCi
+	 SyqFg5A4V8PbQ==
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V Devicetrees for v6.6-final
-Message-ID: <20231015-outmatch-tragedy-228f91d396b5@spud>
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>,
+	kernel@pengutronix.de,
+	linux-imx@nxp.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/4] i.MX dt-bindings changes for 6.7
+Date: Sun, 15 Oct 2023 21:22:57 +0800
+Message-Id: <20231015132300.2268016-1-shawnguo@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="QNViNBABpYrMGRfy"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
---QNViNBABpYrMGRfy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey Arnd,
-
-Just a single patch for you here, been quiet on the fixes front :)
-
-Thanks,
-Conor.
-
-The following changes since commit 1558209533f140624a00408bdab796ab3f309450:
-
-  riscv: dts: starfive: visionfive 2: Fix uart0 pins sort order (2023-09-13 14:24:56 +0100)
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.6-final
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.7
 
-for you to fetch changes up to cf98fe6b579e55aa71b6197e34c112b51f0c2a66:
+for you to fetch changes up to 3a9dd87084faa6b60ab30a48bc27f849f490d5b3:
 
-  riscv: dts: starfive: visionfive 2: correct spi's ss pin (2023-10-12 10:23:23 +0100)
-
-----------------------------------------------------------------
-RISC-V Devicetrees for v6.6-final
-
-A single fix for the Starfive VisionFive 2 platform so that chip select
-for SPI matches the vendor documentation.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  dt-bindings: arm: fsl: Add TQ-Systems LS1088 based boards (2023-10-10 10:17:36 +0800)
 
 ----------------------------------------------------------------
-Nam Cao (1):
-      riscv: dts: starfive: visionfive 2: correct spi's ss pin
+i.MX dt-bindings for 6.7:
 
- arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- Compatibles for new boards: TQ-Systems LS1043A/LS1046A and LS1088
+  based boards, VAR-SOM-MX6 SoM, SolidRun LX2162A SoM & Clearfog,
+  and phyGATE-Tauri-L board.
+- Add missing i.MX23 based board compatibles.
 
---QNViNBABpYrMGRfy
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Fabio Estevam (1):
+      dt-bindings: arm: fsl: Document the missing imx23 boards
 
------BEGIN PGP SIGNATURE-----
+Gregor Herburger (2):
+      dt-bindings: arm: fsl: Add TQ-Systems LS1043A/LS1046A based boards
+      dt-bindings: arm: fsl: Add TQ-Systems LS1088 based boards
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZSvahwAKCRB4tDGHoIJi
-0mQWAQDSV4anPpArYsHAbzU4wWhilKmEzpKHclJrUEemKce6ZwEAucIWM6b5NxTu
-lLbA2Pz7P5YwJ4lViHDoIsZ3hH3JOwU=
-=KhTv
------END PGP SIGNATURE-----
+James Hilliard (1):
+      dt-bindings: arm: fsl: Add VAR-SOM-MX6 SoM with Custom Board
 
---QNViNBABpYrMGRfy--
+Josua Mayer (1):
+      dt-bindings: arm: Add SolidRun LX2162A SoM & Clearfog Board
+
+Yannic Moog (1):
+      dt-bindings: arm: fsl: add phyGATE-Tauri-L board
+
+ Documentation/devicetree/bindings/arm/fsl.yaml | 43 ++++++++++++++++++++++++--
+ 1 file changed, 41 insertions(+), 2 deletions(-)
