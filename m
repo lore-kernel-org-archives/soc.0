@@ -1,210 +1,229 @@
-Return-Path: <SRS0=+Qs5=F6=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=eUZ1=F6=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 193E8CDB474
-	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 08:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A4F0CDB465
+	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 08:36:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7219C433CD; Mon, 16 Oct 2023 08:02:25 +0000 (UTC)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	id C3EE7C433C8; Mon, 16 Oct 2023 08:36:33 +0000 (UTC)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B8AA4C433C7;
-	Mon, 16 Oct 2023 08:02:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8AA4C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-53e2dc8fa02so5594594a12.2;
-        Mon, 16 Oct 2023 01:02:24 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9C5A8C433B7
+	for <soc@kernel.org>; Mon, 16 Oct 2023 08:36:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9C5A8C433B7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4054f790190so45900375e9.2
+        for <soc@kernel.org>; Mon, 16 Oct 2023 01:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697443343; x=1698048143; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1697445391; x=1698050191; darn=kernel.org;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lvF2PcqRl9KSZwBr6MB/2HHkdrTa98SVPuAoc53btQU=;
-        b=WtBXk+PAtYWqlTFbuc1KIq3j0cxan6ZRk7xwj99qqcIuIcpAEHlC9ZTbksIzNxuUr0
-         uwwxTnMr/cv3i3Q0cnVC7h5DwQsQEbqC7TU6Kx6jkR8tc0Q7XyMeHeKZ8AJo/npxgW6n
-         4KDCWuJc0Y1x9SdJuIm2FoqLt0rYC0Ow0UZ9ghbEwDUwmnldcPULqDLocD+QOU+EOGxo
-         kgPlRAWFmld3Q49MB0E0ugKb35RZ6tHWAE15iLGXr7FVP03AFPhgiZk8rIJbkTIQOPLd
-         fbEM8rRzMuj3u8N/awdT6FgSKhpsoCF1ULa6wwupHthXpHOLMuBA5I3bmPvMS8RArrGJ
-         bJWg==
+        bh=edc/9QVACl8VYWB1q6Q4hc0XYulJ2pb66eniekG3zCA=;
+        b=LPFF9lRmgA4swC5ytQBfWwEXGDQe04jdAq+Et2BkxhYd30vuBLxSVjhLPQCLVabeKH
+         qcPegAXtHKvNjWc2vERaZq6G7V0jxd0ra0wkT1emWHrRI0xK43v8goX4O9CC/Qby8+mT
+         th+jXibm13AA/9Eei05daC6L6aW3FldHZb+N5/vhbVdxkEaqoAs4ac1uZUc8jL4+KPIm
+         QHotVrrPkTIYvJzFqa3zjaNr2r+0UFaXMBAilbSvsi2F9cyaF895R85M+HIqM4LhDFvj
+         oH6TB+QgKN06b5CCmhM4CTrmC7S/wrdv8t3y0b3huNlRqbI5cuuwz2TAj/0w8BvzWho9
+         PvFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697443343; x=1698048143;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1697445391; x=1698050191;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvF2PcqRl9KSZwBr6MB/2HHkdrTa98SVPuAoc53btQU=;
-        b=gBmLplFKt+nhxQCL4SZiixNMx50Y9Vnjum0UloAw3UEkiau5sMaE/scS5OUotKuorD
-         Fs4vQiZX2RHY8w/z5YGnbdEYeFLtUzDY4Q0990/d4rVqNRTeYBE8QDfgb6c0rioFuow3
-         /hfCE2p+aqKQhpXpwdWhimboKl15F/CpMul0KnZoRqGwAd+s5FPeF265TkKLr/TnJRRC
-         Npx8whLOS7SxWv/dOSoyM8w8gHMDvpKrqtOj6WE/3I2O6ikqpQLwOholCK+FaIARgbOP
-         vT6JpO/qu0hCxPOx8oUoc4LciyQJKC7z2MX4YRiPn8Uf0Hbxjd/m8soZ8jCWFT/ZAVWv
-         sbJw==
-X-Gm-Message-State: AOJu0YxvEf26TAMsbVPeQiw30dSsfILlczX7v17bFLl8+pSwA4Gnx8lT
-	gXs5FeA9na+VsOUQsUwfgUQ=
-X-Google-Smtp-Source: AGHT+IElTsjn90fwq4hatmt/dgv1pYY/XJlmk6y+MMUK7RR8JqCX9MwWGnjQLP+uu5RVV+AOlO0f2Q==
-X-Received: by 2002:a05:6402:5192:b0:53e:2b80:2f74 with SMTP id q18-20020a056402519200b0053e2b802f74mr9645102edd.0.1697443342650;
-        Mon, 16 Oct 2023 01:02:22 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.161.188])
-        by smtp.gmail.com with ESMTPSA id u26-20020a50951a000000b0053ecef8786asm1190691eda.75.2023.10.16.01.02.21
+        bh=edc/9QVACl8VYWB1q6Q4hc0XYulJ2pb66eniekG3zCA=;
+        b=m12TMNtRmkURvpGYlRRECekgIvE/V81dTxOAt9Z4EH+vFASjvE74FnDoschaeknyq3
+         wVbYsUZVcKMQe96/ohs7Oa5vfOhULeaMsZ2JKgZiSoOY+UJCQ/EwepxXdK19XeMlGvuP
+         fAEbq8Xg9JJECspVDAVKC0WfvmKm0ifOITzsspazys2rSt5Wc2v2NDvPHmlA8W4x8CK3
+         M4BGVVXlktzB7O9iFUY+KMdiIwPDUSG2MAXXjV2/CQ4XprMoWmrbjYyDZZzS3hjARTKx
+         RP/XWjSNivTYBsY4oMpX3vhoZ3zWa/9+RrjHlN+avOEo2JD2Huk2cAEzRxNmrS/bgXaq
+         Tlxw==
+X-Gm-Message-State: AOJu0Yzi7gyA8UcRDpDBSaP7gzdKRNML/TwjoupOETUfbEoWhDfkLHqg
+	Ako4Eir2wxEvzs3llMzJpII0gmAl393djVkM2lG1h0pA
+X-Google-Smtp-Source: AGHT+IGEwoCbwVcDVenbyzWHs7IzOKM/jShsG4VLaYQNse9cqCm79Y3o4AZSYVK6iMkLVmyAKtgQyA==
+X-Received: by 2002:a05:600c:c9:b0:405:3dee:3515 with SMTP id u9-20020a05600c00c900b004053dee3515mr30359547wmm.27.1697445390782;
+        Mon, 16 Oct 2023 01:36:30 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:b5ab:4a16:fd45:8130? ([2a01:e0a:982:cbb0:b5ab:4a16:fd45:8130])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05600c358b00b004075d5664basm6629320wmq.8.2023.10.16.01.36.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 01:02:21 -0700 (PDT)
-Message-ID: <a2cbe324-9226-1d9d-2e7f-3ce7fcb706a0@gmail.com>
-Date: Mon, 16 Oct 2023 10:02:20 +0200
+        Mon, 16 Oct 2023 01:36:30 -0700 (PDT)
+Message-ID: <b3e1bf66-9182-4d48-88ef-7efc20466e7c@linaro.org>
+Date: Mon, 16 Oct 2023 10:36:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [GIT PULL] arm64: dts: mediatek: Updates for v6.7
-Content-Language: en-US, ca-ES, es-ES
-From: Matthias Brugger <matthias.bgg@gmail.com>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.7
+Reply-To: neil.armstrong@linaro.org
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, arm <arm@kernel.org>,
- SoC Team <soc@kernel.org>
-Cc: "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Alexandre Mergnat <amergnat@baylibre.com>, Chen-Yu Tsai <wens@csie.org>,
- Macpaul Lin <macpaul.lin@mediatek.com>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-References: <7a877ad9-481f-bad8-5cad-5d013c6cd70d@gmail.com>
- <ae62c7e0-3e72-403c-abb4-569573037980@app.fastmail.com>
- <aca26ff7-801c-65ad-0cc2-fef8a4f74e27@gmail.com>
-In-Reply-To: <aca26ff7-801c-65ad-0cc2-fef8a4f74e27@gmail.com>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+Hi,
 
-please find below the new tag, based on v6.6-rc3 this time, sorry for the mess.
-Please let me know if you need that in a separate patch or not. I'll no go 
-forward and delete the old tag.
+Here's a set of Amlogic ARM64 DT changeset for v6.7 with:
+- Add audio DT nodes for p200/p201/u200 to align with other boards
+- Add a bunch of peripherals for Amlogic-T7 (watchdog, power domain, pinctrl)
+- Add a bunch or peripherals for Amlogic-A1 (clk, usb, efuse, spi, uarts, emmc, ADC, rng, i2c)
+- Add NAND node on Amlogic AXG
+- Again a bunch of DT fixups for DT bindings check, we're getting close to 0 check errors, only a few remaining!
 
-Regards,
-Matthias
+New boards are added with this PR:
+  - Amlogic AD402 reference board based on A113L SoC
+  - Libre Computer Cottonwood boards
+    - The "Alta" board uses an a311d while the "Solitude" variant uses an s905d3
+    - Those boards were distributed to attendees of this year's Kernel Recipes & Embedded Recipes Event
 
----
+Neil
 
-The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-   Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
+   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v6.6-next-dts64.2
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.7
 
-for you to fetch changes up to 976868a021ee654f4cf6eb6a2f40f95c78c04093:
+for you to fetch changes up to f2d2200e47e942e4df16f0fe8a30aa1d91e4831a:
 
-   arm64: dts: mediatek: cherry: Configure eDP and internal display (2023-10-16 
-09:55:08 +0200)
+   arm64: dts: amlogic: a1: support all i2c masters and their muxes (2023-10-09 10:51:01 +0200)
 
 ----------------------------------------------------------------
-MediaTek ARM64 DTS updates for v6.7
-
-- Add support for SMI/IOMMU/LARBs, power domains and multimedia
-   related subsystems for the MT8365 SoC
-- Add support for MediaTek Genio 1200 IoT evaluation board
-- Add support for newer revisions of MT8192 Chromebooks
-- Add support for internal eDP display on MT8195 Cherry Chromebooks
-- Add display and display backlight support for the Helio X10 SoC and
-   for the Sony Xperia M5 smartphone
+Amlogic ARM64 DT changes for v6.7:
+- Add audio DT nodes for p200/p201/u200
+- Add a bunch of peripherals for Amlogic-T7 (watchdog, power domain, pinctrl)
+- Add a bunch or peripherals for Amlogic-A1 (clk, usb, efuse, spi, uarts, emmc, ADC, rng, i2c)
+- Add NAND node on Amlogic AXG
+- Again a bunch of DT fixups for DT bindings check
+- New boards:
+  - Amlogic AD402 reference board based on A113L SoC
+  - Libre Computer Cottonwood boards
 
 ----------------------------------------------------------------
-Alexandre Mergnat (7):
-       arm64: dts: mediatek: add mmsys support for mt8365 SoC
-       arm64: dts: mediatek: add camsys support for mt8365 SoC
-       arm64: dts: mediatek: add apu support for mt8365 SoC
-       arm64: dts: mediatek: add power domain support for mt8365 SoC
-       arm64: dts: mediatek: add smi support for mt8365 SoC
-       arm64: dts: mediatek: add larb support for mt8365 SoC
-       arm64: dts: mediatek: add iommu support for mt8365 SoC
+Alexander Stein (2):
+       arm64: dts: meson-g12: Fix clock order for amlogic,axg-tdm-iface devices
+       arm64: dts: meson-g12: Fix compatible for amlogic,g12a-tdmin
 
-AngeloGioacchino Del Regno (4):
-       arm64: dts: mediatek: mt6795: Add support for display blocks and DPI/DSI
-       arm64: dts: mediatek: mt6795-xperia-m5: Add display backlight support
-       arm64: dts: mediatek: mt6795-xperia-m5: Add DSI Display and its vregs
-       arm64: dts: mediatek: cherry: Configure eDP and internal display
+Alexey Romanov (4):
+       arm64: dts: meson: a1: enable efuse controller and setup its clk
+       arm64: dts: meson: a1: add hw rng node
+       arm64: dts: meson: a1: add ao secure node
+       arm64: dts: meson-s4: add hwrng node
 
-Chen-Yu Tsai (1):
-       arm64: dts: mediatek: mt8183-kukui: Add PMIC regulator supplies
+Arseniy Krasnov (1):
+       arm64: dts: amlogic: meson-axg: Meson NAND node
 
-Macpaul Lin (2):
-       dt-bindings: arm64: mediatek: add mt8395-evk board
-       arm64: dts: mediatek: add device-tree for Genio 1200 EVK board
+Christian Hewitt (3):
+       arm64: dts: meson: add audio playback to p200
+       arm64: dts: meson: add audio playback to p201
+       arm64: dts: meson: add audio playback to u200
 
-Nícolas F. R. A. Prado (5):
-       dt-bindings: arm64: dts: mediatek: Add rev5-sku2 of hayato
-       dt-bindings: arm64: dts: mediatek: Add rev4 of spherion
-       arm64: dts: mediatek: Remove asurada-audio dtsi files
-       arm64: dts: mediatek: Add hayato-rev5-sku2
-       arm64: dts: mediatek: Add spherion-rev4
+Dmitry Rokosov (9):
+       arm64: dts: meson: a1: reorder includes to keep them sorted
+       arm64: dts: meson: a1: remove extra empty line before reset node
+       arm64: dts: meson: a1: remove the unnecessary 'okay' status pwrc value
+       arm64: dts: meson: a1: reorder gpio_intc node definition
+       arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
+       arm64: dts: meson: a1: support USB controller in OTG mode
+       arm64: dts: introduce Amlogic AD402 reference board based on A113L SoC
+       dt-bindings: arm: amlogic: add Amlogic AD402 bindings
+       arm64: dts: amlogic: a1: support all i2c masters and their muxes
 
-  .../devicetree/bindings/arm/mediatek.yaml          |  16 +
-  arch/arm64/boot/dts/mediatek/Makefile              |   3 +
-  .../boot/dts/mediatek/mt6795-sony-xperia-m5.dts    | 101 +++
-  arch/arm64/boot/dts/mediatek/mt6795.dtsi           | 253 +++++-
-  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  28 +
-  .../mt8192-asurada-audio-rt1015p-rt5682.dtsi       |  19 -
-  .../dts/mediatek/mt8192-asurada-audio-rt1015p.dtsi |  26 -
-  .../dts/mediatek/mt8192-asurada-audio-rt5682.dtsi  |  21 -
-  .../boot/dts/mediatek/mt8192-asurada-hayato-r1.dts |  19 +-
-  .../dts/mediatek/mt8192-asurada-hayato-r5-sku2.dts |  64 ++
-  .../dts/mediatek/mt8192-asurada-spherion-r0.dts    |  19 +-
-  .../dts/mediatek/mt8192-asurada-spherion-r4.dts    |  77 ++
-  arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi   |  28 +
-  arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi    |  33 +
-  arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 210 +++++
-  .../boot/dts/mediatek/mt8395-genio-1200-evk.dts    | 901 +++++++++++++++++++++
-  16 files changed, 1749 insertions(+), 69 deletions(-)
-  delete mode 100644 
-arch/arm64/boot/dts/mediatek/mt8192-asurada-audio-rt1015p-rt5682.dtsi
-  delete mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-audio-rt1015p.dtsi
-  delete mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-audio-rt5682.dtsi
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r5-sku2.dts
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r4.dts
-  create mode 100644 arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
+George Stark (1):
+       arm64: dts: meson: a1: add saradc definition
 
-On 16/10/2023 09:52, Matthias Brugger wrote:
-> Hi Arnd,
-> 
-> On 13/10/2023 22:40, Arnd Bergmann wrote:
->> On Mon, Oct 9, 2023, at 12:34, Matthias Brugger wrote:
->>> Hi Arnd and Olof,
->>>
->>> Please find below a few patches for the 64 bit DTS files targeted for v6.7.
->>>
->>> The patches were picked up with the help from Angelo.
->>> With these changes we have now support for the Genio 1200 EVK board for IoT
->>> applications. Also the MT8365 from the same business line has much more support
->>> of peripherals.
->>> Also support for the new 4th revision of the Acer Chromebook 514 was added. The
->>> difference with older board is the audio codec used.
->>> On the Mobile phone side of things, support for the Helio X10, which is used by
->>> the Sony Xperia M5 got support for the display.
->>
->> Hi Matthias,
->>
->> The contents all look good and I'm happy to merge them, but I noticed that
->> the branch is based on -rc4, while my soc/dt branch is based on -rc3.
->>
->> Pulling it in would slightly mess up the git history and the 'git request-pull'
->> output because of the backmerge of the mainline contents. Do you
->> have a hard dependency on something that went into rc4, or can you
->> rebase the branch to -rc3 or earlier?
->>
->> I usually recommend using -rc1 as a base unless there is an important
->> dependency on something that was merged later.
->>
-> 
-> AFAIK ther is no dependency on -rc4. I'll send a new pull request based on the 
-> correct -rc3
-> 
-> Sorry for that.
-> 
-> Regards,
-> Matthias
+Huqiang Qin (2):
+       arm64: dts: Add watchdog node for Amlogic-T7 SoCs
+       arm64: dts: Add pinctrl node for Amlogic T7 SoCs
+
+Igor Prusov (2):
+       arm64: dts: meson: a1: Add SPIFC mux pins
+       arm64: dts: meson-a1-ad402: set SPIFC pins
+
+Jan Dakinevich (1):
+       arm64: dts: meson: a1: add eMMC controller and its pins
+
+Jerome Brunet (8):
+       arm64: dts: meson: u200: fix spdif output pin
+       arm64: dts: meson: u200: add missing audio clock controller
+       arm64: dts: meson: u200: add spdifout b routes
+       arm64: dts: meson: u200: use TDM C for HDMI
+       arm64: dts: meson: u200: add onboard devices
+       arm64: dts: meson: g12: name spdifout consistently
+       dt-bindings: arm: amlogic: add libretech cottonwood support
+       arm64: dts: amlogic: add libretech cottonwood support
+
+Martin Kurbanov (1):
+       arm64: dts: meson: a1: introduce SPI Flash Controller
+
+Neil Armstrong (1):
+       Merge branch 'genpd_dt' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm into v6.7/arm64-dt
+
+Oleg Lyovin (1):
+       arm64: dts: meson: a1: introduce UART_AO mux definitions
+
+Zelong Dong (1):
+       arm64: dts: meson: add IR controller for Meson-S4 SoC
+
+xianwei.zhao (2):
+       dt-bindings: power: add Amlogic T7 power domains
+       arm64: dts: amlogic: t7: add power domain controller node
+
+  Documentation/devicetree/bindings/arm/amlogic.yaml |   3 +
+  .../bindings/power/amlogic,meson-sec-pwrc.yaml     |   3 +-
+  arch/arm64/boot/dts/amlogic/Makefile               |   3 +
+  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |  28 +
+  arch/arm64/boot/dts/amlogic/meson-a1-ad402.dts     | 147 +++++
+  arch/arm64/boot/dts/amlogic/meson-a1.dtsi          | 369 ++++++++++++-
+  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |  13 +
+  arch/arm64/boot/dts/amlogic/meson-g12.dtsi         |  40 +-
+  arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    | 341 ++++++++++++
+  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |  10 +-
+  .../dts/amlogic/meson-g12b-a311d-libretech-cc.dts  | 121 ++++
+  arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |  10 +-
+  .../boot/dts/amlogic/meson-g12b-ugoos-am6.dts      |  10 +-
+  arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts    |  60 ++
+  arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts    |  39 ++
+  .../dts/amlogic/meson-libretech-cottonwood.dtsi    | 614 +++++++++++++++++++++
+  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     |   6 +
+  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  20 +
+  .../dts/amlogic/meson-sm1-s905d3-libretech-cc.dts  |  89 +++
+  include/dt-bindings/power/amlogic,t7-pwrc.h        |  63 +++
+  20 files changed, 1939 insertions(+), 50 deletions(-)
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-a1-ad402.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-libretech-cottonwood.dtsi
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dts
+  create mode 100644 include/dt-bindings/power/amlogic,t7-pwrc.h
