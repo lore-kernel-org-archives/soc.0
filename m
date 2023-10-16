@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A4F0CDB465
-	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 08:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF96CDB474
+	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 08:37:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3EE7C433C8; Mon, 16 Oct 2023 08:36:33 +0000 (UTC)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	id 2888BC433CC; Mon, 16 Oct 2023 08:37:41 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9C5A8C433B7
-	for <soc@kernel.org>; Mon, 16 Oct 2023 08:36:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9C5A8C433B7
+	by smtp.kernel.org (Postfix) with ESMTPS id 4A04BC433C8
+	for <soc@kernel.org>; Mon, 16 Oct 2023 08:37:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A04BC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4054f790190so45900375e9.2
-        for <soc@kernel.org>; Mon, 16 Oct 2023 01:36:32 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4075c58ac39so43534725e9.3
+        for <soc@kernel.org>; Mon, 16 Oct 2023 01:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697445391; x=1698050191; darn=kernel.org;
+        d=linaro.org; s=google; t=1697445458; x=1698050258; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=edc/9QVACl8VYWB1q6Q4hc0XYulJ2pb66eniekG3zCA=;
-        b=LPFF9lRmgA4swC5ytQBfWwEXGDQe04jdAq+Et2BkxhYd30vuBLxSVjhLPQCLVabeKH
-         qcPegAXtHKvNjWc2vERaZq6G7V0jxd0ra0wkT1emWHrRI0xK43v8goX4O9CC/Qby8+mT
-         th+jXibm13AA/9Eei05daC6L6aW3FldHZb+N5/vhbVdxkEaqoAs4ac1uZUc8jL4+KPIm
-         QHotVrrPkTIYvJzFqa3zjaNr2r+0UFaXMBAilbSvsi2F9cyaF895R85M+HIqM4LhDFvj
-         oH6TB+QgKN06b5CCmhM4CTrmC7S/wrdv8t3y0b3huNlRqbI5cuuwz2TAj/0w8BvzWho9
-         PvFg==
+        bh=rTcYqYafZKh61MOwbQxVbQ/Lja6In1E83xTrWheBRJc=;
+        b=UQcfqljIfBNFWAsSCo5S5kqh/3V0+3kOhoqJ0flVeijfVmayeln6BTiul/BlnoW2u6
+         CGrO4uso+IerIeuMSXupC2tF9WxZ+9KQUdGHQ59eivduAYtJXP2ThjjXqzgqAw9jA1U7
+         oxuILoukUx6eXh1A6nIlAn2GGJqUVXJaQ8lppPn/GXZ2rphTzIBQz9OwZkBpEU+pb9zc
+         FodEA55VZ2Ch3veqVFgdqhxCYqgy8KeXG4PlbBVRZZ8ak+E0engYVlRCfSGBuC2Uv8Jd
+         P5J7M4OH+rekmVw6jeNiDazoEQfxbRox5C5xmz3FI+3Huc0U5WeaI7xn7U5nYUz1x9Rg
+         S9qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697445391; x=1698050191;
+        d=1e100.net; s=20230601; t=1697445458; x=1698050258;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=edc/9QVACl8VYWB1q6Q4hc0XYulJ2pb66eniekG3zCA=;
-        b=m12TMNtRmkURvpGYlRRECekgIvE/V81dTxOAt9Z4EH+vFASjvE74FnDoschaeknyq3
-         wVbYsUZVcKMQe96/ohs7Oa5vfOhULeaMsZ2JKgZiSoOY+UJCQ/EwepxXdK19XeMlGvuP
-         fAEbq8Xg9JJECspVDAVKC0WfvmKm0ifOITzsspazys2rSt5Wc2v2NDvPHmlA8W4x8CK3
-         M4BGVVXlktzB7O9iFUY+KMdiIwPDUSG2MAXXjV2/CQ4XprMoWmrbjYyDZZzS3hjARTKx
-         RP/XWjSNivTYBsY4oMpX3vhoZ3zWa/9+RrjHlN+avOEo2JD2Huk2cAEzRxNmrS/bgXaq
-         Tlxw==
-X-Gm-Message-State: AOJu0Yzi7gyA8UcRDpDBSaP7gzdKRNML/TwjoupOETUfbEoWhDfkLHqg
-	Ako4Eir2wxEvzs3llMzJpII0gmAl393djVkM2lG1h0pA
-X-Google-Smtp-Source: AGHT+IGEwoCbwVcDVenbyzWHs7IzOKM/jShsG4VLaYQNse9cqCm79Y3o4AZSYVK6iMkLVmyAKtgQyA==
-X-Received: by 2002:a05:600c:c9:b0:405:3dee:3515 with SMTP id u9-20020a05600c00c900b004053dee3515mr30359547wmm.27.1697445390782;
-        Mon, 16 Oct 2023 01:36:30 -0700 (PDT)
+        bh=rTcYqYafZKh61MOwbQxVbQ/Lja6In1E83xTrWheBRJc=;
+        b=bphUSlVaQS774EjUdqiCFrtGFOzaGBomBkKckmSKOF7/ULTOnlGxhk5PCA12XouR/p
+         cmfeSxrbY8p5oOtJYoEV9KBKTTpbGVMaSzT88ctoE5Cl8923on+yH2GhUfAew733dd5G
+         dU94oVW4d+TaDhsDRdnBiDcF6KocnN8yJ8IqkFNCkrj5+vs9hY1Gg9wzxvOYElgJedTP
+         +KdV/qLLwOwjVzp2kDneTrcCm4ozaNu4WUvj6biFXdA/lmoYyA8/Hxh7JiChtcKB6v02
+         LOHSzNd/T3y0NndXfRCJs1O2GotNzuuw9DBS1ICeTZMGp+P8Wy1XRLWFPkH0tAVVESC/
+         zyEA==
+X-Gm-Message-State: AOJu0YyR3+Vfft6XKGnJS3KqiY8lVbngvGJkIXpKOzLYErZa4Fabygbw
+	KGXjxAY7kK/ZVTYVCN1cMLH6HFCcX3CrXqooYDNJEAcJ
+X-Google-Smtp-Source: AGHT+IHsEMQ8SCTS8ZorNLkIIvReNSc630e0ztnD1QL89wKHDLcTVq16AdmilglEKYOkydPvSU9ppQ==
+X-Received: by 2002:a05:600c:b4b:b0:405:3b1f:968b with SMTP id k11-20020a05600c0b4b00b004053b1f968bmr29498842wmr.21.1697445458392;
+        Mon, 16 Oct 2023 01:37:38 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:b5ab:4a16:fd45:8130? ([2a01:e0a:982:cbb0:b5ab:4a16:fd45:8130])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c358b00b004075d5664basm6629320wmq.8.2023.10.16.01.36.30
+        by smtp.gmail.com with ESMTPSA id p11-20020a05600c358b00b004075d5664basm6629320wmq.8.2023.10.16.01.37.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 01:36:30 -0700 (PDT)
-Message-ID: <b3e1bf66-9182-4d48-88ef-7efc20466e7c@linaro.org>
-Date: Mon, 16 Oct 2023 10:36:29 +0200
+        Mon, 16 Oct 2023 01:37:38 -0700 (PDT)
+Message-ID: <00ef6ab3-59c1-484a-9d70-50f16e4cc584@linaro.org>
+Date: Mon, 16 Oct 2023 10:37:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v6.7
+Subject: [GIT PULL] amlogic Drivers updates for v6.7
 Reply-To: neil.armstrong@linaro.org
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org, arm@kernel.org
@@ -93,18 +93,8 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a set of Amlogic ARM64 DT changeset for v6.7 with:
-- Add audio DT nodes for p200/p201/u200 to align with other boards
-- Add a bunch of peripherals for Amlogic-T7 (watchdog, power domain, pinctrl)
-- Add a bunch or peripherals for Amlogic-A1 (clk, usb, efuse, spi, uarts, emmc, ADC, rng, i2c)
-- Add NAND node on Amlogic AXG
-- Again a bunch of DT fixups for DT bindings check, we're getting close to 0 check errors, only a few remaining!
-
-New boards are added with this PR:
-  - Amlogic AD402 reference board based on A113L SoC
-  - Libre Computer Cottonwood boards
-    - The "Alta" board uses an a311d while the "Solitude" variant uses an s905d3
-    - Those boards were distributed to attendees of this year's Kernel Recipes & Embedded Recipes Event
+Here's an Amlogic Drivers changeset for v6.7, with only a couple of
+low priority fixes concerning the meson_sm driver.
 
 Neil
 
@@ -114,116 +104,24 @@ The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.7
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.7
 
-for you to fetch changes up to f2d2200e47e942e4df16f0fe8a30aa1d91e4831a:
+for you to fetch changes up to 5d59b6a49bb8f6841acf53affc0c4720fe7450e5:
 
-   arm64: dts: amlogic: a1: support all i2c masters and their muxes (2023-10-09 10:51:01 +0200)
-
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v6.7:
-- Add audio DT nodes for p200/p201/u200
-- Add a bunch of peripherals for Amlogic-T7 (watchdog, power domain, pinctrl)
-- Add a bunch or peripherals for Amlogic-A1 (clk, usb, efuse, spi, uarts, emmc, ADC, rng, i2c)
-- Add NAND node on Amlogic AXG
-- Again a bunch of DT fixups for DT bindings check
-- New boards:
-  - Amlogic AD402 reference board based on A113L SoC
-  - Libre Computer Cottonwood boards
+   firmware: meson: Use device_get_match_data() (2023-10-09 10:48:15 +0200)
 
 ----------------------------------------------------------------
-Alexander Stein (2):
-       arm64: dts: meson-g12: Fix clock order for amlogic,axg-tdm-iface devices
-       arm64: dts: meson-g12: Fix compatible for amlogic,g12a-tdmin
+Amlogic drivers changes for v6.7:
+- correct meson_sm_* API retval handling
+- Use device_get_match_data() in meson SM
 
-Alexey Romanov (4):
-       arm64: dts: meson: a1: enable efuse controller and setup its clk
-       arm64: dts: meson: a1: add hw rng node
-       arm64: dts: meson: a1: add ao secure node
-       arm64: dts: meson-s4: add hwrng node
+----------------------------------------------------------------
+Alexey Romanov (1):
+       drivers: meson: sm: correct meson_sm_* API retval handling
 
-Arseniy Krasnov (1):
-       arm64: dts: amlogic: meson-axg: Meson NAND node
+Rob Herring (1):
+       firmware: meson: Use device_get_match_data()
 
-Christian Hewitt (3):
-       arm64: dts: meson: add audio playback to p200
-       arm64: dts: meson: add audio playback to p201
-       arm64: dts: meson: add audio playback to u200
-
-Dmitry Rokosov (9):
-       arm64: dts: meson: a1: reorder includes to keep them sorted
-       arm64: dts: meson: a1: remove extra empty line before reset node
-       arm64: dts: meson: a1: remove the unnecessary 'okay' status pwrc value
-       arm64: dts: meson: a1: reorder gpio_intc node definition
-       arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
-       arm64: dts: meson: a1: support USB controller in OTG mode
-       arm64: dts: introduce Amlogic AD402 reference board based on A113L SoC
-       dt-bindings: arm: amlogic: add Amlogic AD402 bindings
-       arm64: dts: amlogic: a1: support all i2c masters and their muxes
-
-George Stark (1):
-       arm64: dts: meson: a1: add saradc definition
-
-Huqiang Qin (2):
-       arm64: dts: Add watchdog node for Amlogic-T7 SoCs
-       arm64: dts: Add pinctrl node for Amlogic T7 SoCs
-
-Igor Prusov (2):
-       arm64: dts: meson: a1: Add SPIFC mux pins
-       arm64: dts: meson-a1-ad402: set SPIFC pins
-
-Jan Dakinevich (1):
-       arm64: dts: meson: a1: add eMMC controller and its pins
-
-Jerome Brunet (8):
-       arm64: dts: meson: u200: fix spdif output pin
-       arm64: dts: meson: u200: add missing audio clock controller
-       arm64: dts: meson: u200: add spdifout b routes
-       arm64: dts: meson: u200: use TDM C for HDMI
-       arm64: dts: meson: u200: add onboard devices
-       arm64: dts: meson: g12: name spdifout consistently
-       dt-bindings: arm: amlogic: add libretech cottonwood support
-       arm64: dts: amlogic: add libretech cottonwood support
-
-Martin Kurbanov (1):
-       arm64: dts: meson: a1: introduce SPI Flash Controller
-
-Neil Armstrong (1):
-       Merge branch 'genpd_dt' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm into v6.7/arm64-dt
-
-Oleg Lyovin (1):
-       arm64: dts: meson: a1: introduce UART_AO mux definitions
-
-Zelong Dong (1):
-       arm64: dts: meson: add IR controller for Meson-S4 SoC
-
-xianwei.zhao (2):
-       dt-bindings: power: add Amlogic T7 power domains
-       arm64: dts: amlogic: t7: add power domain controller node
-
-  Documentation/devicetree/bindings/arm/amlogic.yaml |   3 +
-  .../bindings/power/amlogic,meson-sec-pwrc.yaml     |   3 +-
-  arch/arm64/boot/dts/amlogic/Makefile               |   3 +
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |  28 +
-  arch/arm64/boot/dts/amlogic/meson-a1-ad402.dts     | 147 +++++
-  arch/arm64/boot/dts/amlogic/meson-a1.dtsi          | 369 ++++++++++++-
-  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |  13 +
-  arch/arm64/boot/dts/amlogic/meson-g12.dtsi         |  40 +-
-  arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    | 341 ++++++++++++
-  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |  10 +-
-  .../dts/amlogic/meson-g12b-a311d-libretech-cc.dts  | 121 ++++
-  arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |  10 +-
-  .../boot/dts/amlogic/meson-g12b-ugoos-am6.dts      |  10 +-
-  arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts    |  60 ++
-  arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts    |  39 ++
-  .../dts/amlogic/meson-libretech-cottonwood.dtsi    | 614 +++++++++++++++++++++
-  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     |   6 +
-  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  20 +
-  .../dts/amlogic/meson-sm1-s905d3-libretech-cc.dts  |  89 +++
-  include/dt-bindings/power/amlogic,t7-pwrc.h        |  63 +++
-  20 files changed, 1939 insertions(+), 50 deletions(-)
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-a1-ad402.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-libretech-cottonwood.dtsi
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dts
-  create mode 100644 include/dt-bindings/power/amlogic,t7-pwrc.h
+  drivers/firmware/meson/meson_sm.c       | 25 ++++++++++++++++---------
+  include/linux/firmware/meson/meson_sm.h |  2 +-
+  2 files changed, 17 insertions(+), 10 deletions(-)
