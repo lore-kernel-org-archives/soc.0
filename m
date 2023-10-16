@@ -1,91 +1,64 @@
-Return-Path: <SRS0=S59y=F6=sntech.de=heiko@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A046ACDB465
-	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 21:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C3F1CDB465
+	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 21:31:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 875B2C433CA; Mon, 16 Oct 2023 21:28:54 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F0452C433C8;
-	Mon, 16 Oct 2023 21:28:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F0452C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from [194.95.143.137] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1qsV8s-00016V-Vc; Mon, 16 Oct 2023 23:28:51 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.6 #1
-Date: Mon, 16 Oct 2023 23:28:50 +0200
-Message-ID: <1839937.atdPhlSkOF@phil>
-In-Reply-To: <2167992.Mh6RI2rZIc@phil>
-References: <2167992.Mh6RI2rZIc@phil>
+	id E1BA2C433CB; Mon, 16 Oct 2023 21:31:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C50EFC433C8;
+	Mon, 16 Oct 2023 21:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697491917;
+	bh=m4wIRmaJCLwW7+XZloG5xRJzEhGyQ485SoqYdL67D1g=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=nGzm50+HgwjsGPxuWfvCO+MmW6Ryw0tqv9yXS3RHTmDL9wbv+uL6r3OIqaArYPjmc
+	 pAWIcaIcIba1OZ8aN3KWFWbFRn51xS3xQlzFnf1x78e2cHr5JMnMfCTtPvKgy0vLT8
+	 KB3smpR27cMDdRy3Ot6D9f6Ys7TwsJKDNZPg/C54MNXwT4LjjXNSg9NYWaVDn+mIJk
+	 JQ+nhp+HnzVPHs0D+km28y13ktDZEbEOEoQE9lYgrO3IE1sKLeArdIlBfnQGIqh/bE
+	 P/9UvL5ANBP9NavE1D8D64lhtavksQPNlyW4v0WDeH4RlSv2nqMVIeIEk9kMi7RThT
+	 VZBKqKSJXJF6w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B1B86E4E9B6;
+	Mon, 16 Oct 2023 21:31:57 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 6.7
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <169749191772.22284.6961066707017660050.git-patchwork-notify@kernel.org>
+Date: Mon, 16 Oct 2023 21:31:57 +0000
+References: <CACPK8XebMAQvgQTRH+KoaTFg7CzRkS79Fz3Kn8p4mbaezWGkUQ@mail.gmail.com>
+In-Reply-To: <CACPK8XebMAQvgQTRH+KoaTFg7CzRkS79Fz3Kn8p4mbaezWGkUQ@mail.gmail.com>
+To: Joel Stanley <joel@jms.id.au>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Am Montag, 16. Oktober 2023, 23:24:15 CEST schrieb Heiko Stuebner:
+Hello:
 
-please ignore this mail. The numbering is wrong and I've send
-a new correct pull request.
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Thanks
-Heiko
-
+On Mon, 16 Oct 2023 12:17:46 +1030 you wrote:
+> Hello soc maintainers,
+> 
+> I've rejigged my gpg setup and I'm now signing with a new sub-key. Let
+> me know if that causes any issues.
+> 
 > The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 > 
->   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.7-rockchip-dts32-1
-> 
-> for you to fetch changes up to c96b13d7c0e494e1072648301e61e13a2a85a362:
-> 
->   ARM: dts: rockchip: Switch to operating-points-v2 for RK3128's CPU (2023-10-04 23:27:04 +0200)
-> 
-> ----------------------------------------------------------------
-> Someone resurrected a rk3128 board and provided actual SMP support
-> for it. Of course firmware for that SoC does not come with TF-A so
-> it's the old-style SMP the older arm32 Rockchip SoCs use.
-> 
-> And additionally the rv1126 got pwm support.
-> 
-> ----------------------------------------------------------------
-> Alex Bee (4):
->       ARM: dts: rockchip: Add SRAM node for RK3128
->       ARM: dts: rockchip: Add CPU resets for RK3128
->       ARM: dts: rockchip: Enable SMP bring-up for RK3128
->       ARM: dts: rockchip: Switch to operating-points-v2 for RK3128's CPU
-> 
-> Jagan Teki (6):
->       dt-bindings: pwm: rockchip: Document rv1126-pwm
->       ARM: dts: rockchip: Add pwm2m0 pins to rv1126
->       ARM: dts: rockchip: Add pwm2 node to rv1126
->       ARM: dts: rockchip: Add pwm11m0 pins to rv1126
->       ARM: dts: rockchip: Add pwm11 node to rv1126
->       ARM: dts: rockchip: Enable pwm fan for edgeble-neu2
-> 
->  .../devicetree/bindings/pwm/pwm-rockchip.yaml      |  1 +
->  arch/arm/boot/dts/rockchip/rk3128.dtsi             | 61 ++++++++++++++++++++--
->  .../boot/dts/rockchip/rv1126-edgeble-neu2-io.dts   |  4 ++
->  arch/arm/boot/dts/rockchip/rv1126-pinctrl.dtsi     | 16 ++++++
->  arch/arm/boot/dts/rockchip/rv1126.dtsi             | 22 ++++++++
->  5 files changed, 100 insertions(+), 4 deletions(-)
-> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] ARM: aspeed: devicetree changes for 6.7
+    https://git.kernel.org/soc/soc/c/94d310e17858
 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
