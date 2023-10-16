@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 622A3CDB488
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62363CDB48B
 	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 21:31:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3543EC4166B; Mon, 16 Oct 2023 21:31:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B8DBC433AD;
+	id 2C505C43215; Mon, 16 Oct 2023 21:31:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0690AC433A9;
 	Mon, 16 Oct 2023 21:31:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1697491918;
-	bh=We43hs6WbpwVJE5Eu7AWI/GqH9WDo+rKxMx9xZR+5UU=;
+	bh=0UnEUFemqjL8YCfBB9A4AfAx0W9pLhyup5J0kKGNNRM=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=jk4EwyBejvQe0WotOPDlUbkx/qkGh5pK9eqcypYMRh8BcMaqWZEGiu0LxMTywK3ts
-	 zBtkVazi71lvNBurPFaDxYbyaU5K6Xj/x6BxsigcTYqPoAoSjoaqDCcb4j52bESWF8
-	 VI/19B2e8kfy/J8PXRaRPGium9G8HHBOIc1hZl51/7To8UjH9m8gNqnHymR8sX30iH
-	 KG17X0BTMkpbQsc3IDeipzA5b/Rw6F7ZMg27NtoAYV1HEoYpwAENYdBtDH3C9QBcZH
-	 p8Ul9xHsMtfq3lFmzWikzu11WAoLLWI84+uKC+A0aZxinP/uS1s1erOq4rlR5pLZvx
-	 TUAeJNHfvz3sA==
+	b=nXQZphC9vcheW/pubMbo0P7m0SQ+iRYFJWh9h+QGsKZ75AskQz++EVshjEnGK+dMu
+	 /u6CBsPpaBp/GM+17nIFvV+eqlIMHYqwtE1waVnCelkehtnxvM+/krGcve27R/qi/C
+	 qaUsP9NHVgB7HfboTssphvEeMBbNAraSTa4R3dxECHykk89p1vyiEGDAfyJCO+KEvL
+	 oVAqX5OL39ZXC3oLwvLLMRu7LC3iuTnTqmtBorUrikFaNLzzk8zB4CZLvxgtXtQUet
+	 x8KEDtV90pXNkMAkUABpbgb+pEtWteHzujIscAe2OQQGcN3vGRDtYE/XjZEkNh5KGd
+	 aZOxbYGRSqb3Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EB7E6C43170;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB5E9C595D0;
 	Mon, 16 Oct 2023 21:31:57 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.7
+Subject: Re: [GIT PULL 1/6] soc/tegra: Changes for v6.7-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169749191796.22284.10234671567461395214.git-patchwork-notify@kernel.org>
+ <169749191789.22284.4127168616629044938.git-patchwork-notify@kernel.org>
 Date: Mon, 16 Oct 2023 21:31:57 +0000
-References: <b3e1bf66-9182-4d48-88ef-7efc20466e7c@linaro.org>
-In-Reply-To: <b3e1bf66-9182-4d48-88ef-7efc20466e7c@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+References: <20231013153723.1729109-1-thierry.reding@gmail.com>
+In-Reply-To: <20231013153723.1729109-1-thierry.reding@gmail.com>
+To: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,30 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 16 Oct 2023 10:36:29 +0200 you wrote:
-> Hi,
+On Fri, 13 Oct 2023 17:37:17 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> Here's a set of Amlogic ARM64 DT changeset for v6.7 with:
-> - Add audio DT nodes for p200/p201/u200 to align with other boards
-> - Add a bunch of peripherals for Amlogic-T7 (watchdog, power domain, pinctrl)
-> - Add a bunch or peripherals for Amlogic-A1 (clk, usb, efuse, spi, uarts, emmc, ADC, rng, i2c)
-> - Add NAND node on Amlogic AXG
-> - Again a bunch of DT fixups for DT bindings check, we're getting close to 0 check errors, only a few remaining!
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+> 
+>   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] amlogic ARM64 DT updates for v6.7
-    https://git.kernel.org/soc/soc/c/0a84cbfb7fed
+  - [GIT,PULL,1/6] soc/tegra: Changes for v6.7-rc1
+    https://git.kernel.org/soc/soc/c/024d4292e426
+  - [GIT,PULL,2/6] firmware: tegra: Changes for v6.7-rc1
+    https://git.kernel.org/soc/soc/c/9e6e423a3665
+  - [GIT,PULL,3/6] dt-bindings: Changes for v6.7-rc1
+    (no matching commit)
+  - [GIT,PULL,4/6] memory: tegra: Changes for v6.7-rc1
+    https://git.kernel.org/soc/soc/c/78aee16af9c8
+  - [GIT,PULL,5/6] ARM: tegra: Device tree changes for v6.7-rc1
+    (no matching commit)
+  - [GIT,PULL,6/6] arm64: tegra: Device tree changes for v6.7-rc1
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
