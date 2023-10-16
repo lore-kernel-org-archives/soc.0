@@ -1,46 +1,64 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <SRS0=8Y9D=F6=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA20BCDB47E
-	for <soc@archiver.kernel.org>; Sun, 15 Oct 2023 20:42:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82C7BCDB47E
+	for <soc@archiver.kernel.org>; Mon, 16 Oct 2023 01:48:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6EF39C433CB; Sun, 15 Oct 2023 20:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85569C433C7;
-	Sun, 15 Oct 2023 20:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697402529;
-	bh=2QcJxdj1dNEjZSdTGOXK0OBHigtXZ9WZTFrQturLIb4=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=p89Mj+ocqDFLrkusXf17YeAys9wWImveMoPZNmuSZN1QWlBNspCoH418klWGHIx46
-	 I87kbIXls2bnd0elGoHKkw/65bqzq/BTPIlmPWtkTwRWck7iI4Xey0Pa7k9WFlVejj
-	 ABASqFc9P110/s2ZURspUb398IJ8SSRZIc+WeVtLtWAKUZ7stpNShvH49lH27V+Rp/
-	 s0HsqfwIjCG8kVeZmaEl8yFvgwbcD/ks/60p+WL01kpzf3UbY6IY+UIWFuAs76FWJP
-	 YgsenOHa5p8lh/Kumfx6ZWxMXU0SXy93aGqh3PCeKKawxlFeodthM94o/J2eqk1NDX
-	 FKbTMkeVwgZaA==
-From: Bjorn Andersson <andersson@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [GIT PULL] Qualcomm ARM DeviceTree updates for v6.7
-Date: Sun, 15 Oct 2023 13:45:57 -0700
-Message-ID: <20231015204558.855987-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.42.0
+	id 404F5C433C9; Mon, 16 Oct 2023 01:48:01 +0000 (UTC)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 69EC2C433C7
+	for <soc@kernel.org>; Mon, 16 Oct 2023 01:47:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 69EC2C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9ba1eb73c27so652104266b.3
+        for <soc@kernel.org>; Sun, 15 Oct 2023 18:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google; t=1697420877; x=1698025677; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2gi9c7eKRL4XqjpqT3Lj//N+9Q1k9fI+kzxaFF2cLfM=;
+        b=YJcFTsw4jaIl8OPRz8Z8qK/R65Fg+25nwEjvFYKGgjRbqBbICNxYaq+eJuZpYQkOL+
+         CHGNGeXBOlvEJNyaQWh7V1ooAhAeF7sMNlRnQr/JvVJnzNd+Q+cx9EN61wmy2hRrk3sG
+         CPbKJzFCWwNoXag6Sh7zRMvc5c5vBwW70g2Js=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697420877; x=1698025677;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2gi9c7eKRL4XqjpqT3Lj//N+9Q1k9fI+kzxaFF2cLfM=;
+        b=hzT+VA/5uHgeptGk3a+YOFtevtZaW6hy3z7VzSrHuddBt2dmKZWOmK4eAD0gd/EASb
+         KfjCrxB3WTvNFvIrcWoCfif2fVSMqjq+HLcYBzYhvv17J7j4JpwcU6JF6Fok5C43jjPl
+         OMBktTU5kVjHTRIfSDjiwIfW7Wqn/G8MWVfmQqUChCkHrx83RNI0QALfaH65SoroW78F
+         Oa+xNS0UpLRr8FCyRKQMiyLBR4N7tXm8I9Rqnc0FhSxoFKbj2XI69TC3Ci64kVeUbEie
+         Qpik4pyua0M0D/07XQYPRaGVhDAUsWwtIlQ4EKrq2JZxLF4rqecYQp37O0UYVVWJMD+k
+         smRA==
+X-Gm-Message-State: AOJu0Ywih5MUH0/uogKeDXwW6NHuTjNGu3D4ibnW2KVAtdIfQLjrJVLI
+	KxrWyCLrtzS2lf4kkgdkaM8eVRetgO74XI5cCq2fcSPRLE4=
+X-Google-Smtp-Source: AGHT+IEeNVVDtf63s6s5ORKap+0q4n2lmr+oL3UCh6TIq2jsgVIqT9pZ3aPv49+cZqQMMqe8NW6/XpdvZKFWgvQ6sQ0=
+X-Received: by 2002:a17:907:3e94:b0:9be:6ff7:1287 with SMTP id
+ hs20-20020a1709073e9400b009be6ff71287mr5051490ejc.57.1697420877178; Sun, 15
+ Oct 2023 18:47:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 16 Oct 2023 12:17:46 +1030
+Message-ID: <CACPK8XebMAQvgQTRH+KoaTFg7CzRkS79Fz3Kn8p4mbaezWGkUQ@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: devicetree changes for 6.7
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Andrew Jeffery <andrew@aj.id.au>
+Content-Type: text/plain; charset="UTF-8"
 
+Hello soc maintainers,
+
+I've rejigged my gpg setup and I'm now signing with a new sub-key. Let
+me know if that causes any issues.
 
 The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
@@ -48,49 +66,46 @@ The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-6.7
+  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
+tags/aspeed-6.7-devicetree
 
-for you to fetch changes up to 2138c32af19740ab54bf5622890fe96ba3530b75:
+for you to fetch changes up to d024ca2792b17577c48f0cf23d648cea6f1a0b9a:
 
-  ARM: dts: qcom: ipq8064: move keys and leds out of soc node (2023-09-27 16:10:23 -0700)
-
-----------------------------------------------------------------
-Qualcomm ARM DeviceTree updates for v6.7
-
-RPM master stats is introduced for MSM8226 and MSM8974. The PCIe PHY of
-SDX55 is transitioned to the new binding. The hall sensor on the Samsung
-Galaxy Tab 4 is inverted.
-
-A number of fixes reported from DeviceTree validation are fixed.
+  ARM: dts: aspeed: mtmitchell: Add I2C NVMe alias port (2023-10-13
+14:59:03 +1030)
 
 ----------------------------------------------------------------
-Dmitry Baryshkov (1):
-      ARM: dts: qcom-sdx55: switch PCIe QMP PHY to new style of bindings
+ASPEED device tree updates for 6.7
 
-Krzysztof Kozlowski (7):
-      ARM: dts: qcom: drop incorrect cell-index from SPMI
-      ARM: dts: qcom: apq8064: drop label property from DSI
-      ARM: dts: qcom: sdx65: fix SDHCI clocks order
-      ARM: dts: qcom: apq8064: drop incorrect regulator-type
-      ARM: dts: qcom: apq8060: drop incorrect regulator-type
-      ARM: dts: qcom: mdm9615: populate vsdcc fixed regulator
-      ARM: dts: qcom: ipq8064: move keys and leds out of soc node
+ - New machine:
 
-Matti Lehtimäki (3):
-      ARM: dts: qcom: apq8026-samsung-matisse-wifi: Fix inverted hall sensor
-      ARM: qcom: msm8226: Add rpm-master-stats node
-      ARM: qcom: msm8974: Add rpm-master-stats node
+  * Facebook's Minevra, as Chassis Management Controller using the
+    AST2600
 
- .../dts/qcom/qcom-apq8026-samsung-matisse-wifi.dts |   4 +-
- .../arm/boot/dts/qcom/qcom-apq8060-dragonboard.dts |   1 -
- .../boot/dts/qcom/qcom-apq8064-asus-nexus7-flo.dts |   1 -
- arch/arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts    |   1 -
- arch/arm/boot/dts/qcom/qcom-apq8064.dtsi           |   1 -
- arch/arm/boot/dts/qcom/qcom-ipq8064-rb3011.dts     |  55 +++++-----
- arch/arm/boot/dts/qcom/qcom-ipq8064-v1.0.dtsi      | 122 ++++++++++-----------
- arch/arm/boot/dts/qcom/qcom-mdm9615.dtsi           |  14 +--
- arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           |  32 ++++++
- arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |  32 ++++++
- arch/arm/boot/dts/qcom/qcom-sdx55.dtsi             |  32 ++----
- arch/arm/boot/dts/qcom/qcom-sdx65.dtsi             |   7 +-
- 12 files changed, 175 insertions(+), 127 deletions(-)
+ - Updates to Ampere's Mt Mitchell and Mt Jade systems, and IBM's
+   Bonnell
+
+----------------------------------------------------------------
+Chanh Nguyen (6):
+      ARM: dts: aspeed: mtjade, mtmitchell: Update gpio-line-names
+      ARM: dts: aspeed: mtjade, mtmitchell: Add new gpio-line-names
+      ARM: dts: aspeed: mtjade: Add the gpio-hog
+      ARM: dts: aspeed: mtmitchell: Add inlet temperature sensor
+      ARM: dts: aspeed: mtmitchell: Remove redundant ADC configurations
+      ARM: dts: aspeed: mtmitchell: Add I2C NVMe alias port
+
+Eddie James (1):
+      ARM: dts: aspeed: bonnell: Add reserved memory for TPM event log
+
+Yang Chen (2):
+      dt-bindings: arm: aspeed: document board compatibles
+      ARM: dts: aspeed: Minerva: Add Facebook Minerva CMC board
+
+ .../devicetree/bindings/arm/aspeed/aspeed.yaml     |   1 +
+ arch/arm/boot/dts/aspeed/Makefile                  |   1 +
+ .../boot/dts/aspeed/aspeed-bmc-ampere-mtjade.dts   |  66 +++--
+ .../dts/aspeed/aspeed-bmc-ampere-mtmitchell.dts    | 302 +++++++++++++++++++--
+ .../dts/aspeed/aspeed-bmc-facebook-minerva-cmc.dts | 265 ++++++++++++++++++
+ .../arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts |   8 +-
+ 6 files changed, 595 insertions(+), 48 deletions(-)
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-minerva-cmc.dts
