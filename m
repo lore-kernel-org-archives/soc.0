@@ -1,128 +1,156 @@
-Return-Path: <SRS0=X4je=F7=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=tRV6=F7=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 534E1CDB474
-	for <soc@archiver.kernel.org>; Tue, 17 Oct 2023 20:33:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F48ECDB474
+	for <soc@archiver.kernel.org>; Tue, 17 Oct 2023 20:39:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1648AC433C7; Tue, 17 Oct 2023 20:33:28 +0000 (UTC)
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 08BAAC433D9; Tue, 17 Oct 2023 20:39:41 +0000 (UTC)
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3B619C433C9;
-	Tue, 17 Oct 2023 20:33:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B619C433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id CDA843200961;
-	Tue, 17 Oct 2023 16:33:23 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 17 Oct 2023 16:33:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1697574803; x=1697661203; bh=cg
-	bPgTwtbWNC/kz5R2sNNRcl3eQ5WTXZbD/ST4Jxbxs=; b=oURQgf2xAoP9T/KP/K
-	rjdiyvH+PMU9nyFZWwf0GIKwhSAnnKGxreOxvHftu1NRJoVPs+xoF26hMXTQ1yYW
-	+aj0FycJnG1A7b0oGgOBJgv0OByB9rh1MqfxNtpjiAmPGzmRBKMX0yyNKhsZidmC
-	3O93wWx4+3YiI9ETshW9Un7Li9A9jZT3fD2kZuoav3AN85Jv5b86Sss1aHVj4+oU
-	P3yyJS1EiGteNhu49ZilKVAt1pwGI3/Qhi7LdW/uwzus659hiKWK+E/6eQMwfDUu
-	F4pwJZCe4wPCAw3eUYqjVoegGP9YDbxATq13yyuWMwYD8YJrvciUo9GVv7Q5mxLa
-	eDrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1697574803; x=1697661203; bh=cgbPgTwtbWNC/
-	kz5R2sNNRcl3eQ5WTXZbD/ST4Jxbxs=; b=Vpdu6sY5QvhVCx6gwaNoiJ0J6NcSV
-	Zq6z4FW62Y+xg3RZidXgnwF28Uhs8wz9BHEhkQVlTCYDkTBjSVDseCBokbUZ9zPs
-	9nGTHeLKQA88vLgs+h6cdqW3GhYk+MYkL4W0X6/sGgLVpR9TcQ0VRwx/PKcxZ5wB
-	MP2gmP8Lo5EUgMnwMi68eVLFj7GoACIzQ6+Qzeqdwk8j23VFTulGuxB0XTLXwjeM
-	EysLNY6zf6JG7u6lU7Qk4Xli2NFXZy3xjoaXit8UEK3qohSd4PKORuDJ0rn1WceB
-	AZiEuESuJhRtW7v3Mv5qbUS5wKU0ko6w+2lwplRD0EZXTLmz6IV2X+iJA==
-X-ME-Sender: <xms:ku8uZRrMd4VAcuWPQ-YWR-TUjFKqaKIJRzXyz4pnsAhap8wJNWuHOA>
-    <xme:ku8uZTpfT3EhuPrmheeW4eXAo4nLpNOYE3QHvDX4v4hlQoKdxKDFzaisk5ZNk-Evf
-    A9ir2BUID4d-U0fQXY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrjedvgddugeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ku8uZeP_MZu0HcSiE0FPN6XeBwUmutE4zwPbQ9o6lSiCALkL885PrQ>
-    <xmx:ku8uZc5RVwSM7k6HQfoiQp5W0WUuvxkUjnPjhwkDKXMpZhPbpP1qKA>
-    <xmx:ku8uZQ6t2JYfWLg9Q93As-Hd-FptvYojnraVpYUM9akFWkA9rjmqgw>
-    <xmx:k-8uZQx7OMiL7bQzd00Wr-r5VxAf4bZB_FksYcXsmZGoaRqY1A1YRQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DFAA2B60089; Tue, 17 Oct 2023 16:33:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
+	by smtp.kernel.org (Postfix) with ESMTPS id C075DC433C8
+	for <soc@kernel.org>; Tue, 17 Oct 2023 20:39:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C075DC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-66d4453ba38so19846266d6.0
+        for <soc@kernel.org>; Tue, 17 Oct 2023 13:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697575178; x=1698179978; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XA1skjAgHjdCnqisORMj4wpVmNxlLSwRWz+H3/RjpJo=;
+        b=sU2DlGoeKPE5L7pFEVjpZ569pKeWK5JnTBo/RsEJ/eeWDsPeGQQnkf2BdBND09ktsB
+         zt1pfF1+NNH1Yi7BRgM7krZDD+UW2GB7tERnZM1a3eYij4EbG+ItTdQ8AD0ccznideLL
+         Q9TftXtrfw7r/1x/VvrQG0jdKKqgc8o2bENvNjKzNykSlpMkNgfgu1ijch9U/oBpLP4G
+         aeV6l/hyG6jNNrnxj5o8vYVdWbRrXKGcWYwjN+AVUZ+xp00nmbZiIYfh/0zegN+X7QqK
+         N2UjXPE0T/2LPeH0krcpSYlpxvd8Ki1orJ/GrI/cZu4FN/droRDp5sTdswEy2gSNo0zV
+         dn/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697575178; x=1698179978;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XA1skjAgHjdCnqisORMj4wpVmNxlLSwRWz+H3/RjpJo=;
+        b=dyn8ZkK14OFlXxTERbBnImRJAU4Ucfvd7T4xKg3ShcON36J6MWkkllUYN9gAO0PhhV
+         zLlWvU5lMnu65wpIceeKmndgpVLi/Vh4Wn87EwCFp+A5NoGwhSBp2LP0jkQmbMQk0uPJ
+         pH4J8wWw4C8LoHiCSicv/73N8yBTaPJpfsW6KyK+6WAu7VBCq/NvvbgABhOGfqEmqSPT
+         sGJmp4++vZ04DQ6Dp24bHSdSdvrAgvlCte6k6oZbIhBBLhVpYcwD2teJ+zi4VDHav3Au
+         CfyPBJCGajhqAgzGM/k40MET2QP0JAEM9+82KIJJ/xW7DW2YIQ9+dmer1R439dl021+p
+         r65Q==
+X-Gm-Message-State: AOJu0YxZLALQJl73ntUbdDzJJpx8r3u8XZBEQ950xLLa/WSeqqppApaT
+	T9mveFDnUda6TQx1IDqArGr9b3M2j+nRTRAjU27ndg==
+X-Google-Smtp-Source: AGHT+IG0jZyX5mwItbRNqua2+caVQuoRBxev+i2K+Vc8lTvA4KemQ/ckZaqEBKGa2oMjPe/6P4JpungwpD5qkdU5/AQ=
+X-Received: by 2002:ad4:5ae8:0:b0:64f:49d1:3fe7 with SMTP id
+ c8-20020ad45ae8000000b0064f49d13fe7mr4054747qvh.23.1697575178600; Tue, 17 Oct
+ 2023 13:39:38 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <21a226f5-5e68-4b54-9768-98f10e3fb417@app.fastmail.com>
-In-Reply-To: <ZS6x18XEJXmB7FFL@xhacker>
-References: <20230912072232.2455-1-jszhang@kernel.org>
- <20230912-trailing-pampered-52738ec6f009@spud> <ZQHSLdPufI6CXApg@xhacker>
- <20230913-faster-spotted-9df41a0d7787@spud>
- <20230920-pesky-stalemate-88f5036b8084@wendy> <ZQwL6fxi6IkUEIMc@xhacker>
- <20230921-4a1fe80384e083c67f38dc27@fedora> <ZS1uiXORq2IRPnId@x1>
- <ZS6x18XEJXmB7FFL@xhacker>
-Date: Tue, 17 Oct 2023 22:33:00 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-10-peter.griffin@linaro.org> <ef25ed87-f065-4a75-9e57-1f1073d9c805@kernel.org>
+In-Reply-To: <ef25ed87-f065-4a75-9e57-1f1073d9c805@kernel.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Tue, 17 Oct 2023 21:39:27 +0100
+Message-ID: <CADrjBPqHKG84k0YDMzKcxdLJL-Vcp2HqTPm9vMWYnmZBYNX2Pw@mail.gmail.com>
+Subject: Re: [PATCH v3 09/20] clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+To: Chanwoo Choi <chanwoo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "Jisheng Zhang" <jszhang@kernel.org>,
- "Drew Fustini" <dfustini@baylibre.com>, soc@kernel.org
-Cc: "Conor Dooley" <conor@kernel.org>,
- "Conor.Dooley" <conor.dooley@microchip.com>, guoren <guoren@kernel.org>,
- "Fu Wei" <wefu@redhat.com>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: dts: thead: set dma-noncoherent to soc bus
-Content-Type: text/plain
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	cw00.choi@samsung.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
+	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
+	soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 17, 2023, at 18:09, Jisheng Zhang wrote:
-> On Mon, Oct 16, 2023 at 10:10:33AM -0700, Drew Fustini wrote:
->> On Thu, Sep 21, 2023 at 11:08:28AM +0100, Conor Dooley wrote:
->>
->> Hi Jisheng, I'm writing the cover letter for v2 of my th1520 mmc series
->> and I am wondering if this dma-noncoherent patch is in any tree yet?
+On Tue, 17 Oct 2023 at 09:52, Chanwoo Choi <chanwoo@kernel.org> wrote:
 >
-> Hi Drew,
+> On 23. 10. 12. 03:48, Peter Griffin wrote:
+> > These plls are found in the Tensor gs101 SoC found in the Pixel 6.
+> >
+> > pll0516x: Integer PLL with high frequency
+> > pll0517x: Integer PLL with middle frequency
+> > pll0518x: Integer PLL with low frequency
+> >
+> > PLL0516x
+> > FOUT = (MDIV * 2 * FIN)/PDIV * 2^SDIV)
+> >
+> > PLL0517x and PLL0518x
+> > FOUT = (MDIV * FIN)/PDIV*2^SDIV)
+> >
+> > The PLLs are similar enough to pll_0822x that the same code can handle
+> > both. The main difference is the change in the fout formula for the
+> > high frequency 0516 pll.
+> >
+> > Locktime for 516,517 & 518 is 150 the same as the pll_0822x lock factor.
+> > MDIV, SDIV PDIV masks and bit shifts are also the same as 0822x.
+> >
+> > When defining the PLL the "con" parameter should be set to CON3
+> > register, like this
+> >
+> > PLL(pll_0517x, CLK_FOUT_SHARED0_PLL, "fout_shared0_pll", "oscclk",
+> >     PLL_LOCKTIME_PLL_SHARED0, PLL_CON3_PLL_SHARED0,
+> >     NULL),
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  drivers/clk/samsung/clk-pll.c | 9 ++++++++-
+> >  drivers/clk/samsung/clk-pll.h | 3 +++
+> >  2 files changed, 11 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/samsung/clk-pll.c b/drivers/clk/samsung/clk-pll.c
+> > index 74934c6182ce..4ef9fea2a425 100644
+> > --- a/drivers/clk/samsung/clk-pll.c
+> > +++ b/drivers/clk/samsung/clk-pll.c
+> > @@ -442,7 +442,11 @@ static unsigned long samsung_pll0822x_recalc_rate(struct clk_hw *hw,
+> >       pdiv = (pll_con3 >> PLL0822X_PDIV_SHIFT) & PLL0822X_PDIV_MASK;
+> >       sdiv = (pll_con3 >> PLL0822X_SDIV_SHIFT) & PLL0822X_SDIV_MASK;
+> >
+> > -     fvco *= mdiv;
+> > +     if (pll->type == pll_0516x)
+> > +             fvco = fvco * 2 * mdiv;
+> > +     else
+> > +             fvco *= mdiv;
+> > +
+> >       do_div(fvco, (pdiv << sdiv));
+> >
+> >       return (unsigned long)fvco;
+> > @@ -1316,6 +1320,9 @@ static void __init _samsung_clk_register_pll(struct samsung_clk_provider *ctx,
+> >       case pll_1417x:
+> >       case pll_0818x:
+> >       case pll_0822x:
+> > +     case pll_0516x:
+> > +     case pll_0517x:
+> > +     case pll_0518x:
+> >               pll->enable_offs = PLL0822X_ENABLE_SHIFT;
+> >               pll->lock_offs = PLL0822X_LOCK_STAT_SHIFT;
+> >               if (!pll->rate_table)
+> > diff --git a/drivers/clk/samsung/clk-pll.h b/drivers/clk/samsung/clk-pll.h
+> > index 0725d485c6ee..ffd3d52c0dec 100644
+> > --- a/drivers/clk/samsung/clk-pll.h
+> > +++ b/drivers/clk/samsung/clk-pll.h
+> > @@ -38,6 +38,9 @@ enum samsung_pll_type {
+> >       pll_0822x,
+> >       pll_0831x,
+> >       pll_142xx,
+> > +     pll_0516x,
+> > +     pll_0517x,
+> > +     pll_0518x,
+> >  };
+> >
+> >  #define PLL_RATE(_fin, _m, _p, _s, _k, _ks) \
 >
-> I forget this patch. Thanks for reminding.
+> I replied it with ack before. Again, reply it with ack.
 >
-> Hi Arnd
->
-> This is the only one dt fix for thead SoC, can you please pick it up
-> for the upcoming -rcN? I knew soc people can directly ask for pick
-> up for only one fix in the past. Let me know if I need to generate a
-> formal PR.
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-Applied to the fixes branch now, thanks.
-
-There is no need for a pull request if you have just a single patch.
-
-Just a few things to consider:
-
-- For both patches and pull requests, make sure you have soc@kernel.org
-  as the primary recipient so I know that I'm the one to apply them
-  and see them in https://patchwork.kernel.org/project/linux-soc/list/
-  I get Cc'd on a lot of patches and would otherwise not know if you
-  are looking for them to be applied or reviewed.
-
-- Since there is no tag description, add a comment under the '---'
-  line asking for the patch to be applied directly, and say if
-  this is a bugfix for the current release or if it should be
-  queued for the next release.
-
-    Arnd
+Thanks Chanwoo. I will add that in v4
