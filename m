@@ -1,115 +1,61 @@
-Return-Path: <SRS0=DNrK=F7=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=Zi41=F7=bombadil.srs.infradead.org=BATV+4081a51caf94f36e8d3a+7359+infradead.org+hch@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E874CDB474
-	for <soc@archiver.kernel.org>; Tue, 17 Oct 2023 13:19:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B14DCDB474
+	for <soc@archiver.kernel.org>; Tue, 17 Oct 2023 13:59:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4C550C433C7; Tue, 17 Oct 2023 13:19:02 +0000 (UTC)
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 0A865C433C7; Tue, 17 Oct 2023 13:59:38 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 307BCC43395;
-	Tue, 17 Oct 2023 13:19:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 307BCC43395
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6b89ab5ddb7so3277535b3a.0;
-        Tue, 17 Oct 2023 06:19:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697548740; x=1698153540;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hrjVOTU4vVWhg8rZEFBUd1El+uZlCjcijcwvkBEbBus=;
-        b=FEBchzskRjVVUIwfkUnoF+iV4ekjKm2CSyqCyvnn+Qz/bgFJNt2ZsbmD/nAwmwm/kO
-         j5eo9vF1uq3D8NTpPpYLidYVuA06+hadvuzVp2dqrRs+9H1iVGN2AmpaP9j+RPhs3P54
-         ovGR/h34pmqCUBNQH1JH0ivy2a+sdP2sh172sj8BOj6kXdU68vp8nfH1KJ7/6kxiqyFJ
-         ogb+ZJq0ZMRVpx+ZWC52KMb6RsBIv8nB6Y0H+yT7YTrXtxrk33qg9r04ae6kdoIeGksW
-         Iq7nBItjK7Fj8rzaEbyzUy0jfOIRS4KbVEnxo7UxiUyg++fddXYDbwN/FsGweS7ey/jG
-         2dxw==
-X-Gm-Message-State: AOJu0YxRQSAILLo/45yjimB0v/gn/KY0PhU2Q2aEDJvETIV8TMxXlhsW
-	e5As14GAl8xLnUDu11uR+ADfwjZLv+1U5A==
-X-Google-Smtp-Source: AGHT+IG1HlHk0kruMled/PRSMJgSoqE7tyWNNIp49R2rKiNBathG74wntFLe2/+7hiwk5DyPsCMLDA==
-X-Received: by 2002:a05:6a00:2da4:b0:6ba:4f2e:33ca with SMTP id fb36-20020a056a002da400b006ba4f2e33camr2538366pfb.2.1697548740301;
-        Tue, 17 Oct 2023 06:19:00 -0700 (PDT)
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com. [209.85.215.173])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa78f25000000b00682868714fdsm1416748pfr.95.2023.10.17.06.18.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 06:19:00 -0700 (PDT)
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5ac88d2cfaaso3007587a12.2;
-        Tue, 17 Oct 2023 06:18:59 -0700 (PDT)
-X-Received: by 2002:a0d:cb10:0:b0:5a7:afcc:80fe with SMTP id
- n16-20020a0dcb10000000b005a7afcc80femr2307771ywd.3.1697548354803; Tue, 17 Oct
- 2023 06:12:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231016054755.915155-1-hch@lst.de> <20231016054755.915155-5-hch@lst.de>
- <20231016-pantyhose-tall-7565b6b20fb9@wendy> <20231016131745.GB26484@lst.de>
- <CAMuHMdXVZz=YWMAgzUzme-U3qxYeLdi66xw2CGubpesGy+ZjRw@mail.gmail.com> <20231017124608.GA4386@lst.de>
-In-Reply-To: <20231017124608.GA4386@lst.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 17 Oct 2023 15:12:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVavDc4g3ALqxFRn45ySCJ16F-Ay72=P3fxXipk0uXFiQ@mail.gmail.com>
-Message-ID: <CAMuHMdVavDc4g3ALqxFRn45ySCJ16F-Ay72=P3fxXipk0uXFiQ@mail.gmail.com>
-Subject: Re: [PATCH 04/12] soc: renesas: select RISCV_DMA_NONCOHERENT from ARCH_R9A07G043
-To: Christoph Hellwig <hch@lst.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 02191C433C8;
+	Tue, 17 Oct 2023 13:59:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02191C433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=m96cL5ijSpQsuieIaiYXP7bFvbIGAJf7RX0A75YE944=; b=q84ISQwQm0u2TmDb443jW9Z9II
+	CKdsgxK59BOKYODsMdscZgn+LE5O6s/dLLGKzclFAx6YqkN8/rjkoMyhagyG9Fjtbx8kAf/MbvOSU
+	o2E3t1IWgnh+encep32oQu1f5aLTA3TNq2II2/MbK7gqGrUtTd+1qL1gWOL3mJN9I3D7D1LujM4r5
+	+x8d87QfoKW8WuFhJPsJOh7J6zsM25gu73qMYqaHAz7+iBWf4zzVSyxtiqApDLEpD63BpfmMcazkf
+	VwVF5ACw8OeM5rap0aTeegPzwDJwEP5OgmnMcCzl7bIonGiKWJBMWUXZGNsvU/X8EemUBgKuf8bIX
+	Tk+0G9Ew==;
+Received: from 213-147-166-120.nat.highway.webapn.at ([213.147.166.120] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1qskbb-00CTWK-0I;
+	Tue, 17 Oct 2023 13:59:32 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Conor Dooley <conor@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, Greg Ungerer <gerg@linux-m68k.org>, 
-	iommu@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Robin Murphy <robin.murphy@arm.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Wei Fang <wei.fang@nxp.com>, 
-	Shenwei Wang <shenwei.wang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, linux-m68k@lists.linux-m68k.org, netdev@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
-	Jim Quinlan <james.quinlan@broadcom.com>, arm-soc <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: linux-riscv@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org
+Subject: fix a few RISC-V / renesas Kconfig dependencies
+Date: Tue, 17 Oct 2023 15:59:23 +0200
+Message-Id: <20231017135926.1240101-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi Christoph,
+Hi all,
 
-On Tue, Oct 17, 2023 at 2:46=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrot=
-e:
-> On Tue, Oct 17, 2023 at 12:44:41PM +0200, Geert Uytterhoeven wrote:
-> > On Mon, Oct 16, 2023 at 3:17=E2=80=AFPM Christoph Hellwig <hch@lst.de> =
-wrote:
-> > > On Mon, Oct 16, 2023 at 01:52:57PM +0100, Conor Dooley wrote:
-> > > > > +   select RISCV_DMA_NONCOHERENT
-> > > > >     select ERRATA_ANDES if RISCV_SBI
-> > > > >     select ERRATA_ANDES_CMO if ERRATA_ANDES
-> > > >
-> > > > Since this Kconfig menu has changed a bit in linux-next, the select=
-s
-> > > > are unconditional here, and ERRATA_ANDES_CMO will in turn select
-> > > > RISCV_DMA_NONCOHERENT.
-> > >
-> > > Oh, looks like another patch landed there in linux-next.  I had
-> > > waited for the previous one go go upstream in -rc6.  Not sure
-> > > how to best handle this conflict.
-> >
-> > I think the easiest is to ask soc to apply this series?
->
-> I don't think pulling all the DMA bits into a random other tree
-> would be a good idea.   I can hand off the first few bits, but I'd
-> need a stable branch to pull in after that.  Which of the half a dozen
-> soc trees we have in linux-next is this anyway?
+this small series sorts out a few Kconfig dependency issue for the
+rich set of RISC-V non-coherent DMA support.
 
-The one and only https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.gi=
-t/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Geert suggested for it to go into the soc tree, which is fine with me
+if I get a stable branch for it as it is required for further dma-mapping
+work.
