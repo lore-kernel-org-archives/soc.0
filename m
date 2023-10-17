@@ -1,89 +1,128 @@
-Return-Path: <SRS0=VDpE=F7=dabbelt.com=palmer@kernel.org>
+Return-Path: <SRS0=X4je=F7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1BF1CDB474
-	for <soc@archiver.kernel.org>; Tue, 17 Oct 2023 20:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 534E1CDB474
+	for <soc@archiver.kernel.org>; Tue, 17 Oct 2023 20:33:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 99991C433C7; Tue, 17 Oct 2023 20:20:31 +0000 (UTC)
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 1648AC433C7; Tue, 17 Oct 2023 20:33:28 +0000 (UTC)
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BB181C433C8
-	for <soc@kernel.org>; Tue, 17 Oct 2023 20:20:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BB181C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7781b176131so62735485a.1
-        for <soc@kernel.org>; Tue, 17 Oct 2023 13:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1697574027; x=1698178827; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j8cW9ID9EmRaqAP0KD7ZrNU0hcrtypKLPEuHrHMnWGw=;
-        b=Qr8xEwDZIe/9iqCKJBD85Tq/6F5E8UOnGG4NJtmMelAfaICl5/fR9UAs9T/hXCDVuV
-         D6VMv2p9KhhghXod4gYH0OVMkZhzi2Cke2VEJ3fdexlZ2bt4Lgfg5TM6jDftJhshxlUU
-         QIaCvKnOf+Wh9p57JCg/8yyuP9ns6aBZJOqu+rdEjdCDpsPSXHKkokRBFHoeKbN1l85y
-         xrriQzPCjwq4aKoMNTpa29o7lAp40DdZzfL2DnIxPz+3e+BY4wwoDUwT2mte+i5qe96D
-         qZN7xtn/lpTVJLklBHj0ZYPqSX7QxCAUS/5TA61nOpVyNxuqKf8tGCEPTk1dkmPo5puv
-         P2yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697574027; x=1698178827;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j8cW9ID9EmRaqAP0KD7ZrNU0hcrtypKLPEuHrHMnWGw=;
-        b=MHv/KDD+NsCJQ3ehG3bxf1hhJAV9YcEC1TGr2+nCEPp/nnNaYC3yZu3YlNZT51BxN1
-         FJ24kkdlJeF/pf7aWAhJyrMC4V87vI98r48aw3M8CECzMdK643DpqAUNw8cqe0rfrFiN
-         lBqxsW8+RTFco1JYMKM71oyKbtqlQA6K4SEGejFZcSavMsSSJ6LU5OguXSLYyN6DrhOl
-         Sswfy6zC3t057zLTxZZblMqxe8PEk1L0YsJOEDYchIxp2P7VrI1ULVMdTw6YDqBkNrtN
-         V7Q9jMxkNlv0wwxzHxddoQumy6J1Guz7BCR9cTDfgYefSSAiXUyJ9iKMtBHI9fcXEJDz
-         vBJg==
-X-Gm-Message-State: AOJu0YxNbqs0fiWKTAof6RvlSyUn6XdQfnbtDaTwv5oPVHCWA6tcwPWU
-	qj33VFR7lj1wSwJ2714svedvnA==
-X-Google-Smtp-Source: AGHT+IGBdwLL1rTJz7m72BA4cEO0GhgKNcA1DZZYX304OW5yBY337OahOIU9yj8GTdS5m16s4rvohA==
-X-Received: by 2002:a05:620a:3195:b0:76e:f5c5:1bac with SMTP id bi21-20020a05620a319500b0076ef5c51bacmr3565791qkb.48.1697574027422;
-        Tue, 17 Oct 2023 13:20:27 -0700 (PDT)
-Received: from localhost ([208.116.208.98])
-        by smtp.gmail.com with ESMTPSA id t27-20020a05620a035b00b0076cda7eab11sm918216qkm.133.2023.10.17.13.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 13:20:26 -0700 (PDT)
-Date: Tue, 17 Oct 2023 13:20:26 -0700 (PDT)
-X-Google-Original-Date: Tue, 17 Oct 2023 13:20:23 PDT (-0700)
-Subject:     Re: Covering DT build in -next merge
-In-Reply-To: <ZS7rlTZLr0m1OEv8@sirena.org.uk>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3B619C433C9;
+	Tue, 17 Oct 2023 20:33:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B619C433C9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id CDA843200961;
+	Tue, 17 Oct 2023 16:33:23 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 17 Oct 2023 16:33:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1697574803; x=1697661203; bh=cg
+	bPgTwtbWNC/kz5R2sNNRcl3eQ5WTXZbD/ST4Jxbxs=; b=oURQgf2xAoP9T/KP/K
+	rjdiyvH+PMU9nyFZWwf0GIKwhSAnnKGxreOxvHftu1NRJoVPs+xoF26hMXTQ1yYW
+	+aj0FycJnG1A7b0oGgOBJgv0OByB9rh1MqfxNtpjiAmPGzmRBKMX0yyNKhsZidmC
+	3O93wWx4+3YiI9ETshW9Un7Li9A9jZT3fD2kZuoav3AN85Jv5b86Sss1aHVj4+oU
+	P3yyJS1EiGteNhu49ZilKVAt1pwGI3/Qhi7LdW/uwzus659hiKWK+E/6eQMwfDUu
+	F4pwJZCe4wPCAw3eUYqjVoegGP9YDbxATq13yyuWMwYD8YJrvciUo9GVv7Q5mxLa
+	eDrw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1697574803; x=1697661203; bh=cgbPgTwtbWNC/
+	kz5R2sNNRcl3eQ5WTXZbD/ST4Jxbxs=; b=Vpdu6sY5QvhVCx6gwaNoiJ0J6NcSV
+	Zq6z4FW62Y+xg3RZidXgnwF28Uhs8wz9BHEhkQVlTCYDkTBjSVDseCBokbUZ9zPs
+	9nGTHeLKQA88vLgs+h6cdqW3GhYk+MYkL4W0X6/sGgLVpR9TcQ0VRwx/PKcxZ5wB
+	MP2gmP8Lo5EUgMnwMi68eVLFj7GoACIzQ6+Qzeqdwk8j23VFTulGuxB0XTLXwjeM
+	EysLNY6zf6JG7u6lU7Qk4Xli2NFXZy3xjoaXit8UEK3qohSd4PKORuDJ0rn1WceB
+	AZiEuESuJhRtW7v3Mv5qbUS5wKU0ko6w+2lwplRD0EZXTLmz6IV2X+iJA==
+X-ME-Sender: <xms:ku8uZRrMd4VAcuWPQ-YWR-TUjFKqaKIJRzXyz4pnsAhap8wJNWuHOA>
+    <xme:ku8uZTpfT3EhuPrmheeW4eXAo4nLpNOYE3QHvDX4v4hlQoKdxKDFzaisk5ZNk-Evf
+    A9ir2BUID4d-U0fQXY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrjedvgddugeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ku8uZeP_MZu0HcSiE0FPN6XeBwUmutE4zwPbQ9o6lSiCALkL885PrQ>
+    <xmx:ku8uZc5RVwSM7k6HQfoiQp5W0WUuvxkUjnPjhwkDKXMpZhPbpP1qKA>
+    <xmx:ku8uZQ6t2JYfWLg9Q93As-Hd-FptvYojnraVpYUM9akFWkA9rjmqgw>
+    <xmx:k-8uZQx7OMiL7bQzd00Wr-r5VxAf4bZB_FksYcXsmZGoaRqY1A1YRQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id DFAA2B60089; Tue, 17 Oct 2023 16:33:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
+MIME-Version: 1.0
+Message-Id: <21a226f5-5e68-4b54-9768-98f10e3fb417@app.fastmail.com>
+In-Reply-To: <ZS6x18XEJXmB7FFL@xhacker>
+References: <20230912072232.2455-1-jszhang@kernel.org>
+ <20230912-trailing-pampered-52738ec6f009@spud> <ZQHSLdPufI6CXApg@xhacker>
+ <20230913-faster-spotted-9df41a0d7787@spud>
+ <20230920-pesky-stalemate-88f5036b8084@wendy> <ZQwL6fxi6IkUEIMc@xhacker>
+ <20230921-4a1fe80384e083c67f38dc27@fedora> <ZS1uiXORq2IRPnId@x1>
+ <ZS6x18XEJXmB7FFL@xhacker>
+Date: Tue, 17 Oct 2023 22:33:00 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-CC: Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org,
-  linux-kernel@vger.kernel.org, soc@kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: broonie@kernel.org, Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-9d3c8241-8749-4b5e-bb01-64cf5e2d0bb8@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: "Jisheng Zhang" <jszhang@kernel.org>,
+ "Drew Fustini" <dfustini@baylibre.com>, soc@kernel.org
+Cc: "Conor Dooley" <conor@kernel.org>,
+ "Conor.Dooley" <conor.dooley@microchip.com>, guoren <guoren@kernel.org>,
+ "Fu Wei" <wefu@redhat.com>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: dts: thead: set dma-noncoherent to soc bus
+Content-Type: text/plain
 
-On Tue, 17 Oct 2023 13:16:21 PDT (-0700), broonie@kernel.org wrote:
-> Hi Stephen,
+On Tue, Oct 17, 2023, at 18:09, Jisheng Zhang wrote:
+> On Mon, Oct 16, 2023 at 10:10:33AM -0700, Drew Fustini wrote:
+>> On Thu, Sep 21, 2023 at 11:08:28AM +0100, Conor Dooley wrote:
+>>
+>> Hi Jisheng, I'm writing the cover letter for v2 of my th1520 mmc series
+>> and I am wondering if this dma-noncoherent patch is in any tree yet?
 >
-> I was wondering if it might be possible to add DTB builds for relevant
-> architecutres to the -next merge checks (everything except x86 AFAIK)?
-> Some current experience suggested to me that it might be helpful for
-> bisecting problems found in testing, breakage building the DTBs causes
-> hassle since where they're used in tree DTs are required to boot the
-> kernel.
+> Hi Drew,
 >
-> At least for arm and arm64 the DT build is quick enough to be negligable
-> in the context of building the kernel itself so hopefully it shouldn't
-> add too much load to do this - it's just adding a 'make dtbs' (with
-> appropriate cross build options) to the kernel build.
+> I forget this patch. Thanks for reminding.
+>
+> Hi Arnd
+>
+> This is the only one dt fix for thead SoC, can you please pick it up
+> for the upcoming -rcN? I knew soc people can directly ask for pick
+> up for only one fix in the past. Let me know if I need to generate a
+> formal PR.
 
-Pretty sure we're in the same shape for RISC-V these days.  +Conor, who 
-would know for sure (as he made it work).
+Applied to the fixes branch now, thanks.
 
->
-> Thanks,
-> Mark
+There is no need for a pull request if you have just a single patch.
+
+Just a few things to consider:
+
+- For both patches and pull requests, make sure you have soc@kernel.org
+  as the primary recipient so I know that I'm the one to apply them
+  and see them in https://patchwork.kernel.org/project/linux-soc/list/
+  I get Cc'd on a lot of patches and would otherwise not know if you
+  are looking for them to be applied or reviewed.
+
+- Since there is no tag description, add a comment under the '---'
+  line asking for the patch to be applied directly, and say if
+  this is a bugfix for the current release or if it should be
+  queued for the next release.
+
+    Arnd
