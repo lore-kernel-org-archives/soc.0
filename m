@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6194CDB47E
-	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12D83CDB47E
+	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 15:40:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 90FDCC433CA; Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7591DC433C8;
-	Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
+	id EBAC1C433CD; Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3896C433C9;
+	Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697643625;
-	bh=Cq1sz5a3srWqkfvOjexPYq9jI5dYEXuMBxQDWK5poDA=;
+	s=k20201202; t=1697643633;
+	bh=bVAtFCoLnH7P7PcqMwgE8U3rk62i/QQKtk+vj/Vd/sQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=iOHEus07Pgj+jcGkIjdinQz0gL6c60mxF9M75NAmTIJkVMKvRZQIaQaobqRupWWPH
-	 P0F9mhQPguenX2/ORrnvRiUXU0as0SpKpKmh3T9OMo+p1kOlkENzsPAfB6Nwy2cpmM
-	 IsQM3uKhP4RFqIpTC7i0IokM6Ex5ZRx6mx4gsnVWEeO0yH1rsNqfhxLJI8kCrJEO51
-	 PD6eWz5cVSyZt10ERe0DJHJgfcJYtxNM2by4Edi3sWw9QZilgzOvu1CMHw3QlxVESQ
-	 LPgxobMwCQpPHsYNP6Xwr+iEVZTFvjBS/ZeS6bYmjgMgxjD/6wGe2Uzr8tnSuwF/Zv
-	 UtcHwkQfX+TCQ==
+	b=d80Iu5ZzsDAynZsQFBBcvZy3TgyWQKX9vbYKg6vqMqQaqof9W8XvuKhcW9rkiFkIO
+	 KtXhSgsS7KPCBthfqUpQmNYysmklsGJVfeSlHvUkXKsnmRjwJ6/dAgQvJrzM1c47jO
+	 ZPQbzb0reB6PdD/LLgQPClZgpjDSoyJwH6e5qcKRbV7xgN9R4SJ3AeScTQYmUkkAKj
+	 Vq6zZKbU4aZrm16jdnqqKBclRQ7T5Wl4dfZYrYUAK33gqDEmp94FWb5QdQoO8kQvR5
+	 bqavN3O0rZiqKireBJSPT2YCdbmDMdrgNvkXLhSeCDswVILl2suQCcPWWB7vzLX2Fz
+	 7RdpCAZbTcZIw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6442EC04DD9;
-	Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE978C04DD9;
+	Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fixes for omaps
+Subject: Re: [GIT PULL] Qualcomm driver updates for v6.7
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169764362540.8197.3944658658126650228.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Oct 2023 15:40:25 +0000
-References: <pull-1697606314-911862@atomide.com>
-In-Reply-To: <pull-1697606314-911862@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+ <169764363377.8197.13230080672129347667.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Oct 2023 15:40:33 +0000
+References: <20231015204014.855672-1-andersson@kernel.org>
+In-Reply-To: <20231015204014.855672-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 18 Oct 2023 08:19:34 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Sun, 15 Oct 2023 13:40:13 -0700 you wrote:
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 > 
-> The following changes since commit 06f114cf7cbe96a07c51c47114d79e9654275919:
-> 
->   Merge branches 'fixes-mapphone' and 'fixes-ti-sysc' into fixes (2023-09-13 11:11:11 +0300)
+>   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 > 
 > are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.7
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Fixes for omaps
-    https://git.kernel.org/soc/soc/c/eaf16b92b18c
+  - [GIT,PULL] Qualcomm driver updates for v6.7
+    https://git.kernel.org/soc/soc/c/57e06f8c1f94
 
 You are awesome, thank you!
 -- 
