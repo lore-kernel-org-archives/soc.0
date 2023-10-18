@@ -1,109 +1,86 @@
-Return-Path: <SRS0=RkYz=GA=canb.auug.org.au=sfr@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282FECDB47E
-	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 06:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DA4ACDB47E
+	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 12:12:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E37DCC433C7; Wed, 18 Oct 2023 06:11:09 +0000 (UTC)
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CD83AC433C8;
-	Wed, 18 Oct 2023 06:11:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD83AC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1697609463;
-	bh=qB3Ha83vzVs0uN4/XnNQdQVWsHMaULkNTOJrWBasbG4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CiTKe3zMJIOCsRXE8xsQTfjFQAvETHmNaIQJlQ9bB47RZvtUtfPvn81VaNtCe3iBZ
-	 +mmdPNOIWdIOxBFO6nSF0t1o2U5mxR2OJ0kMDbJSNOtuDQl2sBnR65GahG+8G/ORdP
-	 qIm40h6NC/ASHKgZVSyLX/RtqZNCMDsDA3HrnMhsRef2cbmXIjT+VdLqJB/02uPdCS
-	 kbEUgusCPKDp+nonC70XUbABRK+eHW85hZP/GcI384BDMSRCO4g3QnrYaIa8P0Js5H
-	 vjRvOSagj7IqdVQF16ZiW0CyHYjMimPVA+QRGxJLnBO4MXpUgFfTrHJTjL4+bQdF7j
-	 XOKre8TtoQU8A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4S9L7q1zQvz4wbp;
-	Wed, 18 Oct 2023 17:11:03 +1100 (AEDT)
-Date: Wed, 18 Oct 2023 17:11:01 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Mark Brown <broonie@kernel.org>
+	id 35D78C433C8; Wed, 18 Oct 2023 12:12:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52005C433C7;
+	Wed, 18 Oct 2023 12:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697631129;
+	bh=GNSNBuoi8bXQFAqtj0OcNBLL8Yx5igtHWQBXtmRYAMk=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=RGuJHmLKUFtKLXMlHtqLYyRo4jc7gE8obyGF/WlFgrCmsVoyfXqEgde3F+j8Ig1EY
+	 OP0BKp8VfeoTy+ppmsNLgruB1XU1tu2it8zAjNiTUtVPAkutiOh3moN/9amqOcFihe
+	 4EUQWmU24HhjT5yROp/Pd97I+Gp4VL+yclKuEYCqYx5WaoaVIYTosxTRHf/cq6tG6h
+	 YWyqOBB2ozCCAvy8/6dLECqPCUCp8BV9Nft8BdK3i5NlRWuChO93oSq99dOzA8xhi8
+	 WL2P8NR/e/MD/IZVHqbsI+kqu6x17ya4A8WVYT7wNGegsWl4LIjK9S2KrHVKaxiOVr
+	 9onSfNLI65JMw==
+Date: Wed, 18 Oct 2023 13:12:03 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
 List-Id: <soc.lore.kernel.org>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, soc@kernel.org
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	soc@kernel.org
 Subject: Re: Covering DT build in -next merge
-Message-ID: <20231018171101.26b8dbcf@canb.auug.org.au>
-In-Reply-To: <ZS7rlTZLr0m1OEv8@sirena.org.uk>
+Message-ID: <b3659452-dfe6-4b41-8519-b74d1052f20d@sirena.org.uk>
 References: <ZS7rlTZLr0m1OEv8@sirena.org.uk>
+ <20231018171101.26b8dbcf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XKZDKnVq=yDSY_XGcsQaGHc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="W863xjY2YyCL2q8P"
+Content-Disposition: inline
+In-Reply-To: <20231018171101.26b8dbcf@canb.auug.org.au>
+X-Cookie: Santa Claus is watching!
 
---Sig_/XKZDKnVq=yDSY_XGcsQaGHc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+--W863xjY2YyCL2q8P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 17 Oct 2023 21:16:21 +0100 Mark Brown <broonie@kernel.org> wrote:
->
-> I was wondering if it might be possible to add DTB builds for relevant
-> architecutres to the -next merge checks (everything except x86 AFAIK)?
-> Some current experience suggested to me that it might be helpful for
-> bisecting problems found in testing, breakage building the DTBs causes
-> hassle since where they're used in tree DTs are required to boot the
-> kernel.
->=20
-> At least for arm and arm64 the DT build is quick enough to be negligable
-> in the context of building the kernel itself so hopefully it shouldn't
-> add too much load to do this - it's just adding a 'make dtbs' (with
-> appropriate cross build options) to the kernel build.
+On Wed, Oct 18, 2023 at 05:11:01PM +1100, Stephen Rothwell wrote:
+> On Tue, 17 Oct 2023 21:16:21 +0100 Mark Brown <broonie@kernel.org> wrote:
 
-Ummm, arm builds (and many others) select CONFIG_OF_EARLY_FLATTREE (in
-the case of arm, only if CONFIG_OF is set), and the top level Makefile
-does this:
+> > I was wondering if it might be possible to add DTB builds for relevant
+> > architecutres to the -next merge checks (everything except x86 AFAIK)?
+> > Some current experience suggested to me that it might be helpful for
+> > bisecting problems found in testing, breakage building the DTBs causes
+> > hassle since where they're used in tree DTs are required to boot the
+> > kernel.
 
-ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/boot/dts/),)
-dtstree :=3D arch/$(SRCARCH)/boot/dts
-endif
+> Ummm, arm builds (and many others) select CONFIG_OF_EARLY_FLATTREE (in
+> the case of arm, only if CONFIG_OF is set), and the top level Makefile
+> does this:
 
-ifneq ($(dtstree),)
-	.
-	.
-	.
-ifdef CONFIG_OF_EARLY_FLATTREE
-all: dtbs
-endif
+> ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/boot/dts/),)
+> dtstree := arch/$(SRCARCH)/boot/dts
+> endif
 
-endif
+> So won't this be the same as doing a separate "make dtbs"?
 
-So won't this be the same as doing a separate "make dtbs"?
---=20
-Cheers,
-Stephen Rothwell
+Huh, yes - then I'm not sure how we're managing to see such extensive
+breakage with the bisects I'm running - I've been running into lerge
+ranges of commits which don't build due to missing header files.  I'll
+have to check into it, sorry for the noise.
 
---Sig_/XKZDKnVq=yDSY_XGcsQaGHc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--W863xjY2YyCL2q8P
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUvdvUACgkQAVBC80lX
-0GwkKQf+IWyF+mZXfIODoybrGBaxaP/eKxHuTHcfCWlF2bGBlIHVawjjisO7Y7en
-XRSHKCHoch/OxrnXrxIj6o+nw0LPnkgwMDujuVrWAtz5dhgKpWpJI0S2WO6bpDj4
-I6CBpp+X7Pe6PQ1U00vVkJX5UDCu4NaiUTy9VuoH/DPrTRf9Va9MzE0IetERz7Pt
-3boOgJG1MNZMPnqEJY1LuKFdA1lVih6InH1Jc5B1H1hACAdTHOrlYiDdcqgSAFjV
-XgbzrvcAedFeBZS/m9cXGDdWWLU8S4Kh9ifmqEeMMFRGMzzC0QQ6G4sNfwg8Ddsb
-kandqhOvxPRl723cVC4SYRg5cdYp3w==
-=5H1I
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUvy5IACgkQJNaLcl1U
+h9AHcQf/SpTLvC/ca55odnLsysHNI7zhux/l43mI+5Z9sYlryuWok21BAAwDuYOO
+WVmTSjn6mlALuYYO4x5UM1soVX4JpsLRQmUh02ieShzYfvCq0vkbmFzn/uogtGGh
+JcPBSFxVNFA8phf26xorbG4Hys08DTu6evi7qjBky+Kum77t0FEbP5r6cqXsYmgO
+AeWHRGT4eF/hSdhfRiq6Dgek+yKwZr6cUqjc04aQ+DIzqHjWUP8FY6aQQWt+0Vz9
+JBZxaKJPaBT2l2SiU1urP/nPg6cd1mxF3HTmCfNHVkNY1zAwNFiIGrsRc0NqPwfQ
+cE/JD1JayCJbGRRB5wbntGQXS9ZONA==
+=QZf5
 -----END PGP SIGNATURE-----
 
---Sig_/XKZDKnVq=yDSY_XGcsQaGHc--
+--W863xjY2YyCL2q8P--
