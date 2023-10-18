@@ -4,60 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B3E6CDB482
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 285ACCDB483
 	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 15:40:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0D34EC43395; Wed, 18 Oct 2023 15:40:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB730C433CC;
-	Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
+	id EC2B5C433D9; Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D302FC433C8
+	for <soc@kernel.org>; Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697643634;
-	bh=9nmGthy7ULVAx94TG2U0pVO/vNZY7E2ex7U8VWj+iRY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=DQC3jFeI11o1ihIr+FGunadi2Cnrg5sQ3HzvhEWJdW25wbqh8h4GqD2GDhBCtgwPJ
-	 dl/PZ8M2V4uo6EsQWS92nIttSAFhot2cc1pEowDs2eLLEGjiROqmAO4mXoDnfsc8+e
-	 PGOAM0gINJMYJ4+i2fz705kyTpe28xhsqMXnUo/3tVT0TeBLS6tz6RTub1VBAyTpNN
-	 WprAL3KIykFUTDDs1jfowFi6phKnW1J0eSqsfzv2g2wHX4aEU0OOO3QRpKq82mF6qm
-	 fAHOhD5gwMmIN08Oa+lthQgitQ7XYPuJe3GhmOq9Ti3SiN0fHv4DruEV+w87SblwsH
-	 rJbe649M1pGmQ==
+	s=k20201202; t=1697643633;
+	bh=vRExftAdefBHzfu4MLeq+iTKyZ+YT0MzMPcTx3cne0w=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=FwiId3RssWY7ahx9OQK2e2gb62xSa9UD4V0kXV83lgj/uh08HR7zr+/JykNWGjdmP
+	 VY3r0jmboCKbZSOv3h+WR31mNpXcdBDuaulE4bdVOaX73kM8kTX7LM0UA/iZELMA1i
+	 mUmbQi9Cb0w8D35j4WwsyyGZXCJq+GDOJh73kKX+DHeKNA/72OjFiV4yIrB4DAlaDy
+	 Jjf+3WdnKfLthzAUVFVxXk6hMLdie8zvxpSHXJy0OTtQ5L+koFCWvaYI5mRqLgCQFt
+	 QXDv6PGQCR1ghKabeyOFQkkfTi3GSjwczCBkZCAfn3cYb3eGlIF5GgqqOmWl0HM/5D
+	 GngZ4m0Ae5Hhw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC619C0C40E;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7476C04E24;
 	Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.6 #1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169764363383.8197.247594516308048006.git-patchwork-notify@kernel.org>
+ <169764363374.8197.16730191932296029310.git-patchwork-summary@kernel.org>
 Date: Wed, 18 Oct 2023 15:40:33 +0000
-References: <2167992.Mh6RI2rZIc@phil>
-In-Reply-To: <2167992.Mh6RI2rZIc@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Mon, 16 Oct 2023 23:24:15 +0200 you wrote:
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
-> 
->   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.7-rockchip-dts32-1
-> 
-> [...]
+Patch: [GIT,PULL] Qualcomm driver updates for v6.7
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=793331
+  Lore link: https://lore.kernel.org/r/20231015204014.855672-1-andersson@kernel.org
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts32 changes for 6.6 #1
-    https://git.kernel.org/soc/soc/c/a8eddbe354b4
+Patch: arm/arm64: dts: Removed undocumented and unused "pl022,hierarchy" property
+  Submitter: Rob Herring <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=788618
+  Lore link: https://lore.kernel.org/r/20230928190859.1072420-1-robh@kernel.org
 
-You are awesome, thank you!
+Patch: [GIT,PULL] Rockchip dts32 changes for 6.6 #1
+  Submitter: Heiko Stübner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=793717
+  Lore link: https://lore.kernel.org/r/2167992.Mh6RI2rZIc@phil
+
+Series: Renesas SoC updates for v6.7
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=788761
+  Lore link: https://lore.kernel.org/r/cover.1695985418.git.geert+renesas@glider.be
+    Patches: [GIT,PULL,1/5] Renesas ARM defconfig updates for v6.7
+             [GIT,PULL,2/5] Renesas ARM SoC updates for v6.7
+
+Patch: [GIT,PULL] Rockchip dts64 changes for 6.7
+  Submitter: Heiko Stübner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=793715
+  Lore link: https://lore.kernel.org/r/1870252.CQOukoFCf9@phil
+
+Patch: [GIT,PULL] RISC-V Devicetrees for v6.7
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=793598
+  Lore link: https://lore.kernel.org/r/20231016-filing-payroll-7aca51b8f1a3@spud
+
+Patch: [GIT,PULL] Fixes for omaps
+  Submitter: Tony Lindgren <tony@atomide.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=794184
+  Lore link: https://lore.kernel.org/r/pull-1697606314-911862@atomide.com
+
+
+Total patches: 8
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
