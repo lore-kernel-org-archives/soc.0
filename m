@@ -4,58 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B40BC41513
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58815CDB486
 	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 15:40:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0F69CC4339A; Wed, 18 Oct 2023 15:40:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E681FC433CA;
+	id 153B3C433CA; Wed, 18 Oct 2023 15:40:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC3E2C43391;
 	Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697643633;
-	bh=pjYA9klbkClUzfUPOYDcnuza087nXimd7t7yexp9oGw=;
+	s=k20201202; t=1697643634;
+	bh=eCilIqJgUQOcIGtppmYIFFlJCIUQW20duGX2z55+/fc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=uK7LloaJnfGKV/gWnj9gToUCYU14jORHe97Bi8eGqucUwQkuLVDpYcHIIC6MgcvK0
-	 MCtaAk/T8XDFh6DXwKukqmZ3R+NVFTSFUtsveoPkzBsnHTar4ABVL83gCnRKTNlxzf
-	 vrJ6cMR06vjBrYP0a2NY3tB4r5sRIw6XYyE1ZB+d+OqnSNdAFa0HQahrY/QIFsTPqX
-	 Wq70hHh0TSc958KxsyaG74pqXd9f+ZFQGnAdrm3/0l0dSTcjdPNZC2Hb5TNljt7LH3
-	 cQDeEpDI2PkZ5GTAIar8M6IoF6ZqRBi4T7vOtgxLmavptLRHMjAamVCUMHdl/nW/gh
-	 dRQeXg1ORhJEg==
+	b=RF9ZTL85yZuxfWdjh49ccuroL3sFnoBclNdc2FwrJ/t/CYJG52Ok4BmLG9aXkZ5kg
+	 nNk6x++rp04wO+mBJkpC01jZDdnk8ompb8JpYYXsxAcQO7K8SLkJAPzBDdT8IVyV7T
+	 WZI6APGsWUKBdhKM2KDBbBRQT3ymX1SOHlrOvYjwVdOL/LhfP7PreZUf6DwlaIyQJh
+	 7t+2WzKfEfWKI7CR3wDS5RZX7fuZTdmAndbMb1TEtpa5iTvQoAg7wAP0V+aFOmtxYu
+	 sZf4dZdG/CN0suhynVPeMUiWIPHkt3AAgMn3zophh7zcABB2U4Pdw91jMAD8U7dSRG
+	 i6lhZ7spTWH/A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C6267E00081;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D25BEE00083;
 	Wed, 18 Oct 2023 15:40:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm/arm64: dts: Removed undocumented and unused
- "pl022,hierarchy" property
+Subject: Re: [GIT PULL 0/5] Renesas SoC updates for v6.7
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169764363380.8197.3566778333954941742.git-patchwork-notify@kernel.org>
+ <169764363385.8197.376917155250192058.git-patchwork-notify@kernel.org>
 Date: Wed, 18 Oct 2023 15:40:33 +0000
-References: <20230928190859.1072420-1-robh@kernel.org>
-In-Reply-To: <20230928190859.1072420-1-robh@kernel.org>
-To: Rob Herring <robh@kernel.org>
+References: <cover.1695985418.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1695985418.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 28 Sep 2023 14:08:45 -0500 you wrote:
-> The "pl022,hierarchy" is not documented, all instances use are 0 and
-> isn't handled in the kernel driver, so let's just remove it.
+On Fri, 29 Sep 2023 13:10:10 +0200 you wrote:
+> Hi SoC folks,
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Arnd, Please apply this directly.
+> This is my first pull request for the inclusion of Renesas SoC updates
+> for v6.7.
+> 
+> It consists of 5 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - arm/arm64: dts: Removed undocumented and unused "pl022,hierarchy" property
-    https://git.kernel.org/soc/soc/c/7115816b609a
+  - [GIT,PULL,1/5] Renesas ARM defconfig updates for v6.7
+    (no matching commit)
+  - [GIT,PULL,2/5] Renesas ARM SoC updates for v6.7
+    https://git.kernel.org/soc/soc/c/f46ada004d8c
+  - [GIT,PULL,3/5] Renesas driver updates for v6.7
+    (no matching commit)
+  - [GIT,PULL,4/5] Renesas DT binding updates for v6.7
+    (no matching commit)
+  - [GIT,PULL,5/5] Renesas DTS updates for v6.7
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
