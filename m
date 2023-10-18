@@ -1,85 +1,109 @@
-Return-Path: <SRS0=nqc+=GA=bombadil.srs.infradead.org=BATV+19490d9e8063348c9c2f+7360+infradead.org+hch@kernel.org>
+Return-Path: <SRS0=RkYz=GA=canb.auug.org.au=sfr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72241CDB483
-	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 05:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282FECDB47E
+	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 06:11:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5820BC433C8; Wed, 18 Oct 2023 05:27:07 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	id E37DCC433C7; Wed, 18 Oct 2023 06:11:09 +0000 (UTC)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5DA68C433C9;
-	Wed, 18 Oct 2023 05:27:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5DA68C433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=G1q5kjKCly+YP8ujUn6bFejuAy7IU52U7erNsqEL50A=; b=AJt060LlpGen+lRt6knsoShqCI
-	O1W/l3v+OgIWq/dNaMJb68oogx+fY6vgqblyV4Y1KRKaOyksT1vqfK5muDYgdHc5Rt+HToKaa46RU
-	t938WpSxFTPYLhNAaHW2h2vNOlNXM8BRefy0BJpwFtZ/6G+WXtWM2RhmY5fbLy622gLDJ7Ph9yQTE
-	Gnax+zzBMMmlmtocynwK7oZGEL447qHcAs+mnIseEMeDcR9l7Zv2/Yni4fvt6AKzm6sLEP0PoSSAD
-	0pzr0tRkfqAeY38dz9SjP3tFzKzLdPYoWtprOPaiZnR2FCRoZXEHI/f923zQ3/ytp/9gXMXW+Y2A6
-	xt4V1l9g==;
-Received: from 2a02-8389-2341-5b80-39d3-4735-9a3c-88d8.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:39d3:4735:9a3c:88d8] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1qsz5E-00Dp3w-1i;
-	Wed, 18 Oct 2023 05:27:04 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Conor Dooley <conor@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id CD83AC433C8;
+	Wed, 18 Oct 2023 06:11:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD83AC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1697609463;
+	bh=qB3Ha83vzVs0uN4/XnNQdQVWsHMaULkNTOJrWBasbG4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CiTKe3zMJIOCsRXE8xsQTfjFQAvETHmNaIQJlQ9bB47RZvtUtfPvn81VaNtCe3iBZ
+	 +mmdPNOIWdIOxBFO6nSF0t1o2U5mxR2OJ0kMDbJSNOtuDQl2sBnR65GahG+8G/ORdP
+	 qIm40h6NC/ASHKgZVSyLX/RtqZNCMDsDA3HrnMhsRef2cbmXIjT+VdLqJB/02uPdCS
+	 kbEUgusCPKDp+nonC70XUbABRK+eHW85hZP/GcI384BDMSRCO4g3QnrYaIa8P0Js5H
+	 vjRvOSagj7IqdVQF16ZiW0CyHYjMimPVA+QRGxJLnBO4MXpUgFfTrHJTjL4+bQdF7j
+	 XOKre8TtoQU8A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4S9L7q1zQvz4wbp;
+	Wed, 18 Oct 2023 17:11:03 +1100 (AEDT)
+Date: Wed, 18 Oct 2023 17:11:01 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-riscv@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	soc@kernel.org,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH 3/3] soc: renesas: ARCH_R9A07G043 depends on !RISCV_ISA_ZICBOM
-Date: Wed, 18 Oct 2023 07:26:54 +0200
-Message-Id: <20231018052654.50074-4-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231018052654.50074-1-hch@lst.de>
-References: <20231018052654.50074-1-hch@lst.de>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, soc@kernel.org
+Subject: Re: Covering DT build in -next merge
+Message-ID: <20231018171101.26b8dbcf@canb.auug.org.au>
+In-Reply-To: <ZS7rlTZLr0m1OEv8@sirena.org.uk>
+References: <ZS7rlTZLr0m1OEv8@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: multipart/signed; boundary="Sig_/XKZDKnVq=yDSY_XGcsQaGHc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-ARCH_R9A07G043 has its own non-standard global pool based DMA coherent
-allocator, which conflicts with the remap based RISCV_ISA_ZICBOM version.
-Add a proper dependency.
+--Sig_/XKZDKnVq=yDSY_XGcsQaGHc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/soc/renesas/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Hi Mark,
 
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 335251ff6e8214..624185e09c967b 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -341,6 +341,7 @@ config ARCH_R9A07G043
- 	bool "RISC-V Platform support for RZ/Five"
- 	depends on NONPORTABLE
- 	depends on RISCV_ALTERNATIVE
-+	depends on !RISCV_ISA_ZICBOM
- 	depends on RISCV_SBI
- 	select ARCH_RZG2L
- 	select AX45MP_L2_CACHE
--- 
-2.39.2
+On Tue, 17 Oct 2023 21:16:21 +0100 Mark Brown <broonie@kernel.org> wrote:
+>
+> I was wondering if it might be possible to add DTB builds for relevant
+> architecutres to the -next merge checks (everything except x86 AFAIK)?
+> Some current experience suggested to me that it might be helpful for
+> bisecting problems found in testing, breakage building the DTBs causes
+> hassle since where they're used in tree DTs are required to boot the
+> kernel.
+>=20
+> At least for arm and arm64 the DT build is quick enough to be negligable
+> in the context of building the kernel itself so hopefully it shouldn't
+> add too much load to do this - it's just adding a 'make dtbs' (with
+> appropriate cross build options) to the kernel build.
 
+Ummm, arm builds (and many others) select CONFIG_OF_EARLY_FLATTREE (in
+the case of arm, only if CONFIG_OF is set), and the top level Makefile
+does this:
+
+ifneq ($(wildcard $(srctree)/arch/$(SRCARCH)/boot/dts/),)
+dtstree :=3D arch/$(SRCARCH)/boot/dts
+endif
+
+ifneq ($(dtstree),)
+	.
+	.
+	.
+ifdef CONFIG_OF_EARLY_FLATTREE
+all: dtbs
+endif
+
+endif
+
+So won't this be the same as doing a separate "make dtbs"?
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XKZDKnVq=yDSY_XGcsQaGHc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUvdvUACgkQAVBC80lX
+0GwkKQf+IWyF+mZXfIODoybrGBaxaP/eKxHuTHcfCWlF2bGBlIHVawjjisO7Y7en
+XRSHKCHoch/OxrnXrxIj6o+nw0LPnkgwMDujuVrWAtz5dhgKpWpJI0S2WO6bpDj4
+I6CBpp+X7Pe6PQ1U00vVkJX5UDCu4NaiUTy9VuoH/DPrTRf9Va9MzE0IetERz7Pt
+3boOgJG1MNZMPnqEJY1LuKFdA1lVih6InH1Jc5B1H1hACAdTHOrlYiDdcqgSAFjV
+XgbzrvcAedFeBZS/m9cXGDdWWLU8S4Kh9ifmqEeMMFRGMzzC0QQ6G4sNfwg8Ddsb
+kandqhOvxPRl723cVC4SYRg5cdYp3w==
+=5H1I
+-----END PGP SIGNATURE-----
+
+--Sig_/XKZDKnVq=yDSY_XGcsQaGHc--
