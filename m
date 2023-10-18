@@ -1,205 +1,162 @@
-Return-Path: <chanwoo@kernel.org>
+Return-Path: <SRS0=jJFC=GA=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27B43CDB47E
-	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 16:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 824B0CDB482
+	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 16:52:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D4DCDC433C9; Wed, 18 Oct 2023 16:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A405C433C8;
-	Wed, 18 Oct 2023 16:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697647890;
-	bh=TLlKRjH6eUmr/KaJhdVqQS2L/pLOYpGQdGsTTIzdRRc=;
-	h=Date:Subject:To:List-Id:Cc:References:From:In-Reply-To:From;
-	b=i1hDhNupfiFQ3szQGBsMoVRmua1xcR7ribPOkw1ytMZaceum26lB3HQX8DJwqkU0T
-	 vm8khMDQPtZrd9Sicik+PIlAkuqNODE0P8Cj9Ahi+GD4TDLVctwQaQXdCMlq8pqF06
-	 f5wDVd1sVeEDq49gN1okVFdMuUtH+6TKKkF+nu4U9nquxHb8vS/BUbWV+TBfKyMynC
-	 F6DoCPx6k0VYguVDyvn3G+puOwvnLBPgKNLLtcIdwIoQqZCyFZfPxfhPwImB7InUXl
-	 wMQ6dqUZEY4e+fwA/IgFYIGvwcIGoL/gcfc8Y1CSFEbje9KS1yeUH2NsrUgb6NKS4i
-	 1DTaGdRUYloWA==
-Message-ID: <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
-Date: Thu, 19 Oct 2023 01:51:23 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
- plls, mux and gates
-Content-Language: en-US
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com
+	id 37219C433CC; Wed, 18 Oct 2023 16:52:34 +0000 (UTC)
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B5DB2C433C7;
+	Wed, 18 Oct 2023 16:52:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5DB2C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39IGqQvm021734;
+	Wed, 18 Oct 2023 11:52:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1697647946;
+	bh=pBfx41kuQIcNj3y4wPggeqMsrvCf7MYOqAKNKkwRtwc=;
+	h=Date:From:To:CC:Subject;
+	b=dgIY9p1o+GzLZCv7cplu62l6SSbIy0IVJX8Dgc2kHlmudwiU/HoOx/Fv7UdD2f4L8
+	 Rnj4vbKlQDkeF4UV0iY5CqlE78Lqk8aoZWcOHBAVmfH5e+8tAfFM9oP8VFtLqcXOUT
+	 4HHKS17BnY6pKVgd+jRxQpjLdmF+9UDw2VNjei9c=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39IGqQf0057054
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 18 Oct 2023 11:52:26 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 18
+ Oct 2023 11:52:26 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 18 Oct 2023 11:52:26 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39IGqQak130574;
+	Wed, 18 Oct 2023 11:52:26 -0500
+Date: Wed, 18 Oct 2023 11:52:26 -0500
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
- semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
- soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-watchdog@vger.kernel.org, kernel-team@android.com,
- linux-serial@vger.kernel.org
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-11-peter.griffin@linaro.org>
-From: Chanwoo Choi <chanwoo@kernel.org>
-In-Reply-To: <20231011184823.443959-11-peter.griffin@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony
+ Lindgren <tony@atomide.com>
+Subject: [GIT PULL] soc: ti: Driver updates for v6.7
+Message-ID: <20231018165226.33x5cjn5jmgnm3di@magnolia>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="67bzctord3thzjmi"
+Content-Disposition: inline
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Peter,
+--67bzctord3thzjmi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 23. 10. 12. 03:48, Peter Griffin wrote:
-> CMU_TOP is the top level clock management unit which contains PLLs, muxes
-> and gates that feed the other clock management units.
-> 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  drivers/clk/samsung/Kconfig     |    9 +
->  drivers/clk/samsung/Makefile    |    2 +
->  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++++
->  3 files changed, 1562 insertions(+)
->  create mode 100644 drivers/clk/samsung/clk-gs101.c
-> 
-> diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
-> index 76a494e95027..14362ec9c543 100644
-> --- a/drivers/clk/samsung/Kconfig
-> +++ b/drivers/clk/samsung/Kconfig
-> @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
->  	select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
->  	select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
->  	select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
-> +	select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
->  	select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
->  
->  config S3C64XX_COMMON_CLK
-> @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
->  	  status of the certains clocks from SoC, but it could also be tied to
->  	  other devices as an input clock.
->  
-> +config GOOGLE_GS101_COMMON_CLK
-> +	bool "Google gs101 clock controller support" if COMPILE_TEST
-> +	depends on COMMON_CLK_SAMSUNG
-> +	depends on EXYNOS_ARM64_COMMON_CLK
-> +	help
-> +	  Support for the clock controller present on the Google gs101 SoC.
-> +	  Choose Y here only if you build for this SoC.
-> +
+Hi,
 
-(snip)
+Please pull:
 
-> +
-> +/* gs101 */
-> +static const struct samsung_mux_clock cmu_top_mux_clks[] __initconst = {
-> +	/* CMU_TOP_PURECLKCOMP */
-> +	MUX(CLK_MOUT_SHARED0_PLL, "mout_shared0_pll", mout_shared0_pll_p,
-> +	    PLL_CON0_PLL_SHARED0, 4, 1),
-> +	MUX(CLK_MOUT_SHARED1_PLL, "mout_shared1_pll", mout_shared1_pll_p,
-> +	    PLL_CON0_PLL_SHARED1, 4, 1),
-> +	MUX(CLK_MOUT_SHARED2_PLL, "mout_shared2_pll", mout_shared2_pll_p,
-> +	    PLL_CON0_PLL_SHARED2, 4, 1),
-> +	MUX(CLK_MOUT_SHARED3_PLL, "mout_shared3_pll", mout_shared3_pll_p,
-> +	    PLL_CON0_PLL_SHARED3, 4, 1),
-> +	MUX(CLK_MOUT_SPARE_PLL, "mout_spare_pll", mout_spare_pll_p,
-> +	    PLL_CON0_PLL_SPARE, 4, 1),
-> +
-> +	/* BUS0 */
-> +	MUX(CLK_MOUT_BUS0_BUS, "mout_cmu_bus0_bus", mout_cmu_bus0_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS, 0, 2),
-> +	MUX(CLK_MOUT_CMU_BOOST, "mout_cmu_boost", mout_cmu_cmu_boost_p,
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-In order to keep the consistent naming style,
-I think that need to change from 'mout_cmu_boost' to 'mout_cmu_cmu_boost'.
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-> +	    CLK_CON_MUX_MUX_CLKCMU_CMU_BOOST, 0, 2),
-> +
-> +	/* BUS1 */
-> +	MUX(CLK_MOUT_BUS1_BUS, "mout_cmu_bus1_bus", mout_cmu_bus1_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS, 0, 2),
-> +
-> +	/* BUS2 */
-> +	MUX(CLK_MOUT_BUS2_BUS, "mout_cmu_bus2_bus", mout_cmu_bus2_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_BUS2_BUS, 0, 2),
-> +
-> +	/* CORE */
-> +	MUX(CLK_MOUT_CORE_BUS, "mout_cmu_core_bus", mout_cmu_core_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> +
-> +	/* EH */
-> +	MUX(CLK_MOUT_EH_BUS, "mout_cmu_eh_bus", mout_cmu_eh_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
+are available in the Git repository at:
 
-'mout_cmu_core_bus' and 'mout_cmu_eh_bus' uses the same register/shift/width information. 
-I think it should be modified by changing the regiter or changing the shift/width information.
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
+er-soc-for-v6.7
 
-> +
-> +	/* CPUCL{0,1,2,} */
-> +	MUX(CLK_MOUT_CPUCL2_SWITCH, "mout_cmu_cpucl2_switch", mout_cmu_cpucl2_switch_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_CPUCL2_SWITCH, 0, 2),
-> +
-> +	MUX(CLK_MOUT_CPUCL1_SWITCH, "mout_cmu_cpucl1_switch", mout_cmu_cpucl1_switch_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_CPUCL1_SWITCH, 0, 2),
-> +
-> +	MUX(CLK_MOUT_CPUCL0_SWITCH, "mout_cmu_cpucl0_switch", mout_cmu_cpucl0_switch_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_CPUCL0_SWITCH, 0, 2),
-> +
-> +	MUX(CLK_MOUT_CPUCL0_DBG, "mout_cmu_cpucl0_dbg", mout_cmu_cpucl0_dbg_p,
-> +	    CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 2),
-> +
-> +	MUX(CLK_MOUT_CMU_HPM, "mout_cmu_hpm", mout_cmu_hpm_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_HPM, 0, 2),
->
+for you to fetch changes up to 3aeb0d3694e16b5066db82aa1152884f2e6aace0:
 
-(snip)
+  soc: ti: k3-socinfo: Avoid overriding return value (2023-10-16 11:38:17 -=
+0500)
 
-> +	/* PDP */
-> +	MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
-> +
-> +	/* PDP */
-> +	MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
-> +
-> +	/* IPP */
-> +	MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
-> +
-> +	/* G3AA */
-> +	MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa", mout_cmu_g3aa_p,
-> +	    CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
+----------------------------------------------------------------
+TI SoC driver updates for v6.7
 
-I think that need to change the mux name and mux parent name
-because other mux name use the twice word according to the register name
-even if use the same work such as 'mout_cmu_g2d_g2d', 'mout_cmu_mcsc_mcsc' and 'mout_cmu_mfc_mfc'.
-- mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
-- mout_cmu_g3aa_p -> mount_cmu_g3aa_g3aa_p
+- Generic fixups: Convert to platform remove callback returning void
+- ti_sci: Minor fixups and mark driver as non-removable
+- k3-socinfo: Documentation fixups, cosmetic fixups
+- knav_qmss_queue: Optimize with device_get_match_data
 
-(snip)
+Signed-off-by: Nishanth Menon <nm@ti.com>
 
-> +	/* CSIS */
-> +	GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
-> +	     CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
-> +	/* PDP */
-> +	GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus",
-> +	     CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> +
-> +	GATE(CLK_GOUT_PDP_VRA, "gout_cmu_pdp_vra", "mout_cmu_pdp_vra",
-> +	     CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> +
-> +	/* IPP */
-> +	GATE(CLK_GOUT_IPP_BUS, "gout_cmu_ipp_bus", "mout_cmu_ipp_bus",
-> +	     CLK_CON_GAT_GATE_CLKCMU_IPP_BUS, 21, 0, 0),
-> +	/* G3AA */
-> +	GATE(CLK_GOUT_G3AA, "gout_cmu_g3aa", "mout_cmu_g3aa",
-> +	     CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 21, 0, 0),
+----------------------------------------------------------------
+Dhruva Gole (1):
+      firmware: ti_sci: Mark driver as non removable
 
-ditto.
-gout_cmu_g3aa -> gout_cmu_g3aa_g3aa
-mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
+Jinjie Ruan (1):
+      firmware: ti_sci: Use list_for_each_entry() helper
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Justin Stitt (1):
+      firmware: ti_sci: refactor deprecated strncpy
 
+Neha Malcom Francis (2):
+      soc: ti: k3-socinfo: Fix typo in bitfield documentation
+      soc: ti: k3-socinfo: Avoid overriding return value
+
+Rob Herring (2):
+      firmware: ti_sci: Use device_get_match_data()
+      soc: ti: knav_qmss_queue: Use device_get_match_data()
+
+Uwe Kleine-K=F6nig (7):
+      soc/ti: k3-ringacc: Convert to platform remove callback returning void
+      soc/ti: knav_dma: Convert to platform remove callback returning void
+      soc/ti: knav_qmss_queue: Convert to platform remove callback returnin=
+g void
+      soc/ti: pm33xx: Convert to platform remove callback returning void
+      soc/ti: pruss: Convert to platform remove callback returning void
+      soc/ti: smartreflex: Convert to platform remove callback returning vo=
+id
+      soc/ti: wkup_m3_ipc: Convert to platform remove callback returning vo=
+id
+
+ drivers/firmware/ti_sci.c        | 69 ++++++------------------------------=
+----
+ drivers/soc/ti/k3-ringacc.c      |  5 ++-
+ drivers/soc/ti/k3-socinfo.c      |  7 ++--
+ drivers/soc/ti/knav_dma.c        |  6 ++--
+ drivers/soc/ti/knav_qmss_queue.c | 13 ++++----
+ drivers/soc/ti/pm33xx.c          |  5 ++-
+ drivers/soc/ti/pruss.c           |  6 ++--
+ drivers/soc/ti/smartreflex.c     |  5 ++-
+ drivers/soc/ti/wkup_m3_ipc.c     |  6 ++--
+ 9 files changed, 30 insertions(+), 92 deletions(-)
+
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--67bzctord3thzjmi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmUwDUMACgkQ3bWEnRc2
+JJ1mGg/9EC44giOXUZQCKO4js1WLxploOGsEAhxRIu40Be6deOSKyiTn5lHNLI5S
+GxO5SkQuFq0StYEVGWcEN3Xo5ABZl7n7WBFH8FGTVx1bflh8yQj4gLscmhe+7iqd
+OX6eEgAGnc2Z1vywPQHGUg/4wQJdChOuFFY4EsZH1lSERvpRZeh95T5/MnYvMU/T
+ExL9uIyF7WbNVWFs+SYfhYShSHP/jhsLbEnJpQw27KzBo3eKX5d0XgC4QDiD0DU6
+XENtghktgMv/lqaMEsrYn4MDq5edg2s27ba05f3Rs+EoHvt/gNcH/leGEWSC44/x
+vGPGRiR43KlJfmun7dByHIBrg/JryXEvE4biJ4PbCDzlq4zFt9wqRBCmGuvHdZi/
+BCn1scPBf7IPkfPdS7aR/Qw4F11ubMq8Pf2rlP1mdGCTOODfQxjuK6QLNOKdhS7M
+RandG0vVc7OMVia/OUskcA6eEmTjUh4yF52AH95UKpFPVI1en93CgjLco/Z4/U3f
+ByWOExozTcx7G3RYCsMF4YDOfXMIcM/M6ERtymzNwVvpIqSboCex7rrAa4YG2LJ/
+YbpN/NHT9WPGdPq/qgEAtRxN6Rt+/+dB78D2eVb+ZeLVraTspie2Lgnh6rZ+J5XU
+5yFQ8nbobrWdpMKdJsyCDNaKbboUBxfhKhP07Elce9xET9lwt/M=
+=/wMu
+-----END PGP SIGNATURE-----
+
+--67bzctord3thzjmi--
