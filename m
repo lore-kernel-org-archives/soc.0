@@ -4,52 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C78ABCDB483
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6194CDB47E
 	for <soc@archiver.kernel.org>; Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 94BBCC433CB; Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F14AC433C7
-	for <soc@kernel.org>; Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
+	id 90FDCC433CA; Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7591DC433C8;
+	Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1697643625;
-	bh=WVF3IY1y/eBwHRaR6jcduUMj7U3dKs5qQiksAEBqACo=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=B6HNZiZO9uF0GGFEp/l3DmZJYBL83eeN3AchDIbEdddB7LUg5XGv+OTZk5phHIvsv
-	 9ye+I+4kTBfsoIlMukKYX9XLsIheZ0qXe2MSYB8lLlhZYB48dIFO6MJ64XLR5Eh2Pi
-	 hK3/F/vBaaBTqRTrH7FZ8cMWqbSCXNkwr8ijJEE1NpJzV91+9PHEepR/+h1KtGNvv5
-	 uNRJjljg+4gUCaUH03nBteyaMZOV9butv6KfGfE9wDfIyEsShkriDEfMQX3gEcfl4E
-	 DIpFZr1WDvWM0l4RuQk+uxC8YOraHEZtMtL0xq9DufQL9UPvBcKlFSTAY42o3BncB8
-	 jY/H4vI8vtS/A==
+	bh=Cq1sz5a3srWqkfvOjexPYq9jI5dYEXuMBxQDWK5poDA=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=iOHEus07Pgj+jcGkIjdinQz0gL6c60mxF9M75NAmTIJkVMKvRZQIaQaobqRupWWPH
+	 P0F9mhQPguenX2/ORrnvRiUXU0as0SpKpKmh3T9OMo+p1kOlkENzsPAfB6Nwy2cpmM
+	 IsQM3uKhP4RFqIpTC7i0IokM6Ex5ZRx6mx4gsnVWEeO0yH1rsNqfhxLJI8kCrJEO51
+	 PD6eWz5cVSyZt10ERe0DJHJgfcJYtxNM2by4Edi3sWw9QZilgzOvu1CMHw3QlxVESQ
+	 LPgxobMwCQpPHsYNP6Xwr+iEVZTFvjBS/ZeS6bYmjgMgxjD/6wGe2Uzr8tnSuwF/Zv
+	 UtcHwkQfX+TCQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D638C04E24;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6442EC04DD9;
 	Wed, 18 Oct 2023 15:40:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Fixes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169764362531.8197.1497708273239238790.git-patchwork-summary@kernel.org>
+ <169764362540.8197.3944658658126650228.git-patchwork-notify@kernel.org>
 Date: Wed, 18 Oct 2023 15:40:25 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <pull-1697606314-911862@atomide.com>
+In-Reply-To: <pull-1697606314-911862@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Fixes for omaps
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=794184
-  Lore link: https://lore.kernel.org/r/pull-1697606314-911862@atomide.com
+On Wed, 18 Oct 2023 08:19:34 +0300 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
+> 
+> The following changes since commit 06f114cf7cbe96a07c51c47114d79e9654275919:
+> 
+>   Merge branches 'fixes-mapphone' and 'fixes-ti-sysc' into fixes (2023-09-13 11:11:11 +0300)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] Fixes for omaps
+    https://git.kernel.org/soc/soc/c/eaf16b92b18c
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
