@@ -4,70 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B7F0CDB483
-	for <soc@archiver.kernel.org>; Thu, 19 Oct 2023 11:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB13CDB482
+	for <soc@archiver.kernel.org>; Thu, 19 Oct 2023 11:31:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7430DC433CA; Thu, 19 Oct 2023 11:30:39 +0000 (UTC)
+	id 8DD00C433CA; Thu, 19 Oct 2023 11:31:39 +0000 (UTC)
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DCE4CC433C8;
-	Thu, 19 Oct 2023 11:30:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCE4CC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 3FD2DC433C8;
+	Thu, 19 Oct 2023 11:31:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FD2DC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Received: from i5e861907.versanet.de ([94.134.25.7] helo=phil.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1qtREZ-0003E9-Ni; Thu, 19 Oct 2023 13:30:35 +0200
+	id 1qtRFY-0003Et-0c; Thu, 19 Oct 2023 13:31:36 +0200
 From: Heiko Stuebner <heiko@sntech.de>
 To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip driver changes for 6.7
-Date: Thu, 19 Oct 2023 13:30:34 +0200
-Message-ID: <2435081.jE0xQCEvom@phil>
-In-Reply-To: <2578684.Lt9SDvczpP@phil>
-References: <2578684.Lt9SDvczpP@phil>
+Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.7
+Date: Thu, 19 Oct 2023 13:31:35 +0200
+Message-ID: <848860372.0ifERbkFSE@phil>
+In-Reply-To: <3709138.MHq7AAxBmi@phil>
+References: <3709138.MHq7AAxBmi@phil>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Am Montag, 16. Oktober 2023, 23:23:50 CEST schrieb Heiko Stuebner:
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d=
-1d:
->=20
+Hi Arnd,
+
+Am Montag, 16. Oktober 2023, 23:28:05 CEST schrieb Heiko Stuebner:
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+> 
 >   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
->=20
+> 
 > are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
-tags/v6.7-rockchip-drivers1
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.7-rockchip-dts32-1
 
-I've updated the tag and sent a v2 pull request separately.
+just for the record, you pulled this already from the
+previous submission with the wrong mail subject.
+
+So this can be scrapped.
+
 
 Thanks
 Heiko
 
-> for you to fetch changes up to 20bd1191830478cfdc9be766a735923c5fbe5350:
->=20
->   soc/rockchip: io-domain: Convert to platform remove callback returning =
-void (2023-10-02 00:56:13 +0200)
->=20
+> for you to fetch changes up to c96b13d7c0e494e1072648301e61e13a2a85a362:
+> 
+>   ARM: dts: rockchip: Switch to operating-points-v2 for RK3128's CPU (2023-10-04 23:27:04 +0200)
+> 
 > ----------------------------------------------------------------
-> Converting the io-domain driver to the new remove callback.
->=20
+> Someone resurrected a rk3128 board and provided actual SMP support
+> for it. Of course firmware for that SoC does not come with TF-A so
+> it's the old-style SMP the older arm32 Rockchip SoCs use.
+> 
+> And additionally the rv1126 got pwm support.
+> 
 > ----------------------------------------------------------------
-> Uwe Kleine-K=F6nig (1):
->       soc/rockchip: io-domain: Convert to platform remove callback return=
-ing void
->=20
->  drivers/soc/rockchip/io-domain.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
+> Alex Bee (4):
+>       ARM: dts: rockchip: Add SRAM node for RK3128
+>       ARM: dts: rockchip: Add CPU resets for RK3128
+>       ARM: dts: rockchip: Enable SMP bring-up for RK3128
+>       ARM: dts: rockchip: Switch to operating-points-v2 for RK3128's CPU
+> 
+> Jagan Teki (6):
+>       dt-bindings: pwm: rockchip: Document rv1126-pwm
+>       ARM: dts: rockchip: Add pwm2m0 pins to rv1126
+>       ARM: dts: rockchip: Add pwm2 node to rv1126
+>       ARM: dts: rockchip: Add pwm11m0 pins to rv1126
+>       ARM: dts: rockchip: Add pwm11 node to rv1126
+>       ARM: dts: rockchip: Enable pwm fan for edgeble-neu2
+> 
+>  .../devicetree/bindings/pwm/pwm-rockchip.yaml      |  1 +
+>  arch/arm/boot/dts/rockchip/rk3128.dtsi             | 61 ++++++++++++++++++++--
+>  .../boot/dts/rockchip/rv1126-edgeble-neu2-io.dts   |  4 ++
+>  arch/arm/boot/dts/rockchip/rv1126-pinctrl.dtsi     | 16 ++++++
+>  arch/arm/boot/dts/rockchip/rv1126.dtsi             | 22 ++++++++
+>  5 files changed, 100 insertions(+), 4 deletions(-)
+> 
 
 
 
