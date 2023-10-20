@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B24BC001DF
-	for <soc@archiver.kernel.org>; Fri, 20 Oct 2023 21:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 938C2C001DF
+	for <soc@archiver.kernel.org>; Fri, 20 Oct 2023 21:45:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 687F6C433C8; Fri, 20 Oct 2023 21:26:46 +0000 (UTC)
+	id 3AA9EC433C9; Fri, 20 Oct 2023 21:45:45 +0000 (UTC)
 Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 59891C433C7
-	for <soc@kernel.org>; Fri, 20 Oct 2023 21:26:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 59891C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 1353CC433C7
+	for <soc@kernel.org>; Fri, 20 Oct 2023 21:45:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1353CC433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-32d9d8284abso882971f8f.3
-        for <soc@kernel.org>; Fri, 20 Oct 2023 14:26:45 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-313e742a787so781304f8f.1
+        for <soc@kernel.org>; Fri, 20 Oct 2023 14:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697837203; x=1698442003; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHYjWkNPmtF9r9aeFX/xUIwcyd64NppqN/TdcvoeUSc=;
-        b=KeJ1cMiBxQkdEncpqCSE03Ix9vBGk2n7eN3DOSeSuOAL8hE2VliXpW+TvcKMfEOq2L
-         TKLhzml22wQBPRPu66y0ZxD5AtQrkbaG25s4Exyx3fk7bzC4eiQAOtBCRP+zO4dwGRKv
-         QFbanu9T4U+zd0zPJ0PqlhWpmm87VINgZwL752DhXREm2wkIj1u/23LSH3PpZz51Y11t
-         rVY4geQpize0mylxwV8quC9zjeGPrtPqd0DXMPCTy19PIuBTo4q1xNni7M0LV6eKeEOU
-         XMEzWX+2HKx5woC4atiHufpEdxCk5Mu6Yj4eX2O1yn29myAeGMXZoVNS/YhTRmmjgeZc
-         g2gw==
+        d=linaro.org; s=google; t=1697838342; x=1698443142; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QxjlY5uEMjde2s1dEktp9/ACelgmEbqMgOPIWBYsGlA=;
+        b=O8Npe0TNxMwz8bAXJvp+RuP7pN4gVl8pHzdHh5DCuZQIywpnZLDN0suCyYt0sHYEKS
+         WFcAJF9sYv8jWIV5BWrzcQlfrd62OyvSp7Q7+GvOK16GhA2T9X+Pl+Tj/HLrjQzrUR/H
+         bbg1AkviG724LhxVLdG7MyeGLVdi/yOhH2169SzaBOWC5DuNMj0gBaDQd8QMD1Eue5RN
+         zRzr7eGQUt5VA/IQ3/of52VNGI75MNoe0kRr6P8iE6I2Baqhsasj/K+bSa8xNQ7O1QWp
+         342sJQRKj9Vg8hbILb+49nFj2sKSo0eqlFQJxqZQ6DCTkumTi/FFhPWB4W9G4cZvG/7k
+         ALAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697837203; x=1698442003;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZHYjWkNPmtF9r9aeFX/xUIwcyd64NppqN/TdcvoeUSc=;
-        b=GQkn0DljuqL52+Efqy95YgrhmOSnJdJ7tpHwFhm4WqHGuCN/xixE2L3v03XgrjcS9j
-         bQGVYJfhokOV+wxynpGp3OHkbqt1kP4IAHkcahRoFfQRKwRENmP9p1EwqvnvzzJz+l2y
-         SDnr2Fc7y/OmRbVA2cBUClPDUBV5x4ogjTq7/S7Z8N5m9CvpBQhWgJKtok7wp1ZDvFMM
-         jP5AlYkICAcqkmlXxBZ+CQ+SHzIiyqksLP6KAz66aliSyQnh8rFYDxeWqx5qG71uALvq
-         SF73iChRnkp+cvYLKDdziLazocSY/XVoxZwQolbZIuCBn7R8P7RcbU4ieciLUgjiW3um
-         HjIw==
-X-Gm-Message-State: AOJu0YxhQErddvrThAQ6quN6jrgsjBAabPThPZ2co4G2xHMxEgAZy96Z
-	V9Rf2g1sretp0oKG+0cCNvCE6w==
-X-Google-Smtp-Source: AGHT+IFRAhrl3tHBW+U6xon/uJrsLJfYk/6lfOn5/BA1/NFw0IMgu3RVszTl0vcHTum/Uj1NNjmnSQ==
-X-Received: by 2002:a05:6000:1105:b0:32d:939d:c7cf with SMTP id z5-20020a056000110500b0032d939dc7cfmr2438552wrw.52.1697837203522;
-        Fri, 20 Oct 2023 14:26:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697838342; x=1698443142;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QxjlY5uEMjde2s1dEktp9/ACelgmEbqMgOPIWBYsGlA=;
+        b=uAgrKvZe4usmuMIY8H0bWMqxktDUEQgIiFCd+Z0AP9zM5jaTcm2PeGYZVdhhDCbcpp
+         qgN9jD/rVtXHQdET2tVoCu73TpFc5ynFXT5A6nt0ID6aRg5IRqUYkiCtmNpkmX0GMzZi
+         BzJWSPNnFXux5Otx2S+RKbZMhPTxt62DLtVR2zEttVKijdaN9Set5lrr7bWspQgnuNUW
+         MfNEsXaFbX6OOWTK1LQwry9a6Rc6stbjZY1WsUJdxtY2F6hi+3XP3IZUlL5AtBulxnrw
+         MKCBVHI2t9Q6QY88TdnVoGPVxprZjGp49NzO9ee+0wAZfbOHWW9vc6PNRAV62zPmOF0E
+         b5cA==
+X-Gm-Message-State: AOJu0Yw5ulCp2FIhSwLrxqSW4yFnU+pSOkLPvgDrt7ZTI5SllOMTXKcw
+	NshN+m4G/GXmZo6eoz+KxMtVdg==
+X-Google-Smtp-Source: AGHT+IFBew19neBanzQT7imiVhuRWGKvNwUZnpZ09iZmlY1NKGIF6jKdwjH/gs2rXWd6fERiMXYm+w==
+X-Received: by 2002:adf:b307:0:b0:314:3369:df57 with SMTP id j7-20020adfb307000000b003143369df57mr6074420wrd.5.1697838342339;
+        Fri, 20 Oct 2023 14:45:42 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id z7-20020a5d4c87000000b0031980294e9fsm2428238wrs.116.2023.10.20.14.26.42
+        by smtp.gmail.com with ESMTPSA id w15-20020a5d608f000000b0032dbf32bd56sm2468482wrt.37.2023.10.20.14.45.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Oct 2023 14:26:43 -0700 (PDT)
-Message-ID: <ccb48488-7fa2-4784-8c5c-7d6084d16016@linaro.org>
-Date: Fri, 20 Oct 2023 23:26:41 +0200
+        Fri, 20 Oct 2023 14:45:41 -0700 (PDT)
+Message-ID: <35b62306-b4c8-4235-a024-f4a600c16091@linaro.org>
+Date: Fri, 20 Oct 2023 23:45:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RESEND PATCH v2] arm64: dts: Update cache properties for
  socionext
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Rob Herring <robh@kernel.org>, soc@kernel.org,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -68,7 +68,6 @@ To: Rob Herring <robh@kernel.org>, soc@kernel.org,
 Cc: Pierre Gondois <pierre.gondois@arm.com>, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20231020195022.4183862-2-robh@kernel.org>
-Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -134,15 +133,8 @@ On 20/10/2023 21:50, Rob Herring wrote:
 > Link: https://lore.kernel.org/r/20221107155825.1644604-21-pierre.gondois@arm.com
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> I noticed this one fell thru the cracks from the rest of the series.
-> 
-> Arnd, Can you take this directly.
 
-A bit after Pierre - in April 2023 - I sent similar which was said to be
-"applied":
-https://lore.kernel.org/all/f9a2c0d7-a78d-9368-f9bb-e8aba11e7d81@socionext.com/
-
-Maybe the Socionext status in MAINTAINERS should be odd fixes?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
