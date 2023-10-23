@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF45CC25B46
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 014BEC25B4B
 	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A8C99C43391; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8E118C433C9;
+	id CD6C7C433B7; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B4992C43395;
 	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698089430;
-	bh=m6aCRTNqlwMYBjFeDJbvXHmRxewLHJ+R9eBo6h4/DqY=;
+	bh=2clmDPwcLilxaXJDZQBJl/eqDiB+O5Gvfc83ZRaF9z8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Q25mRnjY93MwQ5z7sYGoi2hAc+q8IM6fbiWGHqQKt2xHgZQkpAY+KL1HkrYUPItdd
-	 k9Zfa0XVsfY80Z3epr5o3xIWi5Laz3kGKyMH9nxWbBxh9oXBjpoqyekiAY1G0N/uHm
-	 GKz3o2Hl/HZsm0YveeioADjRzUf0xgKG4Y18+YaY3AlAsHa49NvfAnu9RwE2j9WOjF
-	 AnJlK4H2HCX2uDt60cwf/E8CkEmbGp93lLAABt0BaaJc1EQWgEcjrhJICFAX16VELr
-	 K3vgPdibbr53TzeDXH1YJBQHAPyuAMeyYXn3Q6Agd+jP9VEhX9jLzNBIkkhMfR105y
-	 3uvJu+9Jig2dQ==
+	b=cUgDb72kUPv9GRBHWcEoXDRt5aJtlk5vHugOPDZN6jkgR9/+8prIFZh97XCW3U3eS
+	 cTHQjIctZiNfnqtuWfH/CXuzkGvxokmxJxdTDSjyWGi2uBU8f79FltsJuOOx9FB3oB
+	 TLpAi7+leOcfLhxqKAzhdpxm66J2QMA4nTGJUEXUyZpTFPpDh5xAEGHg3x9jzzXTJ7
+	 zDV4CAjl93/FORNjXr5JozEJNepaez6UAi264y6hREnREqaRkO9YeSMPR9jJCTZ57C
+	 EysjxmsQ8aB9X6RYYUTZE5pkcdoyjaqoyL7Hr0r/22TG5hvcoM2Op2Xd1Kzpx2GEPc
+	 NSEtKxtXUhqKg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6632EE4CC1C;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C724E21EC2;
 	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL v2] Rockchip driver changes for 6.7
+Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v6.7 (#1)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169808943041.14534.892693531189978442.git-patchwork-notify@kernel.org>
+ <169808943057.14534.18242384487214335621.git-patchwork-notify@kernel.org>
 Date: Mon, 23 Oct 2023 19:30:30 +0000
-References: <2171043.Icojqenx9y@phil>
-In-Reply-To: <2171043.Icojqenx9y@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+References: <8734y6aaqb.fsf@BL-laptop>
+In-Reply-To: <8734y6aaqb.fsf@BL-laptop>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 19 Oct 2023 13:30:00 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Thu, 19 Oct 2023 17:33:00 +0200 you wrote:
+> Hi,
 > 
-> I still see the driver pull request pending in the soc patchwork,
-> so opted to replace the tag with this one.
+> Here is the first pull request for dt64 for mvebu for v6.7.
 > 
-> The only difference is the addition of one new compatible for the
-> rk3588's pmugrf.
+> Gregory
+> 
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,v2] Rockchip driver changes for 6.7
-    https://git.kernel.org/soc/soc/c/f1243fcea5a3
+  - [GIT,PULL] ARM: mvebu: dt64 for v6.7 (#1)
+    https://git.kernel.org/soc/soc/c/23b336e9825d
 
 You are awesome, thank you!
 -- 
