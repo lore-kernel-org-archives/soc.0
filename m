@@ -1,107 +1,79 @@
-Return-Path: <SRS0=eGr0=GF=socionext.com=hayashi.kunihiko@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF9EAC07545
-	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 02:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BB71C001E0
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 08:27:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B948FC433CC; Mon, 23 Oct 2023 02:12:32 +0000 (UTC)
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id 9AE77C433C9;
-	Mon, 23 Oct 2023 02:12:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9AE77C433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 23 Oct 2023 11:12:29 +0900
-Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
-	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 54D902059034;
-	Mon, 23 Oct 2023 11:12:29 +0900 (JST)
-Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Mon, 23 Oct 2023 11:12:29 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id A7B71B1D40;
-	Mon, 23 Oct 2023 11:12:28 +0900 (JST)
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+	id 2BF2BC433CA; Mon, 23 Oct 2023 08:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB43C433C7;
+	Mon, 23 Oct 2023 08:27:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698049631;
+	bh=VMTJfimWxD2ILNYWo5Q0hGhuuxNAiNQL2dtWaGJDBpw=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=jZAm89CXNCvRLVD0qs765vwkdARbZ/9snD8N/JQ6Hcc03nuQkEMBg44K6dVaWto9B
+	 q5hGkg1GBU/IcjmkgseTGzzkLsEBfa+fO5F7AhdJZ2kKN4YPBXqUfrPNnXUh5wxbdR
+	 nzrmIPKPlMzzc+kwbvt4wp2298sjtFnUs3pPB47Vb1HsQwgSJkifSRjW7A7aAzbM79
+	 QObeaPTXWDsU+NKIGcjx0dC3A0D0ftrC0h3Gx2YKSSNlJKEkjWGiFMtEDvNwZkKTS+
+	 k5PuIN2/MvCYLDeuxtBKxaB8GgEdjgocIjxUY4VQaq4RFjfTR2QzbY/a7OTDwGWKr+
+	 jwDPQU64rCaxw==
+Date: Mon, 23 Oct 2023 09:27:07 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Jisheng Zhang <jszhang@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: Pierre Gondois <pierre.gondois@arm.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH 2/2] arm64: dts: socionext: add missing cache properties
-Date: Mon, 23 Oct 2023 11:12:21 +0900
-Message-Id: <20231023021221.2884828-3-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231023021221.2884828-1-hayashi.kunihiko@socionext.com>
-References: <20231023021221.2884828-1-hayashi.kunihiko@socionext.com>
+Cc: soc@kernel.org, linux-riscv@lists.infradead.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH] riscv: dts: thead: convert isa detection to new
+ properties
+Message-ID: <20231023-factor-unashamed-2fd76c2ad02b@spud>
+References: <20231022154135.3746-1-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="uZzXzpTKTGrgzgtU"
+Content-Disposition: inline
+In-Reply-To: <20231022154135.3746-1-jszhang@kernel.org>
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-As all level 2 and level 3 caches are unified, add required
-cache-unified property to fix warnings like:
+--uZzXzpTKTGrgzgtU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  uniphier-ld11-ref.dtb: l2-cache: 'cache-unified' is a required property
+On Sun, Oct 22, 2023 at 11:41:35PM +0800, Jisheng Zhang wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Convert the th1520 devicetrees to use the new properties
+> "riscv,isa-base" & "riscv,isa-extensions".
+> For compatibility with other projects, "riscv,isa" remains.
+>=20
+> Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>=20
+> Hi Arnd,
+>=20
+> This is the only one thead patch for v6.7, could you please apply it
+> directly?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi | 1 +
- arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 2 ++
- arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi | 1 +
- 3 files changed, 4 insertions(+)
+FYI, this is missing your signoff, since you are resending my patch.
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
-index 54e58d945fd7..4680571c264d 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
-@@ -53,6 +53,7 @@ cpu1: cpu@1 {
- 		l2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-index 18390cba2eda..335093da6573 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-@@ -87,11 +87,13 @@ cpu3: cpu@101 {
- 		a72_l2: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 
- 		a53_l2: l2-cache1 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index 56e037900818..d6e3cc6fdb25 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -84,6 +84,7 @@ cpu3: cpu@3 {
- 		l2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-unified;
- 		};
- 	};
- 
--- 
-2.25.1
+Cheers,
+Conor.
 
+--uZzXzpTKTGrgzgtU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTYuWwAKCRB4tDGHoIJi
+0gaxAP4r49NwCNjROW78Q/G+7YoLWCXPATofAPsnsGVWgGdhCwEAirNvgyRE5s5y
+xqcf7cE9bbEfurl/6ye2sL0ITB7oKwc=
+=Nj8q
+-----END PGP SIGNATURE-----
+
+--uZzXzpTKTGrgzgtU--
