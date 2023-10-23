@@ -1,103 +1,91 @@
-Return-Path: <jszhang@kernel.org>
+Return-Path: <SRS0=eGr0=GF=socionext.com=hayashi.kunihiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5229CDB474
-	for <soc@archiver.kernel.org>; Sun, 22 Oct 2023 15:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D5DC0032E
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 01:55:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 81A2DC433C9; Sun, 22 Oct 2023 15:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EE4C433C8;
-	Sun, 22 Oct 2023 15:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697990029;
-	bh=OHIHSJz2egyZVm9tXlqMmwRR01/RrOpSIeoHXrWG/FU=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=Si8mMiwl5GJYA7QK4XihFid4XOTJvwoyq9d1X+V7RlG6orxPX6sFGnKTa0EtHqc9o
-	 suFL8RbIFO+tiNNpM80EqEmvK31pvfmxEnQdeUbbODYVxfSTyNzexf4MJv4jdTxMp0
-	 bbAA2mrmKNLgSkqhSYEAmAb2UvXZIc2MRhMMcjLVl+A1fyMVfGv/eOpvVKP289f1oF
-	 Kxz6COpeoC0iUrBckdjdItE22Q9JHP87YkFUhRNpUgkb20pz9Q71oxPLLEVzZniZsT
-	 BuA5qoADqV1ENx+OySnIg0LrsGL2jETAIvvcoz5Fa/99eKLqsAnvT4UtRI2GWxqR2Z
-	 D/WJF2viqSurQ==
-From: Jisheng Zhang <jszhang@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: linux-riscv@lists.infradead.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Guo Ren <guoren@kernel.org>
-Subject: [PATCH] riscv: dts: thead: convert isa detection to new properties
-Date: Sun, 22 Oct 2023 23:41:35 +0800
-Message-Id: <20231022154135.3746-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.40.0
+	id 5606BC433C9; Mon, 23 Oct 2023 01:55:02 +0000 (UTC)
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+	by smtp.kernel.org (Postfix) with ESMTP id EA12AC433C8;
+	Mon, 23 Oct 2023 01:54:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA12AC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 23 Oct 2023 10:53:50 +0900
+Received: from mail.mfilter.local (mail-arc01.css.socionext.com [10.213.46.36])
+	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 124862059053;
+	Mon, 23 Oct 2023 10:53:50 +0900 (JST)
+Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Mon, 23 Oct 2023 10:53:50 +0900
+Received: from [10.212.246.227] (unknown [10.212.246.227])
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 56743B1D40;
+	Mon, 23 Oct 2023 10:53:49 +0900 (JST)
+Message-ID: <dc5ba655-e739-bb24-263c-5f362b0d0f35@socionext.com>
+Date: Mon, 23 Oct 2023 10:53:52 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RESEND PATCH v2] arm64: dts: Update cache properties for
+ socionext
+List-Id: <soc.lore.kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Rob Herring <robh@kernel.org>, soc@kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Pierre Gondois <pierre.gondois@arm.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20231020195022.4183862-2-robh@kernel.org>
+ <ccb48488-7fa2-4784-8c5c-7d6084d16016@linaro.org>
+Content-Language: en-US
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <ccb48488-7fa2-4784-8c5c-7d6084d16016@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hi Krzysztof, Rob,
 
-Convert the th1520 devicetrees to use the new properties
-"riscv,isa-base" & "riscv,isa-extensions".
-For compatibility with other projects, "riscv,isa" remains.
+On 2023/10/21 6:26, Krzysztof Kozlowski wrote:
+> On 20/10/2023 21:50, Rob Herring wrote:
+>> From: Pierre Gondois <pierre.gondois@arm.com>
+>>
+>> The DeviceTree Specification v0.3 specifies that the cache node
+>> 'compatible' and 'cache-level' properties are 'required'. Cf.
+>> s3.8 Multi-level and Shared Cache Nodes
+>> The 'cache-unified' property should be present if one of the
+>> properties for unified cache is present ('cache-size', ...).
+>>
+>> Update the Device Trees accordingly.
+>>
+>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+>> Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>> Link:
+>> https://lore.kernel.org/r/20221107155825.1644604-21-pierre.gondois@arm.com
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> ---
+>> I noticed this one fell thru the cracks from the rest of the series.
+>>
+>> Arnd, Can you take this directly.
+> 
+> A bit after Pierre - in April 2023 - I sent similar which was said to be
+> "applied":
+> https://lore.kernel.org/all/f9a2c0d7-a78d-9368-f9bb-e8aba11e7d81@socionext.com/
+> 
+> Maybe the Socionext status in MAINTAINERS should be odd fixes?
 
-Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
-Acked-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Sorry my mistake.
+I thought Pierre's patch had been already applied, however,
+I set Krzysztof's patch to "applied" but it was missing from the post to soc.
+
+Since Krzysztof's patch includes the same "cache-level" lines as Pierre's,
+the lines needs to be removed.
+
+I'll post the update series including both to soc.
+
+Thank you,
+
 ---
-
-Hi Arnd,
-
-This is the only one thead patch for v6.7, could you please apply it
-directly?
-
-Thanks in advance
-
- arch/riscv/boot/dts/thead/th1520.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-index ce708183b6f6..723f65487246 100644
---- a/arch/riscv/boot/dts/thead/th1520.dtsi
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -20,6 +20,9 @@ c910_0: cpu@0 {
- 			compatible = "thead,c910", "riscv";
- 			device_type = "cpu";
- 			riscv,isa = "rv64imafdc";
-+			riscv,isa-base = "rv64i";
-+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicntr", "zicsr",
-+					       "zifencei", "zihpm";
- 			reg = <0>;
- 			i-cache-block-size = <64>;
- 			i-cache-size = <65536>;
-@@ -41,6 +44,9 @@ c910_1: cpu@1 {
- 			compatible = "thead,c910", "riscv";
- 			device_type = "cpu";
- 			riscv,isa = "rv64imafdc";
-+			riscv,isa-base = "rv64i";
-+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicntr", "zicsr",
-+					       "zifencei", "zihpm";
- 			reg = <1>;
- 			i-cache-block-size = <64>;
- 			i-cache-size = <65536>;
-@@ -62,6 +68,9 @@ c910_2: cpu@2 {
- 			compatible = "thead,c910", "riscv";
- 			device_type = "cpu";
- 			riscv,isa = "rv64imafdc";
-+			riscv,isa-base = "rv64i";
-+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicntr", "zicsr",
-+					       "zifencei", "zihpm";
- 			reg = <2>;
- 			i-cache-block-size = <64>;
- 			i-cache-size = <65536>;
-@@ -83,6 +92,9 @@ c910_3: cpu@3 {
- 			compatible = "thead,c910", "riscv";
- 			device_type = "cpu";
- 			riscv,isa = "rv64imafdc";
-+			riscv,isa-base = "rv64i";
-+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicntr", "zicsr",
-+					       "zifencei", "zihpm";
- 			reg = <3>;
- 			i-cache-block-size = <64>;
- 			i-cache-size = <65536>;
--- 
-2.40.0
-
+Best Regards
+Kunihiko Hayashi
