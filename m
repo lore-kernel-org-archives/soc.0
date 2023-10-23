@@ -4,147 +4,286 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71AF6C25B46
-	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:40:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AC6AC25B45
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 20:04:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 569F0C433CA; Mon, 23 Oct 2023 19:40:54 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	id 18C6FC433CB; Mon, 23 Oct 2023 20:04:15 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2D5AEC433C8;
-	Mon, 23 Oct 2023 19:40:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D5AEC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id D66D7C433C8;
+	Mon, 23 Oct 2023 20:04:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D66D7C433C8
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="377291957"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="366263274"
 X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
-   d="scan'208";a="377291957"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 12:40:52 -0700
+   d="scan'208";a="366263274"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 13:04:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="828561743"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="848879893"
 X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
-   d="scan'208";a="828561743"
+   d="scan'208";a="848879893"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 12:40:48 -0700
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 13:04:10 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC2)
 	(envelope-from <andy@kernel.org>)
-	id 1qv0n7-000000081Ru-3tfk;
-	Mon, 23 Oct 2023 22:40:45 +0300
-Date: Mon, 23 Oct 2023 22:40:45 +0300
+	id 1qv19k-000000081jQ-0Sy7;
+	Mon, 23 Oct 2023 23:04:08 +0300
+Date: Mon, 23 Oct 2023 23:04:07 +0300
 From: Andy Shevchenko <andy@kernel.org>
 To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
 	Linus Walleij <linus.walleij@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 4/7] platform: cznic: turris-omnia-mcu: Add support
- for poweroff and wakeup
-Message-ID: <ZTbMPcP7HmBvY4YP@smile.fi.intel.com>
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <ZTbRtwTsmAjp3QG0@smile.fi.intel.com>
 References: <20231023143130.11602-1-kabel@kernel.org>
- <20231023143130.11602-5-kabel@kernel.org>
+ <20231023143130.11602-4-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231023143130.11602-5-kabel@kernel.org>
+In-Reply-To: <20231023143130.11602-4-kabel@kernel.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Oct 23, 2023 at 04:31:27PM +0200, Marek Behún wrote:
-> Add support for true board poweroff (MCU can disable all unnecessary
-> voltage regulators) and wakeup at a specified time, implemented via a
-> RTC driver so that the rtcwake utility can be used to configure it.
+On Mon, Oct 23, 2023 at 04:31:26PM +0200, Marek Behún wrote:
+> Add support for GPIOs connected to the MCU on the Turris Omnia board.
+> 
+> This includes:
+> - front button pin
+> - enable pins for USB regulators
+> - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
+> - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
+> - on board revisions 32+ also various peripheral resets and another
+>   voltage regulator enable pin
 
 ...
 
-> +static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +static bool omnia_gpio_available(struct omnia_mcu *mcu,
+> +				 const struct omnia_gpio *gpio)
 > +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +
-> +	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
-> +
-> +	if (alrm->enabled)
-> +		return omnia_cmd_write_u32(client, CMD_SET_WAKEUP,
-> +					   mcu->rtc_alarm);
-
-> +	else
+> +	if (gpio->feat_mask)
+> +		return (mcu->features & gpio->feat_mask) == gpio->feat;
+> +	else if (gpio->feat)
 
 Redundant 'else'.
 
-> +		return 0;
+> +		return mcu->features & gpio->feat;
+> +
+> +	return true;
 > +}
 
 ...
 
-> +static int omnia_power_off(struct sys_off_data *data)
+> +static int omnia_gpio_init_valid_mask(struct gpio_chip *gc,
+> +				      unsigned long *valid_mask,
+> +				      unsigned int ngpios)
+> +{
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
 > +
-> +	struct omnia_mcu *mcu = data->cb_data;
-> +	__be32 tmp;
-> +	u8 cmd[9];
-> +	u16 arg;
+> +	for (unsigned int i = 0; i < ngpios; i++) {
+> +		const struct omnia_gpio *gpio = &omnia_gpios[i];
+
+> +		if (!gpio->cmd && !gpio->int_bit) {
+> +			__clear_bit(i, valid_mask);
+> +			continue;
+> +		}
+> +
+> +		__assign_bit(i, valid_mask, omnia_gpio_available(mcu, gpio));
+
+Hmm... Why not simply
+
+		if (...)
+			__clear_bit();
+		else
+			__assign_bit(...);
+
+?
+
+> +	}
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static void omnia_irq_bus_lock(struct irq_data *d)
+> +{
+> +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+> +
+> +	/* nothing to do if MCU firmware does not support new interrupt API */
+> +	if (!(mcu->features & FEAT_NEW_INT_API))
+> +		return;
+> +
+> +	mutex_lock(&mcu->lock);
+
+I'm wondering if sparse complains on unbalanced locking. If so,
+the function needs an annotation.
+
+> +}
+
+...
+
+> +static void omnia_irq_bus_sync_unlock(struct irq_data *d)
+> +{
+> +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+> +	struct device *dev = &mcu->client->dev;
+> +	u8 cmd[1 + CMD_INT_ARG_LEN];
+> +	u32 rising, falling;
 > +	int err;
 > +
-> +	if (mcu->front_button_poweron)
-> +		arg = CMD_POWER_OFF_POWERON_BUTTON;
-> +	else
-> +		arg = 0;
+> +	/* nothing to do if MCU firmware does not support new interrupt API */
+> +	if (!(mcu->features & FEAT_NEW_INT_API))
+> +		return;
 > +
-> +	cmd[0] = CMD_POWER_OFF;
-> +	put_unaligned_le16(CMD_POWER_OFF_MAGIC, &cmd[1]);
-> +	put_unaligned_le16(arg, &cmd[3]);
-
-> +	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
-> +	put_unaligned_le32(crc32_be(0xffffffff, (void *)&tmp, sizeof(tmp)),
-> +			   &cmd[5]);
-
-Hmm... Why crc32_le*() can't be used?
-
+> +	cmd[0] = CMD_SET_INT_MASK;
+> +
+> +	rising = mcu->rising & mcu->mask;
+> +	falling = mcu->falling & mcu->mask;
+> +
+> +	/* interleave the rising and falling bytes into the command arguments */
+> +	omnia_mask_interleave(&cmd[1], rising, falling);
+> +
+> +	dev_dbg(dev, "set int mask %8ph\n", &cmd[1]);
+> +
 > +	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-> +	if (err)
-> +		dev_err(&mcu->client->dev,
-> +			"Unable to send the poweroff command: %d\n", err);
+> +	if (err) {
+> +		dev_err(dev, "Cannot set mask: %d\n", err);
+> +		goto unlock;
+> +	}
 > +
-> +	return NOTIFY_DONE;
+> +	/*
+> +	 * Remember which GPIOs have both rising and falling interrupts enabled.
+> +	 * For those we will cache their value so that .get() method is faster.
+> +	 * We also need to forget cached values of GPIOs that aren't cached
+> +	 * anymore.
+> +	 */
+> +	mcu->both = rising & falling;
+> +	mcu->is_cached &= mcu->both;
+> +
+> +unlock:
+> +	mutex_unlock(&mcu->lock);
+> +}
+
+Same question as above.
+
+...
+
+> +static void omnia_irq_init_valid_mask(struct gpio_chip *gc,
+> +				      unsigned long *valid_mask,
+> +				      unsigned int ngpios)
+> +{
+> +	struct omnia_mcu *mcu = gpiochip_get_data(gc);
+> +
+> +	for (unsigned int i = 0; i < ngpios; i++) {
+> +		const struct omnia_gpio *gpio = &omnia_gpios[i];
+> +
+> +		if (!gpio->int_bit) {
+> +			__clear_bit(i, valid_mask);
+> +			continue;
+> +		}
+> +
+> +		__assign_bit(i, valid_mask, omnia_gpio_available(mcu, gpio));
+
+if-else ?
+
+> +	}
 > +}
 
 ...
 
-> +	if (kstrtobool(buf, &val) < 0)
-> +		return -EINVAL;
-
-Why is the error code shadowed?
-
-...
-
-> +	struct device *dev = container_of(kobj, typeof(*dev), kobj);
-
-kobj_to_dev()?
-
-...
-
-> +	/*
-> +	 * poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
-> +	 * present
-
-Missing period at the end.
-
-> +	 */
-
-...
-
-> +	err = devm_rtc_register_device(mcu->rtcdev);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "Cannot register RTC device\n");
+> +static void omnia_mcu_mutex_destroy(void *data)
+> +{
+> +	struct mutex *lock = data;
 > +
-> +	mcu->front_button_poweron = true;
+> +	mutex_destroy(lock);
+> +}
 
+Can be shrunk to oneliner:
+
+static void omnia_mcu_mutex_destroy(void *lock)
+{
+	mutex_destroy(lock);
+}
+
+...
+
+> +		/*
+> +		 * The button_release_emul_work has to be initialized before the
+> +		 * thread is requested, and on driver remove it needs to be
+> +		 * canceled before the thread is freed. Therefore we can't use
+> +		 * devm_delayed_work_autocancel() directly, because the order
+> +		 *   devm_delayed_work_autocancel();
+> +		 *   devm_request_threaded_irq();
+> +		 * would cause improper release order:
+> +		 *   free_irq();
+> +		 *   cancel_delayed_work_sync();
+> +		 * Instead we first initialize the work above, and only now
+> +		 * after IRQ is requested we add the work devm action.
+> +		 */
+
+...
+
+> +/* Returns 0 on success */
+> +static inline int omnia_cmd_read_bits(const struct i2c_client *client, u8 cmd,
+> +				      u32 bits, u32 *dst)
+> +{
+> +	__le32 reply;
+> +	int err;
+> +
+> +	if (!bits) {
+> +		*dst = 0;
+> +		return 0;
+> +	}
+
+> +	err = omnia_cmd_read(client, cmd, &reply, (__fls(bits) >> 3) + 1);
+> +	if (!err)
+> +		*dst = le32_to_cpu(reply) & bits;
+> +
 > +	return err;
 
-Can it be anything than 0?
+Why not be in align with the below, i.e.
+
+	if (err)
+		return err;
+	...
+	return 0;
+
+?
+
+> +}
+> +
+> +static inline int omnia_cmd_read_bit(const struct i2c_client *client, u8 cmd,
+> +				     u32 bit)
+> +{
+> +	u32 reply;
+> +	int err;
+> +
+> +	err = omnia_cmd_read_bits(client, cmd, bit, &reply);
+> +	if (err)
+> +		return err;
+> +
+> +	return !!reply;
+> +}
+
+...
+
+>  static inline int omnia_cmd_read_u16(const struct i2c_client *client, u8 cmd)
+>  {
+> -	u16 reply;
+> +	__le16 reply;
+>  	int err;
+
+Shouldn't this be a part of another patch?
+
+>  }
 
 -- 
 With Best Regards,
