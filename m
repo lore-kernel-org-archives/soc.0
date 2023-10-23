@@ -1,73 +1,67 @@
-Return-Path: <jszhang@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1025C25B47
-	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 17:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E221FC25B45
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6AA28C433CA; Mon, 23 Oct 2023 17:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C51C433C7;
-	Mon, 23 Oct 2023 17:00:19 +0000 (UTC)
+	id B2A01C433D9; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 98C46C433CC;
+	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698080420;
-	bh=g1G7yWysf4/vpcAzIOKI3rb5OX5zd6qjlbvDZhuGXes=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=nUG2xBJdy02m9wKb22uypTnntGmEen+0EJfuFCoOsj/4Acln1BlcNEIB/1UxxJIDg
-	 PX9LJ2sBxbFexhQebotRRXHCTOegkIL/s+/tsD2jer3WwBA0ZEoAJpp5z8/cGOMPgK
-	 1KLgWe5gqKwBr4zNqPjYKzONmgTlJGc7+J/Pd+Dg3QO1rsQEpirlR4lMQNfb09Z94t
-	 zlXZJltllVB02/W5Bio2LXmxyKS0y0BtcOrbNNiQVN5p0IWczY0z+PlwAia2BrzIwn
-	 qQVmcBS0x3pUBugC9is8ZTorbMjsSlBdTXPC6mHw1iXtFPt2o5xn1TclSvBvOvMUK2
-	 kD66lhz5Ee1Kw==
-Date: Tue, 24 Oct 2023 00:48:07 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-riscv@lists.infradead.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH] riscv: dts: thead: convert isa detection to new
- properties
-Message-ID: <ZTajxzpNbPF9WS0X@xhacker>
-References: <20231022154135.3746-1-jszhang@kernel.org>
- <20231023-factor-unashamed-2fd76c2ad02b@spud>
+	s=k20201202; t=1698089430;
+	bh=miAx5/zUuZW011CKj/SlfqsxX4NtWFP4fTzC563ej10=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=EpnviaVU2jDM/OT/T7a4ahw7IgmOgOMnDO3jgxFaYhZUvG39zgPjZu0vhBI+Vb8Rm
+	 FLNSf73MEfGUVj5pTIdz5VDoE1pSxYX8TjNpQQFYzMWOilUhGFhgU/UP+gfJk37IB/
+	 6dTQH4A4y6VsTju4isbTwxqz9u7csAO6K6di2cKg+EYiIBhhqBCFBxP2RxZ4HdyO7j
+	 W1OhpJDPbD1pFZXW0njaF3nuZDOqMJcp0bnIXACQr7Ri4oJDFhAZVSete0xB8I6gi/
+	 3aJ+Vp2Dbj3Ne7aNond5/eonfRc8qGBqdwqN+gOPL5RCoc0lVdzQtmObNxINjIr9/+
+	 VhIWcCDPvmdcw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73181C2BBF6;
+	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231023-factor-unashamed-2fd76c2ad02b@spud>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] riscv: dts: thead: convert isa detection to new properties
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <169808943046.14534.10860012741158716966.git-patchwork-notify@kernel.org>
+Date: Mon, 23 Oct 2023 19:30:30 +0000
+References: <20231022154135.3746-1-jszhang@kernel.org>
+In-Reply-To: <20231022154135.3746-1-jszhang@kernel.org>
+To: Jisheng Zhang <jszhang@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Mon, Oct 23, 2023 at 09:27:07AM +0100, Conor Dooley wrote:
-> On Sun, Oct 22, 2023 at 11:41:35PM +0800, Jisheng Zhang wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > Convert the th1520 devicetrees to use the new properties
-> > "riscv,isa-base" & "riscv,isa-extensions".
-> > For compatibility with other projects, "riscv,isa" remains.
-> > 
-> > Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
-> > Acked-by: Guo Ren <guoren@kernel.org>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> > 
-> > Hi Arnd,
-> > 
-> > This is the only one thead patch for v6.7, could you please apply it
-> > directly?
+Hello:
+
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Sun, 22 Oct 2023 23:41:35 +0800 you wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> FYI, this is missing your signoff, since you are resending my patch.
+> Convert the th1520 devicetrees to use the new properties
+> "riscv,isa-base" & "riscv,isa-extensions".
+> For compatibility with other projects, "riscv,isa" remains.
 > 
+> Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> [...]
 
-Hi Conor,
+Here is the summary with links:
+  - riscv: dts: thead: convert isa detection to new properties
+    https://git.kernel.org/soc/soc/c/0804f3bec9e9
 
-Today I noticed that Arnd has tagged for-next for 6.7, so I guess I
-missed the 6.7 PR, sorry. And I also noticed that Arnd has queued the
-thead dma-noncoherent patch for 6.7(which is expected in rc7 :) because
-I didn't explictly mark the target. I will take care this kind of
-PR/directly_merge target in future.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I expected a large dt and driver changes in the comming development window,
-for example, usb/eth/emmc and so on, so I'll queue your patch into my
-for-next tree once linux6.7-rc1 is released.
 
-Thanks
