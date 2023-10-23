@@ -1,66 +1,153 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <andy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18F28C25B52
-	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71AF6C25B46
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:40:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D1746C433BA; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7CA3C4339A;
-	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698089430;
-	bh=v8FKjVBTdnr5kbLseDJXTUK1p4EtmQtGOKFEG1/zUe8=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=hTWiWYGn6WMccbE97xUQ7cg66mDhEKXVaBLZp9BQq2ViSv2z81dPei2wGbbuMSRJA
-	 RYCU7gwSjOQTNDp1WGjpFT1a7HeEgFlIY/+hz28SlXzXjO7I6+STdHh1wB1SPFLkb+
-	 oMpFWqw8gZB6L9/z6apOVGflLVq6QCD0OCpD1ts4NxTbTFcu4DfT4ad0hYJL5I4d0E
-	 KI6c9cxGnV6YIcN6Td5vijq7CiIoBUZD7/0NuRS3Leo1ShRo2Y2IMkSrT+o+dHFOD6
-	 fuLmbvZspp61E1gmpNGOiV2GJtqUnCOBcB8xHFX1jW98j5AeKUnBulsCG9OLjf0sY/
-	 PEZCw8DU84a3A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 866E9C595C3;
-	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] Update UniPhier armv8 devicetree
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <169808943054.14534.2442895774383990433.git-patchwork-notify@kernel.org>
-Date: Mon, 23 Oct 2023 19:30:30 +0000
-References: <20231023021221.2884828-1-hayashi.kunihiko@socionext.com>
-In-Reply-To: <20231023021221.2884828-1-hayashi.kunihiko@socionext.com>
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+	id 569F0C433CA; Mon, 23 Oct 2023 19:40:54 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2D5AEC433C8;
+	Mon, 23 Oct 2023 19:40:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D5AEC433C8
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="377291957"
+X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
+   d="scan'208";a="377291957"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 12:40:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="828561743"
+X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
+   d="scan'208";a="828561743"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 12:40:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC2)
+	(envelope-from <andy@kernel.org>)
+	id 1qv0n7-000000081Ru-3tfk;
+	Mon, 23 Oct 2023 22:40:45 +0300
+Date: Mon, 23 Oct 2023 22:40:45 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 4/7] platform: cznic: turris-omnia-mcu: Add support
+ for poweroff and wakeup
+Message-ID: <ZTbMPcP7HmBvY4YP@smile.fi.intel.com>
+References: <20231023143130.11602-1-kabel@kernel.org>
+ <20231023143130.11602-5-kabel@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231023143130.11602-5-kabel@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hello:
+On Mon, Oct 23, 2023 at 04:31:27PM +0200, Marek Behún wrote:
+> Add support for true board poweroff (MCU can disable all unnecessary
+> voltage regulators) and wakeup at a specified time, implemented via a
+> RTC driver so that the rtcwake utility can be used to configure it.
 
-This series was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+...
 
-On Mon, 23 Oct 2023 11:12:19 +0900 you wrote:
-> Update devicetree sources for UniPhier armv8 SoCs to add
-> missing cache properties.
-> 
-> This series combines the following patches:
-> - https://lore.kernel.org/r/20221107155825.1644604-21-pierre.gondois@arm.com
-> - https://lore.kernel.org/all/f9a2c0d7-a78d-9368-f9bb-e8aba11e7d81@socionext.com/
-> 
-> [...]
+> +static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
+> +
+> +	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
+> +
+> +	if (alrm->enabled)
+> +		return omnia_cmd_write_u32(client, CMD_SET_WAKEUP,
+> +					   mcu->rtc_alarm);
 
-Here is the summary with links:
-  - [1/2] arm64: dts: Update cache properties for socionext
-    https://git.kernel.org/soc/soc/c/8d4f9145f52e
-  - [2/2] arm64: dts: socionext: add missing cache properties
-    https://git.kernel.org/soc/soc/c/e035ddb68bb2
+> +	else
 
-You are awesome, thank you!
+Redundant 'else'.
+
+> +		return 0;
+> +}
+
+...
+
+> +static int omnia_power_off(struct sys_off_data *data)
+> +
+> +	struct omnia_mcu *mcu = data->cb_data;
+> +	__be32 tmp;
+> +	u8 cmd[9];
+> +	u16 arg;
+> +	int err;
+> +
+> +	if (mcu->front_button_poweron)
+> +		arg = CMD_POWER_OFF_POWERON_BUTTON;
+> +	else
+> +		arg = 0;
+> +
+> +	cmd[0] = CMD_POWER_OFF;
+> +	put_unaligned_le16(CMD_POWER_OFF_MAGIC, &cmd[1]);
+> +	put_unaligned_le16(arg, &cmd[3]);
+
+> +	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
+> +	put_unaligned_le32(crc32_be(0xffffffff, (void *)&tmp, sizeof(tmp)),
+> +			   &cmd[5]);
+
+Hmm... Why crc32_le*() can't be used?
+
+> +	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
+> +	if (err)
+> +		dev_err(&mcu->client->dev,
+> +			"Unable to send the poweroff command: %d\n", err);
+> +
+> +	return NOTIFY_DONE;
+> +}
+
+...
+
+> +	if (kstrtobool(buf, &val) < 0)
+> +		return -EINVAL;
+
+Why is the error code shadowed?
+
+...
+
+> +	struct device *dev = container_of(kobj, typeof(*dev), kobj);
+
+kobj_to_dev()?
+
+...
+
+> +	/*
+> +	 * poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
+> +	 * present
+
+Missing period at the end.
+
+> +	 */
+
+...
+
+> +	err = devm_rtc_register_device(mcu->rtcdev);
+> +	if (err)
+> +		return dev_err_probe(dev, err, "Cannot register RTC device\n");
+> +
+> +	mcu->front_button_poweron = true;
+
+> +	return err;
+
+Can it be anything than 0?
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
 
 
