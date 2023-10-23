@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 014BEC25B4B
-	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06835C25B49
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CD6C7C433B7; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B4992C43395;
+	id D0EE8C433B9; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8452C433A9;
 	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698089430;
-	bh=2clmDPwcLilxaXJDZQBJl/eqDiB+O5Gvfc83ZRaF9z8=;
+	bh=PXO9PC1wRTZX04m4aS8efHMZlDcSsGf0ZTlqome4pO8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=cUgDb72kUPv9GRBHWcEoXDRt5aJtlk5vHugOPDZN6jkgR9/+8prIFZh97XCW3U3eS
-	 cTHQjIctZiNfnqtuWfH/CXuzkGvxokmxJxdTDSjyWGi2uBU8f79FltsJuOOx9FB3oB
-	 TLpAi7+leOcfLhxqKAzhdpxm66J2QMA4nTGJUEXUyZpTFPpDh5xAEGHg3x9jzzXTJ7
-	 zDV4CAjl93/FORNjXr5JozEJNepaez6UAi264y6hREnREqaRkO9YeSMPR9jJCTZ57C
-	 EysjxmsQ8aB9X6RYYUTZE5pkcdoyjaqoyL7Hr0r/22TG5hvcoM2Op2Xd1Kzpx2GEPc
-	 NSEtKxtXUhqKg==
+	b=CSSpPSqPrvj0RMdMBVXfnoNX6UPWUNTrkBYEiBzB7qEInUHzFAVMpBnQOaY0r5tbm
+	 QdwkAHSoT7eWlhocvw8V9Cj8gooU4T96vGelfqc23nXm9Daeak3h4dPodLHCmIDyx2
+	 ZZjinD0YoMPWTMaL0M5ZSCqZh+SbAQNOD7TqD5kHfTH+6tpspGpzbgoIz+YUxFDh7a
+	 LwMhQFtA+3qsnYwj/yhAX/ypLDu6lcpOXDB/XNgaCA0VFG67fDW+4YlxkY//zsHO0O
+	 dzpDRhePjEXYIjdA2Im844jscABj0Vs1/NR45JfNOOLLaiqFL0AEWvyFjn6LK1ZQ2D
+	 17nfTmatAZVUQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C724E21EC2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 929ABE4CC11;
 	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v6.7 (#1)
+Subject: Re: [RESEND PATCH v2] arm64: dts: Update cache properties for socionext
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169808943057.14534.18242384487214335621.git-patchwork-notify@kernel.org>
+ <169808943059.14534.16313559241704782106.git-patchwork-notify@kernel.org>
 Date: Mon, 23 Oct 2023 19:30:30 +0000
-References: <8734y6aaqb.fsf@BL-laptop>
-In-Reply-To: <8734y6aaqb.fsf@BL-laptop>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+References: <20231020195022.4183862-2-robh@kernel.org>
+In-Reply-To: <20231020195022.4183862-2-robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 19 Oct 2023 17:33:00 +0200 you wrote:
-> Hi,
+On Fri, 20 Oct 2023 14:50:22 -0500 you wrote:
+> From: Pierre Gondois <pierre.gondois@arm.com>
 > 
-> Here is the first pull request for dt64 for mvebu for v6.7.
-> 
-> Gregory
-> 
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+> The DeviceTree Specification v0.3 specifies that the cache node
+> 'compatible' and 'cache-level' properties are 'required'. Cf.
+> s3.8 Multi-level and Shared Cache Nodes
+> The 'cache-unified' property should be present if one of the
+> properties for unified cache is present ('cache-size', ...).
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: dt64 for v6.7 (#1)
-    https://git.kernel.org/soc/soc/c/23b336e9825d
+  - [RESEND,v2] arm64: dts: Update cache properties for socionext
+    https://git.kernel.org/soc/soc/c/8d4f9145f52e
 
 You are awesome, thank you!
 -- 
