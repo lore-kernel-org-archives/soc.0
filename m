@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E221FC25B45
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1692C25B48
 	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B2A01C433D9; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98C46C433CC;
+	id A86C8C433CB; Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 87CA3C433C7;
 	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698089430;
-	bh=miAx5/zUuZW011CKj/SlfqsxX4NtWFP4fTzC563ej10=;
+	bh=oee7GkKHycZo72hlQn/aqgyOue3ICh+O6ufTGXqToI0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=EpnviaVU2jDM/OT/T7a4ahw7IgmOgOMnDO3jgxFaYhZUvG39zgPjZu0vhBI+Vb8Rm
-	 FLNSf73MEfGUVj5pTIdz5VDoE1pSxYX8TjNpQQFYzMWOilUhGFhgU/UP+gfJk37IB/
-	 6dTQH4A4y6VsTju4isbTwxqz9u7csAO6K6di2cKg+EYiIBhhqBCFBxP2RxZ4HdyO7j
-	 W1OhpJDPbD1pFZXW0njaF3nuZDOqMJcp0bnIXACQr7Ri4oJDFhAZVSete0xB8I6gi/
-	 3aJ+Vp2Dbj3Ne7aNond5/eonfRc8qGBqdwqN+gOPL5RCoc0lVdzQtmObNxINjIr9/+
-	 VhIWcCDPvmdcw==
+	b=ecL3RlR1L82u+WJ1GN7q0Gl3D53ihNrWSmJWvQiLI8zdNUdjI68fHiF7k0gojf7dX
+	 ZabZJkX40bjoIPD+HY+svKZunfB7IBWQCpiVFWeYafwzh1SZKCI9dcfDJgGMtlqnBz
+	 190ozstjoMNE07TEcS9UgOvaQAP9LRTaqTlT66LakX3XqStZYZQeC6puqAkIobEBMJ
+	 tQI3RkmuBe4Py8UyKnBdCRZhVzxT791JSOgdGRxdFfaLxOwUbE7GYlD1QTRoZ4Opu8
+	 7BvTmN15Sp0JjmWd6GzqUts+6p2HYvDCbWQSYzXpM5rJc2HFyWeY0cjy3X2+8bl839
+	 iVNHWjmufr7sA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73181C2BBF6;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C68DE4CC13;
 	Mon, 23 Oct 2023 19:30:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] riscv: dts: thead: convert isa detection to new properties
+Subject: Re: [GIT PULL] ARM: mvebu: fixes for v6.6 (#1)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169808943046.14534.10860012741158716966.git-patchwork-notify@kernel.org>
+ <169808943044.14534.15261387138282337829.git-patchwork-notify@kernel.org>
 Date: Mon, 23 Oct 2023 19:30:30 +0000
-References: <20231022154135.3746-1-jszhang@kernel.org>
-In-Reply-To: <20231022154135.3746-1-jszhang@kernel.org>
-To: Jisheng Zhang <jszhang@kernel.org>
+References: <875y32abqe.fsf@BL-laptop>
+In-Reply-To: <875y32abqe.fsf@BL-laptop>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 22 Oct 2023 23:41:35 +0800 you wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, 19 Oct 2023 17:11:21 +0200 you wrote:
+> Hi,
 > 
-> Convert the th1520 devicetrees to use the new properties
-> "riscv,isa-base" & "riscv,isa-extensions".
-> For compatibility with other projects, "riscv,isa" remains.
+> Here is the first pull request for fixes for mvebu for v6.6.
 > 
-> Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Gregory
+> 
+> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 > 
 > [...]
 
 Here is the summary with links:
-  - riscv: dts: thead: convert isa detection to new properties
-    https://git.kernel.org/soc/soc/c/0804f3bec9e9
+  - [GIT,PULL] ARM: mvebu: fixes for v6.6 (#1)
+    https://git.kernel.org/soc/soc/c/291c0d3a98af
 
 You are awesome, thank you!
 -- 
