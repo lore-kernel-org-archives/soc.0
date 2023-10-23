@@ -1,92 +1,89 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C04DC004C0
-	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 15:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CF32C001E0
+	for <soc@archiver.kernel.org>; Mon, 23 Oct 2023 15:03:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED6D7C433CA; Mon, 23 Oct 2023 15:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC0FC433C8;
-	Mon, 23 Oct 2023 15:00:02 +0000 (UTC)
+	id F3A1DC433C8; Mon, 23 Oct 2023 15:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8C8C433C9;
+	Mon, 23 Oct 2023 15:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698073204;
-	bh=uAPqaNv940opL9iABBuhDACrPdR2GXnfEPbNduFfEjY=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=oH0D423XEp2Uhxn7nfKSBXidORjmj/9SRBpEnmger/2yHfAiH8QBSLsg8QkOke86d
-	 PmnblBm9n7kX5wTM4xc+RXkpDtuj2ZEDgxy3ugJAs3eHnxM9zdg8DuEGe6Rop3eFjI
-	 9M5ObdeJznnaKZ8S/PWSsci01N/RTjPi6UzMJ7Otxx2ItoesL6APq8ZwHzf3QLTavs
-	 GRI+d679f85KgTJpa7EOKBL23Hxzvhyps9WchgJlYtpX2+yFaYadZByH3cLqvoaH0p
-	 XzhRq0OMQ0q7smaYcsqO6hiZdCJCUCcqy+Nk4LzFIN2MkYgx8yr6g0w/4vi132Bmvx
-	 qdMm6eD0yuLwg==
-Date: Mon, 23 Oct 2023 16:59:59 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
+	s=k20201202; t=1698073394;
+	bh=fpFM9m8aSmPZRNqC55pvlGffUEuq0Fu6lXvayw+85Lw=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=AVt9J0bFS9MbY22bF0uf11w0J84uYZaUJWbqP+KXzPSSrnQ+CxEZ/RRTJWVu6Di+F
+	 M4uw6hyQyD0HUJKarnPJSq7UaL7Dq6y6G0Xqi7AYoiNL7AMWsUnaRUg1rP4MAF0wLn
+	 iCziNfUL2MmtkCoOmiQ0Nxje3zcJ5oTgVlqpmTIX7jq8MPokkCAcLJm6vk8Wp+c0Vb
+	 JbdIVQ4JFS6pxZ2ZRMuNsbMyKuJHyjiC/07GdE96/9uOZ4yar6jQQUdUCdx/s0L0yX
+	 jjRCWc3QDnlwyOujseyamEKEJSzoeiOldW8HVn8tjH6ABcTiGVgeQnLbRifEocAxCs
+	 U2/SOJu8cow9Q==
+Date: Mon, 23 Oct 2023 16:03:08 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy Shevchenko
- <andy@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, linux-watchdog@vger.kernel.org, Wim Van
- Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-watchdog@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
 Subject: Re: [PATCH v3 5/7] platform: cznic: turris-omnia-mcu: Add support
  for MCU watchdog
-Message-ID: <20231023165959.104f6843@dellmb>
-In-Reply-To: <2439af40-0c78-6b41-1746-c71b67af217a@roeck-us.net>
+Message-ID: <89295349-198d-4ae6-942e-913f95e34974@sirena.org.uk>
 References: <20231023143130.11602-1-kabel@kernel.org>
-	<20231023143130.11602-6-kabel@kernel.org>
-	<2439af40-0c78-6b41-1746-c71b67af217a@roeck-us.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+ <20231023143130.11602-6-kabel@kernel.org>
+ <2439af40-0c78-6b41-1746-c71b67af217a@roeck-us.net>
+ <20231023165959.104f6843@dellmb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/3D+MmOz0uhnTItB"
+Content-Disposition: inline
+In-Reply-To: <20231023165959.104f6843@dellmb>
+X-Cookie: Never reveal your best argument.
+
+
+--/3D+MmOz0uhnTItB
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 23 Oct 2023 07:47:44 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+On Mon, Oct 23, 2023 at 04:59:59PM +0200, Marek Beh=FAn wrote:
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 10/23/23 07:31, Marek Beh=FAn wrote:
 
-> On 10/23/23 07:31, Marek Beh=C3=BAn wrote:
-> > Add support for the watchdog mechanism provided by the MCU.
-> >=20
-> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org> =20
->=20
-> Any reason for keeping this out of drivers/watchdog ?
+> > > Add support for the watchdog mechanism provided by the MCU.
 
-Because this whole thing is compiled as one driver, turris-omnia-mcu.ko.
-The whole driver is specific for one device, the Turris Omnia router.
-Splitting it into separate modules would be unnecessary, the driver is
-meant to provide all the Turris Omnia MCU functionality.
+> > Any reason for keeping this out of drivers/watchdog ?
 
-I've seen this done in various platform drivers.
+> Because this whole thing is compiled as one driver, turris-omnia-mcu.ko.
+> The whole driver is specific for one device, the Turris Omnia router.
+> Splitting it into separate modules would be unnecessary, the driver is
+> meant to provide all the Turris Omnia MCU functionality.
 
-Moreover, all of the functionality lives at one I2C address, so only
-one I2C client is used.
+> I've seen this done in various platform drivers.
 
-Originally it was one .c file, but I split it into 4 files to make it
-easier to review.
+> Moreover, all of the functionality lives at one I2C address, so only
+> one I2C client is used.
 
-You can look at the other patches at
-  https://patchwork.kernel.org/project/linux-soc/list/?series=3D795666
+That all sounds a bit like drivers/mfd...
 
-> > +	if (!(mcu->features & FEAT_WDT_PING))
-> > +		return 0;
-> > + =20
->=20
-> Why check this here and not in the calling code ?
+--/3D+MmOz0uhnTItB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-No particular reason, just wanted to keep the calling code cleaner.
+-----BEGIN PGP SIGNATURE-----
 
-> > @@ -36,6 +37,9 @@ struct omnia_mcu {
-> >   	struct rtc_device *rtcdev;
-> >   	u32 rtc_alarm;
-> >   	bool front_button_poweron;
-> > +
-> > +	/* MCU watchdog */
-> > +	struct watchdog_device wdt; =20
->=20
-> This should be internal to the watchdog driver.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmU2iysACgkQJNaLcl1U
+h9BY2wf+Jrh2GcqFiDTOhrKO5fJ5wpQxs+QWCyqBC+A1E0cxrI6sJKCjlhwgqVdD
+L6+KgTgje+U8T3ChsqjaBCSFcGAkhvttnJLD+Rypxa+UPYKftgx0yqFh4Ac3M/RK
+CtLp0JThiquO5wmEcRFLXsSQOYvlKhpvzI09YKQYaB5byBilwVV8ggA5aUfY+fyo
+M7MQI9GlzedlUIn79Ex1nCb8IkCS8pop/f8PaAUiV522LLVlorW4rgeazIMMPlpC
+s4nwe+ytPIeoOBwEkCi7jfkXAECDcgbpw8/+ahR9Ng2eniz035NR/evfiTZ8RThy
+UABg4iy5gVmJ/GZj6iyvBEPX2NYu+g==
+=Ka6A
+-----END PGP SIGNATURE-----
 
-As explained above, all functionality is provided in one kernel module.
-This makes sense here since the driver is meant to provide all
-MCU functionality and it is specific for Turris Omnia.
-
-Marek
+--/3D+MmOz0uhnTItB--
