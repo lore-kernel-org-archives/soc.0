@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F644C25B48
-	for <soc@archiver.kernel.org>; Tue, 24 Oct 2023 15:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D4C6C25B6C
+	for <soc@archiver.kernel.org>; Tue, 24 Oct 2023 15:59:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0D2BC433CC; Tue, 24 Oct 2023 15:59:33 +0000 (UTC)
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	id E239CC433B9; Tue, 24 Oct 2023 15:59:34 +0000 (UTC)
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7B3D8C433C9
-	for <soc@kernel.org>; Tue, 24 Oct 2023 15:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B3D8C433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id D1304C433CD
+	for <soc@kernel.org>; Tue, 24 Oct 2023 15:59:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1304C433CD
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6b1e46ca282so4585464b3a.2
-        for <soc@kernel.org>; Tue, 24 Oct 2023 08:59:32 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6b89ab5ddb7so4600190b3a.0
+        for <soc@kernel.org>; Tue, 24 Oct 2023 08:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1698163171; x=1698767971; darn=kernel.org;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jJrSySweZavE6crw1OgQSY+G1BrAVOWcEO0tgr+71Yg=;
-        b=cmgqHsWhzq6g+4G7Q/BQ84aL2G2ICPtIS93NudJ7fnYE39g23rJ6y8wotnNwXSAZjW
-         y84CRTx+idfhxmGdrydz+aGBWvkBGmLJYkfaSdEtqa33n5V5YhCUAF18/ZWNHqbh8mvS
-         AXMmgyCvuc3s5nNkcNh/XE8bcKfazXP8bjj+I=
+        d=broadcom.com; s=google; t=1698163172; x=1698767972; darn=kernel.org;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0D7ER1UaKMU3pq0wI3Jpnrs10QGiv7bT1N4UjGc8zFM=;
+        b=Rtdfx9Bzpv56pzbBphEEz/XYAILFpu4pqsb80owUGXvg72bcmQtNzyt4dxWxLzesdL
+         xBOmLphLaszAEstJGrnhuYVADqETCR8JxgUWrBYhixAOszRa4k0B70sUtIoSAekuyzp9
+         D5rU/dmMly7rC+iDeSWfUhk57eSj+tTYvBp+g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698163171; x=1698767971;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jJrSySweZavE6crw1OgQSY+G1BrAVOWcEO0tgr+71Yg=;
-        b=kIVl2icJAzDNjAmkUQCb7GTZsWcchfP0n7S55kIwReb5YVnAdAIJ/AJuKAt9nhmrgf
-         Ut/oSScflTRV0NQ8doUbScmG3aEFFPta8RIYhQleA3dpe3gbkl5XaDS+RsO4/vnMmHMF
-         z9NKk2HSSdqCy36+PuWbmQByE+JqxdAxzSGk+R0+lM6FDmezggInroxFk4iyNZpjRH7g
-         Y1qeWi1S5nKk53faHm464n3Um1h3BUgwL79lCahSXRMD4KuF4C2oplcD+LjqIOjbTEIK
-         fdF0b7zKauKhWKB5jMola3g9GElRNTMH6iY0y0B+CQQNdbnSW/UdI0kQCoDNMi0ggtgP
-         RRJQ==
-X-Gm-Message-State: AOJu0YyzkAaWa2wo17IIwzu7kNchFBH5LuY7tNo/iMpC4EWJG0wlR9IX
-	hSCIEV0nSPas/19VrDbopTAYJxWbAM4ggvlJoRorvbNSOsHJYxHFO666b/BjG8gTBUyL6du+B2k
-	BSddZUfvkZIWBj/CWg6PuNUOyKDgUAE6E25ao/kE8Hy88B06S4CVmT6/SdSo5So8UaED3+CLsnc
-	NNpg==
-X-Google-Smtp-Source: AGHT+IF/mCPQnMTaflW8Wi0l5zOMMOWCKBURDvCFL/QbYP9ntV6uYnVLtIe8fXjB+dO6pg1osVKQVg==
-X-Received: by 2002:a05:6a20:da88:b0:17e:2afd:407f with SMTP id iy8-20020a056a20da8800b0017e2afd407fmr4017906pzb.9.1698163171094;
-        Tue, 24 Oct 2023 08:59:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698163172; x=1698767972;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0D7ER1UaKMU3pq0wI3Jpnrs10QGiv7bT1N4UjGc8zFM=;
+        b=AoSnMP+YFKwSXijegQsCQnSIQv/tD3xekeIWQTzgy1IzL9Qzk+aEdeOBm02XiWiAKp
+         UAdipDNOoGvCPuL/kVjCtn69I6kBzy9gOGPlv1um024RtAUN4w3quUNyAnvN8ANOTAva
+         ZUrYegIBD6C+kEn2wXbWxZP2EumUKcO2n9SKRGI+o0/GeOlvZvkMZHkzQg5rYDe/vZOW
+         ZqtuchmDewl4Fqioibz3JzldMBeuI8nTHLoFHqpZNWm11IHb3RaEvoadx3TNWmuIg+J3
+         MaPPEcB7UHEdJZl7GIhd3H3j6ygzzCxbwP02mVVaqZJHGXN81ze81pVMpCppLIz/ya1a
+         Hi9g==
+X-Gm-Message-State: AOJu0Yxd8vi1MF9eJNLlqlZhtdOJGkhS+ZyJfYhtCX7RxW/kZQ2DyYiB
+	XpSuMKF1A0grmOopdPRcBPM0bVPoXy0O2c+mF31tufWI71RyvDVXvW8VQPBzttGnxsSonqgYhgI
+	wg7c6oHRyglD4Vikeh2aCdI6jC4v6uiXvdOEToobDE3j29RIB3krfDN2oO+csxHI/Dm2FADD/q2
+	cg/g==
+X-Google-Smtp-Source: AGHT+IFXOxhnnEcUnJsKgvWy97nCC7Le7xOArB+kWoM1Wv1soK607w3SO1kp9Cyxha6ceM8TibFf4g==
+X-Received: by 2002:a05:6a21:7803:b0:16b:e46e:1246 with SMTP id be3-20020a056a21780300b0016be46e1246mr3217848pzc.30.1698163172467;
+        Tue, 24 Oct 2023 08:59:32 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n5-20020aa79845000000b006bd67a7a7b3sm7790551pfq.68.2023.10.24.08.59.29
+        by smtp.gmail.com with ESMTPSA id n5-20020aa79845000000b006bd67a7a7b3sm7790551pfq.68.2023.10.24.08.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 08:59:30 -0700 (PDT)
+        Tue, 24 Oct 2023 08:59:31 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Rani Hod <rani.hod@gmail.com>,
+Cc: Peter Robinson <pbrobinson@gmail.com>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Vivek Unune <npcomplete13@gmail.com>,
-	Felix Fietkau <nbd@nbd.name>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/2] Broadcom devicetree changes for 6.7
-Date: Tue, 24 Oct 2023 08:59:26 -0700
-Message-Id: <20231024155927.977263-1-florian.fainelli@broadcom.com>
+Subject: [GIT PULL 2/2] Broadcom drivers changes for 6.7
+Date: Tue, 24 Oct 2023 08:59:27 -0700
+Message-Id: <20231024155927.977263-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231024155927.977263-1-florian.fainelli@broadcom.com>
+References: <20231024155927.977263-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000009d84de0608786cca"
+	boundary="000000000000b19cf00608786c97"
 
---0000000000009d84de0608786cca
-Content-Type: text/plain; charset=UTF-8
+--000000000000b19cf00608786c97
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
@@ -80,59 +79,34 @@ The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.7/devicetree
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.7/drivers
 
-for you to fetch changes up to 253358f373492608348136e569366d73cb969f6a:
+for you to fetch changes up to 112cd2f9614d55f5806bf9bf55e3a9052511c894:
 
-  ARM: dts: BCM5301X: Set switch ports for Linksys EA9200 (2023-10-24 08:51:19 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs changes for 6.7,
-please pull the following:
-
-- Rafal makes a number of updates to the BCM5301X (Northstar) SoCs DTS
-  to set MAC addresses for D-LInk DIR-885L, Asus, RT-AC87U, he
-  relicenses parts of the DTSI to GPL 2.0+ / MIT, and finally fixes a
-  number of Ethernet switch ports properties to enable/disable ports
-  adequately.
+  bus: brcmstb_gisb: Depend on SoC specifics over generic arm (2023-10-09 11:51:08 -0700)
 
 ----------------------------------------------------------------
-Rafał Miłecki (7):
-      ARM: dts: BCM5301X: Set MACs for D-Link DIR-885L
-      ARM: dts: BCM5301X: Set MAC address for Asus RT-AC87U
-      ARM: dts: BCM5301X: Relicense Felix's code to the GPL 2.0+ / MIT
-      ARM: dts: BCM5301X: Relicense Vivek's code to the GPL 2.0+ / MIT
-      ARM: dts: BCM5301X: Explicitly disable unused switch CPU ports
-      ARM: dts: BCM5301X: Set fixed-link for extra Netgear R8000 CPU ports
-      ARM: dts: BCM5301X: Set switch ports for Linksys EA9200
+This pull request contains Broadcom ARM/ARM64/MIPS SoCs drivers changes
+for 6.7, please pull the following:
 
- arch/arm/boot/dts/broadcom/bcm-ns.dtsi             | 34 +++++++++++++++++++
- .../bcm4708-buffalo-wzr-1166dhp-common.dtsi        |  8 +++++
- .../boot/dts/broadcom/bcm4708-luxul-xap-1510.dts   |  8 +++++
- .../boot/dts/broadcom/bcm4708-luxul-xwc-1000.dts   |  8 +++++
- .../boot/dts/broadcom/bcm4708-netgear-r6250.dts    |  8 +++++
- .../boot/dts/broadcom/bcm4708-smartrg-sr400ac.dts  |  8 +++++
- .../dts/broadcom/bcm47081-buffalo-wzr-600dhp2.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47081-luxul-xap-1410.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47081-luxul-xwr-1200.dts  |  8 +++++
- .../boot/dts/broadcom/bcm4709-asus-rt-ac87u.dts    | 11 +++++++
- .../boot/dts/broadcom/bcm4709-linksys-ea9200.dts   | 38 ++++++++++++++++++++++
- .../boot/dts/broadcom/bcm4709-netgear-r8000.dts    | 18 ++++++++++
- .../boot/dts/broadcom/bcm47094-dlink-dir-885l.dts  | 24 ++++++++++++++
- .../boot/dts/broadcom/bcm47094-dlink-dir-890l.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47094-luxul-abr-4500.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47094-luxul-xap-1610.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47094-luxul-xbr-4500.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47094-luxul-xwc-2000.dts  |  8 +++++
- .../boot/dts/broadcom/bcm47094-luxul-xwr-3100.dts  |  8 +++++
- .../dts/broadcom/bcm47094-luxul-xwr-3150-v1.dts    |  8 +++++
- .../arm/boot/dts/broadcom/bcm53015-meraki-mr26.dts |  8 +++++
- .../arm/boot/dts/broadcom/bcm53016-meraki-mr32.dts |  8 +++++
- arch/arm/boot/dts/broadcom/bcm5301x.dtsi           | 34 -------------------
- arch/arm/boot/dts/broadcom/bcm953012er.dts         |  8 +++++
- 24 files changed, 269 insertions(+), 34 deletions(-)
+- Kieran fixes the kdoc for devm_rpi_firmware_get
+- Peter updates the dependices of the brcmstb SoC driver and
+  brcmstb_gisb drivers which are ARCH_BRCMSTB specific
 
---0000000000009d84de0608786cca
+----------------------------------------------------------------
+Kieran Bingham (1):
+      firmware: raspberrypi: Fix devm_rpi_firmware_get documentation
+
+Peter Robinson (2):
+      soc: bcm: brcmstb: depend on ARCH_BRCMSTB over arm arches
+      bus: brcmstb_gisb: Depend on SoC specifics over generic arm
+
+ drivers/bus/Kconfig            | 2 +-
+ drivers/firmware/raspberrypi.c | 1 +
+ drivers/soc/bcm/Kconfig        | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+--000000000000b19cf00608786c97
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -203,14 +177,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJOPF2EHzA2Iwmcc
-m49H19Y7JaRShWJSMVeNCBQCA238MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMTAyNDE1NTkzMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFvmDTkfnL4vUCqE
+uuJHiQK7jQpzmEQQ5mF/zELNcUyKMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMTAyNDE1NTkzMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCajcFlw/ETwwHTFgA18pPzrkDXR66iCOmf
-Zefd2iY4j4XJSgIGzNcAqaBDMUNd+0mr/4hOWrqC+Jd12gfCT38OrqBWrrjf1ylLwbIHuaqSU/N4
-rf4f53uTw9YZ1+++ziu8VWh49PKEpKe56qUQMx8pREZBm/emuZdu2gc5LNqTDwFRsj5gAZKg+aFh
-Z6yP9XhvS5GUdETURv/oju5VMAzNbf+KVRjk9R8R2GmfuG0AsDvCenBgGGiFnSZWtLCr+Y9SPfOx
-uCkj5vaPXZ4OpfMGQQUVNb2Zchw/9PbYux8iFlWtboZFf2/q/4LKVwky7iuOmtoR8y8yE448tniu
-DLtd
---0000000000009d84de0608786cca--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAUcJWYlwTO8psJ4y6qkaPB8hWIZPo9EZIH
+AbNjDqkXP/KgIkpAleZmrktMa9Zv7hLj03UNSS38ddPiRk2e0ZA/RS2Efhr4p7x8cxfdZ00FDBcx
+bOzL3NNB2YX7Wh3hiv4RSy/WxYDhSQUSlyvZqtRHmTPUA2kLavCt9IknvPV8nZJq3Z6zlzDtTsvW
+4DcmQPpquZRnn/Gmq9zM8ZtCfQ2nrPnLshpReZdXMOXLkdHCG/I7OJWm2SqQ2PQsPy6/VAa8ijXv
+ZDl3WILOygZ+iiymPhl3ngSSZkMFJw4aTDia9D3SqKMUOAqUq2rz4QmFcjZhJGmOr3k5S4L0CmQJ
+OfBS
+--000000000000b19cf00608786c97--
