@@ -1,366 +1,104 @@
-Return-Path: <SRS0=+HhF=GG=ti.com=vigneshr@kernel.org>
+Return-Path: <SRS0=CPDx=GG=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 007CFC25B6C
-	for <soc@archiver.kernel.org>; Tue, 24 Oct 2023 17:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14C73C00A8F
+	for <soc@archiver.kernel.org>; Tue, 24 Oct 2023 19:43:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BAB78C433CA; Tue, 24 Oct 2023 17:10:03 +0000 (UTC)
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C00E4C433CA; Tue, 24 Oct 2023 19:43:18 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF617C433C8;
-	Tue, 24 Oct 2023 17:10:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF617C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39OH9qDr067538;
-	Tue, 24 Oct 2023 12:09:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1698167393;
-	bh=CV8adzY9N8zKYQd5YtPLSNOQpQd7yubbeMIi6msfMjI=;
-	h=Date:From:Subject:To:CC;
-	b=ejRDDyDbrM/wXMYt8pEc4g0VCHmNL0LQpBk5DIvbdnM1xapEKqnu5F5+mtmaglBxt
-	 HNBchSxU/AIDYnPcInjgHmA6l4P15fYTx+RiI5ybIOOaVsW/VQE5xvWQTsmXh3DwLY
-	 7USYBBHkvh0rxJB2COVsctFJoBG8XkVCfiWtdwB8=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39OH9qdf098441
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 24 Oct 2023 12:09:52 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 24
- Oct 2023 12:09:52 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 24 Oct 2023 12:09:52 -0500
-Received: from [172.24.227.94] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39OH9nq8080994;
-	Tue, 24 Oct 2023 12:09:50 -0500
-Message-ID: <35a3c4c9-5c1b-4891-9ea2-e3f648a9afe0@ti.com>
-Date: Tue, 24 Oct 2023 22:39:48 +0530
+	by smtp.kernel.org (Postfix) with ESMTPS id 5700CC433C8;
+	Tue, 24 Oct 2023 19:43:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5700CC433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from [194.95.143.137] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1qvNJ3-0007KN-8B; Tue, 24 Oct 2023 21:43:13 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 6.7 #2
+Date: Tue, 24 Oct 2023 21:43:12 +0200
+Message-ID: <2777623.BEx9A2HvPv@phil>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [GIT PULL] arm64: dts: ti: K3: Second round of updates for v6.7
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        SoC
-	<soc@kernel.org>, arm-soc <arm@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh
- Raghavendra <vigneshr@ti.com>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------0Aj4ycxzXCWtCR1j8IhYDES9"
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
---------------0Aj4ycxzXCWtCR1j8IhYDES9
-Content-Type: multipart/mixed; boundary="------------5j5N09WTQ82JgNbAit8hIbrW";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- SoC <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <35a3c4c9-5c1b-4891-9ea2-e3f648a9afe0@ti.com>
-Subject: [GIT PULL] arm64: dts: ti: K3: Second round of updates for v6.7
+Hi Arnd, Kevin, Olof,
 
---------------5j5N09WTQ82JgNbAit8hIbrW
-Content-Type: multipart/mixed; boundary="------------pRAwGgMpPelnQMHevB5W66RQ"
+after the first pull request there were some stragglers left.
+One new SoM was submitted and the DFI driver changes were merged
+into the relevant driver tree.
 
---------------pRAwGgMpPelnQMHevB5W66RQ
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi ARM SoC Maintainers,
-
-This is second round of DT updates for K3 platforms for v6.7. These conta=
-in minor yet key
-features for newish AM62P SoC, AM65 ICSSG and J721s2/J784s4 Display suppo=
-rt
-
-Regards
-Vignesh
+This pull request adds the relevant changes for those.
+The commits should be in linux-next since the 19th or 20th of
+october, so did get exposure and the changes go on top of the
+previous v6.7-rockchip-dts64-1 tag.
 
 
-The following changes since commit 56bc311585206a8955de793301d4f84fb4ad2e=
-e6:
+So if there is still time please pull!
+If not, it's also no problem, I'll move them to 6.8 then.
 
-  arm64: dts: ti: k3-j712s2-mcu: Add the mcu domain watchdog instances (2=
-023-10-12 18:53:36 +0530)
+
+Thanks a lot
+Heiko
+
+
+The following changes since commit 1e9ac3e8a6a9d4da9efbad2d8e95cc1140e0e23f:
+
+  arm64: dts: rockchip: add support for Powkiddy RGB30 (2023-10-16 22:58:45 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--dt-for-v6.7-part2
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.7-rockchip-dts64-2
 
-for you to fetch changes up to a4d5bc3214ebb9f4af46613f824109ab90558cd3:
+for you to fetch changes up to 2806a69f3fef61d7353ea8206add8ffb15064b51:
 
-  arm64: dts: ti: k3-am654-idk: Add ICSSG Ethernet ports (2023-10-20 11:0=
-9:30 +0530)
+  arm64: dts: rockchip: Add Turing RK1 SoM support (2023-10-19 20:23:58 +0200)
 
 ----------------------------------------------------------------
-TI K3 device-tree updates for v6.7 - part 2
-
-Second round of few DT updates for K3 platforms. These have been in
-linux-next for a few days without issues. Most of the additions is for
-newer AM62P SoC dtsi bringing support on par with rest of AM62x family.
-
-New features:
-AM62P SoCs:
-Support for wide range of peripherals such as eMMC/SD,
-CPSW Ethernet, OSPI, etc similar to AM62
-
-J721s2/J784s4/AM69 SoCs:
-Display support via DP and HDMI interfaces and associated SerDes support
-
-AM654 EVM/IDK:
-ICSSG/PRU based industrial Ethernet support
+One new board the Turing RK1 system on module.
+Support for DFI (DDR performance monitoring) for rk3588, rk3568 and an
+enable-fix for rk3399 as well as some small fixups for the RGB30 handheld
+(non-existent uart and better vpll frequency).
 
 ----------------------------------------------------------------
-Dasnavis Sabiya (1):
-      arm64: dts: ti: k3-am69-sk: Add DP and HDMI support
+Chris Morgan (2):
+      arm64: dts: rockchip: Update VPLL Frequency for RGB30
+      arm64: dts: rockchip: Remove UART2 from RGB30
 
-MD Danish Anwar (3):
-      arm64: dts: ti: k3-am65-main: Add ICSSG IEP nodes
-      arm64: dts: ti: k3-am654-icssg2: add ICSSG2 Ethernet support
-      arm64: dts: ti: k3-am654-idk: Add ICSSG Ethernet ports
+Sam Edwards (3):
+      dt-bindings: vendor-prefixes: add turing
+      dt-bindings: arm: rockchip: Add Turing RK1
+      arm64: dts: rockchip: Add Turing RK1 SoM support
 
-Rahul T R (2):
-      arm64: dts: ti: k3-j784s4-main: Add DSS and DP-bridge node
-      arm64: dts: ti: k3-j784s4-evm: Enable DisplayPort-0
+Sascha Hauer (3):
+      arm64: dts: rockchip: Always enable DFI on rk3399
+      arm64: dts: rockchip: Add DFI to rk356x
+      arm64: dts: rockchip: Add DFI to rk3588s
 
-Siddharth Vadapalli (2):
-      arm64: dts: ti: k3-j784s4-main: Add system controller and SERDES la=
-ne mux
-      arm64: dts: ti: k3-j784s4-main: Add WIZ and SERDES PHY nodes
+ .../devicetree/bindings/arm/rockchip.yaml          |   5 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm64/boot/dts/rockchip/Makefile              |   1 +
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi           |   1 -
+ .../boot/dts/rockchip/rk3566-powkiddy-rgb30.dts    |  11 +-
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           |   7 +
+ arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dts |  21 +
+ .../arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi | 614 +++++++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi          |  16 +
+ 9 files changed, 676 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
 
-Vignesh Raghavendra (2):
-      arm64: dts: ti: k3-am62p: Add nodes for more IPs
-      arm64: dts: ti: k3-am62p5-sk: Updates for SK EVM
 
- arch/arm64/boot/dts/ti/Makefile              |   4 +
- arch/arm64/boot/dts/ti/k3-am62p-main.dtsi    | 764 +++++++++-
- arch/arm64/boot/dts/ti/k3-am62p-mcu.dtsi     | 190 +++
- arch/arm64/boot/dts/ti/k3-am62p-thermal.dtsi |  47 +
- arch/arm64/boot/dts/ti/k3-am62p-wakeup.dtsi  |  69 +-
- arch/arm64/boot/dts/ti/k3-am62p.dtsi         |   7 +-
- arch/arm64/boot/dts/ti/k3-am62p5-sk.dts      | 510 ++++++-
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi     |  36 +
- arch/arm64/boot/dts/ti/k3-am654-icssg2.dtso  | 145 ++
- arch/arm64/boot/dts/ti/k3-am654-idk.dtso     | 296 ++++
- arch/arm64/boot/dts/ti/k3-am69-sk.dts        | 232 +++
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts     | 117 ++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi   | 274 ++++
- 13 files changed, 2666 insertions(+), 25 deletions(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62p-thermal.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am654-icssg2.dtso
- create mode 100644 arch/arm64/boot/dts/ti/k3-am654-idk.dtso
---=20
 
---------------pRAwGgMpPelnQMHevB5W66RQ
-Content-Type: application/pgp-keys; name="OpenPGP_0xF903332F551A78E9.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xF903332F551A78E9.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-K5paG+wIzgINF3s89w=3D=3D
-=3D6Uiz
------END PGP PUBLIC KEY BLOCK-----
-
---------------pRAwGgMpPelnQMHevB5W66RQ--
-
---------------5j5N09WTQ82JgNbAit8hIbrW--
-
---------------0Aj4ycxzXCWtCR1j8IhYDES9
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmU3+lwFAwAAAAAACgkQxEYeRXyRFuPW
-qAgAi63VBayFB9ZUbSgdDB06wcf6Q9xg1el3p/Vwml7t49rVAVlE2s4kDfFbPm7bGVVDjQ3M6V8X
-XcuNC9soh/rDcNFrgAYqFatMflr2gGeaHh+a2YKoJGBKEE80NrMaZ8n0iALZcCRSvqajfo4QHz8k
-/KwWo7uY2fn6R3p5pxyk2s4x9zL+VbK7AgI5S6i6VrjPtkFAa/AqubMCR51dBnG07qsNuJsHAqPL
-FY4y2kELBNSXRWTAd7xz6GeOLeXdumtZD9hiv565FQHkbfZByl31SL4bvKZ54u7Rjcj1dEAUXlVn
-HoYnlX2GSjqkJxcTRblg7dmpK6XK4obGbsBQKnBPuQ==
-=65Ck
------END PGP SIGNATURE-----
-
---------------0Aj4ycxzXCWtCR1j8IhYDES9--
