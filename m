@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E728EC25B72
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4F90C25B71
 	for <soc@archiver.kernel.org>; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BC2F3C433AB; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A0040C433CA;
+	id CD60AC433CC; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B84AFC433A9;
 	Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698268828;
-	bh=lHP8hm1eVu+vI3BJgT+HJLljAdCQT+dPZjl3qfUxlKY=;
+	bh=JcElVX2YaSW3rbauDcz5BT4ezfz8Dnlflfr1y4Er0q0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Q+3ldRs63NgZLr7EFGuqMq/s+MSB6enDbLB29ux1lrJ60nYhFg+lGHH6cE84ATffA
-	 3PvrSu3GI+gUthAu7yGyFD8DhEL3gxjui51IHYdYBIREtCYBb3SrzmO9FCIbIwajab
-	 zuPsbK38zQ3pXQF81m15/cvSsWW7sNgw9BnsLsCE98XAzv7qpE/ZWd6rJvV31Guzlh
-	 o6qdf8LhJpjC2W4nG4EMeOJ/VKMahoNISF/uhR1i/wwhSbJjunM+AwHat2VRIEQxD3
-	 TZanfJ+RSp7W5BiIaWJIw0hsWcBfdSOOHJDfSQ696naGX2jHmenOka5hD9MalomDyc
-	 Wj0VYaNi6GL3g==
+	b=HJRcrQl8Qz1x2kK3vXufQBtw7retYKzESO0673Q9KKj4CxklgQnnfh7R74CbzxGGH
+	 nGQpGc+IyLczs+NWajx7i+QhYKChKlQEmVMTHEUAuU0RBxrzK73zwyQ3WaeXslXtIe
+	 qL+u4/vC0XNTG5P0rRzoU9ptZZcjQFWmU7rhS8qs1ePYVzqTEJOR3LquZMpYz7/iDm
+	 mCC9sjvhFR05JxJv8ys0Ge2bFK+4sp1PO/Vv6LPPw213o+902zMkGeyxjcZLBhWgrb
+	 7JodBYHCMu/Vh1fcA1N0zrvQzsXZq3kTY9Js7c8tsW2vukwy//OVmS+tJv/mfVtkEx
+	 Fg72QsR2fV2qQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78F97E11F58;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92A4AE11F5C;
 	Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] Broadcom devicetree changes for 6.7
+Subject: Re: [GIT PULL] arm64: dts: ti: K3: Second round of updates for v6.7
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169826882848.12441.15052502010084887072.git-patchwork-notify@kernel.org>
+ <169826882859.12441.12758369116762416160.git-patchwork-notify@kernel.org>
 Date: Wed, 25 Oct 2023 21:20:28 +0000
-References: <20231024155927.977263-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20231024155927.977263-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
+References: <35a3c4c9-5c1b-4891-9ea2-e3f648a9afe0@ti.com>
+In-Reply-To: <35a3c4c9-5c1b-4891-9ea2-e3f648a9afe0@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,22 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 24 Oct 2023 08:59:26 -0700 you wrote:
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+On Tue, 24 Oct 2023 22:39:48 +0530 you wrote:
+> Hi ARM SoC Maintainers,
 > 
->   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+> This is second round of DT updates for K3 platforms for v6.7. These contain minor yet key
+> features for newish AM62P SoC, AM65 ICSSG and J721s2/J784s4 Display support
 > 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.7/devicetree
+> Regards
+> Vignesh
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Broadcom devicetree changes for 6.7
-    https://git.kernel.org/soc/soc/c/a26dffc16361
-  - [GIT,PULL,2/2] Broadcom drivers changes for 6.7
-    https://git.kernel.org/soc/soc/c/759c2e043a60
+  - [GIT,PULL] arm64: dts: ti: K3: Second round of updates for v6.7
+    https://git.kernel.org/soc/soc/c/f652f84a9fbd
 
 You are awesome, thank you!
 -- 
