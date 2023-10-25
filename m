@@ -1,92 +1,64 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 772E8C07545
-	for <soc@archiver.kernel.org>; Wed, 25 Oct 2023 20:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D14D6C25B6E
+	for <soc@archiver.kernel.org>; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3DD51C433CB; Wed, 25 Oct 2023 20:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A12C433C7;
-	Wed, 25 Oct 2023 20:10:44 +0000 (UTC)
+	id A7F08C43391; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DC5BC433C9;
+	Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698264645;
-	bh=iQRE+WTl1DkW4ait010QgZoPxgOjsKrtqUOwFfNr3R0=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=j5vdlahvKjMeUCggtvomW6c+KWk3yOWT47MjXIMlNDd5+FK/RJlFiEEYeBX8Zn+oe
-	 C8mJpkLIPfwxelYpDsjCzQl+X7YfuAXbSi2ErcZsyK1jeMB0CBI+oDqS+bAXY8D1Fi
-	 FEoFMU1wGso5jy9/3czA1MtUo/wiHQJW4MMvwl6aoxR9dnmuu9zwoqy0YYFqwgxizN
-	 3+FI9KuMbHePp9aSIS8cE/t/q1m5kCKLkiCJf/fXzm6o181UycwmicwBXFuNIT3chE
-	 OfTFVpiB7CkOS48KOFIJyxaZD7d+K8bpCLsz2ilWFPaaJTSg5zvuHasJ8y2+ngqSBC
-	 CwJyrhZgFWz9g==
-From: Bjorn Andersson <andersson@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Rayyan Ansari <rayyan@ansari.sh>,
-	Luca Weiss <luca@z3ntu.xyz>
-Subject: [GIT PULL] More Qualcomm Arm32 DeviceTree updates for v6.7
-Date: Wed, 25 Oct 2023 13:15:02 -0700
-Message-ID: <20231025201503.1016435-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.42.0
+	s=k20201202; t=1698268828;
+	bh=kExqErPzDU/M0RwYTzs10D8rDKKcx0tFMMvmjWtRL8k=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=LFnKJDrPCYz+3vBB4bE1gKrhqJAlX3R8YJM5rG6TvBZS9ssjUk0GhwKJaTpj221wd
+	 XiPXjOq8ABI7+nVsFmyfKvrA5OcGc4kluhE5mrgA7UldQV4ohDt5MAcOlKclWtRSyV
+	 yu8759j2yMVRfDG4DltCFHG6uDLfm4fMLqPEl4Hl/IecavLYTA46r6H4q9XR0BHBwb
+	 Ubl+LVxRP249bCCWWk98MCFu3gJhvc+DfXMAC7Q6pt0qRrYHvICxV0+MRTWwwKThtE
+	 CndDvU2wRRMKpim63kBI/h+Qp4I/8RkgYqCmR7vHWqJ0PbdwUlAn/96z1bzz/JA2qt
+	 s5rANlpKn8pjw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A3F7C00446;
+	Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] ARM: dts: samsung: Second round for v6.7
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <169826882843.12441.13085682262479734905.git-patchwork-notify@kernel.org>
+Date: Wed, 25 Oct 2023 21:20:28 +0000
+References: <20231024132615.65609-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20231024132615.65609-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
+
+Hello:
+
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Tue, 24 Oct 2023 15:26:15 +0200 you wrote:
+> Hi,
+> 
+> On top of previous pull request, last minute improvements for v6.7.
+> 
+> Best regards,
+> Krzysztof
+> 
+> [...]
+
+Here is the summary with links:
+  - [GIT,PULL] ARM: dts: samsung: Second round for v6.7
+    https://git.kernel.org/soc/soc/c/e209b029c7d7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-The following changes since commit 2138c32af19740ab54bf5622890fe96ba3530b75:
-
-  ARM: dts: qcom: ipq8064: move keys and leds out of soc node (2023-09-27 16:10:23 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-6.7-2
-
-for you to fetch changes up to 8677233e59137f78d4d578f3d5a21557c1bab342:
-
-  ARM: dts: qcom: add device tree for Nokia Lumia 830 (2023-10-22 18:40:23 -0700)
-
-----------------------------------------------------------------
-More Qualcomm Arm32 DeviceTree updates for v6.7
-
-This introduces new DeviceTree source for Microsoft Lumia 640, Microsoft
-Lumia 640 XL, Nokia Lumia 735, and Nokia Lumia 830, built on MSM8226 and
-MSM8926.
-
-A few stylistic issues are corrected on MSM8974.
-
-----------------------------------------------------------------
-Luca Weiss (3):
-      ARM: dts: qcom: msm8974: replace incorrect indentation in interconnect
-      ARM: dts: qcom: msm8974: sort nodes by reg
-      ARM: dts: qcom: msm8226: provide dsi phy clocks to mmcc
-
-Rayyan Ansari (5):
-      ARM: dts: qcom: add common dt for MSM8x26 Lumias along with Nokia Lumia 630
-      ARM: dts: qcom: add device tree for Microsoft Lumia 640
-      ARM: dts: qcom: add device tree for Microsoft Lumia 640 XL
-      ARM: dts: qcom: add device tree for Nokia Lumia 735
-      ARM: dts: qcom: add device tree for Nokia Lumia 830
-
- arch/arm/boot/dts/qcom/Makefile                    |   5 +
- .../dts/qcom/qcom-msm8226-microsoft-common.dtsi    | 327 +++++++++++++++++++++
- .../dts/qcom/qcom-msm8226-microsoft-dempsey.dts    |  17 ++
- .../dts/qcom/qcom-msm8226-microsoft-makepeace.dts  |  17 ++
- .../dts/qcom/qcom-msm8226-microsoft-moneypenny.dts |  23 ++
- arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           |   4 +-
- .../qcom/qcom-msm8926-microsoft-superman-lte.dts   |  53 ++++
- .../boot/dts/qcom/qcom-msm8926-microsoft-tesla.dts |  67 +++++
- arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |  80 ++---
- 9 files changed, 551 insertions(+), 42 deletions(-)
- create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8226-microsoft-common.dtsi
- create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8226-microsoft-dempsey.dts
- create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8226-microsoft-makepeace.dts
- create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8226-microsoft-moneypenny.dts
- create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8926-microsoft-superman-lte.dts
- create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8926-microsoft-tesla.dts
