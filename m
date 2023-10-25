@@ -1,117 +1,124 @@
-Return-Path: <SRS0=EHW9=GH=gmail.com=lukas.bulwahn@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFB26C25B47
-	for <soc@archiver.kernel.org>; Wed, 25 Oct 2023 11:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03304C0032E
+	for <soc@archiver.kernel.org>; Wed, 25 Oct 2023 12:22:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B774C433C9; Wed, 25 Oct 2023 11:21:47 +0000 (UTC)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AECD0C433C7
-	for <soc@kernel.org>; Wed, 25 Oct 2023 11:21:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AECD0C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-52bd9ddb741so8637645a12.0
-        for <soc@kernel.org>; Wed, 25 Oct 2023 04:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698232905; x=1698837705; darn=kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E2rHfcsjlV4rlBGbf4CfwSEr1+dgsfk+VxIq/saYt7A=;
-        b=P7uMTe6xWFuWQsZoeLgKgChzgQCb3jRxKWaPpl+xecdzDmLvLJsXkuk6pXyf8mvbuX
-         sd6MhaR+NW9BCG21zt+sk9OjsyoRLtc32WnNXBWdWVuVd+EORhPwP3pjfesSeiXIeTXl
-         3Xth4GXcTX6V6dQ4yJp5dEdAmayZ6Oyzm5u44io+IlUj5u4X1pAniwRw3pKm9CePUZQY
-         DrHxXfgpoIjha5y5z9yo7fVEZ0Kl8fgdeWhzfwvxVP5knPiwfS2LjicF652vRjToTMEv
-         H89NYvZyaTxa9ANw1i8gsZ03XIPaacApO1SrOnm2C2GRzTl0wMRUQZRx8OBxY4T6+Q4I
-         EenQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698232905; x=1698837705;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E2rHfcsjlV4rlBGbf4CfwSEr1+dgsfk+VxIq/saYt7A=;
-        b=Wpd9VuvdFPxbA80aZx4oQap1mbWCKX6kFkIbzq1z/Pb9Mw2sr4YwOldOe4t5v8JioV
-         gZ06zRKKnK9MUhGPCauylGwJI/2oTjlMSxZ2aNEY0rVmBmxRu1R5885j1RR5vVhOr6vr
-         uxb7IUcRfgoL5+AS/a674L52ymhKDFgS2JJBP36MwRcoQMAzAJUPaqE/MGpe+WR9RNpr
-         KL39d0Cmhv1B/B5/PfKsQipqZVh5zVg2wnUXvsC+Vi6XzqMjs1y2HrczRUC8aB1DeEL5
-         sScrnFZjEtw13+ZX2xBd0T+HaMBlJzKBi2y0+M3Z/RnCcCUpVwQCzBuOEGcif2Lq0b/u
-         MkBw==
-X-Gm-Message-State: AOJu0Yw+YW+dktLV1rM2Qht0DYJImeQOhQcNllnIcy+yfOFfU0QwBKG/
-	vnQbcIQ10U+YC/YjiuNjJgU=
-X-Google-Smtp-Source: AGHT+IGPuYW/6V1UmkcJQL53Gndt5qS6mrifdkq1FD6CQye3uPK1nErdTXZVKKpQwX3DZ2hm9yT2yA==
-X-Received: by 2002:a17:906:6a0e:b0:9be:45b3:1c3d with SMTP id qw14-20020a1709066a0e00b009be45b31c3dmr9871645ejc.48.1698232904750;
-        Wed, 25 Oct 2023 04:21:44 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:2cbd:f9ec:f035:ebea])
-        by smtp.gmail.com with ESMTPSA id xa22-20020a170907b9d600b0099bd1ce18fesm9841288ejc.10.2023.10.25.04.21.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 04:21:44 -0700 (PDT)
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+	id BD2F5C433C9; Wed, 25 Oct 2023 12:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAFDDC433C7;
+	Wed, 25 Oct 2023 12:22:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698236528;
+	bh=iAp62fcXxNhccc4Gqt2/rcPZle2L2nQUuLLiglxHlKg=;
+	h=Date:From:List-Id:To:Cc:Subject:References:In-Reply-To:From;
+	b=hGEQ15v027nKsJM73uPY1GbkUWIZlqz8u2RVNASMXTk0gt9cGTV5CKoEOLte5ylvM
+	 peWhumFa29diA41cjai/4BuWk0U10OgkiyxYRnWEHujOCWatRsF2HYXUrSajzVu+k+
+	 EbbjhgwJC7sIrpXqmmJwr+EpQ9b5eaEA4N2QgNQzIgzJcxBYg2RB/rswwznfvEnJw9
+	 jsVYXWoE0ORuRe1wrjgTijk5FKX6o3H2ippbhbrw3KmNNbb7RVi7ZeuKyQiDUhuXX1
+	 JSuZkY5S9SRKjKf5YufV6LW3JDNEIX2xzGPiK7WWdjgsTBQklpsW1Me4kaxCDHJ55s
+	 Fza4B+3xpbcPQ==
+Date: Wed, 25 Oct 2023 13:22:03 +0100
+From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Russell King <linux@armlinux.org.uk>,
+To: soc@kernel.org
+Cc: Conor Dooley <conor.dooley@microchip.com>,
 	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] arm: debug: reuse the config DEBUG_OMAP2UART{1,2} for OMAP{3,4,5}
-Date: Wed, 25 Oct 2023 13:21:36 +0200
-Message-Id: <20231025112136.3445-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Russ Weight <russell.h.weight@intel.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] riscv: dts: microchip: add the mpfs' system
+ controller qspi & associated flash
+Message-ID: <20231025-demystify-iodize-cd93fedfd7ff@spud>
+References: <20231020-agreeably-filing-3d48708e6262@spud>
+ <20231020-unrated-uproar-c911c6185ae9@spud>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="K2EkulDe7Fc2EpiM"
+Content-Disposition: inline
+In-Reply-To: <20231020-unrated-uproar-c911c6185ae9@spud>
 
-Commit d2b310b0234c ("ARM: debug: Use generic 8250 debug_ll for omap2 and
-omap3/4/5 common uarts") adds address definitions of DEBUG_UART_PHYS for
-OMAP2, OMAP3, OMAP4 and OMAP5 in ./arch/arm/Kconfig.debug.
 
-These definitions depend on DEBUG_OMAP{2,3,4,5}UART{1,2}; however, only
-DEBUG_OMAP2UART{1,2} are defined in ./arch/arm/Kconfig.debug, and
-DEBUG_OMAP{3,4,5}UART{1,2} are not defined. Hence, the script
-./scripts/checkkconfigsymbols.py warns here on non-existing symbols.
-Simply reuse the config DEBUG_OMAP2UART{1,2}; there is no need to define
-separate config symbols for OMAP{3,4,5}. So, just delete the dead
-references to DEBUG_OMAP{3,4,5}UART{1,2}.
+--K2EkulDe7Fc2EpiM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/arm/Kconfig.debug | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+On Fri, Oct 20, 2023 at 02:18:44PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> The system controller's flash can be accessed via an MSS-exposed QSPI
+> controller sitting, which sits between the mailbox's control & data
+> registers. On Icicle, it has an MT25QL01GBBB8ESF connected to it.
+>=20
+> The system controller and MSS both have separate QSPI controllers, both
+> of which can access the flash, although the system controller takes
+> priority.
+> Unfortunately, on engineering sample silicon, such as that on Icicle
+> kits, the MSS' QSPI controller cannot write to the flash due to a bug.
+> As a workaround, a QSPI controller can be implemented in the FPGA
+> fabric and the IO routing modified to connect it to the flash in place
+> of the "hard" controller in the MSS.
+>=20
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../boot/dts/microchip/mpfs-icicle-kit.dts    | 21 +++++++++++++++++++
+>  arch/riscv/boot/dts/microchip/mpfs.dtsi       | 17 +++++++++++++++
+>  2 files changed, 38 insertions(+)
+>=20
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/ris=
+cv/boot/dts/microchip/mpfs-icicle-kit.dts
+> index 90b261114763..2dae3f8f33f6 100644
+> --- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+> @@ -199,6 +199,27 @@ &syscontroller {
+>  	status =3D "okay";
+>  };
+> =20
+> +&syscontroller_qspi {
+> +	/*
+> +	 * The flash *is* there, but Icicle kits that have engineering sample
+> +	 * silicon (write?) access to this flash to non-functional. The system
+> +	 * controller itself can actually access it, but the MSS cannot write
+> +	 * an image there. Instantiating a coreQSPI in the fabric & connecting
+> +	 * it to the flash instead should work though. Pre-production or later
+> +	 * silicon does not have this issue.
+> +	 */
+> +	status =3D "disabled";
+> +
+> +	sys_ctrl_flash: flash@0 { // MT25QL01GBBB8ESF-0SIT
+> +		compatible =3D "jedec,spi-nor";
+> +		#address-cells =3D <1>;
+> +		#size-cells =3D <1>;
+> +		spi-max-frequency =3D <20000000>;
+> +		spi-rx-bus-width =3D <1>;
+> +		reg =3D <0>;
+> +	};
+> +};
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index b407b7b9b715..fc2b41d41447 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -1593,10 +1593,8 @@ config DEBUG_UART_PHYS
- 	default 0x48020000 if DEBUG_OMAP4UART3 || DEBUG_TI81XXUART1
- 	default 0x48022000 if DEBUG_TI81XXUART2
- 	default 0x48024000 if DEBUG_TI81XXUART3
--	default 0x4806a000 if DEBUG_OMAP2UART1 || DEBUG_OMAP3UART1 || \
--				DEBUG_OMAP4UART1 || DEBUG_OMAP5UART1
--	default 0x4806c000 if DEBUG_OMAP2UART2 || DEBUG_OMAP3UART2 || \
--				DEBUG_OMAP4UART2 || DEBUG_OMAP5UART2
-+	default 0x4806a000 if DEBUG_OMAP2UART1
-+	default 0x4806c000 if DEBUG_OMAP2UART2
- 	default 0x4806e000 if DEBUG_OMAP2UART3 || DEBUG_OMAP4UART4
- 	default 0x49020000 if DEBUG_OMAP3UART3
- 	default 0x49042000 if DEBUG_OMAP3UART4
-@@ -1719,10 +1717,8 @@ config DEBUG_UART_VIRT
- 	default 0xfa020000 if DEBUG_OMAP4UART3 || DEBUG_TI81XXUART1
- 	default 0xfa022000 if DEBUG_TI81XXUART2
- 	default 0xfa024000 if DEBUG_TI81XXUART3
--	default 0xfa06a000 if DEBUG_OMAP2UART1 || DEBUG_OMAP3UART1 || \
--				DEBUG_OMAP4UART1 || DEBUG_OMAP5UART1
--	default 0xfa06c000 if DEBUG_OMAP2UART2 || DEBUG_OMAP3UART2 || \
--				DEBUG_OMAP4UART2 || DEBUG_OMAP5UART2
-+	default 0xfa06a000 if DEBUG_OMAP2UART1
-+	default 0xfa06c000 if DEBUG_OMAP2UART2
- 	default 0xfa06e000 if DEBUG_OMAP2UART3 || DEBUG_OMAP4UART4
- 	default 0xfa71e000 if DEBUG_QCOM_UARTDM
- 	default 0xfb009000 if DEBUG_REALVIEW_STD_PORT
--- 
-2.17.1
+Hmm, I think I will drop this part of the patch, and instead add the
+flash for the sev-kit (which does work correctly) to avoid any confusion
+as to why this is not supported on the current icicle kit boards.
 
+Cheers,
+Conor.
+
+--K2EkulDe7Fc2EpiM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTkIXAAKCRB4tDGHoIJi
+0mrpAP9NgAYLEtvFXBO5DfWx1YJXMlv7vsyRY7eEK5cL3UJxtwEAirHnHzNEZoAG
+1JNLFsVyCMD6ZEn4HrrAqnlzW4dY2A0=
+=J0jG
+-----END PGP SIGNATURE-----
+
+--K2EkulDe7Fc2EpiM--
