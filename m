@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E07E8C25B6B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4BA4C25B6F
 	for <soc@archiver.kernel.org>; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A7EE7C433CD; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90C3EC433CB;
+	id D0E7DC433B6; Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B98F8C433C8;
 	Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698268828;
-	bh=qoZqB9539K6ui5ZdPWTEe3fUK3WPZDsAITvZ0/P/3+8=;
+	bh=0iROfHPMlhmi+rd6GZ0fiIVlXOX9OjdQ/Z7fWlVvt5U=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=pkbk6CgRtAxOkycFtwF2Fkl8Tml7MRnjSEHOWBz5q7ZZKdOznJdKAwaHs8WooQHZl
-	 H6rX0X0QeuqQBAwNesHrDBC6Ci/hDk21StK9PGhufcHgGdiGOKb55uBoUoeNmDhUF+
-	 G+2OLiN+Bkft4X31ufuaO7IF5ICtF2SEar1PParLeCbXKB/oo9c4qBfSn8lWbTr94N
-	 1NVAAGk+lrud3Aj2K6ZKSSOr0nfrwpDFMtiQp40j3lnDk47na2jwY8EzQOxCwz8XKl
-	 iXl1lxK2Ps5DNSeQRX71F6OX0Nea8WrPoBaemNyvObySjbmKDXT/jdlqn7KCgcaE+l
-	 TIGdFk3n5SJKw==
+	b=ZAEvxtHHCAhQ71c1rfjd9S/4r1A6jOmWoyygvRDMW5ILNx1dVdSu5Tt1teV4SPVYN
+	 PDZpHIOjop6wBZLR3cB7R6DtSLwD53chO+RsaQr+08FzX4UE+lK5RvhfaM4Q7cZZ0c
+	 oEJjFXmjQrNMFaP3s5l7xf7VHGpMJO2akJZdVrLGIsI/eCgSOYJ24BzXk8e8SiZATU
+	 TlohxwX7Qzl7+amobCQUniTq+90TyiPIAvUGKoTVvZln27L3nje5c8zMgDvA40/ED3
+	 Vn4lpbVu0MopA5Bq8Wd1qnsdEogrMFaakf+1lnaPnuW5q81MHJnqUatTduW3sQmqg9
+	 dHiNHp1X7QjSw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71034E11F59;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C255E11F5D;
 	Wed, 25 Oct 2023 21:20:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] soc: ti: Driver updates for v6.7
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.7 #2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <169826882845.12441.18058270683297347460.git-patchwork-notify@kernel.org>
+ <169826882857.12441.8140534577857283693.git-patchwork-notify@kernel.org>
 Date: Wed, 25 Oct 2023 21:20:28 +0000
-References: <20231018165226.33x5cjn5jmgnm3di@magnolia>
-In-Reply-To: <20231018165226.33x5cjn5jmgnm3di@magnolia>
-To: Nishanth Menon <nm@ti.com>
+References: <2777623.BEx9A2HvPv@phil>
+In-Reply-To: <2777623.BEx9A2HvPv@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,23 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 18 Oct 2023 11:52:26 -0500 you wrote:
-> Hi,
+On Tue, 24 Oct 2023 21:43:12 +0200 you wrote:
+> Hi Arnd, Kevin, Olof,
 > 
-> Please pull:
+> after the first pull request there were some stragglers left.
+> One new SoM was submitted and the DFI driver changes were merged
+> into the relevant driver tree.
 > 
-> The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
-> 
->   Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+> This pull request adds the relevant changes for those.
+> The commits should be in linux-next since the 19th or 20th of
+> october, so did get exposure and the changes go on top of the
+> previous v6.7-rockchip-dts64-1 tag.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] soc: ti: Driver updates for v6.7
-    https://git.kernel.org/soc/soc/c/80957adc47fd
+  - [GIT,PULL] Rockchip dts64 changes for 6.7 #2
+    https://git.kernel.org/soc/soc/c/c505e1e4b10d
 
 You are awesome, thank you!
 -- 
