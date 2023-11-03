@@ -1,298 +1,279 @@
-Return-Path: <SRS0=NWeF=GQ=bootlin.com=alexandre.belloni@kernel.org>
+Return-Path: <SRS0=TvDL=GQ=google.com=willmcvicker@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7BC1C4332F
-	for <soc@archiver.kernel.org>; Fri,  3 Nov 2023 19:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3754C4332F
+	for <soc@archiver.kernel.org>; Fri,  3 Nov 2023 20:05:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7BAEDC433CC; Fri,  3 Nov 2023 19:23:27 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id A51ADC433C7; Fri,  3 Nov 2023 20:05:36 +0000 (UTC)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DD687C433C7;
-	Fri,  3 Nov 2023 19:23:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DD687C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 038F640005;
-	Fri,  3 Nov 2023 19:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1699039397;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=inw+zUQkXcUkUcEf97SI8dCxdTurEr/2iTCZJajeOCU=;
-	b=LWZl3gANc5V5hyI9PiSaeiZrjL/carT/+SVgrpd5lBYtZss2atE/Couch9NzO90Dp2eE8z
-	VEWgRXZ0vpiofe+FyATzCEl9o7e2YSBR+qMG53Bnlh74ceuKvXqP6blsH4jw2suqcb3x7R
-	pptgn7m7z9QaZ+73PZvWi10vV7u8Oivi60U/wnA0iVc6bxxB9S46udL93MSuECDZ2mz0ew
-	eNbcqA6cnEtm+RqwQOUt+EB4OCNUdRvOxiQ/OpNGCmKiBAm728P4mJapvt+iLLWUMbDQcm
-	Y+aHApReLsATDG0teyZfDbIPR5KoVG9aXPGe+9xjZ24bLtgn+MFebcWsgmA24w==
-Date: Fri, 3 Nov 2023 20:23:16 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id D24B3C433C9
+	for <soc@kernel.org>; Fri,  3 Nov 2023 20:05:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D24B3C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1cc79f73e58so1855ad.1
+        for <soc@kernel.org>; Fri, 03 Nov 2023 13:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699041933; x=1699646733; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5VbkSNuwWNxADmq74BTzzOffPoezQ3iEIy9T2gZ4ntQ=;
+        b=uqH9Qy1i3iY4CYILNaYuamZuF9qe+U9nl9CiVe+kOjdEYl4/3yfboHh/c33WOFtPUz
+         AjFjKz/Mx/vP9jhTffJ5TpbeVrr4kBUCss0alNzjE9D/J7yR4VsEqA5laQhZ4uCc+XBl
+         fNhX58Y34pBUOCGegRVNL+WuQxnZCfbfuQO1F6TNmWEgy9Ot0Uow/r5Pub/+poL40bha
+         4gnKLX28KqHh/J6WsW17y4eukJnKDZ8NLROXnDWvTHOyFaS/GWpskvvCMr4e5ykC9tQr
+         hdhnT1M3EMAadDHxNvIVWPSfUgiksRqeEiL0bZIEW7IvI0GCLIiK37oDtTrLjAuxUdRW
+         wFFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699041933; x=1699646733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5VbkSNuwWNxADmq74BTzzOffPoezQ3iEIy9T2gZ4ntQ=;
+        b=dLVyMSSEflkxXdw2M4bnqtD6/OrfBvpjysfOKnrVa70BxZKmxhcLgi//1nujr6/bNB
+         adSlKTPnSF2AtngxsIALuQIMbkAytuBDFm+hC9tRU0fhCBKsw4lf1FpfQXNxkZJqAbsx
+         zERYLjQuKctK2B/8J5beamPNjuopfJbAoZLXQxPHMzQZ41PzOh2a7M6jzIYUI6dDUVwW
+         lvWllPsAM3JestsgF+i0c5otKV6C8BgMcuRtEec9VLB+xMSHRX3+JnsvPxtIdhWDmkf3
+         gxanCEygtE3k8uoJIy6DuZbhM2Rao5RLJGO50dRT/phWWf5GhwkqSHK4Ajdtu28p9Uw9
+         eTZA==
+X-Gm-Message-State: AOJu0Yy+D84WbHmle9rjSH85NIReTeD7i5gDUDbvLIEkmCRQmzNGQ8hl
+	QUSy6/SoTrn31mfIopaferzhXw==
+X-Google-Smtp-Source: AGHT+IGSLym7LjReWH2oEnEAARiZ56Hfr6abFPm4QXjfoHgBTcHOJjCKffwUPorSCrtlytrQU0sQdA==
+X-Received: by 2002:a17:903:41cd:b0:1bd:9c78:8031 with SMTP id u13-20020a17090341cd00b001bd9c788031mr9924ple.9.1699041932747;
+        Fri, 03 Nov 2023 13:05:32 -0700 (PDT)
+Received: from google.com (137.22.168.34.bc.googleusercontent.com. [34.168.22.137])
+        by smtp.gmail.com with ESMTPSA id jb20-20020a170903259400b001cc615e6850sm1758011plb.90.2023.11.03.13.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 13:05:32 -0700 (PDT)
+Date: Fri, 3 Nov 2023 13:05:28 -0700
+From: William McVicker <willmcvicker@google.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] platform: cznic: turris-omnia-mcu: Add support
- for poweroff and wakeup
-Message-ID: <202311031923161422b866@mail.local>
-References: <20231026161803.16750-1-kabel@kernel.org>
- <20231026161803.16750-5-kabel@kernel.org>
+Cc: Maksym Holovach <maksym.holovach.an.2022@lpnu.ua>,
+	Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+	s.nawrocki@samsung.com, linus.walleij@linaro.org,
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
+	will@kernel.org, arnd@arndb.de, olof@lixom.net,
+	cw00.choi@samsung.com, tudor.ambarus@linaro.org,
+	andre.draszik@linaro.org, semen.protsenko@linaro.org,
+	saravanak@google.com, soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	kernel-team@android.com, linux-serial@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [PATCH v2 00/20] Add minimal Tensor/GS101 SoC support and
+ Oriole/Pixel6 board
+Message-ID: <ZUVSiBvy9SNXFG_A@google.com>
+References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+ <3d489d6c-2098-4f0c-9ec4-f6040665753e@lpnu.ua>
+ <CADrjBPp+fyNoPdix6=Wp4cDCRFq2Mui8NS6WENejcHn+H1M-jA@mail.gmail.com>
+ <48e1c0bd-9518-4927-b490-f3206256bbd4@lpnu.ua>
+ <c0b8f356-0f26-459d-850d-ec0fa1fd3987@linaro.org>
+ <ZUUvp3kqM7NPlyZ_@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231026161803.16750-5-kabel@kernel.org>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <ZUUvp3kqM7NPlyZ_@google.com>
 
-On 26/10/2023 18:18:00+0200, Marek Behún wrote:
-> +static int omnia_get_uptime_wakeup(const struct i2c_client *client, u32 *uptime,
-> +				   u32 *wakeup)
-> +{
-> +	__le32 reply[2];
-> +	int err;
-> +
-> +	err = omnia_cmd_read(client, CMD_GET_UPTIME_AND_WAKEUP, reply,
-> +			     sizeof(reply));
-> +	if (err)
-> +		return err;
-> +
-> +	if (uptime)
-> +		*uptime = le32_to_cpu(reply[0]);
-> +
-> +	if (wakeup)
-> +		*wakeup = le32_to_cpu(reply[1]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	u32 uptime;
-> +	int err;
-> +
-> +	err = omnia_get_uptime_wakeup(to_i2c_client(dev), &uptime, NULL);
-> +	if (err)
-> +		return err;
+On 11/03/2023, William McVicker wrote:
+> Hi Maksym, Krzysztof, Peter,
+> 
+> On 11/03/2023, Krzysztof Kozlowski wrote:
+> > On 03/11/2023 14:56, Maksym Holovach wrote:
+> > > Hi Peter,
+> > > 
+> > > On 11/3/23 15:11, Peter Griffin wrote:
+> > >> Hi Maksym,
+> > >>
+> > >> Thanks for your feedback.
+> > >>
+> > >> On Thu, 2 Nov 2023 at 22:32, Maksym Holovach
+> > >> <maksym.holovach.an.2022@lpnu.ua> wrote:
+> > >>> Hi, all
+> > >>>
+> > >>> I wanted to inquire about how do you all feel about calling this SoC by
+> > >>> the Google "gs101" name.
+> > >> Interesting question, I think calling it gs101 is the correct approach see
+> > >> below for my rationale.
+> > >>
+> > >>> I believe the proper name for it should be the actual Samsung name,
+> > >>> written in the silicon and reported in the Chip ID hardware: Exynos9845.
+> > >>> This also touches the Tensor G2 (Exynos9855), Tensor G3 (Exynos9865),
+> > >>> and possibly the "Tesla" SoCs.
+> > >>>
+> > >>> I do not think the Linux kernel should be a marketing material: it
+> > >>> should reflect reality. The chip is almost 100% composed of Samsung
+> > >>> Exynos IP blocks and should be called that way.
+> > >> As you alluded to Tesla fsd and Axis artpec8 SoCs are also based on
+> > >> Exynos designs and support upstream uses the axis,artpec8* or tesla,fsd*
+> > >> compatibles.
+> > >>
+> > >> So using google,gs101 is consistent with the existing upstream naming
+> > >> scheme, for customized ASICs that were based off a Exynos design. But
+> > >> it also reflects the reality that this SoC is not a Exynos9845 as there is
+> > >> also a lot of Google owned and other third party IP integrated that is not
+> > >> found in Exynos9845.
+> > > 
+> > > A quick question: Do you imply Exynos9845 exists outside of the context 
+> > > of Tensor G1? I used to believe Exynos9845 **is** Tensor G1.
+> 
+> Yes, the gs101 SoC is *not* equivalent to the Exynos9845. Similar to how Tesla
+> FSD licenses Exynos IP blocks, gs101 does not only comprise of Exynos IP
+> blocks. The final design is unique to Google and comprises of several different
+> vendor IP blocks (not only Exynos).
 
-Does this get the real time or the board uptime?
+Sorry, I need to correct this after talking to more people. The Exynos9845 is
+the name that Samsung LSI refers to as the gs101 SoC. However, it was made
+exclusively for Google with Google-designed IP. Since this chip is exclusive to
+the Pixel device line-up, it would make sense to use the well known name that
+is used by Google in the Pixel factory kernel.
 
-> +
-> +	rtc_time64_to_tm(uptime, tm);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +	u32 wakeup;
-> +	int err;
-> +
-> +	err = omnia_get_uptime_wakeup(client, NULL, &wakeup);
-> +	if (err)
-> +		return err;
-> +
-> +	alrm->enabled = !!wakeup;
-> +	rtc_time64_to_tm(wakeup ?: mcu->rtc_alarm, &alrm->time);
+Regards,
+Will
 
-I don't think this works properly as on boot, mcu->rtc_alarm will not be
-set whereas wakeup could be.
-
-Also, is wakeup actually an absolute time? I'm not sure I get how the
-MCU works then.
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +
-> +	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
-> +
-> +	if (alrm->enabled)
-> +		return omnia_cmd_write_u32(client, CMD_SET_WAKEUP,
-> +					   mcu->rtc_alarm);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_alarm_irq_enable(struct device *dev, unsigned int enabled)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +
-> +	return omnia_cmd_write_u32(client, CMD_SET_WAKEUP,
-> +				   enabled ? mcu->rtc_alarm : 0);
-> +}
-> +
-> +static const struct rtc_class_ops omnia_rtc_ops = {
-> +	.read_time		= omnia_read_time,
-> +	.read_alarm		= omnia_read_alarm,
-> +	.set_alarm		= omnia_set_alarm,
-> +	.alarm_irq_enable	= omnia_alarm_irq_enable,
-> +};
-> +
-> +static int omnia_power_off(struct sys_off_data *data)
-> +{
-> +	struct omnia_mcu *mcu = data->cb_data;
-> +	__be32 tmp;
-> +	u8 cmd[9];
-> +	u16 arg;
-> +	int err;
-> +
-> +	if (mcu->front_button_poweron)
-> +		arg = CMD_POWER_OFF_POWERON_BUTTON;
-> +	else
-> +		arg = 0;
-> +
-> +	cmd[0] = CMD_POWER_OFF;
-> +	put_unaligned_le16(CMD_POWER_OFF_MAGIC, &cmd[1]);
-> +	put_unaligned_le16(arg, &cmd[3]);
-> +
-> +	/*
-> +	 * Although all values from and to MCU are passed in little-endian, the
-> +	 * MCU's CRC unit uses big-endian CRC32 polynomial (0x04c11db7), so we
-> +	 * need to use crc32_be() here.
-> +	 */
-> +	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
-> +	put_unaligned_le32(crc32_be(0xffffffff, (void *)&tmp, sizeof(tmp)),
-> +			   &cmd[5]);
-> +
-> +	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-> +	if (err)
-> +		dev_err(&mcu->client->dev,
-> +			"Unable to send the poweroff command: %d\n", err);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int omnia_restart(struct sys_off_data *data)
-> +{
-> +	struct omnia_mcu *mcu = data->cb_data;
-> +	u8 cmd[3];
-> +	int err;
-> +
-> +	cmd[0] = CMD_GENERAL_CONTROL;
-> +
-> +	if (reboot_mode == REBOOT_HARD)
-> +		cmd[1] = cmd[2] = CTL_HARD_RST;
-> +	else
-> +		cmd[1] = cmd[2] = CTL_LIGHT_RST;
-> +
-> +	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-> +	if (err)
-> +		dev_err(&mcu->client->dev,
-> +			"Unable to send the restart command: %d\n", err);
-> +
-> +	/*
-> +	 * MCU needs a little bit to process the I2C command, otherwise it will
-> +	 * do a light reset based on SOC SYSRES_OUT pin.
-> +	 */
-> +	mdelay(1);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static ssize_t front_button_poweron_show(struct device *dev,
-> +					 struct device_attribute *a, char *buf)
-> +{
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
-> +
-> +	return sysfs_emit(buf, "%d\n", mcu->front_button_poweron);
-> +}
-> +
-> +static ssize_t front_button_poweron_store(struct device *dev,
-> +					  struct device_attribute *a,
-> +					  const char *buf, size_t count)
-> +{
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
-> +	bool val;
-> +	int err;
-> +
-> +	err = kstrtobool(buf, &val);
-> +	if (err)
-> +		return err;
-> +
-> +	mcu->front_button_poweron = val;
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(front_button_poweron);
-> +
-> +static struct attribute *omnia_mcu_poweroff_attrs[] = {
-> +	&dev_attr_front_button_poweron.attr,
-> +	NULL
-> +};
-> +
-> +static umode_t poweroff_attrs_visible(struct kobject *kobj, struct attribute *a,
-> +				      int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
-> +
-> +	if (mcu->features & FEAT_POWEROFF_WAKEUP)
-> +		return a->mode;
-> +
-> +	return 0;
-> +}
-> +
-> +const struct attribute_group omnia_mcu_poweroff_group = {
-> +	.attrs = omnia_mcu_poweroff_attrs,
-> +	.is_visible = poweroff_attrs_visible,
-> +};
-> +
-> +int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu)
-> +{
-> +	struct device *dev = &mcu->client->dev;
-> +	int err;
-> +
-> +	/* MCU restart is always available */
-> +	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
-> +					    SYS_OFF_PRIO_FIRMWARE,
-> +					    omnia_restart, mcu);
-> +	if (err)
-> +		return dev_err_probe(dev, err,
-> +				     "Cannot register system restart handler\n");
-> +
-> +	/*
-> +	 * Poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
-> +	 * present.
-> +	 */
-> +	if (!(mcu->features & FEAT_POWEROFF_WAKEUP))
-> +		return 0;
-> +
-> +	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
-> +					    SYS_OFF_PRIO_FIRMWARE,
-> +					    omnia_power_off, mcu);
-> +	if (err)
-> +		return dev_err_probe(dev, err,
-> +				     "Cannot register system power off handler\n");
-> +
-> +	mcu->rtcdev = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(mcu->rtcdev))
-> +		return dev_err_probe(dev, PTR_ERR(mcu->rtcdev),
-> +				     "Cannot allocate RTC device\n");
-> +
-> +	mcu->rtcdev->ops = &omnia_rtc_ops;
-> +	mcu->rtcdev->range_max = U32_MAX;
-
-You probably need to add:
-
-set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, mcu->rtcdev->features);
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> > > 
+> > > Also, what kind of Google IP are you talking about? I believe only the 
+> > > neural accelerator should be custom-ish.
+> > > 
+> > > Additionally, I believe it having or not having Google IP is irrelevant: 
+> > > for example, the new Raspberry Pi 5 Broadcom SoC has a lot of 
+> > > Raspberry's own IP, but it's still called Broadcom as it's the real 
+> > > manufacturer and designer of the chip.
+> > 
+> > That's a good argument. Indeed BCM2712 contains "New Raspberry
+> > Pi-developed ISP".
+> > https://www.raspberrypi.com/documentation/computers/processors.html
+> > 
+> > There aren't many patches but GPU is still called brcm,2712.
+> > 
+> > For Tesla FSD, there was discussion and output was not very consisting.
+> > First, the name itself was used for everything - SoC architecture, one
+> > given SoC and eventually the board.
+> > https://lore.kernel.org/all/5ab62673-8d46-ec1d-1c80-696421ab69ca@canonical.com/
+> > 
+> > Eventually the last part - board - was renamed to "Evaluation board",
+> > but I don't know how true or real it is.
+> > 
+> > See also:
+> > "I would argue that if this SoC shares the pinctrl, clock, spi, adc,
+> > and timer implementation
+> > with Exynos, we should consider it part of the Exynos family,"
+> > https://lore.kernel.org/all/CAK8P3a31bCHNcNWrLX+QW+4RuK=DBpxLA_j5BFKxXxXKCT8PFQ@mail.gmail.com/
+> > 
+> > However it was also claimed:
+> > 
+> > "AFA architecture is concerns both Exynos and FSD has completely
+> > different architecture (at least at HW level)."
+> > https://lore.kernel.org/all/07ce01d8091e$9a6fd9c0$cf4f8d40$@samsung.com/
+> > 
+> > >> I guess the same is also true for `axis,artpec8` and `tesla,fsd` SoCs.
+> > >> IMO the SoC compatible string should be uniquely identifying the actual
+> > >> SoC, not a close relative.
+> > >>
+> > >> Regarding product_id you are correct this reads 0x09845000 but even
+> > >> within Samsung Exynos family there are examples where the register
+> > >> value does not match the SoC compatible. For example Exynos850 SoC
+> > >> has a product ID value of "E3830". Where the Linux compatible is
+> > >> matching the Samsung marketing name, not the internal/outdated name.
+> > > 
+> > > I did not know Exynos 850 is also not going under it's real name. 
+> > > Ultimately, I believe all of those SoCs should go under their technical 
+> > > name in the exynos/ directory.
+> > 
+> > The initial technical name does not exist outside of vendor sources and
+> > part name. E.g. Winlink E850 board hardware manual calls it:
+> > "Samsung Exynos 850, S5E3830"
+> > and everywhere else Exynos 850 SoC is used.
+> > 
+> > If you start calling it Exynos 3830, only me and Sam (who mainlined it)
+> > would know what is it. Everyone else, all users of kernel, would be
+> > confused.
+> > 
+> > Therefore using well known final product name is for Exynos850 reasonable.
+> 
+> I agree with this. By using the final (well known) product SoC name -- gs101 --
+> other developers will be able to easily identify the particular SoC.
+> 
+> > 
+> > > 
+> > > Another concern is that Google could in the future license other SoC: be 
+> > > it Qualcomm, Nvidia or anything. If we put completely different hw under 
+> > > google/ directory, does it really make sense? In that case, who'll 
+> > > maintain the google/ directory? Exynos people? Qualcomm people if they 
+> > > license it? Some other people?
+> 
+> I don't understand why the architecture of the SoC would dictate which folder
+> to put the device tree files under. It makes more sense to group board DT files
+> together based on who distributes them. Having all the Pixel DT board files
+> together allows Google to create a single device tree binary per SoC coupled
+> with the set of device tree overlays per board variant (this is the dtbo.img)
+> to ship to all their devices. If you look at all the in-market Pixel devices
+> with Tensor SoCs, you will find that you could create one dtb (concatenate
+> gs101.dtb, gs201.dtb, and zuma.dtb) and one dtbo image for 10 devices which
+> significantly simplifies the maintenance, testing, and software distribution
+> for all 10 of those products.
+> 
+> > 
+> > That's indeed a problem. Future Tesla SoC might have just few pieces
+> > similar to FSD. There would be no common SoC part, except the actual
+> > Tesla IP.
+> > 
+> > Same for Google. Future GSXXX, if done by Qualcomm, will be absolutely
+> > different than GS101 and the only common part would be the TPU (Tensor).
+> > 
+> > So now let's decide what is the common denominator:
+> > 1. Core SoC architecture, like buses, pinctrl, clocks, timers, serial,
+> > and many IP blocks, which constitute 95% of Devicetree bindings and drivers,
+> > 2. The one, big piece made by Samsung's customer: TPU, NPU or whatever.
+> 
+> As mentioned above, I think this should be based on how the DTBs and DTBOs are
+> used and distributed. What is the benefit of adding the gs101 board files under
+> the exynos folder?
+> 
+> Thanks,
+> Will
+> 
+> > 
+> > > 
+> > > Then, I don't think Tensor G3 has a proper "GS" name, it goes by "Zuma" 
+> > > in decompiled kernel modules as far as I see.
+> > > 
+> > > Finally, Tesla people already tried to submit drivers called by Tesla 
+> > > name, but which basically copied the functionality of the Exynos 
+> > > drivers. We would want to avoid that, ideally.
+> > > 
+> > > My opinion is that all the Tesla and Google SoCs should be in the 
+> > > exynos/ directory, not only because they are basically Samsung Exynos, 
+> > > but also because they don't really need a separate directory: neither 
+> > > Google nor Tesla didn't neither manufacture or design those SoCs from 
+> > > scratch. The only reason I can think of for them to have it in a 
+> > > separate directory is maybe because Google and Tesla actually paid 
+> > > Samsung money for the right to call Exynos "Google designed" SoCs, but I 
+> > > believe the kernel should be left out of that.
+> > 
+> > For some reason, although I know which, Cc-list is here trimmed and
+> > misses Alim...
+> > 
+> > So standard reply follow (it makes me really, really grumpy, because it
+> > means you develop on some crazy old kernel or do not use tools which
+> > automate the process):
+> > 
+> > Please use scripts/get_maintainers.pl to get a list of necessary people
+> > and lists to CC (and consider --no-git-fallback argument). It might
+> > happen, that command when run on an older kernel, gives you outdated
+> > entries. Therefore please be sure you base your patches on recent Linux
+> > kernel.
+> > 
+> > Best regards,
+> > Krzysztof
+> > 
