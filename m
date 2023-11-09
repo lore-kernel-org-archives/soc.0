@@ -1,301 +1,73 @@
-Return-Path: <SRS0=wTQB=GV=linaro.org=semen.protsenko@kernel.org>
+Return-Path: <SRS0=3AV4=GW=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BDD9C0018C
-	for <soc@archiver.kernel.org>; Wed,  8 Nov 2023 17:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89697C4167B
+	for <soc@archiver.kernel.org>; Thu,  9 Nov 2023 05:45:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3498C433C7; Wed,  8 Nov 2023 17:34:01 +0000 (UTC)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 4E728C433C8; Thu,  9 Nov 2023 05:45:57 +0000 (UTC)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2525DC433CA
-	for <soc@kernel.org>; Wed,  8 Nov 2023 17:33:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2525DC433CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2809a824bbbso5511594a91.3
-        for <soc@kernel.org>; Wed, 08 Nov 2023 09:33:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699464838; x=1700069638; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sAWSOoeAjfBbJekhTKUv9QwV6bzlMliXHO1btit3MQo=;
-        b=Flk7A7nEY0VFuStor7fnrcGQTjXZfgTexV8TdiFeB43bVtBnBvvDo89LyvX0+xowbI
-         0GvEDo3E+Bdo+INMCy+CFU0oIL1EotiAaVqlDWR3Nx70OmXkLg6dju58c0J0mANjFNcP
-         AmuLoz3Vfh3hqoF2c/NfxlxIq71UXWcJ4UUDHTFS749JsLIURWqBWieIzKwh+bXDj/VM
-         WAYEdqIuI7paH80aDVjjZGsD+Ec4IENUeMi5J86+Y1cz2Pqdq4ubJrwZHqIlsIQ1aZTM
-         Vsc4d1SXSUVvB8gH0Y8zfNLDwKEYwZ3mGZMU3tmek9nHQ+NyR2t1jrxZAfDd1fUIUx0t
-         OlWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699464838; x=1700069638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sAWSOoeAjfBbJekhTKUv9QwV6bzlMliXHO1btit3MQo=;
-        b=VMPEwO7n96DMkPJGYiWB+jA2CWSVq9Eq8XIHLg4rqlmZcrx8waAIvnl1rc+arurEsZ
-         bqjBUewWEr0IQNkbZiOggmCvvauRG5r+VOGBYB2q0/VnjcXlFqu05av3n2s8+7SKYwl4
-         dG7izq+vPmwB1ll+sVHfHowCzoXsaX91yie2+GnglV+XS9D/iZHNenL5egwHAy4DF+U3
-         QXz2EBtXHm3ym0YrIgHODucmIXR9deovE2un2xplJ3zbMexKvo3+amx4AcNspE7aWIGA
-         uv4k6222KMp5tv8iRAsz3MPbRZLigaA7j9aB+ss26Iv+sJTKi8Z1kJRyQ3xrUWQqT2Ij
-         hpiw==
-X-Gm-Message-State: AOJu0YxfE4hOEXobvG27/xBpwFGiaR0TiYJT4bgVoj6MxhHew60R20mV
-	DscjOhW6nXcaak/umTQotemCHyzJLjn5W6JXQxkbnQ==
-X-Google-Smtp-Source: AGHT+IGY4VBAJ38xlUtcmXFmIEhynykPBn3dfo+SVZRmQxxurhZcoKtbYoXN1XDKnlHvImSQIH0q75kjXSAbWt8IHAw=
-X-Received: by 2002:a17:90a:6888:b0:281:da1:4b96 with SMTP id
- a8-20020a17090a688800b002810da14b96mr2347498pjd.22.1699464838284; Wed, 08 Nov
- 2023 09:33:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-11-peter.griffin@linaro.org> <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
- <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com>
-In-Reply-To: <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Wed, 8 Nov 2023 11:33:46 -0600
-Message-ID: <CAPLW+4m+n-U4cAkJZTeCsoE_e6r1j8srYmVjSLawPWwHi6SEAw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
- plls, mux and gates
-To: Peter Griffin <peter.griffin@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 756F5C433CC;
+	Thu,  9 Nov 2023 05:45:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 756F5C433CC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm000004.china.huawei.com (unknown [172.30.72.55])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SQrSp732kz1P85Y;
+	Thu,  9 Nov 2023 13:42:34 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm000004.china.huawei.com (7.193.23.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Thu, 9 Nov 2023 13:45:11 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <xuwei5@hisilicon.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Chanwoo Choi <chanwoo@kernel.org>, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
-	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
-	s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
-	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>, <krzk@kernel.org>,
+	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH v1 2/3] soc: hisilicon: kunpeng_hccs: Add failure log for no _CRS method
+Date: Thu, 9 Nov 2023 13:45:25 +0800
+Message-ID: <20231109054526.27270-3-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20231109054526.27270-1-lihuisong@huawei.com>
+References: <20231109054526.27270-1-lihuisong@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm000004.china.huawei.com (7.193.23.18)
+X-CFilter-Loop: Reflected
 
-On Tue, Nov 7, 2023 at 7:57=E2=80=AFAM Peter Griffin <peter.griffin@linaro.=
-org> wrote:
->
-> Hi Chanwoo,
->
-> Thanks for your review!
->
-> On Wed, 18 Oct 2023 at 17:51, Chanwoo Choi <chanwoo@kernel.org> wrote:
-> >
-> > Hi Peter,
-> >
-> > On 23. 10. 12. 03:48, Peter Griffin wrote:
-> > > CMU_TOP is the top level clock management unit which contains PLLs, m=
-uxes
-> > > and gates that feed the other clock management units.
-> > >
-> > > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > > ---
-> > >  drivers/clk/samsung/Kconfig     |    9 +
-> > >  drivers/clk/samsung/Makefile    |    2 +
-> > >  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++=
-++
-> > >  3 files changed, 1562 insertions(+)
-> > >  create mode 100644 drivers/clk/samsung/clk-gs101.c
-> > >
-> > > diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfi=
-g
-> > > index 76a494e95027..14362ec9c543 100644
-> > > --- a/drivers/clk/samsung/Kconfig
-> > > +++ b/drivers/clk/samsung/Kconfig
-> > > @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
-> > >       select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
-> > >       select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
-> > >       select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
-> > > +     select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
-> > >       select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
-> > >
-> > >  config S3C64XX_COMMON_CLK
-> > > @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
-> > >         status of the certains clocks from SoC, but it could also be =
-tied to
-> > >         other devices as an input clock.
-> > >
-> > > +config GOOGLE_GS101_COMMON_CLK
-> > > +     bool "Google gs101 clock controller support" if COMPILE_TEST
-> > > +     depends on COMMON_CLK_SAMSUNG
-> > > +     depends on EXYNOS_ARM64_COMMON_CLK
-> > > +     help
-> > > +       Support for the clock controller present on the Google gs101 =
-SoC.
-> > > +       Choose Y here only if you build for this SoC.
-> > > +
-> >
-> > (snip)
-> >
-> > > +
-> > > +/* gs101 */
-> > > +static const struct samsung_mux_clock cmu_top_mux_clks[] __initconst=
- =3D {
-> > > +     /* CMU_TOP_PURECLKCOMP */
-> > > +     MUX(CLK_MOUT_SHARED0_PLL, "mout_shared0_pll", mout_shared0_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED0, 4, 1),
-> > > +     MUX(CLK_MOUT_SHARED1_PLL, "mout_shared1_pll", mout_shared1_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED1, 4, 1),
-> > > +     MUX(CLK_MOUT_SHARED2_PLL, "mout_shared2_pll", mout_shared2_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED2, 4, 1),
-> > > +     MUX(CLK_MOUT_SHARED3_PLL, "mout_shared3_pll", mout_shared3_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED3, 4, 1),
-> > > +     MUX(CLK_MOUT_SPARE_PLL, "mout_spare_pll", mout_spare_pll_p,
-> > > +         PLL_CON0_PLL_SPARE, 4, 1),
-> > > +
-> > > +     /* BUS0 */
-> > > +     MUX(CLK_MOUT_BUS0_BUS, "mout_cmu_bus0_bus", mout_cmu_bus0_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS, 0, 2),
-> > > +     MUX(CLK_MOUT_CMU_BOOST, "mout_cmu_boost", mout_cmu_cmu_boost_p,
-> >
-> > In order to keep the consistent naming style,
-> > I think that need to change from 'mout_cmu_boost' to 'mout_cmu_cmu_boos=
-t'.
->
-> Yes, that's a good point, and a good spot! Will fix it in v4.
->
+Driver gets the PCC channel id by using the PCC GAS in _CRS.
+But, currently, if the firmware has no _CRS method on platform, there
+is not any failure log. So this patch adds the log for this.
 
-Why do we need cmu_cmu part at all? From the look of it, renaming all
-*_cmu_cmu_* clocks to just cmu wouldn't cause any naming conflicts. So
-I don't see any benefit of double cmu prefix really.
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ drivers/soc/hisilicon/kunpeng_hccs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> >
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CMU_BOOST, 0, 2),
-> > > +
-> > > +     /* BUS1 */
-> > > +     MUX(CLK_MOUT_BUS1_BUS, "mout_cmu_bus1_bus", mout_cmu_bus1_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS, 0, 2),
-> > > +
-> > > +     /* BUS2 */
-> > > +     MUX(CLK_MOUT_BUS2_BUS, "mout_cmu_bus2_bus", mout_cmu_bus2_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_BUS2_BUS, 0, 2),
-> > > +
-> > > +     /* CORE */
-> > > +     MUX(CLK_MOUT_CORE_BUS, "mout_cmu_core_bus", mout_cmu_core_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> > > +
-> > > +     /* EH */
-> > > +     MUX(CLK_MOUT_EH_BUS, "mout_cmu_eh_bus", mout_cmu_eh_bus_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> >
-> > 'mout_cmu_core_bus' and 'mout_cmu_eh_bus' uses the same register/shift/=
-width information.
-> > I think it should be modified by changing the regiter or changing the s=
-hift/width information.
->
-> It should be using the CLK_CON_MUX_MUX_CLKCMU_EH_BUS register.
-> Will fix it in v4.
->
-> >
-> > > +
-> > > +     /* CPUCL{0,1,2,} */
-> > > +     MUX(CLK_MOUT_CPUCL2_SWITCH, "mout_cmu_cpucl2_switch", mout_cmu_=
-cpucl2_switch_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL2_SWITCH, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CPUCL1_SWITCH, "mout_cmu_cpucl1_switch", mout_cmu_=
-cpucl1_switch_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL1_SWITCH, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CPUCL0_SWITCH, "mout_cmu_cpucl0_switch", mout_cmu_=
-cpucl0_switch_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL0_SWITCH, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CPUCL0_DBG, "mout_cmu_cpucl0_dbg", mout_cmu_cpucl0=
-_dbg_p,
-> > > +         CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CMU_HPM, "mout_cmu_hpm", mout_cmu_hpm_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_HPM, 0, 2),
-> > >
-> >
-> > (snip)
-> >
-> > > +     /* PDP */
-> > > +     MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
-> > > +
-> > > +     /* PDP */
-> > > +     MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
-> > > +
-> > > +     /* IPP */
-> > > +     MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
-> > > +
-> > > +     /* G3AA */
-> > > +     MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa", mout_cmu_g3aa_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
-> >
-> > I think that need to change the mux name and mux parent name
-> > because other mux name use the twice word according to the register nam=
-e
-> > even if use the same work such as 'mout_cmu_g2d_g2d', 'mout_cmu_mcsc_mc=
-sc' and 'mout_cmu_mfc_mfc'.
-> > - mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
-> > - mout_cmu_g3aa_p -> mount_cmu_g3aa_g3aa_p
->
-> Will fix in v4
->
+diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+index dad6235dbf1a..fd3ca0eb8175 100644
+--- a/drivers/soc/hisilicon/kunpeng_hccs.c
++++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+@@ -85,8 +85,10 @@ static int hccs_get_pcc_chan_id(struct hccs_dev *hdev)
+ 	struct hccs_register_ctx ctx = {0};
+ 	acpi_status status;
+ 
+-	if (!acpi_has_method(handle, METHOD_NAME__CRS))
++	if (!acpi_has_method(handle, METHOD_NAME__CRS)) {
++		dev_err(hdev->dev, "No _CRS method.\n");
+ 		return -ENODEV;
++	}
+ 
+ 	ctx.dev = hdev->dev;
+ 	status = acpi_walk_resources(handle, METHOD_NAME__CRS,
+-- 
+2.33.0
 
-That consistent name duplication, while not causing any conflicts when
-being removed, looks suspicious to me. That's probably some internal
-scheme which doesn't make much sense for us and doesn't bring any
-value, in terms of clock drivers. Maybe it'll be better to instead get
-rid of such duplication throughout the driver, at least for clock name
-strings? I mention this, because that's what I did in clk-exynos850.
-With the only exception being the main domain clocks, which basically
-enables/disables the whole unit internally, e.g.
-
-    GATE(CLK_GOUT_G3D_CMU_G3D_PCLK, "gout_g3d_cmu_g3d_pclk", ...
-
-which "G3D domain gate clock that enables/disables G3D", or something
-like that. But clk-exynos850 doesn't have any duplicating bits like
-"cmu_cmu" or "g3d_g3d". And the reason why I did that is I wanted
-those clock names appear short and nice in device tree, as there were
-no benefits in those duplicating bits.
-
-> >
-> > (snip)
-> >
-> > > +     /* CSIS */
-> > > +     GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
-> > > +     /* PDP */
-> > > +     GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> > > +
-> > > +     GATE(CLK_GOUT_PDP_VRA, "gout_cmu_pdp_vra", "mout_cmu_pdp_vra",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> > > +
-> > > +     /* IPP */
-> > > +     GATE(CLK_GOUT_IPP_BUS, "gout_cmu_ipp_bus", "mout_cmu_ipp_bus",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_IPP_BUS, 21, 0, 0),
-> > > +     /* G3AA */
-> > > +     GATE(CLK_GOUT_G3AA, "gout_cmu_g3aa", "mout_cmu_g3aa",
-> > > +          CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 21, 0, 0),
-> >
-> > ditto.
-> > gout_cmu_g3aa -> gout_cmu_g3aa_g3aa
-> > mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
->
-
-Ditto.
-
-> Will fix in V4
->
-> regards,
->
-> Peter.
