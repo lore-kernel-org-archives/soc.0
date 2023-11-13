@@ -1,147 +1,122 @@
-Return-Path: <SRS0=tHIT=GY=gmail.com=alexander.sverdlin@kernel.org>
+Return-Path: <SRS0=8Kzp=G2=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1FBFC4332F
-	for <soc@archiver.kernel.org>; Sat, 11 Nov 2023 21:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA497C4332F
+	for <soc@archiver.kernel.org>; Mon, 13 Nov 2023 10:00:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8FBE7C43391; Sat, 11 Nov 2023 21:33:45 +0000 (UTC)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	id 6C51BC433CA; Mon, 13 Nov 2023 10:00:28 +0000 (UTC)
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7784EC433C8;
-	Sat, 11 Nov 2023 21:33:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7784EC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 7BA02C433C8;
+	Mon, 13 Nov 2023 10:00:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7BA02C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-408382da7f0so25426515e9.0;
-        Sat, 11 Nov 2023 13:33:44 -0800 (PST)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-66d0ceba445so22074946d6.0;
+        Mon, 13 Nov 2023 02:00:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699738422; x=1700343222; darn=kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BjJpwKGCecxdkQ5LjdaCff64J4ZeBO10oL7F7MwcVn4=;
-        b=SiDr7gQ7WKPE1PJ9Y8O63LbJefF0vxR1HG70c9fYifsHSSzztXjRMk31bN1Lel2AqA
-         OUBHURdRRiGtOt9I0QtQWqcnNnt5OEqREhvrl5wOAKm/OqoVsKklbi6fMpYv+MRmW6rS
-         qK1gMuhis/IUpqppp3iM7/ne+aT4/OX6w7tp3EmTZBbRRnCNwJOtye23kpzJ1CNpTBJ2
-         wLrZBG4lHkBmfdyKCHXoSZomtX9DGGYg4QOR9J79H+efOCy3lvm/8roQWtmaIEDMDC3l
-         9dWm5nVvm6Jy9u77AR6PCDktsEGv445xk4MlQiLPNCvmYmy0zQyB7Ecv+rEwBF2sYr1Q
-         RUiQ==
+        d=gmail.com; s=20230601; t=1699869626; x=1700474426; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JbOR8jc4vESBCIxoa+hxCKP6qo+nQDlXSDfPg0qKWS8=;
+        b=YM/QTL/7RvoJHAp6JqfNJvfYGkaLQR87Kxg9SG7RN0g+7JwTXCrzkxrA/O2PqjX8S8
+         M8qSgA9/8oV9iSKJGLeJO+ufJJBzUHXijzRxoNnGrXy/HzWn0NIbPcoYsS7LCYzZNSKC
+         Vo9GBZwbS1Quw843tNQqp3fOCl0s348ZwM9Dv8GsgnjheRt7v8jHifSolmNlwPnDrwI0
+         dJDELs6V8WFQ9w1Dd7cmHafsNWLtBVH/2RMaxo/9i0Saepo3fRbbrfycEEZDSYlSoWiD
+         DYRDmcS+7+rREuoV0iDVf+hrT2oNmakI1JY8Gw3N7wMyC3f5qtslSSkvBlfvEMg7+XxH
+         +WfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699738422; x=1700343222;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BjJpwKGCecxdkQ5LjdaCff64J4ZeBO10oL7F7MwcVn4=;
-        b=DhH5TzFE0TkPDl9rqMDxDUSi4QEp0YzskY2yxQ54TtMm4Ml7Kf8OL0CBEYGDvnVBUH
-         S2RF7oJyQoMN74LDX9qc2W2+34fDj074BLZaConw8GEZp4so/uxs+4m20MXElpK5rLWu
-         vB2+sTZwYxxUgBflW+FE4fuUNeVZ4wSoC4PqgwkU1hq9B8Xe6I+zdI8cz7ONiv3CvI2h
-         o2Zmges+Y4Ebrw+ai16joFSts7/dT3qSQUIfKK3o15DQOYdq8hchBxCD0oXQew3fyuOO
-         04ILL5Use7S4mSMSreQgSPhvlEUR4FMLS6Z2LDyRonDXTfMFrl2Ocg2cTOK+Fp70zgRj
-         WC7g==
-X-Gm-Message-State: AOJu0Yy2hjMV7MEMvpl5doozn8HUhGtqbbK4Et7ATxtIDhHZMFmnOClZ
-	1A+FpIinaExgDdVZkZnyKbwZMLWABxrFLA==
-X-Google-Smtp-Source: AGHT+IGcspAIBmQE8uECroiT5zYPxAfvcuIKjKOjZDZOhwNchFn+oYO8zOgLHmFyk1hPD+Lg8347oA==
-X-Received: by 2002:a05:600c:5121:b0:408:57bb:ef96 with SMTP id o33-20020a05600c512100b0040857bbef96mr2147252wms.30.1699738422278;
-        Sat, 11 Nov 2023 13:33:42 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id be14-20020a05600c1e8e00b00401b242e2e6sm8935242wmb.47.2023.11.11.13.33.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Nov 2023 13:33:41 -0800 (PST)
-Message-ID: <c49f77492cacc5a30079720af58a9f2fca761609.camel@gmail.com>
-Subject: Re: [PATCH v3 07/42] soc: Add SoC driver for Cirrus ep93xx
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me
-List-Id: <soc.lore.kernel.org>
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Lennert Buytenhek
- <kernel@wantstofly.org>, Russell King <linux@armlinux.org.uk>, Lukasz
- Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>,  Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Daniel Lezcano
- <daniel.lezcano@linaro.org>,  Thomas Gleixner <tglx@linutronix.de>,
- Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-  Guenter Roeck <linux@roeck-us.net>, Sebastian Reichel <sre@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, Mark
- Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>, Miquel Raynal
- <miquel.raynal@bootlin.com>,  Richard Weinberger <richard@nod.at>, Vignesh
- Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, Sergey
- Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,  Jaroslav Kysela
- <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Michael Peters
- <mpeters@embeddedts.com>, Kris Bahnsen <kris@embeddedts.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org, 
- linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
- netdev@vger.kernel.org,  dmaengine@vger.kernel.org,
- linux-mtd@lists.infradead.org,  linux-ide@vger.kernel.org,
- linux-input@vger.kernel.org,  alsa-devel@alsa-project.org
-Date: Sat, 11 Nov 2023 22:33:38 +0100
-In-Reply-To: <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
+        d=1e100.net; s=20230601; t=1699869626; x=1700474426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JbOR8jc4vESBCIxoa+hxCKP6qo+nQDlXSDfPg0qKWS8=;
+        b=gyBWV0na0AwCfoXDFL6siUOyBNbcV6BKSZriDfDKy+HyphfAjWQ6fW9FKMhQwCnPmf
+         AUfejEIJsac9HiyjM2lSvEfg9tykd19IjtWrlT7dxHQKM99Lu+lDyWyJj0vBI4RUw2nr
+         z/5lL7cTTpeGj+dVjPbEqrotANH524gbGEOcdERPOKsjLQjJcPNpoguxV/vdvpwyTJeC
+         ClhrJUpuU1LIloEeVqo9Y7aHB5VknYacXyt/Vbea2SEkOIS/uoTXrWv99s8g5kVHnunb
+         OsI2rcDi4UOgb3tntJi1XcRad5Epg7Qr+I0jS6yFqpLJPIvy5O/jCDqYOzWSqMEwv1l3
+         HTcA==
+X-Gm-Message-State: AOJu0Yw/0k3FesEzIToyiL/KkpxhdFq/wgLsu7mu+SBOxA1g/dBQXm1C
+	FdwXRzSh4ZwGh6+UXRLqDTcSodzIKpHmqWDDzP0=
+X-Google-Smtp-Source: AGHT+IGCUr7PujFC+poPa2QrZRvWL4HOk1bJVQMa23HsF2MY33M5q50/7KY3Uea2911BZ50MrpHn+FMZq5R37QecRrw=
+X-Received: by 2002:ad4:45b4:0:b0:658:1eec:408a with SMTP id
+ y20-20020ad445b4000000b006581eec408amr4664228qvu.40.1699869626386; Mon, 13
+ Nov 2023 02:00:26 -0800 (PST)
+MIME-Version: 1.0
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
-	 <20230605-ep93xx-v3-7-3d63a5f1103e@maquefel.me>
-	 <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
+ <20230605-ep93xx-v3-14-3d63a5f1103e@maquefel.me> <ZLq0Z0QgBdCoDpV+@smile.fi.intel.com>
+ <80ed91bb971516638fa1793d648939815eba7630.camel@gmail.com>
+In-Reply-To: <80ed91bb971516638fa1793d648939815eba7630.camel@gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 13 Nov 2023 11:59:49 +0200
+Message-ID: <CAHp75VeYHscM-r94kTrpH44W=OGVq+qoNNQZoVrR5_n-_K_Xsw@mail.gmail.com>
+Subject: Re: [PATCH v3 14/42] power: reset: Add a driver for the ep93xx reset
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, Lennert Buytenhek <kernel@wantstofly.org>, 
+	Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Sebastian Reichel <sre@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Vinod Koul <vkoul@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Michael Peters <mpeters@embeddedts.com>, Kris Bahnsen <kris@embeddedts.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+	alsa-devel@alsa-project.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
-MIME-Version: 1.0
 
-Hello Andy,
+On Sat, Nov 11, 2023 at 8:18=E2=80=AFPM Alexander Sverdlin
+<alexander.sverdlin@gmail.com> wrote:
+> On Fri, 2023-07-21 at 19:37 +0300, Andy Shevchenko wrote:
 
-On Fri, 2023-07-21 at 17:13 +0300, Andy Shevchenko wrote:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_lock_irqsave(&ep93xx_sw=
-lock, flags);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_read(map, EP93XX_SYSC=
-ON_DEVCFG, &val);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val &=3D ~clear_bits;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val |=3D set_bits;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(map, EP93XX_SYS=
-CON_SWLOCK, EP93XX_SWLOCK_MAGICK);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(map, EP93XX_SYS=
-CON_DEVCFG, val);
->=20
-> Is this sequence a must?
-> I.o.w. can you first supply magic and then update devcfg?
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_unlock_irqrestore(&ep93=
-xx_swlock, flags);
->=20
-> ...
->=20
-> > +void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int mask, unsigned int =
-val)
-> > +{
->=20
-> Same Q as above.
+...
 
-EP93xx User Manual [1] has most verbose description of SWLock for ADC
-block:
-"Writing 0xAA to this register will unlock all locked registers until the
-next block access. The ARM lock instruction prefix should be used for the
-two consequtive write cycles when writing to locked chip registers."
+> > > +       mdelay(1000);
+> >
+> > Atomic?! Such a huge delay must be explained, esp. why it's atomic.
+>
+> atomic or not, SoC is supposed to reset itself here.
+> However there is an errata [1] and the SoC can lockup instead.
 
-One may conclude that RmW (two accesses to the particular block) sequence
-is not appropriate.
+Good, and what I'm saying is that this piece of code must have a
+comment explaining this.
 
-[1]=C2=A0https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.=
-pdf=20
+> So even pr_emerg() makes sense to me.
+
+This is irrelevant to the comment.
+
+> > > +       pr_emerg("Unable to restart system\n");
+> > > +       return NOTIFY_DONE;
+>
+> [1] http://web.archive.org/web/20161130230727/http://www.cirrus.com/en/pu=
+bs/appNote/AN258REV2.pdf
 
 --=20
-Alexander Sverdlin.
-
+With Best Regards,
+Andy Shevchenko
