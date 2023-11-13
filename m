@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3631C4167D
-	for <soc@archiver.kernel.org>; Mon, 13 Nov 2023 10:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33017C4332F
+	for <soc@archiver.kernel.org>; Mon, 13 Nov 2023 10:23:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7E947C43391; Mon, 13 Nov 2023 10:20:34 +0000 (UTC)
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	id 094D8C433CA; Mon, 13 Nov 2023 10:23:34 +0000 (UTC)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7CB67C433C7;
-	Mon, 13 Nov 2023 10:20:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7CB67C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 0A386C433C7;
+	Mon, 13 Nov 2023 10:23:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A386C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-66d09b6d007so28608486d6.1;
-        Mon, 13 Nov 2023 02:20:33 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5a7d9d357faso46936667b3.0;
+        Mon, 13 Nov 2023 02:23:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699870832; x=1700475632; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1699871012; x=1700475812; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FB3t9eIHw+pKT3CBB8s0t2nQUBpXnYyol/A+bIoemXQ=;
-        b=O67kgG19UOoNy1QHLGYYO/LuDJn9/98B5cKVVhpvtwmhxafWi3ElbNypztuKToFoIy
-         mlxrs2UM7q7lkffwHVyEtwmy61CIJah8Ik03xjIY04Qdxa3ID2EZYwes+ERhccuhUbCo
-         1QuJf2URgioSJk6gBR8zI2zkC5SneqqNd2FhsOhbSjld0I/M9az63nMF2MO0crtRrilH
-         xoepBYVQD/FSbj02U1W11NSxDHu4TS9FRbDwHK3LxllRjsd2GhHJ5xEg8Ul1jcCc+CMc
-         PuBGsrF7PiZhJo0G0gC4plW1HATz2HCnY3RnEciY57ujeFGF91Ugk52DclUYyfrh1dGa
-         Vq7Q==
+        bh=ISelrhUz+tUwTPOpVjAn5G1ABI4YmRZvCmOYJcKmy7Q=;
+        b=QJjELbP7r2UF3/nspWGIiEPn7DVEjzsv9dXe1SDgmd/6G3OyX534uG1NOaCd913NtA
+         9fGog5HI6adENOig68wE6NqmKo1TGBRX5D7Nsw0edsTKCwSgdtqhKFCzD0oPVI/ZHjRV
+         7UTfZ8ifWMdTEj3u3LtaqZ1eGhlZM8al1319lSmkLE4BubyYBd7p3gSAcPVofPjDkgx7
+         Q1uFKA44MrUGYherFcUEQtgPEZ7PJq/dJnccC2rTsyTUYSpWlOMTvEkuLgNshD9RPKbN
+         4SDtLRIlygqsD+GOv1EaiMNeBbcxEOD5FzUzsMhPHuKL7IJ8GsBktSTMFJIM1xWTti6t
+         Ufcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699870832; x=1700475632;
+        d=1e100.net; s=20230601; t=1699871012; x=1700475812;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FB3t9eIHw+pKT3CBB8s0t2nQUBpXnYyol/A+bIoemXQ=;
-        b=CA7HI5cWvPQVf/28e3cOySZLxLmf1lH5XneQPZP/TstoveKuMGHb8A53Pa/Mos+NM2
-         JtLbPmKKIqVtWfDh17yraB0WNV844AgJSqwMC03vUl2zg+tsB+rVsLep13iAohjraSHj
-         1q9QdPbQiIok1+PGa9kq3tSelrSV5czGrqkspE/gkiqOL1mV0n8DZ/MNi7MGZ8jxUlV+
-         ewsXlwKuSoXQrsHDubCoEZ0gq/M4YyFMvmAKuQHB5tqDxqGZ53afnwR6k95Hn+cuFWDO
-         Ny4uDdOhBBOhZbRQB+BPn7YYdaGzoztONhvfoFqNSjByXD1tmxwQiOLdjcZJnx8Iiq13
-         Q2VA==
-X-Gm-Message-State: AOJu0YxyeOkuMbphsHa24nHxx5E8tsk9/Ekbfr8244XhDa09cJJ2//5a
-	S1RhmZZjzepM50yiFXN6UF8rAHCO6beTsYNl3wc=
-X-Google-Smtp-Source: AGHT+IHcamihKm+ziuVIZapYWw1ITNZRzLvq04tB/x59umIja9AF0bX8BVytW1nYcQa699XIK195qbQ3GDjcnycnRno=
-X-Received: by 2002:a05:6214:a90:b0:671:8630:f590 with SMTP id
- ev16-20020a0562140a9000b006718630f590mr5914012qvb.18.1699870832421; Mon, 13
- Nov 2023 02:20:32 -0800 (PST)
+        bh=ISelrhUz+tUwTPOpVjAn5G1ABI4YmRZvCmOYJcKmy7Q=;
+        b=lSYoUTzWCencTDFNN7D1KNnFlqf89s8WLO5BtRQGmx4L96kFKphSs8iIC62mlyU0+w
+         +t5YCEV9bxbxjahmab8d2M4mTvIb4fpN5sWKs393XBkMYNyRD1vWnFnHWexYwbGKVcNu
+         leCAMbhkGELxK44sRMJ6BVFl3yUn/NaG6fkupIItW9gTmIF8bWEmJJudN5zVDnYiyhOq
+         F/9g1aiy3KyjYe3/x9dB/UsTGo0egjn/XfAiMBEc4TZUVOgulQ6pJGHG/z4k2F7UuBHy
+         kX7CKFPyYdoI2/Bg+g/vyF8sOftE67sks5tmFHtD9Xjf77NnOLdN+fdksyjuFhq5jZmD
+         Tw4w==
+X-Gm-Message-State: AOJu0YzxgP2GaZ73gD1F+OzD3QizczYsiZdVgwaX0ewZl8McC1sJ9b+8
+	HGmaP8o/1Att+jbkxBycS7faJEMHy7wR+LOHEmE=
+X-Google-Smtp-Source: AGHT+IGeFMq6OPRYVFpLBqn7U8F7RLctOzbaeZinyDCceNJQA9yzq0afSM1d3lxBYSz248sE7pBipt1geSP2uWLF31w=
+X-Received: by 2002:a81:4782:0:b0:5a7:a817:be43 with SMTP id
+ u124-20020a814782000000b005a7a817be43mr6070415ywa.6.1699871011907; Mon, 13
+ Nov 2023 02:23:31 -0800 (PST)
 MIME-Version: 1.0
 References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-7-3d63a5f1103e@maquefel.me> <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
- <c49f77492cacc5a30079720af58a9f2fca761609.camel@gmail.com>
-In-Reply-To: <c49f77492cacc5a30079720af58a9f2fca761609.camel@gmail.com>
+ <20230605-ep93xx-v3-14-3d63a5f1103e@maquefel.me> <ZLq0Z0QgBdCoDpV+@smile.fi.intel.com>
+ <fcfdc6f05926db494ea0105e5523cc21ecfdf4e7.camel@gmail.com>
+In-Reply-To: <fcfdc6f05926db494ea0105e5523cc21ecfdf4e7.camel@gmail.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 13 Nov 2023 12:19:56 +0200
-Message-ID: <CAHp75VccVh+M444AAixVzSvM6-FsDm8jDYdakHhNFTAL8WOGMA@mail.gmail.com>
-Subject: Re: [PATCH v3 07/42] soc: Add SoC driver for Cirrus ep93xx
+Date: Mon, 13 Nov 2023 12:22:56 +0200
+Message-ID: <CAHp75VcsF8GtmE2iDf2xPWi7U5WXhi1ZFUSeA_Y+TfHQn72Jrg@mail.gmail.com>
+Subject: Re: [PATCH v3 14/42] power: reset: Add a driver for the ep93xx reset
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me, 
@@ -91,53 +91,31 @@ Cc: Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 11, 2023 at 11:33=E2=80=AFPM Alexander Sverdlin
+On Mon, Nov 13, 2023 at 12:07=E2=80=AFPM Alexander Sverdlin
 <alexander.sverdlin@gmail.com> wrote:
-> On Fri, 2023-07-21 at 17:13 +0300, Andy Shevchenko wrote:
+> On Fri, 2023-07-21 at 19:37 +0300, Andy Shevchenko wrote:
+> > > +       /* Issue the reboot */
+>             ^^^^^^^^^^^^^^^^^^^^^^
+> This is the relevant comment, one can extend it, but looks already quite
+> informative considering EP93XX_SYSCON_DEVCFG_SWRST register name.
 
-...
+This does not explain the necessity of the mdelay() below.
 
-> > > +       spin_lock_irqsave(&ep93xx_swlock, flags);
-> > > +
-> > > +       regmap_read(map, EP93XX_SYSCON_DEVCFG, &val);
-> > > +       val &=3D ~clear_bits;
-> > > +       val |=3D set_bits;
-> > > +       regmap_write(map, EP93XX_SYSCON_SWLOCK, EP93XX_SWLOCK_MAGICK)=
-;
-> > > +       regmap_write(map, EP93XX_SYSCON_DEVCFG, val);
+> But Nikita would be able to include more verbose comment if
+> you'd have a suggestion.
+
+Please,add one.
+
+> > > +       ep93xx_devcfg_set_clear(priv->map, EP93XX_SYSCON_DEVCFG_SWRST=
+, 0x00);
+> > > +       ep93xx_devcfg_set_clear(priv->map, 0x00, EP93XX_SYSCON_DEVCFG=
+_SWRST);
 > >
-> > Is this sequence a must?
-> > I.o.w. can you first supply magic and then update devcfg?
 > >
-> > > +       spin_unlock_irqrestore(&ep93xx_swlock, flags);
+> > > +       mdelay(1000);
+> >
+> > Atomic?! Such a huge delay must be explained, esp. why it's atomic.
 
-...
-
-> > > +void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int re=
-g,
-> > > +                                unsigned int mask, unsigned int val)
-
-> > Same Q as above.
->
-> EP93xx User Manual [1] has most verbose description of SWLock for ADC
-> block:
-> "Writing 0xAA to this register will unlock all locked registers until the
-> next block access. The ARM lock instruction prefix should be used for the
-> two consequtive write cycles when writing to locked chip registers."
->
-> One may conclude that RmW (two accesses to the particular block) sequence
-> is not appropriate.
-
-It's not obvious to me. The terms "block access" and "block cycle"
-occur only once in the very same section that describes ADCSWLock. The
-meaning of these terms is not fully understandable. So, assuming that
-you have tried it differently and it indeed doesn't work, let's go
-with this one.
-
-> [1] https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.pdf
-
-
-
---
+--=20
 With Best Regards,
 Andy Shevchenko
