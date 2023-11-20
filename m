@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 241E8C54E76
-	for <soc@archiver.kernel.org>; Mon, 20 Nov 2023 21:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A1F0C5AE5C
+	for <soc@archiver.kernel.org>; Mon, 20 Nov 2023 21:21:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E16ECC433AB; Mon, 20 Nov 2023 21:21:47 +0000 (UTC)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	id D338BC433CD; Mon, 20 Nov 2023 21:21:48 +0000 (UTC)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EF62FC43142
-	for <soc@kernel.org>; Mon, 20 Nov 2023 21:21:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF62FC43142
+	by smtp.kernel.org (Postfix) with ESMTPS id 276A4C116AF
+	for <soc@kernel.org>; Mon, 20 Nov 2023 21:21:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 276A4C116AF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40a48775c58so21343755e9.3
-        for <soc@kernel.org>; Mon, 20 Nov 2023 13:21:38 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-32ddfb38c02so3224105f8f.3
+        for <soc@kernel.org>; Mon, 20 Nov 2023 13:21:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700515296; x=1701120096; darn=kernel.org;
+        d=linaro.org; s=google; t=1700515295; x=1701120095; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8SZvpwVvhHSYn6AVsfP8mg+sxtJjbt/EepCXw4mUJk4=;
-        b=GEcmkwr8LEfutw5RrZWNxtomQwVQa0QqoMWdoxurBcexx4zt95f0qfgqdBreLsXsrH
-         +zJFTEC/H5poRNQ9T7oLWCYNN+VXemcjsU9aFOK1ohTM2mClPIUxfvfwsVh5eGS3Xw8F
-         HHj1pgMwzV1vfgl0oSTv8NAW0FoMHjQui5vDvTUqTxtkebyMkyFM73fLWroL5nYlXTFf
-         zLQ/w4A3DqhXfCcFwmL/SofEDLIoJnYpMYX6AB7lry8KFpLbOgqGyOzzvcNxA5NoKIfJ
-         DPZO+zMM5lb6wS49OjZpXzChY1UIvQMyxrqR8pX/9HmDt5a2VNfC0IUB5MW/FSHoa36m
-         R33A==
+        bh=5xzH1qVWZagQwtrex4D7hKZbomAwnZl4FRr3XQibftE=;
+        b=rwpgoRJGBhwmb9x1VTRHijUyjFPpzO5McXhRHH8Neg0gzT7ITvK230u/wgjwD4NXOl
+         8I/MFo0g/YG8dcJdmoVfhY3ppkaU82aakrYjGClhlZQMEBEyzn98XOY//jdsnQwD6Dwq
+         de41VcCK25bz2MeIO7p7OYE6Oxbwm6DTySVqF/h/RlLHvo924/urNiR0EpGdhsTwRZBo
+         xf8dJ7BC+iF3EL/B3NFQldRQZGX+xz67oxK2pxHGE06eieohTuR0WnFh2+ZqXQBoqnUK
+         M1In0TDnfzoQHfBGzTTK7V9reTH8hW4JL78vHoPeklnLKVY6cGr1WIAmLL8JStOGw5wv
+         U4Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700515296; x=1701120096;
+        d=1e100.net; s=20230601; t=1700515295; x=1701120095;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8SZvpwVvhHSYn6AVsfP8mg+sxtJjbt/EepCXw4mUJk4=;
-        b=APkYMW3cKVlzfhP+aGOsvMAmxaTIIYC2BCz/UILwWaJuhXDU2BQNVKoztyiF23Q3VR
-         ZtYpOf2hMsEpRXi2RVtVoxwl8rPnPYa4/KqwKW5TewQhJaG7fSHiZSuwDRRVtlUhwyaM
-         TbPbJTlLkZSRPkmiDPPWIibBnN8lGGIDd/jyr0gB08Bv9ycFfVQ0w+ItphnFkAeQFoC7
-         n+uJzsBMK0+LcF9xbUC9z88Ml6cCdPL8Efsp9qgNIth95bQSgyqp/2Nb4GG5pCErcy81
-         qO0lzgJASZoylI2BCdB4tG1Ly9UidozgkO5CE8BlCWLmvn9CKkgRgQkipqlLLG1FQm6T
-         W6Wg==
-X-Gm-Message-State: AOJu0YxT+vUQOJc4UTAwcX8Ubv6HkmlmhmGcK3UCXXkirzdeHzoY2//n
-	+cbSZtBuKNE+n08eB6sb/BA5og==
-X-Google-Smtp-Source: AGHT+IHWybnx0ZdcwvMDBNOdpFDZ42C4c7PfCA39mS3Y8UEKdxKa8P+vhEV2G8kWfZN270RqzE6obg==
-X-Received: by 2002:a05:600c:190c:b0:408:4160:150a with SMTP id j12-20020a05600c190c00b004084160150amr6535303wmq.33.1700515296392;
-        Mon, 20 Nov 2023 13:21:36 -0800 (PST)
+        bh=5xzH1qVWZagQwtrex4D7hKZbomAwnZl4FRr3XQibftE=;
+        b=d270aJ9AZJCWcBQkTzK0Wc7j2qKaQupEnL0gq1pZSxxwK8/lJwIw0KO77yw4/TML5O
+         JwUXs9hK/YsfdUStM5r0glahDfWkBwJnTIZn0LrPWOZD6Ci1blfMq+Z/HBByVLHlgle8
+         UjEJrMgp581FScQ38APgKhdgS4Q2ltk2Rq6HQaa0ErKUOkj1IAMcL2k1kdkuayTIPFMs
+         uhrUvaG+ARCrYoyxF9sUNxqHxWolqgOUxNJOHlix3KxpjOgXkOESw8EYJiAVaWjJUdvL
+         62ihIK0jsQgj8shW7nzJGWjyUU13dXNg0ysmrzjItwPl0fm3g3bpgwz9Wb5I6UEylGLo
+         DyiA==
+X-Gm-Message-State: AOJu0YzS8l1LaCBXa6/+cPVywH/ewJFUXIICVEFpfyz9pS8+Of2bM2W0
+	k1R1fvCUovbtSkGuBpcXJOYLKg==
+X-Google-Smtp-Source: AGHT+IHlI8CbGgLGdDp2LcFN/quv8DGZ8mmUQYQ6BZCv79rxA1KKalAof733Ct4yCGTEyNtq9o2Lfw==
+X-Received: by 2002:a5d:4ecc:0:b0:331:3c1f:b94b with SMTP id s12-20020a5d4ecc000000b003313c1fb94bmr5666176wrv.6.1700515294943;
+        Mon, 20 Nov 2023 13:21:34 -0800 (PST)
 Received: from gpeter-l.lan (host-92-29-24-243.as13285.net. [92.29.24.243])
-        by smtp.gmail.com with ESMTPSA id je14-20020a05600c1f8e00b0040596352951sm19518451wmb.5.2023.11.20.13.21.35
+        by smtp.gmail.com with ESMTPSA id je14-20020a05600c1f8e00b0040596352951sm19518451wmb.5.2023.11.20.13.21.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 13:21:35 -0800 (PST)
+        Mon, 20 Nov 2023 13:21:34 -0800 (PST)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -87,45 +87,133 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v4 19/19] MAINTAINERS: add entry for Google Tensor SoC
-Date: Mon, 20 Nov 2023 21:20:37 +0000
-Message-ID: <20231120212037.911774-20-peter.griffin@linaro.org>
+Subject: [PATCH v4 18/19] arm64: dts: exynos: google: Add initial Oriole/pixel 6 board support
+Date: Mon, 20 Nov 2023 21:20:36 +0000
+Message-ID: <20231120212037.911774-19-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 In-Reply-To: <20231120212037.911774-1-peter.griffin@linaro.org>
 References: <20231120212037.911774-1-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add maintainers entry for the Google tensor SoC based
-platforms.
+Add initial board support for the Pixel 6 phone code named Oriole. This
+has been tested with a minimal busybox initramfs and boots to a shell.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/arm64/boot/dts/exynos/Makefile           |  2 +
+ arch/arm64/boot/dts/exynos/google/Makefile    |  4 +
+ .../boot/dts/exynos/google/gs101-oriole.dts   | 79 +++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e55173ae5e39..f5c84da7008e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9013,6 +9013,16 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
- F:	drivers/firmware/google/
- 
-+GOOGLE TENSOR SoC SUPPORT
-+M:	Peter Griffin <peter.griffin@linaro.org>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-samsung-soc@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-+F:	arch/arm64/boot/dts/exynos/google/
-+F:	drivers/clk/samsung/clk-gs101.c
-+F:	include/dt-bindings/clock/google,clk-gs101.h
+diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
+index 6e4ba69268e5..44c24a8ad9e1 100644
+--- a/arch/arm64/boot/dts/exynos/Makefile
++++ b/arch/arm64/boot/dts/exynos/Makefile
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
++subdir-y += google
 +
- GPD POCKET FAN DRIVER
- M:	Hans de Goede <hdegoede@redhat.com>
- L:	platform-driver-x86@vger.kernel.org
+ dtb-$(CONFIG_ARCH_EXYNOS) += \
+ 	exynos5433-tm2.dtb		\
+ 	exynos5433-tm2e.dtb		\
+diff --git a/arch/arm64/boot/dts/exynos/google/Makefile b/arch/arm64/boot/dts/exynos/google/Makefile
+new file mode 100644
+index 000000000000..0a6d5e1fe4ee
+--- /dev/null
++++ b/arch/arm64/boot/dts/exynos/google/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++
++dtb-$(CONFIG_ARCH_EXYNOS) += \
++	gs101-oriole.dtb \
+diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+new file mode 100644
+index 000000000000..111665490840
+--- /dev/null
++++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+@@ -0,0 +1,79 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Oriole Device Tree
++ *
++ * Copyright 2021-2023 Google,LLC
++ */
++
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include "gs101-pinctrl.h"
++#include "gs101.dtsi"
++
++/ {
++	model = "Oriole";
++	compatible = "google,gs101-oriole", "google,gs101";
++
++	chosen {
++		bootargs = "earlycon=exynos4210,mmio32,0x10A00000 console=ttySAC0";
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&key_voldown>, <&key_volup>, <&key_power>;
++
++		button-vol-down {
++			label = "KEY_VOLUMEDOWN";
++			linux,code = <KEY_VOLUMEDOWN>;
++			gpios = <&gpa7 3 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++
++		button-vol-up {
++			label = "KEY_VOLUMEUP";
++			linux,code = <KEY_VOLUMEUP>;
++			gpios = <&gpa8 1 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++
++		button-power {
++			label = "KEY_POWER";
++			linux,code = <KEY_POWER>;
++			gpios = <&gpa10 1 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++	};
++};
++
++&pinctrl_1 {
++	key_voldown: key-voldown-pins {
++		samsung,pins = "gpa7-3";
++		samsung,pin-function = <0xf>;
++		samsung,pin-pud = <0>;
++		samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
++	};
++
++	key_volup: key-volup-pins {
++		samsung,pins = "gpa8-1";
++		samsung,pin-function = <0xf>;
++		samsung,pin-pud = <0>;
++		samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
++	};
++};
++
++&pinctrl_0 {
++	key_power: key-power-pins {
++		samsung,pins = "gpa10-1";
++		samsung,pin-function = <0xf>;
++		samsung,pin-pud = <0>;
++		samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
++	};
++};
++
++&watchdog_cl0 {
++	timeout-sec = <30>;
++};
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
