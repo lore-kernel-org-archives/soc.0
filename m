@@ -1,103 +1,229 @@
-Return-Path: <SRS0=pvBr=HB=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=kXw4=HB=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8B9BC197A0
-	for <soc@archiver.kernel.org>; Mon, 20 Nov 2023 23:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BEFBC197A0
+	for <soc@archiver.kernel.org>; Mon, 20 Nov 2023 23:21:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7D5F8C433CC; Mon, 20 Nov 2023 23:15:37 +0000 (UTC)
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	id 1172FC433C9; Mon, 20 Nov 2023 23:21:03 +0000 (UTC)
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3FA7AC433C8;
-	Mon, 20 Nov 2023 23:15:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FA7AC433C8
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-357ccaf982eso16258255ab.0;
-        Mon, 20 Nov 2023 15:15:36 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id A3CD6C433CC
+	for <soc@kernel.org>; Mon, 20 Nov 2023 23:21:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A3CD6C433CC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-66d122e0c85so15273186d6.3
+        for <soc@kernel.org>; Mon, 20 Nov 2023 15:21:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700522459; x=1701127259; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDE9uf6TJS4VJZQo8P1PD8XGmY54klHhH1bboj6uhLs=;
+        b=ztFMyTNMu/UGCXAJY/UwanaFdPd4wKJJWp8TwuGV0F7EO4wTpqxbzKuwlhtACHggCu
+         T/mxxBSrdmqZ6PQgriBNzn96Yem9XsTrIN03H6f0x5F8WNqvhSl4yNYEo740MdWjIPr+
+         ZYBanoFgAXlFZouazcvPZVqaOoCf7YhGW15OLnmiMKO6ytHY3u2YS0LBpr6STK+MJvle
+         0kg/sm2+ng0tBv/ilZzHX4ty7iN8iXKFpPbXHS1AFS10oW2iXmOOOXl8S2PreXchb/9l
+         2obG4jodkP6kZCaTo/bDJ/EiifibklnEtL8MbBpVkEUznKVhujM2Bm8zLHSeqpcfPvB2
+         hcIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700522135; x=1701126935;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oY5J7Q7Bh87QLqEtzkkFLokxl1xQuST2xeMLw4gISwQ=;
-        b=W3viHGOxjehB75M6dDxGrJiIpj/DHIB5ZD7AggPPf79YhDurySqdvP57vEVc63T5zG
-         ksJItsiX5WqwFwLIM05rJa+aGLPutE/kIAd1DUr7UQh36jhIUw+mVmtkyDgasqwOt5fo
-         MUZxyE9cQkNKwsWx1g2vCTs1InuPlzDPemEpo50mq1Gtuqse9rL1XGiK42Zj4PNYm776
-         ExKuKBgvwQkth3GR6dPNs1TUcS7Tc0z3+MgPLM9HE/b9/+SCVag1kXshxK/QTekal3GV
-         8wS754FIRL9/p2BIm/fZVLl8Equf+laNJkiqsoHlrymOTx7WsOuvRmcjkEf+fWgsxPgf
-         u1VQ==
-X-Gm-Message-State: AOJu0YwXLFYGl07uhsHpm74ffYtG2U8lUJ1qiPNXkGuXoqDNUSQKk524
-	sNFk/WZMEcHT9PQZdxTvTQ==
-X-Google-Smtp-Source: AGHT+IH9hx2Lz/XIxkLFIUxOIoP+9llZ0Q3H76wLRJe9Z357B1Pd7dlTGI55NnHwh5CKRiPgYoqlFw==
-X-Received: by 2002:a05:6e02:16ce:b0:35a:fc1c:1ac7 with SMTP id 14-20020a056e0216ce00b0035afc1c1ac7mr9596630ilx.30.1700522135248;
-        Mon, 20 Nov 2023 15:15:35 -0800 (PST)
-Received: from herring.priv ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056e020f8800b0035905b40621sm2763008ilo.66.2023.11.20.15.15.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 15:15:34 -0800 (PST)
-Received: (nullmailer pid 3706371 invoked by uid 1000);
-	Mon, 20 Nov 2023 23:15:31 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20230601; t=1700522459; x=1701127259;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PDE9uf6TJS4VJZQo8P1PD8XGmY54klHhH1bboj6uhLs=;
+        b=sEV5fYJM+9myWnzyvAhFX59cXUcS9F5ikPntWeSulXCtnx6847oWr1r95C03eZOBuK
+         VF02HOBWxxqt+fe7HDK1GshB6a4CZfW7v0Zu0SuyWe7LF6YTvLfkmvzKJT0wKoUB+Rq6
+         E5XzlKH5BISZxW7WEvnsc8pnrSR0bzGxwdVXF45kVZbRBJ+bCLpxs7F35thUwTpoynTT
+         FdwCnBK83DoegoN8Io5JSmIcdy2c2in4SXnUrFvlt3z/iVQ4rNvyMZychEfw64kxIKXh
+         MCyyj6hjnPqwvghxSmQ4c5NdX9RmGJurRSZqIeMtmhmZWvU3PZzvVqoUpYRCRGeJUx0o
+         ifeA==
+X-Gm-Message-State: AOJu0Yw9j8XXlfOHiHrYucfx3D5eWMjr0UnFpIX0loGeyD53Lnm3pNaz
+	Ef8UM6gfSesbSSHjI/u7OUzUr6BV1FfX12C9MxyYqA==
+X-Google-Smtp-Source: AGHT+IEIf36/atlYRS4ex1+NljmP+H67rXnsoYzqUWj5sBQBBvshmK0zVcWGVs0uO2q0X3HTu/piwsUGx1LRUA/4v8k=
+X-Received: by 2002:a05:6214:27eb:b0:66f:ba8f:39a9 with SMTP id
+ jt11-20020a05621427eb00b0066fba8f39a9mr12512023qvb.8.1700522459312; Mon, 20
+ Nov 2023 15:20:59 -0800 (PST)
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Peter Griffin <peter.griffin@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-serial@vger.kernel.org, olof@lixom.net, cw00.choi@samsung.com, andre.draszik@linaro.org, saravanak@google.com, jirislaby@kernel.org, arnd@arndb.de, krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com, linux-gpio@vger.kernel.org, willmcvicker@google.com, tudor.ambarus@linaro.org, linux-samsung-soc@vger.kernel.org, mturquette@baylibre.com, soc@kernel.org, linux@roeck-us.net, linux-watchdog@vger.kernel.org, semen.protsenko@linaro.org, sboyd@kernel.org, robh+dt@kernel.org, conor+dt@kernel.org, wim@linux-watchdog.org, gregkh@linuxfoundation.org, will@kernel.org, linux-arm-kernel@lists.infradead.org, tomasz.figa@gmail.com, linus.walleij@linaro.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, s.nawrocki@samsung.com, kernel-team@android.com, catalin.marinas@arm.com
-In-Reply-To: <20231120212037.911774-10-peter.griffin@linaro.org>
 References: <20231120212037.911774-1-peter.griffin@linaro.org>
- <20231120212037.911774-10-peter.griffin@linaro.org>
-Message-Id: <170052213161.3706337.15818635228108481923.robh@kernel.org>
-Subject: Re: [PATCH v4 09/19] dt-bindings: serial: samsung: Make
- samsung,uart-fifosize required property
-Date: Mon, 20 Nov 2023 16:15:31 -0700
+ <20231120212037.911774-16-peter.griffin@linaro.org> <5ee955e4-4c22-4696-8001-1e4f24952eeb@roeck-us.net>
+ <CADrjBPoHYTZiMCFKBtdaT6hFp9QO=GMzn5yE2k3Dg_mcBhrvkA@mail.gmail.com> <0c37e32f-079c-4b91-a9db-1c1c2df299b1@roeck-us.net>
+In-Reply-To: <0c37e32f-079c-4b91-a9db-1c1c2df299b1@roeck-us.net>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Mon, 20 Nov 2023 23:20:47 +0000
+Message-ID: <CADrjBPog+7p3Njx4E_gU1uZRrOULNXVV2fbcL5pxce2tM3=Q=g@mail.gmail.com>
+Subject: Re: [PATCH v4 15/19] watchdog: s3c2410_wdt: Add support for WTCON
+ register DBGACK_MASK bit
+To: Guenter Roeck <linux@roeck-us.net>
+List-Id: <soc.lore.kernel.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
+	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
+	soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Guenter,
 
-On Mon, 20 Nov 2023 21:20:27 +0000, Peter Griffin wrote:
-> Specifying samsung,uart-fifosize in both DT and driver static data is error
-> prone and relies on driver probe order and dt aliases to be correct.
-> 
-> Additionally on many Exynos platforms these are (USI) universal serial
-> interfaces which can be uart, spi or i2c, so it can change per board.
-> 
-> For google,gs101-uart and exynosautov9-uart make samsung,uart-fifosize a
-> required property. For these platforms fifosize now *only* comes from DT.
-> 
-> It is hoped other Exynos platforms will also switch over time.
-> 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  .../bindings/serial/samsung_uart.yaml           | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
+On Mon, 20 Nov 2023 at 23:03, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 11/20/23 14:45, Peter Griffin wrote:
+> > Hi Guenter,
+> >
+> > Thanks for the review.
+> >
+> > On Mon, 20 Nov 2023 at 22:00, Guenter Roeck <linux@roeck-us.net> wrote:
+> >>
+> >> On 11/20/23 13:20, Peter Griffin wrote:
+> >>> The WDT uses the CPU core signal DBGACK to determine whether the SoC
+> >>> is running in debug mode or not. If the DBGACK signal is asserted and
+> >>> DBGACK_MASK is enabled, then WDT output and interrupt is masked.
+> >>>
+> >>> Presence of the DBGACK_MASK bit is determined by adding a new
+> >>> QUIRK_HAS_DBGACK_BIT quirk. Currently only gs101 SoC is known to have
+> >>> the DBGACK_MASK bit so add the quirk to drv_data_gs101_cl1 and
+> >>> drv_data_gs101_cl1 quirks.
+> >>>
+> >>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> >>> ---
+> >>>    drivers/watchdog/s3c2410_wdt.c | 32 +++++++++++++++++++++++++++-----
+> >>>    1 file changed, 27 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> >>> index 08b8c57dd812..ed561deeeed9 100644
+> >>> --- a/drivers/watchdog/s3c2410_wdt.c
+> >>> +++ b/drivers/watchdog/s3c2410_wdt.c
+> >>> @@ -34,9 +34,10 @@
+> >>>
+> >>>    #define S3C2410_WTCNT_MAXCNT        0xffff
+> >>>
+> >>> -#define S3C2410_WTCON_RSTEN  (1 << 0)
+> >>> -#define S3C2410_WTCON_INTEN  (1 << 2)
+> >>> -#define S3C2410_WTCON_ENABLE (1 << 5)
+> >>> +#define S3C2410_WTCON_RSTEN          (1 << 0)
+> >>> +#define S3C2410_WTCON_INTEN          (1 << 2)
+> >>> +#define S3C2410_WTCON_ENABLE         (1 << 5)
+> >>> +#define S3C2410_WTCON_DBGACK_MASK    (1 << 16)
+> >>>
+> >>>    #define S3C2410_WTCON_DIV16 (0 << 3)
+> >>>    #define S3C2410_WTCON_DIV32 (1 << 3)
+> >>> @@ -107,12 +108,16 @@
+> >>>     * %QUIRK_HAS_PMU_CNT_EN: PMU block has some register (e.g. CLUSTERx_NONCPU_OUT)
+> >>>     * with "watchdog counter enable" bit. That bit should be set to make watchdog
+> >>>     * counter running.
+> >>> + *
+> >>> + * %QUIRK_HAS_DBGACK_BIT: WTCON register has DBGACK_MASK bit. Enables masking
+> >>> + * WDT interrupt and reset request according to CPU core DBGACK signal.
+> >>
+> >> This is a bit difficult to understand. I _think_ it means that the DBGACK_MASK bit
+> >> has to be set to be able to trigger interrupt and reset requests.
+> >
+> > Not quite, it is a bit that controls masking the watchdog outputs when the SoC
+> > is in debug mode.
+> >
+> >> "masking" normally refers to disabling something (at least in interrupt context).
+> >> "Enables masking WDT interrupt" sounds like the bit has to be set in order to
+> >> be able to disable interupts, and the code below suggests that the bit has to be
+> >> set for the driver to work. Is that the case ? It might make sense to explain this
+> >> a bit further.
+> >
+> > Maybe I explained it more clearly in the commit message than the comment
+> >
+> > "The WDT uses the CPU core signal DBGACK to determine whether the SoC
+> > is running in debug mode or not. If the DBGACK signal is asserted and
+> > DBGACK_MASK is enabled, then WDT output and interrupt is masked."
+> >
+> > Is that any clearer? Or maybe simpler again
+> >
+> > "Enabling DBGACK_MASK bit masks the watchdog outputs when the SoC is
+> > in debug mode. Debug mode is determined by the DBGACK CPU signal."
+> >
+> > Let me know what you think is the clearest and most succinct and I can
+> > update the comment.
+> >
+>
+> You are still using the term "masked" which I think just hides what
+> the code is really doing. Why not just say "disable" ?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The reason for using the "masked" terminology was that is what the
+Watchdog IP TRM uses throughout to describe the feature. But I agree
+just saying disable is clearer.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/serial/samsung_uart.yaml:141:8: [warning] wrong indentation: expected 8 but found 7 (indentation)
+>
+> "Setting the DBGACK_MASK bit disables the watchdog outputs when the SoC is
+>   in debug mode. Debug mode is determined by the DBGACK CPU signal."
+>
+> That seems to be much clearer to me, though I think there should still
+> be a comment along the line of "disable watchdog output if CPU is in
+> debug mode" in the code.
 
-dtschema/dtc warnings/errors:
+I will update the quirk comment with the less ambiguous wording and
+also add an extra comment like you suggest.
 
-doc reference errors (make refcheckdocs):
+>
+> That doesn't really explain _why_ the watchdog is disabled in this mode,
+> but at least it makes it obvious what is happening.
+>
+> >>
+> >>>     */
+> >>>    #define QUIRK_HAS_WTCLRINT_REG                      (1 << 0)
+> >>>    #define QUIRK_HAS_PMU_MASK_RESET            (1 << 1)
+> >>>    #define QUIRK_HAS_PMU_RST_STAT                      (1 << 2)
+> >>>    #define QUIRK_HAS_PMU_AUTO_DISABLE          (1 << 3)
+> >>>    #define QUIRK_HAS_PMU_CNT_EN                        (1 << 4)
+> >>> +#define QUIRK_HAS_DBGACK_BIT                 (1 << 5)
+> >>>
+> >>>    /* These quirks require that we have a PMU register map */
+> >>>    #define QUIRKS_HAVE_PMUREG \
+> >>> @@ -279,7 +284,7 @@ static const struct s3c2410_wdt_variant drv_data_gs101_cl0 = {
+> >>>        .cnt_en_reg = GS_CLUSTER0_NONCPU_OUT,
+> >>>        .cnt_en_bit = 8,
+> >>>        .quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> >>> -               QUIRK_HAS_WTCLRINT_REG,
+> >>> +               QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT,
+> >>>    };
+> >>>
+> >>>    static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
+> >>> @@ -291,7 +296,7 @@ static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
+> >>>        .cnt_en_reg = GS_CLUSTER1_NONCPU_OUT,
+> >>>        .cnt_en_bit = 7,
+> >>>        .quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_CNT_EN |
+> >>> -               QUIRK_HAS_WTCLRINT_REG,
+> >>> +               QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT,
+> >>>    };
+> >>>
+> >>>    static const struct of_device_id s3c2410_wdt_match[] = {
+> >>> @@ -408,6 +413,21 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+> >>>        return 0;
+> >>>    }
+> >>>
+> >>> +static void s3c2410wdt_mask_dbgack(struct s3c2410_wdt *wdt, bool mask)
+> >>
+> >> I think I must be missing something. This is only ever called with mask==true,
+> >> meaning the bit, if present, is always set.
+> >>
+> >> Why not call the function s3c2410wdt_set_dbgack() and drop the unnecessary
+> >> parameter ?
+> >
+> > I can update like you suggest, it would simplify the logic a little bit.
+> >
+>
+> Please do.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231120212037.911774-10-peter.griffin@linaro.org
+Will do
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Thanks,
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Peter
