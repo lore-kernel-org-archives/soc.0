@@ -1,442 +1,142 @@
-Return-Path: <SRS0=ukhv=HC=linaro.org=andre.draszik@kernel.org>
+Return-Path: <SRS0=Wr2J=HC=foss.st.com=prvs=96898be838=etienne.carriere@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3417C61D92
-	for <soc@archiver.kernel.org>; Tue, 21 Nov 2023 14:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 459E6C61D90
+	for <soc@archiver.kernel.org>; Tue, 21 Nov 2023 15:06:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD812C433C7; Tue, 21 Nov 2023 14:30:53 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 01CE8C433C8; Tue, 21 Nov 2023 15:06:03 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4CCA0C433CC
-	for <soc@kernel.org>; Tue, 21 Nov 2023 14:30:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4CCA0C433CC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-32dff08bbdbso4328634f8f.2
-        for <soc@kernel.org>; Tue, 21 Nov 2023 06:30:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700577048; x=1701181848; darn=kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gNBdVexOS2rFhdNBsyEIv1F9WYnWDTUlYqa+qcf8hzQ=;
-        b=GoiVoCKt49xrQEZO3XDJvCho06yWMKuqxaA5M7RkFRCPFxIKgn102QbMrZONavx7b6
-         ztjezNSEFadRxl2PxTZNpxmiDjlpdoHGzR9tggHic1TCYz+xaX/hBbEQQC0sFAXIHocv
-         CPWIJKtHDlWK99OmIf7Lw05bEWvQ24uH3aKpYW5zv8k2ZRYfbi8iQJWh4+FbF9F/zN2e
-         POj29o1gTadjuExBzr5C9WnBDW09h650bm3WV/DDr+gnfn3yNgL72ds2mmZAtzb/7bza
-         gb+2tpNidu64gQmg9TObMaohKXGX79cXO7LW8S+O80I+J6Cr7HAwidBeJjtqruLYM0Sh
-         aO9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700577048; x=1701181848;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gNBdVexOS2rFhdNBsyEIv1F9WYnWDTUlYqa+qcf8hzQ=;
-        b=CDYJChF8QGd3Pr9EFxDRvOhyoMMAY87t6YrtDUSjr3Nbvwrrlp+8njDK9xuNdMZewz
-         Cq4+zsfPspv0KCdOexv1xtOt/aPKFdeMtappojr7pwJggZPVR/NMr7ARZzzqhOugwodi
-         yMGs1QTWwCkG39te0Aa72cAMTrz4JWK833by4v1McIa/Daz1W3lek8V/f004L093LzpQ
-         qtADk29NvjAOZhpYoF5HfyKoaGoRfv+6zF5Ysv8A6y6TJrxJ/1qSOh0/L56H2IzMxs1F
-         4tzLjnuq0Z1LtMl6h7vXET5bsn41EtxH8MLdNnhzpsy6rQI/BAAEksQhpS0ZpCd56Ezp
-         1+oA==
-X-Gm-Message-State: AOJu0YzDoo6OmzIatir6ioEAUmG3a6sdI74Hh8CJIWxlRLQloH6i4kXs
-	77jFzfF3GnXl0zAshpWBt95zsQ==
-X-Google-Smtp-Source: AGHT+IFdDq8s8xEIRQ3+9S23u28ZojRTHZvq7IBqpudi3JlSagvWpPldboHVju4qMSeGvdUu2NcUQQ==
-X-Received: by 2002:a5d:6c6b:0:b0:332:c3fc:47ab with SMTP id r11-20020a5d6c6b000000b00332c3fc47abmr7206670wrz.9.1700577048318;
-        Tue, 21 Nov 2023 06:30:48 -0800 (PST)
-Received: from [10.1.1.118] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id d8-20020adffbc8000000b003316aeb280esm13778774wrs.104.2023.11.21.06.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 06:30:47 -0800 (PST)
-Message-ID: <8f7430b4056092552acaa323250709ba1c2bf605.camel@linaro.org>
-Subject: Re: [PATCH v4 11/19] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
- and cmu_apm support
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org,  sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com,  linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net,  catalin.marinas@arm.com, will@kernel.org,
- arnd@arndb.de, olof@lixom.net,  gregkh@linuxfoundation.org,
- jirislaby@kernel.org, cw00.choi@samsung.com,  alim.akhtar@samsung.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 4E9F5C433C7;
+	Tue, 21 Nov 2023 15:06:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E9F5C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3ALDrtQ9014582;
+	Tue, 21 Nov 2023 16:05:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:references:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=
+	selector1; bh=NSQTqtkoUPKX1gBN9J3jU6YVYeTm0qXHX7/yeko/snc=; b=Rj
+	QV6dGq5OayP1mhKBtG6jq/zR+Wfppw9rbYlSWV1tYmLnRhulN9ZDvCbqloaN3Sk4
+	CDbEF8imaXHwBckrK0uCYb4EONkMhOrtQJAHQJjOwzPz1qVOmXp9CWdYz4hX5bL/
+	wyiO4UsMd01QHdcr4e4EPdHGGraCzsVFc8hqZgWNKYAuSFcFM7z26EKkV7iQg2se
+	ucF30/WXAtexvUn4f2457Q6I6vz5dfNJnwLe1ottp0sCgrtXgoTL7bUp2KIscsY/
+	K3l17Wuzd+3GBCeimWYQ+CEjms6ZRP/PtCtOlbUqJNUpEQLb9Hr1MWLstsgfiWqB
+	dscE0WdrA0VSCLJtdwlg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ugwtyrane-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Nov 2023 16:05:54 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F0E6B10002A;
+	Tue, 21 Nov 2023 16:05:53 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BA013228A27;
+	Tue, 21 Nov 2023 16:05:53 +0100 (CET)
+Received: from SHFDAG1NODE1.st.com (10.75.129.69) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 21 Nov
+ 2023 16:05:52 +0100
+Received: from SHFDAG1NODE1.st.com ([fe80::117e:c4ab:ed81:6cb1]) by
+ SHFDAG1NODE1.st.com ([fe80::117e:c4ab:ed81:6cb1%13]) with mapi id
+ 15.01.2507.027; Tue, 21 Nov 2023 16:05:52 +0100
+From: Etienne CARRIERE - foss <etienne.carriere@foss.st.com>
+To: Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: tudor.ambarus@linaro.org, semen.protsenko@linaro.org,
- saravanak@google.com,  willmcvicker@google.com, soc@kernel.org,
- devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org,  linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org,  linux-watchdog@vger.kernel.org,
- kernel-team@android.com,  linux-serial@vger.kernel.org
-Date: Tue, 21 Nov 2023 14:30:45 +0000
-In-Reply-To: <20231120212037.911774-12-peter.griffin@linaro.org>
-References: <20231120212037.911774-1-peter.griffin@linaro.org>
-	 <20231120212037.911774-12-peter.griffin@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+CC: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        "Kevin
+ Hilman" <khilman@baylibre.com>,
+        "soc@kernel.org" <soc@kernel.org>, "arm@kernel.org" <arm@kernel.org>
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Add SCMI reset support
+Thread-Topic: [PATCH] ARM: multi_v7_defconfig: Add SCMI reset support
+Thread-Index: AQHaDjNLViXe5j1+tUOJsy0uMnBb6rCEimUAgABwUT0=
+Date: Tue, 21 Nov 2023 15:05:52 +0000
+Message-ID: <87e815c023e3456cbb8cf7c709bbf942@foss.st.com>
+References: <20231103085400.2924282-1-etienne.carriere@foss.st.com>,<16304f9a-fbbb-497f-917a-c2e2b8d67d9e@foss.st.com>
+In-Reply-To: <16304f9a-fbbb-497f-917a-c2e2b8d67d9e@foss.st.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.201.20.20]
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.49.2-3 
 MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-21_08,2023-11-21_01,2023-05-22_02
 
-On Mon, 2023-11-20 at 21:20 +0000, Peter Griffin wrote:
-> [...]
-> +	/* HSI2 */
-> +	MUX(CLK_MOUT_HSI2_BUS, "mout_cmu_hsi2_bus", mout_cmu_hsi2_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_HSI2_BUS, 0, 2),
-> +	MUX(CLK_MOUT_HSI2_PCIE, "mout_cmu_hsi2_pcie", mout_cmu_hsi2_pcie0_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_HSI2_PCIE, 0, 2),
-> +	MUX(CLK_MOUT_HSI2_UFS_EMBD, "mout_cmu_hsi2_ufs_embd",
-> +	=C2=A0=C2=A0=C2=A0 mout_cmu_hsi2_ufs_embd_p, CLK_CON_MUX_MUX_CLKCMU_HSI=
-2_UFS_EMBD,
-> +	=C2=A0=C2=A0=C2=A0 0, 2),
-> +	MUX(CLK_MOUT_HSI2_MMC_CARD, "mout_cmu_hsi2_mmc_card",
-> +	=C2=A0=C2=A0=C2=A0 mout_cmu_hsi2_mmc_card_p, CLK_CON_MUX_MUX_CLKCMU_HSI=
-2_MMC_CARD,
-> +	=C2=A0=C2=A0=C2=A0 0, 2),
-> +	/* CSIS */
-> +	MUX(CLK_MOUT_CSIS, "mout_cmu_csis_bus", mout_cmu_csis_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_CSIS_BUS, 0, 2),
-> +	/* PDP */
-> +	MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
-> +	/* PDP */
+Hi Alexandre,
 
-you have the /* PDP */ commend twice here.
+> From: Alexandre TORGUE - foss
+> Sent: Tuesday, November 21, 2023 10:19 AM
+>=20
+> Hi Etienne
+>=20
+> On 11/3/23 09:54, Etienne Carriere wrote:
+> > SCMI reset controllers are used in the ARMv7 STMicroelectronics stm32mp
+> > boards:
+> > - for STM32MP13: stm32mp135f-dk
+> > - for STM32MP15 boards with SCMI variant, introduced by commit 5b7e5831=
+3a77
+> >    ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1=
+)")
+> >    * stm32mp157c-ev1-scmi
+> >    * stm32mp157c-ed1-scmi
+> >    * stm32mp157c-dk2-scmi
+> >    * stm32mp157a-dk1-scmi
+> >
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> > Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
+> > ---
+> >   arch/arm/configs/multi_v7_defconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/mul=
+ti_v7_defconfig
+> > index 23fc49f23d25..01b3797f9317 100644
+> > --- a/arch/arm/configs/multi_v7_defconfig
+> > +++ b/arch/arm/configs/multi_v7_defconfig
+> > @@ -1189,6 +1189,7 @@ CONFIG_PWM_TEGRA=3Dy
+> >   CONFIG_PWM_VT8500=3Dy
+> >   CONFIG_KEYSTONE_IRQ=3Dy
+> >   CONFIG_RESET_MCHP_SPARX5=3Dy
+> > +CONFIG_RESET_SCMI=3Dy
+> >   CONFIG_PHY_SUN4I_USB=3Dy
+> >   CONFIG_PHY_SUN9I_USB=3Dy
+> >   CONFIG_PHY_BRCM_USB=3Dm
+>=20
+> Just one question before to apply this patch. CONFIG_RESET_SCMI is set
+> by the following dependency in drivers/reset/Kconfig:
+>=20
+> RESET_CONTROLLER [=3Dy] && (ARM_SCMI_PROTOCOL [=3Dy] || COMPILE_TEST [=3D=
+n])
+>=20
+> CONFIG_ARM_SCMI is already set in multi_v7_defconfig.
+> CONFIG_RESET_CONTROLLER seems to be set in each platform Kconfig.
+>=20
+> So not sure we need to force CONFIG_RESET_SCMI in the multi_v7_defconfig.
 
-> +	MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
-> +	/* IPP */
-> +	MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
-> +	/* G3AA */
-> +	MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa_g3aa", mout_cmu_g3aa_g3aa_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
-> +	/* ITP */
-> +	MUX(CLK_MOUT_ITP, "mout_cmu_itp_bus", mout_cmu_itp_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_ITP_BUS, 0, 2),
-> +	/* DNS */
-> +	MUX(CLK_MOUT_DNS_BUS, "mout_cmu_dns_bus", mout_cmu_dns_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_DNS_BUS, 0, 2),
-> +	/* TNR */
-> +	MUX(CLK_MOUT_TNR_BUS, "mout_cmu_tnr_bus", mout_cmu_tnr_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_TNR_BUS, 0, 2),
-> +	/* MCSC*/
-> +	MUX(CLK_MOUT_MCSC_ITSC, "mout_cmu_mcsc_itsc", mout_cmu_mcsc_itsc_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MCSC_ITSC, 0, 2),
-> +	MUX(CLK_MOUT_MCSC_MCSC, "mout_cmu_mcsc_mcsc", mout_cmu_mcsc_mcsc_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MCSC_MCSC, 0, 2),
-> +	/* GDC */
-> +	MUX(CLK_MOUT_GDC_SCSC, "mout_cmu_gdc_scsc", mout_cmu_gdc_scsc_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_GDC_SCSC, 0, 2),
-> +	MUX(CLK_MOUT_GDC_GDC0, "mout_cmu_gdc_gdc0", mout_cmu_gdc_gdc0_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_GDC_GDC0, 0, 2),
-> +	MUX(CLK_MOUT_GDC_GDC1, "mout_cmu_gdc_gdc1", mout_cmu_gdc_gdc1_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_GDC_GDC1, 0, 2),
-> +	/* MFC */
-> +	MUX(CLK_MOUT_MFC_MFC, "mout_cmu_mfc_mfc", mout_cmu_mfc_mfc_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MFC_MFC, 0, 2),
-> +	/* DDRPHY0/1/2/3 */
-> +	MUX(CLK_MOUT_MIF_SWITCH, "mout_cmu_mif_switch", mout_cmu_mif_switch_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MIF_SWITCH, 0, 2),
-> +	/* MIF0/1/2/3 */
-> +	MUX(CLK_MOUT_MIF_BUS, "mout_cmu_mif_busp", mout_cmu_mif_busp_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MIF_BUSP, 0, 2),
-> +	/* MISC */
-> +	MUX(CLK_MOUT_MISC_BUS, "mout_cmu_misc_bus", mout_cmu_misc_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MISC_BUS, 0, 2),
-> +	MUX(CLK_MOUT_MISC_SSS, "mout_cmu_misc_sss", mout_cmu_misc_sss_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_MISC_SSS, 0, 2),
-> +	/* PERI0 */
-> +	MUX(CLK_MOUT_PERIC0_IP, "mout_cmu_peric0_ip", mout_cmu_peric0_ip_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_PERIC0_IP, 0, 2),
-> +	MUX(CLK_MOUT_PERIC0_BUS, "mout_cmu_peric0_bus", mout_cmu_peric0_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_PERIC0_BUS, 0, 2),
-> +	/* PERI1 */
-> +	MUX(CLK_MOUT_PERIC1_IP, "mout_cmu_peric1_ip", mout_cmu_peric1_ip_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_PERIC0_IP, 0, 2),
-> +	MUX(CLK_MOUT_PERIC1_BUS, "mout_cmu_peric1_bus", mout_cmu_peric1_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_PERIC0_BUS, 0, 2),
-> +	/* TPU */
-> +	MUX(CLK_MOUT_TPU_TPU, "mout_cmu_tpu_tpu", mout_cmu_tpu_tpu_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_TPU_TPU, 0, 2),
-> +	MUX(CLK_MOUT_TPU_TPUCTL, "mout_cmu_tpu_tpuctl", mout_cmu_tpu_tpuctl_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_TPU_TPUCTL, 0, 2),
-> +	MUX(CLK_MOUT_TPU_BUS, "mout_cmu_tpu_bus", mout_cmu_tpu_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_TPU_BUS, 0, 2),
-> +	MUX(CLK_MOUT_TPU_UART, "mout_cmu_tpu_uart", mout_cmu_tpu_uart_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_TPU_UART, 0, 2),
-> +	/* BO */
-> +	MUX(CLK_MOUT_BO_BUS, "mout_cmu_bo_bus", mout_cmu_bo_bus_p,
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_MUX_MUX_CLKCMU_BO_BUS, 0, 2),
-> +};
-> +
-> +static const struct samsung_div_clock cmu_top_div_clks[] __initconst =3D=
- {
-> +	/* CMU_TOP_PURECLKCOMP */
-> +	DIV(CLK_DOUT_SHARED0_DIV3, "dout_shared0_div3", "mout_shared0_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED0_DIV3, 0, 2),
-> +	DIV(CLK_DOUT_SHARED0_DIV2, "dout_shared0_div2", "mout_shared0_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED0_DIV2, 0, 1),
-> +	DIV(CLK_DOUT_SHARED0_DIV5, "dout_shared0_div5", "mout_shared0_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED0_DIV5, 0, 2),
-> +	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "dout_shared0_div2",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED0_DIV4, 0, 1),
-> +	DIV(CLK_DOUT_SHARED1_DIV2, "dout_shared1_div2", "mout_shared1_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED1_DIV2, 0, 1),
-> +	DIV(CLK_DOUT_SHARED1_DIV3, "dout_shared1_div3", "mout_shared1_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED1_DIV3, 0, 2),
-> +	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "mout_shared1_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED1_DIV4, 0, 1),
-> +	DIV(CLK_DOUT_SHARED2_DIV2, "dout_shared2_div2", "mout_shared2_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED2_DIV2, 0, 1),
-> +	DIV(CLK_DOUT_SHARED3_DIV2, "dout_shared3_div2", "mout_shared3_pll",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_PLL_SHARED3_DIV2, 0, 1),
-> +	/* BUS0 */
-> +	DIV(CLK_DOUT_BUS0_BUS, "dout_cmu_bus0_bus_div", "gout_cmu_bus0_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_BUS0_BUS, 0, 4),
-> +	DIV(CLK_DOUT_CMU_BOOST, "dout_cmu_boost", "gout_cmu_cmu_boost",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_DIV_CLKCMU_CMU_BOOST, 0, 2),
-> +	/* BUS1 */
-> +	DIV(CLK_DOUT_BUS1_BUS, "dout_cmu_bus1_bus", "gout_cmu_bus1_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_BUS1_BUS, 0, 4),
-> +	/* BUS2 */
-> +	DIV(CLK_DOUT_BUS2_BUS, "dout_cmu_bus2_bus", "gout_cmu_bus2_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_BUS2_BUS, 0, 4),
-> +	/* CORE */
-> +	DIV(CLK_DOUT_CORE_BUS, "dout_cmu_core_bus", "gout_cmu_core_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_CORE_BUS, 0, 4),
-> +	/* EH */
-> +	DIV(CLK_DOUT_EH_BUS, "dout_cmu_eh_bus", "gout_cmu_eh_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_EH_BUS, 0, 4),
-> +	/* CPUCL{0,1,2,} */
-> +	DIV(CLK_DOUT_CPUCL2_SWITCH, "dout_cmu_cpucl2_switch",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_cpucl2_switch", CLK_CON_DIV_CLKCMU_CPUCL2_=
-SWITCH, 0, 3),
-> +	DIV(CLK_DOUT_CPUCL1_SWITCH, "dout_cmu_cpucl1_switch",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_cpucl1_switch", CLK_CON_DIV_CLKCMU_CPUCL1_=
-SWITCH, 0, 3),
-> +	DIV(CLK_DOUT_CPUCL0_SWITCH, "dout_cmu_cpucl0_switch",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_cpucl0_switch", CLK_CON_DIV_CLKCMU_CPUCL0_=
-SWITCH, 0, 3),
-> +	DIV(CLK_DOUT_CPUCL0_DBG, "dout_cmu_cpucl0_dbg", "gout_cmu_cpucl0_dbg",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 4),
-> +	DIV(CLK_DOUT_CMU_HPM, "dout_cmu_hpm", "gout_cmu_hpm",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HPM, 0, 2),
-> +	/* G3D */
-> +	DIV(CLK_DOUT_G3D_SWITCH, "dout_cmu_g3d_switch", "gout_cmu_g3d_switch",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_G3D_SWITCH, 0, 3),
-> +	DIV(CLK_DOUT_G3D_SWITCH, "dout_cmu_g3d_busd", "gout_cmu_g3d_busd",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_G3D_BUSD, 0, 4),
-> +
+My bad. Thanks for noticing that to me. Indeed the default directive in
+drivers/reset/Kconfig together with arm/multi_v7_defconfig makes CONFIG_RES=
+ET_SCMI
+be enabled.
 
-accidental extra empty line
+Sorry for the noise, you can discard my patch request.
 
-> +	DIV(CLK_DOUT_G3D_GLB, "dout_cmu_g3d_glb", "gout_cmu_g3d_glb",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_G3D_GLB, 0, 4),
-> +	/* DPU */
-> +	DIV(CLK_DOUT_DPU_BUS, "dout_cmu_dpu_bus", "gout_cmu_dpu_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_DPU_BUS, 0, 4),
-> +	/* DISP */
-> +	DIV(CLK_DOUT_DISP_BUS, "dout_cmu_disp_bus", "gout_cmu_disp_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_DISP_BUS, 0, 4),
-> +	/* G2D */
-> +	DIV(CLK_DOUT_G2D_G2D, "dout_cmu_g2d_g2d", "gout_cmu_g2d_g2d",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_G2D_G2D, 0, 4),
-> +	DIV(CLK_DOUT_G2D_MSCL, "dout_cmu_g2d_mscl", "gout_cmu_g2d_mscl",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_G2D_MSCL, 0, 4),
-> +	/* HSI0 */
-> +	DIV(CLK_DOUT_HSI0_USB31DRD, "dout_cmu_hsi0_usb31drd",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_hsi0_usb31drd", CLK_CON_DIV_CLKCMU_HSI0_US=
-B31DRD, 0, 5),
-> +	DIV(CLK_DOUT_HSI0_BUS, "dout_cmu_hsi0_bus", "gout_cmu_hsi0_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HSI0_BUS, 0, 4),
-> +	DIV(CLK_DOUT_HSI0_DPGTC, "dout_cmu_hsi0_dpgtc", "gout_cmu_hsi0_dpgtc",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HSI0_DPGTC, 0, 4),
-> +	/* TODO register exists but all lower bits are reserved */
-> +	DIV(CLK_DOUT_HSI0_USBDPDGB, "dout_cmu_hsi0_usbdpdbg",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_hsi0_usbdpdbg", CLK_CON_DIV_CLKCMU_HSI0_US=
-BDPDBG, 0, 0),
-> +	/* HSI1 */
-> +	DIV(CLK_DOUT_HSI1_BUS, "dout_cmu_hsi1_bus", "gout_cmu_hsi1_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HSI1_BUS, 0, 4),
-> +	DIV(CLK_DOUT_HSI1_PCIE, "dout_cmu_hsi1_pcie", "gout_cmu_hsi1_pcie",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HSI1_PCIE, 0, 3),
-> +	/* HSI2 */
-> +	DIV(CLK_DOUT_HSI2_BUS, "dout_cmu_hsi2_bus", "gout_cmu_hsi2_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HSI2_BUS, 0, 4),
-> +	DIV(CLK_DOUT_HSI2_PCIE, "dout_cmu_hsi2_pcie", "gout_cmu_hsi2_pcie",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_HSI2_PCIE, 0, 3),
-> +	DIV(CLK_DOUT_HSI2_UFS_EMBD, "dout_cmu_hsi2_ufs_embd",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_hsi2_ufs_embd", CLK_CON_DIV_CLKCMU_HSI2_UF=
-S_EMBD, 0, 4),
-> +	DIV(CLK_DOUT_HSI2_MMC_CARD, "dout_cmu_hsi2_mmc_card",
-> +	=C2=A0=C2=A0=C2=A0 "gout_cmu_hsi2_mmc_card", CLK_CON_DIV_CLKCMU_HSI2_MM=
-C_CARD, 0, 9),
-> +	/* CSIS */
-> +	DIV(CLK_DOUT_CSIS, "dout_cmu_csis_bus", "gout_cmu_csis_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_CSIS_BUS, 0, 4),
-> +	/* PDP */
-> +	DIV(CLK_DOUT_PDP_BUS, "dout_cmu_pdp_bus", "gout_cmu_pdp_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_PDP_BUS, 0, 4),
-> +	DIV(CLK_DOUT_PDP_VRA, "dout_cmu_pdp_vra", "gout_cmu_pdp_vra",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_PDP_VRA, 0, 4),
-> +	/* IPP */
-> +	DIV(CLK_DOUT_IPP_BUS, "dout_cmu_ipp_bus", "gout_cmu_ipp_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_IPP_BUS, 0, 4),
-> +	/* G3AA */
-> +	DIV(CLK_DOUT_G3AA, "dout_cmu_g3aa_g3aa", "gout_cmu_g3aa_g3aa",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_G3AA_G3AA, 0, 4),
-> +	/* ITP */
-> +	DIV(CLK_DOUT_ITP, "dout_cmu_itp_bus", "gout_cmu_itp_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_ITP_BUS, 0, 4),
-> +	/* DNS */
-> +	DIV(CLK_DOUT_DNS_BUS, "dout_cmu_dns_bus", "gout_cmu_dns_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_DNS_BUS, 0, 4),
-> +	/* TNR */
-> +	DIV(CLK_DOUT_TNR_BUS, "dout_cmu_tnr_bus", "gout_cmu_tnr_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_TNR_BUS, 0, 4),
-> +	/* MCSC*/
-> +	DIV(CLK_DOUT_MCSC_ITSC, "dout_cmu_mcsc_itsc", "gout_cmu_mcsc_itsc",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_MCSC_ITSC, 0, 4),
-> +	DIV(CLK_DOUT_MCSC_MCSC, "dout_cmu_mcsc_mcsc", "gout_cmu_mcsc_mcsc",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_MCSC_MCSC, 0, 4),
-> +	/* GDC */
-> +	DIV(CLK_DOUT_GDC_SCSC, "dout_cmu_gdc_scsc", "gout_cmu_gdc_scsc",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_GDC_SCSC, 0, 4),
-> +	DIV(CLK_DOUT_GDC_GDC0, "dout_cmu_gdc_gdc0", "gout_cmu_gdc_gdc0",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_GDC_GDC0, 0, 4),
-> +	DIV(CLK_DOUT_GDC_GDC1, "dout_cmu_gdc_gdc1", "gout_cmu_gdc_gdc1",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_GDC_GDC1, 0, 4),
-> +	/* MFC */
-> +	DIV(CLK_DOUT_MFC_MFC, "dout_cmu_mfc_mfc", "gout_cmu_mfc_mfc",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_MFC_MFC, 0, 4),
-> +	/* MIF0/1/2/3 */
-> +	DIV(CLK_DOUT_MIF_BUS, "dout_cmu_mif_busp", "gout_cmu_mif_busp",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_MIF_BUSP, 0, 4),
-> +	/* MISC */
-> +	DIV(CLK_DOUT_MISC_BUS, "dout_cmu_misc_bus", "gout_cmu_misc_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_MISC_BUS, 0, 4),
-> +	DIV(CLK_DOUT_MISC_SSS, "dout_cmu_misc_sss", "gout_cmu_misc_sss",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_MISC_SSS, 0, 4),
-> +	/* PERI0 */
-> +	DIV(CLK_DOUT_PERIC0_BUS, "dout_cmu_peric0_bus", "gout_cmu_peric0_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_PERIC0_BUS, 0, 4),
-> +	DIV(CLK_DOUT_PERIC0_IP, "dout_cmu_peric0_ip", "gout_cmu_peric0_ip",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_PERIC0_IP, 0, 4),
-> +	/* PERI1 */
-> +	DIV(CLK_DOUT_PERIC1_BUS, "dout_cmu_peric1_bus", "gout_cmu_peric1_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_PERIC1_BUS, 0, 4),
-> +	DIV(CLK_DOUT_PERIC1_IP, "dout_cmu_peric1_ip", "gout_cmu_peric1_ip",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_PERIC1_IP, 0, 4),
-> +	/* TPU */
-> +	DIV(CLK_DOUT_TPU_TPU, "dout_cmu_tpu_tpu", "gout_cmu_tpu_tpu",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_TPU_TPU, 0, 4),
-> +	DIV(CLK_DOUT_TPU_TPUCTL, "dout_cmu_tpu_tpuctl", "gout_cmu_tpu_tpuctl",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_TPU_TPUCTL, 0, 4),
-> +	DIV(CLK_DOUT_TPU_BUS, "dout_cmu_tpu_bus", "gout_cmu_tpu_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_TPU_BUS, 0, 4),
-> +	DIV(CLK_DOUT_TPU_UART, "dout_cmu_tpu_uart", "gout_cmu_tpu_uart",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_TPU_UART, 0, 4),
-> +	/* BO */
-> +	DIV(CLK_DOUT_BO_BUS, "dout_cmu_bo_bus", "gout_cmu_bo_bus",
-> +	=C2=A0=C2=A0=C2=A0 CLK_CON_DIV_CLKCMU_BO_BUS, 0, 4),
-> +};
-> +
-> +static const struct samsung_gate_clock cmu_top_gate_clks[] __initconst =
-=3D {
-> +	/* BUS0 */
-> +	GATE(CLK_GOUT_BUS0_BUS, "gout_cmu_bus0_bus", "mout_cmu_bus0_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_BUS0_BUS, 21, 0, 0),
-> +	/* BUS1 */
-> +	GATE(CLK_GOUT_BUS1_BUS, "gout_cmu_bus1_bus", "mout_cmu_bus1_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_BUS1_BUS, 21, 0, 0),
-> +	/* BUS2 */
-> +	GATE(CLK_GOUT_BUS2_BUS, "gout_cmu_bus2_bus", "mout_cmu_bus2_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_BUS2_BUS, 21, 0, 0),
-> +	/* CORE */
-> +	GATE(CLK_GOUT_CORE_BUS, "gout_cmu_core_bus", "mout_cmu_core_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_CORE_BUS, 21, 0, 0),
-> +	/* EH */
-> +	GATE(CLK_GOUT_EH_BUS, "gout_cmu_eh_bus", "mout_cmu_eh_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_EH_BUS, 21, 0, 0),
-> +	/* CPUCL{0,1,2,} */
-> +	GATE(CLK_GOUT_CPUCL2_SWITCH, "gout_cmu_cpucl2_switch",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_cpucl2_switch", CLK_CON_GAT_GATE_CLK=
-CMU_CPUCL2_SWITCH,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	GATE(CLK_GOUT_CPUCL1_SWITCH, "gout_cmu_cpucl1_switch",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_cpucl1_switch", CLK_CON_GAT_GATE_CLK=
-CMU_CPUCL1_SWITCH,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	GATE(CLK_GOUT_CPUCL0_SWITCH, "gout_cmu_cpucl0_switch",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_cpucl0_switch", CLK_CON_GAT_GATE_CLK=
-CMU_CPUCL0_SWITCH,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	GATE(CLK_GOUT_CPUCL0_DBG, "gout_cmu_cpucl0_dbg", "mout_cmu_cpucl0_dbg",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_CPUCL0_DBG_BUS, 21, 0,=
- 0),
-> +	GATE(CLK_GOUT_CMU_HPM, "gout_cmu_hpm", "mout_cmu_hpm",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HPM, 21, 0, 0),
-> +	/* G3D */
-> +	GATE(CLK_GOUT_G3D_SWITCH, "gout_cmu_g3d_switch", "mout_cmu_g3d_switch",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_G3D_SWITCH, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_SWITCH, "gout_cmu_g3d_busd", "mout_cmu_g3d_busd",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_G3D_BUSD, 21, 0, 0),
-> +	GATE(CLK_GOUT_G3D_GLB, "gout_cmu_g3d_glb", "mout_cmu_g3d_glb",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_G3D_GLB, 21, 0, 0),
-> +	/* DPU */
-> +	GATE(CLK_GOUT_DPU_BUS, "gout_cmu_dpu_bus", "mout_cmu_dpu_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_DPU_BUS, 21, 0, 0),
-> +	/* DISP */
-> +	GATE(CLK_GOUT_DISP_BUS, "gout_cmu_disp_bus", "mout_cmu_disp_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_DISP_BUS, 21, 0, 0),
-> +	/* G2D */
-> +	GATE(CLK_GOUT_G2D_G2D, "gout_cmu_g2d_g2d", "mout_cmu_g2d_g2d",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_G2D_G2D, 21, 0, 0),
-> +	GATE(CLK_GOUT_G2D_MSCL, "gout_cmu_g2d_mscl", "mout_cmu_g2d_mscl",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_G2D_MSCL, 21, 0, 0),
-> +	/* HSI0 */
-> +	GATE(CLK_GOUT_HSI0_USB31DRD, "gout_cmu_hsi0_usb31drd",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_hsi0_usb31drd", CLK_CON_GAT_GATE_CLK=
-CMU_HSI0_USB31DRD,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI0_BUS, "gout_cmu_hsi0_bus", "mout_cmu_hsi0_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HSI0_BUS, 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI0_DPGTC, "gout_cmu_hsi0_dpgtc", "mout_cmu_hsi0_dpgtc",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HSI0_DPGTC, 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI0_USBDPDGB, "gout_cmu_hsi0_usbdpdbg",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_hsi0_usbdpdbg", CLK_CON_GAT_GATE_CLK=
-CMU_HSI0_USBDPDBG,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	/* HSI1 */
-> +	GATE(CLK_GOUT_HSI1_BUS, "gout_cmu_hsi1_bus", "mout_cmu_hsi1_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HSI1_BUS, 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI1_PCIE, "gout_cmu_hsi1_pcie", "mout_cmu_hsi1_pcie",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HSI1_PCIE, 21, 0, 0),
-> +	/* HSI2 */
-> +	GATE(CLK_GOUT_HSI2_BUS, "gout_cmu_hsi2_bus", "mout_cmu_hsi2_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HSI2_BUS, 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI2_PCIE, "gout_cmu_hsi2_pcie", "mout_cmu_hsi2_pcie",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_HSI2_PCIE, 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI2_UFS_EMBD, "gout_cmu_hsi2_ufs_embd",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_hsi2_ufs_embd", CLK_CON_GAT_GATE_CLK=
-CMU_HSI2_UFS_EMBD,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	GATE(CLK_GOUT_HSI2_MMC_CARD, "gout_cmu_hsi2_mmc_card",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 "mout_cmu_hsi2_mmc_card", CLK_CON_GAT_GATE_CLK=
-CMU_HSI2_MMCCARD,
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 21, 0, 0),
-> +	/* CSIS */
-> +	GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
-> +	/* PDP */
-> +	GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus",
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> +
+Best regards,
+Etienne
 
-and here
 
-Cheers,
-Andre'
-
+>=20
+> Regards
+> Alex
+>=20
