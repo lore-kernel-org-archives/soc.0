@@ -1,100 +1,240 @@
-Return-Path: <SRS0=TOKk=HC=samokat.ru=ap@kernel.org>
+Return-Path: <SRS0=uOmG=HC=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E3E9C5ACB3
-	for <soc@archiver.kernel.org>; Tue, 21 Nov 2023 04:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57802C54FB9
+	for <soc@archiver.kernel.org>; Tue, 21 Nov 2023 06:42:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AFDBC433C7; Tue, 21 Nov 2023 04:01:12 +0000 (UTC)
-Received: from mx08.samokat.ru (mx08.samokat.ru [45.90.244.230])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	id 24B1FC433C9; Tue, 21 Nov 2023 06:42:17 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3DEE9C433C8
-	for <soc@kernel.org>; Tue, 21 Nov 2023 04:01:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3DEE9C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samokat.ru
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samokat.ru
-Received: from os-081902002.samokat.io (localhost.localdomain [127.0.0.1])
-	by mx08.samokat.ru (Proxmox) with ESMTP id 942C518611E
-	for <soc@kernel.org>; Tue, 21 Nov 2023 06:27:06 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samokat.ru; h=cc
-	:content-description:content-transfer-encoding:content-type
-	:content-type:date:from:from:mime-version:reply-to:reply-to
-	:subject:subject:to:to; s=mx08; bh=Y6pD9fRLODwrM9h1xLnuG9W/s5Zzx
-	soItNuqaC1FKq0=; b=uG7HvXitPI58Vkv9vtZNutqxboj/DoIPZNh3st+sY0/j7
-	sY9A+QJwbrRm5syRYHorly9MgX9Z0eQ3VJoiU2cqq/2Cq5V1POh1hJ9G1wfQDXJ+
-	3ZHdlYrH0TTRdEvQvQ1oLrbbp3HWqLoBIUnl8cUNhiS3h82DUcGamXAIAgVGQvP0
-	hjf4H3cXJsSZM4lzu7z4yVZ9ayBh28GpkgyT8ywGRT+rM8v8H3XP5lUXJbQeonFq
-	nnNdq3qgFiMSYlg6cHS2xIk4lRxrEWdbagcRJHexLq5vPo6Ixmit+t6K2XgP+5pR
-	qzGuCrqO7T/WyLLvYWAyqfIopSDSAwK0HT/mGVj9g==
-Received: from ksmg-08.samokat.ru (os-081902003.samokat.io [10.18.145.3])
-	by mx08.samokat.ru (Proxmox) with ESMTPS id B59AF187E99
-	for <soc@kernel.org>; Tue, 21 Nov 2023 05:33:29 +0300 (MSK)
-Received: from os-081902003.samokat.io (localhost [127.0.0.1])
-	by ksmg-08.samokat.ru (Postfix) with ESMTP id B4E541A0004
-	for <soc@kernel.org>; Tue, 21 Nov 2023 05:33:29 +0300 (MSK)
-Received: from [85.195.105.114] (os-081144001.samokat.io [10.18.144.1])
-	by ksmg-08.samokat.ru (Postfix) with ESMTP
-	for <soc@kernel.org>; Tue, 21 Nov 2023 05:33:29 +0300 (MSK)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Heartfelt 
+	by smtp.kernel.org (Postfix) with ESMTPS id 9786DC433C7;
+	Tue, 21 Nov 2023 06:42:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9786DC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700548935; x=1732084935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JmpHPcDR2GOkMATNC2UbhmrpWmY/FEs9q0VQCEmc49s=;
+  b=mi4InY3pJqGjm3KHJOuIk/v4DQO9jbsTy2qmtxfCzrQRdMro20j7BwaZ
+   61o3H9IqAYLVwQhMiCZ/mFDeAEXhcFpPhwFR6xdz43h4M71drYM8S0IUF
+   UGGz6qJbDBjHtPY77J7xO8Gv/RPWRYsz6TY59+bgVqmLicHtRnx7iuURP
+   51IN66mlLZCyDR6lLFGx3ifo3R7qSO0yTNwHflUlUcfXPevzF8mQOmcyA
+   ivUn7u/Sqtk17zI3NdSjz1szRjjyBiJQ4bDQqPUtDp/D7MSrBFOQ72maE
+   2abp7gLixPTD6OR67E6KvIPHblPzaFxYdvYL0/UIajhQlr3J4EDSvAZIa
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371948744"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="371948744"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 22:42:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="760012743"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="760012743"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 20 Nov 2023 22:42:04 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5KSP-0007RI-2y;
+	Tue, 21 Nov 2023 06:42:01 +0000
+Date: Tue, 21 Nov 2023 14:23:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+	s.nawrocki@samsung.com, linus.walleij@linaro.org,
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
+	will@kernel.org, arnd@arndb.de, olof@lixom.net,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	cw00.choi@samsung.com, alim.akhtar@samsung.com
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-From: "Anna Pechorin"<ap@samokat.ru>
-Date: Mon, 20 Nov 2023 18:33:29 -0800
-Reply-To: dealings100@hotmail.com
-X-KSMG-Rule-ID: 1
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 181488 [Nov 20 2023]
-X-KSMG-AntiSpam-Version: 6.0.0.2
-X-KSMG-AntiSpam-Envelope-From: ap@samokat.ru
-X-KSMG-AntiSpam-Rate: 60
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4, {Prob_reply_not_match_from}, {Prob_msgid_missed_1b}, {Tracking_cluster_exceptions, from}, {Tracking_free_reply_not_from}, {Tracking_cnf_strong}, {Tracking_dating_nourl, reply1}, {Tracking_dating_reply, mail_free}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;samokat.ru:7.1.1;127.0.0.199:7.1.2;hotmail.com:5.0.1,7.1.1, FromAlignment: s
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/11/21 00:12:00 #22490067
-X-KSMG-AntiVirus-Status: Clean, skipped
-Message-Id: <20231121032706.942C518611E@mx08.samokat.ru>
+Cc: oe-kbuild-all@lists.linux.dev, peter.griffin@linaro.org,
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+	semen.protsenko@linaro.org, saravanak@google.com,
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 09/19] dt-bindings: serial: samsung: Make
+ samsung,uart-fifosize required property
+Message-ID: <202311211435.CJVOACBE-lkp@intel.com>
+References: <20231120212037.911774-10-peter.griffin@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231120212037.911774-10-peter.griffin@linaro.org>
 
-Hello
+Hi Peter,
 
-How are you, I hope this email finds you in good health and spirit? Before =
-I continue let me humbly apologize for coming into your space unsolicited. =
-Nonetheless, I take solace in the fact that it is with the best intention a=
-nd for our mutual benefit.
+kernel test robot noticed the following build warnings:
 
-I chose you among other contacts I came across in my search for someone who=
- can be of help.  It took a great deal of brain storming to arrive at my de=
-cision I must say, with the hope that my contact with you will be private a=
-nd confidential.
+[auto build test WARNING on pinctrl-samsung/for-next]
+[also build test WARNING on next-20231120]
+[cannot apply to krzk/for-next robh/for-next linus/master v6.7-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The business idea that I have is to partner with you by investing in your c=
-ountry and you becoming my fund manager. This whole idea is borne out of th=
-e fact that presently I am totally indisposed to carry out any financial tr=
-ansaction owing to restrictions relating to the Russia /Ukraine war and the=
- suspicious death of my husband, Ivan Pechorin in the hand of our President=
- Vladimir Putin. =
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-soc-samsung-exynos-pmu-Add-gs101-compatible/20231121-052449
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git for-next
+patch link:    https://lore.kernel.org/r/20231120212037.911774-10-peter.griffin%40linaro.org
+patch subject: [PATCH v4 09/19] dt-bindings: serial: samsung: Make samsung,uart-fifosize required property
+compiler: loongarch64-linux-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20231121/202311211435.CJVOACBE-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311211435.CJVOACBE-lkp@intel.com/
 
-It will be an absolute pleasure, if you would have the wherewithal to handl=
-e this project to my satisfaction. Every detail concerning this project wou=
-ld be laid bare to you upon indication of your interest. =
+dtcheck warnings: (new ones prefixed by >>)
+>> Documentation/devicetree/bindings/serial/samsung_uart.yaml:141:8: [warning] wrong indentation: expected 8 but found 7 (indentation)
 
+vim +141 Documentation/devicetree/bindings/serial/samsung_uart.yaml
 
-Strictly respond to: dealings100@hotmail.com
+     8	
+     9	maintainers:
+    10	  - Krzysztof Kozlowski <krzk@kernel.org>
+    11	  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    12	
+    13	description: |+
+    14	  Each Samsung UART should have an alias correctly numbered in the "aliases"
+    15	  node, according to serialN format, where N is the port number (non-negative
+    16	  decimal integer) as specified by User's Manual of respective SoC.
+    17	
+    18	properties:
+    19	  compatible:
+    20	    oneOf:
+    21	      - items:
+    22	          - const: samsung,exynosautov9-uart
+    23	          - const: samsung,exynos850-uart
+    24	      - enum:
+    25	          - apple,s5l-uart
+    26	          - axis,artpec8-uart
+    27	          - google,gs101-uart
+    28	          - samsung,s3c6400-uart
+    29	          - samsung,s5pv210-uart
+    30	          - samsung,exynos4210-uart
+    31	          - samsung,exynos5433-uart
+    32	          - samsung,exynos850-uart
+    33	
+    34	  reg:
+    35	    maxItems: 1
+    36	
+    37	  reg-io-width:
+    38	    description: |
+    39	      The size (in bytes) of the IO accesses that should be performed
+    40	      on the device.
+    41	    enum: [ 1, 4 ]
+    42	
+    43	  clocks:
+    44	    minItems: 2
+    45	    maxItems: 5
+    46	
+    47	  clock-names:
+    48	    description: N = 0 is allowed for SoCs without internal baud clock mux.
+    49	    minItems: 2
+    50	    items:
+    51	      - const: uart
+    52	      - pattern: '^clk_uart_baud[0-3]$'
+    53	      - pattern: '^clk_uart_baud[0-3]$'
+    54	      - pattern: '^clk_uart_baud[0-3]$'
+    55	      - pattern: '^clk_uart_baud[0-3]$'
+    56	
+    57	  dmas:
+    58	    items:
+    59	      - description: DMA controller phandle and request line for RX
+    60	      - description: DMA controller phandle and request line for TX
+    61	
+    62	  dma-names:
+    63	    items:
+    64	      - const: rx
+    65	      - const: tx
+    66	
+    67	  interrupts:
+    68	    description: RX interrupt and optionally TX interrupt.
+    69	    minItems: 1
+    70	    maxItems: 2
+    71	
+    72	  power-domains:
+    73	    maxItems: 1
+    74	
+    75	  samsung,uart-fifosize:
+    76	    description: The fifo size supported by the UART channel.
+    77	    $ref: /schemas/types.yaml#/definitions/uint32
+    78	    enum: [16, 64, 256]
+    79	
+    80	required:
+    81	  - compatible
+    82	  - clocks
+    83	  - clock-names
+    84	  - interrupts
+    85	  - reg
+    86	
+    87	allOf:
+    88	  - $ref: serial.yaml#
+    89	
+    90	  - if:
+    91	      properties:
+    92	        compatible:
+    93	          contains:
+    94	            enum:
+    95	              - samsung,s5pv210-uart
+    96	    then:
+    97	      properties:
+    98	        clocks:
+    99	          minItems: 2
+   100	          maxItems: 3
+   101	        clock-names:
+   102	          minItems: 2
+   103	          items:
+   104	            - const: uart
+   105	            - pattern: '^clk_uart_baud[0-1]$'
+   106	            - pattern: '^clk_uart_baud[0-1]$'
+   107	
+   108	  - if:
+   109	      properties:
+   110	        compatible:
+   111	          contains:
+   112	            enum:
+   113	              - apple,s5l-uart
+   114	              - axis,artpec8-uart
+   115	              - samsung,exynos4210-uart
+   116	              - samsung,exynos5433-uart
+   117	    then:
+   118	      properties:
+   119	        clocks:
+   120	          maxItems: 2
+   121	        clock-names:
+   122	          items:
+   123	            - const: uart
+   124	            - const: clk_uart_baud0
+   125	
+   126	  - if:
+   127	      properties:
+   128	        compatible:
+   129	          contains:
+   130	            enum:
+   131	              - google,gs101-uart
+   132	              - samsung,exynosautov9-uart
+   133	    then:
+   134	      properties:
+   135	        samsung,uart-fifosize:
+   136	          description: The fifo size supported by the UART channel.
+   137	          $ref: /schemas/types.yaml#/definitions/uint32
+   138	          enum: [16, 64, 256]
+   139	
+   140	      required:
+ > 141	       - samsung,uart-fifosize
+   142	
 
-Best regards
-
-Anna Pechorin.
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
