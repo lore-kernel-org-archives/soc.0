@@ -1,484 +1,115 @@
-Return-Path: <SRS0=ukhv=HC=linaro.org=andre.draszik@kernel.org>
+Return-Path: <SRS0=jJ5b=HC=foss.st.com=prvs=968950e3a3=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB8B9C61D90
-	for <soc@archiver.kernel.org>; Tue, 21 Nov 2023 08:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E69CDC5ACB3
+	for <soc@archiver.kernel.org>; Tue, 21 Nov 2023 09:19:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 89C60C43395; Tue, 21 Nov 2023 08:41:39 +0000 (UTC)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id B87DDC433CB; Tue, 21 Nov 2023 09:19:20 +0000 (UTC)
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7EB6CC433CD
-	for <soc@kernel.org>; Tue, 21 Nov 2023 08:41:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7EB6CC433CD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-32d895584f1so3763446f8f.1
-        for <soc@kernel.org>; Tue, 21 Nov 2023 00:41:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700556089; x=1701160889; darn=kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SCHxMbqw99jM5wJ3HP5Ky8BQ0qy1EingX8oib4vezVc=;
-        b=djPK3oDjCBGkSPXJLlLZM8312P2xcP34q2aGoz5xYjal7pTq90y8vk7ZGkjfo+EP1D
-         p9d90gbHY+PNR5xBKQ13Wv8oZ9GOMzVLJ3o25BKMovcm0Fvho+9YRi0VlYRWpSc8+WEF
-         /HbseL0FecGgWHtZEal3nGe/OP0arEpYL+yZbmCpxp2k4dAfuyTHKDXilPz8/OMTsaTR
-         TfK3vD+lwLcwT7NefDapwSvLroGTbPMEfL03TUlSAQKPKSfLfW6Iz4nfzob6g0WRJPjJ
-         nlzabHrpqVoX6ii71Bi5/xSyC/X36KeC6Fgvl4dWXMjft7nyQ/CW65P9wYRVvNNhNZl0
-         ZDKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700556089; x=1701160889;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SCHxMbqw99jM5wJ3HP5Ky8BQ0qy1EingX8oib4vezVc=;
-        b=munXzbFYt63soDfuV7w4lIB/5iy2hNUncM9inhl886SGRaOnmwQMJP8zmbPWEk5Qc3
-         DdJUIIDkP8jqj0X5cy/vK7KDjLJQwO9z0JHZvaJHXmqa30isZhPUw9icxraBzgFdygTS
-         EseyfghMEeyqt6k7vVxsc5ie0zYeuR4XvVbXAx1MjSc0bSa4ORJa0tjqHeeNutgG7DPc
-         UM1VC/I8Oz6w8ZBFUxuEP8RKVRn6PgndVvBAyq3S9wQKArUgEa/oMRV3gfo5l6W3aE7B
-         ADF/TA/5X6m6hNv1wgz3UXQZjhPuwwf+xXpViRFZHKbMqaVXDFGMFSGv8IY0FuSYwYba
-         JmFw==
-X-Gm-Message-State: AOJu0Yyc92xhJ+lf2PU/LsM9h5sEpfrhWdQPNt1fSUpQHFiwKba7PB5F
-	d3H1JAmwbZc/ytXia4CCGkt+pA==
-X-Google-Smtp-Source: AGHT+IFPRU2ASHglS//FhOGT8YwLtY74wKLDgPgE2pWlmfa1x1pmOlPojboz4Lh+OEQfDXfzzGz8+A==
-X-Received: by 2002:adf:ef86:0:b0:331:7799:84d8 with SMTP id d6-20020adfef86000000b00331779984d8mr6187499wro.68.1700556089516;
-        Tue, 21 Nov 2023 00:41:29 -0800 (PST)
-Received: from draszik.lan ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id bf14-20020a0560001cce00b0032dde679398sm13885709wrb.8.2023.11.21.00.41.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 00:41:29 -0800 (PST)
-Message-ID: <b5e7a95ef3ca5323c06f30c6d1d570d8629ad9a5.camel@linaro.org>
-Subject: Re: [PATCH v4 02/19] dt-bindings: clock: Add Google gs101 clock
- management unit bindings
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org,  sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com,  linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net,  catalin.marinas@arm.com, will@kernel.org,
- arnd@arndb.de, olof@lixom.net,  gregkh@linuxfoundation.org,
- jirislaby@kernel.org, cw00.choi@samsung.com,  alim.akhtar@samsung.com
-List-Id: <soc.lore.kernel.org>
-Cc: tudor.ambarus@linaro.org, semen.protsenko@linaro.org,
- saravanak@google.com,  willmcvicker@google.com, soc@kernel.org,
- devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org,  linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org,  linux-watchdog@vger.kernel.org,
- kernel-team@android.com,  linux-serial@vger.kernel.org
-Date: Tue, 21 Nov 2023 08:41:27 +0000
-In-Reply-To: <20231120212037.911774-3-peter.griffin@linaro.org>
-References: <20231120212037.911774-1-peter.griffin@linaro.org>
-	 <20231120212037.911774-3-peter.griffin@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.49.2-2 
+	by smtp.kernel.org (Postfix) with ESMTPS id DC45AC433C7;
+	Tue, 21 Nov 2023 09:19:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC45AC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3AL41oP9001074;
+	Tue, 21 Nov 2023 10:19:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=Se6slwyvr1tGOsCXIQtaS5Bx9pGKNzcVmVzimZG4nYM=; b=be
+	VenTppvhYkI7aVVtpv/yj4ylY70HOoTx9b2epMWw/ZlEVPFD7m8P4IUkstOEDh3W
+	WVxVXwgrhn3+8Usw8mjGocKQR+Vo1XIF6WUGHewUlZRJQCQ2akUiPnTkX6bJAOo3
+	s1b0bTRnMuAhrqfXplI/dJHhWa1yWJQBE3mMGuDMvaGVhceET6msVKC2+esUyO2k
+	Gi2fdQmdFRXu3pxRUgCXeRbvFbkCbKTOHpI+DH9XeljeAF+Ul5vnspaTw5PUrOoU
+	EX7bbpYXpKZysUn+wraRCvR69gSaFb64ksUg1bpu//sr6eEzmmlkuWmkbrBA44HA
+	auJ54z/VIB+x4S8ndLzg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ugn5q1e5q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Nov 2023 10:19:11 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C71CC10002A;
+	Tue, 21 Nov 2023 10:19:10 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2B6ED21512C;
+	Tue, 21 Nov 2023 10:19:10 +0100 (CET)
+Received: from [10.201.21.122] (10.201.21.122) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 21 Nov
+ 2023 10:19:09 +0100
+Message-ID: <16304f9a-fbbb-497f-917a-c2e2b8d67d9e@foss.st.com>
+Date: Tue, 21 Nov 2023 10:19:08 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Add SCMI reset support
+Content-Language: en-US
+To: Etienne Carriere <etienne.carriere@foss.st.com>,
+        <linux-kernel@vger.kernel.org>
+List-Id: <soc.lore.kernel.org>
+CC: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, <soc@kernel.org>,
+        <arm@kernel.org>
+References: <20231103085400.2924282-1-etienne.carriere@foss.st.com>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20231103085400.2924282-1-etienne.carriere@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.122]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-21_03,2023-11-20_01,2023-05-22_02
 
-On Mon, 2023-11-20 at 21:20 +0000, Peter Griffin wrote:
-> Provide dt-schema documentation for Google gs101 SoC clock controller.
-> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
->=20
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+Hi Etienne
+
+On 11/3/23 09:54, Etienne Carriere wrote:
+> SCMI reset controllers are used in the ARMv7 STMicroelectronics stm32mp
+> boards:
+> - for STM32MP13: stm32mp135f-dk
+> - for STM32MP15 boards with SCMI variant, introduced by commit 5b7e58313a77
+>    ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)")
+>    * stm32mp157c-ev1-scmi
+>    * stm32mp157c-ed1-scmi
+>    * stm32mp157c-dk2-scmi
+>    * stm32mp157a-dk1-scmi
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
 > ---
-> =C2=A0.../bindings/clock/google,gs101-clock.yaml=C2=A0=C2=A0=C2=A0 | 110 =
-+++++++++
-> =C2=A0include/dt-bindings/clock/google,gs101.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 232 ++++++++++++++++++
-> =C2=A02 files changed, 342 insertions(+)
-> =C2=A0create mode 100644 Documentation/devicetree/bindings/clock/google,g=
-s101-clock.yaml
-> =C2=A0create mode 100644 include/dt-bindings/clock/google,gs101.h
->=20
-> diff --git a/Documentation/devicetree/bindings/clock/google,gs101-clock.y=
-aml b/Documentation/devicetree/bindings/clock/google,gs101-
-> clock.yaml
-> new file mode 100644
-> index 000000000000..4612886fcc15
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-> @@ -0,0 +1,110 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/google,gs101-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google GS101 SoC clock controller
-> +
-> +maintainers:
-> +=C2=A0 - Peter Griffin <peter.griffin@linaro.org>
-> +
-> +description: |
-> +=C2=A0 Google GS101 clock controller is comprised of several CMU units, =
-generating
-> +=C2=A0 clocks for different domains. Those CMU units are modeled as sepa=
-rate device
-> +=C2=A0 tree nodes, and might depend on each other. The root clock in tha=
-t clock tree
-> +=C2=A0 is OSCCLK (24.576 MHz). That external clock must be defined as a =
-fixed-rate
-> +=C2=A0 clock in dts.
-> +
-> +=C2=A0 CMU_TOP is a top-level CMU, where all base clocks are prepared us=
-ing PLLs and
-> +=C2=A0 dividers; all other leaf clocks (other CMUs) are usually derived =
-from CMU_TOP.
-> +
-> +=C2=A0 Each clock is assigned an identifier and client nodes can use thi=
-s identifier
-> +=C2=A0 to specify the clock which they consume. All clocks available for=
- usage
-> +=C2=A0 in clock consumer nodes are defined as preprocessor macros in
-> +=C2=A0 'dt-bindings/clock/gs101.h' header.
-> +
-> +properties:
-> +=C2=A0 compatible:
-> +=C2=A0=C2=A0=C2=A0 enum:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - google,gs101-cmu-top
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - google,gs101-cmu-apm
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - google,gs101-cmu-misc
-> +
-> +=C2=A0 clocks:
-> +=C2=A0=C2=A0=C2=A0 minItems: 1
-> +=C2=A0=C2=A0=C2=A0 maxItems: 2
-> +
-> +=C2=A0 clock-names:
-> +=C2=A0=C2=A0=C2=A0 minItems: 1
-> +=C2=A0=C2=A0=C2=A0 maxItems: 2
-> +
-> +=C2=A0 "#clock-cells":
-> +=C2=A0=C2=A0=C2=A0 const: 1
-> +
-> +=C2=A0 reg:
-> +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> +
-> +required:
-> +=C2=A0 - compatible
-> +=C2=A0 - "#clock-cells"
-> +=C2=A0 - clocks
-> +=C2=A0 - clock-names
-> +=C2=A0 - reg
-> +
-> +allOf:
-> +=C2=A0 - if:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 contains:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enum:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 - google,gs101-cmu-top
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 - google,gs101-cmu-apm
-> +=C2=A0=C2=A0=C2=A0 then:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - des=
-cription: External reference clock (24.576 MHz)
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - con=
-st: oscclk
-> +
-> +=C2=A0 - if:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 contains:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const=
-: google,gs101-cmu-misc
-> +
-> +=C2=A0=C2=A0=C2=A0 then:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - des=
-cription: External reference clock (24.576 MHz)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - des=
-cription: Misc bus clock (from CMU_TOP)
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - con=
-st: oscclk
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - con=
-st: dout_cmu_misc_bus
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +=C2=A0 # Clock controller node for CMU_TOP
-> +=C2=A0 - |
-> +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/clock/google,gs101.h>
-> +=C2=A0=C2=A0=C2=A0 soc {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <2>;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <1>;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cmu_top: clock-controller@1e0=
-80000 {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compa=
-tible =3D "google,gs101-cmu-top";
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =
-=3D <0x0 0x1e080000 0x8000>;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #cloc=
-k-cells =3D <1>;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock=
-s =3D <&ext_24_5m>;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock=
--names =3D "oscclk";
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> +=C2=A0=C2=A0=C2=A0 };
-> +
-> +...
-> diff --git a/include/dt-bindings/clock/google,gs101.h b/include/dt-bindin=
-gs/clock/google,gs101.h
-> new file mode 100644
-> index 000000000000..7765ba68f734
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/google,gs101.h
-> @@ -0,0 +1,232 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + * Author: Peter Griffin <peter.griffin@linaro.org>
-> + *
-> + * Device Tree binding constants for Google gs101 clock controller.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLOCK_GOOGLE_GS101_H
-> +#define _DT_BINDINGS_CLOCK_GOOGLE_GS101_H
-> +
-> +/* CMU_TOP PLL*/
+>   arch/arm/configs/multi_v7_defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+> index 23fc49f23d25..01b3797f9317 100644
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@ -1189,6 +1189,7 @@ CONFIG_PWM_TEGRA=y
+>   CONFIG_PWM_VT8500=y
+>   CONFIG_KEYSTONE_IRQ=y
+>   CONFIG_RESET_MCHP_SPARX5=y
+> +CONFIG_RESET_SCMI=y
+>   CONFIG_PHY_SUN4I_USB=y
+>   CONFIG_PHY_SUN9I_USB=y
+>   CONFIG_PHY_BRCM_USB=m
 
-Usually there should be a space before */
-Same in many other places in this file.
+Just one question before to apply this patch. CONFIG_RESET_SCMI is set 
+by the following dependency in drivers/reset/Kconfig:
 
-Cheers,
-Andr=C3=A9
+RESET_CONTROLLER [=y] && (ARM_SCMI_PROTOCOL [=y] || COMPILE_TEST [=n])
 
-> +#define CLK_FOUT_SHARED0_PLL		1
-> +#define CLK_FOUT_SHARED1_PLL		2
-> +#define CLK_FOUT_SHARED2_PLL		3
-> +#define CLK_FOUT_SHARED3_PLL		4
-> +#define CLK_FOUT_SPARE_PLL		5
-> +
-> +/* CMU_TOP MUX*/
-> +#define CLK_MOUT_SHARED0_PLL		6
-> +#define CLK_MOUT_SHARED1_PLL		7
-> +#define CLK_MOUT_SHARED2_PLL		8
-> +#define CLK_MOUT_SHARED3_PLL		9
-> +#define CLK_MOUT_SPARE_PLL		10
-> +#define CLK_MOUT_BUS0_BUS		11
-> +#define CLK_MOUT_CMU_BOOST		12
-> +#define CLK_MOUT_BUS1_BUS		13
-> +#define CLK_MOUT_BUS2_BUS		14
-> +#define CLK_MOUT_CORE_BUS		15
-> +#define CLK_MOUT_EH_BUS			16
-> +#define CLK_MOUT_CPUCL2_SWITCH		17
-> +#define CLK_MOUT_CPUCL1_SWITCH		18
-> +#define CLK_MOUT_CPUCL0_SWITCH		19
-> +#define CLK_MOUT_CPUCL0_DBG		20
-> +#define CLK_MOUT_CMU_HPM		21
-> +#define CLK_MOUT_G3D_SWITCH		22
-> +#define CLK_MOUT_G3D_GLB		23
-> +#define CLK_MOUT_DPU_BUS		24
-> +#define CLK_MOUT_DISP_BUS		25
-> +#define CLK_MOUT_G2D_G2D		26
-> +#define CLK_MOUT_G2D_MSCL		27
-> +#define CLK_MOUT_HSI0_USB31DRD		28
-> +#define CLK_MOUT_HSI0_BUS		29
-> +#define CLK_MOUT_HSI0_DPGTC		30
-> +#define CLK_MOUT_HSI0_USBDPDGB		31
-> +#define CLK_MOUT_HSI1_BUS		32
-> +#define CLK_MOUT_HSI1_PCIE		33
-> +#define CLK_MOUT_HSI2_BUS		34
-> +#define CLK_MOUT_HSI2_PCIE		35
-> +#define CLK_MOUT_HSI2_UFS_EMBD		36
-> +#define CLK_MOUT_HSI2_MMC_CARD		37
-> +#define CLK_MOUT_CSIS			38
-> +#define CLK_MOUT_PDP_BUS		39
-> +#define CLK_MOUT_PDP_VRA		40
-> +#define CLK_MOUT_IPP_BUS		41
-> +#define CLK_MOUT_G3AA			42
-> +#define CLK_MOUT_ITP			43
-> +#define CLK_MOUT_DNS_BUS		44
-> +#define CLK_MOUT_TNR_BUS		45
-> +#define CLK_MOUT_MCSC_ITSC		46
-> +#define CLK_MOUT_MCSC_MCSC		47
-> +#define CLK_MOUT_GDC_SCSC		48
-> +#define CLK_MOUT_GDC_GDC0		49
-> +#define CLK_MOUT_GDC_GDC1		50
-> +#define CLK_MOUT_MFC_MFC		51
-> +#define CLK_MOUT_MIF_SWITCH		52
-> +#define CLK_MOUT_MIF_BUS		53
-> +#define CLK_MOUT_MISC_BUS		54
-> +#define CLK_MOUT_MISC_SSS		55
-> +#define CLK_MOUT_PERIC0_IP		56
-> +#define CLK_MOUT_PERIC0_BUS		57
-> +#define CLK_MOUT_PERIC1_IP		58
-> +#define CLK_MOUT_PERIC1_BUS		59
-> +#define CLK_MOUT_TPU_TPU		60
-> +#define CLK_MOUT_TPU_TPUCTL		61
-> +#define CLK_MOUT_TPU_BUS		62
-> +#define CLK_MOUT_TPU_UART		63
-> +#define CLK_MOUT_TPU_HPM		64
-> +#define CLK_MOUT_BO_BUS			65
-> +#define CLK_MOUT_G3D_BUSD		66
-> +
-> +/* CMU_TOP Dividers*/
-> +#define CLK_DOUT_SHARED0_DIV3		67
-> +#define CLK_DOUT_SHARED0_DIV2		68
-> +#define CLK_DOUT_SHARED0_DIV4		69
-> +#define CLK_DOUT_SHARED0_DIV5		70
-> +#define CLK_DOUT_SHARED1_DIV3		71
-> +#define CLK_DOUT_SHARED1_DIV2		72
-> +#define CLK_DOUT_SHARED1_DIV4		73
-> +#define CLK_DOUT_SHARED2_DIV2		74
-> +#define CLK_DOUT_SHARED3_DIV2		75
-> +#define CLK_DOUT_BUS0_BUS		76
-> +#define CLK_DOUT_CMU_BOOST		77
-> +#define CLK_DOUT_BUS1_BUS		78
-> +#define CLK_DOUT_BUS2_BUS		79
-> +#define CLK_DOUT_CORE_BUS		80
-> +#define CLK_DOUT_EH_BUS			81
-> +#define CLK_DOUT_CPUCL2_SWITCH		82
-> +#define CLK_DOUT_CPUCL1_SWITCH		83
-> +#define CLK_DOUT_CPUCL0_SWITCH		84
-> +#define CLK_DOUT_CPUCL0_DBG		85
-> +#define CLK_DOUT_CMU_HPM		86
-> +#define CLK_DOUT_G3D_SWITCH		87
-> +#define CLK_DOUT_G3D_GLB		88
-> +#define CLK_DOUT_DPU_BUS		89
-> +#define CLK_DOUT_DISP_BUS		90
-> +#define CLK_DOUT_G2D_G2D		91
-> +#define CLK_DOUT_G2D_MSCL		92
-> +#define CLK_DOUT_HSI0_USB31DRD		93
-> +#define CLK_DOUT_HSI0_BUS		94
-> +#define CLK_DOUT_HSI0_DPGTC		95
-> +#define CLK_DOUT_HSI0_USBDPDGB		96
-> +#define CLK_DOUT_HSI1_BUS		97
-> +#define CLK_DOUT_HSI1_PCIE		98
-> +#define CLK_DOUT_HSI2_BUS		100
-> +#define CLK_DOUT_HSI2_PCIE		101
-> +#define CLK_DOUT_HSI2_UFS_EMBD		102
-> +#define CLK_DOUT_HSI2_MMC_CARD		103
-> +#define CLK_DOUT_CSIS			104
-> +#define CLK_DOUT_PDP_BUS		105
-> +#define CLK_DOUT_PDP_VRA		106
-> +#define CLK_DOUT_IPP_BUS		107
-> +#define CLK_DOUT_G3AA			108
-> +#define CLK_DOUT_ITP			109
-> +#define CLK_DOUT_DNS_BUS		110
-> +#define CLK_DOUT_TNR_BUS		111
-> +#define CLK_DOUT_MCSC_ITSC		112
-> +#define CLK_DOUT_MCSC_MCSC		113
-> +#define CLK_DOUT_GDC_SCSC		114
-> +#define CLK_DOUT_GDC_GDC0		115
-> +#define CLK_DOUT_GDC_GDC1		116
-> +#define CLK_DOUT_MFC_MFC		117
-> +#define CLK_DOUT_MIF_BUS		118
-> +#define CLK_DOUT_MISC_BUS		119
-> +#define CLK_DOUT_MISC_SSS		120
-> +#define CLK_DOUT_PERIC0_BUS		121
-> +#define CLK_DOUT_PERIC0_IP		122
-> +#define CLK_DOUT_PERIC1_BUS		123
-> +#define CLK_DOUT_PERIC1_IP		124
-> +#define CLK_DOUT_TPU_TPU		125
-> +#define CLK_DOUT_TPU_TPUCTL		126
-> +#define CLK_DOUT_TPU_BUS		127
-> +#define CLK_DOUT_TPU_UART		128
-> +#define CLK_DOUT_TPU_HPM		129
-> +#define CLK_DOUT_BO_BUS			130
-> +
-> +/* CMU_TOP Gates*/
-> +#define CLK_GOUT_BUS0_BUS		131
-> +#define CLK_GOUT_BUS1_BUS		132
-> +#define CLK_GOUT_BUS2_BUS		133
-> +#define CLK_GOUT_CORE_BUS		134
-> +#define CLK_GOUT_EH_BUS			135
-> +#define CLK_GOUT_CPUCL2_SWITCH		136
-> +#define CLK_GOUT_CPUCL1_SWITCH		137
-> +#define CLK_GOUT_CPUCL0_SWITCH		138
-> +#define CLK_GOUT_CPUCL0_DBG		139
-> +#define CLK_GOUT_CMU_HPM		140
-> +#define CLK_GOUT_G3D_SWITCH		141
-> +#define CLK_GOUT_G3D_GLB		142
-> +#define CLK_GOUT_DPU_BUS		143
-> +#define CLK_GOUT_DISP_BUS		144
-> +#define CLK_GOUT_G2D_G2D		145
-> +#define CLK_GOUT_G2D_MSCL		146
-> +#define CLK_GOUT_HSI0_USB31DRD		147
-> +#define CLK_GOUT_HSI0_BUS		148
-> +#define CLK_GOUT_HSI0_DPGTC		149
-> +#define CLK_GOUT_HSI0_USBDPDGB		150
-> +#define CLK_GOUT_HSI1_BUS		151
-> +#define CLK_GOUT_HSI1_PCIE		152
-> +#define CLK_GOUT_HSI2_BUS		153
-> +#define CLK_GOUT_HSI2_PCIE		154
-> +#define CLK_GOUT_HSI2_UFS_EMBD		155
-> +#define CLK_GOUT_HSI2_MMC_CARD		156
-> +#define CLK_GOUT_CSIS			157
-> +#define CLK_GOUT_PDP_BUS		158
-> +#define CLK_GOUT_PDP_VRA		159
-> +#define CLK_GOUT_IPP_BUS		160
-> +#define CLK_GOUT_G3AA			161
-> +#define CLK_GOUT_ITP			162
-> +#define CLK_GOUT_DNS_BUS		163
-> +#define CLK_GOUT_TNR_BUS		164
-> +#define CLK_GOUT_MCSC_ITSC		165
-> +#define CLK_GOUT_MCSC_MCSC		166
-> +#define CLK_GOUT_GDC_SCSC		167
-> +#define CLK_GOUT_GDC_GDC0		168
-> +#define CLK_GOUT_GDC_GDC1		169
-> +#define CLK_GOUT_MFC_MFC		170
-> +#define CLK_GOUT_MIF_SWITCH		171
-> +#define CLK_GOUT_MIF_BUS		172
-> +#define CLK_GOUT_MISC_BUS		173
-> +#define CLK_GOUT_MISC_SSS		174
-> +#define CLK_GOUT_PERIC0_BUS		175
-> +#define CLK_GOUT_PERIC0_IP		176
-> +#define CLK_GOUT_PERIC1_BUS		177
-> +#define CLK_GOUT_PERIC1_IP		178
-> +#define CLK_GOUT_TPU_TPU		179
-> +#define CLK_GOUT_TPU_TPUCTL		180
-> +#define CLK_GOUT_TPU_BUS		181
-> +#define CLK_GOUT_TPU_UART		182
-> +#define CLK_GOUT_TPU_HPM		183
-> +#define CLK_GOUT_BO_BUS			184
-> +#define CLK_GOUT_CMU_BOOST		185
-> +
-> +/* CMU_APM */
-> +
-> +#define CLK_MOUT_APM_FUNC					1
-> +#define CLK_MOUT_APM_FUNCSRC					2
-> +#define CLK_DOUT_APM_BOOST					3
-> +#define CLK_DOUT_APM_USI0_UART					4
-> +#define CLK_DOUT_APM_USI0_USI					5
-> +#define CLK_DOUT_APM_USI1_UART					6
-> +#define CLK_GOUT_APM_FUNC					7
-> +#define CLK_GOUT_APM_UID_APBIF_GPIO_ALIVE_IPCLKPORT_PCLK	8
-> +#define CLK_GOUT_APM_UID_APBIF_GPIO_FAR_ALIVE_IPCLKPORT_PCLK	9
-> +#define CLK_GOUT_APM_UID_APBIF_PMU_ALIVE_IPCLKPORT_PCLK		10
-> +#define CLK_GOUT_APM_UID_SYSREG_APM_IPCLKPORT_PCLK		11
-> +#define CLK_APM_PLL_DIV2_APM					12
-> +#define CLK_APM_PLL_DIV4_APM					13
-> +#define CLK_APM_PLL_DIV16_APM					14
-> +
-> +/* CMU_MISC */
-> +
-> +#define CLK_MOUT_MISC_BUS_USER					1
-> +#define CLK_MOUT_MISC_SSS_USER					2
-> +#define CLK_DOUT_MISC_BUSP					3
-> +#define CLK_DOUT_MISC_GIC					4
-> +#define CLK_GOUT_MISC_PCLK					5
-> +#define CLK_GOUT_MISC_SYSREG_PCLK				6
-> +#define CLK_GOUT_MISC_WDT_CLUSTER0				7
-> +#define CLK_GOUT_MISC_WDT_CLUSTER1				8
-> +
-> +#endif /* _DT_BINDINGS_CLOCK_GOOGLE_GS101_H */
+CONFIG_ARM_SCMI is already set in multi_v7_defconfig.
+CONFIG_RESET_CONTROLLER seems to be set in each platform Kconfig.
 
+So not sure we need to force CONFIG_RESET_SCMI in the multi_v7_defconfig.
+
+Regards
+Alex
