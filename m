@@ -4,61 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0FFAC61D97
-	for <soc@archiver.kernel.org>; Wed, 22 Nov 2023 19:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A396C61D97
+	for <soc@archiver.kernel.org>; Wed, 22 Nov 2023 19:15:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6A419C433C8; Wed, 22 Nov 2023 19:11:28 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	id E5427C433C9; Wed, 22 Nov 2023 19:15:06 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A60F5C433C7
-	for <soc@kernel.org>; Wed, 22 Nov 2023 19:11:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A60F5C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id E0BB7C433C8
+	for <soc@kernel.org>; Wed, 22 Nov 2023 19:15:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E0BB7C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40b31232bf0so684815e9.1
-        for <soc@kernel.org>; Wed, 22 Nov 2023 11:11:26 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5098e423ba2so63115e87.2
+        for <soc@kernel.org>; Wed, 22 Nov 2023 11:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700680285; x=1701285085; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rS0IeuQymTPunLEjIK3ignhoNL0mPtFkpErGaI1EAfM=;
-        b=f0Ln1ds2Q0Ogh0+HGaH1a6zUVkOHGkW75khP285tiFG9hD2XXyzF8tnYR6ItN6YZeF
-         CC6HFbm6txnhh/aSDG9JNxKoA4VfgvLZEWp2S5gVbLVDPhf6Cv1ihvTBI9YIt1SLqzPe
-         jOFq06Wiitz1c9S0w7DYEAaiJlTvllCmPOWP5W9N5205N5sHI6B7+g5H8LugT8bMb7wR
-         IzTOfpLRdOvxw2jQ/6FcYdjLilcpi1tmofNVldIIiqY2CP5VkALPJxthXvPk6S0MI9IA
-         oYfKe8HpzuWZ9Ryk1B6VzkTU8g89RfY4fL35LdZOjSRUPDl8WK0COfkWvmhQW1BSwv+Y
-         eURQ==
+        d=linaro.org; s=google; t=1700680504; x=1701285304; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1f84WpdM/CjxjwlNo95/tVsIuMsst5GZtDL6YED4Mjo=;
+        b=XUMd34yJYGIE2jOcfaBYsWpZZorRA4aRkiZkog1kalOXAJgowEnltG4aPZonTrMVS6
+         NptCazaXrYyFgm8w3BrLfRE6s18/3NHLHIOhDs2Jixz7PlZQjSXOsuYqruUhHVEaxSFl
+         qJThrUGqHfp6kOUSsPeNOxkfKAGIXneqk7QJUi9h35QJYbxlVr1YXDeQpUmK0Xe7Kikw
+         RTOrvamXV+0Ycl9ZNUUjN7GabtaL80tiSEUgI9tYPX+3F8Ji38RC9/IY0tW1DUzGvwNt
+         IXjfNnniyHIKuBhNnQlx9s9/8n2+yKPu6KKkJH+9fWELvp1QwvsEwVoAYHHVby7IO1tA
+         tdUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700680285; x=1701285085;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rS0IeuQymTPunLEjIK3ignhoNL0mPtFkpErGaI1EAfM=;
-        b=XGj0C8WgKUavYBS2IN0w++caM2TyCDcKmdLmD//8jo+QAr5QyHnjFbtUdupKb+kBGf
-         zOhM8niWCiMUpPSspRjiAbCYA1XmYPJ17BWwAYuQdY8qs3cx/c3x23VdNQx/rV9rTIlJ
-         qUDise/9BEsAqnalMLE7QpDlTBQOOr1P6ftEoFGISvPkL0j4/TwjDhnAqsbCN0mFB2Uy
-         wvj/JaT+5UEXrMY24Fga0zMOgz4c96v8j+Gng3pN7wMRnOUYx37q1mIG9iG2HF+qgTya
-         RNnbcR1Z5f8ijsG8kukvRVImbbYnU3ElvcbkOL3T2PlUx8r7RegxUqoMDVl5n6YclojK
-         8/gA==
-X-Gm-Message-State: AOJu0Yw5fxRR+o3A6T+7UELPjEuUP7D8dFqdkhaysAEseuO8AQ0BsjXH
-	3ItzHYj3RcHVAKe9gp1/Q3iY8Q==
-X-Google-Smtp-Source: AGHT+IESYOaIHBU6Qw/A8q5haZ+lQJXM4TMaa1eu5v2o7Pgh67SyojzHoOc1p/r3F+XRfAN4c+VwLQ==
-X-Received: by 2002:a05:600c:4ec8:b0:40b:26d9:2351 with SMTP id g8-20020a05600c4ec800b0040b26d92351mr1114997wmq.32.1700680284909;
-        Wed, 22 Nov 2023 11:11:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700680504; x=1701285304;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1f84WpdM/CjxjwlNo95/tVsIuMsst5GZtDL6YED4Mjo=;
+        b=tH7NZ/7gIwrg/fFtL8MfvHSQqrK5jOEPEbqRZW/fvzRIR5x1/SJH+5erjHmOCKOXoD
+         Hv6eaBwTehh39DW3V8fTt7PCnY/9Nwrx1v8rsntryAJJgwDeIjdzhJJDnvuQkJ/ZqpfR
+         xJn5co5yUkXzxgWp31jSVByIKZI4dHnLAbfM/6l60w018P8nIm2kgFY2UQW2ULn0yv8/
+         SW/vUDg1LF8oAXp2crTVuk8vJTvwDlG5Qs+xTS0WqwcZCLheQ6o2AgG82v3uosi3cDLs
+         oVWxdSG3YtXPHM9DqwTquC89b9ksUjgXkbDK5uaWcxR/qUzV9zhP4R9s1DL1RXL9F7FZ
+         6OfQ==
+X-Gm-Message-State: AOJu0Yxb98VArLoLEhsLtqRj4HpFXghzSq/TMLy9szJ8G1Qk0VPAGsYK
+	UrPRa0WZ7TH1gqkxNDAJN/Irig==
+X-Google-Smtp-Source: AGHT+IE5boTbHE+iPfZgyHgCfVrrZ1ZcsEDAON5unG7sQH/8wIEeyEeMZvULEKYtoUj00NoXjAvuxQ==
+X-Received: by 2002:ac2:5a11:0:b0:505:6cc7:e0f7 with SMTP id q17-20020ac25a11000000b005056cc7e0f7mr2063966lfn.44.1700680504111;
+        Wed, 22 Nov 2023 11:15:04 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.100])
-        by smtp.gmail.com with ESMTPSA id p34-20020a05600c1da200b00406408dc788sm335519wms.44.2023.11.22.11.11.22
+        by smtp.gmail.com with ESMTPSA id lt18-20020a170906fa9200b00a04431e5a44sm111730ejb.16.2023.11.22.11.15.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 11:11:24 -0800 (PST)
-Message-ID: <21d1996d-de03-40b5-a6ca-74203c775f76@linaro.org>
-Date: Wed, 22 Nov 2023 20:11:21 +0100
+        Wed, 22 Nov 2023 11:15:03 -0800 (PST)
+Message-ID: <e98577e9-88c1-4715-82ce-d3eb0ad3b156@linaro.org>
+Date: Wed, 22 Nov 2023 20:15:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 07/19] dt-bindings: pinctrl: samsung: add
  gs101-wakeup-eint compatible
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
  conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
@@ -76,7 +78,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-serial@vger.kernel.org
 References: <20231120212037.911774-1-peter.griffin@linaro.org>
  <20231120212037.911774-8-peter.griffin@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <21d1996d-de03-40b5-a6ca-74203c775f76@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -121,35 +123,40 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231120212037.911774-8-peter.griffin@linaro.org>
+In-Reply-To: <21d1996d-de03-40b5-a6ca-74203c775f76@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 20/11/2023 22:20, Peter Griffin wrote:
-> gs101 is similar to newer Exynos SoCs like Exynos850 and ExynosAutov9
-> where more than one pin controller can do external wake-up interrupt.
-> So add a dedicated compatible for it.
+On 22/11/2023 20:11, Krzysztof Kozlowski wrote:
+> On 20/11/2023 22:20, Peter Griffin wrote:
+>> gs101 is similar to newer Exynos SoCs like Exynos850 and ExynosAutov9
+>> where more than one pin controller can do external wake-up interrupt.
+>> So add a dedicated compatible for it.
+>>
+>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+>> ---
+>>  .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+>> index 1b75abebb953..41f3a2f2992e 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+>> @@ -30,6 +30,7 @@ properties:
+>>    compatible:
+>>      oneOf:
+>>        - enum:
+>> +          - google,gs101-wakeup-eint
+>>            - samsung,s3c2410-wakeup-eint
+>>            - samsung,s3c2412-wakeup-eint
+>>            - samsung,s3c64xx-wakeup-eint
 > 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-> index 1b75abebb953..41f3a2f2992e 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-> @@ -30,6 +30,7 @@ properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - google,gs101-wakeup-eint
->            - samsung,s3c2410-wakeup-eint
->            - samsung,s3c2412-wakeup-eint
->            - samsung,s3c64xx-wakeup-eint
+> This looks compatible with Exynos7. If true, then please add it to
+> proper items few lines below. This part changed ~2 weeks ago.
 
-This looks compatible with Exynos7. If true, then please add it to
-proper items few lines below. This part changed ~2 weeks ago.
+Ah, not entirely. Exynos7 still has multiplexed interrupts, but GS,
+Exynos850 and autov9 do not have, so the compatibility is a bit
+different. I'll send an idea.
 
 Best regards,
 Krzysztof
