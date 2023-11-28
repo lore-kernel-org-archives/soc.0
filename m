@@ -1,302 +1,198 @@
-Return-Path: <SRS0=tXOV=HJ=huawei.com=jonathan.cameron@kernel.org>
+Return-Path: <SRS0=lfpM=HJ=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CCE9C4167B
-	for <soc@archiver.kernel.org>; Tue, 28 Nov 2023 15:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7DD6C4167B
+	for <soc@archiver.kernel.org>; Tue, 28 Nov 2023 17:50:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E8263C433C9; Tue, 28 Nov 2023 15:45:10 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 74871C433CC; Tue, 28 Nov 2023 17:50:07 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4161AC433C8;
-	Tue, 28 Nov 2023 15:45:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4161AC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SfmvR3PBkz6K9FF;
-	Tue, 28 Nov 2023 23:43:31 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 256F114025A;
-	Tue, 28 Nov 2023 23:45:05 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 28 Nov
- 2023 15:44:48 +0000
-Date: Tue, 28 Nov 2023 15:44:48 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Huisong Li <lihuisong@huawei.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4CEEEC433C8
+	for <soc@kernel.org>; Tue, 28 Nov 2023 17:50:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4CEEEC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r82DD-0008Kh-R5; Tue, 28 Nov 2023 18:49:31 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r82DA-00CEE8-AI; Tue, 28 Nov 2023 18:49:28 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r82DA-00AItg-0H; Tue, 28 Nov 2023 18:49:28 +0100
+Date: Tue, 28 Nov 2023 18:49:27 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-CC: <xuwei5@hisilicon.com>, <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>, <krzk@kernel.org>,
-	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>
-Subject: Re: [PATCH v1 3/3] soc: hisilicon: kunpeng_hccs: Support the
- platform with PCC type3 and interrupt ack
-Message-ID: <20231128154448.00006b8f@Huawei.com>
-In-Reply-To: <20231109054526.27270-4-lihuisong@huawei.com>
-References: <20231109054526.27270-1-lihuisong@huawei.com>
-	<20231109054526.27270-4-lihuisong@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Tony Lindgren <tony@atomide.com>, Yuan Can <yuancan@huawei.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Rob Herring <robh@kernel.org>, Samuel Holland <samuel@sholland.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>, Chen-Yu Tsai <wens@csie.org>,
+	Andy Gross <agross@kernel.org>, linux-sunxi@lists.linux.dev,
+	Nick Alcock <nick.alcock@oracle.com>,
+	Yangtao Li <frank.li@vivo.com>, Liu Ying <victor.liu@nxp.com>,
+	linux-arm-msm@vger.kernel.org, Jay Fang <f.fangjian@huawei.com>,
+	Hans de Goede <hdegoede@redhat.com>, linux-tegra@vger.kernel.org,
+	Linux-OMAP <linux-omap@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+	"Sicelo A. Mhlongo" <absicsz@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PULL v2] bus: Convert to platform remove callback returning void
+Message-ID: <20231128174927.m46dgp4juig2omci@pengutronix.de>
+References: <20231109202830.4124591-1-u.kleine-koenig@pengutronix.de>
+ <1e5e1008-707b-449a-9dbf-48324eb2b248@app.fastmail.com>
+ <20231116115307.32rovgcej2s5pe4r@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-
-On Thu, 9 Nov 2023 13:45:26 +0800
-Huisong Li <lihuisong@huawei.com> wrote:
-
-> Support the platform with PCC type3 and interrupt ack.
-Probably mention this is version 2 as that's what you call it
-in the code.
-> 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-
-Hi.
-
-Main comment in here is that it is almost always better to use
-a version specific structure with callbacks / data etc rather than
-have instances of if (version1) do_x; else if (version2) do_y;
-
-It ends up pulling all the differences into one place + allows a
-great deal more flexibility.  See inline for details.
-
-Otherwise looks fine to me
-
-Jonathan
-
-> ---
->  drivers/soc/hisilicon/kunpeng_hccs.c | 137 +++++++++++++++++++++------
->  drivers/soc/hisilicon/kunpeng_hccs.h |   2 +
->  2 files changed, 110 insertions(+), 29 deletions(-)
-> 
-> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-> index fd3ca0eb8175..96cdac7be244 100644
-> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
-> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-> @@ -38,6 +38,11 @@
-...
-
->  
-> +static int hccs_get_device_version(struct hccs_dev *hdev)
-> +{
-> +	const struct acpi_device_id *acpi_id;
-> +
-> +	acpi_id = acpi_match_device(hdev->dev->driver->acpi_match_table,
-> +				    hdev->dev);
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="53zsv2odqs745utj"
+Content-Disposition: inline
+In-Reply-To: <20231116115307.32rovgcej2s5pe4r@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
 
-Why not just have
-hdev->dev_ver = (u8)acpi_device_get_match_data(&hdev->dev);
-inline where this is called?
+--53zsv2odqs745utj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-You probably don't even need the error check as you can't get here
-without an appropriate match as the driver would never be matched.
+Hello Arnd,
 
-> +	if (!acpi_id) {
-> +		dev_err(hdev->dev, "get device version failed.");
-> +		return -EINVAL;
-> +	}
-> +
-> +	hdev->dev_ver = (u8)acpi_id->driver_data;
-> +	return 0;
-> +}
-> +
+On Thu, Nov 16, 2023 at 12:53:07PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Fri, Nov 10, 2023 at 07:32:01AM +0100, Arnd Bergmann wrote:
+> > On Thu, Nov 9, 2023, at 21:28, Uwe Kleine-K=F6nig wrote:
+> > > this series converts all drivers below drivers/bus to struct
+> > > platform_driver::remove_new(). See commit 5c5a7680e67b ("platform:
+> > > Provide a remove callback that returns no value") for an extended
+> > > explanation and the eventual goal.
+> > >
+> > > drivers/bus/fsl-mc was already addressed earlier with a separate
+> > > series[1].
+> > >
+> > > All conversations are trivial, because all .remove() callbacks return=
+ed
+> > > zero unconditionally.
+> > >
+> > > Some of the drivers touched here don't have a maintainer and there is=
+ no
+> > > maintainer for all of drivers/bus. It would be great if someone could=
+ pick up
+> > > the whole series, maybe Arnd might do that?
+> >=20
+> > Sure, please send a pull request to soc@kernel.org if there
+> > are no further comments.
+>=20
+> here it comes:
+>=20
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa=
+86:
+>=20
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-...
+Here comes an updated PR. The only change is that it also includes two
+Reviewed-by tags for Jernej Skrabec that came in after I sent the PR.
+Obviously that changed the commit hash which made it necessary to redo
+the PR. I hope it doesn't disturb your tooling that there are now two
+similar pull requests.
 
->  static void hccs_unregister_pcc_channel(struct hccs_dev *hdev)
->  {
->  	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
-> @@ -131,6 +159,11 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
->  	cl->tx_block = false;
->  	cl->knows_txdone = true;
->  	cl->tx_done = hccs_chan_tx_done;
-> +	if (hdev->dev_ver == HCCS_HW_DEVICE_V2) {
+Best regards
+Uwe
 
-I'd prefer to see this done as data. That is, instead of having an enum
-used in the ACPI match data, have a pointer to a struct with the callback.
-Then this will become something like
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
-	hcc_info = acpi_device_get_match_data(hdev);
-	cl->rx_callback = hcc_info->rx_callback;
-	init_completion(&cl_info->done);
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-Initializing the completion is harmless if it's not used, so just do it
-unconditionally.
+are available in the Git repository at:
 
-> +		cl->rx_callback = hccs_pcc_rx_callback;
-> +		init_completion(&cl_info->done);
-> +	}
-> +
->  	pcc_chan = pcc_mbox_request_channel(cl, hdev->chan_id);
->  	if (IS_ERR(pcc_chan)) {
->  		dev_err(dev, "PPC channel request failed.\n");
-> @@ -147,10 +180,16 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
->  	 */
->  	cl_info->deadline_us =
->  			HCCS_PCC_CMD_WAIT_RETRIES_NUM * pcc_chan->latency;
-> -	if (cl_info->mbox_chan->mbox->txdone_irq) {
-> +	if (hdev->dev_ver == HCCS_HW_DEVICE_V1 &&
-> +	    cl_info->mbox_chan->mbox->txdone_irq) {
+  https://git.pengutronix.de/git/ukl/linux tags/bus-platform-remove-void
 
-Also data in hcc_info would be better than version number based
-code flow.
-	if (hcc_info->has_txdone_irq &&
-	    cl_info->mbox_chan->mbox->rx_done_irq) {
-	....
-	} else if (!hcc_info->has_txdone_irq &&
-		   !cl_info->mbox_chan->mbox->tx_done_irq) {
-	...
-	}
->  		dev_err(dev, "PCC IRQ in PCCT is enabled.\n");
->  		rc = -EINVAL;
->  		goto err_mbx_channel_free;
-> +	} else if (hdev->dev_ver == HCCS_HW_DEVICE_V2 &&
-> +		   !cl_info->mbox_chan->mbox->txdone_irq) {
-> +		dev_err(dev, "PCC IRQ in PCCT isn't supported.\n");
-> +		rc = -EINVAL;
-> +		goto err_mbx_channel_free;
->  	}
->  
->  	if (pcc_chan->shmem_base_addr) {
-> @@ -175,49 +214,81 @@ static int hccs_register_pcc_channel(struct hccs_dev *hdev)
->  static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
->  {
->  	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
-> -	struct acpi_pcct_shared_memory __iomem *comm_base =
-> -							cl_info->pcc_comm_addr;
-> +	struct acpi_pcct_shared_memory __iomem *comm_base;
-> +	int ret = 0;
->  	u16 status;
-> -	int ret;
->  
->  	/*
->  	 * Poll PCC status register every 3us(delay_us) for maximum of
->  	 * deadline_us(timeout_us) until PCC command complete bit is set(cond)
->  	 */
-> -	ret = readw_poll_timeout(&comm_base->status, status,
-> -				 status & PCC_STATUS_CMD_COMPLETE,
-> -				 HCCS_POLL_STATUS_TIME_INTERVAL_US,
-> -				 cl_info->deadline_us);
-> -	if (unlikely(ret))
-> -		dev_err(hdev->dev, "poll PCC status failed, ret = %d.\n", ret);
-> +	if (hdev->dev_ver == HCCS_HW_DEVICE_V1) {
+for you to fetch changes up to fc540426f7baa0c7d4b477e80435d075659092a2:
 
-As above. I'd prefer to see this as a call back in an info structure rather
-than code here.
+  bus: ts-nbus: Convert to platform remove callback returning void (2023-11=
+-28 18:43:27 +0100)
 
-> +		comm_base = cl_info->pcc_comm_addr;
-> +		ret = readw_poll_timeout(&comm_base->status, status,
-> +					status & PCC_STATUS_CMD_COMPLETE,
-> +					HCCS_POLL_STATUS_TIME_INTERVAL_US,
-> +					cl_info->deadline_us);
-> +		if (unlikely(ret))
-> +			dev_err(hdev->dev, "poll PCC status failed, ret = %d.\n", ret);
-> +	} else {
-> +		if (!wait_for_completion_timeout(&cl_info->done,
-> +				usecs_to_jiffies(cl_info->deadline_us))) {
-> +			dev_err(hdev->dev, "PCC command executed timeout!\n");
-> +			ret = -ETIMEDOUT;
-> +		}
-> +	}
->  
->  	return ret;
->  }
->  
-> +static void hccs_fill_pcc_shared_mem_region(struct hccs_dev *hdev, u8 cmd,
-> +					    struct hccs_desc *desc,
-> +					    void __iomem *comm_space,
-> +					    u16 space_size)
-> +{
-> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
-> +	struct acpi_pcct_ext_pcc_shared_memory tmp1 = {0};
-> +	struct acpi_pcct_shared_memory tmp2 = {0};
-> +
-> +	if (hdev->dev_ver == HCCS_HW_DEVICE_V1) {
-1) tmp1 and temp2 are local to the two forks of this statement
-so pull them down here.
-2) Use c99 style struct init to make this cleaner.
-		struct acpi_pcct_shared_memory = {
-			.signature = x,
-			.command = cmd,
-		};
+----------------------------------------------------------------
+This series converts all drivers below drivers/bus to struct
+platform_driver::remove_new(). See commit 5c5a7680e67b ("platform:
+Provide a remove callback that returns no value") for an extended
+explanation and the eventual goal.
 
-I'd also like this to be a callback in the version specific info
-structure rather than done as an if / else here that really doesn't
-extend well if we get a lot more versions doing it differently.
+After the initial simplification in commit 864acca58000 ("bus: fsl-mc:
+Drop if block with always false condition") all conversations are
+trivial because the remove callbacks all return zero unconditionally.
 
-> +		tmp2.signature = PCC_SIGNATURE | hdev->chan_id;
-> +		tmp2.command = cmd;
-> +		tmp2.status = 0;
-> +		memcpy_toio(cl_info->pcc_comm_addr, (void *)&tmp2,
-> +			    sizeof(struct acpi_pcct_shared_memory));
-> +	} else {
-> +		tmp1.signature = PCC_SIGNATURE | hdev->chan_id;
-> +		tmp1.command = cmd;
-> +		tmp1.flags = PCC_CMD_COMPLETION_NOTIFY;
-> +		tmp1.length = HCCS_PCC_SHARE_MEM_BYTES;
-> +		memcpy_toio(cl_info->pcc_comm_addr, (void *)&tmp1,
-> +			    sizeof(struct acpi_pcct_ext_pcc_shared_memory));
-> +	}
-> +
-> +	/* Copy the message to the PCC comm space */
-> +	memcpy_toio(comm_space, (void *)desc, space_size);
-> +}
-...
+----------------------------------------------------------------
+Uwe Kleine-K=F6nig (14):
+      bus: fsl-mc: Drop if block with always false condition
+      bus: fsl-mc: Convert to platform remove callback returning void
+      bus: hisi_lpc: Convert to platform remove callback returning void
+      bus: omap-ocp2scp: Convert to platform remove callback returning void
+      bus: omap_l3_smx: Convert to platform remove callback returning void
+      bus: qcom-ssc-block-bus: Convert to platform remove callback returnin=
+g void
+      bus: simple-pm-bus: Convert to platform remove callback returning void
+      bus: sun50i-de2: Convert to platform remove callback returning void
+      bus: sunxi-rsb: Convert to platform remove callback returning void
+      bus: tegra-aconnect: Convert to platform remove callback returning vo=
+id
+      bus: tegra-gmi: Convert to platform remove callback returning void
+      bus: ti-pwmss: Convert to platform remove callback returning void
+      bus: ti-sysc: Convert to platform remove callback returning void
+      bus: ts-nbus: Convert to platform remove callback returning void
+
+ drivers/bus/fsl-mc/fsl-mc-bus.c  | 16 +++-------------
+ drivers/bus/hisi_lpc.c           |  6 ++----
+ drivers/bus/omap-ocp2scp.c       |  6 ++----
+ drivers/bus/omap_l3_smx.c        |  6 ++----
+ drivers/bus/qcom-ssc-block-bus.c |  6 ++----
+ drivers/bus/simple-pm-bus.c      |  7 +++----
+ drivers/bus/sun50i-de2.c         |  5 ++---
+ drivers/bus/sunxi-rsb.c          |  6 ++----
+ drivers/bus/tegra-aconnect.c     |  6 ++----
+ drivers/bus/tegra-gmi.c          |  6 ++----
+ drivers/bus/ti-pwmss.c           |  5 ++---
+ drivers/bus/ti-sysc.c            |  6 ++----
+ drivers/bus/ts-nbus.c            |  6 ++----
+ 13 files changed, 28 insertions(+), 59 deletions(-)
 
 
-> @@ -1214,6 +1288,10 @@ static int hccs_probe(struct platform_device *pdev)
->  	hdev->dev = &pdev->dev;
->  	platform_set_drvdata(pdev, hdev);
->  
-> +	rc = hccs_get_device_version(hdev);
-> +	if (rc)
-> +		return rc;
-> +
->  	mutex_init(&hdev->lock);
->  	rc = hccs_get_pcc_chan_id(hdev);
->  	if (rc)
-> @@ -1251,7 +1329,8 @@ static void hccs_remove(struct platform_device *pdev)
->  }
->  
->  static const struct acpi_device_id hccs_acpi_match[] = {
-> -	{ "HISI04B1"},
-> +	{ "HISI04B1", HCCS_HW_DEVICE_V1},
-> +	{ "HISI04B2", HCCS_HW_DEVICE_V2},
->  	{ ""},
-Side comment, but 
-	{}
-So no content (rely on c initializing it to be zero filled anyway and no comma
-as we don't want anything after this point.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
->  };
->  MODULE_DEVICE_TABLE(acpi, hccs_acpi_match);
-> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.h b/drivers/soc/hisilicon/kunpeng_hccs.h
-> index 6012d2776028..bbb1aada0c6c 100644
-> --- a/drivers/soc/hisilicon/kunpeng_hccs.h
-> +++ b/drivers/soc/hisilicon/kunpeng_hccs.h
-> @@ -51,12 +51,14 @@ struct hccs_mbox_client_info {
->  	struct pcc_mbox_chan *pcc_chan;
->  	u64 deadline_us;
->  	void __iomem *pcc_comm_addr;
-> +	struct completion done;
->  };
->  
->  struct hccs_dev {
->  	struct device *dev;
->  	struct acpi_device *acpi_dev;
->  	u64 caps;
-> +	u8 dev_ver;
-See above, but I'd rather see
-	const struct hcc_verspecific_info *info;
-here that encodes the differences as callbacks and data and rather than code.
->  	u8 chip_num;
->  	struct hccs_chip_info *chips;
->  	u8 chan_id;
+--53zsv2odqs745utj
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVmKCcACgkQj4D7WH0S
+/k66uAf+KEj6yCYL/fZUMESxp+ruHd0CIqqyeqoXs8QJkSZpBYf6q/1nJvHP8UV8
+uwqqXDJ+/qN0XvfzFFY8sBUbw8aZhyPKUsrdXsauHjCYGMwjVDB2fWrmchk8J2cN
+6yS1cKfZjexAhBrZm/02p1b6zTV6AMj3HYKEmTsFmZ3G9FcANo/zOro3prS0M4W6
+79xe6KqnjNr0MCIHeBnnig/94vz408lqk+ebBS25Fy7JIkfsNTGrntTrQ/zbyQ/T
+Oaegx6m+33HBtpLeK/L+dOLBzdSblKXZpSbbKD1NVT1q0aDcfnlXU8CHp080y0u/
+Ppx52VMZg3hOXuwZtKcIZA1COE/NyA==
+=jxQg
+-----END PGP SIGNATURE-----
+
+--53zsv2odqs745utj--
