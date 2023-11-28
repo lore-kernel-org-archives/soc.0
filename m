@@ -4,68 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD3C7C4167B
-	for <soc@archiver.kernel.org>; Tue, 28 Nov 2023 07:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28674C4167B
+	for <soc@archiver.kernel.org>; Tue, 28 Nov 2023 08:58:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A51F5C433CA; Tue, 28 Nov 2023 07:39:01 +0000 (UTC)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	id E7EBEC433CC; Tue, 28 Nov 2023 08:58:58 +0000 (UTC)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9B9A1C433C8
-	for <soc@kernel.org>; Tue, 28 Nov 2023 07:39:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9B9A1C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 18896C433C7
+	for <soc@kernel.org>; Tue, 28 Nov 2023 08:58:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 18896C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-54af2498e85so5290223a12.0
-        for <soc@kernel.org>; Mon, 27 Nov 2023 23:39:00 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5482df11e73so6777117a12.0
+        for <soc@kernel.org>; Tue, 28 Nov 2023 00:58:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701157139; x=1701761939; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1701161935; x=1701766735; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1xpWhdI1Pe1089vUOdBI66mS/Wx9VBdLigp8n4bIcBQ=;
-        b=hH2Q2tMuKlUWDUKOPJ4PWyA5Xs3H1ETfQeA+Vj2E7iGUYxPBqzCOTcMeh17kXBfBfu
-         Gm7ahjOjjMg+AAE6LtdwnOeqhn/cMgTXMKq595KbnMAbhkFPb/gE75uAmTPZRR/Izk8e
-         CrpTWTPPmUOMi0dT81icQT9PxbQhBHJ0A0lQAhRZYQtjthWGhp/vXI4uMkiIZ66C/eFa
-         lTx5A3U3pCVEdXVg6URfXKVrYT4TvEO4oADtXf0C7EhBAHNj3t8D7WS9IG8P8YWmWs47
-         3zHDeGimyaK0DxVBkJaX8UIfAit6V4oZ9gkvEZUJQz6ivO0iHWui9by+5tB8U9akHKws
-         MlKQ==
+        bh=UGpYHJ/5KU9x0FpSQk/2EgeAQ9Rghpf69obPvi4FEEU=;
+        b=FLqigoeN2cubx+k6AWlELjoU842Mi5XjrztC3mJEtZhfamz4qMul85+cPXrRRzCUfg
+         4UmYY3g4e19+z+PsrcPxMMaf7NJR7HgG+gXQsWBn2lq54WvGV7L70ONpFVz8eUcwU8iC
+         syRaqIaagveuK0VEA7lb9iG3nB1QhaPIuFkT/1w9SMnR2QMF3N5afTxfEYUuZAfQMvWk
+         7ztqwa1UDjM/V8oGeFWXHuNubGBpe1JhwTosfga63xjx3LlMDE6P/I3BoM+GP6txAu4N
+         51Z5LHDMiozh1UyOWDFczzSOkopczzYdsvogS7wsZFCAhLR+2JN4RIGO8xS5F3bJH+LR
+         W95Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701157139; x=1701761939;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1701161935; x=1701766735;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1xpWhdI1Pe1089vUOdBI66mS/Wx9VBdLigp8n4bIcBQ=;
-        b=jzhB2tR9uW9yTCfCiDl3PJG9R5qRhYzqCsyKdr+CWYjBRf8bjhSSpC0E+voBh48B2e
-         wJd64vBaiYpSK1lMACKcWZ/Dc+6Q7P0M8FS6M5MP7qNMooHwIXFEVbMxhb/5q66zuKJS
-         SM9aVu7Gg0uSiMYuZgPlvNJDVf92hL2GWaT+74L/qL/8nbCaHMv2peSJ6BshKk2NWS5w
-         dpQMCDlNODb7mGhGyD/L7qxv/YuDuUHMFZBleXSoCUAfyMoPVhuV5V0tsvV/fMNoRL1S
-         O9BeVGc2sqM6N5DzCtpPrWRIphOyAXJRG0lgHzfAFftT/uvJDZuJKjyMRxmJQtA3SJgf
-         1pkQ==
-X-Gm-Message-State: AOJu0Yyc9D7KmDkrCfBz/rTHo2LO+RbU10ub8CSDYW9mBCwhya1udArZ
-	RaNKKKsr7tjnub1/U4aWzd4KVQ==
-X-Google-Smtp-Source: AGHT+IEwCF3lvSZOgwGHlaziA4rCYoZBAn4V2HpUvlGg0w80wo/sXoP1wZ9X/0DJ/QkOxdcCvkCvJQ==
-X-Received: by 2002:a17:906:7c4d:b0:9fa:ca0c:ac42 with SMTP id g13-20020a1709067c4d00b009faca0cac42mr10896090ejp.64.1701157138796;
-        Mon, 27 Nov 2023 23:38:58 -0800 (PST)
+        bh=UGpYHJ/5KU9x0FpSQk/2EgeAQ9Rghpf69obPvi4FEEU=;
+        b=rgfgB23pko5hBpIJZkBf2anc0VULTY/o0u387ZJU2b1icRnYLbZevqbkse/PdGn8DM
+         xRm6MwJZekbDc5ffXDJ8ZiBTXa/id77yrOKCLhkHP2na1nKXgrIDUJzm9Hp3zAf79XCJ
+         7FCCjMk8/cjx3Jd/M6M5iVKA4joaeESqZmP/beMQY4OrEDwHtG7iiBjDFxBpqeb7j9Dw
+         WwfmqxiC6wrQPy2LCjOOOO+XErRo1mzrHpA+Dp6SHVOWnD6OX9VfB+wOgvsi32NHchnK
+         0LZioB6I4wUcZnybPJBr4oDwJWZl6QJAp5z2xAlK1QQRNopdIrKzeEepEGqv1h3lsJFS
+         z9iw==
+X-Gm-Message-State: AOJu0YxpaHm2JPSeIW4yqRKUUiEC/ElfQC29pyPV9YSdlG+Zb4tsNxtT
+	EmZdTsw4tbncHWZm6KKWi3k/Qw==
+X-Google-Smtp-Source: AGHT+IEgIsNU+8Ga6PP5Ysj5x1L7yrm45es5mMmhnSW4AxcFkCQuqBZ1rC+ew3qIYRmtnJ4t+2BItw==
+X-Received: by 2002:a50:9312:0:b0:53e:3b8f:8a58 with SMTP id m18-20020a509312000000b0053e3b8f8a58mr11821123eda.11.1701161935368;
+        Tue, 28 Nov 2023 00:58:55 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id q23-20020a17090676d700b00a017da998bdsm6473249ejn.32.2023.11.27.23.38.57
+        by smtp.gmail.com with ESMTPSA id bt16-20020a0564020a5000b00548e4c5220csm6113884edb.26.2023.11.28.00.58.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 23:38:58 -0800 (PST)
-Message-ID: <c9f8c072-de00-4f4a-b675-b42a5cbd4922@linaro.org>
-Date: Tue, 28 Nov 2023 08:38:56 +0100
+        Tue, 28 Nov 2023 00:58:54 -0800 (PST)
+Message-ID: <f23ff6a1-0130-45a4-809c-efa82c1e3c6c@linaro.org>
+Date: Tue, 28 Nov 2023 09:58:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] ARM: dts: aspeed: asrock: Add ASRock X570D4U BMC
+Subject: Re: [PATCH v3 17/20] arm64: dts: google: Add initial Google gs101 SoC
+ support
 Content-Language: en-US
+To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Renze Nicolai <renze@rnplus.nl>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-aspeed@lists.ozlabs.org, arnd@arndb.de, olof@lixom.net,
- soc@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- joel@jms.id.au, andrew@aj.id.au
-References: <20231128013136.2699317-1-renze@rnplus.nl>
- <20231128013136.2699317-3-renze@rnplus.nl>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+ tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org,
+ wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
+ cw00.choi@samsung.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+ semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
+ soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, kernel-team@android.com,
+ linux-serial@vger.kernel.org
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-18-peter.griffin@linaro.org>
+ <33fe3e2e-9d09-42ee-9472-25d3be09baf4@linaro.org>
+ <CADrjBPrh19YzB45hM4xaELn67uf3iBQo++T-8+2Uenq6-fDzKg@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -111,103 +122,27 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231128013136.2699317-3-renze@rnplus.nl>
+In-Reply-To: <CADrjBPrh19YzB45hM4xaELn67uf3iBQo++T-8+2Uenq6-fDzKg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/11/2023 02:30, Renze Nicolai wrote:
-> This is a relatively low-cost AST2500-based Amd Ryzen 5000 Series
-> micro-ATX board that we hope can provide a decent platform for OpenBMC
-> development.
+On 25/11/2023 00:22, Peter Griffin wrote:
+>>> +
+>>> +     /* bootloader requires ect node */
+>>> +     ect {
+>>
+>> This needs bindings.
 > 
-> This initial device-tree provides the necessary configuration for
-> basic BMC functionality such as serial console, KVM support
-> and POST code snooping.
+> I experimented a bit more and the minimum I need is an empty dt node
+> called ect, otherwise the bootloader will boot loop and we can't boot
+> the kernel
+> [   2.977870] [E] [BOOT] fdt /ect path not found -1
 > 
-> Signed-off-by: Renze Nicolai <renze@rnplus.nl>
-> ---
->  arch/arm/boot/dts/aspeed/Makefile             |   1 +
->  .../dts/aspeed/aspeed-bmc-asrock-x570d4u.dts  | 344 ++++++++++++++++++
->  2 files changed, 345 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
-> 
-> diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
-> index d3ac20e316d0..2205bd079d0c 100644
-> --- a/arch/arm/boot/dts/aspeed/Makefile
-> +++ b/arch/arm/boot/dts/aspeed/Makefile
-> @@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-bmc-arm-stardragon4800-rep2.dtb \
->  	aspeed-bmc-asrock-e3c246d4i.dtb \
->  	aspeed-bmc-asrock-romed8hm3.dtb \
-> +	aspeed-bmc-asrock-x570d4u.dtb \
->  	aspeed-bmc-bytedance-g220a.dtb \
->  	aspeed-bmc-delta-ahe50dc.dtb \
->  	aspeed-bmc-facebook-bletchley.dtb \
-> diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
-> new file mode 100644
-> index 000000000000..9fb1d76abacb
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
-> @@ -0,0 +1,344 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/dts-v1/;
-> +#include "aspeed-g5.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +
-> +/ {
-> +	model = "Asrock Rack X570D4U BMC";
-> +	compatible = "asrock,x570d4u-bmc";
-> +
-> +	chosen {
-> +			stdout-path = &uart5;
-> +			bootargs = "console=ttyS4,115200 earlycon";
+> Apart from a comment indicating that the bootloader requires this
+> empty ect dt node, what other bindings documentation would you like to
+> see? Something in google.yaml?
 
-Drop console. stdout-path defines the console and earlycon is for debugging.
-
-> +	};
-> +
-> +	memory@80000000 {
-> +			reg = <0x80000000 0x20000000>;
-
-You have messed up indentation everywhere.
-
-> +	};
-> +
-> +	reserved-memory {
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			pci_memory: region@9A000000 {
-> +				no-map;
-> +				reg = <0x9A000000 0x00010000>; /* 64K */
-> +			};
-> +
-> +			video_engine_memory: jpegbuffer {
-> +				size = <0x02800000>;	/* 40M */
-> +				alignment = <0x01000000>;
-> +				compatible = "shared-dma-pool";
-> +				reusable;
-> +			};
-> +
-> +			gfx_memory: framebuffer {
-> +				size = <0x01000000>;
-> +				alignment = <0x01000000>;
-> +				compatible = "shared-dma-pool";
-> +				reusable;
-> +			};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		heartbeat {
-
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check W=1` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
+Yes, it would be enough.
 
 
 Best regards,
