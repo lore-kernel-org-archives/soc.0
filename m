@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C3B6C4167B
-	for <soc@archiver.kernel.org>; Thu, 30 Nov 2023 14:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AFA3C10DAA
+	for <soc@archiver.kernel.org>; Thu, 30 Nov 2023 14:49:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 126A6C433C7; Thu, 30 Nov 2023 14:43:03 +0000 (UTC)
+	id 1F2F8C433CB; Thu, 30 Nov 2023 14:49:18 +0000 (UTC)
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 54284C433C8;
-	Thu, 30 Nov 2023 14:42:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 54284C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id D2C88C433C8;
+	Thu, 30 Nov 2023 14:49:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2C88C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SgzQf5chBz6D9Cn;
-	Thu, 30 Nov 2023 22:41:14 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SgzVV4rgKz6H80S;
+	Thu, 30 Nov 2023 22:44:34 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4F4581404F6;
-	Thu, 30 Nov 2023 22:42:51 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 379AB140C98;
+	Thu, 30 Nov 2023 22:49:13 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 30 Nov
- 2023 14:42:50 +0000
-Date: Thu, 30 Nov 2023 14:42:48 +0000
+ 2023 14:49:12 +0000
+Date: Thu, 30 Nov 2023 14:49:11 +0000
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: Huisong Li <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
 CC: <xuwei5@hisilicon.com>, <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>, <krzk@kernel.org>,
 	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>
-Subject: Re: [PATCH v2 3/4] soc: hisilicon: kunpeng_hccs: remove an unused
- blank line
-Message-ID: <20231130144248.00006d0f@Huawei.com>
-In-Reply-To: <20231130134550.33398-4-lihuisong@huawei.com>
+Subject: Re: [PATCH v2 4/4] soc: hisilicon: kunpeng_hccs: Support the
+ platform with PCC type3 and interrupt ack
+Message-ID: <20231130144911.00005faf@Huawei.com>
+In-Reply-To: <20231130134550.33398-5-lihuisong@huawei.com>
 References: <20231109054526.27270-1-lihuisong@huawei.com>
 	<20231130134550.33398-1-lihuisong@huawei.com>
-	<20231130134550.33398-4-lihuisong@huawei.com>
+	<20231130134550.33398-5-lihuisong@huawei.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
@@ -49,29 +49,86 @@ X-Originating-IP: [10.202.227.76]
 X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, 30 Nov 2023 21:45:49 +0800
+On Thu, 30 Nov 2023 21:45:50 +0800
 Huisong Li <lihuisong@huawei.com> wrote:
 
-> Remove an unused blank line.
+> Support the platform with PCC type3 and interrupt ack. And a version
+> specific structure is introduced to handle the difference between the
+> device in the code.
 > 
 > Signed-off-by: Huisong Li <lihuisong@huawei.com>
-FWIW
+
+Hi.
+
+A few trivial things inline but now looks good to me!
+
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 > ---
->  drivers/soc/hisilicon/kunpeng_hccs.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/soc/hisilicon/kunpeng_hccs.c | 136 ++++++++++++++++++++++-----
+>  drivers/soc/hisilicon/kunpeng_hccs.h |  15 +++
+>  2 files changed, 126 insertions(+), 25 deletions(-)
 > 
 > diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-> index fd3ca0eb8175..15125f1e0f3e 100644
+> index 15125f1e0f3e..d2302ff8c0e9 100644
 > --- a/drivers/soc/hisilicon/kunpeng_hccs.c
 > +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-> @@ -529,7 +529,6 @@ static int hccs_get_all_port_info_on_die(struct hccs_dev *hdev,
+
+...
+
 >  
->  static int hccs_query_all_port_info_on_platform(struct hccs_dev *hdev)
+> -static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
+> +static inline int hccs_wait_cmd_complete_by_poll(struct hccs_dev *hdev)
+
+Why inline?  Do we have numbers to support this hint to the compiler being
+useful?
+
 >  {
-> -
->  	struct device *dev = hdev->dev;
->  	struct hccs_chip_info *chip;
->  	struct hccs_die_info *die;
+>  	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>  	struct acpi_pcct_shared_memory __iomem *comm_base =
+> @@ -194,30 +211,75 @@ static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
+>  	return ret;
+>  }
+>  
+> +static inline int hccs_wait_cmd_complete_by_irq(struct hccs_dev *hdev)
+> +{
+> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+> +	int ret = 0;
+
+Drop ret...
+
+> +
+> +	if (!wait_for_completion_timeout(&cl_info->done,
+> +			usecs_to_jiffies(cl_info->deadline_us))) {
+> +		dev_err(hdev->dev, "PCC command executed timeout!\n");
+> +		ret = -ETIMEDOUT;
+		return -TIMEDOUT;
+...
+> +	}
+> +
+> +	return ret;
+return 0;
+
+> +}
+
+> +static const struct hccs_verspecific_data hisi04b1_verspec_data = {
+> +	.rx_callback = NULL,
+
+It's harmless but no need to set callback to NULL. Maybe it acts as documentation?
+It's common practice to just let C spec guarantees initialize any not implemented callbacks
+to 0 without them needing to be done explicitly.
+
+> +	.wait_cmd_complete = hccs_wait_cmd_complete_by_poll,
+> +	.fill_pcc_shared_mem = hccs_fill_pcc_shared_mem_region,
+> +	.shared_mem_size = sizeof(struct acpi_pcct_shared_memory),
+> +	.has_txdone_irq = false,
+> +};
+> +
+> +static const struct hccs_verspecific_data hisi04b2_verspec_data = {
+> +	.rx_callback = hccs_pcc_rx_callback,
+> +	.wait_cmd_complete = hccs_wait_cmd_complete_by_irq,
+> +	.fill_pcc_shared_mem = hccs_fill_ext_pcc_shared_mem_region,
+> +	.shared_mem_size = sizeof(struct acpi_pcct_ext_pcc_shared_memory),
+> +	.has_txdone_irq = true,
+> +};
 
