@@ -1,62 +1,219 @@
-Return-Path: <SRS0=wqEb=HM=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=Tcbz=HM=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F45DC4167B
-	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 07:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F23AC4167B
+	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 12:01:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 21F54C433C9; Fri,  1 Dec 2023 07:06:12 +0000 (UTC)
-Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 4352DC433C7; Fri,  1 Dec 2023 12:01:33 +0000 (UTC)
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3223EC433C7
-	for <soc@kernel.org>; Fri,  1 Dec 2023 07:06:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3223EC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
-Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id 5494060476;
-	Fri,  1 Dec 2023 07:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1701414370;
-	bh=RXpbKQwq6L7Fxm/0BkFGv54CyvhTReyPPdkffpuvbsc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CwGaHDPbV2JUMhJAKfc8j7Oy8P/WEbo+xFfr15UKt2im8yKC2LOjQMJCewDqx96jE
-	 aSpg2thl/1PEa9AAgZ3zAxGK7PamGvw8cf4LGwEvS9y8pz32Pq9V7R0r8b/JvY3onO
-	 hL6fD6K/kf1NYVkvcgzntGzcqcsGH7plpBC1P0chyvE6IuaS6seg05FMm1yy7U3xVh
-	 kDAIW+LTJ/xqEvT34t5Q3LW1enGtJuC1kx9Msk2qc+/27leT2CBwMKeLItMVLfNd4I
-	 gqu3P9kcEH/z9f6T+MXXZ+3O/pNw6AFdQf0lk+BbDJBF38evhqGzPSl6ZxZSrbOAHe
-	 5hLhE3He+9HYg==
-Date: Fri, 1 Dec 2023 09:05:51 +0200
-From: Tony Lindgren <tony@atomide.com>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm: debug: reuse the config DEBUG_OMAP2UART{1,2} for
- OMAP{3,4,5}
-Message-ID: <20231201070551.GJ5169@atomide.com>
-References: <20231025112136.3445-1-lukas.bulwahn@gmail.com>
- <20231201070207.GI5169@atomide.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 1983BC433CD
+	for <soc@kernel.org>; Fri,  1 Dec 2023 12:01:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1983BC433CD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-58d9a4e9464so988987eaf.0
+        for <soc@kernel.org>; Fri, 01 Dec 2023 04:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701432090; x=1702036890; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nqr2nx7EOHUR5Y4hfhQw728v568+AKwyIx25pZkKlds=;
+        b=q3phbkY8SziIwiPCz00c9bJjTj37ua1hLqOsONLmAH+9Fa/uqpQOup4XKEGr/l07yR
+         9jY7lquoHObKhyOzm8I6uPiJ0GVKWDIsoA/uqBRRXad47TMvxG+dLeJ0BqysDYkB8inj
+         Z244f7kf0B7Xq9ZqEXn0EgJJQfVqDJ+CI+NeRYw/iOx8Gnb4cKkVfH5dWJ3sCePTs35U
+         RNk0DNh/7ILwCwswPR29dL5jm/rFtlG44SPiVPJykfikYktH/XPQQyj2gDyHIGaATXEB
+         q6Chq2Wusv9UIjnnk3Pc9WPio4TvkFJkP3zqLV1i44lv65WsvBQRvQZDK+AIK0kDMdpc
+         BPUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701432090; x=1702036890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nqr2nx7EOHUR5Y4hfhQw728v568+AKwyIx25pZkKlds=;
+        b=vuN5QuYQB9LEfl78Eb1ktqLpKYCKNPt+usmK/y1xdnVP2MNVAA/o+LoA4qULgzv39X
+         NkYFddKv0Q7veZEVw6Jhd77zJ9qpwF9fyC9C3wtgqq4QvXxSNJpO5uGVP1aQNgfbMxz5
+         d/MsZ/vjyKbf0IZVn9SZ6BuJAOXl5n/O6tg4dkiTA2x/5rQIiWfBQ33T4NKGP890zA8U
+         +z4D9/mM7n8oQ0G/SE8JpBiEpBPllxJfctNiuz1Q6kEZjfZIy6DZ/LPJOIWvNMr5cHCb
+         zbqWST/IxHvzRUrsuCIFItoRdRBqPkASLB9ihi8BY1O3Pu6lrOKYHOvQjHAQx3YtXvPs
+         4YTg==
+X-Gm-Message-State: AOJu0YxbUA0vZhJci+HXbaLdkmN7g9xoiSUwo4Ja80cNhiNsicKFOLu0
+	6MZECYoRGM8rR+2tfbOsHcDMXkE0Lhy35fEGpSIx4g==
+X-Google-Smtp-Source: AGHT+IEaVymyT4zngunznKYVd+LC7Ualf/L3X9ECNL23Q0+vmG0MBNBYVzrxhh9Wp1sn8PZeKLWznfrlwVe1KoQ8knI=
+X-Received: by 2002:a05:6358:e90:b0:16e:4162:2ae5 with SMTP id
+ 16-20020a0563580e9000b0016e41622ae5mr11320311rwg.8.1701432089401; Fri, 01 Dec
+ 2023 04:01:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231201070207.GI5169@atomide.com>
+References: <20231120212037.911774-1-peter.griffin@linaro.org>
+ <20231120212037.911774-19-peter.griffin@linaro.org> <CAPLW+4k=M1q1thr2RXG4fGkvD51H7NxS1A3Ck+Up7W1nTcUPcw@mail.gmail.com>
+In-Reply-To: <CAPLW+4k=M1q1thr2RXG4fGkvD51H7NxS1A3Ck+Up7W1nTcUPcw@mail.gmail.com>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Fri, 1 Dec 2023 12:01:16 +0000
+Message-ID: <CADrjBPoimnYhB3t5wSCKMTr8MbkDCVXvRmtsGzXrjZCW_7fF5A@mail.gmail.com>
+Subject: Re: [PATCH v4 18/19] arm64: dts: exynos: google: Add initial
+ Oriole/pixel 6 board support
+To: Sam Protsenko <semen.protsenko@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-* Tony Lindgren <tony@atomide.com> [231201 09:02]:
-> * Lukas Bulwahn <lukas.bulwahn@gmail.com> [231025 14:21]:
-> > Simply reuse the config DEBUG_OMAP2UART{1,2}; there is no need to define
-> > separate config symbols for OMAP{3,4,5}. So, just delete the dead
-> > references to DEBUG_OMAP{3,4,5}UART{1,2}.
-> 
-> Thanks applying into omap-for-v6.8/debug.
+Hi Sam,
 
-It's been already applied by Arnd, no need to do anything :)
+On Tue, 21 Nov 2023 at 18:39, Sam Protsenko <semen.protsenko@linaro.org> wr=
+ote:
+>
+> On Mon, Nov 20, 2023 at 3:21=E2=80=AFPM Peter Griffin <peter.griffin@lina=
+ro.org> wrote:
+> >
+> > Add initial board support for the Pixel 6 phone code named Oriole. This
+> > has been tested with a minimal busybox initramfs and boots to a shell.
 
-Regards,
+Will fix it in v5.
 
-Tony
+Peter
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/exynos/Makefile           |  2 +
+> >  arch/arm64/boot/dts/exynos/google/Makefile    |  4 +
+> >  .../boot/dts/exynos/google/gs101-oriole.dts   | 79 +++++++++++++++++++
+> >  3 files changed, 85 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
+> >  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/=
+exynos/Makefile
+> > index 6e4ba69268e5..44c24a8ad9e1 100644
+> > --- a/arch/arm64/boot/dts/exynos/Makefile
+> > +++ b/arch/arm64/boot/dts/exynos/Makefile
+> > @@ -1,4 +1,6 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> > +subdir-y +=3D google
+> > +
+> >  dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
+> >         exynos5433-tm2.dtb              \
+> >         exynos5433-tm2e.dtb             \
+> > diff --git a/arch/arm64/boot/dts/exynos/google/Makefile b/arch/arm64/bo=
+ot/dts/exynos/google/Makefile
+> > new file mode 100644
+> > index 000000000000..0a6d5e1fe4ee
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/google/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
+> > +       gs101-oriole.dtb \
+> > diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/=
+arm64/boot/dts/exynos/google/gs101-oriole.dts
+> > new file mode 100644
+> > index 000000000000..111665490840
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+> > @@ -0,0 +1,79 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Oriole Device Tree
+> > + *
+> > + * Copyright 2021-2023 Google,LLC
+> > + */
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+>
+> Now that the dts is being built as a dtb (not dtbo), I don' think this
+> /plugin/ bit is needed here?
+>
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/input/input.h>
+> > +#include "gs101-pinctrl.h"
+> > +#include "gs101.dtsi"
+> > +
+> > +/ {
+> > +       model =3D "Oriole";
+> > +       compatible =3D "google,gs101-oriole", "google,gs101";
+> > +
+> > +       chosen {
+> > +               bootargs =3D "earlycon=3Dexynos4210,mmio32,0x10A00000 c=
+onsole=3DttySAC0";
+> > +       };
+> > +
+> > +       gpio-keys {
+> > +               compatible =3D "gpio-keys";
+> > +               pinctrl-names =3D "default";
+> > +               pinctrl-0 =3D <&key_voldown>, <&key_volup>, <&key_power=
+>;
+> > +
+> > +               button-vol-down {
+> > +                       label =3D "KEY_VOLUMEDOWN";
+> > +                       linux,code =3D <KEY_VOLUMEDOWN>;
+> > +                       gpios =3D <&gpa7 3 GPIO_ACTIVE_LOW>;
+> > +                       wakeup-source;
+> > +               };
+> > +
+> > +               button-vol-up {
+> > +                       label =3D "KEY_VOLUMEUP";
+> > +                       linux,code =3D <KEY_VOLUMEUP>;
+> > +                       gpios =3D <&gpa8 1 GPIO_ACTIVE_LOW>;
+> > +                       wakeup-source;
+> > +               };
+> > +
+> > +               button-power {
+> > +                       label =3D "KEY_POWER";
+> > +                       linux,code =3D <KEY_POWER>;
+> > +                       gpios =3D <&gpa10 1 GPIO_ACTIVE_LOW>;
+> > +                       wakeup-source;
+> > +               };
+> > +       };
+> > +};
+> > +
+> > +&pinctrl_1 {
+> > +       key_voldown: key-voldown-pins {
+> > +               samsung,pins =3D "gpa7-3";
+> > +               samsung,pin-function =3D <0xf>;
+> > +               samsung,pin-pud =3D <0>;
+> > +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
+> > +       };
+> > +
+> > +       key_volup: key-volup-pins {
+> > +               samsung,pins =3D "gpa8-1";
+> > +               samsung,pin-function =3D <0xf>;
+> > +               samsung,pin-pud =3D <0>;
+> > +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
+> > +       };
+> > +};
+> > +
+> > +&pinctrl_0 {
+> > +       key_power: key-power-pins {
+> > +               samsung,pins =3D "gpa10-1";
+> > +               samsung,pin-function =3D <0xf>;
+> > +               samsung,pin-pud =3D <0>;
+> > +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
+> > +       };
+> > +};
+> > +
+> > +&watchdog_cl0 {
+> > +       timeout-sec =3D <30>;
+> > +};
+> > --
+> > 2.43.0.rc1.413.gea7ed67945-goog
+> >
