@@ -1,116 +1,293 @@
-Return-Path: <SRS0=Z/cl=HM=linaro.org=semen.protsenko@kernel.org>
+Return-Path: <SRS0=F/1U=HM=google.com=willmcvicker@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E111C4167B
-	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 20:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 677B3C07E97
+	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 22:40:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 22180C433C9; Fri,  1 Dec 2023 20:39:39 +0000 (UTC)
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	id 29E72C433CD; Fri,  1 Dec 2023 22:40:39 +0000 (UTC)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5BB9EC433CA
-	for <soc@kernel.org>; Fri,  1 Dec 2023 20:39:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5BB9EC433CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-28613d87c4cso2332070a91.3
-        for <soc@kernel.org>; Fri, 01 Dec 2023 12:39:37 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 88FB8C433CA
+	for <soc@kernel.org>; Fri,  1 Dec 2023 22:40:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88FB8C433CA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1cc79f73e58so17695ad.1
+        for <soc@kernel.org>; Fri, 01 Dec 2023 14:40:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701463176; x=1702067976; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TIkFSFKTNqG5pJgN73rHGp3fFqpS3rYpv0qft22FsBI=;
-        b=YCOGqcb+ZK60VdxhZkNeoO7guNtbJ5pOVHOxBlpAAa2ts41oD7i4sP6QsRJajqpuK4
-         boQg0rLvb1BnVVs4AASH6jfcnp6o+cnV0l/vGCCT6/huyihZt1v9fm6EkwOrD0+gsV6j
-         BdmU7xlkDB6vavTpywkhHE/Eq6WYkDf01hlM1z1nWhCTM7LqwaF24NAvsgVluafAVx4K
-         gFJGyPJV6VBnrNN+iZhqMpaxnc1elnZf7CBdTU3HHzn541tMcV8sDboSZ9OLVJBo5DHX
-         LP2Xb/HGZuSmKxIV3c0lGS3KWvixMB1M0V6LgjQk30/M1/7hDjvby9zT0uRYh+v3THXx
-         l92w==
+        d=google.com; s=20230601; t=1701470436; x=1702075236; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i3amzJ9PYXbI1KiZ14eb196KPwActNZucZcEeWBrD0w=;
+        b=OWMKX0icbFBbVbZu6GnNaTerJXxXuLe4TR817zN3vwfArlj5Uk788yMUcRi/K4HflK
+         FQNVZC827LfufB5r1RxsN9pkx2dw7SKPXvPxrPGHUi4zPdbWxd9sMZiX81uYz/BVTOef
+         oNfNG6DnvyFj18Hf058owyzdPo0BFDWGW0ibxBA2S7EkKJDJALc2S4l5LFpVrH6OXIG0
+         9kyUBKHW4nkCF6RdzvKdZtpq4sYySoTPyWVXh06LUtMdIbqO7/1EEW02cFWwXf/hYbb4
+         tIDZg/kE6y4kD68ovOMiNJe6b1H7lsrCEnGnkKlMgq6Wbb8gsSNi6uyYat6lq0/K1Wfz
+         jS/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701463176; x=1702067976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TIkFSFKTNqG5pJgN73rHGp3fFqpS3rYpv0qft22FsBI=;
-        b=qrzIU0aOzEpoOddlvwU14W8kc2YcZP8bDFBqCyZXMtLdjCgkEINMBCHAJETyoUOdwG
-         CxMTDzonbP8UQtFtrwPwAu0EuLR/m0PKVhQExa/RNRah10fxzvf7EQS0xxAf6NdhoRcI
-         lK3PzHXo4X1bNC1d5fScyfJhvs+L0dw0Xe7RiHMWlI/p4xNHOj+ILY8WLCLyDwULmrEe
-         6YhU4KqT9DcbclKQLScvYq7rX65sYNKhJYdECBcW7bz3oU9lZnApLxxIoW9Y5U9Yb+yy
-         QtUJCF9mqkSXOnEZlvEGy+RXakUCx9P7gYBIuAL2EOqN4NFJypHnphx+uR/RmY7gJGNK
-         ZCcA==
-X-Gm-Message-State: AOJu0YwsENKKe/qjIjWR1B+qjrzljAblsKP+tV7YFmYlQ5diIIfYagdP
-	MbHQp6ccU+Q1C3PnwZGbhdZ9CWbduT9RAsNek5nznw==
-X-Google-Smtp-Source: AGHT+IH43vrh31UX2rertdGqcGoKOrUcSkFAhN2ABa2Tjpy7c4Re8Gr5gHANOJcx9cdbUKLq+BVtXmQ/7DBOMK7M+mo=
-X-Received: by 2002:a17:90a:de90:b0:286:6cc1:3f24 with SMTP id
- n16-20020a17090ade9000b002866cc13f24mr75683pjv.91.1701463176618; Fri, 01 Dec
- 2023 12:39:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20231201160925.3136868-1-peter.griffin@linaro.org> <20231201160925.3136868-11-peter.griffin@linaro.org>
-In-Reply-To: <20231201160925.3136868-11-peter.griffin@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Fri, 1 Dec 2023 14:39:25 -0600
-Message-ID: <CAPLW+4n+Gg6yzFeKVw+p5M-Lxznt8X-jrNQ9NoJojdDhvjiFHQ@mail.gmail.com>
-Subject: Re: [PATCH v5 10/20] dt-bindings: soc: samsung: usi: add
- google,gs101-usi compatible
-To: Peter Griffin <peter.griffin@linaro.org>, krzysztof.kozlowski+dt@linaro.org
+        d=1e100.net; s=20230601; t=1701470436; x=1702075236;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i3amzJ9PYXbI1KiZ14eb196KPwActNZucZcEeWBrD0w=;
+        b=JjQ9EQOEegJYxC3dVhrSrB8W2AewfygaHnUyonCIQPgengEelTtXDb8SrLWNhG7oNa
+         tNbln8GQCV97v9XdDfURnRsRG1eaaTV0I2oD3ccs7LQquzGct23lV4HuQk6dYp/VO+0D
+         QbHXQDQosLJkgFWSoXWdq+6ejmLQng1IgdWIINRZwqh4N3/taMG9CUWuQFLiKBxhr5Ho
+         ce/RW27kr6PKprkb5w5XYseCOptfJnvSPpjKLZbwXNC9WJQvAxzxXzTvlETZLpVI5qSY
+         r5ddEOA/y+F+v6fovxQofyQksSWWSEyOzTVtRX1hrnpqJRa8zJxirbmkeCku2shchhp+
+         uVvQ==
+X-Gm-Message-State: AOJu0Yx9nlvzZBvs12AJc3O8wfezAVcpFlsnaGL5UJHyDN4CNz0bTMLE
+	geERPhvYQgxkwKS/btoWcAEDlQ==
+X-Google-Smtp-Source: AGHT+IE6Qkc5x7uZhqKUzAZQbv9EZF5VZpsVIkIAt4woWS/XMdu931x08schv1HTiKbQWlRT79cvJQ==
+X-Received: by 2002:a17:902:e552:b0:1d0:55ef:4f76 with SMTP id n18-20020a170902e55200b001d055ef4f76mr248210plf.9.1701470435588;
+        Fri, 01 Dec 2023 14:40:35 -0800 (PST)
+Received: from google.com (148.98.83.34.bc.googleusercontent.com. [34.83.98.148])
+        by smtp.gmail.com with ESMTPSA id q24-20020a62e118000000b006b8ffc49ba5sm3477885pfh.38.2023.12.01.14.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 14:40:34 -0800 (PST)
+Date: Fri, 1 Dec 2023 14:40:31 -0800
+From: William McVicker <willmcvicker@google.com>
+To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, mturquette@baylibre.com, conor+dt@kernel.org, 
-	sboyd@kernel.org, tomasz.figa@gmail.com, s.nawrocki@samsung.com, 
-	linus.walleij@linaro.org, wim@linux-watchdog.org, linux@roeck-us.net, 
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, olof@lixom.net, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, cw00.choi@samsung.com, 
-	alim.akhtar@samsung.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	saravanak@google.com, willmcvicker@google.com, soc@kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+	linus.walleij@linaro.org, wim@linux-watchdog.org,
+	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, cw00.choi@samsung.com,
+	alim.akhtar@samsung.com, tudor.ambarus@linaro.org,
+	andre.draszik@linaro.org, semen.protsenko@linaro.org,
+	saravanak@google.com, soc@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
 	kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5 00/20]  Add minimal Tensor/GS101 SoC support and
+ Oriole/Pixel6 board
+Message-ID: <ZWpg31AEwd-C8F-R@google.com>
+References: <20231201160925.3136868-1-peter.griffin@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231201160925.3136868-1-peter.griffin@linaro.org>
 
-On Fri, Dec 1, 2023 at 10:11=E2=80=AFAM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
->
-> From: Tudor Ambarus <tudor.ambarus@linaro.org>
->
-> Add google,gs101-usi dedicated compatible for representing USI of Google
-> GS101 SoC.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
-
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
->  Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yam=
-l b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> index 61be1f2ddbe7..a10a438d89f0 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> @@ -28,6 +28,9 @@ properties:
->                - samsung,exynosautov9-usi
->                - samsung,exynosautov920-usi
->            - const: samsung,exynos850-usi
-> +      - items:
-> +          - const: google,gs101-usi
-> +          - const: samsung,exynos850-usi
->        - enum:
->            - samsung,exynos850-usi
-
-Krzysztof, Peter: can you please point me out the doc which explains
-the need to have all those enums/consts here repeating for exynos850?
-I kinda forgot why it's needed, can't find any documentation, and now
-it just looks confusing to me.
-
->
-> --
+On 12/01/2023, Peter Griffin wrote:
+> Hi folks,
+> 
+> Thanks to everyone who reviewed the previous rounds. V5 incorporates
+> the review feedback received so far, and is rebased onto linux-next as
+> per Krzysztof request to incorporate all his dt-binding changes for
+> exynos.
+> 
+> As this series spans multiple subsytems the expectation is that Krzysztof
+> will apply the whole series through the Samsung SoC tree. If the relevant
+> subsystem maintainers can give a acked-by or reviewed-by on the relevant
+> patches that would be most appreciated!
+> 
+> This series adds initial SoC support for the GS101 SoC and also initial board
+> support for Pixel 6 phone (Oriole).
+> 
+> The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
+> (raven) phones. Currently DT is added for the gs101 SoC and Oriole.
+> As you can see from the patches the SoC is based on a Samsung Exynos SoC,
+> and therefore lots of the low level Exynos drivers can be re-used.
+> 
+> The support added in this series consists of:
+> * cpus
+> * pinctrl
+> * CCF implementation of cmu_top, cmu_misc & cmu_apm
+> * watchdog
+> * USI uart
+> * gpio
+> 
+> This is enough to boot through to a busybox initramfs and shell using an
+> upstream kernel though :) More platform support will be added over the
+> following weeks and months.
+> 
+> For further information on how to build and flash the upstream kernel on your
+> Pixel 6, with a prebuilt busybox initramfs please refer to the script and
+> README.md here:
+> 
+> https://git.codelinaro.org/linaro/googlelt/pixelscripts
+> 
+> Note: Booting without a dtbo works with some versions of the bootloader
+> but crashes on others. Later versions aren't necessarily better. You can
+> get the bootloader version with `fastboot getvar version-bootloader`
+> Known good bootloader versions are: -
+> - slider-1.3-11000330
+> - slider-1.2-9152140
+> Known to crash without dtbo
+> - slider-1.3-10780582
+> 
+> kind regards,
+> 
+> Peter.
+> 
+> lore v4: https://lore.kernel.org/linux-arm-kernel/20231120212037.911774-1-peter.griffin@linaro.org/T/
+> pw   v3: https://patchwork.kernel.org/project/linux-samsung-soc/cover/20231011184823.443959-1-peter.griffin@linaro.org/
+> lore v2: https://lore.kernel.org/all/20231010224928.2296997-1-peter.griffin@linaro.org/
+> lore v1: https://lore.kernel.org/linux-arm-kernel/20231005155618.700312-1-peter.griffin@linaro.org/
+> 
+> Changes since v4:
+>  - clk-gs101: order cmu_top by register address, fix incorrect mux widths,
+>    add missing mux/div/gates (Andre)
+>  - google,gs101.h: add missing space in comment (Andre)
+>  - ckl-gs101:google,gs101.h add all remaining gates for cmu_misc and cmu_apm
+>  - update pmu dt labels (Krzysztof)
+>  - Remove uart16 rts/tx gpio definitions (Krzysztof)
+>  - Fixup various dts cosmetic nits (using consts, alignments,
+>    names) (Sam/Krzysztof)
+>  - Add more specific compatibles for arm cpu's and pmu (Sam)
+>  - Use address-cells 1 and ranges property for SoC addresses (Sam)
+>  - Encapsulate uart node in USI node (Sam)
+>  - Remove earlycon from bootargs
+>  - s3c2410_wdt: Reword QUIRK_HAS_DBGACK_BIT docs and add comment (Guenter)
+>  - s3c2410_wdt: Reorder DBGACK_MASK functionality first, gs101
+>    SoC second (Sam/Krzysztof)
+>  
+> Changes since v3:
+>  - Add reviewed-by and tested-by tags
+>  - google,gs101-clock.yaml: move Required to before Allof,
+>    enum for cmu*top/misc (Krzysztof)
+>  - samsung-wdt.yaml: stick to 80chars (Sam)
+>  - google.yaml - remove new line
+>  - samsung,pinctrl-wakeup-interrupt: sort alphabetically (RobH)
+>  - gs101-oriole.dts: update gpio-keys pinctrl-0 phandle for keys (Stephen)
+>  - samsung,exynos-sysreg.yaml - Alphabetical order (RobH)
+>  - pinctrl-exynos: update/move comments, slight cosmetic changes (Sam)
+>  - samsung_tty.c: update to generic drv_data name/macro (Arnd)
+>  - samsung_uart.yaml: make samsung,uart-fifosize required for gs101-uart (Arnd)
+>  - pinctrl-exynos: Remove eint irqs from alive pin controller node (Peter/Rob)
+>  - Fixup kernel test robot unused const variable warnings
+>  - clk-gs101: Update to mout_cmu_eh_bus to CLK_CON_MUX_MUX_CLKCMU_EH_BUS
+>    (Chanwoo)
+>  - clk-gs101: Update g3aa gout/dout/mout names to g3aa_g3aa for
+>    consistency (Chanwoo)
+>  - Remove .eint_gpio_init() cb on alive, alive_far, gsacore & gsactrl
+>    banks (Sam)
+>  - s3c2410_wdt: Drop windowed watchdog mode for now (Peter)
+>  - s3c2410_wdt: Separate gs101 SoC support from dbgack feature (Sam)
+>  - Move dts to arch/arm64/boot/dts/exynos/google directory (Krzysztof)
+> 
+> Changes since v2:
+>  - Fixup pinctrl@174d0000: interrupts: [..] is too long DTC warning (Tudor)
+>  - Add missing windowed watchdog code (Guenter)
+>  - Fixup UART YAML bindings error (Krzysztof)
+>  - gs101.dtsi add missing serial_0 alias (me)
+>  - samsung_tty.c: fixup gs101_serial_drv_data so fifosize is obtained from DT
+>  
+> Changes since v1:
+>  - Remove irq/gs101.h and replace macros with irq numbers globally
+>  - exynos-pmu - keep alphabetical order
+>  - add cmu_apm to clock bindings documentation
+>  - sysreg bindings - remove superfluous `google,gs101-sysreg`
+>  - watchdog bindings - Alphanumerical order, update gs201 comment
+>  - samsung,pinctrl.yaml - add new "if:then:else:" to narrow for google SoC
+>  - samsung,pinctrl-wakeup-interrupt.yaml - Alphanumerical order
+>  - samsung,pinctrl- add google,gs101-wakeup-eint compatible
+>  - clk-pll: fixup typos
+>  - clk-gs101: fix kernel test robot warnings (add 2 new clocks,dividers,gate)
+>  - clk-gs101: fix alphabetical order
+>  - clk-gs101: cmu_apm: fixup typo and missing empty entry
+>  - clk-gs101: cmu_misc: remove clocks that were being registered twice
+>  - pinctrl: filter sel: rename/reorder variables, add comment for FLTCON
+>    bitfield
+>  - pinctrl: filter sel: avoid setting reserved bits by loop over FLTCON1 pins
+>    as well
+>  - pinctrl: gs101: rename bank_type_6/7 structs to be more specific,
+>    split from filter
+>  - watchdog: s3c2410_wdt: remove dev_info prints
+>  - gs101.dtsi/oriole.dts: order by unit node, remove underscores from node
+>    name, blank lines add SoC node, split dts and dtsi into separate patches,
+>    remove 'DVT' suffix
+>  - gs101-oriole.dtso: Remove overlay until board_id is documented properly
+>  - Add GS101_PIN_* macros to gs101-pinctrl.h instead of using Exynos ones
+>  - gpio-keys: update linux,code to use input-event-code macros
+>  - add dedicated gs101-uart compatible
+> 
+> Peter Griffin (19):
+>   dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+>   dt-bindings: clock: Add Google gs101 clock management unit bindings
+>   dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG
+>     compatibles to GS101
+>   dt-bindings: watchdog: Document Google gs101 watchdog bindings
+>   dt-bindings: arm: google: Add bindings for Google ARM platforms
+>   dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
+>   dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
+>   dt-bindings: serial: samsung: Add google-gs101-uart compatible
+>   dt-bindings: serial: samsung: Make samsung,uart-fifosize required
+>     property
+>   clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+>   clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
+>   pinctrl: samsung: Add filter selection support for alive banks
+>   pinctrl: samsung: Add gs101 SoC pinctrl configuration
+>   watchdog: s3c2410_wdt: Add support for WTCON register DBGACK_MASK bit
+>   watchdog: s3c2410_wdt: Add support for Google gs101 SoC
+>   tty: serial: samsung: Add gs101 compatible and common
+>     fifoszdt_serial_drv_data
+>   arm64: dts: exynos: google: Add initial Google gs101 SoC support
+>   arm64: dts: exynos: google: Add initial Oriole/pixel 6 board support
+>   MAINTAINERS: add entry for Google Tensor SoC
+> 
+> Tudor Ambarus (1):
+>   dt-bindings: soc: samsung: usi: add google,gs101-usi compatible
+> 
+>  .../devicetree/bindings/arm/google.yaml       |   53 +
+>  .../bindings/clock/google,gs101-clock.yaml    |  110 +
+>  .../samsung,pinctrl-wakeup-interrupt.yaml     |    2 +
+>  .../bindings/pinctrl/samsung,pinctrl.yaml     |    1 +
+>  .../bindings/serial/samsung_uart.yaml         |   11 +
+>  .../bindings/soc/samsung/exynos-pmu.yaml      |    2 +
+>  .../bindings/soc/samsung/exynos-usi.yaml      |    3 +
+>  .../soc/samsung/samsung,exynos-sysreg.yaml    |    6 +
+>  .../bindings/watchdog/samsung-wdt.yaml        |    8 +-
+>  MAINTAINERS                                   |   10 +
+>  arch/arm64/boot/dts/exynos/Makefile           |    2 +
+>  arch/arm64/boot/dts/exynos/google/Makefile    |    4 +
+>  .../boot/dts/exynos/google/gs101-oriole.dts   |  105 +
+>  .../boot/dts/exynos/google/gs101-pinctrl.dtsi | 1250 +++++++++
+>  .../boot/dts/exynos/google/gs101-pinctrl.h    |   33 +
+>  arch/arm64/boot/dts/exynos/google/gs101.dtsi  |  476 ++++
+>  drivers/clk/samsung/Makefile                  |    1 +
+>  drivers/clk/samsung/clk-gs101.c               | 2495 +++++++++++++++++
+>  drivers/clk/samsung/clk-pll.c                 |    6 +
+>  drivers/clk/samsung/clk-pll.h                 |    3 +
+>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  159 ++
+>  drivers/pinctrl/samsung/pinctrl-exynos.c      |   91 +-
+>  drivers/pinctrl/samsung/pinctrl-exynos.h      |   41 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.c     |    4 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.h     |   23 +
+>  drivers/tty/serial/samsung_tty.c              |   16 +
+>  drivers/watchdog/s3c2410_wdt.c                |   74 +-
+>  include/dt-bindings/clock/google,gs101.h      |  392 +++
+>  28 files changed, 5370 insertions(+), 11 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+>  create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
+>  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+>  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-pinctrl.dtsi
+>  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-pinctrl.h
+>  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101.dtsi
+>  create mode 100644 drivers/clk/samsung/clk-gs101.c
+>  create mode 100644 include/dt-bindings/clock/google,gs101.h
+> 
+> -- 
 > 2.43.0.rc2.451.g8631bc7472-goog
->
+> 
+
+Thanks Peter for the updated patch series! I've gone through and reviewed the
+changes and tested them on my Oriole device. I was able to boot to the busybox
+console and verify the appropriate drivers probed.
+
+Great work!
+
+Regards,
+Will
+
