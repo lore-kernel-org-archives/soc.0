@@ -1,469 +1,133 @@
-Return-Path: <SRS0=e2gx=HM=bewilderbeest.net=zev@kernel.org>
+Return-Path: <SRS0=Z3CQ=HM=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0276EC4167B
-	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 02:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46199C4167B
+	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 02:45:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CA36CC433CA; Fri,  1 Dec 2023 02:09:55 +0000 (UTC)
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 0F68FC433C9; Fri,  1 Dec 2023 02:45:29 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 055B5C433C8;
-	Fri,  1 Dec 2023 02:09:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 055B5C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: zev)
-	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 9D58A5DE;
-	Thu, 30 Nov 2023 18:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-	s=thorn; t=1701396585;
-	bh=IQnr2LuCi9+j4pwVCnA+5NoWhOAKMYkfYmQhdpRD4cI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YmdEvKTkmiFa0xdGC9TtGo9u4paR+p2dW2ZBB2TTZVw/aS2xHZzvge+xUWTmUw0hL
-	 WAsSK52ZWG06cgpACcBy9i3hHHRKeZvj0IVMtv6lquM/LpnHNlrD10v52RU8eSoXCs
-	 iYZcp9tiMGpcrltk+xiqYADSoFHGUQFB8NV2zi/Y=
-Date: Thu, 30 Nov 2023 18:09:44 -0800
-From: Zev Weiss <zev@bewilderbeest.net>
-To: Renze Nicolai <renze@rnplus.nl>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au
-Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: asrock: Add ASRock X570D4U BMC
-Message-ID: <5507daa3-0223-4a65-af2c-99da2c7bb4c9@hatter.bewilderbeest.net>
-References: <20231128232456.2932350-1-renze@rnplus.nl>
- <20231128232456.2932350-3-renze@rnplus.nl>
+	by smtp.kernel.org (Postfix) with ESMTPS id 36886C433C7;
+	Fri,  1 Dec 2023 02:45:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36886C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm000004.china.huawei.com (unknown [172.30.72.54])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ShHTb0CvWzvQw8;
+	Fri,  1 Dec 2023 10:44:51 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm000004.china.huawei.com
+ (7.193.23.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 1 Dec
+ 2023 10:45:23 +0800
+Message-ID: <b2cb48ed-3ba2-ee61-4f33-0a60ebaf0029@huawei.com>
+Date: Fri, 1 Dec 2023 10:45:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20231128232456.2932350-3-renze@rnplus.nl>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 4/4] soc: hisilicon: kunpeng_hccs: Support the platform
+ with PCC type3 and interrupt ack
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+List-Id: <soc.lore.kernel.org>
+CC: <xuwei5@hisilicon.com>, <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>, <krzk@kernel.org>,
+	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>
+References: <20231109054526.27270-1-lihuisong@huawei.com>
+ <20231130134550.33398-1-lihuisong@huawei.com>
+ <20231130134550.33398-5-lihuisong@huawei.com>
+ <20231130144911.00005faf@Huawei.com>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20231130144911.00005faf@Huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.121.59]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm000004.china.huawei.com (7.193.23.18)
+X-CFilter-Loop: Reflected
 
-On Tue, Nov 28, 2023 at 03:23:17PM PST, Renze Nicolai wrote:
->This is a relatively low-cost AST2500-based Amd Ryzen 5000 Series
->micro-ATX board that we hope can provide a decent platform for OpenBMC
->development.
+
+在 2023/11/30 22:49, Jonathan Cameron 写道:
+> On Thu, 30 Nov 2023 21:45:50 +0800
+> Huisong Li <lihuisong@huawei.com> wrote:
 >
->This initial device-tree provides the necessary configuration for
->basic BMC functionality such as serial console, KVM support
->and POST code snooping.
+>> Support the platform with PCC type3 and interrupt ack. And a version
+>> specific structure is introduced to handle the difference between the
+>> device in the code.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> Hi.
 >
->Signed-off-by: Renze Nicolai <renze@rnplus.nl>
->---
-> arch/arm/boot/dts/aspeed/Makefile             |   1 +
-> .../dts/aspeed/aspeed-bmc-asrock-x570d4u.dts  | 359 ++++++++++++++++++
-> 2 files changed, 360 insertions(+)
-> create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
+> A few trivial things inline but now looks good to me!
 >
->diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
->index d3ac20e316d0..2205bd079d0c 100644
->--- a/arch/arm/boot/dts/aspeed/Makefile
->+++ b/arch/arm/boot/dts/aspeed/Makefile
->@@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
-> 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
-> 	aspeed-bmc-asrock-e3c246d4i.dtb \
-> 	aspeed-bmc-asrock-romed8hm3.dtb \
->+	aspeed-bmc-asrock-x570d4u.dtb \
-> 	aspeed-bmc-bytedance-g220a.dtb \
-> 	aspeed-bmc-delta-ahe50dc.dtb \
-> 	aspeed-bmc-facebook-bletchley.dtb \
->diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
->new file mode 100644
->index 000000000000..b7c84188b405
->--- /dev/null
->+++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
->@@ -0,0 +1,359 @@
->+// SPDX-License-Identifier: GPL-2.0+
->+/dts-v1/;
->+#include "aspeed-g5.dtsi"
->+#include <dt-bindings/gpio/aspeed-gpio.h>
->+#include <dt-bindings/leds/common.h>
->+
->+/ {
->+	model = "Asrock Rack X570D4U BMC";
->+	compatible = "asrock,x570d4u-bmc", "aspeed,ast2500";
->+
->+	chosen {
->+		stdout-path = &uart5;
->+	};
->+
->+	memory@80000000 {
->+		reg = <0x80000000 0x20000000>;
->+	};
->+
->+	reserved-memory {
->+		#address-cells = <1>;
->+		#size-cells = <1>;
->+		ranges;
->+
->+		pci_memory: region@9a000000 {
->+			no-map;
->+			reg = <0x9a000000 0x00010000>; /* 64K */
->+		};
->+
->+		video_engine_memory: jpegbuffer {
->+			size = <0x02800000>;	/* 40M */
->+			alignment = <0x01000000>;
->+			compatible = "shared-dma-pool";
->+			reusable;
->+		};
->+
->+		gfx_memory: framebuffer {
->+			size = <0x01000000>;
->+			alignment = <0x01000000>;
->+			compatible = "shared-dma-pool";
->+			reusable;
->+		};
->+	};
->+
->+	leds {
->+		compatible = "gpio-leds";
->+
->+		led0 {
->+			/* led-heartbeat-n */
->+			function = LED_FUNCTION_HEARTBEAT;
->+			color = <LED_COLOR_ID_GREEN>;
->+			gpios = <&gpio ASPEED_GPIO(H, 6) GPIO_ACTIVE_LOW>;
->+			linux,default-trigger = "timer";
->+		};
->+
->+		led1 {
->+			/* led-fault-n */
->+			function = LED_FUNCTION_FAULT;
->+			color = <LED_COLOR_ID_AMBER>;
->+			gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
->+			panic-indicator;
->+		};
-
-To strictly match Documentation/devicetree/bindings/leds/leds-gpio.yaml 
-the node names here should be led-0 and led-1 (with a hyphen).
-
-There *is* some automated tooling to check DTs against the bindings that 
-should flag things like that -- see the bits regarding 'make dtbs_check' 
-in Documentation/devicetree/bindings/writing-schema.rst.  However, in 
-its current state it's (a) somewhat fragile and easy to invoke wrong 
-without getting any indication of it (IME, make sure to also pass 
-ARCH=arm on the make command-line), and (b) will probably dump a pretty 
-large quantity of output of which very little pertains to the actual 
-.dts you're adding, which makes it less useful than would be ideal.
-
->+	};
->+
->+	iio-hwmon {
->+		compatible = "iio-hwmon";
->+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
->+			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
->+			<&adc 10>, <&adc 11>, <&adc 12>;
->+	};
->+};
->+
->+&gpio {
->+	status = "okay";
->+	gpio-line-names =
->+	/*A0-A3*/       "status-locatorled-n",                    "",                      "button-nmi-n",          "",
->+	/*A4-A7*/       "",                                       "",                      "",                      "",
->+	/*B0-B3*/       "input-bios-post-cmplt-n",                "",                      "",                      "",
->+	/*B4-B7*/       "",                                       "",                      "",                      "",
->+	/*C0-C3*/       "",                                       "",                      "",                      "",
->+	/*C4-C7*/       "",                                       "",                      "control-locatorbutton", "",
->+	/*D0-D3*/       "button-power",                           "control-power",         "button-reset",          "control-reset",
->+	/*D4-D7*/       "",                                       "",                      "",                      "",
->+	/*E0-E3*/       "",                                       "",                      "",                      "",
->+	/*E4-E7*/       "",                                       "",                      "",                      "",
->+	/*F0-F3*/       "",                                       "",                      "",                      "",
->+	/*F4-F7*/       "",                                       "",                      "",                      "",
->+	/*G0-G3*/       "output-rtc-battery-voltage-read-enable", "input-id0",             "input-id1",             "input-id2",
->+	/*G4-G7*/       "input-alert1-n",                         "input-alert2-n",        "input-alert3-n",        "",
->+	/*H0-H3*/       "",                                       "",                      "",                      "",
->+	/*H4-H7*/       "input-mfg",                              "",                      "led-heartbeat-n",       "input-caseopen",
->+	/*I0-I3*/       "",                                       "",                      "",                      "",
->+	/*I4-I7*/       "",                                       "",                      "",                      "",
->+	/*J0-J3*/       "output-bmc-ready",                       "",                      "",                      "",
->+	/*J4-J7*/       "",                                       "",                      "",                      "",
->+	/*K0-K3*/       "",                                       "",                      "",                      "",
->+	/*K4-K7*/       "",                                       "",                      "",                      "",
->+	/*L0-L3*/       "",                                       "",                      "",                      "",
->+	/*L4-L7*/       "",                                       "",                      "",                      "",
->+	/*M0-M3*/       "",                                       "",                      "",                      "",
->+	/*M4-M7*/       "",                                       "",                      "",                      "",
->+	/*N0-N3*/       "",                                       "",                      "",                      "",
->+	/*N4-N7*/       "",                                       "",                      "",                      "",
->+	/*O0-O3*/       "",                                       "",                      "",                      "",
->+	/*O4-O7*/       "",                                       "",                      "",                      "",
->+	/*P0-P3*/       "",                                       "",                      "",                      "",
->+	/*P4-P7*/       "",                                       "",                      "",                      "",
->+	/*Q0-Q3*/       "",                                       "",                      "",                      "",
->+	/*Q4-Q7*/       "",                                       "",                      "",                      "",
->+	/*R0-R3*/       "",                                       "",                      "",                      "",
->+	/*R4-R7*/       "",                                       "",                      "",                      "",
->+	/*S0-S3*/       "input-bmc-pchhot-n",                     "",                      "",                      "",
->+	/*S4-S7*/       "",                                       "",                      "",                      "",
->+	/*T0-T3*/       "",                                       "",                      "",                      "",
->+	/*T4-T7*/       "",                                       "",                      "",                      "",
->+	/*U0-U3*/       "",                                       "",                      "",                      "",
->+	/*U4-U7*/       "",                                       "",                      "",                      "",
->+	/*V0-V3*/       "",                                       "",                      "",                      "",
->+	/*V4-V7*/       "",                                       "",                      "",                      "",
->+	/*W0-W3*/       "",                                       "",                      "",                      "",
->+	/*W4-W7*/       "",                                       "",                      "",                      "",
->+	/*X0-X3*/       "",                                       "",                      "",                      "",
->+	/*X4-X7*/       "",                                       "",                      "",                      "",
->+	/*Y0-Y3*/       "",                                       "",                      "",                      "",
->+	/*Y4-Y7*/       "",                                       "",                      "",                      "",
->+	/*Z0-Z3*/       "",                                       "",                      "led-fault-n",           "output-bmc-throttle-n",
->+	/*Z4-Z7*/       "",                                       "",                      "",                      "",
->+	/*AA0-AA3*/     "input-cpu1-thermtrip-latch-n",           "",                      "input-cpu1-prochot-n",  "",
->+	/*AA4-AC7*/     "",                                       "",                      "",                      "",
->+	/*AB0-AB3*/     "",                                       "",                      "",                      "",
->+	/*AB4-AC7*/     "",                                       "",                      "",                      "",
->+	/*AC0-AC3*/     "",                                       "",                      "",                      "",
->+	/*AC4-AC7*/     "",                                       "",                      "",                      "";
->+};
->+
->+&fmc {
->+	status = "okay";
->+	flash@0 {
->+		status = "okay";
->+		label = "bmc";
->+		m25p,fast-read;
->+		spi-max-frequency = <10000000>;
->+#include "openbmc-flash-layout-64.dtsi"
->+	};
->+};
->+
->+&uart5 {
->+	status = "okay";
->+};
->+
->+&vuart {
->+	status = "okay";
->+};
->+
->+&mac0 {
->+	status = "okay";
->+	pinctrl-names = "default";
->+	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
->+
->+	nvmem-cells = <&eth0_macaddress>;
->+	nvmem-cell-names = "mac-address";
->+};
->+
->+&mac1 {
->+	status = "okay";
->+	pinctrl-names = "default";
->+	pinctrl-0 = <&pinctrl_rmii2_default &pinctrl_mdio2_default>;
->+	use-ncsi;
->+
->+	nvmem-cells = <&eth1_macaddress>;
->+	nvmem-cell-names = "mac-address";
->+};
->+
->+&i2c0 {
->+	status = "okay";
->+};
->+
->+&i2c1 {
->+	status = "okay";
->+
->+	w83773g@4c {
->+		compatible = "nuvoton,w83773g";
->+		reg = <0x4c>;
->+	};
->+};
->+
->+&i2c2 {
->+	status = "okay";
->+};
->+
->+&i2c3 {
->+	status = "okay";
->+};
->+
->+&i2c4 {
->+	status = "okay";
->+
->+	i2c-mux@70 {
->+		compatible = "nxp,pca9545";
->+		reg = <0x70>;
->+		#address-cells = <1>;
->+		#size-cells = <0>;
->+
->+		i2c4mux0ch0@0 {
->+			/* SMBus on PCI express 16x slot */
->+			#address-cells = <1>;
->+			#size-cells = <0>;
->+			reg = <0>;
->+		};
->+
->+		i2c4mux0ch1@1 {
->+			/* SMBus on PCI express 8x slot */
->+			#address-cells = <1>;
->+			#size-cells = <0>;
->+			reg = <1>;
->+		};
->+
->+		i2c4mux0ch2@2 {
->+			#address-cells = <1>;
->+			#size-cells = <0>;
->+			reg = <2>;
->+		};
->+
->+		i2c4mux0ch3@3 {
->+			/* SMBus on PCI express 1x slot */
->+			#address-cells = <1>;
->+			#size-cells = <0>;
->+			reg = <3>;
->+		};
->+	};
-
-Comments here are good, thanks -- was leaving out the suggested bus 
-aliases an intentional choice or just an oversight though?  FWIW, 
-personally I'd definitely recommend it.
-
->+};
->+
->+&i2c5 {
->+	status = "okay";
->+};
->+
->+&i2c7 {
->+	status = "okay";
->+
->+	eeprom@57 {
->+		compatible = "st,24c128", "atmel,24c128";
->+		reg = <0x57>;
->+		pagesize = <16>;
->+		#address-cells = <1>;
->+		#size-cells = <1>;
->+
->+		eth0_macaddress: macaddress@3f80 {
->+			reg = <0x3f80 6>;
->+		};
->+
->+		eth1_macaddress: macaddress@3f88 {
->+			reg = <0x3f88 6>;
->+		};
->+	};
->+};
->+
->+&gfx {
->+	status = "okay";
->+};
->+
->+&pinctrl {
->+	aspeed,external-nodes = <&gfx &lhc>;
->+};
->+
->+&vhub {
->+	status = "okay";
->+};
->+
->+&ehci1 {
->+	status = "okay";
->+};
->+&uhci {
->+	status = "okay";
->+};
-
-Micro-nit if you send a v3: a blank line between the ehci1 & uhci nodes 
-here would be nice.
-
->+
->+&kcs3 {
->+	aspeed,lpc-io-reg = <0xca2>;
->+	status = "okay";
->+};
->+
->+&lpc_ctrl {
->+	status = "okay";
->+};
->+
->+&lpc_snoop {
->+	status = "okay";
->+	snoop-ports = <0x80>;
->+};
->+
->+&p2a {
->+	status = "okay";
->+	memory-region = <&pci_memory>;
->+};
->+
->+&video {
->+	status = "okay";
->+	memory-region = <&video_engine_memory>;
->+};
->+
->+&pwm_tacho {
->+	status = "okay";
->+	pinctrl-names = "default";
->+	pinctrl-0 = <&pinctrl_pwm0_default
->+				&pinctrl_pwm1_default
->+				&pinctrl_pwm2_default
->+				&pinctrl_pwm3_default
->+				&pinctrl_pwm4_default
->+				&pinctrl_pwm5_default>;
->+
->+	fan@0 {
->+		reg = <0x00>;
->+		aspeed,fan-tach-ch = /bits/ 8 <0x00 0x01>;
->+	};
->+
->+	fan@1 {
->+		reg = <0x01>;
->+		aspeed,fan-tach-ch = /bits/ 8 <0x02 0x03>;
->+	};
->+
->+	fan@2 {
->+		reg = <0x02>;
->+		aspeed,fan-tach-ch = /bits/ 8 <0x04 0x05>;
->+	};
->+
->+	fan@3 {
->+		reg = <0x03>;
->+		aspeed,fan-tach-ch = /bits/ 8 <0x06 0x07>;
->+	};
->+
->+	fan@4 {
->+		reg = <0x04>;
->+		aspeed,fan-tach-ch = /bits/ 8 <0x08 0x09>;
->+	};
->+
->+	fan@5 {
->+		reg = <0x05>;
->+		aspeed,fan-tach-ch = /bits/ 8 <0x0a 0x0b>;
->+	};
->+};
->+
->+&adc {
->+	status = "okay";
->+	pinctrl-names = "default";
->+	pinctrl-0 = <&pinctrl_adc0_default
->+				&pinctrl_adc1_default
->+				&pinctrl_adc2_default
->+				&pinctrl_adc3_default
->+				&pinctrl_adc4_default
->+				&pinctrl_adc5_default
->+				&pinctrl_adc6_default
->+				&pinctrl_adc7_default
->+				&pinctrl_adc8_default
->+				&pinctrl_adc9_default
->+				&pinctrl_adc10_default
->+				&pinctrl_adc11_default
->+				&pinctrl_adc12_default
->+				&pinctrl_adc13_default
->+				&pinctrl_adc14_default
->+				&pinctrl_adc15_default>;
->+};
->-- 
->2.43.0
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 >
+>> ---
+>>   drivers/soc/hisilicon/kunpeng_hccs.c | 136 ++++++++++++++++++++++-----
+>>   drivers/soc/hisilicon/kunpeng_hccs.h |  15 +++
+>>   2 files changed, 126 insertions(+), 25 deletions(-)
+>>
+>> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+>> index 15125f1e0f3e..d2302ff8c0e9 100644
+>> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
+>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+> ...
 >
+>>   
+>> -static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
+>> +static inline int hccs_wait_cmd_complete_by_poll(struct hccs_dev *hdev)
+> Why inline?  Do we have numbers to support this hint to the compiler being
+> useful?
+No testing for this, but here might not be really useful.
+So will remove this inline.
+>>   {
+>>   	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>>   	struct acpi_pcct_shared_memory __iomem *comm_base =
+>> @@ -194,30 +211,75 @@ static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
+>>   	return ret;
+>>   }
+>>   
+>> +static inline int hccs_wait_cmd_complete_by_irq(struct hccs_dev *hdev)
+>> +{
+>> +	struct hccs_mbox_client_info *cl_info = &hdev->cl_info;
+>> +	int ret = 0;
+> Drop ret...
+Ack
+>
+>> +
+>> +	if (!wait_for_completion_timeout(&cl_info->done,
+>> +			usecs_to_jiffies(cl_info->deadline_us))) {
+>> +		dev_err(hdev->dev, "PCC command executed timeout!\n");
+>> +		ret = -ETIMEDOUT;
+> 		return -TIMEDOUT;
+> ...
+>> +	}
+>> +
+>> +	return ret;
+> return 0;
+Ack
+>> +}
+>> +static const struct hccs_verspecific_data hisi04b1_verspec_data = {
+>> +	.rx_callback = NULL,
+> It's harmless but no need to set callback to NULL. Maybe it acts as documentation?
+Just to explicitly assign value and show the difference between the devices.
+> It's common practice to just let C spec guarantees initialize any not implemented callbacks
+> to 0 without them needing to be done explicitly.
+Correct, but It's harmless.
+>
+>> +	.wait_cmd_complete = hccs_wait_cmd_complete_by_poll,
+>> +	.fill_pcc_shared_mem = hccs_fill_pcc_shared_mem_region,
+>> +	.shared_mem_size = sizeof(struct acpi_pcct_shared_memory),
+>> +	.has_txdone_irq = false,
+>> +};
+>> +
+>> +static const struct hccs_verspecific_data hisi04b2_verspec_data = {
+>> +	.rx_callback = hccs_pcc_rx_callback,
+>> +	.wait_cmd_complete = hccs_wait_cmd_complete_by_irq,
+>> +	.fill_pcc_shared_mem = hccs_fill_ext_pcc_shared_mem_region,
+>> +	.shared_mem_size = sizeof(struct acpi_pcct_ext_pcc_shared_memory),
+>> +	.has_txdone_irq = true,
+>> +};
+> .
