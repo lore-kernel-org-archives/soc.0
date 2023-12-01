@@ -1,134 +1,326 @@
-Return-Path: <SRS0=/gx/=HM=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=Tcbz=HM=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53980C4167B
-	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 12:28:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C34F5C10DCE
+	for <soc@archiver.kernel.org>; Fri,  1 Dec 2023 13:59:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D1BFC433C8; Fri,  1 Dec 2023 12:28:51 +0000 (UTC)
-Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	id 9EDF7C433CA; Fri,  1 Dec 2023 13:59:47 +0000 (UTC)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B2DD4C433C9
-	for <soc@kernel.org>; Fri,  1 Dec 2023 12:28:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2DD4C433C9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4ShXRD5hwqz4wxM4
-	for <soc@kernel.org>; Fri,  1 Dec 2023 13:28:40 +0100 (CET)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:7f2e:4977:a943:cc87])
-	by baptiste.telenet-ops.be with bizsmtp
-	id H0UU2B00W0rKVV8010UUHC; Fri, 01 Dec 2023 13:28:33 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1r92cr-00ARcF-Tk;
-	Fri, 01 Dec 2023 13:28:28 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1r92dA-00CVD5-KM;
-	Fri, 01 Dec 2023 13:28:28 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/2] Renesas DTS updates for v6.8
-Date: Fri,  1 Dec 2023 13:28:17 +0100
-Message-Id: <cover.1701433489.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1701433485.git.geert+renesas@glider.be>
-References: <cover.1701433485.git.geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2D218C433C8
+	for <soc@kernel.org>; Fri,  1 Dec 2023 13:59:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D218C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4644f2e611bso725580137.2
+        for <soc@kernel.org>; Fri, 01 Dec 2023 05:59:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701439184; x=1702043984; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1yCG4pe1ktETRoP/XqgFwnt2CEeWHDkaQ6KkbqIhlho=;
+        b=L+YvZyvYr1NwAbCdUPJMfzrq+Q8H0ck5scEoZU7uQkKRRoqV638+yDMjJ1HpeZKUl9
+         GD5YRr84zXJLlFTnX+xczdx4b9P15wj01c2TR5JPJbS5XOI4Mglj/h9ZJL4gy8xpuT5N
+         /XJkubk/AauSdBXztF1thW+XUwFMBsyA+4cHLCrNic9fLQy1e1nj8kWPzfW9FB1AYEcj
+         O79JAjL3IG+pj5f2T8MRJn5fyWxmRXdEJikLV5GW9nEFclnpnS2AM2LxZy5lMl+7mowI
+         ynMDrOUyiRJ3BUyCfaniReLjvm2Vwj1Z8Rl6W//ueJTavxB8OmwYVKAnMRAADx01I7yn
+         DsBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701439184; x=1702043984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1yCG4pe1ktETRoP/XqgFwnt2CEeWHDkaQ6KkbqIhlho=;
+        b=GEfxcpe2izjHQpNrWvqyJ9Yf1ezJY3rS3FY36d8yP3znRSf98MVVlK05RT+5pLBHV0
+         PvRxjiTjz+oMFLb6saZB8ntR8TvhKeWfSsvLtSVOJSwiYYq0SW7FKte/4Mt0OBM5DQ72
+         MQ6BENqWQegKzA/FEj4mYNT/zxGk69p12VHjB67VIj2SdoNJkP0U3ryZIb61UG/dVynl
+         I7YnD71RZ50EhcFyG/nVELI6N9uvvjHD5txCbFu960XcshF+j0pZSPnX9YhtSb4FIx3Y
+         U41rczk8JZpiIqBJxRsUanEpOqJHYzQ7EUUUjfaIhmBIDnINni0bV585Z1DkCRPPKoSx
+         uWng==
+X-Gm-Message-State: AOJu0YwPEXwmjSq356kFdOYq/NBX7NdwD6u6YtowyXwLkQJKw0frgcFI
+	bvKE9sAPgcTHA6WFwWapRpC/8Bn5oFXNZxqXMajT/A==
+X-Google-Smtp-Source: AGHT+IHzGBgEfZ8S5Rxe7Ey9dCw2DLKBKlfHnp3JfgDoWR8BdSEvIU9b1Yh84EFVYi5qKDUh1jOnlCDeJvCh55RcaAg=
+X-Received: by 2002:a67:f48d:0:b0:462:ef88:3680 with SMTP id
+ o13-20020a67f48d000000b00462ef883680mr20773259vsn.17.1701439183224; Fri, 01
+ Dec 2023 05:59:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-11-peter.griffin@linaro.org> <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
+ <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com> <CAPLW+4m+n-U4cAkJZTeCsoE_e6r1j8srYmVjSLawPWwHi6SEAw@mail.gmail.com>
+In-Reply-To: <CAPLW+4m+n-U4cAkJZTeCsoE_e6r1j8srYmVjSLawPWwHi6SEAw@mail.gmail.com>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Fri, 1 Dec 2023 13:59:31 +0000
+Message-ID: <CADrjBPpCNc6RASB8p1MmaLuR46b_MsACyyGFLrnozW0_9oRQ3g@mail.gmail.com>
+Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
+ plls, mux and gates
+To: Sam Protsenko <semen.protsenko@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Chanwoo Choi <chanwoo@kernel.org>, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
+	s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
+	olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com, 
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+Hi Sam,
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+On Wed, 8 Nov 2023 at 17:33, Sam Protsenko <semen.protsenko@linaro.org> wro=
+te:
+>
+> On Tue, Nov 7, 2023 at 7:57=E2=80=AFAM Peter Griffin <peter.griffin@linar=
+o.org> wrote:
+> >
+> > Hi Chanwoo,
+> >
+> > Thanks for your review!
+> >
+> > On Wed, 18 Oct 2023 at 17:51, Chanwoo Choi <chanwoo@kernel.org> wrote:
+> > >
+> > > Hi Peter,
+> > >
+> > > On 23. 10. 12. 03:48, Peter Griffin wrote:
+> > > > CMU_TOP is the top level clock management unit which contains PLLs,=
+ muxes
+> > > > and gates that feed the other clock management units.
+> > > >
+> > > > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > > > ---
+> > > >  drivers/clk/samsung/Kconfig     |    9 +
+> > > >  drivers/clk/samsung/Makefile    |    2 +
+> > > >  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++=
+++++
+> > > >  3 files changed, 1562 insertions(+)
+> > > >  create mode 100644 drivers/clk/samsung/clk-gs101.c
+> > > >
+> > > > diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kcon=
+fig
+> > > > index 76a494e95027..14362ec9c543 100644
+> > > > --- a/drivers/clk/samsung/Kconfig
+> > > > +++ b/drivers/clk/samsung/Kconfig
+> > > > @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
+> > > >       select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
+> > > >       select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
+> > > >       select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
+> > > > +     select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
+> > > >       select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
+> > > >
+> > > >  config S3C64XX_COMMON_CLK
+> > > > @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
+> > > >         status of the certains clocks from SoC, but it could also b=
+e tied to
+> > > >         other devices as an input clock.
+> > > >
+> > > > +config GOOGLE_GS101_COMMON_CLK
+> > > > +     bool "Google gs101 clock controller support" if COMPILE_TEST
+> > > > +     depends on COMMON_CLK_SAMSUNG
+> > > > +     depends on EXYNOS_ARM64_COMMON_CLK
+> > > > +     help
+> > > > +       Support for the clock controller present on the Google gs10=
+1 SoC.
+> > > > +       Choose Y here only if you build for this SoC.
+> > > > +
+> > >
+> > > (snip)
+> > >
+> > > > +
+> > > > +/* gs101 */
+> > > > +static const struct samsung_mux_clock cmu_top_mux_clks[] __initcon=
+st =3D {
+> > > > +     /* CMU_TOP_PURECLKCOMP */
+> > > > +     MUX(CLK_MOUT_SHARED0_PLL, "mout_shared0_pll", mout_shared0_pl=
+l_p,
+> > > > +         PLL_CON0_PLL_SHARED0, 4, 1),
+> > > > +     MUX(CLK_MOUT_SHARED1_PLL, "mout_shared1_pll", mout_shared1_pl=
+l_p,
+> > > > +         PLL_CON0_PLL_SHARED1, 4, 1),
+> > > > +     MUX(CLK_MOUT_SHARED2_PLL, "mout_shared2_pll", mout_shared2_pl=
+l_p,
+> > > > +         PLL_CON0_PLL_SHARED2, 4, 1),
+> > > > +     MUX(CLK_MOUT_SHARED3_PLL, "mout_shared3_pll", mout_shared3_pl=
+l_p,
+> > > > +         PLL_CON0_PLL_SHARED3, 4, 1),
+> > > > +     MUX(CLK_MOUT_SPARE_PLL, "mout_spare_pll", mout_spare_pll_p,
+> > > > +         PLL_CON0_PLL_SPARE, 4, 1),
+> > > > +
+> > > > +     /* BUS0 */
+> > > > +     MUX(CLK_MOUT_BUS0_BUS, "mout_cmu_bus0_bus", mout_cmu_bus0_bus=
+_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS, 0, 2),
+> > > > +     MUX(CLK_MOUT_CMU_BOOST, "mout_cmu_boost", mout_cmu_cmu_boost_=
+p,
+> > >
+> > > In order to keep the consistent naming style,
+> > > I think that need to change from 'mout_cmu_boost' to 'mout_cmu_cmu_bo=
+ost'.
+> >
+> > Yes, that's a good point, and a good spot! Will fix it in v4.
+> >
+>
+> Why do we need cmu_cmu part at all? From the look of it, renaming all
+> *_cmu_cmu_* clocks to just cmu wouldn't cause any naming conflicts. So
+> I don't see any benefit of double cmu prefix really.
 
-are available in the Git repository at:
+The benefit is consistency, as Chanwoo pointed out.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.8-tag1
+>
+> > >
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_CMU_BOOST, 0, 2),
+> > > > +
+> > > > +     /* BUS1 */
+> > > > +     MUX(CLK_MOUT_BUS1_BUS, "mout_cmu_bus1_bus", mout_cmu_bus1_bus=
+_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS, 0, 2),
+> > > > +
+> > > > +     /* BUS2 */
+> > > > +     MUX(CLK_MOUT_BUS2_BUS, "mout_cmu_bus2_bus", mout_cmu_bus2_bus=
+_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_BUS2_BUS, 0, 2),
+> > > > +
+> > > > +     /* CORE */
+> > > > +     MUX(CLK_MOUT_CORE_BUS, "mout_cmu_core_bus", mout_cmu_core_bus=
+_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
+> > > > +
+> > > > +     /* EH */
+> > > > +     MUX(CLK_MOUT_EH_BUS, "mout_cmu_eh_bus", mout_cmu_eh_bus_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
+> > >
+> > > 'mout_cmu_core_bus' and 'mout_cmu_eh_bus' uses the same register/shif=
+t/width information.
+> > > I think it should be modified by changing the regiter or changing the=
+ shift/width information.
+> >
+> > It should be using the CLK_CON_MUX_MUX_CLKCMU_EH_BUS register.
+> > Will fix it in v4.
+> >
+> > >
+> > > > +
+> > > > +     /* CPUCL{0,1,2,} */
+> > > > +     MUX(CLK_MOUT_CPUCL2_SWITCH, "mout_cmu_cpucl2_switch", mout_cm=
+u_cpucl2_switch_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL2_SWITCH, 0, 2),
+> > > > +
+> > > > +     MUX(CLK_MOUT_CPUCL1_SWITCH, "mout_cmu_cpucl1_switch", mout_cm=
+u_cpucl1_switch_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL1_SWITCH, 0, 2),
+> > > > +
+> > > > +     MUX(CLK_MOUT_CPUCL0_SWITCH, "mout_cmu_cpucl0_switch", mout_cm=
+u_cpucl0_switch_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL0_SWITCH, 0, 2),
+> > > > +
+> > > > +     MUX(CLK_MOUT_CPUCL0_DBG, "mout_cmu_cpucl0_dbg", mout_cmu_cpuc=
+l0_dbg_p,
+> > > > +         CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 2),
+> > > > +
+> > > > +     MUX(CLK_MOUT_CMU_HPM, "mout_cmu_hpm", mout_cmu_hpm_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_HPM, 0, 2),
+> > > >
+> > >
+> > > (snip)
+> > >
+> > > > +     /* PDP */
+> > > > +     MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
+> > > > +
+> > > > +     /* PDP */
+> > > > +     MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
+> > > > +
+> > > > +     /* IPP */
+> > > > +     MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
+> > > > +
+> > > > +     /* G3AA */
+> > > > +     MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa", mout_cmu_g3aa_p,
+> > > > +         CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
+> > >
+> > > I think that need to change the mux name and mux parent name
+> > > because other mux name use the twice word according to the register n=
+ame
+> > > even if use the same work such as 'mout_cmu_g2d_g2d', 'mout_cmu_mcsc_=
+mcsc' and 'mout_cmu_mfc_mfc'.
+> > > - mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
+> > > - mout_cmu_g3aa_p -> mount_cmu_g3aa_g3aa_p
+> >
+> > Will fix in v4
+> >
+>
+> That consistent name duplication, while not causing any conflicts when
+> being removed, looks suspicious to me. That's probably some internal
+> scheme which doesn't make much sense for us and doesn't bring any
+> value, in terms of clock drivers. Maybe it'll be better to instead get
+> rid of such duplication throughout the driver, at least for clock name
+> strings? I mention this, because that's what I did in clk-exynos850.
+> With the only exception being the main domain clocks, which basically
+> enables/disables the whole unit internally, e.g.
+>
+>     GATE(CLK_GOUT_G3D_CMU_G3D_PCLK, "gout_g3d_cmu_g3d_pclk", ...
+>
+> which "G3D domain gate clock that enables/disables G3D", or something
+> like that. But clk-exynos850 doesn't have any duplicating bits like
+> "cmu_cmu" or "g3d_g3d". And the reason why I did that is I wanted
+> those clock names appear short and nice in device tree, as there were
+> no benefits in those duplicating bits.
 
-for you to fetch changes up to 95d516f3eb96bac466a6bfec28a1e55b8ed5160b:
+I did start out doing something similar, but decided it was a bad
+idea. The value of consistent naming and being able to more easily
+cross reference and verify correctness with the TRM for me far
+outweighs the advantage of having a shorter name. There are literally
+thousands of clocks we need to expose in this SoC to have everything
+fully modelled and having these various "exceptions" where we change
+the naming scheme of the clock because of a duplicated word IMO isn't
+helpful.
 
-  ARM: dts: renesas: r9a06g032: Add missing space in compatible (2023-11-28 10:29:11 +0100)
+Peter
 
-----------------------------------------------------------------
-Renesas DTS updates for v6.8
 
-  - Add FLASH support for the Renesas Marzen and Blanche development
-    boards,
-  - Add 4-bit TX support for the QSPI FLASHes on the RZ/G2L, RZ/G2LC,
-    and RZ/V2L SMARC SoMs,
-  - Add SDHI support for the RZ/G3S SMARC development kit,
-  - Add LCD support for the Atmark Techno Armadillo-800-EVA development
-    board, which requires switching from the legacy frame buffer device
-    driver to the DRM driver,
-  - Miscellaneous fixes and improvements.
-
-----------------------------------------------------------------
-Biju Das (2):
-      arm64: dts: renesas: rzg2l-smarc-som: Enable 4-bit tx support
-      arm64: dts: renesas: rzg2lc-smarc-som: Enable 4-bit tx support
-
-Claudiu Beznea (2):
-      arm64: dts: renesas: rzg3s-smarc-som: Enable SDHI2
-      arm64: dts: renesas: rzg3s-smarc: Enable SDHI1
-
-Conor Dooley (1):
-      riscv: dts: renesas: Convert isa detection to new properties
-
-Geert Uytterhoeven (10):
-      ARM: dts: renesas: marzen: Add FLASH node
-      ARM: dts: renesas: blanche: Add FLASH node
-      ARM: dts: renesas: rcar-gen2: Fix I2C bus demux node names
-      ARM: dts: renesas: Add missing ADV751[13] power supply properties
-      arm64: dts: renesas: Add missing ADV751[13] power supply properties
-      ARM: dts: renesas: iwg22d-sodimm: Fix stmpe node names
-      ARM: dts: renesas: marzen: Rename keyboard nodes
-      ARM: shmobile: defconfig: Switch to DRM_SHMOBILE
-      ARM: dts: renesas: r8a7740: Add LCDC nodes
-      ARM: dts: renesas: armadillo800eva: Add LCD panel
-
-Niklas Söderlund (4):
-      arm64: dts: renesas: draak: Make HDMI the default video input
-      arm64: dts: renesas: draak: Move HDMI bus properties to correct node
-      arm64: dts: renesas: r9a09g011: Add missing space in compatible
-      ARM: dts: renesas: r9a06g032: Add missing space in compatible
-
- arch/arm/boot/dts/renesas/iwg20d-q7-dbcm-ca.dtsi   | 15 +++++
- .../boot/dts/renesas/r8a7740-armadillo800eva.dts   | 28 +++++++++-
- arch/arm/boot/dts/renesas/r8a7740.dtsi             | 65 ++++++++++++++++++++++
- .../dts/renesas/r8a7745-iwg22d-sodimm-dbhd-ca.dts  | 15 +++++
- .../arm/boot/dts/renesas/r8a7745-iwg22d-sodimm.dts |  4 +-
- arch/arm/boot/dts/renesas/r8a7779-marzen.dts       | 48 +++++++++++++---
- arch/arm/boot/dts/renesas/r8a7790-lager.dts        | 23 ++++++--
- arch/arm/boot/dts/renesas/r8a7790-stout.dts        | 15 +++++
- arch/arm/boot/dts/renesas/r8a7791-koelsch.dts      | 30 +++++++++-
- arch/arm/boot/dts/renesas/r8a7791-porter.dts       | 26 ++++++++-
- arch/arm/boot/dts/renesas/r8a7792-blanche.dts      | 49 ++++++++++++++++
- arch/arm/boot/dts/renesas/r8a7792-wheat.dts        | 21 +++++++
- arch/arm/boot/dts/renesas/r8a7793-gose.dts         | 28 +++++++++-
- arch/arm/boot/dts/renesas/r8a7794-alt.dts          |  4 +-
- arch/arm/boot/dts/renesas/r8a7794-silk.dts         | 17 +++++-
- arch/arm/boot/dts/renesas/r9a06g032.dtsi           |  2 +-
- arch/arm/configs/shmobile_defconfig                |  5 +-
- arch/arm64/boot/dts/renesas/draak.dtsi             | 32 ++++++-----
- arch/arm64/boot/dts/renesas/ebisu.dtsi             |  6 ++
- arch/arm64/boot/dts/renesas/r8a77970-eagle.dts     | 15 +++++
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi         |  2 +-
- arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi   |  1 +
- arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi  |  1 +
- arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   | 49 ++++++++++++++++
- arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi       | 65 ++++++++++++++++++++++
- arch/riscv/boot/dts/renesas/r9a07g043f.dtsi        |  4 ++
- 26 files changed, 528 insertions(+), 42 deletions(-)
+>
+> > >
+> > > (snip)
+> > >
+> > > > +     /* CSIS */
+> > > > +     GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
+> > > > +          CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
+> > > > +     /* PDP */
+> > > > +     GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus"=
+,
+> > > > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
+> > > > +
+> > > > +     GATE(CLK_GOUT_PDP_VRA, "gout_cmu_pdp_vra", "mout_cmu_pdp_vra"=
+,
+> > > > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
+> > > > +
+> > > > +     /* IPP */
+> > > > +     GATE(CLK_GOUT_IPP_BUS, "gout_cmu_ipp_bus", "mout_cmu_ipp_bus"=
+,
+> > > > +          CLK_CON_GAT_GATE_CLKCMU_IPP_BUS, 21, 0, 0),
+> > > > +     /* G3AA */
+> > > > +     GATE(CLK_GOUT_G3AA, "gout_cmu_g3aa", "mout_cmu_g3aa",
+> > > > +          CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 21, 0, 0),
+> > >
+> > > ditto.
+> > > gout_cmu_g3aa -> gout_cmu_g3aa_g3aa
+> > > mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
+> >
+>
+> Ditto.
+>
+> > Will fix in V4
+> >
+> > regards,
+> >
+> > Peter.
