@@ -4,113 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 632B1C4167B
-	for <soc@archiver.kernel.org>; Sun,  3 Dec 2023 21:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57392C4167B
+	for <soc@archiver.kernel.org>; Sun,  3 Dec 2023 21:31:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 429B4C433C7; Sun,  3 Dec 2023 21:21:28 +0000 (UTC)
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	id 27839C433D9; Sun,  3 Dec 2023 21:31:56 +0000 (UTC)
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7072AC433CC
-	for <soc@kernel.org>; Sun,  3 Dec 2023 21:21:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7072AC433CC
+	by smtp.kernel.org (Postfix) with ESMTPS id 5AF49C433CC
+	for <soc@kernel.org>; Sun,  3 Dec 2023 21:31:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5AF49C433CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-589d4033e84so2415832eaf.1
-        for <soc@kernel.org>; Sun, 03 Dec 2023 13:21:26 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-67a91751ba8so18255656d6.3
+        for <soc@kernel.org>; Sun, 03 Dec 2023 13:31:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701638485; x=1702243285; darn=kernel.org;
+        d=linaro.org; s=google; t=1701639113; x=1702243913; darn=kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MBALP8YV0QZwaMwdd2KBWcj9Tq1p2Z16LRDLKvabBto=;
-        b=tv8UoyCGNL0uknT0wnzPef8wwdYRS8SD0dZuq88t7bo/Ljxj9Gew9fo40EdcULUwMD
-         32/k0+WwQCXbPw0WXmP1EgXd+hG13aJl3O0Wby4yA5VPBuWMdPWXvH9HJAWatGG7KoZN
-         7hPKYeOEGsYJFkGstC9txzdYB2BQ5v+Ptla2yRRCqc9G7rTZzlnZHdvjRUYXJB/jtVht
-         sLu3f3vKboV8/2S0CFq6avPP5CbEageOqYnkFkT2eW7x1cdmnMTUx+boGbdFCWJa1NAw
-         9W6Nk2/Qbw1WrMXxPwEZQk/CaCmSEBSCJ1GeFKyg70bne9XszbBYWOyXkSsFW1hsY36W
-         aMvQ==
+        bh=G02u0sdxnFAEWbNN9nRUil1ZtXJaIE05IGNFhr9iJSA=;
+        b=ispkqaR5H/BS9DDnUHHUL016yda8LbfKZjVL/iblua+5Ps2bWLsyLZWoaM7QCWr/WS
+         mJjpVD81MLRIndxGL1SyzhZl1oTOzTRaHXuilv/8TguoEENxMENIMjV/fAeJDjEC3qxp
+         jnYwCFmCWxSplIdGONIhqXKDjgYyDLEZd+4mrLDic1RJDL6fn9LGzpreNi0zaCD31pmP
+         zEHoYE2GEsWOqifS5G4djaOsqrqFGJPgMmcI5AjH6K73pIN13FV2wDXvebFQRAGDL6FQ
+         mGIc2S08Eehscz4NDYjO7R3E2bcdZaJg/ViS/jyEMam96dU8uFdYig3teGCPgOxRwfJn
+         FKTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701638485; x=1702243285;
+        d=1e100.net; s=20230601; t=1701639113; x=1702243913;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MBALP8YV0QZwaMwdd2KBWcj9Tq1p2Z16LRDLKvabBto=;
-        b=PMKBBwtM3QhU4HgGwrcvqebzc1o86OlmO+ldcKScUiDuo6w3mpT2NbhUtJVuA8byLn
-         LX3jeflAVIXYerRbJBYSgWKcZFHgVv1wW9mhvbdTEN9cGvHtBCsZku0zCWlqWShreYhT
-         j1td2mw2S55nvie6vPdc99XU6+az9JQ3I7ln7OBe4nfSmTZswPUtlqM39c62O7l+X0dt
-         24BOMNlLBnXTd16Y1oV0gqdmmwur84ICgt17uvtD7yv1CEy4ktXLeAT3Lg+pZPtIfV60
-         VmsJk7AiDPpFCLBy8mJwS9uIUnnxSU/+Rq5MYOOYQp9kQQ2Yi1KirxbdeEJ/7CCZAAOx
-         Aqfg==
-X-Gm-Message-State: AOJu0YydTFqdeuzsArqsIhAkGbxUJmQaTW5s5eZ9fX21t/61JqEtq8IC
-	CrAEJ0jUR18So7pMhkjn+B10FiJW4HP9wdrx52UCHA==
-X-Google-Smtp-Source: AGHT+IGtekMHkp852JA6RkiudAH5D96Q93RiRqk9YOj5heuqbhP+mmIk3wEQ0uwM4Ob7BzATccUT7+4SnMfM9Ymm5do=
-X-Received: by 2002:a05:6358:1206:b0:170:8f0:c6c2 with SMTP id
- h6-20020a056358120600b0017008f0c6c2mr3905258rwi.21.1701638485268; Sun, 03 Dec
- 2023 13:21:25 -0800 (PST)
+        bh=G02u0sdxnFAEWbNN9nRUil1ZtXJaIE05IGNFhr9iJSA=;
+        b=Mcf1wy+yaVxA+khHXCw0N7pKdj9Ys9WHIyrmT0V45vNaK5GDZVWWK6PQFI3bTfNwa4
+         Q78DWEv9YH9ch1XCObGmriOeP1042W8bsI36KvNKpnKkIrPvBeeyzZvFBx634mKhlWWq
+         HrDZMkuFkxWXOM6sedLuIGDGhF/bwPH7naCCR8Mj47D3Ueo+Q1XUvc8hhWF8jfBLDP/5
+         ChPbtVwypLgpejMhmh5rh5ELrNCgN9DmiLzfIjM0L+di2WX6wiDT26Q7o8cIm0Hsjr9M
+         3mw8H8AfaSOU6856X2DyTzSBtrfwOOhk9w18Jz26i84qfZL4KxkkdFDHDgumTbHH5RE2
+         Mm/A==
+X-Gm-Message-State: AOJu0YwKDnka5EAQ/voNIwVinuJjW/2ImAeYap7HE12/87Rr7xcnZXcZ
+	i9/DFObNBkQCHRvMTEr/qqNwgZs44cNVQLLUKmSgDg==
+X-Google-Smtp-Source: AGHT+IGNohdhuUx6qw41RjMk55NiBYO1sgpsNCtd4DXi5RmzCel7FKuFM65wkoSHPpohcTc4yi+ZokTYRVrg0YEEWT8=
+X-Received: by 2002:a0c:f7d0:0:b0:67a:bb7f:ebd7 with SMTP id
+ f16-20020a0cf7d0000000b0067abb7febd7mr1547835qvo.61.1701639113122; Sun, 03
+ Dec 2023 13:31:53 -0800 (PST)
 MIME-Version: 1.0
 References: <20231201160925.3136868-1-peter.griffin@linaro.org>
- <20231201160925.3136868-8-peter.griffin@linaro.org> <fedd4ec8-b4e6-472a-9bfd-063ea8b9658e@linaro.org>
-In-Reply-To: <fedd4ec8-b4e6-472a-9bfd-063ea8b9658e@linaro.org>
+ <20231201160925.3136868-10-peter.griffin@linaro.org> <59b949a0-5aeb-4f01-8789-cb305513b626@app.fastmail.com>
+In-Reply-To: <59b949a0-5aeb-4f01-8789-cb305513b626@app.fastmail.com>
 From: Peter Griffin <peter.griffin@linaro.org>
-Date: Sun, 3 Dec 2023 21:21:14 +0000
-Message-ID: <CADrjBPrqWKdhiL8TCcBC3ohLAwrAZiRwtA8Yg0q4gkrf9qrKqw@mail.gmail.com>
-Subject: Re: [PATCH v5 07/20] dt-bindings: pinctrl: samsung: add
- gs101-wakeup-eint compatible
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Sun, 3 Dec 2023 21:31:41 +0000
+Message-ID: <CADrjBPoeLLcoDuLdkVhO4C_8qFAvFSu2igNPP09RXagiJpPsig@mail.gmail.com>
+Subject: Re: [PATCH v5 09/20] dt-bindings: serial: samsung: Make
+ samsung,uart-fifosize required property
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
-	soc@kernel.org, devicetree@vger.kernel.org, 
+Cc: Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org, 
+	Michael Turquette <mturquette@baylibre.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Sam Protsenko <semen.protsenko@linaro.org>, saravanak@google.com, 
+	William McVicker <willmcvicker@google.com>, soc@kernel.org, devicetree@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
+	linux-clk@vger.kernel.org, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-watchdog@vger.kernel.org, 
+	kernel-team@android.com, linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Krzysztof,
+Hi Arnd,
 
-Thanks for the review.
-
-On Sun, 3 Dec 2023 at 15:11, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Fri, 1 Dec 2023 at 16:39, Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On 01/12/2023 17:09, Peter Griffin wrote:
-> > gs101 is similar to newer Exynos SoCs like Exynos850 and ExynosAutov9
-> > where more than one pin controller can do external wake-up interrupt.
-> > So add a dedicated compatible for it.
+> On Fri, Dec 1, 2023, at 17:09, Peter Griffin wrote:
 > >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-> > index 2bafa867aea2..de2209f8ba00 100644
-> > --- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-> > +++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-> > @@ -44,6 +44,7 @@ properties:
-> >            - const: samsung,exynos7-wakeup-eint
-> >        - items:
-> >            - enum:
-> > +              - google,gs101-wakeup-eint
-> >                - samsung,exynosautov9-wakeup-eint
-> >                - samsung,exynosautov920-wakeup-eint
-> >            - const: samsung,exynos850-wakeup-eint
-> > @@ -111,6 +112,7 @@ allOf:
-> >          compatible:
-> >            contains:
-> >              enum:
-> > +              - google,gs101-wakeup-eint
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - google,gs101-uart
+> > +    then:
+> > +      required:
+> > +        - samsung,uart-fifosize
+> > +
 >
-> Drop, not needed.
+> Is there a way to reverse the list and make the property
+> required for anything that is not explicitly enumerated?
 
-Will fix
+I'm not aware of a way to do that, but I'm by no means an expert with
+json schema. Krzysztof or Rob may know of a way.
 
-Peter.
+I presume your rationale is any newly added platform would get a DTC
+warning if they didn't add the samsung,uart-fifosize property?
+
+Krzysztof and Rob also had concerns in the previous series about ABI
+breakage on existing platforms, which is why this was only made
+required for google,gs101-uart.
+
+regards,
+
+Peter
