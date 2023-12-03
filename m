@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 581A2C4167B
-	for <soc@archiver.kernel.org>; Sun,  3 Dec 2023 15:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E47FEC4167B
+	for <soc@archiver.kernel.org>; Sun,  3 Dec 2023 15:11:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3FAA0C433C7; Sun,  3 Dec 2023 15:11:07 +0000 (UTC)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	id CADC2C433CA; Sun,  3 Dec 2023 15:11:41 +0000 (UTC)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9509AC433CB
-	for <soc@kernel.org>; Sun,  3 Dec 2023 15:11:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9509AC433CB
+	by smtp.kernel.org (Postfix) with ESMTPS id 1769EC433CC
+	for <soc@kernel.org>; Sun,  3 Dec 2023 15:11:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1769EC433CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50bf2d9b3fdso457389e87.3
-        for <soc@kernel.org>; Sun, 03 Dec 2023 07:11:05 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-54c67b0da54so2632191a12.0
+        for <soc@kernel.org>; Sun, 03 Dec 2023 07:11:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701616263; x=1702221063; darn=kernel.org;
+        d=linaro.org; s=google; t=1701616298; x=1702221098; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=MQKFwbSfCTR6pDRHerNzXKcjABQ/ztRD/TlHLxcH5SI=;
-        b=Fid/IcMQEJHUeGsQTUdihg91nx3uthI/SUhDIJVIzUAjAt08ixbJz4+Ymf8yAKr+l1
-         qTVoOROMIhe2M+8ZpFgCt8ako+ZnZU1wyV78R0Mbe8vsHZZcz6PISu2wvHpHYDa1pb2/
-         DHnFOcoJY9HXQIThNXzjTEwki7luPtKDzSA7i4Whkj+c51a2Aip8IfzjVcKOICxN8FDJ
-         UppzHZ+thp+rDru8W3EoIsqk+PImYmt47AE4hpCTlG1+v/j0lscQ3Ag9QVPmCz0gXQc/
-         KIKKXYs3zRK7aQX3ds89C4qzEZ/nk9IvlYTnMltzeBAo+G/1/+pQTn4f/qMe8ug17Jmo
-         aOjw==
+        bh=x1s3diQUmhZKnFhf6RPj31jXRYpUbrUePNSllpbOaq8=;
+        b=ILPA/ZKsIv/hghB9Mk+MzeVe9CAw6hbmg2llchT0Ob6E8J3EAz21RdFrGM/tg0u7o0
+         9WdDf9LrKHx7nmh8KHAp03qY3xEZkdQDntPKa4WrrAaKArzMjuxvKLwsLtOabvKUSGwQ
+         ClU7ezxttbaYUKXry8W/RK37ERP1svW2+bocfS313WQ1f5bg+rUis2gYLWy1uC/tMKW9
+         jfW8urQFNQSU9E4xYvil47KWpeAuh8sUIirOmnY4oZE5nF/jBGpMcKkfWFiuYT6G6uJ/
+         FGGhjMJlJWFuAaakrUor8qsX8VhtEXIE+zNjCosBC7K8OxmqWmhE9LPKoSsBSvVypIoz
+         oOrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701616263; x=1702221063;
+        d=1e100.net; s=20230601; t=1701616298; x=1702221098;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MQKFwbSfCTR6pDRHerNzXKcjABQ/ztRD/TlHLxcH5SI=;
-        b=jgIURp3BVDaUAZe9naiWmgIguelr+CLfVajDfjgjtX4m/LMa0wSOxAqNEXbXeCkixn
-         sb7Yvul/FOPOuNSouhEMZmR29Fk2Cy4Fld0yKmBY11M27H25NhhSSY3B1X8jss5vU5xY
-         Ijgqwy9MPpXx9GKBI26PgnPKVhkpYXZ4hIE3AIWKOcmDRxm9kJ6vq3R2ApEiM6mDedGg
-         yuLd6B1Z6F1eME0Ls8MEBegusKnADyOq5BprLAav+ET2hMWTDWqImJVc4E1NRjKkmtiS
-         Qw27JqeFiI1/SMymTsu00sgqU53GrlNrzN5eOx3cD0WVq2QNkVBQLTErWQCGirvLXJaC
-         JyyA==
-X-Gm-Message-State: AOJu0YwItEs/C4CeC7pcNkr47AU7XKT/2IWnursWCrOdin4D6nsCit85
-	Sp8LQ6ONMwDojITeUTIEHqoEVw==
-X-Google-Smtp-Source: AGHT+IHMeCPlrrrhBentngA06L4JOo+/ABPRG9Kh27mONiPiJV9fiLOZgc1qIrI0vNMrI9AUk1s9nQ==
-X-Received: by 2002:ac2:5298:0:b0:50b:e65e:9511 with SMTP id q24-20020ac25298000000b0050be65e9511mr925430lfm.71.1701616263257;
-        Sun, 03 Dec 2023 07:11:03 -0800 (PST)
+        bh=x1s3diQUmhZKnFhf6RPj31jXRYpUbrUePNSllpbOaq8=;
+        b=iXDv4MzZJF6IcPe7Xe8NMf3xUkA9Cyy2+CiL5n2tLQ0d1XLA4c/cxRnRu0uNSGl7bW
+         uLGWT7LcigG6Eqwq/gnlDkHGSMMiLMfUpd397Yx8gz34ppj+XIzPidJVAB0o7SwZ9382
+         QkZU2PLaqrX+vZSUtW5tQ8tCODTuN7xQG0fBPt7AvNCiGF7O3uwog5aUIy162xu6W0Cw
+         XqUT89nbQwy4scipgo93qFCWsqRihncEh0DwYbwF0t8mN7WpW5GdJn7rjZBn5YKPZWxn
+         q4wuaYnjHbq1Fx/TaNCadVOwsjKjApLnoDCNuvrJk5+oefNIvXVK4UKNGAmvTSo+b3gP
+         X2FQ==
+X-Gm-Message-State: AOJu0YzR/+/vbJa77TPjN8BZASrvnw82CvtyittugtfXp/0+0OYjTW0r
+	JQvlypodpoVL41ZRGj+Ui5NY2g==
+X-Google-Smtp-Source: AGHT+IE6hLs+OQKKsA4hYNMrfNjXulBViiSAa71dvfVFYSnYccTJHBs8h9EOclYeTIhao87y1pcINQ==
+X-Received: by 2002:a17:906:d10e:b0:a19:a19b:55dc with SMTP id b14-20020a170906d10e00b00a19a19b55dcmr2615752ejz.108.1701616298269;
+        Sun, 03 Dec 2023 07:11:38 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id di16-20020a170906731000b00a1b6d503e7esm492044ejc.157.2023.12.03.07.10.59
+        by smtp.gmail.com with ESMTPSA id di16-20020a170906731000b00a1b6d503e7esm492044ejc.157.2023.12.03.07.11.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Dec 2023 07:11:02 -0800 (PST)
-Message-ID: <b4e710c0-dddb-4217-9979-21bdc20ee302@linaro.org>
-Date: Sun, 3 Dec 2023 16:10:59 +0100
+        Sun, 03 Dec 2023 07:11:37 -0800 (PST)
+Message-ID: <fedd4ec8-b4e6-472a-9bfd-063ea8b9658e@linaro.org>
+Date: Sun, 3 Dec 2023 16:11:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/20] dt-bindings: serial: samsung: Make
- samsung,uart-fifosize required property
+Subject: Re: [PATCH v5 07/20] dt-bindings: pinctrl: samsung: add
+ gs101-wakeup-eint compatible
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -75,7 +75,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
  linux-serial@vger.kernel.org
 References: <20231201160925.3136868-1-peter.griffin@linaro.org>
- <20231201160925.3136868-10-peter.griffin@linaro.org>
+ <20231201160925.3136868-8-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,44 +121,40 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231201160925.3136868-10-peter.griffin@linaro.org>
+In-Reply-To: <20231201160925.3136868-8-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 01/12/2023 17:09, Peter Griffin wrote:
-> Specifying samsung,uart-fifosize in both DT and driver static data is error
-> prone and relies on driver probe order and dt aliases to be correct.
-> 
-> Additionally on many Exynos platforms these are (USI) universal serial
-> interfaces which can be uart, spi or i2c, so it can change per board.
-> 
-> For google,gs101-uart and exynosautov9-uart make samsung,uart-fifosize a
-> required property. For these platforms fifosize now *only* comes from DT.
-
-I don't see ExynosAutov9 compatible in your patch.
-
-> 
-> It is hoped other Exynos platforms will also switch over time.
+> gs101 is similar to newer Exynos SoCs like Exynos850 and ExynosAutov9
+> where more than one pin controller can do external wake-up interrupt.
+> So add a dedicated compatible for it.
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  .../devicetree/bindings/serial/samsung_uart.yaml       | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml      | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> index ccc3626779d9..65d5d361e8f4 100644
-> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> @@ -133,6 +133,16 @@ allOf:
->              - const: uart
->              - const: clk_uart_baud0
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - google,gs101-uart
+> diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+> index 2bafa867aea2..de2209f8ba00 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
+> @@ -44,6 +44,7 @@ properties:
+>            - const: samsung,exynos7-wakeup-eint
+>        - items:
+>            - enum:
+> +              - google,gs101-wakeup-eint
+>                - samsung,exynosautov9-wakeup-eint
+>                - samsung,exynosautov920-wakeup-eint
+>            - const: samsung,exynos850-wakeup-eint
+> @@ -111,6 +112,7 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> +              - google,gs101-wakeup-eint
+
+Drop, not needed.
+
 Best regards,
 Krzysztof
 
