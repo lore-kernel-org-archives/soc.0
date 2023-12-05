@@ -1,215 +1,292 @@
-Return-Path: <SRS0=Yz1O=HQ=s4.acemsrvh.com=bounce-1707420-681-1076303-soc=kernel.org@kernel.org>
+Return-Path: <SRS0=WAkG=HQ=s4.acemsrvh.com=bounce-1707420-679-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA05FC4167B
-	for <soc@archiver.kernel.org>; Tue,  5 Dec 2023 15:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DDFC4167B
+	for <soc@archiver.kernel.org>; Tue,  5 Dec 2023 15:30:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 69A95C433CA; Tue,  5 Dec 2023 15:26:21 +0000 (UTC)
+	id C9D4EC433CA; Tue,  5 Dec 2023 15:30:19 +0000 (UTC)
 Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CD679C433C8
-	for <soc@kernel.org>; Tue,  5 Dec 2023 15:26:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD679C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mgrutocqueville.org
+	by smtp.kernel.org (Postfix) with ESMTPS id EDE4AC433C8
+	for <soc@kernel.org>; Tue,  5 Dec 2023 15:30:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EDE4AC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ndifunding.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=s4.acemsrvh.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=mgrutocqueville.org;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=ndifunding.org;
  h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
- List-Unsubscribe:List-Unsubscribe-Post:Message-ID; i=team@mgrutocqueville.org;
- bh=wE6X4rbF2qwNM1lF9Ca6PzZ7TwT7rC43MSi4Jn/yumw=;
- b=SUkcdMOheaXLxz6oGXf6JKwntoDOdrISyLRgdcCZjZCxL8X7rnF99kL5Xfmu++kZi7Cr4sI+SUXy
-   QO+/zdIFa4fPcFm9yvUdz8jKDoe/TI/HNJNUK8Cd9k5rmGqgQ1NAiTH8jU7qCRoYZALgAcgWkoGQ
-   A9Gwrhh8ukX26mHLveqKsW4YIRobULaBbzDHmkZE98MPJmukA+Yd2YzvJd+eE4qQ4zPf1Y0AkaEl
-   pQXhLGLWFzUmVo0l6chR3YNnHe+JfCxG7XJ/LJ2mijecjPW1KSXnwVEsT5c6a/d7SFNIW2G2Swxx
-   dHyoLUjKCCtQyt+n8SRFbm1nESLtSKpaCUhHlA==
-Received: by s4.acemsrvh.com id hdt0hk34rc8s for <soc@kernel.org>; Tue, 5 Dec 2023 15:26:18 +0000 (envelope-from <bounce-1707420-681-1076303-soc=kernel.org@s4.acemsrvh.com>)
+ List-Unsubscribe:List-Unsubscribe-Post:Message-ID; i=team@ndifunding.org;
+ bh=PzGeTlPpnBwvnVzGGvLuIIkpn18lLfRF4j299Hu6XpM=;
+ b=PuNcRx3FvvDSf/+GTDaHMZbCT3dhjRwuNyw0+GOOB+WfONHavi1J/ZuFGsv9BoffrGdDZJdje246
+   Jo6pTy2CMfQS8FoyLpDCX3FtDDKDAL9gwt3KT685GkJlozsqqD62uWiROsDymuLpJ+NJCBa8c1hG
+   97eY0dSE2m/46yp4NSDyVytPvK7dMbJt7nELcwdjGaeQTPylyebW4PgzvqNeYaUfXalxAB/U5MaU
+   hKdsWyKDV5zCjXCaeQb7kqxauKqYDuhUV5y6xRwXM5+cyVXFsRuODRyeCziZyvo/XccF7j7Up71L
+   0iMZtCxP/vtiP8pb1ekYeY8yZC+8ggmu3wDBIQ==
+Received: by s4.acemsrvh.com id hdt10i34rc8a for <soc@kernel.org>; Tue, 5 Dec 2023 15:30:17 +0000 (envelope-from <bounce-1707420-679-1076303-soc=kernel.org@s4.acemsrvh.com>)
 X-Mailer: ActiveCampaign Mailer
 CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-From: "Charlotte Berry" <team@mgrutocqueville.org>
-Subject: United Way Million Dollar Roundtable Member
-Date: Tue, 05 Dec 2023 09:22:14 -0600
+From: "Linda Lysakowski, ACFRE" <team@ndifunding.org>
+Subject: Meet EVERY Millionaire Donor In Your City
+Date: Tue, 05 Dec 2023 09:22:11 -0600
 MIME-Version: 1.0
 Content-Type: multipart/alternative;
- boundary="_=_swift-1053669749656f4026862743.80557830_=_"
+ boundary="_=_swift-1933784563656f40235ad2f4.90976163_=_"
 Content-Transfer-Encoding: 7bit
 X-DKIM-Options: s=acdkim1
-X-mid: c29jQGtlcm5lbC5vcmcgLCBjNjgxICwgbTExNTIgLCBzNTk4
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjNjc5ICwgbTExNTAgLCBzNTk5
 x-virtual-mta: s4.acemsrvh.com
-Feedback-ID: 1707420:1707420.681:s4.acemsrvh.com:activecampaign
-X-250ok-CID: 1707420-681
-List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-681-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
- <http://jimmylarose.activehosted.com/box.php?nl=214&c=681&m=1152&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
+Feedback-ID: 1707420:1707420.679:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-679
+List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-679-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
+ <http://jimmylarose.activehosted.com/box.php?nl=214&c=679&m=1150&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
 List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Message-ID: <20231205152618.441.1719880141.swift@jimmylarose.activehosted.com>
+Message-ID: <20231205153017.8401.2089599826.swift@jimmylarose.activehosted.com>
 
 
---_=_swift-1053669749656f4026862743.80557830_=_
+--_=_swift-1933784563656f40235ad2f4.90976163_=_
 Content-Type: text/plain; charset=utf-8
 
-(Meet All The Major Donors In Your Community) 
+(That Want to Give To Your Organization) 
  ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
 
-******"Major Gifts Ramp-Up makes Tocqueville Members want to give, and
-give and GIVE AGAIN!" ~****
+WE KNOW ALL THE WEALTHY DONORS 
+WHO LIVE & GIVE IN YOUR COMMUNITY
 
-**Charlotte Berry, United Way Million Dollar Roundtable Member****BRAND
-NEW TOCQUEVILLE MEMBERS ARE AVAILABLE 
-TO YOUR LOCAL UNITED WAY PROGRAM
+"Meet the MILLIONAIRE FAMILIES who already give major gifts to
+nonprofits in your community. We will provide you their contact
+information and show you how to meet them one-on-one!" ~ Linda
+Lysakowski, ACFRE
 
-****VISIT HERE
-or press
-"Get Started" button below! 
-
-(Reservations are also open for Local United Way Programs & Partner
-Agencies)
+VISIT HERE  OR PRESS BUTTON BELOW FOR
+A 60 SECOND VIDEO OVERVIEW
 
  
 
-https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=&sig=4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=1701789978&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=hiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=678f48a0e320c6856d0620aa2e024acb&i=681A1152A214A2671 
+https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmc=&sig=99eT82scTYDPf2pa3i7by99RpiDtzJZdDuRp77agDnU5&iat=1701790217&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=TGIVm9bF2Lhw3rngFZUqh0VRmNH9Lh0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2Bi6k%2Ballaq9BL2vc5&s=678f48a0e320c6856d0620aa2e024acb&i=679A1150A214A2665 
 
  
 
-****"Major Gifts Ramp-Up makes Tocqueville Members want to give, and
-give and GIVE AGAIN!"** ~ Charlotte Berry, United Way Million Dollar
-Roundtable Member**
+"We grew our budget from $178,000 to $3.5 Million in 18 months using
+Major Gifts Ramp-Up. Your board is going to love this." - Sarah Garrett,
+Phoenix Center
 
-Dear colleague in service,
+Dear Colleagues In Service,
 
-My name is Charlotte Berry and I'm privileged to be 
+Over the past 30 years I've been privileged to lead and speak at
+hundreds of AFP conferences, nonprofit state association events and
+industry workshops. I spent my time and money on these gatherings to
+stay up to speed on trends and to network with my peers.
 
-**South Carolina's very first United Way Million Dollar Roundtable
-Member.** I thought I'd start your day by sharing how Major Gifts
-Ramp-Up has inspired me and hundreds of Local United Way programs to
-grow their Alexis de Tocqueville Societies.
+For me personally, those days are over. We now live in the era of
+Covid-19 and if I'm going to fly across the country for a multi-day
+in-person event it won't be to hear retreaded PowerPoint presentations
+from 1995. It will have to be different. It will have to be special. I'm
+pleased to share that I've discovered that worthwhile experience.
 
-If it is time for your organization to become fully funded, I strongly
-recommend that you attend a Major Gifts Ramp-Up Event. I
+It's called Major Gifts Ramp-Up.
 
-**loo**k forward to meeting you personally at our next 2-Day Conference.
-Prepare to hear the truth in ways you have never experienced. You will
-hear from me and learn from the experts who defied convention and
-challenged the false thinking that keeps Local United Way Programs from
-raising as much money as they should.
+Over 17,000 nonprofit executives from across the U.S. have already
+attended a Major Gifts Ramp-Up Event. THEY LOVE THESE CONFERENCES (and
+so do their boards!) Why? Because this fast-paced and provocative
+training has been customized for the audience in attendance. Prepare to
+hear the truth in ways you've never experienced before. You'll learn
+from the masters who defied convention and challenged the false thinking
+that keeps charities broke. 
 
-VISIT HERE TO JOIN US
+Let me encourage you to join us so you can learn how to prioritize your
+nonprofit's cash flow. You see, the number one indicator of a charity's
+ability to scale program is its capacity to add new staff. How then do
+you generate the millions you need to grow your mission? Whether you're
+a brand new start-up, small, medium or large 501(c)3 organization the
+most efficient way to increase income is Major Gifts Fundraising.
 
-Here's what your Local United Way colleagues have to say about Major
-Gifts Ramp-Up:
+VISIT HERE  FOR 60 SECOND VIDEO
+OVERVIEW
 
-"Having served nonprofits for the past 40 years, I thought I'd seen
-everything! Then I attended Major Gifts Ramp-Up New York and experienced
-MGRU faculty's brilliant performance. Their unbounded enthusiasm, comic
-timing, exceptional sense of theater and insights into nonprofit
-management will change the way you view yourself and the raising of big
-gifts. This conference is a must-see, especially for those who think
-they've seen it all!" ~ Su Marcy, United Way of Ulster County
+I'm pleased to announce that I'm now part of the Major Gifts Ramp-Up
+Team and am co-hosting MGRU events across nation. Here's our 2023
+conference schedule.
 
-"Our program here in Macon, GA continued to be challenged with ongoing
-company campaign losses. I was also frustrated by our declining
-Tocqueville Membership. I agreed to attend a Major Gifts Ramp-Up Event
-and was so impressed that our team agreed to host a 2-Day live virtual
-event for our local United Way Partner Agencies. THEY LOVED IT! This
-conference was inspirational, innovative, fun, and exactly what our
-partners needed in the way of training. Conventional methods of
-management and fundraising were challenged with humor and insight.
-MGRU's expert faculty engaged our grantees and inspired them to grow
-revenues in new ways they never dreamed possible. We now have 55 new
-five-figure givers after just 12 months of implementing Major Gifts
-Ramp-Up. (We also raised 430,000 in one evening!)" ~ George McCanless,
-United Way of Central Georgia
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
 
-"Two words...AMAZING EXPERIENCE. Our Mid-Illinois Major Gifts Ramp-Up
-Event was provocative and pushed our agency directors to
-'re-imagine' their roles as CEOs! (I've received only positive
-comments from those who attended.) 
+**Dec 06 2023 - Dec 07 2023**Virtual Online Event
 
-**MGRU Faculty challenged us to see charity through a new lens and then
-gave us the tools we needed to change.** Our own United Way staff were
-inspired and are now poised for unprecedented campaign success. If you
-believe in nonprofit capacity-building than this program is for you." ~
-Debbie Bogle, President & CEO, United Way of Decatur and Mid-Illinois
+**MAJOR GIFTS RAMP-UP WEST COAST**
+Executives, Board Members & Volunteers
 
-VISIT HERE TO JOIN US
+**Dec 13 2023 - Dec 14 2023**Virtual Online Event
 
-**Over 200 Local United Ways have already**
+**LAS VEGAS, NV (DESTINATION EVENT)**
+NFL Alumni Foundation
 
-**attended Major Gifts Ramp-Up!**
+**Jan 10 2024 - Jan 11 2024**Live In-Person Event
 
-Here's your 2024 Local United Way Conference Event Schedule:
+**CAROLINA NONPROFITS (DESTINATION EVENT)**
+Goodwill Industries of Eastern NC Inc.
 
-**UNITED WAY PROGRAMS AND PARTNERS**
+**Jan 31 2024 - Feb1 2024**Live In-Person Event
 
-**Feb 28 2024 - Feb 29 2024**
+**UNITED WAY PROGRAMS & PARTNERS**
 
-Virtual Online Event
+**Feb 28 2024 - Feb 29 2024**Virtual Online Event
 
-**UNITED WAY PROGRAMS AND PARTNERS**
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
 
-**Jul 17 2024 - Jul 18 2024**
+**Mar 6 2024 - Mar 7 2024**Virtual Online Event
 
-Virtual Online Event
+**FAITH & FUNDRAISING NATIONWIDE**
+Ministries, Schools & Churches
 
-**UNITED WAY PROGRAMS AND PARTNERS**
+**Mar 13 2024 - Mar 14 2024**Virtual Online Event
 
-**Oct 23 2024 - Oct 24 2024**
+**MIAMI, FL (DESTINATION EVENT)**
 
-Virtual Online Event
+**Mar 20 2024 - Mar 21 2024**Live In-Person Event
 
-**UNITED WAY PROGRAMS AND PARTNERS**
+**JACKSONVILLE, FL (DESTINATION EVENT)**
 
-**Dec 04 2024 - Dec 05 2024**
+**Mar 26 2024 - Mar 27 2024**Live In-Person Event
 
-Virtual Online Event
+**RENO, NV (DESTINATION EVENT)**
 
-VISIT HERE TO JOIN US
+**Apr 03 2024 - Apr 04 2024**Live In-Person Event
 
-During this 2-Day virtual meeting your faculty 
+**DALLAS, TX (DESTINATION EVENT)**
 
-**will allow you to access the names and contact information of every
-millionaire household within your service area. These are donors you've
-never met who can invest a 5, 6 or 7 figure gifts.** I'm also pleased to
-share that our team of experts has designed comprehensive custom
-materials in collaboration with local United Ways to provide you
-everything you need to raise the millions you require to accomplish your
-important mission!
+**Apr 24 2024 - Apr 25 2024**Live In-Person Event
+
+**PHILADELPHIA, PA (DESTINATION EVENT)**
+
+**May 01 2024 - May 02 2024**Live In-Person Event
+
+**CINCINNATI, OH (DESTINATION EVENT)**
+
+**May 22 2024 - May 23 2024**Live In-Person Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
+
+**Jun 05 2024 - Jun 06 2024**Virtual Online Event
+
+**UNITED WAY PROGRAMS & PARTNERS**
+
+**Jul 17 2024 - Jul 18 2024**Virtual Online Event
+
+**FAITH & FUNDRAISING NATIONWIDE**
+Ministries, Schools & Churches
+
+**Jul 31 2024 - Aug 1 2024**Virtual Online Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+
+**GOODWILL INDUSTRIES PROGRAMS**
+
+**Sep 25 2024 - Sep 26 2024**Virtual Online Event
+
+**COLUMBUS, OH (DESTINATION EVENT)**
+
+**Oct 16 2024 - Oct 17 2024**Live In-Person Event
+
+**NASHVILLE, TN (DESTINATION EVENT)
+UNITED WAY PROGRAMS**
+
+**Oct 23 2024 - Oct 24 2024**Live In-Person Event
+
+**FAITH & FUNDRAISING NATIONWIDE**
+Ministries, Schools & Churches
+
+**Nov 13 2024 - Nov 14 2024**Virtual Online Event
+
+**MELBOURNE, FL (DESTINATION EVENT)
+UNITED WAY PROGRAMS**
+
+**Dec 4 2024 - Dec 5 2024**Live In-Person Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
+
+**Dec 11 2024 - Dec 12 2024**Virtual Online Event
+
+VISIT HERE  FOR 60 SECOND VIDEO
+OVERVIEW
+
+Major Gifts Ramp-Up is not nonprofit management 101! Meet the
+fundraising veterans who've raised millions. Join us to learn how you
+can build the financial capacity you need to secure your future. This
+live and in-person event will challenge everything you believe about the
+raising of money, and 
+
+**will make**five, six and seven figure major gifts available to your
+nonprofit in the shortest period of time possible.
+
+**"I've spent the last week receiving email messages, phone calls and
+personal visits thanking me for bringing Major Gifts Ramp-Up to our
+community. This spectacular 2-day capacity-building conference was
+daring, confrontational and exactly what our organizations needed in the
+way of training.  Conventional methods of management and fundraising
+were challenged with humor and insight. Their expert faculty engaged our
+grantees and inspired them to grow revenues in new ways that work. 
+Prepare for significant change if you give yourself this gift."** ~ Debi
+Meeds, Springfield, MO
 
 Who should attend? If you're a CEO, CFO, COO, CDO, Executive Director,
-Development Director, Staff Member, Board Member, Trustee or Volunteer 
+Development Director, Staff Member, Board Member, Pastor, Trustee or
+Volunteer responsible for the financial health of a nonprofit, ministry
+or church then you'll want to make sure you bring as many people as
+possible to this training.
 
-**responsible for the financial health of your local United Way**, then
-I would encourage you to bring as many people as possible to this
-training.
+Tuition for a quality capacity-building conference could cost up to $800
+per guest. We're thrilled to share that a group of major donors have
+underwritten this event allowing us to offer tuition for ONE PERSON at
+$248 or UNLIMITED REGISTRATIONS for only $498.
 
-**Again, I look forward to meeting you at our next event.** Major Gifts
-Ramp-Up will ensure you have that spectacular 2024!
+That's right, every member of your team can come for only $498. Please
+register today. This event will reach capacity soon.
+
+VISIT HERE TO GET STARTED 
+
+****
+We believe in you. We're going to introduce you to all the wealthy
+donors in your community. How? We have their contact information and
+will share with you the five secrets to meeting wealthy donors for the
+very first time. Let MGRU's faculty show you how to access them ASAP. I
+look forward to meeting you personally.
+
+Until then I remain,
 
 Sincerely Yours,
 
-**Charlotte Lunsford Berry**
+Linda Lysakowski, ACFRE
 
-United Way Million Dollar Roundtable Member
+National Development Institute
 
-P.S. Nonprofit Execs, VISIT HERE
-to make
-your reservation today.
+P.S. Are you responsible for building your organizations financial
+capacity? If so, Major Gifts Ramp-Up may be the most powerful conference
+event you ever experience.
 
-**Over 200 Local United Ways have already attended a Major Gifts Ramp-Up
-Event.**
+P.P.S. Don't let anyone tell you now is not the time to fund raise. 
+Don't let anyone tell you things have to stay the same.  Don't let
+a few panicked Board members hijack your future. Now is the time to act!
+
+P.P.P.S. VISIT HERE  to make your
+unlimited reservation today.
 _________________
 
 Sent to soc@kernel.org
 
 Unsubscribe:
-http://jimmylarose.activehosted.com/proc.php?nl=214&amp;c=681&amp;m=1152&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
+http://jimmylarose.activehosted.com/proc.php?nl=214&amp;c=679&amp;m=1150&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
 
 National Development Institute, PO Box 1840, Lexington, SOUTH CAROLINA 29071, United States
---_=_swift-1053669749656f4026862743.80557830_=_
+--_=_swift-1933784563656f40235ad2f4.90976163_=_
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -267,9 +344,65 @@ ortant;} *[class].ac-social-icon-24 {width:24px !important; height:24px !im=
 portant;} *[class].ac-social-icon-28 {width:28px !important; height:28px !i=
 mportant;} *[class].__ac_social_icons { margin-right: 0px !important; } }=
 =0A</style><style data-ac-keep=3D"true"> @media only screen and (max-width:=
- 320px) { #layout-row4096 img { width: 100% !important; height: auto !impor=
-tant; max-width: 320px !important; } #layout-row4101 .break-line { width: 1=
-00% !important; margin: auto !important; } div.divbody { padding: 20px !imp=
+ 320px) { #layout-row4086 img { width: 100% !important; height: auto !impor=
+tant; max-width: 320px !important; } div.divbody { padding: 20px !important=
+; } table, tbody, td, .divbody { display: table !important; width: 100% !im=
+portant; max-width: 100% !important; } .td_rss .rss-item img.iphone_large_i=
+mage { width: auto !important; } u + .body { display: table !important; wid=
+th: 100vw !important; min-width: 100vw !important; } u + .body table { disp=
+lay: table !important; width: 100% !important; min-width: 100% !important; =
+} u + .body td { display: block !important; width: 100% !important; min-wid=
+th: 100% !important; } u + .body img { display: inline-block !important; ma=
+rgin: auto !important; width: auto !important; vertical-align: bottom !impo=
+rtant; } u + .body center { display: block !important; margin: auto !import=
+ant; width: 100% !important; min-width: 100% !important; text-align: center=
+=0A!important; } u + .body table._ac_social_table, u + .body table._ac_soci=
+al_table td, u + .body table._ac_social_table div, u + .body table._ac_soci=
+al_table a { display: inline-block !important; margin: auto !important; wid=
+th: auto !important; min-width: auto !important; text-align: center !import=
+ant; } u + .body table._ac_social_table img { display: inline-block !import=
+ant; margin: auto !important; width: 32px !important; min-width: 32px !impo=
+rtant; max-width: 32px !important; }=0A}=0A@media only screen and (max-widt=
+h: 375px) { #layout-row4086 img { width: 100% !important; height: auto !imp=
+ortant; max-width: 375px !important; } div.divbody { padding: 20px !importa=
+nt; } table, tbody, td, .divbody { display: table !important; width: 100% !=
+important; max-width: 100% !important; } .td_rss .rss-item img.iphone_large=
+_image { width: auto !important; } u + .body { display: table !important; w=
+idth: 100vw !important; min-width: 100vw !important; } u + .body table { di=
+splay: table !important; width: 100% !important; min-width: 100% !important=
+; } u + .body td { display: block !important; width: 100% !important; min-w=
+idth: 100% !important; } u + .body img { display: inline-block !important; =
+margin: auto !important; width: auto !important; vertical-align: bottom !im=
+portant; } u + .body center { display: block !important; margin: auto !impo=
+rtant; width: 100% !important; min-width: 100% !important; text-align: cent=
+er !important; } u + .body=0Atable._ac_social_table, u + .body table._ac_so=
+cial_table td, u + .body table._ac_social_table div, u + .body table._ac_so=
+cial_table a { display: inline-block !important; margin: auto !important; w=
+idth: auto !important; min-width: auto !important; text-align: center !impo=
+rtant; } u + .body table._ac_social_table img { display: inline-block !impo=
+rtant; margin: auto !important; width: 32px !important; min-width: 32px !im=
+portant; max-width: 32px !important; }=0A}=0A@media only screen and (max-wi=
+dth: 414px) { #layout-row4086 img { width: 100% !important; height: auto !i=
+mportant; max-width: 414px !important; } div.divbody { padding: 20px !impor=
+tant; } table, tbody, td, .divbody { display: table !important; width: 100%=
+ !important; max-width: 100% !important; } .td_rss .rss-item img.iphone_lar=
+ge_image { width: auto !important; } u + .body { display: table !important;=
+ width: 100vw !important; min-width: 100vw !important; } u + .body table { =
+display: table !important; width: 100% !important; min-width: 100% !importa=
+nt; } u + .body td { display: block !important; width: 100% !important; min=
+-width: 100% !important; } u + .body img { display: inline-block !important=
+; margin: auto !important; width: auto !important; vertical-align: bottom !=
+important; } u + .body center { display: block !important; margin: auto !im=
+portant; width: 100% !important; min-width: 100% !important; text-align: ce=
+nter !important; } u + .body=0Atable._ac_social_table, u + .body table._ac_=
+social_table td, u + .body table._ac_social_table div, u + .body table._ac_=
+social_table a { display: inline-block !important; margin: auto !important;=
+ width: auto !important; min-width: auto !important; text-align: center !im=
+portant; } u + .body table._ac_social_table img { display: inline-block !im=
+portant; margin: auto !important; width: 32px !important; min-width: 32px !=
+important; max-width: 32px !important; }=0A}=0A@media only screen and (max-=
+width: 667px) { #layout-row4086 img { width: 100% !important; height: auto =
+!important; max-width: 609px !important; } div.divbody { padding: 20px !imp=
 ortant; } table, tbody, td, .divbody { display: table !important; width: 10=
 0% !important; max-width: 100% !important; } .td_rss .rss-item img.iphone_l=
 arge_image { width: auto !important; } u + .body { display: table !importan=
@@ -279,85 +412,25 @@ tant; } u + .body td { display: block !important; width: 100% !important; m=
 in-width: 100% !important; } u + .body img { display: inline-block !importa=
 nt; margin: auto !important; width: auto !important; vertical-align: bottom=
  !important; } u + .body center { display: block !important; margin: auto !=
-important;=0Awidth: 100% !important; min-width: 100% !important; text-align=
-: center !important; } u + .body table._ac_social_table, u + .body table._a=
+important; width: 100% !important; min-width: 100% !important; text-align: =
+center !important; } u + .body=0Atable._ac_social_table, u + .body table._a=
 c_social_table td, u + .body table._ac_social_table div, u + .body table._a=
 c_social_table a { display: inline-block !important; margin: auto !importan=
 t; width: auto !important; min-width: auto !important; text-align: center !=
 important; } u + .body table._ac_social_table img { display: inline-block !=
 important; margin: auto !important; width: 32px !important; min-width: 32px=
- !important; max-width: 32px !important; }=0A}=0A@media only screen and (ma=
-x-width: 375px) { #layout-row4096 img { width: 100% !important; height: aut=
-o !important; max-width: 375px !important; } #layout-row4101 .break-line { =
-width: 100% !important; margin: auto !important; } div.divbody { padding: 2=
-0px !important; } table, tbody, td, .divbody { display: table !important; w=
-idth: 100% !important; max-width: 100% !important; } .td_rss .rss-item img.=
-iphone_large_image { width: auto !important; } u + .body { display: table !=
-important; width: 100vw !important; min-width: 100vw !important; } u + .bod=
-y table { display: table !important; width: 100% !important; min-width: 100=
-% !important; } u + .body td { display: block !important; width: 100% !impo=
-rtant; min-width: 100% !important; } u + .body img { display: inline-block =
-!important; margin: auto !important; width: auto !important; vertical-align=
-: bottom !important; } u + .body center { display: block !important; margin=
-: auto !important; width: 100% !important; min-width:=0A100% !important; te=
-xt-align: center !important; } u + .body table._ac_social_table, u + .body =
-table._ac_social_table td, u + .body table._ac_social_table div, u + .body =
-table._ac_social_table a { display: inline-block !important; margin: auto !=
-important; width: auto !important; min-width: auto !important; text-align: =
-center !important; } u + .body table._ac_social_table img { display: inline=
--block !important; margin: auto !important; width: 32px !important; min-wid=
-th: 32px !important; max-width: 32px !important; }=0A}=0A@media only screen=
- and (max-width: 414px) { #layout-row4096 img { width: 100% !important; hei=
-ght: auto !important; max-width: 414px !important; } #layout-row4101 .break=
--line { width: 100% !important; margin: auto !important; } div.divbody { pa=
-dding: 20px !important; } table, tbody, td, .divbody { display: table !impo=
-rtant; width: 100% !important; max-width: 100% !important; } .td_rss .rss-i=
-tem img.iphone_large_image { width: auto !important; } u + .body { display:=
- table !important; width: 100vw !important; min-width: 100vw !important; } =
-u + .body table { display: table !important; width: 100% !important; min-wi=
-dth: 100% !important; } u + .body td { display: block !important; width: 10=
-0% !important; min-width: 100% !important; } u + .body img { display: inlin=
-e-block !important; margin: auto !important; width: auto !important; vertic=
-al-align: bottom !important; } u + .body center { display: block !important=
-; margin: auto !important; width: 100% !important; min-width:=0A100% !impor=
-tant; text-align: center !important; } u + .body table._ac_social_table, u =
-+ .body table._ac_social_table td, u + .body table._ac_social_table div, u =
-+ .body table._ac_social_table a { display: inline-block !important; margin=
-: auto !important; width: auto !important; min-width: auto !important; text=
--align: center !important; } u + .body table._ac_social_table img { display=
-: inline-block !important; margin: auto !important; width: 32px !important;=
- min-width: 32px !important; max-width: 32px !important; }=0A}=0A@media onl=
-y screen and (max-width: 667px) { #layout-row4096 img { width: 100% !import=
-ant; height: auto !important; max-width: 553px !important; } #layout-row410=
-1 .break-line { width: 100% !important; margin: auto !important; } div.divb=
-ody { padding: 20px !important; } table, tbody, td, .divbody { display: tab=
-le !important; width: 100% !important; max-width: 100% !important; } .td_rs=
-s .rss-item img.iphone_large_image { width: auto !important; } u + .body { =
-display: table !important; width: 100vw !important; min-width: 100vw !impor=
-tant; } u + .body table { display: table !important; width: 100% !important=
-; min-width: 100% !important; } u + .body td { display: block !important; w=
-idth: 100% !important; min-width: 100% !important; } u + .body img { displa=
-y: inline-block !important; margin: auto !important; width: auto !important=
-; vertical-align: bottom !important; } u + .body center { display: block !i=
-mportant; margin: auto !important; width: 100% !important; min-width:=0A100=
-% !important; text-align: center !important; } u + .body table._ac_social_t=
-able, u + .body table._ac_social_table td, u + .body table._ac_social_table=
- div, u + .body table._ac_social_table a { display: inline-block !important=
-; margin: auto !important; width: auto !important; min-width: auto !importa=
-nt; text-align: center !important; } u + .body table._ac_social_table img {=
- display: inline-block !important; margin: auto !important; width: 32px !im=
-portant; min-width: 32px !important; max-width: 32px !important; }=0A} </st=
-yle><!--[if !mso]><!-- webfonts --><!--<![endif]--><!--[if lt mso 12]> <![e=
-ndif]--><!--[if gte mso 9]>=0A<xml> <o:OfficeDocumentSettings> <o:AllowPNG/=
-> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings>=0A</xml=
->=0A<![endif]--></head><body id=3D"ac-designer" class=3D"body" style=3D"fon=
-t-family: Arial; line-height: 1.1; margin: 0px; background-color: #ffffff; =
-width: 100%; text-align: center;">=09=09<div style=3D"display: none !import=
-ant; padding: 0; height: 1px; font-size: 1px; background-color: inherit !im=
-portant; opacity: 0; color: transparent; mso-line-height-rule: exactly; lin=
-e-height:1px; mso-hide:all;">=0A=09=09=09(Meet All The Major Donors In Your=
- Community)=0A=09=09=09<div style=3D"display: none; max-height: 0px; overfl=
-ow: hidden;">=0A=09=09=09=09&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+ !important; max-width: 32px !important; }=0A} </style><!--[if !mso]><!-- w=
+ebfonts --><!--<![endif]--><!--[if lt mso 12]> <![endif]--><!--[if gte mso =
+9]>=0A<xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o=
+:PixelsPerInch> </o:OfficeDocumentSettings>=0A</xml>=0A<![endif]--></head><=
+body id=3D"ac-designer" class=3D"body" style=3D"font-family: Arial; line-he=
+ight: 1.1; margin: 0px; background-color: #ffffff; width: 100%; text-align:=
+ center;">=09=09<div style=3D"display: none !important; padding: 0; height:=
+ 1px; font-size: 1px; background-color: inherit !important; opacity: 0; col=
+or: transparent; mso-line-height-rule: exactly; line-height:1px; mso-hide:a=
+ll;">=0A=09=09=09(That Want to Give To Your Organization)=0A=09=09=09<div s=
+tyle=3D"display: none; max-height: 0px; overflow: hidden;">=0A=09=09=09=09&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
 =8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
 =E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
 =E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
@@ -382,637 +455,1127 @@ ow: hidden;">=0A=09=09=09=09&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
 =E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
 =E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
 =E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=0A=09=09=09</div>=0A=
-=0A=09=09</div>=0A<div class=3D"divbody" style=3D"margin: 0px; outline: non=
-e; padding: 0px; color: #000000; font-family: arial; line-height: 1.1; widt=
-h: 100%; background-color: #ffffff; background: #ffffff; text-align: center=
-;"><table class=3D"template-table" border=3D"0" cellpadding=3D"0" cellspaci=
-ng=3D"0" width=3D"100%" align=3D"left" style=3D"-ms-text-size-adjust: auto;=
- -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px=
-; min-width: auto; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background=
--color: #ffffff; background: #ffffff;"><tr style=3D"mso-line-height-rule: e=
-xactly;"><td align=3D"center" valign=3D"top" width=3D"100%" style=3D"mso-li=
-ne-height-rule: exactly;"><table class=3D"template-table" border=3D"0" cell=
-padding=3D"0" cellspacing=3D"0" width=3D"632" bgcolor=3D"#ffffff" style=3D"=
--ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse=
-: collapse; font-size: 14px; min-width: auto; mso-table-lspace: 0pt; mso-ta=
-ble-rspace: 0pt; max-width: 632px;"><tr=0Astyle=3D"mso-line-height-rule: ex=
-actly;"><td id=3D"layout_table_397a9ec7ee80ef23fc1c0b375d25c336253f93f9" va=
-lign=3D"top" align=3D"center" width=3D"632" style=3D"mso-line-height-rule: =
-exactly;"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" class=3D"=
-layout layout-table root-table" width=3D"632" style=3D"-ms-text-size-adjust=
-: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
-e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
-r style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin4097"=
- valign=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"><tab=
-le width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D=
-"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collaps=
-e: initial !important; font-size: 14px; min-width: 100%; mso-table-lspace: =
-0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4097" class=3D"layout layo=
-ut-row widget _widget_text style4097" style=3D"mso-line-height-rule: exactl=
-y; margin: 0;=0Apadding: 0;"><td id=3D"layout-row-padding4097" valign=3D"to=
-p" style=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"1=
-00%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-siz=
-e-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; =
-font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: =
-0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td id=3D"text_div4067" =
-class=3D"td_text td_block" valign=3D"top" align=3D"left" width=3D"612" styl=
-e=3D"line-height: 110%; mso-line-height-rule: exactly; margin: 0; outline: =
-none; padding: 0; color: inherit; font-size: 12px; font-weight: inherit; li=
-ne-height: 1.1; text-decoration: inherit; font-family: arial;"> <div style=
-=3D"line-height: 110%; margin: 0; outline: none; padding: 0; color: inherit=
-; font-size: inherit; font-weight: inherit; line-height: 1.1; text-decorati=
-on: inherit; text-align: center; mso-line-height-rule: exactly;" class=3D""=
- data-line-height=3D"1.1"> <span style=3D"color: #000000;=0Afont-size: 16px=
-; font-weight: 700; line-height: inherit; text-decoration: inherit; font-st=
-yle: normal; font-family: arial, helvetica, sans;" class=3D""> </span><div =
-style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 1=
-6px; font-weight: inherit; line-height: inherit; text-decoration: inherit; =
-font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; --tw-=
-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offs=
-et-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,2=
-46,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tr=
-ansparent; text-align: left;' class=3D""><div style=3D"margin: 0; outline: =
-none; padding: 0; color: inherit; font-size: inherit; font-weight: inherit;=
- line-height: inherit; text-decoration: inherit; text-align: center;" class=
-=3D""> </div>=0A</div>=0A <span style=3D"color: inherit; font-size: inherit=
-; font-weight: inherit; line-height: inherit; text-decoration: inherit; fon=
-t-family: arial, helvetica, sans;" class=3D""><span style=3D"color: inherit=
+=E2=80=8C&nbsp;=E2=80=8C=0A=09=09=09</div>=0A=0A=09=09</div>=0A<div class=
+=3D"divbody" style=3D"margin: 0px; outline: none; padding: 0px; color: #000=
+000; font-family: arial; line-height: 1.1; width: 100%; background-color: #=
+ffffff; background: #ffffff; text-align: center;"><table class=3D"template-=
+table" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" alig=
+n=3D"left" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 1=
+00%; border-collapse: collapse; font-size: 14px; min-width: auto; mso-table=
+-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; background:=
+ #ffffff;"><tr style=3D"mso-line-height-rule: exactly;"><td align=3D"center=
+" valign=3D"top" width=3D"100%" style=3D"mso-line-height-rule: exactly;"><t=
+able class=3D"template-table" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"632" bgcolor=3D"#ffffff" style=3D"-ms-text-size-adjust: auto; =
+-webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px;=
+ min-width: auto; mso-table-lspace: 0pt; mso-table-rspace: 0pt; max-width: =
+632px;"><tr=0Astyle=3D"mso-line-height-rule: exactly;"><td id=3D"layout_tab=
+le_62844e4be5f913cbe9f6bdec619ffed1b98d395f" valign=3D"top" align=3D"center=
+" width=3D"632" style=3D"mso-line-height-rule: exactly;"><table cellpadding=
+=3D"0" cellspacing=3D"0" border=3D"0" class=3D"layout layout-table root-tab=
+le" width=3D"632" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-ad=
+just: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; ms=
+o-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-r=
+ule: exactly;"><td id=3D"layout-row-margin4087" valign=3D"top" style=3D"mso=
+-line-height-rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto;=
+ -webkit-text-size-adjust: 100%; border-collapse: initial !important; font-=
+size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"=
+><tr id=3D"layout-row4087" class=3D"layout layout-row widget _widget_text s=
+tyle4087" style=3D"mso-line-height-rule: exactly; margin: 0;=0Apadding: 0;"=
+><td id=3D"layout-row-padding4087" valign=3D"top" style=3D"mso-line-height-=
+rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text=
+-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: =
+100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-=
+height-rule: exactly;"><td id=3D"text_div4057" class=3D"td_text td_block" v=
+align=3D"top" align=3D"left" width=3D"612" style=3D"mso-line-height-rule: e=
+xactly; margin: 0; outline: none; padding: 0; color: inherit; font-size: 12=
+px; font-weight: inherit; line-height: 1; text-decoration: inherit; font-fa=
+mily: arial;"> <div style=3D"margin: 0; outline: none; padding: 0; color: i=
+nherit; font-size: 16px; font-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit;" class=3D""> <div style=3D"margin: 0; outline: none; pa=
+dding: 0; color: inherit; font-size: inherit; font-weight: inherit; line-he=
+ight: inherit;=0Atext-decoration: inherit; text-align: center;" class=3D"">=
+ <span style=3D'color: #000000; font-size: inherit; font-weight: inherit; l=
+ine-height: inherit; text-decoration: inherit; font-family: "trebuchet ms",=
+ tahoma, arial, sans;' class=3D""><span style=3D"color: inherit; font-size:=
+ 16px; font-weight: 700; line-height: inherit; text-decoration: inherit; fo=
+nt-style: normal;" class=3D""> </span><div style=3D"margin: 0; outline: non=
+e; padding: 0; color: #000000; font-size: 16px; font-weight: inherit; line-=
+height: inherit; text-decoration: inherit; font-style: normal; --tw-shadow:=
+ 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-widt=
+h: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5)=
+; --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpare=
+nt; text-align: left;" class=3D""><div style=3D"margin: 0; outline: none; p=
+adding: 0; color: inherit; font-size: inherit; font-weight: inherit; line-h=
+eight: inherit; text-decoration:=0Ainherit; text-align: center;" class=3D""=
+> </div>=0A</div>=0A <div style=3D"margin: 0; outline: none; padding: 0; co=
+lor: #000000; font-size: 16px; font-weight: inherit; line-height: inherit; =
+text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: va=
+r(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff;=
+ --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transp=
+arent; --tw-ring-shadow: 0 0 transparent; text-align: left;" class=3D""><di=
+v style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size:=
+ inherit; font-weight: inherit; line-height: inherit; text-decoration: inhe=
+rit; text-align: center;" class=3D""><div style=3D"margin: 0; outline: none=
+; padding: 0; color: inherit; font-size: inherit; font-weight: inherit; lin=
+e-height: inherit; text-decoration: inherit; text-align: left;"><div style=
+=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size: inheri=
+t; font-weight: inherit; line-height: inherit; text-decoration: inherit; te=
+xt-align: center;"><span style=3D"color:=0Ainherit; font-size: 22px; font-w=
+eight: bold; line-height: inherit; text-decoration: inherit;" class=3D"">WE=
+ KNOW ALL THE WEALTHY DONORS <br>WHO LIVE & GIVE IN YOUR COMMUNITY</span></=
+div>=0A<span style=3D'color: #000000; font-size: inherit; font-weight: 400;=
+ line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms=
+", tahoma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(=
+--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; -=
+-tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpar=
+ent; --tw-ring-shadow: 0 0 transparent;'><br><div style=3D"margin: 0; outli=
+ne: none; padding: 0; color: inherit; font-size: inherit; font-weight: inhe=
+rit; line-height: inherit; text-decoration: inherit; text-align: center;"><=
+span style=3D'color: #000000; font-size: inherit; font-weight: 400; line-he=
+ight: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahom=
+a, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0=0Atransparent;' class=3D""><span style=3D'color: #000000=
 ; font-size: inherit; font-weight: inherit; line-height: inherit; text-deco=
 ration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-em=
 pty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-rin=
 g-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --=
-tw-ring-shadow: 0 0 transparent; text-align: center; margin: 0;" class=3D""=
-><div style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-s=
-ize: inherit; font-weight: inherit; line-height: inherit; text-decoration: =
-inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); =
---tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
- rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-=
-shadow: 0 0 transparent; text-align:=0Aleft;" class=3D""><div style=3D"marg=
-in: 0; outline: none; padding: 0; color: inherit; font-size: inherit; font-=
-weight: inherit; line-height: inherit; text-decoration: inherit; text-align=
-: center;" class=3D""><span style=3D"color: inherit; font-size: inherit; fo=
-nt-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-sh=
+tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial=
+, sans; font-style: italic;' class=3D"">"M</span><span style=3D'color: #000=
+000; font-size: inherit; font-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw=
+-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-=
+ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, ar=
+ial, sans;' class=3D""><span style=3D'color: #000000; font-size: inherit; f=
+ont-weight: inherit; line-height:=0Ainherit; text-decoration: inherit; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 t=
+ransparent; font-family: "trebuchet ms", tahoma, arial, sans; font-style: i=
+talic;'>eet the MILLIONAIRE FAMILIES</span><span style=3D'color: #000000; f=
+ont-size: inherit; font-weight: inherit; line-height: inherit; text-decorat=
+ion: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty=
+, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-c=
+olor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-=
+ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, s=
+ans; font-style: italic;'> who already give major gifts to nonprofits in yo=
+ur community. We will provide you their contact information and show you ho=
+w to meet them one-on-one!</span><span=0Astyle=3D'color: #000000; font-size=
+: inherit; font-weight: inherit; line-height: inherit; text-decoration: inh=
+erit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans; fon=
+t-style: italic;'>" </span></span></span><span style=3D'color: #000000; fon=
+t-size: inherit; font-weight: inherit; line-height: inherit; text-decoratio=
+n: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: =
+0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparen=
+t;'><span style=3D'color: #000000; font-size: inherit; font-weight: 400; li=
+ne-height: inherit; text-decoration: inherit;=0Afont-style: italic; --tw-sh=
 adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
 -width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
 ,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
-sparent;" class=3D""> <span style=3D"color: inherit; font-size: 18px; font-=
-weight: inherit; line-height: inherit; text-decoration: inherit;" class=3D"=
-"><span style=3D"color: inherit; font-size: inherit; font-weight: bold; lin=
-e-height: inherit; text-decoration: inherit;" class=3D""> <b style=3D"margi=
-n: 0; outline: none; padding: 0; color: #000000; font-style: normal; font-s=
-ize: 18px;"><strong style=3D"margin: 0; outline: none; padding: 0;=0Acolor:=
- #000000; font-size: 18px; font-style: normal;"><em style=3D"margin: 0; out=
-line: none; padding: 0;">"Major Gifts Ramp-Up makes Tocqueville Members wan=
-t to give, and give and GIVE AGAIN!" ~ </em></strong><strong style=3D"margi=
-n: 0; outline: none; padding: 0; color: #000000; font-size: 18px; font-styl=
-e: normal;">Charlotte Berry, United Way Million Dollar Roundtable Member</s=
-trong><br><br></b></span><span style=3D"color: #000000; font-size: 18px; fo=
-nt-weight: 400; line-height: inherit; text-decoration: inherit; font-style:=
- normal;">BRAND NEW TOCQUEVILLE MEMBERS ARE AVAILABLE <br>TO YOUR LOCAL UNI=
-TED WAY PROGRAM</span></span></span></div>=0A</div>=0A<span style=3D"color:=
- #000000; font-size: 16px; font-weight: inherit; line-height: inherit; text=
--decoration: inherit; font-style: normal; --tw-shadow: 0 0 transparent; --t=
-w-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-off=
-set-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-sh=
-adow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><b st=
-yle=3D"margin: 0; outline: none; padding: 0; font-weight: inherit; font-siz=
-e: 18px; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); =
---tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
- rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-=
-shadow: 0 0 transparent; color: #000000;" class=3D""><br style=3D"" class=
-=3D""></b><b style=3D"margin: 0; outline: none; padding: 0; color: #000000;=
- --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
-g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=0Argba(=
+sparent; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">~ </=
+span><span style=3D'color: #000000; font-size: inherit; font-weight: inheri=
+t; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-=
+offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans;' class=3D"">Linda Lysakowski, ACF=
+RE</span></span></div>=0A</span><span style=3D'color: #000000; font-size: i=
+nherit; font-weight: inherit; line-height: inherit; text-decoration: inheri=
+t; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 trans=
+parent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --=
+tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-rin=
+g-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;' class=
+=3D""><br><div style=3D"margin: 0; outline: none; padding: 0; color: inheri=
+t; font-size: inherit; font-weight: inherit; line-height: inherit; text-dec=
+oration: inherit; text-align: center;"><span class=3D"" style=3D"color: #00=
+0000; font-size: inherit; font-weight: inherit; line-height: inherit; text-=
+decoration: inherit;"><span style=3D'color: inherit; font-size: inherit; fo=
+nt-weight: bold; line-height: inherit; text-decoration: inherit; font-style=
+: normal; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 =
+0 transparent; --tw-ring-inset:=0Avar(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparen=
+t;'><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirec=
+tUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=3DFzg=
+JVKhW77WHztvv2LmR5PTXVNcQrvpy3MEhw4rnui2e&iat=3D1701790217&a=3D%7C%7C266055=
+50%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DTGIVm9bF2Lhw3rn=
+gFZUqh0VRmNH9Lh0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2Bi6k%2Ballaq9BL2vc5&s=3D678f48=
+a0e320c6856d0620aa2e024acb&i=3D679A1150A214A2664" data-ac-default-color=3D"=
+1" target=3D"_blank" style=3D'margin: 0; outline: none; padding: 0; color: =
+#0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuche=
+t ms", tahoma, arial, sans;'><span style=3D'color: inherit; font-size: inhe=
+rit; font-weight: inherit; line-height: inherit; text-decoration: inherit;=
+=0A--tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
+ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
 59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
-: 0 0 transparent; font-size: 18px;" class=3D""><a href=3D"https://jimmylar=
-ose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25w=
-cm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&=
-sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=3D1701789978&a=3D%7C=
-%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DhiCW7K=
-REoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=
-=3D678f48a0e320c6856d0620aa2e024acb&i=3D681A1152A214A2671" data-ac-default-=
-color=3D"1" style=3D"margin: 0; outline: none; padding: 0; color: #0764ba; =
-text-decoration: underline; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
-var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #ff=
-f; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tran=
-sparent; --tw-ring-shadow: 0 0 transparent;" target=3D"_blank" class=3D""><=
-span style=3D"color: ; font-size: inherit; font-weight: inherit; line-heigh=
-t: inherit; text-decoration: inherit;" class=3D"">VISIT HERE</span></a> </b=
-></span></span><span style=3D"color: inherit; font-size:=0A16px; font-weigh=
-t: inherit; line-height: inherit; text-decoration: inherit;">or press "Get =
-Started" button below! <br><br>(</span><i class=3D"" style=3D"margin: 0; ou=
-tline: none; padding: 0; font-weight: inherit; text-decoration: inherit; fo=
-nt-size: 16px; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empt=
-y, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-=
-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw=
--ring-shadow: 0 0 transparent;"><span style=3D"color: #000000; font-size: i=
+: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans;' class=
+=3D"">VISIT HERE</span></a> </span><span style=3D'color: inherit; font-size=
+: inherit; font-weight: inherit; line-height: inherit; text-decoration: inh=
+erit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 tr=
+ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+ --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
+ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;'>OR=
+ PRESS <span style=3D"color: inherit; font-size: inherit; font-weight: bold=
+; line-height: inherit; text-decoration: inherit; font-style: italic;" clas=
+s=3D"">BUTTON</span> BELOW FOR A 60 SECOND VIDEO OVERVIEW</span></span></di=
+v>=0A</span></div>=0A</div>=0A</div>=0A</span></div>=0A </div>=0A</td>=0A</=
+tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"ms=
+o-line-height-rule: exactly;"><td id=3D"layout-row-margin4088" valign=3D"to=
+p" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto=
+; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14p=
+x; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=
+=3D"layout-row4088" class=3D"layout layout-row widget _widget_spacer " styl=
+e=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4088" vali=
+gn=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adju=
+st: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-s=
+ize: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">=
+<tr style=3D"mso-line-height-rule: exactly;"><td valign=3D"top" height=3D"1=
+5" style=3D"mso-line-height-rule: exactly;"><div class=3D"spacer" style=3D"=
+margin: 0; outline: none; padding: 0;=0Aheight: 15px;"><table cellpadding=
+=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-ms-text-size=
+-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; f=
+ont-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0=
+pt;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"spacer-body"=
+ valign=3D"top" height=3D"15" width=3D"632" style=3D"mso-line-height-rule: =
+exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table=
+>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height=
+-rule: exactly;"><td id=3D"layout-row-margin4086" valign=3D"top" style=3D"m=
+so-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-tex=
+t-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width:=
+ 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4=
+086" class=3D"layout layout-row widget _widget_picture " align=3D"center" s=
+tyle=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4086" v=
+align=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%=
+" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-a=
+djust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; fon=
+t-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt=
+;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"image-td" alig=
+n=3D"center" valign=3D"top" width=3D"632" style=3D"mso-line-height-rule: ex=
+actly;"><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?r=
+edirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmc=3D&sig=3D9=
+9eT82scTYDPf2pa3i7by99RpiDtzJZdDuRp77agDnU5&iat=3D1701790217&a=3D%7C%7C2660=
+5550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DTGIVm9bF2Lhw3=
+rngFZUqh0VRmNH9Lh0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2Bi6k%2Ballaq9BL2vc5&s=3D678f=
+48a0e320c6856d0620aa2e024acb&i=3D679A1150A214A2665" style=3D"margin: 0; out=
+line: none; padding: 0; color: #0764ba; display: block; min-width: 100%;"><=
+img src=3D"https://content.app-us1.com/cdn-cgi/image/dpr=3D2,fit=3Dscale-do=
+wn,format=3Dauto,onerror=3Dredirect,width=3D650/ZvmyW/2023/07/10/09dadca3-7=
+ca1-4967-a05e-3aa7c16b18ea.jpeg?r=3D626663346" width=3D"609" style=3D"borde=
+r: none; display: block; outline: none; width: 609px; opacity: 1; max-width=
+: 100%;"></a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A=
+</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-m=
+argin4089" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table w=
+idth=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms=
+-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: c=
+ollapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table=
+-rspace: 0pt;"><tr id=3D"layout-row4089" class=3D"layout layout-row widget =
+_widget_spacer " style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-=
+row-padding4089" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><t=
+able width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=
+=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-coll=
+apse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; ms=
+o-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td vali=
+gn=3D"top" height=3D"15" style=3D"mso-line-height-rule: exactly;"><div clas=
+s=3D"spacer" style=3D"margin: 0; outline: none; padding: 0;=0Aheight: 15px;=
+"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" st=
+yle=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-c=
+ollapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt;=
+ mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td c=
+lass=3D"spacer-body" valign=3D"top" height=3D"15" width=3D"632" style=3D"ms=
+o-line-height-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</t=
+d>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr styl=
+e=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin4085" valig=
+n=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjus=
+t: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-si=
+ze: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><=
+tr id=3D"layout-row4085" class=3D"layout layout-row widget _widget_text " s=
+tyle=3D"mso-line-height-rule: exactly; margin: 0; padding: 0;"><td id=3D"la=
+yout-row-padding4085" valign=3D"top" style=3D"mso-line-height-rule: exactly=
+;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-=
+collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt=
+; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td =
+id=3D"text_div4055" class=3D"td_text td_block" valign=3D"top" align=3D"left=
+" width=3D"632" style=3D"line-height: 140%;=0Amso-line-height-rule: exactly=
+; margin: 0; outline: none; padding: 0; color: inherit; font-size: 12px; fo=
+nt-weight: inherit; line-height: 1.4; text-decoration: inherit; font-family=
+: arial;"> <div style=3D"line-height: 140%; margin: 0; outline: none; paddi=
+ng: 0; color: inherit; font-size: inherit; font-weight: inherit; line-heigh=
+t: 1.4; text-decoration: inherit; mso-line-height-rule: exactly;" class=3D"=
+" data-line-height=3D"1.4"> <div style=3D"margin: 0; outline: none; padding=
+: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height:=
+ inherit; text-decoration: inherit;" class=3D""> <div style=3D"margin: 0; o=
+utline: none; padding: 0; color: #000000; font-size: 16px; font-weight: inh=
+erit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tran=
+sparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; -=
+-tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ri=
+ng-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0Atransparent; tex=
+t-align: center;" class=3D""><div style=3D"margin: 0; outline: none; paddin=
+g: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height=
+: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent; text-align: center;" c=
+lass=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: #00000=
+0; font-size: 16px; font-weight: 400; line-height: inherit; text-decoration=
+: inherit; font-style: normal; text-align: left;" class=3D""></div>=0A</div=
+>=0A</div>=0A <span style=3D"color: inherit; font-size: 16px; font-weight: =
+inherit; line-height: inherit; text-decoration: inherit;" class=3D""><div s=
+tyle=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: in=
+herit; font-weight: 400; line-height: inherit; text-decoration: inherit; fo=
+nt-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; text-align:=
+ center; font-style: normal;' class=3D""></div>=0A <span style=3D'color: #0=
+00000; font-size: inherit; font-weight: 400; line-height: inherit; text-dec=
+oration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent; font-style: normal; text-align: left; margin: 0;' class=3D""><div =
+style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size: i=
 nherit; font-weight: inherit; line-height: inherit; text-decoration: inheri=
 t; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
 ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
 59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
-: 0 0 transparent;" class=3D"">Reservations are also open for Local United =
-Way Programs & Partner Agencies)</span></i></span></div>=0A<!--[if (gte mso=
- 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D"false=
-"> #text_div4067, #text_div4067 div { line-height: 110% !important; };=0A</=
-style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A=
-</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layo=
-ut-row-margin4098" valign=3D"top" style=3D"mso-line-height-rule: exactly;">=
-<table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" styl=
-e=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-col=
-lapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; m=
-so-table-rspace: 0pt;"><tr id=3D"layout-row4098" class=3D"layout layout-row=
- widget _widget_spacer " style=3D"mso-line-height-rule: exactly;"><td id=3D=
-"layout-row-padding4098" valign=3D"top" style=3D"mso-line-height-rule: exac=
-tly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
-" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; bord=
-er-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: =
-0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><=
-td valign=3D"top" height=3D"15" style=3D"mso-line-height-rule: exactly;"><d=
-iv class=3D"spacer" style=3D"margin: 0; outline: none; padding: 0;=0Aheight=
-: 15px;"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"1=
-00%" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; b=
-order-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspac=
-e: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;=
-"><td class=3D"spacer-body" valign=3D"top" height=3D"15" width=3D"632" styl=
-e=3D"mso-line-height-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div=
->=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<=
-tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin4096=
-" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"1=
-00%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-siz=
-e-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; =
-font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: =
-0pt;"><tr id=3D"layout-row4096" class=3D"layout layout-row widget _widget_p=
-icture " align=3D"center" style=3D"mso-line-height-rule: exactly;"><td id=
-=3D"layout-row-padding4096" valign=3D"top" style=3D"mso-line-height-rule: e=
-xactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
-=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%;=
- border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lsp=
-ace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactl=
-y;"><td class=3D"image-td" align=3D"center" valign=3D"top" width=3D"632" st=
-yle=3D"mso-line-height-rule: exactly;"><a=0Ahref=3D"https://jimmylarose.lt.=
-acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXR=
-jb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&sig=3D4=
-RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=3D1701789978&a=3D%7C%7C2660=
-5550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DhiCW7KREoE33Y=
-s822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=3D678f48=
-a0e320c6856d0620aa2e024acb&i=3D681A1152A214A2671" style=3D"margin: 0; outli=
-ne: none; padding: 0; color: #0764ba; display: block; min-width: 100%;"><im=
-g src=3D"https://content.app-us1.com/cdn-cgi/image/dpr=3D2,fit=3Dscale-down=
-,format=3Dauto,onerror=3Dredirect,width=3D650/ZvmyW/2023/08/07/0bae1f9f-11c=
-7-4fe8-a502-3f71ec9276f2.jpeg?r=3D50231362" width=3D"553" style=3D"border: =
-none; display: block; outline: none; width: 553px; opacity: 1; max-width: 1=
-00%;"></a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</t=
-r>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-marg=
-in4099" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table widt=
-h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-te=
-xt-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: coll=
-apse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rs=
-pace: 0pt;"><tr id=3D"layout-row4099" class=3D"layout layout-row widget _wi=
-dget_spacer " style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row=
--padding4099" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><tabl=
-e width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"=
--ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse=
-: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-ta=
-ble-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td valign=
-=3D"top" height=3D"20" style=3D"mso-line-height-rule: exactly;"><div class=
-=3D"spacer" style=3D"margin: 0; outline: none; padding: 0;=0Aheight: 20px;"=
-><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" sty=
-le=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-co=
-llapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; =
-mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td cl=
-ass=3D"spacer-body" valign=3D"top" height=3D"20" width=3D"632" style=3D"mso=
--line-height-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td=
->=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=
-=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin4100" valign=
-=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"><table widt=
-h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-te=
-xt-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: init=
-ial !important; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; ms=
-o-table-rspace: 0pt;"><tr id=3D"layout-row4100" class=3D"layout layout-row =
-widget _widget_text style4100" style=3D"mso-line-height-rule: exactly; marg=
-in: 0; padding: 0;"><td id=3D"layout-row-padding4100" valign=3D"top" style=
-=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"100%" bor=
-der=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust=
-: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
-e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
-r style=3D"mso-line-height-rule: exactly;"><td id=3D"text_div4070" class=3D=
-"td_text td_block" valign=3D"top"=0Aalign=3D"left" width=3D"612" style=3D"l=
-ine-height: 120%; mso-line-height-rule: exactly; margin: 0; outline: none; =
-padding: 0; color: inherit; font-size: 12px; font-weight: inherit; line-hei=
-ght: 1.2; text-decoration: inherit; font-family: arial;"> <div data-line-he=
-ight=3D"1.2" style=3D"line-height: 120%; margin: 0; outline: none; padding:=
- 0; color: #000000; font-size: 16px; font-weight: inherit; line-height: 1.2=
-; text-decoration: inherit; mso-line-height-rule: exactly; font-family: ari=
-al, helvetica, sans;"> <div style=3D"margin: 0; outline: none; padding: 0; =
-color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; te=
+: 0 0 transparent; text-align: center;" class=3D""><span style=3D"color: #0=
+00000; font-size: inherit; font-weight: inherit; line-height:=0Ainherit; te=
 xt-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(=
 --tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; -=
 -tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpar=
-ent; --tw-ring-shadow: 0 0 transparent; font-style: normal; text-align: cen=
-ter;"><div style=3D"margin: 0; outline: none; padding:=0A0; color: #000000;=
- font-size: inherit; font-weight: bold; line-height: inherit; text-decorati=
-on: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty,=
- ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-co=
-lor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-r=
-ing-shadow: 0 0 transparent; text-align: center; font-style: italic;"></div=
->=0A</div>=0A<strong style=3D"margin: 0; outline: none; padding: 0; color: =
-#000000; font-size: 16px; font-style: normal; font-family: arial, helvetica=
-, sans;" class=3D""><div style=3D"margin: 0; outline: none; padding: 0; col=
-or: inherit; font-size: inherit; font-weight: inherit; line-height: inherit=
-; text-decoration: inherit; text-align: center;"><strong class=3D"" style=
-=3D"margin: 0; outline: none; padding: 0; text-decoration: inherit; font-st=
-yle: normal; font-family: arial, helvetica, sans;"><em style=3D"margin: 0; =
-outline: none; padding: 0;">"Major Gifts Ramp-Up makes Tocqueville Members =
-want to give, and give and GIVE AGAIN!"</em> ~ Charlotte Berry, United Way =
-Million Dollar Roundtable Member</strong></div>=0A</strong><div style=3D"ma=
-rgin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-w=
-eight: 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 =
-0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: =
-0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
- font-style: normal; text-align: center;"></div>=0A</div>=0A<!--[if (gte ms=
-o 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D"fals=
-e"> #text_div4070, #text_div4070 div { line-height: 120% !important; };=0A<=
-/style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=
-=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"l=
-ayout-row-margin4101" valign=3D"top" style=3D"mso-line-height-rule: exactly=
-;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
-tyle=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-=
-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt=
-; mso-table-rspace: 0pt;"><tr id=3D"layout-row4101" class=3D"layout layout-=
-row widget _widget_break " style=3D"mso-line-height-rule: exactly;"><td id=
-=3D"layout-row-padding4101" valign=3D"top" style=3D"mso-line-height-rule: e=
-xactly; line-height: 0;"><table width=3D"100%" border=3D"0" cellpadding=3D"=
-0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size=
--adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%;=
- mso-table-lspace: 0pt; mso-table-rspace: 0pt; line-height: 0; mso-line-hei=
-ght-rule: exactly;"><tr style=3D"mso-line-height-rule: exactly;"><td height=
-=3D"10" style=3D"mso-line-height-rule: exactly; line-height: 0;"></td>=0A</=
-tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td align=3D"center" hei=
-ght=3D"1" width=3D"632" style=3D"mso-line-height-rule: exactly; line-height=
-: 0;"> <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
-=3D"0" height=3D"1" width=3D"632" style=3D"-ms-text-size-adjust: auto; -web=
-kit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min=
--width: auto!important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; line-=
-height: 0; mso-line-height-rule: exactly; width: 100%; max-width: 100%;"><t=
-r style=3D"mso-line-height-rule: exactly;"><td class=3D"break-line" bgcolor=
-=3D"#000000" height=3D"1" width=3D"632" style=3D"mso-line-height-rule: exac=
-tly; line-height: 1px; height: 1px; width: 632px; background-color: #000000=
-;"> </td>=0A </tr>=0A</table>=0A</td>=0A </tr>=0A<tr style=3D"mso-line-heig=
-ht-rule: exactly;"><td height=3D"10" style=3D"mso-line-height-rule: exactly=
-; line-height: 0;"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</=
-td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout=
--row-margin4095" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><t=
-able width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=
-=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-coll=
-apse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; ms=
-o-table-rspace: 0pt;"><tr id=3D"layout-row4095" class=3D"layout layout-row =
-widget _widget_text " style=3D"mso-line-height-rule: exactly; margin: 0; pa=
-dding: 0;"><td id=3D"layout-row-padding4095" valign=3D"top" style=3D"mso-li=
-ne-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D=
-"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-siz=
-e-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%=
-; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-heig=
-ht-rule: exactly;"><td id=3D"text_div4065" class=3D"td_text td_block" valig=
-n=3D"top" align=3D"left" width=3D"632" style=3D"line-height: 140%;=0Amso-li=
-ne-height-rule: exactly; margin: 0; outline: none; padding: 0; color: inher=
-it; font-size: 12px; font-weight: inherit; line-height: 1.4; text-decoratio=
-n: inherit; font-family: arial;"> <div style=3D"line-height: 140%; margin: =
-0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weight:=
- inherit; line-height: 1.4; text-decoration: inherit; mso-line-height-rule:=
- exactly;" class=3D"" data-line-height=3D"1.4"> <div style=3D"margin: 0; ou=
-tline: none; padding: 0; color: inherit; font-size: inherit; font-weight: i=
-nherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tr=
+ent; --tw-ring-shadow: 0 0 transparent;" class=3D""><span style=3D"color: #=
+000000; font-size: inherit; font-weight: 400; line-height: inherit; text-de=
+coration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-=
+empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-r=
+ing-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; =
+--tw-ring-shadow: 0 0 transparent; font-style: italic;" class=3D"">"We grew=
+ our budget from </span><span style=3D"color: #000000; font-size: inherit; =
+font-weight: bold; line-height: inherit; text-decoration: inherit; --tw-sha=
+dow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-=
+width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=0Argba(59,130,24=
+6,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tra=
+nsparent; font-style: italic;" class=3D"">$178,000 to $3.5 Million</span><s=
+pan style=3D"color: #000000; font-size: inherit; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-=
+ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offse=
+t-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shad=
+ow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic;=
+" class=3D""> in 18 months using Major Gifts Ramp-Up. Your board is going t=
+o love this."</span><span style=3D"color: #000000; font-size: inherit; font=
+-weight: 400; line-height: inherit; text-decoration: inherit; --tw-shadow: =
+0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0Atranspar=
+ent; font-style: normal;" class=3D""> - Sarah Garrett, Phoenix Center</span=
+></span></div>=0A<span style=3D"color: #000000; font-size: inherit; font-we=
+ight: 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --=
+tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;"=
+ class=3D""><br style=3D"" class=3D"">Dear Colleagues In Service,<br class=
+=3D""><br class=3D""></span></span><span style=3D'color: #000000; font-size=
+: inherit; font-weight: inherit; line-height: inherit; text-decoration: inh=
+erit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 tr=
 ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
  --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; tex=
-t-align: center;" class=3D""><div style=3D"margin: 0; outline: none; paddin=
-g: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height=
-: inherit;=0Atext-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-r=
+ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;' cl=
+ass=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: 40=
+0; line-height: inherit; text-decoration:=0Ainherit; font-style: normal; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;" class=3D""><span style=3D"color: #000000; font-size: inherit=
+; font-weight: inherit; line-height: inherit; text-decoration: inherit; --t=
+w-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-of=
+fset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130=
+,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 =
+transparent;" class=3D""> <span style=3D'color: #000000; font-size: 16px; f=
+ont-weight: 400; line-height: inherit; text-decoration: inherit; font-famil=
+y: "trebuchet ms", tahoma, arial, sans; font-style: normal;' class=3D"">Ove=
+r the past 30 years I've been privileged to lead and speak at hundreds of A=
+FP conferences, nonprofit state association events and=0Aindustry workshops=
+. I spent my time and money on these gatherings to stay up to speed on tren=
+ds and to network with my peers.</span><br style=3D"" class=3D""><br style=
+=3D"" class=3D""><span style=3D'color: #000000; font-size: 16px; font-weigh=
+t: 400; line-height: inherit; text-decoration: inherit; font-family: "trebu=
+chet ms", tahoma, arial, sans; font-style: normal;' class=3D"">For me perso=
+nally, those days are over. We now live in the era of Covid-19 and if I'm g=
+oing to fly across the country for a multi-day in-person event it won't be =
+to hear retreaded PowerPoint presentations from 1995. It will have to be di=
+fferent. It will have to be special. I'm pleased to share that I've discove=
+red that worthwhile experience.</span><br style=3D"" class=3D""><br style=
+=3D"" class=3D""><span style=3D'color: #000000; font-size: 16px; font-weigh=
+t: 400; line-height: inherit; text-decoration: inherit; font-family: "trebu=
+chet ms", tahoma, arial, sans; font-style: normal;' class=3D"">It's called =
+Major Gifts=0ARamp-Up.<br class=3D""><br class=3D""><span style=3D'color: #=
+000000; font-size: 16px; font-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw=
+-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-=
+ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, ar=
+ial, sans; font-style: normal;' class=3D"">Over 17,000 nonprofit executives=
+ from across the U.S. have already attended a Major Gifts Ramp-Up Event. TH=
+EY LOVE THESE CONFERENCES (and so do their boards!) Why? Because this fast-=
+paced and provocative training has been customized for the audience in atte=
+ndance.</span><b style=3D'margin: 0; outline: none; padding: 0; --tw-shadow=
+: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wid=
+th: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5=
+); --tw-ring-offset-shadow: 0=0A0 transparent; --tw-ring-shadow: 0 0 transp=
+arent; font-family: "trebuchet ms", tahoma, arial, sans; color: #000000; fo=
+nt-size: 16px; font-style: normal;' class=3D""><i style=3D'margin: 0; outli=
+ne: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--=
+tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --t=
+w-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparen=
+t; --tw-ring-shadow: 0 0 transparent; font-style: italic; font-family: "tre=
+buchet ms", tahoma, arial, sans;' class=3D""><span style=3D'color: #000000;=
+ font-size: inherit; font-weight: inherit; line-height: inherit; text-decor=
+ation: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial,=
+ sans;' class=3D""> Prepare to hear the truth=0Ain ways you've never experi=
+enced before. You'll learn from the masters who defied convention and chall=
+enged the false thinking that keeps charities broke.</span></i></b> </span>=
+ <br class=3D""><br class=3D"">Let me encourage you to join us so you can l=
+earn how to prioritize your nonprofit's cash flow. You see, the number one =
+indicator of a charity's ability to scale program <b style=3D"margin: 0; ou=
+tline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpa=
+rent; --tw-ring-shadow: 0 0 transparent;" class=3D""><i style=3D"margin: 0;=
+ outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
+var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #ff=
+f; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tran=
+sparent; --tw-ring-shadow: 0 0 transparent; font-style:=0Aitalic;" class=3D=
+""><span style=3D"color: #000000; font-size: inherit; font-weight: inherit;=
+ line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"=
+">is its capacity to add new staff.</span></i></b> How then do you generate=
+ the millions you need to grow your mission? Whether you're a brand new sta=
+rt-up, small, medium or large 501(c)3 organization the most efficient way t=
+o increase income is Major Gifts Fundraising.<br style=3D"" class=3D""><spa=
+n style=3D"color: #000000; font-size: inherit; font-weight: inherit; line-h=
+eight: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --t=
+w-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-off=
+set-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=0A--tw-ring-offset-=
+shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: nor=
+mal;" class=3D""><span name=3D"email_14" style=3D"color: #000000; font-size=
+: inherit; font-weight: inherit; line-height: inherit; text-decoration: inh=
+erit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent;" class=3D""><br style=3D"" class=3D""><b style=3D"mar=
+gin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><a=0Ahref=3D=
+"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHM=
+lM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=3DFzgJVKhW77WHztvv2=
+LmR5PTXVNcQrvpy3MEhw4rnui2e&iat=3D1701790217&a=3D%7C%7C26605550%7C%7C&accou=
+nt=3Djimmylarose%2Eactivehosted%2Ecom&email=3DTGIVm9bF2Lhw3rngFZUqh0VRmNH9L=
+h0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2Bi6k%2Ballaq9BL2vc5&s=3D678f48a0e320c6856d06=
+20aa2e024acb&i=3D679A1150A214A2664" data-ac-default-color=3D"1" target=3D"_=
+blank" style=3D"margin: 0; outline: none; padding: 0; color: #0764ba; text-=
+decoration: underline; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(-=
+-tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --=
+tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpare=
+nt; --tw-ring-shadow: 0 0 transparent; font-weight: inherit;" class=3D""><s=
+pan style=3D"color: inherit; font-size: inherit; font-weight: inherit; line=
+-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; -=
+-tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-o=
+ffset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-=
+shadow: 0 0 transparent;=0A--tw-ring-shadow: 0 0 transparent;" class=3D"">V=
+ISIT HERE</span></a> </b></span><span style=3D"color: #000000; font-size: i=
+nherit; font-weight: inherit; line-height: inherit; text-decoration: inheri=
+t; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
+ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
+59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
+: 0 0 transparent; font-style: inherit;" class=3D"">FOR 60 SECOND VIDEO OVE=
+RVIEW</span></span></span><span style=3D"color: #000000; font-size: inherit=
+; font-weight: inherit; line-height: inherit; text-decoration: inherit; --t=
+w-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-of=
+fset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130=
+,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 =
+transparent;" class=3D""><br style=3D"" class=3D""><br style=3D"" class=3D"=
+"></span><span style=3D"color: #000000; font-size:=0Ainherit; font-weight: =
+inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 t=
+ransparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px=
+; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw=
+-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" c=
+lass=3D"">I'm pleased to announce that I'm now part of the Major Gifts Ramp=
+-Up Team and am co-hosting MGRU events across nation. Here's our 2023 confe=
+rence schedule.</span></span><div style=3D'margin: 0; outline: none; paddin=
+g: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inher=
+it; text-decoration: inherit; font-style: normal; font-family: "trebuchet m=
+s", tahoma, arial, sans; text-align: -webkit-left;' class=3D""><br></div>=
+=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; font=
+-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inher=
+it; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; t=
+ext-align: -webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;=
+"></b></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #=
+000000; font-size: 16px; font-weight: 400; line-height: inherit; text-decor=
+ation: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-styl=
+e: normal; text-align: -webkit-left;'><b style=3D"margin: 0; outline: none;=
+ padding: 0;">MAJOR GIFTS RAMP-UP NATIONWIDE</b><br>Executives, Board Membe=
+rs & Volunteers<br><i style=3D"margin: 0; outline: none; padding: 0;">Dec 0=
+6 2023 - Dec 07 2023<br></i>Virtual Online Event</div>=0A<div style=3D'marg=
+in: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-wei=
+ght: 400; line-height: inherit; text-decoration: inherit; font-family: "tre=
+buchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-le=
+ft;'><br><b style=3D"margin: 0; outline: none; padding: 0;">MAJOR GIFTS RAM=
+P-UP WEST COAST</b><br>Executives, Board Members & Volunteers<br><i style=
+=3D"margin: 0; outline: none; padding: 0;">Dec 13 2023 - Dec 14 2023<br></i=
+>Virtual Online Event</div>=0A<br><div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
+al, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div styl=
+e=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px;=
+ font-weight: 400; line-height: inherit; text-decoration: inherit; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -=
+webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">LAS VEGAS,=
+ NV (DESTINATION EVENT)</b><br>NFL Alumni Foundation<br><i style=3D"margin:=
+ 0; outline: none; padding: 0;">Jan 10 2024 - Jan 11 2024<br></i>Live In-Pe=
+rson Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; =
+color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; te=
+xt-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; f=
+ont-style: normal; text-align: -webkit-left;'></div>=0A<div style=3D'margin=
+: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weigh=
+t: 400; line-height: inherit; text-decoration: inherit; font-family: "trebu=
+chet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left=
+;'><b style=3D"margin: 0; outline: none; padding: 0;">CAROLINA NONPROFITS (=
+DESTINATION EVENT)</b><br>Goodwill Industries of Eastern NC Inc.<br><i styl=
+e=3D"margin: 0; outline: none; padding: 0;">Jan 31 2024 - Feb1 2024<br></i>=
+Live In-Person Event</div>=0A<br><div style=3D'margin: 0; outline: none; pa=
+dding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: i=
+nherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, aria=
+l, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -w=
+ebkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">UNITED WAY =
+PROGRAMS & PARTNERS</b><br><i style=3D"margin: 0; outline: none; padding: 0=
+;">Feb 28 2024 - Feb 29 2024<br></i>Virtual Online Event</div>=0A<br><div s=
+tyle=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16=
+px; font-weight: 400; line-height: inherit; text-decoration: inherit; font-=
+family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align=
+: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: none; padding: =
+0; color: #000000; font-size: 16px; font-weight: 400; line-height: inherit;=
+ text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans=
+; font-style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; out=
+line: none; padding: 0;">MAJOR GIFTS RAMP-UP NATIONWIDE</b><br>Executives, =
+Board Members & Volunteers<br><i style=3D"margin: 0; outline: none; padding=
+: 0;">Mar 6 2024 - Mar 7 2024<br></i>Virtual Online Event</div>=0A<br><div =
+style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 1=
+6px; font-weight: 400; line-height: inherit; text-decoration: inherit; font=
+-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-alig=
+n: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: none; padding:=
+ 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inherit=
+; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, san=
+s; font-style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; ou=
+tline: none; padding: 0;">FAITH & FUNDRAISING NATIONWIDE</b><br>Ministries,=
+ Schools & Churches<br><i style=3D"margin: 0; outline: none; padding: 0;">M=
+ar 13 2024 - Mar 14 2024<br></i>Virtual Online Event</div>=0A<br><div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -w=
+ebkit-left;'></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; c=
+olor: #000000; font-size: 16px; font-weight: 400; line-height: inherit; tex=
+t-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; fo=
+nt-style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; outline=
+: none; padding: 0;">MIAMI, FL (DESTINATION EVENT)</b><br><i style=3D"margi=
+n: 0; outline: none; padding: 0;">Mar 20 2024 - Mar 21 2024<br></i>Live In-=
+Person Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0=
+; color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; =
+text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans;=
+ font-style: normal; text-align: -webkit-left;'></div>=0A<div style=3D'marg=
+in: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-wei=
+ght: 400; line-height: inherit; text-decoration: inherit; font-family: "tre=
+buchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-le=
+ft;'><b style=3D"margin: 0; outline: none; padding: 0;">JACKSONVILLE, FL (D=
+ESTINATION EVENT)</b></div>=0A<div style=3D'margin: 0; outline: none; paddi=
+ng: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inhe=
+rit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, =
+sans; font-style: normal; text-align: -webkit-left;'><i style=3D"margin: 0;=
+ outline: none; padding: 0;">Mar 26 2024 - Mar 27 2024<br></i>Live In-Perso=
+n Event</div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: =
+#000000; font-size: 16px; font-weight: 400; line-height: inherit; text-deco=
+ration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-sty=
+le: normal; text-align: -webkit-left;'><br><b style=3D"margin: 0; outline: =
+none; padding: 0;">RENO, NV (DESTINATION EVENT)</b></div>=0A<div style=3D'm=
+argin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-=
+weight: 400; line-height: inherit; text-decoration: inherit; font-family: "=
+trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit=
+-left;'><i style=3D"margin: 0; outline: none; padding: 0;">Apr 03 2024 - Ap=
+r 04 2024<br></i>Live In-Person Event</div>=0A<br><div style=3D'margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'></=
+div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'><b style=3D"margin: 0; outline: none; padding=
+: 0;">DALLAS, TX (DESTINATION EVENT)</b></div>=0A<div style=3D'margin: 0; o=
+utline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400=
+; line-height: inherit; text-decoration: inherit; font-family: "trebuchet m=
+s", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><i =
+style=3D"margin: 0; outline: none; padding: 0;">Apr 24 2024 - Apr 25 2024<b=
+r></i>Live In-Person Event</div>=0A<br><div style=3D'margin: 0; outline: no=
+ne; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma=
+, arial, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div=
+ style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: =
+16px; font-weight: 400; line-height: inherit; text-decoration: inherit; fon=
+t-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-ali=
+gn: -webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">PHILA=
+DELPHIA, PA (DESTINATION EVENT)</b><br><i style=3D"margin: 0; outline: none=
+; padding: 0;">May 01 2024 - May 02 2024<br></i>Live In-Person Event</div>=
+=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: no=
+ne; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma=
+, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=3D"m=
+argin: 0; outline: none; padding: 0;">CINCINNATI, OH (DESTINATION EVENT)</b=
+><br><i style=3D"margin: 0; outline: none; padding: 0;">May 22 2024 - May 2=
+3 2024<br></i>Live In-Person Event</div>=0A<br><div style=3D'margin: 0; out=
+line: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; =
+line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms"=
+, tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'></div=
+>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; fon=
+t-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inhe=
+rit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; =
+text-align: -webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0=
+;">MAJOR GIFTS RAMP-UP NATIONWIDE</b><br>Executives, Board Members & Volunt=
+eers<br><i style=3D"margin: 0; outline: none; padding: 0;">Jun 05 2024 - Ju=
+n 06 2024<br></i>Virtual Online Event</div>=0A<br><div style=3D'margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'></=
+div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'><b style=3D"margin: 0; outline: none; padding=
+: 0;">UNITED WAY PROGRAMS & PARTNERS</b><br><i style=3D"margin: 0; outline:=
+ none; padding: 0;">Jul 17 2024 - Jul 18 2024<br></i>Virtual Online Event</=
+div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #0000=
+00; font-size: 16px; font-weight: 400; line-height: inherit; text-decoratio=
+n: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: n=
+ormal; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline=
+: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line=
+-height: inherit; text-decoration: inherit; font-family: "trebuchet ms", ta=
+homa, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=
+=3D"margin: 0; outline: none; padding: 0;">FAITH & FUNDRAISING NATIONWIDE</=
+b><br>Ministries, Schools & Churches<br><i style=3D"margin: 0; outline: non=
+e; padding: 0;">Jul 31 2024 - Aug 1 2024<br></i>Virtual Online Event</div>=
+=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: no=
+ne; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma=
+, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=3D"m=
+argin: 0; outline: none; padding: 0;">MAJOR GIFTS RAMP-UP NATIONWIDE</b></d=
+iv>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; f=
+ont-size: 16px; font-weight: 400; line-height: inherit; text-decoration: in=
+herit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal=
+; text-align: -webkit-left;'><strong style=3D"margin: 0; outline: none; pad=
+ding: 0;">GOODWILL INDUSTRIES PROGRAMS</strong><br><i style=3D"margin: 0; o=
+utline: none; padding: 0;">Sep 25 2024 - Sep 26 2024<br></i>Virtual Online =
+Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color=
+: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-de=
+coration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-s=
+tyle: normal; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><b=
+ style=3D"margin: 0; outline: none; padding: 0;">COLUMBUS, OH (DESTINATION =
+EVENT)</b></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; colo=
+r: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-d=
+ecoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-=
+style: normal; text-align: -webkit-left;'><i style=3D"margin: 0; outline: n=
+one; padding: 0;">Oct 16 2024 - Oct 17 2024<br></i>Live In-Person Event</di=
+v>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #000000=
+; font-size: 16px; font-weight: 400; line-height: inherit; text-decoration:=
+ inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: nor=
+mal; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: =
+none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-h=
+eight: inherit; text-decoration: inherit; font-family: "trebuchet ms", taho=
+ma, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=3D=
+"margin: 0; outline: none; padding: 0;">NASHVILLE, TN (DESTINATION EVENT)<b=
+r>UNITED WAY PROGRAMS</b></div>=0A<div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
+al, sans; font-style: normal; text-align: -webkit-left;'><i style=3D"margin=
+: 0; outline: none; padding: 0;">Oct 23 2024 - Oct 24 2024<br></i>Live In-P=
+erson Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0;=
+ color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; t=
+ext-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; =
+font-style: normal; text-align: -webkit-left;'></div>=0A<div style=3D'margi=
+n: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weig=
+ht: 400; line-height: inherit; text-decoration: inherit; font-family: "treb=
+uchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-lef=
+t;'><b style=3D"margin: 0; outline: none; padding: 0;">FAITH & FUNDRAISING =
+NATIONWIDE</b><br>Ministries, Schools & Churches<br><i style=3D"margin: 0; =
+outline: none; padding: 0;">Nov 13 2024 - Nov 14 2024<br></i>Virtual Online=
+ Event</div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #=
+000000; font-size: 16px; font-weight: 400; line-height: inherit; text-decor=
+ation: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-styl=
+e: normal; text-align: -webkit-left;'></div>=0A<br><div style=3D'margin: 0;=
+ outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 4=
+00; line-height: inherit; text-decoration: inherit; font-family: "trebuchet=
+ ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><=
+b style=3D"margin: 0; outline: none; padding: 0;">MELBOURNE, FL (DESTINATIO=
+N EVENT)<br>UNITED WAY PROGRAMS</b></div>=0A<div style=3D'margin: 0; outlin=
+e: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; lin=
+e-height: inherit; text-decoration: inherit; font-family: "trebuchet ms", t=
+ahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><i style=
+=3D"margin: 0; outline: none; padding: 0;">Dec 4 2024 - Dec 5 2024<br></i>L=
+ive In-Person Event</div>=0A<br><div style=3D'margin: 0; outline: none; pad=
+ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
+herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
+, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -w=
+ebkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">MAJOR GIFTS=
+ RAMP-UP NATIONWIDE</b><br>Executives, Board Members & Volunteers<br><i sty=
+le=3D"margin: 0; outline: none; padding: 0;">Dec 11 2024 - Dec 12 2024<br><=
+/i>Virtual Online Event</div>=0A<div style=3D'margin: 0; outline: none; pad=
+ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
+herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
+, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-styl=
+e: normal; font-family: "trebuchet ms", tahoma, arial, sans; text-align: -w=
+ebkit-left;' class=3D""></div>=0A <div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-style: normal; font-family: "trebuc=
+het ms", tahoma, arial, sans; text-align: -webkit-left;' class=3D""></div>=
+=0A<br class=3D""><div style=3D'margin: 0; outline: none; padding: 0; color=
+: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-de=
+coration: inherit; font-style: normal; font-family: "trebuchet ms", tahoma,=
+ arial, sans; text-align: -webkit-left;' class=3D""></div>=0A<div style=3D'=
+margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
+-weight: 400; line-height: inherit; text-decoration: inherit; font-style: n=
+ormal; font-family: "trebuchet ms", tahoma, arial, sans; text-align: -webki=
+t-left;' class=3D""><span class=3D"" style=3D'color: #000000; font-size: in=
+herit; font-weight: bold; line-height: inherit; text-decoration: inherit; f=
+ont-family: "trebuchet ms", tahoma, arial, sans; text-align: inherit; font-=
+style: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0 transparent;'><a href=3D"https://jimmylarose.lt.acemlnd.=
+com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJ=
+lbmNlcy5vcmclMkY=3D&sig=3DFzgJVKhW77WHztvv2LmR5PTXVNcQrvpy3MEhw4rnui2e&iat=
+=3D1701790217&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted=
+%2Ecom&email=3DTGIVm9bF2Lhw3rngFZUqh0VRmNH9Lh0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2=
+Bi6k%2Ballaq9BL2vc5&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D679A1150A214A2=
+664" data-ac-default-color=3D"1"=0Atarget=3D"_blank" style=3D"margin: 0; ou=
+tline: none; padding: 0; color: #0764ba; text-decoration: underline; --tw-s=
+hadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offse=
+t-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,24=
+6,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tra=
+nsparent;" class=3D""><span style=3D"color: inherit; font-size: inherit; fo=
+nt-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent;" class=3D"">VISIT HERE</span></a> </span><span class=3D"" style=3D=
+'color: #000000; font-size: inherit; font-weight: 400; line-height: inherit=
+; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, san=
+s; text-align: inherit; font-style: inherit;=0A--tw-shadow: 0 0 transparent=
+; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-rin=
+g-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offs=
+et-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;'>FOR 60 SECO=
+ND VIDEO OVERVIEW</span><br class=3D""></div>=0A</span></span></div>=0A<div=
+ style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size: =
+inherit; font-weight: inherit; line-height: inherit; text-decoration: inher=
+it;" class=3D""><span style=3D"color: inherit; font-size: 16px; font-weight=
+: inherit; line-height: inherit; text-decoration: inherit;" class=3D""><spa=
+n style=3D'color: #000000; font-size: inherit; font-weight: 400; line-heigh=
+t: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, =
+arial, sans; font-style: inherit; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent;' class=3D""><br style=3D"=
+" class=3D""><span style=3D"color: #000000; font-size: inherit; font-weight=
+: 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tra=
+nsparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+=0A--tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; f=
+ont-style: normal;" class=3D"">Major Gifts Ramp-Up is not nonprofit managem=
+ent 101! Meet the fundraising veterans who've raised millions. Join us to l=
+earn how you can build the financial capacity you need to secure your futur=
+e. This live and in-person event will challenge everything you believe abou=
+t the raising of money, and</span><span style=3D"color: #000000; font-size:=
+ inherit; font-weight: 400; line-height: inherit; text-decoration: inherit;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent; font-style: normal;" class=3D""> </span><b style=3D"margin=
+: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-ins=
+et:=0Avar(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent; color: #000000; font-styl=
+e: normal;" class=3D""><i style=3D"margin: 0; outline: none; padding: 0; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent; font-style: italic;" class=3D"">will make </i></b><b style=3D=
+"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-r=
 ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
 -color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
-w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; text-align: center;"=
- class=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: #000=
-000; font-size: 16px; font-weight: 400; line-height: inherit; text-decorati=
-on: inherit; font-style: normal; text-align: left;" class=3D""></div>=0A</d=
-iv>=0A</div>=0A<span style=3D"color: #000000; font-size: 16px; font-weight:=
- 400; line-height: inherit; text-decoration: inherit; font-family: arial; f=
-ont-style: normal; text-align: left; margin: 0;" class=3D"">Dear colleague =
-in service,<br class=3D""><br class=3D"">My name is Charlotte Berry and I'm=
- privileged to be <em class=3D"" style=3D"margin: 0; outline: none; padding=
-: 0;"><strong class=3D"" style=3D"margin: 0; outline: none; padding: 0;">So=
-uth Carolina's very first United Way Million Dollar Roundtable Member.</str=
-ong></em> I thought I'd start your day by sharing how Major Gifts Ramp-Up h=
-as inspired me and hundreds of Local United Way programs to grow their Alex=
-is de Tocqueville Societies.</span><br class=3D""><br class=3D""><span styl=
-e=3D"color: #000000; font-size: 16px; font-weight: 400; line-height: inheri=
-t; text-decoration: inherit; font-family: arial; font-style: normal; text-a=
-lign: left; margin: 0;" class=3D"">If it is time for your organization to b=
-ecome fully funded, I strongly recommend=0Athat you attend a Major Gifts Ra=
-mp-Up Event.<em class=3D"" style=3D"margin: 0; outline: none; padding: 0;">=
-<strong class=3D"" style=3D"margin: 0; outline: none; padding: 0;"> I<stron=
-g class=3D"" style=3D"margin: 0; outline: none; padding: 0;"> loo</strong>k=
- forward to meeting you personally at our next 2-Day Conference.</strong></=
-em> Prepare to hear the truth in ways you have never experienced. You will =
-hear from me and learn from the experts who defied convention and challenge=
-d the false thinking that keeps Local United Way Programs from raising as m=
-uch money as they should.</span><br class=3D""><div style=3D"margin: 0; out=
-line: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; =
-line-height: inherit; text-decoration: inherit; font-family: arial; font-st=
-yle: normal; text-align: -webkit-left;" class=3D""></div>=0A<br class=3D"">=
-<div style=3D"margin: 0; outline: none; padding: 0; color: #000000; font-si=
-ze: 16px; font-weight: 400; line-height: inherit; text-decoration: inherit;=
- font-family: arial; font-style: normal; text-align: -webkit-left;" class=
-=3D""><b class=3D"" style=3D"margin: 0; outline: none; padding: 0;"><a data=
--cke-saved-href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?red=
-irectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQt=
-d2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCg=
-zDUY4mzbRd&iat=3D1701789978&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%=
-2Eactivehosted%2Ecom&email=3DhiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJg=
-Bq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D68=
-1A1152A214A2671" href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-track=
-er?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bm=
-l0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiU=
-DgtYCgzDUY4mzbRd&iat=3D1701789978&a=3D%7C%7C26605550%7C%7C&account=3Djimmyl=
-arose%2Eactivehosted%2Ecom&email=3DhiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC=
-%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=3D678f48a0e320c6856d0620aa2e024acb&=
-i=3D681A1152A214A2671" target=3D"_blank" style=3D"margin: 0; outline: none;=
- padding: 0; color: #0764ba; text-decoration: underline; font-size: 16px;"=
-=0Adata-ac-default-color=3D"1" class=3D""><span style=3D"color: ; font-size=
-: inherit; font-weight: inherit; line-height: inherit; text-decoration: inh=
-erit;" class=3D"">VISIT HERE TO JOIN US</span></a></b></div>=0A<br class=3D=
-""><div style=3D"margin: 0; outline: none; padding: 0; color: #000000; font=
--size: 16px; font-weight: 400; line-height: inherit; text-decoration: inher=
-it; font-family: arial; font-style: normal; text-align: -webkit-left;" clas=
-s=3D""></div>=0A<div style=3D"margin: 0; outline: none; padding: 0; color: =
-#000000; font-size: 16px; font-weight: 400; line-height: inherit; text-deco=
-ration: inherit; font-family: arial; font-style: normal; text-align: -webki=
-t-left;" class=3D"">Here's what your Local United Way colleagues have to sa=
-y about Major Gifts Ramp-Up:</div>=0A<br class=3D""><div style=3D"margin: 0=
-; outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: =
-400; line-height: inherit; text-decoration: inherit; font-family: arial; fo=
-nt-style: normal; text-align: -webkit-left;" class=3D""></div>=0A<div style=
-=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
-font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
-ly: arial; text-align: -webkit-left;" class=3D""><span class=3D"" style=3D"=
-color: inherit; font-size: inherit; font-weight: inherit; line-height: inhe=
-rit; text-decoration: inherit; font-style: italic;"><span style=3D"color: #=
-000000; font-size: 16px; font-weight: 400; line-height: inherit; text-decor=
-ation: inherit; font-family: arial; font-style: italic;" class=3D"">"</span=
->Having served nonprofits for the past 40 years, I thought I'd seen everyth=
-ing! Then I attended Major Gifts Ramp-Up New York and experienced MGRU facu=
-lty's brilliant performance. Their unbounded enthusiasm, comic timing, exce=
-ptional sense of theater and insights into nonprofit management will change=
- the way you view yourself and the raising of big gifts. This conference is=
- a must-see, especially for those who think they=E2=80=99ve seen it all!<em=
-=0Astyle=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transpar=
-ent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-=
-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-o=
-ffset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-styl=
-e: italic; font-weight: 400; font-size: 16px; font-family: arial; color: #0=
-00000;"><span style=3D"color: #000000; font-size: 16px; font-weight: 400; l=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; color: #000000; font=
+-style: normal;" class=3D""><i style=3D"margin: 0; outline: none; padding: =
+0; --tw-shadow: 0 0=0Atransparent; --tw-ring-inset: var(--tw-empty, ); --tw=
+-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb=
+a(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shad=
+ow: 0 0 transparent; font-style: italic;" class=3D""><span style=3D"color: =
+#000000; font-size: inherit; font-weight: inherit; line-height: inherit; te=
+xt-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(=
+--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; -=
+-tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpar=
+ent; --tw-ring-shadow: 0 0 transparent;" class=3D"">fiv</span><span style=
+=3D"color: #000000; font-size: inherit; font-weight: inherit; line-height: =
+inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0=0Atransparent;" class=3D"">e, six and=
+ seven figure major gifts available to your nonprofit in the shortest perio=
+d of time possible.</span></i></b></span><span style=3D"color: #000000; fon=
+t-size: inherit; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent; font-style: normal;" class=3D""><span style=3D"colo=
+r: #000000; font-size: inherit; font-weight: inherit; line-height: inherit;=
+ text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: v=
+ar(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff=
+; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 trans=
+parent; --tw-ring-shadow: 0 0 transparent;" class=3D""><span style=3D'color=
+: #000000; font-size: inherit; font-weight: inherit;=0Aline-height: inherit=
+; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, san=
+s; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
+ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
+59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
+: 0 0 transparent;' class=3D""><span style=3D"color: #000000; font-size: in=
+herit; font-weight: inherit; line-height: inherit; text-decoration: inherit=
+; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ri=
+ng-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(5=
+9,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow:=
+ 0 0 transparent;" class=3D""><br style=3D"" class=3D""><br style=3D"" clas=
+s=3D""><em style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0p=
+x; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=0A-=
+-tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
+ font-style: italic; font-weight: inherit;" class=3D"">"I=E2=80=99ve spent =
+the last week receiving email messages, phone calls and personal visits tha=
+nking me for bringing Major Gifts Ramp-Up to our community. This spectacula=
+r 2-day capacity-building conference was daring, confrontational and exactl=
+y what our organizations needed in the way of training.=C2=A0 Conventional =
+methods of management and fundraising were challenged with humor and insigh=
+t. Their expert faculty engaged our grantees and inspired them to grow reve=
+nues in new ways that work.=C2=A0 Prepare for significant change if you giv=
+e yourself this gift."</em> ~ Debi Meeds, Springfield, MO<br style=3D"" cla=
+ss=3D""><br style=3D"" class=3D""></span><span name=3D"email_16" style=3D"c=
+olor: #000000; font-size: inherit; font-weight: inherit; line-height: inher=
+it; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset=
+: var(--tw-empty, );=0A--tw-ring-offset-width: 0px; --tw-ring-offset-color:=
+ #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 =
+transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">Who should atte=
+nd? If you=E2=80=99re a CEO, CFO, COO, CDO, Executive Director, Development=
+ Director, Staff Member, Board Member, Pastor, Trustee or Volunteer respons=
+ible for the financial health of a nonprofit, ministry or church then you'l=
+l want to make sure you bring as many people as possible to this training.<=
+br style=3D"" class=3D""><br style=3D"" class=3D""></span><span name=3D"ema=
+il_17" style=3D"color: #000000; font-size: inherit; font-weight: inherit; l=
 ine-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent=
 ; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-rin=
 g-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offs=
-et-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-family:=
- arial; font-style: italic;">"</span></em></span> ~ Su Marcy, United Way of=
- Ulster County<br class=3D""><br class=3D""><em style=3D"margin: 0; outline=
-: none; padding: 0;" class=3D""><span style=3D"color: #000000; font-size: 1=
-6px; font-weight: 400;=0Aline-height: inherit; text-decoration: inherit; fo=
-nt-family: arial; font-style: italic;" class=3D"">"</span>Our program here =
-in Macon, GA continued to be challenged with ongoing company campaign losse=
-s. I was also frustrated by our declining Tocqueville Membership. I agreed =
-to attend a Major Gifts Ramp-Up Event and was so impressed that our team ag=
-reed to host a 2-Day live virtual event for our local United Way Partner Ag=
-encies. THEY LOVED IT! This conference was inspirational, innovative, fun, =
-and exactly what our partners needed in the way of training. Conventional m=
-ethods of management and fundraising were challenged with humor and insight=
-. MGRU's expert faculty engaged our grantees and inspired them to grow reve=
-nues in new ways they never dreamed possible. We now have 55 new five-figur=
-e givers after just 12 months of implementing Major Gifts Ramp-Up. (We also=
- raised 430,000 in one evening!)<span style=3D"color: #000000; font-size: 1=
-6px; font-weight: 400;=0Aline-height: inherit; text-decoration: inherit; fo=
-nt-family: arial; font-style: italic;" class=3D"">"</span> </em>~ George Mc=
-Canless, United Way of Central Georgia</div>=0A<br class=3D""><div style=3D=
-"margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; fon=
-t-weight: 400; line-height: inherit; text-decoration: inherit; font-family:=
- arial; font-style: normal; text-align: -webkit-left;" class=3D""></div>=0A=
-<div style=3D"margin: 0; outline: none; padding: 0; color: #000000; font-si=
-ze: 16px; font-weight: 400; line-height: inherit; text-decoration: inherit;=
- font-family: arial; text-align: -webkit-left;" class=3D""><span style=3D"c=
-olor: inherit; font-size: inherit; font-weight: inherit; line-height: inher=
-it; text-decoration: inherit; font-style: italic;" class=3D"">"Two words=
-=E2=80=A6AMAZING EXPERIENCE. Our Mid-Illinois Major Gifts Ramp-Up Event was=
- provocative and pushed our agency directors to =E2=80=98re-imagine=
-=E2=80=99 their roles as CEOs! (I=E2=80=99ve received only positive comment=
-s from those who attended.) <strong class=3D"" style=3D"margin: 0; outline:=
- none; padding: 0;">MGRU Faculty challenged us to see charity through a new=
- lens and then gave us the tools we needed to change.</strong> Our own Unit=
-ed Way staff were inspired and are now poised for unprecedented campaign su=
-ccess. If you believe in nonprofit capacity-building than this program is f=
-or you."</span> ~ Debbie Bogle, President & CEO,=0AUnited Way of Decatur an=
-d Mid-Illinois</div>=0A<div style=3D"margin: 0; outline: none; padding: 0; =
-color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; te=
-xt-decoration: inherit; font-family: arial; font-style: normal; text-align:=
- -webkit-left;" class=3D""><br class=3D""><b class=3D"" style=3D"margin: 0;=
- outline: none; padding: 0;"><a data-cke-saved-href=3D"https://jimmylarose.=
-lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9m=
-aXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&sig=
-=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=3D1701789978&a=3D%7C%7C=
-26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DhiCW7KREo=
-E33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=3D67=
-8f48a0e320c6856d0620aa2e024acb&i=3D681A1152A214A2671" href=3D"https://jimmy=
-larose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub=
-25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=
-=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=3D1701789978&a=
-=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3D=
-hiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28=
-oB&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D681A1152A214A2671" target=3D"_b=
-lank" style=3D"margin: 0; outline: none; padding: 0; color: #0764ba; text-d=
-ecoration: underline; font-size: 16px;"=0Adata-ac-default-color=3D"1" class=
-=3D""><span style=3D"color: ; font-size: inherit; font-weight: inherit; lin=
-e-height: inherit; text-decoration: inherit;" class=3D"">VISIT HERE TO JOIN=
- US</span></a></b><br class=3D""></div>=0A<br class=3D""><div style=3D"marg=
-in: 0; outline: none; padding: 0; color: #000000; font-size: 20px; font-wei=
-ght: 400; line-height: inherit; text-decoration: inherit; font-family: aria=
-l; font-style: normal; text-align: center;" class=3D""><em class=3D"" style=
-=3D"margin: 0; outline: none; padding: 0;"><strong style=3D"margin: 0; outl=
-ine: none; padding: 0;" class=3D"">Over 200 Local United Ways have already<=
-/strong></em></div>=0A<div style=3D"margin: 0; outline: none; padding: 0; c=
-olor: #000000; font-size: 20px; font-weight: 400; line-height: inherit; tex=
-t-decoration: inherit; font-family: arial; font-style: normal; text-align: =
-center;" class=3D""><em class=3D"" style=3D"margin: 0; outline: none; paddi=
-ng: 0;"><strong style=3D"margin: 0; outline: none; padding: 0;" class=3D"">=
-attended Major Gifts Ramp-Up!</strong></em></div>=0A<br class=3D""><div sty=
-le=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px=
-; font-weight: 400; line-height: inherit; text-decoration: inherit; font-fa=
-mily: arial; font-style: normal; text-align: -webkit-left;" class=3D""></di=
-v>=0A<div style=3D"margin: 0; outline: none; padding: 0; color: #000000; fo=
-nt-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inh=
-erit; font-family: arial; font-style: normal; text-align: -webkit-left;" cl=
-ass=3D"">Here's your 2024 Local United Way Conference Event Schedule:</div>=
-=0A<div style=3D"margin: 0; outline: none; padding: 0; color: #000000; font=
--size: 16px; font-weight: 400; line-height: inherit; text-decoration: inher=
-it; font-family: arial; font-style: normal; text-align: -webkit-left;" clas=
-s=3D""></div>=0A<br style=3D"font-size: 16px;" class=3D""><div style=3D"mar=
-gin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-we=
-ight: 400; line-height: inherit; text-decoration: inherit; font-family: ari=
-al; font-style: normal; text-align: -webkit-left;" class=3D""><b style=3D"m=
-argin: 0; outline: none; padding: 0;" class=3D"">UNITED WAY PROGRAMS AND PA=
-RTNERS</b></div>=0A<div style=3D"margin: 0; outline: none; padding: 0; colo=
-r: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-d=
-ecoration: inherit; font-family: arial; font-style: normal; text-align: -we=
-bkit-left;" class=3D""><i style=3D"margin: 0; outline: none; padding: 0;" c=
-lass=3D"">Feb 28 2024 - Feb 29 2024</i></div>=0A<div style=3D"margin: 0; ou=
-tline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400;=
- line-height: inherit; text-decoration: inherit; font-family: arial; font-s=
-tyle: normal; text-align: -webkit-left;" class=3D"">Virtual Online Event</d=
-iv>=0A<div style=3D"margin: 0; outline: none; padding: 0; color: #000000; f=
-ont-size: 16px; font-weight: 400; line-height: inherit; text-decoration: in=
-herit; font-family: arial; font-style: normal; text-align: -webkit-left;" c=
-lass=3D""></div>=0A<br style=3D"font-size: 16px;" class=3D""><div style=3D"=
-margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
--weight: 400; line-height: inherit; text-decoration: inherit; font-family: =
-arial; font-style: normal; text-align: -webkit-left;" class=3D""><b style=
-=3D"margin: 0; outline: none; padding: 0;" class=3D"">UNITED WAY PROGRAMS A=
-ND PARTNERS</b></div>=0A<div style=3D"margin: 0; outline: none; padding: 0;=
- color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; t=
-ext-decoration: inherit; font-family: arial; font-style: normal; text-align=
-: -webkit-left;" class=3D""><i style=3D"margin: 0; outline: none; padding: =
-0;" class=3D"">Jul 17 2024 - Jul 18 2024</i></div>=0A<div style=3D"margin: =
-0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weight:=
- 400; line-height: inherit; text-decoration: inherit; font-family: arial; f=
-ont-style: normal; text-align: -webkit-left;" class=3D"">Virtual Online Eve=
-nt</div>=0A<br style=3D"font-size: 16px;" class=3D""><div style=3D"margin: =
-0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weight:=
- 400; line-height: inherit; text-decoration: inherit; font-family: arial; f=
-ont-style: normal; text-align: -webkit-left;" class=3D""></div>=0A<div styl=
-e=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px;=
- font-weight: 400; line-height: inherit; text-decoration: inherit; font-fam=
-ily: arial; font-style: normal; text-align: -webkit-left;" class=3D""><b st=
-yle=3D"margin: 0; outline: none; padding: 0;" class=3D"">UNITED WAY PROGRAM=
-S AND PARTNERS</b></div>=0A<div style=3D"margin: 0; outline: none; padding:=
- 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inherit=
-; text-decoration: inherit; font-family: arial; font-style: normal; text-al=
-ign: -webkit-left;" class=3D""><i style=3D"margin: 0; outline: none; paddin=
-g: 0;" class=3D"">Oct 23 2024 - Oct 24 2024</i></div>=0A<div style=3D"margi=
-n: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weig=
-ht: 400; line-height: inherit; text-decoration: inherit; font-family: arial=
-; font-style: normal; text-align: -webkit-left;" class=3D"">Virtual Online =
-Event</div>=0A<br style=3D"font-size: 16px;" class=3D""><div style=3D"margi=
-n: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weig=
-ht: 400; line-height: inherit; text-decoration: inherit; font-family: arial=
-; font-style: normal; text-align: -webkit-left;" class=3D""></div>=0A<div s=
-tyle=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size: 16=
-px; font-weight: 400; line-height: inherit; text-decoration: inherit; font-=
-family: arial; font-style: normal; text-align: -webkit-left;" class=3D""><b=
- style=3D"margin: 0; outline: none; padding: 0;" class=3D"">UNITED WAY PROG=
-RAMS AND PARTNERS</b></div>=0A<div style=3D"margin: 0; outline: none; paddi=
-ng: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inhe=
-rit; text-decoration: inherit; font-family: arial; font-style: normal; text=
--align: -webkit-left;" class=3D""><i style=3D"margin: 0; outline: none; pad=
-ding: 0;" class=3D"">Dec 04 2024 - Dec 05 2024</i></div>=0A<div style=3D"ma=
-rgin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-w=
-eight: 400; line-height: inherit; text-decoration: inherit; font-family: ar=
-ial; font-style: normal; text-align: -webkit-left;" class=3D"">Virtual Onli=
-ne Event</div>=0A<div style=3D"margin: 0; outline: none; padding: 0; color:=
- #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-dec=
-oration: inherit; font-family: arial; font-style: normal; text-align: -webk=
-it-left;" class=3D""></div>=0A<br class=3D""><div style=3D"margin: 0; outli=
-ne: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; li=
-ne-height: inherit; text-decoration: inherit; font-family: arial; font-styl=
-e: normal; text-align: -webkit-left;" class=3D""><b class=3D"" style=3D"mar=
-gin: 0; outline: none; padding: 0;"><a data-cke-saved-href=3D"https://jimmy=
-larose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub=
-25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=
-=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=3D1701789978&a=
-=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3D=
-hiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28=
-oB&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D681A1152A214A2671" href=3D"http=
-s://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0El=
-MkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZ=
-lbnQlMkY=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDgtYCgzDUY4mzbRd&iat=3D170178=
-9978&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&em=
-ail=3DhiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjA=
-VdmS28oB&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D681A1152A214A2671" target=
-=3D"_blank" style=3D"margin: 0; outline: none; padding: 0; color: #0764ba; =
-text-decoration: underline; font-size: 16px; font-family:=0Aarial;" data-ac=
--default-color=3D"1" class=3D""><span style=3D"color: ; font-size: inherit;=
- font-weight: inherit; line-height: inherit; text-decoration: inherit;" cla=
-ss=3D"">VISIT HERE TO JOIN US</span></a></b><br class=3D""><br class=3D"">D=
-uring this 2-Day virtual meeting your faculty <b class=3D"" style=3D"margin=
-: 0; outline: none; padding: 0;"><i class=3D"" style=3D"margin: 0; outline:=
- none; padding: 0;">will allow you to access the names and contact informat=
-ion of every millionaire household within your service area. These are dono=
-rs you've never met who can invest a 5, 6 or 7 figure gifts.</i></b> I'm al=
-so pleased to share that our team of experts has designed comprehensive cus=
-tom materials in collaboration with local United Ways to provide you everyt=
-hing you need to raise the millions you require to accomplish your importan=
-t mission!<br class=3D""><br class=3D"">Who should attend? If you=E2=80=
-=99re a CEO, CFO, COO, CDO, Executive Director, Development Director, Staff=
- Member, Board Member,=0ATrustee or Volunteer <b style=3D"margin: 0; outlin=
-e: none; padding: 0;" class=3D""><i class=3D"" style=3D"margin: 0; outline:=
- none; padding: 0;">responsible for the financial health of your local Unit=
-ed Way</i></b>, then I would encourage you to bring as many people as possi=
-ble to this training.</div>=0A<div style=3D"margin: 0; outline: none; paddi=
-ng: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inhe=
-rit; text-decoration: inherit; font-style: normal; text-align: -webkit-left=
-;" class=3D""><br class=3D""><strong style=3D"margin: 0; outline: none; pad=
-ding: 0; font-family: arial;" class=3D"">Again, I look forward to meeting y=
-ou at our next event.</strong> Major Gifts Ramp-Up will ensure you have tha=
-t spectacular 2024!<br class=3D""><br class=3D"">Sincerely Yours,<br class=
-=3D""><br class=3D""><em style=3D'margin: 0; outline: none; padding: 0; fon=
-t-size: 20px; font-family: georgia, "times new roman";' class=3D""><b style=
-=3D"margin: 0; outline: none; padding: 0;" class=3D"">Charlotte Lunsford Be=
-rry</b></em></div>=0A<div style=3D"margin: 0; outline: none; padding: 0; co=
-lor: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text=
--decoration: inherit; font-family: arial; font-style: normal; text-align: -=
-webkit-left;" class=3D""> <br class=3D"">United Way Million Dollar Roundtab=
-le Member<br class=3D""><br class=3D"">P.S. Nonprofit Execs, <strong class=
-=3D"" style=3D"margin: 0; outline: none; padding: 0;"><a target=3D"_blank" =
-data-cke-saved-href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker=
-?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZ1bml0=
-ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1wKcUiUDg=
-tYCgzDUY4mzbRd&iat=3D1701789978&a=3D%7C%7C26605550%7C%7C&account=3Djimmylar=
-ose%2Eactivehosted%2Ecom&email=3DhiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0cpIaC%3=
-ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=3D678f48a0e320c6856d0620aa2e024acb&i=
-=3D681A1152A214A2671" href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-=
-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclM=
-kZ1bml0ZWQtd2F5LWNvbmZlcmVuY2UtZXZlbnQlMkY=3D&sig=3D4RPPdHvtYYWmGLDaXb3CB1w=
-KcUiUDgtYCgzDUY4mzbRd&iat=3D1701789978&a=3D%7C%7C26605550%7C%7C&account=3Dj=
-immylarose%2Eactivehosted%2Ecom&email=3DhiCW7KREoE33Ys822gbGlBJLEoJo5vnTGR0=
-cpIaC%3ATJgBq3O1Lf%2BMDbsmY2Z4WEjAVdmS28oB&s=3D678f48a0e320c6856d0620aa2e02=
-4acb&i=3D681A1152A214A2671" style=3D"margin: 0; outline:=0Anone; padding: 0=
-; color: #0764ba; text-decoration: underline; font-size: 16px; font-family:=
- arial;" data-ac-default-color=3D"1" class=3D""><span style=3D"color: ; fon=
-t-size: inherit; font-weight: inherit; line-height: inherit; text-decoratio=
-n: inherit;" class=3D"">VISIT HERE</span></a> </strong>to make your reserva=
-tion today.<em class=3D"" style=3D"margin: 0; outline: none; padding: 0;"><=
-strong class=3D"" style=3D"margin: 0; outline: none; padding: 0;"> Over 200=
- Local United Ways have already attended a Major Gifts Ramp-Up Event. <br c=
-lass=3D""></strong></em></div>=0A </div>=0A<!--[if (gte mso 12)&(lte mso 15=
-) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D"false"> #text_div4065=
-, #text_div4065 div { line-height: 140% !important; };=0A</style>=0A<![endi=
-f]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A=
-</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</div>=0A<=
-img src=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?nl=3D214&c=
-=3D681&m=3D1152&s=3D678f48a0e320c6856d0620aa2e024acb&l=3Dopen&account=3Djim=
-mylarose.activehosted.com&a=3D26605550" border=3D"0" width=3D"1" height=3D"=
-1" style=3D"display:block;width:1px!important;min-width:1px!important;max-w=
-idth:1px!important;height:1px!important;border:0;overflow:hidden;" /><div i=
-d=3D"ac-footer" style=3D"clear:both;background-color:inherit;background:inh=
-erit;min-width:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;padding:20px;=
-color:#000000;font-size:11px;font-family:arial,helvetica,sans-serif;line-he=
-ight:140%;line-height:1.4;text-align:center;box-sizing:border-box;"><center=
->Sent to: <span style=3D"font-size:11px;font-family:arial,helvetica,sans-se=
-rif;font-weight:normal;text-decoration:none;outline:none;">soc@kernel.org</=
-span><br><br><a href=3D"http://jimmylarose.activehosted.com/proc.php?nl=3D2=
-14&c=3D681&m=3D1152&s=3D678f48a0e320c6856d0620aa2e024acb&act=3Dunsub"=0Asty=
-le=3D"font-size:11px;font-family:arial,helvetica,sans-serif;font-weight:bol=
-d;text-decoration:underline;"><span style=3D"font-weight:bold;text-decorati=
-on:underline;">Unsubscribe</span></a><br><br>National Development Institute=
-, PO Box 1840, Lexington, SOUTH CAROLINA 29071, United States</center></div=
->=0A<br clear=3D"all" /></body>=0A</html>
---_=_swift-1053669749656f4026862743.80557830_=_--
+et-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">=
+Tuition for a quality capacity-building conference=0Acould cost up to $800 =
+per guest. We're thrilled to share that a group of major donors have underw=
+ritten this event allowing us to offer tuition for </span><strong style=3D"=
+margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit; =
+font-weight: 700;" class=3D""><span style=3D"color: #000000; font-size: inh=
+erit; font-weight: inherit; line-height: inherit; text-decoration: inherit;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent;" class=3D"">ONE PERSON at $248 or UNLIMITED REGISTRATIONS =
+for only $498.</span></strong><b style=3D"margin: 0; outline: none;=0Apaddi=
+ng: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --=
+tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: r=
+gba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sh=
+adow: 0 0 transparent;" class=3D""><br style=3D"" class=3D""><br style=3D""=
+ class=3D""><strong style=3D"margin: 0; outline: none; padding: 0; --tw-sha=
+dow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-=
+width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,=
+0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 trans=
+parent; font-style: inherit; font-weight: 700;" class=3D""><i style=3D"marg=
+in: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic; color=
+: #000000;=0Afont-weight: inherit;" class=3D""><span style=3D"color: #00000=
+0; font-size: inherit; font-weight: inherit; line-height: inherit; text-dec=
+oration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-e=
+mpty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ri=
+ng-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; -=
+-tw-ring-shadow: 0 0 transparent;" class=3D"">That's right, every member of=
+ your team can come for only $498.</span></i></strong><strong style=3D"marg=
+in: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit; font=
+-weight: 700;" class=3D""><span style=3D"color: #000000; font-size: inherit=
+; font-weight: inherit; line-height: inherit; text-decoration: inherit; --t=
+w-shadow: 0 0 transparent;=0A--tw-ring-inset: var(--tw-empty, ); --tw-ring-=
+offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,1=
+30,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 =
+0 transparent;" class=3D""> </span></strong></b>Please register today. This=
+ event will reach capacity soon.<br style=3D"" class=3D""><br style=3D"" cl=
+ass=3D""><strong style=3D"margin: 0; outline: none; padding: 0; --tw-shadow=
+: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wid=
+th: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5=
+); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpar=
+ent; font-style: inherit; font-weight: 700; color: #000000;" class=3D""><a =
+href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3D=
+aHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=3DFzgJVKhW77=
+WHztvv2LmR5PTXVNcQrvpy3MEhw4rnui2e&iat=3D1701790217&a=3D%7C%7C26605550%7C%7=
+C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DTGIVm9bF2Lhw3rngFZUqh0=
+VRmNH9Lh0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2Bi6k%2Ballaq9BL2vc5&s=3D678f48a0e320c=
+6856d0620aa2e024acb&i=3D679A1150A214A2664" data-ac-default-color=3D"1"=0Ata=
+rget=3D"_blank" style=3D"margin: 0; outline: none; padding: 0; color: #0764=
+ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw-ring-ins=
+et: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color:=
+ #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 =
+transparent; --tw-ring-shadow: 0 0 transparent; font-weight: inherit;" clas=
+s=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: inhe=
+rit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 trans=
+parent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --=
+tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-rin=
+g-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=
+=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transp=
+arent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=0A-=
+-tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ri=
+ng-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" clas=
+s=3D"">VISIT HERE TO GET STARTE</span>D</span></a></strong></span><b style=
+=3D'margin: 0; outline: none; padding: 0; font-family: "trebuchet ms", taho=
+ma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-em=
+pty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-rin=
+g-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --=
+tw-ring-shadow: 0 0 transparent;' class=3D""><br style=3D"" class=3D""></b>=
+<br style=3D"" class=3D""><span name=3D"email_24" style=3D'color: #000000; =
+font-size: inherit; font-weight: inherit; line-height: inherit; text-decora=
+tion: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shado=
+w: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wi=
+dth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.=
+5);=0A--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 trans=
+parent;' class=3D"">We believe in you. We're going to introduce you to all =
+the wealthy donors in your community. How? We have their contact informatio=
+n and will share with you the five secrets to meeting wealthy donors for th=
+e very first time. Let MGRU's faculty show you how to access them ASAP. I l=
+ook forward to meeting you personally.<br style=3D"" class=3D""><br style=
+=3D"" class=3D""></span><span name=3D"email_25" style=3D'color: #000000; fo=
+nt-size: inherit; font-weight: inherit; line-height: inherit; text-decorati=
+on: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow:=
+ 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-widt=
+h: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5)=
+; --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpare=
+nt;' class=3D"">Until then I remain,<br style=3D"" class=3D""><br style=3D"=
+" class=3D"">Sincerely Yours,<br=0Astyle=3D"" class=3D""><br style=3D"" cla=
+ss=3D""></span><em style=3D"margin: 0; outline: none; padding: 0; --tw-shad=
+ow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-w=
+idth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0=
+.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transp=
+arent; font-style: italic; font-weight: inherit; font-size: 20px;" class=3D=
+""><b style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 trans=
+parent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --=
+tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-rin=
+g-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=
+=3D""><span name=3D"email_29" style=3D'color: #000000; font-size: inherit; =
+font-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-=
+shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offs=
+et-width: 0px; --tw-ring-offset-color: #fff;=0A--tw-ring-color: rgba(59,130=
+,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 =
+transparent; font-family: georgia, "times new roman";' class=3D"">Linda Lys=
+akowski, ACFRE</span></b></em></span><span style=3D'color: #000000; font-si=
+ze: inherit; font-weight: inherit; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0p=
+x; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;' =
+class=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: =
+inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 t=
+ransparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px=
+; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw=
+-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0Atransparent;"=
+ class=3D""><br style=3D"" class=3D""><br style=3D"" class=3D""><span style=
+=3D"color: #000000; font-size: inherit; font-weight: inherit; line-height: =
+inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">National Dev=
+elopment Institute</span><br style=3D"" class=3D""><br style=3D"" class=3D"=
+"><span style=3D"color: #000000; font-size: inherit; font-weight: inherit; =
+line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""=
+>P.S. Are you responsible for building your organizations financial capacit=
+y? If so, <span=0Astyle=3D"color: #000000; font-size: inherit; font-weight:=
+ inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0p=
+x; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; f=
+ont-style: italic;" class=3D"">Major Gifts Ramp-Up may be </span><span styl=
+e=3D"color: #000000; font-size: inherit; font-weight: 400; line-height: inh=
+erit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-ins=
+et: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color:=
+ #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 =
+transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic;" class=
+=3D"">the most powerful conference event </span><span style=3D"color: #0000=
+00; font-size: inherit; font-weight: inherit; line-height: inherit; text-de=
+coration: inherit; --tw-shadow: 0=0A0 transparent; --tw-ring-inset: var(--t=
+w-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw=
+-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent=
+; --tw-ring-shadow: 0 0 transparent; font-style: italic;" class=3D"">you ev=
+er experience.</span><br style=3D"" class=3D""><br style=3D"" class=3D""></=
+span><span style=3D"color: #000000; font-size: inherit; font-weight: inheri=
+t; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-=
+offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=
+=3D"">P.P.S. </span><span style=3D"color: #000000; font-size: inherit; font=
+-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-shad=
+ow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-w=
+idth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=0Argba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent; font-style: inherit;" class=3D"">Don=E2=80=99t let anyone tell you=
+ now is not the time to fund raise.=C2=A0 Don=E2=80=99t let anyone tell you=
+ things have to stay the same.=C2=A0=C2=A0</span><em style=3D"margin: 0; ou=
+tline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpa=
+rent; --tw-ring-shadow: 0 0 transparent; font-style: inherit; font-weight: =
+inherit;" class=3D""><b style=3D"margin: 0; outline: none; padding: 0; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 t=
+ransparent; font-style: inherit;" class=3D""><span style=3D"color: #000000;=
+ font-size: inherit;=0Afont-weight: inherit; line-height: inherit; text-dec=
+oration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-e=
+mpty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ri=
+ng-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; -=
+-tw-ring-shadow: 0 0 transparent;" class=3D"">Don=E2=80=99t let a few panic=
+ked Board members hijack your future.</span></b></em></span><span style=3D"=
+color: #000000; font-size: inherit; font-weight: inherit; line-height: inhe=
+rit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inse=
+t: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: =
+#fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 t=
+ransparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit;" class=
+=3D""> Now is the time to act!<br style=3D"" class=3D""><br style=3D"" clas=
+s=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: inhe=
+rit; line-height: inherit; text-decoration:=0Ainherit; --tw-shadow: 0 0 tra=
+nsparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; =
+--tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-r=
+ing-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font=
+-style: normal;" class=3D"">P.P.P.S. </span><span style=3D"color: #000000; =
+font-size: inherit; font-weight: 400; line-height: inherit; text-decoration=
+: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, )=
+; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-colo=
+r: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-rin=
+g-shadow: 0 0 transparent; font-style: normal;" class=3D""><b style=3D"marg=
+in: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent;=0Afont-style: inherit;" c=
+lass=3D""><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?r=
+edirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=
+=3DFzgJVKhW77WHztvv2LmR5PTXVNcQrvpy3MEhw4rnui2e&iat=3D1701790217&a=3D%7C%7C=
+26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DTGIVm9bF2=
+Lhw3rngFZUqh0VRmNH9Lh0kKZJT4lcP%3A7v5vuV1S0ld78Cj%2Bi6k%2Ballaq9BL2vc5&s=3D=
+678f48a0e320c6856d0620aa2e024acb&i=3D679A1150A214A2664" data-ac-default-col=
+or=3D"1" target=3D"_blank" style=3D"margin: 0; outline: none; padding: 0; c=
+olor: #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --=
+tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
+fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
+hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weight: inh=
+erit;" class=3D""><span style=3D"color: inherit; font-size: inherit; font-w=
+eight: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow=
+: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wid=
+th: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5=
+);=0A--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transp=
+arent;" class=3D"">VISIT HERE</span></a></b><span style=3D"color: #000000; =
+font-size: inherit; font-weight: inherit; line-height: inherit; text-decora=
+tion: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empt=
+y, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-=
+color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw=
+-ring-shadow: 0 0 transparent;" class=3D""> to make your unlimited reservat=
+ion today.<br class=3D""></span></span></span></span></span> </span><div st=
+yle=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size: inh=
+erit; font-weight: inherit; line-height: inherit; text-decoration: inherit;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent;"=0Aclass=3D""><div style=3D"margin: 0; outline: none; padd=
+ing: 0; color: #000000; font-size: 16px; font-weight: inherit; line-height:=
+ inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring=
+-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-co=
+lor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: =
+0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit;" c=
+lass=3D""><br class=3D"" style=3D"color: #000000; font-style: inherit; font=
+-weight: 400; --tw-shadow:0 0 transparent; --tw-ring-inset:var(--tw-empty, =
+); --tw-ring-offset-width:0px; --tw-ring-offset-color:#fff; --tw-ring-color=
+:rgba(59,130,246,0.5); --tw-ring-offset-shadow:0 0 transparent; --tw-ring-s=
+hadow:0 0 transparent;"></div>=0A</div>=0A </div>=0A </div>=0A<!--[if (gte =
+mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D"fa=
+lse"> #text_div4055, #text_div4055 div { line-height: 140% !important; };=
+=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</tabl=
+e>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A=
+</table>=0A</div>=0A<img src=3D"https://jimmylarose.lt.acemlnd.com/Prod/lin=
+k-tracker?nl=3D214&c=3D679&m=3D1150&s=3D678f48a0e320c6856d0620aa2e024acb&l=
+=3Dopen&account=3Djimmylarose.activehosted.com&a=3D26605550" border=3D"0" w=
+idth=3D"1" height=3D"1" style=3D"display:block;width:1px!important;min-widt=
+h:1px!important;max-width:1px!important;height:1px!important;border:0;overf=
+low:hidden;" /><div id=3D"ac-footer" style=3D"clear:both;background-color:i=
+nherit;background:inherit;min-width:100%;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;padding:20px;color:#000000;font-size:11px;font-family:arial,helveti=
+ca,sans-serif;line-height:140%;line-height:1.4;text-align:center;box-sizing=
+:border-box;"><center>Sent to: <span style=3D"font-size:11px;font-family:ar=
+ial,helvetica,sans-serif;font-weight:normal;text-decoration:none;outline:no=
+ne;">soc@kernel.org</span><br><br><a href=3D"http://jimmylarose.activehoste=
+d.com/proc.php?nl=3D214&c=3D679&m=3D1150&s=3D678f48a0e320c6856d0620aa2e024a=
+cb&act=3Dunsub"=0Astyle=3D"font-size:11px;font-family:arial,helvetica,sans-=
+serif;font-weight:bold;text-decoration:underline;"><span style=3D"font-weig=
+ht:bold;text-decoration:underline;">Unsubscribe</span></a><br><br>National =
+Development Institute, PO Box 1840, Lexington, SOUTH CAROLINA 29071, United=
+ States</center></div>=0A<br clear=3D"all" /></body>=0A</html>
+--_=_swift-1933784563656f40235ad2f4.90976163_=_--
 
