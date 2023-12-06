@@ -1,342 +1,184 @@
-Return-Path: <SRS0=LHv9=HR=linaro.org=andre.draszik@kernel.org>
+Return-Path: <SRS0=NKHo=HR=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 072ACC4167B
-	for <soc@archiver.kernel.org>; Wed,  6 Dec 2023 12:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CCBCC4167B
+	for <soc@archiver.kernel.org>; Wed,  6 Dec 2023 12:47:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D5BC1C433C8; Wed,  6 Dec 2023 12:30:45 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id 54925C433C9; Wed,  6 Dec 2023 12:47:29 +0000 (UTC)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EE214C433C9
-	for <soc@kernel.org>; Wed,  6 Dec 2023 12:30:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EE214C433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id EE53CC433C7
+	for <soc@kernel.org>; Wed,  6 Dec 2023 12:47:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EE53CC433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40bda47c489so50368915e9.3
-        for <soc@kernel.org>; Wed, 06 Dec 2023 04:30:42 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-67ab5e015aaso24913776d6.0
+        for <soc@kernel.org>; Wed, 06 Dec 2023 04:47:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701865841; x=1702470641; darn=kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Gc2ntkoTShdEBwllBOG4rF/rr9xiDv3tAETL/Jav0Vk=;
-        b=vkbZV4qADkU2RYOLi/BTFcs6bdsJmpNunZVxdEghYyUTDUx7VHgKHZbdbP7zz+jxXB
-         MMYQe+daNN24zwuXKgEo6yM266pq9XBhMg3bAVsRd5UZpTbE1JifiTZJvdyjdj/cXjvP
-         nCFesYFIFdx5PcfNFsX24pQP3p7NCq5SMrhSPuto+QAhqKWwFf+8K5WErOQEnyVGDFmB
-         rfrYGqyoWAT7QfpBpGJiAP/eXMAvb7Z2EH6I9yZgpwWvDl6QUt6eHDflhrR02GRBQ25T
-         mzsgPov7x/pEzQGxD7paOA5mdEBScuoU0CfYjXY5M9WciUEOHFAxPHDLx3jCJsMnf/xa
-         mh0Q==
+        d=linaro.org; s=google; t=1701866846; x=1702471646; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n4HaoseseFRfpAOsa7GPwOZAfsJ+SNvW7lTiyiT6xZA=;
+        b=zTMBPdrNY+EvHezL+Ddx5wXogJhL6NgVtOgGY6r3M4nqdNyGbGlaUxrZakOrBAYCU1
+         7oBe+e6DHAEE664sMe+VjM3DtS1kho9cJ5olKvRyXnlshhgPvnG50Lh42rZN6v+VMvmG
+         4nhs9SozRHY+x4VbF8qFfGH+sNHa41+fFXtORzxSVf6AO2yKMj/Ux5WC5MybDRKISZHY
+         FqQqRkH6Rb8cKUM0V0OGha4JiVthuAuwIW11bNYDupvroOyJvqRYWWSlNM6ft/jrZFi9
+         qFk6ApygNeOKQH6ojn4PLWyDWiedV8bv+/8jh0JPIFpOkPVJZd3rhSat9gchMsZGtKaR
+         kuag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701865841; x=1702470641;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gc2ntkoTShdEBwllBOG4rF/rr9xiDv3tAETL/Jav0Vk=;
-        b=BN6scg1OdVdQ4Z1pxmcTEV5fQegetLKPGbH6QXfji37Ud5u5w0+FhtLRVTMfUfcSTU
-         U5kO7djDjFkYZMnVb3jEKYQj3ZVGPy48YaLEjIb/YlMy64Jd/yiJKHnlaoLrFEMByBXw
-         aMOcWfV2DvkZZJyQfaxt3DF1Vlz9NFRpKvJJf0twkym/BfYd3zEJAsg10IbrypSFlc16
-         LEhdMMMFkakNbWdbOzMmeWZO1WhG4VNUFLwT+gpp8/Z48HYYY/gIWRHm5he4gTzRAt5u
-         3rHCW+CYaSf1IwoP27KVJxxqGhgrJCJQWEm/pfNOgmA+mPj66Objy24mTfH7AlNxtvkN
-         GRbw==
-X-Gm-Message-State: AOJu0Yya0b6LBycwdMRnwHDw7V5WHHwuXq9DWq2gz+LMt56kDvbmQtK0
-	/aGTvJC4s9SAGXgTyLHgm5AeWg==
-X-Google-Smtp-Source: AGHT+IGbvAtCRyJ/+D7Ia80B4kAtNqKFbVvgpz/mjpVjvbfrPm9mXg4sGbWIF2mmxMZ4z9+ih3afgA==
-X-Received: by 2002:a7b:ca54:0:b0:40b:5e59:c567 with SMTP id m20-20020a7bca54000000b0040b5e59c567mr597074wml.145.1701865841085;
-        Wed, 06 Dec 2023 04:30:41 -0800 (PST)
-Received: from [10.1.1.118] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id hg10-20020a05600c538a00b0040b398f0585sm22066938wmb.9.2023.12.06.04.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 04:30:40 -0800 (PST)
-Message-ID: <6e595a110444033de6ecd35bedc6e84ea1c43fdc.camel@linaro.org>
-Subject: Re: [PATCH v5 02/20] dt-bindings: clock: Add Google gs101 clock
- management unit bindings
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org,  sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com,  linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net,  catalin.marinas@arm.com, will@kernel.org,
- arnd@arndb.de, olof@lixom.net,  gregkh@linuxfoundation.org,
- jirislaby@kernel.org, cw00.choi@samsung.com,  alim.akhtar@samsung.com
-List-Id: <soc.lore.kernel.org>
-Cc: tudor.ambarus@linaro.org, semen.protsenko@linaro.org,
- saravanak@google.com,  willmcvicker@google.com, soc@kernel.org,
- devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org,  linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org,  linux-watchdog@vger.kernel.org,
- kernel-team@android.com,  linux-serial@vger.kernel.org
-Date: Wed, 06 Dec 2023 12:30:38 +0000
-In-Reply-To: <20231201160925.3136868-3-peter.griffin@linaro.org>
+        d=1e100.net; s=20230601; t=1701866846; x=1702471646;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n4HaoseseFRfpAOsa7GPwOZAfsJ+SNvW7lTiyiT6xZA=;
+        b=TpYUeJltKFqmKdc6VyWa+V1YL1JtJYYaHDfG6NPhtzOK9Ow3kYuwZNyvopEmihWTAy
+         9NA6uZQQdma6HNas8+jErNEWyV9sIIb0mLi7z0lwMdqj8dLWFdci4j6a84hfEQLbjziD
+         OHej2kBbIJWjDeoZk/yTY03XTvN8VfUmVH4WIgv3TnZVdu/RXoJLO7C3FXk5ZVy77eT+
+         8BW3lHN1GnvqzDPW8b0YLjCHXyaae3QHY3kxmaw6RRvSu7LVxbm9ReqUASi20EkqZoDb
+         84P9/duKaVw8yfBDrtQDNOsRnlPfVcH9d6q5AYOczVlONAZK9xYyLYVRFbxv/Yi8sXii
+         jhLw==
+X-Gm-Message-State: AOJu0YwtNXFKatY5TwhxPPFmaghd7lRboWJDwGh83jUdwqiTPs2oPNGh
+	79pb53t3XIHiRmPi0fnQSvbwcLXG//0OwIO1q2buuw==
+X-Google-Smtp-Source: AGHT+IHOfpL6BkZMMtxBr2eS7p+xlelrNL7BgzbEdDInmIpBIHdd4PBiyT6fKU1Lhyo6KKA5y6PSRh/1nAPz2rJNaUc=
+X-Received: by 2002:ad4:551d:0:b0:67a:3967:4b09 with SMTP id
+ pz29-20020ad4551d000000b0067a39674b09mr650650qvb.8.1701866845831; Wed, 06 Dec
+ 2023 04:47:25 -0800 (PST)
+MIME-Version: 1.0
 References: <20231201160925.3136868-1-peter.griffin@linaro.org>
-	 <20231201160925.3136868-3-peter.griffin@linaro.org>
+ <20231201160925.3136868-15-peter.griffin@linaro.org> <CGME20231202004026epcas5p4d3947d7bb99e54f70ca37272cfdc5e55@epcas5p4.samsung.com>
+ <CAPLW+4kBOWFPx3Hr-=UoLWvRxCorzBY9RCOiBhfkKcU0LAa21Q@mail.gmail.com>
+ <000001da24c0$0b83aab0$228b0010$@samsung.com> <71972f4f-b5ac-484a-8a09-0b74bd7c623b@linaro.org>
+In-Reply-To: <71972f4f-b5ac-484a-8a09-0b74bd7c623b@linaro.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Wed, 6 Dec 2023 12:47:14 +0000
+Message-ID: <CADrjBPqTdmEqD_4fcPqz0wBYqgPG8nPr2reXp5=s=bRRtLKXsg@mail.gmail.com>
+Subject: Re: [PATCH v5 14/20] pinctrl: samsung: Add gs101 SoC pinctrl configuration
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>, Sam Protsenko <semen.protsenko@linaro.org>, 
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, cw00.choi@samsung.com, tudor.ambarus@linaro.org, 
+	andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com, 
+	soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.49.2-3 
-MIME-Version: 1.0
 
-Hi Pete,
+Hi Krzysztof / Sam,
 
-On Fri, 2023-12-01 at 16:09 +0000, Peter Griffin wrote:
-> [...]
-> +...
-> diff --git a/include/dt-bindings/clock/google,gs101.h b/include/dt-bindin=
-gs/clock/google,gs101.h
-> new file mode 100644
-> index 000000000000..9f280f74578a
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/google,gs101.h
-> @@ -0,0 +1,392 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + * Author: Peter Griffin <peter.griffin@linaro.org>
-> + *
-> + * Device Tree binding constants for Google gs101 clock controller.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLOCK_GOOGLE_GS101_H
-> +#define _DT_BINDINGS_CLOCK_GOOGLE_GS101_H
-> +
-> +/* CMU_TOP PLL */
-> +#define CLK_FOUT_SHARED0_PLL		1
-> +#define CLK_FOUT_SHARED1_PLL		2
-> +#define CLK_FOUT_SHARED2_PLL		3
-> +#define CLK_FOUT_SHARED3_PLL		4
-> +#define CLK_FOUT_SPARE_PLL		5
-> +
-> +/* CMU_TOP MUX */
-> +#define CLK_MOUT_SHARED0_PLL		6
-> +#define CLK_MOUT_SHARED1_PLL		7
-> +#define CLK_MOUT_SHARED2_PLL		8
-> +#define CLK_MOUT_SHARED3_PLL		9
-> +#define CLK_MOUT_SPARE_PLL		10
-> +#define CLK_MOUT_BO_BUS			11
-> +#define CLK_MOUT_BUS0_BUS		12
-> +#define CLK_MOUT_BUS1_BUS		13
-> +#define CLK_MOUT_BUS2_BUS		14
-> +#define CLK_MOUT_CIS_CLK0		15
-> +#define CLK_MOUT_CIS_CLK1		16
-> +#define CLK_MOUT_CIS_CLK2		17
-> +#define CLK_MOUT_CIS_CLK3		18
-> +#define CLK_MOUT_CIS_CLK4		19
-> +#define CLK_MOUT_CIS_CLK5		20
-> +#define CLK_MOUT_CIS_CLK6		21
-> +#define CLK_MOUT_CIS_CLK7		22
-> +#define CLK_MOUT_CMU_BOOST		23
-> +#define CLK_MOUT_BOOST_OPTION1		24
-> +#define CLK_MOUT_CORE_BUS		25
-> +#define CLK_MOUT_CPUCL0_DBG		26
-> +#define CLK_MOUT_CPUCL0_SWITCH		27
-> +#define CLK_MOUT_CPUCL1_SWITCH		28
-> +#define CLK_MOUT_CPUCL2_SWITCH		29
-> +#define CLK_MOUT_CSIS_BUS		30
-> +#define CLK_MOUT_DISP_BUS		31
-> +#define CLK_MOUT_DNS_BUS		32
-> +#define CLK_MOUT_DPU_BUS		33
-> +#define CLK_MOUT_EH_BUS			34
-> +#define CLK_MOUT_G2D_G2D		35
-> +#define CLK_MOUT_G2D_MSCL		36
-> +#define CLK_MOUT_G3AA_G3AA		37
-> +#define CLK_MOUT_G3D_BUSD		38
-> +#define CLK_MOUT_G3D_GLB		39
-> +#define CLK_MOUT_G3D_SWITCH		40
-> +#define CLK_MOUT_GDC_GDC0		41
-> +#define CLK_MOUT_GDC_GDC1		42
-> +#define CLK_MOUT_GDC_SCSC		43
-> +#define CLK_MOUT_CMU_HPM		44
-> +#define CLK_MOUT_HSI0_BUS		45
-> +#define CLK_MOUT_HSI0_DPGTC		46
-> +#define CLK_MOUT_HSI0_USB31DRD		47
-> +#define CLK_MOUT_HSI0_USBDPDGB		48
-> +#define CLK_MOUT_HSI1_BUS		49
-> +#define CLK_MOUT_HSI1_PCIE		50
-> +#define CLK_MOUT_HSI2_BUS		51
-> +#define CLK_MOUT_HSI2_MMC_CARD		52
-> +#define CLK_MOUT_HSI2_PCIE		53
-> +#define CLK_MOUT_HSI2_UFS_EMBD		54
-> +#define CLK_MOUT_IPP_BUS		55
-> +#define CLK_MOUT_ITP_BUS		56
-> +#define CLK_MOUT_MCSC_ITSC		57
-> +#define CLK_MOUT_MCSC_MCSC		58
-> +#define CLK_MOUT_MFC_MFC		59
-> +#define CLK_MOUT_MIF_BUSP		60
-> +#define CLK_MOUT_MIF_SWITCH		61
-> +#define CLK_MOUT_MISC_BUS		62
-> +#define CLK_MOUT_MISC_SSS		63
-> +#define CLK_MOUT_PDP_BUS		64
-> +#define CLK_MOUT_PDP_VRA		65
-> +#define CLK_MOUT_PERIC0_BUS		66
-> +#define CLK_MOUT_PERIC0_IP		67
-> +#define CLK_MOUT_PERIC1_BUS		68
-> +#define CLK_MOUT_PERIC1_IP		69
-> +#define CLK_MOUT_TNR_BUS		70
-> +#define CLK_MOUT_TOP_BOOST_OPTION1	71
-> +#define CLK_MOUT_TOP_CMUREF		72
-> +#define CLK_MOUT_TPU_BUS		73
-> +#define CLK_MOUT_TPU_TPU		74
-> +#define CLK_MOUT_TPU_TPUCTL		75
-> +#define CLK_MOUT_TPU_UART		76
-> +#define CLK_MOUT_CMU_CMUREF		77
-> +
-> +/* CMU_TOP Dividers */
-> +#define CLK_DOUT_BO_BUS			78
-> +#define CLK_DOUT_BUS0_BUS		79
-> +#define CLK_DOUT_BUS1_BUS		80
-> +#define CLK_DOUT_BUS2_BUS		81
-> +#define CLK_DOUT_CIS_CLK0		82
-> +#define CLK_DOUT_CIS_CLK1		83
-> +#define CLK_DOUT_CIS_CLK2		84
-> +#define CLK_DOUT_CIS_CLK3		85
-> +#define CLK_DOUT_CIS_CLK4		86
-> +#define CLK_DOUT_CIS_CLK5		87
-> +#define CLK_DOUT_CIS_CLK6		88
-> +#define CLK_DOUT_CIS_CLK7		89
-> +#define CLK_DOUT_CORE_BUS		90
-> +#define CLK_DOUT_CPUCL0_DBG		91
-> +#define CLK_DOUT_CPUCL0_SWITCH		92
-> +#define CLK_DOUT_CPUCL1_SWITCH		93
-> +#define CLK_DOUT_CPUCL2_SWITCH		94
-> +#define CLK_DOUT_CSIS_BUS		95
-> +#define CLK_DOUT_DISP_BUS		96
-> +#define CLK_DOUT_DNS_BUS		97
-> +#define CLK_DOUT_DPU_BUS		98
-> +#define CLK_DOUT_EH_BUS			99
-> +#define CLK_DOUT_G2D_G2D		100
-> +#define CLK_DOUT_G2D_MSCL		101
-> +#define CLK_DOUT_G3AA_G3AA		102
-> +#define CLK_DOUT_G3D_BUSD		103
-> +#define CLK_DOUT_G3D_GLB		104
-> +#define CLK_DOUT_G3D_SWITCH		105
-> +#define CLK_DOUT_GDC_GDC0		106
-> +#define CLK_DOUT_GDC_GDC1		107
-> +#define CLK_DOUT_GDC_SCSC		108
-> +#define CLK_DOUT_CMU_HPM		109
-> +#define CLK_DOUT_HSI0_BUS		110
-> +#define CLK_DOUT_HSI0_DPGTC		111
-> +#define CLK_DOUT_HSI0_USB31DRD		112
-> +#define CLK_DOUT_HSI0_USBDPDGB		113
-> +#define CLK_DOUT_HSI1_BUS		114
-> +#define CLK_DOUT_HSI1_PCIE		115
-> +#define CLK_DOUT_HSI2_BUS		116
-> +#define CLK_DOUT_HSI2_MMC_CARD		117
-> +#define CLK_DOUT_HSI2_PCIE		118
-> +#define CLK_DOUT_HSI2_UFS_EMBD		119
-> +#define CLK_DOUT_IPP_BUS		107
+On Wed, 6 Dec 2023 at 11:38, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 02/12/2023 02:36, Alim Akhtar wrote:
+> >
+> >>
+> >> On Fri, Dec 1, 2023 at 10:11=E2=80=AFAM Peter Griffin <peter.griffin@l=
+inaro.org>
+> >> wrote:
+> >>>
+> >>> Add support for the pin-controller found on the gs101 SoC used in
+> >>> Pixel 6 phones.
+> >>>
+> >>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> >>> ---
+> >>>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 159 ++++++++++++++++=
+++
+> >>>  drivers/pinctrl/samsung/pinctrl-exynos.c      |   2 +
+> >>>  drivers/pinctrl/samsung/pinctrl-exynos.h      |  34 ++++
+> >>>  drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
+> >>>  drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
+> >>>  5 files changed, 198 insertions(+)
+> >>>
+> >>> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> >>> b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> >>> index cb965cf93705..e1a0668ecb16 100644
+> >>> --- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> >>> +++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> >>> @@ -796,3 +796,162 @@ const struct samsung_pinctrl_of_match_data
+> >> fsd_of_data __initconst =3D {
+> >>>         .ctrl           =3D fsd_pin_ctrl,
+> >>>         .num_ctrl       =3D ARRAY_SIZE(fsd_pin_ctrl),
+> >>>  };
+> >>> +
+> >>> +/*
+> >>> + * bank type for non-alive type
+> >>> + * (CON bit field: 4, DAT bit field: 1, PUD bit field: 4, DRV bit
+> >>> +field: 4)
+> >>> + * (CONPDN bit field: 2, PUDPDN bit field: 4)  */ static struct
+> >>> +samsung_pin_bank_type gs101_bank_type_off  =3D {
+> >>> +       .fld_width =3D { 4, 1, 4, 4, 2, 4, },
+> >>> +       .reg_offset =3D { 0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, }, };
+> >>
+> >> This is just the same as exynos850_bank_type_off (100% duplication).
+> >> Here is what I suggest. Now that it's obvious there is some common pla=
+tform
+> >> for moder Exynos SoCs, and it's probably Exynos9, I'd suggest next cou=
+rse of
+> >> action (if maintainers agree):
+> >>   1. Remove this one
+> >>   2. Rename exynos850_bank_type_off to exynos9_bank_type_off
+> >>   3. Use it for both gs101 and exynos850
+> >>
+> >> Does it make sense?
+> >>
+> > My opinion is to reuse exynos850 for gs101 (wherever applicable), same =
+philosophy was historically followed in this file.
+> > That way (using exynos850 for gs101) things will be simple.
+> > Adding exynos9_* is not adding any benefit, rather it create confusion.
+>
+> I don't see much value in renaming exynos850 bank type to exynos9
+> considering:
+> 1. We don't really know the bank types for all of Exynos9xxx SoCs,
+> 2. Exynos7885 also uses Exynos850 bank types. Exynos7885 was much
+> earlier than Exynos9xxx family.
 
-You're restarting at 107 here, but the numbers should continue at 120...
+Thanks Alim and Krzysztof for your input.
 
-> +#define CLK_DOUT_ITP_BUS		108
-> +#define CLK_DOUT_MCSC_ITSC		109
-> +#define CLK_DOUT_MCSC_MCSC		110
-> +#define CLK_DOUT_MFC_MFC		111
-> +#define CLK_DOUT_MIF_BUSP		112
-> +#define CLK_DOUT_MISC_BUS		113
-> +#define CLK_DOUT_MISC_SSS		114
-> +#define CLK_DOUT_PDP_BUS		115
-> +#define CLK_DOUT_PDP_VRA		116
-> +#define CLK_DOUT_PERIC0_BUS		117
-> +#define CLK_DOUT_PERIC0_IP		118
-> +#define CLK_DOUT_PERIC1_BUS		119
-> +#define CLK_DOUT_PERIC1_IP		120
-> +#define CLK_DOUT_TNR_BUS		121
-> +#define CLK_DOUT_TPU_BUS		122
-> +#define CLK_DOUT_TPU_TPU		123
-> +#define CLK_DOUT_TPU_TPUCTL		124
-> +#define CLK_DOUT_TPU_UART		125
-> +#define CLK_DOUT_CMU_BOOST		126
-> +#define CLK_DOUT_CMU_CMUREF		127
-> +#define CLK_DOUT_SHARED0_DIV2		128
-> +#define CLK_DOUT_SHARED0_DIV3		129
-> +#define CLK_DOUT_SHARED0_DIV4		130
-> +#define CLK_DOUT_SHARED0_DIV5		131
-> +#define CLK_DOUT_SHARED1_DIV2		132
-> +#define CLK_DOUT_SHARED1_DIV3		133
-> +#define CLK_DOUT_SHARED1_DIV4		134
-> +#define CLK_DOUT_SHARED2_DIV2		135
-> +#define CLK_DOUT_SHARED3_DIV2		136
-> +
-> +/* CMU_TOP Gates */
-> +#define CLK_GOUT_BUS0_BOOST		137
-> +#define CLK_GOUT_BUS1_BOOST		138
-> +#define CLK_GOUT_BUS2_BOOST		139
-> +#define CLK_GOUT_CORE_BOOST		140
-> +#define CLK_GOUT_CPUCL0_BOOST		141
-> +#define CLK_GOUT_CPUCL1_BOOST		142
-> +#define CLK_GOUT_CPUCL2_BOOST		143
-> +#define CLK_GOUT_MIF_BOOST		144
-> +#define CLK_GOUT_MIF_SWITCH		145
-> +#define CLK_GOUT_BO_BUS			146
-> +#define CLK_GOUT_BUS0_BUS		147
-> +#define CLK_GOUT_BUS1_BUS		148
-> +#define CLK_GOUT_BUS2_BUS		149
-> +#define CLK_GOUT_CIS_CLK0		150
-> +#define CLK_GOUT_CIS_CLK1		151
-> +#define CLK_GOUT_CIS_CLK2		152
-> +#define CLK_GOUT_CIS_CLK3		153
-> +#define CLK_GOUT_CIS_CLK4		154
-> +#define CLK_GOUT_CIS_CLK5		155
-> +#define CLK_GOUT_CIS_CLK6		156
-> +#define CLK_GOUT_CIS_CLK7		157
-> +#define CLK_GOUT_CMU_BOOST		158
-> +#define CLK_GOUT_CORE_BUS		159
-> +#define CLK_GOUT_CPUCL0_DBG		160
-> +#define CLK_GOUT_CPUCL0_SWITCH		161
-> +#define CLK_GOUT_CPUCL1_SWITCH		162
-> +#define CLK_GOUT_CPUCL2_SWITCH		163
-> +#define CLK_GOUT_CSIS_BUS		164
-> +#define CLK_GOUT_DISP_BUS		165
-> +#define CLK_GOUT_DNS_BUS		166
-> +#define CLK_GOUT_DPU_BUS		167
-> +#define CLK_GOUT_EH_BUS			168
-> +#define CLK_GOUT_G2D_G2D		169
-> +#define CLK_GOUT_G2D_MSCL		170
-> +#define CLK_GOUT_G3AA_G3AA		171
-> +#define CLK_GOUT_G3D_BUSD		172
-> +#define CLK_GOUT_G3D_GLB		173
-> +#define CLK_GOUT_G3D_SWITCH		174
-> +#define CLK_GOUT_GDC_GDC0		175
-> +#define CLK_GOUT_GDC_GDC1		176
-> +#define CLK_GOUT_GDC_SCSC		177
-> +#define CLK_GOUT_CMU_HPM		178
-> +#define CLK_GOUT_HSI0_BUS		179
-> +#define CLK_GOUT_HSI0_DPGTC		180
-> +#define CLK_GOUT_HSI0_USB31DRD		181
-> +#define CLK_GOUT_HSI0_USBDPDGB		182
-> +#define CLK_GOUT_HSI1_BUS		183
-> +#define CLK_GOUT_HSI1_PCIE		184
-> +#define CLK_GOUT_HSI2_BUS		185
-> +#define CLK_GOUT_HSI2_MMC_CARD		186
-> +#define CLK_GOUT_HSI2_PCIE		187
-> +#define CLK_GOUT_HSI2_UFS_EMBD		188
-> +#define CLK_GOUT_IPP_BUS		189
-> +#define CLK_GOUT_ITP_BUS		190
-> +#define CLK_GOUT_MCSC_ITSC		191
-> +#define CLK_GOUT_MCSC_MCSC		192
-> +#define CLK_GOUT_MFC_MFC		193
-> +#define CLK_GOUT_MIF_BUSP		194
-> +#define CLK_GOUT_MISC_BUS		195
-> +#define CLK_GOUT_MISC_SSS		196
-> +#define CLK_GOUT_PDP_BUS		197
-> +#define CLK_GOUT_PDP_VRA		298
-> +#define CLK_GOUT_G3AA			299
-> +#define CLK_GOUT_PERIC0_BUS		200
-> +#define CLK_GOUT_PERIC0_IP		201
-> +#define CLK_GOUT_PERIC1_BUS		202
-> +#define CLK_GOUT_PERIC1_IP		203
-> +#define CLK_GOUT_TNR_BUS		204
-> +#define CLK_GOUT_TOP_CMUREF		205
-> +#define CLK_GOUT_TPU_BUS		206
-> +#define CLK_GOUT_TPU_TPU		207
-> +#define CLK_GOUT_TPU_TPUCTL		208
-> +#define CLK_GOUT_TPU_UART		209
+Exynos7885 (Exynos 8 family) using Exynos850 bank types looks like a
+mistake to me. I found some downstream code for 7885, and it doesn't
+look like selecting a filter was supported downstream [1] [2]. As Sam
+confirmed this hardware is present on e850 downstream, so 7885 and
+e850 have different hardware at least for these banks.
 
-... up to here. I also checked the other units, they seem to be OK.
+As the EXYNOS850_PIN_BANK_EINTW macro is being used by Exynos850,
+exynosautov9 and exynos7885 using a generic macro with gs101 doesn't
+look possible (I have no way to find out these filter register
+offsets, or if those platforms actually have these registers).
 
-Cheers,
-Andre'
+Therefore I propose:
+1. For bank types that match exactly use exynos850 versions
+2. For bank types which have fltcon_offset we add a new macro
+EXYNOS9_PIN_BANK_EINTW like it exists in this series or
+GS101_PIN_BANK_EINTW if people prefer that
 
+That still leaves us in the rather unfortunate position that if
+Exynos850 wants selectable filter support then it wouldn't be using
+the EXYNOS850_PIN_BANK_EINTW macro. But I suggest we cross that bridge
+if/when Sam decides to support selectable filters on e850. We could do
+some sort of macro renaming, but what we rename it to though I have no
+idea EXYNOS7885_blah or EXYNOSAUTOV9_blah.
+
+@Chanho do you know if ExynosAutov9 supports selectable filters on alive ba=
+nks?
+
+regards,
+
+Peter
+
+[1] https://github.com/samsungexynos7885/android_kernel_samsung_universal78=
+85/blob/android-9.0/drivers/pinctrl/samsung/pinctrl-exynos.c#L1696
+[2] https://github.com/samsungexynos7885/android_kernel_samsung_universal78=
+85/blob/android-9.0/drivers/pinctrl/samsung/pinctrl-exynos.h#L108
