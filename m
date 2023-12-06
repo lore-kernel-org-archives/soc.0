@@ -1,212 +1,83 @@
-Return-Path: <SRS0=MMah=HR=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A949C10DC1
-	for <soc@archiver.kernel.org>; Wed,  6 Dec 2023 11:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 414EAC4167B
+	for <soc@archiver.kernel.org>; Wed,  6 Dec 2023 12:27:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DC1EEC433C7; Wed,  6 Dec 2023 11:38:21 +0000 (UTC)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7CAEDC433CC
-	for <soc@kernel.org>; Wed,  6 Dec 2023 11:38:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7CAEDC433CC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3335397607dso755814f8f.1
-        for <soc@kernel.org>; Wed, 06 Dec 2023 03:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701862697; x=1702467497; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qm7pCcZmaWCMHPggwY7CXlYkirEJ9BDVaMQ6Qupg/xA=;
-        b=kqg/NXm3z8QmmdONTno3xbX+HoXpJt4MenD2+SUl4kwZnSrq+yZQCn6ZKOsdAZkiqh
-         7V3Tv+bXsVkceEM9mfjZaozgBiv7b6QlxKnDjXQOKDJoDb5T+xalGa9bSNSMxAeMTy7h
-         0H24aZjHhbflYnoOV2i1Q/C4h6B5Xa9/diAShV9XPewBWM2IoQQ8u/8JHhh5pyM3giU5
-         Oz36A6Xwar5Rj1I91xEEL2KsCpCp690ooWi/jvdia/r/93grHE/sng5HELyiZicak23Z
-         bslVU9at6HxCwZR5Ii/lwl9TjEZcdxdcGnXcCEei14rHf8/lg1qK54fXFR4XokN6Bbou
-         HJEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701862697; x=1702467497;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qm7pCcZmaWCMHPggwY7CXlYkirEJ9BDVaMQ6Qupg/xA=;
-        b=ZPC+FfG+PdfmfEkiKK5ZcgaGqJG0RCkpUxH/ZHUIQvoCn4tUfkvwW/RIFMIdsv+9NW
-         vDbvMlb9jAkJo4BALGPktrSOr+PZGBU9M/eE77ZZn794p1vFTcjU085HD0loYOGHQj3K
-         R12rwMOyEncJwJkv6oiU75zowQ+OeP87tjYbfSXPOscVyVy1XSouX8sToexVIadwiST2
-         mCw2t5QHQwoxGaevyrQW4nM9f6lKAStNfaDsfazuwRTeryF1wYc3dNsXhNEpazfeafbV
-         FXbA48zx+R5J3doBczttiAAEoaomdDih/DIwgLyUVsmipzPjGWfV6F8OjJtmS2f+A794
-         jrfg==
-X-Gm-Message-State: AOJu0YxPVx/k9Lsu6txswNzVeVBWjcZmxPXlEFya3EGoHlttsYllUQXh
-	4PRF8tKfuMqWBKJDiksFvYQ8IA==
-X-Google-Smtp-Source: AGHT+IHDl6UGXjkhX+Sh5mNIn+o9ppG/aW6SJEMyI6QLyUYRYrTFnfXaaCrq1qDg++lrAfzAdnteqw==
-X-Received: by 2002:a5d:4fca:0:b0:333:387b:687b with SMTP id h10-20020a5d4fca000000b00333387b687bmr387774wrw.34.1701862697689;
-        Wed, 06 Dec 2023 03:38:17 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id f13-20020a5d64cd000000b003334898aafasm8392073wri.11.2023.12.06.03.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Dec 2023 03:38:16 -0800 (PST)
-Message-ID: <71972f4f-b5ac-484a-8a09-0b74bd7c623b@linaro.org>
-Date: Wed, 6 Dec 2023 12:38:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 14/20] pinctrl: samsung: Add gs101 SoC pinctrl
- configuration
-Content-Language: en-US
-To: Alim Akhtar <alim.akhtar@samsung.com>,
- 'Sam Protsenko' <semen.protsenko@linaro.org>,
- 'Peter Griffin' <peter.griffin@linaro.org>
+	id EDE3DC433CB; Wed,  6 Dec 2023 12:27:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1BDC433C8;
+	Wed,  6 Dec 2023 12:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701865634;
+	bh=SFu4/bR/AMrjm4JlTuMfP6+O1LKZw8xcETHgeCdmOcw=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=UlRCcDlxBcdIYtZoPpzMTuhqHXiPWCYfA6idr0x7B3j3Y2UMcQ+waxv51fpaH13zM
+	 zxfEclP72Liv5bjZpSgP6sDpzhrxzmK3JYaucrIB1EAhBZjXvf4/sAPiDQBTtVJAhX
+	 AaGDCeqqHHBAhSRQF7QuWR3OnECuf/4QxAY40FEZf31Tla//HUoSY+Pgvm0AJ/fn3j
+	 7dfkSQgkmcJJtou2/vXNZMiW0yDZuj7jH49rmmPIlZSL0zZAMSfR+smj12+l1E3BNJ
+	 wnQ1zNYJ1Y624VCEyb3EArLu3uKZgp/f7+o+lHj+NmiWNUFj6Gu/R3Cj4GK20GbDSt
+	 z+2M1Lo5wc4UQ==
+From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
- tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org,
- wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
- jirislaby@kernel.org, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
- andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
- soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-watchdog@vger.kernel.org, kernel-team@android.com,
- linux-serial@vger.kernel.org
-References: <20231201160925.3136868-1-peter.griffin@linaro.org>
- <20231201160925.3136868-15-peter.griffin@linaro.org>
- <CGME20231202004026epcas5p4d3947d7bb99e54f70ca37272cfdc5e55@epcas5p4.samsung.com>
- <CAPLW+4kBOWFPx3Hr-=UoLWvRxCorzBY9RCOiBhfkKcU0LAa21Q@mail.gmail.com>
- <000001da24c0$0b83aab0$228b0010$@samsung.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <000001da24c0$0b83aab0$228b0010$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+To: soc@kernel.org,
+	Conor Dooley <conor@kernel.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Russ Weight <russell.h.weight@intel.com>,
+	linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] PolarFire SoC Auto Update Support
+Date: Wed,  6 Dec 2023 12:25:58 +0000
+Message-Id: <20231206-catfight-trailing-47b7b547e79b@spud>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231020-agreeably-filing-3d48708e6262@spud>
+References: <20231020-agreeably-filing-3d48708e6262@spud>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1335; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=zTxZ7tRHD+kYdL3Atrz/x5KAMx98vgPG50Y04wXmGgk=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKkFGcHW+uFcuo67KtRWbXzAJcHVK2PBLG9zq8H3gOyPZ 98fK7zrKGVhEONgkBVTZEm83dcitf6Pyw7nnrcwc1iZQIYwcHEKwETq/jD8szAQym13+xgbeTva UWzKI+W50QJ8bS6WPW6nejyqOk5/YGRofxHUuPRLGNept/eWWBrNfvnPZIqGxIOCdzyLy81bgt/ zAwA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
-On 02/12/2023 02:36, Alim Akhtar wrote:
+From: Conor Dooley <conor.dooley@microchip.com>
+
+On Fri, 20 Oct 2023 14:18:38 +0100, Conor Dooley wrote:
+> Hey all,
 > 
+> This patchset adds support for the "Auto Update" feature on PolarFire
+> SoC that allows for writing an FPGA bistream to the SPI flash connected
+> to the system controller.
+> On powercycle (or reboot depending on how the firmware implements the
+> openSBI SRST extension) "Auto Update" will take place, and program the
+> FPGA with the contents of the SPI flash - provided that that image is
+> valid and an actual upgrade from that already programmed.
 > 
->> -----Original Message-----
->> From: Sam Protsenko <semen.protsenko@linaro.org>
->> Sent: Saturday, December 2, 2023 6:10 AM
->> To: Peter Griffin <peter.griffin@linaro.org>
->> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->> mturquette@baylibre.com; conor+dt@kernel.org; sboyd@kernel.org;
->> tomasz.figa@gmail.com; s.nawrocki@samsung.com; linus.walleij@linaro.org;
->> wim@linux-watchdog.org; linux@roeck-us.net; catalin.marinas@arm.com;
->> will@kernel.org; arnd@arndb.de; olof@lixom.net;
->> gregkh@linuxfoundation.org; jirislaby@kernel.org;
->> cw00.choi@samsung.com; alim.akhtar@samsung.com;
->> tudor.ambarus@linaro.org; andre.draszik@linaro.org;
->> saravanak@google.com; willmcvicker@google.com; soc@kernel.org;
->> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> samsung-soc@vger.kernel.org; linux-clk@vger.kernel.org; linux-
->> gpio@vger.kernel.org; linux-watchdog@vger.kernel.org; kernel-
->> team@android.com; linux-serial@vger.kernel.org
->> Subject: Re: [PATCH v5 14/20] pinctrl: samsung: Add gs101 SoC pinctrl
->> configuration
->>
->> On Fri, Dec 1, 2023 at 10:11 AM Peter Griffin <peter.griffin@linaro.org>
->> wrote:
->>>
->>> Add support for the pin-controller found on the gs101 SoC used in
->>> Pixel 6 phones.
->>>
->>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->>> ---
->>>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 159 ++++++++++++++++++
->>>  drivers/pinctrl/samsung/pinctrl-exynos.c      |   2 +
->>>  drivers/pinctrl/samsung/pinctrl-exynos.h      |  34 ++++
->>>  drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
->>>  drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
->>>  5 files changed, 198 insertions(+)
->>>
->>> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->>> b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->>> index cb965cf93705..e1a0668ecb16 100644
->>> --- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->>> +++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
->>> @@ -796,3 +796,162 @@ const struct samsung_pinctrl_of_match_data
->> fsd_of_data __initconst = {
->>>         .ctrl           = fsd_pin_ctrl,
->>>         .num_ctrl       = ARRAY_SIZE(fsd_pin_ctrl),
->>>  };
->>> +
->>> +/*
->>> + * bank type for non-alive type
->>> + * (CON bit field: 4, DAT bit field: 1, PUD bit field: 4, DRV bit
->>> +field: 4)
->>> + * (CONPDN bit field: 2, PUDPDN bit field: 4)  */ static struct
->>> +samsung_pin_bank_type gs101_bank_type_off  = {
->>> +       .fld_width = { 4, 1, 4, 4, 2, 4, },
->>> +       .reg_offset = { 0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, }, };
->>
->> This is just the same as exynos850_bank_type_off (100% duplication).
->> Here is what I suggest. Now that it's obvious there is some common platform
->> for moder Exynos SoCs, and it's probably Exynos9, I'd suggest next course of
->> action (if maintainers agree):
->>   1. Remove this one
->>   2. Rename exynos850_bank_type_off to exynos9_bank_type_off
->>   3. Use it for both gs101 and exynos850
->>
->> Does it make sense?
->>
-> My opinion is to reuse exynos850 for gs101 (wherever applicable), same philosophy was historically followed in this file.
-> That way (using exynos850 for gs101) things will be simple. 
-> Adding exynos9_* is not adding any benefit, rather it create confusion.
+> [...]
 
-I don't see much value in renaming exynos850 bank type to exynos9
-considering:
-1. We don't really know the bank types for all of Exynos9xxx SoCs,
-2. Exynos7885 also uses Exynos850 bank types. Exynos7885 was much
-earlier than Exynos9xxx family.
+Arnd, I've gone and applied this stuff since things have been dead
+since I sent it & will send it to you for the upcoming mw in a few weeks.
 
-Best regards,
-Krzysztof
+[1/6] dt-bindings: soc: microchip: add a property for system controller flash
+      https://git.kernel.org/conor/c/98d62e97c39f
+[2/6] soc: microchip: mpfs: enable access to the system controller's flash
+      https://git.kernel.org/conor/c/742aa6c563d2
+[3/6] soc: microchip: mpfs: print service status in warning message
+      https://git.kernel.org/conor/c/a8f00589be7b
+[4/6] soc: microchip: mpfs: add auto-update subdev to system controller
+      https://git.kernel.org/conor/c/fad13b5b73e0
+[5/6] firmware: microchip: add PolarFire SoC Auto Update support
+      https://git.kernel.org/conor/c/ec5b0f1193ad
 
+Thanks,
+Conor.
