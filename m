@@ -1,83 +1,342 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=LHv9=HR=linaro.org=andre.draszik@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 414EAC4167B
-	for <soc@archiver.kernel.org>; Wed,  6 Dec 2023 12:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 072ACC4167B
+	for <soc@archiver.kernel.org>; Wed,  6 Dec 2023 12:30:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EDE3DC433CB; Wed,  6 Dec 2023 12:27:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1BDC433C8;
-	Wed,  6 Dec 2023 12:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701865634;
-	bh=SFu4/bR/AMrjm4JlTuMfP6+O1LKZw8xcETHgeCdmOcw=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UlRCcDlxBcdIYtZoPpzMTuhqHXiPWCYfA6idr0x7B3j3Y2UMcQ+waxv51fpaH13zM
-	 zxfEclP72Liv5bjZpSgP6sDpzhrxzmK3JYaucrIB1EAhBZjXvf4/sAPiDQBTtVJAhX
-	 AaGDCeqqHHBAhSRQF7QuWR3OnECuf/4QxAY40FEZf31Tla//HUoSY+Pgvm0AJ/fn3j
-	 7dfkSQgkmcJJtou2/vXNZMiW0yDZuj7jH49rmmPIlZSL0zZAMSfR+smj12+l1E3BNJ
-	 wnQ1zNYJ1Y624VCEyb3EArLu3uKZgp/f7+o+lHj+NmiWNUFj6Gu/R3Cj4GK20GbDSt
-	 z+2M1Lo5wc4UQ==
-From: Conor Dooley <conor@kernel.org>
+	id D5BC1C433C8; Wed,  6 Dec 2023 12:30:45 +0000 (UTC)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id EE214C433C9
+	for <soc@kernel.org>; Wed,  6 Dec 2023 12:30:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EE214C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40bda47c489so50368915e9.3
+        for <soc@kernel.org>; Wed, 06 Dec 2023 04:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701865841; x=1702470641; darn=kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Gc2ntkoTShdEBwllBOG4rF/rr9xiDv3tAETL/Jav0Vk=;
+        b=vkbZV4qADkU2RYOLi/BTFcs6bdsJmpNunZVxdEghYyUTDUx7VHgKHZbdbP7zz+jxXB
+         MMYQe+daNN24zwuXKgEo6yM266pq9XBhMg3bAVsRd5UZpTbE1JifiTZJvdyjdj/cXjvP
+         nCFesYFIFdx5PcfNFsX24pQP3p7NCq5SMrhSPuto+QAhqKWwFf+8K5WErOQEnyVGDFmB
+         rfrYGqyoWAT7QfpBpGJiAP/eXMAvb7Z2EH6I9yZgpwWvDl6QUt6eHDflhrR02GRBQ25T
+         mzsgPov7x/pEzQGxD7paOA5mdEBScuoU0CfYjXY5M9WciUEOHFAxPHDLx3jCJsMnf/xa
+         mh0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701865841; x=1702470641;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gc2ntkoTShdEBwllBOG4rF/rr9xiDv3tAETL/Jav0Vk=;
+        b=BN6scg1OdVdQ4Z1pxmcTEV5fQegetLKPGbH6QXfji37Ud5u5w0+FhtLRVTMfUfcSTU
+         U5kO7djDjFkYZMnVb3jEKYQj3ZVGPy48YaLEjIb/YlMy64Jd/yiJKHnlaoLrFEMByBXw
+         aMOcWfV2DvkZZJyQfaxt3DF1Vlz9NFRpKvJJf0twkym/BfYd3zEJAsg10IbrypSFlc16
+         LEhdMMMFkakNbWdbOzMmeWZO1WhG4VNUFLwT+gpp8/Z48HYYY/gIWRHm5he4gTzRAt5u
+         3rHCW+CYaSf1IwoP27KVJxxqGhgrJCJQWEm/pfNOgmA+mPj66Objy24mTfH7AlNxtvkN
+         GRbw==
+X-Gm-Message-State: AOJu0Yya0b6LBycwdMRnwHDw7V5WHHwuXq9DWq2gz+LMt56kDvbmQtK0
+	/aGTvJC4s9SAGXgTyLHgm5AeWg==
+X-Google-Smtp-Source: AGHT+IGbvAtCRyJ/+D7Ia80B4kAtNqKFbVvgpz/mjpVjvbfrPm9mXg4sGbWIF2mmxMZ4z9+ih3afgA==
+X-Received: by 2002:a7b:ca54:0:b0:40b:5e59:c567 with SMTP id m20-20020a7bca54000000b0040b5e59c567mr597074wml.145.1701865841085;
+        Wed, 06 Dec 2023 04:30:41 -0800 (PST)
+Received: from [10.1.1.118] ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id hg10-20020a05600c538a00b0040b398f0585sm22066938wmb.9.2023.12.06.04.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 04:30:40 -0800 (PST)
+Message-ID: <6e595a110444033de6ecd35bedc6e84ea1c43fdc.camel@linaro.org>
+Subject: Re: [PATCH v5 02/20] dt-bindings: clock: Add Google gs101 clock
+ management unit bindings
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ conor+dt@kernel.org,  sboyd@kernel.org, tomasz.figa@gmail.com,
+ s.nawrocki@samsung.com,  linus.walleij@linaro.org, wim@linux-watchdog.org,
+ linux@roeck-us.net,  catalin.marinas@arm.com, will@kernel.org,
+ arnd@arndb.de, olof@lixom.net,  gregkh@linuxfoundation.org,
+ jirislaby@kernel.org, cw00.choi@samsung.com,  alim.akhtar@samsung.com
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Moritz Fischer <mdf@kernel.org>,
-	Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>,
-	Russ Weight <russell.h.weight@intel.com>,
-	linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] PolarFire SoC Auto Update Support
-Date: Wed,  6 Dec 2023 12:25:58 +0000
-Message-Id: <20231206-catfight-trailing-47b7b547e79b@spud>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231020-agreeably-filing-3d48708e6262@spud>
-References: <20231020-agreeably-filing-3d48708e6262@spud>
+Cc: tudor.ambarus@linaro.org, semen.protsenko@linaro.org,
+ saravanak@google.com,  willmcvicker@google.com, soc@kernel.org,
+ devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org,  linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org,  linux-watchdog@vger.kernel.org,
+ kernel-team@android.com,  linux-serial@vger.kernel.org
+Date: Wed, 06 Dec 2023 12:30:38 +0000
+In-Reply-To: <20231201160925.3136868-3-peter.griffin@linaro.org>
+References: <20231201160925.3136868-1-peter.griffin@linaro.org>
+	 <20231201160925.3136868-3-peter.griffin@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.49.2-3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1335; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=zTxZ7tRHD+kYdL3Atrz/x5KAMx98vgPG50Y04wXmGgk=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKkFGcHW+uFcuo67KtRWbXzAJcHVK2PBLG9zq8H3gOyPZ 98fK7zrKGVhEONgkBVTZEm83dcitf6Pyw7nnrcwc1iZQIYwcHEKwETq/jD8szAQym13+xgbeTva UWzKI+W50QJ8bS6WPW6nejyqOk5/YGRofxHUuPRLGNept/eWWBrNfvnPZIqGxIOCdzyLy81bgt/ zAwA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hi Pete,
 
-On Fri, 20 Oct 2023 14:18:38 +0100, Conor Dooley wrote:
-> Hey all,
-> 
-> This patchset adds support for the "Auto Update" feature on PolarFire
-> SoC that allows for writing an FPGA bistream to the SPI flash connected
-> to the system controller.
-> On powercycle (or reboot depending on how the firmware implements the
-> openSBI SRST extension) "Auto Update" will take place, and program the
-> FPGA with the contents of the SPI flash - provided that that image is
-> valid and an actual upgrade from that already programmed.
-> 
+On Fri, 2023-12-01 at 16:09 +0000, Peter Griffin wrote:
 > [...]
+> +...
+> diff --git a/include/dt-bindings/clock/google,gs101.h b/include/dt-bindin=
+gs/clock/google,gs101.h
+> new file mode 100644
+> index 000000000000..9f280f74578a
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/google,gs101.h
+> @@ -0,0 +1,392 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (C) 2023 Linaro Ltd.
+> + * Author: Peter Griffin <peter.griffin@linaro.org>
+> + *
+> + * Device Tree binding constants for Google gs101 clock controller.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_CLOCK_GOOGLE_GS101_H
+> +#define _DT_BINDINGS_CLOCK_GOOGLE_GS101_H
+> +
+> +/* CMU_TOP PLL */
+> +#define CLK_FOUT_SHARED0_PLL		1
+> +#define CLK_FOUT_SHARED1_PLL		2
+> +#define CLK_FOUT_SHARED2_PLL		3
+> +#define CLK_FOUT_SHARED3_PLL		4
+> +#define CLK_FOUT_SPARE_PLL		5
+> +
+> +/* CMU_TOP MUX */
+> +#define CLK_MOUT_SHARED0_PLL		6
+> +#define CLK_MOUT_SHARED1_PLL		7
+> +#define CLK_MOUT_SHARED2_PLL		8
+> +#define CLK_MOUT_SHARED3_PLL		9
+> +#define CLK_MOUT_SPARE_PLL		10
+> +#define CLK_MOUT_BO_BUS			11
+> +#define CLK_MOUT_BUS0_BUS		12
+> +#define CLK_MOUT_BUS1_BUS		13
+> +#define CLK_MOUT_BUS2_BUS		14
+> +#define CLK_MOUT_CIS_CLK0		15
+> +#define CLK_MOUT_CIS_CLK1		16
+> +#define CLK_MOUT_CIS_CLK2		17
+> +#define CLK_MOUT_CIS_CLK3		18
+> +#define CLK_MOUT_CIS_CLK4		19
+> +#define CLK_MOUT_CIS_CLK5		20
+> +#define CLK_MOUT_CIS_CLK6		21
+> +#define CLK_MOUT_CIS_CLK7		22
+> +#define CLK_MOUT_CMU_BOOST		23
+> +#define CLK_MOUT_BOOST_OPTION1		24
+> +#define CLK_MOUT_CORE_BUS		25
+> +#define CLK_MOUT_CPUCL0_DBG		26
+> +#define CLK_MOUT_CPUCL0_SWITCH		27
+> +#define CLK_MOUT_CPUCL1_SWITCH		28
+> +#define CLK_MOUT_CPUCL2_SWITCH		29
+> +#define CLK_MOUT_CSIS_BUS		30
+> +#define CLK_MOUT_DISP_BUS		31
+> +#define CLK_MOUT_DNS_BUS		32
+> +#define CLK_MOUT_DPU_BUS		33
+> +#define CLK_MOUT_EH_BUS			34
+> +#define CLK_MOUT_G2D_G2D		35
+> +#define CLK_MOUT_G2D_MSCL		36
+> +#define CLK_MOUT_G3AA_G3AA		37
+> +#define CLK_MOUT_G3D_BUSD		38
+> +#define CLK_MOUT_G3D_GLB		39
+> +#define CLK_MOUT_G3D_SWITCH		40
+> +#define CLK_MOUT_GDC_GDC0		41
+> +#define CLK_MOUT_GDC_GDC1		42
+> +#define CLK_MOUT_GDC_SCSC		43
+> +#define CLK_MOUT_CMU_HPM		44
+> +#define CLK_MOUT_HSI0_BUS		45
+> +#define CLK_MOUT_HSI0_DPGTC		46
+> +#define CLK_MOUT_HSI0_USB31DRD		47
+> +#define CLK_MOUT_HSI0_USBDPDGB		48
+> +#define CLK_MOUT_HSI1_BUS		49
+> +#define CLK_MOUT_HSI1_PCIE		50
+> +#define CLK_MOUT_HSI2_BUS		51
+> +#define CLK_MOUT_HSI2_MMC_CARD		52
+> +#define CLK_MOUT_HSI2_PCIE		53
+> +#define CLK_MOUT_HSI2_UFS_EMBD		54
+> +#define CLK_MOUT_IPP_BUS		55
+> +#define CLK_MOUT_ITP_BUS		56
+> +#define CLK_MOUT_MCSC_ITSC		57
+> +#define CLK_MOUT_MCSC_MCSC		58
+> +#define CLK_MOUT_MFC_MFC		59
+> +#define CLK_MOUT_MIF_BUSP		60
+> +#define CLK_MOUT_MIF_SWITCH		61
+> +#define CLK_MOUT_MISC_BUS		62
+> +#define CLK_MOUT_MISC_SSS		63
+> +#define CLK_MOUT_PDP_BUS		64
+> +#define CLK_MOUT_PDP_VRA		65
+> +#define CLK_MOUT_PERIC0_BUS		66
+> +#define CLK_MOUT_PERIC0_IP		67
+> +#define CLK_MOUT_PERIC1_BUS		68
+> +#define CLK_MOUT_PERIC1_IP		69
+> +#define CLK_MOUT_TNR_BUS		70
+> +#define CLK_MOUT_TOP_BOOST_OPTION1	71
+> +#define CLK_MOUT_TOP_CMUREF		72
+> +#define CLK_MOUT_TPU_BUS		73
+> +#define CLK_MOUT_TPU_TPU		74
+> +#define CLK_MOUT_TPU_TPUCTL		75
+> +#define CLK_MOUT_TPU_UART		76
+> +#define CLK_MOUT_CMU_CMUREF		77
+> +
+> +/* CMU_TOP Dividers */
+> +#define CLK_DOUT_BO_BUS			78
+> +#define CLK_DOUT_BUS0_BUS		79
+> +#define CLK_DOUT_BUS1_BUS		80
+> +#define CLK_DOUT_BUS2_BUS		81
+> +#define CLK_DOUT_CIS_CLK0		82
+> +#define CLK_DOUT_CIS_CLK1		83
+> +#define CLK_DOUT_CIS_CLK2		84
+> +#define CLK_DOUT_CIS_CLK3		85
+> +#define CLK_DOUT_CIS_CLK4		86
+> +#define CLK_DOUT_CIS_CLK5		87
+> +#define CLK_DOUT_CIS_CLK6		88
+> +#define CLK_DOUT_CIS_CLK7		89
+> +#define CLK_DOUT_CORE_BUS		90
+> +#define CLK_DOUT_CPUCL0_DBG		91
+> +#define CLK_DOUT_CPUCL0_SWITCH		92
+> +#define CLK_DOUT_CPUCL1_SWITCH		93
+> +#define CLK_DOUT_CPUCL2_SWITCH		94
+> +#define CLK_DOUT_CSIS_BUS		95
+> +#define CLK_DOUT_DISP_BUS		96
+> +#define CLK_DOUT_DNS_BUS		97
+> +#define CLK_DOUT_DPU_BUS		98
+> +#define CLK_DOUT_EH_BUS			99
+> +#define CLK_DOUT_G2D_G2D		100
+> +#define CLK_DOUT_G2D_MSCL		101
+> +#define CLK_DOUT_G3AA_G3AA		102
+> +#define CLK_DOUT_G3D_BUSD		103
+> +#define CLK_DOUT_G3D_GLB		104
+> +#define CLK_DOUT_G3D_SWITCH		105
+> +#define CLK_DOUT_GDC_GDC0		106
+> +#define CLK_DOUT_GDC_GDC1		107
+> +#define CLK_DOUT_GDC_SCSC		108
+> +#define CLK_DOUT_CMU_HPM		109
+> +#define CLK_DOUT_HSI0_BUS		110
+> +#define CLK_DOUT_HSI0_DPGTC		111
+> +#define CLK_DOUT_HSI0_USB31DRD		112
+> +#define CLK_DOUT_HSI0_USBDPDGB		113
+> +#define CLK_DOUT_HSI1_BUS		114
+> +#define CLK_DOUT_HSI1_PCIE		115
+> +#define CLK_DOUT_HSI2_BUS		116
+> +#define CLK_DOUT_HSI2_MMC_CARD		117
+> +#define CLK_DOUT_HSI2_PCIE		118
+> +#define CLK_DOUT_HSI2_UFS_EMBD		119
+> +#define CLK_DOUT_IPP_BUS		107
 
-Arnd, I've gone and applied this stuff since things have been dead
-since I sent it & will send it to you for the upcoming mw in a few weeks.
+You're restarting at 107 here, but the numbers should continue at 120...
 
-[1/6] dt-bindings: soc: microchip: add a property for system controller flash
-      https://git.kernel.org/conor/c/98d62e97c39f
-[2/6] soc: microchip: mpfs: enable access to the system controller's flash
-      https://git.kernel.org/conor/c/742aa6c563d2
-[3/6] soc: microchip: mpfs: print service status in warning message
-      https://git.kernel.org/conor/c/a8f00589be7b
-[4/6] soc: microchip: mpfs: add auto-update subdev to system controller
-      https://git.kernel.org/conor/c/fad13b5b73e0
-[5/6] firmware: microchip: add PolarFire SoC Auto Update support
-      https://git.kernel.org/conor/c/ec5b0f1193ad
+> +#define CLK_DOUT_ITP_BUS		108
+> +#define CLK_DOUT_MCSC_ITSC		109
+> +#define CLK_DOUT_MCSC_MCSC		110
+> +#define CLK_DOUT_MFC_MFC		111
+> +#define CLK_DOUT_MIF_BUSP		112
+> +#define CLK_DOUT_MISC_BUS		113
+> +#define CLK_DOUT_MISC_SSS		114
+> +#define CLK_DOUT_PDP_BUS		115
+> +#define CLK_DOUT_PDP_VRA		116
+> +#define CLK_DOUT_PERIC0_BUS		117
+> +#define CLK_DOUT_PERIC0_IP		118
+> +#define CLK_DOUT_PERIC1_BUS		119
+> +#define CLK_DOUT_PERIC1_IP		120
+> +#define CLK_DOUT_TNR_BUS		121
+> +#define CLK_DOUT_TPU_BUS		122
+> +#define CLK_DOUT_TPU_TPU		123
+> +#define CLK_DOUT_TPU_TPUCTL		124
+> +#define CLK_DOUT_TPU_UART		125
+> +#define CLK_DOUT_CMU_BOOST		126
+> +#define CLK_DOUT_CMU_CMUREF		127
+> +#define CLK_DOUT_SHARED0_DIV2		128
+> +#define CLK_DOUT_SHARED0_DIV3		129
+> +#define CLK_DOUT_SHARED0_DIV4		130
+> +#define CLK_DOUT_SHARED0_DIV5		131
+> +#define CLK_DOUT_SHARED1_DIV2		132
+> +#define CLK_DOUT_SHARED1_DIV3		133
+> +#define CLK_DOUT_SHARED1_DIV4		134
+> +#define CLK_DOUT_SHARED2_DIV2		135
+> +#define CLK_DOUT_SHARED3_DIV2		136
+> +
+> +/* CMU_TOP Gates */
+> +#define CLK_GOUT_BUS0_BOOST		137
+> +#define CLK_GOUT_BUS1_BOOST		138
+> +#define CLK_GOUT_BUS2_BOOST		139
+> +#define CLK_GOUT_CORE_BOOST		140
+> +#define CLK_GOUT_CPUCL0_BOOST		141
+> +#define CLK_GOUT_CPUCL1_BOOST		142
+> +#define CLK_GOUT_CPUCL2_BOOST		143
+> +#define CLK_GOUT_MIF_BOOST		144
+> +#define CLK_GOUT_MIF_SWITCH		145
+> +#define CLK_GOUT_BO_BUS			146
+> +#define CLK_GOUT_BUS0_BUS		147
+> +#define CLK_GOUT_BUS1_BUS		148
+> +#define CLK_GOUT_BUS2_BUS		149
+> +#define CLK_GOUT_CIS_CLK0		150
+> +#define CLK_GOUT_CIS_CLK1		151
+> +#define CLK_GOUT_CIS_CLK2		152
+> +#define CLK_GOUT_CIS_CLK3		153
+> +#define CLK_GOUT_CIS_CLK4		154
+> +#define CLK_GOUT_CIS_CLK5		155
+> +#define CLK_GOUT_CIS_CLK6		156
+> +#define CLK_GOUT_CIS_CLK7		157
+> +#define CLK_GOUT_CMU_BOOST		158
+> +#define CLK_GOUT_CORE_BUS		159
+> +#define CLK_GOUT_CPUCL0_DBG		160
+> +#define CLK_GOUT_CPUCL0_SWITCH		161
+> +#define CLK_GOUT_CPUCL1_SWITCH		162
+> +#define CLK_GOUT_CPUCL2_SWITCH		163
+> +#define CLK_GOUT_CSIS_BUS		164
+> +#define CLK_GOUT_DISP_BUS		165
+> +#define CLK_GOUT_DNS_BUS		166
+> +#define CLK_GOUT_DPU_BUS		167
+> +#define CLK_GOUT_EH_BUS			168
+> +#define CLK_GOUT_G2D_G2D		169
+> +#define CLK_GOUT_G2D_MSCL		170
+> +#define CLK_GOUT_G3AA_G3AA		171
+> +#define CLK_GOUT_G3D_BUSD		172
+> +#define CLK_GOUT_G3D_GLB		173
+> +#define CLK_GOUT_G3D_SWITCH		174
+> +#define CLK_GOUT_GDC_GDC0		175
+> +#define CLK_GOUT_GDC_GDC1		176
+> +#define CLK_GOUT_GDC_SCSC		177
+> +#define CLK_GOUT_CMU_HPM		178
+> +#define CLK_GOUT_HSI0_BUS		179
+> +#define CLK_GOUT_HSI0_DPGTC		180
+> +#define CLK_GOUT_HSI0_USB31DRD		181
+> +#define CLK_GOUT_HSI0_USBDPDGB		182
+> +#define CLK_GOUT_HSI1_BUS		183
+> +#define CLK_GOUT_HSI1_PCIE		184
+> +#define CLK_GOUT_HSI2_BUS		185
+> +#define CLK_GOUT_HSI2_MMC_CARD		186
+> +#define CLK_GOUT_HSI2_PCIE		187
+> +#define CLK_GOUT_HSI2_UFS_EMBD		188
+> +#define CLK_GOUT_IPP_BUS		189
+> +#define CLK_GOUT_ITP_BUS		190
+> +#define CLK_GOUT_MCSC_ITSC		191
+> +#define CLK_GOUT_MCSC_MCSC		192
+> +#define CLK_GOUT_MFC_MFC		193
+> +#define CLK_GOUT_MIF_BUSP		194
+> +#define CLK_GOUT_MISC_BUS		195
+> +#define CLK_GOUT_MISC_SSS		196
+> +#define CLK_GOUT_PDP_BUS		197
+> +#define CLK_GOUT_PDP_VRA		298
+> +#define CLK_GOUT_G3AA			299
+> +#define CLK_GOUT_PERIC0_BUS		200
+> +#define CLK_GOUT_PERIC0_IP		201
+> +#define CLK_GOUT_PERIC1_BUS		202
+> +#define CLK_GOUT_PERIC1_IP		203
+> +#define CLK_GOUT_TNR_BUS		204
+> +#define CLK_GOUT_TOP_CMUREF		205
+> +#define CLK_GOUT_TPU_BUS		206
+> +#define CLK_GOUT_TPU_TPU		207
+> +#define CLK_GOUT_TPU_TPUCTL		208
+> +#define CLK_GOUT_TPU_UART		209
 
-Thanks,
-Conor.
+... up to here. I also checked the other units, they seem to be OK.
+
+Cheers,
+Andre'
+
