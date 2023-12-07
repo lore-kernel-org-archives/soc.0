@@ -1,379 +1,1229 @@
-Return-Path: <SRS0=cP0g=HS=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=yOGa=HS=s4.acemsrvh.com=bounce-1707420-683-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE087C4167B
-	for <soc@archiver.kernel.org>; Thu,  7 Dec 2023 13:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0023EC4167B
+	for <soc@archiver.kernel.org>; Thu,  7 Dec 2023 15:19:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 88896C433CA; Thu,  7 Dec 2023 13:33:40 +0000 (UTC)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id BDC4DC433CA; Thu,  7 Dec 2023 15:19:47 +0000 (UTC)
+Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1DF7BC433C7
-	for <soc@kernel.org>; Thu,  7 Dec 2023 13:33:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1DF7BC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50bfd3a5b54so801982e87.3
-        for <soc@kernel.org>; Thu, 07 Dec 2023 05:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701956017; x=1702560817; darn=kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wGGkuczunoZ5IaAe/7L5H5MZ4THvG/3e0SV/iOUnOnI=;
-        b=hTfM4z/nGftvWnPA4NrsbCbTjqvWpTM7/1CqnJC7BNu9BaprYsZiKeqrSFpBusFU1r
-         0UjdVLmZeiL6zuZ6sjOhVeAtjgqU+Epa3C5dRcQArYvc4JWjdTLGMnqyXFx8g7hZ7WXc
-         zbSmkA0U7pdQtzlWz3uRrAOZ8Pa+xpi0uWSyC317i7k8TSTiDhcoRjs+ym7ZlI1snwtU
-         zzdXFxaJ18CQBECZRhgjiWJSbPHgcBi/1u6mS3y6xoFWKFTcLfSjwTcFqAATSJGceCwJ
-         cWCrxO8XTo9Bc4iwPMSPmDfQNf9dTGiXEDWttL3mtNU80zGFhReMheJJpcpRJP7zP0Ad
-         tMXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701956017; x=1702560817;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wGGkuczunoZ5IaAe/7L5H5MZ4THvG/3e0SV/iOUnOnI=;
-        b=fGcUUBx4qMr75RA7t5UXo38xA43rTY6IeEAcFaVeT0TCxMlrdwsjNwuzuz/s04WDde
-         TtbOQjEjosxVmy4FKmsEdu3HCrFEhvpSDoqiCB3kYaCfaM1UCsQMZjeOJdTsrVqzJ7jP
-         6s1e9ry3dRyZFwqvuUATP52IGdzHXC3I715ERsVM5LUSQ8SrI/AsQTe9MnrZfvicShkl
-         Y5K+yRCnZxlXqgjRUJyt6JgsSi/r78qsgimrDhuZOBJCw4j5HdnEsFUsCxVFKXKLLxsu
-         JvApabbrqm3S6OTqKDZG9s6+2d6EtCPX+XdYg7WgSi+/sv3ws29k5jKHVhq416HfAHDx
-         eXPQ==
-X-Gm-Message-State: AOJu0Yz1sTK1ndYDP7enFAfCyibB9VR8SocI8F8xs5ZzwE2AmEQyXlE/
-	OY3WagGeHvQ9/4ju5m9BM+La0g==
-X-Google-Smtp-Source: AGHT+IFnBvhN0p2bvdSpm4q+9Zjh+cjhQfkva/OTan9+LnlPoHI9aTnYoxh++rJ7WQsnOERM2xn7kg==
-X-Received: by 2002:ac2:511d:0:b0:50b:e47f:e96f with SMTP id q29-20020ac2511d000000b0050be47fe96fmr1293400lfb.57.1701956016881;
-        Thu, 07 Dec 2023 05:33:36 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id a10-20020ac2504a000000b00502e6c9a733sm171235lfm.231.2023.12.07.05.33.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 05:33:36 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 07 Dec 2023 14:33:35 +0100
-Subject: [PATCH v2] ARM: Delete ARM11MPCore (ARM11 ARMv6K SMP) support
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231207-drop-11mpcore-v2-1-560b396f3bf5@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAK7JcWUC/13MTQrCMBCG4auUWRtxElONK+8hXZT8tAPahIkEp
- eTuxoIbNwPvwPeskD2Tz3DpVmBfKFNcWshdB3Yel8kLcq1BHqTCdoTjmATiI9nIXjite2t1ODl
- joG0S+0CvzbsNrWfKz8jvjS/4/f6k459UUKAIprdOGXW2Aa93WkaO+8gTDLXWD/hRjjerAAAA
+	by smtp.kernel.org (Postfix) with ESMTPS id 08E18C433C7
+	for <soc@kernel.org>; Thu,  7 Dec 2023 15:19:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08E18C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nanoenonprofits.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=s4.acemsrvh.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=dk; d=nanoenonprofits.org;
+ h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ List-Unsubscribe:List-Unsubscribe-Post:Message-ID; i=team@nanoenonprofits.org;
+ bh=Ss8zD6m7pCPm1ilz428d4ua8e8xA3uDdCbjf8qJXVIY=;
+ b=xTL7v93Q3Nfb7WLrw7JKaKTwp5FqDzSaG4JgKZvg1x7kOZPB6n/gaS1psCWh+fDV4R0FrBuwNI1M
+   Nfd4n1VgPYxg3GDr3/hjT1yyV7mBqbDLH0IMxT8PptO4eL9jd2W29gPVqVMlBlV/4qNOjtzX/QwP
+   hzBjSFi2gxuuufec1E4=
+Received: by s4.acemsrvh.com id he7h9234rc8q for <soc@kernel.org>; Thu, 7 Dec 2023 15:19:43 +0000 (envelope-from <bounce-1707420-683-1076303-soc=kernel.org@s4.acemsrvh.com>)
+X-Mailer: ActiveCampaign Mailer
+CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>, 
- Russell King <linux@armlinux.org.uk>, Liviu Dudau <liviu.dudau@arm.com>, 
- Sudeep Holla <sudeep.holla@arm.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Lubomir Rintel <lkundrak@v3.sk>, 
- Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
-Cc: linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.4
+To: soc@kernel.org
+From: "Kathleen Robinson, Ph.D." <team@nanoenonprofits.org>
+Subject: Receive Your Credentials Over The Weekend
+Date: Thu, 07 Dec 2023 09:17:26 -0600
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift-1053521766571e206c9c386.27542409_=_"
+Content-Transfer-Encoding: 7bit
+X-DKIM-Options: s=dk
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjNjgzICwgbTExNTQgLCBzNjAz
+x-virtual-mta: s4.acemsrvh.com
+Feedback-ID: 1707420:1707420.683:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-683
+List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-683-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
+ <http://jimmylarose.activehosted.com/box.php?nl=214&c=683&m=1154&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Message-ID: <20231207151943.22143.1293573800.swift@jimmylarose.activehosted.com>
 
-This ARM11 SMP configuration was one of the first SMP configurations
-the ARM kernel supported, but it has the downside of odd DMA handling,
-odd cache tagging, and often (as of recent) completely broken cache
-handling on the ARM RealView PB11MPCore test chips. To boot the
-platform it was necessary to completely disable the cache.
-When it comes to the EB 11MPCore it is unclear if this ever worked.
 
-These reference designs are now the only ARMv6K SMP platforms.
+--_=_swift-1053521766571e206c9c386.27542409_=_
+Content-Type: text/plain; charset=utf-8
 
-As only reference designs of purely academic interest remain, and
-since the special-cased DMA and PMU code is hard to maintain and
-doesn't really work, it is not really worth our time.
+(Secure your CNE, CDE & CNC) 
+ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
 
-Delete the ARM11MPCore support along with:
+Receive Your Nonprofit Credentials This Weekend!
 
-- The special DMA quirk CONFIG_DMA_CACHE_RWFO that is only used
-  on ARMv6K SMP, and we are the last ARMV6K system leaving the
-  building and the cache handling is awkward, so good-bye.
+VISIT HERE  or press
+credentialing photo below to get started.
 
-- The special PMU handling that was only used by ARM11MPCore.
+"Secure your Certified Nonprofit Executive (CNE). NANOE Credentialing
+will play an important role in your vocational success for years to
+come." ~ Kathleen Robinson, Ph.D. 
 
-The following is left behind:
+(Because you work with Charitable Organizations) 
 
-- TIMER_OF_DECLARE(arm_twd_11mp, "arm,arm11mp-twd-timer", ...)
-  in arch/arm/kernel/smp_twd.c, this is still in use by Marvell MMP3
-  arch/arm/boot/dts/marvell/mmp3.dtsi
+https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5nJTJG&sig=CYuuj6qjBuoinynvq1u3thxLdzKBQSfkbVtyGRkBMkqu&iat=1701962383&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=vztw0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qulbrIHQX0&s=678f48a0e320c6856d0620aa2e024acb&i=683A1154A214A2677 
 
-- IRQCHIP_DECLARE(arm11mp_gic, "arm,arm11mp-gic", ...)
-  in drivers/irqchip/irq-gic.c, this is still in use by Marvell MMP3
-  arch/arm/boot/dts/marvell/mmp3.dtsi
+ 
 
-- A compatible for the arm11mpcore SCU, since this was mistakedly
-  used for the Cortex-A9 version of RealView EB.
+Certified Nonprofit Executive (CNE)
 
-These are unfortunate but will need to be kept around for
-compatibility. New Marvell-specific compatibles should however probably
-be added.
+**200 Multiple Choice Questions**
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Changes in v2:
-- Keep the PB11MPCore SCU compatible for a bit (until we delete these
-  RealView EB device trees).
-- Please apply this to the SoC tree once there is consensus.
-- Link to v1: https://lore.kernel.org/r/20231204-drop-11mpcore-v1-1-f96cd3938cf1@linaro.org
----
- arch/arm/kernel/perf_event_v6.c            | 34 ------------------------------
- arch/arm/mach-versatile/Kconfig            | 17 ---------------
- arch/arm/mach-versatile/platsmp-realview.c |  6 +++++-
- arch/arm/mach-versatile/realview.c         |  1 -
- arch/arm/mm/Kconfig                        | 18 ----------------
- arch/arm/mm/cache-v6.S                     | 31 ---------------------------
- 6 files changed, 5 insertions(+), 102 deletions(-)
+Certified Development Executive (CDE)
 
-diff --git a/arch/arm/kernel/perf_event_v6.c b/arch/arm/kernel/perf_event_v6.c
-index 1ae99deeec54..3115077f6abc 100644
---- a/arch/arm/kernel/perf_event_v6.c
-+++ b/arch/arm/kernel/perf_event_v6.c
-@@ -525,40 +525,7 @@ static int armv6_1176_pmu_init(struct arm_pmu *cpu_pmu)
- 	return 0;
- }
- 
--/*
-- * ARMv6mpcore is almost identical to single core ARMv6 with the exception
-- * that some of the events have different enumerations and that there is no
-- * *hack* to stop the programmable counters. To stop the counters we simply
-- * disable the interrupt reporting and update the event. When unthrottling we
-- * reset the period and enable the interrupt reporting.
-- */
--
--static int armv6mpcore_map_event(struct perf_event *event)
--{
--	return armpmu_map_event(event, &armv6mpcore_perf_map,
--				&armv6mpcore_perf_cache_map, 0xFF);
--}
--
--static int armv6mpcore_pmu_init(struct arm_pmu *cpu_pmu)
--{
--	cpu_pmu->name		= "armv6_11mpcore";
--	cpu_pmu->handle_irq	= armv6pmu_handle_irq;
--	cpu_pmu->enable		= armv6pmu_enable_event;
--	cpu_pmu->disable	= armv6mpcore_pmu_disable_event;
--	cpu_pmu->read_counter	= armv6pmu_read_counter;
--	cpu_pmu->write_counter	= armv6pmu_write_counter;
--	cpu_pmu->get_event_idx	= armv6pmu_get_event_idx;
--	cpu_pmu->clear_event_idx = armv6pmu_clear_event_idx;
--	cpu_pmu->start		= armv6pmu_start;
--	cpu_pmu->stop		= armv6pmu_stop;
--	cpu_pmu->map_event	= armv6mpcore_map_event;
--	cpu_pmu->num_events	= 3;
--
--	return 0;
--}
--
- static const struct of_device_id armv6_pmu_of_device_ids[] = {
--	{.compatible = "arm,arm11mpcore-pmu",	.data = armv6mpcore_pmu_init},
- 	{.compatible = "arm,arm1176-pmu",	.data = armv6_1176_pmu_init},
- 	{.compatible = "arm,arm1136-pmu",	.data = armv6_1136_pmu_init},
- 	{ /* sentinel value */ }
-@@ -568,7 +535,6 @@ static const struct pmu_probe_info armv6_pmu_probe_table[] = {
- 	ARM_PMU_PROBE(ARM_CPU_PART_ARM1136, armv6_1136_pmu_init),
- 	ARM_PMU_PROBE(ARM_CPU_PART_ARM1156, armv6_1156_pmu_init),
- 	ARM_PMU_PROBE(ARM_CPU_PART_ARM1176, armv6_1176_pmu_init),
--	ARM_PMU_PROBE(ARM_CPU_PART_ARM11MPCORE, armv6mpcore_pmu_init),
- 	{ /* sentinel value */ }
- };
- 
-diff --git a/arch/arm/mach-versatile/Kconfig b/arch/arm/mach-versatile/Kconfig
-index b1519b4dc03a..e029270c2687 100644
---- a/arch/arm/mach-versatile/Kconfig
-+++ b/arch/arm/mach-versatile/Kconfig
-@@ -201,23 +201,6 @@ config REALVIEW_EB_A9MP
- 	  Enable support for the Cortex-A9MPCore tile fitted to the
- 	  Realview(R) Emulation Baseboard platform.
- 
--config REALVIEW_EB_ARM11MP
--	bool "Support ARM11MPCore Tile"
--	depends on MACH_REALVIEW_EB && ARCH_MULTI_V6
--	select HAVE_SMP
--	help
--	  Enable support for the ARM11MPCore tile fitted to the Realview(R)
--	  Emulation Baseboard platform.
--
--config MACH_REALVIEW_PB11MP
--	bool "Support RealView(R) Platform Baseboard for ARM11MPCore"
--	depends on ARCH_MULTI_V6
--	select HAVE_SMP
--	help
--	  Include support for the ARM(R) RealView(R) Platform Baseboard for
--	  the ARM11MPCore.  This platform has an on-board ARM11MPCore and has
--	  support for PCI-E and Compact Flash.
--
- # ARMv6 CPU without K extensions, but does have the new exclusive ops
- config MACH_REALVIEW_PB1176
- 	bool "Support RealView(R) Platform Baseboard for ARM1176JZF-S"
-diff --git a/arch/arm/mach-versatile/platsmp-realview.c b/arch/arm/mach-versatile/platsmp-realview.c
-index 5d363385c801..6965a1de727b 100644
---- a/arch/arm/mach-versatile/platsmp-realview.c
-+++ b/arch/arm/mach-versatile/platsmp-realview.c
-@@ -18,6 +18,11 @@
- #define REALVIEW_SYS_FLAGSSET_OFFSET	0x30
- 
- static const struct of_device_id realview_scu_match[] = {
-+	/*
-+	 * The ARM11MP SCU compatible is only provided as fallback for
-+	 * old RealView EB Cortex-A9 device trees that were using this
-+	 * compatible by mistake.
-+	 */
- 	{ .compatible = "arm,arm11mp-scu", },
- 	{ .compatible = "arm,cortex-a9-scu", },
- 	{ .compatible = "arm,cortex-a5-scu", },
-@@ -27,7 +32,6 @@ static const struct of_device_id realview_scu_match[] = {
- static const struct of_device_id realview_syscon_match[] = {
-         { .compatible = "arm,core-module-integrator", },
-         { .compatible = "arm,realview-eb-syscon", },
--        { .compatible = "arm,realview-pb11mp-syscon", },
-         { .compatible = "arm,realview-pbx-syscon", },
-         { },
- };
-diff --git a/arch/arm/mach-versatile/realview.c b/arch/arm/mach-versatile/realview.c
-index a3933e2373d5..36a6f6bc4fdd 100644
---- a/arch/arm/mach-versatile/realview.c
-+++ b/arch/arm/mach-versatile/realview.c
-@@ -9,7 +9,6 @@
- static const char *const realview_dt_platform_compat[] __initconst = {
- 	"arm,realview-eb",
- 	"arm,realview-pb1176",
--	"arm,realview-pb11mp",
- 	"arm,realview-pba8",
- 	"arm,realview-pbx",
- 	NULL,
-diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
-index c164cde50243..2b6f50dd5478 100644
---- a/arch/arm/mm/Kconfig
-+++ b/arch/arm/mm/Kconfig
-@@ -937,24 +937,6 @@ config VDSO
- 	  You must have glibc 2.22 or later for programs to seamlessly
- 	  take advantage of this.
- 
--config DMA_CACHE_RWFO
--	bool "Enable read/write for ownership DMA cache maintenance"
--	depends on CPU_V6K && SMP
--	default y
--	help
--	  The Snoop Control Unit on ARM11MPCore does not detect the
--	  cache maintenance operations and the dma_{map,unmap}_area()
--	  functions may leave stale cache entries on other CPUs. By
--	  enabling this option, Read or Write For Ownership in the ARMv6
--	  DMA cache maintenance functions is performed. These LDR/STR
--	  instructions change the cache line state to shared or modified
--	  so that the cache operation has the desired effect.
--
--	  Note that the workaround is only valid on processors that do
--	  not perform speculative loads into the D-cache. For such
--	  processors, if cache maintenance operations are not broadcast
--	  in hardware, other workarounds are needed (e.g. cache
--	  maintenance broadcasting in software via FIQ).
- 
- config OUTER_CACHE
- 	bool
-diff --git a/arch/arm/mm/cache-v6.S b/arch/arm/mm/cache-v6.S
-index 250c83bf7158..44211d8a296f 100644
---- a/arch/arm/mm/cache-v6.S
-+++ b/arch/arm/mm/cache-v6.S
-@@ -201,10 +201,6 @@ ENTRY(v6_flush_kern_dcache_area)
-  *	- end     - virtual end address of region
-  */
- v6_dma_inv_range:
--#ifdef CONFIG_DMA_CACHE_RWFO
--	ldrb	r2, [r0]			@ read for ownership
--	strb	r2, [r0]			@ write for ownership
--#endif
- 	tst	r0, #D_CACHE_LINE_SIZE - 1
- 	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
- #ifdef HARVARD_CACHE
-@@ -213,10 +209,6 @@ v6_dma_inv_range:
- 	mcrne	p15, 0, r0, c7, c11, 1		@ clean unified line
- #endif
- 	tst	r1, #D_CACHE_LINE_SIZE - 1
--#ifdef CONFIG_DMA_CACHE_RWFO
--	ldrbne	r2, [r1, #-1]			@ read for ownership
--	strbne	r2, [r1, #-1]			@ write for ownership
--#endif
- 	bic	r1, r1, #D_CACHE_LINE_SIZE - 1
- #ifdef HARVARD_CACHE
- 	mcrne	p15, 0, r1, c7, c14, 1		@ clean & invalidate D line
-@@ -231,10 +223,6 @@ v6_dma_inv_range:
- #endif
- 	add	r0, r0, #D_CACHE_LINE_SIZE
- 	cmp	r0, r1
--#ifdef CONFIG_DMA_CACHE_RWFO
--	ldrlo	r2, [r0]			@ read for ownership
--	strlo	r2, [r0]			@ write for ownership
--#endif
- 	blo	1b
- 	mov	r0, #0
- 	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
-@@ -248,9 +236,6 @@ v6_dma_inv_range:
- v6_dma_clean_range:
- 	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
- 1:
--#ifdef CONFIG_DMA_CACHE_RWFO
--	ldr	r2, [r0]			@ read for ownership
--#endif
- #ifdef HARVARD_CACHE
- 	mcr	p15, 0, r0, c7, c10, 1		@ clean D line
- #else
-@@ -269,10 +254,6 @@ v6_dma_clean_range:
-  *	- end     - virtual end address of region
-  */
- ENTRY(v6_dma_flush_range)
--#ifdef CONFIG_DMA_CACHE_RWFO
--	ldrb	r2, [r0]		@ read for ownership
--	strb	r2, [r0]		@ write for ownership
--#endif
- 	bic	r0, r0, #D_CACHE_LINE_SIZE - 1
- 1:
- #ifdef HARVARD_CACHE
-@@ -282,10 +263,6 @@ ENTRY(v6_dma_flush_range)
- #endif
- 	add	r0, r0, #D_CACHE_LINE_SIZE
- 	cmp	r0, r1
--#ifdef CONFIG_DMA_CACHE_RWFO
--	ldrblo	r2, [r0]			@ read for ownership
--	strblo	r2, [r0]			@ write for ownership
--#endif
- 	blo	1b
- 	mov	r0, #0
- 	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
-@@ -301,13 +278,7 @@ ENTRY(v6_dma_map_area)
- 	add	r1, r1, r0
- 	teq	r2, #DMA_FROM_DEVICE
- 	beq	v6_dma_inv_range
--#ifndef CONFIG_DMA_CACHE_RWFO
- 	b	v6_dma_clean_range
--#else
--	teq	r2, #DMA_TO_DEVICE
--	beq	v6_dma_clean_range
--	b	v6_dma_flush_range
--#endif
- ENDPROC(v6_dma_map_area)
- 
- /*
-@@ -317,11 +288,9 @@ ENDPROC(v6_dma_map_area)
-  *	- dir	- DMA direction
-  */
- ENTRY(v6_dma_unmap_area)
--#ifndef CONFIG_DMA_CACHE_RWFO
- 	add	r1, r1, r0
- 	teq	r2, #DMA_TO_DEVICE
- 	bne	v6_dma_inv_range
--#endif
- 	ret	lr
- ENDPROC(v6_dma_unmap_area)
- 
+**150 Multiple Choice Questions**
 
----
-base-commit: d570fe67df85c84be7cc33ca9e9568d9601b494f
-change-id: 20231202-drop-11mpcore-d556cc5f7d99
+Certified Nonprofit Consultant (CNC)
 
-Best regards,
--- 
-Linus Walleij <linus.walleij@linaro.org>
+**100 Multiple Choice Questions**
+
+ 
+
+https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5nJTJG&sig=CYuuj6qjBuoinynvq1u3thxLdzKBQSfkbVtyGRkBMkqu&iat=1701962383&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=vztw0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qulbrIHQX0&s=678f48a0e320c6856d0620aa2e024acb&i=683A1154A214A2677 
+
+ 
+
+Dear CEOs, CFOs, COO, CDOs, & Nonprofit Staff Members,
+
+NANOE is the only nationwide membership organization in the U.S. for
+Executives seeking credentials in the art of nonprofit
+capacity-building. 
+
+****Practitioners who hold a prestigious NANOE credential are "best
+practice" experts who grow charitable enterprise and discover new ways
+to advance the common good.****NANOE's three capacity-building
+training certifications are based on industry insider knowledge,
+university research, and a love for serving humanity. Each credential
+compliments the other ensuring CEOs, CFOs, COOs & CDOs organization-wide
+are equipped with progressive capacity building practices that drive new
+growth.
+
+VISIT HERE  or PRESS CERTIFICATE
+ABOVE TO GET STARTED. 
+Here's a brief overview of the three credentials you can receive that
+will supercharge your career:
+
+CERTIFIED NONPROFIT EXECUTIVE (CNE): Striking the balance between
+managing volunteer board members, administrators, front-line staff,
+programs, finance and fundraising presents nonprofit managers with the
+complex and perfect storm of corporate oversight.  Practitioners who
+hold CNE learn new ways to prioritize capacity-building that ensures
+they weather the tumultuous seasons of nonprofit administration.
+Certified Nonprofit Executives become the capacity-building expert CEOs,
+CFOs, COOs & CDOs a charitable enterprise needs to expand its mission!
+
+CERTIFIED DEVELOPMENT EXECUTIVE (CDE): Many fundraisers come to the
+nonprofit sector with great intentions to advance a charity's mission
+without having correctly answered the question, "who is our customer?"
+Executives mistakenly think that the rain forest, the student, the
+homeless or a family-in-need are their customers and therein lies the
+difficulty. Individuals you serve are not your customers because they
+have no money. Certified Development Executives are expert at
+understanding who their true customer is and are equipped with new best
+practices that ensure they create life-long partnerships with new
+friends who financially invest in your mission.
+
+**CERTIFIED NONPROFIT CONSULTANT (CNC):**During our careers, at one
+point or another, many of us wonder if we could be trusted to share our
+expertise with others in a way that produces personal income. The truth
+is, successful consulting is more than sharing your experience...it's
+a coveted lifestyle with multiple dimensions. First, you need to be an
+expert in particular area of nonprofit management. Second, you must
+learn how to disseminate your knowledge using the consulting arts.
+Third, you must build a sustainable business enterprise that
+consistently generates opportunities to serve. Practitioners who hold
+the CNC credential are nationally qualified experts who labor alongside
+nonprofits providing the organizations they serve "big wins!"
+
+VISIT HERE  or PRESS CERTIFICATE
+ABOVE TO GET STARTED.
+
+**You'll also be pleased to know that we provide LIVE CREDENTIALING
+SUPPORT.**NANOE's Member Relations Director Lisa Van Zyll is available
+Mondays through Fridays 9am to 5pm (EST) to answer any of your questions
+and to support you as you take your exam! Feel free  to give her a ring
+at (202) 309-4125.
+
+Here's how credentialing works:
+
+1. Complete your personal experience profile (memorialize your
+vocational journey ...
+
+**no minimums required)**
+
+2. Complete your training profile (memorialize your instructional
+journey
+
+**...no minimums required)**
+
+3. Complete and pass your credentialing exam 
+
+****(open book, exam resources, automated & online)****
+
+a. Certified Nonprofit Executive - 
+
+**200 Multiple Choice Questions**
+b. Certified Development Executive - 
+
+**150 Multiple Choice Questions**
+c. Certified Nonprofit Consultant - 
+
+**100 Multiple Choice Questions**
+d. 70% to pass. 30 days to complete exam (includes SAVE AS YOU GO
+function)
+e. Pass/Fail status is revealed immediately upon test completion
+
+4. NANOE's Credentialing Board will confirm your completed process
+within 2-3 weeks
+
+****ONCE YOU'RE CERTIFIED YOU'RE ALWAYS CERTIFIED.**** No
+re-certification required as long as you maintain your annual membership
+with NANOE.
+
+Executives Who Hold a NANOE Credential:
+
+1. Are recognized by employers in the nonprofit sector as having met a
+series of standards set by NANOE demonstrating a superior commitment to
+growing capacity within nonprofits.
+
+2. Have their personal certification officially recorded at the offices
+of National Association of Nonprofit Organizations & Executives.
+
+3. Receive an official Credentialing Certificate demonstrating their
+achievement.
+
+4. Receive the credential CNE, CDE, CNC and are authorized to use this
+designation in their public title.
+
+5. Are provided the CNE, CDE and/or CNC badge for use on business cards,
+letterhead, websites, etc.
+
+6. Are members in good standing of National Association of Nonprofit
+Organizations and Executive (NANOE).
+
+7. Pay a one-time fee of $98 for one credential or $148 for two
+credentials or $198 for three credentials.
+
+8. Avoid cumbersome and expensive re-certification processes for CNE,
+CDE or CNC. Credentials are maintained as long the holder maintains
+membership in NANOE.
+
+9. Experience the satisfaction and challenge of a meaningful adult
+continuing educational process that ensures their effectiveness now and
+in the future.
+
+VISIT HERE  or PRESS CERTIFICATE
+ABOVE TO GET STARTED. 
+Please feel free to contact me with your questions at (202) 309-4125.
+
+Sincerely Yours,
+
+Kathleen Robinson, Ph.D., CNE, CDE, CNC
+
+NANOE Credentialing Director
+_________________
+
+Sent to soc@kernel.org
+
+Unsubscribe:
+http://jimmylarose.activehosted.com/proc.php?nl=214&amp;c=683&amp;m=1154&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
+
+National Association of Nonprofit Organizations & Executives, 712 H Street NE, Washington, DC 20002, United States
+--_=_swift-1053521766571e206c9c386.27542409_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
+text/html; charset=3Dutf-8"><meta http-equiv=3D"Content-Language" content=
+=3D"en-us"><meta name=3D"format-detection" content=3D"telephone=3Dno"><meta=
+ name=3D"format-detection" content=3D"date=3Dno"><meta name=3D"format-detec=
+tion" content=3D"address=3Dno"><meta name=3D"format-detection" content=3D"e=
+mail=3Dno"><meta name=3D"viewport" content=3D"width=3Ddevice-width, minimal=
+-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalable=3D0;"><meta ht=
+tp-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><style data-ac-keep=3D"t=
+rue"> .ExternalClass { width: 100%; background: inherit; background-color: =
+inherit; } .ExternalClass, .ExternalClass p, .ExternalClass span, .External=
+Class font, .ExternalClass td, .ExternalClass div { line-height: 100%; } .E=
+xternalClass p, .ExternalClass ul, .ExternalClass ol { Margin: 0; } .undore=
+set div p, .undoreset p { margin-bottom: 20px; } div[class^=3D"aolmail_divb=
+ody"] { overflow: auto; } [owa] #ac-footer { padding: 20px 0px !important; =
+background:=0Ainherit; background-color: inherit; } a[x-apple-data-detector=
+s] { color: inherit !important; text-decoration: none !important; font-size=
+: inherit !important; font-family: inherit !important; font-weight: inherit=
+ !important; line-height: inherit !important; } @-ms-viewport { width: devi=
+ce-width; } </style><style data-ac-keep=3D"true">=0A@media only screen and =
+(max-width: 600px) { /*----------------------------------------------------=
+---------------------*\ Abandoned Cart widget \*---------------------------=
+---------------------------------------------*/ .td_abandoned-cart img {dis=
+play: block;padding-right: 0 !important;padding-bottom: 0 !important;width:=
+ 100% !important;max-width: 100% !important;height: auto !important;} body =
+{ padding: 0!important; font-size:1em!important; } * { -webkit-box-sizing: =
+border-box; -moz-box-sizing: border-box; box-sizing: border-box; } *[class]=
+.divbody {-webkit-text-size-adjust:none !important;} *[class].td_picture im=
+g {width:auto !important;} *[class].td_text { line-height: 110%; } *[class]=
+.td_button { width: auto; } /* Collapse all block elements */ :not(.body) t=
+able { display: block!important; float:none!important; border-collapse:coll=
+apse !important; width:100% !important; min-width:100% !important; clear:bo=
+th!important; } :not(.body) thead, :not(.body) tbody,=0A:not(.body) tr { di=
+splay:block!important; float:none!important; width:100% !important; } :not(=
+.body) th, :not(.body) td, :not(.body) p { display:block!important; float:n=
+one!important; width:100% !important; clear:both!important; } /* Remove bro=
+wser default styling for elements */ ul, ol { margin-left: 20px; margin-bot=
+tom: 10px; margin-top: 10px; -webkit-margin-before: 0; -webkit-margin-after=
+: 0; -webkit-padding-start: 0; } /* Set default height for spacer once coll=
+apse */ *[class].spacer { height: auto!important; } a[href^=3Ddate]{ color:=
+inherit !important; text-decoration:none !important;} a[href^=3Dtelephone]{=
+ color:inherit !important; text-decoration:none !important;} a[href^=3Daddr=
+ess]{ color:inherit !important; text-decoration:none !important;} a[href^=
+=3Demail]{ color:inherit !important; text-decoration:none !important;} /* D=
+efault table cell height */ td[height=3D"14"]{height:14px!important;font-si=
+ze:14px!important;line-height:14px!important;}=0Atd[height=3D"12"]{height:1=
+2px!important;font-size:12px!important;line-height:12px!important;} /*-----=
+--------------------------------------------------------------------*\ Prod=
+uct Widget \*--------------------------------------------------------------=
+-----------*/ .td_product div, .td_product .products-display { float: none =
+!important; display: block !important; width: 100% !important; Margin-botto=
+m: 20px !important; } .td_product img { width: 100% !important; max-width: =
+100% !important; } /* Default social icons */ *[class].ac-social-icon-16 {w=
+idth:16px !important; height:16px !important;} *[class].ac-social-icon-24 {=
+width:24px !important; height:24px !important;} *[class].ac-social-icon-28 =
+{width:28px !important; height:28px !important;} *[class].__ac_social_icons=
+ { margin-right: 0px !important; } }=0A</style><style data-ac-keep=3D"true"=
+> @media only screen and (max-width: 320px) { #layout-row4104 img { width: =
+100% !important; height: auto !important; max-width: 320px !important; } #l=
+ayout-row4107 img { width: 100% !important; height: auto !important; max-wi=
+dth: 320px !important; } div.divbody { padding: 20px !important; } table, t=
+body, td, .divbody { display: table !important; width: 100% !important; max=
+-width: 100% !important; } .td_rss .rss-item img.iphone_large_image { width=
+: auto !important; } u + .body { display: table !important; width: 100vw !i=
+mportant; min-width: 100vw !important; } u + .body table { display: table !=
+important; width: 100% !important; min-width: 100% !important; } u + .body =
+td { display: block !important; width: 100% !important; min-width: 100% !im=
+portant; } u + .body img { display: inline-block !important; margin: auto !=
+important; width: auto !important; vertical-align: bottom !important; } u +=
+ .body center { display: block !important;=0Amargin: auto !important; width=
+: 100% !important; min-width: 100% !important; text-align: center !importan=
+t; } u + .body table._ac_social_table, u + .body table._ac_social_table td,=
+ u + .body table._ac_social_table div, u + .body table._ac_social_table a {=
+ display: inline-block !important; margin: auto !important; width: auto !im=
+portant; min-width: auto !important; text-align: center !important; } u + .=
+body table._ac_social_table img { display: inline-block !important; margin:=
+ auto !important; width: 32px !important; min-width: 32px !important; max-w=
+idth: 32px !important; }=0A}=0A@media only screen and (max-width: 375px) { =
+#layout-row4104 img { width: 100% !important; height: auto !important; max-=
+width: 375px !important; } #layout-row4107 img { width: 100% !important; he=
+ight: auto !important; max-width: 375px !important; } div.divbody { padding=
+: 20px !important; } table, tbody, td, .divbody { display: table !important=
+; width: 100% !important; max-width: 100% !important; } .td_rss .rss-item i=
+mg.iphone_large_image { width: auto !important; } u + .body { display: tabl=
+e !important; width: 100vw !important; min-width: 100vw !important; } u + .=
+body table { display: table !important; width: 100% !important; min-width: =
+100% !important; } u + .body td { display: block !important; width: 100% !i=
+mportant; min-width: 100% !important; } u + .body img { display: inline-blo=
+ck !important; margin: auto !important; width: auto !important; vertical-al=
+ign: bottom !important; } u + .body center { display: block !important; mar=
+gin: auto !important; width: 100%=0A!important; min-width: 100% !important;=
+ text-align: center !important; } u + .body table._ac_social_table, u + .bo=
+dy table._ac_social_table td, u + .body table._ac_social_table div, u + .bo=
+dy table._ac_social_table a { display: inline-block !important; margin: aut=
+o !important; width: auto !important; min-width: auto !important; text-alig=
+n: center !important; } u + .body table._ac_social_table img { display: inl=
+ine-block !important; margin: auto !important; width: 32px !important; min-=
+width: 32px !important; max-width: 32px !important; }=0A}=0A@media only scr=
+een and (max-width: 414px) { #layout-row4104 img { width: 100% !important; =
+height: auto !important; max-width: 414px !important; } #layout-row4107 img=
+ { width: 100% !important; height: auto !important; max-width: 414px !impor=
+tant; } div.divbody { padding: 20px !important; } table, tbody, td, .divbod=
+y { display: table !important; width: 100% !important; max-width: 100% !imp=
+ortant; } .td_rss .rss-item img.iphone_large_image { width: auto !important=
+; } u + .body { display: table !important; width: 100vw !important; min-wid=
+th: 100vw !important; } u + .body table { display: table !important; width:=
+ 100% !important; min-width: 100% !important; } u + .body td { display: blo=
+ck !important; width: 100% !important; min-width: 100% !important; } u + .b=
+ody img { display: inline-block !important; margin: auto !important; width:=
+ auto !important; vertical-align: bottom !important; } u + .body center { d=
+isplay: block !important; margin: auto !important; width: 100%=0A!important=
+; min-width: 100% !important; text-align: center !important; } u + .body ta=
+ble._ac_social_table, u + .body table._ac_social_table td, u + .body table.=
+_ac_social_table div, u + .body table._ac_social_table a { display: inline-=
+block !important; margin: auto !important; width: auto !important; min-widt=
+h: auto !important; text-align: center !important; } u + .body table._ac_so=
+cial_table img { display: inline-block !important; margin: auto !important;=
+ width: 32px !important; min-width: 32px !important; max-width: 32px !impor=
+tant; }=0A}=0A@media only screen and (max-width: 667px) { #layout-row4104 i=
+mg { width: 100% !important; height: auto !important; max-width: 608px !imp=
+ortant; } #layout-row4107 img { width: 100% !important; height: auto !impor=
+tant; max-width: 588px !important; } div.divbody { padding: 20px !important=
+; } table, tbody, td, .divbody { display: table !important; width: 100% !im=
+portant; max-width: 100% !important; } .td_rss .rss-item img.iphone_large_i=
+mage { width: auto !important; } u + .body { display: table !important; wid=
+th: 100vw !important; min-width: 100vw !important; } u + .body table { disp=
+lay: table !important; width: 100% !important; min-width: 100% !important; =
+} u + .body td { display: block !important; width: 100% !important; min-wid=
+th: 100% !important; } u + .body img { display: inline-block !important; ma=
+rgin: auto !important; width: auto !important; vertical-align: bottom !impo=
+rtant; } u + .body center { display: block !important; margin: auto !import=
+ant; width: 100%=0A!important; min-width: 100% !important; text-align: cent=
+er !important; } u + .body table._ac_social_table, u + .body table._ac_soci=
+al_table td, u + .body table._ac_social_table div, u + .body table._ac_soci=
+al_table a { display: inline-block !important; margin: auto !important; wid=
+th: auto !important; min-width: auto !important; text-align: center !import=
+ant; } u + .body table._ac_social_table img { display: inline-block !import=
+ant; margin: auto !important; width: 32px !important; min-width: 32px !impo=
+rtant; max-width: 32px !important; }=0A} </style><!--[if !mso]><!-- webfont=
+s --><!--<![endif]--><!--[if lt mso 12]> <![endif]--><!--[if gte mso 9]>=0A=
+<xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:Pixel=
+sPerInch> </o:OfficeDocumentSettings>=0A</xml>=0A<![endif]--></head><body i=
+d=3D"ac-designer" class=3D"body" style=3D"font-family: Arial; line-height: =
+1.1; margin: 0px; background-color: #ffffff; width: 100%; text-align: cente=
+r;">=09=09<div style=3D"display: none !important; padding: 0; height: 1px; =
+font-size: 1px; background-color: inherit !important; opacity: 0; color: tr=
+ansparent; mso-line-height-rule: exactly; line-height:1px; mso-hide:all;">=
+=0A=09=09=09(Secure your CNE, CDE & CNC)=0A=09=09=09<div style=3D"display: =
+none; max-height: 0px; overflow: hidden;">=0A=09=09=09=09&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=0A=
+=09=09=09</div>=0A=0A=09=09</div>=0A<div class=3D"divbody" style=3D"margin:=
+ 0px; outline: none; padding: 0px; color: #000000; font-family: arial; line=
+-height: 1.1; width: 100%; background-color: #ffffff; background: #ffffff; =
+text-align: center;"><table class=3D"template-table" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" width=3D"100%" align=3D"left" style=3D"-ms-text-=
+size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collaps=
+e; font-size: 14px; min-width: auto; mso-table-lspace: 0pt; mso-table-rspac=
+e: 0pt; background-color: #ffffff; background: #ffffff;"><tr style=3D"mso-l=
+ine-height-rule: exactly;"><td align=3D"center" valign=3D"top" width=3D"100=
+%" style=3D"mso-line-height-rule: exactly;"><table class=3D"template-table"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"650" bgcolor=3D"=
+#ffffff" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100=
+%; border-collapse: collapse; font-size: 14px; min-width: auto; mso-table-l=
+space: 0pt; mso-table-rspace: 0pt; max-width: 650px;"><tr=0Astyle=3D"mso-li=
+ne-height-rule: exactly;"><td id=3D"layout_table_32d7fb52564752899163559dc1=
+60c1c09674fc27" valign=3D"top" align=3D"center" width=3D"650" style=3D"mso-=
+line-height-rule: exactly;"><table cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" class=3D"layout layout-table root-table" width=3D"650" style=3D"-m=
+s-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: =
+collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-tabl=
+e-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layo=
+ut-row-margin4103" valign=3D"top" style=3D"mso-line-height-rule: exactly; p=
+adding: 5px;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 10=
+0%; border-collapse: initial !important; font-size: 14px; min-width: 100%; =
+mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4103" cl=
+ass=3D"layout layout-row widget _widget_text style4103" style=3D"mso-line-h=
+eight-rule: exactly; margin: 0;=0Apadding: 0;"><td id=3D"layout-row-padding=
+4103" valign=3D"top" style=3D"mso-line-height-rule: exactly; padding: 5px;"=
+><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-co=
+llapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; =
+mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td id=
+=3D"text_div4073" class=3D"td_text td_block" valign=3D"top" align=3D"left" =
+width=3D"630" style=3D"mso-line-height-rule: exactly; margin: 0; outline: n=
+one; padding: 0; color: inherit; font-size: 12px; font-weight: inherit; lin=
+e-height: 1; text-decoration: inherit; font-family: arial;"> <div style=3D"=
+margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
+-weight: inherit; line-height: inherit; text-decoration: inherit; text-alig=
+n: center;" class=3D""><span style=3D"color: inherit; font-size: 16px; font=
+-weight: inherit; line-height: inherit; text-decoration: inherit;"=0Aclass=
+=3D""><span style=3D'color: inherit; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; font-family: "trebuchet=
+ ms", tahoma, arial, sans;' class=3D""><span style=3D"color: #000000; font-=
+size: 18px; font-weight: bold; line-height: inherit; text-decoration: inher=
+it; font-style: normal; text-align: center; --tw-shadow: 0 0 transparent; -=
+-tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-o=
+ffset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-=
+shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; margin: 0;" cla=
+ss=3D"">Receive Your Nonprofit Credentials This Weekend!<br class=3D""><br =
+class=3D""></span><span style=3D"color: inherit; font-size: 14px; font-weig=
+ht: inherit; line-height: inherit; text-decoration: inherit;" class=3D""><s=
+pan style=3D"color: #000000; font-size: 16px; font-weight: inherit; line-he=
+ight: inherit; text-decoration: inherit; font-style: normal; text-align: ce=
+nter; --tw-shadow: 0=0A0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent; margin: 0;" class=3D""><a href=3D"https://jimmylaro=
+se.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZ=
+S5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5nJTJG&sig=3DCYuuj6qjBuoinynvq1u3thxLdzKBQ=
+SfkbVtyGRkBMkqu&iat=3D1701962383&a=3D%7C%7C26605550%7C%7C&account=3Djimmyla=
+rose%2Eactivehosted%2Ecom&email=3Dvztw0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%2=
+FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qulbrIHQX0&s=3D678f48a0e320c6856d0620aa2e02=
+4acb&i=3D683A1154A214A2677" data-ac-default-color=3D"1" target=3D"_blank" s=
+tyle=3D"margin: 0; outline: none; padding: 0; color: #0764ba; text-decorati=
+on: underline; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empt=
+y, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-=
+color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw=
+-ring-shadow: 0 0 transparent; font-weight: bold;" class=3D""><span style=
+=3D"color: inherit; font-size: inherit; font-weight: inherit; line-height:=
+=0Ainherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">VISIT HER=
+E</span></a><span style=3D"color: #000000; font-size: inherit; font-weight:=
+ 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tran=
+sparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; -=
+-tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ri=
+ng-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" clas=
+s=3D""> </span><span style=3D"color: #000000; font-size: inherit; font-weig=
+ht: 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 t=
+ransparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px=
+; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=0A--=
+tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;"=
+ class=3D"">or press credentialing photo below to get started.</span></span=
+><br class=3D""><i style=3D"margin: 0; outline: none; padding: 0; --tw-shad=
+ow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-w=
+idth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0=
+.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transp=
+arent; font-style: italic; color: #000000; font-weight: 400;" class=3D""><b=
+r class=3D""><i style=3D"margin: 0; outline: none; padding: 0; text-align: =
+center; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent; font-style: italic;" class=3D""><i style=3D"margin:=
+ 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inse=
+t: var(--tw-empty,=0A); --tw-ring-offset-width: 0px; --tw-ring-offset-color=
+: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0=
+ transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic;" class=
+=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transp=
+arent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --t=
+w-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring=
+-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=
+=3D"">"S</span>ecure your Certified Nonprofit Executive (CNE). NANOE Creden=
+tialing will play an important role in your vocational success for years to=
+ come." ~ </i></i><i style=3D"margin: 0; outline: none; padding: 0; font-we=
+ight: inherit; color: #000000; text-align: center; --tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff;=0A--tw-ring-color: rgba(59,130,246,0.5); --tw-rin=
+g-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-s=
+tyle: italic;" class=3D""><span style=3D"color: #000000; font-size: inherit=
+; font-weight: 400; line-height: inherit; text-decoration: inherit; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent; font-style: normal;" class=3D"">Kathleen Robinson, Ph.D.</span></i=
+></i> <i style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 tr=
+ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+ --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
+ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; fon=
+t-style: italic; color: #000000; font-weight: 400;" class=3D""><div style=
+=3D"margin: 0; outline: none; padding: 0;=0Acolor: inherit; font-size: inhe=
+rit; font-weight: inherit; line-height: inherit; text-decoration: inherit; =
+--tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring=
+-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,=
+130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
+ 0 transparent; text-align: left;" class=3D""></div>=0A</i><br style=3D"" c=
+lass=3D""><span style=3D"color: #000000; font-size: 18px; font-weight: 400;=
+ line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style=
+: normal;" class=3D"">(Because you work with Charitable Organizations)</spa=
+n></span></span> <br class=3D""></span></div>=0A</td>=0A</tr>=0A</table>=0A=
+</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rul=
+e: exactly;"><td id=3D"layout-row-margin4104" valign=3D"top" style=3D"mso-l=
+ine-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-=
+size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 1=
+00%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row410=
+4" class=3D"layout layout-row widget _widget_picture " align=3D"center" sty=
+le=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4104" val=
+ign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adj=
+ust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-=
+size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"=
+><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"image-td" align=
+=3D"center" valign=3D"top" width=3D"650" style=3D"mso-line-height-rule: exa=
+ctly;"><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?re=
+directUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5nJTJ=
+G&sig=3DCYuuj6qjBuoinynvq1u3thxLdzKBQSfkbVtyGRkBMkqu&iat=3D1701962383&a=3D%=
+7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3Dvztw=
+0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qulbrI=
+HQX0&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D683A1154A214A2677" style=3D"m=
+argin: 0; outline: none; padding: 0; color: #0764ba; display: block; min-wi=
+dth: 100%;"><img src=3D"https://jimmylarose.imgus11.com/public//4bd2be2df70=
+bb2573ad86a3959e29bb0.jpg?r=3D594252201" width=3D"608" style=3D"border: non=
+e; display: block; outline: none; width: 608px; opacity: 1; max-width: 100%=
+;"></a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=
+=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin=
+4105" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
+t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
+pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
+ace: 0pt;"><tr id=3D"layout-row4105" class=3D"layout layout-row widget _wid=
+get_spacer " style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-=
+padding4105" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table=
+ width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-=
+ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse:=
+ collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-tab=
+le-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td valign=3D=
+"top" height=3D"30" style=3D"mso-line-height-rule: exactly;"><div class=3D"=
+spacer" style=3D"margin: 0; outline: none; padding: 0;=0Aheight: 30px;"><ta=
+ble cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" style=
+=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-coll=
+apse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; ms=
+o-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td clas=
+s=3D"spacer-body" valign=3D"top" height=3D"30" width=3D"650" style=3D"mso-l=
+ine-height-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=
+=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=
+=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin4102" valign=
+=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust=
+: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
+e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
+r id=3D"layout-row4102" class=3D"layout layout-row widget _widget_text " st=
+yle=3D"mso-line-height-rule: exactly; margin: 0; padding: 0;"><td id=3D"lay=
+out-row-padding4102" valign=3D"top" style=3D"mso-line-height-rule: exactly;=
+"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" st=
+yle=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-c=
+ollapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt;=
+ mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td i=
+d=3D"text_div4072" class=3D"td_text td_block" valign=3D"top" align=3D"left"=
+ width=3D"650" style=3D"line-height: 140%;=0Amso-line-height-rule: exactly;=
+ margin: 0; outline: none; padding: 0; color: inherit; font-size: 12px; fon=
+t-weight: inherit; line-height: 1.4; text-decoration: inherit; font-family:=
+ arial;"> <div style=3D"line-height: 140%; margin: 0; outline: none; paddin=
+g: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height=
+: 1.4; text-decoration: inherit; mso-line-height-rule: exactly;" class=3D""=
+ data-line-height=3D"1.4"> <div style=3D"margin: 0; outline: none; padding:=
+ 0; color: inherit; font-size: inherit; font-weight: inherit; line-height: =
+inherit; text-decoration: inherit;" class=3D""> <p style=3D"margin: 0; outl=
+ine: none; padding: 0; color: inherit; font-size: 12px; font-weight: inheri=
+t; line-height: inherit; text-decoration: inherit;" class=3D""> </p>=0A<div=
+ style=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size: =
+16px; font-weight: 400; line-height: inherit; text-decoration: inherit; tex=
+t-align: left; font-family: arial; font-style: normal;" class=3D""></div>=
+=0A <div style=3D"margin: 0; outline: none; padding: 0; color: inherit; fon=
+t-size: 16px; font-weight: inherit; line-height: inherit; text-decoration: =
+inherit;" class=3D""> <div style=3D"margin: 0; outline: none; padding: 0; c=
+olor: #000000; font-size: 16px; font-weight: inherit; line-height: inherit;=
+ text-decoration: inherit; text-align: center; --tw-shadow: 0 0 transparent=
+; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-rin=
+g-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offs=
+et-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: =
+normal;"><span style=3D'color: inherit; font-size: 16px; font-weight: bold;=
+ line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style=
+: normal;=0Afont-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">C=
+ertified Nonprofit Executive (CNE)</span></div>=0A<div style=3D"margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: in=
+herit; line-height: inherit; text-decoration: inherit; text-align: center; =
+--tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring=
+-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,=
+130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
+ 0 transparent; font-style: normal;"><em style=3D'margin: 0; outline: none;=
+ padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty,=
+ ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-co=
+lor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-r=
+ing-shadow: 0 0 transparent; font-style: italic; font-size: 16px; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans;' class=3D"">200 Multiple Choice Qu=
+estions</em></div>=0A<div style=3D"margin: 0; outline: none; padding: 0; co=
+lor: #000000; font-size: 12px; font-weight: inherit; line-height: inherit; =
+text-decoration: inherit; text-align: center; --tw-shadow: 0 0 transparent;=
+ --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring=
+-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offse=
+t-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: n=
+ormal;"><br style=3D'font-family: "trebuchet ms", tahoma, arial, sans;font-=
+weight: bold; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty=
+, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-c=
+olor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-=
+ring-shadow: 0 0 transparent; color: inherit;'></div>=0A<span style=3D'colo=
+r: #000000; font-size: 12px; font-weight: inherit; line-height: inherit; te=
+xt-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(=
+--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; -=
+-tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpar=
+ent; --tw-ring-shadow: 0 0 transparent; font-style: normal; font-family: "t=
+rebuchet ms", tahoma, arial, sans;' class=3D""><div style=3D"margin: 0; out=
+line: none; padding: 0; color: #000000; font-size: 16px; font-weight: bold;=
+ line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style=
+: normal; text-align: center;"><span style=3D"color: inherit; font-size: 16=
+px; font-weight: inherit; line-height: inherit; text-decoration:=0Ainherit;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent; font-style: normal;">Certified Development Executive (CDE)=
+</span></div>=0A<em style=3D"margin: 0; outline: none; padding: 0; --tw-sha=
+dow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-=
+width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,=
+0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 trans=
+parent; font-style: italic; font-size: 16px; color: #000000;"><div style=3D=
+"margin: 0; outline: none; padding: 0; color: inherit; font-size: inherit; =
+font-weight: inherit; line-height: inherit; text-decoration: inherit; text-=
+align: center; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empt=
+y, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-=
+color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw=
+-ring-shadow: 0 0 transparent;"><em style=3D"margin: 0; outline: none; padd=
+ing: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5);=0A--tw-ring-offset-shadow: 0 0 transparent; --tw-ring=
+-shadow: 0 0 transparent; font-style: italic; font-size: 16px;" class=3D"">=
+150 Multiple Choice Questions</em></div>=0A</em></span><div style=3D"margin=
+: 0; outline: none; padding: 0; color: #000000; font-size: 12px; font-weigh=
+t: inherit; line-height: inherit; text-decoration: inherit; text-align: cen=
+ter; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw=
+-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb=
+a(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shad=
+ow: 0 0 transparent; font-style: normal;"><br style=3D'font-family: "trebuc=
+het ms", tahoma, arial, sans;font-weight: bold; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; color: inhe=
+rit;'></div>=0A<span style=3D'color: #000000; font-size: 12px; font-weight:=
+ inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0p=
+x; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; f=
+ont-style: normal; font-family: "trebuchet ms", tahoma, arial, sans;' class=
+=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: #000000; f=
+ont-size: 16px; font-weight: bold; line-height: inherit; text-decoration: i=
+nherit; font-style: normal; text-align: center; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;"><span styl=
+e=3D"color: inherit; font-size: 16px; font-weight: inherit; line-height: in=
+herit; text-decoration:=0Ainherit; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;">Cer=
+tified Nonprofit Consultant (CNC)</span></div>=0A<em style=3D"margin: 0; ou=
+tline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpa=
+rent; --tw-ring-shadow: 0 0 transparent; font-style: italic; font-size: 16p=
+x; color: #000000;"><div style=3D"margin: 0; outline: none; padding: 0; col=
+or: inherit; font-size: inherit; font-weight: inherit; line-height: inherit=
+; text-decoration: inherit; text-align: center; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;"><em style=
+=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --t=
+w-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-off=
+set-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=0A--tw-ring-offset-=
+shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: ita=
+lic; font-size: 16px;" class=3D"">100 Multiple Choice Questions</em></div>=
+=0A</em></span><div style=3D'margin: 0; outline: none; padding: 0; color: i=
+nherit; font-size: inherit; font-weight: inherit; line-height: inherit; tex=
+t-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; te=
+xt-align: center;'><span style=3D"color: inherit; font-size: inherit; font-=
+weight: inherit; line-height: inherit; text-decoration: inherit; text-align=
+: inherit;"> </span></div>=0A</div>=0A <p style=3D"margin: 0; outline: none=
+; padding: 0; color: inherit; font-size: 12px; font-weight: inherit; line-h=
+eight: inherit; text-decoration: inherit;" class=3D""></p>=0A </div>=0A </d=
+iv>=0A<!--[if (gte mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" d=
+ata-ac-inline=3D"false"> #text_div4072, #text_div4072 div { line-height: 14=
+0% !important; };=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=
+=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: ex=
+actly;"><td id=3D"layout-row-margin4109" valign=3D"top" style=3D"mso-line-h=
+eight-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-ad=
+just: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; ms=
+o-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4109" clas=
+s=3D"layout layout-row widget _widget_spacer " style=3D"mso-line-height-rul=
+e: exactly;"><td id=3D"layout-row-padding4109" valign=3D"top" style=3D"mso-=
+line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-=
+size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 1=
+00%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-h=
+eight-rule: exactly;"><td valign=3D"top" height=3D"22" style=3D"mso-line-he=
+ight-rule: exactly;"><div class=3D"spacer" style=3D"margin: 0; outline: non=
+e; padding: 0;=0Aheight: 22px;"><table cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" style=3D"-ms-text-size-adjust: auto; -webkit-te=
+xt-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width=
+: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-lin=
+e-height-rule: exactly;"><td class=3D"spacer-body" valign=3D"top" height=3D=
+"22" width=3D"650" style=3D"mso-line-height-rule: exactly;">=C2=A0</td>=0A<=
+/tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</tab=
+le>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=
+=3D"layout-row-margin4107" valign=3D"top" style=3D"mso-line-height-rule: ex=
+actly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; bo=
+rder-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace=
+: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4107" class=3D"layout la=
+yout-row widget _widget_picture " align=3D"center" style=3D"mso-line-height=
+-rule: exactly;"><td id=3D"layout-row-padding4107" valign=3D"top" style=3D"=
+mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-te=
+xt-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width=
+: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-lin=
+e-height-rule: exactly;"><td class=3D"image-td" align=3D"center" valign=3D"=
+top" width=3D"650" style=3D"mso-line-height-rule: exactly;"><a=0Ahref=3D"ht=
+tps://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0=
+ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5nJTJG&sig=3DCYuuj6qjBuoiny=
+nvq1u3thxLdzKBQSfkbVtyGRkBMkqu&iat=3D1701962383&a=3D%7C%7C26605550%7C%7C&ac=
+count=3Djimmylarose%2Eactivehosted%2Ecom&email=3Dvztw0w9YC%2BEbtbSSCnKpILqW=
+KVqs9l2%2B2bz%2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qulbrIHQX0&s=3D678f48a0e320c=
+6856d0620aa2e024acb&i=3D683A1154A214A2677" style=3D"margin: 0; outline: non=
+e; padding: 0; color: #0764ba; display: block; min-width: 100%;"><img src=
+=3D"https://jimmylarose.imgus11.com/public//3f7b41ebe7089742621465e4bc670e4=
+2.jpg?r=3D4387986" width=3D"588" style=3D"border: none; display: block; out=
+line: none; width: 588px; opacity: 1; max-width: 100%;"></a></td>=0A</tr>=
+=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-l=
+ine-height-rule: exactly;"><td id=3D"layout-row-margin4108" valign=3D"top" =
+style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -=
+webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; =
+min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"l=
+ayout-row4108" class=3D"layout layout-row widget _widget_spacer " style=3D"=
+mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4108" valign=3D=
+"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: a=
+uto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: =
+14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr s=
+tyle=3D"mso-line-height-rule: exactly;"><td valign=3D"top" height=3D"17" st=
+yle=3D"mso-line-height-rule: exactly;"><div class=3D"spacer" style=3D"margi=
+n: 0; outline: none; padding: 0;=0Aheight: 17px;"><table cellpadding=3D"0" =
+cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-ms-text-size-adjust=
+: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
+e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
+r style=3D"mso-line-height-rule: exactly;"><td class=3D"spacer-body" valign=
+=3D"top" height=3D"17" width=3D"650" style=3D"mso-line-height-rule: exactly=
+;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=0A</t=
+d>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: =
+exactly;"><td id=3D"layout-row-margin4106" valign=3D"top" style=3D"mso-line=
+-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-=
+adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; =
+mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4106" cl=
+ass=3D"layout layout-row widget _widget_text " style=3D"mso-line-height-rul=
+e: exactly; margin: 0; padding: 0;"><td id=3D"layout-row-padding4106" valig=
+n=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjus=
+t: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-si=
+ze: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><=
+tr style=3D"mso-line-height-rule: exactly;"><td id=3D"text_div4076" class=
+=3D"td_text td_block" valign=3D"top" align=3D"left" width=3D"650" style=3D"=
+line-height: 140%;=0Amso-line-height-rule: exactly; margin: 0; outline: non=
+e; padding: 0; color: inherit; font-size: 12px; font-weight: inherit; line-=
+height: 1.4; text-decoration: inherit; font-family: arial;"> <div style=3D"=
+line-height: 140%; margin: 0; outline: none; padding: 0; color: #000000; fo=
+nt-size: 16px; font-weight: inherit; line-height: 1.4; text-decoration: inh=
+erit; mso-line-height-rule: exactly;" class=3D"" data-line-height=3D"1.4"> =
+<span style=3D'color: #000000; font-size: 16px; font-weight: 400; line-heig=
+ht: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal; =
+font-family: "trebuchet ms", tahoma, arial, sans;' class=3D""><span style=
+=3D"color: inherit; font-size: inherit; font-weight: inherit; line-height: =
+inherit; text-decoration: inherit;=0A--tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;" c=
+lass=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: i=
+nherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tr=
+ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+ --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
+ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" cl=
+ass=3D"">Dear CEOs, CFOs, COO, CDOs, & Nonprofit Staff Members,<br style=3D=
+"" class=3D""></span><br style=3D"" class=3D""></span><span name=3D"email_6=
+" style=3D"color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=0A--tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;" c=
+lass=3D""><span name=3D"email_7" style=3D"color: #000000; font-size: inheri=
+t; font-weight: inherit; line-height: inherit; text-decoration: inherit; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;" class=3D"">NANOE is the only nationwide membership organizat=
+ion in the U.S. for Executives seeking credentials in the art of nonprofit =
+capacity-building. <strong style=3D"margin: 0; outline: none; padding: 0; -=
+-tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-=
+offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,1=
+30,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow:=0A=
+0 0 transparent; font-style: inherit; font-weight: bolder; font-size: 16px;=
+" class=3D""><em style=3D"margin: 0; outline: none; padding: 0; --tw-shadow=
+: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wid=
+th: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5=
+); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpar=
+ent; font-style: italic; font-weight: inherit; font-size: 16px;" class=3D""=
+>Practitioners who hold a prestigious NANOE credential are "best practice" =
+experts who grow charitable enterprise and discover new ways to advance the=
+ common good. </em></strong></span><span name=3D"email_8" style=3D"color: #=
+000000; font-size: inherit; font-weight: inherit; line-height: inherit; tex=
+t-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(-=
+-tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --=
+tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpare=
+nt;=0A--tw-ring-shadow: 0 0 transparent;" class=3D"">NANOE=E2=80=99s three =
+capacity-building training certifications are based on industry insider kno=
+wledge, university research, and a love for serving humanity. Each credenti=
+al compliments the other ensuring CEOs, CFOs, COOs & CDOs organization-wide=
+ are equipped with progressive capacity building practices that drive new g=
+rowth.<br><br><strong style=3D"margin: 0; outline: none; padding: 0; --tw-s=
+hadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offse=
+t-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,24=
+6,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tra=
+nsparent; font-style: inherit; font-weight: bolder; font-size: 16px; color:=
+ #000000;"><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracke=
+r?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5=
+nJTJG&sig=3DCYuuj6qjBuoinynvq1u3thxLdzKBQSfkbVtyGRkBMkqu&iat=3D1701962383&a=
+=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3D=
+vztw0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qu=
+lbrIHQX0&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D683A1154A214A2677" data-a=
+c-default-color=3D"1" style=3D"margin: 0; outline: none; padding: 0; color:=
+ #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weight: inherit;=
+" target=3D"_blank"><span style=3D"color: ; font-size: inherit; font-weight=
+: inherit; line-height: inherit; text-decoration: inherit;">VISIT HERE</spa=
+n></a></strong><span style=3D"color: inherit; font-size: 16px; font-weight:=
+ inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, );=0A--tw-ring-offset-width: =
+0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
+-tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
+ font-style: normal;"> or PRESS CERTIFICATE ABOVE TO GET STARTED.</span> </=
+span></span></span><div style=3D"margin: 0; outline: none; padding: 0; colo=
+r: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-d=
+ecoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw=
+-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-=
+ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent; font-style: normal; text-align: start;"=
+ class=3D""><span name=3D"email_10" style=3D'color: inherit; font-size: 16p=
+x; font-weight: inherit; line-height: inherit; text-decoration: inherit; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=0Argba(59,=
+130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
+ 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D=
+""><br style=3D"" class=3D"">Here's a brief overview of the three credentia=
+ls you can receive that will supercharge your career:<br style=3D"" class=
+=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: bold;=
+ line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"=
+"><br style=3D"" class=3D""><span style=3D"color: inherit; font-size: 16px;=
+ font-weight: inherit; line-height: inherit; text-decoration: inherit; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5);=0A--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;" class=3D"">CERTIFIED NONPROFIT EXECUTIVE (CNE):</span> </spa=
+n>Striking the balance between managing volunteer board members, administra=
+tors, front-line staff, programs, finance and fundraising presents nonprofi=
+t managers with the complex and perfect storm of corporate oversight.=C2=
+=A0 Practitioners who hold CNE learn new ways to prioritize capacity-buildi=
+ng that ensures they weather the tumultuous seasons of nonprofit administra=
+tion. Certified Nonprofit Executives become the capacity-building expert CE=
+Os, CFOs, COOs & CDOs a charitable enterprise needs to expand its mission!<=
+br style=3D"" class=3D""><br style=3D"" class=3D""><strong style=3D"margin:=
+ 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inse=
+t: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: =
+#fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 t=
+ransparent; --tw-ring-shadow: 0 0=0Atransparent; font-style: inherit; font-=
+weight: bolder; font-size: 16px;" class=3D"">CERTIFIED DEVELOPMENT EXECUTIV=
+E (CDE):<span style=3D"color: inherit; font-size: inherit; font-weight: 400=
+; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpar=
+ent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-=
+ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-o=
+ffset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D=
+""> </span></strong>Many fundraisers come to the nonprofit sector with grea=
+t intentions to advance a charity=E2=80=99s mission without having correctl=
+y answered the question, "who is our customer?" Executives mistakenly think=
+ that the rain forest, the student, the homeless or a family-in-need are th=
+eir customers and therein lies the difficulty. Individuals you serve are no=
+t your customers because they have no money. Certified Development Executiv=
+es are expert at understanding who their true=0Acustomer is and are equippe=
+d with new best practices that ensure they create life-long partnerships wi=
+th new friends who financially invest in your mission.<br style=3D"" class=
+=3D""><br style=3D"" class=3D""><span name=3D"email_11" style=3D"color: #00=
+0000; font-size: inherit; font-weight: 400; line-height: inherit; text-deco=
+ration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-em=
+pty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-rin=
+g-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --=
+tw-ring-shadow: 0 0 transparent;" class=3D""><strong style=3D"margin: 0; ou=
+tline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpa=
+rent; --tw-ring-shadow: 0 0 transparent; font-style: inherit; font-weight: =
+bolder; font-size: 16px;" class=3D"">CERTIFIED NONPROFIT CONSULTANT=0A(CNC)=
+: </strong>During our careers, at one point or another, many of us wonder i=
+f we could be trusted to share our expertise with others in a way that prod=
+uces personal income. The truth is, successful consulting is more than shar=
+ing your experience=E2=80=A6it=E2=80=99s a coveted lifestyle with multiple =
+dimensions. First, you need to be an expert in particular area of nonprofit=
+ management. Second, you must learn how to disseminate your knowledge using=
+ the consulting arts. Third, you must build a sustainable business enterpri=
+se that consistently generates opportunities to serve. Practitioners who ho=
+ld the CNC credential are nationally qualified experts who labor alongside =
+nonprofits providing the organizations they serve "big wins!"<br style=3D""=
+ class=3D""><br style=3D"" class=3D""><strong style=3D"margin: 0; outline: =
+none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-e=
+mpty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ri=
+ng-color:=0Argba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent; font-style: inherit; font-weight: bolde=
+r; font-size: 16px; color: #000000;" class=3D""><a href=3D"https://jimmylar=
+ose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5v=
+ZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5nJTJG&sig=3DCYuuj6qjBuoinynvq1u3thxLdzKB=
+QSfkbVtyGRkBMkqu&iat=3D1701962383&a=3D%7C%7C26605550%7C%7C&account=3Djimmyl=
+arose%2Eactivehosted%2Ecom&email=3Dvztw0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%=
+2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qulbrIHQX0&s=3D678f48a0e320c6856d0620aa2e0=
+24acb&i=3D683A1154A214A2677" data-ac-default-color=3D"1" class=3D"" style=
+=3D"margin: 0; outline: none; padding: 0; color: #0764ba; text-decoration: =
+underline; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, )=
+; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-colo=
+r: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-rin=
+g-shadow: 0 0 transparent; font-weight: inherit;" target=3D"_blank"><span s=
+tyle=3D"color: ; font-size: inherit; font-weight: inherit; line-height: inh=
+erit; text-decoration: inherit;">VISIT HERE</span></a></strong><span=0Astyl=
+e=3D"color: inherit; font-size: 16px; font-weight: inherit; line-height: in=
+herit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-in=
+set: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color=
+: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0=
+ transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;" class=
+=3D""> or PRESS CERTIFICATE ABOVE TO GET STARTED.</span><br style=3D"" clas=
+s=3D""><br style=3D"" class=3D""><strong style=3D"margin: 0; outline: none;=
+ padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty,=
+ ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-co=
+lor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-r=
+ing-shadow: 0 0 transparent; font-style: inherit; font-weight: bolder; font=
+-size: 16px;" class=3D"">You'll also be pleased to know that we provide LIV=
+E CREDENTIALING SUPPORT. </strong>NANOE's Member Relations Director Lisa Va=
+n Zyll is=0Aavailable Mondays through Fridays 9am to 5pm (EST) to answer an=
+y of your questions and to support you as you take your exam! Feel free=
+=C2=A0 to give her a ring at (202) 309-4125.<br style=3D"" class=3D""><br s=
+tyle=3D"" class=3D""></span><span style=3D"color: inherit; font-size: inher=
+it; font-weight: bold; line-height: inherit; text-decoration: inherit; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 t=
+ransparent;" class=3D"">Here's how credentialing works:</span></span></div>=
+=0A<span style=3D'color: #000000; font-size: 16px; font-weight: 400; line-h=
+eight: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --t=
+w-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-off=
+set-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-sh=
+adow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: norma=
+l; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D""><span styl=
+e=3D"color: inherit; font-size: inherit; font-weight: inherit; line-height:=
+ inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring=
+-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-co=
+lor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: =
+0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><br style=
+=3D"" class=3D""><span name=3D"email_12" style=3D"color: #000000; font-size=
+: 16px; font-weight: inherit; line-height: inherit; text-decoration: inheri=
+t; --tw-shadow: 0 0=0Atransparent; --tw-ring-inset: var(--tw-empty, ); --tw=
+-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb=
+a(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shad=
+ow: 0 0 transparent; font-style: normal;" class=3D"">1. Complete your perso=
+nal experience profile (memorialize your vocational journey ...<em style=3D=
+"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic; =
+font-weight: inherit; font-size: 16px;" class=3D"">no minimums required)</e=
+m><br style=3D"" class=3D""><br style=3D"" class=3D"">2. Complete your trai=
+ning profile (memorialize your instructional journey<em style=3D"margin: 0;=
+ outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
+var(--tw-empty, ); --tw-ring-offset-width:=0A0px; --tw-ring-offset-color: #=
+fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tr=
+ansparent; --tw-ring-shadow: 0 0 transparent; font-style: italic; font-weig=
+ht: inherit; font-size: 16px;" class=3D"">...no minimums required)</em><br =
+style=3D"" class=3D""><br style=3D"" class=3D"">3. Complete and pass your c=
+redentialing exam <strong style=3D"margin: 0; outline: none; padding: 0; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent; font-style: inherit; font-weight: 400; font-size: 16px;" clas=
+s=3D""><em style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0p=
+x; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0Atransparent;=
+ font-style: italic; font-weight: inherit; font-size: 16px;" class=3D"">(op=
+en book, exam resources, automated & online)</em></strong><br style=3D"" cl=
+ass=3D""><br style=3D"" class=3D"">a. Certified Nonprofit Executive - <em s=
+tyle=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent;=
+ --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring=
+-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offse=
+t-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: i=
+talic; font-weight: 400; font-size: 16px;" class=3D"">200 Multiple Choice Q=
+uestions</em><br style=3D"" class=3D"">b. Certified Development Executive -=
+ <em style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transp=
+arent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --t=
+w-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring=
+-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-st=
+yle: italic;=0Afont-weight: 400; font-size: 16px;" class=3D"">150 Multiple =
+Choice Questions</em><br style=3D"" class=3D"">c. Certified Nonprofit Consu=
+ltant - <em style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --=
+tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; =
+font-style: italic; font-weight: 400; font-size: 16px;" class=3D"">100 Mult=
+iple Choice Questions</em><br style=3D"" class=3D"">d. 70% to pass. 30 days=
+ to complete exam (includes SAVE AS YOU GO function)<br style=3D"" class=3D=
+"">e. Pass/Fail status is revealed immediately upon test completion<br styl=
+e=3D"" class=3D""><br style=3D"" class=3D"">4. NANOE=E2=80=99s Credentialin=
+g Board will confirm your completed process within 2-3 weeks<br style=3D"" =
+class=3D""><br style=3D"" class=3D""><strong style=3D"margin: 0; outline: n=
+one; padding: 0; --tw-shadow: 0 0 transparent;=0A--tw-ring-inset: var(--tw-=
+empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-r=
+ing-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; =
+--tw-ring-shadow: 0 0 transparent; font-style: inherit; font-weight: 400; f=
+ont-size: 16px;" class=3D""><em style=3D"margin: 0; outline: none; padding:=
+ 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-=
+ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba=
+(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shado=
+w: 0 0 transparent; font-style: italic; font-weight: inherit; font-size: 16=
+px;" class=3D"">ONCE YOU=E2=80=99RE CERTIFIED YOU=E2=80=99RE ALWAYS CERTIFI=
+ED.</em></strong> No re-certification required as long as you maintain your=
+ annual membership with NANOE.<br style=3D"" class=3D""><br style=3D"" clas=
+s=3D""><span style=3D"color: inherit; font-size: inherit; font-weight: bold=
+; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpar=
+ent;=0A--tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --t=
+w-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring=
+-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=
+=3D"">Executives Who Hold a NANOE Credential:<br style=3D"" class=3D""></sp=
+an><br style=3D"" class=3D"">1. Are recognized by employers in the nonprofi=
+t sector as having met a series of standards set by NANOE demonstrating a s=
+uperior commitment to growing capacity within nonprofits.<br style=3D"" cla=
+ss=3D""><br style=3D"" class=3D"">2. Have their personal certification offi=
+cially recorded at the offices of National Association of Nonprofit Organiz=
+ations & Executives.<br style=3D"" class=3D""><br style=3D"" class=3D"">3. =
+Receive an official Credentialing Certificate demonstrating their achieveme=
+nt.<br style=3D"" class=3D""><br style=3D"" class=3D"">4. Receive the crede=
+ntial CNE, CDE, CNC and are authorized to use this designation in their pub=
+lic title.<br style=3D"" class=3D""><br style=3D""=0Aclass=3D"">5. Are prov=
+ided the CNE, CDE and/or CNC badge for use on business cards, letterhead, w=
+ebsites, etc.<br style=3D"" class=3D""><br style=3D"" class=3D"">6. Are mem=
+bers in good standing of National Association of Nonprofit Organizations an=
+d Executive (NANOE).<br style=3D"" class=3D""><br style=3D"" class=3D"">7. =
+Pay a one-time fee of $98 for one credential or $148 for two credentials or=
+ $198 for three credentials.<br style=3D"" class=3D""><br style=3D"" class=
+=3D"">8. Avoid cumbersome and expensive re-certification processes for CNE,=
+ CDE or CNC. Credentials are maintained as long the holder maintains member=
+ship in NANOE.<br style=3D"" class=3D""><br style=3D"" class=3D"">9. Experi=
+ence the satisfaction and challenge of a meaningful adult continuing educat=
+ional process that ensures their effectiveness now and in the future.<br st=
+yle=3D"" class=3D""><br style=3D"" class=3D""></span></span><strong style=
+=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --t=
+w-ring-inset: var(--tw-empty,=0A); --tw-ring-offset-width: 0px; --tw-ring-o=
+ffset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-=
+shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: nor=
+mal; font-weight: bolder; font-size: 16px; color: inherit;" class=3D""></st=
+rong> <strong style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0=
+ 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width:=
+ 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); =
+--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent=
+; font-style: inherit; font-weight: bolder; font-size: 16px; color: #000000=
+;"></strong> <strong style=3D"margin: 0; outline: none; padding: 0; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent; font-style: inherit; font-weight:=0Abolder; font-size: 16px; color=
+: #000000;"><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker=
+?redirectUrl=3DaHR0cHMlM0ElMkYlMkZuYW5vZS5vcmclMkZuYW5vZS1jcmVkZW50aWFsaW5n=
+JTJG&sig=3DCYuuj6qjBuoinynvq1u3thxLdzKBQSfkbVtyGRkBMkqu&iat=3D1701962383&a=
+=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3D=
+vztw0w9YC%2BEbtbSSCnKpILqWKVqs9l2%2B2bz%2FqEL3%3A5z%2BKLUeK3WRARiN6vyv5W3qu=
+lbrIHQX0&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D683A1154A214A2677" data-a=
+c-default-color=3D"1" style=3D"margin: 0; outline: none; padding: 0; color:=
+ #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weight: inherit;=
+" target=3D"_blank"><span style=3D"color: ; font-size: inherit; font-weight=
+: inherit; line-height: inherit; text-decoration: inherit;">VISIT HERE</spa=
+n></a></strong><span style=3D"color: #000000; font-size: 16px; font-weight:=
+ inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 =
+transparent;=0A--tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: =
+0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
+-tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
+ font-style: normal;"> or PRESS CERTIFICATE ABOVE TO GET STARTED.</span> </=
+span><div style=3D"margin: 0; outline: none; padding: 0; color: #000000; fo=
+nt-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inh=
+erit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent; font-style: normal; text-align: start;" class=3D""><s=
+pan style=3D"color: inherit; font-size: 16px; font-weight: inherit; line-he=
+ight: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw=
+-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offs=
+et-color: #fff;=0A--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
+hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><br =
+style=3D"" class=3D""><span style=3D'color: inherit; font-size: inherit; fo=
+nt-weight: inherit; line-height: inherit; text-decoration: inherit; font-fa=
+mily: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 transparent; --=
+tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
+fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
+hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: norm=
+al;' class=3D"">Please feel free to contact me with your questions at <span=
+ style=3D"color: #000000; font-size: 16px; font-weight: 400; line-height: i=
+nherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0=0A0 transparent; font-style: normal;" cl=
+ass=3D"">(202) 309-4125.</span></span><br style=3D"" class=3D""><br style=
+=3D"" class=3D""><span style=3D'color: inherit; font-size: inherit; font-we=
+ight: inherit; line-height: inherit; text-decoration: inherit; font-family:=
+ "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;' =
+class=3D"">Sincerely Yours,</span><br style=3D"" class=3D""><br style=3D"" =
+class=3D""><span style=3D'color: inherit; font-size: 20px; font-weight: bol=
+d; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-=
+offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=0Afont-s=
+tyle: italic; font-family: georgia, "times new roman";' class=3D"">Kathleen=
+ Robinson, Ph.D., CNE, CDE, CNC</span><br style=3D"" class=3D""><br style=
+=3D"" class=3D""><span style=3D'color: inherit; font-size: inherit; font-we=
+ight: inherit; line-height: inherit; text-decoration: inherit; font-family:=
+ "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;' =
+class=3D"">NANOE Credentialing Director</span></span></div>=0A </div>=0A<!-=
+-[if (gte mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-in=
+line=3D"false"> #text_div4076, #text_div4076 div { line-height: 140% !impor=
+tant; };=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=
+=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=
+=0A</tr>=0A</table>=0A</div>=0A<img src=3D"https://jimmylarose.lt.acemlnd.c=
+om/Prod/link-tracker?nl=3D214&c=3D683&m=3D1154&s=3D678f48a0e320c6856d0620aa=
+2e024acb&l=3Dopen&account=3Djimmylarose.activehosted.com&a=3D26605550" bord=
+er=3D"0" width=3D"1" height=3D"1" style=3D"display:block;width:1px!importan=
+t;min-width:1px!important;max-width:1px!important;height:1px!important;bord=
+er:0;overflow:hidden;" /><div id=3D"ac-footer" style=3D"clear:both;backgrou=
+nd-color:inherit;background:inherit;min-width:100%;mso-table-lspace:0pt;mso=
+-table-rspace:0pt;padding:20px;color:#000000;font-size:11px;font-family:ari=
+al,helvetica,sans-serif;line-height:140%;line-height:1.4;text-align:center;=
+box-sizing:border-box;"><center>Sent to: <span style=3D"font-size:11px;font=
+-family:arial,helvetica,sans-serif;font-weight:normal;text-decoration:none;=
+outline:none;">soc@kernel.org</span><br><br><a href=3D"http://jimmylarose.a=
+ctivehosted.com/proc.php?nl=3D214&c=3D683&m=3D1154&s=3D678f48a0e320c6856d06=
+20aa2e024acb&act=3Dunsub"=0Astyle=3D"font-size:11px;font-family:arial,helve=
+tica,sans-serif;font-weight:bold;text-decoration:underline;"><span style=3D=
+"font-weight:bold;text-decoration:underline;">Unsubscribe</span></a><br><br=
+>National Association of Nonprofit Organizations & Executives, 712 H Street=
+ NE, Washington, DC 20002, United States</center></div>=0A<br clear=3D"all"=
+ /></body>=0A</html>
+--_=_swift-1053521766571e206c9c386.27542409_=_--
 
