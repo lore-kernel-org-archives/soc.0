@@ -1,115 +1,84 @@
-Return-Path: <SRS0=HXi2=HS=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=eIL7=HT=huawei.com=xuwei5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CAD3C4167B
-	for <soc@archiver.kernel.org>; Thu,  7 Dec 2023 20:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9141EC4167B
+	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 07:18:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0E73DC433C8; Thu,  7 Dec 2023 20:41:42 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 5BAF7C433C7; Fri,  8 Dec 2023 07:18:42 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51C10C433C7;
-	Thu,  7 Dec 2023 20:41:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51C10C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from [194.95.143.137] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1rBLBi-00060I-20; Thu, 07 Dec 2023 21:41:38 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts fixes for 6.7
-Date: Thu, 07 Dec 2023 21:41:37 +0100
-Message-ID: <2709704.mvXUDI8C0e@phil>
+	by smtp.kernel.org (Postfix) with ESMTPS id B3542C433C8;
+	Fri,  8 Dec 2023 07:18:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3542C433C8
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemd100008.china.huawei.com (unknown [172.30.72.54])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Smj7n1PYYzsRnN;
+	Fri,  8 Dec 2023 15:14:45 +0800 (CST)
+Received: from [10.67.121.2] (10.67.121.2) by kwepemd100008.china.huawei.com
+ (7.221.188.193) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.28; Fri, 8 Dec
+ 2023 15:18:34 +0800
+Message-ID: <6572C34A.7010101@hisilicon.com>
+Date: Fri, 8 Dec 2023 15:18:34 +0800
+From: Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+To: Huisong Li <lihuisong@huawei.com>
+List-Id: <soc.lore.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <Jonathan.Cameron@Huawei.com>,
+	<arnd@arndb.de>, <krzk@kernel.org>, <sudeep.holla@arm.com>,
+	<liuyonglong@huawei.com>, <xuwei5@hisilicon.com>
+Subject: Re: [PATCH v3 0/5] soc: hisilicon: kunpeng_hccs: Support the platform
+ with PCC type3 and interrupt ack
+References: <20231109054526.27270-1-lihuisong@huawei.com> <20231201034534.7276-1-lihuisong@huawei.com>
+In-Reply-To: <20231201034534.7276-1-lihuisong@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.121.2]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd100008.china.huawei.com (7.221.188.193)
+X-CFilter-Loop: Reflected
 
-Hi Arnd, Kevin, Olof,
+Hi Huisong,
 
-please find a below a collection of fixes for the current release 6.7
-cycle.
+On 2023/12/1 11:45, Huisong Li wrote:
+> The main purpose of this series is to support the platform with PCC type3
+> and interrupt ack. At the same time, this series also fix some clean codes
+> and modify the incorrect email domain name.
+> 
+> ---
+>  v3:
+>   - remove inline tag of two wait_cmd_complete function.
+>   - delete variable 'ret' in hccs_wait_cmd_complete_by_irq()
+>   - add a new patch which fix incorrect email domain name in document.
+> 
+>  v2:
+>   - using a version specific structure to replace device version according
+>     to Jonathan's advice.
+>   - add a new patch that remove an unused blank line.
+> 
+> Huisong Li (5):
+>   soc: hisilicon: kunpeng_hccs: Fix some incorrect format strings
+>   soc: hisilicon: kunpeng_hccs: Add failure log for no _CRS method
+>   soc: hisilicon: kunpeng_hccs: Remove an unused blank line
+>   doc: kunpeng_hccs: Fix incorrect email domain name
+>   soc: hisilicon: kunpeng_hccs: Support the platform with PCC type3 and
+>     interrupt ack
+> 
+>  .../sysfs-devices-platform-kunpeng_hccs       |   6 +-
+>  drivers/soc/hisilicon/kunpeng_hccs.c          | 152 ++++++++++++++----
+>  drivers/soc/hisilicon/kunpeng_hccs.h          |  15 ++
+>  3 files changed, 137 insertions(+), 36 deletions(-)
+> 
 
-Please pull
+Thanks!
+Series applied to the HiSilicon driver tree.
 
-Thanks
-Heiko
-
-
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
-
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.7-rockchip-dtsfixes1
-
-for you to fetch changes up to 37f3d6108730713c411827ab4af764909f4dfc78:
-
-  arm64: dts: rockchip: Fix eMMC Data Strobe PD on rk3588 (2023-12-06 10:38:03 +0100)
-
-----------------------------------------------------------------
-Devicetree fixes for the 6.7-cycle.
-
-All over the place this time. From adapting the size of the vdec nodes
-on rk3328 and rk3399, fixing some wrong pinctrl settings on rk3128 and
-the Turing RK1 board, emmc-settings fixes on rk3588 and interrupt-name
-mishaps, down to some dt-cleanups.
-
-Also this adds the missing rockchip,rk3588-pmugrf compatible to the soc
-grf binding, that I somehow messed up during the pull requests for the
--rc1 . At least with it included the dt-checker is happier.
-
-----------------------------------------------------------------
-Alex Bee (2):
-      arm64: dts: rockchip: Expand reg size of vdec node for RK3399
-      ARM: dts: rockchip: Fix sdmmc_pwren's pinmux setting for RK3128
-
-Heiko Stuebner (2):
-      arm64: dts: rockchip: fix rk356x pcie msg interrupt name
-      arm64: dts: rockchip: drop interrupt-names property from rk3588s dfi
-
-Jonas Karlman (1):
-      arm64: dts: rockchip: Expand reg size of vdec node for RK3328
-
-Krzysztof Kozlowski (2):
-      ARM: dts: rockchip: minor whitespace cleanup around '='
-      arm64: dts: rockchip: minor whitespace cleanup around '='
-
-Rob Herring (1):
-      arm64: dts: rockchip: Fix PCI node addresses on rk3399-gru
-
-Sam Edwards (2):
-      arm64: dts: rockchip: Fix Turing RK1 interrupt pinctrls
-      arm64: dts: rockchip: Fix eMMC Data Strobe PD on rk3588
-
-Sascha Hauer (1):
-      dt-bindings: soc: rockchip: grf: add rockchip,rk3588-pmugrf
-
- Documentation/devicetree/bindings/soc/rockchip/grf.yaml  | 1 +
- arch/arm/boot/dts/rockchip/rk3128.dtsi                   | 2 +-
- arch/arm/boot/dts/rockchip/rk322x.dtsi                   | 6 +++---
- arch/arm64/boot/dts/rockchip/px30-ringneck-haikou.dts    | 2 +-
- arch/arm64/boot/dts/rockchip/rk3328.dtsi                 | 2 +-
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi  | 3 +--
- arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet-dumo.dts | 4 ++--
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi             | 1 +
- arch/arm64/boot/dts/rockchip/rk3399.dtsi                 | 6 ++++--
- arch/arm64/boot/dts/rockchip/rk356x.dtsi                 | 2 +-
- arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi      | 4 ++--
- arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dts      | 2 +-
- arch/arm64/boot/dts/rockchip/rk3588s-pinctrl.dtsi        | 2 +-
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi                | 1 -
- 14 files changed, 20 insertions(+), 18 deletions(-)
-
-
-
+Best Regards,
+Wei
