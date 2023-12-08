@@ -1,149 +1,54 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFFE7C4167B
-	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 15:46:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E57CC10DC1
+	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 17:08:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B063DC433CA; Fri,  8 Dec 2023 15:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6B8C433C7;
-	Fri,  8 Dec 2023 15:46:06 +0000 (UTC)
+	id 2B7E9C433C7; Fri,  8 Dec 2023 17:08:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0966AC433C8;
+	Fri,  8 Dec 2023 17:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702050368;
-	bh=d66daHmWbMCUMbZAv8R2P4fXdyVqForZCPIK4FmV15g=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=h9FXX7K9oXuFGiV1cPXN9SRN/4XpGvh8oHxYRboCWXCW2SvdLZ4N75lIjbntUUSUU
-	 dSr4j6DgtEuV8PUxNCId+RriRjvmtdXJA2T1/1CHeWEURdbkUiUWSERun0DeiTuInS
-	 71ylthe8dPgoYYzB066qEl77T1DhI5Zv680Emi9gTeoCIw5BnntASqnMnnCkZ2KdaV
-	 Td0jQhDbwO70BopdE/dmi3wuHJsjHjSCjUuP+5vGSJeMdNRLE3qv67G/9KLPeQ3pvf
-	 LxJhr9vFqB1dglbmj11e6wonhBp/+09GN4EHNXVhqPDExZXSFkEajUthNRsrBAkqNp
-	 GmE7rhDV/MTHw==
-Date: Fri, 8 Dec 2023 16:46:03 +0100
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+	s=k20201202; t=1702055315;
+	bh=HUSkycKQqdvCwDWPRR3SQZhNrNjKB7XwUDzkxrLiRAQ=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=IQeoKGdO2IjGdLDLwstlNRatIRxtFVG/GFlPRnq0oOVTi6NG+rOKE3Qymo2xPBxnb
+	 P9deDtyZTu3WmO4vbaEFxCIB2E9wcVtvtHqKC7Omdm9NvXtWVcwpx2s4s3TkPwSO4w
+	 iG0gazrUWQQwu/Q+B5sF4dFnRHkvuE13njfGh8H4xV43AG4Vw/7CbWVMppaXpaEjRF
+	 +CYiSPUTDCq6JMNVi65Y5I1n1JyhZDu00lWTwPpYZo4rZASNojZ4bFL9z/bGkjNuzo
+	 yBzT1OYLrrfnmyPz9Q0lHh3mB/3yPBpW997M7oAzcf4xwDNrDIh+xsYEVYFjZ5fX9E
+	 LCGTrHneastaw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EB725DD4F1E;
+	Fri,  8 Dec 2023 17:08:34 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for v6.7
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <90aa3b5f-a0d4-4609-85c2-e3d4cc944102@app.fastmail.com>
+References: <90aa3b5f-a0d4-4609-85c2-e3d4cc944102@app.fastmail.com>
+X-PR-Tracked-List-Id: Upstream kernel work for Rockchip platforms <linux-rockchip.lists.infradead.org>
+X-PR-Tracked-Message-Id: <90aa3b5f-a0d4-4609-85c2-e3d4cc944102@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.7-1
+X-PR-Tracked-Commit-Id: fd1e5745f87a9e06974d2f42d22b3e1682c99105
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a6adef898741eb07526aaf9d8b982d3dff4a9e67
+Message-Id: <170205531495.9242.2736142793084399675.pr-tracker-bot@kernel.org>
+Date: Fri, 08 Dec 2023 17:08:34 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy Shevchenko
- <andy@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Alessandro
- Zummo <a.zummo@towertech.it>, Bartosz Golaszewski <brgl@bgdev.pl>,
- linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] platform: cznic: turris-omnia-mcu: Add support
- for poweroff and wakeup
-Message-ID: <20231208164603.5c52723a@dellmb>
-In-Reply-To: <202311031923161422b866@mail.local>
-References: <20231026161803.16750-1-kabel@kernel.org>
-	<20231026161803.16750-5-kabel@kernel.org>
-	<202311031923161422b866@mail.local>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, imx@lists.linux.dev, linux-rockchip@lists.infradead.org
 
-On Fri, 3 Nov 2023 20:23:16 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+The pull request you sent on Fri, 08 Dec 2023 14:59:56 +0100:
 
-> On 26/10/2023 18:18:00+0200, Marek Beh=C3=BAn wrote:
-> > +static int omnia_get_uptime_wakeup(const struct i2c_client *client, u3=
-2 *uptime,
-> > +				   u32 *wakeup)
-> > +{
-> > +	__le32 reply[2];
-> > +	int err;
-> > +
-> > +	err =3D omnia_cmd_read(client, CMD_GET_UPTIME_AND_WAKEUP, reply,
-> > +			     sizeof(reply));
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	if (uptime)
-> > +		*uptime =3D le32_to_cpu(reply[0]);
-> > +
-> > +	if (wakeup)
-> > +		*wakeup =3D le32_to_cpu(reply[1]);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int omnia_read_time(struct device *dev, struct rtc_time *tm)
-> > +{
-> > +	u32 uptime;
-> > +	int err;
-> > +
-> > +	err =3D omnia_get_uptime_wakeup(to_i2c_client(dev), &uptime, NULL);
-> > +	if (err)
-> > +		return err; =20
->=20
-> Does this get the real time or the board uptime?
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.7-1
 
-Hi Alexandre,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a6adef898741eb07526aaf9d8b982d3dff4a9e67
 
-sorry I did not notice your email sooner.
-This returns board uptime. The MCU does not remember real time.
+Thank you!
 
-> > +
-> > +	rtc_time64_to_tm(uptime, tm);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int omnia_read_alarm(struct device *dev, struct rtc_wkalrm *alr=
-m)
-> > +{
-> > +	struct i2c_client *client =3D to_i2c_client(dev);
-> > +	struct omnia_mcu *mcu =3D i2c_get_clientdata(client);
-> > +	u32 wakeup;
-> > +	int err;
-> > +
-> > +	err =3D omnia_get_uptime_wakeup(client, NULL, &wakeup);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	alrm->enabled =3D !!wakeup;
-> > +	rtc_time64_to_tm(wakeup ?: mcu->rtc_alarm, &alrm->time); =20
->=20
-> I don't think this works properly as on boot, mcu->rtc_alarm will not be
-> set whereas wakeup could be.
-
-mcu->rtc_alarm is the value that is to be written to MCU wakeup
-register when we enable the RTC alarm with .alarm_irq_enable().
-
-When the alarm is enabled by other means than the driver (prior boot or
-by a userspace utility), the omnia_read_alarm() will determine it
-correctly, since it will read via I2C the MCU wakeup value.
-
-If it is non-zero, it will return that the alarm is enabled and the
-alarm time is determined by this non-zero value.
-
-If the alarm is disabled on the MCU, we return that the alarm is
-disabled, but we fill in the alrm->time with the cached value of
-mcu->rtc_alarm which was set in previous call to the .set_alarm method.
-This is because we want to support both the new IOCTLs (RTC_WKALM_RD,
-RTC_WKALM_SET) and the old (RTC_ALM_SET, RTC_AIE_ON, RTC_AIE_OFF).
-
->=20
-> Also, is wakeup actually an absolute time? I'm not sure I get how the
-> MCU works then.
-
-The wakeup value is in the same units as uptime: seconds elapsed since
-MCU started.
-
-Example:
-- uptime is 2000 seconds (MCU has been powered on 2000 seconds ago)
-- we are going to power off the board, but we want it to power on in
-  one hour
-- we will therefore set wakeup to uptime + 3600 =3D 2000 + 3600 =3D 5600
-
-> > +	mcu->rtcdev->ops =3D &omnia_rtc_ops;
-> > +	mcu->rtcdev->range_max =3D U32_MAX; =20
->=20
-> You probably need to add:
->=20
-> set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, mcu->rtcdev->features);
->=20
-
-Thx, will do. Is this bit documented? Could only find its definition
-and one usage with git grep.
-
-Marek
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
