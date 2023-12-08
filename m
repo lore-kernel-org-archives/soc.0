@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12379C4167B
-	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 07:22:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9F76C4167B
+	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 07:25:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E23B4C433CA; Fri,  8 Dec 2023 07:22:09 +0000 (UTC)
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	id 975F3C433CC; Fri,  8 Dec 2023 07:25:03 +0000 (UTC)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 92470C433C8;
-	Fri,  8 Dec 2023 07:22:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 92470C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id D0A45C433C8;
+	Fri,  8 Dec 2023 07:25:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0A45C433C8
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from kwepemd100008.china.huawei.com (unknown [172.30.72.56])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4SmjJB36xPz14LDV;
-	Fri,  8 Dec 2023 15:22:02 +0800 (CST)
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SmjH85VXcz1Q6Jq;
+	Fri,  8 Dec 2023 15:21:08 +0800 (CST)
 Received: from [10.67.121.2] (10.67.121.2) by kwepemd100008.china.huawei.com
  (7.221.188.193) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.28; Fri, 8 Dec
- 2023 15:22:03 +0800
-Message-ID: <6572C41B.6050703@hisilicon.com>
-Date: Fri, 8 Dec 2023 15:22:03 +0800
+ 2023 15:24:57 +0800
+Message-ID: <6572C4C8.6050401@hisilicon.com>
+Date: Fri, 8 Dec 2023 15:24:56 +0800
 From: Wei Xu <xuwei5@hisilicon.com>
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
@@ -35,13 +35,13 @@ CC: <linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>,
 	<zhangyi.ac@huawei.com>, <tangkunshan@huawei.com>, <daniel.shen@huawei.com>,
 	<huangdaode@huawei.com>, <liguozhu@hisilicon.com>,
 	<Jonathan.Cameron@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>, "lihuisong (C)"
-	<lihuisong@huawei.com>
-Subject: [GIT,PULL] hisilicon: driver updates for v6.8
+	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>, Johan Hovold
+	<johan+linaro@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Subject: [GIT,PULL] arm64: dts: hisilicon dts updates for v6.8
 Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.67.121.2]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemd100008.china.huawei.com (7.221.188.193)
 X-CFilter-Loop: Reflected
 
@@ -61,28 +61,28 @@ The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
 are available in the Git repository at:
 
-  https://github.com/hisilicon/linux-hisi.git tags/hisi-drivers-for-6.8
+  https://github.com/hisilicon/linux-hisi.git tags/hisi-arm64-dt-for-6.8
 
-for you to fetch changes up to be2f78a8a638e71bbbc2109bc052524143e8f42a:
+for you to fetch changes up to 94fa073377db02ef0ca391f32e11e0f4649b2657:
 
-  soc: hisilicon: kunpeng_hccs: Support the platform with PCC type3 and interrupt ack (2023-12-07 06:16:35 +0000)
-
-----------------------------------------------------------------
-HiSilicon driver updates for v6.8
-
-- Add support for the platform with PCC type3 and interrupt ack
-- Few cleanups and improvements: correct the format of some strings and domain typo,
-add failure log
+  arm64: dts: hisilicon: hikey970-pmic: clean up SPMI node (2023-12-08 06:14:05 +0000)
 
 ----------------------------------------------------------------
-Huisong Li (5):
-      soc: hisilicon: kunpeng_hccs: Fix some incorrect format strings
-      soc: hisilicon: kunpeng_hccs: Add failure log for no _CRS method
-      soc: hisilicon: kunpeng_hccs: Remove an unused blank line
-      doc: kunpeng_hccs: Fix incorrect email domain name
-      soc: hisilicon: kunpeng_hccs: Support the platform with PCC type3 and interrupt ack
+ARM64: DT: HiSilicon ARM64 DT updates for v6.8
 
- .../testing/sysfs-devices-platform-kunpeng_hccs    |   6 +-
- drivers/soc/hisilicon/kunpeng_hccs.c               | 152 ++++++++++++++++-----
- drivers/soc/hisilicon/kunpeng_hccs.h               |  15 ++
- 3 files changed, 137 insertions(+), 36 deletions(-)
+- Merge the hi3620-clock binding into hisilicon,sysctrl
+- Clean up the hikey970 PMIC dtsi
+
+----------------------------------------------------------------
+Johan Hovold (2):
+      arm64: dts: hisilicon: hikey970-pmic: fix regulator cells properties
+      arm64: dts: hisilicon: hikey970-pmic: clean up SPMI node
+
+Rob Herring (1):
+      dt-bindings: hisilicon: Merge hi3620-clock into hisilicon,sysctrl binding
+
+ .../bindings/arm/hisilicon/controller/sysctrl.yaml   | 17 +++++++++++++++++
+ .../devicetree/bindings/clock/hi3620-clock.txt       | 20 --------------------
+ arch/arm64/boot/dts/hisilicon/hikey970-pmic.dtsi     |  6 +-----
+ 3 files changed, 18 insertions(+), 25 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/hi3620-clock.txt
