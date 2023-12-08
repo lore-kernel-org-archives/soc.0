@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FCB0C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51718C10DCE
 	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 09:00:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27EC2C43395; Fri,  8 Dec 2023 09:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1220FC433CA;
-	Fri,  8 Dec 2023 09:00:26 +0000 (UTC)
+	id 24D29C433CC; Fri,  8 Dec 2023 09:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08596C433C9
+	for <soc@kernel.org>; Fri,  8 Dec 2023 09:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1702026026;
-	bh=yAqfgxeZ8KU6YKWJzpTjNES33dcT5cOfDyeyzonr5uY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=h0tMuZzafey2LesldaQl/vYSZakWlaUZOvg3eoB2QgrB47NFszI3NPlAmKE8VgSub
-	 16eTw4FAiQyY9kiqC7/yJZ949WCS/38tAg7gU6s4RxwUcNujJRO8saBRMCWbwU7taa
-	 qxDs2RIs1M7395JvM2Zpp1n7VleoUNjHDo9efpW2GOT6EVgii8ULCLRBmeijHuGp20
-	 Tc4M/0DbkPGdvusf7/mZL7h2KHkOAWRwrtMm7GL+/Ss7F07uoRInj7Orw+gIf7/nI6
-	 x25o7SFts2pG19/KhAxM+ZikNF9TKMOS7EHrReGqBDOL1gdSQ0x+tXq9eS9F/4BbM3
-	 Gq1YA1sUd8GYQ==
+	bh=7NbTfE3Pte9IWDR8M3XAFKSYg9GVYBTqCgxuKMi/NAU=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=k/YDSOkGueM0mE+9O84Kgit4olyjXqbdmkLn6q2Xugm46rN+5LBo1d+qFjkNh8x/G
+	 Hgma4E+hKo3pebytzzdLiDodciV06PWBpx5HwL5CzIkU+NgjhL9B4IIhZ3QBM/4JD8
+	 dfR8XsGcPg15mriDV5Dji8k4Xo4EPdbn/fc8NlOxeYSSPsBQiDdjCjS3XK60lffK5l
+	 +fATnHZIpA/b5C19k8VhkMaxTzMc8DLC1iIMoSWfpeSfkqbiVKilfOazadw536hE57
+	 XSaj9m2/lrCdGNInQnjNnW+1NgXNpfNxaGjnXifakUF+sQz7f0kbYJaYiaKjg/06Vx
+	 Bw7T6/TsvY9Dg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E61F6C595CE;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2A06C04DD9;
 	Fri,  8 Dec 2023 09:00:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts fixes for 6.7
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170202602593.9233.11350197205461084066.git-patchwork-notify@kernel.org>
+ <170202602575.9233.1269801438386851605.git-patchwork-summary@kernel.org>
 Date: Fri, 08 Dec 2023 09:00:25 +0000
-References: <2709704.mvXUDI8C0e@phil>
-In-Reply-To: <2709704.mvXUDI8C0e@phil>
-To: Heiko Stuebner <heiko@sntech.de>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Thu, 07 Dec 2023 21:41:37 +0100 you wrote:
-> Hi Arnd, Kevin, Olof,
-> 
-> please find a below a collection of fixes for the current release 6.7
-> cycle.
-> 
-> Please pull
-> 
-> [...]
+Patch: [GIT,PULL] i.MX fixes for 6.7
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=807664
+  Lore link: https://lore.kernel.org/r/20231207005202.GF270430@dragon
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts fixes for 6.7
-    https://git.kernel.org/soc/soc/c/fd1e5745f87a
+Patch: [GIT,PULL] Rockchip dts fixes for 6.7
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=807995
+  Lore link: https://lore.kernel.org/r/2709704.mvXUDI8C0e@phil
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
