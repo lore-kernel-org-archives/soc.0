@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027A2C4167B
-	for <soc@archiver.kernel.org>; Sat,  9 Dec 2023 23:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D4AC4167B
+	for <soc@archiver.kernel.org>; Sat,  9 Dec 2023 23:31:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EBA58C433C8; Sat,  9 Dec 2023 23:31:33 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id 5EDC3C116C9; Sat,  9 Dec 2023 23:31:47 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 235D7C43391
-	for <soc@kernel.org>; Sat,  9 Dec 2023 23:31:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 235D7C43391
+	by smtp.kernel.org (Postfix) with ESMTPS id 6A244C43215
+	for <soc@kernel.org>; Sat,  9 Dec 2023 23:31:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6A244C43215
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40c3fe6c08fso7899415e9.1
-        for <soc@kernel.org>; Sat, 09 Dec 2023 15:31:31 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40c3f68b649so8227635e9.0
+        for <soc@kernel.org>; Sat, 09 Dec 2023 15:31:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702164690; x=1702769490; darn=kernel.org;
+        d=linaro.org; s=google; t=1702164697; x=1702769497; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2xJMMkIi7gHwqFFRiNxJNl8E4vObJQqSH/0uTp/Sg+Q=;
-        b=fjs4si8vbhJVCqhCFGRIxPmxwJlALSHNxHYuadCKNmMcXEFQtb2AVdAC2DDaBwtCju
-         btTuymr8p3ljzZzsMLetFhj1t6Nu4cHGXKTeELjtpYwV+LS0ODp1ugHjXKCtFbUlnPlH
-         LxXgxfRMO/LZ9YCWe8box62nm1HXVfCmZM/GYspOi6AZZjpbfGTnMD2WbtPpoSRyPxRK
-         H9RZ5tuCKvlnR8vJGzbMpn3dI8OCXWRqyJfh9SYhnsqQ2dyVa26CXcz0ilOvjz2ULqnl
-         wQEq6pvq0fUOfVe9tfAGZquTDY8b7sEYS8674aAr6wQI8B5wZCziFk/OFMSQymzlgrNR
-         44Uw==
+        bh=fFN6xER1loihBa9uWQwup/JqyzQhajX2oH9kffaNe40=;
+        b=yHjTtKv5Yd5QNl7LRqNYWBozhe2K3PwzRSFMPVRncRlmiKrD7N6lAE9cdbE1rMPGdg
+         5vOFPYHRFURS0Dk9cv/Xh39Qz8IwVZIpB3kVPm7lpO9ZGn7708Eq4jsBfkfU/7zKjqBj
+         fUCrzh+oRsu4Wyx/WVQ7Eu7gUcxG/RH8LED5d79Lg2pfRUcADo3t0PJZvb2u1W6cK1eB
+         g+emeNGMkRkcVpOque+jBiuFXLAG0ZD32wtS5WRD6s6XCdzE4R1cFPgUf+J3hUq/9GyM
+         IsjjB0LgNeMJsc1mZfOKy+nTZrjClWCaUalaPuncQPQeiMOJAmpMqPWkVuw/LuzBSRqn
+         ajjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702164690; x=1702769490;
+        d=1e100.net; s=20230601; t=1702164697; x=1702769497;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2xJMMkIi7gHwqFFRiNxJNl8E4vObJQqSH/0uTp/Sg+Q=;
-        b=GDeVoJjLU96ShpKkhe1tzSzPf2kbMTx2Y8yZ24xDI9sueq2DpPaAtRnknqBd6TuM5E
-         7u9+2dmP4svXKFwbrgyc3UY/xSE7wlp2OndQT7xAvxfGlilxeeSP+jW//13vd2lb4W3w
-         9M7YM2eMNtZfO+c3Utx1/W9KBdZ1SzR3dJ4d/ETHRyd76BZRyBNdk6bosd5lDItCqfim
-         aLM0sAgz5zwu2Rjh181EVnmYgP/eScxLwa5GWPnLB+hpaM+aC5fFSBqfeB34sHyIyhBu
-         XvFkrUg8qz+cUW0Oq5fvmSUCBAuSJq3NJDTPFv1ZtH0qTJrH9BX7a6OI6itKLXG+DUQf
-         YgVw==
-X-Gm-Message-State: AOJu0Yx8gUWHkkE+a6lItOoNWoVGbyxoG6T/gTJBS8vKCXSoE+yMmDl7
-	4fHbHA+AasOJQQ3cuVl/uGyC9Q==
-X-Google-Smtp-Source: AGHT+IFzcDIQzUfZRPbTkMhtVL/A5vnbyjnWALM6VMaCSNOIf0ll9TyONx6g9zFQADGgXl8vbrrY9w==
-X-Received: by 2002:a05:600c:3212:b0:40b:5e21:c598 with SMTP id r18-20020a05600c321200b0040b5e21c598mr749759wmp.102.1702164690518;
-        Sat, 09 Dec 2023 15:31:30 -0800 (PST)
+        bh=fFN6xER1loihBa9uWQwup/JqyzQhajX2oH9kffaNe40=;
+        b=oS34VSbrjC+L4yUhVHtqrROzWTsfjo4inX4i4XAjlJk76Q/vGUEIdi8MtYj7O+OzHr
+         ZJXnTYS4EOIE+IhAsx4zx4Itt/5t3+zc28kzqH0+YUgoaFkqNT/ia10jTkP2klGRPR3m
+         fysJMhxRDPN9U1kPiWcsq3lYlKf1PtfnKYx48jcPAl33zElJZp78W/Havjsvcu2MtqJe
+         WcAu3gvGDKE6i7/xznCV7k0L4cY9N7U5oipQWNYeo16KRL8H0ad3IKkNGyAJ/DmYRI6g
+         Lgsl5I8zsretLhhC2xDlkhbzhVApXYxYvi34U0STu1u3TnKySLKcHOkI6qOVkHzgJzvZ
+         vi0w==
+X-Gm-Message-State: AOJu0Yz3W5PZ0kTrGNjgrWgcN91qpqRStonfbbUtsSQsKHhKmzVe8FL4
+	RNthAlvtlZ6PViernlzAMjUfAQ==
+X-Google-Smtp-Source: AGHT+IHlNWaNCCCVx46tnk9DPqNQxKSg2eKBcJFo3Qqg135ZJrQ+9HNnrazePrrKs5Bhv5Z8UV7hxA==
+X-Received: by 2002:a7b:c850:0:b0:40c:2b16:1e3 with SMTP id c16-20020a7bc850000000b0040c2b1601e3mr782723wml.84.1702164697697;
+        Sat, 09 Dec 2023 15:31:37 -0800 (PST)
 Received: from gpeter-l.lan (host-92-23-61-173.as13285.net. [92.23.61.173])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b0040c41846923sm1875277wmq.26.2023.12.09.15.31.28
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b0040c41846923sm1875277wmq.26.2023.12.09.15.31.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Dec 2023 15:31:30 -0800 (PST)
+        Sat, 09 Dec 2023 15:31:37 -0800 (PST)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -87,88 +87,43 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v6 11/20] clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
-Date: Sat,  9 Dec 2023 23:30:57 +0000
-Message-ID: <20231209233106.147416-12-peter.griffin@linaro.org>
+Subject: [PATCH v6 15/20] watchdog: s3c2410_wdt: Update QUIRK macros to use BIT macro
+Date: Sat,  9 Dec 2023 23:31:01 +0000
+Message-ID: <20231209233106.147416-16-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 In-Reply-To: <20231209233106.147416-1-peter.griffin@linaro.org>
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These plls are found in the Tensor gs101 SoC found in the Pixel 6.
+Update the remaining QUIRK macros to use the BIT macro.
 
-pll0516x: Integer PLL with high frequency
-pll0517x: Integer PLL with middle frequency
-pll0518x: Integer PLL with low frequency
-
-PLL0516x
-FOUT = (MDIV * 2 * FIN)/PDIV * 2^SDIV)
-
-PLL0517x and PLL0518x
-FOUT = (MDIV * FIN)/PDIV*2^SDIV)
-
-The PLLs are similar enough to pll_0822x that the same code can handle
-both. The main difference is the change in the fout formula for the
-high frequency 0516 pll.
-
-Locktime for 516,517 & 518 is 150 the same as the pll_0822x lock factor.
-MDIV, SDIV PDIV masks and bit shifts are also the same as 0822x.
-
-When defining the PLL the "con" parameter should be set to CON3
-register, like this
-
-PLL(pll_0517x, CLK_FOUT_SHARED0_PLL, "fout_shared0_pll", "oscclk",
-    PLL_LOCKTIME_PLL_SHARED0, PLL_CON3_PLL_SHARED0,
-    NULL),
-
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Will McVicker <willmcvicker@google.com>
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- drivers/clk/samsung/clk-pll.c | 6 ++++++
- drivers/clk/samsung/clk-pll.h | 3 +++
- 2 files changed, 9 insertions(+)
+ drivers/watchdog/s3c2410_wdt.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-pll.c b/drivers/clk/samsung/clk-pll.c
-index 74934c6182ce..4bbdf5e91650 100644
---- a/drivers/clk/samsung/clk-pll.c
-+++ b/drivers/clk/samsung/clk-pll.c
-@@ -443,6 +443,9 @@ static unsigned long samsung_pll0822x_recalc_rate(struct clk_hw *hw,
- 	sdiv = (pll_con3 >> PLL0822X_SDIV_SHIFT) & PLL0822X_SDIV_MASK;
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index 7ecb762a371d..b7a03668f743 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -107,11 +107,11 @@
+  * DBGACK_MASK bit disables the watchdog outputs when the SoC is in debug mode.
+  * Debug mode is determined by the DBGACK CPU signal.
+  */
+-#define QUIRK_HAS_WTCLRINT_REG			(1 << 0)
+-#define QUIRK_HAS_PMU_MASK_RESET		(1 << 1)
+-#define QUIRK_HAS_PMU_RST_STAT			(1 << 2)
+-#define QUIRK_HAS_PMU_AUTO_DISABLE		(1 << 3)
+-#define QUIRK_HAS_PMU_CNT_EN			(1 << 4)
++#define QUIRK_HAS_WTCLRINT_REG			BIT(0)
++#define QUIRK_HAS_PMU_MASK_RESET		BIT(1)
++#define QUIRK_HAS_PMU_RST_STAT			BIT(2)
++#define QUIRK_HAS_PMU_AUTO_DISABLE		BIT(3)
++#define QUIRK_HAS_PMU_CNT_EN			BIT(4)
+ #define QUIRK_HAS_DBGACK_BIT			BIT(5)
  
- 	fvco *= mdiv;
-+	if (pll->type == pll_0516x)
-+		fvco *= 2;
-+
- 	do_div(fvco, (pdiv << sdiv));
- 
- 	return (unsigned long)fvco;
-@@ -1316,6 +1319,9 @@ static void __init _samsung_clk_register_pll(struct samsung_clk_provider *ctx,
- 	case pll_1417x:
- 	case pll_0818x:
- 	case pll_0822x:
-+	case pll_0516x:
-+	case pll_0517x:
-+	case pll_0518x:
- 		pll->enable_offs = PLL0822X_ENABLE_SHIFT;
- 		pll->lock_offs = PLL0822X_LOCK_STAT_SHIFT;
- 		if (!pll->rate_table)
-diff --git a/drivers/clk/samsung/clk-pll.h b/drivers/clk/samsung/clk-pll.h
-index 0725d485c6ee..ffd3d52c0dec 100644
---- a/drivers/clk/samsung/clk-pll.h
-+++ b/drivers/clk/samsung/clk-pll.h
-@@ -38,6 +38,9 @@ enum samsung_pll_type {
- 	pll_0822x,
- 	pll_0831x,
- 	pll_142xx,
-+	pll_0516x,
-+	pll_0517x,
-+	pll_0518x,
- };
- 
- #define PLL_RATE(_fin, _m, _p, _s, _k, _ks) \
+ /* These quirks require that we have a PMU register map */
 -- 
 2.43.0.472.g3155946c3a-goog
 
