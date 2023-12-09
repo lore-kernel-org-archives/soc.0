@@ -1,63 +1,63 @@
-Return-Path: <SRS0=Y5q6=HT=linaro.org=peter.griffin@kernel.org>
+Return-Path: <SRS0=QSjn=HU=linaro.org=peter.griffin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 393A7C4167B
-	for <soc@archiver.kernel.org>; Fri,  8 Dec 2023 21:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EB02C4167B
+	for <soc@archiver.kernel.org>; Sat,  9 Dec 2023 00:10:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E7EEEC433CD; Fri,  8 Dec 2023 21:14:34 +0000 (UTC)
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	id 63BD2C43395; Sat,  9 Dec 2023 00:10:24 +0000 (UTC)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B8B39C433CA
-	for <soc@kernel.org>; Fri,  8 Dec 2023 21:14:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8B39C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id BD1BFC433CA
+	for <soc@kernel.org>; Sat,  9 Dec 2023 00:10:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BD1BFC433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-67a9febb2bfso14364366d6.1
-        for <soc@kernel.org>; Fri, 08 Dec 2023 13:14:33 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3b83fc26e4cso1715385b6e.2
+        for <soc@kernel.org>; Fri, 08 Dec 2023 16:10:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702070072; x=1702674872; darn=kernel.org;
+        d=linaro.org; s=google; t=1702080621; x=1702685421; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eMdZYz3DPUe4bdT/CXZ3OjIbw+BdLseGOOZQ+mLDsoY=;
-        b=vw+n52vfP6DFHMbQAsdM302lPO0m7pBQEJ3slLA8D6Uz2chN6FUvgqM9btq30ueow3
-         npl5MrEFiEhoWzZe0j+U3wSrBPtSuahyuV2gjzTsSHzuCtUnUkktyulGiF4xIJYvMEwW
-         w5G9dgetAlafIIvJBNjPuvnVLBB5CD2Cmf0bBgzkewGxjDOsdXk/rSaV1a0t6F1kMvgV
-         zMfWZ/sEnuGZ8h+zxoiJdFieKuxVCowamI3bY80Ph4Jh7fQKahg08Mhi6f99iPDfZ7Cz
-         KH9FV58gQnsURU63yMb5zOYr/SEhO1bDzPofKEyUW2q+rKhUZ8F6l7KChQFJ9UoXUvO5
-         qQUg==
+        bh=azix/yRrG4Km4lzOJULD3ZaeZVJ1BPo9SUg9XKCQAZ8=;
+        b=KFJjiIA4Gm4e1laZHzndaQ1RCLSM5q8TxRIgVHwh4ahf5fsLU9dhnC8b06fcWH32RJ
+         fEN3Kuhwbj8mNhsgDM+7xRtYL+C/GD6OmOSx3365FvGq1cpgzOrrkAWkvVKkdcJooYFt
+         3Z95KO2DE1gEMsB3Ur0xMbS873Oi/ilLo7v9WpSIzztkzmDENjPCxY95WxFhicgzWrIL
+         8UyzwT2abyTP5JAFtRcZObvVeWu1Yk29sQC2w6XlO0YXQODA94RpSuyTZVStSw8uJmQY
+         PTQbRXjkhQBOXIRhSPOD8Iq5BTJnwEuwEyeKKwgtDhyiBPdB1Pl5Cj5EraljijmOTBTz
+         z0zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702070072; x=1702674872;
+        d=1e100.net; s=20230601; t=1702080621; x=1702685421;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eMdZYz3DPUe4bdT/CXZ3OjIbw+BdLseGOOZQ+mLDsoY=;
-        b=fr5KT65ptFxCVR9kj3uE/gFZzJTa2ShlOjYck07C5ToOduDVqqIAPznkYXiN7UMQgt
-         sI0oEZQy6+GjxnZIqeBZuP8QY9p9geZlmBz81HvoN/MT1s6jysEh0KO7EFgnJXt/vIfl
-         xZXlpUT9qlrTaeT76jtMhNp3h768FuUOraWfDazQy41s8qGgtOCzrzEYeaPqT3pwW5az
-         20NNkmUUBI9CYQtFTHNdoNJDyhNi7IcKcT0SOlUO9I8J4/omn/2V2GGGwpUzvwNxAKL1
-         8fcB27XfoBVdc3EWJ2hGxGkp66moXKPLwYIBtzI9rpE+m/wZzHgeKe6ilO6EZNWWc+SP
-         /bvw==
-X-Gm-Message-State: AOJu0YxZyCF+8c1Ug3hbq6qU5Z7Z3AJTys6Zqc/n9TEnCVnolcgSN3zk
-	Q7/vQznMrFnveBpvYE7b9aRKDzJ3lixirbH7JviuPw==
-X-Google-Smtp-Source: AGHT+IGpulKyZ3OIbS0DyP2qkU03il9CmjBCOxhzoGEpedDhT+htnC+NzAmQyXg4CgZlNXYQiSL6lZrAvMlkclzO+XA=
-X-Received: by 2002:a05:6214:a91:b0:67a:a721:f304 with SMTP id
- ev17-20020a0562140a9100b0067aa721f304mr526927qvb.68.1702070072556; Fri, 08
- Dec 2023 13:14:32 -0800 (PST)
+        bh=azix/yRrG4Km4lzOJULD3ZaeZVJ1BPo9SUg9XKCQAZ8=;
+        b=G1OZ1KTrg5PRHWsBxFgj/gEBXyAZlKNUIpmf4fXLaDvXHbYGsR/SdDkgusjnAvBcsv
+         h1xV+O2pN88lsWKJ777r6XI3r45H9WNqqw4+pnqb4YvO3K5p9Ojw+t79jsVImwSwJxOz
+         gl6WYAFPUXdm5GkwJe6coYMan1BLI84z5rR1S0dJSfBqVaA0w8AiKCxJsvsakKCNNWUZ
+         R8FWC3KnJjaxaviX8RwrwSebO9KFyc0mVxl+K6XqGc4fW8nXJHVHeFUlnNu3NrOHSTKe
+         xYowfXYwcJo2EMbkmKZSuc7zxrySmJDC+rh7kSqRa8uWoI3jQPrSWi/c4OeegMfa7G/C
+         isqw==
+X-Gm-Message-State: AOJu0YxziuptF/AMRP7lPPmc7U7amj6Y/BDyEqQPlnLDRf5a8LSugFfj
+	QlLQzxR+d7izoCrHZAWxtfpfyo0yXip/6Fg4PN/RjA==
+X-Google-Smtp-Source: AGHT+IHz7/iskB7s5RD0vmm831Z1V5eHiAlf4apNR66Oq422LsMXkYYMGiWwLPJO+HLNaKpMMTj16w2DrWT9VIou5yI=
+X-Received: by 2002:a05:6808:6549:b0:3b9:dd3b:464c with SMTP id
+ fn9-20020a056808654900b003b9dd3b464cmr742599oib.103.1702080621671; Fri, 08
+ Dec 2023 16:10:21 -0800 (PST)
 MIME-Version: 1.0
 References: <20231201160925.3136868-1-peter.griffin@linaro.org>
- <20231201160925.3136868-13-peter.griffin@linaro.org> <5e9c0b1c5885775a7bc32ef59cb09a2a93d4cbe1.camel@linaro.org>
-In-Reply-To: <5e9c0b1c5885775a7bc32ef59cb09a2a93d4cbe1.camel@linaro.org>
+ <20231201160925.3136868-3-peter.griffin@linaro.org> <6e595a110444033de6ecd35bedc6e84ea1c43fdc.camel@linaro.org>
+In-Reply-To: <6e595a110444033de6ecd35bedc6e84ea1c43fdc.camel@linaro.org>
 From: Peter Griffin <peter.griffin@linaro.org>
-Date: Fri, 8 Dec 2023 21:14:21 +0000
-Message-ID: <CADrjBPqAjqW27TvvT3BpEovOsouRedsnB49qdkkgSto=z0jM3Q@mail.gmail.com>
-Subject: Re: [PATCH v5 12/20] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
- and cmu_apm support
+Date: Sat, 9 Dec 2023 00:10:10 +0000
+Message-ID: <CADrjBPq+jvULhG4vezCCt4xXsQrybTsOuiCBB3LZZq32OrJjoA@mail.gmail.com>
+Subject: Re: [PATCH v5 02/20] dt-bindings: clock: Add Google gs101 clock
+ management unit bindings
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
@@ -77,88 +77,18 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Andr=C3=A9
 
-On Tue, 5 Dec 2023 at 07:52, Andr=C3=A9 Draszik <andre.draszik@linaro.org> =
+On Wed, 6 Dec 2023 at 12:30, Andr=C3=A9 Draszik <andre.draszik@linaro.org> =
 wrote:
 >
-> Hi Pete,
->
-> On Fri, 2023-12-01 at 16:09 +0000, Peter Griffin wrote:
-> > cmu_top is the top level clock management unit which contains PLLs, mux=
-es,
-> > dividers and gates that feed the other clock management units.
-> >
-> > cmu_misc clocks IPs such as Watchdog and cmu_apm clocks ips part of the
-> > APM module.
-> >
-> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> > Tested-by: Will McVicker <willmcvicker@google.com>
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  drivers/clk/samsung/Makefile    |    1 +
-> >  drivers/clk/samsung/clk-gs101.c | 2495 +++++++++++++++++++++++++++++++
-> >  2 files changed, 2496 insertions(+)
-> >  create mode 100644 drivers/clk/samsung/clk-gs101.c
-> >
-> > diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefil=
-e
-> > index ebbeacabe88f..3056944a5a54 100644
-> > --- a/drivers/clk/samsung/Makefile
-> > +++ b/drivers/clk/samsung/Makefile
-> > @@ -21,6 +21,7 @@ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)       +=3D clk-=
-exynos7.o
-> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-exynos7885.o
-> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-exynos850.o
-> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-exynosautov9.o
-> > +obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-gs101.o
-> >  obj-$(CONFIG_S3C64XX_COMMON_CLK)     +=3D clk-s3c64xx.o
-> >  obj-$(CONFIG_S5PV210_COMMON_CLK)     +=3D clk-s5pv210.o clk-s5pv210-au=
-dss.o
-> >  obj-$(CONFIG_TESLA_FSD_COMMON_CLK)   +=3D clk-fsd.o
-> > diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-=
-gs101.c
-> > new file mode 100644
-> > index 000000000000..6bd233a7ab63
-> > --- /dev/null
-> > +++ b/drivers/clk/samsung/clk-gs101.c
-> > @@ -0,0 +1,2495 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2023 Linaro Ltd.
-> > + * Author: Peter Griffin <peter.griffin@linaro.org>
-> > + *
-> > + * Common Clock Framework support for GS101.
-> > + */
-> > +
-> > +#include <linux/clk.h>
-> > +#include <linux/clk-provider.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/platform_device.h>
-> > +
-> > +#include <dt-bindings/clock/google,gs101.h>
-> > +
-> > +#include "clk.h"
-> > +#include "clk-exynos-arm64.h"
-> > +
-> > +/* NOTE: Must be equal to the last clock ID increased by one */
-> > +#define TOP_NR_CLK   (CLK_GOUT_TPU_UART + 1)
-> > +#define APM_NR_CLK   (CLK_APM_PLL_DIV16_APM + 1)
-> > +#define MISC_NR_CLK  (CLK_GOUT_MISC_XIU_D_MISC_IPCLKPORT_ACLK + 1)
-> > +
-> > +/* ---- CMU_TOP ------------------------------------------------------=
-------- */
-> > +
-> > [...]
-> > +
-> > +/* ---- CMU_APM ------------------------------------------------------=
-------- */
-> > [..]
-> > +
-> > +/* ---- CMU_MISC -----------------------------------------------------=
--------- */
->
-> nit - the CMU_MISC comment here is an outlier.
 
-Will fix.
+<cut>
+
+> > +#define CLK_DOUT_HSI2_PCIE           118
+> > +#define CLK_DOUT_HSI2_UFS_EMBD               119
+> > +#define CLK_DOUT_IPP_BUS             107
+>
+> You're restarting at 107 here, but the numbers should continue at 120...
+
+I've fixed this in v6.
 
 Peter.
