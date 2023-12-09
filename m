@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B86C4167B
-	for <soc@archiver.kernel.org>; Sat,  9 Dec 2023 01:01:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C86CC4167B
+	for <soc@archiver.kernel.org>; Sat,  9 Dec 2023 22:04:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 41A16C433D9; Sat,  9 Dec 2023 01:01:07 +0000 (UTC)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	id 0BDE9C433C9; Sat,  9 Dec 2023 22:04:16 +0000 (UTC)
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F4138C433C7
-	for <soc@kernel.org>; Sat,  9 Dec 2023 01:01:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F4138C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 2A325C433CA
+	for <soc@kernel.org>; Sat,  9 Dec 2023 22:04:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2A325C433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5d852ac9bb2so25836617b3.2
-        for <soc@kernel.org>; Fri, 08 Dec 2023 17:01:05 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-67ac0ef6bb8so20128176d6.1
+        for <soc@kernel.org>; Sat, 09 Dec 2023 14:04:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702083665; x=1702688465; darn=kernel.org;
+        d=linaro.org; s=google; t=1702159453; x=1702764253; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ElaXcfV6dmgzWzzP1M0WxFihXPQM8C12PJOBL/Tp0sE=;
-        b=sxwigppNw6GrVIF9IvrROuMiFCjT4CYyR1lKnklcVuD5Rex3HOETxt0Hp68hvjbuQb
-         3He2ntQEPsZWDmXUo63zY5WK01SM3hWhN05gSMvqfwzRqIOqL7pg6wlZ2nGHKYz0P6W8
-         3QnR9wHrS6h8AU03eRwIAJh7641cgY03MNWtmvKQ5PuC6BG3bb5TBl7rzS1cH0DHN3Z/
-         USN9+HJ1BX2/vKd0u4Ry8W0QcGJzcwXJ7yF6bq9TN8vYzijxensGouYIACW0SDpgs1Oe
-         rtj/5Ht//S66Q+x1lYzEzS9Vq3VEIIPoKhDxk46VuucmfCb9yFnQATHiwqtO8RLfBwpP
-         Kcag==
+        bh=DDeZCYtXqn2cs2JrwzvomIoxvwFGKvb0D6cCKP3KGx0=;
+        b=rX9Yl1tgZCRQtoq2JIn4sSfG/xXwzy4KMs/CN1keiVxSKYco7ashcGCxh02zL0tesu
+         HrchW7vfsX5hstfKWzQhrpbL8VwLNLnv0o7CBJTTNzCrXeCby0GcxXBIEE/SywDYZ5J7
+         Su9f5/jbHk79UgERj3PVVSQyHuXHuh+PkPbfovmVfmrb6ba4isNZaqQqGn1lmmkX3yTK
+         cgGD3khYQyp2Z4/Me/YUT8X5+a6R1t1tiQjG8UyhRbgvYUdEvLeylwd2K1tkx9CdRcaj
+         ZFGOrjSsYHHaS9ZsMvQ8rxCDaM2n5R/AlnUiVz9ZF9T+T8ax8YGE05SiOROhluhfTzq0
+         54Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702083665; x=1702688465;
+        d=1e100.net; s=20230601; t=1702159453; x=1702764253;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ElaXcfV6dmgzWzzP1M0WxFihXPQM8C12PJOBL/Tp0sE=;
-        b=ZdlQvBTuQjg17UTTb/7W7ECx8w+Q5Im+iS9+NBTXJ+/+BEO+fcmwd79vrk79F78eTa
-         aFnO/g+P6lyxoHuK2ji/T/DczIN3KwDREFrsxyagteU+AemI2pd+nWf9W5dvTVk6rGJH
-         +Oy3D3+wJm09kia7DaRmetGcVPsHv/y5mvEG2XrAM6+A9fM/k7gyDJ5LfgeVwAJF7Gh7
-         XSjcX6uS4fNTZ7n/bNAZKvsS/TRJaZMby94qA4Tc1OgvN/9bb9LcYFWyy0Hf/9zuQUU9
-         42A53BLLWZ6Edn6+AjVzvS0IRaZY7g6yCFxAHBZeskY6KfYmFKtYjgRbjKrWRgbbTxDK
-         fzBA==
-X-Gm-Message-State: AOJu0YzhTQ9nqp7N4vKaw1YQ71DWgV8lTpOxgZklapfkAt0x4pT5C0Bb
-	RwRcCeJSdN3ppB+bsrf2ljC3+T35gBnT9YJle+W9zg==
-X-Google-Smtp-Source: AGHT+IH5c7drT+7MHmk+IZXb9MS8muJJAtPfMa/43napxTl9DXzmHgSvTulnvFbF7nfeWXmR3prdtkp8JfQyLi6/3nE=
-X-Received: by 2002:a0d:eb02:0:b0:5d4:1a53:861f with SMTP id
- u2-20020a0deb02000000b005d41a53861fmr925367ywe.1.1702083664866; Fri, 08 Dec
- 2023 17:01:04 -0800 (PST)
+        bh=DDeZCYtXqn2cs2JrwzvomIoxvwFGKvb0D6cCKP3KGx0=;
+        b=WeK2cLHpqL3HuB5STXt53KlaVCIhVFNyX+Tf6xkwWGgSsuJd3QcfuwjzphJegVtZFs
+         90PZkE8ugH94vPYL2BP2oa1Z1y0ToPQhYP99KZV/YF15Od7jFXStuORFZL/sKjucdEGC
+         qPPHwBSdyqQI1coYA4RMDoD3HnuoJLsJs5YZQ3T54WfgMGpkaZEUZlHEMOtAOp2xekfL
+         svEV6G7P5zgLRSNbMYtFJn7EswN1hvgNyyuZLoAaTH8JhNaTO/1aa2mh2Sy4n+K7C3WS
+         oZgBK3Mil2nzD2ya0lQQ3Kv1uwDus+bcf26uATs6gyHFubYtgs8Uja4rGA/3kMdepY16
+         Vc7g==
+X-Gm-Message-State: AOJu0YxQMaRKZ3oPtLbKPojDadJ4QE7mE+5qexgnTqce8qemFnb0lf/W
+	vNpqtbFFkgBko3bzimRE5nu4CkdxcUjcygzn6DL6Iw==
+X-Google-Smtp-Source: AGHT+IGShvGwLPhyao8X9Dj8VhmyqZQEkFRbj4Ak+KHDxcWKcLLYf+Q6tnP2alm19gFUubHvpWgjIuI0akR6N4sAeiY=
+X-Received: by 2002:a0c:c782:0:b0:67a:21aa:6505 with SMTP id
+ k2-20020a0cc782000000b0067a21aa6505mr2131602qvj.45.1702159452795; Sat, 09 Dec
+ 2023 14:04:12 -0800 (PST)
 MIME-Version: 1.0
 References: <20231201160925.3136868-1-peter.griffin@linaro.org>
- <20231201160925.3136868-19-peter.griffin@linaro.org> <CAPLW+4ki_GUAnor4sTanXFLzKrAB9JpxK98PED1fUY-MLCzUdA@mail.gmail.com>
-In-Reply-To: <CAPLW+4ki_GUAnor4sTanXFLzKrAB9JpxK98PED1fUY-MLCzUdA@mail.gmail.com>
+ <20231201160925.3136868-20-peter.griffin@linaro.org> <CAPLW+4mOmQM+Hy-kUKn9onU25-ycgj4CWfAK+-vZVH+yw=FhtQ@mail.gmail.com>
+In-Reply-To: <CAPLW+4mOmQM+Hy-kUKn9onU25-ycgj4CWfAK+-vZVH+yw=FhtQ@mail.gmail.com>
 From: Peter Griffin <peter.griffin@linaro.org>
-Date: Sat, 9 Dec 2023 01:00:53 +0000
-Message-ID: <CADrjBPq-MLBVrW0ju64JdXia+QnDSsKR9+DSi==rkZXokMzt+g@mail.gmail.com>
-Subject: Re: [PATCH v5 18/20] arm64: dts: exynos: google: Add initial Google
- gs101 SoC support
+Date: Sat, 9 Dec 2023 22:04:01 +0000
+Message-ID: <CADrjBPqWimgbPUZoW1cTs0grL2Kv3rpNMhz=z-c+MUx6h6mTAQ@mail.gmail.com>
+Subject: Re: [PATCH v5 19/20] arm64: dts: exynos: google: Add initial
+ Oriole/pixel 6 board support
 To: Sam Protsenko <semen.protsenko@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, 
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
 	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
 	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
 	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
@@ -77,216 +77,106 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Sam,
 
-On Sat, 2 Dec 2023 at 01:54, Sam Protsenko <semen.protsenko@linaro.org> wro=
+On Sat, 2 Dec 2023 at 02:28, Sam Protsenko <semen.protsenko@linaro.org> wro=
 te:
 >
 > On Fri, Dec 1, 2023 at 10:11=E2=80=AFAM Peter Griffin <peter.griffin@lina=
 ro.org> wrote:
 > >
-> > Google gs101 SoC is ARMv8 mobile SoC found in the Pixel 6,
-> > (oriole) Pixel 6a (bluejay) and Pixel 6 pro (raven) mobile
-> > phones. It features:
-> > * 4xA55 little cluster
-> > * 2xA76 Mid cluster
-> > * 2xX1 Big cluster
+> > Add initial board support for the Pixel 6 phone code named Oriole. This
+> > has been tested with a minimal busybox initramfs and boots to a shell.
 > >
-> > This commit adds the basic device tree for gs101 (SoC).
-> > Further platform support will be added over time.
-
-[cut]
-
-> > +       spi0_cs_func: spi0-cs-func-pins {
-> > +               samsung,pins =3D "gpp20-3";
-> > +               samsung,pin-function =3D <GS101_PIN_FUNC_3>;
-> > +               samsung,pin-pud =3D <GS101_PIN_PULL_NONE>;
-> > +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> > +       };
-> > +};
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/exynos/Makefile           |   2 +
+> >  arch/arm64/boot/dts/exynos/google/Makefile    |   4 +
+> >  .../boot/dts/exynos/google/gs101-oriole.dts   | 105 ++++++++++++++++++
+> >  3 files changed, 111 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
+> >  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/=
+exynos/Makefile
+> > index 6e4ba69268e5..44c24a8ad9e1 100644
+> > --- a/arch/arm64/boot/dts/exynos/Makefile
+> > +++ b/arch/arm64/boot/dts/exynos/Makefile
+> > @@ -1,4 +1,6 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> > +subdir-y +=3D google
 > > +
+> >  dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
+> >         exynos5433-tm2.dtb              \
+> >         exynos5433-tm2e.dtb             \
+> > diff --git a/arch/arm64/boot/dts/exynos/google/Makefile b/arch/arm64/bo=
+ot/dts/exynos/google/Makefile
+> > new file mode 100644
+> > index 000000000000..0a6d5e1fe4ee
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/google/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
+> > +       gs101-oriole.dtb \
+> > diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/=
+arm64/boot/dts/exynos/google/gs101-oriole.dts
+> > new file mode 100644
+> > index 000000000000..6abd00fa337e
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+> > @@ -0,0 +1,105 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Oriole Device Tree
+> > + *
+> > + * Copyright 2021-2023 Google,LLC
 >
-> Nitpick: this empty line is not needed.
+> Space after comma. Maybe also make this line consistent for all added
+> files. Checking existing files, it's usually spelled "Copyright (C)
+> <years>, Google LLC."
 
-Ok will fix
+I've made it match the other files I've added in v6 (by removing the
+,). There seems to be a lot of variation upstream as to whether a . is
+used at the end or not so I've left that as it was.
+>
+> Btw, I forgot to mention in my review for PATCH #18: please double
+> check the commit message, there are some issues with punctuation
+> there.
 
-[cut]
+Ok, I will check it.
 
+>
+> > + * Copyright 2023 Linaro Ltd - <peter.griffin@linaro.org>
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/input/input.h>
+> > +#include "gs101-pinctrl.h"
+> > +#include "gs101.dtsi"
+> > +
+> > +/ {
+> > +       model =3D "Oriole";
+> > +       compatible =3D "google,gs101-oriole", "google,gs101";
 > > +
 > > +       aliases {
-> > +               pinctrl0 =3D &pinctrl_gpio_alive;
-> > +               pinctrl1 =3D &pinctrl_far_alive;
-> > +               pinctrl2 =3D &pinctrl_gsacore;
-> > +               pinctrl3 =3D &pinctrl_gsactrl;
-> > +               pinctrl4 =3D &pinctrl_peric0;
-> > +               pinctrl5 =3D &pinctrl_peric1;
-> > +               pinctrl6 =3D &pinctrl_hsi1;
-> > +               pinctrl7 =3D &pinctrl_hsi2;
 > > +               serial0 =3D &serial_0;
->
-> Please check commit f4324583cd4d ("arm64: dts: exynos: move aliases to
-> board in Exynos850"). At least for Exynos850 the serial alias was
-> moved to the board dts by Krzysztof.
-
-Ok will fix
-
->
 > > +       };
 > > +
-> > +       pmu-0 {
-> > +               compatible =3D "arm,cortex-a55-pmu";
-> > +               interrupts =3D <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_clus=
-ter0>;
-> > +       };
-> > +
-> > +       pmu-1 {
-> > +               compatible =3D "arm,cortex-a76-pmu";
-> > +               interrupts =3D <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_clus=
-ter1>;
-> > +       };
-> > +
-> > +       pmu-2 {
-> > +               compatible =3D "arm,cortex-x1-pmu";
-> > +               interrupts =3D <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_clus=
-ter2>;
-> > +       };
-> > +
-> > +       pmu-3 {
-> > +               compatible =3D "arm,dsu-pmu";
-> > +               interrupts =3D <GIC_SPI 257 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +               cpus =3D <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
-> > +                      <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
-> > +       };
-> > +
-> > +       /* TODO replace with CCF clock */
-> > +       dummy_clk: oscillator {
-> > +               compatible =3D "fixed-clock";
-> > +               #clock-cells =3D <0>;
-> > +               clock-frequency =3D <12345>;
-> > +               clock-output-names =3D "pclk";
-> > +       };
+> > +       chosen {
+> > +               /* Bootloader expects bootargs specified otherwise it c=
+rashes */
 >
-> Don't you already have real USI/UART clocks implemented in your clock dri=
-ver?
-
-No, not yet, hence the dummy clock.
-
-[cut]
-
-> > +
-> > +               usi_uart: usi@10a000c0 {
-> > +                       compatible =3D "google,gs101-usi",
+> Just wanted to say: I think you are doing a great job with this
+> platform, and I can only imagine how hard it can be when you can't
+> actually tinker with the bootloader source code. But I do appreciate
+> that you was able to minimize stuff like earlycon, ect, etc :) And
+> this one actually LGTM.
 >
-> I can't see this compatible in USI driver. Does it make sense to add it t=
-here?
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-It is not required at the moment, as it is compatible with
-samsung,exynos850-usi. I don't want to keep adding more patches to
-this series, and then having an endless cycle of nits.
-
->
-> > +                                    "samsung,exynos850-usi";
-> > +                       reg =3D <0x10a000c0 0x20>;
-> > +                       samsung,sysreg =3D <&sysreg_peric0 0x1020>;
-> > +                       samsung,mode =3D <USI_V2_UART>;
-> > +                       #address-cells =3D <1>;
-> > +                       #size-cells =3D <1>;
-> > +                       ranges;
-> > +                       clocks =3D <&dummy_clk>, <&dummy_clk>;
->
-> The same concern as above. I think I saw those clocks already
-> implemented in gs101 clock driver.
-
-No, these clocks have not been implemented yet, hence the dummy clock.
-There is no support for cmu_peric0 bank yet in the clock driver.
-
->
-> > +                       clock-names =3D "pclk", "ipclk";
-> > +                       status =3D "disabled";
-> > +
-> > +                       serial_0: serial@10a00000 {
-> > +                               compatible =3D "google,gs101-uart";
-> > +                               reg =3D <0x10a00000 0xc0>;
-> > +                               reg-io-width =3D <4>;
-> > +                               samsung,uart-fifosize =3D <256>;
-> > +                               interrupts =3D <GIC_SPI 634
-> > +                                             IRQ_TYPE_LEVEL_HIGH 0>;
-> > +                               clocks =3D <&dummy_clk 0>, <&dummy_clk =
-0>;
->
-> Ditto.
-
-See above
-
->
-> > +                               clock-names =3D "uart", "clk_uart_baud0=
-";
-> > +                               status =3D "disabled";
-> > +                       };
-> > +               };
-> > +
-> > +               pinctrl_peric1: pinctrl@10c40000 {
-> > +                       compatible =3D "google,gs101-pinctrl";
-> > +                       reg =3D <0x10C40000 0x00001000>;
-> > +                       interrupts =3D <GIC_SPI 644 IRQ_TYPE_LEVEL_HIGH=
- 0>;
-> > +               };
-> > +
-> > +               sysreg_peric1: syscon@10c20000 {
-> > +                       compatible =3D "google,gs101-peric1-sysreg", "s=
-yscon";
-> > +                       reg =3D <0x10C20000 0x10000>;
-> > +               };
-> > +
-> > +               pinctrl_hsi1: pinctrl@11840000 {
-> > +                       compatible =3D "google,gs101-pinctrl";
-> > +                       reg =3D <0x11840000 0x00001000>;
-> > +                       interrupts =3D <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH=
- 0>;
-> > +               };
-> > +
-> > +               pinctrl_hsi2: pinctrl@14440000 {
-> > +                       compatible =3D "google,gs101-pinctrl";
-> > +                       reg =3D <0x14440000 0x00001000>;
-> > +                       interrupts =3D <GIC_SPI 503 IRQ_TYPE_LEVEL_HIGH=
- 0>;
-> > +               };
-> > +
-> > +               cmu_apm: clock-controller@17400000 {
-> > +                       compatible =3D "google,gs101-cmu-apm";
-> > +                       reg =3D <0x17400000 0x8000>;
-> > +                       #clock-cells =3D <1>;
-> > +
-> > +                       clocks =3D <&ext_24_5m>;
-> > +                       clock-names =3D "oscclk";
->
-> Doesn't CMU_APM take any clocks from CMU_TOP?
-
-No it doesn't.
-
->
-> > +               };
-> > +
-> > +               sysreg_apm: syscon@174204e0 {
-> > +                       compatible =3D "google,gs101-apm-sysreg", "sysc=
-on";
-> > +                       reg =3D <0x174204e0 0x1000>;
-> > +               };
-> > +
-> > +               pmu_system_controller: system-controller@17460000 {
-> > +                       compatible =3D "google,gs101-pmu", "syscon";
-> > +                       reg =3D <0x17460000 0x10000>;
-> > +               };
->
-> Just a suggestion: it might be relatively simple to add syscon-reboot
-> node in pmu_system_controller, and it might just work. One more
-> feature for free! :)
-
-Thanks for the suggestion. I tried that previously and it is not
-included here deliberately because it relies on more than that to be
-functional. Although the register offsets are the same, the PMU
-registers are protected from the kernel and are only write accessible
-via SMC call on this platform. I have patches ready to send out as a
-RFC for that once this initial series is merged and we can discuss
-that then.
+Thanks, much appreciated!
 
 regards,
 
