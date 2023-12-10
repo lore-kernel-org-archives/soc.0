@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DB0AC4167B
-	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 13:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C62CC4167B
+	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 13:53:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C6061C433CB; Sun, 10 Dec 2023 13:49:33 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id 375CAC433CC; Sun, 10 Dec 2023 13:53:01 +0000 (UTC)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 128D1C433CD
-	for <soc@kernel.org>; Sun, 10 Dec 2023 13:49:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 128D1C433CD
+	by smtp.kernel.org (Postfix) with ESMTPS id 4E5C7C433CA
+	for <soc@kernel.org>; Sun, 10 Dec 2023 13:52:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E5C7C433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a1e2ded3d9fso440387166b.0
-        for <soc@kernel.org>; Sun, 10 Dec 2023 05:49:31 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3b844357f7cso2787304b6e.1
+        for <soc@kernel.org>; Sun, 10 Dec 2023 05:52:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702216170; x=1702820970; darn=kernel.org;
+        d=linaro.org; s=google; t=1702216378; x=1702821178; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e5o7QMqT1/h/c/y4rQYTZ+85QaiS8Pwt6E28lSDw4ZY=;
-        b=rgqLgQxINQiV9a6TICIT8YtD7eXubRg2ey57nNxWRQErRuu4F36/J/kME4izbT8+AA
-         Y1yCpoA9Z2EUw6Bgm7AG6Q/EHJSPkQGHzRwkowQ/iSaNb/Kzp+tvstsNx0ajOthpaYvt
-         9Wfg+ggp1srKWMWwNvZuCsrLmAK14Td1GF6qPeLtMc9wGluC0CzrnwIRPYANq1uvMShA
-         lXBGUowQxFPqN0oGIkJTABhiwLW4+32SFD1uf1WBPucFBDiQ0hw6XaFURbDfszOkg8kg
-         4RUzF2+viYhfM+bNgc/QBS0Gx7VXA+5DjKbV4tfmZf7GSURLBcgJR4YAjHyE8jkT1c4y
-         4zDg==
+        bh=DyfZzF+pEmdCnaQqoUIXxpgj+wJsipZvikAaIUgXmqU=;
+        b=PtTSkza4yt1wh4hfMKTB4oGyeKX5c7XxfdBhelSW3fkKQS6hYC/IsgSxqjDMTICM6B
+         3Iwse3JdGIYlr6ZlRR46ex6lBjV78dMziaRVU9n+AKHTwh1RWUjXPjrPDZdqipJ1wuHN
+         dBU+6msjQLc5Knzl5VxNicK9nr02fizUo7eQB3eizaLLfUJ/fhmB5NSxr3oWD0Wo2Qru
+         CVCDQ0FUk9l5pWwYb5acchyeNynHSEYiycWluWJx7oijfwOtauElge0ARTqnxJ5EymS4
+         /Pu7kSO1BzjSTGj++nQ2dIwDlphwYQ7Nbx+kLldenzshF3v5ZTWpbjvBpreMXo66yZXh
+         Ia7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702216170; x=1702820970;
+        d=1e100.net; s=20230601; t=1702216378; x=1702821178;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e5o7QMqT1/h/c/y4rQYTZ+85QaiS8Pwt6E28lSDw4ZY=;
-        b=uoH2F5vzuaX1HYH0kvsyaR5vF/b0Np5vTh/YaPVVzLRTiCc1tTlfF1UWSVDlVJ6Jow
-         bO3YyyvYtVTrdYFpCP2amHTZwexJh+gZBCrUWwoXNk0+w2wjAC3sPpXOe9DhOdArnFnY
-         EJ3bFKCP/5H8ur9Inzqit+SPe4wsyt2DTQxy8u2G4hQ61Dr5hIY+6sNqtAXaD40jcieX
-         /peDa4lcGi4DWqa792FLwZ89x4YS/UpzSvO+Xp3X4633Ns2CXwF/eqTj8zeY+WiX7pA3
-         /G7tuoSMEmVa8Dyrdlz4uOFBWromjKNCeDEyyVEOa5vKLmDWj0wxtvJn22pjpTCAhQU/
-         nNgQ==
-X-Gm-Message-State: AOJu0YxxOsseUEy+HfX+GK0j/zPuTefnNHev5h2ro/roAEb1tDHRf7cK
-	6s//PgfDuWbDIx+xkDGqIAuH/w==
-X-Google-Smtp-Source: AGHT+IHmKOzFti2jhtzD65YbqgtqLG5pAJ71Avs61aBrwetBhPAc9LejJ/ro9TGOsFTvc1XomzIJPQ==
-X-Received: by 2002:a17:907:38c:b0:a19:a19b:78d8 with SMTP id ss12-20020a170907038c00b00a19a19b78d8mr1298768ejb.155.1702216170240;
-        Sun, 10 Dec 2023 05:49:30 -0800 (PST)
+        bh=DyfZzF+pEmdCnaQqoUIXxpgj+wJsipZvikAaIUgXmqU=;
+        b=V+hEIB3n/CBkQwQcppTUXpJ0zyHNOPhq9V/qTsADGRNyGN+JrUL+EdOmhvJSx9OW3s
+         mF/u/EI0zG5fb9PEUJFGyWhUlL5lfQPDVb6IMxM7H6cUa8Mj7R4fGXdJpesNRGoD6jDT
+         OGtepyeYpeQ2pKrRzrvEt8TsHh3EsiEiWlPA1cFS2fs+KPeVNZwCR38G04FrYVus6bVJ
+         iWtJ058eRmuqswNSjF/mGXUZr2YlHDzFQVU9oIHlNRIVCOMpXRmoAuS+OYtfagC56wHE
+         64gjfBFD4U6kzFBALYRH6WO10pJwq/F1yCaSNG+RuS+mzX8YnvLY0K7cP5zp5Soy4gzC
+         FtfA==
+X-Gm-Message-State: AOJu0Ywx7mN4pdKMApO9lTvXM3tYB5eMu0fnXrtPO86oyTXQtRkTcquM
+	eH02tyO7ln1UWhrqO2jHbqkgbw==
+X-Google-Smtp-Source: AGHT+IEc1BOhnl0TdzEPP1ZWGXEY7kf7u1c43rqRtWGQXy5QT9zWwBljFRVUmZmDfObmkFTLgeboFQ==
+X-Received: by 2002:a05:6808:3c96:b0:3b8:b063:6bb6 with SMTP id gs22-20020a0568083c9600b003b8b0636bb6mr5762059oib.101.1702216378270;
+        Sun, 10 Dec 2023 05:52:58 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id rm6-20020a1709076b0600b00a1f6f120b33sm3014923ejc.110.2023.12.10.05.49.27
+        by smtp.gmail.com with ESMTPSA id e20-20020aa78c54000000b006cb9a9ea64dsm4544874pfd.220.2023.12.10.05.52.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 05:49:29 -0800 (PST)
-Message-ID: <c2244932-cb2f-423a-bbe6-9ab2b08b9d63@linaro.org>
-Date: Sun, 10 Dec 2023 14:49:26 +0100
+        Sun, 10 Dec 2023 05:52:57 -0800 (PST)
+Message-ID: <2dd2f920-a0a5-4f69-b7e6-c09c3f83eae6@linaro.org>
+Date: Sun, 10 Dec 2023 14:52:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 03/20] dt-bindings: soc: google: exynos-sysreg: add
- dedicated SYSREG compatibles to GS101
+Subject: Re: [PATCH v6 05/20] dt-bindings: arm: google: Add bindings for
+ Google ARM platforms
 Content-Language: en-US
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- olof@lixom.net, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- cw00.choi@samsung.com, alim.akhtar@samsung.com
+To: Peter Griffin <peter.griffin@linaro.org>, Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
  soc@kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+ s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
+ linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+ olof@lixom.net, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+ cw00.choi@samsung.com, alim.akhtar@samsung.com,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
- linux-serial@vger.kernel.org
+ linux-serial@vger.kernel.org, Rob Herring <robh@kernel.org>
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-4-peter.griffin@linaro.org>
+ <20231209233106.147416-6-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,36 +121,43 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209233106.147416-4-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-6-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/12/2023 00:30, Peter Griffin wrote:
-> GS101 has three different SYSREG controllers, add dedicated
-> compatibles for them to the documentation.
-> 
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  .../bindings/soc/samsung/samsung,exynos-sysreg.yaml         | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> index 2de4301a467d..127f4ffde76a 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> @@ -22,6 +22,12 @@ properties:
->                - tesla,fsd-fsys1-sysreg
->                - tesla,fsd-peric-sysreg
->            - const: syscon
-> +      - items:
+> +  Likewise there are a couple of names for the actual device
+> +  - Marketing name ("Pixel 6")
+> +  - Codename ("Oriole")
+> +
+> +  Devicetrees should use the lowercased SoC ID and lowercased board codename,
+> +  e.g. gs101 and gs101-oriole.
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: Google Pixel 6 / Oriole
+> +        items:
 > +          - enum:
-> +              - google,gs101-apm-sysreg
-> +              - google,gs101-peric0-sysreg
-> +              - google,gs101-peric1-sysreg
+> +              - google,gs101-oriole
+> +          - const: google,gs101
+> +
+> +  # Bootloader requires empty ect node to be present
+> +  ect:
+> +    type: object
+> +    additionalProperties: false
 
-This should be part of the first enum. No need for new list for every
-new SoC. I'll fix it while applying.
+This is a major change, thus Rob's review should be dropped with short
+explanation.
+
+No new properties post-review.
+
+Rob,
+
+Please re-review the "ect" part. I suggested it to Peter to solve the
+bootloader requirements.
 
 Best regards,
 Krzysztof
