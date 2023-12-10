@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE6EAC4167B
-	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 14:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA62C4167B
+	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 14:01:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B28AFC433C8; Sun, 10 Dec 2023 14:01:48 +0000 (UTC)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	id 31C68C433C7; Sun, 10 Dec 2023 14:01:52 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3D300C433CA
-	for <soc@kernel.org>; Sun, 10 Dec 2023 14:01:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3D300C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 0937CC433CA
+	for <soc@kernel.org>; Sun, 10 Dec 2023 14:01:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0937CC433CA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2c9f8faf57bso45124511fa.3
-        for <soc@kernel.org>; Sun, 10 Dec 2023 06:01:46 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-54dca2a3f16so6554758a12.0
+        for <soc@kernel.org>; Sun, 10 Dec 2023 06:01:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702216905; x=1702821705; darn=kernel.org;
+        d=linaro.org; s=google; t=1702216908; x=1702821708; darn=kernel.org;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=509ouQXj36I5/HmX907dzCDtwty3xLRM03HHWK4ixvQ=;
-        b=qCNEdA6OTDJliEVCXU+68z4v8nuZY53yGdWu32zyS6GNc03xR/SbTiOWfVX6TpjZJZ
-         CrtAW9u/TfezPIO3/0N+BHZId0s3S42+hOpTVyhWhLP/eAyORlQOdBhkseqTP90SNdrU
-         IfYZjBqLCyT4LLRVFvmvfvKPRKoHknkH66vhOf7egaIaMTK6lPeQxCEFLQJYMS2a75nR
-         6NR7t5n3Yz/sef9VxG0mgokWPXxVWYTBaFp943qooIfkWO7GkXUhnvDD8/9LDm4PDvrQ
-         3yMl6DyRKb0AbQt6ZAXobrrnvvt+QOug6+UzRHwl8VgILBqXCjrqq+eEjLzdCM/unckL
-         Y2lw==
+        bh=SrhZNFmRkf5QkANQC+uz36bgjgb8UZO2KJuZBL7fznE=;
+        b=hLgp7fgKBiQfI4NZfGHw7IPQKohUmYTChcFVxYE5REOPW4BprMfbD2EXlxKfO0tO9i
+         XV2UaIgST+/rwadRqbbxaN4Z+Jy3I/qdFWOAHlPHlM5c9BOYCE8PA+EkJhqON1GSRcik
+         IVz34EDQ/6HlcuB2aRYE5Hrm+C/11TA5J6abPgtkkVXsosHIi6pyaY0SkfHbPZry2GRw
+         FBU2mE2ukeqTm4MoSqjC9vXnryWBv+rqJhAorXXjq+NFFoyLrCFxBNcwbpFKJvOiT7UQ
+         fR6XDCkEuP677qM1b1//qjXLtAJD4aI+M4XOVESGi8NK/5THqYA5cfMHeuIASWK/bEwy
+         QXIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702216905; x=1702821705;
+        d=1e100.net; s=20230601; t=1702216908; x=1702821708;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=509ouQXj36I5/HmX907dzCDtwty3xLRM03HHWK4ixvQ=;
-        b=TU2o6meoE3MhY7TNRXO30fx/8xQuP+6FwtCwnFRUj0AOxrDgyEoJ7NWaoTd1sayjof
-         eTvMyWJzmgQYGISgA4BIxwboyRjyZ3puUxURQNYC8I3Ee0662m3RSBLkrZGaXP9KpNps
-         ENy5e3mWhjjggnWziQjLltp1CDMqaJeD03rxoZ6dGjWB7uS9irT6bPtVpNybwPcTvpmW
-         8EwiCgkgcdhGBkFwieBSJFc6V73AxleBVHarw/0mRH94lDm0uB6RZS1E/sqiD5DSqUax
-         nkuYFIMGFMTkiF6tt4X4sYmmlhj92zmjPocFVuF585r30sI6ZJ1Kd9VUkWgce1mKOPov
-         gUlA==
-X-Gm-Message-State: AOJu0YxRNpo0yUv24pnpUZy5xgav7D9YxAYWB8YhLy810tPgw4rWO/aN
-	4aJZPsj0JhLJNjlBDjjNHXup7Q==
-X-Google-Smtp-Source: AGHT+IEZmhO9bfzbn9JehG5hOmeoOZbTHQz/rhyB/WkPhsdghbEEi7AQ8p1xd7LZWL25BdUtRojVkA==
-X-Received: by 2002:a05:651c:10b6:b0:2cc:2189:7f5a with SMTP id k22-20020a05651c10b600b002cc21897f5amr36215ljn.93.1702216905124;
-        Sun, 10 Dec 2023 06:01:45 -0800 (PST)
+        bh=SrhZNFmRkf5QkANQC+uz36bgjgb8UZO2KJuZBL7fznE=;
+        b=IJ23k0GL1d45yhlTT1cCMwoxnfGJ5soMKrP1CkoRFMyhiq4Nm/a7tlLh0ynJLNQLrK
+         S07gEyAFv9mgYA7iDt0sFAbPeSU16lQB4awRgdboVJtcGMJfcLQFEVoXIw72drjml6ju
+         DLV5zr+7vxSSAzEKHCQa8737aAGW3pgAhqhSCBrhQ4rm404khDpkZC8u0jB8dwP9qCh1
+         CqRPMqUWujUb6TNlUf3GDg4l6np/gnpnlMwyqJNWSmi6GLTHrjB5mWoQPfWyKDVceMh6
+         24+HHazfZnz+cvyMzmpvyPZo0XOVVlY73LEbNWcQ+zM8A8rjPSXcptaEcA6uI7ye2k5+
+         HDZQ==
+X-Gm-Message-State: AOJu0YxIg9FRs02rbzN7J6F6WfFQ3fawe4tv0a8HVMGDiICMByENB62A
+	8YPXqENrQvRK8nLdCKWmygjT7g==
+X-Google-Smtp-Source: AGHT+IGD245LrSk0xYctz3uy/kk2KvcUmnSUKmb1u8fAYEK0Zu2DWqkA0Pi8IyNUK3s5IFZQRvE6Bw==
+X-Received: by 2002:a17:907:280f:b0:a1f:4d21:301a with SMTP id eb15-20020a170907280f00b00a1f4d21301amr3987023ejc.13.1702216908355;
+        Sun, 10 Dec 2023 06:01:48 -0800 (PST)
 Received: from [127.0.1.1] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id tg10-20020a1709078dca00b00a178b965899sm3458691ejc.100.2023.12.10.06.01.42
+        by smtp.gmail.com with ESMTPSA id tg10-20020a1709078dca00b00a178b965899sm3458691ejc.100.2023.12.10.06.01.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Dec 2023 06:01:44 -0800 (PST)
+        Sun, 10 Dec 2023 06:01:48 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
  mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
@@ -68,28 +68,29 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
  linux-watchdog@vger.kernel.org, kernel-team@android.com, 
  linux-serial@vger.kernel.org
-In-Reply-To: <20231209233106.147416-2-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-3-peter.griffin@linaro.org>
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-2-peter.griffin@linaro.org>
-Subject: Re: (subset) [PATCH v6 01/20] dt-bindings: soc: samsung:
- exynos-pmu: Add gs101 compatible
-Message-Id: <170221690211.46013.5711996168125251211.b4-ty@linaro.org>
-Date: Sun, 10 Dec 2023 15:01:42 +0100
+ <20231209233106.147416-3-peter.griffin@linaro.org>
+Subject: Re: (subset) [PATCH v6 02/20] dt-bindings: clock: Add Google gs101
+ clock management unit bindings
+Message-Id: <170221690550.46013.13677086533521441233.b4-ty@linaro.org>
+Date: Sun, 10 Dec 2023 15:01:45 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12.3
 
 
-On Sat, 09 Dec 2023 23:30:47 +0000, Peter Griffin wrote:
-> Add gs101-pmu compatible to the bindings documentation.
+On Sat, 09 Dec 2023 23:30:48 +0000, Peter Griffin wrote:
+> Provide dt-schema documentation for Google gs101 SoC clock controller.
+> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
 > 
 > 
 
 Applied, thanks!
 
-[01/20] dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
-        https://git.kernel.org/krzk/linux/c/fdd78ff04ccc96f628c2f93e0d48ab0a74bf34ef
+[02/20] dt-bindings: clock: Add Google gs101 clock management unit bindings
+        https://git.kernel.org/krzk/linux/c/0a910f1606384a5886a045e36b1fc80a7fa6706b
 
 Best regards,
 -- 
