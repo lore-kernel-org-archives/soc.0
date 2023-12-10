@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FE2CC4167B
-	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 13:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DB0AC4167B
+	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 13:49:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 26CC8C433CA; Sun, 10 Dec 2023 13:44:27 +0000 (UTC)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	id C6061C433CB; Sun, 10 Dec 2023 13:49:33 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8A5B4C433CB
-	for <soc@kernel.org>; Sun, 10 Dec 2023 13:44:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8A5B4C433CB
+	by smtp.kernel.org (Postfix) with ESMTPS id 128D1C433CD
+	for <soc@kernel.org>; Sun, 10 Dec 2023 13:49:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 128D1C433CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-336210c34ebso200685f8f.1
-        for <soc@kernel.org>; Sun, 10 Dec 2023 05:44:25 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a1e2ded3d9fso440387166b.0
+        for <soc@kernel.org>; Sun, 10 Dec 2023 05:49:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702215863; x=1702820663; darn=kernel.org;
+        d=linaro.org; s=google; t=1702216170; x=1702820970; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=x/3q+uISdkVJVNPsLlMhVaPH7ZypeRNsMLbHDEBUj8M=;
-        b=bdI7PHsHwtV38zoCXj51fhEIztc+E1xch6oINcmOQIVZkqNb405kejpgz9D/042ugp
-         aG9nXBn90DDaaFftG1W+x4IVH6T0O22Je9aNFkWz+9iodRcBkWvxfSyd0yTII7WlHB+4
-         pipVJ+Ac4G1z6VpKobykr5FfbKAbJK+2ccfe8kDj63Nbv32YZf67L0SY61AMIPcAEER/
-         WKl64hAlwbkfBYrWKya5EA8X2jm3s551FtYHo8S/321HnSMYElssZsN8JTh+n8cuHFD+
-         sB1hpihlAXWoBmnjrzE8K0Jl+XXj8g4XWjy02QRh/OhBDPnQdwZRZUvt5xuBtqIfkeOP
-         OSEw==
+        bh=e5o7QMqT1/h/c/y4rQYTZ+85QaiS8Pwt6E28lSDw4ZY=;
+        b=rgqLgQxINQiV9a6TICIT8YtD7eXubRg2ey57nNxWRQErRuu4F36/J/kME4izbT8+AA
+         Y1yCpoA9Z2EUw6Bgm7AG6Q/EHJSPkQGHzRwkowQ/iSaNb/Kzp+tvstsNx0ajOthpaYvt
+         9Wfg+ggp1srKWMWwNvZuCsrLmAK14Td1GF6qPeLtMc9wGluC0CzrnwIRPYANq1uvMShA
+         lXBGUowQxFPqN0oGIkJTABhiwLW4+32SFD1uf1WBPucFBDiQ0hw6XaFURbDfszOkg8kg
+         4RUzF2+viYhfM+bNgc/QBS0Gx7VXA+5DjKbV4tfmZf7GSURLBcgJR4YAjHyE8jkT1c4y
+         4zDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702215863; x=1702820663;
+        d=1e100.net; s=20230601; t=1702216170; x=1702820970;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x/3q+uISdkVJVNPsLlMhVaPH7ZypeRNsMLbHDEBUj8M=;
-        b=DkUAiO0Gqq4jPjid5mJ2zzfJI9Kn8iUF2Rf1NQI7Hcg1dZXuBFkNGQr0YbYpAgFTcE
-         9x5FYqyxYEUTclS8pCrV2DNRwWedprCXW/3QFGho9gnmB0H/k7ymPe/iBTI+znRcKqmA
-         9jGXGBLVjc1MuLZjiUyMCSqbJDSrxrFtn2cx6d9s+jtcvW8wO7bUCfgwgy6ZInANymiJ
-         Z3qeZH0z/PuowqXHuJKxRQXEoei3VVOJCYMUEM3luQ5XT0iFQSJi13j7C5lvTItIpbE4
-         gErzbdoaQwkdDg2FeQwXjIKgcE1YAySvaevcAzl5ExpDnJWfnnCaKk/9ht3XNoqb3Xz6
-         MLIQ==
-X-Gm-Message-State: AOJu0YybvtiyCtADZAaNfSczRzmBwUjDDyGbsRBODGzk252b8tq3YUcE
-	MtDsXEssZaDq0L5jntBoMC0eYw==
-X-Google-Smtp-Source: AGHT+IFfm9zwidtx3/plTYWGMzlKaKvEvp7UdU0MyT8vFa+oKsZxStV7wXCIBDe0Wx0pSWFXm67cjA==
-X-Received: by 2002:a5d:6a07:0:b0:333:2fc4:461 with SMTP id m7-20020a5d6a07000000b003332fc40461mr1152276wru.90.1702215863653;
-        Sun, 10 Dec 2023 05:44:23 -0800 (PST)
+        bh=e5o7QMqT1/h/c/y4rQYTZ+85QaiS8Pwt6E28lSDw4ZY=;
+        b=uoH2F5vzuaX1HYH0kvsyaR5vF/b0Np5vTh/YaPVVzLRTiCc1tTlfF1UWSVDlVJ6Jow
+         bO3YyyvYtVTrdYFpCP2amHTZwexJh+gZBCrUWwoXNk0+w2wjAC3sPpXOe9DhOdArnFnY
+         EJ3bFKCP/5H8ur9Inzqit+SPe4wsyt2DTQxy8u2G4hQ61Dr5hIY+6sNqtAXaD40jcieX
+         /peDa4lcGi4DWqa792FLwZ89x4YS/UpzSvO+Xp3X4633Ns2CXwF/eqTj8zeY+WiX7pA3
+         /G7tuoSMEmVa8Dyrdlz4uOFBWromjKNCeDEyyVEOa5vKLmDWj0wxtvJn22pjpTCAhQU/
+         nNgQ==
+X-Gm-Message-State: AOJu0YxxOsseUEy+HfX+GK0j/zPuTefnNHev5h2ro/roAEb1tDHRf7cK
+	6s//PgfDuWbDIx+xkDGqIAuH/w==
+X-Google-Smtp-Source: AGHT+IHmKOzFti2jhtzD65YbqgtqLG5pAJ71Avs61aBrwetBhPAc9LejJ/ro9TGOsFTvc1XomzIJPQ==
+X-Received: by 2002:a17:907:38c:b0:a19:a19b:78d8 with SMTP id ss12-20020a170907038c00b00a19a19b78d8mr1298768ejb.155.1702216170240;
+        Sun, 10 Dec 2023 05:49:30 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id f11-20020a5d664b000000b003333e71ef9asm6366879wrw.115.2023.12.10.05.44.20
+        by smtp.gmail.com with ESMTPSA id rm6-20020a1709076b0600b00a1f6f120b33sm3014923ejc.110.2023.12.10.05.49.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 05:44:23 -0800 (PST)
-Message-ID: <eb3bfbbf-ce33-4281-9039-3e2ead40b1f2@linaro.org>
-Date: Sun, 10 Dec 2023 14:44:20 +0100
+        Sun, 10 Dec 2023 05:49:29 -0800 (PST)
+Message-ID: <c2244932-cb2f-423a-bbe6-9ab2b08b9d63@linaro.org>
+Date: Sun, 10 Dec 2023 14:49:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 02/20] dt-bindings: clock: Add Google gs101 clock
- management unit bindings
+Subject: Re: [PATCH v6 03/20] dt-bindings: soc: google: exynos-sysreg: add
+ dedicated SYSREG compatibles to GS101
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -75,7 +75,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
  linux-serial@vger.kernel.org
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-3-peter.griffin@linaro.org>
+ <20231209233106.147416-4-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,24 +121,37 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209233106.147416-3-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-4-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/12/2023 00:30, Peter Griffin wrote:
-> Provide dt-schema documentation for Google gs101 SoC clock controller.
-> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
+> GS101 has three different SYSREG controllers, add dedicated
+> compatibles for them to the documentation.
 > 
 > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  .../bindings/clock/google,gs101-clock.yaml    | 106 +++++
->  include/dt-bindings/clock/google,gs101.h      | 392 ++++++++++++++++++
->  2 files changed, 498 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
->  create mode 100644 include/dt-bindings/clock/google,gs101.h
+>  .../bindings/soc/samsung/samsung,exynos-sysreg.yaml         | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> index 2de4301a467d..127f4ffde76a 100644
+> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> @@ -22,6 +22,12 @@ properties:
+>                - tesla,fsd-fsys1-sysreg
+>                - tesla,fsd-peric-sysreg
+>            - const: syscon
+> +      - items:
+> +          - enum:
+> +              - google,gs101-apm-sysreg
+> +              - google,gs101-peric0-sysreg
+> +              - google,gs101-peric1-sysreg
 
-Wearing DT hat:
+This should be part of the first enum. No need for new list for every
+new SoC. I'll fix it while applying.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Best regards,
+Krzysztof
 
