@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D7DFC4167B
-	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 14:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0078DC4167B
+	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 14:26:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56FC9C433C7; Sun, 10 Dec 2023 14:24:50 +0000 (UTC)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	id DBDD5C433CA; Sun, 10 Dec 2023 14:26:46 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8F418C433CD
-	for <soc@kernel.org>; Sun, 10 Dec 2023 14:24:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F418C433CD
+	by smtp.kernel.org (Postfix) with ESMTPS id 681BDC433C9
+	for <soc@kernel.org>; Sun, 10 Dec 2023 14:26:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 681BDC433C9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40c2db2ee28so36725195e9.2
-        for <soc@kernel.org>; Sun, 10 Dec 2023 06:24:47 -0800 (PST)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3335397607dso4220117f8f.1
+        for <soc@kernel.org>; Sun, 10 Dec 2023 06:26:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702218286; x=1702823086; darn=kernel.org;
+        d=linaro.org; s=google; t=1702218404; x=1702823204; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QJVTjxLJRTHGX2+DLUDaqD3hDkGkgUqbRVWTjFURRas=;
-        b=mVJ15pTSTSYuFKBCc+JjT+KY6DhgzGDENwgRjsq7Lc5IEkhvzpU2fSG8eU7YE00/3a
-         eLh/O2+YL+YQOLtxGEzEXNvtSBCiiUJvaP1at2GXyX4wy6PjmKyapw99oFmomsYpnPE7
-         CXS88W3PRRcyTiWszcEAFEhitio/sw8WntyK4GMC8dw4qyQfgK7MnzuNObpIO+JuvSkE
-         iCTSZ6YYd8HRxChaUMB/ZkSmvd+FVoIBvkrrdZ+J494FfgZl5VcWnzgzgO6EOx+H7Gem
-         KEmB9cJd+FqJh53JmptrJ5T7TdK1oY0b6MB4x7uBQ8BFZLinWKP7EkOz2kruYbRIPHkT
-         2PbA==
+        bh=kK49YUa5FxiF2kaa082NEbAgvqplCkjoF/Z5IeMRDaQ=;
+        b=B44jBOK+SZ+wdnI1QBV6oHuvOZfdyyDFvFBCGX49zDj9VMqHQewNkYHr7w8wWD3XvK
+         A8GlEyuy2Hq8LQfzCjph3TBJI3TIUmH2yC9XkN0uRy374GIzkLb6Yk8+doeiFLaYt6GX
+         6LxsomSL28R4/tPgNaGW0eJS7MxX1fqHdY0VbWfBTsK18kb/91lmipU3VAqGWck63n13
+         2I3KQyCwyObCngylWnO9nQXcJYeNfwOvHDXt0DnNOZbr84Zz/24f6wrG7HvJibFs8iWB
+         84zpbq7TqXwoLU0xlbEr4e1DMfqIR3TQRT98frvFUEngmEIwiTehIraDAyhV5kUAUBPg
+         y5Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702218286; x=1702823086;
+        d=1e100.net; s=20230601; t=1702218404; x=1702823204;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QJVTjxLJRTHGX2+DLUDaqD3hDkGkgUqbRVWTjFURRas=;
-        b=DZ5Ha8550l4EZPaz80qRNvmElx5bUB0PRF4y+iXj8+NdQproOqkfFVYg+DqukjqtMX
-         96OrLYGKMPnGrahva5LrRuRTiAP9/NK7ES94i2beWV5spwO3uX55CKSx7/jEzphAFG9F
-         V023a1zkMTG4pAnGHrDlv+ymzYWteRa9wvCPjq2Rr/ujEEU1BeHNeH+icahN9T7KyTiU
-         MeqDQRiwUQ/rCNzlkJtRdSEfwoYHCkRgPbkUwt7Ru0xqwb1BJLgpGcD1NkEUPHR/tb3A
-         LMD5abVKOCK5dxPRcoYUlbacY66LtPp/CLNuDVc7tAiVfwSiMz0/tkWucHUvyOUzDSIP
-         Dn8g==
-X-Gm-Message-State: AOJu0YywWQRUWJYQ5HzQOGIZiLokgbdGZabMd6Mf3ZhFoWo1o1t/0+4s
-	HpZTexG0Gcz1lFXXR+153+MKOg==
-X-Google-Smtp-Source: AGHT+IEIJD7c2A1oFfK2yjpbev+frtkLypGf/Wf2fdfohAclzP0T7gr5vPAXxmRX+QxNeKbHYNUVbw==
-X-Received: by 2002:a05:600c:4f81:b0:40c:3f09:57b7 with SMTP id n1-20020a05600c4f8100b0040c3f0957b7mr1050757wmq.145.1702218285846;
-        Sun, 10 Dec 2023 06:24:45 -0800 (PST)
+        bh=kK49YUa5FxiF2kaa082NEbAgvqplCkjoF/Z5IeMRDaQ=;
+        b=hh9OzW/WJt7oFLAWuB78LnelWlIJ3n/c2k/RYX3QW0qzY5TMetDDtYrkppJ8Y9wTGY
+         V3mDm9EBCp/CgoPKI/f+A58Qi+/xU9h7h9i+2AUER1IDnDJJdS5LR79/iiRZDq2ttab8
+         YJxUah+pXcj6DQodIL1AIoDP2iaAI2YX87cCWfWSuLIO8DflABVsVzeFKWOcmEFgbvsR
+         JtUZEerX7ARYeS8waQPwz2WLQXbej4ANs6w6iykCfcaaEw7oVa+ma3LWYu8DbZqoqPQx
+         L5s/DJxmZ9WWBz/Vexyc+2qVlD+KJxeuim7wEWjwEDP9SjjduWVm2JawWq6XvEsR9MX+
+         mvJQ==
+X-Gm-Message-State: AOJu0YwnrrfttoEQHOkiX90P0C2u5xJEbiMmxBNm1NVlcyfhoHsd9Jgq
+	JPpsUAN0HUhEwbOaH1Ln4tZ71g==
+X-Google-Smtp-Source: AGHT+IGrlf4/g6JuQuSm+Dmo34Vq6HctNEVH2WrZlW9UX5gbNWdoDWz0eFhbScKkz1naoM+5ZCXa+Q==
+X-Received: by 2002:a05:600c:4f09:b0:40b:5e4a:4061 with SMTP id l9-20020a05600c4f0900b0040b5e4a4061mr1439819wmq.129.1702218403735;
+        Sun, 10 Dec 2023 06:26:43 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b0040c1d2c6331sm9810914wms.32.2023.12.10.06.24.43
+        by smtp.gmail.com with ESMTPSA id n10-20020a05600c500a00b004094e565e71sm9773994wmr.23.2023.12.10.06.26.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 06:24:45 -0800 (PST)
-Message-ID: <9ffd229e-cf1b-4508-ba74-d5a000c54582@linaro.org>
-Date: Sun, 10 Dec 2023 15:24:43 +0100
+        Sun, 10 Dec 2023 06:26:43 -0800 (PST)
+Message-ID: <25533a7f-326f-48d1-a8a6-e5798bdca4b4@linaro.org>
+Date: Sun, 10 Dec 2023 15:26:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 14/20] watchdog: s3c2410_wdt: Add support for WTCON
- register DBGACK_MASK bit
+Subject: Re: [PATCH v6 16/20] watchdog: s3c2410_wdt: Add support for Google
+ gs101 SoC
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -75,7 +75,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
  linux-serial@vger.kernel.org
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-15-peter.griffin@linaro.org>
+ <20231209233106.147416-17-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,30 +121,37 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209233106.147416-15-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-17-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/12/2023 00:31, Peter Griffin wrote:
-> The WDT uses the CPU core signal DBGACK to determine whether the SoC
-> is running in debug mode or not. If the DBGACK signal is asserted and
-> DBGACK_MASK bit is enabled, then WDT output and interrupt is masked
-> (disabled).
+> This patch adds the compatibles and drvdata for the Google
+> gs101 SoC found in Pixel 6, Pixel 6a & Pixel 6 pro phones.
 > 
-> Presence of the DBGACK_MASK bit is determined by adding a new
-> QUIRK_HAS_DBGACK_BIT quirk. Also update to use BIT macro to avoid
-> checkpatch --strict warnings.
+> Similar to Exynos850 it has two watchdog instances, one for
+> each cluster and has some control bits in PMU registers.
 > 
-> Tested-by: Will McVicker <willmcvicker@google.com>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
-Guenter, Wim,
 
-The watchdog patches are kind of independent, except that bindings has
-conflicting re-organization which I took via my Samsung SoC tree. If it
-is fine with you, please provide acks or review and I will take the
-watchdog changes.
+> +
+>  static const struct of_device_id s3c2410_wdt_match[] = {
+>  	{ .compatible = "samsung,s3c2410-wdt",
+>  	  .data = &drv_data_s3c2410 },
+> @@ -285,6 +318,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
+>  	  .data = &drv_data_exynos850_cl0 },
+>  	{ .compatible = "samsung,exynosautov9-wdt",
+>  	  .data = &drv_data_exynosautov9_cl0 },
+> +	{ .compatible = "google,gs101-wdt",
+> +	  .data = &drv_data_gs101_cl0 },
+
+Keep some alphabetical order by compatible, so this should be probably
+the first entry in the table.
+
+Same for s3c2410_wdt_variant structures.
+
+>  	{},
+
 
 Best regards,
 Krzysztof
