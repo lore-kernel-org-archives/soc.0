@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0078DC4167B
-	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 14:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D7C0C4167B
+	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 14:38:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DBDD5C433CA; Sun, 10 Dec 2023 14:26:46 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	id 20B9FC433D9; Sun, 10 Dec 2023 14:38:45 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 681BDC433C9
-	for <soc@kernel.org>; Sun, 10 Dec 2023 14:26:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 681BDC433C9
+	by smtp.kernel.org (Postfix) with ESMTPS id A7F92C433C8
+	for <soc@kernel.org>; Sun, 10 Dec 2023 14:38:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A7F92C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3335397607dso4220117f8f.1
-        for <soc@kernel.org>; Sun, 10 Dec 2023 06:26:45 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a1f653e3c3dso313064066b.2
+        for <soc@kernel.org>; Sun, 10 Dec 2023 06:38:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702218404; x=1702823204; darn=kernel.org;
+        d=linaro.org; s=google; t=1702219122; x=1702823922; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kK49YUa5FxiF2kaa082NEbAgvqplCkjoF/Z5IeMRDaQ=;
-        b=B44jBOK+SZ+wdnI1QBV6oHuvOZfdyyDFvFBCGX49zDj9VMqHQewNkYHr7w8wWD3XvK
-         A8GlEyuy2Hq8LQfzCjph3TBJI3TIUmH2yC9XkN0uRy374GIzkLb6Yk8+doeiFLaYt6GX
-         6LxsomSL28R4/tPgNaGW0eJS7MxX1fqHdY0VbWfBTsK18kb/91lmipU3VAqGWck63n13
-         2I3KQyCwyObCngylWnO9nQXcJYeNfwOvHDXt0DnNOZbr84Zz/24f6wrG7HvJibFs8iWB
-         84zpbq7TqXwoLU0xlbEr4e1DMfqIR3TQRT98frvFUEngmEIwiTehIraDAyhV5kUAUBPg
-         y5Xw==
+        bh=9rj3u8Yy/EreftvWNnUMWPW+sdikD5j4wuv5v1LFbfg=;
+        b=WJ/YB9B5AHp4OxJRsfpFN9gtnCDk8Uemxo19a7hicJim4S0+ZYlhDbpjl7tUBIq1SR
+         +1GmGpMZZbJ1Zh8FY9L6cXyI8/cJzAmEEc1g8SNm10Nj8iFLebXhdIt/aNpVEhycD05H
+         fpdEdVrZeRDD8PQR1st14sY7Qai9mNGDXDPJbKsa9J9fhMcyfX4yd+cthGoGC8m+cO3P
+         b7NWTaJgVIv/Tk3cmERXPJz/uXWusX+sxffsAwmezFnxuh9ZCbmtgfz6GSMkWfbyszse
+         w0sk8kPq2wWsYYwV9uHfLiovVuU31vNQQUjbuCsMyXrYqI0L9AxBC0L+KvXImrMOxTPg
+         yGDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702218404; x=1702823204;
+        d=1e100.net; s=20230601; t=1702219122; x=1702823922;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kK49YUa5FxiF2kaa082NEbAgvqplCkjoF/Z5IeMRDaQ=;
-        b=hh9OzW/WJt7oFLAWuB78LnelWlIJ3n/c2k/RYX3QW0qzY5TMetDDtYrkppJ8Y9wTGY
-         V3mDm9EBCp/CgoPKI/f+A58Qi+/xU9h7h9i+2AUER1IDnDJJdS5LR79/iiRZDq2ttab8
-         YJxUah+pXcj6DQodIL1AIoDP2iaAI2YX87cCWfWSuLIO8DflABVsVzeFKWOcmEFgbvsR
-         JtUZEerX7ARYeS8waQPwz2WLQXbej4ANs6w6iykCfcaaEw7oVa+ma3LWYu8DbZqoqPQx
-         L5s/DJxmZ9WWBz/Vexyc+2qVlD+KJxeuim7wEWjwEDP9SjjduWVm2JawWq6XvEsR9MX+
-         mvJQ==
-X-Gm-Message-State: AOJu0YwnrrfttoEQHOkiX90P0C2u5xJEbiMmxBNm1NVlcyfhoHsd9Jgq
-	JPpsUAN0HUhEwbOaH1Ln4tZ71g==
-X-Google-Smtp-Source: AGHT+IGrlf4/g6JuQuSm+Dmo34Vq6HctNEVH2WrZlW9UX5gbNWdoDWz0eFhbScKkz1naoM+5ZCXa+Q==
-X-Received: by 2002:a05:600c:4f09:b0:40b:5e4a:4061 with SMTP id l9-20020a05600c4f0900b0040b5e4a4061mr1439819wmq.129.1702218403735;
-        Sun, 10 Dec 2023 06:26:43 -0800 (PST)
+        bh=9rj3u8Yy/EreftvWNnUMWPW+sdikD5j4wuv5v1LFbfg=;
+        b=taCgRM4h3zDrIhMAxskki5tkd0KzSoS9NPWw4yw3idUP+SdD319SzKu650J/kyps3k
+         yR2J7rZb5fc/Wg075x2Z0xrOyMbdQT3htrFk5ERWFLyoeWby7YxSG7fDe8hXP/6f6SHw
+         dGYKiYOZm3GSg7hlujDrd2J5mUjOYtQ/EEBCDtQ3oRv8OYphaZh11i6/7yOXjx59Rdal
+         DscVwpGVMQKE/uVgFpAUWJvTRMXK8oZQlogYbDA8n5a/Yzw1Qh7vXs99mWpZyTXSx7WD
+         7+3+Cxzer65a/dOYBxmqJoFXyvQrJhwqqnc4njKBwRudXf6ktoK4LRoY/CK6gOKJdP61
+         FehA==
+X-Gm-Message-State: AOJu0YwlfeAxBWjmtlCmI6RpPIM6IxyAV5kUfyuqhRfMBg72LSm5TE6h
+	hSkxpoCm6s+Alz2rmhmoOkkaVA==
+X-Google-Smtp-Source: AGHT+IH5SSJfRxt9rexPWoB8DJcsL1qC84BW0o7F0g+RZT+9+3KGokWi2xSyUrMWdZfU947O+c5WQg==
+X-Received: by 2002:a17:906:bcf3:b0:a1c:c3c3:73eb with SMTP id op19-20020a170906bcf300b00a1cc3c373ebmr747973ejb.250.1702219121991;
+        Sun, 10 Dec 2023 06:38:41 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id n10-20020a05600c500a00b004094e565e71sm9773994wmr.23.2023.12.10.06.26.40
+        by smtp.gmail.com with ESMTPSA id fm14-20020a05600c0c0e00b00407b93d8085sm12119612wmb.27.2023.12.10.06.38.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 06:26:43 -0800 (PST)
-Message-ID: <25533a7f-326f-48d1-a8a6-e5798bdca4b4@linaro.org>
-Date: Sun, 10 Dec 2023 15:26:40 +0100
+        Sun, 10 Dec 2023 06:38:41 -0800 (PST)
+Message-ID: <8400d76b-2a04-4d60-ad6c-954dca07562f@linaro.org>
+Date: Sun, 10 Dec 2023 15:38:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 16/20] watchdog: s3c2410_wdt: Add support for Google
- gs101 SoC
+Subject: Re: [PATCH v6 18/20] arm64: dts: exynos: google: Add initial Google
+ gs101 SoC support
 Content-Language: en-US
 To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -75,7 +75,7 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
  linux-serial@vger.kernel.org
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-17-peter.griffin@linaro.org>
+ <20231209233106.147416-19-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,36 +121,383 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209233106.147416-17-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-19-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/12/2023 00:31, Peter Griffin wrote:
-> This patch adds the compatibles and drvdata for the Google
-> gs101 SoC found in Pixel 6, Pixel 6a & Pixel 6 pro phones.
+> Google gs101 SoC is a ARMv8 mobile SoC found in the Pixel 6
+> (oriole), Pixel 6a (bluejay) and Pixel 6 pro (raven) mobile
+> phones.
 > 
-> Similar to Exynos850 it has two watchdog instances, one for
-> each cluster and has some control bits in PMU registers.
+> It features:
+> * 4xA55 Little cluster
+> * 2xA76 Mid cluster
+> * 2xX1 Big cluster
 > 
 
+...
+
+> diff --git a/arch/arm64/boot/dts/exynos/google/gs101-pinctrl.h b/arch/arm64/boot/dts/exynos/google/gs101-pinctrl.h
+> new file mode 100644
+> index 000000000000..68b7bc47c91b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/exynos/google/gs101-pinctrl.h
+> @@ -0,0 +1,33 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Pinctrl binding constants for GS101
+> + *
+> + * Copyright 2020-2023 Google LLC
+> + */
+> +
+> +#ifndef __DT_BINDINGS_PINCTRL_GS101_H__
+> +#define __DT_BINDINGS_PINCTRL_GS101_H__
+
+Header guards don't really match location.
 
 > +
->  static const struct of_device_id s3c2410_wdt_match[] = {
->  	{ .compatible = "samsung,s3c2410-wdt",
->  	  .data = &drv_data_s3c2410 },
-> @@ -285,6 +318,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
->  	  .data = &drv_data_exynos850_cl0 },
->  	{ .compatible = "samsung,exynosautov9-wdt",
->  	  .data = &drv_data_exynosautov9_cl0 },
-> +	{ .compatible = "google,gs101-wdt",
-> +	  .data = &drv_data_gs101_cl0 },
+> +#define GS101_PIN_PULL_NONE		0
+> +#define GS101_PIN_PULL_DOWN		1
+> +#define GS101_PIN_PULL_UP		3
+> +
+> +/* Pin function in power down mode */
+> +#define GS101_PIN_PDN_OUT0		0
+> +#define GS101_PIN_PDN_OUT1		1
+> +#define GS101_PIN_PDN_INPUT		2
+> +#define GS101_PIN_PDN_PREV		3
+> +
+> +/* GS101 drive strengths */
+> +#define GS101_PIN_DRV_2_5_MA		0
+> +#define GS101_PIN_DRV_5_MA		1
+> +#define GS101_PIN_DRV_7_5_MA		2
+> +#define GS101_PIN_DRV_10_MA		3
+> +
+> +#define GS101_PIN_FUNC_INPUT		0
+> +#define GS101_PIN_FUNC_OUTPUT		1
+> +#define GS101_PIN_FUNC_2		2
+> +#define GS101_PIN_FUNC_3		3
+> +#define GS101_PIN_FUNC_EINT		0xf
+> +
+> +#endif /* __DT_BINDINGS_PINCTRL_GS101_H__ */
+> diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> new file mode 100644
+> index 000000000000..60e112d25246
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> @@ -0,0 +1,476 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * GS101 SoC
+> + *
+> + * Copyright 2019-2023 Google LLC
+> + * Copyright 2023 Linaro Ltd - <peter.griffin@linaro.org>
+> + */
+> +
+> +#include <dt-bindings/clock/google,gs101.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/soc/samsung,exynos-usi.h>
+> +
+> +/ {
+> +	compatible = "google,gs101";
+> +	#address-cells = <2>;
+> +	#size-cells = <1>;
+> +
+> +	interrupt-parent = <&gic>;
+> +
+> +	aliases {
+> +		pinctrl0 = &pinctrl_gpio_alive;
+> +		pinctrl1 = &pinctrl_far_alive;
+> +		pinctrl2 = &pinctrl_gsacore;
+> +		pinctrl3 = &pinctrl_gsactrl;
+> +		pinctrl4 = &pinctrl_peric0;
+> +		pinctrl5 = &pinctrl_peric1;
+> +		pinctrl6 = &pinctrl_hsi1;
+> +		pinctrl7 = &pinctrl_hsi2;
+> +	};
+> +
+> +	pmu-0 {
+> +		compatible = "arm,cortex-a55-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster0>;
+> +	};
+> +
+> +	pmu-1 {
+> +		compatible = "arm,cortex-a76-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster1>;
+> +	};
+> +
+> +	pmu-2 {
+> +		compatible = "arm,cortex-x1-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster2>;
+> +	};
+> +
+> +	pmu-3 {
+> +		compatible = "arm,dsu-pmu";
+> +		interrupts = <GIC_SPI 257 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
+> +		       <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
+> +	};
 
-Keep some alphabetical order by compatible, so this should be probably
-the first entry in the table.
+Keep alphabetical order of top-level nodes. pmu should be before psci
 
-Same for s3c2410_wdt_variant structures.
+> +
+> +	/* TODO replace with CCF clock */
+> +	dummy_clk: oscillator {
 
->  	{},
+clock-3
+
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <12345>;
+> +		clock-output-names = "pclk";
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu-map {
+> +			cluster0 {
+> +				core0 {
+> +					cpu = <&cpu0>;
+> +				};
+> +				core1 {
+> +					cpu = <&cpu1>;
+> +				};
+> +				core2 {
+> +					cpu = <&cpu2>;
+> +				};
+> +				core3 {
+> +					cpu = <&cpu3>;
+> +				};
+> +			};
+> +
+> +			cluster1 {
+> +				core0 {
+> +					cpu = <&cpu4>;
+> +				};
+> +				core1 {
+> +					cpu = <&cpu5>;
+> +				};
+> +			};
+> +
+> +			cluster2 {
+> +				core0 {
+> +					cpu = <&cpu6>;
+> +				};
+> +				core1 {
+> +					cpu = <&cpu7>;
+> +				};
+> +			};
+> +		};
+
+...
+
+> +
+> +	/* ect node is required to be present by bootloader */
+> +	ect {
+> +	};
+
+alphabetical order
+
+> +
+> +	ext_24_5m: clock-1 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-output-names = "oscclk";
+> +	};
+> +
+> +	ext_200m: clock-2 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-output-names = "ext-200m";
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-1.0";
+> +		method = "smc";
+> +	};
+> +
+> +	reserved_memory: reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		gsa_reserved_protected: gsa@90200000 {
+> +			reg = <0x0 0x90200000 0x400000>;
+> +			no-map;
+> +		};
+> +
+> +		tpu_fw_reserved: tpu-fw@93000000 {
+> +			reg = <0x0 0x93000000 0x1000000>;
+> +			no-map;
+> +		};
+> +
+> +		aoc_reserve: aoc@94000000 {
+> +			reg = <0x0 0x94000000 0x03000000>;
+> +			no-map;
+> +		};
+> +
+> +		abl_reserved: abl@f8800000 {
+> +			reg = <0x0 0xf8800000 0x02000000>;
+> +			no-map;
+> +		};
+> +
+> +		dss_log_reserved: dss-log-reserved@fd3f0000 {
+> +			reg = <0x0 0xfd3f0000 0x0000e000>;
+> +			no-map;
+> +		};
+> +
+> +		debug_kinfo_reserved: debug-kinfo-reserved@fd3fe000 {
+> +			reg = <0x0 0xfd3fe000 0x00001000>;
+> +			no-map;
+> +		};
+> +
+> +		bldr_log_reserved: bldr-log-reserved@fd800000 {
+> +			reg = <0x0 0xfd800000 0x00100000>;
+> +			no-map;
+> +		};
+> +
+> +		bldr_log_hist_reserved: bldr-log-hist-reserved@fd900000 {
+> +			reg = <0x0 0xfd900000 0x00002000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	timer {
+
+alphabetical order, so this goes to the end
+
+> +		compatible = "arm,armv8-timer";
+> +		interrupts =
+> +		   <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW) 0>,
+> +		   <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW) 0>,
+> +		   <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW) 0>,
+> +		   <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW) 0>;
+> +		clock-frequency = <24576000>;
+
+I don't remember if you already got Marc's wrath, so just in case: are
+you sure it is needed?
+
+Anyway, this is board specific, not SoC.
+
+> +	};
+> +
+> +	soc: soc@0 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x0 0x0 0x0 0x40000000>;
+> +
+> +		cmu_misc: clock-controller@10010000 {
+> +			compatible = "google,gs101-cmu-misc";
+> +			reg = <0x10010000 0x8000>;
+> +			#clock-cells = <1>;
+> +			clocks =  <&cmu_top CLK_DOUT_CMU_MISC_BUS>,
+
+One space after =
+
+> +				  <&cmu_top CLK_DOUT_CMU_MISC_SSS>;
+> +			clock-names = "dout_cmu_misc_bus", "dout_cmu_misc_sss";
+> +		};
+> +
+> +		watchdog_cl0: watchdog@10060000 {
+> +			compatible = "google,gs101-wdt";
+> +			reg = <0x10060000 0x100>;
+> +			interrupts = <GIC_SPI 765 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks =
+> +			  <&cmu_misc CLK_GOUT_MISC_WDT_CLUSTER0_PCLK>,
+
+Join lines (clocks = <foo bar>). Same in other places.
+
+> +			  <&ext_24_5m>;
+> +			clock-names = "watchdog", "watchdog_src";
+> +			samsung,syscon-phandle = <&pmu_system_controller>;
+> +			samsung,cluster-index = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		watchdog_cl1: watchdog@10070000 {
+> +			compatible = "google,gs101-wdt";
+> +			reg = <0x10070000 0x100>;
+> +			interrupts = <GIC_SPI 766 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks =
+> +			  <&cmu_misc CLK_GOUT_MISC_WDT_CLUSTER1_PCLK>,
+> +			  <&ext_24_5m>;
+> +			clock-names = "watchdog", "watchdog_src";
+> +			samsung,syscon-phandle = <&pmu_system_controller>;
+> +			samsung,cluster-index = <1>;
+> +			status = "disabled";
+> +		};
+> +
+> +		gic: interrupt-controller@10400000 {
+> +			compatible = "arm,gic-v3";
+> +			#interrupt-cells = <4>;
+> +			interrupt-controller;
+> +			reg = <0x10400000 0x10000>, /* GICD */
+> +			      <0x10440000 0x100000>;/* GICR * 8 */
+> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
+> +
+> +			ppi-partitions {
+> +				ppi_cluster0: interrupt-partition-0 {
+> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
+> +				};
+> +
+> +				ppi_cluster1: interrupt-partition-1 {
+> +					affinity = <&cpu4 &cpu5>;
+> +				};
+> +
+> +				ppi_cluster2: interrupt-partition-2 {
+> +					affinity = <&cpu6 &cpu7>;
+> +				};
+> +			};
+> +		};
+> +
+> +		sysreg_peric0: syscon@10820000 {
+> +			compatible = "google,gs101-peric0-sysreg", "syscon";
+> +			reg = <0x10820000 0x10000>;
+> +		};
+> +
+> +		pinctrl_peric0: pinctrl@10840000 {
+> +			compatible = "google,gs101-pinctrl";
+> +			reg = <0x10840000 0x00001000>;
+> +			interrupts = <GIC_SPI 625 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		};
+> +
+> +		usi_uart: usi@10a000c0 {
+> +			compatible = "google,gs101-usi",
+> +				     "samsung,exynos850-usi";
+> +			reg = <0x10a000c0 0x20>;
+> +			samsung,sysreg = <&sysreg_peric0 0x1020>;
+> +			samsung,mode = <USI_V2_UART>;
+
+vendor properties go to the end, after standard properties, before status.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/tree/Documentation/devicetree/bindings/dts-coding-style.rst?h=dt/next&id=0d3a771610d0e155c9aa305f142f84dda5030fae#n122
+
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +			clocks = <&dummy_clk>, <&dummy_clk>;
+> +			clock-names = "pclk", "ipclk";
+> +			status = "disabled";
+> +
+> +			serial_0: serial@10a00000 {
+> +				compatible = "google,gs101-uart";
+> +				reg = <0x10a00000 0xc0>;
+> +				reg-io-width = <4>;
+> +				samsung,uart-fifosize = <256>;
+
+Ditto
+
+> +				interrupts = <GIC_SPI 634
+> +					      IRQ_TYPE_LEVEL_HIGH 0>;
+> +				clocks = <&dummy_clk 0>, <&dummy_clk 0>;
+> +				clock-names = "uart", "clk_uart_baud0";
+> +				status = "disabled";
+> +			};
+> +		};
 
 
 Best regards,
