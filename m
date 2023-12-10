@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C62CC4167B
-	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 13:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78518C10DCE
+	for <soc@archiver.kernel.org>; Sun, 10 Dec 2023 13:56:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 375CAC433CC; Sun, 10 Dec 2023 13:53:01 +0000 (UTC)
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	id 54F62C433C7; Sun, 10 Dec 2023 13:56:03 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4E5C7C433CA
-	for <soc@kernel.org>; Sun, 10 Dec 2023 13:52:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E5C7C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 1E898C433CD
+	for <soc@kernel.org>; Sun, 10 Dec 2023 13:56:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E898C433CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3b844357f7cso2787304b6e.1
-        for <soc@kernel.org>; Sun, 10 Dec 2023 05:52:59 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a1f5cb80a91so347269266b.3
+        for <soc@kernel.org>; Sun, 10 Dec 2023 05:56:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702216378; x=1702821178; darn=kernel.org;
+        d=linaro.org; s=google; t=1702216559; x=1702821359; darn=kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DyfZzF+pEmdCnaQqoUIXxpgj+wJsipZvikAaIUgXmqU=;
-        b=PtTSkza4yt1wh4hfMKTB4oGyeKX5c7XxfdBhelSW3fkKQS6hYC/IsgSxqjDMTICM6B
-         3Iwse3JdGIYlr6ZlRR46ex6lBjV78dMziaRVU9n+AKHTwh1RWUjXPjrPDZdqipJ1wuHN
-         dBU+6msjQLc5Knzl5VxNicK9nr02fizUo7eQB3eizaLLfUJ/fhmB5NSxr3oWD0Wo2Qru
-         CVCDQ0FUk9l5pWwYb5acchyeNynHSEYiycWluWJx7oijfwOtauElge0ARTqnxJ5EymS4
-         /Pu7kSO1BzjSTGj++nQ2dIwDlphwYQ7Nbx+kLldenzshF3v5ZTWpbjvBpreMXo66yZXh
-         Ia7w==
+        bh=INZmx+xtGzIo4fqLOlpYenuhwexRARPngqxKA520KWo=;
+        b=Nn95TzJb1dyqqMpLtVyQ9xPfOhfRnWyEZrlSvwnitPrzLivr5RlnnByJipD///UESL
+         z9ow/s8R5LJTI7FtFS38xVKpoTnoRautfnKzCpf16bKRpLMwsUbTJv4EMEh5sZ3rpe46
+         1HgXz8xVJ4nFrIru/IVvK639556oHbWmxhFWOJFCUawqn87modLdLZPp/bnOrelHhnbt
+         wvmN9raa1EZserLOYGesZKR9ug4Zxo67Qag5RzrFuXimhGpySqwPx9zxs5GXm/GI9o86
+         R2rABXzHfvidp3sqVbW5iNIsn+bMYXsWLspVZE95j51msPizSvhE4NpW3bKVYSydOjuo
+         o8IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702216378; x=1702821178;
+        d=1e100.net; s=20230601; t=1702216559; x=1702821359;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DyfZzF+pEmdCnaQqoUIXxpgj+wJsipZvikAaIUgXmqU=;
-        b=V+hEIB3n/CBkQwQcppTUXpJ0zyHNOPhq9V/qTsADGRNyGN+JrUL+EdOmhvJSx9OW3s
-         mF/u/EI0zG5fb9PEUJFGyWhUlL5lfQPDVb6IMxM7H6cUa8Mj7R4fGXdJpesNRGoD6jDT
-         OGtepyeYpeQ2pKrRzrvEt8TsHh3EsiEiWlPA1cFS2fs+KPeVNZwCR38G04FrYVus6bVJ
-         iWtJ058eRmuqswNSjF/mGXUZr2YlHDzFQVU9oIHlNRIVCOMpXRmoAuS+OYtfagC56wHE
-         64gjfBFD4U6kzFBALYRH6WO10pJwq/F1yCaSNG+RuS+mzX8YnvLY0K7cP5zp5Soy4gzC
-         FtfA==
-X-Gm-Message-State: AOJu0Ywx7mN4pdKMApO9lTvXM3tYB5eMu0fnXrtPO86oyTXQtRkTcquM
-	eH02tyO7ln1UWhrqO2jHbqkgbw==
-X-Google-Smtp-Source: AGHT+IEc1BOhnl0TdzEPP1ZWGXEY7kf7u1c43rqRtWGQXy5QT9zWwBljFRVUmZmDfObmkFTLgeboFQ==
-X-Received: by 2002:a05:6808:3c96:b0:3b8:b063:6bb6 with SMTP id gs22-20020a0568083c9600b003b8b0636bb6mr5762059oib.101.1702216378270;
-        Sun, 10 Dec 2023 05:52:58 -0800 (PST)
+        bh=INZmx+xtGzIo4fqLOlpYenuhwexRARPngqxKA520KWo=;
+        b=cCi6vmmD8t03Tmk9FHpdJ2HcbUFQTpCNbCrd+OtLuEt7mx8lZcoDwgIobxg3qdSN0+
+         fAvsT13MWA0aXXL6nOBBbSd7aPrd0uK/o4SQMjkvlY7cRZpG7iiXwFqBi63njLicWCu/
+         qxop3zD0K5HtQSyEQTj3kXvJ8NOuM+P+lIHu8LBpU4oPCwRXCWgrX2TEAxaCI7B7A3o1
+         OQwb506msNeBv7XzYhJZne+/p365rI3/yC2FQx7nBAD7MszyrlYgIEndLYMWn0FgzMk+
+         LnGYCCUP8eXnEiVWvSmJEbiK58MLQG6WqMRLEVHTJlDwoqBnQ9AVuXn8t8IvQBh9SbRV
+         RVYw==
+X-Gm-Message-State: AOJu0YwrFV3lmUng5oHa8GK1IB/pQAvZeAb3AABTVTZ2DsqHSGyQYrAP
+	NzsRo1mor1f1jzgqvIqnJxT31g==
+X-Google-Smtp-Source: AGHT+IGpcDe50EC7iA2p9jzSdwOPDhRmrUx0hnxjbE10idpJ2PGsJWW6rC82FnKLT6IippagxU6Kpg==
+X-Received: by 2002:a17:906:1003:b0:a19:a19b:4241 with SMTP id 3-20020a170906100300b00a19a19b4241mr758819ejm.172.1702216559325;
+        Sun, 10 Dec 2023 05:55:59 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id e20-20020aa78c54000000b006cb9a9ea64dsm4544874pfd.220.2023.12.10.05.52.48
+        by smtp.gmail.com with ESMTPSA id ll9-20020a170907190900b00a1da2f7c1d8sm3443093ejc.77.2023.12.10.05.55.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 05:52:57 -0800 (PST)
-Message-ID: <2dd2f920-a0a5-4f69-b7e6-c09c3f83eae6@linaro.org>
-Date: Sun, 10 Dec 2023 14:52:46 +0100
+        Sun, 10 Dec 2023 05:55:58 -0800 (PST)
+Message-ID: <46c9c8b4-942d-4f6f-a6cc-00158314d5e5@linaro.org>
+Date: Sun, 10 Dec 2023 14:55:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 05/20] dt-bindings: arm: google: Add bindings for
- Google ARM platforms
+Subject: Re: [PATCH v6 13/20] pinctrl: samsung: Add gs101 SoC pinctrl
+ configuration
 Content-Language: en-US
-To: Peter Griffin <peter.griffin@linaro.org>, Rob Herring <robh@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
- semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
- soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, robh+dt@kernel.org,
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
  conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
  s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
  linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
  olof@lixom.net, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- cw00.choi@samsung.com, alim.akhtar@samsung.com,
+ cw00.choi@samsung.com, alim.akhtar@samsung.com
+List-Id: <soc.lore.kernel.org>
+Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+ semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
+ soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-watchdog@vger.kernel.org, kernel-team@android.com,
- linux-serial@vger.kernel.org, Rob Herring <robh@kernel.org>
+ linux-serial@vger.kernel.org
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-6-peter.griffin@linaro.org>
+ <20231209233106.147416-14-peter.griffin@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -121,43 +121,47 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209233106.147416-6-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-14-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/12/2023 00:30, Peter Griffin wrote:
-> +  Likewise there are a couple of names for the actual device
-> +  - Marketing name ("Pixel 6")
-> +  - Codename ("Oriole")
-> +
-> +  Devicetrees should use the lowercased SoC ID and lowercased board codename,
-> +  e.g. gs101 and gs101-oriole.
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +      - description: Google Pixel 6 / Oriole
-> +        items:
-> +          - enum:
-> +              - google,gs101-oriole
-> +          - const: google,gs101
-> +
-> +  # Bootloader requires empty ect node to be present
-> +  ect:
-> +    type: object
-> +    additionalProperties: false
+> Add support for the pin-controller found on the gs101 SoC used in
+> Pixel 6 phones.
+> 
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
 
-This is a major change, thus Rob's review should be dropped with short
-explanation.
 
-No new properties post-review.
+> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
+> index 6b58ec84e34b..3834bf953178 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-exynos.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
+> @@ -468,6 +468,8 @@ static const struct of_device_id exynos_wkup_irq_ids[] = {
+>  			.data = &exynos7_wkup_irq_chip },
+>  	{ .compatible = "samsung,exynosautov9-wakeup-eint",
+>  			.data = &exynos7_wkup_irq_chip },
+> +	{ .compatible = "google,gs101-wakeup-eint",
+> +			.data = &exynos7_wkup_irq_chip },
 
-Rob,
+You don't need it.
 
-Please re-review the "ect" part. I suggested it to Peter to solve the
-bootloader requirements.
+>  	{ }
+>  };
+>  
+> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> index 79babbb39ced..b8d549fe38cb 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> @@ -1321,6 +1321,8 @@ static const struct of_device_id samsung_pinctrl_dt_match[] = {
+>  		.data = &exynosautov9_of_data },
+>  	{ .compatible = "tesla,fsd-pinctrl",
+>  		.data = &fsd_of_data },
+> +	{ .compatible = "google,gs101-pinctrl",
+> +		.data = &gs101_of_data },
+
+Place it somewhere alphabetically. Probably before tesla.
+
 
 Best regards,
 Krzysztof
