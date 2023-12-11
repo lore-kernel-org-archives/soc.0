@@ -1,333 +1,186 @@
-Return-Path: <SRS0=R+Db=HW=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=dieM=HW=samsung.com=cw00.choi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74D09C4332F
-	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 23:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C040C4332F
+	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 23:57:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4DC57C433CC; Mon, 11 Dec 2023 23:39:31 +0000 (UTC)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 4265AC433C8; Mon, 11 Dec 2023 23:57:18 +0000 (UTC)
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 87CC2C433C7
-	for <soc@kernel.org>; Mon, 11 Dec 2023 23:39:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87CC2C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50c0dbaf2baso4827025e87.3
-        for <soc@kernel.org>; Mon, 11 Dec 2023 15:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702337967; x=1702942767; darn=kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gmTBdiB5i6WxztAJKP1mC1fcft/Tb2SFW1nbXnwAHRI=;
-        b=AI7Rv38S3dZqg4B/rUmwKPddWi94wAa42tIAkMvIKM4kqYlTJ9UYp11AQuoZCVsOOF
-         k+3r7TBPPYzdLEVxuFVoTAJySDcfQj3W6h2MCsmHdkXLt6C4cqcB33G7sZL3VQya8u29
-         ZsO6cMbMUEMTqlpUwLz8c9AQob6BjaXzSOcPr6XSvo+n0ACE/gigEtDG5C1bKfp3uaR7
-         deQXpQ9QYgBvd984QodrloI/hXjgClCgU52egWmGv0G+mb37XzobtXOc5boUJxzFr+LH
-         /6N0kuq2LL/1z7tzZ2UUahT5aeFqTawdqd0ZrbYMvVI9+ue/jZPFVgBo3UVVPzysSFB9
-         Aktg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702337967; x=1702942767;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gmTBdiB5i6WxztAJKP1mC1fcft/Tb2SFW1nbXnwAHRI=;
-        b=CHJcsupYuXlpC4Mk8p3QsVHwGUrsZ9FuiSAjMt2/Xvd9CfcAu8qkqrgn+oDmK0AS/d
-         NmwFEpWWJmK1evDCxP6f/nCveWHbizD/+jsCWT79IM6bv1StiH4Yf+tl4liTIrHLzO1e
-         89xU/u5XgyVOwuf1BVqTpOfCLh9GjMsqSQ/5q9zYqJC1LDISOc0hCwJ3JeROg5sE9hJA
-         IzJL1mDa/sg0q5zH4HI/XGjMznIjbeUK+sRJFgzqfecBk9K0bcyQCGrq+oAbGg69LgE4
-         ihOKebu/GwO+qaNnMiJlIX/ZZQarFqEUZ6ZM0Rrf1IEmPgsSJTNXgUIBX6xi8Am2F+w5
-         wBPw==
-X-Gm-Message-State: AOJu0YwG0r8O+kSU/J/NXQBvFhcHQRHwQ4w629NUwwUWGE+VZviwKpYn
-	rjl0X683f3hJ4zde8/uyMwCU1w==
-X-Google-Smtp-Source: AGHT+IECAW066Wl/bbDWejk9x4hFvue3qKNiJwX7PHG/SRlJvvzCKvirqhyWWM12t4bHmYISp/I+4A==
-X-Received: by 2002:a19:8c1c:0:b0:50b:ef5a:d022 with SMTP id o28-20020a198c1c000000b0050bef5ad022mr1414557lfd.41.1702337967360;
-        Mon, 11 Dec 2023 15:39:27 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id d22-20020a193856000000b0050bf1c67922sm1225301lfj.79.2023.12.11.15.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 15:39:26 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 12 Dec 2023 00:39:25 +0100
-Subject: [PATCH] ARM: dts: ste: minor whitespace cleanup around '='
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231212-ux500-dts-v1-1-5a31b6742d85@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAKydd2UC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2NDI0Mj3dIKUwMD3ZSSYt1k05REs+REE6NEsxQloPqCotS0zAqwWdGxtbU
- ATpuFxlsAAAA=
+	by smtp.kernel.org (Postfix) with ESMTPS id C64DFC433C7;
+	Mon, 11 Dec 2023 23:57:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C64DFC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20231211235712epoutp02fc6492c306a0c87b00f73d2b96eaddb1~f7FS22I-N1560215602epoutp02X;
+	Mon, 11 Dec 2023 23:57:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20231211235712epoutp02fc6492c306a0c87b00f73d2b96eaddb1~f7FS22I-N1560215602epoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1702339032;
+	bh=bBw6NK33ONaSuHSNqwie2fG1DfnIrR8z9bBcfqRccco=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=PUT/0HrMIoBxCMk8iXdgFD0X2Sg28os0ByEf6vCuabil4sWM0oFEYVseZv4lSYqGa
+	 LsccOknD0Dn8ODSwTq9QpwtT39Vp0wonnBzyqeETRPkUJk0S10LW+thNOiM5+ibXmp
+	 AU+1O/H/t6/tRSNZdApzyfnLCAzYAFg6AXeuaPOU=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+	20231211235712epcas1p39dede76e04ae14189f0260fca7d7d07a~f7FSfcmRd2517825178epcas1p3Y;
+	Mon, 11 Dec 2023 23:57:12 +0000 (GMT)
+Received: from epsmgec1p1-new.samsung.com (unknown [182.195.36.144]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4SpzF30zJRz4x9Q1; Mon, 11 Dec
+	2023 23:57:11 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+	epsmgec1p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	40.C5.19104.6D1A7756; Tue, 12 Dec 2023 08:57:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+	20231211235710epcas1p314c62a7abccf937bd63907c3c8166efc~f7FQ4CCEp2515825158epcas1p3o;
+	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231211235710epsmtrp27050d1763a3b4c4daa8ddc76689a55d1~f7FQ2wCih2834428344epsmtrp2m;
+	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
+X-AuditID: b6c32a4c-80dff70000004aa0-47-6577a1d65ccb
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5D.68.07368.6D1A7756; Tue, 12 Dec 2023 08:57:10 +0900 (KST)
+Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20231211235710epsmtip18f3770cc7713786a97d3d0f4185e114d~f7FQUXaxH1746317463epsmtip1G;
+	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
+From: "Chanwoo Choi" <cw00.choi@samsung.com>
+To: "'Peter Griffin'" <peter.griffin@linaro.org>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+	<conor+dt@kernel.org>, <sboyd@kernel.org>, <tomasz.figa@gmail.com>,
+	<s.nawrocki@samsung.com>, <linus.walleij@linaro.org>,
+	<wim@linux-watchdog.org>, <linux@roeck-us.net>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <arnd@arndb.de>, <olof@lixom.net>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+	<alim.akhtar@samsung.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.4
+Cc: <tudor.ambarus@linaro.org>, <andre.draszik@linaro.org>,
+	<semen.protsenko@linaro.org>, <saravanak@google.com>,
+	<willmcvicker@google.com>, <soc@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>, <kernel-team@android.com>,
+	<linux-serial@vger.kernel.org>
+In-Reply-To: <20231211162331.435900-7-peter.griffin@linaro.org>
+Subject: RE: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix
+ incorrect numbering and DGB suffix
+Date: Tue, 12 Dec 2023 08:57:09 +0900
+Message-ID: <0ecc01da2c8d$c129e490$437dadb0$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQEeDlMUs+qnFg95EVUf+Z9FZqMuEwIO8XO4Aj/o0Sqx+ofWIA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbVRz29La3hQ28KzWcIWFdjS5DCxQoHshw6hi5GZiQoeCMDhq4UkJp
+	mz4ANWbEPRgPCRsQoZPBwkTA8n6/xiiMDUTcskFR2AYWB4xZBIIbg4Itlyn/fb/vfN/vdfLj
+	YNwbbBdOvFxDqeQSmQC3Zzb3HvQUGq8kU163lxlo8nIzjhofNzCR5WI/Gy2UZQGk7xpmoOK+
+	YRY6XVqDI3ORK2pt4aHs2SkM5a3/yED1plEWWsx6wEINxesAFfx6jYGGSr9lo7Hqa2w0fWWI
+	ge4MHkWDxmUc1RZsMNHZrj426n2SxkIZBguONkbrmGgm2+oyGddxVNluTbL0+0l0ZkKMKpc2
+	ATLNbWDv8snmjmYWqb+sB+Ta84uAXBg7yybbdPfZZEm9lqyvTMfJidFOnKzQ61lkd5GeTTZc
+	PUXeu/UNi2x7msomsxsrAblc7xb28icJh6SUJJZS8Sl5jCI2Xh4XKAgJjzoSJfbzEglF/uht
+	AV8uSaQCBUGhYcLgeJl1XQJ+kkSmtVJhErVa4PnOIZVCq6H4UoVaEyiglLEypVjpoZYkqrXy
+	OA85pQkQeXl5i63C6ARpz4MLbGWjY4pxKikVtOzOAHYcSPjCkqYWdgaw53CJTgCLxywYHSwB
+	2HKpA6eDfwCs7s/DXliKh0oB/dAF4FrrPJMO5gBMvTppVXE4OPEWLHn2kc3AIyYx2JVnZ9Ng
+	hB6Dq5sTW5nsiMNwrCuVacNOhBROmsu3eCbxOlzMKcJt2IHwh+3V/Swa74EDhdNbeozYB1v+
+	+n67Iz5c/bOMRfM8eCn9HEYXfh8+HC1g2ApDIt8ejlWtsGlDELQsDbNo7AQf32zc5l3gsrkL
+	pw25AN6Zn8fooAbAuooz2+V8YPcPuQzbmBhxENa0e9L0fti2VgToLhyheSWLZZNAwgGeP8el
+	Ja/Bu5P3GTTeC0vT0vEcINDtmE23Yzbdjnl0/xcrAcxK4EIp1YlxVIxIKRLKqeT/vjxGkVgP
+	tu7JPbQVPK2xeBgAgwMMAHIwAc/BtU9NcR1iJV98SakUUSqtjFIbgNi68QuYyysxCutByjVR
+	Il9/L18/bx9fJPITCZwdhu4lUVwiTqKhEihKSale+BgcO5dURuG4wJkbohAmGTLtlPExCTdK
+	onXy/bzdAcnhP9UYuj/46jtqc5yXfCsenxl42EQWvKk9/+y97LvtsRXD3ZbstM58t2nxqONh
+	QwrgJ7XxnGqdgqOTmv7+xXRkSusXODcyN1Pce6D1WM5vhaFCc6QUKBJz43qYox+fqLPfNC3l
+	D2QOwD1uE4O1DQufPRefTnX8XK3K7vMZ3+e0Ykkxyma/No9M1UasRxuH+t0OSL0fhWTCXe03
+	J6TOp9449vPxhiBRd3mhMau36mREMOuEynfcHPfk9qOEYPdF18Jd4WXXj2dwZ6tGcvcarq+W
+	j3/4amT9HwUdJpfIgD5PYYRF1hP2KfMlAVMtlYjcMZVa8i8FxU6q2AQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xTVxyGc+6/XpqBl9K5U8YY62JG3FYpzu3MGCUsS26yxJHhPogZ2MC1
+	GKCQVtAuY1QcVYsQhhspZVgMiuFSRUoH0lL+tEwRkdmGFMKUaQpBHOgEE8RBGaVZxrf3PL/f
+	+5zz4dC4qJmMpo+qjnFqlSJXSgmJDrc09kPfxeNcwuy4BD280EEh25N2Aq1W3xSgZ03nALI4
+	RzBkHhgh0anGVgo9rY9BNzrFqPLxIxz9tHIFQ1a/j0TPz02SqN28ApDx9x4MDTdWCND4tR4B
+	mro4jCHP0OdoaGyRQteNAQKVOQcEyD13mkQG1yqFAr42As1Urrf8YysU4u3rkoWJdPTD/V2I
+	X1gDyD8bwJPi2A5HB8laLlgA+8+rasA+Gy8TsF2mBwK2wVrIWvmzFHvf102xzRYLyfbWWwRs
+	+6USdnSwlGS7lnQCttLGA3bRGpuyJU24J4vLPVrEqXfsPSzM7p/8UVBgizgx9qhIBzpfM4Aw
+	GjIfQfNwIzAAIS1iHAB6WhxkaCCBNZ7fcAOg13MUdLs1oZ0ZAO/8VY4FOcV8ABtefh3kYuYF
+	Dvkzy1jwgDN2HI7o9GSo4QbQ52+hgtYwZh8cd+qIYI5ijkBvTQ0WzASzDT6vqt/YCWc+hfZr
+	N8lQjoS3a6eI4G04I4P6NhDEOPM27Jz/BQ89NA4uTzeRIS6GdWf1G1zMJMM/fUasCkSZNplM
+	/5tMm0ymTe0GQPBAwhVo8pR5mfICuYo7LtMo8jSFKqUsMz/PCjZ+0/b4G2DSHJC5AEYDF4A0
+	LhWHxwxoOFF4lkL7LafOz1AX5nIaF3iTJqRvhMuNdVkiRqk4xuVwXAGn/m+K0WHROux7+9Wr
+	ezOe1qWW7dvzyiZL8bRsPZDaVjrnuuXw9CrfT5p8oD15K/HQnb4rVF1i9VfqmlHzZ+9VvEVL
+	17zf/IFNxyfm/GxIbb1X+mVgd0l/SqSxb3m6L3lL8b14yimUL+3cKuku1zmaGXPsdxMv/Ky+
+	9YTXe+A6//iTXQ8zLqkjlxUV8w5YX2zvGZpaLUy//W5CX/7r/KxWX5Sf0G7PTIpbTFOF7b+c
+	TPe+FGqravX8RO1aSWzE0oDmi3Rbv69p4e6TrkGt/dcdimhMdNiLV6gaD/49f3Iu+4zNtDvt
+	/PlyOklSlHMk+uPLztMGZluxcnSn/FTbIB+xMH/3nZmY7pJqKaHJVsi342qN4l/cq8GFvAMA
+	AA==
+X-CMS-MailID: 20231211235710epcas1p314c62a7abccf937bd63907c3c8166efc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231211162506epcas1p290e6adbb82f27ebade65376f298f7fd3
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+	<CGME20231211162506epcas1p290e6adbb82f27ebade65376f298f7fd3@epcas1p2.samsung.com>
+	<20231211162331.435900-7-peter.griffin@linaro.org>
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The DTS code coding style expects exactly one space before and after '='
-sign.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-SoC maintainers: this single patch is all changes I have for v6.8,
-please apply it directly for DTS changes.
----
- arch/arm/boot/dts/st/ste-dbx5x0.dtsi                  | 18 +++++++++---------
- arch/arm/boot/dts/st/ste-hrefprev60.dtsi              |  2 +-
- arch/arm/boot/dts/st/ste-hrefv60plus.dtsi             |  2 +-
- arch/arm/boot/dts/st/ste-nomadik-stn8815.dtsi         |  8 ++++----
- arch/arm/boot/dts/st/ste-snowball.dts                 |  2 +-
- arch/arm/boot/dts/st/ste-ux500-samsung-codina-tmo.dts |  2 +-
- arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts     |  2 +-
- arch/arm/boot/dts/st/ste-ux500-samsung-gavini.dts     |  2 +-
- arch/arm/boot/dts/st/ste-ux500-samsung-janice.dts     |  2 +-
- arch/arm/boot/dts/st/ste-ux500-samsung-kyle.dts       |  2 +-
- 10 files changed, 21 insertions(+), 21 deletions(-)
+> -----Original Message-----
+> From: Peter Griffin <peter.griffin@linaro.org>
+> Sent: Tuesday, December 12, 2023 1:23 AM
+> To: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> mturquette@baylibre.com; conor+dt@kernel.org; sboyd@kernel.org;
+> tomasz.figa@gmail.com; s.nawrocki@samsung.com; linus.walleij@linaro.org;
+> wim@linux-watchdog.org; linux@roeck-us.net; catalin.marinas@arm.com;
+> will@kernel.org; arnd@arndb.de; olof@lixom.net;
+gregkh@linuxfoundation.org;
+> jirislaby@kernel.org; cw00.choi@samsung.com; alim.akhtar@samsung.com
+> Cc: peter.griffin@linaro.org; tudor.ambarus@linaro.org;
+> andre.draszik@linaro.org; semen.protsenko@linaro.org;
+saravanak@google.com;
+> willmcvicker@google.com; soc@kernel.org; devicetree@vger.kernel.org;
+linux-
+> arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+> clk@vger.kernel.org; linux-gpio@vger.kernel.org; linux-
+> watchdog@vger.kernel.org; kernel-team@android.com; linux-
+> serial@vger.kernel.org
+> Subject: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix incorrect
+> numbering and DGB suffix
+> 
+> 166 was skipped by mistake and two clocks:
+> * CLK_MOUT_CMU_HSI0_USBDPDGB
+> * CLK_GOUT_HSI0_USBDPDGB
+> 
+> Have an incorrect DGB ending instead of DBG.
+> 
+> This is an ABI break, but as the patch was only applied yesterday this
+header
+> has never been in an actual release so it seems better to fix this early
+than
+> ignore it.
+> 
+> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock
+management
+> unit bindings")
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+>  include/dt-bindings/clock/google,gs101.h | 118 +++++++++++------------
+>  1 file changed, 59 insertions(+), 59 deletions(-)
+> 
 
-diff --git a/arch/arm/boot/dts/st/ste-dbx5x0.dtsi b/arch/arm/boot/dts/st/ste-dbx5x0.dtsi
-index d5d88771ef97..0f87abeddc33 100644
---- a/arch/arm/boot/dts/st/ste-dbx5x0.dtsi
-+++ b/arch/arm/boot/dts/st/ste-dbx5x0.dtsi
-@@ -425,7 +425,7 @@ rtc@80154000 {
- 		gpio0: gpio@8012e000 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8012e000 0x80>;
-+			reg = <0x8012e000 0x80>;
- 			interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -440,7 +440,7 @@ gpio0: gpio@8012e000 {
- 		gpio1: gpio@8012e080 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8012e080 0x80>;
-+			reg = <0x8012e080 0x80>;
- 			interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -455,7 +455,7 @@ gpio1: gpio@8012e080 {
- 		gpio2: gpio@8000e000 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8000e000 0x80>;
-+			reg = <0x8000e000 0x80>;
- 			interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -470,7 +470,7 @@ gpio2: gpio@8000e000 {
- 		gpio3: gpio@8000e080 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8000e080 0x80>;
-+			reg = <0x8000e080 0x80>;
- 			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -485,7 +485,7 @@ gpio3: gpio@8000e080 {
- 		gpio4: gpio@8000e100 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8000e100 0x80>;
-+			reg = <0x8000e100 0x80>;
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -500,7 +500,7 @@ gpio4: gpio@8000e100 {
- 		gpio5: gpio@8000e180 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8000e180 0x80>;
-+			reg = <0x8000e180 0x80>;
- 			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -515,7 +515,7 @@ gpio5: gpio@8000e180 {
- 		gpio6: gpio@8011e000 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8011e000 0x80>;
-+			reg = <0x8011e000 0x80>;
- 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -530,7 +530,7 @@ gpio6: gpio@8011e000 {
- 		gpio7: gpio@8011e080 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0x8011e080 0x80>;
-+			reg = <0x8011e080 0x80>;
- 			interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-@@ -545,7 +545,7 @@ gpio7: gpio@8011e080 {
- 		gpio8: gpio@a03fe000 {
- 			compatible = "stericsson,db8500-gpio",
- 				"st,nomadik-gpio";
--			reg =  <0xa03fe000 0x80>;
-+			reg = <0xa03fe000 0x80>;
- 			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-diff --git a/arch/arm/boot/dts/st/ste-hrefprev60.dtsi b/arch/arm/boot/dts/st/ste-hrefprev60.dtsi
-index 9859ee91a15e..c87fd27b4434 100644
---- a/arch/arm/boot/dts/st/ste-hrefprev60.dtsi
-+++ b/arch/arm/boot/dts/st/ste-hrefprev60.dtsi
-@@ -62,7 +62,7 @@ spi@80002000 {
- 
- 		// External Micro SD slot
- 		mmc@80126000 {
--			cd-gpios  = <&tc3589x_gpio 3 GPIO_ACTIVE_HIGH>;
-+			cd-gpios = <&tc3589x_gpio 3 GPIO_ACTIVE_HIGH>;
- 		};
- 
- 		pinctrl {
-diff --git a/arch/arm/boot/dts/st/ste-hrefv60plus.dtsi b/arch/arm/boot/dts/st/ste-hrefv60plus.dtsi
-index e66fa59c2de6..f87f4150ea68 100644
---- a/arch/arm/boot/dts/st/ste-hrefv60plus.dtsi
-+++ b/arch/arm/boot/dts/st/ste-hrefv60plus.dtsi
-@@ -191,7 +191,7 @@ gpio@8011e080 {
- 
- 		// External Micro SD slot
- 		mmc@80126000 {
--			cd-gpios  = <&gpio2 31 GPIO_ACTIVE_HIGH>; // 95
-+			cd-gpios = <&gpio2 31 GPIO_ACTIVE_HIGH>; // 95
- 		};
- 
- 		pinctrl {
-diff --git a/arch/arm/boot/dts/st/ste-nomadik-stn8815.dtsi b/arch/arm/boot/dts/st/ste-nomadik-stn8815.dtsi
-index 6816eef39d45..4d37c5fb553c 100644
---- a/arch/arm/boot/dts/st/ste-nomadik-stn8815.dtsi
-+++ b/arch/arm/boot/dts/st/ste-nomadik-stn8815.dtsi
-@@ -52,7 +52,7 @@ mtu1: mtu@101e3000 {
- 
- 	gpio0: gpio@101e4000 {
- 		compatible = "st,nomadik-gpio";
--		reg =  <0x101e4000 0x80>;
-+		reg = <0x101e4000 0x80>;
- 		interrupt-parent = <&vica>;
- 		interrupts = <6>;
- 		interrupt-controller;
-@@ -66,7 +66,7 @@ gpio0: gpio@101e4000 {
- 
- 	gpio1: gpio@101e5000 {
- 		compatible = "st,nomadik-gpio";
--		reg =  <0x101e5000 0x80>;
-+		reg = <0x101e5000 0x80>;
- 		interrupt-parent = <&vica>;
- 		interrupts = <7>;
- 		interrupt-controller;
-@@ -80,7 +80,7 @@ gpio1: gpio@101e5000 {
- 
- 	gpio2: gpio@101e6000 {
- 		compatible = "st,nomadik-gpio";
--		reg =  <0x101e6000 0x80>;
-+		reg = <0x101e6000 0x80>;
- 		interrupt-parent = <&vica>;
- 		interrupts = <8>;
- 		interrupt-controller;
-@@ -94,7 +94,7 @@ gpio2: gpio@101e6000 {
- 
- 	gpio3: gpio@101e7000 {
- 		compatible = "st,nomadik-gpio";
--		reg =  <0x101e7000 0x80>;
-+		reg = <0x101e7000 0x80>;
- 		ngpio = <28>;
- 		interrupt-parent = <&vica>;
- 		interrupts = <9>;
-diff --git a/arch/arm/boot/dts/st/ste-snowball.dts b/arch/arm/boot/dts/st/ste-snowball.dts
-index 27c2ec51e732..1322abfc7acf 100644
---- a/arch/arm/boot/dts/st/ste-snowball.dts
-+++ b/arch/arm/boot/dts/st/ste-snowball.dts
-@@ -266,7 +266,7 @@ mmc@80126000 {
- 			pinctrl-1 = <&mc0_a_1_sleep>;
- 
- 			/* GPIO218 MMC_CD */
--			cd-gpios  = <&gpio6 26 GPIO_ACTIVE_LOW>;
-+			cd-gpios = <&gpio6 26 GPIO_ACTIVE_LOW>;
- 
- 			status = "okay";
- 		};
-diff --git a/arch/arm/boot/dts/st/ste-ux500-samsung-codina-tmo.dts b/arch/arm/boot/dts/st/ste-ux500-samsung-codina-tmo.dts
-index 463942ae755e..c623cc35c5ea 100644
---- a/arch/arm/boot/dts/st/ste-ux500-samsung-codina-tmo.dts
-+++ b/arch/arm/boot/dts/st/ste-ux500-samsung-codina-tmo.dts
-@@ -310,7 +310,7 @@ mmc@80126000 {
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&mc0_a_2_default>;
- 			pinctrl-1 = <&mc0_a_2_sleep>;
--			cd-gpios  = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
-+			cd-gpios = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
- 			status = "okay";
- 		};
- 
-diff --git a/arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts b/arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts
-index c1ae0e23fe45..2355ca6e9ad6 100644
---- a/arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts
-+++ b/arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts
-@@ -402,7 +402,7 @@ mmc@80126000 {
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&mc0_a_2_default>;
- 			pinctrl-1 = <&mc0_a_2_sleep>;
--			cd-gpios  = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
-+			cd-gpios = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
- 			status = "okay";
- 		};
- 
-diff --git a/arch/arm/boot/dts/st/ste-ux500-samsung-gavini.dts b/arch/arm/boot/dts/st/ste-ux500-samsung-gavini.dts
-index b21e40da3dfd..ad9a20ccaaeb 100644
---- a/arch/arm/boot/dts/st/ste-ux500-samsung-gavini.dts
-+++ b/arch/arm/boot/dts/st/ste-ux500-samsung-gavini.dts
-@@ -362,7 +362,7 @@ mmc@80126000 {
- 			pinctrl-0 = <&mc0_a_2_default>;
- 			pinctrl-1 = <&mc0_a_2_sleep>;
- 			/* "flash detect" actually card detect */
--			cd-gpios  = <&gpio6 25 GPIO_ACTIVE_LOW>;
-+			cd-gpios = <&gpio6 25 GPIO_ACTIVE_LOW>;
- 			status = "okay";
- 		};
- 
-diff --git a/arch/arm/boot/dts/st/ste-ux500-samsung-janice.dts b/arch/arm/boot/dts/st/ste-ux500-samsung-janice.dts
-index 6e586e875565..229f7c32103c 100644
---- a/arch/arm/boot/dts/st/ste-ux500-samsung-janice.dts
-+++ b/arch/arm/boot/dts/st/ste-ux500-samsung-janice.dts
-@@ -412,7 +412,7 @@ mmc@80126000 {
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&mc0_a_2_default>;
- 			pinctrl-1 = <&mc0_a_2_sleep>;
--			cd-gpios  = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
-+			cd-gpios = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
- 			status = "okay";
- 		};
- 
-diff --git a/arch/arm/boot/dts/st/ste-ux500-samsung-kyle.dts b/arch/arm/boot/dts/st/ste-ux500-samsung-kyle.dts
-index ba4421080b2a..cdb147dcc1db 100644
---- a/arch/arm/boot/dts/st/ste-ux500-samsung-kyle.dts
-+++ b/arch/arm/boot/dts/st/ste-ux500-samsung-kyle.dts
-@@ -238,7 +238,7 @@ mmc@80126000 {
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&mc0_a_1_default>;
- 			pinctrl-1 = <&mc0_a_1_sleep>;
--			cd-gpios  = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
-+			cd-gpios = <&gpio6 25 GPIO_ACTIVE_LOW>; // GPIO217
- 			status = "okay";
- 		};
- 
+(snip)
 
----
-base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
-change-id: 20231212-ux500-dts-c5da6ca42a6d
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-Best regards,
--- 
-Linus Walleij <linus.walleij@linaro.org>
+Best Regards,
+Chanwoo Choi
+
 
