@@ -1,114 +1,98 @@
-Return-Path: <SRS0=/kUF=HW=linaro.org=peter.griffin@kernel.org>
+Return-Path: <SRS0=nAtV=HW=linaro.org=andre.draszik@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B574C4167B
-	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 09:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20131C4167B
+	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 10:04:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 38E5BC433C7; Mon, 11 Dec 2023 09:24:37 +0000 (UTC)
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	id E44BDC433CD; Mon, 11 Dec 2023 10:04:33 +0000 (UTC)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 842B5C433CA
-	for <soc@kernel.org>; Mon, 11 Dec 2023 09:24:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 842B5C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id CCDF4C433C7
+	for <soc@kernel.org>; Mon, 11 Dec 2023 10:04:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCDF4C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-4b2d6c6d28dso960986e0c.2
-        for <soc@kernel.org>; Mon, 11 Dec 2023 01:24:35 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50c02628291so4382528e87.0
+        for <soc@kernel.org>; Mon, 11 Dec 2023 02:04:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702286674; x=1702891474; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ioYDubYP3iKfHKMHSy5gra3AJi2J9HK+LXY7uK+G2MA=;
-        b=oVRCeMdkVXDSJ6hf7UQ8PvpYmxuymfWSjmFFyyMb80NW9uy0rePaPuO9tYY58ncvIW
-         yIIHY9jRFj1YFqZU7vPfydMSsgy5c1kH/WY3qNWdbwALoPGYY30ZpGKaDNNhpqu/MLdI
-         kwTiok9hN4rX7mDEpt37mDwIW2rMogNUob++xZE/xfN7mmvSP1ksDEUZF9dAb6fDZNkH
-         kUEw5neR2BSucp5TX4Q/Y5g5+woQfy3c/mpG5YrNXoS6HqjWvtZgS7Q85Ah70jfo5pgs
-         mZY8Bd+t5srKc0gt/6sNQljw8CBb4J/69HhMGktkEe9mX3HJBrasaoyd3If0hm6CiWWU
-         TSjg==
+        d=linaro.org; s=google; t=1702289071; x=1702893871; darn=kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dlDvMrT1asX8DIwxy4hQXmmKRl2/sfivmPuoV3hSf5Y=;
+        b=kB3QzRURSMG664u09rFy4LpgD4bkXiu/FpEC5uk8kMzBk4GLlkKfCg9kIKcC6gJkQa
+         u3WBiBGYX9MZFmxPzj8kj0c0t8HHrz7l+Gyd6YCrCgMUgr05FyxARZh89nQytq+h8tvn
+         IGBwB4zrqnbYn/lyP7C7WueTUsaCo+c4389vrsIa+9xw9VphapAQ/BT7QyngtG2yIarb
+         3t0tN3efJeyDshoXlGxBWnxs5y9F78IhOGkR6F8vwgBUQNyUmS9liaVnPdgX4F0EHgIO
+         2V4GMG2eli84FUa3/q/KdlRp1Z9fZdL4CYlXQV4jhO9W0iF0PvJsfARlQAOK16voA5lz
+         bNEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702286674; x=1702891474;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ioYDubYP3iKfHKMHSy5gra3AJi2J9HK+LXY7uK+G2MA=;
-        b=pMN466HtX6ZXj56rJZ1tdqomhHehrt1uISTD4Rw52bvP9+xhc++IgH8DEWHuk+3yzi
-         /I4Q0zPGUm4o9sJN7u/NV9DWz4LjmO/omQBARt6Ob5LxKXPBoFrSinjvxQEar4JQGELn
-         tW5DZc/ewxNWskdoyIukbUqFfgMAPh8kQNzSuNEf+ZfGx47dtYM0TPl6m9i1WgsQI6dc
-         TCAEa5T1iCJU14SDSl/8q1LXnAmFT7EI97IdR7Bu5UFnWktoFpxAkH7tWXSKXPV1u7bX
-         LPz3sy2v37A7hMl1WV7GPlslbUtjqneR+odCTCJcqWsiXPauY4STttJJEk+Sbvg9UgOP
-         D6+Q==
-X-Gm-Message-State: AOJu0YxqbdqlUUl/exu97Zlen1wOVx/NWqKvF7oa9DbASkjHQNd9xfRR
-	EPLC4Pdlt+dP2oTf7XY0SBTB4VXSRwku66SIvWnDzQ==
-X-Google-Smtp-Source: AGHT+IFmqVBB1S6PPILmZng6sUl4gnE7B/ENtukMPc8F2U+pjJRlhmvt8Xvk382O4/Rc8AUY2sPYgeEL53IrvFfBTZs=
-X-Received: by 2002:a05:6102:3e90:b0:464:82c0:7ed9 with SMTP id
- m16-20020a0561023e9000b0046482c07ed9mr2131634vsv.20.1702286674338; Mon, 11
- Dec 2023 01:24:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-5-peter.griffin@linaro.org> <e70d516d-db24-4d79-bbd8-bb5b497a4391@linaro.org>
-In-Reply-To: <e70d516d-db24-4d79-bbd8-bb5b497a4391@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Mon, 11 Dec 2023 09:24:22 +0000
-Message-ID: <CADrjBPrhO42-7TY0iNuRcyWj_YUwpNMWROY_6waLoVtmp7uwrg@mail.gmail.com>
-Subject: Re: [PATCH v6 04/20] dt-bindings: watchdog: Document Google gs101
- watchdog bindings
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1702289071; x=1702893871;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dlDvMrT1asX8DIwxy4hQXmmKRl2/sfivmPuoV3hSf5Y=;
+        b=jjz2qAgINZZjfcnL/o1DRPoS/Pp0Pb7GsF+lcS5yNhmPZbWeCeMKkPOe16RmGYiClq
+         ndLUVg9AqjKn6Gz5qPXR8mGW8pcDgqwCMeflFdWoifxKqyfmrrV3q4kQXW9KmUwNp7aQ
+         vKYR62lkr8e9eB2AMvSdQUmfGMKrh5CVeJO1U/4g5q1CJvXsA/uoklgat/wWlK6w2K+k
+         hYZuOvF1P0vzLoR6XwanUKal8BSp1jmX4Amam6CgALnh3ocIP4QEcMRrISzOfs0er5QA
+         98MwBskl+IThNRsJTPr+tpmDYMp8GrdbF3booFvSUzZXbOTpP/tlejnAFbs2yg/mxiHl
+         I7oQ==
+X-Gm-Message-State: AOJu0YzHNjJOSiM0m6ZXSc4/mv6numVcWyB4qa2iqaShLpnvhV7oxYD0
+	FPH4qj6lSfYMBkrlowGvdfGteQ==
+X-Google-Smtp-Source: AGHT+IGE0CAwP4QDiJnNgqtN7eWwZHyt1mgacPdvwANjL6HNlCW8mOl+VpfcTEOzlnLHL9+YpJ2Ucw==
+X-Received: by 2002:ac2:58d8:0:b0:50b:f05b:7c22 with SMTP id u24-20020ac258d8000000b0050bf05b7c22mr1538255lfo.53.1702289070940;
+        Mon, 11 Dec 2023 02:04:30 -0800 (PST)
+Received: from draszik.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id fs27-20020a05600c3f9b00b0040b36050f1bsm12147315wmb.44.2023.12.11.02.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 02:04:30 -0800 (PST)
+Message-ID: <0c8532d2bcb6ad5a583e8f716cc88cd5cbae1356.camel@linaro.org>
+Subject: Re: [PATCH v6 12/20] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
+ and cmu_apm support
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ conor+dt@kernel.org,  sboyd@kernel.org, tomasz.figa@gmail.com,
+ s.nawrocki@samsung.com,  linus.walleij@linaro.org, wim@linux-watchdog.org,
+ linux@roeck-us.net,  catalin.marinas@arm.com, will@kernel.org,
+ arnd@arndb.de, olof@lixom.net,  gregkh@linuxfoundation.org,
+ jirislaby@kernel.org, cw00.choi@samsung.com,  alim.akhtar@samsung.com
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
-	soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
+Cc: tudor.ambarus@linaro.org, semen.protsenko@linaro.org,
+ saravanak@google.com,  willmcvicker@google.com, soc@kernel.org,
+ devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org,  linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org,  linux-watchdog@vger.kernel.org,
+ kernel-team@android.com,  linux-serial@vger.kernel.org
+Date: Mon, 11 Dec 2023 10:04:29 +0000
+In-Reply-To: <20231209233106.147416-13-peter.griffin@linaro.org>
+References: <20231209233106.147416-1-peter.griffin@linaro.org>
+	 <20231209233106.147416-13-peter.griffin@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.49.2-3 
+MIME-Version: 1.0
 
-Hi Krzysztof,
+On Sat, 2023-12-09 at 23:30 +0000, Peter Griffin wrote:
+> cmu_top is the top level clock management unit which contains PLLs, muxes=
+,
+> dividers and gates that feed the other clock management units.
+>=20
+> cmu_misc clocks IPs such as Watchdog and cmu_apm clocks ips part of the
+> APM module.
+>=20
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Tested-by: Will McVicker <willmcvicker@google.com>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
-On Sun, 10 Dec 2023 at 14:23, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 10/12/2023 00:30, Peter Griffin wrote:
-> > Add the "google,gs101-wdt" compatible to the dt-schema documentation.
-> >
-> > gs101 SoC has two CPU clusters and each cluster has its own dedicated
-> > watchdog timer (similar to exynos850 and exynosautov9 SoCs).
-> >
-> > These WDT instances are controlled using different bits in PMU
-> > registers.
-> >
-> > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  .../devicetree/bindings/watchdog/samsung-wdt.yaml         | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-> > index 8fb6656ba0c2..57468c2c5ece 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-> > @@ -17,6 +17,7 @@ description: |+
-> >  properties:
-> >    compatible:
-> >      enum:
-> > +      - google,gs101-wdt                      # for Google gs101
->
-> I think you did not rebase on linux-next. The hunk differs.
+Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 
-It was re-based off 'next-20231130'. I will re-base off the current
-day's linux-next for v7.
+Cheers,
+Andr=C3=A9
 
-Thanks,
-
-Peter.
