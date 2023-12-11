@@ -1,113 +1,103 @@
-Return-Path: <SRS0=/kUF=HW=linaro.org=peter.griffin@kernel.org>
+Return-Path: <SRS0=WmvE=HW=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD7C0C4167B
-	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 10:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F206C4167B
+	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 10:52:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 93BC6C433C7; Mon, 11 Dec 2023 10:26:53 +0000 (UTC)
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	id 24760C433C7; Mon, 11 Dec 2023 10:52:59 +0000 (UTC)
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01839C433CA
-	for <soc@kernel.org>; Mon, 11 Dec 2023 10:26:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01839C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 459C8C433C8
+	for <soc@kernel.org>; Mon, 11 Dec 2023 10:52:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 459C8C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-677fba00a49so34308266d6.1
-        for <soc@kernel.org>; Mon, 11 Dec 2023 02:26:51 -0800 (PST)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5ca1b4809b5so124054a12.3
+        for <soc@kernel.org>; Mon, 11 Dec 2023 02:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702290411; x=1702895211; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBClK4lqtI01tZ9y+a3IQvx46bQqW6gXipVJViDNMLE=;
-        b=EG7KZQ99lt+HJcu5wL3TTUEdwx4QxaZKdPG40XbnWvAjNqt2ctV6Ut0qYneO6DCtEi
-         LTcIiCzqUXZVqYK6ijf+8UqeqZYgBzpTUSsw4MFnhizP/uTjwZ81N5ih9tCpKQxdMW2c
-         51f7aB6hL+aWdMgQ3xEdSusXUtfHIUEjCmo4NuEJsGw6Spo++eQb98WOePRf2LOraYeR
-         KsJG1LyaEHYS32owz/1NxbucACAIGWiOVmuP2pRg8dDXWmrnDHBKocrrrOL7rPm56F7d
-         UzmkabfStX01UowiA63B5YLEwvUsDHlGHzW9AWzwGb8X47x3mSr63hixg/VhmgfnsUcj
-         2ewQ==
+        d=linaro.org; s=google; t=1702291977; x=1702896777; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dy0Zb8GZwtRwUsfyN7YDaLjZK7xM4pji8PYYJ7g0zJs=;
+        b=tt2hHYrbtzjVneuLunjKjGAafWKnjQiT3/ZzGi+sg5x91mYCnfrhAxqAReHhezGs2w
+         TH4ZOkdKARXPKux9fob3nZUNewZNtPHRdFvbA1HFEzoD7fIiM61HlPxx+9KE+Qzjzxdi
+         MdidVBR4iH/E+OgZKoHSuSWHUcQ+NDA55N6ZXruTbZ0Zoq0tv/IeWkcOsFmEmFJX6Gaj
+         2oF/ufJlRSP9thRz1XubEEgNgtC76M1L8j6pyCvyO7WBsRE4tljbiGcqdZE5YQylOD+h
+         VsGtpcaA6lpr9aFEGmLK3CXQYZtFm0Q2riDt4KeearIzeEmTwmW13ozyuO3oVyyDxhtZ
+         WquQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702290411; x=1702895211;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zBClK4lqtI01tZ9y+a3IQvx46bQqW6gXipVJViDNMLE=;
-        b=g59LgOTP5AOXgNJtfhASX4Oi96NxAx23MF4cAQh0HAQO25OBRiLsab2uUX3ZXXHrs0
-         efu9iqTJhaNcx4ZFeTubQ9WsR1/mk+aB0O3/2AfJO7Y/ijm2ShG0l2eUjlGu0R+RlKPX
-         KnLSm534M9gBP3sQzom8yukrYa5qBUSQgOuY+K2AIi+mxkM5PmsSizft8cA9d+0K/NKh
-         jgq4ZYhYqLglFuVNrQxrcurTAungveq/c6KNUbzchV2BeWNDdNRye/WAGwiVIBUKHjdw
-         IJ3e2C9Ah0vQYh9GeozfCMRq9BYGqLRQso42kVfHDl62fmudnGJzMaTiF6TtrL4FIO+p
-         wrHQ==
-X-Gm-Message-State: AOJu0YxUpv27iDa2ryOOI0prRaFE6kYCrqlw1X6LehoFB8VzHphztTA4
-	Hc+l72lNXgx0tsYovL3EoUpw5A6fhgVzzAkHv7PU3w==
-X-Google-Smtp-Source: AGHT+IGXuSEmjxGIf3QPro+i3LI5BnTbhCqPp7O7UIiBh/LqSwNTV/bm9Ks6TLe0NeBnUASLNjJvb+hNli7R0WXRvsA=
-X-Received: by 2002:a0c:fb04:0:b0:67a:ad44:2126 with SMTP id
- c4-20020a0cfb04000000b0067aad442126mr5413328qvp.60.1702290410972; Mon, 11 Dec
- 2023 02:26:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-17-peter.griffin@linaro.org> <25533a7f-326f-48d1-a8a6-e5798bdca4b4@linaro.org>
-In-Reply-To: <25533a7f-326f-48d1-a8a6-e5798bdca4b4@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Mon, 11 Dec 2023 10:26:39 +0000
-Message-ID: <CADrjBPrg51Fkkme71yLeFc06ROgAjcchXGoX7Uxrmin-+yBayQ@mail.gmail.com>
-Subject: Re: [PATCH v6 16/20] watchdog: s3c2410_wdt: Add support for Google
- gs101 SoC
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1702291977; x=1702896777;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dy0Zb8GZwtRwUsfyN7YDaLjZK7xM4pji8PYYJ7g0zJs=;
+        b=R6V3vBpgaj08pL0YzKsMuXBa41sADHszWcAzti1wFKC8UieYYocFvLGqrTCjHE1526
+         j7QdygQfmaCRfX+CAk1sAFl031iFtUnhZExcwECaKCTvXla+HIG2KUcBi+UTFEIYw7Mg
+         ThwVhugwy92SRwa/4lNIDD73VY+LxO+Q+qXOJVge4G08wY8wR5P+p6FSXJYxh9kj9y4u
+         7phhBoDxuQqPUKnkbUsI/wusC5RvLuUCUwXZKpQjjfvYgSIkLBwaiuZRtEzh/40Ma1vI
+         bwNd3ID71wVFYp57+B9NZ0aXCTaGSaI0yT2wOUinoH2LLLtivohf5JVzMi+NL06OeHRm
+         pPBg==
+X-Gm-Message-State: AOJu0YwMlaW5zooT/4a2kcGOiwE6No8VPvLN4H7jfXqo1OD857t3OgnI
+	O+bj7n2/B8EVTzTNdKLETpPH5W/ivZRZQclGvJY=
+X-Google-Smtp-Source: AGHT+IGlfs9NOB4Bdlr8Do475taU6StZskH8gQC08vA1+lCvO27M00ERC6HaYrxRCQlP8keYAbBjFA==
+X-Received: by 2002:a05:6a20:394a:b0:18c:ab4:f6c9 with SMTP id r10-20020a056a20394a00b0018c0ab4f6c9mr2003960pzg.56.1702291977599;
+        Mon, 11 Dec 2023 02:52:57 -0800 (PST)
+Received: from rayden (h-217-31-164-171.A175.priv.bahnhof.se. [217.31.164.171])
+        by smtp.gmail.com with ESMTPSA id 19-20020a17090a1a5300b002802a080d1dsm7302776pjl.16.2023.12.11.02.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 02:52:57 -0800 (PST)
+Date: Mon, 11 Dec 2023 11:52:49 +0100
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
-	soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] OP-TEE FF-A asynchronous notifications for 6.8
+Message-ID: <20231211105249.GA587253@rayden>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi Krzysztof,
+Hello arm-soc maintainers,
 
-Thanks for the review.
-
-On Sun, 10 Dec 2023 at 14:26, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 10/12/2023 00:31, Peter Griffin wrote:
-> > This patch adds the compatibles and drvdata for the Google
-> > gs101 SoC found in Pixel 6, Pixel 6a & Pixel 6 pro phones.
-> >
-> > Similar to Exynos850 it has two watchdog instances, one for
-> > each cluster and has some control bits in PMU registers.
-> >
->
->
-> > +
-> >  static const struct of_device_id s3c2410_wdt_match[] = {
-> >       { .compatible = "samsung,s3c2410-wdt",
-> >         .data = &drv_data_s3c2410 },
-> > @@ -285,6 +318,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
-> >         .data = &drv_data_exynos850_cl0 },
-> >       { .compatible = "samsung,exynosautov9-wdt",
-> >         .data = &drv_data_exynosautov9_cl0 },
-> > +     { .compatible = "google,gs101-wdt",
-> > +       .data = &drv_data_gs101_cl0 },
->
-> Keep some alphabetical order by compatible, so this should be probably
-> the first entry in the table.
->
-> Same for s3c2410_wdt_variant structures.
-
-Will fix in v7.
+Please pull these patches that enables asynchronous notifications in
+OP-TEE FF-A driver. This pull request is on top of the
+"system_thread_for_v6.8" pull request to avoid a merge conflict.
 
 Thanks,
+Jens
 
-Peter
+The following changes since commit 4b391c9c37646f25118355f414b9e6d9fefe782f:
+
+  firmware: arm_scmi: optee: use optee system invocation (2023-11-17 15:48:03 +0100)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/ffa-notif-for-v6.8
+
+for you to fetch changes up to d0476a59de064205f4aaa8f7c6d6f32bc28a44d4:
+
+  optee: ffa_abi: add asynchronous notifications (2023-11-17 15:55:41 +0100)
+
+----------------------------------------------------------------
+OP-TEE: asynchronous notifications with FF-A
+
+Add support for asynchronous notifications in the OP-TEE FF-A driver. This
+is the FF-A counterpart to the asynchronous notifications already
+available in the OP-TEE SMC ABI.
+
+----------------------------------------------------------------
+Jens Wiklander (2):
+      optee: provide optee_do_bottom_half() as a common function
+      optee: ffa_abi: add asynchronous notifications
+
+ drivers/tee/optee/call.c          | 31 ++++++++++++-
+ drivers/tee/optee/ffa_abi.c       | 93 +++++++++++++++++++++++++++++++++++++--
+ drivers/tee/optee/optee_ffa.h     | 28 ++++++++++--
+ drivers/tee/optee/optee_private.h |  9 +++-
+ drivers/tee/optee/smc_abi.c       | 36 ++-------------
+ 5 files changed, 155 insertions(+), 42 deletions(-)
