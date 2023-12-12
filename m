@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B31C4332F
-	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 19:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B19C4332F
+	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 19:39:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 43DF7C433D9; Tue, 12 Dec 2023 19:39:42 +0000 (UTC)
+	id 3E134C433D9; Tue, 12 Dec 2023 19:39:45 +0000 (UTC)
 Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 60E7AC433C7
-	for <soc@kernel.org>; Tue, 12 Dec 2023 19:39:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60E7AC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 59620C433C7
+	for <soc@kernel.org>; Tue, 12 Dec 2023 19:39:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 59620C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40c41df5577so30060765e9.0
-        for <soc@kernel.org>; Tue, 12 Dec 2023 11:39:41 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40c55872d80so4578405e9.1
+        for <soc@kernel.org>; Tue, 12 Dec 2023 11:39:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702409980; x=1703014780; darn=kernel.org;
+        d=linaro.org; s=google; t=1702409983; x=1703014783; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YxAzDX9JXlerGjW9sliLNg1VqSbKZo+v7TiUYRAOW8s=;
-        b=nqIvnTnJriq0/ZVHudE9+YwZD5+aCBMnldxDyoRsvCCztcGbxv+CUXemrzVZMfAsHh
-         M5E22GaNbZHFgmjf9zwyA/KbTQ1Vrfv3FgRGDXwTPUnIyIM1Y7tgpUohpBWnrTn74glW
-         WBvbY4vT2Zzj4EQlfd8nZR98EquOYuCjPMRjLqSYlUZIj8TjVPiZRKowfDqHAQsEnxUj
-         Sb1rdmabwvLCrV+dXblSntoSz09Q0fwtVB961B7DVzvB/ArFD1mWvl/pOSGmMR+LtHV6
-         VT1kxcWGd2YpNfGyexJnBhaFolPA5JNrv8rgX5T6TAh8UfmhNZXWicvzE23K5m4/K+dl
-         9fPA==
+        bh=HU5RbQo6yU19wzCnPIdhHQhCfrzZV9IA9nmUM54hRn4=;
+        b=oNK/ybUDFKMngk+arNAl5ud5Njl0I2WMj9EsuT+6+jUdOta27DHQ32Ugs/E+mnEvAC
+         hzkYoiCK5Kx2NIjhJiYvMsqaObN9go85rmeqAc1FlF2nAmENz2EsFLmtHGAXI53Dk3zz
+         ucNzjjjhEHR33/oABY4LcgBiyO0lj5M//RhCnkc1388FU9jrd9L8QYe1YaCnFn+N1d8s
+         hxR9cE7BZJ4nJHnMdVWD75hxzwW2OZgEKh1fJrdCHHZkJMy92YFfVziKY0HKtOgieeql
+         FAhqgpffvks2p92pwbmK9cr5w7VXFjQCsUNneq49mFBsqGvp/YgnDQUNbIpG3fSdmIuy
+         CCCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702409980; x=1703014780;
+        d=1e100.net; s=20230601; t=1702409983; x=1703014783;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YxAzDX9JXlerGjW9sliLNg1VqSbKZo+v7TiUYRAOW8s=;
-        b=JMSPVmwCSVTpvQOcU4r4JwPUZg8j7N5X1dyWPDDsNQc4jgig7C5BGU7FtiJk3grSKW
-         9rUJxbz0fzHtnkRoYTcwMkEFZLZcjU3K9wjlyIqLiLe3MixYnKTK3X4pxMrouJRj56U/
-         pZUc6ihLLwRyZujJUffd8/lpQyb7GOg2QO6wSO6Xigek8bS4cBwKASdcPDDrko6WZJEx
-         OVA8P4DqbtallI7kD3KRlosywpKhTOdtas5pylqe1HZcTr4S+39Wp8JuIW2lzFfJ0luC
-         TO70XxK/mjUbPkP9yXUAbqamwxW1hd/ivZCaJAtLgjFfsjR7f/DDjkrOuFRRZQFTlAuR
-         bqsg==
-X-Gm-Message-State: AOJu0Yw/9Ntg65UGHgukb9+TfO9ENCQzqd3dsB9te/5rImQgrwje3KDm
-	1FLRu9QJkY/GF8+5RzfcwcQblw==
-X-Google-Smtp-Source: AGHT+IEfRC4TinznPMBUka4PyGE92KOat9ON7LxpFk3J1KfTrqntMs1dCJLWbdbcFiI3FdFisklHVw==
-X-Received: by 2002:a05:600c:2948:b0:40c:333a:8ad with SMTP id n8-20020a05600c294800b0040c333a08admr1631510wmd.149.1702409979887;
-        Tue, 12 Dec 2023 11:39:39 -0800 (PST)
+        bh=HU5RbQo6yU19wzCnPIdhHQhCfrzZV9IA9nmUM54hRn4=;
+        b=BmUdGUjjVIYlgxqscSAmM5/b4ot7ENkuWzmhBwNptz4Gx4yad0MnN9fcbNxBzBU1PX
+         QNVa4QfT7ZXsFRMrgErvS1JiPIoWqMhCBnjPvmw7JkpOy2zuhd2T6m5KMVdyGmknlPE7
+         FX1Q9hm3wZTXdmxUs1j8Wfl+tuvAKQ9Y8h8WDYwbzjSdNrXQ4+H3c+RZhz7h5b2valsP
+         nrfZaehXgctQYxuiqkkjuHgiV3xJMdI5zbej0vg5/0HAQieyUC1TcUqfCaTa8CbrLOkt
+         v80mL9aJhjVZCM+vLaFyWezbJZq8u9H7qkWGWHJSoGBV6XhqOneBVeZouBrzXictLZ/+
+         VpCQ==
+X-Gm-Message-State: AOJu0Yyp0fQYE3wLwUf2RxTRMArQPHYzhkMgveN7qqlWFChtmlhE+m40
+	laJLxPVsoqCwsgWW5vUMO2j/GQ==
+X-Google-Smtp-Source: AGHT+IGPurVjTAMMlyJVVpPYaeBs9uu+XLoCG94/B3i6Isrtg80koLVV4yN6mfxoVxf49RaSEPKFpQ==
+X-Received: by 2002:a05:600c:4f41:b0:40c:2d74:b9b with SMTP id m1-20020a05600c4f4100b0040c2d740b9bmr3324675wmq.24.1702409982887;
+        Tue, 12 Dec 2023 11:39:42 -0800 (PST)
 Received: from krzk-bin.. ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id i9-20020a05600c354900b003fee6e170f9sm17345530wmq.45.2023.12.12.11.39.37
+        by smtp.gmail.com with ESMTPSA id i9-20020a05600c354900b003fee6e170f9sm17345530wmq.45.2023.12.12.11.39.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 11:39:39 -0800 (PST)
+        Tue, 12 Dec 2023 11:39:42 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -88,33 +88,31 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: Re: (subset) [PATCH v7 08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
-Date: Tue, 12 Dec 2023 20:39:17 +0100
-Message-Id: <170240988142.242356.6873777616992390636.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v7 13/16] tty: serial: samsung: Add gs101 compatible and common fifoszdt_serial_drv_data
+Date: Tue, 12 Dec 2023 20:39:18 +0100
+Message-Id: <170240988144.242356.2200926663420450424.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231211162331.435900-9-peter.griffin@linaro.org>
-References: <20231211162331.435900-1-peter.griffin@linaro.org> <20231211162331.435900-9-peter.griffin@linaro.org>
+In-Reply-To: <20231211162331.435900-14-peter.griffin@linaro.org>
+References: <20231211162331.435900-1-peter.griffin@linaro.org> <20231211162331.435900-14-peter.griffin@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 
-On Mon, 11 Dec 2023 16:23:23 +0000, Peter Griffin wrote:
-> cmu_top is the top level clock management unit which contains PLLs, muxes,
-> dividers and gates that feed the other clock management units.
+On Mon, 11 Dec 2023 16:23:28 +0000, Peter Griffin wrote:
+> Add serial driver data for Google Tensor gs101 SoC and a common
+> fifoszdt_serial_drv_data that can be used by platforms that specify the
+> samsung,uart-fifosize DT property.
 > 
-> cmu_misc clocks IPs such as Watchdog and cmu_apm clocks ips part of the
-> APM module.
-> 
+> A corresponding dt-bindings patch updates the yaml to ensure
+> samsung,uart-fifosize is a required property.
 > 
 > [...]
 
 Applied, thanks!
 
-Dropped the header, pointed out by Rob.
-
-[08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
-        https://git.kernel.org/krzk/linux/c/2c597bb7d66a55f2af2fff9bf4629dd07b3b9a1e
+[13/16] tty: serial: samsung: Add gs101 compatible and common fifoszdt_serial_drv_data
+        https://git.kernel.org/krzk/linux/c/c95f5b21a0eaa4a2701c28e2b209f9a7e09cd4f0
 
 Best regards,
 -- 
