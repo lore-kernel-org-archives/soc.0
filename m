@@ -1,89 +1,232 @@
-Return-Path: <SRS0=u7GA=HX=linaro.org=peter.griffin@kernel.org>
+Return-Path: <SRS0=7AxC=HX=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67D8AC4332F
-	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 19:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB3B1C4332F
+	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 21:19:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 53EF0C433CC; Tue, 12 Dec 2023 19:44:05 +0000 (UTC)
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	id 730B7C433C9; Tue, 12 Dec 2023 21:19:04 +0000 (UTC)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 65D1BC433C8
-	for <soc@kernel.org>; Tue, 12 Dec 2023 19:44:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65D1BC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1fb33059466so4211606fac.2
-        for <soc@kernel.org>; Tue, 12 Dec 2023 11:44:04 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3B2F0C433C8;
+	Tue, 12 Dec 2023 21:19:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B2F0C433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-28694702c18so6034920a91.3;
+        Tue, 12 Dec 2023 13:19:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702410243; x=1703015043; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5BQMFtAFEVshsml7NDivd/paYwikSCal1XjNLmVRnaY=;
-        b=OYR+9ySUfKLcEaVAvD6pfHW3S53Phf8sdQ/zplNvUAIoSs8BJxES8sllOkKpGDC0Kr
-         BrAoc0uYbklVipmy1Y/Dw5rOSRh9fvZQz4P/2fKHiwlvPWtgdHtt8zgTKutRI4aDpSv0
-         eGClaIUdkaEgVY5MAJz/5rdwq1UJ5LlokR/3mc49Gszj20q32kpfTSks71pzunwkRUOz
-         NdRtiteo8DydF+Y6FdkxowGY+tMwO/afBQNCIIU6e0b79T3xGSGzENB/O9J01NOJtaVQ
-         +2YZiirQGieSUTarM6D52ew83BMlL2quKFHBjoKtylS4vIR/JUCHpsHTYRsUT0uVmttY
-         0Qqw==
+        d=gmail.com; s=20230601; t=1702415942; x=1703020742; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kMoLJYgn7fDY9nUFDcOY8AQOiuzLi7LcMhALoQeUtF0=;
+        b=ZdC/tHUE7k6tu5dpVCVhaTiGy5lB2KlRCfult6PITmhM1w12o2dEYuVGzq8QNvclZ1
+         MHTJbpwuhZVgL6FA2aYXBxoOS2z7OgqcJFEmLCpK2LLzDGmmQKtoYfFMfylpMjLPt4j9
+         WiCa8P0s6kKmdt6TIlmTQ+geREYpGBWpzhZ3VnN0XaWaeAOfVR0NZ/vHUOYG/Z0wTtJo
+         bctxFice9eKQcYRioNeRXxT/aQ55X6YsoKmvVsF1Ysun1xwdsugr3jksjxA4oXX5w/jM
+         J5t7lI0zvf3AbVAV23KUaiZBMnsGxSGhFCsFIrRW7vbKb7UfioB/xGU7Vm1s1LKMG3UO
+         3MLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702410243; x=1703015043;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1702415942; x=1703020742;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5BQMFtAFEVshsml7NDivd/paYwikSCal1XjNLmVRnaY=;
-        b=F+B5t4sPKrCa6r7lsO+YGD3KR01FueCNYvnM8bUv0Gm2f3L0ZsUUfvjvv1pYoYa7fz
-         7xtb/QTUPWfcHkL+Rd0nRY4B/FWCv1HS2GwMNHg8IN3EIDHoS+UuwtGbbu7OINZgF7kB
-         Wi51Gz3I+EnmTMTWpBSqluA2F8Ee+3Qp7ysvasCJnRh9WEVznsv4Z29uv8Kvce+1lcpS
-         GkL3HfZ1dQAIp5WIXQ4/cHOSBLlkAbfM5He7fp6Mo8utIm12EIueXrItFZooclhT1gMe
-         El9n968ddCoAh2GDWi8rQ1a9N6SGa72nNQF6efo3uuFz/KOApQUVKLuIgMdWiqP6u44L
-         /0zg==
-X-Gm-Message-State: AOJu0YxsE8uhtHr6pP7MRIFU4PhLEWdkV0rCzqyuhuwtEbLJejmN58Ru
-	VvbwqbGfm5h5FR7MhYMIhHXDKyu08SckkOMQBJWWtg==
-X-Google-Smtp-Source: AGHT+IEpRUag5rB1tDDpj1KnSRL4BnsZpmVdNbHOzdHEtq0m5gt0oCTzHiRTdbC5zgVahAhKY6c+9bAJrFEY8lC9oNc=
-X-Received: by 2002:a05:6870:7817:b0:1fb:75a:6d15 with SMTP id
- hb23-20020a056870781700b001fb075a6d15mr8510488oab.60.1702410243522; Tue, 12
- Dec 2023 11:44:03 -0800 (PST)
+        bh=kMoLJYgn7fDY9nUFDcOY8AQOiuzLi7LcMhALoQeUtF0=;
+        b=Gd1I8VyFYZS92vL3UZfOmFuXXBce/yMLUnKHuo7RqjAd59Kuj8VMQwkMMLe/znw6w6
+         RpjyDWexYda6oPOURYU+sHh9l4q2u/vFhWXkIZaMMJyC+GOjFHxLC2pE9j1OLh0zpNAp
+         prBYKkhG71xwLLq3xl1obgaHYP0CsCq3tu6FhGlHmf+309xo0gZpdZzY+5h8R70mrSun
+         ZdxTyRPsJ8julcHN7UbIq6mbJnsu0bXSDGpdlxem6WF2+0x3gf55UPotQ9/kgKaxTAXv
+         NbJCYhR+38TearP0CFj9zqtI2XgoPP9VU5PyrVSSQb0yN3DBNnCmdLfbXHhjRRN8e1LW
+         00cg==
+X-Gm-Message-State: AOJu0YxJQHcN2MKNpgzPe+GfpqNqcLfHzLHByJuvgOu6ui22TK9ZJcTJ
+	JosaZeUWpZiwlGXFgAyAbHY=
+X-Google-Smtp-Source: AGHT+IHfMYA0e5583oScQWydg+DxCkFVtWOC6tsTqs18GNwFIduE95LRcs6hLxnlOHAFU/CgLbOilg==
+X-Received: by 2002:a17:90a:2f43:b0:28a:c61a:5a20 with SMTP id s61-20020a17090a2f4300b0028ac61a5a20mr1162458pjd.1.1702415942317;
+        Tue, 12 Dec 2023 13:19:02 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id px6-20020a17090b270600b002609cadc56esm9605497pjb.11.2023.12.12.13.18.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Dec 2023 13:19:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <cb84bee8-db33-41b3-b0f3-79b3df494496@roeck-us.net>
+Date: Tue, 12 Dec 2023 13:18:59 -0800
 MIME-Version: 1.0
-References: <20231211162331.435900-1-peter.griffin@linaro.org>
- <20231211162331.435900-9-peter.griffin@linaro.org> <CAL_JsqJ_NUajmQs8ZYiE2GpvNxBwtkLRE2jvWDU3hKtztt92Ug@mail.gmail.com>
- <CADrjBPrkso2cM8zKq-WU8WC3P3A9YoS6nqX-f6XvSNS-EofK9g@mail.gmail.com> <d23cc32c-8a5b-48aa-be4d-608fbbb9ac3a@linaro.org>
-In-Reply-To: <d23cc32c-8a5b-48aa-be4d-608fbbb9ac3a@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Tue, 12 Dec 2023 19:43:51 +0000
-Message-ID: <CADrjBPoireQMauac4D4d0Ry+PBBUUF=s0Lozp50KLz2y6ZLHKw@mail.gmail.com>
-Subject: Re: [PATCH v7 08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
- and cmu_apm support
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 12/16] watchdog: s3c2410_wdt: Add support for Google
+ gs101 SoC
+Content-Language: en-US
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+ s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
+ catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, olof@lixom.net,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, cw00.choi@samsung.com,
+ alim.akhtar@samsung.com
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
-	soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+ semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
+ soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, kernel-team@android.com,
+ linux-serial@vger.kernel.org
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+ <20231211162331.435900-13-peter.griffin@linaro.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231211162331.435900-13-peter.griffin@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 12 Dec 2023 at 19:38, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 11/12/2023 20:46, Peter Griffin wrote:
-> >>> +#include <linux/platform_device.h>
-> >
-> > You are correct, this header isn't required. If a new series is
-> > required I will remove it.
->
-> I dropped it while applying.
+On 12/11/23 08:23, Peter Griffin wrote:
+> This patch adds the compatibles and drvdata for the Google
+> gs101 SoC found in Pixel 6, Pixel 6a & Pixel 6 pro phones.
+> 
+> Similar to Exynos850 it has two watchdog instances, one for
+> each cluster and has some control bits in PMU registers.
+> 
+> gs101 also has the dbgack_mask bit in wtcon register, so
+> we also enable QUIRK_HAS_DBGACK_BIT.
+> 
+> Tested-by: Will McVicker <willmcvicker@google.com>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
-Thanks Krzysztof :)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/watchdog/s3c2410_wdt.c | 49 ++++++++++++++++++++++++++++++----
+>   1 file changed, 44 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index b7a03668f743..c3046610ab5d 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -69,6 +69,13 @@
+>   #define EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT	25
+>   #define EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT	24
+>   
+> +#define GS_CLUSTER0_NONCPU_OUT			0x1220
+> +#define GS_CLUSTER1_NONCPU_OUT			0x1420
+> +#define GS_CLUSTER0_NONCPU_INT_EN		0x1244
+> +#define GS_CLUSTER1_NONCPU_INT_EN		0x1444
+> +#define GS_CLUSTER2_NONCPU_INT_EN		0x1644
+> +#define GS_RST_STAT_REG_OFFSET			0x3B44
+> +
+>   /**
+>    * DOC: Quirk flags for different Samsung watchdog IP-cores
+>    *
+> @@ -270,7 +277,35 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
+>   		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
+>   };
+>   
+> +static const struct s3c2410_wdt_variant drv_data_gs101_cl0 = {
+> +	.mask_reset_reg = GS_CLUSTER0_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 0,
+> +	.cnt_en_reg = GS_CLUSTER0_NONCPU_OUT,
+> +	.cnt_en_bit = 8,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET |
+> +		  QUIRK_HAS_PMU_CNT_EN | QUIRK_HAS_WTCLRINT_REG |
+> +		  QUIRK_HAS_DBGACK_BIT,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
+> +	.mask_reset_reg = GS_CLUSTER1_NONCPU_INT_EN,
+> +	.mask_bit = 2,
+> +	.mask_reset_inv = true,
+> +	.rst_stat_reg = GS_RST_STAT_REG_OFFSET,
+> +	.rst_stat_bit = 1,
+> +	.cnt_en_reg = GS_CLUSTER1_NONCPU_OUT,
+> +	.cnt_en_bit = 7,
+> +	.quirks = QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET |
+> +		  QUIRK_HAS_PMU_CNT_EN | QUIRK_HAS_WTCLRINT_REG |
+> +		  QUIRK_HAS_DBGACK_BIT,
+> +};
+> +
+>   static const struct of_device_id s3c2410_wdt_match[] = {
+> +	{ .compatible = "google,gs101-wdt",
+> +	  .data = &drv_data_gs101_cl0 },
+>   	{ .compatible = "samsung,s3c2410-wdt",
+>   	  .data = &drv_data_s3c2410 },
+>   	{ .compatible = "samsung,s3c6410-wdt",
+> @@ -605,9 +640,10 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>   	}
+>   
+>   #ifdef CONFIG_OF
+> -	/* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster index */
+> +	/* Choose Exynos9 SoC family driver data w.r.t. cluster index */
+>   	if (variant == &drv_data_exynos850_cl0 ||
+> -	    variant == &drv_data_exynosautov9_cl0) {
+> +	    variant == &drv_data_exynosautov9_cl0 ||
+> +	    variant == &drv_data_gs101_cl0) {
+>   		u32 index;
+>   		int err;
+>   
+> @@ -620,9 +656,12 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>   		case 0:
+>   			break;
+>   		case 1:
+> -			variant = (variant == &drv_data_exynos850_cl0) ?
+> -				&drv_data_exynos850_cl1 :
+> -				&drv_data_exynosautov9_cl1;
+> +			if (variant == &drv_data_exynos850_cl0)
+> +				variant = &drv_data_exynos850_cl1;
+> +			else if (variant == &drv_data_exynosautov9_cl0)
+> +				variant = &drv_data_exynosautov9_cl1;
+> +			else if (variant == &drv_data_gs101_cl0)
+> +				variant = &drv_data_gs101_cl1;
+>   			break;
+>   		default:
+>   			return dev_err_probe(dev, -EINVAL, "wrong cluster index: %u\n", index);
+
