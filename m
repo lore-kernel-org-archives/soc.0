@@ -1,186 +1,129 @@
-Return-Path: <SRS0=dieM=HW=samsung.com=cw00.choi@kernel.org>
+Return-Path: <SRS0=QVJy=HX=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C040C4332F
-	for <soc@archiver.kernel.org>; Mon, 11 Dec 2023 23:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79179C4167D
+	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 09:31:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4265AC433C8; Mon, 11 Dec 2023 23:57:18 +0000 (UTC)
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 4ABDFC433C7; Tue, 12 Dec 2023 09:31:15 +0000 (UTC)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C64DFC433C7;
-	Mon, 11 Dec 2023 23:57:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C64DFC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20231211235712epoutp02fc6492c306a0c87b00f73d2b96eaddb1~f7FS22I-N1560215602epoutp02X;
-	Mon, 11 Dec 2023 23:57:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20231211235712epoutp02fc6492c306a0c87b00f73d2b96eaddb1~f7FS22I-N1560215602epoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1702339032;
-	bh=bBw6NK33ONaSuHSNqwie2fG1DfnIrR8z9bBcfqRccco=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=PUT/0HrMIoBxCMk8iXdgFD0X2Sg28os0ByEf6vCuabil4sWM0oFEYVseZv4lSYqGa
-	 LsccOknD0Dn8ODSwTq9QpwtT39Vp0wonnBzyqeETRPkUJk0S10LW+thNOiM5+ibXmp
-	 AU+1O/H/t6/tRSNZdApzyfnLCAzYAFg6AXeuaPOU=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-	20231211235712epcas1p39dede76e04ae14189f0260fca7d7d07a~f7FSfcmRd2517825178epcas1p3Y;
-	Mon, 11 Dec 2023 23:57:12 +0000 (GMT)
-Received: from epsmgec1p1-new.samsung.com (unknown [182.195.36.144]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4SpzF30zJRz4x9Q1; Mon, 11 Dec
-	2023 23:57:11 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-	epsmgec1p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	40.C5.19104.6D1A7756; Tue, 12 Dec 2023 08:57:11 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-	20231211235710epcas1p314c62a7abccf937bd63907c3c8166efc~f7FQ4CCEp2515825158epcas1p3o;
-	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20231211235710epsmtrp27050d1763a3b4c4daa8ddc76689a55d1~f7FQ2wCih2834428344epsmtrp2m;
-	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
-X-AuditID: b6c32a4c-80dff70000004aa0-47-6577a1d65ccb
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	5D.68.07368.6D1A7756; Tue, 12 Dec 2023 08:57:10 +0900 (KST)
-Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20231211235710epsmtip18f3770cc7713786a97d3d0f4185e114d~f7FQUXaxH1746317463epsmtip1G;
-	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
-From: "Chanwoo Choi" <cw00.choi@samsung.com>
-To: "'Peter Griffin'" <peter.griffin@linaro.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-	<conor+dt@kernel.org>, <sboyd@kernel.org>, <tomasz.figa@gmail.com>,
-	<s.nawrocki@samsung.com>, <linus.walleij@linaro.org>,
-	<wim@linux-watchdog.org>, <linux@roeck-us.net>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <arnd@arndb.de>, <olof@lixom.net>,
-	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-	<alim.akhtar@samsung.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D6F8AC433CD
+	for <soc@kernel.org>; Tue, 12 Dec 2023 09:31:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6F8AC433CD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40c317723a8so45037585e9.3
+        for <soc@kernel.org>; Tue, 12 Dec 2023 01:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702373472; x=1702978272; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RT1JrNd7Xh9affKUYGufSKLnRgO9NCJPK/+u/p2YNSU=;
+        b=zc6qAJ0ciTufvNq+VuN6jn07QniTEJAmQTY8s8arX6YvkTDI+LDd7xB0usJ/mxXXK8
+         Fev95b1llp/I4+u/+ZELpMvn+Pv/duKXcYbnE/XeQ6bNJzJP/W5R77sIvKA7f79zGgAA
+         USn05zzABD8ukjIff4v7NAP03FIp81O0rQBoFIJuuxzqrfQmBSqPIcKmwwgTRVoD5I9n
+         0szQ9/Y5JedrkbXoQsyth/4sIOe7en7DgY++f/BXdlTI2w3F2fQa6gieZCBtRVpaqcqn
+         cGR4XaKemIOPYrZVNHhtPd833D+ofAJbeirKSUXo9Q68OLGmowyISHJTmIdUoyypMRNb
+         1eUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702373472; x=1702978272;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RT1JrNd7Xh9affKUYGufSKLnRgO9NCJPK/+u/p2YNSU=;
+        b=DQ5FxhdxUuuuEbOtSnbTr4Ev106qaUB/XwQSfT3vqhwIbGtmGnjc4ijZZzfNVgO4Zv
+         QHzWVKXicfQdr9V5lh/+9xaxkgec2jp6cMsAjYTRE7D2t44+TE1ntp/2zJeQmutRXUs+
+         JYM8xlNOTPRx0qNLI4NGi1WpHjm0ZnPPjpkN3y2kZclrDxFT0syV8VGTFHFpxORyhc3N
+         vLjK0Yl9ua6ZObzN9T9/8q9Sl77ENH/hkMMTois06ogNIRAmQm9+ZHcPPOA2NwHNRYB5
+         t+glk6GJmgQ2KiLWCGDa0kcT+v7IgxTaiLLe7HBAT0DDm8dN8T/eZjC+DByU29wzoZf4
+         7PGw==
+X-Gm-Message-State: AOJu0YxzbriAByklfnV/YHqnSQeCenncK+mICz03kSQeBUeYzY7kZwAe
+	/xWj1fdxyUyg4kBvkU+evWG8iQ==
+X-Google-Smtp-Source: AGHT+IE+ZwU5DBKg6w3fcvGqVzKaj0LTIv+2OhyE+F2zWYVgLYYHgVdm+n1fqLqXnuQ5cuFqTfN99g==
+X-Received: by 2002:a05:600c:2d52:b0:40c:2ba7:ee30 with SMTP id a18-20020a05600c2d5200b0040c2ba7ee30mr3122570wmg.165.1702373471932;
+        Tue, 12 Dec 2023 01:31:11 -0800 (PST)
+Received: from krzk-bin.. ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b0040b4c59f133sm15799711wmo.1.2023.12.12.01.31.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 01:31:11 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: <tudor.ambarus@linaro.org>, <andre.draszik@linaro.org>,
-	<semen.protsenko@linaro.org>, <saravanak@google.com>,
-	<willmcvicker@google.com>, <soc@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-watchdog@vger.kernel.org>, <kernel-team@android.com>,
-	<linux-serial@vger.kernel.org>
-In-Reply-To: <20231211162331.435900-7-peter.griffin@linaro.org>
-Subject: RE: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix
- incorrect numbering and DGB suffix
-Date: Tue, 12 Dec 2023 08:57:09 +0900
-Message-ID: <0ecc01da2c8d$c129e490$437dadb0$@samsung.com>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 2/2] ARM: dts: samsung: Samsung for v6.8
+Date: Tue, 12 Dec 2023 10:31:05 +0100
+Message-Id: <20231212093105.13938-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231212093105.13938-1-krzysztof.kozlowski@linaro.org>
+References: <20231212093105.13938-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQEeDlMUs+qnFg95EVUf+Z9FZqMuEwIO8XO4Aj/o0Sqx+ofWIA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbVRz29La3hQ28KzWcIWFdjS5DCxQoHshw6hi5GZiQoeCMDhq4UkJp
-	mz4ANWbEPRgPCRsQoZPBwkTA8n6/xiiMDUTcskFR2AYWB4xZBIIbg4Itlyn/fb/vfN/vdfLj
-	YNwbbBdOvFxDqeQSmQC3Zzb3HvQUGq8kU163lxlo8nIzjhofNzCR5WI/Gy2UZQGk7xpmoOK+
-	YRY6XVqDI3ORK2pt4aHs2SkM5a3/yED1plEWWsx6wEINxesAFfx6jYGGSr9lo7Hqa2w0fWWI
-	ge4MHkWDxmUc1RZsMNHZrj426n2SxkIZBguONkbrmGgm2+oyGddxVNluTbL0+0l0ZkKMKpc2
-	ATLNbWDv8snmjmYWqb+sB+Ta84uAXBg7yybbdPfZZEm9lqyvTMfJidFOnKzQ61lkd5GeTTZc
-	PUXeu/UNi2x7msomsxsrAblc7xb28icJh6SUJJZS8Sl5jCI2Xh4XKAgJjzoSJfbzEglF/uht
-	AV8uSaQCBUGhYcLgeJl1XQJ+kkSmtVJhErVa4PnOIZVCq6H4UoVaEyiglLEypVjpoZYkqrXy
-	OA85pQkQeXl5i63C6ARpz4MLbGWjY4pxKikVtOzOAHYcSPjCkqYWdgaw53CJTgCLxywYHSwB
-	2HKpA6eDfwCs7s/DXliKh0oB/dAF4FrrPJMO5gBMvTppVXE4OPEWLHn2kc3AIyYx2JVnZ9Ng
-	hB6Dq5sTW5nsiMNwrCuVacNOhBROmsu3eCbxOlzMKcJt2IHwh+3V/Swa74EDhdNbeozYB1v+
-	+n67Iz5c/bOMRfM8eCn9HEYXfh8+HC1g2ApDIt8ejlWtsGlDELQsDbNo7AQf32zc5l3gsrkL
-	pw25AN6Zn8fooAbAuooz2+V8YPcPuQzbmBhxENa0e9L0fti2VgToLhyheSWLZZNAwgGeP8el
-	Ja/Bu5P3GTTeC0vT0vEcINDtmE23Yzbdjnl0/xcrAcxK4EIp1YlxVIxIKRLKqeT/vjxGkVgP
-	tu7JPbQVPK2xeBgAgwMMAHIwAc/BtU9NcR1iJV98SakUUSqtjFIbgNi68QuYyysxCutByjVR
-	Il9/L18/bx9fJPITCZwdhu4lUVwiTqKhEihKSale+BgcO5dURuG4wJkbohAmGTLtlPExCTdK
-	onXy/bzdAcnhP9UYuj/46jtqc5yXfCsenxl42EQWvKk9/+y97LvtsRXD3ZbstM58t2nxqONh
-	QwrgJ7XxnGqdgqOTmv7+xXRkSusXODcyN1Pce6D1WM5vhaFCc6QUKBJz43qYox+fqLPfNC3l
-	D2QOwD1uE4O1DQufPRefTnX8XK3K7vMZ3+e0Ykkxyma/No9M1UasRxuH+t0OSL0fhWTCXe03
-	J6TOp9449vPxhiBRd3mhMau36mREMOuEynfcHPfk9qOEYPdF18Jd4WXXj2dwZ6tGcvcarq+W
-	j3/4amT9HwUdJpfIgD5PYYRF1hP2KfMlAVMtlYjcMZVa8i8FxU6q2AQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xTVxyGc+6/XpqBl9K5U8YY62JG3FYpzu3MGCUsS26yxJHhPogZ2MC1
-	GKCQVtAuY1QcVYsQhhspZVgMiuFSRUoH0lL+tEwRkdmGFMKUaQpBHOgEE8RBGaVZxrf3PL/f
-	+5zz4dC4qJmMpo+qjnFqlSJXSgmJDrc09kPfxeNcwuy4BD280EEh25N2Aq1W3xSgZ03nALI4
-	RzBkHhgh0anGVgo9rY9BNzrFqPLxIxz9tHIFQ1a/j0TPz02SqN28ApDx9x4MDTdWCND4tR4B
-	mro4jCHP0OdoaGyRQteNAQKVOQcEyD13mkQG1yqFAr42As1Urrf8YysU4u3rkoWJdPTD/V2I
-	X1gDyD8bwJPi2A5HB8laLlgA+8+rasA+Gy8TsF2mBwK2wVrIWvmzFHvf102xzRYLyfbWWwRs
-	+6USdnSwlGS7lnQCttLGA3bRGpuyJU24J4vLPVrEqXfsPSzM7p/8UVBgizgx9qhIBzpfM4Aw
-	GjIfQfNwIzAAIS1iHAB6WhxkaCCBNZ7fcAOg13MUdLs1oZ0ZAO/8VY4FOcV8ABtefh3kYuYF
-	Dvkzy1jwgDN2HI7o9GSo4QbQ52+hgtYwZh8cd+qIYI5ijkBvTQ0WzASzDT6vqt/YCWc+hfZr
-	N8lQjoS3a6eI4G04I4P6NhDEOPM27Jz/BQ89NA4uTzeRIS6GdWf1G1zMJMM/fUasCkSZNplM
-	/5tMm0ymTe0GQPBAwhVo8pR5mfICuYo7LtMo8jSFKqUsMz/PCjZ+0/b4G2DSHJC5AEYDF4A0
-	LhWHxwxoOFF4lkL7LafOz1AX5nIaF3iTJqRvhMuNdVkiRqk4xuVwXAGn/m+K0WHROux7+9Wr
-	ezOe1qWW7dvzyiZL8bRsPZDaVjrnuuXw9CrfT5p8oD15K/HQnb4rVF1i9VfqmlHzZ+9VvEVL
-	17zf/IFNxyfm/GxIbb1X+mVgd0l/SqSxb3m6L3lL8b14yimUL+3cKuku1zmaGXPsdxMv/Ky+
-	9YTXe+A6//iTXQ8zLqkjlxUV8w5YX2zvGZpaLUy//W5CX/7r/KxWX5Sf0G7PTIpbTFOF7b+c
-	TPe+FGqravX8RO1aSWzE0oDmi3Rbv69p4e6TrkGt/dcdimhMdNiLV6gaD/49f3Iu+4zNtDvt
-	/PlyOklSlHMk+uPLztMGZluxcnSn/FTbIB+xMH/3nZmY7pJqKaHJVsi342qN4l/cq8GFvAMA
-	AA==
-X-CMS-MailID: 20231211235710epcas1p314c62a7abccf937bd63907c3c8166efc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231211162506epcas1p290e6adbb82f27ebade65376f298f7fd3
-References: <20231211162331.435900-1-peter.griffin@linaro.org>
-	<CGME20231211162506epcas1p290e6adbb82f27ebade65376f298f7fd3@epcas1p2.samsung.com>
-	<20231211162331.435900-7-peter.griffin@linaro.org>
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-> -----Original Message-----
-> From: Peter Griffin <peter.griffin@linaro.org>
-> Sent: Tuesday, December 12, 2023 1:23 AM
-> To: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> mturquette@baylibre.com; conor+dt@kernel.org; sboyd@kernel.org;
-> tomasz.figa@gmail.com; s.nawrocki@samsung.com; linus.walleij@linaro.org;
-> wim@linux-watchdog.org; linux@roeck-us.net; catalin.marinas@arm.com;
-> will@kernel.org; arnd@arndb.de; olof@lixom.net;
-gregkh@linuxfoundation.org;
-> jirislaby@kernel.org; cw00.choi@samsung.com; alim.akhtar@samsung.com
-> Cc: peter.griffin@linaro.org; tudor.ambarus@linaro.org;
-> andre.draszik@linaro.org; semen.protsenko@linaro.org;
-saravanak@google.com;
-> willmcvicker@google.com; soc@kernel.org; devicetree@vger.kernel.org;
-linux-
-> arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
-> clk@vger.kernel.org; linux-gpio@vger.kernel.org; linux-
-> watchdog@vger.kernel.org; kernel-team@android.com; linux-
-> serial@vger.kernel.org
-> Subject: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix incorrect
-> numbering and DGB suffix
-> 
-> 166 was skipped by mistake and two clocks:
-> * CLK_MOUT_CMU_HSI0_USBDPDGB
-> * CLK_GOUT_HSI0_USBDPDGB
-> 
-> Have an incorrect DGB ending instead of DBG.
-> 
-> This is an ABI break, but as the patch was only applied yesterday this
-header
-> has never been in an actual release so it seems better to fix this early
-than
-> ignore it.
-> 
-> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock
-management
-> unit bindings")
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  include/dt-bindings/clock/google,gs101.h | 118 +++++++++++------------
->  1 file changed, 59 insertions(+), 59 deletions(-)
-> 
+are available in the Git repository at:
 
-(snip)
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-6.8
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+for you to fetch changes up to 50c7cdc9a4d2d21373c1ab52c131109ab30c53f5:
 
-Best Regards,
-Chanwoo Choi
+  ARM: dts: samsung: exynos4210-i9100: Add accelerometer node (2023-12-08 20:42:17 +0100)
 
+----------------------------------------------------------------
+Samsung DTS ARM changes for v6.8
 
+1. Exynos4212 and Exynos4412: Final fixes for dtbs_check warnings.
+   Replace duplicate PMU node in FIMC IS node with syscon phandle.  The
+   old solution of duplicated PMU node was not a correct representation of
+   the hardware and could have concurrent access issues.
+
+   The DTS change depends on media FIMC IS drivers changes already
+   merged in previous cycle, thus it is not fully
+   backwards-compatible.  It is a necessary trade-off in fixing wrong
+   description in DTS.
+
+   With this fix, `make dtbs_check` status looks like:
+   S3C6410: no warnings
+   Exynos: no warnings, one undocumented compatible
+   S5PV210: one warning, one undocumented compatible
+
+2. Exynos4210, Exynos4212, Exynos4412, S5PV210:
+   Correct FIMC IS camera ranges and IO addresses to silence dtc W=1
+   warnings.  No functional impact expected.
+   After this fix, there are no dtc W=1 warnings on all ARMv7 platforms.
+
+3. Galaxy I9100: Fix 12-second hang during boot by enabling regulator
+   (real cause not really known), add touch keys and accelerometer.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      ARM: dts: samsung: exynos4x12: replace duplicate pmu node with phandle
+      ARM: dts: samsung: exynos4: fix camera unit addresses/ranges
+      ARM: dts: samsung: s5pv210: fix camera unit addresses/ranges
+
+Paul Cercueil (3):
+      ARM: dts: samsung: exynos4210-i9100: Unconditionally enable LDO12
+      ARM: dts: samsung: exynos4210-i9100: Add node for touch keys
+      ARM: dts: samsung: exynos4210-i9100: Add accelerometer node
+
+ arch/arm/boot/dts/samsung/exynos4.dtsi         | 26 +++++++-------
+ arch/arm/boot/dts/samsung/exynos4210-i9100.dts | 48 +++++++++++++++++++++++++-
+ arch/arm/boot/dts/samsung/exynos4x12.dtsi      | 22 ++++++------
+ arch/arm/boot/dts/samsung/s5pv210.dtsi         | 18 +++++-----
+ 4 files changed, 79 insertions(+), 35 deletions(-)
