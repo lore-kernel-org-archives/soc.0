@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79179C4167D
-	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 09:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ACA9C4332F
+	for <soc@archiver.kernel.org>; Tue, 12 Dec 2023 09:31:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4ABDFC433C7; Tue, 12 Dec 2023 09:31:15 +0000 (UTC)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	id D5122C433C7; Tue, 12 Dec 2023 09:31:14 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D6F8AC433CD
-	for <soc@kernel.org>; Tue, 12 Dec 2023 09:31:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6F8AC433CD
+	by smtp.kernel.org (Postfix) with ESMTPS id 514B8C433D9
+	for <soc@kernel.org>; Tue, 12 Dec 2023 09:31:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 514B8C433D9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40c317723a8so45037585e9.3
-        for <soc@kernel.org>; Tue, 12 Dec 2023 01:31:13 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40c2db2ee28so57046655e9.2
+        for <soc@kernel.org>; Tue, 12 Dec 2023 01:31:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702373472; x=1702978272; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RT1JrNd7Xh9affKUYGufSKLnRgO9NCJPK/+u/p2YNSU=;
-        b=zc6qAJ0ciTufvNq+VuN6jn07QniTEJAmQTY8s8arX6YvkTDI+LDd7xB0usJ/mxXXK8
-         Fev95b1llp/I4+u/+ZELpMvn+Pv/duKXcYbnE/XeQ6bNJzJP/W5R77sIvKA7f79zGgAA
-         USn05zzABD8ukjIff4v7NAP03FIp81O0rQBoFIJuuxzqrfQmBSqPIcKmwwgTRVoD5I9n
-         0szQ9/Y5JedrkbXoQsyth/4sIOe7en7DgY++f/BXdlTI2w3F2fQa6gieZCBtRVpaqcqn
-         cGR4XaKemIOPYrZVNHhtPd833D+ofAJbeirKSUXo9Q68OLGmowyISHJTmIdUoyypMRNb
-         1eUg==
+        d=linaro.org; s=google; t=1702373470; x=1702978270; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVnjFBFz55vwuXcf5dpaWSskODt2yW9zgN1+Y6WbSck=;
+        b=RQGNlaxHtYvuCqviP50lWdKmmifLMvTiE7fCd3v9FlC6Z6iY5ppjJwkY9IBE3BJzXm
+         0o3qDxYfgWQUzqofciS09Hx/2cl6kaN10yqScpBmDU+s6auf+q+HAn6//hS4qxpSgSSp
+         jqCqfMKIidg9cyudPP4OegFC9mj3gPsg0AVFyGqH9TSAjEOwZfl1S9kwxuW3aJTfZH99
+         n4i0ngpyBhjIfl6TGPESYOg62WDprd6Yt18sFFehlW8MEnzJjw0qDzFr9gfNBjh0/IIO
+         NM0pjG+IskQ1qblb9drYBhYhEpVRzpDKjUqUvCrW1ylVYp4PZordOqGyI2qt8cJ4Do5p
+         8T/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702373472; x=1702978272;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RT1JrNd7Xh9affKUYGufSKLnRgO9NCJPK/+u/p2YNSU=;
-        b=DQ5FxhdxUuuuEbOtSnbTr4Ev106qaUB/XwQSfT3vqhwIbGtmGnjc4ijZZzfNVgO4Zv
-         QHzWVKXicfQdr9V5lh/+9xaxkgec2jp6cMsAjYTRE7D2t44+TE1ntp/2zJeQmutRXUs+
-         JYM8xlNOTPRx0qNLI4NGi1WpHjm0ZnPPjpkN3y2kZclrDxFT0syV8VGTFHFpxORyhc3N
-         vLjK0Yl9ua6ZObzN9T9/8q9Sl77ENH/hkMMTois06ogNIRAmQm9+ZHcPPOA2NwHNRYB5
-         t+glk6GJmgQ2KiLWCGDa0kcT+v7IgxTaiLLe7HBAT0DDm8dN8T/eZjC+DByU29wzoZf4
-         7PGw==
-X-Gm-Message-State: AOJu0YxzbriAByklfnV/YHqnSQeCenncK+mICz03kSQeBUeYzY7kZwAe
-	/xWj1fdxyUyg4kBvkU+evWG8iQ==
-X-Google-Smtp-Source: AGHT+IE+ZwU5DBKg6w3fcvGqVzKaj0LTIv+2OhyE+F2zWYVgLYYHgVdm+n1fqLqXnuQ5cuFqTfN99g==
-X-Received: by 2002:a05:600c:2d52:b0:40c:2ba7:ee30 with SMTP id a18-20020a05600c2d5200b0040c2ba7ee30mr3122570wmg.165.1702373471932;
-        Tue, 12 Dec 2023 01:31:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702373470; x=1702978270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NVnjFBFz55vwuXcf5dpaWSskODt2yW9zgN1+Y6WbSck=;
+        b=pjvGsdCyx7AjmG5yHuDxoTofL/9ZhfZ8JAlW15YMLXw5UGLiJvwmPY81o+w38jbwR2
+         imlgKmrsKDEOdg3rZq6z3vix4319IaQRx8cSOARQExxC5r3VshFZPfuz/K5XkkKKZdDR
+         Bt7/Q8tSvHO5aUeM3yY9Z1BorOBx4QzNmdfWs0SF3lEij81p9IRZKVN/u7RqO2LcFfnu
+         exwywKvMLUB7ioZ3kx/CNUBiQbRm61jau2Lfsw08V9LmrJ3pyts66vGDAeu2GYE5CyQi
+         eYkNtRvxz34EzPAdgjozzR8X2AYRdQ8kjsWxqfEgu/p5EmAyy7EnrLUV4dBw56UoIJlx
+         izQA==
+X-Gm-Message-State: AOJu0YyGa2IREQiHClH+cxTlM6hjg9BaiNag9m0TLxQeZSMPwoPjfN08
+	brOqoi8TE6ySUD+ZFtAI/el7Rg==
+X-Google-Smtp-Source: AGHT+IHsBMD4HPskhcKBj6CsvZc0x/kXc8Rz3Q4Lo1KDd6I8GyolcXLw0xRVM/BY8ShVZqGZwcYz1g==
+X-Received: by 2002:a05:600c:2149:b0:40c:2b85:5b74 with SMTP id v9-20020a05600c214900b0040c2b855b74mr2832288wml.85.1702373470496;
+        Tue, 12 Dec 2023 01:31:10 -0800 (PST)
 Received: from krzk-bin.. ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b0040b4c59f133sm15799711wmo.1.2023.12.12.01.31.10
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b0040b4c59f133sm15799711wmo.1.2023.12.12.01.31.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 01:31:11 -0800 (PST)
+        Tue, 12 Dec 2023 01:31:10 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -63,15 +62,30 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Alim Akhtar <alim.akhtar@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 2/2] ARM: dts: samsung: Samsung for v6.8
-Date: Tue, 12 Dec 2023 10:31:05 +0100
-Message-Id: <20231212093105.13938-2-krzysztof.kozlowski@linaro.org>
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: [GIT PULL 1/2] arm64: dts: samsung: Exynops and Google for v6.8
+Date: Tue, 12 Dec 2023 10:31:04 +0100
+Message-Id: <20231212093105.13938-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231212093105.13938-1-krzysztof.kozlowski@linaro.org>
-References: <20231212093105.13938-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
+Hi,
+
+DTS and bindings for v6.8, together.  Explanation for this is in first point of
+pull-request tag message below.  The bindings are still kept on topic branch,
+just in case if any other subsystem wants to pull them.
+
+I expect this week to take more Google GS101 changes, so there will be later
+another pull request on top of this one.  If you have any comments about GS101,
+now is good time to say.
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
@@ -79,51 +93,120 @@ The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-6.8
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-6.8
 
-for you to fetch changes up to 50c7cdc9a4d2d21373c1ab52c131109ab30c53f5:
+for you to fetch changes up to 40af852a7ca59d23ab4afd02af2623121da2f116:
 
-  ARM: dts: samsung: exynos4210-i9100: Add accelerometer node (2023-12-08 20:42:17 +0100)
-
-----------------------------------------------------------------
-Samsung DTS ARM changes for v6.8
-
-1. Exynos4212 and Exynos4412: Final fixes for dtbs_check warnings.
-   Replace duplicate PMU node in FIMC IS node with syscon phandle.  The
-   old solution of duplicated PMU node was not a correct representation of
-   the hardware and could have concurrent access issues.
-
-   The DTS change depends on media FIMC IS drivers changes already
-   merged in previous cycle, thus it is not fully
-   backwards-compatible.  It is a necessary trade-off in fixing wrong
-   description in DTS.
-
-   With this fix, `make dtbs_check` status looks like:
-   S3C6410: no warnings
-   Exynos: no warnings, one undocumented compatible
-   S5PV210: one warning, one undocumented compatible
-
-2. Exynos4210, Exynos4212, Exynos4412, S5PV210:
-   Correct FIMC IS camera ranges and IO addresses to silence dtc W=1
-   warnings.  No functional impact expected.
-   After this fix, there are no dtc W=1 warnings on all ARMv7 platforms.
-
-3. Galaxy I9100: Fix 12-second hang during boot by enabling regulator
-   (real cause not really known), add touch keys and accelerometer.
+  Merge branch 'for-v6.8/samsung-bindings-compatibles' into next/dt64 (2023-12-11 08:41:24 +0100)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (3):
-      ARM: dts: samsung: exynos4x12: replace duplicate pmu node with phandle
-      ARM: dts: samsung: exynos4: fix camera unit addresses/ranges
-      ARM: dts: samsung: s5pv210: fix camera unit addresses/ranges
+Samsung DTS ARM64 changes for v6.8
 
-Paul Cercueil (3):
-      ARM: dts: samsung: exynos4210-i9100: Unconditionally enable LDO12
-      ARM: dts: samsung: exynos4210-i9100: Add node for touch keys
-      ARM: dts: samsung: exynos4210-i9100: Add accelerometer node
+Two (and a half) major items are coming with this pull request:
+1. Add specific compatibles to all Samsung Exynos and Tesla FSD blocks,
+   because that's what guidelines expect [1] and is generally
+   recommended practice.  Existing compatibles are left untouched, thus
+   no driver changes are needed.  The work only cleans things up, so any
+   future contributions will use recommended style: specific and
+   fallback compatibles.
 
- arch/arm/boot/dts/samsung/exynos4.dtsi         | 26 +++++++-------
- arch/arm/boot/dts/samsung/exynos4210-i9100.dts | 48 +++++++++++++++++++++++++-
- arch/arm/boot/dts/samsung/exynos4x12.dtsi      | 22 ++++++------
- arch/arm/boot/dts/samsung/s5pv210.dtsi         | 18 +++++-----
- 4 files changed, 79 insertions(+), 35 deletions(-)
+   Since no driver changes are needed in this work and the DTS is
+   directly affected by bindings change (running tests with `make
+   dtbs_check`), this pull includes all bindings changes, even though
+   usual practice is that bindings come via driver subsystem.  Keeping
+   everything here makes review and testing easier.  Also will allow us
+   to avoid conflicts related to new platforms (see below).
+
+2. Add ExynosAutov920 SoC and SADK board (Samsung Automotive Development
+   Kit) with minimal support so far: serial console, GPIO-based keys and
+   PWM fan.
+
+3. Add few bindings for upcoming Google GS101 SoC.  This pull request
+   does not include its DTS yet, just few reviewed dependencies.  DTS
+   will be coming soon.
+
+[1] Documentation/devicetree/bindings/writing-bindings.rst
+
+----------------------------------------------------------------
+Jaewon Kim (10):
+      arm64: dts: exynos: add gpio-key node for exynosautov9-sadk
+      dt-bindings: samsung: exynos-sysreg: add exynosautov920 sysreg
+      dt-bindings: samsung: exynos-pmu: add exynosautov920 compatible
+      dt-bindings: samsung: usi: add exynosautov920-usi compatible
+      dt-bindings: serial: samsung: add exynosautov920-uart compatible
+      dt-bindings: pwm: samsung: add exynosautov920 compatible
+      dt-bindings: arm: samsung: Document exynosautov920 SADK board binding
+      dt-bindings: hwinfo: samsung,exynos-chipid: add exynosautov920 compatible
+      arm64: dts: exynos: add initial support for exynosautov920 SoC
+      arm64: dts: exynos: add minimal support for exynosautov920 sadk board
+
+Krzysztof Kozlowski (28):
+      dt-bindings: hwinfo: samsung,exynos-chipid: add specific compatibles for existing SoC
+      dt-bindings: i2c: exynos5: add specific compatibles for existing SoC
+      dt-bindings: i2c: samsung,s3c2410-i2c: add specific compatibles for existing SoC
+      dt-bindings: mmc: samsung,exynos-dw-mshc: add specific compatibles for existing SoC
+      dt-bindings: rtc: s3c-rtc: add specific compatibles for existing SoC
+      dt-bindings: serial: samsung: add specific compatibles for existing SoC
+      dt-bindings: samsung: exynos-pmu: add specific compatibles for existing SoC
+      dt-bindings: gpu: arm,mali-midgard: add specific compatibles for existing Exynos SoC
+      dt-bindings: iio: samsung,exynos-adc: add specific compatibles for existing SoC
+      ASoC: dt-bindings: samsung-i2s: add specific compatibles for existing SoC
+      dt-bindings: pwm: samsung: add specific compatibles for existing SoC
+      arm64: dts: exynos5433: add specific compatibles to several blocks
+      arm64: dts: exynos7: add specific compatibles to several blocks
+      arm64: dts: exynos7885: add specific compatibles to several blocks
+      arm64: dts: exynos850: add specific compatibles to several blocks
+      arm64: dts: exynosautov9: add specific compatibles to several blocks
+      Merge branch 'for-v6.8/samsung-bindings-compatibles' into next/dt64
+      arm64: dts: exynos850: use Exynos7 fallbacks for pin wake-up controllers
+      arm64: dts: exynosautov9: use Exynos7 fallbacks for pin wake-up controller
+      dt-bindings: i2c: exynos5: add specific compatible for Tesla FSD
+      dt-bindings: pwm: samsung: add specific compatible for Tesla FSD
+      dt-bindings: serial: samsung: add specific compatible for Tesla FSD
+      dt-bindings: samsung: exynos-pmu: add specific compatible for Tesla FSD
+      dt-bindings: watchdog: samsung: add specific compatible for Tesla FSD
+      Merge branch 'for-v6.8/samsung-bindings-compatibles' into next/dt64
+      arm64: dts: fsd: add specific compatibles for Tesla FSD
+      dt-bindings: samsung: exynos-sysreg: combine exynosautov920 with other enum
+      Merge branch 'for-v6.8/samsung-bindings-compatibles' into next/dt64
+
+Peter Griffin (3):
+      dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+      dt-bindings: clock: Add Google gs101 clock management unit bindings
+      dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG compatibles to GS101
+
+ .../bindings/arm/samsung/samsung-boards.yaml       |    6 +
+ .../bindings/clock/google,gs101-clock.yaml         |  106 ++
+ .../devicetree/bindings/gpu/arm,mali-midgard.yaml  |    5 +
+ .../bindings/hwinfo/samsung,exynos-chipid.yaml     |   18 +-
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml       |   11 +-
+ .../bindings/i2c/samsung,s3c2410-i2c.yaml          |   22 +-
+ .../bindings/iio/adc/samsung,exynos-adc.yaml       |   29 +-
+ .../bindings/mfd/samsung,exynos5433-lpass.yaml     |    2 +-
+ .../bindings/mmc/samsung,exynos-dw-mshc.yaml       |   25 +-
+ .../devicetree/bindings/pwm/pwm-samsung.yaml       |    4 +
+ Documentation/devicetree/bindings/rtc/s3c-rtc.yaml |    5 +
+ .../devicetree/bindings/serial/samsung_uart.yaml   |   17 +-
+ .../bindings/soc/samsung/exynos-pmu.yaml           |   10 +
+ .../bindings/soc/samsung/exynos-usi.yaml           |    6 +-
+ .../soc/samsung/samsung,exynos-sysreg.yaml         |    5 +
+ .../devicetree/bindings/sound/samsung-i2s.yaml     |   19 +-
+ .../devicetree/bindings/watchdog/samsung-wdt.yaml  |   21 +-
+ arch/arm64/boot/dts/exynos/Makefile                |    3 +-
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi         |   60 +-
+ arch/arm64/boot/dts/exynos/exynos7.dtsi            |   18 +-
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi         |   45 +-
+ arch/arm64/boot/dts/exynos/exynos850.dtsi          |   40 +-
+ arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts   |   51 +
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi       |   10 +-
+ .../boot/dts/exynos/exynosautov920-pinctrl.dtsi    | 1266 ++++++++++++++++++++
+ arch/arm64/boot/dts/exynos/exynosautov920-sadk.dts |   88 ++
+ arch/arm64/boot/dts/exynos/exynosautov920.dtsi     |  312 +++++
+ arch/arm64/boot/dts/tesla/fsd.dtsi                 |   32 +-
+ include/dt-bindings/clock/google,gs101.h           |  392 ++++++
+ 29 files changed, 2494 insertions(+), 134 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-sadk.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+ create mode 100644 include/dt-bindings/clock/google,gs101.h
