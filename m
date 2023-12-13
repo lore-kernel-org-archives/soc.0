@@ -1,107 +1,80 @@
-Return-Path: <SRS0=rOi0=HY=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=3lSd=HY=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03A90C4332F
-	for <soc@archiver.kernel.org>; Wed, 13 Dec 2023 12:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A912C4332F
+	for <soc@archiver.kernel.org>; Wed, 13 Dec 2023 14:32:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DD17EC433CA; Wed, 13 Dec 2023 12:00:04 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id BE2FFC433C7;
-	Wed, 13 Dec 2023 12:00:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BE2FFC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 034C3C15;
-	Wed, 13 Dec 2023 04:00:48 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E79353F762;
-	Wed, 13 Dec 2023 04:00:00 -0800 (PST)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	id 4100FC433C9; Wed, 13 Dec 2023 14:32:47 +0000 (UTC)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 575B0C433C7;
+	Wed, 13 Dec 2023 14:32:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 575B0C433C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6d7fa93afe9so5178079a34.2;
+        Wed, 13 Dec 2023 06:32:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702477965; x=1703082765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z0kWneZU0gge6lamU79WOa8q8MUgTJ3s6CXlsPKbl1w=;
+        b=k72wbZrgQPREHN5VxXZh66FhESzliWO7CGv26IAAUooul6CBzHZHpMMDienOEDFJRd
+         Tl6BHJhNEjDvVh1vnggd27tZheZIKpFWxqWKdZu1QI+SkH26YA212y9K+0hE2TPf5m/Q
+         cW6yoIBOLDS60v7fzcl4bGEN7gfyYYFfd1pH/dWVuO+oFXU+2iEChWdtRfizWG7jC1bU
+         MYzxy8RA7M8k1GJ733uRvpPVPAeNub/BThyWNQpYirF++ZBI5Bs0m0gSrpZU/f42CSMh
+         MOTSA10NgvNBSPsXtY8FzwxvDZT1grlJuEeOmkg31oNQ15627k5dMWFzvOXbUyX8h6Dd
+         Lycw==
+X-Gm-Message-State: AOJu0YwTlvQNCCJLm15oPYynn10sML/DL67ixmkk45T4utC19xgzC/7q
+	BaNXmT1+fpnZKi2fopbWgA==
+X-Google-Smtp-Source: AGHT+IFWkvHfseSXYTYT3uKdOPAB8K0URkVWZMX3xZ7xanO9ooySMDAjcPKjyJvnnmKaV3WR/fUj1g==
+X-Received: by 2002:a05:6830:1b64:b0:6d9:da9f:ab2f with SMTP id d4-20020a0568301b6400b006d9da9fab2fmr7327230ote.27.1702477965392;
+        Wed, 13 Dec 2023 06:32:45 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p26-20020a9d695a000000b006d85518ae62sm2776323oto.76.2023.12.13.06.32.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 06:32:44 -0800 (PST)
+Received: (nullmailer pid 1093516 invoked by uid 1000);
+	Wed, 13 Dec 2023 14:32:43 -0000
+Date: Wed, 13 Dec 2023 08:32:42 -0600
+From: Rob Herring <robh@kernel.org>
+To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.8
-Date: Wed, 13 Dec 2023 11:59:52 +0000
-Message-ID: <20231213115953.3578115-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.43.0
+Cc: linux-samsung-soc@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, s.nawrocki@samsung.com, willmcvicker@google.com, gregkh@linuxfoundation.org, linux@roeck-us.net, linux-arm-kernel@lists.infradead.org, kernel-team@android.com, olof@lixom.net, linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, alim.akhtar@samsung.com, saravanak@google.com, will@kernel.org, cw00.choi@samsung.com, tudor.ambarus@linaro.org, linus.walleij@linaro.org, mturquette@baylibre.com, soc@kernel.org, conor+dt@kernel.org, wim@linux-watchdog.org, sboyd@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-serial@vger.kernel.org, tomasz.figa@gmail.com, linux-gpio@vger.kernel.org, jirislaby@kernel.org, semen.protsenko@linaro.org, krzysztof.kozlowski+dt@linaro.org, andre.draszik@linaro.org
+Subject: Re: [PATCH v7 02/16] dt-bindings: arm: google: Add bindings for
+ Google ARM platforms
+Message-ID: <170247795662.1093374.11352509671907840697.robh@kernel.org>
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+ <20231211162331.435900-3-peter.griffin@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231211162331.435900-3-peter.griffin@linaro.org>
 
-Hi ARM SoC Team,
 
-Please pull !
+On Mon, 11 Dec 2023 16:23:17 +0000, Peter Griffin wrote:
+> This introduces bindings and dt-schema for the Google Tensor SoCs.
+> Currently just gs101 and pixel 6 are supported.
+> 
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+> @RobH I removed your 'Reviewed-by: Rob Herring <robh@kernel.org>' tag
+> as since you reviewed this I added the empty ect node. Can you please
+> do the review again?
+> 
+> x# Please enter the commit message for your changes. Lines starting
+> ---
+>  .../devicetree/bindings/arm/google.yaml       | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+> 
 
-Regards,
-Sudeep
+Reviewed-by: Rob Herring <robh@kernel.org>
 
--->8
-
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
-
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.8
-
-for you to fetch changes up to b5efc28a754d2e90b9d52ba5aaa051cc24a5c85d:
-
-  firmware: arm_scmi: Add protocol versioning checks (2023-12-01 16:46:10 +0000)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.8
-
-Few minor updates:
-
-1. Addition of protocol versioning checks to warn if the firmware version
-   is newer or greater than the version supported by the kernel driver
-
-2. Increment of the maximum OPP count in the perf protocol from 16 to 32
-   as needed by a few recent/future qualcomm platforms
-
-3. Optimisation of set performance operations by returning error
-   immediately and avoiding to send the command to the platform(which
-   would return error eventually) if the domain doesn't support perf
-   operations. Similarly, the fastchannel handling is also optimised by
-   avoiding to initialise the corresponding set operations fastchannels.
-
-4. Extension of extended names helper to accomodate recently added new
-   flags parameter to be able to properly configure the command used to
-   query the extended name of a resource.
-
-----------------------------------------------------------------
-Cristian Marussi (2):
-      firmware: arm_scmi: Add optional flags to extended names helper
-      firmware: arm_scmi: Add protocol versioning checks
-
-Sibi Sankar (2):
-      firmware: arm_scmi: Fix NULL pointer dereference during fastchannel init
-      firmware: arm_scmi: Increase the maximum opp count in the perf protocol
-
-Sudeep Holla (1):
-      firmware: arm_scmi: Populate fastchannel info only if set operations are allowed
-
-xinglong.yang (1):
-      firmware: arm_scmi: Check beforehand if the perf domain set operations are allowed
-
- drivers/firmware/arm_scmi/base.c      |  6 ++++-
- drivers/firmware/arm_scmi/clock.c     |  8 ++++--
- drivers/firmware/arm_scmi/driver.c    | 24 ++++++++++++++----
- drivers/firmware/arm_scmi/perf.c      | 48 ++++++++++++++++++++++-------------
- drivers/firmware/arm_scmi/power.c     |  8 ++++--
- drivers/firmware/arm_scmi/powercap.c  |  8 ++++--
- drivers/firmware/arm_scmi/protocols.h | 11 ++++++--
- drivers/firmware/arm_scmi/reset.c     |  9 +++++--
- drivers/firmware/arm_scmi/sensors.c   |  8 ++++--
- drivers/firmware/arm_scmi/system.c    |  6 ++++-
- drivers/firmware/arm_scmi/voltage.c   |  8 ++++--
- 11 files changed, 105 insertions(+), 39 deletions(-)
