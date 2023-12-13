@@ -1,99 +1,71 @@
-Return-Path: <SRS0=q5FS=HY=linaro.org=peter.griffin@kernel.org>
+Return-Path: <SRS0=4rAY=HY=pengutronix.de=p.zabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFDBDC4332F
-	for <soc@archiver.kernel.org>; Wed, 13 Dec 2023 14:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85383C4167D
+	for <soc@archiver.kernel.org>; Wed, 13 Dec 2023 15:26:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C8190C433C7; Wed, 13 Dec 2023 14:35:12 +0000 (UTC)
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 5EAB9C433CC; Wed, 13 Dec 2023 15:26:22 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EA329C433CD
-	for <soc@kernel.org>; Wed, 13 Dec 2023 14:35:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA329C433CD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-677fba00a49so54438456d6.1
-        for <soc@kernel.org>; Wed, 13 Dec 2023 06:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702478110; x=1703082910; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KTNi7dR+svtLHr9EuyRcDA6UpdWYvTWzjT4RYlMslAc=;
-        b=qUGnIMNID+USl8TUAu3/iq+xEntru6CMAW6p9cfotfzHpm38ZHa6qfvYIk/5d3ynpL
-         ptMphF22yonppHrYl3ZXG4acIcJaEkulcpvZ+21Y2gKC8BrZzTRqnH3jPmPTxrbAFgnk
-         P/GR0wHo5Yip7pmIEABoRtySqW7W5JAyAfcXOScM7Ox3yuwlMEzfjYRBHahltLa9u/8g
-         GGwBAZ6X+/6psu8nNYaBL/CUcGWkY1W9Omr1mjR4Et2U9DNPYfBqkSHigp+ujrrkM1nr
-         xB8QB+HoLKdU1A5c1QA4hcANgg1G3UKN4CCfkn7aUcYba/WE7rJ2NC2t40GNAp+YUqrM
-         Mr2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702478110; x=1703082910;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KTNi7dR+svtLHr9EuyRcDA6UpdWYvTWzjT4RYlMslAc=;
-        b=bzh3du3AxpLD7Ma1Lq0bUIA1bzSeHsYdY8ETMqu2xCpj/bRGKtPPt9SAkxKffCf/Vt
-         LQf2stzIxouP8P+oCdisXcqhLGxJ0fJ5m5qmoLlx8jxxEeOOMB+j48pqs6K/9BNacBpN
-         XC6hXICWesDN1x7I3hTt6ITNdCeDAyUR/cKIZ0Si7lV/gdYlpi8Gp/eEkFRTs2Jb/RIY
-         oOXs833Alv9CN5SRmFrmH8H+xcOQUvAtEqt5zv8d4L2bx8lFyNIstzBDit77z+bgF/d6
-         0uS2bJOZKc20mxO9KtU6/mVm2P+caeB8uF17wdeoqGOzBimQc/IutL3hxUVFFwkavV73
-         oD4w==
-X-Gm-Message-State: AOJu0YwWjaiNb5FRrnU91gVB7BSJM6Bob1hwMx3eHHGLTnbtY6fANySn
-	LOa9YEHzqtDNQ8rYBAXiYklRUXkbBuoRlNheyG61Og==
-X-Google-Smtp-Source: AGHT+IH6ErSqj4HVtA2uJPaby1dJ9yyZlKr4jTaQrX7sGd+lhiiTWLXuE/j7czQuoLQh4Qis/8Wg8Qzn43NmjP/zrwU=
-X-Received: by 2002:a0c:f992:0:b0:67a:d9f5:19fc with SMTP id
- t18-20020a0cf992000000b0067ad9f519fcmr11200900qvn.28.1702478109905; Wed, 13
- Dec 2023 06:35:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20231211162331.435900-1-peter.griffin@linaro.org>
- <20231211162331.435900-3-peter.griffin@linaro.org> <170247795662.1093374.11352509671907840697.robh@kernel.org>
-In-Reply-To: <170247795662.1093374.11352509671907840697.robh@kernel.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Wed, 13 Dec 2023 14:34:58 +0000
-Message-ID: <CADrjBPqqTtimdR_twqqvvzyMAZ=Z4YoVKm80LT_utqcO6LAgOA@mail.gmail.com>
-Subject: Re: [PATCH v7 02/16] dt-bindings: arm: google: Add bindings for
- Google ARM platforms
-To: Rob Herring <robh@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4BC53C433C7
+	for <soc@kernel.org>; Wed, 13 Dec 2023 15:26:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BC53C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rDR7o-0005Gz-Aw; Wed, 13 Dec 2023 16:26:16 +0100
+From: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-samsung-soc@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, 
-	s.nawrocki@samsung.com, willmcvicker@google.com, gregkh@linuxfoundation.org, 
-	linux@roeck-us.net, linux-arm-kernel@lists.infradead.org, 
-	kernel-team@android.com, olof@lixom.net, linux-watchdog@vger.kernel.org, 
-	linux-clk@vger.kernel.org, alim.akhtar@samsung.com, saravanak@google.com, 
-	will@kernel.org, cw00.choi@samsung.com, tudor.ambarus@linaro.org, 
-	linus.walleij@linaro.org, mturquette@baylibre.com, soc@kernel.org, 
-	conor+dt@kernel.org, wim@linux-watchdog.org, sboyd@kernel.org, 
-	robh+dt@kernel.org, devicetree@vger.kernel.org, linux-serial@vger.kernel.org, 
-	tomasz.figa@gmail.com, linux-gpio@vger.kernel.org, jirislaby@kernel.org, 
-	semen.protsenko@linaro.org, krzysztof.kozlowski+dt@linaro.org, 
-	andre.draszik@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller fixes for v6.7
+Date: Wed, 13 Dec 2023 16:26:06 +0100
+Message-Id: <20231213152606.231044-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-On Wed, 13 Dec 2023 at 14:32, Rob Herring <robh@kernel.org> wrote:
->
->
-> On Mon, 11 Dec 2023 16:23:17 +0000, Peter Griffin wrote:
-> > This introduces bindings and dt-schema for the Google Tensor SoCs.
-> > Currently just gs101 and pixel 6 are supported.
-> >
-> > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> > @RobH I removed your 'Reviewed-by: Rob Herring <robh@kernel.org>' tag
-> > as since you reviewed this I added the empty ect node. Can you please
-> > do the review again?
-> >
-> > x# Please enter the commit message for your changes. Lines starting
-> > ---
-> >  .../devicetree/bindings/arm/google.yaml       | 53 +++++++++++++++++++
-> >  1 file changed, 53 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
-> >
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Dear arm-soc maintainers,
 
-Thanks Rob :)
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+
+are available in the Git repository at:
+
+  git://git.pengutronix.de/pza/linux.git tags/reset-fixes-for-v6.7
+
+for you to fetch changes up to 4a6756f56bcf8e64c87144a626ce53aea4899c0e:
+
+  reset: Fix crash when freeing non-existent optional resets (2023-11-30 15:02:21 +0100)
+
+----------------------------------------------------------------
+Reset controller fixes for v6.7
+
+Fix a void-pointer-to-enum-cast warning in the hisilicon hi6220 reset
+driver and fix a NULL pointer dereference when freeing non-existent
+optional resets requested via the reset_array API in the core.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      reset: Fix crash when freeing non-existent optional resets
+
+Krzysztof Kozlowski (1):
+      reset: hisilicon: hi6220: fix Wvoid-pointer-to-enum-cast warning
+
+ drivers/reset/core.c                   | 8 ++++----
+ drivers/reset/hisilicon/hi6220_reset.c | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
