@@ -1,103 +1,173 @@
-Return-Path: <SRS0=4rAY=HY=pengutronix.de=p.zabel@kernel.org>
+Return-Path: <SRS0=62cD=HY=samsung.com=alim.akhtar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F477C4167B
-	for <soc@archiver.kernel.org>; Wed, 13 Dec 2023 15:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B583CC4332F
+	for <soc@archiver.kernel.org>; Wed, 13 Dec 2023 16:24:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 65898C433C8; Wed, 13 Dec 2023 15:33:23 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 7F146C433C8; Wed, 13 Dec 2023 16:24:15 +0000 (UTC)
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 943F3C433C7
-	for <soc@kernel.org>; Wed, 13 Dec 2023 15:33:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 943F3C433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rDREa-0004RM-7y; Wed, 13 Dec 2023 16:33:16 +0100
-From: Philipp Zabel <p.zabel@pengutronix.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E25DC433C7;
+	Wed, 13 Dec 2023 16:24:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E25DC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20231213162409epoutp0356c11593163893954a6089beaa221e12~gcMTWPHbQ2305723057epoutp03G;
+	Wed, 13 Dec 2023 16:24:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20231213162409epoutp0356c11593163893954a6089beaa221e12~gcMTWPHbQ2305723057epoutp03G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1702484649;
+	bh=K2Z9vFnf7mpL13jEaXOuxYQ/7/4WeeOVu5AXF86OdSU=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=nUpbupoioP10Qg+itCEifcBULZaxFWC9ZO42OP95qAOX74CQQRPHvDjcCy9MFZMVu
+	 Ckruc40euMqQfHxvJxMN4mF4pe7I9btveofCTj/sxfOsFx1/K1NVRUcP+a37IfmaxL
+	 HzLMWtlg2Z9ZiYRKQvQJWp1T4uOTGswmKUa/Ylq8=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20231213162409epcas5p298fcec4ae90c5461cbae6460fe7466f7~gcMS_tat62242322423epcas5p2C;
+	Wed, 13 Dec 2023 16:24:09 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.183]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4Sr15M58NQz4x9Pr; Wed, 13 Dec
+	2023 16:24:07 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	9C.33.08567.7AAD9756; Thu, 14 Dec 2023 01:24:07 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20231213162406epcas5p1ba19db7d5abf61b7d2eb2dc84e15f150~gcMQoYm0A2627126271epcas5p1M;
+	Wed, 13 Dec 2023 16:24:06 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231213162406epsmtrp26ac0a902b1ea2f70c561c1dbaee77aa6~gcMQl5rf30608006080epsmtrp2C;
+	Wed, 13 Dec 2023 16:24:06 +0000 (GMT)
+X-AuditID: b6c32a44-617fd70000002177-e8-6579daa74d5b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	E7.D5.07368.6AAD9756; Thu, 14 Dec 2023 01:24:06 +0900 (KST)
+Received: from INBRO000447 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20231213162402epsmtip19f81ac507419a595d0fd94445304eb49~gcMMb-R0x0862108621epsmtip1p;
+	Wed, 13 Dec 2023 16:24:02 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'Peter Griffin'" <peter.griffin@linaro.org>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+	<conor+dt@kernel.org>, <sboyd@kernel.org>, <tomasz.figa@gmail.com>,
+	<s.nawrocki@samsung.com>, <linus.walleij@linaro.org>,
+	<wim@linux-watchdog.org>, <linux@roeck-us.net>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <arnd@arndb.de>, <olof@lixom.net>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+	<cw00.choi@samsung.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [GIT PULL] Reset controller updates for v6.8
-Date: Wed, 13 Dec 2023 16:33:13 +0100
-Message-Id: <20231213153313.278867-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+Cc: <tudor.ambarus@linaro.org>, <andre.draszik@linaro.org>,
+	<semen.protsenko@linaro.org>, <saravanak@google.com>,
+	<willmcvicker@google.com>, <soc@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>, <kernel-team@android.com>,
+	<linux-serial@vger.kernel.org>
+In-Reply-To: <20231211162331.435900-10-peter.griffin@linaro.org>
+Subject: RE: [PATCH v7 09/16] pinctrl: samsung: Add gs101 SoC pinctrl
+ configuration
+Date: Wed, 13 Dec 2023 21:54:01 +0530
+Message-ID: <017201da2de0$cb2ed820$618c8860$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-us
+Thread-Index: AQEeDlMUs+qnFg95EVUf+Z9FZqMuEwIDfwFVAR9h5iGyBo1g8A==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TfVSTZRTved99Ac5ePorHaTl2IoTTgCXQA0eKDPQNkjhx7Jw6R2hub0DA
+	NjcI8RyTRBAn7KCHOrhASApyrMaXgNDIxkchQpIERFNTWCjyIWCYfIw2Xiz/+917f7/nd+99
+	zuXgLj+yeZwkWRqllIlTBCxHRmO7t4+waiST8q/r80ANE/UMtHK6i41mKvMB0hv7MDT0YJyJ
+	yjr6mCi7wsBC06VbUHOTG9LcuYWjouUqDNWNDjLRbP4NJqovWwao+Jc2DF2pKGCj4e/a2Gjs
+	yysY6r8cgS4PzbNQTbGVgXKMHWzUPnmcidSmFRayDtYy0LjGphodWmYhXYvtkbmROHTMHIh0
+	c6sAjd614mF8srG1kUnqz+oBubR4GpAzwzls8qL2Opssr0sn63QnWKR58HsWeV6vZ5I/lOrZ
+	ZP1XR8iBn48yyYsPs9ikpkEHyPm652Oefj95RyIlllJKPiWTyKVJsoRQQVRs/BvxgUH+IqEo
+	GL0i4MvEqVSoIPytGOGupBTbugT8j8Up6bZUjFilEvi9ukMpT0+j+IlyVVqogFJIUxQBCl+V
+	OFWVLkvwlVFpISJ//5cDbcQPkhPN175mKx5uONh/+3AWKHNSAwcOJAJgSUk3pgaOHBeiFcC8
+	DjWDDuYA7DIYWXSwAGBtTTbjscSY07teMAJYbTGvS+4AWFbQCewsFiGEzRW5LDt2I27gcKjv
+	dTsJJ/Q4fLRqxu0FByIM6o62rJFcib1QO16zZsEgPOFUe+8ah0sEwyFTEYPGzrD7zNgaxomt
+	sGmqBKdb4sNHlkomnXeHdzs72GrAsRnvhOW3jth9IaFxhJZJPZPmh8MsyxmMxq5w4qcGNo15
+	cH7aPjPHhkl4bplHpxPhVJUB0Pg1eGmghGGn4IQ3NLT40a4bYcHSGEYruTAv14Vme8Ls6d/W
+	97YZnjp5cr0BEt68Xs4sBB7aJ+bSPjGX9olZtP+blQOGDmyiFKrUBEoSqBDJqIz/vlsiT60D
+	a7fkE94MhsusviaAcYAJQA4ucON2N2dQLlypOPMQpZTHK9NTKJUJBNqWfQrnPSOR245RlhYv
+	Cgj2DwgKCgoI3h4kErhz7+WUSl2IBHEalUxRCkr5WIdxHHhZmJeh0GdjT59l9zvn5R6bCsK+
+	ec86e3A4XoNiy5eei/rUfOAzXx7WNvJhZLR5oSG2yfhRXIio8N5S4+Gi2d6/zBO/+jZtM1W4
+	CRXz1/aP7vt8sjWqfqW27+1dA7svyJ2tZ90UWvKQk0CasUGd7rww4z0b8ocwIqCsS7F6qYZx
+	AJ7gHrsPLNUaL5M2+hMjxvdsFpWUNIxHKx/EiUZv/1nbmYHkxw1ZuX+bnbY4qLO3SfZcfSli
+	2st1Yeve4v5Ii+oLhxerpNXeydGxQYs69/33qd+fzc0r5fg5JOKd+ZV7eGNzsfU9YzcXt1+Q
+	fLsYmdTTs69ocinrzX9eSHnqXX32uc1XMysFDFWiWOSDK1XifwH6mvUX1AQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xTVxiHd3r/Uu28tETPYHGsuswRRDrRnC1m0YnmLtvcMuIynBk2cFMR
+	qE0rY7gZqgjOpmsaxACdtDAYQmkclA4LCGRtZ4AgG8FQ1hUjFMa6UBl0gSBYRmmW8e133t/7
+	PHk/HBoTmolYOlt+gVPKpbliko+3O8U79zZ4CrnklTuJyPZXG46eld2n0FyDFiBL9xAPuf+Z
+	IZDJNUSg4rofSPSk+kVkvxuDdH9OYKh89TYPWX2jBJrXPiJQm2kVoMpfenhosO4bCo3d6aHQ
+	VO0gDw0PHEMD7iCJWipDOCrpdlHIOXuNQBrHMxKFRltxNKNbp3zuVRKZO9clC57P0FXvAWRe
+	WAPI5w9hh+PZ9q52grUYLYBdeVoG2LmxEortMIxTbI01n7War5Osd/QeyTZZLATbW22h2Lb6
+	IvZh3xWC7VhSU6zOZgZs0Lrzw22n+IeyuNzszznlvrfO8M96R76nFEtbvxievKQGpi0aEEVD
+	JgV2lzwgNYBPC5kuACu0zbxIEQfdrXoqkkWwKTRDRZb+AHC+ZYoIFySzF9rrSjfoGGYBg81r
+	YxsPjOnE4JC6lIggLgBvTd7Ew0gUcxiar3SS4Sxi0qBpTrOhwplXYMD5AAtnAfMGdDvK8UiO
+	hv1VU+uZXrcmwdJWEB5jzEvwbuAWFjkvHi5PNxCR+Q7o/9lFhddjmLdhzUSRHogMm0SG/0WG
+	TSLDJrgG4GbwAqdQ5cnyMiUKiZwrSFJJ81T5cllS5vk8K9j4Tgl77OCRKZTkADwaOACkMXGM
+	oN9ewAkFWdLCi5zyfIYyP5dTOUAcjYt3CCSV32YJGZn0ApfDcQpO+V/Lo6Ni1bzn6+4ZCyrG
+	d6dvl5yb5JS2hMZeL/vjB550T4ZymjrYGd04c9mybPzutf7721ZeXRp6M8eYyfKvPjefbCs/
+	nb51cZfwyXjR0jtaj6ix8rg69XpOypmQ9uH26EHn6G+Jlx/D218e2p080X8xbbKlOVXj9gZO
+	DvXZ5LP6QNVXxvphmfiGfi012RF8XxjoiEtRnND1MPrGd9GnpvRTP3VpZS/XCnQHqvx7XIna
+	2l0fDZRVFJ8THblWdNT9iaX7mH/k5JZfJU3tx3W+/fvekxU7V4+8PnswWPh32nhsH/r4BK3I
+	6B1Z/HqkADl+rw4+ro+/6fedTs2mFhYLl6f3824cZe1BvRhXnZVKEjClSvovulMx070DAAA=
+X-CMS-MailID: 20231213162406epcas5p1ba19db7d5abf61b7d2eb2dc84e15f150
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231211162431epcas5p2e2ec25eea1849559515c4e2855a8d58c
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+	<CGME20231211162431epcas5p2e2ec25eea1849559515c4e2855a8d58c@epcas5p2.samsung.com>
+	<20231211162331.435900-10-peter.griffin@linaro.org>
 
-Dear arm-soc maintainers,
+Hi Peter
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+> -----Original Message-----
+> From: Peter Griffin <peter.griffin@linaro.org>
+> Sent: Monday, December 11, 2023 9:53 PM
+> To: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> mturquette@baylibre.com; conor+dt@kernel.org; sboyd@kernel.org;
+> tomasz.figa@gmail.com; s.nawrocki@samsung.com; linus.walleij@linaro.org;
+> wim@linux-watchdog.org; linux@roeck-us.net; catalin.marinas@arm.com;
+> will@kernel.org; arnd@arndb.de; olof@lixom.net;
+> gregkh@linuxfoundation.org; jirislaby@kernel.org;
+> cw00.choi@samsung.com; alim.akhtar@samsung.com
+> Cc: peter.griffin@linaro.org; tudor.ambarus@linaro.org;
+> andre.draszik@linaro.org; semen.protsenko@linaro.org;
+> saravanak@google.com; willmcvicker@google.com; soc@kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> samsung-soc@vger.kernel.org; linux-clk@vger.kernel.org; linux-
+> gpio@vger.kernel.org; linux-watchdog@vger.kernel.org; kernel-
+> team@android.com; linux-serial@vger.kernel.org
+> Subject: [PATCH v7 09/16] pinctrl: samsung: Add gs101 SoC pinctrl
+> configuration
+> 
+> Add support for the pin-controller found on the gs101 SoC used in Pixel 6
+> phones.
+> 
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-are available in the Git repository at:
+> ---
+>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 140 ++++++++++++++++++
+>  drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
+>  3 files changed, 143 insertions(+)
+> 
+[snip]
+> 
+> --
+> 2.43.0.472.g3155946c3a-goog
 
-  git://git.pengutronix.de/pza/linux.git tags/reset-for-v6.8
 
-for you to fetch changes up to c3c46acd5be9a3351c163d2869045cab4d5342dc:
-
-  dt-bindings: reset: hisilicon,hi3660-reset: Drop providers and consumers from example (2023-11-29 11:49:45 +0100)
-
-----------------------------------------------------------------
-Reset controller updates for v6.8
-
-Make use of devm_platform_get_and_ioremap_resource() and
-device_get_match_data() in several drivers, support the Amlogic C3 reset
-controller, and improve various device tree binding documents.
-
-----------------------------------------------------------------
-Lad Prabhakar (1):
-      dt-bindings: reset: renesas,rzg2l-usbphy-ctrl: Document RZ/Five SoC
-
-Rob Herring (4):
-      reset: Use device_get_match_data()
-      dt-bindings: reset: qcom: drop unneeded quotes
-      dt-bindings: reset: imx-src: Simplify compatible schema and drop unneeded quotes
-      dt-bindings: reset: hisilicon,hi3660-reset: Drop providers and consumers from example
-
-Yangtao Li (7):
-      reset: brcmstb: Use devm_platform_get_and_ioremap_resource()
-      reset: meson-audio-arb: Convert to devm_platform_ioremap_resource()
-      reset: qcom-aoss: Convert to devm_platform_ioremap_resource()
-      reset: qcom: Convert to devm_platform_ioremap_resource()
-      reset: simple: Convert to devm_platform_get_and_ioremap_resource()
-      reset: sunplus: Use devm_platform_get_and_ioremap_resource()
-      reset: uniphier-glue: Use devm_platform_get_and_ioremap_resource()
-
-Zelong Dong (2):
-      dt-bindings: reset: Add compatible and DT bindings for Amlogic C3 Reset Controller
-      reset: reset-meson: add support for Amlogic C3 SoC Reset Controller
-
- .../bindings/reset/amlogic,meson-reset.yaml        |   1 +
- .../devicetree/bindings/reset/fsl,imx-src.yaml     |  31 ++----
- .../bindings/reset/hisilicon,hi3660-reset.yaml     |  25 +----
- .../devicetree/bindings/reset/qcom,aoss-reset.yaml |  10 +-
- .../devicetree/bindings/reset/qcom,pdc-global.yaml |   8 +-
- .../bindings/reset/renesas,rzg2l-usbphy-ctrl.yaml  |   2 +-
- drivers/reset/reset-brcmstb.c                      |   3 +-
- drivers/reset/reset-meson-audio-arb.c              |   4 +-
- drivers/reset/reset-meson.c                        |   1 +
- drivers/reset/reset-npcm.c                         |   5 +-
- drivers/reset/reset-qcom-aoss.c                    |   4 +-
- drivers/reset/reset-qcom-pdc.c                     |   4 +-
- drivers/reset/reset-simple.c                       |   3 +-
- drivers/reset/reset-sunplus.c                      |   3 +-
- drivers/reset/reset-uniphier-glue.c                |   3 +-
- drivers/reset/sti/reset-syscfg.c                   |  11 +-
- include/dt-bindings/reset/amlogic,c3-reset.h       | 119 +++++++++++++++++++++
- 17 files changed, 157 insertions(+), 80 deletions(-)
- create mode 100644 include/dt-bindings/reset/amlogic,c3-reset.h
