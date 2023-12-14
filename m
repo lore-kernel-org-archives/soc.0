@@ -1,149 +1,64 @@
-Return-Path: <SRS0=5FFS=HZ=mediatek.com=macpaul.lin@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABF98C4332F
-	for <soc@archiver.kernel.org>; Thu, 14 Dec 2023 17:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DA0DC4167D
+	for <soc@archiver.kernel.org>; Thu, 14 Dec 2023 19:19:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 71419C433CA; Thu, 14 Dec 2023 17:54:28 +0000 (UTC)
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 40616C433C8;
-	Thu, 14 Dec 2023 17:54:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40616C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: cfd594fa9aa911eeba30773df0976c77-20231215
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=QtivBajJ2uEBe/N9gJN8n3kJKYyoOgnif0RBAayWfuQ=;
-	b=ql44oSG2Bhr9l3tkGQz4JLjMujdHaHk2gtPBefJsL/VTiueEMMjVViLtSgyRnVhqwW1hmY/VtdvArqL73TIfpghrnEHb8EOHmW0hDFM2jKF/5CfP5LCBKk1JDaS+wf721FWyHMHbCM0OZZFVoGwrDqkVgwKOXwGRdCKpyzCDbVw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:1c84478b-279d-43a1-a913-32752cb4efb4,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:5d391d7,CLOUDID:284fcc73-1bd3-4f48-b671-ada88705968c,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-	DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: cfd594fa9aa911eeba30773df0976c77-20231215
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1779464143; Fri, 15 Dec 2023 01:54:22 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 15 Dec 2023 01:54:21 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Fri, 15 Dec 2023 01:54:20 +0800
-Message-ID: <1ce43346-3f60-b614-cdcc-7d9db8dec758@mediatek.com>
-Date: Fri, 15 Dec 2023 01:54:19 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm64: mediatek: remove broken pmic interrupt property
-Content-Language: en-US
+	id 42335C433C9; Thu, 14 Dec 2023 19:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CA1C433C8;
+	Thu, 14 Dec 2023 19:19:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702581588;
+	bh=SLnwOfnZIrvB4VzBl+S7nelpsQ3BWswHTT1pzK3ba6s=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=Y0PnfO1xw9oPRJjtjNXQztojKz5nL5HTowk1D7mVbfgXB+kpyEUWI+5nnJkVJ0BK1
+	 mP+ZeDhaQq61KjHQmDu+QHl+VZJZKU8Dz3D9nF8XaEUsKTFkMNcNAggo2uovhIpsvu
+	 D5X4m9nW0OutzNrZKYDjP+rNyvc2MZllY2il3DAgArC17fvJKs9J/EDLF4aBgkgzZD
+	 5/ZPEQZ4n6ntlFJSz7XoIej8qfBUfeW5HYM5k+kn18FJqaItp7vIKEDHCcQZWaKr/3
+	 Hx3HI/y0NvbhSXhHyvDRFcyl65IlecCBAeOaILo93mICBZ1uU7h/6E197I0cs6fj1z
+	 TEMAuggTyZ8Uw==
+Date: Thu, 14 Dec 2023 20:19:44 +0100
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Arnd
- Bergmann <arnd@kernel.org>, <soc@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Ben Lok <ben.lok@mediatek.com>
-CC: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
-	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <bear.wang@mediatek.com>,
-	<pablo.sun@mediatek.com>, <wenst@chromium.org>
-References: <20231212214737.230115-1-arnd@kernel.org>
- <bc5dafe4-5487-4794-97f1-f4e4d967a665@collabora.com>
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <bc5dafe4-5487-4794-97f1-f4e4d967a665@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner fixes for 6.7
+Message-ID: <ZXtVUJ0SG2NRpPG4@archlinux>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 12/13/23 19:09, AngeloGioacchino Del Regno wrote:
+Hi!
 
-> Il 12/12/23 22:47, Arnd Bergmann ha scritto:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The pmic is connected to the GIC, which uses four-cell interrupt 
->> properties,
->> but its interrupt is specified as two-cell that would only make sense 
->> for
->> the GPIO irqchip:
->>
->> arch/arm64/boot/dts/mediatek/mt8195.dtsi:464.4-27: Warning 
->> (interrupts_property): /soc/i2c@11d01000/pmic@34:#interrupt-cells: 
->> size is (8), expected multiple of 16
->>
->> Remove the interrupt for now to shut up the warning. When someone 
->> figures out
->> what the correct interrupt and parent are, we can add it back.
->>
->
-> Please, can anyone from MediaTek comment on that?
+Please pull following DT fixes for 6.7.
 
-Sorry for late response, I've just stuck in other tasks and didn't 
-notice this
+Best regards,
+Jernej
 
-patch is for genio-1200-evk. I've tested 6.7-rc1 but I thought it might 
-be an issue
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
-in origin mt8195.dtsi and not be related to board dts.
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-> I see a mt6360_pins on PIO:
->             pinmux = <PINMUX_GPIO17__FUNC_GPIO17>,
->                  <PINMUX_GPIO128__FUNC_GPIO128>;
->
-> ...and that's GPIO128, which may effectively be the IRQ pin for MT6360.
->
-> Still, I'm not sure whether the interrupt is on GIC or PIO, please 
-> clarify,
-> otherwise we will have to get this commit upstream.
->
-I think it could be solved by adding
+are available in the Git repository at:
 
-'interrupt-parent = <&pio>;' to mt6360 node.
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-fixes-for-6.7-1
 
-But currently I have no much time to verify it.
+for you to fetch changes up to b9622937d95809ef89904583191571a9fa326402:
 
-I'll try to find some time to find out the solution tomorrow.
+  arm64: dts: allwinner: h616: update emac for Orange Pi Zero 3 (2023-11-18 23:24:34 +0100)
 
-> Thanks,
-> Angelo
->
->> Fixes: f2b543a191b6 ("arm64: dts: mediatek: add device-tree for Genio 
->> 1200 EVK board")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>   arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts 
->> b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
->> index 70b465f7c6a7..a409ef998746 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
->> +++ b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
->> @@ -238,8 +238,6 @@ &i2c6 {
->>       mt6360: pmic@34 {
->>           compatible = "mediatek,mt6360";
->>           reg = <0x34>;
->> -        interrupts = <128 IRQ_TYPE_EDGE_FALLING>;
->> -        interrupt-names = "IRQB";
->>           interrupt-controller;
->>           #interrupt-cells = <1>;
->>           pinctrl-0 = <&mt6360_pins>;
->
+----------------------------------------------------------------
+- Fix ethernet node for Orange Pi Zero 3 board
 
-Thanks for pointing out the issue! Let's see if it could be solved by 
-adding 'interrupt-parents'.
+----------------------------------------------------------------
+Chukun Pan (1):
+      arm64: dts: allwinner: h616: update emac for Orange Pi Zero 3
 
-Macpaul Lin
-
+ arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero.dtsi | 3 ---
+ arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts | 3 +++
+ arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero3.dts | 2 ++
+ 3 files changed, 5 insertions(+), 3 deletions(-)
