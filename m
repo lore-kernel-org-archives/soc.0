@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DA0DC4167D
-	for <soc@archiver.kernel.org>; Thu, 14 Dec 2023 19:19:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2650C4332F
+	for <soc@archiver.kernel.org>; Thu, 14 Dec 2023 19:23:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42335C433C9; Thu, 14 Dec 2023 19:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CA1C433C8;
-	Thu, 14 Dec 2023 19:19:46 +0000 (UTC)
+	id 72563C433C8; Thu, 14 Dec 2023 19:23:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D8DBC433C7;
+	Thu, 14 Dec 2023 19:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702581588;
-	bh=SLnwOfnZIrvB4VzBl+S7nelpsQ3BWswHTT1pzK3ba6s=;
+	s=k20201202; t=1702581786;
+	bh=1jSyaZzwOop1fqkEuKg2l2BsCl81VoWnlMNWcTHjtkg=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=Y0PnfO1xw9oPRJjtjNXQztojKz5nL5HTowk1D7mVbfgXB+kpyEUWI+5nnJkVJ0BK1
-	 mP+ZeDhaQq61KjHQmDu+QHl+VZJZKU8Dz3D9nF8XaEUsKTFkMNcNAggo2uovhIpsvu
-	 D5X4m9nW0OutzNrZKYDjP+rNyvc2MZllY2il3DAgArC17fvJKs9J/EDLF4aBgkgzZD
-	 5/ZPEQZ4n6ntlFJSz7XoIej8qfBUfeW5HYM5k+kn18FJqaItp7vIKEDHCcQZWaKr/3
-	 Hx3HI/y0NvbhSXhHyvDRFcyl65IlecCBAeOaILo93mICBZ1uU7h/6E197I0cs6fj1z
-	 TEMAuggTyZ8Uw==
-Date: Thu, 14 Dec 2023 20:19:44 +0100
+	b=SNrTMyT0hl+WomlcINkwaLBDWus58T5BE17Gp9muT9+dt3VrWii1Kcyp6bb1ileHi
+	 4rOuANGr7UZAgd0zObC46yDkEmBaIZb4a50BPx8DeWdFKk+qzzcgzBSpl516KIEhB0
+	 IlDOBkaY2pHU5zVkpw9DslghVZpuCZLGRy11/W0d6ZmCw4t9BBvlXEA29DjdRHORc5
+	 wUMAOXPxFxIPEKBDkGh+8WpaFHlUqODVtb3azmJYlrLp4q55Fx6q281cwtVuaHetiI
+	 zSbfv8608dOOA2liQoD6I3Mp6u/aYI3VZ6oYVNkDwLTo65bbS443IqgjP/vyc3LUBe
+	 jB+dncnBoyvZA==
+Date: Thu, 14 Dec 2023 20:23:02 +0100
 From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: wens@csie.org, samuel@sholland.org,
 	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [GIT PULL] Allwinner fixes for 6.7
-Message-ID: <ZXtVUJ0SG2NRpPG4@archlinux>
+Subject: [GIT PULL] Allwinner device tree changes for 6.8
+Message-ID: <ZXtWFk-Bne835txP@archlinux>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi!
 
-Please pull following DT fixes for 6.7.
+Please pull following DT changes for 6.8.
 
 Best regards,
 Jernej
@@ -45,20 +45,28 @@ The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-fixes-for-6.7-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.8-1
 
-for you to fetch changes up to b9622937d95809ef89904583191571a9fa326402:
+for you to fetch changes up to 557e5347ba8bb050fec39c488486c4a948f2e4aa:
 
-  arm64: dts: allwinner: h616: update emac for Orange Pi Zero 3 (2023-11-18 23:24:34 +0100)
-
-----------------------------------------------------------------
-- Fix ethernet node for Orange Pi Zero 3 board
+  arm64: dts: allwinner: h618: add Transpeed 8K618-T TV box (2023-12-14 19:53:04 +0100)
 
 ----------------------------------------------------------------
-Chukun Pan (1):
-      arm64: dts: allwinner: h616: update emac for Orange Pi Zero 3
+- new boards: Orange Pi Zero 2W, Transpeed 8K618-T
 
- arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero.dtsi | 3 ---
- arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts | 3 +++
- arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero3.dts | 2 ++
- 3 files changed, 5 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+Andre Przywara (5):
+      dt-bindings: arm: sunxi: add Orange Pi Zero 2W
+      arm64: dts: allwinner: h616: add Orange Pi Zero 2W support
+      dt-bindings: vendor-prefixes: add Transpeed
+      dt-bindings: arm: sunxi: document Transpeed 8K618-T board name
+      arm64: dts: allwinner: h618: add Transpeed 8K618-T TV box
+
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |  10 ++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm64/boot/dts/allwinner/Makefile             |   1 +
+ .../dts/allwinner/sun50i-h618-orangepi-zero2w.dts  | 176 +++++++++++++++++++++
+ .../allwinner/sun50i-h618-transpeed-8k618-t.dts    | 161 +++++++++++++++++++
+ 5 files changed, 350 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero2w.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h618-transpeed-8k618-t.dts
