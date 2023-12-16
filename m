@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB60C38147
-	for <soc@archiver.kernel.org>; Sat, 16 Dec 2023 06:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68152C4167B
+	for <soc@archiver.kernel.org>; Sat, 16 Dec 2023 06:46:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 23832C433C8; Sat, 16 Dec 2023 06:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DA2C433CC;
-	Sat, 16 Dec 2023 06:46:25 +0000 (UTC)
+	id 289FBC433CA; Sat, 16 Dec 2023 06:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758C5C433C7;
+	Sat, 16 Dec 2023 06:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702709187;
-	bh=+qao/yERtxq3fikc9dlJaJbTJRFg3+DhPk8hj5VFXTw=;
+	s=k20201202; t=1702709189;
+	bh=LLxgoJG18VDR07HUv24HGkgRl3LPp1P62gXn0F9pe84=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZIaZ5QYU3haBn/lkbeeMHbuFmZcCBYVX5y4SFtH84hCMZo+DJhRzPSLUqTjylt07S
-	 d+39WMUoymYfV5TQxslWx2lhHyirDpw0nYff/G3iL5kfmtL8LhWTbwMLOH5VtzGSzw
-	 F8bV3dUbXDNo0thRIrnVVeiH9I94MexvmZUEO52mB7xvssAdVKXEcWv4FzdewEpV+S
-	 GKgsYB6FiNEXAgaRrYhkY5jUKHj3OZXprPWYbKdqWrasG8lUPUxsBG2hqg1rSYXkeH
-	 lFgQM16irnWsYW9/mgh4kqo4/aXUzSUyoLnHFWywWFSREf78blSGWYa99etjxTn2hr
-	 CGaHKlv/mJiBg==
+	b=rK1JxJPQJc+stxDxUp7qMC2TS5MKoRC5j7G74gMqbeTdMqyfqINoc3bY8FIsSMEGl
+	 9JvJmv652hzzcUgYru+0torY1egIc1hQYm4BsywTZckbulDFoUrHy5Q+UeDIn/0WTg
+	 gruNMJQC0divZqOIpNFEv5CuO+MTx0EjB7FDzTtnSWDHbD17tVH1KqLnlZBMstz5N4
+	 Shq7gG0pWO5PajEhQCM1BUBuxylVj9s39inNvHyWcGElC3pIvgmPZDXcwaHHGxKJ1u
+	 UcBF4nOjWuMV3VjX65/13MmqtNLJWfn31SwZiaPoYVZkdlxQgC/KKhmIDGApDhVV8c
+	 XyvwJWFptmMiQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -31,13 +31,14 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/5] i.MX SoC change for 6.8
-Date: Sat, 16 Dec 2023 14:46:02 +0800
-Message-Id: <20231216064605.876196-2-shawnguo@kernel.org>
+Subject: [GIT PULL 3/5] i.MX DT bindings for 6.8
+Date: Sat, 16 Dec 2023 14:46:03 +0800
+Message-Id: <20231216064605.876196-3-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231216064605.876196-1-shawnguo@kernel.org>
 References: <20231216064605.876196-1-shawnguo@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
@@ -46,26 +47,36 @@ The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-6.8
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindgins-6.8
 
-for you to fetch changes up to c8705471b94d0d869e2e3ac80c0d960f0215474f:
+for you to fetch changes up to 6cbac23b309cc6454779703a741392df4e80455f:
 
-  ARM: mxs: Do not search for "fsl,clkctrl" (2023-12-06 11:21:43 +0800)
-
-----------------------------------------------------------------
-i.MX SoC change for 6.8:
-
-- Update mach-imx MMDC driver to use device_get_match_data().
-- Drop the use of "fsl,clkctrl" from mach-mxs platform code, as it's
-  an undocumented compatible.
+  dt-bindings: arm: fsl: add Dimonoff gateway EVK board (2023-12-14 10:49:21 +0800)
 
 ----------------------------------------------------------------
-Fabio Estevam (1):
-      ARM: mxs: Do not search for "fsl,clkctrl"
+i.MX DT bindings for 6.8:
 
-Rob Herring (1):
-      ARM: imx: Use device_get_match_data()
+- New vendor prefix for Dimonoff and echarge Véhicule Électrique (RVE).
+- New board compatible for TQ-Systems LX2160A, RVE gateway, Dimonoff
+  gateway EVK, i.MX8M Mallow and SKOV i.MX8MP RevB board.
 
- arch/arm/mach-imx/mmdc.c     | 9 ++++-----
- arch/arm/mach-mxs/mach-mxs.c | 4 +++-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+----------------------------------------------------------------
+Gregor Herburger (1):
+      dt-bindings: arm: fsl: Add TQ-Systems LX2160A based boards
+
+Hugo Villeneuve (4):
+      dt-bindings: vendor-prefixes: add rve
+      dt-bindings: arm: fsl: add RVE gateway board
+      dt-bindings: vendor-prefixes: add dimonoff
+      dt-bindings: arm: fsl: add Dimonoff gateway EVK board
+
+Joao Paulo Goncalves (2):
+      dt-bindings: arm: fsl: add verdin imx8mm mallow board
+      dt-bindings: arm: fsl: add verdin imx8mp mallow board
+
+Oleksij Rempel (1):
+      dt-bindings: arm: Add compatible for SKOV i.MX8MP RevB board
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 22 +++++++++++++++++++++-
+ .../devicetree/bindings/vendor-prefixes.yaml       |  4 ++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
