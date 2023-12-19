@@ -1,777 +1,1575 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <SRS0=Fz2P=H6=s4.acemsrvh.com=bounce-1707420-689-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751BEC46CCD
-	for <soc@archiver.kernel.org>; Tue, 19 Dec 2023 14:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 778C4C46CCD
+	for <soc@archiver.kernel.org>; Tue, 19 Dec 2023 15:24:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4280CC433D9; Tue, 19 Dec 2023 14:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D8EC433C8;
-	Tue, 19 Dec 2023 14:49:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702997385;
-	bh=RdOIc6N4XOY5+ehFSC5h3OhBHWEltFSCZVGV0weNHfY=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=QNRBTv4jstuJyXW8p2PbpbnaCpBHUaOQD5dBFXnQuxJTxTzhW0CU2YfQDvQmyWtND
-	 alhMcVKpQB9fWA4AwbYLehzdw2z1PWBjdowBTEdH7U9JHZcY+h+/OU2PugHLT7+sHN
-	 mJlNzRZEm7ytY8cmbtwqMtahtH95tKUGRCweltD+kSDP1grXZznuy03pfvvQsSl/C/
-	 iP3mycuxQG2/U//7MmklsLwL2s39lpN1JRHwT9FTT4L1i03U52THTxjxLrP56OOR8E
-	 mJ2YpIl6CY0Zd3YLsWTwy7decqRRbKtV53ERuvZ77oBpbmqwCcSxdcmF2d6CKVQR2p
-	 AaEoJb4xDxU5A==
-From: Bjorn Andersson <andersson@kernel.org>
+	id 55440C433C8; Tue, 19 Dec 2023 15:24:29 +0000 (UTC)
+Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 93B6CC433C7
+	for <soc@kernel.org>; Tue, 19 Dec 2023 15:24:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 93B6CC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ndifunding.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=s4.acemsrvh.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=ndifunding.org;
+ h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ List-Unsubscribe:List-Unsubscribe-Post:Message-ID; i=team@ndifunding.org;
+ bh=zF1/6iZ1mUdiX9bFvJE9pT/Utcz5uLNJPI37XMbEQdU=;
+ b=PugjRfUErEGfS3bKHD1NO4sfWWsTQhLn8viz8rCh5r6sgio9H1qEc5YzNlMFoWN7X3kmv1wEtQ1P
+   cMQP4pczZk6nIDKQI2giJp1+Cqyo3N/6jZ88Dymur757MtUap9XT6HYdS28eT/RngeW2UfOxQMn/
+   R/QAKxwg7RtGOWEvHD/S4hkER4u8jCGGZeXM93izUJtIzpWPlDrwJhFGmElAEuyUc10V8yT8Qqfg
+   K/aY7eF3ENAmuZLO/f9S0SgZ5b7wgBWrq6buF+ybu9UpZYlstwpoheCJz0WH714k8XO5QukR1Is7
+   NRG3MgJcyuKMAmOYSCVnRYeMS5hyxQ7hsHFMdQ==
+Received: by s4.acemsrvh.com id hg6qqk365bkc for <soc@kernel.org>; Tue, 19 Dec 2023 15:24:26 +0000 (envelope-from <bounce-1707420-689-1076303-soc=kernel.org@s4.acemsrvh.com>)
+X-Mailer: ActiveCampaign Mailer
+CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Douglas Anderson <dianders@chromium.org>,
-	Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Nikita Travkin <nikita@trvn.ru>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Robert Marko <robimarko@gmail.com>,
-	=?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Nia Espera <nespera@igalia.com>,
-	Tengfei Fan <quic_tengfan@quicinc.com>,
-	Caleb Connolly <caleb.connolly@linaro.org>,
-	Komal Bajaj <quic_kbajaj@quicinc.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Mao Jinlong <quic_jinlmao@quicinc.com>,
-	Mukesh Ojha <quic_mojha@quicinc.com>,
-	Om Prakash Singh <quic_omprsing@quicinc.com>,
-	Rohit Agarwal <quic_rohiagar@quicinc.com>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Alex Elder <elder@linaro.org>,
-	Anusha Rao <quic_anusha@quicinc.com>,
-	Chukun Pan <amadeus@jmu.edu.cn>,
-	Fenglin Wu <quic_fenglinw@quicinc.com>,
-	Jianhua Lu <lujianhua000@gmail.com>,
-	Lin,
-	Meng-Bo <linmengbo0689@protonmail.com>,
-	Luka Panio <lukapanio@gmail.com>,
-	Lukas Walter <lukas.walter@aceart.de>,
-	Nitheesh Sekar <quic_nsekar@quicinc.com>,
-	Nitin Rawat <quic_nitirawa@quicinc.com>,
-	Richard Acayan <mailingradian@gmail.com>,
-	Varadarajan Narayanan <quic_varada@quicinc.com>,
-	Vincent Knecht <vincent.knecht@mailoo.org>,
-	Ajit Pandey <quic_ajipan@quicinc.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Gianluca Boiano <morf3089@gmail.com>,
-	Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	"J . R . Divya Antony" <d.antony.jr@gmail.com>,
-	Jasper Korten <jja2000@gmail.com>,
-	Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-	Jonathan Albrieux <jonathan.albrieux@gmail.com>,
-	Priyansh Jain <quic_priyjain@quicinc.com>,
-	Raghavendra Kakarla <quic_rkakarla@quicinc.com>,
-	Raymond Hackley <raymondhackley@protonmail.com>,
-	Rayyan Ansari <rayyan@ansari.sh>,
-	Shazad Hussain <quic_shazhuss@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Sridharan S N <quic_sridsn@quicinc.com>,
-	Steev Klimaszewski <steev@kali.org>,
-	Stephen Boyd <swboyd@chromium.org>
-Subject: [GIT PULL] Qualcomm ARM64 updates for v6.8
-Date: Tue, 19 Dec 2023 06:53:59 -0800
-Message-ID: <20231219145402.874161-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.42.0
+To: "Nonprofit Execs & Board Members" <soc@kernel.org>
+From: "Linda Lysakowski, ACFRE" <team@ndifunding.org>
+Subject: Meet EVERY Millionaire Donor In Your City
+Date: Tue, 19 Dec 2023 09:19:02 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+ boundary="_=_swift-16994123566581b466a391e1.16136981_=_"
+Content-Transfer-Encoding: 7bit
+X-DKIM-Options: s=acdkim1
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjNjg5ICwgbTExNjAgLCBzNjEy
+x-virtual-mta: s4.acemsrvh.com
+Feedback-ID: 1707420:1707420.689:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-689
+List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-689-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
+ <http://jimmylarose.activehosted.com/box.php?nl=214&c=689&m=1160&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Message-ID: <20231219152426.28286.482818287.swift@jimmylarose.activehosted.com>
 
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+--_=_swift-16994123566581b466a391e1.16136981_=_
+Content-Type: text/plain; charset=utf-8
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+(That Want to Give To Your Organization) 
+ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
 
-are available in the Git repository at:
+WE KNOW ALL THE WEALTHY DONORS 
+WHO LIVE & GIVE IN YOUR COMMUNITY
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.8
+"Meet the MILLIONAIRE FAMILIES who already give major gifts to
+nonprofits in your community. We will provide you their contact
+information and show you how to meet them one-on-one!" ~ Linda
+Lysakowski, ACFRE
 
-for you to fetch changes up to b7b9a6aa7aea2bcba2d35d65e4ce2913115485a3:
+VISIT HERE  OR PRESS BUTTON BELOW FOR
+A 60 SECOND VIDEO OVERVIEW
 
-  arm64: dts: qcom: sc8180x-primus: Allow UFS regulators load/mode setting (2023-12-17 14:28:17 -0600)
+ 
 
-----------------------------------------------------------------
-Qualcomm ARM64 updates for v6.8
+https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmc=&sig=Gj84KcEGPn11RHdU4XAEZ9n2DQQeidYYDyHZwvCoCYv9&iat=1702999466&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=GV%2BZxlpglTGdwpqbyTPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2yMTn%2BwFP6RMIoypEjMX5q&s=678f48a0e320c6856d0620aa2e024acb&i=689A1160A214A2701 
 
-Support is added for the new Snapdragon 8 Gen 3 mobile platform, with
-support for the MTP and QRD development devices, the new Snapdragon X
-Elite compute platform with QCP and CRD development/references devices,
-the QCS6590/QCM6490 platform with support for the IDP development device
-and the Robotics RB3gen2 board, the Huawei Honor 5X/GR5 handset
-built on MSM8939, and Xiaomi Pad 6 on SM8250.
+ 
 
-On IPQ5018 and IPQ6018 platform support for CPUfreq, USB, and one
-additional QUP SPI controller is added.
+"We grew our budget from $178,000 to $3.5 Million in 18 months using
+Major Gifts Ramp-Up. Your board is going to love this." - Sarah Garrett,
+Phoenix Center
 
-CPU OPP tables are selectively enabled based on fuses, for both IPQ5332
-and IPQ6018. IPQ6018 gains description of a few more SPI and UART nodes.
+Dear Colleagues In Service,
 
-Common elements of the IPQ9574 RDP boards are refactored into a common
-include file. IPQ9574 also gains description of its LEDs and WPS
-busttons.
+Over the past 30 years I've been privileged to lead and speak at
+hundreds of AFP conferences, nonprofit state association events and
+industry workshops. I spent my time and money on these gatherings to
+stay up to speed on trends and to network with my peers.
 
-MSM8916 finally gets the DSP-based audio described, and this is enabled
-for a variety of boards. Acer Iconia Talk S and Loncheer L8910 gains
-notification LED, battery and charger support is added to Loncheer
-L8150, and GPU is enabled for Samsung Galaxy Tab A.
+For me personally, those days are over. We now live in the era of
+Covid-19 and if I'm going to fly across the country for a multi-day
+in-person event it won't be to hear retreaded PowerPoint presentations
+from 1995. It will have to be different. It will have to be special. I'm
+pleased to share that I've discovered that worthwhile experience.
 
-Similariy DSP-based audio is added on MSM8939, the BAM-DMUX support is
-enabled as well. The Longcheer L9100 gains RGB notification LED support,
-and the wireless subsystem is enabled.
+It's called Major Gifts Ramp-Up.
 
-Missing SPI controllers are described on MSM8953. On MSM8996 the MPM is
-enabled, to allow using wakeup interrupts. Interconnect providers, MPM
-and display are added to QCM2290.
+Over 17,000 nonprofit executives from across the U.S. have already
+attended a Major Gifts Ramp-Up Event. THEY LOVE THESE CONFERENCES (and
+so do their boards!) Why? Because this fast-paced and provocative
+training has been customized for the audience in attendance. Prepare to
+hear the truth in ways you've never experienced before. You'll learn
+from the masters who defied convention and challenged the false thinking
+that keeps charities broke. 
 
-UFS, remoteprocs and WiFi is enabled for Fairphone FP5.
-On Fairphone FP3 audio, WiFi and Bluetooth are enabled.
+Let me encourage you to join us so you can learn how to prioritize your
+nonprofit's cash flow. You see, the number one indicator of a charity's
+ability to scale program is its capacity to add new staff. How then do
+you generate the millions you need to grow your mission? Whether you're
+a brand new start-up, small, medium or large 501(c)3 organization the
+most efficient way to increase income is Major Gifts Fundraising.
 
-On the Robotics RB1, HDMI and the CAN bus controller are added. On
-Robotics RB2 Bluetooth, the modem remoteproc and WiFi are enabled.
-Bluetooth is enabled on the Robotics RB5.
+VISIT HERE  FOR 60 SECOND VIDEO
+OVERVIEW
 
-On SA8775P tsens and thermal is added, as well as the random number
-generator.
+I'm pleased to announce that I'm now part of the Major Gifts Ramp-Up
+Team and am co-hosting MGRU events across nation. Here's our 2023
+conference schedule.
 
-Sound and RTC support is added for the Acer Aspire 1.
+**MAJOR GIFTS RAMP-UP WEST COAST**
 
-On SC7280 DeviceTree is refactored, in order to allow non-Chrome devices
-to inherit the base dtsi. Support for UFS, crypto, TrustZone based
-remoteprocs, the Camera Control Interface (CCI) and random number
-generator support are added. Additionally a variety of smaller fixes are
-introduced.
-
-A variety of fixes are introduced for SC8180X, in particular missing
-power-domains and interconnects.
-
-On SC8280XP the camera clock controller is added, and a number of
-smaller fixes are introduced.
-
-The display subsystem in SDM670 is described.
-
-On SDX75 interconnect providers are added, as is USB3 and the related
-PHY, which is then enabled on the IDP device.
-
-On SM6115 interconnect providers are added and existing clients are
-wired up. A UART controller is added as well.
-
-The MPM is added, to provide wakeup interrutps, on SM6375. The modem
-subsystem, and WiFi are enabled on Sony Xperia 10 IV, a few regulator
-supplies are corrected.
-
-On SM8150 the DisplayPort controller is added, for USB Type-C output,
-which together with the addition of HDMI is described on the HDK board.
-
-GPU and random number generator support are added to SM8450, and enabled
-on the HDK board.
-
-On SM8550 GPU, IPA, random number generator, missing SoundWire ports are
-added, and enabled on both MTP and QRD devices.
-
-Additionally a large number of smaller functional and DeviceTree binding
-validation issues are corrected across a variety of platforms.
-
-----------------------------------------------------------------
-Abel Vesa (2):
-      arm64: dts: qcom: x1e80100: Add Compute Reference Device
-      arm64: dts: qcom: x1e80100-crd: Fix supplies for some LDOs in PM8550
-
-Ajit Pandey (1):
-      arm64: dts: qcom: sm4450: Add apps_rsc and cmd_db node
-
-Alex Elder (2):
-      arm64: dts: qcom: sm8550: add IPA information
-      arm64: dts: qcom: sm8550-qrd: enable IPA
-
-André Apitzsch (4):
-      arm64: dts: qcom: msm8916-longcheer-l8910: Enable RGB LED
-      arm64: dts: qcom: msm8939-longcheer-l9100: Enable RGB LED
-      arm64: dts: qcom: msm8939-longcheer-l9100: Add proximity-near-level
-      dt-bindings: arm: qcom: Add Motorola Moto G 4G (2013)
-
-Anusha Rao (2):
-      arm64: dts: qcom: ipq9574: Add common RDP dtsi file
-      arm64: dts: qcom: ipq9574: Enable WPS buttons
-
-Bartosz Golaszewski (1):
-      arm64: dts: qcom: qrb5165-rb5: add the Bluetooth node
-
-Bjorn Andersson (8):
-      Merge tag 'qcom-arm64-for-6.7-2' into arm64-for-6.8
-      arm64: dts: qcom: sc8180x-primus: Fix HALL_INT polarity
-      Merge branch '20231026105345.3376-3-bryan.odonoghue@linaro.org' into arm64-for-6.8
-      Merge branch '20231106-topic-sm8650-upstream-clocks-v3-5-761a6fadb4c0@linaro.org' into arm64-for-6.8
-      Merge branch 'icc-sm8650' of https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc into arm64-for-6.8
-      Merge branch '20231205061002.30759-4-quic_sibis@quicinc.com' into arm64-for-6.8
-      Merge branch 'icc-x1e80100' of https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc into arm64-for-6.8
-      Merge branch 'icc-sm6115' of https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc into HEAD
-
-Bryan O'Donoghue (4):
-      dt-bindings: clock: Use gcc.yaml for common clock properties
-      dt-bindings: clock: Add SC8280XP CAMCC
-      arm64: dts: qcom: sc8280xp: Add in CAMCC for sc8280xp
-      arm64: dts: qcom: sm8250: Add wakeup-source to usb_1 and usb_2
-
-Caleb Connolly (3):
-      arm64: dts: qcom: qrb4210-rb2: don't force usb peripheral mode
-      arm64: dts: qcom: sdm845-oneplus: enable flash LED
-      arm64: dts: qcom: qrb2210-rb1: use USB host mode
-
-Chukun Pan (2):
-      arm64: dts: qcom: ipq6018: Add remaining QUP UART node
-      arm64: dts: qcom: ipq6018: Add QUP5 SPI node
-
-Dmitry Baryshkov (26):
-      arm64: dts: qcom: sm8150: extend the size of the PDC resource
-      arm64: dts: qcom: ipq6018: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: ipq8074: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: msm8996: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: msm8998: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: sdm845: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8150: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8250: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8350: switch USB QMP PHY to new style of bindings
-      arm64: dts: qcom: qrb2210-rb1: add wifi variant property
-      arm64: dts: qcom: msm8996: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: msm8998: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sdm845: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm6115: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm6350: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8150: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8250: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8350: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8450: switch UFS QMP PHY to new style of bindings
-      arm64: dts: qcom: sm8150: make dispcc cast minimal vote on MMCX
-      arm64: dts: qcom: sm8150-hdk: enable HDMI output
-      arm64: dts: qcom: sm8150-hdk: fix SS USB regulators
-      arm64: dts: qcom: sm8150: add DisplayPort controller
-      arm64: dts: qcom: sm8150: add USB-C ports to the USB+DP QMP PHY
-      arm64: dts: qcom: sm8150: add USB-C ports to the OTG USB host
-      arm64: dts: qcom: sm8150-hdk: enable DisplayPort and USB-C altmode
-
-Douglas Anderson (9):
-      arm64: dts: qcom: sc7180: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sc7280: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sdm845: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sm8150: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sm8250: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sa8775p: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sc8280xp: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sm6350: Make watchdog bark interrupt edge triggered
-      arm64: dts: qcom: sc7180: Switch pompom to the generic edp-panel
-
-Fenglin Wu (2):
-      arm64: dts: qcom: sm8550-mtp: Add pm8010 regulators
-      arm64: dts: qcom: sm8550-qrd: add PM8010 regulators
-
-Gianluca Boiano (1):
-      arm64: dts: qcom: msm8953: add SPI interfaces
-
-Gokul Sriram Palanisamy (1):
-      arm64: dts: qcom: ipq5018: enable the CPUFreq support
-
-Imran Shaik (1):
-      arm64: dts: qcom: qdu1000: Add ECPRI clock controller
-
-J.R. Divya Antony (1):
-      arm64: dts: qcom: msm8916-asus-z00l: Add sound and modem
-
-Jasper Korten (1):
-      arm64: dts: qcom: msm8916-samsung-gt5: Add sound and modem
-
-Jianhua Lu (2):
-      arm64: dts: qcom: sm8250-xiaomi-elish: Fix typos
-      arm64: dts: qcom: sm8250-xiaomi-elish: Add pm8150b type-c node and enable usb otg
-
-Joel Selvaraj (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: enable flash led
-
-Johan Hovold (17):
-      arm64: dts: qcom: sc8280xp-x13s: add missing camera LED pin config
-      arm64: dts: qcom: sc8280xp-crd: fix eDP phy compatible
-      arm64: dts: qcom: sa8775p: fix USB wakeup interrupt types
-      arm64: dts: qcom: sc7180: fix USB wakeup interrupt types
-      arm64: dts: qcom: sc7280: fix usb_1 wakeup interrupt types
-      arm64: dts: qcom: sc7280: fix usb_2 wakeup interrupt types
-      arm64: dts: qcom: sc8180x: fix USB wakeup interrupt types
-      arm64: dts: qcom: sdm670: fix USB wakeup interrupt types
-      arm64: dts: qcom: sdm845: fix USB wakeup interrupt types
-      arm64: dts: qcom: sm6375: fix USB wakeup interrupt types
-      arm64: dts: qcom: sm8150: fix USB wakeup interrupt types
-      arm64: dts: qcom: sm8550: fix USB wakeup interrupt types
-      arm64: dts: qcom: sc8180x: fix USB DP/DM HS PHY interrupts
-      arm64: dts: qcom: sdm845: fix USB DP/DM HS PHY interrupts
-      arm64: dts: qcom: sdm845: fix USB SS wakeup
-      arm64: dts: qcom: sm8150: fix USB DP/DM HS PHY interrupts
-      arm64: dts: qcom: sm8150: fix USB SS wakeup
-
-Jonathan Albrieux (1):
-      arm64: dts: qcom: msm8916-longcheer-l8910: Add sound and modem
-
-Kathiravan Thirumoorthy (7):
-      arm64: dts: qcom: ipq8074: include the GPLL0 as clock provider for mailbox
-      arm64: dts: qcom: ipq6018: include the GPLL0 as clock provider for mailbox
-      arm64: dts: qcom: ipq9574: include the GPLL0 as clock provider for mailbox
-      arm64: dts: qcom: ipq5332: include the GPLL0 as clock provider for mailbox
-      arm64: dts: qcom: ipq9574: enable GPIO based LED
-      arm64: dts: qcom: ipq5332: add missing properties to the GPIO LED node
-      arm64: dts: qcom: ipq5018: add few more reserved memory regions
-
-Komal Bajaj (3):
-      dt-bindings: arm: qcom: Add QCM6490 IDP and QCS6490 RB3Gen2 board
-      arm64: dts: qcom: Add base qcm6490 idp board dts
-      arm64: dts: qcom: Add base qcs6490-rb3gen2 board dts
-
-Konrad Dybcio (34):
-      arm64: dts: qcom: sm6375: Add UART1
-      arm64: dts: qcom: sm6375-pdx225: Enable MSS
-      arm64: dts: qcom: sm6375-pdx225: Enable ATH10K WiFi
-      arm64: dts: qcom: sm6375-pdx225: Add USBPHY regulators
-      arm64: dts: qcom: sc8280xp-x13s: Use the correct DP PHY compatible
-      arm64: dts: qcom: sm6115: Add UART3
-      arm64: dts: qcom: qrb4210-rb2: Enable bluetooth
-      arm64: dts: qcom: sc8280xp: Add QMP handle to RPMh stats
-      arm64: dts: qcom: sc7180: Add the missing MDSS icc path
-      arm64: dts: qcom: sc7280: Add the missing MDSS icc path
-      arm64: dts: qcom: qcm2290: Add display nodes
-      arm64: dts: qcom: qcm2290: Hook up interconnects
-      arm64: dts: qcom: qrb2210-rb1: Set up HDMI
-      arm64: dts: qcom: qrb2210-rb1: Enable CAN bus controller
-      dt-bindings: interconnect: Add Qualcomm SM6115 NoC
-      arm64: dts: qcom: sc7280: Add ZAP shader support
-      arm64: dts: qcom: sc7280: Fix up GPU SIDs
-      arm64: dts: qcom: sc7280: Mark Adreno SMMU as DMA coherent
-      arm64: dts: qcom: sc7280: Add 0xac Adreno speed bin
-      arm64: dts: qcom: qrb4210-rb2: Enable MPSS and Wi-Fi
-      arm64: dts: qcom: sm8450: Add GPU nodes
-      arm64: dts: qcom: sm8550: Add GPU nodes
-      arm64: dts: qcom: sm8550-qrd: Enable the A740 GPU
-      arm64: dts: qcom: sm8550-mtp: Enable the A740 GPU
-      arm64: dts: qcom: sm8450-hdk: Enable the A730 GPU
-      arm64: dts: qcom: sm6115: Hook up interconnects
-      arm64: dts: qcom: sm6375: Hook up MPM
-      arm64: dts: qcom: msm8996: Hook up MPM
-      arm64: dts: qcom: qcm2290: Hook up MPM
-      arm64: dts: qcom: sc8180x: Add UFS GDSC
-      arm64: dts: qcom: sc8180x: Add missing MDP clocks
-      arm64: dts: qcom: sc8180x: Add interconnects to UFS
-      arm64: dts: qcom: sc8180x: Describe the GIC redistributor
-      arm64: dts: qcom: sc8180x-primus: Allow UFS regulators load/mode setting
-
-Krzysztof Kozlowski (36):
-      arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
-      arm64: dts: qcom: sm8450: correct TX Soundwire clock
-      arm64: dts: qcom: sm8550: correct TX Soundwire clock
-      arm64: dts: qcom: sc8180x: drop duplicated PCI iommus property
-      arm64: dts: qcom: qdu1000: correct LLCC reg entries
-      arm64: dts: qcom: qdu1000-idp: drop unused LLCC multi-ch-bit-off
-      arm64: dts: qcom: sc8280xp: correct Soundwire node name
-      arm64: dts: qcom: sm8250: correct Soundwire node name
-      arm64: dts: qcom: sc8180x-primus: drop sound-dai-cells from eDisplayPort
-      arm64: dts: qcom: sc8280xp-x13s: drop sound-dai-cells from eDisplayPort
-      arm64: dts: qcom: sm8350: move DPU opp-table to its node
-      arm64: dts: qcom: qrb5165-rb5: correct LED panic indicator
-      arm64: dts: qcom: sdm845-db845c: correct LED panic indicator
-      arm64: dts: qcom: sdm845: correct Soundwire node name
-      arm64: dts: qcom: sc8180x-flex-5g: use 'gpios' suffix for PCI GPIOs
-      arm64: dts: qcom: sc8180x-primus: use 'gpios' suffix for PCI GPIOs
-      arm64: dts: qcom: sm8150: use 'gpios' suffix for PCI GPIOs
-      arm64: dts: qcom: sm6115: align mem timer size cells with bindings
-      arm64: dts: qcom: sm6125: add interrupts to DWC3 USB controller
-      arm64: dts: qcom: sm6375-pdx225: add fixed touchscreen AVDD regulator
-      arm64: dts: qcom: sc8180x: align APSS with bindings
-      dt-bindings: arm: qcom-soc: extend pattern for matching existing SoCs
-      arm64: dts: qcom: minor whitespace cleanup around '='
-      arm64: dts: qcom: sm8650: add ADSP GPR
-      arm64: dts: qcom: sm8650: add LPASS LPI pin controller
-      arm64: dts: qcom: sm8650: add ADSP audio codec macros
-      arm64: dts: qcom: sm8650: add Soundwire controllers
-      arm64: dts: qcom: sm8650-mtp: add WSA8845 speakers
-      arm64: dts: qcom: pm8550: drop PWM address/size cells
-      arm64: dts: qcom: ipq8074: add dedicated SDHCI compatible
-      arm64: dts: qcom: sm8650: drop unneeded assigned-clocks from WSA macro
-      arm64: dts: qcom: sm8550: add missing two RX Soundwire ports in configuration
-      arm64: dts: qcom: sm8450: move Soundwire pinctrl to its nodes
-      arm64: dts: qcom: sm8450: drop unneeded assigned-clocks from codec macros
-      arm64: dts: qcom: sm8550: move Soundwire pinctrl to its nodes
-      arm64: dts: qcom: sm8550: drop unneeded assigned-clocks from codec macros
-
-Lin, Meng-Bo (2):
-      arm64: dts: qcom: msm8916-samsung-j5: Add sound and modem
-      arm64: dts: qcom: msm8939-samsung-a7: Add sound and modem
-
-Luca Weiss (23):
-      arm64: dts: qcom: sc7280: Add ports subnodes in usb/dp qmpphy node
-      arm64: dts: qcom: sc7280: Add Camera Control Interface busses
-      arm64: dts: qcom: pm7250b: Use correct node name for gpios
-      iio: adc: Add PM7325 PMIC7 ADC bindings
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add PM7250B thermals
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add PMK7325 thermals
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add PM7325 thermals
-      arm64: dts: qcom: sdm632-fairphone-fp3: Enable WiFi/Bluetooth
-      arm64: dts: qcom: msm8953: Use non-deprecated qcom,domain in LPASS
-      arm64: dts: qcom: sdm632-fairphone-fp3: Enable LPASS
-      dt-bindings: vendor-prefixes: document HTC Corporation
-      dt-bindings: arm: qcom: Add HTC One Mini 2
-      arm64: dts: qcom: msm8953: Set initial address for memory
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable UFS
-      arm64: dts: qcom: sc7280: Use WPSS PAS instead of PIL
-      arm64: dts: qcom: sc7280: Add ADSP node
-      arm64: dts: qcom: sc7280: Add CDSP node
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable various remoteprocs
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable WiFi
-      dt-bindings: arm: qcom: Fix up htc-memul compatible
-      arm64: dts: qcom: sc7280: Remove unused second MPSS reg
-      arm64: dts: qcom: sc7280: Rename reserved-memory nodes
-      arm64: dts: qcom: sc7280*: move MPSS and WPSS memory to dtsi
-
-Luka Panio (2):
-      dt-bindings: arm: qcom: Add Xiaomi Pad 6 (xiaomi-pipa)
-      arm64: dts: qcom: sm8250-xiaomi-pipa: Add initial device tree
-
-Lukas Walter (2):
-      dt-bindings: arm: qcom: Add Huawei Honor 5X / GR5 (2016)
-      arm64: dts: qcom: msm8939-huawei-kiwi: Add initial device tree
-
-Manivannan Sadhasivam (3):
-      arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
-      arm64: dts: qcom: Use "pcie" as the node name instead of "pci"
-      arm64: dts: qcom: sa8775p: Add missing space between node name and braces
-
-Mao Jinlong (3):
-      arm64: dts: qcom: msm8996: Fix 'in-ports' is a required property
-      arm64: dts: qcom: msm8998: Fix 'out-ports' is a required property
-      arm64: dts: qcom: Fix coresight warnings in in-ports and out-ports
-
-Mukesh Ojha (3):
-      arm64: dts: qcom: sm8250: Add TCSR halt register space
-      arm64: dts: qcom: sm8350: Add TCSR halt register space
-      arm64: dts: qcom: sm8550: Enable download mode register write
-
-Neil Armstrong (22):
-      arm64: dts: qcom: sm8550: add TRNG node
-      arm64: dts: qcom: sm8450: add TRNG node
-      dt-bindings: interconnect: document the RPMh Network-On-Chip Interconnect in Qualcomm SM8650 SoC
-      dt-bindings: clock: qcom: document the SM8650 TCSR Clock Controller
-      dt-bindings: clock: qcom: document the SM8650 General Clock Controller
-      dt-bindings: clock: qcom: document the SM8650 Display Clock Controller
-      dt-bindings: clock: qcom: document the SM8650 GPU Clock Controller
-      dt-bindings: clock: qcom: Document the SM8650 RPMH Clock Controller
-      arm64: dts: qcom: sm8550: fix soundwire controllers node name
-      arm64: dts: qcom: sm8450: fix soundwire controllers node name
-      dt-bindings: arm: qcom: document SM8650 and the reference boards
-      arm64: dts: qcom: add initial SM8650 dtsi
-      arm64: dts: qcom: pm8550ve: make PMK8550VE SID configurable
-      arm64: dts: qcom: sm8650: add initial SM8650 MTP dts
-      arm64: dts: qcom: sm8650: add initial SM8650 QRD dts
-      arm64: dts: qcom: sm8650: add interconnect dependent device nodes
-      arm64: dts: qcom: sm8650-mtp: add interconnect dependent device nodes
-      arm64: dts: qcom: sm8650-qrd: add interconnect dependent device nodes
-      arm64: dts: qcom: sm8650: add IPA information
-      arm64: dts: qcom: sm8650-qrd: enable IPA
-      arm64: dts: qcom: sm8650: Add DisplayPort device nodes
-      arm64: dts: qcom: sm8650: add fastrpc-compute-cb nodes
-
-Nia Espera (4):
-      dt-bindings: iio: adc: qcom: Add Qualcomm smb139x
-      arm64: dts: qcom: sm8350: Fix DMA0 address
-      arm64: dts: qcom: pm8350k: Remove hanging whitespace
-      arm64: dts: qcom: sm8350: Fix remoteproc interrupt type
-
-Nikita Travkin (6):
-      arm64: dts: qcom: msm8916-longcheer-l8150: Add sound and modem
-      arm64: dts: qcom: pm8916: Add BMS and charger
-      arm64: dts: qcom: msm8916-longcheer-l8150: Add battery and charger
-      arm64: dts: qcom: acer-aspire1: Enable RTC
-      arm64: dts: qcom: acer-aspire1: Correct audio codec definition
-      arm64: dts: qcom: acer-aspire1: Add sound
-
-Nitheesh Sekar (2):
-      arm64: dts: qcom: ipq5018: Add USB related nodes
-      arm64: dts: qcom: ipq5018: Enable USB
-
-Nitin Rawat (2):
-      arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 soc
-      arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 IDP board
-
-Om Prakash Singh (3):
-      arm64: dts: qcom: sa8775p: add TRNG node
-      arm64: dts: qcom: sc7280: add TRNG node
-      arm64: dts: qcom: sc7280: add QCrypto nodes
-
-Priyansh Jain (1):
-      arm64: dts: qcom: Enable tsens and thermal for sa8775p SoC
-
-Raghavendra Kakarla (1):
-      arm64: dts: qcom: sa8775p: Add RPMh sleep stats
-
-Rajendra Nayak (6):
-      dt-bindings: interconnect: Add Qualcomm X1E80100 SoC
-      dt-bindings: clock: qcom: Add X1E80100 GCC clocks
-      dt-bindings: clock: qcom-rpmhcc: Add RPMHCC bindings for X1E80100
-      dt-bindings: arm: cpus: Add qcom,oryon compatible
-      dt-bindings: arm: qcom: Document X1E80100 SoC and boards
-      arm64: dts: qcom: Add base X1E80100 dtsi and the QCP dts
-
-Raymond Hackley (1):
-      arm64: dts: qcom: msm8916-acer-a1-724: Add notification LED
-
-Rayyan Ansari (1):
-      dt-bindings: arm: qcom: Document MSM8x26-based Lumia phones
-
-Richard Acayan (2):
-      arm64: dts: qcom: sdm670: add specific cpufreq compatible
-      arm64: dts: qcom: sdm670: add display subsystem
-
-Robert Marko (5):
-      arm64: dts: qcom: ipq5018: add QUP1 SPI controller
-      dt-bindings: clocks: qcom,gcc-ipq8074: allow QMP PCI PHY PIPE clocks
-      arm64: dts: qcom: ipq8074: pass QMP PCI PHY PIPE clocks to GCC
-      arm64: dts: qcom: ipq6018: use CPUFreq NVMEM
-      arm64: dts: qcom: ipq8074: Add QUP4 SPI node
-
-Rohit Agarwal (3):
-      arm64: dts: qcom: Add interconnect nodes for SDX75
-      arm64: dts: qcom: Add USB3 and PHY support on SDX75
-      arm64: dts: qcom: sdx75-idp: Enable USB3 and PHY support
-
-Shazad Hussain (1):
-      arm64: dts: qcom: sa8775p-ride: enable pmm8654au_0_pon_resin
-
-Sibi Sankar (1):
-      dt-bindings: arm: qcom-soc: extend pattern matching for X1E80100 SoC
-
-Sridharan S N (1):
-      dt-bindings: arm: qcom: drop the IPQ board types
-
-Steev Klimaszewski (1):
-      arm64: dts: qcom: sdm850-lenovo-yoga: Add wakeup-sources
-
-Stephan Gerhold (13):
-      arm64: dts: qcom: msm8916-samsung-gt5: Enable GPU
-      arm64: dts: qcom: msm8939-longcheer-l9100: Enable wcnss_mem
-      arm64: dts: qcom: msm8916-*: Fix alphabetic node order
-      arm64: dts: qcom: msm8916: Add QDSP6
-      arm64: dts: qcom: msm8939: Add QDSP6
-      arm64: dts: qcom: msm8916: Add common msm8916-modem-qdsp6.dtsi
-      arm64: dts: qcom: msm8916-samsung-a2015: Add sound and modem
-      arm64: dts: qcom: msm8916-samsung-serranove: Add sound and modem
-      arm64: dts: qcom: msm8916-wingtech-wt88047: Add sound and modem
-      arm64: dts: qcom: Add missing vio-supply for AW2013
-      arm64: dts: qcom: msm8939: Add clock-frequency for broadcast timer
-      arm64: dts: qcom: msm8916: Make blsp_dma controlled-remotely
-      arm64: dts: qcom: msm8939: Make blsp_dma controlled-remotely
-
-Stephen Boyd (1):
-      dt-bindings: arm: qcom: Fix html link
-
-Tengfei Fan (4):
-      arm64: dts: qcom: sm4450: Add RPMH and Global clock
-      arm64: dts: qcom: sm4450: add uart console support
-      arm64: dts: qcom: sm4450-qrd: add QRD4450 uart support
-      arm64: dts: qcom: sm4450-qrd: mark QRD4450 reserved gpios
-
-Varadarajan Narayanan (2):
-      arm64: dts: qcom: ipq5332: populate the opp table based on the eFuse
-      arm64: dts: qcom: ipq9574: populate the opp table based on the eFuse
-
-Vincent Knecht (2):
-      arm64: dts: qcom: msm8939: Add BAM-DMUX WWAN
-      arm64: dts: qcom: msm8916-alcatel-idol347: Add sound and modem
-
- Documentation/devicetree/bindings/arm/cpus.yaml    |    1 +
- .../devicetree/bindings/arm/qcom-soc.yaml          |   16 +-
- Documentation/devicetree/bindings/arm/qcom.yaml    |   47 +-
- .../bindings/clock/qcom,camcc-sm8250.yaml          |   18 +-
- .../bindings/clock/qcom,gcc-ipq8074.yaml           |    4 +
- .../devicetree/bindings/clock/qcom,rpmhcc.yaml     |    2 +
- .../bindings/clock/qcom,sc7180-camcc.yaml          |   18 +-
- .../bindings/clock/qcom,sc7280-camcc.yaml          |   18 +-
- .../bindings/clock/qcom,sdm845-camcc.yaml          |   18 +-
- .../bindings/clock/qcom,sm8450-camcc.yaml          |   20 +-
- .../bindings/clock/qcom,sm8450-gpucc.yaml          |    2 +
- .../bindings/clock/qcom,sm8550-tcsr.yaml           |    8 +-
- .../bindings/clock/qcom,sm8650-dispcc.yaml         |  106 +
- .../devicetree/bindings/clock/qcom,sm8650-gcc.yaml |   65 +
- .../bindings/clock/qcom,x1e80100-gcc.yaml          |   72 +
- .../bindings/interconnect/qcom,sm6115.yaml         |  152 +
- .../bindings/interconnect/qcom,sm8650-rpmh.yaml    |  136 +
- .../bindings/interconnect/qcom,x1e80100-rpmh.yaml  |   83 +
- .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
- arch/arm64/boot/dts/qcom/Makefile                  |    8 +
- arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts     |   12 +
- arch/arm64/boot/dts/qcom/ipq5018.dtsi              |  142 +
- arch/arm64/boot/dts/qcom/ipq5332-rdp-common.dtsi   |    3 +
- arch/arm64/boot/dts/qcom/ipq5332-rdp441.dts        |    2 +-
- arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts        |    2 +-
- arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts        |    2 +-
- arch/arm64/boot/dts/qcom/ipq5332.dtsi              |   23 +-
- arch/arm64/boot/dts/qcom/ipq6018.dtsi              |  119 +-
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  110 +-
- arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi   |  169 +
- arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts        |   63 +-
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts        |   91 +-
- arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts        |   65 +-
- arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts        |   65 +-
- arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts        |   66 +-
- arch/arm64/boot/dts/qcom/ipq9574.dtsi              |   25 +-
- arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts   |   24 +
- .../boot/dts/qcom/msm8916-alcatel-idol347.dts      |  173 +-
- arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts     |   21 +
- .../boot/dts/qcom/msm8916-longcheer-l8150.dts      |   75 +-
- .../boot/dts/qcom/msm8916-longcheer-l8910.dts      |  103 +
- arch/arm64/boot/dts/qcom/msm8916-modem-qdsp6.dtsi  |  148 +
- .../dts/qcom/msm8916-samsung-a2015-common.dtsi     |   71 +
- .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts      |   10 +-
- .../dts/qcom/msm8916-samsung-e2015-common.dtsi     |    4 +
- .../boot/dts/qcom/msm8916-samsung-grandmax.dts     |    4 +
- .../boot/dts/qcom/msm8916-samsung-gt5-common.dtsi  |   92 +-
- arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts |   26 +
- arch/arm64/boot/dts/qcom/msm8916-samsung-gt58.dts  |   46 +
- .../boot/dts/qcom/msm8916-samsung-j5-common.dtsi   |   14 +
- arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts    |    4 +
- .../boot/dts/qcom/msm8916-samsung-serranove.dts    |   13 +
- arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts    |    8 +-
- arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts  |    8 +-
- .../boot/dts/qcom/msm8916-wingtech-wt88047.dts     |   75 +
- .../arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts |    8 +-
- arch/arm64/boot/dts/qcom/msm8916.dtsi              |   50 +
- arch/arm64/boot/dts/qcom/msm8939-huawei-kiwi.dts   |  242 +
- .../boot/dts/qcom/msm8939-longcheer-l9100.dts      |   56 +
- arch/arm64/boot/dts/qcom/msm8939-samsung-a7.dts    |   70 +
- arch/arm64/boot/dts/qcom/msm8939.dtsi              |   82 +
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-mido.dts   |    1 +
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts |    1 +
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts  |    1 +
- arch/arm64/boot/dts/qcom/msm8953.dtsi              |  110 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |  125 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |   87 +-
- arch/arm64/boot/dts/qcom/pm7250b.dtsi              |    2 +-
- arch/arm64/boot/dts/qcom/pm8550.dtsi               |    3 -
- arch/arm64/boot/dts/qcom/pm8550ve.dtsi             |    6 +-
- arch/arm64/boot/dts/qcom/pm8916.dtsi               |   48 +
- arch/arm64/boot/dts/qcom/pmk8350.dtsi              |    2 +-
- arch/arm64/boot/dts/qcom/qcm2290.dtsi              |  504 +-
- arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts |  288 +-
- arch/arm64/boot/dts/qcom/qcm6490-idp.dts           |  468 ++
- arch/arm64/boot/dts/qcom/qcs404.dtsi               |    2 +-
- arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts       |  455 ++
- arch/arm64/boot/dts/qcom/qdu1000.dtsi              |   23 +-
- arch/arm64/boot/dts/qcom/qrb2210-rb1.dts           |  113 +
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts           |  112 +-
- .../boot/dts/qcom/qrb5165-rb5-vision-mezzanine.dts |    2 +-
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |   31 +-
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts          |    5 +
- arch/arm64/boot/dts/qcom/sa8775p.dtsi              | 1124 +++-
- arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts   |  174 +-
- .../arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi |    2 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |   14 +-
- arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |   37 +-
- .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi    |    7 +-
- .../boot/dts/qcom/sc7280-herobrine-wifi-sku.dtsi   |    1 +
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   19 +
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  579 +-
- .../arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts |    4 +-
- arch/arm64/boot/dts/qcom/sc8180x-primus.dts        |   12 +-
- arch/arm64/boot/dts/qcom/sc8180x.dtsi              |   51 +-
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |    2 +
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |   12 +
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |   24 +-
- arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts  |   19 +
- arch/arm64/boot/dts/qcom/sdm670.dtsi               |  298 +-
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |    4 +-
- .../arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi |   23 +
- arch/arm64/boot/dts/qcom/sdm845-wcd9340.dtsi       |    2 +-
- .../dts/qcom/sdm845-xiaomi-beryllium-common.dtsi   |   22 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi               |  127 +-
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |    8 +-
- arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts   |    2 +-
- arch/arm64/boot/dts/qcom/sdx75-idp.dts             |   29 +
- arch/arm64/boot/dts/qcom/sdx75.dtsi                |  170 +
- arch/arm64/boot/dts/qcom/sm4450-qrd.dts            |   18 +-
- arch/arm64/boot/dts/qcom/sm4450.dtsi               |  107 +
- arch/arm64/boot/dts/qcom/sm6115.dtsi               |  342 +-
- arch/arm64/boot/dts/qcom/sm6125.dtsi               |    4 +
- arch/arm64/boot/dts/qcom/sm6350.dtsi               |   20 +-
- .../dts/qcom/sm6375-sony-xperia-murray-pdx225.dts  |   43 +-
- arch/arm64/boot/dts/qcom/sm6375.dtsi               |   84 +-
- arch/arm64/boot/dts/qcom/sm8150-hdk.dts            |  264 +-
- arch/arm64/boot/dts/qcom/sm8150.dtsi               |  223 +-
- .../boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi  |   47 +-
- arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa.dts    |  623 ++
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |  143 +-
- arch/arm64/boot/dts/qcom/sm8350.dtsi               |  147 +-
- arch/arm64/boot/dts/qcom/sm8450-hdk.dts            |    8 +
- arch/arm64/boot/dts/qcom/sm8450.dtsi               |  285 +-
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |  129 +
- arch/arm64/boot/dts/qcom/sm8550-qrd.dts            |  136 +
- arch/arm64/boot/dts/qcom/sm8550.dtsi               |  285 +-
- arch/arm64/boot/dts/qcom/sm8650-mtp.dts            |  727 +++
- arch/arm64/boot/dts/qcom/sm8650-qrd.dts            |  811 +++
- arch/arm64/boot/dts/qcom/sm8650.dtsi               | 6013 ++++++++++++++++++++
- arch/arm64/boot/dts/qcom/x1e80100-crd.dts          |  424 ++
- arch/arm64/boot/dts/qcom/x1e80100-qcp.dts          |  401 ++
- arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 3527 ++++++++++++
- include/dt-bindings/clock/qcom,sc8280xp-camcc.h    |  179 +
- include/dt-bindings/clock/qcom,sm8650-dispcc.h     |  102 +
- include/dt-bindings/clock/qcom,sm8650-gcc.h        |  254 +
- include/dt-bindings/clock/qcom,sm8650-gpucc.h      |   43 +
- include/dt-bindings/clock/qcom,sm8650-tcsr.h       |   18 +
- include/dt-bindings/clock/qcom,x1e80100-gcc.h      |  485 ++
- include/dt-bindings/iio/qcom,spmi-adc7-pm7325.h    |   69 +
- include/dt-bindings/iio/qcom,spmi-adc7-smb139x.h   |   19 +
- include/dt-bindings/iio/qcom,spmi-vadc.h           |    3 +
- include/dt-bindings/interconnect/qcom,sm6115.h     |  111 +
- .../dt-bindings/interconnect/qcom,sm8650-rpmh.h    |  154 +
- .../dt-bindings/interconnect/qcom,x1e80100-rpmh.h  |  207 +
- include/dt-bindings/reset/qcom,sm8650-gpucc.h      |   20 +
- 146 files changed, 23560 insertions(+), 1252 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8650-dispcc.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8650-gcc.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,x1e80100-gcc.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6115.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml
- create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-modem-qdsp6.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/msm8939-huawei-kiwi.dts
- create mode 100644 arch/arm64/boot/dts/qcom/qcm6490-idp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8650-mtp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8650-qrd.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm8650.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/x1e80100-crd.dts
- create mode 100644 arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/x1e80100.dtsi
- create mode 100644 include/dt-bindings/clock/qcom,sc8280xp-camcc.h
- create mode 100644 include/dt-bindings/clock/qcom,sm8650-dispcc.h
- create mode 100644 include/dt-bindings/clock/qcom,sm8650-gcc.h
- create mode 100644 include/dt-bindings/clock/qcom,sm8650-gpucc.h
- create mode 100644 include/dt-bindings/clock/qcom,sm8650-tcsr.h
- create mode 100644 include/dt-bindings/clock/qcom,x1e80100-gcc.h
- create mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pm7325.h
- create mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-smb139x.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm6115.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h
- create mode 100644 include/dt-bindings/reset/qcom,sm8650-gpucc.h
+Executives, Board Members & Volunteers
+
+**Dec 13 2023 - Dec 14 2023**Virtual Online Event
+
+**LAS VEGAS, NV (DESTINATION EVENT)**
+NFL Alumni Foundation
+
+**Jan 10 2024 - Jan 11 2024**Live In-Person Event
+
+**CAROLINA NONPROFITS (DESTINATION EVENT)**
+Goodwill Industries of Eastern NC Inc.
+
+**Jan 31 2024 - Feb1 2024**Live In-Person Event
+
+**UNITED WAY PROGRAMS & PARTNERS**
+
+**Feb 28 2024 - Feb 29 2024**Virtual Online Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
+
+**Mar 6 2024 - Mar 7 2024**Virtual Online Event
+
+**FAITH & FUNDRAISING NATIONWIDE**
+Ministries, Schools & Churches
+
+**Mar 13 2024 - Mar 14 2024**Virtual Online Event
+
+**MIAMI, FL (DESTINATION EVENT)**
+
+**Mar 20 2024 - Mar 21 2024**Live In-Person Event
+
+**JACKSONVILLE, FL (DESTINATION EVENT)**
+
+**Mar 26 2024 - Mar 27 2024**Live In-Person Event
+
+**RENO, NV (DESTINATION EVENT)**
+
+**Apr 03 2024 - Apr 04 2024**Live In-Person Event
+
+**DALLAS, TX (DESTINATION EVENT)**
+
+**Apr 24 2024 - Apr 25 2024**Live In-Person Event
+
+**PHILADELPHIA, PA (DESTINATION EVENT)**
+
+**May 01 2024 - May 02 2024**Live In-Person Event
+
+**CINCINNATI, OH (DESTINATION EVENT)**
+
+**May 22 2024 - May 23 2024**Live In-Person Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
+
+**Jun 05 2024 - Jun 06 2024**Virtual Online Event
+
+**UNITED WAY PROGRAMS & PARTNERS**
+
+**Jul 17 2024 - Jul 18 2024**Virtual Online Event
+
+**FAITH & FUNDRAISING NATIONWIDE**
+Ministries, Schools & Churches
+
+**Jul 31 2024 - Aug 1 2024**Virtual Online Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+
+**GOODWILL INDUSTRIES PROGRAMS**
+
+**Sep 25 2024 - Sep 26 2024**Virtual Online Event
+
+**COLUMBUS, OH (DESTINATION EVENT)**
+
+**Oct 16 2024 - Oct 17 2024**Live In-Person Event
+
+**NASHVILLE, TN (DESTINATION EVENT)
+UNITED WAY PROGRAMS**
+
+**Oct 23 2024 - Oct 24 2024**Live In-Person Event
+
+**FAITH & FUNDRAISING NATIONWIDE**
+Ministries, Schools & Churches
+
+**Nov 13 2024 - Nov 14 2024**Virtual Online Event
+
+**MELBOURNE, FL (DESTINATION EVENT)
+UNITED WAY PROGRAMS**
+
+**Dec 4 2024 - Dec 5 2024**Live In-Person Event
+
+**MAJOR GIFTS RAMP-UP NATIONWIDE**
+Executives, Board Members & Volunteers
+
+**Dec 11 2024 - Dec 12 2024**Virtual Online Event
+
+VISIT HERE  FOR 60 SECOND VIDEO
+OVERVIEW
+
+Major Gifts Ramp-Up is not nonprofit management 101! Meet the
+fundraising veterans who've raised millions. Join us to learn how you
+can build the financial capacity you need to secure your future. This
+live and in-person event will challenge everything you believe about the
+raising of money, and 
+
+**will make**five, six and seven figure major gifts available to your
+nonprofit in the shortest period of time possible.
+
+**"I've spent the last week receiving email messages, phone calls and
+personal visits thanking me for bringing Major Gifts Ramp-Up to our
+community. This spectacular 2-day capacity-building conference was
+daring, confrontational and exactly what our organizations needed in the
+way of training.  Conventional methods of management and fundraising
+were challenged with humor and insight. Their expert faculty engaged our
+grantees and inspired them to grow revenues in new ways that work. 
+Prepare for significant change if you give yourself this gift."** ~ Debi
+Meeds, Springfield, MO
+
+Who should attend? If you're a CEO, CFO, COO, CDO, Executive Director,
+Development Director, Staff Member, Board Member, Pastor, Trustee or
+Volunteer responsible for the financial health of a nonprofit, ministry
+or church then you'll want to make sure you bring as many people as
+possible to this training.
+
+Tuition for a quality capacity-building conference could cost up to $800
+per guest. We're thrilled to share that a group of major donors have
+underwritten this event allowing us to offer tuition for ONE PERSON at
+$248 or UNLIMITED REGISTRATIONS for only $498.
+
+That's right, every member of your team can come for only $498. Please
+register today. This event will reach capacity soon.
+
+VISIT HERE TO GET STARTED 
+
+****
+We believe in you. We're going to introduce you to all the wealthy
+donors in your community. How? We have their contact information and
+will share with you the five secrets to meeting wealthy donors for the
+very first time. Let MGRU's faculty show you how to access them ASAP. I
+look forward to meeting you personally.
+
+Until then I remain,
+
+Sincerely Yours,
+
+Linda Lysakowski, ACFRE
+
+National Development Institute
+
+P.S. Are you responsible for building your organizations financial
+capacity? If so, Major Gifts Ramp-Up may be the most powerful conference
+event you ever experience.
+
+P.P.S. Don't let anyone tell you now is not the time to fund raise. 
+Don't let anyone tell you things have to stay the same.  Don't let
+a few panicked Board members hijack your future. Now is the time to act!
+
+P.P.P.S. VISIT HERE  to make your
+unlimited reservation today.
+_________________
+
+Sent to soc@kernel.org
+
+Unsubscribe:
+http://jimmylarose.activehosted.com/proc.php?nl=214&amp;c=689&amp;m=1160&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
+
+National Development Institute, PO Box 1840, Lexington, SOUTH CAROLINA 29071, United States
+--_=_swift-16994123566581b466a391e1.16136981_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
+text/html; charset=3Dutf-8"><meta http-equiv=3D"Content-Language" content=
+=3D"en-us"><meta name=3D"format-detection" content=3D"telephone=3Dno"><meta=
+ name=3D"format-detection" content=3D"date=3Dno"><meta name=3D"format-detec=
+tion" content=3D"address=3Dno"><meta name=3D"format-detection" content=3D"e=
+mail=3Dno"><meta name=3D"viewport" content=3D"width=3Ddevice-width, minimal=
+-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalable=3D0;"><meta ht=
+tp-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><style data-ac-keep=3D"t=
+rue"> .ExternalClass { width: 100%; background: inherit; background-color: =
+inherit; } .ExternalClass, .ExternalClass p, .ExternalClass span, .External=
+Class font, .ExternalClass td, .ExternalClass div { line-height: 100%; } .E=
+xternalClass p, .ExternalClass ul, .ExternalClass ol { Margin: 0; } .undore=
+set div p, .undoreset p { margin-bottom: 20px; } div[class^=3D"aolmail_divb=
+ody"] { overflow: auto; } [owa] #ac-footer { padding: 20px 0px !important; =
+background:=0Ainherit; background-color: inherit; } a[x-apple-data-detector=
+s] { color: inherit !important; text-decoration: none !important; font-size=
+: inherit !important; font-family: inherit !important; font-weight: inherit=
+ !important; line-height: inherit !important; } @-ms-viewport { width: devi=
+ce-width; } </style><style data-ac-keep=3D"true">=0A@media only screen and =
+(max-width: 600px) { /*----------------------------------------------------=
+---------------------*\ Abandoned Cart widget \*---------------------------=
+---------------------------------------------*/ .td_abandoned-cart img {dis=
+play: block;padding-right: 0 !important;padding-bottom: 0 !important;width:=
+ 100% !important;max-width: 100% !important;height: auto !important;} body =
+{ padding: 0!important; font-size:1em!important; } * { -webkit-box-sizing: =
+border-box; -moz-box-sizing: border-box; box-sizing: border-box; } *[class]=
+.divbody {-webkit-text-size-adjust:none !important;} *[class].td_picture im=
+g {width:auto !important;} *[class].td_text { line-height: 110%; } *[class]=
+.td_button { width: auto; } /* Collapse all block elements */ :not(.body) t=
+able { display: block!important; float:none!important; border-collapse:coll=
+apse !important; width:100% !important; min-width:100% !important; clear:bo=
+th!important; } :not(.body) thead, :not(.body) tbody,=0A:not(.body) tr { di=
+splay:block!important; float:none!important; width:100% !important; } :not(=
+.body) th, :not(.body) td, :not(.body) p { display:block!important; float:n=
+one!important; width:100% !important; clear:both!important; } /* Remove bro=
+wser default styling for elements */ ul, ol { margin-left: 20px; margin-bot=
+tom: 10px; margin-top: 10px; -webkit-margin-before: 0; -webkit-margin-after=
+: 0; -webkit-padding-start: 0; } /* Set default height for spacer once coll=
+apse */ *[class].spacer { height: auto!important; } a[href^=3Ddate]{ color:=
+inherit !important; text-decoration:none !important;} a[href^=3Dtelephone]{=
+ color:inherit !important; text-decoration:none !important;} a[href^=3Daddr=
+ess]{ color:inherit !important; text-decoration:none !important;} a[href^=
+=3Demail]{ color:inherit !important; text-decoration:none !important;} /* D=
+efault table cell height */ /*---------------------------------------------=
+----------------------------*\ Product Widget=0A\*-------------------------=
+------------------------------------------------*/ .td_product div, .td_pro=
+duct .products-display { float: none !important; display: block !important;=
+ width: 100% !important; Margin-bottom: 20px !important; } .td_product img =
+{ width: 100% !important; max-width: 100% !important; } /* Default social i=
+cons */ *[class].ac-social-icon-16 {width:16px !important; height:16px !imp=
+ortant;} *[class].ac-social-icon-24 {width:24px !important; height:24px !im=
+portant;} *[class].ac-social-icon-28 {width:28px !important; height:28px !i=
+mportant;} *[class].__ac_social_icons { margin-right: 0px !important; } }=
+=0A</style><style data-ac-keep=3D"true"> @media only screen and (max-width:=
+ 320px) { #layout-row4143 img { width: 100% !important; height: auto !impor=
+tant; max-width: 320px !important; } div.divbody { padding: 20px !important=
+; } table, tbody, td, .divbody { display: table !important; width: 100% !im=
+portant; max-width: 100% !important; } .td_rss .rss-item img.iphone_large_i=
+mage { width: auto !important; } u + .body { display: table !important; wid=
+th: 100vw !important; min-width: 100vw !important; } u + .body table { disp=
+lay: table !important; width: 100% !important; min-width: 100% !important; =
+} u + .body td { display: block !important; width: 100% !important; min-wid=
+th: 100% !important; } u + .body img { display: inline-block !important; ma=
+rgin: auto !important; width: auto !important; vertical-align: bottom !impo=
+rtant; } u + .body center { display: block !important; margin: auto !import=
+ant; width: 100% !important; min-width: 100% !important; text-align: center=
+=0A!important; } u + .body table._ac_social_table, u + .body table._ac_soci=
+al_table td, u + .body table._ac_social_table div, u + .body table._ac_soci=
+al_table a { display: inline-block !important; margin: auto !important; wid=
+th: auto !important; min-width: auto !important; text-align: center !import=
+ant; } u + .body table._ac_social_table img { display: inline-block !import=
+ant; margin: auto !important; width: 32px !important; min-width: 32px !impo=
+rtant; max-width: 32px !important; }=0A}=0A@media only screen and (max-widt=
+h: 375px) { #layout-row4143 img { width: 100% !important; height: auto !imp=
+ortant; max-width: 375px !important; } div.divbody { padding: 20px !importa=
+nt; } table, tbody, td, .divbody { display: table !important; width: 100% !=
+important; max-width: 100% !important; } .td_rss .rss-item img.iphone_large=
+_image { width: auto !important; } u + .body { display: table !important; w=
+idth: 100vw !important; min-width: 100vw !important; } u + .body table { di=
+splay: table !important; width: 100% !important; min-width: 100% !important=
+; } u + .body td { display: block !important; width: 100% !important; min-w=
+idth: 100% !important; } u + .body img { display: inline-block !important; =
+margin: auto !important; width: auto !important; vertical-align: bottom !im=
+portant; } u + .body center { display: block !important; margin: auto !impo=
+rtant; width: 100% !important; min-width: 100% !important; text-align: cent=
+er !important; } u + .body=0Atable._ac_social_table, u + .body table._ac_so=
+cial_table td, u + .body table._ac_social_table div, u + .body table._ac_so=
+cial_table a { display: inline-block !important; margin: auto !important; w=
+idth: auto !important; min-width: auto !important; text-align: center !impo=
+rtant; } u + .body table._ac_social_table img { display: inline-block !impo=
+rtant; margin: auto !important; width: 32px !important; min-width: 32px !im=
+portant; max-width: 32px !important; }=0A}=0A@media only screen and (max-wi=
+dth: 414px) { #layout-row4143 img { width: 100% !important; height: auto !i=
+mportant; max-width: 414px !important; } div.divbody { padding: 20px !impor=
+tant; } table, tbody, td, .divbody { display: table !important; width: 100%=
+ !important; max-width: 100% !important; } .td_rss .rss-item img.iphone_lar=
+ge_image { width: auto !important; } u + .body { display: table !important;=
+ width: 100vw !important; min-width: 100vw !important; } u + .body table { =
+display: table !important; width: 100% !important; min-width: 100% !importa=
+nt; } u + .body td { display: block !important; width: 100% !important; min=
+-width: 100% !important; } u + .body img { display: inline-block !important=
+; margin: auto !important; width: auto !important; vertical-align: bottom !=
+important; } u + .body center { display: block !important; margin: auto !im=
+portant; width: 100% !important; min-width: 100% !important; text-align: ce=
+nter !important; } u + .body=0Atable._ac_social_table, u + .body table._ac_=
+social_table td, u + .body table._ac_social_table div, u + .body table._ac_=
+social_table a { display: inline-block !important; margin: auto !important;=
+ width: auto !important; min-width: auto !important; text-align: center !im=
+portant; } u + .body table._ac_social_table img { display: inline-block !im=
+portant; margin: auto !important; width: 32px !important; min-width: 32px !=
+important; max-width: 32px !important; }=0A}=0A@media only screen and (max-=
+width: 667px) { #layout-row4143 img { width: 100% !important; height: auto =
+!important; max-width: 609px !important; } div.divbody { padding: 20px !imp=
+ortant; } table, tbody, td, .divbody { display: table !important; width: 10=
+0% !important; max-width: 100% !important; } .td_rss .rss-item img.iphone_l=
+arge_image { width: auto !important; } u + .body { display: table !importan=
+t; width: 100vw !important; min-width: 100vw !important; } u + .body table =
+{ display: table !important; width: 100% !important; min-width: 100% !impor=
+tant; } u + .body td { display: block !important; width: 100% !important; m=
+in-width: 100% !important; } u + .body img { display: inline-block !importa=
+nt; margin: auto !important; width: auto !important; vertical-align: bottom=
+ !important; } u + .body center { display: block !important; margin: auto !=
+important; width: 100% !important; min-width: 100% !important; text-align: =
+center !important; } u + .body=0Atable._ac_social_table, u + .body table._a=
+c_social_table td, u + .body table._ac_social_table div, u + .body table._a=
+c_social_table a { display: inline-block !important; margin: auto !importan=
+t; width: auto !important; min-width: auto !important; text-align: center !=
+important; } u + .body table._ac_social_table img { display: inline-block !=
+important; margin: auto !important; width: 32px !important; min-width: 32px=
+ !important; max-width: 32px !important; }=0A} </style><!--[if !mso]><!-- w=
+ebfonts --><!--<![endif]--><!--[if lt mso 12]> <![endif]--><!--[if gte mso =
+9]>=0A<xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o=
+:PixelsPerInch> </o:OfficeDocumentSettings>=0A</xml>=0A<![endif]--></head><=
+body id=3D"ac-designer" class=3D"body" style=3D"font-family: Arial; line-he=
+ight: 1.1; margin: 0px; background-color: #ffffff; width: 100%; text-align:=
+ center;">=09=09<div style=3D"display: none !important; padding: 0; height:=
+ 1px; font-size: 1px; background-color: inherit !important; opacity: 0; col=
+or: transparent; mso-line-height-rule: exactly; line-height:1px; mso-hide:a=
+ll;">=0A=09=09=09(That Want to Give To Your Organization)=0A=09=09=09<div s=
+tyle=3D"display: none; max-height: 0px; overflow: hidden;">=0A=09=09=09=09&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C=0A=09=09=09</div>=0A=0A=09=09</div>=0A<div class=
+=3D"divbody" style=3D"margin: 0px; outline: none; padding: 0px; color: #000=
+000; font-family: arial; line-height: 1.1; width: 100%; background-color: #=
+ffffff; background: #ffffff; text-align: center;"><table class=3D"template-=
+table" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" alig=
+n=3D"left" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 1=
+00%; border-collapse: collapse; font-size: 14px; min-width: auto; mso-table=
+-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; background:=
+ #ffffff;"><tr style=3D"mso-line-height-rule: exactly;"><td align=3D"center=
+" valign=3D"top" width=3D"100%" style=3D"mso-line-height-rule: exactly;"><t=
+able class=3D"template-table" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"632" bgcolor=3D"#ffffff" style=3D"-ms-text-size-adjust: auto; =
+-webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px;=
+ min-width: auto; mso-table-lspace: 0pt; mso-table-rspace: 0pt; max-width: =
+632px;"><tr=0Astyle=3D"mso-line-height-rule: exactly;"><td id=3D"layout_tab=
+le_14f676cbc6ab1b644a906901bd83f006baf2f07d" valign=3D"top" align=3D"center=
+" width=3D"632" style=3D"mso-line-height-rule: exactly;"><table cellpadding=
+=3D"0" cellspacing=3D"0" border=3D"0" class=3D"layout layout-table root-tab=
+le" width=3D"632" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-ad=
+just: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; ms=
+o-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-r=
+ule: exactly;"><td id=3D"layout-row-margin4144" valign=3D"top" style=3D"mso=
+-line-height-rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto;=
+ -webkit-text-size-adjust: 100%; border-collapse: initial !important; font-=
+size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"=
+><tr id=3D"layout-row4144" class=3D"layout layout-row widget _widget_text s=
+tyle4144" style=3D"mso-line-height-rule: exactly; margin: 0;=0Apadding: 0;"=
+><td id=3D"layout-row-padding4144" valign=3D"top" style=3D"mso-line-height-=
+rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text=
+-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: =
+100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-=
+height-rule: exactly;"><td id=3D"text_div4114" class=3D"td_text td_block" v=
+align=3D"top" align=3D"left" width=3D"612" style=3D"mso-line-height-rule: e=
+xactly; margin: 0; outline: none; padding: 0; color: inherit; font-size: 12=
+px; font-weight: inherit; line-height: 1; text-decoration: inherit; font-fa=
+mily: arial;"> <div style=3D"margin: 0; outline: none; padding: 0; color: i=
+nherit; font-size: 16px; font-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit;" class=3D""> <div style=3D"margin: 0; outline: none; pa=
+dding: 0; color: inherit; font-size: inherit; font-weight: inherit; line-he=
+ight: inherit;=0Atext-decoration: inherit; text-align: center;" class=3D"">=
+ <span style=3D'color: #000000; font-size: inherit; font-weight: inherit; l=
+ine-height: inherit; text-decoration: inherit; font-family: "trebuchet ms",=
+ tahoma, arial, sans;' class=3D""><span style=3D"color: inherit; font-size:=
+ 16px; font-weight: 700; line-height: inherit; text-decoration: inherit; fo=
+nt-style: normal;" class=3D""> </span><div style=3D"margin: 0; outline: non=
+e; padding: 0; color: #000000; font-size: 16px; font-weight: inherit; line-=
+height: inherit; text-decoration: inherit; font-style: normal; --tw-shadow:=
+ 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-widt=
+h: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5)=
+; --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpare=
+nt; text-align: left;" class=3D""><div style=3D"margin: 0; outline: none; p=
+adding: 0; color: inherit; font-size: inherit; font-weight: inherit; line-h=
+eight: inherit; text-decoration:=0Ainherit; text-align: center;" class=3D""=
+> </div>=0A</div>=0A <div style=3D"margin: 0; outline: none; padding: 0; co=
+lor: #000000; font-size: 16px; font-weight: inherit; line-height: inherit; =
+text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: va=
+r(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff;=
+ --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transp=
+arent; --tw-ring-shadow: 0 0 transparent; text-align: left;" class=3D""><di=
+v style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size:=
+ inherit; font-weight: inherit; line-height: inherit; text-decoration: inhe=
+rit; text-align: center;" class=3D""><div style=3D"margin: 0; outline: none=
+; padding: 0; color: inherit; font-size: inherit; font-weight: inherit; lin=
+e-height: inherit; text-decoration: inherit; text-align: left;"><div style=
+=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size: inheri=
+t; font-weight: inherit; line-height: inherit; text-decoration: inherit; te=
+xt-align: center;"><span style=3D"color:=0Ainherit; font-size: 22px; font-w=
+eight: bold; line-height: inherit; text-decoration: inherit;" class=3D"">WE=
+ KNOW ALL THE WEALTHY DONORS <br>WHO LIVE & GIVE IN YOUR COMMUNITY</span></=
+div>=0A<span style=3D'color: #000000; font-size: inherit; font-weight: 400;=
+ line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms=
+", tahoma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(=
+--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; -=
+-tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpar=
+ent; --tw-ring-shadow: 0 0 transparent;'><br><div style=3D"margin: 0; outli=
+ne: none; padding: 0; color: inherit; font-size: inherit; font-weight: inhe=
+rit; line-height: inherit; text-decoration: inherit; text-align: center;"><=
+span style=3D'color: #000000; font-size: inherit; font-weight: 400; line-he=
+ight: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahom=
+a, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0=0Atransparent;' class=3D""><span style=3D'color: #000000=
+; font-size: inherit; font-weight: inherit; line-height: inherit; text-deco=
+ration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-em=
+pty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-rin=
+g-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --=
+tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial=
+, sans; font-style: italic;' class=3D"">"M</span><span style=3D'color: #000=
+000; font-size: inherit; font-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw=
+-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-=
+ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, ar=
+ial, sans;' class=3D""><span style=3D'color: #000000; font-size: inherit; f=
+ont-weight: inherit; line-height:=0Ainherit; text-decoration: inherit; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 t=
+ransparent; font-family: "trebuchet ms", tahoma, arial, sans; font-style: i=
+talic;'>eet the MILLIONAIRE FAMILIES</span><span style=3D'color: #000000; f=
+ont-size: inherit; font-weight: inherit; line-height: inherit; text-decorat=
+ion: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty=
+, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-c=
+olor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-=
+ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, s=
+ans; font-style: italic;'> who already give major gifts to nonprofits in yo=
+ur community. We will provide you their contact information and show you ho=
+w to meet them one-on-one!</span><span=0Astyle=3D'color: #000000; font-size=
+: inherit; font-weight: inherit; line-height: inherit; text-decoration: inh=
+erit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans; fon=
+t-style: italic;'>" </span></span></span><span style=3D'color: #000000; fon=
+t-size: inherit; font-weight: inherit; line-height: inherit; text-decoratio=
+n: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: =
+0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparen=
+t;'><span style=3D'color: #000000; font-size: inherit; font-weight: 400; li=
+ne-height: inherit; text-decoration: inherit;=0Afont-style: italic; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">~ </=
+span><span style=3D'color: #000000; font-size: inherit; font-weight: inheri=
+t; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-=
+offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans;' class=3D"">Linda Lysakowski, ACF=
+RE</span></span></div>=0A</span><span style=3D'color: #000000; font-size: i=
+nherit; font-weight: inherit; line-height: inherit; text-decoration: inheri=
+t; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0 trans=
+parent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --=
+tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-rin=
+g-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;' class=
+=3D""><br><div style=3D"margin: 0; outline: none; padding: 0; color: inheri=
+t; font-size: inherit; font-weight: inherit; line-height: inherit; text-dec=
+oration: inherit; text-align: center;"><span class=3D"" style=3D"color: #00=
+0000; font-size: inherit; font-weight: inherit; line-height: inherit; text-=
+decoration: inherit;"><span style=3D'color: inherit; font-size: inherit; fo=
+nt-weight: bold; line-height: inherit; text-decoration: inherit; font-style=
+: normal; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 =
+0 transparent; --tw-ring-inset:=0Avar(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparen=
+t;'><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirec=
+tUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=3D3q9=
+VD64xq81BYVSb92BVr1byPdAtY8h13vosHpMrYGP7&iat=3D1702999466&a=3D%7C%7C266055=
+50%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DGV%2BZxlpglTGdw=
+pqbyTPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2yMTn%2BwFP6RMIoypEjMX5q&s=3D67=
+8f48a0e320c6856d0620aa2e024acb&i=3D689A1160A214A2700" data-ac-default-color=
+=3D"1" target=3D"_blank" style=3D'margin: 0; outline: none; padding: 0; col=
+or: #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw=
+-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offs=
+et-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-sha=
+dow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-family: "treb=
+uchet ms", tahoma, arial, sans;'><span style=3D'color: inherit; font-size: =
+inherit; font-weight: inherit; line-height: inherit; text-decoration: inher=
+it;=0A--tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans;' cl=
+ass=3D"">VISIT HERE</span></a> </span><span style=3D'color: inherit; font-s=
+ize: inherit; font-weight: inherit; line-height: inherit; text-decoration: =
+inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --=
+tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;'=
+>OR PRESS <span style=3D"color: inherit; font-size: inherit; font-weight: b=
+old; line-height: inherit; text-decoration: inherit; font-style: italic;" c=
+lass=3D"">BUTTON</span> BELOW FOR A 60 SECOND VIDEO OVERVIEW</span></span><=
+/div>=0A</span></div>=0A</div>=0A</div>=0A</span></div>=0A </div>=0A</td>=
+=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=
+=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margin4145" valign=
+=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust=
+: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-siz=
+e: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><t=
+r id=3D"layout-row4145" class=3D"layout layout-row widget _widget_spacer " =
+style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4145" =
+valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100=
+%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-=
+adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; fo=
+nt-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0p=
+t;"><tr style=3D"mso-line-height-rule: exactly;"><td valign=3D"top" height=
+=3D"15" style=3D"mso-line-height-rule: exactly;"><div class=3D"spacer" styl=
+e=3D"margin: 0; outline: none; padding: 0;=0Aheight: 15px;"><table cellpadd=
+ing=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-ms-text-s=
+ize-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse=
+; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace=
+: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"spacer-bo=
+dy" valign=3D"top" height=3D"15" width=3D"632" style=3D"mso-line-height-rul=
+e: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</ta=
+ble>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-hei=
+ght-rule: exactly;"><td id=3D"layout-row-margin4143" valign=3D"top" style=
+=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webki=
+t-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-w=
+idth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout=
+-row4143" class=3D"layout layout-row widget _widget_picture " align=3D"cent=
+er" style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding41=
+43" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D=
+"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-s=
+ize-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse=
+; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace=
+: 0pt;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"image-td"=
+ align=3D"center" valign=3D"top" width=3D"632" style=3D"mso-line-height-rul=
+e: exactly;"><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-trac=
+ker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmc=3D&si=
+g=3DGj84KcEGPn11RHdU4XAEZ9n2DQQeidYYDyHZwvCoCYv9&iat=3D1702999466&a=3D%7C%7=
+C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DGV%2BZxl=
+pglTGdwpqbyTPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2yMTn%2BwFP6RMIoypEjMX5q=
+&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D689A1160A214A2701" style=3D"margi=
+n: 0; outline: none; padding: 0; color: #0764ba; display: block; min-width:=
+ 100%;"><img src=3D"https://content.app-us1.com/cdn-cgi/image/dpr=3D2,fit=
+=3Dscale-down,format=3Dauto,onerror=3Dredirect,width=3D650/ZvmyW/2023/07/10=
+/09dadca3-7ca1-4967-a05e-3aa7c16b18ea.jpeg?r=3D2005939582" width=3D"609" st=
+yle=3D"border: none; display: block; outline: none; width: 609px; opacity: =
+1; max-width: 100%;"></a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table=
+>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"=
+layout-row-margin4146" valign=3D"top" style=3D"mso-line-height-rule: exactl=
+y;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border=
+-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0p=
+t; mso-table-rspace: 0pt;"><tr id=3D"layout-row4146" class=3D"layout layout=
+-row widget _widget_spacer " style=3D"mso-line-height-rule: exactly;"><td i=
+d=3D"layout-row-padding4146" valign=3D"top" style=3D"mso-line-height-rule: =
+exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%;=
+ border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lsp=
+ace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactl=
+y;"><td valign=3D"top" height=3D"15" style=3D"mso-line-height-rule: exactly=
+;"><div class=3D"spacer" style=3D"margin: 0; outline: none; padding: 0;=0Ah=
+eight: 15px;"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=
+=3D"100%" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 10=
+0%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-=
+lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exa=
+ctly;"><td class=3D"spacer-body" valign=3D"top" height=3D"15" width=3D"632"=
+ style=3D"mso-line-height-rule: exactly;">=C2=A0</td>=0A</tr>=0A</table>=0A=
+</div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr=
+>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-margi=
+n4142" valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
+t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
+pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
+ace: 0pt;"><tr id=3D"layout-row4142" class=3D"layout layout-row widget _wid=
+get_text " style=3D"mso-line-height-rule: exactly; margin: 0; padding: 0;">=
+<td id=3D"layout-row-padding4142" valign=3D"top" style=3D"mso-line-height-r=
+ule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 1=
+00%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table=
+-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: ex=
+actly;"><td id=3D"text_div4112" class=3D"td_text td_block" valign=3D"top" a=
+lign=3D"left" width=3D"632" style=3D"line-height: 140%;=0Amso-line-height-r=
+ule: exactly; margin: 0; outline: none; padding: 0; color: inherit; font-si=
+ze: 12px; font-weight: inherit; line-height: 1.4; text-decoration: inherit;=
+ font-family: arial;"> <div style=3D"line-height: 140%; margin: 0; outline:=
+ none; padding: 0; color: inherit; font-size: inherit; font-weight: inherit=
+; line-height: 1.4; text-decoration: inherit; mso-line-height-rule: exactly=
+;" class=3D"" data-line-height=3D"1.4"> <div style=3D"margin: 0; outline: n=
+one; padding: 0; color: inherit; font-size: inherit; font-weight: inherit; =
+line-height: inherit; text-decoration: inherit;" class=3D""> <div style=3D"=
+margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
+-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-shad=
+ow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-w=
+idth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0=
+.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0Atran=
+sparent; text-align: center;" class=3D""><div style=3D"margin: 0; outline: =
+none; padding: 0; color: inherit; font-size: inherit; font-weight: inherit;=
+ line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; text-align=
+: center;" class=3D""><div style=3D"margin: 0; outline: none; padding: 0; c=
+olor: #000000; font-size: 16px; font-weight: 400; line-height: inherit; tex=
+t-decoration: inherit; font-style: normal; text-align: left;" class=3D""></=
+div>=0A</div>=0A</div>=0A <span style=3D"color: inherit; font-size: 16px; f=
+ont-weight: inherit; line-height: inherit; text-decoration: inherit;" class=
+=3D""><div style=3D'margin: 0; outline: none; padding: 0; color: #000000; f=
+ont-size: inherit; font-weight: 400; line-height: inherit; text-decoration:=
+ inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: 0 =
+0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: =
+0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
+-tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
+ text-align: center; font-style: normal;' class=3D""></div>=0A <span style=
+=3D'color: #000000; font-size: inherit; font-weight: 400; line-height: inhe=
+rit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, =
+sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
+ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
+dow: 0 0 transparent; font-style: normal; text-align: left; margin: 0;' cla=
+ss=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: inherit;=
+ font-size: inherit; font-weight: inherit; line-height: inherit; text-decor=
+ation: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0 transparent; text-align: center;" class=3D""><span style=
+=3D"color: #000000; font-size: inherit; font-weight: inherit; line-height:=
+=0Ainherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><span sty=
+le=3D"color: #000000; font-size: inherit; font-weight: 400; line-height: in=
+herit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-in=
+set: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color=
+: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0=
+ transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic;" class=
+=3D"">"We grew our budget from </span><span style=3D"color: #000000; font-s=
+ize: inherit; font-weight: bold; line-height: inherit; text-decoration: inh=
+erit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
+w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=0A=
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent; font-style: italic;" class=3D"">$178,000 to $3.5 Mi=
+llion</span><span style=3D"color: #000000; font-size: inherit; font-weight:=
+ 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tran=
+sparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; -=
+-tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ri=
+ng-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-=
+style: italic;" class=3D""> in 18 months using Major Gifts Ramp-Up. Your bo=
+ard is going to love this."</span><span style=3D"color: #000000; font-size:=
+ inherit; font-weight: 400; line-height: inherit; text-decoration: inherit;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0=0Atransparent; font-style: normal;" class=3D""> - Sarah Garrett, Phoeni=
+x Center</span></span></div>=0A<span style=3D"color: #000000; font-size: in=
+herit; font-weight: 400; line-height: inherit; text-decoration: inherit; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;" class=3D""><br style=3D"" class=3D"">Dear Colleagues In Serv=
+ice,<br class=3D""><br class=3D""></span></span><span style=3D'color: #0000=
+00; font-size: inherit; font-weight: inherit; line-height: inherit; text-de=
+coration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-s=
+hadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offse=
+t-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,24=
+6,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tra=
+nsparent;' class=3D""><span style=3D"color: #000000; font-size: inherit; fo=
+nt-weight: 400; line-height: inherit; text-decoration:=0Ainherit; font-styl=
+e: normal; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, )=
+; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-colo=
+r: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-rin=
+g-shadow: 0 0 transparent;" class=3D""><span style=3D"color: #000000; font-=
+size: inherit; font-weight: inherit; line-height: inherit; text-decoration:=
+ inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, );=
+ --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color=
+: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring=
+-shadow: 0 0 transparent;" class=3D""> <span style=3D'color: #000000; font-=
+size: 16px; font-weight: 400; line-height: inherit; text-decoration: inheri=
+t; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal;' c=
+lass=3D"">Over the past 30 years I've been privileged to lead and speak at =
+hundreds of AFP conferences, nonprofit state association events and=0Aindus=
+try workshops. I spent my time and money on these gatherings to stay up to =
+speed on trends and to network with my peers.</span><br style=3D"" class=3D=
+""><br style=3D"" class=3D""><span style=3D'color: #000000; font-size: 16px=
+; font-weight: 400; line-height: inherit; text-decoration: inherit; font-fa=
+mily: "trebuchet ms", tahoma, arial, sans; font-style: normal;' class=3D"">=
+For me personally, those days are over. We now live in the era of Covid-19 =
+and if I'm going to fly across the country for a multi-day in-person event =
+it won't be to hear retreaded PowerPoint presentations from 1995. It will h=
+ave to be different. It will have to be special. I'm pleased to share that =
+I've discovered that worthwhile experience.</span><br style=3D"" class=3D""=
+><br style=3D"" class=3D""><span style=3D'color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; font-style: normal;' class=3D"">It=
+'s called Major Gifts=0ARamp-Up.<br class=3D""><br class=3D""><span style=
+=3D'color: #000000; font-size: 16px; font-weight: inherit; line-height: inh=
+erit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-ins=
+et: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color:=
+ #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 =
+transparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms"=
+, tahoma, arial, sans; font-style: normal;' class=3D"">Over 17,000 nonprofi=
+t executives from across the U.S. have already attended a Major Gifts Ramp-=
+Up Event. THEY LOVE THESE CONFERENCES (and so do their boards!) Why? Becaus=
+e this fast-paced and provocative training has been customized for the audi=
+ence in attendance.</span><b style=3D'margin: 0; outline: none; padding: 0;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0=0A0 transparent; --tw-ring-shadow=
+: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans; color:=
+ #000000; font-size: 16px; font-style: normal;' class=3D""><i style=3D'marg=
+in: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-i=
+nset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-colo=
+r: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 =
+0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic; font-=
+family: "trebuchet ms", tahoma, arial, sans;' class=3D""><span style=3D'col=
+or: #000000; font-size: inherit; font-weight: inherit; line-height: inherit=
+; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
+var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #ff=
+f; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tran=
+sparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", ta=
+homa, arial, sans;' class=3D""> Prepare to hear the truth=0Ain ways you've =
+never experienced before. You'll learn from the masters who defied conventi=
+on and challenged the false thinking that keeps charities broke.</span></i>=
+</b> </span> <br class=3D""><br class=3D"">Let me encourage you to join us =
+so you can learn how to prioritize your nonprofit's cash flow. You see, the=
+ number one indicator of a charity's ability to scale program <b style=3D"m=
+argin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><i style=
+=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --t=
+w-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-off=
+set-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-sh=
+adow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style:=0Aita=
+lic;" class=3D""><span style=3D"color: #000000; font-size: inherit; font-we=
+ight: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow:=
+ 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-widt=
+h: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5)=
+; --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpare=
+nt;" class=3D"">is its capacity to add new staff.</span></i></b> How then d=
+o you generate the millions you need to grow your mission? Whether you're a=
+ brand new start-up, small, medium or large 501(c)3 organization the most e=
+fficient way to increase income is Major Gifts Fundraising.<br style=3D"" c=
+lass=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: i=
+nherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tr=
+ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
+ --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=0A--t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; f=
+ont-style: normal;" class=3D""><span name=3D"email_14" style=3D"color: #000=
+000; font-size: inherit; font-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw=
+-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-=
+ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent;" class=3D""><br style=3D"" class=3D""><=
+b style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transpare=
+nt; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-r=
+ing-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-of=
+fset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"=
+"><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirec=
+tUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=3D3q9=
+VD64xq81BYVSb92BVr1byPdAtY8h13vosHpMrYGP7&iat=3D1702999466&a=3D%7C%7C266055=
+50%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DGV%2BZxlpglTGdw=
+pqbyTPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2yMTn%2BwFP6RMIoypEjMX5q&s=3D67=
+8f48a0e320c6856d0620aa2e024acb&i=3D689A1160A214A2700" data-ac-default-color=
+=3D"1" target=3D"_blank" style=3D"margin: 0; outline: none; padding: 0; col=
+or: #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw=
+-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offs=
+et-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-sha=
+dow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weight: inher=
+it;" class=3D""><span style=3D"color: inherit; font-size: inherit; font-wei=
+ght: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: =
+0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent;=0A--tw-ring-shadow: 0 0 transpar=
+ent;" class=3D"">VISIT HERE</span></a> </b></span><span style=3D"color: #00=
+0000; font-size: inherit; font-weight: inherit; line-height: inherit; text-=
+decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--t=
+w-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw=
+-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent=
+; --tw-ring-shadow: 0 0 transparent; font-style: inherit;" class=3D"">FOR 6=
+0 SECOND VIDEO OVERVIEW</span></span></span><span style=3D"color: #000000; =
+font-size: inherit; font-weight: inherit; line-height: inherit; text-decora=
+tion: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empt=
+y, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-=
+color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw=
+-ring-shadow: 0 0 transparent;" class=3D""><br style=3D"" class=3D""><br st=
+yle=3D"" class=3D""></span><span style=3D"color: #000000; font-size:=0Ainhe=
+rit; font-weight: inherit; line-height: inherit; text-decoration: inherit; =
+--tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring=
+-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,=
+130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
+ 0 transparent;" class=3D"">I'm pleased to announce that I'm now part of th=
+e Major Gifts Ramp-Up Team and am co-hosting MGRU events across nation. Her=
+e's our 2023 conference schedule.</span></span><div style=3D'margin: 0; out=
+line: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; =
+line-height: inherit; text-decoration: inherit; font-style: normal; font-fa=
+mily: "trebuchet ms", tahoma, arial, sans; text-align: -webkit-left;' class=
+=3D""><br></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; colo=
+r: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-d=
+ecoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-=
+style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; outline: n=
+one; padding: 0;"></b></div>=0A<div style=3D'margin: 0; outline: none; padd=
+ing: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inh=
+erit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial,=
+ sans; font-style: normal; text-align: -webkit-left;'><b style=3D'margin: 0=
+; outline: none; padding: 0; font-family: "trebuchet ms", tahoma, arial, sa=
+ns; text-decoration: inherit;'>MAJOR GIFTS RAMP-UP WEST COAST</b><br></div>=
+=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; font=
+-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inher=
+it; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; t=
+ext-align: -webkit-left;'>Executives, Board Members & Volunteers<br><i styl=
+e=3D"margin: 0; outline: none; padding: 0;">Dec 13 2023 - Dec 14 2023<br></=
+i>Virtual Online Event</div>=0A<br><div style=3D'margin: 0; outline: none; =
+padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height:=
+ inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ar=
+ial, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div sty=
+le=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px=
+; font-weight: 400; line-height: inherit; text-decoration: inherit; font-fa=
+mily: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: =
+-webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">LAS VEGAS=
+, NV (DESTINATION EVENT)</b><br>NFL Alumni Foundation<br><i style=3D"margin=
+: 0; outline: none; padding: 0;">Jan 10 2024 - Jan 11 2024<br></i>Live In-P=
+erson Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0;=
+ color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; t=
+ext-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; =
+font-style: normal; text-align: -webkit-left;'></div>=0A<div style=3D'margi=
+n: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weig=
+ht: 400; line-height: inherit; text-decoration: inherit; font-family: "treb=
+uchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-lef=
+t;'><b style=3D"margin: 0; outline: none; padding: 0;">CAROLINA NONPROFITS =
+(DESTINATION EVENT)</b><br>Goodwill Industries of Eastern NC Inc.<br><i sty=
+le=3D"margin: 0; outline: none; padding: 0;">Jan 31 2024 - Feb1 2024<br></i=
+>Live In-Person Event</div>=0A<br><div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
+al, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div styl=
+e=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px;=
+ font-weight: 400; line-height: inherit; text-decoration: inherit; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -=
+webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">UNITED WAY=
+ PROGRAMS & PARTNERS</b><br><i style=3D"margin: 0; outline: none; padding: =
+0;">Feb 28 2024 - Feb 29 2024<br></i>Virtual Online Event</div>=0A<br><div =
+style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 1=
+6px; font-weight: 400; line-height: inherit; text-decoration: inherit; font=
+-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-alig=
+n: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: none; padding:=
+ 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inherit=
+; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, san=
+s; font-style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; ou=
+tline: none; padding: 0;">MAJOR GIFTS RAMP-UP NATIONWIDE</b><br>Executives,=
+ Board Members & Volunteers<br><i style=3D"margin: 0; outline: none; paddin=
+g: 0;">Mar 6 2024 - Mar 7 2024<br></i>Virtual Online Event</div>=0A<br><div=
+ style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: =
+16px; font-weight: 400; line-height: inherit; text-decoration: inherit; fon=
+t-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-ali=
+gn: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: none; padding=
+: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inheri=
+t; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sa=
+ns; font-style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; o=
+utline: none; padding: 0;">FAITH & FUNDRAISING NATIONWIDE</b><br>Ministries=
+, Schools & Churches<br><i style=3D"margin: 0; outline: none; padding: 0;">=
+Mar 13 2024 - Mar 14 2024<br></i>Virtual Online Event</div>=0A<br><div styl=
+e=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px;=
+ font-weight: 400; line-height: inherit; text-decoration: inherit; font-fam=
+ily: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -=
+webkit-left;'></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; =
+color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; te=
+xt-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; f=
+ont-style: normal; text-align: -webkit-left;'><b style=3D"margin: 0; outlin=
+e: none; padding: 0;">MIAMI, FL (DESTINATION EVENT)</b><br><i style=3D"marg=
+in: 0; outline: none; padding: 0;">Mar 20 2024 - Mar 21 2024<br></i>Live In=
+-Person Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: =
+0; color: #000000; font-size: 16px; font-weight: 400; line-height: inherit;=
+ text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans=
+; font-style: normal; text-align: -webkit-left;'></div>=0A<div style=3D'mar=
+gin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-we=
+ight: 400; line-height: inherit; text-decoration: inherit; font-family: "tr=
+ebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-l=
+eft;'><b style=3D"margin: 0; outline: none; padding: 0;">JACKSONVILLE, FL (=
+DESTINATION EVENT)</b></div>=0A<div style=3D'margin: 0; outline: none; padd=
+ing: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inh=
+erit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial,=
+ sans; font-style: normal; text-align: -webkit-left;'><i style=3D"margin: 0=
+; outline: none; padding: 0;">Mar 26 2024 - Mar 27 2024<br></i>Live In-Pers=
+on Event</div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color:=
+ #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-dec=
+oration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-st=
+yle: normal; text-align: -webkit-left;'><br><b style=3D"margin: 0; outline:=
+ none; padding: 0;">RENO, NV (DESTINATION EVENT)</b></div>=0A<div style=3D'=
+margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
+-weight: 400; line-height: inherit; text-decoration: inherit; font-family: =
+"trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -webki=
+t-left;'><i style=3D"margin: 0; outline: none; padding: 0;">Apr 03 2024 - A=
+pr 04 2024<br></i>Live In-Person Event</div>=0A<br><div style=3D'margin: 0;=
+ outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 4=
+00; line-height: inherit; text-decoration: inherit; font-family: "trebuchet=
+ ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><=
+/div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000;=
+ font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: =
+inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norm=
+al; text-align: -webkit-left;'><b style=3D"margin: 0; outline: none; paddin=
+g: 0;">DALLAS, TX (DESTINATION EVENT)</b></div>=0A<div style=3D'margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><i=
+ style=3D"margin: 0; outline: none; padding: 0;">Apr 24 2024 - Apr 25 2024<=
+br></i>Live In-Person Event</div>=0A<br><div style=3D'margin: 0; outline: n=
+one; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-he=
+ight: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahom=
+a, arial, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<di=
+v style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size:=
+ 16px; font-weight: 400; line-height: inherit; text-decoration: inherit; fo=
+nt-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-al=
+ign: -webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">PHIL=
+ADELPHIA, PA (DESTINATION EVENT)</b><br><i style=3D"margin: 0; outline: non=
+e; padding: 0;">May 01 2024 - May 02 2024<br></i>Live In-Person Event</div>=
+=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: no=
+ne; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma=
+, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=3D"m=
+argin: 0; outline: none; padding: 0;">CINCINNATI, OH (DESTINATION EVENT)</b=
+><br><i style=3D"margin: 0; outline: none; padding: 0;">May 22 2024 - May 2=
+3 2024<br></i>Live In-Person Event</div>=0A<br><div style=3D'margin: 0; out=
+line: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; =
+line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms"=
+, tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'></div=
+>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; fon=
+t-size: 16px; font-weight: 400; line-height: inherit; text-decoration: inhe=
+rit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; =
+text-align: -webkit-left;'><b style=3D"margin: 0; outline: none; padding: 0=
+;">MAJOR GIFTS RAMP-UP NATIONWIDE</b><br>Executives, Board Members & Volunt=
+eers<br><i style=3D"margin: 0; outline: none; padding: 0;">Jun 05 2024 - Ju=
+n 06 2024<br></i>Virtual Online Event</div>=0A<br><div style=3D'margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'></=
+div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'><b style=3D"margin: 0; outline: none; padding=
+: 0;">UNITED WAY PROGRAMS & PARTNERS</b><br><i style=3D"margin: 0; outline:=
+ none; padding: 0;">Jul 17 2024 - Jul 18 2024<br></i>Virtual Online Event</=
+div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #0000=
+00; font-size: 16px; font-weight: 400; line-height: inherit; text-decoratio=
+n: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: n=
+ormal; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline=
+: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line=
+-height: inherit; text-decoration: inherit; font-family: "trebuchet ms", ta=
+homa, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=
+=3D"margin: 0; outline: none; padding: 0;">FAITH & FUNDRAISING NATIONWIDE</=
+b><br>Ministries, Schools & Churches<br><i style=3D"margin: 0; outline: non=
+e; padding: 0;">Jul 31 2024 - Aug 1 2024<br></i>Virtual Online Event</div>=
+=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #000000; =
+font-size: 16px; font-weight: 400; line-height: inherit; text-decoration: i=
+nherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: norma=
+l; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: no=
+ne; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-hei=
+ght: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma=
+, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=3D"m=
+argin: 0; outline: none; padding: 0;">MAJOR GIFTS RAMP-UP NATIONWIDE</b></d=
+iv>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; f=
+ont-size: 16px; font-weight: 400; line-height: inherit; text-decoration: in=
+herit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal=
+; text-align: -webkit-left;'><strong style=3D"margin: 0; outline: none; pad=
+ding: 0;">GOODWILL INDUSTRIES PROGRAMS</strong><br><i style=3D"margin: 0; o=
+utline: none; padding: 0;">Sep 25 2024 - Sep 26 2024<br></i>Virtual Online =
+Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color=
+: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-de=
+coration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-s=
+tyle: normal; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; =
+outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 40=
+0; line-height: inherit; text-decoration: inherit; font-family: "trebuchet =
+ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><b=
+ style=3D"margin: 0; outline: none; padding: 0;">COLUMBUS, OH (DESTINATION =
+EVENT)</b></div>=0A<div style=3D'margin: 0; outline: none; padding: 0; colo=
+r: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-d=
+ecoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-=
+style: normal; text-align: -webkit-left;'><i style=3D"margin: 0; outline: n=
+one; padding: 0;">Oct 16 2024 - Oct 17 2024<br></i>Live In-Person Event</di=
+v>=0A<br><div style=3D'margin: 0; outline: none; padding: 0; color: #000000=
+; font-size: 16px; font-weight: 400; line-height: inherit; text-decoration:=
+ inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: nor=
+mal; text-align: -webkit-left;'></div>=0A<div style=3D'margin: 0; outline: =
+none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-h=
+eight: inherit; text-decoration: inherit; font-family: "trebuchet ms", taho=
+ma, arial, sans; font-style: normal; text-align: -webkit-left;'><b style=3D=
+"margin: 0; outline: none; padding: 0;">NASHVILLE, TN (DESTINATION EVENT)<b=
+r>UNITED WAY PROGRAMS</b></div>=0A<div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
+al, sans; font-style: normal; text-align: -webkit-left;'><i style=3D"margin=
+: 0; outline: none; padding: 0;">Oct 23 2024 - Oct 24 2024<br></i>Live In-P=
+erson Event</div>=0A<br><div style=3D'margin: 0; outline: none; padding: 0;=
+ color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; t=
+ext-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; =
+font-style: normal; text-align: -webkit-left;'></div>=0A<div style=3D'margi=
+n: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weig=
+ht: 400; line-height: inherit; text-decoration: inherit; font-family: "treb=
+uchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-lef=
+t;'><b style=3D"margin: 0; outline: none; padding: 0;">FAITH & FUNDRAISING =
+NATIONWIDE</b><br>Ministries, Schools & Churches<br><i style=3D"margin: 0; =
+outline: none; padding: 0;">Nov 13 2024 - Nov 14 2024<br></i>Virtual Online=
+ Event</div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #=
+000000; font-size: 16px; font-weight: 400; line-height: inherit; text-decor=
+ation: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-styl=
+e: normal; text-align: -webkit-left;'></div>=0A<br><div style=3D'margin: 0;=
+ outline: none; padding: 0; color: #000000; font-size: 16px; font-weight: 4=
+00; line-height: inherit; text-decoration: inherit; font-family: "trebuchet=
+ ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><=
+b style=3D"margin: 0; outline: none; padding: 0;">MELBOURNE, FL (DESTINATIO=
+N EVENT)<br>UNITED WAY PROGRAMS</b></div>=0A<div style=3D'margin: 0; outlin=
+e: none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; lin=
+e-height: inherit; text-decoration: inherit; font-family: "trebuchet ms", t=
+ahoma, arial, sans; font-style: normal; text-align: -webkit-left;'><i style=
+=3D"margin: 0; outline: none; padding: 0;">Dec 4 2024 - Dec 5 2024<br></i>L=
+ive In-Person Event</div>=0A<br><div style=3D'margin: 0; outline: none; pad=
+ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
+herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
+, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-fami=
+ly: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-align: -w=
+ebkit-left;'><b style=3D"margin: 0; outline: none; padding: 0;">MAJOR GIFTS=
+ RAMP-UP NATIONWIDE</b><br>Executives, Board Members & Volunteers<br><i sty=
+le=3D"margin: 0; outline: none; padding: 0;">Dec 11 2024 - Dec 12 2024<br><=
+/i>Virtual Online Event</div>=0A<div style=3D'margin: 0; outline: none; pad=
+ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
+herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
+, sans; font-style: normal; text-align: -webkit-left;'></div>=0A<div style=
+=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; =
+font-weight: 400; line-height: inherit; text-decoration: inherit; font-styl=
+e: normal; font-family: "trebuchet ms", tahoma, arial, sans; text-align: -w=
+ebkit-left;' class=3D""></div>=0A <div style=3D'margin: 0; outline: none; p=
+adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
+inherit; text-decoration: inherit; font-style: normal; font-family: "trebuc=
+het ms", tahoma, arial, sans; text-align: -webkit-left;' class=3D""></div>=
+=0A<br class=3D""><div style=3D'margin: 0; outline: none; padding: 0; color=
+: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-de=
+coration: inherit; font-style: normal; font-family: "trebuchet ms", tahoma,=
+ arial, sans; text-align: -webkit-left;' class=3D""></div>=0A<div style=3D'=
+margin: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font=
+-weight: 400; line-height: inherit; text-decoration: inherit; font-style: n=
+ormal; font-family: "trebuchet ms", tahoma, arial, sans; text-align: -webki=
+t-left;' class=3D""><span class=3D"" style=3D'color: #000000; font-size: in=
+herit; font-weight: bold; line-height: inherit; text-decoration: inherit; f=
+ont-family: "trebuchet ms", tahoma, arial, sans; text-align: inherit; font-=
+style: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-emp=
+ty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
+-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
+w-ring-shadow: 0 0 transparent;'><a href=3D"https://jimmylarose.lt.acemlnd.=
+com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJ=
+lbmNlcy5vcmclMkY=3D&sig=3D3q9VD64xq81BYVSb92BVr1byPdAtY8h13vosHpMrYGP7&iat=
+=3D1702999466&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted=
+%2Ecom&email=3DGV%2BZxlpglTGdwpqbyTPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2=
+yMTn%2BwFP6RMIoypEjMX5q&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D689A1160A2=
+14A2700" data-ac-default-color=3D"1"=0Atarget=3D"_blank" style=3D"margin: 0=
+; outline: none; padding: 0; color: #0764ba; text-decoration: underline; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;" class=3D""><span style=3D"color: inherit; font-size: inherit=
+; font-weight: inherit; line-height: inherit; text-decoration: inherit; --t=
+w-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-of=
+fset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130=
+,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 =
+transparent;" class=3D"">VISIT HERE</span></a> </span><span class=3D"" styl=
+e=3D'color: #000000; font-size: inherit; font-weight: 400; line-height: inh=
+erit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial,=
+ sans; text-align: inherit; font-style: inherit;=0A--tw-shadow: 0 0 transpa=
+rent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw=
+-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-=
+offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;'>FOR 60 =
+SECOND VIDEO OVERVIEW</span><br class=3D""></div>=0A</span></span></div>=0A=
+<div style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-si=
+ze: inherit; font-weight: inherit; line-height: inherit; text-decoration: i=
+nherit;" class=3D""><span style=3D"color: inherit; font-size: 16px; font-we=
+ight: inherit; line-height: inherit; text-decoration: inherit;" class=3D"">=
+<span style=3D'color: #000000; font-size: inherit; font-weight: 400; line-h=
+eight: inherit; text-decoration: inherit; font-family: "trebuchet ms", taho=
+ma, arial, sans; font-style: inherit; --tw-shadow: 0 0 transparent; --tw-ri=
+ng-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-=
+color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow=
+: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;' class=3D""><br style=
+=3D"" class=3D""><span style=3D"color: #000000; font-size: inherit; font-we=
+ight: 400; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px;=0A--tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); =
+--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent=
+; font-style: normal;" class=3D"">Major Gifts Ramp-Up is not nonprofit mana=
+gement 101! Meet the fundraising veterans who've raised millions. Join us t=
+o learn how you can build the financial capacity you need to secure your fu=
+ture. This live and in-person event will challenge everything you believe a=
+bout the raising of money, and</span><span style=3D"color: #000000; font-si=
+ze: inherit; font-weight: 400; line-height: inherit; text-decoration: inher=
+it; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-=
+ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba=
+(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shado=
+w: 0 0 transparent; font-style: normal;" class=3D""> </span><b style=3D"mar=
+gin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset:=0Avar(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent; color: #000000; font-s=
+tyle: normal;" class=3D""><i style=3D"margin: 0; outline: none; padding: 0;=
+ --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-rin=
+g-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent; font-style: italic;" class=3D"">will make </i></b><b style=
+=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --t=
+w-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-off=
+set-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-sh=
+adow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; color: #000000; f=
+ont-style: normal;" class=3D""><i style=3D"margin: 0; outline: none; paddin=
+g: 0; --tw-shadow: 0 0=0Atransparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent; font-style: italic;" class=3D""><span style=3D"colo=
+r: #000000; font-size: inherit; font-weight: inherit; line-height: inherit;=
+ text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: v=
+ar(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff=
+; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 trans=
+parent; --tw-ring-shadow: 0 0 transparent;" class=3D"">fiv</span><span styl=
+e=3D"color: #000000; font-size: inherit; font-weight: inherit; line-height:=
+ inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring=
+-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-co=
+lor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: =
+0 0 transparent; --tw-ring-shadow: 0 0=0Atransparent;" class=3D"">e, six an=
+d seven figure major gifts available to your nonprofit in the shortest peri=
+od of time possible.</span></i></b></span><span style=3D"color: #000000; fo=
+nt-size: inherit; font-weight: 400; line-height: inherit; text-decoration: =
+inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); =
+--tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
+ rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-=
+shadow: 0 0 transparent; font-style: normal;" class=3D""><span style=3D"col=
+or: #000000; font-size: inherit; font-weight: inherit; line-height: inherit=
+; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
+var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #ff=
+f; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tran=
+sparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><span style=3D'colo=
+r: #000000; font-size: inherit; font-weight: inherit;=0Aline-height: inheri=
+t; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sa=
+ns; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-=
+ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba=
+(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shado=
+w: 0 0 transparent;' class=3D""><span style=3D"color: #000000; font-size: i=
+nherit; font-weight: inherit; line-height: inherit; text-decoration: inheri=
+t; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
+ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
+59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
+: 0 0 transparent;" class=3D""><br style=3D"" class=3D""><br style=3D"" cla=
+ss=3D""><em style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=0A=
+--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent=
+; font-style: italic; font-weight: inherit;" class=3D"">"I=E2=80=99ve spent=
+ the last week receiving email messages, phone calls and personal visits th=
+anking me for bringing Major Gifts Ramp-Up to our community. This spectacul=
+ar 2-day capacity-building conference was daring, confrontational and exact=
+ly what our organizations needed in the way of training.=C2=A0 Conventional=
+ methods of management and fundraising were challenged with humor and insig=
+ht. Their expert faculty engaged our grantees and inspired them to grow rev=
+enues in new ways that work.=C2=A0 Prepare for significant change if you gi=
+ve yourself this gift."</em> ~ Debi Meeds, Springfield, MO<br style=3D"" cl=
+ass=3D""><br style=3D"" class=3D""></span><span name=3D"email_16" style=3D"=
+color: #000000; font-size: inherit; font-weight: inherit; line-height: inhe=
+rit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inse=
+t: var(--tw-empty, );=0A--tw-ring-offset-width: 0px; --tw-ring-offset-color=
+: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0=
+ transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">Who should att=
+end? If you=E2=80=99re a CEO, CFO, COO, CDO, Executive Director, Developmen=
+t Director, Staff Member, Board Member, Pastor, Trustee or Volunteer respon=
+sible for the financial health of a nonprofit, ministry or church then you'=
+ll want to make sure you bring as many people as possible to this training.=
+<br style=3D"" class=3D""><br style=3D"" class=3D""></span><span name=3D"em=
+ail_17" style=3D"color: #000000; font-size: inherit; font-weight: inherit; =
+line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparen=
+t; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ri=
+ng-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-off=
+set-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""=
+>Tuition for a quality capacity-building conference=0Acould cost up to $800=
+ per guest. We're thrilled to share that a group of major donors have under=
+written this event allowing us to offer tuition for </span><strong style=3D=
+"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit;=
+ font-weight: 700;" class=3D""><span style=3D"color: #000000; font-size: in=
+herit; font-weight: inherit; line-height: inherit; text-decoration: inherit=
+; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ri=
+ng-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(5=
+9,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow:=
+ 0 0 transparent;" class=3D"">ONE PERSON at $248 or UNLIMITED REGISTRATIONS=
+ for only $498.</span></strong><b style=3D"margin: 0; outline: none;=0Apadd=
+ing: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent;" class=3D""><br style=3D"" class=3D""><br style=3D"=
+" class=3D""><strong style=3D"margin: 0; outline: none; padding: 0; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
+,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
+sparent; font-style: inherit; font-weight: 700;" class=3D""><i style=3D"mar=
+gin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic; colo=
+r: #000000;=0Afont-weight: inherit;" class=3D""><span style=3D"color: #0000=
+00; font-size: inherit; font-weight: inherit; line-height: inherit; text-de=
+coration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-=
+empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-r=
+ing-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; =
+--tw-ring-shadow: 0 0 transparent;" class=3D"">That's right, every member o=
+f your team can come for only $498.</span></i></strong><strong style=3D"mar=
+gin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit; fon=
+t-weight: 700;" class=3D""><span style=3D"color: #000000; font-size: inheri=
+t; font-weight: inherit; line-height: inherit; text-decoration: inherit; --=
+tw-shadow: 0 0 transparent;=0A--tw-ring-inset: var(--tw-empty, ); --tw-ring=
+-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,=
+130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
+ 0 transparent;" class=3D""> </span></strong></b>Please register today. Thi=
+s event will reach capacity soon.<br style=3D"" class=3D""><br style=3D"" c=
+lass=3D""><strong style=3D"margin: 0; outline: none; padding: 0; --tw-shado=
+w: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wi=
+dth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.=
+5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpa=
+rent; font-style: inherit; font-weight: 700; color: #000000;" class=3D""><a=
+ href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=
+=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&sig=3D3q9VD64=
+xq81BYVSb92BVr1byPdAtY8h13vosHpMrYGP7&iat=3D1702999466&a=3D%7C%7C26605550%7=
+C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DGV%2BZxlpglTGdwpqby=
+TPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2yMTn%2BwFP6RMIoypEjMX5q&s=3D678f48=
+a0e320c6856d0620aa2e024acb&i=3D689A1160A214A2700" data-ac-default-color=3D"=
+1"=0Atarget=3D"_blank" style=3D"margin: 0; outline: none; padding: 0; color=
+: #0764ba; text-decoration: underline; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weight: inherit=
+;" class=3D""><span style=3D"color: inherit; font-size: inherit; font-weigh=
+t: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 =
+0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: =
+0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
+-tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
+" class=3D""><span style=3D"color: inherit; font-size: inherit; font-weight=
+: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0=
+ transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
+px;=0A--tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); =
+--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent=
+;" class=3D"">VISIT HERE TO GET STARTE</span>D</span></a></strong></span><b=
+ style=3D'margin: 0; outline: none; padding: 0; font-family: "trebuchet ms"=
+, tahoma, arial, sans; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(-=
+-tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --=
+tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpare=
+nt; --tw-ring-shadow: 0 0 transparent;' class=3D""><br style=3D"" class=3D"=
+"></b><br style=3D"" class=3D""><span name=3D"email_24" style=3D'color: #00=
+0000; font-size: inherit; font-weight: inherit; line-height: inherit; text-=
+decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5);=0A--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;' class=3D"">We believe in you. We're going to introduce you t=
+o all the wealthy donors in your community. How? We have their contact info=
+rmation and will share with you the five secrets to meeting wealthy donors =
+for the very first time. Let MGRU's faculty show you how to access them ASA=
+P. I look forward to meeting you personally.<br style=3D"" class=3D""><br s=
+tyle=3D"" class=3D""></span><span name=3D"email_25" style=3D'color: #000000=
+; font-size: inherit; font-weight: inherit; line-height: inherit; text-deco=
+ration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-sha=
+dow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-=
+width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,=
+0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 trans=
+parent;' class=3D"">Until then I remain,<br style=3D"" class=3D""><br style=
+=3D"" class=3D"">Sincerely Yours,<br=0Astyle=3D"" class=3D""><br style=3D""=
+ class=3D""></span><em style=3D"margin: 0; outline: none; padding: 0; --tw-=
+shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offs=
+et-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,2=
+46,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tr=
+ansparent; font-style: italic; font-weight: inherit; font-size: 20px;" clas=
+s=3D""><b style=3D"margin: 0; outline: none; padding: 0; --tw-shadow: 0 0 t=
+ransparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px=
+; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw=
+-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" c=
+lass=3D""><span name=3D"email_29" style=3D'color: #000000; font-size: inher=
+it; font-weight: inherit; line-height: inherit; text-decoration: inherit; -=
+-tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-=
+offset-width: 0px; --tw-ring-offset-color: #fff;=0A--tw-ring-color: rgba(59=
+,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: =
+0 0 transparent; font-family: georgia, "times new roman";' class=3D"">Linda=
+ Lysakowski, ACFRE</span></b></em></span><span style=3D'color: #000000; fon=
+t-size: inherit; font-weight: inherit; line-height: inherit; text-decoratio=
+n: inherit; font-family: "trebuchet ms", tahoma, arial, sans; --tw-shadow: =
+0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width=
+: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5);=
+ --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparen=
+t;' class=3D""><span style=3D"color: #000000; font-size: inherit; font-weig=
+ht: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0=
+ 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width:=
+ 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); =
+--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0Atranspare=
+nt;" class=3D""><br style=3D"" class=3D""><br style=3D"" class=3D""><span s=
+tyle=3D"color: #000000; font-size: inherit; font-weight: inherit; line-heig=
+ht: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-r=
+ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
+-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
+w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D"">National=
+ Development Institute</span><br style=3D"" class=3D""><br style=3D"" class=
+=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: inher=
+it; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transp=
+arent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --t=
+w-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring=
+-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=
+=3D"">P.S. Are you responsible for building your organizations financial ca=
+pacity? If so, <span=0Astyle=3D"color: #000000; font-size: inherit; font-we=
+ight: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow:=
+ 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-widt=
+h: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5)=
+; --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpare=
+nt; font-style: italic;" class=3D"">Major Gifts Ramp-Up may be </span><span=
+ style=3D"color: #000000; font-size: inherit; font-weight: 400; line-height=
+: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: italic;" c=
+lass=3D"">the most powerful conference event </span><span style=3D"color: #=
+000000; font-size: inherit; font-weight: inherit; line-height: inherit; tex=
+t-decoration: inherit; --tw-shadow: 0=0A0 transparent; --tw-ring-inset: var=
+(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; =
+--tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpa=
+rent; --tw-ring-shadow: 0 0 transparent; font-style: italic;" class=3D"">yo=
+u ever experience.</span><br style=3D"" class=3D""><br style=3D"" class=3D"=
+"></span><span style=3D"color: #000000; font-size: inherit; font-weight: in=
+herit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tra=
+nsparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; =
+--tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-r=
+ing-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" cla=
+ss=3D"">P.P.S. </span><span style=3D"color: #000000; font-size: inherit; fo=
+nt-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-sh=
+adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
+-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=0Argba(59,130,2=
+46,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tr=
+ansparent; font-style: inherit;" class=3D"">Don=E2=80=99t let anyone tell y=
+ou now is not the time to fund raise.=C2=A0 Don=E2=80=99t let anyone tell y=
+ou things have to stay the same.=C2=A0=C2=A0</span><em style=3D"margin: 0; =
+outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: v=
+ar(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff=
+; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 trans=
+parent; --tw-ring-shadow: 0 0 transparent; font-style: inherit; font-weight=
+: inherit;" class=3D""><b style=3D"margin: 0; outline: none; padding: 0; --=
+tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
+ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
+0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent; font-style: inherit;" class=3D""><span style=3D"color: #00000=
+0; font-size: inherit;=0Afont-weight: inherit; line-height: inherit; text-d=
+ecoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw=
+-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-=
+ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent;=
+ --tw-ring-shadow: 0 0 transparent;" class=3D"">Don=E2=80=99t let a few pan=
+icked Board members hijack your future.</span></b></em></span><span style=
+=3D"color: #000000; font-size: inherit; font-weight: inherit; line-height: =
+inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-=
+inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-col=
+or: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0=
+ 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inherit;" cl=
+ass=3D""> Now is the time to act!<br style=3D"" class=3D""><br style=3D"" c=
+lass=3D""><span style=3D"color: #000000; font-size: inherit; font-weight: i=
+nherit; line-height: inherit; text-decoration:=0Ainherit; --tw-shadow: 0 0 =
+transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0p=
+x; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --t=
+w-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; f=
+ont-style: normal;" class=3D"">P.P.P.S. </span><span style=3D"color: #00000=
+0; font-size: inherit; font-weight: 400; line-height: inherit; text-decorat=
+ion: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty=
+, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-c=
+olor: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-=
+ring-shadow: 0 0 transparent; font-style: normal;" class=3D""><b style=3D"m=
+argin: 0; outline: none; padding: 0; --tw-shadow: 0 0 transparent; --tw-rin=
+g-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-c=
+olor: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow:=
+ 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=0Afont-style: inherit;=
+" class=3D""><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracke=
+r?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkY=3D&=
+sig=3D3q9VD64xq81BYVSb92BVr1byPdAtY8h13vosHpMrYGP7&iat=3D1702999466&a=3D%7C=
+%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DGV%2BZ=
+xlpglTGdwpqbyTPDMkx%2F7j0w77aMepEaH4IY%3ATUu6OnTB%2FG2yMTn%2BwFP6RMIoypEjMX=
+5q&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D689A1160A214A2700" data-ac-defa=
+ult-color=3D"1" target=3D"_blank" style=3D"margin: 0; outline: none; paddin=
+g: 0; color: #0764ba; text-decoration: underline; --tw-shadow: 0 0 transpar=
+ent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-=
+ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-o=
+ffset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-weig=
+ht: inherit;" class=3D""><span style=3D"color: inherit; font-size: inherit;=
+ font-weight: inherit; line-height: inherit; text-decoration: inherit; --tw=
+-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-off=
+set-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,=
+246,0.5);=0A--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
+ transparent;" class=3D"">VISIT HERE</span></a></b><span style=3D"color: #0=
+00000; font-size: inherit; font-weight: inherit; line-height: inherit; text=
+-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--=
+tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --t=
+w-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparen=
+t; --tw-ring-shadow: 0 0 transparent;" class=3D""> to make your unlimited r=
+eservation today.<br class=3D""></span></span></span></span></span> </span>=
+<div style=3D"margin: 0; outline: none; padding: 0; color: inherit; font-si=
+ze: inherit; font-weight: inherit; line-height: inherit; text-decoration: i=
+nherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); -=
+-tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: =
+rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-s=
+hadow: 0 0 transparent;"=0Aclass=3D""><div style=3D"margin: 0; outline: non=
+e; padding: 0; color: #000000; font-size: 16px; font-weight: inherit; line-=
+height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --=
+tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
+fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
+hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-style: inhe=
+rit;" class=3D""><br class=3D"" style=3D"color: #000000; font-style: inheri=
+t; font-weight: 400; --tw-shadow:0 0 transparent; --tw-ring-inset:var(--tw-=
+empty, ); --tw-ring-offset-width:0px; --tw-ring-offset-color:#fff; --tw-rin=
+g-color:rgba(59,130,246,0.5); --tw-ring-offset-shadow:0 0 transparent; --tw=
+-ring-shadow:0 0 transparent;"></div>=0A</div>=0A </div>=0A </div>=0A<!--[i=
+f (gte mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inlin=
+e=3D"false"> #text_div4112, #text_div4112 div { line-height: 140% !importan=
+t; };=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<=
+/table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</t=
+r>=0A</table>=0A</div>=0A<img src=3D"https://jimmylarose.lt.acemlnd.com/Pro=
+d/link-tracker?nl=3D214&c=3D689&m=3D1160&s=3D678f48a0e320c6856d0620aa2e024a=
+cb&l=3Dopen&account=3Djimmylarose.activehosted.com&a=3D26605550" border=3D"=
+0" width=3D"1" height=3D"1" style=3D"display:block;width:1px!important;min-=
+width:1px!important;max-width:1px!important;height:1px!important;border:0;o=
+verflow:hidden;" /><div id=3D"ac-footer" style=3D"clear:both;background-col=
+or:inherit;background:inherit;min-width:100%;mso-table-lspace:0pt;mso-table=
+-rspace:0pt;padding:20px;color:#000000;font-size:11px;font-family:arial,hel=
+vetica,sans-serif;line-height:140%;line-height:1.4;text-align:center;box-si=
+zing:border-box;"><center>Sent to: <span style=3D"font-size:11px;font-famil=
+y:arial,helvetica,sans-serif;font-weight:normal;text-decoration:none;outlin=
+e:none;">soc@kernel.org</span><br><br><a href=3D"http://jimmylarose.activeh=
+osted.com/proc.php?nl=3D214&c=3D689&m=3D1160&s=3D678f48a0e320c6856d0620aa2e=
+024acb&act=3Dunsub"=0Astyle=3D"font-size:11px;font-family:arial,helvetica,s=
+ans-serif;font-weight:bold;text-decoration:underline;"><span style=3D"font-=
+weight:bold;text-decoration:underline;">Unsubscribe</span></a><br><br>Natio=
+nal Development Institute, PO Box 1840, Lexington, SOUTH CAROLINA 29071, Un=
+ited States</center></div>=0A<br clear=3D"all" /></body>=0A</html>
+--_=_swift-16994123566581b466a391e1.16136981_=_--
+
