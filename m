@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 100EEC35274
-	for <soc@archiver.kernel.org>; Thu, 21 Dec 2023 12:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE4EC35274
+	for <soc@archiver.kernel.org>; Thu, 21 Dec 2023 12:57:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E43F1C433C8; Thu, 21 Dec 2023 12:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9239C433C9;
-	Thu, 21 Dec 2023 12:38:17 +0000 (UTC)
+	id B21D0C433C9; Thu, 21 Dec 2023 12:57:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725BAC433C7;
+	Thu, 21 Dec 2023 12:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703162298;
-	bh=KKQaeH2EmDJ7mFaL5Q6gJzAHWCpUvrzqaLBg34q+1wY=;
+	s=k20201202; t=1703163476;
+	bh=0gL04RciAH1GJbtSVRyq/UZwV+St7gyPSP7QIFrKX6A=;
 	h=Date:From:List-Id:To:List-Id:Cc:Subject:From;
-	b=E7C8zH+zhk4HHPrdh0XrPs09Fo0xrLRwGbuRrX/1Lj8SXVwcj1Fd9sCXPrxkwZd/Q
-	 zfmW7gTodJGNazNRCsKR70oTvOzQUHZA5LEPiTkZbGSkgqbR2OAnIiSxdfE/YwoL+B
-	 truvPYxeBwmNCBBnhHjMu+GOKQUTiZNb5tjac+h3oqiHANV13BCa0ISM6bTAf/YUTU
-	 ksrJs0QT437ncf82BkhHBbrgcE814xqteHBe+3S6yaqBuojg2nit5qokIq/Oh4st4K
-	 0Zo1pgmWAdyJyDo3LrkPiIJ1Hoa5SReadsJNS1tY46AOE/6Ht7oUcsvGf0K8Z63Spn
-	 pUDDWTN70G/mA==
-Date: Thu, 21 Dec 2023 12:38:15 +0000
+	b=KxeDm+XMTbGH/jT4L5Vo4/35ZuW+bfgGwR4YYpbrzRAJ0XHqFV/8280JlBFlAzLFa
+	 qOAYZ/6WFcFs+TJ4nPvTWkxr3uJe2TvSemryWxYXUQG+CrgGIeG1hJDxnfJpWQD3KC
+	 zd2BPqYonDqgc3rm6oCEczSLRpjg5mrK2fqhUweambE8e8t0jsC5qwMHSZOphH99HO
+	 sfyrxy2Dwb0dPMJy2buBewzKsVOrs5yJjQ8KxVigQgVD1b5yLRz5IC7JDqaxWGMCdX
+	 TbVkgu7kpMpVxAoG7xiW3dEzZdrb+ljmVidMGScHRZkWkVaRvlgQYxYRjNda0GNDkW
+	 2Bir0HpAxUp6A==
+Date: Thu, 21 Dec 2023 12:57:53 +0000
 From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: conor@kernel.org, arnd@arndb.de, linux-riscv@lists.infradead.org,
 	soc@kernel.org
-Subject: [GIT PULL] RISC-V SoC drivers for v6.8
-Message-ID: <20231221-droop-unblock-81e4fe14acee@spud>
+Subject: [GIT PULL] RISC-V cache drivers for v6.8
+Message-ID: <20231221-catatonic-monday-d4c61283b136@spud>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="BIkMRZ8AmKuplyuY"
+	protocol="application/pgp-signature"; boundary="uVYq/yheRuBdIaKE"
 Content-Disposition: inline
 
 
---BIkMRZ8AmKuplyuY
+--uVYq/yheRuBdIaKE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey Arnd,
 
-The FPGA preprogramming driver that we discussed a while back (was it
-at LPC?) is in this PR. It's in the soc-drivers branch because there's
-a bunch of pre-req patches to the existing soc driver that it relies on.
-I'll put stuff for drivers/firmware into a separate branch in the future.
+Please pull the move of the ccache driver out of drivers/soc and the
+addition of support for the non-standard non-coherent cache operations
+on the jh7100. Despite it being an early(ish) SoC and being succeeded by
+the jh7110, there's still people actively adding mainline support for
+some of the peripherals etc.
 
 Cheers,
 Conor.
@@ -55,67 +56,54 @@ The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-drivers-for-v6.8
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-cache-for-v6.8
 
-for you to fetch changes up to 0f2d06dd1910cc7f6591620a2070d44ca3f56551:
+for you to fetch changes up to 9a9e8d8d2b6e61a516cbb8a43c5cec51c065ffa4:
 
-  MAINTAINERS: add auto-update driver to mpfs entry (2023-12-07 16:43:29 +0000)
+  riscv: errata: Make ERRATA_STARFIVE_JH7100 depend on !DMA_DIRECT_REMAP (2023-12-16 23:37:38 +0000)
 
 ----------------------------------------------------------------
-RISC-V SoC drivers for v6.8
+RISC-V cache drivers for v6.8
 
-There's only one set of changes here, the addition of "Auto Update"
-support for PolarFire SoC. Auto Update is one of the ways that the FPGA
-bitstream can be updated, and the only one suitable for use from Linux
-as it does not immediately initiate a reboot when started.
-The driver was not accepted in the FPGA manager subsystem as the update
-only occurs after a reboot and makes no use of the FPGA manager
-framework.
+The SiFive composable cache driver moves to the cache driver
+subdirectory from the drivers/soc and grows support for non-coherent
+cache operations. The immediate user for these is the jh7100 SoC, that
+a rake of people have on VisionFive v1 or Beagle-V Starlight boards.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Conor Dooley (6):
-      dt-bindings: soc: microchip: add a property for system controller flash
-      soc: microchip: mpfs: enable access to the system controller's flash
-      soc: microchip: mpfs: print service status in warning message
-      soc: microchip: mpfs: add auto-update subdev to system controller
-      firmware: microchip: add PolarFire SoC Auto Update support
-      MAINTAINERS: add auto-update driver to mpfs entry
+Conor Dooley (1):
+      soc: sifive: shunt ccache driver to drivers/cache
 
-Kory Maincent (1):
-      firmware_loader: Expand Firmware upload error codes with firmware invalid error
+Emil Renner Berthing (4):
+      dt-bindings: cache: sifive,ccache0: Add StarFive JH7100 compatible
+      soc: sifive: ccache: Add StarFive JH7100 support
+      riscv: errata: Add StarFive JH7100 errata
+      riscv: errata: Make ERRATA_STARFIVE_JH7100 depend on !DMA_DIRECT_REMAP
 
-Rob Herring (1):
-      firmware: microchip: Replace of_device.h with explicit include
+ .../devicetree/bindings/cache/sifive,ccache0.yaml  |  6 ++-
+ MAINTAINERS                                        | 14 ++---
+ arch/riscv/Kconfig.errata                          | 19 +++++++
+ drivers/cache/Kconfig                              |  6 +++
+ drivers/cache/Makefile                             |  3 +-
+ drivers/{soc/sifive => cache}/sifive_ccache.c      | 62 +++++++++++++++++++++-
+ drivers/soc/Kconfig                                |  1 -
+ drivers/soc/Makefile                               |  1 -
+ drivers/soc/sifive/Kconfig                         | 10 ----
+ drivers/soc/sifive/Makefile                        |  3 --
+ 10 files changed, 99 insertions(+), 26 deletions(-)
+ rename drivers/{soc/sifive => cache}/sifive_ccache.c (81
 
- .../microchip/microchip,mpfs-sys-controller.yaml   |  10 +
- MAINTAINERS                                        |   1 +
- drivers/base/firmware_loader/sysfs_upload.c        |   1 +
- drivers/firmware/Kconfig                           |   1 +
- drivers/firmware/Makefile                          |   1 +
- drivers/firmware/microchip/Kconfig                 |  12 +
- drivers/firmware/microchip/Makefile                |   3 +
- drivers/firmware/microchip/mpfs-auto-update.c      | 494 +++++++++++++++++++++
- drivers/soc/microchip/Kconfig                      |   1 +
- drivers/soc/microchip/mpfs-sys-controller.c        |  33 +-
- include/linux/firmware.h                           |   2 +
- include/soc/microchip/mpfs.h                       |   2 +
- lib/test_firmware.c                                |   1 +
- 13 files changed, 559 insertions(+), 3 deletions(-)
- create mode 100644 drivers/firmware/microchip/Kconfig
- create mode 100644 drivers/firmware/microchip/Makefile
- create mode 100644 drivers/firmware/microchip/mpfs-auto-update.c
-
---BIkMRZ8AmKuplyuY
+--uVYq/yheRuBdIaKE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZYQxtwAKCRB4tDGHoIJi
-0hKhAP0YZXiDzA2aruMFCZY5ccEnrqXzUc0tTvlPw1nStC3CagD/QL2laxvZ2eu/
-F2a3Gu65arDWa+4Krhai4N/ddj905Ac=
-=Lir3
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZYQ2UAAKCRB4tDGHoIJi
+0hLcAP9r9ufLZVUIUusGttE1oB6bJTtc0vRjp5TtpaDv3OcwRwEAkUJmIyM5IN9b
+gE3FS8lsl5j5GU06/6F15kDT/s5BAwc=
+=p52w
 -----END PGP SIGNATURE-----
 
---BIkMRZ8AmKuplyuY--
+--uVYq/yheRuBdIaKE--
