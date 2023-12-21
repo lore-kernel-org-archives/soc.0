@@ -4,58 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66A08C4706F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 676D5C47074
 	for <soc@archiver.kernel.org>; Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5A309C43140; Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 42EA5C43397;
+	id 5AB28C4166B; Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 43783C433B9;
 	Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703180466;
-	bh=OG9u18RgRn/d+Hf/5s64e3a0pJrbXhf5os2zhYI/aGY=;
+	bh=pAqHLWpK3cJ9a/TB66VAcuLTsCAydG+KPKrVPhR8xOk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UL7q6TRbvYSBCArcGcxedLhsNN8m/iSy9aTG7wbZr83V/OAhbiQWn9iRdvJpEXaGg
-	 WcLNoJbErcCawCNa2rFV0Gam36w+GjilHpfprFVzZhIeTS9VtXRBBEdFZT0uqsraJ0
-	 8B0l4LkhaRyMclWKq6Iv7Q9RoLeONR88HexALNV5esp8OrpuLefkmCmZf6f1pls/lb
-	 wMHZUWsuQaT1AGwAsHSgbn4OwjA85Z2iACuvb77NxacKVs0gVgP5d2URd066POuz2M
-	 10mymcR7HpN0ElyHAt7LgFtFp71e/gUAGyrLajLToJOFSoZfN8+X83O/2KEqp3nYdw
-	 4/nByS+Y0M23Q==
+	b=cXKhlqkeFwNWBKNDVIDqh9LbAskMAm9Bd2DDK+NIXbVkVn21i6I9wlaUYWfkZB5WY
+	 hOGUc19tXHCxay2j8y5YdJ9o9rJSExYpVaJAhyOnL6L/AfdquFfty1NABZAKPCexGh
+	 rh7ckYbZ9n2LmtopXkD02rtd1sknMkeRNGC9NHyhOGLUIZzHp/MmsZcEvMNC5JThrO
+	 g53EnNQIcZOtiLfFV0VVddQ3xAX5TFR6fW3TQyxa3uJ1tqNkS9H5LzAdaSafGBhYF5
+	 o0ixRXy/jXjJksczRHNYoyfwUwjmydTfW3Hl6G+ECUgCKSJQhKlNezUPHsTcbByoEm
+	 zFWZKuV2lBgBw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2959BDD4F17;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2EE16DD4F0B;
 	Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fixes for omaps
+Subject: Re: [PATCH v7 00/16] Add minimal Tensor/GS101 SoC support and
+ Oriole/Pixel6 board
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170318046616.3302.2372101822692185187.git-patchwork-notify@kernel.org>
+ <170318046618.3302.10895876662041456813.git-patchwork-notify@kernel.org>
 Date: Thu, 21 Dec 2023 17:41:06 +0000
-References: <pull-1702037799-781982@atomide.com>
-In-Reply-To: <pull-1702037799-781982@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+In-Reply-To: <20231211162331.435900-1-peter.griffin@linaro.org>
+To: Peter Griffin <peter.griffin@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This series was applied to soc/soc.git (for-next)
+by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
 
-On Fri,  8 Dec 2023 14:17:15 +0200 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Mon, 11 Dec 2023 16:23:15 +0000 you wrote:
+> Hi folks,
 > 
-> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+> This series adds initial SoC support for the GS101 SoC and also initial board
+> support for Pixel 6 phone (Oriole).
 > 
->   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
-> 
-> are available in the Git repository at:
+> Thankyou to everyone who has reviewed and tested the previous series. Your
+> time and effort doing so is much appreciated! If any relevant subsystem
+> maintainers can send a acked-by that would be much appreciated. In particular
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Fixes for omaps
-    https://git.kernel.org/soc/soc/c/2096d3ec469f
+  - [v7,01/16] dt-bindings: watchdog: Document Google gs101 watchdog bindings
+    (no matching commit)
+  - [v7,02/16] dt-bindings: arm: google: Add bindings for Google ARM platforms
+    https://git.kernel.org/soc/soc/c/b3582328b9c5
+  - [v7,03/16] dt-bindings: serial: samsung: Add google-gs101-uart compatible
+    (no matching commit)
+  - [v7,04/16] dt-bindings: serial: samsung: Make samsung,uart-fifosize a required property
+    (no matching commit)
+  - [v7,05/16] dt-bindings: soc: samsung: usi: add google,gs101-usi compatible
+    (no matching commit)
+  - [v7,06/16] dt-bindings: clock: google,gs101: fix incorrect numbering and DGB suffix
+    (no matching commit)
+  - [v7,07/16] clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+    (no matching commit)
+  - [v7,08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
+    (no matching commit)
+  - [v7,09/16] pinctrl: samsung: Add gs101 SoC pinctrl configuration
+    (no matching commit)
+  - [v7,10/16] watchdog: s3c2410_wdt: Add support for WTCON register DBGACK_MASK bit
+    (no matching commit)
+  - [v7,11/16] watchdog: s3c2410_wdt: Update QUIRK macros to use BIT macro
+    (no matching commit)
+  - [v7,12/16] watchdog: s3c2410_wdt: Add support for Google gs101 SoC
+    (no matching commit)
+  - [v7,13/16] tty: serial: samsung: Add gs101 compatible and common fifoszdt_serial_drv_data
+    (no matching commit)
+  - [v7,14/16] arm64: dts: exynos: google: Add initial Google gs101 SoC support
+    https://git.kernel.org/soc/soc/c/ea89fdf24fd9
+  - [v7,15/16] arm64: dts: exynos: google: Add initial Oriole/pixel 6 board support
+    https://git.kernel.org/soc/soc/c/6a5713fc7853
+  - [v7,16/16] MAINTAINERS: add entry for Google Tensor SoC
+    https://git.kernel.org/soc/soc/c/9d71df3e6eb7
 
 You are awesome, thank you!
 -- 
