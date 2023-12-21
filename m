@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EEC3C46CD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C839C47073
 	for <soc@archiver.kernel.org>; Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A394C433CC; Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 04466C433CA;
+	id 55400C43142; Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E79AC433B7;
 	Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703180466;
-	bh=bDgC3zkHMgXb93ueQGfaWBj0Tu8/YbSjpa1xztH1UKg=;
+	bh=hol4JhW3QuGsZr5e/1M1+CTfr7HXIu6escR0Q6Z3czg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UBlQzfCWgarXi1mVg/KKBxMd1qFNRSGAzrtuv1QNQNKhufJKSOUMboyWCUZtu9Huf
-	 /NDppYxTunYaFyzv14b05Z1EGmCzbvntBo6lMlX8l067hKrpNKEuTwxmrpiUt44b/Y
-	 haUMnt4g5g4wo+gH3fAvX0tCUFhNc/x8Wiy8ULrTQVfURyEJeozOrwsiyz1pToWGNy
-	 +FxWc1UrMqsYddN/kamQcZQrVFX1yh6gmshxk4DAk1vA7W/t1JBx2VTIniPm/PGrb2
-	 RqLcNEhWW9DoV7Eu1hiKir8lmHYgaA3hNAAtFktg1ZJvE6UOVXzIu8Ln1H095UKMc0
-	 sCgfg7ln0G7Dg==
+	b=Hn+oSDvKkMkq1QlWRQrzdW0WimsuAyg33GQZLDGqMc/O0bU02RpkyfpGZ8NlQHIId
+	 ITP1Vig5pSHuL8avDapf0MQlVhoPKFU1U2L7G0gBtt4Jz/7h2/vC/VcoAXl0QFsCfV
+	 y8VOiWT4B4h8K3/rEU+A8ZjawFB6Rqa+Mc9bMFqioLt2rWO3EuvlwR3sLyWFzpK1Zu
+	 lj9VH9iBZJ+t3Ftx2hdfHLHCgw8NufejAefyTLIGa2/ckWFgYJe/tqo9Y8GI+9oFXq
+	 HXZe7/Gm4i6fGNaKXB6Emy2MKnTkKgv3VCNNzcj3/mjhjKg38zwAoYvF1YRxvnsYfm
+	 dzFfmlENEF+Gw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E40E8DD4EE5;
-	Thu, 21 Dec 2023 17:41:05 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16F8CDD4EF2;
+	Thu, 21 Dec 2023 17:41:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] drivers/firmware updates for v6.8 for TI K3 platforms
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.8 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170318046593.3302.17007308104744431634.git-patchwork-notify@kernel.org>
-Date: Thu, 21 Dec 2023 17:41:05 +0000
-References: <20231218153043.r5psxbjjpccusjg4@september>
-In-Reply-To: <20231218153043.r5psxbjjpccusjg4@september>
-To: Nishanth Menon <nm@ti.com>
+ <170318046609.3302.8744772612363673117.git-patchwork-notify@kernel.org>
+Date: Thu, 21 Dec 2023 17:41:06 +0000
+References: <3535836.iIbC2pHGDl@phil>
+In-Reply-To: <3535836.iIbC2pHGDl@phil>
+To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,24 +42,22 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 18 Dec 2023 09:30:43 -0600 you wrote:
-> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+On Tue, 12 Dec 2023 22:32:52 +0100 you wrote:
+> Hi Arnd, Kevin, Olof,
 > 
->   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+> please find below and in a subsequent pull-request
+> Rockchip changes for for 6.8 .
 > 
-> are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver-soc-for-v6.8
+> The change that might need the most explanation is probably around the
+> aliases. In a recent discussion [0] the alias naming came up - with them
+> aimed at matching labeling / documentation.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] drivers/firmware updates for v6.8 for TI K3 platforms
-    (no matching commit)
-  - [GIT,PULL,2/3] arm64: defconfig: Updates for v6.8 for TI K3 platforms
-    (no matching commit)
-  - [GIT,PULL,3/3] arm64: dts: ti: Updates for v6.8 for TI K3 platforms
-    https://git.kernel.org/soc/soc/c/7af9a9f5e9d1
+  - [GIT,PULL] Rockchip dts64 changes for 6.8 #1
+    https://git.kernel.org/soc/soc/c/16e6e974d17b
 
 You are awesome, thank you!
 -- 
