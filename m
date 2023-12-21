@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF204C35274
-	for <soc@archiver.kernel.org>; Thu, 21 Dec 2023 10:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8148FC35274
+	for <soc@archiver.kernel.org>; Thu, 21 Dec 2023 10:12:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A6268C433C9; Thu, 21 Dec 2023 10:11:11 +0000 (UTC)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	id 5AAB9C433CB; Thu, 21 Dec 2023 10:12:40 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C648CC433C8
-	for <soc@kernel.org>; Thu, 21 Dec 2023 10:11:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C648CC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 4FCAAC433C8
+	for <soc@kernel.org>; Thu, 21 Dec 2023 10:12:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4FCAAC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3333b46f26aso516256f8f.1
-        for <soc@kernel.org>; Thu, 21 Dec 2023 02:11:10 -0800 (PST)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3368c5c077fso116557f8f.1
+        for <soc@kernel.org>; Thu, 21 Dec 2023 02:12:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703153469; x=1703758269; darn=kernel.org;
+        d=linaro.org; s=google; t=1703153557; x=1703758357; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:reply-to
          :content-language:subject:cc:to:from:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMObNTLbiCqgZOU19vHINWmmp+QWstCS1LGacoiIgn8=;
-        b=i54Io2j8DK0tSnLFR9jJGFJ6x9VZnMHIuJd6kAHhIUlKlMCJCV/FW+nIMFDrkO+jjV
-         JZ8XJJEi2olOB2zdtpqoh0/FxW/dmSLxp4tjXvI6AAwCesqMKbF+RqqxGqGphpeegdeH
-         UuFF1G45DYSpu0ooNJ/pdoMytiAMW5WPQVwKpf3ElYqsF+87H28XLoF+pUJTo/e+LfEk
-         M2KfWA6ehcXZ0uuRVroF+VXQLaAz/jLhY+xDIUmVtmWGjDhfhbpZR6axRrq+CYNytYAF
-         G54gxXbl0eeUXliZgQUcfHPO3PbmC4ZrCjpoHMEETvaISN2+A5AfzvlveVX8XUKQWiL+
-         Vcfw==
+        bh=Y9lT5xpj6JS/6F8fnjNjfQNyipqb+Fp7JAcIAt8M+VE=;
+        b=l3Aa2d4S3SHu7AYJn7yP9FgMThQIV7Q6mv3EGtVGi7hW5t/qLuFmtBagi0lbtOqQh4
+         HrlUpFdUHoov9yY7SoTY110osZIy6u6gCeN+6q+Yd/ug9SQKzrPU9MFf4fyL7mT3PvmW
+         v/hHpo0Dp+s4slndf2uz8O4w/MT36U6Z3NIkJoQws2mLrWJpkZOr4/850xKIPHTFwsSL
+         BPdoP53OzCNg6ZY4RF6abj2RcTGgUK1SQrzrk5IehN+ILwfdYLzfNg/+D9FVzkowARH2
+         UuIENBtFaxSRlpK3gaEiYgAXgk3swWbsMd3qSS3UN7BhMaWFsSyFkCzSMGdqOZjHs80U
+         a3UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703153469; x=1703758269;
+        d=1e100.net; s=20230601; t=1703153557; x=1703758357;
         h=content-transfer-encoding:organization:autocrypt:reply-to
          :content-language:subject:cc:to:from:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dMObNTLbiCqgZOU19vHINWmmp+QWstCS1LGacoiIgn8=;
-        b=O5MzH9WifH+IqDVt4fFsVYl1N99h+vKGrBLrAxcY62agMqcNOXqGVUJvQC7Ia9GNnx
-         uB6E4Bf3tLTY6ffBtpsMYQdce+VIjyHVmvVRTK3RGIDmc1SVtcFYwp9SxO+XAj06krEF
-         AHBlQRIjiOxOGTZ48rFmjClYc/1hd+2r27IHZULHCQKEuwtGHec1WMRniQmGQw8gHMHF
-         jGRtb0SLeAmFmOJMmxxE+U4Qb65H8l3tQADc9d1z5JBF3R7YzshmtHY6wF+1Cyfv9Krp
-         BFUl4sVwRa8FxdvrNb+JlFoK8onrkcFL7RbjunmO3K9dBmOkXk7vDHQjs5guxQJ+OtGD
-         XQBw==
-X-Gm-Message-State: AOJu0YwDChsukNumxC8mmyHRQWPtWI9lHFmvnWK4WPQ2ywrl8atU78ka
-	yCDvbc62eAu52umzoEG7VnLWSlsaJsQDiwgnqPDvWFJK
-X-Google-Smtp-Source: AGHT+IGMxxb+i7hFixEKwp+Jxq272QxhvTL0g3UKNL2dF9t+9fE7DPps2Q2XKWhpik6Y6iE0+E7cvA==
-X-Received: by 2002:a5d:540a:0:b0:336:5ad7:2091 with SMTP id g10-20020a5d540a000000b003365ad72091mr513219wrv.143.1703153468819;
-        Thu, 21 Dec 2023 02:11:08 -0800 (PST)
+        bh=Y9lT5xpj6JS/6F8fnjNjfQNyipqb+Fp7JAcIAt8M+VE=;
+        b=jL76a6jKBhg/kAkzELMTKx68Rp5Plz8+A2UsAvxD41FvPkk4llfETl2Rp0GnF7iHsS
+         vuXfbYOT3pzdX7fJrgUt/mpe6N0VM3kCj4o/KxFukZzGGYJGaD04KxCTdRhHtWunPmma
+         KvoTX1/L3LXRMzu30aBg0LPPS99SZrD+dSywxdWbTHhZqhOdq//tC3L7XJl7XwY4W9Hk
+         cyHbpap8OQyYG661MEhCsZbPZqxuUyNcgKm5q17Ad+UGBkHkILEcW7Qvh2+Kdn552WNc
+         UTTKpNr/uV3qif5umNJpk0ElmmS6yAPCdZ3nts9Okg9UVvbn2Ogzo9T7CjHMrafasAf2
+         NN5Q==
+X-Gm-Message-State: AOJu0YzgtpqdHIJBSgJFnbQFZzOUmt8TwUsDq7f6cJSWoJ0Glxl2oxN1
+	pV/u7LtXQayCEuXdW81eoFbcUw3UXgE6NoNlqEZ1abtK
+X-Google-Smtp-Source: AGHT+IH5n6YRER9010t+TIRpLgl9P8IdXPNwqiRhtPfjckIEilGzVXUIU/XQ6SlTit79n20953Ul1A==
+X-Received: by 2002:a5d:66c2:0:b0:336:8c0e:cede with SMTP id k2-20020a5d66c2000000b003368c0ecedemr80744wrw.214.1703153557472;
+        Thu, 21 Dec 2023 02:12:37 -0800 (PST)
 Received: from [192.168.7.29] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id c14-20020adffb4e000000b0033687f3b9b5sm1069591wrs.93.2023.12.21.02.11.07
+        by smtp.gmail.com with ESMTPSA id c14-20020adffb4e000000b0033687f3b9b5sm1069591wrs.93.2023.12.21.02.12.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Dec 2023 02:11:08 -0800 (PST)
-Message-ID: <a987f881-1c23-4528-9cb1-e5a875b7e7a8@linaro.org>
-Date: Thu, 21 Dec 2023 11:11:07 +0100
+        Thu, 21 Dec 2023 02:12:36 -0800 (PST)
+Message-ID: <e38724be-c9f0-4916-bfd0-d20b316db2da@linaro.org>
+Date: Thu, 21 Dec 2023 11:12:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] amlogic drivers updates for v6.8
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.8
 Content-Language: en-US, fr
 Reply-To: neil.armstrong@linaro.org
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
@@ -94,9 +94,9 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a couple of non urgent fixes for the meson-sm drivers.
+Here's a set of Amlogic ARM64 DT changes for v6.8, with cleanups
+and a set of new HW support for the S4 and C4 Amlogic SoCs.
 
-Thanks,
 Neil
 
 The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
@@ -105,21 +105,71 @@ The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.8
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.8
 
-for you to fetch changes up to d8385d7433f9c7d718448465e30d6b8c1207b59f:
+for you to fetch changes up to eb54ef36282f670c704ed5af8593da62bebba80d:
 
-   firmware: meson-sm: unmap out_base shmem in error path (2023-11-27 09:17:51 +0100)
-
-----------------------------------------------------------------
-Amlogic drivers changes for v6.8:
-- meson-sm: unmap out_base shmem in error path
-- meson-sm: use dev_groups attrs for sysfs entries
+   arm64: dts: amlogic: fix format for s4 uart node (2023-12-19 10:24:52 +0100)
 
 ----------------------------------------------------------------
-Evgeny Bachinin (2):
-       firmware: meson_sm: refactor serial sysfs entry via dev_groups attrs
-       firmware: meson-sm: unmap out_base shmem in error path
+Amlogic ARM64 DT changes for v6.8:
+- DT cleanups
+  - s4 uart node
+  - drop redundant status=okay
+  - minor whitespace cleanup around '='
+- Watchdog nodes for S4 & C4 SoCs
+- Clock, I2C, SPICC, NAND, Ethernet nodes for S4 And the AQ222 dev board
+- Add EEPROM on the jethub-jxx boards
+- Update of the amlogic,meson-gx-hhi-sysctrl bindings
 
-  drivers/firmware/meson/meson_sm.c | 19 ++++++++-----------
-  1 file changed, 8 insertions(+), 11 deletions(-)
+----------------------------------------------------------------
+Arseniy Krasnov (1):
+       arm64: dts: amlogic: meson-axg: pinctrl node for NAND
+
+Huqiang Qin (2):
+       arm64: dts: Add watchdog node for Amlogic C3 SoCs
+       arm64: dts: Add watchdog node for Amlogic S4 SoCs
+
+Krzysztof Kozlowski (2):
+       arm64: dts: amlogic: minor whitespace cleanup around '='
+       arm64: dts: amlogic: drop redundant status=okay
+
+Neil Armstrong (1):
+       dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: add example covering meson-axg-hhi-sysctrl
+
+Viacheslav Bocharov (1):
+       arm64: dts: meson-axg: jethub-jxx add support for EEPROM
+
+Xianwei Zhao (3):
+       arm64: dts: amlogic: add some device nodes for S4
+       arm64: dts: amlogic: enable some nodes for board AQ222
+       arm64: dts: amlogic: fix format for s4 uart node
+
+  .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml  |  33 ++
+  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        |   6 +
+  .../meson-axg-jethome-jethub-j110-rev-2.dts        |  14 +-
+  .../meson-axg-jethome-jethub-j110-rev-3.dts        |  12 +
+  arch/arm64/boot/dts/amlogic/meson-axg-s400.dts     |   5 -
+  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |  23 ++
+  arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts  |   1 -
+  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |   1 -
+  .../boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi  |   2 +-
+  .../boot/dts/amlogic/meson-g12b-bananapi.dtsi      |   2 +-
+  arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |   1 -
+  .../boot/dts/amlogic/meson-g12b-ugoos-am6.dts      |   1 -
+  .../arm64/boot/dts/amlogic/meson-gx-p23x-q20x.dtsi |   1 -
+  arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts |   1 -
+  arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts    |   1 -
+  .../boot/dts/amlogic/meson-gxbb-vega-s95.dtsi      |   1 -
+  .../boot/dts/amlogic/meson-gxbb-wetek-play2.dts    |   1 -
+  .../arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dts |   1 -
+  arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dts |   1 -
+  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     |  60 +++-
+  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          | 360 ++++++++++++++++++++-
+  arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts   |   1 -
+  22 files changed, 504 insertions(+), 25 deletions(-)
+
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+Senior Software Engineer - Linaro Developer Services
+https://linaro.org/services
