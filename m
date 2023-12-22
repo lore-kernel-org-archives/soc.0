@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EB18C4706C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6276C47072
 	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5EE6CC433B7; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 455AAC4339A;
+	id 771AEC4166B; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F1E9C433BA;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703246467;
-	bh=4Y1TAtHL3tluvvHHCG1uRrGJtljfpRJxqgvMaNm/WA4=;
+	bh=qFysgIOQRMp6UY8+xlQwqfX4p0GvzD5Zy5yt6IdEwlM=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Nde03NsQoC+nFgCp7dbW8q94BpjkBpOaKiYLJOgvLcLrgirdN/V3OnPGRRghfAjLZ
-	 27oFwanktiu60cajHfR8ijN5rTT774o0YcYwYK54MaEJWD13JsDJnGedi8AXGvNPpL
-	 aZfqwntntYWe1gsv1jmKd7ooj+Nuu7awsCahV2NExwxKgbFZDa0woqveGuUW06zPcF
-	 hT+3zqIDayENXSEvYcIfC9aC1b/qDcxOKsB2EbkTfd/7GkuikC4MEaJvhqOvl8qTqn
-	 NajMvwUcVYbnP4qvSmcLUumaPkY2nnT06Y3eimWV8ZYZB5GT0ZJ3q1yD73fn0QObUS
-	 42e4oDb7vav1g==
+	b=UgaC2hnAzMhBOCajzYsrN7W2T/sX4wqaRm3moyF3Dn1mG74UBmalaMPUVUimqDu/X
+	 jzJgH0uHDsvvQVtHqWCveMvBLQ2VENx6X3mtKc3AXCBnK+qr2+2rll+Ph2+DBKmaWk
+	 cFw9hAhKyMJV/R3KXcFUBMYWq2MdOLY0OGStFKDeIWkEUAB99ctlKvAKa9Cb3MZ4bO
+	 7/DlAnVRYWJcwHlK6srMl3W2BLtg/LGRtoFCHkEwTvuO7r1IihzzBgQpcQRANipwsh
+	 2F1xcr/hzD4Z6SGoYTkG0Tdw9xXexAHzNOZTSKdlR+cOmZGFwcP9ReMF6QfDOXJUxx
+	 7ezejY5XyVvCA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 225F3DD4EF3;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33D81DD4EF4;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Microchip AT91 SoC updates for v6.8
+Subject: Re: [GIT PULL RESEND v2] arm64: soc: ZynqMP SoC changes for v6.8
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170324646713.10550.6600647952805611388.git-patchwork-notify@kernel.org>
+ <170324646720.10550.3474677213334373710.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Dec 2023 12:01:07 +0000
-References: <20231214174830.3045180-1-claudiu.beznea@tuxon.dev>
-In-Reply-To: <20231214174830.3045180-1-claudiu.beznea@tuxon.dev>
-To: Claudiu <claudiu.beznea@tuxon.dev>
+References: <CAHTX3dJ=6y=vEgmH7Qqe=6TJZT=D-egKDmLLER4fS0=OHJRGZA@mail.gmail.com>
+In-Reply-To: <CAHTX3dJ=6y=vEgmH7Qqe=6TJZT=D-egKDmLLER4fS0=OHJRGZA@mail.gmail.com>
+To: Michal Simek <monstr@monstr.eu>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,22 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 14 Dec 2023 19:48:30 +0200 you wrote:
-> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+On Mon, 18 Dec 2023 11:10:48 +0100 you wrote:
+> Hi,
 > 
->   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-6.8
+> please pull these patches to your tree. I am sending it again as v2 because
+> I see origin email in lore here
+> https://lore.kernel.org/soc/CAHTX3dJp_dztRCOn+-_OCeb-L6He7Pi2t-K0QeTDACaMs-xfTA@mail.gmail.com/T/#u
+> but I can't see it in patchwork.
+> I have "patched" Uwe's surname to remove no ascii char and see if that
+> goes through. That should be the only
+> difference between previous RESEND pull request.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Microchip AT91 SoC updates for v6.8
-    https://git.kernel.org/soc/soc/c/6248b4095f40
+  - [GIT,PULL,RESEND,v2] arm64: soc: ZynqMP SoC changes for v6.8
+    https://git.kernel.org/soc/soc/c/c55a4983e93f
 
 You are awesome, thank you!
 -- 
