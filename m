@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6276C47072
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABED5C47074
 	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 771AEC4166B; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F1E9C433BA;
+	id 7D2EEC4167E; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 62112C433BB;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703246467;
-	bh=qFysgIOQRMp6UY8+xlQwqfX4p0GvzD5Zy5yt6IdEwlM=;
+	bh=AI97+cTCFtBrCSDMvf2bN/moWMfsgvtbDg1xD4iBEtI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UgaC2hnAzMhBOCajzYsrN7W2T/sX4wqaRm3moyF3Dn1mG74UBmalaMPUVUimqDu/X
-	 jzJgH0uHDsvvQVtHqWCveMvBLQ2VENx6X3mtKc3AXCBnK+qr2+2rll+Ph2+DBKmaWk
-	 cFw9hAhKyMJV/R3KXcFUBMYWq2MdOLY0OGStFKDeIWkEUAB99ctlKvAKa9Cb3MZ4bO
-	 7/DlAnVRYWJcwHlK6srMl3W2BLtg/LGRtoFCHkEwTvuO7r1IihzzBgQpcQRANipwsh
-	 2F1xcr/hzD4Z6SGoYTkG0Tdw9xXexAHzNOZTSKdlR+cOmZGFwcP9ReMF6QfDOXJUxx
-	 7ezejY5XyVvCA==
+	b=h8WOqIxgfz6VJxVDDHrGbJKidKUNdFCuqbtepHCEQ1Af2gjwAGNyr5tbAaaL/xkuY
+	 +Nz/hFp4Na+FWauUo1QdsqoATdqt5tTtncTTN3xLwc5P2jQp+vUTkVRqqKwrXyi/ln
+	 j5edMPWlv4xP8gO73e3ItK2hQX36u5PtLJeSU4JNMF7FcqQ84vSdz5+fxqKc+NREdz
+	 gRXnrkTyBV/+I6xLOqa8A0q+eNrTIxYzrHQTwTuDaq93rDSDvr2KGGH4DEoaLLmkby
+	 8Z06ZNCNVVqWwzngD+zAi5YztJx7pvuQIf4eBC0iSBgc72PKg9V2UvZxcPa2QL91W5
+	 K2tGug75pUb/g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33D81DD4EF4;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 398B3DD4EFA;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL RESEND v2] arm64: soc: ZynqMP SoC changes for v6.8
+Subject: Re: [GIT PULL] Qualcomm ARM64 defconfig updates for v6.8
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170324646720.10550.3474677213334373710.git-patchwork-notify@kernel.org>
+ <170324646723.10550.5301299025773784616.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Dec 2023 12:01:07 +0000
-References: <CAHTX3dJ=6y=vEgmH7Qqe=6TJZT=D-egKDmLLER4fS0=OHJRGZA@mail.gmail.com>
-In-Reply-To: <CAHTX3dJ=6y=vEgmH7Qqe=6TJZT=D-egKDmLLER4fS0=OHJRGZA@mail.gmail.com>
-To: Michal Simek <monstr@monstr.eu>
+References: <20231219043307.732781-1-andersson@kernel.org>
+In-Reply-To: <20231219043307.732781-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,22 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 18 Dec 2023 11:10:48 +0100 you wrote:
-> Hi,
+On Mon, 18 Dec 2023 20:33:06 -0800 you wrote:
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 > 
-> please pull these patches to your tree. I am sending it again as v2 because
-> I see origin email in lore here
-> https://lore.kernel.org/soc/CAHTX3dJp_dztRCOn+-_OCeb-L6He7Pi2t-K0QeTDACaMs-xfTA@mail.gmail.com/T/#u
-> but I can't see it in patchwork.
-> I have "patched" Uwe's surname to remove no ascii char and see if that
-> goes through. That should be the only
-> difference between previous RESEND pull request.
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.8
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,RESEND,v2] arm64: soc: ZynqMP SoC changes for v6.8
-    https://git.kernel.org/soc/soc/c/c55a4983e93f
+  - [GIT,PULL] Qualcomm ARM64 defconfig updates for v6.8
+    https://git.kernel.org/soc/soc/c/81f5afc68bfa
 
 You are awesome, thank you!
 -- 
