@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDF20C47DBE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A6CC47DB0
 	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E7364C116CB; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D15ABC433B9;
+	id D8732C4339A; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C2310C433CD;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703246467;
-	bh=KBmStwyKHA/mitO5GiWNR8nnHRfnU9ADf8Hp3JLSIzc=;
+	bh=SvSwThC75K3uehBZOA0vJSX/wFBF2Sb8LP0bqurbJ40=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=gRxvitlbL5iMXFI1MojydyqJIRIwy8QM1PIEJvnNMdq8+CwxclsCF/PyuduJfFLNR
-	 4YY8VSRBVP4G5XR1mrTrOCLM6c6vnQcJvE505me3nQ4SkPDUnElj7/zK1zdZs9WXRh
-	 AhXdRDiPJjHS8eFzBbxST2wRKa0q363OUIGKpGjq0tAxO/En+6JM5EF9MMX6gv2oCm
-	 +kkDF8hKwd3rUQ/G1n5gkYLOeBgHtlZNIljagHk1F1WppuBQMniLUUzEy0qjuEd1t5
-	 l2zpy0Ij6Aq9XE3NGWf375nBvEvfUJirzVvQBrWZrcoMVhicRLMm/R7pMucO8DAGB4
-	 1AWG9u/EOgeqQ==
+	b=Ukxrxl3djSDmxkc1S9ljxhWJtDrtCDu6EEM1WuPORc9XvbXIXWUGEET4Ndvtf1ElS
+	 WdJWocljZ7RCLChHZk4p+enKrbo+dGrbACcpCvJDodV3SDJl3uqfi7gSmtvYtFALan
+	 etEVDHFlVnn3rimPcTkXm6vcLJ3AN3/pKpfLtJHBT68RXcRGkgeZ9OpZ0FyZ3wqxMF
+	 ABUs3cVovfjFabB3ZqzPEOfDVxOxeZvqrKN0kGit6m/s06bF8x6QOjFabfkW8wPDvj
+	 ucAth7t9ThYyjxMQZ5JGtcfJWzXkAq3eMnXSqSMLOgqmA1fLcfTGYaKMJI3PJ2YFYu
+	 k2Hqk/ojJjVgQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD2B0DD4EF3;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B026CDD4EEA;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm ARM64 updates for v6.8
+Subject: Re: [GIT,PULL] hisilicon: driver updates for v6.8
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170324646777.10550.9150745099060463183.git-patchwork-notify@kernel.org>
+ <170324646771.10550.6982878878182840955.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Dec 2023 12:01:07 +0000
-References: <20231219145402.874161-1-andersson@kernel.org>
-In-Reply-To: <20231219145402.874161-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+References: <6572C41B.6050703@hisilicon.com>
+In-Reply-To: <6572C41B.6050703@hisilicon.com>
+To: Wei Xu <xuwei5@hisilicon.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 19 Dec 2023 06:53:59 -0800 you wrote:
-> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+On Fri, 8 Dec 2023 15:22:03 +0800 you wrote:
+> Hi ARM SoC maintainers,
 > 
->   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+> Please consider to pull the following changes.
+> Thanks!
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.8
+> Best Regards,
+> Wei
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Qualcomm ARM64 updates for v6.8
-    https://git.kernel.org/soc/soc/c/2d7123c7e167
+  - [GIT,PULL] hisilicon: driver updates for v6.8
+    https://git.kernel.org/soc/soc/c/60cc77704eb2
 
 You are awesome, thank you!
 -- 
