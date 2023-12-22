@@ -4,89 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B255EC47073
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB707C47077
 	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85AEAC4163D; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67ADEC433B8;
+	id 9E13AC116B6; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 78BF2C4167D;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703246467;
-	bh=i5zur05cdluM8p67qnT/2pOG0B8z2Pj+FAU0MXgbVC0=;
+	bh=IVmJHww4+gPWU2ezwsAVBy3MLNfDBkeruLO9CmGD5Sw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=JLW9U7wrtvlrhHUx8eoWiSPMkqxWIUWdo/4xLlxLtagRweMcZkhWWRpFcUu+Ohd9l
-	 T/PgmKOVFF9OWQAHc6wQ2n+pFVvqSlsoVzKVblRyMRuz/o3SYT92z1oFBb0SWv+LAM
-	 n9A2y9XgiCWrcKkarubPcDSqmirZRG81gDJ5MojgNPeiLmfUEY/jeroBAm+xZTiTzn
-	 huVQalEH5mK+Z862ily8DfkOpA63r8UTfAdWQnAMUE5d5f98f/l41Ee3DAE3/3Lksu
-	 YQjfI428mSSMuUWEE8joX3mQf6IoxXPeUIq/t4eD2SF0L2Pcfv8uTP6/K8FqTTAayG
-	 VJhLU/oeZPovw==
+	b=I/Gdt+IVIIBVlu/eWjY3U/iveyL1s4lHFUG4m6mhOW8Oi971/NlcJ4R4LyQYbz/JN
+	 BzZv0+HqZOeE1iDYylBcWU3iuKSQ2H/X1va089KJgRonfbpRw3f9WNWJP7Fa0bz3GR
+	 jIz30OhoBNcNn1mfLqdIH0ScxsiVias2ScV56f/o3Q2kvPYX8XZPf6zarH5fLBO43Y
+	 PEkCn4o8tMSQmjraj7+kSeQbx+CWVuk9LbOyAbVt1fCNxAQAC1zphrEbssHyVjWmUT
+	 NJY+rTYBSl+AQudjx/D/HmLFOvsAKBP730jwN0KRveKpHCcKYU1dDWNKFtYo4Op7Rf
+	 1f07nBXztq5KA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DB52DD4EF5;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C12DDD4EE5;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v7 00/16] Add minimal Tensor/GS101 SoC support and
- Oriole/Pixel6 board
+Subject: Re: [GIT PULL 1/3] drivers/firmware updates for v6.8 for TI K3 platforms
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170324646718.10550.5545145907495300081.git-patchwork-notify@kernel.org>
+ <170324646730.10550.6283367272195172495.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Dec 2023 12:01:07 +0000
-References: <20231211162331.435900-1-peter.griffin@linaro.org>
-In-Reply-To: <20231211162331.435900-1-peter.griffin@linaro.org>
-To: Peter Griffin <peter.griffin@linaro.org>
+References: <20231218153043.r5psxbjjpccusjg4@september>
+In-Reply-To: <20231218153043.r5psxbjjpccusjg4@september>
+To: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
-by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 11 Dec 2023 16:23:15 +0000 you wrote:
-> Hi folks,
+On Mon, 18 Dec 2023 09:30:43 -0600 you wrote:
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 > 
-> This series adds initial SoC support for the GS101 SoC and also initial board
-> support for Pixel 6 phone (Oriole).
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 > 
-> Thankyou to everyone who has reviewed and tested the previous series. Your
-> time and effort doing so is much appreciated! If any relevant subsystem
-> maintainers can send a acked-by that would be much appreciated. In particular
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver-soc-for-v6.8
 > 
 > [...]
 
 Here is the summary with links:
-  - [v7,01/16] dt-bindings: watchdog: Document Google gs101 watchdog bindings
-    https://git.kernel.org/soc/soc/c/81306efd22ff
-  - [v7,02/16] dt-bindings: arm: google: Add bindings for Google ARM platforms
-    (no matching commit)
-  - [v7,03/16] dt-bindings: serial: samsung: Add google-gs101-uart compatible
-    https://git.kernel.org/soc/soc/c/bad3bc0a23b7
-  - [v7,04/16] dt-bindings: serial: samsung: Make samsung,uart-fifosize a required property
-    https://git.kernel.org/soc/soc/c/2072496129b7
-  - [v7,05/16] dt-bindings: soc: samsung: usi: add google,gs101-usi compatible
-    https://git.kernel.org/soc/soc/c/d793f7c471fb
-  - [v7,06/16] dt-bindings: clock: google,gs101: fix incorrect numbering and DGB suffix
-    https://git.kernel.org/soc/soc/c/5b02a863ba50
-  - [v7,07/16] clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
-    https://git.kernel.org/soc/soc/c/13ff3bdafdd5
-  - [v7,08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
-    https://git.kernel.org/soc/soc/c/2c597bb7d66a
-  - [v7,09/16] pinctrl: samsung: Add gs101 SoC pinctrl configuration
-    (no matching commit)
-  - [v7,10/16] watchdog: s3c2410_wdt: Add support for WTCON register DBGACK_MASK bit
-    https://git.kernel.org/soc/soc/c/6584cd349010
-  - [v7,11/16] watchdog: s3c2410_wdt: Update QUIRK macros to use BIT macro
-    https://git.kernel.org/soc/soc/c/d429928dde2d
-  - [v7,12/16] watchdog: s3c2410_wdt: Add support for Google gs101 SoC
-    https://git.kernel.org/soc/soc/c/796bb2d3a16c
-  - [v7,13/16] tty: serial: samsung: Add gs101 compatible and common fifoszdt_serial_drv_data
-    https://git.kernel.org/soc/soc/c/c95f5b21a0ea
-  - [v7,14/16] arm64: dts: exynos: google: Add initial Google gs101 SoC support
-    (no matching commit)
-  - [v7,15/16] arm64: dts: exynos: google: Add initial Oriole/pixel 6 board support
-    (no matching commit)
-  - [v7,16/16] MAINTAINERS: add entry for Google Tensor SoC
+  - [GIT,PULL,1/3] drivers/firmware updates for v6.8 for TI K3 platforms
+    https://git.kernel.org/soc/soc/c/1b3171929107
+  - [GIT,PULL,2/3] arm64: defconfig: Updates for v6.8 for TI K3 platforms
+    https://git.kernel.org/soc/soc/c/6863c7c6357c
+  - [GIT,PULL,3/3] arm64: dts: ti: Updates for v6.8 for TI K3 platforms
     (no matching commit)
 
 You are awesome, thank you!
