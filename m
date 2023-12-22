@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9854C47422
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4934C4707B
 	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B01E0C43397; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9373AC433CC;
+	id 9EBC8C4AF1E; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D4B8C4160E;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703246467;
-	bh=CQE/+8tezPkhqXNyGDcGoSkHuiA/3kdwpqbLT6In3DU=;
+	bh=UpgUQqDhYMFL/bAiQASqV3ZeIlKE/IDX19WwILkji9U=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ShZleaIEDz50MJ/6/8Kat1cWd87pTFiq7aMppxeoE3mezo2lb8kp8hgad2VO22ntC
-	 L5/TXR/XWC1KR93MaohJQ3/GlMax0Jp7Kdj/oqRzcYgRPpRZ1TM2ipanwlr1yQTmQ5
-	 RWG0yQdZRxmIb6spjPGgaNvC5mG5n5jPuMApJwqwAxNUdVFFuChlZb4vuwkzOziP2R
-	 pNsyamH+RwixySuYLJEOe02vfSiaO7c+tdzFMQpf9/wbYVFQYrVIOgqxTdvayeEgrt
-	 oRH8+lGY55fLV5cDMq/SuHvSsH1PvsoZALR11+YlYM6nOaK4rfCv6tAg88n4LkPlEl
-	 I6/KrTscPBqRw==
+	b=qjAIUm+OjShYXzAQFoAygiOwRKrdSsggduuOW+WK5daUtWDpicI9QCnjYohxkQHOO
+	 MnIIupwoEfG2OD4KdNFXfHQVOHKRgqPYLh13+Anu9DZSwD2C+DyCyG0BtG8SYIG8Y5
+	 cQnP55JUz5en3hm8dXy1LXvS+4O4dEE4UxqMkBpzWAOoQ9dzq7sUxx7+nDo8TsC6tV
+	 137jVlCtB8Qygkf5RxRdjmOjtTwtHkNZgEuOxY1MleVuDjqNWOt5mY6xIBrLMW3TNA
+	 9LTZi0W6HIlGF0dmb0HG5UuyRN7mWREiFpnM/nPiqcQdZxQOBmLy04ne+8ijTve5Qx
+	 dYQiF3bsZKWEg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A3B9DD4EEA;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CD8ADD4EFC;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] amlogic drivers updates for v6.8
+Subject: Re: [GIT PULL] RISC-V cache drivers for v6.8
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170324646749.10550.14396846640730693216.git-patchwork-notify@kernel.org>
+ <170324646737.10550.15780932455987944075.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Dec 2023 12:01:07 +0000
-References: <a987f881-1c23-4528-9cb1-e5a875b7e7a8@linaro.org>
-In-Reply-To: <a987f881-1c23-4528-9cb1-e5a875b7e7a8@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+References: <20231221-catatonic-monday-d4c61283b136@spud>
+In-Reply-To: <20231221-catatonic-monday-d4c61283b136@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 21 Dec 2023 11:11:07 +0100 you wrote:
-> Hi,
+On Thu, 21 Dec 2023 12:57:53 +0000 you wrote:
+> Hey Arnd,
 > 
-> Here's a couple of non urgent fixes for the meson-sm drivers.
-> 
-> Thanks,
-> Neil
+> Please pull the move of the ccache driver out of drivers/soc and the
+> addition of support for the non-standard non-coherent cache operations
+> on the jh7100. Despite it being an early(ish) SoC and being succeeded by
+> the jh7110, there's still people actively adding mainline support for
+> some of the peripherals etc.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] amlogic drivers updates for v6.8
-    https://git.kernel.org/soc/soc/c/418188d878d5
+  - [GIT,PULL] RISC-V cache drivers for v6.8
+    https://git.kernel.org/soc/soc/c/41ab5e162569
 
 You are awesome, thank you!
 -- 
