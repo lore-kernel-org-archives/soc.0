@@ -4,58 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E15FDC47DB3
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC3F0C47DAF
 	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D2548C433BF; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9F55C116C9;
+	id BFF29C4AF6B; Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A9F4DC433D9;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1703246467;
-	bh=2GA3Y70mFQZlU+6jn1406m/f2vRMuStjDQiZXyMRBf0=;
+	bh=S1Dyz92nGxrHgtCuV6XOC+9CuWJDGbIPK8WscWSmRcs=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=fBitugnP5f/MwTNb9Ab3Uue8Cgdl9CMLNsoDKuMcUmGh2Lz8ZsAo1WjMMiI7CMmTj
-	 rmTXxZYRVN/HU4neBvAgOV0pdKoinN6NrkGEtMCjSsaUsAxLkDrh9Wt+umz4aJ9yM6
-	 IZLUrhUwIGCciDt2ZSvTmjd39639S7xi/JtgwTGHs4ku90uESln9SwHSlA65W1Q2eq
-	 ZnOViPFeXf3DmPY1uDnEdlSoCsXZRMq9XlebU5YoUf4mMcYtD/G6YRNaF0tTlcvPb4
-	 X3Vfm5TYmqwLrrCyqYqqDTsU49dkrQV/39BIo93T4YQkj+W4R9fR8Ef8en0QJ1zNCO
-	 UqSpHElFWH0DQ==
+	b=P4a1QkYGTkU/SAJ75Hvq/rXA0x+zo1sUvyORFFDArtsaZuW3v0+kvGEaKu3ykSa9m
+	 YEaM+JkJ8S9lvPgxegIBcd2pDqf8AVzmjPh6h36ary+dpsU6dWwDYI6xgDqoBIvXCc
+	 UXsMqoNlgSISSYEh304BS74IqX4zegu6eAgqPExwDde1b+Ko/eIJI7jTeZO3GoBGSG
+	 gG0eG46lkjNzJkSlbITlTxsh08aT4ckU6IJU8m2lmqNlk3vyx+TEMVwc1gn80d175K
+	 CxPO+YXnUD4O6vc/4LpH6Id+Sx2f3fs5b4OZpTTdCUNoBiZEEz5tTb5q+f9Z/8o+do
+	 JjE4uIZCiL9QQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9715DD4EFC;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C6BFDD4EF5;
 	Fri, 22 Dec 2023 12:01:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: enable STM32 DCMIPP media support
+Subject: Re: [GIT PULL 1/3] Devicetree changes for omaps for v6.8
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170324646769.10550.12606270648441240466.git-patchwork-notify@kernel.org>
+ <170324646757.10550.8014460807025017166.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Dec 2023 12:01:07 +0000
-References: <20231215100656.729094-1-alexandre.torgue@foss.st.com>
-In-Reply-To: <20231215100656.729094-1-alexandre.torgue@foss.st.com>
-To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+References: <pull-1702037869-295608@atomide.com>
+In-Reply-To: <pull-1702037869-295608@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 15 Dec 2023 11:06:56 +0100 you wrote:
-> From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+On Fri,  8 Dec 2023 14:18:17 +0200 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
 > 
-> Enables support of STM32 DCMIPP V4L2 media driver.
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 > 
-> Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: multi_v7_defconfig: enable STM32 DCMIPP media support
-    https://git.kernel.org/soc/soc/c/ed27e15bc490
+  - [GIT,PULL,1/3] Devicetree changes for omaps for v6.8
+    (no matching commit)
+  - [GIT,PULL,2/3] Defconfig changes for omaps for v6.8
+    https://git.kernel.org/soc/soc/c/9344204bb92a
+  - [GIT,PULL,3/3] Maintainer changes for v6.8
+    https://git.kernel.org/soc/soc/c/7eda5fe9684f
 
 You are awesome, thank you!
 -- 
