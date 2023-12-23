@@ -1,100 +1,121 @@
-Return-Path: <SRS0=l0og=IB=bootlin.com=herve.codina@kernel.org>
+Return-Path: <SRS0=fH+F=IC=gmx.net=wahrenst@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60BA8C41535
-	for <soc@archiver.kernel.org>; Fri, 22 Dec 2023 12:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58BFAC3DA6E
+	for <soc@archiver.kernel.org>; Sat, 23 Dec 2023 12:36:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 47F9CC433C9; Fri, 22 Dec 2023 12:34:55 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id F2B28C433C7; Sat, 23 Dec 2023 12:36:36 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E0D11C433C8
-	for <soc@kernel.org>; Fri, 22 Dec 2023 12:34:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E0D11C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BC452240003;
-	Fri, 22 Dec 2023 12:34:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1703248490;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bq0Cc7KHVfln4arFsKeGt5O9gb4Np/925X2DinLuzzI=;
-	b=X3gr0tiTDPm0nix/vXT1GCh6Ot7hAp7YQ2RZjpA2QK+NhhgJcTJ6YoXMIThcEFm6dtx5pD
-	FrEPEmTpeB/xztiJTDtdrc5nQr4jBcm06tyA/SdL9QJJXeCMQBLTGJCM4X2Yd8MdVOVyvM
-	dLVMDonEoTvo1TddsOaCC8XQ2mNThiKUgrnoUunvn8tYQYoShtPbiGs7nRfq/w4gCl7y5Z
-	6cTPk7SZhyFQZsJ+iDYaICyLMeGX/KuCihyuLxP5qrt/3g36Rz+7Iks/t++A5z4m6YPDTv
-	OPsucwuj53L7ZkClevva2b7gtATtb4AgbsmB8U5YEObm7FmEl44LoLQ3bn0AQA==
-Date: Fri, 22 Dec 2023 13:34:48 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: "Arnd Bergmann" <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id F1B00C433C8;
+	Sat, 23 Dec 2023 12:36:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F1B00C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1703334972; x=1703939772; i=wahrenst@gmx.net;
+	bh=JncPf9nLdRLwEx36h3QEDk4/crDt/APzy8lf02Z8TQw=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=hinBr81f0IvByakeNxCYzE1O4QipIv+zRyT0kLjhOslFtlHv5bh1YwMCD8mkUmET
+	 /PmZGlZoJ9if3gEglWofUbHlk14WXjV0OJ/Bj+G2G0vViv+paHH5Dx0C/oHW+m3z2
+	 /zQTiDPhikQ/rB/3v3e1dfr49tIGvw9/shDxU8orFmSQqPsY+TQVHC3Kk/kkfGj7S
+	 o4Y8UcPLmDeNnIcx3KwC0G/a6ugudIUf8AcjxLvWDx67KtkP5iI+raMRuuKq2fMjA
+	 ztvzDHbdCoHUW4kJp99SIl9jzaiZny3MeGeeXTVd+gpZlJxeJoXfrQ27YwECfXPbR
+	 U2WLIfatUzznQDSpCQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MvK0X-1qzUU90pCD-00rKnD; Sat, 23
+ Dec 2023 13:36:12 +0100
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc <soc@kernel.org>, "Qiang Zhao" <qiang.zhao@nxp.com>, "Leo Li"
- <leoyang.li@nxp.com>, "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] PowerQUICC QMC and TSA drivers updates for v6.8
-Message-ID: <20231222133448.1413d78d@bootlin.com>
-In-Reply-To: <a274ba17-6ab7-4169-a10c-22fcc9e74248@app.fastmail.com>
-References: <20231212105514.273e8ab0@bootlin.com>
-	<a274ba17-6ab7-4169-a10c-22fcc9e74248@app.fastmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Cc: Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Myl=C3=A8ne=20Josserand?= <mylene.josserand@bootlin.com>,
+	linux-sunxi@lists.linux.dev,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH] ARM: sun9i: smp: Fix array-index-out-of-bounds read in sunxi_mc_smp_init
+Date: Sat, 23 Dec 2023 13:35:46 +0100
+Message-Id: <20231223123546.88125-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: herve.codina@bootlin.com
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:sZWTjmyHvO3Pwx9sSZDiG/Y9Hvhu5VgjYKLEdc7HJpuvZcoVwqq
+ gEu0rPOAqmDAEjVM/679zu2losBRdkPeYk21Fymq/2Dvtpx6YYP7IoYccQgcn1Lw6JqYs0Z
+ ZUpyCtzIZYE3khgqgj6xhmrtzvleGMIL3tD9jjKiO8uqS2+/hbsveCcL//ijsraX326cSbn
+ g8+C+9K5Cm4LXwbF5lGOg==
+UI-OutboundReport: notjunk:1;M01:P0:6IlSc1pTTNo=;mt8A1lHede827k8Qu5kuBxmJF7h
+ NY+vjrvcGkfNl4OF7gp0B9FucfJr9WcjivQghrokqNH+pLVa74MIg1HPDAgerVy7zO7uo+Qbl
+ NkeNEV+/5M4kMuPQlNFwQD2AtdbyHTKhxF7KI5EaLCwDbrUvMpuy6pr5wfJcEecRBbk5Kg1CQ
+ iSaUsTBqAPKXXS0dZDxr/Jy4ElEEn9qZI2AnNCAXXUuAnaM2l6lnUVuMvTNXop60jnBffo8zj
+ NpzcvO64v5au3ac36MYTAQQpy/V9btAsYCKdJRd58b1ibG6Yd7RSROa31JTyUhuf1YxdfWgWC
+ 9llucUx8RyhM001tARtl4YrK7Tw/bJb0mc69lgJ7R25qebFXI6sZSOln5wwHd0idMLtL0Tvoh
+ TAOs+AtRGOVkySR64mB+1ajLoBjWjSEIvu62Empg0+BYz81VqzNZZ/M5DFCGR4XangXCz1QZV
+ ClX5jC23Egml8pX4E7iCSwYEIzd5XfC6qq/lhKEYdInGPW5Z/F8x8bTi7XBJKP8L/YGn7BWli
+ uEScNTe4E12qbgf0Rp8ULAxdG6GsKTiOua8yK/6P8X6NTVomje7SrxEtoZtc3SrG31utqw4jh
+ MaNhKeGkykDZBVQkKnBoVrt+a229T6olYW/qFFop2zNDu2liOCFe8a1aBSdlTXKOwui56goqD
+ IDw2sYwsHSsPppq3/zqCKcRIyN4Goh/pNXqmt02qAyAQrbR0sCg7iOpZcSZHRqhYdrI9h4o9c
+ Fl6lQJEB+M6gWk01VvY2rq1xL3TQISAf1IHtvNFpeb+EoE+9yOHdH45VUxjn2/sDtpHFxIRLN
+ DFhIuL+ZpnW/Ywu4llrb2H/l+s8z9gwX1XOG+iEmsnnoTQT4KjpPxfyF9+mBNhAVgV7+mZamD
+ Aq9L0SgR7Z//D61OaCGMKzhti6s3YEJyz9TT1PqAJP31CwVzdoVY8kYL4JotMqd+i4AwNOj3u
+ Eg6rdZ2+Uk/4/zdzmUJcLEai09I=
 
-Hi Arnd,
+Running a multi-arch kernel (multi_v7_defconfig) on a Raspberry Pi 3B+
+with enabled CONFIG_UBSAN triggers the following warning:
 
-On Fri, 22 Dec 2023 10:55:00 +0000
-"Arnd Bergmann" <arnd@arndb.de> wrote:
+ UBSAN: array-index-out-of-bounds in arch/arm/mach-sunxi/mc_smp.c:810:29
+ index 2 is out of range for type 'sunxi_mc_smp_data [2]'
+ CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.7.0-rc6-00248-g5254c0cbc92d
+ Hardware name: BCM2835
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x40/0x4c
+  dump_stack_lvl from ubsan_epilogue+0x8/0x34
+  ubsan_epilogue from __ubsan_handle_out_of_bounds+0x78/0x80
+  __ubsan_handle_out_of_bounds from sunxi_mc_smp_init+0xe4/0x4cc
+  sunxi_mc_smp_init from do_one_initcall+0xa0/0x2fc
+  do_one_initcall from kernel_init_freeable+0xf4/0x2f4
+  kernel_init_freeable from kernel_init+0x18/0x158
+  kernel_init from ret_from_fork+0x14/0x28
 
-> On Tue, Dec 12, 2023, at 09:55, Herve Codina wrote:
-> > The following changes since commit 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab:
-> >
-> >   Linux 6.7-rc3 (2023-11-26 19:59:33 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   git@github.com:hcodina/linux.git tags/fsl_qmc_tsa_v6.8
-> >
-> > for you to fetch changes up to 7a2ee1576dcc6bbe017a8283fba237b05b13fd15:
-> >  
-> 
-> This is not a valid git URL I can pull from. I have instead pulled from
-> 
->   https://github.com/hcodina/linux.git tags/fsl_qmc_tsa_v6.8
-> 
-> which is what I think you meant. 
+Since the enabled method couldn't match with any entry from
+sunxi_mc_smp_data, the value of the index shouldn't be used right after
+the loop. So move it after the check of ret in order to have a valid
+index.
 
-Yes, exactly.
-Thanks a lot for having pulled the https url.
+Fixes: 1631090e34f5 ("ARM: sun9i: smp: Add is_a83t field")
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ arch/arm/mach-sunxi/mc_smp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> You should probably edit your .gitconfig file to add a section
-> like (not sure about the exact syntax, you'll figure it out).
-> 
-> [url "https://github.com"]
->     insteadOf = git@github.com
-> 
-> 
-> >  drivers/soc/fsl/qe/qmc.c      | 658 
-> > +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------------  
-> 
-> This is an overly long line that you probably copied from a large
-> terminal window. Just for readability, I recommend redirecting the
-> 'git request-pull' output, e.g. into 'xclip' or 'cat', which will
-> give it the appropriate line length for emails.
-> 
+diff --git a/arch/arm/mach-sunxi/mc_smp.c b/arch/arm/mach-sunxi/mc_smp.c
+index cb63921232a6..6ec3445f3c72 100644
+=2D-- a/arch/arm/mach-sunxi/mc_smp.c
++++ b/arch/arm/mach-sunxi/mc_smp.c
+@@ -807,12 +807,12 @@ static int __init sunxi_mc_smp_init(void)
+ 			break;
+ 	}
 
-Thanks you these feedback and tips.
-I will be more careful in the future.
+-	is_a83t =3D sunxi_mc_smp_data[i].is_a83t;
+-
+ 	of_node_put(node);
+ 	if (ret)
+ 		return -ENODEV;
 
-Hervé
++	is_a83t =3D sunxi_mc_smp_data[i].is_a83t;
++
+ 	if (!sunxi_mc_smp_cpu_table_init())
+ 		return -EINVAL;
+
+=2D-
+2.34.1
+
