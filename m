@@ -1,126 +1,207 @@
-Return-Path: <SRS0=znlp=ID=gmx.net=wahrenst@kernel.org>
+Return-Path: <SRS0=yNVQ=ID=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5667DC46CD2
-	for <soc@archiver.kernel.org>; Sun, 24 Dec 2023 11:18:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B8E5C46CD3
+	for <soc@archiver.kernel.org>; Sun, 24 Dec 2023 22:24:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0D4E0C433CA; Sun, 24 Dec 2023 11:18:04 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 3A745C433C8; Sun, 24 Dec 2023 22:24:48 +0000 (UTC)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DDE43C433C7;
-	Sun, 24 Dec 2023 11:18:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DDE43C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1703416664; x=1704021464; i=wahrenst@gmx.net;
-	bh=JWZ+8g5eZNOh20k52eUqOz4WDMv4KYT+Ma3ruBXDwk4=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=D0U0HI2OZqDT/Zf6MDxiiSZ5F3qJ5QCu3HIiYZW+ZCIs+kSzSlVJ4R0Z0p9hTEAk
-	 PAxMNWynPsRS3rLh4dRpLzGOHMopPdy0k8yveYUIbFK3Eh7scEqMOuYYUoyRiKReY
-	 7L0Jo3BX6albQzVaUffNMVK+qLL3L/SxITZiMvIhWFcfaBKkct0Yveg7TiEnzULrT
-	 +o5xMi2DSyHp7McBdtdEGHEbfdPwsR97VWV6bQ/beADeZZFUe6yVKtg8Od4AJXZtR
-	 0l0vHltbR8C2wcQJG9o8SD5EpRnhwNSWpNAQDzWN9DziDons6C39Aqm4X/Ax/PvGN
-	 +uQwiZoxOcv2/pm76w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.130] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSt8W-1rhK8U3TTC-00UHjs; Sun, 24
- Dec 2023 12:17:44 +0100
-Message-ID: <44838edf-a7c7-4563-b9ea-b874dc3a1698@gmx.net>
-Date: Sun, 24 Dec 2023 12:17:42 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C179C433CB
+	for <soc@kernel.org>; Sun, 24 Dec 2023 22:24:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C179C433CB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50e68e93be1so2094778e87.0
+        for <soc@kernel.org>; Sun, 24 Dec 2023 14:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703456684; x=1704061484; darn=kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ecPslPIskkocjAl6EQrmLEwfUip9JzvjMANp6F2xjg=;
+        b=G69HUGRmJVnoK1DNRGBGADdZGF4RYsNnbwo8veIp7YqKMq9LXTCwnajTiAbY8CyJpe
+         tF9FkaFkylq8+86OHt3lb0WaclDGXKUr4sN8f8NNFX2Fr9wUykRQ6bLcIAsvvrxGKQo+
+         mEERlruPysHnbB9kF5RP5+FwgsmV/lKZ5UL89FxnT7LQ7+BT2I8trulRC8L8dcWycQlf
+         9qJ6va2oIt5L8JrK0vRO93vzxwzfzX6PRTD9n5YIZwFFp6fLSGiN6e58FKu8UgCb0h88
+         XobWO/OcBPDQXku3Sa7BQRV5Xkc/zjwdS+etSWATvEgKDoIAaV5wNM5vlxhdeWFuJzzc
+         HN/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703456684; x=1704061484;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/ecPslPIskkocjAl6EQrmLEwfUip9JzvjMANp6F2xjg=;
+        b=WXLWIoRKQsYqVEdxvycchmzcfcX4bECDwgmYTSV3N0QtvhNAN+MR+p0nhOPd7AYj6k
+         8PgcnmeonSdsVOIa4kPnOgwoxgiNObGI5g1AG3WVn2OBe3rzxZzdPac0+WBCyIT+2Abn
+         4sp1qlAArmjRxwAvWEKlBmB+nUyTiygKbWkacF+DNDd62EayJ4nHb2Rl1YchScv8oBvB
+         yph+EGQ2Ad/OHWojRvvc9QGzUcM5qD7nKuZXYwxgUWzSRZpBlOqnD7En5MQS+bNPKIO+
+         uRZV8eiOF26mq9gCVSUZLy7Y/BGnIJbJ01Uov9h2yNfT+9AHofC2lh/1xynkDo+XRQXA
+         6Mig==
+X-Gm-Message-State: AOJu0YzwKRKOQrgjR9HZe30m0MH9LKbmIh+swOaMdWW6VLrtiAIje11G
+	AWWYxEjZnznuDrYH9GaJTBRs4tlZam0ZaQ==
+X-Google-Smtp-Source: AGHT+IERgLw2YPRxcwPW8zWTgCLyErLHVvh2sg6Um1F4q/EELeHHp+64c7Vp2+8La8fmE/Nm1YDcsw==
+X-Received: by 2002:a05:6512:787:b0:50e:7bf0:3cda with SMTP id x7-20020a056512078700b0050e7bf03cdamr86018lfr.104.1703456684079;
+        Sun, 24 Dec 2023 14:24:44 -0800 (PST)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id u2-20020a056512040200b0050e7af5b827sm189663lfk.160.2023.12.24.14.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Dec 2023 14:24:43 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Sun, 24 Dec 2023 23:24:38 +0100
+Subject: [PATCH] ARM: Delete ARM11MPCore perf leftovers
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ARM: sun9i: smp: Fix array-index-out-of-bounds read in
- sunxi_mc_smp_init
-Content-Language: en-US
-To: Florian Fainelli <f.fainelli@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231224-drop-11mpcore-fix-v1-1-d8b16d1c1fae@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAKWviGUC/x2MQQqDQAwAvyI5N2Biu2C/UnrQbKo56C5ZKIL49
+ 4YeZ2DmhKZu2uDZneD6tWZlD6BbB7JO+6JoORi454GY75i9VCTaqhRX/NiBkmR+cMrEY4Loqmv
+ o//P1vq4fiox4JGMAAAA=
 List-Id: <soc.lore.kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>,
- =?UTF-8?Q?Myl=C3=A8ne_Josserand?= <mylene.josserand@bootlin.com>,
- linux-sunxi@lists.linux.dev, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-arm-kernel@lists.infradead.org
-References: <20231223123546.88125-1-wahrenst@gmx.net>
- <17bfb503-9e6a-40c7-b9fa-fc89c8a903c9@gmail.com>
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <17bfb503-9e6a-40c7-b9fa-fc89c8a903c9@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JLSVgLuLUmLFWRh6IJTAltUlcax0zxap1vQ0odssACh4KO5xlCR
- c4s1O57jo+NOAzxOXjaF75sMd5e+6uOEDU7ZUlE+HL5T5fyNkqCiVVI9yQywUGgNl1Pkw6h
- DlelRwOn6cNBPPPVucAboK7ozoUhhOOtrLX2j91q6MmJ38BxbdI+Dg9ymjFIebCuTe8Oy5x
- 2neL5GfwXS8moo5sawxFg==
-UI-OutboundReport: notjunk:1;M01:P0:JZ9lhrLJU/M=;C/SVdbRFQcsjQf1dpsTa4bZU2Q4
- E4NizFWTifE9oSEBi9ct5xT+5KdhhrSuSPX5bHUkjb9utyy8cDrcFhKf9I8X+Ca4R9yD46o5d
- z96D9uCT88AHbDWpQ+D1Ic3jv1OGdigjsTWgFSIgEfaeTU/f/w/RrLWq0E3qAvpcL4duvxwPP
- aCF90FYpAtm+EL/8aznaGMlMyLH2Sri2ZN7/9T2Vg6onhld/1L2Ji7UcKHgEZnfw/B1ItMsKm
- HW/fpf+vxRMIsQSx432SGsNKjOSgFXoQv/CXsxLUQzdu7pRvQXziZsBjjKZXRy81+pQvq9UGa
- LbTLGyPYmHKA3PHwuQSSK63SUXgb8g5NIf+uP5GQluE3qfBn8Y9irP62CcId2r2vHJk6wimvE
- 6m0Yoka7qGn934VHAbFKhBSOXT2mKXwQoEx/9Llz6YwPyA6k9gjqZegWltF7X/E5aw7Khe9UX
- h9sBwr4pNmSncNmvIIi9pdy9WCdblj8LYy6Bi/8HJ3eagyx+jO9JTwaxlrtQ22sdpQRA9g8Aw
- UKWB0UYiPYcvxbhBiUopVG73fxrybLPZonySGnQj/nx5Wz45JObN1RFCzlAzyYume6LqWyyrc
- CelN6QNTPPQt47f/wHGE+iuYN3y/vcBFlQI8ZYqq0IOzpiFWVonCYR6Aj70cFDBiaTu/0Dxb6
- A+sy1/FH631sG2/hwvKmtFLrfIMorh5o4Zt6aEiGaPJiAFATC4JCV8q/TMcxFNgTXqEgApDzU
- KxOYz1Es1AfCG1mpKQDNshhJjvygt5Z0yUj5WXqOWoCHoJz5tHQlgx+1E3bQGALVEOkY3M1pN
- oDpwwjMzg7IGFUBiANu9PVh4ix7JKP8oKH1qj2m16RPO92PaVAaA3htVQ+wAUde4vbSJQ9OHi
- fiexneKDn+DUVZ2oqWwTlyvDr6Q6LDw3OznGtbRhDFPr/i/ZlKlyo8ieejvAlcy15QzGdpu1O
- nAyQgw==
+To: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Russell King <linux@armlinux.org.uk>, Liviu Dudau <liviu.dudau@arm.com>, 
+ Sudeep Holla <sudeep.holla@arm.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Lubomir Rintel <lkundrak@v3.sk>, 
+ Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
+ Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.4
 
-Hi Florian,
+My commit deleting the PB11MPCore apparently left a few dangling
+structs in the perf event code. Fix it up.
 
-Am 24.12.23 um 11:12 schrieb Florian Fainelli:
->
->
-> On 12/23/2023 1:35 PM, Stefan Wahren wrote:
->> Running a multi-arch kernel (multi_v7_defconfig) on a Raspberry Pi 3B+
->> with enabled CONFIG_UBSAN triggers the following warning:
->>
->> =C2=A0 UBSAN: array-index-out-of-bounds in
->> arch/arm/mach-sunxi/mc_smp.c:810:29
->> =C2=A0 index 2 is out of range for type 'sunxi_mc_smp_data [2]'
->> =C2=A0 CPU: 0 PID: 1 Comm: swapper/0 Not tainted
->> 6.7.0-rc6-00248-g5254c0cbc92d
->> =C2=A0 Hardware name: BCM2835
->> =C2=A0=C2=A0 unwind_backtrace from show_stack+0x10/0x14
->> =C2=A0=C2=A0 show_stack from dump_stack_lvl+0x40/0x4c
->> =C2=A0=C2=A0 dump_stack_lvl from ubsan_epilogue+0x8/0x34
->> =C2=A0=C2=A0 ubsan_epilogue from __ubsan_handle_out_of_bounds+0x78/0x80
->> =C2=A0=C2=A0 __ubsan_handle_out_of_bounds from sunxi_mc_smp_init+0xe4/0=
-x4cc
->> =C2=A0=C2=A0 sunxi_mc_smp_init from do_one_initcall+0xa0/0x2fc
->> =C2=A0=C2=A0 do_one_initcall from kernel_init_freeable+0xf4/0x2f4
->> =C2=A0=C2=A0 kernel_init_freeable from kernel_init+0x18/0x158
->> =C2=A0=C2=A0 kernel_init from ret_from_fork+0x14/0x28
->>
->> Since the enabled method couldn't match with any entry from
->> sunxi_mc_smp_data, the value of the index shouldn't be used right after
->> the loop. So move it after the check of ret in order to have a valid
->> index.
->>
->> Fixes: 1631090e34f5 ("ARM: sun9i: smp: Add is_a83t field")
->> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
->
-> Previous attempts at fixing this:
->
-> https://lore.kernel.org/lkml/20230516-sunxi-v1-1-ac4b9651a8c1@google.com=
-/T/
-thanks for pointing out. Nick's version missed the refcounting of node
-and my version missed the proper handling of of_property_match_string.
-So we have actually two issues in the original code.
+Fixes: 2560cffd2134 ("ARM: Delete ARM11MPCore (ARM11 ARMv6K SMP) support")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+This fixes a warning reported in the SoC tree, it's not even
+in next yet. Now that I turned on ARMv6 in my builds it is
+also tested.
+---
+ arch/arm/kernel/perf_event_v6.c | 94 -----------------------------------------
+ 1 file changed, 94 deletions(-)
 
-I will prepare a second version.
+diff --git a/arch/arm/kernel/perf_event_v6.c b/arch/arm/kernel/perf_event_v6.c
+index 3115077f6abc..0cbf46233d6b 100644
+--- a/arch/arm/kernel/perf_event_v6.c
++++ b/arch/arm/kernel/perf_event_v6.c
+@@ -113,69 +113,6 @@ static const unsigned armv6_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+ 	[C(ITLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6_PERFCTR_ITLB_MISS,
+ };
+ 
+-enum armv6mpcore_perf_types {
+-	ARMV6MPCORE_PERFCTR_ICACHE_MISS	    = 0x0,
+-	ARMV6MPCORE_PERFCTR_IBUF_STALL	    = 0x1,
+-	ARMV6MPCORE_PERFCTR_DDEP_STALL	    = 0x2,
+-	ARMV6MPCORE_PERFCTR_ITLB_MISS	    = 0x3,
+-	ARMV6MPCORE_PERFCTR_DTLB_MISS	    = 0x4,
+-	ARMV6MPCORE_PERFCTR_BR_EXEC	    = 0x5,
+-	ARMV6MPCORE_PERFCTR_BR_NOTPREDICT   = 0x6,
+-	ARMV6MPCORE_PERFCTR_BR_MISPREDICT   = 0x7,
+-	ARMV6MPCORE_PERFCTR_INSTR_EXEC	    = 0x8,
+-	ARMV6MPCORE_PERFCTR_DCACHE_RDACCESS = 0xA,
+-	ARMV6MPCORE_PERFCTR_DCACHE_RDMISS   = 0xB,
+-	ARMV6MPCORE_PERFCTR_DCACHE_WRACCESS = 0xC,
+-	ARMV6MPCORE_PERFCTR_DCACHE_WRMISS   = 0xD,
+-	ARMV6MPCORE_PERFCTR_DCACHE_EVICTION = 0xE,
+-	ARMV6MPCORE_PERFCTR_SW_PC_CHANGE    = 0xF,
+-	ARMV6MPCORE_PERFCTR_MAIN_TLB_MISS   = 0x10,
+-	ARMV6MPCORE_PERFCTR_EXPL_MEM_ACCESS = 0x11,
+-	ARMV6MPCORE_PERFCTR_LSU_FULL_STALL  = 0x12,
+-	ARMV6MPCORE_PERFCTR_WBUF_DRAINED    = 0x13,
+-	ARMV6MPCORE_PERFCTR_CPU_CYCLES	    = 0xFF,
+-};
+-
+-/*
+- * The hardware events that we support. We do support cache operations but
+- * we have harvard caches and no way to combine instruction and data
+- * accesses/misses in hardware.
+- */
+-static const unsigned armv6mpcore_perf_map[PERF_COUNT_HW_MAX] = {
+-	PERF_MAP_ALL_UNSUPPORTED,
+-	[PERF_COUNT_HW_CPU_CYCLES]		= ARMV6MPCORE_PERFCTR_CPU_CYCLES,
+-	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV6MPCORE_PERFCTR_INSTR_EXEC,
+-	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV6MPCORE_PERFCTR_BR_EXEC,
+-	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV6MPCORE_PERFCTR_BR_MISPREDICT,
+-	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV6MPCORE_PERFCTR_IBUF_STALL,
+-	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV6MPCORE_PERFCTR_LSU_FULL_STALL,
+-};
+-
+-static const unsigned armv6mpcore_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+-					[PERF_COUNT_HW_CACHE_OP_MAX]
+-					[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
+-	PERF_CACHE_MAP_ALL_UNSUPPORTED,
+-
+-	[C(L1D)][C(OP_READ)][C(RESULT_ACCESS)]	= ARMV6MPCORE_PERFCTR_DCACHE_RDACCESS,
+-	[C(L1D)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DCACHE_RDMISS,
+-	[C(L1D)][C(OP_WRITE)][C(RESULT_ACCESS)]	= ARMV6MPCORE_PERFCTR_DCACHE_WRACCESS,
+-	[C(L1D)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DCACHE_WRMISS,
+-
+-	[C(L1I)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_ICACHE_MISS,
+-
+-	/*
+-	 * The ARM performance counters can count micro DTLB misses, micro ITLB
+-	 * misses and main TLB misses. There isn't an event for TLB misses, so
+-	 * use the micro misses here and if users want the main TLB misses they
+-	 * can use a raw counter.
+-	 */
+-	[C(DTLB)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DTLB_MISS,
+-	[C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_DTLB_MISS,
+-
+-	[C(ITLB)][C(OP_READ)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_ITLB_MISS,
+-	[C(ITLB)][C(OP_WRITE)][C(RESULT_MISS)]	= ARMV6MPCORE_PERFCTR_ITLB_MISS,
+-};
+-
+ static inline unsigned long
+ armv6_pmcr_read(void)
+ {
+@@ -452,37 +389,6 @@ static void armv6pmu_disable_event(struct perf_event *event)
+ 	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+ }
+ 
+-static void armv6mpcore_pmu_disable_event(struct perf_event *event)
+-{
+-	unsigned long val, mask, flags, evt = 0;
+-	struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+-	struct hw_perf_event *hwc = &event->hw;
+-	struct pmu_hw_events *events = this_cpu_ptr(cpu_pmu->hw_events);
+-	int idx = hwc->idx;
+-
+-	if (ARMV6_CYCLE_COUNTER == idx) {
+-		mask	= ARMV6_PMCR_CCOUNT_IEN;
+-	} else if (ARMV6_COUNTER0 == idx) {
+-		mask	= ARMV6_PMCR_COUNT0_IEN;
+-	} else if (ARMV6_COUNTER1 == idx) {
+-		mask	= ARMV6_PMCR_COUNT1_IEN;
+-	} else {
+-		WARN_ONCE(1, "invalid counter number (%d)\n", idx);
+-		return;
+-	}
+-
+-	/*
+-	 * Unlike UP ARMv6, we don't have a way of stopping the counters. We
+-	 * simply disable the interrupt reporting.
+-	 */
+-	raw_spin_lock_irqsave(&events->pmu_lock, flags);
+-	val = armv6_pmcr_read();
+-	val &= ~mask;
+-	val |= evt;
+-	armv6_pmcr_write(val);
+-	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
+-}
+-
+ static int armv6_map_event(struct perf_event *event)
+ {
+ 	return armpmu_map_event(event, &armv6_perf_map,
 
-Nevertheless merry x-mas
->
-> including a patch from William from nearly 18 months ago, which was
-> not captured by lore however.
->
-> Is anyone collecting patches for that platform still?
+---
+base-commit: b057e7afb79ec2edddc940b82af6e3571d1f0ffe
+change-id: 20231224-drop-11mpcore-fix-c6cb526d1296
+
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
 
