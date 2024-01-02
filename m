@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08311C47079
-	for <soc@archiver.kernel.org>; Tue,  2 Jan 2024 10:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AA3CC4707C
+	for <soc@archiver.kernel.org>; Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F20AAC43397; Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DB7B3C433CC;
+	id E04BFC433D9; Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CB1F9C433CB;
 	Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1704190300;
-	bh=aFy1LGuDIBf8i4Q9eHypdKOGH3yZbnefGxNHXdjqIFI=;
+	bh=5cnx/bC99GwroppEyJWkZHTSmPsCrLe7sSubfIGfkyA=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Qe3FvfG2ZKU9SglVndtsWY3BV+cVv6y9LyubWDx9y+uHNrvGmasTD8gxsVC1B9fth
-	 jULlDTIhmWPKqE0MsvA5ubbwbjSgw2oGALa5yrA05NHTOCyUml9dw3hY3oj3RtLf3o
-	 +I+lxbE6GZLb+3PPpe4883uUt+iZkfYKPVbiJOxYc8WIf+4u1VrXrNSgC5GYwLK7i4
-	 78nWYpENQlXHLyqouAbrXXEiAQnKuDu0dmYgCYBV130I39pqL8a90YoIAB/O5tLLc0
-	 Q4/tnBXvxqYJhUBxXjALyfM1b7CL9wu+Bm3Jsio5UVsat35nO556gqWt7yZsvGdV6y
-	 u9YeKXdZwx1DA==
+	b=n/7ybiowCK5dBQAYO1o/hX5wy0AUq0mtVTtM2LZ51Al2GLi3dKdvXpq8C8EPswkIZ
+	 wsn2uKLn9YYmfLCmD7ylHnyOzP3z3B73N3lPtRfSmNCdZ+uEyj5YLn6/kRV26w7pXQ
+	 G/2ZCpd5humtmqsYwyY/KxTQ/mNiNPmMxpmhkevYaOOpE8YjhfczgkcnN461IzZksM
+	 rP1CnpoFSyr4suofjmKe1C1DY9YLHxBr89HKS/0gjEx1qu4NKibMif0WLOEvc4hkDD
+	 onY3EecAWJEZnfaMD0RktQqZ9kWjgl5CQ48One2Ln7BCxAHwKKckUlgHR5jdbJVped
+	 B43imKQBnfunQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5C77DCB6CE;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2A20C395F8;
 	Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: Delete ARM11MPCore perf leftovers
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.8 #2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170419030080.6407.14717880504246066119.git-patchwork-notify@kernel.org>
+ <170419030071.6407.17997943262003820375.git-patchwork-notify@kernel.org>
 Date: Tue, 02 Jan 2024 10:11:40 +0000
-References: <20231224-drop-11mpcore-fix-v1-1-d8b16d1c1fae@linaro.org>
-In-Reply-To: <20231224-drop-11mpcore-fix-v1-1-d8b16d1c1fae@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <3711719.VqM8IeB0Os@diego>
+In-Reply-To: <3711719.VqM8IeB0Os@diego>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 24 Dec 2023 23:24:38 +0100 you wrote:
-> My commit deleting the PB11MPCore apparently left a few dangling
-> structs in the perf event code. Fix it up.
+On Mon, 01 Jan 2024 23:54:40 +0100 you wrote:
+> Hi Arnd, Kevin, Olof,
 > 
-> Fixes: 2560cffd2134 ("ARM: Delete ARM11MPCore (ARM11 ARMv6K SMP) support")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> This fixes a warning reported in the SoC tree, it's not even
-> in next yet. Now that I turned on ARMv6 in my builds it is
-> also tested.
+> please find below and in a subsequent pull-request
+> some more Rockchip changes for for 6.8 .
+> 
+> Just some stuff that came in since #1 .
+> If it's too late for this stuff for 6.8, I'll respin this for
+> 6.9, so no worries :-)
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: Delete ARM11MPCore perf leftovers
-    https://git.kernel.org/soc/soc/c/ced296f63635
+  - [GIT,PULL] Rockchip dts64 changes for 6.8 #2
+    https://git.kernel.org/soc/soc/c/228307ad3f9e
 
 You are awesome, thank you!
 -- 
