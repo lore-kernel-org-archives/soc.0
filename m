@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10A37C47255
-	for <soc@archiver.kernel.org>; Tue,  2 Jan 2024 10:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 029DEC46CD2
+	for <soc@archiver.kernel.org>; Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 03D2FC433AB; Tue,  2 Jan 2024 10:11:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E218BC433CD;
+	id C8829C433C7; Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B33CDC433C9;
 	Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1704190300;
-	bh=z1nlBOvHeUXApQl67OO31WESdLcJnR3Tc6KzIUfvdZk=;
+	bh=UgX+6oEX3p3daHYQRSdG+mGL5HNiqSBR2HW9JXxQsq4=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=HG9woqUmjY4K0rl3yoCrlllN8ZaElHdHqzOv/rbR8tuCUlsNnUEy7GUWdVs2hNV6K
-	 hD3P2INFu5w1oGxFsAX2TtZWpDr8TjR2fnEAf2R7kPOrUDtI9rpVjRfgZZUUDyEYLV
-	 W+dtcCximL0FdP33VD1IzhNVnSaZJMj2BsSc83gHfdbi3bnCB2swbSs6NUYcEHb2R5
-	 cBwLu5+WT78MusomU69cSlqjY8dq/sc5sshFN2NYRWgyDJApanQTtkNWY3IYkmreLm
-	 ggBS1NsdhRJZfD/VazsJt14RDUc5n1rGN6mIxwllnQAhQg/x/dFQ8IbbITgw9lNFdD
-	 AQ1mO9NsfG9qw==
+	b=QQ8zwBrl20sjMYg8VCMNhFysCxsLSO81APuuNT23UIJy66Bq4AsUdZ/odVVj7Ego2
+	 vsWtGml5BjItMC5uaIevCMwl47OfC2y1MnKNnZUJIxsPzNvlDJZUJx6AApZ+1L03Yz
+	 X6fK95Nktpytt+b3AUH66/g5pLV7FOF+sgkjWY2+f+63CIlKR2nhZ1VGYm+f8SLc5I
+	 CrQjBaPz6gVurgstvdWfeL0uvzhiAgTQLjMmpx4fgjdXMdParEju5brDbGiPW5AIcd
+	 TtHaWbywiRXY/K5xfQM+zQ7wL/lqqSsHRg5Fc2A9wM5xPnxN4IZERcKIyNYGdr9G/f
+	 p5ghteYsRyV9g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD04ADCB6D0;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E93CC395C5;
 	Tue,  2 Jan 2024 10:11:40 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.8 #2
+Subject: Re: [GIT PULL] ARM: sprd: DTS and bindings for v6.8-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170419030076.6407.529839583735183129.git-patchwork-notify@kernel.org>
+ <170419030064.6407.1832813384970821171.git-patchwork-notify@kernel.org>
 Date: Tue, 02 Jan 2024 10:11:40 +0000
-References: <15502825.JCcGWNJJiE@diego>
-In-Reply-To: <15502825.JCcGWNJJiE@diego>
-To: Heiko Stuebner <heiko@sntech.de>
+References: <20231228084958.1439115-1-chunyan.zhang@unisoc.com>
+In-Reply-To: <20231228084958.1439115-1-chunyan.zhang@unisoc.com>
+To: Chunyan Zhang <chunyan.zhang@unisoc.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 01 Jan 2024 23:55:12 +0100 you wrote:
-> The following changes since commit 569b26af7919c15a8ce231b4fae29cfbd811f144:
+On Thu, 28 Dec 2023 16:49:58 +0800 you wrote:
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 > 
->   ARM: dts: rockchip: add hdmi-connector node to rk3036-kylin (2023-12-12 20:38:36 +0100)
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.8-rockchip-dts32-2
+>   https://github.com/lyrazhang/linux.git tags/sprd-dt-6.8-rc1
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts32 changes for 6.8 #2
-    https://git.kernel.org/soc/soc/c/b2363297508a
+  - [GIT,PULL] ARM: sprd: DTS and bindings for v6.8-rc1
+    https://git.kernel.org/soc/soc/c/f81647e76136
 
 You are awesome, thank you!
 -- 
