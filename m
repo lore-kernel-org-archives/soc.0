@@ -1,164 +1,237 @@
-Return-Path: <SRS0=WHLa=IO=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=nz3D=IO=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 348D3C47074
-	for <soc@archiver.kernel.org>; Thu,  4 Jan 2024 10:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457E9C47073
+	for <soc@archiver.kernel.org>; Thu,  4 Jan 2024 12:02:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 06339C433C8; Thu,  4 Jan 2024 10:04:14 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	id 0BC2FC433CA; Thu,  4 Jan 2024 12:02:27 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 482FBC433C9
-	for <soc@kernel.org>; Thu,  4 Jan 2024 10:04:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 482FBC433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 08C9D5C0229;
-	Thu,  4 Jan 2024 05:04:11 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 04 Jan 2024 05:04:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1704362651;
-	 x=1704449051; bh=RuqivH/bHN8+FXTQPZU0gzRg06uxicsl69RvAIZgijQ=; b=
-	tdPHzEayjwUYBSOi+/TjwkF4q2Il908vrZEhqMvLlfyvBK6nmrcguC2aUtx6uup6
-	FiPPqWUHPj2mTK9XjdT2lNIszJ33YoKApR2caoSdRHtHBbz3T/h7HHUfYj9+4X1B
-	BsyoCijCiuUFRiDBTq4N2xLQJTz3+vje/0Y9P8j238xN9LVUrPNFHN+HDg+Mmp9B
-	SRfNc73E9iiESy9js5q/nt/OQcbYrxg1gPHb7xHy6ycV3PAC4s0OJEVxh1zmkADn
-	DQ5uoYt/oIr9ti67FV9P3urbJjf4u9a/1QcTzQGv/9Yyw0zRQnYZTEowBxfIhcqL
-	MksUTglzBPDCp/AsfgelJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1704362651; x=
-	1704449051; bh=RuqivH/bHN8+FXTQPZU0gzRg06uxicsl69RvAIZgijQ=; b=y
-	pSzdl/S+1VPJN9qymIEy8DDgypVkG1s02ph+5nMBiBQ1n18UmrP8B/YJzdt/wAX8
-	dQEqZpDssxjZzsgOXc2eW86KDxuXtsmzZe7VZ7PaVh1oOcftZY53sFpxBcwOzvrz
-	A2vMKAZZ4ZDs9iAp3xyHtZaX2ZSkPgVYTFHFiPaTIV0ryJJn2rlsTJUdgT9TUMI5
-	FIiglYQrlHS/lZKqjWkm959FN0CB4wkjPlCw2MUa4klU6gnx6fT2p3rjuDz1c4e8
-	AHCCd9bU4Urk/0nFv+C5gwaF4ZRmU5JnIUZJBj+odUK3hYxX0gE6sTswpJGPLy3E
-	zpXSMVFwWR4nrM8+GYOJA==
-X-ME-Sender: <xms:moKWZX96WnvQG9zn-AAfpaEql5YcP4JWdJACC53eL3FLsnfbKaeHSw>
-    <xme:moKWZTtenibssmiU-ukGWIbrXey6LRD200HdbOR4lTEuGUsQVGCT-16WOfLCefSPp
-    KmJS1yP1ukk1ykVMR0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdegjedguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:moKWZVB527mfSOBSgfllNPC8Jor3BB-TmHs_iAMBe4p44AHY3CHy0w>
-    <xmx:moKWZTfzE8zEibuX8PHISqTfMzXczmyITs7J8D18IlGln1vTPwWvHw>
-    <xmx:moKWZcO8-fUhsBjoR8mKicdhnbJsE8fhTVu75Bw0yg2iifQ0eUXz6A>
-    <xmx:m4KWZb2uDXtdYsysFEhtb08ilMPwaKHzOV2jRRfVFkOQHwN1aC-ykg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id EB611B6008D; Thu,  4 Jan 2024 05:04:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
-MIME-Version: 1.0
-Message-Id: <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
-In-Reply-To: 
- <rj7ijuyy47jrffi6sk7wikqo3rnutz2swkdrznyegalylacawz@jdncegf3elct>
+	by smtp.kernel.org (Postfix) with ESMTPS id 43257C433C7
+	for <soc@kernel.org>; Thu,  4 Jan 2024 12:02:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43257C433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rLMQP-0004kv-8t; Thu, 04 Jan 2024 13:02:13 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rLMQM-000KsV-Aw; Thu, 04 Jan 2024 13:02:10 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rLMQM-003Xuh-0p;
+	Thu, 04 Jan 2024 13:02:10 +0100
+Date: Thu, 4 Jan 2024 13:02:10 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Lubomir Rintel <lkundrak@v3.sk>, 
+	"zhang.songyi" <zhang.songyi@zte.com.cn>, soc@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC RESEND] soc: pxa: ssp: Cast to enum pxa_ssp_type
+ instead of int
+Message-ID: <ymq7tp3ps4grmmo6o7txpk2sswb2mzxoaplu7lih2xbmbtp6np@b6ycr5wmmbcc>
 References: <20240103210604.16877-1-duje.mihanovic@skole.hr>
  <rj7ijuyy47jrffi6sk7wikqo3rnutz2swkdrznyegalylacawz@jdncegf3elct>
-Date: Thu, 04 Jan 2024 11:03:41 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-List-Id: <soc.lore.kernel.org>
-Cc: "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Lubomir Rintel" <lkundrak@v3.sk>, "zhang.songyi" <zhang.songyi@zte.com.cn>,
- soc@kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC RESEND] soc: pxa: ssp: Cast to enum pxa_ssp_type instead of int
-Content-Type: text/plain;charset=utf-8
+ <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yn4ddbhj4j5os74o"
+Content-Disposition: inline
+In-Reply-To: <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
+
+
+--yn4ddbhj4j5os74o
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 4, 2024, at 10:08, Uwe Kleine-K=C3=B6nig wrote:
-> [adding lakml to Cc for wider audience]
->
-> On Wed, Jan 03, 2024 at 10:06:03PM +0100, Duje Mihanovi=C4=87 wrote:
->> On ARM64 platforms, id->data is a 64-bit value and casting it to a
->> 32-bit integer causes build errors. Cast it to the corresponding enum
->> instead.
->>=20
->> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
->> ---
->> This patch is necessary for my Marvell PXA1908 series to compile succ=
-essfully
->> with allyesconfig:
->> https://lore.kernel.org/all/20231102-pxa1908-lkml-v7-0-cabb1a0cb52b@s=
-kole.hr/
->> ---
->>  drivers/soc/pxa/ssp.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
->> index a1e8a07f7275..e2ffd8fd7e13 100644
->> --- a/drivers/soc/pxa/ssp.c
->> +++ b/drivers/soc/pxa/ssp.c
->> @@ -152,11 +152,11 @@ static int pxa_ssp_probe(struct platform_device=
- *pdev)
->>  	if (dev->of_node) {
->>  		const struct of_device_id *id =3D
->>  			of_match_device(of_match_ptr(pxa_ssp_of_ids), dev);
->> -		ssp->type =3D (int) id->data;
->> +		ssp->type =3D (enum pxa_ssp_type) id->data;
->
-> I wonder if this is a long-term fix. The error that the compiler throws
-> is:
->
-> 	drivers/soc/pxa/ssp.c:155:29: error: cast from pointer to integer of=20
-> different size [-Werror=3Dpointer-to-int-cast]
-> 	  155 |                 ssp->type =3D (int) id->data;
-> 	      |                             ^
->
-> enum pxa_ssp_type is an integer type, too, and its width could be
-> smaller than 64 bit, too.
+Hello Arnd,
 
-I would just change the cast to (uintptr_t), which is what we
-have elsewhere.
-
-> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devic=
-etable.h
-> index f458469c5ce5..fbe16089e4bb 100644
-> --- a/include/linux/mod_devicetable.h
-> +++ b/include/linux/mod_devicetable.h
-> @@ -283,7 +283,10 @@ struct of_device_id {
->  	char	name[32];
->  	char	type[32];
->  	char	compatible[128];
-> -	const void *data;
-> +	union {
-> +		const void *data;
-> +		kernel_ulong_t driver_data;
-> +	};
->  };
+On Thu, Jan 04, 2024 at 11:03:41AM +0100, Arnd Bergmann wrote:
+> On Thu, Jan 4, 2024, at 10:08, Uwe Kleine-K=C3=B6nig wrote:
+> > [adding lakml to Cc for wider audience]
+> >
+> > On Wed, Jan 03, 2024 at 10:06:03PM +0100, Duje Mihanovi=C4=87 wrote:
+> >> On ARM64 platforms, id->data is a 64-bit value and casting it to a
+> >> 32-bit integer causes build errors. Cast it to the corresponding enum
+> >> instead.
+> >>=20
+> >> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+> >> ---
+> >> This patch is necessary for my Marvell PXA1908 series to compile succe=
+ssfully
+> >> with allyesconfig:
+> >> https://lore.kernel.org/all/20231102-pxa1908-lkml-v7-0-cabb1a0cb52b@sk=
+ole.hr/
+> >> ---
+> >>  drivers/soc/pxa/ssp.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>=20
+> >> diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
+> >> index a1e8a07f7275..e2ffd8fd7e13 100644
+> >> --- a/drivers/soc/pxa/ssp.c
+> >> +++ b/drivers/soc/pxa/ssp.c
+> >> @@ -152,11 +152,11 @@ static int pxa_ssp_probe(struct platform_device =
+*pdev)
+> >>  	if (dev->of_node) {
+> >>  		const struct of_device_id *id =3D
+> >>  			of_match_device(of_match_ptr(pxa_ssp_of_ids), dev);
+> >> -		ssp->type =3D (int) id->data;
+> >> +		ssp->type =3D (enum pxa_ssp_type) id->data;
+> >
+> > I wonder if this is a long-term fix. The error that the compiler throws
+> > is:
+> >
+> > 	drivers/soc/pxa/ssp.c:155:29: error: cast from pointer to integer of=
+=20
+> > different size [-Werror=3Dpointer-to-int-cast]
+> > 	  155 |                 ssp->type =3D (int) id->data;
+> > 	      |                             ^
+> >
+> > enum pxa_ssp_type is an integer type, too, and its width could be
+> > smaller than 64 bit, too.
 >=20
->  /* VIO */
->
-> For this driver the change would be nice, as several casts can be
-> dropped.
+> I would just change the cast to (uintptr_t), which is what we
+> have elsewhere.
+>=20
+> > diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_device=
+table.h
+> > index f458469c5ce5..fbe16089e4bb 100644
+> > --- a/include/linux/mod_devicetable.h
+> > +++ b/include/linux/mod_devicetable.h
+> > @@ -283,7 +283,10 @@ struct of_device_id {
+> >  	char	name[32];
+> >  	char	type[32];
+> >  	char	compatible[128];
+> > -	const void *data;
+> > +	union {
+> > +		const void *data;
+> > +		kernel_ulong_t driver_data;
+> > +	};
+> >  };
+> >=20
+> >  /* VIO */
+> >
+> > For this driver the change would be nice, as several casts can be
+> > dropped.
+>=20
+> I think this is a nice idea in general, but I would keep
+> it separate from the bugfix, as we might want to do this on
+> a wider scale, or run into problems.
 
-I think this is a nice idea in general, but I would keep
-it separate from the bugfix, as we might want to do this on
-a wider scale, or run into problems.
+Sure, I didn't intend to put the diff into a commit as is.
 
-In particular, removing tons of casts to (kernel_ulong_t)
-in other subsystems is probably more valuable than removing
-casts to (void *) for of_device_id, since kernel_ulong_t
-is particularly confusing, with a definition that is
-completely unrelated to the similarly named __kernel_ulong_t.
+Before doing that change it would probably be sensible to check how this
+field is used, I guess most drivers use an integer value and not a
+pointer there. Also while touching that making the same change with the
+same names for the other *_id structs might be nice. Currently we have
+(from include/linux/mod_devicetable.h):
 
-      Arnd
+	pci_device_id		kernel_ulong_t driver_data
+	ieee1394_device_id	kernel_ulong_t driver_data
+	usb_device_id		kernel_ulong_t driver_info
+	hid_device_id		kernel_ulong_t driver_data
+	ccw_device_id		kernel_ulong_t driver_info
+	ap_device_id		kernel_ulong_t driver_info
+	css_device_id		kernel_ulong_t driver_data
+	acpi_device_id		kernel_ulong_t driver_data
+	pnp_device_id		kernel_ulong_t driver_data
+	pnp_card_device_id	kernel_ulong_t driver_data
+	serio_device_id		-
+	hda_device_id		unsigned long driver_data
+	sdw_device_id		kernel_ulong_t driver_data
+	of_device_id		const void *data
+	vio_device_id		-
+	pcmcia_device_id	kernel_ulong_t driver_info
+	input_device_id		kernel_ulong_t driver_info
+	eisa_device_id		kernel_ulong_t driver_data
+	parisc_device_id	-
+	sdio_device_id		kernel_ulong_t driver_data
+	ssb_device_id		-
+	bcma_device_id		-
+	virtio_device_id	-
+	hv_vmbus_device_id	kernel_ulong_t driver_data
+	rpmsg_device_id		kernel_ulong_t driver_data
+	i2c_device_id		kernel_ulong_t driver_data
+	pci_epf_device_id	kernel_ulong_t driver_data
+	i3c_device_id		const void *data
+	spi_device_id		kernel_ulong_t driver_data
+	slim_device_id		-
+	apr_device_id		kernel_ulong_t driver_data
+	spmi_device_id		kernel_ulong_t driver_data
+	dmi_system_id		void *driver_data
+	platform_device_id	kernel_ulong_t driver_data
+	mdio_device_id		-
+	zorro_device_id		kernel_ulong_t driver_data
+	isapnp_device_id	kernel_ulong_t driver_data
+	amba_id			void *data
+	mips_cdmm_device_id	-
+	x86_cpu_id		kernel_ulong_t driver_data
+	ipack_device_id		-
+	mei_cl_device_id	kernel_ulong_t driver_info
+	rio_device_id		-
+	mcb_device_id		kernel_ulong_t driver_data
+	ulpi_device_id		kernel_ulong_t driver_data
+	fsl_mc_device_id	-
+	tb_service_id		kernel_ulong_t driver_data
+	typec_device_id		kernel_ulong_t driver_data
+	tee_client_device_id	-
+	wmi_device_id		const void *context
+	mhi_device_id		kernel_ulong_t driver_data
+	auxiliary_device_id	kernel_ulong_t driver_data
+	ssam_device_id		kernel_ulong_t driver_data
+	dfl_device_id		kernel_ulong_t driver_data
+	ishtp_device_id		kernel_ulong_t driver_data
+	cdx_device_id		-
+	vchiq_device_id		-
+
+Note driver_data vs driver_info which is probably not worth to unify.
+
+> In particular, removing tons of casts to (kernel_ulong_t)
+> in other subsystems is probably more valuable than removing
+> casts to (void *) for of_device_id, since kernel_ulong_t
+> is particularly confusing, with a definition that is
+> completely unrelated to the similarly named __kernel_ulong_t.
+
+I'll add that to my list of ideas for big projects :-)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--yn4ddbhj4j5os74o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWWnkEACgkQj4D7WH0S
+/k4rvQgAi6v2FzpEUwI/EBd+PS4DuV2QZih24QLKcD2m1n7gA67cvmeQv/ACLUr1
+Hm4av92zXr7OPwuQDZihJtCknVljzYJpJbs5Y03cLw7gb45mMrVQh5dqo1JX28+F
+yNr9dZl3AOHwEY1mA9uwxbxVK9YgaCTnRPGzOwZZ5LAX2I94/eQXZI5iC1nb754k
+zz4dH6tDtpbPd36byIwCY7ePrhoDo8J4euCQRKlY/L8F1HNuIVEoeUgMPYYXE0yY
+ifxdAZqV8t2dUAILIBTqRZ/gjZ+B9OmxcuAeuyK2/d4oprpO1UcTWiUqteodgCmW
+W5OhxOuf9IAsmOM1I4J3rwmGJ7lDsw==
+=HWXa
+-----END PGP SIGNATURE-----
+
+--yn4ddbhj4j5os74o--
