@@ -1,75 +1,88 @@
-Return-Path: <SRS0=wlD5=IN=skole.hr=duje.mihanovic@kernel.org>
+Return-Path: <dinguyen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28F11C3DA6E
-	for <soc@archiver.kernel.org>; Wed,  3 Jan 2024 21:09:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B57EBC3DA6E
+	for <soc@archiver.kernel.org>; Thu,  4 Jan 2024 00:13:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EA4CEC433C9; Wed,  3 Jan 2024 21:09:11 +0000 (UTC)
-Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 70D11C433C7
-	for <soc@kernel.org>; Wed,  3 Jan 2024 21:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70D11C433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=skole.hr
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=skole.hr
-Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-	by mx.skole.hr (mx.skole.hr) with ESMTP id 88FFB83D74;
-	Wed,  3 Jan 2024 22:08:57 +0100 (CET)
-From: =?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Robert Jarzmik <robert.jarzmik@free.fr>
+	id 68C5BC433CC; Thu,  4 Jan 2024 00:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3E8C433C7;
+	Thu,  4 Jan 2024 00:13:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704327236;
+	bh=Vo576v4WqJj38D328y/4wGPLb3Lf9+vjEANjD9msEw4=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=R9qkcCP82I5iAqjQo2YE8oyIuY/pMnOqCLMB+CAT4dn8T8HFPe5q8XttpJPxRl2Mx
+	 wTIKrG1guf8J25RuNbYWd0FfKx/sVq/9E/koMPGdWCx52AH0KXzcainmp7c2CZTr08
+	 me1P0ugfYhsE9ueZrN49QkLYyQBLWOpvAuvQsq35I4HOexs4NdNemm19DoV/bdxpBY
+	 kcFXMt4GeTV90yevKxBqVwPHepmy/1EPxGUYbVq1vyIKKlWTYzfE5L/obXAXHtkM0y
+	 ynuTrGAzPDKjs695wRLuDylWibTvr18SUHmK3MDet2sdBDZXN7fqSbqGIH+bm0/dub
+	 ynYv/AFGEyxOw==
+From: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: =?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
-	Lubomir Rintel <lkundrak@v3.sk>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	zhang songyi <zhang.songyi@zte.com.cn>,
-	soc@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RFC RESEND] soc: pxa: ssp: Cast to enum pxa_ssp_type instead of int
-Date: Wed,  3 Jan 2024 22:06:03 +0100
-Message-ID: <20240103210604.16877-1-duje.mihanovic@skole.hr>
-X-Mailer: git-send-email 2.43.0
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL] arm64: dts: socfpga: updates for v6.8
+Date: Wed,  3 Jan 2024 18:13:54 -0600
+Message-ID: <20240104001354.152410-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On ARM64 platforms, id->data is a 64-bit value and casting it to a
-32-bit integer causes build errors. Cast it to the corresponding enum
-instead.
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
-This patch is necessary for my Marvell PXA1908 series to compile successfully
-with allyesconfig:
-https://lore.kernel.org/all/20231102-pxa1908-lkml-v7-0-cabb1a0cb52b@skole.hr/
----
- drivers/soc/pxa/ssp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
-index a1e8a07f7275..e2ffd8fd7e13 100644
---- a/drivers/soc/pxa/ssp.c
-+++ b/drivers/soc/pxa/ssp.c
-@@ -152,11 +152,11 @@ static int pxa_ssp_probe(struct platform_device *pdev)
- 	if (dev->of_node) {
- 		const struct of_device_id *id =
- 			of_match_device(of_match_ptr(pxa_ssp_of_ids), dev);
--		ssp->type = (int) id->data;
-+		ssp->type = (enum pxa_ssp_type) id->data;
- 	} else {
- 		const struct platform_device_id *id =
- 			platform_get_device_id(pdev);
--		ssp->type = (int) id->driver_data;
-+		ssp->type = (enum pxa_ssp_type) id->driver_data;
- 
- 		/* PXA2xx/3xx SSP ports starts from 1 and the internal pdev->id
- 		 * starts from 0, do a translation here
--- 
-2.43.0
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.8
 
+for you to fetch changes up to 16615a2aa5370a3f16422e9bfdbe07c2204f8513:
+
+  arm64: dts: intel: minor whitespace cleanup around '=' (2024-01-03 18:10:40 -0600)
+
+----------------------------------------------------------------
+SoCFPGA DTS updates for v6.8
+- Fix dtbs_check warnings for nand, usb, FPGA firmware, and pin-controller
+- Clean up of DTS for Agilex5
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (16):
+      ARM: dts: socfpga: drop unsupported cdns,page-size and cdns,block-size
+      ARM: dts: socfpga: align NAND controller name with bindings
+      arm64: dts: socfpga: drop unsupported cdns,page-size and cdns,block-size
+      arm64: dts: socfpga: stratix10: add clock-names to DWC2 USB
+      arm64: dts: socfpga: stratix10: align pincfg nodes with bindings
+      arm64: dts: socfpga: stratix10: move FPGA region out of soc node
+      arm64: dts: socfpga: stratix10: move firmware out of soc node
+      arm64: dts: socfpga: stratix10: add unit address to soc node
+      arm64: dts: socfpga: stratix10_socdk: align NAND chip name with bindings
+      arm64: dts: socfpga: stratix10_swvp: drop unsupported DW MSHC properties
+      arm64: dts: socfpga: agilex: align pin-controller name with bindings
+      arm64: dts: socfpga: agilex: move FPGA region out of soc node
+      arm64: dts: socfpga: agilex: move firmware out of soc node
+      arm64: dts: socfpga: agilex: add unit address to soc node
+      arm64: dts: socfpga: agilex: drop redundant status
+      arm64: dts: intel: minor whitespace cleanup around '='
+
+ arch/arm/boot/dts/intel/socfpga/socfpga.dtsi       |  2 +-
+ .../boot/dts/intel/socfpga/socfpga_arria10.dtsi    |  2 +-
+ .../intel/socfpga/socfpga_arria10_socdk_qspi.dts   |  2 --
+ .../dts/intel/socfpga/socfpga_arria5_socdk.dts     |  2 --
+ .../dts/intel/socfpga/socfpga_cyclone5_socdk.dts   |  2 --
+ .../dts/intel/socfpga/socfpga_cyclone5_sockit.dts  |  2 --
+ .../dts/intel/socfpga/socfpga_cyclone5_sodia.dts   |  2 --
+ .../intel/socfpga/socfpga_cyclone5_vining_fpga.dts |  4 ---
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  | 41 ++++++++++-----------
+ .../boot/dts/altera/socfpga_stratix10_socdk.dts    |  8 ++---
+ .../dts/altera/socfpga_stratix10_socdk_nand.dts    |  6 ++--
+ .../boot/dts/altera/socfpga_stratix10_swvp.dts     |  2 --
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      | 42 +++++++++++-----------
+ arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     |  4 +--
+ arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts |  2 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts |  2 --
+ arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts    |  5 +--
+ 17 files changed, 53 insertions(+), 77 deletions(-)
