@@ -1,237 +1,145 @@
-Return-Path: <SRS0=nz3D=IO=pengutronix.de=ukl@kernel.org>
+Return-Path: <SRS0=N8kN=IO=skole.hr=duje.mihanovic@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457E9C47073
-	for <soc@archiver.kernel.org>; Thu,  4 Jan 2024 12:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6972C47073
+	for <soc@archiver.kernel.org>; Thu,  4 Jan 2024 14:23:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0BC2FC433CA; Thu,  4 Jan 2024 12:02:27 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	id 9C532C433B6; Thu,  4 Jan 2024 14:23:42 +0000 (UTC)
+Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 43257C433C7
-	for <soc@kernel.org>; Thu,  4 Jan 2024 12:02:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43257C433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rLMQP-0004kv-8t; Thu, 04 Jan 2024 13:02:13 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rLMQM-000KsV-Aw; Thu, 04 Jan 2024 13:02:10 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rLMQM-003Xuh-0p;
-	Thu, 04 Jan 2024 13:02:10 +0100
-Date: Thu, 4 Jan 2024 13:02:10 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id B588EC433C7
+	for <soc@kernel.org>; Thu,  4 Jan 2024 14:23:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B588EC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=skole.hr
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=skole.hr
+Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+	by mx.skole.hr (mx.skole.hr) with ESMTP id A6A5D83CEB;
+	Thu,  4 Jan 2024 15:23:28 +0100 (CET)
+From: Duje =?utf-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>
+To: Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= <u.kleine-koenig@pengutronix.de>,
+ Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Lubomir Rintel <lkundrak@v3.sk>, 
-	"zhang.songyi" <zhang.songyi@zte.com.cn>, soc@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC RESEND] soc: pxa: ssp: Cast to enum pxa_ssp_type
- instead of int
-Message-ID: <ymq7tp3ps4grmmo6o7txpk2sswb2mzxoaplu7lih2xbmbtp6np@b6ycr5wmmbcc>
-References: <20240103210604.16877-1-duje.mihanovic@skole.hr>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>, Lubomir Rintel <lkundrak@v3.sk>,
+ "zhang.songyi" <zhang.songyi@zte.com.cn>, soc@kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject:
+ Re: [PATCH RFC RESEND] soc: pxa: ssp: Cast to enum pxa_ssp_type instead of
+ int
+Date: Thu, 04 Jan 2024 15:23:09 +0100
+Message-ID: <9215826.CDJkKcVGEf@radijator>
+In-Reply-To: <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
+References:
+ <20240103210604.16877-1-duje.mihanovic@skole.hr>
  <rj7ijuyy47jrffi6sk7wikqo3rnutz2swkdrznyegalylacawz@jdncegf3elct>
  <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yn4ddbhj4j5os74o"
-Content-Disposition: inline
-In-Reply-To: <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Autocrypt: addr=duje.mihanovic@skole.hr;
+ keydata=
+ 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
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+
+Hello Uwe and Arnd,
+
+for v2 I will change the first cast to (uintptr_t) as Arnd suggested and drop 
+the second cast completely as Uwe suggested.
+
+As a long-term solution (at least for this particular driver), the few PXA 
+platforms and drivers still depending on or using this driver at first seem 
+trivial to convert to pxa2xx-spi, while the navpoint driver seemingly could be 
+removed entirely as all boards using it have been removed. If there are no 
+objections I am willing to do this conversion.
+
+--
+Regards,
+Duje
 
 
---yn4ddbhj4j5os74o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Arnd,
-
-On Thu, Jan 04, 2024 at 11:03:41AM +0100, Arnd Bergmann wrote:
-> On Thu, Jan 4, 2024, at 10:08, Uwe Kleine-K=C3=B6nig wrote:
-> > [adding lakml to Cc for wider audience]
-> >
-> > On Wed, Jan 03, 2024 at 10:06:03PM +0100, Duje Mihanovi=C4=87 wrote:
-> >> On ARM64 platforms, id->data is a 64-bit value and casting it to a
-> >> 32-bit integer causes build errors. Cast it to the corresponding enum
-> >> instead.
-> >>=20
-> >> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
-> >> ---
-> >> This patch is necessary for my Marvell PXA1908 series to compile succe=
-ssfully
-> >> with allyesconfig:
-> >> https://lore.kernel.org/all/20231102-pxa1908-lkml-v7-0-cabb1a0cb52b@sk=
-ole.hr/
-> >> ---
-> >>  drivers/soc/pxa/ssp.c | 4 ++--
-> >>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>=20
-> >> diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
-> >> index a1e8a07f7275..e2ffd8fd7e13 100644
-> >> --- a/drivers/soc/pxa/ssp.c
-> >> +++ b/drivers/soc/pxa/ssp.c
-> >> @@ -152,11 +152,11 @@ static int pxa_ssp_probe(struct platform_device =
-*pdev)
-> >>  	if (dev->of_node) {
-> >>  		const struct of_device_id *id =3D
-> >>  			of_match_device(of_match_ptr(pxa_ssp_of_ids), dev);
-> >> -		ssp->type =3D (int) id->data;
-> >> +		ssp->type =3D (enum pxa_ssp_type) id->data;
-> >
-> > I wonder if this is a long-term fix. The error that the compiler throws
-> > is:
-> >
-> > 	drivers/soc/pxa/ssp.c:155:29: error: cast from pointer to integer of=
-=20
-> > different size [-Werror=3Dpointer-to-int-cast]
-> > 	  155 |                 ssp->type =3D (int) id->data;
-> > 	      |                             ^
-> >
-> > enum pxa_ssp_type is an integer type, too, and its width could be
-> > smaller than 64 bit, too.
->=20
-> I would just change the cast to (uintptr_t), which is what we
-> have elsewhere.
->=20
-> > diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_device=
-table.h
-> > index f458469c5ce5..fbe16089e4bb 100644
-> > --- a/include/linux/mod_devicetable.h
-> > +++ b/include/linux/mod_devicetable.h
-> > @@ -283,7 +283,10 @@ struct of_device_id {
-> >  	char	name[32];
-> >  	char	type[32];
-> >  	char	compatible[128];
-> > -	const void *data;
-> > +	union {
-> > +		const void *data;
-> > +		kernel_ulong_t driver_data;
-> > +	};
-> >  };
-> >=20
-> >  /* VIO */
-> >
-> > For this driver the change would be nice, as several casts can be
-> > dropped.
->=20
-> I think this is a nice idea in general, but I would keep
-> it separate from the bugfix, as we might want to do this on
-> a wider scale, or run into problems.
-
-Sure, I didn't intend to put the diff into a commit as is.
-
-Before doing that change it would probably be sensible to check how this
-field is used, I guess most drivers use an integer value and not a
-pointer there. Also while touching that making the same change with the
-same names for the other *_id structs might be nice. Currently we have
-(from include/linux/mod_devicetable.h):
-
-	pci_device_id		kernel_ulong_t driver_data
-	ieee1394_device_id	kernel_ulong_t driver_data
-	usb_device_id		kernel_ulong_t driver_info
-	hid_device_id		kernel_ulong_t driver_data
-	ccw_device_id		kernel_ulong_t driver_info
-	ap_device_id		kernel_ulong_t driver_info
-	css_device_id		kernel_ulong_t driver_data
-	acpi_device_id		kernel_ulong_t driver_data
-	pnp_device_id		kernel_ulong_t driver_data
-	pnp_card_device_id	kernel_ulong_t driver_data
-	serio_device_id		-
-	hda_device_id		unsigned long driver_data
-	sdw_device_id		kernel_ulong_t driver_data
-	of_device_id		const void *data
-	vio_device_id		-
-	pcmcia_device_id	kernel_ulong_t driver_info
-	input_device_id		kernel_ulong_t driver_info
-	eisa_device_id		kernel_ulong_t driver_data
-	parisc_device_id	-
-	sdio_device_id		kernel_ulong_t driver_data
-	ssb_device_id		-
-	bcma_device_id		-
-	virtio_device_id	-
-	hv_vmbus_device_id	kernel_ulong_t driver_data
-	rpmsg_device_id		kernel_ulong_t driver_data
-	i2c_device_id		kernel_ulong_t driver_data
-	pci_epf_device_id	kernel_ulong_t driver_data
-	i3c_device_id		const void *data
-	spi_device_id		kernel_ulong_t driver_data
-	slim_device_id		-
-	apr_device_id		kernel_ulong_t driver_data
-	spmi_device_id		kernel_ulong_t driver_data
-	dmi_system_id		void *driver_data
-	platform_device_id	kernel_ulong_t driver_data
-	mdio_device_id		-
-	zorro_device_id		kernel_ulong_t driver_data
-	isapnp_device_id	kernel_ulong_t driver_data
-	amba_id			void *data
-	mips_cdmm_device_id	-
-	x86_cpu_id		kernel_ulong_t driver_data
-	ipack_device_id		-
-	mei_cl_device_id	kernel_ulong_t driver_info
-	rio_device_id		-
-	mcb_device_id		kernel_ulong_t driver_data
-	ulpi_device_id		kernel_ulong_t driver_data
-	fsl_mc_device_id	-
-	tb_service_id		kernel_ulong_t driver_data
-	typec_device_id		kernel_ulong_t driver_data
-	tee_client_device_id	-
-	wmi_device_id		const void *context
-	mhi_device_id		kernel_ulong_t driver_data
-	auxiliary_device_id	kernel_ulong_t driver_data
-	ssam_device_id		kernel_ulong_t driver_data
-	dfl_device_id		kernel_ulong_t driver_data
-	ishtp_device_id		kernel_ulong_t driver_data
-	cdx_device_id		-
-	vchiq_device_id		-
-
-Note driver_data vs driver_info which is probably not worth to unify.
-
-> In particular, removing tons of casts to (kernel_ulong_t)
-> in other subsystems is probably more valuable than removing
-> casts to (void *) for of_device_id, since kernel_ulong_t
-> is particularly confusing, with a definition that is
-> completely unrelated to the similarly named __kernel_ulong_t.
-
-I'll add that to my list of ideas for big projects :-)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---yn4ddbhj4j5os74o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWWnkEACgkQj4D7WH0S
-/k4rvQgAi6v2FzpEUwI/EBd+PS4DuV2QZih24QLKcD2m1n7gA67cvmeQv/ACLUr1
-Hm4av92zXr7OPwuQDZihJtCknVljzYJpJbs5Y03cLw7gb45mMrVQh5dqo1JX28+F
-yNr9dZl3AOHwEY1mA9uwxbxVK9YgaCTnRPGzOwZZ5LAX2I94/eQXZI5iC1nb754k
-zz4dH6tDtpbPd36byIwCY7ePrhoDo8J4euCQRKlY/L8F1HNuIVEoeUgMPYYXE0yY
-ifxdAZqV8t2dUAILIBTqRZ/gjZ+B9OmxcuAeuyK2/d4oprpO1UcTWiUqteodgCmW
-W5OhxOuf9IAsmOM1I4J3rwmGJ7lDsw==
-=HWXa
------END PGP SIGNATURE-----
-
---yn4ddbhj4j5os74o--
