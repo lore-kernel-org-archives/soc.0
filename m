@@ -1,54 +1,107 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=FkAh=IQ=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEAFDC3DA6E
-	for <soc@archiver.kernel.org>; Fri,  5 Jan 2024 18:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A955C46CD2
+	for <soc@archiver.kernel.org>; Sat,  6 Jan 2024 12:09:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 78AB9C433C7; Fri,  5 Jan 2024 18:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 57E8EC433C8;
-	Fri,  5 Jan 2024 18:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704478219;
-	bh=1HLYg5Tk7fI9rIiNU/+JZuqGBriCKiLmdd9L4ueaysA=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=mVYebEZ2CTaj3PaeT8oQVWLjoWrFMcjSl2RIzcBHFntvOEX+7+KJUaBNl3uI/mSd8
-	 I3/BNxa1gWDieP3Jh1cfgB/Bb6j60UijJ0NzkG3fx4B3esVRIdmzDDCKu9jgEkqEAW
-	 d0HdPxXsf7QriZOxqBhK4/O4A6S67Tn9B00H4XVs0qyTRN6s50lV9MHS++LRsIiSKH
-	 MWZzD5dNjmwBPcGdbWPDbtjUuCQXyiNnNsVBfMXsaHGrgL4QDOZwJS6HDqp9Nsvl9Y
-	 C/lunnfT2W59RnqVQvA5pwoqVqyxm28pvrJknQXCG+zlGSsfw4lewl7AOvQ14tO1Fh
-	 OgzI/BrznaabQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 324BDDCB6D8;
-	Fri,  5 Jan 2024 18:10:19 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.7, part 3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ade6f246-910d-4d9a-aab4-1ae21a18da00@app.fastmail.com>
-References: <ade6f246-910d-4d9a-aab4-1ae21a18da00@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <ade6f246-910d-4d9a-aab4-1ae21a18da00@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.7-3a
-X-PR-Tracked-Commit-Id: 643fe70e7bcdcc9e2d96952f7fc2bab56385cce5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6d0dc8559c847e2dcd66c5dd93dbab3d3d887ff5
-Message-Id: <170447821915.10283.2607340512395858597.pr-tracker-bot@kernel.org>
-Date: Fri, 05 Jan 2024 18:10:19 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id E2BECC433C7; Sat,  6 Jan 2024 12:09:00 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6A52FC433C8
+	for <soc@kernel.org>; Sat,  6 Jan 2024 12:08:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6A52FC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rM5Tn-00044i-Rv; Sat, 06 Jan 2024 13:08:43 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rM5Tl-000nqO-Is; Sat, 06 Jan 2024 13:08:41 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rM5Tl-00405a-1S;
+	Sat, 06 Jan 2024 13:08:41 +0100
+Date: Sat, 6 Jan 2024 13:08:35 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>, Chen-Yu Tsai <wens@csie.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+	Lubomir Rintel <lkundrak@v3.sk>, "zhang.songyi" <zhang.songyi@zte.com.cn>, soc@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC RESEND] soc: pxa: ssp: Cast to enum pxa_ssp_type
+ instead of int
+Message-ID: <ffwxkd53wb7kgmn5s3gbmujkzsiw3jhw5hohc6wpnxbfkcokj4@ysox2f4z7kcy>
+References: <20240103210604.16877-1-duje.mihanovic@skole.hr>
+ <rj7ijuyy47jrffi6sk7wikqo3rnutz2swkdrznyegalylacawz@jdncegf3elct>
+ <2295d860-44cf-4816-8a1a-54274974302f@app.fastmail.com>
+ <9215826.CDJkKcVGEf@radijator>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="t25hjcghedybu66p"
+Content-Disposition: inline
+In-Reply-To: <9215826.CDJkKcVGEf@radijator>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-The pull request you sent on Fri, 05 Jan 2024 16:38:43 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.7-3a
+--t25hjcghedybu66p
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6d0dc8559c847e2dcd66c5dd93dbab3d3d887ff5
+Hello Duje,
 
-Thank you!
+On Thu, Jan 04, 2024 at 03:23:09PM +0100, Duje Mihanovi=C4=87 wrote:
+> for v2 I will change the first cast to (uintptr_t) as Arnd suggested and =
+drop=20
+> the second cast completely as Uwe suggested.
+>=20
+> As a long-term solution (at least for this particular driver), the few PX=
+A=20
+> platforms and drivers still depending on or using this driver at first se=
+em=20
+> trivial to convert to pxa2xx-spi, while the navpoint driver seemingly cou=
+ld be=20
+> removed entirely as all boards using it have been removed. If there are n=
+o=20
+> objections I am willing to do this conversion.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+In case you need encouragement: Sounds like a nice plan; no objections
+=66rom my side.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t25hjcghedybu66p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWZQrkACgkQj4D7WH0S
+/k4zmgf/X/csmCXZWwLFGhiky+uKwTuiNGE8sP4UV2IM8S/JMyvWX0jU3ZQOBV6w
+5ffuYJSltcwr+kQdsYl1ij/+8Kdff6iL9SvR3nZzkIeZZ9OhXibssspVm06H72Q1
+IuXRyGDw+rkonfNLUQ/hu/DkK85f1X6jaAAONgQ2E0iALhE1Lk/4rmb9cJUp+uh/
++tbWIn0LWA6oTTxQn/r9ySWPAcwds+fB/pH7v59izw4mqYQeVSI5PEnfyqdXDuBc
+LP6JGC1i6nZG985t2zGetlzis4nFEak85su5KZGLuUuOML2uxUu7TEXcWrg5ZqFa
+ZlRsDkowKyz8CqruorKZm4AAHOyAPA==
+=i8u6
+-----END PGP SIGNATURE-----
+
+--t25hjcghedybu66p--
