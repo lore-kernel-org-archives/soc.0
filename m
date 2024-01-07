@@ -1,95 +1,81 @@
-Return-Path: <SRS0=FkAh=IQ=pengutronix.de=ukl@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E820C46CD2
-	for <soc@archiver.kernel.org>; Sat,  6 Jan 2024 14:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB98C47074
+	for <soc@archiver.kernel.org>; Sun,  7 Jan 2024 22:40:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DA39FC433C8; Sat,  6 Jan 2024 14:32:53 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A31DAC433C7
-	for <soc@kernel.org>; Sat,  6 Jan 2024 14:32:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A31DAC433C7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rM7jC-0008H8-MT; Sat, 06 Jan 2024 15:32:46 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rM7jA-000pLJ-Ua; Sat, 06 Jan 2024 15:32:44 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rM7jA-00414h-2m;
-	Sat, 06 Jan 2024 15:32:44 +0100
-Date: Sat, 6 Jan 2024 15:32:44 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Robert Jarzmik <robert.jarzmik@free.fr>, 
-	Lubomir Rintel <lkundrak@v3.sk>, zhang songyi <zhang.songyi@zte.com.cn>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] soc: pxa: ssp: fix casts
-Message-ID: <nrdjrxey27v4lodthfmut3g4ms7uf7az5zruzkmfdwijmktjjz@6sphjciyk6p4>
-References: <20240106-pxa-ssp-v2-1-69ac9f028bba@skole.hr>
+	id DC38FC433C9; Sun,  7 Jan 2024 22:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B02C433C7;
+	Sun,  7 Jan 2024 22:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704667235;
+	bh=gMeYwznrjbIU8oGXfP+WnPDxDzH5U/iZaLqQJDBkChs=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=Ch+/YL1VL+p4NtQnARIOOvL4qWL68Ui0QhykfB4b/pOBtjQKZozTQkoGQQyMv+v+z
+	 OX0jtC9KynReOz1mP1Zwvzj9sHFOqvxAzhfU6J+oKdR0YP+3YM7UrvjbnZqVQ3Uobb
+	 mPi8FeOYKqMJ9RCY9m5BLt5WKh8M5nxdP7qeM+xzl8/Dfzjcn1dDXOaMqScZhwL+Rq
+	 bw7fayEX2Zlpb3pn+0EAseAYmbxjpCdlI6DcL2xndgxnGmvh32HnkXiA5ZH9BbTWi6
+	 KTpP3oXOisn5a2r2HWDc9hrvC0gkuGUhk906yzxjWLords+GAit3PHEY+MkbZKebwN
+	 YYIkeuMioaTGg==
+From: Mark Brown <broonie@kernel.org>
+Date: Sun, 07 Jan 2024 22:40:29 +0000
+Subject: [PATCH] ARM: multi_v7_defconfig: Enable STM32 IPCC mailbox driver
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3ocldl2dp53qaj2y"
-Content-Disposition: inline
-In-Reply-To: <20240106-pxa-ssp-v2-1-69ac9f028bba@skole.hr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240107-arm-defconfig-stm32-ipcc-v1-1-924721db5661@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFwom2UC/x3MMQrDMAxA0asEzRXIboggVykdjCwnGmwHu5RCy
+ N1rMr7h/xO6NtMO63RC0691q2XAPSaQPZRN0eIwePIzOWIMLWPUJLUk27B/8tOjHSK4zETshEN
+ khpEfTZP97vXrfV1/dKzoIGoAAAA=
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=924; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=gMeYwznrjbIU8oGXfP+WnPDxDzH5U/iZaLqQJDBkChs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlmyhg2lXCL3MIQsuRcxZL6PRQTJ7KfgTBogFnh
+ kEGv+36+OaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZZsoYAAKCRAk1otyXVSH
+ 0NjRB/4r9gayJx9sLsDkrCbccgsHwsdKSDyE5usVSohEHTWmpBpP/xjYkadUXQydpUw6NnJVofa
+ Wzpv1APyGBl3kcdHZ0wBtQT8+LUDnaLek7FPGhVzEBAjpWwotHbpOF0hP9JcPiEAKpNeO7ytTvb
+ Az6HYTN830yfs+Uf+tZUJOdkUjEeSeObsl2yaOx3810jVLC1mEN9o1CxsGh6j5JaoUGIVqR4uIb
+ kjVOi+0O0BY7oYRnLdLWZLnSXsWSoBJ14/O9uxPniT3Xhm5k756YuyvUVAo8yCKXAw3GY+2LMgE
+ htQUGy6rTPa9cVobOQW8wTKh2r3GpGSGiGW591lPXMQB9VTC
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
+The STM32 systems have a mailbox used for communication with non-Linux
+processors like the M4 on the STM32MP157A.  Enable the driver for the
+mailbox so it is available for testing.
 
---3ocldl2dp53qaj2y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hello Duje,
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 10fd74bf85f9..f43ae4532586 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -1073,6 +1073,7 @@ CONFIG_OMAP2PLUS_MBOX=y
+ CONFIG_BCM2835_MBOX=y
+ CONFIG_QCOM_APCS_IPC=y
+ CONFIG_QCOM_IPCC=y
++CONFIG_STM32_IPCC=m
+ CONFIG_OMAP_IOMMU=y
+ CONFIG_OMAP_IOMMU_DEBUG=y
+ CONFIG_ROCKCHIP_IOMMU=y
 
-On Sat, Jan 06, 2024 at 03:11:33PM +0100, Duje Mihanovi=C4=87 wrote:
-> On ARM64 platforms, id->data is a 64-bit value and casting it to a
-> 32-bit integer causes build errors. Cast it to uintptr_t instead.
->=20
-> The id->driver_data cast is unnecessary, so drop it.
->=20
-> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+---
+base-commit: 610a9b8f49fbcf1100716370d3b5f6f884a2835a
+change-id: 20240107-arm-defconfig-stm32-ipcc-640071c7ad77
 
-Reviewed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3ocldl2dp53qaj2y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWZZIsACgkQj4D7WH0S
-/k7AqwgApVowd0L0QXcUTJ4iXTbT4jKrA7ZfmmagX+WClWlOwl431TSDCdkp55+z
-uzmEnpmEjSftVTHmw4gq1a+TXM0dmxExJ1Rw6klFWu30RWmFbas7pgaB9iHwcNOU
-gCBBMWdTsogJ5TMtfzCtWOasPxubowK38vNhcKBRFTCUF389eDsd4gvuR1kivqzd
-56ZPsiOKVLiio9n+daUSgRWsUGZteZwLIyHk2dX0Znty40trcHJWkBHbv+cah/Bp
-hdWa45xzzN1jWBPykdsoeEW3yEZH2PzD5C7S4ewqeEZ2eODxY6Jujkh0lo6lpKsx
-s4kAwp5pdjk/DR7irLKXCTVtbZuAzQ==
-=JH91
------END PGP SIGNATURE-----
-
---3ocldl2dp53qaj2y--
