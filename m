@@ -1,81 +1,73 @@
-Return-Path: <broonie@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB98C47074
-	for <soc@archiver.kernel.org>; Sun,  7 Jan 2024 22:40:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E230BC3DA6E
+	for <soc@archiver.kernel.org>; Mon,  8 Jan 2024 11:01:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DC38FC433C9; Sun,  7 Jan 2024 22:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B02C433C7;
-	Sun,  7 Jan 2024 22:40:33 +0000 (UTC)
+	id B9004C433C9; Mon,  8 Jan 2024 11:01:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38684C433C8;
+	Mon,  8 Jan 2024 11:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704667235;
-	bh=gMeYwznrjbIU8oGXfP+WnPDxDzH5U/iZaLqQJDBkChs=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=Ch+/YL1VL+p4NtQnARIOOvL4qWL68Ui0QhykfB4b/pOBtjQKZozTQkoGQQyMv+v+z
-	 OX0jtC9KynReOz1mP1Zwvzj9sHFOqvxAzhfU6J+oKdR0YP+3YM7UrvjbnZqVQ3Uobb
-	 mPi8FeOYKqMJ9RCY9m5BLt5WKh8M5nxdP7qeM+xzl8/Dfzjcn1dDXOaMqScZhwL+Rq
-	 bw7fayEX2Zlpb3pn+0EAseAYmbxjpCdlI6DcL2xndgxnGmvh32HnkXiA5ZH9BbTWi6
-	 KTpP3oXOisn5a2r2HWDc9hrvC0gkuGUhk906yzxjWLords+GAit3PHEY+MkbZKebwN
-	 YYIkeuMioaTGg==
-From: Mark Brown <broonie@kernel.org>
-Date: Sun, 07 Jan 2024 22:40:29 +0000
-Subject: [PATCH] ARM: multi_v7_defconfig: Enable STM32 IPCC mailbox driver
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240107-arm-defconfig-stm32-ipcc-v1-1-924721db5661@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFwom2UC/x3MMQrDMAxA0asEzRXIboggVykdjCwnGmwHu5RCy
- N1rMr7h/xO6NtMO63RC0691q2XAPSaQPZRN0eIwePIzOWIMLWPUJLUk27B/8tOjHSK4zETshEN
- khpEfTZP97vXrfV1/dKzoIGoAAAA=
-To: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>
+	s=k20201202; t=1704711662;
+	bh=XdZBpta2RKAreU6xhq4nrkVq0nZqPyvWZ2OtajFyBkM=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=Pm4pDsflDMA7uIvbHW9k8GGsnojRyox6hLOyU6w5ZkId/JY+nfNulQJ0A/RdwNnjw
+	 6IzbJaAQcthO7vXCtfuw0cNDJepslwkdl98UAu0/GOsyeYtjqs/+fnRAwQ7R4XEGHx
+	 9smYMmRnMRSBFiTAEcloXbmdPjy5yxD9xGissIGieOnnSANAbRu44XjG2HY54ScQdO
+	 4Zfj+9NEiGH39+rtF8NMzhNYmc+rASxtiwe+IDw5HT87u9TEvX6slFLQQq0JUbAilM
+	 HGxxq337RQRG+Ia10hLsor9cnq7JJsOK1mB01st9SL+8/PoAPbFC03Euc67htsF/yq
+	 Mxaw4gjgmqEJQ==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=924; i=broonie@kernel.org;
- h=from:subject:message-id; bh=gMeYwznrjbIU8oGXfP+WnPDxDzH5U/iZaLqQJDBkChs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlmyhg2lXCL3MIQsuRcxZL6PRQTJ7KfgTBogFnh
- kEGv+36+OaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZZsoYAAKCRAk1otyXVSH
- 0NjRB/4r9gayJx9sLsDkrCbccgsHwsdKSDyE5usVSohEHTWmpBpP/xjYkadUXQydpUw6NnJVofa
- Wzpv1APyGBl3kcdHZ0wBtQT8+LUDnaLek7FPGhVzEBAjpWwotHbpOF0hP9JcPiEAKpNeO7ytTvb
- Az6HYTN830yfs+Uf+tZUJOdkUjEeSeObsl2yaOx3810jVLC1mEN9o1CxsGh6j5JaoUGIVqR4uIb
- kjVOi+0O0BY7oYRnLdLWZLnSXsWSoBJ14/O9uxPniT3Xhm5k756YuyvUVAo8yCKXAw3GY+2LMgE
- htQUGy6rTPa9cVobOQW8wTKh2r3GpGSGiGW591lPXMQB9VTC
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+To: soc@kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Sekhar Nori <nsekhar@ti.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: davinci: always select CONFIG_CPU_ARM926T
+Date: Mon,  8 Jan 2024 12:00:36 +0100
+Message-Id: <20240108110055.1531153-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The STM32 systems have a mailbox used for communication with non-Linux
-processors like the M4 on the STM32MP157A.  Enable the driver for the
-mailbox so it is available for testing.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The select was lost by accident during the multiplatform conversion.
+Any davinci-only
+
+arm-linux-gnueabi-ld: arch/arm/mach-davinci/sleep.o: in function `CACHE_FLUSH':
+(.text+0x168): undefined reference to `arm926_flush_kern_cache_all'
+
+Fixes: f962396ce292 ("ARM: davinci: support multiplatform build for ARM v5")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/configs/multi_v7_defconfig | 1 +
+I ran into this today for the first time after five years of randconfig testing
+with the bug in place, so it is clearly very hard to hit.
+
+It's an obvious fix, so I'm applying it to the soc/arm branch directly
+for this week's pull requests.
+
+
+ arch/arm/mach-davinci/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 10fd74bf85f9..f43ae4532586 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -1073,6 +1073,7 @@ CONFIG_OMAP2PLUS_MBOX=y
- CONFIG_BCM2835_MBOX=y
- CONFIG_QCOM_APCS_IPC=y
- CONFIG_QCOM_IPCC=y
-+CONFIG_STM32_IPCC=m
- CONFIG_OMAP_IOMMU=y
- CONFIG_OMAP_IOMMU_DEBUG=y
- CONFIG_ROCKCHIP_IOMMU=y
-
----
-base-commit: 610a9b8f49fbcf1100716370d3b5f6f884a2835a
-change-id: 20240107-arm-defconfig-stm32-ipcc-640071c7ad77
-
-Best regards,
+diff --git a/arch/arm/mach-davinci/Kconfig b/arch/arm/mach-davinci/Kconfig
+index 1c8bf56982e5..2a8a9fe46586 100644
+--- a/arch/arm/mach-davinci/Kconfig
++++ b/arch/arm/mach-davinci/Kconfig
+@@ -4,6 +4,7 @@ menuconfig ARCH_DAVINCI
+ 	bool "TI DaVinci"
+ 	depends on ARCH_MULTI_V5
+ 	depends on CPU_LITTLE_ENDIAN
++	select CPU_ARM926T
+ 	select DAVINCI_TIMER
+ 	select ZONE_DMA
+ 	select PM_GENERIC_DOMAINS if PM
 -- 
-Mark Brown <broonie@kernel.org>
+2.39.2
 
