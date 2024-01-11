@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA977C4707B
-	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 10:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9149AC4707B
+	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 10:39:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 97025C43399; Thu, 11 Jan 2024 10:39:37 +0000 (UTC)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	id 3F419C433C7; Thu, 11 Jan 2024 10:39:40 +0000 (UTC)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AFED2C433F1;
-	Thu, 11 Jan 2024 10:39:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AFED2C433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 5C210C433F1;
+	Thu, 11 Jan 2024 10:39:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C210C433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50e7af5f618so5847604e87.1;
-        Thu, 11 Jan 2024 02:39:36 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50ec948ad31so3858052e87.2;
+        Thu, 11 Jan 2024 02:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704969574; x=1705574374; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MuVNFMNu/znFyjhI4YiVPNBcWz8JIXuuibOlcW6cauo=;
-        b=Yv3lF8SRv4zZvoEflAjQpQ3wsERZMpaDPM43Ztn/Gkg4K6aAuYaxcus8+/2tY2Omku
-         ZdmS+tpgeslaZSSscnEQYNZbeG4cOySTfaB8Opr6KA7fslVKsdiCWQt9Aeb/acRgxNfy
-         xCooXltAr4RNPiRESlyoDN23IVZo6c3mY8ErevbErixoPT+GaGw9rI0A79Em+AQlAkfb
-         9V4FnujGXAA1XbExzSaJ+nt77SnhEBA4oPcAQ/t5NMSUFIMQAoo91gnL7DQCnRJb8MnS
-         OYbn157DEeEWu49kXig8FFHgoF6H81ZjTlbvuT/I4kteV5c8vxSX0GlvYLRK2mxFTFiK
-         bxfg==
+        d=gmail.com; s=20230601; t=1704969577; x=1705574377; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qPI1X20P/Je0ba5yFdcffHFwmZ27vo/Hq5v/+iKRorM=;
+        b=faYXnCwUOdrOvvmf7Imkg7g02bmau17PkF820pwv/dVVFAsDrF/D7oCd3hj8eRS0QD
+         Qo8VKHlYfeWVLeVW252eMr7Y8RrcOFwX4aJLPNGhMtyz4K8aC62r+VzizowU62QN2uM+
+         ZcPkl+n0OSkJskjtFZrQ9oX5YAxaXEGmyICIw9JHJ2Q4mzZMe3sAvoUKONG4ZCPHP41d
+         hL/oHwpMHHwPlyj85MmTXqPb9iEM2JQsnKeGCXG2/98Svm6tHw0ERd+DXi9+RhV31zTd
+         yvAEePN4ctBEiOv+IM4PA1snyW1aTP7CEXBgfMT9idljiSIXVfObherdLHRUOOm3EY3w
+         Ejpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704969574; x=1705574374;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MuVNFMNu/znFyjhI4YiVPNBcWz8JIXuuibOlcW6cauo=;
-        b=pO7/L5Ms/omNl6kQ6PCxkfnjQCQGrlki2zyguZGenRwrJvSUxTtEtsWIqaAspFx0D2
-         ZPInqa9+Sj/wrGucJ68rGT6OjcHD5g2+viItmo2L0sNWBVOwGCGP5rCaXs+0voIMvn5/
-         c5QD8wOV5uWkCj3YLdpnAy3v3gjReI77dx970goTnbQZ3LeziQoTka9lQASAj1YLjQkY
-         xOcYVWzBC6lwa0EsDE+VZLkVlEzgwziYak8X1Hk675E+AaRGjcTdVulpDO2oBw0xUSWO
-         REgrTVRprh/BB6MWeuM1xuABWGcW0vVYlOsKVoju0IPRA8IG6rMeyv47+KhfI6poDNf1
-         dkXA==
-X-Gm-Message-State: AOJu0Yy7ev/awadXSlGsKVWXGhNKynjLCI8Bl/2JhPBWZMALmbbmEzm+
-	7IDghGqCcc332AiYZEqcLB8=
-X-Google-Smtp-Source: AGHT+IEnpP/pKX/gXbee57tP/8wAV93Q1jQEFfaBg+OenM/0Ooa1lAhiPzT2sTpofQ+k5kRMXR9eVw==
-X-Received: by 2002:a19:ad4b:0:b0:50e:dc99:b9d4 with SMTP id s11-20020a19ad4b000000b0050edc99b9d4mr385313lfd.44.1704969574165;
-        Thu, 11 Jan 2024 02:39:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704969577; x=1705574377;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qPI1X20P/Je0ba5yFdcffHFwmZ27vo/Hq5v/+iKRorM=;
+        b=BRl8p/SwzYi0m6LhHYfJBilKEDY1IOXsQZ/KZnAAJU79RaNeD8Fe5a1MvdP/N4qZ5+
+         AXl/34KzX+osY5KAwDWdyW2gKLmBCtXwjmP8EFujdF2va5hg66Hw+mNXe47c+jOe9uLe
+         UkFbTHUVb8GCijWLnqV2At5+hd+9d6kjDrI50jm7bsCUg2Xp903uXSGFEP1WwML59HVJ
+         ra2pXjWiRWNEy6LBwXETWENAnoqoD4uxC++ldayDsrD2A+z/JpONgSAF1crIbVbSjVgA
+         LjRD+ly3e6Phu+TjQnFhVzVzlxmFZPAdajeZ89rlCuRefCXY9oNusjO9WtyKyVFmlrU5
+         FmaA==
+X-Gm-Message-State: AOJu0Yx9cpwCpZhJlOkhWEP7gkC1vpc+f34Wcb64YiIf5IQOW8MWC3Vg
+	D8vNfeyrCjOCDph5Yu4XKAU=
+X-Google-Smtp-Source: AGHT+IEpoHyDf1gqLg9M/jmdtKfdJe1FslovTRkFcPaMSTdBqVE/TypY2qP1lbz07KRoJPguDTflnA==
+X-Received: by 2002:a05:6512:31d2:b0:50e:7ade:d394 with SMTP id j18-20020a05651231d200b0050e7aded394mr636997lfe.0.1704969577147;
+        Thu, 11 Jan 2024 02:39:37 -0800 (PST)
 Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id d14-20020a170906c20e00b00a298e2f6b3csm407179ejz.213.2024.01.11.02.39.32
+        by smtp.gmail.com with ESMTPSA id d14-20020a170906c20e00b00a298e2f6b3csm407179ejz.213.2024.01.11.02.39.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jan 2024 02:39:33 -0800 (PST)
+        Thu, 11 Jan 2024 02:39:36 -0800 (PST)
 From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
@@ -71,35 +72,45 @@ Cc: Daniel Golle <daniel@makrotopia.org>,
 	linux-mediatek@lists.infradead.org,
 	soc@kernel.org,
 	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 0/2] mt7981b: initial DT code
-Date: Thu, 11 Jan 2024 11:39:26 +0100
-Message-Id: <20240111103928.721-1-zajec5@gmail.com>
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH V2 1/2] dt-bindings: arm64: mediatek: Add MT7981B and Xiaomi AX3000T
+Date: Thu, 11 Jan 2024 11:39:27 +0100
+Message-Id: <20240111103928.721-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20240111103928.721-1-zajec5@gmail.com>
+References: <20240111103928.721-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-This work is based on linux-next content and was successfully verified
-using "dtbs_check".
+MT7981B (AKA Filogic 820) is MediaTek's dual-core ARM Cortex-A53 SoC.
+One of market devices using this SoC is Xiaomi AX3000T.
 
-I'm not sure who should apply this work. Given I received reviews from
-AngeloGioacchino should I expect Arnd to pick it to his tree directly?
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Rafał Miłecki (2):
-  dt-bindings: arm64: mediatek: Add MT7981B and Xiaomi AX3000T
-  arm64: dts: mediatek: Add initial MT7981B and Xiaomi AX3000T
-
- .../devicetree/bindings/arm/mediatek.yaml     |   4 +
- arch/arm64/boot/dts/mediatek/Makefile         |   1 +
- .../dts/mediatek/mt7981b-xiaomi-ax3000t.dts   |  15 +++
- arch/arm64/boot/dts/mediatek/mt7981b.dtsi     | 105 ++++++++++++++++++
- 4 files changed, 125 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7981b-xiaomi-ax3000t.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7981b.dtsi
-
+diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+index 92dbfb862757..12cf02b30967 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+@@ -82,6 +82,10 @@ properties:
+           - enum:
+               - mediatek,mt7629-rfb
+           - const: mediatek,mt7629
++      - items:
++          - enum:
++              - xiaomi,ax3000t
++          - const: mediatek,mt7981b
+       - items:
+           - enum:
+               - bananapi,bpi-r3
 -- 
 2.35.3
 
