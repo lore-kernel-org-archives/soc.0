@@ -4,30 +4,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5087BC4725D
-	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 09:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C4CC47077
+	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 09:26:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37A94C433F1; Thu, 11 Jan 2024 09:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB82C43394;
-	Thu, 11 Jan 2024 09:26:07 +0000 (UTC)
+	id 8CC23C433F1; Thu, 11 Jan 2024 09:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9246AC43390;
+	Thu, 11 Jan 2024 09:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704965168;
-	bh=6NGWaDWsy3WnFDR2xmV670DWLBQORB+mtRXuoyuN6TI=;
+	s=k20201202; t=1704965169;
+	bh=Wh+Ghh/xae7yXln1+wKtnus24RXFzzEP2G6Itu8NWA4=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HVlv3kG20McnEGDdsBv3qPZexROqFtNK6UBJXbFz2c+9yGBkpUxVAyT0YsLokTbox
-	 Ht9NPb7qB+KglMpJN5XUI0tFFRe9CUmiFmcrHznWraWyelSn0shYuQA8vLkNf8Q4hU
-	 wCIozc4oMthZMBhSuTJkQ/Lu+spGTFIcKpiettVKu2ec7FjxruvMXPVY2q8YI6rKFz
-	 D2r4/CUrYigE2D0ABBOnQZzGQSD+9Q+lcWIKmqvgRS+rKWQOWpSQ24qofu0RC5zQfO
-	 efc+zEZ8gxIZbKquWBbZbYjjq/QcDoMevLJ5cS8SaS4xCjXSpLqGodMTneVOfp65EI
-	 gPcE2rKAwKEpA==
+	b=ZUQ37j++js6R3XR6MOvnZPrzeYClzxboiSLBJIulEcZ6jTUeVcwf9cks5PCw66gzP
+	 ESzaR3ltX4jgE3S3qu5WYz3bcg57FDy5cezJP/7EJtcTvN9KGOf64CZtfBsw++HObD
+	 3YCvdmvzPUAWCYFXR0GpC7ghAGZVbb3+YDThcV0ZrAelNoBFMZskrp4DX2rxymw7i/
+	 ZxgFnlxmfVGiaJ3Pftc9sxfxkYWYMzH+4QYU+35SJlLH33tYRU/dE7NlWOhHeHrZ1u
+	 S5Ivlkygz2ZUH3uVVz56mLVtrrGSpWWB8YLrFMnzKXopsSrpZL4o4n6VJGwI8pMnLh
+	 edQA2g9QeGoNA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: linux-arm-kernel@lists.infradead.org,
 	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5/6] ARM: defconfig: remove CONFIG_SLUB references
-Date: Thu, 11 Jan 2024 10:25:49 +0100
-Message-Id: <20240111092550.1313277-6-arnd@kernel.org>
+Subject: [PATCH 6/6] ARM: defconfig: remove dead platform options
+Date: Thu, 11 Jan 2024 10:25:50 +0100
+Message-Id: <20240111092550.1313277-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240111092550.1313277-1-arnd@kernel.org>
 References: <20240111092550.1313277-1-arnd@kernel.org>
@@ -36,79 +36,91 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-SLUB is now the only remaining allocator after the SLAB removal and it
-was the default already before that, so no need to mention it in the
-defconfig files.
+These are all options for boards that got removed in the past and
+are not relevant here because the options no longer exist or
+are implied by the platform.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/configs/clps711x_defconfig  | 1 -
- arch/arm/configs/collie_defconfig    | 1 -
- arch/arm/configs/multi_v4t_defconfig | 1 -
+ arch/arm/configs/clps711x_defconfig  | 6 ------
+ arch/arm/configs/dove_defconfig      | 2 --
+ arch/arm/configs/imx_v4_v5_defconfig | 5 -----
  arch/arm/configs/omap1_defconfig     | 1 -
- arch/arm/configs/pxa_defconfig       | 1 -
- 5 files changed, 5 deletions(-)
+ arch/arm/configs/realview_defconfig  | 2 --
+ 5 files changed, 16 deletions(-)
 
 diff --git a/arch/arm/configs/clps711x_defconfig b/arch/arm/configs/clps711x_defconfig
-index d7ed1e7c6a90..5ce6ee0006e0 100644
+index 5ce6ee0006e0..6fa3477e6b02 100644
 --- a/arch/arm/configs/clps711x_defconfig
 +++ b/arch/arm/configs/clps711x_defconfig
-@@ -14,7 +14,6 @@ CONFIG_ARCH_EDB7211=y
- CONFIG_ARCH_P720T=y
- CONFIG_AEABI=y
- # CONFIG_COREDUMP is not set
--CONFIG_SLUB=y
- CONFIG_SLUB_TINY=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-diff --git a/arch/arm/configs/collie_defconfig b/arch/arm/configs/collie_defconfig
-index 6efac6d9c023..01b5a5a73f03 100644
---- a/arch/arm/configs/collie_defconfig
-+++ b/arch/arm/configs/collie_defconfig
-@@ -13,7 +13,6 @@ CONFIG_CMDLINE="noinitrd root=/dev/mtdblock2 rootfstype=jffs2 fbcon=rotate:1"
- CONFIG_FPE_NWFPE=y
- CONFIG_PM=y
- # CONFIG_SWAP is not set
--CONFIG_SLUB=y
- CONFIG_SLUB_TINY=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-diff --git a/arch/arm/configs/multi_v4t_defconfig b/arch/arm/configs/multi_v4t_defconfig
-index 9abc7aae83fa..27d650635d9b 100644
---- a/arch/arm/configs/multi_v4t_defconfig
-+++ b/arch/arm/configs/multi_v4t_defconfig
-@@ -25,7 +25,6 @@ CONFIG_ARM_CLPS711X_CPUIDLE=y
+@@ -6,12 +6,6 @@ CONFIG_RD_LZMA=y
+ CONFIG_EXPERT=y
  CONFIG_JUMP_LABEL=y
  CONFIG_PARTITION_ADVANCED=y
+-CONFIG_ARCH_CLPS711X=y
+-CONFIG_ARCH_AUTCPU12=y
+-CONFIG_ARCH_CDB89712=y
+-CONFIG_ARCH_CLEP7312=y
+-CONFIG_ARCH_EDB7211=y
+-CONFIG_ARCH_P720T=y
+ CONFIG_AEABI=y
  # CONFIG_COREDUMP is not set
--CONFIG_SLUB=y
  CONFIG_SLUB_TINY=y
- CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
+diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
+index 46859e6fee5b..2849d17f5856 100644
+--- a/arch/arm/configs/dove_defconfig
++++ b/arch/arm/configs/dove_defconfig
+@@ -6,9 +6,7 @@ CONFIG_EXPERT=y
+ # CONFIG_ARCH_MULTI_V6 is not set
+ CONFIG_ARCH_MULTI_V7=y
+ CONFIG_ARCH_DOVE=y
+-CONFIG_MACH_DOVE_DB=y
+ CONFIG_MACH_CM_A510=y
+-CONFIG_MACH_DOVE_DT=y
+ CONFIG_AEABI=y
+ CONFIG_HIGHMEM=y
+ CONFIG_ARM_APPENDED_DTB=y
+diff --git a/arch/arm/configs/imx_v4_v5_defconfig b/arch/arm/configs/imx_v4_v5_defconfig
+index ec45e6225225..875c8cdbada7 100644
+--- a/arch/arm/configs/imx_v4_v5_defconfig
++++ b/arch/arm/configs/imx_v4_v5_defconfig
+@@ -12,11 +12,6 @@ CONFIG_ARCH_MULTI_V4T=y
+ CONFIG_ARCH_MULTI_V5=y
+ # CONFIG_ARCH_MULTI_V7 is not set
+ CONFIG_ARCH_MXC=y
+-CONFIG_MACH_MX21ADS=y
+-CONFIG_MACH_MX27ADS=y
+-CONFIG_MACH_MX27_3DS=y
+-CONFIG_MACH_IMX27_VISSTRIM_M10=y
+-CONFIG_MACH_PCA100=y
+ CONFIG_SOC_IMX1=y
+ CONFIG_SOC_IMX25=y
+ CONFIG_SOC_IMX27=y
 diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-index e7f36aa5b782..af5f1c4ec084 100644
+index af5f1c4ec084..729ea8157e2a 100644
 --- a/arch/arm/configs/omap1_defconfig
 +++ b/arch/arm/configs/omap1_defconfig
-@@ -40,7 +40,6 @@ CONFIG_MODULE_FORCE_UNLOAD=y
- CONFIG_PARTITION_ADVANCED=y
- CONFIG_BINFMT_MISC=y
- # CONFIG_SWAP is not set
--CONFIG_SLUB=y
- CONFIG_SLUB_TINY=y
- # CONFIG_VM_EVENT_COUNTERS is not set
- CONFIG_NET=y
-diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-index 2d2102b19e95..f2ca5c9131b5 100644
---- a/arch/arm/configs/pxa_defconfig
-+++ b/arch/arm/configs/pxa_defconfig
-@@ -44,7 +44,6 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_LDM_PARTITION=y
- CONFIG_CMDLINE_PARTITION=y
- CONFIG_BINFMT_MISC=y
--CONFIG_SLUB=y
- CONFIG_SLUB_TINY=y
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
+@@ -28,7 +28,6 @@ CONFIG_MACH_OMAP_PALMTE=y
+ CONFIG_MACH_SX1=y
+ CONFIG_MACH_NOKIA770=y
+ CONFIG_MACH_AMS_DELTA=y
+-CONFIG_MACH_OMAP_GENERIC=y
+ CONFIG_AEABI=y
+ CONFIG_CMDLINE="root=1f03 rootfstype=jffs2"
+ CONFIG_FPE_NWFPE=y
+diff --git a/arch/arm/configs/realview_defconfig b/arch/arm/configs/realview_defconfig
+index d1eaed19fa6c..febea5cf7aaa 100644
+--- a/arch/arm/configs/realview_defconfig
++++ b/arch/arm/configs/realview_defconfig
+@@ -9,8 +9,6 @@ CONFIG_MACH_REALVIEW_EB=y
+ CONFIG_REALVIEW_EB_ARM1136=y
+ CONFIG_REALVIEW_EB_ARM1176=y
+ CONFIG_REALVIEW_EB_A9MP=y
+-CONFIG_REALVIEW_EB_ARM11MP=y
+-CONFIG_MACH_REALVIEW_PB11MP=y
+ CONFIG_MACH_REALVIEW_PB1176=y
+ CONFIG_MACH_REALVIEW_PBA8=y
+ CONFIG_MACH_REALVIEW_PBX=y
 -- 
 2.39.2
 
