@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FADCC47077
-	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 16:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7103EC47077
+	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 16:18:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 32915C43390; Thu, 11 Jan 2024 16:16:55 +0000 (UTC)
+	id 5838BC433F1; Thu, 11 Jan 2024 16:18:37 +0000 (UTC)
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A4B7EC433F1
-	for <soc@kernel.org>; Thu, 11 Jan 2024 16:16:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A4B7EC433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id EFD84C433C7
+	for <soc@kernel.org>; Thu, 11 Jan 2024 16:18:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EFD84C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 552ED3200B18;
-	Thu, 11 Jan 2024 11:16:50 -0500 (EST)
+	by mailout.west.internal (Postfix) with ESMTP id B30913200A17;
+	Thu, 11 Jan 2024 11:18:33 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 11 Jan 2024 11:16:50 -0500
+  by compute5.internal (MEProxy); Thu, 11 Jan 2024 11:18:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1704989809;
-	 x=1705076209; bh=CcbBQOkh5S3PcEvhTXXWeSl7ysYQiWp4Vja+Sy40FJw=; b=
-	pa2EkzVzovgmzTtdMJUd4L1sPm2TthFPYP1PrIrMQsAlPuaXdcd0CR/lSAxaOoTL
-	6PIgIWLhjytD3Zx+4l+AChIn3IiJ2arM3eJ/PeGlzT45BVBS66eZ3jGMhEjgfH99
-	5pNJnZUJdT7WGQCBjgKkcfSrlId2ypg9Z54ZPE6m2a8PrhPeLDOv0zLc8/b50ubR
-	KIPE1GToW1wgbo1CUmKiwO9ZCfdrjoIFodkJVR+HgvIGiBVQsnZc8zdepiTq4aM7
-	NMerpayaj9OWY7O+Rrhlj8Xin/Cx+X+YSGXTMxjPffjqf/N8r28D8ggomfO/ayJ3
-	QlOxsZ1YkuukMKQIpXQ0tQ==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1704989913;
+	 x=1705076313; bh=wR9kVKHNZJUl/jEBXXwkc1yKshWQ8Ddsb/Xbl9Zge9E=; b=
+	ibums8lOcXPMWcJ8h5itn5jzrpotXqq8CVOmk1E1TX7l9BUiH2tH24k3t4tJVp1r
+	SUv/DcppH9h8i21tt9Y+yv0Kqbbv7uqvZsYETuzr0vKucLIxbk2AC6mbLM0jmChj
+	ngtYHK/27MKOSD7wG3o6DqgwVeFOHYuv9n6EALOvJpqc1Yr73myVrk2M7r9Tra7S
+	CDlCT9BdmOdeWmpFQRFe/RXhMq9dP+uobvokZa4WfZrVmAkSBT7+Ukup92gt2xO8
+	WwIqXzsipm1zoJ13BSECnTIM+ssxDH0iPcnjr2c8hFJTyshT1yaFsdKcZQ+9J9lU
+	l7Rn+KuCgbdeya+a90aX2Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1704989809; x=
-	1705076209; bh=CcbBQOkh5S3PcEvhTXXWeSl7ysYQiWp4Vja+Sy40FJw=; b=Z
-	qT5Kul5n4EQcbX8E+qODDTefCKZ02oHMO2S4ribk6n3sUyxmqhFhR7A2KnLz5vdY
-	sJkzzm3RFPrglKfGYFalTZTa9lK2ORXTyNYvFAaPj2ib7HFIDTJPX8eoBEVb42H6
-	Igs59cMz+NVa8yLaxvm1YA5m2MRhrDCY2nAF48A28kTE4N5cIiTDJ7vsbnhHXkj6
-	Dk648jaLL1wyb9ax7BEK/tjKL2cehDjcyc3KMynwUdJ/EgmVt9uUOBUTTXEJEYVx
-	oRaivs4W8lmdSyxeKNl7tbtjJxjHTyVrU7xZRUOW472ultLv4dYaYAukZeypVSAi
-	4ZZiWqEFM6veJ5wqYoGYQ==
-X-ME-Sender: <xms:cRSgZRrGUxMDmaoRgn_6fopdBNfAGoPTVeV7bOmqoHVDFxLlzs4PxA>
-    <xme:cRSgZTrRlPI8QXhuxPUp4PZKCgv63HDpXJLUo7VrFIfe88qS0GYzjuN0iUMfGk7UJ
-    jsRqDQqnBv8SZx6i54>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1704989913; x=
+	1705076313; bh=wR9kVKHNZJUl/jEBXXwkc1yKshWQ8Ddsb/Xbl9Zge9E=; b=7
+	BOV4IU+Ul4q6krr0QGIs/5HWMZzu5F6ldNj5GYrV/+85Wmoli5kOmjz5Cznw7gSh
+	tMffs0H1zp9/j6RrzjjZKDMFPL/VJRwPC5YCd7f1u5QIB8TV6ZI2V9Lre+0hRqYl
+	S/+ceuYICicRDARU9usNavexyQ/cuEA4L1dBYfxfJOJWFTvbzhLxO7ppMenXA3TP
+	oYV8odp1PUcPRpT45cR6IoWJo8hE87xZ3Hg/cZczm2A8VZ6nOxKFA8UDsKod6Y6l
+	yCJUJi/kZEnWNi6mq0xubh+SrSZ4QjarqZCIHuQg/TUz2hUQeOojkpbtf1toZ4JM
+	18DP06luFbM40dmGqitzA==
+X-ME-Sender: <xms:2RSgZV2YnYABOpRycK62GsqoCT_W8V7zQBe1s0PGuugxdfqhuSkU6Q>
+    <xme:2RSgZcGJr72HsOnm8Y2wCop6_Rb01zSLw76aJxvrvRiMhElCP-SI1gHcBY4dbkidb
+    YtTvqWlt9O1-TZsYV0>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeifedgkeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
     rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkefhheetvdethfejkeeigfehtdffieevfeefteffteejffehlefhtdeu
-    veejueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
-    rghrnhgusgdruggv
-X-ME-Proxy: <xmx:cRSgZeOJLyL5p7mV0CY0qRNDQLX8RyMC7dQObrDoEAe-aTRZNgg6nQ>
-    <xmx:cRSgZc4TR4Crl7_TJAJV-7st93kxgaN__DLlRPjIakB37YCBfRFIMQ>
-    <xmx:cRSgZQ5HOpzRC52lX8IvuacXyzmQnXfdPBDE9mFFCHqGRO0ZGsCAMA>
-    <xmx:cRSgZeSKk5g8E8op_Ii-ksrhk9GmzOx-HXiMp0WuXa3ZKNAVE5viBA>
+    htthgvrhhnpeejgeefkeffgeeuvefhfefhhfevudfhjeetueeguddvffffjeevtddtffej
+    udekheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhlihhnrghrohdrohhrghdpgh
+    hithhhuhgsrdgtohhmpdhpvghnghhuthhrohhnihigrdguvgenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:2RSgZV5lzcz7dKGr0a_9-NeVyEd3an_LiXYkmSgecwquLzbsO7etwg>
+    <xmx:2RSgZS0JEvhLCbhCFt2_iSGLbGo8azMDGZJaTrp90A8Q2DibyrQlNw>
+    <xmx:2RSgZYEarIvkqYG39liJVqvAorn_b4wZ9yPXvDQ1RT4RSPOEJsoFpw>
+    <xmx:2RSgZSMt3o8LtH63RMzdARVB2daG0ntSf-vjinFx6RY6-iboiqQSqg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 75DB5B6008F; Thu, 11 Jan 2024 11:16:49 -0500 (EST)
+	id F2C1CB6008D; Thu, 11 Jan 2024 11:18:32 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
 MIME-Version: 1.0
-Message-Id: <b1923a64-b5e6-4dac-988e-ea2a75e948d9@app.fastmail.com>
+Message-Id: <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
 In-Reply-To: <1c120ba6-3c94-4d94-8497-afb6c5063d3c@app.fastmail.com>
 References: <1c120ba6-3c94-4d94-8497-afb6c5063d3c@app.fastmail.com>
-Date: Thu, 11 Jan 2024 17:16:28 +0100
+Date: Thu, 11 Jan 2024 17:18:11 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: [GIT PULL 1/4] SoC: DT changes for 6.8
+Subject: [GIT PULL 2/4] SoC: driver updates for 6.8
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -89,629 +89,258 @@ The following changes since commit 2cc14f52aeb78ce3f29677c2de1f06c0e9147=
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-d=
-t-6.8
+rivers-6.8
 
-for you to fetch changes up to 18a1ee9d716d355361da2765f87dbbadcdea03bf:
+for you to fetch changes up to db0a7c09b2a552c5028a29942e80a4848d182934:
 
-  ARM: dts: usr8200: Fix phy registers (2024-01-11 16:21:02 +0100)
-
-For the merge conflicts, see
-https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=3D=
-test-merge&id=3D72d85957cce5
+  Merge tag 'tee-iov-iter-for-v6.8' of https://git.linaro.org/people/jen=
+s.wiklander/linux-tee into soc/drivers (2023-12-22 11:38:03 +0000)
 
 ----------------------------------------------------------------
-SoC: DT changes for 6.8
+SoC: driver updates for 6.8
 
-There is one new SoC for each 32-bit Arm and 64-bit RISC-V, but both
-the Rockchips rv1109 and Sopgho CV1812H are just minor variations of
-already supported chips.
+A new drivers/cache/ subsystem is added to contain drivers for abstracti=
+ng
+cache flush methods on riscv and potentially others, as this is needed f=
+or
+handling non-coherent DMA but several SoCs require nonstandard hardware
+methods for it.
 
-The other six new SoCs are all part of existing arm64 families, but
-are somewhat more interesting:
+op-tee gains support for asynchronous notification with FF-A, as well
+as support for a system thread for executing in secure world.
 
- - Samsung ExynosAutov920 is an automotive chip, and the first one
-   we support based on the Cortex-A78AE core with lockstep mode.
+The tee, reset, bus, memory and scmi subsystems have a couple of minor
+updates.
 
- - Google gs101 (Tensor G1) is the chip used in a number of Pixel phones,
-   and is grouped with Samsung Exynos here since it is based on the same
-   SoC design, sharing most of its IP blocks with that series.
+Platform specific soc driver changes include:
 
- - MediaTek MT8188 is a new chip used for mid-range tablets and Chromebo=
-oks,
-   using two Cortex-A78 cores where the older MT8195 had four of them.
+ - Samsung Exynos gains driver support for Google GS101 (Tensor G1)
+   across multiple subsystems
 
- - Qualcomm SM8650 (Snapdragon 8 Gen 3) is their current top range
-   phone SoC and the first supported chip based on Cortex-X4, Cortex-A720
-   and Cortex-A520.
+ - Qualcomm Snapdragon gains support for SM8650 and X1E along with
+   added features for some other SoCs
 
- - Qualcomm X1E80100 (Snapdragon X Elite) in turn is the latest
-   Laptop chip using the custom Oryon cores.
+ - Mediatek adds support for "Smart Voltage Scaling" on MT8186 and MT819=
+5,
+   and driver support for MT8188 along with some code refactoring.
 
- - Unisoc UMS9620 (Tanggula 7 series) is a 5G phone SoC based on
-   Cortex-A76 and Cortex-A55
+ - Microchip Polarfire FPGA support for "Auto Update" of the FPGA bitstr=
+eam
 
-In terms of boards, we have
+ - Apple M1 mailbox driver is rewritten into a SoC driver
 
- - Five old Microsoft Lumia phones, the HTC One Mini 2, Motorola Moto
-   G 4G, and Huawei Honor 5X/GR5, all based on Snapdragon SoCs.
-
- - Multiple Rockchips mobile gaming systems (Anbernic RG351V,
-   Powkiddy RK2023, Powkiddy X55) along with the Sonoff iHost Smart
-   Home Hub and a few Rockchips SBCs
-
- - Some ComXpress boards based on Marvell CN913x, which is the
-   follow-up to Armada 7xxx/8xxx.
-
- - Six new industrial/embedded boards based on NXP i.MX8 and i.MX9
-
- - Mediatek MT8183 based Chromebooks from Lenovo, Asus and Acer.
-
- - Toradex Verdin AM62 Mallow carrier for TI AM62
-
- - Huashan Pi board based on the SophGo CV1812H RISC-V chip
-
- - Two boards based on Allwinner H616/H618
-
- - A number of reference boards for various added SoCs from Qualcomm,
-   Mediatek, Google, Samsung, NXP and Spreadtrum
-
-As usual, there are cleanups and warning fixes across all platforms as
-well as added features for several of them.
+ - minor updates on amlogic, mvebu, ti, zynq, imx, renesas and hisilicon
 
 ----------------------------------------------------------------
-
-Shortlog (slightly trimmed)
-
-Aakarsh Jain (1):
-      arm64: dts: fsd: Add MFC related DT enteries
-
 Abel Vesa (3):
-      arm64: dts: qcom: x1e80100: Add Compute Reference Device
-      arm64: dts: qcom: x1e80100-crd: Fix supplies for some LDOs in PM85=
-50
-      arm64: dts: qcom: x1e80100-qcp: Fix supplies for some LDOs in PM85=
-50
+      soc: qcom: llcc: Add missing description for members in slice conf=
+ig
+      dt-bindings: soc: qcom,aoss-qmp: document the X1E80100 Always-On S=
+ubsystem side channel
+      soc: qcom: llcc: Fix LLCC_TRP_ATTR2_CFGn offset
 
-Adam Ford (10):
-      arm64: dts: imx8mp-beacon-kit: Enable DSI to HDMI Bridge
-      arm64: dts: imx8mp: Add NPU Node
-      arm64: dts: imx8mm: Simplify mipi_dsi clocks
-      arm64: dts: imx8mm: Remove video_pll1 clock rate from clk node
-      arm64: dts: imx8mm: Slow default video_pll1 clock rate
-      arm64: dts: imx8mm: Reduce GPU to nominal speed
-      arm64: dts: imx8mm: Add optional overdrive DTSI
-      arm64: dts: imx8mm-beacon: Enable overdrive mode
-      arm64: dts: imx8mn: Enable Overdrive mode
-      arm64: dts: imx8mn-beacon: Support overdrive mode
+Andrew Halaney (3):
+      soc: qcom: pmic_pdcharger_ulog: Search current directory for heade=
+rs
+      soc: qcom: pmic_pdcharger_ulog: Move TRACE_SYSTEM out of #if prote=
+ction
+      soc: qcom: pmic_pdcharger_ulog: Fix hypothetical ulog request mess=
+age endianess
 
-Ahmad Fatoum (2):
-      dt-bindings: arm: stm32: don't mix SCMI and non-SCMI board compati=
-bles
-      ARM: dts: stm32: don't mix SCMI and non-SCMI board compatibles
+AngeloGioacchino Del Regno (17):
+      soc: mediatek: mtk-svs: Subtract offset from regs_v2 to avoid conf=
+lict
+      soc: mediatek: mtk-svs: Convert sw_id and type to enumerations
+      soc: mediatek: mtk-svs: Build bank name string dynamically
+      soc: mediatek: mtk-svs: Reduce memory footprint of struct svs_bank
+      soc: mediatek: mtk-svs: Change the thermal sensor device name
+      soc: mediatek: mtk-svs: Add a map to retrieve fused values
+      soc: mediatek: mtk-svs: Add SVS-Thermal coefficient to SoC platfor=
+m data
+      soc: mediatek: mtk-svs: Move t-calibration-data retrieval to svs_p=
+robe()
+      soc: mediatek: mtk-svs: Commonize efuse parse function for most So=
+Cs
+      soc: mediatek: mtk-svs: Drop supplementary svs per-bank pointer
+      soc: mediatek: mtk-svs: Commonize MT8192 probe function for MT8186
+      soc: mediatek: mtk-svs: Remove redundant print in svs_get_efuse_da=
+ta
+      soc: mediatek: mtk-svs: Compress of_device_id entries
+      soc: mediatek: mtk-svs: Cleanup of svs_probe() function
+      soc: mediatek: mtk-svs: Check if SVS mode is available in the begi=
+nning
+      soc: mediatek: mtk-svs: Use ULONG_MAX to compare floor frequency
+      soc: mediatek: mtk-svs: Constify runtime-immutable members of svs_=
+bank
 
-Ajit Pandey (1):
-      arm64: dts: qcom: sm4450: Add apps_rsc and cmd_db node
+Arnaud Pouliquen (1):
+      tee: Use iov_iter to better support shared buffer registration
 
-Alex Bee (14):
-      dt-bindings: arm: rockchip: Add Geniatech XPI-3128
-      ARM: dts: rockchip: Add sdmmc_det pinctrl for RK3128
-      ARM: dts: rockchip: Add Geniatech XPI-3128 RK3128 board
-      ARM: dts: rockchip: Add USB host clocks for RK3128
-      ARM: dts: rockchip: Add dwc2 otg fifo siztes for RK3128
-      ARM: dts: rockchip: Make usbphy the parent of SCLK_USB480M for RK3=
-128
-      ARM: dts: rockchip: Add gmac node for RK3128
-      ARM: dts: rockchip: Enable gmac for XPI-3128
-      ARM: dts: rockchip: Add power-controller for RK3128
-      ARM: dts: rockchip: Add GPU node for RK3128
-      ARM: dts: rockchip: Enable GPU for XPI-3128
-      ARM: dts: rockchip: Move gpio aliases to SoC dtsi for RK3128
-      ARM: dts: rockchip: Move i2c aliases to SoC dtsi for RK3128
-      ARM: dts: rockchip: Move uart aliases to SoC dtsi for RK3128
+Arnd Bergmann (25):
+      Merge tag 'asahi-soc-mailbox-6.8' of https://github.com/AsahiLinux=
+/linux into soc/drivers
+      Merge tag 'bus-platform-remove-void' of https://git.pengutronix.de=
+/git/ukl/linux into soc/drivers
+      soc: qcom: stats: fix 64-bit division
+      Merge tag 'hisi-drivers-for-6.8' of https://github.com/hisilicon/l=
+inux-hisi into soc/drivers
+      Merge tag 'system-thread-for-v6.8' of https://git.linaro.org/peopl=
+e/jens.wiklander/linux-tee into soc/drivers
+      Merge tag 'ffa-notif-for-v6.8' of https://git.linaro.org/people/je=
+ns.wiklander/linux-tee into soc/drivers
+      Merge tag 'kern-priv-shm-for-v6.8' of https://git.linaro.org/peopl=
+e/jens.wiklander/linux-tee into soc/drivers
+      Merge tag 'fsl_qmc_tsa_v6.8' of https://github.com//hcodina/linux =
+into soc/drivers
+      Merge tag 'mtk-soc-for-v6.8' of https://git.kernel.org/pub/scm/lin=
+ux/kernel/git/mediatek/linux into soc/drivers
+      Merge tag 'renesas-drivers-for-v6.8-tag1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/geert/renesas-devel into soc/drivers
+      Merge tag 'imx-drivers-6.8' of git://git.kernel.org/pub/scm/linux/=
+kernel/git/shawnguo/linux into soc/drivers
+      Merge tag 'zynqmp-soc-for-6.8' of https://github.com/Xilinx/linux-=
+xlnx into soc/drivers
+      Merge tag 'ti-driver-soc-for-v6.8' of https://git.kernel.org/pub/s=
+cm/linux/kernel/git/ti/linux into soc/drivers
+      Merge tag 'qcom-drivers-for-6.8' of https://git.kernel.org/pub/scm=
+/linux/kernel/git/qcom/linux into soc/drivers
+      Merge tag 'samsung-drivers-6.8' of https://git.kernel.org/pub/scm/=
+linux/kernel/git/krzk/linux into soc/drivers
+      Merge tag 'mvebu-drivers-6.8-1' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/gclement/mvebu into soc/drivers
+      Merge tag 'amlogic-drivers-for-v6.8' of https://git.kernel.org/pub=
+/scm/linux/kernel/git/amlogic/linux into soc/drivers
+      Merge tag 'riscv-soc-drivers-for-v6.8' of https://git.kernel.org/p=
+ub/scm/linux/kernel/git/conor/linux into soc/drivers
+      Merge tag 'riscv-cache-for-v6.8' of https://git.kernel.org/pub/scm=
+/linux/kernel/git/conor/linux into soc/drivers
+      Merge tag 'memory-controller-drv-6.8' of https://git.kernel.org/pu=
+b/scm/linux/kernel/git/krzk/linux-mem-ctrl into soc/drivers
+      Merge tag 'memory-controller-drv-6.8-2' of https://git.kernel.org/=
+pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into soc/drivers
+      Merge tag 'scmi-updates-6.8' of git://git.kernel.org/pub/scm/linux=
+/kernel/git/sudeep.holla/linux into soc/drivers
+      Merge tag 'reset-for-v6.8' of git://git.pengutronix.de/pza/linux i=
+nto soc/drivers
+      Merge tag 'optee-cleanup-for-v6.8' of https://git.linaro.org/peopl=
+e/jens.wiklander/linux-tee into soc/drivers
+      Merge tag 'tee-iov-iter-for-v6.8' of https://git.linaro.org/people=
+/jens.wiklander/linux-tee into soc/drivers
 
-Alex Elder (2):
-      arm64: dts: qcom: sm8550: add IPA information
-      arm64: dts: qcom: sm8550-qrd: enable IPA
+Ashish Mhetre (3):
+      memory: tegra: Add SID override programming for MC clients
+      memory: tegra: Skip SID programming if SID registers aren't set
+      memory: tegra: Protect SID override call under CONFIG_IOMMU_API
 
-Alexander Stein (17):
-      arm64: dts: freescale: tqma9352-mba93xxla: add 'chassis-type' prop=
-erty
-      arm64: dts: freescale: add initial device tree for MBa93xxCA start=
-er kit
-      ARM: dts: imx7d: Fix coresight funnel ports
-      ARM: dts: imx7s: Fix lcdif compatible
-      ARM: dts: imx7s: Fix nand-controller #size-cells
-      ARM: dts: imx7s: Add missing #thermal-sensor-cells
-      arm64: dts: imx8mp: Add CCM interrupts
-      arm64: dts: imx8mn: Add CCM interrupts
-      arm64: dts: imx8mm: Add CCM interrupts
-      ARM: dts: imx7s: Add DMA channels for CSPI peripherals
-      ARM: dts: ti/omap: Replace deprecated extcon-usb-gpio id-gpio/vbus=
--gpio properties
-      arm64: dts: freescale: Add dual-channel LVDS overlay for TQMa8MPxL
-      arm64: dts: imx8mp: Disable dsp reserved memory by default
-      arm64: dts: tqma8mpql: Remove invalid/unused property
-      arm64: dts: imx8m*-tqma8m*: Add chassis-type
-      arm64: dts: imx8qxp: Add VPU subsystem file
-      arm64: dts: freescale: imx8qxp: Disable dsp reserved memory by def=
-ault
-
-Alexey Minnekhanov (1):
-      ARM: dts: qcom: msm8974-klte: Remove unused property
-
-Andre Przywara (5):
-      dt-bindings: arm: sunxi: add Orange Pi Zero 2W
-      arm64: dts: allwinner: h616: add Orange Pi Zero 2W support
-      dt-bindings: vendor-prefixes: add Transpeed
-      dt-bindings: arm: sunxi: document Transpeed 8K618-T board name
-      arm64: dts: allwinner: h618: add Transpeed 8K618-T TV box
-
-Andreas Kemnade (3):
-      ARM: dts: omap4-embt2ws: enable 32K clock on WLAN
-      ARM: dts: omap: logicpd-torpedo: do not disguise GNSS device
-      ARM: dts: omap4-embt2ws: Add Bluetooth
-
-Andrejs Cainikovs (2):
-      ARM: dts: imx6q-apalis: add can power-up delay on ixora board
-      arm64: dts: imx8-apalis: add can power-up delay on ixora board
-
-Andrew Davis (11):
-      arm64: dts: ti: k3-am64-main: Fix typo in epwm_tbclk node name
-      arm64: dts: ti: k3-am65: Add chipid node to wkup_conf bus
-      arm64: dts: ti: k3-j7200: Add chipid node to wkup_conf bus
-      arm64: dts: ti: k3-j721e: Add chipid node to wkup_conf bus
-      arm64: dts: ti: k3-j721s2: Add chipid node to wkup_conf bus
-      arm64: dts: ti: k3-j784s4: Add chipid node to wkup_conf bus
-      arm64: dts: ti: k3-am65: Add full compatible to dss-oldi-io-ctrl n=
-ode
-      arm64: dts: ti: k3-am65: Enable SDHCI nodes at the board level
-      arm64: dts: ti: k3-am64: Enable SDHCI nodes at the board level
-      arm64: dts: ti: k3-am625-beagleplay: Use UART name in pinmux name
-      arm64: dts: ti: k3-am65: Add AM652 dtsi file
-
-Andr=C3=A9 Apitzsch (5):
-      arm64: dts: qcom: msm8916-longcheer-l8910: Enable RGB LED
-      arm64: dts: qcom: msm8939-longcheer-l9100: Enable RGB LED
-      arm64: dts: qcom: msm8939-longcheer-l9100: Add proximity-near-level
-      ARM: dts: qcom: msm8926-motorola-peregrine: Add initial device tree
-      dt-bindings: arm: qcom: Add Motorola Moto G 4G (2013)
-
-Andy Yan (10):
-      dt-bindings: soc: rockchip: add rk3588 vop/vo syscon
-      arm64: dts: rockchip: Add vop on rk3588
-      ARM: dts: rockchip: Add stdout-path for rk3036 kylin
-      ARM: dts: rockchip: Remove rockchip,default-sample-phase from rk30=
-36.dtsi
-      dt-bindings: vendor-prefixes: Add Cool Pi
-      dt-bindings: arm: rockchip: Add Cool Pi 4B
-      arm64: dts: rockchip: Add support for rk3588s based board Cool Pi =
-4B
-      dt-bindings: arm: rockchip: Add Cool Pi CM5
-      arm64: dts: rockchip: Add support for rk3588 based board Cool Pi C=
-M5 EVB
-      arm64: dts: rockchip: Fix led pinctrl of lubancat 1
-
-AngeloGioacchino Del Regno (11):
-      arm64: dts: mediatek: cherry: Add platform thermal configuration
-      arm64: dts: mediatek: mt8183: Use interrupts-extended where possib=
-le
-      arm64: dts: mediatek: mt8173: Use interrupts-extended where possib=
-le
-      arm64: dts: mediatek: Use interrupts-extended where possible
-      arm64: dts: mediatek: Move MT6358 PMIC interrupts to MT8183 boards
-      arm64: dts: mediatek: mt8195-cherry: Add MFG0 domain supply
-      arm64: dts: mediatek: mt8195-cherry: Assign sram supply to MFG1 pd
-      media: dt-bindings: mediatek: Add phandle to mediatek,scp on MDP3 =
-RDMA
-      arm64: dts: mediatek: mt8183: Change iospaces for thermal and svs
-      arm64: dts: mediatek: mt8195: Add SVS node and reduce LVTS_AP iosp=
-ace
-      arm64: dts: mediatek: mt8192: Add Smart Voltage Scaling node
-
-Anusha Rao (2):
-      arm64: dts: qcom: ipq9574: Add common RDP dtsi file
-      arm64: dts: qcom: ipq9574: Enable WPS buttons
-
-Aradhya Bhatia (1):
-      arm64: dts: ti: k3-am62a7-sk: Add interrupt support for IO Expander
-
-Arnd Bergmann (34):
-      Merge tag 'renesas-dts-for-v6.8-tag1' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/geert/renesas-devel into soc/dt
-      Merge tag 'hisi-arm64-dt-for-6.8' of https://github.com/hisilicon/=
-linux-hisi into soc/dt
-      Merge tag 'omap-for-v6.8/dt-signed' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/tmlind/linux-omap into soc/dt
-      Merge tag 'samsung-dt64-6.8' of https://git.kernel.org/pub/scm/lin=
-ux/kernel/git/krzk/linux into soc/dt
-      Merge tag 'samsung-dt-6.8' of https://git.kernel.org/pub/scm/linux=
-/kernel/git/krzk/linux into soc/dt
-      Merge tag 'mtk-dts64-for-v6.8' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/mediatek/linux into soc/dt
-      Merge tag 'v6.8-rockchip-dts64-1' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/mmind/linux-rockchip into soc/dt
-      Merge tag 'v6.8-rockchip-dts32-1' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/mmind/linux-rockchip into soc/dt
-      Merge tag 'juno-update-6.8' of git://git.kernel.org/pub/scm/linux/=
-kernel/git/sudeep.holla/linux into soc/dt
-      Merge tag 'at91-dt-6.8' of https://git.kernel.org/pub/scm/linux/ke=
-rnel/git/at91/linux into soc/dt
-      Merge tag 'sunxi-dt-for-6.8-1' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/sunxi/linux into soc/dt
-      Merge tag 'stm32-dt-for-v6.8-1' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/atorgue/stm32 into soc/dt
-      Merge tag 'renesas-dts-for-v6.8-tag2' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/geert/renesas-devel into soc/dt
-      Merge tag 'ux500-dts-soc-for-v6.8' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/linusw/linux-integrator into soc/dt
-      Merge tag 'imx-bindgins-6.8' of git://git.kernel.org/pub/scm/linux=
-/kernel/git/shawnguo/linux into soc/dt
-      Merge tag 'imx-dt-6.8' of git://git.kernel.org/pub/scm/linux/kerne=
-l/git/shawnguo/linux into soc/dt
-      Merge tag 'imx-dt64-6.8' of git://git.kernel.org/pub/scm/linux/ker=
-nel/git/shawnguo/linux into soc/dt
-      Merge tag 'zynqmp-dt-for-6.8' of https://github.com/Xilinx/linux-x=
-lnx into soc/dt
-      Merge tag 'ti-keystone-dt-for-v6.8' of https://git.kernel.org/pub/=
-scm/linux/kernel/git/ti/linux into soc/dt
-      Merge tag 'ti-k3-dt-for-v6.8' of https://git.kernel.org/pub/scm/li=
-nux/kernel/git/ti/linux into soc/dt
-      Merge tag 'qcom-arm32-for-6.8' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/qcom/linux into soc/dt
-      Merge tag 'samsung-dt64-6.8-2' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/krzk/linux into soc/dt
-      Merge tag 'mvebu-dt-6.8-1' of git://git.kernel.org/pub/scm/linux/k=
-ernel/git/gclement/mvebu into soc/dt
-      Merge tag 'mvebu-dt64-6.8-1' of git://git.kernel.org/pub/scm/linux=
-/kernel/git/gclement/mvebu into soc/dt
-      Merge tag 'amlogic-arm64-dt-for-v6.8' of https://git.kernel.org/pu=
-b/scm/linux/kernel/git/amlogic/linux into soc/dt
-      Merge tag 'riscv-dt-for-v6.8' of https://git.kernel.org/pub/scm/li=
-nux/kernel/git/conor/linux into soc/dt
-      Merge tag 'qcom-arm64-for-6.8' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/qcom/linux into soc/dt
-      Merge tag 'sprd-dt-6.8-rc1' of https://github.com/lyrazhang/linux =
-into soc/dt
-      Merge tag 'arm-soc/for-6.8/devicetree' of https://github.com/Broad=
-com/stblinux into soc/dt
-      Merge tag 'qcom-arm32-for-6.8-2' of https://git.kernel.org/pub/scm=
-/linux/kernel/git/qcom/linux into soc/dt
-      Merge tag 'qcom-arm64-for-6.8-2' of https://git.kernel.org/pub/scm=
-/linux/kernel/git/qcom/linux into soc/dt
-      Merge tag 'v6.8-rockchip-dts64-2' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/mmind/linux-rockchip into soc/dt
-      Merge tag 'v6.8-rockchip-dts32-2' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/mmind/linux-rockchip into soc/dt
-      Merge tag 'socfpga_dts_updates_for_v6.8' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/dinguyen/linux into soc/dt
-
-Arseniy Krasnov (1):
-      arm64: dts: amlogic: meson-axg: pinctrl node for NAND
-
-Balsam CHIHI (1):
-      arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
+Atul Dhudase (1):
+      soc: qcom: llcc: Fix dis_cap_alloc and retain_on_pc configuration
 
 Bartosz Golaszewski (1):
-      arm64: dts: qcom: qrb5165-rb5: add the Bluetooth node
+      firmware: qcom: qseecom: fix memory leaks in error paths
 
-Ben Wolsieffer (2):
-      ARM: dts: stm32: add STM32F746 syscfg clock
-      ARM: dts: stm32: add SPI support on STM32F746
+Bjorn Andersson (1):
+      soc: qcom: stats: Express AOSS QMP module dependency
 
-Benedikt Niedermayr (1):
-      arm64: dts: ti: iot2050: Definitions for runtime pinmuxing
+Christophe JAILLET (1):
+      firmware: ti_sci: Fix an off-by-one in ti_sci_debugfs_create()
 
-Bhavya Kapoor (3):
-      arm64: dts: ti: k3-j7200-main: Add Itap Delay Value For DDR52 spee=
-d mode
-      arm64: dts: ti: k3-j721s2-main: Add Itap Delay Value For DDR50 spe=
-ed mode
-      arm64: dts: ti: k3-j784s4-main: Add Itap Delay Value For DDR50 spe=
-ed mode
+Conor Dooley (8):
+      soc: sifive: shunt ccache driver to drivers/cache
+      dt-bindings: soc: microchip: add a property for system controller =
+flash
+      soc: microchip: mpfs: enable access to the system controller's fla=
+sh
+      soc: microchip: mpfs: print service status in warning message
+      soc: microchip: mpfs: add auto-update subdev to system controller
+      firmware: microchip: add PolarFire SoC Auto Update support
+      MAINTAINERS: add auto-update driver to mpfs entry
+      soc: renesas: Make RZ/Five depend on !DMA_DIRECT_REMAP
 
-Biju Das (2):
-      arm64: dts: renesas: rzg2l-smarc-som: Enable 4-bit tx support
-      arm64: dts: renesas: rzg2lc-smarc-som: Enable 4-bit tx support
+Cristian Marussi (2):
+      firmware: arm_scmi: Add optional flags to extended names helper
+      firmware: arm_scmi: Add protocol versioning checks
 
-Bjorn Andersson (9):
-      Merge tag 'qcom-arm64-for-6.7-2' into arm64-for-6.8
-      arm64: dts: qcom: sc8180x-primus: Fix HALL_INT polarity
-      Merge tag 'qcom-dts-for-6.7-2' into arm32-for-6.8
-      Merge branch '20231026105345.3376-3-bryan.odonoghue@linaro.org' in=
-to arm64-for-6.8
-      Merge branch '20231106-topic-sm8650-upstream-clocks-v3-5-761a6fadb=
-4c0@linaro.org' into arm64-for-6.8
-      Merge branch 'icc-sm8650' of https://git.kernel.org/pub/scm/linux/=
-kernel/git/djakov/icc into arm64-for-6.8
-      Merge branch '20231205061002.30759-4-quic_sibis@quicinc.com' into =
-arm64-for-6.8
-      Merge branch 'icc-x1e80100' of https://git.kernel.org/pub/scm/linu=
-x/kernel/git/djakov/icc into arm64-for-6.8
-      Merge branch 'icc-sm6115' of https://git.kernel.org/pub/scm/linux/=
-kernel/git/djakov/icc into HEAD
+Dang Huynh (1):
+      soc: qcom: socinfo: Add PM8937 Power IC
 
-Bryan O'Donoghue (4):
-      dt-bindings: clock: Use gcc.yaml for common clock properties
-      dt-bindings: clock: Add SC8280XP CAMCC
-      arm64: dts: qcom: sc8280xp: Add in CAMCC for sc8280xp
-      arm64: dts: qcom: sm8250: Add wakeup-source to usb_1 and usb_2
+Dmitry Baryshkov (2):
+      usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+      soc: qcom: pmic_glink: enable UCSI by default
 
-Bryant Mairs (1):
-      ARM: dts: qcom: Disable pm8941 & pm8226 smbb charger by default
+Emil Renner Berthing (4):
+      dt-bindings: cache: sifive,ccache0: Add StarFive JH7100 compatible
+      soc: sifive: ccache: Add StarFive JH7100 support
+      riscv: errata: Add StarFive JH7100 errata
+      riscv: errata: Make ERRATA_STARFIVE_JH7100 depend on !DMA_DIRECT_R=
+EMAP
 
-Caleb Connolly (3):
-      arm64: dts: qcom: qrb4210-rb2: don't force usb peripheral mode
-      arm64: dts: qcom: sdm845-oneplus: enable flash LED
-      arm64: dts: qcom: qrb2210-rb1: use USB host mode
+Etienne Carriere (5):
+      tee: optee: system thread call property
+      tee: system session
+      tee: optee: support tracking system threads
+      firmware: arm_scmi: optee: use optee system invocation
+      optee: add missing description of RPC argument reference
 
-Chancel Liu (2):
-      arm64: dts: imx93: Add audio device nodes
-      arm64: dts: imx93: Configure clock rate for audio PLL
+Evgeny Bachinin (2):
+      firmware: meson_sm: refactor serial sysfs entry via dev_groups att=
+rs
+      firmware: meson-sm: unmap out_base shmem in error path
 
-Chen-Yu Tsai (4):
-      arm64: dts: mediatek: mt6358: Merge ldo_vcn33_* regulators
-      arm64: dts: mt8183: kukui-jacuzzi: Drop bogus anx7625 panel_flag p=
-roperty
-      arm64: dts: mt6358: Drop bogus "regulator-fixed" compatible proper=
-ties
-      arm64: dts: mediatek: mt8186: Fix alias prefix for ovl_2l0
+Geert Uytterhoeven (1):
+      soc: renesas: Remove duplicate setup of soc_device_attribute.family
 
-Chris Morgan (8):
-      dt-bindings: arm: rockchip: Add Powkiddy RK2023
-      arm64: dts: rockchip: Update powkiddy,rgb30 include to rk2023 DTSI
-      arm64: dts: rockchip: Add Powkiddy RK2023
-      dt-bindings: arm: rockchip: Add Powkiddy X55
-      arm64: dts: rockchip: Add Powkiddy X55
-      dt-bindings: arm: rockchip: Add Anbernic RG351V
-      arm64: dts: rockchip: Split RG351M from Odroid Go Advance
-      arm64: dts: rockchip: Add Anbernic RG351V
+Ghanshyam Agrawal (1):
+      soc: qcom: llcc: Fix typo in kernel-doc
 
-Chukun Pan (3):
-      arm64: dts: qcom: ipq6018: Add remaining QUP UART node
-      arm64: dts: qcom: ipq6018: Add QUP5 SPI node
-      arm64: dts: qcom: ipq6018: fix clock rates for GCC_USB0_MOCK_UTMI_=
-CLK
+HariBabu Gattem (1):
+      soc: xilinx: Fix for call trace due to the usage of smp_processor_=
+id()
 
-Chunyan Zhang (5):
-      dt-bindings: arm: Add compatible strings for Unisoc's UMS9620
-      arm64: dts: sprd: Add support for Unisoc's UMS9620
-      arm64: dts: sprd: Removed unused clock references from etm nodes
-      arm64: dts: sprd: Add clock reference for pll2 on UMS512
-      arm64: dts: sprd: Change UMS512 idle-state nodename to match bindi=
-ngs
+Hector Martin (5):
+      soc: apple: rtkit: Get rid of apple_rtkit_send_message_wait
+      soc: apple: mailbox: Add ASC/M3 mailbox driver
+      soc: apple: rtkit: Port to the internal mailbox driver
+      mailbox: apple: Delete driver
+      soc: apple: mailbox: Rename config symbol to APPLE_MAILBOX
 
-Cixi Geng (1):
-      arm64: dts: sprd: fix the cpu node for UMS512
+Herve Codina (17):
+      soc: fsl: cpm1: tsa: Fix __iomem addresses declaration
+      soc: fsl: cpm1: qmc: Fix __iomem addresses declaration
+      soc: fsl: cpm1: qmc: Fix rx channel reset
+      soc: fsl: cpm1: qmc: Extend the API to provide Rx status
+      soc: fsl: cpm1: qmc: Remove inline function specifiers
+      soc: fsl: cpm1: qmc: Add support for child devices
+      soc: fsl: cpm1: qmc: Introduce available timeslots masks
+      soc: fsl: cpm1: qmc: Rename qmc_setup_tsa* to qmc_init_tsa*
+      soc: fsl: cpm1: qmc: Introduce qmc_chan_setup_tsa*
+      soc: fsl: cpm1: qmc: Remove no more needed checks from qmc_check_c=
+hans()
+      soc: fsl: cpm1: qmc: Check available timeslots in qmc_check_chans()
+      soc: fsl: cpm1: qmc: Add support for disabling channel TSA entries
+      soc: fsl: cpm1: qmc: Split Tx and Rx TSA entries setup
+      soc: fsl: cpm1: qmc: Introduce is_tsa_64rxtx flag
+      soc: fsl: cpm1: qmc: Handle timeslot entries at channel start() an=
+d stop()
+      soc: fsl: cpm1: qmc: Remove timeslots handling from setup_chan()
+      soc: fsl: cpm1: qmc: Introduce functions to change timeslots at ru=
+ntime
 
-Claudiu Beznea (6):
-      arm64: dts: renesas: rzg3s-smarc-som: Enable SDHI2
-      arm64: dts: renesas: rzg3s-smarc: Enable SDHI1
-      arm64: dts: renesas: r9a08g045: Add IA55 interrupt controller node
-      arm64: dts: renesas: r9a08g045: Add Ethernet nodes
-      arm64: dts: renesas: rzg3s-smarc-som: Use switches' names to selec=
-t on-board functionalities
-      arm64: dts: renesas: rzg3s-smarc-som: Enable the Ethernet interfac=
-es
+Hsiao Chien Sung (4):
+      soc: mediatek: Support MT8188 VDOSYS1 in mtk-mmsys
+      soc: mediatek: Support MT8188 VDOSYS1 Padding in mtk-mmsys
+      soc: mediatek: Support reset bit mapping in mmsys driver
+      soc: mediatek: Add MT8188 VDOSYS reset bit map
 
-Conor Dooley (3):
-      riscv: dts: renesas: Convert isa detection to new properties
-      Merge patch series "Add Huashan Pi board support"
-      riscv: dts: microchip: add the mpfs' system controller qspi & asso=
-ciated flash
+Huisong Li (5):
+      soc: hisilicon: kunpeng_hccs: Fix some incorrect format strings
+      soc: hisilicon: kunpeng_hccs: Add failure log for no _CRS method
+      soc: hisilicon: kunpeng_hccs: Remove an unused blank line
+      doc: kunpeng_hccs: Fix incorrect email domain name
+      soc: hisilicon: kunpeng_hccs: Support the platform with PCC type3 =
+and interrupt ack
 
-Dario Binacchi (1):
-      ARM: dts: stm32: use the same 3v3 for SD and DSI nodes on stm32f46=
-9-disco
-
-David Heidelberg (4):
-      arm64: dts: imx8mq-phanbell: make dts use gpio-fan matrix instead =
-of array
-      arm64: dts: rockchip: make dts use gpio-fan matrix instead of array
-      ARM: dts: marvell: make dts use gpio-fan matrix instead of array
-      arm64: dts: freescale: fix the schema check errors for fsl,tmu-cal=
-ibration
-
-Dmitry Baryshkov (63):
-      arm64: dts: qcom: sm8150: extend the size of the PDC resource
-      arm64: dts: qcom: ipq6018: switch USB QMP PHY to new style of bind=
-ings
-      arm64: dts: qcom: ipq8074: switch USB QMP PHY to new style of bind=
-ings
-      arm64: dts: qcom: msm8996: switch USB QMP PHY to new style of bind=
-ings
-      arm64: dts: qcom: msm8998: switch USB QMP PHY to new style of bind=
-ings
-      arm64: dts: qcom: sdm845: switch USB QMP PHY to new style of bindi=
-ngs
-      arm64: dts: qcom: sm8150: switch USB QMP PHY to new style of bindi=
-ngs
-...
-
-Douglas Anderson (9):
-      arm64: dts: qcom: sc7180: Make watchdog bark interrupt edge trigge=
-red
-      arm64: dts: qcom: sc7280: Make watchdog bark interrupt edge trigge=
-red
-      arm64: dts: qcom: sdm845: Make watchdog bark interrupt edge trigge=
-red
-      arm64: dts: qcom: sm8150: Make watchdog bark interrupt edge trigge=
-red
-      arm64: dts: qcom: sm8250: Make watchdog bark interrupt edge trigge=
-red
-      arm64: dts: qcom: sa8775p: Make watchdog bark interrupt edge trigg=
-ered
-      arm64: dts: qcom: sc8280xp: Make watchdog bark interrupt edge trig=
-gered
-      arm64: dts: qcom: sm6350: Make watchdog bark interrupt edge trigge=
-red
-      arm64: dts: qcom: sc7180: Switch pompom to the generic edp-panel
-
-Dragan Simic (6):
-      arm64: dts: rockchip: Remove ethernet0 alias from the SoC dtsi for=
- RK3399
-      arm64: dts: rockchip: Remove ethernet0 alias from the SoC dtsi for=
- RK3368
-      arm64: dts: rockchip: Remove ethernetX aliases from the SoC dtsi f=
-or RK3328
-      arm64: dts: rockchip: Remove ethernet0 alias from the SoC dtsi for=
- PX30
-      arm64: dts: rockchip: Add ethernet0 alias to the dts for RK3566 bo=
-ards
-      arm64: dts: rockchip: Add ethernet0 alias to the dts for RK3588(S)=
- boards
-
-Drew Fustini (3):
-      riscv: dts: thead: Add TH1520 mmc controllers and sdhci clock
-      riscv: dts: thead: Enable BeagleV Ahead eMMC and microSD
-      riscv: dts: thead: Enable LicheePi 4A eMMC and microSD
-
-Elad Nachman (3):
-      MAINTAINERS: add ac5 to list of maintained Marvell dts files
-      dt-bindings: arm64: add Marvell COM Express boards
-      arm64: dts: cn913x: add device trees for COM Express boards
-
-Emil Renner Berthing (6):
-      riscv: dts: starfive: Mark the JH7100 as having non-coherent DMAs
-      riscv: dts: starfive: Add JH7100 cache controller
-      riscv: dts: starfive: Add pool for coherent DMA memory on JH7100 b=
-oards
-      riscv: dts: starfive: Add JH7100 MMC nodes
-      riscv: dts: starfive: Enable SD-card on JH7100 boards
-      riscv: dts: starfive: Enable SDIO wifi on JH7100 boards
-
-Esteban Blanc (2):
-      arm64: dts: ti: k3-j7200-som-p0: Add TP6594 family PMICs
-      arm64: dts: ti: k3-j721s2-som-p0: Add TP6594 family PMICs
-
-Eugen Hristev (2):
-      dt-bindings: arm: mediatek: convert audsys and mt2701-afe-pcm to y=
-aml
-      arm64: dts: mediatek: mt8186: fix address warning for ADSP mailbox=
-es
-
-Fabio Estevam (45):
-      arm64: dts: imx8mm-venice-gw7: Fix pci sub-nodes
-      arm64: dts: imx8qm-ss-dma: Pass lpuart dma-names
-      arm64: dts: imx8mm-emcon-avari: Fix gpio-cells
-      arm64: dts: imx8dxl-ss-conn: Fix Ethernet interrupt-names order
-      arm64: dts: imx8mm-nitrogen-r2: Fix I2C mux subnode name
-      arm64: dts: imx8mp-debix-model-a: Use phy-mode
-      arm64: dts: imx8qxp-mek: Fix gpio-sbu-mux compatible
-      arm64: dts: imx93: Remove unexistent 'shared-interrupt'
-...
-
-Fenglin Wu (2):
-      arm64: dts: qcom: sm8550-mtp: Add pm8010 regulators
-      arm64: dts: qcom: sm8550-qrd: add PM8010 regulators
-
-Frank Li (1):
-      arm64: dts: freescale: imx93: add i3c1 and i3c2
-
-Garrett Giordano (4):
-      arm64: dts: ti: phycore-am64: Add R5F DMA Region and Mailboxes
-      arm64: dts: ti: k3-am625-phyboard-lyra-rdk: Lower I2C1 frequency
-      arm64: dts: ti: k3-am625-phyboard-lyra-rdk: Add HDMI support
-      arm64: dts: ti: k3-am625-phyboard-lyra-rdk: Remove HDMI Reset Line=
- Name
-
-Geert Uytterhoeven (12):
-      ARM: dts: renesas: marzen: Add FLASH node
-      ARM: dts: renesas: blanche: Add FLASH node
-      ARM: dts: renesas: rcar-gen2: Fix I2C bus demux node names
-      ARM: dts: renesas: Add missing ADV751[13] power supply properties
-      arm64: dts: renesas: Add missing ADV751[13] power supply properties
-      ARM: dts: renesas: iwg22d-sodimm: Fix stmpe node names
-      ARM: dts: renesas: marzen: Rename keyboard nodes
-      ARM: shmobile: defconfig: Switch to DRM_SHMOBILE
-      ARM: dts: renesas: r8a7740: Add LCDC nodes
-      ARM: dts: renesas: armadillo800eva: Add LCD panel
-      riscv: dts: starfive: Group tuples in interrupt properties
-      arm64: dts: renesas: white-hawk-cpu: Fix missing serial console pi=
-n control
-
-Gianluca Boiano (1):
-      arm64: dts: qcom: msm8953: add SPI interfaces
-
-Gokul Sriram Palanisamy (1):
-      arm64: dts: qcom: ipq5018: enable the CPUFreq support
-
-Gregor Herburger (2):
-      dt-bindings: arm: fsl: Add TQ-Systems LX2160A based boards
-      arm64: dts: freescale: add fsl-lx2160a-mblx2160a board
-
-Haibo Chen (3):
-      arm64: dts: imx93-11x11-evk: set SION for cmd and data pad of USDHC
-      arm64: dts: imx93: change tuning start to get a large scan range f=
-or standard tuning
-      arm64: dts: imx93-11x11-evk: add 12 ms delay to make sure the VDD_=
-SD power off
-
-Heiko Stuebner (6):
-      dt-bindings: arm: rockchip: Add Theobroma-Systems Jaguar SBC
-      arm64: dts: rockchip: add Theobroma Jaguar SBC
-      arm64: dts: rockchip: move rk3588 serial aliases to soc dtsi
-      arm64: dts: rockchip: add rk3588 i2c aliases to soc dtsi
-      arm64: dts: rockchip: add rk3588 gpio aliases to soc dtsi
-      arm64: dts: rockchip: add rk3588 spi aliases to soc dtsi
-
-Hiago De Franco (3):
-      ARM: dts: imx6qdl-apalis: Add usdhc aliases
-      ARM: dts: imx6qdl-colibri: Add usdhc aliases
-      ARM: dts: imx7d-colibri-emmc: Add usdhc aliases
-
-Hsiao Chien Sung (6):
-      dt-bindings: display: mediatek: ethdr: Add compatible for MT8188
-      dt-bindings: display: mediatek: mdp-rdma: Add compatible for MT8188
-      dt-bindings: display: mediatek: merge: Add compatible for MT8188
-      dt-bindings: display: mediatek: padding: Add MT8188
-      dt-bindings: arm: mediatek: Add compatible for MT8188
-      dt-bindings: reset: mt8188: Add VDOSYS reset control bits
-
-Hsin-Yi Wang (6):
-      dt-bindings: arm64: mediatek: Add mt8183-kukui-katsu
-      arm64: dts: mt8183: Add kukui katsu board
-      dt-bindings: arm64: mediatek: Add mt8183-kukui-jacuzzi-makomo
-      arm64: dts: mt8183: Add jacuzzi makomo board
-      dt-bindings: arm64: mediatek: Add mt8183-kukui-jacuzzi-pico
-      arm64: dts: mt8183: Add jacuzzi pico/pico6 board
-
-Hugh Cole-Baker (1):
-      arm64: dts: rockchip: Support poweroff on NanoPC-T6
-
-Hugo Villeneuve (8):
-      dt-bindings: vendor-prefixes: add rve
-      dt-bindings: arm: fsl: add RVE gateway board
-      arm64: dts: imx8mn-var-som: add fixed 3.3V regulator for EEPROM
-      arm64: dts: freescale: introduce rve-gateway board
-      arm64: dts: imx8mn-var-som-symphony: add vcc supply for PCA9534
-      dt-bindings: vendor-prefixes: add dimonoff
-      dt-bindings: arm: fsl: add Dimonoff gateway EVK board
-      arm64: dts: freescale: introduce dimonoff-gateway-evk board
-
-Hugues Fruchet (1):
-      ARM: dts: stm32: add dcmipp support to stm32mp135
-
-Huqiang Qin (2):
-      arm64: dts: Add watchdog node for Amlogic C3 SoCs
-      arm64: dts: Add watchdog node for Amlogic S4 SoCs
-
-Imran Shaik (1):
-      arm64: dts: qcom: qdu1000: Add ECPRI clock controller
-
-Inochi Amaoto (7):
-      dt-bindings: interrupt-controller: Add SOPHGO CV1812H plic
-      dt-bindings: timer: Add SOPHGO CV1812H clint
-      dt-bindings: riscv: Add SOPHGO Huashan Pi board compatibles
-      riscv: dts: sophgo: Separate compatible specific for CV1800B soc
-      riscv: dts: sophgo: cv18xx: Add gpio devices
-      riscv: dts: sophgo: add initial CV1812H SoC device tree
-      riscv: dts: sophgo: add Huashan Pi board device tree
-
-J.R. Divya Antony (1):
-      arm64: dts: qcom: msm8916-asus-z00l: Add sound and modem
-
-Jaewon Kim (10):
-      arm64: dts: exynos: add gpio-key node for exynosautov9-sadk
+Jaewon Kim (8):
+      soc: samsung: exynos-chipid: add exynosautov920 SoC support
       dt-bindings: samsung: exynos-sysreg: add exynosautov920 sysreg
       dt-bindings: samsung: exynos-pmu: add exynosautov920 compatible
       dt-bindings: samsung: usi: add exynosautov920-usi compatible
@@ -721,120 +350,29 @@ Jaewon Kim (10):
 ing
       dt-bindings: hwinfo: samsung,exynos-chipid: add exynosautov920 com=
 patible
-      arm64: dts: exynos: add initial support for exynosautov920 SoC
-      arm64: dts: exynos: add minimal support for exynosautov920 sadk bo=
-ard
 
-Jagan Teki (2):
-      dt-bindings: arm: rockchip: Update edgeble-neu6 bindings
-      arm64: dts: rockchip: Use NCM6A-IO board for edgeble-neu6b
+Jens Wiklander (4):
+      optee: provide optee_do_bottom_half() as a common function
+      optee: ffa_abi: add asynchronous notifications
+      optee: add page list to kernel private shared memory
+      optee: allocate shared memory with alloc_pages_exact()
 
-Jai Luthra (8):
-      arm64: dts: ti: k3-am62-main: Enable CSI2-RX
-      arm64: dts: ti: k3-am62a-main: Enable CSI2-RX
-      arm64: dts: ti: k3-am625-beagleplay: Add overlays for OV5640
-      arm64: dts: ti: k3-am62x-sk: Enable camera peripherals
-      arm64: dts: ti: k3-am62x: Add overlays for OV5640
-      arm64: dts: ti: k3-am62a7-sk: Enable camera peripherals
-      arm64: dts: ti: k3-am62x: Add overlay for IMX219
-      arm64: dts: ti: Use OF_ALL_DTBS for combined blobs
+Johan Hovold (3):
+      soc: qcom: pmic_glink_altmode: fix port sanity check
+      soc: qcom: pmic_glink: disable UCSI on sc8280xp
+      soc: qcom: pmic_glink: drop stray semicolons
 
-Jan Kiszka (3):
-      arm64: dts: ti: iot2050: Re-add aliases
-      arm64: dts: ti: iot2050: Drop unused ecap0 PWM
-      arm64: dts: ti: iot2050: Add icssg-prueth nodes for PG2 devices
+Konrad Dybcio (4):
+      dt-bindings: soc: qcom: stats: Add QMP handle
+      soc: qcom: stats: Add DDR sleep stats
+      dt-bindings: firmware: qcom,scm: Allow interconnect for everyone
+      Revert "soc: qcom: stats: Add DDR sleep stats"
 
-Jasper Korten (1):
-      arm64: dts: qcom: msm8916-samsung-gt5: Add sound and modem
+Kory Maincent (1):
+      firmware_loader: Expand Firmware upload error codes with firmware =
+invalid error
 
-Jerome Neanne (2):
-      arm64: dts: ti: k3-j721e-som-p0: Add TP6594 family PMICs
-      arm64: dts: ti: k3-j784s4-evm: Add support for TPS6594 PMIC
-
-Jianhua Lu (2):
-      arm64: dts: qcom: sm8250-xiaomi-elish: Fix typos
-      arm64: dts: qcom: sm8250-xiaomi-elish: Add pm8150b type-c node and=
- enable usb otg
-
-Jimmy Hon (2):
-      arm64: dts: rockchip: add USB3 host on rk3588s-orangepi-5
-      arm64: dts: rockchip: Support poweroff on Orange Pi 5
-
-Joao Paulo Goncalves (7):
-      dt-bindings: arm: fsl: add verdin imx8mm mallow board
-      dt-bindings: arm: fsl: add verdin imx8mp mallow board
-      arm64: dts: freescale: verdin-imx8mm: add support to mallow board
-      arm64: dts: freescale: verdin-imx8mp: add support to mallow board
-      arm64: dts: ti: verdin-am62: Improve spi1 chip-select pinctrl
-      dt-bindings: arm: ti: Add verdin am62 mallow board
-      arm64: dts: ti: Add verdin am62 mallow board
-
-Joel Selvaraj (1):
-      arm64: dts: qcom: sdm845-xiaomi-beryllium: enable flash led
-
-Johan Hovold (26):
-      arm64: dts: qcom: sc8280xp-x13s: add missing camera LED pin config
-      arm64: dts: qcom: sc8280xp-crd: fix eDP phy compatible
-      arm64: dts: qcom: sa8775p: fix USB wakeup interrupt types
-      arm64: dts: qcom: sc7180: fix USB wakeup interrupt types
-      arm64: dts: qcom: sc7280: fix usb_1 wakeup interrupt types
-      arm64: dts: qcom: sc7280: fix usb_2 wakeup interrupt types
-...
-
-Johan Jonker (4):
-      ARM: dts: rockchip: add gpio alias for gpio dt nodes
-      ARM: dts: rockchip: fix rk3036 hdmi ports node
-      ARM: dts: rockchip: add hdmi-connector node to rk3036-kylin
-      arm64: dts: rockchip: add gpio alias for gpio dt nodes
-
-John Clark (4):
-      arm64: dts: rockchip: nanopc-t6 sdmmc beautification
-      arm64: dts: rockchip: support poweroff on the rock-5b
-      arm64: dts: rockchip: correct gpio_pwrctrl1 typo on rock-5b
-      arm64: dts: rockchip: correct gpio_pwrctrl1 typo on nanopc-t6
-
-Jonathan Albrieux (1):
-      arm64: dts: qcom: msm8916-longcheer-l8910: Add sound and modem
-
-Jo=C3=A3o Rodrigues (1):
-      ARM: dts: imx: tqma7: add lm75a sensor (rev. 01xxx)
-
-Kathiravan Thirumoorthy (7):
-      arm64: dts: qcom: ipq8074: include the GPLL0 as clock provider for=
- mailbox
-      arm64: dts: qcom: ipq6018: include the GPLL0 as clock provider for=
- mailbox
-      arm64: dts: qcom: ipq9574: include the GPLL0 as clock provider for=
- mailbox
-      arm64: dts: qcom: ipq5332: include the GPLL0 as clock provider for=
- mailbox
-      arm64: dts: qcom: ipq9574: enable GPIO based LED
-      arm64: dts: qcom: ipq5332: add missing properties to the GPIO LED =
-node
-      arm64: dts: qcom: ipq5018: add few more reserved memory regions
-
-Kieran Bingham (2):
-      arm64: dts: freescale: debix-som: Add heartbeat LED
-      arm64: dts: freescale: debix-som-a-bmb-08: Add CSI Power Regulators
-
-Komal Bajaj (3):
-      dt-bindings: arm: qcom: Add QCM6490 IDP and QCS6490 RB3Gen2 board
-      arm64: dts: qcom: Add base qcm6490 idp board dts
-      arm64: dts: qcom: Add base qcs6490-rb3gen2 board dts
-
-Konrad Dybcio (39):
-      arm64: dts: qcom: sm6375: Add UART1
-      arm64: dts: qcom: sm6375-pdx225: Enable MSS
-      arm64: dts: qcom: sm6375-pdx225: Enable ATH10K WiFi
-      arm64: dts: qcom: sm6375-pdx225: Add USBPHY regulators
-      arm64: dts: qcom: sc8280xp-x13s: Use the correct DP PHY compatible
-      arm64: dts: qcom: sm6115: Add UART3
-      arm64: dts: qcom: qrb4210-rb2: Enable bluetooth
-      arm64: dts: qcom: sc8280xp: Add QMP handle to RPMh stats
-      arm64: dts: qcom: sc7180: Add the missing MDSS icc path
-...
-
-Krzysztof Kozlowski (98):
+Krzysztof Kozlowski (19):
       dt-bindings: hwinfo: samsung,exynos-chipid: add specific compatibl=
 es for existing SoC
       dt-bindings: i2c: exynos5: add specific compatibles for existing S=
@@ -848,451 +386,381 @@ oC
       dt-bindings: serial: samsung: add specific compatibles for existin=
 g SoC
       dt-bindings: samsung: exynos-pmu: add specific compatibles for exi=
-sting
- ...
+sting SoC
+      dt-bindings: gpu: arm,mali-midgard: add specific compatibles for e=
+xisting Exynos SoC
+      dt-bindings: iio: samsung,exynos-adc: add specific compatibles for=
+ existing SoC
+      ASoC: dt-bindings: samsung-i2s: add specific compatibles for exist=
+ing SoC
+      dt-bindings: pwm: samsung: add specific compatibles for existing S=
+oC
+      dt-bindings: i2c: exynos5: add specific compatible for Tesla FSD
+      dt-bindings: pwm: samsung: add specific compatible for Tesla FSD
+      dt-bindings: serial: samsung: add specific compatible for Tesla FSD
+      dt-bindings: samsung: exynos-pmu: add specific compatible for Tesl=
+a FSD
+      dt-bindings: watchdog: samsung: add specific compatible for Tesla =
+FSD
+      dt-bindings: samsung: exynos-sysreg: combine exynosautov920 with o=
+ther enum
+      Merge tag 'samsung-dt-bindings-refactoring-and-google-gs101-6.8' i=
+nto next/drivers
+      MAINTAINERS: qcom: move Andy Gross to credits
 
-Lech Perczak (1):
-      ARM: dts: nxp: imx7d-pico: add cpu-supply nodes
+Lad Prabhakar (1):
+      dt-bindings: reset: renesas,rzg2l-usbphy-ctrl: Document RZ/Five SoC
 
-Lin, Meng-Bo (2):
-      arm64: dts: qcom: msm8916-samsung-j5: Add sound and modem
-      arm64: dts: qcom: msm8939-samsung-a7: Add sound and modem
+Mark Tseng (2):
+      soc: mediatek: svs: Add support for MT8195 SoC
+      soc: mediatek: svs: Add support for MT8186 SoC
 
-Linus Walleij (8):
-      ARM: dts: nxp: Fix some common switch mistakes
-      ARM: dts: marvell: Fix some common switch mistakes
-      ARM64: dts: marvell: Fix some common switch mistakes
-      ARM64: dts: Add special compatibles for the Turris Mox
-      ARM: dts: ux500-href: Push AB8500 inclusion to the top
-      ARM: dts: ux500-href: Push AB8500 config out
-      ARM: dts: ux500-href: Switch HREF520 to AB8505
-      ARM: dts: usr8200: Fix phy registers
+Michal Simek (1):
+      soc: xilinx: fix quoted string split across lines
 
-Luca Weiss (30):
-      arm64: dts: qcom: sc7280: Add ports subnodes in usb/dp qmpphy node
-      arm64: dts: qcom: sc7280: Add Camera Control Interface busses
-      arm64: dts: qcom: pm7250b: Use correct node name for gpios
-      ARM: dts: qcom: msm8974: replace incorrect indentation in intercon=
-nect
-      ARM: dts: qcom: msm8974: sort nodes by reg
-      ARM: dts: qcom: msm8226: provide dsi phy clocks to mmcc
-      iio: adc: Add PM7325 PMIC7 ADC bindings
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add PM7250B thermals
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add PMK7325 thermals
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add PM7325 thermals
-...
+Naman Jain (1):
+      soc: qcom: socinfo: Add few DSPs to get their image details
 
-Luka Panio (2):
-      dt-bindings: arm: qcom: Add Xiaomi Pad 6 (xiaomi-pipa)
-      arm64: dts: qcom: sm8250-xiaomi-pipa: Add initial device tree
+Naman Trivedi Manojbhai (1):
+      soc: xilinx: Add error message for invalid payload received from I=
+PI callback.
 
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust file entry in GOOGLE TENSOR SoC SUPPORT
+Neha Malcom Francis (1):
+      soc: ti: k3-socinfo: Revamp driver to accommodate different rev st=
+ructs
 
-Lukas Walter (2):
-      dt-bindings: arm: qcom: Add Huawei Honor 5X / GR5 (2016)
-      arm64: dts: qcom: msm8939-huawei-kiwi: Add initial device tree
+Neil Armstrong (8):
+      soc: qcom: add ADSP PDCharger ULOG driver
+      dt-bindings: soc: qcom,aoss-qmp: document the SM8560 Always-On Sub=
+system side channel
+      dt-bindings: soc: qcom: pmic-glink: document SM8650 compatible
+      dt-bindings: firmware: qcom,scm: document SM8650 SCM Firmware Inte=
+rface
+      dt-bindings: arm: qcom,ids: Add SoC ID for SM8650
+      soc: qcom: socinfo: Add SM8650 SoC ID table entry
+      dt-bindings: cache: qcom,llcc: Document the SM8650 Last Level Cach=
+e Controller
+      soc: qcom: llcc: Add configuration data for SM8650
 
-Lukasz Luba (1):
-      arm64: dts: rockchip: Add dynamic-power-coefficient to rk3399 GPU
-
-Manivannan Sadhasivam (5):
-      arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
-      ARM: dts: qcom: Use "pcie" as the node name instead of "pci"
-      arm64: dts: qcom: Use "pcie" as the node name instead of "pci"
-      arm64: dts: qcom: sa8775p: Add missing space between node name and=
- braces
-      ARM: dts: qcom: sdx55: Fix the base address of PCIe PHY
-
-Manorit Chawdhry (2):
-      arm64: dts: ti: k3-am65: Add additional regs for DMA components
-      arm64: dts: ti: k3-j7*: Add additional regs for DMA components
-
-Mao Jinlong (3):
-      arm64: dts: qcom: msm8996: Fix 'in-ports' is a required property
-      arm64: dts: qcom: msm8998: Fix 'out-ports' is a required property
-      arm64: dts: qcom: Fix coresight warnings in in-ports and out-ports
-
-Marco Felsch (1):
-      ARM: dts: imx7: add MIPI-DSI support
-
-Marek Vasut (1):
-      arm64: dts: imx8mp: Describe M24C32-D write-lockable page in DH i.=
-MX8MP DHCOM DT
-
-Mark Tseng (1):
-      dt-bindings: soc: mediatek: add mt8186 and mt8195 svs dt-bindings
-
-Markus Niebel (2):
-      ARM: dts: imx6qdl: mba6: fix typo in comments
-      ARM: dts: imx6ul: mba6ulx: fix typo in comments
-
-Matti Lehtim=C3=A4ki (1):
-      ARM: dts: qcom: msm8974: Add watchdog node
-
-Michael Trimarchi (1):
-      arm64: dts: imx8mn-bsh-smm-s2/pro: add display setup
-
-Michael Walle (2):
-      dt-bindings: display: mediatek: dsi: add compatible for MediaTek M=
-T8195
-      arm64: dts: mediatek: mt8195: add DSI and MIPI DPHY nodes
-
-Michal Simek (11):
-      arm64: xilinx: Do not use '_' in DT node names
-      arm64: xilinx: Use lower case for partition address
-      arm64: xilinx: Remove mt25qu512a compatible string from SOM
-      arm64: xilinx: Put ethernet phys to mdio node
-      arm64: xilinx: Remove address/size-cells from flash node
-      arm64: xilinx: Remove address/size-cells from gem nodes
-      dt-bindings: soc: xilinx: Move xilinx.yaml from arm to soc
-      dt-bindings: soc: Add new board description for MicroBlaze V
-      arm64: zynqmp: Move fixed clock to / for kv260
-      arm64: zynqmp: Fix clock node name in kv260 cards
-      arm64: zynqmp: Add missing destination mailbox compatible
-
-Mihai Sain (4):
-      ARM: dts: microchip: sam9x60_curiosity: Add IRQ support for ethern=
-et PHY
-      ARM: dts: microchip: sam9x60ek: Add IRQ support for ethernet PHY
-      ARM: dts: microchip: sama5d27_wlsom1_ek: Remove mmc-ddr-3_3v prope=
-rty from sdmmc0 node
-      ARM: dts: microchip: sama5d27_som1_ek: Remove mmc-ddr-3_3v propert=
-y from sdmmc0 node
-
-Moudy Ho (19):
-      dt-bindings: media: mediatek: mdp3: correct RDMA and WROT node wit=
-h generic names
-      dt-bindings: media: mediatek: mdp3: merge the indentical RDMA unde=
-r display
-      dt-bindings: media: mediatek: mdp3: add config for MT8195 RDMA
-      dt-bindings: media: mediatek: mdp3: add compatible for MT8195 RSZ
-      dt-bindings: media: mediatek: mdp3: add compatible for MT8195 WROT
-      dt-bindings: media: mediatek: mdp3: add component FG for MT8195
-...
-
-Mukesh Ojha (3):
-      arm64: dts: qcom: sm8250: Add TCSR halt register space
-      arm64: dts: qcom: sm8350: Add TCSR halt register space
-      arm64: dts: qcom: sm8550: Enable download mode register write
-
-Neha Malcom Francis (2):
-      arm64: dts: ti: k3-am69-sk: Add support for TPS6594 PMIC
-      arm64: dts: ti: k3-j721e-sk: Add TPS6594 family PMICs
-
-Neil Armstrong (23):
-      arm64: dts: qcom: sm8550: add TRNG node
-      arm64: dts: qcom: sm8450: add TRNG node
-      dt-bindings: interconnect: document the RPMh Network-On-Chip Inter=
-connect in Qualcomm SM8650 SoC
-      dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: add example coveri=
-ng meson-axg-hhi-sysctrl
-      dt-bindings: clock: qcom: document the SM8650 TCSR Clock Controller
-...
-
-Nia Espera (4):
-      dt-bindings: iio: adc: qcom: Add Qualcomm smb139x
-      arm64: dts: qcom: sm8350: Fix DMA0 address
-      arm64: dts: qcom: pm8350k: Remove hanging whitespace
-      arm64: dts: qcom: sm8350: Fix remoteproc interrupt type
-
-Nikita Travkin (6):
-      arm64: dts: qcom: msm8916-longcheer-l8150: Add sound and modem
-      arm64: dts: qcom: pm8916: Add BMS and charger
-      arm64: dts: qcom: msm8916-longcheer-l8150: Add battery and charger
-      arm64: dts: qcom: acer-aspire1: Enable RTC
-      arm64: dts: qcom: acer-aspire1: Correct audio codec definition
-      arm64: dts: qcom: acer-aspire1: Add sound
-
-Niklas S=C3=B6derlund (4):
-      arm64: dts: renesas: draak: Make HDMI the default video input
-      arm64: dts: renesas: draak: Move HDMI bus properties to correct no=
-de
-      arm64: dts: renesas: r9a09g011: Add missing space in compatible
-      ARM: dts: renesas: r9a06g032: Add missing space in compatible
-
-Nitheesh Sekar (2):
-      arm64: dts: qcom: ipq5018: Add USB related nodes
-      arm64: dts: qcom: ipq5018: Enable USB
-
-Nitin Rawat (2):
-      arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 soc
-      arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 IDP board
-
-Nitin Yadav (1):
-      arm64: dts: ti: k3-am62a-main: Fix GPIO pin count in DT nodes
-
-N=C3=ADcolas F. R. A. Prado (1):
-      arm64: dts: mediatek: mt8173: Drop VDEC_SYS reg from decoder
-
-Oleksij Rempel (2):
-      dt-bindings: arm: Add compatible for SKOV i.MX8MP RevB board
-      arm64: dts: freescale: Add SKOV IMX8MP CPU revB board
-
-Om Prakash Singh (3):
-      arm64: dts: qcom: sa8775p: add TRNG node
-      arm64: dts: qcom: sc7280: add TRNG node
-      arm64: dts: qcom: sc7280: add QCrypto nodes
-
-Parth Pancholi (1):
-      arm64: dts: ti: k3-am625-verdin: Enable Verdin UART2
-
-Patrick Delaunay (1):
-      arm64: dts: st: add bsec support to stm32mp25
-
-Paul Cercueil (3):
-      ARM: dts: samsung: exynos4210-i9100: Unconditionally enable LDO12
-      ARM: dts: samsung: exynos4210-i9100: Add node for touch keys
-      ARM: dts: samsung: exynos4210-i9100: Add accelerometer node
-
-Peng Fan (1):
-      arm64: dts: imx93: update anatop node
-
-Peter Griffin (7):
+Peter Griffin (13):
       dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
       dt-bindings: clock: Add Google gs101 clock management unit bindings
       dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG comp=
 atibles to GS101
-      dt-bindings: arm: google: Add bindings for Google ARM platforms
-      arm64: dts: exynos: google: Add initial Google gs101 SoC support
-      arm64: dts: exynos: google: Add initial Oriole/pixel 6 board suppo=
-rt
-      MAINTAINERS: add entry for Google Tensor SoC
+      dt-bindings: watchdog: Document Google gs101 watchdog bindings
+      dt-bindings: serial: samsung: Add google-gs101-uart compatible
+      dt-bindings: serial: samsung: Make samsung,uart-fifosize a require=
+d property
+      dt-bindings: clock: google,gs101: fix incorrect numbering and DGB =
+suffix
+      clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+      clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
+      tty: serial: samsung: Add gs101 compatible and common fifoszdt_ser=
+ial_drv_data
+      watchdog: s3c2410_wdt: Add support for WTCON register DBGACK_MASK =
+bit
+      watchdog: s3c2410_wdt: Update QUIRK macros to use BIT macro
+      watchdog: s3c2410_wdt: Add support for Google gs101 SoC
 
-Philipp Zabel (1):
-      ARM: dts: imx7s: Add on-chip memory
+Rajendra Nayak (2):
+      dt-bindings: cache: qcom,llcc: Add X1E80100 compatible
+      soc: qcom: llcc: Add configuration data for X1E80100
 
-Priyansh Jain (1):
-      arm64: dts: qcom: Enable tsens and thermal for sa8775p SoC
+Rob Herring (7):
+      soc: apple: mailbox: Add explicit include of platform_device.h
+      bus: imx-weim: Use device_get_match_data()
+      reset: Use device_get_match_data()
+      dt-bindings: reset: qcom: drop unneeded quotes
+      dt-bindings: reset: imx-src: Simplify compatible schema and drop u=
+nneeded quotes
+      dt-bindings: reset: hisilicon,hi3660-reset: Drop providers and con=
+sumers from example
+      firmware: microchip: Replace of_device.h with explicit include
 
-Rafa=C5=82 Mi=C5=82ecki (2):
-      ARM: dts: broadcom: Add BCM63138's high speed UART
-      dt-bindings: thermal: convert Mediatek Thermal to the json-schema
+Sibi Sankar (3):
+      firmware: arm_scmi: Fix NULL pointer dereference during fastchanne=
+l init
+      firmware: arm_scmi: Increase the maximum opp count in the perf pro=
+tocol
+      dt-bindings: firmware: qcom,scm: document SCM on X1E80100 SoCs
 
-Raghavendra Kakarla (1):
-      arm64: dts: qcom: sa8775p: Add RPMh sleep stats
+Sjoerd Simons (2):
+      bus: moxtet: Mark the irq as shared
+      bus: moxtet: Add spi device table
 
-Rajendra Nayak (6):
-      dt-bindings: interconnect: Add Qualcomm X1E80100 SoC
-      dt-bindings: clock: qcom: Add X1E80100 GCC clocks
-      dt-bindings: clock: qcom-rpmhcc: Add RPMHCC bindings for X1E80100
-      dt-bindings: arm: cpus: Add qcom,oryon compatible
-      dt-bindings: arm: qcom: Document X1E80100 SoC and boards
-      arm64: dts: qcom: Add base X1E80100 dtsi and the QCP dts
+Sudeep Holla (1):
+      firmware: arm_scmi: Populate fastchannel info only if set operatio=
+ns are allowed
 
-Raymond Hackley (1):
-      arm64: dts: qcom: msm8916-acer-a1-724: Add notification LED
+Sumit Garg (1):
+      tee: optee: Remove redundant custom workqueue
 
-Rayyan Ansari (6):
-      dt-bindings: arm: qcom: Document MSM8x26-based Lumia phones
-      ARM: dts: qcom: add common dt for MSM8x26 Lumias along with Nokia =
-Lumia 630
-      ARM: dts: qcom: add device tree for Microsoft Lumia 640
-      ARM: dts: qcom: add device tree for Microsoft Lumia 640 XL
-      ARM: dts: qcom: add device tree for Nokia Lumia 735
-      ARM: dts: qcom: add device tree for Nokia Lumia 830
+Tanmay Shah (1):
+      soc: xilinx: fix unhandled SGI warning message
 
-Richard Acayan (2):
-      arm64: dts: qcom: sdm670: add specific cpufreq compatible
-      arm64: dts: qcom: sdm670: add display subsystem
+Tudor Ambarus (2):
+      dt-bindings: soc: samsung: usi: add google,gs101-usi compatible
+      dt-bindings: clock: google,gs101: rename CMU_TOP gate defines
 
-Rob Herring (3):
-      arm: dts: omap: Apply am57xx-idk overlays to base dtbs
-      dt-bindings: hisilicon: Merge hi3620-clock into hisilicon,sysctrl =
-binding
-      arm64: dts: xilinx: Apply overlays to base dtbs
+Uwe Kleine-K=C3=B6nig (30):
+      soc/xilinx: zynqmp_power: Convert to platform remove callback retu=
+rning void
+      bus: fsl-mc: Drop if block with always false condition
+      bus: fsl-mc: Convert to platform remove callback returning void
+      bus: hisi_lpc: Convert to platform remove callback returning void
+      bus: omap-ocp2scp: Convert to platform remove callback returning v=
+oid
+      bus: omap_l3_smx: Convert to platform remove callback returning vo=
+id
+      bus: qcom-ssc-block-bus: Convert to platform remove callback retur=
+ning void
+      bus: simple-pm-bus: Convert to platform remove callback returning =
+void
+      bus: sun50i-de2: Convert to platform remove callback returning void
+      bus: sunxi-rsb: Convert to platform remove callback returning void
+      bus: tegra-aconnect: Convert to platform remove callback returning=
+ void
+      bus: tegra-gmi: Convert to platform remove callback returning void
+      bus: ti-pwmss: Convert to platform remove callback returning void
+      bus: ti-sysc: Convert to platform remove callback returning void
+      bus: ts-nbus: Convert to platform remove callback returning void
+      memory: brcmstb_dpfe: Convert to platform remove callback returnin=
+g void
+      memory: brcmstb_memc: Convert to platform remove callback returnin=
+g void
+      memory: emif: Convert to platform remove callback returning void
+      memory: fsl-corenet-cf: Convert to platform remove callback return=
+ing void
+      memory: fsl_ifc: Convert to platform remove callback returning void
+      memory: jz4780-nemc: Convert to platform remove callback returning=
+ void
+      memory: mtk-smi: Convert to platform remove callback returning void
+      memory: omap-gpmc: Convert to platform remove callback returning v=
+oid
+      memory: renesas-rpc-if: Convert to platform remove callback return=
+ing void
+      memory: exynos5422-dmc: Convert to platform remove callback return=
+ing void
+      memory: stm32-fmc2-ebi: Convert to platform remove callback return=
+ing void
+      memory: tegra186-emc: Convert to platform remove callback returnin=
+g void
+      memory: tegra210-emc: Convert to platform remove callback returnin=
+g void
+      memory: ti-aemif: Convert to platform remove callback returning vo=
+id
+      memory: ti-emif-pm: Convert to platform remove callback returning =
+void
 
-Robert Marko (5):
-      arm64: dts: qcom: ipq5018: add QUP1 SPI controller
-      dt-bindings: clocks: qcom,gcc-ipq8074: allow QMP PCI PHY PIPE cloc=
-ks
-      arm64: dts: qcom: ipq8074: pass QMP PCI PHY PIPE clocks to GCC
-      arm64: dts: qcom: ipq6018: use CPUFreq NVMEM
-      arm64: dts: qcom: ipq8074: Add QUP4 SPI node
+Vaishnav Achath (1):
+      soc: ti: k3-socinfo: Add JTAG ID for J722S
 
-Rohit Agarwal (3):
-      arm64: dts: qcom: Add interconnect nodes for SDX75
-      arm64: dts: qcom: Add USB3 and PHY support on SDX75
-      arm64: dts: qcom: sdx75-idp: Enable USB3 and PHY support
+Yangtao Li (7):
+      reset: brcmstb: Use devm_platform_get_and_ioremap_resource()
+      reset: meson-audio-arb: Convert to devm_platform_ioremap_resource()
+      reset: qcom-aoss: Convert to devm_platform_ioremap_resource()
+      reset: qcom: Convert to devm_platform_ioremap_resource()
+      reset: simple: Convert to devm_platform_get_and_ioremap_resource()
+      reset: sunplus: Use devm_platform_get_and_ioremap_resource()
+      reset: uniphier-glue: Use devm_platform_get_and_ioremap_resource()
 
-Ronald Wahl (1):
-      arm64: dts: ti: k3-am62-main: Add gpio-ranges properties
+Zelong Dong (2):
+      dt-bindings: reset: Add compatible and DT bindings for Amlogic C3 =
+Reset Controller
+      reset: reset-meson: add support for Amlogic C3 SoC Reset Controller
 
-Sam Edwards (1):
-      arm64: dts: rockchip: Fix rk3588 USB power-domain clocks
-
-Sarah Walker (1):
-      arm64: dts: ti: k3-am62-main: Add GPU device node
-
-Sebastian Reichel (3):
-      arm64: dts: rockchip: add analog audio to RK3588 EVB1
-      arm64: dts: rockchip: add USB3 host to rock-5b
-      arm64: dts: rockchip: add USB3 host to rock-5a
-
-Shazad Hussain (1):
-      arm64: dts: qcom: sa8775p-ride: enable pmm8654au_0_pon_resin
-
-Sibi Sankar (1):
-      dt-bindings: arm: qcom-soc: extend pattern matching for X1E80100 S=
-oC
-
-Siddharth Vadapalli (3):
-      arm64: dts: ti: k3-am68-sk-base-board: Add alias for MCU CPSW2G
-      arm64: dts: ti: k3-j721e-evm: Add overlay for PCIE0 Endpoint Mode
-      arm64: dts: ti: k3-j721s2-evm: Add overlay for PCIE1 Endpoint Mode
-
-Sjoerd Simons (1):
-      arm64: dts: armada-3720-turris-mox: set irq type for RTC
-
-Sridharan S N (1):
-      dt-bindings: arm: qcom: drop the IPQ board types
-
-Steev Klimaszewski (1):
-      arm64: dts: qcom: sdm850-lenovo-yoga: Add wakeup-sources
-
-Stephan Gerhold (13):
-      arm64: dts: qcom: msm8916-samsung-gt5: Enable GPU
-      arm64: dts: qcom: msm8939-longcheer-l9100: Enable wcnss_mem
-      arm64: dts: qcom: msm8916-*: Fix alphabetic node order
-      arm64: dts: qcom: msm8916: Add QDSP6
-...
-
-Stephen Boyd (1):
-      dt-bindings: arm: qcom: Fix html link
-
-Su Bao Cheng (1):
-      arm64: dts: ti: iot2050: Refactor the m.2 and minipcie power pin
-
-Tengfei Fan (4):
-      arm64: dts: qcom: sm4450: Add RPMH and Global clock
-      arm64: dts: qcom: sm4450: add uart console support
-      arm64: dts: qcom: sm4450-qrd: add QRD4450 uart support
-      arm64: dts: qcom: sm4450-qrd: mark QRD4450 reserved gpios
-
-Tianling Shen (1):
-      arm64: dts: rockchip: configure eth pad driver strength for orange=
-pi r1 plus lts
-
-Tim Harvey (3):
-      arm64: dts: imx8mm-venice-gw72xx: add TPM device
-      arm64: dts: imx8mp-venice-gw72xx: add TPM device
-      arm64: dts: imx8mp-venice-gw74xx: remove unecessary propreties in =
-tpm node
-
-Tim Lunn (7):
-      ARM: dts: rockchip: Add alternate UART pins to rv1126
-      ARM: dts: rockchip: Serial aliases for rv1126
-      ARM: dts: rockchip: Add i2c2 node to rv1126
-      ARM: dts: rockchip: Split up rgmii1 pinctrl on rv1126
-      ARM: dts: rockchip: Add rv1109 SoC
-      dt-bindings: arm: rockchip: Add Sonoff iHost
-      ARM: dts: rockchip: Add Sonoff iHost Smart Home Hub
-
-Tomi Valkeinen (1):
-      arm64: dts: ti: k3-am65-main: Fix DSS irq trigger type
-
-Tony Lindgren (4):
-      dt-bindings: omap: Add Motorola mapphone mz609 and mz617 tablets
-      ARM: dts: motorola-mapphone: Move LCD to common file for xt875 and=
- xt894
-      ARM: dts: motorola-mapphone: Move handset devices to a common file
-      ARM: dts: motorola-mapphone: Add basic support for mz609 and mz617
-
-Trevor Woerner (3):
-      arm64: dts: rockchip: add gpio-line-names to rk3308-rock-pi-s
-      arm64: dts: rockchip: add gpio-line-names to rk3328-rock-pi-e
-      arm64: dts: rockchip: rk3308-rock-pi-s gpio-line-names cleanup
-
-Uwe Kleine-K=C3=B6nig (1):
-      ARM: dts: stm32: Consolidate usbh_[eo]hci phy properties on stm32m=
-p15
-
-Vahe Grigoryan (3):
-      arm64: dts: rockchip: fix misleading comment in rk3399-puma-haikou=
-.dts
-      arm64: dts: rockchip: expose BIOS Disable feedback pin on rk3399-p=
-uma
-      arm64: dts: rockchip: make use gpio-keys for buttons on puma-haikou
-
-Varadarajan Narayanan (2):
-      arm64: dts: qcom: ipq5332: populate the opp table based on the eFu=
-se
-      arm64: dts: qcom: ipq9574: populate the opp table based on the eFu=
-se
-
-Viacheslav Bocharov (1):
-      arm64: dts: meson-axg: jethub-jxx add support for EEPROM
-
-Vignesh Raghavendra (4):
-      arm64: dts: ti: k3-am642-evm/sk: Mark mcu_gpio_intr as reserved
-      arm64: dts: ti: k3-am62p5-sk: Mark mcu gpio and mcu_gpio_intr as r=
-eserved
-      arm64: dts: ti: k3-am62x-sk-common: Mark mcu gpio and mcu_gpio_int=
-r as reserved
-      arm64: dts: ti: k3-am6*: Add additional regs for DMA components
-
-Vincent Knecht (2):
-      arm64: dts: qcom: msm8939: Add BAM-DMUX WWAN
-      arm64: dts: qcom: msm8916-alcatel-idol347: Add sound and modem
-
-Xianwei Zhao (3):
-      arm64: dts: amlogic: add some device nodes for S4
-      arm64: dts: amlogic: enable some nodes for board AQ222
-      arm64: dts: amlogic: fix format for s4 uart node
-
-Xu Yang (1):
-      arm64: dts: imx8dxl-ss-ddr: change ddr_pmu0 compatible
-
-Yunfei Dong (1):
-      arm64: dts: mediatek: mt8183: Add decoder
-
-jason-ch chen (4):
-      dt-bindings: arm: Add compatible for MediaTek MT8188
-      dt-bindings: arm: mediatek: Add mt8188 pericfg compatible
-      dt-bindings: soc: mediatek: pwrap: Modify compatible for MT8188
-      arm64: dts: Add MediaTek MT8188 dts and evaluation board and Makef=
-ile
-
-shironeko (1):
-      arm64: dts: rockchip: add missing tx/rx-fifo-depth for rk3328 gmac
+xinglong.yang (1):
+      firmware: arm_scmi: Check beforehand if the perf domain set operat=
+ions are allowed
 
 yu-chang.lee (1):
-      dt-bindings: arm: mediatek: mmsys: Add VPPSYS compatible for MT8188
+      soc: mediatek: mmsys: Add support for MT8188 VPPSYS
 
-   0.5% Documentation/devicetree/bindings/arm/mediatek/
-   0.7% Documentation/devicetree/bindings/arm/
-   0.8% Documentation/devicetree/bindings/clock/
-   0.4% Documentation/devicetree/bindings/display/mediatek/
-   0.6% Documentation/devicetree/bindings/interconnect/
-   0.8% Documentation/devicetree/bindings/media/
-   0.5% Documentation/devicetree/bindings/sound/
-   0.3% Documentation/devicetree/bindings/thermal/
-   0.5% Documentation/devicetree/bindings/
-   0.5% arch/arm/boot/dts/marvell/
-   0.5% arch/arm/boot/dts/nxp/imx/
-   0.3% arch/arm/boot/dts/nxp/
-   4.8% arch/arm/boot/dts/qcom/
-   0.6% arch/arm/boot/dts/renesas/
-   1.9% arch/arm/boot/dts/rockchip/
-   1.3% arch/arm/boot/dts/st/
-   1.3% arch/arm/boot/dts/ti/omap/
-   0.3% arch/arm/boot/dts/
-   0.4% arch/arm64/boot/dts/allwinner/
-   0.8% arch/arm64/boot/dts/amlogic/
-   3.3% arch/arm64/boot/dts/exynos/google/
-   3.4% arch/arm64/boot/dts/exynos/
-   7.4% arch/arm64/boot/dts/freescale/
-   0.9% arch/arm64/boot/dts/marvell/
-   5.3% arch/arm64/boot/dts/mediatek/
-  37.8% arch/arm64/boot/dts/qcom/
-   0.8% arch/arm64/boot/dts/renesas/
-   8.5% arch/arm64/boot/dts/rockchip/
-   0.5% arch/arm64/boot/dts/sprd/
-   5.7% arch/arm64/boot/dts/ti/
-   0.6% arch/arm64/boot/dts/
-   0.5% arch/riscv/boot/dts/sophgo/
-   0.3% arch/riscv/boot/dts/starfive/
-   3.8% include/dt-bindings/clock/
-   0.3% include/dt-bindings/iio/
-   0.9% include/dt-bindings/interconnect/
- 808 files changed, 53337 insertions(+), 5146 deletions(-)
+ CREDITS                                            |    4 +
+ Documentation/ABI/testing/sysfs-bus-optee-devices  |    9 +
+ .../testing/sysfs-devices-platform-kunpeng_hccs    |    6 +-
+ .../bindings/arm/samsung/samsung-boards.yaml       |    6 +
+ .../devicetree/bindings/cache/qcom,llcc.yaml       |    3 +
+ .../devicetree/bindings/cache/sifive,ccache0.yaml  |    6 +-
+ .../bindings/clock/google,gs101-clock.yaml         |  106 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   18 +-
+ .../devicetree/bindings/gpu/arm,mali-midgard.yaml  |    5 +
+ .../bindings/hwinfo/samsung,exynos-chipid.yaml     |   18 +-
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml       |   11 +-
+ .../bindings/i2c/samsung,s3c2410-i2c.yaml          |   22 +-
+ .../bindings/iio/adc/samsung,exynos-adc.yaml       |   29 +-
+ .../bindings/mfd/samsung,exynos5433-lpass.yaml     |    2 +-
+ .../bindings/mmc/samsung,exynos-dw-mshc.yaml       |   25 +-
+ .../devicetree/bindings/pwm/pwm-samsung.yaml       |    4 +
+ .../bindings/reset/amlogic,meson-reset.yaml        |    1 +
+ .../devicetree/bindings/reset/fsl,imx-src.yaml     |   31 +-
+ .../bindings/reset/hisilicon,hi3660-reset.yaml     |   25 +-
+ .../devicetree/bindings/reset/qcom,aoss-reset.yaml |   10 +-
+ .../devicetree/bindings/reset/qcom,pdc-global.yaml |    8 +-
+ .../bindings/reset/renesas,rzg2l-usbphy-ctrl.yaml  |    2 +-
+ Documentation/devicetree/bindings/rtc/s3c-rtc.yaml |    5 +
+ .../devicetree/bindings/serial/samsung_uart.yaml   |   28 +-
+ .../microchip/microchip,mpfs-sys-controller.yaml   |   10 +
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |    2 +
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         |   22 +-
+ .../devicetree/bindings/soc/qcom/qcom-stats.yaml   |   14 +
+ .../bindings/soc/samsung/exynos-pmu.yaml           |   10 +
+ .../bindings/soc/samsung/exynos-usi.yaml           |    7 +-
+ .../soc/samsung/samsung,exynos-sysreg.yaml         |    5 +
+ .../devicetree/bindings/sound/samsung-i2s.yaml     |   19 +-
+ .../devicetree/bindings/watchdog/samsung-wdt.yaml  |   29 +-
+ MAINTAINERS                                        |   18 +-
+ arch/riscv/Kconfig.errata                          |   19 +
+ drivers/base/firmware_loader/sysfs_upload.c        |    1 +
+ drivers/bus/fsl-mc/fsl-mc-bus.c                    |   16 +-
+ drivers/bus/hisi_lpc.c                             |    6 +-
+ drivers/bus/imx-weim.c                             |    9 +-
+ drivers/bus/moxtet.c                               |    9 +-
+ drivers/bus/omap-ocp2scp.c                         |    6 +-
+ drivers/bus/omap_l3_smx.c                          |    6 +-
+ drivers/bus/qcom-ssc-block-bus.c                   |    6 +-
+ drivers/bus/simple-pm-bus.c                        |    7 +-
+ drivers/bus/sun50i-de2.c                           |    5 +-
+ drivers/bus/sunxi-rsb.c                            |    6 +-
+ drivers/bus/tegra-aconnect.c                       |    6 +-
+ drivers/bus/tegra-gmi.c                            |    6 +-
+ drivers/bus/ti-pwmss.c                             |    5 +-
+ drivers/bus/ti-sysc.c                              |    6 +-
+ drivers/bus/ts-nbus.c                              |    6 +-
+ drivers/cache/Kconfig                              |    6 +
+ drivers/cache/Makefile                             |    3 +-
+ drivers/{soc/sifive =3D> cache}/sifive_ccache.c      |   62 +-
+ drivers/clk/samsung/Makefile                       |    1 +
+ drivers/clk/samsung/clk-gs101.c                    | 2518 +++++++++++++=
++++++++
+ drivers/clk/samsung/clk-pll.c                      |    6 +
+ drivers/clk/samsung/clk-pll.h                      |    3 +
+ drivers/firmware/Kconfig                           |    1 +
+ drivers/firmware/Makefile                          |    1 +
+ drivers/firmware/arm_scmi/base.c                   |    6 +-
+ drivers/firmware/arm_scmi/clock.c                  |    8 +-
+ drivers/firmware/arm_scmi/driver.c                 |   24 +-
+ drivers/firmware/arm_scmi/optee.c                  |    4 +
+ drivers/firmware/arm_scmi/perf.c                   |   48 +-
+ drivers/firmware/arm_scmi/power.c                  |    8 +-
+ drivers/firmware/arm_scmi/powercap.c               |    8 +-
+ drivers/firmware/arm_scmi/protocols.h              |   11 +-
+ drivers/firmware/arm_scmi/reset.c                  |    9 +-
+ drivers/firmware/arm_scmi/sensors.c                |    8 +-
+ drivers/firmware/arm_scmi/system.c                 |    6 +-
+ drivers/firmware/arm_scmi/voltage.c                |    8 +-
+ drivers/firmware/meson/meson_sm.c                  |   19 +-
+ drivers/firmware/microchip/Kconfig                 |   12 +
+ drivers/firmware/microchip/Makefile                |    3 +
+ drivers/firmware/microchip/mpfs-auto-update.c      |  494 ++++
+ drivers/firmware/qcom/qcom_qseecom_uefisecapp.c    |   20 +-
+ drivers/firmware/ti_sci.c                          |   10 +-
+ drivers/mailbox/Kconfig                            |   12 -
+ drivers/mailbox/Makefile                           |    2 -
+ drivers/mailbox/apple-mailbox.c                    |  441 ----
+ drivers/memory/brcmstb_dpfe.c                      |    6 +-
+ drivers/memory/brcmstb_memc.c                      |    6 +-
+ drivers/memory/emif.c                              |    6 +-
+ drivers/memory/fsl-corenet-cf.c                    |    6 +-
+ drivers/memory/fsl_ifc.c                           |    6 +-
+ drivers/memory/jz4780-nemc.c                       |    5 +-
+ drivers/memory/mtk-smi.c                           |   10 +-
+ drivers/memory/omap-gpmc.c                         |    6 +-
+ drivers/memory/renesas-rpc-if.c                    |    6 +-
+ drivers/memory/samsung/exynos5422-dmc.c            |    6 +-
+ drivers/memory/stm32-fmc2-ebi.c                    |    6 +-
+ drivers/memory/tegra/tegra186-emc.c                |    6 +-
+ drivers/memory/tegra/tegra186.c                    |   19 +
+ drivers/memory/tegra/tegra210-emc-core.c           |    6 +-
+ drivers/memory/ti-aemif.c                          |    5 +-
+ drivers/memory/ti-emif-pm.c                        |    6 +-
+ drivers/reset/reset-brcmstb.c                      |    3 +-
+ drivers/reset/reset-meson-audio-arb.c              |    4 +-
+ drivers/reset/reset-meson.c                        |    1 +
+ drivers/reset/reset-npcm.c                         |    5 +-
+ drivers/reset/reset-qcom-aoss.c                    |    4 +-
+ drivers/reset/reset-qcom-pdc.c                     |    4 +-
+ drivers/reset/reset-simple.c                       |    3 +-
+ drivers/reset/reset-sunplus.c                      |    3 +-
+ drivers/reset/reset-uniphier-glue.c                |    3 +-
+ drivers/reset/sti/reset-syscfg.c                   |   11 +-
+ drivers/soc/Kconfig                                |    1 -
+ drivers/soc/Makefile                               |    1 -
+ drivers/soc/apple/Kconfig                          |   15 +-
+ drivers/soc/apple/Makefile                         |    4 +
+ drivers/soc/apple/mailbox.c                        |  437 ++++
+ drivers/soc/apple/mailbox.h                        |   48 +
+ drivers/soc/apple/rtkit-internal.h                 |    8 +-
+ drivers/soc/apple/rtkit.c                          |  133 +-
+ drivers/soc/fsl/qe/qmc.c                           |  658 +++--
+ drivers/soc/fsl/qe/tsa.c                           |   22 +-
+ drivers/soc/hisilicon/kunpeng_hccs.c               |  152 +-
+ drivers/soc/hisilicon/kunpeng_hccs.h               |   15 +
+ drivers/soc/mediatek/mt8188-mmsys.h                |  210 ++
+ drivers/soc/mediatek/mtk-mmsys.c                   |   39 +
+ drivers/soc/mediatek/mtk-mmsys.h                   |   32 +
+ drivers/soc/mediatek/mtk-mutex.c                   |   51 +
+ drivers/soc/mediatek/mtk-svs.c                     | 1678 +++++++------
+ drivers/soc/microchip/Kconfig                      |    1 +
+ drivers/soc/microchip/mpfs-sys-controller.c        |   33 +-
+ drivers/soc/qcom/Kconfig                           |   13 +
+ drivers/soc/qcom/Makefile                          |    2 +
+ drivers/soc/qcom/llcc-qcom.c                       |  107 +-
+ drivers/soc/qcom/pmic_glink.c                      |   24 +-
+ drivers/soc/qcom/pmic_glink_altmode.c              |    6 +-
+ drivers/soc/qcom/pmic_pdcharger_ulog.c             |  166 ++
+ drivers/soc/qcom/pmic_pdcharger_ulog.h             |   36 +
+ drivers/soc/qcom/socinfo.c                         |   13 +-
+ drivers/soc/renesas/Kconfig                        |    1 +
+ drivers/soc/renesas/renesas-soc.c                  |    4 -
+ drivers/soc/samsung/exynos-chipid.c                |    1 +
+ drivers/soc/sifive/Kconfig                         |   10 -
+ drivers/soc/sifive/Makefile                        |    3 -
+ drivers/soc/ti/k3-socinfo.c                        |   73 +-
+ drivers/soc/xilinx/xlnx_event_manager.c            |    7 +-
+ drivers/soc/xilinx/zynqmp_power.c                  |   16 +-
+ drivers/tee/optee/call.c                           |  161 +-
+ drivers/tee/optee/core.c                           |   62 +-
+ drivers/tee/optee/device.c                         |   17 +-
+ drivers/tee/optee/ffa_abi.c                        |  107 +-
+ drivers/tee/optee/optee_ffa.h                      |   28 +-
+ drivers/tee/optee/optee_private.h                  |   40 +-
+ drivers/tee/optee/smc_abi.c                        |  112 +-
+ drivers/tee/tee_core.c                             |    8 +
+ drivers/tee/tee_shm.c                              |   78 +-
+ drivers/tty/serial/samsung_tty.c                   |   16 +
+ drivers/usb/typec/ucsi/ucsi.c                      |    3 +
+ drivers/usb/typec/ucsi/ucsi.h                      |    3 +
+ drivers/usb/typec/ucsi/ucsi_glink.c                |   13 +
+ drivers/watchdog/s3c2410_wdt.c                     |   85 +-
+ include/dt-bindings/arm/qcom,ids.h                 |    1 +
+ include/dt-bindings/clock/google,gs101.h           |  392 +++
+ include/dt-bindings/reset/amlogic,c3-reset.h       |  119 +
+ include/linux/apple-mailbox.h                      |   19 -
+ include/linux/firmware.h                           |    2 +
+ include/linux/soc/apple/rtkit.h                    |   18 -
+ include/linux/soc/mediatek/mtk-mmsys.h             |    8 +
+ include/linux/tee_drv.h                            |   16 +
+ include/soc/fsl/qe/qmc.h                           |   27 +-
+ include/soc/microchip/mpfs.h                       |    2 +
+ include/soc/tegra/mc.h                             |    1 +
+ lib/test_firmware.c                                |    1 +
+ sound/soc/fsl/fsl_qmc_audio.c                      |    2 +-
+ 169 files changed, 7828 insertions(+), 2092 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/google,gs101=
+-clock.yaml
+ rename drivers/{soc/sifive =3D> cache}/sifive_ccache.c (81%)
+ create mode 100644 drivers/clk/samsung/clk-gs101.c
+ create mode 100644 drivers/firmware/microchip/Kconfig
+ create mode 100644 drivers/firmware/microchip/Makefile
+ create mode 100644 drivers/firmware/microchip/mpfs-auto-update.c
+ delete mode 100644 drivers/mailbox/apple-mailbox.c
+ create mode 100644 drivers/soc/apple/mailbox.c
+ create mode 100644 drivers/soc/apple/mailbox.h
+ create mode 100644 drivers/soc/qcom/pmic_pdcharger_ulog.c
+ create mode 100644 drivers/soc/qcom/pmic_pdcharger_ulog.h
+ delete mode 100644 drivers/soc/sifive/Kconfig
+ delete mode 100644 drivers/soc/sifive/Makefile
+ create mode 100644 include/dt-bindings/clock/google,gs101.h
+ create mode 100644 include/dt-bindings/reset/amlogic,c3-reset.h
+ delete mode 100644 include/linux/apple-mailbox.h
