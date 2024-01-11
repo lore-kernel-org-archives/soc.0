@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD039C47DA6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C49FC47077
 	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 96439C43390; Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80144C433B2;
+	id 3FDFDC433A6; Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24280C43394;
 	Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1705004419;
-	bh=Mq9+/BoFQY0JzZNuA0jOTyobGVKGRsHORK8Xgv3AUOc=;
+	bh=3o5fxzrZXmcLmspPWYtH5zMR0B5CE9B/xigBPhIeIxM=;
 	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=lUxbSmP8Hzvv1gQoZZatahc7TsUEH5iieD/rzz1yOJwhnNM9h0hu0FR/z8pjMiAlf
-	 wdU3Mp+WhPL4Lik1UvZjHNFT3QA/Px/gLvVpvItg/uTFrWXj8RbGXNBiIB36ebOZTn
-	 w4vLWdnCT4qQr6Wsxt1fHx6qQFVt1uSIIpE/0kTkY/GtK9kWmjDM2zEURnXUb2JW9O
-	 pTcxNKnVVCWAJUaufzAOBIT3HNzsaKjmfgboxjnbXHY5bTtEc1CeCkAH/RgorJg+37
-	 sfQsJPI2f41PF3E4uAyja0XhygH6lYScmVD4E4u13nciDnkI9aFG5SgW/7f3KQCvWQ
-	 fDIcVH8lfetow==
+	b=LhUvRkrVdU7Y+RJz+CcXFC3wMxkhbC3CnC8K2GGf1pYlG14BYnDhg43O3tXpjqDfl
+	 e6VUsTkbSHfoo0kZjMLHanPpRiDynpeB08brwMEx7eCvW7z2R96yTaZqfg9k1PrHI1
+	 ySAkj2W2QKQnp9+2mZAUZDuwCFs6iFwO9l9xTWHtGbI+fIb94IVbscKsWRfuJ4wek2
+	 Gd9OTjREoNpQNJ30ZjPWfHAqcdylYc4o5wveqR/OJf8QxfsunvrwQvbYBYg1mySo4C
+	 ISd/28fPd9uoOVZqr+1fbUST//6yKu4rgGF57ZQ8jb4bfy1qWvb3a58OU1bYRgdngW
+	 x9fqFzxnR96xA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C437D8C974;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10A66DFC698;
 	Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
-Subject: Re: [GIT PULL 4/4] ARM: SoC defconfig updates for 6.8
+Subject: Re: [GIT PULL 2/4] SoC: driver updates for 6.8
 From: pr-tracker-bot@kernel.org
-In-Reply-To: <3c697540-fa12-45e3-9662-521688f8d14e@app.fastmail.com>
-References: <1c120ba6-3c94-4d94-8497-afb6c5063d3c@app.fastmail.com> <3c697540-fa12-45e3-9662-521688f8d14e@app.fastmail.com>
+In-Reply-To: <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
+References: <1c120ba6-3c94-4d94-8497-afb6c5063d3c@app.fastmail.com> <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
 X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <3c697540-fa12-45e3-9662-521688f8d14e@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.8
-X-PR-Tracked-Commit-Id: c2dba4d19f6542e52e59873a596cce0388d0df64
+X-PR-Tracked-Message-Id: <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.8
+X-PR-Tracked-Commit-Id: db0a7c09b2a552c5028a29942e80a4848d182934
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5bad490858c3ebdbb47e622e8f9049f828d2abba
-Message-Id: <170500441943.14602.9293827223673270137.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: f6597d17069a67819f57569e44ac9069f0b829e8
+Message-Id: <170500441906.14602.3050873929534381970.pr-tracker-bot@kernel.org>
 Date: Thu, 11 Jan 2024 20:20:19 +0000
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 11 Jan 2024 17:20:36 +0100:
+The pull request you sent on Thu, 11 Jan 2024 17:18:11 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.8
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.8
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5bad490858c3ebdbb47e622e8f9049f828d2abba
+https://git.kernel.org/torvalds/c/f6597d17069a67819f57569e44ac9069f0b829e8
 
 Thank you!
 
