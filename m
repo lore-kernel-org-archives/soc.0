@@ -1,126 +1,105 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=3nnK=IV=gmail.com=zajec5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C4CC47077
-	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 09:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA977C4707B
+	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 10:39:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8CC23C433F1; Thu, 11 Jan 2024 09:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9246AC43390;
-	Thu, 11 Jan 2024 09:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704965169;
-	bh=Wh+Ghh/xae7yXln1+wKtnus24RXFzzEP2G6Itu8NWA4=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZUQ37j++js6R3XR6MOvnZPrzeYClzxboiSLBJIulEcZ6jTUeVcwf9cks5PCw66gzP
-	 ESzaR3ltX4jgE3S3qu5WYz3bcg57FDy5cezJP/7EJtcTvN9KGOf64CZtfBsw++HObD
-	 3YCvdmvzPUAWCYFXR0GpC7ghAGZVbb3+YDThcV0ZrAelNoBFMZskrp4DX2rxymw7i/
-	 ZxgFnlxmfVGiaJ3Pftc9sxfxkYWYMzH+4QYU+35SJlLH33tYRU/dE7NlWOhHeHrZ1u
-	 S5Ivlkygz2ZUH3uVVz56mLVtrrGSpWWB8YLrFMnzKXopsSrpZL4o4n6VJGwI8pMnLh
-	 edQA2g9QeGoNA==
-From: Arnd Bergmann <arnd@kernel.org>
+	id 97025C43399; Thu, 11 Jan 2024 10:39:37 +0000 (UTC)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id AFED2C433F1;
+	Thu, 11 Jan 2024 10:39:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AFED2C433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50e7af5f618so5847604e87.1;
+        Thu, 11 Jan 2024 02:39:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704969574; x=1705574374; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MuVNFMNu/znFyjhI4YiVPNBcWz8JIXuuibOlcW6cauo=;
+        b=Yv3lF8SRv4zZvoEflAjQpQ3wsERZMpaDPM43Ztn/Gkg4K6aAuYaxcus8+/2tY2Omku
+         ZdmS+tpgeslaZSSscnEQYNZbeG4cOySTfaB8Opr6KA7fslVKsdiCWQt9Aeb/acRgxNfy
+         xCooXltAr4RNPiRESlyoDN23IVZo6c3mY8ErevbErixoPT+GaGw9rI0A79Em+AQlAkfb
+         9V4FnujGXAA1XbExzSaJ+nt77SnhEBA4oPcAQ/t5NMSUFIMQAoo91gnL7DQCnRJb8MnS
+         OYbn157DEeEWu49kXig8FFHgoF6H81ZjTlbvuT/I4kteV5c8vxSX0GlvYLRK2mxFTFiK
+         bxfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704969574; x=1705574374;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MuVNFMNu/znFyjhI4YiVPNBcWz8JIXuuibOlcW6cauo=;
+        b=pO7/L5Ms/omNl6kQ6PCxkfnjQCQGrlki2zyguZGenRwrJvSUxTtEtsWIqaAspFx0D2
+         ZPInqa9+Sj/wrGucJ68rGT6OjcHD5g2+viItmo2L0sNWBVOwGCGP5rCaXs+0voIMvn5/
+         c5QD8wOV5uWkCj3YLdpnAy3v3gjReI77dx970goTnbQZ3LeziQoTka9lQASAj1YLjQkY
+         xOcYVWzBC6lwa0EsDE+VZLkVlEzgwziYak8X1Hk675E+AaRGjcTdVulpDO2oBw0xUSWO
+         REgrTVRprh/BB6MWeuM1xuABWGcW0vVYlOsKVoju0IPRA8IG6rMeyv47+KhfI6poDNf1
+         dkXA==
+X-Gm-Message-State: AOJu0Yy7ev/awadXSlGsKVWXGhNKynjLCI8Bl/2JhPBWZMALmbbmEzm+
+	7IDghGqCcc332AiYZEqcLB8=
+X-Google-Smtp-Source: AGHT+IEnpP/pKX/gXbee57tP/8wAV93Q1jQEFfaBg+OenM/0Ooa1lAhiPzT2sTpofQ+k5kRMXR9eVw==
+X-Received: by 2002:a19:ad4b:0:b0:50e:dc99:b9d4 with SMTP id s11-20020a19ad4b000000b0050edc99b9d4mr385313lfd.44.1704969574165;
+        Thu, 11 Jan 2024 02:39:34 -0800 (PST)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id d14-20020a170906c20e00b00a298e2f6b3csm407179ejz.213.2024.01.11.02.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jan 2024 02:39:33 -0800 (PST)
+From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 6/6] ARM: defconfig: remove dead platform options
-Date: Thu, 11 Jan 2024 10:25:50 +0100
-Message-Id: <20240111092550.1313277-7-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240111092550.1313277-1-arnd@kernel.org>
-References: <20240111092550.1313277-1-arnd@kernel.org>
+Cc: Daniel Golle <daniel@makrotopia.org>,
+	Hsin-Yi Wang <hsinyi@chromium.org>,
+	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
+	jason-ch chen <Jason-ch.Chen@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	soc@kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2 0/2] mt7981b: initial DT code
+Date: Thu, 11 Jan 2024 11:39:26 +0100
+Message-Id: <20240111103928.721-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-These are all options for boards that got removed in the past and
-are not relevant here because the options no longer exist or
-are implied by the platform.
+This work is based on linux-next content and was successfully verified
+using "dtbs_check".
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/configs/clps711x_defconfig  | 6 ------
- arch/arm/configs/dove_defconfig      | 2 --
- arch/arm/configs/imx_v4_v5_defconfig | 5 -----
- arch/arm/configs/omap1_defconfig     | 1 -
- arch/arm/configs/realview_defconfig  | 2 --
- 5 files changed, 16 deletions(-)
+I'm not sure who should apply this work. Given I received reviews from
+AngeloGioacchino should I expect Arnd to pick it to his tree directly?
 
-diff --git a/arch/arm/configs/clps711x_defconfig b/arch/arm/configs/clps711x_defconfig
-index 5ce6ee0006e0..6fa3477e6b02 100644
---- a/arch/arm/configs/clps711x_defconfig
-+++ b/arch/arm/configs/clps711x_defconfig
-@@ -6,12 +6,6 @@ CONFIG_RD_LZMA=y
- CONFIG_EXPERT=y
- CONFIG_JUMP_LABEL=y
- CONFIG_PARTITION_ADVANCED=y
--CONFIG_ARCH_CLPS711X=y
--CONFIG_ARCH_AUTCPU12=y
--CONFIG_ARCH_CDB89712=y
--CONFIG_ARCH_CLEP7312=y
--CONFIG_ARCH_EDB7211=y
--CONFIG_ARCH_P720T=y
- CONFIG_AEABI=y
- # CONFIG_COREDUMP is not set
- CONFIG_SLUB_TINY=y
-diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
-index 46859e6fee5b..2849d17f5856 100644
---- a/arch/arm/configs/dove_defconfig
-+++ b/arch/arm/configs/dove_defconfig
-@@ -6,9 +6,7 @@ CONFIG_EXPERT=y
- # CONFIG_ARCH_MULTI_V6 is not set
- CONFIG_ARCH_MULTI_V7=y
- CONFIG_ARCH_DOVE=y
--CONFIG_MACH_DOVE_DB=y
- CONFIG_MACH_CM_A510=y
--CONFIG_MACH_DOVE_DT=y
- CONFIG_AEABI=y
- CONFIG_HIGHMEM=y
- CONFIG_ARM_APPENDED_DTB=y
-diff --git a/arch/arm/configs/imx_v4_v5_defconfig b/arch/arm/configs/imx_v4_v5_defconfig
-index ec45e6225225..875c8cdbada7 100644
---- a/arch/arm/configs/imx_v4_v5_defconfig
-+++ b/arch/arm/configs/imx_v4_v5_defconfig
-@@ -12,11 +12,6 @@ CONFIG_ARCH_MULTI_V4T=y
- CONFIG_ARCH_MULTI_V5=y
- # CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_MXC=y
--CONFIG_MACH_MX21ADS=y
--CONFIG_MACH_MX27ADS=y
--CONFIG_MACH_MX27_3DS=y
--CONFIG_MACH_IMX27_VISSTRIM_M10=y
--CONFIG_MACH_PCA100=y
- CONFIG_SOC_IMX1=y
- CONFIG_SOC_IMX25=y
- CONFIG_SOC_IMX27=y
-diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-index af5f1c4ec084..729ea8157e2a 100644
---- a/arch/arm/configs/omap1_defconfig
-+++ b/arch/arm/configs/omap1_defconfig
-@@ -28,7 +28,6 @@ CONFIG_MACH_OMAP_PALMTE=y
- CONFIG_MACH_SX1=y
- CONFIG_MACH_NOKIA770=y
- CONFIG_MACH_AMS_DELTA=y
--CONFIG_MACH_OMAP_GENERIC=y
- CONFIG_AEABI=y
- CONFIG_CMDLINE="root=1f03 rootfstype=jffs2"
- CONFIG_FPE_NWFPE=y
-diff --git a/arch/arm/configs/realview_defconfig b/arch/arm/configs/realview_defconfig
-index d1eaed19fa6c..febea5cf7aaa 100644
---- a/arch/arm/configs/realview_defconfig
-+++ b/arch/arm/configs/realview_defconfig
-@@ -9,8 +9,6 @@ CONFIG_MACH_REALVIEW_EB=y
- CONFIG_REALVIEW_EB_ARM1136=y
- CONFIG_REALVIEW_EB_ARM1176=y
- CONFIG_REALVIEW_EB_A9MP=y
--CONFIG_REALVIEW_EB_ARM11MP=y
--CONFIG_MACH_REALVIEW_PB11MP=y
- CONFIG_MACH_REALVIEW_PB1176=y
- CONFIG_MACH_REALVIEW_PBA8=y
- CONFIG_MACH_REALVIEW_PBX=y
+Rafał Miłecki (2):
+  dt-bindings: arm64: mediatek: Add MT7981B and Xiaomi AX3000T
+  arm64: dts: mediatek: Add initial MT7981B and Xiaomi AX3000T
+
+ .../devicetree/bindings/arm/mediatek.yaml     |   4 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ .../dts/mediatek/mt7981b-xiaomi-ax3000t.dts   |  15 +++
+ arch/arm64/boot/dts/mediatek/mt7981b.dtsi     | 105 ++++++++++++++++++
+ 4 files changed, 125 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7981b-xiaomi-ax3000t.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7981b.dtsi
+
 -- 
-2.39.2
+2.35.3
 
