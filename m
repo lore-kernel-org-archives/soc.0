@@ -1,54 +1,192 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=bUg3=IX=wunner.de=lukas@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C49FC47077
-	for <soc@archiver.kernel.org>; Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75BF7C4706C
+	for <soc@archiver.kernel.org>; Sat, 13 Jan 2024 09:04:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3FDFDC433A6; Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24280C43394;
-	Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705004419;
-	bh=3o5fxzrZXmcLmspPWYtH5zMR0B5CE9B/xigBPhIeIxM=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=LhUvRkrVdU7Y+RJz+CcXFC3wMxkhbC3CnC8K2GGf1pYlG14BYnDhg43O3tXpjqDfl
-	 e6VUsTkbSHfoo0kZjMLHanPpRiDynpeB08brwMEx7eCvW7z2R96yTaZqfg9k1PrHI1
-	 ySAkj2W2QKQnp9+2mZAUZDuwCFs6iFwO9l9xTWHtGbI+fIb94IVbscKsWRfuJ4wek2
-	 Gd9OTjREoNpQNJ30ZjPWfHAqcdylYc4o5wveqR/OJf8QxfsunvrwQvbYBYg1mySo4C
-	 ISd/28fPd9uoOVZqr+1fbUST//6yKu4rgGF57ZQ8jb4bfy1qWvb3a58OU1bYRgdngW
-	 x9fqFzxnR96xA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10A66DFC698;
-	Thu, 11 Jan 2024 20:20:19 +0000 (UTC)
-Subject: Re: [GIT PULL 2/4] SoC: driver updates for 6.8
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
-References: <1c120ba6-3c94-4d94-8497-afb6c5063d3c@app.fastmail.com> <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <e56412b6-f79a-4464-b2f8-2ba2c078f0c5@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.8
-X-PR-Tracked-Commit-Id: db0a7c09b2a552c5028a29942e80a4848d182934
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f6597d17069a67819f57569e44ac9069f0b829e8
-Message-Id: <170500441906.14602.3050873929534381970.pr-tracker-bot@kernel.org>
-Date: Thu, 11 Jan 2024 20:20:19 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id 219BCC43394; Sat, 13 Jan 2024 09:04:03 +0000 (UTC)
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id EFDBBC433C7;
+	Sat, 13 Jan 2024 09:03:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EFDBBC433C7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 2C8E5100D943C;
+	Sat, 13 Jan 2024 10:03:49 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id F15972DEC30; Sat, 13 Jan 2024 10:03:48 +0100 (CET)
+Message-Id: <8b49a64d5946792f01e75fab74076557ef4f7d60.1705135956.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Sat, 13 Jan 2024 10:03:51 +0100
+Subject: [PATCH] ARM: dts: Fix TPM schema violations
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc: Patrick Williams <patrick@stwcx.xyz>, Tao Ren <rentao.bupt@gmail.com>, Eddie James <eajames@linux.ibm.com>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, Bruno Thomsen <bruno.thomsen@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, Wes Huang <wes.huang@moxa.com>, Fero JD Zhou <FeroJD.Zhou@moxa.com>, SZ Lin <sz.lin@moxa.com>, Benoit Cousson <bcousson@baylibre.com>, Tony Lindgren <tony@atomide.com>, Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>, upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
 
-The pull request you sent on Thu, 11 Jan 2024 17:18:11 +0100:
+Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
+bindings"), several issues are reported by "make dtbs_check" for ARM
+devicetrees:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.8
+The nodename needs to be "tpm@0" rather than "tpmdev@0" and the
+compatible property needs to contain the chip's name in addition to the
+generic "tcg,tpm_tis-spi" or "tcg,tpm-tis-i2c":
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f6597d17069a67819f57569e44ac9069f0b829e8
+  tpmdev@0: $nodename:0: 'tpmdev@0' does not match '^tpm(@[0-9a-f]+)?$'
+        from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
 
-Thank you!
+  tpm@2e: compatible: 'oneOf' conditional failed, one must be fixed:
+        ['tcg,tpm-tis-i2c'] is too short
+        from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
 
+Fix these schema violations.
+
+Aspeed Facebook BMCs use an Infineon SLB9670:
+https://lore.kernel.org/all/ZZSmMJ%2F%2Fl972Qbxu@fedora/
+https://lore.kernel.org/all/ZZT4%2Fw2eVzMhtsPx@fedora/
+https://lore.kernel.org/all/ZZTS0p1hdAchIbKp@heinlein.vulture-banana.ts.net/
+
+Aspeed Tacoma uses a Nuvoton NPCT75X per commit 39d8a73c53a2 ("ARM: dts:
+aspeed: tacoma: Add TPM").
+
+phyGATE-Tauri uses an Infineon SLB9670:
+https://lore.kernel.org/all/ab45c82485fa272f74adf560cbb58ee60cc42689.camel@phytec.de/
+
+A single schema violation remains in am335x-moxa-uc-2100-common.dtsi
+because it is unknown which chip is used on the board.  The devicetree's
+author has been asked for clarification but has not responded so far:
+https://lore.kernel.org/all/20231220090910.GA32182@wunner.de/
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
+---
+The commit mentioned above, 26c9d152ebf3 ("dt-bindings: tpm: Consolidate
+TCG TIS bindings") landed in Linus' tree 8 hours ago.
+
+Because this consists only of fixes, I think it could be picked up and
+forwarded to Linus at any time, even outside the merge window.
+
+The Reviewed-by tags from Patrick and Tao were offered here:
+https://lore.kernel.org/all/ZZWB4wRiAyDtlLJM@heinlein.vulture-banana.ts.net/
+https://lore.kernel.org/all/ZZWkhaiDFOGvcPQy@fedora/
+
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts   | 4 ++--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts    | 4 ++--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts           | 2 +-
+ arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi | 4 ++--
+ arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi          | 2 +-
+ arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts        | 2 +-
+ arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi    | 2 +-
+ 7 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts
+index e899de6..5be0e8f 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts
++++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts
+@@ -45,8 +45,8 @@
+ 		num-chipselects = <1>;
+ 		cs-gpios = <&gpio0 ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+ 
+-		tpmdev@0 {
+-			compatible = "tcg,tpm_tis-spi";
++		tpm@0 {
++			compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 			spi-max-frequency = <33000000>;
+ 			reg = <0>;
+ 		};
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts
+index a677c82..5a8169b 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts
++++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts
+@@ -80,8 +80,8 @@
+ 		gpio-miso = <&gpio ASPEED_GPIO(R, 5) GPIO_ACTIVE_HIGH>;
+ 		num-chipselects = <1>;
+ 
+-		tpmdev@0 {
+-			compatible = "tcg,tpm_tis-spi";
++		tpm@0 {
++			compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 			spi-max-frequency = <33000000>;
+ 			reg = <0>;
+ 		};
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
+index 3f6010e..213023b 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
++++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
+@@ -456,7 +456,7 @@
+ 	status = "okay";
+ 
+ 	tpm: tpm@2e {
+-		compatible = "tcg,tpm-tis-i2c";
++		compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+ 		reg = <0x2e>;
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi b/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi
+index 31590d3..00e5887 100644
+--- a/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi
++++ b/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi
+@@ -35,8 +35,8 @@
+ 		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
+ 		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
+ 
+-		tpmdev@0 {
+-			compatible = "tcg,tpm_tis-spi";
++		tpm@0 {
++			compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 			spi-max-frequency = <33000000>;
+ 			reg = <0>;
+ 		};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi b/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi
+index 44cc4ff..d12fb44 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi
++++ b/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi
+@@ -116,7 +116,7 @@
+ 	tpm_tis: tpm@1 {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_tpm>;
+-		compatible = "tcg,tpm_tis-spi";
++		compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 		reg = <1>;
+ 		spi-max-frequency = <20000000>;
+ 		interrupt-parent = <&gpio5>;
+diff --git a/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts b/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts
+index 3a72384..9984b34 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts
++++ b/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts
+@@ -130,7 +130,7 @@
+ 	 * TCG specification - Section 6.4.1 Clocking:
+ 	 * TPM shall support a SPI clock frequency range of 10-24 MHz.
+ 	 */
+-	st33htph: tpm-tis@0 {
++	st33htph: tpm@0 {
+ 		compatible = "st,st33htpm-spi", "tcg,tpm_tis-spi";
+ 		reg = <0>;
+ 		spi-max-frequency = <24000000>;
+diff --git a/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi b/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi
+index b8730aa..a59331a 100644
+--- a/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi
++++ b/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi
+@@ -217,7 +217,7 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi1_pins>;
+ 
+-	tpm_spi_tis@0 {
++	tpm@0 {
+ 		compatible = "tcg,tpm_tis-spi";
+ 		reg = <0>;
+ 		spi-max-frequency = <500000>;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.40.1
+
