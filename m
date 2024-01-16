@@ -1,141 +1,104 @@
-Return-Path: <SRS0=pXBb=IZ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=XSqt=I2=h08.hostsharing.net=foo00@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77646C3DA79
-	for <soc@archiver.kernel.org>; Mon, 15 Jan 2024 20:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 362D2C47077
+	for <soc@archiver.kernel.org>; Tue, 16 Jan 2024 10:24:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42972C433C7; Mon, 15 Jan 2024 20:18:09 +0000 (UTC)
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+	id 00266C433C7; Tue, 16 Jan 2024 10:24:31 +0000 (UTC)
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 648B7C433F1;
-	Mon, 15 Jan 2024 20:18:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 648B7C433F1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 2815B3200B25;
-	Mon, 15 Jan 2024 15:18:04 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Mon, 15 Jan 2024 15:18:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1705349883; x=1705436283; bh=e+ykc0zOmp
-	+y1Z7R5pTDfegBpM5HaaHl2YIznyofnRg=; b=Zudq/OQVUSbgUeJ7VgSexjEMis
-	Yyoi7XQ5AQkOZE1cO8jcSwrnSNFqsmAPtyAEujvTEMJe2w4OU/8E0slEN17nm5hw
-	TPVGSMoDPb8zXQFUu28DDfcA7iQFbfrCypppj1QkJaJbU0wcBrA2OzcxsiOziKQQ
-	v4wz68j7Ett/UYRH4GEwJF6oGetGNJjrzfX7KSE6uY6GTzlCR9AR5nvDSTHUYRtg
-	zUwIabO3NOLxRuzLYH+6HTqewDaKLAaVD0QW00vnsNU5H8nxeGTflkeKCU0ty92z
-	8x3QOkYNK8UVKW3BQQb6rOmZwySIYAeWapxsGm9mVGndOqHmswh4tGT7n8Yw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1705349883; x=1705436283; bh=e+ykc0zOmp+y1Z7R5pTDfegBpM5H
-	aaHl2YIznyofnRg=; b=Mi3ROXdwiL6vOPVn/TnKU+QitRjS39TYAcKwetaXwmo3
-	jC0XdgjlIriLJgI0Tm+TGRAXfaEaqfhuuMsKOFFQJLEtWwFHlsnu2ecajYIrXbdh
-	SeWXyTwWm1WI0Dq1g5c673AAc5rp+0SWTTNc5pPGr5z8OmPWUURXOr8zN/3mW7NF
-	t+19JpX4kU/KtjXxtPqjyhhJy/RQgxWp27uLeBbLXUAfYh52mwQ5B7LGre/w4BUC
-	5GfGZqFl524OIPXAPybjQaEs03sCTgi5CTbQk84mMw+Nh5cdocJJD5DJy1S4GUj1
-	LNSrbQktUKHs+fEnws+jle1ZjmpFKAkPyytZ85Pj0A==
-X-ME-Sender: <xms:-pKlZSeNIxS12fwTkbr06DzcMtTKr4nYHLMiGJ65ir_vW9fuaMTB7g>
-    <xme:-pKlZcM_3r0Rp4UiyUoX5xmyBCCF5qUhl68KBcTzJeKhPe5Br6vKBlJTWg3nlpH69
-    a98kDFMvu2h5LoNC_s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdejuddgudefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeeiiedtlefgtdfhheetheffudekffefteeiieevudfggfegieefteevgeev
-    veduieenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhkvghrnhgvlhdroh
-    hrghdpghgrthgvfihorhhkshdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:-pKlZTiwDl7yupMOdwsgf6XD1WZQ0S6g-oq3h_Uiu2DhLaZJxuioZw>
-    <xmx:-pKlZf_DFocOrvK91AFNmbCl_5XnYYHQyCukOHgurk9h0AykZwDQEw>
-    <xmx:-pKlZetRIAag5BvUcMXdMOXCc8gn7mMRTTFc4FERKuYIyFOq2E-eqw>
-    <xmx:-5KlZV8O6iaGGFVQ352rrsarpopTVEWvIJtE8_z7GpH_byhOocP9NA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 04AFCB6008D; Mon, 15 Jan 2024 15:18:01 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
-MIME-Version: 1.0
-Message-Id: <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
-In-Reply-To: <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
-References: 
- <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
- <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
-Date: Mon, 15 Jan 2024 21:17:41 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 75F7DC433F1;
+	Tue, 16 Jan 2024 10:24:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 75F7DC433F1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id F2BB730000868;
+	Tue, 16 Jan 2024 11:24:23 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id E3127316BEB; Tue, 16 Jan 2024 11:24:23 +0100 (CET)
+Date: Tue, 16 Jan 2024 11:24:23 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- "Lukas Wunner" <lukas@wunner.de>, "Olof Johansson" <olof@lixom.net>,
- soc@kernel.org, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc: "Yannic Moog" <Y.Moog@phytec.de>, "Alexander Bauer" <a.bauer@phytec.de>,
- upstream@lists.phytec.de, "Teresa Remmet" <T.Remmet@phytec.de>,
- "Tim Harvey" <tharvey@gateworks.com>, "Shawn Guo" <shawnguo@kernel.org>,
- "Sascha Hauer" <s.hauer@pengutronix.de>,
- "Pengutronix Kernel Team" <kernel@pengutronix.de>,
- "Fabio Estevam" <festevam@gmail.com>, "NXP Linux Team" <linux-imx@nxp.com>,
- "Adam Ford" <aford173@gmail.com>, "Heiko Thiery" <heiko.thiery@gmail.com>,
- "Enric Balletbo i Serra" <eballetbo@kernel.org>,
- "Matthias Brugger" <matthias.bgg@gmail.com>,
- "Hsin-Yi Wang" <hsinyi@chromium.org>, "Chen-Yu Tsai" <wenst@chromium.org>,
- =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+	Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>,
+	upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>,
+	Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>, Adam Ford <aford173@gmail.com>,
+	Heiko Thiery <heiko.thiery@gmail.com>,
+	Enric Balletbo i Serra <eballetbo@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Hsin-Yi Wang <hsinyi@chromium.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
-Content-Type: text/plain
+Message-ID: <20240116102423.GA27561@wunner.de>
+References: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
+ <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
+ <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Jan 15, 2024, at 09:41, AngeloGioacchino Del Regno wrote:
-> Il 13/01/24 19:06, Lukas Wunner ha scritto:
->> Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
->> bindings"), several issues are reported by "make dtbs_check" for arm64
->> devicetrees:
->> 
->> The compatible property needs to contain the chip's name in addition to
->> the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
->> rather than "cr50@0":
->> 
->>    tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
->>          from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
->> 
->>    cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
->>          from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
->> 
->> Fix these schema violations.
->> 
->> phyGATE-Tauri uses an Infineon SLB9670:
->> https://lore.kernel.org/all/ab45c82485fa272f74adf560cbb58ee60cc42689.camel@phytec.de/
->> 
->> Gateworks Venice uses an Atmel ATTPM20P:
->> https://trac.gateworks.com/wiki/tpm
->> 
->> Signed-off-by: Lukas Wunner <lukas@wunner.de>
->
-> For MediaTek:
-> Reviewed-by: AngeloGioacchino Del Regno 
-> <angelogioacchino.delregno@collabora.com>
->
-> ...but I think you should split this per-SoC.
->
-> Anyway, if Arnd wants to take this patch directly I'm also totally fine 
-> with that.
+On Mon, Jan 15, 2024 at 09:17:41PM +0100, Arnd Bergmann wrote:
+> > Il 13/01/24 19:06, Lukas Wunner ha scritto:
+> > > Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
+> > > bindings"), several issues are reported by "make dtbs_check" for arm64
+> > > devicetrees:
+> > > 
+> > > The compatible property needs to contain the chip's name in addition to
+> > > the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
+> > > rather than "cr50@0":
+> > > 
+> > >    tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
+> > >          from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
+> > > 
+> > >    cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
+> > >          from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
+> > > 
+> > > Fix these schema violations.
+> 
+> However, I got some conflicts trying to apply them on
+> top of v6.7, so maybe check that and resend.
 
-I would prefer to apply the combined patches:
-if you end up with a series of patches that all have
-identical commit texts, it's better to combine them
-as that gives a more readable git history.
+This patch needs to be applied on top of the soc-dt-6.8 tag,
+not v6.7, because there were changes in your v6.8 pull request
+which introduce a new TPM DT node in:
 
-However, I got some conflicts trying to apply them on
-top of v6.7, so maybe check that and resend.
+  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+  arch/arm64/boot/dts/freescale/imx8mp-venice-gw72xx.dtsi
 
-       Arnd
+and modify an existing TPM DT node in:
+
+  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+
+So if I'd base this patch on top of v6.7, it would be missing
+the fixes for these three devicetrees and I'd have to submit
+a separate patch with them.  Happy to do so if that's what
+you want but basing on top of soc-dt-6.8 seemed more reasonable
+to me as initial submission.
+
+Thanks!
+
+Lukas
