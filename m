@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 722EFC4828C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A8DEC47DA9
 	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40BB8C41613; Fri, 26 Jan 2024 23:55:45 +0000 (UTC)
+	id 316F1C43142; Fri, 26 Jan 2024 23:55:45 +0000 (UTC)
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EAE3AC43399;
-	Fri, 26 Jan 2024 23:55:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EAE3AC43399
+	by smtp.kernel.org (Postfix) with ESMTPS id 03680C4166B;
+	Fri, 26 Jan 2024 23:55:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 03680C4166B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNtChX020800;
-	Fri, 26 Jan 2024 23:55:32 GMT
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QLidNf001840;
+	Fri, 26 Jan 2024 23:55:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=JHAwrxllOSXe9Lncc3Bw
-	hW25fiD1hVsmdl5djzDx1Po=; b=W9g8gxYmcUjfRRE6D7smqhpnYf1XFu9a0rab
-	qj9zbi6u5RdwTgtP/KKz7oRqfVlHAI+pQ863D7LZqd9cHAZG03yWTMCUO6ZmATqG
-	eXM9zgh4aGGKEoKNMGyQApsuRknC92CZKHMKlzJyBX+aLfqA3rvvkuPSM4z8OUEb
-	/I7dzKX79V7LDlQhPTXHgj1LVFm3M5lpSZqn/uLlYcw7a4aqQxa/zp2Rz4119ns5
-	Qhdtcs3OxNCREH4Km/oAjk0LcQ9RkdyK7HYUEAKC6dCqY3hI+6fb1WHfZallaD6Y
-	ik0QO44xTaUP6ZAWabC1wA8sv/tobkT2d0qyH3ymYfy8F4fHxA==
+	:mime-version:content-type; s=qcppdkim1; bh=JehfiXL/jESvck/dHwB/
+	tjacBNHINenDJXJssZftYA0=; b=lywtgH4wOf75UMzKTOMrxUO+QQzBiVuwolYi
+	4+3YY51x+Vuq9uVMWrFDeAFOgYM74dj1aDZHBX5IBmUshUpNwDMnRjq/u/yueF38
+	JnBOd4pRUen/fT+EKprd54SeS0Ekj3+5wReNqHikR3Gm0O1MKUN1SbFY33yBx+E3
+	mdIEJSuNc3BK12d1R5hE8wf/4W/LsFncrddpZNP9jgXxsF+t1QjJA7chRVbGWrEJ
+	jZ/57DEy0G6Hv2+mN6h+ICl3dn/3FaTPsu6kUFAEmkPuFaG32QTvk8Y9PZWpfLBX
+	aujNRaEOavRQ0HqyD+TKReQ51Mj2/YUS3HD7+trSOKnUxHOcaA==
 Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvgy8gq02-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvgy8gq04-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 26 Jan 2024 23:55:32 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtUwh018645
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtUwn018645
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 26 Jan 2024 23:55:31 GMT
 Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 26 Jan 2024 15:55:15 -0800
+ 15.2.1118.40; Fri, 26 Jan 2024 15:55:17 -0800
 From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
 CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-Subject: [PATCH 37/46] microblaze: reserved_mem: Switch fdt_init_reserved_mem to dt_init_reserved_mem
-Date: Fri, 26 Jan 2024 15:54:16 -0800
-Message-ID: <20240126235425.12233-38-quic_obabatun@quicinc.com>
+Subject: [PATCH 42/46] riscv: reserved_mem: Switch fdt_init_reserved_mem() to dt_init_reserved_mem()
+Date: Fri, 26 Jan 2024 15:54:21 -0800
+Message-ID: <20240126235425.12233-43-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
@@ -69,12 +69,12 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WGiY7kIbvTjv0FKjDvTQTDg0e-SPCZFX
-X-Proofpoint-ORIG-GUID: WGiY7kIbvTjv0FKjDvTQTDg0e-SPCZFX
+X-Proofpoint-GUID: 7nA_V3mCURdgAzpTsaoIGUM62pOvtIbp
+X-Proofpoint-ORIG-GUID: 7nA_V3mCURdgAzpTsaoIGUM62pOvtIbp
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=543
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=605
  priorityscore=1501 lowpriorityscore=0 clxscore=1015 impostorscore=0
  mlxscore=0 phishscore=0 spamscore=0 adultscore=0 suspectscore=0
  malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
@@ -86,22 +86,22 @@ reserved memory regions.
 
 Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 ---
- arch/microblaze/kernel/setup.c | 2 +-
+ arch/riscv/kernel/setup.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/microblaze/kernel/setup.c b/arch/microblaze/kernel/setup.c
-index d999ad774a44..112a05572d8c 100644
---- a/arch/microblaze/kernel/setup.c
-+++ b/arch/microblaze/kernel/setup.c
-@@ -59,7 +59,7 @@ void __init setup_arch(char **cmdline_p)
- 
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 0601ed1e4ce6..3abc41217ede 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -271,7 +271,7 @@ void __init setup_arch(char **cmdline_p)
  	unflatten_device_tree();
+ #endif
  
 -	fdt_init_reserved_mem();
 +	dt_init_reserved_mem();
+ 	misc_mem_init();
  
- 	setup_cpuinfo();
- 
+ 	init_resources();
 -- 
 2.17.1
 
