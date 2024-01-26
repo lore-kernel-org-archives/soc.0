@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96869C48290
-	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67705C48291
+	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6629DC4166A; Fri, 26 Jan 2024 23:55:23 +0000 (UTC)
+	id 4AFD2C43330; Fri, 26 Jan 2024 23:55:25 +0000 (UTC)
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 12F7CC32781;
-	Fri, 26 Jan 2024 23:55:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12F7CC32781
+	by smtp.kernel.org (Postfix) with ESMTPS id D9A69C43394;
+	Fri, 26 Jan 2024 23:55:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9A69C43394
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QND1Cd010380;
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNaTjh020399;
 	Fri, 26 Jan 2024 23:55:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=XHojE8I4UoGhN8L8CD1q
-	TmSQB9PfOL1bfEmbuePPtGE=; b=Bdf+Zr9tzpVxmUZEDqkPk6BSSPwPO3B5PeIy
-	Hyt/id2HAk9UH0n7kh81sFPkWXVuqWCIE02yMYHmDwp63diX4maAQDCS11I8ekMp
-	DGQagjOHg5L47S5hyQPbZfSy7HK42QpH8FrhJ1QCeM/vKxSs6qZI2ldXt6Li7C5F
-	yFmO7EwNcJmB/HunViV3oTW6gI24mgDl8PGR0WXh6cwNNAozs8OZ6OXxrIiA7eZx
-	CZTarzkteJ6OT8N199g9L2vHzeFd9l2bScXGqRScadqXek/DDaRdp3JIU5EnpzhA
-	nJ6dEAT+aJhRw3uQ0ApaSGtCI9MgCcaAdqTgnRELMGDcQwq7gQ==
+	:mime-version:content-type; s=qcppdkim1; bh=Rbfri0w8rs8j6hzJO9zw
+	SwBaauq10llgtGmh4EGN4Iw=; b=YeV+7YJ8kD35EMtHgwAtiZc8T+CPXgMFIAYQ
+	bhxWyLFAGvdKLYOr5gN5breKWYgDCM2C2hfqd54afS7CsQbwzKhA6BOw9thu/jM4
+	hKpw6SCMiMeQ1sz8mzAglfszGN2pWdZ1btjb19HY7epiH139vt4OecLhZGtABUm+
+	OlcpfDuFgUZp1+6E99b1wA70sE2F6yeP+IZG4RTf3r9eYZDt0G/7z/pi8xTTr/V2
+	h73w5yRhep79bqOxYAMytTSsPWpbOPG6B7GSU3ThKOvXI+SOnXMaBLdwXn/iUiUv
+	7jRsMrVlsDQ717LLS74eMv6c2t0JQKaKsBta3t5PboyOwsEAkQ==
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv6c8j5x6-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv6c8j5x5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 26 Jan 2024 23:55:11 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtAhQ009370
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtAhO009370
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 26 Jan 2024 23:55:10 GMT
 Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
@@ -56,9 +56,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
 CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-Subject: [PATCH 15/46] um: reserved_mem: Implement the new processing order for reserved memory
-Date: Fri, 26 Jan 2024 15:53:54 -0800
-Message-ID: <20240126235425.12233-16-quic_obabatun@quicinc.com>
+Subject: [PATCH 14/46] sh: reserved_mem: Implement the new processing order for reserved memory
+Date: Fri, 26 Jan 2024 15:53:53 -0800
+Message-ID: <20240126235425.12233-15-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
@@ -69,12 +69,12 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uMbJo1Fa0UGEPMJzo1jpXqVqEdpyLG5I
-X-Proofpoint-ORIG-GUID: uMbJo1Fa0UGEPMJzo1jpXqVqEdpyLG5I
+X-Proofpoint-GUID: xWIxx8I7sp_MTzBvsRofwlpzt5Nk-qWs
+X-Proofpoint-ORIG-GUID: xWIxx8I7sp_MTzBvsRofwlpzt5Nk-qWs
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=501
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=470
  priorityscore=1501 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
  malwarescore=0 clxscore=1015 spamscore=0 suspectscore=0 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2401190000
@@ -102,31 +102,31 @@ already be writable at this point.
 
 Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 ---
- arch/um/kernel/dtb.c | 4 +++-
+ arch/sh/boards/of-generic.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
-index 484141b06938..3ecee151a083 100644
---- a/arch/um/kernel/dtb.c
-+++ b/arch/um/kernel/dtb.c
-@@ -2,6 +2,7 @@
- 
- #include <linux/init.h>
+diff --git a/arch/sh/boards/of-generic.c b/arch/sh/boards/of-generic.c
+index f7f3e618e85b..7bec409f077c 100644
+--- a/arch/sh/boards/of-generic.c
++++ b/arch/sh/boards/of-generic.c
+@@ -8,6 +8,7 @@
+ #include <linux/of.h>
+ #include <linux/of_clk.h>
  #include <linux/of_fdt.h>
 +#include <linux/of_reserved_mem.h>
- #include <linux/printk.h>
- #include <linux/memblock.h>
- #include <init.h>
-@@ -25,7 +26,8 @@ void uml_dtb_init(void)
- 		return;
- 	}
- 
+ #include <linux/clocksource.h>
+ #include <linux/irqchip.h>
+ #include <asm/machvec.h>
+@@ -110,7 +111,8 @@ static int noopi(void)
+ static void __init sh_of_mem_reserve(void)
+ {
+ 	early_init_fdt_reserve_self();
 -	early_init_fdt_scan_reserved_mem();
 +	early_fdt_scan_reserved_mem();
 +	fdt_init_reserved_mem();
- 	unflatten_device_tree();
  }
  
+ static void __init sh_of_setup(char **cmdline_p)
 -- 
 2.17.1
 
