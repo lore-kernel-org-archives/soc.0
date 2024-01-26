@@ -1,289 +1,162 @@
-Return-Path: <SRS0=MX4Q=JE=gmail.com=unicornxw@kernel.org>
+Return-Path: <SRS0=Tt6i=JE=outlook.com=unicorn_wang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72371C47DDB
-	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 09:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3476DC47422
+	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 12:31:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 58611C433B1; Fri, 26 Jan 2024 09:20:09 +0000 (UTC)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 00C2FC43390; Fri, 26 Jan 2024 12:31:21 +0000 (UTC)
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2025.outbound.protection.outlook.com [40.92.102.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 329ABC433F1;
-	Fri, 26 Jan 2024 09:20:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 329ABC433F1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3bd5c4cffefso501085b6e.1;
-        Fri, 26 Jan 2024 01:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706260807; x=1706865607; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DbPS2g/FW/Dmc26RYN8Cus85towmInG4xD9nWjD1Ezw=;
-        b=hhKo9GKxkduA2b+r85A+BgLMvFF+lUrAvBm9BTBa99/VGJ/7QUNpzVCA9h7XeWurp7
-         mTsgiI/aOpF4XAzMu8smXTHOinsu0DEw1bVEfZfOX1ZBPhU90xyAAg+uoJUKyNlAtXry
-         rktR9eUkZoQRoGo/LF8bseQJC60/n0XYHXk/rgWMkcT/FjEn+VrNSqm9ivP3b9kzYcMj
-         6XqKn3LoQDIJ0l4eVrU8wWErEXcuk/CVE2UL4TuHtgPx9/68DDDLTIvCyVrHdIHShUbM
-         Hde82w7nC5reS7yyoGu1xIhJdvSJd41XY9lnt0k5dCULdnAr77SKDuAcbmE5OfByGTQB
-         xNlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706260807; x=1706865607;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DbPS2g/FW/Dmc26RYN8Cus85towmInG4xD9nWjD1Ezw=;
-        b=ZydGMB77a2nZFV8gEyY+Zi9lYI+fLV0H2KMK00gVL+0JTUEVoAMDJDDO1p9Zvf9Lt8
-         tkkYJq8ElrQPnMo+PZu6xtrwq6wWceQWKq7Fz0R+vtHO90KoxIShfsoWv/RkxyLfP1Pl
-         3XY6JdxLBGEpE6kkH/yjI+D5z2Nx/L5Gusu5tDqmXMcTedZ1+eOiX+xcyaY/1WZk7GRl
-         ROOrvj/0sKS8iMSjr9YrE2JZ/C/Xihy9XMcqLp2I9SkYlLqEuxFAPC7kEbX23hy/DOMX
-         gOjerjoRrYMn0CsWFRt5thLklsxq5+YLoR/ggihU50TeBwz4H4EsH0z5Tr4g3+IAh4Kq
-         e/8w==
-X-Gm-Message-State: AOJu0YyiiCnxaLtcWw1ZDTmI8uu4ZEk0BBD1fedGCynGak6Qt1yehUNB
-	kSAzFgF5nyJn/EQjd8/Y4xnjAdZDKYUMh7/rUVf/MjCpFmxQEuiTd5uThPTus34=
-X-Google-Smtp-Source: AGHT+IG4/fIJ3Fx/D6kEbuWYSv2IFtKGcmYfremgF8IxlokED4ovL3XXVQRcqApNEpcn1Cev5OR3gw==
-X-Received: by 2002:a05:6808:38cf:b0:3bd:a3cf:3a3a with SMTP id el15-20020a05680838cf00b003bda3cf3a3amr1748535oib.54.1706260807008;
-        Fri, 26 Jan 2024 01:20:07 -0800 (PST)
-Received: from localhost.localdomain ([122.8.183.87])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05680803d300b003bdf87f078esm31793oie.51.2024.01.26.01.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 01:20:06 -0800 (PST)
-From: Chen Wang <unicornxw@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 93E05C433C7;
+	Fri, 26 Jan 2024 12:31:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 93E05C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kn4HQbsCsaEJr3tiveFPpH7Non68gfNKLWZfXeAOhhqEZDXkool4Z2kjt42HQS39YPILUa4VP5q1onvG+QXy0+TGuMbFskk8FrIcb5BnjneB8cvJvV5yTkqZh7cM4j+aKq5vn8ck7ju4eyc0pxYphLgzd/QDIYjAZUiZr7+jIdnOQSMTEHMJIqpwtQp1RteHsBuuVVZft60J24X1E6O5TPxyEHZYWVt0cCFQ/iqZTusZFrvecFbyww2/pTDPHXK52KENIUP0CCjeIO5wrUhmY7c1rezc3Qcg+flbDPDG/+6ED0QTFQOU4FlSFpWdJds74GCpfyP1CHHwknh68LC7bQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1cp9B3MrBZ8zk4Nex80q5Hj0AoiheHrl65cSvGxGrgA=;
+ b=TPNUI9UsgOuvmdcaTnQAeQYhRXwIUGHGEW5c2tSzZDWjpgUgTtTSskV5orFhx14rMDw5gsM9j1afpS4H9j2+OKMVOgxQEKL3bgroow0t5NuadsvoRKBjQluanJj29zQZG3s2fRRNoV0ds09jJhVnhffxNfEmle9gUypv/tz21jtIub6Mv131knSzyOXynDGcsJ3ElNERxxgcDhOntV1Cx38uw/XC7GrXKVsOk82WGlVOf9xPESa3ZM7Ly/7bEVymVrXHaHsabAHRQWUDls2MKfqpxhgYdknte034h36L1bMNZ20jhVZSV5rwvKCjzl6Nu0/Vr5kHdNzXmoB3Qn7YcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1cp9B3MrBZ8zk4Nex80q5Hj0AoiheHrl65cSvGxGrgA=;
+ b=uUD46WGIFmecuda+7xYzKEkhiiT8Ad++3zYwFu+Wz89gDg6I90mup4Oy2PMORIlANcZGgVMqsh/t+ebyfHuI/ALKVNrbaBRcUsoWNFsnAIN58LM4uTppodE0qe1Pw9UijGmVr+3czo5X8lF8PuP81hJLUwVxGhDr1xutfN7TPkQ6b33/jB/6Z4tJyhmurE3mBi9bwRTogsVfYRQ8J+05QgKQ3LQJv/ftEDCKVWnR8kMJ6O92MS0WUn4HCGR8lf8rCMa53oUzVNTGoZ9ddRDBOYUbIb5VtS387bWkztHfBej34oRuIHTTRT+YzUFuJmp4lduri2fxwL14mAam83hUmg==
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+ by MA0P287MB0784.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:e0::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.26; Fri, 26 Jan
+ 2024 12:31:13 +0000
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a2d5:82f2:b6d4:f2cd]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a2d5:82f2:b6d4:f2cd%2]) with mapi id 15.20.7228.022; Fri, 26 Jan 2024
+ 12:31:13 +0000
+Message-ID:
+ <MA0P287MB2822632A358DFEF21FCA333AFE792@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Fri, 26 Jan 2024 20:31:09 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL] RISC-V Devicetrees fix for Sophgo/SG2042 v6.8-rc1
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org,
-	palmer@dabbelt.com,
-	linux-riscv@lists.infradead.org,
-	inochiama@outlook.com,
-	xiaoguang.xing@sophgo.com,
-	haijiao.liu@sophgo.com,
-	chao.wei@sophgo.com,
-	unicorn_wang@outlook.com,
-	Guo Ren <guoren@kernel.org>
-Subject: [PATCH 1/1] riscv: dts: sophgo: separate sg2042 mtime and mtimecmp to fit aclint format
-Date: Fri, 26 Jan 2024 17:20:00 +0800
-Message-Id: <184e1cefffe56eebc7cebfe51fd74cec756b2930.1706259884.git.unicorn_wang@outlook.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1706259884.git.unicorn_wang@outlook.com>
-References: <cover.1706259884.git.unicorn_wang@outlook.com>
-MIME-Version: 1.0
+To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
+Cc: Conor Dooley <conor@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ linux-riscv@lists.infradead.org, Inochi Amaoto <inochiama@outlook.com>,
+ Xiaoguang Xing <xiaoguang.xing@sophgo.com>, haijiao.liu@sophgo.com,
+ Chao Wei <chao.wei@sophgo.com>
+References: <MA0P287MB28228572C526C5099A8BDA2DFE7B2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+ <0f091a2a-0bc8-42ca-9d5d-aa218fa88e93@app.fastmail.com>
+ <MA0P287MB28229E73972FE184B461511AFE792@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+ <cf70dd11-18fc-4c57-beab-b682f8edb220@app.fastmail.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <cf70dd11-18fc-4c57-beab-b682f8edb220@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TMN: [sf3XkVt0VVsqM9Yhey2SE/aWWMoJ/60b]
+X-ClientProxiedBy: SI2PR01CA0008.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::10) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:138::5)
+X-Microsoft-Original-Message-ID:
+ <8249b373-3e52-4882-b1d2-4abf3da8c1f8@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|MA0P287MB0784:EE_
+X-MS-Office365-Filtering-Correlation-Id: e51c8403-b1de-4023-46e2-08dc1e6aaf3b
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	gGHPB35M9HvFPR+4GWww4tuQmSGV7qxRmQ9fPox3tNfCPvYlXYzbM01nNgRXE5AMJdLhR/1f3N4Rd/jGkLDDFZCKfZJh1gIcZr/tyWdetf28QPPGWWOJ/XxEGMpCsCt44e3aE/pmtAFRJlUvFLu2IpT2kUWNev/RWAnUqQQG/VUnsFA464TNyVeVPrHBtLkQ6Tco/inYvaHoT+IUWnVb2M1Yp1qYZBu5Mk5piyeHTdx1L68Y2DO3Pwjl2HHiqdxnL3YWXQxKyQUfU2vrlD2iVyIUE116WC02InQ9ffqb2HPg9VhdEoQ/LNtK5BbPaLirvE3laPQaU7HjNMg//3AFFUF2ukUYh6z0KyCSTcRqgC0Zz42l7NQrS5W62FTNUxMvWDRzTDxssb2PCN2cQA5b9hUkp13Jbt7b6g5+S/vY0FO9NSUIHB7TfIA7NNoz0T/Ecjh/kaQsUAOALLSJb3orH4WYlyEq16QRgvBYTqAq51eY1PA2V3lUTxXoObUbDqxi1uxE4nfC2i0TXnWytuHYXcPrvCjmH5OEATVm1tULBxDgCvEAoglx2kvudcnkb4lx
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eE5HTlRiNFkxVFMxNlR6UVN1SHZtRzExUkVpa2IyUEEvWEVSQkwvcEJ1Z2tq?=
+ =?utf-8?B?aTdOZ0FwOVl5eGxKZGpia09HeXByWklWanZVY3AvUUFVYzkwZTRuRDMzdlBs?=
+ =?utf-8?B?MllxMEphNW5YSjFNQ1dJNmJ4Ykg4dFRzdTJDNEZ1bXQyWTU4OXdNSEkwaWY1?=
+ =?utf-8?B?ajFscTVmbU1uN2RnMGIrcHJ0TmJ2d0U2aEVpUWMzTm1HZ1dXc2ZTVTM5L0RO?=
+ =?utf-8?B?SExWL1haYkFZSVFDUi93RC9HVXFtVEl6bEYvRlJUOFdrN3dDeVJENEZZeXNC?=
+ =?utf-8?B?bzh6NFdyMWxKdkp0cG45aUlyUUZra29KSmtxaEI2RE9XRXpSRWlaaitGTjhC?=
+ =?utf-8?B?NUlOMVhPdnF2T013WXJkcjI0RXR0ajJnOXFoUTFkU0lHVHZwL2VSWmQ0OUlk?=
+ =?utf-8?B?S2JadUszajQ4c1VVSTc2RzFlNExNUHVXb3NmVUxKOC81Ykw3WHhmb0pRekVL?=
+ =?utf-8?B?b0VxaHY2YmJCMGY2dHVQeHZaZVJNc29EZWVBdXI1Y2VvUDlyWTR2RzZMMmU5?=
+ =?utf-8?B?a3hGV1h4SmRybUg4dDhubWhsUEdpVnNKWTBwdStlWUcwRitKL2pOUVNOUzFY?=
+ =?utf-8?B?ZjBsUVFpUllrU0ZRMXVyam1mVHFXdEx4eTlGaW5uUDdlQUtLWWM0VUNyZmpD?=
+ =?utf-8?B?QWRzY0tZVHg1aHF3cTU5eEZLamIyc0MwNnNmT0VYL0xKYnBaNCsyRkltMGd3?=
+ =?utf-8?B?QlZ0YllVNm83RW9tK3hMNnZhZ040MTUrbjRObVpxNHhjcDRYSVRTTTlaakQ0?=
+ =?utf-8?B?bmwwWWZiMXI0aTh3MGpicS9pK1FNMjUxL2RQY21BZmh4dHpWbE52L0Jyclh3?=
+ =?utf-8?B?amswM1hUTTAyUmlOeHZIdmM4ZDFYbXBUL0tObWR4RmpwdzRHU3R0Nm9tZUxN?=
+ =?utf-8?B?c2Z3L2dYbTQvMGtQeTdjT2ZQT3ZkTlpKMnpDcURwTXNsdGRCNHJ5cVFzSklx?=
+ =?utf-8?B?OEF0VHFCcmVWSUVpWWJBZ3UyMkx5M0pjSVp0LzVac00yRXgxbitUdmRHc1hk?=
+ =?utf-8?B?Q0o5M1FVN2RWSTh0ZjkzMEp5dGVRT01tNzhMYTAzYnlOMEQvOEZ1Z096Smty?=
+ =?utf-8?B?ejdrTmpKS2VLWDA3T3lERHdBNzRBVC9ML293UnAwUk90TWZNMzk1T0cwY0h3?=
+ =?utf-8?B?NnpkcndqUFdOVW1QOTM2bU5PQnE3ZzZDQnozYm1xdlpnRGI2b1lvNWM2b3dz?=
+ =?utf-8?B?NS80V0tBVEluWlJ5VUpBanlQQVU0UEQwZ2p2VmhFbDg0UGRaQ3A3RzZGaUhV?=
+ =?utf-8?B?NVdlM2F4dnRQcEd2dG9lbUNLTlUzSURZTW1sMGtMWDZJTVNSME15MjRIeU9B?=
+ =?utf-8?B?a2JJNlVlcFJQUEEyTkQ4VWhRdk1TaGNPaVFKckRZV2x1dHkzaVI3UWhpbHN1?=
+ =?utf-8?B?cjdHRnZ0N3ZndjFxTERxRGpqVXg5WU5pT1ZJSDJGcU1UME1lbnJDOVFsNnpQ?=
+ =?utf-8?B?YlVRM21sMnhpZmxrdURvSUZJMkZlUmg5RUIxbklyaW1pK3lSOTc3Vjk1VmY4?=
+ =?utf-8?B?ZTR2NCtZU2t3VDd5aFdBWWlabGthNmVQaEkzRlkvTXJKVjVBR2loY1dWK2Fw?=
+ =?utf-8?B?WHQ1a2NwaVB1WVlkZG5qMTZ4eVFtYS9tN3JBdGhHcFc2WU1GQ0lRckx6M3BW?=
+ =?utf-8?Q?7Y+in0/S1TzHy7kMcW82yWjcNaYAOPIr37fq5OMUK5P0=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e51c8403-b1de-4023-46e2-08dc1e6aaf3b
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 12:31:13.7074
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0P287MB0784
 
-From: Inochi Amaoto <inochiama@outlook.com>
 
-Change the timer layout in the dtb to fit the format that needed by
-the SBI.
+On 2024/1/26 15:10, Arnd Bergmann wrote:
+> On Fri, Jan 26, 2024, at 08:06, Chen Wang wrote:
+>> On 2024/1/26 14:11, Arnd Bergmann wrote:
+>> [......]
+>>> The tag description is what gets turned into the merge commit
+>>> when I pull it, so it needs to be something that makes sense
+>>> for the long-term git history as well as for me to understand
+>>> why I need to pull it.
+>>>
+>>> For a normal branch, that would mainly mean that you should
+>>> give a summary of the branch contents. In this case, I see you
+>>> have only one patch, so it's probably easier to send that
+>>> patch to soc@kernel.org individually, with the same cc list.
+>> I have one question about your mentiond "send that patch to
+>> soc@kernel.org individiually ...".  If I sent it as a patch, where
+>> should I add the explanation of what I explained in this GIT PULL about
+>> the omission. After all, the content of this explanation is not part of
+>> the commit of that patch.
+>>
+>> Should I send this patch email and then reply it, and then explain in
+>> the reply email?
+> There are two common ways of doing it:
+>
+> a) You can add extra information below the '---' line in your
+>     patch, next to the diffstat. This text will get dropped during
+>     'git am' when I pick it up but is available when I look at
+>     the email.
+>
+> b) You can send the patches as a series using 'git format-patch
+>     --cover letter' and 'git send-email'. In this case, the cover
+>     letter will be numbered as '[PATCH 0/1]' and allow you to
+>     add the same kind of description that would go into a pull
+>     request but won't become a merge commit.
+>
+>         Arnd
 
-Fixes: 967a94a92aaa ("riscv: dts: add initial Sophgo SG2042 SoC device tree")
-Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
-Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
----
- arch/riscv/boot/dts/sophgo/sg2042.dtsi | 80 +++++++++++++++-----------
- 1 file changed, 48 insertions(+), 32 deletions(-)
+Hi, Arnd,
 
-diff --git a/arch/riscv/boot/dts/sophgo/sg2042.dtsi b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
-index 93256540d078..ead1cc35d88b 100644
---- a/arch/riscv/boot/dts/sophgo/sg2042.dtsi
-+++ b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
-@@ -93,144 +93,160 @@ clint_mswi: interrupt-controller@7094000000 {
- 					      <&cpu63_intc 3>;
- 		};
- 
--		clint_mtimer0: timer@70ac000000 {
-+		clint_mtimer0: timer@70ac004000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac000000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac004000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu0_intc 7>,
- 					      <&cpu1_intc 7>,
- 					      <&cpu2_intc 7>,
- 					      <&cpu3_intc 7>;
- 		};
- 
--		clint_mtimer1: timer@70ac010000 {
-+		clint_mtimer1: timer@70ac014000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac010000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac014000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu4_intc 7>,
- 					      <&cpu5_intc 7>,
- 					      <&cpu6_intc 7>,
- 					      <&cpu7_intc 7>;
- 		};
- 
--		clint_mtimer2: timer@70ac020000 {
-+		clint_mtimer2: timer@70ac024000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac020000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac024000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu8_intc 7>,
- 					      <&cpu9_intc 7>,
- 					      <&cpu10_intc 7>,
- 					      <&cpu11_intc 7>;
- 		};
- 
--		clint_mtimer3: timer@70ac030000 {
-+		clint_mtimer3: timer@70ac034000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac030000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac034000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu12_intc 7>,
- 					      <&cpu13_intc 7>,
- 					      <&cpu14_intc 7>,
- 					      <&cpu15_intc 7>;
- 		};
- 
--		clint_mtimer4: timer@70ac040000 {
-+		clint_mtimer4: timer@70ac044000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac040000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac044000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu16_intc 7>,
- 					      <&cpu17_intc 7>,
- 					      <&cpu18_intc 7>,
- 					      <&cpu19_intc 7>;
- 		};
- 
--		clint_mtimer5: timer@70ac050000 {
-+		clint_mtimer5: timer@70ac054000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac050000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac054000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu20_intc 7>,
- 					      <&cpu21_intc 7>,
- 					      <&cpu22_intc 7>,
- 					      <&cpu23_intc 7>;
- 		};
- 
--		clint_mtimer6: timer@70ac060000 {
-+		clint_mtimer6: timer@70ac064000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac060000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac064000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu24_intc 7>,
- 					      <&cpu25_intc 7>,
- 					      <&cpu26_intc 7>,
- 					      <&cpu27_intc 7>;
- 		};
- 
--		clint_mtimer7: timer@70ac070000 {
-+		clint_mtimer7: timer@70ac074000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac070000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac074000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu28_intc 7>,
- 					      <&cpu29_intc 7>,
- 					      <&cpu30_intc 7>,
- 					      <&cpu31_intc 7>;
- 		};
- 
--		clint_mtimer8: timer@70ac080000 {
-+		clint_mtimer8: timer@70ac084000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac080000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac084000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu32_intc 7>,
- 					      <&cpu33_intc 7>,
- 					      <&cpu34_intc 7>,
- 					      <&cpu35_intc 7>;
- 		};
- 
--		clint_mtimer9: timer@70ac090000 {
-+		clint_mtimer9: timer@70ac094000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac090000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac094000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu36_intc 7>,
- 					      <&cpu37_intc 7>,
- 					      <&cpu38_intc 7>,
- 					      <&cpu39_intc 7>;
- 		};
- 
--		clint_mtimer10: timer@70ac0a0000 {
-+		clint_mtimer10: timer@70ac0a4000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac0a0000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac0a4000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu40_intc 7>,
- 					      <&cpu41_intc 7>,
- 					      <&cpu42_intc 7>,
- 					      <&cpu43_intc 7>;
- 		};
- 
--		clint_mtimer11: timer@70ac0b0000 {
-+		clint_mtimer11: timer@70ac0b4000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac0b0000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac0b4000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu44_intc 7>,
- 					      <&cpu45_intc 7>,
- 					      <&cpu46_intc 7>,
- 					      <&cpu47_intc 7>;
- 		};
- 
--		clint_mtimer12: timer@70ac0c0000 {
-+		clint_mtimer12: timer@70ac0c4000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac0c0000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac0c4000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu48_intc 7>,
- 					      <&cpu49_intc 7>,
- 					      <&cpu50_intc 7>,
- 					      <&cpu51_intc 7>;
- 		};
- 
--		clint_mtimer13: timer@70ac0d0000 {
-+		clint_mtimer13: timer@70ac0d4000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac0d0000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac0d4000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu52_intc 7>,
- 					      <&cpu53_intc 7>,
- 					      <&cpu54_intc 7>,
- 					      <&cpu55_intc 7>;
- 		};
- 
--		clint_mtimer14: timer@70ac0e0000 {
-+		clint_mtimer14: timer@70ac0e4000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac0e0000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac0e4000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu56_intc 7>,
- 					      <&cpu57_intc 7>,
- 					      <&cpu58_intc 7>,
- 					      <&cpu59_intc 7>;
- 		};
- 
--		clint_mtimer15: timer@70ac0f0000 {
-+		clint_mtimer15: timer@70ac0f4000 {
- 			compatible = "sophgo,sg2042-aclint-mtimer", "thead,c900-aclint-mtimer";
--			reg = <0x00000070 0xac0f0000 0x00000000 0x00007ff8>;
-+			reg = <0x00000070 0xac0f4000 0x00000000 0x0000c000>;
-+			reg-names = "mtimecmp";
- 			interrupts-extended = <&cpu60_intc 7>,
- 					      <&cpu61_intc 7>,
- 					      <&cpu62_intc 7>,
--- 
-2.25.1
+I have re-sent that patch to soc@kernel.org. Will it be merged in master 
+in 6.8-rc2?
+
+Thanks,
+
+Chen
 
