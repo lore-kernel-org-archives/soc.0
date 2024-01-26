@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71356C4828E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48774C4828C
 	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5CDD8C41606; Fri, 26 Jan 2024 23:55:22 +0000 (UTC)
+	id 0F1D7C43609; Fri, 26 Jan 2024 23:55:22 +0000 (UTC)
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A2C72C43601;
-	Fri, 26 Jan 2024 23:55:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A2C72C43601
+	by smtp.kernel.org (Postfix) with ESMTPS id C3BFDC433F1;
+	Fri, 26 Jan 2024 23:55:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3BFDC433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNf8t3022118;
-	Fri, 26 Jan 2024 23:55:06 GMT
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNf8t2022118;
+	Fri, 26 Jan 2024 23:55:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=V0LEvpWcWygNAyG9WGDn
-	fp0Gm0ltd++h0qHGAExwYhc=; b=mA62snqAlGQC4QpudaSR/kUKojXSWQE+SjeV
-	v/zl6ClTFt5gpmgAmlx10hYXzfwku/HiLM/KFAaXkPQmYj3wvaS69ymSRHCh8qG2
-	wcgBcM9aUzsBJX++bE2Y+YgpgSZAwuNVamVT7NR9Ub0qCB7bJ/E/kG57nM6+Zd3h
-	X64H21/nSJB/OSchBCRCHnF0OXcx2Uas1TkL5+wN6msaba+N9z4nSdZfSB7jAowX
-	3CdFsoehkAY2jODahUgQdEzj6956J0w/bZKPubSwWTKDMR/o8zUqFEGMEXxiTEJJ
-	lHgaHt2lm7bMMLCDIA5UfAFnEh84Zq5kVt1UgfrM3GfQWxFKyQ==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv4nrad0r-1
+	:mime-version:content-type; s=qcppdkim1; bh=yHkSFlkLJD2JCjneLpD2
+	tGeP0zrZRJG5TSxIZCtLSpU=; b=Y0JDkIMtaYC79/V7DC96ZtZEioCLG+Pt7de/
+	JXSIEQHYMBBRwrL8DmsZZEIIi+6Rtwbl+fELpq5ZB+DAtfpJRvTCRdVp5X89UiSe
+	KpCF6+0Efad0OXMdXtKuHwy2Zd1kZN29w/O1lEdAC4VtjMHX17UTedy48b7w/pac
+	5EzAuF2Bi43P9lxLhbI4RH5R0F4gfr8LbV/YM54AoXuLWQZvjzWPMpr8G7rDiICm
+	lYZGPcDJYPWar/PI/2owSJuQs4HHXEAbowfi69L4FnoIGBWO5pySeBFcRKkohQIB
+	qtwRfjzSCTEELSvZ9iIX8adw5Os01Y06QF1XoQxVwN6PSdMAeg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv4nrad0m-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:05 +0000 (GMT)
+	Fri, 26 Jan 2024 23:55:02 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNt43T011314
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNt1JU009985
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:04 GMT
+	Fri, 26 Jan 2024 23:55:01 GMT
 Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 26 Jan 2024 15:55:00 -0800
+ 15.2.1118.40; Fri, 26 Jan 2024 15:54:57 -0800
 From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
 CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-Subject: [PATCH 09/46] mips: reserved_mem: Implement the new processing order for reserved memory
-Date: Fri, 26 Jan 2024 15:53:48 -0800
-Message-ID: <20240126235425.12233-10-quic_obabatun@quicinc.com>
+Subject: [PATCH 01/46] of: reserved_mem: Change the order that reserved_mem regions are stored
+Date: Fri, 26 Jan 2024 15:53:40 -0800
+Message-ID: <20240126235425.12233-2-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
@@ -69,64 +69,358 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: S6wU07rNBCx7nZxx8XMNpsvpLyLtyokP
-X-Proofpoint-GUID: S6wU07rNBCx7nZxx8XMNpsvpLyLtyokP
+X-Proofpoint-ORIG-GUID: Dj5TYbGUioxz3V2ly4mHhjQfPVNWhSRr
+X-Proofpoint-GUID: Dj5TYbGUioxz3V2ly4mHhjQfPVNWhSRr
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- mlxlogscore=613 spamscore=0 mlxscore=0 bulkscore=0 clxscore=1015
+ mlxlogscore=999 spamscore=0 mlxscore=0 bulkscore=0 clxscore=1015
  priorityscore=1501 malwarescore=0 phishscore=0 impostorscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2401190000 definitions=main-2401260176
 
-Call early_fdt_scan_reserved_mem() in place of
-early_init_fdt_scan_reserved_mem() to carry out the first stage of the
-reserved memory processing only.
+Some architectures such as arm64 require the page tables to be setup
+before memblock allocated memory is writable.
+Therefore, the dynamic allocation of the reserved_mem array will need to
+be done after the page tables have been setup on these architectures. In
+most cases this will be after paging_init().
 
-The early_fdt_scan_reserved_mem() function is used to scan through the
-DT and mark all the reserved memory regions as reserved or nomap as
-needed, as well as allocate the memory required by the
-dynamically-placed
-reserved memory regions.
+Reserved memory regions can be divided into 2 groups.
+i) Statically-placed reserved memory regions
+i.e. regions defined in the DT using the @reg property.
+ii) Dynamically-placed reserved memory regions.
+i.e. regions specified in the DT using the @alloc_ranges
+    and @size properties.
 
-The second stage of the reserved memory processing is done by
-fdt_init_reserved_mem(). This function is used to store the information
-of the statically-placed reserved memory nodes in the reserved_mem
-array as well as call the region specific initialization function on all
-the stored reserved memory regions.
+It is possible to call memblock_reserve() and memblock_mark_nomap() on
+the statically-placed reserved memory regions and not need to save them
+to the reserved_mem array until memory is allocated for it using
+memblock, which will be after the page tables have been setup.
+For the dynamically-placed reserved memory regions, it is not possible
+to wait to store its information because the starting address is
+allocated only at run time, and hence they need to be stored somewhere
+after they are allocated.
+Waiting until after the page tables have been setup to allocate memory
+for the dynamically-placed regions is also not an option because the
+allocations will come from memory that have already been added to the
+page tables, which is not good for memory that is supposed to be
+reserved and/or marked as nomap.
 
-The call to fdt_init_reserved_mem() is placed right after
-early_fdt_scan_reserved_mem() because memblock allocated memory should
-be writable at this point.
+Therefore, the processing of the reserved memory regions is split up
+into two stages, of which the first stage is carried out by
+early_init_fdt_scan_reserved_mem() and the second is carried out by
+fdt_init_reserved_mem().
+
+The early_init_fdt_scan_reserved_mem(), which is called before the page
+tables are setup is used to:
+1. Call memblock_reserve() and memblock_mark_nomap() on all the
+   statically-placed reserved memory regions as needed.
+2. Allocate memory from memblock for the dynamically-placed reserved
+   memory regions and store them in the static array for reserved_mem.
+   memblock_reserve() and memblock_mark_nomap() are also called as
+   needed on all the memory allocated for the dynamically-placed
+   regions.
+
+fdt_init_reserved_mem() is now used to carry out the following:
+1. Add the information for the statically-placed reserved memory into
+   reserved_mem array.
+2. Run the region specific init functions for each of the reserve memory
+   regions saved in the reserved_mem array.
+
+Since fdt_init_reserved_mem() is called from within
+early_init_fdt_scan_reserved_mem(), subsequent patches will make
+changes to separate both functions and call fdt_init_reserved_mem()
+after the page tables have been setup were needed.
 
 Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 ---
- arch/mips/kernel/setup.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/of/fdt.c                | 78 +++++++++++++++++++++++++++++----
+ drivers/of/of_private.h         |  2 +-
+ drivers/of/of_reserved_mem.c    | 54 ++++++++++-------------
+ include/linux/of_fdt.h          |  1 +
+ include/linux/of_reserved_mem.h |  9 ++++
+ 5 files changed, 104 insertions(+), 40 deletions(-)
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 9c30de151597..13e862151d5f 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -28,6 +28,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/decompress/generic.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/dmi.h>
- #include <linux/crash_dump.h>
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index bf502ba8da95..d02884ec0b6b 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -504,7 +504,6 @@ static int __init __reserved_mem_reserve_reg(unsigned long node,
+ 	phys_addr_t base, size;
+ 	int len;
+ 	const __be32 *prop;
+-	int first = 1;
+ 	bool nomap;
  
-@@ -649,7 +650,8 @@ static void __init arch_mem_init(char **cmdline_p)
- 	check_kernel_sections_mem();
+ 	prop = of_get_flat_dt_prop(node, "reg", &len);
+@@ -532,10 +531,6 @@ static int __init __reserved_mem_reserve_reg(unsigned long node,
+ 			       uname, &base, (unsigned long)(size / SZ_1M));
  
- 	early_init_fdt_reserve_self();
--	early_init_fdt_scan_reserved_mem();
-+	early_fdt_scan_reserved_mem();
-+	fdt_init_reserved_mem();
+ 		len -= t_len;
+-		if (first) {
+-			fdt_reserved_mem_save_node(node, uname, base, size);
+-			first = 0;
+-		}
+ 	}
+ 	return 0;
+ }
+@@ -564,11 +559,62 @@ static int __init __reserved_mem_check_root(unsigned long node)
+ }
  
- #ifndef CONFIG_NUMA
- 	memblock_set_node(0, PHYS_ADDR_MAX, &memblock.memory, 0);
+ /*
+- * fdt_scan_reserved_mem() - scan a single FDT node for reserved memory
++ * Save the reserved_mem reg nodes in the reserved_mem array
++ */
++void __init fdt_scan_reserved_mem_reg_nodes(void)
++
++{
++	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
++	const void *fdt = initial_boot_params;
++	phys_addr_t base, size;
++	const __be32 *prop;
++	int node, child;
++	int len;
++
++	node = fdt_path_offset(fdt, "/reserved-memory");
++	if (node < 0) {
++		pr_err("Reserved memory: Did not find reserved-memory node\n");
++		return;
++	}
++
++	if (__reserved_mem_check_root(node) != 0) {
++		pr_err("Reserved memory: unsupported node format, ignoring\n");
++		return;
++	}
++
++	fdt_for_each_subnode(child, fdt, node) {
++		const char *uname;
++
++		prop = of_get_flat_dt_prop(child, "reg", &len);
++		if (!prop)
++			continue;
++
++		if (!of_fdt_device_is_available(fdt, child))
++			continue;
++
++		uname = fdt_get_name(fdt, child, NULL);
++		if (len && len % t_len != 0) {
++			pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
++			       uname);
++			continue;
++		}
++
++		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
++		size = dt_mem_next_cell(dt_root_size_cells, &prop);
++
++		if (size)
++			fdt_reserved_mem_save_node(child, uname, base, size);
++	}
++}
++
++/*
++ * fdt_scan_reserved_mem() - scan a single FDT node for reserved memory.
+  */
+ static int __init fdt_scan_reserved_mem(void)
+ {
+ 	int node, child;
++	int dynamic_nodes_cnt = 0;
++	int dynamic_nodes[MAX_RESERVED_REGIONS];
+ 	const void *fdt = initial_boot_params;
+ 
+ 	node = fdt_path_offset(fdt, "/reserved-memory");
+@@ -590,8 +636,24 @@ static int __init fdt_scan_reserved_mem(void)
+ 		uname = fdt_get_name(fdt, child, NULL);
+ 
+ 		err = __reserved_mem_reserve_reg(child, uname);
+-		if (err == -ENOENT && of_get_flat_dt_prop(child, "size", NULL))
+-			fdt_reserved_mem_save_node(child, uname, 0, 0);
++
++		/* Delay allocation of the dynamically-placed regions
++		 * until after all other statically-placed regions have
++		 * been reserved or marked as nomap
++		 */
++		if (err == -ENOENT && of_get_flat_dt_prop(child, "size", NULL)) {
++			dynamic_nodes[dynamic_nodes_cnt] = child;
++			dynamic_nodes_cnt++;
++		}
++	}
++
++	for (int i = 0; i < dynamic_nodes_cnt; i++) {
++		const char *uname;
++
++		child = dynamic_nodes[i];
++		uname = fdt_get_name(fdt, child, NULL);
++
++		__reserved_mem_alloc_size(child, uname);
+ 	}
+ 	return 0;
+ }
+diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+index f38397c7b582..542e37a37a24 100644
+--- a/drivers/of/of_private.h
++++ b/drivers/of/of_private.h
+@@ -36,6 +36,7 @@ struct alias_prop {
+ #endif
+ 
+ #define OF_ROOT_NODE_SIZE_CELLS_DEFAULT 1
++#define MAX_RESERVED_REGIONS    64
+ 
+ extern struct mutex of_mutex;
+ extern raw_spinlock_t devtree_lock;
+@@ -175,7 +176,6 @@ static inline struct device_node *__of_get_dma_parent(const struct device_node *
+ }
+ #endif
+ 
+-void fdt_init_reserved_mem(void);
+ void fdt_reserved_mem_save_node(unsigned long node, const char *uname,
+ 			       phys_addr_t base, phys_addr_t size);
+ 
+diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+index 7ec94cfcbddb..d62f1956024c 100644
+--- a/drivers/of/of_reserved_mem.c
++++ b/drivers/of/of_reserved_mem.c
+@@ -26,7 +26,6 @@
+ 
+ #include "of_private.h"
+ 
+-#define MAX_RESERVED_REGIONS	64
+ static struct reserved_mem reserved_mem[MAX_RESERVED_REGIONS];
+ static int reserved_mem_count;
+ 
+@@ -132,8 +131,7 @@ static int __init __reserved_mem_alloc_in_range(phys_addr_t size,
+  * __reserved_mem_alloc_size() - allocate reserved memory described by
+  *	'size', 'alignment'  and 'alloc-ranges' properties.
+  */
+-static int __init __reserved_mem_alloc_size(unsigned long node,
+-	const char *uname, phys_addr_t *res_base, phys_addr_t *res_size)
++int __init __reserved_mem_alloc_size(unsigned long node, const char *uname)
+ {
+ 	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
+ 	phys_addr_t start = 0, end = 0;
+@@ -212,10 +210,7 @@ static int __init __reserved_mem_alloc_size(unsigned long node,
+ 		       uname, (unsigned long)(size / SZ_1M));
+ 		return -ENOMEM;
+ 	}
+-
+-	*res_base = base;
+-	*res_size = size;
+-
++	fdt_reserved_mem_save_node(node, uname, base, size);
+ 	return 0;
+ }
+ 
+@@ -310,6 +305,8 @@ void __init fdt_init_reserved_mem(void)
+ {
+ 	int i;
+ 
++	fdt_scan_reserved_mem_reg_nodes();
++
+ 	/* check for overlapping reserved regions */
+ 	__rmem_check_for_overlap();
+ 
+@@ -328,30 +325,25 @@ void __init fdt_init_reserved_mem(void)
+ 		if (prop)
+ 			rmem->phandle = of_read_number(prop, len/4);
+ 
+-		if (rmem->size == 0)
+-			err = __reserved_mem_alloc_size(node, rmem->name,
+-						 &rmem->base, &rmem->size);
+-		if (err == 0) {
+-			err = __reserved_mem_init_node(rmem);
+-			if (err != 0 && err != -ENOENT) {
+-				pr_info("node %s compatible matching fail\n",
+-					rmem->name);
+-				if (nomap)
+-					memblock_clear_nomap(rmem->base, rmem->size);
+-				else
+-					memblock_phys_free(rmem->base,
+-							   rmem->size);
+-			} else {
+-				phys_addr_t end = rmem->base + rmem->size - 1;
+-				bool reusable =
+-					(of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
+-
+-				pr_info("%pa..%pa (%lu KiB) %s %s %s\n",
+-					&rmem->base, &end, (unsigned long)(rmem->size / SZ_1K),
+-					nomap ? "nomap" : "map",
+-					reusable ? "reusable" : "non-reusable",
+-					rmem->name ? rmem->name : "unknown");
+-			}
++		err = __reserved_mem_init_node(rmem);
++		if (err != 0 && err != -ENOENT) {
++			pr_info("node %s compatible matching fail\n",
++				rmem->name);
++			if (nomap)
++				memblock_clear_nomap(rmem->base, rmem->size);
++			else
++				memblock_phys_free(rmem->base,
++						   rmem->size);
++		} else {
++			phys_addr_t end = rmem->base + rmem->size - 1;
++			bool reusable =
++				(of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
++
++			pr_info("%pa..%pa (%lu KiB) %s %s %s\n",
++				&rmem->base, &end, (unsigned long)(rmem->size / SZ_1K),
++				nomap ? "nomap" : "map",
++				reusable ? "reusable" : "non-reusable",
++				rmem->name ? rmem->name : "unknown");
+ 		}
+ 	}
+ }
+diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+index d69ad5bb1eb1..7b2a5d93d719 100644
+--- a/include/linux/of_fdt.h
++++ b/include/linux/of_fdt.h
+@@ -73,6 +73,7 @@ extern int early_init_dt_scan_root(void);
+ extern bool early_init_dt_scan(void *params);
+ extern bool early_init_dt_verify(void *params);
+ extern void early_init_dt_scan_nodes(void);
++extern void fdt_scan_reserved_mem_reg_nodes(void);
+ 
+ extern const char *of_flat_dt_get_machine_name(void);
+ extern const void *of_flat_dt_match_machine(const void *default_match,
+diff --git a/include/linux/of_reserved_mem.h b/include/linux/of_reserved_mem.h
+index 4de2a24cadc9..2a3178920bae 100644
+--- a/include/linux/of_reserved_mem.h
++++ b/include/linux/of_reserved_mem.h
+@@ -32,12 +32,14 @@ typedef int (*reservedmem_of_init_fn)(struct reserved_mem *rmem);
+ #define RESERVEDMEM_OF_DECLARE(name, compat, init)			\
+ 	_OF_DECLARE(reservedmem, name, compat, init, reservedmem_of_init_fn)
+ 
++void fdt_init_reserved_mem(void);
+ int of_reserved_mem_device_init_by_idx(struct device *dev,
+ 				       struct device_node *np, int idx);
+ int of_reserved_mem_device_init_by_name(struct device *dev,
+ 					struct device_node *np,
+ 					const char *name);
+ void of_reserved_mem_device_release(struct device *dev);
++int __reserved_mem_alloc_size(unsigned long node, const char *uname);
+ 
+ struct reserved_mem *of_reserved_mem_lookup(struct device_node *np);
+ #else
+@@ -45,6 +47,8 @@ struct reserved_mem *of_reserved_mem_lookup(struct device_node *np);
+ #define RESERVEDMEM_OF_DECLARE(name, compat, init)			\
+ 	_OF_DECLARE_STUB(reservedmem, name, compat, init, reservedmem_of_init_fn)
+ 
++static inline void fdt_init_reserved_mem(void) { }
++
+ static inline int of_reserved_mem_device_init_by_idx(struct device *dev,
+ 					struct device_node *np, int idx)
+ {
+@@ -60,6 +64,11 @@ static inline int of_reserved_mem_device_init_by_name(struct device *dev,
+ 
+ static inline void of_reserved_mem_device_release(struct device *pdev) { }
+ 
++static inline int __reserved_mem_alloc_size(unsigned long node, const char *uname)
++{
++	return -ENOSYS;
++}
++
+ static inline struct reserved_mem *of_reserved_mem_lookup(struct device_node *np)
+ {
+ 	return NULL;
 -- 
 2.17.1
 
