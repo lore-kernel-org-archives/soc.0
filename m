@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15AC1C48285
-	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8949C47422
+	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F0E23C43141; Fri, 26 Jan 2024 23:55:34 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	id 9F177C433A6; Fri, 26 Jan 2024 23:55:37 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1718FC43390;
-	Fri, 26 Jan 2024 23:55:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1718FC43390
+	by smtp.kernel.org (Postfix) with ESMTPS id 88966C433F1;
+	Fri, 26 Jan 2024 23:55:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88966C433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNABQ2002718;
-	Fri, 26 Jan 2024 23:55:20 GMT
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNlpwG008423;
+	Fri, 26 Jan 2024 23:55:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=9NIeVab+4KQFwJjvpVja
-	hQhcsSm6ssiCjFbQstrLKNA=; b=fMr+6M2D9JB9W03G4AclBkYHg1/U5DQfspNX
-	5yuTVgvmYEwIj8iK8EfN4MMYa67iFl+IYDwYcEJc1VEtdM93+iXz/OS4kruq0V6R
-	l/678czq8sW12SjfGN+CYEQtse7BAKFrQILPO5ZTn+BzkYFtUjmBXVC+sLAcrHrY
-	g09yy/jWWYTDBEw+ycJjfb0+8lHGKnvi3UCLsmMO5x9JuC9RgYAxSCL1IX7zHoja
-	gpyjuA9L9ngrf6eximgRRNu9o0y0OB/0rACAHmr6AuCaf4ycIT7qWIMBazEqm6Az
-	UCp/q6cFxXD0rf7/NdiBo0f4h3alKFvPmy+o3dO3GXQVMWaT6w==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvgp2gru5-1
+	:mime-version:content-type; s=qcppdkim1; bh=vp4tQtzbT+li35T+dpUc
+	WvhuHZa8MXWH0P5L19tG/1U=; b=kxYcEZHXEYzh15dO8VolthugYS5OkhtHxDfN
+	WMICWGS7ygQiMZbEMWDK8/xJ7YeQudDoWspg1iiOxkv+rZiSsQnl+9mUh43HxVr/
+	vCMeaIEryGoMjOkw1i7F9+PK3N3DGuRvUVETlYGqc0UahOmMNri5EN7mdp7XWs+Z
+	EdSc1qEmeVyGxpR7lU6+lrrbDtNqKxYwV0wjX/Vt79y1iTQxBzOB+JY+bb5ARht5
+	G1ZqBweUyL5BwMIVZPiXLGqdgJpKSDxTXXQdiuI6ZSsbmXi4grQbZ/6Nc9eryVFq
+	lKsEms2RQvh3cP1kMMOw68Tj91jhaptANhTbC0Oecqmq4EOORw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv6c8j5xr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:20 +0000 (GMT)
+	Fri, 26 Jan 2024 23:55:25 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtJP6010237
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtODG018599
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:19 GMT
+	Fri, 26 Jan 2024 23:55:24 GMT
 Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 26 Jan 2024 15:55:07 -0800
+ 15.2.1118.40; Fri, 26 Jan 2024 15:55:08 -0800
 From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
 CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-Subject: [PATCH 22/46] csky: resrved_mem: Move fdt_init_reserved_mem() below unflatten_device_tree()
-Date: Fri, 26 Jan 2024 15:54:01 -0800
-Message-ID: <20240126235425.12233-23-quic_obabatun@quicinc.com>
+Subject: [PATCH 25/46] nios2: resrved_mem: Move fdt_init_reserved_mem() below unflatten_device_tree()
+Date: Fri, 26 Jan 2024 15:54:04 -0800
+Message-ID: <20240126235425.12233-26-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
@@ -69,16 +69,16 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LxtbCnVNAdzpVkcCk8ApI7GAjVIE2oTM
-X-Proofpoint-ORIG-GUID: LxtbCnVNAdzpVkcCk8ApI7GAjVIE2oTM
+X-Proofpoint-GUID: kNswk0KfKKvQN3Lx3ruOY4arbnUkcHg3
+X-Proofpoint-ORIG-GUID: kNswk0KfKKvQN3Lx3ruOY4arbnUkcHg3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=863 phishscore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1015 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401190000 definitions=main-2401260176
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=587
+ priorityscore=1501 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 spamscore=0 suspectscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2401190000
+ definitions=main-2401260176
 
 The unflattened devicetree structure is available to be used not long
 after the page tables have been set up on most architectures, and is
@@ -93,25 +93,26 @@ flattened devicetree APIs.
 
 Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 ---
- arch/csky/kernel/setup.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/nios2/kernel/setup.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-index 4e2b739ac968..d8c65819877b 100644
---- a/arch/csky/kernel/setup.c
-+++ b/arch/csky/kernel/setup.c
-@@ -73,10 +73,9 @@ void __init setup_arch(char **cmdline_p)
+diff --git a/arch/nios2/kernel/setup.c b/arch/nios2/kernel/setup.c
+index c1d42861cc72..a2f7360824df 100644
+--- a/arch/nios2/kernel/setup.c
++++ b/arch/nios2/kernel/setup.c
+@@ -169,10 +169,11 @@ void __init setup_arch(char **cmdline_p)
  
- 	csky_memblock_init();
- 
+ 	early_init_fdt_reserve_self();
+ 	early_fdt_scan_reserved_mem();
 -	fdt_init_reserved_mem();
--
+ 
  	unflatten_and_copy_device_tree();
  
 +	fdt_init_reserved_mem();
- #ifdef CONFIG_SMP
- 	setup_smp();
- #endif
++
+ 	setup_cpuinfo();
+ 
+ 	copy_exception_handler(cpuinfo.exception_addr);
 -- 
 2.17.1
 
