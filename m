@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE830C48285
-	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C75C8C4828C
+	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B7331C43330; Fri, 26 Jan 2024 23:55:38 +0000 (UTC)
+	id B0419C433C7; Fri, 26 Jan 2024 23:55:39 +0000 (UTC)
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ABEC4C433F1;
-	Fri, 26 Jan 2024 23:55:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ABEC4C433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id A4413C43390;
+	Fri, 26 Jan 2024 23:55:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A4413C43390
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QMNT1w023758;
-	Fri, 26 Jan 2024 23:55:23 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNoS3C030684;
+	Fri, 26 Jan 2024 23:55:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=TQbxaUradiVsQAjmlk+e
-	lqhTc/xEHMy4mH289Ds/6RY=; b=hieDGjJEIJ4KYvgxtpXww114lPvQuyPPwhqK
-	Pa7vEvRIxH0Qw7sIubTcUXm3jsqqR4l1fZbbOc24cC9dlIgE53IU6yBLFt4yzjjC
-	k27ffZcZw4h01AEGxpWUFv6lzfAW1XMkNZLuC2KLAld7CPfzAqPwxk8a3CrNLqZH
-	uvD5hKcrlY+aBk11uJt+ge7todLie0qsNrCeHsWixzMjH8u7pWJmSJQ3c8pYymUV
-	YZajBZPudI07T/rpQ/6lPY3ccxQ4+c8Rwhm1npPn/U8z+daaJo69gwAvJeHbiiLe
-	4b25/h9libYHFHakDkNUMPf0HS/77JYIhumU3MCMrMV5B5/OsA==
+	:mime-version:content-type; s=qcppdkim1; bh=WrXR8pIcGToq5+tEyXOq
+	U2zww97hFs/foHrPQe8HFUk=; b=AbBF+W0peuMqGIaDVSsbuxbzShEO3H+9cQy0
+	nI1A/Py62BuvFmupFEHn23n8erBMKkro2AR8yWJrjlPGxBus3WJIWhrIcz0bVVqM
+	GFpt6uFxRNLq9kOAlxgQnikLKhNm6DvZwOsaBd2ths7O+Kz6qxxMlc+0h888iId/
+	uiju77O8hY1y2aw6vf20Hziig7YQKkhUMw643riToJMMbhdl2U7Zj8URI88uv2wu
+	61zSBxdbQSfKrttDpLJQYuB52/cldFaOCWfWHP+ll1LeCIxfAYrZSL4nMBBkZMKF
+	0vg4aXpWyG1izFZ7iSGqzbf7mabVVwQrXtP7ics885+hYFm7MA==
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvmmmg7w8-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvjx88dn1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:23 +0000 (GMT)
+	Fri, 26 Jan 2024 23:55:26 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtMRT009460
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNtPhg009489
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:22 GMT
+	Fri, 26 Jan 2024 23:55:25 GMT
 Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 26 Jan 2024 15:55:07 -0800
+ 15.2.1118.40; Fri, 26 Jan 2024 15:55:10 -0800
 From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
 CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-Subject: [PATCH 23/46] microblaze: resrved_mem: Move fdt_init_reserved_mem() below unflatten_device_tree()
-Date: Fri, 26 Jan 2024 15:54:02 -0800
-Message-ID: <20240126235425.12233-24-quic_obabatun@quicinc.com>
+Subject: [PATCH 27/46] riscv: resrved_mem: Move fdt_init_reserved_mem() below unflatten_device_tree()
+Date: Fri, 26 Jan 2024 15:54:06 -0800
+Message-ID: <20240126235425.12233-28-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
@@ -69,15 +69,15 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1YFft0XNdhKnvYvkmrY4qIB5N9zsQ1B-
-X-Proofpoint-ORIG-GUID: 1YFft0XNdhKnvYvkmrY4qIB5N9zsQ1B-
+X-Proofpoint-ORIG-GUID: dv6m4OaXsC8stWk9QvcBlbUU_DqnJl-W
+X-Proofpoint-GUID: dv6m4OaXsC8stWk9QvcBlbUU_DqnJl-W
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 phishscore=0 adultscore=0 spamscore=0 mlxlogscore=863
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 clxscore=1015 malwarescore=0
+ suspectscore=0 mlxlogscore=847 lowpriorityscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2401190000 definitions=main-2401260176
 
 The unflattened devicetree structure is available to be used not long
@@ -93,28 +93,31 @@ flattened devicetree APIs.
 
 Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 ---
- arch/microblaze/kernel/setup.c | 4 ++--
+ arch/riscv/kernel/setup.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/microblaze/kernel/setup.c b/arch/microblaze/kernel/setup.c
-index 631faa4613ec..d999ad774a44 100644
---- a/arch/microblaze/kernel/setup.c
-+++ b/arch/microblaze/kernel/setup.c
-@@ -55,12 +55,12 @@ void __init setup_arch(char **cmdline_p)
- 
- 	setup_memory();
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index ea4fbc8e0ea1..0601ed1e4ce6 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -262,8 +262,6 @@ void __init setup_arch(char **cmdline_p)
+ 	efi_init();
+ 	paging_init();
  
 -	fdt_init_reserved_mem();
 -
- 	console_verbose();
+ 	/* Parse the ACPI tables for possible boot-time configuration */
+ 	acpi_boot_table_init();
  
+@@ -272,6 +270,8 @@ void __init setup_arch(char **cmdline_p)
+ #else
  	unflatten_device_tree();
- 
-+	fdt_init_reserved_mem();
+ #endif
 +
- 	setup_cpuinfo();
++	fdt_init_reserved_mem();
+ 	misc_mem_init();
  
- 	microblaze_cache_init();
+ 	init_resources();
 -- 
 2.17.1
 
