@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79FFBC4828F
-	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9939C47DA9
+	for <soc@archiver.kernel.org>; Fri, 26 Jan 2024 23:55:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 605E7C43141; Fri, 26 Jan 2024 23:55:23 +0000 (UTC)
+	id C6AF7C43330; Fri, 26 Jan 2024 23:55:24 +0000 (UTC)
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5D9F9C433C7;
-	Fri, 26 Jan 2024 23:55:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D9F9C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 60770C43142;
+	Fri, 26 Jan 2024 23:55:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60770C43142
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNt2ql006015;
-	Fri, 26 Jan 2024 23:55:02 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QNeIEN029503;
+	Fri, 26 Jan 2024 23:55:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=kZa2Pe53+6g14o/QY6sX
-	E+C2csDopSUWS/8cevqSYa0=; b=Q9MFmI/0qU7Eq7vCH9+LsoEjT4jkmvBEFP2b
-	V18Uay8A2aX+UFs/VwyhFxWowzM3v8cV5nhv+GwYFeaOiirDeMnz9s5XRgGatEzH
-	5F8/c3YnxJDch0cP5O9Njt2C0LGiXnQHSZXn3NDNrFvDeSVnOUxhozcWHu+OKdQs
-	juoHbzv2Kc2xncvwVClwqNQBCTPdhJuSuO4glagnQ2jfkG1ip9IZbMuNijR0S8qM
-	3Wv9mwMv3F6tfydwy5ofXznCETy3pZ64cQgVItgWKDHz0exYXfNaKmSjJvlgRbDd
-	yn4jEw320ZG8nha5IDM/fruFWxh735g9QGqsClRIp3EpkLWc2g==
+	:mime-version:content-type; s=qcppdkim1; bh=FPFZD1Rm/nqqowAfp/Hl
+	IZdajqjXw49ivI2WyXs86D4=; b=j+PlOEBwERMJ1ddJ0ONx2CHGkNUIz6eCB0L8
+	tIieFujtQ6yEDDkGHhOw6ffBfuQbH/q1TzelqZAYazMx0zQh9uRqkRiZPNfrYzLe
+	Q6RB7bwFNIgAy7ius0fYHbr0+7P0sbferLjP0r3jCA44qCO8q/XaWSU2jYbclDqr
+	qLkDRquAFlL1ZJ4dcNWNVxLbZpo0j4Rgq4TOEX7raSRU1oQYcosE1Gv039fgOTvS
+	up3fSBg0pX16Fi9RRgkzBKVsXTuvYmsypWkrY8bQLSE9zQNyfmcayqwpgf0ibxJp
+	shPodKOv3vXyGD9U39LmCSxJHSN61SoOh0NWgdmJwv79IFjEXQ==
 Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv4f9jd0a-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv8e89uxc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:02 +0000 (GMT)
+	Fri, 26 Jan 2024 23:55:09 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNt1JV009985
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QNt9hY010158
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Jan 2024 23:55:01 GMT
+	Fri, 26 Jan 2024 23:55:09 GMT
 Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 26 Jan 2024 15:54:57 -0800
+ 15.2.1118.40; Fri, 26 Jan 2024 15:55:02 -0800
 From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
 CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-Subject: [PATCH 02/46] of: reserved_mem: Introduce new early reserved memory scan function
-Date: Fri, 26 Jan 2024 15:53:41 -0800
-Message-ID: <20240126235425.12233-3-quic_obabatun@quicinc.com>
+Subject: [PATCH 13/46] riscv: reserved_mem: Implement the new processing order for reserved memory
+Date: Fri, 26 Jan 2024 15:53:52 -0800
+Message-ID: <20240126235425.12233-14-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
@@ -69,91 +69,79 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: U2-fU3rRD1n6fc8VYjNIwksODXsmUq9K
-X-Proofpoint-GUID: U2-fU3rRD1n6fc8VYjNIwksODXsmUq9K
+X-Proofpoint-GUID: IcZIFt1JpWJOoMQpQEm8vk-E1DJcZvSO
+X-Proofpoint-ORIG-GUID: IcZIFt1JpWJOoMQpQEm8vk-E1DJcZvSO
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=452 spamscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=731
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2401190000 definitions=main-2401260176
 
-Introduce new reserved memory scan function called
-early_fdt_scan_reserved_mem() which is a clone of the original
-early_init_fdt_scan_reserved_mem() function, but does not call
-fdt_init_reserved_mem() at the end.
+Call early_fdt_scan_reserved_mem() in place of
+early_init_fdt_scan_reserved_mem() to carry out the first stage of the
+reserved memory processing only.
 
-This will allow architectures to separate the first stage of the
-reserved memory processing which is done by
-early_init_fdt_scan_reserved_mem() from the second stage of the reserved
-memory processing which is done by fdt_init_reserved_mem().
+The early_fdt_scan_reserved_mem() function is used to scan through the
+DT and mark all the reserved memory regions as reserved or nomap as
+needed, as well as allocate the memory required by the
+dynamically-placed
+reserved memory regions.
+
+The second stage of the reserved memory processing is done by
+fdt_init_reserved_mem(). This function is used to store the information
+of the statically-placed reserved memory nodes in the reserved_mem
+array as well as call the region specific initialization function on all
+the stored reserved memory regions.
+
+The call to fdt_init_reserved_mem() is placed after paging_init()
+in preparation for the dynamic allocation of the reserved_mem array
+using memblock. This is because memblock allocated memory is not
+writable until after the page tables have been setup on the riscv
+architecture.
 
 Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 ---
- drivers/of/fdt.c       | 27 +++++++++++++++++++++++++++
- include/linux/of_fdt.h |  2 ++
- 2 files changed, 29 insertions(+)
+ arch/riscv/kernel/setup.c | 3 +++
+ arch/riscv/mm/init.c      | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index d02884ec0b6b..6bda033936af 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -711,6 +711,33 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 	fdt_init_reserved_mem();
- }
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 4f73c0ae44b2..ea4fbc8e0ea1 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -16,6 +16,7 @@
+ #include <linux/sched.h>
+ #include <linux/console.h>
+ #include <linux/of_fdt.h>
++#include <linux/of_reserved_mem.h>
+ #include <linux/sched/task.h>
+ #include <linux/smp.h>
+ #include <linux/efi.h>
+@@ -261,6 +262,8 @@ void __init setup_arch(char **cmdline_p)
+ 	efi_init();
+ 	paging_init();
  
-+/**
-+ * early_fdt_scan_reserved_mem() - create reserved memory regions
-+ *
-+ * This function grabs memory from early allocator for device exclusive use
-+ * defined in device tree structures. It should be called by arch specific code
-+ * once the early allocator (i.e. memblock) has been fully activated.
-+ */
-+void __init early_fdt_scan_reserved_mem(void)
-+{
-+	int n;
-+	u64 base, size;
++	fdt_init_reserved_mem();
 +
-+	if (!initial_boot_params)
-+		return;
-+
-+	fdt_scan_reserved_mem();
-+	fdt_reserve_elfcorehdr();
-+
-+	/* Process header /memreserve/ fields */
-+	for (n = 0; ; n++) {
-+		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
-+		if (!size)
-+			break;
-+		memblock_reserve(base, size);
-+	}
-+}
-+
- /**
-  * early_init_fdt_reserve_self() - reserve the memory used by the FDT blob
-  */
-diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-index 7b2a5d93d719..9b849c5c3917 100644
---- a/include/linux/of_fdt.h
-+++ b/include/linux/of_fdt.h
-@@ -63,6 +63,7 @@ extern int early_init_dt_scan_memory(void);
- extern void early_init_dt_check_for_usable_mem_range(void);
- extern int early_init_dt_scan_chosen_stdout(void);
- extern void early_init_fdt_scan_reserved_mem(void);
-+extern void early_fdt_scan_reserved_mem(void);
- extern void early_init_fdt_reserve_self(void);
- extern void early_init_dt_add_memory_arch(u64 base, u64 size);
- extern u64 dt_mem_next_cell(int s, const __be32 **cellp);
-@@ -88,6 +89,7 @@ extern void early_get_first_memblock_info(void *, phys_addr_t *);
- static inline void early_init_dt_check_for_usable_mem_range(void) {}
- static inline int early_init_dt_scan_chosen_stdout(void) { return -ENODEV; }
- static inline void early_init_fdt_scan_reserved_mem(void) {}
-+static inline void early_fdt_scan_reserved_mem(void) {}
- static inline void early_init_fdt_reserve_self(void) {}
- static inline const char *of_flat_dt_get_machine_name(void) { return NULL; }
- static inline void unflatten_device_tree(void) {}
+ 	/* Parse the ACPI tables for possible boot-time configuration */
+ 	acpi_boot_table_init();
+ 
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 32cad6a65ccd..32b168d6672b 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -264,7 +264,7 @@ static void __init setup_bootmem(void)
+ 	 * in the device tree, otherwise the allocation could end up in a
+ 	 * reserved region.
+ 	 */
+-	early_init_fdt_scan_reserved_mem();
++	early_fdt_scan_reserved_mem();
+ 
+ 	/*
+ 	 * If DTB is built in, no need to reserve its memblock.
 -- 
 2.17.1
 
