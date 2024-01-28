@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E6B0C47DDB
-	for <soc@archiver.kernel.org>; Sun, 28 Jan 2024 04:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0562C47258
+	for <soc@archiver.kernel.org>; Sun, 28 Jan 2024 06:06:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 31B2AC433F1; Sun, 28 Jan 2024 04:30:24 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	id 94D31C433B1; Sun, 28 Jan 2024 06:06:27 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 97B5FC43390;
-	Sun, 28 Jan 2024 04:30:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 97B5FC43390
+	by smtp.kernel.org (Postfix) with ESMTPS id DAC1DC433F1;
+	Sun, 28 Jan 2024 06:06:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DAC1DC433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706416222; x=1737952222;
+  t=1706421985; x=1737957985;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5KJJfPnG1UoHE6jIm0aaEisxP7TFBqaCktqKdcwNC7c=;
-  b=OL5A2zQXdbXJSZik48wC7XaVKRIm8h7XDGeeHRB/bT3aSFeRmDVOZlhV
-   ijpEB6mDPCwsuZZuWfQPFnxRguZS1eniI2Y3yoActmXClwd9M3pzWWPHk
-   DZkRUH1zeW02I7ly76wUDLj4hm+tHfSEyc2n5K5jV3RxcIyLSZ8j707sg
-   QWj6yw4OiHI4272uJ7UhgY7/7RuZ+Ax345nlNh+ikJVtJhPesBc3c4f4T
-   pJUeFIsnc9qQG3p1DAOmQ34jr5UbfXtadhKoex8acy2ARq8O930ygOKTS
-   u3JKBDNNSBjJJy7lrC8XzijAIfKGk4KsDxexqEm6l9yDU0X+eNrNwmOYd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="433900340"
+  bh=NttJqLrnePMktBrZTxU8B3o9czIfX/MyFTnT41W2cfo=;
+  b=oBo8WN91XAlDgT5qZc6wY7FV2dAuLTOT4E0SXThXVq663ZFm3oduJXb5
+   kLqjlPovyVnaxegJiiEWL7g6CP9h2PqLRt769SjtPxFZmatsaTVDiXkKP
+   BqNRcDe9xr/bVSEwv0TIRUQZM2Mo5CFt1BrU1+caoELc1pCc5dVC96ep9
+   RbowP2B805TBvIbIEwnBCjh8kND8eDMIZuzX6dMVdGNPESL9aeFYGMa6G
+   QfGL/cvm95tZ4EGnLRWHpssv94ygI+HIhFKhDENvUJhlY3TIWLISs7hus
+   38kBWtCwOi7osFFC357Q3SfP0QBHfWjSswUmDBcRxY2bLj7gUCjsb6zQc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="10128816"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="433900340"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 20:30:21 -0800
+   d="scan'208";a="10128816"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 22:06:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="910718819"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="910718819"
+   d="scan'208";a="2982796"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Jan 2024 20:30:13 -0800
+  by orviesa005.jf.intel.com with ESMTP; 27 Jan 2024 22:06:16 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rTwo7-00034k-1V;
-	Sun, 28 Jan 2024 04:30:11 +0000
-Date: Sun, 28 Jan 2024 12:29:50 +0800
+	id 1rTyJ3-00038s-2C;
+	Sun, 28 Jan 2024 06:06:13 +0000
+Date: Sun, 28 Jan 2024 14:06:05 +0800
 From: kernel test robot <lkp@intel.com>
 List-Id: <soc.lore.kernel.org>
 To: Oreoluwa Babatunde <quic_obabatun@quicinc.com>, catalin.marinas@arm.com,
@@ -62,7 +61,7 @@ Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH 30/46] of: reserved_mem: Add code to use unflattened DT
  for reserved_mem nodes
-Message-ID: <202401281219.iIhqs1Si-lkp@intel.com>
+Message-ID: <202401281304.tsu89Kcm-lkp@intel.com>
 References: <20240126235425.12233-31-quic_obabatun@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -84,70 +83,40 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Oreoluwa-Babatunde/of-res
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
 patch link:    https://lore.kernel.org/r/20240126235425.12233-31-quic_obabatun%40quicinc.com
 patch subject: [PATCH 30/46] of: reserved_mem: Add code to use unflattened DT for reserved_mem nodes
-config: i386-randconfig-061-20240127 (https://download.01.org/0day-ci/archive/20240128/202401281219.iIhqs1Si-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281219.iIhqs1Si-lkp@intel.com/reproduce)
+config: arm-randconfig-r133-20240127 (https://download.01.org/0day-ci/archive/20240128/202401281304.tsu89Kcm-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20240128/202401281304.tsu89Kcm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401281219.iIhqs1Si-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401281304.tsu89Kcm-lkp@intel.com/
 
 sparse warnings: (new ones prefixed by >>)
->> drivers/of/of_reserved_mem.c:111:18: sparse: sparse: incompatible types for operation (<):
-   drivers/of/of_reserved_mem.c:111:18: sparse:    struct device_node *[assigned] node
-   drivers/of/of_reserved_mem.c:111:18: sparse:    int
+>> kernel/dma/coherent.c:371:34: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned long node @@     got struct device_node *node @@
+   kernel/dma/coherent.c:371:34: sparse:     expected unsigned long node
+   kernel/dma/coherent.c:371:34: sparse:     got struct device_node *node
+   kernel/dma/coherent.c:378:33: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned long node @@     got struct device_node *node @@
+   kernel/dma/coherent.c:378:33: sparse:     expected unsigned long node
+   kernel/dma/coherent.c:378:33: sparse:     got struct device_node *node
 
-vim +111 drivers/of/of_reserved_mem.c
+vim +371 kernel/dma/coherent.c
 
-    98	
-    99	/*
-   100	 * Save the reserved_mem reg nodes in the reserved_mem array
-   101	 */
-   102	static void __init dt_scan_reserved_mem_reg_nodes(void)
-   103	{
-   104		int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
-   105		struct device_node *node, *child;
-   106		phys_addr_t base, size;
-   107		const __be32 *prop;
-   108		int len;
-   109	
-   110		node = of_find_node_by_path("/reserved-memory");
- > 111		if (node < 0) {
-   112			pr_err("Reserved memory: Did not find reserved-memory node\n");
-   113			return;
-   114		}
-   115	
-   116		for_each_child_of_node(node, child) {
-   117			const char *uname;
-   118			struct reserved_mem *rmem;
-   119	
-   120			if (!of_device_is_available(child))
-   121				continue;
-   122	
-   123			prop = of_get_property(child, "reg", &len);
-   124			if (!prop) {
-   125				rmem = of_reserved_mem_lookup(child);
-   126				if (rmem)
-   127					rmem->dev_node = child;
-   128				continue;
-   129			}
-   130	
-   131			uname = of_node_full_name(child);
-   132			if (len && len % t_len != 0) {
-   133				pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
-   134				       uname);
-   135				continue;
-   136			}
-   137	
-   138			base = dt_mem_next_cell(dt_root_addr_cells, &prop);
-   139			size = dt_mem_next_cell(dt_root_size_cells, &prop);
-   140	
-   141			if (size)
-   142				fdt_reserved_mem_save_node(child, uname, base, size);
-   143		}
-   144	}
-   145	
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  362  
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  363  static int __init rmem_dma_setup(struct reserved_mem *rmem)
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  364  {
+b81d457b174810 kernel/dma/coherent.c       Oreoluwa Babatunde 2024-01-26  365  	struct device_node *node = rmem->dev_node;
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  366  
+b81d457b174810 kernel/dma/coherent.c       Oreoluwa Babatunde 2024-01-26  367  	if (of_get_property(node, "reusable", NULL))
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  368  		return -EINVAL;
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  369  
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  370  #ifdef CONFIG_ARM
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13 @371  	if (!of_get_flat_dt_prop(node, "no-map", NULL)) {
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  372  		pr_err("Reserved memory: regions without no-map are not yet supported\n");
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  373  		return -EINVAL;
+7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  374  	}
+70d6aa0ecfed25 kernel/dma/coherent.c       Christoph Hellwig  2021-06-24  375  #endif
+93228b44c33a57 drivers/base/dma-coherent.c Vladimir Murzin    2017-06-26  376  
 
 -- 
 0-DAY CI Kernel Test Service
