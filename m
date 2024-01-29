@@ -1,103 +1,67 @@
-Return-Path: <SRS0=bS9p=JH=intel.com=lkp@kernel.org>
+Return-Path: <lorenzo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEDBDC47422
-	for <soc@archiver.kernel.org>; Mon, 29 Jan 2024 03:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D2DC47422
+	for <soc@archiver.kernel.org>; Mon, 29 Jan 2024 11:20:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9820FC43390; Mon, 29 Jan 2024 03:40:12 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7DE05C433F1;
-	Mon, 29 Jan 2024 03:40:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7DE05C433F1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706499610; x=1738035610;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+bQCXJR0sf7n1fc5UEvI/I5MK89K8Itu0r2VGI3HRFo=;
-  b=Iy0L7m2j7ZhYwqtcpqKy1g8hjLWgHpAfjYHL8rW1nsSvJy5X2NpUfmWe
-   34NO9MLiGSUmRxxkS2iW8+0mn+0TPo4PJtCeyLjXz1I3BPgcCrU2iSbVV
-   DLcJ1ABr4QFtGOGeN1M4gdMMLyeLbNNAQsXEq8OeBqRNNgwiwIW2/yCkr
-   MNSQ8k90zb+K7J0pF6eHKu4nfaTdzRIBXvt0q7JJ5Ecnf+o7RST9ASejL
-   G7YL9ZLYo2wQ7K7VTk/xZSqhmfA7Sxmxl0vNzwa4wMmasx8rekwQvZEda
-   XJ9jg5KeMuJTQM/vXhgSDboE+OVez/fqmPhVdDYH+2YZiCbPt4rVxTFGq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="9952529"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="9952529"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 19:40:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="906947399"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="906947399"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2024 19:40:02 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUIV6-00040q-2C;
-	Mon, 29 Jan 2024 03:40:00 +0000
-Date: Mon, 29 Jan 2024 11:39:11 +0800
-From: kernel test robot <lkp@intel.com>
+	id 64C53C43394; Mon, 29 Jan 2024 11:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA01AC433C7;
+	Mon, 29 Jan 2024 11:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706527210;
+	bh=EmN8RznQlcv3XJVtMjnrACuEdVkzu+e2XyXTojClPv0=;
+	h=Date:From:To:List-Id:Cc:Subject:From;
+	b=PH9we1ggCYxn4Q5BZ49a6vZ0G/ucZeZFCqfA03kqiDx40XbyB0Pci2kCfOZtAsLAa
+	 tAQqe4xf5ZT4xZobWJtNcUrdow2docIM35hOLyrgegISpvIClS7FP0Wy49CPpAzICB
+	 fznDQCgaAlOvU0tUD4dlHVZrsU8WhDT/YChEwAr23j3LTscvkJ4KWq+hnUaow+ZM1o
+	 6B31tfGJbHU+M5+PI8zlAbTBfzSpkSaH9BrXHqR1CSjdMHmC99GGM+pFcKv/mjbnz9
+	 IIAq3fl7kDw5qeYrdpfmskT7/MHzASmobNqXeK8UqFGhpw1A0TDOKJfGGeYv5Yvi9C
+	 R9Jyxluc5f6pg==
+Date: Mon, 29 Jan 2024 12:20:06 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: Oreoluwa Babatunde <quic_obabatun@quicinc.com>, catalin.marinas@arm.com,
-	will@kernel.org, robh+dt@kernel.org, frowand.list@gmail.com,
-	vgupta@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-	guoren@kernel.org, monstr@monstr.eu, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, dinguyen@kernel.org, chenhuacai@kernel.org,
-	tsbogend@alpha.franken.de, jonas@southpole.se,
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-	mpe@ellerman.id.au, ysato@users.sourceforge.jp, dalias@libc.org,
-	glaubitz@physik.fu-berlin.de, richard@nod.at,
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-	chris@zankel.net, jcmvbkbc@gmail.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 18/46] of: reserved_mem: Add code to dynamically allocate
- reserved_mem array
-Message-ID: <202401291128.e7tdNh5x-lkp@intel.com>
-References: <20240126235425.12233-19-quic_obabatun@quicinc.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+	devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
+	soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	dd@embedd.com
+Subject: Support for airoha en7581 Soc
+Message-ID: <ZbeJ5okKQ66FXGxP@lore-desk>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="30fnfXUcwDqiOIse"
+Content-Disposition: inline
+
+
+--30fnfXUcwDqiOIse
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240126235425.12233-19-quic_obabatun@quicinc.com>
 
-Hi Oreoluwa,
+Hi Matthias,
 
-kernel test robot noticed the following build warnings:
+I was wondering about the status of the following patches:
+https://lore.kernel.org/linux-arm-kernel/20231001122418.2688120-4-dd@embedd.com/T/#rbafabf4bf2473327f35ce7d79623f63838630537
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on arm64/for-next/core vgupta-arc/for-curr powerpc/next powerpc/fixes jcmvbkbc-xtensa/xtensa-for-next linus/master v6.8-rc1 next-20240125]
-[cannot apply to vgupta-arc/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Do we need to respin them? Thx in advance.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oreoluwa-Babatunde/of-reserved_mem-Change-the-order-that-reserved_mem-regions-are-stored/20240127-081735
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240126235425.12233-19-quic_obabatun%40quicinc.com
-patch subject: [PATCH 18/46] of: reserved_mem: Add code to dynamically allocate reserved_mem array
-config: arm-aspeed_g4_defconfig (https://download.01.org/0day-ci/archive/20240129/202401291128.e7tdNh5x-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401291128.e7tdNh5x-lkp@intel.com/reproduce)
+Regards,
+Lorenzo
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401291128.e7tdNh5x-lkp@intel.com/
+--30fnfXUcwDqiOIse
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+-----BEGIN PGP SIGNATURE-----
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
->> WARNING: modpost: vmlinux: section mismatch in reference: alloc_reserved_mem_array+0x50 (section: .text.unlikely) -> memblock_alloc_try_nid (section: .init.text)
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZbeJ5gAKCRA6cBh0uS2t
+rH6UAP4qkxn7CkKcLaOW7Wu0RgdFjYWNJ4a1a/eLgMiAr1GwYgD/TXzi5bwXyZqG
+xTWAJFSl4n/BbU8cIyL2LGCy8Y4afQE=
+=fdcj
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--30fnfXUcwDqiOIse--
