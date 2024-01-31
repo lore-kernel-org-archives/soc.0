@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ECABC46CD2
-	for <soc@archiver.kernel.org>; Wed, 31 Jan 2024 00:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 392DEC47DB3
+	for <soc@archiver.kernel.org>; Wed, 31 Jan 2024 15:27:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C8F03C43399; Wed, 31 Jan 2024 00:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E6CC433C7;
-	Wed, 31 Jan 2024 00:07:12 +0000 (UTC)
+	id E63B4C43399; Wed, 31 Jan 2024 15:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 953FBC43141;
+	Wed, 31 Jan 2024 15:27:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706659632;
-	bh=4IQeU0aHdZ9OyJPsxqDoj0X2DZjWXfdHf5qWMKXFsBo=;
+	s=k20201202; t=1706714831;
+	bh=19Hap+jLLwl5/KUouZC5xJUm2952vDYNgv2x4gYBsJ8=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=WDMKUIklvJcm6EcsZNKAPY/tr3zImhMVxuK+6CQzXx3/bqkePR8l3BDVDP05wgtfd
-	 z8mNxq0EX9GgXIKa2en2de4C47Jl93ypnNnPJ2jL++MIrU05hBGDyWv7CFgOblKvSz
-	 Hzo5RMVvFMnisIj9crEhIxJjUGLQBoeFMID/wXovHe38dXqecSLRKKnWZNQ3UM6ggp
-	 PwgoZxxh3NF8D08IYo9SPpvoWmN9SbsoCuTe1Ag9FO2iPadbzNzRRLbw+uCrM0ULrX
-	 5JOCzJO5UhFvn6RNC0O6HcwaHNqn/0Tkfu7Xo8KTSA2xWaof7iuOx0RV7OG08cP5/C
-	 V1L92SX9fU73Q==
-Date: Tue, 30 Jan 2024 18:07:10 -0600
+	b=IMUECFk4IsuVJekwgnSVNtYRLCBMpnC1fVqiDc/WVEP2cs/45v0TH1d0Njhd3Wrvs
+	 DHqmKcS89rbwbgoSwgxUJZbyx6Bp0Hro0yXENdlO0/SOEiofJbJjX26Odp6VBk7CgE
+	 HuRrk4A60wHkDQQWqENmPVL3nTvjZEbq5SY6vn/EMk02MYtNwF43DeToI3BNlhZro2
+	 3R91SRBIPwho2wLYHCSUdLpinOl1lD2iM+I+SsIP9nzPUvro64J4Vewd5dDtQmMspK
+	 QJIZOQEaqUVqgufuZMEhuewAy0T8ZQBrta8JZ8RRekOzYiymyk76sVifG6A7Lw99fv
+	 BE4DrcuAXZIOg==
+Date: Wed, 31 Jan 2024 09:27:09 -0600
 From: Rob Herring <robh@kernel.org>
 To: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
@@ -37,183 +37,64 @@ Cc: catalin.marinas@arm.com, will@kernel.org, frowand.list@gmail.com,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 	kernel@quicinc.com
-Subject: Re: [PATCH 00/46] Dynamic allocation of reserved_mem array.
-Message-ID: <20240131000710.GA2581425-robh@kernel.org>
+Subject: Re: [PATCH 07/46] Loongarch: reserved_mem: Implement the new
+ processing order for reserved memory
+Message-ID: <20240131152709.GA1272666-robh@kernel.org>
 References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
+ <20240126235425.12233-8-quic_obabatun@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240126235425.12233-1-quic_obabatun@quicinc.com>
+In-Reply-To: <20240126235425.12233-8-quic_obabatun@quicinc.com>
 
-On Fri, Jan 26, 2024 at 03:53:39PM -0800, Oreoluwa Babatunde wrote:
-> The reserved_mem array is used to store data for the different
-> reserved memory regions defined in the DT of a device.  The array
-> stores information such as region name, node, start-address, and size
-> of the reserved memory regions.
+On Fri, Jan 26, 2024 at 03:53:46PM -0800, Oreoluwa Babatunde wrote:
+> Call early_fdt_scan_reserved_mem() in place of
+> early_init_fdt_scan_reserved_mem() to carry out the first stage of the
+> reserved memory processing only.
 > 
-> The array is currently statically allocated with a size of
-> MAX_RESERVED_REGIONS(64). This means that any system that specifies a
-> number of reserved memory regions greater than MAX_RESERVED_REGIONS(64)
-> will not have enough space to store the information for all the regions.
+> The early_fdt_scan_reserved_mem() function is used to scan through the
+> DT and mark all the reserved memory regions as reserved or nomap as
+> needed, as well as allocate the memory required by the
+> dynamically-placed
+> reserved memory regions.
 > 
-> Therefore, this series extends the use of the static array for
-> reserved_mem, and introduces a dynamically allocated array using
-> memblock_alloc() based on the number of reserved memory regions
-> specified in the DT.
+> The second stage of the reserved memory processing is done by
+> fdt_init_reserved_mem(). This function is used to store the information
+> of the statically-placed reserved memory nodes in the reserved_mem
+> array as well as call the region specific initialization function on all
+> the stored reserved memory regions.
 > 
-> Some architectures such as arm64 require the page tables to be setup
-> before memblock allocated memory is writable.  Therefore, the dynamic
-> allocation of the reserved_mem array will need to be done after the
-> page tables have been setup on these architectures. In most cases that
-> will be after paging_init().
+> The call to fdt_init_reserved_mem() is placed right after
+> early_fdt_scan_reserved_mem() since memblock allocated memory should
+> already be writable at this point.
 > 
-> Reserved memory regions can be divided into 2 groups.
-> i) Statically-placed reserved memory regions
-> i.e. regions defined in the DT using the @reg property.
-> ii) Dynamically-placed reserved memory regions.
-> i.e. regions specified in the DT using the @alloc_ranges
->     and @size properties.
+> Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+> ---
+>  arch/loongarch/kernel/setup.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> It is possible to call memblock_reserve() and memblock_mark_nomap() on
-> the statically-placed reserved memory regions and not need to save them
-> to the reserved_mem array until memory is allocated for it using
-> memblock, which will be after the page tables have been setup.
-> For the dynamically-placed reserved memory regions, it is not possible
-> to wait to store its information because the starting address is
-> allocated only at run time, and hence they need to be stored somewhere
-> after they are allocated.
-> Waiting until after the page tables have been setup to allocate memory
-> for the dynamically-placed regions is also not an option because the
-> allocations will come from memory that have already been added to the
-> page tables, which is not good for memory that is supposed to be
-> reserved and/or marked as nomap.
-> 
-> Therefore, this series splits up the processing of the reserved memory
-> regions into two stages, of which the first stage is carried out by
-> early_init_fdt_scan_reserved_mem() and the second is carried out by
-> fdt_init_reserved_mem().
-> 
-> The early_init_fdt_scan_reserved_mem(), which is called before the page
-> tables are setup is used to:
-> 1. Call memblock_reserve() and memblock_mark_nomap() on all the
->    statically-placed reserved memory regions as needed.
-> 2. Allocate memory from memblock for the dynamically-placed reserved
->    memory regions and store them in the static array for reserved_mem.
->    memblock_reserve() and memblock_mark_nomap() are also called as
->    needed on all the memory allocated for the dynamically-placed
->    regions.
-> 3. Count the total number of reserved memory regions found in the DT.
-> 
-> fdt_init_reserved_mem(), which should be called after the page tables
-> have been setup, is used to carry out the following:
-> 1. Allocate memory for the reserved_mem array based on the number of
->    reserved memory regions counted as mentioned above.
-> 2. Copy all the information for the dynamically-placed reserved memory
->    regions from the static array into the new allocated memory for the
->    reserved_mem array.
-> 3. Add the information for the statically-placed reserved memory into
->    reserved_mem array.
-> 4. Run the region specific init functions for each of the reserve memory
->    regions saved in the reserved_mem array.
+> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+> index edf2bba80130..72b164d3ace0 100644
+> --- a/arch/loongarch/kernel/setup.c
+> +++ b/arch/loongarch/kernel/setup.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/libfdt.h>
+>  #include <linux/of_fdt.h>
+> +#include <linux/of_reserved_mem.h>
+>  #include <linux/of_address.h>
+>  #include <linux/suspend.h>
+>  #include <linux/swiotlb.h>
+> @@ -390,8 +391,9 @@ static void __init arch_mem_init(char **cmdline_p)
+>  
+>  	check_kernel_sections_mem();
+>  
+> -	early_init_fdt_scan_reserved_mem();
+> +	early_fdt_scan_reserved_mem();
 
-I don't see the need for fdt_init_reserved_mem() to be explicitly called 
-by arch code. I said this already, but that can be done at the same time 
-as unflattening the DT. The same conditions are needed for both: we need 
-to be able to allocate memory from memblock.
-
-To put it another way, if fdt_init_reserved_mem() can be called "early", 
-then unflattening could be moved earlier as well. Though I don't think 
-we should optimize that. I'd rather see all arches call the DT functions 
-at the same stages.
-
-> Once the above steps have been completed and the init process is done
-> running, the original statically allocated reserved_mem array of size
-> MAX_RESERVED_REGIONS(64) will be automatically freed back to buddy
-> because it is no longer needed. This is done by marking the array as an
-> "__initdata" object in Patch 0018.
-> 
-> Note:
-> 
-> - Per Architecture, this series is effectively only 10 patches. The
->   code for each architecture is split up into separate patches to
->   allow each architecture to be tested independently of changes from
->   other architectures. Should this series be accepted, this should
->   allow for each arcitecture change to be picked up independently as
->   well.
-
-Only if patches 1 and 2 are accepted in one cycle and the arch ones in 
-the next cycle. No need for that though, I can take the whole thing 
-(when it's ready).
-
-
-> 
->   Patch 0001: Splits up the processing of the reserved memory regions
->   between early_init_fdt_scan_reserved_mem and fdt_init_reserved_mem.
-> 
->   Patch 0002: Introduces a copy of early_init_fdt_scan_reserved_mem()
->   which is used to separate it from fdt_init_reserved_mem() so that the
->   two functions can be called independently of each other.
-> 
->   Patch 0003 - Patch 0016: Duplicated change for each architecture to
->   call early_init_fdt_scan_reserved_mem() and fdt_init_reserved_mem()
->   at their appropriate locations. Here fdt_init_reserved_mem() is called
->   either before of after the page tables have been setup depending on
->   the architecture requirements.
-> 
->   Patch 0017: Deletes the early_init_fdt_scan_reserved_mem() function
->   since all architectures are now using the copy introduced in
->   Patch 0002.
-> 
->   Patch 0018: Dynamically allocate memory for the reserved_mem array
->   based on the total number of reserved memory regions specified in the
->   DT.
-> 
->   Patch 0019 - Patch 0029: Duplicated change for each architecture to
->   move the fdt_init_reserved_mem() function call to below the
->   unflatten_devicetree() function call. This is so that the unflatten
->   devicetree APIs can be used to process the reserved memory regions.
-> 
->   Patch 0030: Make code changes to start using the unflatten devicetree
->   APIs to access the reserved memory regions defined in the DT.
-> 
->   Patch 0031: Rename fdt_* functions as dt_* to refelct that the
->   flattened devicetree (fdt) APIs have been replaced with the unflatten
->   devicetree APIs.
-> 
->   Patch 0032 - Patch 0045: Duplicated change for each architecture to
->   switch from the use of fdt_init_reserved_mem() to
->   dt_init_reserved_mem(), which is the same function but the later uses
->   the unflatten devicetree APIs.
-> 
->   Patch 0046: Delete the fdt_init_reserved_mem() function as all
->   architectures have switched to using dt_init_reserved_mem() which was
->   introduced in Patch 0031.
-> 
-> - The limitation to this approach is that there is still a limit of
->   64 for dynamically-placed reserved memory regions. But from my current
->   analysis, these types of reserved memory regions are generally less
->   in number when compared to the statically-placed reserved memory
->   regions.
-> 
-> - I have looked through all architectures and placed the call to
->   memblock_alloc() for the reserved_mem array at points where I
->   believe memblock allocated memory are available to be written to.
->   I currently only have access to an arm64 device and this is where I am
->   testing the functionality of this series. Hence, I will need help from
->   architecture maintainers to test this series on other architectures to
->   ensure that the code is functioning properly on there.
-> 
-> Previous patch revisions:
-> 1. [RFC V1 Patchset]:
-> https://lore.kernel.org/all/20231019184825.9712-1-quic_obabatun@quicinc.com/
-> 
-> 2. [RFC V2 Patchset]:
-> https://lore.kernel.org/all/20231204041339.9902-1-quic_obabatun@quicinc.com/
-> - Extend changes to all other relevant architectures.
-> - Add code to use unflatten devicetree APIs to process the reserved
->   memory regions.
-
-Dropping RFC does not make this v1. RFC is a state of the patches not a 
-version.
+Looking at the loongarch code, there's an existing problem with the 
+order of init. This is done after unflattening and copying the DT. That 
+means the kernel could freely allocate memory for the DT in a reserved 
+region.
 
 Rob
