@@ -1,228 +1,101 @@
-Return-Path: <robh@kernel.org>
+Return-Path: <SRS0=h8cn=JO=gmail.com=alexander.sverdlin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A953C4828F
-	for <soc@archiver.kernel.org>; Fri,  2 Feb 2024 15:29:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475FAC4828D
+	for <soc@archiver.kernel.org>; Mon,  5 Feb 2024 10:23:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6FABBC433A6; Fri,  2 Feb 2024 15:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F71C433C7;
-	Fri,  2 Feb 2024 15:29:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706887750;
-	bh=eWCT34Fq+b7991k5pNSiwWeUVYQTzCYYL/cyt2+oOI4=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=FQcMYbJD377UCUye1ongyzueF7fnGQ9TAFH0kSvL/OREHfX9BuNNBixbmGDTpSsMq
-	 DnoNGZ/Kn76YG6ZZNVnKfa3/2buI1j9JIbr8szqq+uV17LUgaGkVQBGv9rk7OttVZJ
-	 CbCxbTeiws5gZ66nmRbYgOViuF/j045PjFYyBXr4mtt5VG2MOzy/9vu1e9jJ9TpbeZ
-	 E8UCx5f2lOujI5D4n2prtl7OWXa8ya7Gukiz8HJHfe7jVUdAgbX6BKLJz2qTR9Ht10
-	 Qg40JNqkJOm3scz4i6gT2vl7FSJ697eV2hiFvdYOd3MTXu4ACBMyrz8qgR+m9LyROd
-	 iwO5+XeVvnCrg==
-Date: Fri, 2 Feb 2024 09:29:08 -0600
-From: Rob Herring <robh@kernel.org>
-To: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+	id 035FBC43390; Mon,  5 Feb 2024 10:23:50 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 213ABC433F1
+	for <soc@kernel.org>; Mon,  5 Feb 2024 10:23:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 213ABC433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a359e6fde44so437300166b.3
+        for <soc@kernel.org>; Mon, 05 Feb 2024 02:23:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707128627; x=1707733427; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XX4Ym3d2uPw+/HY4vPGG7XwZmCRiTXwEgrLOAbWQDn4=;
+        b=Xiy9Uaz+ZrB7CkZJjVucJViav4vgr8wMPz2IIRX99vD8JaBogG2ZWek3+2OgO2wLS+
+         E1GlRx+APYTKf9ydZTkB+umrv+NiFIP72JQso4S4S2i2tm3Y4QwvZTBzbsTEVlKITMMj
+         4Brqkp6sAZhBmPpJsPrqv+W/1mT3m6ke1ynNQxBrLC2sH9m27xrj2ZDLkYkMzlmu0xEU
+         yLBqj16tGLj2nK0N5/gWUgCAHCVUduL6sHVmUCPgQVm75aHvZxi/0yn3PLRiZg8prQpV
+         a+rIvYnhwdzs/uQdhLlohysoLTLXT3VRKwyezy6jgJ7sO8OTDGlblRObaNw1CCsPjzbf
+         0pGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707128627; x=1707733427;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XX4Ym3d2uPw+/HY4vPGG7XwZmCRiTXwEgrLOAbWQDn4=;
+        b=eQ4xfTFD3+UbC6XlkVqW2EuWdN6hYKlysHUCF9utx8EQQ9SjnIoAiiRecYhT9N9VaG
+         J5MfEGCPumjX7hOYwMk9NWdU1NnbnruOXQfAfjxBSR951Xl6ZU4P6bJKKzNhzn2Q1udV
+         OPpSPxMDir6cy8tPQ108KfWsKUKv4JmIQjfy+Oc9AqfHBAjmyVi4rIIhv4woUeGHk1z1
+         rHj3VoSeih2vvdpP/UG+iPcYsyjasRoaZognnyS2Hkxw7yUMxuU89MwH8BjLmFd6T/mU
+         UxQwXMUBEIK3owWfvxX5d6srsP6arbZVyAv9eY7ebypvj7Mo5kUo/XmAJINdcowIwRDA
+         GBIg==
+X-Gm-Message-State: AOJu0YwaN3yQHz9l1Wrkq9fw9gD4Oplr7sE/upw/A4WlwI6/01odhkG3
+	OipmOM5NFmKPE+6WEyl+VZhrnu1md2XNiAsss68fUeVuIS1lK+yiudVaajHBOn8ZRQ==
+X-Google-Smtp-Source: AGHT+IEhgC7WpQxUeQ7w9jPqIfihBfLgrkJnQPKhaKfxYJQOVq5OuY1YA+3A/JW3juiNLHkOHk1kzw==
+X-Received: by 2002:a17:906:194e:b0:a37:e7ee:3ba4 with SMTP id b14-20020a170906194e00b00a37e7ee3ba4mr565762eje.20.1707128627157;
+        Mon, 05 Feb 2024 02:23:47 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUebXMJzoW8NsFszB6JpWkjxUdvAicQboDttoHPbN0WsjspbdhzsPFJda6aPJXWwbl+JhZNTdV/w/IrsNtPLUGzfAlTARSg+7WtavOZFwmBGpol5IIFic+HnPzk/+aZ7oVFts+fnQtR8HIhZ4ulBkUfzkJRpPr/rSazL32pTy2NsbQzjV4IiVTUsEeJ9bdmRNCD7qDQbx0GZUJkZg==
+Received: from localhost ([2a02:1210:8690:9300:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with UTF8SMTPSA id vg11-20020a170907d30b00b00a37669280d1sm2450005ejc.141.2024.02.05.02.23.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Feb 2024 02:23:46 -0800 (PST)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: catalin.marinas@arm.com, will@kernel.org, frowand.list@gmail.com,
-	vgupta@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-	guoren@kernel.org, monstr@monstr.eu, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, dinguyen@kernel.org, chenhuacai@kernel.org,
-	tsbogend@alpha.franken.de, jonas@southpole.se,
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-	mpe@ellerman.id.au, ysato@users.sourceforge.jp, dalias@libc.org,
-	glaubitz@physik.fu-berlin.de, richard@nod.at,
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-	chris@zankel.net, jcmvbkbc@gmail.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	kernel@quicinc.com
-Subject: Re: [PATCH 00/46] Dynamic allocation of reserved_mem array.
-Message-ID: <20240202152908.GA4045321-robh@kernel.org>
-References: <20240126235425.12233-1-quic_obabatun@quicinc.com>
- <20240131000710.GA2581425-robh@kernel.org>
- <51dc64bb-3101-4b4a-a54f-c0df6c0b264c@quicinc.com>
- <20240201194653.GA1328565-robh@kernel.org>
- <d98288ed-a0d9-4fc1-87bc-d79cb528778c@quicinc.com>
+To: soc@kernel.org
+Cc: Nikita Shubin <nikita.shubin@maquefel.me>,
+	stable@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: [PATCH] ARM: ep93xx: Add terminator to gpiod_lookup_table
+Date: Mon,  5 Feb 2024 11:23:34 +0100
+Message-ID: <20240205102337.439002-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d98288ed-a0d9-4fc1-87bc-d79cb528778c@quicinc.com>
 
-On Thu, Feb 01, 2024 at 01:10:18PM -0800, Oreoluwa Babatunde wrote:
-> 
-> On 2/1/2024 11:46 AM, Rob Herring wrote:
-> > On Thu, Feb 01, 2024 at 09:08:06AM -0800, Oreoluwa Babatunde wrote:
-> >> On 1/30/2024 4:07 PM, Rob Herring wrote:
-> >>> On Fri, Jan 26, 2024 at 03:53:39PM -0800, Oreoluwa Babatunde wrote:
-> >>>> The reserved_mem array is used to store data for the different
-> >>>> reserved memory regions defined in the DT of a device.  The array
-> >>>> stores information such as region name, node, start-address, and size
-> >>>> of the reserved memory regions.
-> >>>>
-> >>>> The array is currently statically allocated with a size of
-> >>>> MAX_RESERVED_REGIONS(64). This means that any system that specifies a
-> >>>> number of reserved memory regions greater than MAX_RESERVED_REGIONS(64)
-> >>>> will not have enough space to store the information for all the regions.
-> >>>>
-> >>>> Therefore, this series extends the use of the static array for
-> >>>> reserved_mem, and introduces a dynamically allocated array using
-> >>>> memblock_alloc() based on the number of reserved memory regions
-> >>>> specified in the DT.
-> >>>>
-> >>>> Some architectures such as arm64 require the page tables to be setup
-> >>>> before memblock allocated memory is writable.  Therefore, the dynamic
-> >>>> allocation of the reserved_mem array will need to be done after the
-> >>>> page tables have been setup on these architectures. In most cases that
-> >>>> will be after paging_init().
-> >>>>
-> >>>> Reserved memory regions can be divided into 2 groups.
-> >>>> i) Statically-placed reserved memory regions
-> >>>> i.e. regions defined in the DT using the @reg property.
-> >>>> ii) Dynamically-placed reserved memory regions.
-> >>>> i.e. regions specified in the DT using the @alloc_ranges
-> >>>>     and @size properties.
-> >>>>
-> >>>> It is possible to call memblock_reserve() and memblock_mark_nomap() on
-> >>>> the statically-placed reserved memory regions and not need to save them
-> >>>> to the reserved_mem array until memory is allocated for it using
-> >>>> memblock, which will be after the page tables have been setup.
-> >>>> For the dynamically-placed reserved memory regions, it is not possible
-> >>>> to wait to store its information because the starting address is
-> >>>> allocated only at run time, and hence they need to be stored somewhere
-> >>>> after they are allocated.
-> >>>> Waiting until after the page tables have been setup to allocate memory
-> >>>> for the dynamically-placed regions is also not an option because the
-> >>>> allocations will come from memory that have already been added to the
-> >>>> page tables, which is not good for memory that is supposed to be
-> >>>> reserved and/or marked as nomap.
-> >>>>
-> >>>> Therefore, this series splits up the processing of the reserved memory
-> >>>> regions into two stages, of which the first stage is carried out by
-> >>>> early_init_fdt_scan_reserved_mem() and the second is carried out by
-> >>>> fdt_init_reserved_mem().
-> >>>>
-> >>>> The early_init_fdt_scan_reserved_mem(), which is called before the page
-> >>>> tables are setup is used to:
-> >>>> 1. Call memblock_reserve() and memblock_mark_nomap() on all the
-> >>>>    statically-placed reserved memory regions as needed.
-> >>>> 2. Allocate memory from memblock for the dynamically-placed reserved
-> >>>>    memory regions and store them in the static array for reserved_mem.
-> >>>>    memblock_reserve() and memblock_mark_nomap() are also called as
-> >>>>    needed on all the memory allocated for the dynamically-placed
-> >>>>    regions.
-> >>>> 3. Count the total number of reserved memory regions found in the DT.
-> >>>>
-> >>>> fdt_init_reserved_mem(), which should be called after the page tables
-> >>>> have been setup, is used to carry out the following:
-> >>>> 1. Allocate memory for the reserved_mem array based on the number of
-> >>>>    reserved memory regions counted as mentioned above.
-> >>>> 2. Copy all the information for the dynamically-placed reserved memory
-> >>>>    regions from the static array into the new allocated memory for the
-> >>>>    reserved_mem array.
-> >>>> 3. Add the information for the statically-placed reserved memory into
-> >>>>    reserved_mem array.
-> >>>> 4. Run the region specific init functions for each of the reserve memory
-> >>>>    regions saved in the reserved_mem array.
-> >>> I don't see the need for fdt_init_reserved_mem() to be explicitly called 
-> >>> by arch code. I said this already, but that can be done at the same time 
-> >>> as unflattening the DT. The same conditions are needed for both: we need 
-> >>> to be able to allocate memory from memblock.
-> >>>
-> >>> To put it another way, if fdt_init_reserved_mem() can be called "early", 
-> >>> then unflattening could be moved earlier as well. Though I don't think 
-> >>> we should optimize that. I'd rather see all arches call the DT functions 
-> >>> at the same stages.
-> >> Hi Rob,
-> >>
-> >> The reason we moved fdt_init_reserved_mem() back into the arch specific code
-> >> was because we realized that there was no apparently obvious way to call
-> >> early_init_fdt_scan_reserved_mem() and fdt_init_reserved_mem() in the correct
-> >> order that will work for all archs if we placed fdt_init_reserved_mem() inside the
-> >> unflatten_devicetree() function.
-> >>
-> >> early_init_fdt_scan_reserved_mem() needs to be
-> >> called first before fdt_init_reserved_mem(). But on some archs,
-> >> unflatten_devicetree() is called before early_init_fdt_scan_reserved_mem(), which
-> >> means that if we have fdt_init_reserved_mem() inside the unflatten_devicetree()
-> >> function, it will be called before early_init_fdt_scan_reserved_mem().
-> >>
-> >> This is connected to your other comments on Patch 7 & Patch 14.
-> >> I agree, unflatten_devicetree() should NOT be getting called before we reserve
-> >> memory for the reserved memory regions because that could cause memory to be
-> >> allocated from regions that should be reserved.
-> >>
-> >> Hence, resolving this issue should allow us to call fdt_init_reserved_mem() from
-> >> the  unflatten_devicetree() function without it changing the order that we are
-> >> trying to have.
-> > There's one issue I've found which is unflatten_device_tree() isn't 
-> > called for ACPI case on arm64. Turns out we need /reserved-memory 
-> > handled in that case too. However, I think we're going to change 
-> > calling unflatten_device_tree() unconditionally for another reason[1]. 
-> >
-> > [1] https://lore.kernel.org/all/efe6a7886c3491cc9c225a903efa2b1e.sboyd@kernel.org/
-> >
-> >> I will work on implementing this and send another revision.
-> > I think we should go with a simpler route that's just copy the an 
-> > initial array in initdata to a properly sized, allocated array like the 
-> > patch below. Of course it will need some arch fixes and a follow-on 
-> > patch to increase the initial array size.
-> >
-> > 8<--------------------------------------------------------------------
-> > From: Rob Herring <robh@kernel.org>
-> > Date: Wed, 31 Jan 2024 16:26:23 -0600
-> > Subject: [PATCH] of: reserved-mem: Re-allocate reserved_mem array to actual
-> >  size
-> >
-> > In preparation to increase the static reserved_mem array size yet again,
-> > copy the initial array to an allocated array sized based on the actual
-> > size needed. Now increasing the the size of the static reserved_mem
-> > array only eats up the initdata space. For platforms with reasonable
-> > number of reserved regions, we have a net gain in free memory.
-> >
-> > In order to do memblock allocations, fdt_init_reserved_mem() is moved a
-> > bit later to unflatten_device_tree(). On some arches this is effectively
-> > a nop.
+From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-[...]
+Without the terminator, if a con_id is passed to gpio_find() that
+does not exist in the lookup table the function will not stop looping
+correctly, and eventually cause an oops.
 
-> Hi Rob,
-> 
-> One thing that could come up with this is that  memory
-> for the dynamically-placed reserved memory regions
-> won't be allocated until we call fdt_init_reserved_mem().
-> (i.e. reserved memory regions defined using @alloc-ranges
-> and @size properties)
-> 
-> Since fdt_init_reserved_mem() is now being called from
-> unflatten_device_tree(), the page tables would have been
-> setup on most architectures, which means we will be
-> allocating from memory that have already been mapped.
-> 
-> Could this be an issue for memory that is supposed to be
-> reserved? 
+Cc: stable@vger.kernel.org
+Fixes: b2e63555592f ("i2c: gpio: Convert to use descriptors")
+Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ arch/arm/mach-ep93xx/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I suppose if the alloc-ranges region is not much bigger than the size 
-and the kernel already made some allocation that landed in the region, 
-then the allocation could fail. Not much we can do other than alloc the 
-reserved regions as soon as possible. Are there cases where that's not 
-happening?
+diff --git a/arch/arm/mach-ep93xx/core.c b/arch/arm/mach-ep93xx/core.c
+index 71b113976420..8b1ec60a9a46 100644
+--- a/arch/arm/mach-ep93xx/core.c
++++ b/arch/arm/mach-ep93xx/core.c
+@@ -339,6 +339,7 @@ static struct gpiod_lookup_table ep93xx_i2c_gpiod_table = {
+ 				GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN),
+ 		GPIO_LOOKUP_IDX("G", 0, NULL, 1,
+ 				GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN),
++		{ }
+ 	},
+ };
+ 
+-- 
+2.42.0
 
-I suppose the kernel could try and avoid all alloc-ranges until they've 
-been allocated, but that would have to be best effort. I've seen 
-optimizations where it's desired to spread buffers across DRAM banks, so 
-you could have N alloc-ranges for N banks that covers all of memory.
-
-There's also the issue that if you have more fixed regions than memblock 
-can handle (128) before it can reallocate its arrays, then the 
-page tables themselves could be allocated in reserved regions.
-
-> Especially for the regions that are specified as
-> no-map?
-
-'no-map' is a hint, not a guarantee. Arm32 ignores it for regions 
-within the kernel's linear map (at least it used to). I don't think 
-anything changes here with it.
-
-Rob
