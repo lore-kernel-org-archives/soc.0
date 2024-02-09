@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C1B5C48BC1
-	for <soc@archiver.kernel.org>; Fri,  9 Feb 2024 16:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0E85C4829D
+	for <soc@archiver.kernel.org>; Fri,  9 Feb 2024 16:55:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 324B4C43390; Fri,  9 Feb 2024 16:55:21 +0000 (UTC)
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
+	id A8B22C43399; Fri,  9 Feb 2024 16:55:20 +0000 (UTC)
+Received: from riemann.telenet-ops.be (riemann.telenet-ops.be [195.130.137.80])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C3F07C43330
+	by smtp.kernel.org (Postfix) with ESMTPS id A049AC43394
 	for <soc@kernel.org>; Fri,  9 Feb 2024 16:55:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3F07C43330
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A049AC43394
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4TWg2M49R7z4x0WZ
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+	by riemann.telenet-ops.be (Postfix) with ESMTPS id 4TWg2M3n8Kz4wyFV
 	for <soc@kernel.org>; Fri,  9 Feb 2024 17:55:07 +0100 (CET)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:55fd:ff17:c1c8:954d])
-	by albert.telenet-ops.be with bizsmtp
-	id l4uy2B0064RKXn6064uy1E; Fri, 09 Feb 2024 17:55:00 +0100
+	by andre.telenet-ops.be with bizsmtp
+	id l4uy2B00K4RKXn6014uyDb; Fri, 09 Feb 2024 17:55:00 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rYU9O-0008GX-7b;
+	id 1rYU9O-0008Gd-8k;
 	Fri, 09 Feb 2024 17:54:58 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rYU9S-0061GJ-En;
+	id 1rYU9S-0061GR-Gu;
 	Fri, 09 Feb 2024 17:54:58 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -40,9 +40,9 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/4] Renesas ARM defconfig updates for v6.9
-Date: Fri,  9 Feb 2024 17:54:50 +0100
-Message-Id: <cover.1707487828.git.geert+renesas@glider.be>
+Subject: [GIT PULL 3/4] Renesas DT binding updates for v6.9
+Date: Fri,  9 Feb 2024 17:54:52 +0100
+Message-Id: <cover.1707487832.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1707487826.git.geert+renesas@glider.be>
 References: <cover.1707487826.git.geert+renesas@glider.be>
@@ -55,29 +55,24 @@ The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.9-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.9-tag1
 
-for you to fetch changes up to 93189f33fcb4e678c9494cddeff96b123ef5674f:
+for you to fetch changes up to 49558e814fefdf33bf0b2d1c46c30d6a3f9634f3:
 
-  arm64: defconfig: Enable R8A779H0 SoC (2024-01-31 15:01:24 +0100)
-
-----------------------------------------------------------------
-Renesas ARM defconfig updates for v6.9
-
-  - Disable obsolete board staging support in the Renesas ARM and ARM V7
-    multi-platform defconfigs,
-  - Enable support for the Renesas R-Car V4M (R8A779H0) SoC in the ARM64
-    defconfig.
+  dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single (2024-01-31 15:06:52 +0100)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (2):
-      ARM: shmobile: defconfig: Disable staging
-      ARM: multi_v7_defconfig: Disable board staging
+Renesas DT binding updates for v6.9
 
-Linh Phung (1):
-      arm64: defconfig: Enable R8A779H0 SoC
+  - Document support for the Renesas R-Car V4M (R8A779H0) SoC, and the
+    White Hawk Single and Gray Hawk Single development boards.
 
- arch/arm/configs/multi_v7_defconfig | 1 -
- arch/arm/configs/shmobile_defconfig | 2 --
- arch/arm64/configs/defconfig        | 1 +
- 3 files changed, 1 insertion(+), 3 deletions(-)
+----------------------------------------------------------------
+Geert Uytterhoeven (3):
+      dt-bindings: soc: renesas: Document R-Car V4H White Hawk Single
+      dt-bindings: reset: renesas,rst: Document R-Car V4M support
+      dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single
+
+ Documentation/devicetree/bindings/reset/renesas,rst.yaml   |  1 +
+ Documentation/devicetree/bindings/soc/renesas/renesas.yaml | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
