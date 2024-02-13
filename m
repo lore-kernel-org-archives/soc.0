@@ -1,103 +1,111 @@
-Return-Path: <robh@kernel.org>
+Return-Path: <SRS0=mL58=JW=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FE5DC4829A
-	for <soc@archiver.kernel.org>; Tue, 13 Feb 2024 19:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 092EDC4829A
+	for <soc@archiver.kernel.org>; Tue, 13 Feb 2024 20:02:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 051ABC43399; Tue, 13 Feb 2024 19:35:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3659C43390;
-	Tue, 13 Feb 2024 19:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707852923;
-	bh=io3IHUz4w8uho1fRTkKUDdRHdXN+FkOTbGUXes+HSwM=;
-	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:From;
-	b=nC5yv0wT3DgPAYxk67YpeyMCOPQkCYoByAe0P20ibCZ2ZwpRXd+xIv5AqQOnkRr62
-	 cxdPJbNSI9jT3FXpYwVYIOXR0ouq46nNz4TLHhI8H+vMT3ps6nVXceSfGHHKwtREYx
-	 Sbg3UPfGR/V5C3yWrSox+lIgE9ejNmJT1TANOBTxvAUGXTTudhW4ND1OOaXvjablDm
-	 Pq1vKqjSz6KCFP5XAlEcDdsbF21T3QakjhMnzYri2o5fnkDrsWQ6GuLtLe9bTHjiVY
-	 BZU+xASTGTnd1z8TXb/DlPot58ZDRaKwIT9h2dNK+T45l/LYEdnroleltXx5US+sPV
-	 GKvPP5SxiGlCg==
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 13 Feb 2024 13:34:30 -0600
-Subject: [PATCH 6/6] dtc: Enable dtc interrupt_provider check
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240213-arm-dt-cleanups-v1-6-f2dee1292525@kernel.org>
-References: <20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org>
-In-Reply-To: <20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org>
+	id C5176C43390; Tue, 13 Feb 2024 20:02:57 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E239BC433F1;
+	Tue, 13 Feb 2024 20:02:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E239BC433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from [194.95.143.137] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1rZyzP-0000Dw-94; Tue, 13 Feb 2024 21:02:47 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Tsahee Zidenberg <tsahee@annapurnalabs.com>, 
- Antoine Tenart <atenart@kernel.org>, Joel Stanley <joel@jms.id.au>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>, Ray Jui <rjui@broadcom.com>, 
- Scott Branden <sbranden@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Stefan Agner <stefan@agner.ch>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- =?utf-8?q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>, 
- Tony Lindgren <tony@atomide.com>, Chanho Min <chanho.min@lge.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, Linus Walleij <linusw@kernel.org>, 
- Imre Kaloz <kaloz@openwrt.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
- openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, linux-omap@vger.kernel.org, 
- linux-mediatek@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-kbuild@vger.kernel.org
-X-Mailer: b4 0.13-dev
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.8
+Date: Tue, 13 Feb 2024 21:02:46 +0100
+Message-ID: <2450634.jE0xQCEvom@phil>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-Now that all the interrupt warnings have been fixed, enable
-'interrupt_provider' check by default. This will also enable
-'interrupt_map' check.
+Hi Arnd, Kevin, Olof,
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- scripts/Makefile.lib | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+please find a below a collection of fixes for the current release 6.8
+cycle.
 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index cd5b181060f1..fce35e4657f5 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -340,7 +340,7 @@ quiet_cmd_gzip = GZIP    $@
- # DTC
- # ---------------------------------------------------------------------------
- DTC ?= $(objtree)/scripts/dtc/dtc
--DTC_FLAGS += -Wno-interrupt_provider \
-+DTC_FLAGS += \
- 	-Wno-unique_unit_address
- 
- # Disable noisy checks by default
-@@ -358,7 +358,6 @@ endif
- ifneq ($(findstring 2,$(KBUILD_EXTRA_WARN)),)
- DTC_FLAGS += -Wnode_name_chars_strict \
- 	-Wproperty_name_chars_strict \
--	-Winterrupt_provider \
- 	-Wunique_unit_address
- endif
- 
+Please pull
 
--- 
-2.43.0
+Thanks
+Heiko
+
+
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git ta=
+gs/v6.8-rockchip-dtsfixes1
+
+for you to fetch changes up to c22d03a95b0d815cd186302fdd93f74d99f1c914:
+
+  arm64: dts: rockchip: Correct Indiedroid Nova GPIO Names (2024-02-13 20:2=
+8:19 +0100)
+
+=2D---------------------------------------------------------------
+Some fixes to make devicetrees conform to bindings better (pwm irqs), dt
+styling fixes (unneeded jaguar status, whitespaces, Cool Pi regulator
+naming) and functionality fixes (px30 spi chipselect number, allowing
+rk3588-evb1 to turn off, pcie lane numbers on CoolPi, wrong gpio-names
+on Indidroid Nova and some CoolPi sdmmc aliases to match what uboot uses).
+
+=2D---------------------------------------------------------------
+Andy Yan (4):
+      arm64: dts: rockchip: aliase sdmmc as mmc1 for Cool Pi 4B
+      arm64: dts: rockchip: aliase sdmmc as mmc1 for Cool Pi CM5 EVB
+      arm64: dts: rockchip: rename vcc5v0_usb30_host regulator for Cool Pi =
+CM5 EVB
+      arm64: dts: rockchip: Fix the num-lanes of pcie3x4 on Cool Pi CM5 EVB
+
+Chris Morgan (1):
+      arm64: dts: rockchip: Correct Indiedroid Nova GPIO Names
+
+Heiko Stuebner (2):
+      arm64: dts: rockchip: drop unneeded status from rk3588-jaguar gpio-le=
+ds
+      arm64: dts: rockchip: set num-cs property for spi on px30
+
+Johan Jonker (1):
+      arm64: dts: rockchip: Drop interrupts property from rk3328 pwm-rockch=
+ip node
+
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: minor rk3588 whitespace cleanup
+
+Sebastian Reichel (1):
+      arm64: dts: rockchip: mark system power controller on rk3588-evb1
+
+Uwe Kleine-K=F6nig (1):
+      ARM: dts: rockchip: Drop interrupts property from pwm-rockchip nodes
+
+ arch/arm/boot/dts/rockchip/rv1108.dtsi                   |  8 --------
+ arch/arm64/boot/dts/rockchip/px30.dtsi                   |  2 ++
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi                 |  1 -
+ arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5-evb.dts   |  8 +++++---
+ arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi      |  4 ++--
+ arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts         |  1 +
+ arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts           |  1 -
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dts        |  8 ++++----
+ arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts       |  4 ++--
+ arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts | 10 +++++-----
+ 10 files changed, 21 insertions(+), 26 deletions(-)
+
+
 
