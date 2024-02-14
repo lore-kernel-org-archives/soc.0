@@ -1,1188 +1,238 @@
-Return-Path: <SRS0=NwV0=JX=em-1707420.mgruconference.org=bounce-1707420-755-1076303-soc=kernel.org@kernel.org>
+Return-Path: <SRS0=NHvF=JX=broadcom.com=florian.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16012C48BC3
-	for <soc@archiver.kernel.org>; Wed, 14 Feb 2024 16:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB0EDC48BC3
+	for <soc@archiver.kernel.org>; Wed, 14 Feb 2024 18:41:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3B05C43390; Wed, 14 Feb 2024 16:36:12 +0000 (UTC)
-Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 817FFC43143; Wed, 14 Feb 2024 18:41:18 +0000 (UTC)
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3AD0FC433C7
-	for <soc@kernel.org>; Wed, 14 Feb 2024 16:36:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3AD0FC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=mgruconference.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=em-1707420.mgruconference.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=mgruconference.org;
- h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
- List-Unsubscribe:List-Unsubscribe-Post:Message-ID; i=team@mgruconference.org;
- bh=afs6Zl+RTx8gBBMFM9GZBAa1hi43OXAUvCQbjNQ4/Do=;
- b=SPbebhg6Qr5lcYxiMFzdd+zOVktmzLHU4565APV6Z9snjbGoVRaiKpW8s1RuNjrvnqYufv1uQLT0
-   ERM4OWu/a0cW/p6W6KMHdKlU/zXA70x2e6x4QvQcGvpbA1bAOzkv6spkPSX2qy3v4Uh+UWpYjFe9
-   91i80GAwDdTDIKSuwpZpHGYA+pKbr5LHmtTVZeY2eXlZFXyss5S9X8HGWaKHVVSszzF8KmtDXDR5
-   xxPNbm+EfpkCsiIq1RKUc6/HU2xwesQA+jVtmNHUQ5JFAK8VSLKLGR06pzgNM7hByEtfVD3vvDty
-   AakVoGDfbcomsxanAubLDO2JDSLlV/H+G17kjg==
-Received: by s4.acemsrvh.com id hpjlvk36bm4p for <soc@kernel.org>; Wed, 14 Feb 2024 16:36:08 +0000 (envelope-from <bounce-1707420-755-1076303-soc=kernel.org@em-1707420.mgruconference.org>)
-X-Mailer: ActiveCampaign Mailer
-CFBL-Address: fbl-report@acems1.com; report=arf
-List-Id: <soc.lore.kernel.org>
-To: "Nonprofit Execs & Board Members" <soc@kernel.org>
-From: "Linda Lysakowski, ACFRE" <team@mgruconference.org>
-Subject: Nonprofit Destination Events (2-Day Getaways)
-Date: Wed, 14 Feb 2024 10:33:59 -0600
+	by smtp.kernel.org (Postfix) with ESMTPS id 4A1E6C433C7
+	for <soc@kernel.org>; Wed, 14 Feb 2024 18:41:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A1E6C433C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-781753f52afso3383485a.2
+        for <soc@kernel.org>; Wed, 14 Feb 2024 10:41:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1707936075; x=1708540875; darn=kernel.org;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=COz95Q9if5EHUv0cRKv7zVypcgYxQFiRSrjGcmiZmj8=;
+        b=gz35w3tQTU11rLNckS6dgA8QThHeLrg8cZdACY5IExyfOisn7BQzy3S3VmiGet3C7Q
+         btqP/7io1rDYTlTyj4z/FPR9Q6vJujeEnc0SyYA6icYVznoftfm4vki9KquwEEVCpyQP
+         tTh31FmQkibxXEaRh+4ha8/FeZAY8PFMn8JUk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707936075; x=1708540875;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=COz95Q9if5EHUv0cRKv7zVypcgYxQFiRSrjGcmiZmj8=;
+        b=bqaJ6r0DXyCNLf5qCGhuTzsvM6T5oLscCsIgUIxUje8b1Xa57ZsxBTrCeCSZnCVeFY
+         Y68x//f5rcSTbQJ03WD+x1BCHDQdNwHLHQPboUATlx20ngi3Vg8jJ1mcYaDymb6Q1asU
+         BZ2rg9b07eww7f4aS0UsyPDpWSqqjPwKugdsHg3AGvRhjA2LnR79SOreUlxU1ADc7T3k
+         ayclDdkDCzXrTytnTiuxDgPj1H2PXf5QDGU3THnEjTreZ+2dsS6AR/gEctRBPeZv2nqO
+         hOj8Nq+F3nkEVHk23tFYUdDlxH9yFgG3AE9GKFh5/pr9JolDc+WdZQNOYoNiDfGgSqiN
+         csYA==
+X-Forwarded-Encrypted: i=1; AJvYcCXeXdKGc4VzuxOmBnrsiAFZprHUbgN8Y6cD133Jyv+TWhj74W1clzdo22a6HoStMIhgNeNx24HV1kkY7kv5ww==
+X-Gm-Message-State: AOJu0YwHVcC10MssSoH+OiolpqtDrtbUEsF58I01lSdwuupTkbvr+JI0
+	KM/MSv+de8/5pZffcxiPAhb1gGqB6mIfT4G0OkVvajoM4t6PpipLnzGrWP3Rbg==
+X-Google-Smtp-Source: AGHT+IGG9vamkxVTyKtk3A1Fy5G5Pfea0uIk6/fO7rl9o+F/wLbdrSOhlQqyC/jaEbCyIJhr665oZg==
+X-Received: by 2002:a05:620a:e1e:b0:786:89d9:b165 with SMTP id y30-20020a05620a0e1e00b0078689d9b165mr3574025qkm.5.1707936075179;
+        Wed, 14 Feb 2024 10:41:15 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXLsGALexbWo+Wwv7IKKdp0UuYgRpj6ylGwciCwRcVb9Gx9ATMB6YXHVdvIXn1K1rF8tqdkx52P52CaXmOnepxY87ZO6tWS9GLpFdjf99M24KkzEFu9ydkPtHhutb7UzCLsJoGk2HWGhyRM08eU5+XcsVQ3FTxQmJtttM6QsZX0uikrTuZ8kxZsZ8nnnzEER75etbcJqDwYtcZTEAaxgTv4qSHByIjk4eRsBmaKpbNfI5/ByzWLKUaIvFpWy5luhq2mnDAxM9EMUCrnt8343EGOTFxa3wSKgV3Mh+2DseGQg3WUTsurP7SCU+foj4RicGKVkpQ6hj2EpofKHyEA7Cx96JOtmaO2eswPNyLdBhFawjPzsWKE2j3HmwrIN/OE/ME+miukC2cMhvnnGUzsenlW3Qu1VpW5RVCW08nFCwEXTF1wphAXVb9YA6jNI/L0ICMbCxIu/cJ6aXDyzQtOVVNMVy0HDvtu5fn7KJvH7UWyrstnepNetXZkwX6QTmRw0JCcd4vrtIIk8gnIrCUMu5MaVnFBsdUsh1p63WeQNkaqkA3EsxfSnvOma+v1YhAUBsBYegyjFxU2bHeKUkXij0SAwG/tGCv04TdaXZ8Ac1uXVysmzUdT69ghmvUTQ8Q5hQYMl2et9VlbMPS9EO3SpIUbYYvjrNWqhcy952LTS7JcNL3be7bWoP8CUmJ7U+tbwR/pZskudPaCckep7ihMqRxtWl88otZE3bur5VdmqluHSByerT8VP9ZNwQb9bqYtE8r9dsbhk5YNpBa8MDDA2qzrUPAzbrUU8f+quuWYpYlhCYIFfNCoqEP+YgtEB4F0GKhGfMsa3gGlbqhIty2/TRhnk8+FBf6RSez2zCy4aLEw8wCSae5HtW9lybnZ/6xMzkMTz5tSL6IDXtUi8BUhCSY7gpnkCgzn0rh1kHHINFuKui7rcHO8c5YWH1wPK840n8ODPr
+ 0kdWXHzkSxzqcND4cmnYZ7X/VpeIKbS1prKW/li2eQ9llraQasD4Y9JxmWfzSWro69T4KJ9Xu5mgGGtMjLmGFx+wOX4WAw0FoBzMzRaeKMr288r2nWlaR+JvU3uOXHjJ9oqdkvL8yTXcN83uCZQC47VQWQ67lo8dzix2ss3d+zNEY72O4/exexeOuKNQDHyErLhCRfQ/IaQd8/DA0wkghfReL3b9UPplLRhBznx7p1jpUKy6iugm/AI35PVv/BP8LmT9xyylbv1AGk9cVVphy/lzD2iuT8pIl5L2Dst7P7dhY5R+NmJQvCbgE6meEWd2V0lJQk9oE0YBHLtCb4BlAUhRGkVXTUw3f/QLslzI/ulvK9vuuVP2lEWFc9GazDhckwAcamBgOu4ATy8h1MBZtnyrg6Z3MkcPJPCvcCl4T9jhOBBGoPN0jF2pTR1KQz15Wqb207iXc+5MpgFGJXyQUMCGksCCmEJ9USNswmog91d13Rfl2ELqy3KNB4DvFLuYhPVeLrOfRj8bIcpoSneYFdLBvhvaNIcFgJsDjfgF7Cr8MA7rqf7v4RfuwjrjIfWnOX+QuxjRj56PTYOyzhAZ5aPQlBsWO9AuIyhJm2AbRYyjZy5CE9BBwTbzPiJZGIMA3UGJlMz7fWkTkVTBYDNIzVg3CMzUiTW38wRq84YM5afwq3XZV/smCVCHHvsegm6cVHLClzA6ChKNtvzMmGoL+XbrUI2OIo+utM8GQhgJ2letftzQ==
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id t8-20020a05620a004800b0078718e1f581sm1810522qkt.68.2024.02.14.10.41.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Feb 2024 10:41:14 -0800 (PST)
+Message-ID: <43d80fa7-4f11-44ee-9a79-7f76fd9ffcc7@broadcom.com>
+Date: Wed, 14 Feb 2024 10:41:08 -0800
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
- boundary="_=_swift-44799910865cceb77b58a24.82099209_=_"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] arm: dts: Fix dtc interrupt_provider warnings
+List-Id: <soc.lore.kernel.org>
+To: Rob Herring <robh@kernel.org>, soc@kernel.org,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+ Antoine Tenart <atenart@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Andrew Lunn <andrew@lunn.ch>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, Stefan Agner <stefan@agner.ch>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+ Tony Lindgren <tony@atomide.com>, Chanho Min <chanho.min@lge.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>, Linus Walleij <linusw@kernel.org>,
+ Imre Kaloz <kaloz@openwrt.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+ openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-omap@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kbuild@vger.kernel.org
+References: <20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org>
+ <20240213-arm-dt-cleanups-v1-2-f2dee1292525@kernel.org>
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ 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
+In-Reply-To: <20240213-arm-dt-cleanups-v1-2-f2dee1292525@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="00000000000014467306115bdb84"
+
+--00000000000014467306115bdb84
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-DKIM-Options: s=acdkim1
-X-mid: c29jQGtlcm5lbC5vcmcgLCBjNzU1ICwgbTEyODIgLCBzNjU3
-x-virtual-mta: s4.acemsrvh.com
-Feedback-ID: 1707420:1707420.755:s4.acemsrvh.com:activecampaign
-X-250ok-CID: 1707420-755
-List-Unsubscribe: <mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-755-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>,
- <http://jimmylarose.activehosted.com/box.php?nl=252&c=755&m=1282&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Message-ID: <20240214163608.31434.890055045.swift@jimmylarose.activehosted.com>
+
+On 2/13/24 11:34, Rob Herring wrote:
+> The dtc interrupt_provider warning is off by default. Fix all the warnings
+> so it can be enabled.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+
+>   arch/arm/boot/dts/broadcom/bcm-cygnus.dtsi             |  3 +++
+>   arch/arm/boot/dts/broadcom/bcm-hr2.dtsi                |  1 +
+>   arch/arm/boot/dts/broadcom/bcm-nsp.dtsi                |  2 ++
+
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com> #Broadcom
+-- 
+Florian
 
 
---_=_swift-44799910865cceb77b58a24.82099209_=_
-Content-Type: text/plain; charset=utf-8
+--00000000000014467306115bdb84
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-(Designed for Nonprofit Execs & Board Members) 
- ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
-
-2-Day Getaway Events for Nonprofits
-Reno, Cincinnati & Dallas
-
-VISIT HERE OR PRESS DIFFERENT DESTINATIONS BELOW
-
-"The 7th habit in Stephen F. Covey's 'Habits of Highly Effective People'
-is SHARPEN THE SAW! Covey insisted that successful C-Suite members take
-the time and money to invest in their own professional development! You
-need it, you deserve it, and your organization will be better for it.
-Join us for a 2-Day IN-PERSON extravaganza and spend time with the
-finest people in the world...your fellow nonprofit execs and YOU!" ~
-Linda Lysakowski, ACFRE
-
- 
-
-https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=aHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZtYWpvci1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9uLWV2ZW50cyUyRg==&sig=A6ZxYBnx7mZ9YkAxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=1707928568&a=%7C%7C26605550%7C%7C&account=jimmylarose%2Eactivehosted%2Ecom&email=JNotSWptnefZn3sXmumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=678f48a0e320c6856d0620aa2e024acb&i=755A1282A252A2960
-
-MGRU WEST COAST
-
-West 2nd Events Center
-600 W 2nd St
-Reno, NV 89503
-
-April 3-4, 2024
-9am-4:00pm (Both Days)
-Happy Hour (5pm)
-
-MGRU MIDWEST
-
-Indiana Wesleyan University
-9286 Schulze Drive
-Cincinnati, OH 45069
-
-May 22-23, 2024
-9am-4:00pm (Both Days)
-Happy Hour (5pm) 
-
-MGRU SOUTHWEST
-
-Arlington-Mansfield Area YMCA
-78 Regency Parkway
-Mansfield, TX 76063
-
-June 12-13, 2024
-9am-4:00pm (Both Days)
-Happy Hour (5pm) 
-
- 
-
-Dear Colleagues In Service,
-
-Over the past 30 years I've been privileged to lead and speak at
-hundreds of AFP conferences, nonprofit state association events and
-industry workshops. I spent my time and money on these gatherings to
-stay up to speed on trends and to network with my peers.
-
-For me, those days are over. Great nonprofit conferences are now virtual
-so if I'm going to fly across the country for a multi-day in-person
-event it won't be to hear retreaded PowerPoint presentation from 1995.
-It will have to be different. It will have to be special. I'm pleased to
-share that I've discovered that worthwhile experience.
-
-It's called Major Gifts Ramp-Up.
-
-Your entire team is invited to MEET THE MILLIONARE DONORS who make 5,6 &
-7 figure gifts in YOUR COMMUNITY. We have their contact information (and
-will make sure you have it too!) If you're responsible for increasing
-your organization's income these live 2-Day IN-PERSON extravaganzas will
-be the most powerful conference events you ever attend.
-
-VISIT HERE TO GET STARTED
-
-I had heard good things about MGRU over the years but finally took the
-time to attend their two-day event. 
-
-**Simply put, their team of superstars blew me away.**
-
-Jimmy LaRose and his faculty were daring, confrontational and provided
-exactly what 21st century nonprofits need in the way of training. 
-
-**Conventional methods of management and fundraising were challenged
-with humor and insight.** Their expert team engaged the audience and
-inspired them generate new income in new ways that took my breath away.
-
-Major Gifts Ramp-Up is not nonprofit management 101! 19,000 nonprofit
-executives from across the U.S. have already attended this conference.
-THEY LOVE THESE CONFERENCES (and so do their boards!) Why? Because this
-fast-paced and provocative training has been customized for the audience
-in attendance. Prepare to hear the truth in ways you've never
-experienced before. You'll learn from the masters who defied convention
-and challenged the false thinking that keeps charities broke. 
-
-That's why I'm inviting you to join me for a national Major Gifts
-Ramp-Up conference event. This live performance will challenge
-everything you believe about the raising of money.
-
-VISIT HERE TO GET STARTED
-
-Who should attend? If you're a CEO, CFO, COO, CDO, Executive Director,
-Development Director, Staff Member, Board Member, Pastor, Trustee or
-Volunteer responsible for the financial health of a nonprofit, ministry
-or church then you'll want to make sure you bring as many people as
-possible to this training.
-
-Tuition for a quality capacity-building conference could cost up to
-$1,200 per guest. We're thrilled to share that a group of major donors
-have underwritten this event allowing us to offer tuition for ONE PERSON
-at $248 or UNLIMITED REGISTRATIONS for only $498.
-
-**That's right, every member of your team can come for only $498.**
-Please register today. This event will reach capacity soon.
-
-VISIT HERE TO GET STARTED
-
-We believe in you. We're going to introduce you to all the wealthy
-donors in your community. How? We have their contact information and
-will share with you the five secrets to meeting wealthy donors for the
-very first time. Let MGRU's faculty show you how to access the funding
-you need to accomplish your important mission.
-
-I look forward to meeting you personally. Until then I remain,
-
-Sincerely Yours,
-
-****Linda Lysakowski, ACFRE****
-
-National Development Institute
-
-P.S. VISIT HERE
-
-to make your unlimited reservation today.
-
-P.P.S. Let me encourage you to prioritize your cash flow. Did you know
-that the number one indicator of a charity's ability to scale program 
-
-**is its capacity to add new staff?** How then, do you generate the
-millions you need to scale your mission? Whether you're a brand new
-start-up, small, medium or large 501(c)3 organization the most efficient
-way to grow your revenues is major gifts fundraising.
-_________________
-
-Sent to soc@kernel.org
-
-Unsubscribe:
-http://jimmylarose.activehosted.com/proc.php?nl=252&amp;c=755&amp;m=1282&amp;s=678f48a0e320c6856d0620aa2e024acb&amp;act=unsub
-
-National Development Institute, PO Box 1840, Lexington, SC 29071, United States
---_=_swift-44799910865cceb77b58a24.82099209_=_
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
-text/html; charset=3Dutf-8"><meta http-equiv=3D"Content-Language" content=
-=3D"en-us"><meta name=3D"format-detection" content=3D"telephone=3Dno"><meta=
- name=3D"format-detection" content=3D"date=3Dno"><meta name=3D"format-detec=
-tion" content=3D"address=3Dno"><meta name=3D"format-detection" content=3D"e=
-mail=3Dno"><meta name=3D"viewport" content=3D"width=3Ddevice-width, minimal=
--ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalable=3D0;"><meta ht=
-tp-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><style data-ac-keep=3D"t=
-rue"> .ExternalClass { width: 100%; background: inherit; background-color: =
-inherit; } .ExternalClass, .ExternalClass p, .ExternalClass span, .External=
-Class font, .ExternalClass td, .ExternalClass div { line-height: 100%; } .E=
-xternalClass p, .ExternalClass ul, .ExternalClass ol { Margin: 0; } .undore=
-set div p, .undoreset p { margin-bottom: 20px; } div[class^=3D"aolmail_divb=
-ody"] { overflow: auto; } [owa] #ac-footer { padding: 20px 0px !important; =
-background:=0Ainherit; background-color: inherit; } a[x-apple-data-detector=
-s] { color: inherit !important; text-decoration: none !important; font-size=
-: inherit !important; font-family: inherit !important; font-weight: inherit=
- !important; line-height: inherit !important; } @-ms-viewport { width: devi=
-ce-width; } </style><style data-ac-keep=3D"true">=0A@media only screen and =
-(max-width: 600px) { /*----------------------------------------------------=
----------------------*\ Abandoned Cart widget \*---------------------------=
----------------------------------------------*/ .td_abandoned-cart img {dis=
-play: block;padding-right: 0 !important;padding-bottom: 0 !important;width:=
- 100% !important;max-width: 100% !important;height: auto !important;} body =
-{ padding: 0!important; font-size:1em!important; } * { -webkit-box-sizing: =
-border-box; -moz-box-sizing: border-box; box-sizing: border-box; } *[class]=
-.divbody {-webkit-text-size-adjust:none !important;} *[class].td_picture im=
-g {width:auto !important;} *[class].td_text { line-height: 110%; } *[class]=
-.td_button { width: auto; } /* Collapse all block elements */ :not(.body) t=
-able { display: block!important; float:none!important; border-collapse:coll=
-apse !important; width:100% !important; min-width:100% !important; clear:bo=
-th!important; } :not(.body) thead, :not(.body) tbody,=0A:not(.body) tr { di=
-splay:block!important; float:none!important; width:100% !important; } :not(=
-.body) th, :not(.body) td, :not(.body) p { display:block!important; float:n=
-one!important; width:100% !important; clear:both!important; } /* Remove bro=
-wser default styling for elements */ ul, ol { margin-left: 20px; margin-bot=
-tom: 10px; margin-top: 10px; -webkit-margin-before: 0; -webkit-margin-after=
-: 0; -webkit-padding-start: 0; } /* Set default height for spacer once coll=
-apse */ *[class].spacer { height: auto!important; } a[href^=3Ddate]{ color:=
-inherit !important; text-decoration:none !important;} a[href^=3Dtelephone]{=
- color:inherit !important; text-decoration:none !important;} a[href^=3Daddr=
-ess]{ color:inherit !important; text-decoration:none !important;} a[href^=
-=3Demail]{ color:inherit !important; text-decoration:none !important;} /* D=
-efault table cell height */ td[height=3D"12"]{height:12px!important;font-si=
-ze:12px!important;line-height:12px!important;}=0A/*------------------------=
--------------------------------------------------*\ Product Widget \*------=
--------------------------------------------------------------------*/ .td_p=
-roduct div, .td_product .products-display { float: none !important; display=
-: block !important; width: 100% !important; Margin-bottom: 20px !important;=
- } .td_product img { width: 100% !important; max-width: 100% !important; } =
-/* Default social icons */ *[class].ac-social-icon-16 {width:16px !importan=
-t; height:16px !important;} *[class].ac-social-icon-24 {width:24px !importa=
-nt; height:24px !important;} *[class].ac-social-icon-28 {width:28px !import=
-ant; height:28px !important;} *[class].__ac_social_icons { margin-right: 0p=
-x !important; } }=0A</style><style data-ac-keep=3D"true"> @media only scree=
-n and (max-width: 320px) { #layout-row4671 img { width: 100% !important; he=
-ight: auto !important; max-width: 320px !important; } #layout-row4677 .brea=
-k-line { width: 100% !important; margin: auto !important; } #layout-row4680=
- .break-line { width: 100% !important; margin: auto !important; } #layout-r=
-ow4681 .break-line { width: 100% !important; margin: auto !important; } div=
-.divbody { padding: 20px !important; } table, tbody, td, .divbody { display=
-: table !important; width: 100% !important; max-width: 100% !important; } .=
-td_rss .rss-item img.iphone_large_image { width: auto !important; } u + .bo=
-dy { display: table !important; width: 100vw !important; min-width: 100vw !=
-important; } u + .body table { display: table !important; width: 100% !impo=
-rtant; min-width: 100% !important; } u + .body td { display: block !importa=
-nt; width: 100% !important; min-width: 100% !important; } u + .body img { d=
-isplay: inline-block=0A!important; margin: auto !important; width: auto !im=
-portant; vertical-align: bottom !important; } u + .body center { display: b=
-lock !important; margin: auto !important; width: 100% !important; min-width=
-: 100% !important; text-align: center !important; } u + .body table._ac_soc=
-ial_table, u + .body table._ac_social_table td, u + .body table._ac_social_=
-table div, u + .body table._ac_social_table a { display: inline-block !impo=
-rtant; margin: auto !important; width: auto !important; min-width: auto !im=
-portant; text-align: center !important; } u + .body table._ac_social_table =
-img { display: inline-block !important; margin: auto !important; width: 32p=
-x !important; min-width: 32px !important; max-width: 32px !important; }=0A}=
-=0A@media only screen and (max-width: 375px) { #layout-row4671 img { width:=
- 100% !important; height: auto !important; max-width: 375px !important; } #=
-layout-row4677 .break-line { width: 100% !important; margin: auto !importan=
-t; } #layout-row4680 .break-line { width: 100% !important; margin: auto !im=
-portant; } #layout-row4681 .break-line { width: 100% !important; margin: au=
-to !important; } div.divbody { padding: 20px !important; } table, tbody, td=
-, .divbody { display: table !important; width: 100% !important; max-width: =
-100% !important; } .td_rss .rss-item img.iphone_large_image { width: auto !=
-important; } u + .body { display: table !important; width: 100vw !important=
-; min-width: 100vw !important; } u + .body table { display: table !importan=
-t; width: 100% !important; min-width: 100% !important; } u + .body td { dis=
-play: block !important; width: 100% !important; min-width: 100% !important;=
- } u + .body img { display: inline-block !important; margin: auto !importan=
-t;=0Awidth: auto !important; vertical-align: bottom !important; } u + .body=
- center { display: block !important; margin: auto !important; width: 100% !=
-important; min-width: 100% !important; text-align: center !important; } u +=
- .body table._ac_social_table, u + .body table._ac_social_table td, u + .bo=
-dy table._ac_social_table div, u + .body table._ac_social_table a { display=
-: inline-block !important; margin: auto !important; width: auto !important;=
- min-width: auto !important; text-align: center !important; } u + .body tab=
-le._ac_social_table img { display: inline-block !important; margin: auto !i=
-mportant; width: 32px !important; min-width: 32px !important; max-width: 32=
-px !important; }=0A}=0A@media only screen and (max-width: 414px) { #layout-=
-row4671 img { width: 100% !important; height: auto !important; max-width: 4=
-14px !important; } #layout-row4677 .break-line { width: 100% !important; ma=
-rgin: auto !important; } #layout-row4680 .break-line { width: 100% !importa=
-nt; margin: auto !important; } #layout-row4681 .break-line { width: 100% !i=
-mportant; margin: auto !important; } div.divbody { padding: 20px !important=
-; } table, tbody, td, .divbody { display: table !important; width: 100% !im=
-portant; max-width: 100% !important; } .td_rss .rss-item img.iphone_large_i=
-mage { width: auto !important; } u + .body { display: table !important; wid=
-th: 100vw !important; min-width: 100vw !important; } u + .body table { disp=
-lay: table !important; width: 100% !important; min-width: 100% !important; =
-} u + .body td { display: block !important; width: 100% !important; min-wid=
-th: 100% !important; } u + .body img { display: inline-block !important; ma=
-rgin: auto !important;=0Awidth: auto !important; vertical-align: bottom !im=
-portant; } u + .body center { display: block !important; margin: auto !impo=
-rtant; width: 100% !important; min-width: 100% !important; text-align: cent=
-er !important; } u + .body table._ac_social_table, u + .body table._ac_soci=
-al_table td, u + .body table._ac_social_table div, u + .body table._ac_soci=
-al_table a { display: inline-block !important; margin: auto !important; wid=
-th: auto !important; min-width: auto !important; text-align: center !import=
-ant; } u + .body table._ac_social_table img { display: inline-block !import=
-ant; margin: auto !important; width: 32px !important; min-width: 32px !impo=
-rtant; max-width: 32px !important; }=0A}=0A@media only screen and (max-widt=
-h: 667px) { #layout-row4671 img { width: 100% !important; height: auto !imp=
-ortant; max-width: 588px !important; } #layout-row4677 .break-line { width:=
- 100% !important; margin: auto !important; } #layout-row4680 .break-line { =
-width: 100% !important; margin: auto !important; } #layout-row4681 .break-l=
-ine { width: 100% !important; margin: auto !important; } div.divbody { padd=
-ing: 20px !important; } table, tbody, td, .divbody { display: table !import=
-ant; width: 100% !important; max-width: 100% !important; } .td_rss .rss-ite=
-m img.iphone_large_image { width: auto !important; } u + .body { display: t=
-able !important; width: 100vw !important; min-width: 100vw !important; } u =
-+ .body table { display: table !important; width: 100% !important; min-widt=
-h: 100% !important; } u + .body td { display: block !important; width: 100%=
- !important; min-width: 100% !important; } u + .body img { display: inline-=
-block !important; margin: auto !important;=0Awidth: auto !important; vertic=
-al-align: bottom !important; } u + .body center { display: block !important=
-; margin: auto !important; width: 100% !important; min-width: 100% !importa=
-nt; text-align: center !important; } u + .body table._ac_social_table, u + =
-.body table._ac_social_table td, u + .body table._ac_social_table div, u + =
-.body table._ac_social_table a { display: inline-block !important; margin: =
-auto !important; width: auto !important; min-width: auto !important; text-a=
-lign: center !important; } u + .body table._ac_social_table img { display: =
-inline-block !important; margin: auto !important; width: 32px !important; m=
-in-width: 32px !important; max-width: 32px !important; }=0A} </style><!--[i=
-f !mso]><!-- webfonts --><!--<![endif]--><!--[if lt mso 12]> <![endif]--><!=
---[if gte mso 9]>=0A<xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:Pixel=
-sPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings>=0A</xml>=0A<![end=
-if]--></head><body id=3D"ac-designer" class=3D"body" style=3D"font-family: =
-Arial; line-height: 1.1; margin: 0px; background-color: #ffffff; width: 100=
-%; text-align: center;">=09=09<div style=3D"display: none !important; paddi=
-ng: 0; height: 1px; font-size: 1px; background-color: inherit !important; o=
-pacity: 0; color: transparent; mso-line-height-rule: exactly; line-height:1=
-px; mso-hide:all;">=0A=09=09=09(Designed for Nonprofit Execs & Board Member=
-s)=0A=09=09=09<div style=3D"display: none; max-height: 0px; overflow: hidde=
-n;">=0A=09=09=09=09&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=0A=09=09=09</div>=0A=0A=09=09</div>=
-=0A<div class=3D"divbody" style=3D"margin: 0px; outline: none; padding: 0px=
-; color: #000000; font-family: arial; line-height: 1.1; width: 100%; backgr=
-ound-color: #ffffff; background: #ffffff; text-align: center;"><table class=
-=3D"template-table" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
-=3D"100%" align=3D"left" style=3D"-ms-text-size-adjust: auto; -webkit-text-=
-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: a=
-uto; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fffff=
-f; background: #ffffff;"><tr style=3D"mso-line-height-rule: exactly;"><td a=
-lign=3D"center" valign=3D"top" width=3D"100%" style=3D"mso-line-height-rule=
-: exactly;"><table class=3D"template-table" border=3D"0" cellpadding=3D"0" =
-cellspacing=3D"0" width=3D"632" bgcolor=3D"#ffffff" style=3D"-ms-text-size-=
-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; fo=
-nt-size: 14px; min-width: auto; mso-table-lspace: 0pt; mso-table-rspace: 0p=
-t; max-width: 632px;"><tr=0Astyle=3D"mso-line-height-rule: exactly;"><td id=
-=3D"layout_table_272110761ea8911679a4057deb7b63e36b6360e2" valign=3D"top" a=
-lign=3D"center" width=3D"632" style=3D"mso-line-height-rule: exactly;"><tab=
-le cellpadding=3D"0" cellspacing=3D"0" border=3D"0" class=3D"layout layout-=
-table root-table" width=3D"632" style=3D"-ms-text-size-adjust: auto; -webki=
-t-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-w=
-idth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso=
--line-height-rule: exactly;"><td id=3D"layout-row-margin4672" valign=3D"top=
-" style=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"10=
-0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size=
--adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: initial !im=
-portant; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table=
--rspace: 0pt;"><tr id=3D"layout-row4672" class=3D"layout layout-row widget =
-_widget_text style4672" style=3D"mso-line-height-rule: exactly; margin: 0;=
-=0Apadding: 0;"><td id=3D"layout-row-padding4672" valign=3D"top" style=3D"m=
-so-line-height-rule: exactly; padding: 5px;"><table width=3D"100%" border=
-=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: a=
-uto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: =
-14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr s=
-tyle=3D"mso-line-height-rule: exactly;"><td id=3D"text_div4633" class=3D"td=
-_text td_block" valign=3D"top" align=3D"left" width=3D"612" style=3D"mso-li=
-ne-height-rule: exactly; margin: 0; outline: none; padding: 0; color: inher=
-it; font-size: 12px; font-weight: inherit; line-height: 1; text-decoration:=
- inherit; font-family: arial;"> <div style=3D"margin: 0; outline: none; pad=
-ding: 0; color: inherit; font-size: 16px; font-weight: inherit; line-height=
-: inherit; text-decoration: inherit;" class=3D""> <div style=3D"margin: 0; =
-outline: none; padding: 0; color: inherit; font-size: inherit; font-weight:=
- inherit; line-height: inherit;=0Atext-decoration: inherit; text-align: cen=
-ter;" class=3D""> <span style=3D'color: #000000; font-size: inherit; font-w=
-eight: inherit; line-height: inherit; text-decoration: inherit; font-family=
-: "trebuchet ms", tahoma, arial, sans;' class=3D""><span style=3D"color: in=
-herit; font-size: 16px; font-weight: 700; line-height: inherit; text-decora=
-tion: inherit; font-style: normal;" class=3D""> </span><div style=3D"margin=
-: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weigh=
-t: inherit; line-height: inherit; text-decoration: inherit; font-style: nor=
-mal; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw=
--ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb=
-a(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shad=
-ow: 0 0 transparent; text-align: left;" class=3D""><div style=3D"margin: 0;=
- outline: none; padding: 0; color: inherit; font-size: inherit; font-weight=
-: inherit; line-height: inherit; text-decoration:=0Ainherit; text-align: ce=
-nter;" class=3D""> </div>=0A</div>=0A <div style=3D"margin: 0; outline: non=
-e; padding: 0; color: #000000; font-size: 16px; font-weight: inherit; line-=
-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --=
-tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
-fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
-hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; text-align: left=
-;" class=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: in=
-herit; font-size: inherit; font-weight: inherit; line-height: inherit; text=
--decoration: inherit; text-align: center;" class=3D""> <div style=3D'margin=
-: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weigh=
-t: inherit; line-height: inherit; text-decoration: inherit; font-family: "t=
-rebuchet ms", tahoma, arial, sans; text-align: -webkit-center;' class=3D"">=
-<span style=3D'color: #000000; font-size: 20px; font-weight: inherit; line-=
-height: inherit; text-decoration: inherit; font-family:=0A"trebuchet ms", t=
-ahoma, arial, sans;' class=3D""><span style=3D'color: inherit; font-size: 1=
-8px; font-weight: inherit; line-height: inherit; text-decoration: inherit; =
---tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring=
--offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,=
-130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0=
- 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D=
-""><span style=3D"color: inherit; font-size: 20px; font-weight: inherit; li=
-ne-height: inherit; text-decoration: inherit;" class=3D"">2-Day Getaway Eve=
-nts for Nonprofits<br><span style=3D"color: inherit; font-size: 28px; font-=
-weight: bold; line-height: inherit; text-decoration: inherit;" class=3D"">R=
-eno, Cincinnati & Dallas</span></span><br><br><strong style=3D'margin: 0; o=
-utline: none; padding: 0; font-weight: 700; font-style: normal; --tw-shadow=
-: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wid=
-th:=0A0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0=
-.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transp=
-arent; font-size: 18px; font-family: "trebuchet ms", tahoma, arial, sans; c=
-olor: #000000;'><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tra=
-cker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZt=
-YWpvci1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9uLWV2ZW50cyUyRg=3D=3D&sig=3DA6ZxYBnx=
-7mZ9YkAxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=3D1707928568&a=3D%7C%7C26605550%7C=
-%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptnefZn3sXmumJ=
-kxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=3D678f48a0e=
-320c6856d0620aa2e024acb&i=3D755A1282A252A2960" target=3D"_blank" style=3D'm=
-argin: 0; outline: none; padding: 0; color: #0764ba; text-decoration: under=
-line; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --t=
-w-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rg=
-ba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-sha=
-dow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans; fon=
-t-weight: inherit;' data-ac-default-color=3D"1"><span style=3D'color:=0Ainh=
-erit; font-size: inherit; font-weight: inherit; line-height: inherit; text-=
-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--t=
-w-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw=
--ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent=
-; --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, a=
-rial, sans;'>VISIT HERE OR PRESS DIFFERENT DESTINATIONS BELOW</span></a></s=
-trong> </span><div style=3D"margin: 0; outline: none; padding: 0; color: in=
-herit; font-size: inherit; font-weight: inherit; line-height: inherit; text=
--decoration: inherit; text-align: left;" class=3D""><span style=3D'color: #=
-000000; font-size: 16px; font-weight: inherit; line-height: inherit; text-d=
-ecoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans;' clas=
-s=3D""><br class=3D""><span style=3D"color: inherit; font-size: inherit; fo=
-nt-weight: inherit; line-height: inherit; text-decoration: inherit; font-st=
-yle: italic;"=0Aclass=3D"">"The 7th habit in Stephen F. Covey's 'Habits of =
-Highly Effective People' is <span style=3D"color: inherit; font-size: inher=
-it; font-weight: bold; line-height: inherit; text-decoration: inherit;" cla=
-ss=3D"">SHARPEN THE SAW!</span> Covey insisted that successful C-Suite memb=
-ers take the time and money to invest in their own professional development=
-! You need it, you deserve it, and your organization will be better for it.=
- Join us for a 2-Day IN-PERSON extravaganza and spend time with the finest =
-people in the world...your fellow nonprofit execs and YOU!" <span style=3D'=
-color: #000000; font-size: 16px; font-weight: 400; line-height: inherit; te=
-xt-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; f=
-ont-style: normal;'>~ Linda Lysakowski, ACFRE<br></span></span></span></div=
->=0A</span></div>=0A</div>=0A</div>=0A</span></div>=0A </div>=0A</td>=0A</t=
-r>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso=
--line-height-rule: exactly;"><td id=3D"layout-row-margin4673" valign=3D"top=
-" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"=
-0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto;=
- -webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px=
-; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D=
-"layout-row4673" class=3D"layout layout-row widget _widget_spacer " style=
-=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4673" valig=
-n=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" bo=
-rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjus=
-t: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-si=
-ze: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><=
-tr style=3D"mso-line-height-rule: exactly;"><td valign=3D"top" height=3D"15=
-" style=3D"mso-line-height-rule: exactly;"><div class=3D"spacer" style=3D"m=
-argin: 0; outline: none; padding: 0;=0Aheight: 15px;"><table cellpadding=3D=
-"0" cellspacing=3D"0" border=3D"0" width=3D"100%" style=3D"-ms-text-size-ad=
-just: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font=
--size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;=
-"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"spacer-body" va=
-lign=3D"top" height=3D"15" width=3D"632" style=3D"mso-line-height-rule: exa=
-ctly;">=C2=A0</td>=0A</tr>=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=
-=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr id=3D"layout-row4676" cla=
-ss=3D"layout layout-row clear-this " style=3D"mso-line-height-rule: exactly=
-;"><td id=3D"layout-row-padding4676" valign=3D"top" style=3D"mso-line-heigh=
-t-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cell=
-spacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust=
-: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-ta=
-ble-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule:=
- exactly;"><td id=3D"layout_table_6f8d4abdeecf4e68f0973196cc31e53d071df766"=
- valign=3D"top" width=3D"358" style=3D"mso-line-height-rule: exactly;"><tab=
-le cellpadding=3D"0" cellspacing=3D"0" border=3D"0" class=3D"layout layout-=
-table " width=3D"358" style=3D"-ms-text-size-adjust: auto; -webkit-text-siz=
-e-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%=
-; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-heig=
-ht-rule: exactly;"><td id=3D"layout-row-margin4671" valign=3D"top" style=3D=
-"mso-line-height-rule:=0Aexactly;"><table width=3D"100%" border=3D"0" cellp=
-adding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit=
--text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-wi=
-dth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-=
-row4671" class=3D"layout layout-row widget _widget_picture " align=3D"left"=
- style=3D"mso-line-height-rule: exactly;"><td id=3D"layout-row-padding4671"=
- valign=3D"top" style=3D"mso-line-height-rule: exactly;"><table width=3D"10=
-0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size=
--adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; f=
-ont-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0=
-pt;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"image-td" al=
-ign=3D"left" valign=3D"top" width=3D"358" style=3D"mso-line-height-rule: ex=
-actly;"><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link-tracker?r=
-edirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZtYWpvci=
-1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9uLWV2ZW50cyUyRg=3D=3D&sig=3DA6ZxYBnx7mZ9Yk=
-AxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=3D1707928568&a=3D%7C%7C26605550%7C%7C&ac=
-count=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptnefZn3sXmumJkxPifv=
-U5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=3D678f48a0e320c68=
-56d0620aa2e024acb&i=3D755A1282A252A2960" style=3D"margin: 0; outline: none;=
- padding: 0; color: #0764ba; display: block; min-width: 100%;"><img src=3D"=
-https://content.app-us1.com/cdn-cgi/image/dpr=3D2,fit=3Dscale-down,format=
-=3Dauto,onerror=3Dredirect,width=3D650/ZvmyW/2024/02/13/109e512b-d16d-44e4-=
-8780-d8607b9ac9ed.jpeg?r=3D983090633" width=3D"358" style=3D"border: none; =
-display: block; outline: none; width: 358px; opacity: 1; max-width: 100%;">=
-</a></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<=
-/table>=0A</td>=0A<td id=3D"layout_table_34cc16c0aed1686c2f426288616f6943d9=
-1f86fe" valign=3D"top" width=3D"274" style=3D"mso-line-height-rule: exactly=
-;"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" class=3D"layout =
-layout-table " width=3D"274" style=3D"-ms-text-size-adjust: auto; -webkit-t=
-ext-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-widt=
-h: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-li=
-ne-height-rule: exactly;"><td id=3D"layout-row-margin4675" valign=3D"top" s=
-tyle=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"100%"=
- border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-ad=
-just: auto; -webkit-text-size-adjust: 100%; border-collapse: initial !impor=
-tant; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rs=
-pace: 0pt;"><tr id=3D"layout-row4675" class=3D"layout layout-row widget _wi=
-dget_text style4675" style=3D"mso-line-height-rule: exactly; margin: 0; pad=
-ding: 0;"><td id=3D"layout-row-padding4675" valign=3D"top"=0Astyle=3D"mso-l=
-ine-height-rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"0"=
- cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -=
-webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; =
-min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=
-=3D"mso-line-height-rule: exactly;"><td id=3D"text_div4636" class=3D"td_tex=
-t td_block" valign=3D"top" align=3D"left" width=3D"254" style=3D"mso-line-h=
-eight-rule: exactly; margin: 0; outline: none; padding: 0; color: inherit; =
-font-size: 12px; font-weight: inherit; line-height: 1; text-decoration: inh=
-erit; font-family: arial;"> <div style=3D"margin: 0; outline: none; padding=
-: 0; color: #000000; font-size: 12px; font-weight: inherit; line-height: in=
-herit; text-decoration: inherit;" class=3D""> <span style=3D"color: #000000=
-; font-size: 12px; font-weight: inherit; line-height: inherit; text-decorat=
-ion: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty=
-, );=0A--tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring=
--color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --t=
-w-ring-shadow: 0 0 transparent;" class=3D""><span style=3D'color: inherit; =
-font-size: 18px; font-weight: inherit; line-height: inherit; text-decoratio=
-n: inherit; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D""><=
-span style=3D"color: inherit; font-size: 20px; font-weight: inherit; line-h=
-eight: inherit; text-decoration: inherit;" class=3D""><a href=3D"https://ji=
-mmylarose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMk=
-Zub25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZtYWpvci1naWZ0cy1yYW1wLXVwLXJlbm8tbnYlM=
-kY=3D&sig=3DErwj3QivTJXZauEMKkrXsbG2sQu2gbiojKZfHBWxjAbw&iat=3D1707928568&a=
-=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3D=
-JNotSWptnefZn3sXmumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpe=
-Tp3CyJ&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D755A1282A252A2961" style=3D=
-"margin: 0; outline: none; padding: 0; color: #0174df; text-decoration: und=
-erline; font-style: normal; font-weight: bold;" target=3D"_blank"><span sty=
-le=3D"color: #0174df; font-size: inherit; font-weight: inherit;=0Aline-heig=
-ht: inherit; text-decoration: inherit;" class=3D"">MGRU WEST COAST</span></=
-a><br style=3D"" class=3D""></span><span style=3D"color: inherit; font-size=
-: 16px; font-weight: inherit; line-height: inherit; text-decoration: inheri=
-t; font-style: normal; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(-=
--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --=
-tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transpare=
-nt; --tw-ring-shadow: 0 0 transparent;" class=3D"">West 2nd Events Center<b=
-r style=3D"" class=3D"">600 W 2nd St<br class=3D"">Reno, NV 89503<br style=
-=3D"" class=3D""></span><br class=3D""><span style=3D"color: inherit; font-=
-size: 16px; font-weight: inherit; line-height: inherit; text-decoration: in=
-herit; font-style: italic;" class=3D"">April 3-4, 2024<br style=3D"" class=
-=3D""></span></span><span style=3D'color: inherit; font-size: 16px; font-we=
-ight: normal; line-height: inherit; text-decoration: inherit; --tw-shadow: =
-0 0 transparent;=0A--tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wid=
-th: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5=
-); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpar=
-ent; font-family: "trebuchet ms", tahoma, arial, sans; font-style: italic;'=
- class=3D"">9am-4:00pm (Both Days)<br style=3D"" class=3D"">Happy Hour (5pm=
-)</span></span><br class=3D""></div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A<=
-/tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactl=
-y;"><td id=3D"layout-row-margin4681" valign=3D"top" style=3D"mso-line-heigh=
-t-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cell=
-spacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust=
-: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-ta=
-ble-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4681" class=3D=
-"layout layout-row widget _widget_break " style=3D"mso-line-height-rule: ex=
-actly;"><td id=3D"layout-row-padding4681" valign=3D"top" style=3D"mso-line-=
-height-rule: exactly; line-height: 0;"><table width=3D"100%" border=3D"0" c=
-ellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -we=
-bkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; mi=
-n-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; line-height: 0=
-; mso-line-height-rule: exactly;"><tr style=3D"mso-line-height-rule: exactl=
-y;"><td height=3D"10" style=3D"mso-line-height-rule: exactly; line-height: =
-0;"></td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td align=
-=3D"center" height=3D"1" width=3D"274" style=3D"mso-line-height-rule: exact=
-ly; line-height: 0;"> <table align=3D"center" border=3D"0" cellpadding=3D"0=
-" cellspacing=3D"0" height=3D"1" width=3D"274" style=3D"-ms-text-size-adjus=
-t: auto; -webkit-text-size-adjust: 100%; border-collapse: collapse; font-si=
-ze: 14px; min-width: auto!important; mso-table-lspace: 0pt; mso-table-rspac=
-e: 0pt; line-height: 0; mso-line-height-rule: exactly; width: 100%; max-wid=
-th: 100%;"><tr style=3D"mso-line-height-rule: exactly;"><td class=3D"break-=
-line" bgcolor=3D"#000000" height=3D"1" width=3D"274" style=3D"mso-line-heig=
-ht-rule: exactly; line-height: 1px; height: 1px; width: 274px; background-c=
-olor: #000000;"> </td>=0A </tr>=0A</table>=0A</td>=0A </tr>=0A<tr style=3D"=
-mso-line-height-rule: exactly;"><td height=3D"10" style=3D"mso-line-height-=
-rule: exactly; line-height: 0;"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A=
-</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td=
- id=3D"layout-row-margin4679" valign=3D"top" style=3D"mso-line-height-rule:=
- exactly; padding: 5px;"><table width=3D"100%" border=3D"0" cellpadding=3D"=
-0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size=
--adjust: 100%; border-collapse: initial !important; font-size: 14px; min-wi=
-dth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-=
-row4679" class=3D"layout layout-row widget _widget_text style4679" style=3D=
-"mso-line-height-rule: exactly; margin: 0; padding: 0;"><td id=3D"layout-ro=
-w-padding4679" valign=3D"top" style=3D"mso-line-height-rule: exactly; paddi=
-ng: 5px;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
-=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%;=
- border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lsp=
-ace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-rule: exactl=
-y;"><td id=3D"text_div4639" class=3D"td_text td_block" valign=3D"top"=0Aali=
-gn=3D"left" width=3D"254" style=3D"mso-line-height-rule: exactly; margin: 0=
-; outline: none; padding: 0; color: inherit; font-size: 12px; font-weight: =
-inherit; line-height: 1; text-decoration: inherit; font-family: arial;"> <d=
-iv style=3D"margin: 0; outline: none; padding: 0; color: #000000; font-size=
-: 12px; font-weight: inherit; line-height: inherit; text-decoration: inheri=
-t;" class=3D""> <span style=3D'color: #000000; font-size: 18px; font-weight=
-: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0=
- transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0=
-px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --=
-tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; =
-font-family: "trebuchet ms", tahoma, arial, sans;' class=3D""> <span style=
-=3D'color: #000000; font-size: 18px; font-weight: 400; line-height: inherit=
-; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: =
-var(--tw-empty, );=0A--tw-ring-offset-width: 0px; --tw-ring-offset-color: #=
-fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tr=
-ansparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", =
-tahoma, arial, sans; font-style: normal;' class=3D""><span style=3D"color: =
-inherit; font-size: 20px; font-weight: inherit; line-height: inherit; text-=
-decoration: inherit;" class=3D""><a href=3D"https://jimmylarose.lt.acemlnd.=
-com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJ=
-lbmNlcy5vcmclMkZtYWpvci1naWZ0cy1yYW1wLXVwLWNpbmNpbm5hdGktb2glMkY=3D&sig=3D8=
-DFEqNUtVNVza9NTsgpYwA4W49B8fQUo5nAL3hHmvbM9&iat=3D1707928568&a=3D%7C%7C2660=
-5550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptnefZn=
-3sXmumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=3D67=
-8f48a0e320c6856d0620aa2e024acb&i=3D755A1282A252A2962" style=3D'margin: 0; o=
-utline: none; padding: 0; color: #0174df; text-decoration: underline; --tw-=
-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offs=
-et-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,2=
-46,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=0A=
-transparent; font-family: "trebuchet ms", tahoma, arial, sans; font-weight:=
- bold; font-style: normal;' target=3D"_blank"><span style=3D"color: #0174df=
-; font-size: inherit; font-weight: inherit; line-height: inherit; text-deco=
-ration: inherit;" class=3D"">MGRU MIDWEST</span></a><br style=3D"" class=3D=
-""></span><span style=3D'color: #000000; font-size: 16px; font-weight: inhe=
-rit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 trans=
-parent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --=
-tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-rin=
-g-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-f=
-amily: "trebuchet ms", tahoma, arial, sans; font-style: normal;' class=3D""=
->Indiana Wesleyan University<br class=3D"">9286 Schulze Drive<br class=3D""=
->Cincinnati, OH 45069<br class=3D""></span><br style=3D"" class=3D""><span =
-style=3D'color: #000000; font-size: 16px; font-weight: inherit; line-height=
-: inherit; text-decoration:=0Ainherit; --tw-shadow: 0 0 transparent; --tw-r=
-ing-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset=
--color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shado=
-w: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuc=
-het ms", tahoma, arial, sans; font-style: italic;' class=3D"">May 22-23, 20=
-24<br style=3D"" class=3D""></span></span><span style=3D'color: #000000; fo=
-nt-size: 16px; font-weight: normal; line-height: inherit; text-decoration: =
-inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); =
---tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color:=
- rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-=
-shadow: 0 0 transparent; font-family: "trebuchet ms", tahoma, arial, sans; =
-font-style: italic;' class=3D"">9am-4:00pm (Both Days)<br style=3D"" class=
-=3D"">Happy Hour (5pm)</span> </span><br class=3D""></div>=0A</td>=0A</tr>=
-=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-l=
-ine-height-rule: exactly;"><td id=3D"layout-row-margin4680" valign=3D"top" =
-style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0"=
- cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -=
-webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; =
-min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"l=
-ayout-row4680" class=3D"layout layout-row widget _widget_break " style=3D"m=
-so-line-height-rule: exactly;"><td id=3D"layout-row-padding4680" valign=3D"=
-top" style=3D"mso-line-height-rule: exactly; line-height: 0;"><table width=
-=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
-t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
-pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
-ace: 0pt; line-height: 0; mso-line-height-rule: exactly;"><tr style=3D"mso-=
-line-height-rule: exactly;"><td height=3D"10" style=3D"mso-line-height-rule=
-: exactly; line-height: 0;"></td>=0A</tr>=0A<tr style=3D"mso-line-height-ru=
-le: exactly;"><td align=3D"center" height=3D"1" width=3D"274" style=3D"mso-=
-line-height-rule: exactly; line-height: 0;"> <table align=3D"center" border=
-=3D"0" cellpadding=3D"0" cellspacing=3D"0" height=3D"1" width=3D"274" style=
-=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-coll=
-apse: collapse; font-size: 14px; min-width: auto!important; mso-table-lspac=
-e: 0pt; mso-table-rspace: 0pt; line-height: 0; mso-line-height-rule: exactl=
-y; width: 100%; max-width: 100%;"><tr style=3D"mso-line-height-rule: exactl=
-y;"><td class=3D"break-line" bgcolor=3D"#000000" height=3D"1" width=3D"274"=
- style=3D"mso-line-height-rule: exactly; line-height: 1px; height: 1px; wid=
-th: 274px; background-color: #000000;"> </td>=0A </tr>=0A</table>=0A</td>=
-=0A </tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td height=3D"10" =
-style=3D"mso-line-height-rule: exactly; line-height: 0;"></td>=0A</tr>=0A</=
-table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-h=
-eight-rule: exactly;"><td id=3D"layout-row-margin4678" valign=3D"top" style=
-=3D"mso-line-height-rule: exactly; padding: 5px;"><table width=3D"100%" bor=
-der=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust=
-: auto; -webkit-text-size-adjust: 100%; border-collapse: initial !important=
-; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace=
-: 0pt;"><tr id=3D"layout-row4678" class=3D"layout layout-row widget _widget=
-_text style4678" style=3D"mso-line-height-rule: exactly; margin: 0; padding=
-: 0;"><td id=3D"layout-row-padding4678" valign=3D"top" style=3D"mso-line-he=
-ight-rule: exactly; padding: 5px;"><table width=3D"100%" border=3D"0" cellp=
-adding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit=
--text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-wi=
-dth: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-=
-line-height-rule: exactly;"><td id=3D"text_div4638" class=3D"td_text td_blo=
-ck" valign=3D"top"=0Aalign=3D"left" width=3D"254" style=3D"mso-line-height-=
-rule: exactly; margin: 0; outline: none; padding: 0; color: inherit; font-s=
-ize: 12px; font-weight: inherit; line-height: 1; text-decoration: inherit; =
-font-family: arial;"> <div style=3D"margin: 0; outline: none; padding: 0; c=
-olor: #000000; font-size: 12px; font-weight: inherit; line-height: inherit;=
- text-decoration: inherit;" class=3D""> <span style=3D'color: inherit; font=
--size: 18px; font-weight: inherit; line-height: inherit; text-decoration: i=
-nherit; font-family: "trebuchet ms", tahoma, arial, sans;' class=3D""> </sp=
-an><span style=3D"color: #000000; font-size: 12px; font-weight: inherit; li=
-ne-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent;=
- --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring=
--offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offse=
-t-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D""><=
-span style=3D'color: inherit; font-size: 18px;=0Afont-weight: inherit; line=
--height: inherit; text-decoration: inherit; font-family: "trebuchet ms", ta=
-homa, arial, sans;' class=3D""> <span style=3D"color: #000000; font-size: i=
-nherit; font-weight: inherit; line-height: inherit; text-decoration: inheri=
-t; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-r=
-ing-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(=
-59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow=
-: 0 0 transparent; font-style: normal;" class=3D""><span style=3D"color: in=
-herit; font-size: 20px; font-weight: inherit; line-height: inherit; text-de=
-coration: inherit;" class=3D""><a href=3D"https://jimmylarose.lt.acemlnd.co=
-m/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlb=
-mNlcy5vcmclMkZtYWpvci1naWZ0cy1yYW1wLXVwLWRhbGxhcy10eCUyRg=3D=3D&sig=3DEGwhL=
-UeGctwEFZ4FddcDKv6x3wSLfqbh7bBmi1LiHXoA&iat=3D1707928568&a=3D%7C%7C26605550=
-%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptnefZn3sXm=
-umJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=3D678f48=
-a0e320c6856d0620aa2e024acb&i=3D755A1282A252A2963" data-ac-default-color=3D"=
-1" style=3D"margin: 0; outline: none;=0Apadding: 0; color: #0174df; text-de=
-coration: underline; font-weight: bold;"><span style=3D"color: ; font-size:=
- inherit; font-weight: inherit; line-height: inherit; text-decoration: inhe=
-rit;">MGRU SOUTHWEST</span></a><br style=3D"" class=3D""></span><span style=
-=3D"color: #000000; font-size: 16px; font-weight: inherit; line-height: inh=
-erit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-ins=
-et: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color:=
- #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 =
-transparent; --tw-ring-shadow: 0 0 transparent; font-style: normal;" class=
-=3D"">Arlington-Mansfield Area YMCA<br class=3D"">78 Regency Parkway<br cla=
-ss=3D"">Mansfield, TX 76063<br style=3D"" class=3D""></span><br style=3D"" =
-class=3D""><span style=3D"color: #000000; font-size: 16px; font-weight: inh=
-erit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 tran=
-sparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width:=0A0px;=
- --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; fon=
-t-style: italic;" class=3D"">June 12-13, 2024<br style=3D"" class=3D""></sp=
-an></span><span style=3D"color: #000000; font-size: 16px; font-weight: norm=
-al; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transp=
-arent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --t=
-w-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring=
--offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-st=
-yle: italic;" class=3D"">9am-4:00pm (Both Days)<br style=3D"" class=3D"">Ha=
-ppy Hour (5pm)</span></span> </span><br class=3D""></div>=0A</td>=0A</tr>=
-=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-l=
-ine-height-rule: exactly;"><td id=3D"layout-row-margin4677" valign=3D"top" =
-style=3D"mso-line-height-rule: exactly;"><table width=3D"100%" border=3D"0"=
- cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -=
-webkit-text-size-adjust: 100%; border-collapse: collapse; font-size: 14px; =
-min-width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"l=
-ayout-row4677" class=3D"layout layout-row widget _widget_break " style=3D"m=
-so-line-height-rule: exactly;"><td id=3D"layout-row-padding4677" valign=3D"=
-top" style=3D"mso-line-height-rule: exactly; line-height: 0;"><table width=
-=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-ms-tex=
-t-size-adjust: auto; -webkit-text-size-adjust: 100%; border-collapse: colla=
-pse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt; mso-table-rsp=
-ace: 0pt; line-height: 0; mso-line-height-rule: exactly;"><tr style=3D"mso-=
-line-height-rule: exactly;"><td height=3D"10" style=3D"mso-line-height-rule=
-: exactly; line-height: 0;"></td>=0A</tr>=0A<tr style=3D"mso-line-height-ru=
-le: exactly;"><td align=3D"center" height=3D"1" width=3D"274" style=3D"mso-=
-line-height-rule: exactly; line-height: 0;"> <table align=3D"center" border=
-=3D"0" cellpadding=3D"0" cellspacing=3D"0" height=3D"1" width=3D"274" style=
-=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-coll=
-apse: collapse; font-size: 14px; min-width: auto!important; mso-table-lspac=
-e: 0pt; mso-table-rspace: 0pt; line-height: 0; mso-line-height-rule: exactl=
-y; width: 100%; max-width: 100%;"><tr style=3D"mso-line-height-rule: exactl=
-y;"><td class=3D"break-line" bgcolor=3D"#000000" height=3D"1" width=3D"274"=
- style=3D"mso-line-height-rule: exactly; line-height: 1px; height: 1px; wid=
-th: 274px; background-color: #000000;"> </td>=0A </tr>=0A</table>=0A</td>=
-=0A </tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td height=3D"10" =
-style=3D"mso-line-height-rule: exactly; line-height: 0;"></td>=0A</tr>=0A</=
-table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr=
->=0A</table>=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"=
-><td id=3D"layout-row-margin4674" valign=3D"top" style=3D"mso-line-height-r=
-ule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspa=
-cing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 1=
-00%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso-table=
--lspace: 0pt; mso-table-rspace: 0pt;"><tr id=3D"layout-row4674" class=3D"la=
-yout layout-row widget _widget_spacer " style=3D"mso-line-height-rule: exac=
-tly;"><td id=3D"layout-row-padding4674" valign=3D"top" style=3D"mso-line-he=
-ight-rule: exactly;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" c=
-ellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text-size-adj=
-ust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%; mso=
--table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-height-ru=
-le: exactly;"><td valign=3D"top" height=3D"15" style=3D"mso-line-height-rul=
-e: exactly;"><div class=3D"spacer" style=3D"margin: 0; outline: none; paddi=
-ng: 0;=0Aheight: 15px;"><table cellpadding=3D"0" cellspacing=3D"0" border=
-=3D"0" width=3D"100%" style=3D"-ms-text-size-adjust: auto; -webkit-text-siz=
-e-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: 100%=
-; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-heig=
-ht-rule: exactly;"><td class=3D"spacer-body" valign=3D"top" height=3D"15" w=
-idth=3D"632" style=3D"mso-line-height-rule: exactly;">=C2=A0</td>=0A</tr>=
-=0A</table>=0A</div>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=
-=0A</td>=0A</tr>=0A<tr style=3D"mso-line-height-rule: exactly;"><td id=3D"l=
-ayout-row-margin4670" valign=3D"top" style=3D"mso-line-height-rule: exactly=
-;"><table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
-tyle=3D"-ms-text-size-adjust: auto; -webkit-text-size-adjust: 100%; border-=
-collapse: collapse; font-size: 14px; min-width: 100%; mso-table-lspace: 0pt=
-; mso-table-rspace: 0pt;"><tr id=3D"layout-row4670" class=3D"layout layout-=
-row widget _widget_text " style=3D"mso-line-height-rule: exactly; margin: 0=
-; padding: 0;"><td id=3D"layout-row-padding4670" valign=3D"top" style=3D"ms=
-o-line-height-rule: exactly;"><table width=3D"100%" border=3D"0" cellpaddin=
-g=3D"0" cellspacing=3D"0" style=3D"-ms-text-size-adjust: auto; -webkit-text=
--size-adjust: 100%; border-collapse: collapse; font-size: 14px; min-width: =
-100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr style=3D"mso-line-=
-height-rule: exactly;"><td id=3D"text_div4631" class=3D"td_text td_block" v=
-align=3D"top" align=3D"left" width=3D"632" style=3D"line-height: 140%;=0Ams=
-o-line-height-rule: exactly; margin: 0; outline: none; padding: 0; color: i=
-nherit; font-size: 12px; font-weight: inherit; line-height: 1.4; text-decor=
-ation: inherit; font-family: arial;"> <div style=3D"line-height: 140%; marg=
-in: 0; outline: none; padding: 0; color: inherit; font-size: inherit; font-=
-weight: inherit; line-height: 1.4; text-decoration: inherit; mso-line-heigh=
-t-rule: exactly;" class=3D"" data-line-height=3D"1.4"> <div style=3D"margin=
-: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-weigh=
-t: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 =
-0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: =
-0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
- text-align: center;" class=3D""><div style=3D"margin: 0; outline: none; pa=
-dding: 0; color: inherit; font-size: inherit; font-weight: inherit; line-he=
-ight: inherit;=0Atext-decoration: inherit; --tw-shadow: 0 0 transparent; --=
-tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
-fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
-hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; text-align: cent=
-er;" class=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: =
-#000000; font-size: 16px; font-weight: 400; line-height: inherit; text-deco=
-ration: inherit; font-style: normal; text-align: left;" class=3D""></div>=
-=0A</div>=0A</div>=0A <span style=3D'color: inherit; font-size: inherit; fo=
-nt-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-sh=
-adow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset=
--width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246=
-,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tran=
-sparent; font-family: "trebuchet ms", tahoma, arial, sans; margin: 0;' clas=
-s=3D""><div style=3D"margin: 0; outline: none; padding: 0; color: #000000; =
-font-size: 16px; font-weight: inherit; line-height: inherit; text-decoratio=
-n: inherit; text-align: left; font-style: normal; --tw-shadow: 0 0 transpar=
-ent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-=
-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-o=
-ffset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;" class=3D=
-""><span style=3D"color: inherit; font-size: inherit; font-weight: inherit;=
- line-height: inherit;=0Atext-decoration: inherit; text-align: inherit;" cl=
-ass=3D"">Dear Colleagues In Service,</span><br class=3D""></div>=0A<div sty=
-le=3D"margin: 0; outline: none; padding: 0; color: inherit; font-size: 16px=
-; font-weight: inherit; line-height: inherit; text-decoration: inherit; --t=
-w-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-of=
-fset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130=
-,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 =
-transparent;" class=3D""><br class=3D""></div>=0A</span><div style=3D"margi=
-n: 0; outline: none; padding: 0; color: inherit; font-size: inherit; font-w=
-eight: inherit; line-height: inherit; text-decoration: inherit;" class=3D""=
-><span style=3D"color: #000000; font-size: 16px; font-weight: inherit; line=
--height: inherit; text-decoration: inherit; text-align: inherit; --tw-shado=
-w: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-wi=
-dth: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.=
-5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transpa=
-rent;" class=3D""><div style=3D'margin: 0; outline: none; padding: 0; color=
-: #000000; font-size: 16px; font-weight: inherit; line-height: inherit; tex=
-t-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; te=
-xt-align: -webkit-left;' class=3D""><span style=3D'color: inherit; font-siz=
-e: 16px; font-weight: 400; line-height: inherit; text-decoration: inherit; =
-font-style: normal; font-family: "trebuchet ms", tahoma, arial,=0Asans;' cl=
-ass=3D"">Over the past 30 years I've been privileged to lead and speak at h=
-undreds of AFP conferences, nonprofit state association events and industry=
- workshops. I spent my time and money on these gatherings to stay up to spe=
-ed on trends and to network with my peers.</span><br class=3D""><br class=
-=3D""><span style=3D'color: inherit; font-size: 16px; font-weight: inherit;=
- line-height: inherit; text-decoration: inherit; font-family: "trebuchet ms=
-", tahoma, arial, sans;' class=3D"">For me, those days are over. Great nonp=
-rofit conferences are now virtual so if I'm going to fly across the country=
- for a <span style=3D"color: inherit; font-size: inherit; font-weight: bold=
-; line-height: inherit; text-decoration: inherit; font-style: italic;" clas=
-s=3D"">multi-day in-person event</span> it won't be to hear retreaded Power=
-Point presentation from 1995. It will have to be different. It will have to=
- be special. I'm pleased to share that I've discovered that worthwhile expe=
-rience.<br=0Aclass=3D""><br class=3D"">It's called Major Gifts Ramp-Up.<br>=
-<br><span style=3D'color: inherit; font-size: 16px; font-weight: 400; line-=
-height: inherit; text-decoration: inherit; --tw-shadow: 0 0 transparent; --=
-tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-of=
-fset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-s=
-hadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; font-family: "tr=
-ebuchet ms", tahoma, arial, sans;'>Your entire team is invited to MEET THE =
-MILLIONARE DONORS w</span><span style=3D'color: inherit; font-size: 16px; f=
-ont-weight: inherit; line-height: inherit; text-decoration: inherit; --tw-s=
-hadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offse=
-t-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,24=
-6,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 tra=
-nsparent; font-family: "trebuchet ms", tahoma, arial, sans;'><span style=3D=
-'color: inherit; font-size:=0Ainherit; font-weight: 400; line-height: inher=
-it; text-decoration: inherit; --tw-shadow: 0 0 transparent; --tw-ring-inset=
-: var(--tw-empty, ); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #=
-fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 tr=
-ansparent; --tw-ring-shadow: 0 0 transparent; font-family: "trebuchet ms", =
-tahoma, arial, sans;'>ho make 5,6 & 7 figure gifts in YOUR COMMUNITY. </spa=
-n><span style=3D"color: inherit; font-size: inherit; font-weight: inherit; =
-line-height: inherit; text-decoration: inherit;">We have their contact info=
-rmation</span><span style=3D'color: inherit; font-size: inherit; font-weigh=
-t: inherit; line-height: inherit; text-decoration: inherit; --tw-shadow: 0 =
-0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: =
-0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); -=
--tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent;=
- font-family: "trebuchet ms", tahoma,=0Aarial, sans;'><span style=3D"color:=
- inherit; font-size: inherit; font-weight: inherit; line-height: inherit; t=
-ext-decoration: inherit;"> (and will make sure you have it too!) </span><sp=
-an style=3D"color: inherit; font-size: inherit; font-weight: bold; line-hei=
-ght: inherit; text-decoration: inherit; font-style: italic;" class=3D"">If =
-you're responsible for increasing your organization's income these live 2-D=
-ay IN-PERSON extravaganzas will be the most powerful conference events you =
-ever attend.</span></span></span><br class=3D""><br class=3D""><b class=3D"=
-" style=3D"margin: 0; outline: none; padding: 0; font-style: normal;"></b><=
-/span><strong style=3D"margin: 0; outline: none; padding: 0; font-style: no=
-rmal;" class=3D""><a=0Ahref=3D"https://jimmylarose.lt.acemlnd.com/Prod/link=
--tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmcl=
-MkZtYWpvci1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9uLWV2ZW50cyUyRg=3D=3D&sig=3DA6Zx=
-YBnx7mZ9YkAxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=3D1707928568&a=3D%7C%7C2660555=
-0%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptnefZn3sX=
-mumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=3D678f4=
-8a0e320c6856d0620aa2e024acb&i=3D755A1282A252A2960" target=3D"_blank" style=
-=3D"margin: 0; outline: none; padding: 0; color: #0174df; text-decoration: =
-underline;" class=3D""><span style=3D"color: #0174df; font-size: inherit; f=
-ont-weight: inherit; line-height: inherit; text-decoration: inherit;">VISIT=
- HERE TO GET STARTED</span></a></strong><br class=3D""><br class=3D""><span=
- style=3D'color: inherit; font-size: 16px; font-weight: inherit; line-heigh=
-t: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, =
-arial, sans;' class=3D"">I had heard good things about MGRU over the years =
-but finally took the time to attend their two-day event. <b class=3D"" styl=
-e=3D"margin: 0; outline: none; padding: 0; font-style: normal; font-weight:=
- 400;"><i class=3D""=0Astyle=3D"margin: 0; outline: none; padding: 0;">Simp=
-ly put, their team of superstars blew me away.</i></b><br class=3D""><br cl=
-ass=3D""><em class=3D"" style=3D"margin: 0; outline: none; padding: 0; font=
--style: normal;">Jimmy LaRose and his faculty were daring, confrontational =
-and provided exactly what 21st century nonprofits need in the way of traini=
-ng. <b class=3D"" style=3D"margin: 0; outline: none; padding: 0; font-weigh=
-t: 400;">Conventional methods of management and fundraising were challenged=
- with humor and insight.</b> Their expert team engaged the audience and ins=
-pired them generate new income in new ways that took my breath away.<br cla=
-ss=3D""><br class=3D""><i style=3D'margin: 0; outline: none; padding: 0; --=
-tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-o=
-ffset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,13=
-0,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0=
- transparent; font-family: "trebuchet ms",=0Atahoma, arial, sans; color: #0=
-00000; font-size: 16px; font-style: italic;' class=3D""> <span style=3D'col=
-or: #000000; font-size: 16px; font-weight: 400; line-height: inherit; text-=
-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; font=
--style: normal;' class=3D"">Major Gifts Ramp-Up is not nonprofit management=
- 101!</span><span style=3D"color: inherit; font-size: inherit; font-weight:=
- bold; line-height: inherit; text-decoration: inherit;" class=3D""> 19,000<=
-/span> nonprofit executives from across the U.S. have already attended this=
- conference. </i><span style=3D'color: #000000; font-size: 16px; font-weigh=
-t: 400; line-height: inherit; text-decoration: inherit; font-family: "trebu=
-chet ms", tahoma, arial, sans; font-style: normal;' class=3D"">THEY LOVE TH=
-ESE CONFERENCES (and so do their boards!) Why? Because this fast-paced and =
-provocative training has been customized for the audience in attendance.</s=
-pan><b style=3D'margin: 0; outline: none; padding: 0; --tw-shadow:=0A0 0 tr=
-ansparent; --tw-ring-inset: var(--tw-empty, ); --tw-ring-offset-width: 0px;=
- --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,0.5); --tw-=
-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; fon=
-t-family: "trebuchet ms", tahoma, arial, sans; color: #000000; font-size: 1=
-6px; font-style: normal;' class=3D""><i style=3D'margin: 0; outline: none; =
-padding: 0; --tw-shadow: 0 0 transparent; --tw-ring-inset: var(--tw-empty, =
-); --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-col=
-or: rgba(59,130,246,0.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ri=
-ng-shadow: 0 0 transparent; font-style: italic; font-family: "trebuchet ms"=
-, tahoma, arial, sans;' class=3D""><span style=3D"color: inherit; font-size=
-: inherit; font-weight: 400; line-height: inherit; text-decoration: inherit=
-;" class=3D""> Prepare to hear the truth in ways you've never experienced b=
-efore. </span>You'll learn from the masters who defied convention and chall=
-enged the=0Afalse thinking that keeps charities broke.</i></b> </em><br cla=
-ss=3D""><br class=3D"">That's why I'm inviting you to join me for a nationa=
-l Major Gifts Ramp-Up conference event. <span style=3D"color: inherit; font=
--size: inherit; font-weight: bold; line-height: inherit; text-decoration: i=
-nherit; font-style: italic;" class=3D"">This live performance will challeng=
-e everything you believe about the raising of money.<br class=3D""><br clas=
-s=3D""></span></span><strong class=3D"" style=3D'margin: 0; outline: none; =
-padding: 0; font-family: "trebuchet ms", tahoma, arial, sans; font-size: 16=
-px; font-style: normal; text-decoration: inherit;'><a href=3D"https://jimmy=
-larose.lt.acemlnd.com/Prod/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub=
-25wcm9maXRjb25mZXJlbmNlcy5vcmclMkZtYWpvci1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9u=
-LWV2ZW50cyUyRg=3D=3D&sig=3DA6ZxYBnx7mZ9YkAxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=
-=3D1707928568&a=3D%7C%7C26605550%7C%7C&account=3Djimmylarose%2Eactivehosted=
-%2Ecom&email=3DJNotSWptnefZn3sXmumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3=
-%2B%2BdlVsuZLpeTp3CyJ&s=3D678f48a0e320c6856d0620aa2e024acb&i=3D755A1282A252=
-A2960" target=3D"_blank" class=3D"" style=3D"margin: 0; outline: none; padd=
-ing: 0; color:=0A#0174df; text-decoration: underline;"><span style=3D"color=
-: #0174df; font-size: inherit; font-weight: inherit; line-height: inherit; =
-text-decoration: inherit;" class=3D"">VISIT HERE TO GET STARTED</span></a><=
-/strong></div>=0A<br class=3D""><div style=3D'margin: 0; outline: none; pad=
-ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
-herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
-, sans; font-style: normal; text-align: -webkit-left;' class=3D""></div>=0A=
-<div style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-si=
-ze: 16px; font-weight: 400; line-height: inherit; text-decoration: inherit;=
- font-family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text=
--align: -webkit-left;' class=3D"">Who should attend? If you=E2=80=99re a CE=
-O, CFO, COO, CDO, Executive Director, Development Director, Staff Member, B=
-oard Member, Pastor, Trustee or Volunteer responsible for the financial hea=
-lth of a nonprofit, ministry or church then you'll want to make sure you br=
-ing as many people as possible to this training.</div>=0A<div style=3D'marg=
-in: 0; outline: none; padding: 0; color: #000000; font-size: 16px; font-wei=
-ght: 400; line-height: inherit; text-decoration: inherit; font-family: "tre=
-buchet ms", tahoma, arial, sans; font-style: normal; text-align: -webkit-le=
-ft;' class=3D""> <br class=3D"">Tuition for a quality capacity-building con=
-ference could cost up to $1,200 per guest. We're thrilled to share that a g=
-roup of major donors have underwritten this event allowing us to offer tuit=
-ion for ONE PERSON at $248 or UNLIMITED REGISTRATIONS for only $498.<br cla=
-ss=3D""></div>=0A<br class=3D""><div style=3D'margin: 0; outline: none; pad=
-ding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: in=
-herit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial=
-, sans; font-style: normal; text-align: -webkit-left;' class=3D""><strong c=
-lass=3D"" style=3D"margin: 0; outline: none; padding: 0;"><i class=3D"" sty=
-le=3D"margin: 0; outline: none; padding: 0;">That's right, every member of =
-your team can come for only $498.</i> Please register today. This event wil=
-l reach capacity soon.</strong><br class=3D""></div>=0A<br class=3D""><div =
-style=3D'margin: 0; outline: none; padding: 0; color: #000000; font-size: 1=
-6px; font-weight: 400; line-height: inherit; text-decoration: inherit; font=
--family: "trebuchet ms", tahoma, arial, sans; font-style: normal; text-alig=
-n: -webkit-left;' class=3D""><strong class=3D"" style=3D"margin: 0; outline=
-: none; padding: 0;"><a href=3D"https://jimmylarose.lt.acemlnd.com/Prod/lin=
-k-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5vcmc=
-lMkZtYWpvci1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9uLWV2ZW50cyUyRg=3D=3D&sig=3DA6Z=
-xYBnx7mZ9YkAxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=3D1707928568&a=3D%7C%7C266055=
-50%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptnefZn3s=
-XmumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=3D678f=
-48a0e320c6856d0620aa2e024acb&i=3D755A1282A252A2960" target=3D"_blank" class=
-=3D"" style=3D"margin: 0; outline: none; padding: 0; color: #0174df; text-d=
-ecoration: underline;"><span style=3D"color: #0174df; font-size: inherit; f=
-ont-weight: inherit; line-height: inherit; text-decoration: inherit;" class=
-=3D"">VISIT HERE TO GET STARTED</span></a></strong><br class=3D""></div>=0A=
-<br class=3D""><div style=3D'margin: 0; outline: none; padding: 0; color: #=
-000000; font-size: 16px; font-weight: inherit; line-height: inherit; text-d=
-ecoration: inherit; font-family: "trebuchet ms", tahoma, arial, sans; text-=
-align: -webkit-left;' class=3D"">We believe in you. We're going to introduc=
-e you to all the wealthy donors in your community. How? <span style=3D"colo=
-r: inherit; font-size: inherit; font-weight: bold; line-height: inherit; te=
-xt-decoration: inherit; font-style: italic;" class=3D"">We have their conta=
-ct information and will share with you the five secrets to meeting wealthy =
-donors for the very first time.</span> Let MGRU's faculty show you how to a=
-ccess the funding you need to accomplish your important mission.<br class=
-=3D""></div>=0A<br class=3D""><div style=3D'margin: 0; outline: none; paddi=
-ng: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: inhe=
-rit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, arial, =
-sans; font-style: normal; text-align: -webkit-left;' class=3D"">I look forw=
-ard to meeting you personally. <span style=3D'color: #000000; font-size: in=
-herit; font-weight: 400; line-height: inherit; text-decoration: inherit; fo=
-nt-family: "trebuchet ms", tahoma, arial, sans;' class=3D"">Until then I re=
-main,</span></div>=0A<br class=3D""><div style=3D'margin: 0; outline: none;=
- padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height=
-: inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, a=
-rial, sans; font-style: normal; text-align: -webkit-left;' class=3D"">Since=
-rely Yours,<br class=3D""></div>=0A<br class=3D""><div style=3D"margin: 0; =
-outline: none; padding: 0; color: #000000; font-size: 20px; font-weight: 40=
-0; line-height: inherit; text-decoration: inherit; font-style: normal; text=
--align: -webkit-left;" class=3D""><strong style=3D"margin: 0; outline: none=
-; padding: 0;" class=3D""><em style=3D'margin: 0; outline: none; padding: 0=
-; font-family: georgia, "times new roman";' class=3D"">Linda Lysakowski, AC=
-FRE</em></strong></div>=0A<br class=3D""><div style=3D'margin: 0; outline: =
-none; padding: 0; color: #000000; font-size: 16px; font-weight: 400; line-h=
-eight: inherit; text-decoration: inherit; font-family: "trebuchet ms", taho=
-ma, arial, sans; font-style: normal; text-align: -webkit-left;' class=3D"">=
-</div>=0A<div style=3D'margin: 0; outline: none; padding: 0; color: #000000=
-; font-size: 16px; font-weight: 400; line-height: inherit; text-decoration:=
- inherit; font-family: "trebuchet ms", tahoma, arial, sans; font-style: nor=
-mal; text-align: -webkit-left;' class=3D"">National Development Institute<b=
-r class=3D""><br class=3D""><strong class=3D"" style=3D"margin: 0; outline:=
- none; padding: 0;">P.S. <a href=3D"https://jimmylarose.lt.acemlnd.com/Prod=
-/link-tracker?redirectUrl=3DaHR0cHMlM0ElMkYlMkZub25wcm9maXRjb25mZXJlbmNlcy5=
-vcmclMkZtYWpvci1naWZ0cy1yYW1wLXVwLWRlc3RpbmF0aW9uLWV2ZW50cyUyRg=3D=3D&sig=
-=3DA6ZxYBnx7mZ9YkAxePG5mM8JA5dxPiKzFJtGuYsac12b&iat=3D1707928568&a=3D%7C%7C=
-26605550%7C%7C&account=3Djimmylarose%2Eactivehosted%2Ecom&email=3DJNotSWptn=
-efZn3sXmumJkxPifvU5zzj01OTNeH%2Bd%3A3uCXDZKzguupAF3%2B%2BdlVsuZLpeTp3CyJ&s=
-=3D678f48a0e320c6856d0620aa2e024acb&i=3D755A1282A252A2960" target=3D"_blank=
-" class=3D"" style=3D"margin: 0; outline: none; padding: 0; color: #0174df;=
- text-decoration: underline;"><span style=3D"color: #0174df; font-size: inh=
-erit; font-weight: inherit; line-height: inherit; text-decoration: inherit;=
-" class=3D"">VISIT HERE</span></a> </strong>to make your unlimited reservat=
-ion today.</div>=0A<br class=3D""><div style=3D'margin: 0; outline: none; p=
-adding: 0; color: #000000; font-size: 16px; font-weight: 400; line-height: =
-inherit; text-decoration: inherit; font-family: "trebuchet ms", tahoma, ari=
-al, sans; font-style: normal; text-align: -webkit-left;' class=3D"">P.P.S. =
-Let me encourage you to prioritize your cash flow. Did you know that the nu=
-mber one indicator of a charity's ability to scale program <b class=3D"" st=
-yle=3D"margin: 0; outline: none; padding: 0;"><i class=3D"" style=3D"margin=
-: 0; outline: none; padding: 0;">is its capacity to add new staff?</i></b> =
-How then, do you generate the millions you need to scale your mission? Whet=
-her you're a brand new start-up, small, medium or large 501(c)3 organizatio=
-n the most efficient way to grow your revenues is major gifts fundraising.<=
-br class=3D""><br class=3D""></div>=0A</span></div>=0A </div>=0A<!--[if (gt=
-e mso 12)&(lte mso 15) ]>=0A<style data-ac-keep=3D"true" data-ac-inline=3D"=
-false"> #text_div4631, #text_div4631 div { line-height: 140% !important; };=
-=0A</style>=0A<![endif]--></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</tabl=
-e>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A=
-</table>=0A</div>=0A<img src=3D"https://jimmylarose.lt.acemlnd.com/Prod/lin=
-k-tracker?nl=3D252&c=3D755&m=3D1282&s=3D678f48a0e320c6856d0620aa2e024acb&l=
-=3Dopen&account=3Djimmylarose.activehosted.com&a=3D26605550" border=3D"0" w=
-idth=3D"1" height=3D"1" style=3D"display:block;width:1px!important;min-widt=
-h:1px!important;max-width:1px!important;height:1px!important;border:0;overf=
-low:hidden;" /><div id=3D"ac-footer" style=3D"clear:both;background-color:i=
-nherit;background:inherit;min-width:100%;mso-table-lspace:0pt;mso-table-rsp=
-ace:0pt;padding:20px;color:#000000;font-size:11px;font-family:arial,helveti=
-ca,sans-serif;line-height:140%;line-height:1.4;text-align:center;box-sizing=
-:border-box;"><center>Sent to: <span style=3D"font-size:11px;font-family:ar=
-ial,helvetica,sans-serif;font-weight:normal;text-decoration:none;outline:no=
-ne;">soc@kernel.org</span><br><br><a href=3D"http://jimmylarose.activehoste=
-d.com/proc.php?nl=3D252&c=3D755&m=3D1282&s=3D678f48a0e320c6856d0620aa2e024a=
-cb&act=3Dunsub"=0Astyle=3D"font-size:11px;font-family:arial,helvetica,sans-=
-serif;font-weight:bold;text-decoration:underline;"><span style=3D"font-weig=
-ht:bold;text-decoration:underline;">Unsubscribe</span></a><br><br>National =
-Development Institute, PO Box 1840, Lexington, SC 29071, United States</cen=
-ter></div>=0A<br clear=3D"all" /></body>=0A</html>
---_=_swift-44799910865cceb77b58a24.82099209_=_--
-
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPtbWpyNL0PH+MQR
+UqsmyQA6Bc5Z96zEqhgYpgnMNeBeMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDIxNDE4NDExNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQD18ENx9WjUnvfZWLxeo2yAGUKHUhWnuzAj
+N7mfaCxZV9s5wZ/56BrO5t+5U6MwjQi7dEliXy1s8pmB/VjJwZFeUll5RqYvJl3xiLfpyK6Rx34a
+aJUd/Zl3bHp16uUymdY+Gk7s6MZdlLauiysbVv6ZuJJRjwaohxGfjHrCvqoWUo4d7CrZYqTuiJdY
+iaKSsE6EscA6GiiTqlsavTFtwQhCAioT7ggE4qrHa2eUSZ2q4l4F61K6Mc9GLgmdVdopSjTcqxmk
+XwvdRJV5xFT0h0AbPG5K6VM6MA39aV90H5wrbD3CUsB6ufsCspeO//g/GKQJsJS3BJWuIchRiLS0
+f+wy
+--00000000000014467306115bdb84--
