@@ -1,135 +1,94 @@
-Return-Path: <SRS0=XyzI=JZ=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=Y6T7=JZ=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0CD3C48260
-	for <soc@archiver.kernel.org>; Fri, 16 Feb 2024 11:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C474C48BC4
+	for <soc@archiver.kernel.org>; Fri, 16 Feb 2024 14:27:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BC6FAC43609; Fri, 16 Feb 2024 11:00:23 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	id 2B1F1C43394; Fri, 16 Feb 2024 14:27:06 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B2EB3C433C7;
-	Fri, 16 Feb 2024 11:00:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2EB3C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a3d82926ed2so76062266b.0;
-        Fri, 16 Feb 2024 03:00:22 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 02E68C433C7
+	for <soc@kernel.org>; Fri, 16 Feb 2024 14:27:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02E68C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-563b7b3e3ecso2141239a12.0
+        for <soc@kernel.org>; Fri, 16 Feb 2024 06:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708081220; x=1708686020; darn=kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PLhCxXeXfTy0oKV1PZq76pGTpwbsrb7RXVp5Ag35IfA=;
-        b=nclE5N36t4X50lTZWeaKc7lQIaLwi4jRfiGkqjn+0l93/VL3Jj0NzoC4+algiIGfEr
-         T5OhxiZ11UudDSA70IOYhZkhq6OtuYYhPMcMItaRUBLhtWL2ba4UrYMe++Tdztgm41jU
-         H2uWpJAlibHNPLXpbGEgddukDLCnSoNPQPiQI+aEKBfGfKxZS28McsYf2Y73uMtA3ZOW
-         t4dkpEtLQbT/eX3ZnZwSlLqe0m129egg70CmNbX2HonRkeuKeKXLkQuaDSQVaYH3rdFg
-         j2aBoIVt3p6X3duKGvvsmroD5pxsnkbn1k4xXZC0/+vGzevuxcizhgwCG4iBAvdGfzDB
-         lbmg==
+        d=linaro.org; s=google; t=1708093623; x=1708698423; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YX3KVONGaKL/+cfVdIf5qOfUj2ReaxP0KFNOM/lKY8g=;
+        b=PU6ud5hUPL88j/nkhgVT0ETrDmhC87j09vV/KiRfi8iPzDEefonuf9d++HubDqvdlT
+         z9Ol2ijhfzNzhf5gMV8SIZ2He4Rq+Ft+dcQn1XInPa5s4LXc8TFyR0gVYxJmStBBvP3/
+         7KaP7m4wBVttzTJKGtduvfzbu0xRsVjKU518Ek/jj8rY6ogni6CcrjcM6SsWAPfSEG5W
+         uUXNcx38O7HFRX5T0yBM2sQ1SNpZYX3qeeM27JCJmI0vfICPrbmKT5ScmnOTawDthZYY
+         p0IHK7k2v0qhcCL9OYxQmnqvdx50kbNXSn+gtdQoYAMWOuR+WFKS3DQ1wjdQS2G3OdHA
+         gPrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708081220; x=1708686020;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PLhCxXeXfTy0oKV1PZq76pGTpwbsrb7RXVp5Ag35IfA=;
-        b=uKBuQ+Tpt1FLALEwXqsokpXy0MKWrGGj1EleZts13uAbpzhVn4uB0DFye0c4fDzHNs
-         BpZVL4GVun+UiLyqsyCbfEYtcZYUBzj0DPC0D22EjCII/YRyeC54Wsr2dW0qicwBfLyT
-         9MkjN84oyJGm45qtAQLWccAlcpI3zucUQhByrGX0x5pq3jW9uo6XQWi3fqBtnoaKRPpj
-         956wUHPucoe1tQzVAki7DICfF1YCYe9OR41D3xzkOmmNlDhc1N3SvHSIrtYmPjJ1mNw+
-         75XQ1Z1+YS5qMW90amIkEl54TrnrFlrL6b9BOlsaKINgm5GTkupfmZx465n9VGM9CPTo
-         VU9g==
-X-Forwarded-Encrypted: i=1; AJvYcCXKEZtVl87MzgeHN5szDZXfHK0nelb7zaGkJIvFWMXOdq+NMGMXHSdTraQF6WR3PZfqvGvpAMG5BSF772fn8X0X6vVILh1bugDvLd5Ue694YnBdV3XLbZYNBhdb+gBIff1xt8lvI98aWrRp1s7DUx3lKihjhabqzoIQqZELa7Gd9uyvqEHoiUBsPV5tqvhbHa4YC5EyECZSO39KZIN/2aC8jEzh1CA+moa3UveASo3KN0feLF1lKsS9pQmAXyt66KSX9E5lJlIj045vf91Uyw==
-X-Gm-Message-State: AOJu0YzcusDEEN1mTtzD8ZtKGIOZ6U4b1h4JNtEhZP1zj+K9gWQR9bDe
-	OxHQkeqkclAHPRaHUgJT4hSKaxbEB1Pv+PcRZUvcOEGZqh+RGY0/KRMDxzYB
-X-Google-Smtp-Source: AGHT+IGJg1U3l1s0cZ7SNrJJLULfB++IrJsj8RGS0gGWbyw09mvwxmMXattq7dTy3fEu4mQVbz3vaQ==
-X-Received: by 2002:a17:906:46da:b0:a3c:f6dc:ea46 with SMTP id k26-20020a17090646da00b00a3cf6dcea46mr3038631ejs.49.1708081220098;
-        Fri, 16 Feb 2024 03:00:20 -0800 (PST)
-Received: from localhost (p200300e41f147f00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f14:7f00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ts4-20020a170907c5c400b00a3df003b6a9sm219235ejc.119.2024.02.16.03.00.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 03:00:19 -0800 (PST)
-Content-Type: multipart/signed;
- boundary=3f4d0b1f359aea3b19397b20b790a1177690846d9dafd4c758ed6e868b5b;
- micalg=pgp-sha256; protocol="application/pgp-signature"
-Mime-Version: 1.0
-Date: Fri, 16 Feb 2024 12:00:18 +0100
-Message-Id: <CZ6G9AYXMMHZ.3ABQKCJUHPSLU@gmail.com>
-Cc: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
- <openbmc@lists.ozlabs.org>, <linux-tegra@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, <linux-omap@vger.kernel.org>,
- <linux-mediatek@lists.infradead.org>, <linux-renesas-soc@vger.kernel.org>,
- <linux-arm-msm@vger.kernel.org>, <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH 2/6] arm: dts: Fix dtc interrupt_provider warnings
-From: "Thierry Reding" <thierry.reding@gmail.com>
+        d=1e100.net; s=20230601; t=1708093623; x=1708698423;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YX3KVONGaKL/+cfVdIf5qOfUj2ReaxP0KFNOM/lKY8g=;
+        b=v5SP+9ysfidEfw7b2tR7hDuxK9VMjFB+kwpQx8K1WJB6wc79F7aFs6VBAFB0X8xi7d
+         gYX4MavR/0dpiOmIznA/bCpldXyCf+ap4Gf+F8QRf6McUPw4YupeSZVimBSjVeFWoB1F
+         ZbPVj3B9dLgJXqW/ABntiMQwmCp6yOCEeQziLxZp5FC0q1PDM9kFXiEyWyR91EqxShAB
+         T3TPnUEiEfEIfa2aK+L4AtAipsKj2Xbpr7bFd0DFFUDBFfgAjwiBUM1PJWc17zD2KtRU
+         BDprPMpD34ke5YnF0lJF+iOTc7tb7ufQm932w0f8a8H4gIehZb9qMPPS1253XyL5nf/l
+         8DKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUw/f0xq6Qzw4xf5eULZLtN4KgugLUJCrP+FoU/Z9WE+836g1RIYjP4Lmi0swo9QUT04wElWWNcokRE7nDCig==
+X-Gm-Message-State: AOJu0Yytoq0RRGYVyiqqszF6pYvqyq9PkWuBk2hcJiYqWvbQFyLDxoLc
+	khIOVkbnA8KTG8k/ZyJudqP2faqnZyyfexr5QD/cRWABYYPOB8prWA0y0dH7hpc=
+X-Google-Smtp-Source: AGHT+IHugTV6Jok5OHz7GlnSz+q/H3J1cRw1PJgwcuyGVl2rBOMyj1xn3Mds6N5/PpVu/nAw3txNPQ==
+X-Received: by 2002:a17:906:d86:b0:a3d:7559:6ed1 with SMTP id m6-20020a1709060d8600b00a3d75596ed1mr3539918eji.4.1708093623188;
+        Fri, 16 Feb 2024 06:27:03 -0800 (PST)
+Received: from rayden (h-217-31-164-171.A175.priv.bahnhof.se. [217.31.164.171])
+        by smtp.gmail.com with ESMTPSA id p19-20020a170906b21300b00a3dad483948sm1249648ejz.182.2024.02.16.06.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 06:27:02 -0800 (PST)
+Date: Fri, 16 Feb 2024 15:27:00 +0100
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: "Rob Herring" <robh@kernel.org>, <soc@kernel.org>, "Shawn Guo"
- <shawnguo@kernel.org>, "Sascha Hauer" <s.hauer@pengutronix.de>,
- "Pengutronix Kernel Team" <kernel@pengutronix.de>, "Fabio Estevam"
- <festevam@gmail.com>, "NXP Linux Team" <linux-imx@nxp.com>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Tsahee Zidenberg" <tsahee@annapurnalabs.com>, "Antoine Tenart"
- <atenart@kernel.org>, "Joel Stanley" <joel@jms.id.au>, "Andrew Jeffery"
- <andrew@codeconstruct.com.au>, "Ray Jui" <rjui@broadcom.com>, "Scott
- Branden" <sbranden@broadcom.com>, "Broadcom internal kernel review list"
- <bcm-kernel-feedback-list@broadcom.com>, "Andrew Lunn" <andrew@lunn.ch>,
- "Gregory Clement" <gregory.clement@bootlin.com>, "Sebastian Hesselbarth"
- <sebastian.hesselbarth@gmail.com>, =?utf-8?q?Jonathan_Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>, "Jonathan Hunter" <jonathanh@nvidia.com>, "Stefan
- Agner" <stefan@agner.ch>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- =?utf-8?q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>, "Tony Lindgren"
- <tony@atomide.com>, "Chanho Min" <chanho.min@lge.com>, "Matthias Brugger"
- <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno"
- <angelogioacchino.delregno@collabora.com>, "Geert Uytterhoeven"
- <geert+renesas@glider.be>, "Magnus Damm" <magnus.damm@gmail.com>, "Linus
- Walleij" <linusw@kernel.org>, "Imre Kaloz" <kaloz@openwrt.org>, "Bjorn
- Andersson" <andersson@kernel.org>, "Konrad Dybcio"
- <konrad.dybcio@linaro.org>, "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>, "Nicolas Schier"
- <nicolas@fjasle.eu>
-X-Mailer: aerc 0.16.0-1-0-g560d6168f0ed-dirty
-References: <20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org>
- <20240213-arm-dt-cleanups-v1-2-f2dee1292525@kernel.org>
-In-Reply-To: <20240213-arm-dt-cleanups-v1-2-f2dee1292525@kernel.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] Make tee_bus_type const for v6.9
+Message-ID: <20240216142700.GA3863398@rayden>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
---3f4d0b1f359aea3b19397b20b790a1177690846d9dafd4c758ed6e868b5b
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+Hello arm-soc maitainers,
 
-On Tue Feb 13, 2024 at 8:34 PM CET, Rob Herring wrote:
-[...]
->  arch/arm/boot/dts/nvidia/tegra30-apalis-v1.1.dtsi      |  1 -
->  arch/arm/boot/dts/nvidia/tegra30-apalis.dtsi           |  1 -
->  arch/arm/boot/dts/nvidia/tegra30-colibri.dtsi          |  1 -
-[...]
+Please pull this small patch making tee_bus_type const.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Thanks,
+Jens
 
---3f4d0b1f359aea3b19397b20b790a1177690846d9dafd4c758ed6e868b5b
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
 
------BEGIN PGP SIGNATURE-----
+  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmXPQEMACgkQ3SOs138+
-s6F44g/+KPT4RF0vNadKSFIV9/iihK84gvvjHc/8S/+Ks+sJw7//4Zws8JtsGdab
-UvvmQ8R5uIrvLpONlnmdl8cjWpnA3OV1VMJRgXeYIR/kKZxuoiZF03R8COiGQvfJ
-Cf4mq2od1sc4OOIFxTV0KJfp6XbmI09stW6zm5wk1F5CjbnMD0TTgxQhEAsOLfum
-aDJefFKp6T8QOlCQhCeYYnXwUIBdoYs7z+SRXBuJWJvgwdPMnyc4M7/5PtW57UXZ
-Vn2Hri2+u9imbcIzSUkrPLev1Kg5sWTF7CSICzmA+jTvHQUAZFQQMyjrGFkFTeI/
-g/J4ljpwRqBlhXRx5ioNbGqYmptZvuljjH6bT8hDzTRNPdfvZfKJSX2+wWb5+kM7
-/CdKfwORAUgMMqqABa4mSxHys/mmyeLJ2idQj/buql4pC7EpgD7SZRadqnaAkD/S
-3zxA6VBVq4Jt+6X3kjgGySa0tUyBMSWydLjH/TTkcZtwu8iEEggp7MxiYA2wJhne
-Pf5VjnhX5nLnPJuJn/Av5GHF1jvsrt9lENJTmpLFZIzxhxWrPntynrvfbpAV50e3
-eWqEDRu7eWFatZNZTrnRhmOHcGO197HIErp20X4PVISOY0uolzuiHFpjQBCUGQdV
-1xaTRZPbjaTB4pcqWNxi+mI4M6jIyDJc6COrC2G9t5GYMcbE6W4=
-=HY7z
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---3f4d0b1f359aea3b19397b20b790a1177690846d9dafd4c758ed6e868b5b--
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/tee-bus-type-for-v6.9
+
+for you to fetch changes up to 1d044941d53855ca06e4fa34936ff7273c8641dd:
+
+  tee: make tee_bus_type const (2024-02-15 08:28:24 +0100)
+
+----------------------------------------------------------------
+tee: make tee_bus_type const
+
+----------------------------------------------------------------
+Ricardo B. Marliere (1):
+      tee: make tee_bus_type const
+
+ drivers/tee/tee_core.c  | 2 +-
+ include/linux/tee_drv.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
