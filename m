@@ -1,84 +1,84 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=DdBq=J4=collabora.com=angelogioacchino.delregno@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EB59C54764
-	for <soc@archiver.kernel.org>; Mon, 19 Feb 2024 09:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF015C48BC3
+	for <soc@archiver.kernel.org>; Mon, 19 Feb 2024 13:12:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CFF86C43399; Mon, 19 Feb 2024 09:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82908C43394;
-	Mon, 19 Feb 2024 09:38:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708335506;
-	bh=LkDFMgrk7Th+N3vQSprqGTyuxUeNhHvf7vzI5mE/Z7c=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=bFLop4tMdf1YUkZ/vhzIhrBjr+F2hheGHi3LWAfeOi9pwhjX2eqpEBD5t1aUvrK1B
-	 KEnVfRe+92U0v33PWd1XVTwX6fjM6zbxYOVjVuy2jt+JxJvLA597ujaVGEDfqagb+F
-	 RCqg9d1RtCZrqeZ4wQVDK6615jbBLhxEAe1D2l+ZZC+yNmSjwk3MmZ7nM4fTlORhFx
-	 HBqm0moXf2Nj912msQyzGl7VUnNGGtMlwHKBsdxIsB2GGSt99AJn/JU1nZxKCRCiTi
-	 yRvJrW9w5icULfOSLs8TMCNFP4HSbcfRgRJo+3yF0PDGcgcmFrT1ifhAH6vdYJtzso
-	 6Z3qpuKvv7CDQ==
-From: Arnd Bergmann <arnd@kernel.org>
+	id 96FD0C43399; Mon, 19 Feb 2024 13:12:38 +0000 (UTC)
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 93BEBC433C7;
+	Mon, 19 Feb 2024 13:12:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 93BEBC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1708348355;
+	bh=OoYJXfbff7Gspv7yl5dq0o/qXCHZiJTyhWFMKa/hC6Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eWjNxx03q3oh2Rkk8ilacpB3btEsjLlfmhcUS4lQITV0uNVlQnWvhnrvyeXUAoAON
+	 CKG5lWNBO1Y7yPvzdM85x5Q/4SylUgKUtMqLnM+uQ8Qu1CZeRjrwEddn2VNW/ezXVX
+	 yB8f5ID/Ti85SLQ8e71KoLdC9BZ8+1vgx/PtVNKpZ6uiHtQyOkAt/znrb5AHij5SVp
+	 GGw07PUy47x0DmBjqYIIPfoGdV6ilnK6jEZHdY/jwOzapITUuY+ZNtaTehYLh6v6yI
+	 Q6qYDNQp2HAISUwVb44LCUZRaDXIzpd0flbIs/j0Gr4Vca5EgzVcDnVQ8/KgNG/qLI
+	 fGTfQUA90pmEg==
+Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 7C4F337820C3;
+	Mon, 19 Feb 2024 13:12:35 +0000 (UTC)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: config: disable new platforms in virt.config
-Date: Mon, 19 Feb 2024 10:38:04 +0100
-Message-Id: <20240219093819.644324-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	matthias.bgg@gmail.com
+Subject: [GIT,PULL,2/2] MediaTek soc driver updates for v6.9
+Date: Mon, 19 Feb 2024 14:12:26 +0100
+Message-ID: <20240219131230.157792-2-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240219131230.157792-1-angelogioacchino.delregno@collabora.com>
+References: <20240219131230.157792-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
-A couple of new platforms got added since last year when Mark
-added virt.config, so turn these off as well.
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm64/configs/virt.config | 4 ++++
- 1 file changed, 4 insertions(+)
+are available in the Git repository at:
 
-diff --git a/arch/arm64/configs/virt.config b/arch/arm64/configs/virt.config
-index c47c36f8f67b..2d1d2ce7ae2a 100644
---- a/arch/arm64/configs/virt.config
-+++ b/arch/arm64/configs/virt.config
-@@ -14,6 +14,7 @@
- # CONFIG_ARCH_BERLIN is not set
- # CONFIG_ARCH_BRCMSTB is not set
- # CONFIG_ARCH_EXYNOS is not set
-+# CONFIG_ARCH_SPARX5 is not set
- # CONFIG_ARCH_K3 is not set
- # CONFIG_ARCH_LAYERSCAPE is not set
- # CONFIG_ARCH_LG1K is not set
-@@ -23,14 +24,17 @@
- # CONFIG_ARCH_MESON is not set
- # CONFIG_ARCH_MVEBU is not set
- # CONFIG_ARCH_NXP is not set
-+# CONFIG_ARCH_MA35 is not set
- # CONFIG_ARCH_MXC is not set
- # CONFIG_ARCH_NPCM is not set
- # CONFIG_ARCH_QCOM is not set
-+# CONFIG_ARCH_REALTEK is not set
- # CONFIG_ARCH_RENESAS is not set
- # CONFIG_ARCH_ROCKCHIP is not set
- # CONFIG_ARCH_S32 is not set
- # CONFIG_ARCH_SEATTLE is not set
- # CONFIG_ARCH_INTEL_SOCFPGA is not set
-+# CONFIG_ARCH_STM32 is not set
- # CONFIG_ARCH_SYNQUACER is not set
- # CONFIG_ARCH_TEGRA is not set
- # CONFIG_ARCH_TESLA_FSD is not set
--- 
-2.39.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-soc-for-v6.9
+
+for you to fetch changes up to 54d21dea6a6c117f3cab4caa1f9c3ffafb515dd6:
+
+  soc: mediatek: mtk-socinfo: Add extra entry for MT8183 (2024-01-31 09:41:43 +0100)
+
+----------------------------------------------------------------
+MediaTek soc driver updates for v6.9
+
+The only addition here is the MediaTek SoC Information driver,
+registering socinfo for various MediaTek SoCs.
+
+----------------------------------------------------------------
+Chen-Yu Tsai (2):
+      soc: mediatek: mtk-socinfo: Clean up NVMEM cell read
+      soc: mediatek: mtk-socinfo: Add extra entry for MT8183
+
+William-tw Lin (1):
+      soc: mediatek: mtk-socinfo: Add driver for getting chip information
+
+ drivers/soc/mediatek/Kconfig       |   9 ++++
+ drivers/soc/mediatek/Makefile      |   1 +
+ drivers/soc/mediatek/mtk-socinfo.c | 191 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 201 insertions(+)
+ create mode 100644 drivers/soc/mediatek/mtk-socinfo.c
 
