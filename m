@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B90FC54764
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B38C5478C
 	for <soc@archiver.kernel.org>; Tue, 20 Feb 2024 21:12:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0226EC43601; Tue, 20 Feb 2024 21:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFD7AC433A6;
+	id 13AE4C43143; Tue, 20 Feb 2024 21:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2191C43330;
 	Tue, 20 Feb 2024 21:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708463561;
-	bh=FHj2794pnPONSym5fB9IXuXcgI9W2viwNvCOYw2/8Gk=;
+	s=k20201202; t=1708463562;
+	bh=PHlSODmmsd/vgb7Nl0gOkfuyAWCnTdce2tacyKcEIUY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ebC71HWJW4Jl32wjqeRR2HgmyHQkpTtN4iyiRaCI5/4Nxrv2WScM5H9+Ph7n+4+J/
-	 6Q9gAWfv2iLM4PPGgxm15rHuYB5Gc/SC9UG8VK0eFa0E97lFZ4OaX56GKrvzFwa2yy
-	 uoeiBkFI58/zisRQnREtWbVEzoz4DkdxzhLoOSTo0ppmOJnwLHwolRhHUv9ASFGuwZ
-	 S6SmwonTk1JCDRNqxR348/s2WrZzloCp7K6e+KhTcCkTBDsDXCwV0gfgiSC+KKWZma
-	 D7GaaHp+xrUahSupLvig1bWBGfPcaLUHbFzF+6U5b9S67FA3vSI42Z6tpkzCJnvzib
-	 /wrMgSHdHhU8w==
+	b=ZSKCJZcdF2Nwimr9o3Ta9lrSL6tse9EsmocQhcloewCCgnoV71E9fU208xE/+FFjn
+	 htfplgDAeZdbJzuyStOLB5q1O1K1klK5nZdQAatrup+TZQIFkjGP8yVxvcXF0dQSH1
+	 K6sRiAvU/NvezX0nuiXzH9nq/lh06pU2ogntFoX/u4WFLJMelCx2IXFh0HKeqZNsRG
+	 llgijxOCWhZ4pWsTkuk96NjTogL6HxLeR/pfnEk6HBm6s1q2vPoKiwStzPml4TDVus
+	 oK7T88cJ2IFu6c0h5p2i/NtrU4bLB6iJl0VECffG0eS5DzgzlyH6BZH/kFnxYBomgZ
+	 nLWbiom6d0wjw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB48DD84BC4;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAB7CD84BC6;
 	Tue, 20 Feb 2024 21:12:41 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts fixes for 6.8
+Subject: Re: [GIT PULL] i.MX fixes for 6.8
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170846356182.4365.2761861273948383560.git-patchwork-notify@kernel.org>
+ <170846356189.4365.5989040903927452456.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Feb 2024 21:12:41 +0000
-References: <2450634.jE0xQCEvom@phil>
-In-Reply-To: <2450634.jE0xQCEvom@phil>
-To: Heiko Stuebner <heiko@sntech.de>
+References: <20240206151744.2459-1-shawnguo2@yeah.net>
+In-Reply-To: <20240206151744.2459-1-shawnguo2@yeah.net>
+To: Shawn Guo <shawnguo2@yeah.net>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 13 Feb 2024 21:02:46 +0100 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Tue,  6 Feb 2024 23:17:44 +0800 you wrote:
+> From: Shawn Guo <shawnguo@kernel.org>
 > 
-> please find a below a collection of fixes for the current release 6.8
-> cycle.
+> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 > 
-> Please pull
+>   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts fixes for 6.8
-    https://git.kernel.org/soc/soc/c/0cf54e404d4f
+  - [GIT,PULL] i.MX fixes for 6.8
+    https://git.kernel.org/soc/soc/c/d0a59944e34f
 
 You are awesome, thank you!
 -- 
