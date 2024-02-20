@@ -1,233 +1,64 @@
-Return-Path: <SRS0=DdBq=J4=collabora.com=angelogioacchino.delregno@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07A3EC48BF8
-	for <soc@archiver.kernel.org>; Mon, 19 Feb 2024 13:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5207AC48BC4
+	for <soc@archiver.kernel.org>; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E4A1CC433A6; Mon, 19 Feb 2024 13:12:38 +0000 (UTC)
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4786FC43390;
-	Mon, 19 Feb 2024 13:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4786FC43390
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708348355;
-	bh=Z3j3MYfDfaYZ+6bnOqQf9P1k31aixEwrgoJ74rNBZes=;
-	h=From:To:Cc:Subject:Date:From;
-	b=VLYkKuJRt8iLG8IMjha1zTnIqJt7nLGSxDnwaXE6xJZ2WhBY8jsdO33O7xmtszgyJ
-	 jApIk/q4PsUD3J54B9E2OSCI7BWNaKi6AsDsjSNWBB8Ao3HjyvHEn4xetJ7+yVQWjH
-	 RVUzQ4jKkbxThhcwE/XK50bEmyIeiyW4tRenU8BheDwLYA0aLUST92/QBKtKDF9hFi
-	 G4p9r7MAyigMTEc16mCNgPwze+jx2Lova0iBGvykJ2wOs00vi4IRoVgE1G0sSRb083
-	 dLhkbEN589dnl00BvQbPCKmx5MQftzpdsBaJuEgmZQhdY1f+dJFKHWp0B5axO6aZvO
-	 Zqv40AMDyeQuA==
-Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CD3F837820C1;
-	Mon, 19 Feb 2024 13:12:34 +0000 (UTC)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	matthias.bgg@gmail.com
-Subject: [GIT,PULL,1/2] MediaTek ARM64 Device Tree updates for v6.9
-Date: Mon, 19 Feb 2024 14:12:25 +0100
-Message-ID: <20240219131230.157792-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.43.0
+	id 20B63C43330; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B8B9C43394;
+	Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708463502;
+	bh=9IbJs1bE7tUPz1ST6MvxBPAf+/W3japply8frggQN+k=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=pQAiaXif3YAzYSbgDAh2EcJs8RmlZU0xNrdE+86dtP5AA2C8r5iwsU8KqPEqgj+qM
+	 T5Ga4OHJvOhlIDgw8v22EYQ1pR/tnfACAr1Yk4qAIyWtLWSBazh0BT140rBxTrjW1x
+	 Dmz2/rwytBd5LcuaNWw9nTfKXNy64jN6fmwbhDFujgOdOn07yfsTqQZoprOe9mpQQR
+	 0OcYWXLc21e7MwneMHalcmrn7gCzQ9A8gANhzFaXbdvnfOnoKbvKWgmKrTG8nR4ePP
+	 XG1pO9kA6Fvng5sLnmVbNqwP0oTXsttc0BXMnAoUKhxXEC78ku6sfyEr37IjzLwGHh
+	 EjkQUfBqYpvBg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E30EAD990D9;
+	Tue, 20 Feb 2024 21:11:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Rockchip dts fixes for 6.8
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <170846350192.4365.17170167595548898389.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Feb 2024 21:11:41 +0000
+References: <2450634.jE0xQCEvom@phil>
+In-Reply-To: <2450634.jE0xQCEvom@phil>
+To: Heiko Stuebner <heiko@sntech.de>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+Hello:
 
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-are available in the Git repository at:
+On Tue, 13 Feb 2024 21:02:46 +0100 you wrote:
+> Hi Arnd, Kevin, Olof,
+> 
+> please find a below a collection of fixes for the current release 6.8
+> cycle.
+> 
+> Please pull
+> 
+> [...]
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-dts64-for-v6.9
+Here is the summary with links:
+  - [GIT,PULL] Rockchip dts fixes for 6.8
+    https://git.kernel.org/soc/soc/c/0cf54e404d4f
 
-for you to fetch changes up to ef569d5db50e7edd709e482157769a5b3c367e22:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  arm64: dts: mt8195-cherry-tomato: change watchdog reset boot flow (2024-02-19 13:35:24 +0100)
 
-----------------------------------------------------------------
-MediaTek ARM64 DeviceTree updates for v6.9
-
-This adds support for the following new machines:
- - MT7981B: Xiaomi AX3000T
- - MT7986A: Acelink EW-7886CAX
- - MT7988A: BananaPi BPI-R4
- - MT8186 Chromebooks: Tentacruel, Tentacool, Steelix, Rusty, Magneton
- - MT8395/MT8195: Radxa NIO 12L
-
-Also adds more support for the MediaTek MT8186 SoC's Video and JPEG
-encoders and for MT7988 clocks, enables wakeup support for the CrOS
-EC on SPI in all MediaTek Chromebooks, performs some cleanups and
-includes some spare fixes.
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: mediatek: Replace deprecated extcon-usb-gpio id-gpio/vbus-gpio properties
-
-Allen-KH Cheng (1):
-      arm64: dts: mediatek: mt8186: Add jpgenc node
-
-AngeloGioacchino Del Regno (3):
-      arm64: dts: mediatek: mt8195: Add MTU3 nodes and correctly describe USB
-      dt-bindings: arm64: mediatek: Add MT8395 Radxa NIO 12L board compatible
-      arm64: dts: mediatek: Introduce the MT8395 Radxa NIO 12L board
-
-Arınç ÜNAL (2):
-      arm64: dts: mt7622: add port@5 as CPU port
-      arm64: dts: mt7986: add port@5 as CPU port
-
-Chen-Yu Tsai (9):
-      dt-bindings: arm: mediatek: Sort entries by SoC then board compatibles
-      dt-bindings: arm: mediatek: Add MT8186 Tentacruel / Tentacool Chromebooks
-      dt-bindings: arm: mediatek: Add MT8186 Steelix Chromebook
-      dt-bindings: arm: mediatek: Add MT8186 Rusty Chromebook
-      dt-bindings: arm: mediatek: Add MT8186 Magneton Chromebooks
-      arm64: dts: mediatek: Add MT8186 Krabby platform based Tentacruel / Tentacool
-      arm64: dts: mediatek: Introduce MT8186 Steelix
-      arm64: dts: mediatek: Add MT8186 Steelix platform based Rusty
-      arm64: dts: mediatek: Add MT8186 Magneton Chromebooks
-
-Eugen Hristev (5):
-      dt-bindings: media: mtk-vcodec-encoder: fix non-vp8 clock name
-      arm64: dts: mediatek: mt8192: fix vencoder clock name
-      dt-bindings: media: mtk-vcodec-encoder: add compatible for mt8186
-      arm64: dts: mediatek: mt8186: fix VENC power domain clocks
-      dt-bindings: media: mediatek-jpeg-encoder: change max iommus count
-
-Hsin-Te Yuan (1):
-      arm64: dts: mt8195-cherry-tomato: change watchdog reset boot flow
-
-Krzysztof Kozlowski (1):
-      arm64: dts: mediatek: replace underscores in node names
-
-Kyrie Wu (1):
-      arm64: dts: mediatek: mt8186: Add venc node
-
-Mark Hasemeyer (4):
-      arm64: dts: mediatek: mt8173: Enable cros-ec-spi as wake source
-      arm64: dts: mediatek: mt8183: Enable cros-ec-spi as wake source
-      arm64: dts: mediatek: mt8192: Enable cros-ec-spi as wake source
-      arm64: dts: mediatek: mt8195: Enable cros-ec-spi as wake source
-
-Nícolas F. R. A. Prado (4):
-      arm64: dts: mt8183: Move CrosEC base detection node to kukui-based DTs
-      arm64: dts: mediatek: mt8192-asurada: Remove CrosEC base detection node
-      arm64: dts: mediatek: mt8186: Add missing clocks to ssusb power domains
-      arm64: dts: mediatek: mt8186: Add missing xhci clock to usb controllers
-
-Rafał Miłecki (17):
-      arm64: dts: mediatek: mt7986: fix reference to PWM in fan node
-      arm64: dts: mediatek: mt7986: drop crypto's unneeded/invalid clock name
-      arm64: dts: mediatek: mt7986: fix SPI bus width properties
-      arm64: dts: mediatek: mt7986: fix SPI nodename
-      arm64: dts: mediatek: mt7986: drop "#clock-cells" from PWM
-      arm64: dts: mediatek: mt7986: add "#reset-cells" to infracfg
-      dt-bindings: arm64: mediatek: Add MT7981B and Xiaomi AX3000T
-      arm64: dts: mediatek: Add initial MT7981B and Xiaomi AX3000T
-      dt-bindings: arm64: mediatek: Add MT7988A and BPI-R4
-      arm64: dts: mediatek: Add initial MT7988A and BPI-R4
-      arm64: dts: mediatek: mt7988: add clock controllers
-      dt-bindings: vendor-prefixes: add acelink
-      dt-bindings: arm64: dts: mediatek: Add Acelink EW-7886CAX access point
-      arm64: dts: mediatek: Add Acelink EW-7886CAX
-      arm64: dts: mediatek: mt7986: reorder properties
-      arm64: dts: mediatek: mt7986: reorder nodes
-      arm64: dts: mediatek: mt7622: add missing "device_type" to memory nodes
-
-William-tw Lin (1):
-      arm64: dts: mediatek: Add socinfo efuses to MT8173/83/96/92/95 SoCs
-
-Yunfei Dong (1):
-      arm64: dts: mediatek: mt8186: Add video decoder device nodes
-
- Documentation/devicetree/bindings/arm/mediatek.yaml                  |  198 ++++--
- Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml |   31 +-
- Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml   |    3 +-
- Documentation/devicetree/bindings/vendor-prefixes.yaml               |    2 +
- arch/arm64/boot/dts/mediatek/Makefile                                |   14 +
- arch/arm64/boot/dts/mediatek/mt2712-evb.dts                          |    4 +-
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi                            |    2 +-
- arch/arm64/boot/dts/mediatek/mt6797.dtsi                             |    8 +-
- arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts             |   13 +
- arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts                         |   25 +
- arch/arm64/boot/dts/mediatek/mt7981b-xiaomi-ax3000t.dts              |   15 +
- arch/arm64/boot/dts/mediatek/mt7981b.dtsi                            |  105 ++++
- arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts          |  173 ++++++
- arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso       |    2 +-
- arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts             |    2 +-
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts                         |   31 +-
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi                            |  180 +++---
- arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts                         |   31 +-
- arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dts             |   11 +
- arch/arm64/boot/dts/mediatek/mt7988a.dtsi                            |  136 ++++
- arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts                |    2 +-
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi                         |    3 +-
- arch/arm64/boot/dts/mediatek/mt8173-evb.dts                          |    2 +-
- arch/arm64/boot/dts/mediatek/mt8173.dtsi                             |   19 +-
- arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi                |    4 +
- arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi                |    4 +
- arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi                 |    4 +
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi                       |    5 +-
- arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts                      |    2 +-
- arch/arm64/boot/dts/mediatek/mt8183.dtsi                             |   11 +-
- arch/arm64/boot/dts/mediatek/mt8186-corsola-krabby.dtsi              |  129 ++++
- arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393216.dts   |   39 ++
- arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393217.dts   |   39 ++
- arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393218.dts   |   26 +
- arch/arm64/boot/dts/mediatek/mt8186-corsola-rusty-sku196608.dts      |   26 +
- arch/arm64/boot/dts/mediatek/mt8186-corsola-steelix-sku131072.dts    |   18 +
- arch/arm64/boot/dts/mediatek/mt8186-corsola-steelix-sku131073.dts    |   18 +
- arch/arm64/boot/dts/mediatek/mt8186-corsola-steelix.dtsi             |  199 ++++++
- arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacool-sku327681.dts  |   57 ++
- arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacool-sku327683.dts  |   24 +
- arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacruel-sku262144.dts |   44 ++
- arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacruel-sku262148.dts |   26 +
- arch/arm64/boot/dts/mediatek/mt8186-corsola.dtsi                     | 1681 ++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8186.dtsi                             |   93 ++-
- arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi                     |    5 +-
- arch/arm64/boot/dts/mediatek/mt8192.dtsi                             |   10 +-
- arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts             |    4 +
- arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts             |    4 +
- arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts             |    4 +
- arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi                      |   27 +-
- arch/arm64/boot/dts/mediatek/mt8195-demo.dts                         |   18 +-
- arch/arm64/boot/dts/mediatek/mt8195-evb.dts                          |   12 +
- arch/arm64/boot/dts/mediatek/mt8195.dtsi                             |  128 ++--
- arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts               |   17 +-
- arch/arm64/boot/dts/mediatek/mt8395-radxa-nio-12l.dts                |  825 +++++++++++++++++++++++++
- 55 files changed, 4247 insertions(+), 268 deletions(-)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7981b-xiaomi-ax3000t.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7981b.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7988a-bananapi-bpi-r4.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7988a.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-krabby.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393216.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393217.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393218.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-rusty-sku196608.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-steelix-sku131072.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-steelix-sku131073.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-steelix.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacool-sku327681.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacool-sku327683.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacruel-sku262144.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola-tentacruel-sku262148.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-corsola.dtsi
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8395-radxa-nio-12l.dts
