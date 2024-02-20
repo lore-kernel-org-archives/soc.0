@@ -4,58 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E40C54764
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E77C5478B
 	for <soc@archiver.kernel.org>; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 29B65C43399; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 14018C433B1;
+	id 30F83C43141; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1AA35C433B2;
 	Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1708463502;
-	bh=e2ngQiclIxwBdiG0wawks10EFoEkr4bxWO3MwFQDBgw=;
+	bh=2vDql4w8KriQybwh1S9NXq12SJVGSKV+CuUPNBltFNA=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=MuDCrUbmU7Nr/l8GWRlaQk/9SfUSXefICgC2IjMK9yUcpDGPxjaVdUyUadKmz4hPE
-	 fsnrpvcR8qk1Guxjavp5jzF2AtiG51pxO75rEEvwFV7+8dn3yqgr6tvGgNwUcneOy3
-	 zkZ4FIGpfxhc1NzyEDqekcwDUz/FCw/Azd5K6In7Z81wZkh4wSEYeoCIlmOnbtBBEt
-	 uzMSLDRWtu6y6qeJ1dAC4jIKfI995Yx2x3qRywfU30kbxvhRYabeEACKNXXw7O3/8k
-	 JQXvBBtyhslzPTOtxTRSrucHj2qYTl+bTMFH5twIcLEG/kOlgoNNra3ZXmMiGvY6vP
-	 gtUKcJAF1evTA==
+	b=gG2bZLV4s6zRgM0pyAx8zJQW+9efwP9tZoE8hj19QwxL4LNjMAEnQDbu6gDzenjO5
+	 WCIYduZSaLKLw/q34vrpB5YWEYF2+zT+QT2Zp+WAvCcvgODZvjC5rjeTc4yLO39UYo
+	 QWDFc4rWImNIxr4Eb089HUyvzK2nemiMbf18FAftTpvDpGAg+/5lHb0PT4WAflWczl
+	 5811wOOj8ZtYAlTk5JPCizUUJ2gkJxyiytUIwKdjSOuu1dseKmvdSmSe55oJ/8EPzU
+	 66COpznlGNysG7TQfekltO/tjLneEGsOYdGnPSFnDx5sFqvuLbNRfMZjDCUAPYI+U+
+	 f/949dC01NluQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0B73D84BC4;
-	Tue, 20 Feb 2024 21:11:41 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 04804D84BC0;
+	Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.8
+Subject: Re: [PATCH] ARM: ep93xx: Add terminator to gpiod_lookup_table
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170846350198.4365.10293073673459865260.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Feb 2024 21:11:41 +0000
-References: <20240206151744.2459-1-shawnguo2@yeah.net>
-In-Reply-To: <20240206151744.2459-1-shawnguo2@yeah.net>
-To: Shawn Guo <shawnguo2@yeah.net>
+ <170846350201.4365.18389489056883543482.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Feb 2024 21:11:42 +0000
+References: <20240205102337.439002-1-alexander.sverdlin@gmail.com>
+In-Reply-To: <20240205102337.439002-1-alexander.sverdlin@gmail.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue,  6 Feb 2024 23:17:44 +0800 you wrote:
-> From: Shawn Guo <shawnguo@kernel.org>
+On Mon,  5 Feb 2024 11:23:34 +0100 you wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
 > 
-> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+> Without the terminator, if a con_id is passed to gpio_find() that
+> does not exist in the lookup table the function will not stop looping
+> correctly, and eventually cause an oops.
 > 
->   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
-> 
-> are available in the Git repository at:
+> Cc: stable@vger.kernel.org
+> Fixes: b2e63555592f ("i2c: gpio: Convert to use descriptors")
+> Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.8
-    https://git.kernel.org/soc/soc/c/d0a59944e34f
+  - ARM: ep93xx: Add terminator to gpiod_lookup_table
+    https://git.kernel.org/soc/soc/c/fdf87a0dc26d
 
 You are awesome, thank you!
 -- 
