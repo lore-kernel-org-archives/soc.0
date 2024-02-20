@@ -4,76 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 515EBC5475B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5046FC48BC3
 	for <soc@archiver.kernel.org>; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1476FC433C7; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3D78C43390
-	for <soc@kernel.org>; Tue, 20 Feb 2024 21:11:41 +0000 (UTC)
+	id 245ECC43390; Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EB5AC43399;
+	Tue, 20 Feb 2024 21:11:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1708463502;
-	bh=S1Pu94T+NeNNu47iAqsCLnvFzX6H4AtnFpvmVBp9cHY=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=KZqVsJ8Tkp5sU7Mum6Qj4xOlsfJo38IOjqS0cqGTAqwqjRPjQEoPCQGz7ZRDvWyzV
-	 jYi6nvNjmHFMxC8Q6IMxIRGxG0CNMa7t+oB9VsIeXjBgDaA1RTKg6FxUdA5aRFweti
-	 2c8eooX+hSShH+IWjvTY/ZApZ2/YGtzCY7JhpgITKH099T9zvP5SSEfbGMnd8SboRy
-	 gwV5VKsCTl2d/WhX+8V+/fBzqceVqJZA63ET1/jzSiKV9bzxPCx+6UQlwibRnfGITM
-	 6uWwq80VoxrctmPW1Zz0gwsF2g1uUs0Fvu4u74BI1HRIvNt4SCQzX3ERjbXO7ztRAp
-	 g2XOTEarBxNzw==
+	bh=pL+FfLly31u7fOBjtcBADjVf6mml4/yerT+M1Ch5Gvc=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=IKHt2IOTB3ar2eoOFs+UM+qLkjYM/6LPP0F5iIIOYBlu4w47fb1LuYjUoYcQw54bN
+	 KKatyrTPNz4/63tFdYVg4852GXemWNtHQmKjz3j+PONnVXp2GpUkU4pVJdRRYDMGlS
+	 135xP56IklyJNhijxR94Dd9hid/C5Mz6OzipQqY+Ge8bSJTTBZdmxJPzaLnC5gANl7
+	 1coqV87YfTzFYj0b2TQqB0eyYBZJ/CWf4GJsX9kizFflDKh0wdYP2Hqm3vXFDDrxbv
+	 g0UuRJUKniYYiFSBfNDHze7j2y6m0soUhyaLg5kXmL33/UNn3hs4OfvL5SxA24A7Oa
+	 1dccpAYGpRoCw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB955D990CD;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9705D990D7;
 	Tue, 20 Feb 2024 21:11:41 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH 0/6] dts: Fix dtc interrupt warnings
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170846350184.4365.18252009577961394399.git-patchwork-summary@kernel.org>
+ <170846350195.4365.161469197356599413.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Feb 2024 21:11:41 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org>
+In-Reply-To: <20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This series was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Rockchip dts fixes for 6.8
-  Submitter: Heiko Stuebner <heiko@sntech.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=825778
-  Lore link: https://lore.kernel.org/r/2450634.jE0xQCEvom@phil
+On Tue, 13 Feb 2024 13:34:24 -0600 you wrote:
+> I had a branch with most of these changes sitting in my tree for some
+> time. Geert's asking about some errors not getting found prompted me to
+> clean it up and send it out. This series fixes all* interrupt related
+> warnings and enables the check by default.
+> 
+> SoC maintainers, Can you please take this series directly.
+> 
+> [...]
 
-Series: dts: Fix dtc interrupt warnings
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=825772
-  Lore link: https://lore.kernel.org/r/20240213-arm-dt-cleanups-v1-0-f2dee1292525@kernel.org
-    Patches: [1/6] arm64: dts: freescale: Disable interrupt_map check
-             [2/6] arm: dts: Fix dtc interrupt_provider warnings
-             [3/6] arm64: dts: Fix dtc interrupt_provider warnings
-             [4/6] arm: dts: Fix dtc interrupt_map warnings
-             [5/6] arm64: dts: qcom: Fix interrupt-map cell sizes
-             [6/6] dtc: Enable dtc interrupt_provider check
+Here is the summary with links:
+  - [1/6] arm64: dts: freescale: Disable interrupt_map check
+    https://git.kernel.org/soc/soc/c/e08f65491c0e
+  - [2/6] arm: dts: Fix dtc interrupt_provider warnings
+    https://git.kernel.org/soc/soc/c/96fd598e9c34
+  - [3/6] arm64: dts: Fix dtc interrupt_provider warnings
+    https://git.kernel.org/soc/soc/c/91adecf911e5
+  - [4/6] arm: dts: Fix dtc interrupt_map warnings
+    https://git.kernel.org/soc/soc/c/f02b0f0dc26f
+  - [5/6] arm64: dts: qcom: Fix interrupt-map cell sizes
+    https://git.kernel.org/soc/soc/c/704dccec0d49
+  - [6/6] dtc: Enable dtc interrupt_provider check
+    https://git.kernel.org/soc/soc/c/78b6f8e7379b
 
-Patch: [GIT,PULL] i.MX fixes for 6.8
-  Submitter: Shawn Guo <shawnguo2@yeah.net>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=823632
-  Lore link: https://lore.kernel.org/r/20240206151744.2459-1-shawnguo2@yeah.net
-
-Patch: ARM: ep93xx: Add terminator to gpiod_lookup_table
-  Submitter: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=823101
-  Lore link: https://lore.kernel.org/r/20240205102337.439002-1-alexander.sverdlin@gmail.com
-
-
-Total patches: 9
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
