@@ -4,35 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C628C48BF6
-	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 22:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3C6C48BEB
+	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 23:01:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 43BE2C433C7; Wed, 21 Feb 2024 22:58:26 +0000 (UTC)
+	id 41B1CC433B1; Wed, 21 Feb 2024 23:01:25 +0000 (UTC)
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D1416C433F1;
-	Wed, 21 Feb 2024 22:58:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1416C433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 0F4EAC43390;
+	Wed, 21 Feb 2024 23:01:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F4EAC43390
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Received: from i5e861914.versanet.de ([94.134.25.20] helo=diego.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1rcvXh-0000pG-TV; Wed, 21 Feb 2024 23:58:21 +0100
+	id 1rcvaa-0000rv-NM; Thu, 22 Feb 2024 00:01:20 +0100
 From: Heiko Stuebner <heiko@sntech.de>
 To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts32 changes for 6.9 #1
-Date: Wed, 21 Feb 2024 23:58:21 +0100
-Message-ID: <37970455.XM6RcZxFsP@diego>
+Subject: [GIT PULL] Rockchip driver changes for 6.9 #1
+Date: Thu, 22 Feb 2024 00:01:20 +0100
+Message-ID: <5997473.alqRGMn8q6@diego>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
+
+Hi Arnd, Kevin, Olof,
+
+in expectation of more real driver-related changes I had started these
+binding additions in a driver-branch, but in hindsight they could've also
+just lived in the dt branch. So sorry about the additional pull.
+
+Heiko
+
 
 The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
@@ -40,31 +49,27 @@ The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.9-rockchip-dts32-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.9-rockchip-drivers1
 
-for you to fetch changes up to 15a5ed03000cf61daf87d14628085cb1bc8ae72c:
+for you to fetch changes up to 85a33544afa8895803798553c7510658dcbd3546:
 
-  ARM: dts: rockchip: fix rk322x hdmi ports node (2024-02-13 20:22:34 +0100)
-
-----------------------------------------------------------------
-Display output for rk3128 and some adaptions to binding clarifications
-for hdmi nodes on some older socs.
+  dt-bindings: soc: rockchip: add rk3588 USB3 syscon (2024-02-13 19:37:15 +0100)
 
 ----------------------------------------------------------------
-Alex Bee (3):
-      ARM: dts: rockchip: Add display subsystem for RK3128
-      ARM: dts: rockchip: Add HDMI node for RK3128
-      ARM: dts: rockchip: Enable HDMI output for XPI-3128
+dt-binding additions for some syscons (rk3588 usb3, hdptxphy) and a
+clock addition to the rk3588 VO syscon binding.
+6#
 
-Johan Jonker (2):
-      ARM: dts: rockchip: fix rk3288 hdmi ports node
-      ARM: dts: rockchip: fix rk322x hdmi ports node
+----------------------------------------------------------------
+Cristian Ciocaltea (1):
+      dt-bindings: soc: rockchip: Add rk3588 hdptxphy syscon
 
- arch/arm/boot/dts/rockchip/rk3128-xpi-3128.dts | 29 +++++++++++++
- arch/arm/boot/dts/rockchip/rk3128.dtsi         | 60 ++++++++++++++++++++++++++
- arch/arm/boot/dts/rockchip/rk322x.dtsi         | 16 ++++---
- arch/arm/boot/dts/rockchip/rk3288.dtsi         | 16 +++++--
- 4 files changed, 113 insertions(+), 8 deletions(-)
+Sebastian Reichel (2):
+      dt-bindings: soc: rockchip: add clock to RK3588 VO grf
+      dt-bindings: soc: rockchip: add rk3588 USB3 syscon
+
+ .../devicetree/bindings/soc/rockchip/grf.yaml      | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 
 
