@@ -1,218 +1,107 @@
-Return-Path: <SRS0=Mtuc=J6=oss.nxp.com=ghennadi.procopciuc@kernel.org>
+Return-Path: <SRS0=MIRM=J6=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1179C48BEB
-	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 17:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A736C54788
+	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 22:35:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ABBE6C433F1; Wed, 21 Feb 2024 17:00:19 +0000 (UTC)
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2049.outbound.protection.outlook.com [40.107.20.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5FC00C43399; Wed, 21 Feb 2024 22:35:34 +0000 (UTC)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EAD0AC433C7;
-	Wed, 21 Feb 2024 17:00:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EAD0AC433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DCnzKi4UOt6xc7+Vc2uNxzqA95KJedaWesJLixuvJU5MSz4n0emPHegXze8epk0SHLl7/C8x5cDaP/W7GBSgp/Xfyuq/jN1ivsgXuf5nnJVVl4iKFOcHOkz3+v2IbrOltS6J6X4Z6+aZKSrihI1yIj6gI2P+byP0q1AtSLBMfWCHOIJGDJPoGrjtMlGuxnIViI457GfLHvs4sANbFpFPZsRD9JlF00SlaEchxSmzasK8vpdxKLIgwP3b5hrnUaTZ596VIGyQR2CbPXctYvModTuV4pOaTvJYQCrNSvPLMdvt/MeSm9TLEs4i9EEEhC6Sw6EOuwwx/sfXkwP4ajRFqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hstYrZB4eoaxK+5vYbT9kgx1ayHRzaf4aQ170ENoKvY=;
- b=jMEdHRE4m5enyjcl1Mn/HFQKjdCccRhoPqOP9d9uOFD88yDbveRMPF07hlyczZh7rsrZO6PmUzsoKA9WB91CaiQf3IxHf8dnuUBMYorg/8VcVyzlW+/epFGiyT7phGKpGPqgeNHQtRlGPypr5BUtWTBfARYg68qxrKdA1IKMH2paVJ1sQLP0Tj+dNVP0S05X+tK9Ly1oXw7h/GKJPjvPd8GdsPKZNpJfpDa7h+2bAWeRcgWyLsiFcJRi4IJgkqf3yOP8SJK4B/KnfwzpRUxOYsmwhCnCfJ/aj71a7Zqk4w4RFgMgXo1lCxU4tDnFmh/OfaXg0cA/te4bdZF0tTXaIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hstYrZB4eoaxK+5vYbT9kgx1ayHRzaf4aQ170ENoKvY=;
- b=Zt/OumNeHtK2TvGuue9xStsOfxLPp7z2SsxYwcu9SFC6wWAZNtPBMoX7k3InyPihMD4zTYQaKIj01nid+wAFMioAKwXD1iIYDuFqsqzGsTm7+F1Pw1RQejB/8JDNAZ5zz+UFgimWLrXq0oqbUkjcKPXKRkyy3w0CT0Ym29E4qXc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU2PR04MB8582.eurprd04.prod.outlook.com (2603:10a6:10:2d9::24)
- by AS5PR04MB9893.eurprd04.prod.outlook.com (2603:10a6:20b:653::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.22; Wed, 21 Feb
- 2024 17:00:14 +0000
-Received: from DU2PR04MB8582.eurprd04.prod.outlook.com
- ([fe80::195c:9861:96a1:56ed]) by DU2PR04MB8582.eurprd04.prod.outlook.com
- ([fe80::195c:9861:96a1:56ed%4]) with mapi id 15.20.7292.036; Wed, 21 Feb 2024
- 17:00:14 +0000
-Message-ID: <bcb79af4-56d9-4204-9503-cff996f1ba41@oss.nxp.com>
-Date: Wed, 21 Feb 2024 19:00:10 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] MAINTAINERS: Add maintainer for NXP S32G boards
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Chester Lin <chester62515@gmail.com>, krzysztof.kozlowski+dt@linaro.org,
- =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
- Matthias Brugger <mbrugger@suse.com>, robh+dt@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- soc@kernel.org, NXP S32 Linux Team <s32@nxp.com>,
- Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-References: <20240221120123.1118552-1-ghennadi.procopciuc@oss.nxp.com>
- <20240221120123.1118552-2-ghennadi.procopciuc@oss.nxp.com>
- <f4465547-1fb1-4578-9a69-7d399e7661b3@linaro.org>
- <403e32c2-910e-4745-9ebe-fbf377c3fde8@linaro.org>
- <ad856766-8903-46c0-93af-24e101ad51dc@oss.nxp.com>
- <e538ded0-bd3a-4ca4-b2bd-8d20d8c8c3fe@linaro.org>
-From: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
-In-Reply-To: <e538ded0-bd3a-4ca4-b2bd-8d20d8c8c3fe@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1PR06CA0214.eurprd06.prod.outlook.com
- (2603:10a6:802:2c::35) To DU2PR04MB8582.eurprd04.prod.outlook.com
- (2603:10a6:10:2d9::24)
+	by smtp.kernel.org (Postfix) with ESMTPS id 58F65C433F1
+	for <soc@kernel.org>; Wed, 21 Feb 2024 22:35:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 58F65C433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6083befe2a7so39133597b3.0
+        for <soc@kernel.org>; Wed, 21 Feb 2024 14:35:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708554932; x=1709159732; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qNNPLiMZIvFIjbJatWBpQjhrqg62von28N3bY5RLgJw=;
+        b=Bdpio+2Fr9acwn75FVhSG2nMsFA/6AVYmXEb4oVmcyQb5JVZ//b4VgFEYVOHuV4oLX
+         2q+r/Wpgnitlgh9JEjmd87Cnb1x/mjDvVBSk52xCUDaEPzwPPKa+W+YagoImw0YKCLKY
+         lBg2Wto5fg1uLaWeGlz1rnjAVUfB8wn/1Ypw/LUyfwLF24KsSbhP3KDsEeIpGeTyTp0S
+         QaHxKUeGNy+xu6raZbXhdB/BMDzyPcheXznHnwcJJqLiwGiK7UDPkGgozbBBt2sWMvAg
+         kz6agXKpcx80Wdj9UoJZRZ7dj5e0HD7rNmhFngIt4Ms4jBboGNgu4awT4IVhEGtHJIrI
+         xpcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708554932; x=1709159732;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qNNPLiMZIvFIjbJatWBpQjhrqg62von28N3bY5RLgJw=;
+        b=QCQRqVjArevobxzgXyXngHOQXlPsm3maReDN4l/k5QDtVQdMIEvM2Sj3kfdGhQbZhM
+         f8Av3io79f6+xyU0lfednDy3TTOSIgu2o/uJaiCgz3qxhLm/srdqOq/KKFOs+MDFO1eS
+         UaIrx1viTFl0qwfvy+lRKGoCezRey+CzlVpWBAL1OC8RUwftSds+0kxT6QJjZdExCvw1
+         nfqjfDBmVaNm4ptbXPFIT8ucScrXIG/SyKLJU3jNokCU8mkpq9XGHglVj88iUFvrWPXC
+         MyEdzrl882fpZmV62wC5yKucfZ2Chu0QE9NYTVocOungd3bsGEn0ulk9F3xz1v5PihCS
+         ZOPg==
+X-Gm-Message-State: AOJu0YyKVA6Iuj5uELLEBLsV7WrniQqfPLoASG0PVdlHZAvdY8yGZ/zI
+	qgX2mv8tmuKd3S1h7nfm/+QOmka1W3YXZmRgswXKCsVXrzI5gWjnvf1EZkuYAhQMwSGXdaya1B6
+	GHwzv/4ypxQlogdAyKcpjrFdjqFbyNIkyzkyUu8PdfUnOidT7ATc=
+X-Google-Smtp-Source: AGHT+IGknbpBLSxyew4UhqhWjPXNMdg9iwJqqtQkNhyq8ojF5dQz8R4Rh6Hb2XFOnuzvIBE07OoChR/hOy428ypk1IU=
+X-Received: by 2002:a05:690c:c16:b0:608:1be7:6e5c with SMTP id
+ cl22-20020a05690c0c1600b006081be76e5cmr12137179ywb.49.1708554931207; Wed, 21
+ Feb 2024 14:35:31 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8582:EE_|AS5PR04MB9893:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24af8a84-6b23-4ab8-15a3-08dc32fe924d
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	K7uMaj4M4B0xNdBHiu15D2AuWX1DJyc8Amr5ubydIYqaAk/ygH2H6XWD8q+DulBRIr8Zlcr+knr7K4E2fORZqQbi9uvqmQdUXNwW4nlrse4N7ftf1KiOv0u0ECp2xjUWvQDLgnY6xgyazkvZmmkl+4wOo8efxjK4tFaLDlSzCGGz/FQBI3bXOcpz//yVyrru55mc1fZLfigII6lrnaEDtCNNN+OsA/BZzhstuqdJf55pq7J8D3ij3Nyq/JNZhCx0BfflyJIP5fOx51HCVveyXrXSi/wvcxWx4XdZupHsmF87+But4UDPxB6LutxkQpCYVzNqcTPktcmqyOwTjttOMXiULXqThuqFpatGb4TOUEAy2hp7gV3AJsLmaorOzMEAE65E1GNcAllmDHYvI23DQxP2QDMyX0mYsbpIg+eFG2NqLE19xUTBjddq/4n/I7D/3JxKw7N+oCdL7a1UALzgjwDcGKmxHm98rgsPWmg73DsoRK6nGoi6M3SIlZYQkYisbKjXXSBdOHR+x8Hge8anWw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8582.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bk1kOTUrVmUvOVZTVExtc0lXaXlVdzBKK295Qkt5aG1PUkpiTnRBZEthcWhy?=
- =?utf-8?B?QlRVMkFBeGlHb0hCUDFOY3hrd2FQZ2JaTGFtMlNjV2hHelNUOXFMYkl2aXBK?=
- =?utf-8?B?WnJBUExGN1lBdEg5ZGFNNVpyZlk5aXBtVW80bFBMU3ZLbUZ2ODhaV29VNWQx?=
- =?utf-8?B?UUpJUzNIU0x5bFY3UlZMWlo2UVlLc0Vrc205VTVVRHJpMGRDeGhxWlZhWlBa?=
- =?utf-8?B?clBqUXVaUmFXa1FZMHQxc09VQzdjY2hpb1h3NEVyS0hlSzd1NzFVYmZOTUh1?=
- =?utf-8?B?aFM5Z2lLenNtUHRkSGx5QXllMFIwQUtCVFc5NlFFMjh0WVYxZE83VExJOTVJ?=
- =?utf-8?B?elVhZWx1eEtTOHE3Z01TQUVGeGkzYUc5OGVsM2pXK3VmcE5LaW1IVW1hdzVr?=
- =?utf-8?B?bENKdG5DamlNWDJ0R3JHb0Nqa0RwTXRPMUxPVm1uV2JJMks0MmJZcXVsTmRR?=
- =?utf-8?B?U2RQeWVWdFNDaHI0enV1emphS3JmUUI4WkxZMHJKekovQnk1ZWdKWU9TMFBY?=
- =?utf-8?B?YjN1TUJPbGJmRFZXcXkrZUQ5UE1MaEs2YXA5TVc0R2F6OXQ5TUZDQUtxbjQv?=
- =?utf-8?B?RmV2WGVlUVlBanZUalRiU3J3R1JUcjkwN0NVcFkrRTR2aXZ6UXRRWllXelVk?=
- =?utf-8?B?NlpEcG9QK0prcE93MXBuVnhPNnE3N3BkUkxKN1NGb0YxR045ZndqNm56Z3hV?=
- =?utf-8?B?K2RENDlvZGxxOGkzVVliVWFWdmZXb05udDVsRTVjdzRMWjE0cWk1ajlhZnFR?=
- =?utf-8?B?a1pEQWdOb1BEaVRBRkRQSEsyeTU2SHRMWVo2RVB2ajkvQXlnSVBCYUhMbVlS?=
- =?utf-8?B?cWpqMk1jcWJ4dUZqOHQ4T2cwdlFoNHRVNEJ5NzBFdHZyREV4cW9ZUHJmd29H?=
- =?utf-8?B?V0NhVVB0MHFYYnVNdkY2aUFHNkdrQ3dWeEdYcy9EdjlwVTEvb3hXMmxhUFBt?=
- =?utf-8?B?NlFXU3VlamVTZkxLZ3AxQkpZd0hMTThkYmtxWHQ3VjA4TnVhSTFYcS82b2Ra?=
- =?utf-8?B?NWlrc213TUs5YWl3dnBCQmMybFJCQ1FQZmJPZFJvUUdKL2pDRm9zYVFSWDd2?=
- =?utf-8?B?T2RCS2V3TXVyMnI2MXJXSithWTZQMFdJRmhKN1lTVTdseHVXcUcwUjdrdWRp?=
- =?utf-8?B?TUUvR3ptVy9pYjBpa3hXcGtwVzJKWXJSOFM5MWkyQWVJVHI4SzRKRFNzeG5u?=
- =?utf-8?B?SSs3Z2g3ZmlYUll6MzdkWXk3YUNNejdTSWI2c3pLU1NPZXFWNDFOZThCeW9r?=
- =?utf-8?B?enJzY2NZZjdSV0I5WGk0akRWcXZxWFJ6NW9odHdzSXY3S05WMXBudnVzRE1X?=
- =?utf-8?B?RWxsZytuMUFlTDh6KzNqcDBSNXpxNXEvWmYxMnVmTjdvWjFrcU5EWWtGbUtH?=
- =?utf-8?B?N1FERU1QUXZ5MC92T0xIYitRTEhOYzhnQTFXRTVKeWFEUjNqR05qUnlUUjBy?=
- =?utf-8?B?K2paVklSenlJcDZPS1pxN1pZejkzbW1Cc1REanltd1NsZDgrU1lZQ3JKWTFI?=
- =?utf-8?B?b0Q2N00yT0VDa3cxbW1Yay9FdUhUb1ZWQm5LNm8xdHJWYlIycENkTzFOa1Jh?=
- =?utf-8?B?dnBOZVBKWXZxVU1tYXRGbFhYSTgwUHUvS0ErNGdoT0J3SENqL3RsTmtkQ2dR?=
- =?utf-8?B?OTRaWUZmcEhMQW5YYUVPakVEdTBmc1hpRUY2WTVjSkRYQTBqdGI4ektVWmgw?=
- =?utf-8?B?di9lTjlTcWE0OGlHQ1l1bGJVSkZ2a3BOWjM0VXAwZFB4ZWNUbHFQdmRLUjdR?=
- =?utf-8?B?amRIc0t1aUJQb2R5Rzh0Z2FXaExiNTgwTE93OWhyMGNuL3g5MHQ5MjgwaTRV?=
- =?utf-8?B?bGJFSSs4S0puOGpMdFhneTREL1lYN1hSYzh3UWxscnNsZUNSU2tIYTNoejNK?=
- =?utf-8?B?enNnSjhsdTR6a2E1bkprSjBSQnhGdDVvRFh3ODNiMzBZbXZ6a3JybUtSeDVM?=
- =?utf-8?B?bnFGdWNvcHdIZjQ4KzFrZWtJOFNJVm5iRWR2Z2d5MGwxazF6Tm03YURoM3By?=
- =?utf-8?B?eFgvQk5ONDNSMVFEQTZyRFpkZGEvZU84VVdHQlVIZ2hDbE9ZbnNNQURKdjZK?=
- =?utf-8?B?K0xLODl3eCtucnFmNDVnRkpEZEUyQzRaZU5yVEF0eXdRZGJaVDhjYlJXOThX?=
- =?utf-8?B?NnVEM1hrSGFqR0QyQk53TXIzRjR4dWxHVUpjQmg3NFF4QnkwUjJoUk1BNEVs?=
- =?utf-8?B?WlE9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24af8a84-6b23-4ab8-15a3-08dc32fe924d
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8582.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 17:00:14.0418
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tHK81gfsstCIubiIjOjLpemoxv1CuqYpnWymSmN3YTGkqt9caX8RYZUSRlMSDRtCsf+FvsL+Lna7RMpbMIKCUrCFV2d4H7euP/NbptvW/s0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9893
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 21 Feb 2024 23:35:20 +0100
+Message-ID: <CACRpkdaL6j6OdixHFHoMms4e=tXEw_6ynBMFb6m8=7KkVgEedA@mail.gmail.com>
+Subject: [GIT PULL] ARM Versatile DTS fixes for v6.9
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/21/24 17:43, Krzysztof Kozlowski wrote:
-> On 21/02/2024 16:19, Ghennadi Procopciuc wrote:
->> On 2/21/24 16:45, Krzysztof Kozlowski wrote:
->>> On 21/02/2024 15:42, Krzysztof Kozlowski wrote:
->>>> On 21/02/2024 13:01, Ghennadi Procopciuc wrote:
->>>>> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
->>>>>
->>>>> Add myself as a maintainer of the NXP S32G DT files.
->>>>
->>>> No need for cover letters for single patches. OTOH, this commit msg is
->>>> empty...
->> Thank you, I can correct that.
->>
->>>> Plus your patch looks corrupted (wrong encoding): F??rber
->>
->> Indeed, it is due to 'Content-Type: text/plain; charset="us-ascii"'.
->> I can fix this as part of v2.
->>
->>>> BTW, did you contribute anything to the upstream Linux kernel? Do you
->>>> know the process? Downstream does not really matter.
->>>
->>> I found the answer:
->>>
->>> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
->>> Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
->>>
->>> Does not look like. Please get some upstream work experience first.
->>>
->>> https://lore.kernel.org/all/?q=f%3Aghennadi.procopciuc%40oss.nxp.com
->>
->> Although I am new to upstream communities and may make mistakes, I am
->> eager to learn and improve.
->>
->> After leaving SuSe[0], the current maintainer of the NXP S32G DT files
->> became inactive[1]. As a result, this area is not currently being
->> maintained. This is the actual reason why I attempted to add myself as a
->> maintainer of that area. Although I acknowledge that I may not have
->> enough experience to become a maintainer, I am concerned that the NXP
->> S32G DT patch submission may be blocked for everyone due to the current
->> situation.
-> 
-> I would be just happy to see first actual contributions or any sort of
-> activity, like reviewing, before taking over something.
-> 
-> You do not need to become maintainer to provide reviews. By reviewing
-> patches you already reduce burden/work from the maintainers.
-> 
-> Best regards,
-> Krzysztof
-> 
+Hi SoC folks,
 
-I fully understand and agree with your perspective on this matter and
-accept the fact that I will not be a maintainer as initially intended.
-Furthermore, I am very willing to participate in any reviews related to
-S32G SoCs.
+these are some ARM Versatile DTS fixes for v6.9.
+Details in the signed tag!
 
-Patches, including those I have created ([0], [1]), will likely be
-submitted for this area. This is because each enabled driver for S32G
-SoCs is expected to have at least one node in the device tree. These
-patches will undergo review and receive feedback. However, the upstream
-process will come to a halt at this point since there are no maintainers
-to apply and integrate them. 
+Please pull it in.
 
-I do not know how this situation should be handled, given my lack of
-experience in upstreaming maintenance. The documentation for the Linux
-kernel is insufficient in providing guidance [2] on how to handle
-inactive maintainers and it is unclear who should take over their
-responsibilities. This is likely not the first time this has happened in
-the kernel's history.
+Yours,
+Linus Walleij
 
-Could you please guide me on how these patches should be integrated into
-a maintainer's  tree and by whom?
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
-[0]
-https://lore.kernel.org/all/94742ebd-bc3a-4726-9ba7-5954203e4da1@suse.com/
-[1]
-https://lore.kernel.org/all/372ed255-85b7-4f18-a28e-82e18171f7e3@suse.com/
-[2]
-https://docs.kernel.org/maintainer/feature-and-driver-maintainers.html#non-compliance
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
-Best regards,
-Ghennadi
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+tags/versatile-dts-v6.9
+
+for you to fetch changes up to d41e4dfc316bbd9a4572df26f0d740d6cc685de1:
+
+  dt-bindings: arm: realview: Spelling s/ARM 11/Arm11/, s/Cortex
+A-/Cortex-A/ (2024-02-21 23:30:01 +0100)
+
+----------------------------------------------------------------
+DTS fixes for the ARM Versatile boards:
+
+- Use the "mtd-rom" compatible for the Realview ROM
+- Fix up two VGA connector cells and labels
+- Fix up the Cortex spelling
+
+----------------------------------------------------------------
+Geert Uytterhoeven (2):
+      ARM: dts: arm: realview: Fix development chip ROM compatible value
+      dt-bindings: arm: realview: Spelling s/ARM 11/Arm11/, s/Cortex
+A-/Cortex-A/
+
+Linus Walleij (2):
+      ARM: dts: versatile: Fix up VGA connector
+      ARM: dts: integrator: Fix up VGA connector
+
+ Documentation/devicetree/bindings/arm/arm,realview.yaml | 6 +++---
+ arch/arm/boot/dts/arm/arm-realview-pb1176.dts           | 2 +-
+ arch/arm/boot/dts/arm/integratorap-im-pd1.dts           | 3 +--
+ arch/arm/boot/dts/arm/versatile-ab.dts                  | 3 +--
+ 4 files changed, 6 insertions(+), 8 deletions(-)
