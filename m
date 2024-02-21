@@ -1,53 +1,65 @@
-Return-Path: <SRS0=Mtuc=J6=oss.nxp.com=ghennadi.procopciuc@kernel.org>
+Return-Path: <SRS0=JApN=J6=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8980CC48BC3
-	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 15:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5091EC48BC3
+	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 15:43:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 55E3CC433A6; Wed, 21 Feb 2024 15:19:22 +0000 (UTC)
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2072.outbound.protection.outlook.com [40.107.241.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 0E7D9C43394; Wed, 21 Feb 2024 15:43:19 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6B4D9C43141;
-	Wed, 21 Feb 2024 15:19:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B4D9C43141
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UQKysZ8G9JLQGW45AL32O88d6m/xk/Mi4kL4BXV7WYoGNxkokN+kX4rYqO7la4mF3n7eqWmtlstjl9A1hwjOTWqogIXhyg74Jfmy3Kj3+8wF4k0T8G7+QCxNs5Xy1Zez/aY9P29l1CxfrjZ/Wa8l9hRMVwcMg+8BUmASHveUI3Ta01YGNto7xW0bjq24Qv0uxoQT+537UdZWC1uq6DtT7/S3SjBWH6Xpxl/cdF0VcOqhijL34z/VpXyrXjviPpCjh+1k5WSHfrMmHA4iqNoH7b6jYg/Dm0VDARjv1jaa5s1K5C8XmNzH2BPamJy8SmXqcopuM5F3QBTF8YWKgjIjTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CNb5VnUSQRvn3bMgCn6jW4XRu3OuNdPpunx4nVX1nRE=;
- b=fDjmcko/JVg7BAN+oaAkPeC+epnVykkuN4ZGYiNBn6NFcyfFtk22owAtVf/4qfisfMeL5ah8BJBTq+ewU+a80/tgJlJOhYroaiZ3HBGTUrTOFRD/vAREWFDNieBHxQsqvi0JFbBZGjY8rlKtHjH05uL7b4JAfwNcsim4OSTN71lmmvHaQTk5q8tZmiRtSq5gR3oFlKGrfusrXlT/E9J7pNFEwNSDlmVNfZn5iu7wmKnjCBiJk6L9CbHdxya2hwsA7GKvvhKl1HfPX2RekZ228Nao1SjmeFAKO8WEf1ejjP+kd7ah6pP0Ormo7/UC37dHl2HbwSGq2uxDBtrgJ/IM5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CNb5VnUSQRvn3bMgCn6jW4XRu3OuNdPpunx4nVX1nRE=;
- b=g0Ln31o7Jlzar5vdm6Wuz2D8L9lEGyVr4gh+WjGDMriow3WTTo/ZhK/gj7AnaHEBwV+loql9pGGbomWzSw5dALsj+krUFglATvA0ZwRr0+gtJ5kqdBxfSpNjgknx6dh4Z77LprwY1Ndh1VGLuRePcqWOvkKUoaM4fC/ASJsh5KU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU2PR04MB8582.eurprd04.prod.outlook.com (2603:10a6:10:2d9::24)
- by AS5PR04MB9854.eurprd04.prod.outlook.com (2603:10a6:20b:673::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.21; Wed, 21 Feb
- 2024 15:19:07 +0000
-Received: from DU2PR04MB8582.eurprd04.prod.outlook.com
- ([fe80::195c:9861:96a1:56ed]) by DU2PR04MB8582.eurprd04.prod.outlook.com
- ([fe80::195c:9861:96a1:56ed%4]) with mapi id 15.20.7292.036; Wed, 21 Feb 2024
- 15:19:05 +0000
-Message-ID: <ad856766-8903-46c0-93af-24e101ad51dc@oss.nxp.com>
-Date: Wed, 21 Feb 2024 17:19:01 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 0518AC433F1
+	for <soc@kernel.org>; Wed, 21 Feb 2024 15:43:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0518AC433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a3566c0309fso814095466b.1
+        for <soc@kernel.org>; Wed, 21 Feb 2024 07:43:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708530196; x=1709134996; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HYPJBlpSkFCHdVgLslmiqUOZByirVW8qunK061Blp0U=;
+        b=JWJHWrfYcc/5V/gluZfnS7BOkgwgwhkI1unW2UO+tlQXMDgnoDXeVJTy1M1N1jHe8a
+         UrePjaAcX+52QzHB27Kl9OoYL0fmRnkGQ5zUzPArrufsW3CvNoCTl7V/IWBbJ5sUYBGK
+         Ym1BzVsxRm5y8SkESwzKPbpDiciQdgOuE3m0wlS18emvTe2a9DY8DR9Hk+PgJR4ff9Ff
+         +XRyMoplhwrzKuubFCT4uQ1GXyjT8+99K1vCSgM4//Z9g6jsDuyGCpX7Wx+km9ePySYD
+         fozXVk+AfCgh6GEs5RalNgkSPphv5nfQNCbog/gMbxpjMYCz5BglbhiI1nzgk4FXu2tT
+         JaSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708530196; x=1709134996;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HYPJBlpSkFCHdVgLslmiqUOZByirVW8qunK061Blp0U=;
+        b=mkOfcZRrqyIB08EmxqhJwDP+IQ9bv3YxV1WgGRBpZCY7aFMtGS5nRpoxRQQzH1TZqi
+         DxtrH5h+cWXXd47z3vIm7ZPyCkm/OFgvN711S/NS9bTRrwKcuxaKKG8ikxfzKLY1KyWe
+         0hBx8FOFQoUN1BcrnOjRTDK2UrmZQWKSeM+cGaAipQA8yuqlhnN6H6vEFuC9XY5EkI1J
+         tvnUOIqe/lwmUR56a6Al1r7IDaS6xMz9SmKKib8lTH/B4sGU+Xn9ajfub4iv5GlIYOQ2
+         s8loFBr4DP5IqH26rpRj/oRNB9W98Ra0COfBkIaRVVTQ2+l1WrZhW0GUCrzbT9DnR66A
+         zTsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXeDNFgyuDowkhXrpOeWHd2PZaZ+6YY9zKvbKheCLmH47Oxfk2gD8jae5FyVl2YA1m8Ss38HkAsZilznv8bQA==
+X-Gm-Message-State: AOJu0Yyq4mVkN6542+d6NTM+bV5LxqlHsx8pB+kzK/5yppWqTVcI0Aou
+	Ef6vYIvVUf65elsfi7SB05aDa5R7/r6yNIBntaCI7WZu50ko7zSobzy9y7Jbe7I=
+X-Google-Smtp-Source: AGHT+IEOwSPfl5OGhGHb2pcaVwCbGIpWDZ4oXyQBlaoUkbrefM9619gNRMmJfGuQvWA24LA6eO0j5Q==
+X-Received: by 2002:a17:906:5906:b0:a3e:d9ca:259f with SMTP id h6-20020a170906590600b00a3ed9ca259fmr5147972ejq.14.1708530195776;
+        Wed, 21 Feb 2024 07:43:15 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id lj8-20020a170907188800b00a3e0c8f4afbsm4916042ejc.110.2024.02.21.07.43.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 07:43:15 -0800 (PST)
+Message-ID: <e538ded0-bd3a-4ca4-b2bd-8d20d8c8c3fe@linaro.org>
+Date: Wed, 21 Feb 2024 16:43:13 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/1] MAINTAINERS: Add maintainer for NXP S32G boards
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  Chester Lin <chester62515@gmail.com>, krzysztof.kozlowski+dt@linaro.org,
  =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
@@ -60,127 +72,102 @@ References: <20240221120123.1118552-1-ghennadi.procopciuc@oss.nxp.com>
  <20240221120123.1118552-2-ghennadi.procopciuc@oss.nxp.com>
  <f4465547-1fb1-4578-9a69-7d399e7661b3@linaro.org>
  <403e32c2-910e-4745-9ebe-fbf377c3fde8@linaro.org>
-From: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
-In-Reply-To: <403e32c2-910e-4745-9ebe-fbf377c3fde8@linaro.org>
+ <ad856766-8903-46c0-93af-24e101ad51dc@oss.nxp.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <ad856766-8903-46c0-93af-24e101ad51dc@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR09CA0129.eurprd09.prod.outlook.com
- (2603:10a6:803:12c::13) To DU2PR04MB8582.eurprd04.prod.outlook.com
- (2603:10a6:10:2d9::24)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8582:EE_|AS5PR04MB9854:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6622ab6c-54cf-4cbf-737b-08dc32f070d5
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	JR1l+wrpy9qx5t6iPZ3YRjyPHOZA2jYM0righFo6ikC7mQpNGavSGeEdFRXJzqDpUS1zAoZeCGt1udtEpMyQye3wv6hisXnt1K1Kah3MlzZRteRJQ8WDQYJFypB4hVOUyWMbhqohXsM6f9LuWAZE5bHu5AhSFIOM+rMxpU64BmEqdUCXwoZLg7gwr1t4EQLiPNtg7/p25MtCBnp85RydV0GzQ33lgWeidbRh1eoyyYRlDhz4wyTKMhOP3uxg34kTYwNOfg9cm7THHnQ6N7A1MJ9K125JJQ+05r5TYIn/AeonmInCqYnVTGG3xYm5gvHi6adUiHLJfhlTPHkrk4LCZazZTCD4PrkhZooyebqL1XESdjWqYRDPYm58hX2Nbk3CA5qoWKDnXVT98q/sMabaNxq6SUTeYRHbSB2C7h2SVmgaci/nx3p9ghD1Vs+nMhxoyYHu6iZIAdZaOh67bAjv4xcMjB4+i3auokrN+TH3fX2H+FjS2KFiECDoIiORTm27HrKZPf7ZHysRv8ctZ+Gfuw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8582.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?czNSLzNZd0dLQ2M0SEI5d1diWjJUQkNUR1Btdy92U0Q3Vi96RlJodzhod01P?=
- =?utf-8?B?eVdiTm9tYmhlZE5mUkRDZ1VQSlR3b2xQVm5zK2VwQmdMNkVkWkZyR1orWkMz?=
- =?utf-8?B?N0FnQWxPZTBxMHJ5bUhkM2Y0UDFaaTRxb3ROdFE2K0FHak16MUpVcUNBT3c1?=
- =?utf-8?B?dW0yOTIxOXhOazJaYjR5S3FaTXVTeFR6RE1PblpCY01sREgxcEI4eEc0S2dv?=
- =?utf-8?B?bHo3WXZEeWxYWjJYNVRxaytwWVhrRStqSDRVRFhhOStUSUxBTWVJbU9HMG54?=
- =?utf-8?B?ZXIxZHlZTjhTaXFTR0Jab1ZsMXNoSEtWeHBERk1mcFhzNWNFdkUwMVd2dkt1?=
- =?utf-8?B?Q1k3aFA5WjM2VnROM24rN0RBWVZhZkdUL3p5NkZLNlNEdU85RVRPSXVTTlp6?=
- =?utf-8?B?cFFVUFdjOW1QRVRkNDNDWkg2OFVKa3lrNEtNMmtBZkw1S2RKQVFrK3YvZjdL?=
- =?utf-8?B?ZHhYNnhuVEVOVWRiZEFSdzhCWjJaMm40UmV0bUszNG9JcWRrWW15cDNWUGVZ?=
- =?utf-8?B?TmR4NVUxdzFVUGtKT1YreEs5V3huRm5UdmdFZ3MzU3VFVkJGL2lmL2dSeUph?=
- =?utf-8?B?eXhzQitGKzQ3RU55ZnluM2k3eTE0QjlROXRrS1J5dUx4UzY1cDIxblBna0Vy?=
- =?utf-8?B?Ny9xdE5vOVNiTEphMUlSelFMMGxyRkZhY2ZuUFIxZkJGa25xN3dZUzlhMkR1?=
- =?utf-8?B?ZUZKSWlia1BlUFJCU2tndEp4T1EzVmVUUmZHOG1vVFIrQndoMUhMaGpSTFNW?=
- =?utf-8?B?bFBNMnFib1hxMHljVHltS3FTZWdVbTUwNFo1ajdkOG1aZUxicG1NKy9RYjBq?=
- =?utf-8?B?dHovMmY1Y1BQQU5qVlJ0Y3RNUTZKR29HdVhPMnI4UitCZGc5c0RHTDFKOWsy?=
- =?utf-8?B?MUloVFB0WTRmNlRiUzY1ckJFVWdteXpoN1dPZTVkaktuTmZBakRMb0FDU3pr?=
- =?utf-8?B?SHdOekdJRFRIR2RXMlM0cGNTQXhTUG9sWnpYNnpYYnorYTd1YWxNUnMrRHdO?=
- =?utf-8?B?a2hpdTROSW1YcTBZeWZiWXdWY2l2bnJKN0ZGUk05ODhUdEhwMkUwRG9WVXRz?=
- =?utf-8?B?WUxXc0M4SWhIcUNqOU5ZczRlSEtKekhGYTZXMVArSnM4R1Mwcjh0cU96Q2xT?=
- =?utf-8?B?U1lIWUx0VW4vWUNIWTFnalFDald5L1VvYjhLQ0tEN0E1OTFodlBaOWJKTHc1?=
- =?utf-8?B?SVgxTjhzd29Zb0VPV2xCcC9hNVhVRlpqdTVzeUJVQit3ZllxdnFOTU5ZcmtH?=
- =?utf-8?B?NDZFVmdhcGhOR01RQ0hZQmJUTlpidVBrMTZodEdIM1VDbElRTStFRFFjZlQ0?=
- =?utf-8?B?TXRkSjhEU2J4SHlUTzJFVVJpUlROVW5mdWc4ZDJTUnQyYzFsVVBsZmZHUytB?=
- =?utf-8?B?aHh2b2c2dGIwNHZoaUEyRGpBNnMxSDd6S1hNRFJjVDdERDNJQnBZKzBrUnpT?=
- =?utf-8?B?YlArRnB5akdxdXRnWDd2S2tzR3hNaDF3NENtNWtuaEZhRzZ3aEpyWWNWbXVn?=
- =?utf-8?B?S1J0K3pBbmtCMDhBVWVNQ05xN2FMMWNrOHFQYnN6T0I5bGkzQTZGWmJUN3FO?=
- =?utf-8?B?VUNXMTF1WGE3TFlhZXlZU1VLeDJlM3VWWWxyRXhFT2xXWFhqUXhvaWMxdzB1?=
- =?utf-8?B?dWRnVlBoS1FxUTVPY2diN0MzUyt2bFQyOFRabmJVdFAwUDBNSzlINHdtMnVL?=
- =?utf-8?B?ZmxlQWlHeTNTOXY4THV2RmxHZkNlc3BTMVFDL1EwcEN4cFY3T0FWc2dmazAw?=
- =?utf-8?B?TTFzZ1piN2VwcUhsYVZqVVBSRWxpNkI2SnVkSWUxWkZGeldxaDg3ZTR4M2hm?=
- =?utf-8?B?U1lwa1JTVVlvVWRIeVNNUTl2Um5hVXVlR2tWdEc2dG1NQkpSVStndngxTUtC?=
- =?utf-8?B?ZEZOUEtzWjliQ1lVWkZqM2lIZnRVS2l6WHd5aFJUTHpFVHB2cUZHVUpsZmor?=
- =?utf-8?B?aTM0NjZoQkc3Y0QxYllnVWhzWWNza1hGSWRmZkx5dVlRVTluSld1VTVjcVA4?=
- =?utf-8?B?Sml0NjJrZVlWazlKYTRyTWhPKzRvUE10OGtuYnMwTTJPTkpwMDZBcFViQnhH?=
- =?utf-8?B?WWsraUZiRmliVUVVQjArTm1ocm9tN0VycWs0R2N6TmNQWi9ZODAwWjNnRWJW?=
- =?utf-8?B?VHFRWlBDNGJqM3ZvQVEzcnhJQ3BGeDFRL0RVL3VQUXFhU3gzSlJpZWtyRkxs?=
- =?utf-8?B?Nmc9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6622ab6c-54cf-4cbf-737b-08dc32f070d5
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8582.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 15:19:04.9828
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TCEXnqL2IbNWikdlvHC6L3+DkJRrx8i24jtaxOLtGB5CsRepwAvILljuQY7wquVL4lpPHvwAw/WMbECmBtlp1Aly/ElZXhPh9f3rewdvOH0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9854
 
-On 2/21/24 16:45, Krzysztof Kozlowski wrote:
-> On 21/02/2024 15:42, Krzysztof Kozlowski wrote:
->> On 21/02/2024 13:01, Ghennadi Procopciuc wrote:
->>> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+On 21/02/2024 16:19, Ghennadi Procopciuc wrote:
+> On 2/21/24 16:45, Krzysztof Kozlowski wrote:
+>> On 21/02/2024 15:42, Krzysztof Kozlowski wrote:
+>>> On 21/02/2024 13:01, Ghennadi Procopciuc wrote:
+>>>> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+>>>>
+>>>> Add myself as a maintainer of the NXP S32G DT files.
 >>>
->>> Add myself as a maintainer of the NXP S32G DT files.
+>>> No need for cover letters for single patches. OTOH, this commit msg is
+>>> empty...
+> Thank you, I can correct that.
+> 
+>>> Plus your patch looks corrupted (wrong encoding): F??rber
+> 
+> Indeed, it is due to 'Content-Type: text/plain; charset="us-ascii"'.
+> I can fix this as part of v2.
+> 
+>>> BTW, did you contribute anything to the upstream Linux kernel? Do you
+>>> know the process? Downstream does not really matter.
 >>
->> No need for cover letters for single patches. OTOH, this commit msg is
->> empty...
-Thank you, I can correct that.
-
->> Plus your patch looks corrupted (wrong encoding): F??rber
-
-Indeed, it is due to 'Content-Type: text/plain; charset="us-ascii"'.
-I can fix this as part of v2.
-
->> BTW, did you contribute anything to the upstream Linux kernel? Do you
->> know the process? Downstream does not really matter.
+>> I found the answer:
+>>
+>> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+>> Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
+>>
+>> Does not look like. Please get some upstream work experience first.
+>>
+>> https://lore.kernel.org/all/?q=f%3Aghennadi.procopciuc%40oss.nxp.com
 > 
-> I found the answer:
+> Although I am new to upstream communities and may make mistakes, I am
+> eager to learn and improve.
 > 
-> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-> Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
-> 
-> Does not look like. Please get some upstream work experience first.
-> 
-> https://lore.kernel.org/all/?q=f%3Aghennadi.procopciuc%40oss.nxp.com
+> After leaving SuSe[0], the current maintainer of the NXP S32G DT files
+> became inactive[1]. As a result, this area is not currently being
+> maintained. This is the actual reason why I attempted to add myself as a
+> maintainer of that area. Although I acknowledge that I may not have
+> enough experience to become a maintainer, I am concerned that the NXP
+> S32G DT patch submission may be blocked for everyone due to the current
+> situation.
 
-Although I am new to upstream communities and may make mistakes, I am
-eager to learn and improve.
+I would be just happy to see first actual contributions or any sort of
+activity, like reviewing, before taking over something.
 
-After leaving SuSe[0], the current maintainer of the NXP S32G DT files
-became inactive[1]. As a result, this area is not currently being
-maintained. This is the actual reason why I attempted to add myself as a
-maintainer of that area. Although I acknowledge that I may not have
-enough experience to become a maintainer, I am concerned that the NXP
-S32G DT patch submission may be blocked for everyone due to the current
-situation.
+You do not need to become maintainer to provide reviews. By reviewing
+patches you already reduce burden/work from the maintainers.
 
-Should someone else from MAINTAINERS take over this area, or are there
-other alternatives?
-
-[0] https://lore.kernel.org/all/20231115234508.11510-1-clin@suse.com/
-[1]
-https://lore.kernel.org/all/a7a55dc6-c204-4aad-adff-9806d3302b6b@oss.nxp.com/
-
-
-> 
-> Best regards,
-> Krzysztof
-> Regards,
-Ghennadi
+Best regards,
+Krzysztof
 
