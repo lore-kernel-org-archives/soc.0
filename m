@@ -1,64 +1,135 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=Mtuc=J6=oss.nxp.com=ghennadi.procopciuc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43A77C5478B
-	for <soc@archiver.kernel.org>; Tue, 20 Feb 2024 21:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00A21C48BC3
+	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 12:01:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2CE4BC4166B; Tue, 20 Feb 2024 21:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 15717C4166A;
-	Tue, 20 Feb 2024 21:12:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708463562;
-	bh=6iItUHNDQzgRsQwbujji8Szw+QAq2UeORAkKelwLqs0=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ZhYtGzPyOpdxuHOBw1yyKACXYuvAuJQdjtvGCLWJmaCVUjnEZ7MYQOplUBTBaR6v9
-	 qacuk9ix8MYAiZrphVUmzIwIL6yYHabxidEFyOkRQCaX8Ed8RQwQBh6v/RUBx0UzlZ
-	 9qa1W8C+2YC5g16rAVVexjI4kyU3wT/u2IAm3W7OkM4L6uMh/nTvywHakASjHSOfVv
-	 udFkMqdz2Psp6z0t43o/V5iNPS0pIZS+5a/dj4ZqQn4lEBgv1l1bqEc7EbuMInMAGz
-	 Gx+/ydlxHJtSCyYbx4dpDkiIRpW7YNaMo5awzfKv+k9E0wontNP3Bib9Ck+tl2WB3M
-	 pmGMx+qU3vzhQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EAF55D990D7;
-	Tue, 20 Feb 2024 21:12:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: config: disable new platforms in virt.config
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <170846356195.4365.10471154067834528340.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Feb 2024 21:12:41 +0000
-References: <20240219093819.644324-1-arnd@kernel.org>
-In-Reply-To: <20240219093819.644324-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+	id B4288C433F1; Wed, 21 Feb 2024 12:01:43 +0000 (UTC)
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2059.outbound.protection.outlook.com [40.107.14.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 15EBCC433C7;
+	Wed, 21 Feb 2024 12:01:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 15EBCC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bJV4HnxLGQLh5f6BIbqzFlDSN2MX9axX9apnG0zsWAi3rmknmhBhLhXoK2qfOLA1hvr0f+a/HWwlRdmz3j87bojM7mUkAqGky4wnhiSMdTPTUGZDxyReRc2p+1F+VvEH1/uEwgWWPP4yd68d0SP0DVzy5nYq71Uk9nJIGBxF7oKKUHgULF6Gyw+I0AHugREfrvQPq4m9CZ5gXJml6fEmU604VpKnab8fBUqwZNqbkGmcmDEPELivSmL5V+d4TgOQ4FbfRw4YigUtlrqYhYaphkk6V3dEi+ecfnj1O8pEWsxhf7t5GjEpATRJK2FLC9oFc6FDlqym8ZirbP6rBEnf8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YguBz4Hf876gUChm4lAXaP3JhfZAhuBev++IF6YNf68=;
+ b=imz4cDtRvP9etGiBEOYd+oROaPsNZCALoSwmgrzTGR4YY/fVRYu+3cxgsLyss0wCPdqhMUDf/QpmnYWEwpWOXhYRp6u7aC4cWws16+ZM6hUNxJK7RXw7FQXYCErfcmcUYm9kOqS2nKsppg0NrQQ28y5vUiQX1CjU8npA7/ehQOJZZjZfUiFeX5+t+nw7ZrpLDw53FLzJM78d7xe5lSLr6TQs9hnNmjGPzTis5V43Ai4LQL12+CVwbnbAVwPX/7c9fzv0EOM0YBOmNXLaLbK/pHePiKPyu86GnW24k1t9Q0pdpNEb+oZ5aWU6DsymHSJDLvZEQzhgmJxyGIkkiO/j3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YguBz4Hf876gUChm4lAXaP3JhfZAhuBev++IF6YNf68=;
+ b=VFzsh2ZqFLSnSXTRfE/Ar224Zkf9B1ym5PMlnEcaVq+Ev3KXmjSWMKquRXbEFRoTm9991K8Ji+yLVool0Gz67Gm8wUxnUpqnq3l56Tod71IUV7WPtrtulYwiH9nAYdMNjmK6SKsmCIlt6V3E6UQjz/o98f3wMJliOoHQTuHBq3k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU2PR04MB8582.eurprd04.prod.outlook.com (2603:10a6:10:2d9::24)
+ by DB9PR04MB8395.eurprd04.prod.outlook.com (2603:10a6:10:247::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.38; Wed, 21 Feb
+ 2024 12:01:37 +0000
+Received: from DU2PR04MB8582.eurprd04.prod.outlook.com
+ ([fe80::195c:9861:96a1:56ed]) by DU2PR04MB8582.eurprd04.prod.outlook.com
+ ([fe80::195c:9861:96a1:56ed%4]) with mapi id 15.20.7292.036; Wed, 21 Feb 2024
+ 12:01:37 +0000
+From: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Chester Lin <chester62515@gmail.com>,
+	krzysztof.kozlowski+dt@linaro.org,
+	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Matthias Brugger <mbrugger@suse.com>,
+	robh+dt@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
+Subject: [PATCH 0/1] MAINTAINERS: Add S32G SoC maintainer
+Date: Wed, 21 Feb 2024 14:01:21 +0200
+Message-ID: <20240221120123.1118552-1-ghennadi.procopciuc@oss.nxp.com>
+X-Mailer: git-send-email 2.43.2
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: VE1PR03CA0016.eurprd03.prod.outlook.com
+ (2603:10a6:802:a0::28) To DU2PR04MB8582.eurprd04.prod.outlook.com
+ (2603:10a6:10:2d9::24)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8582:EE_|DB9PR04MB8395:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1821f7db-704f-4192-0425-08dc32d4db4e
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	OAVkVsb3kymS3cdwdaYGI3CT8o3yqNxO2GuCNvtCZbBE87ji9WIOuFZIqYJKFpyrytxWyA7jJ9l3ugdxbzXICod0fpIGZeLusbYEPUC6n26jEX/h9PQyKVaFB44+QRIm7gPHq6VTSDXbW84iCtKKcG25wWff0Y3PEwRxA7qgXoipgACA5s5QP9lyQ0ijVwvlq1nMMTLCDPWLkAOlNWLhsOsqt394g9FsxO1Cx7vPHZlyroIcPQA3o6AmptTGbFxudaD+Dosn9nyxgzahrxVtyA65JQjstCGRJOYcQ52t7WjrUhTJSwKa6TLTvpfjwVFCQfV0R8Y/FDpBYwY+/b49TL4NIody0+/CeHIxY/FMnqs0t9xVvw6CqsJ1JgV5NPMEzrmfZxDYs//SaI4gTFQTrVyLgq5RcpepMOewciP+GPIK2nKsH32DvyCWSAtmtqvnwwKUeOcEk0rtxKHieUlLrtEiR6I0fN6W/lDolYNODfv/lXYsLmMIp6+RgIx8HJua/22usSDBXm1Rr4+wSxIiDEyz6F9Q2jN80coORreKKIIi+TnoteoFDXsMoDm41PT7LPbEc7Flwfp/OO4x5fo+pbdsN/69dezeTVl5Zf7g1UstmvbDUGMHGdfoxJiJ6a6e
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8582.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?evrOlVuM6EpvPhGDvucYXUiokNSJwwsBvvVcmNe38U2IOcCLeNjfreGJdKwq?=
+ =?us-ascii?Q?yDaH64hNCuTVjMwZ+/QVMGR+HsJTfDPNKC7f9EfREakcjp2jfz1MKgqZkNb7?=
+ =?us-ascii?Q?A3hlBUZfpqid4DfuZ6mTC8aggIXRJ6+I3eb+IDOzxc5Yd1tounEF1l8vln/C?=
+ =?us-ascii?Q?n+U8eP5RP81bXkIJSLGZVdBK2DEHs4U5EoiXQSwPIcSmGN09H+roWblhlS5w?=
+ =?us-ascii?Q?wngGs8GlzFMgnHROhvSnfoqxOZfV1TALnI1bkPm+vDwBdRpKRl8sCmwWlvcW?=
+ =?us-ascii?Q?Mq0GqHsLW5qQpoIsNeAeQ8rJfpCIPoKAV0I+w/6wrWnxND2IIquwz7DHYM4F?=
+ =?us-ascii?Q?qMb+BL0mOXTRjw/ekF+fJ8sxKuiTtIjYK/4R2vvujh3UgdRn8Nux62bg+FVb?=
+ =?us-ascii?Q?AcbDjtG5qEmU9FwCGGY6jmRS2OhMlDh0ZseWv/Vj+EqytCr4t+gRftL+f396?=
+ =?us-ascii?Q?Fp5ESkY1rYtzRndzk5iPKXSFbXd+ra0r2lXGJwfNYGPrCa4CqzRpXkfKcyGZ?=
+ =?us-ascii?Q?NoYldBSzCyu5ANvZP5h9QvzWzq+DQJNuSHYykoqNY1aOn2qDIQltFotaVDAA?=
+ =?us-ascii?Q?BuBT18w0mH4nl8dw1w8G+X4YSVQiTzgKFN1e5KhwaaoFcq5smSxyGbRFvrE9?=
+ =?us-ascii?Q?lsrX5IjbiXtErRaZfxFRzRrDKPKR+Tn4eqmFDOredIJ1jwjTCIbLF2D8UVKI?=
+ =?us-ascii?Q?cNT4d2ZuHMIdfnur54HY02IDV3+DnW6pOACr9tSYcRpcmTKyBlmAU6SMb73R?=
+ =?us-ascii?Q?9O5nKVvrlOPbx6grAOwdyWOoiHxWgtt87yjaFdCp8jmIGkJK3DFA7X7xsdjc?=
+ =?us-ascii?Q?7MG/DhoM207DOnVrRbYBfFNS7Mh40SC2mQk53pijXhLzdyOryRsTlT4uhgAZ?=
+ =?us-ascii?Q?ujWdWdWZgWi3mEW3frcM6VR/HOxL01nIZFJpowxsIlTMFbyU6xlnd3r96QHh?=
+ =?us-ascii?Q?G+gFpAQxNdZWB3SkGF6573j7A4RnMsd8eEz2JlYKn4B7TSgWVemC1FssZdg9?=
+ =?us-ascii?Q?BCHQVb9vAYF05Gqmk+rPGcGaTQOfrcKnP/9bb1DBVIV0REcOWF9tKZXi4kR3?=
+ =?us-ascii?Q?Y0ScuicMZmwQzmj6qyYkijSbHEw7q08x5AFEkLJTKiSO2xgGdr1qjDCXEpbK?=
+ =?us-ascii?Q?Tseeckwtt3Cq4/S3HGWHhZ/lWgsapPBvB5uDDKOHWnjB/edZ258DsspAB55l?=
+ =?us-ascii?Q?pCl8s4YihTCLF5w3yRjDf7LXFKf5pUFuZ48zFC0XWCulZXgY77H/C39hWdox?=
+ =?us-ascii?Q?GHd7VFRwwb4n/BamYrbno1q2xr1LMA1dCitTeyqiZ3L5zlH3lRLFGIp0tjX/?=
+ =?us-ascii?Q?mT7/TMR1yexOdZvXgBq909wTBfr/H/4lKMCno8HmG2SXEI16LVamSJdce/gk?=
+ =?us-ascii?Q?deo2Bju8wJ6CiqiM+pGhEnF1zdo3ZxYl7Yfb+votTYaBmb3hfob5NA2ZNWiM?=
+ =?us-ascii?Q?p5JqgUwJTiWuCpWLAncWOawpEPq4YdXjlRCH9IbJoFNsPc91fieq97+XSFb9?=
+ =?us-ascii?Q?SJBy1Gnx3/aC970lfRaG5fH+i4XUgex+R3vS9h37sbLeFJUfJB4/BGQdy5Qi?=
+ =?us-ascii?Q?6HbBqR9BEWLYCsLlABUxXIxmdZtr2F87hfyGh8Ew1P5TaGtkmnYYiS8TIGC6?=
+ =?us-ascii?Q?xQ=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1821f7db-704f-4192-0425-08dc32d4db4e
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8582.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 12:01:37.5219
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZWd95QbOGohgEABws+aKVDzWClp/A1CZGnZ8XKx2Ok0N5BShnsiks262/tOwMimio5lGB1Q0ST72W78TLSfpFh1euO41R2XWBDzRLev+M14=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8395
 
-Hello:
+Add myself as co-maintainer for the S32G platform alongside Chester Lin, as I am
+directly involved in developing and maintaining the downstream version of the
+kernel and Linux BSP for this platform.
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Ghennadi Procopciuc (1):
+  MAINTAINERS: Add maintainer for NXP S32G boards
 
-On Mon, 19 Feb 2024 10:38:04 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> A couple of new platforms got added since last year when Mark
-> added virt.config, so turn these off as well.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> [...]
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - arm64: config: disable new platforms in virt.config
-    https://git.kernel.org/soc/soc/c/9dcb9e583f10
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.2
 
