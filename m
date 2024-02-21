@@ -4,61 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F801C48BF6
-	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 14:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 533C6C48BC3
+	for <soc@archiver.kernel.org>; Wed, 21 Feb 2024 14:45:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DB803C43394; Wed, 21 Feb 2024 14:42:36 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 1E118C43390; Wed, 21 Feb 2024 14:45:27 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0F551C433F1
-	for <soc@kernel.org>; Wed, 21 Feb 2024 14:42:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F551C433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 2D4A1C433C7
+	for <soc@kernel.org>; Wed, 21 Feb 2024 14:45:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D4A1C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a3e75e30d36so632489566b.1
-        for <soc@kernel.org>; Wed, 21 Feb 2024 06:42:35 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-564a53b8133so3704159a12.0
+        for <soc@kernel.org>; Wed, 21 Feb 2024 06:45:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708526554; x=1709131354; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F1Kmlsg6mHbFOG6v2ikopaJgo51oV6dg5EjaptpGoDw=;
-        b=MaEJSvYTCNl5v81JO49Bsq9dzkJK7QIVGjYcmS0xGd2O/Hk9B9681Jl2m9ZbKypSPy
-         JjPMv0UswQn/RVPFp4AY9TCPGozD4tVAaAdL4i/ZCJHoaEXuh7n7HwaI0L/Jxp5C4yxG
-         Ckt3lJBENNozhKBbda8Z2G3sQs7TfaRndhgCeeOx60RJE7wEcnKnrBmUZiVD+1dW9n/b
-         WTwSpUYqClQ70rHnU10B5d8apiz9TTRvMM4tIwpW8C6V0e/L4Cz0+LJOROp+1iygMaWX
-         O/tRkwJj6eyJt/4fgwsycIDMUjsNFVk6Rx8k8sgIRV0ob5FGacbLkElUmNAtQc142CJX
-         hTxg==
+        d=linaro.org; s=google; t=1708526724; x=1709131524; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WjyeNfwggCjpbW8wL8jNpb/QkgImBKqp+2wL70wVTJA=;
+        b=lgab2ZPeZItwCsTJAivh07E/zE7DEUsWTZwTeJCZueRnG2S0NIkRbdRG5p+ZR5y8us
+         q31P8LRxV4VWb9W0eGBpH/7rwWqxLMXahWn0s3eiNOWZ10zK78daFNcvflLQTv1cOUUW
+         krhmYW8ttr2MU2fxf8qXtgRlLFxUeh+s0qDhiX/Y7d0yryCLBBt+NTp2CQwX3y+1FNgF
+         0LvS6FUh7BXmXn4Y+WwgRwDHDLLFfLie/MddVs39CxeLi4GW82lm3lcPmwoZCW70bmHs
+         r0RhEx8VdUbqKOcXInm8ERzQUFRVtODMnu8Cj2fzZ+ZOKZSxzt6Qg3tBU3+hwzlA92pF
+         7sbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708526554; x=1709131354;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1Kmlsg6mHbFOG6v2ikopaJgo51oV6dg5EjaptpGoDw=;
-        b=rHEIoH3W461XZunlH6p1C5sK7/VwmL/tLWNBuKiCR8VjeL3JQ6+BpQoocCErkmGMhd
-         Qr6Y0Nrz9YeZ+arrNYOyx548eK99RToQTr9ojSlEe9zpwBOUB8cuxiX/d9ME8r21ZK7U
-         KqWguaIgO21crsz84aOrOGBqzRzMrDj3GuyU2Mm6WSjo43djWxqpLnY8FQaI5Ej5O7OK
-         p0X/TbsuIvrBhQky24UnrIbaXJRfnpXGqvCyGprb+Dc92OFg9hFqbhUlNMsUqhkrnhKF
-         A6IISZzXpNfKsRdxwWXV0RcVQDD/RaUVcKcXJGZmRKOnTsW2gQWqVrJcCD4Cj7yVQQPf
-         lDWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWsT5pUzX5oavaWkljAHdkIxI4r8pz/UtFiShD/kIex4kHkqkBC3qE/1CgrqoMsFIrcskrbL+g84hpEJz/ziQ==
-X-Gm-Message-State: AOJu0YxImbihPtRAfpLx/vW+HU0FaZv8iZCDAR/TZ2wbiZQyqS6I7GbQ
-	yd68FS7YsdQjhdvK9qQTdrLVTzJCjgMVWFA2DL//thC/Th15bf+N98vwS+VVDI4=
-X-Google-Smtp-Source: AGHT+IHAgZ1c2HtFOf7W54HfxVd65piuCXVksLf3uZv299tc+n6fVwFIj45hOEodLVzneDppQCcE6g==
-X-Received: by 2002:a17:906:68d4:b0:a3f:816:1e0a with SMTP id y20-20020a17090668d400b00a3f08161e0amr3808840ejr.37.1708526554172;
-        Wed, 21 Feb 2024 06:42:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708526724; x=1709131524;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WjyeNfwggCjpbW8wL8jNpb/QkgImBKqp+2wL70wVTJA=;
+        b=e2GF5KQ5clvyxt7spNNg7+p4GJEzLXXcy4eFfIT6a4W8CjvsbQGcP5MR7PYkE5bVDt
+         nhs2pCs45tw4VYf+jpOTMStsieA3NAsWA4Z09lgoJkrtNlWksu7t38IxNHP27+Oy+v6e
+         pnmtMi8e1OaEKmFbaZAanhpFRVwZYDCR2Na+ru/Tvy8OH0hqB7zUn1iEC1qBrbqDTYyc
+         ppVopHDSUZllmjppJc6YhdG1AkkpWkLL/QqMnBuGRn1GsYVI68Ec6RffHzZqG6AxyHBr
+         93YjFJhRn6Yqa7xXfTVXs8DF45qx4zmhTjyoczrssDv9ZZcoikp3euOs2bQB1T/dCvoi
+         LXIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVB9jkAZQAZKpqyqCYUoVEKoNrwq0PRCgTy6ni3bC/XNbVlu9zkV+6tz4MCXvDW75tOWldTRbpzw+Z30WzfcQ==
+X-Gm-Message-State: AOJu0YyjmfKrlgHKXKM+XkKcBla/dBeYQoJZAYjMA6Gxea64GWkab0NS
+	HPaJBHSWNAoAB66rf9ZV8XnmlyBDbATADGjwTsh/sjU/6AAebgDCT5MlN242jo0=
+X-Google-Smtp-Source: AGHT+IFOQwr4pPv82Vjgtcp/1o0V2Lg7dT+QzsMNDevJBDGDjSVGcQa2NCJWVVcxsqqgwDwslEoVrA==
+X-Received: by 2002:a17:906:b094:b0:a3d:1cbd:67f7 with SMTP id x20-20020a170906b09400b00a3d1cbd67f7mr11894515ejy.0.1708526724327;
+        Wed, 21 Feb 2024 06:45:24 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id ha1-20020a170906a88100b00a3d310a2684sm5002073ejb.158.2024.02.21.06.42.32
+        by smtp.gmail.com with ESMTPSA id g25-20020a1709063b1900b00a3f45b80563sm535615ejf.77.2024.02.21.06.45.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 06:42:33 -0800 (PST)
-Message-ID: <f4465547-1fb1-4578-9a69-7d399e7661b3@linaro.org>
-Date: Wed, 21 Feb 2024 15:42:31 +0100
+        Wed, 21 Feb 2024 06:45:23 -0800 (PST)
+Message-ID: <403e32c2-910e-4745-9ebe-fbf377c3fde8@linaro.org>
+Date: Wed, 21 Feb 2024 15:45:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/1] MAINTAINERS: Add maintainer for NXP S32G boards
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  Chester Lin <chester62515@gmail.com>, krzysztof.kozlowski+dt@linaro.org,
@@ -70,7 +72,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
 References: <20240221120123.1118552-1-ghennadi.procopciuc@oss.nxp.com>
  <20240221120123.1118552-2-ghennadi.procopciuc@oss.nxp.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <f4465547-1fb1-4578-9a69-7d399e7661b3@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -115,23 +117,32 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240221120123.1118552-2-ghennadi.procopciuc@oss.nxp.com>
+In-Reply-To: <f4465547-1fb1-4578-9a69-7d399e7661b3@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/02/2024 13:01, Ghennadi Procopciuc wrote:
-> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+On 21/02/2024 15:42, Krzysztof Kozlowski wrote:
+> On 21/02/2024 13:01, Ghennadi Procopciuc wrote:
+>> From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+>>
+>> Add myself as a maintainer of the NXP S32G DT files.
 > 
-> Add myself as a maintainer of the NXP S32G DT files.
+> No need for cover letters for single patches. OTOH, this commit msg is
+> empty...
+> 
+> Plus your patch looks corrupted (wrong encoding): F??rber
+> 
+> BTW, did you contribute anything to the upstream Linux kernel? Do you
+> know the process? Downstream does not really matter.
 
-No need for cover letters for single patches. OTOH, this commit msg is
-empty...
+I found the answer:
 
-Plus your patch looks corrupted (wrong encoding): F??rber
+From: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
 
-BTW, did you contribute anything to the upstream Linux kernel? Do you
-know the process? Downstream does not really matter.
+Does not look like. Please get some upstream work experience first.
 
+https://lore.kernel.org/all/?q=f%3Aghennadi.procopciuc%40oss.nxp.com
 
 Best regards,
 Krzysztof
