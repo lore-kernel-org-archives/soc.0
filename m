@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE72C5478C
-	for <soc@archiver.kernel.org>; Fri, 23 Feb 2024 13:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F873C54E4F
+	for <soc@archiver.kernel.org>; Fri, 23 Feb 2024 13:10:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C53D1C43601; Fri, 23 Feb 2024 13:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AEED7C433A6;
+	id CDD0EC433A6; Fri, 23 Feb 2024 13:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7689C433B2;
 	Fri, 23 Feb 2024 13:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1708693828;
-	bh=4Q3gXjDU+fhPSyy3/3j4+LNBW5xTQpplEQzHMw2kptI=;
+	bh=5fDZmrmcSi85psQssgx8Lf/zxGWkckSwvoNejvGrKYk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Tkdi/+6dqr5LMy/i5D7BODHhB3s1g/nZOgZMSOacKq1ChoxBS/YepEifWy9rE2XRr
-	 99psZMDKPUvMTpRBs4VF2zUn/wAx1oqBYGw9hNob/7IH3KJHAmgcaehLcA7tDK/uzT
-	 GiLMGwuPy+5FrPOsnvhqTfyT4oU+NTHI3gmaBzQTwZpufdJYhWUf8F3S5xAnC6+4fv
-	 MWUF9lly0oqynDc7fPq+sG+ARgeeDGvVYFV2ca1aK25QuPiWuLtOlJDz0SMe6fbwav
-	 6nO7J3e025kyElRY9wkK6z6pmuuuISc0htv3/J6hWZNTjmOr2miE3/unRfwiAoKmHe
-	 q+b1Xfcxsu0sA==
+	b=I71l3S32maOz699RMhnbeNvwgNBOPeEepfjtAWAuy4KkM/s4k5xirPoz5iSn+zn00
+	 GtiTLW7Vsoxmjw3qjLenU9SL5bGU6GgAT4Wq2hQqzTmlpqZW5gUOTq+aiZnW7TXBvJ
+	 1VlHfRdP/ZW9inY8SJDq7c8TgYmSgbyc0s9INHvL9ZUXFmjrPqSfnDv//aEKPQuQZe
+	 9AmAglJMxt+dTkfvaeL3wR2xRVYWNG0/gQfJXvCiS0cfpOsPX60Zjek5yWDQgynkTG
+	 wfzAACc1c8qqxKXYq3NFBWJdSCAZbCxtt2KL0834dfBCz0nvxo4jtY1fUf3ABfgHWT
+	 nDvZ1Tr7UInGg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C4CBD84BBC;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9368BD84BBB;
 	Fri, 23 Feb 2024 13:10:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Microchip firmware driver fixes for v6.8-rc6
+Subject: Re: [GIT PULL] RISC-V Cache driver fixes for v6.8-rc6
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170869382857.28623.149461954067004836.git-patchwork-notify@kernel.org>
+ <170869382860.28623.859047466469593932.git-patchwork-notify@kernel.org>
 Date: Fri, 23 Feb 2024 13:10:28 +0000
-References: <20240221-recognize-dust-4bb575f4e67b@spud>
-In-Reply-To: <20240221-recognize-dust-4bb575f4e67b@spud>
+References: <20240221-keenness-handheld-b930aaa77708@spud>
+In-Reply-To: <20240221-keenness-handheld-b930aaa77708@spud>
 To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -42,10 +42,12 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 21 Feb 2024 16:37:15 +0000 you wrote:
+On Wed, 21 Feb 2024 16:27:33 +0000 you wrote:
 > Hey Arnd,
 > 
-> Please pull a single fix for the single Microchip firmware driver.
+> First of a few small PRs - I'd send these as patchsets but my flow for
+> sending a PR is easier. I guess that says something about how poor my
+> patch sending flow is...
 > 
 > Cheers,
 > Conor.
@@ -53,8 +55,8 @@ On Wed, 21 Feb 2024 16:37:15 +0000 you wrote:
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Microchip firmware driver fixes for v6.8-rc6
-    https://git.kernel.org/soc/soc/c/4d934f94adc9
+  - [GIT,PULL] RISC-V Cache driver fixes for v6.8-rc6
+    https://git.kernel.org/soc/soc/c/bcb323bd10a1
 
 You are awesome, thank you!
 -- 
