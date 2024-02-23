@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CAEAC54798
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7533C54E49
 	for <soc@archiver.kernel.org>; Fri, 23 Feb 2024 11:21:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E58F7C433B2; Fri, 23 Feb 2024 11:21:19 +0000 (UTC)
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
+	id CF9B6C433C7; Fri, 23 Feb 2024 11:21:20 +0000 (UTC)
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2DCA4C43390
+	by smtp.kernel.org (Postfix) with ESMTPS id 37D74C433A6
 	for <soc@kernel.org>; Fri, 23 Feb 2024 11:21:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2DCA4C43390
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37D74C433A6
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:6f61:ab26:80d6:d9d4])
-	by xavier.telenet-ops.be with bizsmtp
-	id qbM72B00Q2itsqh01bM7gT; Fri, 23 Feb 2024 12:21:09 +0100
+	by laurent.telenet-ops.be with bizsmtp
+	id qbM72B00H2itsqh01bM7HQ; Fri, 23 Feb 2024 12:21:09 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rdTbu-001P3l-Vg;
+	id 1rdTbu-001P3m-Vf;
 	Fri, 23 Feb 2024 12:21:07 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rdTc3-00D0P1-9o;
+	id 1rdTc3-00D0P4-AX;
 	Fri, 23 Feb 2024 12:21:07 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -36,48 +36,42 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/2] Renesas SoC updates for v6.9 (take two)
-Date: Fri, 23 Feb 2024 12:20:57 +0100
-Message-Id: <cover.1708687130.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/2] Renesas DT binding updates for v6.9 (take two)
+Date: Fri, 23 Feb 2024 12:20:58 +0100
+Message-Id: <cover.1708687132.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1708687130.git.geert+renesas@glider.be>
+References: <cover.1708687130.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit 49558e814fefdf33bf0b2d1c46c30d6a3f9634f3:
 
-This is my second pull request for the inclusion of Renesas SoC updates
-for v6.9.
+  dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single (2024-01-31 15:06:52 +0100)
 
-It consists of 2 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/2] Renesas DT binding updates for v6.9 (take two)
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.9-tag2
 
-    - Restore sort order,
-    - Document preferred compatible naming,
+for you to fetch changes up to 3a9856e830500e20e61b92f5ea6b8cc505e085be:
 
-  [GIT PULL 2/2] Renesas DTS updates for v6.9 (take two)
+  dt-bindings: renesas: Document preferred compatible naming (2024-02-19 11:21:04 +0100)
 
-    - Add pin control, I2C, GPIO, CA76 cluster, Ethernet, SD/MMC, DMA, and
-      HyperFLASH/QSPI (RPC) support for the R-Car V4M SoC,
-    - Add I2C EEPROM, Ethernet, eMMC, and QSPI FLASH support for the Gray
-      Hawk Single development board,
-    - Fix PCIe power on ULCB development boards equipped with the
-      Shimafuji Kingfisher extension,
-    - Add PSCI support for the RZ/G3S SoC,
-    - Add camera support for the RZ/G2UL SMARC EVK development board,
-    - Add display support for the RZ/G2L{,C} and RZ/V2L SoCs and SMARC EVK
-      development boards,
-    - Miscellaneous fixes and improvements,
+----------------------------------------------------------------
+Renesas DT binding updates for v6.9 (take two)
 
-Thanks for pulling!
+  - Restore sort order,
+  - Document preferred compatible naming,
 
-Gr{oetje,eeting}s,
+----------------------------------------------------------------
+Lad Prabhakar (1):
+      dt-bindings: soc: renesas: Preserve the order of SoCs based on their part numbers
 
-						Geert
+Niklas Söderlund (1):
+      dt-bindings: renesas: Document preferred compatible naming
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ .../bindings/soc/renesas/renesas-soc.yaml          | 73 ++++++++++++++++++++++
+ .../devicetree/bindings/soc/renesas/renesas.yaml   | 12 ++--
+ 2 files changed, 79 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/renesas/renesas-soc.yaml
