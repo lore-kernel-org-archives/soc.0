@@ -1,64 +1,135 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=3ghZ=KA=yeah.net=shawnguo2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F47C54E58
-	for <soc@archiver.kernel.org>; Fri, 23 Feb 2024 13:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A882C54798
+	for <soc@archiver.kernel.org>; Fri, 23 Feb 2024 14:43:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EF5F5C43601; Fri, 23 Feb 2024 13:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA080C43399;
-	Fri, 23 Feb 2024 13:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708693829;
-	bh=8OYf84/ZnrQNvA6WzrsdY8QVVf/SZRWya6CA/GnBb4s=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Bl+APN1bcGzh8XzVRL04PJ58DcpQbhty7UpS3Autrj53lWzcZ0eX2Ohe/1NrL+aXc
-	 1T+kEJP+XF91EtOWsLcMGttQttv8IRethH06meqDjjvfXmKfXizsCOE1w9T6nC16Y3
-	 eFADYrYzckcN4nIMh5QsZ6gm2IIN2RO6wXWmR8Sh+x7B/bmfaAH69dW6WOtSTcoSZF
-	 xE4nENvEbgJoJc3/RnzYfCIjbYvAbX/ZgJEZKhoNj6YmoOMRCG9IxN01gaiH6na2mQ
-	 scEi0NHaUILdlK218s0OEJ6wJ49C8/Wa/xVehrm03TirvFg7Aj600PBp0x6P2HC51M
-	 woktMmvmFNb/w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C75D4D84BBC;
-	Fri, 23 Feb 2024 13:10:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V SoC driver fixes for v6.8-rc6
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <170869382981.28623.8452845100632265770.git-patchwork-notify@kernel.org>
-Date: Fri, 23 Feb 2024 13:10:29 +0000
-References: <20240221-irate-outrage-cf7f96f83074@spud>
-In-Reply-To: <20240221-irate-outrage-cf7f96f83074@spud>
-To: Conor Dooley <conor@kernel.org>
+	id 16B3DC43390; Fri, 23 Feb 2024 14:43:11 +0000 (UTC)
+Received: from mail-177131.yeah.net (mail-177131.yeah.net [123.58.177.131])
+	by smtp.kernel.org (Postfix) with ESMTP id 3E9A6C433C7;
+	Fri, 23 Feb 2024 14:43:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E9A6C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=u/aavTwccFRcAG7ut7q4MQxLB8Quxo5JTYbXqtZujLA=;
+	b=lQ+oLqDH54vwPb/2DxXNxJwrA6cCwjSvXCLU//q3PnzyNF4WwIy9KdQOfdiIs5
+	OPXhIyh06YbsSq+H5wDDctOU1/aPxbL+HL6ms0I9hQixQGr7Yq6hd0GXtZlMyo4o
+	5hvH5/fqqYQLkkK3CsevrTA4+KQVmTuxvoobl5vePCJTQ=
+Received: from dragon (unknown [183.213.196.200])
+	by smtp1 (Coremail) with SMTP id ClUQrAAn6R3yrthlVxU3BA--.6479S3;
+	Fri, 23 Feb 2024 22:43:00 +0800 (CST)
+Date: Fri, 23 Feb 2024 22:42:58 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Matthias Brugger <mbrugger@suse.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
+	Olof Johansson <olof@lixom.net>,
+	Chester Lin <chester62515@gmail.com>,
+	krzysztof.kozlowski+dt@linaro.org,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	soc@kernel.org, NXP S32 Linux Team <s32@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/1] MAINTAINERS: Add maintainer for NXP S32G boards
+Message-ID: <Zdiu8s5Cgz9s6dLP@dragon>
+References: <20240221120123.1118552-1-ghennadi.procopciuc@oss.nxp.com>
+ <20240221120123.1118552-2-ghennadi.procopciuc@oss.nxp.com>
+ <f4465547-1fb1-4578-9a69-7d399e7661b3@linaro.org>
+ <403e32c2-910e-4745-9ebe-fbf377c3fde8@linaro.org>
+ <ad856766-8903-46c0-93af-24e101ad51dc@oss.nxp.com>
+ <e538ded0-bd3a-4ca4-b2bd-8d20d8c8c3fe@linaro.org>
+ <bcb79af4-56d9-4204-9503-cff996f1ba41@oss.nxp.com>
+ <e6f6070e-8355-4a0b-a904-1a24970f249b@linaro.org>
+ <e530d504-dfa3-4d39-b903-b2570bb8b014@suse.com>
+ <c3e68c62-b81f-475b-9b15-c983c94aed8b@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c3e68c62-b81f-475b-9b15-c983c94aed8b@app.fastmail.com>
+X-CM-TRANSID:ClUQrAAn6R3yrthlVxU3BA--.6479S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr43trW8GFyftry8ZFWxCrg_yoW5Jr4UpF
+	W8CF98Kr4kKr1kAwnF9r129a40v3y5JFW3XrykW345JasIqw1ftryI9r4a9asxursYgF4a
+	yF4UXas29a15Za7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jIrWrUUUUU=
+X-Originating-IP: [183.213.196.200]
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiGBSNZV6NnjDVsQAAs9
 
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Wed, 21 Feb 2024 16:44:29 +0000 you wrote:
-> Arnd,
+On Fri, Feb 23, 2024 at 01:29:10PM +0100, Arnd Bergmann wrote:
+> On Fri, Feb 23, 2024, at 13:02, Matthias Brugger wrote:
+> > On 22/02/2024 12:13, Krzysztof Kozlowski wrote:
+> >> On 21/02/2024 18:00, Ghennadi Procopciuc wrote:
+> >> 
+> >> Andreas or Matthias,
+> >> Maybe you could change your R: into M: and take s32g patches?
+> >> 
+> >> If not, then I will ack this patch making Ghennadi the maintainer.
+> >> 
+> >
+> > Normal process would be that Arnd would contact Chester to see if he is 
+> > not able 
+> > to do the maintainer work any more. In that case maybe Arnd could take 
+> > over.
 > 
-> Yet another 1 patch PR.
+> I was hoping to see a reply from Chester one way or another,
+> I see he has been on Cc for the entire thread but not
+> chimed in.
 > 
-> Cheers,
-> Conor.
+> > I'm not saying that Ghennadi won't be able to defend this, if it ever occurs. 
+> > Basically because I don't have a good track record of him due to missing 
+> > upstream collaboration.
+> >
+> > I would prefer that Arnd (or Andreas) step up to take the maintainer role. I 
+> > already have one and it's difficult for me to find the time to do it in an 
+> > acceptable way.
 > 
-> [...]
+> It appears that we already cover the dts files in the IMX
+> entry, whether that is intentional or not:
+> 
+> ARM/FREESCALE IMX / MXC ARM ARCHITECTURE
+> M:      Shawn Guo <shawnguo@kernel.org>
+> M:      Sascha Hauer <s.hauer@pengutronix.de>
+> R:      Pengutronix Kernel Team <kernel@pengutronix.de>
+> R:      Fabio Estevam <festevam@gmail.com>
+> R:      NXP Linux Team <linux-imx@nxp.com> 
+> L:      linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> S:      Maintained
+> T:      git git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git
+> F:      arch/arm/boot/dts/nxp/imx/
+> F:      arch/arm/boot/dts/nxp/mxs/
+> F:      arch/arm64/boot/dts/freescale/
+> 
+> Added everyone there to Cc, having any s32 patches go through
+> the imx tree would be the easiest way as far as I'm concerned.
+> I've added the maintainers to Cc, let's see what they think.
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V SoC driver fixes for v6.8-rc6
-    https://git.kernel.org/soc/soc/c/fe514e177532
+It's unintentional that IMX entry covers s32 dts files, as they have a
+dedicated entry.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+ARM/NXP S32G ARCHITECTURE
+M:      Chester Lin <chester62515@gmail.com>
+R:      Andreas Färber <afaerber@suse.de>
+R:      Matthias Brugger <mbrugger@suse.com>
+R:      NXP S32 Linux Team <s32@nxp.com>
+L:      linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+S:      Maintained
+F:      arch/arm64/boot/dts/freescale/s32g*.dts*
 
+However I'm fine with collecting and sending patches through IMX tree,
+if S32G folks help review them.
+
+Shawn
 
