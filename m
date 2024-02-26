@@ -4,31 +4,31 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 090A5C48BF6
-	for <soc@archiver.kernel.org>; Mon, 26 Feb 2024 10:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5811C48BF6
+	for <soc@archiver.kernel.org>; Mon, 26 Feb 2024 10:43:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BAD3EC433F1; Mon, 26 Feb 2024 10:37:08 +0000 (UTC)
+	id 5B296C43394; Mon, 26 Feb 2024 10:43:11 +0000 (UTC)
 Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 023FAC433C7;
-	Mon, 26 Feb 2024 10:37:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 023FAC433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 2A86EC433F1;
+	Mon, 26 Feb 2024 10:43:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2A86EC433F1
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
 Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id 26C4260462;
-	Mon, 26 Feb 2024 10:36:36 +0000 (UTC)
+	by mail5.25mail.st (Postfix) with ESMTPSA id EA011604E8;
+	Mon, 26 Feb 2024 10:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1708943818;
-	bh=oYT/HiK94SkFdce/HNd/VrIiwY34Ea01L0AEBbrybCE=;
+	s=25mailst; t=1708944189;
+	bh=r+im7roRpYG1Yh4e3je3sYTXtj6U+RSWFzwn/ezHhS8=;
 	h=From:To:Cc:Subject:Date:From;
-	b=QyhzL5YSf0CH02td46MD2M7l5wTIr+W1Rkl0vvKX6NWyvhBBRCzbT+R8+jrwl/dbu
-	 /k5XVnxdPLWphk5w9JCNisk5UrlF14m8qlsRIncdRY9GA8riO27JhQJVYXlzIHATob
-	 okha8QqxVHDHCkNINZPcm1S8S5F6vZQUw9rnS/giTCImU35v+TgTZrX07ub7CadiMm
-	 sthr0mYOwieOgqBe41yJ7mdwHoLGznermZhjhmL5X7ooZD35KTPZzP9Bdwns5C8SvE
-	 D0U5z8AByBq1Yma/ZMSAefCFrS5wt72m/J0b9InQB6XxfiYKDgr3qHRTmVW3dNT2pT
-	 i8Up2FzH+SQZg==
+	b=XrH9eNmj9A5qDaJ08kmbBM8A7B6l67WVVpwpD9sYr6acI3nDlSGbqcnwY1DIngNG2
+	 vY0+/jmSbiHeU8msKq6YJKiWT5jXNFWYHdlrnCXlO7QQBOWITKtYmey70IR9Aw6MVD
+	 FNcN7tK/z+vQ0H6AW8aDcNqCgxjuP3vcie1pgWw3BfulGM7hR46hGlMQySJZeRIGou
+	 Ap5a55tpTvUm370ZxfpM+y9uKQ1YtLjILEPAZpS3Jcl7RwsyyN2ki9i9p4jdH+M+Qq
+	 2qzPpCed+Co+fgNVsKXtvx/uHwr2AEeXgTY3R8WrTC72WarJXZUEjUGaqDAoVOWQ4d
+	 qUNmx6qhe8UsQ==
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -36,14 +36,10 @@ Cc: arm@kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"Tony Lindgren" <tony@atomide.com>,
-	"Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-	"Rob Herring" <robh@kernel.org>,
-	"Nishanth Menon" <nm@ti.com>,
-	"Vignesh Raghavendra" <vigneshr@ti.com>,
-	"Andrew Davis" <afd@ti.com>
-Subject: [GIT PULL] Add PowerVR Series5 SGX GPUs for the TI SoCs
-Date: Mon, 26 Feb 2024 12:36:12 +0200
-Message-ID: <pull-1708943489-872615@atomide.com>
+	"Randy Dunlap" <rdunlap@infradead.org>
+Subject: [GIT PULL] Kerneldoc fixes for omaps for v6.9
+Date: Mon, 26 Feb 2024 12:42:44 +0200
+Message-ID: <pull-1708944095-4485@atomide.com>
 X-Mailer: git-send-email 2.43.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +53,44 @@ The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/sgx-for-v6.9-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.9/soc-signed
 
-for you to fetch changes up to 21cfb2ba471bde8fefc327f4c8e2af9499f5173d:
+for you to fetch changes up to c6e33edb02292059a06ce8fdc4249a5db86a6114:
 
-  arm64: dts: ti: k3-am654-main: Add device tree entry for SGX GPU (2024-01-26 09:43:23 +0200)
-
-----------------------------------------------------------------
-Add PowerVR Series5 SGX GPUs for the TI SoCs
-
-With the Imagination Rogue GPU binding added, let's also add the devicetree
-binding for earlier SGX GPUs. Let's also patch the TI SoCs for the related
-SGX GPU nodes.
-
-Based on the mailing list discussions, the conclusion was that we need two
-separate device tree bindings, one for Rogue and upcoming GPUS, and one for
-the older SGX GPUs.
-
-For merging the changes, I applied the binding changes together with the
-TI SoC related changes into a branch leaving out the sun6i and mips changes
-as suggested by Rob.
-
-These changes are mostly 32-bit SoCs, but also contains one arm64 change.
-It does not cause any merge conflicts.
+  ARM: OMAP2+: fix kernel-doc warnings (2024-01-26 10:28:07 +0200)
 
 ----------------------------------------------------------------
-Andrew Davis (9):
-      dt-bindings: gpu: Rename img,powervr to img,powervr-rogue
-      dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
-      ARM: dts: omap3: Add device tree entry for SGX GPU
-      ARM: dts: omap4: Add device tree entry for SGX GPU
-      ARM: dts: omap5: Add device tree entry for SGX GPU
-      ARM: dts: AM33xx: Add device tree entry for SGX GPU
-      ARM: dts: AM437x: Add device tree entry for SGX GPU
-      ARM: dts: DRA7xx: Add device tree entry for SGX GPU
-      arm64: dts: ti: k3-am654-main: Add device tree entry for SGX GPU
+Kerneldoc warning fixes for omaps for v6.9
 
- .../{img,powervr.yaml => img,powervr-rogue.yaml}   |   4 +-
- .../devicetree/bindings/gpu/img,powervr-sgx.yaml   | 138 +++++++++++++++++++++
- MAINTAINERS                                        |   3 +-
- arch/arm/boot/dts/ti/omap/am33xx.dtsi              |   9 +-
- arch/arm/boot/dts/ti/omap/am3517.dtsi              |  11 +-
- arch/arm/boot/dts/ti/omap/am4372.dtsi              |   6 +
- arch/arm/boot/dts/ti/omap/dra7.dtsi                |   9 +-
- arch/arm/boot/dts/ti/omap/omap34xx.dtsi            |  11 +-
- arch/arm/boot/dts/ti/omap/omap36xx.dtsi            |   9 +-
- arch/arm/boot/dts/ti/omap/omap4.dtsi               |   9 +-
- arch/arm/boot/dts/ti/omap/omap5.dtsi               |   9 +-
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |   7 ++
- 12 files changed, 195 insertions(+), 30 deletions(-)
- rename Documentation/devicetree/bindings/gpu/{img,powervr.yaml => img,powervr-rogue.yaml} (91%)
- create mode 100644 Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
+A series of kerneldoc warning fixes for omaps from Randy.
+
+----------------------------------------------------------------
+Randy Dunlap (13):
+      ARM: OMAP2+: am33xx-restart: fix function name in kernel-doc
+      ARM: OMAP2+: clockdomain: fix kernel-doc warnings
+      ARM: OMAP2+: clock: fix a function name in kernel-doc
+      ARM: OMAP2+: cm33xx: use matching function name in kernel-doc
+      ARM: OMAP2+: CMINST: use matching function name in kernel-doc
+      ARM: OMAP2+: hwmod: remove misuse of kernel-doc
+      ARM: OMAP2+: hwmod: fix kernel-doc warnings
+      ARM: OMAP2+: pmic-cpcap: fix kernel-doc warnings
+      ARM: OMAP2+: prm44xx: fix a kernel-doc warning
+      ARM: OMAP2+: PRM: fix kernel-doc warnings
+      ARM: OMAP2+: fix a kernel-doc warning
+      ARM: OMAP2+: fix kernel-doc warnings
+      ARM: OMAP2+: fix kernel-doc warnings
+
+ arch/arm/mach-omap2/am33xx-restart.c         |  2 +-
+ arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c |  2 +-
+ arch/arm/mach-omap2/clockdomain.c            |  4 ++--
+ arch/arm/mach-omap2/cm33xx.c                 |  2 +-
+ arch/arm/mach-omap2/cminst44xx.c             |  2 +-
+ arch/arm/mach-omap2/omap-secure.c            |  4 ++--
+ arch/arm/mach-omap2/omap_hwmod.c             |  9 +++++----
+ arch/arm/mach-omap2/omap_hwmod_common_data.c |  6 +++---
+ arch/arm/mach-omap2/pmic-cpcap.c             | 24 ++++++++++++------------
+ arch/arm/mach-omap2/powerdomain.c            |  2 +-
+ arch/arm/mach-omap2/prm44xx.c                |  2 +-
+ arch/arm/mach-omap2/prm_common.c             |  4 +++-
+ arch/arm/mach-omap2/wd_timer.c               |  4 +++-
+ 13 files changed, 36 insertions(+), 31 deletions(-)
