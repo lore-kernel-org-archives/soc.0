@@ -1,36 +1,56 @@
-Return-Path: <dinguyen@kernel.org>
+Return-Path: <SRS0=P+pf=KD=yeah.net=shawnguo2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3140AC54E49
-	for <soc@archiver.kernel.org>; Mon, 26 Feb 2024 01:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28BFFC48BF6
+	for <soc@archiver.kernel.org>; Mon, 26 Feb 2024 03:42:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7615C43394; Mon, 26 Feb 2024 01:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391A0C433F1;
-	Mon, 26 Feb 2024 01:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708910730;
-	bh=TrYvjGtvE6ePd8XYZL+WkuIo5TC2YTJkSxugKjiV1gA=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=eQSFppU21B/4Gdml0b/b6YlD8uqklNMASAgw+wuJ+KNo7/bOhvKiby6OMonS6jJti
-	 N4spQtCTDc4AcpKU2/JiZ0P/A5EhQ91prN3iT8hD18s2HrYoufIT4AICdIjKPZpBQI
-	 1TH3dEeNYhdIhTBeLYPWj8CMtjKaFjAbTHvwsQVc0ugsRlPfog8iBhH6paevmCPZ9C
-	 fRZkzgDPAAJfhEn2fYFcljzgAbQkJPktnjxHS7DRJTkf5c67ps7/oKpDNBv5XzIUP1
-	 91+cUAZ3Fm1l9oGJ+0ix8Y1lesYESeRa+dv/DDp4yZc+qAi93+1Jyr5tE/ajntfgnj
-	 c0xYfYwggEotg==
-From: Dinh Nguyen <dinguyen@kernel.org>
+	id EC106C43141; Mon, 26 Feb 2024 03:42:45 +0000 (UTC)
+Received: from mail-177131.yeah.net (mail-177131.yeah.net [123.58.177.131])
+	by smtp.kernel.org (Postfix) with ESMTP id B46D8C43399;
+	Mon, 26 Feb 2024 03:42:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B46D8C43399
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=znav7
+	z5Pz9k7TXnIDi7pxyWtYj0admOeRx1PN1ls78k=; b=lyZfPst5thvAC2+cfQd1b
+	BsHGmCHOYeSfEw8aynENDWk6wztO7YJ2n2xM+hPomQktTiaKW85hYVMpfMEeLaIt
+	ABlE0YrD+1Ka9e6bJYh+8PR2NndAI1UKijBdc/YW5rd08YfFr+wnYrLiJLiWyX7K
+	RoJCbYOWabTTeA4auL06Wo=
+Received: from localhost.localdomain (unknown [183.213.196.200])
+	by smtp1 (Coremail) with SMTP id ClUQrACHSyCmCNxlT1hhBA--.22032S3;
+	Mon, 26 Feb 2024 11:42:32 +0800 (CST)
+From: Shawn Guo <shawnguo2@yeah.net>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] ARM: socfpga: update for v6.9
-Date: Sun, 25 Feb 2024 19:25:28 -0600
-Message-ID: <20240226012528.20380-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.41.0
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 2/5] i.MX dt-bindings for 6.9
+Date: Mon, 26 Feb 2024 11:41:43 +0800
+Message-Id: <20240226034147.233993-2-shawnguo2@yeah.net>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240226034147.233993-1-shawnguo2@yeah.net>
+References: <20240226034147.233993-1-shawnguo2@yeah.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ClUQrACHSyCmCNxlT1hhBA--.22032S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1DCFWkGr1xtFW8Xw1DWrg_yoW8WFW8pF
+	sxGF93GryvqFy7JwnxZ3WDCr4rXr1UAF17JFZxJr10y3W5Ar1jqr1rKwn5ur9rJry7Wr4a
+	yF18Cr1vk3WUXaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jlq2NUUUUU=
+X-Originating-IP: [183.213.196.200]
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiGAiQZV6Nnjbw4QABsO
+
+From: Shawn Guo <shawnguo@kernel.org>
 
 The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
@@ -38,19 +58,44 @@ The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.9
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.9
 
-for you to fetch changes up to 2c373e75155bcc9c81060cdc07ee1b59e113bd2b:
+for you to fetch changes up to 65524e1453109c2f94b361274154154fa2120c85:
 
-  arm64: dts: intel: agilex5: drop "master" I3C node name suffix (2024-02-01 07:25:55 -0600)
-
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.9
-- Drop the "master" suffix in I3C controller node name
+  dt-bindings: arm: add UNI-T UTi260B (2024-02-25 21:57:10 +0800)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      arm64: dts: intel: agilex5: drop "master" I3C node name suffix
+i.MX dt-bindings for 6.9:
 
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+- New compatibles for boards: TQMa8Xx, Sielaff i.MX6 Solo, Toradex Apalis
+  imx6q-eval-v1.2, VAR-SOM-MX93, phyBOARD-Segin-i.MX93, UNI-T UTi260B.
+- Add vendor prefix for UNI-T.
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      dt-bindings: arm: add TQMa8Xx boards
+
+Frieder Schrempf (1):
+      dt-bindings: arm: fsl: Add Sielaff i.MX6 Solo board
+
+Hiago De Franco (1):
+      dt-bindings: arm: fsl: Add toradex,apalis_imx6q-eval-v1.2 board
+
+Hugo Villeneuve (1):
+      dt-bindings: arm: fsl: remove redundant company name
+
+Joao Paulo Goncalves (1):
+      dt-bindings: arm: fsl: add imx8qm apalis eval v1.2 carrier board
+
+Mathieu Othacehe (2):
+      dt-bindings: arm: fsl: Add VAR-SOM-MX93 with Symphony
+      dt-bindings: arm: fsl: Add phyBOARD-Segin-i.MX93
+
+Sebastian Reichel (2):
+      dt-bindings: vendor-prefixes: add UNI-T
+      dt-bindings: arm: add UNI-T UTi260B
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 41 +++++++++++++++++++---
+ .../devicetree/bindings/vendor-prefixes.yaml       |  2 ++
+ 2 files changed, 39 insertions(+), 4 deletions(-)
+
