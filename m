@@ -1,51 +1,72 @@
-Return-Path: <SRS0=ef6L=KD=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=hzE+=KD=monstr.eu=monstr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5811C48BF6
-	for <soc@archiver.kernel.org>; Mon, 26 Feb 2024 10:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF5DC54E49
+	for <soc@archiver.kernel.org>; Mon, 26 Feb 2024 12:12:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5B296C43394; Mon, 26 Feb 2024 10:43:11 +0000 (UTC)
-Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 3CBFDC43390; Mon, 26 Feb 2024 12:12:34 +0000 (UTC)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2A86EC433F1;
-	Mon, 26 Feb 2024 10:43:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2A86EC433F1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
-Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id EA011604E8;
-	Mon, 26 Feb 2024 10:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1708944189;
-	bh=r+im7roRpYG1Yh4e3je3sYTXtj6U+RSWFzwn/ezHhS8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XrH9eNmj9A5qDaJ08kmbBM8A7B6l67WVVpwpD9sYr6acI3nDlSGbqcnwY1DIngNG2
-	 vY0+/jmSbiHeU8msKq6YJKiWT5jXNFWYHdlrnCXlO7QQBOWITKtYmey70IR9Aw6MVD
-	 FNcN7tK/z+vQ0H6AW8aDcNqCgxjuP3vcie1pgWw3BfulGM7hR46hGlMQySJZeRIGou
-	 Ap5a55tpTvUm370ZxfpM+y9uKQ1YtLjILEPAZpS3Jcl7RwsyyN2ki9i9p4jdH+M+Qq
-	 2qzPpCed+Co+fgNVsKXtvx/uHwr2AEeXgTY3R8WrTC72WarJXZUEjUGaqDAoVOWQ4d
-	 qUNmx6qhe8UsQ==
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>,
-	"Randy Dunlap" <rdunlap@infradead.org>
-Subject: [GIT PULL] Kerneldoc fixes for omaps for v6.9
-Date: Mon, 26 Feb 2024 12:42:44 +0200
-Message-ID: <pull-1708944095-4485@atomide.com>
-X-Mailer: git-send-email 2.43.1
+	by smtp.kernel.org (Postfix) with ESMTPS id 28685C433F1
+	for <soc@kernel.org>; Mon, 26 Feb 2024 12:12:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28685C433F1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-60908e5fb9eso5727557b3.2
+        for <soc@kernel.org>; Mon, 26 Feb 2024 04:12:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20230601.gappssmtp.com; s=20230601; t=1708949550; x=1709554350; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+3NlhK2NplClKgCuNW6sST7a+GqRQRhrHRBsNzh7BvI=;
+        b=zR+AfkLw0UGUOv2/OOeT0FVA6RNdzYx6wd+6gr+6BR+woKrHcS6LWDSoYyQjP+jO8e
+         zGlr5p/45M4W4ZWiEWq4kExttYEcoT+yEcPEN/EedkK02bfN9e7dU5chY9m2ZfFDJneC
+         u4NnbBNeBEHVUee5xPU65efC9KqH2pvadRAAarYSfVI36gizjmb4ohLWD8hJ5MHLSz+/
+         YRFkXRcxQheNOoihRhvvND2tnUBOYEbsbaoQMgRq+mP5/HZ9c/XEXK6zLyMvIIArwLFI
+         9VqFkL89JJ4wI/Dd01q5n4dhfxvbyXAyovVqsV27xg8g7nEMed8TuNt7KPScXEC2NdNY
+         3KQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708949550; x=1709554350;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+3NlhK2NplClKgCuNW6sST7a+GqRQRhrHRBsNzh7BvI=;
+        b=RC+NxA5dT+0RHNn42bDgbrQ14JRRuu3T/j8ThDjhypYDSbXiQwFQZW1+PGZNhwMlcr
+         8bvjlRe+xIEI9LrDhGffYjGNTv4niCMgp16eG1FQrO/9RgKUhjy/xAQnAT8BZWfgux45
+         gHukvrtO5JYT97Ud7ssK2UaFWqQHuptcGPI06xKd4L5m1o8OGi2xX6BqkDMVWIIsHbEL
+         y6k+pTKATMzHz4TIwUhlFmPuIrDP8fbAjwUpoJ01snfxtfav9M/FGoPV0oYrN0cQNqf0
+         X3Vps753zVj87vfih6vcZZsx7SQgFOSDJDdzJxt2CZRw0kRxH41TS0hpoF+GRPUQ4W8v
+         02gA==
+X-Gm-Message-State: AOJu0Yzo3V4AcA95OqHI1rgUsKdlbTmMAjXrek734FOa0NxPL+zusfP9
+	6JRoCbxQUZxb9WoLYRzWof1KRn8tm7jAdEB/Z33hUcSXNrKCO9vcw1zYvhU5ljChv5mPgTXiAA5
+	pv+Dv7gVUZlcTiVTxKJv8ognbxUgF+eo31IGQ1LExVAeZFov34+T1
+X-Google-Smtp-Source: AGHT+IHd7y9yQC8+HWBy7AKLDQgGlw2JZz5cU1BO5bZJg2RC7+XRWOw/qQTVJ8AieaDtqILJYCkXcLytxA2pDKWGUq8=
+X-Received: by 2002:a25:818c:0:b0:dc5:f51e:6a60 with SMTP id
+ p12-20020a25818c000000b00dc5f51e6a60mr4177757ybk.6.1708949550041; Mon, 26 Feb
+ 2024 04:12:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Michal Simek <monstr@monstr.eu>
+Date: Mon, 26 Feb 2024 13:12:18 +0100
+Message-ID: <CAHTX3dJpawPhgVxSsXuSvG20JY9r4EkJu2NrrH1OKRjKxTpNAA@mail.gmail.com>
+Subject: [GIT PULL] ARM: Zynq SoC changes for v6.9
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
+Content-Type: multipart/alternative; boundary="000000000000dea464061247d29a"
 
-From: "Tony Lindgren" <tony@atomide.com>
+--000000000000dea464061247d29a
+Content-Type: text/plain; charset="UTF-8"
+
+Hi,
+
+please pull these two simple patches to your tree.
+
+Thanks,
+Michal
 
 The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
@@ -53,44 +74,61 @@ The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.9/soc-signed
+  https://github.com/Xilinx/linux-xlnx.git tags/zynq-soc-for-6.9
 
-for you to fetch changes up to c6e33edb02292059a06ce8fdc4249a5db86a6114:
+for you to fetch changes up to a22f00c0167f459a19a4828d3c24943ae4694418:
 
-  ARM: OMAP2+: fix kernel-doc warnings (2024-01-26 10:28:07 +0200)
-
-----------------------------------------------------------------
-Kerneldoc warning fixes for omaps for v6.9
-
-A series of kerneldoc warning fixes for omaps from Randy.
+  ARM: zynq: Remove clk/zynq.h header (2024-01-22 14:22:10 +0100)
 
 ----------------------------------------------------------------
-Randy Dunlap (13):
-      ARM: OMAP2+: am33xx-restart: fix function name in kernel-doc
-      ARM: OMAP2+: clockdomain: fix kernel-doc warnings
-      ARM: OMAP2+: clock: fix a function name in kernel-doc
-      ARM: OMAP2+: cm33xx: use matching function name in kernel-doc
-      ARM: OMAP2+: CMINST: use matching function name in kernel-doc
-      ARM: OMAP2+: hwmod: remove misuse of kernel-doc
-      ARM: OMAP2+: hwmod: fix kernel-doc warnings
-      ARM: OMAP2+: pmic-cpcap: fix kernel-doc warnings
-      ARM: OMAP2+: prm44xx: fix a kernel-doc warning
-      ARM: OMAP2+: PRM: fix kernel-doc warnings
-      ARM: OMAP2+: fix a kernel-doc warning
-      ARM: OMAP2+: fix kernel-doc warnings
-      ARM: OMAP2+: fix kernel-doc warnings
+ARM: Zynq SoC changes for 6.9
 
- arch/arm/mach-omap2/am33xx-restart.c         |  2 +-
- arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c |  2 +-
- arch/arm/mach-omap2/clockdomain.c            |  4 ++--
- arch/arm/mach-omap2/cm33xx.c                 |  2 +-
- arch/arm/mach-omap2/cminst44xx.c             |  2 +-
- arch/arm/mach-omap2/omap-secure.c            |  4 ++--
- arch/arm/mach-omap2/omap_hwmod.c             |  9 +++++----
- arch/arm/mach-omap2/omap_hwmod_common_data.c |  6 +++---
- arch/arm/mach-omap2/pmic-cpcap.c             | 24 ++++++++++++------------
- arch/arm/mach-omap2/powerdomain.c            |  2 +-
- arch/arm/mach-omap2/prm44xx.c                |  2 +-
- arch/arm/mach-omap2/prm_common.c             |  4 +++-
- arch/arm/mach-omap2/wd_timer.c               |  4 +++-
- 13 files changed, 36 insertions(+), 31 deletions(-)
+- Fix kernel-doc
+- Removed one useless header
+
+----------------------------------------------------------------
+Michal Simek (1):
+      ARM: zynq: Remove clk/zynq.h header
+
+Randy Dunlap (1):
+      ARM: zynq: slcr: fix function prototype kernel-doc warnings
+
+ arch/arm/mach-zynq/slcr.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+
+--000000000000dea464061247d29a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi,</div><div><br></div><div>please pull these two si=
+mple patches to your tree.</div><div><br></div><div>Thanks,</div><div>Micha=
+l<br></div><div><br></div>The following changes since commit 6613476e225e09=
+0cc9aad49be7fa504e290dd33d:<br><br>=C2=A0 Linux 6.8-rc1 (2024-01-21 14:11:3=
+2 -0800)<br><br>are available in the Git repository at:<br><br>=C2=A0 <a hr=
+ef=3D"https://github.com/Xilinx/linux-xlnx.git">https://github.com/Xilinx/l=
+inux-xlnx.git</a> tags/zynq-soc-for-6.9<br><br>for you to fetch changes up =
+to a22f00c0167f459a19a4828d3c24943ae4694418:<br><br>=C2=A0 ARM: zynq: Remov=
+e clk/zynq.h header (2024-01-22 14:22:10 +0100)<br><br>--------------------=
+--------------------------------------------<br>ARM: Zynq SoC changes for 6=
+.9<br><br>- Fix kernel-doc<br>- Removed one useless header<br><br>---------=
+-------------------------------------------------------<br>Michal Simek (1)=
+:<br>=C2=A0 =C2=A0 =C2=A0 ARM: zynq: Remove clk/zynq.h header<br><br>Randy =
+Dunlap (1):<br>=C2=A0 =C2=A0 =C2=A0 ARM: zynq: slcr: fix function prototype=
+ kernel-doc warnings<br><br>=C2=A0arch/arm/mach-zynq/slcr.c | 5 ++---<br>=
+=C2=A01 file changed, 2 insertions(+), 3 deletions(-)<br><br><span class=3D=
+"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_sign=
+ature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div>Michal Sime=
+k, Ing. (M.Eng), OpenPGP -&gt; KeyID: FE3D1F91<br>w: <a href=3D"http://www.=
+monstr.eu" target=3D"_blank">www.monstr.eu</a> p: +42-0-721842854<br>Mainta=
+iner of Linux kernel - Xilinx Microblaze<br>Maintainer of Linux kernel - Xi=
+linx Zynq ARM and ZynqMP ARM64 SoCs<br>U-Boot custodian - Xilinx Microblaze=
+/Zynq/ZynqMP/Versal SoCs</div></div></div></div>
+
+--000000000000dea464061247d29a--
