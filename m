@@ -1,135 +1,96 @@
-Return-Path: <SRS0=TXPA=KF=ti.com=vigneshr@kernel.org>
+Return-Path: <SRS0=Wmst=KF=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D131C5478C
-	for <soc@archiver.kernel.org>; Wed, 28 Feb 2024 04:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94CD2C47DD9
+	for <soc@archiver.kernel.org>; Wed, 28 Feb 2024 06:41:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 82C04C43394; Wed, 28 Feb 2024 04:22:28 +0000 (UTC)
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	id 5307CC43394; Wed, 28 Feb 2024 06:41:07 +0000 (UTC)
+Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 41119C43390;
-	Wed, 28 Feb 2024 04:22:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 41119C43390
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41S4MO8o088288;
-	Tue, 27 Feb 2024 22:22:24 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1709094144;
-	bh=uOMXxiLvdKL4AtXcYa6qxw/0JHnggNcnG64J5RnQQLs=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=Ph7xNvBwh0dZFGGU4+pvLBLEd+xZlaXU4/SxQ+mKwyxWMWcJ+ajx5a1XH3ut/C6yJ
-	 Pq3Roo0GJ4whIR1GB+afmNI2Icakam/fRrqnKp2j941bPoaYTSh+On8U7KPEKI+TzS
-	 cCBlGgXjr1tmVzWdUrCcDecyHopBGJMatHUok8pk=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41S4MOgC016064
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 27 Feb 2024 22:22:24 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 27
- Feb 2024 22:22:24 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 27 Feb 2024 22:22:24 -0600
-Received: from [172.24.227.94] (uda0132425.dhcp.ti.com [172.24.227.94])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41S4MK5R111529;
-	Tue, 27 Feb 2024 22:22:21 -0600
-Message-ID: <a555943a-45d0-4e8e-ad25-682638cfcff7@ti.com>
-Date: Wed, 28 Feb 2024 09:52:18 +0530
+	by smtp.kernel.org (Postfix) with ESMTPS id EFFB6C433F1;
+	Wed, 28 Feb 2024 06:41:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EFFB6C433F1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
+Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
+	by mail5.25mail.st (Postfix) with ESMTPSA id 8F5B3603C6;
+	Wed, 28 Feb 2024 06:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
+	s=25mailst; t=1709102464;
+	bh=TPfI/lcDNrhg6PzKe8s3nQTlVd4svZedNDUy3gcY8/E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=G85+NW1l51Wc1JyZ2knuyM0kH72Mb/9pp0n7VuBDVTlXdHQY5nEQ9963y7Sh4soXx
+	 n0coT7mJs/YLnStlViIFM/KMCG62GhpbA4IT4g//HvoOupDDuJUQA4as6C83MNKtWP
+	 /AxHCMDmU9ArWg3J7unynG4u0ET7DZQK5tSKBnuKBx/2vcN/E2UAd27eIwZNkoQtF2
+	 ZViPdmJtN7OehmzTE4ykOZCM8MY4MhE9uIqYimglMwrgMIs0/+CQGNSf9JHRpYRcyZ
+	 uRXbuET0L6GIuRyFnECnywPh6TUC0uUxD+0OkRM38b9NZatwAKkJbaaCYh0nZztM1J
+	 LfPBnpRdv992w==
+From: Tony Lindgren <tony@atomide.com>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Update TI clksel clocks to use reg
+Date: Wed, 28 Feb 2024 08:40:47 +0200
+Message-ID: <pull-1709102378-94138@atomide.com>
+X-Mailer: git-send-email 2.43.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [GIT PULL 2/2] ARM/arm64: defconfig: Updates for v6.9 for TI K2/K3
- platforms
-Content-Language: en-US
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc
-	<arm@kernel.org>, SoC <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
-References: <e7e984db-47b9-404a-9471-5d2ed0effe1d@ti.com>
-From: Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <e7e984db-47b9-404a-9471-5d2ed0effe1d@ti.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------9fx309zh3wgVxU6L6u2LMj0K"
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
---------------9fx309zh3wgVxU6L6u2LMj0K
-Content-Type: multipart/mixed; boundary="------------ZCdoKbjb0TEaZdVZTsgy4z18";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-Cc: Tero Kristo <kristo@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Message-ID: <a555943a-45d0-4e8e-ad25-682638cfcff7@ti.com>
-Subject: [GIT PULL 2/2] ARM/arm64: defconfig: Updates for v6.9 for TI K2/K3
- platforms
-References: <e7e984db-47b9-404a-9471-5d2ed0effe1d@ti.com>
-In-Reply-To: <e7e984db-47b9-404a-9471-5d2ed0effe1d@ti.com>
-
---------------ZCdoKbjb0TEaZdVZTsgy4z18
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd3=
-3d:
+From: "Tony Lindgren" <tony@atomide.com>
+
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--config-for-v6.9
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.9/dt-warnings-signed
 
-for you to fetch changes up to 02b645583e26f38261711f2a8b36c5db06862527:
+for you to fetch changes up to 808e65304d1844aa4a0ab317ae1d36f9ab6da174:
 
-  arm64: defconfig: Enable Wave5 Video Encoder/Decoder (2024-02-21 23:41:=
-39 +0530)
+  ARM: dts: omap3: Update clksel clocks to use reg instead of ti,bit-shift (2024-02-26 13:08:45 +0200)
 
 ----------------------------------------------------------------
-TI K2/K3 defconfig updates for v6.9
+Update TI clksel clocks to use reg
 
-- Enable Wave5 encoder/decoder driver present on multiple K3 SoCs
-- Enable K2 boards via multi_v7_defconfig to move away from keystone
-  specific defconfig.
+Updates for TI clksel clocks to use the standard reg property instead of
+the non-standard ti,bit-shift legacy property.
+
+There are still lots of TI composite clock related devicetree warnings for
+missing bindings, and overlapping reg properties. We have grouped some of
+the TI composite clocks under the clksel clock node, but did not consider
+the reg property issue. Let's update the existing users before we continue
+grouping more of the composite clocks.
 
 ----------------------------------------------------------------
-Andrew Davis (1):
-      ARM: multi_v7_defconfig: Add more TI Keystone support
+Tony Lindgren (4):
+      clk: ti: Handle possible address in the node name
+      clk: ti: Improve clksel clock bit parsing for reg property
+      ARM: dts: am3: Update clksel clocks to use reg instead of ti,bit-shift
+      ARM: dts: omap3: Update clksel clocks to use reg instead of ti,bit-shift
 
-Brandon Brnich (1):
-      arm64: defconfig: Enable Wave5 Video Encoder/Decoder
-
- arch/arm/configs/multi_v7_defconfig | 16 ++++++++++
- arch/arm64/configs/defconfig        |  1 +
- 2 files changed, 17 insertions(+)
-
---------------ZCdoKbjb0TEaZdVZTsgy4z18--
-
---------------9fx309zh3wgVxU6L6u2LMj0K
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmXetPsFAwAAAAAACgkQxEYeRXyRFuPG
-NQf9Hmj4ji1Z/XzFGIS8bGCbXDhVaJCRfpv4aJsnia5rWQvsGUiifFq2p/MqQ0fzbBdZNC1ZSVRy
-HNn/Ww4jU6rQvbUetQU99SECUKVyap/3wOUKmIGoyX1Dg9eYRR1/03oOqO6r1L5ySsJ9eRLnrMIY
-a/yAKlsBrsoExMvw2gRQGFfUlzkdIP+yVlfsqqCBHUY1beWaIdlBGfZXCMrY2kMJ1JFfK36h88lt
-k9/VFaOCFgm9JGyVVI8In+Jj8NqfyaZGsu3w92qA982zCIrAr1KgOl3FpH8CINjbPzU7Vt9EKGpX
-V/D+sjCoP45JjADL+EXgHb9tLKzKEDR14Tts3Fvt8Q==
-=+QhN
------END PGP SIGNATURE-----
-
---------------9fx309zh3wgVxU6L6u2LMj0K--
+ arch/arm/boot/dts/ti/omap/am33xx-clocks.dtsi       |  39 +-
+ arch/arm/boot/dts/ti/omap/am35xx-clocks.dtsi       |  18 +-
+ arch/arm/boot/dts/ti/omap/omap3430es1-clocks.dtsi  |  52 ++-
+ .../boot/dts/ti/omap/omap34xx-omap36xx-clocks.dtsi |  86 ++--
+ .../omap36xx-am35xx-omap3430es2plus-clocks.dtsi    |  28 +-
+ arch/arm/boot/dts/ti/omap/omap36xx-clocks.dtsi     |   7 +-
+ .../ti/omap/omap36xx-omap3430es2plus-clocks.dtsi   |  46 +-
+ arch/arm/boot/dts/ti/omap/omap3xxx-clocks.dtsi     | 510 +++++++++++----------
+ drivers/clk/ti/apll.c                              |  11 +-
+ drivers/clk/ti/clk.c                               |  71 ++-
+ drivers/clk/ti/clock.h                             |   1 +
+ drivers/clk/ti/divider.c                           |   5 +-
+ drivers/clk/ti/gate.c                              |   9 +-
+ drivers/clk/ti/interface.c                         |   4 +-
+ drivers/clk/ti/mux.c                               |   6 +-
+ include/linux/clk/ti.h                             |   3 +
+ 16 files changed, 491 insertions(+), 405 deletions(-)
