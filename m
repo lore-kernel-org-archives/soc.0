@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBBFBC54E59
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5227C54E5A
 	for <soc@archiver.kernel.org>; Thu, 29 Feb 2024 17:02:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0DD4C41674; Thu, 29 Feb 2024 17:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBB66C43143;
+	id C3870C4166A; Thu, 29 Feb 2024 17:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB216C43330;
 	Thu, 29 Feb 2024 17:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1709226129;
-	bh=NLLJfUvGGp5708Gdk7VF9cx5qqLzbMjXJNzF80TDcaI=;
+	bh=SL/jb2VE3xumbCZZH7C2q3mFUtowBmBBjJehL9+Hwsw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=cK6dQUV4jMRA0U0CHRYfsIdICwWCmO967v2R6LFwC/XLtLAO9k3KsvtsN1EWu+ZjY
-	 0lrIa/byFCl2ilCe812Yra2t1+Sb32V41xtkFPUT8QAvlDObFZgahxL59BwWnL8+cs
-	 1XStfwovOSR3U/lDYEH39DjJuIJM9TY8/KT//E3RJOXvPrgLhDdkaFgUKhjWwjlGHW
-	 ewAMcpzIJnlz3NcKc4iC0G7CXtoZqufVvs0hbiyI/K/M8XZvoHPg2Ko2rMzfiyLm8u
-	 WFXZENQ9yPq7kbhSGnyOLGFzZeEtxxl+Lb6urrEntxhjXFksFYuOwmsJGvj68/7awx
-	 92E03joQeyTPg==
+	b=D0iQFgCizE2NCaw0BRiFhBIGjinXf8tjvxdssRtAkKZREEeUoM3OfnN5t9CAopmUT
+	 vZ2N7JSbCmWypC88QoVNBMa6ob0yCvMltLkcoIINd01Medw0PnGnLjDb8oSzlibr3j
+	 ABSBu64NUAl2gYjOntP4U6jjwtN/xzslQ+b0d2qZnBiMFXA/azJgJ/4gzFhwIArUQ0
+	 aaECKiesGUwh7dV0cNLrprMAgaePt+uRirRD4De0eCXRw/QzeMRxkBuXhxY6KWMd7c
+	 T6Ig08Q1sKtzfHQSu4qAb2jeBqbP8wMeQThbZlMbrOAijvirG57SQ4QrbymxeewSxl
+	 DOsqtQQSeaZtA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 916AED990AB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 817FFD990A8;
 	Thu, 29 Feb 2024 17:02:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM Versatile DTS fixes for v6.9
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.9 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170922612959.13542.14247349616763193585.git-patchwork-notify@kernel.org>
+ <170922612952.13542.2516408421425352236.git-patchwork-notify@kernel.org>
 Date: Thu, 29 Feb 2024 17:02:09 +0000
-References: <CACRpkdaL6j6OdixHFHoMms4e=tXEw_6ynBMFb6m8=7KkVgEedA@mail.gmail.com>
-In-Reply-To: <CACRpkdaL6j6OdixHFHoMms4e=tXEw_6ynBMFb6m8=7KkVgEedA@mail.gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <3622360.hdfAi7Kttb@diego>
+In-Reply-To: <3622360.hdfAi7Kttb@diego>
+To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 21 Feb 2024 23:35:20 +0100 you wrote:
-> Hi SoC folks,
+On Wed, 21 Feb 2024 23:57:43 +0100 you wrote:
+> Hi Arnd, Kevin, Olof,
 > 
-> these are some ARM Versatile DTS fixes for v6.9.
-> Details in the signed tag!
+> please find below and in a subsequent pull-request
+> Rockchip changes for for 6.9 .
 > 
-> Please pull it in.
+> Some new boards, some new peripherals, nothing really stands out.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM Versatile DTS fixes for v6.9
-    https://git.kernel.org/soc/soc/c/5d9f164317e6
+  - [GIT,PULL] Rockchip dts64 changes for 6.9 #1
+    https://git.kernel.org/soc/soc/c/34eb16dedb9e
 
 You are awesome, thank you!
 -- 
