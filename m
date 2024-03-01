@@ -1,117 +1,96 @@
-Return-Path: <SRS0=O1iE=KH=gmail.com=jernej.skrabec@kernel.org>
+Return-Path: <SRS0=+ucK=KH=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DEBC5478C
-	for <soc@archiver.kernel.org>; Fri,  1 Mar 2024 17:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F2BC5475B
+	for <soc@archiver.kernel.org>; Fri,  1 Mar 2024 18:00:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 950ADC43394; Fri,  1 Mar 2024 17:22:37 +0000 (UTC)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 50DFCC433F1; Fri,  1 Mar 2024 18:00:44 +0000 (UTC)
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A84C9C433C7;
-	Fri,  1 Mar 2024 17:22:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A84C9C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33e162b1b71so1280751f8f.1;
-        Fri, 01 Mar 2024 09:22:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709313755; x=1709918555; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=37WDRV9x4Xm24khamq/oQN+S82VH6v/HallOiNR2z8I=;
-        b=YmlOr4jUBqvvvv5Fo4W84NAZhgK5sYscRv2MRb1y3eO8Xkf9dhWCIPMhWMY1XU84uZ
-         p9bpjgViZ0RtalMO/uOlsc+uOPwAn2oQaPxPJuPkYCEySyV08oTildrJxVxQosbyP/Xz
-         J8vGY1zaZGbl28syBuI5b3NmZRqr8O9geKQfYTEMmF2oK1uVSbS2lwugfvFS/YagNmHK
-         5Qde7v/PofShpULsE54WAH3KOc3IJV8Yt8VXZRWNfn8ehRXju/Y/wqrnMuUyfQiEoD63
-         xdx9QqohNSeu6dceJQpvhJSCwKBgP8cEWoZGwS84hdLX/BfMUznGjLkOo74/EHOTHqL0
-         q43Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709313755; x=1709918555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=37WDRV9x4Xm24khamq/oQN+S82VH6v/HallOiNR2z8I=;
-        b=hKZ7uDtLZEj/8E5iAMFoVP5fvxHyXJ7A5YrKsWJwX8DoYHeZzY/2jgmrIfJZuv4b4I
-         6JbGo6d0nkNNmXf/X+aG5cFtxd8BYipFb40Q4nCRO+KwPCuuJ3Iwl/VPOXXy0Yj/hYk8
-         +SLolNJ3Aqi6iUAFwjpvftr4UBmK2sYwPKMNAAohcQkOzgN5L6M2LefmiUXd98lMlH9d
-         AltfsXW8xi6AGoLUSsRwQW9AuMVWsfq7co4xc36/EFpeyY/q1dlhVAe8xtow6vChWah5
-         C9K0/BDeO39SXuswwGCdxXhcVhf2rznEw9vTGUHNPrUKOF5waG1wZWJ0srIQ5XMyTS0U
-         7Wjw==
-X-Forwarded-Encrypted: i=1; AJvYcCV1kWuLm2TeHzGzMuAqGCrt26KLU52hYzrney66O0BusNnnldoMtyu7YIHmo4GaYvjukiVy+aVJ+NOsnEI0lV7jeEI7/cYF3R6OowGnQWk=
-X-Gm-Message-State: AOJu0Yxu6FlCRfyawqYZhmXSb2016uARI2MDNB44w0FOfs4U2RMilRSF
-	jvYSzX0tvZ388wnI8h6RRA/8OAQ5t+iZQy/EUGV1MT6JcXicrHinVZUCYo5s
-X-Google-Smtp-Source: AGHT+IGtVWAQft25IP1iqNWRhDEMUGcaRacUUSQk9h+swOPYRkaoHEXxo+JZvWLEqXKiNPyGToM3cA==
-X-Received: by 2002:adf:b649:0:b0:33e:1f2b:a468 with SMTP id i9-20020adfb649000000b0033e1f2ba468mr1578174wre.24.1709313754549;
-        Fri, 01 Mar 2024 09:22:34 -0800 (PST)
-Received: from jernej-laptop.localnet ([188.159.248.16])
-        by smtp.gmail.com with ESMTPSA id h18-20020a5d5052000000b0033cf4e47496sm5013576wrt.51.2024.03.01.09.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 09:22:34 -0800 (PST)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: Jernej Skrabec <jernej@kernel.org>, arm <arm@kernel.org>, soc@kernel.org,
- Arnd Bergmann <arnd@arndb.de>
-Cc: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [GIT PULL] Allwinner device tree changes for 6.9
-Date: Fri, 01 Mar 2024 18:22:32 +0100
-Message-ID: <2203755.NgBsaNRSFp@jernej-laptop>
-In-Reply-To: <3990c5be-6173-4c20-96ca-79e22cb4a40f@app.fastmail.com>
-References:
- <20240223210408.GA9248@jernej-laptop>
- <3990c5be-6173-4c20-96ca-79e22cb4a40f@app.fastmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 05650C433C7;
+	Fri,  1 Mar 2024 18:00:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 05650C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id DA3A91380125;
+	Fri,  1 Mar 2024 13:00:41 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 01 Mar 2024 13:00:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1709316041; x=1709402441; bh=Mstj23e8M+
+	zZCqcSyr181S5/vGyFrNsavdRVO8Avn9w=; b=Ancgegr/eBTjHNS39hGmsN1y+C
+	2uOxqGRzYLIf4E4RxKvStcPv2l0/vCgeWUl3Vp6Dj5WZwE7aVhqnPFO3SLGA0s3l
+	PkK89/EQT6DvQg78nE5DS3aOlps9fJ4qKuo/o5sUjqFbTpT2PB+EIzvQx3WxQULA
+	pbYcOtC9XSywMt1+8lkXZvt8Bey2k1USvTVlFnt6G9SB36RVOVpAD99EWpc2RW/L
+	XuewyjbwHVmfcBNkg51gM33QSIroAPu94nncS6jrYnhBPxfQpGv2uBaNrAalUOPU
+	BDsFce/pxjZgcnH8KWhJrvqcrMJDGkEl4zq5N5YHDd0CAWRbzUue3P3y2UDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709316041; x=1709402441; bh=Mstj23e8M+zZCqcSyr181S5/vGyF
+	rNsavdRVO8Avn9w=; b=npmWQZ/uZqlG3aWPW476u2oALsYCWnjr82sEGHG4GdGp
+	9viQQKsc9ss1IXsDxtAKkxO2NPdrzBc3C/mcrEtSI4QlqJm4L1D7wTWz6JRLTS6f
+	ACx6k1mUjaMK0tXSts+lQQqTD3buWz4HCyUfyaDE2jpN5x87liYdOyfz9p14cY5u
+	Swir8sJVSe9eEbVrljuP7IKJIv767Z9qW5zyfsVivkcbcJsm6O54D8a1Y0PRTIBP
+	gw77VAoq2x+SinDnjGZD54X6csUpAhzC5LOO2AWLC/+mJ8/UoraO1u5jbLPbkXoE
+	rU/7bW+ye81vD1v+BOHQryNQE14gkg/buswUaQ/peQ==
+X-ME-Sender: <xms:yBfiZfbU54YYfMuL2jR0DVmYAczmtUMywzqWNe-aaHziNeb9qnk9dw>
+    <xme:yBfiZebMyKjurR0Imycc8Z5dWqvQ2Nx7pjPtkYALxjw9q3YAlnsTSGZjFYooO5KD5
+    UKpFjB4FpL5_K63Tjw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrhedugddutdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepjedvvddvudeludehjeeitdehheeivdejgfelleffiefgvefhhfeuudfhgeef
+    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:yBfiZR86_pTy1rIbKoL2Cf7fXlTotaWf79BZxEbvJmUfjCwVHZmJCA>
+    <xmx:yBfiZVoF7pPJUiACatLc2UF7LoDY8wkjIECOaDm6UCu_0DqOAsCsJA>
+    <xmx:yBfiZarnYgw1Y55TRTJMe5Ucy_tWttvEu2EeS3CMkXV7IBH8lwJ3cg>
+    <xmx:yRfiZWfou_7HnAzj_yCQNdtkD1WOVZ9mT0BxlE9Pl-E6WO79WIRJvA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B12F6B6008D; Fri,  1 Mar 2024 13:00:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-205-g4dbcac4545-fm-20240301.001-g4dbcac45
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Message-Id: <b2bfa163-3695-4d92-9bcd-1e05dd4c6af3@app.fastmail.com>
+In-Reply-To: 
+ <MA0P287MB2822E853325154E87EAD3DEEFE582@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+References: 
+ <MA0P287MB2822E853325154E87EAD3DEEFE582@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Fri, 01 Mar 2024 19:00:19 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+To: "Chen Wang" <unicorn_wang@outlook.com>, soc@kernel.org
+Cc: "Conor Dooley" <conor@kernel.org>, linux-riscv@lists.infradead.org,
+ "Inochi Amaoto" <inochiama@outlook.com>,
+ "Xiaoguang Xing" <xiaoguang.xing@sophgo.com>, haijiao.liu@sophgo.com,
+ "Chao Wei" <chao.wei@sophgo.com>, "Liu Gui" <kenneth.liu@sophgo.com>
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.9
+Content-Type: text/plain
 
-Dne petek, 01. marec 2024 ob 10:54:41 CET je Arnd Bergmann napisal(a):
-> On Fri, Feb 23, 2024, at 22:04, Jernej Skrabec wrote:
-> > Hi!
-> >
-> > Please pull following device tree changes for 6.9.
-> >
-> > Note that this is based on top of fixes for 6.8:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git 
-> > tags/sunxi-fixes-for-6.8-1
-> >
-> 
-> I've pulled it into the soc/dt branch manually, as b4 refused
-> to pull it because it got confused by the text above and
-> assumed it should pull from the fixes branch, which does not
-> match the commit ID below.
-> 
-> Having the stacked pull requests is otherwise the right idea,
-> just maybe next time only mention the branch name rather than
-> the URL that can confuse tools.
+On Wed, Feb 28, 2024, at 09:14, Chen Wang wrote:
+> The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+>
+>    Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
+>
+> are available in the Git repository at:
+>
+>    https://github.com:sophgo/linux.git riscv-sophgo-dt-for-v6.9
+>
 
-Sorry about that. I'll do that next time.
+This does not appear to be a valid git URL. Can you resend?
 
-Best regards,
-Jernej
-
-> 
->        Arnd
-> 
-> >
-> > The following changes since commit cbec657208bdd4bff4ff31cac5924aa18817027c:
-> >
-> >   arm64: dts: allwinner: h616: Add Orange Pi Zero 2W to Makefile 
-> > (2024-02-23 21:02:51 +0100)
-> >
-> > are available in the Git repository at:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git 
-> > tags/sunxi-dt-for-6.9-1
-> >
-> > for you to fetch changes up to f4318af40544b8e7ff5a6b667ede60e6cf808262:
-> 
-
-
-
-
+       Arnd
