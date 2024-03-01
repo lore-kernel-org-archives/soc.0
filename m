@@ -1,88 +1,97 @@
-Return-Path: <SRS0=amPN=KH=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=YUml=KH=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE84FC5475B
-	for <soc@archiver.kernel.org>; Fri,  1 Mar 2024 15:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BABDC5478C
+	for <soc@archiver.kernel.org>; Fri,  1 Mar 2024 16:05:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A6167C433C7; Fri,  1 Mar 2024 15:32:54 +0000 (UTC)
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id C932CC43142; Fri,  1 Mar 2024 16:05:17 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3A16AC43390
-	for <soc@kernel.org>; Fri,  1 Mar 2024 15:32:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3A16AC43390
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:db22:6af9:7d18:6ee8])
-	by michel.telenet-ops.be with bizsmtp
-	id tTYj2B0021TWuYv06TYj1f; Fri, 01 Mar 2024 16:32:43 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rg4sC-0023yC-C2;
-	Fri, 01 Mar 2024 16:32:43 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rg4sN-00Bfbx-39;
-	Fri, 01 Mar 2024 16:32:43 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id D054AC433F1;
+	Fri,  1 Mar 2024 16:05:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D054AC433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C10F71BF20C;
+	Fri,  1 Mar 2024 16:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709309112;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=7Tciyw/kQdq4GNWgXQIMkKj028oPMnhQ9lE4nVzxL7g=;
+	b=pbswQajvdr7lcyXJNUJXw+QbKJTGHIlZfQRw7O5JZ+yWpySNBGlY1iFVBF5/7LMYZgvtpk
+	30u14kIFd4gx932O+E1BkLala95Ru542kryZOrYWbWx69emaLz/DHSABzjgb07BNXb193D
+	IFsIk8LZiRWLFjzL7HC+TIHc8aA/rg/sGZ+xeq2exqNw9myndQW1mGKYoPqiCcL9BFH+nm
+	KApZ9/OtTZzxOkeXPUELBTQ1wvXuYwiOT0WwppgnxoVBr9Yzk4OtcD8RlDjc9mOelI9QE/
+	gno2OUoCeN0KiYC1PNm6FkB3mOtXsmAHjWuLPzLVFtNNnHzWm+Z1Z7lADzlD6Q==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas DT binding updates for v6.9 (take three)
-Date: Fri,  1 Mar 2024 16:32:23 +0100
-Message-Id: <cover.1709307006.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt for v6.9 (#1)
+Date: Fri, 01 Mar 2024 17:05:11 +0100
+Message-ID: <87cysehr9k.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-GND-Sasl: gregory.clement@bootlin.com
 
-	Hi SoC folks,
+Hi,
 
-This is my third pull request for the inclusion of Renesas SoC updates
-for v6.9.
+Here is the first pull request for dt for mvebu for v6.9.
 
-The following changes since commit 3a9856e830500e20e61b92f5ea6b8cc505e085be:
+Gregory
 
-  dt-bindings: renesas: Document preferred compatible naming (2024-02-19 11:21:04 +0100)
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.9-tag3
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-6.9-1
 
-for you to fetch changes up to 0d5a9b5d5d2fe6a138a8a9ff2513f446d69f2672:
+for you to fetch changes up to 2f9086ef0a20b4751e7c5b40a46becd44c336106:
 
-  dt-bindings: soc: renesas: renesas-soc: Add pattern for gray-hawk (2024-03-01 15:41:34 +0100)
-
-----------------------------------------------------------------
-Renesas DT binding updates for v6.9 (take three)
-
-  - Add missing gray-hawk pattern to list of preferred compatible names.
-
-This fixes a recently introduced "make dtbs_check" issue.
-
-Thanks for pulling!
+  arm: dts: marvell: clearfog-gtr-l8: align port numbers with enclosure (2024-03-01 16:35:13 +0100)
 
 ----------------------------------------------------------------
-Lad Prabhakar (1):
-      dt-bindings: soc: renesas: renesas-soc: Add pattern for gray-hawk
+mvebu dt for 6.9 (part 1)
 
- Documentation/devicetree/bindings/soc/renesas/renesas-soc.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+a38x: improve solidrun armada 388 clearfog GTR device support:
 
-Gr{oetje,eeting}s,
+Initial device-tree merge for Clearfog GTR devices had issues causing
+problems with sfp connectors. The fixes are:
+ - Converted armada-38x dt-bindings to yaml and replaced invalid
+   compatibles.
+ - Added pinctrl nodes for all referenced gpios and removed invalid io
+   from first sfp connector.
+ - Added descriptions for secondary sfp connector and updated labels
+   of dsa switch ports.
 
-						Geert
+----------------------------------------------------------------
+Josua Mayer (10):
+      dt-bindings: marvell: a38x: convert soc compatibles to yaml
+      dt-bindings: marvell: a38x: add solidrun armada 388 clearfog boards
+      dt-bindings: marvell: a38x: add kobol helios-4 board
+      dt-bindings: marvell: a38x: add solidrun armada 385 clearfog gtr boards
+      arm: dts: marvell: clearfog: add pro variant compatible in legacy dts
+      arm: dts: marvell: clearfog-gtr: add board-specific compatible strings
+      arm: dts: marvell: clearfog-gtr: sort pinctrl nodes alphabetically
+      arm: dts: marvell: clearfog-gtr: add missing pinctrl for all used gpios
+      arm: dts: marvell: clearfog-gtr-l8: add support for second sfp connector
+      arm: dts: marvell: clearfog-gtr-l8: align port numbers with enclosure
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ .../devicetree/bindings/arm/marvell/armada-38x.txt | 27 -------
+ .../bindings/arm/marvell/armada-38x.yaml           | 70 ++++++++++++++++++
+ .../dts/marvell/armada-385-clearfog-gtr-l8.dts     | 38 +++++++---
+ .../dts/marvell/armada-385-clearfog-gtr-s4.dts     |  2 +
+ .../boot/dts/marvell/armada-385-clearfog-gtr.dtsi  | 84 ++++++++++++++++------
+ arch/arm/boot/dts/marvell/armada-388-clearfog.dts  |  5 +-
+ 6 files changed, 167 insertions(+), 59 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-38x.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
