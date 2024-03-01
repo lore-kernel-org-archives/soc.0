@@ -1,91 +1,88 @@
-Return-Path: <SRS0=7r4F=KH=pengutronix.de=p.zabel@kernel.org>
+Return-Path: <SRS0=amPN=KH=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CAB3C5478C
-	for <soc@archiver.kernel.org>; Fri,  1 Mar 2024 11:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE84FC5475B
+	for <soc@archiver.kernel.org>; Fri,  1 Mar 2024 15:32:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB30CC43390; Fri,  1 Mar 2024 11:13:08 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id A6167C433C7; Fri,  1 Mar 2024 15:32:54 +0000 (UTC)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A052BC433F1
-	for <soc@kernel.org>; Fri,  1 Mar 2024 11:13:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A052BC433F1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rg0p5-0004HB-U2; Fri, 01 Mar 2024 12:13:03 +0100
-From: Philipp Zabel <p.zabel@pengutronix.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3A16AC43390
+	for <soc@kernel.org>; Fri,  1 Mar 2024 15:32:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3A16AC43390
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:db22:6af9:7d18:6ee8])
+	by michel.telenet-ops.be with bizsmtp
+	id tTYj2B0021TWuYv06TYj1f; Fri, 01 Mar 2024 16:32:43 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rg4sC-0023yC-C2;
+	Fri, 01 Mar 2024 16:32:43 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rg4sN-00Bfbx-39;
+	Fri, 01 Mar 2024 16:32:43 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [GIT PULL] Reset controller updates for v6.9
-Date: Fri,  1 Mar 2024 12:13:00 +0100
-Message-Id: <20240301111300.4038207-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DT binding updates for v6.9 (take three)
+Date: Fri,  1 Mar 2024 16:32:23 +0100
+Message-Id: <cover.1709307006.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
 
-Dear arm-soc maintainers,
+	Hi SoC folks,
 
-The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
+This is my third pull request for the inclusion of Renesas SoC updates
+for v6.9.
 
-  Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
+The following changes since commit 3a9856e830500e20e61b92f5ea6b8cc505e085be:
+
+  dt-bindings: renesas: Document preferred compatible naming (2024-02-19 11:21:04 +0100)
 
 are available in the Git repository at:
 
-  git://git.pengutronix.de/pza/linux.git tags/reset-for-v6.9
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.9-tag3
 
-for you to fetch changes up to c721f189e89c0d4db119d7bb2b46768d0fb5f6b1:
+for you to fetch changes up to 0d5a9b5d5d2fe6a138a8a9ff2513f446d69f2672:
 
-  reset: Instantiate reset GPIO controller for shared reset-gpios (2024-02-21 11:53:25 +0100)
-
-----------------------------------------------------------------
-Reset controller updates for v6.9
-
-Enable support for the Sophgo SG2042 reset controller via reset-simple,
-add a GPIO-based reset controller criver for shared GPIO resets, extract
-an of_phandle_args_equal() helper function out of cpufreq, and use it in
-reset-gpio.
-
-Based on v6.8-rc5 because reset-gpio depends on commits in the
-gpio-driver-h-stubs-for-v6.8-rc5 tag.
+  dt-bindings: soc: renesas: renesas-soc: Add pattern for gray-hawk (2024-03-01 15:41:34 +0100)
 
 ----------------------------------------------------------------
-Chen Wang (2):
-      dt-bindings: reset: sophgo: support SG2042
-      reset: simple: add support for Sophgo SG2042
+Renesas DT binding updates for v6.9 (take three)
 
-Krzysztof Kozlowski (4):
-      of: Add of_phandle_args_equal() helper
-      cpufreq: do not open-code of_phandle_args_equal()
-      reset: gpio: Add GPIO-based reset controller
-      reset: Instantiate reset GPIO controller for shared reset-gpios
+  - Add missing gray-hawk pattern to list of preferred compatible names.
 
- .../bindings/reset/sophgo,sg2042-reset.yaml        |  35 ++++
- MAINTAINERS                                        |   5 +
- drivers/reset/Kconfig                              |  12 +-
- drivers/reset/Makefile                             |   1 +
- drivers/reset/core.c                               | 224 +++++++++++++++++++--
- drivers/reset/reset-gpio.c                         | 119 +++++++++++
- drivers/reset/reset-simple.c                       |   2 +
- include/dt-bindings/reset/sophgo,sg2042-reset.h    |  87 ++++++++
- include/linux/cpufreq.h                            |   3 +-
- include/linux/of.h                                 |  16 ++
- include/linux/reset-controller.h                   |   4 +
- 11 files changed, 492 insertions(+), 16 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/reset/sophgo,sg2042-reset.yaml
- create mode 100644 drivers/reset/reset-gpio.c
- create mode 100644 include/dt-bindings/reset/sophgo,sg2042-reset.h
+This fixes a recently introduced "make dtbs_check" issue.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Lad Prabhakar (1):
+      dt-bindings: soc: renesas: renesas-soc: Add pattern for gray-hawk
+
+ Documentation/devicetree/bindings/soc/renesas/renesas-soc.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
