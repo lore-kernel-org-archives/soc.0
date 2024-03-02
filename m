@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5955AC5478C
-	for <soc@archiver.kernel.org>; Sat,  2 Mar 2024 12:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D915DC5478C
+	for <soc@archiver.kernel.org>; Sat,  2 Mar 2024 12:18:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1DE02C43394; Sat,  2 Mar 2024 12:17:07 +0000 (UTC)
+	id BF63FC43394; Sat,  2 Mar 2024 12:18:00 +0000 (UTC)
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2A638C433C7;
-	Sat,  2 Mar 2024 12:17:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2A638C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id F29E9C433F1;
+	Sat,  2 Mar 2024 12:17:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F29E9C433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Received: from [194.95.143.137] (helo=phil.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1rgOIa-0005Ih-9D; Sat, 02 Mar 2024 13:17:04 +0100
+	id 1rgOJR-0005JE-2M; Sat, 02 Mar 2024 13:17:57 +0100
 From: Heiko Stuebner <heiko@sntech.de>
 To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts32 changes for 6.9 #2
-Date: Sat, 02 Mar 2024 13:17:03 +0100
-Message-ID: <3258282.tdWV9SEqCh@phil>
+Subject: [GIT PULL] Rockchip arm64 defconfig changes for 6.9 #1
+Date: Sat, 02 Mar 2024 13:17:56 +0100
+Message-ID: <14841602.uLZWGnKmhe@phil>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
-The following changes since commit 15a5ed03000cf61daf87d14628085cb1bc8ae72c:
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
-  ARM: dts: rockchip: fix rk322x hdmi ports node (2024-02-13 20:22:34 +0100)
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.9-rockchip-dts32-2
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.9-rockchip-config64-1
 
-for you to fetch changes up to 391f46c775fa2108952c8f9a88b5bea2c3c74d1d:
+for you to fetch changes up to 23ed255e74317b10b41b396d4af5b79b47b28c22:
 
-  ARM: dts: rockchip: Wifi improvements for Sonoff iHost (2024-02-28 00:00:55 +0100)
-
-----------------------------------------------------------------
-Small Sonoff iHost improvements (wifi and mmc aliases)
+  arm64: defconfig: Enable Rockchip HDMI/eDP Combo PHY (2024-02-27 23:35:45 +0100)
 
 ----------------------------------------------------------------
-Tim Lunn (2):
-      ARM: dts: rockchip: mmc aliases for Sonoff iHost
-      ARM: dts: rockchip: Wifi improvements for Sonoff iHost
+Enablement of the hdmi phy-driver used on rk3588.
 
- arch/arm/boot/dts/rockchip/rv1126-sonoff-ihost.dtsi | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+----------------------------------------------------------------
+Cristian Ciocaltea (1):
+      arm64: defconfig: Enable Rockchip HDMI/eDP Combo PHY
+
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 
 
