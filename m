@@ -1,65 +1,112 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=Sq+Z=KK=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03198C54E72
-	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 16:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56817C5478C
+	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 16:26:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B9762C32784; Mon,  4 Mar 2024 16:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3F55C3278C;
-	Mon,  4 Mar 2024 16:12:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709568720;
-	bh=j0Fn4AGA87e6hli7fWCR63nnlbbPqMqa2MBgnQQDQ0Q=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=kmv1gPxlbz2cC40cmw/cM9cLHWXpC6+pyGy5J2N52dhCp29GdEWeOGx4gqcE0eG0J
-	 9AD6/Z9UIMEjCyOoazUr0qZc+W4xcE/KTL0lcUi+L9mVuMX9bK8PEmOxxU4b7NAG8v
-	 q1HOtoa3IzfQNOlLh5n7L3Q5RHFlCR6VcxlssVAkVtPz3890YQ6ks6ym+VLp9ONwfP
-	 yQtfQy7Ouvn/gjG9IcRbWJLBKMwWj8Pc8VejA86oqDIPaugTWz0n9OQkUZH15FfCD+
-	 JLwMaxAUrUgIM4aWtIjg0+mLAi4l9aL1XrgsFG99btPTqAj1kpG6WjBklSlmKjXGBL
-	 N8q0OrlcuHhWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90386D88F8A;
-	Mon,  4 Mar 2024 16:12:00 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 3F271C43394; Mon,  4 Mar 2024 16:26:47 +0000 (UTC)
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7CCD4C433C7;
+	Mon,  4 Mar 2024 16:26:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7CCD4C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 5DD2B11400AD;
+	Mon,  4 Mar 2024 11:26:44 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 04 Mar 2024 11:26:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1709569604; x=1709656004; bh=SJo0UieZld
+	f0HO8FjodcJafHBVBLs+ULn11Koofn42k=; b=c78ABoY2z7m3rPmuWJoTw5/MxF
+	NT3nO+OHxXoB4f/g/o/8KB3buoiG5OhZyJPY1YYpM/Wd6QZr8IR8pdZ18LDwRt4+
+	+NsQyQnwJ9G2I8Gvt/RkCXXTojHzafuNvlxjwnyiNqChTLQkj3/ZmghoRt6JAIzC
+	APN3ugWgdbkb+Cr5xSgW4TgPXxczQGZrEvWOtIAa/FhAykl/tew8+81mqyoMGlM8
+	ZrYNvEwHmCqCVE8rRAxpBlZEcKMKn4g9aRqr3enbunGmSGCSgVaGZ1rALcM82Ebm
+	NsQzSYyK6ec2m3tyBUGMpFABLX2BI/zkajQZtdRkKAPUCMVanUwrR7gR9IJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709569604; x=1709656004; bh=SJo0UieZldf0HO8FjodcJafHBVBL
+	s+ULn11Koofn42k=; b=FFKDJGxM0DAPeUNRC4zEwbPjOvGE8p/D7r20mCfmTff8
+	awK1cul8qyXjNVHt9bpOFoU4usua7k2+PaHXvn4dUlFiUjZtHINT+yQOBsTBlr6i
+	Gq6YxZEQ7hq61QdAy7/3A7VZv05v2sLZ+2/ls7WZ6ofTFFZ16eoMMuMmE8eQESlc
+	c4TfPSFt4P2JMbmuANHhJaHsOllQl4IHwm7MInkt3cnJphpz8UwmgwUel3cg2yCp
+	qwKJ3Exom40JcbVRW47Hv8T6BDWy7qXBDBiw2AaLFJz5br7uWsnqCAribZ8DlDg/
+	AXe15OjPqzSnB/MPZlG3jZhXs0gXaF/G1FO3DOHV8Q==
+X-ME-Sender: <xms:RPblZW83VcqtbCVJjxD5AyUYRAsSQQVUVq1Nz0Tz3cSOkKZvGxopyg>
+    <xme:RPblZWtwYFpSoo0x8aLE_vsbLGeVgXqd4Js_cYMjwbGCHFk4feopMqM5iRGI8AdpM
+    J8UtNjhg15gLMGIJ8E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheejgdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefhtdelhfettdetvdetvdeuueegvdeuleeuudevhfeuhfeugfdvtdevvedvfffh
+    udenucffohhmrghinheplhhinhgrrhhordhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:RPblZcBXFISARMmyhfzu34p8oNzI4W88CFyf0PWr88a-l7Hm52xIqA>
+    <xmx:RPblZedIYy2U1PjUZA5S1j74rUPrB7d9ivcU6R35bqs1Hr8PNiLrRA>
+    <xmx:RPblZbNY_UnxzuwlJaeC5JsnbSVV5itefiKSmGMO1Rmf-zAMJbq2Cg>
+    <xmx:RPblZQo7M9kHpPhPQp3L5CM5Br2H4hAxPT_o9TaFUrXvpCcdflgbBQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 15152B6008D; Mon,  4 Mar 2024 11:26:43 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm ARM64 DeviceTree fixes for 6.8
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <170956872058.25915.8886353614833934189.git-patchwork-notify@kernel.org>
-Date: Mon, 04 Mar 2024 16:12:00 +0000
-References: <20240225025205.479589-1-andersson@kernel.org>
-In-Reply-To: <20240225025205.479589-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+Message-Id: <560b697d-4343-4e69-986d-6c3f4daa637c@app.fastmail.com>
+In-Reply-To: <20240216142700.GA3863398@rayden>
+References: <20240216142700.GA3863398@rayden>
+Date: Mon, 04 Mar 2024 17:26:23 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: "Jens Wiklander" <jens.wiklander@linaro.org>, arm <arm@kernel.org>,
+ soc@kernel.org
+Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ op-tee@lists.trustedfirmware.org
+Subject: Re: [GIT PULL] Make tee_bus_type const for v6.9
+Content-Type: text/plain
 
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Sat, 24 Feb 2024 20:52:04 -0600 you wrote:
-> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
-> 
->   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
-> 
+On Fri, Feb 16, 2024, at 15:27, Jens Wiklander wrote:
+> Hello arm-soc maitainers,
+>
+> Please pull this small patch making tee_bus_type const.
+>
+> Thanks,
+> Jens
+>
+> The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+>
+>   Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
+>
 > are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.8
-> 
-> [...]
+>
+>   https://git.linaro.org/people/jens.wiklander/linux-tee.git/ 
+> tags/tee-bus-type-for-v6.9
+>
+> for you to fetch changes up to 1d044941d53855ca06e4fa34936ff7273c8641dd:
+>
+>   tee: make tee_bus_type const (2024-02-15 08:28:24 +0100)
+>
+> ----------------------------------------------------------------
+> tee: make tee_bus_type const
+>
 
-Here is the summary with links:
-  - [GIT,PULL] Qualcomm ARM64 DeviceTree fixes for 6.8
-    https://git.kernel.org/soc/soc/c/2bb5a9ac8842
+My soc/drivers branch was based on -rc1, not -rc2, and
+I did not want to do a backmerge of the rc2 contents into
+it, so I ended up just cherry-picking this trivial change.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I hope that's ok.
 
-
+     Arnd
