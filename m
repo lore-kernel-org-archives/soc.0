@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FBBEC54E5C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C1F3C54E60
 	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 12979C43601; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EF0ACC43394;
-	Mon,  4 Mar 2024 08:01:14 +0000 (UTC)
+	id 4E7E6C41612; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 36494C41606;
+	Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1709539275;
-	bh=EOza5XzJ40sRvUFq8avIMx13ZIGW53/7RABwp43VMY8=;
+	bh=OQxfd8ykYHzSipDGLxp5OI3NGVejtQDsnChxohpsflA=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Z10kzs2sAaqeiXcDvpdpsmsfLHkN+8ntQYizmH2TTZQdqE5AdCnXKiUpl/2R0wSYJ
-	 0vemeuV2OzT9xfcnNB5c7QUrHPwN50OResrmZS/oHBhW5oQRQcDzY7OJHnw6si1bwo
-	 YVyh8eUzDrk0iochC6aUCM6EtuUrmFy3bo4CkyEcuwfZznKTlcp4twvoJJppUCmAbS
-	 ofMGsBrVr5OHiqEC2Wcv0mks0agzBVvCARAm6aU5PJ6GXNevxLJgPw2vtIDB4rWDw6
-	 b0ASugpTh5Wb0yZddoIwoVGCRWx61WoPatDlIHYGIMtLoes7axSaN0Jlrn+hLA1N3i
-	 MqR+Iex5UY/6A==
+	b=ZgSimi0C/xwaW1COjDV+xna4g7/kyVhIAHSWalhsdT9eXqhji0FHkOvI646e/3kyc
+	 LqVPojAveGVwGEJv31gcNDWAmaiozjQ96FfO348Y/NZQn3vMXmb5YR4zmgOyoiRYaS
+	 0xcTD5piABBhoV47dcMUbXwUGP7gIlY1pagX744LTW3qmaqCpsfDVpIkTrJoTSHL45
+	 bMS6qQUi75rs3ajkRJDr+Q8jvxPJVT0hi4zw4gG4cmdbK/r0yaLHqos3PRp38Dxtg3
+	 FT78gpQpD7zIjnBeeT2xb1JhUgBiXbZkCSM5wRG8fZZrd66H1TBWIRdHRuGEODWMyH
+	 g6Rilzwp0aO9w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9AB5D88F8A;
-	Mon,  4 Mar 2024 08:01:14 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 174DDC595C4;
+	Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.9 #2
+Subject: Re: [GIT PULL] ARM: socfpga: update for v6.9
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170953927482.27833.10269208339302151611.git-patchwork-notify@kernel.org>
-Date: Mon, 04 Mar 2024 08:01:14 +0000
-References: <3258282.tdWV9SEqCh@phil>
-In-Reply-To: <3258282.tdWV9SEqCh@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+ <170953927509.27833.13587376587093535495.git-patchwork-notify@kernel.org>
+Date: Mon, 04 Mar 2024 08:01:15 +0000
+References: <20240226012528.20380-1-dinguyen@kernel.org>
+In-Reply-To: <20240226012528.20380-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 02 Mar 2024 13:17:03 +0100 you wrote:
-> The following changes since commit 15a5ed03000cf61daf87d14628085cb1bc8ae72c:
+On Sun, 25 Feb 2024 19:25:28 -0600 you wrote:
+> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 > 
->   ARM: dts: rockchip: fix rk322x hdmi ports node (2024-02-13 20:22:34 +0100)
+>   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.9-rockchip-dts32-2
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.9
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts32 changes for 6.9 #2
-    https://git.kernel.org/soc/soc/c/73022d5f020d
+  - [GIT,PULL] ARM: socfpga: update for v6.9
+    https://git.kernel.org/soc/soc/c/fe37e5cb49a6
 
 You are awesome, thank you!
 -- 
