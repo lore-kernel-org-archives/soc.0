@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FCA1C54E49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80967C54E55
 	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4C2F5C433B2; Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 36503C43399;
+	id 51B15C43609; Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34351C43390;
 	Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1709574032;
-	bh=Kr+3EpU/+9z5v6I09a3dGOKHYPmAxWuKKt8m9mHQ61w=;
+	bh=IrSULPMsxYFWUkqLt7xCanj6q8CWb9ZU+g9HBeveP5Y=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=F/Y/oPNtn88lRTeJnqnIDY5Mjv4GACfw5SFG32oulIRZjAq6UU5UUrcqBiJztNZtj
-	 fCjgAXyCaaykSPjW94+uMmresU+XyJcs+8BkQAr5Gu+yLwCGDhr2HsRYwM8F8hJEUY
-	 iGBO/g+43Q0yET1PmLM7Vp7FBxday8al+Np9OHdikvOQqvyX77YTtUbOZiXbYg1u1j
-	 7ywlvbCb+0jN7n96FMFJfKka9a6AiL04Gky/tLKiQKbWybdeVmBixMXZ5VUD+mTY6A
-	 osHCL5/UYawDz4W75j5zRvpbs71pc/RhF0r+s0Ruu2xSrEU5pOO5j+cUU61RD3U//S
-	 yAby2IamRgmnA==
+	b=j5k+iB9mWY9yzIcaCgQVWsxMNCUZMM8fZjjxrzrXkjuc6MSdAjWls+CaJ2zmj8zv6
+	 KrDS8746uuyVpTXFqW6LAGcZZPfwulKeXGfpLncF3jyoKWkKFpE5fXd4mmz/2yEyGC
+	 oREfwA3ov6bUT8MOl2oeFMrCNxYvZMY5O2ODFn5a5vQyXy7rKz12Rdip7f7cvCh999
+	 mU46NU20DzaMs+YYcQbDHwM9DvQhXDiqP066Ej65PAn3DFMM+JYZ6VicNtwYH4SPor
+	 ygtvnVBChFmhLLJgl4j8LG0j4k7WeD4XKttypX7Q8G90uG/g9uRO/i266x+cf8z5Im
+	 KeK/hnaEYIlJQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 18FCAD88F8A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1296AD9A4B9;
 	Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] samsung: drivers for v6.9, part two
+Subject: Re: [GIT PULL] Qualcomm ARM64 defconfig updates for v6.9
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170957403209.23732.2107316922936619240.git-patchwork-notify@kernel.org>
+ <170957403207.23732.16617933313445772900.git-patchwork-notify@kernel.org>
 Date: Mon, 04 Mar 2024 17:40:32 +0000
-References: <20240227080755.34170-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240227080755.34170-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240225032456.481112-1-andersson@kernel.org>
+In-Reply-To: <20240225032456.481112-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,23 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 27 Feb 2024 09:07:53 +0100 you wrote:
-> Hi,
+On Sat, 24 Feb 2024 21:24:53 -0600 you wrote:
+> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 > 
-> On top of previous pull request.
+>   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 > 
-> Best regards,
-> Krzysztof
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.9
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] samsung: drivers for v6.9, part two
-    (no matching commit)
-  - [PULL,v6.9,2/3] ARM: defconfig: enable STMicroelectronics accelerometer and gyro for Exynos
-    https://git.kernel.org/soc/soc/c/a254ec05aeb9
-  - [PULL,v6.9,3/3] ARM: dts: samsung: exynos4412: decrease memory to account for unusable region
-    https://git.kernel.org/soc/soc/c/784c93e3ca2e
+  - [GIT,PULL] Qualcomm ARM64 defconfig updates for v6.9
+    https://git.kernel.org/soc/soc/c/70881a7209f6
 
 You are awesome, thank you!
 -- 
