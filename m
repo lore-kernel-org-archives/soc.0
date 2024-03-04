@@ -1,65 +1,95 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=IwX1=KK=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB44C54E6E
-	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AB81C5478C
+	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 13:27:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6C022C433F1; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55DF7C32789;
-	Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709539275;
-	bh=zCQEJjAZL8Lr3XqGUmvWIgnV07YfZm2NFmOnLuyCxtw=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=TAkluLh5Nz7LQzskHZ0uQ4rO6MwO+xUQXwE/3wwUwITpRiujwldX6GMDS1bK8jt6n
-	 rZqIL+kJefCIK2O12tryCwI80xH3yEK9N9MjembJtayQuvcXL2rerCTgADEXSYklOp
-	 dOTazUaz1vFDujyzgp9MZzqAXPJfC4ndMu/+9XhBmDyABW+OWFQs369xFw7TjQxSWQ
-	 sJNJkMH1CONXFDCVIsHTfLpcDGwF41QnuGXH5TSERpHF8hr/QEFlJ9aKjKiavqzYfq
-	 U0gXgTSMJuSspko5HbZX9Bi/TsjHhAGCVUGZcSqifFDBtW1q9+trQIfGurRY0fOivH
-	 FOWRSyy56/s2A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41CA2D88F88;
-	Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v6.9 (#1)
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <170953927526.27833.16582714316420329444.git-patchwork-notify@kernel.org>
-Date: Mon, 04 Mar 2024 08:01:15 +0000
-References: <87cysehr9k.fsf@BL-laptop>
-In-Reply-To: <87cysehr9k.fsf@BL-laptop>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+	id 525C3C433A6; Mon,  4 Mar 2024 13:27:32 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5D647C433F1
+	for <soc@kernel.org>; Mon,  4 Mar 2024 13:27:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D647C433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a36126ee41eso682146466b.2
+        for <soc@kernel.org>; Mon, 04 Mar 2024 05:27:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709558849; x=1710163649; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Il7WGqFl44AfF17lTuHv5NBgNOasTcj9Ggen1b7rvc=;
+        b=s1pTHZHLJJtKeBSGdtoM1V3UMERfAYNAoPJ/qMQlcsEgmO91mppnGc3K/U6TH+TMIj
+         gp3XndY7bXvZowaDAbAt0DcaaU8S4H2W8XtjCrOPY9856SHN8BjRrpvQtI05vvsJp1SX
+         kGBjneE1i2mwfzh1Opkh+jHJsjzeZ3TdCs6Lz+/wwP2hOe2DnhlMmOX9RaDTxjkxs5/C
+         BRhNZZ5ehlfhwOFA55W/yFUHbLh15L3oAsalmSlXmTobphOY5CjCRsRXpha1f1NUFgQ2
+         qirAOkWURcQwUeWDAXubZEAqdlO9lZdmgqkQ7iwhII8s2dvRxk/TPUjTNi8KBkrrqLyi
+         1IMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709558849; x=1710163649;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Il7WGqFl44AfF17lTuHv5NBgNOasTcj9Ggen1b7rvc=;
+        b=SqbS6lO64zf1sw3/Pf2n+z1ual9OB1zaygP9EuAxyCqir8s4iZ4ZQaWab/WUJS1poP
+         B/y69BWCOBq1KglVNljtWEoexBjT4RfeK4eRm7dyfel7DlnVLqwNKljYX+GlBhM+cXKR
+         qwlJ1awcgANBdXlNd+dKQjsrIBfdjgdd4Js8XpikWtABt4DVovtkCILC1PGfhG6iWFyo
+         kylH0sefFUTY9R6rrwi0GJwIEh81iAIeog2IFv5W5Y/mkYrdmdNI5VqzbAVl/E+S27Qu
+         EKB+/ljJ07z990XKRc/o4V9O+UrpLtdlW+LxEV82YM+MSF+vHQvVoBHhWZH/HPbjONq4
+         DymQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6ShRf+VFj7GG4eNywszlCoOemhoJcU9+C27TYxPTA8QDlAqfJzSaf+Xc/uzVNE6gdLdpILrxW3ILjRWPy2Q==
+X-Gm-Message-State: AOJu0YzFwp45p3Lk0ZybinytmXjWel5XVmI+YQuPEadiicWGCtVna3tF
+	iqJTt3VsAF8jWsoVxY4drWTLnRljxeRdGTIYXHio48+1pePKaW+Lhvr+w1O6YI0=
+X-Google-Smtp-Source: AGHT+IEyllblhYtJQrtPvZ3Qg5J5x6MA5AQO1G5GPdXsMuXDvx7aa+s+I01lireZgZtMHmj5nurMeA==
+X-Received: by 2002:a17:906:1906:b0:a44:7db8:a343 with SMTP id a6-20020a170906190600b00a447db8a343mr6236750eje.76.1709558849464;
+        Mon, 04 Mar 2024 05:27:29 -0800 (PST)
+Received: from rayden (h-217-31-164-171.A175.priv.bahnhof.se. [217.31.164.171])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170906710b00b00a4434e9938asm4803437ejj.84.2024.03.04.05.27.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Mar 2024 05:27:29 -0800 (PST)
+Date: Mon, 4 Mar 2024 14:27:27 +0100
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org,
+	Sumit Garg <sumit.garg@linaro.org>
+Subject: [GIT PULL] OP-TEE fix for 6.8
+Message-ID: <20240304132727.GA3501807@rayden>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hello:
+Hello arm-soc maintainers,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+Please pull this small fix for a panic in the OP-TEE driver that can occur
+in the error path when registering devices on the TEE bus.
 
-On Fri, 01 Mar 2024 17:05:11 +0100 you wrote:
-> Hi,
-> 
-> Here is the first pull request for dt for mvebu for v6.9.
-> 
-> Gregory
-> 
-> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
-> 
-> [...]
+Thanks,
+Jens
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: dt for v6.9 (#1)
-    https://git.kernel.org/soc/soc/c/ada123939ee6
+The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
 
+are available in the Git repository at:
 
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-fix-for-v6.8
+
+for you to fetch changes up to 95915ba4b987cf2b222b0f251280228a1ff977ac:
+
+  tee: optee: Fix kernel panic caused by incorrect error handling (2024-03-04 09:49:03 +0100)
+
+----------------------------------------------------------------
+Fix kernel panic in OP-TEE driver
+
+----------------------------------------------------------------
+Sumit Garg (1):
+      tee: optee: Fix kernel panic caused by incorrect error handling
+
+ drivers/tee/optee/device.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
