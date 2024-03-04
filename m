@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CC7BC54E58
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CDB7C54E5D
 	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 30EFEC4167D; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A91CC43142;
-	Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
+	id 0DE46C43390; Mon,  4 Mar 2024 08:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EA309C433F1;
+	Mon,  4 Mar 2024 08:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1709539275;
-	bh=km87MCOP1KcGiuDzZ/Xm+lf+mOQ93RxdDZmTqVwRyAI=;
+	bh=K3qiXoTKt2GMNd62HMga1pBbnYixgGu0Awd6CbNmbvI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=lhaDUCas0u0GnyAHwi/yEBdXRrTCD5D++pYheLSfKbT3ycKDDCW0Lf3OYTGAI/1Xw
-	 zb9N4yfRGs1BNfjVTfSIQDZsODDmGk33DI4z07yi4JsKV862rRJ1Nsxx+2W6dg7Xul
-	 lnlGkRai8kNGU4DcpvzRw11Fu0k0Ur4kWJKuZZNczf0v7/GKHapKqHDb9e9pu+/+BL
-	 dA4MfgTj/1CPz8kXPdCUiaGc6zv0eYgps9FqzJxw9e74dEeAdh+wQS1VrB9QUL4/6m
-	 XlywEs6o/jSs9ozKjkIkE5YMCB8OzN/KXpCucIcHNeKPg7SZvYhc0uJLmkKAXCaoFg
-	 qFl0nu9ylkmCw==
+	b=mPiSV2rtr2DXsj4ZrDhCDgLc/jPbJCgnBM5Q5j1pBQsRNO7K5zSINoao7huyJ75b8
+	 6hfY1V9W5H37lzPArchM96hR7WOi579VLbEVzUUMhCGEvf/l14KnBKJegei+2tjiwP
+	 8yIXB5/6l2ob9FMrb4F+zRvvSPmJXq/ANV4Zbh6u4dq0dX3GPdtm8TSfhtxaCMQ/YB
+	 Rz7214ztNDkwfzNa5d5j8dycLLw/fVYa8AjzV1mLxwo05W/faxCtAXaK0HNZfthg/0
+	 LUdASGNTCwAMUWsh5xMSGzPTqVs255BFhXexrEbfCY9fDXm3/LuY3xGDuohEkGexoO
+	 15SsS4vdhj3OQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE177D88F8F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3563C595C4;
 	Mon,  4 Mar 2024 08:01:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Add PowerVR Series5 SGX GPUs for the TI SoCs
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.9
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170953927497.27833.7806652179425540482.git-patchwork-notify@kernel.org>
+ <170953927479.27833.14291197564357042065.git-patchwork-notify@kernel.org>
 Date: Mon, 04 Mar 2024 08:01:14 +0000
-References: <pull-1708943489-872615@atomide.com>
-In-Reply-To: <pull-1708943489-872615@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <MA0P287MB2822315119DA51FF95EE3071FE5D2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <MA0P287MB2822315119DA51FF95EE3071FE5D2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+To: Chen Wang <unicorn_wang@outlook.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 26 Feb 2024 12:36:12 +0200 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Sat, 2 Mar 2024 14:48:08 +0800 you wrote:
+> Hey Arnd,
 > 
-> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+> Please pull dt changes for RISC-V/Sophgo.
 > 
->   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
-> 
-> are available in the Git repository at:
+> Thanks,
+> Chen.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Add PowerVR Series5 SGX GPUs for the TI SoCs
-    https://git.kernel.org/soc/soc/c/b339605081b9
+  - [GIT,PULL] RISC-V Sophgo Devicetrees for v6.9
+    https://git.kernel.org/soc/soc/c/f9c59f24821c
 
 You are awesome, thank you!
 -- 
