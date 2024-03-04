@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 971A7C54E60
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BF08C54E5F
 	for <soc@archiver.kernel.org>; Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6B073C4166A; Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54E96C43601;
+	id 7066CC4166D; Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56E88C43141;
 	Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1709574032;
-	bh=F9vQlmuGVLwftEhteYd5LrVGCg6g5hsDXGxUJ75HS0E=;
+	bh=KHqX8UiZo95nk444WvVbdd/ANVsEWZoX+PWE0u4KNa8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=phJH7P4uufVBX5yuUv3N7Jqwb35UTLOpDa7PmuC0hssnauiPuVDJnPvQSynRCVS77
-	 isqhzeEexmlRRzXbd4/R/381vbByI1kAzcqXn6uCu4JQ2tGlfFP9EhgKI1xF224ug3
-	 G9XfQaxanbcVliVhwFB0Qzr9S/ff83yBqkTiW58ngSRPPrU03BU5XIlzqSESZ0xJYm
-	 ZsPtaR2gbucJk2DpS+ts19WTCJ2z5ZCT8wUQKiZvEjgKY+MX37qCpulCFMYgpqapvT
-	 6eFfayYBt2+W/XvyKpRpbxWe7VG7PWGXKbcAjGSZsV71D+D1W2+P6YhWKCiCwkbk+D
-	 ku5Ucw0y9PQUg==
+	b=fS1H/gGmIVgr5lpxMHFYiWtghL7HHsUm0FPIGJpRm1f+mQhvjKrTP5mjAEva1bvuZ
+	 vC7xadbk2Fo9+Nnsh/jYT+KQOO/LAlG45g5v4JyUTFPeVf/N1+qgb8F8hmZoej3aoV
+	 mLHIXnLwteQmI4KEBHBFMbFUhyIqwkbGg2mYTSW1NNbFG2NwwQ66hTVOVC1FVAsLLU
+	 9+Tg0jdzW/s+TmP/rgqMHqzWpjb+cQxG+NO0FCRJzAicK3T4uxGYm6L6i0aoCLnOZG
+	 8TomWJeMP0ChL6kivgCZusmiQz68tHb70pB3UcCYTtJS8NPOL68t/O+W5lBDF/YaRr
+	 MzQazW3we2MmQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2555AD88F8C;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32105D88F8E;
 	Mon,  4 Mar 2024 17:40:32 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: dts: ti: keystone: Updates for v6.9
+Subject: Re: [GIT PULL 1/2] arm64: dts: ti: K3 devicetree updates for v6.9
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170957403215.23732.7260676849876704484.git-patchwork-notify@kernel.org>
+ <170957403220.23732.2993270182458985604.git-patchwork-notify@kernel.org>
 Date: Mon, 04 Mar 2024 17:40:32 +0000
-References: <20240304133843.e6rm5va6w4oavgoy@posted>
-In-Reply-To: <20240304133843.e6rm5va6w4oavgoy@posted>
-To: Nishanth Menon <nm@ti.com>
+References: <e7e984db-47b9-404a-9471-5d2ed0effe1d@ti.com>
+In-Reply-To: <e7e984db-47b9-404a-9471-5d2ed0effe1d@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,22 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 4 Mar 2024 07:38:43 -0600 you wrote:
-> Hi Arnd, SoC team,
-> 
-> Apologies on a extremely late PR due to unavoidable personal
-> circumstances. This is very minor change, and would be nice to have in
-> v6.9. If it is too late, I can carry this forward for 6.10.
-> 
+On Wed, 28 Feb 2024 09:41:54 +0530 you wrote:
 > The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+> 
+>   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-for-v6.9
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: dts: ti: keystone: Updates for v6.9
-    https://git.kernel.org/soc/soc/c/cceac3f06fb3
+  - [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.9
+    (no matching commit)
+  - [GIT,PULL,2/2] ARM/arm64: defconfig: Updates for v6.9 for TI K2/K3 platforms
+    https://git.kernel.org/soc/soc/c/3251c2c2b165
 
 You are awesome, thank you!
 -- 
