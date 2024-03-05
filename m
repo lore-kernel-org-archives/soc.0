@@ -4,51 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFD16C54798
-	for <soc@archiver.kernel.org>; Tue,  5 Mar 2024 19:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C209AC54798
+	for <soc@archiver.kernel.org>; Tue,  5 Mar 2024 20:00:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7C5A6C433C7; Tue,  5 Mar 2024 19:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6529AC433F1;
-	Tue,  5 Mar 2024 19:55:29 +0000 (UTC)
+	id A8C09C433C7; Tue,  5 Mar 2024 20:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97502C433F1;
+	Tue,  5 Mar 2024 20:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709668530;
-	bh=MsIuvb6B6a0xancTYfzjAF1o8tDdk8OkqjwIyj63cqI=;
+	s=k20201202; t=1709668845;
+	bh=17Wh5GpfBMEAEfVPD7Mh1BrDB5q05dVOlvQzlOBQ1Zo=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=kH0N4NHBh9YPXajcS3WjNTsmcMyG9QswcjMY84xv6AmQPIXBJilDRfRlg0A3QAr1/
-	 2CuJMQdii8fMBVKnMFDnYNqAubpY7g41ml6aqNB5XOL73CqsLa36f3rvfWo2oHbLDQ
-	 8J2N+9uvLE25HCvuOIrFRND1P51spif2dZbvMgv1CKSVYu24Wh3ufNtgi98/f5wFVy
-	 5Hxp2EhrpgDjI8kN6O/urlRMwfu6GbzdMAjaQUzSSTQhKjiQPwGtYNHcNSfxMwMscf
-	 pD0q6bfL9otIg8IA0wcSkCaEz03lU5u1ME1wXig0glUC1YXeoDyju2ZC2ymSEieFVe
-	 Oht5+Z+45UrMA==
-Date: Tue, 5 Mar 2024 19:55:27 +0000
+	b=WIwEKLv2yPKqXUuwdM17FfWIcgAcXgDfQZen/BkuiU8EFZqqHBexyB4wdHdftCQWs
+	 6wb1TQknmtcvI3bLQlwbwtlMBBOAq3LZUiadSr/L/I3unjVRsRf6fu4xsZnK2VRjHC
+	 jQUJFAhJ9ZXgRMPEg1rm+ViBlV1URn5vWb6Sl3yTlHJx3n12iyYNB+zSvV1wxU3vq1
+	 ReS0ooVgG3FFn9gWQrlF5XUqnFzm/f8AHM03KquWxMDdD/wZZHd/z37j75w6uqRkHz
+	 z9IjOh8VGwBfUZEXvyh2KzmrxEktsAlvUvYLdn6sElAZ7URzcIcC/gfKFfT5rq3hl5
+	 bHZPxsDNb+fqQ==
+Date: Tue, 5 Mar 2024 20:00:42 +0000
 From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: conor@kernel.org, palmer@dabbelt.com, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V Devicetrees for v6.9
-Message-ID: <20240305-iodine-moneywise-53797ae9bf6e@spud>
+Subject: [GIT PULL] RISC-V firmware drivers for v6.9
+Message-ID: <20240305-vicinity-dumpling-8943ef26f004@spud>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="SBUcMGjypV+7GXFj"
+	protocol="application/pgp-signature"; boundary="wPm0oy/W+799syCQ"
 Content-Disposition: inline
 
 
---SBUcMGjypV+7GXFj
+--wPm0oy/W+799syCQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey Arnd,
 
-I'm a little late this time around, meant to send this before -rc8,
-but I ended up crashing my bike in the surprise bad weather we had
-here on Friday and didn't do anything for the weekend at all.
+Feel free to cherry pick this either if it makes more sense (or even
+send it to fixes instead). It's a fix for an oversize allocation, so
+given how late it is in the merge window I opted to send it as 6.9
+material.
 
-There's some binding stuff here that Uwe didn't want to take in PWM
-and then a follow-up patch that ended up in my tree because the original
-was not in his... I'm gonna try to avoid something like that happening
-again, I' prob just send that sort of thing via Rob in the future.
-
-Thanks,
+Cheers,
 Conor.
 
 The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
@@ -57,84 +53,36 @@ The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.9
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-firmware-for-v6.9
 
-for you to fetch changes up to 28ecaaa5af192fa8a3f406e5a3e5416324c4d0a5:
+for you to fetch changes up to af1e0a7d39f98c0dea1b186a76fcee7da6a5f7bc:
 
-  riscv: dts: starfive: jh7110: Add camera subsystem nodes (2024-03-01 16:12:26 +0000)
+  firmware: microchip: Fix over-requested allocation size (2024-03-04 19:18:16 +0000)
 
 ----------------------------------------------------------------
-RISC-V Devicetrees for v6.9
+RISC-V firmware drivers for v6.9
 
-Microchip:
-Missing bus clocks for the CAN controllers spotted during the creation
-of a driver for the controllers and a specific compatible for the SiFive
-PDMA block on PolarFire SoC.
-
-Starfive:
-PWM nodes for the jh7100 and jh7110. Camera subsystem support for the
-latter. Most notably however is the addition of ethernet support for the
-jh7110 which finally allows people to use the network on the OG VisionFive
-and on the Beagle-V Starlight board. This was made possible by the
-non-standard cache management operations support added for the RZ/Five
-which could be extended to the ccache present on the jh7100.
-
-bindings:
-Additional clarification for what the reg property represents for cpus
-and two opencores PWM binding changes - the original addition and an
-added compatible. The latter is here as the driver patch was not ready
-but the PWM maintainer told me to go ahead and merge it.
+A single minor fix for an oversized allocation due to sizeof() misuse by
+yours truly that came in since I sent my last fixes PR.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Changhuang Liang (1):
-      riscv: dts: starfive: jh7110: Add camera subsystem nodes
+Dawei Li (1):
+      firmware: microchip: Fix over-requested allocation size
 
-Conor Dooley (1):
-      riscv: dts: microchip: add missing CAN bus clocks
+ drivers/firmware/microchip/mpfs-auto-update.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Cristian Ciocaltea (4):
-      riscv: dts: starfive: jh7100: Add sysmain and gmac DT nodes
-      riscv: dts: starfive: jh7100-common: Setup pinmux and enable gmac
-      riscv: dts: starfive: visionfive-v1: Setup ethernet phy
-      riscv: dts: starfive: beaglev-starlight: Setup phy reset gpio
-
-Heinrich Schuchardt (1):
-      dt-bindings: riscv: cpus: reg matches hart ID
-
-Ji Sheng Teoh (1):
-      dt-bindings: pwm: opencores: Add compatible for StarFive JH8100
-
-Shravan Chippa (1):
-      riscv: dts: microchip: add specific compatible for mpfs pdma
-
-William Qiu (3):
-      dt-bindings: pwm: Add bindings for OpenCores PWM Controller
-      riscv: dts: starfive: jh7100: Add PWM node and pins configuration
-      riscv: dts: starfive: jh7110: Add PWM node and pins configuration
-
- .../devicetree/bindings/pwm/opencores,pwm.yaml     |  56 +++++++++++
- Documentation/devicetree/bindings/riscv/cpus.yaml  |   4 +
- arch/riscv/boot/dts/microchip/mpfs.dtsi            |   6 +-
- .../boot/dts/starfive/jh7100-beaglev-starlight.dts |  11 +++
- arch/riscv/boot/dts/starfive/jh7100-common.dtsi    | 108 +++++++++++++++++++++
- .../dts/starfive/jh7100-starfive-visionfive-v1.dts |  22 ++++-
- arch/riscv/boot/dts/starfive/jh7100.dtsi           |  45 +++++++++
- .../dts/starfive/jh7110-starfive-visionfive-2.dtsi |  71 ++++++++++++++
- arch/riscv/boot/dts/starfive/jh7110.dtsi           |  76 +++++++++++++++
- 9 files changed, 395 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/pwm/opencores,pwm.yaml
-
---SBUcMGjypV+7GXFj
+--wPm0oy/W+799syCQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZed4rgAKCRB4tDGHoIJi
-0tBaAQDl/hRShjw3Ogh0Inq9g2GSxpMwlRnlTrpjDehip8EJEgEA8bOJW2LNvYDZ
-lnpvp4AEEgjpDWpcJpGHGQ0HXd8Uowc=
-=oK3y
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZed56gAKCRB4tDGHoIJi
+0kJKAQCOfMZo0TwwMP8IrOmjFf826qr9nCj0CAXAF1U3zpdaSgD/eCZgGksOtX00
+DFGZZ1ornDNWi/ggXIFQQukytKNgwgM=
+=Cv2+
 -----END PGP SIGNATURE-----
 
---SBUcMGjypV+7GXFj--
+--wPm0oy/W+799syCQ--
