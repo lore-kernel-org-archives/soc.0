@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B32D2C54E49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB98FC5475B
 	for <soc@archiver.kernel.org>; Wed,  6 Mar 2024 07:00:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 69602C43399; Wed,  6 Mar 2024 07:00:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50CA1C43390;
-	Wed,  6 Mar 2024 07:00:28 +0000 (UTC)
+	id 634DFC43394; Wed,  6 Mar 2024 07:00:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C14FC433C7
+	for <soc@kernel.org>; Wed,  6 Mar 2024 07:00:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1709708428;
-	bh=8EzFCeGhWJVEsB8gTUVmTpK95tk7vaOFLaJ2ui0LTZU=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UvbgNeKwwLcltbku+U0TrZBA3ZmOJQFuitR57knAWVglL89yTNdLErZyc48bg3s0i
-	 a/n/kvV+tb600RMNheT4J8pjmDiKGCQwhnctd5XnIQR115lQarN6odx3aU1QfoYfzp
-	 /DjgA3fLRKyGNHH7aHUrNh4JPaFsP+8RsOkxKYQg2Qn37U5REprHqKoX0738ZuLD3M
-	 3wlun/+MblGgxb3Sj/+DqJr8PDpWgZB1tANz8gLiO8416TAIClT6M6/xAcPtuUPU8G
-	 NBXAUUeWKD8H7wrnXnEct/TAz31fvvr/+LtDqop8FqFyL0i25D3lIt25YF7ZWSW71R
-	 qyNUxLYwaGe7g==
+	bh=TRqD7B/f1+n1jdb5vJ3T0XCDYdRxXWSNhMtirlMGzCY=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=ETI4dn6KBpXq+NCyXAYVSnwd//FIYXlWFWCtf5xBNo3YVvjdsBuabjVXiSYd4PPP7
+	 t2R2N5XkYDVKTGjiUCRXAubd+qcgeN5U1uxxDBpogQX3zf2LwQTDOUl+s0AZpYozpt
+	 Z2nQg8BIcOfn/9oUloAaO0+/fC9SsP9DJ1940TM2i45hayN9Qns1E2DGgNtXhEvjz2
+	 goBOpu2VX0aWp789TZg0d+UX1QZNzsMUFZTfVc0PQMbZ7+ovYU28Xpu1/mpTjaCh40
+	 VfhWOq02FGsLBdeFruO1KzLdDqLjj4EUzPPVEkK2FciIY6tIo1VmFp4/zOhnk42ysT
+	 y0qrIgcQEB0AQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2FE7BD84BDB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2596AD9A4B6;
 	Wed,  6 Mar 2024 07:00:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V firmware drivers for v6.9
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <170970842818.7525.5182222305004261736.git-patchwork-notify@kernel.org>
+ <170970842806.7525.15103012372936002287.git-patchwork-summary@kernel.org>
 Date: Wed, 06 Mar 2024 07:00:28 +0000
-References: <20240305-vicinity-dumpling-8943ef26f004@spud>
-In-Reply-To: <20240305-vicinity-dumpling-8943ef26f004@spud>
-To: Conor Dooley <conor@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Tue, 5 Mar 2024 20:00:42 +0000 you wrote:
-> Hey Arnd,
-> 
-> Feel free to cherry pick this either if it makes more sense (or even
-> send it to fixes instead). It's a fix for an oversize allocation, so
-> given how late it is in the merge window I opted to send it as 6.9
-> material.
-> 
-> [...]
+Patch: [GIT,PULL] RISC-V firmware drivers for v6.9
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=832694
+  Lore link: https://lore.kernel.org/r/20240305-vicinity-dumpling-8943ef26f004@spud
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V firmware drivers for v6.9
-    https://git.kernel.org/soc/soc/c/1c7cfb6158f6
+Patch: [GIT,PULL] A few more Qualcomm Arm64 DeviceTree fixes for v6.8
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=832796
+  Lore link: https://lore.kernel.org/r/20240306031208.4218-1-andersson@kernel.org
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
