@@ -1,112 +1,80 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=52GY=KN=broadcom.com=florian.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F651C5475B
-	for <soc@archiver.kernel.org>; Wed,  6 Mar 2024 18:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57BA7C54798
+	for <soc@archiver.kernel.org>; Thu,  7 Mar 2024 20:04:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5533FC433F1; Wed,  6 Mar 2024 18:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414D9C433C7;
-	Wed,  6 Mar 2024 18:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709748494;
-	bh=aNvdoVB8CYkClyqqn06SdWt2NUie0KzhPE48rEF9VIU=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=pimsxjFhK+zyfYVmU1R9cldV/XdlNrXnhVvAHkPtupRuB9DnZawtNO7v7HSD2LDfa
-	 3mDvleMRg5H/ab55L3/SHvlrLwfKFAXjh0MT407rknDKyhjXVPq6fkh7DHqRT8YGLe
-	 74U2vLc6/FnxXCqWfVajtaO2KNPnvc2dZH8Aiv+ahsvdlV66Ud+3cYFBfbf3KR149p
-	 ifACxqXlWHcyPPImTqc9xR0eQAs6wkQL1BFvUHW3k7yj4Dddh79rbPzZxyUkxEG9QG
-	 ABQ9VeuOz3xkZ7ZX57Tu2M9KgMS9RauulJpW1AjE29ogbQuvBtAJ6h2cR9ya00QD06
-	 xgOy6AHYnY/Lg==
-Date: Wed, 6 Mar 2024 18:08:11 +0000
-From: Conor Dooley <conor@kernel.org>
+	id 07497C433F1; Thu,  7 Mar 2024 20:04:48 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 13FFFC433C7;
+	Thu,  7 Mar 2024 20:04:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 13FFFC433C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E740CC0000F4;
+	Thu,  7 Mar 2024 12:04:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E740CC0000F4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1709841883;
+	bh=3F6pcXkEIkL0aTsmU/MIbDZ7aL8xSEk3Y33/Ir5L+D0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CI1LZ5aC8tu3UTxvPb0yO9mE2fdT4CjFozFd1u0k/KvZGJoWRXcBdUf/2XYou5MtC
+	 8TW08FcH8+e9QWWOa3SxS4xANuNyDvUKkJC3rF3CzR2rMNefPC1rJLzl3ZShLrYQMW
+	 1p6+g/AmUYM5G1chsQEwyMK+beygGuFUM2AQ/mSg=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 2C17D18041CAC6;
+	Thu,  7 Mar 2024 12:04:41 -0800 (PST)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: conor@kernel.org, palmer@dabbelt.com, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V Devicetree fixes for v6.8-final
-Message-ID: <20240306-waltz-facial-9e4e1b792053@spud>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 2/3] Broadcom drivers changes for 6.9
+Date: Thu,  7 Mar 2024 12:04:40 -0800
+Message-Id: <20240307200441.2151734-2-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240307200441.2151734-1-florian.fainelli@broadcom.com>
+References: <20240307200441.2151734-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="xRXufZSFrzlx0kDP"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
---xRXufZSFrzlx0kDP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey Arnd,
-
-I know it is pretty late in the day here for fixes, and I would've kept
-the builtin dtb fix as v6.9 material, but Geert reported yesterday that
-boot was broken on the jh7100 platforms due to a fix that I sent in my
-last PR.
-
-Thanks,
-Conor.
-
-The following changes since commit ce6b6d1513965f500a05f3facf223fa01fd74920:
-
-  riscv: dts: sifive: add missing #interrupt-cells to pmic (2024-02-14 09:09:33 +0000)
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-fixes-for-v6.8-final
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.9/drivers
 
-for you to fetch changes up to 2672031b20f6681514bef14ddcfe8c62c2757d11:
+for you to fetch changes up to 86964bb62a9334acfebd869ca8ffc184dc365b75:
 
-  riscv: dts: Move BUILTIN_DTB_SOURCE to common Kconfig (2024-03-06 00:08:32 +0000)
-
-----------------------------------------------------------------
-RISC-V Devicetree fixes for v6.8-final
-
-Starfive:
-The previous cleanup broke boot on the jh7100 as the driver depended on
-the fallback clock name created based on the node-name when
-clock-output-names is not present. Add clock-output-names to restore
-working order.
-
-Generic:
-BUILTIN_DTB has been broken for ages on any platform other than the
-nommu Canaan k210 SoC as the first dtb built (in alphanumerical order),
-would get built into the image. This didn't get fixed for ages because
-nobody actually cared about running it other than the k210 enough to
-fix it. The folks doing Sophgo SG2042 development have come along and
-fixed it, as they want to use builtin dtbs. linux-boot on that platform
-reuses the dtb it was provided by OpenSBI when booting linux proper,
-which is unfortunately not possible to boot a mainline kernel with.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  bus: brcmstb_gisb: Added support for 74165 register layout (2024-01-29 10:43:22 -0800)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      riscv: dts: starfive: jh7100: fix root clock names
+This pull request contains Broadcom SoC device drivers changes for 6.9,
+please pull the following:
 
-Yangyu Chen (1):
-      riscv: dts: Move BUILTIN_DTB_SOURCE to common Kconfig
+- Florian adds support for the 74165 GISB arbiter layout which shuffled
+  register offsets around
 
- arch/riscv/Kconfig                             | 14 ++++++++++-
- arch/riscv/Kconfig.socs                        | 32 --------------------------
- arch/riscv/boot/dts/Makefile                   |  2 +-
- arch/riscv/boot/dts/canaan/Makefile            |  2 --
- arch/riscv/boot/dts/microchip/Makefile         |  1 -
- arch/riscv/boot/dts/sifive/Makefile            |  1 -
- arch/riscv/boot/dts/starfive/jh7100.dtsi       |  4 ++++
- arch/riscv/configs/nommu_k210_defconfig        |  2 ++
- arch/riscv/configs/nommu_k210_sdcard_defconfig |  2 ++
- 9 files changed, 22 insertions(+), 38 deletions(-)
+----------------------------------------------------------------
+Florian Fainelli (2):
+      dt-bindings: bus: Document Broadcom GISB arbiter 74165 compatible
+      bus: brcmstb_gisb: Added support for 74165 register layout
 
---xRXufZSFrzlx0kDP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZeixCgAKCRB4tDGHoIJi
-0sVUAQDA0DHhq7ioR+8EQAm5wUw5VjdsZ8xm+lipPkOywGpuTQEAtH6cyvFfdSSl
-1RrJXne0Nn4UF+8FZg0bgzJNtFhTtQk=
-=rXKb
------END PGP SIGNATURE-----
-
---xRXufZSFrzlx0kDP--
+ Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml |  1 +
+ drivers/bus/brcmstb_gisb.c                               | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+)
