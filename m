@@ -1,80 +1,193 @@
-Return-Path: <SRS0=52GY=KN=broadcom.com=florian.fainelli@kernel.org>
+Return-Path: <SRS0=0nIi=KO=quicinc.com=quic_obabatun@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E45A4C54E4A
-	for <soc@archiver.kernel.org>; Thu,  7 Mar 2024 20:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A40C5475B
+	for <soc@archiver.kernel.org>; Fri,  8 Mar 2024 19:12:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CE461C433F1; Thu,  7 Mar 2024 20:04:51 +0000 (UTC)
-Received: from relay.smtp-ext.broadcom.com (unknown [192.19.166.231])
+	id A7E29C43609; Fri,  8 Mar 2024 19:12:48 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CABF2C433C7;
-	Thu,  7 Mar 2024 20:04:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CABF2C433C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id A332CC00115D;
-	Thu,  7 Mar 2024 12:04:42 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com A332CC00115D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1709841882;
-	bh=WX3PXIqwar7P1dbtitXZ9roTf2LNzl4lEJ76EvPJxDQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eZcpohE3wfPGbPTKcVjuYNTe7R37zEx1eHQhl3tuzf1EK70XMvSb+otwSijNfolke
-	 qZD3w7gR6ljx6lIoYn2BZc9+zetXdkPtC3wsgzfOU5OdOFgNFSiINNXKh9ZzpzuRft
-	 Xo2TF/ocTaMwfQwOH2FhPsm61Bp1+oyw8k03gkqk=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 10C4218041CAC4;
-	Thu,  7 Mar 2024 12:04:41 -0800 (PST)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 50072C43390;
+	Fri,  8 Mar 2024 19:12:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 50072C43390
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 428Ia6Lk014709;
+	Fri, 8 Mar 2024 19:12:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	qcppdkim1; bh=YWKo5hfeN1dHC2eJBtj7dn2Dw/vycuIkLhqrLxET/j0=; b=Vl
+	NcHMWzhnGRw3cPapHCmd05saOgxIjNI4gguOzHs+BkP+PMjN2gy0LDMPMuAcxm1k
+	DAeYZHE7xFaAHTeYLy9ECHFq6Xl7/BbPxiT3A2wrxR7p7iezXg56kc0htdaEIcIy
+	MT0klI+jhBgwml13uz7Ots9xGmSBF4Eh1e6B2H2HmRAD7MyPM0wrLgBVo6vS8azV
+	ShX3vCP2OagrF6giQEbYwCWrtR+dBMpWJxhJtXMiGVj/ef9mK03phf7pwno1rpxh
+	rV9idPLzvPf/nT5C9I5Rtb6JnpVrTUlxO7+F+qj5PZrsLk2WG/Q4b9nQq0AYlLkX
+	l7hCBx3CjWdPIGfOj/qg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wr82x02x9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Mar 2024 19:12:30 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 428JCT1w005678
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 8 Mar 2024 19:12:29 GMT
+Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Fri, 8 Mar 2024 11:12:26 -0800
+From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/3] Broadcom devicetree-arm64 changes for 6.9
-Date: Thu,  7 Mar 2024 12:04:39 -0800
-Message-Id: <20240307200441.2151734-1-florian.fainelli@broadcom.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
+        <frowand.list@gmail.com>, <vgupta@kernel.org>, <arnd@arndb.de>,
+        <olof@lixom.net>, <soc@kernel.org>, <guoren@kernel.org>,
+        <monstr@monstr.eu>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <dinguyen@kernel.org>, <chenhuacai@kernel.org>,
+        <tsbogend@alpha.franken.de>, <jonas@southpole.se>,
+        <stefan.kristiansson@saunalahti.fi>, <shorne@gmail.com>,
+        <mpe@ellerman.id.au>, <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+        <glaubitz@physik.fu-berlin.de>, <richard@nod.at>,
+        <anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
+        <chris@zankel.net>, <jcmvbkbc@gmail.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+Subject: [PATCH v4 4/4] of: reserved_mem: Rename fdt_* functions to refelct use of unflatten_devicetree APIs
+Date: Fri, 8 Mar 2024 11:12:04 -0800
+Message-ID: <20240308191204.819487-5-quic_obabatun@quicinc.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240308191204.819487-1-quic_obabatun@quicinc.com>
+References: <20240308191204.819487-1-quic_obabatun@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5MueeBaeKBGY6HLUZEinlb4jupVVyEx9
+X-Proofpoint-GUID: 5MueeBaeKBGY6HLUZEinlb4jupVVyEx9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-08_08,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 phishscore=0 adultscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=828 lowpriorityscore=0
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403080152
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+Rename the relevant fdt_* functions to a new naming scheme, dt_*, to
+reflect the use of the unflatten_devicetree APIs to scan through the
+reserved memory regions defined in the DT.
 
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+---
+ drivers/of/fdt.c                |  2 +-
+ drivers/of/of_private.h         |  4 ++--
+ drivers/of/of_reserved_mem.c    | 14 +++++++-------
+ include/linux/of_reserved_mem.h |  4 ++--
+ 4 files changed, 12 insertions(+), 12 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 11630eba965c..e51bb3aa782b 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1355,7 +1355,7 @@ void __init unflatten_device_tree(void)
+ 	of_alias_scan(early_init_dt_alloc_memory_arch);
+ 
+ 	unittest_unflatten_overlay_base();
+-	fdt_init_reserved_mem();
++	dt_init_reserved_mem();
+ }
+ 
+ /**
+diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+index aa8844318257..8970948e10d4 100644
+--- a/drivers/of/of_private.h
++++ b/drivers/of/of_private.h
+@@ -177,7 +177,7 @@ static inline struct device_node *__of_get_dma_parent(const struct device_node *
+ }
+ #endif
+ 
+-void fdt_reserved_mem_save_node(struct device_node *node, const char *uname,
+-				phys_addr_t base, phys_addr_t size);
++void dt_reserved_mem_save_node(struct device_node *node, const char *uname,
++			       phys_addr_t base, phys_addr_t size);
+ 
+ #endif /* _LINUX_OF_PRIVATE_H */
+diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+index 8d50a5178440..7d154d188a74 100644
+--- a/drivers/of/of_reserved_mem.c
++++ b/drivers/of/of_reserved_mem.c
+@@ -147,15 +147,15 @@ static void __init dt_scan_reserved_mem_reg_nodes(void)
+ 		size = dt_mem_next_cell(dt_root_size_cells, &prop);
+ 
+ 		if (size)
+-			fdt_reserved_mem_save_node(child, uname, base, size);
++			dt_reserved_mem_save_node(child, uname, base, size);
+ 	}
+ }
+ 
+ /*
+- * fdt_reserved_mem_save_node() - save fdt node for second pass initialization
++ * dt_reserved_mem_save_node() - save dt node for second pass initialization
+  */
+-void __init fdt_reserved_mem_save_node(struct device_node *node, const char *uname,
+-				       phys_addr_t base, phys_addr_t size)
++void __init dt_reserved_mem_save_node(struct device_node *node, const char *uname,
++				      phys_addr_t base, phys_addr_t size)
+ {
+ 	struct reserved_mem *rmem = &reserved_mem[reserved_mem_count];
+ 
+@@ -307,7 +307,7 @@ int __init __reserved_mem_alloc_size(unsigned long node, const char *uname)
+ 		       uname, (unsigned long)(size / SZ_1M));
+ 		return -ENOMEM;
+ 	}
+-	fdt_reserved_mem_save_node(NULL, uname, base, size);
++	dt_reserved_mem_save_node(NULL, uname, base, size);
+ 	return 0;
+ }
+ 
+@@ -391,9 +391,9 @@ static void __init __rmem_check_for_overlap(void)
+ }
+ 
+ /**
+- * fdt_init_reserved_mem() - allocate and init all saved reserved memory regions
++ * dt_init_reserved_mem() - allocate and init all saved reserved memory regions
+  */
+-void __init fdt_init_reserved_mem(void)
++void __init dt_init_reserved_mem(void)
+ {
+ 	int i, ret;
+ 
+diff --git a/include/linux/of_reserved_mem.h b/include/linux/of_reserved_mem.h
+index e92babd669c2..dd67b9b2488e 100644
+--- a/include/linux/of_reserved_mem.h
++++ b/include/linux/of_reserved_mem.h
+@@ -32,7 +32,7 @@ typedef int (*reservedmem_of_init_fn)(struct reserved_mem *rmem);
+ #define RESERVEDMEM_OF_DECLARE(name, compat, init)			\
+ 	_OF_DECLARE(reservedmem, name, compat, init, reservedmem_of_init_fn)
+ 
+-void fdt_init_reserved_mem(void);
++void dt_init_reserved_mem(void);
+ int of_reserved_mem_device_init_by_idx(struct device *dev,
+ 				       struct device_node *np, int idx);
+ int of_reserved_mem_device_init_by_name(struct device *dev,
+@@ -47,7 +47,7 @@ struct reserved_mem *of_reserved_mem_lookup(struct device_node *np);
+ #define RESERVEDMEM_OF_DECLARE(name, compat, init)			\
+ 	_OF_DECLARE_STUB(reservedmem, name, compat, init, reservedmem_of_init_fn)
+ 
+-static inline void fdt_init_reserved_mem(void) { }
++static inline void dt_init_reserved_mem(void) { }
+ 
+ static inline int of_reserved_mem_device_init_by_idx(struct device *dev,
+ 					struct device_node *np, int idx)
+-- 
+2.34.1
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.9/devicetree-arm64
-
-for you to fetch changes up to 27058b95fbb784406ea4c40b20caa3f04937140c:
-
-  arm64: dts: broadcom: bcmbca: bcm4908: drop invalid switch cells (2024-01-29 10:43:10 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SoCs changes for 6.9,
-please pull the following:
-
-- Rafal defines a proper NVMEM layout for the Asus GT-AC5300 router and
-  removes some invalid Device Tree properties pertaining to the
-  Ethernet switch on bcm4908
-
-----------------------------------------------------------------
-Rafał Miłecki (2):
-      arm64: dts: broadcom: bcmbca: bcm4908: use NVMEM layout for Asus GT-AC5300
-      arm64: dts: broadcom: bcmbca: bcm4908: drop invalid switch cells
-
- .../boot/dts/broadcom/bcmbca/bcm4908-asus-gt-ac5300.dts     | 13 +++++++------
- arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi            |  3 ---
- 2 files changed, 7 insertions(+), 9 deletions(-)
