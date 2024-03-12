@@ -4,445 +4,171 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B36C2C54E5D
-	for <soc@archiver.kernel.org>; Tue, 12 Mar 2024 16:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A491C54E5D
+	for <soc@archiver.kernel.org>; Tue, 12 Mar 2024 16:47:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7ADB9C43394; Tue, 12 Mar 2024 16:45:53 +0000 (UTC)
+	id EC71AC43390; Tue, 12 Mar 2024 16:47:03 +0000 (UTC)
 Received: from wfout4-smtp.messagingengine.com (wfout4-smtp.messagingengine.com [64.147.123.147])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C3117C433C7
-	for <soc@kernel.org>; Tue, 12 Mar 2024 16:45:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3117C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id C455DC433F1
+	for <soc@kernel.org>; Tue, 12 Mar 2024 16:47:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C455DC433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id A890C1C00084;
-	Tue, 12 Mar 2024 12:45:50 -0400 (EDT)
+	by mailfout.west.internal (Postfix) with ESMTP id AE5251C00076;
+	Tue, 12 Mar 2024 12:47:01 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 12 Mar 2024 12:45:51 -0400
+  by compute5.internal (MEProxy); Tue, 12 Mar 2024 12:47:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1710261950;
-	 x=1710348350; bh=jDkpr1CO6A8RUZEyAfzCCOgBSr7MUYnAnILwj9l8UME=; b=
-	D2ycGkQkzKZJoqIT6OlkkjCwTwTD81ix6RtIkhp/VnY/EO8bbhpahL2vQ+ME+1yt
-	f4TndQ94tctjgVVQUoUtbi8rcQbSaw6ke+Ktxdvn5S2E8fWtqYT0qkG7Dvawwf7+
-	zh8Ttt6oAgtBgGpvFAmLJb17E0omAwiz0U6NCjkRJMpSEHQ7baB5Ok7rx8vk/6ja
-	9qtqcaywMpFwP0IGr+ggKTJ6p8molTRWB2RFPjj7JrQF9e+wi//ExD8VhPM6TWUJ
-	YXiJf+mGDeOWe/iSA2e/a8z3oQWAwSafyYIoR3Wq3SXGzZrzxkn1e41rq7y2979b
-	76u0NhMLtEOq2baxJzHEIQ==
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1710262021; x=1710348421; bh=MwpOu/tg2M
+	IdvMwhIU2xxdVqRvxdJJhDNXci8dpj6ic=; b=LpGcltHme0xzcZMpEYg74GLl6T
+	lZ7d4wDim82W7CYwpGUsFTANcaPLlidmWy7PdCgzGiSu3alk2o/GEE8JTS48XXc0
+	VhmPAk4UpQb26y+CEQ0nPvb3uLrBm6TQLbpeit2njP+1OYBGatjTUPwiSgbsgRQ1
+	FZz3TammLdBSm75ZP5v0NGzfUuRBIg+jW09cKw+TCms2co3vrOnRBod1HHAOSBui
+	D5KNUrMt9mGZzhXL7N00w0WMvvEqJXVK9ouQzaJ7DAUyVUdNxmVujW8h5B0eZnaN
+	DDsd2NIUdTzdGIr24TEiBSgYn0fUidNyMzKPj49xekq3fWbe7ANzkJkWl0zQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1710261950; x=
-	1710348350; bh=jDkpr1CO6A8RUZEyAfzCCOgBSr7MUYnAnILwj9l8UME=; b=o
-	DgCe9/DED0s6EQR6bNtXoOQWBBq/w8iUZM/d6Xs4f4wBKbAxxgYx/GBjB0kcYOJD
-	MYEu7lU/t/OYI5i6Fxw8+K47/1tKd0lxZ6XJH//Mr19+oYICrrqGpPCwKGZ8letT
-	7ZQ3FVnV3b46lajbeR8vJkxErePxJLNmi2aNplBV1z07e6X8quECihbdXdiXvrRE
-	4ggU1gpFBP61HctN2zCyr0GeNKKlxBo4a/SgjJqseGx9AzFfBxOfel8Yx0xnTSnl
-	9wkvurSeRURwBurWJSS9mrr7KwEAaM0jV2BsYdsgadzb+j4Feb0bWuVvEkSnEQIs
-	rSyneXrdyjdn54LFLBp5A==
-X-ME-Sender: <xms:vYbwZZLhYc8D0kSf8uEXQAKxYYxK6cpeciohcN-In6xC5rYfGlRJ3g>
-    <xme:vYbwZVJT5BMruqg412VeqkIX6Kso8YUvfk_SjHRISNyizNmvbvZ7PjxuWHaxxjdVm
-    Wbkg-3cQ16yerj-7gQ>
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1710262021; x=1710348421; bh=MwpOu/tg2MIdvMwhIU2xxdVqRvxd
+	JJhDNXci8dpj6ic=; b=EyP2JmfxOP+Sa6QnCLClT0TAR11NnSYb9chR+SSqhupW
+	TkQExX4SYgJvIAvWUv0iIRo3ngtJLsnbSUjzGxQpruwon9l3wwR3VzDX1l4P4kI5
+	LjDo07AxJCtihMIQ/8Of8IaOZYlqKhclwMkC3gc/qM8VgOg4bnAqOxgTUQMM1lPX
+	QTGxOP4p4jykAnHffRiPR5VYeB9Xtb1Iza+QljWxp5AAm+iifrk71TKbCyk1igFW
+	iYGjfzIJb3v0zpYIIb4pWJv9kKzyXZ6C54jgXkKGujFX2Qik4AOTOORsJRT1WIAo
+	cjLSNE+EFJz34F48DFUFnts9slabtfGavdBnUNpLTw==
+X-ME-Sender: <xms:BYfwZdib365nQoG2OKiT1o5OHXIYbs8NhbFSKY22SFyLOaoyS-P1rQ>
+    <xme:BYfwZSCHT56aZByGKeEIvr8VLrU3ueZrH_mCKLS8sslCh6SLM8gwcqiKLi_6xRQ1K
+    ZkHmS8uiIbNkcYSF0w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeefgdelvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
-    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:vobwZRt-C36XDR0nLl4qYIUqh7GyVWANWdrhDEgha77ln1PUTJowWQ>
-    <xmx:vobwZaZf-O2qhsLTyq_GuH8LKTKLaroQYGZp-_BXRd6Gwr1mitdDZg>
-    <xmx:vobwZQai-9ViT_T5c_88DagzhPPaWHDrXFvL4REtQl4CIzrm-jtQzw>
-    <xmx:vobwZeD8I0IMlx0Rh5tus3qfhJCng7pYs_MtDsod3Iz2_gze0oF0iQ>
-    <xmx:vobwZXWCk8xxMBTnHKfi02_VJZD_tBgZcK_IS-wCn98GihcxszoJ0SFRv6g>
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeigeeuvdekheevudeiteegudfgjeehuefghfettddvteeuteekhfehudfhtefg
+    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
+    nhgusgdruggv
+X-ME-Proxy: <xmx:BYfwZdGgIyTdSgYKPHCa7ayYGRFc9QV_E7E7jkd4Kndke6TFhwovnw>
+    <xmx:BYfwZSSrNikP_FKKoJrX4xjCPayBV-gToelz1CN-Lu6M7aehqCtiGw>
+    <xmx:BYfwZaz6fOPJ2mteoIPZ_x-ZFWtdKvxTGhYGF0WFDfBDliTa0V1Gjg>
+    <xmx:BYfwZY7f4-Q62Dk2bPOWThf2WnRw6Bzz6TxomTt1_VEFoz23bsT7DA>
+    <xmx:BYfwZUsHNpuxJ0f_xDwTTcU_BtyUc2BRfEV73V3NmnJA2ArmQsQG1ZySPIM>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DFA34B60092; Tue, 12 Mar 2024 12:45:49 -0400 (EDT)
+	id 030AEB6008D; Tue, 12 Mar 2024 12:47:00 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
 MIME-Version: 1.0
-Message-Id: <2bb4979a-508f-4791-82ac-ce31065f6da1@app.fastmail.com>
+Message-Id: <1ba0456e-879b-4435-808d-54dd91b9506c@app.fastmail.com>
 In-Reply-To: <89d0bb77-a608-4ae0-b9d9-e17fdf5f12da@app.fastmail.com>
 References: <89d0bb77-a608-4ae0-b9d9-e17fdf5f12da@app.fastmail.com>
-Date: Tue, 12 Mar 2024 17:45:29 +0100
+Date: Tue, 12 Mar 2024 17:46:31 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: [GIT PULL 2/4] ARM: SoC drivers for 6.9
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: [GIT PULL 3/4] ARM: SoC code updates for 6.9
+Content-Type: text/plain
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd=
-33d:
+The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
 
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-d=
-rivers-6.9
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.9
 
-for you to fetch changes up to 049238d24467e3d2121e8ef2abef1149be6722e9:
+for you to fetch changes up to 98dcb872779f8bea30cd34716c7fdeb0963e3606:
 
-  Merge tag 'qcom-drivers-for-6.9-2' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/qcom/linux into soc/drivers (2024-03-06 07:43:46 +0100)
+  ARM: s32c: update MAINTAINERS entry (2024-03-05 17:23:09 +0100)
 
 ----------------------------------------------------------------
-ARM: SoC drivers for 6.9
+ARM: SoC code updates for 6.9
 
-This is the usual mix of updates for drivers that are used on (mostly
-ARM) SoCs with no other top-level subsystem tree, including:
-
- - The SCMI firmware subsystem gains support for version 3.2 of the
-   specification and updates to the notification code.
-
- - Feature updates for Tegra and Qualcomm platforms for added
-   hardware support.
-
- - A number of platforms get soc_device additions for identifying newly
-   added chips from Renesas, Qualcomm, Mediatek and Google.
-
- - Trivial improvements for firmware and memory drivers amongst
-   others, in particular 'const' annotations throughout multiple
-   subsystems.
+These are mostly minor updates, including a number of kerneldoc
+fixes from Randy Dunlap across multiple platforms. OMAP gets
+a few bugfixes, and the MAINTAINERS file gets updated for AMD
+Zynq and NXP S32G.
 
 ----------------------------------------------------------------
-Abel Vesa (1):
-      dt-bindings: soc: qcom: qcom,pmic-glink: document X1E80100 compati=
-ble
+Alexander Sverdlin (2):
+      ARM: AM33xx: PRM: Remove redundand defines
+      ARM: AM33xx: PRM: Implement REBOOT_COLD
 
-Andre Przywara (1):
-      firmware: arm_scmi: Fix double free in SMC transport cleanup path
-
-Andr=C3=A9 Draszik (1):
-      dt-bindings: samsung: exynos-sysreg: gs101-peric0/1 require a clock
-
-Anjelique Melendez (2):
-      dt-bindings: soc: qcom: Add qcom,pbs bindings
-      soc: qcom: add QCOM PBS driver
-
-Arnd Bergmann (16):
-      soc/tegra: Fix build failure on Tegra241
-      Merge tag 'mtk-soc-for-v6.9' of https://git.kernel.org/pub/scm/lin=
-ux/kernel/git/mediatek/linux into soc/drivers
-      Merge tag 'renesas-drivers-for-v6.9-tag1' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/geert/renesas-devel into soc/drivers
-      Merge tag 'samsung-drivers-6.9' of https://git.kernel.org/pub/scm/=
-linux/kernel/git/krzk/linux into soc/drivers
-      Merge tag 'memory-controller-drv-6.9' of https://git.kernel.org/pu=
-b/scm/linux/kernel/git/krzk/linux-mem-ctrl into soc/drivers
-      soc: qcom: spm: fix building with CONFIG_REGULATOR=3Dn
-      Merge tag 'ffa-update-6.9' of git://git.kernel.org/pub/scm/linux/k=
-ernel/git/sudeep.holla/linux into soc/drivers
-      Merge tag 'scmi-updates-6.9' of git://git.kernel.org/pub/scm/linux=
-/kernel/git/sudeep.holla/linux into soc/drivers
-      Merge tag 'tegra-for-6.9-soc' of git://git.kernel.org/pub/scm/linu=
-x/kernel/git/tegra/linux into soc/drivers
-      Merge tag 'tegra-for-6.9-firmware' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/tegra/linux into soc/drivers
-      Merge tag 'sunxi-drivers-for-6.9-1' of https://git.kernel.org/pub/=
-scm/linux/kernel/git/sunxi/linux into soc/drivers
-      Merge tag 'qcom-drivers-for-6.9' of https://git.kernel.org/pub/scm=
-/linux/kernel/git/qcom/linux into soc/drivers
-      Merge tag 'samsung-drivers-6.9-2' of https://git.kernel.org/pub/sc=
-m/linux/kernel/git/krzk/linux into soc/drivers
-      Merge tag 'omap-for-v6.9/ti-sysc-signed' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/tmlind/linux-omap into soc/drivers
-      Merge tag 'memory-controller-drv-6.9-2' of https://git.kernel.org/=
-pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into soc/drivers
-      Merge tag 'qcom-drivers-for-6.9-2' of https://git.kernel.org/pub/s=
-cm/linux/kernel/git/qcom/linux into soc/drivers
-
-Bjorn Andersson (5):
-      soc: qcom: aoss: Mark qmp_send() __printf()
-      soc: qcom: aoss: Add debugfs interface for sending messages
-      soc: qcom: aoss: Add tracepoints in qmp_send()
-      pmdomain: qcom: rpmhpd: Drop SA8540P gfx.lvl
-      Merge branch '20240201204421.16992-2-quic_amelende@quicinc.com' in=
-to drivers-for-6.9
-
-Chen-Yu Tsai (2):
-      soc: mediatek: mtk-socinfo: Clean up NVMEM cell read
-      soc: mediatek: mtk-socinfo: Add extra entry for MT8183
+Arnd Bergmann (8):
+      Merge tag 'samsung-soc-6.9' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into soc/arm
+      Merge tag 'imx-soc-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into soc/arm
+      Merge tag 'omap-for-v6.9/soc-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
+      Merge tag 'zynq-soc-for-6.9' of https://github.com/Xilinx/linux-xlnx into soc/arm
+      Merge tag 'zynqmp-soc-for-6.9' of https://github.com/Xilinx/linux-xlnx into soc/arm
+      Merge tag 'omap-for-v6.9/omap1-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
+      Merge tag 'omap-for-v6.9/soc-part2-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
+      ARM: s32c: update MAINTAINERS entry
 
 Christophe JAILLET (1):
-      soc/tegra: pmc: Remove some old and deprecated functions and const=
-ants
+      ARM: imx: Remove usage of the deprecated ida_simple_xx() API
 
-Christophe Kerello (5):
-      dt-bindings: memory-controller: st,stm32: add MP25 support
-      memory: stm32-fmc2-ebi: check regmap_read return value
-      memory: stm32-fmc2-ebi: add MP25 support
-      memory: stm32-fmc2-ebi: add MP25 RIF support
-      memory: stm32-fmc2-ebi: keep power domain on
+Jay Buddhabhatti (1):
+      soc: xilinx: update maintainer of event manager driver
 
-Cristian Marussi (22):
-      firmware: arm_scmi: Check mailbox/SMT channel for consistency
-      firmware: arm_scmi: Use xa_insert() to store opps
-      firmware: arm_scmi: Use xa_insert() when saving raw queues
-      firmware: arm_scmi: Fix the clock protocol version for v3.2
-      firmware: arm_scmi: Fix the clock protocol supported version
-      firmware: arm_scmi: Rework clock domain info lookups
-      firmware: arm_scmi: Add multiple protocols registration support
-      firmware: arm_scmi: Check for notification support
-      firmware: arm_scmi: Add a common helper to check if a message is s=
-upported
-      firmware: arm_scmi: Implement is_notify_supported callback in perf=
- protocol
-      firmware: arm_scmi: Implement is_notify_supported callback in powe=
-r protocol
-      firmware: arm_scmi: Implement is_notify_supported callback in syst=
-em power protocol
-      firmware: arm_scmi: Implement is_notify_supported callback in cloc=
-k protocol
-      firmware: arm_scmi: Implement is_notify_supported callback in sens=
-or protocol
-      firmware: arm_scmi: Implement is_notify_supported callback in rese=
-t protocol
-      firmware: arm_scmi: Implement is_notify_supported callback in powe=
-rcap protocol
-      firmware: arm_scmi: Use opps_by_lvl to store opps
-      firmware: arm_scmi: Report frequencies in the perf notifications
-      firmware: arm_scmi: Add support for v3.2 NEGOTIATE_PROTOCOL_VERSION
-      firmware: arm_scmi: Add clock check for extended config support
-      firmware: arm_scmi: Add standard clock OEM definitions
-      firmware: arm_scmi: Update the supported clock protocol version
+Masahiro Yamada (1):
+      ARM: omap1: remove duplicated 'select ARCH_OMAP'
 
-Danila Tikhonov (2):
-      dt-bindings: arm: qcom,ids: Add IDs for SM8475 family
-      soc: qcom: socinfo: Add Soc IDs for SM8475 family
+Michal Simek (1):
+      ARM: zynq: Remove clk/zynq.h header
 
-Dmitry Baryshkov (6):
-      soc: qcom: socinfo: rename PM2250 to PM4125
-      dt-bindings: soc: qcom: merge qcom,saw2.txt into qcom,spm.yaml
-      dt-bindings: soc: qcom: qcom,saw2: add missing compatible strings
-      dt-bindings: soc: qcom: qcom,saw2: define optional regulator node
-      soc: qcom: spm: remove driver-internal structures from the driver =
-API
-      soc: qcom: spm: add support for voltage regulator
+Randy Dunlap (15):
+      ARM: s5pv210: fix pm.c kernel-doc warning
+      ARM: zynq: slcr: fix function prototype kernel-doc warnings
+      ARM: OMAP2+: am33xx-restart: fix function name in kernel-doc
+      ARM: OMAP2+: clockdomain: fix kernel-doc warnings
+      ARM: OMAP2+: clock: fix a function name in kernel-doc
+      ARM: OMAP2+: cm33xx: use matching function name in kernel-doc
+      ARM: OMAP2+: CMINST: use matching function name in kernel-doc
+      ARM: OMAP2+: hwmod: remove misuse of kernel-doc
+      ARM: OMAP2+: hwmod: fix kernel-doc warnings
+      ARM: OMAP2+: pmic-cpcap: fix kernel-doc warnings
+      ARM: OMAP2+: prm44xx: fix a kernel-doc warning
+      ARM: OMAP2+: PRM: fix kernel-doc warnings
+      ARM: OMAP2+: fix a kernel-doc warning
+      ARM: OMAP2+: fix kernel-doc warnings
+      ARM: OMAP2+: fix kernel-doc warnings
 
-Duy Nguyen (2):
-      soc: renesas: Identify R-Car V4M
-      soc: renesas: rcar-rst: Add support for R-Car V4M
+Ricardo B. Marliere (1):
+      ARM: s3c64xx: make bus_type const
 
-Florian Fainelli (1):
-      MAINTAINERS: Update SCMI entry with HWMON driver
-
-Geert Uytterhoeven (2):
-      soc: renesas: Introduce ARCH_RCAR_GEN4
-      dt-bindings: memory: renesas,rpc-if: Document R-Car V4M support
-
-Jon Hunter (4):
-      soc/tegra: fuse: Fix crash in tegra_fuse_readl()
-      memory: tegra: Correct DLA client names
-      memory: tegra: Add BPMP and ICC info for DLA clients
-      memory: tegra: Fix indentation
-
-Kartik (9):
-      mm/util: Introduce kmemdup_array()
-      soc/tegra: fuse: Use dev_err_probe for probe failures
-      soc/tegra: fuse: Refactor resource mapping
-      soc/tegra: fuse: Add tegra_acpi_init_apbmisc()
-      soc/tegra: fuse: Add function to add lookups
-      soc/tegra: fuse: Add function to print SKU info
-      soc/tegra: fuse: Add ACPI support for Tegra194 and Tegra234
-      soc/tegra: fuse: Add support for Tegra241
-      soc/tegra: fuse: Define tegra194_soc_attr_group for Tegra241
-
-Krzysztof Kozlowski (4):
-      dt-bindings: memory-controllers: narrow regex for unit address to =
-hex numbers
-      MAINTAINERS: samsung: gs101: match patches touching Google Tensor =
-SoC
-      soc: qcom: geni-se: drop unused kerneldoc struct geni_wrapper param
-      soc: qcom: aoss: add missing kerneldoc for qmp members
-
-Luca Weiss (1):
-      dt-bindings: soc: qcom: qcom,saw2: add msm8226 l2 compatible
-
-Markus Elfring (1):
-      firmware: tegra: bpmp: Return directly after a failed kzalloc() in=
- get_filename()
-
-Peng Fan (1):
-      firmware: arm_scmi: Implement clock get permissions
-
-Peter Griffin (2):
-      soc: samsung: exynos-pmu: Add regmap support for SoCs that protect=
- PMU regs
-      watchdog: s3c2410_wdt: use exynos_get_pmu_regmap_by_phandle() for =
-PMU regs
-
-Peter Robinson (1):
-      bus: tegra-aconnect: Update dependency to ARCH_TEGRA
-
-Petlozu Pravareshwar (2):
-      soc/tegra: pmc: Update address mapping sequence for PMC apertures
-      soc/tegra: pmc: Update scratch as an optional aperture
-
-Prathamesh Shete (1):
-      soc/tegra: pmc: Add SD wake event for Tegra234
-
-Randy Dunlap (2):
-      soc: qcom: smp2p: fix all kernel-doc warnings
-      firmware: arm_scmi: Fix struct kernel-doc warnings in optee transp=
-ort
-
-Ricardo B. Marliere (6):
-      bus: sunxi-rsb: make sunxi_rsb_bus const
-      soc: qcom: apr: make aprbus const
-      firmware: arm_scmi: Make scmi_bus_type const
-      firmware: arm_ffa: Make ffa_bus_type const
-      bus: ti-sysc: constify the struct device_type usage
-      tee: make tee_bus_type const
-
-Rob Herring (1):
-      dt-bindings: soc/qcom: Add size constraints on "qcom,rpm-msg-ram"
-
-Sebastian Reichel (1):
-      dt-bindings: bus: imx-weim: convert to YAML
-
-Sudeep Holla (1):
-      firmware: arm_scmi: Warn if domain frequency multiplier is 0 or ro=
-unded off
-
-Tanzir Hasan (1):
-      firmware: arm_scmi: Replace asm-generic/bug.h with linux/bug.h
-
-Tao Zhang (1):
-      soc: qcom: smem: remove hwspinlock from item get routine
-
-Tengfei Fan (2):
-      dt-bindings: arm: qcom,ids: add SoC ID for QCM8550 and QCS8550
-      soc: qcom: socinfo: add SoC Info support for QCM8550 and QCS8550 p=
-latform
-
-Tomasz Figa (1):
-      MAINTAINERS: Remove Tomasz from Samsung clock and pinctrl entries
-
-Tudor Ambarus (1):
-      dt-bindings: i2c: exynos5: add google,gs101-hsi2c compatible
-
-Unnathi Chalicheemala (1):
-      soc: qcom: llcc: Check return value on Broadcast_OR reg read
-
-Uwe Kleine-K=C3=B6nig (3):
-      memory: emif: Simplify code handling CONFIG_DEBUG_FS
-      memory: emif: Simplify code handling CONFIG_OF
-      memory: emif: Drop usage of platform_driver_probe()
-
-William-tw Lin (1):
-      soc: mediatek: mtk-socinfo: Add driver for getting chip information
-
- .../devicetree/bindings/arm/msm/qcom,saw2.txt      |  58 --
- Documentation/devicetree/bindings/bus/imx-weim.txt | 117 ----
- .../devicetree/bindings/i2c/i2c-exynos5.yaml       |   1 +
- .../fsl/fsl,imx-weim-peripherals.yaml              |  31 +
- .../memory-controllers/fsl/fsl,imx-weim.yaml       | 204 ++++++
- .../memory-controllers/mc-peripheral-props.yaml    |   1 +
- .../memory-controllers/nvidia,tegra20-emc.yaml     |   2 +-
- .../memory-controllers/renesas,rpc-if.yaml         |   1 +
- .../memory-controllers/st,stm32-fmc2-ebi.yaml      |   7 +-
- .../devicetree/bindings/soc/qcom/qcom,pbs.yaml     |  46 ++
- .../bindings/soc/qcom/qcom,pmic-glink.yaml         |   2 +
- .../bindings/soc/qcom/qcom,rpm-master-stats.yaml   |   2 +
- .../soc/qcom/{qcom,spm.yaml =3D> qcom,saw2.yaml}     |  46 +-
- .../soc/samsung/samsung,exynos-sysreg.yaml         |   2 +
- MAINTAINERS                                        |   4 +-
- drivers/bus/Kconfig                                |   5 +-
- drivers/bus/sunxi-rsb.c                            |   4 +-
- drivers/bus/ti-sysc.c                              |   2 +-
- drivers/firmware/arm_ffa/bus.c                     |   2 +-
- drivers/firmware/arm_scmi/bus.c                    |  26 +-
- drivers/firmware/arm_scmi/clock.c                  | 197 +++++-
- drivers/firmware/arm_scmi/common.h                 |   3 +-
- drivers/firmware/arm_scmi/driver.c                 |  99 ++-
- drivers/firmware/arm_scmi/mailbox.c                |  14 +
- drivers/firmware/arm_scmi/notify.c                 |  17 +-
- drivers/firmware/arm_scmi/notify.h                 |   4 +
- drivers/firmware/arm_scmi/optee.c                  |   6 +-
- drivers/firmware/arm_scmi/perf.c                   | 170 ++++-
- drivers/firmware/arm_scmi/power.c                  |  30 +-
- drivers/firmware/arm_scmi/powercap.c               |  45 +-
- drivers/firmware/arm_scmi/protocols.h              |   5 +
- drivers/firmware/arm_scmi/raw_mode.c               |  12 +-
- drivers/firmware/arm_scmi/reset.c                  |  37 +-
- drivers/firmware/arm_scmi/sensors.c                |  37 +-
- drivers/firmware/arm_scmi/shmem.c                  |   8 +-
- drivers/firmware/arm_scmi/smc.c                    |   7 +
- drivers/firmware/arm_scmi/system.c                 |  16 +
- drivers/firmware/tegra/bpmp-debugfs.c              |   2 +-
- drivers/memory/emif.c                              |  65 +-
- drivers/memory/stm32-fmc2-ebi.c                    | 729 ++++++++++++++=
-+++++--
- drivers/memory/tegra/tegra234.c                    |  48 +-
- drivers/pmdomain/qcom/rpmhpd.c                     |   1 -
- drivers/soc/mediatek/Kconfig                       |   9 +
- drivers/soc/mediatek/Makefile                      |   1 +
- drivers/soc/mediatek/mtk-socinfo.c                 | 191 ++++++
- drivers/soc/qcom/Kconfig                           |   9 +
- drivers/soc/qcom/Makefile                          |   2 +
- drivers/soc/qcom/apr.c                             |   2 +-
- drivers/soc/qcom/llcc-qcom.c                       |   2 +
- drivers/soc/qcom/qcom-geni-se.c                    |   1 -
- drivers/soc/qcom/qcom-pbs.c                        | 236 +++++++
- drivers/soc/qcom/qcom_aoss.c                       | 105 ++-
- drivers/soc/qcom/smem.c                            |  11 -
- drivers/soc/qcom/smp2p.c                           |   6 +-
- drivers/soc/qcom/socinfo.c                         |   7 +-
- drivers/soc/qcom/spm.c                             | 248 ++++++-
- drivers/soc/qcom/trace-aoss.h                      |  48 ++
- drivers/soc/renesas/Kconfig                        |  17 +-
- drivers/soc/renesas/rcar-rst.c                     |   1 +
- drivers/soc/renesas/renesas-soc.c                  |   8 +
- drivers/soc/samsung/Kconfig                        |   1 +
- drivers/soc/samsung/exynos-pmu.c                   | 235 ++++++-
- drivers/soc/samsung/exynos-pmu.h                   |   1 +
- drivers/soc/tegra/Kconfig                          |   5 +
- drivers/soc/tegra/fuse/fuse-tegra.c                | 118 +++-
- drivers/soc/tegra/fuse/fuse-tegra30.c              |  23 +-
- drivers/soc/tegra/fuse/fuse.h                      |   8 +-
- drivers/soc/tegra/fuse/tegra-apbmisc.c             | 108 ++-
- drivers/soc/tegra/pmc.c                            |  87 ++-
- .../bindings/fieldbus/arcx,anybus-controller.txt   |   2 +-
- drivers/tee/tee_core.c                             |   2 +-
- drivers/watchdog/Kconfig                           |   1 -
- drivers/watchdog/s3c2410_wdt.c                     |   8 +-
- include/dt-bindings/arm/qcom,ids.h                 |   5 +
- include/linux/arm_ffa.h                            |   2 +-
- include/linux/scmi_protocol.h                      |  21 +-
- include/linux/soc/qcom/apr.h                       |   2 +-
- include/linux/soc/qcom/qcom-pbs.h                  |  30 +
- include/linux/soc/samsung/exynos-pmu.h             |  11 +-
- include/linux/string.h                             |   1 +
- include/linux/tee_drv.h                            |   2 +-
- include/soc/qcom/qcom-spmi-pmic.h                  |   2 +-
- include/soc/qcom/spm.h                             |  23 +-
- include/soc/tegra/fuse.h                           |   1 +
- include/soc/tegra/pmc.h                            |  18 -
- mm/util.c                                          |  17 +
- 86 files changed, 3210 insertions(+), 543 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,saw2.=
-txt
- delete mode 100644 Documentation/devicetree/bindings/bus/imx-weim.txt
- create mode 100644 Documentation/devicetree/bindings/memory-controllers=
-/fsl/fsl,imx-weim-peripherals.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers=
-/fsl/fsl,imx-weim.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pbs.=
-yaml
- rename Documentation/devicetree/bindings/soc/qcom/{qcom,spm.yaml =3D> q=
-com,saw2.yaml} (53%)
- create mode 100644 drivers/soc/mediatek/mtk-socinfo.c
- create mode 100644 drivers/soc/qcom/qcom-pbs.c
- create mode 100644 drivers/soc/qcom/trace-aoss.h
- create mode 100644 include/linux/soc/qcom/qcom-pbs.h
+ MAINTAINERS                                  | 20 ++++++++------------
+ arch/arm/mach-imx/mmdc.c                     |  6 +++---
+ arch/arm/mach-omap1/Kconfig                  |  1 -
+ arch/arm/mach-omap2/am33xx-restart.c         |  5 +++--
+ arch/arm/mach-omap2/board-generic.c          |  6 ++++++
+ arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c |  2 +-
+ arch/arm/mach-omap2/clockdomain.c            |  4 ++--
+ arch/arm/mach-omap2/cm33xx.c                 |  2 +-
+ arch/arm/mach-omap2/cminst44xx.c             |  2 +-
+ arch/arm/mach-omap2/omap-secure.c            |  4 ++--
+ arch/arm/mach-omap2/omap_hwmod.c             |  9 +++++----
+ arch/arm/mach-omap2/omap_hwmod_common_data.c |  6 +++---
+ arch/arm/mach-omap2/pmic-cpcap.c             | 24 ++++++++++++------------
+ arch/arm/mach-omap2/powerdomain.c            |  2 +-
+ arch/arm/mach-omap2/prm-regbits-33xx.h       |  1 +
+ arch/arm/mach-omap2/prm.h                    |  1 +
+ arch/arm/mach-omap2/prm33xx.c                | 22 ++++++++++++++--------
+ arch/arm/mach-omap2/prm44xx.c                |  2 +-
+ arch/arm/mach-omap2/prm_common.c             | 10 +++++++++-
+ arch/arm/mach-omap2/wd_timer.c               |  4 +++-
+ arch/arm/mach-s3c/cpu.h                      |  2 +-
+ arch/arm/mach-s3c/s3c6410.c                  |  2 +-
+ arch/arm/mach-s3c/s3c64xx.c                  |  2 +-
+ arch/arm/mach-s5pv210/pm.c                   |  2 +-
+ arch/arm/mach-zynq/slcr.c                    |  5 ++---
+ 25 files changed, 83 insertions(+), 63 deletions(-)
