@@ -1,54 +1,99 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=zS0J=KS=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99770C54E5D
-	for <soc@archiver.kernel.org>; Tue, 12 Mar 2024 18:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E9FBC54E58
+	for <soc@archiver.kernel.org>; Tue, 12 Mar 2024 20:09:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 64262C433B1; Tue, 12 Mar 2024 18:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 47A45C43399;
-	Tue, 12 Mar 2024 18:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710267609;
-	bh=hwqoQLazlRp03OTGfEBfvs32LIr3/WgkmSbbMuv7IKY=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=rbk3L/e09jpQxtD10E7TbtFiBV1KomN6fCG98d/S3zP+kSH5cyq501n0JETIIJJ5e
-	 GAaeQgkRNnk3eV9O96k29S7A7GS9H56pR5d5p0RXa4IEr123GG+0NU4SR6/XMIFK3k
-	 10m4ykBrbccxB0/2rZOwJ+U3bOjV76OWUni/7VIWDRR5+srGAmhViaODYYb5pzt0G0
-	 M1JaDoD3N+ylXaQ3i71JftHyIVGcxWCx4eOuzZGyOBSt2qyjhCUAy72E4EWXxv8HuK
-	 SMhbKqatzFKnp41HzOk9acfYtUedQMJDMRBAUEq+hwX8WVXD+77xDsUti/LhO7qVFw
-	 pFoeMFV33EVTw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D7C2D95061;
-	Tue, 12 Mar 2024 18:20:09 +0000 (UTC)
-Subject: Re: [GIT PULL 2/4] ARM: SoC drivers for 6.9
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <2bb4979a-508f-4791-82ac-ce31065f6da1@app.fastmail.com>
-References: <89d0bb77-a608-4ae0-b9d9-e17fdf5f12da@app.fastmail.com> <2bb4979a-508f-4791-82ac-ce31065f6da1@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <2bb4979a-508f-4791-82ac-ce31065f6da1@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.9
-X-PR-Tracked-Commit-Id: 049238d24467e3d2121e8ef2abef1149be6722e9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2184dbcde47aefd5358b14463a0d993013f5609e
-Message-Id: <171026760917.25732.10991309858732518614.pr-tracker-bot@kernel.org>
-Date: Tue, 12 Mar 2024 18:20:09 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id 31D32C43390; Tue, 12 Mar 2024 20:09:54 +0000 (UTC)
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id DBCFBC433F1
+	for <soc@kernel.org>; Tue, 12 Mar 2024 20:09:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DBCFBC433F1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id BCD7813800C1;
+	Tue, 12 Mar 2024 16:09:51 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 12 Mar 2024 16:09:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1710274191;
+	 x=1710360591; bh=JvyS36dgrFwt51pid3LyHJNrqlRZGupc/3d306PFVYw=; b=
+	dHCVtnEzG4pegO0MfMNzjCRi7Gb8ULpCe6ooI7gAbCLQbMJAZ7fGMc2ek28w0dmP
+	n609raXrb8heJnWk4iT/tzlRoFXxfSDyGTfNecdRJ4cOKPodwHXXa5EXHcM7mZoA
+	OaktmtkpzoAy67Ee6E+Cmle8/13SXtYjs8zNLaEbaS6A9HcabtMAwssPhzQN6MAc
+	aFMiDsDmGywUrAZkaUu9mQ1uYPNtROyymnjQldWoYs9wIPfljb4lYHNZ6ZBY09mQ
+	LcbVxQDgNHYX2r5vuHnZPEe+ZwyQoP7uV3r6xAbvW+VFBU5K8i82o4gnJs4VstUG
+	MDhHRJkKs0sOYvBoxqhZKA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1710274191; x=
+	1710360591; bh=JvyS36dgrFwt51pid3LyHJNrqlRZGupc/3d306PFVYw=; b=R
+	/wuoD4NRetU+n7kx4NajRyAzx+191uaUZghXmzrKd7t3xAIGfhj/DcernUy7YEPS
+	xvJA62+B5ToznvtC8mzcDNqnhxC6x0YKW91UqfGfVs5A3rXy1qKbnMz7/pNhVifH
+	+KVpToUBRVi84129Yafenes+495lgqiiIFUrN3dJjcgPkhJC1u2qYa4iQeVkhY+n
+	i71DigL8p4pvLftmvW3MvdyD9jCKH4T7gcatrUOqh6Dk/1K8lcLvQZdkJ/j9tgL3
+	y2XGyu4eTnjA8ryNMPtFsyKcX1SSHUrKUXuZP0PWS/qa+9nnLdyGe6g6s0O50696
+	VfEzIA8oys/U2R10EVjYA==
+X-ME-Sender: <xms:j7bwZcgtfn-7IxAtEdEzh5TfphxHlIwNErs5oj-ERFMdFOocvO5Vkw>
+    <xme:j7bwZVBKMZJ4cLMbZkgxTsl37eSVA2BX43S6qL-ZIGRp74TdtCD2fV1ucOpFv7n00
+    QKdfvtjBXPaoI6q5VQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeefgddufeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:j7bwZUHc4GAL7cdXFWfa3HDR4jcAXF18vP2KJTGkUf4OrFILK8VKRg>
+    <xmx:j7bwZdSZb_ReaSfIeue_lUm_ovX880s6fqih3eMRzi19YaqTi9Jeww>
+    <xmx:j7bwZZy7bDvXIZsNEp7vP_zzvEvtG19nfyGmHGmQMYTc14tGD1y7Gg>
+    <xmx:j7bwZb6lkLqu4u4meMaWe14f49YydZt8j9vxRge4AWE1YHr0f51_ig>
+    <xmx:j7bwZQmVcsUKntRHdo40akcfT-WmqV_VDyB5cKK1WC9qhHvSHrFUNg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 70AB8B6008D; Tue, 12 Mar 2024 16:09:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
+MIME-Version: 1.0
+Message-Id: <cedfda68-d9fe-4051-bb23-ecf6ddab853b@app.fastmail.com>
+In-Reply-To: 
+ <4c9621d72bf6a7dc427e174edde6c1b0ae7a0469.1706083174.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1706083174.git.u.kleine-koenig@pengutronix.de>
+ <4c9621d72bf6a7dc427e174edde6c1b0ae7a0469.1706083174.git.u.kleine-koenig@pengutronix.de>
+Date: Tue, 12 Mar 2024 21:09:28 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ soc@kernel.org
+Cc: linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+ "Sebastien Bourdelin" <sebastien.bourdelin@gmail.com>
+Subject: Re: [PATCH v3 1/2] bus: ts-nbus: Convert to atomic pwm API
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Tue, 12 Mar 2024 17:45:29 +0100:
+On Wed, Jan 24, 2024, at 09:12, Uwe Kleine-K=C3=B6nig wrote:
+> With this change the PWM hardware is only configured once (instead of
+> three times).
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.9
+I'm not sure what happened here, but I just noticed that I missed
+these in my pull requests. I still have a soc/late branch that
+I was planning to send out in a couple of days, so I ended up
+merging it into that now.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2184dbcde47aefd5358b14463a0d993013f5609e
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+     Arnd
