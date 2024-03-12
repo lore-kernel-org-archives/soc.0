@@ -4,171 +4,185 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A491C54E5D
-	for <soc@archiver.kernel.org>; Tue, 12 Mar 2024 16:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD74C54E58
+	for <soc@archiver.kernel.org>; Tue, 12 Mar 2024 16:47:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EC71AC43390; Tue, 12 Mar 2024 16:47:03 +0000 (UTC)
-Received: from wfout4-smtp.messagingengine.com (wfout4-smtp.messagingengine.com [64.147.123.147])
+	id 62DCFC433C7; Tue, 12 Mar 2024 16:47:46 +0000 (UTC)
+Received: from wfhigh4-smtp.messagingengine.com (wfhigh4-smtp.messagingengine.com [64.147.123.155])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C455DC433F1
-	for <soc@kernel.org>; Tue, 12 Mar 2024 16:47:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C455DC433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 4DCE3C433F1
+	for <soc@kernel.org>; Tue, 12 Mar 2024 16:47:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4DCE3C433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id AE5251C00076;
-	Tue, 12 Mar 2024 12:47:01 -0400 (EDT)
+	by mailfhigh.west.internal (Postfix) with ESMTP id 34EFD180009B;
+	Tue, 12 Mar 2024 12:47:44 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 12 Mar 2024 12:47:02 -0400
+  by compute5.internal (MEProxy); Tue, 12 Mar 2024 12:47:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1710262021; x=1710348421; bh=MwpOu/tg2M
-	IdvMwhIU2xxdVqRvxdJJhDNXci8dpj6ic=; b=LpGcltHme0xzcZMpEYg74GLl6T
-	lZ7d4wDim82W7CYwpGUsFTANcaPLlidmWy7PdCgzGiSu3alk2o/GEE8JTS48XXc0
-	VhmPAk4UpQb26y+CEQ0nPvb3uLrBm6TQLbpeit2njP+1OYBGatjTUPwiSgbsgRQ1
-	FZz3TammLdBSm75ZP5v0NGzfUuRBIg+jW09cKw+TCms2co3vrOnRBod1HHAOSBui
-	D5KNUrMt9mGZzhXL7N00w0WMvvEqJXVK9ouQzaJ7DAUyVUdNxmVujW8h5B0eZnaN
-	DDsd2NIUdTzdGIr24TEiBSgYn0fUidNyMzKPj49xekq3fWbe7ANzkJkWl0zQ==
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1710262063;
+	 x=1710348463; bh=+pSPTrckktAgZrC61fswcgNJEn0V4pdObZ0UIRDjo6s=; b=
+	jSejd4Y1Og0w0qD4sb0BYJ45LKO+XdP7+lcsKdX3gyyAbdUy0oXoJnoB37bX59ah
+	2ebaMczeuJhhZWcDV4y2cYou0+gG6yyJ6NnZNRm46k1iAIGH9S0Q3+KZQq9trAng
+	7OlRUyxSaSCK+SxHmd71vOF1tL0XIAD9nrTJeA8atwBcyQxeco9JT6ii2+4ilthk
+	fpJJKMZH8Kim6RqXx4IH4dXuAnu9NzTF34+IFNvEdy6KJQX0Dbg0G0j/BCXAI1l7
+	QJmd4KMu0gOsMhRwPeEWEADMpDv/5B8D1ue5aD0DQ+ouUcw7tBkScTCp+LgVO6qV
+	qZX3Oj3o28xHYLED3ZGnQA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1710262021; x=1710348421; bh=MwpOu/tg2MIdvMwhIU2xxdVqRvxd
-	JJhDNXci8dpj6ic=; b=EyP2JmfxOP+Sa6QnCLClT0TAR11NnSYb9chR+SSqhupW
-	TkQExX4SYgJvIAvWUv0iIRo3ngtJLsnbSUjzGxQpruwon9l3wwR3VzDX1l4P4kI5
-	LjDo07AxJCtihMIQ/8Of8IaOZYlqKhclwMkC3gc/qM8VgOg4bnAqOxgTUQMM1lPX
-	QTGxOP4p4jykAnHffRiPR5VYeB9Xtb1Iza+QljWxp5AAm+iifrk71TKbCyk1igFW
-	iYGjfzIJb3v0zpYIIb4pWJv9kKzyXZ6C54jgXkKGujFX2Qik4AOTOORsJRT1WIAo
-	cjLSNE+EFJz34F48DFUFnts9slabtfGavdBnUNpLTw==
-X-ME-Sender: <xms:BYfwZdib365nQoG2OKiT1o5OHXIYbs8NhbFSKY22SFyLOaoyS-P1rQ>
-    <xme:BYfwZSCHT56aZByGKeEIvr8VLrU3ueZrH_mCKLS8sslCh6SLM8gwcqiKLi_6xRQ1K
-    ZkHmS8uiIbNkcYSF0w>
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1710262063; x=
+	1710348463; bh=+pSPTrckktAgZrC61fswcgNJEn0V4pdObZ0UIRDjo6s=; b=e
+	+sd3K0K9jQh2zbY22ovJ1D/memZ1tm4l0M0bElM1FMHbHlYmsghVbZXO/tghhIU4
+	+ar88urCPM8dY+mMsBsWxEly+mJEcELusW26yj791fD2nopPbVEW6ddYztweYlTu
+	lK9AmslOQuNSgc8jkXu1zZQjkRSGCLfS3c0r/83+oDZ3vh63zaXZKr8ImoWoWnuB
+	JVX1R/pv9f/TaH1TfjYX15Hcsn5ziao0f2aJ5EYT9UyczL06ustIiQGimBUPoPUv
+	qY+aBCIsFdHhVpd/PJJqXweXwqeHmWQWuA1H0k6iZVr6Rl2gL0Y2UopkfMiRn/YX
+	fkgBkrOyNk2k/0XMiIfBg==
+X-ME-Sender: <xms:L4fwZfgIbRcUYZhhNYmQZjQCAYhQNeNjSJJmo1sIPz_l191pqP3x3A>
+    <xme:L4fwZcC9EYyqGCFkPLco3beCoT9ex1uVMJA5jta0ldbURmtpUBKNmFZDfDvb5atzE
+    oHU8YWWQLlhObvYsFc>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeefgdelvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeeigeeuvdekheevudeiteegudfgjeehuefghfettddvteeuteekhfehudfhtefg
-    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
-    nhgusgdruggv
-X-ME-Proxy: <xmx:BYfwZdGgIyTdSgYKPHCa7ayYGRFc9QV_E7E7jkd4Kndke6TFhwovnw>
-    <xmx:BYfwZSSrNikP_FKKoJrX4xjCPayBV-gToelz1CN-Lu6M7aehqCtiGw>
-    <xmx:BYfwZaz6fOPJ2mteoIPZ_x-ZFWtdKvxTGhYGF0WFDfBDliTa0V1Gjg>
-    <xmx:BYfwZY7f4-Q62Dk2bPOWThf2WnRw6Bzz6TxomTt1_VEFoz23bsT7DA>
-    <xmx:BYfwZUsHNpuxJ0f_xDwTTcU_BtyUc2BRfEV73V3NmnJA2ArmQsQG1ZySPIM>
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
+    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:L4fwZfGiaPh_HGM65dQQO3eKdd1BBp-0HH6-n4n3pLBfETL8ngTtOQ>
+    <xmx:L4fwZcRSAUCv3VnO5_-W8Xi-qffQHuPzP8cSsK8k1V2OkbDfAVj3mw>
+    <xmx:L4fwZcwZ4PHlCEIrPDIiIdeJU9xO3GnEcE2_PyGp1scJ886LHFI-PQ>
+    <xmx:L4fwZS7gjoTVPrmacTNtGfLTjKF_FM7WDL_qSG7HqPoEt8DOrj7hEA>
+    <xmx:L4fwZWtvJcXqMUOfNjR4-dss2AybCy3FidVLDazqpfMjmwDHkoDQQERvfmY>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 030AEB6008D; Tue, 12 Mar 2024 12:47:00 -0400 (EDT)
+	id 7F847B60089; Tue, 12 Mar 2024 12:47:43 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
 MIME-Version: 1.0
-Message-Id: <1ba0456e-879b-4435-808d-54dd91b9506c@app.fastmail.com>
+Message-Id: <a901bb0c-bf09-470b-98e1-10ae1cacf0db@app.fastmail.com>
 In-Reply-To: <89d0bb77-a608-4ae0-b9d9-e17fdf5f12da@app.fastmail.com>
 References: <89d0bb77-a608-4ae0-b9d9-e17fdf5f12da@app.fastmail.com>
-Date: Tue, 12 Mar 2024 17:46:31 +0100
+Date: Tue, 12 Mar 2024 17:47:22 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: [GIT PULL 3/4] ARM: SoC code updates for 6.9
-Content-Type: text/plain
+Subject: [GIT PULL 4/4] ARM defconfig updates for 6.9
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd=
+33d:
 
-  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.9
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-d=
+efconfig-6.9
 
-for you to fetch changes up to 98dcb872779f8bea30cd34716c7fdeb0963e3606:
+for you to fetch changes up to d8999d151e4110effc760397f500dda25d7a60b1:
 
-  ARM: s32c: update MAINTAINERS entry (2024-03-05 17:23:09 +0100)
-
-----------------------------------------------------------------
-ARM: SoC code updates for 6.9
-
-These are mostly minor updates, including a number of kerneldoc
-fixes from Randy Dunlap across multiple platforms. OMAP gets
-a few bugfixes, and the MAINTAINERS file gets updated for AMD
-Zynq and NXP S32G.
+  arm64: defconfig: Enable support for cbmem entries in the coreboot tab=
+le (2024-03-04 21:18:53 +0100)
 
 ----------------------------------------------------------------
-Alexander Sverdlin (2):
-      ARM: AM33xx: PRM: Remove redundand defines
-      ARM: AM33xx: PRM: Implement REBOOT_COLD
+ARM defconfig updates for 6.9
 
-Arnd Bergmann (8):
-      Merge tag 'samsung-soc-6.9' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into soc/arm
-      Merge tag 'imx-soc-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into soc/arm
-      Merge tag 'omap-for-v6.9/soc-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
-      Merge tag 'zynq-soc-for-6.9' of https://github.com/Xilinx/linux-xlnx into soc/arm
-      Merge tag 'zynqmp-soc-for-6.9' of https://github.com/Xilinx/linux-xlnx into soc/arm
-      Merge tag 'omap-for-v6.9/omap1-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
-      Merge tag 'omap-for-v6.9/soc-part2-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into soc/arm
-      ARM: s32c: update MAINTAINERS entry
+This has the usual updates to enable platform specific driver modules
+as new hardware gets supported, as well as an update to the virt.config
+fragment so we disable all newly added platforms again.
 
-Christophe JAILLET (1):
-      ARM: imx: Remove usage of the deprecated ida_simple_xx() API
+----------------------------------------------------------------
+Abel Vesa (1):
+      arm64: defconfig: Enable X1E80100 multimedia clock controllers con=
+figs
 
-Jay Buddhabhatti (1):
-      soc: xilinx: update maintainer of event manager driver
+Alexander Stein (1):
+      arm64: defconfig: Enable i.MX8QXP device drivers
 
-Masahiro Yamada (1):
-      ARM: omap1: remove duplicated 'select ARCH_OMAP'
+Andrew Davis (2):
+      ARM: multi_v7_defconfig: Add more TI Keystone support
+      ARM: multi_v7_defconfig: Add more TI Keystone support
 
-Michal Simek (1):
-      ARM: zynq: Remove clk/zynq.h header
+Arnd Bergmann (6):
+      arm64: config: disable new platforms in virt.config
+      Merge tag 'renesas-arm-defconfig-for-v6.9-tag1' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/defconfig
+      Merge tag 'qcom-arm64-defconfig-for-6.9' of https://git.kernel.org=
+/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
+      Merge tag 'imx-defconfig-6.9' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/shawnguo/linux into soc/defconfig
+      Merge tag 'ti-k3-config-for-v6.9' of https://git.kernel.org/pub/sc=
+m/linux/kernel/git/ti/linux into soc/defconfig
+      Merge tag 'v6.9-rockchip-config64-1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/mmind/linux-rockchip into soc/defconfig
 
-Randy Dunlap (15):
-      ARM: s5pv210: fix pm.c kernel-doc warning
-      ARM: zynq: slcr: fix function prototype kernel-doc warnings
-      ARM: OMAP2+: am33xx-restart: fix function name in kernel-doc
-      ARM: OMAP2+: clockdomain: fix kernel-doc warnings
-      ARM: OMAP2+: clock: fix a function name in kernel-doc
-      ARM: OMAP2+: cm33xx: use matching function name in kernel-doc
-      ARM: OMAP2+: CMINST: use matching function name in kernel-doc
-      ARM: OMAP2+: hwmod: remove misuse of kernel-doc
-      ARM: OMAP2+: hwmod: fix kernel-doc warnings
-      ARM: OMAP2+: pmic-cpcap: fix kernel-doc warnings
-      ARM: OMAP2+: prm44xx: fix a kernel-doc warning
-      ARM: OMAP2+: PRM: fix kernel-doc warnings
-      ARM: OMAP2+: fix a kernel-doc warning
-      ARM: OMAP2+: fix kernel-doc warnings
-      ARM: OMAP2+: fix kernel-doc warnings
+Bjorn Andersson (2):
+      arm64: defconfig: Enable MAX20411 regulator driver
+      arm64: defconfig: Enable Qualcomm interconnect providers
 
-Ricardo B. Marliere (1):
-      ARM: s3c64xx: make bus_type const
+Brandon Brnich (1):
+      arm64: defconfig: Enable Wave5 Video Encoder/Decoder
 
- MAINTAINERS                                  | 20 ++++++++------------
- arch/arm/mach-imx/mmdc.c                     |  6 +++---
- arch/arm/mach-omap1/Kconfig                  |  1 -
- arch/arm/mach-omap2/am33xx-restart.c         |  5 +++--
- arch/arm/mach-omap2/board-generic.c          |  6 ++++++
- arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c |  2 +-
- arch/arm/mach-omap2/clockdomain.c            |  4 ++--
- arch/arm/mach-omap2/cm33xx.c                 |  2 +-
- arch/arm/mach-omap2/cminst44xx.c             |  2 +-
- arch/arm/mach-omap2/omap-secure.c            |  4 ++--
- arch/arm/mach-omap2/omap_hwmod.c             |  9 +++++----
- arch/arm/mach-omap2/omap_hwmod_common_data.c |  6 +++---
- arch/arm/mach-omap2/pmic-cpcap.c             | 24 ++++++++++++------------
- arch/arm/mach-omap2/powerdomain.c            |  2 +-
- arch/arm/mach-omap2/prm-regbits-33xx.h       |  1 +
- arch/arm/mach-omap2/prm.h                    |  1 +
- arch/arm/mach-omap2/prm33xx.c                | 22 ++++++++++++++--------
- arch/arm/mach-omap2/prm44xx.c                |  2 +-
- arch/arm/mach-omap2/prm_common.c             | 10 +++++++++-
- arch/arm/mach-omap2/wd_timer.c               |  4 +++-
- arch/arm/mach-s3c/cpu.h                      |  2 +-
- arch/arm/mach-s3c/s3c6410.c                  |  2 +-
- arch/arm/mach-s3c/s3c64xx.c                  |  2 +-
- arch/arm/mach-s5pv210/pm.c                   |  2 +-
- arch/arm/mach-zynq/slcr.c                    |  5 ++---
- 25 files changed, 83 insertions(+), 63 deletions(-)
+Cristian Ciocaltea (1):
+      arm64: defconfig: Enable Rockchip HDMI/eDP Combo PHY
+
+Geert Uytterhoeven (2):
+      ARM: shmobile: defconfig: Disable staging
+      ARM: multi_v7_defconfig: Disable board staging
+
+Komal Bajaj (1):
+      arm64: defconfig: Enable GCC and interconnect for QDU1000/QRU1000
+
+Krzysztof Kozlowski (1):
+      arm64: defconfig: drop ext2 filesystem and redundant ext3
+
+Linh Phung (1):
+      arm64: defconfig: Enable R8A779H0 SoC
+
+Luca Weiss (1):
+      arm64: defconfig: Enable QCOM PBS
+
+Marek Szyprowski (1):
+      ARM: multi_v7_defconfig: Enable BACKLIGHT_CLASS_DEVICE
+
+Martin J=C3=BCcker (1):
+      ARM: defconfig: enable STMicroelectronics accelerometer and gyro f=
+or Exynos
+
+Martin Kaiser (2):
+      ARM: imx_v6_v7_defconfig: enable the vf610 gpio driver
+      arm64: defconfig: enable the vf610 gpio driver
+
+Neil Armstrong (3):
+      arm64: defconfig: enable audio drivers for SM8650 QRD board
+      arm64: defconfig: enable WCD939x USBSS driver as module
+      arm64: deconfig: enable Goodix Berlin SPI touchscreen driver as mo=
+dule
+
+N=C3=ADcolas F. R. A. Prado (1):
+      arm64: defconfig: Enable support for cbmem entries in the coreboot=
+ table
+
+Yannic Moog (1):
+      arm64: defconfig: enable i.MX8MP ldb bridge
+
+ arch/arm/configs/exynos_defconfig    |  3 +++
+ arch/arm/configs/imx_v6_v7_defconfig |  1 +
+ arch/arm/configs/multi_v7_defconfig  | 21 ++++++++++++++++++++-
+ arch/arm/configs/shmobile_defconfig  |  2 --
+ arch/arm64/configs/defconfig         | 34 +++++++++++++++++++++++++++++=
++----
+ arch/arm64/configs/virt.config       |  4 ++++
+ 6 files changed, 58 insertions(+), 7 deletions(-)
