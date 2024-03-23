@@ -4,130 +4,167 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2AF5C6FD1F
-	for <soc@archiver.kernel.org>; Sat, 23 Mar 2024 16:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7682AC54E58
+	for <soc@archiver.kernel.org>; Sat, 23 Mar 2024 16:44:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AF0E4C433C7; Sat, 23 Mar 2024 16:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F63C433F1;
-	Sat, 23 Mar 2024 16:44:02 +0000 (UTC)
+	id 5B9A4C433C7; Sat, 23 Mar 2024 16:44:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0549CC433B1;
+	Sat, 23 Mar 2024 16:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711212246;
-	bh=6kri9cAqdeLQSwynoX/Mgs7Zl64zCLiK2ixhjODz/Ms=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=BSpS9Eg/l+jRAko4Tz+ZMN4JCRwHeQdIYDpwIFJvgc226TRfGH4lO7KFm0HfyEk4N
-	 QHc+jaFbJbeJiqblewqW6zH8z311yjUlRYbc8QwrovBl8/iHMp/qfBAYHeRk7oLhdP
-	 5IiBfQzDjXjsCXYQrG9kf7QF/htVTR19FxpQSkB9Zsw3c0mmpSEwLMczirzljbgrWx
-	 sPhY3/3j56aA886Q3ykqgJ3Hga9PU8kyd1Q+FxjDo58YxSUGjuV+z8109u6Ddplcyi
-	 ks2EQegxrXkJvon8ZBFpuoQRquk4cyc/ytK6z0WZ+MvxZ8zzfZeB1se0xXW/QShgFv
-	 f7tmL5+5HfinQ==
+	s=k20201202; t=1711212248;
+	bh=W76kJSCvy7y4KTL7rzLN2h2F2967tAyVM/LSlB/3CGk=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=G5xH391WZeBvBB17A5ubfbNSYlEQ/FTdYVECW/XDEZAlSsxoG8TFfIMduCz73AE/D
+	 eiWG/+fCUAB2C8MIFrCibPb0iO5EGvma8m2U7xvn/SGHjQU/RgNcFYWDgyGtW24Dl4
+	 jyHVFZs5AZvkg1lA4NXbXbJXlUgoel2SOJrqPar7NiqX9bRxDNsSVy+drP1HHZMFHH
+	 9zBZUEEVudEN9/mSfduG72KH2AjX0qOy2tyT47Ri1yHnu3ILVttON3eR0OdTGS5og1
+	 cU0W8shYhCsEUqZlsPf22EVZmM+ZvFk9gYPuy0luZXc7bYFla6Sb1WlZ3XQEIr+Sec
+	 iOC0My66ryTyQ==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Gregory CLEMENT <gregory.clement@bootlin.com>,
 	soc@kernel.org,
-	arm@kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	devicetree@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-crypto@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v5 00/11] Turris Omnia MCU driver
-Date: Sat, 23 Mar 2024 17:43:48 +0100
-Message-ID: <20240323164359.21642-1-kabel@kernel.org>
+	arm@kernel.org
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 01/11] dt-bindings: arm: add cznic,turris-omnia-mcu binding
+Date: Sat, 23 Mar 2024 17:43:49 +0100
+Message-ID: <20240323164359.21642-2-kabel@kernel.org>
 X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240323164359.21642-1-kabel@kernel.org>
+References: <20240323164359.21642-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello Andy, Linus, Arnd, Gregory, and others,
+Add binding for cznic,turris-omnia-mcu, the device-tree node
+representing the system-controller features provided by the MCU on the
+Turris Omnia router.
 
-I am sending v5 of the series adding Turris Omnia MCU driver.
-See the cover letters for v1, v2, v3 and v4:
-  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
-  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
-  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
-  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes from v4:
+- #gpio-cells changed from 2 (pin number, flags) to 3 (bank, pin number,
+  flags). This is because two years ago we added device-tree fixing code
+  into U-Boot [1] which adds reset-gpios to PCIe controller nodes if
+  these GPIOs are controllable via MCU, and the code adds the gpio
+  specifiers to have 3 cells. Implementing this driver with twocell
+  specifier breaks PCIe functionality for users which have upgraded U-Boot
+- added documentation for #interrupt-cells and #gpio-cells
 
-Changes since v4:
-- added new patches
-    06/11 devm-helpers: Add resource managed version of irq_create_mapping()
-    07/11 platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
-    08/11 devm-helpers: Add resource managed version of debugfs directory create
-          function
-    09/11 platform: cznic: turris-omnia-mcu: Add support for digital message
-          signing via debugfs
-- for changes specific to patches which were also sent in previous versions see
-  the notes in those patches
-
-Marek Behún (11):
-  dt-bindings: arm: add cznic,turris-omnia-mcu binding
-  platform: cznic: Add preliminary support for Turris Omnia MCU
-  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
-  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
-  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
-  devm-helpers: Add resource managed version of irq_create_mapping()
-  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
-  devm-helpers: Add resource managed version of debugfs directory create
-    function
-  platform: cznic: turris-omnia-mcu: Add support for digital message
-    signing via debugfs
-  ARM: dts: turris-omnia: Add MCU system-controller node
-  ARM: dts: turris-omnia: Add GPIO key node for front button
-
- .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
- .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
- .../bindings/arm/cznic,turris-omnia-mcu.yaml  |   86 ++
- MAINTAINERS                                   |    5 +
- .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
- drivers/crypto/caam/ctrl.c                    |   16 +-
- drivers/crypto/caam/jr.c                      |    8 +-
- drivers/gpio/gpio-mockup.c                    |   11 +-
- drivers/gpu/drm/bridge/ti-sn65dsi86.c         |   13 +-
- drivers/hwmon/hp-wmi-sensors.c                |   15 +-
- drivers/hwmon/mr75203.c                       |   15 +-
- drivers/hwmon/pmbus/pmbus_core.c              |   16 +-
- drivers/platform/Kconfig                      |    2 +
- drivers/platform/Makefile                     |    1 +
- drivers/platform/cznic/Kconfig                |   51 +
- drivers/platform/cznic/Makefile               |   10 +
- .../platform/cznic/turris-omnia-mcu-base.c    |  406 +++++++
- .../platform/cznic/turris-omnia-mcu-debugfs.c |  216 ++++
- .../platform/cznic/turris-omnia-mcu-gpio.c    | 1056 +++++++++++++++++
- .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
- .../platform/cznic/turris-omnia-mcu-trng.c    |   89 ++
- .../cznic/turris-omnia-mcu-watchdog.c         |  122 ++
- drivers/platform/cznic/turris-omnia-mcu.h     |  214 ++++
- include/linux/devm-helpers.h                  |   94 ++
- include/linux/turris-omnia-mcu-interface.h    |  238 ++++
- 25 files changed, 3044 insertions(+), 72 deletions(-)
- create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
- create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+[1] https://source.denx.de/u-boot/u-boot/-/commit/1da53ae26afc
+---
+ .../bindings/arm/cznic,turris-omnia-mcu.yaml  | 86 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 87 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
- create mode 100644 drivers/platform/cznic/Kconfig
- create mode 100644 drivers/platform/cznic/Makefile
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
- create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
+diff --git a/Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml b/Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+new file mode 100644
+index 000000000000..dd9ee21ee24d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/cznic,turris-omnia-mcu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: CZ.NIC's Turris Omnia MCU
++
++maintainers:
++  - Marek Behún <kabel@kernel.org>
++
++description:
++  The MCU on Turris Omnia acts as a system controller providing additional
++  GPIOs, interrupts, watchdog, system power off and wakeup configuration.
++
++properties:
++  compatible:
++    const: cznic,turris-omnia-mcu
++
++  reg:
++    description: MCU I2C slave address
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++    description: |
++      The first cell specifies the interrupt number (0 to 63), the second cell
++      specifies interrupt type (which can be one of IRQ_TYPE_EDGE_RISING,
++      IRQ_TYPE_EDGE_FALLING or IRQ_TYPE_EDGE_BOTH).
++      The interrupt numbers correspond sequentially to GPIO numbers, taking the
++      GPIO banks into account:
++        IRQ number   GPIO bank   GPIO pin within bank
++           0 - 15      0           0 - 15
++          16 - 47      1           0 - 31
++          48 - 63      2           0 - 15
++      There are several exceptions:
++        IRQ number   meaning
++          11           LED panel brightness changed by button press
++          13           TRNG entropy ready
++          14           ECDSA message signature computation done
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 3
++    description:
++      The first cell is bank number (0, 1 or 2), the second cell is pin number
++      within the bank (0 to 15 for banks 0 and 2, 0 to 31 for bank 1), and the
++      third cell specifies consumer flags.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++  - gpio-controller
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        system-controller@2a {
++            compatible = "cznic,turris-omnia-mcu";
++            reg = <0x2a>;
++
++            interrupt-parent = <&gpio1>;
++            interrupts = <11 IRQ_TYPE_NONE>;
++
++            gpio-controller;
++            #gpio-cells = <3>;
++
++            interrupt-controller;
++            #interrupt-cells = <2>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index aa3b947fb080..89edfc2b875b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2141,6 +2141,7 @@ W:	https://www.turris.cz/
+ F:	Documentation/ABI/testing/debugfs-moxtet
+ F:	Documentation/ABI/testing/sysfs-bus-moxtet-devices
+ F:	Documentation/ABI/testing/sysfs-firmware-turris-mox-rwtm
++F:	Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+ F:	Documentation/devicetree/bindings/bus/moxtet.txt
+ F:	Documentation/devicetree/bindings/firmware/cznic,turris-mox-rwtm.txt
+ F:	Documentation/devicetree/bindings/gpio/gpio-moxtet.txt
 -- 
 2.43.2
 
