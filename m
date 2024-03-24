@@ -1,28 +1,45 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=rLL5=K6=wanadoo.fr=christophe.jaillet@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8B12C54E67
-	for <soc@archiver.kernel.org>; Sat, 23 Mar 2024 21:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86F5ACD11BF
+	for <soc@archiver.kernel.org>; Sun, 24 Mar 2024 09:21:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7431BC433A6; Sat, 23 Mar 2024 21:25:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F0B2C433C7;
-	Sat, 23 Mar 2024 21:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711229151;
-	bh=ewbb3fGZ24mY6UOj2n/ZI82QsQGXdDkN3r2W4fSmfmE=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=EqkcFqFpjaM+8tvpkykPmyU63xmAqu09XJoCsUBspu2o1DJkRmb+mcnzXQYMo/4Uo
-	 HJQbZZ+FHKExsRbaxOONgsRwx2VBBY0QRvJW/qQGUlTdWp+HS7rNR+xEpGE27ROtII
-	 9o+30gQOB4yvhejgGb+CBPkUzMyPFItiWZqumLu4SHe7FgYUsyppFN0C/G3YFROsn0
-	 LErzo/LwQ4p6t5cnX8Wdh7PmOofz2y2fiE90tXL+2BxvNxql6wQTCr8lSTDq7RIh9z
-	 C5u7ZFA9dJc38ohrd1EAA+3HUPT6NsBhHCB0yA/3sBzv5aGfEBroWu6UcbJX0SkpZt
-	 4kBo6WiR9ZA+w==
-Date: Sat, 23 Mar 2024 22:25:06 +0100
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+	id 24665C43330; Sun, 24 Mar 2024 09:21:52 +0000 (UTC)
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 104D9C433C7;
+	Sun, 24 Mar 2024 09:21:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 104D9C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.18] ([86.243.17.157])
+	by smtp.orange.fr with ESMTPA
+	id oK2irMGMsawLVoK2jrwkZQ; Sun, 24 Mar 2024 10:21:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1711272099;
+	bh=URa/scX9JJ6Z40dL8WhIkmALLQ5X37NM9gkybLRw27I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=dyxV2PmfdDK4SdMqDlTsqv99dIOXj8UvQ5ME5HH4EtxbgGSf4TnhnkCGwm4s4G5QI
+	 tvGWZ//51EwFtkGLbv4M4Ue9oEAXee1J7uAg46dOYYP8hXPnYViBgLx/RWoxKp7RWz
+	 8LmeYJio7eISxEVIBB9onYHxN7t3orzI8cXYOclXyY4tQeVSH/7zTv+k18w+BziPFG
+	 pYK8qLUlBndwVIScyE+yX3yFtc7h0eGM7bhZBZchjrveNwHQ5Zamq5YkTumszsnINk
+	 kkjHjc9+pcfIq4OG2Ei6Fsl2EytJV36zDiA9RFlGhioo0yef7vG+RnvUseBasPXaSj
+	 bcgE0WjFPp23Q==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 24 Mar 2024 10:21:39 +0100
+X-ME-IP: 86.243.17.157
+Message-ID: <69264f8a-a113-4d49-b8a6-fb9e858584e4@wanadoo.fr>
+Date: Sun, 24 Mar 2024 10:21:28 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 08/11] devm-helpers: Add resource managed version of
+ debugfs directory create function
+To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Jonathan.Cameron@huawei.com, Laurent.pinchart@ideasonboard.com,
  airlied@gmail.com, andrzej.hajda@intel.com, arm@kernel.org, arnd@arndb.de,
@@ -39,55 +56,55 @@ Cc: Jonathan.Cameron@huawei.com, Laurent.pinchart@ideasonboard.com,
  neil.armstrong@linaro.org, pankaj.gupta@nxp.com,
  patrick.rudolph@9elements.com, rfoss@kernel.org, soc@kernel.org,
  tzimmermann@suse.de
-Subject: Re: [PATCH v5 08/11] devm-helpers: Add resource managed version of
- debugfs directory create function
-Message-ID: <20240323222506.4ffbdd71@thinkpad>
-In-Reply-To: <f7c64a5a-2abc-4b7e-95db-7ca57b5427c0@wanadoo.fr>
 References: <20240323164359.21642-1-kabel@kernel.org>
-	<20240323164359.21642-9-kabel__6885.49310886941$1711212291$gmane$org@kernel.org>
-	<f7c64a5a-2abc-4b7e-95db-7ca57b5427c0@wanadoo.fr>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+ <20240323164359.21642-9-kabel__6885.49310886941$1711212291$gmane$org@kernel.org>
+ <f7c64a5a-2abc-4b7e-95db-7ca57b5427c0@wanadoo.fr>
+ <20240323222506.4ffbdd71@thinkpad>
+Content-Language: en-MW
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240323222506.4ffbdd71@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, 23 Mar 2024 22:10:40 +0100
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
-
-> > -	return devm_add_action_or_reset(dev, gpio_mockup_debugfs_cleanup, chip);
-> > +	return devm_add_action_or_reset(dev, devm_debugfs_dir_recursive_drop,
-> > +					chip->dbg_dir);  
+Le 23/03/2024 à 22:25, Marek Behún a écrit :
+> On Sat, 23 Mar 2024 22:10:40 +0100
+> Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 > 
-> This look strange. Shouldn't the debugfs_create_dir() call in 
-> gpio_mockup_debugfs_setup() be changed, instead?
+
+...
+
+>>>    static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
+>>>    {
+>>> -	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
+>>> +	pvt->dbgfs_dir = devm_debugfs_create_dir(dev, dev_name(dev), NULL);
+>>> +	if (IS_ERR(pvt->dbgfs_dir))
+>>> +		return PTR_ERR(pvt->dbgfs_dir);
+>>
+>> Not sure if the test and error handling should be added here.
+>> *If I'm correct*, functions related to debugfs already handle this case
+>> and just do nothing. And failure in debugfs related code is not
+>> considered as something that need to be reported and abort a probe function.
+>>
+>> Maybe the same other (already existing) tests in this patch should be
+>> removed as well, in a separated patch.
 > 
-> (I've not look in the previous version if something was said about it, 
-> so apologies if already discussed)
+> Functions related to debugfs maybe do, but devm_ resource management
+> functions may fail to allocate release structure, and those errors need
+> to be handled, AFAIK.
 
-Yeah, this specific user needs a more complicated refactoring.
+I would say no.
+If this memory allocation fails, then debugfs_create_dir() will not be 
+called, but that's not a really big deal if the driver itself can still 
+run normally without it.
 
-I was reluctant to do more complicated refactors in the patch that also
-introduces these helpers.
+Up to you to leave it as-is or remove what I think is a useless error 
+handling.
+At least, maybe it could be said in the commit log, so that maintainers 
+can comment on it, if they don't spot the error handling you introduce.
 
-But Guenter asked me to split the patch anyway...
+CJ
 
-> >   static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
-> >   {
-> > -	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
-> > +	pvt->dbgfs_dir = devm_debugfs_create_dir(dev, dev_name(dev), NULL);
-> > +	if (IS_ERR(pvt->dbgfs_dir))
-> > +		return PTR_ERR(pvt->dbgfs_dir);  
 > 
-> Not sure if the test and error handling should be added here.
-> *If I'm correct*, functions related to debugfs already handle this case 
-> and just do nothing. And failure in debugfs related code is not 
-> considered as something that need to be reported and abort a probe function.
+> Marek
 > 
-> Maybe the same other (already existing) tests in this patch should be 
-> removed as well, in a separated patch.
 
-Functions related to debugfs maybe do, but devm_ resource management
-functions may fail to allocate release structure, and those errors need
-to be handled, AFAIK.
-
-Marek
