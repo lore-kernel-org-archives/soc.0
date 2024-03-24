@@ -1,110 +1,202 @@
-Return-Path: <SRS0=rLL5=K6=wanadoo.fr=christophe.jaillet@kernel.org>
+Return-Path: <SRS0=HQhw=K6=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86F5ACD11BF
-	for <soc@archiver.kernel.org>; Sun, 24 Mar 2024 09:21:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4A12C47DD9
+	for <soc@archiver.kernel.org>; Sun, 24 Mar 2024 11:02:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 24665C43330; Sun, 24 Mar 2024 09:21:52 +0000 (UTC)
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5DCF2C433B2; Sun, 24 Mar 2024 11:02:01 +0000 (UTC)
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 104D9C433C7;
-	Sun, 24 Mar 2024 09:21:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 104D9C433C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id oK2irMGMsawLVoK2jrwkZQ; Sun, 24 Mar 2024 10:21:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1711272099;
-	bh=URa/scX9JJ6Z40dL8WhIkmALLQ5X37NM9gkybLRw27I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=dyxV2PmfdDK4SdMqDlTsqv99dIOXj8UvQ5ME5HH4EtxbgGSf4TnhnkCGwm4s4G5QI
-	 tvGWZ//51EwFtkGLbv4M4Ue9oEAXee1J7uAg46dOYYP8hXPnYViBgLx/RWoxKp7RWz
-	 8LmeYJio7eISxEVIBB9onYHxN7t3orzI8cXYOclXyY4tQeVSH/7zTv+k18w+BziPFG
-	 pYK8qLUlBndwVIScyE+yX3yFtc7h0eGM7bhZBZchjrveNwHQ5Zamq5YkTumszsnINk
-	 kkjHjc9+pcfIq4OG2Ei6Fsl2EytJV36zDiA9RFlGhioo0yef7vG+RnvUseBasPXaSj
-	 bcgE0WjFPp23Q==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 24 Mar 2024 10:21:39 +0100
-X-ME-IP: 86.243.17.157
-Message-ID: <69264f8a-a113-4d49-b8a6-fb9e858584e4@wanadoo.fr>
-Date: Sun, 24 Mar 2024 10:21:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/11] devm-helpers: Add resource managed version of
- debugfs directory create function
-To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 56A01C433C7
+	for <soc@kernel.org>; Sun, 24 Mar 2024 11:01:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 56A01C433C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+	id ed5c59f1-e9cd-11ee-abf4-005056bdd08f;
+	Sun, 24 Mar 2024 13:01:56 +0200 (EET)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sun, 24 Mar 2024 13:01:55 +0200
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Jonathan.Cameron@huawei.com, Laurent.pinchart@ideasonboard.com,
- airlied@gmail.com, andrzej.hajda@intel.com, arm@kernel.org, arnd@arndb.de,
- bamv2005@gmail.com, brgl@bgdev.pl, daniel@ffwll.ch, davem@davemloft.net,
- dianders@chromium.org, dri-devel@lists.freedesktop.org,
- eajames@linux.ibm.com, gaurav.jain@nxp.com, gregory.clement@bootlin.com,
- hdegoede@redhat.com, herbert@gondor.apana.org.au, horia.geanta@nxp.com,
- james.clark@arm.com, james@equiv.tech, jdelvare@suse.com,
- jernej.skrabec@gmail.com, jonas@kwiboo.se, linus.walleij@linaro.org,
- linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, maarten.lankhorst@linux.intel.com,
- mazziesaccount@gmail.com, mripard@kernel.org, naresh.solanki@9elements.com,
- neil.armstrong@linaro.org, pankaj.gupta@nxp.com,
- patrick.rudolph@9elements.com, rfoss@kernel.org, soc@kernel.org,
- tzimmermann@suse.de
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org,
+	arm@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v5 02/11] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <ZgAII1B03bLUisWr@surfacebook.localdomain>
 References: <20240323164359.21642-1-kabel@kernel.org>
- <20240323164359.21642-9-kabel__6885.49310886941$1711212291$gmane$org@kernel.org>
- <f7c64a5a-2abc-4b7e-95db-7ca57b5427c0@wanadoo.fr>
- <20240323222506.4ffbdd71@thinkpad>
-Content-Language: en-MW
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240323222506.4ffbdd71@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20240323164359.21642-3-kabel@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240323164359.21642-3-kabel@kernel.org>
 
-Le 23/03/2024 à 22:25, Marek Behún a écrit :
-> On Sat, 23 Mar 2024 22:10:40 +0100
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
-> 
+Sat, Mar 23, 2024 at 05:43:50PM +0100, Marek Beh�n kirjoitti:
+> Add the basic skeleton for a new platform driver for the microcontroller
+> found on the Turris Omnia board.
 
 ...
 
->>>    static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
->>>    {
->>> -	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
->>> +	pvt->dbgfs_dir = devm_debugfs_create_dir(dev, dev_name(dev), NULL);
->>> +	if (IS_ERR(pvt->dbgfs_dir))
->>> +		return PTR_ERR(pvt->dbgfs_dir);
->>
->> Not sure if the test and error handling should be added here.
->> *If I'm correct*, functions related to debugfs already handle this case
->> and just do nothing. And failure in debugfs related code is not
->> considered as something that need to be reported and abort a probe function.
->>
->> Maybe the same other (already existing) tests in this patch should be
->> removed as well, in a separated patch.
-> 
-> Functions related to debugfs maybe do, but devm_ resource management
-> functions may fail to allocate release structure, and those errors need
-> to be handled, AFAIK.
+> +++ b/drivers/platform/cznic/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
+> +turris-omnia-mcu-objs		:= turris-omnia-mcu-base.o
 
-I would say no.
-If this memory allocation fails, then debugfs_create_dir() will not be 
-called, but that's not a really big deal if the driver itself can still 
-run normally without it.
+'objs' is for user space. You need to use 'y'. Same applies to the entire
+series.
 
-Up to you to leave it as-is or remove what I think is a useless error 
-handling.
-At least, maybe it could be said in the commit log, so that maintainers 
-can comment on it, if they don't spot the error handling you introduce.
+...
 
-CJ
++ array_size.h
++ bits.h
 
-> 
-> Marek
-> 
+> +#include <linux/device.h>
+> +#include <linux/hex.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/turris-omnia-mcu-interface.h>
+> +#include <linux/types.h>
+
++ string.h
+
+> +#include <linux/sysfs.h>
+
+...
+
+> +	err = omnia_cmd_read(mcu->client, bootloader ? CMD_GET_FW_VERSION_BOOT :
+> +						       CMD_GET_FW_VERSION_APP,
+> +			     reply, sizeof(reply));
+
+Wouldn't be better to have a logical split?
+
+	err = omnia_cmd_read(mcu->client,
+			     bootloader ? CMD_GET_FW_VERSION_BOOT : CMD_GET_FW_VERSION_APP,
+			     reply, sizeof(reply));
+
+?
+
+...
+
+> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
+
+What's wrong with dev_get_drvdata()?
+
+...
+
+> +static ssize_t fw_features_show(struct device *dev, struct device_attribute *a,
+> +				char *buf)
+
+One line?
+
+...
+
+> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
+
+Use direct call (see above). Same applies to all such constructions in your
+code.
+
+...
+
+> +static const struct attribute_group omnia_mcu_base_group = {
+> +	.attrs = omnia_mcu_base_attrs,
+> +	.is_visible = omnia_mcu_base_attrs_visible,
+> +};
+> +
+> +static const struct attribute_group *omnia_mcu_groups[] = {
+> +	&omnia_mcu_base_group,
+> +	NULL
+> +};
+
+__ATTRIBUTE_GROUPS()
+
+...
+
+> +static struct i2c_driver omnia_mcu_driver = {
+> +	.probe		= omnia_mcu_probe,
+> +	.driver		= {
+> +		.name	= "turris-omnia-mcu",
+> +		.of_match_table = of_omnia_mcu_match,
+> +		.dev_groups = omnia_mcu_groups,
+> +	},
+> +};
+
+> +
+
+Redundant blank line.
+
+> +module_i2c_driver(omnia_mcu_driver);
+
+...
+
+> +#ifndef __TURRIS_OMNIA_MCU_H
+> +#define __TURRIS_OMNIA_MCU_H
+
++ array_size.h
+
+> +#include <linux/i2c.h>
+> +#include <linux/if_ether.h>
+> +#include <linux/types.h>
+> +#include <asm/byteorder.h>
+
+...
+
+> +static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
+> +				 void *reply, unsigned int len)
+> +{
+
+Why is this in the header?
+
+> +	struct i2c_msg msgs[2];
+> +	int ret;
+> +
+> +	msgs[0].addr = client->addr;
+> +	msgs[0].flags = 0;
+> +	msgs[0].len = 1;
+> +	msgs[0].buf = &cmd;
+> +	msgs[1].addr = client->addr;
+> +	msgs[1].flags = I2C_M_RD;
+> +	msgs[1].len = len;
+> +	msgs[1].buf = reply;
+> +
+> +	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret != ARRAY_SIZE(msgs))
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+
+...
+
+> +#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
+> +#define __TURRIS_OMNIA_MCU_INTERFACE_H
+> +
+> +#include <linux/bits.h>
+
++ bitfield.h
+
+> +#endif /* __TURRIS_OMNIA_MCU_INTERFACE_H */
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
