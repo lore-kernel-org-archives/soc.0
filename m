@@ -4,152 +4,212 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CABDC54E64
-	for <soc@archiver.kernel.org>; Mon, 25 Mar 2024 09:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D89CC54E64
+	for <soc@archiver.kernel.org>; Mon, 25 Mar 2024 09:40:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40D74C433F1; Mon, 25 Mar 2024 09:10:10 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	id C4450C43394; Mon, 25 Mar 2024 09:40:25 +0000 (UTC)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3E672C433C7;
-	Mon, 25 Mar 2024 09:10:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E672C433C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 86702C433F1;
+	Mon, 25 Mar 2024 09:40:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86702C433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-513e14b2bd9so5019845e87.2;
-        Mon, 25 Mar 2024 02:10:08 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-513d599dbabso5355893e87.1;
+        Mon, 25 Mar 2024 02:40:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711357807; x=1711962607; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aD1cN8szRSMxO3IVBp2PA+D27BKP1mIpHeo/IVwH7JI=;
-        b=JxH8Mq9EfGRNHXCoQ5A0XGt6F43L1ynU6UNIVWzNVZlD/j4v3bIi11WyAkS1Dd1Av+
-         V3Da8VSNF0PvG2eSpmUO6vuE0AnffGbvX1vLKLL7R5kOfjB45nT//6t/VtFLTu4EjqKh
-         WsQI18OzIUwfS5UnsQ2ru4XNr3QOOWwua7W8jIApCimNeGEKIghVSSl9K+9YRyvFKp39
-         Y0RL2yfbj2MH32DNlyrX5XDd7UwK4qZ3zGBuf8KAoH5Yq2j91R4wKXHNlPyD9hKV5RGZ
-         iOWwjiteRvNwXLovxYqm8V1gymXZm9EVSW2Vz5r3FysoJN8pL50ANQrp4nnxQHPPoRjU
-         q5qg==
+        d=gmail.com; s=20230601; t=1711359622; x=1711964422; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mtstH1BLOLsw9jtNCibv6vHLTRe0hRVYkNedjxZxFWA=;
+        b=myg3cQ2WbWugPjbjOkW3unRn2DVDU6DtfIVXXWi2XpatDsNvb/CKDMaUsYzAFR1wkE
+         xcpeVN+FCUB7nTQ1oY66kjdtbkYaOoRyefkwAm70WkQTLCFapxABnxVL8+TcPBLCwOm9
+         Di81RRXMwAj2ms17DiEW3O1NrGNPKbrNpy58uUS4aqEmbFH8Nw/H28mxxqsuHnWmaIcS
+         MFFalJAMqM+6QhchdkaDeP1Cv4ntmY7l8bR697JkoLxEEmsD2FmvpCFOuknby3UrP8pM
+         nA5G2RTd+hbMih1q0kzy4KsTHBBvK+uTzhPGelXpoqm+Zyjg5No5v8MX69tPl/i80bbs
+         amcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711357807; x=1711962607;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1711359622; x=1711964422;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aD1cN8szRSMxO3IVBp2PA+D27BKP1mIpHeo/IVwH7JI=;
-        b=sggMP2gxg91DTeHwRLD8NoNj5G1naHFgYpk6UMxlDC9S+Vk3NhDhWlYky+UHjYsvR6
-         955+ntEtenPaALvN2ws3m5UvKBJztdGtqMA1n8ZBU2v5AxSBjE/rz7ctY/l7LhRgTZcv
-         Aea/OlGqj/DC68NtvTpntziC7aTn+Jq3B/sGRxpNzCMEbdykHOsds3vbXSTLCut9pq34
-         HRh8DsJzoj0XOcALFKboknN4wW5rr2mvmy+y1aBDXpOra+vnPkMpVjOaGVYfz7FTClq6
-         m/GXbV5wi97RGz9kHGN7Gq1Y5sTQRxYl1MXRPanjtaOW4A/gEqgf7ysKiZyh5f+Ajl7Z
-         vtmw==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Lpg41uu9PZqTrk0czHXsRApoXMakOX80gnvvymOc2lcLQX7g5Flkd25d8mmKvOWhuM6HzFofT4Unc/aqNwgiHZjHjBCbPpH7ARjx5tGY5isTNSo1tXovP97gpuRBgQ==
-X-Gm-Message-State: AOJu0YzMBlnFltBPAGgJ6vP/JH9+4ehT7HRVNH+ojlnU8QRAwaFI8pKl
-	IrkiseaA5chKfW92PQ7jmVjQLmfFTONjMP/q/vYdgc6nn087fvMOLrrC+gVL
-X-Google-Smtp-Source: AGHT+IHjCBUOy94j2CvEre/QAbDy1ckEeszdxhgFO9te9Xg1xdWSwRZx6LcsWrpuC1tNkTBe+KhyDg==
-X-Received: by 2002:a19:2d0a:0:b0:513:cc88:e1b with SMTP id k10-20020a192d0a000000b00513cc880e1bmr4342156lfj.61.1711357806364;
-        Mon, 25 Mar 2024 02:10:06 -0700 (PDT)
+        bh=mtstH1BLOLsw9jtNCibv6vHLTRe0hRVYkNedjxZxFWA=;
+        b=jeo+bdzc6fOO7wRLAGlsOd+mu6FrNVk3h08MQ59ouePy8s+JqaGsquZdz/mL+9rYmP
+         qqRTNyAtvI22k1A358v4k1KwxW8qBUU/6aHBUr5ABb/3GUnh980xbUxDgaNVmHtk9+q7
+         VQ6HRG/+t/gvcGOVAvqOFy2eoUq0kEQCvdCygmSPtNfmDmdXbbuuNSduXArV2ap6uENd
+         T2jsnY+3Xl12MdW1IV3+3fxLG13UHvAUGyM49A9wDDiOrSiwiQlasvXBgm3cHsAMmN73
+         xsKLQvxfyCYlF34g6cXSaUSJ50A5w0pi0yxALYFdY76ZF+kBtrp4v9nQqgs2OxjN+Y6K
+         WEuA==
+X-Forwarded-Encrypted: i=1; AJvYcCVlYFcW/zbanFq7lIfzxJLbE2RD0mdoNyhL8ehw0b+rceYbRnFKLjHAsjp1ELEm4eRCpDdIBfiq2S2LdfipJxiaUOxfX74srMbyCcT2cCc=
+X-Gm-Message-State: AOJu0YzxyuyW8hezpgC8HS//Sp1ODSRFen1DO/skR3vpGWlMQoA3NpvW
+	D++Jlz9135mECh5gnodbni2fsFmUBkc+BcjhO+RKOKdPUYVwQILsvy3BwDGf
+X-Google-Smtp-Source: AGHT+IEAPIfQV7RaQc/ZjRSgo29as88bZrpnYHt2zKpdpLka6t1u8dBCE0dT8oAk2COFiZ0eYavTeQ==
+X-Received: by 2002:ac2:59c1:0:b0:515:9ae2:93b0 with SMTP id x1-20020ac259c1000000b005159ae293b0mr3835321lfn.19.1711359621730;
+        Mon, 25 Mar 2024 02:40:21 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:7426:df00::6? (drtxq0yyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:7426:df00::6])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac24947000000b005132f12ee7asm991001lfi.174.2024.03.25.02.10.05
+        by smtp.gmail.com with ESMTPSA id s17-20020a056512215100b00513e47ef4b1sm1016016lfr.195.2024.03.25.02.40.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 02:10:06 -0700 (PDT)
-Message-ID: <0352287d-cbd0-4ed7-8551-a23191487279@gmail.com>
-Date: Mon, 25 Mar 2024 11:10:04 +0200
+        Mon, 25 Mar 2024 02:40:21 -0700 (PDT)
+Message-ID: <dd4c655f-39c4-47c1-b5fb-4d6fc94cc430@gmail.com>
+Date: Mon, 25 Mar 2024 11:40:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/11] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
+Subject: Re: [PATCH v5 06/11] devm-helpers: Add resource managed version of
+ irq_create_mapping()
+Content-Language: en-US, en-GB
 List-Id: <soc.lore.kernel.org>
 To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
  Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT
  <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
- linux-gpio@vger.kernel.org
+ Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Horia_Geant=C4=83?=
+ <horia.geanta@nxp.com>, Pankaj Gupta <pankaj.gupta@nxp.com>,
+ Gaurav Jain <gaurav.jain@nxp.com>, linux-crypto@vger.kernel.org,
+ Herbert Xu <herbert@gondor.apana.org.au>
 References: <20240323164359.21642-1-kabel@kernel.org>
- <20240323164359.21642-4-kabel@kernel.org>
-Content-Language: en-US, en-GB
+ <20240323164359.21642-7-kabel@kernel.org>
 From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240323164359.21642-4-kabel@kernel.org>
+In-Reply-To: <20240323164359.21642-7-kabel@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Marek,
-
-I can't say I did a proper review but browsing through the code without 
-proper understanding of the platform raised one small question :)
-
 On 3/23/24 18:43, Marek Behún wrote:
-> Add support for GPIOs connected to the MCU on the Turris Omnia board.
+> Add resource managed version of irq_create_mapping(), to help drivers
+> automatically dispose a linux irq mapping when driver is detached.
 > 
-> This includes:
-> - front button pin
-> - enable pins for USB regulators
-> - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
-> - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
-> - on board revisions 32+ also various peripheral resets and another
->    voltage regulator enable pin
+> The new function devm_irq_create_mapping() is not yet used, but the
+> action function can be used in the FSL CAAM driver.
 > 
 > Signed-off-by: Marek Behún <kabel@kernel.org>
+> ---
+>   drivers/crypto/caam/jr.c     |  8 ++----
+>   include/linux/devm-helpers.h | 54 ++++++++++++++++++++++++++++++++++++
+>   2 files changed, 56 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
+> index 26eba7de3fb0..ad0295b055f8 100644
+> --- a/drivers/crypto/caam/jr.c
+> +++ b/drivers/crypto/caam/jr.c
+> @@ -7,6 +7,7 @@
+>    * Copyright 2019, 2023 NXP
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/of_irq.h>
+>   #include <linux/of_address.h>
+>   #include <linux/platform_device.h>
+> @@ -576,11 +577,6 @@ static int caam_jr_init(struct device *dev)
+>   	return error;
+>   }
+>   
+> -static void caam_jr_irq_dispose_mapping(void *data)
+> -{
+> -	irq_dispose_mapping((unsigned long)data);
+> -}
+> -
+>   /*
+>    * Probe routine for each detected JobR subsystem.
+>    */
+> @@ -656,7 +652,7 @@ static int caam_jr_probe(struct platform_device *pdev)
+>   		return -EINVAL;
+>   	}
+>   
+> -	error = devm_add_action_or_reset(jrdev, caam_jr_irq_dispose_mapping,
+> +	error = devm_add_action_or_reset(jrdev, devm_irq_mapping_drop,
+>   					 (void *)(unsigned long)jrpriv->irq);
+>   	if (error)
+>   		return error;
+> diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
+> index 74891802200d..3805551fd433 100644
+> --- a/include/linux/devm-helpers.h
+> +++ b/include/linux/devm-helpers.h
+> @@ -24,6 +24,8 @@
+>    */
+>   
+>   #include <linux/device.h>
+> +#include <linux/kconfig.h>
+> +#include <linux/irqdomain.h>
+>   #include <linux/workqueue.h>
 
-...
+My confidence level is not terribly high today, so I am likely to accept 
+just about any counter arguments :) But ... More I think of this whole 
+header, less convinced I am that this (the header) is a great idea. I 
+wonder who has authored a concept like this... :rolleyes:
 
+Pulling punch of unrelated APIs (or, unrelated except the devm-usage) in 
+one header has potential to be including a lot of unneeded stuff to the 
+users. I am under impression this can be bad for example for the build 
+times.
+
+I think that ideally the devm-APIs should live close to their non-devm 
+counterparts, and this header should be just used as a last resort, when 
+all the other options fail :) May I assume all other options have failed 
+for the IRQ stuff?
+
+Well, I will leave the big picture to the bigger minds. When just 
+looking at the important things like the function names and coding style 
+- this change looks Ok to me ;)
+
+>   static inline void devm_delayed_work_drop(void *res)
+> @@ -76,4 +78,56 @@ static inline int devm_work_autocancel(struct device *dev,
+>   	return devm_add_action(dev, devm_work_drop, w);
+>   }
+>   
 > +/**
-> + * omnia_mask_interleave - Interleaves the bytes from @rising and @falling
-> + *	@dst: the destination u8 array of interleaved bytes
-> + *	@rising: rising mask
-> + *	@falling: falling mask
+> + * devm_irq_mapping_drop - devm action for disposing an irq mapping
+> + * @res:	linux irq number cast to the void * type
 > + *
-> + * Interleaves the little-endian bytes from @rising and @falling words.
-This means the 'rising' and 'falling' should always be little-endian? 
-Should the parameter types reflect this? Or should we see some 
-cpu_to_le() calls? (Or, is this code just guaranteed to be always 
-running on a le-machine?).
-
-> + * If @rising = (r0, r1, r2, r3) and @falling = (f0, f1, f2, f3), the result is
-> + * @dst = (r0, f0, r1, f1, r2, f2, r3, f3).
-> + *
-> + * The MCU receives interrupt mask and reports pending interrupt bitmap int this
-> + * interleaved format. The rationale behind it is that the low-indexed bits are
-> + * more important - in many cases, the user will be interested only in
-> + * interrupts with indexes 0 to 7, and so the system can stop reading after
-> + * first 2 bytes (r0, f0), to save time on the slow I2C bus.
-> + *
-> + * Feel free to remove this function and its inverse, omnia_mask_deinterleave,
-> + * and use an appropriate bitmap_* function once such a function exists.
+> + * devm_irq_mapping_drop() can be used as an action parameter for the
+> + * devm_add_action_or_reset() function in order to automatically dispose
+> + * a linux irq mapping when a device driver is detached.
 > + */
-> +static void omnia_mask_interleave(u8 *dst, u32 rising, u32 falling)
+> +static inline void devm_irq_mapping_drop(void *res)
 > +{
-> +	for (int i = 0; i < sizeof(u32); ++i) {
-> +		dst[2 * i] = rising >> (8 * i);
-> +		dst[2 * i + 1] = falling >> (8 * i);
-> +	}
+> +	irq_dispose_mapping((unsigned int)(unsigned long)res);
 > +}
 > +
 > +/**
-> + * omnia_mask_deinterleave - Deinterleaves the bytes into @rising and @falling
-> + *	@src: the source u8 array containing the interleaved bytes
-> + *	@rising: pointer where to store the rising mask gathered from @src
-> + *	@falling: pointer where to store the falling mask gathered from @src
+> + * devm_irq_create_mapping - Resource managed version of irq_create_mapping()
+> + * @dev:	Device which lifetime the mapping is bound to
+> + * @domain:	domain owning this hardware interrupt or NULL for default domain
+> + * @hwirq:	hardware irq number in that domain space
 > + *
-> + * This is the inverse function to omnia_mask_interleave.
+> + * Create an irq mapping to linux irq space which is automatically disposed when
+> + * the driver is detached.
+> + * devm_irq_create_mapping() can be used to omit the explicit
+> + * irq_dispose_mapping() call when driver is detached.
+> + *
+> + * Returns a linux irq number on success, 0 if mapping could not be created, or
+> + * a negative error number if devm action could not be added.
 > + */
-> +static void omnia_mask_deinterleave(const u8 *src, u32 *rising, u32 *falling)
+> +static inline int devm_irq_create_mapping(struct device *dev,
+> +					  struct irq_domain *domain,
+> +					  irq_hw_number_t hwirq)
 > +{
-> +	*rising = *falling = 0;
+> +	unsigned int virq = irq_create_mapping(domain, hwirq);
 > +
-> +	for (int i = 0; i < sizeof(u32); ++i) {
-> +		*rising |= src[2 * i] << (8 * i);
-> +		*falling |= src[2 * i + 1] << (8 * i);
+> +	if (!virq)
+> +		return 0;
+> +
+> +	/*
+> +	 * irq_dispose_mapping() is an empty function if CONFIG_IRQ_DOMAIN is
+> +	 * disabled. No need to register an action in that case.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_IRQ_DOMAIN)) {
+> +		int err;
+> +
+> +		err = devm_add_action_or_reset(dev, devm_irq_mapping_drop,
+> +					       (void *)(unsigned long)virq);
+> +		if (err)
+> +			return err;
 > +	}
-
-Also here I could expect seeing le_to_cpu() unless I am (again :]) 
-missing something.
-
+> +
+> +	return virq;
 > +}
-
-Yours,
-	-- Matti
+> +
+>   #endif
 
 -- 
 Matti Vaittinen
