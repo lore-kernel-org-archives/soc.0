@@ -4,134 +4,133 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5586BC54E58
-	for <soc@archiver.kernel.org>; Mon, 25 Mar 2024 09:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2408C54E64
+	for <soc@archiver.kernel.org>; Mon, 25 Mar 2024 09:57:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1F16FC43399; Mon, 25 Mar 2024 09:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09853C433F1;
-	Mon, 25 Mar 2024 09:53:53 +0000 (UTC)
+	id 8359FC43394; Mon, 25 Mar 2024 09:57:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D67DC433F1;
+	Mon, 25 Mar 2024 09:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711360436;
-	bh=tJPcPnuUEFp+CDXQqerYYoZxsWHiild4D5RUu48Z0Ks=;
+	s=k20201202; t=1711360667;
+	bh=uJggmdCEy5qVc+JdGsZIsamqVNi9SsgkOafj6qmYN/Y=;
 	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=Ie3TcaczheWBB9Z+nJdPLDdSPftm5KpyqcG+MLA6j82zO1gKtlLkHupoT+e67x32H
-	 re0Rai/Djf9rK30hxjbu+1Fzs6280e4TPIlg+KEmfa3oq32RO2pZPqvypySZwMQLYe
-	 TvKg88ncVEnfolA4+I1oD9605ixkQNxKlpLhDYb5aJjs7tVWliSp9rE4RHYoOoXXIn
-	 CHQtpSVtu8JuE/UlOUj9iFKqG0CceHd0RtycTXgKk9qTuQNrdRyXp0+lBn2Aew15/Z
-	 gWv6dsRh2b9HM+Y7Mm/atB07IrFbg6HndvgVZDnFpuYEPmhAwD9lOWCUc8eIX778cC
-	 LRqASdsNQZy6A==
-Date: Mon, 25 Mar 2024 10:53:49 +0100
+	b=LX8wlBFV50sMIWwXwrYZ6t/fxX0pZ2hZQLC75vbMKhuga/ESKhs9LEiUjeWZ5DZ3K
+	 wQ3GG7/UxVZxx7weOuhHGOECmqtJwLCoVEGFpiXE/QBd6nZKl/78gAAJpGqZbZnT6c
+	 kZZ/D8Fwb8EmKtGcCZNreONmV6B8IY/T9wuVlOp2+3dKcj4a2Zhtua09nwNwAe1udD
+	 bma7JsaraAVCuWPfUYIY2k8yH19uDGy+C1/lzWioEY7QfEOJs9OttlpZc6J7QaI4Z5
+	 3ygnMPfL0Wtl25a+y1wMgI3Hw8i9LzN1ulg6Fqynd9iBU1aKCNsnjkdlQQ7yihl1SE
+	 YiqqkCQQ8yNrg==
+Date: Mon, 25 Mar 2024 10:57:42 +0100
 From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
 To: Matti Vaittinen <mazziesaccount@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT
- <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org, Linus
- Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v5 03/11] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
-Message-ID: <20240325105349.6f6c21c7@dellmb>
-In-Reply-To: <0352287d-cbd0-4ed7-8551-a23191487279@gmail.com>
+ <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org, Hans de
+ Goede <hdegoede@redhat.com>, Horia =?UTF-8?B?R2VhbnTEgw==?=
+ <horia.geanta@nxp.com>, Pankaj Gupta <pankaj.gupta@nxp.com>, Gaurav Jain
+ <gaurav.jain@nxp.com>, linux-crypto@vger.kernel.org, Herbert Xu
+ <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH v5 06/11] devm-helpers: Add resource managed version of
+ irq_create_mapping()
+Message-ID: <20240325105742.0e1c8906@dellmb>
+In-Reply-To: <dd4c655f-39c4-47c1-b5fb-4d6fc94cc430@gmail.com>
 References: <20240323164359.21642-1-kabel@kernel.org>
-	<20240323164359.21642-4-kabel@kernel.org>
-	<0352287d-cbd0-4ed7-8551-a23191487279@gmail.com>
+	<20240323164359.21642-7-kabel@kernel.org>
+	<dd4c655f-39c4-47c1-b5fb-4d6fc94cc430@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 25 Mar 2024 11:10:04 +0200
+On Mon, 25 Mar 2024 11:40:20 +0200
 Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> Hi Marek,
->=20
-> I can't say I did a proper review but browsing through the code without=20
-> proper understanding of the platform raised one small question :)
->=20
 > On 3/23/24 18:43, Marek Beh=C3=BAn wrote:
-> > Add support for GPIOs connected to the MCU on the Turris Omnia board.
+> > Add resource managed version of irq_create_mapping(), to help drivers
+> > automatically dispose a linux irq mapping when driver is detached.
 > >=20
-> > This includes:
-> > - front button pin
-> > - enable pins for USB regulators
-> > - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
-> > - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
-> > - on board revisions 32+ also various peripheral resets and another
-> >    voltage regulator enable pin
+> > The new function devm_irq_create_mapping() is not yet used, but the
+> > action function can be used in the FSL CAAM driver.
 > >=20
-> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org> =20
+> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
+> > ---
+> >   drivers/crypto/caam/jr.c     |  8 ++----
+> >   include/linux/devm-helpers.h | 54 ++++++++++++++++++++++++++++++++++++
+> >   2 files changed, 56 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
+> > index 26eba7de3fb0..ad0295b055f8 100644
+> > --- a/drivers/crypto/caam/jr.c
+> > +++ b/drivers/crypto/caam/jr.c
+> > @@ -7,6 +7,7 @@
+> >    * Copyright 2019, 2023 NXP
+> >    */
+> >  =20
+> > +#include <linux/devm-helpers.h>
+> >   #include <linux/of_irq.h>
+> >   #include <linux/of_address.h>
+> >   #include <linux/platform_device.h>
+> > @@ -576,11 +577,6 @@ static int caam_jr_init(struct device *dev)
+> >   	return error;
+> >   }
+> >  =20
+> > -static void caam_jr_irq_dispose_mapping(void *data)
+> > -{
+> > -	irq_dispose_mapping((unsigned long)data);
+> > -}
+> > -
+> >   /*
+> >    * Probe routine for each detected JobR subsystem.
+> >    */
+> > @@ -656,7 +652,7 @@ static int caam_jr_probe(struct platform_device *pd=
+ev)
+> >   		return -EINVAL;
+> >   	}
+> >  =20
+> > -	error =3D devm_add_action_or_reset(jrdev, caam_jr_irq_dispose_mapping,
+> > +	error =3D devm_add_action_or_reset(jrdev, devm_irq_mapping_drop,
+> >   					 (void *)(unsigned long)jrpriv->irq);
+> >   	if (error)
+> >   		return error;
+> > diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
+> > index 74891802200d..3805551fd433 100644
+> > --- a/include/linux/devm-helpers.h
+> > +++ b/include/linux/devm-helpers.h
+> > @@ -24,6 +24,8 @@
+> >    */
+> >  =20
+> >   #include <linux/device.h>
+> > +#include <linux/kconfig.h>
+> > +#include <linux/irqdomain.h>
+> >   #include <linux/workqueue.h> =20
 >=20
-> ...
+> My confidence level is not terribly high today, so I am likely to accept=
+=20
+> just about any counter arguments :) But ... More I think of this whole=20
+> header, less convinced I am that this (the header) is a great idea. I=20
+> wonder who has authored a concept like this... :rolleyes:
 >=20
-> > +/**
-> > + * omnia_mask_interleave - Interleaves the bytes from @rising and @fal=
-ling
-> > + *	@dst: the destination u8 array of interleaved bytes
-> > + *	@rising: rising mask
-> > + *	@falling: falling mask
-> > + *
-> > + * Interleaves the little-endian bytes from @rising and @falling words=
-. =20
-> This means the 'rising' and 'falling' should always be little-endian?=20
-> Should the parameter types reflect this? Or should we see some=20
-> cpu_to_le() calls? (Or, is this code just guaranteed to be always=20
-> running on a le-machine?).
+> Pulling punch of unrelated APIs (or, unrelated except the devm-usage) in=
+=20
+> one header has potential to be including a lot of unneeded stuff to the=20
+> users. I am under impression this can be bad for example for the build=20
+> times.
 >=20
-> > + * If @rising =3D (r0, r1, r2, r3) and @falling =3D (f0, f1, f2, f3), =
-the result is
-> > + * @dst =3D (r0, f0, r1, f1, r2, f2, r3, f3).
-> > + *
-> > + * The MCU receives interrupt mask and reports pending interrupt bitma=
-p int this
-> > + * interleaved format. The rationale behind it is that the low-indexed=
- bits are
-> > + * more important - in many cases, the user will be interested only in
-> > + * interrupts with indexes 0 to 7, and so the system can stop reading =
-after
-> > + * first 2 bytes (r0, f0), to save time on the slow I2C bus.
-> > + *
-> > + * Feel free to remove this function and its inverse, omnia_mask_deint=
-erleave,
-> > + * and use an appropriate bitmap_* function once such a function exist=
-s.
-> > + */
-> > +static void omnia_mask_interleave(u8 *dst, u32 rising, u32 falling)
-> > +{
-> > +	for (int i =3D 0; i < sizeof(u32); ++i) {
-> > +		dst[2 * i] =3D rising >> (8 * i);
-> > +		dst[2 * i + 1] =3D falling >> (8 * i);
-> > +	}
-> > +}
-> > +
-> > +/**
-> > + * omnia_mask_deinterleave - Deinterleaves the bytes into @rising and =
-@falling
-> > + *	@src: the source u8 array containing the interleaved bytes
-> > + *	@rising: pointer where to store the rising mask gathered from @src
-> > + *	@falling: pointer where to store the falling mask gathered from @src
-> > + *
-> > + * This is the inverse function to omnia_mask_interleave.
-> > + */
-> > +static void omnia_mask_deinterleave(const u8 *src, u32 *rising, u32 *f=
-alling)
-> > +{
-> > +	*rising =3D *falling =3D 0;
-> > +
-> > +	for (int i =3D 0; i < sizeof(u32); ++i) {
-> > +		*rising |=3D src[2 * i] << (8 * i);
-> > +		*falling |=3D src[2 * i + 1] << (8 * i);
-> > +	} =20
+> I think that ideally the devm-APIs should live close to their non-devm=20
+> counterparts, and this header should be just used as a last resort, when=
+=20
+> all the other options fail :) May I assume all other options have failed=
+=20
+> for the IRQ stuff?
 >=20
-> Also here I could expect seeing le_to_cpu() unless I am (again :])=20
-> missing something.
+> Well, I will leave the big picture to the bigger minds. When just=20
+> looking at the important things like the function names and coding style=
+=20
+> - this change looks Ok to me ;)
 
-I don't understand. The rising and falling variables have native
-endiannes, as they should have.
+If the authors of devm-helpers or someone else decide it should not
+exist (due for example of long build times), I am OK with that.
 
-And the src and dst are u8 arrays, which contain two LE32
-unsigned integers, but these integers are interleaved. I am converting
-then to two native unsigned integers byte by byte, so I am basically
-doing what a theoretical le32_interleaved_le32_to_cpu() would have done
-if it did exist. Putting another le*_to_cpu() would only break things.
+But currently this seems to me to be the proper place to put this into.
 
 Marek
