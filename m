@@ -1,197 +1,160 @@
-Return-Path: <SRS0=HQhw=K6=gmail.com=andy.shevchenko@kernel.org>
+Return-Path: <SRS0=+0zi=K7=gmail.com=mazziesaccount@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFE00C47DD9
-	for <soc@archiver.kernel.org>; Sun, 24 Mar 2024 15:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CABDC54E64
+	for <soc@archiver.kernel.org>; Mon, 25 Mar 2024 09:10:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8F6E5C433C7; Sun, 24 Mar 2024 15:31:19 +0000 (UTC)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	id 40D74C433F1; Mon, 25 Mar 2024 09:10:10 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7680AC433F1;
-	Sun, 24 Mar 2024 15:31:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7680AC433F1
+	by smtp.kernel.org (Postfix) with ESMTPS id 3E672C433C7;
+	Mon, 25 Mar 2024 09:10:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E672C433C7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-513d3746950so4439666e87.1;
-        Sun, 24 Mar 2024 08:31:18 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-513e14b2bd9so5019845e87.2;
+        Mon, 25 Mar 2024 02:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711294276; x=1711899076; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0h9CkCjrhT3P+set+37h9vZa3QRZIGn/XuauQXUeDHQ=;
-        b=e/kpasCrPqBCpdWvQUWIrdV9wZF3DvxP6f3mB1wMx1Tyy9T5t4vB9MTxUShDf7/L++
-         sKwveuJrbZOgEBa6cqU5Q5kY0snI5ExArRxnPFbM4Qb5SIsQ8xtQc6jOMj+xMyQDAgLJ
-         ueyM/yGlPzwwj8G9mr4zP8zkk20ukdcF8qPAboeVXQP6KopktJk5E0Fl1QsvoSxPdlzq
-         W1QonMWaEuV39ttth56XBouW0fDU+eFtc/7xMkGkHYwrDTiJ9VyuU+sqBG92gVnyPQqY
-         uWwmj5fqARYGOYheIOt/i6O8300pkjf2acQdR8k+C4g2Zo88CjFICwJEOq1aQ4DxLPop
-         5Bag==
+        d=gmail.com; s=20230601; t=1711357807; x=1711962607; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aD1cN8szRSMxO3IVBp2PA+D27BKP1mIpHeo/IVwH7JI=;
+        b=JxH8Mq9EfGRNHXCoQ5A0XGt6F43L1ynU6UNIVWzNVZlD/j4v3bIi11WyAkS1Dd1Av+
+         V3Da8VSNF0PvG2eSpmUO6vuE0AnffGbvX1vLKLL7R5kOfjB45nT//6t/VtFLTu4EjqKh
+         WsQI18OzIUwfS5UnsQ2ru4XNr3QOOWwua7W8jIApCimNeGEKIghVSSl9K+9YRyvFKp39
+         Y0RL2yfbj2MH32DNlyrX5XDd7UwK4qZ3zGBuf8KAoH5Yq2j91R4wKXHNlPyD9hKV5RGZ
+         iOWwjiteRvNwXLovxYqm8V1gymXZm9EVSW2Vz5r3FysoJN8pL50ANQrp4nnxQHPPoRjU
+         q5qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711294276; x=1711899076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0h9CkCjrhT3P+set+37h9vZa3QRZIGn/XuauQXUeDHQ=;
-        b=VcDZTJujA2Bi+UhJJ9sav+m03Q3STvfwlju2NSvN2Q/Viw+pPngRXdGC49g79cO+Hs
-         357Ob5axqEkKkxY72n00pdliqcxUhLYZvjXDHW1Kda5ada+tNJC2fyZpjG0AmdBIOBDl
-         Vi+MH1VLmdfTA1V2FItj5UrDQAVqa81jyh02m6D8Dxit3a4pZCC+EEyTySdUIOG6xCd+
-         8XkhvC4RuNiObFhJ6auO+VZ+yBJ6vEbTEGlkHPzZIoEXhSX2ROPT4Ip0DTZfVWVUj/gl
-         90QOGvJTDUUmC8lM1hbfdGXidSFR16w1IGM6SvoMtKMNOD9KZbumq29vKpOlVPbgK2YL
-         +yHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVd3pG3xxBKI+9B+2KruXvqybZHvtwObNPpobhsj5irMCtEyUFlAK6Hp5FsWPGMv48FnMCqW4kb5CJWdMBlFnFmtRMHx/EvpaC3iS4fbG512r5IGMxl9SjXiMkBEexrng==
-X-Gm-Message-State: AOJu0YyKoFEsuMRoQR5Anw6HQQ4p21wBixKH+TcGrtO6pLVb9+SDKATE
-	bh6Czf6nKC0E0q/HLM8BtGAYXn5McXNoAo2o15xwBdZQN7sBKfW3sZ4s8tacUz4jrFvs2Uh1UrU
-	F4o/nfn+K+wWeHma7kOrKCAr0peGFovCyYCE=
-X-Google-Smtp-Source: AGHT+IF1hgt89EHgXPEmK77BTi70jUOCk3tAdabwBOn4F1ZNKwy73xPE4h3/tpPQKJQSRKtU/HT7oaL8f7mcIJopj70=
-X-Received: by 2002:ac2:4d95:0:b0:513:5bdb:10f7 with SMTP id
- g21-20020ac24d95000000b005135bdb10f7mr2979461lfe.14.1711294276178; Sun, 24
- Mar 2024 08:31:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711357807; x=1711962607;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aD1cN8szRSMxO3IVBp2PA+D27BKP1mIpHeo/IVwH7JI=;
+        b=sggMP2gxg91DTeHwRLD8NoNj5G1naHFgYpk6UMxlDC9S+Vk3NhDhWlYky+UHjYsvR6
+         955+ntEtenPaALvN2ws3m5UvKBJztdGtqMA1n8ZBU2v5AxSBjE/rz7ctY/l7LhRgTZcv
+         Aea/OlGqj/DC68NtvTpntziC7aTn+Jq3B/sGRxpNzCMEbdykHOsds3vbXSTLCut9pq34
+         HRh8DsJzoj0XOcALFKboknN4wW5rr2mvmy+y1aBDXpOra+vnPkMpVjOaGVYfz7FTClq6
+         m/GXbV5wi97RGz9kHGN7Gq1Y5sTQRxYl1MXRPanjtaOW4A/gEqgf7ysKiZyh5f+Ajl7Z
+         vtmw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6Lpg41uu9PZqTrk0czHXsRApoXMakOX80gnvvymOc2lcLQX7g5Flkd25d8mmKvOWhuM6HzFofT4Unc/aqNwgiHZjHjBCbPpH7ARjx5tGY5isTNSo1tXovP97gpuRBgQ==
+X-Gm-Message-State: AOJu0YzMBlnFltBPAGgJ6vP/JH9+4ehT7HRVNH+ojlnU8QRAwaFI8pKl
+	IrkiseaA5chKfW92PQ7jmVjQLmfFTONjMP/q/vYdgc6nn087fvMOLrrC+gVL
+X-Google-Smtp-Source: AGHT+IHjCBUOy94j2CvEre/QAbDy1ckEeszdxhgFO9te9Xg1xdWSwRZx6LcsWrpuC1tNkTBe+KhyDg==
+X-Received: by 2002:a19:2d0a:0:b0:513:cc88:e1b with SMTP id k10-20020a192d0a000000b00513cc880e1bmr4342156lfj.61.1711357806364;
+        Mon, 25 Mar 2024 02:10:06 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:7426:df00::6? (drtxq0yyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:7426:df00::6])
+        by smtp.gmail.com with ESMTPSA id o7-20020ac24947000000b005132f12ee7asm991001lfi.174.2024.03.25.02.10.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 02:10:06 -0700 (PDT)
+Message-ID: <0352287d-cbd0-4ed7-8551-a23191487279@gmail.com>
+Date: Mon, 25 Mar 2024 11:10:04 +0200
 MIME-Version: 1.0
-References: <20240323164359.21642-1-kabel@kernel.org> <20240323164359.21642-3-kabel@kernel.org>
- <ZgAII1B03bLUisWr@surfacebook.localdomain> <20240324160408.77c8574e@thinkpad>
-In-Reply-To: <20240324160408.77c8574e@thinkpad>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 24 Mar 2024 17:30:39 +0200
-Message-ID: <CAHp75VesxrOdm4H3TYUtfEJx=i3Zpd6a=yzbkUFismnzW=nE-g@mail.gmail.com>
-Subject: Re: [PATCH v5 02/11] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 03/11] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org, 
-	arm@kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT
+ <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ linux-gpio@vger.kernel.org
+References: <20240323164359.21642-1-kabel@kernel.org>
+ <20240323164359.21642-4-kabel@kernel.org>
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20240323164359.21642-4-kabel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 24, 2024 at 5:04=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
- wrote:
->
-> Hi Andy,
->
-> thank you very much for the review. I have some notes and some
-> questions, see below.
+Hi Marek,
 
-Btw, I'll look into other patches next week.
+I can't say I did a proper review but browsing through the code without 
+proper understanding of the platform raised one small question :)
 
-> On Sun, 24 Mar 2024 13:01:55 +0200
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > Sat, Mar 23, 2024 at 05:43:50PM +0100, Marek Beh=C3=BAn kirjoitti:
-
-...
-
-> > > +   err =3D omnia_cmd_read(mcu->client, bootloader ? CMD_GET_FW_VERSI=
-ON_BOOT :
-> > > +                                                  CMD_GET_FW_VERSION=
-_APP,
-> > > +                        reply, sizeof(reply));
-> >
-> > Wouldn't be better to have a logical split?
-> >
-> >       err =3D omnia_cmd_read(mcu->client,
-> >                            bootloader ? CMD_GET_FW_VERSION_BOOT : CMD_G=
-ET_FW_VERSION_APP,
-> >                            reply, sizeof(reply));
->
-> Changed for v6 to
->
-> >       err =3D omnia_cmd_read(mcu->client,
-> >                            bootloader ? CMD_GET_FW_VERSION_BOOT
-> >                                       : CMD_GET_FW_VERSION_APP,
-> >                            reply, sizeof(reply));
->
-> There are still some people wanting only 80 columns, and the whole
-> driver is written that way.
-
-Hmm... Is it still a hard limit for drivers/platform/cznic for the _new_ co=
-de?
-
-> > ?
+On 3/23/24 18:43, Marek Behún wrote:
+> Add support for GPIOs connected to the MCU on the Turris Omnia board.
+> 
+> This includes:
+> - front button pin
+> - enable pins for USB regulators
+> - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
+> - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
+> - on board revisions 32+ also various peripheral resets and another
+>    voltage regulator enable pin
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
 
 ...
 
-> > > +static ssize_t fw_features_show(struct device *dev, struct device_at=
-tribute *a,
-> > > +                           char *buf)
-> >
-> > One line?
->
-> 80 columns...
+> +/**
+> + * omnia_mask_interleave - Interleaves the bytes from @rising and @falling
+> + *	@dst: the destination u8 array of interleaved bytes
+> + *	@rising: rising mask
+> + *	@falling: falling mask
+> + *
+> + * Interleaves the little-endian bytes from @rising and @falling words.
+This means the 'rising' and 'falling' should always be little-endian? 
+Should the parameter types reflect this? Or should we see some 
+cpu_to_le() calls? (Or, is this code just guaranteed to be always 
+running on a le-machine?).
 
-Ditto.
+> + * If @rising = (r0, r1, r2, r3) and @falling = (f0, f1, f2, f3), the result is
+> + * @dst = (r0, f0, r1, f1, r2, f2, r3, f3).
+> + *
+> + * The MCU receives interrupt mask and reports pending interrupt bitmap int this
+> + * interleaved format. The rationale behind it is that the low-indexed bits are
+> + * more important - in many cases, the user will be interested only in
+> + * interrupts with indexes 0 to 7, and so the system can stop reading after
+> + * first 2 bytes (r0, f0), to save time on the slow I2C bus.
+> + *
+> + * Feel free to remove this function and its inverse, omnia_mask_deinterleave,
+> + * and use an appropriate bitmap_* function once such a function exists.
+> + */
+> +static void omnia_mask_interleave(u8 *dst, u32 rising, u32 falling)
+> +{
+> +	for (int i = 0; i < sizeof(u32); ++i) {
+> +		dst[2 * i] = rising >> (8 * i);
+> +		dst[2 * i + 1] = falling >> (8 * i);
+> +	}
+> +}
+> +
+> +/**
+> + * omnia_mask_deinterleave - Deinterleaves the bytes into @rising and @falling
+> + *	@src: the source u8 array containing the interleaved bytes
+> + *	@rising: pointer where to store the rising mask gathered from @src
+> + *	@falling: pointer where to store the falling mask gathered from @src
+> + *
+> + * This is the inverse function to omnia_mask_interleave.
+> + */
+> +static void omnia_mask_deinterleave(const u8 *src, u32 *rising, u32 *falling)
+> +{
+> +	*rising = *falling = 0;
+> +
+> +	for (int i = 0; i < sizeof(u32); ++i) {
+> +		*rising |= src[2 * i] << (8 * i);
+> +		*falling |= src[2 * i + 1] << (8 * i);
+> +	}
 
-...
+Also here I could expect seeing le_to_cpu() unless I am (again :]) 
+missing something.
 
-> > > +static const struct attribute_group *omnia_mcu_groups[] =3D {
-> > > +   &omnia_mcu_base_group,
-> > > +   NULL
-> > > +};
-> >
-> > __ATTRIBUTE_GROUPS()
->
-> The next patches add more groups into this array, after the whole
-> series it looks like this:
->
-> static const struct attribute_group *omnia_mcu_groups[] =3D {
->         &omnia_mcu_base_group,
->         &omnia_mcu_gpio_group,
->         &omnia_mcu_poweroff_group,
->         NULL
-> };
->
-> There is no macro for that.
+> +}
 
-Good point.
+Yours,
+	-- Matti
 
-> Should I still use __ATTRIBUTE_GROUPS() in
-> the first patch and than change it in the next one?
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-...
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-> > > +static inline int omnia_cmd_read(const struct i2c_client *client, u8=
- cmd,
-> > > +                            void *reply, unsigned int len)
-> > > +{
-> >
-> > Why is this in the header?
->
-> I considered it a helper function that should be defined in the header
-> file, like the rest of the cmd helpers in this file. If you disagree, I
-> will put it into the -base.c file.
-
-I don't see the technical justification to hold it in the *.h rather
-than *.c. To me this one is big enough in C and likely in assembly to
-be copied to each user. Besides that aspect, it slows down the build a
-lot (mostly due to i2c.h inclusion which otherwise is not needed).
-
-> > > +   struct i2c_msg msgs[2];
-> > > +   int ret;
-> > > +
-> > > +   msgs[0].addr =3D client->addr;
-> > > +   msgs[0].flags =3D 0;
-> > > +   msgs[0].len =3D 1;
-> > > +   msgs[0].buf =3D &cmd;
-> > > +   msgs[1].addr =3D client->addr;
-> > > +   msgs[1].flags =3D I2C_M_RD;
-> > > +   msgs[1].len =3D len;
-> > > +   msgs[1].buf =3D reply;
-> > > +
-> > > +   ret =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-> > > +   if (ret < 0)
-> > > +           return ret;
-> > > +   if (ret !=3D ARRAY_SIZE(msgs))
-> > > +           return -EIO;
-> > > +
-> > > +   return 0;
-> > > +}
-
---=20
-With Best Regards,
-Andy Shevchenko
