@@ -1,161 +1,238 @@
-Return-Path: <SRS0=rBqz=LB=linaro.org=dan.carpenter@kernel.org>
+Return-Path: <SRS0=o3Mz=LC=quicinc.com=quic_obabatun@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88F75C54E67
-	for <soc@archiver.kernel.org>; Wed, 27 Mar 2024 11:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C865CD11DF
+	for <soc@archiver.kernel.org>; Thu, 28 Mar 2024 21:16:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5A4ECC43390; Wed, 27 Mar 2024 11:39:28 +0000 (UTC)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 19EF4C433F1; Thu, 28 Mar 2024 21:16:52 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3B5C5C43394
-	for <soc@kernel.org>; Wed, 27 Mar 2024 11:39:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B5C5C43394
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a4702457ccbso841190966b.3
-        for <soc@kernel.org>; Wed, 27 Mar 2024 04:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711539565; x=1712144365; darn=kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m93ME46lQ7B8wqoBDoWv3GJg3rLMXw/sn+I50eOHnUw=;
-        b=xFI7as5N71DV4cCWQ/uS+CW+lkLZHtcguaCYdKtj6AMj5Is+JAjL3DPiqSwFboCe6S
-         IkGpU0KF9mkjKmmKZ5KXFTUeklgaVHDGMldPERDFqF4Gxm9A6krvGcqqaTEkseB7i3Xg
-         ATJeAtXi2mzVsHilPok1zQYt6rMj79IOhD34L4hHzCl9qXp0hGfTkUPlapoWaf94fC7C
-         wB/pCJATHZBxH2jfUpOPJKIDLH5KQN/QEDhW20Eu+oC23Lo11z89fyDUggImURyAk2ue
-         WALmAo6f3o0csDXUK+KzRURwwYcXCmAlPoviiUBUE9q5403H/19Vi+yPjlqviQ+BU1qn
-         2vcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711539565; x=1712144365;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m93ME46lQ7B8wqoBDoWv3GJg3rLMXw/sn+I50eOHnUw=;
-        b=vai+7aThcgSIEF5CAXznwCHgpaWARvOqajPwiDjRyvBhFVc2dJVTwDKL8zRb2QIAFe
-         lpOKFI1TuLVOkYdJMtRy7fEyzeLfNXQ/kiA6cc3INqzgXCnb4UG99Aho09k0KYRmIB9V
-         DzGnFR2qowAUQ2uH9on3/au1ij10QSD1TMj+4rk/dbvqQCBatxF3N/+TR5t6VjULVLsq
-         Bj3EdjS6OnjNZ7bH7gALc/TYTOiVlpzpyGiJ6s/U+wtlsD8ffSdVX9EQ4vFLbFBSx8Xv
-         FdlVvL/hia6saLiph58926oBMYv0gZXDNMtVDMKEUwPFmuAWkEPkwp9mKd4SSQTJjgV7
-         KU0A==
-X-Forwarded-Encrypted: i=1; AJvYcCVHgZKvmFd1xeBXSQD5T451UEnTJx0/8VgBoEmzLO/GEat7bIQnCXOsOIpzQmVwZ70hCdrY0iqSJWpKKDaHoQ==
-X-Gm-Message-State: AOJu0YxbqZ149ILErT66I8NDueCEM2ieDpSzvnXl0nEbHyF0KDj9iNv7
-	kHmjGWJYe4l2/aIU6PbXDk99a+EUuvTelEMdaB9setnCOhqor50UWEg1CM4bN3w=
-X-Google-Smtp-Source: AGHT+IEh2db7nxCaUxEgb8RbXF0TQ7G70ljNTsa7xYgI7dJAup4kRdGFRMsvRHBlJJgmz+2s0cMLaQ==
-X-Received: by 2002:a17:906:b1b:b0:a47:499b:d735 with SMTP id u27-20020a1709060b1b00b00a47499bd735mr745672ejg.14.1711539565301;
-        Wed, 27 Mar 2024 04:39:25 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id la5-20020a170907780500b00a45621ded4bsm5395486ejc.146.2024.03.27.04.39.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 04:39:25 -0700 (PDT)
-Date: Wed, 27 Mar 2024 14:39:21 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8934CC433C7;
+	Thu, 28 Mar 2024 21:16:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8934CC433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42SKDfJ2016218;
+	Thu, 28 Mar 2024 21:16:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	qcppdkim1; bh=+MY78+lW5U3e/L0EKh1VpFdXxuRr29FRbMT8d19Xzfo=; b=Oe
+	MPOJvMA5uIvef9XtZKoKUZBkeDjx8zjlNZRdLblLc7IrarXR3aYl/Dxj51MJvChl
+	QnHYk1qX3PPjAWfSvGdnUTzJjFBrEIO4Pqjgo3LGUPDyUXl0yZpzRJjfbdeUT6wn
+	o07DUiFxcnsjVaUbrazufs12vnd6qU0+xLQ+LTjjLyr5JJZu2TMdsI73ErQbgEwU
+	7Nd8sEhpBRHcSNpKX5YGKEA74iIx5eyo19QTTo1Wso0VijSyY3EftG7ppjcCVtUQ
+	+2F4FQL/++dg5+cZBQw22NP7uXq3VwD/igjVCBShyerX6UkoLJaB3FPd2YZH1ROq
+	yw6nZmH8JET4jaJEr5MQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x54r6275n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Mar 2024 21:16:36 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42SLGY8p032402
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Mar 2024 21:16:35 GMT
+Received: from hu-obabatun-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 28 Mar 2024 14:16:31 -0700
+From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org,
-	arm@kernel.org, Hans de Goede <hdegoede@redhat.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-	Pankaj Gupta <pankaj.gupta@nxp.com>,
-	Gaurav Jain <gaurav.jain@nxp.com>, linux-crypto@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH v5 06/11] devm-helpers: Add resource managed version of
- irq_create_mapping()
-Message-ID: <b70ec580-dfac-48bc-87d6-b30f2e91f723@moroto.mountain>
-References: <20240323164359.21642-1-kabel@kernel.org>
- <20240323164359.21642-7-kabel@kernel.org>
- <72bf31c3-337d-4747-8353-639492507a7b@moroto.mountain>
- <20240327103419.3918953a@dellmb>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <robh+dt@kernel.org>,
+        <frowand.list@gmail.com>, <vgupta@kernel.org>, <arnd@arndb.de>,
+        <olof@lixom.net>, <soc@kernel.org>, <guoren@kernel.org>,
+        <monstr@monstr.eu>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <dinguyen@kernel.org>, <chenhuacai@kernel.org>,
+        <tsbogend@alpha.franken.de>, <jonas@southpole.se>,
+        <stefan.kristiansson@saunalahti.fi>, <shorne@gmail.com>,
+        <mpe@ellerman.id.au>, <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+        <glaubitz@physik.fu-berlin.de>, <richard@nod.at>,
+        <anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
+        <chris@zankel.net>, <jcmvbkbc@gmail.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <kernel@quicinc.com>, Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+Subject: [PATCH v5 2/4] of: reserved_mem: Add code to dynamically allocate reserved_mem array
+Date: Thu, 28 Mar 2024 14:15:41 -0700
+Message-ID: <20240328211543.191876-3-quic_obabatun@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240328211543.191876-1-quic_obabatun@quicinc.com>
+References: <20240328211543.191876-1-quic_obabatun@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240327103419.3918953a@dellmb>
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oXCDOQgYN7dmB4uBe8RxCQGEXTK2cGvB
+X-Proofpoint-ORIG-GUID: oXCDOQgYN7dmB4uBe8RxCQGEXTK2cGvB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-28_17,2024-03-28_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ priorityscore=1501 clxscore=1015 lowpriorityscore=0 malwarescore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403210001 definitions=main-2403280152
 
-On Wed, Mar 27, 2024 at 10:34:19AM +0100, Marek Behún wrote:
-> On Tue, 26 Mar 2024 12:00:25 +0300
-> Dan Carpenter <dan.carpenter@linaro.org> wrote:
-> 
-> > On Sat, Mar 23, 2024 at 05:43:54PM +0100, Marek Behún wrote:
-> > > +/**
-> > > + * devm_irq_create_mapping - Resource managed version of irq_create_mapping()
-> > > + * @dev:	Device which lifetime the mapping is bound to
-> > > + * @domain:	domain owning this hardware interrupt or NULL for default domain
-> > > + * @hwirq:	hardware irq number in that domain space
-> > > + *
-> > > + * Create an irq mapping to linux irq space which is automatically disposed when
-> > > + * the driver is detached.
-> > > + * devm_irq_create_mapping() can be used to omit the explicit
-> > > + * irq_dispose_mapping() call when driver is detached.
-> > > + *
-> > > + * Returns a linux irq number on success, 0 if mapping could not be created, or  
-> >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > 
-> > > + * a negative error number if devm action could not be added.
-> > > + */
-> > > +static inline int devm_irq_create_mapping(struct device *dev,
-> > > +					  struct irq_domain *domain,
-> > > +					  irq_hw_number_t hwirq)
-> > > +{
-> > > +	unsigned int virq = irq_create_mapping(domain, hwirq);
-> > > +
-> > > +	if (!virq)
-> > > +		return 0;  
-> > 
-> > What is the point of returning zero instead of an error code?  Neither
-> > of the callers that are introduced later in the patchset use this.
-> > 
-> > I understand that it matches some of the other legacy irq function
-> > behaviors, but I think we are trying to move away from that because it
-> > just leads to bugs.
-> > 
-> > Since we don't need the zero now, let's wait until we have a user before
-> > introducing this behavior.  Then we can add a new function that returns
-> > zero, but we'll still encourage people to use the standard error code
-> > function where possible.  And at the same time, when we do introduce the
-> > zero is an error code, function you should contact
-> > kernel-janitors@vger.kernel.org so someone an write a static checker
-> > rule to detect the bugs that result from it.
-> 
-> Hi Dan,
-> 
-> the first user of this function is the very next patch of this series,
-> and it does this:
-> 
-> +	irq = devm_irq_create_mapping(dev, mcu->gc.irq.domain, irq_idx);
-> +	if (irq <= 0)
-> +		return dev_err_probe(dev, irq ?: -ENXIO,
-> +				     "Cannot map MESSAGE_SIGNED IRQ\n");
-> 
-> So it handles !irq as -ENXIO.
+The reserved_mem array is statically allocated with a size of
+MAX_RESERVED_REGIONS(64). Therefore, if the number of reserved_mem
+regions exceeds this size, there will not be enough space to store
+all the data.
 
-Yeah.  But imagine how much easier it would be if devm_irq_create_mapping()
-returned -ENXIO directly.
+Hence, extend the use of the static array by introducing a
+dynamically allocated array based on the number of reserved memory
+regions specified in the DT.
 
-	irq = devm_irq_create_mapping();
-	if (irq < 0)
-		return dev_err_probe(dev, irq,
-				     "Cannot map MESSAGE_SIGNED IRQ\n");
+On architectures such as arm64, memblock allocated memory is not
+writable until after the page tables have been setup. Hence, the
+dynamic allocation of the reserved_mem array will need to be done only
+after the page tables have been setup.
 
-> 
-> I looked into several users who do
->   virq = irq_create_mapping()
-> and then reutrn errno if !virq:
-> 
->   git grep -A 3 'virq = irq_create_mapping'
-> 
-> Some return -ENOMEM, some -ENXIO, some -EINVAL.
-> 
-> What do you think?
+As a result, a temporary static array is still needed in the initial
+stages to store the information of the dynamically-placed reserved
+memory regions because the start address is selected only at run-time
+and is not stored anywhere else.
+It is not possible to wait until the reserved_mem array is allocated
+because this is done after the page tables are setup and the reserved
+memory regions need to be initialized before then.
 
--ENXIO is fine.
+After the reserved_mem array is allocated, all entries from the static
+array is copied over to the new array, and the rest of the information
+for the statically-placed reserved memory regions are read in from the
+DT and stored in the new array as well.
 
-regards,
-dan carpenter
+Once the init process is completed, the temporary static array is
+released back to the system because it is no longer needed. This is
+achieved by marking it as __initdata.
+
+Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+---
+ drivers/of/of_reserved_mem.c | 58 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 54 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+index db991de16cc0..0aba366eba59 100644
+--- a/drivers/of/of_reserved_mem.c
++++ b/drivers/of/of_reserved_mem.c
+@@ -27,7 +27,9 @@
+ 
+ #include "of_private.h"
+ 
+-static struct reserved_mem reserved_mem[MAX_RESERVED_REGIONS];
++static struct reserved_mem reserved_mem_array[MAX_RESERVED_REGIONS] __initdata;
++static struct reserved_mem *reserved_mem __refdata = reserved_mem_array;
++static int total_reserved_mem_cnt = MAX_RESERVED_REGIONS;
+ static int reserved_mem_count;
+ 
+ static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
+@@ -55,6 +57,45 @@ static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
+ 	return err;
+ }
+ 
++/*
++ * alloc_reserved_mem_array() - allocate memory for the reserved_mem
++ * array using memblock
++ *
++ * This function is used to allocate memory for the reserved_mem array
++ * according to the total number of reserved memory regions defined in
++ * the DT.
++ * After the new array is allocated, the information stored in the
++ * initial static array is copied over to this new array and the new
++ * array is used from this point on.
++ */
++static void __init alloc_reserved_mem_array(void)
++{
++	struct reserved_mem *new_array;
++	size_t alloc_size, copy_size, memset_size;
++
++	alloc_size = array_size(total_reserved_mem_cnt, sizeof(*new_array));
++	if (alloc_size == SIZE_MAX)
++		pr_err("Failed to allocate memory for reserved_mem array with err: %d", -EOVERFLOW);
++
++	new_array = memblock_alloc(alloc_size, SMP_CACHE_BYTES);
++	if (!new_array)
++		pr_err("Failed to allocate memory for reserved_mem array with err: %d", -ENOMEM);
++
++	copy_size = array_size(reserved_mem_count, sizeof(*new_array));
++	if (copy_size == SIZE_MAX) {
++		memblock_free(new_array, alloc_size);
++		total_reserved_mem_cnt = MAX_RESERVED_REGIONS;
++		pr_err("Failed to allocate memory for reserved_mem array with err: %d", -EOVERFLOW);
++	}
++
++	memset_size = alloc_size - copy_size;
++
++	memcpy(new_array, reserved_mem, copy_size);
++	memset(new_array + reserved_mem_count, 0, memset_size);
++
++	reserved_mem = new_array;
++}
++
+ /*
+  * fdt_reserved_mem_save_node() - save fdt node for second pass initialization
+  */
+@@ -63,7 +104,7 @@ static void __init fdt_reserved_mem_save_node(unsigned long node, const char *un
+ {
+ 	struct reserved_mem *rmem = &reserved_mem[reserved_mem_count];
+ 
+-	if (reserved_mem_count == ARRAY_SIZE(reserved_mem)) {
++	if (reserved_mem_count == total_reserved_mem_cnt) {
+ 		pr_err("not enough space for all defined regions.\n");
+ 		return;
+ 	}
+@@ -220,7 +261,7 @@ static int __init __reserved_mem_alloc_size(unsigned long node, const char *unam
+ int __init fdt_scan_reserved_mem(void)
+ {
+ 	int node, child;
+-	int dynamic_nodes_cnt = 0;
++	int dynamic_nodes_cnt = 0, count = 0;
+ 	int dynamic_nodes[MAX_RESERVED_REGIONS];
+ 	const void *fdt = initial_boot_params;
+ 
+@@ -243,6 +284,8 @@ int __init fdt_scan_reserved_mem(void)
+ 		uname = fdt_get_name(fdt, child, NULL);
+ 
+ 		err = __reserved_mem_reserve_reg(child, uname);
++		if (!err)
++			count++;
+ 		/*
+ 		 * Save the nodes for the dynamically-placed regions
+ 		 * into an array which will be used for allocation right
+@@ -257,11 +300,16 @@ int __init fdt_scan_reserved_mem(void)
+ 	}
+ 	for (int i = 0; i < dynamic_nodes_cnt; i++) {
+ 		const char *uname;
++		int err;
+ 
+ 		child = dynamic_nodes[i];
+ 		uname = fdt_get_name(fdt, child, NULL);
+-		__reserved_mem_alloc_size(child, uname);
++
++		err = __reserved_mem_alloc_size(child, uname);
++		if (!err)
++			count++;
+ 	}
++	total_reserved_mem_cnt = count++;
+ 	return 0;
+ }
+ 
+@@ -494,6 +542,8 @@ void __init fdt_init_reserved_mem(void)
+ {
+ 	int i;
+ 
++	alloc_reserved_mem_array();
++
+ 	fdt_scan_reserved_mem_reg_nodes();
+ 
+ 	/* check for overlapping reserved regions */
+-- 
+2.34.1
 
