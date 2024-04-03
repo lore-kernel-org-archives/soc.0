@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7686BCD1288
-	for <soc@archiver.kernel.org>; Wed,  3 Apr 2024 13:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F680CD128A
+	for <soc@archiver.kernel.org>; Wed,  3 Apr 2024 13:45:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 45C57C433F1; Wed,  3 Apr 2024 13:45:39 +0000 (UTC)
+	id EFA36C433C7; Wed,  3 Apr 2024 13:45:41 +0000 (UTC)
 Received: from mail.rnplus.nl (mail.rnplus.nl [178.251.25.70])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3755EC43390
-	for <soc@kernel.org>; Wed,  3 Apr 2024 13:45:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3755EC43390
+	by smtp.kernel.org (Postfix) with ESMTPS id 812A0C43390
+	for <soc@kernel.org>; Wed,  3 Apr 2024 13:45:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 812A0C43390
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=rnplus.nl
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=rnplus.nl
 Received: from localhost (unknown [127.0.0.1])
-	by mail.rnplus.nl (Postfix) with ESMTP id C9E46379491
-	for <soc@kernel.org>; Wed,  3 Apr 2024 13:37:39 +0000 (UTC)
+	by mail.rnplus.nl (Postfix) with ESMTP id 6F46737948F
+	for <soc@kernel.org>; Wed,  3 Apr 2024 13:37:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at rnplus.nl
 Received: from mail.rnplus.nl ([127.0.0.1])
 	by localhost (mail.rnplus.nl [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XWKYp-y20NDk for <soc@kernel.org>;
-	Wed,  3 Apr 2024 15:37:39 +0200 (CEST)
+	with ESMTP id TdyoVG6mlEMc for <soc@kernel.org>;
+	Wed,  3 Apr 2024 15:37:37 +0200 (CEST)
 Received: from localhost.localdomain (184-179-179-143.ftth.glasoperator.nl [143.179.179.184])
-	by mail.rnplus.nl (Postfix) with ESMTPSA id CBDE337947A;
-	Wed,  3 Apr 2024 15:37:31 +0200 (CEST)
+	by mail.rnplus.nl (Postfix) with ESMTPSA id 9705137945A;
+	Wed,  3 Apr 2024 15:37:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=rnplus.nl; s=dkim;
-	t=1712151453; bh=J3x6v1j8NItiPEP2ALslVPQ+eLcuXH6rDPyikVVJs7U=;
+	t=1712151451; bh=FIkSUNs/sbSf4YGW1uMUy2MIHSMnoVsTHAqBue/Rj2c=;
 	h=From:To:Subject:Date:In-Reply-To:References;
-	b=Z26dLVShrOqZaVWeKDgn4w32mfSkcvgNAkOzrO3X9xDzIkQIu66+cACZmAdvbrv86
-	 kjr6bffH0ynPQYYIyKPNwQN3B+4GBGuok9EkXfnQORJWkEPYozDDcDaQh61F3YxYbG
-	 VMCxGa1Nm6fuT3UzR9LBOMwRqrUOitlAZI+IGJ1E=
+	b=VxnvNx3KCHNzIfzWa9MUtUbD8cvjAwRoqSRHFOmK5Xw6HO/ZVKMz90FJ7W9a8uWl9
+	 ODCKkJfa64wt9RUCy5wNNOL0yN195qb1/Q2HCAGUsNOq56fap8ZuWjNNTRtmM19zoX
+	 9XiWOwS7O/7ua21mCF3mOuCVlxAOsfkeXHeAx4j8=
 From: Renze Nicolai <renze@rnplus.nl>
 List-Id: <soc.lore.kernel.org>
 To: renze@rnplus.nl,
@@ -48,60 +48,144 @@ To: renze@rnplus.nl,
 	krzysztof.kozlowski+dt@linaro.org,
 	joel@jms.id.au,
 	andrew@aj.id.au
-Subject: [PATCH v2 2/3] ARM: dts: Disable unused ADC channels for Asrock X570D4U BMC
-Date: Wed,  3 Apr 2024 15:28:52 +0200
-Message-ID: <20240403133037.37782-3-renze@rnplus.nl>
+Subject: [PATCH v2 1/3] ARM: dts: Modify GPIO table for Asrock X570D4U BMC
+Date: Wed,  3 Apr 2024 15:28:51 +0200
+Message-ID: <20240403133037.37782-2-renze@rnplus.nl>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240403133037.37782-1-renze@rnplus.nl>
 References: <20240403133037.37782-1-renze@rnplus.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Additionally adds labels describing the ADC channels.
+Restructure GPIO table to fit maximum line length.
+
+Fix mistakes found while working on OpenBMC
+userland configuration and based on probing
+the board.
+
+Schematic for this board is not available.
+Because of this the choice was made to
+use a descriptive method for naming the
+GPIOs.
+
+ - Push-pull outputs start with output-*
+ - Open-drain outputs start with control-*
+ - LED outputs start with led-*
+ - Inputs start with input-*
+ - Button inputs start with button-*
+ - Active low signals end with *-n
 
 Signed-off-by: Renze Nicolai <renze@rnplus.nl>
 ---
- .../dts/aspeed/aspeed-bmc-asrock-x570d4u.dts  | 29 +++++++++----------
- 1 file changed, 13 insertions(+), 16 deletions(-)
+ .../dts/aspeed/aspeed-bmc-asrock-x570d4u.dts  | 95 ++++++++-----------
+ 1 file changed, 37 insertions(+), 58 deletions(-)
 
 diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
-index dff69d6ff146..66318ef8caae 100644
+index 3c975bc41ae7..dff69d6ff146 100644
 --- a/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
 +++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
-@@ -337,20 +337,17 @@ fan@5 {
- &adc {
+@@ -79,64 +79,43 @@ iio-hwmon {
+ &gpio {
  	status = "okay";
- 	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_adc0_default
--				&pinctrl_adc1_default
--				&pinctrl_adc2_default
--				&pinctrl_adc3_default
--				&pinctrl_adc4_default
--				&pinctrl_adc5_default
--				&pinctrl_adc6_default
--				&pinctrl_adc7_default
--				&pinctrl_adc8_default
--				&pinctrl_adc9_default
--				&pinctrl_adc10_default
--				&pinctrl_adc11_default
--				&pinctrl_adc12_default
--				&pinctrl_adc13_default
--				&pinctrl_adc14_default
--				&pinctrl_adc15_default>;
-+	pinctrl-0 = <&pinctrl_adc0_default       /* 3VSB */
-+			&pinctrl_adc1_default    /* 5VSB */
-+			&pinctrl_adc2_default    /* VCPU */
-+			&pinctrl_adc3_default    /* VSOC */
-+			&pinctrl_adc4_default    /* VCCM */
-+			&pinctrl_adc5_default    /* APU-VDDP */
-+			&pinctrl_adc6_default    /* PM-VDD-CLDO */
-+			&pinctrl_adc7_default    /* PM-VDDCR-S5 */
-+			&pinctrl_adc8_default    /* PM-VDDCR */
-+			&pinctrl_adc9_default    /* VBAT */
-+			&pinctrl_adc10_default   /* 3V */
-+			&pinctrl_adc11_default   /* 5V */
-+			&pinctrl_adc12_default>; /* 12V */
+ 	gpio-line-names =
+-	/*A0-A3*/       "status-locatorled-n",                    "",                      "button-nmi-n",          "",
+-	/*A4-A7*/       "",                                       "",                      "",                      "",
+-	/*B0-B3*/       "input-bios-post-cmplt-n",                "",                      "",                      "",
+-	/*B4-B7*/       "",                                       "",                      "",                      "",
+-	/*C0-C3*/       "",                                       "",                      "",                      "",
+-	/*C4-C7*/       "",                                       "",                      "control-locatorbutton", "",
+-	/*D0-D3*/       "button-power",                           "control-power",         "button-reset",          "control-reset",
+-	/*D4-D7*/       "",                                       "",                      "",                      "",
+-	/*E0-E3*/       "",                                       "",                      "",                      "",
+-	/*E4-E7*/       "",                                       "",                      "",                      "",
+-	/*F0-F3*/       "",                                       "",                      "",                      "",
+-	/*F4-F7*/       "",                                       "",                      "",                      "",
+-	/*G0-G3*/       "output-rtc-battery-voltage-read-enable", "input-id0",             "input-id1",             "input-id2",
+-	/*G4-G7*/       "input-alert1-n",                         "input-alert2-n",        "input-alert3-n",        "",
+-	/*H0-H3*/       "",                                       "",                      "",                      "",
+-	/*H4-H7*/       "input-mfg",                              "",                      "led-heartbeat-n",       "input-caseopen",
+-	/*I0-I3*/       "",                                       "",                      "",                      "",
+-	/*I4-I7*/       "",                                       "",                      "",                      "",
+-	/*J0-J3*/       "output-bmc-ready",                       "",                      "",                      "",
+-	/*J4-J7*/       "",                                       "",                      "",                      "",
+-	/*K0-K3*/       "",                                       "",                      "",                      "",
+-	/*K4-K7*/       "",                                       "",                      "",                      "",
+-	/*L0-L3*/       "",                                       "",                      "",                      "",
+-	/*L4-L7*/       "",                                       "",                      "",                      "",
+-	/*M0-M3*/       "",                                       "",                      "",                      "",
+-	/*M4-M7*/       "",                                       "",                      "",                      "",
+-	/*N0-N3*/       "",                                       "",                      "",                      "",
+-	/*N4-N7*/       "",                                       "",                      "",                      "",
+-	/*O0-O3*/       "",                                       "",                      "",                      "",
+-	/*O4-O7*/       "",                                       "",                      "",                      "",
+-	/*P0-P3*/       "",                                       "",                      "",                      "",
+-	/*P4-P7*/       "",                                       "",                      "",                      "",
+-	/*Q0-Q3*/       "",                                       "",                      "",                      "",
+-	/*Q4-Q7*/       "",                                       "",                      "",                      "",
+-	/*R0-R3*/       "",                                       "",                      "",                      "",
+-	/*R4-R7*/       "",                                       "",                      "",                      "",
+-	/*S0-S3*/       "input-bmc-pchhot-n",                     "",                      "",                      "",
+-	/*S4-S7*/       "",                                       "",                      "",                      "",
+-	/*T0-T3*/       "",                                       "",                      "",                      "",
+-	/*T4-T7*/       "",                                       "",                      "",                      "",
+-	/*U0-U3*/       "",                                       "",                      "",                      "",
+-	/*U4-U7*/       "",                                       "",                      "",                      "",
+-	/*V0-V3*/       "",                                       "",                      "",                      "",
+-	/*V4-V7*/       "",                                       "",                      "",                      "",
+-	/*W0-W3*/       "",                                       "",                      "",                      "",
+-	/*W4-W7*/       "",                                       "",                      "",                      "",
+-	/*X0-X3*/       "",                                       "",                      "",                      "",
+-	/*X4-X7*/       "",                                       "",                      "",                      "",
+-	/*Y0-Y3*/       "",                                       "",                      "",                      "",
+-	/*Y4-Y7*/       "",                                       "",                      "",                      "",
+-	/*Z0-Z3*/       "",                                       "",                      "led-fault-n",           "output-bmc-throttle-n",
+-	/*Z4-Z7*/       "",                                       "",                      "",                      "",
+-	/*AA0-AA3*/     "input-cpu1-thermtrip-latch-n",           "",                      "input-cpu1-prochot-n",  "",
+-	/*AA4-AC7*/     "",                                       "",                      "",                      "",
+-	/*AB0-AB3*/     "",                                       "",                      "",                      "",
+-	/*AB4-AC7*/     "",                                       "",                      "",                      "",
+-	/*AC0-AC3*/     "",                                       "",                      "",                      "",
+-	/*AC4-AC7*/     "",                                       "",                      "",                      "";
++	/*  A */ "input-locatorled-n", "", "", "", "", "", "", "",
++	/*  B */ "input-bios-post-cmplt-n", "", "", "", "", "", "", "",
++	/*  C */ "", "", "", "", "", "", "control-locatorbutton-n", "",
++	/*  D */ "button-power-n", "control-power-n", "button-reset-n",
++		 "control-reset-n", "", "", "", "",
++	/*  E */ "", "", "", "", "", "", "", "",
++	/*  F */ "", "", "", "", "", "", "", "",
++	/*  G */ "output-hwm-vbat-enable", "input-id0-n", "input-id1-n",
++		 "input-id2-n", "input-aux-smb-alert-n", "",
++		 "input-psu-smb-alert-n", "",
++	/*  H */ "", "", "", "", "input-mfg-mode-n", "",
++		 "led-heartbeat-n", "input-case-open-n",
++	/*  I */ "", "", "", "", "", "", "", "",
++	/*  J */ "output-bmc-ready-n", "", "", "", "", "", "", "",
++	/*  K */ "", "", "", "", "", "", "", "",
++	/*  L */ "", "", "", "", "", "", "", "",
++	/*  M */ "", "", "", "", "", "", "", "",
++	/*  N */ "", "", "", "", "", "", "", "",
++	/*  O */ "", "", "", "", "", "", "", "",
++	/*  P */ "", "", "", "", "", "", "", "",
++	/*  Q */ "", "", "", "", "input-bmc-smb-present-n", "", "",
++		 "input-pcie-wake-n",
++	/*  R */ "", "", "", "", "", "", "", "",
++	/*  S */ "input-bmc-pchhot-n", "", "", "", "", "", "", "",
++	/*  T */ "", "", "", "", "", "", "", "",
++	/*  U */ "", "", "", "", "", "", "", "",
++	/*  V */ "", "", "", "", "", "", "", "",
++	/*  W */ "", "", "", "", "", "", "", "",
++	/*  X */ "", "", "", "", "", "", "", "",
++	/*  Y */ "input-sleep-s3-n", "input-sleep-s5-n", "", "", "", "",
++		 "", "",
++	/*  Z */ "", "", "led-fault-n", "output-bmc-throttle-n", "", "",
++		 "", "",
++	/* AA */ "input-cpu1-thermtrip-latch-n", "",
++		 "input-cpu1-prochot-n", "", "", "", "", "",
++	/* AB */ "", "input-power-good", "", "", "", "", "", "",
++	/* AC */ "", "", "", "", "", "", "", "";
  };
+ 
+ &fmc {
 -- 
 2.44.0
 
