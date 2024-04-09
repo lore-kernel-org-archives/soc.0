@@ -4,82 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB56FCD128A
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08C41CD129F
 	for <soc@archiver.kernel.org>; Tue,  9 Apr 2024 15:40:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B7BA7C433B2; Tue,  9 Apr 2024 15:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A1C0FC43390
-	for <soc@kernel.org>; Tue,  9 Apr 2024 15:40:39 +0000 (UTC)
+	id DBE85C43143; Tue,  9 Apr 2024 15:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6160C43330;
+	Tue,  9 Apr 2024 15:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1712677239;
-	bh=ZyT3dYIWJCH40xC75xbOt8KVQwFrVcp3/SyGJPPgtpM=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=LRujqHBvl8eieVW3+SymFHPDzjJvfy3E2vLQSwgZ5fYlakz164UWXlDpijMsEtYT6
-	 mFvYT8RfiFsUQrCmjqnEO9prphCiT/hjv+iC4vry3JCYaGwhQDk/XdjO/XedOhFHnC
-	 J3gQeezyOZUjbIxYpFJjhYb4FVXTnn/t0o7DsWNnrwMskIa/1O3OeuUygpIeTSn/um
-	 z4sC9uR1KGXNPfIr2+u4qCSAsjCfSSGd2re9kTlQOXa1KUhIW/aA0lBo7mUxNDZTbE
-	 90pXhG76HZS0xEpzsyL+KsQBvXe0b/0/woxCMkBWwbActdgjlC2nVtY99pwgL554V1
-	 6v2cDKVjmO4Hg==
+	bh=/d5gkgFiurM7scLkzmghU5xBK7ejkSqRz7xbi4mKSuc=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Q7puMI2M9WI/q+CKM3590y9PxZksytjkv+whrdNvCNO2vYQqI02L+q3+EITf1K9sA
+	 q9FN7X3lYPfsZ9Rhjnqf4tNyW0Z458sEe0wzPQEYQdpz7redGlx0r8IBE/uEtdFrFa
+	 PZh+ZAMfvNvR6CsQY+Gk3BfTuxbpPn1WfFS+N2PwR+5ZJFUryITMVSap00/SEQDSGr
+	 yyFvy/7pBhMsh4/P7gOfBb9Np9gjztdt7+2+nB2L3OVXacVF1KUHkpxbDbImCvRX9x
+	 o29/ITHPZmmfTgkmavH0hcfgylcCzA2bmOhj4eFvfTjAN33HXWJq8j+xaKZo2/NGmg
+	 14gFjhMsuayxA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8780AD6030D;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ACA37D60314;
 	Tue,  9 Apr 2024 15:40:39 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] RISC-V SoC driver fixes for v6.9-rc3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171267723949.12038.12728084155834518947.git-patchwork-summary@kernel.org>
+ <171267723970.12038.459215305758101073.git-patchwork-notify@kernel.org>
 Date: Tue, 09 Apr 2024 15:40:39 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20240406-botch-disband-efc69b8236be@spud>
+In-Reply-To: <20240406-botch-disband-efc69b8236be@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] firmware: arm_ffa: Fix for v6.9
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=841457
-  Lore link: https://lore.kernel.org/r/20240404140339.450509-1-sudeep.holla@arm.com
+On Sat, 6 Apr 2024 11:06:08 +0100 you wrote:
+> Hey Arnd,
+> 
+> A single patch for ya, needed to fix boot on the JH7100.
+> 
+> Cheers,
+> Conor.
+> 
+> [...]
 
-Patch: [fixes] MAINTAINERS: Change Krzysztof Kozlowski's email address
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=842307
-  Lore link: https://lore.kernel.org/r/20240408073234.12968-1-krzysztof.kozlowski@linaro.org
+Here is the summary with links:
+  - [GIT,PULL] RISC-V SoC driver fixes for v6.9-rc3
+    https://git.kernel.org/soc/soc/c/01a71af381a8
 
-Patch: [GIT,PULL] GPIO regression fixes for n8x0
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=840992
-  Lore link: https://lore.kernel.org/r/pull-1712135932-125424@atomide.com
-
-Patch: [GIT,PULL] firmware: arm_scmi: Fixes for v6.9
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=841456
-  Lore link: https://lore.kernel.org/r/20240404140306.450330-1-sudeep.holla@arm.com
-
-Patch: [GIT,PULL] RISC-V SoC driver fixes for v6.9-rc3
-  Submitter: Conor Dooley <conor@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=842016
-  Lore link: https://lore.kernel.org/r/20240406-botch-disband-efc69b8236be@spud
-
-Patch: [GIT,PULL] i.MX fixes for 6.9
-  Submitter: Shawn Guo <shawnguo2@yeah.net>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=841349
-  Lore link: https://lore.kernel.org/r/Zg5rfaVVvD9egoBK@dragon
-
-
-Total patches: 6
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
