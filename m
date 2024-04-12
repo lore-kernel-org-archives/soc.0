@@ -1,362 +1,561 @@
-Return-Path: <SRS0=woEB=LR=quicinc.com=quic_obabatun@kernel.org>
+Return-Path: <robh@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49884C4345F
-	for <soc@archiver.kernel.org>; Fri, 12 Apr 2024 21:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D81AEC4345F
+	for <soc@archiver.kernel.org>; Fri, 12 Apr 2024 22:29:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 20B00C2BD10; Fri, 12 Apr 2024 21:41:13 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F7D6C113CC;
-	Fri, 12 Apr 2024 21:41:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F7D6C113CC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43CLOcCf031674;
-	Fri, 12 Apr 2024 21:40:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=Nk4TG9yDmY9Q1U96or5wfZFuqpbTyezZPX1b/MEyft4=; b=mS
-	kNhyJlU3LJuUasbUvYHNbbO4hKal6ay8cFUVgVl4i8/HWIQ9IRMh0dbzttTGor5c
-	5VC4GSi6r2uuYwQXZOg94GxzLHxWgCfQs+bZFpuTvd84+pBmHqZ0a5XqTHikhZvf
-	qAfAYnNlR2Ix/pTeeLAeHME3LfvRkHOXsAUxe5VL8gGz+KDD/05+b82+tRBf2AWt
-	WN4Y0Ax6DhVp+op8O52AS0hVowovoNNLR2bY9/SBa0ySBtm8m1X1xeHqZ8XvfWQj
-	YHDlOA5WQwJWPONlXqAPkHKmfUQXvSVmLZYvEMcBxBp9nkB/5fToW7/1DQrCqQ2i
-	ZhUjj96ONHq1WWzF8elw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xer1ttx5b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Apr 2024 21:40:46 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43CLei3W009864
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Apr 2024 21:40:44 GMT
-Received: from [10.110.105.144] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 12 Apr
- 2024 14:40:40 -0700
-Message-ID: <7befeeb2-a481-46ac-97d0-a9d6d023427d@quicinc.com>
-Date: Fri, 12 Apr 2024 14:38:54 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/4] of: reserved_mem: Use the unflatten_devicetree
- APIs to scan reserved mem. nodes
-To: Rob Herring <robh+dt@kernel.org>
+	id 9C67DC32781; Fri, 12 Apr 2024 22:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E03C113CC;
+	Fri, 12 Apr 2024 22:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712960951;
+	bh=dvHUo9f2ZgG4pJq4r0jugRT+L386jedgydw0yaLdt9A=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=qYW9ll1Kzsf6JuvAhzLACQWSIH6GxpiKkhqO/53JcsS9wRqohuTJo+mHekoSRs0nw
+	 f1P5p3H1ZmgETGk+bCXpEjB9qhQY+gIlxVEwlnDheASyI9MGdMN+E0/aYYODcLDjio
+	 esSfxwHmO+YbiA2VN0FiURdAdmwmixp8GAUjKEJwBzkI60sR6ZkBuZVwTqgwDfuZkq
+	 tXqXqzs91sTDXNzHDmCHkgDGCn9ZVwrDpHMPLJyOrlElpgFJpgVGcdMjpKD7YvcK9t
+	 VKQ95+bYRWG8BOkB8LwT8YQMMtD83PSw7OHtVUsFgkprtCOhSFbE+kHcdGfFwOnVVV
+	 czECM54Q56BiA==
+From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: <catalin.marinas@arm.com>, <will@kernel.org>, <frowand.list@gmail.com>,
-        <vgupta@kernel.org>, <arnd@arndb.de>, <olof@lixom.net>,
-        <soc@kernel.org>, <guoren@kernel.org>, <monstr@monstr.eu>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <dinguyen@kernel.org>,
-        <chenhuacai@kernel.org>, <tsbogend@alpha.franken.de>,
-        <jonas@southpole.se>, <stefan.kristiansson@saunalahti.fi>,
-        <shorne@gmail.com>, <mpe@ellerman.id.au>, <ysato@users.sourceforge.jp>,
-        <dalias@libc.org>, <glaubitz@physik.fu-berlin.de>, <richard@nod.at>,
-        <anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
-        <chris@zankel.net>, <jcmvbkbc@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <kernel@quicinc.com>
-References: <20240328211543.191876-1-quic_obabatun@quicinc.com>
- <20240328211543.191876-4-quic_obabatun@quicinc.com>
- <CAL_Jsq+RQaKTqB6hnsCJ_d0zM6FkrMXQ0NF0r1P22q95_ZDM4A@mail.gmail.com>
-Content-Language: en-US
-From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
-In-Reply-To: <CAL_Jsq+RQaKTqB6hnsCJ_d0zM6FkrMXQ0NF0r1P22q95_ZDM4A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+To: soc@kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+	Antoine Tenart <atenart@kernel.org>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Robert Richter <rric@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Li Yang <leoyang.li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	"Paul J. Murphy" <paul.j.murphy@intel.com>,
+	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-fsd@tesla.com,
+	Michal Simek <michal.simek@amd.com>
+Cc: devicetree@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-mediatek@lists.infradead.org,
+	linux-tegra@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-realtek-soc@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: [PATCH] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
+Date: Fri, 12 Apr 2024 17:28:51 -0500
+Message-ID: <20240412222857.3873079-1-robh@kernel.org>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bUs5QiPjttYcdFzuNPx6Sq6bSgwqw58d
-X-Proofpoint-GUID: bUs5QiPjttYcdFzuNPx6Sq6bSgwqw58d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-12_18,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 clxscore=1011
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404120156
 
+The "arm,armv8-pmuv3" compatible is intended only for s/w models. Primarily,
+it doesn't provide any detail on uarch specific events.
 
-On 4/11/2024 11:59 AM, Rob Herring wrote:
-> On Thu, Mar 28, 2024 at 4:16 PM Oreoluwa Babatunde
-> <quic_obabatun@quicinc.com> wrote:
->> The unflatten_devicetree APIs have been setup and are available to be
->> used by the time the fdt_init_reserved_mem() function is called.
->> Since the unflatten_devicetree APIs are a more efficient way of scanning
->> through the DT nodes, switch to using these APIs to facilitate the rest
->> of the reserved memory processing.
-> Please use get_maintainers.pl. Specifically, you missed maintainers
-> for kernel/dma/.
+There's still remaining cases for CPUs without any corresponding PMU
+definition and for big.LITTLE systems which only have a single PMU node
+(there should be one per core type).
 
-Sorry about that, Will include them in the next version.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+SoC Maintainers, Can you please apply this directly.
+---
+ arch/arm/boot/dts/broadcom/bcm2711.dtsi              | 4 ++--
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi    | 2 +-
+ arch/arm64/boot/dts/amazon/alpine-v2.dtsi            | 2 +-
+ arch/arm64/boot/dts/apm/apm-storm.dtsi               | 2 +-
+ arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts | 2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi     | 2 +-
+ arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi  | 2 +-
+ arch/arm64/boot/dts/cavium/thunder-88xx.dtsi         | 2 +-
+ arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi        | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi       | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi       | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi       | 7 +++++++
+ arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi       | 7 +++++++
+ arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi       | 5 -----
+ arch/arm64/boot/dts/freescale/imx8dxl.dtsi           | 2 +-
+ arch/arm64/boot/dts/intel/keembay-soc.dtsi           | 2 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi        | 2 +-
+ arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi        | 2 +-
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi         | 2 +-
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi             | 2 +-
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi             | 2 +-
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi                | 2 +-
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi                | 2 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi                 | 2 +-
+ arch/arm64/boot/dts/qcom/sdx75.dtsi                  | 2 +-
+ arch/arm64/boot/dts/realtek/rtd16xx.dtsi             | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3368.dtsi             | 2 +-
+ arch/arm64/boot/dts/sprd/sc9860.dtsi                 | 2 +-
+ arch/arm64/boot/dts/sprd/sc9863a.dtsi                | 2 +-
+ arch/arm64/boot/dts/synaptics/berlin4ct.dtsi         | 2 +-
+ arch/arm64/boot/dts/tesla/fsd.dtsi                   | 2 +-
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi               | 2 +-
+ 32 files changed, 44 insertions(+), 35 deletions(-)
 
->
->> Signed-off-by: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
->> ---
->>  drivers/of/of_reserved_mem.c    | 77 +++++++++++++++++++++------------
->>  include/linux/of_reserved_mem.h |  2 +-
->>  kernel/dma/coherent.c           |  8 ++--
->>  kernel/dma/contiguous.c         |  8 ++--
->>  kernel/dma/swiotlb.c            | 10 ++---
->>  5 files changed, 64 insertions(+), 41 deletions(-)
->>
->> diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
->> index 0aba366eba59..68d1f4cca4bb 100644
->> --- a/drivers/of/of_reserved_mem.c
->> +++ b/drivers/of/of_reserved_mem.c
->> @@ -99,7 +99,7 @@ static void __init alloc_reserved_mem_array(void)
->>  /*
->>   * fdt_reserved_mem_save_node() - save fdt node for second pass initialization
->>   */
->> -static void __init fdt_reserved_mem_save_node(unsigned long node, const char *uname,
->> +static void __init fdt_reserved_mem_save_node(struct device_node *node, const char *uname,
->>                                               phys_addr_t base, phys_addr_t size)
->>  {
->>         struct reserved_mem *rmem = &reserved_mem[reserved_mem_count];
->> @@ -109,7 +109,7 @@ static void __init fdt_reserved_mem_save_node(unsigned long node, const char *un
->>                 return;
->>         }
->>
->> -       rmem->fdt_node = node;
->> +       rmem->dev_node = node;
->>         rmem->name = uname;
->>         rmem->base = base;
->>         rmem->size = size;
->> @@ -178,11 +178,11 @@ static int __init __reserved_mem_reserve_reg(unsigned long node,
->>  }
->>
->>  /*
->> - * __reserved_mem_check_root() - check if #size-cells, #address-cells provided
->> + * __fdt_reserved_mem_check_root() - check if #size-cells, #address-cells provided
->>   * in /reserved-memory matches the values supported by the current implementation,
->>   * also check if ranges property has been provided
->>   */
->> -static int __init __reserved_mem_check_root(unsigned long node)
->> +static int __init __fdt_reserved_mem_check_root(unsigned long node)
->>  {
->>         const __be32 *prop;
->>
->> @@ -200,6 +200,29 @@ static int __init __reserved_mem_check_root(unsigned long node)
->>         return 0;
->>  }
->>
->> +/*
->> + * __dt_reserved_mem_check_root() - check if #size-cells, #address-cells provided
->> + * in /reserved-memory matches the values supported by the current implementation,
->> + * also check if ranges property has been provided
->> + */
->> +static int __init __dt_reserved_mem_check_root(struct device_node *node)
-> The normal prefix is 'of', not 'dt'. Weird, right?, but it dates back
-> to OpenFirmware.
-Got it! I will follow the same for the functions that I renamed in Patch 04 as well.
->
->> +{
->> +       const __be32 *prop;
->> +
->> +       prop = of_get_property(node, "#size-cells", NULL);
-> Throughout, use the appropriate typed function. Here for example,
-> of_property_read_u32().
-ack.
->
->> +       if (!prop || be32_to_cpup(prop) != dt_root_size_cells)
->> +               return -EINVAL;
->> +
->> +       prop = of_get_property(node, "#address-cells", NULL);
->> +       if (!prop || be32_to_cpup(prop) != dt_root_addr_cells)
->> +               return -EINVAL;
->> +
->> +       prop = of_get_property(node, "ranges", NULL);
-> Or for presence, just of_property_present().
-ack.
->
->> +       if (!prop)
->> +               return -EINVAL;
->> +       return 0;
->> +}
->> +
->>  /**
->>   * fdt_scan_reserved_mem_reg_nodes() - Store info for the "reg" defined
->>   * reserved memory regions.
->> @@ -213,33 +236,38 @@ static int __init __reserved_mem_check_root(unsigned long node)
->>  static void __init fdt_scan_reserved_mem_reg_nodes(void)
->>  {
->>         int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
->> -       const void *fdt = initial_boot_params;
->> +       struct device_node *node, *child;
->>         phys_addr_t base, size;
->>         const __be32 *prop;
->> -       int node, child;
->>         int len;
->>
->> -       node = fdt_path_offset(fdt, "/reserved-memory");
->> -       if (node < 0) {
->> +       node = of_find_node_by_path("/reserved-memory");
->> +       if (!node) {
->>                 pr_info("Reserved memory: No reserved-memory node in the DT\n");
->>                 return;
->>         }
->>
->> -       if (__reserved_mem_check_root(node)) {
->> +       if (__dt_reserved_mem_check_root(node)) {
->>                 pr_err("Reserved memory: unsupported node format, ignoring\n");
->>                 return;
->>         }
->>
->> -       fdt_for_each_subnode(child, fdt, node) {
->> +       for_each_child_of_node(node, child) {
->>                 const char *uname;
->> +               struct reserved_mem *rmem;
->>
->> -               prop = of_get_flat_dt_prop(child, "reg", &len);
->> -               if (!prop)
->> +               if (!of_device_is_available(child))
->>                         continue;
->> -               if (!of_fdt_device_is_available(fdt, child))
->> +
->> +               prop = of_get_property(child, "reg", &len);
-> We have specific unflattened functions for reading 'reg'. Note that
-> you should use the 'translated' ones even though we have a check to
-> disallow any real translation. That restriction should be fixed at
-> some point.
-"of_address_to_resource()" seems to be a function that reads the 'reg' property
-the way you are describing here. I'll switch to that function and see how it works!
+diff --git a/arch/arm/boot/dts/broadcom/bcm2711.dtsi b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
+index 22c7f1561344..926f87b86590 100644
+--- a/arch/arm/boot/dts/broadcom/bcm2711.dtsi
++++ b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
+@@ -432,8 +432,8 @@ emmc2: mmc@7e340000 {
+ 		};
+ 	};
+ 
+-	arm-pmu {
+-		compatible = "arm,cortex-a72-pmu", "arm,armv8-pmuv3";
++	pmu {
++		compatible = "arm,cortex-a72-pmu";
+ 		interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
+ 			<GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
+ 			<GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+index 072fe20cfca0..cbbc53c47921 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+@@ -79,7 +79,7 @@ fpga-region {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <0 170 4>,
+ 			     <0 171 4>,
+ 			     <0 172 4>,
+diff --git a/arch/arm64/boot/dts/amazon/alpine-v2.dtsi b/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
+index dbf2dce8d1d6..dbe21d88a29e 100644
+--- a/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
++++ b/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
+@@ -106,7 +106,7 @@ timer {
+ 		};
+ 
+ 		pmu {
+-			compatible = "arm,armv8-pmuv3";
++			compatible = "arm,cortex-a57-pmu";
+ 			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+index 988928c60f15..ee3f838b4904 100644
+--- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+@@ -122,7 +122,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "apm,potenza-pmu", "arm,armv8-pmuv3";
++		compatible = "apm,potenza-pmu";
+ 		interrupts = <1 12 0xff04>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts b/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
+index 8db4243a4947..9115c99d0dc0 100644
+--- a/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
++++ b/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
+@@ -102,7 +102,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+index 896d1f33b5b6..cfd9fd23a1c2 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+@@ -102,7 +102,7 @@ IRQ_TYPE_LEVEL_LOW)>,
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a57-pmu";
+ 		interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
+index d8516ec0dae7..857fa427e195 100644
+--- a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
++++ b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
+@@ -142,7 +142,7 @@ psci {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a72-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi b/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi
+index 8ad31dee11a3..4c9f1f808427 100644
+--- a/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi
++++ b/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi
+@@ -361,7 +361,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "cavium,thunder-pmu", "arm,armv8-pmuv3";
++		compatible = "cavium,thunder-pmu";
+ 		interrupts = <1 7 4>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi b/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi
+index 3419bd252696..68cb3d01187a 100644
+--- a/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi
++++ b/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi
+@@ -83,7 +83,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "brcm,vulcan-pmu", "arm,armv8-pmuv3";
++		compatible = "brcm,vulcan-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>; /* PMU overflow */
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
+index fe9093b3c02e..a0f7bbd691a0 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
+@@ -81,7 +81,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <0 106 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
+index d333b773bc45..8ee6d8c0ef61 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
+@@ -276,7 +276,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <0 106 0x4>,
+ 			     <0 107 0x4>,
+ 			     <0 95 0x4>,
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
+index 1aa38ed09aa4..8352197cea6f 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
+@@ -12,6 +12,13 @@
+ #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
+ #include "fsl-ls208xa.dtsi"
+ 
++/ {
++	pmu {
++		compatible = "arm,cortex-a57-pmu";
++		interrupts = <1 7 0x8>; /* PMU PPI, Level low type */
++	};
++};
++
+ &cpu {
+ 	cpu0: cpu@0 {
+ 		device_type = "cpu";
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi
+index 8581ea55d254..245bbd615c81 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi
+@@ -12,6 +12,13 @@
+ #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
+ #include "fsl-ls208xa.dtsi"
+ 
++/ {
++	pmu {
++		compatible = "arm,cortex-a72-pmu";
++		interrupts = <1 7 0x8>; /* PMU PPI, Level low type */
++	};
++};
++
+ &cpu {
+ 	cpu0: cpu@0 {
+ 		device_type = "cpu";
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
+index 0b7292835906..ccba0a135b24 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
+@@ -247,11 +247,6 @@ timer: timer {
+ 			     <1 10 4>; /* Hypervisor PPI, active-low */
+ 	};
+ 
+-	pmu {
+-		compatible = "arm,armv8-pmuv3";
+-		interrupts = <1 7 0x8>; /* PMU PPI, Level low type */
+-	};
+-
+ 	psci {
+ 		compatible = "arm,psci-0.2";
+ 		method = "smc";
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+index a0674c5c5576..b8abd98bdc43 100644
+--- a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+@@ -104,7 +104,7 @@ dsp_reserved: dsp@92400000 {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a35-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/intel/keembay-soc.dtsi b/arch/arm64/boot/dts/intel/keembay-soc.dtsi
+index 781761d2942b..ae00e9e54e82 100644
+--- a/arch/arm64/boot/dts/intel/keembay-soc.dtsi
++++ b/arch/arm64/boot/dts/intel/keembay-soc.dtsi
+@@ -70,7 +70,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_PPI 0x7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+index 76aafa172eb0..2a5eeb21da47 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+@@ -80,7 +80,7 @@ fpga-region {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+index 5591939e057b..75377c292bcb 100644
+--- a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+@@ -68,7 +68,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a55-pmu";
+ 		interrupts = <GIC_PPI 12 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+index 1cc3fa1c354d..9603223dd761 100644
+--- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+@@ -68,7 +68,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8516.dtsi b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+index 9cbd6dd8f671..d0b03dc4d3f4 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8516.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+@@ -165,7 +165,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a35-pmu";
+ 		interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_LOW>,
+ 			     <GIC_SPI 5 IRQ_TYPE_LEVEL_LOW>,
+ 			     <GIC_SPI 6 IRQ_TYPE_LEVEL_LOW>,
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+index 47f8268e46bf..882b1d1f4ada 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -2004,7 +2004,7 @@ L2: l2-cache {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a57-pmu";
+ 		interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
+index 89beac833d43..d3cd68190a17 100644
+--- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
+@@ -165,7 +165,7 @@ memory@40000000 {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+index 832f472c4b7a..f2a5e2e40461 100644
+--- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
++++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+@@ -177,7 +177,7 @@ memory@80000000 {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a55-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index f5921b80ef94..349c8ba06aca 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -352,7 +352,7 @@ opp-262500000 {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+index 7dbdf8ca6de6..b74cf4baedd6 100644
+--- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+@@ -224,7 +224,7 @@ memory@80000000 {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a55-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
+index 34802cc62983..e57317a17aa9 100644
+--- a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
++++ b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
+@@ -109,7 +109,7 @@ timer {
+ 	};
+ 
+ 	arm_pmu: pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a55-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
+ 		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>,
+ 			<&cpu3>, <&cpu4>, <&cpu5>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368.dtsi b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
+index 62af0cb94839..734f87db4d11 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
+@@ -141,7 +141,7 @@ cpu_b3: cpu@103 {
+ 	};
+ 
+ 	arm-pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/sprd/sc9860.dtsi b/arch/arm64/boot/dts/sprd/sc9860.dtsi
+index e27eb3ed1d47..6bfdbdb0e1cd 100644
+--- a/arch/arm64/boot/dts/sprd/sc9860.dtsi
++++ b/arch/arm64/boot/dts/sprd/sc9860.dtsi
+@@ -165,7 +165,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,cortex-a53-pmu", "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/sprd/sc9863a.dtsi b/arch/arm64/boot/dts/sprd/sc9863a.dtsi
+index 22d81ace740a..53e5b77d70b5 100644
+--- a/arch/arm64/boot/dts/sprd/sc9863a.dtsi
++++ b/arch/arm64/boot/dts/sprd/sc9863a.dtsi
+@@ -134,7 +134,7 @@ timer {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a55-pmu";
+ 		interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi b/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi
+index 53d616c3cfed..71e4bfcc9e81 100644
+--- a/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi
++++ b/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi
+@@ -88,7 +88,7 @@ osc: osc {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,cortex-a53-pmu", "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+index 047a83cee603..690b4ed9c29b 100644
+--- a/arch/arm64/boot/dts/tesla/fsd.dtsi
++++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+@@ -304,7 +304,7 @@ CPU_SLEEP: cpu-sleep {
+ 	};
+ 
+ 	arm-pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a72-pmu";
+ 		interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+index 25d20d803230..34d0e0be3fe6 100644
+--- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
++++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+@@ -169,7 +169,7 @@ dcc: dcc {
+ 	};
+ 
+ 	pmu {
+-		compatible = "arm,armv8-pmuv3";
++		compatible = "arm,cortex-a53-pmu";
+ 		interrupt-parent = <&gic>;
+ 		interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>,
+ 			     <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
+-- 
+2.43.0
 
-Please let me know if you had another function in mind for me to use here.
->
->> +               if (!prop) {
->> +                       rmem = of_reserved_mem_lookup(child);
->> +                       if (rmem)
->> +                               rmem->dev_node = child;
->>                         continue;
->> +               }
->>
->> -               uname = fdt_get_name(fdt, child, NULL);
->> +               uname = of_node_full_name(child);
->>                 if (len && len % t_len != 0) {
->>                         pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
->>                                uname);
->> @@ -269,7 +297,7 @@ int __init fdt_scan_reserved_mem(void)
->>         if (node < 0)
->>                 return -ENODEV;
->>
->> -       if (__reserved_mem_check_root(node) != 0) {
->> +       if (__fdt_reserved_mem_check_root(node) != 0) {
->>                 pr_err("Reserved memory: unsupported node format, ignoring\n");
->>                 return -EINVAL;
->>         }
->> @@ -447,7 +475,7 @@ static int __init __reserved_mem_alloc_size(unsigned long node, const char *unam
->>                        uname, (unsigned long)(size / SZ_1M));
->>                 return -ENOMEM;
->>         }
->> -       fdt_reserved_mem_save_node(node, uname, base, size);
->> +       fdt_reserved_mem_save_node(NULL, uname, base, size);
->>         return 0;
->>  }
->>
->> @@ -467,7 +495,7 @@ static int __init __reserved_mem_init_node(struct reserved_mem *rmem)
->>                 reservedmem_of_init_fn initfn = i->data;
->>                 const char *compat = i->compatible;
->>
->> -               if (!of_flat_dt_is_compatible(rmem->fdt_node, compat))
->> +               if (!of_device_is_compatible(rmem->dev_node, compat))
->>                         continue;
->>
->>                 ret = initfn(rmem);
->> @@ -500,11 +528,6 @@ static int __init __rmem_cmp(const void *a, const void *b)
->>         if (ra->size > rb->size)
->>                 return 1;
->>
->> -       if (ra->fdt_node < rb->fdt_node)
->> -               return -1;
->> -       if (ra->fdt_node > rb->fdt_node)
->> -               return 1;
->> -
->>         return 0;
->>  }
->>
->> @@ -551,16 +574,16 @@ void __init fdt_init_reserved_mem(void)
->>
->>         for (i = 0; i < reserved_mem_count; i++) {
->>                 struct reserved_mem *rmem = &reserved_mem[i];
->> -               unsigned long node = rmem->fdt_node;
->> +               struct device_node *node = rmem->dev_node;
->>                 int len;
->>                 const __be32 *prop;
->>                 int err = 0;
->>                 bool nomap;
->>
->> -               nomap = of_get_flat_dt_prop(node, "no-map", NULL) != NULL;
->> -               prop = of_get_flat_dt_prop(node, "phandle", &len);
->> +               nomap = of_get_property(node, "no-map", NULL) != NULL;
->> +               prop = of_get_property(node, "phandle", &len);
-> We store the phandle in struct device_node, so reading and storing it
-> here shouldn't be needed I think.
-ack.
->
->>                 if (!prop)
->> -                       prop = of_get_flat_dt_prop(node, "linux,phandle", &len);
->> +                       prop = of_get_property(node, "linux,phandle", &len);
->>                 if (prop)
->>                         rmem->phandle = of_read_number(prop, len/4);
->>
->> @@ -574,7 +597,7 @@ void __init fdt_init_reserved_mem(void)
->>                 } else {
->>                         phys_addr_t end = rmem->base + rmem->size - 1;
->>                         bool reusable =
->> -                               (of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
->> +                               (of_get_property(node, "reusable", NULL)) != NULL;
->>
->>                         pr_info("%pa..%pa (%lu KiB) %s %s %s\n",
->>                                 &rmem->base, &end, (unsigned long)(rmem->size / SZ_1K),
->> diff --git a/include/linux/of_reserved_mem.h b/include/linux/of_reserved_mem.h
->> index 4de2a24cadc9..b6107a18d170 100644
->> --- a/include/linux/of_reserved_mem.h
->> +++ b/include/linux/of_reserved_mem.h
->> @@ -10,7 +10,7 @@ struct reserved_mem_ops;
->>
->>  struct reserved_mem {
->>         const char                      *name;
->> -       unsigned long                   fdt_node;
->> +       struct device_node              *dev_node;
->>         unsigned long                   phandle;
->>         const struct reserved_mem_ops   *ops;
->>         phys_addr_t                     base;
->> diff --git a/kernel/dma/coherent.c b/kernel/dma/coherent.c
->> index ff5683a57f77..0db0aae83102 100644
->> --- a/kernel/dma/coherent.c
->> +++ b/kernel/dma/coherent.c
->> @@ -362,20 +362,20 @@ static const struct reserved_mem_ops rmem_dma_ops = {
->>
->>  static int __init rmem_dma_setup(struct reserved_mem *rmem)
->>  {
->> -       unsigned long node = rmem->fdt_node;
->> +       struct device_node *node = rmem->dev_node;
->>
->> -       if (of_get_flat_dt_prop(node, "reusable", NULL))
->> +       if (of_get_property(node, "reusable", NULL))
->>                 return -EINVAL;
->>
->>  #ifdef CONFIG_ARM
->> -       if (!of_get_flat_dt_prop(node, "no-map", NULL)) {
->> +       if (!of_get_property(node, "no-map", NULL)) {
-> While you are here, convert this to IS_ENABLED():
->
-> if (IS_ENABLED(CONFIG_ARM) && !of_property_read_bool(node)) {
->   ...
-> }
-ack.
-
-
-Thank you for your feedback!
-
-Oreoluwa
