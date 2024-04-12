@@ -1,170 +1,54 @@
-Return-Path: <SRS0=BIKN=LR=arndb.de=arnd@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2C9EC04FF9
-	for <soc@archiver.kernel.org>; Fri, 12 Apr 2024 19:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF9FC4345F
+	for <soc@archiver.kernel.org>; Fri, 12 Apr 2024 20:17:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B8BABC2BD11; Fri, 12 Apr 2024 19:48:57 +0000 (UTC)
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 38939C113CD
-	for <soc@kernel.org>; Fri, 12 Apr 2024 19:48:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 38939C113CD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 0C7E711400D1;
-	Fri, 12 Apr 2024 15:48:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 12 Apr 2024 15:48:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm2;
-	 t=1712951335; x=1713037735; bh=Tm1Vv8iVtUIP+//CZh4vk18U1w5+u8zC
-	yyQYlZ4gpRE=; b=fMfr/MuNp7NG9aY9FrYQFR7Kufk2zWhMpgLFT+zhLjUuevZG
-	QDNVIcCHe+X+4fjorfVzXZjTpupxjDa2l8qvfiPtZeyCdAFOfMb92D6pJIp1dlL1
-	RzyIqYA/K5N3Kw7rbaoQTNKd20FPqEqbn4JTm5RmokkqULB71W2kDEhrwdEnlshQ
-	drdHWlH+/0YZoRjNb4WQsSxsxwIYHzW6lWxZP3RG+TS8HZ/fRtzMzYGmJcZDg0NL
-	Yrfmxpt69FjGTO1kc76fOSKaezV1xzA9jQN+Qnt51m+ww2iLuPGzp6Hfrr7Xfuo4
-	W+GIo3BygmFsff/QJvgUQIG5Z97hG2tTM+asiw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:message-id
-	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1712951335; x=1713037735; bh=Tm1Vv8iVtUIP+//CZh4vk18U1w5+u8zCyyQ
-	YlZ4gpRE=; b=f6LjV1OcP91btAf4iUhiRi4syJeNpCPj/GHIrJfD8TNsQToYqbD
-	OfR2+NE+4uZadr27E/6bx+gpmlt5AjhbSHsk7vHEFPnLrmm7P49iQE/bUJyHkOg8
-	rGSVxLp8ht/QFhAoZ4SDZ5bqnDHQV371TdbzDbg8PkJrsX5PpTt8VrmC3tK9Cp0Q
-	bm2kaqyciym4AVhFPJ/FWUISWwipWik20l3CTGlOP9LAgYLQ0CcVdJgIsWdpUJ3f
-	I5D4iaNpCtpTJQAx6dNJvVw3VUSyPF5TYvWZ9a5LSnzox7EIfuw6i1d5p5kxUJfB
-	SaPUdrpZfG+qa/OynYFKJ1VcKut4UPfmbeg==
-X-ME-Sender: <xms:JpAZZq5KO6dhMRuS4MXt_TpEIM7eFUTzMOP6ROj9YtFRcUEaaOMtSQ>
-    <xme:JpAZZj48tX1fMCSH6WhL5FwNc3ZNzCxCsYwjhYC_wTRyQcK_XPHm_3MLTEZ8qEEwl
-    YoImdQskOcOEiRzI_g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudeiuddgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
-    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JpAZZpey0p49ofdkihCGLXgVFLfNbul6BpzTTz-p4NFnJg4UYzxYcw>
-    <xmx:JpAZZnIgQcZGxNI1a_aRW2eHc7mrMO3_8y7X2q5yKUdg7yjsoJ4ztA>
-    <xmx:JpAZZuIAPe7eVBoFlIG4vUaRJ3jQdGbv6q_B_zhMCnyb12Fxj-5ZnA>
-    <xmx:JpAZZowIA4yCmT5vmU97rIgbK98H4OqFK-pE4gPSfnHHGFvhofPepA>
-    <xmx:J5AZZq1zlwTNoEs3CetuaO0CRGUYTcyBJWNFC_-iLMqdNIbVgQgLb3Kn>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id ACDD2B6008D; Fri, 12 Apr 2024 15:48:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
-MIME-Version: 1.0
-Message-Id: <4c6039da-5362-46ad-8126-dacaf7ad1169@app.fastmail.com>
-Date: Fri, 12 Apr 2024 21:48:34 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+	id 4AFEFC4AF07; Fri, 12 Apr 2024 20:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33C43C32783;
+	Fri, 12 Apr 2024 20:17:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712953054;
+	bh=l6MVm4fYmOjNFAcaZ+mBIuLxVK28bF5PHXlbB/aZFqA=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=ZPJn5CmS54Dw7dfTctA4rwwB8LmqndbaYm0YMlmcCSXa0Zmy4yQrr9yFHrRWty9GA
+	 OkIY1sV+cpYqgnhASILyU+lVwOAdMCxIgFUyuF20qBoY2qeR6N77HB5MDGzQwtZup7
+	 /ZD7ViVqrssWTyu/qibKkFnTXlmnlncnKRxjaj2ojFxecIigAPeDHXReF2OrZeXHTn
+	 2RCEPeD7Pb8Got96CUfyvWaumkzPxrZSXPYptXvnao8WXn7WOac6HwniStTdzS6OxO
+	 TcMu8sKK9JuMUEtZu0h0m1vi/Xw5fI569EbrPL2CMV6MSfN7EuiiDA2XptHJE4g//+
+	 Amv6La2qFEIYQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 27BB8DF7856;
+	Fri, 12 Apr 2024 20:17:34 +0000 (UTC)
+Subject: Re: [GIT PULL] SoC fixes for 6.9
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <4c6039da-5362-46ad-8126-dacaf7ad1169@app.fastmail.com>
+References: <4c6039da-5362-46ad-8126-dacaf7ad1169@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <4c6039da-5362-46ad-8126-dacaf7ad1169@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-1
+X-PR-Tracked-Commit-Id: 011d79ef1cfad701c2d8e7e80d8c77523af9c771
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 678e14c772130d3a83225ed56fb9860a40bca38b
+Message-Id: <171295305415.15771.6575415152452339171.pr-tracker-bot@kernel.org>
+Date: Fri, 12 Apr 2024 20:17:34 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] SoC fixes for 6.9
-Content-Type: text/plain
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 
-The following changes since commit 39cd87c4eb2b893354f3b850f916353f2658ae6f:
+The pull request you sent on Fri, 12 Apr 2024 21:48:34 +0200:
 
-  Linux 6.9-rc2 (2024-03-31 14:32:39 -0700)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-1
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/678e14c772130d3a83225ed56fb9860a40bca38b
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-1
+Thank you!
 
-for you to fetch changes up to 011d79ef1cfad701c2d8e7e80d8c77523af9c771:
-
-  MAINTAINERS: Change Krzysztof Kozlowski's email address (2024-04-09 17:06:51 +0200)
-
-----------------------------------------------------------------
-SoC fixes for 6.9
-
-The device tree changes this time are all for NXP i.MX platforms, addressing
-issues with clocks and regulators on i.MX7 and i.MX8.
-
-The old OMAP2 based Nokia N8x0 tablet get a couple of code fixes for
-regressions that came in.
-
-The ARM SCMI and FF-A firmware interfaces get a couple of minor
-bug fixes.
-
-A regression fix for RISC-V cache management addresses a problem with
-probe order on Sifive cores.
-
-----------------------------------------------------------------
-Aaro Koskinen (6):
-      ARM: OMAP2+: fix bogus MMC GPIO labels on Nokia N8x0
-      ARM: OMAP2+: fix N810 MMC gpiod table
-      mmc: omap: fix broken slot switch lookup
-      mmc: omap: fix deferred probe
-      mmc: omap: restore original power up/down steps
-      ARM: OMAP2+: fix USB regression on Nokia N8x0
-
-Arnd Bergmann (5):
-      Merge tag 'omap-for-v6.9/n8x0-fixes-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into arm/fixes
-      Merge tag 'imx-fixes-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
-      Merge tag 'scmi-fixes-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'ffa-fix-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'riscv-soc-fixes-for-v6.9-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
-
-Cristian Marussi (1):
-      firmware: arm_scmi: Make raw debugfs entries non-seekable
-
-Fabio Estevam (2):
-      ARM: dts: imx7-mba7: Use 'no-mmc' property
-      ARM: dts: imx7s-warp: Pass OV2680 link-frequencies
-
-Frank Li (8):
-      arm64: dts: imx8-ss-conn: fix usdhc wrong lpcg clock order
-      arm64: dts: imx8-ss-lsio: fix pwm lpcg indices
-      arm64: dts: imx8-ss-conn: fix usb lpcg indices
-      arm64: dts: imx8-ss-dma: fix spi lpcg indices
-      arm64: dts: imx8-ss-dma: fix pwm lpcg indices
-      arm64: dts: imx8-ss-dma: fix adc lpcg indices
-      arm64: dts: imx8-ss-dma: fix can lpcg indices
-      arm64: dts: imx8qm-ss-dma: fix can lpcg indices
-
-Jens Wiklander (1):
-      firmware: arm_ffa: Fix the partition ID check in ffa_notification_info_get()
-
-Krzysztof Kozlowski (1):
-      MAINTAINERS: Change Krzysztof Kozlowski's email address
-
-Pierre Gondois (1):
-      firmware: arm_scmi: Fix wrong fastchannel initialization
-
-Samuel Holland (1):
-      cache: sifive_ccache: Partially convert to a platform driver
-
-Tim Harvey (2):
-      arm64: dts: freescale: imx8mp-venice-gw72xx-2x: fix USB vbus regulator
-      arm64: dts: freescale: imx8mp-venice-gw73xx-2x: fix USB vbus regulator
-
- MAINTAINERS                                        | 38 ++++++------
- arch/arm/boot/dts/nxp/imx/imx7-mba7.dtsi           |  2 +-
- arch/arm/boot/dts/nxp/imx/imx7s-warp.dts           |  1 +
- arch/arm/mach-omap2/board-n8x0.c                   | 23 +++----
- arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi    | 16 ++---
- arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi     | 40 ++++++------
- arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi    | 16 ++---
- .../boot/dts/freescale/imx8mp-venice-gw72xx.dtsi   |  2 +-
- .../boot/dts/freescale/imx8mp-venice-gw73xx.dtsi   |  2 +-
- arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi   |  8 +--
- drivers/cache/sifive_ccache.c                      | 72 ++++++++++++++--------
- drivers/firmware/arm_ffa/driver.c                  |  2 +-
- drivers/firmware/arm_scmi/powercap.c               |  2 +-
- drivers/firmware/arm_scmi/raw_mode.c               |  7 ++-
- drivers/mmc/host/omap.c                            | 48 ++++++++++-----
- 15 files changed, 158 insertions(+), 121 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
