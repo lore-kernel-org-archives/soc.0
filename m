@@ -1,94 +1,170 @@
-Return-Path: <SRS0=8Gze=LR=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=BIKN=LR=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 233A4C4345F
-	for <soc@archiver.kernel.org>; Fri, 12 Apr 2024 10:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2C9EC04FF9
+	for <soc@archiver.kernel.org>; Fri, 12 Apr 2024 19:48:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 14FEAC2BD11; Fri, 12 Apr 2024 10:49:16 +0000 (UTC)
-Received: from riemann.telenet-ops.be (riemann.telenet-ops.be [195.130.137.80])
+	id B8BABC2BD11; Fri, 12 Apr 2024 19:48:57 +0000 (UTC)
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5464EC2BD10
-	for <soc@kernel.org>; Fri, 12 Apr 2024 10:49:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5464EC2BD10
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-	by riemann.telenet-ops.be (Postfix) with ESMTPS id 4VGCwx2DjPz4x0d7
-	for <soc@kernel.org>; Fri, 12 Apr 2024 12:49:05 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:76d0:2bff:fec8:549])
-	by xavier.telenet-ops.be with bizsmtp
-	id AAoy2C0030SSLxL01Aoylo; Fri, 12 Apr 2024 12:48:58 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rvESG-00GpCB-8Q;
-	Fri, 12 Apr 2024 12:48:57 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rvDj5-004eQD-Ot;
-	Fri, 12 Apr 2024 12:01:43 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/4] Renesas SoC updates for v6.10
-Date: Fri, 12 Apr 2024 12:01:36 +0200
-Message-Id: <cover.1712915528.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	by smtp.kernel.org (Postfix) with ESMTPS id 38939C113CD
+	for <soc@kernel.org>; Fri, 12 Apr 2024 19:48:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 38939C113CD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 0C7E711400D1;
+	Fri, 12 Apr 2024 15:48:55 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 12 Apr 2024 15:48:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm2;
+	 t=1712951335; x=1713037735; bh=Tm1Vv8iVtUIP+//CZh4vk18U1w5+u8zC
+	yyQYlZ4gpRE=; b=fMfr/MuNp7NG9aY9FrYQFR7Kufk2zWhMpgLFT+zhLjUuevZG
+	QDNVIcCHe+X+4fjorfVzXZjTpupxjDa2l8qvfiPtZeyCdAFOfMb92D6pJIp1dlL1
+	RzyIqYA/K5N3Kw7rbaoQTNKd20FPqEqbn4JTm5RmokkqULB71W2kDEhrwdEnlshQ
+	drdHWlH+/0YZoRjNb4WQsSxsxwIYHzW6lWxZP3RG+TS8HZ/fRtzMzYGmJcZDg0NL
+	Yrfmxpt69FjGTO1kc76fOSKaezV1xzA9jQN+Qnt51m+ww2iLuPGzp6Hfrr7Xfuo4
+	W+GIo3BygmFsff/QJvgUQIG5Z97hG2tTM+asiw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1712951335; x=1713037735; bh=Tm1Vv8iVtUIP+//CZh4vk18U1w5+u8zCyyQ
+	YlZ4gpRE=; b=f6LjV1OcP91btAf4iUhiRi4syJeNpCPj/GHIrJfD8TNsQToYqbD
+	OfR2+NE+4uZadr27E/6bx+gpmlt5AjhbSHsk7vHEFPnLrmm7P49iQE/bUJyHkOg8
+	rGSVxLp8ht/QFhAoZ4SDZ5bqnDHQV371TdbzDbg8PkJrsX5PpTt8VrmC3tK9Cp0Q
+	bm2kaqyciym4AVhFPJ/FWUISWwipWik20l3CTGlOP9LAgYLQ0CcVdJgIsWdpUJ3f
+	I5D4iaNpCtpTJQAx6dNJvVw3VUSyPF5TYvWZ9a5LSnzox7EIfuw6i1d5p5kxUJfB
+	SaPUdrpZfG+qa/OynYFKJ1VcKut4UPfmbeg==
+X-ME-Sender: <xms:JpAZZq5KO6dhMRuS4MXt_TpEIM7eFUTzMOP6ROj9YtFRcUEaaOMtSQ>
+    <xme:JpAZZj48tX1fMCSH6WhL5FwNc3ZNzCxCsYwjhYC_wTRyQcK_XPHm_3MLTEZ8qEEwl
+    YoImdQskOcOEiRzI_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudeiuddgudegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
+    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:JpAZZpey0p49ofdkihCGLXgVFLfNbul6BpzTTz-p4NFnJg4UYzxYcw>
+    <xmx:JpAZZnIgQcZGxNI1a_aRW2eHc7mrMO3_8y7X2q5yKUdg7yjsoJ4ztA>
+    <xmx:JpAZZuIAPe7eVBoFlIG4vUaRJ3jQdGbv6q_B_zhMCnyb12Fxj-5ZnA>
+    <xmx:JpAZZowIA4yCmT5vmU97rIgbK98H4OqFK-pE4gPSfnHHGFvhofPepA>
+    <xmx:J5AZZq1zlwTNoEs3CetuaO0CRGUYTcyBJWNFC_-iLMqdNIbVgQgLb3Kn>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id ACDD2B6008D; Fri, 12 Apr 2024 15:48:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <4c6039da-5362-46ad-8126-dacaf7ad1169@app.fastmail.com>
+Date: Fri, 12 Apr 2024 21:48:34 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] SoC fixes for 6.9
+Content-Type: text/plain
 
-	Hi SoC folks,
+The following changes since commit 39cd87c4eb2b893354f3b850f916353f2658ae6f:
 
-This is my first pull request for the inclusion of Renesas SoC updates
-for v6.10.
+  Linux 6.9-rc2 (2024-03-31 14:32:39 -0700)
 
-It consists of 4 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/4] Renesas ARM defconfig updates for v6.10
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-1
 
-    - Enable support for the Renesas RZ/G2L display unit, DA9062 PMIC, and
-      RZ/V2H (R9A09G057) SoC in the ARM64 defconfig,
-    - Refresh shmobile_defconfig for v6.9-rc1.
+for you to fetch changes up to 011d79ef1cfad701c2d8e7e80d8c77523af9c771:
 
-  [GIT PULL 2/4] Renesas driver updates for v6.10
+  MAINTAINERS: Change Krzysztof Kozlowski's email address (2024-04-09 17:06:51 +0200)
 
-    - Identify the new RZ/V2H (R9A09G057) SoC,
-    - Enable support for the TMU (Timer Unit) on R-Car Gen2 SoCs.
+----------------------------------------------------------------
+SoC fixes for 6.9
 
-  [GIT PULL 3/4] Renesas DT binding updates for v6.10
+The device tree changes this time are all for NXP i.MX platforms, addressing
+issues with clocks and regulators on i.MX7 and i.MX8.
 
-    - Document support for the Renesas RZ/V2H(P) (R9A09G057) SoC variants.
+The old OMAP2 based Nokia N8x0 tablet get a couple of code fixes for
+regressions that came in.
 
-  [GIT PULL 4/4] Renesas DTS updates for v6.10
+The ARM SCMI and FF-A firmware interfaces get a couple of minor
+bug fixes.
 
-    - Add HDMI capture support for the Function expansion board for the
-      Eagle development board,
-    - Add PMIC support for the RZ/G2UL SMARC EVK development board,
-    - Add thermal, more serial ((H)SCIF), and timer (CMT and TMU) support
-      for the R-Car V4M SoC,
-    - Add Timer Unit (TMU) support for the R-Mobile APE6, R-Car Gen2, and
-      RZ/G1 SoCs,
-    - Miscellaneous fixes and improvements.
+A regression fix for RISC-V cache management addresses a problem with
+probe order on Sifive cores.
 
-Thanks for pulling!
+----------------------------------------------------------------
+Aaro Koskinen (6):
+      ARM: OMAP2+: fix bogus MMC GPIO labels on Nokia N8x0
+      ARM: OMAP2+: fix N810 MMC gpiod table
+      mmc: omap: fix broken slot switch lookup
+      mmc: omap: fix deferred probe
+      mmc: omap: restore original power up/down steps
+      ARM: OMAP2+: fix USB regression on Nokia N8x0
 
-Gr{oetje,eeting}s,
+Arnd Bergmann (5):
+      Merge tag 'omap-for-v6.9/n8x0-fixes-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into arm/fixes
+      Merge tag 'imx-fixes-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
+      Merge tag 'scmi-fixes-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'ffa-fix-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'riscv-soc-fixes-for-v6.9-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
 
-						Geert
+Cristian Marussi (1):
+      firmware: arm_scmi: Make raw debugfs entries non-seekable
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Fabio Estevam (2):
+      ARM: dts: imx7-mba7: Use 'no-mmc' property
+      ARM: dts: imx7s-warp: Pass OV2680 link-frequencies
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Frank Li (8):
+      arm64: dts: imx8-ss-conn: fix usdhc wrong lpcg clock order
+      arm64: dts: imx8-ss-lsio: fix pwm lpcg indices
+      arm64: dts: imx8-ss-conn: fix usb lpcg indices
+      arm64: dts: imx8-ss-dma: fix spi lpcg indices
+      arm64: dts: imx8-ss-dma: fix pwm lpcg indices
+      arm64: dts: imx8-ss-dma: fix adc lpcg indices
+      arm64: dts: imx8-ss-dma: fix can lpcg indices
+      arm64: dts: imx8qm-ss-dma: fix can lpcg indices
+
+Jens Wiklander (1):
+      firmware: arm_ffa: Fix the partition ID check in ffa_notification_info_get()
+
+Krzysztof Kozlowski (1):
+      MAINTAINERS: Change Krzysztof Kozlowski's email address
+
+Pierre Gondois (1):
+      firmware: arm_scmi: Fix wrong fastchannel initialization
+
+Samuel Holland (1):
+      cache: sifive_ccache: Partially convert to a platform driver
+
+Tim Harvey (2):
+      arm64: dts: freescale: imx8mp-venice-gw72xx-2x: fix USB vbus regulator
+      arm64: dts: freescale: imx8mp-venice-gw73xx-2x: fix USB vbus regulator
+
+ MAINTAINERS                                        | 38 ++++++------
+ arch/arm/boot/dts/nxp/imx/imx7-mba7.dtsi           |  2 +-
+ arch/arm/boot/dts/nxp/imx/imx7s-warp.dts           |  1 +
+ arch/arm/mach-omap2/board-n8x0.c                   | 23 +++----
+ arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi    | 16 ++---
+ arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi     | 40 ++++++------
+ arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi    | 16 ++---
+ .../boot/dts/freescale/imx8mp-venice-gw72xx.dtsi   |  2 +-
+ .../boot/dts/freescale/imx8mp-venice-gw73xx.dtsi   |  2 +-
+ arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi   |  8 +--
+ drivers/cache/sifive_ccache.c                      | 72 ++++++++++++++--------
+ drivers/firmware/arm_ffa/driver.c                  |  2 +-
+ drivers/firmware/arm_scmi/powercap.c               |  2 +-
+ drivers/firmware/arm_scmi/raw_mode.c               |  7 ++-
+ drivers/mmc/host/omap.c                            | 48 ++++++++++-----
+ 15 files changed, 158 insertions(+), 121 deletions(-)
