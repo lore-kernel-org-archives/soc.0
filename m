@@ -1,203 +1,140 @@
-Return-Path: <SRS0=rvoV=LU=samsung.com=alim.akhtar@kernel.org>
+Return-Path: <SRS0=lns7=LU=quicinc.com=quic_bjorande@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90467C00A94
-	for <soc@archiver.kernel.org>; Mon, 15 Apr 2024 11:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F172BC4345F
+	for <soc@archiver.kernel.org>; Mon, 15 Apr 2024 13:45:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6825AC113CC; Mon, 15 Apr 2024 11:49:16 +0000 (UTC)
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	id B2791C4AF07; Mon, 15 Apr 2024 13:45:21 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BC220C2BD10;
-	Mon, 15 Apr 2024 11:49:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BC220C2BD10
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240415114905epoutp047ec76ae33f35546306f3645b8a63e6d3~GcbiXPQqs2027520275epoutp04F;
-	Mon, 15 Apr 2024 11:49:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240415114905epoutp047ec76ae33f35546306f3645b8a63e6d3~GcbiXPQqs2027520275epoutp04F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1713181745;
-	bh=xiCoQ88Z4aGkr+U0s3cjc/8zyNw/xshgaY2fZquL++8=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=mVNncCu/4q324nre0zv4OS2gPOdqkPVfQgxQVb0C8k9GPKF30WlBMBu8+LVObanpl
-	 ZtaDf7es8zp8wDqChl6ATSV8N5a0br+8bdEhggjd+z5puL/NAe2NNZ4aReN17AIx6L
-	 3Dnl8gALewtz09KtOzW2dFOTuL5ILBztMYs0doIE=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20240415114905epcas5p4eacaaad84bb05b4fd2bf1ff9eca4400f~Gcbhyt3Pj1794217942epcas5p4M;
-	Mon, 15 Apr 2024 11:49:05 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4VJ56l4Ylwz4x9Pw; Mon, 15 Apr
-	2024 11:49:03 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A2.EE.09666.F241D166; Mon, 15 Apr 2024 20:49:03 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20240415114903epcas5p47c4eeb90c7407377878f6a6bd2bc1458~Gcbfxdu7t1794217942epcas5p4K;
-	Mon, 15 Apr 2024 11:49:03 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240415114903epsmtrp190d3f7c835c3802c90fd5f7e320072df~GcbfvzlT40122301223epsmtrp1R;
-	Mon, 15 Apr 2024 11:49:03 +0000 (GMT)
-X-AuditID: b6c32a49-cefff700000025c2-6f-661d142f157f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	65.57.08390.E241D166; Mon, 15 Apr 2024 20:49:02 +0900 (KST)
-Received: from INBRO000447 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240415114855epsmtip20375f57d0f3c7972dd46af099f38f3dd~GcbYxrnY92898028980epsmtip2b;
-	Mon, 15 Apr 2024 11:48:55 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8D79CC2BD10;
+	Mon, 15 Apr 2024 13:45:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8D79CC2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43FDi9sY023070;
+	Mon, 15 Apr 2024 13:45:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=yhE0N2GTjzloNk8jSE6bL
+	1E7cB8XApNZKK5EefZJ4P4=; b=Dy752KncX+0qPUtwl62xGFwJu/DOlByTMSyRV
+	RwDnVwOE2JbPaOKtAnnuZ4KDvEtt96WpkJdEuSqG3Z81yMGtE1tR/JZg0/65ba+L
+	uxKdfeWJY5EYSG7hct3G3MU/VXT0J5qwUObOKD72jcfdItNgQITAWAaQiyLD3wtU
+	qTZa0QlwsrBItBOEfCjUkZos6vP8ZSmi37nZEqU/sC5G1kLjpyRWmFF4oeoVU9+u
+	tZ6b38LS+iFCIGmf+tCxaaDJD/Hsiyzo7vaanv75QPxJjYuzAcmgMxIKlKlnH+e3
+	zVS2p75tmrlqh/enbvxgsTGVThcfHpx2me1Ug9jnaB1kKNFJA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xgwdph65s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 13:45:05 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43FDj3v4031752
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 13:45:03 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 15 Apr 2024 06:45:03 -0700
+Date: Mon, 15 Apr 2024 06:45:02 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "'Rob Herring'" <robh@kernel.org>, <soc@kernel.org>, "'Krzysztof
- Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>, "'Conor Dooley'"
-	<conor+dt@kernel.org>, "'Florian Fainelli'" <florian.fainelli@broadcom.com>,
-	"'Broadcom internal kernel review list'"
-	<bcm-kernel-feedback-list@broadcom.com>, "'Dinh Nguyen'"
-	<dinguyen@kernel.org>, "'Tsahee Zidenberg'" <tsahee@annapurnalabs.com>,
-	"'Antoine Tenart'" <atenart@kernel.org>, "'Khuong Dinh'"
-	<khuong@os.amperecomputing.com>, "'Liviu	Dudau'" <liviu.dudau@arm.com>,
-	"'Sudeep Holla'" <sudeep.holla@arm.com>, "'Lorenzo	Pieralisi'"
-	<lpieralisi@kernel.org>, "'Ray Jui'" <rjui@broadcom.com>, "'Scott	Branden'"
-	<sbranden@broadcom.com>, "'Robert Richter'" <rric@kernel.org>, "'Shawn Guo'"
-	<shawnguo@kernel.org>, "'Li Yang'" <leoyang.li@nxp.com>, "'Sascha Hauer'"
-	<s.hauer@pengutronix.de>, "'Pengutronix Kernel Team'"
-	<kernel@pengutronix.de>, "'Fabio Estevam'" <festevam@gmail.com>, "'Paul J.
- Murphy'" <paul.j.murphy@intel.com>, "'Daniele Alessandrelli'"
-	<daniele.alessandrelli@intel.com>, "'Andrew Lunn'" <andrew@lunn.ch>,
-	"'Gregory	Clement'" <gregory.clement@bootlin.com>, "'Sebastian Hesselbarth'"
-	<sebastian.hesselbarth@gmail.com>, "'Matthias Brugger'"
-	<matthias.bgg@gmail.com>, "'AngeloGioacchino Del Regno'"
-	<angelogioacchino.delregno@collabora.com>, "'Thierry Reding'"
-	<thierry.reding@gmail.com>, "'Jonathan Hunter'" <jonathanh@nvidia.com>,
-	"'Bjorn	Andersson'" <andersson@kernel.org>, "'Konrad Dybcio'"
-	<konrad.dybcio@linaro.org>, =?utf-8?Q?'Andreas_F=C3=A4rber'?=
-	<afaerber@suse.de>, "'Heiko Stuebner'" <heiko@sntech.de>, "'Orson Zhai'"
-	<orsonzhai@gmail.com>, "'Baolin Wang'" <baolin.wang@linux.alibaba.com>,
-	"'Chunyan Zhang'" <zhang.lyra@gmail.com>, "'Jisheng Zhang'"
-	<jszhang@kernel.org>, <linux-fsd@tesla.com>, "'Michal Simek'"
-	<michal.simek@amd.com>
-Cc: <devicetree@vger.kernel.org>, <linux-rpi-kernel@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<imx@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
-	<linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-realtek-soc@lists.infradead.org>,
-	<linux-rockchip@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20240412222857.3873079-1-robh@kernel.org>
-Subject: RE: [PATCH] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
-Date: Mon, 15 Apr 2024 17:18:54 +0530
-Message-ID: <0b3b01da8f2a$e9560ca0$bc0225e0$@samsung.com>
+CC: <soc@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list
+	<bcm-kernel-feedback-list@broadcom.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Antoine Tenart
+	<atenart@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Liviu
+ Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo
+ Pieralisi <lpieralisi@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden
+	<sbranden@broadcom.com>,
+        Robert Richter <rric@kernel.org>, Shawn Guo
+	<shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>, Sascha Hauer
+	<s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "Paul J. Murphy"
+	<paul.j.murphy@intel.com>,
+        Daniele Alessandrelli
+	<daniele.alessandrelli@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory
+ Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth
+	<sebastian.hesselbarth@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Thierry
+ Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?=
+	<afaerber@suse.de>,
+        Heiko Stuebner <heiko@sntech.de>, Orson Zhai
+	<orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan
+ Zhang <zhang.lyra@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Alim Akhtar
+	<alim.akhtar@samsung.com>, <linux-fsd@tesla.com>,
+        Michal Simek
+	<michal.simek@amd.com>, <devicetree@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <imx@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
+        <linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-realtek-soc@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
+Message-ID: <Zh0vXinxy7woerJQ@hu-bjorande-lv.qualcomm.com>
+References: <20240412222857.3873079-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLY8iYk/Bpt/dsaN0W9BEDsUNhRuQIeG7qZr1t/T6A=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta1CUZRT2/a67MujHxXijtHUdLTUuK7eDeUkj/FRUZpp0pqlwg2+BAXbX
-	3cXSsNBdEUSwrUBYAeWSFBKriwMLQuqKGk1KeEFHxEDAARFSbCoEpYVPy3/POed53uec98yR
-	kO4lEm9JvNog6NTKRDkzlao5O3++j5/nTJV/VuqrYLTpoSZ9CbR0OEi4/AOGh4VHEYw3nkfw
-	Y9Y5CiobLxFw6+4ZBIeaLtFwruUkAV3XNkBVzW0SCr7fBuN3BmjIv72bAZOlhALjeSsDFTl1
-	FBR/XUND+je1FGT3dZHgMJ4mwNbdRoP51EUWuu5tgiv1BQxcMbYisOZeZWC4c5wEc/sxFvJa
-	fiIg408LA6e/20OBacxEwS5TADReaKXhwIODCEYdwzT05lczMN5gZ+FMxXECntTaKBg62oPg
-	j5EV0HfCC7qvjzFQ/oudgpH6IgqqSvNZKO+sZ98O4HdffsLwTwetLF9ZVIn4osrPecvvFxne
-	3lGG+DpLB8uXNvQTvK0ig+FvtTUwfF1XKF9d9iXfV53vJNgfEXyWcYjhjw/ZiciXPkhYEico
-	YwSdTFBHa2Li1bFL5Wvfi3onKijYX+GjCIUQuUytTBKWysMiIn3C4xOd65DLtioTk52pSKVe
-	L/dbtkSnSTYIsjiN3rBULmhjErWBWl+9MkmfrI71VQuGxQp//0VBTuLmhLjiMzZa+9jjs/Z9
-	D9lUlD59L5JKMBeIK27lob1oqsSdO4lwRkfrs2AY4YM3TLQY/IXw/cdt9HPJ5dxsViw0Ipzr
-	MJNi0IfwaPd9ZoLFcD7YXpo2iT25hmn4dlHSBInkMkmcZ901WZByIbi5+ubksx5cBC7sy3Zi
-	iYTi5uL92asm0q5cKK5qbEAidsPN+T3UBCa513DtYAEpdiTDI71HaNFrMS4prSJEjhfuP9c0
-	2SnmTC54fMDIiIIwfDTb+GwcD3zvwglWxN64f38aO9ED5nhcMuYtpuPwYLkViXg5Pn21gJqg
-	kNx8bK33E62m4azRHkJUuuL0NHeRPRcbh65RIn4FmzMzn5nyuKf+EfkVmm15YTDLC4NZXhjA
-	8r/ZYURVoJcFrT4pVtAHaRVq4dP/9h2tSbKhyWNdsNqOOjof+DoQIUEOhCWk3NPV5DFT5e4a
-	o9y2XdBponTJiYLegYKcn20mvWdEa5zXrjZEKQJD/QODg4MDQwOCFXIv14HdhTHuXKzSICQI
-	glbQPdcREql3KhFgyFPVDB9zq2sqkW1+PWDGRunH0dJThd0kzTbNaouY58txUZHW1avLFh2S
-	jm3esH6Dm2rtlLwpNR5JZetD3l/Xdac3U4h7mLZmTur1NS3Fs2Yc/luzx7Di7saIdpXL8mvL
-	MsprvVaMyqokWp0uxXhz589FK2fteGo3bwrp8FzYnhO+5UBnqNFkowJUZ0cevKXS0Tc08WMU
-	77OwLTV6zuzh7i0qs094wkDKu6kVndMPTAtbmZAT/m1znefesSPSugs72eaCN1q+aNru6VJU
-	qe4VloX4058UZ6zre7N/lV6m/XD/jhEXWc5gYXFwWPJ2P0dI6zyHmyl5/Ld/AlO2rmk++9Gv
-	uyLklD5OqVhA6vTKfwGghwx2NQUAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTdxTH97u9vfeCYdbCyg8IU7sHA6TiVDwom2Oa7C5bxJgZE9wyyygv
-	KZAWx8oeENoiqCDVQG3lDcqoCKMQKNhu0EkXNnmIz03rqFKFIQyZYWOoTChL+O+b8/meT84f
-	h+Hwj1G+TGJKukSWIk4WUu5k24/C1SEiL/+40KKcraA0yqEtLwIG7FYODNVjeFR2DsG8xYbg
-	fEEPCQ2WfgJu3+9GUHGxnws9AxcIcFyLgsa2Oxwo/VYB83fHuaC7o6ZApa8mQWlrosBQ3EFC
-	1Yk2LuSdbCehcNTBAauyiwDjvetc0PzQR4Pjj31wpbOUgivKywiaSq5SMD08zwHNre9oODXw
-	PQH5j/UUdJ05TILqiYqEHNVGsPx0mQvaqdMI5qzTXHDqWiiYN5to6DY0E/C03UjC5LkRBH/O
-	RsJoqzfcu/GEgrqfTSTMdpaT0Fijo6FuuJN+ZyOrHnpKsc8mmmi2obwBseUNX7L63/so1mSv
-	RWyH3k6zNeYxgjUa8in29nUzxXY4wtmW2ix2tEX3vGD6i2ALlJMU2zxpInYLot0jYiXJiZ9L
-	ZOvfPuCeUNVt5Kb96/nFrWOP6GyUt/IIcmMwbxMeKimkjyB3hs+7gLBGOUa7gB++0Vy0lD1x
-	/bMHS6X7COeevoQWAMULwaaaXGoBePGuvohbLEruAuDwijm4cmKnayMP4f65CWoBuPG24N6W
-	3xZLnrwPcdlo4fPMMCTvNXy88L2FsQcvHDdazMiVV+Fe3QjpcgZj56/Opbwat0+UclzXrcGz
-	zrOLSi/eVlxd00i4Ot54rOciXYQ89ctU+mUq/TKVftlKJSINyEeSJpfGS+Ub0t5MkWSI5GKp
-	/FBKvOizVKkRLT5sUJAJmQ1TIisiGGRFmOEIvTxUnv5xfI9YsSJTIkv9VHYoWSK3Ij+GFHp7
-	zIwXxPJ58eJ0yUGJJE0i+58SjJtvNlEXOJ9QOWywz6y69m7YgbW0qlZg6RisEEhTE6tPVO4p
-	2TWnLiZPapPf2h2y+WyIIylAvR32p6tTAmzBigeZr7w6BLHSCCbjkjDpqzUPNzd/sG58TKP9
-	2jlyvnrl66Lsvds7Fdu8oxIc4/z346YeZ4mQ+e+d8tCsaajRBAfm9gZzTYXRD1eE2bZp1QG/
-	vJBxtzeZ2KdsVZxJDA/00UaumOEOygYqBfGN/HrnJy9rhTGWikhvwQ7fw5tiQtfGrEMvdflH
-	55wK6oY02/oOza4o9ug3HyWV7b95VKr4J8LuI2jt24Jse4fsNwdbParyD+pwSBmaKN3hV5Xz
-	cWaBfY8g7A0hKU8QbwjiyOTi/wBJ6xsTHwQAAA==
-X-CMS-MailID: 20240415114903epcas5p47c4eeb90c7407377878f6a6bd2bc1458
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240412222916epcas5p4eaf4b2eeb34e8fad4634d8fca9196e98
-References: <CGME20240412222916epcas5p4eaf4b2eeb34e8fad4634d8fca9196e98@epcas5p4.samsung.com>
-	<20240412222857.3873079-1-robh@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240412222857.3873079-1-robh@kernel.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JnW3rpgElRZ7l7_IYzSAkLFTQ0q_Cpaq
+X-Proofpoint-GUID: JnW3rpgElRZ7l7_IYzSAkLFTQ0q_Cpaq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-15_11,2024-04-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 clxscore=1011 mlxlogscore=803 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404150089
 
-
-
-> -----Original Message-----
-> 
-> The "arm,armv8-pmuv3" compatible is intended only for s/w models.
-> Primarily, it doesn't provide any detail on uarch specific events.
-> 
-> There's still remaining cases for CPUs without any corresponding PMU
-> definition and for big.LITTLE systems which only have a single PMU node
-> (there should be one per core type).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> SoC Maintainers, Can you please apply this directly.
-> ---
->  arch/arm/boot/dts/broadcom/bcm2711.dtsi              | 4 ++--
->  arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi    | 2 +-
->  arch/arm64/boot/dts/amazon/alpine-v2.dtsi            | 2 +-
->  arch/arm64/boot/dts/apm/apm-storm.dtsi               | 2 +-
->  arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts | 2 +-
->  arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi     | 2 +-
->  arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi  | 2 +-
->  arch/arm64/boot/dts/cavium/thunder-88xx.dtsi         | 2 +-
->  arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi        | 2 +-
->  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi       | 2 +-
->  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi       | 2 +-
->  arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi       | 7 +++++++
->  arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi       | 7 +++++++
->  arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi       | 5 -----
->  arch/arm64/boot/dts/freescale/imx8dxl.dtsi           | 2 +-
->  arch/arm64/boot/dts/intel/keembay-soc.dtsi           | 2 +-
->  arch/arm64/boot/dts/intel/socfpga_agilex.dtsi        | 2 +-
->  arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi        | 2 +-
->  arch/arm64/boot/dts/marvell/armada-37xx.dtsi         | 2 +-
->  arch/arm64/boot/dts/mediatek/mt8516.dtsi             | 2 +-
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi             | 2 +-
+On Fri, Apr 12, 2024 at 05:28:51PM -0500, Rob Herring wrote:
+[..]
 >  arch/arm64/boot/dts/qcom/qcm2290.dtsi                | 2 +-
 >  arch/arm64/boot/dts/qcom/qdu1000.dtsi                | 2 +-
 >  arch/arm64/boot/dts/qcom/sdm630.dtsi                 | 2 +-
 >  arch/arm64/boot/dts/qcom/sdx75.dtsi                  | 2 +-
->  arch/arm64/boot/dts/realtek/rtd16xx.dtsi             | 2 +-
->  arch/arm64/boot/dts/rockchip/rk3368.dtsi             | 2 +-
->  arch/arm64/boot/dts/sprd/sc9860.dtsi                 | 2 +-
->  arch/arm64/boot/dts/sprd/sc9863a.dtsi                | 2 +-
->  arch/arm64/boot/dts/synaptics/berlin4ct.dtsi         | 2 +-
->  arch/arm64/boot/dts/tesla/fsd.dtsi                   | 2 +-
 
-For FSD SoC,
+Acked-by: Bjorn Andersson <andersson@kernel.org>
 
-Acked-by: Alim Akhtar <alim.akhtar@samsung.com>
-
+Regards,
+Bjorn
