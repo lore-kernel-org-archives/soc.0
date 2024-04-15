@@ -1,105 +1,85 @@
-Return-Path: <SRS0=208j=LT=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=R4rN=LU=huawei.com=xuwei5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90ADCC001CC
-	for <soc@archiver.kernel.org>; Sun, 14 Apr 2024 07:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75417C4345F
+	for <soc@archiver.kernel.org>; Mon, 15 Apr 2024 01:17:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5A773C4AF0C; Sun, 14 Apr 2024 07:51:05 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 391FDC2BD10; Mon, 15 Apr 2024 01:17:23 +0000 (UTC)
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E492EC072AA;
-	Sun, 14 Apr 2024 07:51:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E492EC072AA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e8616c3.versanet.de ([94.134.22.195] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1rvudE-0001KG-L5; Sun, 14 Apr 2024 09:50:32 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
- Dinh Nguyen <dinguyen@kernel.org>,
- Tsahee Zidenberg <tsahee@annapurnalabs.com>,
- Antoine Tenart <atenart@kernel.org>,
- Khuong Dinh <khuong@os.amperecomputing.com>,
- Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, Robert Richter <rric@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- "Paul J. Murphy" <paul.j.murphy@intel.com>,
- Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
- Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
- Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Jisheng Zhang <jszhang@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-fsd@tesla.com,
- Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-mediatek@lists.infradead.org,
- linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-realtek-soc@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
-Date: Sun, 14 Apr 2024 09:50:29 +0200
-Message-ID: <2262532.iZASKD2KPV@diego>
-In-Reply-To: <20240412222857.3873079-1-robh@kernel.org>
-References: <20240412222857.3873079-1-robh@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id D3F81C072AA
+	for <soc@kernel.org>; Mon, 15 Apr 2024 01:17:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D3F81C072AA
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4VHq2J4Zr6z1hwMy;
+	Mon, 15 Apr 2024 09:14:16 +0800 (CST)
+Received: from kwepemd500014.china.huawei.com (unknown [7.221.188.63])
+	by mail.maildlp.com (Postfix) with ESMTPS id 66AAD1A0172;
+	Mon, 15 Apr 2024 09:17:12 +0800 (CST)
+Received: from [10.67.121.2] (10.67.121.2) by kwepemd500014.china.huawei.com
+ (7.221.188.63) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.28; Mon, 15 Apr
+ 2024 09:17:11 +0800
+Message-ID: <661C8017.1070203@hisilicon.com>
+Date: Mon, 15 Apr 2024 09:17:11 +0800
+From: Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+To: Huisong Li <lihuisong@huawei.com>
+List-Id: <soc.lore.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <Jonathan.Cameron@Huawei.com>,
+	<liuyonglong@huawei.com>, <xuwei5@hisilicon.com>
+Subject: Re: [PATCH 1/2] soc: hisilicon: kunpeng_hccs: Add the check for obtaining
+ complete port attribute
+References: <20240403081935.24308-1-lihuisong@huawei.com> <20240403081935.24308-2-lihuisong@huawei.com>
+In-Reply-To: <20240403081935.24308-2-lihuisong@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.121.2]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd500014.china.huawei.com (7.221.188.63)
 
-Am Samstag, 13. April 2024, 00:28:51 CEST schrieb Rob Herring:
-> The "arm,armv8-pmuv3" compatible is intended only for s/w models. Primarily,
-> it doesn't provide any detail on uarch specific events.
+Hi Huisong,
+
+On 2024/4/3 16:19, Huisong Li wrote:
+> The hccs_get_all_port_attr() is used to obtained the attribute of all
+> ports on a specified DIE from firmware. However, this interface doesn't
+> ensure whether firmware reports the complete attribute of all ports or not.
+> So this patch adds the check for this.
 > 
-> There's still remaining cases for CPUs without any corresponding PMU
-> definition and for big.LITTLE systems which only have a single PMU node
-> (there should be one per core type).
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  drivers/soc/hisilicon/kunpeng_hccs.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> SoC Maintainers, Can you please apply this directly.
-> ---
-
->  arch/arm64/boot/dts/rockchip/rk3368.dtsi             | 2 +-
-
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3368.dtsi b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-> index 62af0cb94839..734f87db4d11 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-> @@ -141,7 +141,7 @@ cpu_b3: cpu@103 {
->  	};
+> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+> index 9ff70b38e5e9..bb69a95b5f2d 100644
+> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
+> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+> @@ -556,6 +556,12 @@ static int hccs_get_all_port_attr(struct hccs_dev *hdev,
+>  		start_id = rsp_head.next_id;
+>  	}
 >  
->  	arm-pmu {
-> -		compatible = "arm,armv8-pmuv3";
-> +		compatible = "arm,cortex-a53-pmu";
->  		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
->  			     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
->  			     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
+> +	if (left_buf_len != 0) {
+> +		dev_err(hdev->dev, "do not get the expected port number(%u) attribute.\n",
 
-For Rockchip:
-Acked-by: Heiko Stuebner <heiko@sntech.de>
+How about changing to "failed to get the expected port number(%u) attribute.\n"?
 
+Best Regards,
+Wei
 
+> +			size);
+> +		return -EINVAL;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> 
