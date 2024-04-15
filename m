@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D5DC00A94
-	for <soc@archiver.kernel.org>; Mon, 15 Apr 2024 17:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35EEDC4345F
+	for <soc@archiver.kernel.org>; Mon, 15 Apr 2024 17:15:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 381A1C4AF12; Mon, 15 Apr 2024 17:05:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D2EC4AF08;
-	Mon, 15 Apr 2024 17:05:43 +0000 (UTC)
+	id 0E183C4AF19; Mon, 15 Apr 2024 17:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC17DC4AF0A;
+	Mon, 15 Apr 2024 17:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713200743;
-	bh=4a9TlTGikPdPtvIswhMDPVXsOAtTJIQPwslpOZDf9fY=;
+	s=k20201202; t=1713201349;
+	bh=clBNt8e+6YrryyfPUqSdkx19pn4NeG8mB3JuyFyvw8c=;
 	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=NFy7sX2s3cIUNBRlFl2k/x2C5OHuIvV1olStkLYruXa19OXeY4Re8RAN2kmjkFBeZ
-	 1DjxKjU/G8hAzm5Z0QOMxfW9Hp2GYx8iAEMmW7L03g4yn5utz++MTGkIaNYY3hKEp6
-	 O9xuJQCk5VE2NdtB1YsmN7ldCQiqUrb3DLDXruLxmstCwXZryyVpkcPIY7SjwJAg6F
-	 MYDXmKK7rkAL2bNPdaGhG8V8vwaVZ7qjnONhJuBl1/YNxMRAbc0EZOqol+pI6alrre
-	 naT771VJyBzqUPlyZxYajdFYf08ATeKbsVydsactbGDsLyP2FQsHXvjQWN8gRJ7txH
-	 RtIsX/QiGu7XQ==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-518d98b9620so1721807e87.3;
-        Mon, 15 Apr 2024 10:05:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVbHHMdit9xpYk7kLCYJJnB/fYiVt1+I5dROlYaAVX0DecGID0f3PzS9Ji8ceYobpu8EbkkWCMCW/PVUJBOjxOpA7+2se5pCBAK2Y4Fh/c2cdERRKMwhBZCdjeUkijGhKe4lnHqKrOoNv9mIdRMAhVBlmku9p8wfjO3VeREI19wDl8sSHYhoshF/OVa8mb0YkPLjGrbCZ8vxLwOiaBM4DbKLMQgUiY04hTR2bMGYaD7HBccwTDiYTRU9VqbsXkLuk8yzl718QboZZDKdfiBdO6qFAiXkw+32VZ4L0M8KU50Y7M5qg==
-X-Gm-Message-State: AOJu0YzGtU8djCtzrimGNlCATdCc0+JL3nuuidq8zHyIskATO/d8mbSb
-	wwuCJ1QGcWA3mm/PEOfQeIEtYIP1ptXwk3UTdPHT+doj+6EsddJRT9JFPMtd4iMLX0oWrK+2EHm
-	Diqh4DOyA3yNk3+A6ovZx6Lcq4w==
-X-Google-Smtp-Source: AGHT+IGj52gH0/Dg5INd/xZRyWwlGDPcfmpSpbX0KU82iJTE7+TtYLQcTn0dGxCxYIzg49fhJoCRFzAjpf+6SCkqXUk=
-X-Received: by 2002:a2e:b0ef:0:b0:2da:320a:68d9 with SMTP id
- h15-20020a2eb0ef000000b002da320a68d9mr3627965ljl.13.1713200741392; Mon, 15
- Apr 2024 10:05:41 -0700 (PDT)
+	b=n1+h7fY66wIyhXmDqUDbVIEh8cPkMuXLXIaQeZLl3QqSWH7AwxVUPaTqyeqFQd11N
+	 lk4Wnqb2wXohrO21GbQMtoQLaQQfQBun9U+Q0IcbgncTpl1hpEqRYg3rG629cPc7hj
+	 hVdsVz4IEGHkUyahKyM4VOHTRNcIRKIr32tnze8VMtzQkRozDIhMuyeNzju7Juuxnn
+	 +VveOPAflqreRNMQ/ufQ0MfwU/t6dVS5quyLB63EESLuehj4YVLr2pb6S9OiPJfstr
+	 nRWV+TeTExmbN1EEkEighfKKJgIBQ4awbBYL6Xi8yEeMv62V6ujiXkASNPnlfhYeFl
+	 xf1nDgFeS4WmA==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-518931f8d23so2461986e87.3;
+        Mon, 15 Apr 2024 10:15:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUSgzSxgvxrHB5lDsbIUgbdzENrgjQrjAsdXoMEldeDgqjePw3z7GGjvayM8nfQumgt3lEGcYktyEmBfrZQzHgLaX2z4GT6OGXJKgv83oEZtEumkJ0mufKK5ekkRlOICfBWrGXbF/U00eFzqt4gHNu1v6YVcQqsDm0AspKjHbeNKeK8GHsMF+uMobQ7IvEM/sA2DwO71G6E/hsLayARhQ4uWIqfqgP73hPqgdAnnwU5Rz+9KhMRLs83Tf5OUSG9bVLY/AW8BP8ipSeWDlJn6ZL/ZQl/nwPRWeJuZ074HWW0AN/6nQ==
+X-Gm-Message-State: AOJu0YxFC1F9yoHbPnnJFFKTdou7glZk6Rv0/WVwmASoekvczoVwyCMJ
+	72YswPnm6ISOuakm1egy5hnKXucMZEsp0IqogfqlzhQ/cpRiB1VpGInGxB5Xd4zjSWSSCOxjWnA
+	vw6xTtTAkKaTiVa6iCx/GMOBoCQ==
+X-Google-Smtp-Source: AGHT+IEkz26w525DUde0Uob20fmQI4fd4Chc0AN6DRGivhpSGWQdBtr0Y20V2JMzBwteB/hWf3vT168YMa0bRGYd8lo=
+X-Received: by 2002:ac2:41c6:0:b0:516:7738:bd5c with SMTP id
+ d6-20020ac241c6000000b005167738bd5cmr6496177lfi.4.1713201348179; Mon, 15 Apr
+ 2024 10:15:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <20240412222857.3873079-1-robh@kernel.org> <Zh0vXinxy7woerJQ@hu-bjorande-lv.qualcomm.com>
- <CAA8EJpqL2T4bJZqtZ9KF=V2NLnFxUjouA6_Hu_H07DofifZaoQ@mail.gmail.com>
-In-Reply-To: <CAA8EJpqL2T4bJZqtZ9KF=V2NLnFxUjouA6_Hu_H07DofifZaoQ@mail.gmail.com>
+ <CAA8EJpqL2T4bJZqtZ9KF=V2NLnFxUjouA6_Hu_H07DofifZaoQ@mail.gmail.com> <CAL_Jsq+q3OLEMT=d8=d9o1D9deKGQ5TAtZg_bgptDPQ1cWcctw@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+q3OLEMT=d8=d9o1D9deKGQ5TAtZg_bgptDPQ1cWcctw@mail.gmail.com>
 From: Rob Herring <robh@kernel.org>
-Date: Mon, 15 Apr 2024 12:05:26 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+q3OLEMT=d8=d9o1D9deKGQ5TAtZg_bgptDPQ1cWcctw@mail.gmail.com>
-Message-ID: <CAL_Jsq+q3OLEMT=d8=d9o1D9deKGQ5TAtZg_bgptDPQ1cWcctw@mail.gmail.com>
+Date: Mon, 15 Apr 2024 12:15:34 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKSz_WVTTi7+AgjgDzXAnAqaxXM3i2NUv93nZSpyuZK5g@mail.gmail.com>
+Message-ID: <CAL_JsqKSz_WVTTi7+AgjgDzXAnAqaxXM3i2NUv93nZSpyuZK5g@mail.gmail.com>
 Subject: Re: [PATCH] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -71,25 +71,34 @@ Cc: Bjorn Andersson <quic_bjorande@quicinc.com>, soc@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 15, 2024 at 11:52=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Mon, Apr 15, 2024 at 12:05=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
 >
-> On Mon, 15 Apr 2024 at 16:46, Bjorn Andersson <quic_bjorande@quicinc.com>=
- wrote:
+> On Mon, Apr 15, 2024 at 11:52=E2=80=AFAM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
 > >
-> > On Fri, Apr 12, 2024 at 05:28:51PM -0500, Rob Herring wrote:
-> > [..]
-> > >  arch/arm64/boot/dts/qcom/qcm2290.dtsi                | 2 +-
-> > >  arch/arm64/boot/dts/qcom/qdu1000.dtsi                | 2 +-
-> > >  arch/arm64/boot/dts/qcom/sdm630.dtsi                 | 2 +-
-> > >  arch/arm64/boot/dts/qcom/sdx75.dtsi                  | 2 +-
+> > On Mon, 15 Apr 2024 at 16:46, Bjorn Andersson <quic_bjorande@quicinc.co=
+m> wrote:
+> > >
+> > > On Fri, Apr 12, 2024 at 05:28:51PM -0500, Rob Herring wrote:
+> > > [..]
+> > > >  arch/arm64/boot/dts/qcom/qcm2290.dtsi                | 2 +-
+> > > >  arch/arm64/boot/dts/qcom/qdu1000.dtsi                | 2 +-
+> > > >  arch/arm64/boot/dts/qcom/sdm630.dtsi                 | 2 +-
+> > > >  arch/arm64/boot/dts/qcom/sdx75.dtsi                  | 2 +-
+> > >
+> > > Acked-by: Bjorn Andersson <andersson@kernel.org>
 > >
-> > Acked-by: Bjorn Andersson <andersson@kernel.org>
+> > Note, we'd need to override PMU compatibles in sdm636.dtsi and
+> > sdm660.dtsi. Ideally it should come as the same patch.
 >
-> Note, we'd need to override PMU compatibles in sdm636.dtsi and
-> sdm660.dtsi. Ideally it should come as the same patch.
+> Uh, that's an A for reuse, but an F for readability... It's sdm632 as
+> well. Will drop sdm630.
 
-Uh, that's an A for reuse, but an F for readability... It's sdm632 as
-well. Will drop sdm630.
+Actually, aren't those Kryo cores just Cortex-A53 derivatives? So the
+A53 PMU compatible is an improvement over the generic one still. We
+can't just add kryo260-pmu compatibles because that breaks
+compatibility. We could have a fallback, but then that introduces a
+pattern we don't want.
 
 Rob
