@@ -1,558 +1,143 @@
-Return-Path: <robh@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB834C4345F
-	for <soc@archiver.kernel.org>; Wed, 17 Apr 2024 20:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2849C4345F
+	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 12:11:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 88DC2C4AF12; Wed, 17 Apr 2024 20:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A49FC116B1;
-	Wed, 17 Apr 2024 20:40:31 +0000 (UTC)
+	id 85018C32786; Thu, 18 Apr 2024 12:11:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF167C113CC;
+	Thu, 18 Apr 2024 12:11:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713386431;
-	bh=x2emqiikXbyTIzoc3xfHSQRQQAprN87tbl3TSNncyvo=;
+	s=k20201202; t=1713442286;
+	bh=b5J5aNlAuhkKaRFLEKNaYcnFOnkIAx+ioPr3QdH9v5A=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=MSnjzqB7n97Bw022rvsHegoMlVlxcpk8wjTq5CjNr0PiyOiqZgC1MoCuwlA6FtoUn
-	 UU3uERtdh/A5pR4UX4HB7gv3PBFPn0PeGXVwrlEyZ4T8mQ8oXymsOueCpaWO8VQn19
-	 8x+8vCR9aUhfo3Tl0iBbKIgz6HFFDAEG3LMcA+Q8+manndsbrDXj0WZBjuNL3347X1
-	 Un1nqNvzj2a8zTBLfJ5jr5VaZgGJjTcCeQY7pQHQCtxXAh00sjoacNW3n/j8HMAfog
-	 L5WHmWfgHeOeStxIrFaNbEncRWZFGFFSAEG7jGXfk1ng2wQV5YFbnACv4fZbSzwLF6
-	 kYinHnoIGQ2gQ==
-From: "Rob Herring (Arm)" <robh@kernel.org>
+	b=XrDUH59m5budXj01S9zfuQA4aaVYhENvFECekzgwmrq77aKyEuIu6q47o3D4nAAcN
+	 p5l07WUO0fo9Ry4QkaShPbPpzAdJn2ZVMKU/RtsWepp6onq8RaMKkwRNApK1Rkg9LZ
+	 xYw23Vd/NOfHmU8wHdl5Pvf+rR6wPpkGVAfRf0TO8NUPOeYboNd+hfQ68mCoR069GA
+	 rIbqLn7lgfrb9x5qHcZbUjFztpom0uwEKA/bmntKowHzHMaZDzN6OiiYclP1Unm+um
+	 1ak2bM14r+JDc2OzclHiOrz9RsPavHcWfIXBof23vS46Jw026vBaL3h6A/V7AyWUe5
+	 BdNSpSyuCIynQ==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-	Antoine Tenart <atenart@kernel.org>,
-	Khuong Dinh <khuong@os.amperecomputing.com>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Robert Richter <rric@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Li Yang <leoyang.li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	"Paul J. Murphy" <paul.j.murphy@intel.com>,
-	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: arm@kernel.org,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
 	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-fsd@tesla.com,
-	Michal Simek <michal.simek@amd.com>
-Cc: devicetree@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-mediatek@lists.infradead.org,
-	linux-tegra@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-realtek-soc@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
-Date: Wed, 17 Apr 2024 15:38:47 -0500
-Message-ID: <20240417203853.3212103-1-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v6 00/11] Turris Omnia MCU driver
+Date: Thu, 18 Apr 2024 14:11:05 +0200
+Message-ID: <20240418121116.22184-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The "arm,armv8-pmuv3" compatible is intended only for s/w models. Primarily,
-it doesn't provide any detail on uarch specific events.
+Hello Andy, Dan, Linus, Arnd, Gregory, and others,
 
-There's still remaining cases for CPUs without any corresponding PMU
-definition and for big.LITTLE systems which only have a single PMU node
-(there should be one per core type).
+I am sending v6 of the series adding Turris Omnia MCU driver.
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
-Acked-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
-Acked-by: Bjorn Andersson <andersson@kernel.org>
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Acked-by: Alim Akhtar <alim.akhtar@samsung.com>
----
-SoC Maintainers, Can you please apply this directly.
+This series depends on the immutable branch between LEDs and locking,
+introducing devm_mutex_init(), see the PR
+  https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
 
-v2:
- - Drop QCom sdm630 change
----
- arch/arm/boot/dts/broadcom/bcm2711.dtsi              | 4 ++--
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi    | 2 +-
- arch/arm64/boot/dts/amazon/alpine-v2.dtsi            | 2 +-
- arch/arm64/boot/dts/apm/apm-storm.dtsi               | 2 +-
- arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts | 2 +-
- arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi     | 2 +-
- arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi  | 2 +-
- arch/arm64/boot/dts/cavium/thunder-88xx.dtsi         | 2 +-
- arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi        | 2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi       | 2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi       | 2 +-
- arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi       | 7 +++++++
- arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi       | 7 +++++++
- arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi       | 5 -----
- arch/arm64/boot/dts/freescale/imx8dxl.dtsi           | 2 +-
- arch/arm64/boot/dts/intel/keembay-soc.dtsi           | 2 +-
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi        | 2 +-
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi        | 2 +-
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi         | 2 +-
- arch/arm64/boot/dts/mediatek/mt8516.dtsi             | 2 +-
- arch/arm64/boot/dts/nvidia/tegra210.dtsi             | 2 +-
- arch/arm64/boot/dts/qcom/qcm2290.dtsi                | 2 +-
- arch/arm64/boot/dts/qcom/qdu1000.dtsi                | 2 +-
- arch/arm64/boot/dts/qcom/sdx75.dtsi                  | 2 +-
- arch/arm64/boot/dts/realtek/rtd16xx.dtsi             | 2 +-
- arch/arm64/boot/dts/rockchip/rk3368.dtsi             | 2 +-
- arch/arm64/boot/dts/sprd/sc9860.dtsi                 | 2 +-
- arch/arm64/boot/dts/sprd/sc9863a.dtsi                | 2 +-
- arch/arm64/boot/dts/synaptics/berlin4ct.dtsi         | 2 +-
- arch/arm64/boot/dts/tesla/fsd.dtsi                   | 2 +-
- arch/arm64/boot/dts/xilinx/zynqmp.dtsi               | 2 +-
- 31 files changed, 43 insertions(+), 34 deletions(-)
+See the cover letters for v1, v2, v3, v4 and v5:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
 
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711.dtsi b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-index 22c7f1561344..926f87b86590 100644
---- a/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-@@ -432,8 +432,8 @@ emmc2: mmc@7e340000 {
- 		};
- 	};
- 
--	arm-pmu {
--		compatible = "arm,cortex-a72-pmu", "arm,armv8-pmuv3";
-+	pmu {
-+		compatible = "arm,cortex-a72-pmu";
- 		interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
- 			<GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
- 			<GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-index 072fe20cfca0..cbbc53c47921 100644
---- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-@@ -79,7 +79,7 @@ fpga-region {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <0 170 4>,
- 			     <0 171 4>,
- 			     <0 172 4>,
-diff --git a/arch/arm64/boot/dts/amazon/alpine-v2.dtsi b/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
-index dbf2dce8d1d6..dbe21d88a29e 100644
---- a/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
-+++ b/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
-@@ -106,7 +106,7 @@ timer {
- 		};
- 
- 		pmu {
--			compatible = "arm,armv8-pmuv3";
-+			compatible = "arm,cortex-a57-pmu";
- 			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
-index 988928c60f15..ee3f838b4904 100644
---- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
-+++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
-@@ -122,7 +122,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "apm,potenza-pmu", "arm,armv8-pmuv3";
-+		compatible = "apm,potenza-pmu";
- 		interrupts = <1 12 0xff04>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts b/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
-index 8db4243a4947..9115c99d0dc0 100644
---- a/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
-+++ b/arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts
-@@ -102,7 +102,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
- 	};
-diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
-index 896d1f33b5b6..cfd9fd23a1c2 100644
---- a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
-@@ -102,7 +102,7 @@ IRQ_TYPE_LEVEL_LOW)>,
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a57-pmu";
- 		interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
-index d8516ec0dae7..857fa427e195 100644
---- a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
-@@ -142,7 +142,7 @@ psci {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a72-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi b/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi
-index 8ad31dee11a3..4c9f1f808427 100644
---- a/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi
-+++ b/arch/arm64/boot/dts/cavium/thunder-88xx.dtsi
-@@ -361,7 +361,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "cavium,thunder-pmu", "arm,armv8-pmuv3";
-+		compatible = "cavium,thunder-pmu";
- 		interrupts = <1 7 4>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi b/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi
-index 3419bd252696..68cb3d01187a 100644
---- a/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi
-+++ b/arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi
-@@ -83,7 +83,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "brcm,vulcan-pmu", "arm,armv8-pmuv3";
-+		compatible = "brcm,vulcan-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>; /* PMU overflow */
- 	};
- 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-index fe9093b3c02e..a0f7bbd691a0 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-@@ -81,7 +81,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <0 106 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-index d333b773bc45..8ee6d8c0ef61 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-@@ -276,7 +276,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <0 106 0x4>,
- 			     <0 107 0x4>,
- 			     <0 95 0x4>,
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
-index 1aa38ed09aa4..8352197cea6f 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
-@@ -12,6 +12,13 @@
- #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
- #include "fsl-ls208xa.dtsi"
- 
-+/ {
-+	pmu {
-+		compatible = "arm,cortex-a57-pmu";
-+		interrupts = <1 7 0x8>; /* PMU PPI, Level low type */
-+	};
-+};
-+
- &cpu {
- 	cpu0: cpu@0 {
- 		device_type = "cpu";
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi
-index 8581ea55d254..245bbd615c81 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi
-@@ -12,6 +12,13 @@
- #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
- #include "fsl-ls208xa.dtsi"
- 
-+/ {
-+	pmu {
-+		compatible = "arm,cortex-a72-pmu";
-+		interrupts = <1 7 0x8>; /* PMU PPI, Level low type */
-+	};
-+};
-+
- &cpu {
- 	cpu0: cpu@0 {
- 		device_type = "cpu";
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-index 0b7292835906..ccba0a135b24 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-@@ -247,11 +247,6 @@ timer: timer {
- 			     <1 10 4>; /* Hypervisor PPI, active-low */
- 	};
- 
--	pmu {
--		compatible = "arm,armv8-pmuv3";
--		interrupts = <1 7 0x8>; /* PMU PPI, Level low type */
--	};
--
- 	psci {
- 		compatible = "arm,psci-0.2";
- 		method = "smc";
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-index a0674c5c5576..b8abd98bdc43 100644
---- a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-@@ -104,7 +104,7 @@ dsp_reserved: dsp@92400000 {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a35-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/intel/keembay-soc.dtsi b/arch/arm64/boot/dts/intel/keembay-soc.dtsi
-index 781761d2942b..ae00e9e54e82 100644
---- a/arch/arm64/boot/dts/intel/keembay-soc.dtsi
-+++ b/arch/arm64/boot/dts/intel/keembay-soc.dtsi
-@@ -70,7 +70,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_PPI 0x7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index 76aafa172eb0..2a5eeb21da47 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -80,7 +80,7 @@ fpga-region {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-index 5591939e057b..75377c292bcb 100644
---- a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-@@ -68,7 +68,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a55-pmu";
- 		interrupts = <GIC_PPI 12 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-index 1cc3fa1c354d..9603223dd761 100644
---- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-@@ -68,7 +68,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8516.dtsi b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
-index 9cbd6dd8f671..d0b03dc4d3f4 100644
---- a/arch/arm64/boot/dts/mediatek/mt8516.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
-@@ -165,7 +165,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a35-pmu";
- 		interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_LOW>,
- 			     <GIC_SPI 5 IRQ_TYPE_LEVEL_LOW>,
- 			     <GIC_SPI 6 IRQ_TYPE_LEVEL_LOW>,
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 47f8268e46bf..882b1d1f4ada 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -2004,7 +2004,7 @@ L2: l2-cache {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a57-pmu";
- 		interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-index 89beac833d43..d3cd68190a17 100644
---- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-@@ -165,7 +165,7 @@ memory@40000000 {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-index 832f472c4b7a..f2a5e2e40461 100644
---- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-@@ -177,7 +177,7 @@ memory@80000000 {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a55-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-index 7dbdf8ca6de6..b74cf4baedd6 100644
---- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-@@ -224,7 +224,7 @@ memory@80000000 {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a55-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
-index 34802cc62983..e57317a17aa9 100644
---- a/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
-+++ b/arch/arm64/boot/dts/realtek/rtd16xx.dtsi
-@@ -109,7 +109,7 @@ timer {
- 	};
- 
- 	arm_pmu: pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a55-pmu";
- 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
- 		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>,
- 			<&cpu3>, <&cpu4>, <&cpu5>;
-diff --git a/arch/arm64/boot/dts/rockchip/rk3368.dtsi b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-index 62af0cb94839..734f87db4d11 100644
---- a/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-@@ -141,7 +141,7 @@ cpu_b3: cpu@103 {
- 	};
- 
- 	arm-pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/sprd/sc9860.dtsi b/arch/arm64/boot/dts/sprd/sc9860.dtsi
-index e27eb3ed1d47..6bfdbdb0e1cd 100644
---- a/arch/arm64/boot/dts/sprd/sc9860.dtsi
-+++ b/arch/arm64/boot/dts/sprd/sc9860.dtsi
-@@ -165,7 +165,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,cortex-a53-pmu", "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/sprd/sc9863a.dtsi b/arch/arm64/boot/dts/sprd/sc9863a.dtsi
-index 22d81ace740a..53e5b77d70b5 100644
---- a/arch/arm64/boot/dts/sprd/sc9863a.dtsi
-+++ b/arch/arm64/boot/dts/sprd/sc9863a.dtsi
-@@ -134,7 +134,7 @@ timer {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a55-pmu";
- 		interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi b/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi
-index 53d616c3cfed..71e4bfcc9e81 100644
---- a/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi
-+++ b/arch/arm64/boot/dts/synaptics/berlin4ct.dtsi
-@@ -88,7 +88,7 @@ osc: osc {
- 	};
- 
- 	pmu {
--		compatible = "arm,cortex-a53-pmu", "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index 047a83cee603..690b4ed9c29b 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -304,7 +304,7 @@ CPU_SLEEP: cpu-sleep {
- 	};
- 
- 	arm-pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a72-pmu";
- 		interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-index 25d20d803230..34d0e0be3fe6 100644
---- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-+++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-@@ -169,7 +169,7 @@ dcc: dcc {
- 	};
- 
- 	pmu {
--		compatible = "arm,armv8-pmuv3";
-+		compatible = "arm,cortex-a53-pmu";
- 		interrupt-parent = <&gic>;
- 		interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
+Changes since v5:
+- use dev_get_drvdata(dev) instead of
+  i2c_get_clientdata(to_i2c_client(dev))
+- uses devm_mutex_init() from the above mentioned branch
+- addressed Andy's suggestions for patch 2 (excluding the one suggesting
+  100 column lines, I still prefer 80 columns)
+- addressed Dan's suggestion for devm_irq_create_mapping() (return
+  -ENXIO if mapping could not be created, not 0 as irq_create_mapping()
+  does)
+- I threw away the changes for other drivers that came with the new
+  devm_ helpers, notably conversion to devm_debugfs_create_dir(), as
+  there were some problems
+
+Marek Behún (11):
+  dt-bindings: arm: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  devm-helpers: Add resource managed version of irq_create_mapping()
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  devm-helpers: Add resource managed version of debugfs directory create
+    function
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
+
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../bindings/arm/cznic,turris-omnia-mcu.yaml  |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   51 +
+ drivers/platform/cznic/Makefile               |    9 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  439 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  209 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1047 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |   89 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  123 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  188 +++
+ include/linux/devm-helpers.h                  |   94 ++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 18 files changed, 3023 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
+
 -- 
-2.43.0
+2.43.2
 
