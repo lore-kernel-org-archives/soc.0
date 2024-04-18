@@ -4,36 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEF2C4345F
-	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 12:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D86C04FFF
+	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 12:11:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 361CEC2BD11; Thu, 18 Apr 2024 12:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54423C3277B;
-	Thu, 18 Apr 2024 12:11:44 +0000 (UTC)
+	id F4127C2BD11; Thu, 18 Apr 2024 12:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEE3C32781;
+	Thu, 18 Apr 2024 12:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713442306;
-	bh=ypUSGhQv/68ujM0yOLLZAifAP6IFFNdOBDVaREk68t4=;
+	s=k20201202; t=1713442303;
+	bh=ap6u4jJVqsVtbs9MZBwDK1tnlUgtvs4miuNhDed77lo=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oo5A+RVXX/xNrAWl9tlT9d++XKSxKZ/61s1Y9YpIjqPtcttPlXhw7YHJ4N9EEdI4i
-	 GdijSB4EkAnFGU8xgjIdz8PsjksG5DFuvI8EPetWpZTe00h9mEaRcrdhluixhRbzb5
-	 p+4vzFaY4sj3I/fJzBdMiX5p0ZNBcYgHw6AZtbnxL7ZuQvgdaWtWy3V4bgXv3C9zoK
-	 GLBjsarqPibAXgQ+Zh6XYnJ00qCCH6JHrmo6SRtC/45lu8mCxS+phoG0N/5IinFdnS
-	 VKaP5eeXUgbo4AK92zoaiRHeBprDXrG5a5VXsrwQDxNhQqk9Fxs8JjgOSJE3eP0dzH
-	 OlXIv8d69ZmUQ==
+	b=cvOU+5BLd+Ubj7Eopndn3YzruZB/G8KixhIeld8UBMKquS291FEWnPklapE+ij/y/
+	 R4ohad71KCXje+83/xwikOju89MPNaCIf5yAqDSK4QinUsVN54MRu6tDw2Z2Je9ACD
+	 +psedmmOMtOeRXil96VMO/q9kQJolDJZBs89i8GfVe9E7tDquRXRgEiNxK0aMocedB
+	 wGF4gRY4l5bD7necnm2mEOp6C47Oqw/blhZwZ1/tDwDNKGM1SvpKGVHuSUScFQ48O+
+	 aP7/DfYNsDB5uXHEK+JnTHC5FwcTnC+qeRHN0Oz3yaApEUXTuMrFsyAR7p0qHrNQLV
+	 WYebr0J1Fbe5g==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+	Andy Shevchenko <andy@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-crypto@vger.kernel.org
 Cc: arm@kernel.org,
 	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v6 08/11] devm-helpers: Add resource managed version of debugfs directory create function
-Date: Thu, 18 Apr 2024 14:11:13 +0200
-Message-ID: <20240418121116.22184-9-kabel@kernel.org>
+Subject: [PATCH v6 07/11] platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+Date: Thu, 18 Apr 2024 14:11:12 +0200
+Message-ID: <20240418121116.22184-8-kabel@kernel.org>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240418121116.22184-1-kabel@kernel.org>
 References: <20240418121116.22184-1-kabel@kernel.org>
@@ -41,72 +42,216 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A few drivers register a devm action to remove a debugfs directory,
-implementing a one-liner function that calls debufs_remove_recursive().
-Help drivers avoid this repeated implementations by adding managed
-version of debugfs directory create function.
+Add support for true random number generator provided by the MCU.
+New Omnia boards come without the Atmel SHA204-A chip. Instead the
+crypto functionality is provided by new microcontroller, which has
+a TRNG peripheral.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- include/linux/devm-helpers.h | 40 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ drivers/platform/cznic/Kconfig                |  2 +
+ drivers/platform/cznic/Makefile               |  1 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  6 +-
+ .../platform/cznic/turris-omnia-mcu-gpio.c    |  2 +-
+ .../platform/cznic/turris-omnia-mcu-trng.c    | 89 +++++++++++++++++++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  8 ++
+ 6 files changed, 106 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
 
-diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
-index fe62b28baf03..58e0a7fbd549 100644
---- a/include/linux/devm-helpers.h
-+++ b/include/linux/devm-helpers.h
-@@ -23,6 +23,7 @@
-  * already ran.
-  */
+diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
+index e2649cdecc38..750d5f47dba8 100644
+--- a/drivers/platform/cznic/Kconfig
++++ b/drivers/platform/cznic/Kconfig
+@@ -19,6 +19,7 @@ config TURRIS_OMNIA_MCU
+ 	depends on I2C
+ 	select GPIOLIB
+ 	select GPIOLIB_IRQCHIP
++	select HW_RANDOM
+ 	select RTC_CLASS
+ 	select WATCHDOG_CORE
+ 	help
+@@ -28,6 +29,7 @@ config TURRIS_OMNIA_MCU
+ 	  - board poweroff into true low power mode (with voltage regulators
+ 	    disabled) and the ability to configure wake up from this mode (via
+ 	    rtcwake)
++	  - true random number generator (if available on the MCU)
+ 	  - MCU watchdog
+ 	  - GPIO pins
+ 	    - to get front button press events (the front button can be
+diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
+index 687f7718c0a1..eae4c6b341ff 100644
+--- a/drivers/platform/cznic/Makefile
++++ b/drivers/platform/cznic/Makefile
+@@ -4,4 +4,5 @@ obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
+ turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
+ turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
+ turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
++turris-omnia-mcu-y		+= turris-omnia-mcu-trng.o
+ turris-omnia-mcu-y		+= turris-omnia-mcu-watchdog.o
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
+index 5f88119d825c..7fe4a3df93a6 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu-base.c
++++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
+@@ -369,7 +369,11 @@ static int omnia_mcu_probe(struct i2c_client *client)
+ 	if (err)
+ 		return err;
  
-+#include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/kconfig.h>
- #include <linux/irqdomain.h>
-@@ -130,4 +131,43 @@ static inline int devm_irq_create_mapping(struct device *dev,
- 	return virq;
+-	return omnia_mcu_register_gpiochip(mcu);
++	err = omnia_mcu_register_gpiochip(mcu);
++	if (err)
++		return err;
++
++	return omnia_mcu_register_trng(mcu);
  }
  
-+static inline void devm_debugfs_dir_recursive_drop(void *res)
-+{
-+	debugfs_remove_recursive(res);
-+}
-+
-+/**
-+ * devm_debugfs_create_dir - Resource managed debugfs directory creation
-+ * @dev:	Device which lifetime the directory is bound to
-+ * @name:	a pointer to a string containing the name of the directory to
-+ *		create
-+ * @parent:	a pointer to the parent dentry for this file.  This should be a
-+ *		directory dentry if set.  If this parameter is NULL, then the
-+ *		directory will be created in the root of the debugfs filesystem.
+ static const struct of_device_id of_omnia_mcu_match[] = {
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-gpio.c b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
+index b3b203f0d2b9..625018ca82cc 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu-gpio.c
++++ b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
+@@ -162,7 +162,7 @@ static const struct omnia_gpio {
+ };
+ 
+ /* mapping from interrupts to indexes of GPIOs in the omnia_gpios array */
+-static const u8 omnia_int_to_gpio_idx[32] = {
++const u8 omnia_int_to_gpio_idx[32] = {
+ 	[__bf_shf(INT_CARD_DET)]		= 4,
+ 	[__bf_shf(INT_MSATA_IND)]		= 5,
+ 	[__bf_shf(INT_USB30_OVC)]		= 6,
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-trng.c b/drivers/platform/cznic/turris-omnia-mcu-trng.c
+new file mode 100644
+index 000000000000..24fa8cb5d522
+--- /dev/null
++++ b/drivers/platform/cznic/turris-omnia-mcu-trng.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * CZ.NIC's Turris Omnia MCU TRNG driver
 + *
-+ * Create a debugfs directory which is automatically recursively removed when
-+ * the driver is detached. A few drivers create debugfs directories which they
-+ * want removed before driver is detached.
-+ * devm_debugfs_create_dir() can be used to omit the explicit
-+ * debugfs_remove_recursive() call when driver is detached.
++ * 2024 by Marek Behún <kabel@kernel.org>
 + */
-+static inline struct dentry *
-+devm_debugfs_create_dir(struct device *dev, const char *name,
-+			struct dentry *parent)
++
++#include <linux/bitfield.h>
++#include <linux/completion.h>
++#include <linux/devm-helpers.h>
++#include <linux/i2c.h>
++#include <linux/irqdomain.h>
++#include <linux/minmax.h>
++#include <linux/module.h>
++#include <linux/string.h>
++#include <linux/turris-omnia-mcu-interface.h>
++#include <linux/types.h>
++
++#include "turris-omnia-mcu.h"
++
++#define CMD_TRNG_MAX_ENTROPY_LEN	64
++
++static irqreturn_t omnia_trng_irq_handler(int irq, void *dev_id)
 +{
-+	struct dentry *dentry;
-+	int err;
++	struct omnia_mcu *mcu = dev_id;
 +
-+	dentry = debugfs_create_dir(name, parent);
-+	if (IS_ERR(dentry))
-+		return dentry;
++	complete(&mcu->trng_completion);
 +
-+	err = devm_add_action_or_reset(dev, devm_debugfs_dir_recursive_drop,
-+				       dentry);
-+	if (err < 0)
-+		return ERR_PTR(err);
-+
-+	return dentry;
++	return IRQ_HANDLED;
 +}
 +
- #endif
++static int omnia_trng_read(struct hwrng *rng, void *data, size_t max, bool wait)
++{
++	struct omnia_mcu *mcu = (struct omnia_mcu *)rng->priv;
++	u8 reply[1 + CMD_TRNG_MAX_ENTROPY_LEN];
++	int err, bytes;
++
++	if (!wait && !completion_done(&mcu->trng_completion))
++		return 0;
++
++	do {
++		if (wait_for_completion_interruptible(&mcu->trng_completion))
++			return -EINTR;
++
++		err = omnia_cmd_read(mcu->client, CMD_TRNG_COLLECT_ENTROPY,
++				     reply, sizeof(reply));
++		if (err)
++			return err;
++
++		bytes = min3(reply[0], max, CMD_TRNG_MAX_ENTROPY_LEN);
++	} while (wait && !bytes);
++
++	memcpy(data, &reply[1], bytes);
++
++	return bytes;
++}
++
++int omnia_mcu_register_trng(struct omnia_mcu *mcu)
++{
++	struct device *dev = &mcu->client->dev;
++	int irq, err;
++	u8 irq_idx;
++
++	if (!(mcu->features & FEAT_TRNG))
++		return 0;
++
++	irq_idx = omnia_int_to_gpio_idx[__bf_shf(INT_TRNG)];
++	irq = devm_irq_create_mapping(dev, mcu->gc.irq.domain, irq_idx);
++	if (irq < 0)
++		return dev_err_probe(dev, irq, "Cannot map TRNG IRQ\n");
++
++	init_completion(&mcu->trng_completion);
++
++	err = devm_request_threaded_irq(dev, irq, NULL, omnia_trng_irq_handler,
++					IRQF_ONESHOT, "turris-omnia-mcu-trng",
++					mcu);
++	if (err)
++		return dev_err_probe(dev, err, "Cannot request TRNG IRQ\n");
++
++	mcu->trng.name = "turris-omnia-mcu-trng";
++	mcu->trng.read = omnia_trng_read;
++	mcu->trng.priv = (unsigned long)mcu;
++
++	err = devm_hwrng_register(dev, &mcu->trng);
++	if (err)
++		return dev_err_probe(dev, err, "Cannot register TRNG\n");
++
++	return 0;
++}
+diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
+index 1838cb3d636e..e0cf10f8c32e 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu.h
++++ b/drivers/platform/cznic/turris-omnia-mcu.h
+@@ -9,7 +9,9 @@
+ #define __TURRIS_OMNIA_MCU_H
+ 
+ #include <linux/bitops.h>
++#include <linux/completion.h>
+ #include <linux/gpio/driver.h>
++#include <linux/hw_random.h>
+ #include <linux/if_ether.h>
+ #include <linux/mutex.h>
+ #include <linux/rtc.h>
+@@ -45,6 +47,10 @@ struct omnia_mcu {
+ 
+ 	/* MCU watchdog */
+ 	struct watchdog_device wdt;
++
++	/* true random number generator */
++	struct hwrng trng;
++	struct completion trng_completion;
+ };
+ 
+ int omnia_cmd_write_read(const struct i2c_client *client,
+@@ -147,11 +153,13 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd)
+ 	return err ?: reply;
+ }
+ 
++extern const u8 omnia_int_to_gpio_idx[32];
+ extern const struct attribute_group omnia_mcu_gpio_group;
+ extern const struct attribute_group omnia_mcu_poweroff_group;
+ 
+ int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
+ int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
++int omnia_mcu_register_trng(struct omnia_mcu *mcu);
+ int omnia_mcu_register_watchdog(struct omnia_mcu *mcu);
+ 
+ #endif /* __TURRIS_OMNIA_MCU_H */
 -- 
 2.43.2
 
