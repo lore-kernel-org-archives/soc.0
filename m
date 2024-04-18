@@ -1,81 +1,75 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 046B6C4345F
-	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 14:15:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C99C4345F
+	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 15:43:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D071EC2BD11; Thu, 18 Apr 2024 14:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A731EC113CC;
-	Thu, 18 Apr 2024 14:15:13 +0000 (UTC)
+	id DD0D5C116B1; Thu, 18 Apr 2024 15:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD7EC113CC;
+	Thu, 18 Apr 2024 15:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713449715;
-	bh=kEU8pg5x/u3kCeO1AkCEa9X4vxxjtiSQ6fE84z9fXE4=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=sU+ctp1t3S5vaMl+Ofb9aSpNLyCLSyP54gWSHD34ji5tgyQUC99dTq6wqQgB+OS6O
-	 EuT9oyfDsgoHWkLa74UGw+XNYH0n6cGIq13KzaIbVx4kuOvaXxPNKfFWAHPtqhuUmo
-	 +fJjB1H0SK9lHlnCW6LaSbQ8eHUVhMBanjMvQFtw7L8ScRutkdMWnqhRWJo/95vRXq
-	 a7SumTdz0ob57DEO9MQS7WMjbH7JpzNzN0w4nLVOzkrHiNUVs/Siho7/Jk8i9nO7w0
-	 dGc5LEDid1X2BLSgec/OlDkbVAQ1RIQW6TrQSB+zJiZiEjDC+XIyU3kDiXM5Iy/U/u
-	 G0M/DM0k2wAlQ==
-Date: Thu, 18 Apr 2024 16:15:10 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
+	s=k20201202; t=1713455038;
+	bh=xJuCAMEMI4H0VXMOYYN8BJoikiiTJ0i9X5lKoXkiLGM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=HrTLOtSODv3tRummfG2jsSqfToL8pxAZXVhngDITqillR0l7xD8SNLnkM1We9aBGb
+	 dvLmeuRlQXfbAb44SIO2e3Ojc5nwNBft6FNV0bgEd0ya7ZWhtCSV3IlKvyALsZEZe4
+	 VS+YnsgYYJiDyjnI47YntoI/M8bEWp539AVZ2zJiRxzlr9hBP6EpFOOwaDGSqVUpjF
+	 pIuw5veweCkjMVOJoA8o1koGK9M86SFOe8sEz+oh70KEeporb/Y0BnWYOoeiLs9TgL
+	 5nhrAimI957YpT/AQi04bHn4orBve98gsCkyjEALMXOwkqtPG9fCLGneSbTpnrWdw0
+	 QQ1p69b0L6pvA==
+Date: Thu, 18 Apr 2024 16:43:54 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, Andy Shevchenko <andy@kernel.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>,
- linux-watchdog@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>,
- arm@kernel.org
-Subject: Re: [PATCH v6 05/11] platform: cznic: turris-omnia-mcu: Add support
- for MCU watchdog
-Message-ID: <20240418161510.5ff0dc46@dellmb>
-In-Reply-To: <b0cce881-f42b-469f-a4db-dcfcf89738f5@roeck-us.net>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 01/11] dt-bindings: arm: add cznic,turris-omnia-mcu
+ binding
+Message-ID: <20240418-grain-ethics-8a3ee62ac9a1@spud>
 References: <20240418121116.22184-1-kabel@kernel.org>
-	<20240418121116.22184-6-kabel@kernel.org>
-	<b0cce881-f42b-469f-a4db-dcfcf89738f5@roeck-us.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
+ <20240418121116.22184-2-kabel@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="fNry77T239LsQMX4"
+Content-Disposition: inline
+In-Reply-To: <20240418121116.22184-2-kabel@kernel.org>
+
+
+--fNry77T239LsQMX4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 18 Apr 2024 06:26:04 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On Thu, Apr 18, 2024 at 02:11:10PM +0200, Marek Beh=C3=BAn wrote:
-> > Add support for the watchdog mechanism provided by the MCU.
-> >=20
-> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org> =20
+On Thu, Apr 18, 2024 at 02:11:06PM +0200, Marek Beh=FAn wrote:
+> Add binding for cznic,turris-omnia-mcu, the device-tree node
+> representing the system-controller features provided by the MCU on the
+> Turris Omnia router.
 >=20
-> This driver should reside in driver/watchdog and use a generic API
-> such as regmap to access chip registers.
+> Signed-off-by: Marek Beh=FAn <kabel@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/arm/cznic,turris-omnia-mcu.yaml  | 86 +++++++++++++++++++
 
-Hi Guenter,
+Why's this in bindings/arm btw? Seems like it is some remote firmware if
+it is running off-SoC on an MCU, so either remoteproc or firmware would
+make more sense? Tying it to arm at least needs an explanation IMO.
 
-I have these points against that:
+--fNry77T239LsQMX4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-- the regmap API is not applicable in a sane way to the Turris Omnia
-  MCU interface. I was trying to do this 5 years ago. An explanation
-  can be found at
-    https://www.spinics.net/lists/linux-leds/msg11583.html
-  (the LED driver uses same interface as the MCU driver, LED controller
-   is implemented by the MCU).
+-----BEGIN PGP SIGNATURE-----
 
-  so were the watchdog driver a separate module, we would either need
-  to rape the regmap API to do this, or come up with a new API specific
-  for Turris Omnia, which seems like an unnecessary complication just
-  for one device
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiE/ugAKCRB4tDGHoIJi
+0kBMAP0dMGUS965+90f3LCJ0ZFw9sNu6BYih/dx8ZIq4ycCMvQEAhw6JDxT7LFqJ
+a3d3KKeKFEg16PejV+LaHIqbodOsZwU=
+=NUXN
+-----END PGP SIGNATURE-----
 
-- this watchdog is specific for Turris Omnia, the driver can not be
-  reused anywhere else
-
-- there are several other multifunction drivers in kernel registering
-  watchdog that do not live in drivers/watchdog/
-
-- leaving it in platform/cznic/turris-omnia-mcu* keeps all these
-  turris-omnia-mcu features together and they are all implemented
-  by one .ko module
-
-Marek
+--fNry77T239LsQMX4--
