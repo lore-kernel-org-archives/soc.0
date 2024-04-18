@@ -4,37 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D86C04FFF
-	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 12:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10FCDC4345F
+	for <soc@archiver.kernel.org>; Thu, 18 Apr 2024 12:11:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F4127C2BD11; Thu, 18 Apr 2024 12:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEE3C32781;
-	Thu, 18 Apr 2024 12:11:41 +0000 (UTC)
+	id 04E25C2BD11; Thu, 18 Apr 2024 12:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B38BC3277B;
+	Thu, 18 Apr 2024 12:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713442303;
-	bh=ap6u4jJVqsVtbs9MZBwDK1tnlUgtvs4miuNhDed77lo=;
+	s=k20201202; t=1713442310;
+	bh=37yk1SLJTNogGwuhRvNW0aCMjVDru9bLPJ0iOjpjveE=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cvOU+5BLd+Ubj7Eopndn3YzruZB/G8KixhIeld8UBMKquS291FEWnPklapE+ij/y/
-	 R4ohad71KCXje+83/xwikOju89MPNaCIf5yAqDSK4QinUsVN54MRu6tDw2Z2Je9ACD
-	 +psedmmOMtOeRXil96VMO/q9kQJolDJZBs89i8GfVe9E7tDquRXRgEiNxK0aMocedB
-	 wGF4gRY4l5bD7necnm2mEOp6C47Oqw/blhZwZ1/tDwDNKGM1SvpKGVHuSUScFQ48O+
-	 aP7/DfYNsDB5uXHEK+JnTHC5FwcTnC+qeRHN0Oz3yaApEUXTuMrFsyAR7p0qHrNQLV
-	 WYebr0J1Fbe5g==
+	b=IlCt6Ra/aFxwZg1hujMX6BjVMgj7ASY3aFKSWl/RPYZh8/UldO4cBjCEHPR5W5oOJ
+	 DW4dKdyy5V0fEHHm5DGk7+P0G9tZ4m0+SJvXFnOJVUL/J8BQe54KldyYiBQSkD7KSl
+	 8N9Ht6dPuoqg+2rt09+qYBiYKEOCbWeQg/eg6dxrZd3RyTk/sG0K4tAA75YVUmIFxH
+	 3A44Mp+Est0ZQZhRJtP16wrOKYcLxjy44g5qzJ9weeJgeembFPedIh4aebqTAXOnuL
+	 vwhGu6p/iFVf3ifiQsSLxrWbGZItKhk+4IJzpLveuuGakv37hRF8mf3zzFx4gPcu6M
+	 4E6oIzXQo6kzA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-crypto@vger.kernel.org
+	soc@kernel.org
 Cc: arm@kernel.org,
-	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v6 07/11] platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
-Date: Thu, 18 Apr 2024 14:11:12 +0200
-Message-ID: <20240418121116.22184-8-kabel@kernel.org>
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+	devicetree@vger.kernel.org
+Subject: [PATCH v6 10/11] ARM: dts: turris-omnia: Add MCU system-controller node
+Date: Thu, 18 Apr 2024 14:11:15 +0200
+Message-ID: <20240418121116.22184-11-kabel@kernel.org>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240418121116.22184-1-kabel@kernel.org>
 References: <20240418121116.22184-1-kabel@kernel.org>
@@ -42,216 +44,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for true random number generator provided by the MCU.
-New Omnia boards come without the Atmel SHA204-A chip. Instead the
-crypto functionality is provided by new microcontroller, which has
-a TRNG peripheral.
+Turris Omnia's MCU provides various features that can be configured over
+I2C at address 0x2a. Add device-tree node.
 
+Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/platform/cznic/Kconfig                |  2 +
- drivers/platform/cznic/Makefile               |  1 +
- .../platform/cznic/turris-omnia-mcu-base.c    |  6 +-
- .../platform/cznic/turris-omnia-mcu-gpio.c    |  2 +-
- .../platform/cznic/turris-omnia-mcu-trng.c    | 89 +++++++++++++++++++
- drivers/platform/cznic/turris-omnia-mcu.h     |  8 ++
- 6 files changed, 106 insertions(+), 2 deletions(-)
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ .../dts/marvell/armada-385-turris-omnia.dts   | 22 ++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-index e2649cdecc38..750d5f47dba8 100644
---- a/drivers/platform/cznic/Kconfig
-+++ b/drivers/platform/cznic/Kconfig
-@@ -19,6 +19,7 @@ config TURRIS_OMNIA_MCU
- 	depends on I2C
- 	select GPIOLIB
- 	select GPIOLIB_IRQCHIP
-+	select HW_RANDOM
- 	select RTC_CLASS
- 	select WATCHDOG_CORE
- 	help
-@@ -28,6 +29,7 @@ config TURRIS_OMNIA_MCU
- 	  - board poweroff into true low power mode (with voltage regulators
- 	    disabled) and the ability to configure wake up from this mode (via
- 	    rtcwake)
-+	  - true random number generator (if available on the MCU)
- 	  - MCU watchdog
- 	  - GPIO pins
- 	    - to get front button press events (the front button can be
-diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
-index 687f7718c0a1..eae4c6b341ff 100644
---- a/drivers/platform/cznic/Makefile
-+++ b/drivers/platform/cznic/Makefile
-@@ -4,4 +4,5 @@ obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
- turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
- turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
- turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
-+turris-omnia-mcu-y		+= turris-omnia-mcu-trng.o
- turris-omnia-mcu-y		+= turris-omnia-mcu-watchdog.o
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-index 5f88119d825c..7fe4a3df93a6 100644
---- a/drivers/platform/cznic/turris-omnia-mcu-base.c
-+++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-@@ -369,7 +369,11 @@ static int omnia_mcu_probe(struct i2c_client *client)
- 	if (err)
- 		return err;
+diff --git a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
+index 7b755bb4e4e7..59079d63fe27 100644
+--- a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
++++ b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
+@@ -218,7 +218,22 @@ i2c@0 {
+ 			#size-cells = <0>;
+ 			reg = <0>;
  
--	return omnia_mcu_register_gpiochip(mcu);
-+	err = omnia_mcu_register_gpiochip(mcu);
-+	if (err)
-+		return err;
+-			/* STM32F0 command interface at address 0x2a */
++			mcu: system-controller@2a {
++				compatible = "cznic,turris-omnia-mcu";
++				reg = <0x2a>;
 +
-+	return omnia_mcu_register_trng(mcu);
- }
++				pinctrl-names = "default";
++				pinctrl-0 = <&mcu_pins>;
++
++				interrupt-parent = <&gpio1>;
++				interrupts = <11 IRQ_TYPE_NONE>;
++
++				gpio-controller;
++				#gpio-cells = <3>;
++
++				interrupt-controller;
++				#interrupt-cells = <2>;
++			};
  
- static const struct of_device_id of_omnia_mcu_match[] = {
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-gpio.c b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
-index b3b203f0d2b9..625018ca82cc 100644
---- a/drivers/platform/cznic/turris-omnia-mcu-gpio.c
-+++ b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
-@@ -162,7 +162,7 @@ static const struct omnia_gpio {
+ 			led-controller@2b {
+ 				compatible = "cznic,turris-omnia-leds";
+@@ -501,6 +516,11 @@ fixed-link {
  };
  
- /* mapping from interrupts to indexes of GPIOs in the omnia_gpios array */
--static const u8 omnia_int_to_gpio_idx[32] = {
-+const u8 omnia_int_to_gpio_idx[32] = {
- 	[__bf_shf(INT_CARD_DET)]		= 4,
- 	[__bf_shf(INT_MSATA_IND)]		= 5,
- 	[__bf_shf(INT_USB30_OVC)]		= 6,
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-trng.c b/drivers/platform/cznic/turris-omnia-mcu-trng.c
-new file mode 100644
-index 000000000000..24fa8cb5d522
---- /dev/null
-+++ b/drivers/platform/cznic/turris-omnia-mcu-trng.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * CZ.NIC's Turris Omnia MCU TRNG driver
-+ *
-+ * 2024 by Marek Behún <kabel@kernel.org>
-+ */
+ &pinctrl {
++	mcu_pins: mcu-pins {
++		marvell,pins = "mpp43";
++		marvell,function = "gpio";
++	};
 +
-+#include <linux/bitfield.h>
-+#include <linux/completion.h>
-+#include <linux/devm-helpers.h>
-+#include <linux/i2c.h>
-+#include <linux/irqdomain.h>
-+#include <linux/minmax.h>
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/turris-omnia-mcu-interface.h>
-+#include <linux/types.h>
-+
-+#include "turris-omnia-mcu.h"
-+
-+#define CMD_TRNG_MAX_ENTROPY_LEN	64
-+
-+static irqreturn_t omnia_trng_irq_handler(int irq, void *dev_id)
-+{
-+	struct omnia_mcu *mcu = dev_id;
-+
-+	complete(&mcu->trng_completion);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int omnia_trng_read(struct hwrng *rng, void *data, size_t max, bool wait)
-+{
-+	struct omnia_mcu *mcu = (struct omnia_mcu *)rng->priv;
-+	u8 reply[1 + CMD_TRNG_MAX_ENTROPY_LEN];
-+	int err, bytes;
-+
-+	if (!wait && !completion_done(&mcu->trng_completion))
-+		return 0;
-+
-+	do {
-+		if (wait_for_completion_interruptible(&mcu->trng_completion))
-+			return -EINTR;
-+
-+		err = omnia_cmd_read(mcu->client, CMD_TRNG_COLLECT_ENTROPY,
-+				     reply, sizeof(reply));
-+		if (err)
-+			return err;
-+
-+		bytes = min3(reply[0], max, CMD_TRNG_MAX_ENTROPY_LEN);
-+	} while (wait && !bytes);
-+
-+	memcpy(data, &reply[1], bytes);
-+
-+	return bytes;
-+}
-+
-+int omnia_mcu_register_trng(struct omnia_mcu *mcu)
-+{
-+	struct device *dev = &mcu->client->dev;
-+	int irq, err;
-+	u8 irq_idx;
-+
-+	if (!(mcu->features & FEAT_TRNG))
-+		return 0;
-+
-+	irq_idx = omnia_int_to_gpio_idx[__bf_shf(INT_TRNG)];
-+	irq = devm_irq_create_mapping(dev, mcu->gc.irq.domain, irq_idx);
-+	if (irq < 0)
-+		return dev_err_probe(dev, irq, "Cannot map TRNG IRQ\n");
-+
-+	init_completion(&mcu->trng_completion);
-+
-+	err = devm_request_threaded_irq(dev, irq, NULL, omnia_trng_irq_handler,
-+					IRQF_ONESHOT, "turris-omnia-mcu-trng",
-+					mcu);
-+	if (err)
-+		return dev_err_probe(dev, err, "Cannot request TRNG IRQ\n");
-+
-+	mcu->trng.name = "turris-omnia-mcu-trng";
-+	mcu->trng.read = omnia_trng_read;
-+	mcu->trng.priv = (unsigned long)mcu;
-+
-+	err = devm_hwrng_register(dev, &mcu->trng);
-+	if (err)
-+		return dev_err_probe(dev, err, "Cannot register TRNG\n");
-+
-+	return 0;
-+}
-diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
-index 1838cb3d636e..e0cf10f8c32e 100644
---- a/drivers/platform/cznic/turris-omnia-mcu.h
-+++ b/drivers/platform/cznic/turris-omnia-mcu.h
-@@ -9,7 +9,9 @@
- #define __TURRIS_OMNIA_MCU_H
- 
- #include <linux/bitops.h>
-+#include <linux/completion.h>
- #include <linux/gpio/driver.h>
-+#include <linux/hw_random.h>
- #include <linux/if_ether.h>
- #include <linux/mutex.h>
- #include <linux/rtc.h>
-@@ -45,6 +47,10 @@ struct omnia_mcu {
- 
- 	/* MCU watchdog */
- 	struct watchdog_device wdt;
-+
-+	/* true random number generator */
-+	struct hwrng trng;
-+	struct completion trng_completion;
- };
- 
- int omnia_cmd_write_read(const struct i2c_client *client,
-@@ -147,11 +153,13 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd)
- 	return err ?: reply;
- }
- 
-+extern const u8 omnia_int_to_gpio_idx[32];
- extern const struct attribute_group omnia_mcu_gpio_group;
- extern const struct attribute_group omnia_mcu_poweroff_group;
- 
- int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
- int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
-+int omnia_mcu_register_trng(struct omnia_mcu *mcu);
- int omnia_mcu_register_watchdog(struct omnia_mcu *mcu);
- 
- #endif /* __TURRIS_OMNIA_MCU_H */
+ 	pcawan_pins: pcawan-pins {
+ 		marvell,pins = "mpp46";
+ 		marvell,function = "gpio";
 -- 
 2.43.2
 
