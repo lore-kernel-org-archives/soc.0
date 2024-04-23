@@ -1,98 +1,91 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12B4FC4345F
-	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 16:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B0AEC04FFE
+	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 16:20:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7FACC4AF09; Tue, 23 Apr 2024 16:06:05 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E23BCC116B1;
-	Tue, 23 Apr 2024 16:06:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E23BCC116B1
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: I0gWYpgBTQKtE4aW6X7VPA==
-X-CSE-MsgGUID: wGrfkOZFR++DrBnLOf0Vfg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9312970"
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="9312970"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 09:06:04 -0700
-X-CSE-ConnectionGUID: LYGEq/79Sa+qDtrCi/1Veg==
-X-CSE-MsgGUID: 65O88O6jRX2M92k6olZJSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="29058763"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 09:05:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rzIeX-00000000Nys-2y1l;
-	Tue, 23 Apr 2024 19:05:53 +0300
-Date: Tue, 23 Apr 2024 19:05:53 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	id D22B0C3277B; Tue, 23 Apr 2024 16:20:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B01C116B1;
+	Tue, 23 Apr 2024 16:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713889239;
+	bh=dOzHpdqiINcQK8dwCoL5qWvSMBimhZb0EaPVD81Gwjs=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=Msm9UsIbRD0kGRj8MTa+gsWCtA5uKlte/REb4uGQaMdzgrPTjrBuxCEEfbG6kItZp
+	 guOhIJ4leYvIlxuvZyKgebEyTpbvET1ECUP0PKwfgsg9ooyEOYEXaHJChirsSyCe0O
+	 6nVApfpuGAlIYVMWuFMsCdokMR8ZJP494/Xv5lXWUwlClJbK8NOPeBFTmh8+08gUM9
+	 A+Ife9MMYH98q7e0HBOboJm3PVLYiIG472o++7IivfWxK+zjhOE3+KWbp5jEmg7/TG
+	 3Xv95n39ZhIDzojxQN/4Xe0A0G19A4xhiU4ft2Qq/66133DMpQ2HYpVRF7qQLoWEMu
+	 qCp+RU9rHv83A==
+Date: Tue, 23 Apr 2024 18:20:14 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	devicetree@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Olivia Mackall <olivia@selenic.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>, arm@kernel.org,
-	Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Subject: Re: [PATCH v6 00/11] Turris Omnia MCU driver
-Message-ID: <ZifcYXdJ7mSEJVfh@smile.fi.intel.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
+ <arnd@arndb.de>, soc@kernel.org, Hans de Goede <hdegoede@redhat.com>, Matti
+ Vaittinen <mazziesaccount@gmail.com>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Christophe JAILLET
+ <christophe.jaillet@wanadoo.fr>, arm@kernel.org
+Subject: Re: [PATCH v6 08/11] devm-helpers: Add resource managed version of
+ debugfs directory create function
+Message-ID: <20240423182014.7ae8cdc3@thinkpad>
+In-Reply-To: <ZifbjfBg0lBRkpoS@smile.fi.intel.com>
 References: <20240418121116.22184-1-kabel@kernel.org>
+	<20240418121116.22184-9-kabel@kernel.org>
+	<ZifbjfBg0lBRkpoS@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240418121116.22184-1-kabel@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 18, 2024 at 02:11:05PM +0200, Marek Behún wrote:
-> Hello Andy, Dan, Linus, Arnd, Gregory, and others,
-> 
-> I am sending v6 of the series adding Turris Omnia MCU driver.
-> 
-> This series depends on the immutable branch between LEDs and locking,
-> introducing devm_mutex_init(), see the PR
->   https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
+On Tue, 23 Apr 2024 19:02:21 +0300
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-...
+> On Thu, Apr 18, 2024 at 02:11:13PM +0200, Marek Beh=C3=BAn wrote:
+> > A few drivers register a devm action to remove a debugfs directory,
+> > implementing a one-liner function that calls debufs_remove_recursive().
+> > Help drivers avoid this repeated implementations by adding managed
+> > version of debugfs directory create function. =20
+>=20
+> ...
+>=20
+> > +static inline struct dentry *
+> > +devm_debugfs_create_dir(struct device *dev, const char *name,
+> > +			struct dentry *parent)
+> > +{
+> > +	struct dentry *dentry;
+> > +	int err; =20
+>=20
+> > +	dentry =3D debugfs_create_dir(name, parent);
+> > +	if (IS_ERR(dentry))
+> > +		return dentry; =20
+>=20
+> Why do we care?
+>=20
+> > +	err =3D devm_add_action_or_reset(dev, devm_debugfs_dir_recursive_drop,
+> > +				       dentry);
+> > +	if (err < 0)
+> > +		return ERR_PTR(err);
+> > +
+> > +	return dentry;
+> > +} =20
+>=20
+> static inline struct dentry *
+> devm_debugfs_create_dir(struct device *dev, const char *name, struct dent=
+ry *parent)
+> {
+> 	struct dentry *dentry;
+> 	int err;
+>=20
+> 	dentry =3D debugfs_create_dir(name, parent);
+>=20
+> 	err =3D devm_add_action_or_reset(dev, devm_debugfs_dir_recursive_drop, d=
+entry);
+> 	if (err)
+> 		return ERR_PTR(err);
 
->   devm-helpers: Add resource managed version of irq_create_mapping()
->   devm-helpers: Add resource managed version of debugfs directory create
->     function
-
-IIUC you created them as static inline, the header will become yet another
-cumbersome and messy "kernel.h". Can we prevent that?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+But if the dir creation fails, there is no need to allocate devm
+destructor...
