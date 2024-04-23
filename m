@@ -1,116 +1,107 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=8AdT=L4=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2902C4345F
-	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 16:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDC07C4345F
+	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 16:44:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A34C9C2BD11; Tue, 23 Apr 2024 16:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B455C116B1;
-	Tue, 23 Apr 2024 16:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713890639;
-	bh=BFQ92V4Z/xX64CrTExX5fx8ZINfEjGS/nDWxNQoRNE4=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=VCMhUxqVN9fDeELly/4TWoKT2+3lnzK3r4JJrhMnNZiGcsUjvPLo/n06CtplOfQNj
-	 8kX1AH3a2qaeRAAYjdgIpkzSSSjj/weLzGKlKr+Z2HSSdimMPfWUlS3C6jD62p+J7W
-	 vOXqRmSIbRhZolfSxDvCyGQLjlDJysKfsj1Kis2f2yisvyZWSzLFgyPRr9siAKfDit
-	 afDwTOKSmB9QWjw3lfpaXb0+5w0yWqtsxD2h0Z0FLuIkmjhCJ7pSE856kN3U8EL+VZ
-	 zs8nRXMO1qB9fOt+DVrG6R31PAmzCzchsbVtmMQVdp9Xutn2crlBotJOXS5Ibna8z9
-	 5sWLyRVyOezGw==
-Date: Tue, 23 Apr 2024 18:43:46 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, Hans de Goede <hdegoede@redhat.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>, arm@kernel.org
-Subject: Re: [PATCH v6 08/11] devm-helpers: Add resource managed version of
- debugfs directory create function
-Message-ID: <20240423184346.37eb0915@thinkpad>
-In-Reply-To: <Zifi0Iw8iVNvhptE@smile.fi.intel.com>
-References: <20240418121116.22184-1-kabel@kernel.org>
-	<20240418121116.22184-9-kabel@kernel.org>
-	<ZifbjfBg0lBRkpoS@smile.fi.intel.com>
-	<20240423182014.7ae8cdc3@thinkpad>
-	<Zifi0Iw8iVNvhptE@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	id A3716C2BD11; Tue, 23 Apr 2024 16:44:20 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B2859C2BD10;
+	Tue, 23 Apr 2024 16:44:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2859C2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a55b2f49206so4718766b.1;
+        Tue, 23 Apr 2024 09:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713890658; x=1714495458; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YzHvPMI8jy4JoQIjALX1Zmza34aN1gCSFeb2zP8PLnY=;
+        b=fMlMlrGxWOCy3e2sgOJiNtzqDqnIsHBtrctyAZdSq+sAKKTSy4TWt2shHGyRTkS/vQ
+         29jPvPeK93ZaKauxhLkNXCOnSy/gXZuIjwAjhHS9WyTYLP7422fuiJMCP7VJL4nop7Kz
+         MhYPX2DZTPS+rTGalkyi9q+qBhItuH4Bfpgd3rygZWV7I72i7Y+u/oYf5FgLjEYkXDQ/
+         UiSeDsSAMwOjY373/gdVwTDfgtGYlvbLzHQioLrVbip2gDhVCGKDfpKBa5VP1crU1cOs
+         KCGa4DC2LtU1QB6uUm8GVUbzJC5lY+zxdLRBL/WzVL04uj3Y2JOdUo0kkyOfxUFhl0Dg
+         M02g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713890658; x=1714495458;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YzHvPMI8jy4JoQIjALX1Zmza34aN1gCSFeb2zP8PLnY=;
+        b=m67HmP1rC6hPAbunQiiZgbkY+zynIlxSHpogwVf3/7nI2/59H1mYk8yOxxFfsrBkBd
+         4da7Ns9yZBW+zDidHQdyYpV6UQ2oBCn6ND25OQMnq6+WmVbfY7bn8EuJ3J6Yj1zVUQIH
+         TDvdZ600n7XkXB7cigoSnn7amlKz6H/zYLbyT7YQRAJHbyUscH3+g8wRFoZWhEfU589G
+         fP8XICHYoCEtqjBYSjl4sTlKXCC5yFCBg/mKZlCqv+4NJu1aqAXznkoh+WfbC0rPeE2T
+         9YhNCNYLmfebttErU1+DjLSIXEtC8ktXM9BaGUauk2UMKTngFxL8lH9MNFpJeq1ZOHom
+         T7fA==
+X-Forwarded-Encrypted: i=1; AJvYcCVs+N7TYVZiAw5uG+73znxX0o1NHfUEyYk3WgmkKP2glfNGT1P0/pGboG0CtT8aab1ARgscup5yGCdLDwiyDd0eka6ML4W5jKdVOadikVQ=
+X-Gm-Message-State: AOJu0YxEYDLPoIVQHx+qH1AyzEvcFpPh4Vkmw6xswTV60tiJZXMQ/+6o
+	Fhtb6quhHkMmHcChqOt+BQ0sRr0gTj9tA3D9bIoDidi1uWV22inxNTkZpDpeD8fxF4whsogMS+I
+	aWnHpZmmOUZ6MkfecN0NW/YT+Esq9jco9
+X-Google-Smtp-Source: AGHT+IHSbCrYySuPw2JwMFZJ1BbFCsUQksBQF5BIagB21JFr3mV8NPTJAmKTRu8kFIXN4c3hM3Wotbg80bYc0sdO3hU=
+X-Received: by 2002:a17:906:a2cf:b0:a55:75f7:42fb with SMTP id
+ by15-20020a170906a2cf00b00a5575f742fbmr3582184ejb.24.1713890657677; Tue, 23
+ Apr 2024 09:44:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20240418121116.22184-1-kabel@kernel.org> <20240418121116.22184-8-kabel@kernel.org>
+ <Zifamxfa18yjD_VS@smile.fi.intel.com> <20240423183225.6e4f90a7@thinkpad>
+In-Reply-To: <20240423183225.6e4f90a7@thinkpad>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 23 Apr 2024 19:43:41 +0300
+Message-ID: <CAHp75VcfmTeG+G1DkteR6GN96y3+h_Mz1YQ8U5asHJ7oTq+KbQ@mail.gmail.com>
+Subject: Re: [PATCH v6 07/11] platform: cznic: turris-omnia-mcu: Add support
+ for MCU provided TRNG
+To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, Olivia Mackall <olivia@selenic.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org, arm@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 23 Apr 2024 19:33:20 +0300
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+On Tue, Apr 23, 2024 at 7:32=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
+ wrote:
+> On Tue, 23 Apr 2024 18:58:19 +0300
+> Andy Shevchenko <andy@kernel.org> wrote:
+> > On Thu, Apr 18, 2024 at 02:11:12PM +0200, Marek Beh=C3=BAn wrote:
 
-> On Tue, Apr 23, 2024 at 06:20:14PM +0200, Marek Beh=C3=BAn wrote:
-> > On Tue, 23 Apr 2024 19:02:21 +0300
-> > Andy Shevchenko <andriy.shevchenko@intel.com> wrote: =20
-> > > On Thu, Apr 18, 2024 at 02:11:13PM +0200, Marek Beh=C3=BAn wrote: =20
->=20
-> ...
->=20
-> > > > +static inline struct dentry *
-> > > > +devm_debugfs_create_dir(struct device *dev, const char *name,
-> > > > +			struct dentry *parent)
-> > > > +{
-> > > > +	struct dentry *dentry;
-> > > > +	int err;   =20
-> > >  =20
-> > > > +	dentry =3D debugfs_create_dir(name, parent);
-> > > > +	if (IS_ERR(dentry))
-> > > > +		return dentry;   =20
-> > >=20
-> > > Why do we care?
-> > >  =20
-> > > > +	err =3D devm_add_action_or_reset(dev, devm_debugfs_dir_recursive_=
-drop,
-> > > > +				       dentry);
-> > > > +	if (err < 0)
-> > > > +		return ERR_PTR(err);
-> > > > +
-> > > > +	return dentry;
-> > > > +}   =20
-> > >=20
-> > > static inline struct dentry *
-> > > devm_debugfs_create_dir(struct device *dev, const char *name, struct =
-dentry *parent)
-> > > {
-> > > 	struct dentry *dentry;
-> > > 	int err;
-> > >=20
-> > > 	dentry =3D debugfs_create_dir(name, parent);
-> > >=20
-> > > 	err =3D devm_add_action_or_reset(dev, devm_debugfs_dir_recursive_dro=
-p, dentry);
-> > > 	if (err)
-> > > 		return ERR_PTR(err); =20
-> >=20
-> > But if the dir creation fails, there is no need to allocate devm
-> > destructor... =20
->=20
-> Yes, but why do we care about that?
-> debugfs is designed the way that we should ignore errors from it.
->=20
-> This discussion let me think, that probably the best solution is to add a=
- field
-> to struct device_driver to handle this.
->=20
-> debugfs will appear only when device is completely instantiated, removed =
-before
-> anything, and a lot of other benefits (see the story behind dev_groups as=
- a
-> reference).
->=20
+...
 
-Okay, this seems way beyond the scope of what I am trying to do here.
+> > > +   irq_idx =3D omnia_int_to_gpio_idx[__bf_shf(INT_TRNG)];
+> > > +   irq =3D devm_irq_create_mapping(dev, mcu->gc.irq.domain, irq_idx)=
+;
+> > > +   if (irq < 0)
+> > > +           return dev_err_probe(dev, irq, "Cannot map TRNG IRQ\n");
+> >
+> > This looks like some workaround against existing gpiod_to_irq(). Why do=
+ you
+> > need this?
+>
+> Hmmm, I thought that would not work because that line is only valid
+> as an IRQ, not as a GPIO (this is enforced via the valid_mask member of
+> gpio_chip and gpio_irq_chip).
+>
+> But looking at the code of gpiolib, if I do
+>   irq =3D gpiod_to_irq(gpiochip_get_desc(gc, irq_idx));
+> the valid_mask is not enforced anywhere.
 
-Since Matti is also not entirely content with these additions to the
-devm-helpers.h header and you suggested to use gpiod_to_irq(), I shall
-drop these changes from the next version and just use
-devm_add_action_or_reset() in the driver directly.
+Which one? GPIO has two: one per GPIO realm and one for IRQ domain.
 
-Marek
+> Is this semantically right to do even in spite of the fact that the
+> line is not a valid GPIO line?
+
+Yes. It's orthogonal to that.
+
+--=20
+With Best Regards,
+Andy Shevchenko
