@@ -1,94 +1,104 @@
-Return-Path: <broonie@kernel.org>
+Return-Path: <SRS0=F7km=L4=intel.com=jani.nikula@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5697C4345F
-	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 05:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E5B5C10F15
+	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 08:06:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 866A2C32782; Tue, 23 Apr 2024 05:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB58C116B1;
-	Tue, 23 Apr 2024 05:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713851162;
-	bh=4m4S4iaNoFCD5VJ6S4cA667fbteVW4wdxQCTE6NM2CY=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=pHoS7+PMKebC1m2RzgTCKQO65bIg/+V/GP8DBkY6vKbBV+0pMb5XEUe6rmGzDRelI
-	 2HWt2UPYATZ+YLQjix77Pybemb0d7i4p1gP+uioryjVcAT9TYF8mPWCcmnq9pKI8dC
-	 KBjsV3ZfGIcyeVwjymzhWNk37jDugEQQ/stvvctlxSTJAWVIQVhDRclprnN8IkuL40
-	 U22tMNS5+1fXvFKoEyakjetMFZ/M1zYiB/6jilNduio/EyzHCiGwro54+mru3aPO2k
-	 XWgjGYuHYbMhf9HG6V71VboQIYJfCxwuTVBgbKj8/oO6T2HRjuOYWX6gO+gs2zjq8H
-	 Vf45davhLmpcA==
-Date: Tue, 23 Apr 2024 14:45:58 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Maxime Ripard <mripard@kernel.org>
+	id 16293C4AF07; Tue, 23 Apr 2024 08:06:08 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id D051FC116B1;
+	Tue, 23 Apr 2024 08:06:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D051FC116B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713859566; x=1745395566;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=1G2wfwFlzUQsBtBXl3QVOUc+WealeiEYe1NA+eUKk9w=;
+  b=ei+2z/2vJ4i5ZHZkpIoZjmEmwB39p7BK3ao4aLF574A5zQzzf1wVA3p1
+   1JxRPhr1FPKab43DTHzkUpW0d+PKApvH3afMqn2msDaaaWxPlVjFIDOA+
+   Pzoud5gSf3Y4QRc0J3mNvb2lYAkgLgGcXXoQPFWx61QwytNkegR4udvO7
+   BW87A32du/y45JcpF9ixS8U4F5MzuB7TZ7w6Xuu8wseAABa0EQ0bqFpRg
+   E9rMHX+Fq1QpkNjmiIqZagw+e183yCtS0juviut3jsbZ3sYOEiXJUs5og
+   N13Jysku5OSTt7F9ECnFVILvd0zGeT1OOhUvXsMrqHsHocbDb8f5h0f01
+   g==;
+X-CSE-ConnectionGUID: 4QegkNYoRfyD/xWIy2OkCw==
+X-CSE-MsgGUID: mE6QtkQVSD2qyZtVXlf2zQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9649880"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="9649880"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 01:06:05 -0700
+X-CSE-ConnectionGUID: 2pZv5y+bRdWiLyPwdQlQmg==
+X-CSE-MsgGUID: PVL+lBr9SF6FJ1Vhx70a/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="24736040"
+Received: from fpirou-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.46.117])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 01:06:01 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>, Maxime Ripard <mripard@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>,
-	soc@kernel.org
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
+ <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter
+ <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org, kernel test robot
+ <lkp@intel.com>, soc@kernel.org
 Subject: Re: [PATCH v3 07/13] drm: Make drivers depends on DRM_DW_HDMI
-Message-ID: <ZidLFpREqwKd9FHK@finisterre.sirena.org.uk>
+In-Reply-To: <ZidLFpREqwKd9FHK@finisterre.sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 References: <20240327-kms-kconfig-helpers-v3-0-eafee11b84b3@kernel.org>
  <20240327-kms-kconfig-helpers-v3-7-eafee11b84b3@kernel.org>
  <2c78772a-1d3f-47dd-9c3f-a3011703e1ab@sirena.org.uk>
+ <ZidLFpREqwKd9FHK@finisterre.sirena.org.uk>
+Date: Tue, 23 Apr 2024 11:05:58 +0300
+Message-ID: <87le54sduh.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ww8fNriCpgA4t3ar"
-Content-Disposition: inline
-In-Reply-To: <2c78772a-1d3f-47dd-9c3f-a3011703e1ab@sirena.org.uk>
-X-Cookie: TANSTAAFL
+Content-Type: text/plain
+
+On Tue, 23 Apr 2024, Mark Brown <broonie@kernel.org> wrote:
+> On Tue, Apr 02, 2024 at 04:43:46PM +0100, Mark Brown wrote:
+>> On Wed, Mar 27, 2024 at 11:57:02AM +0100, Maxime Ripard wrote:
+>> 
+>> > DRM_DW_HDMI has a number of dependencies that might not be enabled.
+>> > However, drivers were used to selecting it while not enforcing the
+>> > DRM_DW_HDMI dependencies.
+>> > 
+>> > This could result in Kconfig warnings (and further build breakages) such
+>> > as:
+>> > 
+>> >   Kconfig warnings: (for reference only)
+>> >      WARNING: unmet direct dependencies detected for DRM_DW_HDMI
+>> >      Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && DRM_BRIDGE [=y] && DRM_DISPLAY_HELPER [=n]
+>> >      Selected by [m]:
+>> >      - DRM_SUN8I_DW_HDMI [=m] && HAS_IOMEM [=y] && DRM_SUN4I [=m]
+>
+>> This has landed in -next and appears to be causing breakage for several
+>> platforms using these devices.  For example I'm seeing the HDMI fail to
+>> probe on sun50i-a64-pin64-plus with arm64 defconfig, the DT kselftest
+>> result isn't terribly informative but it can be seen here:
+>
+> It has now been *three* weeks that this breakage has sat unaddressed in
+> -next, this has been making my CI for -next unusable.  Given that
+> getting the defconfig bits of this merged appears somwhow unreasonably
+> difficult can we please drop these changes from the DRM tree until some
+> strategy for getting everything merged is put into place?
+
+This is what's being done [1].
 
 
---ww8fNriCpgA4t3ar
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+BR,
+Jani.
 
-On Tue, Apr 02, 2024 at 04:43:46PM +0100, Mark Brown wrote:
-> On Wed, Mar 27, 2024 at 11:57:02AM +0100, Maxime Ripard wrote:
->=20
-> > DRM_DW_HDMI has a number of dependencies that might not be enabled.
-> > However, drivers were used to selecting it while not enforcing the
-> > DRM_DW_HDMI dependencies.
-> >=20
-> > This could result in Kconfig warnings (and further build breakages) such
-> > as:
-> >=20
-> >   Kconfig warnings: (for reference only)
-> >      WARNING: unmet direct dependencies detected for DRM_DW_HDMI
-> >      Depends on [n]: HAS_IOMEM [=3Dy] && DRM [=3Dm] && DRM_BRIDGE [=3Dy=
-] && DRM_DISPLAY_HELPER [=3Dn]
-> >      Selected by [m]:
-> >      - DRM_SUN8I_DW_HDMI [=3Dm] && HAS_IOMEM [=3Dy] && DRM_SUN4I [=3Dm]
 
-> This has landed in -next and appears to be causing breakage for several
-> platforms using these devices.  For example I'm seeing the HDMI fail to
-> probe on sun50i-a64-pin64-plus with arm64 defconfig, the DT kselftest
-> result isn't terribly informative but it can be seen here:
+[1] https://lore.kernel.org/r/cover.1713780345.git.geert+renesas@glider.be
 
-It has now been *three* weeks that this breakage has sat unaddressed in
--next, this has been making my CI for -next unusable.  Given that
-getting the defconfig bits of this merged appears somwhow unreasonably
-difficult can we please drop these changes from the DRM tree until some
-strategy for getting everything merged is put into place?
 
---ww8fNriCpgA4t3ar
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYnSxIACgkQJNaLcl1U
-h9DO/Af+JThtSrbnCe6qv2KyUQjklU/Q3jii/SGSG6EkkThvcMOrvLeuzOGmgn4q
-AYESNMJikjvXh+sdbMPuA5/AOQk/T1Cig5ljEnYqcZKZFo+Q98Fmdacu15o2/PU9
-CA7fQx7W69f6ua4dx10zFBMKVuV/Z1tTWCj5TYBeQj21rbI6e1UL2epdXY8OX6U7
-fDiPatmH8ZujrRQcJIa70xD/qkI17aIdYmucme7yz+ouLp1ow079ZQ8OapDqnEkk
-IroiNHzN7hHnZ3TqqP2IlAOF6kVmxUG7/CukMg/rqROa+T184oh2Lm2emOnijuXR
-mNo+xrLxvj/O+VGG3illQC+1O7nq9g==
-=vweS
------END PGP SIGNATURE-----
-
---ww8fNriCpgA4t3ar--
+-- 
+Jani Nikula, Intel
