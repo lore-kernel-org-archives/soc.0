@@ -1,111 +1,82 @@
-Return-Path: <SRS0=eoZA=L4=gmail.com=mazziesaccount@kernel.org>
+Return-Path: <SRS0=Swux=L4=intel.com=andriy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD80C4345F
-	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 12:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29801C4345F
+	for <soc@archiver.kernel.org>; Tue, 23 Apr 2024 12:46:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B5B5EC3277B; Tue, 23 Apr 2024 12:33:42 +0000 (UTC)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 0F116C2BD11; Tue, 23 Apr 2024 12:46:24 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D8080C116B1;
-	Tue, 23 Apr 2024 12:33:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D8080C116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d88a869ce6so78911371fa.3;
-        Tue, 23 Apr 2024 05:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713875619; x=1714480419; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LEZu2AGX25WwaFvHUkBYrSSFp3zJKmgOTVkk5e6RoEc=;
-        b=it9N7REDs198A11GoCXkzPz5KyrE/DXv47gTRWWUUkLQUPvvAItkZmeM9dPayTB4ee
-         2fxwBCiBv6nyM2tRWNNAjAxrxwLdLLCide9dfJPtLah9s4P+/iAFtlH4I9Nk6dj5qm1Q
-         5kAcfB6NSpkH4gbymrX2qAqAbIvhWM7dy7iMLKIGe0mJVhFxEVIiLApIpfKTEayUpzYE
-         O1phXoKv1mu5pfPT2QyxpsXkZ7eZvIrRvhlHyr9MXAZAP8PmGteLastM4a5YeTMiI0Pi
-         QFKFzauzCCZrL2riQNhM0ffEJA01fRHSGY0kUCFMwRP89BG4ncWdNGnSfKEcpZlNTfMv
-         3WeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713875619; x=1714480419;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LEZu2AGX25WwaFvHUkBYrSSFp3zJKmgOTVkk5e6RoEc=;
-        b=VW07bYhPsvImPDsXVALBLRDtre724qk+HNhqJn5OVpuiXBkNUCLbPtQAkr3X0OWCl1
-         xW7Oi0Cn5jTDWx+J2wvsnYaFfHcd18diB71vlQnX6DJXZzRO5+S1dc5wkIXOeaJZfJ0C
-         NJGPUk3HjO6bjA/OFpjlJ3wmzptyB5/xjlXmE88M7hc2vwA6a5stAkwr5h0OlCCTfAQa
-         b7VcivloDZwQWmSH/3j/2GYm4fXpctgUgWj9pDTsVLigBi6sf0sBCRljyg6M3WFZsWw7
-         g3dFmLmjESvd+u0VZs6xrNHCMtVpcdnqQTB1N5h0DrYGHrEIxTpfih87MXrqyImzXtcH
-         G8gw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgOVh6YbBJjZMGUb27xt1DDxwv+ZcgW1RzKeZMoTCFD+khigOlvA95hzEqWL63Dtj5Yd5lKIY40Rgk5NUCcw==
-X-Gm-Message-State: AOJu0YxtxiR+dK7ipHIAhPP32pA94LDkeFdCuTfe7vPDslOAVAutmwrw
-	6IzYupmykj9vPasweHgQUwbN4JwWHdwzvHkXVbk56GsQfqCAfQajfYRa7g==
-X-Google-Smtp-Source: AGHT+IFVgDWEP43oPU2MPvahiq0s3SEJClHpGoxHz43hC6fnz+VO5sMNEF6UYAtF7/975RHkMhN01A==
-X-Received: by 2002:a2e:9886:0:b0:2dc:f896:5825 with SMTP id b6-20020a2e9886000000b002dcf8965825mr7513293ljj.50.1713875618648;
-        Tue, 23 Apr 2024 05:33:38 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
-        by smtp.gmail.com with ESMTPSA id bj24-20020a2eaa98000000b002da080a84cfsm1660763ljb.23.2024.04.23.05.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 05:33:38 -0700 (PDT)
-Message-ID: <d3818d8f-8695-4bb6-820c-f2822ce6037b@gmail.com>
-Date: Tue, 23 Apr 2024 15:33:36 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 08/11] devm-helpers: Add resource managed version of
- debugfs directory create function
-Content-Language: en-US, en-GB
+	by smtp.kernel.org (Postfix) with ESMTPS id 9B8FEC4AF07;
+	Tue, 23 Apr 2024 12:46:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9B8FEC4AF07
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713876382; x=1745412382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nWKLAuSPqPzmYAhVoQUFTTnC7bmPAK4+uoykkEg6cxU=;
+  b=P+bNKBHVGyJdsybG1p4cKKBINnfHB9RMVP3SCbyqjhE1En8aFc3kseXh
+   t/B7+eiJKpf2Q3YQRLppDMSt/tn6duDH0CgKNiJiPzR/Gam/61KbGW3cf
+   G3fPpdmfPTjWCDytw4oxQXx6t3AiJm4XRwkDg2ILAclxbi49xSnwN5b2q
+   rSkJ0v8WkLrzPAYfEazutADlIFFo3A/ZZlIxr4kXYyI6xV3aI6HEtTfUJ
+   MXBTxKZnQgEqWL8xoXcBvmG5oDPSEJ+F4oQ85ZimPywJbV5/PdoST+7Dc
+   cpUCaR8+VgbYzbd3WNQS5fCldrJZHLSsK1xykb2irfH7KwhA9E517vQtz
+   g==;
+X-CSE-ConnectionGUID: MIhNzBtDRbWKA0vRfuW4GQ==
+X-CSE-MsgGUID: RwyLHjoaR6G++MaL136XvA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9578310"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="9578310"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 05:46:21 -0700
+X-CSE-ConnectionGUID: jm3JyQPXSWSIhatOc76i7Q==
+X-CSE-MsgGUID: 0s/O9KbNTommFaUlAPhMcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="29160484"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 05:46:20 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1rzFXM-00000000KmD-0TJ3;
+	Tue, 23 Apr 2024 15:46:16 +0300
+Date: Tue, 23 Apr 2024 15:46:15 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, Hans de Goede <hdegoede@redhat.com>,
- Dan Carpenter <dan.carpenter@linaro.org>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: arm@kernel.org
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>, arm@kernel.org
+Subject: Re: [PATCH v6 06/11] devm-helpers: Add resource managed version of
+ irq_create_mapping()
+Message-ID: <Zietl9AhJ_2VB5YQ@smile.fi.intel.com>
 References: <20240418121116.22184-1-kabel@kernel.org>
- <20240418121116.22184-9-kabel@kernel.org>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240418121116.22184-9-kabel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20240418121116.22184-7-kabel@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240418121116.22184-7-kabel@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 4/18/24 15:11, Marek Behún wrote:
-> A few drivers register a devm action to remove a debugfs directory,
-> implementing a one-liner function that calls debufs_remove_recursive().
-> Help drivers avoid this repeated implementations by adding managed
-> version of debugfs directory create function.
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
->   include/linux/devm-helpers.h | 40 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 40 insertions(+)
-> 
-> diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
-> index fe62b28baf03..58e0a7fbd549 100644
-> --- a/include/linux/devm-helpers.h
-> +++ b/include/linux/devm-helpers.h
-> @@ -23,6 +23,7 @@
->    * already ran.
->    */
->   
-> +#include <linux/debugfs.h>
+On Thu, Apr 18, 2024 at 02:11:11PM +0200, Marek Beh�n wrote:
+> Add resource managed version of irq_create_mapping(), to help drivers
+> automatically dispose a linux irq mapping when driver is detached.
 
-With the same remark that I did for 06/11
-
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-Yours,
-	-- Matti
+AFAICS this is a dead code.
+Please, drop it from the next version.
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+With Best Regards,
+Andy Shevchenko
 
-~~ When things go utterly wrong vim users can always type :help! ~~
 
