@@ -1,110 +1,88 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <SRS0=QZeH=L6=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D90C4345F
-	for <soc@archiver.kernel.org>; Wed, 24 Apr 2024 19:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EAFBC4345F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 04:44:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 366AAC2BD11; Wed, 24 Apr 2024 19:47:18 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	id 1960DC2BBFC; Thu, 25 Apr 2024 04:44:17 +0000 (UTC)
+Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 56B47C113CD;
-	Wed, 24 Apr 2024 19:47:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 56B47C113CD
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: FNX225g2QUazM+QhjjnG9A==
-X-CSE-MsgGUID: dCphpL6NRdGNIOXCSQP7JQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="21066126"
-X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
-   d="scan'208";a="21066126"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 12:47:16 -0700
-X-CSE-ConnectionGUID: rPj+xjYvTNa9M//QHhquJw==
-X-CSE-MsgGUID: T2yKAZHXTGSHqHYD+k4zNA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
-   d="scan'208";a="24863622"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 12:47:14 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rziaF-00000000mFg-02Ei;
-	Wed, 24 Apr 2024 22:47:11 +0300
-Date: Wed, 24 Apr 2024 22:47:10 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id C345BC113CC;
+	Thu, 25 Apr 2024 04:44:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C345BC113CC
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
+Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
+	by mail5.25mail.st (Postfix) with ESMTPSA id 111B56054A;
+	Thu, 25 Apr 2024 04:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
+	s=25mailst; t=1714020247;
+	bh=pKxM3kug+6FaG53pNZPx1vcG2su9BKkq9n/vgd6jrCE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=g0mgFA3G24Afpq5sNBMk/9N0QpWr0aV+DpH+/1TB3chGYKQLvFq5T+lAfmu+jGOKg
+	 /8IP+zN4ui/CJf7wsyK27aaXXchQNr9flJ9rig7/AMhgp0XEcbD9Kz3JIlhkNz2Nz2
+	 f8l9EDX6L6PXDyG5fC3U42JpoWQMdDWElMWg5BPBo4HF2N+KZ5zEa4MFHMpJElfiNL
+	 deM4sz3dMCFUprrtLD6BVDl4gb2TH0aYBvQkJkTag8JVM3pD92DRoh0XztfqThUFlc
+	 SYoC5AOwVSzZJ64A4z5xNamij/PC+5Kx0G3bKdMCtlkKwioX1/XB+ct3EX00KAsANg
+	 lAE88RilLYUpQ==
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v7 6/9] platform: cznic: turris-omnia-mcu: Add support
- for MCU provided TRNG
-Message-ID: <Zilhvv3ffWMDL1Uj@smile.fi.intel.com>
-References: <20240424173809.7214-1-kabel@kernel.org>
- <20240424173809.7214-7-kabel@kernel.org>
- <ZilQiHLLj1eQxP2L@smile.fi.intel.com>
- <20240424205123.5fc82a1a@dellmb>
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Devicetree changes for omaps for v6.10
+Date: Thu, 25 Apr 2024 07:43:36 +0300
+Message-ID: <pull-1714020191-304166@atomide.com>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240424205123.5fc82a1a@dellmb>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Apr 24, 2024 at 08:51:23PM +0200, Marek Behún wrote:
-> On Wed, 24 Apr 2024 21:33:44 +0300
-> Andy Shevchenko <andy@kernel.org> wrote:
-> > On Wed, Apr 24, 2024 at 07:38:05PM +0200, Marek Behún wrote:
+From: "Tony Lindgren" <tony@atomide.com>
 
-...
+The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
-> > > +static void omnia_irq_mapping_drop(void *res)
-> > > +{
-> > > +	irq_dispose_mapping((unsigned int)(unsigned long)res);
-> > > +}
-> > 
-> > Leftover?
-> 
-> What do you mean? I dropped the devm-helpers.h changes, now I do
-> devm_add_action_or_reset() manually, with this function as the action.
+  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 
-But why?
+are available in the Git repository at:
 
-...
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.10/dt-signed
 
-> > > +	irq_idx = omnia_int_to_gpio_idx[__bf_shf(INT_TRNG)];
-> > > +	irq = gpiod_to_irq(gpiochip_get_desc(&mcu->gc, irq_idx));
-> > > +	if (irq < 0)
-> > > +		return dev_err_probe(dev, irq, "Cannot get TRNG IRQ\n");
+for you to fetch changes up to 32f4c19f6a52bdfa6ec73a067b6e7382b8d6653e:
 
-> > > +	err = devm_add_action_or_reset(dev, omnia_irq_mapping_drop,
-> > > +				       (void *)(unsigned long)irq);
-> > > +	if (err)
-> > > +		return err;
-> > 
-> > Are you sure it's correct now?
-> 
-> Yes, why wouldn't it?
+  ARM: dts: dra7: Use clksel binding for CTRL_CORE_SMA_SW_0 (2024-04-10 09:15:54 +0300)
 
-For what purpose? I don't see drivers doing that. Are you expecting that
-the same IRQ mapping will be reused for something else? Can you elaborate
-how? (I can imagine one theoretical / weird case how to achieve that,
-but impractical.)
+----------------------------------------------------------------
+Devicetree changes for omaps for v6.10
 
-Besides above, this is asymmetrical call to gpiod_to_irq(). If we really care
-about this, it should be provided by GPIO library.
+Update n900 charge limit, and make use of the clksel binding for dra7
+for the clksel clocks and other dpll output related clocks.
 
--- 
-With Best Regards,
-Andy Shevchenko
+----------------------------------------------------------------
+Arthur Demchenkov (1):
+      ARM: dts: n900: set charge current limit to 950mA
 
+Tony Lindgren (12):
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_CORE
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_DSP
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_IVA
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_GPU
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_DRR
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_GMAC
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_EVE
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_CORE
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_ABE_PLL_SYS
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_PER
+      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_USB
+      ARM: dts: dra7: Use clksel binding for CTRL_CORE_SMA_SW_0
 
+ arch/arm/boot/dts/ti/omap/dra76x.dtsi        |  63 ++++---
+ arch/arm/boot/dts/ti/omap/dra7xx-clocks.dtsi | 270 ++++++++++++++++++---------
+ arch/arm/boot/dts/ti/omap/omap3-n900.dts     |   2 +-
+ 3 files changed, 221 insertions(+), 114 deletions(-)
