@@ -1,93 +1,84 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F19E8C4345F
-	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 10:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD69AC4345F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 10:41:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E2776C2BD11; Thu, 25 Apr 2024 10:04:14 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CFBAAC113CC;
-	Thu, 25 Apr 2024 10:04:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CFBAAC113CC
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: ucQc448tT+ikQSkrlUbJog==
-X-CSE-MsgGUID: LbILEMpqR2W1sYpFUGkkbg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9584775"
-X-IronPort-AV: E=Sophos;i="6.07,229,1708416000"; 
-   d="scan'208";a="9584775"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 03:04:13 -0700
-X-CSE-ConnectionGUID: yZtPqqnrQ7enbZvr3/8aJw==
-X-CSE-MsgGUID: XtFGhbl0QVKu36aiAOns4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,229,1708416000"; 
-   d="scan'208";a="25643272"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 03:04:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rzvxX-00000000xPX-1VBZ;
-	Thu, 25 Apr 2024 13:04:07 +0300
-Date: Thu, 25 Apr 2024 13:04:07 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	id 9F5B6C2BBFC; Thu, 25 Apr 2024 10:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57289C113CE;
+	Thu, 25 Apr 2024 10:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714041695;
+	bh=iv7SUIiaG9s3NVPGgli4gIp/ZnPvi4cNgaMFQtY+byk=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=ZZBGxiQhHpjKRskelCMvza4VK8UoRlAXvP+wVoXNvcSOS1xd8zmnxQ+EKfw9JnZSH
+	 gQOnpjjUenCi1O/QuAM57Scw9eCpw8KxgYQUBOuEY1BuRtFEO0aTzSL2Wuxb3DTSBU
+	 YvwmyYhcqpIX/dCveRtCiNry2qwslldOGNyz3oaUGGQ7Hn+tDetHvq9z0MwEDxywaO
+	 OUrAQHyY893fLSH61HgXnZNQJPBVu7F0b/G0CFXmhhqZixfM4JYX6B3tZ4gGKK46WL
+	 kYxp2G5rcovPXNGGzNR2keKoTWMc+umnwmG7i0yi1xAsrS2rOxV15U5c+D63IgONUl
+	 23vNHsI13d4qA==
+Date: Thu, 25 Apr 2024 12:41:30 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-crypto@vger.kernel.org
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
+ <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Hans de Goede
+ <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
+ <ilpo.jarvinen@linux.intel.com>, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org
 Subject: Re: [PATCH v7 6/9] platform: cznic: turris-omnia-mcu: Add support
  for MCU provided TRNG
-Message-ID: <Zioql5TSzTLtMsX7@smile.fi.intel.com>
+Message-ID: <20240425124130.6c96e273@dellmb>
+In-Reply-To: <Zioql5TSzTLtMsX7@smile.fi.intel.com>
 References: <20240424173809.7214-1-kabel@kernel.org>
- <20240424173809.7214-7-kabel@kernel.org>
- <ZilQiHLLj1eQxP2L@smile.fi.intel.com>
- <20240424205123.5fc82a1a@dellmb>
- <Zilhvv3ffWMDL1Uj@smile.fi.intel.com>
- <20240425113447.5d4b21f4@dellmb>
+	<20240424173809.7214-7-kabel@kernel.org>
+	<ZilQiHLLj1eQxP2L@smile.fi.intel.com>
+	<20240424205123.5fc82a1a@dellmb>
+	<Zilhvv3ffWMDL1Uj@smile.fi.intel.com>
+	<20240425113447.5d4b21f4@dellmb>
+	<Zioql5TSzTLtMsX7@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240425113447.5d4b21f4@dellmb>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 25, 2024 at 11:34:47AM +0200, Marek Behún wrote:
-> On Wed, 24 Apr 2024 22:47:10 +0300
-> Andy Shevchenko <andy@kernel.org> wrote:
-> > On Wed, Apr 24, 2024 at 08:51:23PM +0200, Marek Behún wrote:
+On Thu, 25 Apr 2024 13:04:07 +0300
+Andy Shevchenko <andy@kernel.org> wrote:
 
-...
+> On Thu, Apr 25, 2024 at 11:34:47AM +0200, Marek Beh=C3=BAn wrote:
+> > On Wed, 24 Apr 2024 22:47:10 +0300
+> > Andy Shevchenko <andy@kernel.org> wrote: =20
+> > > On Wed, Apr 24, 2024 at 08:51:23PM +0200, Marek Beh=C3=BAn wrote: =20
+>=20
+> ...
+>=20
+> > > For what purpose? I don't see drivers doing that. Are you expecting t=
+hat
+> > > the same IRQ mapping will be reused for something else? Can you elabo=
+rate
+> > > how? (I can imagine one theoretical / weird case how to achieve that,
+> > > but impractical.) =20
+> >=20
+> > I do a lot of binding/unbinding of that driver. I was under the
+> > impression that all resources should be dropped on driver unbind.
+> >  =20
+> > > Besides above, this is asymmetrical call to gpiod_to_irq(). If we rea=
+lly care
+> > > about this, it should be provided by GPIO library. =20
+> >=20
+> > Something like the following? =20
+>=20
+> Not needed. IRQ mappings are per domain, and GPIO chip has its own associ=
+ated
+> with the respective lifetime, AFAIU when you remove the GPIO chip, all ma=
+ppings
+> will be disposed (as I pointed out in previous mail).
+>=20
 
-> > For what purpose? I don't see drivers doing that. Are you expecting that
-> > the same IRQ mapping will be reused for something else? Can you elaborate
-> > how? (I can imagine one theoretical / weird case how to achieve that,
-> > but impractical.)
-> 
-> I do a lot of binding/unbinding of that driver. I was under the
-> impression that all resources should be dropped on driver unbind.
-> 
-> > Besides above, this is asymmetrical call to gpiod_to_irq(). If we really care
-> > about this, it should be provided by GPIO library.
-> 
-> Something like the following?
+OMG you are right :) of course. OK, I shall drop this.
 
-Not needed. IRQ mappings are per domain, and GPIO chip has its own associated
-with the respective lifetime, AFAIU when you remove the GPIO chip, all mappings
-will be disposed (as I pointed out in previous mail).
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Marek
