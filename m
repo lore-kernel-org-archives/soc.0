@@ -1,74 +1,115 @@
-Return-Path: <SRS0=eYoi=L6=yeah.net=shawnguo2@kernel.org>
+Return-Path: <andy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A04C19F4F
-	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 09:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB6EAC4345F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 09:58:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9F18BC113CC; Thu, 25 Apr 2024 09:55:58 +0000 (UTC)
-Received: from mail-177132.yeah.net (mail-177132.yeah.net [123.58.177.132])
-	by smtp.kernel.org (Postfix) with ESMTP id 2D9C8C2BD10;
-	Thu, 25 Apr 2024 09:55:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D9C8C2BD10
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=xQul+LRJa5DBqWGtv092kro7gL1oG1Dc98ltSQ5nIAU=;
-	b=ONuytCpXMYEEPHdRlj4YG+hnuQ41IsIM5HpG0VhuF93KWW9Zp1f3xrmFZBX5o+
-	HA3Na+D0DECoj4dYMjZl5Zl9xIoIUC0ltqeBNwzEm1SdQW8rTN2xniu3GXf7kg+P
-	yBGW48mhblJncz/XJ7WVCshjCqF9Mohmr8jGOStS34rI0=
-Received: from dragon (unknown [223.68.79.243])
-	by smtp2 (Coremail) with SMTP id C1UQrADXX1GnKCpmhnh2BA--.6268S3;
-	Thu, 25 Apr 2024 17:55:52 +0800 (CST)
-Date: Thu, 25 Apr 2024 17:55:50 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
+	id 90E2DC2BBFC; Thu, 25 Apr 2024 09:58:26 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5EF5AC113CC;
+	Thu, 25 Apr 2024 09:58:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5EF5AC113CC
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: kC0MmAsMQKuB5IrkrPCbGA==
+X-CSE-MsgGUID: l4ezjcvrRsO7paCLv7iqZA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9584019"
+X-IronPort-AV: E=Sophos;i="6.07,229,1708416000"; 
+   d="scan'208";a="9584019"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:58:25 -0700
+X-CSE-ConnectionGUID: Cg4/5Cm3RVGi2RzuHv7fuQ==
+X-CSE-MsgGUID: 5oOkjPLhRiKjs3troc24TA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,229,1708416000"; 
+   d="scan'208";a="25052602"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:58:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy@kernel.org>)
+	id 1rzvrv-00000000xJU-0yPK;
+	Thu, 25 Apr 2024 12:58:19 +0300
+Date: Thu, 25 Apr 2024 12:58:18 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.9, round 2
-Message-ID: <ZioopqscxwUOwQkf@dragon>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v7 6/9] platform: cznic: turris-omnia-mcu: Add support
+ for MCU provided TRNG
+Message-ID: <ZiopOgbF18MObiOj@smile.fi.intel.com>
+References: <20240424173809.7214-1-kabel@kernel.org>
+ <20240424173809.7214-7-kabel@kernel.org>
+ <ZilQiHLLj1eQxP2L@smile.fi.intel.com>
+ <20240424205123.5fc82a1a@dellmb>
+ <Zilhvv3ffWMDL1Uj@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-CM-TRANSID:C1UQrADXX1GnKCpmhnh2BA--.6268S3
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Gw4kAry5Ar4Uuw4DWF1Dtrb_yoWkurc_ZF
-	W8GF1UWw48Jr4UA3WUtw1vgr9rtF1UJryrAryUXr47X39rAr1UJFy0qrWrXrnrXw4rXrZr
-	JrWUXw1jq34rCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0StC7UUUUU==
-X-Originating-IP: [223.68.79.243]
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiGArLZV6Nnu1lSwAAsy
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zilhvv3ffWMDL1Uj@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-The following changes since commit 00b436182138310bb8d362b912b12a9df8f72ca3:
+On Wed, Apr 24, 2024 at 10:47:11PM +0300, Andy Shevchenko wrote:
+> On Wed, Apr 24, 2024 at 08:51:23PM +0200, Marek Behún wrote:
+> > On Wed, 24 Apr 2024 21:33:44 +0300
+> > Andy Shevchenko <andy@kernel.org> wrote:
+> > > On Wed, Apr 24, 2024 at 07:38:05PM +0200, Marek Behún wrote:
 
-  arm64: dts: imx8qm-ss-dma: fix can lpcg indices (2024-04-03 20:44:54 +0800)
+...
 
-are available in the Git repository at:
+> > > > +static void omnia_irq_mapping_drop(void *res)
+> > > > +{
+> > > > +	irq_dispose_mapping((unsigned int)(unsigned long)res);
+> > > > +}
+> > > 
+> > > Leftover?
+> > 
+> > What do you mean? I dropped the devm-helpers.h changes, now I do
+> > devm_add_action_or_reset() manually, with this function as the action.
+> 
+> But why?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.9-2
+...
 
-for you to fetch changes up to d7f3040a565214a30e2f07dc9b91566d316e2d36:
+> > > > +	irq_idx = omnia_int_to_gpio_idx[__bf_shf(INT_TRNG)];
+> > > > +	irq = gpiod_to_irq(gpiochip_get_desc(&mcu->gc, irq_idx));
+> > > > +	if (irq < 0)
+> > > > +		return dev_err_probe(dev, irq, "Cannot get TRNG IRQ\n");
+> 
+> > > > +	err = devm_add_action_or_reset(dev, omnia_irq_mapping_drop,
+> > > > +				       (void *)(unsigned long)irq);
+> > > > +	if (err)
+> > > > +		return err;
+> > > 
+> > > Are you sure it's correct now?
+> > 
+> > Yes, why wouldn't it?
+> 
+> For what purpose? I don't see drivers doing that. Are you expecting that
+> the same IRQ mapping will be reused for something else? Can you elaborate
+> how? (I can imagine one theoretical / weird case how to achieve that,
+> but impractical.)
+> 
+> Besides above, this is asymmetrical call to gpiod_to_irq(). If we really care
+> about this, it should be provided by GPIO library.
 
-  ARM: dts: imx6ull-tarragon: fix USB over-current polarity (2024-04-25 14:21:00 +0800)
+FWIW, gpiochip_irqchip_remove() disposes mappings for internally allocated IRQ
+domains. So with your code it even might be a double-disposal.
 
-----------------------------------------------------------------
-i.MX fixes for 6.9, round 2:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-- Fix i.MX8MP the second CSI2 assigned-clock property which got wrong by
-  commit f78835d1e616 ("arm64: dts: imx8mp: reparent MEDIA_MIPI_PHY1_REF
-  to CLK_24M")
-- Correct USB over-current polarity for imx6ull-tarragon board
-
-----------------------------------------------------------------
-Marek Vasut (1):
-      arm64: dts: imx8mp: Fix assigned-clocks for second CSI2
-
-Michael Heimpold (1):
-      ARM: dts: imx6ull-tarragon: fix USB over-current polarity
-
- arch/arm/boot/dts/nxp/imx/imx6ull-tarragon-common.dtsi | 1 +
- arch/arm64/boot/dts/freescale/imx8mp.dtsi              | 2 +-
 
