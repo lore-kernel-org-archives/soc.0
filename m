@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE25BC10F15
-	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 13:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBE82C19F4F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 13:23:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 72083C3277B; Thu, 25 Apr 2024 13:00:01 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	id C3E70C2BD11; Thu, 25 Apr 2024 13:23:05 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A046EC113CC;
-	Thu, 25 Apr 2024 12:59:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A046EC113CC
+	by smtp.kernel.org (Postfix) with ESMTPS id 702D8C113CC;
+	Thu, 25 Apr 2024 13:23:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 702D8C113CC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P7WlCc014451;
-	Thu, 25 Apr 2024 14:59:53 +0200
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43PCtDeq012275;
+	Thu, 25 Apr 2024 15:22:52 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:from:subject:to:cc:content-type
-	:content-transfer-encoding; s=selector1; bh=iFI/pPGANMxm89JA+f5R
-	co9tjdWs0GoSvGzII5jlimI=; b=KN4IpWTP1yWRAMc7kHLdP/FNsDwA9nOrO+4A
-	BnH0QftfsLpUfJQVHDg83ZCS/Ul05P2AU7TgQdT2TpnJgMExqt9W+uWf2sKNVpr8
-	Bct8mWDHxiyyPmYfoFGMDDI9cAFCvYYTZRCWmlIQSdOdR2dJLCttP61PkrqjNHjp
-	qDFrPvEGdlh2J5jRvKrPMJ6C/g1klOvPSYCfODpyAfmyzi8aJHxUaiiYxjtueSei
-	W5CxMbwHo8mrhtlg9vH0LLeVoCLuhcL5OUzm8/yvNqYMHcKWhAnQREHAv1mqjW8M
-	hr5D2tIcmaXNP2ChKeSYYGRqfkysmcBea5Y363xjKFQneeo8Iw==
+	message-id:date:mime-version:to:cc:from:subject:content-type
+	:content-transfer-encoding; s=selector1; bh=LgD+SDobhxw14Hvk6XEU
+	bwsvQuSESmzGrKihkw7kf+c=; b=JzzDNbPEOxaIpHqho3BDUoNEwG+fFjZSdUJ6
+	NMAngUUPEKJq/oQ3piJTnTUF38j+FgPO3AJy2OYBC4EHzFYXeAy3VcGHVk5Dq8YH
+	NP1agErUM5LZi4bVCWHULs1X8f/sigramPsHiRECt+Ta3EjIo0PzRBZrIle71pR4
+	A1ZqmUAsjd8t23zggZSwx9cQ3n8xs95d+Qpy4fBBl3TUi0W82htkrrAEDcU/JFbA
+	k/Sba8M1pvpEE789mGfhNKQro5PNClifIO2IC4wLlEfX7GKjpTjJozNIkSm4wHOA
+	38ZxoRs+kUsjSCpP8ua62DQ1wC1+P5mycmNO8yu995WFMM/TGA==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3xm4kbde2m-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3xmq90uww4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 14:59:53 +0200 (MEST)
+	Thu, 25 Apr 2024 15:22:52 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id DD6264002D;
-	Thu, 25 Apr 2024 14:59:47 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id A84894002D;
+	Thu, 25 Apr 2024 15:22:46 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B0B2321ED2E;
-	Thu, 25 Apr 2024 14:59:17 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A451D2207A8;
+	Thu, 25 Apr 2024 15:22:16 +0200 (CEST)
 Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 25 Apr
- 2024 14:59:17 +0200
-Message-ID: <7dc64226-5429-4ab7-a8c8-6053b12e3cf5@foss.st.com>
-Date: Thu, 25 Apr 2024 14:59:16 +0200
+ 2024 15:22:16 +0200
+Message-ID: <2040767c-413e-4447-b354-c44999930e4c@foss.st.com>
+Date: Thu, 25 Apr 2024 15:22:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 Bus firewall for v6.10
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Kevin
  Hilman <khilman@baylibre.com>, <arm@kernel.org>,
         <soc@kernel.org>
 CC: <alexandre.torgue@foss.st.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Gatien CHEVALLIER
-	<gatien.chevallier@foss.st.com>
+        <linux-stm32@st-md-mailman.stormreply.com>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Subject: [GIT PULL] STM32 DT changes for v6.10#1
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.48.86.79]
@@ -67,15 +65,16 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-04-25_13,2024-04-25_01,2023-05-22_02
 
-Hi Arnd,
+Hi ARM SoC maintainers,
 
-Please consider the first round of STM32 firewall bus patch-set. DT part 
-for all MPU SoC will come with teh STM32 DT pull request.
+Please consider this first round of STM32 DT for v6.10 cycle.
+Main changes are the introduction of the firewall bus for all platform
+and the the add of the STM32MP25 clock support.
 
-Note that conflict merge have been seen on linux-next for this patch:
-"of: property: fw_devlink: Add support for "access-controller"
+This PR depends on "[GIT PULL] STM32 Bus firewall for v6.10" PR I just 
+sent and to clk-next tree.
 
-Regards
+Thanks
 Alex
 
 
@@ -86,184 +85,123 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 are available in the Git repository at:
 
    git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-bus-firewall-for-v6.10-1
+tags/stm32-dt-for-v6.10-1
 
-for you to fetch changes up to e4500d7525f9223a0a46431caa6d0f2d165f05ce:
+for you to fetch changes up to 36cf0d86d760f30b59bc61ffc72c58503c353a17:
 
-   bus: stm32_firewall: fix off by one in stm32_firewall_get_firewall() 
-(2024-04-25 14:44:39 +0200)
+   arm64: dts: st: correct masks for GIC PPI interrupts on stm32mp25 
+(2024-04-25 15:00:31 +0200)
 
 ----------------------------------------------------------------
-STM32 Firewall bus for v6.10, round 1
+STM32 DT for v6.10, round 1
 
 Highlights:
----------
+----------
 
-Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
-platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
-register to the framework to offer firewall services such as access
-granting.
+- MPU:
+   - STM32MP13:
+     - Add and enable LTDC display (rocktech,rk043fn48h)
+       on stm32mp135f-dk.
+     - Add firewall bus based on  ETZPC firewall controller.
+     - Add PWR regulator support: Can be only used if the platform is
+       set as "no-secure" (RCC_SECCFGR cleared) either use SCMI
+       regulator.
 
-This series of patches is a new approach on the previous STM32 system
-bus, history is available here:
-https://lore.kernel.org/lkml/20230127164040.1047583/
+   - STMP32MP15:
+     - Add firewall bus based on  ETZPC firewall controller.
+     - Add heartbeat on stm32mp157c-ed1.
 
-The need for such framework arises from the fact that there are now
-multiple hardware firewalls implemented across multiple products.
-Drivers are shared between different products, using the same code.
-When it comes to firewalls, the purpose mostly stays the same: Protect
-hardware resources. But the implementation differs, and there are
-multiple types of firewalls: peripheral, memory, ...
-
-Some hardware firewall controllers such as the RIFSC implemented on
-STM32MP2x platforms may require to take ownership of a resource before
-being able to use it, hence the requirement for firewall services to
-take/release the ownership of such resources.
-
-On the other hand, hardware firewall configurations are becoming
-more and more complex. These mecanisms prevent platform crashes
-or other firewall-related incoveniences by denying access to some
-resources.
-
-The stm32 firewall framework offers an API that is defined in
-firewall controllers drivers to best fit the specificity of each
-firewall.
-
-For every peripherals protected by either the ETZPC or the RIFSC, the
-firewall framework checks the firewall controlelr registers to see if
-the peripheral's access is granted to the Linux kernel. If not, the
-peripheral is configured as secure, the node is marked populated,
-so that the driver is not probed for that device.
-
-The firewall framework relies on the access-controller device tree
-binding. It is used by peripherals to reference a domain access
-controller. In this case a firewall controller. The bus uses the ID
-referenced by the access-controller property to know where to look
-in the firewall to get the security configuration for the peripheral.
-This allows a device tree description rather than a hardcoded peripheral
-table in the bus driver.
-
-The STM32 ETZPC device is responsible for filtering accesses based on
-security level, or co-processor isolation for any resource connected
-to it.
-
-The RIFSC is responsible for filtering accesses based on Compartment
-ID / security level / privilege level for any resource connected to
-it.
+   - STM32MP25:
+     - Add firewall bus based on  RIFSC firewall controller.
+     - Add clock support (RCC) based on SCMI clock protocol for root clocks.
+     - Add all I2C instances and declare i2c2/i2c8 on stm32mp257f-ev1.
+     - Add all SPI instances. and declare spi3/spi8 on stm32mp257f-ev1.
 
 ----------------------------------------------------------------
-Dan Carpenter (1):
-       bus: stm32_firewall: fix off by one in stm32_firewall_get_firewall()
+Alain Volmat (6):
+       arm64: dts: st: add all 8 i2c nodes on stm32mp251
+       arm64: dts: st: add i2c2/i2c8 pins for stm32mp25
+       arm64: dts: st: add i2c2 / i2c8 properties on stm32mp257f-ev1
+       arm64: dts: st: add all 8 spi nodes on stm32mp251
+       arm64: dts: st: add spi3/spi8 pins for stm32mp25
+       arm64: dts: st: add spi3 / spi8 properties on stm32mp257f-ev1
 
-Gatien Chevallier (7):
-       dt-bindings: treewide: add access-controllers description
-       dt-bindings: bus: document RIFSC
-       dt-bindings: bus: document ETZPC
-       firewall: introduce stm32_firewall framework
-       of: property: fw_devlink: Add support for "access-controller"
-       bus: rifsc: introduce RIFSC firewall controller driver
-       bus: etzpc: introduce ETZPC firewall controller driver
+Alexandre Torgue (1):
+       ARM: dts: stm32: put ETZPC as an access controller for STM32MP13x 
+boards
 
-Oleksii Moisieiev (1):
-       dt-bindings: document generic access controllers
+Dario Binacchi (1):
+       ARM: dts: stm32: move can3 node from stm32f746 to stm32f769
 
- 
-Documentation/devicetree/bindings/access-controllers/access-controllers.yaml 
-|  84 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml 
-       |  96 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml 
-       | 105 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/media/cec/st,stm32-cec.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml 
-       |   4 +++
- 
-Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml 
-  |   4 +++
-  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/net/stm32-dwmac.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml 
-       |   4 +++
-  Documentation/devicetree/bindings/usb/dwc2.yaml 
-       |   4 +++
-  MAINTAINERS 
-       |   7 +++++
-  arch/arm/mach-stm32/Kconfig 
-       |   1 +
-  arch/arm64/Kconfig.platforms 
-       |   1 +
-  drivers/bus/Kconfig 
-       |  10 +++++++
-  drivers/bus/Makefile 
-       |   1 +
-  drivers/bus/stm32_etzpc.c 
-       | 141 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  drivers/bus/stm32_firewall.c 
-       | 294 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  drivers/bus/stm32_firewall.h 
-       |  83 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  drivers/bus/stm32_rifsc.c 
-       | 252 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  drivers/of/property.c 
-       |   2 ++
-  include/linux/bus/stm32_firewall_device.h 
-       | 142 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  40 files changed, 1323 insertions(+)
-  create mode 100644 
-Documentation/devicetree/bindings/access-controllers/access-controllers.yaml
-  create mode 100644 
-Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
-  create mode 100644 
-Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
-  create mode 100644 drivers/bus/stm32_etzpc.c
-  create mode 100644 drivers/bus/stm32_firewall.c
-  create mode 100644 drivers/bus/stm32_firewall.h
-  create mode 100644 drivers/bus/stm32_rifsc.c
-  create mode 100644 include/linux/bus/stm32_firewall_device.h
+Gabriel Fernandez (1):
+       arm64: dts: st: add rcc support for STM32MP25
+
+Gatien Chevallier (4):
+       arm64: dts: st: add RIFSC as an access controller for STM32MP25x 
+boards
+       ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+       ARM: dts: stm32: put ETZPC as an access controller for STM32MP15x 
+boards
+       ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+
+Hugues Fruchet (1):
+       media: dt-bindings: add access-controllers to STM32MP25 video codecs
+
+Marek Vasut (1):
+       ARM: dts: stm32: add PWR regulators support on stm32mp131
+
+Patrice Chotard (1):
+       ARM: dts: stm32: add heartbeat led for stm32mp157c-ed1
+
+Patrick Delaunay (1):
+       arm64: dts: st: correct masks for GIC PPI interrupts on stm32mp25
+
+Raphael Gallais-Pou (4):
+       dt-bindings: display: simple: allow panel-common properties
+       ARM: dts: stm32: add LTDC support for STM32MP13x SoC family
+       ARM: dts: stm32: add LTDC pinctrl on STM32MP13x SoC family
+       ARM: dts: stm32: enable display support on stm32mp135f-dk board
+
+  Documentation/devicetree/bindings/display/panel/panel-simple.yaml 
+|   11 +-
+  Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml 
+|    4 +
+  arch/arm/boot/dts/st/stm32f746.dtsi 
+|   17 --
+  arch/arm/boot/dts/st/stm32f769.dtsi 
+|   17 ++
+  arch/arm/boot/dts/st/stm32mp13-pinctrl.dtsi 
+|   57 +++++
+  arch/arm/boot/dts/st/stm32mp131.dtsi 
+| 1088 
+++++++++++++++++++++++++++++++++++++++++++--------------------------------------
+  arch/arm/boot/dts/st/stm32mp133.dtsi 
+|   51 ++--
+  arch/arm/boot/dts/st/stm32mp135.dtsi 
+|   11 +
+  arch/arm/boot/dts/st/stm32mp135f-dk.dts 
+|   53 ++++
+  arch/arm/boot/dts/st/stm32mp13xc.dtsi 
+|   19 +-
+  arch/arm/boot/dts/st/stm32mp13xf.dtsi 
+|   19 +-
+  arch/arm/boot/dts/st/stm32mp151.dtsi 
+| 2764 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------------------------------------------------------------------
+  arch/arm/boot/dts/st/stm32mp153.dtsi 
+|   52 ++--
+  arch/arm/boot/dts/st/stm32mp157c-ed1.dts 
+|   12 +
+  arch/arm/boot/dts/st/stm32mp15xc.dtsi 
+|   19 +-
+  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi 
+|   82 ++++++
+  arch/arm64/boot/dts/st/stm32mp251.dtsi 
+|  359 +++++++++++++++++++++++----
+  arch/arm64/boot/dts/st/stm32mp253.dtsi 
+|    7 +
+  arch/arm64/boot/dts/st/stm32mp255.dtsi 
+|   33 ++-
+  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts 
+|   34 +++
+  20 files changed, 2683 insertions(+), 2026 deletions(-)
