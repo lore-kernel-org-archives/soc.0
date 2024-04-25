@@ -1,88 +1,114 @@
-Return-Path: <SRS0=QZeH=L6=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=eYoi=L6=yeah.net=shawnguo2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EAFBC4345F
-	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 04:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A90EC4345F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 06:36:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1960DC2BBFC; Thu, 25 Apr 2024 04:44:17 +0000 (UTC)
-Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C345BC113CC;
-	Thu, 25 Apr 2024 04:44:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C345BC113CC
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
-Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id 111B56054A;
-	Thu, 25 Apr 2024 04:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1714020247;
-	bh=pKxM3kug+6FaG53pNZPx1vcG2su9BKkq9n/vgd6jrCE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=g0mgFA3G24Afpq5sNBMk/9N0QpWr0aV+DpH+/1TB3chGYKQLvFq5T+lAfmu+jGOKg
-	 /8IP+zN4ui/CJf7wsyK27aaXXchQNr9flJ9rig7/AMhgp0XEcbD9Kz3JIlhkNz2Nz2
-	 f8l9EDX6L6PXDyG5fC3U42JpoWQMdDWElMWg5BPBo4HF2N+KZ5zEa4MFHMpJElfiNL
-	 deM4sz3dMCFUprrtLD6BVDl4gb2TH0aYBvQkJkTag8JVM3pD92DRoh0XztfqThUFlc
-	 SYoC5AOwVSzZJ64A4z5xNamij/PC+5Kx0G3bKdMCtlkKwioX1/XB+ct3EX00KAsANg
-	 lAE88RilLYUpQ==
-From: Tony Lindgren <tony@atomide.com>
+	id 175A9C4AF0A; Thu, 25 Apr 2024 06:36:05 +0000 (UTC)
+Received: from mail-177132.yeah.net (mail-177132.yeah.net [123.58.177.132])
+	by smtp.kernel.org (Postfix) with ESMTP id 3E7C5C113CC;
+	Thu, 25 Apr 2024 06:36:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E7C5C113CC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=znCW4xJn3QRey/3PtwEkZuygD9e6UvUN/Gc1h2x4hsE=;
+	b=kvIZc6X16kU5qE9Nuaji67kho/47nX8LfmMXf0m+xCMikIJAnqJClKpQwTuH2S
+	d6QgxtMeaWpdDwT+/ahxHaFmSNlQoBR9Rz5WkJQ/kNuhh728cefs82EuINbNsYrJ
+	UBqC0xmfCv9okKiUBVV+IfS15/wxqi6XnFVpz9g43K6FU=
+Received: from dragon (unknown [223.68.79.243])
+	by smtp2 (Coremail) with SMTP id C1UQrADHLhiS+SlmRJRzBA--.45238S3;
+	Thu, 25 Apr 2024 14:34:59 +0800 (CST)
+Date: Thu, 25 Apr 2024 14:34:57 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: "Rob Herring (Arm)" <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Devicetree changes for omaps for v6.10
-Date: Thu, 25 Apr 2024 07:43:36 +0300
-Message-ID: <pull-1714020191-304166@atomide.com>
-X-Mailer: git-send-email 2.44.0
+Cc: soc@kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+	Antoine Tenart <atenart@kernel.org>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Robert Richter <rric@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Li Yang <leoyang.li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	"Paul J. Murphy" <paul.j.murphy@intel.com>,
+	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Heiko Stuebner <heiko@sntech.de>, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Michal Simek <michal.simek@amd.com>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev
+Subject: Re: [PATCH v2] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible
+ usage
+Message-ID: <Zin4+9mv1oIAewHH@dragon>
+References: <20240417203853.3212103-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240417203853.3212103-1-robh@kernel.org>
+X-CM-TRANSID:C1UQrADHLhiS+SlmRJRzBA--.45238S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZrWUWF45KryrtFW7uw45KFg_yoW8Xr1rp3
+	WUuw45Cr18Wr1rCasFgw1IvF90kw4rArW3uF9rGr9xtrn0va4UtF1Svr4fuw4DZ3WrCa1I
+	qF4DZryjg3WYqFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBrWOUUUUU=
+X-Originating-IP: [223.68.79.243]
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiFRPLZV6NnF3JSgAAs5
 
-From: "Tony Lindgren" <tony@atomide.com>
+On Wed, Apr 17, 2024 at 03:38:47PM -0500, Rob Herring (Arm) wrote:
+> The "arm,armv8-pmuv3" compatible is intended only for s/w models. Primarily,
+> it doesn't provide any detail on uarch specific events.
+> 
+> There's still remaining cases for CPUs without any corresponding PMU
+> definition and for big.LITTLE systems which only have a single PMU node
+> (there should be one per core type).
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+> Acked-by: Heiko Stuebner <heiko@sntech.de>
+> Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
+> Acked-by: Bjorn Andersson <andersson@kernel.org>
+> Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Acked-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+> SoC Maintainers, Can you please apply this directly.
+> 
+> v2:
+>  - Drop QCom sdm630 change
+> ---
+...
+>  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi       | 2 +-
+>  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi       | 2 +-
+>  arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi       | 7 +++++++
+>  arch/arm64/boot/dts/freescale/fsl-ls2088a.dtsi       | 7 +++++++
+>  arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi       | 5 -----
+>  arch/arm64/boot/dts/freescale/imx8dxl.dtsi           | 2 +-
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+Acked-by: Shawn Guo <shawnguo@kernel.org>
 
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.10/dt-signed
-
-for you to fetch changes up to 32f4c19f6a52bdfa6ec73a067b6e7382b8d6653e:
-
-  ARM: dts: dra7: Use clksel binding for CTRL_CORE_SMA_SW_0 (2024-04-10 09:15:54 +0300)
-
-----------------------------------------------------------------
-Devicetree changes for omaps for v6.10
-
-Update n900 charge limit, and make use of the clksel binding for dra7
-for the clksel clocks and other dpll output related clocks.
-
-----------------------------------------------------------------
-Arthur Demchenkov (1):
-      ARM: dts: n900: set charge current limit to 950mA
-
-Tony Lindgren (12):
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_CORE
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_DSP
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_IVA
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_GPU
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_DRR
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_GMAC
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_EVE
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_CORE
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_ABE_PLL_SYS
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_PER
-      ARM: dts: dra7: Use clksel binding for CM_CLKSEL_DPLL_USB
-      ARM: dts: dra7: Use clksel binding for CTRL_CORE_SMA_SW_0
-
- arch/arm/boot/dts/ti/omap/dra76x.dtsi        |  63 ++++---
- arch/arm/boot/dts/ti/omap/dra7xx-clocks.dtsi | 270 ++++++++++++++++++---------
- arch/arm/boot/dts/ti/omap/omap3-n900.dts     |   2 +-
- 3 files changed, 221 insertions(+), 114 deletions(-)
