@@ -1,152 +1,586 @@
-Return-Path: <SRS0=Z+Dw=L6=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=F08A=L6=blaize.com=nikolaos.pasaloukos@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18801C4345F
-	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 07:31:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACB02C4345F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 09:34:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F1EE2C113CC; Thu, 25 Apr 2024 07:31:25 +0000 (UTC)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 7EB1AC113CC; Thu, 25 Apr 2024 09:34:15 +0000 (UTC)
+Received: from mx07-0063e101.pphosted.com (mx07-0063e101.pphosted.com [205.220.184.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C3D1FC2BBFC
-	for <soc@kernel.org>; Thu, 25 Apr 2024 07:31:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3D1FC2BBFC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2db2f6cb312so9105921fa.2
-        for <soc@kernel.org>; Thu, 25 Apr 2024 00:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714030282; x=1714635082; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ul9hzsEcg7DYm2vJuobyphUHRoFSWDx7IAFuHRf9zA4=;
-        b=H0s41ToWgtO4MmeMIR+H7hVC18I0/y7+UjSJfyJYSE3kYpWr/08t+dnvfjjBzXswOw
-         +goiy71cZmhL93ursFttqpEd2vE1T2k4RKURGHUw9VnKmocWhBsdPbfdLoOaNTx3XN9r
-         57Fn4F0HNZSaKE0zI0z9S40IKxhSOUfxXB6k2HruDVJ+KKwdXYzWdZ97ANZE9exTqjLz
-         1Tp0dlYckujBYBdYQJS90qJcdygaEejNYqOhI4W5KOZLTnK+TMppw/TtfxzQ6lTEJs74
-         3mM32KoyuvJFWQ6KCEsGRoSO1zgCJuFB9TydKUZ7JJwGi0NMZakMmvvoQU4wVpn0DxKg
-         aigg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714030282; x=1714635082;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ul9hzsEcg7DYm2vJuobyphUHRoFSWDx7IAFuHRf9zA4=;
-        b=d3QCbOJDp/Qxs+idgtDwdEe6k+uZTSHaLeHolFRSEysWSwRPPgrTlQU8kqqcHYrlaR
-         Chur0K+4NOni8ulV4q7XqPjNOaZvjEmInHVNdYOgz6EUf9BOZbUijK6PAY9kbiuqAnPo
-         bmoi04URRrhHIErwfVmfp/Vr2w01zLsq9ba7QZrmDxAaTGkBI57ICwJrsJhlqQXLHQdL
-         UvUz1qfBSrVpit8erBzVgTWkXeeqYBWmig5hEPF6hvcS8DfZ2tm4Q8nnhAVBAUhjhZIZ
-         lJdgGZWhEgk9wYEF0SjKj/qwJh1SItVMycU4LFecFtNXNtwjAUp8Fs/vjNzh8E+5kF/6
-         l+0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXGhYczRWviCEKg4SgwTuJUwqLGhLEo+PASj0FU5wPl7dz/U0J9txlfLmQ2tbpDdaB51qF1+BY7haNn162lEw==
-X-Gm-Message-State: AOJu0Yzh4bdCTILnwLOcPNZTur4z8TtwrEtl1c7y6uISZJmauq9nd4JC
-	5QhSI6dinrvnTAKcbioOKY9cXFBw6VGyFVvYQVU1u7LftXZO/pljbe1Wf6SXl6o=
-X-Google-Smtp-Source: AGHT+IEiRBUviT2k4uhh1UXsujRvJ586KrHxaEdXV0yDDilA0LqYA463l/ieRAYdipdoU5lQ8sa7HA==
-X-Received: by 2002:a2e:81c2:0:b0:2d4:6893:24e1 with SMTP id s2-20020a2e81c2000000b002d4689324e1mr3514710ljg.50.1714030281939;
-        Thu, 25 Apr 2024 00:31:21 -0700 (PDT)
-Received: from rayden (h-217-31-164-171.A175.priv.bahnhof.se. [217.31.164.171])
-        by smtp.gmail.com with ESMTPSA id bo1-20020a0564020b2100b0056fd89cd52dsm8654055edb.85.2024.04.25.00.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Apr 2024 00:31:21 -0700 (PDT)
-Date: Thu, 25 Apr 2024 09:31:19 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 46D07C2BD10;
+	Thu, 25 Apr 2024 09:34:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 46D07C2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=blaize.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=blaize.com
+Received: from pps.filterd (m0247495.ppops.net [127.0.0.1])
+	by mx08-0063e101.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P9FH0a019229;
+	Thu, 25 Apr 2024 10:34:05 +0100
+Received: from ma0pr01cu012.outbound.protection.outlook.com (mail-southindiaazlp17011005.outbound.protection.outlook.com [40.93.131.5])
+	by mx08-0063e101.pphosted.com (PPS) with ESMTPS id 3xny4n99m1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Apr 2024 10:34:05 +0100 (BST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nxoHAJT2AZ7xbb3k/Z3UiNOAgCxjfyyai4K/L0O/oyk2Nppkr4X3/M2Ac7GHR/MjEZ9gE16TQbTBW/4WrJzGpngKn8RUM1ZrVc1FJEVTjppQ7grXmIhzjZuICLDPhJO0hsqY6NoPCr9Rpkj+31Pw48bDcQQGLo4kuycEx8kYTezTPxMXwPb7GGwjKX720E9SKja78LgYlhKV52XWklAGTiMMiKASlyKaie8+ECOKLm10+0hVgg8Lw3IaIaWSmQaGimYgkQ6/d+mNVsVoR94OfS81SEGOsnrHqligOCeYcLcGY8oo6GMxilr66m6vLvqM095J8qINuOjZ8dRl5G+rCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2ve2cYbChshGJ2jNr/CD2x3QoFE+lEZQVOM5jXoQDwI=;
+ b=UObse0RYEgTvAn/gYuNC1BHx6IkDvxYe8N5c3IlGCkW4v7ac1oXNllKURGT3lGLHWMN2FQIs17V8udFwVwmzuv/gVLECpAY6DGci91960NbZEVQSznOu0VZRW7d9sOoXNSqgunldIEoHv3CDd+tIeO6k7N3gmk8KPMlGAHlKM0uamN5STegwPj2hTptUEQYCX6yN6T6sSPDvHJUx4iyhMvQSU3m8aGfDaxX9GvjuI63RW1LAxe8GL5n5ixD22pd3EKRyiDVuspAR70FsBInlSI8XoEkqEp2eTsxijXaDSEUhPhs3jDQotktCZ+h2aknj726qEqznlkxWWvWOzRq3rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=blaize.com; dmarc=pass action=none header.from=blaize.com;
+ dkim=pass header.d=blaize.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=BLAIZE.COM;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2ve2cYbChshGJ2jNr/CD2x3QoFE+lEZQVOM5jXoQDwI=;
+ b=AqpwE6PCdtG1xXwMGkNmrd2yzIxPPIKYCFgatCwSnW6r4kx5AweqUK4bQ7RuO9UZM3HrdUPd5DNBiY+fMPmD+Dqn6wdLD+kPHoPkpQVGLe57Fj5BhGZX5TquD/wNjAYg4H6w+nsGdTyMaa/5D2OXhXABJkFmGsv5L3eYTtk2D0Y=
+Received: from MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:12a::5)
+ by MA0PR01MB7426.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:3b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.25; Thu, 25 Apr
+ 2024 09:33:59 +0000
+Received: from MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::309a:12cf:74a4:5655]) by MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::309a:12cf:74a4:5655%3]) with mapi id 15.20.7472.044; Thu, 25 Apr 2024
+ 09:33:59 +0000
+Message-ID: <16091773-b0dd-415f-9d83-7a0e76f9121b@blaize.com>
+Date: Thu, 25 Apr 2024 10:33:51 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/7] arm64: Add initial support for Blaize BLZP1600 CB2
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE driver for Trusted Services
-Message-ID: <20240425073119.GA3261080@rayden>
+Cc: "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        James Cowgill <james.cowgill@blaize.com>,
+        Matt Redfearn <matthew.redfearn@blaize.com>,
+        Neil Jones <neil.jones@blaize.com>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20240424133320.19273-1-nikolaos.pasaloukos@blaize.com>
+ <20240424-budget-vaguely-426f34eb305e@spud>
+Content-Language: en-GB
+From: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+In-Reply-To: <20240424-budget-vaguely-426f34eb305e@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0221.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:b::17) To MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:12a::5)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0PR01MB10184:EE_|MA0PR01MB7426:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96b900c3-1765-48c7-0014-08dc650ad613
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|7416005|1800799015|366007;
+X-Microsoft-Antispam-Message-Info: 
+	=?utf-8?B?QnFCRElzMnV5bnFJNVdMNzcvVEpqdE8yYjlDcXVKWG4ycGNsZENqUlRwcWgz?=
+ =?utf-8?B?bU9WL1haUzNYdDdBUVJPaE1EQzVBdmpMYjE1REwzSWFsaHp1OTdhMWlxZi9D?=
+ =?utf-8?B?bVIyTzdwMUszZGFYSHRJejM5cUxVVXByNVRUNnIyWUJNa3VHK3hMVEQrbTRJ?=
+ =?utf-8?B?djRNWjh3TW5hdyt5VkIraXFQYURiUERtUEFuNHMxUE9YNWlTcUdSTk5sckZZ?=
+ =?utf-8?B?QVRTbnhRblZtNUdKbEljL2RwYmFNU3l4NkJPZ2R1WlNHZEl5YWdvWVZ2WFJq?=
+ =?utf-8?B?Vzk3NUo0bXRpMlQ3Wi9JOEUwSXJGVW9QUVlzaGJkOXpPWFdZMkhPZzAwdGdu?=
+ =?utf-8?B?d0dPZ21lR0J6d3gwUWdDY3lGdGlnY2lSbW1nR0FJWDBkQkpjSDRlYVhKUlpR?=
+ =?utf-8?B?THVlTUc4b0pLTXBDVWtZQVFicXo4L2RTYng3ajBvS3RFUjA4ak9mcGFxbDRo?=
+ =?utf-8?B?WGxndHZnY3EvN3hGRm9wdVBGaUhmQ2J5TUIzeWFCUWlHRkNPOGZqTllxdGFZ?=
+ =?utf-8?B?Nk5HNlhkaFBQT0hmNHFvUHdTWnludWIzcWVYUmFVdmUxT29FdmUxYkQrL2k3?=
+ =?utf-8?B?dncrSXZMUWhZK0VJY3FsMFFuaHFEbGVTaC9GbTA4QTZ0cVU4NzRHbTE2TWdn?=
+ =?utf-8?B?d3Jibjhvb0FrT0JOLzFSL0RYZEszcjdSbnVZak9KeU1sQ0dSYUd2dWg2V3JC?=
+ =?utf-8?B?Q0EwNnduTVJObUliQ2pWaEFzOCtET1ZEbXlxY3NQS0FJcEIreUlhYVhaWFNF?=
+ =?utf-8?B?VElMa2hzQXlmYlNPSkkwQWd5aDBjWmR3T1hURDBNWFFreW5xcWRsenYwRW9T?=
+ =?utf-8?B?UGM0RitTQUYzTTZ2UE4yd3NUM1hkMWdybEg4elJOV1lMYlFVMDlxbG5FaVRr?=
+ =?utf-8?B?MXg5clFyRzBpbERTdld4RG1aY09sNUxHT1N5dDlCcC9za3A2OVgwUVQwVUFC?=
+ =?utf-8?B?Qy9KbUdGZE1GZTNzZXkzdWlUSjR3dCtTMEVWOEtDVEJUenA0dFFwWnNsdVF3?=
+ =?utf-8?B?azgzV0ZBczZZZ3lPWEN3aDk0Q3BpL3BHbWpjM3ZsdFpBNHR4bTJsb0FIV2x2?=
+ =?utf-8?B?OGpSVGdva0hQdnhvalNLZ04wbVJUSmJmUHBiUWY4dnFsRE5WRVdCNlovOXBP?=
+ =?utf-8?B?MmZjS1QyOG1kY0dGdE9uMHcxeW9ZTUtMME9ZbVFKWlVGUVFOeXhPRFAvUXpC?=
+ =?utf-8?B?ZWtlM2loeFJETzB4aFBJeEI3MzlGV1VkUk5IQ2xvNEV2VUdibDZibUtYOVJE?=
+ =?utf-8?B?eldLODlYM3pWS05yMXNPZkE1c0ZIdnhqYmRaL0xGREFoYzhpVTFVekF4L3RL?=
+ =?utf-8?B?Y2RzVFlDSnVNZzdvK0VLWDgxanNjcDNYMXAzelE3cTJFNXU4YjhMOWllOFpU?=
+ =?utf-8?B?OHVNbVYwUDVZQVJ4b3d0OVluZ05HVDZMUlVnOSs1R3RaYmg4TkxFQktIU3FZ?=
+ =?utf-8?B?M2RRR0JVbVkwRVoxb2NqazF4bGdoenA2dHZ1SFhVdmh2Zzl5eG4ySnh6T0Zt?=
+ =?utf-8?B?cFhadWhvL3hGYzMzckdZMzB0RFArWVJ0UkFBVkRCb0I4UXQxWVBsbXFRL0RD?=
+ =?utf-8?B?L3BqRnl0NUtMQzdVcnovT1Y5TzFwbmZQbG1XTnNyR0FuMlZlb2plL1EwNmwx?=
+ =?utf-8?B?MGduU2VZekFLUDlXNEdQS2Z1SjF6cXc9PQ==?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?Z3hBbHE5OUpmU2xzNkFLSisrOW9DTkloVVVjVlB0SWsrMGFQWjNjbEZESEpM?=
+ =?utf-8?B?bkpWdjFqdlViN3Fpb3lEc1cyS3NZNlRXajcxZ1gwRVRTWTlrcEpVZk12eGZJ?=
+ =?utf-8?B?VEQxUGw0eitzSkVPU2FYMHh2TXlhZGVIWTh5ZStlcElmM3JmOGxEV3BmNW9X?=
+ =?utf-8?B?KzJ5Tkh3KzV1aVpGanZwY0ptdnJxUkFza09NVDZaQkhNeEFwd0FZZDQzKzJh?=
+ =?utf-8?B?MURNd2hadnBNYkdvazVsNHhJVEJ0UXF2TjRtZzRiYXYweWtBZmJlbWc0eTZB?=
+ =?utf-8?B?eW03SkNCdmhwK0g3QUNLcDZ4WkdPQjQvb3lxZWE5Y1p3a2h2bXpkcXJRSytz?=
+ =?utf-8?B?M2g3eUUvZitoU3FyaTI3WHdGTWk2VU1odVlrZ3EyV2xWb25ORjVleVJhMlpu?=
+ =?utf-8?B?bDRNbnNWbWt0aTg3SkFqS0Q1cWpEV1RLdStnM1pIanYvZDRkd0o2c0h3UDda?=
+ =?utf-8?B?WWorKzY1Y1ZUVlo0M3FTYlJpbzkxelhkZU9ZVkFlQ3VUVGpzQjdYVlhTMnNi?=
+ =?utf-8?B?d29iWHVjbDVhL0hvSGROK2ltd056MWdXQzJIbzlteEJ1ZGR0dEViSjNDbWUz?=
+ =?utf-8?B?b2dxOWxSTGpLMHE1ZHVWSkZIYnlRekg1YStiaUg4UVRIZkQxMHBaS1VVTHhl?=
+ =?utf-8?B?NWRRLzNwMUkxZ0lVNDRYTDc3YmFhNDEzelI4TlE2Z3JvK0QrM1hYUGowUnhD?=
+ =?utf-8?B?YUR5Y0djTWdvM2E3UDNreVZOWkFhZUZGd0tTV0hSUHBtODVVbFllbktobktQ?=
+ =?utf-8?B?VE4xVXBSSEZHVFRsNkNqWjVtcXllZHQrTFIvaFJ2blRVekhzYkdPWEVnRlZw?=
+ =?utf-8?B?UVdvNkhSR3hFOXpPZS9nckdQMTcrazJmZXk0Um15alhqcGs3blRPODgvR3dK?=
+ =?utf-8?B?M1V4WVN6aTlqU0Y4VEhmTHZCaEJkTTF0d1FFcHRpZ3BiUXlQMW9rMGlTTHkw?=
+ =?utf-8?B?NDNRb0hoU2ZQNnRuNjJBdDFqTW1xMWlwMkhHak05ZHVFZEFlSDdYS1pMUTB4?=
+ =?utf-8?B?aHJZMldZbFdIK2I2WTBYdCtpMlZxYWNPSHY0RUJEQzl5Z2FyajBDWGpMMUVX?=
+ =?utf-8?B?VElPVjloYkxvOHlrc1FWeWw5Y080cHNKNEFBVlIrMlJKWGZrRHBxMnF0TC9V?=
+ =?utf-8?B?Vk43V3gxN2RRZzlDaWJsdE43VVlqV3dIVi93N25xZUFJZXFvMHkvZWkwQ1Jq?=
+ =?utf-8?B?VjNsNXQ3T0J4dWFSb3dLNXNIYlJwcFc5UUUvWlBpL1dHVkc5Um9BUldlMUNw?=
+ =?utf-8?B?dFh3QkFXV3hETzFkalcxWGdrbEo5RUpVZ2dGU1l3NEJHdGplclV3Y0g5UkFa?=
+ =?utf-8?B?MWhSbklKQ2JyVWRnMm5CbXBFTDR4cUlNVE1DNEgyWjhwZlhPbXZsMjRqSDdu?=
+ =?utf-8?B?S1lTekRBNzNGdjR0cnd5eU5obE93ZTFkYUtYSUZscUhyRTltWURrN0VHNVZ6?=
+ =?utf-8?B?bWcwS2ltNVBrQTg3bUdrUWxKMG5YL2w3a1VkdzR5OHV5cDNUWFBxSFNNTGFL?=
+ =?utf-8?B?VzR4RkFzTytQRHhWNDFqYmd0RTY2RWZzVFIyelhFVFQweDB5MS9DRFNJZndu?=
+ =?utf-8?B?TVhZcE11cUxhRElzSkswZG9EVU10Nmp6YkwwOWdaWDBvZnJPaTBScmlrQXJP?=
+ =?utf-8?B?bmo5a3NaaTRvam9saHA0VmNCclFqOHNBYjJtQlZObVplSlBZaGVmYnlCT1hQ?=
+ =?utf-8?B?Q1JTbFlueEx6SWVmcVo5ci9ZVEU5ZlZaSDVFTTJtbjA5TjF6Y093TkU1d1Rw?=
+ =?utf-8?B?L0h3U29HV1d3V1RNVkNmUUd1bEdGeXFHemNZc2xqT01RckZzRWxDZlR3eEg3?=
+ =?utf-8?B?em9qamh0V0g4TzBwYlFwRWRLYXRnK1ZXZjFVZDhGT1p2bnpvREtOOFR0UjQ1?=
+ =?utf-8?B?cEdpYnJWYUIzdWhkTVYzZUdJSHBvSjZQTGFISlptMGEySEwwYjRPQXpaVEdZ?=
+ =?utf-8?B?dlRNeW5YWFBDbzRGcTRQU0dvcUcvTk00dythYkF3WkE0VWFveCsveEQ0d0Vh?=
+ =?utf-8?B?bDlCVGZKWVVHdmI0TW10S0NwajdmOGpkK1ZnbFNXS01qSmxXdFlxejFsRmVR?=
+ =?utf-8?B?S21TRWk2UHNaWmsyWHF4TmwwZ1VDSENIeEZyMUVQWHZ5eXdJVEpNeEFMcHhv?=
+ =?utf-8?B?Q3hxdkF2SHpaUVNaajM0cUREZ3k2SktNTnhBaFVOajVqMkJ2ckV5ZzhjNEpW?=
+ =?utf-8?B?ajU5SzVaSmgzVXE5aGp3ck02TlZDODV6Um5yU3BFUDcrd1lNWWdJL2dMYWlm?=
+ =?utf-8?Q?lDHuIwWzL4OqC0WiicGeTlSYJwh5gDKyJ2Z2X1EdLM=3D?=
+X-OriginatorOrg: blaize.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96b900c3-1765-48c7-0014-08dc650ad613
+X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2024 09:33:59.8144
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 9d1c3c89-8615-4064-88a7-bb1a8537c779
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zcfLRCzmH/ntPdFbMTBCuLwqDk43uY6XsZadHWxtujAVjORe5/IpJXRa4N2c43V1cv08fBmd5aY0bJD7Q4lCUrh2GuR8+1yLSQsmMByCs5E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB7426
+X-Proofpoint-GUID: abWl3JnyZdwUrgmnPmNK73gGp-46B_O8
+X-Proofpoint-ORIG-GUID: abWl3JnyZdwUrgmnPmNK73gGp-46B_O8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-25_09,2024-04-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.21.0-2404010002
+ definitions=main-2404250068
 
-Hello arm-soc maintainers,
+On 24/04/2024 16:15, Conor Dooley wrote:
+> On Wed, Apr 24, 2024 at 01:33:23PM +0000, Niko Pasaloukos wrote:
+>> Adds support for the Blaize CB2 development board based on
+>> BLZP1600 SoC. This consists of a Carrier-Board-2 and a SoM.
+>>
+>> The blaize-blzp1600.dtsi is the common part for the SoC,
+>> blaize-blzp1600-som.dtsi is the common part for the SoM and
+>> blaize-blzp1600-cb2.dts is the board specific file.
+>>
+>> 'make dtbs_check' complains about ['ti,ina3221'] and ['national,lm96163']
+>> which are already upstreamed drivers with no yaml documentation.
+> 
+> Might not be what you want to hear, but please add yaml documentation
+> for them. Rob told you to do so on v1:
+> https://lore.kernel.org/all/20230412140344.GA2234522-robh@kernel.org/
+> 
+> That said, I went and looked. ina3221 _is_ documented in a yaml binding
+> and has been since October. national,lm96163 on the other hand, you'll
+> have to document if you want to use it.
+> 
+> Cheers,
+> Conor.
 
-Please pull these patches that introduces a TEE driver for Trusted
-Services. You can see more details below from the signed tag. These
-patches have been in for a few weeks.
+Apologies Conor. It has been removed for now and I'll do it when
+we will push it upstream.
 
-Thanks,
-Jens
+Kind regards,
+Niko
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+> 
+>>
+>> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
+>> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
+>> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
+>> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
+>> Co-developed-by: Neil Jones <neil.jones@blaize.com>
+>> Signed-off-by: Neil Jones <neil.jones@blaize.com>
+>> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+>> ---
+>>  arch/arm64/boot/dts/Makefile                  |   1 +
+>>  arch/arm64/boot/dts/blaize/Makefile           |   2 +
+>>  .../boot/dts/blaize/blaize-blzp1600-cb2.dts   |  84 +++++++
+>>  .../boot/dts/blaize/blaize-blzp1600-som.dtsi  |  23 ++
+>>  .../boot/dts/blaize/blaize-blzp1600.dtsi      | 211 ++++++++++++++++++
+>>  5 files changed, 321 insertions(+)
+>>  create mode 100644 arch/arm64/boot/dts/blaize/Makefile
+>>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-cb2.dts
+>>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
+>>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+>> index 30dd6347a929..601b6381ea0c 100644
+>> --- a/arch/arm64/boot/dts/Makefile
+>> +++ b/arch/arm64/boot/dts/Makefile
+>> @@ -9,6 +9,7 @@ subdir-y += apm
+>>  subdir-y += apple
+>>  subdir-y += arm
+>>  subdir-y += bitmain
+>> +subdir-y += blaize
+>>  subdir-y += broadcom
+>>  subdir-y += cavium
+>>  subdir-y += exynos
+>> diff --git a/arch/arm64/boot/dts/blaize/Makefile b/arch/arm64/boot/dts/blaize/Makefile
+>> new file mode 100644
+>> index 000000000000..595e7a350300
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/blaize/Makefile
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +dtb-$(CONFIG_ARCH_BLAIZE_BLZP1600) += blaize-blzp1600-cb2.dtb
+>> diff --git a/arch/arm64/boot/dts/blaize/blaize-blzp1600-cb2.dts b/arch/arm64/boot/dts/blaize/blaize-blzp1600-cb2.dts
+>> new file mode 100644
+>> index 000000000000..0bdec7e81380
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/blaize/blaize-blzp1600-cb2.dts
+>> @@ -0,0 +1,84 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2023 Blaize, Inc. All rights reserved.
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "blaize-blzp1600-som.dtsi"
+>> +#include <dt-bindings/net/ti-dp83867.h>
+>> +
+>> +/ {
+>> +	model = "Blaize BLZP1600 SoM1600P CB2 Development Board";
+>> +
+>> +	compatible = "blaize,blzp1600-cb2", "blaize,blzp1600";
+>> +
+>> +	aliases {
+>> +		serial0 = &uart0;
+>> +	};
+>> +
+>> +	chosen {
+>> +		stdout-path = "serial0:115200";
+>> +	};
+>> +};
+>> +
+>> +&i2c0 {
+>> +	clock-frequency = <100000>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c1 {
+>> +	clock-frequency = <100000>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c3 {
+>> +	clock-frequency = <100000>;
+>> +	status = "okay";
+>> +
+>> +	gpio_expander: gpio@74 {
+>> +		compatible = "ti,tca9539";
+>> +		reg = <0x74>;
+>> +		gpio-controller;
+>> +		#gpio-cells = <2>;
+>> +		gpio-line-names = "RSP_PIN_7",	/* GPIO_0 */
+>> +				  "RSP_PIN_11",	/* GPIO_1 */
+>> +				  "RSP_PIN_13",	/* GPIO_2 */
+>> +				  "RSP_PIN_15",	/* GPIO_3 */
+>> +				  "RSP_PIN_27",	/* GPIO_4 */
+>> +				  "RSP_PIN_29",	/* GPIO_5 */
+>> +				  "RSP_PIN_31",	/* GPIO_6 */
+>> +				  "RSP_PIN_33",	/* GPIO_7 */
+>> +				  "RSP_PIN_37",	/* GPIO_8 */
+>> +				  "RSP_PIN_16",	/* GPIO_9 */
+>> +				  "RSP_PIN_18",	/* GPIO_10 */
+>> +				  "RSP_PIN_22",	/* GPIO_11 */
+>> +				  "RSP_PIN_28",	/* GPIO_12 */
+>> +				  "RSP_PIN_32",	/* GPIO_13 */
+>> +				  "RSP_PIN_36",	/* GPIO_14 */
+>> +				  "TP31";	/* GPIO_15 */
+>> +	};
+>> +
+>> +	gpio_expander_m2: gpio@75 {
+>> +		compatible = "ti,tca9539";
+>> +		reg = <0x75>;
+>> +		gpio-controller;
+>> +		#gpio-cells = <2>;
+>> +		gpio-line-names = "M2_W_DIS1_N",	/* GPIO_0 */
+>> +				  "M2_W_DIS2_N",	/* GPIO_1 */
+>> +				  "M2_UART_WAKE_N",	/* GPIO_2 */
+>> +				  "M2_COEX3",		/* GPIO_3 */
+>> +				  "M2_COEX_RXD",	/* GPIO_4 */
+>> +				  "M2_COEX_TXD",	/* GPIO_5 */
+>> +				  "M2_VENDOR_PIN40",	/* GPIO_6 */
+>> +				  "M2_VENDOR_PIN42",	/* GPIO_7 */
+>> +				  "M2_VENDOR_PIN38",	/* GPIO_8 */
+>> +				  "M2_SDIO_RST_N",	/* GPIO_9 */
+>> +				  "M2_SDIO_WAKE_N",	/* GPIO_10 */
+>> +				  "M2_PETN1",		/* GPIO_11 */
+>> +				  "M2_PERP1",		/* GPIO_12 */
+>> +				  "M2_PERN1",		/* GPIO_13 */
+>> +				  "UIM_SWP",		/* GPIO_14 */
+>> +				  "UART1_TO_RSP";	/* GPIO_15 */
+>> +	};
+>> +};
+>> diff --git a/arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi b/arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
+>> new file mode 100644
+>> index 000000000000..efac0d6b3d60
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
+>> @@ -0,0 +1,23 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2023 Blaize, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include "blaize-blzp1600.dtsi"
+>> +
+>> +/ {
+>> +	memory@1000 {
+>> +		device_type = "memory";
+>> +		reg = <0x0 0x00001000 0xfffff000>;
+>> +	};
+>> +};
+>> +
+>> +/* i2c4 bus is available only on the SoM, not on the board */
+>> +&i2c4 {
+>> +	clock-frequency = <100000>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&uart0 {
+>> +	status = "okay";
+>> +};
+>> diff --git a/arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi b/arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
+>> new file mode 100644
+>> index 000000000000..ad1e502559d8
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
+>> @@ -0,0 +1,211 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2023 Blaize, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +#include <dt-bindings/reset/blaize,blzp1600-reset.h>
+>> +#include <dt-bindings/clock/blaize,blzp1600-clk.h>
+>> +
+>> +/ {
+>> +	interrupt-parent = <&gic>;
+>> +	#address-cells = <2>;
+>> +	#size-cells = <1>;
+>> +
+>> +	cpus {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <0>;
+>> +
+>> +		cpu0: cpu@0 {
+>> +			compatible = "arm,cortex-a53";
+>> +			device_type = "cpu";
+>> +			enable-method = "psci";
+>> +			reg = <0x0 0x0>;
+>> +			next-level-cache = <&l2>;
+>> +		};
+>> +
+>> +		cpu1: cpu@1 {
+>> +			compatible = "arm,cortex-a53";
+>> +			device_type = "cpu";
+>> +			enable-method = "psci";
+>> +			reg = <0x0 0x1>;
+>> +			next-level-cache = <&l2>;
+>> +		};
+>> +
+>> +		l2: l2-cache0 {
+>> +			compatible = "cache";
+>> +			cache-level = <2>;
+>> +			cache-unified;
+>> +		};
+>> +	};
+>> +
+>> +	timer {
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = /* Physical Secure PPI */
+>> +			     <GIC_PPI 13 (GIC_CPU_MASK_RAW(0x3) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>,
+>> +			     /* Physical Non-Secure PPI */
+>> +			     <GIC_PPI 14 (GIC_CPU_MASK_RAW(0x3) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>,
+>> +			     /* Hypervisor PPI */
+>> +			     <GIC_PPI 10 (GIC_CPU_MASK_RAW(0x3) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>,
+>> +			     /* Virtual PPI */
+>> +			     <GIC_PPI 11 (GIC_CPU_MASK_RAW(0x3) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>;
+>> +	};
+>> +
+>> +	psci {
+>> +		compatible = "arm,psci-1.0", "arm,psci-0.2";
+>> +		method = "smc";
+>> +	};
+>> +
+>> +	pmu {
+>> +		compatible = "arm,cortex-a53-pmu";
+>> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
+>> +			     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+>> +		interrupt-affinity = <&cpu0>, <&cpu1>;
+>> +	};
+>> +
+>> +	sram@0 {
+>> +		/*
+>> +		 * On BLZP1600 there is no general purpose (non-secure) SRAM.
+>> +		 * A small DDR memory space has been reserved for general use.
+>> +		 */
+>> +		compatible = "mmio-sram";
+>> +		reg = <0x0 0x00000000 0x00001000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0x0 0x00000000 0x1000>;
+>> +
+>> +		/* SCMI reserved buffer space on DDR space */
+>> +		scmi0_shm: scmi-sram@800 {
+>> +			compatible = "arm,scmi-shmem";
+>> +			reg = <0x800 0x80>;
+>> +		};
+>> +	};
+>> +
+>> +	firmware {
+>> +		scmi {
+>> +			compatible = "arm,scmi-smc";
+>> +			arm,smc-id = <0x82002000>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			shmem = <&scmi0_shm>;
+>> +
+>> +			scmi_clk: protocol@14 {
+>> +				reg = <0x14>;
+>> +				#clock-cells = <1>;
+>> +			};
+>> +
+>> +			scmi_rst: protocol@16 {
+>> +				reg = <0x16>;
+>> +				#reset-cells = <1>;
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	soc {
+>> +		compatible = "simple-bus";
+>> +		#address-cells = <2>;
+>> +		#size-cells = <1>;
+>> +		ranges;
+>> +
+>> +		gic: interrupt-controller@200410000 {
+>> +			compatible = "arm,gic-400";
+>> +			#interrupt-cells = <3>;
+>> +			#address-cells = <0>;
+>> +			interrupt-controller;
+>> +			reg = <0x2 0x00410000 0x20000>,
+>> +			      <0x2 0x00420000 0x20000>,
+>> +			      <0x2 0x00440000 0x20000>,
+>> +			      <0x2 0x00460000 0x20000>;
+>> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x3) |
+>> +						 IRQ_TYPE_LEVEL_LOW)>;
+>> +		};
+>> +
+>> +		uart0: serial@2004d0000 {
+>> +			compatible = "ns16550a";
+>> +			reg = <0x2 0x004d0000 0x1000>;
+>> +			clocks = <&scmi_clk BLZP1600_UART0_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_UART0_RST>;
+>> +			reg-shift = <2>;
+>> +			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		uart1: serial@2004e0000 {
+>> +			compatible = "ns16550a";
+>> +			reg = <0x2 0x004e0000 0x1000>;
+>> +			clocks = <&scmi_clk BLZP1600_UART1_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_UART1_RST>;
+>> +			reg-shift = <2>;
+>> +			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		i2c0: i2c@2004f0000 {
+>> +			compatible = "snps,designware-i2c";
+>> +			reg = <0x2 0x004f0000 0x1000>;
+>> +			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&scmi_clk BLZP1600_I2C0_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_I2C0_RST>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		i2c1: i2c@200500000 {
+>> +			compatible = "snps,designware-i2c";
+>> +			reg = <0x2 0x00500000 0x1000>;
+>> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&scmi_clk BLZP1600_I2C1_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_I2C1_RST>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		i2c2: i2c@200510000 {
+>> +			compatible = "snps,designware-i2c";
+>> +			reg = <0x2 0x00510000 0x1000>;
+>> +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&scmi_clk BLZP1600_I2C2_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_I2C2_RST>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		i2c3: i2c@200520000 {
+>> +			compatible = "snps,designware-i2c";
+>> +			reg = <0x2 0x00520000 0x1000>;
+>> +			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&scmi_clk BLZP1600_I2C3_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_I2C3_RST>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		i2c4: i2c@200530000 {
+>> +			compatible = "snps,designware-i2c";
+>> +			reg = <0x2 0x00530000 0x1000>;
+>> +			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&scmi_clk BLZP1600_I2C4_CLK>;
+>> +			resets = <&scmi_rst BLZP1600_I2C4_RST>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		arm_cc712: crypto@200550000 {
+>> +			compatible = "arm,cryptocell-712-ree";
+>> +			reg = <0x2 0x00550000 0x1000>;
+>> +			interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&scmi_clk 7>;
+>> +		};
+>> +	};
+>> +};
+>> -- 
+>> 2.34.1
+>>
 
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/tee-ts-for-v6.10
-
-for you to fetch changes up to 31611cc8faa082a96009c29822d9906d893cce57:
-
-  MAINTAINERS: tee: tstee: Add entry (2024-04-03 14:03:09 +0200)
-
-----------------------------------------------------------------
-TEE driver for Trusted Services
-
-This introduces a TEE driver for Trusted Services [1].
-
-Trusted Services is a TrustedFirmware.org project that provides a
-framework for developing and deploying device Root of Trust services in
-FF-A [2] Secure Partitions. The project hosts the reference
-implementation of Arm Platform Security Architecture [3] for Arm
-A-profile devices.
-
-The FF-A Secure Partitions are accessible through the FF-A driver in
-Linux. However, the FF-A driver doesn't have a user space interface so
-user space clients currently cannot access Trusted Services. The goal of
-this TEE driver is to bridge this gap and make Trusted Services
-functionality accessible from user space.
-
-[1] https://www.trustedfirmware.org/projects/trusted-services/
-[2] https://developer.arm.com/documentation/den0077/
-[3] https://www.arm.com/architecture/security-features/platform-security
-
-----------------------------------------------------------------
-Balint Dobszay (4):
-      tee: optee: Move pool_op helper functions
-      tee: tstee: Add Trusted Services TEE driver
-      Documentation: tee: Add TS-TEE driver
-      MAINTAINERS: tee: tstee: Add entry
-
-Sumit Garg (1):
-      tee: Refactor TEE subsystem header files
-
- Documentation/tee/index.rst         |   1 +
- Documentation/tee/ts-tee.rst        |  71 ++++++
- MAINTAINERS                         |  10 +
- drivers/tee/Kconfig                 |   1 +
- drivers/tee/Makefile                |   1 +
- drivers/tee/amdtee/amdtee_private.h |   2 +-
- drivers/tee/amdtee/call.c           |   2 +-
- drivers/tee/amdtee/core.c           |   3 +-
- drivers/tee/amdtee/shm_pool.c       |   2 +-
- drivers/tee/optee/call.c            |   2 +-
- drivers/tee/optee/core.c            |  66 +----
- drivers/tee/optee/device.c          |   2 +-
- drivers/tee/optee/ffa_abi.c         |   8 +-
- drivers/tee/optee/notif.c           |   2 +-
- drivers/tee/optee/optee_private.h   |  14 +-
- drivers/tee/optee/rpc.c             |   2 +-
- drivers/tee/optee/smc_abi.c         |  11 +-
- drivers/tee/tee_core.c              |   2 +-
- drivers/tee/tee_private.h           |  35 ---
- drivers/tee/tee_shm.c               |  67 ++++-
- drivers/tee/tee_shm_pool.c          |   2 +-
- drivers/tee/tstee/Kconfig           |  11 +
- drivers/tee/tstee/Makefile          |   3 +
- drivers/tee/tstee/core.c            | 480 ++++++++++++++++++++++++++++++++++++
- drivers/tee/tstee/tstee_private.h   |  92 +++++++
- include/linux/tee_core.h            | 306 +++++++++++++++++++++++
- include/linux/tee_drv.h             | 285 +++------------------
- include/uapi/linux/tee.h            |   1 +
- 28 files changed, 1095 insertions(+), 389 deletions(-)
- create mode 100644 Documentation/tee/ts-tee.rst
- create mode 100644 drivers/tee/tstee/Kconfig
- create mode 100644 drivers/tee/tstee/Makefile
- create mode 100644 drivers/tee/tstee/core.c
- create mode 100644 drivers/tee/tstee/tstee_private.h
- create mode 100644 include/linux/tee_core.h
