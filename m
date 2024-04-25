@@ -1,84 +1,72 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=2Wdg=L6=huawei.com=xuwei5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD69AC4345F
-	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 10:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 584EBC4345F
+	for <soc@archiver.kernel.org>; Thu, 25 Apr 2024 11:16:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9F5B6C2BBFC; Thu, 25 Apr 2024 10:41:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57289C113CE;
-	Thu, 25 Apr 2024 10:41:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714041695;
-	bh=iv7SUIiaG9s3NVPGgli4gIp/ZnPvi4cNgaMFQtY+byk=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=ZZBGxiQhHpjKRskelCMvza4VK8UoRlAXvP+wVoXNvcSOS1xd8zmnxQ+EKfw9JnZSH
-	 gQOnpjjUenCi1O/QuAM57Scw9eCpw8KxgYQUBOuEY1BuRtFEO0aTzSL2Wuxb3DTSBU
-	 YvwmyYhcqpIX/dCveRtCiNry2qwslldOGNyz3oaUGGQ7Hn+tDetHvq9z0MwEDxywaO
-	 OUrAQHyY893fLSH61HgXnZNQJPBVu7F0b/G0CFXmhhqZixfM4JYX6B3tZ4gGKK46WL
-	 kYxp2G5rcovPXNGGzNR2keKoTWMc+umnwmG7i0yi1xAsrS2rOxV15U5c+D63IgONUl
-	 23vNHsI13d4qA==
-Date: Thu, 25 Apr 2024 12:41:30 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Hans de Goede
- <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
- <ilpo.jarvinen@linux.intel.com>, Olivia Mackall <olivia@selenic.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v7 6/9] platform: cznic: turris-omnia-mcu: Add support
- for MCU provided TRNG
-Message-ID: <20240425124130.6c96e273@dellmb>
-In-Reply-To: <Zioql5TSzTLtMsX7@smile.fi.intel.com>
-References: <20240424173809.7214-1-kabel@kernel.org>
-	<20240424173809.7214-7-kabel@kernel.org>
-	<ZilQiHLLj1eQxP2L@smile.fi.intel.com>
-	<20240424205123.5fc82a1a@dellmb>
-	<Zilhvv3ffWMDL1Uj@smile.fi.intel.com>
-	<20240425113447.5d4b21f4@dellmb>
-	<Zioql5TSzTLtMsX7@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	id 400A4C113CE; Thu, 25 Apr 2024 11:16:21 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 73D6FC113CC
+	for <soc@kernel.org>; Thu, 25 Apr 2024 11:16:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73D6FC113CC
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VQCrc4F3rzwTQh;
+	Thu, 25 Apr 2024 19:13:04 +0800 (CST)
+Received: from kwepemd500014.china.huawei.com (unknown [7.221.188.63])
+	by mail.maildlp.com (Postfix) with ESMTPS id 780821401E9;
+	Thu, 25 Apr 2024 19:16:16 +0800 (CST)
+Received: from [10.67.121.2] (10.67.121.2) by kwepemd500014.china.huawei.com
+ (7.221.188.63) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.28; Thu, 25 Apr
+ 2024 19:16:15 +0800
+Message-ID: <662A3B7F.4060003@hisilicon.com>
+Date: Thu, 25 Apr 2024 19:16:15 +0800
+From: Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+To: Huisong Li <lihuisong@huawei.com>
+List-Id: <soc.lore.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <Jonathan.Cameron@Huawei.com>,
+	<liuyonglong@huawei.com>
+Subject: Re: [PATCH v2 0/2] soc: hisilicon: kunpeng_hccs: add dependency and
+ enhance verification
+References: <20240403081935.24308-1-lihuisong@huawei.com> <20240417094801.25393-1-lihuisong@huawei.com>
+In-Reply-To: <20240417094801.25393-1-lihuisong@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.121.2]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd500014.china.huawei.com (7.221.188.63)
 
-On Thu, 25 Apr 2024 13:04:07 +0300
-Andy Shevchenko <andy@kernel.org> wrote:
+Hi Huisong,
 
-> On Thu, Apr 25, 2024 at 11:34:47AM +0200, Marek Beh=C3=BAn wrote:
-> > On Wed, 24 Apr 2024 22:47:10 +0300
-> > Andy Shevchenko <andy@kernel.org> wrote: =20
-> > > On Wed, Apr 24, 2024 at 08:51:23PM +0200, Marek Beh=C3=BAn wrote: =20
->=20
-> ...
->=20
-> > > For what purpose? I don't see drivers doing that. Are you expecting t=
-hat
-> > > the same IRQ mapping will be reused for something else? Can you elabo=
-rate
-> > > how? (I can imagine one theoretical / weird case how to achieve that,
-> > > but impractical.) =20
-> >=20
-> > I do a lot of binding/unbinding of that driver. I was under the
-> > impression that all resources should be dropped on driver unbind.
-> >  =20
-> > > Besides above, this is asymmetrical call to gpiod_to_irq(). If we rea=
-lly care
-> > > about this, it should be provided by GPIO library. =20
-> >=20
-> > Something like the following? =20
->=20
-> Not needed. IRQ mappings are per domain, and GPIO chip has its own associ=
-ated
-> with the respective lifetime, AFAIU when you remove the GPIO chip, all ma=
-ppings
-> will be disposed (as I pointed out in previous mail).
->=20
+On 2024/4/17 17:47, Huisong Li wrote:
+> Add PCC dependency and enhance verification during the probe phase.
+> 
+> ---
+>  v2: fix the log on failure.
+> 
+> Huisong Li (2):
+>   soc: hisilicon: kunpeng_hccs: Add the check for obtaining complete
+>     port attribute
+>   soc: hisilicon: kunpeng_hccs: replace MAILBOX dependency with PCC
+> 
+>  drivers/soc/hisilicon/Kconfig        | 2 +-
+>  drivers/soc/hisilicon/kunpeng_hccs.c | 6 ++++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
 
-OMG you are right :) of course. OK, I shall drop this.
+Thanks!
+Series applied to the HiSilicon driver tree with minor changes in the commit msg:
+https://github.com/hisilicon/linux-hisi/tree/next/drivers
 
-Marek
+Best Regards,
+Wei
