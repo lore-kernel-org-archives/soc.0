@@ -1,162 +1,65 @@
-Return-Path: <SRS0=tp4w=L7=bootlin.com=gregory.clement@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD69C4345F
-	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 702A7C41513
+	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D1B96C2BD11; Fri, 26 Apr 2024 16:13:48 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 96ACAC113CD;
-	Fri, 26 Apr 2024 16:13:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 96ACAC113CD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 949E120002;
-	Fri, 26 Apr 2024 16:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1714148018;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iHq0a5TYFF7yrLXeX6BIAdFUmvRofAskO9re+BiJUcg=;
-	b=fNojwqBbgjVi8+uUgbS7dQ3VT+jboqmKA/OOumXC1o+9UTHoXNi5NIM+IKveAdoe8uVZ/H
-	8FNblc7Ig09gQOhAFQmDasKExhFMRaCAruTqEO51OwdvHCCPe8QsiyqqQEKoCNMPj2xAoc
-	XEC5yvUoNDkMZ8mXylxxj0vkheELgBQGMRd8uqI0hOCI/Ht+xSIsJrmm2fzSFlUsDELyK7
-	wH22z+CBJpLHGhpaiYFfysHrio67/bxr8BHnYcgM9T6JEpza4io6OEGnaEJqEzPgOY/vU9
-	9izwgVmU8xG9NCEDX3OncYDEjpODVCEkAxsV0RZYsTFzD8FOcGzklzZS2XmTdA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-List-Id: <soc.lore.kernel.org>
-To: Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>,
- soc@kernel.org, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de
- Goede <hdegoede@redhat.com>, Ilpo =?utf-8?Q?J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Dan
- Carpenter <dan.carpenter@linaro.org>, devicetree@vger.kernel.org, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck
- <linux@roeck-us.net>, Herbert Xu <herbert@gondor.apana.org.au>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Linus Walleij
- <linus.walleij@linaro.org>, linux-crypto@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, Olivia Mackall <olivia@selenic.com>, Rob
- Herring <robh+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>, Andrew Lunn
- <andrew@lunn.ch>, Conor
- Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Rob Herring <robh@kernel.org>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
- <uwe@kleine-koenig.org>
-Subject: Re: [PATCH v7 0/9] Turris Omnia MCU driver
-In-Reply-To: <20240424173809.7214-1-kabel@kernel.org>
-References: <20240424173809.7214-1-kabel@kernel.org>
-Date: Fri, 26 Apr 2024 18:13:32 +0200
-Message-ID: <875xw45cgj.fsf@BLaptop.bootlin.com>
+	id 5447BC4AF0B; Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E8E4C4AF08;
+	Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714148483;
+	bh=l2FTrIzg+sDuLELsYRDOL+lvNsTfmX1ByKZws12Ri2Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=lLkSpKLfPXqNDJyY7oNXYJVho5VtH/LRjOkXvLrwIPTrA8z0Ni6dx0qzJJDLjoH+J
+	 f6t1RVaILl5TQuaJBg6r5sY45W9lyHe7uh03DsiaMj1NoA+5tUqUnKrDOa/2rBAg4/
+	 kIfJw59FlzLCu7B3cqyY1GiCMcjNTYUyIv0pzsTn7u/j77ss/qCJ5SPXj65NyRQ7cb
+	 J8sugIhGpLZoagJLK4ZxsuZitnXgWgXK9jXvSkDgP3KeQffRbhtvdWNdCNef5/UPc2
+	 XEnl5Ha0eBLuY5GwIN5NdT4iLncqP4tL0S/UehBQ7ENIE3djDTNne+2Ed+A2i8lOkT
+	 J5ivVgxEHlosQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2608FC433F2;
+	Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Qualcomm driver fix for v6.9
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <171414848315.5338.6105490738161777799.git-patchwork-notify@kernel.org>
+Date: Fri, 26 Apr 2024 16:21:23 +0000
+References: <20240420163816.1133528-1-andersson@kernel.org>
+In-Reply-To: <20240420163816.1133528-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Hello all,
+Hello:
 
-> Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
->
-> this is v7 of the series adding Turris Omnia MCU driver.
->
-> This series depends on the immutable branch between LEDs and locking,
-> introducing devm_mutex_init(), see the PR
->   https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
->
-> See also cover letters for v1, v2, v3, v4, v5 and v6:
->   https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.698=
-6-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.168=
-18-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.116=
-02-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.167=
-50-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.216=
-42-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.221=
-84-1-kabel@kernel.org/
->
-> Changes since v6:
-> - moved the DT binding from arm/cznic,turris-omnia-mcu.yaml to
->   firmware/cznic,turris-omnia-mcu.yaml, as suggested by Conor Dooley
->   (patch 1)
-> - dropped the devm-helpers.h additions, for the reasons see
->   https://lore.kernel.org/soc/20240423184346.37eb0915@thinkpad/
-> - use gpiod_to_irq(gpiochip_get_desc(...)) instead of
->   irq_create_mapping(), as suggested by Andy Shevchenko (patches 6 and
->   7)
-> - added a dummy read of TRNG entropy when registering TRNG, in case
->   someone cleared the TRNG interrupt before probing the driver, but did
->   not read the entropy (the MCU won't send a new TRNG interrupt if the
->   entropy is not collected) (patch 6)
-> - fixed a bug in TRNG probing, wherein if the=20
->
-> Marek Beh=C3=BAn (9):
->   dt-bindings: arm: add cznic,turris-omnia-mcu binding
->   platform: cznic: Add preliminary support for Turris Omnia MCU
->   platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
->   platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
->   platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
->   platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
->   platform: cznic: turris-omnia-mcu: Add support for digital message
->     signing via debugfs
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-It is still early as there are some comment pending but I wonder who
-will responsible of merging all theses patches ?
+On Sat, 20 Apr 2024 11:38:15 -0500 you wrote:
+> The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+> 
+>   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.9
+> 
+> [...]
 
-Arnd ? Hans ? Ilpo ? me ?
+Here is the summary with links:
+  - [GIT,PULL] Qualcomm driver fix for v6.9
+    https://git.kernel.org/soc/soc/c/14672a9b3ec5
 
-Gregory
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
->   ARM: dts: turris-omnia: Add MCU system-controller node
->   ARM: dts: turris-omnia: Add GPIO key node for front button
->
->  .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
->  .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
->  .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
->  MAINTAINERS                                   |    5 +
->  .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
->  drivers/platform/Kconfig                      |    2 +
->  drivers/platform/Makefile                     |    1 +
->  drivers/platform/cznic/Kconfig                |   51 +
->  drivers/platform/cznic/Makefile               |    9 +
->  .../platform/cznic/turris-omnia-mcu-base.c    |  439 +++++++
->  .../platform/cznic/turris-omnia-mcu-debugfs.c |  216 ++++
->  .../platform/cznic/turris-omnia-mcu-gpio.c    | 1047 +++++++++++++++++
->  .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
->  .../platform/cznic/turris-omnia-mcu-trng.c    |  109 ++
->  .../cznic/turris-omnia-mcu-watchdog.c         |  123 ++
->  drivers/platform/cznic/turris-omnia-mcu.h     |  188 +++
->  include/linux/turris-omnia-mcu-interface.h    |  249 ++++
->  17 files changed, 2956 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turri=
-s-omnia-mcu
->  create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turr=
-is-omnia-mcu.yaml
->  create mode 100644 drivers/platform/cznic/Kconfig
->  create mode 100644 drivers/platform/cznic/Makefile
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeu=
-p.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
->  create mode 100644 include/linux/turris-omnia-mcu-interface.h
->
-> --=20
-> 2.43.2
