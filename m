@@ -1,77 +1,62 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1D67C4345F
-	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8923C4345F
+	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:43:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C2426C2BD11; Fri, 26 Apr 2024 16:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5570C113CD;
-	Fri, 26 Apr 2024 16:40:10 +0000 (UTC)
+	id D6C90C116B1; Fri, 26 Apr 2024 16:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A047C113CD;
+	Fri, 26 Apr 2024 16:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714149613;
-	bh=9nlNpjXl2tclRLBwf7U2c3+7suexJGgJHSSMR5Q3zxM=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=dCWxMZMqrnYjsFMLJd4hWadH2UkfHRPpcOKTV9JmQqVgSg4+n2KdMaVNqCjvSPyAB
-	 D+bSRM+tDfCbIyb3MyVCzHopupyN3JMmBAUT8DUrLvHXt1BDOsexBQ0IaXHQQmm2ji
-	 8UoVjaaBSFZEm3F1/ZPoY8W+7hZd0+LEQB1XacfqZxbZ0lsKQC6/NSVf7axKv6ChEB
-	 N/0yF8uSbseVxg/s65iYt9ILGYye/IyECbGA5f/6ePwWEc+K5foPciLeMPQZQAMB6o
-	 seN+SbCWuWC5fFpod3qkv1vrbEu9ZGqtaEnmL/g7eGZpRESsGfLrmYgXPmYYqqTEpV
-	 4OWKvNmlN2q9w==
-Date: Fri, 26 Apr 2024 18:40:04 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+	s=k20201202; t=1714149838;
+	bh=J03uKQoHQpVCaMRRkCpW8xUCxGu4+2Me52A8K2pCfI8=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=rXCBceym8U8ZgeiN+hsom48YjctqEJWisGgA+09G4rOWns+By7W3TcJa2D03wneDy
+	 HeAVh8OqY8ayqf5JxnEI12eNXtLc8WZwsKqpl4qcATa8HT/h3MYT+opdYqXs/eu1dq
+	 hKnJNc3H9PDHcQnGz/HQmSg2ORKeHcFWzQos+AYAhzCaYymUKx/XpbpoMJtez2CyUU
+	 oqXdhaGdKBco06K/b65Tqrf0oOkxnChyFe6sZe38wly8SsEnubnpuvU52lbArUW5Dw
+	 M4yf16IlS/W+WI2X64BYwyR5aVWOxVeWlxtjWl6fdzi49NSIR8w9PCx6V7y7eGFmwF
+	 tikDh11XCtSQA==
+Date: Fri, 26 Apr 2024 18:43:54 +0200
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy
- Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo
- =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Andrew Lunn
- <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
- <uwe@kleine-koenig.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 8/9] ARM: dts: turris-omnia: Add MCU
- system-controller node
-Message-ID: <20240426184004.2456f2e6@dellmb>
-In-Reply-To: <87bk5w5d0v.fsf@BLaptop.bootlin.com>
-References: <20240424173809.7214-1-kabel@kernel.org>
-	<20240424173809.7214-9-kabel@kernel.org>
-	<87bk5w5d0v.fsf@BLaptop.bootlin.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner config changes for 6.10
+Message-ID: <20240426164354.GA101098@jernej-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 26 Apr 2024 18:01:20 +0200
-Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
+Hi!
 
-> Hello Marek,
-> 
-> > Turris Omnia's MCU provides various features that can be configured over
-> > I2C at address 0x2a. Add device-tree node.
-> >
-> > Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")  
-> 
-> Is it really a fix ?
-> 
-> It seems that the node you add depends on the firmware support that was
-> not yet added.
-> 
-> Gregory
+Please pull following config changes for 6.10.
 
-It is a fix in the sense that Omnia always had the MCU, and so
-device-tree without the MCU node was incorrect.
+Best regards,
+Jernej
 
-Since device-trees should be (if possible) backwards and forwards
-compatible, this should not be a problem.
+The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
-But I am guessing it might be because of what new U-Boot does: if it
-finds the MCU node in the device-tree, it will add a reset gpio property
-for ethernet PHY, linking it to the MCU node. So if this
-patch got backported to older kernel where the MCU driver is not
-present, and the board had this new U-Boot, the kernel would not create
-the eth2 interface, because it would be waiting for a driver providing
-the GPIO.
+  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 
-So hmm, maybe I should drop the Fixes tag.
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-config-for-6.10-1
+
+for you to fetch changes up to deff401b14e2d832b25b55862ad6c73378fe034e:
+
+  ARM: configs: sunxi: Enable DRM_DW_HDMI (2024-04-15 23:32:39 +0200)
+
+----------------------------------------------------------------
+- add dependency for DRM_SUN8I_DW_HDMI in sunxi defconfig
+
+----------------------------------------------------------------
+Maxime Ripard (1):
+      ARM: configs: sunxi: Enable DRM_DW_HDMI
+
+ arch/arm/configs/sunxi_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
