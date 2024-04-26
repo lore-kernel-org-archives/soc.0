@@ -1,481 +1,149 @@
-Return-Path: <SRS0=t9T5=L7=bootlin.com=alexandre.belloni@kernel.org>
+Return-Path: <SRS0=4721=L7=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14E72C19F4E
-	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 09:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53947C19F4F
+	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 10:50:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0654C32782; Fri, 26 Apr 2024 09:41:28 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6AB9BC113CD;
-	Fri, 26 Apr 2024 09:41:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6AB9BC113CD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B6EC1BF20B;
-	Fri, 26 Apr 2024 09:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1714124482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+SKdFqpGd8mavN/bYCulkR/r3GoWQdnvcMSl/ae5B2s=;
-	b=G3OwmxZDt+CVlFdLxhjnKHMPBaDFxNfZYSNcby5OlrSbl2zUDuBXobnK3Qm+MBtdB8rLry
-	Ccfsi5Yk6aD59IcvMchXhLpFs2I6gvG0lL9W/VT1Qam5baxcczDJYVYxOe7KbX+y+cR6V+
-	1p7a55gA6kG7tBEZuiCog6Ho5sXfCgYIljxAJUjy4z6ZPa3i1EzOvBHoffR1bD716h1aoI
-	wMlO3nRenlqcHG8uW9L5HGNGxbXiRCAAnd2FTpQNktpS5qDuGAa4ln7Bqxun6WGE8wxic5
-	A3TBdwp3Npk1pXMFiqxPcQKShb3ewm3PCK6rhaMEEDHn1yC/fdFsEVI4InIrnQ==
-Date: Fri, 26 Apr 2024 11:41:20 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	id 1A58FC32782; Fri, 26 Apr 2024 10:50:43 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id CF48BC2BD10;
+	Fri, 26 Apr 2024 10:50:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CF48BC2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 280382F4;
+	Fri, 26 Apr 2024 03:51:09 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1C7A43F64C;
+	Fri, 26 Apr 2024 03:50:40 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v7 4/9] platform: cznic: turris-omnia-mcu: Add support
- for poweroff and wakeup
-Message-ID: <20240426094120b6e8176e@mail.local>
-References: <20240424173809.7214-1-kabel@kernel.org>
- <20240424173809.7214-5-kabel@kernel.org>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.10
+Date: Fri, 26 Apr 2024 11:50:29 +0100
+Message-ID: <20240426105031.1526987-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.43.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240424173809.7214-5-kabel@kernel.org>
-X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 24/04/2024 19:38:03+0200, Marek Behún wrote:
-> Add support for true board poweroff (MCU can disable all unnecessary
-> voltage regulators) and wakeup at a specified time, implemented via a
-> RTC driver so that the rtcwake utility can be used to configure it.
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Hi ARM SoC Team,
 
-> ---
->  .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  16 ++
->  drivers/platform/cznic/Kconfig                |   4 +
->  drivers/platform/cznic/Makefile               |   1 +
->  .../platform/cznic/turris-omnia-mcu-base.c    |   5 +
->  .../cznic/turris-omnia-mcu-sys-off-wakeup.c   | 258 ++++++++++++++++++
->  drivers/platform/cznic/turris-omnia-mcu.h     |  20 ++
->  6 files changed, 304 insertions(+)
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-> index b27b60d00c87..564119849388 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-> +++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-> @@ -38,6 +38,22 @@ Description:	(RW) The front button on the Turris Omnia router can be
->  
->  		Format: %s.
->  
-> +What:		/sys/bus/i2c/devices/<mcu_device>/front_button_poweron
-> +Date:		July 2024
-> +KernelVersion:	6.10
-> +Contact:	Marek Behún <kabel@kernel.org>
-> +Description:	(RW) Newer versions of the microcontroller firmware of the
-> +		Turris Omnia router support powering off the router into true
-> +		low power mode. The router can be powered on by pressing the
-> +		front button.
-> +
-> +		This file configures whether front button power on is enabled.
-> +
-> +		This file is present only if the power off feature is supported
-> +		by the firmware.
-> +
-> +		Format: %i.
-> +
->  What:		/sys/bus/i2c/devices/<mcu_device>/fw_features
->  Date:		July 2024
->  KernelVersion:	6.10
-> diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-> index 3a8c3edcd7e6..0a752aa654fa 100644
-> --- a/drivers/platform/cznic/Kconfig
-> +++ b/drivers/platform/cznic/Kconfig
-> @@ -19,10 +19,14 @@ config TURRIS_OMNIA_MCU
->  	depends on I2C
->  	select GPIOLIB
->  	select GPIOLIB_IRQCHIP
-> +	select RTC_CLASS
->  	help
->  	  Say Y here to add support for the features implemented by the
->  	  microcontroller on the CZ.NIC's Turris Omnia SOHO router.
->  	  The features include:
-> +	  - board poweroff into true low power mode (with voltage regulators
-> +	    disabled) and the ability to configure wake up from this mode (via
-> +	    rtcwake)
->  	  - GPIO pins
->  	    - to get front button press events (the front button can be
->  	      configured either to generate press events to the CPU or to change
-> diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
-> index 53fd8f1777a3..a185ef882e44 100644
-> --- a/drivers/platform/cznic/Makefile
-> +++ b/drivers/platform/cznic/Makefile
-> @@ -3,3 +3,4 @@
->  obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
->  turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
->  turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
-> +turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
-> diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-> index 708b084cb5da..697ace090bda 100644
-> --- a/drivers/platform/cznic/turris-omnia-mcu-base.c
-> +++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-> @@ -195,6 +195,7 @@ static const struct attribute_group omnia_mcu_base_group = {
->  static const struct attribute_group *omnia_mcu_groups[] = {
->  	&omnia_mcu_base_group,
->  	&omnia_mcu_gpio_group,
-> +	&omnia_mcu_poweroff_group,
->  	NULL
->  };
->  
-> @@ -360,6 +361,10 @@ static int omnia_mcu_probe(struct i2c_client *client)
->  					     "Cannot read board info\n");
->  	}
->  
-> +	err = omnia_mcu_register_sys_off_and_wakeup(mcu);
-> +	if (err)
-> +		return err;
-> +
->  	return omnia_mcu_register_gpiochip(mcu);
->  }
->  
-> diff --git a/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
-> new file mode 100644
-> index 000000000000..fbd1b4cd7011
-> --- /dev/null
-> +++ b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
-> @@ -0,0 +1,258 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * CZ.NIC's Turris Omnia MCU system off and RTC wakeup driver
-> + *
-> + * This is not a true RTC driver (in the sense that it does not provide a
-> + * real-time clock), rather the MCU implements a wakeup from powered off state
-> + * at a specified time relative to MCU boot, and we expose this feature via RTC
-> + * alarm, so that it can be used via the rtcwake command, which is the standard
-> + * Linux command for this.
-> + *
-> + * 2024 by Marek Behún <kabel@kernel.org>
-> + */
-> +
-> +#include <linux/crc32.h>
-> +#include <linux/delay.h>
-> +#include <linux/i2c.h>
-> +#include <linux/reboot.h>
-> +#include <linux/rtc.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/turris-omnia-mcu-interface.h>
-> +#include <linux/types.h>
-> +
-> +#include "turris-omnia-mcu.h"
-> +
-> +static int omnia_get_uptime_wakeup(const struct i2c_client *client, u32 *uptime,
-> +				   u32 *wakeup)
-> +{
-> +	__le32 reply[2];
-> +	int err;
-> +
-> +	err = omnia_cmd_read(client, CMD_GET_UPTIME_AND_WAKEUP, reply,
-> +			     sizeof(reply));
-> +	if (err)
-> +		return err;
-> +
-> +	if (uptime)
-> +		*uptime = le32_to_cpu(reply[0]);
-> +
-> +	if (wakeup)
-> +		*wakeup = le32_to_cpu(reply[1]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	u32 uptime;
-> +	int err;
-> +
-> +	err = omnia_get_uptime_wakeup(to_i2c_client(dev), &uptime, NULL);
-> +	if (err)
-> +		return err;
-> +
-> +	rtc_time64_to_tm(uptime, tm);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +	u32 wakeup;
-> +	int err;
-> +
-> +	err = omnia_get_uptime_wakeup(client, NULL, &wakeup);
-> +	if (err)
-> +		return err;
-> +
-> +	alrm->enabled = !!wakeup;
-> +	rtc_time64_to_tm(wakeup ?: mcu->rtc_alarm, &alrm->time);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +
-> +	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
-> +
-> +	if (alrm->enabled)
-> +		return omnia_cmd_write_u32(client, CMD_SET_WAKEUP,
-> +					   mcu->rtc_alarm);
-> +
-> +	return 0;
-> +}
-> +
-> +static int omnia_alarm_irq_enable(struct device *dev, unsigned int enabled)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-> +
-> +	return omnia_cmd_write_u32(client, CMD_SET_WAKEUP,
-> +				   enabled ? mcu->rtc_alarm : 0);
-> +}
-> +
-> +static const struct rtc_class_ops omnia_rtc_ops = {
-> +	.read_time		= omnia_read_time,
-> +	.read_alarm		= omnia_read_alarm,
-> +	.set_alarm		= omnia_set_alarm,
-> +	.alarm_irq_enable	= omnia_alarm_irq_enable,
-> +};
-> +
-> +static int omnia_power_off(struct sys_off_data *data)
-> +{
-> +	struct omnia_mcu *mcu = data->cb_data;
-> +	__be32 tmp;
-> +	u8 cmd[9];
-> +	u16 arg;
-> +	int err;
-> +
-> +	if (mcu->front_button_poweron)
-> +		arg = CMD_POWER_OFF_POWERON_BUTTON;
-> +	else
-> +		arg = 0;
-> +
-> +	cmd[0] = CMD_POWER_OFF;
-> +	put_unaligned_le16(CMD_POWER_OFF_MAGIC, &cmd[1]);
-> +	put_unaligned_le16(arg, &cmd[3]);
-> +
-> +	/*
-> +	 * Although all values from and to MCU are passed in little-endian, the
-> +	 * MCU's CRC unit uses big-endian CRC32 polynomial (0x04c11db7), so we
-> +	 * need to use crc32_be() here.
-> +	 */
-> +	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
-> +	put_unaligned_le32(crc32_be(0xffffffff, (void *)&tmp, sizeof(tmp)),
-> +			   &cmd[5]);
-> +
-> +	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-> +	if (err)
-> +		dev_err(&mcu->client->dev,
-> +			"Unable to send the poweroff command: %d\n", err);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int omnia_restart(struct sys_off_data *data)
-> +{
-> +	struct omnia_mcu *mcu = data->cb_data;
-> +	u8 cmd[3];
-> +	int err;
-> +
-> +	cmd[0] = CMD_GENERAL_CONTROL;
-> +
-> +	if (reboot_mode == REBOOT_HARD)
-> +		cmd[1] = cmd[2] = CTL_HARD_RST;
-> +	else
-> +		cmd[1] = cmd[2] = CTL_LIGHT_RST;
-> +
-> +	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-> +	if (err)
-> +		dev_err(&mcu->client->dev,
-> +			"Unable to send the restart command: %d\n", err);
-> +
-> +	/*
-> +	 * MCU needs a little bit to process the I2C command, otherwise it will
-> +	 * do a light reset based on SOC SYSRES_OUT pin.
-> +	 */
-> +	mdelay(1);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static ssize_t front_button_poweron_show(struct device *dev,
-> +					 struct device_attribute *a, char *buf)
-> +{
-> +	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", mcu->front_button_poweron);
-> +}
-> +
-> +static ssize_t front_button_poweron_store(struct device *dev,
-> +					  struct device_attribute *a,
-> +					  const char *buf, size_t count)
-> +{
-> +	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-> +	bool val;
-> +	int err;
-> +
-> +	err = kstrtobool(buf, &val);
-> +	if (err)
-> +		return err;
-> +
-> +	mcu->front_button_poweron = val;
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(front_button_poweron);
-> +
-> +static struct attribute *omnia_mcu_poweroff_attrs[] = {
-> +	&dev_attr_front_button_poweron.attr,
-> +	NULL
-> +};
-> +
-> +static umode_t poweroff_attrs_visible(struct kobject *kobj, struct attribute *a,
-> +				      int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-> +
-> +	if (mcu->features & FEAT_POWEROFF_WAKEUP)
-> +		return a->mode;
-> +
-> +	return 0;
-> +}
-> +
-> +const struct attribute_group omnia_mcu_poweroff_group = {
-> +	.attrs = omnia_mcu_poweroff_attrs,
-> +	.is_visible = poweroff_attrs_visible,
-> +};
-> +
-> +int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu)
-> +{
-> +	struct device *dev = &mcu->client->dev;
-> +	int err;
-> +
-> +	/* MCU restart is always available */
-> +	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
-> +					    SYS_OFF_PRIO_FIRMWARE,
-> +					    omnia_restart, mcu);
-> +	if (err)
-> +		return dev_err_probe(dev, err,
-> +				     "Cannot register system restart handler\n");
-> +
-> +	/*
-> +	 * Poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
-> +	 * present.
-> +	 */
-> +	if (!(mcu->features & FEAT_POWEROFF_WAKEUP))
-> +		return 0;
-> +
-> +	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
-> +					    SYS_OFF_PRIO_FIRMWARE,
-> +					    omnia_power_off, mcu);
-> +	if (err)
-> +		return dev_err_probe(dev, err,
-> +				     "Cannot register system power off handler\n");
-> +
-> +	mcu->rtcdev = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(mcu->rtcdev))
-> +		return dev_err_probe(dev, PTR_ERR(mcu->rtcdev),
-> +				     "Cannot allocate RTC device\n");
-> +
-> +	mcu->rtcdev->ops = &omnia_rtc_ops;
-> +	mcu->rtcdev->range_max = U32_MAX;
-> +	set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, mcu->rtcdev->features);
-> +
-> +	err = devm_rtc_register_device(mcu->rtcdev);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "Cannot register RTC device\n");
-> +
-> +	mcu->front_button_poweron = true;
-> +
-> +	return 0;
-> +}
-> diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
-> index e8d9bf1c8fdc..6179a4f2069e 100644
-> --- a/drivers/platform/cznic/turris-omnia-mcu.h
-> +++ b/drivers/platform/cznic/turris-omnia-mcu.h
-> @@ -12,9 +12,11 @@
->  #include <linux/gpio/driver.h>
->  #include <linux/if_ether.h>
->  #include <linux/mutex.h>
-> +#include <linux/rtc.h>
->  #include <linux/types.h>
->  #include <linux/workqueue.h>
->  #include <asm/byteorder.h>
-> +#include <asm/unaligned.h>
->  
->  struct omnia_mcu {
->  	struct i2c_client *client;
-> @@ -34,6 +36,11 @@ struct omnia_mcu {
->  	struct delayed_work button_release_emul_work;
->  	u16 last_status;
->  	bool button_pressed_emul;
-> +
-> +	/* RTC device for configuring wake-up */
-> +	struct rtc_device *rtcdev;
-> +	u32 rtc_alarm;
-> +	bool front_button_poweron;
->  };
->  
->  int omnia_cmd_write_read(const struct i2c_client *client,
-> @@ -46,6 +53,17 @@ static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
->  	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
->  }
->  
-> +static inline int omnia_cmd_write_u32(const struct i2c_client *client, u8 cmd,
-> +				      u32 val)
-> +{
-> +	u8 buf[5];
-> +
-> +	buf[0] = cmd;
-> +	put_unaligned_le32(val, &buf[1]);
-> +
-> +	return omnia_cmd_write(client, buf, sizeof(buf));
-> +}
-> +
->  static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
->  				 void *reply, unsigned int len)
->  {
-> @@ -107,7 +125,9 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd)
->  }
->  
->  extern const struct attribute_group omnia_mcu_gpio_group;
-> +extern const struct attribute_group omnia_mcu_poweroff_group;
->  
->  int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
-> +int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
->  
->  #endif /* __TURRIS_OMNIA_MCU_H */
-> -- 
-> 2.43.2
-> 
-> 
+Please pull !
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The pinctrl changes are acked and agreed to via SoC tree by Linus Walleij
+and the dt-bindings are acked by Rob H.
+
+Regards,
+Sudeep
+
+-->8
+
+The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+
+  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.10
+
+for you to fetch changes up to eb524cb651b794f2529e36deb6b18523adc9ecaa:
+
+  pinctrl: Implementation of the generic scmi-pinctrl driver (2024-04-19 15:17:37 +0100)
+
+----------------------------------------------------------------
+Arm SCMI updates for v6.10
+
+1. Basic support for SCMI v3.2 pincontrol protocol
+
+   SCMI v3.2 introduces pincontrol protocol which is intended for
+   controlling pins and their configuration. The pin control protocol
+   provides commands to:
+   - List the pins, groups of pins, available functions, and their
+     association with each other.
+   - Set the parameter configuration and multiplexing of the pins or
+     groups of pins
+   - Optionally request exclusive access to a pin or group of pins.
+   - Optionally configure the permissions of an agent to access a pin
+     or group of pins.
+
+  These changes adds basic support for the same in the SCMI core layer
+  and an implementation of the generic scmi-pinctrl driver with associated
+  DT bindings.
+
+2. Framework support for multiple vendors custom protocols
+
+   With the fixed space for vendor protocols, the possibility of having
+   multiple vendors implementing distinct SCMI vendor protocols with
+   the same overlapping protocol number is very high and with the need
+   to support them all in a single kernel image or a module is also high.
+
+   In order to implement the same we assume:
+   - vendor protocols has to be tagged at build time with a vendor_id
+   - vendor protocols could also optionally be tagged at build time with
+     sub_vendor_id and implementation version
+
+  At the initialisation all the built vendor protocols are registered
+  with the SCMI core using a key derived from the above tags
+
+3. Logging and tracing improvements
+
+   This includes using dev_err_probe() to bail out from probe, adding
+   message dump traces for bad and unexpected replies and widening of
+   the tag buffer in trace_scmi_dump_msg to allow diverse tag names
+
+4. Miscellaneous updates or improvements
+
+   This includes adding the accessor function get_max_msg_size() used
+   in pinctl protocol, updation of dt-bindings examples for protocol@13
+   to promote new bindings and simplification of scmi_devm_notifier_unregister
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      firmware: arm_scmi: Avoid non-constant printk format strings
+
+Cristian Marussi (6):
+      include: trace: Widen the tag buffer in trace_scmi_dump_msg
+      firmware: arm_scmi: Add helper to trace bad messages
+      firmware: arm_scmi: Add message dump traces for bad and unexpected replies
+      firmware: arm_scmi: Simplify scmi_devm_notifier_unregister
+      firmware: arm_scmi: Use dev_err_probe to bail out
+      firmware: arm_scmi: Add support for multiple vendors custom protocols
+
+Peng Fan (5):
+      firmware: arm_scmi: Log the perf domain names in the error paths
+      firmware: arm_scmi: Introduce get_max_msg_size() helper/accessor
+      dt-bindings: firmware: Support SCMI pinctrl protocol
+      firmware: arm_scmi: Add basic support for SCMI v3.2 pincontrol protocol
+      pinctrl: Implementation of the generic scmi-pinctrl driver
+
+Ulf Hansson (1):
+      dt-bindings: firmware: arm,scmi: Update examples for protocol@13
+
+ .../devicetree/bindings/firmware/arm,scmi.yaml     |  54 +-
+ MAINTAINERS                                        |   1 +
+ drivers/firmware/arm_scmi/Makefile                 |   3 +-
+ drivers/firmware/arm_scmi/common.h                 |  11 +
+ drivers/firmware/arm_scmi/driver.c                 | 269 +++++-
+ drivers/firmware/arm_scmi/mailbox.c                |   3 +
+ drivers/firmware/arm_scmi/notify.c                 |  30 +-
+ drivers/firmware/arm_scmi/perf.c                   |  15 +-
+ drivers/firmware/arm_scmi/pinctrl.c                | 916 +++++++++++++++++++++
+ drivers/firmware/arm_scmi/protocols.h              |  18 +
+ drivers/pinctrl/Kconfig                            |  11 +
+ drivers/pinctrl/Makefile                           |   1 +
+ drivers/pinctrl/pinctrl-scmi.c                     | 571 +++++++++++++
+ include/linux/scmi_protocol.h                      |  86 +-
+ include/trace/events/scmi.h                        |   6 +-
+ 15 files changed, 1925 insertions(+), 70 deletions(-)
+ create mode 100644 drivers/firmware/arm_scmi/pinctrl.c
+ create mode 100644 drivers/pinctrl/pinctrl-scmi.c
