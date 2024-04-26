@@ -4,59 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B4DAC25B5F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D846C19F4F
 	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 672E1C4AF10; Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50AF2C32783;
-	Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
+	id 439D1C32786; Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E1FEC32783
+	for <soc@kernel.org>; Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714148483;
-	bh=OdVShDNLlo2wB0OexPQHt12My96Qlj63iW6MJFkxayw=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=am+stae1OrfgKDaKU98IiG6RWIYGwlOToKhD7CmyFOoqC6MfFPEQjdCqdgPpwKXTL
-	 pf5GdcQCIEH62f0l3A/I2FnUlsLduqtaLC1H+Kc02VUBeyf8EL2RoZNkW/qkXP9ed7
-	 yO8VdPegkyvEhwODW9MpZJ1VvMVGTziQRr1Px2Pn73un7xqd6ki6nmPmhDclV6X/Ix
-	 sdOigJiDv6In0aIZWHOdd1eEDBButp0vO4lz5RZOSXissQOFgvCCG9z/GjKT95t4O3
-	 Jp8ea/SiRrZ0PK4I/MEW8wBCaGCoPRcnhBOjrVAK1t6LBxWELLUCyHyq8LUiAlG+7m
-	 yL+w+4nmkR3QA==
+	bh=pbwinPxU/raVcGwC5rGNAhFZBdxAoVO6dFP65u57KWo=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=tGMhKDmJ6oKO1VLMs8TAlWM+d6JHYSy3C6pD9p+o2w173b5UDnLYdSmdqFanQMxPQ
+	 GPOhg1pSt9dlfgVDHvfcenRcFfkuolwnaea2CoJ9/3PigMCqjaUbnl6i4n8iqAw2Xd
+	 XQ2QPAT0jPQDidX8VbP4doqJ/AHd1nPpDyb78ktyB7sxwpSaqN96EMZkv4cb6zOkgU
+	 2ey3u+Pz/NT5c3MqLJTD8bbHoCWh+og6Lae2zfW9BRxTsrTsVLPfogu9+SO9yhWTQz
+	 HJdAxiv8q07Zrn5zSa601z4oN4vyolpALXmf+BgnDgXystSSzSHzLfAqVdNgfwwi0H
+	 vf4pQtYY6GYnQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 394FAC54BB2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16C67DF3C9B;
 	Fri, 26 Apr 2024 16:21:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts fixes for 6.9
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171414848323.5338.8701420680702735732.git-patchwork-notify@kernel.org>
+ <171414848302.5338.1596104197340350614.git-patchwork-summary@kernel.org>
 Date: Fri, 26 Apr 2024 16:21:23 +0000
-References: <3413596.CbtlEUcBR6@phil>
-In-Reply-To: <3413596.CbtlEUcBR6@phil>
-To: Heiko Stuebner <heiko@sntech.de>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 19 Apr 2024 13:34:30 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
-> 
-> please find a below a collection of fixes for the current release 6.9
-> cycle.
-> 
-> Please pull
-> 
-> [...]
+Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree fixes for v6.9
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=846347
+  Lore link: https://lore.kernel.org/r/20240420161002.1132240-1-andersson@kernel.org
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts fixes for 6.9
-    https://git.kernel.org/soc/soc/c/32a1eaa986f4
+Patch: [GIT,PULL] Qualcomm driver fix for v6.9
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=846354
+  Lore link: https://lore.kernel.org/r/20240420163816.1133528-1-andersson@kernel.org
 
-You are awesome, thank you!
+Patch: [GIT,PULL] i.MX fixes for 6.9, round 2
+  Submitter: Shawn Guo <shawnguo2@yeah.net>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=847788
+  Lore link: https://lore.kernel.org/r/ZioopqscxwUOwQkf@dragon
+
+Patch: [GIT,PULL] Microchip AT91 fixes for v6.9
+  Submitter: Claudiu <claudiu.beznea@tuxon.dev>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=846407
+  Lore link: https://lore.kernel.org/r/20240421124824.960096-1-claudiu.beznea@tuxon.dev
+
+Patch: [GIT,PULL] Rockchip dts fixes for 6.9
+  Submitter: Heiko Stuebner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=846107
+  Lore link: https://lore.kernel.org/r/3413596.CbtlEUcBR6@phil
+
+
+Total patches: 5
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
