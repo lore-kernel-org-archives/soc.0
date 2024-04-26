@@ -1,64 +1,77 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0F6BC41513
-	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1D67C4345F
+	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 16:40:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A262EC2BD10; Fri, 26 Apr 2024 16:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CFA4C4AF0A;
-	Fri, 26 Apr 2024 16:22:11 +0000 (UTC)
+	id C2426C2BD11; Fri, 26 Apr 2024 16:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5570C113CD;
+	Fri, 26 Apr 2024 16:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714148531;
-	bh=9/txpUO3eDm58r1pQMnz5uQBWAgpVpPlw+W1UScE0LI=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=lF3MZtVXM585EwK62tPxLC58ElnaGeIzrBW1tPXMpHxP0jvtf9J6q+9j/cfBz/zd/
-	 W44asTZZhQxFsHQjRrNEWPLRX+4Q4RY9r6pxq+W2MMpFDtqOsuKImyVazF+VhLVJMT
-	 QDSdNxjmgs6/y1L0tdDtLZy3QDU8TJzKh14PqT79CPnJHf7p17YamU5tadD6tQwuBA
-	 rqcra6QRQ7xxKyhVn0Kddk4/yaq8KeVpWbKV1qaAEmlapqEB70uPXknQHiIgDrJTv6
-	 G10RdiXXAln9hQkdd4v6Zn/oG1p7TMfyXQgkEllbpzDwCyabitMpPWb1PhT+ifT8Bt
-	 MFAL8D/LBJ9TA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 80366DF3C9D;
-	Fri, 26 Apr 2024 16:22:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts fixes for 6.9
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <171414853152.5338.3656800486801536515.git-patchwork-notify@kernel.org>
-Date: Fri, 26 Apr 2024 16:22:11 +0000
-References: <3413596.CbtlEUcBR6@phil>
-In-Reply-To: <3413596.CbtlEUcBR6@phil>
-To: Heiko Stuebner <heiko@sntech.de>
+	s=k20201202; t=1714149613;
+	bh=9nlNpjXl2tclRLBwf7U2c3+7suexJGgJHSSMR5Q3zxM=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=dCWxMZMqrnYjsFMLJd4hWadH2UkfHRPpcOKTV9JmQqVgSg4+n2KdMaVNqCjvSPyAB
+	 D+bSRM+tDfCbIyb3MyVCzHopupyN3JMmBAUT8DUrLvHXt1BDOsexBQ0IaXHQQmm2ji
+	 8UoVjaaBSFZEm3F1/ZPoY8W+7hZd0+LEQB1XacfqZxbZ0lsKQC6/NSVf7axKv6ChEB
+	 N/0yF8uSbseVxg/s65iYt9ILGYye/IyECbGA5f/6ePwWEc+K5foPciLeMPQZQAMB6o
+	 seN+SbCWuWC5fFpod3qkv1vrbEu9ZGqtaEnmL/g7eGZpRESsGfLrmYgXPmYYqqTEpV
+	 4OWKvNmlN2q9w==
+Date: Fri, 26 Apr 2024 18:40:04 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy
+ Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo
+ =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Andrew Lunn
+ <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <uwe@kleine-koenig.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 8/9] ARM: dts: turris-omnia: Add MCU
+ system-controller node
+Message-ID: <20240426184004.2456f2e6@dellmb>
+In-Reply-To: <87bk5w5d0v.fsf@BLaptop.bootlin.com>
+References: <20240424173809.7214-1-kabel@kernel.org>
+	<20240424173809.7214-9-kabel@kernel.org>
+	<87bk5w5d0v.fsf@BLaptop.bootlin.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Fri, 26 Apr 2024 18:01:20 +0200
+Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Fri, 19 Apr 2024 13:34:30 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
+> Hello Marek,
 > 
-> please find a below a collection of fixes for the current release 6.9
-> cycle.
+> > Turris Omnia's MCU provides various features that can be configured over
+> > I2C at address 0x2a. Add device-tree node.
+> >
+> > Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")  
 > 
-> Please pull
+> Is it really a fix ?
 > 
-> [...]
+> It seems that the node you add depends on the firmware support that was
+> not yet added.
+> 
+> Gregory
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts fixes for 6.9
-    https://git.kernel.org/soc/soc/c/32a1eaa986f4
+It is a fix in the sense that Omnia always had the MCU, and so
+device-tree without the MCU node was incorrect.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Since device-trees should be (if possible) backwards and forwards
+compatible, this should not be a problem.
 
+But I am guessing it might be because of what new U-Boot does: if it
+finds the MCU node in the device-tree, it will add a reset gpio property
+for ethernet PHY, linking it to the MCU node. So if this
+patch got backported to older kernel where the MCU driver is not
+present, and the board had this new U-Boot, the kernel would not create
+the eth2 interface, because it would be waiting for a driver providing
+the GPIO.
 
+So hmm, maybe I should drop the Fixes tag.
