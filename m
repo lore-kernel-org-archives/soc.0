@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B959C4345F
-	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 18:05:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A210CC04FFE
+	for <soc@archiver.kernel.org>; Fri, 26 Apr 2024 18:05:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E0F8CC113CE; Fri, 26 Apr 2024 18:05:29 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	id 7D88FC113CE; Fri, 26 Apr 2024 18:05:31 +0000 (UTC)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 18D7CC113CD;
-	Fri, 26 Apr 2024 18:05:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 18D7CC113CD
+	by smtp.kernel.org (Postfix) with ESMTPS id A92BFC113CD;
+	Fri, 26 Apr 2024 18:05:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A92BFC113CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41b847a81d1so6014575e9.1;
-        Fri, 26 Apr 2024 11:05:28 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-41b6254a47cso15971325e9.3;
+        Fri, 26 Apr 2024 11:05:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714154727; x=1714759527; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1714154728; x=1714759528; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7XB49tGVq8/oqGDvYcm6xbYCDDcByu96D48kyxbsvgI=;
-        b=nQYccyd2tf12P35zdC1MXTGcO3wGBYO0uHe/QqZgxnJUbLXBlQnuprOMHlK7PGRPSV
-         sIhop6ZMhhJqhNscgpPc6WqfhxFbPGh519Piky5miWs9VVn+qhUqNtjJk2zt6GK8dRXd
-         oT6yJLSR5mDWv3qgtNv8+Jfj/gXDTBslmcn7X4p8ndKVfFD6BFEajGbTMUSVAX7DqURB
-         wteEiwwhVBqWV/6uHp9u2jV6LtpBrqX5AFysuXHE+tb2aUJksxstCmAWkAmWtndT1TSY
-         HrMvGMraDcyHkZC1EeLCUv/Ulk3YircYLSnMUxtaDFCcinZ6Tc0ThBaCp1TwS3SgPxwO
-         HRVg==
+        bh=er1tYyCt13uPsO0y7NV434ai1ZywuWVo5RfP9WCPdB8=;
+        b=YmrHeNxRsL1D0hcNzmzw/2XsnyTOIMqqM1ea2hEMfV2CvJSQ9GaIar7BB50a1HzktL
+         222/YaUYPi3jmS3/KknOezvoRmfgYaB5ZTy+5Sin0aJVv8CcAsYi1sNpVDqWFW5ChDqO
+         TJtEoi5cbJOqyoVJPKGcYKOEZ3A1Jc8lEOI4+JzeW07/NGl9gYZpDWWoM/AJvd74gZoO
+         0lX5sKL8SyLf4Z6LwVQhNCj8Zitnqd+c9sAGG/ynr3Ryl0BFEN2oKSLI5x56c/vP1Pk0
+         os88udUFrQkL2hk3TxQcik4fwECUD7XpiJHEIKVuPFChcPXI8MdSIeF5t9zfHR/rfLuX
+         kBxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714154727; x=1714759527;
+        d=1e100.net; s=20230601; t=1714154728; x=1714759528;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7XB49tGVq8/oqGDvYcm6xbYCDDcByu96D48kyxbsvgI=;
-        b=qy0RvJSgBn7sNYTPD+qGUaCsDkd4OAPzsx1VRYlmrZoIyV8rkMAwoyYA0z/Kz7/mUR
-         vX99QOq77cX4+PAQvXr1nXdINYv7kKPObgTzndyai8KgM03wXGDuYyEtegUzOgU7a1+8
-         oFKgS8jvzCIYlb31pUUtG1XkyzfQ5ZRlGoqJ+pcWW6RGkd8n9FwOUYgH0aVWBQICnBaC
-         btguKLBbVRl2MQUUOBvt9lJoQ+TTbLErnogDiliVMM/cSEDTOH3CO6aWh7ni3PXwn3/p
-         0iwPN0VscK8aCO9NfnP2JxyyPFXrGZXIWvJBhy/YuZujgc7+QgKmqxgWDENjFphLhVu9
-         0jcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJGPAFcdvZncp+zWaqM55DQgAaKRCqL/XeHe1ZXCDYbT2zTQRirqlqmaHCGO4UJEVgKJnzJ9FDDI9E21yf6Q==
-X-Gm-Message-State: AOJu0YwLdDB1duXNl/sfuOBX0YY4zUtsNFWN6HScCkK/GtTH917s3LM9
-	r3ohNs6IXF+G/7nB3oMkTkeEioE41c2y1mVFyVQW9ztFri8n6pN73ozNdg==
-X-Google-Smtp-Source: AGHT+IEVOSuQqh6QuWNOlrA9S0aszuOQjxCnYwdaLsOY4O9O6H5Ry7seW3EvjqEvwKEDjgUIkaX4yA==
-X-Received: by 2002:a05:600c:3509:b0:418:de31:7148 with SMTP id h9-20020a05600c350900b00418de317148mr3129431wmq.3.1714154726677;
-        Fri, 26 Apr 2024 11:05:26 -0700 (PDT)
+        bh=er1tYyCt13uPsO0y7NV434ai1ZywuWVo5RfP9WCPdB8=;
+        b=F6P8Ary11G/O3G9Pv8VTQautNePYvZ8nkfi/0hnN5ebgOEYWImPhaev01vrRPLEjDL
+         cJEL5raCOeBXD5dgmWI1JCNYcymCHCfq65Sj5TtC5H97Ickq1AZwrZtdDbbh7W5bXUMz
+         KCwVr9sM94c2WyhNFubJ1OYSydMQpv4T1LNosasPL7AOEkHq1/14Eq6XfwkE+hOU/nbP
+         NXIY0h3EPt0R5MzfImYtkach/3KeGjbjybz4/X28pE6CJkZj0IfS+PtlLsWa8nAM0gHm
+         q8ARzMqPdLyUa+mBnjMPO48oQY4IHuTX0Z9/dwR+8E1QhsopAdzEG6zre2Nw3855M+G+
+         poqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVy8Js48AkT9mmUeCUoc4wff6MrWIwykZtRBbri4OuxGxvWy0aBFaYhYht4GyECcTOxjaEoN6JanyGfrlCzw==
+X-Gm-Message-State: AOJu0YyEgt4rRmw7Ob1R0Na6hceHbvdQTf3wbQ3LLdRB1KtRkdwG+xp8
+	k2jO+Okgw1TSW9SKYzy2rN6JO0MjCSbNJeDghHpFurDnp286jRqpQhQBDQ==
+X-Google-Smtp-Source: AGHT+IFcGcZCotuCyyjLiLREkMlEbMqXPS5b/W/si5dCVYGHCJyr+6QukDeZbLs7p4POeeWWspc+jw==
+X-Received: by 2002:a05:600c:3b24:b0:418:7c58:d592 with SMTP id m36-20020a05600c3b2400b004187c58d592mr2745550wms.28.1714154728307;
+        Fri, 26 Apr 2024 11:05:28 -0700 (PDT)
 Received: from localhost (p200300e41f162000f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f16:2000:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c310900b0041a9fc2a6b5sm15091017wmo.20.2024.04.26.11.05.25
+        by smtp.gmail.com with ESMTPSA id l16-20020a05600c4f1000b0041a1fee2854sm20946523wmq.17.2024.04.26.11.05.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Apr 2024 11:05:25 -0700 (PDT)
+        Fri, 26 Apr 2024 11:05:27 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/5] ARM: tegra: Changes for v6.10-rc1
-Date: Fri, 26 Apr 2024 20:05:16 +0200
-Message-ID: <20240426180519.3972626-3-thierry.reding@gmail.com>
+Subject: [GIT PULL 4/5] arm64: tegra: Changes for v6.10-rc1
+Date: Fri, 26 Apr 2024 20:05:17 +0200
+Message-ID: <20240426180519.3972626-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240426180519.3972626-1-thierry.reding@gmail.com>
 References: <20240426180519.3972626-1-thierry.reding@gmail.com>
@@ -79,28 +79,30 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.10-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.10-arm64-dt
 
-for you to fetch changes up to ff4d7e172100e2c35c92ce96881c3777ac566528:
+for you to fetch changes up to 0d23cacb2ae0fc9d8d40f36cb37ad272b3249ffe:
 
-  ARM: tegra: tegra20-ac97: Replace deprecated "gpio" suffix (2024-04-26 17:45:18 +0200)
+  arm64: tegra: Add Tegra Security Engine DT nodes (2024-04-26 18:57:11 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Changes for v6.10-rc1
+arm64: tegra: Changes for v6.10-rc1
 
-Adds support for EMC frequency scaling on PAZ100 devices with RAM code 1
-and cleans up deprecated device tree properties.
+Adds the Security Engine devices found on Tegra234 and fixes RTC aliases
+by referencing them by label rather than path so that errors can be
+detected more easily.
 
 ----------------------------------------------------------------
-Mohammad Shehar Yaar Tausif (1):
-      ARM: tegra: tegra20-ac97: Replace deprecated "gpio" suffix
+Akhil R (1):
+      arm64: tegra: Add Tegra Security Engine DT nodes
 
-Nicolas Chauvet (1):
-      ARM: tegra: paz00: Add emc-tables for ram-code 1
+Krzysztof Kozlowski (1):
+      arm64: tegra: Correct Tegra132 I2C alias
 
- arch/arm/boot/dts/nvidia/tegra20-colibri.dtsi |  4 +--
- arch/arm/boot/dts/nvidia/tegra20-paz00.dts    | 43 +++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra132-norrin.dts |  4 ++--
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi       |  2 +-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi       | 16 ++++++++++++++++
+ 3 files changed, 19 insertions(+), 3 deletions(-)
