@@ -1,96 +1,73 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92B20C4345F
-	for <soc@archiver.kernel.org>; Sat, 27 Apr 2024 11:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C868EC4345F
+	for <soc@archiver.kernel.org>; Sat, 27 Apr 2024 13:30:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5FC92C116B1; Sat, 27 Apr 2024 11:03:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E0AC113CE;
-	Sat, 27 Apr 2024 11:03:35 +0000 (UTC)
+	id 79FDCC32781; Sat, 27 Apr 2024 13:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0071C113CE;
+	Sat, 27 Apr 2024 13:30:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714215816;
-	bh=t7WJCJ2IOLzIiafVQuwBdJHvmvR0DL9iSenJjWaZspA=;
+	s=k20201202; t=1714224610;
+	bh=PwVUHK0Tmf9/OYbk10AR6hcNks7Knp+NBSiDWZIMfWw=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=TaoOq6q/dg23xROmntFTGgmZ/6dArvuHP5LD/CrKEcKDy/97PYNSgupNYLXpYNPAq
-	 ehwFVPw1BynbZhC74hJFB8Hch10DqJuYfJBvYnUQMAZIY1yS5+TpD3ofWXBXdb15kH
-	 cMfA9TixuEcxUkQpmoOR9FoHM8gSFxa+YkplBgtgTCvCifbwz2zlorXv0RE4QUskis
-	 w/d/ZuXTHFO/DofTnLL6bjHbPuGHXC92OXUqE0bGdWHMnBI4++AccVCjceSY6gl65M
-	 FlNL1K8aaNWwJVOsZYLg2PGXmgaWvxD+/N189c0wwcr5amidAoEfQPUKWG4zPGYWWr
-	 EcuOthGYF0/Sg==
-Date: Sat, 27 Apr 2024 12:03:33 +0100
-From: Conor Dooley <conor@kernel.org>
+	b=D+NMkJFv500YKFF4cekn1+vvQ05UOr8EE045WBk2H5UQ1mmGyFLcSCtCIGVlH5Uch
+	 LFq612j5KuKxEx/skF/2R/QIAIYYzNk33juay1Ly8H/npSu/rOIYd6vooIsZlwssIc
+	 WsMEYMI8GVMzCp9n57gF3LD+BDrkoyre8xJnZKWGOt+7rXcloBmBaT4BcWLmSM/otD
+	 yzuJ7CGch3yE5k+WmmtLOVnuAt1h64jKmD5lwEXPUbuz1pRwEAZtavosl8Q3tXtOoQ
+	 gSdhT2bDdfQEVm12N96KLdx/tgM/gXNY60yxrJhFU0XKC87GQAh4Fkp4PQ1Ocp9XtB
+	 pVeI8q2BKe2KQ==
+Date: Sat, 27 Apr 2024 15:30:06 +0200
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V SoC driver fixes for v6.9-rc6
-Message-ID: <20240427-unflawed-humorless-690472f9c5a0@spud>
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner device tree changes for 6.10, part 2
+Message-ID: <20240427133006.GA146501@jernej-laptop>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="6+0j8s9u3CcYEjQq"
-Content-Disposition: inline
-
-
---6+0j8s9u3CcYEjQq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hey Arnd,
+Hi!
 
-Please pull some minor fixes for some of the drivers under my remit.
+Here are some last minute DT changes. They apply on top of
+sunxi-dt-for-6.10-1.
 
-Thanks,
-Conor.
+Best regards,
+Jernej
 
-The following changes since commit c90847bcbfb65d0f1c48fcc73a2b3a2d4ceac6a1:
+The following changes since commit fd46e5e136a83f61c1746d5a08686c0c4f4c0706:
 
-  cache: sifive_ccache: Partially convert to a platform driver (2024-03-28 22:40:56 +0000)
+  arm64: dts: allwinner: h616: Add NMI device node (2024-04-26 17:50:16 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-fixes-for-v6.9-rc6
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.10-2
 
-for you to fetch changes up to 3aa20d1f7bcb19a79b8062e49153eb3b16a88adb:
+for you to fetch changes up to 0d185df6c9ff841be2460d2f4610de22f326d5dc:
 
-  firmware: microchip: clarify that sizes and addresses are in hex (2024-04-24 22:02:20 +0100)
-
-----------------------------------------------------------------
-RISC-V SoC driver fixes for v6.9-rc6
-
-firmware:
-Two changes for misleading printouts from the auto update driver, one
-for an erroneous success message and the other to make it clear
-addresses are in hex.
-
-cache:
-Samuel's fix for the ccache driver left an unused variable, so he
-sent a follow up patch to silence that complaint.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  arm64: dts: allwinner: h700: Add RG35XX-H DTS (2024-04-27 15:21:00 +0200)
 
 ----------------------------------------------------------------
-Conor Dooley (2):
-      firmware: microchip: don't unconditionally print validation success
-      firmware: microchip: clarify that sizes and addresses are in hex
+- new boards: RG35XX 2024, RG35XX-Plus, RG35XX-H
 
-Samuel Holland (1):
-      cache: sifive_ccache: Silence unused variable warning
+----------------------------------------------------------------
+Ryan Walklin (4):
+      dt-bindings: arm: sunxi: document Anbernic RG35XX handheld gaming device variants
+      arm64: dts: allwinner: h700: Add RG35XX 2024 DTS
+      arm64: dts: allwinner: h700: Add RG35XX-Plus DTS
+      arm64: dts: allwinner: h700: Add RG35XX-H DTS
 
- drivers/cache/sifive_ccache.c                 | 2 +-
- drivers/firmware/microchip/mpfs-auto-update.c | 8 +++++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
---6+0j8s9u3CcYEjQq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZizbhQAKCRB4tDGHoIJi
-0rSqAQD9Oxni1oYISoNG3eDcofmwhzGaogsC0pvlTD2vT+MIIwD/R2S7OwcbiRa6
-t/ETcobl0yefgtfZhkneIzPa+w1D9Qo=
-=YNaL
------END PGP SIGNATURE-----
-
---6+0j8s9u3CcYEjQq--
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |  15 +
+ arch/arm64/boot/dts/allwinner/Makefile             |   3 +
+ .../allwinner/sun50i-h700-anbernic-rg35xx-2024.dts | 327 +++++++++++++++++++++
+ .../allwinner/sun50i-h700-anbernic-rg35xx-h.dts    |  36 +++
+ .../allwinner/sun50i-h700-anbernic-rg35xx-plus.dts |  53 ++++
+ 5 files changed, 434 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-h.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-plus.dts
