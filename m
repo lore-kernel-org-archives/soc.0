@@ -1,73 +1,66 @@
-Return-Path: <jernej@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C868EC4345F
-	for <soc@archiver.kernel.org>; Sat, 27 Apr 2024 13:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C44C4345F
+	for <soc@archiver.kernel.org>; Sat, 27 Apr 2024 15:38:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79FDCC32781; Sat, 27 Apr 2024 13:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0071C113CE;
-	Sat, 27 Apr 2024 13:30:08 +0000 (UTC)
+	id 1FAFDC32781; Sat, 27 Apr 2024 15:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63CDBC113CE;
+	Sat, 27 Apr 2024 15:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714224610;
-	bh=PwVUHK0Tmf9/OYbk10AR6hcNks7Knp+NBSiDWZIMfWw=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=D+NMkJFv500YKFF4cekn1+vvQ05UOr8EE045WBk2H5UQ1mmGyFLcSCtCIGVlH5Uch
-	 LFq612j5KuKxEx/skF/2R/QIAIYYzNk33juay1Ly8H/npSu/rOIYd6vooIsZlwssIc
-	 WsMEYMI8GVMzCp9n57gF3LD+BDrkoyre8xJnZKWGOt+7rXcloBmBaT4BcWLmSM/otD
-	 yzuJ7CGch3yE5k+WmmtLOVnuAt1h64jKmD5lwEXPUbuz1pRwEAZtavosl8Q3tXtOoQ
-	 gSdhT2bDdfQEVm12N96KLdx/tgM/gXNY60yxrJhFU0XKC87GQAh4Fkp4PQ1Ocp9XtB
-	 pVeI8q2BKe2KQ==
-Date: Sat, 27 Apr 2024 15:30:06 +0200
-From: Jernej Skrabec <jernej@kernel.org>
+	s=k20201202; t=1714232299;
+	bh=xYHFz5PHb+gJPbbg4YbjtDLs7Ib7KvY4tHDLECwPqQg=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=kyVaS4fCLch3ZjaIjmXHr1bxuIUeesKlceXCYwkqQes7S6zM0Qxb8r2drayXWUwkQ
+	 8T2CUXFoMjDhUDF86y7XCGbf2g8/cEZj1cT4mPqimkI09k5sjBvAXM4nVPJX2Z4jA1
+	 H8NqkYh/bcX2Rm4KHXEiX4h5kw2+nJ0XFh8IEwoGUHKxqbkXyMthtSEP4yl/U9mkcV
+	 zOwpw68Nro8lazWtHJ2bEU0C6FzB3rgmchGpH4LQj4RPcVJakw6BWGUVakGkbP9jXx
+	 AX24T14+PrTgmGexxm9aCHTwyRm3G8Tp+8Zz3j6gx6D4B7dqU7wD0LDjjPRb4MX9Lt
+	 jl6WAAjiUVJ8g==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: wens@csie.org, samuel@sholland.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [GIT PULL] Allwinner device tree changes for 6.10, part 2
-Message-ID: <20240427133006.GA146501@jernej-laptop>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Volodymyr Babchuk <Volodymyr_Babchuk@epam.com>
+Subject: [GIT PULL] One more Qualcomm Arm64 DeviceTree fix for v6.9
+Date: Sat, 27 Apr 2024 10:38:16 -0500
+Message-ID: <20240427153817.1430382-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi!
 
-Here are some last minute DT changes. They apply on top of
-sunxi-dt-for-6.10-1.
+The following changes since commit ecda8309098402f878c96184f29a1b7ec682d772:
 
-Best regards,
-Jernej
-
-The following changes since commit fd46e5e136a83f61c1746d5a08686c0c4f4c0706:
-
-  arm64: dts: allwinner: h616: Add NMI device node (2024-04-26 17:50:16 +0200)
+  arm64: dts: qcom: sc8180x: Fix ss_phy_irq for secondary USB controller (2024-04-12 12:21:47 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.10-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.9-2
 
-for you to fetch changes up to 0d185df6c9ff841be2460d2f4610de22f326d5dc:
+for you to fetch changes up to 819fe8c96a5172dfd960e5945e8f00f8fed32953:
 
-  arm64: dts: allwinner: h700: Add RG35XX-H DTS (2024-04-27 15:21:00 +0200)
-
-----------------------------------------------------------------
-- new boards: RG35XX 2024, RG35XX-Plus, RG35XX-H
+  arm64: dts: qcom: sa8155p-adp: fix SDHC2 CD pin configuration (2024-04-20 12:58:33 -0500)
 
 ----------------------------------------------------------------
-Ryan Walklin (4):
-      dt-bindings: arm: sunxi: document Anbernic RG35XX handheld gaming device variants
-      arm64: dts: allwinner: h700: Add RG35XX 2024 DTS
-      arm64: dts: allwinner: h700: Add RG35XX-Plus DTS
-      arm64: dts: allwinner: h700: Add RG35XX-H DTS
+One more Qualcomm Arm64 DeviceTree fix for v6.9
 
- Documentation/devicetree/bindings/arm/sunxi.yaml   |  15 +
- arch/arm64/boot/dts/allwinner/Makefile             |   3 +
- .../allwinner/sun50i-h700-anbernic-rg35xx-2024.dts | 327 +++++++++++++++++++++
- .../allwinner/sun50i-h700-anbernic-rg35xx-h.dts    |  36 +++
- .../allwinner/sun50i-h700-anbernic-rg35xx-plus.dts |  53 ++++
- 5 files changed, 434 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-h.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-plus.dts
+On ths SA8155P automotive platform, the wrong gpio controller is defined
+for the SD-card detect pin, which depending on probe ordering of things
+cause ethernet to be broken. The card detect pin reference is corrected
+to solve this problem.
+
+----------------------------------------------------------------
+Volodymyr Babchuk (1):
+      arm64: dts: qcom: sa8155p-adp: fix SDHC2 CD pin configuration
+
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 30 +++++++++++++-----------------
+ 1 file changed, 13 insertions(+), 17 deletions(-)
