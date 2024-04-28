@@ -1,50 +1,52 @@
-Return-Path: <SRS0=LnnC=MB=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=E4X5=MB=yeah.net=shawnguo2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3ADFC4345F
-	for <soc@archiver.kernel.org>; Sun, 28 Apr 2024 05:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 182DBC4345F
+	for <soc@archiver.kernel.org>; Sun, 28 Apr 2024 12:13:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95458C4AF19; Sun, 28 Apr 2024 05:47:41 +0000 (UTC)
-Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1B906C113CC;
-	Sun, 28 Apr 2024 05:47:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B906C113CC
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=atomide.com
-Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id 3F4E8604E8;
-	Sun, 28 Apr 2024 05:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1714283253;
-	bh=9BqlwdBd+mwk4vWYBKbMPMvVOURywSUpi/q+Ly1EeUc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SbBNKWIDY2UCMWo/+TKoffWmnweSPjgyR9d3PyU/iy1NuEJzK+silnbcweryBFnl/
-	 6oXQaYmigvJ9Ul0W1xHjxPzgpJ+3dBvlbJcCGqU1Vz0q8/tsYmOsmBsIW3gineravF
-	 /yHyjl7EuaU13Epy3XRlJonuIzMRImnX2HJEpdR5MR2EU4dE0Ilj4rQituWZeBXHCS
-	 hGPzbgo21zxlvrftcwv0qdIkYQEmPXFUrNOxGR+xisHkY5fQCNJ4pmSDxPGqWYSSIh
-	 IM7zGc5htUuAEwCe95q3hvuu/VI7H0FF+2BWUH76XiwoFe2xKTDiB2fiXD9lneMuhA
-	 nXAdiICzeFyvw==
-From: Tony Lindgren <tony@atomide.com>
+	id E4E9AC4AF1D; Sun, 28 Apr 2024 12:13:00 +0000 (UTC)
+Received: from mail-177131.yeah.net (mail-177131.yeah.net [123.58.177.131])
+	by smtp.kernel.org (Postfix) with ESMTP id 075EFC113CC;
+	Sun, 28 Apr 2024 12:12:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 075EFC113CC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=V6AkH
+	7us/FhA2MMRr/RWOpT53Cn6H0lXgXiYvuGskRc=; b=OCDuPYCYSRgEVsgHmQaIa
+	QFL1V/LNywlnjPebvgEPdUuucPUwOzE6Oq6qsOcUg5HX2ZnMbgBlv0KIQIUYAScO
+	4gP2P36QjwgswoG+kivn68Lwojw8K3CK75kxy9MN5IBTA/2dVKThwJu/5A7zmf6p
+	bSRnXsGoYF2FIQM9NKDq2Q=
+Received: from localhost.localdomain (unknown [114.216.210.46])
+	by smtp1 (Coremail) with SMTP id ClUQrAD3v19HPS5mcJTNAw--.22534S2;
+	Sun, 28 Apr 2024 20:12:56 +0800 (CST)
+From: Shawn Guo <shawnguo2@yeah.net>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Driver changes for ti-sysc for v6.10
-Date: Sun, 28 Apr 2024 08:47:11 +0300
-Message-ID: <pull-1714283210-549557@atomide.com>
-X-Mailer: git-send-email 2.44.0
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	kernel@pengutronix.de,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/5] i.MX SoC changes for 6.10
+Date: Sun, 28 Apr 2024 20:12:43 +0800
+Message-Id: <20240428121247.10370-1-shawnguo2@yeah.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ClUQrAD3v19HPS5mcJTNAw--.22534S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZryrKr47KrW3ZrW8GF45ZFb_yoWfZwc_Ja
+	47Ja4UJrW8Jr1rAw1Utw1xCr4ktr47Ja4UGrn8Jr4UJw1xJry8Awn7Xr40qr1jqF4UAr9r
+	Gr1UJw1vyr1UCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8Ta0PUUUUU==
+X-Originating-IP: [114.216.210.46]
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiFQnOZV6NnGd0owAAsI
 
-From: "Tony Lindgren" <tony@atomide.com>
+From: Shawn Guo <shawnguo@kernel.org>
 
 The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
@@ -52,31 +54,22 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/drivers-ti-sysc-for-v6.10-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-6.10
 
-for you to fetch changes up to 4bcc2e91b9e77644ee04b290bfd2c1410d7c402e:
+for you to fetch changes up to 6eaa8431b340577ddfba86cf92f4b52e52370db4:
 
-  bus: ti-sysc: Drop legacy idle quirk handling (2024-04-25 07:29:41 +0300)
-
-----------------------------------------------------------------
-Driver updates for ti-sysc
-
-A change to update the handling of no-reset-on-init quirk to make it init
-time only like it should be. And a change to add the missing copyrights.
-
-Also a series of changes to simplify the driver by dropping the old unused
-handling for interconnect targets tagged pm_runtime_irq_safe().
-
-These are all non-urgent changes and can be queued whenever suitable.
+  ARM: imx: Assign parents for mmdc event_source devices (2024-04-22 13:41:58 +0800)
 
 ----------------------------------------------------------------
-Tony Lindgren (5):
-      bus: ti-sysc: Move check for no-reset-on-init
-      bus: ti-sysc: Add a description and copyrights
-      bus: ti-sysc: Drop legacy quirk handling for uarts
-      bus: ti-sysc: Drop legacy quirk handling for smartreflex
-      bus: ti-sysc: Drop legacy idle quirk handling
+i.MX SoC changes for 6.10:
 
- drivers/bus/ti-sysc.c                 | 165 +++++++---------------------------
- include/linux/platform_data/ti-sysc.h |   1 -
- 2 files changed, 34 insertions(+), 132 deletions(-)
+- Assign the pmu->dev parent to be the platform device for MMDC driver,
+  so that it doesn't appear directly under /sys/devices/.
+
+----------------------------------------------------------------
+Jonathan Cameron (1):
+      ARM: imx: Assign parents for mmdc event_source devices
+
+ arch/arm/mach-imx/mmdc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
