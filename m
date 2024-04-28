@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8202DC4345F
-	for <soc@archiver.kernel.org>; Sun, 28 Apr 2024 16:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 785B9C10F1A
+	for <soc@archiver.kernel.org>; Sun, 28 Apr 2024 16:33:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61F10C4AF1A; Sun, 28 Apr 2024 16:33:24 +0000 (UTC)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	id 502BBC4AF17; Sun, 28 Apr 2024 16:33:25 +0000 (UTC)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4FE1AC4AF19
-	for <soc@kernel.org>; Sun, 28 Apr 2024 16:33:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4FE1AC4AF19
+	by smtp.kernel.org (Postfix) with ESMTPS id 5A921C116B1
+	for <soc@kernel.org>; Sun, 28 Apr 2024 16:33:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A921C116B1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56e1bbdb362so4071145a12.1
-        for <soc@kernel.org>; Sun, 28 Apr 2024 09:33:22 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5171a529224so4581336e87.0
+        for <soc@kernel.org>; Sun, 28 Apr 2024 09:33:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714322000; x=1714926800; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bkBehBmM8rJHl9TYbr2TiyM0+uJxcjWlmpw8IC5vBb8=;
-        b=YjbEcazfwUVFVcG5VHCS5gcmY7OhJTAu1Crqx3K++5fONp60hGj5cdfgKRoxFE5enf
-         N4mugkY1xGerKtWWuD1ld70foaXGRgwcIP7o7AibH4HxitR+hnLTVhjUrMR5/zTdbSmE
-         PJrDWQoVHvEY7uHg81I0L3l0uVZpdb80HfKoOw8xf8dN8unh+UrkMawqt5MgbLXzDE1P
-         H62jpco9gjRsGkNGNNYylyZq/2sJ9kv7CKVFOAHrs6ZgC7d3wD6ICU71yQeGS/nqnigD
-         BpvchFdz94U4AYtF4C8PqQ4P6UJHGeripmgrhPUuF591V1gmVzeLTuj2HO1eK3PEYym6
-         aoaQ==
+        d=linaro.org; s=google; t=1714322002; x=1714926802; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DIvwFd+6dBRNz3tx998sp/xJQSPWwbglBJ/Us19tEPs=;
+        b=I0BSnJCXqwUNjRdGLZ0Zi8BliHo1EtF3GRGKNq8ySChklYlHHMk10D7XIEFg0pGvDc
+         kVfCTEWJF75YTZZ1jcPsh+og3m+ECi/MU/EtqYQlc1r8qtGyvkRxzqXLSPGgBt1UDky9
+         TF3NR+cFATZqe+m2i06D3mInYsx1xyhgoPYmhhYYgYVHjj2bH9m1LvAcFaAoE7faCO19
+         cuEAqztNqpZxd24bbvvD7Po7X6DwuUIIHOSs0nuX3tKNXM15UHCiAX9kddVkLHwJ+qnv
+         huKmvWlkG2x6cQJddfQh3QOFSU6wkGws/MG+Rg9H5RcOGm4zDuMbPHMwPAdD8lXSEEUm
+         RNQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714322000; x=1714926800;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bkBehBmM8rJHl9TYbr2TiyM0+uJxcjWlmpw8IC5vBb8=;
-        b=AlyFEyI7+7sKB3M9ME00qotfqs1aS+0BnvsFyE5kfw+MVe7GBk1YQmBJtYJtvMDaoi
-         iO0GsbpcbXrskGEOrrE//DowS7pOQBkIyS/nN1Km+cqRkKiz0TVmwRYnDIypOk+2+0sP
-         S8A44UJ7PJSC27VJK29wa5Hf+855d+z37db5xq1f5tDDe06xEF3E2NR/tJXo/KI9MAkl
-         YQtgoruzywZbGE4BXtxN3pCccaL1Icw2ykDgv0LiZqxhUYJGaKyaLW172+mOtIOx125p
-         GogDL6rg5heabcZZSbvF/EcfD6XgVKlVhVmgNjQr+1n3LZJikVmqwjmJApbtRlqdY0tZ
-         QNnA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEScdgoG71q/ZoXrRH/1aSmqBkIIbV/RWXUIMxM+JnkNuTjnNiHqvUVosDaNXTwmiIFvMdKnpjQgSynxR9iw==
-X-Gm-Message-State: AOJu0YxMtKDUqw40l7jFWmO1OAxnNNwcdYnXA04usW3z63OkdzN0ZTVb
-	P+9WLuAhCPrwiRboSVDZ5SXiJekzEdi1WQPFUUxA409rqJEr0WyBNftxR6FW3XOmKZ2n7shq7HV
-	vEJk=
-X-Google-Smtp-Source: AGHT+IG2xsOsBb1Q9wusjv7j48e04laj4MhrtGe2fyJZosVzz7UkCTyzwT62xmRR9KcjI6SwTW3mwg==
-X-Received: by 2002:a17:906:1c8b:b0:a58:c09d:1484 with SMTP id g11-20020a1709061c8b00b00a58c09d1484mr7831776ejh.7.1714322000448;
-        Sun, 28 Apr 2024 09:33:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714322002; x=1714926802;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DIvwFd+6dBRNz3tx998sp/xJQSPWwbglBJ/Us19tEPs=;
+        b=YfcgmyONALXCibDfTkrhLvmKFMKjmDtr7OIaOG011jxj9wDN6cAu5dWJOr41RjJVha
+         dDuowFCPweoX5Wq74OxX0W8jrD/6+mF8foS28wbBrbOLW2PGXabTaMRglqCKIaYqAXC9
+         jbBYmBXfXpdoOOD+XndVXjLQ/wyGhs0YJYwVW/ZninI75YuGpewac8WTVPw2wv0CrC31
+         tMZ+44rrPrDsPSvnCXQdiduJJn8DtXrkTqIBt+hZl8T4LSs7+n2W9SXYnrAykt7mtJHx
+         kysBfBVzGR1ylfi6xzxIHDdzHYU0CFAjP8W2NkzGMXVc0VysJe+X7B7ZRJQYlaCLSl55
+         UOyg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKqMcZ6myrN7MCCn7r1e1KTXd9ToCBcCae3g/0dBotBNGkhEbLphtGBcqtBNxrHWXyHRTtzQXpiEVexDpSNQ==
+X-Gm-Message-State: AOJu0YzvTFMTS/xTi37vrJ9uXhpZNKTJxxxdpxxN9zcyIlwETBc9fXnA
+	08Z4sdeL5KfeNxsdDCkE03zLBlasmQh6hWkK0biHT71614PBJax2ruKEIhhDvzI=
+X-Google-Smtp-Source: AGHT+IGj/4CvRzNe03RJhSdckWN1v7eKR6DFdwXQ54NmI3ZsptGolRM+QbPy2Y04B05+jtOGJKazTw==
+X-Received: by 2002:ac2:5b8d:0:b0:51d:3c79:547 with SMTP id o13-20020ac25b8d000000b0051d3c790547mr2031285lfn.27.1714322002207;
+        Sun, 28 Apr 2024 09:33:22 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id lb2-20020a170906adc200b00a58f4b3661asm1173623ejb.0.2024.04.28.09.33.19
+        by smtp.gmail.com with ESMTPSA id lb2-20020a170906adc200b00a58f4b3661asm1173623ejb.0.2024.04.28.09.33.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Apr 2024 09:33:19 -0700 (PDT)
+        Sun, 28 Apr 2024 09:33:21 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -64,10 +64,12 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] arm64: dts: cleanup and fixes for v6.10
-Date: Sun, 28 Apr 2024 18:33:13 +0200
-Message-ID: <20240428163316.28955-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/2] ARM: dts: cleanup for v6.10
+Date: Sun, 28 Apr 2024 18:33:14 +0200
+Message-ID: <20240428163316.28955-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240428163316.28955-1-krzysztof.kozlowski@linaro.org>
+References: <20240428163316.28955-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -77,88 +79,28 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.10
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.10
 
-for you to fetch changes up to de2ba5bd3607a5e5442a5fcbdea6ee2823b72fb9:
+for you to fetch changes up to 5e0705a74f8075dbefcb0ad18d6bbf909c72ebf3:
 
-  arm64: dts: cavium: thunder2-99xx: drop redundant reg-names (2024-04-24 09:23:56 +0200)
-
-----------------------------------------------------------------
-Minor improvements in ARM64 DTS for v6.10
-
-Fixes, which might have practical impact, however things were broken for
-long enough to justify pushing it regular path:
-1. ARM Juno: shorten node names for thermal zones, because Linux drivers
-   have strict limit of 20 characters.
-2. HiSilicon: correct size of GIC GICC address space and add missing
-   GICH and GICV spaces, add cache info to properly describe cache
-   topology and solve kernel boot warning.
-
-Several cleanups:
-1. Use capital "OR" for multiple licenses in SPDX.
-2. Correct white-spaces for code readability.
-3. Fix W=1 dtc compiler warnings, which should not have practical
-   impact for Amazon, APM, Cavium, Realtek, Socionext Uniphier and
-   Spreadtrum like:
-    - missing unit addresses,
-    - nodes not belonging to soc node,
-    - not using generic node names,
-    - few incorrect unit addresses.
+  ARM: dts: aspeed: Add vendor prefixes to lm25066 compat strings (2024-04-24 09:25:22 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (25):
-      arm64: dts: juno: fix thermal zone node names
-      arm64: dts: amd: use capital "OR" for multiple licenses in SPDX
-      arm64: dts: sprd: minor whitespace cleanup
-      arm64: dts: sc9860: add missing aon-prediv unit address
-      arm64: dts: sc9860: move GPIO keys to board
-      arm64: dts: sc9860: move GIC to soc node
-      arm64: dts: whale2: add missing ap-apb unit address
-      arm64: dts: sharkl3: add missing unit addresses
-      arm64: dts: uniphier: ld11-global: use generic node name for audio-codec
-      arm64: dts: uniphier: ld11-global: drop audio codec port unit address
-      arm64: dts: uniphier: ld20-global: use generic node name for audio-codec
-      arm64: dts: uniphier: ld20-global: drop audio codec port unit address
-      arm64: dts: realtek: rtd129x: add missing unit address to soc node
-      arm64: dts: realtek: rtd139x: add missing unit address to soc node
-      arm64: dts: realtek: rtc16xx: add missing unit address to soc node
-      arm64: dts: cavium: move non-MMIO node out of soc
-      arm64: dts: cavium: correct unit addresses
-      arm64: dts: apm: storm: move non-MMIO node out of soc
-      arm64: dts: apm: shadowcat: move non-MMIO node out of soc
-      arm64: dts: amazon: alpine-v2: add missing io-fabric unit addresses
-      arm64: dts: amazon: alpine-v2: move non-MMIO node out of soc
-      arm64: dts: amazon: alpine-v3: add missing io-fabric unit addresses
-      arm64: dts: amazon: alpine-v3: drop cache nodes unit addresses
-      arm64: dts: amazon: alpine-v3: correct gic unit addresses
-      arm64: dts: cavium: thunder2-99xx: drop redundant reg-names
+Minor improvements in ARM DTS for v6.10
 
-Yang Xiwen (3):
-      arm64: dts: hi3798cv200: fix the size of GICR
-      arm64: dts: hi3798cv200: add GICH, GICV register space and irq
-      arm64: dts: hi3798cv200: add cache info
+1. TI: add missing white-spaces for code readability.
+2. Aspeed: add vendor prefix to compatibles, to properly describe
+   hardware, even though Linux drivers match by device name.
 
- arch/arm64/boot/dts/amazon/alpine-v2.dtsi          | 35 +++++++-------
- arch/arm64/boot/dts/amazon/alpine-v3.dtsi          | 12 ++---
- arch/arm64/boot/dts/amd/elba-16core.dtsi           |  2 +-
- arch/arm64/boot/dts/amd/elba-asic-common.dtsi      |  2 +-
- arch/arm64/boot/dts/amd/elba-asic.dts              |  2 +-
- arch/arm64/boot/dts/amd/elba-flash-parts.dtsi      |  2 +-
- arch/arm64/boot/dts/amd/elba.dtsi                  |  2 +-
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         | 14 +++---
- arch/arm64/boot/dts/apm/apm-storm.dtsi             | 13 ++---
- arch/arm64/boot/dts/arm/juno-base.dtsi             |  4 +-
- arch/arm64/boot/dts/arm/juno-scmi.dtsi             |  4 +-
- arch/arm64/boot/dts/cavium/thunder-88xx.dtsi       | 20 ++++----
- arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi      |  1 -
- arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi     | 43 ++++++++++++++++-
- arch/arm64/boot/dts/realtek/rtd129x.dtsi           |  2 +-
- arch/arm64/boot/dts/realtek/rtd139x.dtsi           |  2 +-
- arch/arm64/boot/dts/realtek/rtd16xx.dtsi           |  2 +-
- .../boot/dts/socionext/uniphier-ld11-global.dts    |  4 +-
- .../boot/dts/socionext/uniphier-ld20-global.dts    |  4 +-
- arch/arm64/boot/dts/sprd/sc9860.dtsi               | 56 ++++++----------------
- arch/arm64/boot/dts/sprd/sharkl3.dtsi              | 18 +++----
- arch/arm64/boot/dts/sprd/sp9860g-1h10.dts          | 30 +++++++++++-
- arch/arm64/boot/dts/sprd/whale2.dtsi               |  2 +-
- 23 files changed, 159 insertions(+), 117 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      ARM: dts: ti: omap: minor whitespace cleanup
+
+Zev Weiss (1):
+      ARM: dts: aspeed: Add vendor prefixes to lm25066 compat strings
+
+ arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-romed8hm3.dts | 4 ++--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts    | 2 +-
+ arch/arm/boot/dts/ti/omap/am33xx.dtsi                    | 8 ++++----
+ arch/arm/boot/dts/ti/omap/am4372.dtsi                    | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
