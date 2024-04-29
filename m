@@ -4,57 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D648C25B79
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 809B0C25B78
 	for <soc@archiver.kernel.org>; Mon, 29 Apr 2024 16:41:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 83864C4AF1C; Mon, 29 Apr 2024 16:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D6F9C4DDE3;
+	id 712DAC4DDE1; Mon, 29 Apr 2024 16:41:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A0EAC4AF68;
 	Mon, 29 Apr 2024 16:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714408888;
-	bh=AKBewQShKZHFn10VHnNztRNg1QKgOk6bAWxVtkgwPro=;
+	bh=pxiU1rk20b0fqzQdFnh7KNBfhC06BIKej0z9/CjMymQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=QfEp2Gk5vJCa36LbmgJUl89gD/B/yZ0PqJ90M8RrPjxQhC7FmJdRXI1F7Rux2q/cd
-	 jIGbWJLRk/sg2F9YinJzdAGaizBVT+8TXNbBEu1dx0uPDyX5cDASbVWH9j+MqKnfgc
-	 Ne6CDKllrjRnKedwsqPCLRLuMLtJBLSrkCWNPi3rspUTUH0TMhZnli3tyFwlbijWkJ
-	 SB/WZpsyHGFcQjPPvuAx330Cj/gabdBho09gfj/BGTCVm4h/X1ftRJfqxnBloU+chT
-	 oxRcYbH3d+oIfVUMScIjny6JNA4XhsEGW3og73efu2Oqw2MBRjziLOUwp3YDCg6aDh
-	 HHZVTV1h8qfxg==
+	b=gJOnR+NjrPBKoUHtMj2SGExtbgH2Jto5GISpOvoNsQ7ufgtQWh9ytPLorF+c/TSZQ
+	 m8mY05H9BLFVvWzFzOJOSaB1ls3cPJNKqkBXRHOA2QIaqzsgVRvVTIWkUklkOhGHO7
+	 S7btGZGbT4y6oQu5X/DdwH4BFEL3QSkNxs9+chp5Nk1BSKuAb7OUu2OxEm3Dc3VqrW
+	 Qk7LiWTzo86BuvSJpvBmtv3zIytlG0qWRy+jdXWz/6gDtMba8djlmzdFIed6h4XfHc
+	 O6arN+HTwf4pWO6gq5G7cQSXQAhbQFfrY0LZD0QNk9R90yc8zrMmaBhGQ6ovvQBHyb
+	 pYkM3OQAUq0BA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 62AC3E2D48A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4EE51C54BA4;
 	Mon, 29 Apr 2024 16:41:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
+Subject: Re: [GIT PULL] STM32 DT changes for v6.10#1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171440888840.20509.7790329984684096971.git-patchwork-notify@kernel.org>
+ <171440888831.20509.11557712056816960095.git-patchwork-notify@kernel.org>
 Date: Mon, 29 Apr 2024 16:41:28 +0000
-References: <20240417203853.3212103-1-robh@kernel.org>
-In-Reply-To: <20240417203853.3212103-1-robh@kernel.org>
-To: Rob Herring <robh@kernel.org>
+References: <2040767c-413e-4447-b354-c44999930e4c@foss.st.com>
+In-Reply-To: <2040767c-413e-4447-b354-c44999930e4c@foss.st.com>
+To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 17 Apr 2024 15:38:47 -0500 you wrote:
-> The "arm,armv8-pmuv3" compatible is intended only for s/w models. Primarily,
-> it doesn't provide any detail on uarch specific events.
+On Thu, 25 Apr 2024 15:22:15 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> There's still remaining cases for CPUs without any corresponding PMU
-> definition and for big.LITTLE systems which only have a single PMU node
-> (there should be one per core type).
+> Please consider this first round of STM32 DT for v6.10 cycle.
+> Main changes are the introduction of the firewall bus for all platform
+> and the the add of the STM32MP25 clock support.
+> 
+> This PR depends on "[GIT PULL] STM32 Bus firewall for v6.10" PR I just
+> sent and to clk-next tree.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] arm/arm64: dts: Drop "arm,armv8-pmuv3" compatible usage
-    https://git.kernel.org/soc/soc/c/8b40a46966d2
+  - [GIT,PULL] STM32 DT changes for v6.10#1
+    https://git.kernel.org/soc/soc/c/3f356691583d
 
 You are awesome, thank you!
 -- 
