@@ -1,72 +1,53 @@
-Return-Path: <SRS0=cisp=MC=tuxon.dev=claudiu.beznea@kernel.org>
+Return-Path: <SRS0=RVG4=MC=collabora.com=angelogioacchino.delregno@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEC40C4345F
-	for <soc@archiver.kernel.org>; Mon, 29 Apr 2024 12:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9992EC04FFE
+	for <soc@archiver.kernel.org>; Mon, 29 Apr 2024 14:02:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A9B70C4AF1B; Mon, 29 Apr 2024 12:14:34 +0000 (UTC)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 6B5FAC4AF1A; Mon, 29 Apr 2024 14:02:54 +0000 (UTC)
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6237DC113CD
-	for <soc@kernel.org>; Mon, 29 Apr 2024 12:14:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6237DC113CD
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-572669fd9f9so2976315a12.0
-        for <soc@kernel.org>; Mon, 29 Apr 2024 05:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1714392871; x=1714997671; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rnru7AQeB5sDVzbfKURylOzsCBelpYug0+PLC4dQZ8w=;
-        b=Kywn8GmtVVPbNirR+trVT9mcNxLl+9zzdf3DpNjbdksLfeHkxsePZPPnHAQH4l3OX0
-         lJ8ag35vdB4etclyht7ibO1s8khm0S+YPNWXreXIDQ3zuS0WPiHoqzHbIifRuFTE/ZNL
-         PVwXLqwvlIcCpOGu7kpQICK2ZE76MLvFVxdutkzwu7vBgwRevpahG6QTVPfqdbSrTcqC
-         A5jcYHH2xQ162tJ+U0hbh2Nr38By1G1MTesNZRq5mqLUVCfbVQtk9ehKOWWjsppqYnT4
-         cc/6TXg8vC8LlrNmSoTgGU2zXPOcNAukoRRqTx0PzUOvObARc8Jk72O0UP4GVxV86gjO
-         ZmYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714392871; x=1714997671;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rnru7AQeB5sDVzbfKURylOzsCBelpYug0+PLC4dQZ8w=;
-        b=ohetGK/1wg0oslFM0QWdJnH1mWT4sIhd61a+wnLYTXNPOvbdnsSE/9AcO7/w+RgeKZ
-         z7UOw24+q1fiDgcvu+jLZTxVkfIwbxBAQDSemyjahLvZPJyJSqsr+BAmFWIrNlXH4mYY
-         JUokYiyEBOSsBmt4i5CB+AtfnNVfDmo2461wDLnzQsOyAIuIa06ofDJtebW0vSF0cwmV
-         PIscIlGhFUBvpjitlMJ7l+BTfRaX2YnSNFXVPaDDcmNMUiQvpJ/XakPGOY66SZN02JhP
-         zhIB48UxH23A4F91dYIbhfpuxDIz9HTNlNKIzBnLo9VS30s9KRQkvB9DpCa95+MaVikZ
-         cWrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIr3CDm9vID/WWVU3UTzUCVFTQ23GY7YjwYS/p0EiiTa3ZMtzKm0f1hHNAh9VrP16KibG8ZuJX3KrQW6bZWg==
-X-Gm-Message-State: AOJu0YzRFPv+c4RSFto9fUt5ZtW43tpMVZwXkAYWtzoGd/FzA8mlnb13
-	2T7zhiQ5o9hp6kiPZxZKrgB6OovuWPcFMIdgz3//ycHfUn9JT9jqE+WlWox6FbM=
-X-Google-Smtp-Source: AGHT+IHIsTLT7TuHiaBj2TLx6gySvXE9mcKLUn9ubEsypGvBfIuYOvwweRwuK9ZZg4X1TGt9xAWbXQ==
-X-Received: by 2002:a17:906:1345:b0:a4e:cd5c:da72 with SMTP id x5-20020a170906134500b00a4ecd5cda72mr6800379ejb.63.1714392871302;
-        Mon, 29 Apr 2024 05:14:31 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.53])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170906640300b00a58ca8e88c2sm4074004ejm.15.2024.04.29.05.14.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 05:14:30 -0700 (PDT)
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4D941C116B1;
+	Mon, 29 Apr 2024 14:02:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D941C116B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1714399368;
+	bh=X7IGfbGsT7uQlyjPuobKXUVEAqPWoHd5DZQUwqLMYxw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=p9Ze86BtQwfVuiWA3h/zaN/siAvRGSrjji4wkDfDr7563mvAdw1zVDbAOll3Zh0AY
+	 JZ8oq/D6skwoHNJraTfsroVRToR1sNcvHF4LTRcVGBX0GZZ3O2FbRApVSZUvBLBQoI
+	 TzD6vfD4G9CKX1gaa/xvyGdL91q/At/MvQYmjp+B5gqLg1EuMXq6j9ZiobMTPVZIO4
+	 rnNJi5L4lUfY7NzeFmZGgHJyVD2WUvqRPC3z4rZjibe8OKstbiB+YmwC/HdAqRo9P0
+	 JN2fvk8KCiyscXsZmEmdiYtcEibEFvHSQ5X2l9/Xduf8ZZUK9/0g55tsIO6bLvQt9J
+	 nmPqh8lerO0VQ==
+Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 228453781453;
+	Mon, 29 Apr 2024 14:02:48 +0000 (UTC)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 List-Id: <soc.lore.kernel.org>
-To: arnd@arndb.de,
-	olof@lixom.net,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: nicolas.ferre@microchip.com,
-	linux-arm-kernel@lists.infradead.org,
-	conor@kernel.org,
-	claudiu.beznea@tuxon.dev
-Subject: [GIT PULL] Microchip ARM64 DT updates for v6.10
-Date: Mon, 29 Apr 2024 15:14:29 +0300
-Message-Id: <20240429121429.1941241-1-claudiu.beznea@tuxon.dev>
-X-Mailer: git-send-email 2.39.2
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [GIT,PULL,2/2] MediaTek driver updates for v6.10
+Date: Mon, 29 Apr 2024 16:02:43 +0200
+Message-ID: <20240429140245.238210-2-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240429140245.238210-1-angelogioacchino.delregno@collabora.com>
+References: <20240429140245.238210-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 4cece764965020c22cff7665b18a012006359095:
@@ -75,33 +56,53 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-dt64-6.10
+  git://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk-soc-for-v6.10
 
-for you to fetch changes up to 6c7c4b91aa43543c9f967120a6eabd451a0927d4:
+for you to fetch changes up to 8a87e1d21ef84fe68913aeba9838222422eef4d7:
 
-  arm64: dts: microchip: sparx5_pcb135: drop duplicated NOR flash (2024-04-08 16:56:30 +0100)
-
-----------------------------------------------------------------
-Microchip ARM64 device tree updates for v6.10
-
-It contains:
-- dtbs_check and dtc W=1 warning fixes
-- mdio2 and serdes address fixes for sparx5
+  soc: mediatek: mtk-socinfo: Correct the marketing name for MT8188GV (2024-04-23 12:16:56 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (10):
-      arm64: dts: microchip: sparx5: fix mdio reg
-      arm64: dts: microchip: sparx5: correct serdes unit address
-      arm64: dts: microchip: sparx5_pcb134: add missing I2C mux unit addresses
-      arm64: dts: microchip: sparx5_pcb135: add missing I2C mux unit addresses
-      arm64: dts: microchip: sparx5_pcb134: align I2C mux node name with bindings
-      arm64: dts: microchip: sparx5_pcb135: align I2C mux node name with bindings
-      arm64: dts: microchip: sparx5_pcb134: drop LED unit addresses
-      arm64: dts: microchip: sparx5_pcb135: drop LED unit addresses
-      arm64: dts: microchip: sparx5_pcb134: drop duplicated NOR flash
-      arm64: dts: microchip: sparx5_pcb135: drop duplicated NOR flash
+MediaTek driver updates for v6.10
 
- arch/arm64/boot/dts/microchip/sparx5.dtsi          |   4 +-
- .../boot/dts/microchip/sparx5_pcb134_board.dtsi    | 149 ++++++++++-----------
- .../boot/dts/microchip/sparx5_pcb135_board.dtsi    |  35 ++---
- 3 files changed, 85 insertions(+), 103 deletions(-)
+This adds a much needed cleanup for the MediaTek CMDQ helper driver and
+also some more helper functions which will be used in drivers using the
+MediaTek Global Command Engine (GCE) HW.
+
+Also adds support for MT8188's VPPSYS mutex for MDP3 support, a new SoC
+in the mtk-socinfo driver and changes the marketing name for the pre
+existing MT8188 SoC.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (3):
+      soc: mediatek: socinfo: Advertise about unknown MediaTek SoC
+      soc: mediatek: mtk-mutex: Add support for MT8188 VPPSYS
+      soc: mediatek: mtk-socinfo: Add entry for MT8395AV/ZA Genio 1200
+
+Chun-Kuang Hu (7):
+      soc: mediatek: cmdq: Fix typo of CMDQ_JUMP_RELATIVE
+      soc: mediatek: cmdq: Add parameter shift_pa to cmdq_pkt_jump()
+      soc: mediatek: cmdq: Rename cmdq_pkt_jump() to cmdq_pkt_jump_abs()
+      soc: mediatek: cmdq: Add cmdq_pkt_jump_rel() helper function
+      soc: mediatek: cmdq: Add cmdq_pkt_eoc() helper function
+      soc: mediatek: cmdq: Remove cmdq_pkt_flush_async() helper function
+      soc: mediatek: cmdq: Refine cmdq_pkt_create() and cmdq_pkt_destroy()
+
+Jason-JH.Lin (4):
+      soc: mediatek: mtk-cmdq: Add specific purpose register definitions for GCE
+      soc: mediatek: mtk-cmdq: Add cmdq_pkt_mem_move() function
+      soc: mediatek: mtk-cmdq: Add cmdq_pkt_poll_addr() function
+      soc: mediatek: mtk-cmdq: Add cmdq_pkt_acquire_event() function
+
+Jason-ch Chen (1):
+      soc: mediatek: mtk-socinfo: Correct the marketing name for MT8188GV
+
+Nícolas F. R. A. Prado (1):
+      soc: mediatek: cmdq: Don't log an error when gce-client-reg is not found
+
+ drivers/soc/mediatek/mtk-cmdq-helper.c | 163 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------
+ drivers/soc/mediatek/mtk-mutex.c       |  41 ++++++++++++++++++++++
+ drivers/soc/mediatek/mtk-socinfo.c     |  14 ++++++--
+ include/linux/soc/mediatek/mtk-cmdq.h  | 139 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------
+ 4 files changed, 292 insertions(+), 65 deletions(-)
+
