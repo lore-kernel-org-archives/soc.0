@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B12C25B7C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D612C25B79
 	for <soc@archiver.kernel.org>; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8917AC113CD; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 72987C4DDE3;
+	id 7FC39C4DDE5; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 69ED6C4DDE1;
 	Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714424447;
-	bh=1r+m6TpjbFa49I1Qj3+IhHY+qUbTL9ZKwpW6yA7vgtI=;
+	bh=LFXis33Vi6SQxeO8lkAaW2oKiSNigXIHiXPZZQcqyAM=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=fMkObC8czAF3fBjXXAXNjRO1xyN5KSIEQSk1BsQtiUikcalUiJL+zyho2p7WDyNT8
-	 JezkxZJmg0GMQdux0xIjrvelYUBwyC9B1yW0lvrkcpSbnV4Aeu2Lcmr745ONHd2z6e
-	 02i1exQGC4fp/ms1FTe5PnZkj44GV/VoLSPT8Fu0Xp7QdfnUV6I5ucAel1/k3Eh5iW
-	 PbcpmLHhmG4VBAFyoYdaJNeCSypO3o10hLeZSCt0lGs2wsAnGb/IXP1OtT99d1k/1f
-	 tsHuJ0AggaZxXXNeqP+rhsURy/gZ8gtjDIKtLmTmqVHE4mop7BeRUUshnyAw88B1fi
-	 OM/8ZpLYxqHHQ==
+	b=q5+2pyRCioZPJ8SKUqiaUlzQGpWcxqRT1TrdwjLCRFLOCcCZjGEuLsRY3pTSlF0cw
+	 VKdCSTMhpAwZuvWxg3L07EfwJc3xsb9vUUBQU17GmnJiV25dMBYe/Jx7H24ljBx8Uk
+	 39cpTPMcJdtWjbKuFhYXInwhWc8xTvHtrdG8LIDVCXsaHxVhZ3LN6qu1pwll7xixak
+	 YSvZ8JYWugCBalBtuzvjQ+C4TO314hoNfdIiVBd8z5jKM7eoLKPdUfAYE/HVPeKLZM
+	 sIRgeiyQbFXk9autJCFJW5lY+XzYpPb/272Wd2QX8aY6rm9aBdYPdA6qNVSonYcXqm
+	 qL0tfFz/ZUPwA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68C55C54BA4;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6028EC54BAA;
 	Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] memory: drivers for v6.10
+Subject: Re: [GIT,PULL] hisilicon: driver updates for v6.10
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171442444742.17402.7105824619880801918.git-patchwork-notify@kernel.org>
+ <171442444739.17402.4608908110220955088.git-patchwork-notify@kernel.org>
 Date: Mon, 29 Apr 2024 21:00:47 +0000
-References: <20240428162001.28011-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240428162001.28011-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <662A3EDE.5070708@hisilicon.com>
+In-Reply-To: <662A3EDE.5070708@hisilicon.com>
+To: Wei Xu <xuwei5@hisilicon.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 28 Apr 2024 18:20:01 +0200 you wrote:
-> The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+On Thu, 25 Apr 2024 19:30:38 +0800 you wrote:
+> Hi ARM SoC maintainers,
 > 
->   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+> Please consider to pull the following changes.
+> Thanks!
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.10
+> Best Regards,
+> Wei
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] memory: drivers for v6.10
-    https://git.kernel.org/soc/soc/c/75c0675f1c28
+  - [GIT,PULL] hisilicon: driver updates for v6.10
+    https://git.kernel.org/soc/soc/c/29a7020067d2
 
 You are awesome, thank you!
 -- 
