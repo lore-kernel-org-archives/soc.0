@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39262C25B4F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B07BC3DA40
 	for <soc@archiver.kernel.org>; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 15677C4AF48; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB2DDC4AF17;
-	Mon, 29 Apr 2024 21:00:46 +0000 (UTC)
+	id 2AA0FC4AF53; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1332EC4AF18;
+	Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714424447;
-	bh=1IEm+HHWUX9eZ5VFkr2UGlKSUcJthv4VnuZhhmQZKow=;
+	bh=9Xjxk4ETPYCSM6Oc/yLIlM9XoC0efjm2uG66HhEJ4ps=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=YmbESPtVNHmRURtqNns738lGJKBtqXVm7rr96gAP87LQCcL948zjdHXSoygKFpb0O
-	 AEMYaFBJ7OEHU0qDXt21Zh/u4ZIqNBmuL70I3MIc6C6wM9YeAWZIqnnotz1f6t6/aW
-	 lezKunsnHvcRmcRRKDTguqI/EF7gmC28q3ZuemZeOBEXMtFylx7vS0g8h8EqyBLVQ1
-	 BI/SWA0PHS8JZrVTKXeMYwHAm45bCOEQkcy5EWWTlNkAyqBUIqc++wbymtBtRkJpa1
-	 nDj/3svB+zpxkdYVDzOhKlX+nqRZGa3iYZYv8ZNxdMfq9iBZ5kZsWyJL8p4mjxzSRf
-	 uYSZ704TrjoVA==
+	b=ONR0Gxq1x/OY8fw4fLoqeyNvbAf6+08pwzZDND/VUXAa33YQ1e7ZEYZe+REQidXD5
+	 UlE3VMU0/0xCdq5snktMZjGK2NAFxizM5P3z323+/Y8q7ywUHY1kWDBuhLZ+3ew72V
+	 M5P4HIUEkC4JtJsxaS41dvhXOa7bZQKvJAQphf8JU5+oNQd+l16dKWTT3dzYkcziVI
+	 b82IatvcWOD1fMNAD/TbOi2JzZDVpXQxpnyqQNMK1F/YWVoCgb+KNiMeMpXg/iITA8
+	 oONUD/01j9A7xqLqpFcfjBAxe5rngMENPriQOssZ95ciHyHQ22Hg3o0yKnvxB7+5xx
+	 /9vZP9ruSPVbg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DA0C3C54BAD;
-	Mon, 29 Apr 2024 21:00:46 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 034F3C54BAE;
+	Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] STM32 Bus firewall for v6.10
+Subject: Re: [GIT PULL] Qualcomm Arm64 Defconfig updates for v6.10
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171442444688.17402.489374273539696029.git-patchwork-notify@kernel.org>
-Date: Mon, 29 Apr 2024 21:00:46 +0000
-References: <7dc64226-5429-4ab7-a8c8-6053b12e3cf5@foss.st.com>
-In-Reply-To: <7dc64226-5429-4ab7-a8c8-6053b12e3cf5@foss.st.com>
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+ <171442444701.17402.1150914419278011574.git-patchwork-notify@kernel.org>
+Date: Mon, 29 Apr 2024 21:00:47 +0000
+References: <20240427162037.1431822-1-andersson@kernel.org>
+In-Reply-To: <20240427162037.1431822-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 25 Apr 2024 14:59:16 +0200 you wrote:
-> Hi Arnd,
+On Sat, 27 Apr 2024 11:20:36 -0500 you wrote:
+> The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 > 
-> Please consider the first round of STM32 firewall bus patch-set. DT part
-> for all MPU SoC will come with teh STM32 DT pull request.
+>   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 > 
-> Note that conflict merge have been seen on linux-next for this patch:
-> "of: property: fw_devlink: Add support for "access-controller"
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.10
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] STM32 Bus firewall for v6.10
-    https://git.kernel.org/soc/soc/c/46671fd3e311
+  - [GIT,PULL] Qualcomm Arm64 Defconfig updates for v6.10
+    https://git.kernel.org/soc/soc/c/948b25640fdd
 
 You are awesome, thank you!
 -- 
