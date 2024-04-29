@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F755C25B5F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FBAC25B5C
 	for <soc@archiver.kernel.org>; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 20463C4AF50; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09EB9C4AF1D;
+	id 3CC56C4AF60; Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 261B7C4AF4D;
 	Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714424447;
-	bh=EOgRijqgi1gstcNamXz0jBMzJQDbIGgIwaSpuQexroY=;
+	bh=up0DZlKzCjD66nDSnaGBnSn2QcxoUSnPd4Xs1iaY11M=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=WcrPOX/ZCC0xk2Oa+M5V9giNu5Qga3ft6rcvMTT08DLNqJHwpb5pbDkytFsXE7XWj
-	 c5NLjdPU0CWNe6LYtRr7K2rfDnNLVNWdJDpT8ETR1H8dTePLy5UEMqiulM399pcktH
-	 8VAPlabSb5nJ5oToDPfn/imXE0PDq9bj5WrHhzV+7Xj7WMNGtQUSIfRwWu5G4FDpSJ
-	 xBLUJT2VaVsacllrxsaaP/7XfUpl/Ae5mdTh/OOq1pSe67JVAXv6VQbaIsNttsaxEm
-	 6ulJhUwljydlDw8qfikklsZQxyNqNzR7l6q68Y/8MciK9/YZzKyiwrRFnERx45NmxN
-	 lrnxz46KOiFNA==
+	b=T86x2x24RyGeMPiOdpfSMqJbRM3reU7+9vWRQDgnpfvurfMOOoN42oY9cdMHID0Xh
+	 WH6mpksCQRBT+/3ZuwBLkndgQuEp5neNc8OkUVqnnsZGOE8iUtRDy+NI9QpAIQLG0T
+	 kDkX4K6yGmL3CrNnGUQjiRUaUsEJlww4ngu8Ow99pIT67/y2i97B2XjMuQbvJFIdD4
+	 q2YgTP9sz8zwDsm6shZoB//0ScZQBZm7nh+qzjp9JN10RMLMVNwx21xt70HrG1nPaj
+	 f5gM5WrvHEleF3MzmReXrIn9ZQJ7pJJTkMxt5nx4vG+j/v8AReylOJa2X/yRH9HO00
+	 CcodSkfRcrSvQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE5B4C54BAF;
-	Mon, 29 Apr 2024 21:00:46 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 15683E2D48A;
+	Mon, 29 Apr 2024 21:00:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Driver changes for ti-sysc for v6.10
+Subject: Re: [GIT PULL] Rockchip arm64 defconfig changes for 6.10 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171442444697.17402.14720465081534042847.git-patchwork-notify@kernel.org>
-Date: Mon, 29 Apr 2024 21:00:46 +0000
-References: <pull-1714283210-549557@atomide.com>
-In-Reply-To: <pull-1714283210-549557@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+ <171442444708.17402.4124109936420801238.git-patchwork-notify@kernel.org>
+Date: Mon, 29 Apr 2024 21:00:47 +0000
+References: <8976550.lOV4Wx5bFT@phil>
+In-Reply-To: <8976550.lOV4Wx5bFT@phil>
+To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 28 Apr 2024 08:47:11 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
-> 
+On Thu, 25 Apr 2024 23:46:20 +0200 you wrote:
 > The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 > 
 >   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 > 
 > are available in the Git repository at:
 > 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.10-rockchip-defconfig64
+> 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Driver changes for ti-sysc for v6.10
-    https://git.kernel.org/soc/soc/c/75e4eadcf94b
+  - [GIT,PULL] Rockchip arm64 defconfig changes for 6.10 #1
+    https://git.kernel.org/soc/soc/c/c356ab9b8f6e
 
 You are awesome, thank you!
 -- 
