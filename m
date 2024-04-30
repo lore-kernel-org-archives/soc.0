@@ -1,66 +1,45 @@
-Return-Path: <SRS0=z99U=MD=linaro.org=dan.carpenter@kernel.org>
+Return-Path: <SRS0=+xyY=MD=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EAB1C4345F
-	for <soc@archiver.kernel.org>; Tue, 30 Apr 2024 15:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A379BC4345F
+	for <soc@archiver.kernel.org>; Tue, 30 Apr 2024 15:17:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 34AFFC4AF1C; Tue, 30 Apr 2024 15:10:55 +0000 (UTC)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 8B5D3C4AF18; Tue, 30 Apr 2024 15:17:54 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 470B0C2BBFC
-	for <soc@kernel.org>; Tue, 30 Apr 2024 15:10:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 470B0C2BBFC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-41ba1ba55e9so32229555e9.3
-        for <soc@kernel.org>; Tue, 30 Apr 2024 08:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714489852; x=1715094652; darn=kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FoNbL1otlIxZgmhvKJLjnRUQ+ehkgEVScvtuFLOElk8=;
-        b=cu2lnPI3AVqbHb9RYqmLEGPucWqFbSQj9NmzHCXv2ssEeRkbB5sFhrQ4XgT4grC2Hz
-         V+t+BSKt8N2sQSKCZ71706v7bfY+UhMBcnW8E5EjfKXJPL7UHT+ClETxKcPZ9caGmh+8
-         OzvW9WeApj8nyO81IhxXHxJH1ZFP2Oaz/uiLlPOw4+LJf11QXtYD9smCVswzCoNU154J
-         pO0L26Nca2Qgk2P66xx6X/V6Il5xKC8ABPeGhpiS983lFo/HDmN6SnMzM/+An3rJBsV2
-         sFiPtG7luBCQ6ZlvkAZN6gaLnDyEOCSlmQOzDiruw2ecJTFTeK8WD1iMwTNVqWA//i/O
-         Mkkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714489852; x=1715094652;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FoNbL1otlIxZgmhvKJLjnRUQ+ehkgEVScvtuFLOElk8=;
-        b=IUlkjijrThvkFoudhb1vbyOWGMgO7Y7RKHgqg0W1pnlYkSuoMKF3kV1dFuCvbUqXWZ
-         ISmopC8uX5o9CEWEsGT4dkVW1cwAnnAUtgpfRl4VmNMrCDW0suQjauPgRRUPTYlQSE3x
-         3+C44R10EpyKuMXbxS6gXmUFUhsk+lNgUS4ahrv2iHYuNTOQEUCf+y83Pt+L0XWO9hBv
-         AlVfReUiPsYUtXsv6RzzjZfBsMxJYOImnoRMt8HSOIXhg3mzU19KOi7aIACy1BxgKCk4
-         I5NIemSEsShciRXCc0RAmJUf27NTjeQZ9CtTb46O4d+3ksvxwvCpwIacrmW3tmGinFdu
-         sg1w==
-X-Forwarded-Encrypted: i=1; AJvYcCURgD/ivLWF8U/5R9OPgNn/euRkMc0IT/ET3DaKUUAiNse6ESmEfcail6nAhSagWkKVw/TBIiKJjBrZBgxa7Q==
-X-Gm-Message-State: AOJu0YwqlgyhEmCXULAwZOUkQtQ7P8XU/lBx2Ae2oVxwFRKBkxaP4r4K
-	nVeBkzX1GRRwp4b49quYER5GuvAQOd7foqFwcTEMJVgBTuEFN/xI+/sr/8rSGIU=
-X-Google-Smtp-Source: AGHT+IHN8GNDQe5D65ve0ojweVIrevfxwqcUzOR2YOMwYsfobgmsRztxhHwpyHsCU8V6PZ014Nhs6g==
-X-Received: by 2002:a05:600c:54ca:b0:41c:258:9b70 with SMTP id iw10-20020a05600c54ca00b0041c02589b70mr2045652wmb.28.1714489852242;
-        Tue, 30 Apr 2024 08:10:52 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b004186f979543sm49593289wms.33.2024.04.30.08.10.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 08:10:52 -0700 (PDT)
-Date: Tue, 30 Apr 2024 18:10:48 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 45FE7C2BBFC;
+	Tue, 30 Apr 2024 15:17:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45FE7C2BBFC
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=gmail.com
+X-CSE-ConnectionGUID: 3Vo6bCchRcmoEo7bQF6GGw==
+X-CSE-MsgGUID: RmQ6g15LQgWsgN3IGhZ/Rg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="13997563"
+X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
+   d="scan'208";a="13997563"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 08:17:52 -0700
+X-CSE-ConnectionGUID: G1Vsk4kTRDGDBosz8shwAA==
+X-CSE-MsgGUID: fmqUP9TbSnOUcSyrzZVqVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
+   d="scan'208";a="26904672"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 08:17:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy.shevchenko@gmail.com>)
+	id 1s1pEn-00000002hj1-2C7p;
+	Tue, 30 Apr 2024 18:17:45 +0300
+Date: Tue, 30 Apr 2024 18:17:45 +0300
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
 To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>,
 	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
@@ -72,18 +51,36 @@ Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
 Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
  Turris Omnia MCU
-Message-ID: <0fe30dce-f1af-4bb8-8c09-3bec3867f473@moroto.mountain>
+Message-ID: <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
 References: <20240430115111.3453-1-kabel@kernel.org>
  <20240430115111.3453-3-kabel@kernel.org>
  <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
  <20240430160507.45f1f098@dellmb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20240430160507.45f1f098@dellmb>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Behún wrote:
+On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek BehÃºn wrote:
+> On Tue, 30 Apr 2024 15:53:51 +0300
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > On Tue, Apr 30, 2024 at 2:51â€¯PM Marek BehÃºn <kabel@kernel.org> wrote:
+
+...
+
+> > > +static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader,
+> > > +                                 u8 version[static OMNIA_FW_VERSION_HEX_LEN])
+> > 
+> > Interesting format of the last parameter. Does it make any difference
+> > to the compiler if you use u8 *version?
+> 
+> The compiler will warn if an array with not enough space is passed as
+> argument.
+
+Really?
+
 > > > +{
 > > > +       u8 reply[OMNIA_FW_VERSION_LEN];
 > > > +       int err;
@@ -113,8 +110,104 @@ On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Behún wrote:
 > 
 > would be too crazy, right?
 
-Indeed.  Please don't do that.  0_0
+Yes, it's not a Python :-)
 
-regards,
-dan carpenter
+> > > +       return 0;
+> > > +}  
+
+...
+
+> > > +               dev_err(dev, "Cannot read MCU %s firmware version: %d\n", type,
+> > > +                       err);  
+> > 
+> > One  line?
+> 
+> I'd like to keep this driver to 80 columns.
+
+Then better to have a logical split then?
+
+			dev_err(dev, "Cannot read MCU %s firmware version: %d\n",
+				type, err);
+
+...
+
+> > > +               omnia_info_missing_feature(dev, "feature reading");  
+> > 
+> > Tautology. Read the final message. I believe you wanted to pass just
+> > "reading" here.
+> 
+> No, I actually wanted it to print
+>   Your board's MCU firmware does not support the feature reading
+>   feature.
+> as in the feature "feature reading" is not supported.
+> I guess I could change it to
+>   Your board's MCU firmware does not support the feature reading.
+> but that would complicate the code: either I would need to add
+> " feature" suffix to all the features[].name, or duplicate the
+> info string from the omnia_info_missing_feature() function.
+
+From point of a mere user (as I am towards this driver) I consider
+the tautology confusing.
+
+	...the 'reading' feature
+
+may be a good compromise.
+
+...
+
+> > > +       memcpy(mcu->board_first_mac, &reply[9], ETH_ALEN);  
+> > 
+> > There is an API ether_copy_addr() or so, don't remember by heart.
+> > You also need an include for ETH_ALEN definition.
+> 
+> Doc for ether_addr_copy says:
+>   Please note: dst & src must both be aligned to u16.
+> since the code does:
+>   u16 *a = (u16 *)dst;
+>   const u16 *b = (const u16 *)src;
+> 
+>   a[0] = b[0];
+>   a[1] = b[1];
+>   a[2] = b[2]
+> 
+> Since I am copying from &reply[9], which is not u16-aligned, this won't
+> work.
+
+It would work on architectures that support misaligned accesses, but in general
+you are right. Perhaps a comment on top to avoid "cleanup" patches like this?
+
+...
+
+> > > +enum omnia_ctl_byte_e {
+> > > +       CTL_LIGHT_RST           = BIT(0),
+> > > +       CTL_HARD_RST            = BIT(1),
+> > > +       /* BIT(2) is currently reserved */
+> > > +       CTL_USB30_PWRON         = BIT(3),
+> > > +       CTL_USB31_PWRON         = BIT(4),
+> > > +       CTL_ENABLE_4V5          = BIT(5),
+> > > +       CTL_BUTTON_MODE         = BIT(6),
+> > > +       CTL_BOOTLOADER          = BIT(7)  
+> > 
+> > Keep trailing comma as it might be extended (theoretically). And you
+> > do the similar in other enums anyway.
+> 
+> ctl_byt is 8-bit, so this enum really can't be extended.
+
+I understand that (even before writing the previous reply).
+
+> In fact I need
+> to drop the last comma from omnia_ext_sts_dword_e and omnia_int_e.
+
+Who prevents from having in a new firmware let's say
+
+ BIT(31) | BIT(1)
+
+as a new value?
+
+From Linux perspective these are not terminating lines.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
