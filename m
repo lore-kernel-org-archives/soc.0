@@ -1,371 +1,294 @@
-Return-Path: <SRS0=XCEV=MD=linux.intel.com=ilpo.jarvinen@kernel.org>
+Return-Path: <robh@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 636C7C4345F
-	for <soc@archiver.kernel.org>; Tue, 30 Apr 2024 15:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E76DC4345F
+	for <soc@archiver.kernel.org>; Tue, 30 Apr 2024 19:21:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2FA92C4AF1B; Tue, 30 Apr 2024 15:31:58 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8AF42C2BBFC;
-	Tue, 30 Apr 2024 15:31:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8AF42C2BBFC
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714491116; x=1746027116;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=4f8vPTEXoa/RV1WM80QmDjyRVjLy1yOS8lAeuWD3UDg=;
-  b=O9jJTgDXfLCsHBvVUzfIqB6keaqgXeA8Cxi/8AjON/4xXkHb12mOXq/a
-   ZFjK4fsYm1IIanLz1sw6/+yh4cNMZ8ayjdbAFWgl2HeJuqbzWw4gUGbbV
-   ewgM/081kXjtK9pXfAHEDP/tQb3KF4xYPcR+AxyQ2Lob2Z0dTvOIBfhws
-   xlmyZQ8g1jkpXnaUepOOJp2pfKHewo78hjfBLbnmX7fHAUibUxNeVFu/n
-   G+cGPanPiESaKRDhiqIeFEScRqMnkyoKlqrnGO3JMLF4y9z1Gjb+6cdOs
-   vG/xOFOJjckYn2ewcbcYqu/wHZ4noJiG6yPQ9pmye6a9X/s82RNfEmZ1o
-   w==;
-X-CSE-ConnectionGUID: kjfV03XPQN6FQ0FVkeaIuA==
-X-CSE-MsgGUID: 0Btv0FKDRmexbpfbxslXZg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10065023"
-X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
-   d="scan'208";a="10065023"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 08:31:55 -0700
-X-CSE-ConnectionGUID: yrXH3eKyShmIIQa33+NmwA==
-X-CSE-MsgGUID: Q0p7S90gQtu+ou59TZSY7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
-   d="scan'208";a="31290948"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.49])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 08:31:51 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 30 Apr 2024 18:31:46 +0300 (EEST)
-To: =?ISO-8859-15?Q?Marek_Beh=FAn?= <kabel@kernel.org>
+	id 62758C4AF1B; Tue, 30 Apr 2024 19:21:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148FAC2BBFC;
+	Tue, 30 Apr 2024 19:21:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714504918;
+	bh=9uH838bGBhtsxWjwYC5ZUO6ofF47IyznjlfHd2isjAQ=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=AYvPCvZVa5oChSnb7EODSOuLmauguENJCLdrz/Xhhs0mz0aSaS37EeP/txvzdNao2
+	 lNDLsR8yZQugbmt2rgkB9yMXJZIYI0pPQ6+OtxeRu8iAfrO6HMBFxQqCHOmDIhQy1F
+	 EGal4bJL5Zt0a8epkruq+P9YEhVJ1jlvi/OkDdiHIEvLbRXDTHgiQlCQPxr5V7YvCr
+	 dru9YzwPcZXKguy+a0CXptr1yPW8KmFQ6lk4RsSVQGsD3Vy59vLqh+gKStWxMMAgTs
+	 4EftAS4aON7u4xGm10KIxzqLctfkTbvhInKb9FYJ7+N2koEbh/NiEqdrwMT/eq9BRH
+	 p/3Bj9CfwDYFQ==
+From: "Rob Herring (Arm)" <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
-    Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, 
-    Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-    Linus Walleij <linus.walleij@linaro.org>, 
-    Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, 
-    Alessandro Zummo <a.zummo@towertech.it>, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-    linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-    Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-In-Reply-To: <20240430115111.3453-3-kabel@kernel.org>
-Message-ID: <b90daba1-3333-0ca5-fb09-c2157f12d594@linux.intel.com>
-References: <20240430115111.3453-1-kabel@kernel.org> <20240430115111.3453-3-kabel@kernel.org>
+To: soc@kernel.org,
+	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Robert Richter <rric@kernel.org>,
+	Chanho Min <chanho.min@lge.com>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>,
+	Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	linux-tegra@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org
+Subject: [PATCH] arm64: dts: Add/fix /memory node unit-addresses
+Date: Tue, 30 Apr 2024 14:18:54 -0500
+Message-ID: <20240430191856.874600-2-robh@kernel.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-121940876-1714490287=:1349"
-Content-ID: <30ac92b2-d54b-bf80-edf2-b3f998ae025a@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+'/memory' nodes always have a 'reg' property, and therefore should have
+a unit-address with just plain hex (i.e. no commas). Fix all the arm64
+'/memory' nodes.
 
---8323328-121940876-1714490287=:1349
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <c3816c99-1507-eaa1-97b9-2aac21194b52@linux.intel.com>
+It's possible that some bootloader depends on /memory (arm32 ATAG to DT
+code does for example). If so, the memory node should be commented with
+that requirement.
 
-On Tue, 30 Apr 2024, Marek Beh=FAn wrote:
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+SoC maintainers, please take this directly.
 
-> Add the basic skeleton for a new platform driver for the microcontroller
-> found on the Turris Omnia board.
->=20
-> Signed-off-by: Marek Beh=FAn <kabel@kernel.org>
+arm32 is much worse, but the platforms using ATAG to DT code can't be 
+changed and I don't know which ones those are.
 
-> +=09struct device *dev =3D &mcu->client->dev;
-> +=09bool suggest_fw_upgrade =3D false;
-> +=09int status;
-> +
-> +=09/* status word holds MCU type, which we need below */
-> +=09status =3D omnia_cmd_read_u16(mcu->client, CMD_GET_STATUS_WORD);
-> +=09if (status < 0)
-> +=09=09return status;
-> +
-> +=09/* check whether MCU firmware supports the CMD_GET_FEAUTRES command *=
-/
+ arch/arm64/boot/dts/actions/s700-cubieboard7.dts       | 2 +-
+ arch/arm64/boot/dts/apm/apm-merlin.dts                 | 2 +-
+ arch/arm64/boot/dts/apm/apm-mustang.dts                | 2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts    | 2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts    | 2 +-
+ arch/arm64/boot/dts/cavium/thunder2-99xx.dts           | 2 +-
+ arch/arm64/boot/dts/lg/lg1312-ref.dts                  | 2 +-
+ arch/arm64/boot/dts/lg/lg1313-ref.dts                  | 2 +-
+ arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts    | 2 +-
+ arch/arm64/boot/dts/nvidia/tegra210-smaug.dts          | 2 +-
+ arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi             | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi           | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-r88.dts            | 2 +-
+ arch/arm64/boot/dts/sprd/sp9860g-1h10.dts              | 2 +-
+ 15 files changed, 15 insertions(+), 15 deletions(-)
 
-FEATURES
+diff --git a/arch/arm64/boot/dts/actions/s700-cubieboard7.dts b/arch/arm64/boot/dts/actions/s700-cubieboard7.dts
+index 63e375cd9eb4..bd54b5165129 100644
+--- a/arch/arm64/boot/dts/actions/s700-cubieboard7.dts
++++ b/arch/arm64/boot/dts/actions/s700-cubieboard7.dts
+@@ -24,7 +24,7 @@ memory@0 {
+ 		reg = <0x0 0x0 0x0 0x80000000>;
+ 	};
+ 
+-	memory@1,e0000000 {
++	memory@1e0000000 {
+ 		device_type = "memory";
+ 		reg = <0x1 0xe0000000 0x0 0x0>;
+ 	};
+diff --git a/arch/arm64/boot/dts/apm/apm-merlin.dts b/arch/arm64/boot/dts/apm/apm-merlin.dts
+index 2e8069002ec1..6e05cf1a3df6 100644
+--- a/arch/arm64/boot/dts/apm/apm-merlin.dts
++++ b/arch/arm64/boot/dts/apm/apm-merlin.dts
+@@ -15,7 +15,7 @@ / {
+ 
+ 	chosen { };
+ 
+-	memory {
++	memory@100000000 {
+ 		device_type = "memory";
+ 		reg = < 0x1 0x00000000 0x0 0x80000000 >;
+ 	};
+diff --git a/arch/arm64/boot/dts/apm/apm-mustang.dts b/arch/arm64/boot/dts/apm/apm-mustang.dts
+index 033e10e12b18..e7644cddf06f 100644
+--- a/arch/arm64/boot/dts/apm/apm-mustang.dts
++++ b/arch/arm64/boot/dts/apm/apm-mustang.dts
+@@ -15,7 +15,7 @@ / {
+ 
+ 	chosen { };
+ 
+-	memory {
++	memory@100000000 {
+ 		device_type = "memory";
+ 		reg = < 0x1 0x00000000 0x0 0x80000000 >; /* Updated by bootloader */
+ 	};
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
+index dec5a110f1e8..f43cfe66b6af 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
+@@ -50,7 +50,7 @@ chosen {
+ 		bootargs = "earlycon=uart8250,mmio32,0x66130000";
+ 	};
+ 
+-	memory {
++	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x00000000 0x80000000 0x00000000 0x40000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts
+index 1d314f17bbdd..c50df1d02797 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts
+@@ -47,7 +47,7 @@ chosen {
+ 		bootargs = "earlycon=uart8250,mmio32,0x66130000";
+ 	};
+ 
+-	memory {
++	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x00000000 0x80000000 0x00000001 0x00000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/cavium/thunder2-99xx.dts b/arch/arm64/boot/dts/cavium/thunder2-99xx.dts
+index d005e1e79c3d..89fc4107a0c4 100644
+--- a/arch/arm64/boot/dts/cavium/thunder2-99xx.dts
++++ b/arch/arm64/boot/dts/cavium/thunder2-99xx.dts
+@@ -14,7 +14,7 @@ / {
+ 	model = "Cavium ThunderX2 CN99XX";
+ 	compatible = "cavium,thunderx2-cn9900", "brcm,vulcan-soc";
+ 
+-	memory {
++	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x00000000 0x80000000 0x0 0x80000000>,  /* 2G @ 2G  */
+ 		      <0x00000008 0x80000000 0x0 0x80000000>;  /* 2G @ 34G */
+diff --git a/arch/arm64/boot/dts/lg/lg1312-ref.dts b/arch/arm64/boot/dts/lg/lg1312-ref.dts
+index 260a2c5b19e5..cdd10f138098 100644
+--- a/arch/arm64/boot/dts/lg/lg1312-ref.dts
++++ b/arch/arm64/boot/dts/lg/lg1312-ref.dts
+@@ -22,7 +22,7 @@ aliases {
+ 		serial2 = &uart2;
+ 	};
+ 
+-	memory {
++	memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x00000000 0x20000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/lg/lg1313-ref.dts b/arch/arm64/boot/dts/lg/lg1313-ref.dts
+index e89ae853788a..6ace977ff4cf 100644
+--- a/arch/arm64/boot/dts/lg/lg1313-ref.dts
++++ b/arch/arm64/boot/dts/lg/lg1313-ref.dts
+@@ -22,7 +22,7 @@ aliases {
+ 		serial2 = &uart2;
+ 	};
+ 
+-	memory {
++	memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x00000000 0x20000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+index a5ab2bc0f835..eeceb5b292a8 100644
+--- a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
++++ b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+@@ -16,7 +16,7 @@ chosen {
+ 		stdout-path = &serial0;
+ 	};
+ 
+-	memory {
++	memory@0 {
+ 		reg = <0x0 0x0 0x0 0x40000000>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+index 9ebb7369256e..2e5b6b2c1f56 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+@@ -25,7 +25,7 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
+-	memory {
++	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x0 0xc0000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
+index 1b8379ba87f9..34e2f80514a3 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi
+@@ -16,7 +16,7 @@ chosen {
+ 		stdout-path = "serial0";
+ 	};
+ 
+-	memory {
++	memory@40000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x40000000 0x0 0x20000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi b/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi
+index b48b98c13705..e5c0dbf794ae 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi
+@@ -17,7 +17,7 @@ chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+ 
+-	memory {
++	memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x0 0x0 0x40000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+index dcee2e28916f..23ae2d9de382 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+@@ -21,7 +21,7 @@ chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+ 
+-	memory {
++	memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x0 0x0 0x80000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+index b16b7ca02379..7f14206d53c3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+@@ -21,7 +21,7 @@ chosen {
+ 		stdout-path = "serial2:115200n8";
+ 	};
+ 
+-	memory {
++	memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x0 0x0 0x40000000>;
+ 	};
+diff --git a/arch/arm64/boot/dts/sprd/sp9860g-1h10.dts b/arch/arm64/boot/dts/sprd/sp9860g-1h10.dts
+index 6b95fd94cee3..5724cac87e53 100644
+--- a/arch/arm64/boot/dts/sprd/sp9860g-1h10.dts
++++ b/arch/arm64/boot/dts/sprd/sp9860g-1h10.dts
+@@ -24,7 +24,7 @@ aliases {
+ 		spi0 = &adi_bus;
+ 	};
+ 
+-	memory{
++	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0 0x60000000>,
+ 		      <0x1 0x80000000 0 0x60000000>;
+-- 
+2.43.0
 
-> +=09if (status & STS_FEATURES_SUPPORTED) {
-> +=09=09__le32 reply;
-> +=09=09int ret;
-> +
-> +=09=09/* try read 32-bit features */
-> +=09=09ret =3D omnia_cmd_read(mcu->client, CMD_GET_FEATURES, &reply,
-> +=09=09=09=09     sizeof(reply));
-> +=09=09if (ret) {
-> +=09=09=09/* try read 16-bit features */
-> +=09=09=09ret =3D omnia_cmd_read_u16(mcu->client, CMD_GET_FEATURES);
-> +=09=09=09if (ret < 0)
-> +=09=09=09=09return ret;
-> +
-> +=09=09=09mcu->features =3D ret;
-> +=09=09} else {
-> +=09=09=09mcu->features =3D le32_to_cpu(reply);
-> +
-> +=09=09=09if (mcu->features & FEAT_FROM_BIT_16_INVALID)
-> +=09=09=09=09mcu->features &=3D GENMASK(15, 0);
-> +=09=09}
-
-I'm not a big fan of the inconsistency here when it comes to who handles=20
-the endianness, perhaps there is a good reason for that but it looks a bit=
-=20
-odd to have it done in a different way for 32-bit and 16-bit.
-
-> +=09} else {
-> +=09=09omnia_info_missing_feature(dev, "feature reading");
-> +=09=09suggest_fw_upgrade =3D true;
-> +=09}
-> +
-> +=09mcu->type =3D omnia_status_to_mcu_type(status);
-> +=09dev_info(dev, "MCU type %s%s\n", mcu->type,
-> +=09=09 (mcu->features & FEAT_PERIPH_MCU) ?
-> +=09=09=09", with peripheral resets wired" : "");
-> +
-> +=09omnia_mcu_print_version_hash(mcu, true);
-> +
-> +=09if (mcu->features & FEAT_BOOTLOADER)
-> +=09=09dev_warn(dev,
-> +=09=09=09 "MCU is running bootloader firmware. Was firmware upgrade inte=
-rrupted?\n");
-> +=09else
-> +=09=09omnia_mcu_print_version_hash(mcu, false);
-> +
-> +=09for (unsigned int i =3D 0; i < ARRAY_SIZE(features); i++) {
-> +=09=09if (mcu->features & features[i].mask)
-> +=09=09=09continue;
-> +
-> +=09=09omnia_info_missing_feature(dev, features[i].name);
-> +=09=09suggest_fw_upgrade =3D true;
-> +=09}
-> +
-> +=09if (suggest_fw_upgrade)
-> +=09=09dev_info(dev,
-> +=09=09=09 "Consider upgrading MCU firmware with the omnia-mcutool utilit=
-y.\n");
-> +
-> +=09return 0;
-> +}
-
-> +int omnia_cmd_read(const struct i2c_client *client, u8 cmd, void *reply,
-> +=09=09   unsigned int len);
-> +
-> +static inline int omnia_cmd_read_u16(const struct i2c_client *client, u8=
- cmd)
-> +{
-> +=09__le16 reply;
-> +=09int err;
-> +
-> +=09err =3D omnia_cmd_read(client, cmd, &reply, sizeof(reply));
-> +
-> +=09return err ?: le16_to_cpu(reply);
-> +}
-> +
-> +static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 =
-cmd)
-> +{
-> +=09u8 reply;
-> +=09int err;
-> +
-> +=09err =3D omnia_cmd_read(client, cmd, &reply, sizeof(reply));
-> +
-> +=09return err ?: reply;
-> +}
-> +
-> +#endif /* __TURRIS_OMNIA_MCU_H */
-
-
-> diff --git a/include/linux/turris-omnia-mcu-interface.h b/include/linux/t=
-urris-omnia-mcu-interface.h
-> new file mode 100644
-> index 000000000000..88f8490b5897
-> --- /dev/null
-> +++ b/include/linux/turris-omnia-mcu-interface.h
-> @@ -0,0 +1,249 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * CZ.NIC's Turris Omnia MCU I2C interface commands definitions
-> + *
-> + * 2024 by Marek Beh=FAn <kabel@kernel.org>
-> + */
-> +
-> +#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
-> +#define __TURRIS_OMNIA_MCU_INTERFACE_H
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +
-> +enum omnia_commands_e {
-> +=09CMD_GET_STATUS_WORD=09=09=3D 0x01, /* slave sends status word back */
-> +=09CMD_GENERAL_CONTROL=09=09=3D 0x02,
-> +=09CMD_LED_MODE=09=09=09=3D 0x03, /* default/user */
-> +=09CMD_LED_STATE=09=09=09=3D 0x04, /* LED on/off */
-> +=09CMD_LED_COLOR=09=09=09=3D 0x05, /* LED number + RED + GREEN + BLUE */
-> +=09CMD_USER_VOLTAGE=09=09=3D 0x06,
-> +=09CMD_SET_BRIGHTNESS=09=09=3D 0x07,
-> +=09CMD_GET_BRIGHTNESS=09=09=3D 0x08,
-> +=09CMD_GET_RESET=09=09=09=3D 0x09,
-> +=09CMD_GET_FW_VERSION_APP=09=09=3D 0x0A, /* 20B git hash number */
-> +=09CMD_SET_WATCHDOG_STATE=09=09=3D 0x0B, /* 0 - disable
-> +=09=09=09=09=09=09 * 1 - enable / ping
-> +=09=09=09=09=09=09 * after boot watchdog is started
-> +=09=09=09=09=09=09 * with 2 minutes timeout
-> +=09=09=09=09=09=09 */
-> +
-> +=09/* CMD_WATCHDOG_STATUS=09=09=3D 0x0C, not implemented anymore */
-> +
-> +=09CMD_GET_WATCHDOG_STATE=09=09=3D 0x0D,
-> +=09CMD_GET_FW_VERSION_BOOT=09=09=3D 0x0E, /* 20B git hash number */
-> +=09CMD_GET_FW_CHECKSUM=09=09=3D 0x0F, /* 4B length, 4B checksum */
-> +
-> +=09/* available if FEATURES_SUPPORTED bit set in status word */
-> +=09CMD_GET_FEATURES=09=09=3D 0x10,
-> +
-> +=09/* available if EXT_CMD bit set in features */
-> +=09CMD_GET_EXT_STATUS_DWORD=09=3D 0x11,
-> +=09CMD_EXT_CONTROL=09=09=09=3D 0x12,
-> +=09CMD_GET_EXT_CONTROL_STATUS=09=3D 0x13,
-> +
-> +=09/* available if NEW_INT_API bit set in features */
-> +=09CMD_GET_INT_AND_CLEAR=09=09=3D 0x14,
-> +=09CMD_GET_INT_MASK=09=09=3D 0x15,
-> +=09CMD_SET_INT_MASK=09=09=3D 0x16,
-> +
-> +=09/* available if FLASHING bit set in features */
-> +=09CMD_FLASH=09=09=09=3D 0x19,
-> +
-> +=09/* available if WDT_PING bit set in features */
-> +=09CMD_SET_WDT_TIMEOUT=09=09=3D 0x20,
-> +=09CMD_GET_WDT_TIMELEFT=09=09=3D 0x21,
-> +
-> +=09/* available if POWEROFF_WAKEUP bit set in features */
-> +=09CMD_SET_WAKEUP=09=09=09=3D 0x22,
-> +=09CMD_GET_UPTIME_AND_WAKEUP=09=3D 0x23,
-> +=09CMD_POWER_OFF=09=09=09=3D 0x24,
-> +
-> +=09/* available if USB_OVC_PROT_SETTING bit set in features */
-> +=09CMD_SET_USB_OVC_PROT=09=09=3D 0x25,
-> +=09CMD_GET_USB_OVC_PROT=09=09=3D 0x26,
-> +
-> +=09/* available if TRNG bit set in features */
-> +=09CMD_TRNG_COLLECT_ENTROPY=09=3D 0x28,
-> +
-> +=09/* available if CRYPTO bit set in features */
-> +=09CMD_CRYPTO_GET_PUBLIC_KEY=09=3D 0x29,
-> +=09CMD_CRYPTO_SIGN_MESSAGE=09=09=3D 0x2A,
-> +=09CMD_CRYPTO_COLLECT_SIGNATURE=09=3D 0x2B,
-> +
-> +=09/* available if BOARD_INFO it set in features */
-> +=09CMD_BOARD_INFO_GET=09=09=3D 0x2C,
-> +=09CMD_BOARD_INFO_BURN=09=09=3D 0x2D,
-> +
-> +=09/* available only at address 0x2b (led-controller) */
-> +=09/* available only if LED_GAMMA_CORRECTION bit set in features */
-> +=09CMD_SET_GAMMA_CORRECTION=09=3D 0x30,
-> +=09CMD_GET_GAMMA_CORRECTION=09=3D 0x31,
-> +
-> +=09/* available only at address 0x2b (led-controller) */
-> +=09/* available only if PER_LED_CORRECTION bit set in features */
-> +=09/* available only if FROM_BIT_16_INVALID bit NOT set in features */
-> +=09CMD_SET_LED_CORRECTIONS=09=09=3D 0x32,
-> +=09CMD_GET_LED_CORRECTIONS=09=09=3D 0x33,
-> +};
-> +
-> +enum omnia_flashing_commands_e {
-> +=09FLASH_CMD_UNLOCK=09=09=3D 0x01,
-> +=09FLASH_CMD_SIZE_AND_CSUM=09=09=3D 0x02,
-> +=09FLASH_CMD_PROGRAM=09=09=3D 0x03,
-> +=09FLASH_CMD_RESET=09=09=09=3D 0x04,
-> +};
-
-I'm bit worried about many items above, they seem generic enough they=20
-could trigger name conflict at some point. Could these all defines be=20
-prefixed so there's no risk of collisions.
-
-> +enum omnia_sts_word_e {
-> +=09STS_MCU_TYPE_MASK=09=09=09=3D GENMASK(1, 0),
-> +=09STS_MCU_TYPE_STM32=09=09=09=3D 0 << 0,
-> +=09STS_MCU_TYPE_GD32=09=09=09=3D 1 << 0,
-> +=09STS_MCU_TYPE_MKL=09=09=09=3D 2 << 0,
-
-These are FIELD_PREP(STS_MCU_TYPE_MASK, x), although I suspect you need to=
-=20
-use FIELD_PREP_CONST() in this context. If neither ends up working in this=
-=20
-context, then leave it as is.
-
-> +=09STS_FEATURES_SUPPORTED=09=09=09=3D BIT(2),
-> +=09STS_USER_REGULATOR_NOT_SUPPORTED=09=3D BIT(3),
-> +=09STS_CARD_DET=09=09=09=09=3D BIT(4),
-> +=09STS_MSATA_IND=09=09=09=09=3D BIT(5),
-> +=09STS_USB30_OVC=09=09=09=09=3D BIT(6),
-> +=09STS_USB31_OVC=09=09=09=09=3D BIT(7),
-> +=09STS_USB30_PWRON=09=09=09=09=3D BIT(8),
-> +=09STS_USB31_PWRON=09=09=09=09=3D BIT(9),
-> +=09STS_ENABLE_4V5=09=09=09=09=3D BIT(10),
-> +=09STS_BUTTON_MODE=09=09=09=09=3D BIT(11),
-> +=09STS_BUTTON_PRESSED=09=09=09=3D BIT(12),
-> +=09STS_BUTTON_COUNTER_MASK=09=09=09=3D GENMASK(15, 13)
-> +};
-> +
-> +enum omnia_ctl_byte_e {
-> +=09CTL_LIGHT_RST=09=09=3D BIT(0),
-> +=09CTL_HARD_RST=09=09=3D BIT(1),
-> +=09/* BIT(2) is currently reserved */
-> +=09CTL_USB30_PWRON=09=09=3D BIT(3),
-> +=09CTL_USB31_PWRON=09=09=3D BIT(4),
-> +=09CTL_ENABLE_4V5=09=09=3D BIT(5),
-> +=09CTL_BUTTON_MODE=09=09=3D BIT(6),
-> +=09CTL_BOOTLOADER=09=09=3D BIT(7)
-> +};
-> +
-> +enum omnia_features_e {
-> +=09FEAT_PERIPH_MCU=09=09=09=3D BIT(0),
-> +=09FEAT_EXT_CMDS=09=09=09=3D BIT(1),
-> +=09FEAT_WDT_PING=09=09=09=3D BIT(2),
-> +=09FEAT_LED_STATE_EXT_MASK=09=09=3D GENMASK(4, 3),
-> +=09FEAT_LED_STATE_EXT=09=09=3D 1 << 3,
-> +=09FEAT_LED_STATE_EXT_V32=09=09=3D 2 << 3,
-
-Ditto.
-
-> +=09FEAT_LED_GAMMA_CORRECTION=09=3D BIT(5),
-> +=09FEAT_NEW_INT_API=09=09=3D BIT(6),
-> +=09FEAT_BOOTLOADER=09=09=09=3D BIT(7),
-> +=09FEAT_FLASHING=09=09=09=3D BIT(8),
-> +=09FEAT_NEW_MESSAGE_API=09=09=3D BIT(9),
-> +=09FEAT_BRIGHTNESS_INT=09=09=3D BIT(10),
-> +=09FEAT_POWEROFF_WAKEUP=09=09=3D BIT(11),
-> +=09FEAT_CAN_OLD_MESSAGE_API=09=3D BIT(12),
-> +=09FEAT_TRNG=09=09=09=3D BIT(13),
-> +=09FEAT_CRYPTO=09=09=09=3D BIT(14),
-> +=09FEAT_BOARD_INFO=09=09=09=3D BIT(15),
-> +
-> +=09/*
-> +=09 * Orginally the features command replied only 16 bits. If more were
-> +=09 * read, either the I2C transaction failed or 0xff bytes were sent.
-> +=09 * Therefore to consider bits 16 - 31 valid, one bit (20) was reserve=
-d
-> +=09 * to be zero.
-> +=09 */
-> +
-> +=09/* Bits 16 - 19 correspond to bits 0 - 3 of status word */
-> +=09FEAT_MCU_TYPE_MASK=09=09=3D GENMASK(17, 16),
-> +=09FEAT_MCU_TYPE_STM32=09=09=3D 0 << 16,
-> +=09FEAT_MCU_TYPE_GD32=09=09=3D 1 << 16,
-> +=09FEAT_MCU_TYPE_MKL=09=09=3D 2 << 16,
-
-Ditto.
-
-
---=20
- i.
---8323328-121940876-1714490287=:1349--
