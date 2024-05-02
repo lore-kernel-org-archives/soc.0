@@ -4,67 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33683C41513
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32AF7C04FFE
 	for <soc@archiver.kernel.org>; Thu,  2 May 2024 14:10:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0E276C4AF1A; Thu,  2 May 2024 14:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7879C4AF14
-	for <soc@kernel.org>; Thu,  2 May 2024 14:10:37 +0000 (UTC)
+	id 19075C4AF1D; Thu,  2 May 2024 14:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 033F5C4AF18;
+	Thu,  2 May 2024 14:10:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714659037;
-	bh=kdlmA+ZDuanESy5P1UYJE5mPG8DoENgDNNvtQJg8PxY=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=Nl+x0efkK6rHmhEg1crhnr9IikF0FQiXZgyeaW2+s+sfpFi4GgVJ/dH0tVDu8CpWe
-	 bCG2ko4zH5WTdCW6NobVwOJmNbwBqGYBqdtQNVsfkTqQPjYe1qkFDwycBgFByM82rl
-	 fQnk5ncueFmqRPFPpXP0Im5N708cnJvl6YK6x0UKzc4jonRJkQ0izwbXAyyM0tmrc3
-	 lfG7UEKITzePfvzHQ1MELSnfKyBj1mGyobmPyVjDYiKVBqXdmdAHVl70NjE7FDAqOT
-	 iAWH9qepBUM3wE5i3mRsuspbLWsT4kMHEsukhMJUtYOweU4BZF7ObpIn2JpX/rk8sT
-	 oKYEoNN6f/pYQ==
+	s=k20201202; t=1714659038;
+	bh=POp3YTy3R6MuX1zrV2I71VY50w/HHSkuRkyujSj/aEg=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Zorfw107LRWckBtevEJ0FV77z/VofqWoGOkX18BM3rNNev86fzDBSYcSgb6Daf3Ua
+	 Umusp9keqGuJRsKrestNdCldszn4cCUIsJe5wpxIBOs0nKlSOndiuI6Ooq74qpCUqb
+	 13fU9od0SyEDFI9uxmOGphCDP0hCos1x5lDGqfPgSIRu9YPX65HQCUTxFUqtTJL4ip
+	 ZsB+KCKE1Mt3Df+8f+/wD90qRimA8OhCzEncJF14W29dIrjC5tPXQnJcgCikQMuVst
+	 reyr2iUOmxuuFh1V073u9J3eMWWr5MVNuQn7xrwDxMjbNa/vfpVXZo9LXJmEMuMOMZ
+	 Ikg+aNZtJDlDQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7A5CC43443;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DE884C43612;
 	Thu,  2 May 2024 14:10:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.10
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171465903774.21409.6377949975797719694.git-patchwork-summary@kernel.org>
+ <171465903790.21409.14392428908934301468.git-patchwork-notify@kernel.org>
 Date: Thu, 02 May 2024 14:10:37 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <MA0P287MB2822CA2DE757787D6EA3B1F8FE192@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <MA0P287MB2822CA2DE757787D6EA3B1F8FE192@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+To: Chen Wang <unicorn_wang@outlook.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: arm64: dts: Add/fix /memory node unit-addresses
-  Submitter: Rob Herring (Arm) <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=849450
-  Lore link: https://lore.kernel.org/r/20240430191856.874600-2-robh@kernel.org
+On Wed, 1 May 2024 09:31:27 +0800 you wrote:
+> Hey Arnd,
+> 
+> Please pull dt changes for RISC-V/Sophgo.
+> 
+> Thanks,
+> Chen.
+> 
+> [...]
 
-Series: [GIT,PULL,1/3] soc: ti: Driver updates for v6.7
-  Submitter: Nishanth Menon <nm@ti.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=849636
-  Lore link: https://lore.kernel.org/r/20240501124300.i5jzeugdlrlnfg22@undrafted
-    Patches: [GIT,PULL,1/3] soc: ti: Driver updates for v6.7
-             [GIT,PULL,2/3] ARM: dts: ti: keystone: Updates for v6.9
-             [GIT,PULL,3/3] arm64: dts: TI K3 updates for v6.10
+Here is the summary with links:
+  - [GIT,PULL] RISC-V Sophgo Devicetrees for v6.10
+    https://git.kernel.org/soc/soc/c/0ea32f50b36f
 
-Patch: [GIT,PULL] RISC-V Sophgo Devicetrees for v6.10
-  Submitter: Chen Wang <unicorn_wang@outlook.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=849524
-  Lore link: https://lore.kernel.org/r/MA0P287MB2822CA2DE757787D6EA3B1F8FE192@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
-
-
-Total patches: 5
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
