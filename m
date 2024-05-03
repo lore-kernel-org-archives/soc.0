@@ -1,384 +1,170 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=u4mD=MG=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B535C4345F
-	for <soc@archiver.kernel.org>; Fri,  3 May 2024 08:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 931BEC4345F
+	for <soc@archiver.kernel.org>; Fri,  3 May 2024 08:32:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 08BF8C4AF19; Fri,  3 May 2024 08:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF45C116B1;
-	Fri,  3 May 2024 08:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714724909;
-	bh=WPFQDOZyXqlIgSkFDs2liqlBzNzrSepKHsz+LqKxi18=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=owkQbAI4HDNZFH9hjnIOzf0LKj9YSWG0oHwOeBLU0zLjlvcyPb2SC/sgZOouqhec9
-	 jcRV8LrCorHPw9XIoAQ/UOaKv8P9xuJT9K70t+BbW25fwPNJBoJtcZOZb86gx0snuZ
-	 OnBSkyUWHEhJbUdi6e3lFDpLZXovRQxczhQaQJC3MrQ46yIq5rRwdzKNyoo+OOBDvV
-	 UQjmCfHt/eul62Jxgckk6Z/YoQwslInXHUct77cNHZUUHUmsNnZFGE1lPiXaJYMJKz
-	 6bD+juZrSbBO4WaC+28jnkDCOYC0xpRzsF2PBXruGrFUqP5DTG6aFlxrZnx/D6208Y
-	 WjeOtRmdngw8A==
-Date: Fri, 3 May 2024 10:28:17 +0200
-From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v8 3/9] platform: cznic: turris-omnia-mcu: Add support
- for MCU connected GPIOs
-Message-ID: <20240503082714.ow5qtqu2myi3z2ug@kandell>
-References: <20240430115111.3453-1-kabel@kernel.org>
- <20240430115111.3453-4-kabel@kernel.org>
- <CAHp75VdV_JmbS1pM11Pf8S5vWU8X1FrKpw3aAtTHK0tsLua5fg@mail.gmail.com>
+	id 6C35BC4AF1A; Fri,  3 May 2024 08:32:09 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 70272C4AF18
+	for <soc@kernel.org>; Fri,  3 May 2024 08:32:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70272C4AF18
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34b64b7728cso6708404f8f.0
+        for <soc@kernel.org>; Fri, 03 May 2024 01:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714725127; x=1715329927; darn=kernel.org;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mfZqj/uiTXAWVaICZsb8XGcycuISC2QrzlPyuabJPZQ=;
+        b=dI9CfPSJzuRGBV35UdxwU8ZN0m+ojEySbvDhmQKUOymwflA544xoBKDuAPdN6ILJFw
+         NGokgeCNX+dgej+THfa2OL5ur1EHKr4Lb89eopqWas+kdVK0LLxbgAxErmjBVtFGfKmW
+         8xAZCEdCASnK8bgT2Bh4boQ8rI6QDPPUr9zPs8AZsHdClJa9Iv2KuArus1/39mGvGIyQ
+         42wLCQwdktmXxxgeg3WZKgF1rUoTMe1eL4Hm0IrcfjebJNcgFkhLY9NC3zhlaYmjLe4S
+         JhUqiMAv0O2y4pYXMyf92jO9JdcZvZVH4mL4wAwyVbTJMgfU/iPnjRDAYQBRX3V1lCrD
+         lwxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714725127; x=1715329927;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfZqj/uiTXAWVaICZsb8XGcycuISC2QrzlPyuabJPZQ=;
+        b=BnPBkw6xkmmNunoGOgQZQHvUT9WiJAPWDmeizijil6I/WtVjXTRLhrsrFcc1G63gz8
+         cB/vjwrO9hQB/CD8uQbJ/+Eu691M8MBZyw5i8gkyizHZLP1/Hhai0MwhXAEh5GsQ0LTJ
+         VfmZO/BeP00ZGudoc/vaiAjIL5+3Z+wvCtYpjxHP4FJcz4421nv2NChzM28Yq9s2dyAm
+         uzRxAQ4xl8iU1metA8OnQbJI5iKqeNrFmue+fqJswf7HkpExHdRT8itwleJW2g8+BSPn
+         t576hQpCN1H/I13U4j1tNVudqC20GnMYJ93ELAsFC8Z3gUoVi03VN4o+gUNOWGWK/Iu+
+         g88A==
+X-Gm-Message-State: AOJu0Yz4/rjMBujUN4+aeL4XPxd3F+SlWZTSkuCmAsSKdjHds7aTy3PP
+	Lz0Y5/880srLwdAHUNFFaSAp2hMBJFqDo6a5YBoIgN6bylgzLqGq2OeLyKQaxus54Ri6C7xj/xB
+	B16U=
+X-Google-Smtp-Source: AGHT+IFhxQr+lmvVrOszWeI4LjVFeSB2fpxfi8yQWJUByV+T/Z2kBX/gj36Lqd2+kb9ElWT2vjllgw==
+X-Received: by 2002:a05:6000:1379:b0:34d:7dee:649c with SMTP id q25-20020a056000137900b0034d7dee649cmr1532075wrz.13.1714725126617;
+        Fri, 03 May 2024 01:32:06 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:cad:2140:e481:a79a:a1d8:3ad2? ([2a01:e0a:cad:2140:e481:a79a:a1d8:3ad2])
+        by smtp.gmail.com with ESMTPSA id i3-20020a5d6303000000b00347eb354b30sm3164818wru.84.2024.05.03.01.32.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 May 2024 01:32:06 -0700 (PDT)
+Message-ID: <6030a450-fb4e-4e27-a5c3-6f4e0f326d9a@linaro.org>
+Date: Fri, 3 May 2024 10:32:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdV_JmbS1pM11Pf8S5vWU8X1FrKpw3aAtTHK0tsLua5fg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.10
+Reply-To: neil.armstrong@linaro.org
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 03, 2024 at 07:05:34AM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 30, 2024 at 2:51 PM Marek Behún <kabel@kernel.org> wrote:
-> >
-> > Add support for GPIOs connected to the MCU on the Turris Omnia board.
-> >
-> > This includes:
-> > - front button pin
-> > - enable pins for USB regulators
-> > - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
-> > - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
-> > - on board revisions 32+ also various peripheral resets and another
-> >   voltage regulator enable pin
-> 
-> ...
-> 
-> > -int omnia_cmd_read(const struct i2c_client *client, u8 cmd, void *reply,
-> > -                  unsigned int len)
-> > +int omnia_cmd_write_read(const struct i2c_client *client,
-> > +                        void *cmd, unsigned int cmd_len,
-> > +                        void *reply, unsigned int reply_len)
-> >  {
-> >         struct i2c_msg msgs[2];
-> > -       int ret;
-> > +       int ret, num;
-> >
-> >         msgs[0].addr = client->addr;
-> >         msgs[0].flags = 0;
-> > -       msgs[0].len = 1;
-> > -       msgs[0].buf = &cmd;
-> > -       msgs[1].addr = client->addr;
-> > -       msgs[1].flags = I2C_M_RD;
-> > -       msgs[1].len = len;
-> > -       msgs[1].buf = reply;
-> > -
-> > -       ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-> > +       msgs[0].len = cmd_len;
-> > +       msgs[0].buf = cmd;
-> > +       num = 1;
-> > +
-> > +       if (reply_len) {
-> > +               msgs[1].addr = client->addr;
-> > +               msgs[1].flags = I2C_M_RD;
-> > +               msgs[1].len = reply_len;
-> > +               msgs[1].buf = reply;
-> > +               num++;
-> > +       }
-> > +
-> > +       ret = i2c_transfer(client->adapter, msgs, num);
-> >         if (ret < 0)
-> >                 return ret;
-> > -       if (ret != ARRAY_SIZE(msgs))
-> > +       if (ret != num)
-> >                 return -EIO;
-> >
-> >         return 0;
-> 
-> Hold on, you are "patching" the code you just brought by the previous
-> patch?! No, just do from the beginning how it should be at the end.
+Hi,
 
-Fixed.
+Here's a set of Amlogic ARM64 DT changes for v6.10, with:
+- Initial Amlogic A4 & A5 support
+- MIPI DSI support for G12A, G12B & SM1 SoCs
+- Overlay for Khadas TS050 panel for the Khadas VIM3/VIM3L
+- Amlogic T7 reset controller
+- New board: MNT Reform 2 CM4 adapter with a BPI-CM4 Module, AV400 (Amlogic A5),
+BA400 (Amlogic A4)
 
-> > +#include <linux/devm-helpers.h>
-> 
-> Do you still need this?
+Neil
 
-Yes, for devm_delayed_work_drop().
+The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
-> ...
-> 
-> > +#define FRONT_BUTTON_RELEASE_DELAY     50 /* ms */
-> 
-> Use proper unit suffix instead of a comment like many others do.
-> 
-> _MS here.
+   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 
-Fixed.
+are available in the Git repository at:
 
-> > +static const char * const omnia_mcu_gpio_templates[64] = {
-> > +       /* GPIOs with value read from the 16-bit wide status */
-> > +       [4]  = "gpio%u.MiniPCIe0 Card Detect",
-> > +       [5]  = "gpio%u.MiniPCIe0 mSATA Indicator",
-> > +       [6]  = "gpio%u.Front USB3 port over-current",
-> > +       [7]  = "gpio%u.Rear USB3 port over-current",
-> > +       [8]  = "gpio%u.Front USB3 port power",
-> > +       [9]  = "gpio%u.Rear USB3 port power",
-> > +       [12] = "gpio%u.Front Button",
-> > +
-> > +       /* GPIOs with value read from the 32-bit wide extended status */
-> > +       [16] = "gpio%u.SFP nDET",
-> > +       [28] = "gpio%u.MiniPCIe0 LED",
-> > +       [29] = "gpio%u.MiniPCIe1 LED",
-> > +       [30] = "gpio%u.MiniPCIe2 LED",
-> > +       [31] = "gpio%u.MiniPCIe0 PAN LED",
-> > +       [32] = "gpio%u.MiniPCIe1 PAN LED",
-> > +       [33] = "gpio%u.MiniPCIe2 PAN LED",
-> > +       [34] = "gpio%u.WAN PHY LED0",
-> > +       [35] = "gpio%u.WAN PHY LED1",
-> > +       [36] = "gpio%u.LAN switch p0 LED0",
-> > +       [37] = "gpio%u.LAN switch p0 LED1",
-> > +       [38] = "gpio%u.LAN switch p1 LED0",
-> > +       [39] = "gpio%u.LAN switch p1 LED1",
-> > +       [40] = "gpio%u.LAN switch p2 LED0",
-> > +       [41] = "gpio%u.LAN switch p2 LED1",
-> > +       [42] = "gpio%u.LAN switch p3 LED0",
-> > +       [43] = "gpio%u.LAN switch p3 LED1",
-> > +       [44] = "gpio%u.LAN switch p4 LED0",
-> > +       [45] = "gpio%u.LAN switch p4 LED1",
-> > +       [46] = "gpio%u.LAN switch p5 LED0",
-> > +       [47] = "gpio%u.LAN switch p5 LED1",
-> > +
-> > +       /* GPIOs with value read from the 16-bit wide extended control status */
-> > +       [48] = "gpio%u.eMMC nRESET",
-> > +       [49] = "gpio%u.LAN switch nRESET",
-> > +       [50] = "gpio%u.WAN PHY nRESET",
-> > +       [51] = "gpio%u.MiniPCIe0 nPERST",
-> > +       [52] = "gpio%u.MiniPCIe1 nPERST",
-> > +       [53] = "gpio%u.MiniPCIe2 nPERST",
-> > +       [54] = "gpio%u.WAN PHY SFP mux",
-> > +};
-> 
-> You may reduce the memory footprint of these just by doing "gpio%u."
-> part(s) outside. Here compiler won't compress this (as in the case of
-> repetitive string literals),
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.10
 
-Are you saying that I should dynamically create another array just to
-pass it to the gpiochip's names pointer?
- 
-> > +static const struct omnia_gpio {
-> > +       u8 cmd, ctl_cmd;
-> > +       u32 bit, ctl_bit;
-> > +       u32 int_bit;
-> > +       u16 feat, feat_mask;
-> > +} omnia_gpios[64] = {
-> 
-> It's much better to decouple definition and assignment and put
-> definition _before_ the macros that fill it.
+for you to fetch changes up to a42f2e9ba13b8a4c556f43ed99e22ae14fb73130:
 
-Fixed.
+   arm64: dts: amlogic: Add Amlogic T7 reset controller (2024-04-23 10:04:25 +0200)
 
-> > +               scoped_guard(mutex, &mcu->lock)
-> > +                       val = omnia_cmd_read_bit(mcu->client,
-> > +                                                CMD_GET_EXT_CONTROL_STATUS,
-> > +                                                EXT_CTL_PHY_SFP_AUTO);
-> > +
-> > +               if (val < 0)
-> > +                       return val;
-> 
-> I would move that under guard  for the sake of better readability
-> (usual pattern in place). It's anyway a slow path and one branch under
-> the mutex won't affect anything.
+----------------------------------------------------------------
+Amlogic ARM64 DT changes for v6.10:
+- New Boards:
+   - MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+   - AV400 (Amlogic A5)
+   - BA400 (Amlogic A4)
+- Initial Amlogic A4 & A5 support
+- MIPI DSI support for G12A, G12B & SM1 SoCs
+- Overlay for Khadas TS050 panel for the Khadas VIM3/VIM3L
+- Amlogic T7 reset controller
 
-OK.
+----------------------------------------------------------------
+Neil Armstrong (4):
+       dt-bindings: arm: amlogic: Document the MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+       arm64: meson: g12-common: add the MIPI DSI nodes
+       arm64: meson: khadas-vim3l: add TS050 DSI panel overlay
+       arm64: dts: amlogic: meson-g12b-bananapi-cm4: add support for MNT Reform2 with CM4 adaper
 
-> > +               if (val)
-> > +                       return GPIO_LINE_DIRECTION_IN;
-> > +
-> > +               return GPIO_LINE_DIRECTION_OUT;
-> 
-> ...
-> 
-> > +       struct omnia_mcu *mcu = gpiochip_get_data(gc);
-> > +       u32 sts_bits, ext_sts_bits, ext_ctl_bits;
-> > +       int err, i;
-> 
-> > +       sts_bits = 0;
-> > +       ext_sts_bits = 0;
-> > +       ext_ctl_bits = 0;
-> 
-> Why not assign these inside the definition line?
+Xianwei Zhao (6):
+       arm64: dts: meson: fix S4 power-controller node
+       dt-bindings: arm: amlogic: add A4 support
+       dt-bindings: arm: amlogic: add A5 support
+       dt-bindings: serial: amlogic,meson-uart: Add compatible string for A4
+       arm64: dts: add support for A4 based Amlogic BA400
+       arm64: dts: add support for A5 based Amlogic AV400
 
-OK.
+Zelong Dong (1):
+       arm64: dts: amlogic: Add Amlogic T7 reset controller
 
-> > +       for_each_set_bit(i, mask, ARRAY_SIZE(omnia_gpios)) {
-> > +               if (omnia_gpios[i].cmd == CMD_GET_STATUS_WORD)
-> > +                       __assign_bit(i, bits, sts_bits & omnia_gpios[i].bit);
-> > +               else if (omnia_gpios[i].cmd == CMD_GET_EXT_STATUS_DWORD)
-> > +                       __assign_bit(i, bits, ext_sts_bits &
-> > +                                             omnia_gpios[i].bit);
-> 
-> One line?
-
-That would be 81 columns, which I would like to avoid.
-I can remove the _bits suffix from these variables, though. What do you
-think?
-
-> > +               else if (omnia_gpios[i].cmd == CMD_GET_EXT_CONTROL_STATUS)
-> > +                       __assign_bit(i, bits, ext_ctl_bits &
-> > +                                             omnia_gpios[i].bit);
-> 
-> Ditto?
-> 
-> > +       }
-> 
-> ...
-> 
-> > +       struct omnia_mcu *mcu = gpiochip_get_data(gc);
-> > +       u16 ext_ctl, ext_ctl_mask;
-> > +       u8 ctl, ctl_mask;
-> > +       int i;
-> > +
-> > +       ctl = 0;
-> > +       ctl_mask = 0;
-> > +       ext_ctl = 0;
-> > +       ext_ctl_mask = 0;
-> 
-> Assignments in the definition line?
-
-OK
-
-> > +       for_each_set_bit(i, mask, ARRAY_SIZE(omnia_gpios)) {
-> > +               if (omnia_gpios[i].ctl_cmd == CMD_GENERAL_CONTROL) {
-> > +                       ctl_mask |= omnia_gpios[i].ctl_bit;
-> > +                       if (test_bit(i, bits))
-> > +                               ctl |= omnia_gpios[i].ctl_bit;
-> > +               } else if (omnia_gpios[i].ctl_cmd == CMD_EXT_CONTROL) {
-> > +                       ext_ctl_mask |= omnia_gpios[i].ctl_bit;
-> > +                       if (test_bit(i, bits))
-> > +                               ext_ctl |= omnia_gpios[i].ctl_bit;
-> > +               }
-> > +       }
-> 
-> ...
-> 
-> > +/**
-> > + * omnia_mask_interleave - Interleaves the bytes from @rising and @falling
-> > + *     @dst: the destination u8 array of interleaved bytes
-> > + *     @rising: rising mask
-> > + *     @falling: falling mask
-> > + *
-> > + * Interleaves the little-endian bytes from @rising and @falling words.
-> > + *
-> > + * If @rising = (r0, r1, r2, r3) and @falling = (f0, f1, f2, f3), the result is
-> > + * @dst = (r0, f0, r1, f1, r2, f2, r3, f3).
-> > + *
-> > + * The MCU receives interrupt mask and reports pending interrupt bitmap int this
-> 
-> an interrupt
-> a pending
-> int --> in ?
-
-Thx.
-
-> > + * interleaved format. The rationale behind it is that the low-indexed bits are
-> > + * more important - in many cases, the user will be interested only in
-> > + * interrupts with indexes 0 to 7, and so the system can stop reading after
-> > + * first 2 bytes (r0, f0), to save time on the slow I2C bus.
-> > + *
-> > + * Feel free to remove this function and its inverse, omnia_mask_deinterleave,
-> > + * and use an appropriate bitmap_* function once such a function exists.
-> > + */
-> > +static void omnia_mask_interleave(u8 *dst, u32 rising, u32 falling)
-> > +{
-> > +       for (int i = 0; i < sizeof(u32); ++i) {
-> > +               dst[2 * i] = rising >> (8 * i);
-> > +               dst[2 * i + 1] = falling >> (8 * i);
-> > +       }
-> 
-> I will look at this later on,
-> 
-> > +}
-> 
-> > +static void omnia_mask_deinterleave(const u8 *src, u32 *rising, u32 *falling)
-> > +{
-> > +       *rising = *falling = 0;
-> > +
-> > +       for (int i = 0; i < sizeof(u32); ++i) {
-> > +               *rising |= src[2 * i] << (8 * i);
-> > +               *falling |= src[2 * i + 1] << (8 * i);
-> > +       }
-> > +}
-> 
-> and into this.
-> 
-> ...
-> 
-> > +static size_t omnia_irq_compute_pending_length(u32 rising, u32 falling)
-> > +{
-> > +       size_t rlen = 0, flen = 0;
-> > +
-> > +       if (rising)
-> > +               rlen = ((__fls(rising) >> 3) << 1) + 1;
-> > +
-> > +       if (falling)
-> > +               flen = ((__fls(falling) >> 3) << 1) + 2;
-> > +
-> > +       return max(rlen, flen);
-> > +}
-> 
-> I am not sure why you need this, but it can be done easily
-> 
-> x = ((__fls(falling | rising) >> 3) << 1) + 1;
-> if (falling)
->   return x + 1;
-> return x;
-> 
-> and most likely you can drop minmax.h.
-
-This will return different results for for example when
-  rising = 0x100
-  falling = 0x10
-where we need to read only 3 bytes, but your version will say that we
-need 4 bytes.
-
-> > +static const char * const front_button_modes[2] = { "mcu", "cpu" };
-> 
-> 2 is not needed.
-
-OK
-
-> > -#include <linux/i2c.h>
-> 
-> ??? That is exactly the point to have things done from the beginning.
-
-I must have somehow missed this before sending, I see that I've already
-fixed it in my working branch.
-
-> > +#include <linux/bitops.h>
-> > +#include <linux/gpio/driver.h>
-> >  #include <linux/if_ether.h>
-> > +#include <linux/mutex.h>
-> >  #include <linux/types.h>
-> > +#include <linux/workqueue.h>
-> >  #include <asm/byteorder.h>
-> 
-> ...
-> 
-> > +       err = omnia_cmd_read(client, cmd, &reply, (__fls(bits) >> 3) + 1);
-> 
-> Perhaps a helper for this (__fls(x) >> 3 + (y)) ? It seems it's used
-> in a few places.
-> 
-> 
-> > +       if (err)
-> > +               return err;
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
+  Documentation/devicetree/bindings/arm/amlogic.yaml |  13 +
+  .../bindings/serial/amlogic,meson-uart.yaml        |   4 +-
+  arch/arm64/boot/dts/amlogic/Makefile               |   7 +
+  .../boot/dts/amlogic/amlogic-a4-a113l2-ba400.dts   |  42 +++
+  arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi |  66 ++++
+  arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi        |  40 +++
+  .../boot/dts/amlogic/amlogic-a5-a113x2-av400.dts   |  42 +++
+  arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |  40 +++
+  arch/arm64/boot/dts/amlogic/amlogic-t7-reset.h     | 197 +++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |   7 +
+  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  70 ++++
+  .../meson-g12b-bananapi-cm4-mnt-reform2.dts        | 384 +++++++++++++++++++++
+  .../boot/dts/amlogic/meson-khadas-vim3-ts050.dtso  | 108 ++++++
+  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |  13 +-
+  14 files changed, 1028 insertions(+), 5 deletions(-)
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4-a113l2-ba400.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a5-a113x2-av400.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7-reset.h
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dts
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-khadas-vim3-ts050.dtso
