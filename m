@@ -4,45 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01022C4345F
-	for <soc@archiver.kernel.org>; Fri,  3 May 2024 15:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E61C4345F
+	for <soc@archiver.kernel.org>; Fri,  3 May 2024 16:00:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BE1B7C4AF14; Fri,  3 May 2024 15:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3273C116B1;
-	Fri,  3 May 2024 15:24:26 +0000 (UTC)
+	id 36510C4AF14; Fri,  3 May 2024 16:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2168AC116B1;
+	Fri,  3 May 2024 16:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714749867;
-	bh=VzYDjz6Alrh5rc29azegKHfeaIuyDttUXWVT6P1Z5Qc=;
+	s=k20201202; t=1714752021;
+	bh=D/hkTPjcZ3XhzhYMbrhX7QYHL46VROSqlyZ0ngn0ErY=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=Bd+hPBjiI2lvqOXQOLp4/KMxCgCWaFSmWc9LMrAkocGUM+UHPNSrgECAjaWwBInpD
-	 2IhQMkS2dl8F1M2qRSg07wh9dMmT3S41hvVNNx2pdtztTQRFCqg8Hto00CFE7lbXJv
-	 thGGsLF5hqjJ8zCGCcvubLPE68li8wJk9bVLuwgG4gOHCl8iYe8mxQw7wH7xz97Tct
-	 RV6CSSBS84y9Z2ntmM8Igrv3j7IIIEKAx3Z+0X53xzNslJ/nV/uZe1lZBhOH4BSCSK
-	 4rTLprkrqiVuOeXn5qUVxuJFM4kjtlo0gGr4o1CCP1huCnOVSvLBS82+BiwyWQwiG7
-	 a4HS005QTz5zg==
-Date: Fri, 3 May 2024 16:24:24 +0100
+	b=FNQSV3XQRmxOP01zbKwIRelQMTww4h1zgAkrMPo/aSuu/6gp0fBcaZ/7zGXTWA24d
+	 Uyx25HMWTVsKPD7P/q5Hm8n7sXNRCP4WyR0+HRyKj3MPYG2nfzMDOZti9KUMOYMeB5
+	 CRRHprrASlTFQ4RH6W0wD6/0Bn3bn50u3/rFkqdLbzzy05txk4fF3+AMtaQ1wx/o3W
+	 tro5+8TnHDat4f67teqRIHtrZfoLiR6VONnytUMlaYrPqTXp/eiLdLeWtxa8Ij3kjM
+	 rxuP4N9iNKOfHn+CLnGBmXqV1RKCNH6lyOW5cZV+GJHMnuNGBjFxKGxIGESCn7vM15
+	 mJmEjz79RUJPQ==
+Date: Fri, 3 May 2024 17:00:18 +0100
 From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V Devicetrees for v6.10
-Message-ID: <20240503-swimmer-botany-7368a8a17b1a@spud>
+Cc: conor@kernel.org, palmer@dabbelt.com, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V SoC drivers for v6.10
+Message-ID: <20240503-mardi-underling-3d81a9f97329@spud>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Nt1dKSqlHDLidhSC"
+	protocol="application/pgp-signature"; boundary="2GaNlXgN7vr+swTG"
 Content-Disposition: inline
 
 
---Nt1dKSqlHDLidhSC
+--2GaNlXgN7vr+swTG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 Hey Arnd,
 
-Please pull some dt updates for v6.10. The diff here is a little bigger
-than my tag implies, but I've done this on top of -fixes and wanted to
-make this obvious. I've also not really mentioned all the Kconfig stuff
-much as you'll get that in another branch.
+Please pull some SoC-related Kconfig changes for v6.10. LMK if you
+think this stuff should really be going through the actual riscv tree
+in the future and I'll just harass Palmer about it instead of taking
+it myself. That said, Palmer did Ack it all...
 
 Cheers,
 Conor.
@@ -53,129 +54,71 @@ The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.10
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-co=
+nfig-for-v6.10
 
-for you to fetch changes up to 8fd63d81a76024fbd8e3fca29a0748bc9ca46161:
+for you to fetch changes up to cd899f85b1e454188fa2f14c3396a894f440b15f:
 
-  riscv: dts: microchip: add pac1934 power-monitor to icicle (2024-05-02 17:24:09 +0100)
+  riscv: config: enable ARCH_CANAAN in defconfig (2024-04-10 11:42:13 +0100)
 
 ----------------------------------------------------------------
-RISC-V Devicetrees for v6.10
+RISC-V SoC Kconfig Updates for v6.10
 
-Canaan:
-Basic support for the k230 from Canaan and two boards based on it.
-The k230 is the first SoC we're adding support for that implements the
-ratified Vector extension, granted mainline doesn't yet support the
-non-ratified extension for the SoCs that have it. Only the "Big" core is
-supported right now and in a very basic configuration. The SoC is also
-the first we have that support the Zicbom and Zicboz cache
-management/zeroing extensions. Despite having T-Head CPU cores, the
-non-spec compliant page table bit "erratum" isn't currently used here
-either, as the SoC supports the standard Svpbmt extension. Using Svpbmt
-requires non-factory m-mode firmware to clear the relevant bit in
-CSR.MXSTATUS, but non-factory firmware is required for running mainline
-on most (all?) SoCs using a T-Head CPU to date due to other issues.
-Commit 5db2c4dc413e ("riscv: dts: add initial canmv-k230 and k230-evb
-dts") contains more information on the supported extensions.
+A few different bits of SoC-related Kconfig work. The first part of
+this is shared with the DT updates - the modification of all SOC_CANAAN
+users to SOC_CANAAN_K210 to split the existing m-mode nommu k210 away
+=66rom the k230 that is able to be used in a "common" kernel.
 
-Support for the k230 required some re-jiggling of Kconfig options that
-previously operated under the assumption that a Canaan SoC meant a
-kernel running in m-mode with the MMU disabled.
-
-Microchip:
-A simple addition of a power-monitor on the Icicle dev board, as the
-binding for it is now in mainline.
-
-StarFive:
-Support for the Milk-V Mars. This board is incredibly similar to the
-VisionFive v2 that is already supported, with only the really ethernet
-configuration being slightly different. Emil requested that a common
-dtsi file, so my fixes branch is pulled into for-next to avoid an
-annoying conflict between moved content and some erroneously added
-nodes that were removed as fixes this cycle.
+The other thing here is the removal of most of the SOC_VENDOR options,
+with their ARCH_VENDOR equivalents that've been waiting in the wings for
+1 year+ now made visible. Due a lapse on my part when originally adding
+the ARCH_VENDOR stuff, the Microchip transition isn't complete - the
+_POLARFIRE was a mistake to keep as there's gonna be non-PolarFire
+RISC-V stuff from Microchip soonTM.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Conor Dooley (3):
+Conor Dooley (4):
       RISC-V: Drop unused SOC_CANAAN
-      RISC-V: add Milkv Mars board devicetree
-      riscv: dts: microchip: add pac1934 power-monitor to icicle
+      RISC-V: drop SOC_MICROCHIP_POLARFIRE for ARCH_MICROCHIP
+      RISC-V: drop SOC_SIFIVE for ARCH_SIFIVE
+      RISC-V: drop SOC_VIRT for ARCH_VIRT
 
-Hannah Peuckmann (2):
-      riscv: dts: starfive: visionfive 2: Remove non-existing TDM hardware
-      riscv: dts: starfive: visionfive 2: Remove non-existing I2S hardware
-
-Jisheng Zhang (8):
-      riscv: dts: starfive: add 'cpus' label to jh7110 and jh7100 soc dtsi
-      dt-bindings: riscv: starfive: add Milkv Mars board
-      riscv: dts: starfive: visionfive 2: update sound and codec dt node name
-      riscv: dts: starfive: visionfive 2: use cpus label for timebase freq
-      riscv: dts: starfive: visionfive 2: add tf cd-gpios
-      riscv: dts: starfive: visionfive 2: add "disable-wp" for tfcard
-      riscv: dts: starfive: introduce a common board dtsi for jh7110 based boards
-      riscv: dts: starfive: add Milkv Mars board device tree
-
-Shengyu Qu (1):
-      riscv: dts: starfive: Remove PMIC interrupt info for Visionfive 2 board
-
-Thomas Bonnefille (1):
-      riscv: dts: thead: Fix node ordering in TH1520 device tree
-
-Yangyu Chen (10):
+Yangyu Chen (6):
       riscv: Kconfig.socs: Split ARCH_CANAAN and SOC_CANAAN_K210
       soc: canaan: Deprecate SOC_CANAAN and use SOC_CANAAN_K210 for K210
       clk: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
       pinctrl: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
       reset: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
-      dt-bindings: riscv: Add T-HEAD C908 compatible
-      dt-bindings: add Canaan K230 boards compatible strings
-      dt-bindings: timer: Add Canaan K230 CLINT
-      dt-bindings: interrupt-controller: Add Canaan K230 PLIC
-      riscv: dts: add initial canmv-k230 and k230-evb dts
+      riscv: config: enable ARCH_CANAAN in defconfig
 
- .../interrupt-controller/sifive,plic-1.0.0.yaml    |   1 +
- .../devicetree/bindings/riscv/canaan.yaml          |   8 +-
- Documentation/devicetree/bindings/riscv/cpus.yaml  |   1 +
- .../devicetree/bindings/riscv/starfive.yaml        |   1 +
- .../devicetree/bindings/timer/sifive,clint.yaml    |   1 +
- arch/riscv/Kconfig.socs                            |   8 +-
- arch/riscv/Makefile                                |   2 +-
- arch/riscv/boot/dts/canaan/Makefile                |   2 +
- arch/riscv/boot/dts/canaan/k230-canmv.dts          |  24 +
- arch/riscv/boot/dts/canaan/k230-evb.dts            |  24 +
- arch/riscv/boot/dts/canaan/k230.dtsi               | 142 +++++
- arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts  |  32 +
- arch/riscv/boot/dts/starfive/Makefile              |   1 +
- arch/riscv/boot/dts/starfive/jh7100.dtsi           |   2 +-
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi    | 599 ++++++++++++++++++
- arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts |  30 +
- .../dts/starfive/jh7110-starfive-visionfive-2.dtsi | 683 +--------------------
- arch/riscv/boot/dts/starfive/jh7110.dtsi           |   2 +-
- arch/riscv/boot/dts/thead/th1520.dtsi              |  54 +-
- arch/riscv/configs/nommu_k210_defconfig            |   3 +-
- arch/riscv/configs/nommu_k210_sdcard_defconfig     |   3 +-
- drivers/clk/Kconfig                                |   4 +-
- drivers/pinctrl/Kconfig                            |   4 +-
- drivers/reset/Kconfig                              |   4 +-
- drivers/soc/Makefile                               |   2 +-
- drivers/soc/canaan/Kconfig                         |   4 +-
- 26 files changed, 914 insertions(+), 727 deletions(-)
- create mode 100644 arch/riscv/boot/dts/canaan/k230-canmv.dts
- create mode 100644 arch/riscv/boot/dts/canaan/k230-evb.dts
- create mode 100644 arch/riscv/boot/dts/canaan/k230.dtsi
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-common.dtsi
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts
+ arch/riscv/Kconfig.socs                            | 22 +++++++++---------=
+----
+ arch/riscv/Makefile                                |  2 +-
+ arch/riscv/configs/defconfig                       |  7 ++++---
+ arch/riscv/configs/nommu_k210_defconfig            |  3 ++-
+ arch/riscv/configs/nommu_k210_sdcard_defconfig     |  3 ++-
+ arch/riscv/configs/nommu_virt_defconfig            |  2 +-
+ drivers/clk/Kconfig                                |  4 ++--
+ drivers/pinctrl/Kconfig                            |  4 ++--
+ drivers/reset/Kconfig                              |  4 ++--
+ drivers/soc/Makefile                               |  2 +-
+ drivers/soc/canaan/Kconfig                         |  4 ++--
+ tools/testing/kunit/qemu_configs/riscv.py          |  2 +-
+ .../selftests/wireguard/qemu/arch/riscv32.config   |  2 +-
+ .../selftests/wireguard/qemu/arch/riscv64.config   |  2 +-
+ 14 files changed, 31 insertions(+), 32 deletions(-)
 
---Nt1dKSqlHDLidhSC
+--2GaNlXgN7vr+swTG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjUBqAAKCRB4tDGHoIJi
-0nsTAQD1j/ao7NZPHfuXO/jza5QJzPbolfBIuFqm70sCePC/6AEAvzSVrA37RNTt
-DySd8hlht5b24XLbV521NQgCaFrShwM=
-=hh0Y
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjUKEQAKCRB4tDGHoIJi
+0i2GAQC5OhZf31C5jWXd+7ucb8Je+dskOOnCoIMe4riFlB01zwEA9Xya95A0Q6m0
+ngc47qjBWdjchk4soRp5JD3yqolh0AI=
+=OTNe
 -----END PGP SIGNATURE-----
 
---Nt1dKSqlHDLidhSC--
+--2GaNlXgN7vr+swTG--
