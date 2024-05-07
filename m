@@ -1,126 +1,141 @@
-Return-Path: <SRS0=aYPc=MK=arndb.de=arnd@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55DABC10F1A
-	for <soc@archiver.kernel.org>; Tue,  7 May 2024 12:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72923C25B4F
+	for <soc@archiver.kernel.org>; Tue,  7 May 2024 17:44:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 24926C4AF63; Tue,  7 May 2024 12:16:06 +0000 (UTC)
-Received: from wfhigh6-smtp.messagingengine.com (wfhigh6-smtp.messagingengine.com [64.147.123.157])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 689B5C2BBFC;
-	Tue,  7 May 2024 12:16:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 689B5C2BBFC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 38B5A1800095;
-	Tue,  7 May 2024 08:16:00 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 07 May 2024 08:16:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1715084159; x=1715170559; bh=HWVcQkuyNh
-	J6YB2kHQMpV4nKRP/UJMbsrUtkQrq1C3c=; b=GWAV3DhODOVGMwKE5UJ4oyo+3N
-	ZMcKZdyapzuFo0Z/tbvDNP+wZ+PEWn9droU29pSPY3ML8NpNyExVF50WMBpYHz27
-	Wb35D/pLpYP/0A8fxMemn2GXg3RIbIGkVSbl7G1I3zWpmmujWT1YfY+r1yFmgSR1
-	CsShIGWoiycEzh1ZaT7kPhFDc//IjSWjQvLQOjjECYTvs+bySbxbDbK2yle5VqU8
-	raJan+gqwlmld5JXwXXWXU8Yy9Xnq9aVPEUKB9Ug1ILZEsKpsBdVk8WS8tvYIW6U
-	xnyDKXHtswl+4gd7qB1D/EDY6bNtEmgC5Ybz2aLI82IH6OBOv046Cozbxbbw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1715084159; x=1715170559; bh=HWVcQkuyNhJ6YB2kHQMpV4nKRP/U
-	JMbsrUtkQrq1C3c=; b=iQb+/Gf7oR43rWmHqkwU92WCU1lkVR6FEFm7Z8a3kbs7
-	5AvH0A9KQmnDdxOHddvStqWJE7eJq7RJWlaq3jkvRPPOmrdkdc3BtsSrlf/o2fcQ
-	2lD2GkfICJx0I9DR7nlxgyrnyG2fSQkId1wd8bjAmmx5+8yqKk/cfBxMSF8I7Dss
-	RdMSTpeqdKexMLNnuVyYZ5XrXl40K2Xte0Dcsop3yIALsleex0BjzgLuAUi4pQBf
-	W1M28PRY2BrWitYgYmGyjSMz1fOCnmG8ov/KlYD40K+NdQPNlO+je92MWI8gj3nn
-	dhSKKEBGt7a/2c74A7khX7chkFeFJnNN9OBM6w+tMQ==
-X-ME-Sender: <xms:fxs6ZjrCFzqb6iDlo1c5dIQNv6T0tspSUv3z76VvwSa7HrXz7mFgRQ>
-    <xme:fxs6ZtrqC7bNUxQHCao6MYyDC6iLa61aDm22rKFpkz1UYvR1C8LQLSEwD1n8MtlPd
-    Ew0cTE4Z5U9DeGNvs0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:fxs6ZgMza7zRHMdpQgpcFkAyh8rg42ILHwU2mXTFSR-KWOqehRbyMw>
-    <xmx:fxs6Zm7WIG8kJXyF9W6ULiv_wn3YdNTkCetGtMYkiyFEHG8jcB1rbw>
-    <xmx:fxs6Zi7lTR9mjID03CsjkE-fQndatOII7dfA-alJhXVfl6oxi_CJbA>
-    <xmx:fxs6ZuiEYPsq2CdJ_G8Mv17ian73OZlckPhLt6vzg6K6koreqi4kUA>
-    <xmx:fxs6ZomfLY1F0hsgBC03WC9C7Pki2odx_1vRkVH4StG5aps7UXorkeY2>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 76350B6008D; Tue,  7 May 2024 08:15:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-443-g0dc955c2a-fm-20240507.001-g0dc955c2
-MIME-Version: 1.0
-Message-Id: <9031c5c8-1e93-491d-b756-5794cb87d1cb@app.fastmail.com>
-In-Reply-To: <20240507-concrete-come-2899fab0888e@wendy>
-References: <20240503-swimmer-botany-7368a8a17b1a@spud>
- <5222e581-a189-4477-ba6a-edf4ce369eb0@app.fastmail.com>
- <20240507-hungrily-squash-2ac370e05fc0@wendy>
- <b618c311-8925-4717-b6bf-f3699b106189@app.fastmail.com>
- <20240507-concrete-come-2899fab0888e@wendy>
-Date: Tue, 07 May 2024 14:15:39 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Conor.Dooley" <conor.dooley@microchip.com>
+	id 3C166C4AF66; Tue,  7 May 2024 17:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EADC2BBFC;
+	Tue,  7 May 2024 17:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715103894;
+	bh=afeJ7X9kQkRTOnq7LRYcJeb2wMqKcbRZeouJI2+0JdE=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=hwRNvNX37RNh1vyzZyJiMzpxEMtX/l8WZr4bv9TjAFO2XeiFcAiYhWZPsv+Vq+8am
+	 32YaXR3RYwRUGroxQXNxFiDHPKU74BX+iIPjwKVBdfEY3AT0AoQZHCVetcR6egwqHa
+	 IH8u4PZ6r9r53Wfcb0Xb9Tn766aP6/H/uP4ZR0U1BvLk3DY4rfMiBn5GVNXfONbd6D
+	 1aC5tLWxhy9N5F+G3KDLMTiip5dywq0Rz8ie7bWd8K7I5GJ8Tf//rpUPoB0Sres4Lf
+	 LZxEFhEcycVydn5schwxfzhrFxTWJBQs3ZzL058sc57w9u7QrJPy3k4XhpvpfwX+rx
+	 aXRgPmXt0kekg==
+Date: Tue, 7 May 2024 19:44:41 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: "Conor Dooley" <conor@kernel.org>, soc@kernel.org,
- linux-riscv@lists.infradead.org
-Subject: Re: [GIT PULL] RISC-V Devicetrees for v6.10
-Content-Type: text/plain
+Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v8 3/9] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <20240507174441.uualqqy65es55gzf@kandell>
+References: <20240430115111.3453-1-kabel@kernel.org>
+ <20240430115111.3453-4-kabel@kernel.org>
+ <CAHp75VdV_JmbS1pM11Pf8S5vWU8X1FrKpw3aAtTHK0tsLua5fg@mail.gmail.com>
+ <20240503082714.ow5qtqu2myi3z2ug@kandell>
+ <ZjUyJSuGthKH0q4q@smile.fi.intel.com>
+ <20240505081832.vf2267v37shu6fhe@kandell>
+ <CAHp75VcDi5hbG3wzygBJ=iGteVrzJp08sKD0cJyS1vvkx8fo6Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VcDi5hbG3wzygBJ=iGteVrzJp08sKD0cJyS1vvkx8fo6Q@mail.gmail.com>
 
-On Tue, May 7, 2024, at 12:21, Conor Dooley wrote:
-> On Tue, May 07, 2024 at 12:08:13PM +0200, Arnd Bergmann wrote:
->> On Tue, May 7, 2024, at 11:58, Conor Dooley wrote:
->> > On Tue, May 07, 2024 at 11:27:36AM +0200, Arnd Bergmann wrote:
->> >> On Fri, May 3, 2024, at 17:24, Conor Dooley wrote:
->
->> >> If you are able to extract the DT bits that don't depend
->> >> on other branches (jh7xxx, microchip, bindings and
->> >> new files) and resend those, I could still add them to the
->> >> same dt-late branch.
->> >
->> > The jh7xxx stuff does actually depend on another branch, although that
->> > branch is fixes. Do you want that removed too? If you do, I'd say to
->> > just drop the whole PR.
->> 
->> As I wrote below, it's fine to have a branch based on a
->> fixes branch, so please keep that part.
->
-> Cool, just wasn't sure if you were intentionally contradicting yourself
-> or if the "below" part had just been some general remarks. I'll try to
-> get a "revised" PR sent tomorrow.
+On Sun, May 05, 2024 at 04:34:28PM +0300, Andy Shevchenko wrote:
+> On Sun, May 5, 2024 at 11:18 AM Marek Behún <kabel@kernel.org> wrote:
+> > On Fri, May 03, 2024 at 09:51:17PM +0300, Andy Shevchenko wrote:
+> > > On Fri, May 03, 2024 at 10:28:17AM +0200, Marek Behún wrote:
+> > > > On Fri, May 03, 2024 at 07:05:34AM +0300, Andy Shevchenko wrote:
+> > > > > On Tue, Apr 30, 2024 at 2:51 PM Marek Behún <kabel@kernel.org> wrote:
+> 
+> ...
+> 
+> > > > > > +static const char * const omnia_mcu_gpio_templates[64] = {
+> > > > > > +       /* GPIOs with value read from the 16-bit wide status */
+> > > > > > +       [4]  = "gpio%u.MiniPCIe0 Card Detect",
+> > > > > > +       [5]  = "gpio%u.MiniPCIe0 mSATA Indicator",
+> > > > > > +       [6]  = "gpio%u.Front USB3 port over-current",
+> > > > > > +       [7]  = "gpio%u.Rear USB3 port over-current",
+> > > > > > +       [8]  = "gpio%u.Front USB3 port power",
+> > > > > > +       [9]  = "gpio%u.Rear USB3 port power",
+> > > > > > +       [12] = "gpio%u.Front Button",
+> > > > > > +
+> > > > > > +       /* GPIOs with value read from the 32-bit wide extended status */
+> > > > > > +       [16] = "gpio%u.SFP nDET",
+> > > > > > +       [28] = "gpio%u.MiniPCIe0 LED",
+> > > > > > +       [29] = "gpio%u.MiniPCIe1 LED",
+> > > > > > +       [30] = "gpio%u.MiniPCIe2 LED",
+> > > > > > +       [31] = "gpio%u.MiniPCIe0 PAN LED",
+> > > > > > +       [32] = "gpio%u.MiniPCIe1 PAN LED",
+> > > > > > +       [33] = "gpio%u.MiniPCIe2 PAN LED",
+> > > > > > +       [34] = "gpio%u.WAN PHY LED0",
+> > > > > > +       [35] = "gpio%u.WAN PHY LED1",
+> > > > > > +       [36] = "gpio%u.LAN switch p0 LED0",
+> > > > > > +       [37] = "gpio%u.LAN switch p0 LED1",
+> > > > > > +       [38] = "gpio%u.LAN switch p1 LED0",
+> > > > > > +       [39] = "gpio%u.LAN switch p1 LED1",
+> > > > > > +       [40] = "gpio%u.LAN switch p2 LED0",
+> > > > > > +       [41] = "gpio%u.LAN switch p2 LED1",
+> > > > > > +       [42] = "gpio%u.LAN switch p3 LED0",
+> > > > > > +       [43] = "gpio%u.LAN switch p3 LED1",
+> > > > > > +       [44] = "gpio%u.LAN switch p4 LED0",
+> > > > > > +       [45] = "gpio%u.LAN switch p4 LED1",
+> > > > > > +       [46] = "gpio%u.LAN switch p5 LED0",
+> > > > > > +       [47] = "gpio%u.LAN switch p5 LED1",
+> > > > > > +
+> > > > > > +       /* GPIOs with value read from the 16-bit wide extended control status */
+> > > > > > +       [48] = "gpio%u.eMMC nRESET",
+> > > > > > +       [49] = "gpio%u.LAN switch nRESET",
+> > > > > > +       [50] = "gpio%u.WAN PHY nRESET",
+> > > > > > +       [51] = "gpio%u.MiniPCIe0 nPERST",
+> > > > > > +       [52] = "gpio%u.MiniPCIe1 nPERST",
+> > > > > > +       [53] = "gpio%u.MiniPCIe2 nPERST",
+> > > > > > +       [54] = "gpio%u.WAN PHY SFP mux",
+> > > > > > +};
+> > > > >
+> > > > > You may reduce the memory footprint of these just by doing "gpio%u."
+> > > > > part(s) outside. Here compiler won't compress this (as in the case of
+> > > > > repetitive string literals),
+> > > >
+> > > > Are you saying that I should dynamically create another array just to
+> > > > pass it to the gpiochip's names pointer?
+> > >
+> > > I have looked into this again and now I'm puzzled how you tested this.
+> > > To me it seems that those gpio%u will go as a fixed string to the user space,
+> > > there is no %u --> number substitution happens. Moreover, this data anyway
+> > > is redundant. Userspace and debugfs all have line numbers being printed.
+> > >
+> >
+> > It gets substituted in drivers/gpio/gpiolib-sysfs.c, function
+> > gpiod_export():
+> >
+> >   dev = device_create_with_groups(&gpio_class, &gdev->dev,
+> >                                   MKDEV(0, 0), data, gpio_groups,
+> >                                   ioname ? ioname : "gpio%u",
+> >                                   desc_to_gpio(desc));
+> >
+> > The ioname variable contains the string.
+> >
+> > This is then visible in sysfs:
+> >
+> >   $ cd /sys/class/gpio
+> >   $ echo 560 >export
+> >   $ ls
+> >   ...
+> >   gpio560.eMMC nRESET
+> >   ...
+> 
+> Interesting. But before giving my conclusion on this, what is the
+> output of /sys/kernel/debug/gpio and `gpioinfo` (the latter from
+> libgpiod)?
 
-Ok. To clarify: basing on a bugfix pull request is always fine
-since those are already in Linus' tree by the time I send my
-pull requests to him for the merge window, so the branch contents
-as seen by 'git request-pull' are clean.
+It prints %u, as you suspected and I see you already posted patch to
+avoid this. I'm dropping the "gpio%u." prefixes from GPIO line names.
 
-For dependencies between the branches that are meant for the
-merge window, I don't mind taking them when there is a good
-reason and we have discussed it in advance. It means a little
-extra work for me as I have to be careful about the order of
-my own pull requests to ensure that the branch that contains
-the dependency gets merged first, and the commit log on Linus'
-side is what's actually meant to be in the branch.
-
-I also try hard (in general) to avoid dependencies between the
-soc/dt branch and any of the other branches, to be sure that
-there are no incompatible binding changes. This wasn't a
-problem here (I think), but if you send something late in the
-cycle, I pretty much don't want to have to think about that.
-
-      Arnd
+Marek
