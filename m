@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6D0AC25B7B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB008C3DA40
 	for <soc@archiver.kernel.org>; Tue,  7 May 2024 09:40:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AFF1EC4DDEB; Tue,  7 May 2024 09:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99DE2C4DDE6;
+	id 9CB7DC4DDE5; Tue,  7 May 2024 09:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85461C3277B;
 	Tue,  7 May 2024 09:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1715074839;
-	bh=LHZWkU8Af/Wby4JcBQP8/6YVIORGfsA2q5uBuj8VtjM=;
+	bh=ldZcHZMMKQTey7iNLP5YJ/H5dnzOCJv0jv3AFybd4lQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ra9jZGkGNKA514XentcGsTZCVZqkSywwKGveIOzUn3RdctKEZaSqnCZ11njrNQQIk
-	 XSBl5OOFyI2nZ8EFzn1ZeIdlOrJ8NczP3VjiFwmUaYLdsdUQeiJza7KuuclUqzECB0
-	 BjCUdBDkHlBimInCEtOjfZAGbYLx3Uo8Ks0LmqH+lzYGMBzvIgbUozT1NRdDvG37UQ
-	 URdy4oWdakI0nKWclVlpGKyrzN75soQwRIZTxsHbE8kwXITNygTFonBK5iQd9bj6aZ
-	 DOG+Mmupk67KnI4f7QqlJv05/rJhLlwIAs2FvIFNNu2NfVB1bKumzZZn263+di+lKn
-	 +mFku+ZKLNgiw==
+	b=CFjh9s9OW5gUaCPHnOMMjV6zXpyQ/QYAyLOyPr0aRVkHiJMyEfRqUMYvMGR2l+rxn
+	 nju3CaHUf5J0lwKlCxxuHQyx/3gwoMhRx9xy4pnuPbEBTqz/Q7yvbShYUKUTpHaLPD
+	 lNzu5u+k7rEgLI6nLUkiHWtBaaR1ks0YLu5EXFYME93fW2TP6i6NpRZ7Ge11iAwTgz
+	 A72L/g/5Vsrm1NfirifC2U6iGJE1l3OjTdGMuYnl1iiheh9yV39C3LlaZbiRO4IdS9
+	 o6fSjv1SXth3BseVTtQYLqzKlXvvsEU2sF3igaJjE8K2S3xfKUn3LRQfbzmRpdas3G
+	 iBNn4QqKRJLUw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90641C3276D;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DF96C3276C;
 	Tue,  7 May 2024 09:40:39 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: arm for v6.10 (#1)
+Subject: Re: [GIT PULL] amlogic defconfig update for v6.10
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171507483958.24942.15327636711383759083.git-patchwork-notify@kernel.org>
+ <171507483944.24942.14319033160025468454.git-patchwork-notify@kernel.org>
 Date: Tue, 07 May 2024 09:40:39 +0000
-References: <87h6fcndxj.fsf@BLaptop.bootlin.com>
-In-Reply-To: <87h6fcndxj.fsf@BLaptop.bootlin.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+References: <13bf8bc4-1cb7-4b94-8c98-9d1cdae5e1f8@linaro.org>
+In-Reply-To: <13bf8bc4-1cb7-4b94-8c98-9d1cdae5e1f8@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 05 May 2024 23:31:36 +0200 you wrote:
+On Fri, 3 May 2024 10:34:20 +0200 you wrote:
 > Hi,
 > 
-> Here is the first pull request for arm for mvebu for v6.10.
+> Here's a simple Amlogic Defconfig changeset for v6.10 enabling the
+> Khadas TS050 panel driver as module.
 > 
-> Gregory
-> 
-> The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+> Neil
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: arm for v6.10 (#1)
-    https://git.kernel.org/soc/soc/c/5a0054ba8950
+  - [GIT,PULL] amlogic defconfig update for v6.10
+    https://git.kernel.org/soc/soc/c/b633c162e08f
 
 You are awesome, thank you!
 -- 
