@@ -4,52 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE916C25B75
-	for <soc@archiver.kernel.org>; Tue,  7 May 2024 09:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C2C2C41513
+	for <soc@archiver.kernel.org>; Tue,  7 May 2024 09:40:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BE165C4AF63; Tue,  7 May 2024 09:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A8CBBC2BBFC
-	for <soc@kernel.org>; Tue,  7 May 2024 09:40:31 +0000 (UTC)
+	id 852E4C2BBFC; Tue,  7 May 2024 09:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F12AC4AF63;
+	Tue,  7 May 2024 09:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715074831;
-	bh=AsU4C9dlV1cNmLfzxZRcJljwUr7ODzFj5jI7RjYvZ0E=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=KqX6nPKNonuec0RZsECn+lU4RGh2PjCsYUAIpy84FPrLvAm4zNZ2HYthsiHIu6qwM
-	 sQqb5Mr9mcyTzULhI9OLu6QPxQIg00QaPDaVA4Nky1+w2pXq7M6yCMoqW2fE5dbA8y
-	 +4wLYRvyFzH3jayTm43VHXSGxV7FT3lQRc1oB0VrhYSEm1Mof42nfZYeg/OSQBXgM6
-	 2Fo+CIotenTuGRGcOyn317wXMsdHKcwxT1RAyGm7/p6/294RyAZGqJ7GCUMmeEet38
-	 WoBcTKEBGKOZ8wH3Gab0hcf2NBMrfn6tz5YFCbRyzA1zLCos6UnDblbNITUYdoFQX0
-	 NxWF7dy8byL3w==
+	s=k20201202; t=1715074839;
+	bh=1Q00392YkABibh+6KuV0HKaYyB7J66qsuFplEUKqn88=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=ca0hs0w3X8OapMtXr9gPhRMkWo2oWfvqVUgqU+seVJq7V6gbdNU1SEcLZ3w9+jJp1
+	 9axjPIl/KbNXF2OH6KgkM/3qp4Rj9OLE5NsAtyQGHETrZerV/7POKuPrD1wgMNlGsl
+	 EBzFEWQL3g5LDfDTiV1GS7ROPaoOP3m719/vbVt9InR38+cWiC1GZMvteYIfRmAPUy
+	 K3hbu2MWw6OrzUjweMCVeYRTpse6Je85U5cuq+LDcaKc0+vSlWJyMpqeJLCzDxWQd8
+	 XDo+rZN19C0mUKg2ZRu4kBeqj0l1nQIc3rJTLsw8iYPhPtvQ4pCBDaDbANL6Mda+6m
+	 zvsaZ8oU+6YVA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90D5DC43330;
-	Tue,  7 May 2024 09:40:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 609A3C43331;
+	Tue,  7 May 2024 09:40:39 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] arm64: dts: samsung: dts for v6.10, part two
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171507483154.24942.7817460616375430116.git-patchwork-summary@kernel.org>
-Date: Tue, 07 May 2024 09:40:31 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <171507483939.24942.5952976813166030208.git-patchwork-notify@kernel.org>
+Date: Tue, 07 May 2024 09:40:39 +0000
+References: <20240504121233.7589-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240504121233.7589-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] One more Qualcomm Arm64 DeviceTree fix for v6.9
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=848512
-  Lore link: https://lore.kernel.org/r/20240427153817.1430382-1-andersson@kernel.org
+On Sat,  4 May 2024 14:12:32 +0200 you wrote:
+> Hi,
+> 
+> On top of previous DTS64 pull request.
+> 
+> Best regards,
+> Krzysztof
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] arm64: dts: samsung: dts for v6.10, part two
+    https://git.kernel.org/soc/soc/c/f89d22439fd6
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
