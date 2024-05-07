@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5121C25B75
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8016C25B77
 	for <soc@archiver.kernel.org>; Tue,  7 May 2024 09:40:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 97192C4DDE4; Tue,  7 May 2024 09:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 81C83C4AF68;
+	id A5EA6C4DDE8; Tue,  7 May 2024 09:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8FDCFC4DDE3;
 	Tue,  7 May 2024 09:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1715074839;
-	bh=0doJUzCyKywALCkHDPKMFaOX+QuofM8qHFCa5Qx0i4U=;
+	bh=gYZok/HWdiepFC2cBn6SUqMolKHdvyU8LHUFO6o/yYk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=T8TkjZV+MXwqG0uq2HCV6HK3LYW1lRMqmKMasBTarM60ciDXyDUbNCKx1aMp8tfQv
-	 OAS/2yJ7SGptMkpvr0shHj3PUagR5bVtnqlm6HpbB7z9rdEmQqQ3f289YtQYijiVex
-	 xjY/gCPf706Kl9XI55NutZBSxLDDWo27qBWkCEga2yTkYJMeORTtncz//QYxhr81bf
-	 mbHSnNjZCNfmBANrCCKvGyzR4RioSimCDfoP1/ZuIYtmmnsubGiAe0atYQIhtwte6E
-	 NHtcQ54ct9I/Rk6kreNHZbeVKGGwYJ0q546WBws8v4myxJO7/ED4FoWDGjaKWA6mIJ
-	 ep9V6yP28BdqA==
+	b=KIhY8S9agVf0ruBvpGjtPo6zfqqncG6wbeFGDvTi3tqHy4V0OCo/d9eeXBu4veMVJ
+	 Dymwr1wRG7z2fFJOIOa1yN093VSETh9Ct5Il/muOcNotqbOWb9VinHrHkRFoOnO2AV
+	 m6q7/m4eZbSmdFUcD9lrxf16xfSffM7w8k+xOzQIiqokd6Ye3Ynv7vXtiLHdkTot3c
+	 nPRT//N57siufA5+Hzot9N2x0xSw1cigsFMYx7YYBXE4+a07ebxDwiPXtYvtjCzwIq
+	 SENxtJybbr6W7fTL349xw+dSoo7WjC+6EPcQYyAluaM85UYcj4TXvyYfORH1xmNlxO
+	 4JJl4D8ugbRFQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 748CEC43332;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B396C3276E;
 	Tue,  7 May 2024 09:40:39 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v6.10 (#1)
+Subject: Re: [GIT PULL] RISC-V SoC drivers for v6.10
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171507483947.24942.2509872705471408121.git-patchwork-notify@kernel.org>
+ <171507483950.24942.16974102633729247358.git-patchwork-notify@kernel.org>
 Date: Tue, 07 May 2024 09:40:39 +0000
-References: <87jzk8ndyy.fsf@BLaptop.bootlin.com>
-In-Reply-To: <87jzk8ndyy.fsf@BLaptop.bootlin.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+References: <20240503-mardi-underling-3d81a9f97329@spud>
+In-Reply-To: <20240503-mardi-underling-3d81a9f97329@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 05 May 2024 23:30:45 +0200 you wrote:
-> Hi,
+On Fri, 3 May 2024 17:00:18 +0100 you wrote:
+> Hey Arnd,
 > 
-> Here is the first pull request for dt64 for mvebu for v6.10.
-> 
-> Gregory
-> 
-> The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+> Please pull some SoC-related Kconfig changes for v6.10. LMK if you
+> think this stuff should really be going through the actual riscv tree
+> in the future and I'll just harass Palmer about it instead of taking
+> it myself. That said, Palmer did Ack it all...
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: dt64 for v6.10 (#1)
-    https://git.kernel.org/soc/soc/c/8db93c212e64
+  - [GIT,PULL] RISC-V SoC drivers for v6.10
+    https://git.kernel.org/soc/soc/c/a3116c88817e
 
 You are awesome, thank you!
 -- 
