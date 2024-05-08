@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D2A0C25B4F
-	for <soc@archiver.kernel.org>; Wed,  8 May 2024 02:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3674C10F1A
+	for <soc@archiver.kernel.org>; Wed,  8 May 2024 02:13:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2BDA4C4AF67; Wed,  8 May 2024 02:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CFFDC2BBFC;
-	Wed,  8 May 2024 02:09:01 +0000 (UTC)
+	id 9FA59C4AF63; Wed,  8 May 2024 02:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E047DC2BBFC;
+	Wed,  8 May 2024 02:13:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715134142;
-	bh=Kc6whfBxP4QiNRCIjCOwqK5YyznnggssJmlM1+bJBWw=;
+	s=k20201202; t=1715134393;
+	bh=+KmuidCa3RZuP20dNHil6I4AyYy6j5ze6v4PfqQ4hjY=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=U7nQme2yc/yKYS/AMxYvAamotCx2ZYQeKmNjcfYGJyKfZhYPRFymws3Rm3eEZpYK+
-	 KTcsdF6tba0B/qUJ+yPSZGiBmuyNwu4xqYLuXGyOxbw1UbU3d0m2q28B9hqelpRE0O
-	 Z3Ot+L2E37Xjz66+AUXv/hzjCXrcP3grTkLiarU3zzrhhdZGn9prF8JqqgiVnKofku
-	 nyMUUmNmryLIxd4xijCseaZMH1QZpxENWsuh+GbCE82FR0JbzuJs5H3hLFitPwd8sl
-	 SWVb8phJbVEVt1nF4KA9mtq/gZdDYhahL2cuTpeOO/7q5DkMhCgBa9CL/FvMPfXp8W
-	 gBIIQPHhOrX7Q==
+	b=gA0D6i4AI0gdyVVuNtAkIuaPWKYCvLMWAONhMDxdCWHbxjDihCPvthUhQc+g5xCEb
+	 SVaH/l9Ro9S9JblLisH2+Wy0TcSNwNCX59Y83Zpw+9uyqyR1x11dcvvzFDeBh66FFx
+	 HIJ3fRX7BivfrFY+XUNTPIq+kv8BKdf3JPiOMqm9n5CY0F8ADbfMtaD2fbSxYwM0xq
+	 MnBlPOHAlIU+arMoAzAmGx7m55ExrYtRH0vMKJgOe3jQalyTlhyCtq2rKx3pXsuGMz
+	 KfmeLt5+uU5bnJBaGu80nfuHT4ez6OiRHp6tqaekTWzjAlzg7C9pk2s6l5OUjBWvYd
+	 jL3VzmDbG24wg==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -29,46 +29,36 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: [GIT PULL] A few more Qualcomm driver updates for v6.10
-Date: Tue,  7 May 2024 21:08:59 -0500
-Message-ID: <20240508020900.204413-1-andersson@kernel.org>
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [GIT PULL] One more Qualcomm Arm64 defconfig update for v6.10
+Date: Tue,  7 May 2024 21:13:11 -0500
+Message-ID: <20240508021312.206121-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 
-The following changes since commit 166db01007ea802ff9933ac73ec8f140ca0cf5d5:
+The following changes since commit fefda685ec0846a1f1c2b13af2cce4cea580a768:
 
-  soc: qcom: cmd-db: replace deprecated strncpy with strtomem (2024-04-21 12:26:47 -0500)
+  arm64: defconfig: enable REGULATOR_QCOM_USB_VBUS (2024-04-23 14:09:14 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.10-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.10-2
 
-for you to fetch changes up to 4b34d4c25da289712d9a5bd5bac5888f099cbc5c:
+for you to fetch changes up to b052c7fe3cb787282ab7e1fa088c794a1eb7fdb0:
 
-  firmware: qcom: uefisecapp: Allow on sc8180x Primus and Flex 5G (2024-05-01 13:39:57 -0500)
-
-----------------------------------------------------------------
-A few more Qualcomm driver updates for v6.10
-
-This fixes a sleep-while-atomic issue in pmic_glink, stemming from the
-fact that the GLINK callback comes from interrupt context.
-
-It fixes the Bluetooth address in the example of qcom,wcnss, and it
-enables UEFI variables on SC8180X devices (Primus and Flex 5G).
+  arm64: defconfig: select INTERCONNECT_QCOM_SM6115 as built-in (2024-04-29 21:40:33 -0500)
 
 ----------------------------------------------------------------
-Bjorn Andersson (2):
-      soc: qcom: pmic_glink: Make client-lock non-sleeping
-      firmware: qcom: uefisecapp: Allow on sc8180x Primus and Flex 5G
+One more Qualcomm Arm64 defconfig update for v6.10
 
-Johan Hovold (1):
-      dt-bindings: soc: qcom,wcnss: fix bluetooth address example
+This enables the SM6115 interconnect provider, to make it possible to
+boot boards on this SoC.
 
- .../devicetree/bindings/soc/qcom/qcom,wcnss.yaml   |  4 ++--
- drivers/firmware/qcom/qcom_scm.c                   |  2 ++
- drivers/soc/qcom/pmic_glink.c                      | 25 +++++++++++++---------
- 3 files changed, 19 insertions(+), 12 deletions(-)
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+      arm64: defconfig: select INTERCONNECT_QCOM_SM6115 as built-in
+
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
