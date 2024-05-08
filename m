@@ -1,54 +1,89 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23CEC04FFE
-	for <soc@archiver.kernel.org>; Wed,  8 May 2024 17:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2CB0C04FFE
+	for <soc@archiver.kernel.org>; Wed,  8 May 2024 17:51:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8F1B0C2BD11; Wed,  8 May 2024 17:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73746C113CC;
-	Wed,  8 May 2024 17:24:05 +0000 (UTC)
+	id ADB9AC4AF0A; Wed,  8 May 2024 17:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69EFC113CC;
+	Wed,  8 May 2024 17:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715189045;
-	bh=LVflNGpLJaDRSDa+a8HFciyMMmPpKmQmkHnSjlEEsaw=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=AFeUyVBGD61n40gXZjUcqy5zC5tOFAi+f1TWmVm1uVebK4LvIkwoF6wG6bLPdkJ8g
-	 ECNi9u8E3aY+KhS1uJcVvGGTDCTvq4cL/QBg+vDnGrzu36tveIcIHyx5z8sb1yWltN
-	 PBE8PVuYY4tuieiqvTJ4TwDgz/tTxLhBd1w/XioNhhG3Re8twjZTwSKtvMj+cf2E33
-	 ptoYv+RHJ4T8I3/m1N7bS7AGOaAhV3BMx8bnZsCURWiiZ9/26C6X/NbV3KF4uDkYhQ
-	 0tFqaBHQ6pkHKxLOP5HK66Sxe7fNEd75IDogTIDslEU/4COjC+WxyitpaeHlbWUdiw
-	 yM5XinCIa4DFw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 666E8C43331;
-	Wed,  8 May 2024 17:24:05 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM SoC fixes for 6.9, part 3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <7abb76bb-eb4a-4136-af2f-6b22fbf3d79f@app.fastmail.com>
-References: <7abb76bb-eb4a-4136-af2f-6b22fbf3d79f@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7abb76bb-eb4a-4136-af2f-6b22fbf3d79f@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-3
-X-PR-Tracked-Commit-Id: 5549d1e39989e2ba86c4775546d0bd8055746cfa
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6d7ddd805123e03db0a16c7dbc8509366432a630
-Message-Id: <171518904540.5238.12248743909624398844.pr-tracker-bot@kernel.org>
-Date: Wed, 08 May 2024 17:24:05 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	s=k20201202; t=1715190702;
+	bh=6BoXTjno+NyYSgI8Dc+giUYFLUmA8bHJfXR+Wn6NEzA=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=OZGi2A4TNpGcY+C687v7tFZX8EX7YlwtJSk47SHRcAamTYNiq/NWWyXieV/jNX/yR
+	 a6KPaTu7Uw6/tPk7e6KdcAVRAooRQeie107vVWvp9eNyktIzqr5HVmYLYkq/52fUJU
+	 0Ce0XXzHrKH62z3H+sWbAAGJd1H9osUP35KWDGu5bRSEhw2BZ5zYaN1swEr39KMIir
+	 lDAVgb7TC1bq8PVov4YOwj7Vn9uodBfR55Sa94Pq2SjoM3LZ5Afs97sBMTZ61n9xGg
+	 dYZKP0aBd229t2pqrWY0ilqmEUwNfViBiCgu9lhtpfyNsuVLg7DLh3kajcZTtYEg7k
+	 Q6j/Oy9rp55Mg==
+Date: Wed, 8 May 2024 19:50:55 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: Re: [PATCH v9 0/9] Turris Omnia MCU driver
+Message-ID: <20240508175055.he4zsuvkj3bojnem@kandell>
+References: <20240508103118.23345-1-kabel@kernel.org>
+ <ZjtfRIykefGlqRF9@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZjtfRIykefGlqRF9@smile.fi.intel.com>
 
-The pull request you sent on Wed, 08 May 2024 08:00:08 +0200:
+On Wed, May 08, 2024 at 02:17:24PM +0300, Andy Shevchenko wrote:
+> On Wed, May 08, 2024 at 12:31:09PM +0200, Marek Behún wrote:
+> > Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
+> > 
+> > this is v9 of the series adding Turris Omnia MCU driver.
+> > 
+> > This series still depends on the immutable branch between LEDs and
+> > locking, introducing devm_mutex_init(), see the PR
+> >   https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
+> > 
+> > See also cover letters for v1, v2, v3, v4, v5, v6, v7 and v8:
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
+> >   https://patchwork.kernel.org/project/linux-soc/cover/20240430115111.3453-1-kabel@kernel.org/
+> 
+> From GPIO implementation perspective, it's good enough in my opinion. The rest
+> can be amended later on.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-3
+I will send v10 tomorrow with these issues fixed. We'll see if Arnd will
+be willing to take this for 6.10, and if not, 6.11 will it be.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6d7ddd805123e03db0a16c7dbc8509366432a630
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Marek
