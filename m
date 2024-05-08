@@ -1,90 +1,126 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <SRS0=UipH=ML=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AD56C10F1A
-	for <soc@archiver.kernel.org>; Wed,  8 May 2024 02:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF55DC04FFE
+	for <soc@archiver.kernel.org>; Wed,  8 May 2024 06:00:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 66A1DC4AF17; Wed,  8 May 2024 02:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72440C2BBFC;
-	Wed,  8 May 2024 02:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715134702;
-	bh=z6N29eTE8KzPYRGBbT3xpC7DEkI5Fo/50aEHfdp+YPA=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=thgA9ds5TiE2Go/nWPUhu+anVUopTYriLcd5vWy1w0/GEF0dlWA87oKiKv5wHSBXF
-	 KMMeqp1dY7d+elT2AKfwe78sjc2WKaCtj95KyitiXKO/01PmLAV33ijFg5bZcwi6ro
-	 i1J4Iakte4CnMwGBm8pQJePAYba0Mf++Fq/cv+SxG6yesygtN99ep/u6EAjuxoqydk
-	 sjUJX8S/kXi0YuQkoQr+f8DkBwvA1dYOW1DTy2kacKiUT3e8Xn4d6qRXF9wxPBaW90
-	 oVNMZbp99bzgo6cTgzMBVJM0Ahnbi1578LpEVHwN+ZKjL0WKOdDOmD4JwzfQLx9cf3
-	 +SOUrcqa+Gcaw==
-From: Bjorn Andersson <andersson@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Connor Abbott <cwabbott0@gmail.com>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [GIT PULL] A few more Qualcomm Arm64 DeviceTree updates for v6.10
-Date: Tue,  7 May 2024 21:18:18 -0500
-Message-ID: <20240508021820.206441-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.44.0
+	id 89455C4AF18; Wed,  8 May 2024 06:00:11 +0000 (UTC)
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C1524C113CC
+	for <soc@kernel.org>; Wed,  8 May 2024 06:00:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C1524C113CC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id B1EC01140373;
+	Wed,  8 May 2024 02:00:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 08 May 2024 02:00:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm2;
+	 t=1715148008; x=1715234408; bh=Y8akIGgpPxTEYGPDiQP8mlHmghc/is8+
+	EovMJZsxLNk=; b=VF7TMJq42dxp00WdJGfVmxJ4UqJYlhc9JbCvEQkElPFeu/7p
+	4jDq/ZhHMW18M0S1e6gXQ6ld16kSE7bhAQiK/k7zrpKL4Pw3rbwUjhBfsORl2koW
+	UHgsAnbkP13nWA38irgU47T/yOAV0jAxlPvu0O0iF8tWx9HLXyutzjavTWm6NIyP
+	MNYZCHZs0QTtSqWcNX6/6Io7+NuWCTZGMm/A4dXTHOwOi0W4egFwIWHPLHjSo6M1
+	nIH2mwDDvuFo+gt5DAWX42ok/+4vYfk6HeOGTjJcTPrRUAlOmwMqNcDdH76YgeWs
+	qytz8OnSc1oY6DXTCuFchy1mn4sL29ScvRw1Eg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1715148008; x=1715234408; bh=Y8akIGgpPxTEYGPDiQP8mlHmghc/is8+Eov
+	MJZsxLNk=; b=ElyOoeBQQSPqIpjMinoYoMVhH7Vn5Y0lHFgHYgZ3qPnN+xThFC2
+	ZRp/JLM6tuOhLX/hEo6ZIiwITGTFPtaH/wRZJxjGtZO2RSTVFj2DDnkXLU6hgWt1
+	IoAPo7/m/+M/P+Tbjoeke3BXPwCte6wuiF+5NBB4UbroVqakWoYUvN3o7/kQ3GZL
+	w2uSFpwkCJOMVAPqnQ0SdmUXTidlUqX2VyV2Y5JfZXVyZq27018x7wr6GDYJZiXK
+	+obUDa2yM4qZqF7Lo+pW0DG4JP0cQxTT2ctFYpAvC9TLWcJjst3PFwiyH9OJChXM
+	/dPpHUt6XmiiedSRD6kDwKHl/o2i2+hT3IA==
+X-ME-Sender: <xms:6BQ7Zi5PuRzKr2sE5MYTBRs-IDvt_2ts2XnB_S-K_UicZ4ZsojguAA>
+    <xme:6BQ7Zr4maOLyJ3OVMkOcdk5IG2MVPN8CRoKb-P_4yNAWd9H6Zts2_91p0E7Puq6G8
+    JTU3bJ63nnf8eiusGQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvledgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:6BQ7ZheLr2u-9WRhZFrubjPCG18EM0gMC3kBgUDwjbyKCvO_ipBZzQ>
+    <xmx:6BQ7ZvJOzABmXDC7hsvmxId3f7dsOtopN57LLq9UDmFh_81pzK0p9w>
+    <xmx:6BQ7ZmLNRsUzIchIG0r02Y0SO4xEPAMkvpASG7DbC1TxRPeftk40LA>
+    <xmx:6BQ7Zgwb6m5EphtJgLC5brSJZALMNymPvSl2kwl7UIvllPvg5N0IsA>
+    <xmx:6BQ7Zi1WXvVohFQbKF9JYO_DX-P8isnkfpn7ZVfOzf70lpmGWTUtMcUi>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 5157DB6008D; Wed,  8 May 2024 02:00:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-443-g0dc955c2a-fm-20240507.001-g0dc955c2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <7abb76bb-eb4a-4136-af2f-6b22fbf3d79f@app.fastmail.com>
+Date: Wed, 08 May 2024 08:00:08 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM SoC fixes for 6.9, part 3
+Content-Type: text/plain
 
+The following changes since commit 14672a9b3ec5c934cf86658328a56207337b54ff:
 
-The following changes since commit 873d845a357a4d89700cb1bb5b3da68890756f50:
-
-  dt-bindings: arm: qcom: Add Samsung Galaxy S5 China (kltechn) (2024-04-23 08:00:06 -0500)
+  Merge tag 'qcom-drivers-fixes-for-6.9' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into for-next (2024-04-26 18:08:02 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.10-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.9-3
 
-for you to fetch changes up to 0ea3e1d6f31d8aea72d0d0b53919c585a12a593b:
+for you to fetch changes up to 5549d1e39989e2ba86c4775546d0bd8055746cfa:
 
-  arm64: dts: qcom: pm6150: correct USB VBUS regulator compatible (2024-05-03 15:30:02 -0500)
-
-----------------------------------------------------------------
-A few more Qualcomm Arm64 DeviceTree updates for v6.10
-
-This corrects the obviously broken compatible of the USB VBUS regulator
-in PM6150.
-
-It clears the odd-looking default address on QCS404 EVB, with the
-expectation that a proper address is provides by other means.
-
-The newly added SM8650 GPU node is corrected with a missing memory
-region.
-
-The third DWC3 instance on SC8280XP is added, and enabled on Lenovo
-Thinkpad X13s to give working fingerprint sensor.
+  Merge tag 'qcom-arm64-fixes-for-6.9-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2024-05-07 08:07:06 +0200)
 
 ----------------------------------------------------------------
-Connor Abbott (1):
-      arm64: dts: qcom: sm8650: Fix GPU cx_mem size
+ARM SoC fixes for 6.9, part 3
 
-Johan Hovold (2):
-      arm64: dts: qcom: sc8280xp-x13s: enable USB MP and fingerprint reader
-      arm64: dts: qcom: qcs404: fix bluetooth device address
+These are a couple of last minute fixes that came in over the
+previous week, addressing:
 
-Krishna Kurapati (1):
-      arm64: dts: qcom: sc8280xp: Add USB DWC3 Multiport controller
+ - A pin configuration bug on a qualcomm board that caused
+   issues with ethernet and mmc.
 
-Krzysztof Kozlowski (1):
-      arm64: dts: qcom: pm6150: correct USB VBUS regulator compatible
+ - Two minor code fixes for misleading console output in the
+   microchip firmware driver.
 
- arch/arm64/boot/dts/qcom/pm6150.dtsi               |  4 +-
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi           |  2 +-
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     | 85 ++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 82 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8650.dtsi               |  2 +-
- 5 files changed, 171 insertions(+), 4 deletions(-)
+ - A build warning in the sifive cache driver
+
+----------------------------------------------------------------
+Arnd Bergmann (3):
+      Merge tag 'mtk-soc-fixes-for-v6.9' of https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux into for-next
+      Merge tag 'riscv-soc-fixes-for-v6.9-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-6.9-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+
+Conor Dooley (2):
+      firmware: microchip: don't unconditionally print validation success
+      firmware: microchip: clarify that sizes and addresses are in hex
+
+Samuel Holland (1):
+      cache: sifive_ccache: Silence unused variable warning
+
+Volodymyr Babchuk (1):
+      arm64: dts: qcom: sa8155p-adp: fix SDHC2 CD pin configuration
+
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts      | 30 ++++++++++++---------------
+ drivers/cache/sifive_ccache.c                 |  2 +-
+ drivers/firmware/microchip/mpfs-auto-update.c |  8 ++++---
+ drivers/soc/mediatek/Kconfig                  |  1 +
+ drivers/soc/mediatek/mtk-svs.c                |  7 +++++--
+ 5 files changed, 25 insertions(+), 23 deletions(-)
