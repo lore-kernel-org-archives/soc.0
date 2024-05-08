@@ -1,65 +1,167 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A80C4C41513
-	for <soc@archiver.kernel.org>; Wed,  8 May 2024 07:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC348C04FFE
+	for <soc@archiver.kernel.org>; Wed,  8 May 2024 10:31:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8A509C4DDE2; Wed,  8 May 2024 07:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73C3DC4AF66;
-	Wed,  8 May 2024 07:20:30 +0000 (UTC)
+	id 99F7EC4DDE0; Wed,  8 May 2024 10:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2A0C113CC;
+	Wed,  8 May 2024 10:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715152830;
-	bh=t93zxNIFoNlK9IOczIZYuG+djop0y5jxW82d5sJzfQI=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=k+kvSprZy1W8WLw7MWMSd3vbBhaHX1PiTNOcLY9fHxZUiySavQUHPxVeYHmJ5GPlB
-	 Hj/j/PEcZ/qp3iBgykGkrtFMNJuWeCPbo4rjXLh9jdAaw/gzZw3ZuKma8hYwDRwz7I
-	 aHufOaOA6cIxj0/DyIujrqJx7IHWbWg0/gbZZPuW4qW3S7rDNM4Qn9/x7rLx+5hwnr
-	 DIqoqsXnZWmBwKhM3Os/nVfMIb3nJeFyM3v+/N9fO4Eib2D3cbrjRsM45WdHhKbzwI
-	 xA8lxx2fDxn2AWtfqZF8SJt5Hi3AH8XF4i/Suh+I428BSEBHrD6jyLOyG1HlGkhgnX
-	 ZRBCzD1sHoLFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58DD7C4361A;
-	Wed,  8 May 2024 07:20:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] A few more Qualcomm Arm64 DeviceTree updates for v6.10
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <171515283036.32265.11802019548554541789.git-patchwork-notify@kernel.org>
-Date: Wed, 08 May 2024 07:20:30 +0000
-References: <20240508021820.206441-1-andersson@kernel.org>
-In-Reply-To: <20240508021820.206441-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+	s=k20201202; t=1715164287;
+	bh=ElHEynA8rsJ2bTq8jeNso8DeLwGwXvebWz8OvwP/J3c=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=dGTUv4qdc5MbZfI1fVgooTtxxj058JZWli/4uOAVHvSOOjlN69blvBBEkTJD46zCv
+	 Fe6/S1nPyKEJHz9MhA3Y6r9b3vzLfsE6vq6KC8+0fpAWmPiTjjGSI2+4C4nWVIIRwz
+	 g0LTtMn9+XX7mPsf8yTGn/g6iddzDT909bOHaUGS4VufIWje7qqZ3dc7dSTrVo/+Os
+	 whXV2rvO1ron6LBqHha1OUqGmwvA+dd4EvEq4iVvNbCt4qNjUwKg0x9I3WFLR2Nj+F
+	 9S7JynCRzb1cG741Ju86dZYJGkSiTOGdE0TpakBehlqzwnV8qwrjTxCS9W5OqLiZk9
+	 QWrHgNbs0FpvA==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v9 0/9] Turris Omnia MCU driver
+Date: Wed,  8 May 2024 12:31:09 +0200
+Message-ID: <20240508103118.23345-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello:
+Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+this is v9 of the series adding Turris Omnia MCU driver.
 
-On Tue,  7 May 2024 21:18:18 -0500 you wrote:
-> The following changes since commit 873d845a357a4d89700cb1bb5b3da68890756f50:
-> 
->   dt-bindings: arm: qcom: Add Samsung Galaxy S5 China (kltechn) (2024-04-23 08:00:06 -0500)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.10-2
-> 
-> [...]
+This series still depends on the immutable branch between LEDs and
+locking, introducing devm_mutex_init(), see the PR
+  https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
 
-Here is the summary with links:
-  - [GIT,PULL] A few more Qualcomm Arm64 DeviceTree updates for v6.10
-    https://git.kernel.org/soc/soc/c/0cb7e0c617c6
+See also cover letters for v1, v2, v3, v4, v5, v6, v7 and v8:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240430115111.3453-1-kabel@kernel.org/
 
-You are awesome, thank you!
+Changes since v8:
+- removed the MACH_ARMADA_38X || COMPILE_TEST dependency for the
+  CZNIC_PLATFORMS Kconfig option in the Kconfig file, as suggested
+  by Andy (patch 2)
+- fixed the issues in the global header turris-omnia-mcu-interface.h
+  pointed out by Andy and Ilpo: added the "OMNIA_" prefix to all
+  enumerator entries, added trailing commas, converted to use
+  FIELD_PREP_CONST() (patches 2-7)
+- added comment why we can't use ether_addr_copy(), as requested by
+  Andy (patch 2)
+- rewritten the error message for when the MCU does not support
+  reporting features, requested by Andy (patch 2)
+- changed how the nul-byte is assigned to the end of bin2hex() result,
+  requested by Andy (patch 2)
+- made the omnia_cmd_write_read() function final in patch 2, instead of
+  updating it in subsequent patches, requested by Andy
+- in order to be more consistent, changed the omnia_cmd_read_u8() and
+  omnia_cmd_read_u16() functions to return zero on success and the read
+  value is passed into a pointer, and then added a new function
+  omnia_cmd_read_u32(), as requested by Ilpo (he did not like the
+  inconsistency in omnia_mcu_read_features(), where the
+  omnia_cmd_read_u16() hid the le16_to_cpu() call, but then we did an
+  explicit call to le32_to_cpu() when reading 32-bit features) (patch 2)
+- some other minor tweaks (changed the version type from u8[] to char[],
+  changed len type from size_t to unsigned int in omnia_cmd_write())
+  (patches 2 & 3)
+- dropped the "gpio%u." prefix from GPIO line names, Andy pointed out
+  why this is wrong (patch 3)
+- decoupled GPIOs information struct definition and assignment and put
+  filling macros before the assignment, requested by Andy (patch 3)
+- moved return value check into the guarded scope, suggested by Andy
+  (patch 3)
+- put some assignments into the definition lines, suggested by Andy
+  (patch 3)
+- fixed some typos (patches 2 & 3)
+- refactored the reply length computation into a new function
+  omnia_compute_reply_length(), as requested by Andy (patch 3)
+
+Marek Behún (9):
+  dt-bindings: firmware: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
+
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   50 +
+ drivers/platform/cznic/Makefile               |    9 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  451 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  207 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1040 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  103 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  127 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  210 ++++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 17 files changed, 2971 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.2
 
