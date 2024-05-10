@@ -4,112 +4,152 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43436C10F1A
-	for <soc@archiver.kernel.org>; Thu,  9 May 2024 18:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC721C25B75
+	for <soc@archiver.kernel.org>; Fri, 10 May 2024 08:09:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0F311C4AF07; Thu,  9 May 2024 18:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE28DC116B1;
-	Thu,  9 May 2024 18:57:37 +0000 (UTC)
+	id 80515C32781; Fri, 10 May 2024 08:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AE6C113CC;
+	Fri, 10 May 2024 08:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715281060;
-	bh=Pm5Msa1YUJp/7t63OKazwtwIkFsr6oJkT3uasv+Aze4=;
+	s=k20201202; t=1715328591;
+	bh=W2UAzXDx1JJQEGjRLpfJ+yKhnxYjrwqMgJeXw+yMleo=;
 	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=KUws44+RV2+YJPUvzrpldb3w3trTQcCxqBDoUV9IqrOe5m1h3rSGAIxKdKFtJU3VC
-	 SKdQncqBdhxjc6/C8CBI1MbD+EAuO6qOzqgTnuuHHDyNpVS/CdejZRe8Ffpix2hS7R
-	 N4JQhpjz/Yq+eVKk5z/nrFKp/eDde8BtvCc0n+ZzdVwoczW8JyoOXyjGn0VU/lhmlO
-	 lOwB9ctWBFM9m+mRP2RuRLFba2ppAxSiqydJMM4O8KQgaV41QfuaRLh+aWiRzfA5Iv
-	 qzwVZV7Pj3EbzePh02JxE7f++CyGIF4UatCmyG2lHrCiGxlvWjr7/tCeVwgymG4cXg
-	 c1PECJwBiI4Mg==
-Date: Thu, 9 May 2024 20:57:29 +0200
+	b=dqk/LqIQL/tWGZe4UHPMQFasZmFc3m8UEle9efU9dFXtv6z6iOXMO3QgbENbOrosT
+	 3gKGWtsazKHUFczDbFALaTqvxEtmQwprHr/6oOgQo/IYPePNNV97noyllpku/hDXP2
+	 TcTxi5P9i6cWLPXPhp+of1Q2hZHtUcyAvcAimJPyZkaqd4rvdCnSUQb80AZWsBqtWC
+	 kl6vCjeFLcbncgYncRHqNO3vLp6Y2Bjk1RfoPhFdB+xWXXAhdmSl7+6udarbJlG/hs
+	 F/eqzVgBl2+BKpRkPOH9PGu3ItvEdbymmO3FCREXX2t4Acw5u/b/GHmmnMb8uVBKn6
+	 pumg9gO1oAkQA==
+Date: Fri, 10 May 2024 10:09:46 +0200
 From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
 To: Andy Shevchenko <andy@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
  <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Hans de Goede
  <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
- <ilpo.jarvinen@linux.intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org, Dan Carpenter
- <dan.carpenter@linaro.org>
-Subject: Re: [PATCH v9 7/9] platform: cznic: turris-omnia-mcu: Add support
- for digital message signing via debugfs
-Message-ID: <20240509205729.09728cbb@thinkpad>
-In-Reply-To: <Zjti-FkUCAQzMmrQ@smile.fi.intel.com>
+ <ilpo.jarvinen@linux.intel.com>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v9 3/9] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <20240510100946.270c00e3@dellmb>
+In-Reply-To: <ZjtfCjAlDMMndRfv@smile.fi.intel.com>
 References: <20240508103118.23345-1-kabel@kernel.org>
-	<20240508103118.23345-8-kabel@kernel.org>
-	<Zjti-FkUCAQzMmrQ@smile.fi.intel.com>
+	<20240508103118.23345-4-kabel@kernel.org>
+	<ZjtfCjAlDMMndRfv@smile.fi.intel.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, 8 May 2024 14:33:12 +0300
+On Wed, 8 May 2024 14:16:26 +0300
 Andy Shevchenko <andy@kernel.org> wrote:
 
-> On Wed, May 08, 2024 at 12:31:16PM +0200, Marek Beh=C3=BAn wrote:
+> On Wed, May 08, 2024 at 12:31:12PM +0200, Marek Beh=C3=BAn wrote:
 
 ...
 
-> > +static irqreturn_t omnia_msg_signed_irq_handler(int irq, void *dev_id)
+> > +static int omnia_ctl_cmd_locked(struct omnia_mcu *mcu, u8 cmd, u16 val,
+> > +				u16 mask) =20
+>=20
+> Can be one line as it's only 81 characters long.
+
+OK
+
+> > +	if (type & IRQ_TYPE_EDGE_RISING)
+> > +		mcu->rising |=3D bit;
+> > +	else
+> > +		mcu->rising &=3D ~bit;
+> > +
+> > +	if (type & IRQ_TYPE_EDGE_FALLING)
+> > +		mcu->falling |=3D bit;
+> > +	else
+> > +		mcu->falling &=3D ~bit; =20
+>=20
+> If those variables was defined as unsigned long, these can be just
+>=20
+> 	__assign_bit()
+> 	__assign_bit()
+>=20
+> And other non-atomic bitops elsewhere, like __clear_bit().
+=20
+Changing this propagated to many other variables and even required
+some refactoring of the omnia_gpio structure, since the bit, ctl_bit
+and int_bit members are stored as a masks, but __assign_bit() /
+__set_bit() / __clear_bit() requires bit numbers.
+
+For example
+  if (gpio->int_bit && (mcu->is_cached & gpio->int_bit))
+    return !!(mcu->cached & gpio->int_bit);
+needed to change to
+  if (gpio->has_int && (mcu->is_cached & BIT(gpio->int_bit)))
+    return !!(mcu->cached & BIT(gpio->int_bit));
+and so on.
+
+Moreover, I agree that the if-else statement which you commented on,
+when changed to __assign_bit(), looks much nicer, but some changes that
+sprouted from this are in my opinion less readable.
+
+I have prepared the fixup patch, but I am not confident enough that
+everything is done correctly. I would prefer leaving this one for
+later, if it is okay with you.
+
+> > + * Feel free to remove this function and its inverse, omnia_mask_deint=
+erleave,
+> > + * and use an appropriate bitmap_* function once such a function exist=
+s. =20
+>=20
+> bitmap_*()
+
+OK
+
+...
+
+> > +static int omnia_read_status_word_old_fw(struct omnia_mcu *mcu, u16 *s=
+tatus)
 > > +{
-> > +	u8 reply[1 + OMNIA_MCU_CRYPTO_SIGNATURE_LEN];
-> > +	struct omnia_mcu *mcu =3D dev_id;
 > > +	int err;
 > > +
-> > +	err =3D omnia_cmd_read(mcu->client, OMNIA_CMD_CRYPTO_COLLECT_SIGNATUR=
-E,
-> > +			     reply, sizeof(reply));
-> > +	if (!err && reply[0] !=3D OMNIA_MCU_CRYPTO_SIGNATURE_LEN)
-> > +		err =3D -EIO;
-> > +
-> > +	guard(mutex)(&mcu->sign_lock);
-> > +
-> > +	if (mcu->sign_state =3D=3D SIGN_STATE_REQUESTED) {
-> > +		mcu->sign_err =3D err;
-> > +		if (!err)
-> > +			memcpy(mcu->signature, &reply[1],
-> > +			       OMNIA_MCU_CRYPTO_SIGNATURE_LEN); =20
+> > +	err =3D omnia_cmd_read_u16(mcu->client, OMNIA_CMD_GET_STATUS_WORD,
+> > +				 status);
+> > +	if (!err) =20
 >=20
-> > +		mcu->sign_state =3D SIGN_STATE_COLLECTED; =20
+> Why not traditional pattern?
 >=20
-> Even for an error case?
+> 	if (err)
+> 		return err;
 
-Yes, the pair (errno, signature) is collected.
+OK, also for the rest similar.
 
-> > +		complete(&mcu->msg_signed_completion);
-> > +	}
-> > +
-> > +	return IRQ_HANDLED;
+...
+
+> > +static bool omnia_irq_read_pending(struct omnia_mcu *mcu,
+> > +				   unsigned long *pending)
+> > +{
+> > +	if (mcu->features & OMNIA_FEAT_NEW_INT_API)
+> > +		return omnia_irq_read_pending_new(mcu, pending);
+> > +	else =20
+>=20
+> 'else' is redundant, but it can be still used for indentation purposes he=
+re.
+
+As you say, for indentation purposes I would prefer keeping it this way.
+
+>=20
+> > +		return omnia_irq_read_pending_old(mcu, pending);
 > > +} =20
 >=20
 > ...
 >=20
-> > +	scoped_guard(mutex, &mcu->sign_lock)
-> > +		if (mcu->sign_state !=3D SIGN_STATE_REQUESTED &&
-> > +		    mcu->sign_state !=3D SIGN_STATE_COLLECTED)
-> > +			return -ENODATA; =20
+> > +static struct attribute *omnia_mcu_gpio_attrs[] =3D {
+> > +	&dev_attr_front_button_mode.attr,
+> > +	NULL
+> > +};
+> > +
+> > +const struct attribute_group omnia_mcu_gpio_group =3D {
+> > +	.attrs =3D omnia_mcu_gpio_attrs,
+> > +}; =20
 >=20
-> {}
->=20
-> Don't you want interruptible mutex? In such case you might need to return
-> -ERESTARTSYS. OTOH, this is debugfs, we don't much care.
+> Haven't seen the rest, but here perhaps ATTRIBUTE_GROUPS().
 
-Indeed I shall use
-  scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &mcu->sign_lock) {
-    ...
-  }
-
-And -ERESTARTSYS instead of -EINTR also for the subsequent
-wait_for_completion_interruptible(), and also in trng from patch 6/9.
-
-> ...
->=20
-> > +#define OMNIA_MCU_CRYPTO_PUBLIC_KEY_LEN	33 =20
->=20
-> 33? Hmm... does it mean (32 + 1)?
-
-Rather (1 + 32), the first byte is 0x02 or 0x03, determining whether
-the y coordinate of the public key elliptic curve point is positive or
-negative, and the rest 32 bytes are the x coordinate.
-
-Marek
-
+Those define the variable as static, but I need to access it from
+turris-omnia-mcu-base.c compilation unit.
