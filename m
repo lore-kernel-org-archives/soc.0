@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94249C25B74
-	for <soc@archiver.kernel.org>; Fri, 10 May 2024 10:18:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E86FC25B10
+	for <soc@archiver.kernel.org>; Fri, 10 May 2024 10:18:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8065FC2BD11; Fri, 10 May 2024 10:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29CDC32781;
-	Fri, 10 May 2024 10:18:41 +0000 (UTC)
+	id 47979C4AF09; Fri, 10 May 2024 10:18:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3299C113CC;
+	Fri, 10 May 2024 10:18:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715336324;
-	bh=5JlYe73jIem02xH1w770yLEniOhcmIDGWw/K0zB19YA=;
+	s=k20201202; t=1715336327;
+	bh=ayoznqWHB+SlsdCBolOjUF8X2jDrQYgo3Pd7Brual2I=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k8O+Gmxz6Y4nUMC8zDllYBw9i2v5f9wj275UxugYX6Flc+DxkCQRWZqxnKqM04VtM
-	 cGcI5p17wcPSpJr4N2kBANRFPbRBW2ITmbrnHuEy1Uo9HMMv14oCp7170CA5V5s1kN
-	 MQr9mrxg0Ag7ZiPbDtEe7ytnOvZW3E1YROGysdcdjyi0/Zy/ytITyjohuwNODEdOWq
-	 tW6yIFzy3nTPmufV9TLEHyGtUifHDgJhbMSGX5aIsP0mmP6FxJPr5xkbX9m2JkNEWy
-	 xLlDtrzx8sjMDUVxsCLo73bfNRKbwa+VftWZHLAnJa4BlTMEr/bKLln876+Algbf81
-	 OG1T2Fm6nv2bg==
+	b=J81WphumT+eUvXSV/4IBBDKk8iP8zMG5VzTMO8HYTQwW2tVPgMQbW2oQ23VWmdaUb
+	 E0hVuDVc0N8IybeNOr8YuvSaknpBxldM+VbbUFtwFLGGq/OJzPEvI+ki2RRrUgJrWe
+	 lRQtvWO55DbxWxhaI4adx70ZznXcDv1ViWHo3j3s2hcxZk2C/0MhsXDPP4PvtwmjXI
+	 cw9n2Egrqqj90H4Mac0x4CqrAjDJksB0G3RfPKYwl+rSKyTY7UnZY5Ka+XJDDsZqiq
+	 psX+wks0CTdv2jS9Awt8HmNY8A0wwM8/ZynCU5+zaQWkKqPLP0EYzWQodg17m3eYkE
+	 seM2M9Q8ImFvA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -29,15 +29,14 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Andy Shevchenko <andy@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-watchdog@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-crypto@vger.kernel.org
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v10 5/9] platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
-Date: Fri, 10 May 2024 12:18:15 +0200
-Message-ID: <20240510101819.13551-6-kabel@kernel.org>
+Subject: [PATCH v10 6/9] platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+Date: Fri, 10 May 2024 12:18:16 +0200
+Message-ID: <20240510101819.13551-7-kabel@kernel.org>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240510101819.13551-1-kabel@kernel.org>
 References: <20240510101819.13551-1-kabel@kernel.org>
@@ -45,249 +44,228 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for the watchdog mechanism provided by the MCU.
+Add support for true random number generator provided by the MCU.
+New Omnia boards come without the Atmel SHA204-A chip. Instead the
+crypto functionality is provided by new microcontroller, which has
+a TRNG peripheral.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
  drivers/platform/cznic/Kconfig                |   2 +
  drivers/platform/cznic/Makefile               |   1 +
- .../platform/cznic/turris-omnia-mcu-base.c    |   4 +
- .../cznic/turris-omnia-mcu-watchdog.c         | 128 ++++++++++++++++++
- drivers/platform/cznic/turris-omnia-mcu.h     |  24 ++++
- 5 files changed, 159 insertions(+)
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ .../platform/cznic/turris-omnia-mcu-base.c    |   6 +-
+ .../platform/cznic/turris-omnia-mcu-gpio.c    |   2 +-
+ .../platform/cznic/turris-omnia-mcu-trng.c    | 103 ++++++++++++++++++
+ drivers/platform/cznic/turris-omnia-mcu.h     |   8 ++
+ 6 files changed, 120 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
 
 diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-index c1e719235517..e262930b3faf 100644
+index e262930b3faf..6edac80d5fa3 100644
 --- a/drivers/platform/cznic/Kconfig
 +++ b/drivers/platform/cznic/Kconfig
-@@ -19,6 +19,7 @@ config TURRIS_OMNIA_MCU
+@@ -18,6 +18,7 @@ config TURRIS_OMNIA_MCU
+ 	depends on I2C
  	select GPIOLIB
  	select GPIOLIB_IRQCHIP
++	select HW_RANDOM
  	select RTC_CLASS
-+	select WATCHDOG_CORE
+ 	select WATCHDOG_CORE
  	help
- 	  Say Y here to add support for the features implemented by the
- 	  microcontroller on the CZ.NIC's Turris Omnia SOHO router.
-@@ -26,6 +27,7 @@ config TURRIS_OMNIA_MCU
+@@ -27,6 +28,7 @@ config TURRIS_OMNIA_MCU
  	  - board poweroff into true low power mode (with voltage regulators
  	    disabled) and the ability to configure wake up from this mode (via
  	    rtcwake)
-+	  - MCU watchdog
++	  - true random number generator (if available on the MCU)
+ 	  - MCU watchdog
  	  - GPIO pins
  	    - to get front button press events (the front button can be
- 	      configured either to generate press events to the CPU or to change
 diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
-index a185ef882e44..687f7718c0a1 100644
+index 687f7718c0a1..eae4c6b341ff 100644
 --- a/drivers/platform/cznic/Makefile
 +++ b/drivers/platform/cznic/Makefile
-@@ -4,3 +4,4 @@ obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
+@@ -4,4 +4,5 @@ obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
  turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
  turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
  turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
-+turris-omnia-mcu-y		+= turris-omnia-mcu-watchdog.o
++turris-omnia-mcu-y		+= turris-omnia-mcu-trng.o
+ turris-omnia-mcu-y		+= turris-omnia-mcu-watchdog.o
 diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-index 479f355f730a..f44996588d38 100644
+index f44996588d38..1d4153a96526 100644
 --- a/drivers/platform/cznic/turris-omnia-mcu-base.c
 +++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-@@ -376,6 +376,10 @@ static int omnia_mcu_probe(struct i2c_client *client)
+@@ -380,7 +380,11 @@ static int omnia_mcu_probe(struct i2c_client *client)
  	if (err)
  		return err;
  
-+	err = omnia_mcu_register_watchdog(mcu);
+-	return omnia_mcu_register_gpiochip(mcu);
++	err = omnia_mcu_register_gpiochip(mcu);
 +	if (err)
 +		return err;
 +
- 	return omnia_mcu_register_gpiochip(mcu);
++	return omnia_mcu_register_trng(mcu);
  }
  
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-watchdog.c b/drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ static const struct of_device_id of_omnia_mcu_match[] = {
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-gpio.c b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
+index 966a39656644..d4498e8f30cb 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu-gpio.c
++++ b/drivers/platform/cznic/turris-omnia-mcu-gpio.c
+@@ -167,7 +167,7 @@ static const struct omnia_gpio omnia_gpios[64] = {
+ };
+ 
+ /* mapping from interrupts to indexes of GPIOs in the omnia_gpios array */
+-static const u8 omnia_int_to_gpio_idx[32] = {
++const u8 omnia_int_to_gpio_idx[32] = {
+ 	[__bf_shf(OMNIA_INT_CARD_DET)]			= 4,
+ 	[__bf_shf(OMNIA_INT_MSATA_IND)]			= 5,
+ 	[__bf_shf(OMNIA_INT_USB30_OVC)]			= 6,
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-trng.c b/drivers/platform/cznic/turris-omnia-mcu-trng.c
 new file mode 100644
-index 000000000000..da2efc32df8f
+index 000000000000..fbde00f3fca1
 --- /dev/null
-+++ b/drivers/platform/cznic/turris-omnia-mcu-watchdog.c
-@@ -0,0 +1,128 @@
++++ b/drivers/platform/cznic/turris-omnia-mcu-trng.c
+@@ -0,0 +1,103 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * CZ.NIC's Turris Omnia MCU watchdog driver
++ * CZ.NIC's Turris Omnia MCU TRNG driver
 + *
 + * 2024 by Marek Behún <kabel@kernel.org>
 + */
 +
++#include <linux/bitfield.h>
++#include <linux/completion.h>
++#include <linux/gpio/consumer.h>
++#include <linux/gpio/driver.h>
++#include <linux/hw_random.h>
 +#include <linux/i2c.h>
-+#include <linux/moduleparam.h>
++#include <linux/interrupt.h>
++#include <linux/minmax.h>
++#include <linux/module.h>
++#include <linux/string.h>
 +#include <linux/turris-omnia-mcu-interface.h>
 +#include <linux/types.h>
-+#include <linux/units.h>
-+#include <linux/watchdog.h>
 +
 +#include "turris-omnia-mcu.h"
 +
-+#define WATCHDOG_TIMEOUT		120
++#define OMNIA_CMD_TRNG_MAX_ENTROPY_LEN	64
 +
-+static unsigned int timeout;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			   __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+static int omnia_wdt_start(struct watchdog_device *wdt)
++static irqreturn_t omnia_trng_irq_handler(int irq, void *dev_id)
 +{
-+	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++	struct omnia_mcu *mcu = dev_id;
 +
-+	return omnia_cmd_write_u8(mcu->client, OMNIA_CMD_SET_WATCHDOG_STATE, 1);
++	complete(&mcu->trng_completion);
++
++	return IRQ_HANDLED;
 +}
 +
-+static int omnia_wdt_stop(struct watchdog_device *wdt)
++static int omnia_trng_read(struct hwrng *rng, void *data, size_t max, bool wait)
 +{
-+	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++	struct omnia_mcu *mcu = (struct omnia_mcu *)rng->priv;
++	u8 reply[1 + OMNIA_CMD_TRNG_MAX_ENTROPY_LEN];
++	int err, bytes;
 +
-+	return omnia_cmd_write_u8(mcu->client, OMNIA_CMD_SET_WATCHDOG_STATE, 0);
-+}
-+
-+static int omnia_wdt_ping(struct watchdog_device *wdt)
-+{
-+	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
-+
-+	return omnia_cmd_write_u8(mcu->client, OMNIA_CMD_SET_WATCHDOG_STATE, 1);
-+}
-+
-+static int omnia_wdt_set_timeout(struct watchdog_device *wdt,
-+				 unsigned int timeout)
-+{
-+	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
-+
-+	return omnia_cmd_write_u16(mcu->client, OMNIA_CMD_SET_WDT_TIMEOUT,
-+				   timeout * DECI);
-+}
-+
-+static unsigned int omnia_wdt_get_timeleft(struct watchdog_device *wdt)
-+{
-+	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
-+	u16 timeleft;
-+	int err;
-+
-+	err = omnia_cmd_read_u16(mcu->client, OMNIA_CMD_GET_WDT_TIMELEFT,
-+				 &timeleft);
-+	if (err) {
-+		dev_err(&mcu->client->dev, "Cannot get watchdog timeleft: %d\n",
-+			err);
++	if (!wait && !completion_done(&mcu->trng_completion))
 +		return 0;
-+	}
 +
-+	return timeleft / DECI;
++	do {
++		if (wait_for_completion_interruptible(&mcu->trng_completion))
++			return -ERESTARTSYS;
++
++		err = omnia_cmd_read(mcu->client,
++				     OMNIA_CMD_TRNG_COLLECT_ENTROPY,
++				     reply, sizeof(reply));
++		if (err)
++			return err;
++
++		bytes = min3(reply[0], max, OMNIA_CMD_TRNG_MAX_ENTROPY_LEN);
++	} while (wait && !bytes);
++
++	memcpy(data, &reply[1], bytes);
++
++	return bytes;
 +}
 +
-+static const struct watchdog_info omnia_wdt_info = {
-+	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-+	.identity = "Turris Omnia MCU Watchdog",
-+};
-+
-+static const struct watchdog_ops omnia_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= omnia_wdt_start,
-+	.stop		= omnia_wdt_stop,
-+	.ping		= omnia_wdt_ping,
-+	.set_timeout	= omnia_wdt_set_timeout,
-+	.get_timeleft	= omnia_wdt_get_timeleft,
-+};
-+
-+int omnia_mcu_register_watchdog(struct omnia_mcu *mcu)
++int omnia_mcu_register_trng(struct omnia_mcu *mcu)
 +{
 +	struct device *dev = &mcu->client->dev;
-+	u8 state;
-+	int err;
++	u8 irq_idx, dummy;
++	int irq, err;
 +
-+	if (!(mcu->features & OMNIA_FEAT_WDT_PING))
++	if (!(mcu->features & OMNIA_FEAT_TRNG))
 +		return 0;
 +
-+	mcu->wdt.info = &omnia_wdt_info;
-+	mcu->wdt.ops = &omnia_wdt_ops;
-+	mcu->wdt.parent = dev;
-+	mcu->wdt.min_timeout = 1;
-+	mcu->wdt.max_timeout = 65535 / DECI;
++	irq_idx = omnia_int_to_gpio_idx[__bf_shf(OMNIA_INT_TRNG)];
++	irq = gpiod_to_irq(gpiochip_get_desc(&mcu->gc, irq_idx));
++	if (irq < 0)
++		return dev_err_probe(dev, irq, "Cannot get TRNG IRQ\n");
 +
-+	mcu->wdt.timeout = WATCHDOG_TIMEOUT;
-+	watchdog_init_timeout(&mcu->wdt, timeout, dev);
-+
-+	watchdog_set_drvdata(&mcu->wdt, mcu);
-+
-+	omnia_wdt_set_timeout(&mcu->wdt, mcu->wdt.timeout);
-+
-+	err = omnia_cmd_read_u8(mcu->client, OMNIA_CMD_GET_WATCHDOG_STATE,
-+				&state);
++	/*
++	 * If someone else cleared the TRNG interrupt but did not read the
++	 * entropy, a new interrupt won't be generated, and entropy collection
++	 * will be stuck. Ensure an interrupt will be generated by executing
++	 * the collect entropy command (and discarding the result).
++	 */
++	err = omnia_cmd_read(mcu->client, OMNIA_CMD_TRNG_COLLECT_ENTROPY,
++			     &dummy, 1);
 +	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot get MCU watchdog state\n");
++		return err;
 +
-+	if (state)
-+		set_bit(WDOG_HW_RUNNING, &mcu->wdt.status);
++	init_completion(&mcu->trng_completion);
 +
-+	watchdog_set_nowayout(&mcu->wdt, nowayout);
-+	watchdog_stop_on_reboot(&mcu->wdt);
-+	err = devm_watchdog_register_device(dev, &mcu->wdt);
++	err = devm_request_threaded_irq(dev, irq, NULL, omnia_trng_irq_handler,
++					IRQF_ONESHOT, "turris-omnia-mcu-trng",
++					mcu);
 +	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot register MCU watchdog\n");
++		return dev_err_probe(dev, err, "Cannot request TRNG IRQ\n");
++
++	mcu->trng.name = "turris-omnia-mcu-trng";
++	mcu->trng.read = omnia_trng_read;
++	mcu->trng.priv = (unsigned long)mcu;
++
++	err = devm_hwrng_register(dev, &mcu->trng);
++	if (err)
++		return dev_err_probe(dev, err, "Cannot register TRNG\n");
 +
 +	return 0;
 +}
 diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
-index 2648046231ed..f54d17af457d 100644
+index f54d17af457d..7d71890664b1 100644
 --- a/drivers/platform/cznic/turris-omnia-mcu.h
 +++ b/drivers/platform/cznic/turris-omnia-mcu.h
-@@ -14,6 +14,7 @@
+@@ -9,7 +9,9 @@
+ #define __TURRIS_OMNIA_MCU_H
+ 
+ #include <linux/bitops.h>
++#include <linux/completion.h>
+ #include <linux/gpio/driver.h>
++#include <linux/hw_random.h>
+ #include <linux/if_ether.h>
  #include <linux/mutex.h>
  #include <linux/rtc.h>
- #include <linux/types.h>
-+#include <linux/watchdog.h>
- #include <linux/workqueue.h>
- #include <asm/byteorder.h>
- #include <asm/unaligned.h>
-@@ -43,6 +44,9 @@ struct omnia_mcu {
- 	struct rtc_device *rtcdev;
- 	u32 rtc_alarm;
- 	bool front_button_poweron;
+@@ -47,6 +49,10 @@ struct omnia_mcu {
+ 
+ 	/* MCU watchdog */
+ 	struct watchdog_device wdt;
 +
-+	/* MCU watchdog */
-+	struct watchdog_device wdt;
++	/* true random number generator */
++	struct hwrng trng;
++	struct completion trng_completion;
  };
  
  int omnia_cmd_write_read(const struct i2c_client *client,
-@@ -55,6 +59,25 @@ static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
- 	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
+@@ -175,11 +181,13 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd,
+ 	return omnia_cmd_read(client, cmd, reply, sizeof(*reply));
  }
  
-+static inline int omnia_cmd_write_u8(const struct i2c_client *client, u8 cmd,
-+				     u8 val)
-+{
-+	u8 buf[2] = { cmd, val };
-+
-+	return omnia_cmd_write(client, buf, sizeof(buf));
-+}
-+
-+static inline int omnia_cmd_write_u16(const struct i2c_client *client, u8 cmd,
-+				      u16 val)
-+{
-+	u8 buf[3];
-+
-+	buf[0] = cmd;
-+	put_unaligned_le16(val, &buf[1]);
-+
-+	return omnia_cmd_write(client, buf, sizeof(buf));
-+}
-+
- static inline int omnia_cmd_write_u32(const struct i2c_client *client, u8 cmd,
- 				      u32 val)
- {
-@@ -157,5 +180,6 @@ extern const struct attribute_group omnia_mcu_poweroff_group;
++extern const u8 omnia_int_to_gpio_idx[32];
+ extern const struct attribute_group omnia_mcu_gpio_group;
+ extern const struct attribute_group omnia_mcu_poweroff_group;
  
  int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
  int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
-+int omnia_mcu_register_watchdog(struct omnia_mcu *mcu);
++int omnia_mcu_register_trng(struct omnia_mcu *mcu);
+ int omnia_mcu_register_watchdog(struct omnia_mcu *mcu);
  
  #endif /* __TURRIS_OMNIA_MCU_H */
 -- 
