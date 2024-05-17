@@ -1,84 +1,180 @@
-Return-Path: <SRS0=/d5S=MS=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=kMo/=MU=foss.st.com=prvs=5867d29662=patrice.chotard@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85072C25B75
-	for <soc@archiver.kernel.org>; Wed, 15 May 2024 09:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01C26C04FFE
+	for <soc@archiver.kernel.org>; Fri, 17 May 2024 06:14:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 44299C32782; Wed, 15 May 2024 09:55:34 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id D78CDC116B1;
-	Wed, 15 May 2024 09:55:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D78CDC116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C16A1007;
-	Wed, 15 May 2024 02:55:56 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1EA363F762;
-	Wed, 15 May 2024 02:55:31 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: [RESEND][PATCH] firmware: psci: Fix return value from psci_system_suspend()
-Date: Wed, 15 May 2024 10:55:28 +0100
-Message-ID: <20240515095528.1949992-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.43.2
+	id C2767C4AF07; Fri, 17 May 2024 06:14:02 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 34429C2BD10;
+	Fri, 17 May 2024 06:14:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 34429C2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44H0O4Ye003261;
+	Fri, 17 May 2024 08:13:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=J3o804ncxF/enh0kdjgc+0YUwQx2VM+mClNeplniKwc=; b=CV
+	xSZy930UTX7kDamAv2gi390UDjIU+WfLGT6+qTNZa8Hkd+yJK75cIjojTcNGENLI
+	BZXukHl1cbO+xx0BClOTjP4+RS637PPEZfSGyM5gcLPtlikd9R82kz62BFQCUdjg
+	hg7KKyl1iltJ7WLlSnl73hlsyoLrSH4JScIhCCz5Atn5dnoL4Qog2D57Ukm5e4ei
+	7lGcFyD2wB2a/S/nX+IftdXds93oxlEx06x7ejgzCNxb1dAlqpVZ9aDQL7DgoNF3
+	6W7MH/CNQYmJRAhI6UKq5f2XqI/btsPocfwEo0I/o9aUe09mZKEAIhrOAYKJFBSG
+	bWg2Tl1y24/bmqSNujYQ==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y4sxwghph-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 17 May 2024 08:13:35 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 924C54002D;
+	Fri, 17 May 2024 08:13:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 79F8F20F54A;
+	Fri, 17 May 2024 08:11:54 +0200 (CEST)
+Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 17 May
+ 2024 08:11:51 +0200
+Message-ID: <124b75a6-d8da-4e29-8dce-79d18c355ba2@foss.st.com>
+Date: Fri, 17 May 2024 08:11:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/20] pinctrl: stm32: Use scope based of_node_put()
+ cleanups
+List-Id: <soc.lore.kernel.org>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Linus Walleij
+	<linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Emil Renner Berthing
+	<kernel@esmil.dk>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        Hal Feng
+	<hal.feng@starfivetech.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang
+	<baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Viresh
+ Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, <soc@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki
+	<s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Geert
+ Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>, Damien Le Moal <dlemoal@kernel.org>,
+        Ludovic Desroches
+	<ludovic.desroches@microchip.com>,
+        Nicolas Ferre
+	<nicolas.ferre@microchip.com>,
+        Alexandre Belloni
+	<alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix
+ Kernel Team <kernel@pengutronix.de>,
+        Chester Lin <chester62515@gmail.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Ghennadi Procopciuc
+	<ghennadi.procopciuc@oss.nxp.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias
+ Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+        Sascha Hauer
+	<s.hauer@pengutronix.de>,
+        Andrew Jeffery <andrew@codeconstruct.com.au>,
+        Joel
+ Stanley <joel@jms.id.au>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Tony
+ Lindgren <tony@atomide.com>,
+        Stephen Warren <swarren@wwwdotorg.org>
+CC: <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <imx@lists.linux.dev>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        Peng Fan
+	<peng.fan@nxp.com>
+References: <20240504-pinctrl-cleanup-v2-0-26c5f2dc1181@nxp.com>
+ <20240504-pinctrl-cleanup-v2-3-26c5f2dc1181@nxp.com>
+Content-Language: en-US
+From: Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20240504-pinctrl-cleanup-v2-3-26c5f2dc1181@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.87.62]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-16_07,2024-05-15_01,2023-05-22_02
 
-Currently we return the value from invoke_psci_fn() directly as return
-value from psci_system_suspend(). It is wrong to send the PSCI interface
-return value directly. psci_to_linux_errno() provide the mapping from
-PSCI return value to the one that can be returned to the callers within
-the kernel.
 
-Use psci_to_linux_errno() to convert and return the correct value from
-psci_system_suspend().
 
-Fixes: faf7ec4a92c0 ("drivers: firmware: psci: add system suspend support")
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/firmware/psci/psci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 5/4/24 15:20, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Use scope based of_node_put() cleanup to simplify code.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/pinctrl/stm32/pinctrl-stm32.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+> index 978ccdbaf3d3..a8673739871d 100644
+> --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
+> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+> @@ -670,7 +670,6 @@ static int stm32_pctrl_dt_node_to_map(struct pinctrl_dev *pctldev,
+>  				 struct device_node *np_config,
+>  				 struct pinctrl_map **map, unsigned *num_maps)
+>  {
+> -	struct device_node *np;
+>  	unsigned reserved_maps;
+>  	int ret;
+>  
+> @@ -678,12 +677,11 @@ static int stm32_pctrl_dt_node_to_map(struct pinctrl_dev *pctldev,
+>  	*num_maps = 0;
+>  	reserved_maps = 0;
+>  
+> -	for_each_child_of_node(np_config, np) {
+> +	for_each_child_of_node_scoped(np_config, np) {
+>  		ret = stm32_pctrl_dt_subnode_to_map(pctldev, np, map,
+>  				&reserved_maps, num_maps);
+>  		if (ret < 0) {
+>  			pinctrl_utils_free_map(pctldev, *map, *num_maps);
+> -			of_node_put(np);
+>  			return ret;
+>  		}
+>  	}
+> 
 
-Hi {arm-}soc team,
+Hi
 
-Please pick this up directly. This has slipped through the cracks as I
-didn't follow up or cc-ed arm-soc team. Previously posted @[1].
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/r/20231113153446.82684-1-sudeep.holla@arm.com
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index d9629ff87861..2328ca58bba6 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -497,10 +497,12 @@ int psci_cpu_suspend_enter(u32 state)
-
- static int psci_system_suspend(unsigned long unused)
- {
-+	int err;
- 	phys_addr_t pa_cpu_resume = __pa_symbol(cpu_resume);
-
--	return invoke_psci_fn(PSCI_FN_NATIVE(1_0, SYSTEM_SUSPEND),
-+	err = invoke_psci_fn(PSCI_FN_NATIVE(1_0, SYSTEM_SUSPEND),
- 			      pa_cpu_resume, 0, 0);
-+	return psci_to_linux_errno(err);
- }
-
- static int psci_system_suspend_enter(suspend_state_t state)
---
-2.43.2
-
+Thanks
+Patrice
