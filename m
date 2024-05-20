@@ -1,274 +1,133 @@
-Return-Path: <SRS0=kMo/=MU=foss.st.com=prvs=5867d29662=patrice.chotard@kernel.org>
+Return-Path: <SRS0=BIus=MX=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE71C04FFE
-	for <soc@archiver.kernel.org>; Fri, 17 May 2024 06:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E02EFC04FFE
+	for <soc@archiver.kernel.org>; Mon, 20 May 2024 07:41:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B7761C4AF08; Fri, 17 May 2024 06:46:16 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id A1D78C4AF07; Mon, 20 May 2024 07:41:27 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0C494C2BD10;
-	Fri, 17 May 2024 06:46:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C494C2BD10
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44GKOJUN015055;
-	Fri, 17 May 2024 08:45:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=z/uK7yf6eIe+jSuaXNY0ImTzPYAvaGtkUIkCxsmH9qM=; b=tM
-	myJ/dMGKQ2x/4Ia33JfzZHcbgnx7LWrzROgMgfHhzPWq0PRz9OjTTociU4rQ6I5R
-	IYFzIFLY0ReOsUeTwx91iz945oEF7HmCnXypJxQbRi3+yIQ+10AwkrblW/lieGiG
-	65WmOoAnpKxBY/y2iy7RqLElDrZOTGjUwgSsM2gVxnZyEqUNzyno7y/GRQZZjFEV
-	OSxYVDjB6Y2pyBD6b+pV2aLeUDSz9GEULXeSjZOMbAB/C/K1yx0SCrI3zfofnHJ6
-	AZOrbjQ26YwAEE/E5uByqagJzdtxukCnzwMGt6xODMYg2i6T+bOOvR/RP2gycvfH
-	b3ijlVxPrqbcbkxrKm6w==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y4sxv8p52-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 17 May 2024 08:45:53 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7B0074002D;
-	Fri, 17 May 2024 08:45:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 871E621058D;
-	Fri, 17 May 2024 08:44:26 +0200 (CEST)
-Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 17 May
- 2024 08:44:23 +0200
-Message-ID: <e2b89d34-0222-42a1-98ae-c417220f9b39@foss.st.com>
-Date: Fri, 17 May 2024 08:44:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 08/20] pinctrl: st: Use scope based of_node_put()
- cleanups
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D828C4AF0B
+	for <soc@kernel.org>; Mon, 20 May 2024 07:41:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D828C4AF0B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a59b097b202so498408166b.0
+        for <soc@kernel.org>; Mon, 20 May 2024 00:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716190883; x=1716795683; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9y2+R5Z+lMlXgJtdu7Zc9o7DnmU5CSj/l6XtGSHRsxY=;
+        b=OlDCas0VpAfp/EMqrzm5uNDScH9SfT4quKjsemjpT8DRc96PsddKS2zHELHV6P2KtZ
+         ngMbQ0/x0b6mZcAKmWaahqW4GNw5381LDo4l+Gv2di3NXf8IYjyQ5fHNLK73Nb8nhBmh
+         EAeLTXSTqVTyhyHzUKG+dg79ZY7niF2O8x7lt87QdiCqvi5qApQEi0C5VP44R/GHZMhz
+         TSLjyVg4CJ+emWmRxEKZ5rrCrpz4XsWbKK0SHjtGe0d2zoRPFaWEbvbxRYWnd2m7UNjz
+         kHpzJk4sbzfN4k788QUfFcEAQM/+NN9HgrAX4R8qfpVJQqNWmEVVB9GX1MhLmo1P5H+X
+         B2wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716190883; x=1716795683;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9y2+R5Z+lMlXgJtdu7Zc9o7DnmU5CSj/l6XtGSHRsxY=;
+        b=sX5N8BSf886q9mk5eFPPsyLjOOCr7P5wxcSI6o4/0kLj8W9cPboZFRaV43SUvSlQ2m
+         8CVtW24Vnvkh12IY67zmHQ9zA3tyLwSojyUnSM9HQYu+YUFzbL8sHmvJozfc8lfc/EWK
+         Ew1F5VN0PW2XakdbfDh/YO84AUohVG5Ba3ZCAnJ+s4nH6zuvn1Ua+f0nqh6ZRo2s0Gq8
+         OYWpSswoJDO8IGIun2MfAOP/bNNviKZe88U9VMeq2jEh0T2hKkS57PVeGqzGVwfPtZim
+         Z2YYmiZkCQkE0jn19rSkN6c0rJY3gEuH9GdLE8kD9sz67ydF+DegooO7yO/oVjredERw
+         +iRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXWoPG+kcXalzzUkJMQdn1FGakwC/Ys8303hJxKd9B1nNEVeSdqW1va7+XsQGG1lYh1ckFg7OhormW9BBcZgQ==
+X-Gm-Message-State: AOJu0YwgtvM4DPSkYj78Niv95YcmpijKYPh6la/cQ8F8ovgDLwx/503k
+	caiLtT//OzJnOYh9StomPZDChTxsCEZieSdxZj+UzdIRa5VtgWxN5DyBJo2aZuE=
+X-Google-Smtp-Source: AGHT+IH9haA9iR4YwoKX0PzjzpCIy5yTTINDqwVFObjzHq50kZ9iLXtPJQM9TPGv9QNsFnHhLLi5EQ==
+X-Received: by 2002:a17:906:6a02:b0:a5a:7c7e:a0d3 with SMTP id a640c23a62f3a-a5a7c7ea16fmr1445195766b.44.1716190883404;
+        Mon, 20 May 2024 00:41:23 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.206.169])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a893a91b9sm754853166b.7.2024.05.20.00.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 May 2024 00:41:22 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Linus Walleij
-	<linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Emil Renner Berthing
-	<kernel@esmil.dk>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Hal Feng
-	<hal.feng@starfivetech.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang
-	<baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Viresh
- Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, <soc@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sylwester Nawrocki
-	<s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Geert
- Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Damien Le Moal <dlemoal@kernel.org>,
-        Ludovic Desroches
-	<ludovic.desroches@microchip.com>,
-        Nicolas Ferre
-	<nicolas.ferre@microchip.com>,
-        Alexandre Belloni
-	<alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix
- Kernel Team <kernel@pengutronix.de>,
-        Chester Lin <chester62515@gmail.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Ghennadi Procopciuc
-	<ghennadi.procopciuc@oss.nxp.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias
- Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>,
-        Sascha Hauer
-	<s.hauer@pengutronix.de>,
-        Andrew Jeffery <andrew@codeconstruct.com.au>,
-        Joel
- Stanley <joel@jms.id.au>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Tony
- Lindgren <tony@atomide.com>,
-        Stephen Warren <swarren@wwwdotorg.org>
-CC: <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <imx@lists.linux.dev>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        Peng Fan
-	<peng.fan@nxp.com>
-References: <20240504-pinctrl-cleanup-v2-0-26c5f2dc1181@nxp.com>
- <20240504-pinctrl-cleanup-v2-8-26c5f2dc1181@nxp.com>
-Content-Language: en-US
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20240504-pinctrl-cleanup-v2-8-26c5f2dc1181@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.87.62]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-16_07,2024-05-15_01,2023-05-22_02
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
+	soc@kernel.org,
+	Antoine Tenart <atenart@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] =?UTF-8?q?ti:=20omap:=20MAINTAINERS:=20move=20Beno?= =?UTF-8?q?=C3=AEt=20Cousson=20to=20CREDITS?=
+Date: Mon, 20 May 2024 09:40:12 +0200
+Message-ID: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Last email from Benoît Cousson was in 2014 [1], so remove him from
+maintainers of the TI OMAP platform.  Stale maintainer entries hide
+information whether subsystem needs help, has a bus-factor or is even
+orphaned.
 
+Benoît Cousson, thank you for TI OMAP contributions and maintenance.
 
-On 5/4/24 15:20, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Use scope based of_node_put() cleanup to simplify code.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/pinctrl/pinctrl-st.c | 37 +++++++++++--------------------------
->  1 file changed, 11 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
-> index 5d9abd6547d0..fe2d52e434db 100644
-> --- a/drivers/pinctrl/pinctrl-st.c
-> +++ b/drivers/pinctrl/pinctrl-st.c
-> @@ -1195,10 +1195,10 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
->  	struct property *pp;
->  	struct device *dev = info->dev;
->  	struct st_pinconf *conf;
-> -	struct device_node *pins;
-> +	struct device_node *pins __free(device_node) = NULL;
->  	phandle bank;
->  	unsigned int offset;
-> -	int i = 0, npins = 0, nr_props, ret = 0;
-> +	int i = 0, npins = 0, nr_props;
->  
->  	pins = of_get_child_by_name(np, "st,pins");
->  	if (!pins)
-> @@ -1213,8 +1213,7 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
->  			npins++;
->  		} else {
->  			pr_warn("Invalid st,pins in %pOFn node\n", np);
-> -			ret = -EINVAL;
-> -			goto out_put_node;
-> +			return -EINVAL;
->  		}
->  	}
->  
-> @@ -1223,10 +1222,8 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
->  	grp->pins = devm_kcalloc(dev, npins, sizeof(*grp->pins), GFP_KERNEL);
->  	grp->pin_conf = devm_kcalloc(dev, npins, sizeof(*grp->pin_conf), GFP_KERNEL);
->  
-> -	if (!grp->pins || !grp->pin_conf) {
-> -		ret = -ENOMEM;
-> -		goto out_put_node;
-> -	}
-> +	if (!grp->pins || !grp->pin_conf)
-> +		return -ENOMEM;
->  
->  	/* <bank offset mux direction rt_type rt_delay rt_clk> */
->  	for_each_property_of_node(pins, pp) {
-> @@ -1260,17 +1257,13 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
->  		i++;
->  	}
->  
-> -out_put_node:
-> -	of_node_put(pins);
-> -
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int st_pctl_parse_functions(struct device_node *np,
->  			struct st_pinctrl *info, u32 index, int *grp_index)
->  {
->  	struct device *dev = info->dev;
-> -	struct device_node *child;
->  	struct st_pmx_func *func;
->  	struct st_pctl_group *grp;
->  	int ret, i;
-> @@ -1285,15 +1278,13 @@ static int st_pctl_parse_functions(struct device_node *np,
->  		return -ENOMEM;
->  
->  	i = 0;
-> -	for_each_child_of_node(np, child) {
-> +	for_each_child_of_node_scoped(np, child) {
->  		func->groups[i] = child->name;
->  		grp = &info->groups[*grp_index];
->  		*grp_index += 1;
->  		ret = st_pctl_dt_parse_groups(child, grp, info, i++);
-> -		if (ret) {
-> -			of_node_put(child);
-> +		if (ret)
->  			return ret;
-> -		}
->  	}
->  	dev_info(dev, "Function[%d\t name:%s,\tgroups:%d]\n", index, func->name, func->ngroups);
->  
-> @@ -1601,7 +1592,6 @@ static int st_pctl_probe_dt(struct platform_device *pdev,
->  	int i = 0, j = 0, k = 0, bank;
->  	struct pinctrl_pin_desc *pdesc;
->  	struct device_node *np = dev->of_node;
-> -	struct device_node *child;
->  	int grp_index = 0;
->  	int irq = 0;
->  
-> @@ -1646,25 +1636,21 @@ static int st_pctl_probe_dt(struct platform_device *pdev,
->  	pctl_desc->pins = pdesc;
->  
->  	bank = 0;
-> -	for_each_child_of_node(np, child) {
-> +	for_each_child_of_node_scoped(np, child) {
->  		if (of_property_read_bool(child, "gpio-controller")) {
->  			const char *bank_name = NULL;
->  			char **pin_names;
->  
->  			ret = st_gpiolib_register_bank(info, bank, child);
-> -			if (ret) {
-> -				of_node_put(child);
-> +			if (ret)
->  				return ret;
-> -			}
->  
->  			k = info->banks[bank].range.pin_base;
->  			bank_name = info->banks[bank].range.name;
->  
->  			pin_names = devm_kasprintf_strarray(dev, bank_name, ST_GPIO_PINS_PER_BANK);
-> -			if (IS_ERR(pin_names)) {
-> -				of_node_put(child);
-> +			if (IS_ERR(pin_names))
->  				return PTR_ERR(pin_names);
-> -			}
->  
->  			for (j = 0; j < ST_GPIO_PINS_PER_BANK; j++, k++) {
->  				pdesc->number = k;
-> @@ -1678,7 +1664,6 @@ static int st_pctl_probe_dt(struct platform_device *pdev,
->  							i++, &grp_index);
->  			if (ret) {
->  				dev_err(dev, "No functions found.\n");
-> -				of_node_put(child);
->  				return ret;
->  			}
->  		}
-> 
+[1] https://lore.kernel.org/all/?q=f%3Abcousson%40baylibre.com
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ CREDITS     | 5 +++++
+ MAINTAINERS | 2 --
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Thanks
-Patrice
+diff --git a/CREDITS b/CREDITS
+index 0107047f807b..ea84fb373310 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -796,6 +796,11 @@ E: luisfcorreia@gmail.com
+ D: Ralink rt2x00 WLAN driver
+ S: Belas, Portugal
+ 
++N: Benoît Cousson
++E: bcousson@baylibre.com
++D: TI OMAP Devicetree platforms
++D: TI OMAP HWMOD boards
++
+ N: Alan Cox
+ W: http://www.linux.org.uk/diary/
+ D: Linux Networking (0.99.10->2.0.29)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a482f2a499e4..8193bd95c84c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16147,7 +16147,6 @@ S:	Maintained
+ F:	arch/arm/*omap*/*clock*
+ 
+ OMAP DEVICE TREE SUPPORT
+-M:	Benoît Cousson <bcousson@baylibre.com>
+ M:	Tony Lindgren <tony@atomide.com>
+ L:	linux-omap@vger.kernel.org
+ L:	devicetree@vger.kernel.org
+@@ -16202,7 +16201,6 @@ S:	Maintained
+ F:	arch/arm/mach-omap2/omap_hwmod*data*
+ 
+ OMAP HWMOD SUPPORT
+-M:	Benoît Cousson <bcousson@baylibre.com>
+ M:	Paul Walmsley <paul@pwsan.com>
+ L:	linux-omap@vger.kernel.org
+ S:	Maintained
+-- 
+2.43.0
+
