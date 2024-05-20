@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E02EFC04FFE
-	for <soc@archiver.kernel.org>; Mon, 20 May 2024 07:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5F20C25B79
+	for <soc@archiver.kernel.org>; Mon, 20 May 2024 07:41:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A1D78C4AF07; Mon, 20 May 2024 07:41:27 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 99906C4AF0D; Mon, 20 May 2024 07:41:28 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0D828C4AF0B
-	for <soc@kernel.org>; Mon, 20 May 2024 07:41:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D828C4AF0B
+	by smtp.kernel.org (Postfix) with ESMTPS id 96989C2BD10
+	for <soc@kernel.org>; Mon, 20 May 2024 07:41:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 96989C2BD10
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a59b097b202so498408166b.0
-        for <soc@kernel.org>; Mon, 20 May 2024 00:41:24 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a5a4bc9578cso639577166b.2
+        for <soc@kernel.org>; Mon, 20 May 2024 00:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716190883; x=1716795683; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9y2+R5Z+lMlXgJtdu7Zc9o7DnmU5CSj/l6XtGSHRsxY=;
-        b=OlDCas0VpAfp/EMqrzm5uNDScH9SfT4quKjsemjpT8DRc96PsddKS2zHELHV6P2KtZ
-         ngMbQ0/x0b6mZcAKmWaahqW4GNw5381LDo4l+Gv2di3NXf8IYjyQ5fHNLK73Nb8nhBmh
-         EAeLTXSTqVTyhyHzUKG+dg79ZY7niF2O8x7lt87QdiCqvi5qApQEi0C5VP44R/GHZMhz
-         TSLjyVg4CJ+emWmRxEKZ5rrCrpz4XsWbKK0SHjtGe0d2zoRPFaWEbvbxRYWnd2m7UNjz
-         kHpzJk4sbzfN4k788QUfFcEAQM/+NN9HgrAX4R8qfpVJQqNWmEVVB9GX1MhLmo1P5H+X
-         B2wQ==
+        d=linaro.org; s=google; t=1716190885; x=1716795685; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6A/avYP5YPpm971N8IK0uubu89NMozFIaDiylX6PsHQ=;
+        b=CYctmq6YJjy1QgksV+agYU4DSA++JTLOv/E2BE43vOwgeAetlAE2asRz4GfeY8+EZ6
+         JXF+9EoqYV8RARVRmT00Mt1ckk+PSKFJ2jHbWLw8iQ8dJ2bl2XvnSlKngbOs4z9scMol
+         CqYnwI6CTIJCYBOjLbM/EKi951XMcAvpfAa0B0uEPDHFEsrfbsEgs2xjAdNKvrU7NY0X
+         Rz5WazasRPMzzisZM1Hn8soX1chmbOrdJPTR0uRgjIPpcUKdQO3lSaerWT2mwVQ7/3Op
+         tzG8KYKGmCsVMjFfbsO/5U58r/zYuZ0w+Jy3zRJ/7PTKmG/H1ScWNXKFl5YHz4wVZK/A
+         YHVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716190883; x=1716795683;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9y2+R5Z+lMlXgJtdu7Zc9o7DnmU5CSj/l6XtGSHRsxY=;
-        b=sX5N8BSf886q9mk5eFPPsyLjOOCr7P5wxcSI6o4/0kLj8W9cPboZFRaV43SUvSlQ2m
-         8CVtW24Vnvkh12IY67zmHQ9zA3tyLwSojyUnSM9HQYu+YUFzbL8sHmvJozfc8lfc/EWK
-         Ew1F5VN0PW2XakdbfDh/YO84AUohVG5Ba3ZCAnJ+s4nH6zuvn1Ua+f0nqh6ZRo2s0Gq8
-         OYWpSswoJDO8IGIun2MfAOP/bNNviKZe88U9VMeq2jEh0T2hKkS57PVeGqzGVwfPtZim
-         Z2YYmiZkCQkE0jn19rSkN6c0rJY3gEuH9GdLE8kD9sz67ydF+DegooO7yO/oVjredERw
-         +iRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXWoPG+kcXalzzUkJMQdn1FGakwC/Ys8303hJxKd9B1nNEVeSdqW1va7+XsQGG1lYh1ckFg7OhormW9BBcZgQ==
-X-Gm-Message-State: AOJu0YwgtvM4DPSkYj78Niv95YcmpijKYPh6la/cQ8F8ovgDLwx/503k
-	caiLtT//OzJnOYh9StomPZDChTxsCEZieSdxZj+UzdIRa5VtgWxN5DyBJo2aZuE=
-X-Google-Smtp-Source: AGHT+IH9haA9iR4YwoKX0PzjzpCIy5yTTINDqwVFObjzHq50kZ9iLXtPJQM9TPGv9QNsFnHhLLi5EQ==
-X-Received: by 2002:a17:906:6a02:b0:a5a:7c7e:a0d3 with SMTP id a640c23a62f3a-a5a7c7ea16fmr1445195766b.44.1716190883404;
-        Mon, 20 May 2024 00:41:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716190885; x=1716795685;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6A/avYP5YPpm971N8IK0uubu89NMozFIaDiylX6PsHQ=;
+        b=hqJLBGE/mmKj2f9BMVvD6kuK0gQJxt6JqHYze91Pq8ojdgiRX3NHOS3QaUVmZxTx3K
+         nxdFhqnUA+/doazj7N8ZklPRdJmpZZiFuYBuT/kI1GtOEcxOpW5Qo6MqH36QL8gtnpFW
+         c+JQ4h98mHMdwtt4SPuZApPyvP8yJyzA79YhOdYSq6dV2IO/Ym33WrYyW28uAvdvDfVu
+         lkJXmW435Py55FudCG1L080JzMnSAj1HHaZe2NajeVypJ9RNTVDOyccNFdpcuMvB7X9T
+         vuMlOhfFKiXdJZbm2mD7FjJH41/fPZNXJAkCI9QUpwytU7h8gisods4bgubyBseh6Cgo
+         smuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXa4hAFhEISgUEczoOI+rC/1eTtJ9gMJ/ojNzYGYbMIEr2IUfaVLnyo1unUhj291qOT21MVnia/ThbFwd02iA==
+X-Gm-Message-State: AOJu0YxADRi7b0HbE/2nYQsWGoFvfoeSKZfG9K7KZo0fm/E0V29cXH3V
+	+KgMCo7aFB9AB7srhXjl+nh4ft2nd6b4KDEQFeMeajhSOxoWYPtgncGQJ5hpydM=
+X-Google-Smtp-Source: AGHT+IGaGv6w5Ejo+3PCQdIkO7sIlmQZTkHvXrWEWEQy4bzPDzHGkbybTDIi2J4UNNkyIEUhf7BVeg==
+X-Received: by 2002:a17:906:4f83:b0:a59:ea34:fe0d with SMTP id a640c23a62f3a-a5a2d65ed4bmr2937020466b.47.1716190884722;
+        Mon, 20 May 2024 00:41:24 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.206.169])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a893a91b9sm754853166b.7.2024.05.20.00.41.21
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a893a91b9sm754853166b.7.2024.05.20.00.41.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 00:41:22 -0700 (PDT)
+        Mon, 20 May 2024 00:41:24 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -69,65 +70,65 @@ To: Arnd Bergmann <arnd@arndb.de>,
 	linux-omap@vger.kernel.org
 Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] =?UTF-8?q?ti:=20omap:=20MAINTAINERS:=20move=20Beno?= =?UTF-8?q?=C3=AEt=20Cousson=20to=20CREDITS?=
-Date: Mon, 20 May 2024 09:40:12 +0200
-Message-ID: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] amazon: MAINTAINERS: change to odd fixes and Tsahee Zidenberg to CREDITS
+Date: Mon, 20 May 2024 09:40:13 +0200
+Message-ID: <20240520074013.9672-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
+References: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Last email from Benoît Cousson was in 2014 [1], so remove him from
-maintainers of the TI OMAP platform.  Stale maintainer entries hide
-information whether subsystem needs help, has a bus-factor or is even
-orphaned.
+Last email from Tsahee Zidenberg was in 2016 [1], so move Tsahee from
+Amazon platform maintainers to credits (thank you for your contributions
+and maintenance!).  Stale maintainer entries hide information whether
+subsystem needs help, has a bus-factor or is even orphaned.
 
-Benoît Cousson, thank you for TI OMAP contributions and maintenance.
+The Amazon platform still has active maintainer - Antoine Tenart -
+however there was no maintenance activities coming from Antoine.  All
+my patches from last 4 years related to Amazon remained unanswered - no
+acks, no picks - so document the actual not active status of the
+platform by changing it to Odd Fixes.
 
-[1] https://lore.kernel.org/all/?q=f%3Abcousson%40baylibre.com
+[1] https://lore.kernel.org/all/?q=f%3Atsahee%40annapurnalabs.com
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- CREDITS     | 5 +++++
- MAINTAINERS | 2 --
+ CREDITS     | 4 ++++
+ MAINTAINERS | 3 +--
  2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/CREDITS b/CREDITS
-index 0107047f807b..ea84fb373310 100644
+index ea84fb373310..bdf592e0bd25 100644
 --- a/CREDITS
 +++ b/CREDITS
-@@ -796,6 +796,11 @@ E: luisfcorreia@gmail.com
- D: Ralink rt2x00 WLAN driver
- S: Belas, Portugal
+@@ -4367,6 +4367,10 @@ N: Haojian Zhuang
+ E: haojian.zhuang@gmail.com
+ D: MMP support
  
-+N: Benoît Cousson
-+E: bcousson@baylibre.com
-+D: TI OMAP Devicetree platforms
-+D: TI OMAP HWMOD boards
++N: Tsahee Zidenberg
++E: tsahee@annapurnalabs.com
++D: Annapurna Labs Alpine Architecture
 +
- N: Alan Cox
- W: http://www.linux.org.uk/diary/
- D: Linux Networking (0.99.10->2.0.29)
+ N: Richard Zidlicky
+ E: rz@linux-m68k.org, rdzidlic@geocities.com
+ W: http://www.geocities.com/rdzidlic
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a482f2a499e4..8193bd95c84c 100644
+index 8193bd95c84c..3e1ce64801ef 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16147,7 +16147,6 @@ S:	Maintained
- F:	arch/arm/*omap*/*clock*
+@@ -1958,10 +1958,9 @@ F:	drivers/soc/amlogic/
+ N:	meson
  
- OMAP DEVICE TREE SUPPORT
--M:	Benoît Cousson <bcousson@baylibre.com>
- M:	Tony Lindgren <tony@atomide.com>
- L:	linux-omap@vger.kernel.org
- L:	devicetree@vger.kernel.org
-@@ -16202,7 +16201,6 @@ S:	Maintained
- F:	arch/arm/mach-omap2/omap_hwmod*data*
- 
- OMAP HWMOD SUPPORT
--M:	Benoît Cousson <bcousson@baylibre.com>
- M:	Paul Walmsley <paul@pwsan.com>
- L:	linux-omap@vger.kernel.org
- S:	Maintained
+ ARM/Annapurna Labs ALPINE ARCHITECTURE
+-M:	Tsahee Zidenberg <tsahee@annapurnalabs.com>
+ M:	Antoine Tenart <atenart@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-S:	Maintained
++S:	Odd Fixes
+ F:	arch/arm/boot/dts/amazon/
+ F:	arch/arm/mach-alpine/
+ F:	arch/arm64/boot/dts/amazon/
 -- 
 2.43.0
 
