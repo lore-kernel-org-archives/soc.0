@@ -1,134 +1,300 @@
-Return-Path: <SRS0=BIus=MX=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=b/WY=MX=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5F20C25B79
-	for <soc@archiver.kernel.org>; Mon, 20 May 2024 07:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6798EC25B77
+	for <soc@archiver.kernel.org>; Mon, 20 May 2024 21:50:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 99906C4AF0D; Mon, 20 May 2024 07:41:28 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 3636FC4AF07; Mon, 20 May 2024 21:50:03 +0000 (UTC)
+Received: from wfhigh6-smtp.messagingengine.com (wfhigh6-smtp.messagingengine.com [64.147.123.157])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 96989C2BD10
-	for <soc@kernel.org>; Mon, 20 May 2024 07:41:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 96989C2BD10
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a5a4bc9578cso639577166b.2
-        for <soc@kernel.org>; Mon, 20 May 2024 00:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716190885; x=1716795685; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6A/avYP5YPpm971N8IK0uubu89NMozFIaDiylX6PsHQ=;
-        b=CYctmq6YJjy1QgksV+agYU4DSA++JTLOv/E2BE43vOwgeAetlAE2asRz4GfeY8+EZ6
-         JXF+9EoqYV8RARVRmT00Mt1ckk+PSKFJ2jHbWLw8iQ8dJ2bl2XvnSlKngbOs4z9scMol
-         CqYnwI6CTIJCYBOjLbM/EKi951XMcAvpfAa0B0uEPDHFEsrfbsEgs2xjAdNKvrU7NY0X
-         Rz5WazasRPMzzisZM1Hn8soX1chmbOrdJPTR0uRgjIPpcUKdQO3lSaerWT2mwVQ7/3Op
-         tzG8KYKGmCsVMjFfbsO/5U58r/zYuZ0w+Jy3zRJ/7PTKmG/H1ScWNXKFl5YHz4wVZK/A
-         YHVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716190885; x=1716795685;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6A/avYP5YPpm971N8IK0uubu89NMozFIaDiylX6PsHQ=;
-        b=hqJLBGE/mmKj2f9BMVvD6kuK0gQJxt6JqHYze91Pq8ojdgiRX3NHOS3QaUVmZxTx3K
-         nxdFhqnUA+/doazj7N8ZklPRdJmpZZiFuYBuT/kI1GtOEcxOpW5Qo6MqH36QL8gtnpFW
-         c+JQ4h98mHMdwtt4SPuZApPyvP8yJyzA79YhOdYSq6dV2IO/Ym33WrYyW28uAvdvDfVu
-         lkJXmW435Py55FudCG1L080JzMnSAj1HHaZe2NajeVypJ9RNTVDOyccNFdpcuMvB7X9T
-         vuMlOhfFKiXdJZbm2mD7FjJH41/fPZNXJAkCI9QUpwytU7h8gisods4bgubyBseh6Cgo
-         smuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXa4hAFhEISgUEczoOI+rC/1eTtJ9gMJ/ojNzYGYbMIEr2IUfaVLnyo1unUhj291qOT21MVnia/ThbFwd02iA==
-X-Gm-Message-State: AOJu0YxADRi7b0HbE/2nYQsWGoFvfoeSKZfG9K7KZo0fm/E0V29cXH3V
-	+KgMCo7aFB9AB7srhXjl+nh4ft2nd6b4KDEQFeMeajhSOxoWYPtgncGQJ5hpydM=
-X-Google-Smtp-Source: AGHT+IGaGv6w5Ejo+3PCQdIkO7sIlmQZTkHvXrWEWEQy4bzPDzHGkbybTDIi2J4UNNkyIEUhf7BVeg==
-X-Received: by 2002:a17:906:4f83:b0:a59:ea34:fe0d with SMTP id a640c23a62f3a-a5a2d65ed4bmr2937020466b.47.1716190884722;
-        Mon, 20 May 2024 00:41:24 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.206.169])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a893a91b9sm754853166b.7.2024.05.20.00.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 00:41:24 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	arm@kernel.org,
-	soc@kernel.org,
-	Antoine Tenart <atenart@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Tony Lindgren <tony@atomide.com>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] amazon: MAINTAINERS: change to odd fixes and Tsahee Zidenberg to CREDITS
-Date: Mon, 20 May 2024 09:40:13 +0200
-Message-ID: <20240520074013.9672-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
-References: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 57947C2BD11
+	for <soc@kernel.org>; Mon, 20 May 2024 21:50:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57947C2BD11
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id D68721800122;
+	Mon, 20 May 2024 17:49:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 20 May 2024 17:50:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm3;
+	 t=1716241799; x=1716328199; bh=uiY0+F8tNTKaymEVhT+9GghBP7w/6w6L
+	i9SG+N7ubIw=; b=YKqFr78jkfb2ESwInhsBsTbXz0E9n6mKx5zQ6wol/VtKauku
+	n9Bfag7yTqdKR88M8xmGXSlPBeWG0EVj3gAtZNEDg3dx3m5+9Vv6YD+hj8VsfzmV
+	Ve8/dnx+YPajAOI89GY8gZPTQNpNy/qkiqPJX1Iu1gPpyg9StRsB6y94sZfNtjHa
+	I47SxywXmkEYYlrVZfYcpa1KJdaMRiY8JSc81diRP00CQ8sdjgvzj6yS5KJ3NweC
+	aJ0LsOIP8KzOsRHVxxnFFuwgjU1mVORDHbcv3ol0xFpYDOvr/NT8L8M4+dmq/Rx/
+	n1khPaXwGhnohdyUlj6ibSV7cSA3qCaEZsdTqw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1716241799; x=1716328199; bh=uiY0+F8tNTKaymEVhT+9GghBP7w/6w6Li9S
+	G+N7ubIw=; b=nLNJeYSn923oXi6TGOMYyUcdq57Xs0x6AR0TICrqOiKFMWqEtKJ
+	kSPz/ebuYwgcZBE6fXlgli70FS7exBjotyZBGv0L0TPI6FKIbaTGnEIZBokjj+xM
+	Ib6ZwXamTvgwTXw+KWinCviEMSADhIrfWkvVpyHNleY/00VWlXErtpUwTCGdSxnU
+	C+tQ3b89q7n+4m63+pY++IombzY6EDdqoHXTvlSW68nlExXIonAZ+jW6j9yt0yxY
+	fjC+mjCpm8KppQbG95alA3b2XxtMv1zNDgjRkbv7Ebs/7rwmFk/qqGelnSaaXWng
+	trr88rVlRftv6hhynMdTNy4z70v5i4jxH9Q==
+X-ME-Sender: <xms:h8VLZh_6mRKb07STvG-nRss5GYnCjjA6oZNqOkuN1exgPxSZ24yl0w>
+    <xme:h8VLZlt10QCKmT0pm-CP24IMQVtTzmbbGtWPsPBveo1gzRHaR-5-U6p-vlrYbCsag
+    rnNodmxNtj-YeymxT0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeiuddgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:h8VLZvAR45lD2fatQP73v1Mj9SvWmSBmQbpuJP1Xgh-QyRw-EKZ4bg>
+    <xmx:h8VLZlev73XbNO_7m2oRcJQZWvRAWnhutKAv7VtDuh-SlrbNnTFozA>
+    <xmx:h8VLZmOWDeGN2Bjb_AgdujJljXSFNEx9ZscZSP3pCsQHpDOwvvBcEA>
+    <xmx:h8VLZnmWEAYJRv1FEHDR9p7gm_uHyaocLmmBm-PxkjfgsIeIdMTEDA>
+    <xmx:h8VLZiAlho6UzXXkL18pXpu26-4JWrwtUqv6Upbw9rRsEj0rdrCNdJXC>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 186B0B6008D; Mon, 20 May 2024 17:49:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-480-g515a2f54a-fm-20240515.001-g515a2f54
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <7b555e52-a83b-4218-9251-27dcb4e93268@app.fastmail.com>
+Date: Mon, 20 May 2024 21:49:14 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ "Conor Dooley" <conor.dooley@microchip.com>,
+ "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Joel Stanley" <joel@jms.id.au>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] soc: devicetree updates for v6.10, part 2
+Content-Type: text/plain
 
-Last email from Tsahee Zidenberg was in 2016 [1], so move Tsahee from
-Amazon platform maintainers to credits (thank you for your contributions
-and maintenance!).  Stale maintainer entries hide information whether
-subsystem needs help, has a bus-factor or is even orphaned.
+The following changes since commit fec50db7033ea478773b159e0e2efb135270e3b7:
 
-The Amazon platform still has active maintainer - Antoine Tenart -
-however there was no maintenance activities coming from Antoine.  All
-my patches from last 4 years related to Amazon remained unanswered - no
-acks, no picks - so document the actual not active status of the
-platform by changing it to Odd Fixes.
+  Linux 6.9-rc3 (2024-04-07 13:22:46 -0700)
 
-[1] https://lore.kernel.org/all/?q=f%3Atsahee%40annapurnalabs.com
+are available in the Git repository at:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- CREDITS     | 4 ++++
- MAINTAINERS | 3 +--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-late-6.10
 
-diff --git a/CREDITS b/CREDITS
-index ea84fb373310..bdf592e0bd25 100644
---- a/CREDITS
-+++ b/CREDITS
-@@ -4367,6 +4367,10 @@ N: Haojian Zhuang
- E: haojian.zhuang@gmail.com
- D: MMP support
- 
-+N: Tsahee Zidenberg
-+E: tsahee@annapurnalabs.com
-+D: Annapurna Labs Alpine Architecture
-+
- N: Richard Zidlicky
- E: rz@linux-m68k.org, rdzidlic@geocities.com
- W: http://www.geocities.com/rdzidlic
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8193bd95c84c..3e1ce64801ef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1958,10 +1958,9 @@ F:	drivers/soc/amlogic/
- N:	meson
- 
- ARM/Annapurna Labs ALPINE ARCHITECTURE
--M:	Tsahee Zidenberg <tsahee@annapurnalabs.com>
- M:	Antoine Tenart <atenart@kernel.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
-+S:	Odd Fixes
- F:	arch/arm/boot/dts/amazon/
- F:	arch/arm/mach-alpine/
- F:	arch/arm64/boot/dts/amazon/
--- 
-2.43.0
+for you to fetch changes up to 01a7f9e1a97ee48ed187b040afcda23886b9f48d:
 
+  Merge tag 'riscv-dt-for-v6.10-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into soc/dt-late (2024-05-08 22:23:00 +0200)
+
+----------------------------------------------------------------
+soc: devicetree updates for v6.10, part 2
+
+This is a follow-up to an earlier pull request for device tree changes,
+as three platform maintainers sent their contents too late to be included
+in the main set, but had not caused any further problems since then:
+
+ - The Amlogic platform now containts support for two new SoC types,
+   the A4 and A5 chips for audio applications. Both come with a
+   reference board, and one more dts file gets addded for the
+   combination of the MNT Reform Laptop with the BPI-CM4 CPU
+   module
+
+ - The ASpeed platform adds support for six addititional server
+   platforms that use ast2500 or ast2600 as their BMC, while
+   another one gets removed.
+
+ - The RISC-V platforms from Microchip, Starfive and and T-HEAD
+   get additional features for existing hardware, plus the
+   addition of the Milk-V Mars based on the StarFive VisionFive v2
+   board.
+
+----------------------------------------------------------------
+Andrew Geissler (1):
+      ARM: dts: aspeed: system1: IBM System1 BMC board
+
+Arnd Bergmann (3):
+      Merge tag 'amlogic-arm64-dt-for-v6.10' of https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into soc/dt-late
+      Merge tag 'aspeed-6.10-devicetree' of git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into soc/dt-late
+      Merge tag 'riscv-dt-for-v6.10-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into soc/dt-late
+
+Conor Dooley (2):
+      RISC-V: add Milkv Mars board devicetree
+      riscv: dts: microchip: add pac1934 power-monitor to icicle
+
+Delphine CC Chiu (2):
+      ARM: dts: aspeed: yosemite4: Enable ipmb device for OCP debug card
+      ARM: dts: aspeed: yosemite4: set bus13 frequency to 100k
+
+Eddie James (2):
+      ARM: dts: aspeed: FSI interrupt support
+      ARM: dts: Aspeed: Bonnell: Fix NVMe LED labels
+
+Hannah Peuckmann (2):
+      riscv: dts: starfive: visionfive 2: Remove non-existing TDM hardware
+      riscv: dts: starfive: visionfive 2: Remove non-existing I2S hardware
+
+Jisheng Zhang (8):
+      riscv: dts: starfive: add 'cpus' label to jh7110 and jh7100 soc dtsi
+      dt-bindings: riscv: starfive: add Milkv Mars board
+      riscv: dts: starfive: visionfive 2: update sound and codec dt node name
+      riscv: dts: starfive: visionfive 2: use cpus label for timebase freq
+      riscv: dts: starfive: visionfive 2: add tf cd-gpios
+      riscv: dts: starfive: visionfive 2: add "disable-wp" for tfcard
+      riscv: dts: starfive: introduce a common board dtsi for jh7110 based boards
+      riscv: dts: starfive: add Milkv Mars board device tree
+
+Kelly Hung (2):
+      dt-bindings: arm: aspeed: add ASUS X4TF board
+      ARM: dts: aspeed: x4tf: Add dts for asus x4tf project
+
+Krzysztof Kozlowski (5):
+      ARM: dts: aspeed: greatlakes: correct Mellanox multi-host property
+      ARM: dts: aspeed: yosemite4: correct Mellanox multi-host property
+      ARM: dts: aspeed: yosemitev2: correct Mellanox multi-host property
+      ARM: dts: aspeed: harma: correct Mellanox multi-host property
+      ARM: dts: aspeed: drop unused ref_voltage ADC property
+
+Neil Armstrong (4):
+      dt-bindings: arm: amlogic: Document the MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+      arm64: meson: g12-common: add the MIPI DSI nodes
+      arm64: meson: khadas-vim3l: add TS050 DSI panel overlay
+      arm64: dts: amlogic: meson-g12b-bananapi-cm4: add support for MNT Reform2 with CM4 adaper
+
+Ninad Palsule (1):
+      dt-bindings: arm: aspeed: add IBM system1-bmc
+
+Peter Yin (14):
+      dt-bindings: arm: aspeed: add Meta Harma board
+      ARM: dts: aspeed: Harma: Add Meta Harma (AST2600) BMC
+      ARM: dts: aspeed: Harma: Revise SGPIO line name.
+      ARM: dts: aspeed: Harma: mapping ttyS2 to UART4.
+      ARM: dts: aspeed: Harma: Remove Vuart
+      ARM: dts: aspeed: Harma: Add cpu power good line name
+      ARM: dts: aspeed: Harma: Add spi-gpio
+      ARM: dts: aspeed: Harma: Add PDB temperature
+      ARM: dts: aspeed: Harma: Revise max31790 address
+      ARM: dts: aspeed: Harma: Add NIC Fru device
+      ARM: dts: aspeed: Harma: Add ltc4286 device
+      ARM: dts: aspeed: Harma: Revise node name
+      ARM: dts: aspeed: Harma: Add retimer device
+      ARM: dts: aspeed: Harma: Modify GPIO line name
+
+Renze Nicolai (5):
+      dt-bindings: arm: aspeed: add Asrock X570D4U board
+      ARM: dts: aspeed: asrock: Add ASRock X570D4U BMC
+      ARM: dts: aspeed: Modify GPIO table for Asrock X570D4U BMC
+      ARM: dts: aspeed: Disable unused ADC channels for Asrock X570D4U BMC
+      ARM: dts: aspeed: Modify I2C bus configuration
+
+Shengyu Qu (1):
+      riscv: dts: starfive: Remove PMIC interrupt info for Visionfive 2 board
+
+Tao Ren (1):
+      ARM: dts: aspeed: Remove Facebook Cloudripper dts
+
+Thomas Bonnefille (1):
+      riscv: dts: thead: Fix node ordering in TH1520 device tree
+
+Xianwei Zhao (6):
+      arm64: dts: meson: fix S4 power-controller node
+      dt-bindings: arm: amlogic: add A4 support
+      dt-bindings: arm: amlogic: add A5 support
+      dt-bindings: serial: amlogic,meson-uart: Add compatible string for A4
+      arm64: dts: add support for A4 based Amlogic BA400
+      arm64: dts: add support for A5 based Amlogic AV400
+
+Yang Chen (11):
+      ARM: dts: aspeed: minerva: Revise the name of DTS
+      ARM: dts: aspeed: minerva: Modify mac3 setting
+      ARM: dts: aspeed: minerva: Change sgpio use
+      ARM: dts: aspeed: minerva: Enable power monitor device
+      ARM: dts: aspeed: minerva: Add temperature sensor
+      ARM: dts: aspeed: minerva: correct the address of eeprom
+      ARM: dts: aspeed: minerva: add bus labels and aliases
+      ARM: dts: aspeed: minerva: add fan rpm controller
+      ARM: dts: aspeed: minerva: Add led-fan-fault gpio
+      ARM: dts: aspeed: minerva: add gpio line name
+      ARM: dts: aspeed: minerva: add sgpio line name
+
+Zelong Dong (1):
+      arm64: dts: amlogic: Add Amlogic T7 reset controller
+
+Zev Weiss (8):
+      dt-bindings: arm: aspeed: document ASRock SPC621D8HM3
+      ARM: dts: aspeed: Add ASRock SPC621D8HM3 BMC
+      ARM: dts: aspeed: asrock: Use MAC address from FRU EEPROM
+      ARM: dts: aspeed: Add vendor prefixes to lm25066 compat strings
+      ARM: dts: aspeed: ahe50dc: Update lm25066 regulator name
+      dt-bindings: trivial-devices: add isil,isl69269
+      dt-bindings: arm: aspeed: document ASRock E3C256D4I
+      ARM: dts: aspeed: Add ASRock E3C256D4I BMC
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   13 +
+ .../devicetree/bindings/arm/aspeed/aspeed.yaml     |    6 +
+ .../devicetree/bindings/riscv/starfive.yaml        |    1 +
+ .../bindings/serial/amlogic,meson-uart.yaml        |    4 +-
+ .../devicetree/bindings/trivial-devices.yaml       |    2 +
+ arch/arm/boot/dts/aspeed/Makefile                  |    9 +-
+ .../dts/aspeed/aspeed-bmc-ampere-mtmitchell.dts    |    1 -
+ .../dts/aspeed/aspeed-bmc-asrock-e3c246d4i.dts     |    9 +
+ .../dts/aspeed/aspeed-bmc-asrock-e3c256d4i.dts     |  322 ++++
+ .../dts/aspeed/aspeed-bmc-asrock-romed8hm3.dts     |   13 +-
+ .../dts/aspeed/aspeed-bmc-asrock-spc621d8hm3.dts   |  324 ++++
+ .../boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts  |  360 +++++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-asus-x4tf.dts  |  581 +++++++
+ .../boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts   |    4 +-
+ .../dts/aspeed/aspeed-bmc-facebook-cloudripper.dts |  544 -------
+ .../dts/aspeed/aspeed-bmc-facebook-greatlakes.dts  |    4 +-
+ .../boot/dts/aspeed/aspeed-bmc-facebook-harma.dts  |  648 ++++++++
+ .../dts/aspeed/aspeed-bmc-facebook-minerva-cmc.dts |  265 ----
+ .../dts/aspeed/aspeed-bmc-facebook-minerva.dts     |  543 +++++++
+ .../dts/aspeed/aspeed-bmc-facebook-yosemite4.dts   |   15 +-
+ .../dts/aspeed/aspeed-bmc-facebook-yosemitev2.dts  |    2 +-
+ .../arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts |    8 +-
+ .../arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts | 1623 ++++++++++++++++++++
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi            |    4 +
+ arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi     |    2 +
+ arch/arm64/boot/dts/amlogic/Makefile               |    7 +
+ .../boot/dts/amlogic/amlogic-a4-a113l2-ba400.dts   |   42 +
+ arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi |   66 +
+ arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi        |   40 +
+ .../boot/dts/amlogic/amlogic-a5-a113x2-av400.dts   |   42 +
+ arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |   40 +
+ arch/arm64/boot/dts/amlogic/amlogic-t7-reset.h     |  197 +++
+ arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |    7 +
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |   70 +
+ .../meson-g12b-bananapi-cm4-mnt-reform2.dts        |  384 +++++
+ .../boot/dts/amlogic/meson-khadas-vim3-ts050.dtso  |  108 ++
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |   13 +-
+ arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts  |   32 +
+ arch/riscv/boot/dts/starfive/Makefile              |    1 +
+ arch/riscv/boot/dts/starfive/jh7100.dtsi           |    2 +-
+ arch/riscv/boot/dts/starfive/jh7110-common.dtsi    |  599 ++++++++
+ arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts |   30 +
+ .../dts/starfive/jh7110-starfive-visionfive-2.dtsi |  683 +-------
+ arch/riscv/boot/dts/starfive/jh7110.dtsi           |    2 +-
+ arch/riscv/boot/dts/thead/th1520.dtsi              |   54 +-
+ 45 files changed, 6181 insertions(+), 1545 deletions(-)
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-e3c256d4i.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-spc621d8hm3.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-asus-x4tf.dts
+ delete mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-cloudripper.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-harma.dts
+ delete mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-minerva-cmc.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-minerva.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4-a113l2-ba400.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a5-a113x2-av400.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7-reset.h
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-khadas-vim3-ts050.dtso
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-common.dtsi
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts
