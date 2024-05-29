@@ -1,253 +1,326 @@
-Return-Path: <SRS0=I26k=NA=baylibre.com=bcousson@kernel.org>
+Return-Path: <SRS0=1SU1=NA=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6774C25B75
-	for <soc@archiver.kernel.org>; Wed, 29 May 2024 09:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E56F5C25B75
+	for <soc@archiver.kernel.org>; Wed, 29 May 2024 12:06:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6C5FFC4AF0B; Wed, 29 May 2024 09:26:26 +0000 (UTC)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id A9C30C32781; Wed, 29 May 2024 12:06:23 +0000 (UTC)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8111FC2BD10
-	for <soc@kernel.org>; Wed, 29 May 2024 09:26:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8111FC2BD10
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5785f7347cdso1981845a12.0
-        for <soc@kernel.org>; Wed, 29 May 2024 02:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1716974783; x=1717579583; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z0c2VBkZnNFQSkF5HpEZa/3M4/PXAGu7qN45PFuHAPE=;
-        b=Y99CTLQmGnwrpswAaAFPxFPPav6NpLQZgAeb6VmRlA6gIpYYMunVjUOh8Y16Cp0ZjH
-         qe9WaG/+nOsp6IWu73u/1hwkhMz7zCPl1s623yDeqAxhspRO5YGKmU/NBNH9tj890B6r
-         XNnujPyTqLP2/IHtR/8ADIEhyDDX2OxkuWvh5vLpkPdR3iibr6c7/wj6Scf3VjWoHXhI
-         u/Ntwd5YN1Zyp9EhZdujuGrp50jUosJeZWS0RUHrs7Kn2ojSoiHdn5WF+nHOj1yg3BhD
-         aGAqhcT/XyllbmJYinjwr6eKWueYqyHbvPkSIq6YEDUZDrlUO7R78Zb+aUIwoVM22I8W
-         zSWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716974783; x=1717579583;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z0c2VBkZnNFQSkF5HpEZa/3M4/PXAGu7qN45PFuHAPE=;
-        b=l+DQGMpeYleN+WEvdmPbKyzPhU9aZjCTWLXVEqqVXERBfsAdOXXjWNVN0x5uUYN7JK
-         lKR9UaFeamgaVpZvpB2VFfnyskV/NCcEjx+CkuJYDXfsq+vxwlmc8NUbuLgiehKLWMqi
-         X0aFrFbZGNv4Vt/TFaR0lu0b0iWe989RqlT9NYsovhlFhuOs4agcoCQ9y4ENcN1xCqEm
-         fF1s86FjZyLviZ1KEnxb/pHdGZqpaU71YJgaTHRkmL1a7LPakRKVj5V8WVRL1j9iby+F
-         SkpusQF+uO3TldYDvGDnV7lw4pZaB6RmhESwmaRjfk0zilAztA6cV3zBIzVgtoZ8x7kb
-         Apzw==
-X-Forwarded-Encrypted: i=1; AJvYcCW92WeJ+LbW9DlNsYiw5KK7WzqNgBNYRL0i+6RO33v1eg3HCqKAoyjl7mCuXNMCm7fXwatrT7ClKwFrVSg5mA==
-X-Gm-Message-State: AOJu0YxvidIsleiG3PzCxsGqwL07937dM6idrlpLD7tVakHuOuUgktpj
-	W+a0/UC5yjNecldaM4mt05G/o05r+UsEyEkF+Ttg1ilWcr88AAfutC1fJUaf63k2CX809z8kpxF
-	57SIqSSMg8Wwxw+YXsJDS4Pj2eqPd1KdMM/yITA==
-X-Google-Smtp-Source: AGHT+IFGQMfOt9P1e58O+h1I5kyuyrp7Z9rcNMfsvpyuyhrnijSmsG0oYQC92G/kn5k1HbYYnCWP52Ok0diTBgtlLKM=
-X-Received: by 2002:a50:9e25:0:b0:579:8d79:4a2e with SMTP id
- 4fb4d7f45d1cf-5798d795d04mr7712032a12.10.1716974782660; Wed, 29 May 2024
- 02:26:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240520074013.9672-1-krzysztof.kozlowski@linaro.org>
-From: Benoit Cousson <bcousson@baylibre.com>
-Date: Wed, 29 May 2024 11:26:11 +0200
-Message-ID: <CALpuT31Rhnjpsc_kePK9H-UNDs1310Aj1z3EHrqJUL0xOFEpvw@mail.gmail.com>
-Subject: =?UTF-8?Q?Re=3A_=5BPATCH_1=2F2=5D_ti=3A_omap=3A_MAINTAINERS=3A_move_Beno=C3=AEt_?=
-	=?UTF-8?Q?Cousson_to_CREDITS?=
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id B2348C2BD10
+	for <soc@kernel.org>; Wed, 29 May 2024 12:06:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2348C2BD10
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1b01:1838:131c:4de4])
+	by michel.telenet-ops.be with bizsmtp
+	id V06J2C00H3VPV9V0606JRr; Wed, 29 May 2024 14:06:18 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sCI3T-00GbKO-SF;
+	Wed, 29 May 2024 14:06:18 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sCI4Q-009XF6-73;
+	Wed, 29 May 2024 14:06:18 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org, 
-	Antoine Tenart <atenart@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, linux-arm-kernel@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-omap@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: multipart/alternative; boundary="000000000000025a540619945822"
+Cc: soc@kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH resend v3] arm64: dts: mediatek: mt7986a: bpi-r3: Convert to sugar syntax
+Date: Wed, 29 May 2024 14:06:14 +0200
+Message-Id: <2fd900a30b5a0f7de4ea68f60bac250794b8cdb4.1716984213.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
---000000000000025a540619945822
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Overlay syntactic sugar for generating target-path fragments is
+supported by the version of dtc supplied with the kernel since commit
+50aafd60898a8b3e ("scripts/dtc: Update to upstream version
+v1.4.6-21-g84e414b0b5bc").  Hence convert the Bananapi R3 overlay
+devicetree source files to sugar syntax, improving readability.
 
-Hi Krzysztof
-
-Le sam. 25 mai 2024 =C3=A0 21:51, Krzysztof Kozlowski <
-krzysztof.kozlowski@linaro.org> a =C3=A9crit :
-
-> Last email from Beno=C3=AEt Cousson was in 2014 [1], so remove him from
-> maintainers of the TI OMAP platform.  Stale maintainer entries hide
-> information whether subsystem needs help, has a bus-factor or is even
-> orphaned.
->
-
-Whaooo, 10 years ago already... Time flies :-)
-
-
-> Beno=C3=AEt Cousson, thank you for TI OMAP contributions and maintenance.
->
-
-You're welcome! Thanks for doing the necessary cleanup.
-
-[1] https://lore.kernel.org/all/?q=3Df%3Abcousson%40baylibre.com
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-
-Here is my latest contribution then ;-)
-
-Acked-by: Beno=C3=AEt Cousson <bcousson@baylibre.com>
-
-
-> ---
->  CREDITS     | 5 +++++
->  MAINTAINERS | 2 --
->  2 files changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/CREDITS b/CREDITS
-> index 0107047f807b..ea84fb373310 100644
-> --- a/CREDITS
-> +++ b/CREDITS
-> @@ -796,6 +796,11 @@ E: luisfcorreia@gmail.com
->  D: Ralink rt2x00 WLAN driver
->  S: Belas, Portugal
->
-> +N: Beno=C3=AEt Cousson
-> +E: bcousson@baylibre.com
-> +D: TI OMAP Devicetree platforms
-> +D: TI OMAP HWMOD boards
-> +
->  N: Alan Cox
->  W: http://www.linux.org.uk/diary/
->  D: Linux Networking (0.99.10->2.0.29)
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a482f2a499e4..8193bd95c84c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16147,7 +16147,6 @@ S:      Maintained
->  F:     arch/arm/*omap*/*clock*
->
->  OMAP DEVICE TREE SUPPORT
-> -M:     Beno=C3=AEt Cousson <bcousson@baylibre.com>
->  M:     Tony Lindgren <tony@atomide.com>
->  L:     linux-omap@vger.kernel.org
->  L:     devicetree@vger.kernel.org
-> @@ -16202,7 +16201,6 @@ S:      Maintained
->  F:     arch/arm/mach-omap2/omap_hwmod*data*
->
->  OMAP HWMOD SUPPORT
-> -M:     Beno=C3=AEt Cousson <bcousson@baylibre.com>
->  M:     Paul Walmsley <paul@pwsan.com>
->  L:     linux-omap@vger.kernel.org
->  S:     Maintained
-> --
-> 2.43.0
->
-
-Best Regards,
-Beno=C3=AEt
-
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-Beno=C3=AEt Cousson
-President & COO
-BayLibre - At the Heart of Embedded Linux
-www.baylibre.com
+No changes in generated dtbo.
 
---000000000000025a540619945822
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+v3:
+  - Fix SoC part number,
 
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Krzysztof<br clear=3D"all"><div><div d=
-ir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div=
-><br></div><div>Le=C2=A0sam. 25 mai 2024 =C3=A0=C2=A021:51, Krzysztof Kozlo=
-wski &lt;<a href=3D"mailto:krzysztof.kozlowski@linaro.org">krzysztof.kozlow=
-ski@linaro.org</a>&gt; a =C3=A9crit=C2=A0:<br></div></div></div></div></div=
-></div><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">Last email from Beno=C3=AEt Cousson was in 2014 [1], so remove h=
-im from<br>
-maintainers of the TI OMAP platform.=C2=A0 Stale maintainer entries hide<br=
->
-information whether subsystem needs help, has a bus-factor or is even<br>
-orphaned.<br></blockquote><div><br></div><div><div>Whaooo, 10 years ago alr=
-eady... Time flies :-)=C2=A0</div><div>=C2=A0<br></div></div><blockquote cl=
-ass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid=
- rgb(204,204,204);padding-left:1ex">Beno=C3=AEt Cousson, thank you for TI O=
-MAP contributions and maintenance.<br></blockquote><div><br></div><div>You&=
-#39;re welcome! Thanks for doing the necessary cleanup.=C2=A0</div><div><br=
-></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;=
-border-left:1px solid rgb(204,204,204);padding-left:1ex">[1] <a href=3D"htt=
-ps://lore.kernel.org/all/?q=3Df%3Abcousson%40baylibre.com" rel=3D"noreferre=
-r" target=3D"_blank">https://lore.kernel.org/all/?q=3Df%3Abcousson%40baylib=
-re.com</a><br>
-<br>
-Signed-off-by: Krzysztof Kozlowski &lt;<a href=3D"mailto:krzysztof.kozlowsk=
-i@linaro.org" target=3D"_blank">krzysztof.kozlowski@linaro.org</a>&gt;<br><=
-/blockquote><div><br></div><div>Here is my latest=C2=A0contribution=C2=A0th=
-en ;-)=C2=A0</div><div><br></div><div>Acked-by: Beno=C3=AEt Cousson &lt;<a =
-href=3D"mailto:bcousson@baylibre.com" target=3D"_blank">bcousson@baylibre.c=
-om</a>&gt;<br class=3D"gmail-Apple-interchange-newline"></div><div>=C2=A0</=
-div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
-der-left:1px solid rgb(204,204,204);padding-left:1ex">
----<br>
-=C2=A0CREDITS=C2=A0 =C2=A0 =C2=A0| 5 +++++<br>
-=C2=A0MAINTAINERS | 2 --<br>
-=C2=A02 files changed, 5 insertions(+), 2 deletions(-)<br>
-<br>
-diff --git a/CREDITS b/CREDITS<br>
-index 0107047f807b..ea84fb373310 100644<br>
---- a/CREDITS<br>
-+++ b/CREDITS<br>
-@@ -796,6 +796,11 @@ E: <a href=3D"mailto:luisfcorreia@gmail.com" target=3D=
-"_blank">luisfcorreia@gmail.com</a><br>
-=C2=A0D: Ralink rt2x00 WLAN driver<br>
-=C2=A0S: Belas, Portugal<br>
-<br>
-+N: Beno=C3=AEt Cousson<br>
-+E: <a href=3D"mailto:bcousson@baylibre.com" target=3D"_blank">bcousson@bay=
-libre.com</a><br>
-+D: TI OMAP Devicetree platforms<br>
-+D: TI OMAP HWMOD boards<br>
-+<br>
-=C2=A0N: Alan Cox<br>
-=C2=A0W: <a href=3D"http://www.linux.org.uk/diary/" rel=3D"noreferrer" targ=
-et=3D"_blank">http://www.linux.org.uk/diary/</a><br>
-=C2=A0D: Linux Networking (0.99.10-&gt;2.0.29)<br>
-diff --git a/MAINTAINERS b/MAINTAINERS<br>
-index a482f2a499e4..8193bd95c84c 100644<br>
---- a/MAINTAINERS<br>
-+++ b/MAINTAINERS<br>
-@@ -16147,7 +16147,6 @@ S:=C2=A0 =C2=A0 =C2=A0 Maintained<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0arch/arm/*omap*/*clock*<br>
-<br>
-=C2=A0OMAP DEVICE TREE SUPPORT<br>
--M:=C2=A0 =C2=A0 =C2=A0Beno=C3=AEt Cousson &lt;<a href=3D"mailto:bcousson@b=
-aylibre.com" target=3D"_blank">bcousson@baylibre.com</a>&gt;<br>
-=C2=A0M:=C2=A0 =C2=A0 =C2=A0Tony Lindgren &lt;<a href=3D"mailto:tony@atomid=
-e.com" target=3D"_blank">tony@atomide.com</a>&gt;<br>
-=C2=A0L:=C2=A0 =C2=A0 =C2=A0<a href=3D"mailto:linux-omap@vger.kernel.org" t=
-arget=3D"_blank">linux-omap@vger.kernel.org</a><br>
-=C2=A0L:=C2=A0 =C2=A0 =C2=A0<a href=3D"mailto:devicetree@vger.kernel.org" t=
-arget=3D"_blank">devicetree@vger.kernel.org</a><br>
-@@ -16202,7 +16201,6 @@ S:=C2=A0 =C2=A0 =C2=A0 Maintained<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0arch/arm/mach-omap2/omap_hwmod*data*<br>
-<br>
-=C2=A0OMAP HWMOD SUPPORT<br>
--M:=C2=A0 =C2=A0 =C2=A0Beno=C3=AEt Cousson &lt;<a href=3D"mailto:bcousson@b=
-aylibre.com" target=3D"_blank">bcousson@baylibre.com</a>&gt;<br>
-=C2=A0M:=C2=A0 =C2=A0 =C2=A0Paul Walmsley &lt;<a href=3D"mailto:paul@pwsan.=
-com" target=3D"_blank">paul@pwsan.com</a>&gt;<br>
-=C2=A0L:=C2=A0 =C2=A0 =C2=A0<a href=3D"mailto:linux-omap@vger.kernel.org" t=
-arget=3D"_blank">linux-omap@vger.kernel.org</a><br>
-=C2=A0S:=C2=A0 =C2=A0 =C2=A0Maintained<br>
--- <br>
-2.43.0<br></blockquote><div><br></div><div><div>Best Regards,<br clear=3D"a=
-ll"><div><div dir=3D"ltr"><div dir=3D"ltr"><div>Beno=C3=AEt</div><div><br><=
-/div></div></div></div></div><div>---</div><div>Beno=C3=AEt Cousson<br></di=
-v><div>President &amp; COO<br>BayLibre - At the Heart of Embedded Linux<br>=
-<a href=3D"http://www.baylibre.com/" target=3D"_blank">www.baylibre.com</a>=
-</div></div><div>=C2=A0</div></div></div>
+v2:
+  - Rebase on top of commit e630c7b0b6a69f66 ("arm64: dts: mediatek:
+    replace underscores in node names") in next-20240215 and later.
+---
+ .../mt7986a-bananapi-bpi-r3-emmc.dtso         | 28 +++---
+ .../mt7986a-bananapi-bpi-r3-nand.dtso         | 74 ++++++++-------
+ .../mediatek/mt7986a-bananapi-bpi-r3-nor.dtso | 90 +++++++++----------
+ .../mediatek/mt7986a-bananapi-bpi-r3-sd.dtso  | 16 ++--
+ 4 files changed, 98 insertions(+), 110 deletions(-)
 
---000000000000025a540619945822--
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
+index 779dc6782bb1986f..047a8388811eb9c0 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
+@@ -9,21 +9,17 @@
+ 
+ / {
+ 	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
+-
+-	fragment@0 {
+-		target-path = "/soc/mmc@11230000";
+-		__overlay__ {
+-			bus-width = <8>;
+-			max-frequency = <200000000>;
+-			cap-mmc-highspeed;
+-			mmc-hs200-1_8v;
+-			mmc-hs400-1_8v;
+-			hs400-ds-delay = <0x14014>;
+-			non-removable;
+-			no-sd;
+-			no-sdio;
+-			status = "okay";
+-		};
+-	};
+ };
+ 
++&{/soc/mmc@11230000} {
++	bus-width = <8>;
++	max-frequency = <200000000>;
++	cap-mmc-highspeed;
++	mmc-hs200-1_8v;
++	mmc-hs400-1_8v;
++	hs400-ds-delay = <0x14014>;
++	non-removable;
++	no-sd;
++	no-sdio;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso
+index 7b97c5c91bd0264d..24398f8a7da4345c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso
+@@ -9,46 +9,44 @@
+ 
+ / {
+ 	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
++};
++
++&{/soc/spi@1100a000} {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	spi_nand: flash@0 {
++		compatible = "spi-nand";
++		reg = <0>;
++		spi-max-frequency = <10000000>;
++		spi-tx-buswidth = <4>;
++		spi-rx-buswidth = <4>;
+ 
+-	fragment@0 {
+-		target-path = "/soc/spi@1100a000";
+-		__overlay__ {
++		partitions {
++			compatible = "fixed-partitions";
+ 			#address-cells = <1>;
+-			#size-cells = <0>;
+-			spi_nand: flash@0 {
+-				compatible = "spi-nand";
+-				reg = <0>;
+-				spi-max-frequency = <10000000>;
+-				spi-tx-buswidth = <4>;
+-				spi-rx-buswidth = <4>;
+-
+-				partitions {
+-					compatible = "fixed-partitions";
+-					#address-cells = <1>;
+-					#size-cells = <1>;
+-
+-					partition@0 {
+-						label = "bl2";
+-						reg = <0x0 0x100000>;
+-						read-only;
+-					};
+-
+-					partition@100000 {
+-						label = "reserved";
+-						reg = <0x100000 0x280000>;
+-					};
+-
+-					partition@380000 {
+-						label = "fip";
+-						reg = <0x380000 0x200000>;
+-						read-only;
+-					};
+-
+-					partition@580000 {
+-						label = "ubi";
+-						reg = <0x580000 0x7a80000>;
+-					};
+-				};
++			#size-cells = <1>;
++
++			partition@0 {
++				label = "bl2";
++				reg = <0x0 0x100000>;
++				read-only;
++			};
++
++			partition@100000 {
++				label = "reserved";
++				reg = <0x100000 0x280000>;
++			};
++
++			partition@380000 {
++				label = "fip";
++				reg = <0x380000 0x200000>;
++				read-only;
++			};
++
++			partition@580000 {
++				label = "ubi";
++				reg = <0x580000 0x7a80000>;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
+index e48881be4ed60c98..6a0d529b54aca5bd 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
+@@ -9,54 +9,52 @@
+ 
+ / {
+ 	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
++};
++
++&{/soc/spi@1100a000} {
++	#address-cells = <1>;
++	#size-cells = <0>;
+ 
+-	fragment@0 {
+-		target-path = "/soc/spi@1100a000";
+-		__overlay__ {
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <10000000>;
++
++		partitions {
++			compatible = "fixed-partitions";
+ 			#address-cells = <1>;
+-			#size-cells = <0>;
+-			flash@0 {
+-				compatible = "jedec,spi-nor";
+-				reg = <0>;
+-				spi-max-frequency = <10000000>;
+-
+-				partitions {
+-					compatible = "fixed-partitions";
+-					#address-cells = <1>;
+-					#size-cells = <1>;
+-
+-					partition@0 {
+-						label = "bl2";
+-						reg = <0x0 0x40000>;
+-						read-only;
+-					};
+-
+-					partition@40000 {
+-						label = "u-boot-env";
+-						reg = <0x40000 0x40000>;
+-					};
+-
+-					partition@80000 {
+-						label = "reserved2";
+-						reg = <0x80000 0x80000>;
+-					};
+-
+-					partition@100000 {
+-						label = "fip";
+-						reg = <0x100000 0x80000>;
+-						read-only;
+-					};
+-
+-					partition@180000 {
+-						label = "recovery";
+-						reg = <0x180000 0xa80000>;
+-					};
+-
+-					partition@c00000 {
+-						label = "fit";
+-						reg = <0xc00000 0x1400000>;
+-					};
+-				};
++			#size-cells = <1>;
++
++			partition@0 {
++				label = "bl2";
++				reg = <0x0 0x40000>;
++				read-only;
++			};
++
++			partition@40000 {
++				label = "u-boot-env";
++				reg = <0x40000 0x40000>;
++			};
++
++			partition@80000 {
++				label = "reserved2";
++				reg = <0x80000 0x80000>;
++			};
++
++			partition@100000 {
++				label = "fip";
++				reg = <0x100000 0x80000>;
++				read-only;
++			};
++
++			partition@180000 {
++				label = "recovery";
++				reg = <0x180000 0xa80000>;
++			};
++
++			partition@c00000 {
++				label = "fit";
++				reg = <0xc00000 0x1400000>;
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dtso
+index f623bce075ce6ea4..d9e01967acc471b8 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dtso
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dtso
+@@ -9,15 +9,11 @@
+ 
+ / {
+ 	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
+-
+-	fragment@0 {
+-		target-path = "/soc/mmc@11230000";
+-		__overlay__ {
+-			bus-width = <4>;
+-			max-frequency = <52000000>;
+-			cap-sd-highspeed;
+-			status = "okay";
+-		};
+-	};
+ };
+ 
++&{/soc/mmc@11230000} {
++	bus-width = <4>;
++	max-frequency = <52000000>;
++	cap-sd-highspeed;
++	status = "okay";
++};
+-- 
+2.34.1
+
