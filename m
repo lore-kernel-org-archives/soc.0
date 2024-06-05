@@ -4,105 +4,117 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE528C27C52
-	for <soc@archiver.kernel.org>; Wed,  5 Jun 2024 18:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E99BDC25B76
+	for <soc@archiver.kernel.org>; Wed,  5 Jun 2024 19:01:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B4CEDC3277B; Wed,  5 Jun 2024 18:45:50 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id CD067C32781; Wed,  5 Jun 2024 19:01:00 +0000 (UTC)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C2B40C2BD11;
-	Wed,  5 Jun 2024 18:45:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2B40C2BD11
+	by smtp.kernel.org (Postfix) with ESMTPS id ECA0FC2BD11;
+	Wed,  5 Jun 2024 19:00:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ECA0FC2BD11
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a6c7ae658d0so7207966b.0;
-        Wed, 05 Jun 2024 11:45:49 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52b98fb5c32so280481e87.1;
+        Wed, 05 Jun 2024 12:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717613148; x=1718217948; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1717614058; x=1718218858; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KO3YJpszn4i2dYWjd6GDXV+JNvlKtW6b8xd+9T4kcl0=;
-        b=Yg8NSgfhYBB+bBN3Q1AZGNUoNkeMapVoy3RiwTm3N3qMkS7jTwktw2RFPVG6seUCen
-         snkoK/kNk5ivPx09U4RUYVoYMFfrR3/P+Kjas3nJltFeG3IcX5qVLhSpmS0TFSqlHq5+
-         yDWY2qq1pcPyyJ5swoobqPHQp7/m7VtEu+TKzYVsMbarwVUYz1NtSrCfaw8tcIeL39Hn
-         oUl+S9C12EQJ9p3uYbU+tntOuLaHgwVHLLn2lmYYOJg+Z5QmFzRuyhvTMRJAGYiZoCHB
-         qDkvqY+vJ6eRO1ayuCS27YAb659Lgs5q7gSDAbOc9jnqm7Q4AzB6jEO9VxvXi8YGVqzV
-         iZzA==
+        bh=CYhIOyPTOMDfxI0+KR+naWl8/lGKtywkm84N4Cz6eKM=;
+        b=HOgq0hcVnFhcE4RJOrG9H7YmTorGTeCekifnVwjHscwP/T+6jldU74oEb5cbJJmMrS
+         h/GhOqEFMua5+KtZmkDjxlynWWYlpJ4iPqBscBE/fbO2TbO4V6RhkjPfXHHVE+Fuf1/V
+         NQgbYJT9gIe12KsOPq7lOK9U5ZFV0qhvcbZrMrGExghbNJFeekyAdmZqepsHCkEhU8NX
+         s/gqjQFOWV9icePmAlsXf3kyTq+ZtDv3WTLjKxm+lxRgRTJedOirJWXvdNsAfNctyGhZ
+         Rbi6Bs2PPwC7V5oXtwhtU1fM52QtWbYOqxpwyAxxiQJWhBAISXHZpqXcpkdRSM3guZnK
+         ig7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717613148; x=1718217948;
+        d=1e100.net; s=20230601; t=1717614058; x=1718218858;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KO3YJpszn4i2dYWjd6GDXV+JNvlKtW6b8xd+9T4kcl0=;
-        b=Xqp0n2GzWiiGb8Lnlugw2DSBkD9FRLmnsfvgRjta+6o0FkuPcZODJfuMVuSDo5y/nO
-         j33EdoTN39olT0Ds8FQNzZ1bismnJCgZhWvvawIq/BT6LT+oqEpXE+CDOlBrAzeqEu39
-         f2cRMbB1cyzAutaRvXziGtLqO5lsry+v1TGaaW6Eqo7hM4/BtLzXrJFuwgQrVz6zsHDG
-         X9GNxbssk+id1QFntboUpuaban6YeOTChRRhaTGl3PoemS33ByfCDCuebg2mxXB+anKc
-         9QTGS08It/q8BjroC8BaSe0T5Vx3KLd7fgOiFonup2JpfPasI6hwB648I7rJsEwJfIAX
-         Y69A==
-X-Forwarded-Encrypted: i=1; AJvYcCW3UDIHm+MLvdH2DhqB2nUYvQRfScBZVN9b308waMbXYEZDyYuQYA2je1uoxFin+gxEJNtS1yM5Ix+wA3Rcs4hFKY1SdpFDTy6iplx85NPR90eyOdDtl1t1gD+Hql0yMg==
-X-Gm-Message-State: AOJu0Yzjtiy8AZDEhlCUcs73q4sH6n41oiBtPgBTDChR3xx7jB5DwiXU
-	ZObHqQMdq1R26cVs9GuztwPO/XVMpnGVNjLS5btIoY4hts92fzuWg95N5ef2rhBclw18RW9IKoV
-	bnY2Rj/Nyqv8ctEmcrs8xBT2pjrOWh7U5
-X-Google-Smtp-Source: AGHT+IHMAqLqsfwgU4jp0MKB/YVD1Gmi/UuOwjhc3pR/zh3OZZjcWDqxUdG7mpFATGq7swY87VEpnHuv+bckNYFhb/Q=
-X-Received: by 2002:a17:906:ad9:b0:a68:b73d:30d0 with SMTP id
- a640c23a62f3a-a699f363821mr271306166b.6.1717613147772; Wed, 05 Jun 2024
- 11:45:47 -0700 (PDT)
+        bh=CYhIOyPTOMDfxI0+KR+naWl8/lGKtywkm84N4Cz6eKM=;
+        b=ZE05Kq4V+4BP96U0DTOMjlSEAUrKZF0BytVMr2Kf/nG8UAFpctrk1KLy5qkRu6cxss
+         UW2hhM016dbRlutrLseNrgVl1jRhEblI9iLs0jK9E5wMpI9DvvWL3R1ZhDjzL2nr3XNd
+         NbE+BdLDdK4MbqY4mMRv8stXlz+Q3a2+olUQdd4eD34zNpclbU0KlXoattoaWgiaJAuf
+         VLD+oCROcUs01oQIqnBehOexE2CCnuumrZrQUE34zraHpDU2p5ip6l4zXnB1q0+umDMH
+         n0QJLX9Xxs281sEcZWrVVf/CPZpxRsGkTdHPrNfq9oCuVJweei0wAKEW51BjPub1PWye
+         sLmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPqqby0fGGEmFH5ww926dyX+ZzFEG+UFdz0Ym6Ul2T7I97Kfxu4Iz2BAmxN7dKKeX9uA7x+yAr0B9pex6u3b5u5PsLLuh5O2qZ4Xpt7DVfRLwW36WA1qWE0YQ9gAcbjw==
+X-Gm-Message-State: AOJu0Yyp/DR8uZIDQTyC14iCWs8mVfTDxlpMwTPo+cVYuQO2QpZeFR0q
+	v4TncQ1a0uvBWMvxmVN8ubIjYrmIDKSwo0LJCD7mxm/2Pynn1dBk1KFKgkDzUozheArf/7pvDmo
+	AaVFyzTfg0D/z31BZiwGwO3F0Hg71bWTl
+X-Google-Smtp-Source: AGHT+IGcDozObRVYZ76zXZPRUAXMF/4meZiWPArCnmpa0e4ramK0EiWLTzgfvAF+nimAD5HnaXqqnbcxwOLaFVcBMUA=
+X-Received: by 2002:a05:6512:1285:b0:52b:7a44:e17b with SMTP id
+ 2adb3069b0e04-52bab4ca4d2mr3449911e87.13.1717614057475; Wed, 05 Jun 2024
+ 12:00:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20240605161851.13911-1-kabel@kernel.org> <20240605161851.13911-6-kabel@kernel.org>
-In-Reply-To: <20240605161851.13911-6-kabel@kernel.org>
+References: <20240605161851.13911-1-kabel@kernel.org> <20240605161851.13911-7-kabel@kernel.org>
+In-Reply-To: <20240605161851.13911-7-kabel@kernel.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 5 Jun 2024 21:45:11 +0300
-Message-ID: <CAHp75Vf6U1dSKoGkgQsk_u55H=zjhce=VBnnn07pqu+VnVBR+g@mail.gmail.com>
-Subject: Re: [PATCH v11 5/8] platform: cznic: turris-omnia-mcu: Add support
- for MCU watchdog
-To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Date: Wed, 5 Jun 2024 22:00:20 +0300
+Message-ID: <CAHp75VfWZhmw00QP-ra4Zajn7LMvDW+NUT2fMx5kqeQ9eHLv5A@mail.gmail.com>
+Subject: Re: [PATCH v11 6/8] platform: cznic: turris-omnia-mcu: Add support
+ for MCU provided TRNG
+To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>
 List-Id: <soc.lore.kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
 	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
 	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck <linux@roeck-us.net>, 
-	Linus Walleij <linus.walleij@linaro.org>, linux-watchdog@vger.kernel.org, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Jun 5, 2024 at 7:19=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org> =
 wrote:
 >
-> Add support for the watchdog mechanism provided by the MCU.
+> Add support for true random number generator provided by the MCU.
+> New Omnia boards come without the Atmel SHA204-A chip. Instead the
+> crypto functionality is provided by new microcontroller, which has
+> a TRNG peripheral.
+
++Cc: Bart for gpiochip_get_desc() usage.
 
 ...
 
-+ bitops.h
-+ dev_printk.h
+> +#include <linux/bitfield.h>
+> +#include <linux/completion.h>
 
++ errno.h
+
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/hw_random.h>
 > +#include <linux/i2c.h>
-> +#include <linux/moduleparam.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/minmax.h>
+> +#include <linux/module.h>
+> +#include <linux/string.h>
 
 > +#include <linux/turris-omnia-mcu-interface.h>
 
 As per other patches.
 
 > +#include <linux/types.h>
-> +#include <linux/units.h>
-> +#include <linux/watchdog.h>
 > +
 > +#include "turris-omnia-mcu.h"
 
-struct device;
-
-Alternatively instead of dev_printk.h + struct device forward
-declaration --> device.h.
-
 ...
 
-With the above being addressed, LGTM, FWIW,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+> +       irq_idx =3D omnia_int_to_gpio_idx[__bf_shf(OMNIA_INT_TRNG)];
+> +       irq =3D gpiod_to_irq(gpiochip_get_desc(&mcu->gc, irq_idx));
+> +       if (irq < 0)
+> +               return dev_err_probe(dev, irq, "Cannot get TRNG IRQ\n");
 
---=20
+Okay, it's a bit more complicated than that. The gpiochip_get_desc()
+shouldn't be used. Bart, what can you suggest to do here? Opencoding
+it doesn't sound to me a (fully) correct approach in a long term.
+
+--
 With Best Regards,
 Andy Shevchenko
