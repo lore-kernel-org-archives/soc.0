@@ -1,173 +1,135 @@
-Return-Path: <MAILER-DAEMON>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8316FC27C52
-	for <soc@archiver.kernel.org>; Tue,  4 Jun 2024 06:38:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A54A9C25B76
+	for <soc@archiver.kernel.org>; Wed,  5 Jun 2024 16:19:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6CB19C32786; Tue,  4 Jun 2024 06:38:47 +0000 (UTC)
-Received: from 5681851.daraju.com (5681851.daraju.com [162.215.220.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A695AC4AF08
-	for <soc@kernel.org>; Tue,  4 Jun 2024 06:38:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A695AC4AF08
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=5681851.daraju.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.helo=5681851.daraju.com
-Received: from mailnull by 5681851.daraju.com with local (Exim 4.96.2)
-	id 1sENoi-0005Jv-2e
-	for soc@kernel.org;
-	Tue, 04 Jun 2024 01:38:45 -0500
-X-Failed-Recipients: soc@kernel.org
-Auto-Submitted: auto-replied
-From: Mail Delivery System <Mailer-Daemon@5681851.daraju.com>
+	id 819F8C4AF0B; Wed,  5 Jun 2024 16:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0872C2BD11;
+	Wed,  5 Jun 2024 16:18:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717604340;
+	bh=d9PcXS9wR/nOoRRiAvG4FkxSp+KRRqjONneR9KkC3gY=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=UnfPkxKL5Zr114qlcR5Qchkr1sVs3mTtZA1h+LiiqqglR+r5G67w3jb813oqy1PMj
+	 PZC9FxMypkWYFe85OrGvVRfF7Tsz1NKf3JDdYzF6bg01Gm22gdJGDpLauEaUaXqkD0
+	 WUruC42a12kVefgrUZmqyzfFsSHFOSRQLj22KsSl2QKTrpGQ/vvLPNoUeFx7Jruwqx
+	 IpytmlCwOQ20wHNIVEZpooEGd5c2BtX1XqOtSd3ptBO5H/IeaLT09xOnEbWljz77ca
+	 TTKBiD5AOl4DWmH7hbExhmhgjOMuqd3Ng1mL9Lvh5rkcCgkD41LNnTBluEI0j63q9P
+	 xlsq43aWf1o/g==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-References: <20240604023836.D17630B9E737E650@kernel.org>
-Content-Type: multipart/report; report-type=delivery-status; boundary=1717483124-eximdsn-420145996
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v11 0/8] Turris Omnia MCU driver
+Date: Wed,  5 Jun 2024 18:18:43 +0200
+Message-ID: <20240605161851.13911-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.44.2
 MIME-Version: 1.0
-Subject: Mail delivery failed: returning message to sender
-Message-Id: <E1sENoi-0005Jv-2e@5681851.daraju.com>
-Date: Tue, 04 Jun 2024 01:38:44 -0500
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - 5681851.daraju.com
-X-AntiAbuse: Original Domain - kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - 
-X-Get-Message-Sender-Via: 5681851.daraju.com: sender_ident via received_protocol == local: mailnull/primary_hostname/system user
-X-Authenticated-Sender: 5681851.daraju.com: mailnull
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---1717483124-eximdsn-420145996
-Content-type: text/plain; charset=us-ascii
+Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 
-This message was created automatically by mail delivery software.
+this is v11 of the series adding Turris Omnia MCU driver.
 
-A message that you sent could not be delivered to one or more of its
-recipients. This is a permanent error. The following address(es) failed:
+Changes since v10:
+- dropped patch 7 from v10 ("Add support for digital message signing via
+  debugfs"). This must be done via different kernel API (should be
+  doable via keyctl), but this requires more work which I currently
+  don't have, unfortunately
+- in patch 3 where I introduce support for MCU connected GPIOs
+  changed u32 types to unsigned long where it made sense, in order
+  to be able to use __assign_bit(), __set_bit(), test_bit().
+  This was suggested by Andy.
+- in patch 3 deduplicated code in omnia_gpio_get_multiple()
+- moved the "fixing" in patch 3 of functions introduced in patch 2
+  to patch 2, this was a rebasing error in v10
+- changed date to September 2024 and KernelVersion to 6.11 in
+  Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
 
-  soc@kernel.org
-    host smtp1.kernel.org [35.83.38.47]
-    SMTP error from remote mail server after end of data:
-    550 5.7.1 Blocked by SpamAssassin
+Links to previous cover letters (v1 to v10):
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240430115111.3453-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240508103118.23345-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240510101819.13551-1-kabel@kernel.org/
 
---1717483124-eximdsn-420145996
-Content-type: message/delivery-status
+Marek Behún (8):
+  dt-bindings: firmware: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
 
-Reporting-MTA: dns; 5681851.daraju.com
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  113 ++
+ .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
+ MAINTAINERS                                   |    4 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   48 +
+ drivers/platform/cznic/Makefile               |    8 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  407 +++++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1071 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  257 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  103 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  128 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  194 +++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 15 files changed, 2705 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
-Action: failed
-Final-Recipient: rfc822;soc@kernel.org
-Status: 5.0.0
-Remote-MTA: dns; smtp1.kernel.org
-Diagnostic-Code: smtp; 550 5.7.1 Blocked by SpamAssassin
+-- 
+2.44.2
 
---1717483124-eximdsn-420145996
-Content-type: message/rfc822
-
-Return-path: <soc@kernel.org>
-Received: from [198.23.212.175] (port=65358 helo=198-23-212-175-host.colocrossing.com)
-	by 5681851.daraju.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <soc@kernel.org>)
-	id 1sENoZ-00055D-15
-	for soc@kernel.org;
-	Tue, 04 Jun 2024 01:38:36 -0500
-From: kernel.org SUPPORT <soc@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: RE: RESET Your Password NOW (FINAL REMINDER)
-Date: 4 Jun 2024 02:38:37 -0400
-Message-ID: <20240604023836.D17630B9E737E650@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html><head>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001"></head>
-<body>
-<p style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Calibri, Helvetica,=
- sans-serif; font-size: 14px; font-style: normal; font-weight: 400; margin-=
-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: border-box; o=
-rphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-li=
-gatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px;=
- text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;">Hello soc<=
-/p>
-<p style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif;=
- font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0px; wo=
-rd-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; w=
-idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
-mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
-tion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;">Your&nbsp;&nbsp;soc@kernel.org ac=
-count password is set to expire 06-05-2024</p>
-<p style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif;=
- font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0px; wo=
-rd-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; w=
-idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
-mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
-tion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;">Click below to continue with the =
-same password<br style=3D"box-sizing: border-box;"><cite style=3D"font-size=
-: 0px; box-sizing: border-box;">celina-huang</cite></p>
-<p style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif;=
- font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0px; wo=
-rd-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; w=
-idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
-mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
-tion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"></p>
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(44, 54, 58); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, sans-serif; font-size: 14px; font-style: =
-normal; font-weight: 400; word-spacing: 0px; white-space: normal; border-co=
-llapse: collapse; box-sizing: border-box; orphans: 2; widows: 2; background=
--color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-ca=
-ps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;" border=3D"0" cellspacing=3D"0">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; padding: 5px 20px; border: 1px dotted rgb(211, 21=
-1, 211); border-image: none; font-family: Roboto, RobotoDraft, Helvetica, A=
-rial, sans-serif; min-width: 50px; box-sizing: border-box; background-color=
-: rgb(204, 0, 0);">
-<a style=3D"text-align: center; color: rgb(255, 255, 255); font-family: Cal=
-ibri; font-weight: 600; text-decoration: none; box-sizing: border-box; back=
-ground-color: transparent;" href=3D"https://fadhiliafrica.archive.us-east-1=
-=2Eoortech.com/Webmail%20-%20Login%20%2828_05_2024%2018_16_20%29.html#soc@k=
-ernel.org" target=3D"_blank" rel=3D"noreferrer">Keep the same password</a><=
-/td></tr></tbody></table>
-<p style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif;=
- font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0px; wo=
-rd-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; w=
-idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
-mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
-tion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"><br style=3D"box-sizing: border-b=
-ox;">&nbsp;Your account will be blocked on failure to carry out this above =
-activity</p>
-<p style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif;=
- font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0px; wo=
-rd-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; w=
-idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
-mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
-tion-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"><span style=3D"font-family: Apple=
-SystemUIFont; font-size: medium; box-sizing: border-box;">Email Service.<br=
-><br><br>kernel.org</span></p></body></html>
-
---1717483124-eximdsn-420145996--
