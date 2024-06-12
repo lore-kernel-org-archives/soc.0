@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74673C27C53
-	for <soc@archiver.kernel.org>; Wed, 12 Jun 2024 13:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E79D4C27C77
+	for <soc@archiver.kernel.org>; Wed, 12 Jun 2024 13:55:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 668FFC3277B; Wed, 12 Jun 2024 13:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E26DC4AF1A;
-	Wed, 12 Jun 2024 13:55:16 +0000 (UTC)
+	id D90B0C3277B; Wed, 12 Jun 2024 13:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11ABC4AF1C;
+	Wed, 12 Jun 2024 13:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718200518;
-	bh=7x42hmfj08LWLsSjf15DKkCEuTD32sDaWvE5MzcKO2g=;
+	s=k20201202; t=1718200520;
+	bh=NB3+7yKH7jftdDy0/3uzHo2M1+UbHlrMh0HTTbTUVu8=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L3NhcknAknT8iFqmY+XAh8HPR1m1SA85Qb77aY0cwQCUCJ1LnZGMh4mqypLHr3lzC
-	 3H61gcKhEyx8jBbIho+fRxd7dyNlWyHKv8pYGwB71T2kz1b3LSLPzV6GwY0k7+hRv4
-	 ftD5Erb2s9mDf802BLQlLeTtmUbIxqMBxllwzf3scOWkrNs/wD0G7azcKsM65La7L+
-	 zdHUVa68K+3wQiSDyhYf/lJ318fGFJPeEJ8h9t7qcsCWRlzDzk0fV65FiA61VVGgC1
-	 CiX4/ixBAUEwlwqWBwqU7iQ4mOVlFGC7prdwHyzKr0sITOS37hF5mfuhPMU/Qbr8kG
-	 dmYZKOWOeTNfQ==
+	b=UWlPeV5OPeq1N8OSJPtEhTWIrzG5plQO72Tf7OIMYx/bnUCOVhHcgQqkWJdXWT48g
+	 mFsNx6Pd/OYxcZ1cpS9BlVae/dujlzEr7ZEC+Jsj3174OCfeb6RBRYnF4NiRDgLGlu
+	 uKfsS+KJHKk+8fH6YUd03/4k2wGULD0ocgI3GXC+1xBxwOvzIWjRFhwnfYodXX6W1/
+	 a7Xt3NPuU1zlB4JpdA/ZDDg0BElQaWq28Ofj4zb7lpDEOuSzs8OymISpT1ZE5fGy0Q
+	 /6rY0+mOcA5lV3ZwSVK6B39N0UdGC92dAxbZ1quTPdOv5oWZ5/NgEo18dXY/D9E36b
+	 cbi8IcDMosfjw==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 12/19] firmware: turris-mox-rwtm: Convert rest to devm_* and get rid of driver .remove()
-Date: Wed, 12 Jun 2024 15:54:36 +0200
-Message-ID: <20240612135443.30239-13-kabel@kernel.org>
+Subject: [PATCH 13/19] firmware: turris-mox-rwtm: Use dev_err_probe() where possible
+Date: Wed, 12 Jun 2024 15:54:37 +0200
+Message-ID: <20240612135443.30239-14-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240612135443.30239-1-kabel@kernel.org>
 References: <20240612135443.30239-1-kabel@kernel.org>
@@ -41,119 +41,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Use devm resource management for driver's kobject and mailbox. This
-allows us to get rid of driver's .remove() method and gotos in .probe().
+Use dev_err_probe() where possible in the driver's .probe() method.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 41 +++++++++++++++---------------
- 1 file changed, 20 insertions(+), 21 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index cdbe244be694..153772721901 100644
+index 153772721901..3c3f8ae23809 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -139,6 +139,11 @@ static const struct kobj_type mox_kobj_ktype = {
- 	.default_groups	= mox_rwtm_groups,
- };
+@@ -480,10 +480,9 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
-+static void mox_devm_kobj_release(void *kobj)
-+{
-+	kobject_put(kobj);
-+}
-+
- static int mox_kobj_create(struct mox_rwtm *rwtm)
- {
- 	struct kobject *kobj = &rwtm->kobj;
-@@ -146,11 +151,11 @@ static int mox_kobj_create(struct mox_rwtm *rwtm)
- 
- 	kobject_init(kobj, &mox_kobj_ktype);
- 
--	ret = kobject_add(kobj, firmware_kobj, "turris-mox-rwtm");
-+	ret = devm_add_action_or_reset(rwtm->dev, mox_devm_kobj_release, kobj);
- 	if (ret)
--		kobject_put(kobj);
-+		return ret;
- 
--	return ret;
-+	return kobject_add(kobj, firmware_kobj, "turris-mox-rwtm");
- }
- 
- static int mox_get_status(enum mbox_cmd cmd, u32 retval)
-@@ -453,6 +458,11 @@ static inline void rwtm_register_debugfs(struct mox_rwtm *rwtm)
- }
- #endif
- 
-+static void rwtm_devm_mbox_release(void *mbox)
-+{
-+	mbox_free_channel(mbox);
-+}
-+
- static int turris_mox_rwtm_probe(struct platform_device *pdev)
- {
- 	struct mox_rwtm *rwtm;
-@@ -488,9 +498,13 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 		if (ret != -EPROBE_DEFER)
- 			dev_err(dev, "Cannot request mailbox channel: %i\n",
- 				ret);
--		goto put_kobj;
-+		return ret;
- 	}
- 
-+	ret = devm_add_action_or_reset(dev, rwtm_devm_mbox_release, rwtm->mbox);
+ 	ret = mox_kobj_create(rwtm);
+-	if (ret < 0) {
+-		dev_err(dev, "Cannot create turris-mox-rwtm kobject!\n");
+-		return ret;
+-	}
 +	if (ret < 0)
-+		return ret;
++		return dev_err_probe(dev, ret,
++				     "Cannot create turris-mox-rwtm kobject!\n");
+ 
+ 	platform_set_drvdata(pdev, rwtm);
+ 
+@@ -495,10 +494,11 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	rwtm->mbox = mbox_request_channel(&rwtm->mbox_client, 0);
+ 	if (IS_ERR(rwtm->mbox)) {
+ 		ret = PTR_ERR(rwtm->mbox);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Cannot request mailbox channel: %i\n",
+-				ret);
+-		return ret;
++		if (ret == -EPROBE_DEFER)
++			return ret;
 +
- 	init_completion(&rwtm->cmd_done);
- 
- 	ret = mox_get_board_info(rwtm);
-@@ -501,7 +515,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_notice(dev,
- 			   "Firmware does not support the GET_RANDOM command\n");
--		goto free_channel;
-+		return ret;
++		return dev_err_probe(dev, ret,
++				     "Cannot request mailbox channel!\n");
  	}
  
- 	rwtm->hwrng.name = DRIVER_NAME "_hwrng";
-@@ -511,7 +525,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	ret = devm_add_action_or_reset(dev, rwtm_devm_mbox_release, rwtm->mbox);
+@@ -523,10 +523,8 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	rwtm->hwrng.priv = (unsigned long) rwtm;
+ 
  	ret = devm_hwrng_register(dev, &rwtm->hwrng);
- 	if (ret < 0) {
- 		dev_err(dev, "Cannot register HWRNG: %i\n", ret);
--		goto free_channel;
-+		return ret;
- 	}
+-	if (ret < 0) {
+-		dev_err(dev, "Cannot register HWRNG: %i\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "Cannot register HWRNG!\n");
  
  	rwtm_register_debugfs(rwtm);
-@@ -519,20 +533,6 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	dev_info(dev, "HWRNG successfully registered\n");
  
- 	return 0;
--
--free_channel:
--	mbox_free_channel(rwtm->mbox);
--put_kobj:
--	kobject_put(&rwtm->kobj);
--	return ret;
--}
--
--static void turris_mox_rwtm_remove(struct platform_device *pdev)
--{
--	struct mox_rwtm *rwtm = platform_get_drvdata(pdev);
--
--	kobject_put(&rwtm->kobj);
--	mbox_free_channel(rwtm->mbox);
- }
- 
- static const struct of_device_id turris_mox_rwtm_match[] = {
-@@ -545,7 +545,6 @@ MODULE_DEVICE_TABLE(of, turris_mox_rwtm_match);
- 
- static struct platform_driver turris_mox_rwtm_driver = {
- 	.probe	= turris_mox_rwtm_probe,
--	.remove_new = turris_mox_rwtm_remove,
- 	.driver	= {
- 		.name		= DRIVER_NAME,
- 		.of_match_table	= turris_mox_rwtm_match,
 -- 
 2.44.2
 
