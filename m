@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39DB5C27C4F
-	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 20:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2102AC27C4F
+	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 20:56:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 29528C32789; Thu, 13 Jun 2024 20:49:57 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	id 0C457C4AF1A; Thu, 13 Jun 2024 20:56:46 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 461EFC2BBFC;
-	Thu, 13 Jun 2024 20:49:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 461EFC2BBFC
+	by smtp.kernel.org (Postfix) with ESMTPS id 441B3C2BBFC;
+	Thu, 13 Jun 2024 20:56:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 441B3C2BBFC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a68b41ef3f6so181793766b.1;
-        Thu, 13 Jun 2024 13:49:56 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2e78fe9fc2bso17972701fa.3;
+        Thu, 13 Jun 2024 13:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718311794; x=1718916594; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1718312203; x=1718917003; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VtO8kHkNoxUTTJwoGlHq9nk0A1eCbykjTZq5eBkOpek=;
-        b=RRfDsqykHWhKQ2xHDKAP2/4quOXRJR4CfihCfyTlQ3V/4QgCD1xFYWPbLOGIE/MBth
-         5JXmpUhV+S/9yYMqdBze7dvDRd5dGBzvwp9VdpI+RpRTZhr1tOxmHwizYcoHrlFg2uB8
-         bEXlRVW3AVo2SFbpnG8qK2yBMwid/lI8mXXxiROz46/fS4Ina1VRTv/ZAuDisV9D7l8W
-         fmp08/BypXWmmS3YnBxg5+zpPLy83JAhceKBfcw40dQ2VYW2HeuIgoAOWOVsWcXzUmIw
-         0kdvZq/wyJJJHAIJlt7ASZ7XJ93i03unzRhZaFQqfpd4VhIiyF+EHQl4yL8GlYAd/Rh0
-         u/WQ==
+        bh=z66lGxhnOz8HFB5QRVsguRUEpjfoVydz/yGQO+wziQA=;
+        b=ixhyc8kiB5ymxvpB/6OOjqiHGarkrrVzW10WujGz/Fvk7rk+1QkSpSv/cobknRNo8Y
+         IR+FOoOy2pVQOwiO7VPSHhAWQQKYHGHaIIdCtdrIiZ/NbL0MFyjxR+qWarlHb/zsAKKv
+         kD7PzCKfZy72/k8uiMOXFAbs3SEdtXXa3OvTT99Iufot8MU8FjgszPl7q9d2W5fRH3uq
+         QOsZE2C1gwHbQCn428Uc/dMkQy35nfQgRnDyDzGtmcTzxmXvmJJR43r4/l+noXIIhHeq
+         Vz2NDkkuztqV6w7db3UpQJG6Jkgm0jjS19frVDmfVV+FUXFgqjP8w/IYUo3tqK6PtaFH
+         UsmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718311794; x=1718916594;
+        d=1e100.net; s=20230601; t=1718312203; x=1718917003;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VtO8kHkNoxUTTJwoGlHq9nk0A1eCbykjTZq5eBkOpek=;
-        b=sUf3yLtLgwqgBL6C39b54gEPEpGZjr/+G4GaVQ1LWJdCuisJOi5I2nGLxG3D9aEIJ5
-         aqG0fqwi+8M+xuxey3YH42ru1xaxkcI45L66uyIUXSr9IVCirDC1cHjOSSvUjQa8gDik
-         CuSVmjDIeEasVyAeibxTMRp39rjii6kVrkVLxBtV+a/86MUuDeHpYc7tWCZ2QOXd9I+J
-         MsbGDU4sqeQ/li6amXlpQ/nu3bWt4UNHN0urjWtqTpYgixrHjL6qVUSvVNoqWUugjsy6
-         GEwqRf4WauqzkE/EAHZ9GiT2vUhWQ5+rPNeymF/tFObHMOpZBknI4L1tPpV19nKX0Ngc
-         1aLA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgJGWt73rVHElzZQJ6sc8Uvurtfiw5p8YC5UfMZUOP1tYS+z7PVGN5fF6q+pbXCdA15xUsWpo9PnDuwbST/UyHdP3jn1WiRnzr0uddR3j8rnmqoiCkCgrL+djy5DjCBA==
-X-Gm-Message-State: AOJu0YwvhxuUljJti6WU8bTTAecKtBfOZqiismKn8DVl+IQ5ZWzWzv0k
-	OQqLz86hC7vQB5V9HbEWhdMZZhZduKPNcNOHFjjoO/W+o6UdNnJjObQIZ9lA6B963RRvYHCLDD/
-	gZclkzJaU5b62a5TzWbFhMJOMwey+aUwV5Ssxqw==
-X-Google-Smtp-Source: AGHT+IG+HorDIKzFKMi9cKl9vB+JB4HHszlwZNAG4MhdytCmGnwK6/KhScSrT5RDI2uuKvPrZqLoMfzad3MNwwDwywI=
-X-Received: by 2002:a17:907:7f26:b0:a6f:6046:19ff with SMTP id
- a640c23a62f3a-a6f60cef6e7mr75043466b.5.1718311794169; Thu, 13 Jun 2024
- 13:49:54 -0700 (PDT)
+        bh=z66lGxhnOz8HFB5QRVsguRUEpjfoVydz/yGQO+wziQA=;
+        b=mdoVehP4E6DrhABh+kv8tHrkUEUKVyi2bnGutJYPyK5PF6gMNtz7Vzr2AU0qLn5+N7
+         7k1YKgDpQu/BfUWG+eYgssORK4e7NgTZfENmXDgK6EJZWvFQmn3Ct1LzDP3fTWPtN6Ll
+         vUflrBBkt7avKv3gqgLSX8qp+rAu+80dNsJTn1uqDtRIsv+rQf/7CFu80l07LqzCeejz
+         CMGC9u5hdKjbn8Lqtq/ua/6pCPO8SIIiwtRZ8hD5rtYvwLsZOt4sQj1ssPpeqYvIgLmQ
+         OGnGZ/3lF1840eqBMgWOZ7YBuOrJdgaWDQQ7gXEfMv/hY3R0ch9Un/mOn11ZFZR/sEUF
+         rp4g==
+X-Forwarded-Encrypted: i=1; AJvYcCXxjZUynBRan/Ls42hXklC8VOebE5SmjOdkU7ZbKNiRP6QeN5jUIjtIe35n1j/aShb+Jkh6vOw61P15wpGLKYJWJc9gtysQTzO/nlKb5uMobOOcD/gPlEW+cmYjh6FCNA==
+X-Gm-Message-State: AOJu0YxbzllzTC0CDsTWWUbtTNhYXwwye0njGE0CnjMBd6YZct8T0l+Y
+	dU7ehiTk+UyGhvb6rixgr4rjbMyxVTYMMcq2Yg5tkecrvXMotNMYR2dbGqdazw1zAeiYyhSlf4l
+	pujqz4K4bdfOdEDRMq1cgEDD4jbuL45Wghply/g==
+X-Google-Smtp-Source: AGHT+IFqpOxTPxPsth1ufZqB6boWJKhXU7tioIee/IF8PSM9zxVWRo0ygptKeIy0HJPUkqXlgt0GmXXwf/aOhc/BJ/k=
+X-Received: by 2002:ac2:5057:0:b0:52c:80fa:2967 with SMTP id
+ 2adb3069b0e04-52ca6e55ce3mr526794e87.12.1718312202854; Thu, 13 Jun 2024
+ 13:56:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20240613161045.29606-1-kabel@kernel.org> <20240613161045.29606-12-kabel@kernel.org>
-In-Reply-To: <20240613161045.29606-12-kabel@kernel.org>
+References: <20240613161045.29606-1-kabel@kernel.org> <20240613161045.29606-13-kabel@kernel.org>
+In-Reply-To: <20240613161045.29606-13-kabel@kernel.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 13 Jun 2024 22:49:18 +0200
-Message-ID: <CAHp75VePTX3Ja61eyWjayHALKX14cSgK1QMqbFVrSRTEaJm9HA@mail.gmail.com>
-Subject: Re: [PATCH v2 11/17] firmware: turris-mox-rwtm: Use dev_err_probe()
- where possible
+Date: Thu, 13 Jun 2024 22:56:06 +0200
+Message-ID: <CAHp75VeAryFmzyoN5tv3ALa5G2UcnMfdOAUaAbH=p8PxfcXGFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 12/17] firmware: turris-mox-rwtm: Initialize completion
+ before mailbox
 To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, 
@@ -71,28 +71,9 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Jun 13, 2024 at 6:11=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
  wrote:
 >
-> Use dev_err_probe() where possible in the driver's .probe() method.
+> Initialize the completion before the mailbox channel is requested.
 
-...
-
->         rwtm->mbox =3D mbox_request_channel(&rwtm->mbox_client, 0);
->         if (IS_ERR(rwtm->mbox)) {
->                 ret =3D PTR_ERR(rwtm->mbox);
-> -               if (ret !=3D -EPROBE_DEFER)
-> -                       dev_err(dev, "Cannot request mailbox channel: %i\=
-n",
-> -                               ret);
-> -               return ret;
-
-> +               if (ret =3D=3D -EPROBE_DEFER)
-> +                       return ret;
-
-What;s the point of this check, please?
-
-> +               return dev_err_probe(dev, ret,
-> +                                    "Cannot request mailbox channel!\n")=
-;
->         }
+Sounds like a fix, does it need the Fixes tag?
 
 
 --=20
