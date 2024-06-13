@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B11EC27C4F
-	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 16:10:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2981C27C4F
+	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 16:10:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 09FEDC4AF4D; Thu, 13 Jun 2024 16:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42EDC2BBFC;
-	Thu, 13 Jun 2024 16:10:53 +0000 (UTC)
+	id 97D43C4AF1D; Thu, 13 Jun 2024 16:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A5A7C2BBFC;
+	Thu, 13 Jun 2024 16:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718295055;
-	bh=sc7EudhJ+/Cu2fPeZrbVPk1U0HTdb44HVHOPZKReBEY=;
+	s=k20201202; t=1718295058;
+	bh=hAxG7fxH+1ivyfex6hZATKBA6MlX0OKPE/iu6xwVFFE=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PbyN/+DDmkIpKK8pL7DyTGNSaM4+zrArnMZCo4QDpGDpaCqjoB8lJudvSlX2VzsAx
-	 vEhwbOfGyos/+T5szD2s/Q33gWswH/X2mO57+YhVClPRWDjENK57uPlKHq62D9JD1e
-	 ejdCvFa7A32GUmKDZbg7ZvBvSNNCxdlnwh2zYp1QUJ1nU/l21zwQBrjizBTTIzgqxG
-	 p+9/bHo9uBxxDL2KTKQWhF3cQhuz4BD4DaJ1MpZRHJgj0+OaKRD5oy4q2W4Fq/q2He
-	 SB8rllQP7kUIuESiQetdKvA5vYvO3zRsO0rlLzjG27eE5hVMvyGUxLYFVYF8jJfTNi
-	 65Pmz5qBE3Uqg==
+	b=FgjyqJWHmh/xZk3kM6B0cKl2MJXgCf8byG1++HJzYKzTriVkp2lFmgoRXGgar/L9i
+	 9MDKmcLBNwN52a72lpZnT5GfPVCnllNHI9cSQoU2tkN73QYkuKs16MpiN0WwP4iDC0
+	 fJxbi8NRanLFQHwrfhQh9k+J2byAELVby+hJJ2Esi1OUiqVLlSQ3bXcEyy//1Tm5Vw
+	 8/ELupwKEJ8E+ROFOUk0X+1Y7ckmzJP//sKd8ELKti71z68YLMV/1mf9v0/pi22ok5
+	 k0VvAIecAgijtfLyfk7dfYl2H3Ejuj3UqDUiKHykaNADdvoeoxVP6NSjZtkDnXzryN
+	 I5TyjmkctEjVg==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v2 02/17] firmware: turris-mox-rwtm: Fix checking return value of wait_for_completion_timeout()
-Date: Thu, 13 Jun 2024 18:10:30 +0200
-Message-ID: <20240613161045.29606-3-kabel@kernel.org>
+Subject: [PATCH v2 03/17] firmware: turris-mox-rwtm: Use macro constant instead of hardcoded 4096
+Date: Thu, 13 Jun 2024 18:10:31 +0200
+Message-ID: <20240613161045.29606-4-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240613161045.29606-1-kabel@kernel.org>
 References: <20240613161045.29606-1-kabel@kernel.org>
@@ -41,57 +41,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The wait_for_completion_timeout() function returns 0 if timed out, and a
-positive value if completed. Fix the usage of this function.
+The 4096 bytes limit in mox_hwrng_read() is due to the DMA buffer being
+allocated to one PAGE_SIZE bytes. Use new local macro constant
+RWTM_DMA_BUFFER_SIZE at allocation time and when used in mox_hwrng_read().
 
-Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
-Fixes: 2eab59cf0d20 ("firmware: turris-mox-rwtm: fail probing when firmware does not support hwrng")
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/firmware/turris-mox-rwtm.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index f1f9160c4195..3f4758e03c81 100644
+index 3f4758e03c81..b8deb13aed98 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -202,9 +202,8 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 	if (ret < 0)
- 		return ret;
+@@ -19,6 +19,8 @@
  
--	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
--	if (ret < 0)
--		return ret;
-+	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
-+		return -ETIMEDOUT;
+ #define DRIVER_NAME		"turris-mox-rwtm"
  
- 	ret = mox_get_status(MBOX_CMD_BOARD_INFO, reply->retval);
- 	if (ret == -ENODATA) {
-@@ -238,9 +237,8 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 	if (ret < 0)
- 		return ret;
++#define RWTM_DMA_BUFFER_SIZE	PAGE_SIZE
++
+ /*
+  * The macros and constants below come from Turris Mox's rWTM firmware code.
+  * This firmware is open source and it's sources can be found at
+@@ -287,8 +289,8 @@ static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 	struct armada_37xx_rwtm_tx_msg msg;
+ 	int ret;
  
--	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
--	if (ret < 0)
--		return ret;
-+	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
-+		return -ETIMEDOUT;
+-	if (max > 4096)
+-		max = 4096;
++	if (max > RWTM_DMA_BUFFER_SIZE)
++		max = RWTM_DMA_BUFFER_SIZE;
  
- 	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
- 	if (ret == -ENODATA) {
-@@ -277,9 +275,8 @@ static int check_get_random_support(struct mox_rwtm *rwtm)
- 	if (ret < 0)
- 		return ret;
+ 	msg.command = MBOX_CMD_GET_RANDOM;
+ 	msg.args[0] = 1;
+@@ -479,8 +481,8 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
--	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
--	if (ret < 0)
--		return ret;
-+	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
-+		return -ETIMEDOUT;
+ 	rwtm->dev = dev;
+-	rwtm->buf = dmam_alloc_coherent(dev, PAGE_SIZE, &rwtm->buf_phys,
+-					GFP_KERNEL);
++	rwtm->buf = dmam_alloc_coherent(dev, RWTM_DMA_BUFFER_SIZE,
++					&rwtm->buf_phys, GFP_KERNEL);
+ 	if (!rwtm->buf)
+ 		return -ENOMEM;
  
- 	return mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
- }
 -- 
 2.44.2
 
