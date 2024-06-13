@@ -1,117 +1,108 @@
-Return-Path: <SRS0=f8eM=NP=linux.intel.com=ilpo.jarvinen@kernel.org>
+Return-Path: <SRS0=wOK4=NP=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C715DC27C4F
-	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 13:37:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42EF0C27C4F
+	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 13:49:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 94226C4AF49; Thu, 13 Jun 2024 13:37:31 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 04C41C2BBFC; Thu, 13 Jun 2024 13:49:41 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E287C2BBFC;
-	Thu, 13 Jun 2024 13:37:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E287C2BBFC
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718285851; x=1749821851;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=GYN1wMsa79pIocQGaN7ic2RnYVb4dudtQytKuAQlkE4=;
-  b=f6+GvTduKqbnjuiuHOmAfC7nPaqGmpkMOwDoBvYy/OUkHviQM+L+W4Mm
-   F1bS2wWFV++462l3wHH0aV4tuc9I5P8CKlbmWdO3A6l1/1mGueUNoIOr5
-   qVMp0rn1CTh5ARZAl3lP3vSOEBKqKjWOs6ZipxO5H2hSZdnzvPiBOMznA
-   e+O3hB2YzvyAOnnTqittBIl1U7P4rrCDMOFLf8Eyoi8LL8lILdSd7uCyz
-   4RxJKW9FCFFrJq79XEiDmtS6cfKWSz7rfZxjKDR+pXa0CwP6rvNDmf1tG
-   K1akKHJ/6igPvK/bv4lZPSrKAqeA9NLwA6S1kGTUGeLEyaK+8szb/zKRj
-   g==;
-X-CSE-ConnectionGUID: xiqqveS1TUedExSVh0O5rg==
-X-CSE-MsgGUID: 1CQTZzQ5RxCDF1r3e18Nvg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="26526162"
-X-IronPort-AV: E=Sophos;i="6.08,235,1712646000"; 
-   d="scan'208";a="26526162"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 06:37:30 -0700
-X-CSE-ConnectionGUID: XVGlMhS9TcSp/GNg2lnXbg==
-X-CSE-MsgGUID: 7CN1kuE7QaCip0ivS8WH8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,235,1712646000"; 
-   d="scan'208";a="45052966"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.209])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 06:37:26 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 13 Jun 2024 16:37:23 +0300 (EEST)
-To: =?ISO-8859-15?Q?Marek_Beh=FAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 056A4C32789
+	for <soc@kernel.org>; Thu, 13 Jun 2024 13:49:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 056A4C32789
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a6f11a2d18aso145420966b.2
+        for <soc@kernel.org>; Thu, 13 Jun 2024 06:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718286578; x=1718891378; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEvA9jroZsDs24LkJE27e1G6AbVYrGCtuXUJX4MNe1s=;
+        b=XQc5TVSiOHA6vW8MxfxW0zhSX2kn4sKNfx9Nc/7fJR9nA/e4OisoO8UzQdeiC0NpSL
+         lIvfyx4ZAWrrNdNjYH35jfWAyMZKsTlN2HccqGGsrf45LUwsZ8twSxWGearvPd4VEi7x
+         CAiQDVVeTJ6i0ovVMvLrn2moagqOKmH68E5hCd4mLcoyB2dIGNGo6ZaJ9FgavUdqq3rt
+         ArJ1JacA0yQK+9E1PfK8XOBkOtqCN9zajTU60bzxc3PCgrkhzWdlW83Qaw9qj31f4RoC
+         2/zUDz7Pbm6tSagZR0VdCAjI/tKoazHzkwM3yfFR6rxB/VABBiF5xWTHjA5gsi+cAr8V
+         YLQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718286578; x=1718891378;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yEvA9jroZsDs24LkJE27e1G6AbVYrGCtuXUJX4MNe1s=;
+        b=vsxaW7ktdrhiG6dMOaVqKEdc0aKgvoFBb1DitF0tQzLc5+HO7vMGkvZbww69+kvsYH
+         IJhWgpJDz8pveu8RxQ3lqN16rWpuzJcdaJIcXL9WsvMuBXtz/u/UJDUUmXpIJP8wYbjB
+         xuO6s4OVpOp0sAU5SGImJmzozno157b6kwMiKsKT/B3ErJwaY6plxgbZZy7B1J1WzuxX
+         2fKhpKSifoMws8ieMsAfSHeRVGL36etQ8XhGjRU97JYSzAUza/E97VGXroSg+FHUMQbo
+         Cy63sAg8ylSPGy6oh5miQoV4JHMJrbytGpA+ODKBSN/fYNzUdMBgsUGMxiY9POyjRw9W
+         BrGA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZg2CofyhGDTxE28+nkk1TTt/UNJhL/Uc+5VPXkGibvqBxBtnkj7D3DlOxFc38RbmBQitqSitvllNsbD+v9A==
+X-Gm-Message-State: AOJu0YwkIhVKrqTy11jhHH1Q5/iXYgLWQqERgcNjzolZ1z4J8kDtQktB
+	VEd7slQz1h++Q3D38V2Cxz5M4hNUfleBEvoZI17jcRoVCYSFswWDIWfvDOfgzM0fAY5/z8rNs8T
+	0
+X-Google-Smtp-Source: AGHT+IE8JSarZGMRvnKm1sM0hW1gVfIATdlYWc5pmUAEWGuxrgcsVbMkkFTyUXFdWA7D5wJfcseu7g==
+X-Received: by 2002:a17:906:517:b0:a6e:2a67:7899 with SMTP id a640c23a62f3a-a6f47f7fc60mr284236566b.35.1718286578234;
+        Thu, 13 Jun 2024 06:49:38 -0700 (PDT)
+Received: from krzk-bin.monzoon.net (46-253-189-43.dynamic.monzoon.net. [46.253.189.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56fa4030sm73785166b.207.2024.06.13.06.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jun 2024 06:49:37 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
-    Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, 
-    soc@kernel.org, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
-    Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 10/19] firmware: turris-mox-rwtm: Simplify driver kobject
- code
-In-Reply-To: <20240613153124.6d5928ec@dellmb>
-Message-ID: <36e3991f-f61c-d400-d783-5ddd8605a390@linux.intel.com>
-References: <20240612135443.30239-1-kabel@kernel.org> <20240612135443.30239-11-kabel@kernel.org> <7a6603a0-c207-f500-209a-ab2b9a80f26b@linux.intel.com> <20240613115552.1d7c6162@dellmb> <6a617e8c-9d11-47f5-ca43-0c166a3c0297@linux.intel.com>
- <20240613153124.6d5928ec@dellmb>
+To: arm@kernel.org,
+	soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] MAINTAINERS: ARM: axm: add Krzysztof Kozlowski as maintainer
+Date: Thu, 13 Jun 2024 15:49:10 +0200
+Message-ID: <20240613134910.7862-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-348349624-1718285843=:8853"
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+There is no maintainers entry for the ARM LSI AXM SoC, thus patches end
+up nowhere.  Add such entry, because even if platform is orphaned and on
+its way out of the kernel, it is nice to take patches if someone sends
+something.
 
---8323328-348349624-1718285843=:8853
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+I do not plan to actively support/maintain AXM but I can take odd fixes
+now and then.
 
-On Thu, 13 Jun 2024, Marek Beh=C3=BAn wrote:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> On Thu, 13 Jun 2024 13:19:47 +0300 (EEST)
-> Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
->=20
-> > On Thu, 13 Jun 2024, Marek Beh=C3=BAn wrote:
-> >=20
-> > > On Thu, 13 Jun 2024 11:31:43 +0300 (EEST)
-> > > Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
-> > >  =20
-> > > > Is empty .release necessary at all? I found some kobj_type structs =
-without=20
-> > > > .release so I'd expect it to be unnecessary. =20
-> > >=20
-> > > lib/kobject.c function kobject_cleanup() has the following:
-> > >=20
-> > >   if (t && !t->release)
-> > >     pr_debug("'%s' (%p): does not have a release() function, it is br=
-oken and must be fixed. See Documentation/core-api/kobject.rst.\n", =20
-> >=20
-> > Hmm, the plot thickens... that documentation file says:
-> >=20
-> > 'Do not try to get rid of this warning by providing an "empty" release=
-=20
-> > function.'
-> >=20
-> > ?
->=20
-> This whole thing stinks. I will rewrite it so that the attributes will
-> be under the device's kobject, as they should be. This way I can get
-> rid of the whole own kobject type.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e7fd595b8f5e..60f2815f0453 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2127,6 +2127,14 @@ F:	arch/arm/boot/dts/aspeed/
+ F:	arch/arm/mach-aspeed/
+ N:	aspeed
+ 
++ARM/AXM LSI SOC
++M:	Krzysztof Kozlowski <krzk@kernel.org>
++L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
++S:	Odd Fixes
++F:	Documentation/devicetree/bindings/arm/axxia.yaml
++F:	arch/arm/boot/dts/intel/axm/
++F:	arch/arm/mach-axxia/
++
+ ARM/BITMAIN ARCHITECTURE
+ M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-- 
+2.43.0
 
-Yeah, I didn't really understand why they weren't there in the first=20
-place.
-
-> Then I will add a symlink from /sys/firmware/turris-mox-rwtm to the
-> device, for sysfs ABI compatibility.
-
-
-BTW (unrelated to any of your patches unless I missed something)...
-You might want to check one unlock_mutex: label that seemed to be 100%=20
-duplicate the tail of the return path.
-
-
---=20
- i.
-
---8323328-348349624-1718285843=:8853--
