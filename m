@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4FDC27C4F
-	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 16:11:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD599C41513
+	for <soc@archiver.kernel.org>; Thu, 13 Jun 2024 16:11:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AC56C4AF1C; Thu, 13 Jun 2024 16:11:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7340C32789;
-	Thu, 13 Jun 2024 16:11:16 +0000 (UTC)
+	id A00A4C32786; Thu, 13 Jun 2024 16:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C28C4AF49;
+	Thu, 13 Jun 2024 16:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718295079;
-	bh=MLwvK/C/JclmC0UMosPEx3nJi7odhdUQRtSCpsaanJY=;
+	s=k20201202; t=1718295081;
+	bh=Zwaj3fK3W0vC4aI0OZ43ek2Pcu3wpD5VEZbxj73a0ts=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qLzVDONs2VokIl8UaSreRKS+ySvGuNdZfwdUYQMrUPFI+hqJ4MXcOzGuUXv4NpHBZ
-	 rcE+cEy0zXnHYcHGwFt71Y0/XrHjyOmeD5jqHF4ViKFo3lL+WPWY7sYm+qNgY45H6x
-	 uH/TT68amg1JiOdg6xj7Z3GtE3MxkrS+rnoNnft4eP2l+37kLEBj7f/eu4waZWDhGD
-	 atdHucOtgo481a/bJ0Hxe06llfvpknqncY7sGw30kd52buD+7DlEMY7+mKbRd/nGr+
-	 DkcYNkKChn5dmYtgPxAV2XjZGH5RO0D7WjLdRuO2gDRBMnftowl00Vd3mOKP/mMABp
-	 SMcrBIs6dCujA==
+	b=MrBzZEZn13Hu4TVmwp7Dtd4bQVQ+zPce4eVq+bUoSmSPAPXk3LkEcYa7ZpLgnh4Me
+	 Y7ORoiYO7fKX1KId/md5oOTqMO0nabeced/od6/pi4ahhX++f3mstTZgyL/nQe/fEo
+	 mi1oO4GjEMAw8qFunqQLnD73kbyi1fvRdgtH3laUaVrk2RM0zQTYGUezHf2YEwr9nG
+	 pnOGxqyx8xa+sPTNT0JHDix5Ry6EHvesTDDlSp3AvkMUeLUZIbzZonYCLxzZ/64P50
+	 HO/+rjX6eG6zFk/oj8zzSrCJftB61GJfKsPCXyggpoFNNwpOnTKlmM9PMtlx2N+8dp
+	 P3dGNq3b3G1OA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v2 11/17] firmware: turris-mox-rwtm: Use dev_err_probe() where possible
-Date: Thu, 13 Jun 2024 18:10:39 +0200
-Message-ID: <20240613161045.29606-12-kabel@kernel.org>
+Subject: [PATCH v2 12/17] firmware: turris-mox-rwtm: Initialize completion before mailbox
+Date: Thu, 13 Jun 2024 18:10:40 +0200
+Message-ID: <20240613161045.29606-13-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240613161045.29606-1-kabel@kernel.org>
 References: <20240613161045.29606-1-kabel@kernel.org>
@@ -41,46 +41,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Use dev_err_probe() where possible in the driver's .probe() method.
+Initialize the completion before the mailbox channel is requested.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 3017a8c19005..81a82b1ef515 100644
+index 81a82b1ef515..35c2a899caab 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -461,10 +461,11 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	rwtm->mbox = mbox_request_channel(&rwtm->mbox_client, 0);
- 	if (IS_ERR(rwtm->mbox)) {
- 		ret = PTR_ERR(rwtm->mbox);
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "Cannot request mailbox channel: %i\n",
--				ret);
--		return ret;
-+		if (ret == -EPROBE_DEFER)
-+			return ret;
-+
-+		return dev_err_probe(dev, ret,
-+				     "Cannot request mailbox channel!\n");
- 	}
+@@ -454,6 +454,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, rwtm);
  
- 	ret = devm_add_action_or_reset(dev, rwtm_devm_mbox_release, rwtm->mbox);
-@@ -489,10 +490,8 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	rwtm->hwrng.priv = (unsigned long) rwtm;
+ 	mutex_init(&rwtm->busy);
++	init_completion(&rwtm->cmd_done);
  
- 	ret = devm_hwrng_register(dev, &rwtm->hwrng);
--	if (ret < 0) {
--		dev_err(dev, "Cannot register HWRNG: %i\n", ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Cannot register HWRNG!\n");
+ 	rwtm->mbox_client.dev = dev;
+ 	rwtm->mbox_client.rx_callback = mox_rwtm_rx_callback;
+@@ -472,8 +473,6 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		return ret;
  
- 	rwtm_register_debugfs(rwtm);
- 
+-	init_completion(&rwtm->cmd_done);
+-
+ 	ret = mox_get_board_info(rwtm);
+ 	if (ret < 0)
+ 		dev_warn(dev, "Cannot read board information: %i\n", ret);
 -- 
 2.44.2
 
