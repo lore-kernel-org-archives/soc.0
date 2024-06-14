@@ -1,113 +1,75 @@
-Return-Path: <SRS0=4FUO=NQ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=9b4z=NQ=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F26FC27C77
-	for <soc@archiver.kernel.org>; Fri, 14 Jun 2024 05:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00CB0C27C6E
+	for <soc@archiver.kernel.org>; Fri, 14 Jun 2024 09:07:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EA1FAC4AF49; Fri, 14 Jun 2024 05:58:34 +0000 (UTC)
-Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id C3F1BC4AF49; Fri, 14 Jun 2024 09:07:07 +0000 (UTC)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8DAA4C2BD10;
-	Fri, 14 Jun 2024 05:58:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DAA4C2BD10
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 010921C00137;
-	Fri, 14 Jun 2024 01:58:31 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 14 Jun 2024 01:58:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1718344711;
-	 x=1718431111; bh=1qTKwB0xuC17qQ3ohEJr55cUyC8vl4CnlxLvxp8XPlk=; b=
-	t+UsECk7Mi7Co0g5TVPKxXAISA0dMXJjbyZKvQ8YpdTEyzQ8DFb7n9Yt4Cm4uJEL
-	Q3j/mLvABED4N3neZWKatZaBvL9/HEekLaDLoCb2Xdlull1h4EHQU8/TzIZQS1zf
-	P699KsXwXZCB3AgBt9o6EGqN3DMER87206KXMd2aPXCWDQSOeTAcLHboDGYm03m/
-	T3xH4cqRZQxJQsfLQgF3aNzQ+q0bYmJ6bGwgMRhk4t3rUsOAD01Pgp25PQsRN8Ew
-	KVFJwt+dQ5txXg8vfiu6ysO1Qu5hy8wkoTcEKsezKkHehZI+elNrqYglIFVqfCmD
-	V0K4+t+0vMhZ4IMzWTHDiw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718344711; x=
-	1718431111; bh=1qTKwB0xuC17qQ3ohEJr55cUyC8vl4CnlxLvxp8XPlk=; b=Y
-	8yJXVCW2W0m6fhODnAh2EmsqpFph7XkEYguh4DHAUfjp+mkCKG7dd8JOFKoWkNkT
-	pXeGRpJ1dmGW2CNv5FdKYe8ezg45GMP6Rwx8XVCBMnj3wlQsHPRz45srWV28SOv5
-	VNqF8KiksaG0NIGhiukqWNQrGV94YawTIeYNvYYcmUE4niDUq1Zb6lr66mHx+62p
-	ToKUYAe/k2gi2jf7N4VAXJX5sk+yUwkXbSUEi6vft1x/RMYv4o0nB8t4hvkepoPk
-	CSXY+wjuCVXOjSLvr0TThHXSL2BP89HN8q6+J+XUU3gmRGaY9OXrjEQDucXv1yFY
-	COEU478ZnOf4JGDN6nnhQ==
-X-ME-Sender: <xms:B9xrZsE3UE3IyZ2INEDgbz-5RycTF_B3RHY_l1dDk1FYjX_EvntQdA>
-    <xme:B9xrZlU_IQndCXZ9mPd1ffN_mNpVkOZBhEa0FPjTNL0EwVeYX8NFhMXrN1vadm3US
-    f8Do1B09utnpEemOjI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedukedgledvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:B9xrZmKtytGnBFHA23LtGbf5GkPWDWCCHwYZpM-JWgxXTueFHbAcWA>
-    <xmx:B9xrZuFKTYJF0qHjHFJN6IPxz4_cx5hyzor1MYeiIoxndUdE_i5mVA>
-    <xmx:B9xrZiXM3k0LgpZoa5sITG_b66mk7GwMQvJAyDURv9U2bCXj3AA2ag>
-    <xmx:B9xrZhPGSByPNRl_gdzMfvqxoVM02CMVxgx9i7x0HSou_Qk_K6oZuQ>
-    <xmx:B9xrZmqy52Ggk7cNxogoFv5CnpwO0YJgHSlAzQxlcw9KNYumK_bf2l9T>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 55945B6008D; Fri, 14 Jun 2024 01:58:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-515-g87b2bad5a-fm-20240604.001-g87b2bad5
-MIME-Version: 1.0
-Message-Id: <e9ccc218-6263-4f02-aea6-f2bff10597b7@app.fastmail.com>
-In-Reply-To: 
- <CAHp75VdYqsrOwxCS+knjgFPHRWL_A8rvkW9TkZJPKq9g+oAbrg@mail.gmail.com>
-References: <20240613161045.29606-1-kabel@kernel.org>
- <20240613161045.29606-9-kabel@kernel.org>
- <CAHp75VdYqsrOwxCS+knjgFPHRWL_A8rvkW9TkZJPKq9g+oAbrg@mail.gmail.com>
-Date: Fri, 14 Jun 2024 07:58:11 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andy Shevchenko" <andy.shevchenko@gmail.com>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id E222EC32786
+	for <soc@kernel.org>; Fri, 14 Jun 2024 09:07:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E222EC32786
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:be2a:f066:50f0:dff7])
+	by baptiste.telenet-ops.be with bizsmtp
+	id bM732C00L3w30qz01M73x4; Fri, 14 Jun 2024 11:07:03 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sI2se-00BqO6-Sb;
+	Fri, 14 Jun 2024 11:07:03 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sI2tj-00FbJe-E0;
+	Fri, 14 Jun 2024 11:07:03 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-Cc: "Gregory Clement" <gregory.clement@bootlin.com>,
- "Andrew Lunn" <andrew@lunn.ch>, soc@kernel.org, arm <arm@kernel.org>,
- "Andy Shevchenko" <andy@kernel.org>, "Hans de Goede" <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v2 08/17] firmware: turris-mox-rwtm: Don't create own kobject type
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 1/2] Renesas ARM defconfig updates for v6.11
+Date: Fri, 14 Jun 2024 11:06:58 +0200
+Message-Id: <cover.1718355311.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1718355309.git.geert+renesas@glider.be>
+References: <cover.1718355309.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 13, 2024, at 22:32, Andy Shevchenko wrote:
-> On Thu, Jun 13, 2024 at 6:11=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel=
-.org> wrote:
->
->
->> +static void rwtm_firmware_symlink_drop(void *)
->
-> Interesting, can we actually name the parameter, like "unused"?
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
-Agreed.
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
-I was surprised that the compiler doesn't warn about it and
-checked: apparently this is a c23 language feature, so
-newer versions of gcc now treats it as a gnu extension for
---std=3Dgnu11 as well. gcc-10 and older versions however fail:
+are available in the Git repository at:
 
-error: parameter name omitted
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.11-tag1
 
-and clang-19 still warns=20
+for you to fetch changes up to 4b45a978b25da1d4de051ed8e91e669e3701d780:
 
-warning: omitting the parameter name in a function definition is a C2x e=
-xtension [-Wc2x-extensions]
+  arm64: defconfig: Enable Marvell 88Q2XXX PHY support (2024-06-03 09:35:27 +0200)
 
-    Arnd
+----------------------------------------------------------------
+Renesas ARM defconfig updates for v6.11
+
+  - Enable support for Renesas R-Car Gen4 PCIe controllers and Marvell
+    88Q2XXX 100/1000BASE-T1 Automotive Ethernet PHYs in the ARM64
+    defconfig.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      arm64: defconfig: Enable Marvell 88Q2XXX PHY support
+
+Wolfram Sang (1):
+      arm64: defconfig: Enable Renesas R-Car Gen4 PCIe controller
+
+ arch/arm64/configs/defconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
