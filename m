@@ -1,184 +1,141 @@
-Return-Path: <SRS0=YGCH=NT=suse.de=jdelvare@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 867DEC27C79
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 11:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FEEAC27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 11:34:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6BDE7C4AF1A; Mon, 17 Jun 2024 11:30:11 +0000 (UTC)
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 34C74C2BD10
-	for <soc@kernel.org>; Mon, 17 Jun 2024 11:30:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 34C74C2BD10
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 210FE380DD;
-	Mon, 17 Jun 2024 11:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1718623808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
-	b=dUq0jcBDfOoY50UA4WTj5dHvz5qbARZ1+e9zIzCHR8DYynQxRteJsYlkgk7gCujB94nK4S
-	Ki1moLXcBH8iyQTBkMeJoBVFpPMAjkvtcWdInkB0BNMHdEJR07KiCIjVMcfKD2/VfDz+CQ
-	i8AWTte4TUFKWKV2tw0Tdk9zBrAFh8E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1718623808;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
-	b=9Kklsr+mMbNCjBNWdHmGUuHhBvDtHGaX0CpPssiajQaSAFQ7elqZlS9hXmHoqlvPMfu15U
-	CYcbn4qY7Gao5lCA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=dUq0jcBD;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=9Kklsr+m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1718623808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
-	b=dUq0jcBDfOoY50UA4WTj5dHvz5qbARZ1+e9zIzCHR8DYynQxRteJsYlkgk7gCujB94nK4S
-	Ki1moLXcBH8iyQTBkMeJoBVFpPMAjkvtcWdInkB0BNMHdEJR07KiCIjVMcfKD2/VfDz+CQ
-	i8AWTte4TUFKWKV2tw0Tdk9zBrAFh8E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1718623808;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
-	b=9Kklsr+mMbNCjBNWdHmGUuHhBvDtHGaX0CpPssiajQaSAFQ7elqZlS9hXmHoqlvPMfu15U
-	CYcbn4qY7Gao5lCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 159B313AAA;
-	Mon, 17 Jun 2024 11:30:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id v+QSOj4ecGYxHQAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Mon, 17 Jun 2024 11:30:06 +0000
-Date: Mon, 17 Jun 2024 13:30:04 +0200
-From: Jean Delvare <jdelvare@suse.de>
+	id EA754C4AF1A; Mon, 17 Jun 2024 11:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FA8C2BD10;
+	Mon, 17 Jun 2024 11:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718624046;
+	bh=ZSGNI1iJSZC37XqcitctPL3f0TlGNuf93YRTJTPLDeU=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=dfFPKqwm6FLfQW++l80JZoaBrzq9ftA4ojIAGlHmPQFrJicz9fPUnhGISzPSRagt/
+	 zfw68JbT7RZRAFPDRFUwHUFR0dwdyi8bS2oI5UN+6YDR5/Ro+iObycnP+JH7hKz6B/
+	 RRMPhDAIB4jXOdKeDZERG1gMiWF63KGJMhbBcp5l9MBLXPKSZjs5tazz1GNGoGXfND
+	 XmUvElVNuVsqSm7brORS+zhGkrSkAG0MRWsB3T9mGJrs1knpVIhvNQYc98plRTbYcR
+	 +OfIwVszjfffoh5c2iR4Gypmh6bbHsp+/kLqloESD6ltUN1Xg+QiNyO22+TQ4OB9cr
+	 7potbWXgxMnDA==
+Date: Mon, 17 Jun 2024 13:34:00 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Karol Gugala" <kgugala@antmicro.com>, "Mateusz Holenko"
- <mholenko@antmicro.com>, "Gabriel L. Somlo" <gsomlo@gmail.com>, "Joel
- Stanley" <joel@jms.id.au>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND] drivers/soc/litex: drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20240617133004.59887629@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Gregory CLEMENT
+ <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>,
+ soc@kernel.org, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de
+ Goede <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
+ <ilpo.jarvinen@linux.intel.com>, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v11 6/8] platform: cznic: turris-omnia-mcu: Add support
+ for MCU provided TRNG
+Message-ID: <20240617133400.3e4d2910@dellmb>
+In-Reply-To: <CAHp75VcMzZnKi6WUoiSgky5fsvt77FuPr6XZ+X=AD+i_2JzP3Q@mail.gmail.com>
+References: <20240605161851.13911-1-kabel@kernel.org>
+	<20240605161851.13911-7-kabel@kernel.org>
+	<CAHp75VfWZhmw00QP-ra4Zajn7LMvDW+NUT2fMx5kqeQ9eHLv5A@mail.gmail.com>
+	<CAMRc=McmiZFwPneeCtYtqgLiapf9jP9=L8WBmCwQTsZdZVeaqg@mail.gmail.com>
+	<20240617105614.009be8cc@dellmb>
+	<CAMRc=MfB26+CArmu6tHVkpA16OD6_b45FHr2WgzPh45KcdFc2A@mail.gmail.com>
+	<CAHp75VcMzZnKi6WUoiSgky5fsvt77FuPr6XZ+X=AD+i_2JzP3Q@mail.gmail.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 210FE380DD
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[antmicro.com,gmail.com,jms.id.au,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+On Mon, 17 Jun 2024 12:42:41 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+> On Mon, Jun 17, 2024 at 11:07=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.=
+pl> wrote:
+> > On Mon, Jun 17, 2024 at 10:56=E2=80=AFAM Marek Beh=C3=BAn <kabel@kernel=
+.org> wrote: =20
+> > > On Mon, 17 Jun 2024 10:38:31 +0200
+> > > Bartosz Golaszewski <brgl@bgdev.pl> wrote: =20
+> > > > On Wed, Jun 5, 2024 at 9:00=E2=80=AFPM Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> wrote: =20
+> > > > > On Wed, Jun 5, 2024 at 7:19=E2=80=AFPM Marek Beh=C3=BAn <kabel@ke=
+rnel.org> wrote: =20
+> > > > > >
+> > > > > > Add support for true random number generator provided by the MC=
+U.
+> > > > > > New Omnia boards come without the Atmel SHA204-A chip. Instead =
+the
+> > > > > > crypto functionality is provided by new microcontroller, which =
+has
+> > > > > > a TRNG peripheral. =20
+> > > > >
+> > > > > +Cc: Bart for gpiochip_get_desc() usage. =20
+>=20
+> ...
+>=20
+> > > > > > +       irq_idx =3D omnia_int_to_gpio_idx[__bf_shf(OMNIA_INT_TR=
+NG)];
+> > > > > > +       irq =3D gpiod_to_irq(gpiochip_get_desc(&mcu->gc, irq_id=
+x));
+> > > > > > +       if (irq < 0)
+> > > > > > +               return dev_err_probe(dev, irq, "Cannot get TRNG=
+ IRQ\n"); =20
+> > > > >
+> > > > > Okay, it's a bit more complicated than that. The gpiochip_get_des=
+c()
+> > > > > shouldn't be used. Bart, what can you suggest to do here? Opencod=
+ing
+> > > > > it doesn't sound to me a (fully) correct approach in a long term.=
+ =20
+> > > >
+> > > > Andy's worried about reference counting of the GPIO device. Maybe y=
+ou
+> > > > should just ref the GPIO device in irq_request_resources() and unref
+> > > > it in irq_release_resources()? Then you could use gpiochip_get_desc=
+()
+> > > > just fine. =20
+> > >
+> > > But this is already being done.
+> > >
+> > > The irqchip uses GPIOCHIP_IRQ_RESOURCE_HELPERS macro in its definitio=
+n:
+> > >
+> > >   static const struct irq_chip omnia_mcu_irq_chip =3D {
+> > >     ...
+> > >     GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> > >   };
+> > >
+> > > This means that gpiochip_irq_reqres() and gpiochip_irq_relres() are
+> > > used as irq_request_resources() and irq_release_resources().
+> > >
+> > > The gpiochip_reqres_irq() code increases the module refcount and even
+> > > locks the line as IRQ:
+> > >
+> > >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/drivers/gpio/gpiolib.c?h=3Dv6.10-rc4#n3732 =20
+> >
+> > Andy: what is the issue here then exactly? =20
+>=20
+> The function in use is marked as DEPRECATED. If you are fine with its
+> usage in this case, I have no issues with it.
+> If you want it to be replaced with the respective
+> gpio_device_get_desc(), it's fine, but then the question is how
+> properly get a pointer to GPIO device object.
+>=20
 
-As a minor optimization, this also lets us drop of_match_ptr() and
-ifdef-guarding, as we now know what they will resolve to, we might as
-well save cpp some work.
+Aha, I did not notice that the function is deprecated.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Reviewed-by: Gabriel Somlo <gsomlo@gmail.com>
-Cc: Karol Gugala <kgugala@antmicro.com>
-Cc: Mateusz Holenko <mholenko@antmicro.com>
-Cc: Joel Stanley <joel@jms.id.au>
----
-Resending to soc@kernel.org as requested by Arnd Bergmann, sorry for
-the duplicate.
+What about
 
- drivers/soc/litex/Kconfig          |    2 +-
- drivers/soc/litex/litex_soc_ctrl.c |    4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+  irq =3D gpiod_to_irq(gpio_device_get_desc(mcu->gc.gpiodev, irq_idx));
 
---- linux-6.8.orig/drivers/soc/litex/Kconfig
-+++ linux-6.8/drivers/soc/litex/Kconfig
-@@ -7,7 +7,7 @@ config LITEX
- 
- config LITEX_SOC_CONTROLLER
- 	tristate "Enable LiteX SoC Controller driver"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on HAS_IOMEM
- 	select LITEX
- 	help
---- linux-6.8.orig/drivers/soc/litex/litex_soc_ctrl.c
-+++ linux-6.8/drivers/soc/litex/litex_soc_ctrl.c
-@@ -82,13 +82,11 @@ static int litex_reset_handler(struct no
- 	return NOTIFY_DONE;
- }
- 
--#ifdef CONFIG_OF
- static const struct of_device_id litex_soc_ctrl_of_match[] = {
- 	{.compatible = "litex,soc-controller"},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, litex_soc_ctrl_of_match);
--#endif /* CONFIG_OF */
- 
- static int litex_soc_ctrl_probe(struct platform_device *pdev)
- {
-@@ -130,7 +128,7 @@ static void litex_soc_ctrl_remove(struct
- static struct platform_driver litex_soc_ctrl_driver = {
- 	.driver = {
- 		.name = "litex-soc-controller",
--		.of_match_table = of_match_ptr(litex_soc_ctrl_of_match)
-+		.of_match_table = litex_soc_ctrl_of_match,
- 	},
- 	.probe = litex_soc_ctrl_probe,
- 	.remove_new = litex_soc_ctrl_remove,
+?
 
+Note: I would prefer
+  irq_create_mapping(mcu->gc.irq.domain, irq_idx)
+since the irq_idx line is not a valid GPIO line and at this part of
+the driver the fact that the IRQs are provided through a gpiochip are
+semantically irrelevant (we are interested in "an IRQ", not "an IRQ from
+a GPIO").
 
--- 
-Jean Delvare
-SUSE L3 Support
+Marek
