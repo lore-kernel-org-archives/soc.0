@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC790C27C79
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 14:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C92C27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 14:45:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A1BA9C4AF1D; Mon, 17 Jun 2024 14:45:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF69C4AF4D;
-	Mon, 17 Jun 2024 14:45:38 +0000 (UTC)
+	id 1CBF2C2BD10; Mon, 17 Jun 2024 14:45:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9FEC4AF48;
+	Mon, 17 Jun 2024 14:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718635540;
-	bh=qNQKeKVAjEgxOQBenmNAc0eVUtJC4/u8mbQTNzE9vLQ=;
+	s=k20201202; t=1718635543;
+	bh=sc7EudhJ+/Cu2fPeZrbVPk1U0HTdb44HVHOPZKReBEY=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qiQ7+pZN18F5rjHkAWsh1J+VHxZTChrF2Xeri/YbRrcNMr5gTRI+s+QNv3yJUbHGo
-	 qvY7W5vFiSl1c8++zG4hKW4SFZ0GOUd9PslFH3pILI6IfWnMCrRw3h7MxmrXOLJJeT
-	 IKCUATtvCiHeibSMi8iYbDzbnUYgxz/wP0p8pz1tvZll0tiTU4y9FOnjz9jtE4WJAS
-	 nsqmFPU5sWgu/ip3k+JNYyBps+lMrssnjBWJDsnYEZ7V0Oht8WeGrQVQT7rbiUfEX1
-	 1SGada6kaEUagmfcskDDQ9CKl0pC9PyxfUI4J1nEMI8ZCCbLDGfxmFNfR7YoKh5mGt
-	 Ygj94UPNsLScQ==
+	b=Hj7K4hAZRyyA71WWIYuIWcvPbouXk5LJ1Ao4pqw3FalKxdlf5BsmKD3JLckyxGrDX
+	 Wtykcq6z2S2TYX7osZevo6kej9z2aZq2ZaPzt+BFfcmtwnOpF806IcBUqI5RUs8X5h
+	 xm4asUIjeiBGmGQIGr8FYy+hIBI7AgKnxTyqD5NhQdJiBU7M4Q7QS21LAQ7I0yjqZK
+	 xcbaYuPs6ifEax0M9SgbEdkPHvFSe59Q+72MAXF1a6eaGfL3OVCA/m4RlqoahzcyRn
+	 lSGeUhfBrROeCt+0L0hc+sKYBhPQ/Q8JIHXu5ab1S8mWKdO0X+Cc7EBH0X6GLJkPRl
+	 XCNU36b0zCOFA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v3 01/17] firmware: turris-mox-rwtm: Do not complete if there are no waiters
-Date: Mon, 17 Jun 2024 16:45:16 +0200
-Message-ID: <20240617144532.17385-2-kabel@kernel.org>
+Subject: [PATCH v3 02/17] firmware: turris-mox-rwtm: Fix checking return value of wait_for_completion_timeout()
+Date: Mon, 17 Jun 2024 16:45:17 +0200
+Message-ID: <20240617144532.17385-3-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240617144532.17385-1-kabel@kernel.org>
 References: <20240617144532.17385-1-kabel@kernel.org>
@@ -41,37 +41,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Do not complete the command done completion if there are no waiters.
-This can happen if a wait_for_completion timed out or was interrupted.
+The wait_for_completion_timeout() function returns 0 if timed out, and a
+positive value if completed. Fix the usage of this function.
 
 Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
+Fixes: 2eab59cf0d20 ("firmware: turris-mox-rwtm: fail probing when firmware does not support hwrng")
 Signed-off-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/firmware/turris-mox-rwtm.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/firmware/turris-mox-rwtm.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 31d962cdd6eb..f1f9160c4195 100644
+index f1f9160c4195..3f4758e03c81 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -2,7 +2,7 @@
- /*
-  * Turris Mox rWTM firmware driver
-  *
-- * Copyright (C) 2019 Marek Behún <kabel@kernel.org>
-+ * Copyright (C) 2019, 2024 Marek Behún <kabel@kernel.org>
-  */
+@@ -202,9 +202,8 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
+ 	if (ret < 0)
+ 		return ret;
  
- #include <linux/armada-37xx-rwtm-mailbox.h>
-@@ -174,6 +174,9 @@ static void mox_rwtm_rx_callback(struct mbox_client *cl, void *data)
- 	struct mox_rwtm *rwtm = dev_get_drvdata(cl->dev);
- 	struct armada_37xx_rwtm_rx_msg *msg = data;
+-	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
+-	if (ret < 0)
+-		return ret;
++	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
++		return -ETIMEDOUT;
  
-+	if (completion_done(&rwtm->cmd_done))
-+		return;
-+
- 	rwtm->reply = *msg;
- 	complete(&rwtm->cmd_done);
+ 	ret = mox_get_status(MBOX_CMD_BOARD_INFO, reply->retval);
+ 	if (ret == -ENODATA) {
+@@ -238,9 +237,8 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
+-	if (ret < 0)
+-		return ret;
++	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
++		return -ETIMEDOUT;
+ 
+ 	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
+ 	if (ret == -ENODATA) {
+@@ -277,9 +275,8 @@ static int check_get_random_support(struct mox_rwtm *rwtm)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2);
+-	if (ret < 0)
+-		return ret;
++	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
++		return -ETIMEDOUT;
+ 
+ 	return mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
  }
 -- 
 2.44.2
