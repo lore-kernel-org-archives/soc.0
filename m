@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7016DC27C79
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 19:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 770F2C27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 20:23:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3777AC4AF48; Mon, 17 Jun 2024 19:57:50 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	id 3CBC0C4AF1C; Mon, 17 Jun 2024 20:23:27 +0000 (UTC)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5E6E8C2BD10;
-	Mon, 17 Jun 2024 19:57:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E6E8C2BD10
+	by smtp.kernel.org (Postfix) with ESMTPS id 46004C4AF1A;
+	Mon, 17 Jun 2024 20:23:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 46004C4AF1A
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a6f09eaf420so548779066b.3;
-        Mon, 17 Jun 2024 12:57:49 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a6f09b457fdso440769066b.2;
+        Mon, 17 Jun 2024 13:23:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718654267; x=1719259067; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1718655804; x=1719260604; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FRCxIGmtuHITSjXJ24xnW72xgk3zpATE5MzfmwzZwS8=;
-        b=XqIOOakT2fb2yPQj3yTeQGHCouRueS4XjRB7iV4cRdYGdv8+N5oCYQupr0A3Fe5TN+
-         FDsw5tA5vdLlymsm10UjiSq5eFkf52PKlJCpVGrxQzO2sSnNUOyGa5YRE9YvNCj6LvJR
-         3ugf/29ONIgEPnT/rJXFQvL9OHtD5I7RwSTvuyRyBKUbGFaJxdzRAwrLxFGelwlgmyD4
-         33I/G0p+f7hSt6t13TYg7PjeLsdpACxmQwPMAbFnD9fibTxlxxr9eoyw4DeKirRNR3EA
-         ADAkVDoONkyHBnldgfHbE16M/zuNxszRsnC42+WpcX5lNF06ug21vfn9cd4ybn5lckOe
-         ZSgQ==
+        bh=sZpL8bFgLmvveiNnNGCkQ4x6jqd8hPHneVJQ6rGkAMw=;
+        b=FVUD8A0GdTKwzwI6RIditQENOQBRl/BgM11es+sAPW6IUiLQ+ZsGd2GnRGk+0wMDS2
+         cZe6Zea3SwgHQ5XLftBfdjbuyEcDnZzs1ccW7VAIkpC9jrfILH/ALmIGyaKcxrxkFlh1
+         ii2xNcER2WWaXyhxg6DqEJQBs2xHrse/Racm3DxWP3p/6azMBrUGms7rXSeDBoTvdLks
+         jc5UD3OF3TyPIj2FIQpUGepWI43xoPEipUhaxpKFG7Q6Ove2zRaE1LVQG4IVLayWWTkP
+         M3MeyRGLrCrKKa1lGu7PuMpvigaIlPNzt90dbtclvzmS7TYfBkUds71bO94whG3b69J6
+         tI5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718654267; x=1719259067;
+        d=1e100.net; s=20230601; t=1718655804; x=1719260604;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FRCxIGmtuHITSjXJ24xnW72xgk3zpATE5MzfmwzZwS8=;
-        b=sswKSegvR0NW2b5TFPZLSBLOutCV2kOrQ1w6ywOZUw6D1hhAOBc8x5D3jxFgYBJmYF
-         xYClwPaN+cql03n/7lcG6oqud75ua74XrvEGoGNbvuTLmzku00W/O5GKgWjjEY9nk+ot
-         PJlIBq7XtIl/K3R7aIgzjPEuVf0Ba5RbXx90TxL7RGi9Y5mCxVG2HLGSG5dVgbUxsqjl
-         FfAd+d2c/YGC3D/a7Ml7GivSf3xOLz+sqZEQSuBO73/Hwu7J7in6UNtBUdQe+iS3urmv
-         vo2Hp4t4wXRiGcGnfGsoKRNSGiLDgVd2GiXRyuKWfpDhXr51L2l61g5Nb3rHGMna1fij
-         NV7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUNXWj7OFGVw7CE4BmRNSZL62qgEYMCrtNO2pPdkjilKm5slYlRUBxEZb4ocHmL323Vmc99szGJY+zRGsHXz6cT2LKewgZYKZvolP9IeMGalLO5m0DkWdUQVh5SKeIiBQ==
-X-Gm-Message-State: AOJu0YxhUPpSpugE1uVBTxoeT8jmZnXnpTmPST7XhUEkxVshzjXuEsOQ
-	6jfLgpbmzWDnEzgL207Z0rWARCUAvePbfVbMEQAXwkifZJWNmHgOi5rOKAMjFaoSWsLAM4lI2Ce
-	GOPEb9jByHmeAUOnODxFG3outwxbfe++l
-X-Google-Smtp-Source: AGHT+IGI7EAENdlFDagqvh0G2E+m9va/oZNJIlNT8RN8KRq/CYMbaT3yPNmICTSrtGk1tSWwh7wiuplsgQcrqU8qNoA=
-X-Received: by 2002:a17:906:5648:b0:a6f:ce5:2875 with SMTP id
- a640c23a62f3a-a6f60dc5169mr673977466b.50.1718654267038; Mon, 17 Jun 2024
- 12:57:47 -0700 (PDT)
+        bh=sZpL8bFgLmvveiNnNGCkQ4x6jqd8hPHneVJQ6rGkAMw=;
+        b=m1s3JY96UD/vaMj0ZK4o4ktKP1jrfWqzhC6lLHQwo+eEDPcjh4yI4O+NsiYhvlkGdm
+         VNDm7cbqHrK4V5Uvqtkwz0I/s2t2QsFsq2VIWCImxqRhc0lvMLQqaCc2PpjrNWTXPvhX
+         AGkggxiTEC/rcPVHBbiduJOqV9rlXJ0WVmGNxM3z/dkd2/sdv32ZcHZ4Y0ikryYHyZ5u
+         9iCoDII3icv5vdfuwKOB5yW8Frc+qPNSzbKUZzx5W/2b6fYqCfWBxrw65R7wXHpLrxt4
+         /3psh73ZYLYCXjqvAhBGAUU0keuWLUi1w9FbkmXR57wezIoNyDxKHvyg6nvdHw5hBsZN
+         zKSA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBje15h6UUJ0KX81a4jnVO5yoFjxCaj69oPZ6seb2ve2NnguzRnVn/OuaWpW5I47JifDzSfs6mJkB7gqaiXEPNlNjKjoRTW3S6Ih3HJflU/JZvKN/CFR4LO8qKsmObCw==
+X-Gm-Message-State: AOJu0Ywakzvf/m2fRXbfJb5Pn8ibH+/7hxMC3uaHqHwhwoAHeyKi1JY+
+	xOkDgEsti4yM7KsnVMvUYlJGx4HUXG8upUX/SwHADYUq4ZIXNBAwHvbJuExy9Mmp6RqVtE7qWjy
+	QUlsO3wGNZtKAVgk5mynlgKdh/zvCsL12
+X-Google-Smtp-Source: AGHT+IFrLrQBuWXZobf4t7rzHuczUsD/7n/OLSy15TN6bfockQf20A9p9i+T8zXZ+4lvjwV46RjO0c871hWdiPkDqW0=
+X-Received: by 2002:a17:906:1754:b0:a6f:4bf2:daa2 with SMTP id
+ a640c23a62f3a-a6f60cefd80mr749187666b.15.1718655804128; Mon, 17 Jun 2024
+ 13:23:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20240617144532.17385-1-kabel@kernel.org> <20240617144532.17385-9-kabel@kernel.org>
-In-Reply-To: <20240617144532.17385-9-kabel@kernel.org>
+References: <20240617144532.17385-1-kabel@kernel.org> <20240617144532.17385-10-kabel@kernel.org>
+In-Reply-To: <20240617144532.17385-10-kabel@kernel.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 17 Jun 2024 21:57:10 +0200
-Message-ID: <CAHp75VcHKhPNDpLSZvHFkyqBUFFgjG8o0sh+NN0LhzdZArZkBA@mail.gmail.com>
-Subject: Re: [PATCH v3 08/17] firmware: turris-mox-rwtm: Don't create own
- kobject type
+Date: Mon, 17 Jun 2024 22:22:47 +0200
+Message-ID: <CAHp75VfR8T+W6HWyvJ+xOP14GBeO+-2JFLUjiqV6tF_7qdr8Gw@mail.gmail.com>
+Subject: Re: [PATCH v3 09/17] firmware: turris-mox-rwtm: Simplify debugfs code
 To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, 
@@ -68,38 +67,14 @@ Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 17, 2024 at 4:45=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
+On Mon, Jun 17, 2024 at 4:46=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
  wrote:
 >
-> In order to create attribute files in /sys/firmware/turris-mox-rwtm,
-> this driver creates it's own kobject type.
->
-> Simplify this by dropping this own kobject creation, and instead
-> creating standard device attribute files.
->
-> For backwards compatibility with sysfs ABI, create a symlink
-> /sys/firmware/turris-mox-rwtm, pointing to this device's sysfs
-> directory.
+> Simplify debugfs code: do not check for errors, as debugfs errors should
+> be ignored, and use devm action for dropping the debugfs directory.
 
-...
-
->  #define MOX_ATTR_RO(name, format, cat)                         \
->  static ssize_t                                                 \
-> -name##_show(struct kobject *kobj, struct kobj_attribute *a,    \
-> +name##_show(struct device *dev, struct device_attribute *a,    \
->             char *buf)                                          \
->  {                                                              \
-> -       struct mox_rwtm *rwtm =3D to_rwtm(kobj);  \
-> +       struct mox_rwtm *rwtm =3D dev_get_drvdata(dev);           \
->         if (!rwtm->has_##cat)                                   \
->                 return -ENODATA;                                \
->         return sprintf(buf, format, rwtm->name);                \
-
-At some point this should be replaced with sysfs_emit()
-
->  }                                                              \
-> -static struct kobj_attribute mox_attr_##name =3D __ATTR_RO(name)
-> +static DEVICE_ATTR_RO(name)
+Actually you may do that without devm. There is a lookup method or so
+in debugfs APIs that can be used. Can be amended later on, though.
 
 --=20
 With Best Regards,
