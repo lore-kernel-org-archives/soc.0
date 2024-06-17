@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14AE1C27C79
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 19:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3774CC27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 19:52:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DA491C4AF48; Mon, 17 Jun 2024 19:47:15 +0000 (UTC)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	id 241CDC4AF48; Mon, 17 Jun 2024 19:52:41 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01F3FC2BD10;
-	Mon, 17 Jun 2024 19:47:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01F3FC2BD10
+	by smtp.kernel.org (Postfix) with ESMTPS id 25505C2BD10;
+	Mon, 17 Jun 2024 19:52:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 25505C2BD10
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52c815e8e9eso4809148e87.0;
-        Mon, 17 Jun 2024 12:47:14 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2eaea28868dso64862721fa.3;
+        Mon, 17 Jun 2024 12:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718653633; x=1719258433; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1718653958; x=1719258758; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2sZHc9c3C45R7HyLng9Wt93ETPepngcDrNIz13QvLUQ=;
-        b=DayfdmRX6xTHGz3VbRqFAMWu7fDxvqrG0VorGSJLpIHbqkSWtEY4fsBn+7lsweXlue
-         8NkQ2HG7xU7d3RzKBKobD8mWUJRJIngZX0ckHkqMvnM4oE6cCy8o2YaZF2ej2NeFZ+bS
-         ISodhDqnMVa2v68gJlZ5hXZq/ROFiMF+EjU0DgOJo3Pmv72U3vG12xEQTxC8x4sL9sc3
-         4fSKVttbVznG4jU6JK/qlC9CkGAu+ZInb50fr1pMDeGTSe/ZuwAHAipDcszboONdlNlU
-         JiTAPsEEnh5P6WXlVIzPx+iAPq1Jp2f8YfHdzQ76VAbIjcyFs5DHR5Vgw2mWm1iBnB3V
-         7DFA==
+        bh=lAnOWYrLnN7oURbqKQYIsi/SP7/4lWgtqvJMMkuDW5I=;
+        b=evo7oGIcNCAyaTV/scKOScnEA/axsr1UELqa2+hHpLc0dmZgvZXt2+q+J3cOn4Vw+q
+         QXuo4/t0DKZ+ieCF9BvVQ22XY5iDZ4C61SM8CeJzNzGQWVPWsoULmeBCwb+dmsUL/wzp
+         sCg4782J3Z9pJ8LK4Fl92guUeZcnUuLjJ+HNKcVcqsXb3xquN5MLAFOAyYdFoUsFaG71
+         CiE48lZBF6P43ImmduyrWoznuQNca/HTCFFcenSp0ZhBGQqqZFVpCDVjDURArrNq4Dbv
+         izWT9EtsGG49tJ3Gf5FpRLREs8FUKIxWpLLz6nBRajodWPYN3RKT80h7M/hRekiXnlzc
+         rz1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718653633; x=1719258433;
+        d=1e100.net; s=20230601; t=1718653958; x=1719258758;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2sZHc9c3C45R7HyLng9Wt93ETPepngcDrNIz13QvLUQ=;
-        b=ArWeG6c9HKIk0QZh8Blw7PBPa9x7qnmXUR00atiIojlNiYDPSgQ3ZjjgCHSFN2vK62
-         l7KICCgFQyIsxWYcnTkyGHUXJbDXRy6Wv3c34tfzFFRmobMaiBVvjaSlYJ+cQ25vIPRJ
-         pt0ZscIYRTI7dHdK9dNhvd/RgmuJmgzZ/xSyxbtMyRjcYHUINo7/trQ4eE7Xzoj+GoPh
-         MrTbYaGqFULgwod+srjrdrTrJy/EAdDPYwP7tNsvu9Ti6WFeF8F+ZUA8bPDGfDsPWUvp
-         JDtLOnbgc1agcJ/s2WMFQUAg3jD6HCkxNBwD7QhLI1LWGIKGK4FR6k4T1nO1kYrCm5kT
-         UeHg==
-X-Forwarded-Encrypted: i=1; AJvYcCXdCsFGyY0lJpX3KdXbewJO790tksV0k4gFthRu763B52f7fekVW2vTbSPfP1+t9Uj1J0C38r0i8AqiMnMDQIVjpA9ueViWEoONA+8TcnkNBfKjJmDgC4cE9hgRpS5b7Q==
-X-Gm-Message-State: AOJu0Yw0eWlmWilk12cDZYZBaQ1TfhuE4u2cmggdDW4PIqSi+MYfKC0M
-	N1G9BiCncyPKgnP5+YIxLLJc05gZcII70gyfeWmpp2UCuJuz3tnJNupmImyErSUuXoAnXxiTcch
-	HZ/M5rtt/qiVnSqUQtXmYqhmbAKUWdC5S
-X-Google-Smtp-Source: AGHT+IG5T1mxUe6mUfmw0hc1onyJk8/W4FknaA5tfU6wF/hxVCxSEtH/BwfQRkkZtLhi0rdgZ4ob1HHCFMLkinHA2CE=
-X-Received: by 2002:a05:6512:20cb:b0:52b:bd97:ffde with SMTP id
- 2adb3069b0e04-52ca6e55d56mr6145413e87.7.1718653632549; Mon, 17 Jun 2024
- 12:47:12 -0700 (PDT)
+        bh=lAnOWYrLnN7oURbqKQYIsi/SP7/4lWgtqvJMMkuDW5I=;
+        b=gKXbaNk6xxlj4TFte4X1LMi7Q4s6C94QYSiA3Fu7giJcosBz9qnoKXd02XFQy53Wjd
+         7gndLxRBnP15bH6NeTrOAqCiqv3O1fKMZrWFOkYm3k+6LpTRhPI3IvESgmZLuP7TufU0
+         1vGP3sciPF4xG32uW5/dVt92LHqhg3tsClMLAavfeg/ub9a/l/pSBxKe94ZZX3nGU/ne
+         M3xHXKU97kNfFbS5+4py7QVE9HDub9V7oDqlrzLd2g8e8Fv6elKbNVAbAh9KeFsIk8Id
+         DualJJoScXgLsOt3oPx0phMBTa03ZlENJD1w+UIYVn9CrO9x1wuaGRVzqqrNNNSjKs7f
+         y+ow==
+X-Forwarded-Encrypted: i=1; AJvYcCUGjqr86/U5SHKo+1HObCmX3g/SaNUF6MT4+2ceJh8KKGMCB4pkxyaZ2P55Frn7pAlTSsAdoeumnCSK5XTpn/uY2HTOS/0qmxYtyTUnb44gPvJ0Ka+bvm7JL7o6ly/CDw==
+X-Gm-Message-State: AOJu0YyUyWKvLZ9GGhIDke7nPFV03qcGjW5VqrQWUeW3fS8l6SHwfKvn
+	3/BGi2LZcjssqgGpFOp38Xd3DnKP0XGm8KVYbE7Gc040Lx8Ls0HSj8ZBR0FkjA7oT2g2lGiz8MA
+	+jKba7JsE+qEh5I9wsck8fz8AauRS8BpW
+X-Google-Smtp-Source: AGHT+IEuRcL6epFY5/iwx/x5DKTaBR1xzrQAbKOM9ZV7KxdA6zNgRklRHnJkK4IpuvW/Kr/GcgXihmH/KjbpzCfvKx4=
+X-Received: by 2002:a2e:b8cb:0:b0:2ec:f68:51dd with SMTP id
+ 38308e7fff4ca-2ec0f68561bmr100891361fa.6.1718653957670; Mon, 17 Jun 2024
+ 12:52:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20240617144532.17385-1-kabel@kernel.org> <20240617144532.17385-6-kabel@kernel.org>
-In-Reply-To: <20240617144532.17385-6-kabel@kernel.org>
+References: <20240617144532.17385-1-kabel@kernel.org> <20240617144532.17385-7-kabel@kernel.org>
+In-Reply-To: <20240617144532.17385-7-kabel@kernel.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 17 Jun 2024 21:46:36 +0200
-Message-ID: <CAHp75VccODLAjAA7-WWWj68Lop3UykO+WiWpPep6CCYUtCDxxw@mail.gmail.com>
-Subject: Re: [PATCH v3 05/17] firmware: turris-mox-rwtm: Use the boolean type
- where appropriate
+Date: Mon, 17 Jun 2024 21:52:01 +0200
+Message-ID: <CAHp75VdC6y97keH5Ty=rgn1zY-zqGTtN0M3itxxCjeYHmALQQg@mail.gmail.com>
+Subject: Re: [PATCH v3 06/17] firmware: turris-mox-rwtm: Hide signature
+ related constants behind macros
 To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, 
@@ -71,39 +71,25 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 17, 2024 at 4:45=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
  wrote:
 >
-> Use the boolean type for has_board_info, has_pubkey and last_sig_done
-> members of the driver's private structure.
+> Hide signature generation related constants behind macros instead of
+> hardcoding the values.
+>
+> Use SHA512_DIGEST_SIZE from crypto/sha2.h instead of hardcoded 64 as the
+> message size.
 
 ...
 
-> @@ -67,13 +68,13 @@ struct mox_rwtm {
->         struct completion cmd_done;
->
->         /* board information */
-> -       int has_board_info;
-> +       bool has_board_info;
->         u64 serial_number;
->         int board_version, ram_size;
->         u8 mac_address1[ETH_ALEN], mac_address2[ETH_ALEN];
->
->         /* public key burned in eFuse */
-> -       int has_pubkey;
-> +       bool has_pubkey;
->         u8 pubkey[135];
->
->  #ifdef CONFIG_DEBUG_FS
-> @@ -85,7 +86,7 @@ struct mox_rwtm {
->          */
->         struct dentry *debugfs_root;
->         u32 last_sig[34];
-> -       int last_sig_done;
-> +       bool last_sig_done;
->  #endif
->  };
+>         /* 2 arrays of 17 32-bit words are 136 bytes */
 
-A side note: At some point it might make sense to look at the
-structure layout with help of `pahole` tool and maybe compress it a
-bit to save a few bytes (it might be feasible after this change).
+Hmm... Comment now is a bit too precise. But okay :-)
+
+> -       ret =3D simple_read_from_buffer(buf, len, ppos, rwtm->last_sig, 1=
+36);
+> +       ret =3D simple_read_from_buffer(buf, len, ppos, rwtm->last_sig,
+> +                                     MOX_ECC_SIGNATURE_LEN);
+
+I think sizeof() here is more robust.
+No need to resend due to this.
 
 --=20
 With Best Regards,
