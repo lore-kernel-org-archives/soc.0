@@ -1,76 +1,184 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=YGCH=NT=suse.de=jdelvare@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B451AC27C79
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 11:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 867DEC27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 11:30:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8BD66C4AF1D; Mon, 17 Jun 2024 11:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25110C2BD10;
-	Mon, 17 Jun 2024 11:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718622849;
-	bh=hiOz/a5MvNzI6raAiQizavQECRkliy2q7gjBwWohjYw=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=hBkJwJY9J48jKZvJW79RsdSVux9oSonPBc9hxt9dfg9JrjKNnQ3qkjkgATeMu3HEu
-	 R1viEn7FGXLw3C0k1E/djdEX+4PxzGlaWAUVKxCu72jP4hvu+GCA/AMf1BUwzYZIKh
-	 u7rUAC+MkPLmObWER5XldMjwikc6DOp/TM+OaWBbUce+pr9AYsHjADn4JJF56oJqXa
-	 TPnG8r2EuzCpjRHFJHErCXj0t7YeJ0+h5FAR5TS/Fr9rd1Av2x5DszD8on17UIyTJO
-	 4M2DEvC/l3PavoMTEHZL5TiVHfVNc+G0fOzoWoK1mJQ9Ce9uABCXrdC9oGCi+DESyu
-	 304PFcq21jsLA==
-Date: Mon, 17 Jun 2024 13:14:04 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
+	id 6BDE7C4AF1A; Mon, 17 Jun 2024 11:30:11 +0000 (UTC)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 34C74C2BD10
+	for <soc@kernel.org>; Mon, 17 Jun 2024 11:30:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 34C74C2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 210FE380DD;
+	Mon, 17 Jun 2024 11:30:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718623808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
+	b=dUq0jcBDfOoY50UA4WTj5dHvz5qbARZ1+e9zIzCHR8DYynQxRteJsYlkgk7gCujB94nK4S
+	Ki1moLXcBH8iyQTBkMeJoBVFpPMAjkvtcWdInkB0BNMHdEJR07KiCIjVMcfKD2/VfDz+CQ
+	i8AWTte4TUFKWKV2tw0Tdk9zBrAFh8E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718623808;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
+	b=9Kklsr+mMbNCjBNWdHmGUuHhBvDtHGaX0CpPssiajQaSAFQ7elqZlS9hXmHoqlvPMfu15U
+	CYcbn4qY7Gao5lCA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=dUq0jcBD;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=9Kklsr+m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718623808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
+	b=dUq0jcBDfOoY50UA4WTj5dHvz5qbARZ1+e9zIzCHR8DYynQxRteJsYlkgk7gCujB94nK4S
+	Ki1moLXcBH8iyQTBkMeJoBVFpPMAjkvtcWdInkB0BNMHdEJR07KiCIjVMcfKD2/VfDz+CQ
+	i8AWTte4TUFKWKV2tw0Tdk9zBrAFh8E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718623808;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n8D0TaVXsWou1WCUbJVzMVM6esyWUKjejYmyvZtqGBo=;
+	b=9Kklsr+mMbNCjBNWdHmGUuHhBvDtHGaX0CpPssiajQaSAFQ7elqZlS9hXmHoqlvPMfu15U
+	CYcbn4qY7Gao5lCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 159B313AAA;
+	Mon, 17 Jun 2024 11:30:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id v+QSOj4ecGYxHQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Mon, 17 Jun 2024 11:30:06 +0000
+Date: Mon, 17 Jun 2024 13:30:04 +0200
+From: Jean Delvare <jdelvare@suse.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Andrew Lunn
- <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
- arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de Goede
- <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
- <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v2 11/17] firmware: turris-mox-rwtm: Use dev_err_probe()
- where possible
-Message-ID: <20240617131404.592a4603@dellmb>
-In-Reply-To: <CAHp75VePTX3Ja61eyWjayHALKX14cSgK1QMqbFVrSRTEaJm9HA@mail.gmail.com>
-References: <20240613161045.29606-1-kabel@kernel.org>
-	<20240613161045.29606-12-kabel@kernel.org>
-	<CAHp75VePTX3Ja61eyWjayHALKX14cSgK1QMqbFVrSRTEaJm9HA@mail.gmail.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+To: soc@kernel.org, "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Karol Gugala" <kgugala@antmicro.com>, "Mateusz Holenko"
+ <mholenko@antmicro.com>, "Gabriel L. Somlo" <gsomlo@gmail.com>, "Joel
+ Stanley" <joel@jms.id.au>, LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND] drivers/soc/litex: drop obsolete dependency on
+ COMPILE_TEST
+Message-ID: <20240617133004.59887629@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 210FE380DD
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[antmicro.com,gmail.com,jms.id.au,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 
-On Thu, 13 Jun 2024 22:49:18 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-> On Thu, Jun 13, 2024 at 6:11=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.or=
-g> wrote:
-> >
-> > Use dev_err_probe() where possible in the driver's .probe() method. =20
->=20
-> ...
->=20
-> >         rwtm->mbox =3D mbox_request_channel(&rwtm->mbox_client, 0);
-> >         if (IS_ERR(rwtm->mbox)) {
-> >                 ret =3D PTR_ERR(rwtm->mbox);
-> > -               if (ret !=3D -EPROBE_DEFER)
-> > -                       dev_err(dev, "Cannot request mailbox channel: %=
-i\n",
-> > -                               ret);
-> > -               return ret; =20
->=20
-> > +               if (ret =3D=3D -EPROBE_DEFER)
-> > +                       return ret; =20
->=20
-> What;s the point of this check, please?
->=20
-> > +               return dev_err_probe(dev, ret,
-> > +                                    "Cannot request mailbox channel!\n=
-");
-> >         } =20
->=20
->=20
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-The point is to not print the error message if we just need to wait for
-the mailbox driver.
+As a minor optimization, this also lets us drop of_match_ptr() and
+ifdef-guarding, as we now know what they will resolve to, we might as
+well save cpp some work.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Reviewed-by: Gabriel Somlo <gsomlo@gmail.com>
+Cc: Karol Gugala <kgugala@antmicro.com>
+Cc: Mateusz Holenko <mholenko@antmicro.com>
+Cc: Joel Stanley <joel@jms.id.au>
+---
+Resending to soc@kernel.org as requested by Arnd Bergmann, sorry for
+the duplicate.
+
+ drivers/soc/litex/Kconfig          |    2 +-
+ drivers/soc/litex/litex_soc_ctrl.c |    4 +---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+--- linux-6.8.orig/drivers/soc/litex/Kconfig
++++ linux-6.8/drivers/soc/litex/Kconfig
+@@ -7,7 +7,7 @@ config LITEX
+ 
+ config LITEX_SOC_CONTROLLER
+ 	tristate "Enable LiteX SoC Controller driver"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on HAS_IOMEM
+ 	select LITEX
+ 	help
+--- linux-6.8.orig/drivers/soc/litex/litex_soc_ctrl.c
++++ linux-6.8/drivers/soc/litex/litex_soc_ctrl.c
+@@ -82,13 +82,11 @@ static int litex_reset_handler(struct no
+ 	return NOTIFY_DONE;
+ }
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id litex_soc_ctrl_of_match[] = {
+ 	{.compatible = "litex,soc-controller"},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, litex_soc_ctrl_of_match);
+-#endif /* CONFIG_OF */
+ 
+ static int litex_soc_ctrl_probe(struct platform_device *pdev)
+ {
+@@ -130,7 +128,7 @@ static void litex_soc_ctrl_remove(struct
+ static struct platform_driver litex_soc_ctrl_driver = {
+ 	.driver = {
+ 		.name = "litex-soc-controller",
+-		.of_match_table = of_match_ptr(litex_soc_ctrl_of_match)
++		.of_match_table = litex_soc_ctrl_of_match,
+ 	},
+ 	.probe = litex_soc_ctrl_probe,
+ 	.remove_new = litex_soc_ctrl_remove,
+
+
+-- 
+Jean Delvare
+SUSE L3 Support
