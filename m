@@ -4,227 +4,140 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9469C2BA18
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 14:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39108C27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 15:26:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B54C7C4AF49; Mon, 17 Jun 2024 14:46:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47DBC4AF1D;
-	Mon, 17 Jun 2024 14:46:17 +0000 (UTC)
+	id F3392C4AF50; Mon, 17 Jun 2024 15:26:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F42C4AF1D;
+	Mon, 17 Jun 2024 15:26:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718635579;
-	bh=929W9SWRjwBkQhWkBoC5dIaM4uataYjRxnE8h3e+m3E=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qEQmRjHwa3u5hDlejVPV/Xkwve4PMzTiHl27Sn25S6uOUK4+SvzFhIxDs2OMU+oX/
-	 Ce3erP4nuG/x+bn0hoKb24Oue6clqPXNnX1R/l2j8LlV+WMzSsqtUCx9e49aX1fm8n
-	 um3f0yAmKjW+qdNu7lv8YMm88iY7RfqwGPVTWBw2KG3tEAY29FYK7ji9Z77wxyCco7
-	 TAV5AHZTGER1oY0gfg+JY89nG9Q+8dWe0iKZd3IbNmyleo90KWH2weqz9i8RBcmKkr
-	 ZaIHMGczjet73i0xJAyfO1H0u3CJmJ1TQ+yC/U4mP/1cRbFdWiUkv2u6gYk8ZBXYNE
-	 DPKe4gFzd+iNA==
+	s=k20201202; t=1718637975;
+	bh=oTLnHaJiK0vL379Jvi0C5I8jRbSEsC+C/G9nLiN/JrU=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=t2oiHeLTMzGOLktbuoAtTLfTMFQnFcXpJpK8aeHYSXd0xYrRiHyM0wUqsTX+pe49V
+	 8JcpnNSXsZuwoL/BDt1Oibr1eU9Hlr5WX4gHrATBfkfF3CA0qKQ2sW06Krivhf4Ycq
+	 ec2fA3q/6YtwuIGE6f80bijoFepLOOpGYMSkOIsArx4ypDq0sHCKBrcACoHw7uY7pe
+	 n+MoZYZVWvF1Mifp9pUMxnCEXkrbq0qj8Z1bK+3j4QhzaWJoPpJETsEqe0KZq/A2au
+	 M+SCsU4eLAbLmITuMXPPAxw92K2hoa38bdAA9kTdjpkNoUHlqiuBTLjozzMfNuivkb
+	 JQ+n+KXGofBXw==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Andrew Lunn <andrew@lunn.ch>,
 	Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
 	arm@kernel.org,
 	Andy Shevchenko <andy@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v3 17/17] firmware: turris-mox-rwtm: Deduplicate command execution code
-Date: Mon, 17 Jun 2024 16:45:32 +0200
-Message-ID: <20240617144532.17385-18-kabel@kernel.org>
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v12 0/8] Turris Omnia MCU driver
+Date: Mon, 17 Jun 2024 17:25:58 +0200
+Message-ID: <20240617152606.26191-1-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
-In-Reply-To: <20240617144532.17385-1-kabel@kernel.org>
-References: <20240617144532.17385-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Deduplicate rWTM command execution calls
-  mbox_send_message()
-  wait_for_completion()
-  mox_get_status()
-to one function
-  mox_rwtm_exec()
+Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 
-Signed-off-by: Marek Behún <kabel@kernel.org>
----
- drivers/firmware/turris-mox-rwtm.c | 98 ++++++++++++------------------
- 1 file changed, 39 insertions(+), 59 deletions(-)
+this is v12 of the series adding Turris Omnia MCU driver.
 
-diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 9197e0549c6d..52e5cc1cf48f 100644
---- a/drivers/firmware/turris-mox-rwtm.c
-+++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -157,6 +157,34 @@ static void mox_rwtm_rx_callback(struct mbox_client *cl, void *data)
- 	complete(&rwtm->cmd_done);
- }
- 
-+static int mox_rwtm_exec(struct mox_rwtm *rwtm, enum mbox_cmd cmd,
-+			 struct armada_37xx_rwtm_tx_msg *msg,
-+			 bool interruptible)
-+{
-+	struct armada_37xx_rwtm_tx_msg _msg = {};
-+	int ret;
-+
-+	if (!msg)
-+		msg = &_msg;
-+
-+	msg->command = cmd;
-+
-+	ret = mbox_send_message(rwtm->mbox, msg);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (interruptible) {
-+		ret = wait_for_completion_interruptible(&rwtm->cmd_done);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
-+			return -ETIMEDOUT;
-+	}
-+
-+	return mox_get_status(cmd, rwtm->reply.retval);
-+}
-+
- static void reply_to_mac_addr(u8 *mac, u32 t1, u32 t2)
- {
- 	mac[0] = t1 >> 8;
-@@ -170,19 +198,10 @@ static void reply_to_mac_addr(u8 *mac, u32 t1, u32 t2)
- static int mox_get_board_info(struct mox_rwtm *rwtm)
- {
- 	struct device *dev = rwtm_dev(rwtm);
--	struct armada_37xx_rwtm_tx_msg msg;
- 	struct armada_37xx_rwtm_rx_msg *reply = &rwtm->reply;
- 	int ret;
- 
--	msg.command = MBOX_CMD_BOARD_INFO;
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		return ret;
--
--	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
--		return -ETIMEDOUT;
--
--	ret = mox_get_status(MBOX_CMD_BOARD_INFO, reply->retval);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_BOARD_INFO, NULL, false);
- 	if (ret == -ENODATA) {
- 		dev_warn(dev,
- 			 "Board does not have manufacturing information burned!\n");
-@@ -209,15 +228,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 		pr_info("           burned RAM size %i MiB\n", rwtm->ram_size);
- 	}
- 
--	msg.command = MBOX_CMD_ECDSA_PUB_KEY;
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		return ret;
--
--	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
--		return -ETIMEDOUT;
--
--	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_ECDSA_PUB_KEY, NULL, false);
- 	if (ret == -ENODATA) {
- 		dev_warn(dev, "Board has no public key burned!\n");
- 	} else if (ret == -EOPNOTSUPP) {
-@@ -240,37 +251,23 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 
- static int check_get_random_support(struct mox_rwtm *rwtm)
- {
--	struct armada_37xx_rwtm_tx_msg msg;
--	int ret;
--
--	msg.command = MBOX_CMD_GET_RANDOM;
--	msg.args[0] = 1;
--	msg.args[1] = rwtm->buf_phys;
--	msg.args[2] = 4;
--
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		return ret;
--
--	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
--		return -ETIMEDOUT;
-+	struct armada_37xx_rwtm_tx_msg msg = {
-+		.args = { 1, rwtm->buf_phys, 4 },
-+	};
- 
--	return mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
-+	return mox_rwtm_exec(rwtm, MBOX_CMD_GET_RANDOM, &msg, false);
- }
- 
- static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- {
- 	struct mox_rwtm *rwtm = container_of(rng, struct mox_rwtm, hwrng);
--	struct armada_37xx_rwtm_tx_msg msg;
-+	struct armada_37xx_rwtm_tx_msg msg = {
-+		.args = { 1, rwtm->buf_phys, (max + 3) & ~3 },
-+	};
- 	int ret;
- 
- 	max = min(max, RWTM_DMA_BUFFER_SIZE);
- 
--	msg.command = MBOX_CMD_GET_RANDOM;
--	msg.args[0] = 1;
--	msg.args[1] = rwtm->buf_phys;
--	msg.args[2] = (max + 3) & ~3;
--
- 	if (!wait) {
- 		if (!mutex_trylock(&rwtm->busy))
- 			return -EBUSY;
-@@ -278,15 +275,7 @@ static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- 		mutex_lock(&rwtm->busy);
- 	}
- 
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		goto unlock_mutex;
--
--	ret = wait_for_completion_interruptible(&rwtm->cmd_done);
--	if (ret < 0)
--		goto unlock_mutex;
--
--	ret = mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_GET_RANDOM, &msg, true);
- 	if (ret < 0)
- 		goto unlock_mutex;
- 
-@@ -334,7 +323,6 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
- 			     size_t len, loff_t *ppos)
- {
- 	struct mox_rwtm *rwtm = file->private_data;
--	struct armada_37xx_rwtm_rx_msg *reply = &rwtm->reply;
- 	struct armada_37xx_rwtm_tx_msg msg;
- 	loff_t dummy = 0;
- 	ssize_t ret;
-@@ -367,23 +355,15 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
- 		goto unlock_mutex;
- 	be32_to_cpu_array(rwtm->buf, rwtm->buf, MOX_ECC_NUMBER_WORDS);
- 
--	msg.command = MBOX_CMD_SIGN;
- 	msg.args[0] = 1;
- 	msg.args[1] = rwtm->buf_phys;
- 	msg.args[2] = rwtm->buf_phys + MOX_ECC_NUMBER_LEN;
- 	msg.args[3] = rwtm->buf_phys + 2 * MOX_ECC_NUMBER_LEN;
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		goto unlock_mutex;
- 
--	ret = wait_for_completion_interruptible(&rwtm->cmd_done);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_SIGN, &msg, true);
- 	if (ret < 0)
- 		goto unlock_mutex;
- 
--	ret = MBOX_STS_VALUE(reply->retval);
--	if (MBOX_STS_ERROR(reply->retval) != MBOX_STS_SUCCESS)
--		goto unlock_mutex;
--
- 	/*
- 	 * Here we read the R and S values of the ECDSA signature
- 	 * computed by the rWTM firmware and convert their words from
+Changes since v11:
+- fixed some includes, suggested by Andy
+- moved #include <linux/turris-omnia-mcu-interface.h> after the other
+  includes, since it is domain specific, suggested by Andy
+- in patch 2, use sizeof() of dest buffer in memcpy call, instead of
+  ETH_ALEN constant, as suggested by Andy
+- in patch 3, dropped the .has_int member of omnia GPIO definition
+  structure, and added is_int_bit_valid() function instead, as suggested
+  by Andy
+- in patch 3, changed int to unsigned int where appropriate, as
+  suggested by Andy
+- in patch 3, fixed docstring indentation, suggested by Andy
+- in patch 4 dropped #include <linux/rtc.h>, and instead declared struct
+  rtc_device, it is only used as a pointer, suggested by Andy
+- in patch 5, renamed the completion from trng_completion to
+  trng_entropy_available
+- in patch 5, use gpio_device_get_desc() instead of gpiochip_get_desc()
+  when mapping IRQ (as discussed with Andy and Bart)
+- in patch 5, dropped setting the priv member of hwrng, and instead use
+  container_of() to get the driver private structure, suggested by
+  Herbert
+
+Links to previous cover letters (v1 to v11):
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240430115111.3453-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240508103118.23345-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240510101819.13551-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240605161851.13911-1-kabel@kernel.org/
+
+Marek Behún (8):
+  dt-bindings: firmware: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
+
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  113 ++
+ .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
+ MAINTAINERS                                   |    4 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   48 +
+ drivers/platform/cznic/Makefile               |    8 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  408 +++++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1088 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  260 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  103 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  130 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  194 +++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 15 files changed, 2728 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
+
 -- 
 2.44.2
 
