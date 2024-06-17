@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D86C2BA18
-	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 14:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07524C27C79
+	for <soc@archiver.kernel.org>; Mon, 17 Jun 2024 14:46:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 807D6C4AF48; Mon, 17 Jun 2024 14:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70442C2BD10;
-	Mon, 17 Jun 2024 14:46:05 +0000 (UTC)
+	id EADFEC4AF48; Mon, 17 Jun 2024 14:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D8AC4AF1D;
+	Mon, 17 Jun 2024 14:46:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718635567;
-	bh=CQPS0TEQajBleFkxswdiW1wMbGSGeV3Womaa40tIEPw=;
+	s=k20201202; t=1718635569;
+	bh=hp9iilqHl+n6FJlxywW0cGlXCBexEwsA60AfGXJEU+Q=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XPYLRuUjr47xeyYH5YqS0S+6oxqP4mxXSfO0Yg1/YEvtyC+TaH36QhUWdSQ4XOZNM
-	 iodSbBYoszmevGV8d3Dat4FB98zNy21vydnZ6WdOPFl1tQh2kHnXNQtP1hayOeRrdR
-	 KjWtC/wcoYyClzVkR9EPYrh2mbvdWGr8dk73d2gXyLRHPCSBTF9Smvkqpiw23fcf0Q
-	 0f09ZBGdMeC5HLxNUwmmwKDmIym0wrmDo6sZk4GqdI1WCrYfuBhiSlSMqImEXrm30E
-	 /Gyl8oiMESkURHnRbp5rEETUEMl3E6RkUUEkr1V1Yg+HYffTd+SR53pBBwA+Yv+M7Y
-	 XE42Mmlm/TkVg==
+	b=ZzW8wwg7Qbd1YbNRzkmKf50as9cDQVIGN9CBCOQj+6JR8J/7x+lsjrKkML5ErW1dt
+	 0Jnuye2K4vBi3EW30yD3DFe7fGV2c5dKcyWwxVOQADLIecnXVTSY+iMkRt+/T8MsBi
+	 xqEvTCnI3oV8yf2jYUXt3raogWPz5KNPYo8jcpjelJNfPffs6Qo11dcDbxuHQVDiIY
+	 7Z91WLpKWjEMuogrxIvv7/V2rGb7LwjlBVYrZ6f93aP0smZrbML9dkimwL7ODeCyyN
+	 YorMbvXJ8yyLKeaCuo1985hdSb79WmNrhfCjRY8MZvgmmXm2E/6CillKy2evAXPToT
+	 ZvDqKQ0K+tvTQ==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v3 12/17] firmware: turris-mox-rwtm: Initialize completion before mailbox
-Date: Mon, 17 Jun 2024 16:45:27 +0200
-Message-ID: <20240617144532.17385-13-kabel@kernel.org>
+Subject: [PATCH v3 13/17] firmware: turris-mox-rwtm: Drop redundant device pointer
+Date: Mon, 17 Jun 2024 16:45:28 +0200
+Message-ID: <20240617144532.17385-14-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240617144532.17385-1-kabel@kernel.org>
 References: <20240617144532.17385-1-kabel@kernel.org>
@@ -41,35 +41,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Initialize the completion before the mailbox channel is requested.
+Drop redundant device pointer from driver's private structure.
 
-Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 397175fafbe0..2c43af69783c 100644
+index 2c43af69783c..0b93040167b6 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -455,6 +455,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, rwtm);
+@@ -62,7 +62,6 @@ enum mbox_cmd {
+ };
  
- 	mutex_init(&rwtm->busy);
-+	init_completion(&rwtm->cmd_done);
+ struct mox_rwtm {
+-	struct device *dev;
+ 	struct mbox_client mbox_client;
+ 	struct mbox_chan *mbox;
+ 	struct hwrng hwrng;
+@@ -97,6 +96,11 @@ struct mox_rwtm {
+ #endif
+ };
  
- 	rwtm->mbox_client.dev = dev;
- 	rwtm->mbox_client.rx_callback = mox_rwtm_rx_callback;
-@@ -468,8 +469,6 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	if (ret)
++static inline struct device *rwtm_dev(struct mox_rwtm *rwtm)
++{
++	return rwtm->mbox_client.dev;
++}
++
+ #define MOX_ATTR_RO(name, format, cat)				\
+ static ssize_t							\
+ name##_show(struct device *dev, struct device_attribute *a,	\
+@@ -165,6 +169,7 @@ static void reply_to_mac_addr(u8 *mac, u32 t1, u32 t2)
+ 
+ static int mox_get_board_info(struct mox_rwtm *rwtm)
+ {
++	struct device *dev = rwtm_dev(rwtm);
+ 	struct armada_37xx_rwtm_tx_msg msg;
+ 	struct armada_37xx_rwtm_rx_msg *reply = &rwtm->reply;
+ 	int ret;
+@@ -179,10 +184,10 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
+ 
+ 	ret = mox_get_status(MBOX_CMD_BOARD_INFO, reply->retval);
+ 	if (ret == -ENODATA) {
+-		dev_warn(rwtm->dev,
++		dev_warn(dev,
+ 			 "Board does not have manufacturing information burned!\n");
+ 	} else if (ret == -ENOSYS) {
+-		dev_notice(rwtm->dev,
++		dev_notice(dev,
+ 			   "Firmware does not support the BOARD_INFO command\n");
+ 	} else if (ret < 0) {
  		return ret;
+@@ -214,9 +219,9 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
  
--	init_completion(&rwtm->cmd_done);
--
- 	ret = mox_get_board_info(rwtm);
- 	if (ret < 0)
- 		dev_warn(dev, "Cannot read board information: %i\n", ret);
+ 	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
+ 	if (ret == -ENODATA) {
+-		dev_warn(rwtm->dev, "Board has no public key burned!\n");
++		dev_warn(dev, "Board has no public key burned!\n");
+ 	} else if (ret == -ENOSYS) {
+-		dev_notice(rwtm->dev,
++		dev_notice(dev,
+ 			   "Firmware does not support the ECDSA_PUB_KEY command\n");
+ 	} else if (ret < 0) {
+ 		return ret;
+@@ -418,7 +423,7 @@ static void rwtm_register_debugfs(struct mox_rwtm *rwtm)
+ 
+ 	debugfs_create_file_unsafe("do_sign", 0600, root, rwtm, &do_sign_fops);
+ 
+-	devm_add_action_or_reset(rwtm->dev, rwtm_debugfs_release, root);
++	devm_add_action_or_reset(rwtm_dev(rwtm), rwtm_debugfs_release, root);
+ }
+ #else
+ static inline void rwtm_register_debugfs(struct mox_rwtm *rwtm)
+@@ -446,7 +451,6 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	if (!rwtm)
+ 		return -ENOMEM;
+ 
+-	rwtm->dev = dev;
+ 	rwtm->buf = dmam_alloc_coherent(dev, RWTM_DMA_BUFFER_SIZE,
+ 					&rwtm->buf_phys, GFP_KERNEL);
+ 	if (!rwtm->buf)
 -- 
 2.44.2
 
