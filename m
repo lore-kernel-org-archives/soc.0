@@ -4,58 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5648CC2BD05
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A043C2BBCA
 	for <soc@archiver.kernel.org>; Thu, 20 Jun 2024 21:34:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2BEE1C32781; Thu, 20 Jun 2024 21:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 127EBC4AF0B;
+	id 36D79C4AF0E; Thu, 20 Jun 2024 21:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E57CC4AF10;
 	Thu, 20 Jun 2024 21:34:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1718919259;
-	bh=f6C77T59iogg6QrckcTBIydDDKuwUmDnkPqhz4FDWIE=;
+	bh=jl2ilyI1J66X4W6fAs/snwcJvlPP7578oayaoQlsT50=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=QxnunUK/d44L162RhrOsTP4l/VfhVRap1mqB5C68mk+2V5o5INlh6ovfsccxJdQcQ
-	 zaECDSbmyYJWygf+WUdS9MN3TUn1LyQs+EbZa3m9FYWTZjA8C0/CAn0HIMOepPbuZD
-	 k1Aj3hjM2PxGzNY5cx3WGmMt01EzYk3Q0CVsq8a8DjgezMyuKBUunnYsUdGcImo4dk
-	 sFnGsgkE18UqClA3OW3wS2ipJ2HmjQXdKT5dc7iu5IsV/R1ZjzjRma9LnOYj21MY6k
-	 6T/mVbi4CnB257yD1dPTHTERf5A8aL9Pj03YWtEQC8qdYboVilXOa2P1pPDzras39W
-	 gwHONsuSX62AA==
+	b=klS8VSIsUwaXJh8CL1WUJ9Y5CrYWnXO7R3h7hPHz8TBgbFzGY+J9Ff3Errwwc5WO+
+	 X5Al3E77tEVWfwfibH6Td11vxhpBo73UCaWM0r7C2yaPCtkVaipD1TgMpKt0/GzGnX
+	 lhlX+rG2qWH8+BWuYXpgMRbpCEyy3AdK36HBJZ6zv+vLJ/37J/QYxoRnyVk3nYBB7+
+	 HpcnAn6yzaxgykovSTQZyHvxTGJVe36gdcXQbfLY5hxr2kYbhqDjJCDv+dc8nIGbGD
+	 jGU8UyAwG+P09zUAGrCnMGzeHIQbnna7Q2lk/+TYGKDKyzXzDXKuZpob4B0EZ+qySv
+	 2JQRRNKdsg0OQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E644FCF3B9B;
-	Thu, 20 Jun 2024 21:34:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02DB1CF3B9D;
+	Thu, 20 Jun 2024 21:34:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.10
+Subject: Re: [RESEND][PATCH] firmware: psci: Fix return value from
+ psci_system_suspend()
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171891925894.21354.12808574715343766017.git-patchwork-notify@kernel.org>
-Date: Thu, 20 Jun 2024 21:34:18 +0000
-References: <Zm+xVUmFtaOnYBb4@dragon>
-In-Reply-To: <Zm+xVUmFtaOnYBb4@dragon>
-To: Shawn Guo <shawnguo2@yeah.net>
+ <171891925900.21354.16359165220171268036.git-patchwork-notify@kernel.org>
+Date: Thu, 20 Jun 2024 21:34:19 +0000
+References: <20240515095528.1949992-1-sudeep.holla@arm.com>
+In-Reply-To: <20240515095528.1949992-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 17 Jun 2024 11:45:25 +0800 you wrote:
-> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+On Wed, 15 May 2024 10:55:28 +0100 you wrote:
+> Currently we return the value from invoke_psci_fn() directly as return
+> value from psci_system_suspend(). It is wrong to send the PSCI interface
+> return value directly. psci_to_linux_errno() provide the mapping from
+> PSCI return value to the one that can be returned to the callers within
+> the kernel.
 > 
->   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.10
+> Use psci_to_linux_errno() to convert and return the correct value from
+> psci_system_suspend().
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.10
-    https://git.kernel.org/soc/soc/c/238f636ddc93
+  - [RESEND] firmware: psci: Fix return value from psci_system_suspend()
+    https://git.kernel.org/soc/soc/c/e7c3696d4692
 
 You are awesome, thank you!
 -- 
