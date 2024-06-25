@@ -1,124 +1,182 @@
-Return-Path: <SRS0=L3CL=N3=monstr.eu=monstr@kernel.org>
+Return-Path: <SRS0=wG5C=N3=quicinc.com=quic_jjohnson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDD18C3064D
-	for <soc@archiver.kernel.org>; Tue, 25 Jun 2024 13:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AFD9C2BBCA
+	for <soc@archiver.kernel.org>; Tue, 25 Jun 2024 17:04:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9CDDDC32781; Tue, 25 Jun 2024 13:33:56 +0000 (UTC)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id EEF06C32786; Tue, 25 Jun 2024 17:04:25 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 859E1C4AF09
-	for <soc@kernel.org>; Tue, 25 Jun 2024 13:33:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 859E1C4AF09
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dfef5980a69so5397723276.3
-        for <soc@kernel.org>; Tue, 25 Jun 2024 06:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20230601.gappssmtp.com; s=20230601; t=1719322432; x=1719927232; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2Q7HXkiWIZ27R41hwXhNudn4S+1iU0iF37ik1sbpuvQ=;
-        b=LuDMHYUv9IdK+yMJllU3h7EtuVAudIdCE7uqs6u2QHh9/YAQ3JIrctgzFTYlT7yTR2
-         dbnNmqcuaDxRqgPtWGGZQ9QZIy92Y59LlMbBZN+urHgs8A7jOPTI5xJOMym2SwqQARu7
-         rLYySwWvei5t/Ssk3TEJgLeXRGFUptZGAGSyN4qH8R8vSnLlUw7sAUN5zXdEFjp4BXPj
-         UJ2GNOalLj9RMCnlIkUAPhar/Ej6IXkbB+U488Cev/mmx9NGRm9rDZCvd6NwBcVNiFl1
-         XyNuVh0BXk7GIyrkCHaAfu55vTADYlDAple3+tlrEUJ98yThStv6YZy28OsVzyk0pimA
-         l3Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719322432; x=1719927232;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Q7HXkiWIZ27R41hwXhNudn4S+1iU0iF37ik1sbpuvQ=;
-        b=MYq+CQoo5LpS4vcvqRBAYBQbpaoCjiE3C+ZfVjOSnJ1jwgZiKB0GRMa2dGM4GmPMEm
-         iYSgrfOorAmv5+nMnqr+C+l1PQzVxgX6m3Hc0ZuddT3V667MT6FkQAgnkz2h0/EZeI42
-         PxFFCvnC1kLTuP0N8hc0GkuG9t7M9kyJnJtwAQryy5qN5lY+L3q/LgU3ztvo6TIMIuSq
-         KI9AdsrAnWs9JEdHShKhEJAJyVH+pYV0BSpxMPz5lBf2Hgt6ONPLzz4BrFnGHWp3M/TP
-         aulGLljEIj3+0ATla0Z0n1/SSL1G2d6SYxau0XvvNpTtyoMJYm1yScotyy9aesV/CueJ
-         JOEQ==
-X-Gm-Message-State: AOJu0YzrpLQrKuzvXRWNg6zP9AdmKRUWZbZYokj6hyQi9Tb6YTrosv+4
-	2lGCIHih4b8urEhIbYBPJN7DviDCL5h4RvpZYcaFLfvDFdMH+tLMWCCdHe1rstz27woFoFLiZMB
-	iURBsjUmZYHlgsb4fB0WD5av440+mTs63e5o6wbN1AKj2B1bIZOzJ
-X-Google-Smtp-Source: AGHT+IGwBJ3/cEuD/pHO9eusFdETmDWfaiU8L8J+AMIVAI3T1dCGx01BotDGfddx4BMQS8aex0fT11RqDPAA3MQPXdM=
-X-Received: by 2002:a05:6902:c9:b0:dfd:cc57:e043 with SMTP id
- 3f1490d57ef6-e0300eef70bmr7018279276.6.1719322432055; Tue, 25 Jun 2024
- 06:33:52 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D2A01C32781;
+	Tue, 25 Jun 2024 17:04:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2A01C32781
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45P8YhB7001496;
+	Tue, 25 Jun 2024 17:04:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=cD7f1KxN/GsuTcb74iIdg5
+	CMVlA7CC38kO3WnLLAl3g=; b=GP6qBp3nfu9b5QWqB5BcUMajwbmCBPXj15Idzs
+	uxpKSadETDuyiWmx5rOdHpAGM02RpSf4bJ6sAwG45syBOGSq/YXaC/RLeiOL34qD
+	iyAlV3yG1f41MpH6vJUIjZpYhhD+LKahEOg2u+pq9+1aFNImpX035mfPwEnby6Zz
+	3KpT3MHpImbdMGzbR5xBwD386OQ/WvgsMFk+rDb/C0yqModzVk6QR5PgVJPGLkLm
+	Yr5kU6a/We6ftR/A62+JJurAN3UesSC1wFmBPIDWEmGs3n2AAuDvp3zPf9Jf+WD+
+	FmvwGyUATb4sa85FzvVqnOUbrQt8eELOeqQG0lZOJEP74ZEg==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywmaeyjst-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Jun 2024 17:04:17 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45PH4HuF023610
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Jun 2024 17:04:17 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 25 Jun
+ 2024 10:04:16 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Tue, 25 Jun 2024 10:04:15 -0700
+Subject: [PATCH v2] soc: add missing MODULE_DESCRIPTION() macros
 MIME-Version: 1.0
-From: Michal Simek <monstr@monstr.eu>
-Date: Tue, 25 Jun 2024 15:33:41 +0200
-Message-ID: <CAHTX3dKMtqgNpkEvrw0p2w+SPN83Ai1_kzhefUGOO5rMkPaH_w@mail.gmail.com>
-Subject: [GIT PULL] arm64: dts: ZynqMP SOC changes for 6.11
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240625-md-drivers-soc-v2-1-8bc7c03e3e69@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAI74emYC/3WNyw6CMBBFf4V07Zi2EB6u/A/DopSpTCJFp9BgC
+ P9uYe/yJPees4mATBjELdsEY6RAk0+gL5mwg/FPBOoTCy11IUulYOyhZ4rIAcJkQVW17FSTN6W
+ uRDq9GR2tp/DRJu5MQOjYeDscmhf5ZYXRhBn5mA8U5om/Zz6q4/S3FBUoqJ10tnHO6by4fxay5
+ O3VTqNo933/AbJv14zNAAAA
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+To: Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman
+	<khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        "Martin
+ Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        Shawn Guo
+	<shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "Pengutronix
+ Kernel Team" <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        "Matthias
+ Brugger" <matthias.bgg@gmail.com>, <soc@kernel.org>,
+        "AngeloGioacchino Del
+ Regno" <angelogioacchino.delregno@collabora.com>
+CC: <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <imx@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.14.0
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 36tpm4wtSvK3ie0iutjIYwwdW_YUzX7U
+X-Proofpoint-GUID: 36tpm4wtSvK3ie0iutjIYwwdW_YUzX7U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-25_12,2024-06-25_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 spamscore=0 bulkscore=0 phishscore=0 malwarescore=0
+ clxscore=1011 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2406140001 definitions=main-2406250125
 
-Hi,
+With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/imx/soc-imx8m.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-qmgr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-npe.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/mediatek/mtk-cmdq-helper.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/amlogic/meson-clk-measure.o
 
-please pull the following patches to your tree. Nothing significant
-there just small alignments.
+Add the missing invocations of the MODULE_DESCRIPTION() macro.
 
-Thanks,
-Michal
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Shawn Guo <shawnguo@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org> # for amlogic/meson-clk-measure.c
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+This is the last of the issues that I see in the soc directory
+---
+Changes in v2:
+- No changes to the actual patch. Just collected the tags and sending
+  to soc@kernel.org to put in Arnd's patchwork queue
+- Link to v1: https://lore.kernel.org/r/20240611-md-drivers-soc-v1-1-8f0fc9fff234@quicinc.com
+---
+ drivers/soc/amlogic/meson-clk-measure.c | 1 +
+ drivers/soc/imx/soc-imx8m.c             | 1 +
+ drivers/soc/ixp4xx/ixp4xx-npe.c         | 1 +
+ drivers/soc/ixp4xx/ixp4xx-qmgr.c        | 1 +
+ drivers/soc/mediatek/mtk-cmdq-helper.c  | 1 +
+ 5 files changed, 5 insertions(+)
 
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+diff --git a/drivers/soc/amlogic/meson-clk-measure.c b/drivers/soc/amlogic/meson-clk-measure.c
+index 3f3039600357..a6453ffeb753 100644
+--- a/drivers/soc/amlogic/meson-clk-measure.c
++++ b/drivers/soc/amlogic/meson-clk-measure.c
+@@ -688,4 +688,5 @@ static struct platform_driver meson_msr_driver = {
+ 	},
+ };
+ module_platform_driver(meson_msr_driver);
++MODULE_DESCRIPTION("Amlogic Meson SoC Clock Measure driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
+index ec87d9d878f3..fe111bae38c8 100644
+--- a/drivers/soc/imx/soc-imx8m.c
++++ b/drivers/soc/imx/soc-imx8m.c
+@@ -252,4 +252,5 @@ static int __init imx8_soc_init(void)
+ 	return ret;
+ }
+ device_initcall(imx8_soc_init);
++MODULE_DESCRIPTION("NXP i.MX8M SoC driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/soc/ixp4xx/ixp4xx-npe.c b/drivers/soc/ixp4xx/ixp4xx-npe.c
+index 35825ee95dff..34a6f187c220 100644
+--- a/drivers/soc/ixp4xx/ixp4xx-npe.c
++++ b/drivers/soc/ixp4xx/ixp4xx-npe.c
+@@ -764,6 +764,7 @@ static struct platform_driver ixp4xx_npe_driver = {
+ module_platform_driver(ixp4xx_npe_driver);
+ 
+ MODULE_AUTHOR("Krzysztof Halasa");
++MODULE_DESCRIPTION("Intel IXP4xx Network Processor Engine driver");
+ MODULE_LICENSE("GPL v2");
+ MODULE_FIRMWARE(NPE_A_FIRMWARE);
+ MODULE_FIRMWARE(NPE_B_FIRMWARE);
+diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
+index 244ad8d7e80b..cb112f3643e9 100644
+--- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
++++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
+@@ -465,6 +465,7 @@ static struct platform_driver ixp4xx_qmgr_driver = {
+ };
+ module_platform_driver(ixp4xx_qmgr_driver);
+ 
++MODULE_DESCRIPTION("Intel IXP4xx Queue Manager driver");
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Krzysztof Halasa");
+ 
+diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
+index 046522664dc1..dd70d4d2bed7 100644
+--- a/drivers/soc/mediatek/mtk-cmdq-helper.c
++++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
+@@ -526,4 +526,5 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
+ }
+ EXPORT_SYMBOL(cmdq_pkt_finalize);
+ 
++MODULE_DESCRIPTION("MediaTek Command Queue (CMDQ) driver");
+ MODULE_LICENSE("GPL v2");
 
-  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240611-md-drivers-soc-1780b1939627
 
-are available in the Git repository at:
-
-  https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc2-for-6.11
-
-for you to fetch changes up to 9b003e14801cf85a8cebeddc87bc9fc77100fdce:
-
-  drivers: soc: xilinx: check return status of get_api_version()
-(2024-06-03 13:07:57 +0200)
-
-----------------------------------------------------------------
-arm64: Xilinx SoC changes for 6.11
-
-Timer
-- Fix u32 overflow issue in 32-bit width PWM mode.
-
-Event manager:
-- rename cpu_number1 to dummy_cpu_number
-
-Power:
-- Add cb event for subsystem restart
-- check return status of get_api_version()
-
-Firmware:
-- Move FIRMWARE_VERSION_MASK to xlnx-zynqmp.h
-
-----------------------------------------------------------------
-Jay Buddhabhatti (3):
-      soc: xilinx: rename cpu_number1 to dummy_cpu_number
-      soc: xilinx: Add cb event for subsystem restart
-      drivers: soc: xilinx: check return status of get_api_version()
-
-Ken Sloat (1):
-      pwm: xilinx: Fix u32 overflow issue in 32-bit width PWM mode.
-
-Ronak Jain (1):
-      firmware: xilinx: Move FIRMWARE_VERSION_MASK to xlnx-zynqmp.h
-
- drivers/firmware/xilinx/zynqmp.c            |   3 -
- drivers/soc/xilinx/xlnx_event_manager.c     |  16 +-
- drivers/soc/xilinx/zynqmp_power.c           | 155 +++++++++++++++++---
- include/clocksource/timer-xilinx.h          |   2 +-
- include/linux/firmware/xlnx-event-manager.h |  10 ++
- include/linux/firmware/xlnx-zynqmp.h        |   3 +
- 6 files changed, 152 insertions(+), 37 deletions(-)
-
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
