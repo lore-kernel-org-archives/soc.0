@@ -1,182 +1,136 @@
-Return-Path: <SRS0=wG5C=N3=quicinc.com=quic_jjohnson@kernel.org>
+Return-Path: <SRS0=MU0i=N4=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AFD9C2BBCA
-	for <soc@archiver.kernel.org>; Tue, 25 Jun 2024 17:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B052C30653
+	for <soc@archiver.kernel.org>; Wed, 26 Jun 2024 10:02:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EEF06C32786; Tue, 25 Jun 2024 17:04:25 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 3D60BC4AF0D; Wed, 26 Jun 2024 10:02:24 +0000 (UTC)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D2A01C32781;
-	Tue, 25 Jun 2024 17:04:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2A01C32781
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45P8YhB7001496;
-	Tue, 25 Jun 2024 17:04:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=cD7f1KxN/GsuTcb74iIdg5
-	CMVlA7CC38kO3WnLLAl3g=; b=GP6qBp3nfu9b5QWqB5BcUMajwbmCBPXj15Idzs
-	uxpKSadETDuyiWmx5rOdHpAGM02RpSf4bJ6sAwG45syBOGSq/YXaC/RLeiOL34qD
-	iyAlV3yG1f41MpH6vJUIjZpYhhD+LKahEOg2u+pq9+1aFNImpX035mfPwEnby6Zz
-	3KpT3MHpImbdMGzbR5xBwD386OQ/WvgsMFk+rDb/C0yqModzVk6QR5PgVJPGLkLm
-	Yr5kU6a/We6ftR/A62+JJurAN3UesSC1wFmBPIDWEmGs3n2AAuDvp3zPf9Jf+WD+
-	FmvwGyUATb4sa85FzvVqnOUbrQt8eELOeqQG0lZOJEP74ZEg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywmaeyjst-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 25 Jun 2024 17:04:17 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45PH4HuF023610
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 25 Jun 2024 17:04:17 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 25 Jun
- 2024 10:04:16 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Tue, 25 Jun 2024 10:04:15 -0700
-Subject: [PATCH v2] soc: add missing MODULE_DESCRIPTION() macros
+	by smtp.kernel.org (Postfix) with ESMTPS id 239A0C32786
+	for <soc@kernel.org>; Wed, 26 Jun 2024 10:02:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 239A0C32786
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52cdc4d221eso4932211e87.3
+        for <soc@kernel.org>; Wed, 26 Jun 2024 03:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719396141; x=1720000941; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UIal9mSNuB7WVuajAQysXy9I34dokLqqKQSl/SD8Ip0=;
+        b=slCnaUfybOoU2WvWYxoF313SpbPVg8zCze0/ZCi3WTgBoObfULc0KCRBUMsUg7xQqh
+         yeeV2iYg6DlzBJrwyS38PnYuBAVqDU7ymSo2Yq2R45Bj9xG81Vk4FiIa1OnbY0pRzuP1
+         uyR/kSHLiyifFE6h8G4WNxsHz92kJO9gijvLzpWce3ppqMjd15WzdMvIgrx2WlyPnrC6
+         eGsAbScmFjrzvJLIZnSnLMvnvGhhmM+rCTML/J9wbBAPAeesbznCtcrk5U4RQTWC9RYl
+         XJvVmtc4+5PkM3G5tBddY5uLYUgaLdqpsazSV6Nk4cM91ikcMPeVlPxu7wYIrJJKrmWl
+         2f7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719396141; x=1720000941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UIal9mSNuB7WVuajAQysXy9I34dokLqqKQSl/SD8Ip0=;
+        b=O3JDLAJGBB1TreQ3s4JtjejRdTAVhtCk3+nEJwdRJwl/eyXzKkcKIKTAhYuAyyp9a4
+         eqUsUdN3eXx87roEmzoBp5kUbNR6Q1OQZP1MS3618jSBsuRRVhxyiJsm2LoSkDPwikh5
+         2exOI62JjZLnA3HrrDOynpIwRAt/Wb3f2mqcf8SdZckac3RfSNpxAwLl8mjuDRdGWgkw
+         b2OCy2ZzjzIaBvoKmoEATs6FIiCLpHtHVPnfOJ+KtCkx2Gm7dWx5W2yZNr9jJeNm2Vat
+         aLIBDSyF3Ybe2xoEYOUTSYMP7ZiJjx29CTzkL03jo9RF+iVB0M+ASoInux6e/sfhshQv
+         rPxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNGpOVX1g8Cvl2hNDt4/xy8vWJhLkAf8J/ztCrz/iOsSctDGvnTtRr5AA/ho2Bj20CQrCGq4HrWjjpVxF2/g==
+X-Gm-Message-State: AOJu0YwDQ5FL7w0VaUMdQCy8iOXafrDY+6clLSPGGVjFnVhwP4uKOmp4
+	QPClSKyjGu3hb+giM6bkWuqnv+KAItKKvoUmzOXk32znt8PIFgTQNy7meSgM5F5zyX5rUk7qpup
+	u484C3NAoqpynaKMs8bK0WrQvLLzG67GYXbFLUA==
+X-Google-Smtp-Source: AGHT+IEEH1F7Tv7LomODsunYV84Dtc4zLrPpgRRnnl78k+rzuBYmNhragIOzGe8Zi41e1oTPofFlhnZh4uvVT5y70J8=
+X-Received: by 2002:a05:6512:2254:b0:52c:8fd7:2252 with SMTP id
+ 2adb3069b0e04-52ce18324cdmr7591081e87.11.1719396141307; Wed, 26 Jun 2024
+ 03:02:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240625-md-drivers-soc-v2-1-8bc7c03e3e69@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAI74emYC/3WNyw6CMBBFf4V07Zi2EB6u/A/DopSpTCJFp9BgC
- P9uYe/yJPees4mATBjELdsEY6RAk0+gL5mwg/FPBOoTCy11IUulYOyhZ4rIAcJkQVW17FSTN6W
- uRDq9GR2tp/DRJu5MQOjYeDscmhf5ZYXRhBn5mA8U5om/Zz6q4/S3FBUoqJ10tnHO6by4fxay5
- O3VTqNo933/AbJv14zNAAAA
+References: <20240504-pinctrl-cleanup-v2-0-26c5f2dc1181@nxp.com> <AM6PR04MB594163BAB898D8689A94056F88CE2@AM6PR04MB5941.eurprd04.prod.outlook.com>
+In-Reply-To: <AM6PR04MB594163BAB898D8689A94056F88CE2@AM6PR04MB5941.eurprd04.prod.outlook.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 26 Jun 2024 12:02:09 +0200
+Message-ID: <CACRpkdb17buPQVupCRDthvAgMKpvKvRWEN5GbA7pyF9NxymGEg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/20] pinctrl: Use scope based of_node_put() cleanups
+To: Peng Fan <peng.fan@nxp.com>
 List-Id: <soc.lore.kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman
-	<khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        "Martin
- Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        Shawn Guo
-	<shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "Pengutronix
- Kernel Team" <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        "Matthias
- Brugger" <matthias.bgg@gmail.com>, <soc@kernel.org>,
-        "AngeloGioacchino Del
- Regno" <angelogioacchino.delregno@collabora.com>
-CC: <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <imx@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>
-X-Mailer: b4 0.14.0
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 36tpm4wtSvK3ie0iutjIYwwdW_YUzX7U
-X-Proofpoint-GUID: 36tpm4wtSvK3ie0iutjIYwwdW_YUzX7U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-25_12,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 bulkscore=0 phishscore=0 malwarescore=0
- clxscore=1011 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2406140001 definitions=main-2406250125
+Cc: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Emil Renner Berthing <kernel@esmil.dk>, Jianlong Huang <jianlong.huang@starfivetech.com>, 
+	Hal Feng <hal.feng@starfivetech.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	"soc@kernel.org" <soc@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Patrice Chotard <patrice.chotard@foss.st.com>, 
+	Heiko Stuebner <heiko@sntech.de>, Damien Le Moal <dlemoal@kernel.org>, 
+	Ludovic Desroches <ludovic.desroches@microchip.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Aisheng Dong <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Chester Lin <chester62515@gmail.com>, 
+	Matthias Brugger <mbrugger@suse.com>, 
+	"Ghennadi Procopciuc (OSS)" <ghennadi.procopciuc@oss.nxp.com>, Sean Wang <sean.wang@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	Joel Stanley <joel@jms.id.au>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Tony Lindgren <tony@atomide.com>, Stephen Warren <swarren@wwwdotorg.org>, 
+	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"linux-rockchip@lists.infradead.org" <linux-rockchip@lists.infradead.org>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>, 
+	"imx@lists.linux.dev" <imx@lists.linux.dev>, 
+	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>, 
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>, 
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/imx/soc-imx8m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-qmgr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-npe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/mediatek/mtk-cmdq-helper.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/amlogic/meson-clk-measure.o
+On Tue, Jun 18, 2024 at 1:52=E2=80=AFPM Peng Fan <peng.fan@nxp.com> wrote:
 
-Add the missing invocations of the MODULE_DESCRIPTION() macro.
+> > Subject: [PATCH v2 00/20] pinctrl: Use scope based of_node_put()
+> > cleanups
+>
+> st/stm32/renesas patches are picked. Would you handle the remaining
+> ones?
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Shawn Guo <shawnguo@kernel.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org> # for amlogic/meson-clk-measure.c
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
----
-This is the last of the issues that I see in the soc directory
----
-Changes in v2:
-- No changes to the actual patch. Just collected the tags and sending
-  to soc@kernel.org to put in Arnd's patchwork queue
-- Link to v1: https://lore.kernel.org/r/20240611-md-drivers-soc-v1-1-8f0fc9fff234@quicinc.com
----
- drivers/soc/amlogic/meson-clk-measure.c | 1 +
- drivers/soc/imx/soc-imx8m.c             | 1 +
- drivers/soc/ixp4xx/ixp4xx-npe.c         | 1 +
- drivers/soc/ixp4xx/ixp4xx-qmgr.c        | 1 +
- drivers/soc/mediatek/mtk-cmdq-helper.c  | 1 +
- 5 files changed, 5 insertions(+)
+Hm right, I applied all that apply cleanly:
+971c8b4c08e7 (HEAD -> devel) pinctrl: samsung: Use scope based
+of_node_put() cleanups
+3a882554a3bb pinctrl: k210: Use scope based of_node_put() cleanups
+7f500f2011c0 pinctrl: freescale: mxs: Fix refcount of child
+d7f5120a944a pinctrl: pinconf-generic: Use scope based of_node_put() cleanu=
+ps
+240c5f238d59 pinctrl: bcm: bcm63xx: Use scope based of_node_put() cleanups
+3a0278cfb448 pinctrl: mediatek: Use scope based of_node_put() cleanups
+c957ae7e7e68 pinctrl: nomadik: Use scope based of_node_put() cleanups
+3dcc01b36f18 pinctrl: s32cc: Use scope based of_node_put() cleanups
+7c2aabb56f92 pinctrl: at91: Use scope based of_node_put() cleanups
+56c42f6c7b2c pinctrl: rockchip: Use scope based of_node_put() cleanups
+8c5dc2a5b3a7 pinctrl: spear: Use scope based of_node_put() cleanups
+794e5dc533b0 pinctrl: sprd: Use scope based of_node_put() cleanups
+8fa99c00351c pinctrl: starfive: Use scope based of_node_put() cleanups
+11eefc0ac884 pinctrl: tegra: Use scope based of_node_put() cleanups
 
-diff --git a/drivers/soc/amlogic/meson-clk-measure.c b/drivers/soc/amlogic/meson-clk-measure.c
-index 3f3039600357..a6453ffeb753 100644
---- a/drivers/soc/amlogic/meson-clk-measure.c
-+++ b/drivers/soc/amlogic/meson-clk-measure.c
-@@ -688,4 +688,5 @@ static struct platform_driver meson_msr_driver = {
- 	},
- };
- module_platform_driver(meson_msr_driver);
-+MODULE_DESCRIPTION("Amlogic Meson SoC Clock Measure driver");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
-index ec87d9d878f3..fe111bae38c8 100644
---- a/drivers/soc/imx/soc-imx8m.c
-+++ b/drivers/soc/imx/soc-imx8m.c
-@@ -252,4 +252,5 @@ static int __init imx8_soc_init(void)
- 	return ret;
- }
- device_initcall(imx8_soc_init);
-+MODULE_DESCRIPTION("NXP i.MX8M SoC driver");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/soc/ixp4xx/ixp4xx-npe.c b/drivers/soc/ixp4xx/ixp4xx-npe.c
-index 35825ee95dff..34a6f187c220 100644
---- a/drivers/soc/ixp4xx/ixp4xx-npe.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-npe.c
-@@ -764,6 +764,7 @@ static struct platform_driver ixp4xx_npe_driver = {
- module_platform_driver(ixp4xx_npe_driver);
- 
- MODULE_AUTHOR("Krzysztof Halasa");
-+MODULE_DESCRIPTION("Intel IXP4xx Network Processor Engine driver");
- MODULE_LICENSE("GPL v2");
- MODULE_FIRMWARE(NPE_A_FIRMWARE);
- MODULE_FIRMWARE(NPE_B_FIRMWARE);
-diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-index 244ad8d7e80b..cb112f3643e9 100644
---- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-@@ -465,6 +465,7 @@ static struct platform_driver ixp4xx_qmgr_driver = {
- };
- module_platform_driver(ixp4xx_qmgr_driver);
- 
-+MODULE_DESCRIPTION("Intel IXP4xx Queue Manager driver");
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Krzysztof Halasa");
- 
-diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index 046522664dc1..dd70d4d2bed7 100644
---- a/drivers/soc/mediatek/mtk-cmdq-helper.c
-+++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
-@@ -526,4 +526,5 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
- }
- EXPORT_SYMBOL(cmdq_pkt_finalize);
- 
-+MODULE_DESCRIPTION("MediaTek Command Queue (CMDQ) driver");
- MODULE_LICENSE("GPL v2");
+Can you look into rebasing the remaining ones?
 
----
-base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
-change-id: 20240611-md-drivers-soc-1780b1939627
+I am a bit unsure about Samsung, Krzysztof usually pick these, but no big
+deal I guess, if he objects I can just take it out again.
 
+Yours,
+Linus Walleij
