@@ -4,60 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 543B9C3065E
-	for <soc@archiver.kernel.org>; Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CFEDC2BD09
+	for <soc@archiver.kernel.org>; Thu, 27 Jun 2024 15:20:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4529BC4AF18; Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F012C4AF16;
-	Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
+	id 8FAFDC2BBFC; Thu, 27 Jun 2024 15:20:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A469C32786
+	for <soc@kernel.org>; Thu, 27 Jun 2024 15:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719500464;
-	bh=2Z/EivEKGUdG9tGMEFXoqGSyWCd178j/wXAG2SiylY4=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=te2DyfleOohu9C0p+wLC0Y4tDc5ybkO7TySHECWQ3ffFunvLL8eLDP64UYs1HL4Ql
-	 a1pN0SxwNXoQSmR4pOALMwESylARQsdJPBXrnYFhkuf29T9PgpxNW8qLUXXKXM8UrH
-	 lcbg3mcmn0OM2/v4/cPWsbomZgiKXcyQFkTx4YoEPnXSKa10l8OhdCCAcG8LZcKC5a
-	 7uU1h45sEFbBSmiqIQMoKC5s7TEdUibnf6D7sFFkv9YHxT6BFV7YKfoq0hEHCg6Aaw
-	 2vvUSVjFK9iUoBioiaTVCXFpxUkF/Ti5U5Cqf3xJ/9wYtP8lyYjl+OvGNX08EDYqls
-	 y83Pk9SgayOqg==
+	s=k20201202; t=1719501630;
+	bh=3HGdNTTzpSrnD/q6cB1l/AaBtjtEydYou+gg4SgGgAI=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=CfQotv7kozOpPMpI9jGLUkzSOhJ+EiydQwYU4wq0aajNM+Y0KYPqk7nqfc6vad/yE
+	 vQQlzqiq9lpi7y/1zQuiHqkaGHLwZ36j5MRfEA7CkgIu+GxDmN0rBWaqZ9hn+3ABlo
+	 W8Ygsgp76k9Zri9GUT6kkZyCweXc5GlyR0NUsttupdNVzTl6v3lu5hwZ0GNkksTDhL
+	 0yy1qX3GcS6bOJY4PrPoIaKQyoWLqlCJOkkVEh6qG0ON5YVayZ2h6OTL1e4zbw2Ux3
+	 rg5gOj/5+H/m3TfKjyjDy/gsztO6vKwGsodjKSvB8Z/f1WsSCOEg0/BepGIxuT2s1y
+	 I0gXELDb0dMVw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23C8CC433A2;
-	Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CD0FC433E9;
+	Thu, 27 Jun 2024 15:20:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] OP-TEE add notif wait timeout parameter for v6.11
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171950046413.29698.16595239502677808247.git-patchwork-notify@kernel.org>
-Date: Thu, 27 Jun 2024 15:01:04 +0000
-References: <20240627095325.GA2585076@rayden>
-In-Reply-To: <20240627095325.GA2585076@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+ <171950163031.12878.8857351166367674493.git-patchwork-summary@kernel.org>
+Date: Thu, 27 Jun 2024 15:20:30 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Thu, 27 Jun 2024 11:53:25 +0200 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull this small patch to the OP-TEE driver that adds a timemout
-> parameter when OP-TEE is waiting for a notification via RPC.
-> 
-> Thanks,
-> Jens
-> 
-> [...]
+Patch: [GIT,PULL] OP-TEE fix for v6.11
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=866146
+  Lore link: https://lore.kernel.org/r/20240627125112.GA2674988@rayden
 
-Here is the summary with links:
-  - [GIT,PULL] OP-TEE add notif wait timeout parameter for v6.11
-    https://git.kernel.org/soc/soc/c/30c577a852c4
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
