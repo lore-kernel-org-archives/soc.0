@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B944C41513
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4539EC3065B
 	for <soc@archiver.kernel.org>; Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2B072C4AF0B; Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 14E63C4AF0F;
-	Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
+	id 1AEACC4AF10; Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F39C3C32786;
+	Thu, 27 Jun 2024 15:01:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1719500464;
-	bh=WVy9hIWxRW+oz88lSi9v6c0NDmqH6+kGG/HPxXCBuwc=;
+	bh=9dmf0j14sWmozRDpP444P4LjLjHHFDpEzDtuepKxcxE=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=b6+heHt4gI49lMMxmaYTuOW8igGI9LlKJnKwZ4KN/mDK++zj4Jd2X8gvfOkvIHI9Z
-	 EizlMuPW8FeinCNs5wQJlnF++vNxpDdqD1hPrr4V8Nu2ByOUmVrsnmiFfT3uN8LRtX
-	 Gkrz0547N40r9bpVNvOqVc8bicUqUrRbyx7J7f5rltB9HE8gmdw71cBofD2MDHRDn3
-	 FcsdTuS3c1jyQSO0aYk383vhDxjrSz2Sj4hYNhYO4RBh4AN8EYEPI2mTC3BmV6Y92H
-	 tLyoarpL/z7eFxOzuTqJDVGGLS5dLBMTe3Y3qO3QNZtMqNgO6l2whNm9AmHNg0SsC1
-	 OM9ysmEpSqchg==
+	b=ehakCvuJfWb9mQHYhsdMysh9buECU3vDy6uYCpaG/MKCsqVOXf8iXNHC8uSBNK2Ce
+	 nTQnvLYX83LZaQ9aR/KxwuIfkf9Te6oBMZXiri2g1gGvMfexzPUgYrULFW8l25W+dH
+	 6j3olh4R31p79M9UUFjCUMB/QA5CmUck/jlGfHVVWWQuQvojrHQeEQG3LMq48d8k1R
+	 M4A2NyQWVA+ztUevPY0uoClq8/JWs9Wg/fGe/eKu1zY8RNvwUdY9Z0ISVugF9te4Ns
+	 XHMkwMeHepphr/V88stxFLnUnbjVFfGkxdCfGiu15Zz2CebBXWSMy3fEZxnaBOhGTu
+	 YtxvE5HLwVm7g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02D14C4167D;
-	Thu, 27 Jun 2024 15:01:04 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBEB6C4333E;
+	Thu, 27 Jun 2024 15:01:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: ZynqMP DT changes for 6.11
+Subject: Re: [PATCH v2] soc: add missing MODULE_DESCRIPTION() macros
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171950046400.29698.2628382246143424211.git-patchwork-notify@kernel.org>
-Date: Thu, 27 Jun 2024 15:01:04 +0000
-References: <CAHTX3dLbNAYL4hm+bs=GByA4DqjRr3Rt6WESram8VyU1By8Mow@mail.gmail.com>
-In-Reply-To: <CAHTX3dLbNAYL4hm+bs=GByA4DqjRr3Rt6WESram8VyU1By8Mow@mail.gmail.com>
-To: Michal Simek <monstr@monstr.eu>
+ <171950046389.29698.10130796345532797027.git-patchwork-notify@kernel.org>
+Date: Thu, 27 Jun 2024 15:01:03 +0000
+References: <20240625-md-drivers-soc-v2-1-8bc7c03e3e69@quicinc.com>
+In-Reply-To: <20240625-md-drivers-soc-v2-1-8bc7c03e3e69@quicinc.com>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 25 Jun 2024 15:21:13 +0200 you wrote:
-> Hi,
-> 
-> please pull these changes to your tree. I described it in two chunks
-> where the first is describing new
-> features and the second is only targeting issues reported by
-> dt-schema. Most of that changes target
-> Kria (kv260) platform.
+On Tue, 25 Jun 2024 10:04:15 -0700 you wrote:
+> With ARCH=x86, make allmodconfig && make W=1 C=1 reports:
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/imx/soc-imx8m.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-qmgr.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-npe.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/mediatek/mtk-cmdq-helper.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/amlogic/meson-clk-measure.o
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: ZynqMP DT changes for 6.11
-    https://git.kernel.org/soc/soc/c/02295aa2a461
+  - [v2] soc: add missing MODULE_DESCRIPTION() macros
+    https://git.kernel.org/soc/soc/c/a862a3f7b1b7
 
 You are awesome, thank you!
 -- 
