@@ -1,79 +1,67 @@
-Return-Path: <SRS0=c/st=N6=sntech.de=heiko@kernel.org>
+Return-Path: <robh@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A18B4C2BD09
-	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 14:03:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C971C2BD09
+	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 14:38:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79B99C32781; Fri, 28 Jun 2024 14:03:42 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6809EC116B1;
-	Fri, 28 Jun 2024 14:03:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6809EC116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i53875b6a.versanet.de ([83.135.91.106] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sNCCR-0007eC-IE; Fri, 28 Jun 2024 16:03:39 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts32 changes for 6.11 #1
-Date: Fri, 28 Jun 2024 16:03:38 +0200
-Message-ID: <2187283.irdbgypaU6@diego>
+	id 42B59C4AF0F; Fri, 28 Jun 2024 14:38:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D921C4AF0E
+	for <soc@kernel.org>; Fri, 28 Jun 2024 14:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719585539;
+	bh=wBayFcYkI6Eng8VyuQbXxkQeSimp2zeq7/znLGUhqtw=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=apxyyv/hgE15QYhCqL5Myob0IHMkP8Yxn62IVLqBWUv+hil8hj1ZhIdSUMZQazEy5
+	 ggRl5+SAHsh/eOe3dIcmyFHQkumjTxjc2wo8ST0k4ozMtzEXmvj+q90sb0SNunnlbe
+	 MxI0BGYUuSll6JPDS8+5zumB2Vk07UiCiHwYBSi+lww7muo2zped7YYRvnJB7k0fHz
+	 40ShNDHsc5RvCyBI+ylCthp6vLfu+Zmu0r0MnRBMzTck64dHthS4M9i36Lz2wjGRYH
+	 nGUuOYsOaztDdW4mjOqCgm5AnWne/ddrufuCyERP2UJDQAsKjL2myF85BQ8OqiT60T
+	 LmHyLTWYOZafQ==
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e0360f890a1so405069276.0
+        for <soc@kernel.org>; Fri, 28 Jun 2024 07:38:59 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzoW/u2doUPy2w1mXPWu+1lXuoS3oLuMaJ6vnkeSAs8Y5GX/+/F
+	Bt/hvn8HCpyIGMtDPZmiSxYp1/QQ7vBVAjDj944ZOul9ZAA/J8GoU7giJ/DatdgLW0dl5bdwgOK
+	a50tX1BHJ+I8Z6D62A+oIU+Tb0g==
+X-Google-Smtp-Source: AGHT+IFgWFki7WADTuWSu16XiWdsl0e4qkL5ulq1mRsA9pkDifeTNleirsSAw7YuhaR6WzrBXFVWZptPZrPtvGcrM8Q=
+X-Received: by 2002:a25:9084:0:b0:e02:becd:d5eb with SMTP id
+ 3f1490d57ef6-e035bf4f79dmr1230966276.13.1719585538446; Fri, 28 Jun 2024
+ 07:38:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20240627-arm-dts-fixes-v1-1-40a2cb7d344b@linaro.org>
+In-Reply-To: <20240627-arm-dts-fixes-v1-1-40a2cb7d344b@linaro.org>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 28 Jun 2024 08:38:44 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJFrSyxjHQMF7gtgU0jZ_m2hNx_jrLxY29HE0VXOh4Ggg@mail.gmail.com>
+Message-ID: <CAL_JsqJFrSyxjHQMF7gtgU0jZ_m2hNx_jrLxY29HE0VXOh4Ggg@mail.gmail.com>
+Subject: Re: [PATCH] arm: dts: arm: Drop redundant fixed-factor clocks
+To: Linus Walleij <linus.walleij@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+On Thu, Jun 27, 2024 at 1:57=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
+>
+> From: "Rob Herring (Arm)" <robh@kernel.org>
+>
+> There's not much reason to have multiple fixed-factor-clock instances
+> which are all the same factor and clock input. Drop the nodes, but keep
+> the labels to minimize the changes and keep some distinction of the
+> different clocks.
+>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Link: https://lore.kernel.org/20240528191536.1444649-1-robh@kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> SoC maintainers: please apply this directly for v6.11.
 
-  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+Maybe not. This is a dependency for patch 2 in the series[1].
 
-are available in the Git repository at:
+Rob
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.11-rockchip-dts32-1
-
-for you to fetch changes up to 313da6f69fa41d044b03f2ea37e56fe49f1e8a42:
-
-  ARM: dts: rockchip: add #sound-dai-cells to hdmi node on rk3128 (2024-06-27 20:57:05 +0200)
-
-----------------------------------------------------------------
-More attention for the rk3128 soc (dsi, i2c, spdif, sfc), hdmi-sound
-for a rk3066a board and some minor cleanups.
-
-----------------------------------------------------------------
-Alex Bee (6):
-      dt-bindings: clock: rk3128: Add PCLK_MIPIPHY
-      ARM: dts: rockchip: Add D-PHY for RK3128
-      ARM: dts: rockchip: Add DSI for RK3128
-      ARM: dts: rockchip: Add i2s nodes for RK3128
-      ARM: dts: rockchip: Add spdif node for RK3128
-      ARM: dts: rockchip: Add SFC for RK3128
-
-Heiko Stuebner (1):
-      Merge branch 'v6.11-shared/clkids' into v6.11-armsoc/dts32
-
-Johan Jonker (4):
-      ARM: dts: rockchip: add hdmi-sound node to rk3066a
-      ARM: dts: rockchip: enable hdmi_sound and i2s0 for mk808 hdmi
-      ARM: dts: rockchip: add #sound-dai-cells to hdmi node no rk3036
-      ARM: dts: rockchip: add #sound-dai-cells to hdmi node on rk3128
-
- arch/arm/boot/dts/rockchip/rk3036.dtsi       |   1 +
- arch/arm/boot/dts/rockchip/rk3066a-mk808.dts |   8 ++
- arch/arm/boot/dts/rockchip/rk3066a.dtsi      |  16 ++++
- arch/arm/boot/dts/rockchip/rk3128.dtsi       | 128 +++++++++++++++++++++++++++
- include/dt-bindings/clock/rk3128-cru.h       |   1 +
- 5 files changed, 154 insertions(+)
-
-
-
+[1] https://lore.kernel.org/all/20240528191536.1444649-2-robh@kernel.org/
