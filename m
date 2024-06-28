@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEE3DC30658
-	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 13:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A00B9C2BD09
+	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 13:16:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D8DE6C2BBFC; Fri, 28 Jun 2024 13:15:56 +0000 (UTC)
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+	id 8A68CC2BBFC; Fri, 28 Jun 2024 13:16:02 +0000 (UTC)
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 86E48C4AF0A
-	for <soc@kernel.org>; Fri, 28 Jun 2024 13:15:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86E48C4AF0A
+	by smtp.kernel.org (Postfix) with ESMTPS id 3C1A3C32786
+	for <soc@kernel.org>; Fri, 28 Jun 2024 13:15:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3C1A3C32786
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:acf4:1256:ab55:12e6])
-	by laurent.telenet-ops.be with bizsmtp
-	id h1Fs2C00B5ECAAU011Fslv; Fri, 28 Jun 2024 15:15:52 +0200
+	by albert.telenet-ops.be with bizsmtp
+	id h1Fs2C0085ECAAU061Fsiq; Fri, 28 Jun 2024 15:15:52 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sNBS6-000VGa-9d;
+	id 1sNBS6-000VGQ-7X;
 	Fri, 28 Jun 2024 15:15:52 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sNBSC-00BlRQ-5J;
+	id 1sNBSC-00BlRF-2Z;
 	Fri, 28 Jun 2024 15:15:52 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -36,103 +36,52 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DTS updates for v6.11 (take two)
-Date: Fri, 28 Jun 2024 15:15:49 +0200
-Message-Id: <cover.1719578281.git.geert+renesas@glider.be>
+Subject: [GIT PULL 0/3] Renesas SoC updates for v6.11 (take two)
+Date: Fri, 28 Jun 2024 15:15:46 +0200
+Message-Id: <cover.1719578273.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1719578273.git.geert+renesas@glider.be>
-References: <cover.1719578273.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 2bb78d9fb7c997f13309838600eead88cc99e96b:
+	Hi SoC folks,
 
-  arm64: dts: renesas: r8a779h0: Add video capture nodes (2024-06-07 14:19:29 +0200)
+This is my second pull request for the inclusion of Renesas SoC updates
+for v6.11.
 
-are available in the Git repository at:
+It consists of 3 parts:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.11-tag2
+  [GIT PULL 1/3] Renesas driver updates for v6.11
 
-for you to fetch changes up to 40382441cb3c4ff51882087bf53c6e933ce21e0d:
+    - Add R-Car fuse driver.
 
-  arm64: dts: renesas: r8a779h0: Drop "opp-shared" from opp-table-0 (2024-06-28 09:34:06 +0200)
+  [GIT PULL 2/3] Renesas DT binding updates for v6.11
 
-----------------------------------------------------------------
-Renesas DTS updates for v6.11 (take two)
+    - Document support for R-Car E-FUSE controllers.
 
-  - Add E-FUSE support for the R-Car V3U, S4-8, V4H, and V4M SoCs,
-  - Add sound support for the R-Car V4M SoC,
-  - Miscellaneous fixes and improvements.
+  [GIT PULL 3/3] Renesas DTS updates for v6.11 (take two)
 
-----------------------------------------------------------------
-Geert Uytterhoeven (18):
-      dt-bindings: fuse: Document R-Car E-FUSE / PFC
-      dt-bindings: fuse: Document R-Car E-FUSE / OTP_MEM
-      soc: renesas: Add R-Car fuse driver
-      Merge tag 'renesas-rcar-fuse-tag' into renesas-dts-for-v6.11
-      arm64: dts: renesas: r8a779a0: Add E-FUSE node
-      arm64: dts: renesas: r8a779f0: Add E-FUSE node
-      arm64: dts: renesas: r8a779g0: Add OTP_MEM node
-      arm64: dts: renesas: r8a779h0: Add OTP_MEM node
-      arm64: dts: renesas: r8a779a0: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r8a779f0: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r8a779g0: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a07g043u: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a07g044: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a07g054: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a08g045: Add missing hypervisor virtual timer IRQ
-      ARM: dts: renesas: Add interrupt-names to arch timer nodes
-      arm64: dts: renesas: Add interrupt-names to arch timer nodes
-      arm64: dts: renesas: r8a779h0: Drop "opp-shared" from opp-table-0
+    - Add E-FUSE support for the R-Car V3U, S4-8, V4H, and V4M SoCs,
+    - Add sound support for the R-Car V4M SoC,
+    - Miscellaneous fixes and improvements.
 
-Kuninori Morimoto (2):
-      arm64: dts: renesas: r8a779g0: Tidy up sound DT settings
-      arm64: dts: renesas: r8a779h0: R-Car Sound support
+Note that the new R-Car Fuse DT bindings, and/or driver and platform
+data are shared by multiple driver and DT source files, and thus
+included in multiple pull requests:
+  - "[GIT PULL 1/3] Renesas driver updates for v6.11",
+  - "[GIT PULL 2/3] Renesas DT binding updates for v6.11",
+  - "[GIT PULL 3/3] Renesas DTS updates for v6.11 (take two)",
+  - "[GIT PULL] pinctrl: renesas: Updates for v6.11 (take two)" (for
+    pinctrl).
 
- .../bindings/fuse/renesas,rcar-efuse.yaml          |  55 ++++++
- .../devicetree/bindings/fuse/renesas,rcar-otp.yaml |  38 ++++
- arch/arm/boot/dts/renesas/r8a73a4.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7742.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7743.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7744.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7745.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a77470.dtsi            |   1 +
- arch/arm/boot/dts/renesas/r8a7790.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7791.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7792.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7793.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r8a7794.dtsi             |   1 +
- arch/arm/boot/dts/renesas/r9a06g032.dtsi           |   1 +
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77970.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77990.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a77995.dtsi          |   1 +
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  13 +-
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi          |  13 +-
- .../r8a779g0-white-hawk-ard-audio-da7212.dtso      |   4 -
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |  27 +--
- arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |  76 +++++++-
- arch/arm64/boot/dts/renesas/r9a07g043u.dtsi        |   5 +-
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |   5 +-
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi         |   5 +-
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |   5 +-
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi         |   1 +
- drivers/soc/renesas/Kconfig                        |   8 +
- drivers/soc/renesas/Makefile                       |   1 +
- drivers/soc/renesas/rcar-fuse.c                    | 201 +++++++++++++++++++++
- include/linux/platform_data/rcar_fuse.h            |  11 ++
- include/linux/soc/renesas/rcar-fuse.h              |  41 +++++
- 41 files changed, 509 insertions(+), 24 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/fuse/renesas,rcar-efuse.yaml
- create mode 100644 Documentation/devicetree/bindings/fuse/renesas,rcar-otp.yaml
- create mode 100644 drivers/soc/renesas/rcar-fuse.c
- create mode 100644 include/linux/platform_data/rcar_fuse.h
- create mode 100644 include/linux/soc/renesas/rcar-fuse.h
+Thanks for pulling!
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
