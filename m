@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 441BDC30658
-	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 21:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A72FC3065A
+	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 21:08:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 130ADC32789; Fri, 28 Jun 2024 21:08:27 +0000 (UTC)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	id 2E1B0C116B1; Fri, 28 Jun 2024 21:08:28 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 40977C32786;
-	Fri, 28 Jun 2024 21:08:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40977C32786
+	by smtp.kernel.org (Postfix) with ESMTPS id 48E1EC4AF0A;
+	Fri, 28 Jun 2024 21:08:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 48E1EC4AF0A
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2ec50a5e230so9895251fa.0;
-        Fri, 28 Jun 2024 14:08:25 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-36742cc9c12so684342f8f.2;
+        Fri, 28 Jun 2024 14:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719608904; x=1720213704; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1719608905; x=1720213705; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aQ/W9G4dZKCyzjAYQZCsNtmrg6zW8mHgl+YEz0860cY=;
-        b=aYRBWx1rBajXTUMTDKiyN9LWxTzrb/78RXPbK8zKIoBlFbhToeGahFCYOVo2Q1sD+w
-         hTt9LFA2rXJHDBFn51rDTam+INuBGNROUTJk/ZbVVmjxeOuUg5/cK7wbTFqWgZdA8N0Z
-         AM8jg+CWtLu5MMscfCYapECPxq4P2ASZAN1mmFBrvfoEe0bui63FsJkxFm+vKhsiZIvn
-         bEDzj8n6uGqHjpejYtTTqeUgM5dkMW6LhmnB599GZOXNseLSdWzrfpZYCoY3J4I7Wepw
-         dkpyheinf30AAUsWQqrjLxN17oSJxtCbxJgPmdaHeW6FO7RvFFTuTk4bbG8cJFuZaz+u
-         94WA==
+        bh=NYFsmnNucLgksY/hbrNkPuFtGN3fvvq84p3a3PKYmfI=;
+        b=MzciKrQnHSCcOPFjKSjuJ86qtahrMgvnKJV5EWa2F8aTchVBfAq3FEEVU0UcKCQuuB
+         aZu0JoPMXhec9dxzVV2wHkcfPUS8yW2EuEyK54tZhkcm9SMaoPu9uDk1Sm7O4fhnG12W
+         CgzVCma4dtQYdn9R9gSjGli/tJP2sRuNVL+dmx4ih19BtcjRZTuaui/m3WoonXLvY8U3
+         hiDp3SxO81Rnwf5Lt3ikArKhd8f/F4PvGY1gc/jMfpsUfDI01GPr89M6shjzL2kQ7SH/
+         Rd1KEnSCQNiKHwAw1ok76ol7PPpgvgnLA41Hdg1WlfmtN7jFnDNiOa1RpAR6qNMTc6sp
+         obhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719608904; x=1720213704;
+        d=1e100.net; s=20230601; t=1719608905; x=1720213705;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aQ/W9G4dZKCyzjAYQZCsNtmrg6zW8mHgl+YEz0860cY=;
-        b=CeHbz5Q3BMEWTSAwwXvTiPJUjzj51L5r4EGofU7IAGfPWUA4YHZZDeEWAtGCMwzH/w
-         PVh2ZXpRxUUGUj1I6+094tLD0odNOKNxs/tXlkNZdhaH1++aoO7/9ehKqwtF/uPwCqP7
-         Y2GiP3teIVyKQ1CJLfg7XPCcSgp+S+jivoJGOjhhAEK3CRcPnu4nxhXKZnOxA6NMvmC3
-         rdlchA0B4rPajLRLR1KSvCUqkGk0EzrSAXJAqSXOyjUYgAAuTMD5rrCHAJUF11fuCRTi
-         cZ1+uqEbQ/oKYzva9dD3clyaPdQwxlAw0SdzIhUjNKesyLxrnro1o6VwT2jW4eqkPcsW
-         WCOg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxGAX0vQRtwG4F3sJ1S9+dmvsu5XBGh5J+lpQTLwyGRBLQ4lRcoU6ZaS55Rf1OsQAaAKLsBN75vynJ3Xt32g==
-X-Gm-Message-State: AOJu0YzVFtg+0pEM8cYFg9PjAyWhh4p61nAsIz2S/86lpbiy8yVl5cbi
-	g8podTEo+UTpcuP3pH9sTU2SPUX1nMmDdwOTpGuuqXu4sHXvooVgD0Kdcw==
-X-Google-Smtp-Source: AGHT+IG4ZgoDdwjLa5g14lGKtlAXhoLYbG+jdBqhScB02SXst7kZT3jB1EB2OLcYIlOGTKamxF2qqQ==
-X-Received: by 2002:a2e:9355:0:b0:2ec:5b10:685a with SMTP id 38308e7fff4ca-2ec5b27e816mr109127741fa.17.1719608903013;
-        Fri, 28 Jun 2024 14:08:23 -0700 (PDT)
+        bh=NYFsmnNucLgksY/hbrNkPuFtGN3fvvq84p3a3PKYmfI=;
+        b=X+ol/F/UuAj48i/j3e/3F2vuVav5XOfudXCgnnQOsQ/jKEXLvOEBxs+Shk0Nfm8Ijz
+         9prdbTEnNJZP2ZLvb1vOKWsA5UWz+XJkQDZgYdYYewczqTiDB4OdxqT8qL/AGP5wKil+
+         2SURYfeTTmHEYznIy057QBwbFjRfLoL12MZQGzQY/5OyGKtQg27e/QlDQzWX63gmNRyG
+         7WxysgIpr7uhSPsZ/OChGf8YnxunjdLwP0CR3mgfiN0e8hHQsrPnGxXPjTJ/ngKlqBIM
+         CnxYyW0a1PYGJ5gH8TXPG4qAud27WQaeFDGqLtLm2SSjTS+q4YgfTx7vMr6irUTXV5Al
+         mKsA==
+X-Forwarded-Encrypted: i=1; AJvYcCWqD/iSPB2sp5BKBMFizy5ekb3CdM4ngQBkRDEqELddJOp/xAWVtbyNzF2z37yPT0iKWn6e+CAuETVCGG44Pg==
+X-Gm-Message-State: AOJu0Ywl25MLKLrgDusETvF/h4VgIri7q3GKe0GurnMec+wDRhLJsoHB
+	+UCMZJHZO1SgNQ7EFj1/ypZtFrWHYkKqp5TZVtWJBepXUbu2U5gup9q71w==
+X-Google-Smtp-Source: AGHT+IHso1pi3hEugrAf4X+jvqXirbmBy8z7JOTxlQbB0GyKAYQDS4Zb2FVI1cR7gEq7dHjByfr+2Q==
+X-Received: by 2002:a5d:6b0b:0:b0:367:c4c:1ded with SMTP id ffacd0b85a97d-3670c4c1f8dmr7704028f8f.25.1719608904888;
+        Fri, 28 Jun 2024 14:08:24 -0700 (PDT)
 Received: from localhost (p200300e41f162000f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f16:2000:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b09aa32sm50642725e9.34.2024.06.28.14.08.22
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256af376f5sm51186555e9.6.2024.06.28.14.08.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 14:08:22 -0700 (PDT)
+        Fri, 28 Jun 2024 14:08:24 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -61,9 +61,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/4] ARM: tegra: Core changes for v6.11-rc1
-Date: Fri, 28 Jun 2024 23:08:15 +0200
-Message-ID: <20240628210818.3627404-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 4/4] arm64: tegra: Default configuration changes for v6.11-rc1
+Date: Fri, 28 Jun 2024 23:08:17 +0200
+Message-ID: <20240628210818.3627404-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240628210818.3627404-1-thierry.reding@gmail.com>
 References: <20240628210818.3627404-1-thierry.reding@gmail.com>
@@ -79,24 +79,23 @@ The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.11-arm-core
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.11-arm64-defconfig
 
-for you to fetch changes up to 237c5c9581b4f66c0ad37c6f67c14c79f0847595:
+for you to fetch changes up to fa071acfefe84dc0a6a612afd1d8a35b97feb99e:
 
-  ARM: tegra: paz00: Use software nodes to describe GPIOs for WiFi rfkill (2024-06-28 17:52:16 +0200)
+  arm64: defconfig: Enable NVIDIA CoreSight PMU driver (2024-06-28 16:54:06 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Core changes for v6.11-rc1
+arm64: tegra: Default configuration changes for v6.11-rc1
 
-Uses software nodes to describe rfkill instead of using a GPIO lookup
-table.
+A single change to enable the driver for the NVIDIA CoreSight PMU.
 
 ----------------------------------------------------------------
-Dmitry Torokhov (1):
-      ARM: tegra: paz00: Use software nodes to describe GPIOs for WiFi rfkill
+Besar Wicaksono (1):
+      arm64: defconfig: Enable NVIDIA CoreSight PMU driver
 
- arch/arm/mach-tegra/board-paz00.c | 50 +++++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 18 deletions(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
