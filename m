@@ -1,131 +1,119 @@
-Return-Path: <SRS0=AxmB=N6=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=5O9Q=N6=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7C41C2BD09
-	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 15:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E692C2BD09
+	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 15:41:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9459AC2BBFC; Fri, 28 Jun 2024 15:06:16 +0000 (UTC)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id EA9A5C2BBFC; Fri, 28 Jun 2024 15:41:35 +0000 (UTC)
+Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BB389C116B1;
-	Fri, 28 Jun 2024 15:06:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BB389C116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec1ac1aed2so8411341fa.3;
-        Fri, 28 Jun 2024 08:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719587173; x=1720191973; darn=kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=byFX7b+g2YFL0Se4495noznBPNIYmBdRduirs65L2O0=;
-        b=gN2AJFRBGdDb7eaLzoKrBJp/4FaTcUoRVMdhIbKxQ/HNvyERsHbipPxdodg2fY4zkv
-         Vw5DpYltxIJxy82ceE5du6c06DpS7wgSfzyeUOYVVdNhQbStwR9xNHOXZncVG5InR42E
-         dNRRzRLB8YylvTM/rChWHSshBFX7FM7zD4ULYD3TS1J8h/ZQ0ojdc0rm/XXQB33mjfPV
-         o3ITmQ0JfdCMeGaPvLBDNC/FLZiNtz9BCC4HlcmqUF+zRAGV+ihpFCy3zAoVkCkm8hux
-         M5meXjGL1exmXp+2kPLvo3tZdE2RIhFhNqywOdNEy3KgHzzF1pF2BlXQwKR5yRyXGo3t
-         9Esg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719587173; x=1720191973;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=byFX7b+g2YFL0Se4495noznBPNIYmBdRduirs65L2O0=;
-        b=BfyDbdyMN4HCAwt/FWCu2T337Ktw/ruz1dKlKr+vFh/lJ1URf+ovrgEC77j4q3jfGi
-         Al8aceWtRoN5l+XgMZRMZvh+zv+lOJtu8vPcamJRipft+tpjSYObKFh8/wrGE/pN2YAW
-         7dXQJVPUA20Mez8NwUeXFeEoh/fUwQG2hNA04DGfSqglz2lnvS7VdbwvMRE9uZA0WZnn
-         jYAWeN60cBKHyP5oWzn7BzHjjXxSYUWssCc0rwswU1gxTp4Q9r/mG5frJ5c8v+I/BcN/
-         PgeggX7AhLMOnYYKfsVGDr2+zbMCm2hIInH50VKaJVAh0xwZ0WtXbfXLWpi2LLAkE5Zj
-         WT/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWdDyfiBhXo897TAqxYCBAdxFySVaJFEt3GohWS9wJqM44+DBNpggRKiovTNlqDdUiU81PveP6TscUMqovbOtm2yVtx
-X-Gm-Message-State: AOJu0YzIe+yWb4xBMsU0w+ufjn8UirGR+b2G0JvG5zSn1jTMKPiWk/4l
-	DKaMO7X+XynDycLL2g1BNQ8xS6ulJ02LaiYHvhcQvFmN2D1GO/23tfcpkQ==
-X-Google-Smtp-Source: AGHT+IH+IBDKrbwb67wJZQY1PQz8Vr9gonBlqgAsSdkyvnNetOBliXJAAb1ffJe8fDb9NRUkMKWYDA==
-X-Received: by 2002:a2e:9087:0:b0:2ec:4d48:75f3 with SMTP id 38308e7fff4ca-2ec5b30765emr99738851fa.45.1719587172823;
-        Fri, 28 Jun 2024 08:06:12 -0700 (PDT)
-Received: from orome (p200300e41f162000f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f16:2000:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0e0661sm2557180f8f.47.2024.06.28.08.06.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 08:06:12 -0700 (PDT)
-Date: Fri, 28 Jun 2024 17:06:10 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: Add/fix /memory node unit-addresses
-Message-ID: <lbv5dlpvjfolp3tidna6ft7o3c3xswu6udp6savazegbfovygp@uzf2yyrocfuj>
-References: <20240430191856.874600-2-robh@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 685AFC116B1;
+	Fri, 28 Jun 2024 15:41:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 685AFC116B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 504DE11401F2;
+	Fri, 28 Jun 2024 11:41:33 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 28 Jun 2024 11:41:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1719589293; x=1719675693; bh=/UoMdthz91
+	zRtPMXEDeJIBKRINIwRVbOuY0793Aro/Y=; b=zjoZlmGWn2PhxoNpBrEUn7MBzE
+	+5e0Ahz76qQluPnPsNQW5Ar0ry/ZxqfY79aD/R8cejzZ2rJX69ga/oE3jmxqwWD2
+	zXNWMmmJPLfNj/zFmCQIFakCaxzqvY3SRJtREkMFLBjcUaGj/+eROpJno76kk9bG
+	Juih0SHel0EQnDsWxFR2jdYcbgpcsFoS3SCUoauTxFGLFQJuouSelDl0l3cPESx4
+	NEc0j6eGOS985+HQ/ayTFq78hqQh/RgHXN4pr01yzx7ZV8vstOc5Lag5aMa3QxRX
+	4R/5xfYMBTDpv7g/czWKgXthqaKOmwzk3zhHqIoPSOJOocLO+zu+Uk4oH/pw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1719589293; x=1719675693; bh=/UoMdthz91zRtPMXEDeJIBKRINIw
+	RVbOuY0793Aro/Y=; b=bR9x5GZt9t/XhWUFwRStbVKinrW4JzbQhKuemaNR3bq3
+	61uWEaLyIhxZyZz4aAeH3PvfR5H1c1m/ahLtgT3/N+/0bEA+t9CNiuXmW2hNIfoj
+	OdFw15hVptttpweVO97OZWjVDBnnfOKRVdf/sKPQQvIWmUlAH7mI5SrEg6BeeYc7
+	nHUMmjqp5C/iE/FC8q08dIuHr26ks64HH1IoAm6SJxTXzsolONhG5SUnHp3FFNJs
+	EfxJQKfMJWQgufVl2bOOoYvF6Fxs/lY9EQkxCQl3kpPujfUeTdl45CIGwxWlaJp0
+	0zRnUSq9Pgw7ExRotR0YlvvMd89f9Bwdlr2B/6vI1w==
+X-ME-Sender: <xms:rNl-ZjMZuMt8KOAwQg6mabC2LHjJ2gqBUjPrbyzBhxsMuT6ShBBwqw>
+    <xme:rNl-Zt-oAOGwQtwTLSHg5OwoV20JMItQ27G64YKOanp5zW8tsr7r9w-F5NRGGPR3i
+    p67s_pKMY9DPH5NShY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrtdejgdefiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:rNl-ZiSZ9GvDSWlZ7TR778HUwYWFewf21Xh6YgpD1JBYDaFC5jRVIg>
+    <xmx:rNl-Znv4zmKJLL2luGZGEQPlf2a_Q9YrOZvFc6h7QVWFyV9YfJrXwg>
+    <xmx:rNl-ZrcSBv2zhyQWbT_IAF20_FnnaqKGfS68aHUwkqzB-UIUvzot_Q>
+    <xmx:rNl-Zj3-AKTcq7Sn1P-LCEmM7MPxMcgq2yIXe93DG5fvOltlTgqtsQ>
+    <xmx:rdl-ZsHwAFA9V6v5JuoVfSfUopetAFo3bpEaf15_F122ZbSqKJ-U0zRr>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id C01E3B6008F; Fri, 28 Jun 2024 11:41:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-538-g1508afaa2-fm-20240616.001-g1508afaa
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="pjs3gbaie5x227iz"
-Content-Disposition: inline
-In-Reply-To: <20240430191856.874600-2-robh@kernel.org>
+Message-Id: <16a6ddb2-b749-42cb-9193-0d97dd1f95ad@app.fastmail.com>
+In-Reply-To: <9bb7a807-358d-47ac-a4a8-674720bcf2a6@foss.st.com>
+References: <9bb7a807-358d-47ac-a4a8-674720bcf2a6@foss.st.com>
+Date: Fri, 28 Jun 2024 17:41:12 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+To: "Patrice Chotard" <patrice.chotard@foss.st.com>,
+ "Kevin Hilman" <khilman@baylibre.com>, "Olof Johansson" <olof@lixom.net>,
+ arm <arm@kernel.org>, soc@kernel.org
+Cc: "Raphael Gallais-Pou" <rgallaispou@gmail.com>
+Subject: Re: [GIT PULL] STi DT changes for v6.11 #1
+Content-Type: text/plain
 
+On Fri, Jun 28, 2024, at 10:26, Patrice CHOTARD wrote:
+> Hi ARM SoC maintainers,
+>
+> Please consider this first round of STi DT for v6.11 cycle
+>
+> Patrice
+>
+> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+>
+>   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+>
+> are available in the Git repository at:
+>
+>   
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/pchotard/sti.git 
+> sti-dt-for-v6.11-round1
 
---pjs3gbaie5x227iz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've pulled this from https://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti now, but please adjust your .gitconfig to have
+an entry like this one to get the correct URL in the future:
 
-On Tue, Apr 30, 2024 at 02:18:54PM GMT, Rob Herring (Arm) wrote:
-[...]
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/b=
-oot/dts/nvidia/tegra210-smaug.dts
-> index 9ebb7369256e..2e5b6b2c1f56 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-> @@ -25,7 +25,7 @@ chosen {
->  		stdout-path =3D "serial0:115200n8";
->  	};
-> =20
-> -	memory {
-> +	memory@80000000 {
->  		device_type =3D "memory";
->  		reg =3D <0x0 0x80000000 0x0 0xc0000000>;
->  	};
+[url "https://git.kernel.org"]
+    insteadOf = git+ssh://gitolite@ra.kernel.org
 
-[trimming the recipient list and adding Diogo]
+> ----------------------------------------------------------------
+> STi DT for v6.11 :
+>
+> _ Add #thermal-sensor-cells property on stih410.dtsi and stih418.dtsi
+> _ Add thermal-zones support on stih418
+> _
 
-Sorry I just noticed this as I was doing a cleanup path of patchwork.
+This is not a helpful text, it's just the same lines as the
+individual patches. If you have nothing to add, you can as well
+send the individual patches, otherwise maybe add a brief summary
+that explains why you are working on this now -- e.g.
+is this cleanup for existing code, new users wanting additional
+features or something else?
 
-For tegra210-smaug, unfortunately we can't do this. The problem is that
-the firmware for this device looks for a hard-coded /memory device when
-updating with the proper memory size and this firmware can't always be
-updated.
-
-Diogo, you're one of the few remaining people that I know of that still
-use this device (with an upstream kernel). Do you have any more details
-about this? Is there any way the firmware can be safely updated on these
-devices?
-
-Thierry
-
---pjs3gbaie5x227iz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmZ+0WIACgkQ3SOs138+
-s6ETww//fKn/izh6941gGmnNr73X80O4LhJqg2ssrOGsboYQJ9Ca2/+LImPyEeIv
-Hp4JfswrF2kNORV268f24OZ9dZG/XehTCR5yJwi3MRmF7uawKIItDOsafq7yh1GG
-B+QatqpwOlvX9JFq+uK61TIF/NR7NP+ILo1H4OnnbHmOfNfnm6wG/8bcV2GWGyHg
-Xax2H47PW+TvFKAi5m4yM/qzEfj6rCOOsANoqfhoMyzVQ3+C4SY7JyeHX3ZPn5uD
-nt1MJNxktXZkP45t2s99mEW3yDD5Jia88jIVgBvIRq/VWiT3RRqXoBOCfNxy4ne1
-mE06ZfEGZZeqQsSfdgcs1ZRsG2//h2EjCgOc7+JaE+yvbGC0LsIqoirH8foU+74w
-vrgQd9kY5y3XpoOxQuGJpTsKmVrtJDm1ScLcr3zAcpqR0HMLTEXxInL6gOFv2Lfv
-CI9ACx1cJsmzNNHrgrSWk39HeeoegCtrm+7DKrgaD6zUMUYbug5p2E3BfIKRMdiu
-+yMZ9CMYUD7dylywUIgrQXnsbgWWygMJUEuaLYFZHThzJ2jdCY1vX8FvvWVbDxqn
-Pa09zlWUsN6+BABlb8kqjPhU9FBS6o2FJ1eLFS+lpCwah6KE1fPfPRHhZHtn0oO9
-FXNNCTagT0b8RJc2RPiMTytbtHwherbP+QyYlfpIoHp6qSavTo8=
-=qW8X
------END PGP SIGNATURE-----
-
---pjs3gbaie5x227iz--
+    Arnd
