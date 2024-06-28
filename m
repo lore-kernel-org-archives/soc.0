@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45CE1C3065E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 478ADC3065D
 	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 21:20:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 04D2AC2BD10; Fri, 28 Jun 2024 21:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E21F4C32789;
+	id 118F6C4AF0F; Fri, 28 Jun 2024 21:20:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9837C32786;
 	Fri, 28 Jun 2024 21:20:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719609649;
-	bh=jOL7dmQ8hpICePhC+vbVsCCs6RC1UEkOMfGopN0g0tA=;
+	s=k20201202; t=1719609650;
+	bh=Sle18la5LpkkKUxP3vGq5xB8N6T31AebYh36voEYN5s=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=QdrRspeGVgOpUWDjaVQ0Az+g8Fg7YSzoqxC3G7/AvVE7sI7IeUCNoY1qixoLxZx//
-	 kpP3fUQwWNQ/L5dPA4iw3YTi5DEi2wRtoyajWHs0wFJRoy9fPcfY8D2c0AWl8ZFi5v
-	 OuxrohfRQVzE8p4L7vIQOUB/Xr529qVhLSbkXehqh9ZNi9hNTesMR19FLBllOUDPjK
-	 +pO7x9vR20aUfXAJG/1gETn4TvIjjtnde56OQsWaIS4N1+wq9IzgLe+holsKmbFVw9
-	 IE+PyMZLh0ZjpmCgi63OqjV16piXyJ9QsShP0SP8O7l+XQZH6z1iAOH2yF7dlhQio/
-	 BwWuGkU31++sA==
+	b=LTQ25F5+UxN1LT6Pdf0uTvgMsvNT9/1hLgYyAEXu0HUWnNJNhAsIb4fbkA5t6CtJK
+	 zwdHDztkn4NeDItBk0R3Q6HxhfA7EcDwmTXoF1c0GHRGB9BodqElgWEr4UONwdjC9k
+	 2W7MxZN4R9+Tp4Z0sWEcjLNTqM1KEsOm4sD1WCOzLLSH9dy2AerTg58Ys342Mjh7DU
+	 JfxuktVvDjFG9NsHM+oicO6PJCSn1RQQCohVOnLmlpsN/1IjjravBeK6QmQcDv/sru
+	 grT28K5NEHw1RaQScw3YMV2bqvjTaR4hD0F1yP73HdCo8wJS9kN2AjeBokoYWxg+/Z
+	 uIKuU0G6HKLlA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD4C7C433E9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6B43C4332E;
 	Fri, 28 Jun 2024 21:20:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.11 #1
+Subject: Re: [GIT PULL] ARM: vexpress: Updates for v6.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171960964983.14447.10298348018210429510.git-patchwork-notify@kernel.org>
+ <171960964987.14447.512223018763618499.git-patchwork-notify@kernel.org>
 Date: Fri, 28 Jun 2024 21:20:49 +0000
-References: <4901395.GXAFRqVoOG@diego>
-In-Reply-To: <4901395.GXAFRqVoOG@diego>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+References: <20240620093924.375244-4-sudeep.holla@arm.com>
+In-Reply-To: <20240620093924.375244-4-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 28 Jun 2024 16:02:53 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Thu, 20 Jun 2024 10:39:20 +0100 you wrote:
+> Hi ARM SoC Team,
 > 
-> please find below and in a subsequent pull-request
-> Rockchip changes for for 6.11 .
+> Please pull !
 > 
-> Some new boards, some new peripherals.
+> Regards,
+> Sudeep
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts64 changes for 6.11 #1
-    https://git.kernel.org/soc/soc/c/aff39a02b5b1
+  - [GIT,PULL] ARM: vexpress: Updates for v6.11
+    https://git.kernel.org/soc/soc/c/0dabf24cf4af
 
 You are awesome, thank you!
 -- 
