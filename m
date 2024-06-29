@@ -1,74 +1,94 @@
-Return-Path: <SRS0=jJfL=N7=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=F7Uv=N7=tuxon.dev=claudiu.beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66F5AC27C4F
-	for <soc@archiver.kernel.org>; Sat, 29 Jun 2024 15:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2282C27C4F
+	for <soc@archiver.kernel.org>; Sat, 29 Jun 2024 17:36:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 284CDC2BD10; Sat, 29 Jun 2024 15:11:49 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id DA731C2BBFC;
-	Sat, 29 Jun 2024 15:11:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DA731C2BBFC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA5F3339;
-	Sat, 29 Jun 2024 08:12:04 -0700 (PDT)
-Received: from bogus (unknown [10.57.81.131])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D6663F766;
-	Sat, 29 Jun 2024 08:11:39 -0700 (PDT)
-Date: Sat, 29 Jun 2024 16:11:39 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+	id 696F9C4AF07; Sat, 29 Jun 2024 17:36:39 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1B5BDC2BBFC
+	for <soc@kernel.org>; Sat, 29 Jun 2024 17:36:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B5BDC2BBFC
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42565cdf99cso15801885e9.3
+        for <soc@kernel.org>; Sat, 29 Jun 2024 10:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1719682596; x=1720287396; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cRZLqheC76+KtGADt5dC8ZBCfaAYtac5FzEMNMifjW4=;
+        b=ZUnUxb8aho1m/n/f66IEqEA2agMptk/pOTOjrHirLys+hP8gWHWcehyjWtLcKWfy/T
+         yOyVVbX9Ag6pxyP0snz45mNvtrfpsDEsx98sqNIXUhxzILJMxZP6lvYyHE8SP0UXyoMX
+         BVwEHnR0OXeFlzk7+uN9ebcU3UBhYeEERcr7heodD5ZfEmbOrfVjzM4iHZefUB+42iap
+         UGGzwRE5QfllpAo+xDFglUHI9cL808QbAL/Lvo8h6rAZVFglqUM57h6o9axkPjSmR2/k
+         vV+CKkAl/e6lI0TuDMd7uuMm0j37q5kvaoGkd5MCb5yLJXWt5DsWD6GRxy7cRQXuex2f
+         93Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719682596; x=1720287396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cRZLqheC76+KtGADt5dC8ZBCfaAYtac5FzEMNMifjW4=;
+        b=frrnHK4Oaq1OsGvor0O4Vu9scH19KcCH/7qFr+kfR6gc1xsDW3D85yCbMxfFmC1H4H
+         ype/c2WwECh8QghzRXr3TQzKqV8VjrHfiCTzRmdcz9Oe+Bh0ToLSzk3n7K5KQNv6zDUe
+         zJnzzCkKSVyoC+tTqptvM8CrQaDs7CjWQm16E/0GBB9zD3o/hhw5y2Yh9d60wzlQk8VE
+         sX1kO6wRAmGSHCKj2FaQmi15+Q47Ic02/tQDJalhhndfYqB8Eqzgcr8Jwya/V107W9D8
+         swPRI9BmVgTdG2CE+fywOV8D8C9/7Xy4Xw3W5kykaGIGxj7S0YrlLCIqcwi+/cFuMG2q
+         FDoA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcADcY2N1sGlxEpb7EK2yyfumdjuoMSufVPVLNaYN3i3oBxpyMQk1935m9TPii22BXfPy6IV9lXpa+SWC+Og==
+X-Gm-Message-State: AOJu0YzhklLhmw25kINh71dAqMsJLu7mwhCRbQoo2zCOxt+VH8zFWg/v
+	+AMqufyGoDTcE6yFSAGWDicrnY5ld4W4QwN5iEPgfvbB43DdmbwWy1Q8kboFv9E=
+X-Google-Smtp-Source: AGHT+IH+UrYnL8ldVpgeAn5Rt6NgCYC9txnHk/w6D80pOj7QI7GH+wizU/cpt5DLAes4Ra1eXlaB/w==
+X-Received: by 2002:a05:600c:4a07:b0:421:29cd:5c95 with SMTP id 5b1f17b1804b1-4257a00674amr13009135e9.10.1719682596224;
+        Sat, 29 Jun 2024 10:36:36 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.171])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b061095sm80024755e9.23.2024.06.29.10.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jun 2024 10:36:35 -0700 (PDT)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh@kernel.org>, soc@kernel.org,
-	Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH] arm: dts: arm: Drop redundant fixed-factor clocks
-Message-ID: <20240629151139.ahr7ikxt3joikvk3@bogus>
-References: <20240627-arm-dts-fixes-v1-1-40a2cb7d344b@linaro.org>
- <CAL_JsqJFrSyxjHQMF7gtgU0jZ_m2hNx_jrLxY29HE0VXOh4Ggg@mail.gmail.com>
- <CACRpkdYq92ZzUjb-Fne5th_hNv5xhsQ0Otf9ud+u_JLaMSiXqQ@mail.gmail.com>
+To: arnd@arndb.de,
+	olof@lixom.net,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Microchip AT91 defconfig updates for v6.11
+Date: Sat, 29 Jun 2024 20:36:34 +0300
+Message-Id: <20240629173634.664081-1-claudiu.beznea@tuxon.dev>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdYq92ZzUjb-Fne5th_hNv5xhsQ0Otf9ud+u_JLaMSiXqQ@mail.gmail.com>
 
-On Fri, Jun 28, 2024 at 11:51:02PM +0200, Linus Walleij wrote:
-> On Fri, Jun 28, 2024 at 4:38 PM Rob Herring <robh@kernel.org> wrote:
-> > On Thu, Jun 27, 2024 at 1:57 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> > >
-> > > From: "Rob Herring (Arm)" <robh@kernel.org>
-> > >
-> > > There's not much reason to have multiple fixed-factor-clock instances
-> > > which are all the same factor and clock input. Drop the nodes, but keep
-> > > the labels to minimize the changes and keep some distinction of the
-> > > different clocks.
-> > >
-> > > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > > Link: https://lore.kernel.org/20240528191536.1444649-1-robh@kernel.org
-> > > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > > ---
-> > > SoC maintainers: please apply this directly for v6.11.
-> >
-> > Maybe not. This is a dependency for patch 2 in the series[1].
-> 
-> Aha sorry for missing that :(
-> 
-> Sudeep, are you fine with patch 2/2? Then I can send that
-> the same way so Arnd can pick it up and pile it on top.
-> 
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
-I didn't send 1/2 as well as I didn't hear back from Rob. Either we can
-ask Arnd to pick both directly or either of us can a PR. Let me know if
-you want me send a PR. I have added my review tag on 1/2 IIRC.
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
-Sorry Rob, next time I will just pick to avoid any confusion.
+are available in the Git repository at:
 
---
-Regards,
-Sudeep
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-6.11
+
+for you to fetch changes up to f919a823b15303f167655eb69ad7b58fb4d0b92a:
+
+  ARM: configs: at91: Enable LVDS serializer support (2024-06-09 15:52:37 +0300)
+
+----------------------------------------------------------------
+Microchip AT91 defconfig updates for v6.11
+
+It contains:
+- Enable LVDS serializer support on at91_dt_defconfig
+
+----------------------------------------------------------------
+Dharma Balasubiramani (1):
+      ARM: configs: at91: Enable LVDS serializer support
+
+ arch/arm/configs/at91_dt_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
