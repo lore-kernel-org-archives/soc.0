@@ -1,93 +1,115 @@
-Return-Path: <SRS0=I/Xe=N6=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=lMxw=N7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FF7FC30658
-	for <soc@archiver.kernel.org>; Fri, 28 Jun 2024 21:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D096EC27C4F
+	for <soc@archiver.kernel.org>; Sat, 29 Jun 2024 07:35:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 77259C2BBFC; Fri, 28 Jun 2024 21:51:16 +0000 (UTC)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 8DE36C2BD10; Sat, 29 Jun 2024 07:35:13 +0000 (UTC)
+Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7A029C116B1
-	for <soc@kernel.org>; Fri, 28 Jun 2024 21:51:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A029C116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52cdea1387eso1200325e87.0
-        for <soc@kernel.org>; Fri, 28 Jun 2024 14:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719611473; x=1720216273; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rL4KfqnyiM92HwOvs5pzjIBd7rZb5qTSwbTvkD92S08=;
-        b=dQFiOJeymdgw2PtXAptLCSh+uH1UMTJIaf8ZRPD5Vnp01SWjeiTpIL0Wbb2yBpvX82
-         PrUDh1tJmcQ/jEwI1FQ/ODO00GwR5mSnGi0tPT7qR56IvV1lqK4eRUu8vJx3C6F1ypgc
-         8EyztiY8ShcXi2mrBtzt8N/O19/1XNr86Wp37NchE/BI6xpeoZUuHx2j/Uj7lBXMMovg
-         0grU+tHQQewU9lmzsyQWxAOU5u5XyDLXgRo2EJq09PXjgbnYZni+grih80c8Dmg+7r22
-         1c4nHBTwpiz1zQWXv5hy21SxO7FKIMp3yLOKrxB7MwnJGNRf1j5LzXNSeXEpNrdgfT74
-         ONQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719611473; x=1720216273;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rL4KfqnyiM92HwOvs5pzjIBd7rZb5qTSwbTvkD92S08=;
-        b=Q2OBIHMQIzIJBdU6hr3QSOM6qM06AHlZ/BaWCVk4up5WIG3KaCXQSWfrPUOEoaAPrL
-         Y69U74vjFLOZ/Gp0iwzekuI2RrlZgX9hJY9nKzrWbFbaSYI54gsEGNzc2h27hjpBzGme
-         Op99efAUREJV4nSRUpHPkE7YabecetMHfjzA5eAUxMJ+Y1oG7T3PJz1j+ZC/1zOjg/9V
-         T4Ie6v4bROv7ZDwkW8fmF4pg+Y0Wo0oIchD76IAbvpNsG44xoB32BwO4e15N6nRBedtp
-         xn74HQv4bfQRHN5WNsWa0RMimTOkgRiBaByG/m7PoSp1LCabgYgXqm0v5FG/6tPhLPii
-         Prow==
-X-Gm-Message-State: AOJu0Yw1xiExH1Gohjh2adNC95BTRG05PjhzAYqxjYyKi6Jc7otWYtpA
-	Y8JEG4/CVG2t2OAuIoWnVz2KNeb5d52j5ec/WmA+BlF5IWx/DSJTmqQrF1CKwQEieN4IjL2vZgt
-	VdM9k7G7CYNuJ2b/Kaho6RBbocfOvgGKcJA3mjDGeL0csRNEW
-X-Google-Smtp-Source: AGHT+IFTfvMlr1BllVJT/kxOYbu0WnhBqZ6WFfHXOhcP0+fZ2F/dtSdSRS8jqP6sq8EIGn9vAnqr1+mS+7B7oDKhMAE=
-X-Received: by 2002:a05:6512:3b0c:b0:52c:e393:6634 with SMTP id
- 2adb3069b0e04-52ce3937b27mr14127617e87.33.1719611473342; Fri, 28 Jun 2024
- 14:51:13 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 79CEAC2BBFC
+	for <soc@kernel.org>; Sat, 29 Jun 2024 07:35:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 79CEAC2BBFC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 6FF461140268;
+	Sat, 29 Jun 2024 03:35:10 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Sat, 29 Jun 2024 03:35:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1719646510; x=1719732910; bh=/eAJr3xw+7
+	2LsYHdcWA8X2fuSZiecOT09RuA7xMMUQM=; b=STasOpS/6E043HeTNYIF4yCu/7
+	i3uvyuFz280bduLHi/ntXje1isrAJbYVKpVKyHPHkNMX82crsN3NV7fGWouTtY1G
+	5EWFWeITX7uiFmxLvYISQw0zjcS6ycFPbibGWQU9kzWssKTH/y5WafdZZTDeH1q8
+	r4oe+f3lRsuXmlBUUzy18vUql1vh6CBAOh4tvY2zyqBzWLm8sFbyJ6d+Fpw+265K
+	NfRxbGBw6ye2fXk3HmLgb5Y9jtMN5tdrP4W8et4u+Mbs6voAxsMErbUvIzjEG0sb
+	X6wX64Go0PopIjlCg7excfYVpN9uyIkGqHjuNtfPK3wm2qqmXDwUurcJHEpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1719646510; x=1719732910; bh=/eAJr3xw+72LsYHdcWA8X2fuSZie
+	cOT09RuA7xMMUQM=; b=NvStODn4fl4djEPbZZEGSy2FqLsod56yDU0dV4YvLvpk
+	gpPUzlWxv/CG8fg7iqBmSHHKBKADyX5oM96cKMqR/yCkVUb//ZCSAVVcVAu2Z4e9
+	MQZtORB9/AMl8A/CLltCNu/NM+TDfr3ZKBMUQ/G7e4wI+15pyudFRKVoUJDv7oE4
+	H5luZu7e7wMKc5/yAyoTP9DTGeU5mD3IHBC5ia5fFZZJKAma83oJJqyZ131ERS0M
+	8qMhXfmcSNx86HKM3fpn2Aiz1DFCPbie38uySx6/d47UdcK/4AuRkDBxay+Vbbvz
+	1RoRSSkstEOwPNP29lhnJcRGhh34/uJWEyXUE5sPNg==
+X-ME-Sender: <xms:Lbl_Zo_j-X9slK6CC7ssHIMSphOeizP5f6Z5nstLj-K0OJpG2YtG6w>
+    <xme:Lbl_Zgt6ohG5LhPYevNUMjxnSZrpEGoU9WjQ8zefq0zr87Tb9K-jAUaq-bP7SHUbC
+    TNaUR0g5-SGi8GQVwY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrtdekgdduvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Lbl_ZuAwWH_DFJUO2GmR_tEUogcqr5lGjipbskVDQ-HLEUQVhvRTMg>
+    <xmx:Lrl_Zod72QeZClYkLSgHVVMpU2OHlrwd8pjBmcDG-eduA7ID66J4IQ>
+    <xmx:Lrl_ZtOmTOuzLvTEdpC6VZOP1uJ73nLw_UvfkGsNAWwAoxWRXkTOnQ>
+    <xmx:Lrl_Zik271J1CXntBmroYw92FdoiTx0jDFKXrRO8Jc_V8056qwrq6A>
+    <xmx:Lrl_Zgedmh6qx2LPZ5HvyY31Zj4i3_-TTa3ea8u0xnpRY8o8cSs4KdMR>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id D14ACB6008D; Sat, 29 Jun 2024 03:35:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-538-g1508afaa2-fm-20240616.001-g1508afaa
 MIME-Version: 1.0
-References: <20240627-arm-dts-fixes-v1-1-40a2cb7d344b@linaro.org> <CAL_JsqJFrSyxjHQMF7gtgU0jZ_m2hNx_jrLxY29HE0VXOh4Ggg@mail.gmail.com>
-In-Reply-To: <CAL_JsqJFrSyxjHQMF7gtgU0jZ_m2hNx_jrLxY29HE0VXOh4Ggg@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 28 Jun 2024 23:51:02 +0200
-Message-ID: <CACRpkdYq92ZzUjb-Fne5th_hNv5xhsQ0Otf9ud+u_JLaMSiXqQ@mail.gmail.com>
-Subject: Re: [PATCH] arm: dts: arm: Drop redundant fixed-factor clocks
-To: Rob Herring <robh@kernel.org>
+Message-Id: <5d028f7f-a884-4983-ae8a-9b6b42e0ac4d@app.fastmail.com>
+In-Reply-To: <Zn8uywbvZDDVSjT0@google.com>
+References: <20240628180852.1738922-1-dmitry.torokhov@gmail.com>
+ <ed9dd921-56a6-48cf-9f25-b8bb079c4249@app.fastmail.com>
+ <Zn8uywbvZDDVSjT0@google.com>
+Date: Sat, 29 Jun 2024 09:34:49 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Sudeep Holla <sudeep.holla@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+ "Daniel Mack" <daniel@zonque.org>, "Robert Jarzmik" <robert.jarzmik@free.fr>,
+ "Linus Walleij" <linus.walleij@linaro.org>, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] ARM: pxa: use software nodes/properties for GPIOs
+Content-Type: text/plain
 
-On Fri, Jun 28, 2024 at 4:38=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
-> On Thu, Jun 27, 2024 at 1:57=E2=80=AFPM Linus Walleij <linus.walleij@lina=
-ro.org> wrote:
-> >
-> > From: "Rob Herring (Arm)" <robh@kernel.org>
-> >
-> > There's not much reason to have multiple fixed-factor-clock instances
-> > which are all the same factor and clock input. Drop the nodes, but keep
-> > the labels to minimize the changes and keep some distinction of the
-> > different clocks.
-> >
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Link: https://lore.kernel.org/20240528191536.1444649-1-robh@kernel.org
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > ---
-> > SoC maintainers: please apply this directly for v6.11.
+On Fri, Jun 28, 2024, at 23:44, Dmitry Torokhov wrote:
+> I would like to eventually switch everything to the software
+> nodes/property entries. The GPIO lookup tables were introduced before we
+> had software nodes and were really convenient way to describe GPIOs on
+> non-ACPI non-DT boards. However now that we have software
+> nodes/properties we can move away from both custom platform data and
+> lookup tables in the board code and remove platform data support from
+> the drivers, unifying the driver behavior.
+
+Right, makes sense.
+
+> I am not in any rush with this, so if some boards are on a cutting block
+> I am happy to wait. I started poking at Spitz and the rest of mach-pxa
+> because Linus W sent out a patch to ads7846 ;) and I also remembered
+> that you already dropped bunch of PXA boards that were no longer
+> relevant so I assumed spitz and gumstix still have some use.
 >
-> Maybe not. This is a dependency for patch 2 in the series[1].
+> Could you tell me which ones are likely to stay vs ones that might go? I
+> think arch/arm/mach-s3c/mach-crag* is staying? jornada720?
 
-Aha sorry for missing that :(
+I think in the long run all of them will either get removed
+or converted to DT, though it looks like the DT conversion has
+not picked up for anything other than ep93xx.
 
-Sudeep, are you fine with patch 2/2? Then I can send that
-the same way so Arnd can pick it up and pile it on top.
+For the timeline, I need to ask the same people again that
+wanted the board files to stay two years ago. omap1 might be
+a good one to prioritize for software nodes, as that likely
+still has users and it would help getting closer to a DT
+version.
 
-Yours,
-Linus Walleij
+     Arnd
