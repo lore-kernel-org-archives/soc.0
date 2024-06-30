@@ -1,84 +1,86 @@
-Return-Path: <SRS0=uqXR=N7=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=2HI6=OA=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12EF0C27C4F
-	for <soc@archiver.kernel.org>; Sat, 29 Jun 2024 22:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F863C27C4F
+	for <soc@archiver.kernel.org>; Sun, 30 Jun 2024 08:07:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE7A3C32786; Sat, 29 Jun 2024 22:17:16 +0000 (UTC)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	id D051BC32781; Sun, 30 Jun 2024 08:07:26 +0000 (UTC)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F1991C32789
-	for <soc@kernel.org>; Sat, 29 Jun 2024 22:17:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F1991C32789
+	by smtp.kernel.org (Postfix) with ESMTPS id BE9D7C2BD10
+	for <soc@kernel.org>; Sun, 30 Jun 2024 08:07:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BE9D7C2BD10
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ec17eb4493so25038021fa.2
-        for <soc@kernel.org>; Sat, 29 Jun 2024 15:17:15 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec61eeed8eso24565281fa.0
+        for <soc@kernel.org>; Sun, 30 Jun 2024 01:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719699434; x=1720304234; darn=kernel.org;
+        d=linaro.org; s=google; t=1719734844; x=1720339644; darn=kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z5lOH/7Wxi1ZVOumvqW3D3/dFi0e6hf/Gb4y4MNiTIk=;
-        b=euemtYq/FG79sBc8NwsSJw4nA8vuzvw3Bbg6YSlGfrsqLYIPTyDkYjWcezSC9xpG3S
-         HrG1HDVviU201lPW7VCivsdUe3x5u9NLNyEbUWt/VQVstZDVDaJnrn72Wgo12MyW8ZDf
-         IZKbGhZU1y0E6PLUJdhEBUTfq3K1voPf4BL0wzkv+L+4CstCVq6WjwbzzsbTtZWC4Js4
-         Nu0cAXu+JAnz7TeHznAw9PjBEOsPNHY8lifU7SPsIhEblaitG6jU3l63wKLId55vM6XF
-         s5OH1TG6QurEhwPQUNmV4eJ9X4diemVTgtpaWXY6rvPJNmWf2zT9s+uE3DHzK3LZb0Kj
-         iEKQ==
+        bh=x14W0zMcNYfSjfgEi8hckZrQ+GGSiswtHwN8pa2QffQ=;
+        b=g6/exoauR2NYAXgQaHcTQen5XqYL3d8q8D69+uV9xtRhZ6GxSM8PBH0H001BoYABul
+         QQPPsapZmODKnF5Aqfwfo4DgOu4iXOEcxAs2XlOrwLPskgiGaJ3Zp6MTblx38ZJOivQH
+         NY+DR5IMXm/B3kZFvsv5akT0I62N4rbBF0drHZBr/TYpl7i9jXqxj+m7L3d5VBtY9sLv
+         5D+eoZapcIe12QEhnnazXEyru9D6mxPVEbWrrVMIvRa1udf6tzbkpMV4T6yGkgIY1MYG
+         962kDe7PiKytLNX3Y9ZO9X6vWwBtSI2ql9KaGL/GZ9xfcf8JfMDNQ3YM0LVbxNTAXWFv
+         RPog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719699434; x=1720304234;
+        d=1e100.net; s=20230601; t=1719734844; x=1720339644;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z5lOH/7Wxi1ZVOumvqW3D3/dFi0e6hf/Gb4y4MNiTIk=;
-        b=c007vfc2j1oG1YZ2APvB///Pj9gb1ctzuhEtNGFhbsn5qNdxnEskuXmtmo53ze5oRg
-         U58Q2r3qiInzIygkhSizgVg0RVq7obZyNvNTVJ2tglalGztDD4NDMEvCkqfuirZF4RnR
-         z3DS8JeALNIZgfu6SPUS/i8QNMEnY3Z5A5ddDIJxxL840PbC0ExNowRHmvm6s7UM6RQp
-         oi9GplQ75j3sCM/mv5xksflVLFITf6YVfDjxYCIkigwJ8Qj8xkq8GVusFFhC4gAzG8W+
-         4NUsw6fubd2siERZfuA/rfBEDkUCSifS+mJWyCWUImwfU9Ry8wHofw9rlxlVVSyDUL0m
-         wb2g==
-X-Forwarded-Encrypted: i=1; AJvYcCVwtHiB0EMvugugCJzpt2hQXNaDoLrpjg3u8U+22xQ/8PKpAYUFRdkiDXFioqWaL11cw+0cNHX+rkMIwFvb2w==
-X-Gm-Message-State: AOJu0Yxpr7xBZ9MF7SOpXBpqlalWGpRtlppaekq3IZWScQ6PoBFCneqx
-	hnzPdYGDy4pJyqdtHm7+HCgUvai7t5q+C071cRmJx3cQqd9GP7q5XEKSX4io7NWhz9X7TYlEpvU
-	SeNp+nczdMOpQYEK63gTGQJQhDXOgxpUa080CSAEI9ar1mozP
-X-Google-Smtp-Source: AGHT+IHD0pfUphTP9a8ganUqvqMvBo5IpJm7HUbs7NoywIw/CIMWsnORfMnejwTvGzeW3RzsZN6jfivDiANM7gnA9zg=
-X-Received: by 2002:a05:651c:549:b0:2ec:1e6e:13f9 with SMTP id
- 38308e7fff4ca-2ee5e707c78mr15072281fa.52.1719699433935; Sat, 29 Jun 2024
- 15:17:13 -0700 (PDT)
+        bh=x14W0zMcNYfSjfgEi8hckZrQ+GGSiswtHwN8pa2QffQ=;
+        b=EgduXPBaW5wnJePxDvUjf8KTK7u7l7RcL7KiD8dGqUnwEqZyt5/KU3/5ZMxixLPlks
+         dnW6zUruAxmEI1ZKUSTyvWI2b1FXUzUPkN8wme0jUZuIEazvDaZb97Akm2Lx4lcIAGiB
+         ic79J52li+uRDZ2hG1z9PaKb6auSPjUCuXlWxwsy8dIjjTNiw4OueNs4cNN/OTjo4nua
+         G3OtJyHJtFZGXoWdHLld0lbziPP7Ss90/bZWsg1bgm9E7Fg/gGaocqPIoPReBeaiNt/j
+         Qo2QSg3Srz/u7F18SVfCyg1LUlRzr+qkgIK96xmeblnnS8Z9almt81FZnY9MLAgmKGtm
+         ffLg==
+X-Forwarded-Encrypted: i=1; AJvYcCWnr4f7C+e9SHoeg3X5/uqaSrMX7HfuW5IXiG6UI9yWw3vnKas/OstEGJHOOlocKl+qP8GnE2m0O9/Rrdv0lw==
+X-Gm-Message-State: AOJu0Yx6u23mFa9YJSt75S9WNKhhAqJvxfJt0G+EDNYVrKv4LLZMu5bF
+	tQIUZFd49gIpPpu6dVz/pj5SIgg+VlNZJc3vRPy/BlkefmQswhBBW9bjepHrhbbiRatvd1wjmbD
+	CvXg+wIr0l0wv7lrofywS3v6xZCMoOL1gPsEdAg==
+X-Google-Smtp-Source: AGHT+IFp3NqyIYTlNJnzRJc9aynoy/jFOr3NFhoRp1fIAA9xDMWp4BlmkhBYvRQf+SSix30ahl9U5AB2+G44KmoyGv0=
+X-Received: by 2002:a2e:9c58:0:b0:2ec:3180:d4f7 with SMTP id
+ 38308e7fff4ca-2ee5e375a38mr16017461fa.26.1719734842537; Sun, 30 Jun 2024
+ 01:07:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20240627-arm-dts-fixes-v1-1-40a2cb7d344b@linaro.org>
- <CAL_JsqJFrSyxjHQMF7gtgU0jZ_m2hNx_jrLxY29HE0VXOh4Ggg@mail.gmail.com>
- <CACRpkdYq92ZzUjb-Fne5th_hNv5xhsQ0Otf9ud+u_JLaMSiXqQ@mail.gmail.com> <20240629151139.ahr7ikxt3joikvk3@bogus>
-In-Reply-To: <20240629151139.ahr7ikxt3joikvk3@bogus>
+References: <20240628180852.1738922-1-dmitry.torokhov@gmail.com>
+In-Reply-To: <20240628180852.1738922-1-dmitry.torokhov@gmail.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 30 Jun 2024 00:17:02 +0200
-Message-ID: <CACRpkdabSbROfmth6o+tsgBWwA0XAr3JGQ53doR9AGbnmzHOmA@mail.gmail.com>
-Subject: Re: [PATCH] arm: dts: arm: Drop redundant fixed-factor clocks
-To: Sudeep Holla <sudeep.holla@arm.com>
+Date: Sun, 30 Jun 2024 10:07:11 +0200
+Message-ID: <CACRpkdYA9BCtNNf31uGkF4_Zp7uUZ-Zp6-PLa-qVVSi6NJ-_sA@mail.gmail.com>
+Subject: Re: [PATCH 00/10] ARM: pxa: use software nodes/properties for GPIOs
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh@kernel.org>, soc@kernel.org
+Cc: Haojian Zhuang <haojian.zhuang@gmail.com>, Daniel Mack <daniel@zonque.org>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 29, 2024 at 5:11=E2=80=AFPM Sudeep Holla <sudeep.holla@arm.com>=
- wrote:
+On Fri, Jun 28, 2024 at 8:09=E2=80=AFPM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 
-> > Sudeep, are you fine with patch 2/2? Then I can send that
-> > the same way so Arnd can pick it up and pile it on top.
-> >
->
-> I didn't send 1/2 as well as I didn't hear back from Rob. Either we can
-> ask Arnd to pick both directly or either of us can a PR. Let me know if
-> you want me send a PR. I have added my review tag on 1/2 IIRC.
+> This series converts legacy pxa boards (spitz, gumstix) to use software
+> nodes/properties to describe various GPIOs instead of relying on GPIO
+> lookup tables. The benefit is that structure and behavior is closer to
+> DT-described GPIOs.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+for the patches I didn't write myself.
 
-Thanks Sudeep, I just picked and signed off 2/2 and sent it to
-SoC so things should fix themselves, hopefully.
+What this really needs is testing... :/
+
+If nobody is testing, I think you should just send a pull request
+to soc@kernel.org and users can find out the hard way and help
+fixing regressions. It's a bit hopeless to work on this sometimes.
 
 Yours,
 Linus Walleij
