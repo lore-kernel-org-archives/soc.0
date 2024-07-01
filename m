@@ -1,64 +1,141 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=Ompb=OB=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C479C41513
-	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 12:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FCFCC30653
+	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 12:56:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E4E35C2BD10; Mon,  1 Jul 2024 12:50:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CF052C32786;
-	Mon,  1 Jul 2024 12:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719838229;
-	bh=jFjh2zpvX8gvNtcUah+WMEt5DFPKBbj1UyxV5FzX7h4=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=IY1f5d39swTWYMcImnq+WtylefwjOTyfg4B8KwhBIu6OtzTrV3CDIu/aAY/i+BAcb
-	 lIpbfXzU29q1fdrROQjHv7dFgnoYsCQYS50HJMPmspzcSeWWujssijWWQNQCbnfhLu
-	 Dv28wyRxOsh7lT4YqekpsgH1BxlYQnsi2ydZqn73rhd6fY+oWTX98cuVqq+R3r3Giu
-	 k9M8UkARlUHh345/0JcQbmKUYniUikGKqI2uKmuY5MEAOqGCKwNFV52sIXKZoaAag4
-	 x9tW2Qk61LYw1++Lo73EXL0q5YIneFb1QTwDAV6gyb1nhQwlnAkhG4cqIAwM5rxmG4
-	 mv1vZGB9hY7sQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3C53C43339;
-	Mon,  1 Jul 2024 12:50:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 2597DC2BD10; Mon,  1 Jul 2024 12:56:36 +0000 (UTC)
+Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9DD4DC116B1
+	for <soc@kernel.org>; Mon,  1 Jul 2024 12:56:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DD4DC116B1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4WCQyx279Pz4wxBh
+	for <soc@kernel.org>; Mon, 01 Jul 2024 14:56:25 +0200 (CEST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1c8a:3990:9784:a231])
+	by michel.telenet-ops.be with bizsmtp
+	id iCwG2C00C4bcH3806CwGqZ; Mon, 01 Jul 2024 14:56:18 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sOGZk-000oEs-UP;
+	Mon, 01 Jul 2024 14:56:16 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sOGZs-001GYn-Eo;
+	Mon, 01 Jul 2024 14:56:16 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+List-Id: <soc.lore.kernel.org>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL v2] Renesas DTS updates for v6.11 (take two)
+Date: Mon,  1 Jul 2024 14:56:15 +0200
+Message-Id: <cover.1719837594.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts fixes for 6.10
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <171983822979.2563.11068094135309941989.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Jul 2024 12:50:29 +0000
-References: <10237789.nnTZe4vzsl@diego>
-In-Reply-To: <10237789.nnTZe4vzsl@diego>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+	Hi SoC folks,
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+This is v2 of my second pull request for the inclusion of Renesas SoC
+updates for v6.11.  It replaces "[GIT PULL 0/3] Renesas SoC updates for
+v6.11 (take two)", which I sent last Friday.
 
-On Thu, 27 Jun 2024 23:36:02 +0200 you wrote:
-> Hi Arnd, Kevin, Olof,
-> 
-> please find a below a collection of fixes for the current release 6.10
-> cycle.
-> 
-> Please pull
-> 
-> [...]
+Changes compared to v1:
+  - Back out all R-Car fuse commits.
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts fixes for 6.10
-    https://git.kernel.org/soc/soc/c/07917ee08723
+The following changes since commit 2bb78d9fb7c997f13309838600eead88cc99e96b:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  arm64: dts: renesas: r8a779h0: Add video capture nodes (2024-06-07 14:19:29 +0200)
 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.11-tag2-v2
+
+for you to fetch changes up to 07e777318911d76fa787fc57f02b595481382291:
+
+  arm64: dts: renesas: r8a779h0: R-Car Sound support (2024-07-01 11:35:08 +0200)
+
+----------------------------------------------------------------
+Renesas DTS updates for v6.11 (take two)
+
+  - Add sound support for the R-Car V4M SoC,
+  - Miscellaneous fixes and improvements.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Geert Uytterhoeven (10):
+      arm64: dts: renesas: r8a779h0: Drop "opp-shared" from opp-table-0
+      arm64: dts: renesas: r8a779a0: Add missing hypervisor virtual timer IRQ
+      arm64: dts: renesas: r8a779f0: Add missing hypervisor virtual timer IRQ
+      arm64: dts: renesas: r8a779g0: Add missing hypervisor virtual timer IRQ
+      arm64: dts: renesas: r9a07g043u: Add missing hypervisor virtual timer IRQ
+      arm64: dts: renesas: r9a07g044: Add missing hypervisor virtual timer IRQ
+      arm64: dts: renesas: r9a07g054: Add missing hypervisor virtual timer IRQ
+      arm64: dts: renesas: r9a08g045: Add missing hypervisor virtual timer IRQ
+      ARM: dts: renesas: Add interrupt-names to arch timer nodes
+      arm64: dts: renesas: Add interrupt-names to arch timer nodes
+
+Kuninori Morimoto (2):
+      arm64: dts: renesas: r8a779g0: Tidy up sound DT settings
+      arm64: dts: renesas: r8a779h0: R-Car Sound support
+
+ arch/arm/boot/dts/renesas/r8a73a4.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7742.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7743.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7744.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7745.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a77470.dtsi            |  1 +
+ arch/arm/boot/dts/renesas/r8a7790.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7791.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7792.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7793.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r8a7794.dtsi             |  1 +
+ arch/arm/boot/dts/renesas/r9a06g032.dtsi           |  1 +
+ arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77951.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77960.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77961.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77965.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77970.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77980.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77990.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a77995.dtsi          |  1 +
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  5 +-
+ arch/arm64/boot/dts/renesas/r8a779f0.dtsi          |  5 +-
+ .../r8a779g0-white-hawk-ard-audio-da7212.dtso      |  4 --
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi          | 22 +++----
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi          | 71 +++++++++++++++++++++-
+ arch/arm64/boot/dts/renesas/r9a07g043u.dtsi        |  5 +-
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |  5 +-
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi         |  5 +-
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |  5 +-
+ arch/arm64/boot/dts/renesas/r9a09g011.dtsi         |  1 +
+ 34 files changed, 128 insertions(+), 24 deletions(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
