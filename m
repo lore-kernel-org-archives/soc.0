@@ -1,54 +1,90 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09862C3065A
-	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 16:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E94C2BD09
+	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 17:00:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C6ABDC2BD10; Mon,  1 Jul 2024 16:49:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A27B5C32781;
-	Mon,  1 Jul 2024 16:49:43 +0000 (UTC)
+	id 9D05CC4AF16; Mon,  1 Jul 2024 17:00:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C8CC4AF10;
+	Mon,  1 Jul 2024 17:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719852583;
-	bh=aIy8w2x4i39X1sEGi7Yo4OKtvRgd6sbGVj+X1IPp9hc=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=nETWEwBkViETCOMRbr/aNo7rsET1W64vQHQtv+ftwAyUJBEZHiWsuOqlpLZGEnqUs
-	 Ftjr3NrZwGFrRVU4A7kftk7Eg3i6C/ZTjWhIbadpx1/r+RwzBJLbPCiEPKrwTvtQJJ
-	 3nBag6NIkXcqxrPb7SrJ++lv2Q6aTFnrzY9FmMEeJXtUp3t8T/hy2DZw1YzFPIuG2d
-	 QqBcq5Gb3EKG9gerEY0cLHwtNyaQCxdBrj2pLCcAkYg+CIXdMhe7kUF7v/xWbqxYAg
-	 Ny9MxINsXsZoOKsu5gYOgCWySey/ZWbp7X83HdsW7T6UTSIf3ejBmup/ksHSkrmz3x
-	 +h3qdvlYk4/gA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95DC0C43446;
-	Mon,  1 Jul 2024 16:49:43 +0000 (UTC)
-Subject: Re: [GIT PULL] SoC fixes for 6.10, part 2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <3040c98f-940b-4380-9a90-dfcae18a47b6@app.fastmail.com>
-References: <3040c98f-940b-4380-9a90-dfcae18a47b6@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <3040c98f-940b-4380-9a90-dfcae18a47b6@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.10-2
-X-PR-Tracked-Commit-Id: 07917ee08723e6c46074a2655a380126acee3898
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 651ab78190e2e4817eb6c21bbc5b4119c2fb34f7
-Message-Id: <171985258360.24381.15874330138736099680.pr-tracker-bot@kernel.org>
-Date: Mon, 01 Jul 2024 16:49:43 +0000
+	s=k20201202; t=1719853246;
+	bh=RPa/vjSg3uSpjy6H7yxFua7H/Ic3dtmOuyCqVe6b34k=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=Lt6KcZXg0M+yE9PUdZNYnPiiXgmG1lSelL0oXdPGIUVz89fu7gjWdNYt6kad7bf+j
+	 C1o5JFjkIHo86bbADSGqkKjgHNIyVidDOniQbezvWppO4UuU/6L5AvuHze9JXEaGeo
+	 pOICafeKCSZfC6ywsDpaDALcnJppGXZBhRGmxriWhE3vKQQIBwyVUQmQuXjuegxTlw
+	 Is2cjymDX807Tk5L/zwC4rJ60z9CTYtRDFP5BHnnWdjiB5f08vRzzvwFuiRj6liBAB
+	 pivmepzIhGSpasxAa36OkXs5oyE/IaJTr+MDKRsnwLRz1xD4I0JNSTRFJi3kQWDK9n
+	 AlBQ7jT6z7u+w==
+Date: Mon, 1 Jul 2024 19:00:41 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Gregory Clement
+ <gregory.clement@bootlin.com>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
+ soc@kernel.org, linux-arm-kernel@lists.infradead.org, arm@kernel.org, Andy
+ Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo
+ =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v3 0/5] armada-370-xp irqchip updates
+Message-ID: <20240701190041.286241ec@dellmb>
+In-Reply-To: <20240621093832.23319-1-kabel@kernel.org>
+References: <20240621093832.23319-1-kabel@kernel.org>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Mon, 01 Jul 2024 18:00:20 +0200:
+On Fri, 21 Jun 2024 11:38:27 +0200
+Marek Beh=C3=BAn <kabel@kernel.org> wrote:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.10-2
+> Hi Arnd, Andrew, et al.
+>=20
+> this is v3 of updates for armada-370-xp irqchip. There is one small fix,
+> and another patch added which was previosly sent separately.
+>=20
+> Also I realized that I did not send to the SoC mailing list, nor to
+> Arnd.
+>=20
+> As written in previous cover letter: this driver is in need of a major
+> refactor in order to bring it to modern standards, but that is
+> unfortunately currently infeasible with my time constraints.
+>=20
+> v1 and v2 at:
+>   https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D86=
+3473
+>   https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D86=
+3707
+>=20
+> Changes since v2:
+> - dropped redundant assignment during declaration in patch 4
+>   (bool src0 =3D false, src1 =3D false)
+> - added patch 5 to this series, previously sent separately
+>=20
+> Marek Beh=C3=BAn (1):
+>   irqchip/armada-370-xp: Use atomic_io_modify() instead of another
+>     spinlock
+>=20
+> Pali Roh=C3=A1r (4):
+>   irqchip/armada-370-xp: Do not allow mapping IRQ 0 and 1
+>   irqchip/armada-370-xp: Only call ipi_resume() if IPI is available
+>   irqchip/armada-370-xp: Do not touch IPI registers on platforms without
+>     IPI
+>   irqchip/armada-370-xp: Add support for 32 MSI interrupts on non-IPI
+>     platforms
+>=20
+>  drivers/irqchip/irq-armada-370-xp.c | 121 ++++++++++++++++++++++------
+>  1 file changed, 95 insertions(+), 26 deletions(-)
+>=20
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/651ab78190e2e4817eb6c21bbc5b4119c2fb34f7
+Hi Arnd,
 
-Thank you!
+just noting that these changes were also accepted, by Thomas Glexiner.
+No need to apply to soc. (I marked them as Awainting Upstream on
+patchwork).
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Marek
