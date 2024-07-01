@@ -1,141 +1,66 @@
-Return-Path: <SRS0=Ompb=OB=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=31Gx=OB=lunn.ch=andrew@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FCFCC30653
-	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 12:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF203C30659
+	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 13:01:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2597DC2BD10; Mon,  1 Jul 2024 12:56:36 +0000 (UTC)
-Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
+	id DB12CC4AF0A; Mon,  1 Jul 2024 13:01:24 +0000 (UTC)
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9DD4DC116B1
-	for <soc@kernel.org>; Mon,  1 Jul 2024 12:56:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DD4DC116B1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4WCQyx279Pz4wxBh
-	for <soc@kernel.org>; Mon, 01 Jul 2024 14:56:25 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1c8a:3990:9784:a231])
-	by michel.telenet-ops.be with bizsmtp
-	id iCwG2C00C4bcH3806CwGqZ; Mon, 01 Jul 2024 14:56:18 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1sOGZk-000oEs-UP;
-	Mon, 01 Jul 2024 14:56:16 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1sOGZs-001GYn-Eo;
-	Mon, 01 Jul 2024 14:56:16 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id C50FDC2BD10;
+	Mon,  1 Jul 2024 13:01:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C50FDC2BD10
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=cl/W0DPFRGQ0FbXoMmByDPPZheMpTBFwnsHqAhHg/mY=; b=56
+	vdOH6uQ3o9KeKsJwnVEkmOTiHf6KZmrYBxZrWfqazA2GLDjoQQLZL9YG6c0pwq39G9ZDeueZGXOGU
+	R0Ce/pWejq0G2KFoSlMSBuyavy29cHd+nUFZ6blEinMjVWAvdcB5EcZsIBCD55m8iXe+Kp2iiI88H
+	0JSZfy7v9edpr9E=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sOGeY-001XBC-Ti; Mon, 01 Jul 2024 15:01:06 +0200
+Date: Mon, 1 Jul 2024 15:01:06 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL v2] Renesas DTS updates for v6.11 (take two)
-Date: Mon,  1 Jul 2024 14:56:15 +0200
-Message-Id: <cover.1719837594.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v13 8/8] ARM: dts: turris-omnia: Add GPIO key node for
+ front button
+Message-ID: <562c1194-5c89-43ef-aa22-dbb71f5906bc@lunn.ch>
+References: <20240701113010.16447-1-kabel@kernel.org>
+ <20240701113010.16447-9-kabel@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240701113010.16447-9-kabel@kernel.org>
 
-	Hi SoC folks,
+On Mon, Jul 01, 2024 at 01:30:10PM +0200, Marek Behún wrote:
+> Now that we have the MCU device-tree node, which acts as a GPIO
+> controller, add GPIO key node for the front button.
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
 
-This is v2 of my second pull request for the inclusion of Renesas SoC
-updates for v6.11.  It replaces "[GIT PULL 0/3] Renesas SoC updates for
-v6.11 (take two)", which I sent last Friday.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Changes compared to v1:
-  - Back out all R-Car fuse commits.
-
-The following changes since commit 2bb78d9fb7c997f13309838600eead88cc99e96b:
-
-  arm64: dts: renesas: r8a779h0: Add video capture nodes (2024-06-07 14:19:29 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.11-tag2-v2
-
-for you to fetch changes up to 07e777318911d76fa787fc57f02b595481382291:
-
-  arm64: dts: renesas: r8a779h0: R-Car Sound support (2024-07-01 11:35:08 +0200)
-
-----------------------------------------------------------------
-Renesas DTS updates for v6.11 (take two)
-
-  - Add sound support for the R-Car V4M SoC,
-  - Miscellaneous fixes and improvements.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Geert Uytterhoeven (10):
-      arm64: dts: renesas: r8a779h0: Drop "opp-shared" from opp-table-0
-      arm64: dts: renesas: r8a779a0: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r8a779f0: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r8a779g0: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a07g043u: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a07g044: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a07g054: Add missing hypervisor virtual timer IRQ
-      arm64: dts: renesas: r9a08g045: Add missing hypervisor virtual timer IRQ
-      ARM: dts: renesas: Add interrupt-names to arch timer nodes
-      arm64: dts: renesas: Add interrupt-names to arch timer nodes
-
-Kuninori Morimoto (2):
-      arm64: dts: renesas: r8a779g0: Tidy up sound DT settings
-      arm64: dts: renesas: r8a779h0: R-Car Sound support
-
- arch/arm/boot/dts/renesas/r8a73a4.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7742.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7743.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7744.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7745.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a77470.dtsi            |  1 +
- arch/arm/boot/dts/renesas/r8a7790.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7791.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7792.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7793.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r8a7794.dtsi             |  1 +
- arch/arm/boot/dts/renesas/r9a06g032.dtsi           |  1 +
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77970.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77990.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a77995.dtsi          |  1 +
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  5 +-
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi          |  5 +-
- .../r8a779g0-white-hawk-ard-audio-da7212.dtso      |  4 --
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          | 22 +++----
- arch/arm64/boot/dts/renesas/r8a779h0.dtsi          | 71 +++++++++++++++++++++-
- arch/arm64/boot/dts/renesas/r9a07g043u.dtsi        |  5 +-
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |  5 +-
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi         |  5 +-
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |  5 +-
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi         |  1 +
- 34 files changed, 128 insertions(+), 24 deletions(-)
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+    Andrew
