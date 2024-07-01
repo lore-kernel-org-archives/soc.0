@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30413C2BD09
-	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 11:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FC17C30653
+	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 11:30:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 17BD0C4AF0A; Mon,  1 Jul 2024 11:30:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BE1C116B1;
-	Mon,  1 Jul 2024 11:30:36 +0000 (UTC)
+	id 3F7ABC32786; Mon,  1 Jul 2024 11:30:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70DCBC4AF10;
+	Mon,  1 Jul 2024 11:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719833439;
-	bh=GDefUOLKa6HZ+jn19hPuXZP0AbTmSP1rTIsRqlXAh7w=;
+	s=k20201202; t=1719833442;
+	bh=QKVhhUV5dUqgKhdw02r7HY+ME9YV3Fq3iOmts5qWAwA=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Zwp5gSjdLVnOljJ17L5cM8l0oNpWQC/nrW//9DhhNlScANJSF1xPXh/0gSihdtKYx
-	 jjIVoR1B4EadDxa+QRErcD2vd7tkkhyZzbZBt05WDHlxyG+EnUO9JYCgvBn7QoO6hW
-	 sfyXOqp0TpuU6IVJr8IxjJvgeArErG0YAbzCd2Fq9ehE2f62k/uc/IGodgZjZuNwvg
-	 BG2JRqNWYYSMXXTW/Es0duvC7T1R6MkZpCyXH37f7/4LCe5uCMuIhv+/UpYDfuQvS0
-	 PRlwluz8z2QHvbkC5xGBhx0HUapDPlAQuKHzyuYPIfGdHLWNXefY/hSKEyrbKKkwIH
-	 za3u7THUpZh7g==
+	b=H2rBGbLsWtQ/+gne8DxHKEL8bw4tW5wSq3iytFV/Z01g+MM/F29/lHZxzSUVc1PEH
+	 +ofRciThVok2AgPrAT3yB/yyAKcffdNlJ/9hrukcJJEVREwBHsdoAXG9fb3rnrDy9d
+	 SEMm2dsY2p+h45lW7KxYYGsyZXsGfpbG+z3m3vHX0BG1Mgq68fQH3LnHFiWJC4XfAj
+	 g53Q3LsFKsq1f8DcxYzZLHw8xZwREFESCjAAyvyS22cXRE7stEuG8F6gbFmEp7Ic/Y
+	 ruOIa+79rUIjGKQkanKZ+l0/J4uJAmF8ASMDQnloPiuYC7wNnGhoufX+vgjb+DqVkj
+	 HwFSjXRcdXOrA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Andy Shevchenko <andy@kernel.org>,
 	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
 	Linus Walleij <linus.walleij@linaro.org>,
-	linux-rtc@vger.kernel.org
+	linux-watchdog@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	arm@kernel.org,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v13 4/8] platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
-Date: Mon,  1 Jul 2024 13:30:06 +0200
-Message-ID: <20240701113010.16447-5-kabel@kernel.org>
+Subject: [PATCH v13 5/8] platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+Date: Mon,  1 Jul 2024 13:30:07 +0200
+Message-ID: <20240701113010.16447-6-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240701113010.16447-1-kabel@kernel.org>
 References: <20240701113010.16447-1-kabel@kernel.org>
@@ -45,420 +45,253 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for true board poweroff (MCU can disable all unnecessary
-voltage regulators) and wakeup at a specified time, implemented via a
-RTC driver so that the rtcwake utility can be used to configure it.
+Add support for the watchdog mechanism provided by the MCU.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  16 ++
- drivers/platform/cznic/Kconfig                |   4 +
+ drivers/platform/cznic/Kconfig                |   2 +
  drivers/platform/cznic/Makefile               |   1 +
- .../platform/cznic/turris-omnia-mcu-base.c    |   5 +
- .../cznic/turris-omnia-mcu-sys-off-wakeup.c   | 260 ++++++++++++++++++
- drivers/platform/cznic/turris-omnia-mcu.h     |  20 ++
- 6 files changed, 306 insertions(+)
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ .../platform/cznic/turris-omnia-mcu-base.c    |   4 +
+ .../cznic/turris-omnia-mcu-watchdog.c         | 130 ++++++++++++++++++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  24 ++++
+ 5 files changed, 161 insertions(+)
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-index 86360249080c..307a55f599cb 100644
---- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-+++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-@@ -38,6 +38,22 @@ Description:	(RW) The front button on the Turris Omnia router can be
- 
- 		Format: %s.
- 
-+What:		/sys/bus/i2c/devices/<mcu_device>/front_button_poweron
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RW) Newer versions of the microcontroller firmware of the
-+		Turris Omnia router support powering off the router into true
-+		low power mode. The router can be powered on by pressing the
-+		front button.
-+
-+		This file configures whether front button power on is enabled.
-+
-+		This file is present only if the power off feature is supported
-+		by the firmware.
-+
-+		Format: %i.
-+
- What:		/sys/bus/i2c/devices/<mcu_device>/fw_features
- Date:		September 2024
- KernelVersion:	6.11
 diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-index d95e7c83c7ae..c1e719235517 100644
+index c1e719235517..e262930b3faf 100644
 --- a/drivers/platform/cznic/Kconfig
 +++ b/drivers/platform/cznic/Kconfig
-@@ -18,10 +18,14 @@ config TURRIS_OMNIA_MCU
- 	depends on I2C
+@@ -19,6 +19,7 @@ config TURRIS_OMNIA_MCU
  	select GPIOLIB
  	select GPIOLIB_IRQCHIP
-+	select RTC_CLASS
+ 	select RTC_CLASS
++	select WATCHDOG_CORE
  	help
  	  Say Y here to add support for the features implemented by the
  	  microcontroller on the CZ.NIC's Turris Omnia SOHO router.
- 	  The features include:
-+	  - board poweroff into true low power mode (with voltage regulators
-+	    disabled) and the ability to configure wake up from this mode (via
-+	    rtcwake)
+@@ -26,6 +27,7 @@ config TURRIS_OMNIA_MCU
+ 	  - board poweroff into true low power mode (with voltage regulators
+ 	    disabled) and the ability to configure wake up from this mode (via
+ 	    rtcwake)
++	  - MCU watchdog
  	  - GPIO pins
  	    - to get front button press events (the front button can be
  	      configured either to generate press events to the CPU or to change
 diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
-index 53fd8f1777a3..a185ef882e44 100644
+index a185ef882e44..687f7718c0a1 100644
 --- a/drivers/platform/cznic/Makefile
 +++ b/drivers/platform/cznic/Makefile
-@@ -3,3 +3,4 @@
- obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
+@@ -4,3 +4,4 @@ obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
  turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
  turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
-+turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
+ turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
++turris-omnia-mcu-y		+= turris-omnia-mcu-watchdog.o
 diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-index 4481484b2f94..338a7ab12bd0 100644
+index 338a7ab12bd0..2d8e5c9a8dd1 100644
 --- a/drivers/platform/cznic/turris-omnia-mcu-base.c
 +++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-@@ -198,6 +198,7 @@ static const struct attribute_group omnia_mcu_base_group = {
- static const struct attribute_group *omnia_mcu_groups[] = {
- 	&omnia_mcu_base_group,
- 	&omnia_mcu_gpio_group,
-+	&omnia_mcu_poweroff_group,
- 	NULL
- };
+@@ -377,6 +377,10 @@ static int omnia_mcu_probe(struct i2c_client *client)
+ 	if (err)
+ 		return err;
  
-@@ -372,6 +373,10 @@ static int omnia_mcu_probe(struct i2c_client *client)
- 					     "Cannot read board info\n");
- 	}
- 
-+	err = omnia_mcu_register_sys_off_and_wakeup(mcu);
++	err = omnia_mcu_register_watchdog(mcu);
 +	if (err)
 +		return err;
 +
  	return omnia_mcu_register_gpiochip(mcu);
  }
  
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-watchdog.c b/drivers/platform/cznic/turris-omnia-mcu-watchdog.c
 new file mode 100644
-index 000000000000..0e8ab15b6037
+index 000000000000..3ad146ec1d80
 --- /dev/null
-+++ b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
-@@ -0,0 +1,260 @@
++++ b/drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+@@ -0,0 +1,130 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * CZ.NIC's Turris Omnia MCU system off and RTC wakeup driver
-+ *
-+ * This is not a true RTC driver (in the sense that it does not provide a
-+ * real-time clock), rather the MCU implements a wakeup from powered off state
-+ * at a specified time relative to MCU boot, and we expose this feature via RTC
-+ * alarm, so that it can be used via the rtcwake command, which is the standard
-+ * Linux command for this.
++ * CZ.NIC's Turris Omnia MCU watchdog driver
 + *
 + * 2024 by Marek Behún <kabel@kernel.org>
 + */
 +
-+#include <linux/crc32.h>
-+#include <linux/delay.h>
++#include <linux/bitops.h>
 +#include <linux/device.h>
-+#include <linux/err.h>
 +#include <linux/i2c.h>
-+#include <linux/kstrtox.h>
-+#include <linux/reboot.h>
-+#include <linux/rtc.h>
-+#include <linux/sysfs.h>
++#include <linux/moduleparam.h>
 +#include <linux/types.h>
++#include <linux/units.h>
++#include <linux/watchdog.h>
 +
 +#include <linux/turris-omnia-mcu-interface.h>
 +#include "turris-omnia-mcu.h"
 +
-+static int omnia_get_uptime_wakeup(const struct i2c_client *client, u32 *uptime,
-+				   u32 *wakeup)
++#define WATCHDOG_TIMEOUT		120
++
++static unsigned int timeout;
++module_param(timeout, int, 0);
++MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
++
++static bool nowayout = WATCHDOG_NOWAYOUT;
++module_param(nowayout, bool, 0);
++MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
++			   __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
++
++static int omnia_wdt_start(struct watchdog_device *wdt)
 +{
-+	__le32 reply[2];
++	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++
++	return omnia_cmd_write_u8(mcu->client, OMNIA_CMD_SET_WATCHDOG_STATE, 1);
++}
++
++static int omnia_wdt_stop(struct watchdog_device *wdt)
++{
++	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++
++	return omnia_cmd_write_u8(mcu->client, OMNIA_CMD_SET_WATCHDOG_STATE, 0);
++}
++
++static int omnia_wdt_ping(struct watchdog_device *wdt)
++{
++	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++
++	return omnia_cmd_write_u8(mcu->client, OMNIA_CMD_SET_WATCHDOG_STATE, 1);
++}
++
++static int omnia_wdt_set_timeout(struct watchdog_device *wdt,
++				 unsigned int timeout)
++{
++	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++
++	return omnia_cmd_write_u16(mcu->client, OMNIA_CMD_SET_WDT_TIMEOUT,
++				   timeout * DECI);
++}
++
++static unsigned int omnia_wdt_get_timeleft(struct watchdog_device *wdt)
++{
++	struct omnia_mcu *mcu = watchdog_get_drvdata(wdt);
++	u16 timeleft;
 +	int err;
 +
-+	err = omnia_cmd_read(client, OMNIA_CMD_GET_UPTIME_AND_WAKEUP, reply,
-+			     sizeof(reply));
-+	if (err)
-+		return err;
++	err = omnia_cmd_read_u16(mcu->client, OMNIA_CMD_GET_WDT_TIMELEFT,
++				 &timeleft);
++	if (err) {
++		dev_err(&mcu->client->dev, "Cannot get watchdog timeleft: %d\n",
++			err);
++		return 0;
++	}
 +
-+	if (uptime)
-+		*uptime = le32_to_cpu(reply[0]);
-+
-+	if (wakeup)
-+		*wakeup = le32_to_cpu(reply[1]);
-+
-+	return 0;
++	return timeleft / DECI;
 +}
 +
-+static int omnia_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	u32 uptime;
-+	int err;
-+
-+	err = omnia_get_uptime_wakeup(to_i2c_client(dev), &uptime, NULL);
-+	if (err)
-+		return err;
-+
-+	rtc_time64_to_tm(uptime, tm);
-+
-+	return 0;
-+}
-+
-+static int omnia_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-+	u32 wakeup;
-+	int err;
-+
-+	err = omnia_get_uptime_wakeup(client, NULL, &wakeup);
-+	if (err)
-+		return err;
-+
-+	alrm->enabled = !!wakeup;
-+	rtc_time64_to_tm(wakeup ?: mcu->rtc_alarm, &alrm->time);
-+
-+	return 0;
-+}
-+
-+static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-+
-+	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
-+
-+	if (alrm->enabled)
-+		return omnia_cmd_write_u32(client, OMNIA_CMD_SET_WAKEUP,
-+					   mcu->rtc_alarm);
-+
-+	return 0;
-+}
-+
-+static int omnia_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-+
-+	return omnia_cmd_write_u32(client, OMNIA_CMD_SET_WAKEUP,
-+				   enabled ? mcu->rtc_alarm : 0);
-+}
-+
-+static const struct rtc_class_ops omnia_rtc_ops = {
-+	.read_time		= omnia_read_time,
-+	.read_alarm		= omnia_read_alarm,
-+	.set_alarm		= omnia_set_alarm,
-+	.alarm_irq_enable	= omnia_alarm_irq_enable,
++static const struct watchdog_info omnia_wdt_info = {
++	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
++	.identity = "Turris Omnia MCU Watchdog",
 +};
 +
-+static int omnia_power_off(struct sys_off_data *data)
-+{
-+	struct omnia_mcu *mcu = data->cb_data;
-+	__be32 tmp;
-+	u8 cmd[9];
-+	u16 arg;
-+	int err;
-+
-+	if (mcu->front_button_poweron)
-+		arg = OMNIA_CMD_POWER_OFF_POWERON_BUTTON;
-+	else
-+		arg = 0;
-+
-+	cmd[0] = OMNIA_CMD_POWER_OFF;
-+	put_unaligned_le16(OMNIA_CMD_POWER_OFF_MAGIC, &cmd[1]);
-+	put_unaligned_le16(arg, &cmd[3]);
-+
-+	/*
-+	 * Although all values from and to MCU are passed in little-endian, the
-+	 * MCU's CRC unit uses big-endian CRC32 polynomial (0x04c11db7), so we
-+	 * need to use crc32_be() here.
-+	 */
-+	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
-+	put_unaligned_le32(crc32_be(~0, (void *)&tmp, sizeof(tmp)), &cmd[5]);
-+
-+	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-+	if (err)
-+		dev_err(&mcu->client->dev,
-+			"Unable to send the poweroff command: %d\n", err);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int omnia_restart(struct sys_off_data *data)
-+{
-+	struct omnia_mcu *mcu = data->cb_data;
-+	u8 cmd[3];
-+	int err;
-+
-+	cmd[0] = OMNIA_CMD_GENERAL_CONTROL;
-+
-+	if (reboot_mode == REBOOT_HARD)
-+		cmd[1] = cmd[2] = OMNIA_CTL_HARD_RST;
-+	else
-+		cmd[1] = cmd[2] = OMNIA_CTL_LIGHT_RST;
-+
-+	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-+	if (err)
-+		dev_err(&mcu->client->dev,
-+			"Unable to send the restart command: %d\n", err);
-+
-+	/*
-+	 * MCU needs a little bit to process the I2C command, otherwise it will
-+	 * do a light reset based on SOC SYSRES_OUT pin.
-+	 */
-+	mdelay(1);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static ssize_t front_button_poweron_show(struct device *dev,
-+					 struct device_attribute *a, char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", mcu->front_button_poweron);
-+}
-+
-+static ssize_t front_button_poweron_store(struct device *dev,
-+					  struct device_attribute *a,
-+					  const char *buf, size_t count)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+	bool val;
-+	int err;
-+
-+	err = kstrtobool(buf, &val);
-+	if (err)
-+		return err;
-+
-+	mcu->front_button_poweron = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(front_button_poweron);
-+
-+static struct attribute *omnia_mcu_poweroff_attrs[] = {
-+	&dev_attr_front_button_poweron.attr,
-+	NULL
++static const struct watchdog_ops omnia_wdt_ops = {
++	.owner		= THIS_MODULE,
++	.start		= omnia_wdt_start,
++	.stop		= omnia_wdt_stop,
++	.ping		= omnia_wdt_ping,
++	.set_timeout	= omnia_wdt_set_timeout,
++	.get_timeleft	= omnia_wdt_get_timeleft,
 +};
 +
-+static umode_t poweroff_attrs_visible(struct kobject *kobj, struct attribute *a,
-+				      int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	if (mcu->features & OMNIA_FEAT_POWEROFF_WAKEUP)
-+		return a->mode;
-+
-+	return 0;
-+}
-+
-+const struct attribute_group omnia_mcu_poweroff_group = {
-+	.attrs = omnia_mcu_poweroff_attrs,
-+	.is_visible = poweroff_attrs_visible,
-+};
-+
-+int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu)
++int omnia_mcu_register_watchdog(struct omnia_mcu *mcu)
 +{
 +	struct device *dev = &mcu->client->dev;
++	u8 state;
 +	int err;
 +
-+	/* MCU restart is always available */
-+	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
-+					    SYS_OFF_PRIO_FIRMWARE,
-+					    omnia_restart, mcu);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot register system restart handler\n");
-+
-+	/*
-+	 * Poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
-+	 * present.
-+	 */
-+	if (!(mcu->features & OMNIA_FEAT_POWEROFF_WAKEUP))
++	if (!(mcu->features & OMNIA_FEAT_WDT_PING))
 +		return 0;
 +
-+	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
-+					    SYS_OFF_PRIO_FIRMWARE,
-+					    omnia_power_off, mcu);
++	mcu->wdt.info = &omnia_wdt_info;
++	mcu->wdt.ops = &omnia_wdt_ops;
++	mcu->wdt.parent = dev;
++	mcu->wdt.min_timeout = 1;
++	mcu->wdt.max_timeout = 65535 / DECI;
++
++	mcu->wdt.timeout = WATCHDOG_TIMEOUT;
++	watchdog_init_timeout(&mcu->wdt, timeout, dev);
++
++	watchdog_set_drvdata(&mcu->wdt, mcu);
++
++	omnia_wdt_set_timeout(&mcu->wdt, mcu->wdt.timeout);
++
++	err = omnia_cmd_read_u8(mcu->client, OMNIA_CMD_GET_WATCHDOG_STATE,
++				&state);
 +	if (err)
 +		return dev_err_probe(dev, err,
-+				     "Cannot register system power off handler\n");
++				     "Cannot get MCU watchdog state\n");
 +
-+	mcu->rtcdev = devm_rtc_allocate_device(dev);
-+	if (IS_ERR(mcu->rtcdev))
-+		return dev_err_probe(dev, PTR_ERR(mcu->rtcdev),
-+				     "Cannot allocate RTC device\n");
++	if (state)
++		set_bit(WDOG_HW_RUNNING, &mcu->wdt.status);
 +
-+	mcu->rtcdev->ops = &omnia_rtc_ops;
-+	mcu->rtcdev->range_max = U32_MAX;
-+	set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, mcu->rtcdev->features);
-+
-+	err = devm_rtc_register_device(mcu->rtcdev);
++	watchdog_set_nowayout(&mcu->wdt, nowayout);
++	watchdog_stop_on_reboot(&mcu->wdt);
++	err = devm_watchdog_register_device(dev, &mcu->wdt);
 +	if (err)
-+		return dev_err_probe(dev, err, "Cannot register RTC device\n");
-+
-+	mcu->front_button_poweron = true;
++		return dev_err_probe(dev, err,
++				     "Cannot register MCU watchdog\n");
 +
 +	return 0;
 +}
 diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
-index 3d2dd0054499..2a1c68ba9b7f 100644
+index 2a1c68ba9b7f..dc59f415f611 100644
 --- a/drivers/platform/cznic/turris-omnia-mcu.h
 +++ b/drivers/platform/cznic/turris-omnia-mcu.h
-@@ -15,8 +15,10 @@
+@@ -13,6 +13,7 @@
+ #include <linux/if_ether.h>
+ #include <linux/mutex.h>
  #include <linux/types.h>
++#include <linux/watchdog.h>
  #include <linux/workqueue.h>
  #include <asm/byteorder.h>
-+#include <asm/unaligned.h>
- 
- struct i2c_client;
-+struct rtc_device;
- 
- struct omnia_mcu {
- 	struct i2c_client *client;
-@@ -36,6 +38,11 @@ struct omnia_mcu {
- 	struct delayed_work button_release_emul_work;
- 	unsigned long last_status;
- 	bool button_pressed_emul;
+ #include <asm/unaligned.h>
+@@ -43,6 +44,9 @@ struct omnia_mcu {
+ 	struct rtc_device *rtcdev;
+ 	u32 rtc_alarm;
+ 	bool front_button_poweron;
 +
-+	/* RTC device for configuring wake-up */
-+	struct rtc_device *rtcdev;
-+	u32 rtc_alarm;
-+	bool front_button_poweron;
++	/* MCU watchdog */
++	struct watchdog_device wdt;
  };
  
  int omnia_cmd_write_read(const struct i2c_client *client,
-@@ -48,6 +55,17 @@ static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
+@@ -55,6 +59,25 @@ static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
  	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
  }
  
-+static inline int omnia_cmd_write_u32(const struct i2c_client *client, u8 cmd,
-+				      u32 val)
++static inline int omnia_cmd_write_u8(const struct i2c_client *client, u8 cmd,
++				     u8 val)
 +{
-+	u8 buf[5];
-+
-+	buf[0] = cmd;
-+	put_unaligned_le32(val, &buf[1]);
++	u8 buf[2] = { cmd, val };
 +
 +	return omnia_cmd_write(client, buf, sizeof(buf));
 +}
 +
- static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
- 				 void *reply, unsigned int len)
++static inline int omnia_cmd_write_u16(const struct i2c_client *client, u8 cmd,
++				      u16 val)
++{
++	u8 buf[3];
++
++	buf[0] = cmd;
++	put_unaligned_le16(val, &buf[1]);
++
++	return omnia_cmd_write(client, buf, sizeof(buf));
++}
++
+ static inline int omnia_cmd_write_u32(const struct i2c_client *client, u8 cmd,
+ 				      u32 val)
  {
-@@ -136,7 +154,9 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd,
- }
- 
- extern const struct attribute_group omnia_mcu_gpio_group;
-+extern const struct attribute_group omnia_mcu_poweroff_group;
+@@ -158,5 +181,6 @@ extern const struct attribute_group omnia_mcu_poweroff_group;
  
  int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
-+int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
+ int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
++int omnia_mcu_register_watchdog(struct omnia_mcu *mcu);
  
  #endif /* __TURRIS_OMNIA_MCU_H */
 -- 
