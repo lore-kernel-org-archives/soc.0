@@ -1,90 +1,89 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E94C2BD09
-	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 17:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B63A2C2BD09
+	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9D05CC4AF16; Mon,  1 Jul 2024 17:00:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C8CC4AF10;
-	Mon,  1 Jul 2024 17:00:44 +0000 (UTC)
+	id 71F90C32781; Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5BA01C116B1
+	for <soc@kernel.org>; Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719853246;
-	bh=RPa/vjSg3uSpjy6H7yxFua7H/Ic3dtmOuyCqVe6b34k=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=Lt6KcZXg0M+yE9PUdZNYnPiiXgmG1lSelL0oXdPGIUVz89fu7gjWdNYt6kad7bf+j
-	 C1o5JFjkIHo86bbADSGqkKjgHNIyVidDOniQbezvWppO4UuU/6L5AvuHze9JXEaGeo
-	 pOICafeKCSZfC6ywsDpaDALcnJppGXZBhRGmxriWhE3vKQQIBwyVUQmQuXjuegxTlw
-	 Is2cjymDX807Tk5L/zwC4rJ60z9CTYtRDFP5BHnnWdjiB5f08vRzzvwFuiRj6liBAB
-	 pivmepzIhGSpasxAa36OkXs5oyE/IaJTr+MDKRsnwLRz1xD4I0JNSTRFJi3kQWDK9n
-	 AlBQ7jT6z7u+w==
-Date: Mon, 1 Jul 2024 19:00:41 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Gregory Clement
- <gregory.clement@bootlin.com>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
- soc@kernel.org, linux-arm-kernel@lists.infradead.org, arm@kernel.org, Andy
- Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo
- =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v3 0/5] armada-370-xp irqchip updates
-Message-ID: <20240701190041.286241ec@dellmb>
-In-Reply-To: <20240621093832.23319-1-kabel@kernel.org>
-References: <20240621093832.23319-1-kabel@kernel.org>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	s=k20201202; t=1719867637;
+	bh=ABvg+u08SOwkBJwLuOOuNvGhfljTZEgv3IQlq/T5ru0=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=QUWg6BFnLHyFlbNVgWDuVmFr1kOwmxbSNozQKnHCI4gVWjTxZcyamSSVwYGbYwwhT
+	 AVl5p1BeqS+zxsTT1XeEosh/6ydVJeNKv3lEwo2x6VrEQC0x2IkTWgkj4OPT0fTJ7y
+	 a0zD0CdEGoZEzNB//0i6GNBRNE3/E5Y5oUruTkvkc7CWDX9cKt7eH9jCIxebwpc7IC
+	 BdkSpSM0ZAE03y0KnMCqepwg7Row07Liamopsyum2jUeV2GThrxGl4O+ekD9LFrzho
+	 5/3M9oY5TSxdN0sgiF9YUSTO2Qb4wmWzhmf6oB/visiSr4Px2+0TtANvx0iemceoe0
+	 g301Xf507t4Fw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43ACEC43446;
+	Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <171986763719.7657.5405148911904932755.git-patchwork-summary@kernel.org>
+Date: Mon, 01 Jul 2024 21:00:37 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Fri, 21 Jun 2024 11:38:27 +0200
-Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+Hello:
 
-> Hi Arnd, Andrew, et al.
->=20
-> this is v3 of updates for armada-370-xp irqchip. There is one small fix,
-> and another patch added which was previosly sent separately.
->=20
-> Also I realized that I did not send to the SoC mailing list, nor to
-> Arnd.
->=20
-> As written in previous cover letter: this driver is in need of a major
-> refactor in order to bring it to modern standards, but that is
-> unfortunately currently infeasible with my time constraints.
->=20
-> v1 and v2 at:
->   https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D86=
-3473
->   https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D86=
-3707
->=20
-> Changes since v2:
-> - dropped redundant assignment during declaration in patch 4
->   (bool src0 =3D false, src1 =3D false)
-> - added patch 5 to this series, previously sent separately
->=20
-> Marek Beh=C3=BAn (1):
->   irqchip/armada-370-xp: Use atomic_io_modify() instead of another
->     spinlock
->=20
-> Pali Roh=C3=A1r (4):
->   irqchip/armada-370-xp: Do not allow mapping IRQ 0 and 1
->   irqchip/armada-370-xp: Only call ipi_resume() if IPI is available
->   irqchip/armada-370-xp: Do not touch IPI registers on platforms without
->     IPI
->   irqchip/armada-370-xp: Add support for 32 MSI interrupts on non-IPI
->     platforms
->=20
->  drivers/irqchip/irq-armada-370-xp.c | 121 ++++++++++++++++++++++------
->  1 file changed, 95 insertions(+), 26 deletions(-)
->=20
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-Hi Arnd,
+Patch: [GIT,PULL] amlogic drivers updates for v6.11
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867045
+  Lore link: https://lore.kernel.org/r/35093904-c4a8-432d-b010-a994fc1ee536@linaro.org
 
-just noting that these changes were also accepted, by Thomas Glexiner.
-No need to apply to soc. (I marked them as Awainting Upstream on
-patchwork).
+Series: Turris Omnia MCU driver
+  Submitter: Marek Behún <kabel@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867098
+  Lore link: https://lore.kernel.org/r/20240701113010.16447-1-kabel@kernel.org
+    Patches: [v13,1/8] dt-bindings: firmware: add cznic,turris-omnia-mcu binding
+             [v13,2/8] platform: cznic: Add preliminary support for Turris Omnia MCU
+             [v13,3/8] platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+             [v13,4/8] platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+             [v13,5/8] platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+             [v13,6/8] platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+             [v13,7/8] ARM: dts: turris-omnia: Add MCU system-controller node
+             [v13,8/8] ARM: dts: turris-omnia: Add GPIO key node for front button
 
-Marek
+Patch: arm/arm64: dts: arm: Use generic clock and regulator nodenames
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=866865
+  Lore link: https://lore.kernel.org/r/20240630-arm-dts-fixes-2-v1-1-a32ba57e5b1d@linaro.org
+
+Patch: [GIT,PULL] amlogic ARM64 DT updates for v6.11
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867044
+  Lore link: https://lore.kernel.org/r/7f71e76c-c793-429a-b0ed-7296553a3eff@linaro.org
+
+Patch: [GIT,PULL] Microchip ARM64 DT updates for v6.11
+  Submitter: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=866849
+  Lore link: https://lore.kernel.org/r/20240629174051.665027-1-claudiu.beznea@tuxon.dev
+
+
+Total patches: 12
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
