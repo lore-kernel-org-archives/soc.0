@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9E0C3065C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEBA7C30653
 	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9D901C4AF12; Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86269C116B1;
+	id 93ACBC4AF11; Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 78800C4AF0D;
 	Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1719867637;
-	bh=paE1aYRkrdbVqAkdau6B5yFAbCvr+3U6c0QH5kjK1uM=;
+	bh=rrUBXq3DRvy867ZxXobJZT1mduuH56rmfJQjJCUwR34=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=czBWy/LBIa1+tTtNbB5fmRZePDiZi9v0v6pQuoXIZ4rAg/lFfTX9rb8sEkaGEwu7+
-	 krAIeE0A3mM/JKth1zeRHYZiYZrTnkFXgQ039rER6IOMnwWL+/ki2W+bM5sipbgQ6a
-	 Ucj5xqPNU1ddobwdDv976snWh9l5kdf/CFtjEcoGg74EvcOCns1ZNYmZrI6yXI5jkM
-	 Esv7YwIXdWZCP7/lzgh3n0ukZyvNgcHeFr9ZIetL+E8R/r8VJS9TBwBvo6isHQy1FA
-	 h/sOa+4p6XEwQbWd7kfyEt0f8F5A3A95EYYjcFL2BKkWFMJEckH+BL53a5eqx6auY0
-	 +9Nr72Jhlfmmg==
+	b=pgn/ArsBQRaHKlHP9rVALwIgm+x8kUxR9Jf+ztFpntgtuBlVd+4/3q5ljl30e7J/o
+	 44dPQrr8/ho0pZKNa/bt8YNvwDfTeElSbneMaeCQF93Od8VSPl1V2xUiBYsn/n16RM
+	 aC9SbdBPGXsu6xBJ1aOZTpC1ed0xsJcIppzMbZUo9VLDy8cPXXSGq2EjS2zmMxq8ZG
+	 GjxnYmyBAemXxy1G2zvBd8Deggc+uE8zriuZO8GtfUmqRwpNxzZf3ymUUyRgLL/e4G
+	 ugt+HgCP72V1cAC+c3t9ZCoUx+ejDrDQ/mFANuUyZLgrF9gxpiFO9ckXkAmh4K2kBw
+	 mgHEzE3Y4dpYw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71DA1C43446;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 688C2C4333B;
 	Mon,  1 Jul 2024 21:00:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.11
+Subject: Re: [PATCH] arm/arm64: dts: arm: Use generic clock and regulator
+ nodenames
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <171986763746.7657.15059465933415146361.git-patchwork-notify@kernel.org>
+ <171986763742.7657.13412128348339969945.git-patchwork-notify@kernel.org>
 Date: Mon, 01 Jul 2024 21:00:37 +0000
-References: <7f71e76c-c793-429a-b0ed-7296553a3eff@linaro.org>
-In-Reply-To: <7f71e76c-c793-429a-b0ed-7296553a3eff@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+References: <20240630-arm-dts-fixes-2-v1-1-a32ba57e5b1d@linaro.org>
+In-Reply-To: <20240630-arm-dts-fixes-2-v1-1-a32ba57e5b1d@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 1 Jul 2024 10:36:36 +0200 you wrote:
-> Hi,
+On Sun, 30 Jun 2024 00:15:35 +0200 you wrote:
+> From: "Rob Herring (Arm)" <robh@kernel.org>
 > 
-> Here's a set of Amlogic ARM64 DT changes for v6.11, with:
-> - A bunch of DT fixes to allmost solve all remaining check errors
-> - Some SM1/G12 SPDIF & HDMI updates an fixes
-> - Amlogic S4 PWM
-> - Amlogic A4 Power Domain
-> - New boards: OSMC Vero 4K, Dreambox One & Two, GXLX/S905L p271 Reference Boards
+> With the recent defining of preferred naming for fixed clock and
+> regulator nodes, convert the Arm Ltd. boards to use the preferred
+> names. In the cases which had a unit-address, warnings about missing
+> "reg" property are fixed.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] amlogic ARM64 DT updates for v6.11
-    https://git.kernel.org/soc/soc/c/35b94a99fc67
+  - arm/arm64: dts: arm: Use generic clock and regulator nodenames
+    https://git.kernel.org/soc/soc/c/04f08ef291d4
 
 You are awesome, thank you!
 -- 
