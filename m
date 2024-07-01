@@ -4,81 +4,137 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 689A4C2BD09
-	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 11:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 609A0C2BD09
+	for <soc@archiver.kernel.org>; Mon,  1 Jul 2024 11:35:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5AF89C4AF12; Mon,  1 Jul 2024 11:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FF9C32786;
-	Mon,  1 Jul 2024 11:30:48 +0000 (UTC)
+	id 51A4EC32786; Mon,  1 Jul 2024 11:35:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF07AC116B1;
+	Mon,  1 Jul 2024 11:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719833452;
-	bh=fe0hAV7ALNaaXPDURyyV5f+mGCPo+4ZJTjNHFkb4faY=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aYjixNMVCXEdCyd5ttXVvy6wambd51K4Ee4r7Cse1TcxJE37qLslx5SkAxmNXSzY6
-	 8m06QJeC8j3G2gISnZIverCU3ExG8K+CmFyB2LEM2p1MV7gm/Kurk2BJfco/3KU7gE
-	 7Dc+MWcYfq17xaR96muZgEOn/nNjCg5kkhpBN2qLUV8tzZ1mAvS0aVGUcR73n7ISGZ
-	 4mKL1E40HQRB3pi0VjZzRae2Du+aISwTD7gdmgCDAffACj0d/sKUI99DnMXU4gL7J6
-	 Ne0fvbvkjBRL2R4rjyWPENAxDq1IDSRkMeEOUi1KmFVa+Zgakw9OTnHJqoa61JnvMo
-	 e30HfyMksXhtQ==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+	s=k20201202; t=1719833710;
+	bh=1NrrH/4GMikvLAny3aFE53sPW3zaL/PS5U1g46tV1/g=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=T99lJKBPNu/x8uDrxUPta1yomvDa8eK4INp9fEi0/CPE1wlayjnre9DvF3G8t8+2o
+	 /vRbt+QZ6Jm43H7bjaT+CfmGo0xE1CIKfMyuRQ4slF2R5hlB3Uyk8l6TJoG+nvibQ7
+	 rX3qm1LCm/gfWx+MrImOESmP3/L7i2xR0MWjDK7KNTDCp0D7Cp8aDfdMczPmDq2iwN
+	 rW2+AIUXq9X2l3qpK8bs8U5OHdZdqEdOg0OJtPEs/txADH8GnMxLa0n1XhCctypalR
+	 IVNSz2bxJveDcgFeqGAlPfhqda4fTcFI1snif3+04waV9mGWYY179JXOIlzi2F/DI6
+	 rmMqnpH9I5qJw==
+Date: Mon, 1 Jul 2024 13:35:04 +0200
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-	devicetree@vger.kernel.org
-Subject: [PATCH v13 8/8] ARM: dts: turris-omnia: Add GPIO key node for front button
-Date: Mon,  1 Jul 2024 13:30:10 +0200
-Message-ID: <20240701113010.16447-9-kabel@kernel.org>
-X-Mailer: git-send-email 2.44.2
-In-Reply-To: <20240701113010.16447-1-kabel@kernel.org>
-References: <20240701113010.16447-1-kabel@kernel.org>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
+ <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy Shevchenko
+ <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo
+ =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Linus Walleij
+ <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v12 3/8] platform: cznic: turris-omnia-mcu: Add support
+ for MCU connected GPIOs
+Message-ID: <20240701133429.1f2650e1@dellmb>
+In-Reply-To: <CAMRc=MdpJUaJ3B64TTdt8B=PeJwR+BjiCx1SJj+SJGOT=LtT9A@mail.gmail.com>
+References: <20240617152606.26191-1-kabel@kernel.org>
+	<20240617152606.26191-4-kabel@kernel.org>
+	<CAMRc=MdpJUaJ3B64TTdt8B=PeJwR+BjiCx1SJj+SJGOT=LtT9A@mail.gmail.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-Now that we have the MCU device-tree node, which acts as a GPIO
-controller, add GPIO key node for the front button.
+On Mon, 1 Jul 2024 11:37:44 +0200
+Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Signed-off-by: Marek Behún <kabel@kernel.org>
----
- .../boot/dts/marvell/armada-385-turris-omnia.dts    | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> On Mon, Jun 17, 2024 at 5:26=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.or=
+g> wrote:
+> >
+> > Add support for GPIOs connected to the MCU on the Turris Omnia board.
+> >
+> > This includes:
+> > - front button pin
+> > - enable pins for USB regulators
+> > - MiniPCIe / mSATA card presence pins in MiniPCIe port 0
+> > - LED output pins from WAN ethernet PHY, LAN switch and MiniPCIe ports
+> > - on board revisions 32+ also various peripheral resets and another
+> >   voltage regulator enable pin
+> >
+> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org> =20
+>=20
+> This is one heck of a complex GPIO driver!
 
-diff --git a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
-index 59079d63fe27..43202890c959 100644
---- a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
-+++ b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
-@@ -112,6 +112,19 @@ sfp: sfp {
- 		status = "disabled";
- 	};
- 
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		front-button {
-+			label = "Front Button";
-+			linux,code = <KEY_VENDOR>;
-+			linux,can-disable;
-+			gpios = <&mcu 0 12 GPIO_ACTIVE_HIGH>;
-+			/* debouncing is done by the microcontroller */
-+			debounce-interval = <0>;
-+		};
-+	};
-+
- 	sound {
- 		compatible = "simple-audio-card";
- 		simple-audio-card,name = "SPDIF";
--- 
-2.44.2
+The complexity comes from how the MCU command API was engineered and
+then when I took over the MCU firmware, I had to extend the command in
+a way that would ensure backwards compatibility.
 
+> > +
+> > +#define _DEF_GPIO(_cmd, _ctl_cmd, _bit, _ctl_bit, _int_bit, _feat, _fe=
+at_mask) \
+> > +       {                                                              =
+ \
+> > +               .cmd =3D _cmd,                                         =
+   \
+> > +               .ctl_cmd =3D _ctl_cmd,                                 =
+   \
+> > +               .bit =3D _bit,                                         =
+   \
+> > +               .ctl_bit =3D _ctl_bit,                                 =
+   \
+> > +               .int_bit =3D (_int_bit) < 0 ? OMNIA_GPIO_INVALID_INT_BI=
+T  \
+> > +                                         : (_int_bit),                =
+ \
+> > +               .feat =3D _feat,                                       =
+   \
+> > +               .feat_mask =3D _feat_mask,                             =
+   \
+> > +       }
+> > +#define _DEF_GPIO_STS(_name) \
+> > +       _DEF_GPIO(OMNIA_CMD_GET_STATUS_WORD, 0, __bf_shf(OMNIA_STS_ ## =
+_name), \
+> > +                 0, __bf_shf(OMNIA_INT_ ## _name), 0, 0)
+> > +#define _DEF_GPIO_CTL(_name) \
+> > +       _DEF_GPIO(OMNIA_CMD_GET_STATUS_WORD, OMNIA_CMD_GENERAL_CONTROL,=
+ \
+> > +                 __bf_shf(OMNIA_STS_ ## _name), __bf_shf(OMNIA_CTL_ ##=
+ _name), \
+> > +                 -1, 0, 0)
+> > +#define _DEF_GPIO_EXT_STS(_name, _feat) \
+> > +       _DEF_GPIO(OMNIA_CMD_GET_EXT_STATUS_DWORD, 0, \
+> > +                 __bf_shf(OMNIA_EXT_STS_ ## _name), 0, \
+> > +                 __bf_shf(OMNIA_INT_ ## _name), \
+> > +                 OMNIA_FEAT_ ## _feat | OMNIA_FEAT_EXT_CMDS, \
+> > +                 OMNIA_FEAT_ ## _feat | OMNIA_FEAT_EXT_CMDS)
+> > +#define _DEF_GPIO_EXT_STS_LED(_name, _ledext) \
+> > +       _DEF_GPIO(OMNIA_CMD_GET_EXT_STATUS_DWORD, 0, \
+> > +                 __bf_shf(OMNIA_EXT_STS_ ## _name), 0, \
+> > +                 __bf_shf(OMNIA_INT_ ## _name), \
+> > +                 OMNIA_FEAT_LED_STATE_ ## _ledext, \
+> > +                 OMNIA_FEAT_LED_STATE_EXT_MASK)
+> > +#define _DEF_GPIO_EXT_STS_LEDALL(_name) \
+> > +       _DEF_GPIO(OMNIA_CMD_GET_EXT_STATUS_DWORD, 0, \
+> > +                 __bf_shf(OMNIA_EXT_STS_ ## _name), 0, \
+> > +                 __bf_shf(OMNIA_INT_ ## _name), \
+> > +                 OMNIA_FEAT_LED_STATE_EXT_MASK, 0)
+> > +#define _DEF_GPIO_EXT_CTL(_name, _feat) \
+> > +       _DEF_GPIO(OMNIA_CMD_GET_EXT_CONTROL_STATUS, OMNIA_CMD_EXT_CONTR=
+OL, \
+> > +                 __bf_shf(OMNIA_EXT_CTL_ ## _name), \
+> > +                 __bf_shf(OMNIA_EXT_CTL_ ## _name), -1, \
+> > +                 OMNIA_FEAT_ ## _feat | OMNIA_FEAT_EXT_CMDS, \
+> > +                 OMNIA_FEAT_ ## _feat | OMNIA_FEAT_EXT_CMDS)
+> > +#define _DEF_INT(_name) \
+> > +       _DEF_GPIO(0, 0, 0, 0, __bf_shf(OMNIA_INT_ ## _name), 0, 0)
+> > + =20
+>=20
+> One coding-style nit: can you add newlines between these macros?
+
+Sent v13 with this change.
+
+> I'm having a hard-time understanding the entire architecture of this
+> MCU but the code overall looks good to me so I trust you know what
+> you're doing.
+>=20
+> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+Thanks.
+
+Marek
