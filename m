@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB7AC2BD09
-	for <soc@archiver.kernel.org>; Tue,  2 Jul 2024 03:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D246C2BD09
+	for <soc@archiver.kernel.org>; Tue,  2 Jul 2024 03:11:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 93ADEC32786; Tue,  2 Jul 2024 03:09:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5574CC116B1;
-	Tue,  2 Jul 2024 03:09:13 +0000 (UTC)
+	id D5430C4AF0A; Tue,  2 Jul 2024 03:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12330C116B1;
+	Tue,  2 Jul 2024 03:11:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719889754;
-	bh=+hqnWCG3NdDaHwrRaZorxyC8vCtW5NuxDhOQaYqZw9Y=;
+	s=k20201202; t=1719889917;
+	bh=rQ9OFZQ4w+40SFlsEVI/V8sScA4vJb+vQGJa8mrgoEg=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=XTL1UFLixAahkMOQC+OV2cNPeOBJYNSlbIu+wLoNVMGpJD7GrQ2pTkURRpZnrfGg/
-	 pedUStU33rnKSE1nd+LRv5lis51seabdcurMSMq3UEBDjhDyy5epTwbm7TkDi4q22c
-	 J/5Y/uxjAegupXJDP356cILXwRfgUQpUj0wBP4UFj5R/maxGaAlajSvSmHtRY5Yzv9
-	 qKdwLLQYhgtXNfTc+PM0dpSGxSStAcM/BVnF5GQebqpfz/k12HMSH+IeYzP3l6LMPp
-	 e/dWdnGHp7U48Z1wQAdbqwOKweB2qg4SB5TO+xQcpn46q1R9lqenPl2fncEUnh24GL
-	 onraZ2Te3eYxQ==
+	b=RLmhcnqKpM/NtO35OERsp+aqF9u9YLBU1qnodFiSC0Ir3lQvDJQz0e0nMQQrbTRL9
+	 ufjltvDuMval78x3T1C0cTGoatVc2r5PwlDUI2v0OtAsd0CNhOFYaL8oh+HH86WXFt
+	 n/MTVlIsdVJmsQwKcPPvRjAwpgrT/3QhmMMF69jEu7mdzystcY6qP9YMYZiKjYcePR
+	 3WenT+GyanNSHP5ZW+2ey/IcZfG5+9XwdeB8cedqgNMGgpfQn4P5LwgNs5Ous89RQO
+	 jYDoe2PllsYg/i8n4DUW7h3IrfmwWqokHzKvsvcqxc6fcdyoIb8ZFnYfVhk/6grR2x
+	 6SayiX65gjnfA==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -30,16 +30,10 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
 	Johan Hovold <johan+linaro@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Caleb Connolly <caleb.connolly@linaro.org>,
-	Cong Zhang <quic_congzhan@quicinc.com>,
 	Komal Bajaj <quic_kbajaj@quicinc.com>
-Subject: [GIT PULL] Qualcomm Arm64 DeviceTree fixes for v6.10
-Date: Mon,  1 Jul 2024 22:09:12 -0500
-Message-ID: <20240702030913.340814-1-andersson@kernel.org>
+Subject: [GIT PULL] Qualcomm driver fixes for v6.10
+Date: Mon,  1 Jul 2024 22:11:56 -0500
+Message-ID: <20240702031157.341031-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,68 +45,26 @@ The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.10
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.10
 
-for you to fetch changes up to af355e799b3dc3dd0ed8bf2143641af05d8cd3d4:
+for you to fetch changes up to e227c11179dfb6970360c95a8d7b007eb3b223d6:
 
-  arm64: dts: qcom: qdu1000: Fix LLCC reg property (2024-06-21 00:47:00 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm64 DeviceTree fixes for v6.10
-
-This marks the PSHOLD node on SC8280XP as reserved, to resolve a
-regression where a reset is triggered instead of a clean shutdown. Also
-on SC8280XP the touchscreen properties are adjusted to make it properly
-described on CRD and make it work on the Lenovo Thinkpad X13s.
-
-Corrects the LLCC definitions on SC8180X and QDU1000 to allow these
-drivers and their dependencies to probe.
-
-X1 Elite CRD is given more CMA space, to avoid running out during boot,
-as PCIe SMMU is not accessible.  Audio configuration is corrected, on
-the same.
-
-SM6115 SDHC is given an IOMMU stream, to avoid access issues.
-
-Lastly the EL2 non-secure physical timer interrupt on SA8775P is
-corrected from its previous incorrect value.
+  Revert "dt-bindings: cache: qcom,llcc: correct QDU1000 reg entries" (2024-07-01 21:58:27 -0500)
 
 ----------------------------------------------------------------
-Abel Vesa (1):
-      arm64: dts: qcom: x1e80100: Fix PCIe 6a reg offsets and add MHI
+Qualcomm driver fixes for v6.10
 
-Bjorn Andersson (1):
-      arm64: dts: qcom: sc8180x: Fix LLCC reg property again
+UCSI support is disabled on SC8280XP while being debugged, as it's
+causing the system to crash. A recent LLCC QDU1000 binding change is
+reverted, to allow expressing the LLCC memory regions.
 
-Caleb Connolly (1):
-      arm64: dts: qcom: sm6115: add iommu for sdhc_1
-
-Cong Zhang (1):
-      arm64: dts: qcom: sa8775p: Correct IRQ number of EL2 non-secure physical timer
-
-Johan Hovold (2):
-      arm64: dts: qcom: sc8280xp-x13s: fix touchscreen power on
-      arm64: dts: qcom: sc8280xp-crd: use external pull up for touch reset
+----------------------------------------------------------------
+Johan Hovold (1):
+      soc: qcom: pmic_glink: disable UCSI on sc8280xp
 
 Komal Bajaj (1):
-      arm64: dts: qcom: qdu1000: Fix LLCC reg property
+      Revert "dt-bindings: cache: qcom,llcc: correct QDU1000 reg entries"
 
-Konrad Dybcio (2):
-      arm64: dts: qcom: x1e80100-*: Allocate some CMA buffers
-      arm64: dts: qcom: sc8280xp: Set status = "reserved" on PSHOLD
-
-Krzysztof Kozlowski (2):
-      arm64: dts: qcom: x1e80100-crd: fix WCD audio codec TX port mapping
-      arm64: dts: qcom: x1e80100-crd: fix DAI used for headset recording
-
- arch/arm64/boot/dts/qcom/qdu1000.dtsi                    | 16 +++++++++++++++-
- arch/arm64/boot/dts/qcom/sa8775p.dtsi                    |  2 +-
- arch/arm64/boot/dts/qcom/sc8180x.dtsi                    | 11 +++++++----
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts                |  3 +--
- .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts      | 15 ++++++++-------
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi                   |  2 ++
- arch/arm64/boot/dts/qcom/sm6115.dtsi                     |  1 +
- arch/arm64/boot/dts/qcom/x1e80100-crd.dts                | 13 +++++++++++--
- arch/arm64/boot/dts/qcom/x1e80100-qcp.dts                |  9 +++++++++
- arch/arm64/boot/dts/qcom/x1e80100.dtsi                   | 10 ++++++----
- 10 files changed, 61 insertions(+), 21 deletions(-)
+ Documentation/devicetree/bindings/cache/qcom,llcc.yaml | 2 +-
+ drivers/soc/qcom/pmic_glink.c                          | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
