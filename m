@@ -1,55 +1,54 @@
-Return-Path: <SRS0=Dzy4=OC=yeah.net=shawnguo2@kernel.org>
+Return-Path: <wens@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 176DDC3064D
-	for <soc@archiver.kernel.org>; Tue,  2 Jul 2024 14:22:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B371C3064D
+	for <soc@archiver.kernel.org>; Tue,  2 Jul 2024 15:12:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0D668C2BD10; Tue,  2 Jul 2024 14:22:29 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
-	by smtp.kernel.org (Postfix) with ESMTP id 324F7C4AF0D;
-	Tue,  2 Jul 2024 14:22:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 324F7C4AF0D
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=C0pnlAVeKpphDiHhO+1BwpkHwEbNj3K46SZG87CaeuU=;
-	b=C2Y1atNHwyV8nmwd6I/we8QZQYuMx6IK6GDsFmuKSp4WQkgLtPzSSnv9hDJpPs
-	YfNpWsNDDwEeEdpInFFRmn92aWRhJqDiWAKDf08Y44gGsSkBxCgQLMv8NgJ9vqwU
-	8ezGYUkeJcS2lHwCcwbhrqr4b1aBAdguDmVfvl8PChxxs=
-Received: from localhost.localdomain (unknown [114.218.218.47])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgC3H+0TDYRm7sMJAA--.947S4;
-	Tue, 02 Jul 2024 22:22:13 +0800 (CST)
-From: Shawn Guo <shawnguo2@yeah.net>
+	id 1482EC4AF07; Tue,  2 Jul 2024 15:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD83BC116B1;
+	Tue,  2 Jul 2024 15:12:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719933161;
+	bh=k33hXVwdB7QXNGJCLyWJnvbK+AxHsjUjmrFo9r3aq78=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=PbhH1w4zL/WVKpjh2bFC6P0+BOnwpzuD15yFmyp2T8rpfbKcl79yAfMpJnZ2V/ATv
+	 zZFXlNjmVADOzuTG7Vr7cZDRTbd5JZfuwntvIddt8L/3ujSeqa0z4/hU9Eot4rJd3K
+	 /vzy5FbRW+TbQ55WkIPV2fcAD8lzXyof0bpPf7x263wFUnxCOwgbKw+m0G1GYB3B3B
+	 TD0wKoy2tDz/phCg3dlLc+NdJt+mwm1/k2YnIInubaeLc0Wi1X910+nFxXgFObprik
+	 L65CIA2wZCur18+8vq/1bvoNHz8zfwDT27v8vsqyRvFN2/QvFKh+s5KeWtAa06AltT
+	 PpTk/vVOEaInA==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 4CBE95F852; Tue,  2 Jul 2024 23:12:38 +0800 (CST)
+Date: Tue, 2 Jul 2024 23:12:38 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	kernel@pengutronix.de,
-	imx@lists.linux.dev,
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/5] i.MX ARM device tree change for 6.11
-Date: Tue,  2 Jul 2024 22:21:51 +0800
-Message-Id: <20240702142153.413061-3-shawnguo2@yeah.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240702142153.413061-1-shawnguo2@yeah.net>
-References: <20240702142153.413061-1-shawnguo2@yeah.net>
+Subject: [GIT PULL 1/3] Allwinner SoC fixes for 6.10
+Message-ID: <ZoQY5k21RQLOrBQ3@wens.tw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgC3H+0TDYRm7sMJAA--.947S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZr1DKF1xXw48AFyrZrWkJFb_yoWrZFyDpF
-	Z3CrZrG3Z7G34ftryqqry8Kw15Aw4UZr1aywn8Ja48KFW3Z3W7Xr9a9wn3try5ZFWrXw4S
-	yw4kuryxJw1DuF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jQ4S5UUUUU=
-X-Originating-IP: [114.218.218.47]
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBBUQZWZqrzOkxAAAsU
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uUc39WAOFAsMCQ3s"
+Content-Disposition: inline
 
-From: Shawn Guo <shawnguo@kernel.org>
+
+--uUc39WAOFAsMCQ3s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi SoC maintainers,
+
+We have one fix for 6.10. Please pull.
+
+
+Thanks
+ChenYu
+
 
 The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
@@ -57,85 +56,42 @@ The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-6.11
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-fixes-for-6.10
 
-for you to fetch changes up to dac1c5043a083c570592dd048266e9f87b001c4e:
+for you to fetch changes up to 5b36166e599b5c1332a1147271d2130cece4bb24:
 
-  ARM: dts: imx6qdl-kontron-samx6i: add actual device trees (2024-06-27 15:25:04 +0800)
-
-----------------------------------------------------------------
-i.MX ARM device tree change for 6.11:
-
-- A few changes from Krzysztof Kozlowski to fix dtschema issues
-- A series from Michael Walle to improve kontron-samx6i SoM support by
-  fixing various errors and add kontron-samx6i-ads2 board
-- Add LVDS port data mapping for M53 Menlo board
-- Convert NVMEM usage to layout syntax on MBA6 boards
+  arm64: dts: allwinner: Fix PMIC interrupt number (2024-05-28 22:31:31 +0800)
 
 ----------------------------------------------------------------
-Andreas Kemnade (1):
-      ARM: dts: e60k02: fix aliases for mmc
+Allwinner fixes for 6.10
 
-Krzysztof Kozlowski (5):
-      ARM: dts: imx: align panel timings node name with dtschema
-      ARM: dts: imx: correct choice of panel native mode
-      ARM: dts: imx6dl-aristainetos2_4: drop redundant 'power-on-delay' property
-      ARM: dts: imx: drop redundant 'u-boot,panel-name' property
-      ARM: dts: imx28-tx28: drop redundant 'panel-name' property
+- Fix PMIC interrupt number for Remix Mini PC
 
-Marek Vasut (1):
-      ARM: dts: imx: Add LVDS port data mapping on M53 Menlo
+----------------------------------------------------------------
+Andre Przywara (1):
+      arm64: dts: allwinner: Fix PMIC interrupt number
 
-Michael Walle (12):
-      ARM: dts: imx6qdl-kontron-samx6i: fix phy-mode
-      ARM: dts: imx6qdl-kontron-samx6i: fix PHY reset
-      ARM: dts: imx6qdl-kontron-samx6i: fix board reset
-      ARM: dts: imx6qdl-kontron-samx6i: cleanup the PMIC node
-      ARM: dts: imx6qdl-kontron-samx6i: fix SPI0 chip selects
-      ARM: dts: imx6qdl-kontron-samx6i: fix product name
-      ARM: dts: imx6qdl-kontron-samx6i: always enable eMMC
-      ARM: dts: imx6qdl-kontron-samx6i: add SDIO_PWR_EN support
-      ARM: dts: imx6qdl-kontron-samx6i: fix node names
-      ARM: dts: imx6qdl-kontron-samx6i: fix PCIe reset polarity
-      ARM: dts: imx6qdl-kontron-samx6i: remove wake-up-gpio property
-      ARM: dts: imx6qdl-kontron-samx6i: add actual device trees
+ arch/arm64/boot/dts/allwinner/sun50i-h64-remix-mini-pc.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Rafał Miłecki (1):
-      ARM: dts: nxp: imx6: convert NVMEM content to layout syntax
+--uUc39WAOFAsMCQ3s
+Content-Type: application/pgp-signature; name="signature.asc"
 
- arch/arm/boot/dts/nxp/imx/Makefile                 |   2 +
- arch/arm/boot/dts/nxp/imx/e60k02.dtsi              |   4 +
- arch/arm/boot/dts/nxp/imx/imx51-apf51dev.dts       |   4 +-
- arch/arm/boot/dts/nxp/imx/imx51-babbage.dts        |   2 +-
- arch/arm/boot/dts/nxp/imx/imx51-ts4800.dts         |   4 +-
- arch/arm/boot/dts/nxp/imx/imx53-m53evk.dts         |   4 +-
- arch/arm/boot/dts/nxp/imx/imx53-m53menlo.dts       |   1 +
- arch/arm/boot/dts/nxp/imx/imx53-tx53-x03x.dts      |  14 +-
- arch/arm/boot/dts/nxp/imx/imx53-tx53-x13x.dts      |   6 +-
- .../boot/dts/nxp/imx/imx6dl-aristainetos2_4.dts    |   5 +-
- .../arm/boot/dts/nxp/imx/imx6dl-aristainetos_4.dts |   4 +-
- .../arm/boot/dts/nxp/imx/imx6dl-aristainetos_7.dts |   4 +-
- .../dts/nxp/imx/imx6dl-kontron-samx6i-ads2.dts     |  12 ++
- .../boot/dts/nxp/imx/imx6dl-kontron-samx6i.dtsi    |   2 +-
- .../boot/dts/nxp/imx/imx6q-kontron-samx6i-ads2.dts |  12 ++
- .../arm/boot/dts/nxp/imx/imx6q-kontron-samx6i.dtsi |  25 +---
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw52xx.dtsi      |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw53xx.dtsi      |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw54xx.dtsi      |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw560x.dtsi      |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw5903.dtsi      |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw5904.dtsi      |   2 +-
- .../dts/nxp/imx/imx6qdl-kontron-samx6i-ads2.dtsi   | 148 +++++++++++++++++++++
- .../boot/dts/nxp/imx/imx6qdl-kontron-samx6i.dtsi   |  58 +++++---
- arch/arm/boot/dts/nxp/imx/imx6qdl-mba6a.dtsi       |  12 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-mba6b.dtsi       |  12 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-sabreauto.dtsi   |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-tx6-lcd.dtsi     |  21 ++-
- arch/arm/boot/dts/nxp/imx/imx6qdl-tx6-lvds.dtsi    |  20 ++-
- arch/arm/boot/dts/nxp/imx/imx6ul-tx6ul.dtsi        |  14 +-
- arch/arm/boot/dts/nxp/mxs/imx28-tx28.dts           |   6 -
- 31 files changed, 287 insertions(+), 123 deletions(-)
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-kontron-samx6i-ads2.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-kontron-samx6i-ads2.dts
- create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-kontron-samx6i-ads2.dtsi
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmaEGOQACgkQOJpUIZwP
+JDDqQA/8DVRj9WjoienDaTA90zQKfI2jSGfKvbh608Q0KJgbLPaLUf/7+S8wGcfU
+hmbiDaVPxiah4CXDfn7xxzfeyc4KgRXSo81pPQdul8sT6ngAMEDtMgEau/nN0T9w
+WrLpohRuhFc1E1MbDXoIJN/v3A0YLDobUWXjRla9JFzNql/g7Z+uK+cO127JjQkd
+9/75CN85Yv5a2u2UsIbc88cRrNAn5yS0MgPOgSUJpJH9jOS5bFtpxSbaj1Prs5nV
+eRXTDQOuX6yda9Xv0Fd8FOt7gJTItVONr5tvjPJOlgeN2IJGuAJ9AtMH+JGWqJUN
+yvUyvlgilqgmrnyGyZ2Vu5czuMQ9gNXVNGA7nO0sDRi/xapl6OLshAawrGknQxCp
+kZDGoPIkz96yUAdzFte5j0z8J6MJmyxJvIsDsiSl8qdAXZfMqbraKY5jnkp3B3cK
+pzn6QNRTUZMtu6G8lVoW+H77XvWM72YChNJqIDRdC8dTx6KYtEPNs9fotKH2pQNN
+mvMABat4/j11e3LcuhsWkw3yNBdLqS8oaSUhOrf4Ct//VYHOGzm7zDnjE0caJbGY
+/Kcq2MVF7prl8ec7+vEiBXPXaCDRyCaZQG3jS93t0o5hscw3jnMQ8D6mN1xlusZi
+kI/5xcuLBEfnpkwgB0q/9uoeqwmraYvhUJXrEFye1/S0GK6naOk=
+=EgnH
+-----END PGP SIGNATURE-----
+
+--uUc39WAOFAsMCQ3s--
