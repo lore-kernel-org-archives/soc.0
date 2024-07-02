@@ -4,46 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B371C3064D
-	for <soc@archiver.kernel.org>; Tue,  2 Jul 2024 15:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18CF3C30658
+	for <soc@archiver.kernel.org>; Tue,  2 Jul 2024 15:15:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1482EC4AF07; Tue,  2 Jul 2024 15:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD83BC116B1;
-	Tue,  2 Jul 2024 15:12:40 +0000 (UTC)
+	id D8DEAC4AF07; Tue,  2 Jul 2024 15:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E19C116B1;
+	Tue,  2 Jul 2024 15:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719933161;
-	bh=k33hXVwdB7QXNGJCLyWJnvbK+AxHsjUjmrFo9r3aq78=;
+	s=k20201202; t=1719933316;
+	bh=DaZDSPKv0/JYgC5HIzXmptUVG/3T/DsPn7yQ8KqnQwU=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=PbhH1w4zL/WVKpjh2bFC6P0+BOnwpzuD15yFmyp2T8rpfbKcl79yAfMpJnZ2V/ATv
-	 zZFXlNjmVADOzuTG7Vr7cZDRTbd5JZfuwntvIddt8L/3ujSeqa0z4/hU9Eot4rJd3K
-	 /vzy5FbRW+TbQ55WkIPV2fcAD8lzXyof0bpPf7x263wFUnxCOwgbKw+m0G1GYB3B3B
-	 TD0wKoy2tDz/phCg3dlLc+NdJt+mwm1/k2YnIInubaeLc0Wi1X910+nFxXgFObprik
-	 L65CIA2wZCur18+8vq/1bvoNHz8zfwDT27v8vsqyRvFN2/QvFKh+s5KeWtAa06AltT
-	 PpTk/vVOEaInA==
+	b=MTsCW2xEeIUX9y0q4uLZNFKjRYNg9LxTkO93FvAU37Yg2frtWHuOGU/QDi2QzxdLm
+	 iwTSbppvBIfsiTplPYnKWn/Qmc6zS+M+bztLvSFpBEGYuti9vvDETpT/rq7oYBBkz+
+	 aiHOELBPZXFOXUMfMmXdyLYIXPjPe/GWQs0cqUlf2CJoMmRD0eyZ/+lnAe0e/A98v0
+	 4nhUQgYihjfvmPqj+wR2Ufea2mZzxJmlPQ1Xz3EA+q1sE+Ku+vccU73m7KQKhaE47S
+	 zf2xL+B0dMHNsVMBmicJGNhICaWj43/IbWQGnCPBxQeWuRhZFoWZ8lETXm5RKYr/dX
+	 SusFZ0M0uk96Q==
 Received: by wens.tw (Postfix, from userid 1000)
-	id 4CBE95F852; Tue,  2 Jul 2024 23:12:38 +0800 (CST)
-Date: Tue, 2 Jul 2024 23:12:38 +0800
+	id 151B45F852; Tue,  2 Jul 2024 23:15:14 +0800 (CST)
+Date: Tue, 2 Jul 2024 23:15:14 +0800
 From: Chen-Yu Tsai <wens@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
 	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/3] Allwinner SoC fixes for 6.10
-Message-ID: <ZoQY5k21RQLOrBQ3@wens.tw>
+Subject: [GIT PULL 2/3] Allwinner SoC driver changes for 6.11
+Message-ID: <ZoQZguQ6taJziJ11@wens.tw>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uUc39WAOFAsMCQ3s"
+	protocol="application/pgp-signature"; boundary="u/pROoVQ4UI9smts"
 Content-Disposition: inline
 
 
---uUc39WAOFAsMCQ3s
+--u/pROoVQ4UI9smts
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi SoC maintainers,
 
-We have one fix for 6.10. Please pull.
+Here's the second pull request for this cycle. We have a couple driver
+changes for Allwinner SoCs.
+
+Please pull.
 
 
 Thanks
@@ -56,42 +59,47 @@ The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-fixes-for-6.10
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-drivers-for-6.11
 
-for you to fetch changes up to 5b36166e599b5c1332a1147271d2130cece4bb24:
+for you to fetch changes up to 3a6fb9025cdf975146b2f2e3771b67f03c4ca3dc:
 
-  arm64: dts: allwinner: Fix PMIC interrupt number (2024-05-28 22:31:31 +0800)
-
-----------------------------------------------------------------
-Allwinner fixes for 6.10
-
-- Fix PMIC interrupt number for Remix Mini PC
+  dt-bindings: sram: sunxi-sram: Add regulators child (2024-06-30 23:00:49 +0800)
 
 ----------------------------------------------------------------
-Andre Przywara (1):
-      arm64: dts: allwinner: Fix PMIC interrupt number
+Allwinner SoC driver changes for 6.11
 
- arch/arm64/boot/dts/allwinner/sun50i-h64-remix-mini-pc.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- DT binding addition of regulator node under SRAM node
+- Cleanup of unused list in SRAM driver
 
---uUc39WAOFAsMCQ3s
+----------------------------------------------------------------
+Dr. David Alan Gilbert (1):
+      soc: sunxi: sram: Remove unused list 'claimed_sram'
+
+Samuel Holland (1):
+      dt-bindings: sram: sunxi-sram: Add regulators child
+
+ .../sram/allwinner,sun4i-a10-system-control.yaml   | 28 ++++++++++++++++++++++
+ drivers/soc/sunxi/sunxi_sram.c                     |  2 --
+ 2 files changed, 28 insertions(+), 2 deletions(-)
+
+--u/pROoVQ4UI9smts
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmaEGOQACgkQOJpUIZwP
-JDDqQA/8DVRj9WjoienDaTA90zQKfI2jSGfKvbh608Q0KJgbLPaLUf/7+S8wGcfU
-hmbiDaVPxiah4CXDfn7xxzfeyc4KgRXSo81pPQdul8sT6ngAMEDtMgEau/nN0T9w
-WrLpohRuhFc1E1MbDXoIJN/v3A0YLDobUWXjRla9JFzNql/g7Z+uK+cO127JjQkd
-9/75CN85Yv5a2u2UsIbc88cRrNAn5yS0MgPOgSUJpJH9jOS5bFtpxSbaj1Prs5nV
-eRXTDQOuX6yda9Xv0Fd8FOt7gJTItVONr5tvjPJOlgeN2IJGuAJ9AtMH+JGWqJUN
-yvUyvlgilqgmrnyGyZ2Vu5czuMQ9gNXVNGA7nO0sDRi/xapl6OLshAawrGknQxCp
-kZDGoPIkz96yUAdzFte5j0z8J6MJmyxJvIsDsiSl8qdAXZfMqbraKY5jnkp3B3cK
-pzn6QNRTUZMtu6G8lVoW+H77XvWM72YChNJqIDRdC8dTx6KYtEPNs9fotKH2pQNN
-mvMABat4/j11e3LcuhsWkw3yNBdLqS8oaSUhOrf4Ct//VYHOGzm7zDnjE0caJbGY
-/Kcq2MVF7prl8ec7+vEiBXPXaCDRyCaZQG3jS93t0o5hscw3jnMQ8D6mN1xlusZi
-kI/5xcuLBEfnpkwgB0q/9uoeqwmraYvhUJXrEFye1/S0GK6naOk=
-=EgnH
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmaEGYEACgkQOJpUIZwP
+JDDOnw/7B/RuxhhrPZhJytnpt4+P8X/pSCqrW4UW2ljnCWnWX2+mFw+5cUxYK5LE
+f3YZAUOtIOVJyAFlnXJTOpwM6Cgf+qYer1bXt2T1PO5/F6O7ryI7woVWdQuTLP7O
+Y1r9xsXE8D2O15Fval3GbAIjuKjyZyCTEEGJe//UCj62Cbf/VnugccS9I60BI+g8
+c5j7rD4FOiZNeKk7DDJx1gHWQRBHGccRpX1hUx+ib8S9OWjOeIdch6WvOlBkTmBh
+j2VZ3hwuOxzisemrigKAElOfs7Rs+zL5y2VPckq4jWvFOb4ZCSHsLTxiL33GguA6
+pd6Ui6288Rxovo2FmpnGhgYArGuGcnqovnGd77g4AJ4XpCMG3DQJYy4NlHKBg2eP
+Y+4FlSI5irKPt15LOhc7k7igQ0qNHG/KxszCCJnacJJx58bjTAy+hd6YQETtoueW
+O7ldKj/wxArOfAQlVpYQUh3/DouD8qJAFKW/iKhbhdFOc5ZXO1BXsyxnW6SYSjuW
+0lAG2euXIE+2PyavRxRlV0PMB7uVqCO7+yngJFxd8vGWji1+z96loDSTvK8u9pJK
+Oz6a8Okvavxt4ldPvBd6+eBXxhvuMdd0qqyWZ2gUdERW7+rhwYaTiGRfkj+WGPry
+HOOnU1nxXluZVRAPETq8fFsXsXbpllW3fEZEg5yqmLCvwzaoSKM=
+=guj2
 -----END PGP SIGNATURE-----
 
---uUc39WAOFAsMCQ3s--
+--u/pROoVQ4UI9smts--
