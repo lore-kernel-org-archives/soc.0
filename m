@@ -1,168 +1,140 @@
-Return-Path: <SRS0=URDg=OF=ti.com=nm@kernel.org>
+Return-Path: <SRS0=JFW5=OF=ti.com=vigneshr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DDFBC3271E
-	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 15:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56DC6C3271E
+	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 15:16:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 51FB1C4AF0C; Fri,  5 Jul 2024 15:14:58 +0000 (UTC)
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	id 42446C4AF0C; Fri,  5 Jul 2024 15:16:59 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A91F2C116B1;
-	Fri,  5 Jul 2024 15:14:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A91F2C116B1
+	by smtp.kernel.org (Postfix) with ESMTPS id 4617EC116B1;
+	Fri,  5 Jul 2024 15:16:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4617EC116B1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 465FEnOf063250;
-	Fri, 5 Jul 2024 10:14:49 -0500
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 465FGs5M118267;
+	Fri, 5 Jul 2024 10:16:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1720192490;
-	bh=pxHBl3JxTXfLPHWST+yT08WLecjyDtqhyPWFl2R9XO4=;
-	h=Date:From:To:CC:Subject;
-	b=hCeQYlnApfCGv1yMDgLVIO+jdF8nGiRkSylgvC8PI2y8bbSDQrg7Tf3hVjiHFMzNh
-	 u6lxW2NiJbEGQwN/D1O5hkbHOkwDNB5y5i2InU9FPONa8NIz97rUZYtlCTu9CFleq5
-	 BgNRsl9Mw0lvMgCiUt4zOOZ0DvTX68oodumG7cSc=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 465FEnSe011599
+	s=ti-com-17Q1; t=1720192614;
+	bh=SOCJihyMudDYbXAQtiHVqLLecu3CNpgoUVt3jGljzyA=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=ru05mTUXAvFNW+9NevyEWOIQ4ObvRCSdouqVoVx2lFHXQkEoo/nAuQfedQ+QfPKNh
+	 U9BjrJWJuxyheVIbT5yDS8dJgRagg7N6u+Ugfe+OuOM7qw4UHA0aMOQ6Sd+d7jh8xX
+	 owDd+UVKGOmae0AHeXRKcH1ZSkoduIKKZ+EYvRFc=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 465FGsPS013070
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 5 Jul 2024 10:14:49 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+	Fri, 5 Jul 2024 10:16:54 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- Jul 2024 10:14:49 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2024 10:16:53 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 Jul 2024 10:14:49 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 465FEnXB027305;
-	Fri, 5 Jul 2024 10:14:49 -0500
-Date: Fri, 5 Jul 2024 10:14:49 -0500
-From: Nishanth Menon <nm@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony
- Lindgren <tony@atomide.com>
-Subject: [GIT PULL] soc: ti: Driver updates for v6.11
-Message-ID: <20240705151449.s4rngkehjn73favn@stream>
+ Frontend Transport; Fri, 5 Jul 2024 10:16:53 -0500
+Received: from [172.24.227.94] (uda0132425.dhcp.ti.com [172.24.227.94])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 465FGo6i110570;
+	Fri, 5 Jul 2024 10:16:51 -0500
+Message-ID: <c6b2a0c3-e8c3-4e7a-90ca-a3b9834c63c9@ti.com>
+Date: Fri, 5 Jul 2024 20:46:50 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ds5cc3igitvhtjwr"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: [GIT PULL 2/2] arm64: defconfig: Updates for v6.11 for TI K3
+ platforms
+List-Id: <soc.lore.kernel.org>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc
+	<arm@kernel.org>, SoC <soc@kernel.org>
+CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
+References: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
+From: Vignesh Raghavendra <vigneshr@ti.com>
+Content-Language: en-US
+In-Reply-To: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature";
+	boundary="------------49olJoLJPLagJ6kQj0AEPVIw"
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
---ds5cc3igitvhtjwr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--------------49olJoLJPLagJ6kQj0AEPVIw
+Content-Type: multipart/mixed; boundary="------------8mDuihRvdyg8E6si09AbN22H";
+ protected-headers="v1"
+From: Vignesh Raghavendra <vigneshr@ti.com>
+List-Id: <soc.lore.kernel.org>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+ arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
+Cc: Tero Kristo <kristo@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Message-ID: <c6b2a0c3-e8c3-4e7a-90ca-a3b9834c63c9@ti.com>
+Subject: [GIT PULL 2/2] arm64: defconfig: Updates for v6.11 for TI K3
+ platforms
+References: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
+In-Reply-To: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
+
+--------------8mDuihRvdyg8E6si09AbN22H
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-Please pull:
-
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfab=
+d0:
 
   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
-er-soc-for-v6.11
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
+-config-for-v6.11
 
-for you to fetch changes up to b87a1cbb3385a806f8abfd9b8a2191e4c6620347:
+for you to fetch changes up to e05bc474310336e1ab03ed79112909dd0f74d039:
 
-  dt-bindings: soc: ti: Move ti,j721e-system-controller.yaml to soc/ti (202=
-4-07-01 08:09:27 -0500)
-
-----------------------------------------------------------------
-TI SoC driver updates for v6.11
-
-- Update TISCI protocol URL link  which was dead
-- socinfo: Add j721E SR 2.0 detection support
-- MAINTAINER list additions: ti,pruss.yaml and ti,j721e-system-controller.y=
-aml
-- pm33xx: log statement improvement
-- knav_qmss: minor data structure optimization
+  arm64: defconfig: Enable TI LP873X PMIC (2024-06-12 21:52:38 +0530)
 
 ----------------------------------------------------------------
-Christophe JAILLET (1):
-      soc: ti: knav_qmss: Constify struct knav_range_ops
+TI K3 defconfig updates for v6.11
 
-MD Danish Anwar (1):
-      MAINTAINERS: Add entry for ti,pruss.yaml to TI KEYSTONE MULTICORE NAV=
-IGATOR DRIVERS
+Enable Hyperbus support present on various J7xx EVMs
+OMAP_USB2 driver for AM65 SoC
+LP873X PMIC related drivers for am642-phyboard-electra
 
-Neha Malcom Francis (1):
-      soc: ti: k3-socinfo: Add J721E SR2.0
+----------------------------------------------------------------
+Nathan Morrisson (1):
+      arm64: defconfig: Enable TI LP873X PMIC
 
-Richard Genoud (2):
-      dt-bindings: ti: fix TISCI protocol URL link
-      firmware: ti_sci: fix TISCI protocol URL link
+Ravi Gunasekaran (1):
+      arm64: defconfig: Enable USB2 PHY Driver
 
-Roger Quadros (1):
-      dt-bindings: soc: ti: Move ti,j721e-system-controller.yaml to soc/ti
+Vaishnav Achath (1):
+      arm64: defconfig: Enable MTD support for Hyperbus
 
-Vasyl Gomonovych (1):
-      soc: ti: pm33xx: Fix missing newlines in log statements
-
- Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml            | 2 =
-+-
- Documentation/devicetree/bindings/clock/ti,sci-clk.yaml               | 2 =
-+-
- Documentation/devicetree/bindings/reset/ti,sci-reset.yaml             | 2 =
-+-
- Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml           | 2 =
-+-
- .../bindings/{mfd =3D> soc/ti}/ti,j721e-system-controller.yaml          | =
-4 ++--
- MAINTAINERS                                                           | 1 +
- drivers/firmware/ti_sci.h                                             | 2 =
-+-
- drivers/soc/ti/k3-socinfo.c                                           | 2 =
-+-
- drivers/soc/ti/knav_qmss.h                                            | 2 =
-+-
- drivers/soc/ti/knav_qmss_acc.c                                        | 2 =
-+-
- drivers/soc/ti/knav_qmss_queue.c                                      | 2 =
-+-
- drivers/soc/ti/pm33xx.c                                               | 4 =
-++--
- 12 files changed, 14 insertions(+), 13 deletions(-)
- rename Documentation/devicetree/bindings/{mfd =3D> soc/ti}/ti,j721e-system=
--controller.yaml (96%)
+ arch/arm64/configs/defconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 --=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
+Regards
+Vignesh
 
---ds5cc3igitvhtjwr
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------8mDuihRvdyg8E6si09AbN22H--
+
+--------------49olJoLJPLagJ6kQj0AEPVIw
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmaIDd8ACgkQ3bWEnRc2
-JJ2zTg/9HgAcxzlVJjtsVovpga3vZTtcSOb9RvdNrKMrERe0TwEBzUA7dFnj0lLy
-xPQKGEorhrCHc/50j/VeSkgGbPtLaOGhjpzxn7bUqBR+9BTlviBqn7nDujCl6fW5
-INt2hlKbMm+l6LTX7/CTUWBBRaoC2AqibGtU4ZSWFzWA/G5UAABXK3E2OhgSFPiw
-FfNVIDzSzwHw4kDTPIUMdnCKue0UfCFMF/JyCqXYt4wd0SuWEqDnT/s+e0qm/kwO
-+LAOyrcjjCDS1vKc21ayhSz9T05WsHwJnGtlWgd9WHTE+lumsYoZMU7eoc78aE4E
-YuQJO3nIJVLSTCtQ9jn7A+y20/hSV8GsqxXPmxKQAxxhQdFoR6VdB2bkwKGMwtRX
-5p9a/MfJRfPxDdQzU0THHsAN2YegUUEEBsTsulkUfSWh/hBtMsfYrMM55d0DHdte
-mo6y+xtuCbzP4etIvyFzrWq45OYrsd2+mX1iUu1+LUYPTC1eR+A38OXIfd4D89CU
-3+RohINUHJmEQ/qF96M0o1WvbcL2OvMxFOjpuNqCb8IarYT24krW3V017CIYo1eU
-2a0y6/8n74Y2EmH+alDSCmRSEMwzw3SkSLCLhaKWF34Jm/Zr2jbgtl4ynXqsbMUE
-t1EU39z+Vf3ioGdwLQhSBFYQ9E+9gEvJ4gvI82/dQLItTXCropU=
-=HovR
+wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmaIDmIFAwAAAAAACgkQxEYeRXyRFuM1
+rggAssY5Q7Yj20OI5MwE2IbhgRgsaM/EMyjngqbrDKNrRFTSPRVdZ+lZT+jjeTKZAqv8znYW5fVb
+It+6FrJ2+ZUj57ICX23XmNCcHxVAizKQN7qAhSNVLyib4NM/9PBM8rK+MV4TM2t6j5u4S4BHrGY8
+6UK4sCABlDO3wN8vPpAqNFnZhH7uph19igyR69w8qF3+byVqx6ovfvDUTxZepcLY7/tnHGYSOrYn
+4L/bTa9RaVyrRH6bzKVUZOE9ViK5FH0gWYy/gqj6As7mRrZtXeSv3+LIJjRYemYyLEpxH2ql8ecX
+Vc73aKTfM1NEz3AAR7Ve0jDYNaSlD2SludZ3OrZhYQ==
+=D9OH
 -----END PGP SIGNATURE-----
 
---ds5cc3igitvhtjwr--
+--------------49olJoLJPLagJ6kQj0AEPVIw--
