@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E8CEC3DA41
-	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 12:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65FFDC30658
+	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 12:46:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E5DB3C116B1; Fri,  5 Jul 2024 12:46:09 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	id 4F182C4AF0B; Fri,  5 Jul 2024 12:46:29 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7BC31C32781;
-	Fri,  5 Jul 2024 12:46:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7BC31C32781
+	by smtp.kernel.org (Postfix) with ESMTPS id 0C56DC116B1;
+	Fri,  5 Jul 2024 12:46:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C56DC116B1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C7E9424000E;
-	Fri,  5 Jul 2024 12:46:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 59334C0005;
+	Fri,  5 Jul 2024 12:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720183563;
+	t=1720183580;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=izDTBgSlWHNazZLvxqb8PfZXFxJ5rIcyB7wf/ExlCl8=;
-	b=iu3Dyxy9a9+zRxy28CaeoKV5nPkwtY+e+P1xCapwovheuEyMb1G4Xa2+dG9Z6d938aVozu
-	+7RH7yZLZSus0Q6dm8jz2XRR97E0aqeJTBlAQSWPqTvD178Et2UbMVuIsAjObZwgIJ9m2L
-	cAQykWl8htxabNDXsFJFhS5q7k8h+/BOC3eQDjWwUW5Nwfx9LbPAVHdsEnqtQQBfIB7RKN
-	ADMr0KA1ohorKpCtsBpg8+joW075Bqpy4TYpOaospU3Gl+vFAqgvunuhfUjp+LiUz5y7EV
-	iiDO2ttrn3H8E/Shx6SsmZHyAJaRAkZbcp+QYKM9/aWW1BLxuli2inM4T7fMEA==
+	bh=0Kj1eSZAKDwhk5vAXRl97uoZ1Sujr2CBBYFjFpgU8/A=;
+	b=RLdlFXBcMRAxP1TiU23Cj/PfqhnwgiMMeW56JcIewnO4hNHI3QTWP7+MMlprmIZQUSXXa7
+	WGPsg2RaqpymqUDtEFyNpggh/ES9OB1g7QS9KHXyZckOyM7X7Q+3rDxyIa1w4cXTvVJFlu
+	cW5UZSCDFAivUT7UdQ3zUjqKTWa2xBq5KJy5p5GcTBIdCEmREf3x1fwP7IQjhpsq5yRTna
+	++5a/fDwcZZDi0oV6twzbFaHX/puOaO0Vz1yj54pYce0wJb00NKxsmpojBJ3VqDKDgFkbh
+	HRgxD6zzB6ui1My8hCNanGSSZVwiWKMuvDPfX+TXR+oBAFe4aBVDHuLMWJTK0Q==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>, Arnd Bergmann
@@ -45,13 +45,13 @@ Cc: arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de Goede
  <conor+dt@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
  <uwe@kleine-koenig.org>,
  devicetree@vger.kernel.org
-Subject: Re: [PATCH v13 7/8] ARM: dts: turris-omnia: Add MCU
- system-controller node
-In-Reply-To: <20240701113010.16447-8-kabel@kernel.org>
+Subject: Re: [PATCH v13 8/8] ARM: dts: turris-omnia: Add GPIO key node for
+ front button
+In-Reply-To: <20240701113010.16447-9-kabel@kernel.org>
 References: <20240701113010.16447-1-kabel@kernel.org>
- <20240701113010.16447-8-kabel@kernel.org>
-Date: Fri, 05 Jul 2024 14:46:02 +0200
-Message-ID: <87frsoj9bp.fsf@BLaptop.bootlin.com>
+ <20240701113010.16447-9-kabel@kernel.org>
+Date: Fri, 05 Jul 2024 14:46:19 +0200
+Message-ID: <87cynsj9b8.fsf@BLaptop.bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -59,16 +59,8 @@ X-GND-Sasl: gregory.clement@bootlin.com
 
 Marek Beh=C3=BAn <kabel@kernel.org> writes:
 
-> Turris Omnia's MCU provides various features that can be configured over
-> I2C at address 0x2a. Add device-tree node.
->
-> This does not carry a Fixes tag - we do not want this to get backported
-> to stable kernels for the following reason: U-Boot since v2022.10
-> inserts a phy-reset-gpio property into the WAN ethernet node pointing to
-> the MCU node if it finds the MCU node with a cznic,turris-omnia-mcu
-> compatible. Thus if this change got backported to a stable kernel, the
-> WAN interface driver would defer probe indefinitely (since it would wait
-> for the turris-omnia-mcu driver which would not be present).
+> Now that we have the MCU device-tree node, which acts as a GPIO
+> controller, add GPIO key node for the front button.
 >
 > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
 
@@ -77,50 +69,35 @@ Applied on mvebu/dt
 Thanks,
 
 Gregory
+
 > ---
->  .../dts/marvell/armada-385-turris-omnia.dts   | 22 ++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
+>  .../boot/dts/marvell/armada-385-turris-omnia.dts    | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 >
 > diff --git a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts b/arch=
 /arm/boot/dts/marvell/armada-385-turris-omnia.dts
-> index 7b755bb4e4e7..59079d63fe27 100644
+> index 59079d63fe27..43202890c959 100644
 > --- a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
 > +++ b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
-> @@ -218,7 +218,22 @@ i2c@0 {
->  			#size-cells =3D <0>;
->  			reg =3D <0>;
+> @@ -112,6 +112,19 @@ sfp: sfp {
+>  		status =3D "disabled";
+>  	};
 >=20=20
-> -			/* STM32F0 command interface at address 0x2a */
-> +			mcu: system-controller@2a {
-> +				compatible =3D "cznic,turris-omnia-mcu";
-> +				reg =3D <0x2a>;
+> +	gpio-keys {
+> +		compatible =3D "gpio-keys";
 > +
-> +				pinctrl-names =3D "default";
-> +				pinctrl-0 =3D <&mcu_pins>;
-> +
-> +				interrupt-parent =3D <&gpio1>;
-> +				interrupts =3D <11 IRQ_TYPE_NONE>;
-> +
-> +				gpio-controller;
-> +				#gpio-cells =3D <3>;
-> +
-> +				interrupt-controller;
-> +				#interrupt-cells =3D <2>;
-> +			};
->=20=20
->  			led-controller@2b {
->  				compatible =3D "cznic,turris-omnia-leds";
-> @@ -501,6 +516,11 @@ fixed-link {
->  };
->=20=20
->  &pinctrl {
-> +	mcu_pins: mcu-pins {
-> +		marvell,pins =3D "mpp43";
-> +		marvell,function =3D "gpio";
+> +		front-button {
+> +			label =3D "Front Button";
+> +			linux,code =3D <KEY_VENDOR>;
+> +			linux,can-disable;
+> +			gpios =3D <&mcu 0 12 GPIO_ACTIVE_HIGH>;
+> +			/* debouncing is done by the microcontroller */
+> +			debounce-interval =3D <0>;
+> +		};
 > +	};
 > +
->  	pcawan_pins: pcawan-pins {
->  		marvell,pins =3D "mpp46";
->  		marvell,function =3D "gpio";
+>  	sound {
+>  		compatible =3D "simple-audio-card";
+>  		simple-audio-card,name =3D "SPDIF";
 > --=20
 > 2.44.2
