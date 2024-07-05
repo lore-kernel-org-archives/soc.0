@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E37C3271E
-	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 16:58:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59BADC3271E
+	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 16:59:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9A51CC4AF0B; Fri,  5 Jul 2024 16:58:34 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	id 29599C4AF0B; Fri,  5 Jul 2024 16:59:29 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C2F66C32786;
-	Fri,  5 Jul 2024 16:58:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2F66C32786
+	by smtp.kernel.org (Postfix) with ESMTPS id BECF8C116B1;
+	Fri,  5 Jul 2024 16:59:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BECF8C116B1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CB4A8C0006;
-	Fri,  5 Jul 2024 16:58:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C8D67FF805;
+	Fri,  5 Jul 2024 16:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720198710;
+	t=1720198764;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nfs7xIxjdlyJM0SknZxAvaWWCNtXOH51+Oa6N5mueFo=;
-	b=Cq/9SpOL0HGdDk+FQmFu3kBBQVpLBcQlDwcSCxODFAbMG65nHgBqAdh+Mzjjj6EUwBgx8F
-	nIbtb/yo6B0QCb+1UVDKkpX7dymZu8Pajti1K3iCgP8VMftET9EgVRf9Q7F8SSewPuAV+6
-	sGvFqIlYbtxmaANw0gqGvg0p8Dl6xDQMYGhF5/LmK7tK2CdhHo+yRcL2k2x8MsyQD/h1Lm
-	Jx4TLQy/VjsrDgalFD5j7XLYsOs44voyQXmryOgcrNJMlCEswo23Iw9jzH/zSIPsWj1DmI
-	1x3o1CCzch8sXhsarkZEC0ig0Sy5bJsxq8Q2/YSxUfsmGmKP8ty7F4+p4ZcYHg==
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=IEr/zNIlX4daBHw3vK6huLQdCOaNmFjAaao7GLDdT9I=;
+	b=Wlp9UAaG+d8aWl1dFqejvc3seWFpyZcmho1tfhf3bwXBBzI+QRL/IajIGjmCYvUdHmhol5
+	M7x6RTkFeldz2Us2oPI4l8QBKntRvZLa1h7HcdObutQu7GVyIwBIY1mxd6cpbahPzHW9nu
+	zSEgl5DmadJ2IpWADo6slDpcxPQiBu0K0hnDCtDv4I2tjffrc1wzZOzhz0xNmfPC0zJFzs
+	y4QjeB0tpmBsNfq+DuNbIiY1TLVwXNrS69+eTLNxcQBUOuk/T5ahjvOjTn/1ZEozKu/OMC
+	RKK0hPluboAI7zpNKqEpFbmcTsEkVOZ7h3MVFn8Pi0D7JqeBiVDLvcWMdQnLSA==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v6.11 (#1)
-Date: Fri, 05 Jul 2024 18:58:23 +0200
-Message-ID: <87zfqvixn4.fsf@BLaptop.bootlin.com>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v6.11 (#1)
+Date: Fri, 05 Jul 2024 18:59:16 +0200
+Message-ID: <87wmlzixln.fsf@BLaptop.bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-GND-Sasl: gregory.clement@bootlin.com
 
 Hi,
 
-Here is the first pull request for dt for mvebu for v6.11.
+Here is the first pull request for dt64 for mvebu for v6.11.
 
 Gregory
 
@@ -55,97 +53,45 @@ The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt-6.11-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-6.11-1
 
-for you to fetch changes up to 731daaa5093d5c93c3b46dfbe46970cc52e15335:
+for you to fetch changes up to e9ff907f40768351a3a86f5aa9b819436ee0ef19:
 
-  ARM: dts: turris-omnia: Add GPIO key node for front button (2024-07-05 14=
-:45:47 +0200)
+  arm64: dts: add description for solidrun cn9132 cex7 module and clearfog board (2024-07-05 14:53:16 +0200)
 
 ----------------------------------------------------------------
-mvebu dt for 6.11 (part 1)
+mvebu dt64 for 6.11 (part 1)
 
-armada-385: Add 7-segment LED display on x530
-armada-385: Add Turris Omnia MCU related node
-armada-370 irqchip DT changes: Drop #size-cells from mpic node
-orion / kirkwood: few cleanups
+armada-3720: align GPIO keys and LED node namee with bindings
+Add description for solidrun cn9130 som and clearfog boards
 
 ----------------------------------------------------------------
-Chris Packham (1):
-      ARM: dts: marvell: Add 7-segment LED display on x530
+Josua Mayer (5):
+      dt-bindings: arm64: marvell: add solidrun cn9130 som based boards
+      dt-bindings: arm64: marvell: add solidrun cn9132 CEX-7 evaluation board
+      arm64: dts: add description for solidrun cn9130 som and clearfog boards
+      arm64: dts: add description for solidrun cn9131 solidwan board
+      arm64: dts: add description for solidrun cn9132 cex7 module and clearfog board
 
-Krzysztof Kozlowski (7):
-      ARM: dts: marvell: kirkwood: align GPIO keys node name with bindings
-      ARM: dts: marvell: kirkwood: drop incorrect address/size-cells in GPI=
-O keys
-      ARM: dts: marvell: kirkwood: align LED node name with bindings
-      ARM: dts: marvell: orion: align GPIO keys node name with bindings
-      ARM: dts: marvell: orion: drop incorrect address/size-cells in GPIO k=
-eys
-      ARM: dts: marvell: orion5x-lswsgl: use 'gpios' property for LEDs
-      ARM: dts: marvell: orion: align LED node name with bindings
+Krzysztof Kozlowski (2):
+      arm64: dts: armada-3720: align GPIO keys node name with bindings
+      arm64: dts: armada-3720: align LED node name with bindings
 
-Marek Beh=C3=BAn (3):
-      ARM: dts: armada-{370-xp,375,38x,39x}: Drop #size-cells from mpic node
-      ARM: dts: turris-omnia: Add MCU system-controller node
-      ARM: dts: turris-omnia: Add GPIO key node for front button
-
- arch/arm/boot/dts/marvell/armada-370-xp.dtsi       |  1 -
- arch/arm/boot/dts/marvell/armada-375.dtsi          |  1 -
- arch/arm/boot/dts/marvell/armada-385-atl-x530.dts  | 13 ++++-
- .../boot/dts/marvell/armada-385-turris-omnia.dts   | 35 ++++++++++++-
- arch/arm/boot/dts/marvell/armada-38x.dtsi          |  1 -
- arch/arm/boot/dts/marvell/armada-39x.dtsi          |  1 -
- .../dts/marvell/kirkwood-blackarmor-nas220.dts     |  6 +--
- arch/arm/boot/dts/marvell/kirkwood-c200-v1.dts     |  8 +--
- arch/arm/boot/dts/marvell/kirkwood-cloudbox.dts    |  8 ++-
- arch/arm/boot/dts/marvell/kirkwood-d2net.dts       |  2 +-
- arch/arm/boot/dts/marvell/kirkwood-dir665.dts      | 22 ++++----
- arch/arm/boot/dts/marvell/kirkwood-dns320.dts      | 10 ++--
- arch/arm/boot/dts/marvell/kirkwood-dns325.dts      | 10 ++--
- arch/arm/boot/dts/marvell/kirkwood-dnskw.dtsi      |  8 ++-
- arch/arm/boot/dts/marvell/kirkwood-dockstar.dts    |  4 +-
- arch/arm/boot/dts/marvell/kirkwood-dreamplug.dts   |  6 +--
- arch/arm/boot/dts/marvell/kirkwood-goflexnet.dts   | 20 ++++----
- .../dts/marvell/kirkwood-guruplug-server-plus.dts  |  8 +--
- arch/arm/boot/dts/marvell/kirkwood-ib62x0.dts      | 12 ++---
- arch/arm/boot/dts/marvell/kirkwood-iconnect.dts    | 20 ++++----
- .../boot/dts/marvell/kirkwood-iomega_ix2_200.dts   | 16 +++---
- arch/arm/boot/dts/marvell/kirkwood-l-50.dts        | 20 ++++----
- arch/arm/boot/dts/marvell/kirkwood-laplug.dts      |  6 +--
- .../arm/boot/dts/marvell/kirkwood-linkstation.dtsi |  2 -
- .../boot/dts/marvell/kirkwood-linksys-viper.dts    | 10 ++--
- arch/arm/boot/dts/marvell/kirkwood-lsxl.dtsi       | 18 +++----
- arch/arm/boot/dts/marvell/kirkwood-mplcec4.dts     | 12 ++---
- .../boot/dts/marvell/kirkwood-mv88f6281gtw-ge.dts  | 12 ++---
- arch/arm/boot/dts/marvell/kirkwood-netxbig.dtsi    |  8 ++-
- arch/arm/boot/dts/marvell/kirkwood-ns2-common.dtsi |  6 +--
- arch/arm/boot/dts/marvell/kirkwood-ns2lite.dts     |  2 +-
- arch/arm/boot/dts/marvell/kirkwood-nsa310.dts      | 20 ++++----
- arch/arm/boot/dts/marvell/kirkwood-nsa310a.dts     | 18 +++----
- arch/arm/boot/dts/marvell/kirkwood-nsa310s.dts     |  8 ++-
- arch/arm/boot/dts/marvell/kirkwood-nsa320.dts      | 18 +++----
- arch/arm/boot/dts/marvell/kirkwood-nsa325.dts      | 18 +++----
- .../boot/dts/marvell/kirkwood-nsa3x0-common.dtsi   |  8 ++-
- .../boot/dts/marvell/kirkwood-openblocks_a6.dts    |  4 +-
- .../boot/dts/marvell/kirkwood-openblocks_a7.dts    |  2 -
- arch/arm/boot/dts/marvell/kirkwood-pogo_e02.dts    |  4 +-
- .../dts/marvell/kirkwood-pogoplug-series-4.dts     |  8 ++-
- .../boot/dts/marvell/kirkwood-sheevaplug-esata.dts |  2 +-
- arch/arm/boot/dts/marvell/kirkwood-sheevaplug.dts  |  4 +-
- arch/arm/boot/dts/marvell/kirkwood-synology.dtsi   | 58 +++++++++++-------=
-----
- arch/arm/boot/dts/marvell/kirkwood-t5325.dts       |  4 +-
- arch/arm/boot/dts/marvell/kirkwood-ts219-6281.dts  |  6 +--
- arch/arm/boot/dts/marvell/kirkwood-ts219-6282.dts  |  6 +--
- arch/arm/boot/dts/marvell/kirkwood-ts419.dtsi      |  6 +--
- .../dts/marvell/mvebu-linkstation-gpio-simple.dtsi |  2 -
- .../boot/dts/marvell/orion5x-lacie-d2-network.dts  |  9 ++--
- .../orion5x-lacie-ethernet-disk-mini-v2.dts        |  7 ++-
- .../boot/dts/marvell/orion5x-linkstation-lschl.dts |  4 +-
- arch/arm/boot/dts/marvell/orion5x-lswsgl.dts       | 25 +++++-----
- .../marvell/orion5x-maxtor-shared-storage-2.dts    |  7 ++-
- .../boot/dts/marvell/orion5x-netgear-wnr854t.dts   |  2 +-
- .../arm/boot/dts/marvell/orion5x-rd88f5182-nas.dts |  2 +-
- 56 files changed, 276 insertions(+), 284 deletions(-)
+ .../bindings/arm/marvell/armada-7k-8k.yaml         |  18 +
+ arch/arm64/boot/dts/marvell/Makefile               |   4 +
+ .../boot/dts/marvell/armada-3720-gl-mv1000.dts     |   8 +-
+ arch/arm64/boot/dts/marvell/cn9130-cf-base.dts     | 178 ++++++
+ arch/arm64/boot/dts/marvell/cn9130-cf-pro.dts      | 375 +++++++++++
+ arch/arm64/boot/dts/marvell/cn9130-cf.dtsi         | 197 ++++++
+ arch/arm64/boot/dts/marvell/cn9130-sr-som.dtsi     | 160 +++++
+ arch/arm64/boot/dts/marvell/cn9131-cf-solidwan.dts | 637 ++++++++++++++++++
+ arch/arm64/boot/dts/marvell/cn9132-clearfog.dts    | 673 +++++++++++++++++++
+ arch/arm64/boot/dts/marvell/cn9132-sr-cex7.dtsi    | 712 +++++++++++++++++++++
+ 10 files changed, 2958 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9130-cf-base.dts
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9130-cf-pro.dts
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9130-cf.dtsi
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9130-sr-som.dtsi
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9131-cf-solidwan.dts
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9132-clearfog.dts
+ create mode 100644 arch/arm64/boot/dts/marvell/cn9132-sr-cex7.dtsi
