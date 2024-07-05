@@ -1,101 +1,160 @@
-Return-Path: <SRS0=Yx92=OE=pdp7.com=drew@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83EBFC3271F
-	for <soc@archiver.kernel.org>; Thu,  4 Jul 2024 18:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29116C30658
+	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 03:29:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 568D3C32781; Thu,  4 Jul 2024 18:13:24 +0000 (UTC)
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7F9DAC3277B
-	for <soc@kernel.org>; Thu,  4 Jul 2024 18:13:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F9DAC3277B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-25e00f348e6so488946fac.1
-        for <soc@kernel.org>; Thu, 04 Jul 2024 11:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1720116801; x=1720721601; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=R1zfXTojJsKe3wzSJXZA6AZrGX/lJFvmn/u+9Krof3k=;
-        b=sbCLEET+9iefbZVyvyNF8A5t3pAi42bz4/9hEq2W5MDUjesVYteWGUQh+7VZdcmBVn
-         dKbNnbsALDqiIgZJEchVB5rqYaxoyo03DcWnEz3AXFof5Z8mxwD8/2ebNn2MqUFHoW08
-         HpdKUUJcgc/8mvRCLqaqI78abPJxPBEK7P+sf73WlOR54nfIe4lnTaFUMI/AYNzUoomQ
-         KR6CR0Q8CvEo4hM8w/H7LnM3QjSFh8BgAzSD4Ut8l+2Hg6K9R/3pUqI7/JHply486/Y9
-         nPIzKUf0hQl/1Qoj96hSJklgx9WW5irr0Dgtmbp5cVM66IqAGuK4Nih1oLGdZt1Kt1ct
-         1v+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720116801; x=1720721601;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R1zfXTojJsKe3wzSJXZA6AZrGX/lJFvmn/u+9Krof3k=;
-        b=Uq1BcdjLtuPLFz9ehgHEzGphFHnY7TwIF+KVny9cmhFVNUA6J4+RNTYdG8hr/dxISm
-         lq+TGZIEyyyehNgcSbVGd+RyXWhJJ61veWxbNAX2UCYLuzB8FZfWT6EDLmxYQZXmDb84
-         WeVcV4PGg6tpFlEd8zdI6Q9+JP9Cwq5V26SHUXK/LyPY98vIoQAiLvhKJcz0Y+TY4r2I
-         B6b6+hTnNzWQHAAWAQeGNaJZvPIMT4ANmZb954ltV/ePPINletXLuLPMDhOaZNZevDCn
-         vBVXaeSjcmdja0RYUxiahTOFZMUzOLvLtb81qXvSmRaBKDwQgZpDJK9Ihf8fm1lo0CFK
-         CAuA==
-X-Gm-Message-State: AOJu0YzoViS9icGQgTWQsHj9JS174QX61pAvzBRNhLLcBqHfaPZQnlQX
-	1RqVBhyKM4WCoDh/AphnyUzUdR9JuEE+xTIpojzk0iIWENYgBYGwx66jc7a+6qkuekTHZ+fJfRZ
-	G
-X-Google-Smtp-Source: AGHT+IECInmMyw8Royp+E9lIm6aV35f6xO/4XHeeEgDRWi71l+BBUa5MaOnn/GnWrwUqYtT3LbrnHw==
-X-Received: by 2002:a05:6870:b523:b0:24f:ebcd:6aa9 with SMTP id 586e51a60fabf-25e2b8cf1f8mr2162512fac.1.1720116801683;
-        Thu, 04 Jul 2024 11:13:21 -0700 (PDT)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1802:170:8756:5e46:4951:e2d])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72c6d100ea3sm10049195a12.78.2024.07.04.11.13.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jul 2024 11:13:21 -0700 (PDT)
-From: Drew Fustini <drew@pdp7.com>
+	id DAFF5C4AF0A; Fri,  5 Jul 2024 03:29:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B243C116B1;
+	Fri,  5 Jul 2024 03:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720150168;
+	bh=Ps8xXKZWmPgGRHEifvv2uPVP/BAoklxGIoNc4O9nlDk=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=I9rSH4cpeC7U22DCSdLDfaZRYa5PbvOSVmza4gncSS4VuGRGniDPhLGgZ1QnZFo+e
+	 xN2heeGcubC8TkXHAPqgoM67RNwIHCcpsbQ2FOJWsZnRjngIf3Dm7GaNCAxQwlrMqu
+	 655Ri7F+JX6svSW4XDgGG2J00x7RLYW6xbX0YdPAOMAItbD4CE9IlgE4MocEwyAdpB
+	 sD7Sf02MTFlBRbqDJeS06pPuwNvNTpt7jUoedQ9N9lbVMoYkUVIPzR3RME0V9J7P1H
+	 AAGj06XOwfjnN6LjbOqSwS5iVO6C3pQKi/reb1JiYiAHR9VOefwYzv0m+RIVLv6tPN
+	 PYyTyRkcXWB6A==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: linux-riscv@lists.infradead.org,
-	Drew Fustini <drew@pdp7.com>
-Subject: [PATCH v2] MAINTAINERS: thead: add git tree
-Date: Thu,  4 Jul 2024 11:09:17 -0700
-Message-Id: <20240704180913.2516959-1-drew@pdp7.com>
-X-Mailer: git-send-email 2.34.1
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Luca Weiss <luca@z3ntu.xyz>,
+	=?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Valeriy Klimin <vdos63@gmail.com>,
+	Adam Honse <calcprogrammer1@gmail.com>,
+	Alexandre Messier <alex@me.ssier.org>,
+	Bryant Mairs <bryant@mai.rs>,
+	Luca Weiss <luca@lucaweiss.eu>,
+	Raymond Hackley <raymondhackley@protonmail.com>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Stanislav Jakubek <stano.jakubek@gmail.com>
+Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v6.11
+Date: Thu,  4 Jul 2024 22:29:24 -0500
+Message-ID: <20240705032926.13333-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add git tree for T-Head device tree files and, in the future, drivers for
-the T-Head TH1520 SoC.
 
-Signed-off-by: Drew Fustini <drew@pdp7.com>
----
-Changes from v1:
-- Add exclusion for thead in the RISC-V MISC SOC SUPPORT entry so that
-  there are not two git trees covering the same platform
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 120351e41ef7..503d2bd5caef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19306,6 +19306,7 @@ F:	arch/riscv/boot/dts/
- X:	arch/riscv/boot/dts/allwinner/
- X:	arch/riscv/boot/dts/renesas/
- X:	arch/riscv/boot/dts/sophgo/
-+X:	arch/riscv/boot/dts/thead/
- 
- RISC-V PMU DRIVERS
- M:	Atish Patra <atishp@atishpatra.org>
-@@ -19322,6 +19323,7 @@ M:	Guo Ren <guoren@kernel.org>
- M:	Fu Wei <wefu@redhat.com>
- L:	linux-riscv@lists.infradead.org
- S:	Maintained
-+T:	git https://github.com/pdp7/linux.git
- F:	arch/riscv/boot/dts/thead/
- 
- RNBD BLOCK DRIVERS
--- 
-2.34.1
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.11
+
+for you to fetch changes up to 2a5454d0fe5684855581f8ad958afbcdc476fd64:
+
+  ARM: dts: qcom: qcom-msm8226-samsung-ms013g: Add initial device tree (2024-07-02 22:15:57 -0500)
+
+----------------------------------------------------------------
+Qualcomm Arm32 DeviceTree updates for v6.11
+
+This introduces new support for the Sony Xperia Z3 Compact, HTC One
+(M8), Samsung Galaxy Tab 4 8.0 Wi-Fi, Samsung Galaxy Grand 2, and
+Samsung Galaxy Note 3 devices.
+
+The Motorola Moto G and Motorola Moto G 4G gains accelerometer and
+magnetometer support, with the latter also getting framebuffer supplies
+and a temperature sensor wired up.
+
+The SMBB (charger block) is enabled across all MSM8x26 Lumia devices, as
+this is used for USB state changes.
+
+The operating mode for SDC regulator is set to HPM on Sony Xperia
+"Shinano" family to avoid brownouts on uSD-cards.
+
+The panel on LGE Nexus 5 is connected to the backlight, to make this
+turn off on blanking.
+
+MSM8974 is transitioned to use the mailbox-abstraction for invoking
+PC interrupts on remote processors.
+
+----------------------------------------------------------------
+Adam Honse (1):
+      ARM: dts: qcom: msm8974: Add Samsung Galaxy Note 3
+
+Alexandre Messier (1):
+      ARM: dts: qcom: Add initial support for HTC One (M8)
+
+André Apitzsch (3):
+      ARM: dts: qcom: msm8926-motorola-peregrine: Add accelerometer, magnetometer, regulator
+      ARM: dts: qcom: msm8926-motorola-peregrine: Update temperature sensor
+      ARM: dts: qcom: msm8926-motorola-peregrine: Add framebuffer supplies
+
+Bryant Mairs (1):
+      ARM: dts: qcom: Add support for Samsung Galaxy Tab 4 8.0 Wi-Fi
+
+Dmitry Baryshkov (6):
+      ARM: dts: qcom: apq8064: drop #power-domain-cells property of GCC
+      ARM: dts: qcom: msm8660: drop #power-domain-cells property of GCC
+      ARM: dts: qcom: msm8960: drop #power-domain-cells property of GCC
+      ARM: dts: qcom: ipq4019: drop #power-domain-cells property of GCC
+      ARM: dts: qcom: ipq8064: drop #power-domain-cells property of GCC
+      ARM: dts: qcom: mdm9615: drop #power-domain-cells property of GCC
+
+Krzysztof Kozlowski (2):
+      ARM: dts: qcom: use generic node names for Adreno and QFPROM
+      ARM: dts: qcom: apq8064: drop incorrect ranges from QFPROM
+
+Luca Weiss (5):
+      ARM: dts: qcom: msm8974-hammerhead: Hook up backlight
+      ARM: dts: qcom: msm8974-hammerhead: Update gpio hog node name
+      ARM: dts: qcom: msm8974: Use proper compatible for APCS syscon
+      ARM: dts: qcom: msm8974: Use mboxes properties for APCS
+      ARM: dts: qcom: msm8974: Use mboxes in smsm node
+
+Raymond Hackley (1):
+      ARM: dts: qcom: qcom-msm8226-samsung-ms013g: Add initial device tree
+
+Rayyan Ansari (1):
+      ARM: dts: qcom: msm8226-microsoft-common: Enable smbb explicitly
+
+Stanislav Jakubek (1):
+      ARM: dts: qcom: motorola-falcon: add accelerometer, magnetometer
+
+Valeriy Klimin (2):
+      ARM: dts: qcom: Add Sony Xperia Z3 Compact smartphone
+      ARM: dts: qcom: msm8974-sony-shinano: increase load on l21 for sdhc2
+
+ arch/arm/boot/dts/qcom/Makefile                    |   5 +
+ arch/arm/boot/dts/qcom/msm8226-motorola-falcon.dts |  53 ++
+ .../dts/qcom/qcom-apq8026-samsung-milletwifi.dts   | 573 +++++++++++++++++++++
+ arch/arm/boot/dts/qcom/qcom-apq8064.dtsi           |   7 +-
+ arch/arm/boot/dts/qcom/qcom-apq8084.dtsi           |   2 +-
+ arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi           |   1 -
+ arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi           |   3 +-
+ arch/arm/boot/dts/qcom/qcom-mdm9615.dtsi           |   1 -
+ .../dts/qcom/qcom-msm8226-microsoft-common.dtsi    |   4 +
+ .../boot/dts/qcom/qcom-msm8226-samsung-ms013g.dts  | 386 ++++++++++++++
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           |   4 +-
+ arch/arm/boot/dts/qcom/qcom-msm8660.dtsi           |   1 -
+ .../dts/qcom/qcom-msm8926-motorola-peregrine.dts   | 121 +++++
+ arch/arm/boot/dts/qcom/qcom-msm8960.dtsi           |   1 -
+ .../qcom/qcom-msm8974-lge-nexus5-hammerhead.dts    |   6 +-
+ .../boot/dts/qcom/qcom-msm8974-samsung-hlte.dts    | 401 ++++++++++++++
+ arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |  28 +-
+ arch/arm/boot/dts/qcom/qcom-msm8974pro-htc-m8.dts  | 353 +++++++++++++
+ .../qcom-msm8974pro-sony-xperia-shinano-aries.dts  |  44 ++
+ ...qcom-msm8974pro-sony-xperia-shinano-common.dtsi |   2 +
+ 20 files changed, 1967 insertions(+), 29 deletions(-)
+ create mode 100644 arch/arm/boot/dts/qcom/qcom-apq8026-samsung-milletwifi.dts
+ create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8226-samsung-ms013g.dts
+ create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8974-samsung-hlte.dts
+ create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8974pro-htc-m8.dts
+ create mode 100644 arch/arm/boot/dts/qcom/qcom-msm8974pro-sony-xperia-shinano-aries.dts
