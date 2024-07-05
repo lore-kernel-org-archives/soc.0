@@ -1,140 +1,151 @@
-Return-Path: <SRS0=JFW5=OF=ti.com=vigneshr@kernel.org>
+Return-Path: <SRS0=IP8z=OF=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56DC6C3271E
-	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 15:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E37C3271E
+	for <soc@archiver.kernel.org>; Fri,  5 Jul 2024 16:58:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42446C4AF0C; Fri,  5 Jul 2024 15:16:59 +0000 (UTC)
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	id 9A51CC4AF0B; Fri,  5 Jul 2024 16:58:34 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4617EC116B1;
-	Fri,  5 Jul 2024 15:16:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4617EC116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 465FGs5M118267;
-	Fri, 5 Jul 2024 10:16:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1720192614;
-	bh=SOCJihyMudDYbXAQtiHVqLLecu3CNpgoUVt3jGljzyA=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=ru05mTUXAvFNW+9NevyEWOIQ4ObvRCSdouqVoVx2lFHXQkEoo/nAuQfedQ+QfPKNh
-	 U9BjrJWJuxyheVIbT5yDS8dJgRagg7N6u+Ugfe+OuOM7qw4UHA0aMOQ6Sd+d7jh8xX
-	 owDd+UVKGOmae0AHeXRKcH1ZSkoduIKKZ+EYvRFc=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 465FGsPS013070
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 5 Jul 2024 10:16:54 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- Jul 2024 10:16:53 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 Jul 2024 10:16:53 -0500
-Received: from [172.24.227.94] (uda0132425.dhcp.ti.com [172.24.227.94])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 465FGo6i110570;
-	Fri, 5 Jul 2024 10:16:51 -0500
-Message-ID: <c6b2a0c3-e8c3-4e7a-90ca-a3b9834c63c9@ti.com>
-Date: Fri, 5 Jul 2024 20:46:50 +0530
+	by smtp.kernel.org (Postfix) with ESMTPS id C2F66C32786;
+	Fri,  5 Jul 2024 16:58:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2F66C32786
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CB4A8C0006;
+	Fri,  5 Jul 2024 16:58:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1720198710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nfs7xIxjdlyJM0SknZxAvaWWCNtXOH51+Oa6N5mueFo=;
+	b=Cq/9SpOL0HGdDk+FQmFu3kBBQVpLBcQlDwcSCxODFAbMG65nHgBqAdh+Mzjjj6EUwBgx8F
+	nIbtb/yo6B0QCb+1UVDKkpX7dymZu8Pajti1K3iCgP8VMftET9EgVRf9Q7F8SSewPuAV+6
+	sGvFqIlYbtxmaANw0gqGvg0p8Dl6xDQMYGhF5/LmK7tK2CdhHo+yRcL2k2x8MsyQD/h1Lm
+	Jx4TLQy/VjsrDgalFD5j7XLYsOs44voyQXmryOgcrNJMlCEswo23Iw9jzH/zSIPsWj1DmI
+	1x3o1CCzch8sXhsarkZEC0ig0Sy5bJsxq8Q2/YSxUfsmGmKP8ty7F4+p4ZcYHg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt for v6.11 (#1)
+Date: Fri, 05 Jul 2024 18:58:23 +0200
+Message-ID: <87zfqvixn4.fsf@BLaptop.bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [GIT PULL 2/2] arm64: defconfig: Updates for v6.11 for TI K3
- platforms
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc
-	<arm@kernel.org>, SoC <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
-References: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
-From: Vignesh Raghavendra <vigneshr@ti.com>
-Content-Language: en-US
-In-Reply-To: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------49olJoLJPLagJ6kQj0AEPVIw"
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
---------------49olJoLJPLagJ6kQj0AEPVIw
-Content-Type: multipart/mixed; boundary="------------8mDuihRvdyg8E6si09AbN22H";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-Cc: Tero Kristo <kristo@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Message-ID: <c6b2a0c3-e8c3-4e7a-90ca-a3b9834c63c9@ti.com>
-Subject: [GIT PULL 2/2] arm64: defconfig: Updates for v6.11 for TI K3
- platforms
-References: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
-In-Reply-To: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
-
---------------8mDuihRvdyg8E6si09AbN22H
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfab=
-d0:
+Hi,
+
+Here is the first pull request for dt for mvebu for v6.11.
+
+Gregory
+
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--config-for-v6.11
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-dt-6.11-1
 
-for you to fetch changes up to e05bc474310336e1ab03ed79112909dd0f74d039:
+for you to fetch changes up to 731daaa5093d5c93c3b46dfbe46970cc52e15335:
 
-  arm64: defconfig: Enable TI LP873X PMIC (2024-06-12 21:52:38 +0530)
-
-----------------------------------------------------------------
-TI K3 defconfig updates for v6.11
-
-Enable Hyperbus support present on various J7xx EVMs
-OMAP_USB2 driver for AM65 SoC
-LP873X PMIC related drivers for am642-phyboard-electra
+  ARM: dts: turris-omnia: Add GPIO key node for front button (2024-07-05 14=
+:45:47 +0200)
 
 ----------------------------------------------------------------
-Nathan Morrisson (1):
-      arm64: defconfig: Enable TI LP873X PMIC
+mvebu dt for 6.11 (part 1)
 
-Ravi Gunasekaran (1):
-      arm64: defconfig: Enable USB2 PHY Driver
+armada-385: Add 7-segment LED display on x530
+armada-385: Add Turris Omnia MCU related node
+armada-370 irqchip DT changes: Drop #size-cells from mpic node
+orion / kirkwood: few cleanups
 
-Vaishnav Achath (1):
-      arm64: defconfig: Enable MTD support for Hyperbus
+----------------------------------------------------------------
+Chris Packham (1):
+      ARM: dts: marvell: Add 7-segment LED display on x530
 
- arch/arm64/configs/defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+Krzysztof Kozlowski (7):
+      ARM: dts: marvell: kirkwood: align GPIO keys node name with bindings
+      ARM: dts: marvell: kirkwood: drop incorrect address/size-cells in GPI=
+O keys
+      ARM: dts: marvell: kirkwood: align LED node name with bindings
+      ARM: dts: marvell: orion: align GPIO keys node name with bindings
+      ARM: dts: marvell: orion: drop incorrect address/size-cells in GPIO k=
+eys
+      ARM: dts: marvell: orion5x-lswsgl: use 'gpios' property for LEDs
+      ARM: dts: marvell: orion: align LED node name with bindings
 
---=20
-Regards
-Vignesh
+Marek Beh=C3=BAn (3):
+      ARM: dts: armada-{370-xp,375,38x,39x}: Drop #size-cells from mpic node
+      ARM: dts: turris-omnia: Add MCU system-controller node
+      ARM: dts: turris-omnia: Add GPIO key node for front button
 
---------------8mDuihRvdyg8E6si09AbN22H--
-
---------------49olJoLJPLagJ6kQj0AEPVIw
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmaIDmIFAwAAAAAACgkQxEYeRXyRFuM1
-rggAssY5Q7Yj20OI5MwE2IbhgRgsaM/EMyjngqbrDKNrRFTSPRVdZ+lZT+jjeTKZAqv8znYW5fVb
-It+6FrJ2+ZUj57ICX23XmNCcHxVAizKQN7qAhSNVLyib4NM/9PBM8rK+MV4TM2t6j5u4S4BHrGY8
-6UK4sCABlDO3wN8vPpAqNFnZhH7uph19igyR69w8qF3+byVqx6ovfvDUTxZepcLY7/tnHGYSOrYn
-4L/bTa9RaVyrRH6bzKVUZOE9ViK5FH0gWYy/gqj6As7mRrZtXeSv3+LIJjRYemYyLEpxH2ql8ecX
-Vc73aKTfM1NEz3AAR7Ve0jDYNaSlD2SludZ3OrZhYQ==
-=D9OH
------END PGP SIGNATURE-----
-
---------------49olJoLJPLagJ6kQj0AEPVIw--
+ arch/arm/boot/dts/marvell/armada-370-xp.dtsi       |  1 -
+ arch/arm/boot/dts/marvell/armada-375.dtsi          |  1 -
+ arch/arm/boot/dts/marvell/armada-385-atl-x530.dts  | 13 ++++-
+ .../boot/dts/marvell/armada-385-turris-omnia.dts   | 35 ++++++++++++-
+ arch/arm/boot/dts/marvell/armada-38x.dtsi          |  1 -
+ arch/arm/boot/dts/marvell/armada-39x.dtsi          |  1 -
+ .../dts/marvell/kirkwood-blackarmor-nas220.dts     |  6 +--
+ arch/arm/boot/dts/marvell/kirkwood-c200-v1.dts     |  8 +--
+ arch/arm/boot/dts/marvell/kirkwood-cloudbox.dts    |  8 ++-
+ arch/arm/boot/dts/marvell/kirkwood-d2net.dts       |  2 +-
+ arch/arm/boot/dts/marvell/kirkwood-dir665.dts      | 22 ++++----
+ arch/arm/boot/dts/marvell/kirkwood-dns320.dts      | 10 ++--
+ arch/arm/boot/dts/marvell/kirkwood-dns325.dts      | 10 ++--
+ arch/arm/boot/dts/marvell/kirkwood-dnskw.dtsi      |  8 ++-
+ arch/arm/boot/dts/marvell/kirkwood-dockstar.dts    |  4 +-
+ arch/arm/boot/dts/marvell/kirkwood-dreamplug.dts   |  6 +--
+ arch/arm/boot/dts/marvell/kirkwood-goflexnet.dts   | 20 ++++----
+ .../dts/marvell/kirkwood-guruplug-server-plus.dts  |  8 +--
+ arch/arm/boot/dts/marvell/kirkwood-ib62x0.dts      | 12 ++---
+ arch/arm/boot/dts/marvell/kirkwood-iconnect.dts    | 20 ++++----
+ .../boot/dts/marvell/kirkwood-iomega_ix2_200.dts   | 16 +++---
+ arch/arm/boot/dts/marvell/kirkwood-l-50.dts        | 20 ++++----
+ arch/arm/boot/dts/marvell/kirkwood-laplug.dts      |  6 +--
+ .../arm/boot/dts/marvell/kirkwood-linkstation.dtsi |  2 -
+ .../boot/dts/marvell/kirkwood-linksys-viper.dts    | 10 ++--
+ arch/arm/boot/dts/marvell/kirkwood-lsxl.dtsi       | 18 +++----
+ arch/arm/boot/dts/marvell/kirkwood-mplcec4.dts     | 12 ++---
+ .../boot/dts/marvell/kirkwood-mv88f6281gtw-ge.dts  | 12 ++---
+ arch/arm/boot/dts/marvell/kirkwood-netxbig.dtsi    |  8 ++-
+ arch/arm/boot/dts/marvell/kirkwood-ns2-common.dtsi |  6 +--
+ arch/arm/boot/dts/marvell/kirkwood-ns2lite.dts     |  2 +-
+ arch/arm/boot/dts/marvell/kirkwood-nsa310.dts      | 20 ++++----
+ arch/arm/boot/dts/marvell/kirkwood-nsa310a.dts     | 18 +++----
+ arch/arm/boot/dts/marvell/kirkwood-nsa310s.dts     |  8 ++-
+ arch/arm/boot/dts/marvell/kirkwood-nsa320.dts      | 18 +++----
+ arch/arm/boot/dts/marvell/kirkwood-nsa325.dts      | 18 +++----
+ .../boot/dts/marvell/kirkwood-nsa3x0-common.dtsi   |  8 ++-
+ .../boot/dts/marvell/kirkwood-openblocks_a6.dts    |  4 +-
+ .../boot/dts/marvell/kirkwood-openblocks_a7.dts    |  2 -
+ arch/arm/boot/dts/marvell/kirkwood-pogo_e02.dts    |  4 +-
+ .../dts/marvell/kirkwood-pogoplug-series-4.dts     |  8 ++-
+ .../boot/dts/marvell/kirkwood-sheevaplug-esata.dts |  2 +-
+ arch/arm/boot/dts/marvell/kirkwood-sheevaplug.dts  |  4 +-
+ arch/arm/boot/dts/marvell/kirkwood-synology.dtsi   | 58 +++++++++++-------=
+----
+ arch/arm/boot/dts/marvell/kirkwood-t5325.dts       |  4 +-
+ arch/arm/boot/dts/marvell/kirkwood-ts219-6281.dts  |  6 +--
+ arch/arm/boot/dts/marvell/kirkwood-ts219-6282.dts  |  6 +--
+ arch/arm/boot/dts/marvell/kirkwood-ts419.dtsi      |  6 +--
+ .../dts/marvell/mvebu-linkstation-gpio-simple.dtsi |  2 -
+ .../boot/dts/marvell/orion5x-lacie-d2-network.dts  |  9 ++--
+ .../orion5x-lacie-ethernet-disk-mini-v2.dts        |  7 ++-
+ .../boot/dts/marvell/orion5x-linkstation-lschl.dts |  4 +-
+ arch/arm/boot/dts/marvell/orion5x-lswsgl.dts       | 25 +++++-----
+ .../marvell/orion5x-maxtor-shared-storage-2.dts    |  7 ++-
+ .../boot/dts/marvell/orion5x-netgear-wnr854t.dts   |  2 +-
+ .../arm/boot/dts/marvell/orion5x-rd88f5182-nas.dts |  2 +-
+ 56 files changed, 276 insertions(+), 284 deletions(-)
