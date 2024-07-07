@@ -4,40 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62197C3DA44
-	for <soc@archiver.kernel.org>; Sun,  7 Jul 2024 17:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FC2C3DA41
+	for <soc@archiver.kernel.org>; Sun,  7 Jul 2024 17:23:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37253C4AF07; Sun,  7 Jul 2024 17:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1D7C3277B;
-	Sun,  7 Jul 2024 17:20:16 +0000 (UTC)
+	id 8E7BCC4AF07; Sun,  7 Jul 2024 17:23:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACB6C3277B;
+	Sun,  7 Jul 2024 17:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720372817;
-	bh=MX4MNKSjeZRri9K3RjooKv2nOI0XPcRzj3ZqAlyamO0=;
+	s=k20201202; t=1720373028;
+	bh=4r/fjz6JfKzrR0LEZ5O0zQ+ECsAhunRdItLDMwFHRgM=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=bnLhkqPpzfdD1frBb3MQJClmhauzeLIeXftUr/2dTp9x5vtp0rPAzsw093oYyyc2Z
-	 +x9JVMoQysPDvHnpUZGA8COlYUQMyAcOAik+q4N4AOnHzC8igsB8q2Ob7PpomIz6bq
-	 VrvgstLtUuSbdj69fnzBeZjEC4CiEoI3ZQQhw4zw7QRb3Gj6kM1zv+lxeaP0XsKVx8
-	 p+e7EwZsf3n6iCchw0qphwshQ+KUebY7KLsuCz6uZnZxx+otsn7WB8kJHXq65IJLS9
-	 ZRR1dLGMvsZLq1JSE8+qvNMD1rM2DiU67wcMQ9WNGo8kAYtuBAxw8S8CFjAdY3v8j6
-	 n2ppJPOda4Iyw==
-Date: Sun, 7 Jul 2024 18:20:14 +0100
+	b=NDchqJFaFhYl/dU7GlLYcrZrzJK6tMHMISW5qLAVysVM7cN5MuLuWexuuosk33ReC
+	 Ddg5AtkFSkBB3KpgxbV0ROBgWLjtVgeB0VQ6LZbqUcivsLqq2UeTuMlY2a2d4YnvJx
+	 9AhSxUiPbdEaKI1L2014W4psY4MRVkJf5R1RBld1l9vbtUHhYnzxUnmI4jZbLSU8wz
+	 JxDBYyjeTV9jV5wN7jGoQnnjuoIWzAepzmcqWqJVGUi3/JtpldJRhjskb2mdQXr1ty
+	 Z7OGOJJKsGYt6FiGUIlTBqr48ujHExZZwEVmFqPfHV77OAv9BORhzQIoowA7R2Ojko
+	 BP3Vcg5qvz21w==
+Date: Sun, 7 Jul 2024 18:23:45 +0100
 From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V SoC drivers for v6.11
-Message-ID: <20240707-renovator-coat-bfb979436bcd@spud>
+Subject: [GIT PULL] RISC-V firmware drivers for v6.11
+Message-ID: <20240707-lukewarm-film-8a9da40a1c27@spud>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="LQbIIb9DOF9VsMd1"
+	protocol="application/pgp-signature"; boundary="dzNMppHeLU5ud5xK"
 Content-Disposition: inline
 
 
---LQbIIb9DOF9VsMd1
+--dzNMppHeLU5ud5xK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey Arnd,
+
+Attempt 2 with a fixed $subject. I blame being sick for missing that..
 
 Please pull a handful of changes to the Auto Update driver.
 
@@ -77,15 +79,15 @@ Conor Dooley (3):
  drivers/firmware/microchip/mpfs-auto-update.c | 136 +++++++++++++-------------
  1 file changed, 67 insertions(+), 69 deletions(-)
 
---LQbIIb9DOF9VsMd1
+--dzNMppHeLU5ud5xK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZorOTgAKCRB4tDGHoIJi
-0tU8APsG402BUKYU4sG18yezDQxes03LamExL1FEzqwjP2oZWAD9G5L3ffXIX15a
-Wegp/0q9sPUgmCjM4DKjGhY+sSRHUAM=
-=JcM2
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZorPIQAKCRB4tDGHoIJi
+0sANAP9bG1K7y/ld1oIlIANO1X2CSkjouvdLAZI4cGnCvgF5NgD9HFkF+Ehehl9b
+9cDjuyr0WS+aDzXGGqwTqrGeDuaQrQE=
+=XXpr
 -----END PGP SIGNATURE-----
 
---LQbIIb9DOF9VsMd1--
+--dzNMppHeLU5ud5xK--
