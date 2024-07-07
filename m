@@ -4,44 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FC2C3DA41
-	for <soc@archiver.kernel.org>; Sun,  7 Jul 2024 17:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 704ADC3DA44
+	for <soc@archiver.kernel.org>; Sun,  7 Jul 2024 17:27:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8E7BCC4AF07; Sun,  7 Jul 2024 17:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACB6C3277B;
-	Sun,  7 Jul 2024 17:23:47 +0000 (UTC)
+	id 3C864C32781; Sun,  7 Jul 2024 17:27:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49713C3277B;
+	Sun,  7 Jul 2024 17:27:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720373028;
-	bh=4r/fjz6JfKzrR0LEZ5O0zQ+ECsAhunRdItLDMwFHRgM=;
+	s=k20201202; t=1720373265;
+	bh=OFczwIa8qC/88c1+uwlpiovoMIvU0lo/YpTlvmzj9hY=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=NDchqJFaFhYl/dU7GlLYcrZrzJK6tMHMISW5qLAVysVM7cN5MuLuWexuuosk33ReC
-	 Ddg5AtkFSkBB3KpgxbV0ROBgWLjtVgeB0VQ6LZbqUcivsLqq2UeTuMlY2a2d4YnvJx
-	 9AhSxUiPbdEaKI1L2014W4psY4MRVkJf5R1RBld1l9vbtUHhYnzxUnmI4jZbLSU8wz
-	 JxDBYyjeTV9jV5wN7jGoQnnjuoIWzAepzmcqWqJVGUi3/JtpldJRhjskb2mdQXr1ty
-	 Z7OGOJJKsGYt6FiGUIlTBqr48ujHExZZwEVmFqPfHV77OAv9BORhzQIoowA7R2Ojko
-	 BP3Vcg5qvz21w==
-Date: Sun, 7 Jul 2024 18:23:45 +0100
+	b=cNLgJ/JwV3S79jPtWnJIDMz2KRGizDrFFHAXi8Vfkdn9+7s0/t/I8n1YTqubC2K4o
+	 vTAh3o32QwTGiupNvvIqSL9DD4JLY+qalFPu8aDsRPEDWrJkNfTSDsaLaQpVLiFNZe
+	 hqSefJxJ4sLPkVqFiDJIDoQ7QTGCf6EVTdVJtVtdE19Vz3Brdd9BD/MqCEGSWnj1Lr
+	 /fgG8dpuJjxKRoH6cLjGFPip+JZ/EMJRGU7stcSVipZYYa027WmXo83ysskcuAQ0be
+	 EHwgkpoFlJOs1HQR5CNZGuvk6AGE4Cxb4XbXBOyUEdyXq0xKTK9eS45L4r4NSEs+7o
+	 tz7+AG+hXEe0A==
+Date: Sun, 7 Jul 2024 18:27:42 +0100
 From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V firmware drivers for v6.11
-Message-ID: <20240707-lukewarm-film-8a9da40a1c27@spud>
+Subject: [GIT PULL] RISC-V cache drivers for v6.11
+Message-ID: <20240707-whoever-undesired-c5f6e96ae403@spud>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="dzNMppHeLU5ud5xK"
+	protocol="application/pgp-signature"; boundary="KT7UcFXDAuTnOBPW"
 Content-Disposition: inline
 
 
---dzNMppHeLU5ud5xK
+--KT7UcFXDAuTnOBPW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hey Arnd,
 
-Attempt 2 with a fixed $subject. I blame being sick for missing that..
+Another attempt 2 with a fixed $subject.
 
-Please pull a handful of changes to the Auto Update driver.
+Please pull the addition of a new cache driver.
+
+There's a wee maintainers update in here too, I put the series on this
+branch as one patch is cache related and I have no soc driver patches.
 
 Cheers,
 Conor.
@@ -52,42 +55,49 @@ The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-firmware-for-v6.11
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-cache-for-v6.11
 
-for you to fetch changes up to d930eb4fdfee32e0a3e9a5c9c2af8d65857ac4de:
+for you to fetch changes up to 3d41249c1dee0fa22ebd8d27aa0a280edf943a0e:
 
-  firmware: microchip: use scope-based cleanup where possible (2024-06-05 19:36:17 +0100)
+  MAINTAINERS: add microchip soc binding directory to microchip soc driver entry (2024-06-27 17:33:06 +0100)
 
 ----------------------------------------------------------------
-RISC-V firmware drivers for v6.11
+RISC-V cache drivers for v6.11
 
-Microchip:
-Support for writing "bitstream info" to the flash using the auto-update
-driver. At this point the "bitstream info" is a glorified dtbo wrapper,
-but there's plans to add more info there in the future. Additionally,
-rework some allocations in the driver and use scope-based cleanup on
-them.
+StarFive:
+A new driver for the cache controller on the jh8100, which didn't
+implement Zicbom and thus needs an implementation of non-standard cache
+management operations.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 ----------------------------------------------------------------
-Conor Dooley (3):
-      firmware: microchip: support writing bitstream info to flash
-      firmware: microchip: move buffer allocation into mpfs_auto_update_set_image_address()
-      firmware: microchip: use scope-based cleanup where possible
+Conor Dooley (2):
+      MAINTAINERS: add cache binding directory to cache driver entry
+      MAINTAINERS: add microchip soc binding directory to microchip soc driver entry
 
- drivers/firmware/microchip/mpfs-auto-update.c | 136 +++++++++++++-------------
- 1 file changed, 67 insertions(+), 69 deletions(-)
+Joshua Yeong (2):
+      dt-bindings: cache: Add docs for StarFive Starlink cache controller
+      cache: Add StarFive StarLink cache management
 
---dzNMppHeLU5ud5xK
+ .../cache/starfive,jh8100-starlink-cache.yaml      |  66 +++++++++++
+ MAINTAINERS                                        |   2 +
+ drivers/cache/Kconfig                              |   9 ++
+ drivers/cache/Makefile                             |   5 +-
+ drivers/cache/starfive_starlink_cache.c            | 130 +++++++++++++++++++++
+ 5 files changed, 210 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cache/starfive,jh8100-starlink-cache.yaml
+ create mode 100644 drivers/cache/starfive_starlink_cache.c
+
+--KT7UcFXDAuTnOBPW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZorPIQAKCRB4tDGHoIJi
-0sANAP9bG1K7y/ld1oIlIANO1X2CSkjouvdLAZI4cGnCvgF5NgD9HFkF+Ehehl9b
-9cDjuyr0WS+aDzXGGqwTqrGeDuaQrQE=
-=XXpr
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZorQDgAKCRB4tDGHoIJi
+0iTyAQC6E5jYycKU+W7zDH3Kc7JAcmcrw06+Um3pNJEHi3T+/gEA6V2PtoEkU1Al
+cYhBwKBi41JgCH/GmSmCHGT8I8TXkwQ=
+=I61w
 -----END PGP SIGNATURE-----
 
---dzNMppHeLU5ud5xK--
+--KT7UcFXDAuTnOBPW--
