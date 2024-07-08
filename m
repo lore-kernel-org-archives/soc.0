@@ -1,67 +1,76 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4858C3271E
-	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 11:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670AEC3DA42
+	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 14:31:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7D53DC4AF0A; Mon,  8 Jul 2024 11:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D6DC116B1;
-	Mon,  8 Jul 2024 11:40:08 +0000 (UTC)
+	id 471D9C4AF0D; Mon,  8 Jul 2024 14:31:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 310B8C116B1
+	for <soc@kernel.org>; Mon,  8 Jul 2024 14:31:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720438810;
-	bh=PtrFRVd5Dy4ptI630Fkeii0XsntRASbphrFtmeNRSRY=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N8QnnjxJDvXjfcR/nGjI3y43JDJgv64R4rPgqOpANtXfvPMVpVxBZIo+xnT1zEw2x
-	 k8YuBB2d+WBZb/zJNBlBeKL2+34g77e9jYdvSq74UeCSsv39PiL0BQ/mnlCfpBnlgi
-	 h5A+GCy+2cuphowGOKuxY0LuJMihpimGGGFJrU2onKWOSY/zn1ApVkAcu77zatmm0l
-	 eAPAVOjBo/ibwJ23cRcRJvqou9L1ZRLa5NfAhKtNxqHjlZwGVQjvYNQ4tWKSw8A0X8
-	 mnsUipGcrWyQOH2Q8mYRKomjB5d0SDZCeELLaamsmNaSHp+8nqyJWXIx26pvUaimVR
-	 wj7E+SVA/8ymw==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org
-Cc: arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/2] platform: cznic: turris-omnia-mcu: Depend on WATCHDOG
-Date: Mon,  8 Jul 2024 13:40:02 +0200
-Message-ID: <20240708114002.4285-3-kabel@kernel.org>
-X-Mailer: git-send-email 2.44.2
-In-Reply-To: <20240708114002.4285-1-kabel@kernel.org>
-References: <20240708114002.4285-1-kabel@kernel.org>
+	s=k20201202; t=1720449061;
+	bh=OQEmCSYlxduA4vZ0x9yRjjtTOq+I5ihFlenhMBKicFY=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=QuviPUi8myZgrvqJb5om2TjTLptqoa55X2/3sXlG/hbx3+TP78OWdEF/U8ixDUz5G
+	 se2HK818/KvCIOltUkAzJg0/qOcap4NRa7FnZlwXnlZXCiBdV5NQp6aAhWHuX85unw
+	 GRE1E/xOLopolKQikqF3O91jhQIuJiTktQCW6PVyJgq9nKC4qA+RuTxbWFpRzRCcfR
+	 6vOkn2Erty2NX7M0XGOvKqaUNVT5+15z6IIkkJaTKHprYkj4Fu3Ia64rBZuNx/ZfZe
+	 ioRgpSG8LGmp9zyFxq0Rmc1Rfwq8AYZsQkaNiJGsJB5I8y8AhikQ4puenMKgCjpv6Y
+	 jLbDA23I7wCCQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 17549C433E9;
+	Mon,  8 Jul 2024 14:31:01 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <172044906104.22805.17088784666824660893.git-patchwork-summary@kernel.org>
+Date: Mon, 08 Jul 2024 14:31:01 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Add depend on WATCHDOG, otherwise modpost fails with
-  ERROR: modpost: "watchdog_init_timeout" [drivers/platform/cznic/turris-omnia-mcu.ko] undefined!
-  ERROR: modpost: "devm_watchdog_register_device" [drivers/platform/cznic/turris-omnia-mcu.ko] undefined!
+Hello:
 
-Fixes: ab89fb5fb92c ("platform: cznic: turris-omnia-mcu: Add support for MCU watchdog")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202407040711.g19y3cWq-lkp@intel.com/
-Signed-off-by: Marek Behún <kabel@kernel.org>
----
- drivers/platform/cznic/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-index 8992f7b87223..2a5235cf6844 100644
---- a/drivers/platform/cznic/Kconfig
-+++ b/drivers/platform/cznic/Kconfig
-@@ -17,6 +17,7 @@ config TURRIS_OMNIA_MCU
- 	depends on MACH_ARMADA_38X || COMPILE_TEST
- 	depends on I2C
- 	depends on OF
-+	depends on WATCHDOG
- 	select GPIOLIB
- 	select GPIOLIB_IRQCHIP
- 	select HW_RANDOM
+Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree fixes for v6.10
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867372
+  Lore link: https://lore.kernel.org/r/20240702030913.340814-1-andersson@kernel.org
+
+Patch: [GIT,PULL] Qualcomm driver fixes for v6.10
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867375
+  Lore link: https://lore.kernel.org/r/20240702031157.341031-1-andersson@kernel.org
+
+Patch: [GIT,PULL] Qualcomm Arm64 defconfig fixes for v6.10
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867368
+  Lore link: https://lore.kernel.org/r/20240702025740.339563-1-andersson@kernel.org
+
+Series: [GIT,PULL,1/3] Allwinner SoC fixes for 6.10
+  Submitter: Chen-Yu Tsai <wens@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867613
+  Lore link: https://lore.kernel.org/r/ZoQY5k21RQLOrBQ3@wens.tw
+    Patches: [GIT,PULL,1/3] Allwinner SoC fixes for 6.10
+
+
+Total patches: 4
+
 -- 
-2.44.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
