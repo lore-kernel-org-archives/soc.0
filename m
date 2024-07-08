@@ -4,60 +4,133 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED9B6C3DA47
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E19B2C3271E
 	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DBC77C4AF12; Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5847C4AF0D;
-	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
+	id D0A65C4AF10; Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9CEBC116B1
+	for <soc@kernel.org>; Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720451507;
-	bh=WvNsEp4car/bQkDGGv1EEYNO2DVyArgr45UhHqtL1fw=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=fRcAmhnajJo30tnDy3VYyxfBmVSRi8faUdM2lWd7rt/7jQwHtpc2AUbcho4Uqq4TU
-	 OqG+G2j3LWIlW4xjHX4ueruQlQJzoY4ev8CCmJynrwN9HVypwHCX7aERw2xo/d/rE5
-	 jum0NSUEIBr1KTv8iBSe81PUeyQrLGZxVC6HsuEceNqg+DwxTAPgU7hGsGRK34qVqc
-	 VM3I3OMOVd9MffvpC8PDTDoA9/cLkkTYTqxv2qjusuVGzH1MHNe6ht5tAmUtzjqPuN
-	 HxqVSelTQHjjIqNpw+RFHWpMeRtMFQK16twtqwbrdHDCzxDmUGMABIpp+EY6EBYMbh
-	 JwnpUvkLiMymw==
+	bh=nDOkQgd4xJl2zbJbmFutEXYstjPuyNAeJ1XzVODfAW8=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=ut2NbWu2QTRD43pmgYnlA1A5xWjl/vlKQ+HOLZ411HTLqjWOkA7lWI6f2tzPJZQtI
+	 e22SAPRBGE1dxaDbiqk6f2oc6PsM/H+LCxRBHNC9BHDSxtUA/eOCrMFgz0m3hHh8aI
+	 /6SlEcbYdyuQgupobAersJ6Dvz3rMshKgdMZCBoUQBRRFDbAn9mOns5Y/esxSrk6xP
+	 0a/jyaGTg6jFar3GlsSDTVx5S2jYI+oXbAylEgU8LUq+0bwFZiFhctv41Qac+nJPpa
+	 R7hIA14QJKA0PM7ChvsIWkaOfQ380yVo5TSD/rkL904/gINn8BgDItxCuJignnvQbn
+	 PA/qSo/xHrXGw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4D25DF3717;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0A81DF370E;
 	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: ARM: moxa: add Krzysztof Kozlowski as maintainer
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172045150773.17395.12667690026113175600.git-patchwork-notify@kernel.org>
+ <172045150759.17395.14567783906465842008.git-patchwork-summary@kernel.org>
 Date: Mon, 08 Jul 2024 15:11:47 +0000
-References: <20240613135956.8899-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240613135956.8899-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
-by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Thu, 13 Jun 2024 15:59:56 +0200 you wrote:
-> There is no maintainers entry for the ARM MOXA ART SoC, thus patches end
-> up nowhere.  Add such entry, because even if platform is orphaned and on
-> its way out of the kernel, it is nice to take patches if someone sends
-> something.
-> 
-> I do not plan to actively support/maintain MOXA but I can take odd fixes
-> now and then.
-> 
-> [...]
+Series: [GIT,PULL,1/3] Allwinner SoC fixes for 6.10
+  Submitter: Chen-Yu Tsai <wens@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867613
+  Lore link: https://lore.kernel.org/r/ZoQY5k21RQLOrBQ3@wens.tw
+    Patches: [GIT,PULL,1/3] Allwinner SoC fixes for 6.10
+             [GIT,PULL,3/3] Allwinner SoC device tree changes for 6.11
 
-Here is the summary with links:
-  - MAINTAINERS: ARM: moxa: add Krzysztof Kozlowski as maintainer
-    https://git.kernel.org/soc/soc/c/4c54173d5965
+Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree updates for v6.11
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=869018
+  Lore link: https://lore.kernel.org/r/20240706173140.18887-1-andersson@kernel.org
 
-You are awesome, thank you!
+Patch: MAINTAINERS: ARM: moxa: add Krzysztof Kozlowski as maintainer
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=861662
+  Lore link: https://lore.kernel.org/r/20240613135956.8899-1-krzysztof.kozlowski@linaro.org
+
+Patch: [GIT,PULL] 2/2 ARM: dts: various cleanup for v6.11
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867416
+  Lore link: https://lore.kernel.org/r/20240702065359.7378-2-krzysztof.kozlowski@linaro.org
+
+Patch: [GIT,PULL,1/2] arm64: dts: various cleanup for v6.11
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867415
+  Lore link: https://lore.kernel.org/r/20240702065359.7378-1-krzysztof.kozlowski@linaro.org
+
+Patch: [GIT,PULL] RISC-V Devicetrees for v6.11
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=869104
+  Lore link: https://lore.kernel.org/r/20240707-nuttiness-lustfully-4aaf03c991b2@spud
+
+Patch: [v2] MAINTAINERS: ARM: vt8500: add Alexey and Krzysztof as maintainers
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=861479
+  Lore link: https://lore.kernel.org/r/20240613064612.8589-1-krzysztof.kozlowski@linaro.org
+
+Patch: MAINTAINERS: ARM: alphascale: add Krzysztof Kozlowski as maintainer
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=861219
+  Lore link: https://lore.kernel.org/r/20240612141018.7348-1-krzysztof.kozlowski@linaro.org
+
+Patch: MAINTAINERS: ARM: nspire: add Krzysztof Kozlowski as maintainer
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=861228
+  Lore link: https://lore.kernel.org/r/20240612141740.8470-1-krzysztof.kozlowski@linaro.org
+
+Patch: [GIT,PULL] Qualcomm Arm32 DeviceTree updates for v6.11
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=868621
+  Lore link: https://lore.kernel.org/r/20240705032926.13333-1-andersson@kernel.org
+
+Series: [GIT,PULL,1/2] arm64: dts: samsung: DTS for v6.11
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=867403
+  Lore link: https://lore.kernel.org/r/20240702063514.6215-1-krzysztof.kozlowski@linaro.org
+    Patches: [GIT,PULL,1/2] arm64: dts: samsung: DTS for v6.11
+
+Patch: ARM: dts: ixp4xx: nslu2: beeper uses PWM
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=868030
+  Lore link: https://lore.kernel.org/r/20240703-ixp4xx-dts-v1-1-e5149da36f6e@linaro.org
+
+Series: [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.11
+  Submitter: Vignesh Raghavendra <vigneshr@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=868853
+  Lore link: https://lore.kernel.org/r/37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com
+    Patches: [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.11
+
+Patch: MAINTAINERS: ARM: axm: add Krzysztof Kozlowski as maintainer
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=861658
+  Lore link: https://lore.kernel.org/r/20240613134910.7862-1-krzysztof.kozlowski@linaro.org
+
+
+Total patches: 15
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
