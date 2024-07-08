@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E6AC3DA42
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F45C3DA4A
 	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 19:50:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 90291C4AF0C; Mon,  8 Jul 2024 19:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A6E7C3277B;
+	id B951AC4AF0D; Mon,  8 Jul 2024 19:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A42DCC116B1;
 	Mon,  8 Jul 2024 19:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720468245;
-	bh=8QPxMjl+yKVK8fxQSIjeRdphp9m0/kKcv8kgLEiIEcs=;
+	bh=38PmKliWwgD3EvGc/2j4+qLOeYRZGeKYRkG++kJBRh4=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=quhRIHQLH/guWDgTV0Nqkv8uhgML9fQjG0RwxTl4hyy1D/ii2uk/vhR5ABGH4Afo0
-	 BS4j5QZe267SoJVAz8mxHtR3EAOIAlFV9smfzvqx6qKCxmYW4HbylB5xzg7t/SDceN
-	 GF45aoQtqYMlcx4MFw6AlUja4/rv8foP2hUS8UZGmc9lsG1/F3XEitOz39cgE4HvuN
-	 79TAbyfgJoSjjUOuea9du1d549Y9qlDC7+BXJ9W4uBQjSy5/ECi+aCTmrLrgAbt+S6
-	 F3Ki6k0OaZo6vnVPtAtfURMq3Y+zv2wurIf3Ud0p2rlxedoEUdK/JXzIV744sfvvn9
-	 KpCq1eTafB3HA==
+	b=U3U6Svv5bay0AKbg8VpKLqKOtzWTorxhO2/kmvM3YmvGVKb/9IOhndmaUXAmWYNjT
+	 LJXxfQWDJYy5M50aoK0bDtu5k3fqHo1YtN1xabp0W567Q2U9lLFCzDuK69zUMa1eog
+	 5/qb61PKqDIbY8NVjIcgWsdei4bFHHVILmV7zz8gX77gM4OFt9lHe1RMYIp7u7hq2G
+	 qLiVQ7C+EQ7b6/NN8nBMAf6YYmge1EacgYcJHtWLK8a8AwoPpUQMGt/LTyAlsIvqty
+	 iHq8+Th+7SQXOwszt5D8EEJzXTeBLSku8s52xcaXrMQpuOLOTPIDqul2oT3bwqGbLT
+	 2g9GwB4AbfqGw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6EC01DF3713;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8CD91C433E9;
 	Mon,  8 Jul 2024 19:50:45 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: Add MCP23S08 pinctrl support
+Subject: Re: [GIT PULL 1/2] arm64: dts: ti: K3 devicetree updates for v6.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172046824544.24660.14780334102558290840.git-patchwork-notify@kernel.org>
+ <172046824557.24660.13662272204524498202.git-patchwork-notify@kernel.org>
 Date: Mon, 08 Jul 2024 19:50:45 +0000
-References: <20240705134407.2833659-1-alexandre.torgue@foss.st.com>
-In-Reply-To: <20240705134407.2833659-1-alexandre.torgue@foss.st.com>
-To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+References: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
+In-Reply-To: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 5 Jul 2024 15:44:07 +0200 you wrote:
-> From: Christophe Roullier <christophe.roullier@foss.st.com>
+On Fri, 5 Jul 2024 20:41:13 +0530 you wrote:
+> Hi ARM SoC Maintainers,
 > 
-> Enable MCP23S08 I/O expanders to manage Ethernet PHY
-> reset in STM32MP135F-DK board.
+> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 > 
-> Signed-off-by: Christophe Roullier <christophe.roullier@foss.st.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: multi_v7_defconfig: Add MCP23S08 pinctrl support
-    https://git.kernel.org/soc/soc/c/d7d906675de2
+  - [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.11
+    (no matching commit)
+  - [GIT,PULL,2/2] arm64: defconfig: Updates for v6.11 for TI K3 platforms
+    https://git.kernel.org/soc/soc/c/31f62c5d8811
 
 You are awesome, thank you!
 -- 
