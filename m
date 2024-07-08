@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D13C3DA4D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17BE9C3DA4E
 	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 098E5C4AF49; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E62C5C4AF14;
+	id 008E9C4AF19; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DD946C116B1;
 	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720451507;
-	bh=mtl5DT/Wr+T+cIjYYKMVHDOrxz8jk7xeMt3vXTCH6Hk=;
+	bh=NFkA78gnAIf9O5Jgu1tTZK0+SmoZJh7sq1A1FStK0tk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Ef4O1WXiS1AvRgevV3HSNJnIojnyBaxCfu4+xex/Y2XhTmgCBWwypjr+eHQ+xv39D
-	 nsPVhVoQvdd+YrJuVbVOK8V5L3k3kssVIaoJOpkYX7QhjTOj47aUqr/NikdmS1IPQs
-	 rAVhdOM3GcWUoJM2lyWToXTq2zBbnZAMfUQqyKGKCct/K768pNtGOypObgFLyXw4hs
-	 1ZFL6gmKD1KDVdm45SxdQ46lnkaLpD9NAua4Cu62kkcAnxcEBkw2ia6q0oa8yqFfK8
-	 ITmWTWu4HB98GVOpYbsCK1NoDzpw2lrqcwaf0NqqcpLrwnhqUVNT6LvnNQsFVeG6aS
-	 pAGVR3XoUJPfA==
+	b=HSDbVQBt/DWW7NkSxJb0Pz7PUcqRM9cjMEBTVoXqMhW8IErTo5cC3jRWrkuw9BLVJ
+	 vHiWojWlEdVxDPnYsK9UPnxoJCEnBqCGjD6mwVJDKAgkhA44g1X+2splzWL4/8+GIh
+	 OOBLqsljJo9sLsQz6tcggH41xv3gsIDuqwDbidP2ceoTCtKxC3MQB+szi/DVcNDjd4
+	 vNomljmDxbjXjoPt+XC/UF/nIsXe8JkD2t2qxfxLoiSw67HEqBzUGu6o82O0fATqs6
+	 V1U6xLcctM3ai4hoMrwqJpqi0BOw6xuqnWgAARS2YrY/A7HhLvTOU/aNZPSha/qPUb
+	 DqntX0JJxwCEA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9CECDF370E;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD0DBDF3714;
 	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: ARM: nspire: add Krzysztof Kozlowski as
- maintainer
+Subject: Re: [PATCH v2] MAINTAINERS: ARM: vt8500: add Alexey and Krzysztof as
+ maintainers
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172045150788.17395.2264320468874905830.git-patchwork-notify@kernel.org>
+ <172045150783.17395.11269327343208119773.git-patchwork-notify@kernel.org>
 Date: Mon, 08 Jul 2024 15:11:47 +0000
-References: <20240612141740.8470-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240612141740.8470-1-krzysztof.kozlowski@linaro.org>
+References: <20240613064612.8589-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240613064612.8589-1-krzysztof.kozlowski@linaro.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -43,20 +43,21 @@ Hello:
 This patch was applied to soc/soc.git (for-next)
 by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
 
-On Wed, 12 Jun 2024 16:17:40 +0200 you wrote:
-> Apparently there was never a maintainers entry for the ARM Texas
-> Instruments Nspire SoC, thus patches end up nowhere.  Add such entry,
-> because even if platform is orphaned and on its way out of the kernel,
-> it is nice to take patches if someone sends something.
+On Thu, 13 Jun 2024 08:46:12 +0200 you wrote:
+> The ARM VIA/WonderMedia VT8500 platform became orphaned in
+> commit 8f1b7ba55c61 ("MAINTAINERS: ARM/VT8500, remove defunct e-mail")
+> and clearly it is on the way out of the kernel.  However few folks send
+> patches to it and it is nice to actually take them, till the platform is
+> in the kernel.
 > 
-> I do not plan to actively support/maintain Nspire platform but I can
-> take odd fixes now and then.
+> Alexey Charkov still has VT8500 hardware and plans to work on upstream,
+> so add Alexey as the maintainer.  Krzysztof will collect patches.
 > 
 > [...]
 
 Here is the summary with links:
-  - MAINTAINERS: ARM: nspire: add Krzysztof Kozlowski as maintainer
-    https://git.kernel.org/soc/soc/c/997148228410
+  - [v2] MAINTAINERS: ARM: vt8500: add Alexey and Krzysztof as maintainers
+    https://git.kernel.org/soc/soc/c/084e77a12c3a
 
 You are awesome, thank you!
 -- 
