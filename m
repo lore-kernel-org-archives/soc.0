@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA37C3DA4C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17CA7C3DA50
 	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 144DDC4AF50; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F12C8C4AF17;
+	id 0D3D8C4AF48; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EAD2FC4AF16;
 	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720451508;
-	bh=EL45BJoFH+StQPJYbepmeMgG6NRd2dLN6M3Az5K1Aq8=;
+	bh=dqBZbY8bd1yVkpanzklLGni+TAA8LAS8hOo0127yQoc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=jQEODNCNee6vTiRsg1l57WJGvxk1c8bCC97zeZOnJ34O9TFUoUUW2I+jYZ3gB611+
-	 agu3aOXpXiJkIVOtvSCuShySWERbKw8B3AvT+g/HgabcCE4dmiDyHAVawzDoGRYeFI
-	 AipVN8ZzftDCX3vISs1VHv01Ka0wgPt3QVx0ZLSH2edSsoZ+hpftCCtlADUyQfIdA2
-	 KYGRo+vNESIX/YjaLl7YekwWJ7dqYH0ZewTPycNlx4PczR+rnCxiDMDqDt5B0OCxf3
-	 G/1wRJvsxbhcmwVoVZ1Cx6PuF+2ezQeta/AjcWL7DS06qd2qeZ+2XOZb/GKdUsPm6o
-	 sQfsjKNNtlAFg==
+	b=CPzvIqF6wvxyHF1Eer4A1RaldtHDUFTXRI7ZjJaWpAxscORRUSk5uSj0nrjk4SJmL
+	 GVqj65596ygogESaP5St/GzrGd/mixVrnFtmF6DCL0/Sa24k8umDQShxlpGT9Ab9Ra
+	 bQ221iiLGFtqWiRQGWs2N4LuQmyXgPLt1wefa/BxmmIDRcjiVBVRUIylV2NINey6KO
+	 np98HO4ERXE2frcA5q6lwQhae1ej2iqG+llokXxKOvAPP6gfP+R7CX5z8x1mZr2IN3
+	 kRKfLFp47JcXo27JQ71RRcDoqlmdGDoGxcx7MBmqsc5AfL4EMu92iCLF0hccHefKzC
+	 Ne7+VtpOyOC7w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0C92DF3717;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3A26DF371A;
 	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v6.11
+Subject: Re: [PATCH] MAINTAINERS: ARM: alphascale: add Krzysztof Kozlowski as
+ maintainer
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172045150791.17395.10842774530143916013.git-patchwork-notify@kernel.org>
+ <172045150786.17395.2897097540920505886.git-patchwork-notify@kernel.org>
 Date: Mon, 08 Jul 2024 15:11:47 +0000
-References: <20240705032926.13333-1-andersson@kernel.org>
-In-Reply-To: <20240705032926.13333-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+References: <20240612141018.7348-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240612141018.7348-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This patch was applied to soc/soc.git (for-next)
+by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
 
-On Thu,  4 Jul 2024 22:29:24 -0500 you wrote:
-> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+On Wed, 12 Jun 2024 16:10:18 +0200 you wrote:
+> Apparently there was never a maintainers entry for the ARM Alphascale
+> ASM9260 SoC, thus patches end up nowhere.  Add such entry, because even
+> if platform is orphaned and on its way out of the kernel, it is nice to
+> take patches if someone sends something.
 > 
->   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.11
+> I do not plan to actively support/maintain ARM Alphascale but I can take
+> odd fixes now and then.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Qualcomm Arm32 DeviceTree updates for v6.11
-    https://git.kernel.org/soc/soc/c/a9fe0720f244
+  - MAINTAINERS: ARM: alphascale: add Krzysztof Kozlowski as maintainer
+    https://git.kernel.org/soc/soc/c/3974eeb92565
 
 You are awesome, thank you!
 -- 
