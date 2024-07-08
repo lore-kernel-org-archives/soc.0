@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26B7EC3DA56
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EF6CC3DA58
 	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D4F1C4AF54; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07E23C4AF1D;
+	id 27783C4AF53; Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 118E0C4AF4D;
 	Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720451508;
-	bh=P8ybdV/JoK6GVCuxBtrvDvg4UP403x3rI/khFOKaRto=;
+	bh=5NKk6f9fkPysktlv3T9jC2+31bUaQ/OzN3vuJZAIOBU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=LBVwYyp+0wF1yN2ggXmZFu0umRCZyB65ktUxgfVX5wOeGpZTkxkZfQ1090nSAcrU1
-	 p0ZZH+W3q2wnMF7vjytXHDZqVAg+Je5GjiIF3w6027Fqtkuu/zDh0mM+c3pOT52FRj
-	 3XcY6hzGnNQosaaQXSMtM0riz1HoM4KHpBr8bSls1rLQmPhhlROBzQU8RQMHqd999h
-	 01KDdelrOUjRbRrpU185fbEFvaYsumdkAxV6I4SiQorCXDlXNC2uDzaDd4j3nBTcqD
-	 t6H0qI6DBWMcQWrWwEbW2UXb3+Qr8Fxx1vGF5qmcMznZSxkQeD3cQ62liRh3zXhONW
-	 JvG551fPJ1GBw==
+	b=GSajkKwyNn/mojyBkt6+OYDqWMbmnKk1sck3rgWLtM1frB5/DFOG+Ph38qL76qzaw
+	 9ZDY8/7mnkGKJQqs/O0x7wuXIadYw7rpxD/6hg3xJd24pRGYNcthODgSKaV/8HUXSu
+	 Jcf5uuJGBbIVC3IPFRZ/5WzQmtNYrd6WoGmiqlsTmWApoyFMOVpnmfOdy+9gfZecCK
+	 vxklBzxW1P+gn66wzmfpVuJE53SzcH/GccpY9yCLG/+8a02iuhihhlYx1c8/ayE3gC
+	 53ktRceHVBbR+jp9jpQ/mtIPEkXARmJHzsyxXHzZ/BHo81ykGcJe4dvKwm/zm1EJCS
+	 981rnJLNWATRA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F3323DF3718;
-	Mon,  8 Jul 2024 15:11:47 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 053A5DF370E;
+	Mon,  8 Jul 2024 15:11:48 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] arm64: dts: ti: K3 devicetree updates for v6.11
+Subject: Re: [PATCH] MAINTAINERS: ARM: axm: add Krzysztof Kozlowski as maintainer
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172045150799.17395.7225669655368615771.git-patchwork-notify@kernel.org>
-Date: Mon, 08 Jul 2024 15:11:47 +0000
-References: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
-In-Reply-To: <37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com>
-To: Vignesh Raghavendra <vigneshr@ti.com>
+ <172045150801.17395.10148547634550694847.git-patchwork-notify@kernel.org>
+Date: Mon, 08 Jul 2024 15:11:48 +0000
+References: <20240613134910.7862-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240613134910.7862-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This patch was applied to soc/soc.git (for-next)
+by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
 
-On Fri, 5 Jul 2024 20:41:13 +0530 you wrote:
-> Hi ARM SoC Maintainers,
+On Thu, 13 Jun 2024 15:49:10 +0200 you wrote:
+> There is no maintainers entry for the ARM LSI AXM SoC, thus patches end
+> up nowhere.  Add such entry, because even if platform is orphaned and on
+> its way out of the kernel, it is nice to take patches if someone sends
+> something.
 > 
-> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
-> 
->   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-> 
-> are available in the Git repository at:
+> I do not plan to actively support/maintain AXM but I can take odd fixes
+> now and then.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.11
-    https://git.kernel.org/soc/soc/c/b4f8192afb40
-  - [GIT,PULL,2/2] arm64: defconfig: Updates for v6.11 for TI K3 platforms
-    (no matching commit)
+  - MAINTAINERS: ARM: axm: add Krzysztof Kozlowski as maintainer
+    https://git.kernel.org/soc/soc/c/296c0bb50e31
 
 You are awesome, thank you!
 -- 
