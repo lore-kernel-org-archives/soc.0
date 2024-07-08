@@ -4,52 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF32C3271E
-	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 09:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7D7FC3271E
+	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 11:40:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3FD25C4AF0A; Mon,  8 Jul 2024 09:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF71C116B1;
-	Mon,  8 Jul 2024 09:50:25 +0000 (UTC)
+	id A366DC4AF0A; Mon,  8 Jul 2024 11:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3556CC4AF12;
+	Mon,  8 Jul 2024 11:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720432227;
-	bh=LjbhjXx/iDxJiWp8ze/pXr1zrcjJiznxsH2l24v6G04=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=nKPrPvrWfxH/gXX7LvBHEHyQ38mDiLFaXwfUmEEXe94yr+XqP5LK8ydqARDuZuX1Q
-	 jV2vgau3IHTuXqwYLNauAU8zbMnVosAMzR9LNxwTzGvyWzbVaNfr4snpha+n6qsp7/
-	 WDfj7Jh2AAFkH2nGF2dh0WWnhFKlk0Ywz0wKsRoVrD9HTBh5Le6hwdfaApmS8Agv1Z
-	 1rxkkS2s02YohCEfzCPowYAvLvSoQLSMRw+Jb7gojSA/6RMMF1XMtsL8RhQjNtnO95
-	 AQTHjZ66GCBYVkr86won4qrLOAIraDktauPi+YQiyyCLQFBcs6m9OVU/aL4P3q3JGl
-	 QwK5CBJ0uznew==
-Date: Mon, 8 Jul 2024 11:50:22 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann
- <arnd@arndb.de>
+	s=k20201202; t=1720438806;
+	bh=v0R4UYqSVqjnS7itQzH5PSvZPjuGZF1fvCUi6c7CHkA=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=JQLuOkLH22UbFUJrfBvBJVvs/UUCl9fLLIz0AS89RCS8SJaC622wIBt73kjX/rjQ/
+	 RnuRWfA2vfaHnyWhy/p6cKQyYraR5qSHZWOwo3E+weVf82iL3iWmqs2zA/YfX7KHR0
+	 k1PPTWAKZQLN3WhLiEGVXeLedpISJSGhoRZOCz9NIEu1yRGzVbSBrhwsTuTz5oO2CI
+	 D/6XCLYufcWJBgpnCJ/vrU8OBZAm1YoDQ1bz1nq4BnIl87ZVICs++eMu+bn/A4ZozE
+	 QKE4/WRy//RKo3Woja1+ll3SuP6uFKoUeyCps//Qx91ki5WQVXMbI7JZxb2WyfK6H6
+	 8S15HYb/ZS2GQ==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, <arm@kernel.org>, soc@kernel.org,
- Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] ARM: mvebu: dt for v6.11 (#1)
-Message-ID: <20240708115022.4b8a16c8@dellmb>
-In-Reply-To: <87zfqvixn4.fsf@BLaptop.bootlin.com>
-References: <87zfqvixn4.fsf@BLaptop.bootlin.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org
+Cc: arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 0/2] Fixes for turris-omnia-mcu
+Date: Mon,  8 Jul 2024 13:40:00 +0200
+Message-ID: <20240708114002.4285-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.44.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Gregory, Arnd,
+Hello Arnd,
 
-On Fri, 05 Jul 2024 18:58:23 +0200
-Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
+test robots noticed some bugs with the new turris-omnia-mcu driver while
+doing randomized compilation tests.
 
->       ARM: dts: turris-omnia: Add MCU system-controller node
->       ARM: dts: turris-omnia: Add GPIO key node for front button
+Here come two fixes.
 
-these two commits of this pull request are already merged into
-soc/soc.git, Arnd took them already:
-  https://lore.kernel.org/soc/171986763734.7657.5378232958439993899.git-patchwork-notify@kernel.org/
+Marek Behún (2):
+  platform: cznic: turris-omnia-mcu: Depend on OF
+  platform: cznic: turris-omnia-mcu: Depend on WATCHDOG
 
-Merging those will cause them to appear two times in git log...
+ drivers/platform/cznic/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Marek
+-- 
+2.44.2
 
