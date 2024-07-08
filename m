@@ -1,61 +1,103 @@
-Return-Path: <SRS0=Sopg=OI=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=vH4d=OI=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D471CC3271E
-	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 15:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F24B8C3DA42
+	for <soc@archiver.kernel.org>; Mon,  8 Jul 2024 16:13:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C7130C4AF0A; Mon,  8 Jul 2024 15:32:08 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	id C8BD2C4AF0D; Mon,  8 Jul 2024 16:13:55 +0000 (UTC)
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51DBFC116B1;
-	Mon,  8 Jul 2024 15:32:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51DBFC116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e8616d7.versanet.de ([94.134.22.215] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sQqLV-00021H-HO; Mon, 08 Jul 2024 17:32:05 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts32 changes for 6.11 #2
-Date: Mon, 08 Jul 2024 17:32:04 +0200
-Message-ID: <2169115.3Lj2Plt8kZ@diego>
+	by smtp.kernel.org (Postfix) with ESMTPS id 56C41C116B1;
+	Mon,  8 Jul 2024 16:13:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 56C41C116B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 5C2A2138019E;
+	Mon,  8 Jul 2024 12:13:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 08 Jul 2024 12:13:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1720455233; x=1720541633; bh=Dm+j1g201r
+	WzbPX565s9oKjpW3n6J7GSGb1eKskHe8U=; b=vC7pc1vsLCabenxleJ1LRKf+Gf
+	4ZfdYn0I1pCCPZoFVFtFzEHZatN/a8vEtbbAeace8s4dzYLBW4+foQ8r5BzzVR9U
+	mEnmtFm7w6OIn/EYHfSrB+OJjSkLKlQ2f9355xaOtyInGy374Deo5UsGdcuAkYhy
+	84vgJvPxUl63Nujpl/NtW4MUZtlLo3injdasrfLRr0L2GyhfPBFtJtFrICED6bxN
+	bZwkeqUmST3Mz6W4SlWjqILCaPNqDwx95LEUN91YjDsk8i32ZbByAzu48LMrmiHc
+	MUgif+e1jgpn/PJk43DZyBTpMAKeufbSZ2yrIo/LYcf5zdYZ7P7pzdl6GpHg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1720455233; x=1720541633; bh=Dm+j1g201rWzbPX565s9oKjpW3n6
+	J7GSGb1eKskHe8U=; b=K7ZFPT6cy7sJL9AJyBd/V7kLl0rOVn0bZSFV74Gpll1N
+	LhvVWs2t+DtQo+2DiF09Jf3v2Mm7TBvv16epg2g62FQCUT+9Jx0RVVE/agbgSn6M
+	dZuX35P5OaXog/OIx4OMZXqYePJHzCAix2UZzgIJt+rDNYM/3L4406VCTCZhM32T
+	VF+4bFJ3zU62ja7FFaU9l7bVNKttgIxkax4zO+CuWGmvUn8EJfDRMJ3K2SmUgofO
+	+gFo7sGDZIQJjwBYBXQqZt/aDYBv/Vg0qJ/rPlZkGPUZnwNyl6u42S0Y58txG/HM
+	tlmIxhs4IBt7fs88LbuKpl48KjkiJxAsomSxKr+z5Q==
+X-ME-Sender: <xms:QBCMZphSoNOYZZpLPL20nzS_3l1oZH5BroySH1wEW4KU85aqpNa5Eg>
+    <xme:QBCMZuDWjWHnGCfkUlCjWlwzjEUUSj1iRGUUZCV5EgpUHQ3JVou5wSxWdi78yJXIO
+    NvuB1Uss5Gn6Yw2yYc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdejgdeljecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:QBCMZpEVUkZy-2MC17xW0WtxOYJbXAZpYbJ68GLgWuqgo44O14Rx7Q>
+    <xmx:QBCMZuTg4pSOqgz4Yf-SG69-JrttcZEnLPdMPQZtsyf9axCBPQMFxw>
+    <xmx:QBCMZmxdGoF3ryXgyg6ktnJ682VGL5iuCQnvFdMMGrm-gFRNV676rA>
+    <xmx:QBCMZk5rn_DNXupzPq4eRe_bCohYb6DLgVDv52eTJYh7-hVjsPSgqQ>
+    <xmx:QRCMZhzZmjDs3n-efWualp55dmmklYYu1XQPRMDqD7DIk_0qSr7A5nL1>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0A657B6008D; Mon,  8 Jul 2024 12:13:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Message-Id: <37bdee4b-cde6-496d-8217-80575c3e55ce@app.fastmail.com>
+In-Reply-To: <20240702142153.413061-5-shawnguo2@yeah.net>
+References: <20240702142153.413061-1-shawnguo2@yeah.net>
+ <20240702142153.413061-5-shawnguo2@yeah.net>
+Date: Mon, 08 Jul 2024 18:13:27 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+To: "Shawn Guo" <shawnguo2@yeah.net>, soc@kernel.org, arm <arm@kernel.org>
+Cc: "Shawn Guo" <shawnguo@kernel.org>, "Fabio Estevam" <festevam@gmail.com>,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL 5/5] i.MX defconfig change for 6.11
+Content-Type: text/plain
 
-The following changes since commit 313da6f69fa41d044b03f2ea37e56fe49f1e8a42:
+On Tue, Jul 2, 2024, at 16:21, Shawn Guo wrote:
+> ----------------------------------------------------------------
+> i.MX defconfig change for 6.11:
+>
+> - Enable a few drivers needed by TQMa7x/MBa7x and i.MX53 QSB/QSRB in
+>   imx_v6_v7_defconfig
+> - Enable RAM block device and IWLWIFI driver support in arm64 defconfig
+>
+> Fabio Estevam (2):
+>       arm64: defconfig: Enable RAM block device support
 
-  ARM: dts: rockchip: add #sound-dai-cells to hdmi node on rk3128 (2024-06-27 20:57:05 +0200)
+I don't really like this one change. This has pretty much been
+deprecated for decades, and I don't see a reason to enable
+it now without a really good explanation. 
 
-are available in the Git repository at:
+Is there ever a reason for not using regular initramfs any more?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.11-rockchip-dts32-2
+Shawn, can you resend the pull request without this one for
+the moment?
 
-for you to fetch changes up to 9c29e5d7a2d1d91c29976c0c8aa7f42780e4a254:
-
-  ARM: dts: rockchip: Drop ethernet-phy-ieee802.3-c22 from PHY compatible string on edgeble-neu2 (2024-07-04 19:42:44 +0200)
-
-----------------------------------------------------------------
-Removal of a fallback ethernet-phy compatible that is not conformant
-to the binding.
-
-----------------------------------------------------------------
-Marek Vasut (1):
-      ARM: dts: rockchip: Drop ethernet-phy-ieee802.3-c22 from PHY compatible string on edgeble-neu2
-
- arch/arm/boot/dts/rockchip/rv1126-edgeble-neu2-io.dts | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-
-
+    Arnd
