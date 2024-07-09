@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82073C2BD09
-	for <soc@archiver.kernel.org>; Tue,  9 Jul 2024 19:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17263C2BD09
+	for <soc@archiver.kernel.org>; Tue,  9 Jul 2024 19:34:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 52FD5C4AF0C; Tue,  9 Jul 2024 19:15:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA072C32782;
-	Tue,  9 Jul 2024 19:15:09 +0000 (UTC)
+	id DE5ECC4AF0B; Tue,  9 Jul 2024 19:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAA3C3277B;
+	Tue,  9 Jul 2024 19:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720552517;
-	bh=KBrLhLEYLLooNpL32JyxEFfqPMZZez+JNtnc4LIGG8E=;
+	s=k20201202; t=1720553665;
+	bh=u2Ozh3ERh2tfcTBLIo2nR6uOP9hkHoSipLqpoQ1figU=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=ssNsR++1splSPnzbDDesbqn3t1BrFttbQRLasXKcAQhZsos8Zzd09OI+MUrcUNWlV
-	 8gcxtBMWh/VOsyX1pV8Xf6u8vNOt6j5Hc43kx3vcTZI1P7LZ5hEaa9BRIWs7Q6P06Q
-	 nYThtWVFm/62BOqhcCcDOZ0orfenXnQxulX/su3IocBzye2QhTTDzCVLw+EKT3rNOg
-	 cclxVqPDs5y98cLWIu599b+LNOMahET4DfJ+cEgHk9i6tnm3uweiYPAHmDOnz0dxHK
-	 Z/7XD6BwQsInAdIkp0bVvuw2utFbDLyP8GYWw6mPVqdbQ7xP4qHa1jJod+vKy+X6bJ
-	 lxxZF4hQcoZ9w==
+	b=iRMYNtZXy4vEWpQ4Msf3hkHedpvyCT+LERQit6mWmn4CSLkqBcCP5M4Jh232KXYyu
+	 jOqW7cRdjmRj/HPl3KwcjxuMr1a6K4ntT9E0YxlO5u5FRa9Egla3vgwXjIdvNejZSE
+	 beBv2lkYqZv6s0wZd1qjKPbPsjoyH0dXy48BEg6TzqlDAJ9S3/hzowSnof4qEfkmcu
+	 F98K8GCcxBkytUIyT9zVcDDNi9CvwM+4Srbk3VnuyZTHv8yTjxR34mbbMJUnQ38P7+
+	 LV1fWK7GqLWuxihIBqNnWv7PrHSa1ByojeBTK3VjfTc6ZFM612jg5Ft4HWfQlml3G5
+	 U5VIEApzRyaIA==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -29,36 +29,132 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	David Heidelberg <david@ixit.cz>
-Subject: [GIT PULL] One more Arm32 DeviceTree update for v6.11
-Date: Tue,  9 Jul 2024 14:15:05 -0500
-Message-ID: <20240709191506.3285-1-andersson@kernel.org>
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Varadarajan Narayanan <quic_varada@quicinc.com>,
+	Anton Bambura <jenneron@postmarketos.org>,
+	Cristian Cozzolino <cristian_ci@protonmail.com>,
+	Jens Reidel <adrian@travitia.xyz>,
+	Luca Weiss <luca@lucaweiss.eu>,
+	Mukesh Ojha <quic_mojha@quicinc.com>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+Subject: [GIT PULL] A few more Arm64 DeviceTree updates for v6.11
+Date: Tue,  9 Jul 2024 14:34:05 -0500
+Message-ID: <20240709193406.3966-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 
-The following changes since commit 2a5454d0fe5684855581f8ad958afbcdc476fd64:
+The following changes since commit 968178e35e78e566f75dbb7fbfc4dd1436ce8309:
 
-  ARM: dts: qcom: qcom-msm8226-samsung-ms013g: Add initial device tree (2024-07-02 22:15:57 -0500)
+  dt-bindings: arm: qcom: Document samsung,ms013g (2024-07-02 22:15:29 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.11-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.11-2
 
-for you to fetch changes up to c1842643a3df6004d1bc9df74e34d8b72997d886:
+for you to fetch changes up to 2881fcfc8f32c536a4bf708066d6fea9ba762e86:
 
-  ARM: dts: qcom: msm8960: correct memory base (2024-07-06 17:04:13 -0500)
-
-----------------------------------------------------------------
-One more Arm32 DeviceTree update for v6.11
-
-This fixes the DeviceTree validation warning about MSM8960 /memory node
-not having a unit address.
+  mailmap: Update Luca Weiss's email address (2024-07-08 12:08:35 -0500)
 
 ----------------------------------------------------------------
-David Heidelberg (1):
-      ARM: dts: qcom: msm8960: correct memory base
+A few more Arm64 DeviceTree updates for v6.11
 
- arch/arm/boot/dts/qcom/qcom-msm8960.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This introduces support for Lenovo Thinkpad Yoga slim 7x, LG Leon LTE,
+and LG K10 (K420n).
+
+In addition to this, all Gen-1 platforms gets the DWC3 quirk to disable
+"SuperSpeed in park mode", which resolves an instabliity issue seen in
+host mode.
+
+For Fairphone 4, PM6150L and PMK8003 thermal sensors are added and
+thermal zones defined.
+
+Two fastrpc contexts on SM6350 are marked as non-secure, to allow
+non-secure usage.
+
+The video clock controller on SM8150 is introduced. IPQ9574 GCC is
+marked as a interconnect provider. The vibrator block in the PM6150 is
+described.
+
+On SC7280 the download mode register is defined for SCM, allowing it to
+enable/disable the ramdump support during a system crash.
+
+Lastly, add a mailmap entry for Luca Weiss.
+
+----------------------------------------------------------------
+Anton Bambura (1):
+      arm64: dts: qcom: msm8916-lg-c50: add initial dts for LG Leon LTE
+
+Bjorn Andersson (1):
+      Merge branch '20240430064214.2030013-3-quic_varada@quicinc.com' into arm64-for-6.11
+
+Cristian Cozzolino (1):
+      arm64: dts: qcom: msm8916-lg-m216: Add initial device tree
+
+Jens Reidel (1):
+      arm64: dts: qcom: pm6150: Add vibrator
+
+Krishna Kurapati (8):
+      arm64: dts: qcom: ipq6018: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: ipq8074: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: msm8998: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: sdm630: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: sm6115: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: sm6350: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: msm8996: Disable SS instance in Parkmode for USB
+      arm64: dts: qcom: sdm845: Disable SS instance in Parkmode for USB
+
+Luca Weiss (4):
+      arm64: dts: qcom: sm6350: Add missing qcom,non-secure-domain property
+      arm64: dts: qcom: sm7225-fairphone-fp4: Add PMK8003 thermals
+      arm64: dts: qcom: sm7225-fairphone-fp4: Add PM6150L thermals
+      mailmap: Update Luca Weiss's email address
+
+Mukesh Ojha (1):
+      arm64: dts: qcom: sc7280: Enable download mode register write
+
+Nikita Travkin (1):
+      dt-bindings: arm: qcom: Add msm8916 based LG devices
+
+Satya Priya Kakitapalli (1):
+      arm64: dts: qcom: sm8150: Add video clock controller node
+
+Srinivas Kandagatla (2):
+      dt-bindings: arm: qcom: Add Lenovo Yoga Slim 7x
+      arm64: dts: qcom: x1e80100: add Lenovo Thinkpad Yoga slim 7x devicetree
+
+Varadarajan Narayanan (2):
+      dt-bindings: interconnect: Add Qualcomm IPQ9574 support
+      arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
+
+ .mailmap                                           |   1 +
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   3 +
+ .../bindings/clock/qcom,ipq9574-gcc.yaml           |   3 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   3 +
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi              |   1 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |   2 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |   2 +
+ arch/arm64/boot/dts/qcom/msm8916-lg-c50.dts        | 140 ++++
+ arch/arm64/boot/dts/qcom/msm8916-lg-m216.dts       | 251 ++++++
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |   1 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |   1 +
+ arch/arm64/boot/dts/qcom/pm6150.dtsi               |   6 +
+ arch/arm64/boot/dts/qcom/sa8155p.dtsi              |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   1 +
+ arch/arm64/boot/dts/qcom/sdm630.dtsi               |   1 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   2 +
+ arch/arm64/boot/dts/qcom/sm6115.dtsi               |   1 +
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |   3 +
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts  | 212 +++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |  14 +
+ .../boot/dts/qcom/x1e80100-lenovo-yoga-slim7x.dts  | 929 +++++++++++++++++++++
+ include/dt-bindings/interconnect/qcom,ipq9574.h    |  59 ++
+ 22 files changed, 1640 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-lg-c50.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-lg-m216.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/x1e80100-lenovo-yoga-slim7x.dts
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
