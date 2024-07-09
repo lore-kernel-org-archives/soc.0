@@ -4,57 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D8CC3DA49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98FB8C3DA4C
 	for <soc@archiver.kernel.org>; Tue,  9 Jul 2024 09:30:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6AC2DC4AF0A; Tue,  9 Jul 2024 09:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E168C32786;
+	id 8E10FC4AF1C; Tue,  9 Jul 2024 09:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 704C9C4AF17;
 	Tue,  9 Jul 2024 09:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720517438;
-	bh=T0HRDIh8R2HtAvZNaPpJ3qe9b0D3V12Rfej5u2Vmgg8=;
+	bh=JZtRwUXuJGSCnv6/j5NwIVMDZoHLqkqBmDHykpFLT5Y=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=hR5rHd2e8OLAcxiRcK0tIJ7aABgKb9mjj6vTb+u2tpkUihl9kGf0ArtL8lrR6Hkfp
-	 qXohRj28kNrrEj7ajywovS9YF4Y+Wa+LwLx/YRKj4myReA+THvKrO/7hQ9/vQ048aS
-	 IOUi1ln8oDrHJYSg0c3dE/YQVL1yuELZT2f7KLBV6LXISHjlVFvpNUAGi7semLJ4No
-	 uTYE9qa7EdnEDPz+IZk2L7RlhAGXfXkvg7AIH6xXjfI6gQd3dr8p4JK0OAly5mM9St
-	 6zhaHQFZ4cnG1ec4RBoTD9LW9dxJfXhELHG5DfOwR1avKK6aSEIjf9s6SOtUsQk7jT
-	 YumnFEAVuuQPg==
+	b=R6O/xbmvxRLuxN3jz+g2pTt7lIGmtjuUc5esk012//nfjkegB0IFTtc2hVhzgQ1oH
+	 BBQXYGFBm2fXU8y9nnFj/H09trCQ+W23gOGnKQ3vUyCZPD62+/F7BsAT6iEnpt/OlK
+	 FcU26JRn5s4xh8w5GHZBba7CghBS0uI0zGSWD6g4cbub3rB8AJhON5P6HxtJhX8+Rp
+	 97WmF1d5QOmeExDzOIFUh4lFOis8yvbhK5xxxlZTW9ofYssJQFMWUMgOrp3jbh8Kgd
+	 37iz8eyvnC3xkHJsIk7cC72QSIsOxxRKRV8BofSK7bafeDU+arY4xBeEAO8PqmmfZc
+	 46mf7YIwQkfEA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D590DF3713;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64B4FDF370E;
 	Tue,  9 Jul 2024 09:30:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: stm32: enable scmi regulator for stm32
+Subject: Re: [GIT PULL] RISC-V firmware drivers for v6.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172051743824.12156.8724610610025413505.git-patchwork-notify@kernel.org>
+ <172051743840.12156.16039696947441137392.git-patchwork-notify@kernel.org>
 Date: Tue, 09 Jul 2024 09:30:38 +0000
-References: <20240705134554.2833835-1-alexandre.torgue@foss.st.com>
-In-Reply-To: <20240705134554.2833835-1-alexandre.torgue@foss.st.com>
-To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+References: <20240707-lukewarm-film-8a9da40a1c27@spud>
+In-Reply-To: <20240707-lukewarm-film-8a9da40a1c27@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 5 Jul 2024 15:45:54 +0200 you wrote:
-> From: Pascal Paillet <p.paillet@foss.st.com>
+On Sun, 7 Jul 2024 18:23:45 +0100 you wrote:
+> Hey Arnd,
 > 
-> Add SCMI ARM REGULATOR configuration for stm32.
+> Attempt 2 with a fixed $subject. I blame being sick for missing that..
 > 
-> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Please pull a handful of changes to the Auto Update driver.
+> 
+> Cheers,
+> Conor.
 > 
 > [...]
 
 Here is the summary with links:
-  - arm64: stm32: enable scmi regulator for stm32
-    https://git.kernel.org/soc/soc/c/e9a316affb9a
+  - [GIT,PULL] RISC-V firmware drivers for v6.11
+    https://git.kernel.org/soc/soc/c/9f511474895e
 
 You are awesome, thank you!
 -- 
