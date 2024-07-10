@@ -1,66 +1,105 @@
-Return-Path: <SRS0=LO1r=OK=yeah.net=shawnguo2@kernel.org>
+Return-Path: <wens@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83CE5C2BD09
-	for <soc@archiver.kernel.org>; Wed, 10 Jul 2024 03:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43CDFC3DA41
+	for <soc@archiver.kernel.org>; Wed, 10 Jul 2024 18:12:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 55877C32781; Wed, 10 Jul 2024 03:35:46 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.14])
-	by smtp.kernel.org (Postfix) with ESMTP id 73407C4AF0D;
-	Wed, 10 Jul 2024 03:35:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73407C4AF0D
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=yoKbyY6y+PwSn7kYNR3CBuTfC9HA2wCHppFjzdbEQDA=;
-	b=ON5AZv9S6iUJKe3Uf1rY+dzCf/3t/rPI0y2Bhfr8iGC0IzaWZyd4QBnW5rHQhY
-	alLz2UQsR1ZYo2pnqyroo44CjjJPPbOC6eEv/FnVfYxvflYZRHFEBcb0u85eWoiv
-	9ZCwpjKwtrogQ7OCxGi9z703PcRBgQWaZ1+GG4ANNIS6w=
-Received: from dragon (unknown [117.62.10.72])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgB3P5EZ841m4sSEAA--.26945S3;
-	Wed, 10 Jul 2024 10:34:03 +0800 (CST)
-Date: Wed, 10 Jul 2024 10:34:01 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Arnd Bergmann <arnd@arndb.de>
+	id 0DE16C4AF07; Wed, 10 Jul 2024 18:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6914C32781;
+	Wed, 10 Jul 2024 18:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720635122;
+	bh=JBuQ1VPXGZZENZRSB9356SdJRQn/hLnlVz/uEX6AbCs=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=SErqavPnPXDemBHwnvxs08tZ9G3Ra9qkHrD/yAJB657Y2+ieiRpH08PSKzAdPgiLD
+	 3SDumKwn/S7cZUlDxdqSmteufHt1VOMcdHydhHtbpLQOECGxdxqHZzC55OpWt/By2K
+	 ZjQWzxOkYFFlOHcUDFRUFV5BEmPPoWFQ0SIzl4xqa4YPYgSvAJ1uoxhq2o5AZXoq2y
+	 WN3sKPaWkHT2MAXRUv8JFc2Cp9nLNJAlOBw0+gRqeAGuNp8G8ID1nomXaosrDjI5xq
+	 zCu5phb0TCumbl34cWJ5YZfU+X2r6IIaR+s0y9ip6XD7Ay1aw6mVB7iQxL/elVykxi
+	 r3lrizxrthuXA==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 626245F7C0; Thu, 11 Jul 2024 02:11:59 +0800 (CST)
+Date: Thu, 11 Jul 2024 02:11:59 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, arm <arm@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL v2 5/5] i.MX defconfig change for 6.11
-Message-ID: <Zo3zGRiDFqduQwLo@dragon>
-References: <20240709012534.3106441-1-shawnguo2@yeah.net>
- <3d480ce9-863a-4d2b-ab31-294207a0a924@app.fastmail.com>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner SoC device tree changes for 6.11 part 2
+Message-ID: <Zo7O73Afx7lZcBRi@wens.tw>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wQyIwK0W5D+2KsxB"
+Content-Disposition: inline
+
+
+--wQyIwK0W5D+2KsxB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3d480ce9-863a-4d2b-ab31-294207a0a924@app.fastmail.com>
-X-CM-TRANSID:Ms8vCgB3P5EZ841m4sSEAA--.26945S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUcX_-DUUUU
-X-Originating-IP: [117.62.10.72]
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCxsYZWZv-fr-xAAAsY
 
-On Tue, Jul 09, 2024 at 04:05:29PM +0200, Arnd Bergmann wrote:
-> On Tue, Jul 9, 2024, at 03:25, Shawn Guo wrote:
-> > ----------------------------------------------------------------
-> > i.MX defconfig change for 6.11:
-> >
-> > - Enable a few drivers needed by TQMa7x/MBa7x and i.MX53 QSB/QSRB in
-> >   imx_v6_v7_defconfig
-> > - Enable IWLWIFI driver support in arm64 defconfig
-> 
-> Hi Shawn,
-> 
-> I have queued all five pull requests now. I think patchwork
-> got confused by the v2, so you did not get an automated email
-> for them.
+Hi Arnd,
 
-Great!  Thank you, Arnd!
+Here's a late DT commit for 6.11. The driver parts of the H616 crypto
+engine series was only merged last week, so I only got to it today.
 
-Shawn
+The whole series has been tested by multiple people including me, so
+I don't expect any issues. And it's just enabling a new IP block.
 
+Please pull.
+
+
+Thanks
+ChenYu
+
+
+The following changes since commit 0ce1d34678e5d214746ee4887f9f7714c39e331f:
+
+  riscv: dts: allwinner: Add ClockworkPi and DevTerm devicetrees (2024-06-30 23:06:52 +0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.11-2
+
+for you to fetch changes up to 6ed9a85f1c44d7049cf2d488bfe71252ce467dc2:
+
+  arm64: dts: allwinner: h616: add crypto engine node (2024-07-11 00:43:10 +0800)
+
+----------------------------------------------------------------
+Allwinner SoC device tree changes for 6.11 part 2
+
+One additional peripheral enabled for the H616.
+
+- H616 crypto engine added
+
+----------------------------------------------------------------
+Andre Przywara (1):
+      arm64: dts: allwinner: h616: add crypto engine node
+
+ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+--wQyIwK0W5D+2KsxB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmaOzu0ACgkQOJpUIZwP
+JDB1VhAA2yGX5i/k7c8ILEK4kC8iBX90FCsa57tzVA95myZ82Lef1rMMdlKJ2Z4k
+EFXHJ2U6AQAs4owxdofqccARLUSXKzl00ezz8p0ZkHf/CVU3qh5GMdu/dN4mLfEJ
+oq/4sJ5U9sjf+BwwkGdxs8EvpCV4He8aomO8HkoL95i1sqt48R9goNPBxBirB3Vb
+IKaR4LNLZ3D2RM8bVdoBynM3ICsH8oWwJcZ1x0WWrUom3KONndcr/qV0Zgmlxj38
+guAgztzliyjAiENx0x0kB9RD3eLi8uT3HFrqbXpuipFCGWYS+Rr9X2xZ4Nhpn3X+
+mMupSmTLI2sfSG51Gzlm87aZDFQlQ2QHQmXu4KdLqGqlRUau4otyrf242OswXDP2
+KlkgPkhNvRjBGxnLWgKc3LG02TVNp6NryUIWXWvE4UnAxyu1y04zheZ3n6d27+8B
+FuNBi//vfz7gDbruVu/czqrnd5qaRA+DsXmpHniskcuW8k2dH194rzf/x5VwQJmm
+KSOwaSsWtLxfG+0Etk756WsVDSLEU34IZmjWtSsrDsOXHFYw+YbJ6a1aNWOUCqoQ
+oOa89k3aZp1GwCPMMNUIf9r3OT/oCuEnScNd+gvZvBi1D018dvaY4xI5E+0II1XU
+IyJtmuN3W771VM2fyj41AhSaGGIC+BEyLu/eYDiqAfdoype1/mY=
+=XYbq
+-----END PGP SIGNATURE-----
+
+--wQyIwK0W5D+2KsxB--
