@@ -4,50 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43CDFC3DA41
-	for <soc@archiver.kernel.org>; Wed, 10 Jul 2024 18:12:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1143C3DA42
+	for <soc@archiver.kernel.org>; Wed, 10 Jul 2024 18:33:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0DE16C4AF07; Wed, 10 Jul 2024 18:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6914C32781;
-	Wed, 10 Jul 2024 18:12:01 +0000 (UTC)
+	id 997C0C4AF07; Wed, 10 Jul 2024 18:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F264C32781;
+	Wed, 10 Jul 2024 18:33:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720635122;
-	bh=JBuQ1VPXGZZENZRSB9356SdJRQn/hLnlVz/uEX6AbCs=;
+	s=k20201202; t=1720636387;
+	bh=e7ZBdPwnm5UYeLoiAw+/N6aw4q1vl8AkSLMbEod4nlE=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=SErqavPnPXDemBHwnvxs08tZ9G3Ra9qkHrD/yAJB657Y2+ieiRpH08PSKzAdPgiLD
-	 3SDumKwn/S7cZUlDxdqSmteufHt1VOMcdHydhHtbpLQOECGxdxqHZzC55OpWt/By2K
-	 ZjQWzxOkYFFlOHcUDFRUFV5BEmPPoWFQ0SIzl4xqa4YPYgSvAJ1uoxhq2o5AZXoq2y
-	 WN3sKPaWkHT2MAXRUv8JFc2Cp9nLNJAlOBw0+gRqeAGuNp8G8ID1nomXaosrDjI5xq
-	 zCu5phb0TCumbl34cWJ5YZfU+X2r6IIaR+s0y9ip6XD7Ay1aw6mVB7iQxL/elVykxi
-	 r3lrizxrthuXA==
+	b=JdYEPnQuD0vr7eZDxoIiYnQUbG4xhJ3yAxfapI0jjiwB6rMDowf58e6wbO5fMIrti
+	 M8SsLnQrJEh1rCDLXhRZwVoXRn1ne7zmXBdL/C5N+Y2UyH7//PAD86wlF8uhoJLhoM
+	 ZTzj9ImjAV59Hy0LiXFunR18/W62kENGOcbcRPbAiSTv0HAMLs7v9gJHXHcd0Wv50n
+	 2TUPQvnO18Tq9+mGRztJn80Se9u2i+qcRmrr7HPNDAKeSicZOHm6+a1pu9pZz2by0S
+	 /uxubTg0tMs/xC5r2SH9M1AaFnXR3IknUpuAQJI45vs4oi2xCg0DF3jXodxdZ8Kj6k
+	 u+4I2ubGak1Lg==
 Received: by wens.tw (Postfix, from userid 1000)
-	id 626245F7C0; Thu, 11 Jul 2024 02:11:59 +0800 (CST)
-Date: Thu, 11 Jul 2024 02:11:59 +0800
+	id 4155E5F7C0; Thu, 11 Jul 2024 02:33:05 +0800 (CST)
+Date: Thu, 11 Jul 2024 02:33:05 +0800
 From: Chen-Yu Tsai <wens@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
 	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner SoC device tree changes for 6.11 part 2
-Message-ID: <Zo7O73Afx7lZcBRi@wens.tw>
+Subject: [GIT PULL] Allwinner SoC driver changes for 6.11 part 2
+Message-ID: <Zo7T4YsfamN0PbYK@wens.tw>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wQyIwK0W5D+2KsxB"
+	protocol="application/pgp-signature"; boundary="hogTjffGDKUpGoyc"
 Content-Disposition: inline
 
 
---wQyIwK0W5D+2KsxB
+--hogTjffGDKUpGoyc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi Arnd,
 
-Here's a late DT commit for 6.11. The driver parts of the H616 crypto
-engine series was only merged last week, so I only got to it today.
-
-The whole series has been tested by multiple people including me, so
-I don't expect any issues. And it's just enabling a new IP block.
+Here's a couple more Allwinner driver commits for 6.11. Both of them are
+minor cleanups, marking regmap related variables as constant.
 
 Please pull.
 
@@ -56,50 +53,54 @@ Thanks
 ChenYu
 
 
-The following changes since commit 0ce1d34678e5d214746ee4887f9f7714c39e331f:
 
-  riscv: dts: allwinner: Add ClockworkPi and DevTerm devicetrees (2024-06-30 23:06:52 +0800)
+The following changes since commit 3a6fb9025cdf975146b2f2e3771b67f03c4ca3dc:
+
+  dt-bindings: sram: sunxi-sram: Add regulators child (2024-06-30 23:00:49 +0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.11-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-drivers-for-6.11-2
 
-for you to fetch changes up to 6ed9a85f1c44d7049cf2d488bfe71252ce467dc2:
+for you to fetch changes up to e4b5a39c2fca597f10f1aa4c12f8f90dcd9431bd:
 
-  arm64: dts: allwinner: h616: add crypto engine node (2024-07-11 00:43:10 +0800)
-
-----------------------------------------------------------------
-Allwinner SoC device tree changes for 6.11 part 2
-
-One additional peripheral enabled for the H616.
-
-- H616 crypto engine added
+  bus: sunxi-rsb: Constify struct regmap_bus (2024-07-11 02:15:19 +0800)
 
 ----------------------------------------------------------------
-Andre Przywara (1):
-      arm64: dts: allwinner: h616: add crypto engine node
+Allwinner SoC driver changes for 6.11 part 2
 
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+One additional minor cleanup
 
---wQyIwK0W5D+2KsxB
+- Const-ify |struct regmap_config| in SRAM driver
+- Const-ify |struct regmap_bus| in Allwinner RSB bus driver
+
+----------------------------------------------------------------
+Javier Carrasco (2):
+      soc: sunxi: sram: Constify struct regmap_config
+      bus: sunxi-rsb: Constify struct regmap_bus
+
+ drivers/bus/sunxi-rsb.c        | 2 +-
+ drivers/soc/sunxi/sunxi_sram.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--hogTjffGDKUpGoyc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmaOzu0ACgkQOJpUIZwP
-JDB1VhAA2yGX5i/k7c8ILEK4kC8iBX90FCsa57tzVA95myZ82Lef1rMMdlKJ2Z4k
-EFXHJ2U6AQAs4owxdofqccARLUSXKzl00ezz8p0ZkHf/CVU3qh5GMdu/dN4mLfEJ
-oq/4sJ5U9sjf+BwwkGdxs8EvpCV4He8aomO8HkoL95i1sqt48R9goNPBxBirB3Vb
-IKaR4LNLZ3D2RM8bVdoBynM3ICsH8oWwJcZ1x0WWrUom3KONndcr/qV0Zgmlxj38
-guAgztzliyjAiENx0x0kB9RD3eLi8uT3HFrqbXpuipFCGWYS+Rr9X2xZ4Nhpn3X+
-mMupSmTLI2sfSG51Gzlm87aZDFQlQ2QHQmXu4KdLqGqlRUau4otyrf242OswXDP2
-KlkgPkhNvRjBGxnLWgKc3LG02TVNp6NryUIWXWvE4UnAxyu1y04zheZ3n6d27+8B
-FuNBi//vfz7gDbruVu/czqrnd5qaRA+DsXmpHniskcuW8k2dH194rzf/x5VwQJmm
-KSOwaSsWtLxfG+0Etk756WsVDSLEU34IZmjWtSsrDsOXHFYw+YbJ6a1aNWOUCqoQ
-oOa89k3aZp1GwCPMMNUIf9r3OT/oCuEnScNd+gvZvBi1D018dvaY4xI5E+0II1XU
-IyJtmuN3W771VM2fyj41AhSaGGIC+BEyLu/eYDiqAfdoype1/mY=
-=XYbq
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmaO0+AACgkQOJpUIZwP
+JDDyZxAAiIhd/LvhUwB/VyMO5NFRQPeGrCUL66xXj8Jx3El9ZZRCAY+d2vshaNYP
+qvKhAHDgyIgllOaAoOYMe167EhmHhNZqCDPL9sJcqZxSV5TL9uv5jPk48mskbC7I
+D/QbbmJDQUHUS4oaWEmihjCbtecDM6eTIpMIx98FExQRFknssKPAG0uhGFH/Vlf1
+MmcKpSyysQyikjBpIiWWm4OmVLBbR0BVAKMzJUj/AaDkTz8+GAHpAcl/9TPJDrMR
+vhkctrEiscgFL6xIfhMBd5jL1Oe3/kExwKrjzQJtEM3Wzt4iqSHBwBsJU7BuZZv7
+eL0mzomFxC8urBJRNbmafM1hV97SMNaOgBKS9XMaS5vJaYwbE1d0+kmstsjvhRC1
+Ujb8lkYJV5ebZ3P6Lqr4N6flgYp5stWW8wNnATtuTGuojReN8AqjHTBIulvbsPIM
+JCN9MXte5qYgwkfR56X87XCDYOcSVqb/IyO2/m8wZNiWFsr73PvrzEiJ0SqIs0NA
+5239SQBRTnynefvxc7cmAv3JhqhY/z8u1jBDOUow0b+d/DjShiqNWEcXR+K8QfFB
+iXEc2s3ijc2Fckf9z1zzl3WdFqAwuiRa5ZmAvdn/45K/iIiQnW5RSp8Cf/ZBZQlC
+PpIIuDZgfASXdbBEY77YGY9Si31lme5jW64fScVUaxcAdQr+NiE=
+=FhWG
 -----END PGP SIGNATURE-----
 
---wQyIwK0W5D+2KsxB--
+--hogTjffGDKUpGoyc--
