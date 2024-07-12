@@ -1,54 +1,54 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E780C2BD09
-	for <soc@archiver.kernel.org>; Fri, 12 Jul 2024 13:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18739C3DA45
+	for <soc@archiver.kernel.org>; Fri, 12 Jul 2024 16:05:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 14EF5C4AF0B; Fri, 12 Jul 2024 13:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00B3C32782;
-	Fri, 12 Jul 2024 13:16:58 +0000 (UTC)
+	id D5D25C4AF07; Fri, 12 Jul 2024 16:05:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6184C32782;
+	Fri, 12 Jul 2024 16:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720790221;
-	bh=Y/hNjML+WNSsZPU2qiogB+Nf/Z2HrETCsMXtzxhOnDI=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=PO09tUB++lVLQg2XetgBEfk44polPntz1R4v/EO0mg6WjKq7YLzibt7/EMzwQri7Q
-	 0lUN1M23yg1MMFkdUz5/HnqyG7hEE7HtQXsXN9wPVeEJfsg1mMjs3xD7kyZLbtrJJw
-	 ykTJMwvB6X8+lg5ix/6FtNimfA7+AkTbbo5TFQIe1X/TPYs+1zeMgw1ASmTJp3rvPG
-	 3iqt70uyPrbs0X/63Ck0XLrPYur1BnF7Z+iK75fRPH43A2AYvbckTf/QC1SI2mQL5J
-	 1XhfJ90q/rcnqg9NtJ6ud6XrX6aNAg4LFZ9X0kJ+JBHM6X8U0p/XWPNeb3Ijnn/xTb
-	 A2KVEHJiCtpqg==
-Date: Fri, 12 Jul 2024 15:16:56 +0200
-From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
+	s=k20201202; t=1720800345;
+	bh=VigPz5FaSrg3Q5wQ3721TSY5CQihN9XTHw6FoD9jF78=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=rFlg0oGn7yDc/vu7JNAR5Hc3Lbx64p0KdxYPDTNMVIQ14rYjIRxJUwRcd141Iy8Rz
+	 vJR+Js1wR5FBMTLBlWmWpTex+zOoH1hAShcHGiOpbc+rRnnqT530pBi2Xmu7V0VQzM
+	 WOy/iTY2gL//lBCDRWup/aBUwiGJhiKOAh0/zvj1jWxzJID9TukZVtwbHgkt11R8Ry
+	 +LXI87cjk4DHZE/88C8KUmkEZMsv3StAf3SrQqTW4uEobUTT+eZI6zANTye5Rdk/2A
+	 wBf63RxSzzNDIxd9QVduZFb4YuVyymjE+7bdGexLDvlc3MqupKd0s4HnmXBr8hTXCh
+	 mMocC1Mq8//Nw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADC30C43153;
+	Fri, 12 Jul 2024 16:05:45 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for 6.10, part 3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <00d2b2e8-b352-4dd3-a4cf-47f0ebff5e3e@app.fastmail.com>
+References: <00d2b2e8-b352-4dd3-a4cf-47f0ebff5e3e@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-arm-msm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <00d2b2e8-b352-4dd3-a4cf-47f0ebff5e3e@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.10-3
+X-PR-Tracked-Commit-Id: 6fba5cbd323e013079b304489629a6b814110512
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e091caf99f3a5006c95baec24330bac6f7f17193
+Message-Id: <172080034570.10368.3965539697305238327.pr-tracker-bot@kernel.org>
+Date: Fri, 12 Jul 2024 16:05:45 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, 
-	soc@kernel.org, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v3 09/17] firmware: turris-mox-rwtm: Simplify debugfs code
-Message-ID: <jd7b4jeqkwyoooj56o7gpoagier7g6ycoyx2dknxl6c575jdk4@ena7paun5r25>
-References: <20240617144532.17385-1-kabel@kernel.org>
- <20240617144532.17385-10-kabel@kernel.org>
- <CAHp75VfR8T+W6HWyvJ+xOP14GBeO+-2JFLUjiqV6tF_7qdr8Gw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VfR8T+W6HWyvJ+xOP14GBeO+-2JFLUjiqV6tF_7qdr8Gw@mail.gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@kernel.org, linux-arm-msm@vger.kernel.org, Chunyan Zhang <zhangchunyan@iscas.ac.cn>, Christophe Leroy <christophe.leroy@csgroup.eu>
 
-On Mon, Jun 17, 2024 at 10:22:47PM +0200, Andy Shevchenko wrote:
-> On Mon, Jun 17, 2024 at 4:46 PM Marek Behún <kabel@kernel.org> wrote:
-> >
-> > Simplify debugfs code: do not check for errors, as debugfs errors should
-> > be ignored, and use devm action for dropping the debugfs directory.
-> 
-> Actually you may do that without devm. There is a lookup method or so
-> in debugfs APIs that can be used. Can be amended later on, though.
+The pull request you sent on Fri, 12 Jul 2024 14:39:56 +0200:
 
-But I want to get rid of driver .remove() method altogehter in a subsequent
-patch. How can I use debugfs_lookup_and_remove() that way without devm?
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.10-3
 
-Marek
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e091caf99f3a5006c95baec24330bac6f7f17193
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
