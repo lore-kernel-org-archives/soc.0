@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A8FC3DA5E
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6493C3DA5D
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:47:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 29378C4AF0F; Mon, 15 Jul 2024 10:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B644C4AF0A;
-	Mon, 15 Jul 2024 10:47:38 +0000 (UTC)
+	id 9FA96C4AF0E; Mon, 15 Jul 2024 10:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82475C32782;
+	Mon, 15 Jul 2024 10:47:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721040461;
-	bh=GD4zyNFAdyAK06VMAdVAjv3JUlGZ+p5Wzs9l7CZkbv0=;
+	s=k20201202; t=1721040463;
+	bh=TSF1yBGXH1ew7xzOViFF9FkVDA6qY9UcEeLLPG9fALA=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eN/r6iN+ft1yvSoA7hQKMm6+evNT+FmxCt29ghOtAg5EUaWf3krEtwZZ+NK7e2Kpc
-	 YsxaCHicZYYQKjAfuFIgwM44kv06bFCxR2FXQfS9aeF401RkAuGloyvLTrQ469Y+2d
-	 zsAslXqujL2oSu5Mv034dd6K9NfWyjkV/GSrdJsyIAOTdzG1OlwMexzuOIn+Kq1M0e
-	 oFxtDU1iyBmOIiQoG1rFqpAXJkDGsU2mXBHKIfylRJYcCWdwUlaNCQCw6/mF0rIeA6
-	 khtQp+uUSwz4i7ewaWy/UL6GhWiOr4j/mC4Ywp6ycu1Tgpm/F13DICfC9BQFowQv7W
-	 Ocb/DKto0KfhQ==
+	b=ukpu1OQi2FdzPMTQvzO7GyrPYQN8MU+6z7EAcd9ji1ut+ev+I/Gg1Ox8P9+5fjNFV
+	 hm7rdD01KJthWxpLKsoPpqEHTNjVvmqr0nv4vY3sX7qqPK25OdNuUZbGYJ2g6Hmrsw
+	 FiMB5w6tmGGd5EkA3VcjO1NingVP/LB7GqVZT+3zU1uV575f6n8bfxgC0jxFr6WNtW
+	 N0ZnLoA5nmBnAndBd60hmMGUsf1AYI7tYmkv3AfTxgAxG+oAOf0WiVE8kk6iaOtzZz
+	 3voOUwNm2FM1snzxYyqY8XmtHhoXcFcCD7v4qZxQJOKBOSzQRszh6bYfRlL8ZBQtdv
+	 sVRnlxzHQiSPQ==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v4 05/19] firmware: turris-mox-rwtm: Use the boolean type where appropriate
-Date: Mon, 15 Jul 2024 12:47:09 +0200
-Message-ID: <20240715104723.17751-6-kabel@kernel.org>
+Subject: [PATCH v4 06/19] firmware: turris-mox-rwtm: Hide signature related constants behind macros
+Date: Mon, 15 Jul 2024 12:47:10 +0200
+Message-ID: <20240715104723.17751-7-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240715104723.17751-1-kabel@kernel.org>
 References: <20240715104723.17751-1-kabel@kernel.org>
@@ -41,88 +41,121 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Use the boolean type for has_board_info, has_pubkey and last_sig_done
-members of the driver's private structure.
+Hide signature generation related constants behind macros instead of
+hardcoding the values.
+
+Use SHA512_DIGEST_SIZE from crypto/sha2.h instead of hardcoded 64 as the
+message size.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 36 ++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index f7f9859b8f61..5ed480ac5146 100644
+index 5ed480ac5146..0ae5b2086113 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -19,6 +19,7 @@
- #include <linux/platform_device.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
-+#include <linux/types.h>
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2019, 2024 Marek Behún <kabel@kernel.org>
+  */
  
- #define DRIVER_NAME		"turris-mox-rwtm"
++#include <crypto/sha2.h>
+ #include <linux/armada-37xx-rwtm-mailbox.h>
+ #include <linux/completion.h>
+ #include <linux/debugfs.h>
+@@ -31,6 +32,11 @@
+  * https://gitlab.labs.nic.cz/turris/mox-boot-builder/tree/master/wtmi.
+  */
  
-@@ -67,13 +68,13 @@ struct mox_rwtm {
- 	struct completion cmd_done;
- 
- 	/* board information */
--	int has_board_info;
-+	bool has_board_info;
- 	u64 serial_number;
- 	int board_version, ram_size;
- 	u8 mac_address1[ETH_ALEN], mac_address2[ETH_ALEN];
- 
- 	/* public key burned in eFuse */
--	int has_pubkey;
-+	bool has_pubkey;
- 	u8 pubkey[135];
- 
- #ifdef CONFIG_DEBUG_FS
-@@ -85,7 +86,7 @@ struct mox_rwtm {
++#define MOX_ECC_NUMBER_WORDS	17
++#define MOX_ECC_NUMBER_LEN	(MOX_ECC_NUMBER_WORDS * sizeof(u32))
++
++#define MOX_ECC_SIGNATURE_WORDS	(2 * MOX_ECC_NUMBER_WORDS)
++
+ #define MBOX_STS_SUCCESS	(0 << 30)
+ #define MBOX_STS_FAIL		(1 << 30)
+ #define MBOX_STS_BADCMD		(2 << 30)
+@@ -85,7 +91,7 @@ struct mox_rwtm {
+ 	 * from userspace.
  	 */
  	struct dentry *debugfs_root;
- 	u32 last_sig[34];
--	int last_sig_done;
-+	bool last_sig_done;
+-	u32 last_sig[34];
++	u32 last_sig[MOX_ECC_SIGNATURE_WORDS];
+ 	bool last_sig_done;
  #endif
  };
+@@ -341,18 +347,18 @@ static ssize_t do_sign_read(struct file *file, char __user *buf, size_t len,
+ 	struct mox_rwtm *rwtm = file->private_data;
+ 	ssize_t ret;
  
-@@ -229,7 +230,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 				  reply->status[5]);
- 		reply_to_mac_addr(rwtm->mac_address2, reply->status[6],
- 				  reply->status[7]);
--		rwtm->has_board_info = 1;
-+		rwtm->has_board_info = true;
+-	/* only allow one read, of 136 bytes, from position 0 */
++	/* only allow one read, of whole signature, from position 0 */
+ 	if (*ppos != 0)
+ 		return 0;
  
- 		pr_info("Turris Mox serial number %016llX\n",
- 			rwtm->serial_number);
-@@ -256,7 +257,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 	} else {
- 		u32 *s = reply->status;
+-	if (len < 136)
++	if (len < sizeof(rwtm->last_sig))
+ 		return -EINVAL;
  
--		rwtm->has_pubkey = 1;
-+		rwtm->has_pubkey = true;
- 		sprintf(rwtm->pubkey,
- 			"%06x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x",
- 			ret, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7],
-@@ -352,7 +353,7 @@ static ssize_t do_sign_read(struct file *file, char __user *buf, size_t len,
+ 	if (!rwtm->last_sig_done)
+ 		return -ENODATA;
  
- 	/* 2 arrays of 17 32-bit words are 136 bytes */
- 	ret = simple_read_from_buffer(buf, len, ppos, rwtm->last_sig, 136);
--	rwtm->last_sig_done = 0;
-+	rwtm->last_sig_done = false;
+-	/* 2 arrays of 17 32-bit words are 136 bytes */
+-	ret = simple_read_from_buffer(buf, len, ppos, rwtm->last_sig, 136);
++	ret = simple_read_from_buffer(buf, len, ppos, rwtm->last_sig,
++				      sizeof(rwtm->last_sig));
+ 	rwtm->last_sig_done = false;
  
  	return ret;
- }
-@@ -418,7 +419,7 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
+@@ -367,8 +373,7 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
+ 	loff_t dummy = 0;
+ 	ssize_t ret;
+ 
+-	/* the input is a SHA-512 hash, so exactly 64 bytes have to be read */
+-	if (len != 64)
++	if (len != SHA512_DIGEST_SIZE)
+ 		return -EINVAL;
+ 
+ 	/* if last result is not zero user has not read that information yet */
+@@ -389,17 +394,18 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
+ 	 *   3. Address of the buffer where ECDSA signature value S shall be
+ 	 *      stored by the rWTM firmware.
  	 */
- 	memcpy(rwtm->last_sig, rwtm->buf + 68, 136);
- 	cpu_to_be32_array(rwtm->last_sig, rwtm->last_sig, 34);
--	rwtm->last_sig_done = 1;
-+	rwtm->last_sig_done = true;
+-	memset(rwtm->buf, 0, 4);
+-	ret = simple_write_to_buffer(rwtm->buf + 4, 64, &dummy, buf, len);
++	memset(rwtm->buf, 0, sizeof(u32));
++	ret = simple_write_to_buffer(rwtm->buf + sizeof(u32),
++				     SHA512_DIGEST_SIZE, &dummy, buf, len);
+ 	if (ret < 0)
+ 		goto unlock_mutex;
+-	be32_to_cpu_array(rwtm->buf, rwtm->buf, 17);
++	be32_to_cpu_array(rwtm->buf, rwtm->buf, MOX_ECC_NUMBER_WORDS);
+ 
+ 	msg.command = MBOX_CMD_SIGN;
+ 	msg.args[0] = 1;
+ 	msg.args[1] = rwtm->buf_phys;
+-	msg.args[2] = rwtm->buf_phys + 68;
+-	msg.args[3] = rwtm->buf_phys + 2 * 68;
++	msg.args[2] = rwtm->buf_phys + MOX_ECC_NUMBER_LEN;
++	msg.args[3] = rwtm->buf_phys + 2 * MOX_ECC_NUMBER_LEN;
+ 	ret = mbox_send_message(rwtm->mbox, &msg);
+ 	if (ret < 0)
+ 		goto unlock_mutex;
+@@ -417,8 +423,10 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
+ 	 * computed by the rWTM firmware and convert their words from
+ 	 * LE to BE.
+ 	 */
+-	memcpy(rwtm->last_sig, rwtm->buf + 68, 136);
+-	cpu_to_be32_array(rwtm->last_sig, rwtm->last_sig, 34);
++	memcpy(rwtm->last_sig, rwtm->buf + MOX_ECC_NUMBER_LEN,
++	       sizeof(rwtm->last_sig));
++	cpu_to_be32_array(rwtm->last_sig, rwtm->last_sig,
++			  MOX_ECC_SIGNATURE_WORDS);
+ 	rwtm->last_sig_done = true;
  
  	mutex_unlock(&rwtm->busy);
- 	return len;
 -- 
 2.44.2
 
