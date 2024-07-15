@@ -4,69 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA38AC3DA59
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 11:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD2E8C3DA59
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 12:15:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 98D20C4AF0E; Mon, 15 Jul 2024 11:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A38C4AF0B;
-	Mon, 15 Jul 2024 11:59:21 +0000 (UTC)
+	id B68CFC4AF11; Mon, 15 Jul 2024 12:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC8BC32782;
+	Mon, 15 Jul 2024 12:15:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721044762;
-	bh=udt9/WXU0333dsDexLSegt9f3/2x+UBO21YW0AgcJHI=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JWz1lIzbQEXJC+KBYVd5XHFus9Cow0WdmuAaRmY6/eUlZpDgxb9c+jFCMF7ISh2nS
-	 wpEna6C7fNjGeyJ8mSdGjoHXrhqX3DGBamRKcd+a+carTX1DswvYNVWMF97BpYDNAi
-	 tOhgfQhyXcHv1CehSgHfsVObnx28LGT32d+OIebEML9zWpgtqWjc2liZODqciVwDrW
-	 9EeWtrsmfXDU7kAWNIfdfpnvE4aOqrZlJOMbp+VhxZtObbeZL5QL2B5tMKq8wQymkE
-	 jyEQYUJK6F1LBmtMiqzxmwaAjZRf4tNT+kr9A7MEDpOnw49vxwoYQoeNlIKtEW/L+u
-	 hhTqY5MPq5TpA==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+	s=k20201202; t=1721045720;
+	bh=5xQhG8nlXIRtYqjYTvRs/WOOIOO6JKvWOMa1sLZcaEY=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=qy4gIjGwqtIyw0dHtIViEc2qyYpBZO7O6981IfKdACXOOGCZgh268dn+kcZsu91fC
+	 id/rax7ugkMLpgHAVZvxesBDCU6DS6Zmli0FvcNLEcACQNkQpB2RNC022GHv30MQur
+	 dMytBO5K32dERFA2uUxNP/HBNfE9k0GltjaTXxzv1JFIZwtzkoFEmLQevN6UZpUu8z
+	 6SauGqTVPULbzazpgsPtb0bBgSuV+f/e0Bn4gHn+CcNy5kvEvnp7hMjSQZV4egOZnK
+	 JZfuvEqTsv8e+vtOYi1U2H3t9MgrpTwuX4d+55nFM1qHXlc+BN2a4WN6w4AREtBsg9
+	 enRV4W6BJ2tgw==
+Date: Mon, 15 Jul 2024 14:15:15 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	arm@kernel.org
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>
-Subject: [PATCH 3/3] firmware: turris-mox-rwtm: Initialize completion before mailbox
-Date: Mon, 15 Jul 2024 13:59:12 +0200
-Message-ID: <20240715115912.9507-4-kabel@kernel.org>
-X-Mailer: git-send-email 2.44.2
-In-Reply-To: <20240715115912.9507-1-kabel@kernel.org>
-References: <20240715115912.9507-1-kabel@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, Gregory Clement <gregory.clement@bootlin.com>, soc@kernel.org, 
+	arm <arm@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>, 
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v12 4/8] platform: cznic: turris-omnia-mcu: Add support
+ for poweroff and wakeup
+Message-ID: <mnviqych4f3g2xexnnf5pt6ashprda5cmtbv6mkuwgcco7oabt@kz3ztt4gnfvi>
+References: <20240617152606.26191-1-kabel@kernel.org>
+ <20240617152606.26191-5-kabel@kernel.org>
+ <20240715032402.GA2968547@thelio-3990X>
+ <c7cdd2a7-4201-47bb-b31e-d0279e96fcdb@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7cdd2a7-4201-47bb-b31e-d0279e96fcdb@app.fastmail.com>
 
-Initialize the completion before the mailbox channel is requested.
+On Mon, Jul 15, 2024 at 08:12:39AM +0200, Arnd Bergmann wrote:
+> On Mon, Jul 15, 2024, at 05:24, Nathan Chancellor wrote:
+> > On Mon, Jun 17, 2024 at 05:26:02PM +0200, Marek Beh˙n wrote:
+...
+> >
+> > I am seeing the following Kconfig warning from ARCH=s390 allmodconfig:
+> >
+> > WARNING: unmet direct dependencies detected for RTC_CLASS
+> >   Depends on [n]: !S390 [=y]
+> >   Selected by [m]:
+> >   - TURRIS_OMNIA_MCU [=m] && CZNIC_PLATFORMS [=y] && (MACH_ARMADA_38X 
+> > || COMPILE_TEST [=y]) && I2C [=m] && OF [=y] && WATCHDOG [=y]
+> >
+> > because of:
+> >
+> > menuconfig RTC_CLASS
+> >     bool "Real Time Clock"
+> >     default n
+> >     depends on !S390
+> >
+> > which appears to have ultimately come from commit 9556fb73edfc ("[S390]
+> > Kconfig: unwanted menus for s390."). No other driver appears to
+> > unconditionally select this (I only see it selected within
+> > arch/*/Kconfig), so it does not look like this has come up before.
+> > Should s390 be excluded from the COMPILE_TEST dependency?
+> 
+> There is really no reason for a driver to select another subsystem,
+> it not just causes problems like this one but also leads to
+> circular dependencies and surprises when someone turns on
+> a random driver and then turns it off again, leaving the
+> the other subsystems accidentally enabled.
 
-Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
-Signed-off-by: Marek Beh√∫n <kabel@kernel.org>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
----
- drivers/firmware/turris-mox-rwtm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Makes sense.
 
-diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 3f4758e03c81..3e7f186d239a 100644
---- a/drivers/firmware/turris-mox-rwtm.c
-+++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -499,6 +499,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, rwtm);
- 
- 	mutex_init(&rwtm->busy);
-+	init_completion(&rwtm->cmd_done);
- 
- 	rwtm->mbox_client.dev = dev;
- 	rwtm->mbox_client.rx_callback = mox_rwtm_rx_callback;
-@@ -512,8 +513,6 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 		goto remove_files;
- 	}
- 
--	init_completion(&rwtm->cmd_done);
--
- 	ret = mox_get_board_info(rwtm);
- 	if (ret < 0)
- 		dev_warn(dev, "Cannot read board information: %i\n", ret);
--- 
-2.44.2
+> I've applied the fixup below now, leaving GPIOLIB_IRQCHIP
+> as the only selected symbol since this is not user-visible.
 
+Thanks.
+
+> Marek, you could consider changing the driver so it doesn't
+> actually require all those subsystems at build time but instead
+> just leaves out the functionality. Some subsystems actually
+> have a stub implementation that makes it work by just dropping
+> the dependency, but I did not try that here.
+
+I will look into that.
+
+Marek
