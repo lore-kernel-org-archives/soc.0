@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12252C3DA59
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5527EC3DA59
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:47:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BCC90C32782; Mon, 15 Jul 2024 10:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99272C4AF0B;
-	Mon, 15 Jul 2024 10:47:26 +0000 (UTC)
+	id 3F3F1C4AF0F; Mon, 15 Jul 2024 10:47:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2169AC4AF10;
+	Mon, 15 Jul 2024 10:47:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721040448;
-	bh=D/Pp9rdqJgkpZW0Q+8j07VxPvERZLU/LJml3EnLV8eI=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=UU84WIYn3/yGgaWlcn8OaBwiax/Iy6Agdd9x5lgGDtCRg/21CmSOq52wriTUB/AVb
-	 CiqC+GkelO+lrBAt2Kq6Zhz8yVnDIY1HoQb9f+P/3U8QIhViadQ0y8vnifEaaePIJH
-	 wDaJ5MWe/KO99603RyKXlerC/PFdeVvVGuh51Mf4CnnjslN+UC5to3IQJYJypK9nH2
-	 ONDofn7IzQPbaiZdgJgtIVu0D8LgvmfqrUJjXZGvKfcjwaiqFl6liK9iY9bhK3HUMa
-	 zjiGJGOzk7J6KuiFWgChnyW0QLZFs78lC4Ls6vAnt2u59NrScNo4u5W3yX844rSxoN
-	 8UGz3ZlCENRdg==
+	s=k20201202; t=1721040451;
+	bh=O4uaxv7GHUzy/dI7jVG1XspnPohL9XyQ4MFsapoSjic=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ju2oU8BeB2CBHFs7oQomALT02Q8GtOsq/Kztk9cxyL33di+Isw79fre5bO4prVNRp
+	 u3aTXCj6Xv6SFm0DST5DlCT2ULsFW33XCyTdoZs7jmnwrWYw8a6TpS5ZqxmlIDiMxX
+	 84dxzAYZvKjJOzfLk97QUU7V2BbX6c4/MWQ3ZW57qMD2Dmg3alf1FzovOHBGQncWiv
+	 w0tD5ucaHYNmmc+wdYF2gRl+tX16PaaRj3/4TCtct18IQxz74rCxx3rEvQgWzyeQzz
+	 wHMEISHQ5vyzsUpAvz/uuImZVnaPRLSZ0/WHUz7ewomsAShVtcfsCRS0FvALjEyICS
+	 MmBJqt2t3hxsg==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,65 +31,49 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v4 00/19] Updates for turris-mox-rwtm driver
-Date: Mon, 15 Jul 2024 12:47:04 +0200
-Message-ID: <20240715104723.17751-1-kabel@kernel.org>
+Subject: [PATCH v4 01/19] firmware: turris-mox-rwtm: Do not complete if there are no waiters
+Date: Mon, 15 Jul 2024 12:47:05 +0200
+Message-ID: <20240715104723.17751-2-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
+In-Reply-To: <20240715104723.17751-1-kabel@kernel.org>
+References: <20240715104723.17751-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Arnd, Andy, Gregory et al.
+Do not complete the "command done" completion if there are no waiters.
+This can happen if a wait_for_completion() timed out or was interrupted.
 
-this is v4 of series of fixes, refactors and cleanups for the
-turris-mox-rwtm driver.
+Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+---
+ drivers/firmware/turris-mox-rwtm.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes since v3:
-- addressed Andy's recommendations. Some of them resulted in 2 new
-  patches (08/19 and 18/19). Im patch 10/19 I did not address Andy's
-  comment
-    "Actually you may do that without devm. There is a lookup method
-     or so in debugfs APIs that can be used. Can be amended later on,
-     though."
-  since I do not see how to use the debugfs_lookup_and_remove()
-  function without devm and get rid of the driver's .remove() method
-  at the same time...
-
-v1 - v3 can be found at:
-  https://patchwork.kernel.org/project/linux-soc/list/?series=861215
-  https://patchwork.kernel.org/project/linux-soc/list/?series=861716
-  https://patchwork.kernel.org/project/linux-soc/list/?series=862643
-
-Marek Behún (19):
-  firmware: turris-mox-rwtm: Do not complete if there are no waiters
-  firmware: turris-mox-rwtm: Fix checking return value of
-    wait_for_completion_timeout()
-  firmware: turris-mox-rwtm: Use macro constant instead of hardcoded
-    4096
-  firmware: turris-mox-rwtm: Use ETH_ALEN instead of hardcoded 6
-  firmware: turris-mox-rwtm: Use the boolean type where appropriate
-  firmware: turris-mox-rwtm: Hide signature related constants behind
-    macros
-  firmware: turris-mox-rwtm: Fix driver includes
-  firmware: turris-mox-rwtm: Use sysfs_emit() instead of sprintf()
-  firmware: turris-mox-rwtm: Don't create own kobject type
-  firmware: turris-mox-rwtm: Simplify debugfs code
-  firmware: turris-mox-rwtm: Convert rest to devm_* and get rid of
-    driver .remove()
-  firmware: turris-mox-rwtm: Use dev_err_probe() where possible
-  firmware: turris-mox-rwtm: Initialize completion before mailbox
-  firmware: turris-mox-rwtm: Drop redundant device pointer
-  firmware: turris-mox-rwtm: Use devm_mutex_init() instead of
-    mutex_init()
-  firmware: turris-mox-rwtm: Use container_of() instead of hwrng .priv
-    member
-  firmware: turris-mox-rwtm: Use EOPNOTSUPP instead of ENOSYS
-  firmware: turris-mox-rwtm: Use ALIGN() instead of hardcoding
-  firmware: turris-mox-rwtm: Deduplicate command execution code
-
- drivers/firmware/turris-mox-rwtm.c | 389 ++++++++++++-----------------
- 1 file changed, 157 insertions(+), 232 deletions(-)
-
+diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
+index 31d962cdd6eb..f1f9160c4195 100644
+--- a/drivers/firmware/turris-mox-rwtm.c
++++ b/drivers/firmware/turris-mox-rwtm.c
+@@ -2,7 +2,7 @@
+ /*
+  * Turris Mox rWTM firmware driver
+  *
+- * Copyright (C) 2019 Marek Behún <kabel@kernel.org>
++ * Copyright (C) 2019, 2024 Marek Behún <kabel@kernel.org>
+  */
+ 
+ #include <linux/armada-37xx-rwtm-mailbox.h>
+@@ -174,6 +174,9 @@ static void mox_rwtm_rx_callback(struct mbox_client *cl, void *data)
+ 	struct mox_rwtm *rwtm = dev_get_drvdata(cl->dev);
+ 	struct armada_37xx_rwtm_rx_msg *msg = data;
+ 
++	if (completion_done(&rwtm->cmd_done))
++		return;
++
+ 	rwtm->reply = *msg;
+ 	complete(&rwtm->cmd_done);
+ }
 -- 
 2.44.2
 
