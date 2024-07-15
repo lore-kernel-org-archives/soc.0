@@ -1,140 +1,163 @@
-Return-Path: <SRS0=kWTK=OP=ti.com=vigneshr@kernel.org>
+Return-Path: <SRS0=Cn3K=OP=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1728C3DA59
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 18:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86005C3DA4B
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 20:56:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A0A76C4AF0D; Mon, 15 Jul 2024 18:08:03 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5BC7BC4AF0E; Mon, 15 Jul 2024 20:56:41 +0000 (UTC)
+Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 955D2C32782;
-	Mon, 15 Jul 2024 18:08:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 955D2C32782
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46FI7p3p126761;
-	Mon, 15 Jul 2024 13:07:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1721066871;
-	bh=hQ9KDt0pj5QqeR51RglSiqAIoTDr1j7wa4/OE1HUhrs=;
-	h=Date:From:To:CC:Subject;
-	b=bjqeqgm1ZFt00bEoDMcquuQZ/dBdYg15taX2LiPwv+e4EXaNsoPs8S/ENB3hdi/xb
-	 rL6VAxqW6pq9kNFfQOFl24qATWvTXDxHW7ro8QObD0Ht6xyMiWXO7XXscgxs2diTOJ
-	 zMFh4X3ez95uXKev8Cad3m3VC7VWwA/Y4T5YAO90=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46FI7kWW014962
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 15 Jul 2024 13:07:46 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- Jul 2024 13:07:45 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 Jul 2024 13:07:45 -0500
-Received: from [172.24.227.94] (uda0132425.dhcp.ti.com [172.24.227.94])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46FI7g72004328;
-	Mon, 15 Jul 2024 13:07:43 -0500
-Message-ID: <aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com>
-Date: Mon, 15 Jul 2024 23:37:42 +0530
+	by smtp.kernel.org (Postfix) with ESMTPS id CCB19C32782
+	for <soc@kernel.org>; Mon, 15 Jul 2024 20:56:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCB19C32782
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id A6FC01388B1F;
+	Mon, 15 Jul 2024 16:56:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 15 Jul 2024 16:56:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1721076998; x=1721163398; bh=89
+	e6/j8ZWiMcFYzt0hDXdGvhC/f0P0quEQtnmbKN1SU=; b=VHd/xE/7XDJL+WZraK
+	BlGrie+Q5pOErxp9Cyk0gAmjTo9a2e20yG5u4Tz40yLfOYT5jzVP1ynodLpmbj8R
+	rDeBzHwD/qNqqizfUr/qiPkfcw22Fe5nZwUJ+jD5/PjN9490WhqPzbsl50Adpg4m
+	V+jfgKQK+wNrshvh0tgQao2ipKXjQ8+lN+F4PYc38eCNLSPYIUp/dVYtJZQ1fvXP
+	4CqLFPRBZD20gv5p0khNue/3fN4SJUfEF7ZWhbfDAwQktJfv6CH24HQ8xEAlhWLB
+	6COFPkg5hwLYM3IIIRB50NqyFN7vVJ8BxNeYEjLdv7IODcKU2gGDMoPX3TfnvH+y
+	DQcg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1721076998; x=1721163398; bh=89e6/j8ZWiMcF
+	Yzt0hDXdGvhC/f0P0quEQtnmbKN1SU=; b=jbNIKKe2ttFWlIg5CPZFnAfGh/Z+s
+	slsTle/8bODtK/qH3F1OyJIcAPy9hmrqbzbcZaQb1RFoS8frEvW6OV9uzArNpHGF
+	WUvnJT2cLB5NS0Ds0hq+jaK0LR5RV4WK2+FnlJsps8lb2YowbgV5h1kIT+jCBd46
+	vZBQ+mz/nLNPxCFYWi7ZqJrqBK/PFfihgzCq1dP9ybP6PA2w4yPWuGrx/3LtrKLv
+	OJ1GxyzxTr20UuTtEWrs0Dln8YsvXllvptRxmw5D5lspvP3DdN9HUHiOCRQAGiYj
+	vDGDlkY0gyeJj+sVlRbr+tLAPmT/vGPdSWlKUaFe+WENzoMUdUZi+7EGw==
+X-ME-Sender: <xms:BY2VZrpD_i7M7UmOM-SU2GKU2efYcaKIdBeRAkZLOwQsGZh2N5_C1Q>
+    <xme:BY2VZloOinY_xJKpBm3pvtCm-ZddAFoWRzDojAUjXwEqKwGU9Dn4vDZIHsRsCYSSd
+    o7M9HDunIQCXafVZQc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgedvgdduheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeefheelfeetheelvdeiieeffeethfekvdehheduleetveeikeehhfeghfevkeff
+    ueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:BY2VZoNQBcCoa6zuHjY_uN0jHn1UcGF97MyoLAVRIzMdshFLZ23XvA>
+    <xmx:BY2VZu5lQKDU2dnaGfdHWphGLYDSa0uw3Q1tHVRkTk5j5xL8PNv8Cw>
+    <xmx:BY2VZq7-qq7ehDsR67VsafggBsc3k_-2EQbCAVBfyIDcxzQjpGV3NA>
+    <xmx:BY2VZmhg7Szkf9xl49sJ41VK93wZkX9OFeLBc1a8n4B4rSbbpkPlcw>
+    <xmx:Bo2VZglrKqbc2nXoHBBHzs_OiYX4HPS7zkwTmA_87MVW2JFnYbYdh6eU>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6039FB6008D; Mon, 15 Jul 2024 16:56:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Vignesh Raghavendra <vigneshr@ti.com>
-Content-Language: en-US
+Message-Id: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com>
+Date: Mon, 15 Jul 2024 23:03:57 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc
-	<arm@kernel.org>, SoC <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------RUwPAC00nLsJ4vnxysuoeY8i"
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
---------------RUwPAC00nLsJ4vnxysuoeY8i
-Content-Type: multipart/mixed; boundary="------------ueqxuF7AE95w104VQykrKzYI";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-Cc: Tero Kristo <kristo@kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Nishanth Menon <nm@ti.com>
-Message-ID: <aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com>
-Subject: [GIT PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
-
---------------ueqxuF7AE95w104VQykrKzYI
-Content-Type: text/plain; charset=UTF-8
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@kernel.org
+Subject: [GIT PULL 0/4] soc tree for 6.11
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi ARM SoC Maintainers,
+Hi Linus,
 
-Please pull below PR which consists of a late fix to my earlier pull requ=
-est:
-https://lore.kernel.org/linux-arm-kernel/37f251a1-f3bd-402f-ab22-cf786c38=
-71d7@ti.com/
+Here are the four pull requests for the soc tree.=20
 
-The following changes since commit 6406c5d5512c0814b8c155df7f833a98d9069a=
-72:
+We have again just over 1000 non-merge changesets in the SoC tree, from
+62 pull requests plus some individual patches. About 80% of this is arm6=
+4,
+the rest is arm32 and riscv.=20
 
-  arm64: dts: ti: k3-am62a7-sk: Reserve 576MiB of global CMA (2024-07-03 =
-19:51:21 +0530)
+Not much sticks out in the contents, there are three new SoCs and a
+fairly large number of new machines, but it's spread out over a lot
+of platforms, with rockchip and ti having more than usual.
 
-are available in the Git repository at:
+The overall diffstat is
+   0.4% Documentation/devicetree/bindings/arm/
+   0.9% Documentation/devicetree/bindings/
+   0.2% Documentation/
+   0.4% arch/arm/boot/dts/arm/
+   0.4% arch/arm/boot/dts/marvell/
+   0.4% arch/arm/boot/dts/nxp/imx/
+   2.1% arch/arm/boot/dts/qcom/
+   2.1% arch/arm/boot/dts/st/
+   0.5% arch/arm/boot/dts/
+   0.6% arch/arm/mach-pxa/
+   0.3% arch/arm/mach-versatile/
+   0.3% arch/arm64/boot/dts/allwinner/
+   1.4% arch/arm64/boot/dts/amlogic/
+  14.0% arch/arm64/boot/dts/freescale/
+   2.9% arch/arm64/boot/dts/marvell/
+   4.9% arch/arm64/boot/dts/mediatek/
+  21.9% arch/arm64/boot/dts/qcom/
+   1.1% arch/arm64/boot/dts/renesas/
+  16.5% arch/arm64/boot/dts/rockchip/
+   0.7% arch/arm64/boot/dts/st/
+   9.5% arch/arm64/boot/dts/ti/
+   0.3% arch/arm64/boot/dts/xilinx/
+   0.5% arch/arm64/boot/dts/
+   0.3% arch/riscv/boot/dts/allwinner/
+   0.3% arch/riscv/boot/dts/microchip/
+   0.3% arch/riscv/boot/dts/starfive/
+   0.2% arch/riscv/boot/dts/
+   0.2% drivers/cache/
+   5.2% drivers/clk/qcom/
+   0.2% drivers/firmware/microchip/
+   1.3% drivers/firmware/qcom/
+   0.3% drivers/firmware/
+   3.1% drivers/platform/cznic/
+   0.2% drivers/reset/
+   2.2% drivers/soc/qcom/
+   0.2% drivers/soc/xilinx/
+   0.2% drivers/
+   0.4% include/dt-bindings/clock/
+   0.2% include/dt-bindings/
+   0.7% include/linux/
+ 958 files changed, 66982 insertions(+), 11316 deletions(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--dt-for-v6.11-part2
+There are 232 individual contributors for this tree, the most active
+ones are
 
-for you to fetch changes up to cc5049007d722364bca4a4eeb619d5629733a004:
+     67 Dmitry Baryshkov
+     61 Krzysztof Kozlowski
+     52 Konrad Dybcio
+     42 Frank Li
+     37 Luca Weiss
+     26 Neil Armstrong
+     22 Bartosz Golaszewski
+     22 AngeloGioacchino Del Regno
+     18 Marek Beh=C3=BAn
+     17 Michael Walle
+     16 Siddharth Vadapalli
+     16 Rafa=C5=82 Mi=C5=82ecki
+     16 Jonas Karlman
+     16 Geert Uytterhoeven
+     12 Tengfei Fan
+     12 Alexander Stein
+     12 Abel Vesa
+     11 Marek Vasut
+     10 Nathan Morrisson
+     10 Krishna Kurapati
+     10 Dmitry Torokhov
+     10 Andrew Davis
 
-  arm64: dts: ti: k3-j784s4-evm: Consolidate serdes0 references (2024-07-=
-12 17:08:40 +0530)
-
-----------------------------------------------------------------
-Late fixes towards v6.11-rc1
-
-First patch fixes warning splat seen on J784S4 due to overlapping
-serdes0 lane. Second patch cleans up the serdes0 references for readabili=
-ty
-
-----------------------------------------------------------------
-Andrew Halaney (2):
-      arm64: dts: ti: k3-j784s4-evm: Assign only lanes 0 and 1 to PCIe1
-      arm64: dts: ti: k3-j784s4-evm: Consolidate serdes0 references
-
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 25 +++-------
- 1 file changed, 8 insertions(+), 17 deletions(-)
-
---=20
-Regards
-Vignesh
-
---------------ueqxuF7AE95w104VQykrKzYI--
-
---------------RUwPAC00nLsJ4vnxysuoeY8i
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmaVZW4FAwAAAAAACgkQxEYeRXyRFuMp
-XAgAvyMc9Sy66U1Vk0pNe6ebRIFaA2Tt/Dwp4FuOsoCT/7I6jW9uonvRLqY4XjkQJhm9ER/vzPXS
-EYAKDHQlaZ9bGUo9pTY0+RF25tlse6cL7icOiEsoj65DNmeVm7xo18q8hfPw0XmbQVSjK5/l2UWY
-8VQueqtQ8T15ufRo6XuRSfjfPoeO+vpqMynqMpz2JKc+YP8vouRqrUWzVwQARqv8OrqWdl2KTmgs
-kX3oX55+UU+if0xoNCPM4j/tS/jtyqlwSYEU7LQpjrHMc0oM9n8om4Hw4dF2aMh6CoowYtq9MjNl
-HFMGZfeUPpA1z/xPQwmYopSEywXDYQIQ5BbZ9gaCuQ==
-=TME8
------END PGP SIGNATURE-----
-
---------------RUwPAC00nLsJ4vnxysuoeY8i--
+        Arnd
