@@ -4,53 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 663C7C3DA59
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 11:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C76AC3DA5D
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 11:59:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 55FC4C4AF0F; Mon, 15 Jul 2024 11:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4C7C32782;
-	Mon, 15 Jul 2024 11:59:15 +0000 (UTC)
+	id 0D1B3C4AF0F; Mon, 15 Jul 2024 11:59:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABDBAC4AF0A;
+	Mon, 15 Jul 2024 11:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721044757;
-	bh=3gaZ9hZnz2ePFHwZmyev3FW7K3Cldgnw1RlM7TEVOFU=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=Z2FM+YgH2zlNOdirzicApJKvhugyOksBYuJ1kekM5Ohfa8lIVBFU2l5PQGwTzWR/2
-	 bV1gNRmQbGo0T9HHLv165o2wMGvX/zmubF4l7CZj2N3sQh6s9H04Ac4yse8iwoWuS+
-	 DwRavpvWRmEgbW1V98d4zshRW4TQX37DC9lWwXEqGpzKQU4hPRWV+7oPRYnaQFmL3B
-	 9bZydaKGcn3FzbTazm7YqqvaNSJ01nKmhQmtK1Y1MZnRVx12w9tN2thN7ui4x9D3Ps
-	 u7oFJ3wsMNOhjsdDK/n7Y4qSYOQwvliwIOg/yQIArQJXZJch7x8pTMruQi3bash8Ko
-	 g4/Xa0UJjuFMw==
+	s=k20201202; t=1721044758;
+	bh=O4uaxv7GHUzy/dI7jVG1XspnPohL9XyQ4MFsapoSjic=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lMqkDTFbHLikOHr0PN5S9G7uUaeB9g+Ji3Ii3M1AuXvcjnESyVXrcaIo17U+uSUxu
+	 0xS95IWWm45V37EpMpYP+Ar1h//Kju1GQSWwApYZqTMVH0Q6Fzd4JIQt74C0qOQFjI
+	 Fb5g3Qs30kAZJWBB69WSTR13Dg+aRHm3lnsT5m54o2/ljeLwrDnUefMYU1ArCxEoaR
+	 Hf5EmX4gengCWyb0H5wWR421Fjtk6Az/Kb5ONPMHDb3pXMGjGCgDVYu0StBfRPcz01
+	 dYw1JPHVu12sQUId+6umhB1C+5aM6LpIQh62Ot22OnI2FVVaqLQ8XMU2cocJbhGcyN
+	 Q/sGP2ZXe6jow==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
 	arm@kernel.org
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 0/3] Fixes for turris-mox-rwtm driver
-Date: Mon, 15 Jul 2024 13:59:09 +0200
-Message-ID: <20240715115912.9507-1-kabel@kernel.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>
+Subject: [PATCH 1/3] firmware: turris-mox-rwtm: Do not complete if there are no waiters
+Date: Mon, 15 Jul 2024 13:59:10 +0200
+Message-ID: <20240715115912.9507-2-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
+In-Reply-To: <20240715115912.9507-1-kabel@kernel.org>
+References: <20240715115912.9507-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello Arnd,
+Do not complete the "command done" completion if there are no waiters.
+This can happen if a wait_for_completion() timed out or was interrupted.
 
-as you requested I've split the 3 fix patches from the
-  Updates for turris-mox-rwtm driver
-series. I will send the rest once the merge window is closed.
+Fixes: 389711b37493 ("firmware: Add Turris Mox rWTM firmware driver")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+---
+ drivers/firmware/turris-mox-rwtm.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Marek
-
-Marek Behún (3):
-  firmware: turris-mox-rwtm: Do not complete if there are no waiters
-  firmware: turris-mox-rwtm: Fix checking return value of
-    wait_for_completion_timeout()
-  firmware: turris-mox-rwtm: Initialize completion before mailbox
-
- drivers/firmware/turris-mox-rwtm.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
+index 31d962cdd6eb..f1f9160c4195 100644
+--- a/drivers/firmware/turris-mox-rwtm.c
++++ b/drivers/firmware/turris-mox-rwtm.c
+@@ -2,7 +2,7 @@
+ /*
+  * Turris Mox rWTM firmware driver
+  *
+- * Copyright (C) 2019 Marek Behún <kabel@kernel.org>
++ * Copyright (C) 2019, 2024 Marek Behún <kabel@kernel.org>
+  */
+ 
+ #include <linux/armada-37xx-rwtm-mailbox.h>
+@@ -174,6 +174,9 @@ static void mox_rwtm_rx_callback(struct mbox_client *cl, void *data)
+ 	struct mox_rwtm *rwtm = dev_get_drvdata(cl->dev);
+ 	struct armada_37xx_rwtm_rx_msg *msg = data;
+ 
++	if (completion_done(&rwtm->cmd_done))
++		return;
++
+ 	rwtm->reply = *msg;
+ 	complete(&rwtm->cmd_done);
+ }
 -- 
 2.44.2
 
