@@ -1,231 +1,114 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <SRS0=Cn3K=OP=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08868C3DA59
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3246BC3DA5D
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 11:03:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E7518C4AF0E; Mon, 15 Jul 2024 10:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC87AC4AF0A;
-	Mon, 15 Jul 2024 10:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721040495;
-	bh=ra4UQDdEcA4b5Z3A9nyljWhOjo6TN9B8ZBY2ZwYX6gI=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MKjWaTclRAy0MEGW8/2aOWALLaRxTROYKwi2goJ14PKUkiP9owGfFSWuISPTOBWZD
-	 WOF+iveprDd/WOid5utMR0qfqg/+4J6EASVjgFTDlA0xPpPjP4eFZP+XV1rCvuN54c
-	 YawXxwh2FYaSvsc575C5DUdIUcrPnyNltqt65qbVDcCls090dRi2mqrKMTvl6i2vl4
-	 NGaAkjtfWC/qPegDA+MqJ3/Gt4AzvCIyReIRB2zPPsQlXzkcwQluKEvxSZzu56UMFJ
-	 Q8zVzHi6gCkMvn2B1ahbTmG12JP9TCa0l93Tua0K48jMEY53y5xiFKGoblPN9OkGIe
-	 KfVW1yjfV/fig==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v4 19/19] firmware: turris-mox-rwtm: Deduplicate command execution code
-Date: Mon, 15 Jul 2024 12:47:23 +0200
-Message-ID: <20240715104723.17751-20-kabel@kernel.org>
-X-Mailer: git-send-email 2.44.2
+	id 04B5FC4AF0A; Mon, 15 Jul 2024 11:03:56 +0000 (UTC)
+Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5222DC32782;
+	Mon, 15 Jul 2024 11:03:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5222DC32782
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 0A61311480D8;
+	Mon, 15 Jul 2024 07:03:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 15 Jul 2024 07:03:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1721041433;
+	 x=1721127833; bh=MVFAcHhuDGzWslHu780vKn92UHoO+ZjE4u7m/bOKBVc=; b=
+	F4nwxFBQKMiqkg7BP9IrjGQahfUg2LKcJKGaHhI2scNBzaHj8GFxtaTP2vbAxyav
+	swjD1OyzTEdbgn36iXEGv3wTT2kyZ9jooY2leXkIi6rCgUiq6jkwzn7yCDdYc/h0
+	i9b645HoaPsNRrkbl3Gil5nW+WkZckNwSqe3YC2XtmIZxW1tt/q1FuO+wFHhAkdu
+	4heSMpfYd056f0uT0GEXsElrw6U/q/agXLoSTpfVLnc60F9a4uRKmNI1NGFYNwHq
+	+eLlvFzNDODWk22Ev01WnPOhiPNL2ZAui5Ml4rk8bVkRjGf/V++eDe924367DiuT
+	gznwRZuiBrg1Z6zuMdTwzg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1721041433; x=
+	1721127833; bh=MVFAcHhuDGzWslHu780vKn92UHoO+ZjE4u7m/bOKBVc=; b=I
+	gvC7fELPfWPFKw5/jcrdUC33KMI4JSjo5NyQ1sCPnddzBjU7OlDpsEHlyUXvp5QR
+	YdpSAtwp13BfTMchnp4wyFnYVx1/Spa5qsgtbQbYpNaxCBZIasbJk7+PoniCy6Ew
+	z3yF2RrMDFBm6/F/R6wbNoDBILoXPB7XgeYyExR9CXrhvZ4TFFowOMunALUJZHNV
+	aYZNnzHR5DHEX+aKwCeXN3A4yAvFsdQkrorOMBjQoUTThH81EbDsL1doqtwQkuQH
+	n3QKbjh+oOjSA18bl1Lj4qzurQzLAA8JPqDeAevhQEAlMDqiKNtS91ADyFb9yfTr
+	HlWn5jro9cjDjpUpWnPCQ==
+X-ME-Sender: <xms:FwKVZqj8mVwh5WLtqXGqsqkCWSPv7bQPPxQl5y9tY1OGpvPs2ttFPQ>
+    <xme:FwKVZrCfZamd9ktouvH3wP3RiR15XIJTVanctxOJtIPZVAnGJiAwyq3NrGL0gaSU7
+    IrwzG8jftKrCPDui7U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgedvgdefhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeejgefhuedtjeejheduveegheevudffjeekhfevfefgtedtheegieeludefuedv
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:FwKVZiF2XTskTNpMIqdZKHXlxzVTXJGblJZxBCFbJRnFM21EYwJXmg>
+    <xmx:FwKVZjRePAinb-gWx5k5WF6_c-ZIYl6SYxwWdg9AkZpf_u8HJOGDbg>
+    <xmx:FwKVZnyYiupeJovzOoSOUIqoYL63elKliooMAw2WXiAs9eZJARf8hQ>
+    <xmx:FwKVZh7xOP3lwlNk0PVMlaP47jO6Mk22EmUu5AlSMuB1_HQmCwDJ_Q>
+    <xmx:GQKVZux1NhzOC8uSjhrtDU82h4wj7O9Wz_5XOha9ykl5MbA75cBccbLX>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 68CF6B60093; Mon, 15 Jul 2024 07:03:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+MIME-Version: 1.0
+Message-Id: <4b4785ca-0fba-4227-8186-c5da08d38eb2@app.fastmail.com>
 In-Reply-To: <20240715104723.17751-1-kabel@kernel.org>
 References: <20240715104723.17751-1-kabel@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Mon, 15 Jul 2024 13:11:09 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ "Gregory Clement" <gregory.clement@bootlin.com>,
+ "Andrew Lunn" <andrew@lunn.ch>, soc@kernel.org, arm <arm@kernel.org>,
+ "Andy Shevchenko" <andy@kernel.org>, "Hans de Goede" <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v4 00/19] Updates for turris-mox-rwtm driver
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Deduplicate rWTM command execution calls
-  mbox_send_message()
-  wait_for_completion()
-  mox_get_status()
-to one function
-  mox_rwtm_exec()
+On Mon, Jul 15, 2024, at 12:47, Marek Beh=C3=BAn wrote:
+> Hi Arnd, Andy, Gregory et al.
+>
+> this is v4 of series of fixes, refactors and cleanups for the
+> turris-mox-rwtm driver.
+>
+> Changes since v3:
+> - addressed Andy's recommendations. Some of them resulted in 2 new
+>   patches (08/19 and 18/19). Im patch 10/19 I did not address Andy's
+>   comment
+>     "Actually you may do that without devm. There is a lookup method
+>      or so in debugfs APIs that can be used. Can be amended later on,
+>      though."
+>   since I do not see how to use the debugfs_lookup_and_remove()
+>   function without devm and get rid of the driver's .remove() method
+>   at the same time...
+>
 
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
----
- drivers/firmware/turris-mox-rwtm.c | 98 ++++++++++++------------------
- 1 file changed, 39 insertions(+), 59 deletions(-)
+Hi Marek,
 
-diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 0c7d8c96ea17..525ebdc7ded5 100644
---- a/drivers/firmware/turris-mox-rwtm.c
-+++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -157,6 +157,34 @@ static void mox_rwtm_rx_callback(struct mbox_client *cl, void *data)
- 	complete(&rwtm->cmd_done);
- }
- 
-+static int mox_rwtm_exec(struct mox_rwtm *rwtm, enum mbox_cmd cmd,
-+			 struct armada_37xx_rwtm_tx_msg *msg,
-+			 bool interruptible)
-+{
-+	struct armada_37xx_rwtm_tx_msg _msg = {};
-+	int ret;
-+
-+	if (!msg)
-+		msg = &_msg;
-+
-+	msg->command = cmd;
-+
-+	ret = mbox_send_message(rwtm->mbox, msg);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (interruptible) {
-+		ret = wait_for_completion_interruptible(&rwtm->cmd_done);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
-+			return -ETIMEDOUT;
-+	}
-+
-+	return mox_get_status(cmd, rwtm->reply.retval);
-+}
-+
- static void reply_to_mac_addr(u8 *mac, u32 t1, u32 t2)
- {
- 	mac[0] = t1 >> 8;
-@@ -170,19 +198,10 @@ static void reply_to_mac_addr(u8 *mac, u32 t1, u32 t2)
- static int mox_get_board_info(struct mox_rwtm *rwtm)
- {
- 	struct device *dev = rwtm_dev(rwtm);
--	struct armada_37xx_rwtm_tx_msg msg;
- 	struct armada_37xx_rwtm_rx_msg *reply = &rwtm->reply;
- 	int ret;
- 
--	msg.command = MBOX_CMD_BOARD_INFO;
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		return ret;
--
--	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
--		return -ETIMEDOUT;
--
--	ret = mox_get_status(MBOX_CMD_BOARD_INFO, reply->retval);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_BOARD_INFO, NULL, false);
- 	if (ret == -ENODATA) {
- 		dev_warn(dev,
- 			 "Board does not have manufacturing information burned!\n");
-@@ -209,15 +228,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 		pr_info("           burned RAM size %i MiB\n", rwtm->ram_size);
- 	}
- 
--	msg.command = MBOX_CMD_ECDSA_PUB_KEY;
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		return ret;
--
--	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
--		return -ETIMEDOUT;
--
--	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_ECDSA_PUB_KEY, NULL, false);
- 	if (ret == -ENODATA) {
- 		dev_warn(dev, "Board has no public key burned!\n");
- 	} else if (ret == -EOPNOTSUPP) {
-@@ -240,37 +251,23 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 
- static int check_get_random_support(struct mox_rwtm *rwtm)
- {
--	struct armada_37xx_rwtm_tx_msg msg;
--	int ret;
--
--	msg.command = MBOX_CMD_GET_RANDOM;
--	msg.args[0] = 1;
--	msg.args[1] = rwtm->buf_phys;
--	msg.args[2] = 4;
--
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		return ret;
--
--	if (!wait_for_completion_timeout(&rwtm->cmd_done, HZ / 2))
--		return -ETIMEDOUT;
-+	struct armada_37xx_rwtm_tx_msg msg = {
-+		.args = { 1, rwtm->buf_phys, 4 },
-+	};
- 
--	return mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
-+	return mox_rwtm_exec(rwtm, MBOX_CMD_GET_RANDOM, &msg, false);
- }
- 
- static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- {
- 	struct mox_rwtm *rwtm = container_of(rng, struct mox_rwtm, hwrng);
--	struct armada_37xx_rwtm_tx_msg msg;
-+	struct armada_37xx_rwtm_tx_msg msg = {
-+		.args = { 1, rwtm->buf_phys, ALIGN(max, 4) },
-+	};
- 	int ret;
- 
- 	max = min(max, RWTM_DMA_BUFFER_SIZE);
- 
--	msg.command = MBOX_CMD_GET_RANDOM;
--	msg.args[0] = 1;
--	msg.args[1] = rwtm->buf_phys;
--	msg.args[2] = ALIGN(max, 4);
--
- 	if (!wait) {
- 		if (!mutex_trylock(&rwtm->busy))
- 			return -EBUSY;
-@@ -278,15 +275,7 @@ static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- 		mutex_lock(&rwtm->busy);
- 	}
- 
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		goto unlock_mutex;
--
--	ret = wait_for_completion_interruptible(&rwtm->cmd_done);
--	if (ret < 0)
--		goto unlock_mutex;
--
--	ret = mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_GET_RANDOM, &msg, true);
- 	if (ret < 0)
- 		goto unlock_mutex;
- 
-@@ -333,7 +322,6 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
- 			     size_t len, loff_t *ppos)
- {
- 	struct mox_rwtm *rwtm = file->private_data;
--	struct armada_37xx_rwtm_rx_msg *reply = &rwtm->reply;
- 	struct armada_37xx_rwtm_tx_msg msg;
- 	loff_t dummy = 0;
- 	ssize_t ret;
-@@ -366,23 +354,15 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
- 		goto unlock_mutex;
- 	be32_to_cpu_array(rwtm->buf, rwtm->buf, MOX_ECC_NUMBER_WORDS);
- 
--	msg.command = MBOX_CMD_SIGN;
- 	msg.args[0] = 1;
- 	msg.args[1] = rwtm->buf_phys;
- 	msg.args[2] = rwtm->buf_phys + MOX_ECC_NUMBER_LEN;
- 	msg.args[3] = rwtm->buf_phys + 2 * MOX_ECC_NUMBER_LEN;
--	ret = mbox_send_message(rwtm->mbox, &msg);
--	if (ret < 0)
--		goto unlock_mutex;
- 
--	ret = wait_for_completion_interruptible(&rwtm->cmd_done);
-+	ret = mox_rwtm_exec(rwtm, MBOX_CMD_SIGN, &msg, true);
- 	if (ret < 0)
- 		goto unlock_mutex;
- 
--	ret = MBOX_STS_VALUE(reply->retval);
--	if (MBOX_STS_ERROR(reply->retval) != MBOX_STS_SUCCESS)
--		goto unlock_mutex;
--
- 	/*
- 	 * Here we read the R and S values of the ECDSA signature
- 	 * computed by the rWTM firmware and convert their words from
--- 
-2.44.2
+The 6.11 merge window is now open, so I am not applying the
+cleanup and refactoring patches for this release.
 
+Can you separate the two and resend just the bugfixes so I can
+apply them into a branch for 6.11-rc1? After -rc1 is out
+with those fixes, please rebase the rest and send that got
+inclusion in 6.12.
+
+     Arnd
