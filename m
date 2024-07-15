@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 351B8C3DA59
-	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B13A3C3DA59
+	for <soc@archiver.kernel.org>; Mon, 15 Jul 2024 10:47:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1F8A5C4AF0E; Mon, 15 Jul 2024 10:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B2EC32782;
-	Mon, 15 Jul 2024 10:47:43 +0000 (UTC)
+	id 9D341C4AF0E; Mon, 15 Jul 2024 10:47:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A093C4AF0B;
+	Mon, 15 Jul 2024 10:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721040466;
-	bh=EWfl7Pzk2wgZExrt1XlXb7co9xshNocr3bGJAUWtFbg=;
+	s=k20201202; t=1721040468;
+	bh=XfNjdgEJaHYxp2TbZvn6td3wk5uKTKb8zqMIkFPSr6o=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cWrQmgBVfsiSgnZqiHKQhcmDa4ag758VlUvthlVHGVaUiogjJuULTW7NatosVn8w7
-	 wzw9H7AE8t6W6D4WFbR2VV+Ag4B2+q+Sq3EwQXy+0UcHW9Ow6vHSS7SJ2vnjiwxqxq
-	 ZLDB4kxyPJynAzAUKxXEvkJ7OY7f12t8VfGZzC/5brrLQjXUAyOquozbNxqZco0nY+
-	 L5JzV6y8xh05AN5z1tgvnHxpZwdKFW6wgwsy3mSnIJL/ISq2xgW7ilMmY+YSkxNQhp
-	 s3IwFeZZ8u9EsXc0Q1qTJTwagLkiR5tKRu0Qy09JShQA+bjokAtLSiJg4lJPRmYMPL
-	 A6lVh3hA+qRzA==
+	b=ph9kmlYLuxHGLKrTwqnumcnixK+QcPJJMdvMxdW014LYzhp2AFjLCIVI4MElU0EQB
+	 KUA1O5cyTHvZe15kMRWgfBlNN3Pvj6P1mNcY9lNIZOYADhskuksoL4NB++sZvla9us
+	 7vZj0VVq4gUq8qMx3Hm4B2+lfUoJOp7dhI0q1qisrLsAVYymA25mvAVkB42ly+XzKm
+	 JaZeioxRcxWtLxoDtiFen6u4txCiSFtpv+9RpVmZWfcgTTgWpLDJ11lv8b4MGGvaAn
+	 7IhJ81OJrO3KO51gCv5kiaJIu2SPRyRqeduVxZQ+cmW4ToJL+L9QpzxBHAxIQ+zg6r
+	 W0hoGAOpWx2tA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v4 07/19] firmware: turris-mox-rwtm: Fix driver includes
-Date: Mon, 15 Jul 2024 12:47:11 +0200
-Message-ID: <20240715104723.17751-8-kabel@kernel.org>
+Subject: [PATCH v4 08/19] firmware: turris-mox-rwtm: Use sysfs_emit() instead of sprintf()
+Date: Mon, 15 Jul 2024 12:47:12 +0200
+Message-ID: <20240715104723.17751-9-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240715104723.17751-1-kabel@kernel.org>
 References: <20240715104723.17751-1-kabel@kernel.org>
@@ -41,44 +41,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Drop including of.h, include several other headers that are used but not
-included directly.
+Use sysfs_emit() instead of sprintf() in sysfs attribute .show()
+method.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/firmware/turris-mox-rwtm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 0ae5b2086113..0da40f55c750 100644
+index 0da40f55c750..e3e209247e68 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -8,18 +8,23 @@
- #include <crypto/sha2.h>
- #include <linux/armada-37xx-rwtm-mailbox.h>
- #include <linux/completion.h>
-+#include <linux/container_of.h>
- #include <linux/debugfs.h>
-+#include <linux/device.h>
- #include <linux/dma-mapping.h>
-+#include <linux/err.h>
-+#include <linux/fs.h>
- #include <linux/hw_random.h>
- #include <linux/if_ether.h>
-+#include <linux/kobject.h>
- #include <linux/mailbox_client.h>
- #include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
--#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
-+#include <linux/sysfs.h>
- #include <linux/types.h>
+@@ -151,7 +151,7 @@ name##_show(struct kobject *kobj, struct kobj_attribute *a,	\
+ 	struct mox_rwtm *rwtm = to_rwtm(kobj);	\
+ 	if (!rwtm->has_##cat)					\
+ 		return -ENODATA;				\
+-	return sprintf(buf, format, rwtm->name);		\
++	return sysfs_emit(buf, format, rwtm->name);		\
+ }								\
+ static struct kobj_attribute mox_attr_##name = __ATTR_RO(name)
  
- #define DRIVER_NAME		"turris-mox-rwtm"
 -- 
 2.44.2
 
