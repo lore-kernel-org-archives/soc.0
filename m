@@ -1,121 +1,121 @@
-Return-Path: <SRS0=+sRa=OQ=arndb.de=arnd@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 280E7C3DA49
-	for <soc@archiver.kernel.org>; Tue, 16 Jul 2024 19:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C3FC3DA49
+	for <soc@archiver.kernel.org>; Tue, 16 Jul 2024 19:53:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EA208C4AF0B; Tue, 16 Jul 2024 19:34:06 +0000 (UTC)
-Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 564BDC116B1; Tue, 16 Jul 2024 19:53:34 +0000 (UTC)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 63BFFC116B1;
-	Tue, 16 Jul 2024 19:34:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 63BFFC116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 62A6A1147E87;
-	Tue, 16 Jul 2024 15:34:04 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 16 Jul 2024 15:34:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1721158444; x=1721244844; bh=TDhL7S6Al9
-	iAbakQeQjPClMt67S4P0lNtZj45Ka2TjQ=; b=msNMRdePPF0EUzw9LOCRUHrmUf
-	+dWOu9O0qWbuu3E5zUuIYkHSD+gTUVp4Ut+8jmxu1JtWe7c1xgaBAL/e9TiO0qIj
-	whBTsm6rqVMvy6qD0pZu8sDEVlipOB2PUZrfQc8yelKBON+3mo+Ehf0xb60hmH5u
-	KTPdZ8D99kxK5JE6rfQO98ThUlCt1MwPaE7Nqtil76Hvf2NKd996uI2wxsF0wk40
-	Sf8BawuDW+LEnMrnTsbA9ongACYEbjqXNA8+lEdojw9szbwFa5XmLC3E9IorHQ+k
-	oaCxiexquDCw2++jqGu0HzXrNK1JEF2R6HPqoS/QZSsgum8zqWPoYCESJNUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1721158444; x=1721244844; bh=TDhL7S6Al9iAbakQeQjPClMt67S4
-	P0lNtZj45Ka2TjQ=; b=UWt+sROdxCrpFjh1ROym4vgbgF0M3BHNO+93ac2xb+np
-	PozmzaYSH1AcaBqA/4qP0+8HhfXeo3t1Wub2IHECfWMiqQnIrvG+2XzT6brx3aE0
-	VyMUXxKZ+6VV9I/BaD3dk47dWtXm3UnwFoPXRXi4aa+PAkBFwXSSkjbq2MiJgUGD
-	AC4/LkZ3cqAj98pGZiqr99jBGArlUrSZjeWqsDb+E8WBEBBjqlUyZILFRzh8EZ/q
-	kqiADoRhrL0GiH6DSG1vrEr3bf9G7hQOiR5R4J/Rhywcq73Pg+VzZoIVxq2xwozJ
-	HbiCOP/BJ5P+dKEg2P+NcpO0qM1q4c15tZENR92EbA==
-X-ME-Sender: <xms:K8uWZrS0WXGRV2EPDyBi6c5vdHOY5uGlFxBND_cAGZngBnv-r7BGFQ>
-    <xme:K8uWZszEcdGPt3tmWfPFl9byezIy-6K_r-NFhO_n4OrAqUx2CzGeRwI2sJox6sJoK
-    f39KFSGvag2Ll9Nf_A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeeggddufeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:K8uWZg1rsK_k1Km6SMvauBroojqEBZ9U_QXe9G0ujqjBCAgJIWAT6A>
-    <xmx:K8uWZrCuKomsxRoULawVwljE5fazPwixas9ZJU2y-Q2FhegM2Q87jg>
-    <xmx:K8uWZkhFoqYC6nyQkyfF9Mljeq6AZw2Rw2py_9UFUHSS0Uyq868QSw>
-    <xmx:K8uWZvrLnIzzT8jd0E3yebSTeB7hkl4sPSQKHxpB1SqBXae801wbvA>
-    <xmx:LMuWZtUwNJb6MByqtpvYsP68ZQjFjt6lMVeDJZ3YxuwJoRpnqhKx42b6>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 27D48B6008D; Tue, 16 Jul 2024 15:34:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	by smtp.kernel.org (Postfix) with ESMTPS id EF6CFC4AF0C
+	for <soc@kernel.org>; Tue, 16 Jul 2024 19:53:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF6CFC4AF0C
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-58b0dddab63so9057144a12.3
+        for <soc@kernel.org>; Tue, 16 Jul 2024 12:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1721159610; x=1721764410; darn=kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9A04c1sCzDtDJHwgWZ25LKwlEh7gHT/ykOd5hucUk6E=;
+        b=dxv2POxXCF4bOa//6Cs6C8/ujPhtTorH7EYQTxnyFrJsWFeJGhZ9GctlaW0f1RwKSb
+         BBiRV3RLh/sLs9Wpceks7bMhtxM9EZo/PhaoUXA7lqhLCQHhUNoGLUQmn1JMQeuOcc21
+         VkWcfa4e/GkR6AkOVCDfrXPQ92lurK3I9SPJU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721159610; x=1721764410;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9A04c1sCzDtDJHwgWZ25LKwlEh7gHT/ykOd5hucUk6E=;
+        b=v1bG122gcHD2VyRSWf7UhOgiqLa22Zn8znu2CHMN+iF0vN749jkxqEe8sKr8zvb61/
+         WhdrI/GTnhnY2rnC77nKuvreb2YV3ftzI1Y3VybAn8Owxry2xn97rzxtAXi4uMzVofiM
+         2AxYEI47Xgw5ZytngkdjqEFqgpHvzF62NHYGPp7XIX91kxn7brhZN7tJ+TP6mfVqCMP5
+         ONqD7iyDMVpC8smQoWio5S0zjgX+7TEQp8sK0zAUbct553/t3V59554vMpTZSZXQs2FB
+         xcmHSybuZuCBpeHyFMpkgGzKuOR1NGVJutqZxDAQ/lzNPFSImm5ymLn84gmrg9Erx9s/
+         88kw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZxlGyyE4N72KsJ5sAVlY9eT5TCQ2lnt7TyO+BYFg4HluwAHz74IV4Oz+8Wi3/MVt5xvT/NwzGhHpYUALpyQ==
+X-Gm-Message-State: AOJu0YyfHE/WrvkDIMmuQFtBDafKF/ghkX5X8v7bZnhOh+foAVufizfR
+	cqlX8VR6iTX8/eqVv8iEwXNKgsLeQuuMkM4rcBc8oCsUYVMkFl9g65TAsDO6v/No7n+hrr9MXgc
+	WADeBzw==
+X-Google-Smtp-Source: AGHT+IFSm4UcPC8E4rFRxhq4XsVYLf21GJ6dJBKXUjt1LVe3Q+VizTo/UVryIDTdYI3t6kpOvj4KSA==
+X-Received: by 2002:a17:907:1701:b0:a77:c26c:a56e with SMTP id a640c23a62f3a-a79eaa3f2f3mr220928966b.45.1721159610029;
+        Tue, 16 Jul 2024 12:53:30 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a79bc5a3a21sm359856566b.18.2024.07.16.12.53.29
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jul 2024 12:53:29 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-58b0dddab63so9057108a12.3
+        for <soc@kernel.org>; Tue, 16 Jul 2024 12:53:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWGWp00Un2KbIoNaXLupmxrXYwF4NQNAoj4DKEl5BvwH04rBVA9jy/jIJUSJ2qaHf8RibPWY/Y48ES3ydGaIQ==
+X-Received: by 2002:a17:906:2409:b0:a6f:c268:ff2e with SMTP id
+ a640c23a62f3a-a79ea3d7952mr224501066b.5.1721159609118; Tue, 16 Jul 2024
+ 12:53:29 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <ed757bc4-38ba-420a-9da8-d7de1f1123f6@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=whp2O+NjOXf77hfATgEe-LHTefbFb0eR=ytQUJTOUnfdQ@mail.gmail.com>
-References: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com>
- <b55b7bb8-97b6-4d25-9592-8213ecfe7b6c@app.fastmail.com>
- <CAHk-=whp2O+NjOXf77hfATgEe-LHTefbFb0eR=ytQUJTOUnfdQ@mail.gmail.com>
-Date: Tue, 16 Jul 2024 21:33:42 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+References: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com> <1df9dda1-1f40-4e13-b79b-350690295ab5@app.fastmail.com>
+In-Reply-To: <1df9dda1-1f40-4e13-b79b-350690295ab5@app.fastmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 16 Jul 2024 12:53:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg+38EHPKGou1MqXwAAXC30cM8sMgZAGnZ7TcFO4L9J2w@mail.gmail.com>
+Message-ID: <CAHk-=wg+38EHPKGou1MqXwAAXC30cM8sMgZAGnZ7TcFO4L9J2w@mail.gmail.com>
+Subject: Re: [GIT PULL 1/4] soc: driver updates for 6.11
+To: Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@kernel.org, "Stephen Boyd" <sboyd@kernel.org>,
- "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
- "Luo Jie" <quic_luoj@quicinc.com>, "Bjorn Andersson" <andersson@kernel.org>,
- "Jagadeesh Kona" <quic_jkona@quicinc.com>
-Subject: Re: [GIT PULL 2/4] soc: dt updates for 6.11
-Content-Type: text/plain
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	soc@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 16, 2024, at 20:55, Linus Torvalds wrote:
-> On Mon, 15 Jul 2024 at 14:03, Arnd Bergmann <arnd@arndb.de> wrote:
-> And no, this is not some kind of merge mistake of mine. It was wrong
-> in your tree.
+On Mon, 15 Jul 2024 at 13:59, Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> qcom_cc_really_probe() has always taken a
->
->     struct platform_device *pdev
->
-> as the first argument, not a "struct device *". So the "&pdev->dev"
-> thing is completely wrong, and always has been.
->
-> Looking around, this was also reported by the kernel test robot at
->
->     https://lore.kernel.org/all/202407072331.baglL4Sd-lkp@intel.com/
->     https://lore.kernel.org/all/202407072212.WptVaUDt-lkp@intel.com/
->
-> and still I had to just notice it in my local build test.
->
-> I did fix it up, but this is *not* ok.
+> soc: driver updates for 6.11
 
-I'm very sorry about this. I had missed the extra driver slipping
-in with the qcom DT patches at first and then failed to build test
-the dt branch standalone even after I realized it was there.
+Christ people, am I the only one actually testing any of this?
 
-I see that the interface change is in
-git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git#clk-next,
-which also contains the commit with the driver. This means you'll
-probably have to revert your fix once you merge that branch.
+> Bartosz Golaszewski (14):
+>       firmware: qcom: add a dedicated TrustZone buffer allocator
 
-Apparently the new driver was tested by the authors based on the
-other changes that are in the clk tree, but committed on a branch
-that didn't have them.
+This causes me to get a new and COMPLETELY NONSENSICAL question on my
+regular AMD Threadripper workstation config.
 
-       Arnd
+I'm getting quite fed up with all the constant complete disregard for
+any sanity in Kconfig files. People are putting in COMPLETE GARBAGE
+here, and apparently nobody bothers to test it for any kind of sanity.
+
+This kind of crap needs to stop.
+
+I think the fix is to just add a
+
+        depends on QCOM_TZMEM
+
+to that thing, but on my Altra machine even that doesn't fix this
+horror, because it turns out that everybody and their dog ends up
+doing
+
+        select QCOM_SCM
+
+and we have QCOM_SCM doing
+
+        select QCOM_TZMEM
+
+so it's hard as hell to actually get rid of that pointless churn,
+because you have to figure out which random driver ends up allegedly
+"needing" this.
+
+Are any of these actually _needed_? Because while I like automatic
+"select" things just picking the infrastructure that a driver actually
+requires to work, this all does *NOT* smell like "required
+infrastructure".
+
+This smells like random "do you actually want this?" to me.
+
+And the answer is "No. No I damn well do not". Particularly on my AMD
+machine that most definitely does not have some Qualcomm TrustZone
+thing.
+
+                Linus
