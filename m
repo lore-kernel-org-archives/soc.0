@@ -1,54 +1,121 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=+sRa=OQ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23A0C3DA60
-	for <soc@archiver.kernel.org>; Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 280E7C3DA49
+	for <soc@archiver.kernel.org>; Tue, 16 Jul 2024 19:34:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BDE86C4AF0B; Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CF9BC4AF0E;
-	Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721157945;
-	bh=wawwoVnqXSTkbxDGnOxhcF25rvPRt4nf5m6BFiizgwM=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=lCgfxJQntHOlbBqJULBUjhY/QKpiQE+4rpcGGqq6mgsmRr1w4QEeh87InOxNPVYf4
-	 UCdsmlXT+8mbMl3tN45dOkJ8YkbyjfrU9VqKOEOt57zeMmntKC/BDD4up9z/zgNAAJ
-	 evVOEybtzr8k917RQU/Vj1jvZ9DfW1hjIolbi9c+/+syrTTyumTdtnTwTQ+oXByI4j
-	 ZN5rMXhyHTQ10FNz+FEHbCxA4bZmjdC/sozJwIRQ14C+H3PlHrNXRmFrjZ3sGvhx/e
-	 CvSZFRyuxSmJb5zb/XGy1IWR3aeJoi3p9nkUgzvhT1H9eKSSG9+svL9zt2Gr8WI2g4
-	 4rhzegm2KvXZA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 87463C43443;
-	Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
-Subject: Re: [GIT PULL 3/4] soc: defconfig updates for 6.11
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <e94c0a1a-6e04-4ecb-8985-779c53fd7fc8@app.fastmail.com>
-References: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com> <e94c0a1a-6e04-4ecb-8985-779c53fd7fc8@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <e94c0a1a-6e04-4ecb-8985-779c53fd7fc8@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.11
-X-PR-Tracked-Commit-Id: 05a01ce77349f60b8f8d8b09df4e02a99d1f16df
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a9a4cd9c3397109c2799cb765ab0d3959831a248
-Message-Id: <172115794554.10577.5758621467230822605.pr-tracker-bot@kernel.org>
-Date: Tue, 16 Jul 2024 19:25:45 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id EA208C4AF0B; Tue, 16 Jul 2024 19:34:06 +0000 (UTC)
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 63BFFC116B1;
+	Tue, 16 Jul 2024 19:34:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 63BFFC116B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 62A6A1147E87;
+	Tue, 16 Jul 2024 15:34:04 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 16 Jul 2024 15:34:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1721158444; x=1721244844; bh=TDhL7S6Al9
+	iAbakQeQjPClMt67S4P0lNtZj45Ka2TjQ=; b=msNMRdePPF0EUzw9LOCRUHrmUf
+	+dWOu9O0qWbuu3E5zUuIYkHSD+gTUVp4Ut+8jmxu1JtWe7c1xgaBAL/e9TiO0qIj
+	whBTsm6rqVMvy6qD0pZu8sDEVlipOB2PUZrfQc8yelKBON+3mo+Ehf0xb60hmH5u
+	KTPdZ8D99kxK5JE6rfQO98ThUlCt1MwPaE7Nqtil76Hvf2NKd996uI2wxsF0wk40
+	Sf8BawuDW+LEnMrnTsbA9ongACYEbjqXNA8+lEdojw9szbwFa5XmLC3E9IorHQ+k
+	oaCxiexquDCw2++jqGu0HzXrNK1JEF2R6HPqoS/QZSsgum8zqWPoYCESJNUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1721158444; x=1721244844; bh=TDhL7S6Al9iAbakQeQjPClMt67S4
+	P0lNtZj45Ka2TjQ=; b=UWt+sROdxCrpFjh1ROym4vgbgF0M3BHNO+93ac2xb+np
+	PozmzaYSH1AcaBqA/4qP0+8HhfXeo3t1Wub2IHECfWMiqQnIrvG+2XzT6brx3aE0
+	VyMUXxKZ+6VV9I/BaD3dk47dWtXm3UnwFoPXRXi4aa+PAkBFwXSSkjbq2MiJgUGD
+	AC4/LkZ3cqAj98pGZiqr99jBGArlUrSZjeWqsDb+E8WBEBBjqlUyZILFRzh8EZ/q
+	kqiADoRhrL0GiH6DSG1vrEr3bf9G7hQOiR5R4J/Rhywcq73Pg+VzZoIVxq2xwozJ
+	HbiCOP/BJ5P+dKEg2P+NcpO0qM1q4c15tZENR92EbA==
+X-ME-Sender: <xms:K8uWZrS0WXGRV2EPDyBi6c5vdHOY5uGlFxBND_cAGZngBnv-r7BGFQ>
+    <xme:K8uWZszEcdGPt3tmWfPFl9byezIy-6K_r-NFhO_n4OrAqUx2CzGeRwI2sJox6sJoK
+    f39KFSGvag2Ll9Nf_A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeeggddufeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:K8uWZg1rsK_k1Km6SMvauBroojqEBZ9U_QXe9G0ujqjBCAgJIWAT6A>
+    <xmx:K8uWZrCuKomsxRoULawVwljE5fazPwixas9ZJU2y-Q2FhegM2Q87jg>
+    <xmx:K8uWZkhFoqYC6nyQkyfF9Mljeq6AZw2Rw2py_9UFUHSS0Uyq868QSw>
+    <xmx:K8uWZvrLnIzzT8jd0E3yebSTeB7hkl4sPSQKHxpB1SqBXae801wbvA>
+    <xmx:LMuWZtUwNJb6MByqtpvYsP68ZQjFjt6lMVeDJZ3YxuwJoRpnqhKx42b6>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 27D48B6008D; Tue, 16 Jul 2024 15:34:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+MIME-Version: 1.0
+Message-Id: <ed757bc4-38ba-420a-9da8-d7de1f1123f6@app.fastmail.com>
+In-Reply-To: 
+ <CAHk-=whp2O+NjOXf77hfATgEe-LHTefbFb0eR=ytQUJTOUnfdQ@mail.gmail.com>
+References: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com>
+ <b55b7bb8-97b6-4d25-9592-8213ecfe7b6c@app.fastmail.com>
+ <CAHk-=whp2O+NjOXf77hfATgEe-LHTefbFb0eR=ytQUJTOUnfdQ@mail.gmail.com>
+Date: Tue, 16 Jul 2024 21:33:42 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@kernel.org, "Stephen Boyd" <sboyd@kernel.org>,
+ "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+ "Luo Jie" <quic_luoj@quicinc.com>, "Bjorn Andersson" <andersson@kernel.org>,
+ "Jagadeesh Kona" <quic_jkona@quicinc.com>
+Subject: Re: [GIT PULL 2/4] soc: dt updates for 6.11
+Content-Type: text/plain
 
-The pull request you sent on Mon, 15 Jul 2024 23:11:35 +0200:
+On Tue, Jul 16, 2024, at 20:55, Linus Torvalds wrote:
+> On Mon, 15 Jul 2024 at 14:03, Arnd Bergmann <arnd@arndb.de> wrote:
+> And no, this is not some kind of merge mistake of mine. It was wrong
+> in your tree.
+>
+> qcom_cc_really_probe() has always taken a
+>
+>     struct platform_device *pdev
+>
+> as the first argument, not a "struct device *". So the "&pdev->dev"
+> thing is completely wrong, and always has been.
+>
+> Looking around, this was also reported by the kernel test robot at
+>
+>     https://lore.kernel.org/all/202407072331.baglL4Sd-lkp@intel.com/
+>     https://lore.kernel.org/all/202407072212.WptVaUDt-lkp@intel.com/
+>
+> and still I had to just notice it in my local build test.
+>
+> I did fix it up, but this is *not* ok.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.11
+I'm very sorry about this. I had missed the extra driver slipping
+in with the qcom DT patches at first and then failed to build test
+the dt branch standalone even after I realized it was there.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a9a4cd9c3397109c2799cb765ab0d3959831a248
+I see that the interface change is in
+git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git#clk-next,
+which also contains the commit with the driver. This means you'll
+probably have to revert your fix once you merge that branch.
 
-Thank you!
+Apparently the new driver was tested by the authors based on the
+other changes that are in the clk tree, but committed on a branch
+that didn't have them.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+       Arnd
