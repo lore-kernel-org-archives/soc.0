@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA5FC3DA49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23A0C3DA60
 	for <soc@archiver.kernel.org>; Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C1963C4AF0D; Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB6D9C4AF13;
+	id BDE86C4AF0B; Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CF9BC4AF0E;
 	Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1721157945;
-	bh=4xjswKjKrPe/tRWllYqFYjWaAmqJzIQeB8IXiZqGgw0=;
+	bh=wawwoVnqXSTkbxDGnOxhcF25rvPRt4nf5m6BFiizgwM=;
 	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=XsUdog+Dif69MSO1AEb3kKUAR6tSMBxCfMzL+v/Q0awm4keqpacHszkVgNa3tTUOA
-	 3zKAci0r52rpjBMq1HwWEI45+Gm0lofHM5RLDr3IdXoAJeFOiwfN1RvWofNCzUQ67a
-	 eTh/4ipUE8cwwDdXAwnuIPZPOCc3plY5WkAbpJkB9hmH9WGDEo0LG5Q4n9SdcOI1wJ
-	 ioj0LgvmS2NmBPNqGOLXsqlhTnjay/5mhxzy0Ftojy1B43l0tkpZmsAbxhF6Ogokxr
-	 0TIbNgTtDEiZw7GZ3JwoTPdbE9/OOS5asYcjD6GQcM/18wVZbt4oGqLoL8pUKc1Oj5
-	 TBQMfMzzWTsoQ==
+	b=lCgfxJQntHOlbBqJULBUjhY/QKpiQE+4rpcGGqq6mgsmRr1w4QEeh87InOxNPVYf4
+	 UCdsmlXT+8mbMl3tN45dOkJ8YkbyjfrU9VqKOEOt57zeMmntKC/BDD4up9z/zgNAAJ
+	 evVOEybtzr8k917RQU/Vj1jvZ9DfW1hjIolbi9c+/+syrTTyumTdtnTwTQ+oXByI4j
+	 ZN5rMXhyHTQ10FNz+FEHbCxA4bZmjdC/sozJwIRQ14C+H3PlHrNXRmFrjZ3sGvhx/e
+	 CvSZFRyuxSmJb5zb/XGy1IWR3aeJoi3p9nkUgzvhT1H9eKSSG9+svL9zt2Gr8WI2g4
+	 4rhzegm2KvXZA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A03AFC43445;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 87463C43443;
 	Tue, 16 Jul 2024 19:25:45 +0000 (UTC)
-Subject: Re: [GIT PULL 4/4] soc: arm platform updates for 6.11
+Subject: Re: [GIT PULL 3/4] soc: defconfig updates for 6.11
 From: pr-tracker-bot@kernel.org
-In-Reply-To: <6e920ecb-384d-4fca-988d-fd3380c2daed@app.fastmail.com>
-References: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com> <6e920ecb-384d-4fca-988d-fd3380c2daed@app.fastmail.com>
+In-Reply-To: <e94c0a1a-6e04-4ecb-8985-779c53fd7fc8@app.fastmail.com>
+References: <fe3126a0-7c32-426a-9997-77d76ade5179@app.fastmail.com> <e94c0a1a-6e04-4ecb-8985-779c53fd7fc8@app.fastmail.com>
 X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <6e920ecb-384d-4fca-988d-fd3380c2daed@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.11
-X-PR-Tracked-Commit-Id: dead06c5e110c25931bafc8cf017e3077b871ac5
+X-PR-Tracked-Message-Id: <e94c0a1a-6e04-4ecb-8985-779c53fd7fc8@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.11
+X-PR-Tracked-Commit-Id: 05a01ce77349f60b8f8d8b09df4e02a99d1f16df
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a5db8e4544a4dc7143f30a1438686a4d5fa6d775
-Message-Id: <172115794565.10577.13848078673989818961.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: a9a4cd9c3397109c2799cb765ab0d3959831a248
+Message-Id: <172115794554.10577.5758621467230822605.pr-tracker-bot@kernel.org>
 Date: Tue, 16 Jul 2024 19:25:45 +0000
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@kernel.org
 
-The pull request you sent on Mon, 15 Jul 2024 23:12:14 +0200:
+The pull request you sent on Mon, 15 Jul 2024 23:11:35 +0200:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.11
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.11
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a5db8e4544a4dc7143f30a1438686a4d5fa6d775
+https://git.kernel.org/torvalds/c/a9a4cd9c3397109c2799cb765ab0d3959831a248
 
 Thank you!
 
