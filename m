@@ -1,546 +1,198 @@
-Return-Path: <SRS0=OPox=OS=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=C7v2=OS=microchip.com=prvs=922ab42b8=Conor.Dooley@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C714CC3DA49
-	for <soc@archiver.kernel.org>; Thu, 18 Jul 2024 07:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C23C3DA49
+	for <soc@archiver.kernel.org>; Thu, 18 Jul 2024 07:22:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B8776C4AF0B; Thu, 18 Jul 2024 07:20:57 +0000 (UTC)
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+	id 3CD96C4AF10; Thu, 18 Jul 2024 07:22:26 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7DEF2C116B1
-	for <soc@kernel.org>; Thu, 18 Jul 2024 07:20:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7DEF2C116B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4WPkgw5BjHz20lS9;
-	Thu, 18 Jul 2024 15:19:08 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0420C14035F;
-	Thu, 18 Jul 2024 15:20:48 +0800 (CST)
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 18 Jul 2024 15:20:47 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <xuwei5@hisilicon.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4D8B0C4AF0B;
+	Thu, 18 Jul 2024 07:22:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D8B0C4AF0B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1721287345; x=1752823345;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1lxmhtYpS/88pIYbRToQWF25tT8jA2XwSvzGR+ZqkO0=;
+  b=NcBO4+fkDnwo1bnYwopqiBhUWMQHbuzP4AdCm0+sRMWtFM4A7hofrHO9
+   p9e0kVmidI9XAECMfVuh6GkeAYbSWCxXkAbpntBm7Fq0jfWxlmB1jyDfJ
+   WVOH7nHQNh7Sd7E6ysIi4mVfGIr622Xem77GJ8M/MfACXPia06bPMtLIt
+   bPRYxiAEl7ZRB0jr+b+kwWfCsH+Pj1AnsFZeBKeXHzTVXtDH8/WSGQBEf
+   ojY60PwWTz6CS7UsQxQMbTCd3hnBPFzGPppV6fgx+uSxar5EjtcnO3zpi
+   mknnzIwIuxUorYvvIrj9Hf4RbHi5fgS2BTzcuNCRlln0727XlHJRXAad/
+   Q==;
+X-CSE-ConnectionGUID: oLjE02PpTBywYQTZMe8uCQ==
+X-CSE-MsgGUID: CkM2LwxjS12RAdf3DGg8qg==
+X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
+   d="asc'?scan'208";a="260279899"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Jul 2024 00:22:23 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 18 Jul 2024 00:21:42 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 18 Jul 2024 00:21:41 -0700
+Date: Thu, 18 Jul 2024 08:21:18 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Chen Wang <unicorn_wang@outlook.com>
 List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <Jonathan.Cameron@Huawei.com>,
-	<liuyonglong@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH 4/5] soc: hisilicon: kunpeng_hccs: support low power feature for specified HCCS
-Date: Thu, 18 Jul 2024 15:11:33 +0800
-Message-ID: <20240718071134.31155-5-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20240718071134.31155-1-lihuisong@huawei.com>
-References: <20240718071134.31155-1-lihuisong@huawei.com>
+CC: Conor Dooley <conor@kernel.org>, Inochi Amaoto <inochiama@outlook.com>,
+	<soc@kernel.org>
+Subject: Re: Fwd: [soc:sophgo/dt 1/1]
+ arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10: fatal error:
+ 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
+Message-ID: <20240718-unworn-showbiz-2fb68210b43a@wendy>
+References: <20240717143016.GA94990@thelio-3990X>
+ <MA0P287MB2822CE874640F2525DF59712FEAC2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.28.79.22]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600004.china.huawei.com (7.193.23.242)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="xbuLj/oQapO6I27o"
+Content-Disposition: inline
+In-Reply-To: <MA0P287MB2822CE874640F2525DF59712FEAC2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
 
-This patch add the low power feature for specified HCCS by increasing
-and decrasing the lane number of these HCCS ports on platform.
+--xbuLj/oQapO6I27o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/soc/hisilicon/Kconfig        |   7 +-
- drivers/soc/hisilicon/kunpeng_hccs.c | 377 ++++++++++++++++++++++++++-
- drivers/soc/hisilicon/kunpeng_hccs.h |  14 +
- 3 files changed, 394 insertions(+), 4 deletions(-)
+On Thu, Jul 18, 2024 at 08:49:33AM +0800, Chen Wang wrote:
+>=20
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e content is safe
+>=20
+> hi, Conor,
+>=20
+> Do you have any good suggestion on this?
+>=20
+> DTS changes are submitted through Arnd, clk driver changes are PRed
+> through Stephen. DTS sometimes depends on driver/bindings, when this
+> happend, how to avoid the syncronization issues when merging into upstrea=
+m?
+>=20
+> Actually, I have seen a simiar issue on reset driver before, but this
+> problem occurred again on clocks.
 
-diff --git a/drivers/soc/hisilicon/Kconfig b/drivers/soc/hisilicon/Kconfig
-index 4b0a099b28cc..6d7c244d2e78 100644
---- a/drivers/soc/hisilicon/Kconfig
-+++ b/drivers/soc/hisilicon/Kconfig
-@@ -13,9 +13,12 @@ config KUNPENG_HCCS
- 	  interconnection bus protocol.
- 	  The performance of application may be affected if some HCCS
- 	  ports are not in full lane status, have a large number of CRC
--	  errors and so on.
-+	  errors and so on. This may support for reducing system power
-+	  consumption if there are HCCS ports supported low power feature
-+	  on platform.
- 
- 	  Say M here if you want to include support for querying the
--	  health status and port information of HCCS on Kunpeng SoC.
-+	  health status and port information of HCCS, or reducing system
-+	  power consumption on Kunpeng SoC.
- 
- endmenu
-diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-index 2d68ec49e1d6..97422159fa30 100644
---- a/drivers/soc/hisilicon/kunpeng_hccs.c
-+++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-@@ -23,10 +23,18 @@
-  *    - CRC error count sum
-  *
-  * - Retrieve all used HCCS types on platform.
-+ *
-+ * - Support low power feature for specified HCCS type ports, and provide the
-+ *   following interface:
-+ *    - query HCCS types supported PM
-+ *    - decreasing lanes for all specified HCCS type ports on idle status
-+ *    - increasing lanes for all specified HCCS type ports
-  */
- #include <linux/acpi.h>
-+#include <linux/delay.h>
- #include <linux/iopoll.h>
- #include <linux/platform_device.h>
-+#include <linux/stringify.h>
- #include <linux/sysfs.h>
- #include <linux/types.h>
- 
-@@ -65,6 +73,33 @@ static struct hccs_dev *device_kobj_to_hccs_dev(struct kobject *k)
- 	return platform_get_drvdata(pdev);
- }
- 
-+static char *hccs_port_type_to_name(struct hccs_dev *hdev, u8 type)
-+{
-+	u16 i;
-+
-+	for (i = 0; i < hdev->used_type_num; i++) {
-+		if (hdev->type_name_maps[i].type == type)
-+			return hdev->type_name_maps[i].name;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int hccs_name_to_port_type(struct hccs_dev *hdev,
-+				  const char *name, u8 *type)
-+{
-+	u16 i;
-+
-+	for (i = 0; i < hdev->used_type_num; i++) {
-+		if (strcmp(hdev->type_name_maps[i].name, name) == 0) {
-+			*type = hdev->type_name_maps[i].type;
-+			return 0;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
- struct hccs_register_ctx {
- 	struct device *dev;
- 	u8 chan_id;
-@@ -1193,6 +1228,309 @@ static const struct kobj_type hccs_chip_type = {
- 	.default_groups = hccs_chip_default_groups,
- };
- 
-+static int hccs_parse_pm_port_type(struct hccs_dev *hdev, const char *buf,
-+				   u8 *port_type)
-+{
-+	char hccs_name[HCCS_NAME_MAX_LEN + 1] = "";
-+	u8 type;
-+	int ret;
-+
-+	ret = sscanf(buf, "%" __stringify(HCCS_NAME_MAX_LEN) "s", hccs_name);
-+	if (ret != 1)
-+		return -EINVAL;
-+
-+	ret = hccs_name_to_port_type(hdev, hccs_name, &type);
-+	if (ret) {
-+		dev_err(hdev->dev, "input invalid, please get the available types from 'used_types'.\n");
-+		return ret;
-+	}
-+
-+	if (type == HCCS_V2 && hdev->caps & HCCS_CAPS_HCCS_V2_PM) {
-+		*port_type = type;
-+		return 0;
-+	}
-+
-+	dev_err(hdev->dev, "%s doesn't support for increasing and decreasing lane.\n",
-+		hccs_name);
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int hccs_query_port_idle_status(struct hccs_dev *hdev,
-+				       struct hccs_port_info *port, u8 *idle)
-+{
-+	const struct hccs_die_info *die = port->die;
-+	const struct hccs_chip_info *chip = die->chip;
-+	struct hccs_port_comm_req_param *req_param;
-+	struct hccs_desc desc;
-+	int ret;
-+
-+	hccs_init_req_desc(&desc);
-+	req_param = (struct hccs_port_comm_req_param *)desc.req.data;
-+	req_param->chip_id = chip->chip_id;
-+	req_param->die_id = die->die_id;
-+	req_param->port_id = port->port_id;
-+	ret = hccs_pcc_cmd_send(hdev, HCCS_GET_PORT_IDLE_STATUS, &desc);
-+	if (ret) {
-+		dev_err(hdev->dev,
-+			"get port idle status failed, ret = %d.\n", ret);
-+		return ret;
-+	}
-+
-+	*idle = *((u8 *)desc.rsp.data);
-+	return 0;
-+}
-+
-+static int hccs_get_all_spec_port_idle_sta(struct hccs_dev *hdev, u8 port_type,
-+					   bool *all_idle)
-+{
-+	struct hccs_chip_info *chip;
-+	struct hccs_port_info *port;
-+	struct hccs_die_info *die;
-+	int ret = 0;
-+	u8 i, j, k;
-+	u8 idle;
-+
-+	*all_idle = false;
-+	for (i = 0; i < hdev->chip_num; i++) {
-+		chip = &hdev->chips[i];
-+		for (j = 0; j < chip->die_num; j++) {
-+			die = &chip->dies[j];
-+			for (k = 0; k < die->port_num; k++) {
-+				port = &die->ports[k];
-+				if (port->port_type != port_type)
-+					continue;
-+				ret = hccs_query_port_idle_status(hdev, port,
-+								  &idle);
-+				if (ret) {
-+					dev_err(hdev->dev,
-+						"hccs%u on chip%u/die%u get idle status failed, ret = %d.\n",
-+						k, i, j, ret);
-+					return ret;
-+				} else if (idle == 0) {
-+					dev_info(hdev->dev, "hccs%u on chip%u/die%u is busy.\n",
-+						k, i, j);
-+					return 0;
-+				}
-+			}
-+		}
-+	}
-+	*all_idle = true;
-+
-+	return 0;
-+}
-+
-+static int hccs_get_all_spec_port_full_lane_sta(struct hccs_dev *hdev,
-+						u8 port_type, bool *full_lane)
-+{
-+	struct hccs_link_status status = {0};
-+	struct hccs_chip_info *chip;
-+	struct hccs_port_info *port;
-+	struct hccs_die_info *die;
-+	int ret = 0;
-+	u8 i, j, k;
-+
-+	*full_lane = false;
-+	for (i = 0; i < hdev->chip_num; i++) {
-+		chip = &hdev->chips[i];
-+		for (j = 0; j < chip->die_num; j++) {
-+			die = &chip->dies[j];
-+			for (k = 0; k < die->port_num; k++) {
-+				port = &die->ports[k];
-+				if (port->port_type != port_type)
-+					continue;
-+				ret = hccs_query_port_link_status(hdev, port,
-+								  &status);
-+				if (ret || status.lane_num != port->lane_mode)
-+					goto out;
-+			}
-+		}
-+	}
-+	*full_lane = true;
-+
-+out:
-+	return ret;
-+}
-+
-+static int hccs_prepare_inc_lane(struct hccs_dev *hdev, u8 type)
-+{
-+	struct hccs_inc_lane_req_param *req_param;
-+	struct hccs_desc desc;
-+	int ret;
-+
-+	hccs_init_req_desc(&desc);
-+	req_param = (struct hccs_inc_lane_req_param *)desc.req.data;
-+	req_param->port_type = type;
-+	req_param->opt_type = HCCS_PREPARE_INC_LANE;
-+	ret = hccs_pcc_cmd_send(hdev, HCCS_PM_INC_LANE, &desc);
-+	if (ret)
-+		dev_err(hdev->dev, "prepare for increasing lane failed, ret = %d.\n",
-+			ret);
-+
-+	return ret;
-+}
-+
-+static int hccs_wait_serdes_adapt_completed(struct hccs_dev *hdev, u8 type)
-+{
-+#define HCCS_MAX_WAIT_CNT_FOR_ADAPT	10
-+#define HCCS_QUERY_ADAPT_RES_DELAY_MS	100
-+#define HCCS_SERDES_ADAPT_OK		0
-+
-+	struct hccs_inc_lane_req_param *req_param;
-+	u8 wait_cnt = HCCS_MAX_WAIT_CNT_FOR_ADAPT;
-+	struct hccs_desc desc;
-+	u8 adapt_res;
-+	int ret;
-+
-+	do {
-+		hccs_init_req_desc(&desc);
-+		req_param = (struct hccs_inc_lane_req_param *)desc.req.data;
-+		req_param->port_type = type;
-+		req_param->opt_type = HCCS_GET_ADAPT_RES;
-+		ret = hccs_pcc_cmd_send(hdev, HCCS_PM_INC_LANE, &desc);
-+		if (ret) {
-+			dev_err(hdev->dev, "query adapting result failed, ret = %d.\n",
-+				ret);
-+			return ret;
-+		}
-+		adapt_res = *((u8 *)&desc.rsp.data);
-+		if (adapt_res == HCCS_SERDES_ADAPT_OK)
-+			break;
-+
-+		msleep(HCCS_QUERY_ADAPT_RES_DELAY_MS);
-+	} while (--wait_cnt);
-+
-+	if (adapt_res != HCCS_SERDES_ADAPT_OK) {
-+		dev_err(hdev->dev, "wait for adapting completed timeout.\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	return ret;
-+}
-+
-+static int hccs_start_hpcs_retraining(struct hccs_dev *hdev, u8 type)
-+{
-+	struct hccs_inc_lane_req_param *req_param;
-+	struct hccs_desc desc;
-+	int ret;
-+
-+	hccs_init_req_desc(&desc);
-+	req_param = (struct hccs_inc_lane_req_param *)desc.req.data;
-+	req_param->port_type = type;
-+	req_param->opt_type = HCCS_START_RETRAINING;
-+	ret = hccs_pcc_cmd_send(hdev, HCCS_PM_INC_LANE, &desc);
-+	if (ret)
-+		dev_err(hdev->dev, "start hpcs retraining failed, ret = %d.\n",
-+			ret);
-+
-+	return ret;
-+}
-+
-+static int hccs_start_inc_lane(struct hccs_dev *hdev, u8 type)
-+{
-+	int ret;
-+
-+	ret = hccs_prepare_inc_lane(hdev, type);
-+	if (ret)
-+		return ret;
-+
-+	ret = hccs_wait_serdes_adapt_completed(hdev, type);
-+	if (ret)
-+		return ret;
-+
-+	return hccs_start_hpcs_retraining(hdev, type);
-+}
-+
-+static int hccs_start_dec_lane(struct hccs_dev *hdev, u8 type)
-+{
-+	struct hccs_desc desc;
-+	u8 *port_type;
-+	int ret;
-+
-+	hccs_init_req_desc(&desc);
-+	port_type = (u8 *)desc.req.data;
-+	*port_type = type;
-+	ret = hccs_pcc_cmd_send(hdev, HCCS_PM_DEC_LANE, &desc);
-+	if (ret)
-+		dev_err(hdev->dev, "start to decrease lane failed, ret = %d.\n",
-+			ret);
-+
-+	return ret;
-+}
-+
-+static ssize_t dec_lane_store(struct kobject *kobj, struct kobj_attribute *attr,
-+			      const char *buf, size_t count)
-+{
-+	struct hccs_dev *hdev = device_kobj_to_hccs_dev(kobj);
-+	u8 port_type;
-+	bool all_in_idle;
-+	int ret;
-+
-+	ret = hccs_parse_pm_port_type(hdev, buf, &port_type);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&hdev->lock);
-+	ret = hccs_get_all_spec_port_idle_sta(hdev, port_type, &all_in_idle);
-+	if (ret)
-+		goto out;
-+	else if (!all_in_idle) {
-+		ret = -EOPNOTSUPP;
-+		dev_err(hdev->dev, "please don't decrese lanes on high load with %s, ret = %d.\n",
-+			hccs_port_type_to_name(hdev, port_type), ret);
-+		goto out;
-+	}
-+	ret = hccs_start_dec_lane(hdev, port_type);
-+out:
-+	mutex_unlock(&hdev->lock);
-+
-+	return ret == 0 ? count : ret;
-+}
-+static struct kobj_attribute dec_lane_attr =
-+		__ATTR(dec_lane, 0200, NULL, dec_lane_store);
-+
-+static ssize_t inc_lane_store(struct kobject *kobj, struct kobj_attribute *attr,
-+			      const char *buf, size_t count)
-+{
-+	struct hccs_dev *hdev = device_kobj_to_hccs_dev(kobj);
-+	bool full_lane;
-+	u8 port_type;
-+	int ret;
-+
-+	ret = hccs_parse_pm_port_type(hdev, buf, &port_type);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&hdev->lock);
-+	ret = hccs_get_all_spec_port_full_lane_sta(hdev, port_type, &full_lane);
-+	if (ret || full_lane)
-+		goto out;
-+
-+	ret = hccs_start_inc_lane(hdev, port_type);
-+out:
-+	mutex_unlock(&hdev->lock);
-+	return ret == 0 ? count : ret;
-+}
-+static struct kobj_attribute inc_lane_attr =
-+		__ATTR(inc_lane, 0200, NULL, inc_lane_store);
-+
-+static ssize_t support_pm_types_show(struct kobject *kobj,
-+				     struct kobj_attribute *attr,
-+				     char *buf)
-+{
-+	struct hccs_dev *hdev = device_kobj_to_hccs_dev(kobj);
-+	int len = 0;
-+
-+	if (hdev->caps & HCCS_CAPS_HCCS_V2_PM)
-+		len += sysfs_emit(buf, "%s\n",
-+				    hccs_port_type_to_name(hdev, HCCS_V2));
-+	else
-+		len += sysfs_emit(buf, "%s\n", "none");
-+
-+	return len;
-+}
-+static struct kobj_attribute pm_types_attr =
-+		__ATTR(support_pm_types, 0444, support_pm_types_show, NULL);
- 
- static ssize_t used_types_show(struct kobject *kobj,
- 			       struct kobj_attribute *attr, char *buf)
-@@ -1213,11 +1551,46 @@ static struct kobj_attribute used_types_attr =
- static void hccs_remove_misc_sysfs(struct hccs_dev *hdev)
- {
- 	sysfs_remove_file(&hdev->dev->kobj, &used_types_attr.attr);
-+	sysfs_remove_file(&hdev->dev->kobj, &pm_types_attr.attr);
-+
-+	if (!(hdev->caps & HCCS_CAPS_HCCS_V2_PM))
-+		return;
-+
-+	sysfs_remove_file(&hdev->dev->kobj, &dec_lane_attr.attr);
-+	sysfs_remove_file(&hdev->dev->kobj, &inc_lane_attr.attr);
- }
- 
- static int hccs_add_misc_sysfs(struct hccs_dev *hdev)
- {
--	return sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
-+	int ret;
-+
-+	ret = sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
-+	if (ret)
-+		return ret;
-+
-+	ret = sysfs_create_file(&hdev->dev->kobj, &pm_types_attr.attr);
-+	if (ret)
-+		goto used_types_remove;
-+
-+	if (!(hdev->caps & HCCS_CAPS_HCCS_V2_PM))
-+		return 0;
-+
-+	ret = sysfs_create_file(&hdev->dev->kobj, &dec_lane_attr.attr);
-+	if (ret)
-+		goto pm_types_remove;
-+	ret = sysfs_create_file(&hdev->dev->kobj, &inc_lane_attr.attr);
-+	if (ret)
-+		goto dec_lane_remove;
-+
-+	return 0;
-+
-+dec_lane_remove:
-+	sysfs_remove_file(&hdev->dev->kobj, &dec_lane_attr.attr);
-+pm_types_remove:
-+	sysfs_remove_file(&hdev->dev->kobj, &pm_types_attr.attr);
-+used_types_remove:
-+	sysfs_remove_file(&hdev->dev->kobj, &used_types_attr.attr);
-+	return ret;
- }
- 
- static void hccs_remove_die_dir(struct hccs_die_info *die)
-@@ -1353,7 +1726,7 @@ static int hccs_create_topo_dirs(struct hccs_dev *hdev)
- 
- 	ret = hccs_add_misc_sysfs(hdev);
- 	if (ret) {
--		dev_err(hdev->dev, "create global sysfs interface failed, ret = %d\n", ret);
-+		dev_err(hdev->dev, "create misc sysfs interface failed, ret = %d\n", ret);
- 		goto err;
- 	}
- 
-diff --git a/drivers/soc/hisilicon/kunpeng_hccs.h b/drivers/soc/hisilicon/kunpeng_hccs.h
-index fe8b4089a9c7..6e2f7383c9a0 100644
---- a/drivers/soc/hisilicon/kunpeng_hccs.h
-+++ b/drivers/soc/hisilicon/kunpeng_hccs.h
-@@ -80,10 +80,13 @@ struct hccs_verspecific_data {
- 	bool has_txdone_irq;
- };
- 
-+#define HCCS_CAPS_HCCS_V2_PM	BIT_ULL(0)
-+
- struct hccs_dev {
- 	struct device *dev;
- 	struct acpi_device *acpi_dev;
- 	const struct hccs_verspecific_data *verspec_data;
-+	/* device capabilities from firmware, like HCCS_CAPS_xxx. */
- 	u64 caps;
- 	u8 chip_num;
- 	struct hccs_chip_info *chips;
-@@ -106,6 +109,9 @@ enum hccs_subcmd_type {
- 	HCCS_GET_DIE_PORTS_LANE_STA,
- 	HCCS_GET_DIE_PORTS_LINK_STA,
- 	HCCS_GET_DIE_PORTS_CRC_ERR_CNT,
-+	HCCS_GET_PORT_IDLE_STATUS,
-+	HCCS_PM_DEC_LANE,
-+	HCCS_PM_INC_LANE,
- 	HCCS_SUB_CMD_MAX = 255,
- };
- 
-@@ -149,6 +155,14 @@ struct hccs_port_comm_req_param {
- 	u8 port_id;
- };
- 
-+#define HCCS_PREPARE_INC_LANE	1
-+#define HCCS_GET_ADAPT_RES	2
-+#define HCCS_START_RETRAINING	3
-+struct hccs_inc_lane_req_param {
-+	u8 port_type;
-+	u8 opt_type;
-+};
-+
- #define HCCS_PORT_RESET         1
- #define HCCS_PORT_SETUP         2
- #define HCCS_PORT_CONFIG        3
--- 
-2.22.0
+What I have done in this case is to apply the patches with the binding
+headers on top of a -rc tag from Linus and use that as the base for
+applying clock and dts changes. The jh7110 stuff is an example of this:
+https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=3Dri=
+scv-jh7110_clk_reset
+https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=3Dri=
+scv-jh7110_initial_dts
 
+Both of these branches share the exact same commits for the two
+bindings. I have heard that previously that may not have been acceptable
+to the soc maintainers, but so far Arnd has not complained to me about
+it (although I have only do so sparingly).
+
+There are some other approaches, that are mentioned in the soc subsystem
+maintainer document:
+https://docs.kernel.org/process/maintainer-soc.html#driver-branch-dependenc=
+ies
+
+I've added soc@kernel.org back to the CC list, so that Arnd can
+comment if he wants to.
+
+Cheers,
+Conor.
+
+> -------- Forwarded Message --------
+> Subject:        Re: [soc:sophgo/dt 1/1]
+> arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10: fatal error:
+> 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
+> Date:   Wed, 17 Jul 2024 07:30:16 -0700
+> From:   Nathan Chancellor <nathan@kernel.org>
+> To:     Chen Wang <unicorn_wang@outlook.com>
+> CC:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+> oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+> arm@kernel.org, Guo Ren <guoren@kernel.org>, arnd@arndb.de,
+> conor@kernel.org
+>=20
+>=20
+>=20
+> On Thu, Jul 11, 2024 at 07:09:48AM +0800, Chen Wang wrote:
+> > This build error is due to the changes about
+> > "dt-bindings/clock/sophgo,sg2042-clkgen.h" are still on clk-next and ha=
+ve
+> > not been merge in the master.
+>=20
+> A tree needs to build by itself, so changes like this need to be made
+> atomically. Mainline is now broken because this change went in before
+> clk-next:
+>=20
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/9=
+966522897
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/9=
+966319154
+>=20
+> Please ensure this does not happen again, it is really disruptive for
+> people who test the whole tree, especially during the merge window when
+> we are trying to catch breakage that went in without being in -next.
+>=20
+> Cheers,
+> Nathan
+>=20
+> > On 2024/7/10 18:56, kernel test robot wrote:
+> > > tree: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+> > sophgo/dt
+> > > head: b1240a39511b9206293b82ac372c5114d6e15821
+> > > commit: b1240a39511b9206293b82ac372c5114d6e15821 [1/1] riscv: dts:
+> > add clock generator for Sophgo SG2042 SoC
+> > > config: riscv-allmodconfig
+> > (https://download.01.org/0day-ci/archive/20240710/202407101850.eIQyngoV=
+-lkp@intel.com/config)
+> > > compiler: clang version 19.0.0git
+> > (https://github.com/llvm/llvm-project
+> > a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+> > > reproduce (this is a W=3D1 build):
+> > (https://download.01.org/0day-ci/archive/20240710/202407101850.eIQyngoV=
+-lkp@intel.com/reproduce)
+> > > > If you fix the issue in a separate patch/commit (i.e. not just a
+> > new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes:
+> > https://lore.kernel.org/oe-kbuild-all/202407101850.eIQyngoV-lkp@intel.c=
+om/
+> > > > All errors (new ones prefixed by >>):
+> > > > In file included from
+> > arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts:6:
+> > > > > arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10: fatal error:
+> > 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
+> > > 7 | #include <dt-bindings/clock/sophgo,sg2042-clkgen.h>
+> > > | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > 1 error generated.
+> > > > > vim +7 arch/riscv/boot/dts/sophgo/sg2042.dtsi
+> > > > > 7 #include <dt-bindings/clock/sophgo,sg2042-clkgen.h>
+> > > 8 #include <dt-bindings/clock/sophgo,sg2042-pll.h>
+> > > 9 #include <dt-bindings/clock/sophgo,sg2042-rpgate.h>
+> > > 10 #include <dt-bindings/interrupt-controller/irq.h>
+> > > 11 #include <dt-bindings/reset/sophgo,sg2042-reset.h>
+> > > 12
+> > >
+
+--xbuLj/oQapO6I27o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZpjCbgAKCRB4tDGHoIJi
+0j0jAQD6AtuKSE8ljUvYhhKAg9JWzn4d/EF8q5VWTGKDPKa4VgEAmyXOT8/BmiK/
+DWRfxrDHm3Pil6Ln1HuT4ZvV9mssQgU=
+=yk6+
+-----END PGP SIGNATURE-----
+
+--xbuLj/oQapO6I27o--
