@@ -4,27 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B46EC3DA7F
-	for <soc@archiver.kernel.org>; Fri, 26 Jul 2024 11:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B567C3DA7F
+	for <soc@archiver.kernel.org>; Fri, 26 Jul 2024 11:15:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED090C4AF0E; Fri, 26 Jul 2024 11:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3839AC32782;
-	Fri, 26 Jul 2024 11:14:48 +0000 (UTC)
+	id 433CEC4AF13; Fri, 26 Jul 2024 11:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41FE3C4AF09;
+	Fri, 26 Jul 2024 11:15:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721992496;
-	bh=Tk8a4ZNmhaQOlRMB2a7gNLvIw2k+dlvH/hQpNPuIQr4=;
+	s=k20201202; t=1721992518;
+	bh=FjhP1BmKaw1pB43Y33s8TCUw1kBylkxAqln41CYFyww=;
 	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
-	b=FqWbt93RBxXlb2Kbk/jyKvVyHi2pysbmvV4nMRTYZOCkdRTSlwzfYewRBWGW60gew
-	 FztFFcX1ButBUzXW6Q1k+3k9e3PM6KaNOuAyghMlXXabSKFDXhaKlkRmUW9Ip+GL/r
-	 kvjwFx6ImsEMGoCpTy9Zqvza2wBOUzxDRHUkTcQstsOU5rvQ/sj+msxNY0sRaf6zN1
-	 69xYbELtuQDSVR/Y5ex0BoSyV6xxHWyeoB1R5e0/oXRsfJ7UBuxb9/VQVt7ZFRprqk
-	 cWcXg70e38ZUPqWYKlGKad+9qz9N53QtS8sP6LeIoY+65RdTwkFp8w4j+sklUlgXIM
-	 i2O1eAtAWXj7w==
-Message-ID: <7f3f7255-e177-4689-a2f1-b5f3196ed1a5@kernel.org>
-Date: Fri, 26 Jul 2024 13:14:46 +0200
+	b=oybBgE4uclllQTjEqtCvyxMRPuvm7XaI0rIKcen3PDP25MbZDdK4/Dpp1edo4e8Zb
+	 WbBjlRy7l5tpjHcO9huz27znwiawYdSxd/mZ/S/OkEBPY6hnxE56eZKqvBoSbJ2zpY
+	 dHyh/KWDv0rlo/slK2b3vEX/pTCDGJLthBl5Fd2E4EqP/Z0TjNZNN/XfP4PNCO17l0
+	 r9YSv56G+Je+ThJes0uGab+qZrXQfzeQYUK5WT+IpOD+7I97KWDd/cUjwf3iuIKkkZ
+	 E0oFKwwCc89UlkltTTfIbe+6TYgAt4NnQL7bOO8oo1ogqVycKmrg9X/jB8tFWysqnu
+	 YviW5/fO0GgNg==
+Message-ID: <371a7c7b-de32-4f97-b4c7-3c0ad0732e1a@kernel.org>
+Date: Fri, 26 Jul 2024 13:15:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 05/10] dt-bindings: arm: aspeed: Add maintainer
+Subject: Re: [PATCH v1 06/10] dt-bindings: arm: aspeed: Add aspeed,ast2700-evb
+ compatible string
 List-Id: <soc.lore.kernel.org>
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -38,7 +39,7 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org
 References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
- <20240726110355.2181563-6-kevin_chen@aspeedtech.com>
+ <20240726110355.2181563-7-kevin_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -84,17 +85,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240726110355.2181563-6-kevin_chen@aspeedtech.com>
+In-Reply-To: <20240726110355.2181563-7-kevin_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 26/07/2024 13:03, Kevin Chen wrote:
-
-Why?
-
 > ---
->  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+> index 71c31c08a8ad..b21551817f44 100644
+> --- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+> +++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+> @@ -99,4 +99,9 @@ properties:
+>                - ufispace,ncplite-bmc
+>            - const: aspeed,ast2600
+>  
+> +      - description: AST2700 based boards
+> +        items:
+> +          - enum:
+> +              - aspeed,ast2700-evb
+
+NAK, this cannot be alone. Look at all other examples. Why are you doing
+things differently?
+
 Best regards,
 Krzysztof
 
