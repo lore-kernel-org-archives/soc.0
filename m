@@ -4,28 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E68C3DA7F
-	for <soc@archiver.kernel.org>; Fri, 26 Jul 2024 11:14:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B46EC3DA7F
+	for <soc@archiver.kernel.org>; Fri, 26 Jul 2024 11:14:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B06EC4AF0E; Fri, 26 Jul 2024 11:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C047C32782;
-	Fri, 26 Jul 2024 11:13:56 +0000 (UTC)
+	id ED090C4AF0E; Fri, 26 Jul 2024 11:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3839AC32782;
+	Fri, 26 Jul 2024 11:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721992444;
-	bh=fC+7avX+/W7A87OiCzZCSxs4trGBEV05uEjAtbPMdSI=;
+	s=k20201202; t=1721992496;
+	bh=Tk8a4ZNmhaQOlRMB2a7gNLvIw2k+dlvH/hQpNPuIQr4=;
 	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
-	b=RJoVrlX5ibk/k1u7RoYxXGiKlKN6kbgX5WbDMJf7R9nHWxHQ6G+s5hGt+0OZ9zxT4
-	 l8GYcoTpvJI12iRjF8b7QTXwenVBUsOV/ndFfvRLhEUdQofb9xvOnn9thN5LiwDl0W
-	 0kLsKPWJFG8wSdBYXQSmgxIkYbR5FihvFPvb+b/H5nu0Y0ngRhYRnggQcvxcK6Mfyw
-	 IzW4IC1tDoiAh67z5be4JauCJnzYJJbH/CcHVx/6jrmcrn+4aOwQDl5in7ynnKDd9I
-	 rPRQsjMPdNQUKEmEfOSWONuqX5EV/Z4lt+ODzxFP2sGHR4XD6u4ymT+wDQh2F5fyXm
-	 1RtKVBMT5bsCQ==
-Message-ID: <3b6777d8-14b4-4076-9877-4c71657a49e6@kernel.org>
-Date: Fri, 26 Jul 2024 13:13:55 +0200
+	b=FqWbt93RBxXlb2Kbk/jyKvVyHi2pysbmvV4nMRTYZOCkdRTSlwzfYewRBWGW60gew
+	 FztFFcX1ButBUzXW6Q1k+3k9e3PM6KaNOuAyghMlXXabSKFDXhaKlkRmUW9Ip+GL/r
+	 kvjwFx6ImsEMGoCpTy9Zqvza2wBOUzxDRHUkTcQstsOU5rvQ/sj+msxNY0sRaf6zN1
+	 69xYbELtuQDSVR/Y5ex0BoSyV6xxHWyeoB1R5e0/oXRsfJ7UBuxb9/VQVt7ZFRprqk
+	 cWcXg70e38ZUPqWYKlGKad+9qz9N53QtS8sP6LeIoY+65RdTwkFp8w4j+sklUlgXIM
+	 i2O1eAtAWXj7w==
+Message-ID: <7f3f7255-e177-4689-a2f1-b5f3196ed1a5@kernel.org>
+Date: Fri, 26 Jul 2024 13:14:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 04/10] dt-bindings: reset: ast2700: Add binding for
- ASPEED AST2700 Reset
+Subject: Re: [PATCH v1 05/10] dt-bindings: arm: aspeed: Add maintainer
 List-Id: <soc.lore.kernel.org>
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -39,7 +38,7 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org
 References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
- <20240726110355.2181563-5-kevin_chen@aspeedtech.com>
+ <20240726110355.2181563-6-kevin_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -85,17 +84,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240726110355.2181563-5-kevin_chen@aspeedtech.com>
+In-Reply-To: <20240726110355.2181563-6-kevin_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 26/07/2024 13:03, Kevin Chen wrote:
+
+Why?
+
 > ---
-
-Sorry, that's not acceptable. This does not have even SoB.
-
-All previous comments apply.
-
+>  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 Best regards,
 Krzysztof
 
