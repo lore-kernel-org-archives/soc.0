@@ -1,141 +1,243 @@
-Return-Path: <SRS0=/5Mf=OU=outlook.com=unicorn_wang@kernel.org>
+Return-Path: <SRS0=BMg4=O2=aspeedtech.com=kevin_chen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A01BC3DA5D
-	for <soc@archiver.kernel.org>; Sat, 20 Jul 2024 01:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFA74C3DA49
+	for <soc@archiver.kernel.org>; Fri, 26 Jul 2024 11:04:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F07D3C4AF0B; Sat, 20 Jul 2024 01:18:11 +0000 (UTC)
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2065.outbound.protection.outlook.com [40.92.102.65])
+	id C1121C4AF10; Fri, 26 Jul 2024 11:04:11 +0000 (UTC)
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 28CD0C32782;
-	Sat, 20 Jul 2024 01:18:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28CD0C32782
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=g9ZLpkrjwHxwt3AA3P8/YyXQ0C/zSVmMjcC+B66+5IuwK8y8uke5h7/wXB79RDh+saMqXM8lAG6H8EoKjz6MHdrWqwZ2JLGAAbenmFNoI+x1gQgHm/lYS1alUFz5085CrtjofsvCfDJbjaruCcevUgqDEkpN5If0i3l2nWmZdNVPKoZykAnzfWxwYxsnT7fx/AOFnUX7QFUH9dEXFxv/cbmWhx6H/dh8YKDNfOW2mhprsAyJ2WBT+z6EXN+fUkTKqNZ82ZCa2dd0vD9/p5F2Gk/x82ESCS/M9vnvpLmu2imTEbZSKierewJBmI69kmcnkI2Ofn9LZOiyjF0Un44fvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w8VNnkIOGbMxqHTbIR/RUFGPcAaudtjuoZm+85Q2MS8=;
- b=S8nBpnsPW51WrbviTSJpsG5tZQ44beO/2jvbafh+XBgKVoKoClROcxbn5evhyIhGHK8by9H1wav1LDTP5bOlHu+UEibwOA4mdUoRFH61ZL51phKZGAmEG01NNW7lizkyqcjw7gYqOl5t4b2DIwAuLsljwIGTfhKCypakdWM+E16XmtHYQmwId//Q1DMD+bNBooVOQL1yTQz9tBsyiONkILLyoK2NQDkkKuYKjHHVFc6d7OjL8bJ3drJ5z2WRwta2NFON3qt6TX1Yhq194Mcq3Kjtmk60Vjx0Vp4OrNDJFfwj0GyMvvk+onk0Id+Ig2fPviqXkruJzXo7X84vVcWxgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w8VNnkIOGbMxqHTbIR/RUFGPcAaudtjuoZm+85Q2MS8=;
- b=kHNK7vBpQgBDyNM0DBoKpABSkHswkZOg/5ZCTI0L3pXQGkGedi3289VUrLLeHbYM3E18Ufwz6Cjix9CbRbwY8hHtZfHmJTr1qqEdX4tnqX4SzJJwZGGOmDQpUfC06dhQRmh/3gfdZnqD5oRAEBMekla84S2uu5TlO+jvMRUo1RzCkNIOmuzenwCY+Vfp7zpdtT1/3/ytJv6WkD3+xdy9iZbzou6nkhy+2JvPHoEEr/1ZUFK2VCZRv9FZP8Sl8szuLucHhfbBCTPeCWh+yK2zrw9zGBmEI+ErBNxpMD55SBpUjagzv1mQv4iRT22+asRCQQmJkia/jMI+tgk5p9s68w==
-Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
- by PN3P287MB1637.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:192::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.20; Sat, 20 Jul
- 2024 01:18:05 +0000
-Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- ([fe80::a94:ad0a:9071:806c%6]) with mapi id 15.20.7784.017; Sat, 20 Jul 2024
- 01:18:05 +0000
-Message-ID:
- <MA0P287MB2822E262E322C6519F05C553FEAE2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
-Date: Sat, 20 Jul 2024 09:18:01 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: Fwd: [soc:sophgo/dt 1/1]
- arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10: fatal error:
- 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
-To: Conor Dooley <conor@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 932F4C4AF07;
+	Fri, 26 Jul 2024 11:04:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 932F4C4AF07
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 26 Jul
+ 2024 19:04:00 +0800
+Received: from localhost.localdomain (192.168.10.10) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
+ Transport; Fri, 26 Jul 2024 19:03:59 +0800
+From: Kevin Chen <kevin_chen@aspeedtech.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, "Conor.Dooley"
- <conor.dooley@microchip.com>, Inochi Amaoto <inochiama@outlook.com>,
- soc@kernel.org
-References: <20240717143016.GA94990@thelio-3990X>
- <MA0P287MB2822CE874640F2525DF59712FEAC2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <20240718-unworn-showbiz-2fb68210b43a@wendy>
- <c6722b03-328a-4647-ac5f-d6c00835b61a@app.fastmail.com>
- <MA0P287MB28222A76DAD21778CAF69C4DFEAC2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <20240719-species-fastness-a7030e42d314@spud>
-From: Chen Wang <unicorn_wang@outlook.com>
-In-Reply-To: <20240719-species-fastness-a7030e42d314@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN: [+IRmAfxKMjsvpXYQDCSGgMB0ujgu2pX9]
-X-ClientProxiedBy: SI2PR01CA0039.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::16) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:138::5)
-X-Microsoft-Original-Message-ID:
- <1022d567-f63a-4ee5-853d-c27cd64f428c@outlook.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<joel@jms.id.au>, <andrew@codeconstruct.com.au>, <lee@kernel.org>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <arnd@arndb.de>,
+	<olof@lixom.net>, <soc@kernel.org>, <mturquette@baylibre.com>,
+	<sboyd@kernel.org>, <p.zabel@pengutronix.de>, <quic_bjorande@quicinc.com>,
+	<geert+renesas@glider.be>, <dmitry.baryshkov@linaro.org>,
+	<shawnguo@kernel.org>, <neil.armstrong@linaro.org>,
+	<m.szyprowski@samsung.com>, <nfraprado@collabora.com>, <u-kumar1@ti.com>,
+	<kevin_chen@aspeedtech.com>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v1 02/10] dt-binding: clk: ast2700: Add binding for Aspeed AST27xx Clock
+Date: Fri, 26 Jul 2024 19:03:47 +0800
+Message-ID: <20240726110355.2181563-3-kevin_chen@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
+References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN3P287MB1637:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2282f741-d27f-4253-5638-08dca859ce76
-X-MS-Exchange-SLBlob-MailProps:
-	ScCmN3RHayGRYaI4Y5jHNKItMGAuH0khK5wtDoyoJe6Ytk5zRHoAowqG3fYNRQcK3Ll/A9C0GLcn98Kxgcmgj+q2u+yjlLCLv8oMMbFi5wMZ1fe6d8CZpIbAphyrt2IuZ3NJlX7KAiXzGoTbH03bzp7LmjR9WaAsAHJL+3HFiOjOaPHHxCG8n4P86RYRPD7S+Ten8mK101dgjFv+AArhSb5oHqerEgxJW0c0wtj41ulIMbCtqgU+2saYpGv0skLmntqEp9fZo8jIE9ef2qxUTL9iVlaNVwsGXXaQVXVwdw6XCSL5v82l5kyz/v+1cA8Ldo+dBBiwbcXrtYVaGiBonWerMgfIhQs76HahsY7vTZL+4p0IKbA0EyERaK5msTiYqy84QI6zP1WljN2JjmUdcPY1cHDhrdNB5+Kyi61IC/KHgkHFhSylhZopcGN2tXnOKkkiXn+DJgVxnNZfdJzvXP+sidCotmYUN/Q1UTuK3MwElyFnxQdSFr8zL+Y1fTVNjr7qaAwEhyTNsObtmAvDyzlPG0kwXbw34R223GPLBsjgMV25U/fdqRqCWVJyrbAkmqihAi46y/v5NStPpuLL16hCd/QK/4LUaA71/zMcBJs9kMiZ1Eo2FIERprWeFXmUwHEZ6jWPtr7mpyxeIcjNIfAblyK8N3CrQm6L1cFlHH7Fo/6O6g0HJDximRt54dih0AagJRQilgupYbTAzx+RogBn/MEnZRLhT7NJw5k2Gc8=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|19110799003|8060799006|461199028|4302099013|1602099012|3412199025|440099028;
-X-Microsoft-Antispam-Message-Info:
-	H1y+0+IWaHVaf8yvJvMqRPR2s08nqmnl/2DrCaBegnuSctsZ5LybFRuumUxMEQ9RGNsI9nZ6tWa7wKRJiQCAAcP7edUYbkl5x9MvCxTSNh2emY9NVson5i3rEKd7is5thXSm6P9lVQ+PuKWd8Uv2nTZQcrhzQkq60ogfxNmcPK7P5aL14LqJGAZCqQ3itNQBlVh+qEQpFshMp7uEZ6h56++xEoc3v6zQiRSCQFchdzvWC1tsfRVTixyiBBVmDnowGO01lkxmoGYdS66UCqrIAMMo3ttdckj54sFQLkI07xGJFFWtG4pKM+E0k8/8WBem7mWp6m1QUrTDFaP/fUlqPpGFcrwpRyz3bIWMVusELA1+FSlzCdSu0OljUVsjfFI/7uQwG5JDxc4T+EIdU+bmVepdhGmPGWykFxgE5LChphaF8SkHEp5tlR0/QThJamMXnZStPRnKo3IwtVJXKpouACsvGk0TSmBVcxJUgEmG/8+9VlZPWGaN7l/dX21eGyQvgH/+T7h47nWQzD8VeWfnU6Fr+0Z4VaWMtU0UlZsDx6Az+ujTzTyb+Qq15i+uc2u7jiO7aUMjhIQx74zV3zPBiz9OjRsjYuy519JJj+JMct8fsN66YwRAbcfKRLG5MMH1jEYp/HAm/p3nheP2COOqzIgdglmVXKxdiIcKpLhWYjP0dnHX2Z2dKA4n8MELvdMy0m8V/f5f2jPEoAcWaajOpD8ZtSaHhrTf9R7cB18GEssf3WcgIh9T/1d0ZXxEVMN5
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b2xhSTRpMkpFT1c1Vm1lakxMZ05xWjR1RTgwLzVkYnlXdHRLZGlxb0lwN0tV?=
- =?utf-8?B?OGhON29oNGVoR0EyL3VuMGtUK2tIRHNNQVVYR0VyY29jZStPREw2UEovNnIw?=
- =?utf-8?B?T1o0Vkd5eXl5b1p1aldiZ1JDTzVETnZqaGRheVRyYllHNFFROUh6Y1h3MkhX?=
- =?utf-8?B?aVdaNjU5SmVQODRqdHBqcjNlRkdMdGM3RFlFVzdYc3hpT280Z2lmdE1MZDFE?=
- =?utf-8?B?Nk5GdmpVNlB3QmJ0L1lLNTd3bzFpMldIdEFrYTllam9BbGZoYlNoalZwUlVz?=
- =?utf-8?B?ZXFURVdrNjVwTmJIZUtzRmZvQmlydUQvZEpBU3JtNUJRYzV5aSsvbnZ6b1FN?=
- =?utf-8?B?dEs2UVpocWNoK0hrYkhSNEdKRW91TkdsT1ljRW9Cb3YzZ2x2Y1R2TG82OG84?=
- =?utf-8?B?dlVzcEYrTm40VG93Y3FxaUZmVjhYYnpZVjc5WG9Xb0orbnEyMVhtREJlSzNm?=
- =?utf-8?B?UHdrVGNuajV4cXVkK3B0ZS9rbDdkdWQ3WWtGTHlNUUxtZmRPZG5kSm9ZNGpM?=
- =?utf-8?B?UUV5clpHNlFHZFcwajNxbkNTOCsxeWFlRnBLQ1N5TUp4clRjalRuS0o3L2di?=
- =?utf-8?B?SW9TSjVRRldTM2FUbXQ2ZVRYWEJWS3h5eEtMTVNCOW4vWDZnZSs3UWdUejNn?=
- =?utf-8?B?c1MweUk5QUx3STBDd0Z4ZlFEbmZoeHVHcWEwVDREdTVQMmlGTTNNek4zZ0Ir?=
- =?utf-8?B?NnNvSk5NMHMxVUk0RnBNcUtPek9sSDRrUEJzZU1pTDBoYTF1VTJPRnBFRWds?=
- =?utf-8?B?RUROckJ1T1h0Wm1pYXBuNVNvN09KSk9ncllCbG9uUDZmVnFxU1lLSXFReUlU?=
- =?utf-8?B?dnFzMkFia2IwcHdIb1lFWXV1K1E4cnc0T3JKUWV2VlduWG9xVDhGd0Npd3Y3?=
- =?utf-8?B?M1Y5ODladXk5d3RuMEw0WWtnRXpjb0xJMi82QnlGNkZIK2tmaHhaR3pHVVdY?=
- =?utf-8?B?M2NVM2dMTHdIRnpGS1R1bm1YaCtFbFpRYXZaMUtkblc5Z1lnYzBRNWcwZjd0?=
- =?utf-8?B?TUhqV0xWd1FFdVhsbHBnaUI1OXVJNGJxV1BBNDlDK3diclcyemN2akFtd0M2?=
- =?utf-8?B?UEltclBVRlBvRitIYWpKNm13T2gwZWxXc2g2aVIzd0FvS1JaL0JBbVJ0NHE0?=
- =?utf-8?B?WEdvMGUwa1M5dzErdDljYWthT250NllxY252WlU3b252bG5OMTJIeUo5S1dT?=
- =?utf-8?B?NENPWDZheWFPamJPUmFtQS9hODNWanE4ekg1S1ExZlpoczBYMnBGM3lIZlJn?=
- =?utf-8?B?dUpzUGpKS0J0Y1hxZ3gzTHJoVkJYY3ZLeklRT2tIZk1UZkUzek9RL0JHRlFx?=
- =?utf-8?B?ZVZNbUM5VTRNVGVzNXBSK1Q0cmxDTHpHbWFxcUtBVlRERWs5WExQdGV1U3BC?=
- =?utf-8?B?cWcwc0RqN0FpajE3ZythdFRZelJBL3A5aCtuZkpPMU1vQUxzYnB1TWMwUTVM?=
- =?utf-8?B?OG85WHNsZmxxQVFKakRrWERKL01wOCtNcHVhSHhKdmlIUWRJUmp2VnhmQzBt?=
- =?utf-8?B?QkczT1ZQbW9PbjIxZVZBdmpvNURhS01wbUl4ckZpRFFSOFU4cVBVeUlZN1dl?=
- =?utf-8?B?S1ZmQk5mRzRLeW02UWMvZkJWUUFrSDBFRmdpUzVqOHp4cVZwV05ObGJFaXZj?=
- =?utf-8?B?UnB4S1dyb2dpN1pZdXVob0VIbG9BWVhXV3lGazhlaVQrRU5maFNlUU16dy9w?=
- =?utf-8?Q?jKOp8NLeaFZysReoKdnC?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2282f741-d27f-4253-5638-08dca859ce76
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2024 01:18:05.3364
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB1637
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
+---
+ .../dt-bindings/clock/aspeed,ast2700-clk.h    | 180 ++++++++++++++++++
+ 1 file changed, 180 insertions(+)
+ create mode 100644 include/dt-bindings/clock/aspeed,ast2700-clk.h
 
-On 2024/7/19 23:45, Conor Dooley wrote:
-> On Thu, Jul 18, 2024 at 08:17:41PM +0800, Chen Wang wrote:
->> Thank you Conor and Arnd for your input, I have learned and will notice this
->> next time.
-> Something else worth mentioning is getting your tree added to the stuff
-> that the linux test robot builds:
-> https://github.com/intel/lkp-tests/tree/22f5cf2c860a5604f182f966b1f105ce1c0becb7/repo/linux
->
-> That will build your branch in isolation, and will report if it is not
-> building.
-
-Thank you Conor, I will try this.
-
-Regards,
-
-Chen
+diff --git a/include/dt-bindings/clock/aspeed,ast2700-clk.h b/include/dt-bindings/clock/aspeed,ast2700-clk.h
+new file mode 100644
+index 000000000000..5ca85503736d
+--- /dev/null
++++ b/include/dt-bindings/clock/aspeed,ast2700-clk.h
+@@ -0,0 +1,180 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Device Tree binding constants for AST2700 clock controller.
++ *
++ * Copyright (c) 2023 Aspeed Technology Inc.
++ */
++
++#ifndef __DT_BINDINGS_CLOCK_AST2700_H
++#define __DT_BINDINGS_CLOCK_AST2700_H
++
++/* SOC0 clk-gate */
++#define SCU0_CLK_GATE_MCLK	(0)
++#define SCU0_CLK_GATE_ECLK	(1)
++#define SCU0_CLK_GATE_GCLK	(2)
++#define SCU0_CLK_GATE_VCLK	(3)
++#define SCU0_CLK_GATE_BCLK	(4)
++#define SCU0_CLK_GATE_D1CLK	(5)
++#define SCU0_CLK_GATE_REFCLK	(6)
++#define SCU0_CLK_GATE_USB0CLK	(7)
++#define SCU0_CLK_GATE_RSV8	(8)
++#define SCU0_CLK_GATE_USB1CLK	(9)
++#define SCU0_CLK_GATE_D2CLK	(10)
++#define SCU0_CLK_GATE_RSV11	(11)
++#define SCU0_CLK_GATE_RSV12	(12)
++#define SCU0_CLK_GATE_YCLK	(13)
++#define SCU0_CLK_GATE_USB2CLK	(14)
++#define SCU0_CLK_GATE_UART4CLK	(15)
++#define SCU0_CLK_GATE_SLICLK	(16)
++#define SCU0_CLK_GATE_DACCLK	(17)
++#define SCU0_CLK_GATE_DP	(18)
++#define SCU0_CLK_GATE_RSV19	(19)
++#define SCU0_CLK_GATE_CRT1CLK	(20)
++#define SCU0_CLK_GATE_CRT2CLK	(21)
++#define SCU0_CLK_GATE_VLCLK	(22)
++#define SCU0_CLK_GATE_ECCCLK	(23)
++#define SCU0_CLK_GATE_RSACLK	(24)
++#define SCU0_CLK_GATE_RVAS0CLK	(25)
++#define SCU0_CLK_GATE_UFSCLK	(26)
++#define SCU0_CLK_GATE_EMMCCLK	(27)
++#define SCU0_CLK_GATE_RVAS1CLK	(28)
++/* reserved 29 ~ 31*/
++#define SOC0_CLK_GATE_NUM	(SCU0_CLK_GATE_RVAS1CLK + 1)
++
++/* SOC0 clk */
++#define SCU0_CLKIN		(SOC0_CLK_GATE_NUM + 0)
++#define SCU0_CLK_24M		(SOC0_CLK_GATE_NUM + 1)
++#define SCU0_CLK_192M		(SOC0_CLK_GATE_NUM + 2)
++#define SCU0_CLK_UART		(SOC0_CLK_GATE_NUM + 3)
++#define SCU0_CLK_PSP		(SOC0_CLK_GATE_NUM + 4)
++#define SCU0_CLK_HPLL		(SOC0_CLK_GATE_NUM + 5)
++#define SCU0_CLK_HPLL_DIV2	(SOC0_CLK_GATE_NUM + 6)
++#define SCU0_CLK_HPLL_DIV4	(SOC0_CLK_GATE_NUM + 7)
++#define SCU0_CLK_DPLL		(SOC0_CLK_GATE_NUM + 8)
++#define SCU0_CLK_MPLL		(SOC0_CLK_GATE_NUM + 9)
++#define SCU0_CLK_MPLL_DIV2	(SOC0_CLK_GATE_NUM + 10)
++#define SCU0_CLK_MPLL_DIV4	(SOC0_CLK_GATE_NUM + 11)
++#define SCU0_CLK_MPLL_DIV8	(SOC0_CLK_GATE_NUM + 12)
++#define SCU0_CLK_D1CLK		(SOC0_CLK_GATE_NUM + 13)
++#define SCU0_CLK_D2CLK		(SOC0_CLK_GATE_NUM + 14)
++#define SCU0_CLK_CRT1		(SOC0_CLK_GATE_NUM + 15)
++#define SCU0_CLK_CRT2		(SOC0_CLK_GATE_NUM + 16)
++#define SCU0_CLK_MPHY		(SOC0_CLK_GATE_NUM + 17)
++#define SCU0_CLK_AXI		(SOC0_CLK_GATE_NUM + 18)
++#define SCU0_CLK_AXI1		(SOC0_CLK_GATE_NUM + 19)
++#define SCU0_CLK_AHB		(SOC0_CLK_GATE_NUM + 20)
++#define SCU0_CLK_APB		(SOC0_CLK_GATE_NUM + 21)
++#define SCU0_CLK_MCLK		(SOC0_CLK_GATE_NUM + 22)
++#define SCU0_CLK_ECLK		(SOC0_CLK_GATE_NUM + 23)
++#define SCU0_CLK_GCLK		(SOC0_CLK_GATE_NUM + 24)
++#define SCU0_CLK_VCLK		(SOC0_CLK_GATE_NUM + 25)
++#define SCU0_CLK_BCLK		(SOC0_CLK_GATE_NUM + 26)
++#define SCU0_CLK_REF		(SOC0_CLK_GATE_NUM + 27)
++#define SCU0_CLK_USB0CLK	(SOC0_CLK_GATE_NUM + 28)
++#define SCU0_CLK_USB1CLK	(SOC0_CLK_GATE_NUM + 29)
++#define SCU0_CLK_USB2CLK	(SOC0_CLK_GATE_NUM + 30)
++#define SCU0_CLK_YCLK		(SOC0_CLK_GATE_NUM + 31)
++#define SCU0_CLK_UART4		(SOC0_CLK_GATE_NUM + 32)
++#define SCU0_CLK_SLI		(SOC0_CLK_GATE_NUM + 33)
++#define SCU0_CLK_ECC		(SOC0_CLK_GATE_NUM + 34)
++#define SCU0_CLK_RSA		(SOC0_CLK_GATE_NUM + 35)
++#define SCU0_CLK_RVAS0		(SOC0_CLK_GATE_NUM + 36)
++#define SCU0_CLK_UFS		(SOC0_CLK_GATE_NUM + 37)
++#define SCU0_CLK_RVAS1		(SOC0_CLK_GATE_NUM + 38)
++#define SCU0_CLK_EMMCMUX	(SOC0_CLK_GATE_NUM + 39)
++#define SCU0_CLK_EMMC		(SOC0_CLK_GATE_NUM + 40)
++#define SCU0_CLK_U2PHY_CLK12M	(SOC0_CLK_GATE_NUM + 41)
++#define SCU0_CLK_U2PHY_REFCLK	(SOC0_CLK_GATE_NUM + 42)
++
++#define SOC0_NUM_CLKS		(SCU0_CLK_U2PHY_REFCLK + 1)
++
++/* SOC1 clk gate */
++#define SCU1_CLK_GATE_LCLK0       (0)
++#define SCU1_CLK_GATE_LCLK1       (1)
++#define SCU1_CLK_GATE_ESPI0CLK    (2)
++#define SCU1_CLK_GATE_ESPI1CLK    (3)
++#define SCU1_CLK_GATE_SDCLK       (4)
++#define SCU1_CLK_GATE_REFCLK      (5)
++#define SCU1_CLK_GATE_RSV5CLK     (6)
++#define SCU1_CLK_GATE_LPCHCLK     (7)
++#define SCU1_CLK_GATE_MAC0CLK     (8)
++#define SCU1_CLK_GATE_MAC1CLK     (9)
++#define SCU1_CLK_GATE_MAC2CLK     (10)
++#define SCU1_CLK_GATE_UART0CLK    (11)
++#define SCU1_CLK_GATE_UART1CLK    (12)
++#define SCU1_CLK_GATE_UART2CLK    (13)
++#define SCU1_CLK_GATE_UART3CLK    (14)
++/* reserved bit 15*/
++#define SCU1_CLK_GATE_I3C0CLK     (16)
++#define SCU1_CLK_GATE_I3C1CLK     (17)
++#define SCU1_CLK_GATE_I3C2CLK     (18)
++#define SCU1_CLK_GATE_I3C3CLK     (19)
++#define SCU1_CLK_GATE_I3C4CLK     (20)
++#define SCU1_CLK_GATE_I3C5CLK     (21)
++#define SCU1_CLK_GATE_I3C6CLK     (22)
++#define SCU1_CLK_GATE_I3C7CLK     (23)
++#define SCU1_CLK_GATE_I3C8CLK     (24)
++#define SCU1_CLK_GATE_I3C9CLK     (25)
++#define SCU1_CLK_GATE_I3C10CLK    (26)
++#define SCU1_CLK_GATE_I3C11CLK    (27)
++#define SCU1_CLK_GATE_I3C12CLK    (28)
++#define SCU1_CLK_GATE_I3C13CLK    (29)
++#define SCU1_CLK_GATE_I3C14CLK    (30)
++#define SCU1_CLK_GATE_I3C15CLK    (31)
++
++#define SCU1_CLK_GATE_UART5CLK    (32 + 0)
++#define SCU1_CLK_GATE_UART6CLK	  (32 + 1)
++#define SCU1_CLK_GATE_UART7CLK    (32 + 2)
++#define SCU1_CLK_GATE_UART8CLK    (32 + 3)
++#define SCU1_CLK_GATE_UART9CLK	  (32 + 4)
++#define SCU1_CLK_GATE_UART10CLK   (32 + 5)
++#define SCU1_CLK_GATE_UART11CLK   (32 + 6)
++#define SCU1_CLK_GATE_UART12CLK   (32 + 7)
++#define SCU1_CLK_GATE_FSICLK      (32 + 8)
++#define SCU1_CLK_GATE_LTPIPHYCLK  (32 + 9)
++#define SCU1_CLK_GATE_LTPICLK     (32 + 10)
++#define SCU1_CLK_GATE_VGALCLK     (32 + 11)
++#define SCU1_CLK_GATE_USBUARTCLK  (32 + 12)
++#define SCU1_CLK_GATE_CANCLK      (32 + 13)
++#define SCU1_CLK_GATE_PCICLK	  (32 + 14)
++#define SCU1_CLK_GATE_SLICLK      (32 + 15)
++
++#define SOC1_CLK_GATE_NUM	(SCU1_CLK_GATE_SLICLK + 1)
++
++/* SOC1 clk */
++#define SCU1_CLKIN		(SOC1_CLK_GATE_NUM + 0)
++#define SCU1_CLK_HPLL		(SOC1_CLK_GATE_NUM + 1)
++#define SCU1_CLK_APLL		(SOC1_CLK_GATE_NUM + 2)
++#define SCU1_CLK_APLL_DIV2	(SOC1_CLK_GATE_NUM + 3)
++#define SCU1_CLK_APLL_DIV4	(SOC1_CLK_GATE_NUM + 4)
++#define SCU1_CLK_DPLL		(SOC1_CLK_GATE_NUM + 5)
++#define SCU1_CLK_UXCLK		(SOC1_CLK_GATE_NUM + 6)
++#define SCU1_CLK_HUXCLK		(SOC1_CLK_GATE_NUM + 7)
++#define SCU1_CLK_UARTX		(SOC1_CLK_GATE_NUM + 8)
++#define SCU1_CLK_HUARTX		(SOC1_CLK_GATE_NUM + 9)
++#define SCU1_CLK_AHB		(SOC1_CLK_GATE_NUM + 10)
++#define SCU1_CLK_APB		(SOC1_CLK_GATE_NUM + 11)
++#define SCU1_CLK_UART0		(SOC1_CLK_GATE_NUM + 12)
++#define SCU1_CLK_UART1		(SOC1_CLK_GATE_NUM + 13)
++#define SCU1_CLK_UART2		(SOC1_CLK_GATE_NUM + 14)
++#define SCU1_CLK_UART3		(SOC1_CLK_GATE_NUM + 15)
++#define SCU1_CLK_UART5		(SOC1_CLK_GATE_NUM + 16)
++#define SCU1_CLK_UART6		(SOC1_CLK_GATE_NUM + 17)
++#define SCU1_CLK_UART7		(SOC1_CLK_GATE_NUM + 18)
++#define SCU1_CLK_UART8		(SOC1_CLK_GATE_NUM + 19)
++#define SCU1_CLK_UART9		(SOC1_CLK_GATE_NUM + 20)
++#define SCU1_CLK_UART10		(SOC1_CLK_GATE_NUM + 21)
++#define SCU1_CLK_UART11		(SOC1_CLK_GATE_NUM + 22)
++#define SCU1_CLK_UART12		(SOC1_CLK_GATE_NUM + 23)
++#define SCU1_CLK_APLL_DIVN	(SOC1_CLK_GATE_NUM + 24)
++#define SCU1_CLK_SDMUX		(SOC1_CLK_GATE_NUM + 25)
++#define SCU1_CLK_SDCLK		(SOC1_CLK_GATE_NUM + 26)
++#define SCU1_CLK_RMII		(SOC1_CLK_GATE_NUM + 27)
++#define SCU1_CLK_RGMII		(SOC1_CLK_GATE_NUM + 28)
++#define SCU1_CLK_MACHCLK	(SOC1_CLK_GATE_NUM + 29)
++#define SCU1_CLK_MAC0RCLK	(SOC1_CLK_GATE_NUM + 30)
++#define SCU1_CLK_MAC1RCLK	(SOC1_CLK_GATE_NUM + 31)
++
++#define SOC1_NUM_CLKS		(SCU1_CLK_MAC1RCLK + 1)
++
++#endif
+-- 
+2.34.1
 
