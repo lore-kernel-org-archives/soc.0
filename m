@@ -4,42 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E727C3DA49
-	for <soc@archiver.kernel.org>; Fri, 26 Jul 2024 13:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B56D6C3DA49
+	for <soc@archiver.kernel.org>; Sun, 28 Jul 2024 11:55:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DD41AC4AF0F; Fri, 26 Jul 2024 13:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59867C32786;
-	Fri, 26 Jul 2024 13:34:01 +0000 (UTC)
+	id 7E1C8C32782; Sun, 28 Jul 2024 11:55:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D871EC116B1;
+	Sun, 28 Jul 2024 11:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722000848;
-	bh=gwnxVuoN7LswP7v77zQc6e/qC4v2vnpedCk7vhQDPIM=;
+	s=k20201202; t=1722167711;
+	bh=IBz57s74vuSUyAAr3ijmdcIIYCDfWCz8eKghNS3oOYE=;
 	h=Date:Subject:To:List-Id:Cc:References:From:In-Reply-To:From;
-	b=PbJq1pUetzKP6lj7XNFrYOOTl5lJv8br/1+1uE2CMP2Dj8alrSuV8IrdinHcb3a5h
-	 tECFC8hIiT8kDDA1+LpOCFLotvRRYutUJ2QaJKoBY8Lnqm5+7Nga/aQBFXS7n6bpfG
-	 ABrv0ztX4nsnr7r50pBScYtkab+tyMaxk96umPr/v1SL4js/+gcgu5HQ56f1xHcAaB
-	 nMBE/NNEgqln/udZJJ9yoXM+kFoDEq9GBkJNEHWiMltY0kE2Ac0JLgJ1/24pnQ0hp7
-	 ZUX/KEtcx0QENKkfZVeeEHezJ6B6stnDg3BLvMMzxxmHPuP3P+O9MpmsZk5gB5U4Un
-	 0Dfswh17+Ej6A==
-Message-ID: <241ceb9b-b29f-41fd-8987-2feba2e5e08e@kernel.org>
-Date: Fri, 26 Jul 2024 15:33:59 +0200
+	b=CFAGVz9Zcx4aV+t6eliOFJFzNfhWdqF6v9jQ8c03li3ZwmUKkMBXkF7E3wbh79q46
+	 PxfwUXyA9ZMBAMMCmpw+vflv+y40Gnshz8/eGsG7JO+vTUyv3a1DXVM9EHg3WwsLcC
+	 lhyG+vB7NQpbAfO1wFPsZQGm56BpgOKpQ8e0YOk7fZJ6PqiFUZuVZKke0bc1U1JyTs
+	 pquBNX3H2W0rm/YhiMO5KP9K9bxexCWFAuvg1tlXMCvHXa2BxZEeP81qNsqprPpyYM
+	 wWA49uvZpqSSGw7igAjIGxYZ5eCdU9EDf1fIJ1scnn1Qt/VklGCCddfXndv9F+vk7T
+	 DBxHq5D0LjtDA==
+Message-ID: <91308a58-f70c-4b28-95e5-d64a1f12f252@kernel.org>
+Date: Sun, 28 Jul 2024 13:55:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 00/10] Introduce ASPEED AST27XX BMC SoC
-To: Kevin Chen <kevin_chen@aspeedtech.com>
+Subject: Re: [PATCH 4/5] soc: hisilicon: kunpeng_hccs: support low power
+ feature for specified HCCS
+To: Huisong Li <lihuisong@huawei.com>, xuwei5@hisilicon.com
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, m.szyprowski@samsung.com, nfraprado@collabora.com,
- olof@lixom.net, will@kernel.org, mturquette@baylibre.com,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- conor+dt@kernel.org, devicetree@vger.kernel.org,
- andrew@codeconstruct.com.au, catalin.marinas@arm.com, sboyd@kernel.org,
- p.zabel@pengutronix.de, u-kumar1@ti.com, arnd@arndb.de, joel@jms.id.au,
- quic_bjorande@quicinc.com, lee@kernel.org, krzk+dt@kernel.org,
- linux-arm-kernel@lists.infradead.org, neil.armstrong@linaro.org,
- linux-aspeed@lists.ozlabs.org, dmitry.baryshkov@linaro.org,
- shawnguo@kernel.org, geert+renesas@glider.be,
- "Rob Herring (Arm)" <robh@kernel.org>
-References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
- <172199921352.1507193.4411331020670815695.robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, Jonathan.Cameron@Huawei.com,
+ liuyonglong@huawei.com
+References: <20240718071134.31155-1-lihuisong@huawei.com>
+ <20240718071134.31155-5-lihuisong@huawei.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -85,89 +78,59 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <172199921352.1507193.4411331020670815695.robh@kernel.org>
+In-Reply-To: <20240718071134.31155-5-lihuisong@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/07/2024 15:09, Rob Herring (Arm) wrote:
-> 
-> On Fri, 26 Jul 2024 19:03:45 +0800, Kevin Chen wrote:
->> This patchset adds initial support for the ASPEED.
->> AST27XX Board Management controller (BMC) SoC family.
->>
->> AST2700 is ASPEED's 8th-generation server management processor.
->> Featuring a quad-core ARM Cortex A35 64-bit processor and two
->> independent ARM Cortex M4 processors
->>
->> This patchset adds minimal architecture and drivers such as:
->> Clocksource, Clock and Reset
->>
->> This patchset was tested on the ASPEED AST2700 evaluation board.
->>
->> Kevin Chen (10):
->>   dt-binding: mfd: aspeed,ast2x00-scu: Add binding for ASPEED AST2700
->>     SCU
->>   dt-binding: clk: ast2700: Add binding for Aspeed AST27xx Clock
->>   clk: ast2700: add clock controller
->>   dt-bindings: reset: ast2700: Add binding for ASPEED AST2700 Reset
->>   dt-bindings: arm: aspeed: Add maintainer
->>   dt-bindings: arm: aspeed: Add aspeed,ast2700-evb compatible string
->>   arm64: aspeed: Add support for ASPEED AST2700 BMC SoC
->>   arm64: dts: aspeed: Add initial AST27XX device tree
->>   arm64: dts: aspeed: Add initial AST2700 EVB device tree
->>   arm64: defconfig: Add ASPEED AST2700 family support
->>
->>  .../bindings/arm/aspeed/aspeed.yaml           |    6 +
->>  .../bindings/mfd/aspeed,ast2x00-scu.yaml      |    3 +
->>  MAINTAINERS                                   |    3 +
->>  arch/arm64/Kconfig.platforms                  |   14 +
->>  arch/arm64/boot/dts/Makefile                  |    1 +
->>  arch/arm64/boot/dts/aspeed/Makefile           |    4 +
->>  arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi     |  217 +++
->>  arch/arm64/boot/dts/aspeed/ast2700-evb.dts    |   50 +
->>  arch/arm64/configs/defconfig                  |    1 +
->>  drivers/clk/Makefile                          |    1 +
->>  drivers/clk/clk-ast2700.c                     | 1166 +++++++++++++++++
->>  .../dt-bindings/clock/aspeed,ast2700-clk.h    |  180 +++
->>  .../dt-bindings/reset/aspeed,ast2700-reset.h  |  126 ++
->>  13 files changed, 1772 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
->>  create mode 100644 arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
->>  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
->>  create mode 100644 drivers/clk/clk-ast2700.c
->>  create mode 100644 include/dt-bindings/clock/aspeed,ast2700-clk.h
->>  create mode 100644 include/dt-bindings/reset/aspeed,ast2700-reset.h
->>
->> --
->> 2.34.1
->>
->>
->>
-> 
-> 
-> My bot found new DTB warnings on the .dts files added or changed in this
-> series.
-> 
-> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-> are fixed by another series. Ultimately, it is up to the platform
-> maintainer whether these warnings are acceptable or not. No need to reply
-> unless the platform maintainer has comments.
-> 
-> If you already ran DT checks and didn't see these error(s), then
-> make sure dt-schema is up to date:
-> 
->   pip3 install dtschema --upgrade
-> 
-> 
-> New warnings running 'make CHECK_DTBS=y aspeed/ast2700-evb.dtb' for 20240726110355.2181563-1-kevin_chen@aspeedtech.com:
+On 18/07/2024 09:11, Huisong Li wrote:
+> This patch add the low power feature for specified HCCS by increasing
 
-Kevin,
-Just to clarify. Looking at the patches it was quite obvious you did not
-test it with dtbs_check. For a new arm64 platform without any legacy,
-having 0 warnings is a must.
+Please do not use "This commit/patch/change", but imperative mood. See
+longer explanation here:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-Consider Documentation/process/maintainer-soc-clean-dts.rst being
-implied for this platform.
+> and decrasing the lane number of these HCCS ports on platform.
+> 
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  drivers/soc/hisilicon/Kconfig        |   7 +-
+>  drivers/soc/hisilicon/kunpeng_hccs.c | 377 ++++++++++++++++++++++++++-
+>  drivers/soc/hisilicon/kunpeng_hccs.h |  14 +
+>  3 files changed, 394 insertions(+), 4 deletions(-)
+
+...
+
+
+> +static struct kobj_attribute pm_types_attr =
+> +		__ATTR(support_pm_types, 0444, support_pm_types_show, NULL);
+>  
+>  static ssize_t used_types_show(struct kobject *kobj,
+>  			       struct kobj_attribute *attr, char *buf)
+> @@ -1213,11 +1551,46 @@ static struct kobj_attribute used_types_attr =
+>  static void hccs_remove_misc_sysfs(struct hccs_dev *hdev)
+>  {
+>  	sysfs_remove_file(&hdev->dev->kobj, &used_types_attr.attr);
+> +	sysfs_remove_file(&hdev->dev->kobj, &pm_types_attr.attr);
+> +
+> +	if (!(hdev->caps & HCCS_CAPS_HCCS_V2_PM))
+> +		return;
+> +
+> +	sysfs_remove_file(&hdev->dev->kobj, &dec_lane_attr.attr);
+> +	sysfs_remove_file(&hdev->dev->kobj, &inc_lane_attr.attr);
+>  }
+>  
+>  static int hccs_add_misc_sysfs(struct hccs_dev *hdev)
+>  {
+> -	return sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
+> +	int ret;
+> +
+> +	ret = sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sysfs_create_file(&hdev->dev->kobj, &pm_types_attr.attr);
+
+Where is the ABI documentation?
 
 Best regards,
 Krzysztof
