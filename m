@@ -1,69 +1,73 @@
-Return-Path: <kabel@kernel.org>
+Return-Path: <robh@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFFBDC3DA49
-	for <soc@archiver.kernel.org>; Tue, 30 Jul 2024 14:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD31C3DA7F
+	for <soc@archiver.kernel.org>; Tue, 30 Jul 2024 21:01:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 97E3DC4AF0E; Tue, 30 Jul 2024 14:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4477EC4AF0A;
-	Tue, 30 Jul 2024 14:49:31 +0000 (UTC)
+	id 6D9EEC4AF0B; Tue, 30 Jul 2024 21:01:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158E0C32782;
+	Tue, 30 Jul 2024 21:01:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722350972;
-	bh=3d8j4dhdq9fPcHi3miO1nqzDG+1nOqdZLHAFzQJKU9w=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=or0Xeo7ncIiuM3+UihqW7OHVnpJdjXyNa3kXZOusnrS4dnIFTW59aMJjoGvO7i/v3
-	 nP28yMM1/r+QO5SzxeksrnLbgft3c/GSVoOtOLZerv4IwmHs18MxoZCO7p+j/J2kVI
-	 M9H5VwoE8rQYlbKQxXSqXlaM8uYupZgMSxopR+7DtBoqtD3gChzyifqVoC6vs6bUvN
-	 yyyiY3DC0KOifHBhaiGp8d78lkbzHVpfwxfwkjrFNmmODJrIKPF0bR3SoiMmJP2RQi
-	 SGMZQbKKkfHOJUcM8Mntb7MUAJjYgbmdW9NHzbYOPzrX6UPnyxBWI27XfCVLgapfeA
-	 z3O7CaSTdgPog==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+	s=k20201202; t=1722373300;
+	bh=GkvH/3sbCTojDz8X59B3D08RDAYiw6xu367HrjfDwHg=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=MjB/OoFm/D8Qb00wxaBsHlOJKIAMSAnsq1fI9CUg838XuMnw8+/6alnQxMPH7mE+4
+	 STyJ84AfEfTVNBXJOCAjN3c0/JyGQDO0unx4eHkFrESjQXbTuro/lL/+oOt5Qdelsh
+	 q0HTAZh0X+3urlZKlARfIf3hzP0MU/6DfajRZCLtfRAHYWHa7x+4LQDKnRyZGQ/+vQ
+	 Ho8CQoXgTxsyqRpEk5OETQ0E+Rn34/z3ZDVurHXM2GUNVnn0ZHpr+gjK7G4pb9R4p7
+	 5as2aJg+BBz9UsSnMSYaPNYSEb77ZNw63pkI4QXqYQZFF6afqBkLxqIhM2gTwh0GLs
+	 B/ehQyATM9u1g==
+From: "Rob Herring (Arm)" <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org
-Cc: arm@kernel.org,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 2/2] doc: platform: cznic: turris-omnia-mcu: Use double backticks for attribute value
-Date: Tue, 30 Jul 2024 16:49:24 +0200
-Message-ID: <20240730144924.25552-3-kabel@kernel.org>
-X-Mailer: git-send-email 2.44.2
-In-Reply-To: <20240730144924.25552-1-kabel@kernel.org>
-References: <20240730144924.25552-1-kabel@kernel.org>
+To: soc@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] arm: dts: arm: versatile-ab: Fix duplicate clock node name
+Date: Tue, 30 Jul 2024 15:00:30 -0600
+Message-ID: <20240730210030.2150467-2-robh@kernel.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Use double backticks instead of quotes for sysfs attribute value.
-This makes sphinx generate the "mcu" and "cpu" values in monospace when
-rendering to HTML.
+Commit 04f08ef291d4 ("arm/arm64: dts: arm: Use generic clock and
+regulator nodenames") renamed nodes and created 2 "clock-24000000" nodes
+(at different paths). The kernel can't handle these duplicate names
+even though they are at different paths. Fix this by renaming one of
+the nodes to "clock-pclk". This name is aligned with other Arm boards
+(those didn't have a known frequency to use in the node name).
 
-Fixes: dfa556e45ae9 ("platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs")
-Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: 04f08ef291d4 ("arm/arm64: dts: arm: Use generic clock and regulator nodenames")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- .../ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu        | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Arnd, I imagine you can take this directly.
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-index 210a39043dc1..35a8f6dae5bf 100644
---- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-+++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-@@ -32,9 +32,9 @@ Description:	(RW) The front button on the Turris Omnia router can be
- 		interrupt.
+ arch/arm/boot/dts/arm/versatile-ab.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/arm/versatile-ab.dts b/arch/arm/boot/dts/arm/versatile-ab.dts
+index 6fe6b49f5d8e..635ab9268899 100644
+--- a/arch/arm/boot/dts/arm/versatile-ab.dts
++++ b/arch/arm/boot/dts/arm/versatile-ab.dts
+@@ -157,7 +157,7 @@ timclk: clock-1000000 {
+ 			clocks = <&xtal24mhz>;
+ 		};
  
- 		This file switches between these two modes:
--		 - "mcu" makes the button press event be handled by the MCU to
-+		 - ``mcu`` makes the button press event be handled by the MCU to
- 		   change the LEDs panel intensity.
--		 - "cpu" makes the button press event be handled by the CPU.
-+		 - ``cpu`` makes the button press event be handled by the CPU.
- 
- 		Format: %s.
- 
+-		pclk: clock-24000000 {
++		pclk: clock-pclk {
+ 			#clock-cells = <0>;
+ 			compatible = "fixed-factor-clock";
+ 			clock-div = <1>;
 -- 
-2.44.2
+2.43.0
 
