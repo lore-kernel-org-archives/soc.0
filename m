@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17B38C3DA70
-	for <soc@archiver.kernel.org>; Tue, 30 Jul 2024 14:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFFBDC3DA49
+	for <soc@archiver.kernel.org>; Tue, 30 Jul 2024 14:49:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DF1D2C4AF11; Tue, 30 Jul 2024 14:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C35C4AF10;
-	Tue, 30 Jul 2024 14:49:29 +0000 (UTC)
+	id 97E3DC4AF0E; Tue, 30 Jul 2024 14:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4477EC4AF0A;
+	Tue, 30 Jul 2024 14:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722350970;
-	bh=+FGsIkkToaGugUy415swqKr01ztdr6PyifGgJ1SpdBI=;
+	s=k20201202; t=1722350972;
+	bh=3d8j4dhdq9fPcHi3miO1nqzDG+1nOqdZLHAFzQJKU9w=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=seBRNO66oDVmcPZMkbCiz3nXwbICXmnAzwHYqVD4E95xQ6a2w+QocmMBXKqbpQORW
-	 chAQO4MqzrtgDvm3UusYGTzGZUsLfHlhdf7zPg486WNEzO6sMLloDnRdicpQsid0AO
-	 kn/W3YdlOdjLLh/dxs6Wk5k1JZ18LoMQrx/v/gkuhhgkoxjk48GdkrTOYlklqE0/27
-	 7pfKoIKViyHhn0Mntir37bZfoo7q0ZunqDP/skfBhHHxLizvdGqoNUsgXzKp4K9psp
-	 /b0Lwljx+lnRKjTyNt3C262vjv2q1WDnQstoW6c0Pp9utxahfZL20hMf3syxyaJnU5
-	 bgaIzZWgsrLbw==
+	b=or0Xeo7ncIiuM3+UihqW7OHVnpJdjXyNa3kXZOusnrS4dnIFTW59aMJjoGvO7i/v3
+	 nP28yMM1/r+QO5SzxeksrnLbgft3c/GSVoOtOLZerv4IwmHs18MxoZCO7p+j/J2kVI
+	 M9H5VwoE8rQYlbKQxXSqXlaM8uYupZgMSxopR+7DtBoqtD3gChzyifqVoC6vs6bUvN
+	 yyyiY3DC0KOifHBhaiGp8d78lkbzHVpfwxfwkjrFNmmODJrIKPF0bR3SoiMmJP2RQi
+	 SGMZQbKKkfHOJUcM8Mntb7MUAJjYgbmdW9NHzbYOPzrX6UPnyxBWI27XfCVLgapfeA
+	 z3O7CaSTdgPog==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -27,9 +27,9 @@ To: Arnd Bergmann <arnd@arndb.de>,
 Cc: arm@kernel.org,
 	Stephen Rothwell <sfr@canb.auug.org.au>,
 	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 1/2] doc: platform: cznic: turris-omnia-mcu: Fix sphinx-build warning
-Date: Tue, 30 Jul 2024 16:49:23 +0200
-Message-ID: <20240730144924.25552-2-kabel@kernel.org>
+Subject: [PATCH 2/2] doc: platform: cznic: turris-omnia-mcu: Use double backticks for attribute value
+Date: Tue, 30 Jul 2024 16:49:24 +0200
+Message-ID: <20240730144924.25552-3-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240730144924.25552-1-kabel@kernel.org>
 References: <20240730144924.25552-1-kabel@kernel.org>
@@ -37,34 +37,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Fix sphinx-build warnings
-  ERROR: Unexpected indentation.
-  WARNING: Block quote ends without a blank line; unexpected unindent
-in Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu.
+Use double backticks instead of quotes for sysfs attribute value.
+This makes sphinx generate the "mcu" and "cpu" values in monospace when
+rendering to HTML.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Link: https://lore.kernel.org/all/20240702174938.04c12aab@canb.auug.org.au/
 Fixes: dfa556e45ae9 ("platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs")
 Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- .../ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu      | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu        | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-index 307a55f599cb..210a39043dc1 100644
+index 210a39043dc1..35a8f6dae5bf 100644
 --- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
 +++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
 @@ -32,9 +32,9 @@ Description:	(RW) The front button on the Turris Omnia router can be
  		interrupt.
  
  		This file switches between these two modes:
--		- "mcu" makes the button press event be handled by the MCU to
--		  change the LEDs panel intensity.
--		- "cpu" makes the button press event be handled by the CPU.
-+		 - "mcu" makes the button press event be handled by the MCU to
-+		   change the LEDs panel intensity.
-+		 - "cpu" makes the button press event be handled by the CPU.
+-		 - "mcu" makes the button press event be handled by the MCU to
++		 - ``mcu`` makes the button press event be handled by the MCU to
+ 		   change the LEDs panel intensity.
+-		 - "cpu" makes the button press event be handled by the CPU.
++		 - ``cpu`` makes the button press event be handled by the CPU.
  
  		Format: %s.
  
