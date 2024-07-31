@@ -1,155 +1,354 @@
-Return-Path: <SRS0=eQHc=O7=gmail.com=groeck7@kernel.org>
+Return-Path: <SRS0=u66d=O7=em-1707420.superconsultant.org=bounce-1707420-980-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D8B5C3DA7F
-	for <soc@archiver.kernel.org>; Wed, 31 Jul 2024 15:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CF88C3DA64
+	for <soc@archiver.kernel.org>; Wed, 31 Jul 2024 16:04:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 023A0C4AF10; Wed, 31 Jul 2024 15:14:34 +0000 (UTC)
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 3D037C4AF0B; Wed, 31 Jul 2024 16:04:27 +0000 (UTC)
+Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ED195C116B1;
-	Wed, 31 Jul 2024 15:14:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ED195C116B1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7105043330aso572890b3a.0;
-        Wed, 31 Jul 2024 08:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722438872; x=1723043672; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQESAh5v8TLqvpjfGuDOPF3CiayVAeKgE2izkK/fl10=;
-        b=jq008qTf7WH5XAfCGuSaTvqByM4Ewi7Jtzybm+EHB7zRSB3ffmZkp1gSdkwxwjqyne
-         6sJ33nQKyEyge0j0A4AN1oaVHdg/B+5lTDWaEoybHqAne6U5djRzgx8iimCk4gistOjZ
-         z63u+isZ1EmZVOQkqVQWZIdWLmYp7e+Afyqsr4sGAiAiOd7GGXDqIxTMt7XgcGtgUzPs
-         u6ROWCh+FGu9j84qwtmcPwcgnwCY4+UXzSz1zoyUMdQ9ck52n7te2oRqX8ctNKanNjEP
-         /3oX5nerS8lsYI7avg3R8r0SAhPg0qxbPzP1aPy7rwP7C7QhtyW8XuixXPH4oNn6OHrl
-         Fq0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722438872; x=1723043672;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GQESAh5v8TLqvpjfGuDOPF3CiayVAeKgE2izkK/fl10=;
-        b=UKlu+7zYYScYAFyZENwAz2zltRDqs6judaJAtksmi3A7R9SFXi2PnvOvjC/2/hn1n9
-         AAMzpCfOiIxEHByq4hEd/MxX+khzWrgoSwo/fjiYslLO4R+VlN0OUxGg1LNG2dO8zKym
-         quutyTP2/qPWO7C0LkrLoL7bizcaQXlqOga6CtidhUfBg8Xp4wpbshw4TRwnALEFYqxa
-         LmNGnUUKCiZf+Hilkzg3NzgjOYlDhDUeE7uZMWLiTFK/WB/rCXOuGQch0+/ZND+K/fw2
-         71BUKh1Oxnh+qbL0lQi81DRdz+i5ERp8JlXyHpjvBXMeogkdZeGozbnVR+w9U6DiIcs7
-         nNSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXK9cMTIOIresLFB+7ohLKnFDMWqZYP7iEMymXfKsPvfm/i2zZLaEFEnQxY2BundyyIwymyiSuc4q6ywZUi/vGLK9AZegKRUEz2DxaCz1i0Rh5x9dYwGkNZpIBR8SGntHaIwTcifIQ+
-X-Gm-Message-State: AOJu0Yz0E8Eku6JHEIkdyY8AMy1PJuFSUsmeX8JwB6VDz0CEtCYBaqt+
-	ylWFyIZbabfMCcY4dRmPdJ1cem249V+XpvVH5OESbRGlUu8qN4/lFi/r4A==
-X-Google-Smtp-Source: AGHT+IG0JAUaEWaLbsWRwMvti9oENtdZdaMyGbtcv665ZYl/uXcSE+7CDlI2GS3jT1x9PK4ZkrezOw==
-X-Received: by 2002:a05:6a20:431f:b0:1be:c86e:7a4d with SMTP id adf61e73a8af0-1c4a1512bdemr14841240637.53.1722438871578;
-        Wed, 31 Jul 2024 08:14:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead6e31e4sm10080550b3a.29.2024.07.31.08.14.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jul 2024 08:14:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <47f60f74-27fc-4b69-b4ad-9d035c6732ea@roeck-us.net>
-Date: Wed, 31 Jul 2024 08:14:29 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm: dts: arm: versatile-ab: Fix duplicate clock node
- name
+	by smtp.kernel.org (Postfix) with ESMTPS id D18A7C4AF09
+	for <soc@kernel.org>; Wed, 31 Jul 2024 16:04:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D18A7C4AF09
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=superconsultant.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=em-1707420.superconsultant.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=superconsultant.org;
+ h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ Feedback-ID:List-Unsubscribe:List-Unsubscribe-Post:Message-ID;
+ i=team@superconsultant.org;
+ bh=HjA4/8vleZ2AYICz2RobvOo9KPWhVN0yPP+og20QCIY=;
+ b=VvV1XLEBlkihM2bfb+SwSHifSSCiwScj9gc/UvUhSJacoFYCuJCd3BOq8FRurW9kt/Fwqmi+/HGs
+   6N6gjj47tlpVTrd4XVk3J3cg+94YFYZKoG1zme7jjaDLN9rsNMOv7q6YV6ZixV/Itz8E4PSxSM/s
+   mOhZlQLmyd/9cR3Xnwm2xqNlLE5/QHKAZu2cKTYoHGme6tgHQeFh40uTt721Cbl9vUGbB7hBj9kT
+   QlwO34I1mFfpIT7e8tj390pRTDNZfbHcs15NLPYYuxig5uTdZSr0RhQSUxVfMDYFbraSbgvRMiT0
+   dlmJE5+NdWCEReZvPj51FAZmsLoYIVvUEIWjCw==
+Received: by s4.acemsrvh.com id hl9g8i36bm4r for <soc@kernel.org>; Wed, 31 Jul 2024 16:04:24 +0000 (envelope-from <bounce-1707420-980-1076303-soc=kernel.org@em-1707420.superconsultant.org>)
+X-Mailer: ActiveCampaign Mailer
+CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>, soc@kernel.org,
- Linus Walleij <linus.walleij@linaro.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
- Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240730210030.2150467-2-robh@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240730210030.2150467-2-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: "Nonprofit Execs & Board Members" <soc@kernel.org>
+From: "Stefanie Stark" <team@superconsultant.org>
+Subject: We Need Nonprofit Experts
+Date: Wed, 31 Jul 2024 11:02:19 -0500
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift-86251457266aa600b8b8998.26987393_=_"
 Content-Transfer-Encoding: 7bit
+X-Report-Abuse: Please report abuse here: abuse@acemserv.com
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjOTgwICwgbTE1ODggLCBzODM4
+x-virtual-mta: s4.acemsrvh.com
+Feedback-ID: 1707420:1707420.980:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-980
+List-Unsubscribe: <https://jimmylarose.activehosted.com/box.php?nl=300&c=980&m=1588&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>,<mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-980-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-DKIM-Options: s=acdkim1
+Message-ID: <0.1.F.B0.1DAE3635002BD7C.0@s4.acemsrvh.com>
 
-On 7/30/24 14:00, Rob Herring (Arm) wrote:
-> Commit 04f08ef291d4 ("arm/arm64: dts: arm: Use generic clock and
-> regulator nodenames") renamed nodes and created 2 "clock-24000000" nodes
-> (at different paths). The kernel can't handle these duplicate names
-> even though they are at different paths. Fix this by renaming one of
-> the nodes to "clock-pclk". This name is aligned with other Arm boards
-> (those didn't have a known frequency to use in the node name).
-> 
-> Fixes: 04f08ef291d4 ("arm/arm64: dts: arm: Use generic clock and regulator nodenames")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-> ---
-> Arnd, I imagine you can take this directly.
-> 
->   arch/arm/boot/dts/arm/versatile-ab.dts | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/arm/versatile-ab.dts b/arch/arm/boot/dts/arm/versatile-ab.dts
-> index 6fe6b49f5d8e..635ab9268899 100644
-> --- a/arch/arm/boot/dts/arm/versatile-ab.dts
-> +++ b/arch/arm/boot/dts/arm/versatile-ab.dts
-> @@ -157,7 +157,7 @@ timclk: clock-1000000 {
->   			clocks = <&xtal24mhz>;
->   		};
->   
-> -		pclk: clock-24000000 {
-> +		pclk: clock-pclk {
->   			#clock-cells = <0>;
->   			compatible = "fixed-factor-clock";
->   			clock-div = <1>;
+
+--_=_swift-86251457266aa600b8b8998.26987393_=_
+Content-Type: text/plain; charset=utf-8
+
+Invitation Only  ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ 
+
+**We Need Nonprofit Experts!**
+
+**"Are you ready to share your knowledge and experience with nonprofit organizations? Join us to explore how you can become a Major Gifts Ramp-Up Counselor."** ~ Stefanie Stark, Development Systems International 
+
+https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0Olz1I2hjNb2nugvX6HGKXSi 
+
+ SuperConsulting Virtual Call
+October 30, 2024
+10am - 1pm EST
+
+VISIT HERE TO MAKE RESERVATION https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0Olz1I2hjNb2nugvX6HGKXSi
+
+Because you work with
+CHARITABLE ORGANIZATIONS
+
+Dear Colleague In Service,
+
+****Did you know you can add between $24,000 up to $240,000 to your annual income by becoming a fundraising consultant?****
+
+Development Systems International (DSI) is hosting a live INVITATION ONLY 3hr Virtual Teleconference to explore how you can become a Major Gifts Ramp-Up Counselor. This is a private call. It is "Invitation Only." 
+
+**REGISTRATION IS COMPLIMENTARY.** We look forward to spending time with you to better understand your personal and professional goals.
+
+DSI SuperConsulting Virtual Call (3hr)
+
+**October 30, 2024 - 10am-1pm (EST)**
+REGISTRATION OPENS AT 9:45am
+
+VISIT HERE TO MAKE YOUR RESERVATION https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0Olz1I2hjNb2nugvX6HGKXSi  
+
+ 
+Development Systems International has been raising hundreds of millions of dollars for charitable organizations for nearly 35 years. How? By serving nonprofit leaders just like you who are ready to share their experience with others.
+
+ 
+Please feel free to contact me with your questions at (800) 257-6670.
+
+Sincerely Yours,
+
+**Stefanie Stark, CNC**
+
+President, DSI
+
+Sent to: soc@kernel.org
+
+Unsubscribe https://jimmylarose.acemlnd.com/proc.php?nl=300&c=980&m=1588&s=678f48a0e320c6856d0620aa2e024acb&act=unsub
+
+National Development Institute, PO Box 1840, Lexington, SC 29071, United States
+--_=_swift-86251457266aa600b8b8998.26987393_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
+text/html; charset=3Dutf-8"><meta name=3D"viewport" content=3D"width=3Ddevi=
+ce-width, minimal-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalab=
+le=3D0;"><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><meta n=
+ame=3D"format-detection" content=3D"telephone=3Dno, date=3Dno, email=3Dno, =
+address=3Dno"><meta name=3D"x-apple-disable-message-reformatting">=0A<!--[i=
+f (mso 16)]><style type=3D"text/css"> a { text-decoration: none; } </style>=
+<![endif]--> =0A<!--[if gte mso 9]><style> sup { font-size: 100% !important=
+; } </style><![endif]--> =0A<!--[if gte mso 9]><xml><o:OfficeDocumentSettin=
+gs><o:AllowPNG></o:AllowPNG><o:PixelsPerInch>96</o:PixelsPerInch></o:Office=
+DocumentSettings></xml><![endif]--> =0A<!--[if gte mso 9]><style>sup { font=
+-size: 100% !important; }</style><![endif]--> =0A<!--[if !mso]><!-- --><lin=
+k href=3D"https://fonts.googleapis.com/css?family=3DRoboto:400,400i,700,700=
+i" rel=3D"stylesheet"> =0A<!--<![endif]--><style type=3D"text/css">#outlook=
+ a { padding:0;}.es-button { mso-style-priority:100!important; text-decorat=
+ion:none!important;}a[x-apple-data-detectors] { color:inherit!important; te=
+xt-decoration:none!important; font-size:inherit!important; font-family:inhe=
+rit!important; font-weight:inherit!important; line-height:inherit!important=
+;}.es-desk-hidden { display:none; float:left; overflow:hidden; width:0; max=
+-height:0; line-height:0; mso-hide:all;}=0A@media only screen and (max-widt=
+h:600px) {p, ul li, ol li, a { line-height:150%!important } h1, h2, h3, h1 =
+a, h2 a, h3 a { line-height:120% } h1 { font-size:30px!important; text-alig=
+n:center } h2 { font-size:26px!important; text-align:center } h3 { font-siz=
+e:20px!important; text-align:center } .es-header-body h1 a, .es-content-bod=
+y h1 a, .es-footer-body h1 a { font-size:30px!important; text-align:left } =
+.es-header-body h2 a, .es-content-body h2 a, .es-footer-body h2 a { font-si=
+ze:26px!important; text-align:left } .es-header-body h3 a, .es-content-body=
+ h3 a, .es-footer-body h3 a { font-size:20px!important; text-align:left } .=
+es-menu td a { font-size:13px!important } .es-header-body p, .es-header-bod=
+y ul li, .es-header-body ol li, .es-header-body a { font-size:16px!importan=
+t } .es-content-body p, .es-content-body ul li, .es-content-body ol li, .es=
+-content-body a { font-size:16px!important }=0A .es-footer-body p, .es-foot=
+er-body ul li, .es-footer-body ol li, .es-footer-body a { font-size:16px!im=
+portant } .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li, .es-in=
+foblock a { font-size:12px!important } *[class=3D"gmail-fix"] { display:non=
+e!important } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3 {=
+ text-align:center!important } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2,=
+ .es-m-txt-r h3 { text-align:right!important } .es-m-txt-l, .es-m-txt-l h1,=
+ .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left!important } .es-m-txt-r i=
+mg, .es-m-txt-c img, .es-m-txt-l img { display:inline!important } .es-butto=
+n-border { display:inline-block!important } a.es-button, button.es-button {=
+ font-size:20px!important; display:inline-block!important } .es-adaptive ta=
+ble, .es-left, .es-right { width:100%!important }=0A .ac-footer, .es-conten=
+t table, .es-header table, .es-footer table, .es-content, .es-footer, .es-h=
+eader { width:100%!important; max-width:600px!important } .ac-footer td, .a=
+c-footer p, .es-adapt-td { display:block!important; width:100%!important } =
+.adapt-img { width:100%!important; height:auto!important } .es-m-p0 { paddi=
+ng:0px!important } .es-m-p0r { padding-right:0px!important } .es-m-p0l { pa=
+dding-left:0px!important } .es-m-p0t { padding-top:0px!important } .es-m-p0=
+b { padding-bottom:0!important } .es-m-p20b { padding-bottom:20px!important=
+ } .es-mobile-hidden, .es-hidden { display:none!important } tr.es-desk-hidd=
+en, td.es-desk-hidden, table.es-desk-hidden { width:auto!important; overflo=
+w:visible!important; float:none!important; max-height:inherit!important; li=
+ne-height:inherit!important } tr.es-desk-hidden { display:table-row!importa=
+nt } table.es-desk-hidden { display:table!important }=0A td.es-desk-menu-hi=
+dden { display:table-cell!important } .es-menu td { width:1%!important } ta=
+ble.es-table-not-adapt, .esd-block-html table { width:auto!important } tabl=
+e.es-social { display:inline-block!important } table.es-social td { display=
+:inline-block!important } .es-desk-hidden { display:table-row!important; wi=
+dth:auto!important; overflow:visible!important; max-height:inherit!importan=
+t } }@media screen and (max-width:384px) {.mail-message-content { width:414=
+px!important } }</style>=0A </head>=0A <body class=3D"es-wrapper-color" dat=
+a-som-added=3D"true" lang=3D"und" style=3D"font-family:roboto, 'helvetica n=
+eue', helvetica, arial, sans-serif;width:100%;-webkit-text-size-adjust:100%=
+;-ms-text-size-adjust:100%;padding:0;Margin:0;background-color:#FFFFFF">   =
+     <div style=3D"display: none !important; padding: 0; height: 1px; font-=
+size: 1px; background-color: inherit !important; opacity: 0; color: transpa=
+rent; mso-line-height-rule: exactly; line-height:1px; mso-hide:all;">=0A   =
+         Invitation Only=0A            <div style=3D"display: none; max-hei=
+ght: 0px; overflow: hidden;">=0A               =0A&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=0A   =
+         </div>=0A=0A        </div>=0A<table class=3D"es-wrapper" width=3D"=
+100%" cellspacing=3D"0" cellpadding=3D"0" role=3D"none" style=3D"mso-table-=
+lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px=
+;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;backgro=
+und-position:center top;background-color:#FFFFFF"><tr><td valign=3D"top" st=
+yle=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspacing=3D"0" class=
+=3D"es-content" align=3D"center" role=3D"none" style=3D"mso-table-lspace:0p=
+t;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-la=
+yout:fixed !important;width:100%"><tr><td align=3D"center" bgcolor=3D"#ffff=
+ff" style=3D"padding:0;Margin:0;background-color:#ffffff"><table bgcolor=3D=
+"#ffffff" class=3D"es-content-body" align=3D"center" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table-rspace:=
+0pt;border-collapse:collapse;border-spacing:0px;background-color:transparen=
+t;width:650px"><tr><td align=3D"left"=0Astyle=3D"padding:0;Margin:0;padding=
+-top:20px;padding-left:20px;padding-right:20px"><table cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"100%" role=3D"none" style=3D"mso-table-lspace:0pt;=
+mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td a=
+lign=3D"center" valign=3D"top" style=3D"padding:0;Margin:0;width:610px"><ta=
+ble cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation=
+" style=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collap=
+se;border-spacing:0px"><tr><td align=3D"left" style=3D"padding:0;Margin:0">=
+<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:non=
+e;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande',=
+ 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:30px;=
+color:#333333;font-size:20px;text-align:center"><b>We Need Nonprofit Expert=
+s!</b></p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text=
+-size-adjust:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', =
+'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;l=
+ine-height:24px;color:#333333;font-size:16px;text-align:center"><br></p>=0A=
+<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:non=
+e;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande',=
+ 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;=
+color:#333333;font-size:16px"><em>"Are you ready to share your knowledge an=
+d experience with nonprofit organizations? Join us to explore how you can b=
+ecome a Major Gifts Ramp-Up Counselor."</em> ~ Stefanie Stark, Development =
+Systems International=C2=A0</p>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=
+=0A</table>=0A</td>=0A</tr>=0A=0A <tr><td align=3D"left" style=3D"padding:0=
+;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px"> =0A<!--[i=
+f mso]><table style=3D"width:610px" cellpadding=3D"0" cellspacing=3D"0"><tr=
+><td style=3D"width:197px" valign=3D"top"><![endif]--><table cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"es-left" align=3D"left" role=3D"none" style=
+=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bord=
+er-spacing:0px;float:left"><tr><td class=3D"es-m-p0r es-m-p20b" valign=3D"t=
+op" align=3D"center" style=3D"padding:0;Margin:0;width:197px"><table cellpa=
+dding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" style=3D=
+"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-=
+spacing:0px"><tr><td align=3D"center" style=3D"padding:0;Margin:0;font-size=
+:0px"><a target=3D"_blank" href=3D"https://jimmylarose.acemlnd.com/lt.php?x=
+=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0Olz1I2hjNb2nugvX6HG=
+KXSi" style=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-=
+line-height-rule:exactly;text-decoration:underline;color:#0000EE;font-size:=
+14px"><img class=3D"adapt-img"=0Asrc=3D"https://content.app-us1.com/cdn-cgi=
+/image/onerror=3Dredirect,width=3D650,dpr=3D2,fit=3Dscale-down,format=3Daut=
+o/pwp96/2023/05/15/6b670903-5532-4f9a-a7a7-a825092a4464.png" alt style=3D"d=
+isplay:block;border:0;outline:none;text-decoration:none;-ms-interpolation-m=
+ode:bicubic" data-cf-ir-is-resized=3D"true" width=3D"197"></a>=0A</td>=0A</=
+tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A=0A<!--[if mso]></td>=0A<td sty=
+le=3D"width:20px"></td>=0A<td style=3D"width:393px" valign=3D"top"><![endif=
+]--><table class=3D"es-right" cellpadding=3D"0" cellspacing=3D"0" align=3D"=
+right" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;bor=
+der-collapse:collapse;border-spacing:0px;float:right"><tr><td align=3D"left=
+" style=3D"padding:0;Margin:0;width:393px"><table cellpadding=3D"0" cellspa=
+cing=3D"0" width=3D"100%" role=3D"presentation" style=3D"mso-table-lspace:0=
+pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><t=
+d align=3D"center" style=3D"padding:0;Margin:0"><p style=3D"Margin:0;-webki=
+t-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exac=
+tly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lu=
+cida sans', tahoma, sans-serif;line-height:27px;color:#333333;font-size:18p=
+x">=C2=A0SuperConsulting Virtual Call<br>October 30, 2024<br>10am - 1pm EST=
+<br><br><strong><a href=3D"https://jimmylarose.acemlnd.com/lt.php?x=3D3DZy~=
+GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0Olz1I2hjNb2nugvX6HGKXSi" ta=
+rget=3D"_blank"=0Astyle=3D"-webkit-text-size-adjust:none;-ms-text-size-adju=
+st:none;mso-line-height-rule:exactly;text-decoration:underline;color:#0000E=
+E;font-size:18px;font-family:'trebuchet ms', 'lucida grande', 'lucida sans =
+unicode', 'lucida sans', tahoma, sans-serif">VISIT HERE TO MAKE RESERVATION=
+</a></strong><br><br>Because you work with<br>CHARITABLE ORGANIZATIONS</p>=
+=0A=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A =0A<!--[if mso=
+]></td>=0A</tr>=0A</table>=0A<![endif]--></td>=0A</tr>=0A=0A <tr><td align=
+=3D"left" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table=
+-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td align=3D"c=
+enter" valign=3D"top" style=3D"padding:0;Margin:0;width:650px"><table cellp=
+adding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" style=
+=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bord=
+er-spacing:0px"><tr><td align=3D"center" style=3D"padding:20px;Margin:0;fon=
+t-size:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0pt;m=
+so-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td st=
+yle=3D"padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;=
+height:1px;width:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=
+=0A=0A <tr><td align=3D"left" style=3D"padding:0;Margin:0"><p style=3D"Marg=
+in:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-heigh=
+t-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans un=
+icode', 'lucida sans', tahoma, sans-serif;line-height:19px;color:#333333;fo=
+nt-size:16px">Dear Colleague In Service,<br><br><strong><em>Did you know yo=
+u can add between $24,000 up to $240,000 to your annual income by becoming =
+a fundraising consultant?</em></strong><br><br>Development Systems Internat=
+ional (DSI) is hosting a live INVITATION ONLY 3hr Virtual Teleconference to=
+ explore how you can become a Major Gifts Ramp-Up Counselor. This is a priv=
+ate call. It is "Invitation Only." <em>REGISTRATION IS COMPLIMENTARY.</em> =
+We look forward to spending time with you to better understand your persona=
+l and professional goals.<br><br>DSI SuperConsulting Virtual Call (3hr)<br>=
+<strong>October 30, 2024 - 10am-1pm (EST)</strong><br>REGISTRATION OPENS AT=
+=0A9:45am<br><br><strong><a href=3D"https://jimmylarose.acemlnd.com/lt.php?=
+x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0Olz1I2hjNb2nugvX6H=
+GKXSi" target=3D"_blank" style=3D"-webkit-text-size-adjust:none;-ms-text-si=
+ze-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color=
+:#0000EE;font-size:16px">VISIT HERE TO MAKE YOUR RESERVATION</a></strong>=
+=C2=A0=C2=A0</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-m=
+s-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'trebuchet=
+ ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-s=
+erif;line-height:19px;color:#333333;font-size:16px">=C2=A0<br>Development S=
+ystems International has been raising hundreds of millions of dollars for c=
+haritable organizations for nearly 35 years. How? By serving nonprofit lead=
+ers just like you who are ready to share their experience with others.</p>=
+=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adju=
+st:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida gr=
+ande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height=
+:22px;color:#333333;font-size:16px">=C2=A0<br>Please feel free to contact m=
+e with your questions at (800) 257-6670.<br><br>Sincerely Yours,<br><br><sp=
+an style=3D"font-size:18px;line-height:22px"><b><i>Stefanie Stark, CNC</i><=
+/b></span><br><br>President, DSI</p>=0A</td>=0A</tr>=0A</table>=0A</td>=0A<=
+/tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</t=
+d>=0A</tr>=0A</table>=0A=0A <table class=3D"es-footer ac-footer" cellspacin=
+g=3D"0" cellpadding=3D"0" align=3D"center" role=3D"none" style=3D"mso-table=
+-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0p=
+x;table-layout:fixed !important;width:100%;background-color:transparent;bac=
+kground-repeat:repeat;background-position:center top"><tr><td align=3D"cent=
+er" class=3D"es-footer-body" style=3D"padding:0;Margin:0;background-color:t=
+ransparent;padding-top:20px;padding-bottom:20px;background:inherit;font-fam=
+ily:inherit;font-size:12px;color:inherit"><p style=3D"Margin:0;-webkit-text=
+-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;fo=
+nt-family:inherit;line-height:150%;color:inherit;font-size:inherit">Sent to=
+: soc@kernel.org<br><br><a style=3D"-webkit-text-size-adjust:none;-ms-text-=
+size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;col=
+or:inherit;font-size:inherit;font-family:inherit;font-weight:inherit"=0Ahre=
+f=3D"https://jimmylarose.acemlnd.com/proc.php?nl=3D300&c=3D980&m=3D1588&s=
+=3D678f48a0e320c6856d0620aa2e024acb&act=3Dunsub" target=3D"_blank">Unsubscr=
+ibe</a><br><br><span class=3D"perstag_address" style=3D"color:inherit;font-=
+family:inherit;font-size:inherit">National Development Institute, PO Box 18=
+40, Lexington, SC 29071, United States</span></p>=0A=0A</td>=0A</tr>=0A</ta=
+ble>=0A<img src=3D"https://jimmylarose.acemlnd.com/lt.php?x=3D41Zy~GDJJFjP6=
+pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-k2DjFNu1H0Ru0H3leWgmOTEJnihT8jt~xu8jb" =
+border=3D"0" width=3D"1" height=3D"1" style=3D"display:block;width:1px!impo=
+rtant;min-width:1px!important;max-width:1px!important;height:1px!important;=
+border:0;overflow:hidden;" /><br clear=3D"all" /></body>=0A</html>
+--_=_swift-86251457266aa600b8b8998.26987393_=_--
+
 
