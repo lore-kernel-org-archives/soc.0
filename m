@@ -4,28 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46973C3DA49
-	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 09:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 536D6C3DA49
+	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 09:17:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 368E2C4AF09; Fri,  2 Aug 2024 09:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732A2C32782;
-	Fri,  2 Aug 2024 09:16:53 +0000 (UTC)
+	id 38912C4AF13; Fri,  2 Aug 2024 09:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791DEC32782;
+	Fri,  2 Aug 2024 09:17:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722590221;
-	bh=h4T2Z5yLCtlds/HQEBtiro+DJlvC9ILcivFEw6gvYm8=;
+	s=k20201202; t=1722590265;
+	bh=GSu3k3pjNPPfYdvKG8us8Bm7TChoEA287efB6uq8KaQ=;
 	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
-	b=CRhMiu6GuPq2UYc3EZ+KCKPquVkPUMpfg1PqHQLVW14Qh+s1QmHOw+ovZtj4Ys6uW
-	 vOfjWIYMqR5tlVnHlvKKpqZM25620jo1fyHsFsJVkREPgBY5j9r5N2/8qOuKncUxgV
-	 B4VNi2dZ8Hvx/NaTEsPXb4IiGuqbGcn/6zIQwabJx+IxykOaRif6a2W8jbSgQ279Nm
-	 sqNuBI4fFJRk3//qR6N3oeB87PVQA59Xhhhu7Br0ktmfEncTqPLQGTcikGDq/oe/I2
-	 Bp5ETv6BWMrPAMHa/K71163C7sddA/g0i+gWFKDH6060+4eIMfdKz3xhdOwvu5lag1
-	 daQbwhM9TlyOA==
-Message-ID: <c00e51de-8c13-4531-867f-77ff2d23f45b@kernel.org>
-Date: Fri, 2 Aug 2024 11:16:51 +0200
+	b=AKdYcnLSxvInmtzheoqA0y+osKIThZbxOnk73m33UOCRLO/ztWXfD13yPj9nZBF++
+	 Q4xxWO/NdQLiJOgBsuX1eNdQE6kzSYpRgHODFrxAoru3XGRTi9J6VF7V6OYaAoJ8sk
+	 ict5SKd7HdVQPHt4w4CqPgKYop7wKsSZHNo4qjPobWWnlVrr806879OgX6B3uRSvvM
+	 fUfGG9s2iYla2otbp+/pxca7tJ0q0KIu0kbXuayU1LWh0DnBU9zTcUg4QE45C78XgP
+	 i+ve/2U10PlLvUihw6l8ChdG+cCuPc/QUGmfVyd9Y9wlL8F2W/SNA2HgtXEnv91rc8
+	 NuH3p8vic1VEg==
+Message-ID: <00cd1d9e-24ec-47c2-b88b-d585b10da7e5@kernel.org>
+Date: Fri, 2 Aug 2024 11:17:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/9] arm64: aspeed: Add support for ASPEED AST27XX BMC
- SoC
+Subject: Re: [PATCH v2 9/9] arm64: dts: aspeed: Add initial AST2700 EVB device
+ tree
 List-Id: <soc.lore.kernel.org>
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -39,7 +39,7 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org
 References: <20240802090544.2741206-1-kevin_chen@aspeedtech.com>
- <20240802090544.2741206-8-kevin_chen@aspeedtech.com>
+ <20240802090544.2741206-11-kevin_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -85,18 +85,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802090544.2741206-8-kevin_chen@aspeedtech.com>
+In-Reply-To: <20240802090544.2741206-11-kevin_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 11:05, Kevin Chen wrote:
-> Add two configs of ARCH_ASPEED and MACH_ASPEED_G7.
-> In current arm64 architecture, ARCH_ASPEED would select MACH_ASPEED_G7.
+> Add EVB board of AST2700 in ASPEED G7 Architecture.
 > 
 > Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
 > ---
-
-NAK.
+>  arch/arm64/boot/dts/aspeed/Makefile        |  4 ++
+>  arch/arm64/boot/dts/aspeed/ast2700-evb.dts | 58 ++++++++++++++++++++++
+>  2 files changed, 62 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
+>  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+> 
+> diff --git a/arch/arm64/boot/dts/aspeed/Makefile b/arch/arm64/boot/dts/aspeed/Makefile
+> new file mode 100644
+> index 000000000000..ffe7e15017cc
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/aspeed/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +dtb-$(CONFIG_ARCH_ASPEED) += \
+> +	ast2700-evb.dtb
+> diff --git a/arch/arm64/boot/dts/aspeed/ast2700-evb.dts b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+> new file mode 100644
+> index 000000000000..09c9569c0f7b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +/dts-v1/;
+> +
+> +#include "aspeed-g7.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +
+> +/ {
+> +	model = "AST2700A1-EVB";
+> +	compatible = "aspeed,ast2700-evb", "aspeed,ast2700";
+> +
+> +	aliases {
+> +		serial4 = &uart4;
+> +	};
+> +
+> +	chosen {
+> +		bootargs = "console=ttyS4,115200n8";
+> +		stdout-path = &uart4;
 
 <form letter>
 This is a friendly reminder during the review process.
