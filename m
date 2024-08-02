@@ -4,28 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 536D6C3DA49
-	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 09:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B731C3DA49
+	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 09:18:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 38912C4AF13; Fri,  2 Aug 2024 09:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791DEC32782;
-	Fri,  2 Aug 2024 09:17:37 +0000 (UTC)
+	id 3B938C4AF12; Fri,  2 Aug 2024 09:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDB5C32782;
+	Fri,  2 Aug 2024 09:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722590265;
-	bh=GSu3k3pjNPPfYdvKG8us8Bm7TChoEA287efB6uq8KaQ=;
+	s=k20201202; t=1722590337;
+	bh=dbphdIVJqwevCp53CHXALfkGLRq+V/D3wbfxlX/nOyc=;
 	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
-	b=AKdYcnLSxvInmtzheoqA0y+osKIThZbxOnk73m33UOCRLO/ztWXfD13yPj9nZBF++
-	 Q4xxWO/NdQLiJOgBsuX1eNdQE6kzSYpRgHODFrxAoru3XGRTi9J6VF7V6OYaAoJ8sk
-	 ict5SKd7HdVQPHt4w4CqPgKYop7wKsSZHNo4qjPobWWnlVrr806879OgX6B3uRSvvM
-	 fUfGG9s2iYla2otbp+/pxca7tJ0q0KIu0kbXuayU1LWh0DnBU9zTcUg4QE45C78XgP
-	 i+ve/2U10PlLvUihw6l8ChdG+cCuPc/QUGmfVyd9Y9wlL8F2W/SNA2HgtXEnv91rc8
-	 NuH3p8vic1VEg==
-Message-ID: <00cd1d9e-24ec-47c2-b88b-d585b10da7e5@kernel.org>
-Date: Fri, 2 Aug 2024 11:17:35 +0200
+	b=OMvNUwfE7uhLPAlBZMbpXpIg517Auxjx/N8Eg84WkQTZkHLgWWLF1j+yjDrgojyIs
+	 Jbh/CZEhwn/wozFgTap4PPRELgudYYSf0GfyUp01JfVUFvRiFyR41Y8t02kSd/4xJ0
+	 bc39EkYpWEmUH97rDnL6YBqXSafpOcWyfJReCMcI+XE/EazrC/i3vH1XUr844TKTjx
+	 GR4FqzK0TRg5EfVwEtCCDnA342/7XCaYwrnzEeADE4cp0KEHLZ6QSv3lA/gEL44gfz
+	 HVCADKE8y3Z8VAHlI9Ix1GD+2/ch6N7lScFKTv3ZqRnekbwgLNwCWfhohqPLcidtsh
+	 aKFMAgKF/WIlQ==
+Message-ID: <ba9cc5ea-4138-4e9c-b848-c7a3a070bd73@kernel.org>
+Date: Fri, 2 Aug 2024 11:18:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 9/9] arm64: dts: aspeed: Add initial AST2700 EVB device
- tree
+Subject: Re: [PATCH v2 0/9] Introduce ASPEED AST27XX BMC SoC
 List-Id: <soc.lore.kernel.org>
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -39,7 +38,7 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org
 References: <20240802090544.2741206-1-kevin_chen@aspeedtech.com>
- <20240802090544.2741206-11-kevin_chen@aspeedtech.com>
+ <20240802090544.2741206-2-kevin_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -85,66 +84,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802090544.2741206-11-kevin_chen@aspeedtech.com>
+In-Reply-To: <20240802090544.2741206-2-kevin_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 11:05, Kevin Chen wrote:
-> Add EVB board of AST2700 in ASPEED G7 Architecture.
+> This patchset adds initial support for the ASPEED.
+> AST27XX Board Management controller (BMC) SoC family.
 > 
-> Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
-> ---
->  arch/arm64/boot/dts/aspeed/Makefile        |  4 ++
->  arch/arm64/boot/dts/aspeed/ast2700-evb.dts | 58 ++++++++++++++++++++++
->  2 files changed, 62 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
->  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+> AST2700 is ASPEED's 8th-generation server management processor.
+> Featuring a quad-core ARM Cortex A35 64-bit processor and two
+> independent ARM Cortex M4 processors
 > 
-> diff --git a/arch/arm64/boot/dts/aspeed/Makefile b/arch/arm64/boot/dts/aspeed/Makefile
-> new file mode 100644
-> index 000000000000..ffe7e15017cc
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/aspeed/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +dtb-$(CONFIG_ARCH_ASPEED) += \
-> +	ast2700-evb.dtb
-> diff --git a/arch/arm64/boot/dts/aspeed/ast2700-evb.dts b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-> new file mode 100644
-> index 000000000000..09c9569c0f7b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-> @@ -0,0 +1,58 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +/dts-v1/;
-> +
-> +#include "aspeed-g7.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +
-> +/ {
-> +	model = "AST2700A1-EVB";
-> +	compatible = "aspeed,ast2700-evb", "aspeed,ast2700";
-> +
-> +	aliases {
-> +		serial4 = &uart4;
-> +	};
-> +
-> +	chosen {
-> +		bootargs = "console=ttyS4,115200n8";
-> +		stdout-path = &uart4;
+> This patchset adds minimal architecture and drivers such as:
+> Clocksource, Clock and Reset
+> 
+> This patchset was tested on the ASPEED AST2700 evaluation board.
 
-<form letter>
-This is a friendly reminder during the review process.
+Where is the changelog? You ignored several comments, did not bother to
+respond them, did not implement them.
 
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
-
-Thank you.
-</form letter>
+No changelog means you sent exactly the same? This is not how it works.
+Please read submitting patches, respond to all comments or implement
+them, provide *DETAILED* changelog in the cover letter or individual
+patches (---).
 
 Best regards,
 Krzysztof
