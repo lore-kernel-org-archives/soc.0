@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09050C3DA49
-	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 09:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE972C3DA49
+	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 09:16:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE12EC4AF09; Fri,  2 Aug 2024 09:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D599C32782;
-	Fri,  2 Aug 2024 09:16:19 +0000 (UTC)
+	id E2411C4AF12; Fri,  2 Aug 2024 09:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6517FC32782;
+	Fri,  2 Aug 2024 09:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722590187;
-	bh=EJjZs91HeAXV13ZEk2XqpWMizAFAF5zD1DVpVpsGB6A=;
+	s=k20201202; t=1722590200;
+	bh=Y3r5c3mXmlOWpcFm3QHkylS6JpNEEFokCiPj1jL60MY=;
 	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
-	b=I6EOcVZWgkwu8RTtojmyRB4Txjrog/EzJVGsALHf2J4i//iMqkf+KFi7gkoE2v+JC
-	 XE0FZkTckPk8SGBLHfvU1BmgIMHlTP4I0hMwtJNGLEvcjKixEEnp3Nzy15ScqSk2ub
-	 oBX+Y7uRiSIBIV0FVvVkjTsqK4CzB9v6HDXjwEBhICcXfXTld0VD/52sfBEfqP1g3G
-	 A86K9CEKmthfrM1/KZHBPp+pdtvwq94vtMO5/Qeo0zuTzsJLjSOhc7GqbqMLTq5d05
-	 BumdL2d685iEHMdvh8mNMY4zw/MM8RM0t5yWLKL/qtU3QUdlIvfzXUu5/79e1eeixm
-	 Pv08CRPhDSEFQ==
-Message-ID: <7a1769a0-7273-4995-863a-5db9e201c4f0@kernel.org>
-Date: Fri, 2 Aug 2024 11:16:17 +0200
+	b=YF1vsroSiEErn5zarvC72BreviL6/S1JchUpSglXe/sy5YSk0Y0Fd7RJVtRof8U0c
+	 2r4Uv+TGqO9HESJq43YeG9IbV3lxa/h6RYL8WQCuiV+9EGPz1sMN01b0jc9gwSqbV/
+	 n+Sdh2G0ztAo2V7bKFCnHFQNT3gQX/3mJUqS5FobJeLywpqQx64ckk7B3i6WR2h6VG
+	 HZAsuM3BDOfsrkkUvgOKj3cUfEK7ypxbVnI/3RomU8ta6pzke71rcZbZqJmeDa8WA5
+	 DAURIDjpkeZa8PKylBNR3k7qT2yYmuglov1GMouHYvVYuRn8Vnq5ZUH+deSgpMuG+D
+	 JlJFIyhfQ7Bjg==
+Message-ID: <effd2324-45a9-4c78-8012-7ac94b9b5ea2@kernel.org>
+Date: Fri, 2 Aug 2024 11:16:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/9] clk: ast2700: add clock controller
+Subject: Re: [PATCH v2 5/9] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
 List-Id: <soc.lore.kernel.org>
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -38,9 +38,9 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org
 References: <20240802090544.2741206-1-kevin_chen@aspeedtech.com>
- <20240802090544.2741206-6-kevin_chen@aspeedtech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240802090544.2741206-7-kevin_chen@aspeedtech.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -84,21 +84,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802090544.2741206-6-kevin_chen@aspeedtech.com>
+In-Reply-To: <20240802090544.2741206-7-kevin_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 11:05, Kevin Chen wrote:
-> Add support for ast2700 clock controller.
-> 
 > Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
-> ---
->  drivers/clk/Makefile      |    1 +
->  drivers/clk/clk-ast2700.c | 1173 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 1174 insertions(+)
->  create mode 100644 drivers/clk/clk-ast2700.c
 
-Missing bindings.
+<form letter>
+This is a friendly reminder during the review process.
+
+It seems my or other reviewer's previous comments were not fully
+addressed. Maybe the feedback got lost between the quotes, maybe you
+just forgot to apply it. Please go back to the previous discussion and
+either implement all requested changes or keep discussing them.
+
+Thank you.
+</form letter>
 
 Best regards,
 Krzysztof
