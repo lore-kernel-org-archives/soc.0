@@ -1,105 +1,130 @@
-Return-Path: <SRS0=RxOW=PB=linaro.org=dmitry.baryshkov@kernel.org>
+Return-Path: <SRS0=LgOQ=PB=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0430C3DA7F
-	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 19:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB950C3DA7F
+	for <soc@archiver.kernel.org>; Fri,  2 Aug 2024 19:25:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5AD2CC4AF10; Fri,  2 Aug 2024 19:20:52 +0000 (UTC)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 74E3DC4AF0E; Fri,  2 Aug 2024 19:25:42 +0000 (UTC)
+Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7F993C4AF0C
-	for <soc@kernel.org>; Fri,  2 Aug 2024 19:20:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F993C4AF0C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-654cf0a069eso68196197b3.1
-        for <soc@kernel.org>; Fri, 02 Aug 2024 12:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722626449; x=1723231249; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZNwK4s34iYGvIbS46dI7pOTIc2gw03JA9isN6WtOpc=;
-        b=MQ/Lkjj+kCAlyXXe/vJMym8a+2ENasx3ctZEPxgcE9w2XaLtJZRgM1GhTi4+gPjMnl
-         YeifgHJDlJXYiOHy8etYAfs6ekJJX0tfGLwKJ92xV0IUHy1/U6ucCB4UQ/Sa5/wJRBFP
-         pYZxpqHbxt4QZTMnFVp/dWdwSt/wN9CnOUZAJPwJzaQ2DSA+muE5El5GjHgMkxsTIpOz
-         fuy2OWojqnX/okouFjdXGavX70hd5+yLsqsR6uz9Hx04hGtVSTRTUNmGBkODxPLs1Nwe
-         nwjBP1uhmjjZso+ApaqX0hYyjqPJKqqFl8i02ap1QFOto79c0bzZh/ZNJT3XNpZy5yhs
-         5D0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722626449; x=1723231249;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gZNwK4s34iYGvIbS46dI7pOTIc2gw03JA9isN6WtOpc=;
-        b=aDNHuK4zZv3MDXimb1FsChibPC1F4KYUK1DqkYDavr5cKS46tLREKfqLIPtxAyuKQ5
-         86cDKZyvHYTi7rCiKrrU9KCJYhO3hJjizqrSn+7rTTQvq37OfzTfgwwNLiEn+OI0l+2+
-         75JUJnuA3CLwzkhpdcuxPI6YPdFKsb7+yGTavSZV19js0UeZqcLu3OxE0C6chd0+pACD
-         3GgHrGQRz3z6/Zdbfbi0KYALXVx9H+LHs+AIx/87v/NZ6PADqd0J1PhAkfzr25YxUGuy
-         vl5LvQzsbpxIE8OLE9f7bzNz4qG6va+//eE9Oauz6Ko1czn6HeODkGnx/ii7UqGJeqSN
-         Y1Pw==
-X-Forwarded-Encrypted: i=1; AJvYcCW4EcsFCOM1w/NX621JVWJ6riNanJlnUO0UwfPlvrnA5Jz8sz4yxNAzyoCdSW3Cpi3NYIvKtVS709UZr4wYSw==
-X-Gm-Message-State: AOJu0YxjdX6nTUlXux/FcDxsDOyAu5qkLL7Cuk8xOnbhzokkMaQWQ+ou
-	aZ6zKF5FrU3E1/aljOJEjJlHwrrBCxpV+exyRJZawIMEIfD5Dqh7sAf0eRqaP1NKd6WOIl8DxLn
-	xnB4NNDB2PHs6kwS5aVk42dnSJRkHTypX5MrBRg==
-X-Google-Smtp-Source: AGHT+IEqzG5OJVYb0N/hhSy3/aCVZpwuaC57g1J8oBIELAMwqUOkxVNDUu61cFnvy19WDb7qlbHaefm1NS450MOTFBE=
-X-Received: by 2002:a81:c20e:0:b0:63c:aa2:829d with SMTP id
- 00721157ae682-689637fccd4mr52822217b3.44.1722626449505; Fri, 02 Aug 2024
- 12:20:49 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 659DBC32782;
+	Fri,  2 Aug 2024 19:25:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 659DBC32782
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 34912114836A;
+	Fri,  2 Aug 2024 15:25:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute4.internal (MEProxy); Fri, 02 Aug 2024 15:25:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1722626739;
+	 x=1722713139; bh=KPWpdBe/T1YEYhELoEmhOZAJmkQnlBGJanxmk1YGIuE=; b=
+	bkNilIFm7jHFTG21pN96yxq5at/ynSJ0aE9B30By9sJdeORKNRVPtesIItlO2F4i
+	xTx/vAFmh6B/b3hlf/o6VoDjyBgstfm2F3yKGAd4rjO4ZyoE5J8aQNkd/pFynocd
+	qv/EsJSWYHJ1Otug4POEnkMh9VR58EBN0FwPPMdMnNz91/9dcoa+CMRUF6MxwGBw
+	jfCfGN6zCNdlOoyEOEv016SDQXukBNflql9arXxmceGiquvp+bW1ygSVEJG4Nnkv
+	cc+jBiQfKsVgcKycEmx8IK73OAlDFpnUv5tLhpRIbA5WVb80Qkhnbg0aYHwNA4zP
+	TPArDCWhwFCRE9h89hNKxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1722626739; x=
+	1722713139; bh=KPWpdBe/T1YEYhELoEmhOZAJmkQnlBGJanxmk1YGIuE=; b=e
+	rPfkcNuYhJzr3v3d7rMg/Mv+IbTYL/sTUGzhEDvuFKY8HHAsJu8wPsf55YiJx1kb
+	4JF4IlHI+FXcUbANvlW0R6rkdkjJs6nQV2Uj3CepmXhwR0OJvnPmthtZGkpo8S4Z
+	1F533P8AdsLfmH7LtQI7Zy+UE5X0L1iNkOOlGo/TW0oF8SaGVia80pFnj3LszEgY
+	8jLMck8NSt1/JHNcd2QAguinfBQjbvs4lbouWc/24GS9CgJBaqgbr7CtNhbAoBTb
+	BWGW+GbAmjnQs7EIPFPaReDjK9MckNS+A+nRj6A2LZYlkbJt16isEIXFP06RtT5/
+	n3KrR1JQY3SS7w6SR2dsw==
+X-ME-Sender: <xms:sTKtZo3SSLK8f72pTQY-sidmaGKK3FiUCEYwKKE5SUZE9dJ5YP-T2g>
+    <xme:sTKtZjFwHv69WnaZrjOyQeKAYh8caaO0jwTDx2t9w7oTcMWpFMvzBKjTkdypfV4DJ
+    Dv6wecqYWoJMEh_ajw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkedtgddufeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefh
+    vdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtoheptd
+X-ME-Proxy: <xmx:sTKtZg4jTm6aly8v38zdsT-ADFCvP0qejZ8GBDB4X6MpsETbpO0q-Q>
+    <xmx:sTKtZh3tjuTW0qc6kYHkTkzq6O09yRNIr9jF65j7Ilu-syJ8E0kKEA>
+    <xmx:sTKtZrHH4rKMaGOUEZKuqAz8K8_l_QwfyE3I9mIKqaket8zOBwTMgA>
+    <xmx:sTKtZq-oCgBamFK89lfAGjbzCyyI4l2DsQqwWYIt2SEbZjWtP5r2lg>
+    <xmx:szKtZubXLPbTQCZj5b9WMK9XF-F89rDLppcDT3xiSTJdgLIwRKEtUPYx>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 48551B6008D; Fri,  2 Aug 2024 15:25:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 MIME-Version: 1.0
-References: <20240802090544.2741206-1-kevin_chen@aspeedtech.com> <20240802090544.2741206-9-kevin_chen@aspeedtech.com>
-In-Reply-To: <20240802090544.2741206-9-kevin_chen@aspeedtech.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 2 Aug 2024 22:20:38 +0300
-Message-ID: <CAA8EJprcmQvE3PjySxBKq7Qv3JHJHhic2aQ5MDnwZaf-D=K2Rw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] arm64: defconfig: Add ASPEED AST2700 family support
-To: Kevin Chen <kevin_chen@aspeedtech.com>
+Date: Fri, 02 Aug 2024 21:25:17 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+ "Kevin Chen" <kevin_chen@aspeedtech.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au, 
-	andrew@codeconstruct.com.au, lee@kernel.org, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, soc@kernel.org, 
-	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, 
-	quic_bjorande@quicinc.com, geert+renesas@glider.be, shawnguo@kernel.org, 
-	neil.armstrong@linaro.org, m.szyprowski@samsung.com, nfraprado@collabora.com, 
-	u-kumar1@ti.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc: "Rob Herring" <robh@kernel.org>, krzk+dt@kernel.org,
+ "Conor Dooley" <conor+dt@kernel.org>, "Joel Stanley" <joel@jms.id.au>,
+ "Andrew Jeffery" <andrew@codeconstruct.com.au>, "Lee Jones" <lee@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>,
+ "Bjorn Andersson" <quic_bjorande@quicinc.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "Shawn Guo" <shawnguo@kernel.org>,
+ "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Marek Szyprowski" <m.szyprowski@samsung.com>,
+ =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>,
+ "Udit Kumar" <u-kumar1@ti.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Message-Id: <9795437d-b409-4105-9583-4dcb24b5a06c@app.fastmail.com>
+In-Reply-To: 
+ <CAA8EJprcmQvE3PjySxBKq7Qv3JHJHhic2aQ5MDnwZaf-D=K2Rw@mail.gmail.com>
+References: <20240802090544.2741206-1-kevin_chen@aspeedtech.com>
+ <20240802090544.2741206-9-kevin_chen@aspeedtech.com>
+ <CAA8EJprcmQvE3PjySxBKq7Qv3JHJHhic2aQ5MDnwZaf-D=K2Rw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] arm64: defconfig: Add ASPEED AST2700 family support
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2 Aug 2024 at 12:05, Kevin Chen <kevin_chen@aspeedtech.com> wrote:
+On Fri, Aug 2, 2024, at 21:20, Dmitry Baryshkov wrote:
+> On Fri, 2 Aug 2024 at 12:05, Kevin Chen <kevin_chen@aspeedtech.com> wrote:
+>>
+>> Enable CONFIG_ARCH_ASPEED in arm64 defconfig.
 >
-> Enable CONFIG_ARCH_ASPEED in arm64 defconfig.
+> Why? Usually the defconfig changes have "Enable CONFIG_FOO as it is
+> used on the Bar Baz platform" commit message.
 
-Why? Usually the defconfig changes have "Enable CONFIG_FOO as it is
-used on the Bar Baz platform" commit message.
+I would also expect to see aspeed specific device drivers
+to get enabled in the same commit. On arm32, I see
 
->
-> Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
-> ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 7d32fca64996..b393735a695f 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -38,6 +38,7 @@ CONFIG_ARCH_AIROHA=y
->  CONFIG_ARCH_SUNXI=y
->  CONFIG_ARCH_ALPINE=y
->  CONFIG_ARCH_APPLE=y
-> +CONFIG_ARCH_ASPEED=y
->  CONFIG_ARCH_BCM=y
->  CONFIG_ARCH_BCM2835=y
->  CONFIG_ARCH_BCM_IPROC=y
-> --
-> 2.34.1
->
+CONFIG_ASPEED_KCS_IPMI_BMC=m
+CONFIG_ASPEED_BT_IPMI_BMC=m
+CONFIG_I2C_ASPEED=m
+CONFIG_SPI_ASPEED_SMC=m
+CONFIG_GPIO_ASPEED_SGPIO=y
+CONFIG_SENSORS_ASPEED=m
+CONFIG_VIDEO_ASPEED=m
+CONFIG_DRM_ASPEED_GFX=m
+CONFIG_USB_ASPEED_VHUB=m
+CONFIG_RTC_DRV_ASPEED=m
+CONFIG_ASPEED_LPC_CTRL=m
+CONFIG_ASPEED_LPC_SNOOP=m
+CONFIG_ASPEED_P2A_CTRL=m
+CONFIG_ASPEED_ADC=m
+CONFIG_FSI_MASTER_ASPEED=m
 
+Presumably not all but a lot of these are also used on AST2700.
 
--- 
-With best wishes
-Dmitry
+     Arnd
