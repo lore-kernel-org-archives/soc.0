@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 836CFC3DA7F
-	for <soc@archiver.kernel.org>; Mon,  5 Aug 2024 01:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24466C3DA64
+	for <soc@archiver.kernel.org>; Mon,  5 Aug 2024 01:47:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 74F16C4AF14; Mon,  5 Aug 2024 01:47:26 +0000 (UTC)
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	id 0515AC4AF0B; Mon,  5 Aug 2024 01:47:28 +0000 (UTC)
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8B791C4AF12
-	for <soc@kernel.org>; Mon,  5 Aug 2024 01:47:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B791C4AF12
+	by smtp.kernel.org (Postfix) with ESMTPS id 1936DC4AF0C
+	for <soc@kernel.org>; Mon,  5 Aug 2024 01:47:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1936DC4AF0C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ff3d5c6e9eso42743885ad.1
-        for <soc@kernel.org>; Sun, 04 Aug 2024 18:47:24 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fc49c0aaffso72670635ad.3
+        for <soc@kernel.org>; Sun, 04 Aug 2024 18:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722822444; x=1723427244; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1722822446; x=1723427246; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3W9Xny5Oe2jyjvAS76xpniX/sLkXGO8PpSiALjSSUIs=;
-        b=jTW/CK9Rgk6jfcoZthBrH1bl1wgeShtXPha3ueADP2K8GmmxbMFSILlN7Q24gLmTDN
-         +iaSlH66GrJouGW/IrYmRKOLr0GUT/8U5/vVit7QKI98AGkBB4Tp6z+41JkRxX6ixEDx
-         wlkiCn2n8L2epxjJWs1z+FMrR+6WseW1tJzOcXpA5ZU/Me9WONr9H6JXoPLCRTkxWcC0
-         uOd84yvmxd9ojvbEiT02F9GMCERWhGlZtnsXVIavOaYgKATjn4I3qybhUrOzNJ7RaomB
-         LY+tG4Tuhe4bf38dKqtEDa1tsc15p712SpmPSsHPRF62MZNNrrz4pHzV7hd+5svx+MbT
-         SYzQ==
+        bh=y2fTMTU2sCnO518NONvI840diOGxlwU3sQIVaxycmPg=;
+        b=Hzm7XHlgTXUPjIfMZvafJdaOClXamEYoOPUq/PcqYZ8irvq8/f/yEIRjW+N5B2zeVZ
+         WoJoaKSSwwJJV3UhYVw20RixYleM5v1BVmwI2slsDtuUJ5K9GdqU9IprOT7TDFUyrnsx
+         3Xo89OnxBUGD858rxdpNLgdK/Gog5RWDZ8tyPEzW3e01FQhTaMmOJmaYQfc8dxrWciLl
+         ODIYigW+d6nrQvWv1FhR6n2YMIvqmOgKvSHYEhj4njKwbi8EjMVaUAqH1/5ApAKvm8o0
+         oKQJ1rSPPcPA8o6k6oBBOC0wcEDwIoVOQNYMQApTxrYw5DOVxF8z+gHMI5QKmujnEEe4
+         jlrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722822444; x=1723427244;
+        d=1e100.net; s=20230601; t=1722822446; x=1723427246;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3W9Xny5Oe2jyjvAS76xpniX/sLkXGO8PpSiALjSSUIs=;
-        b=nOgmRg6w4YeURr1qZO9qTd0fREDTIaigDo7v1T6ZFqExax9Yg/sRRl4XTh2mXug+1O
-         iP6mt/UBvupzXB/F1NE1KZLKIsH7cW/FzOQ2Qrblw1K/4Pro7ZtTSOrhJR8uY78Mf2Ie
-         WlFSaleF8X88Jf8iYDyxOV4tQxoCMB64rE4MISCgrPcOPMm/dcUTBdjVU62lHS8XaYt1
-         wdmu+Vq7Y+b0nPM1c0r+0BDcCpfrrT21ir72iE217BNW0yVqYPWQVqBw8EWGOXoBopqk
-         5JaoiQEPtyN+AOg0cDxBZ1xvHmo0lWXGi0oRco6wpk3Ik3pW4n0wpKr2fo8fMQu/IZqy
-         nwlw==
-X-Forwarded-Encrypted: i=1; AJvYcCXVlDQzlWfGpoLQaoqpzMopqsIAHa+j7/3heOVTliFw2iXqKtM3e2OLm8n5kvY+gVYO6qFOKHo8WAGU7WnwCQ==
-X-Gm-Message-State: AOJu0Yz80Y5fOY423Ay8FrmshLaINVrUpRs9FXBHcQS3PVNnJ1AO+KEm
-	zJJ1Um+p7XqPtlid5cG4xlGn+Wm9vF9fRy9cCA7dUCDfLX9gUm6M
-X-Google-Smtp-Source: AGHT+IG2qk2UX76WiKnUEfoLNtj9w3mHbdNpAlFnbpU8lmTUrz8S1fXH3OJw5hl3xcahnItIgN3FOQ==
-X-Received: by 2002:a17:902:b70d:b0:1ff:3b0f:d5e2 with SMTP id d9443c01a7336-1ff5737e3abmr89071635ad.32.1722822443699;
-        Sun, 04 Aug 2024 18:47:23 -0700 (PDT)
+        bh=y2fTMTU2sCnO518NONvI840diOGxlwU3sQIVaxycmPg=;
+        b=e8jySXyMehgfLZmM7Zzp/zaPeVPV7Jt9BBipO9B9Gl6+18QfrUNlS8GUJgsSOS3Z17
+         Or/twKibOAZjw9BNSomVbhUeINLrjqKePZ4en6JJz7LeTW+8t1Ve4vF2OeWojr+MYk/Z
+         ghFOPWbR6PY+GPHU64HYLK+6xFyOE7nnikTqbil9rQ9eMgqkVpxl3rsQZTFpXp0xO8OB
+         /+s+t9Ozr7ewnv4jKvKaALnk8wgLXFsu49Dsf5SrXoljBkF5oict+wKljoTX8uY7vIsB
+         xsOcOmNNltLkpqipR462dlkQ3J1Wj3oxfeGxgTAbOBrT/AQxqwuFLBUwF8z6p94xJ4Pt
+         sMHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUlBQQn0DpMgiT6L/pqmtPLHWLc2xSRvtrfy16sSRrSFDTblraBrURMLRJaVQN8v6FGzDGoUe08m5BtXx+MgA==
+X-Gm-Message-State: AOJu0Yz/1Yg951gI4ukUNaCAD/tXcTiDHlzB8PE+WifmNRnaNMlfKWAF
+	jxOu/Ez2v4+/vU8X5O6tm2XGSBlElSO0351qvfWFWR8cFJ8H5rxY
+X-Google-Smtp-Source: AGHT+IFGvfv0qGcuu0s9hpraRVdX+4qEf2sPdEvVVkHNnRbbklmFC1Z3IJaCt/qLGORFLVGSXNLLxw==
+X-Received: by 2002:a17:902:d2ce:b0:1f6:f298:e50 with SMTP id d9443c01a7336-1ff574e697cmr111650735ad.58.1722822446358;
+        Sun, 04 Aug 2024 18:47:26 -0700 (PDT)
 Received: from dtor-ws.sjc.corp.google.com ([2620:15c:9d:2:22e4:17a:28a:7497])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59295790sm55836015ad.261.2024.08.04.18.47.22
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59295790sm55836015ad.261.2024.08.04.18.47.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Aug 2024 18:47:23 -0700 (PDT)
+        Sun, 04 Aug 2024 18:47:25 -0700 (PDT)
 From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -64,561 +64,107 @@ To: Haojian Zhuang <haojian.zhuang@gmail.com>,
 Cc: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-input@vger.kernel.org
-Subject: [PATCH 2/5] Input: matrix_keypad - switch to gpiod API and generic device properties
-Date: Sun,  4 Aug 2024 18:47:05 -0700
-Message-ID: <20240805014710.1961677-3-dmitry.torokhov@gmail.com>
+Subject: [PATCH 4/5] ARM: spitz: Use software nodes/properties for the matrix keypad
+Date: Sun,  4 Aug 2024 18:47:07 -0700
+Message-ID: <20240805014710.1961677-5-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
 In-Reply-To: <20240805014710.1961677-1-dmitry.torokhov@gmail.com>
 References: <20240805014710.1961677-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gpiod API and generic device properties work with software nodes and
-static properties, which will allow removing platform data support
-from the driver, simplifying and streamlining the code.
+Convert the Spitz to use software nodes and static properties to
+describe GPIOs and other parameters of its matrix keypad.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/input/keyboard/matrix_keypad.c | 341 ++++++++++++++-----------
- 1 file changed, 185 insertions(+), 156 deletions(-)
+ arch/arm/mach-pxa/spitz.c | 64 +++++++++++++++++++++++++--------------
+ 1 file changed, 41 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/input/keyboard/matrix_keypad.c b/drivers/input/keyboard/matrix_keypad.c
-index 604e90d13ed0..5f7e6f27e9c5 100644
---- a/drivers/input/keyboard/matrix_keypad.c
-+++ b/drivers/input/keyboard/matrix_keypad.c
-@@ -17,17 +17,26 @@
- #include <linux/jiffies.h>
- #include <linux/module.h>
- #include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/input/matrix_keypad.h>
- #include <linux/slab.h>
- #include <linux/of.h>
--#include <linux/of_gpio.h>
--#include <linux/of_platform.h>
+diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
+index 9a7dc7b8676d..690596f36979 100644
+--- a/arch/arm/mach-pxa/spitz.c
++++ b/arch/arm/mach-pxa/spitz.c
+@@ -378,38 +378,56 @@ static const uint32_t spitz_keymap[] = {
+ 	KEY(6, 8, KEY_RIGHT),
+ };
  
- struct matrix_keypad {
--	const struct matrix_keypad_platform_data *pdata;
- 	struct input_dev *input_dev;
- 	unsigned int row_shift;
+-static const struct matrix_keymap_data spitz_keymap_data = {
+-	.keymap		= spitz_keymap,
+-	.keymap_size	= ARRAY_SIZE(spitz_keymap),
++static const struct software_node_ref_args spitz_mkp_row_gpios[] = {
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 12, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 17, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 91, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 34, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 36, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 38, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 39, GPIO_ACTIVE_HIGH),
+ };
  
-+	unsigned int col_scan_delay_us;
-+	/* key debounce interval in milli-second */
-+	unsigned int debounce_ms;
-+	bool drive_inactive_cols;
-+
-+	struct gpio_desc *row_gpios[MATRIX_MAX_ROWS];
-+	unsigned int num_row_gpios;
-+
-+	struct gpio_desc *col_gpios[MATRIX_MAX_ROWS];
-+	unsigned int num_col_gpios;
-+
- 	unsigned int row_irqs[MATRIX_MAX_ROWS];
- 	DECLARE_BITMAP(wakeup_enabled_irqs, MATRIX_MAX_ROWS);
- 
-@@ -44,50 +53,43 @@ struct matrix_keypad {
-  * columns. In that case it is configured here to be input, otherwise it is
-  * driven with the inactive value.
-  */
--static void __activate_col(const struct matrix_keypad_platform_data *pdata,
--			   int col, bool on)
-+static void __activate_col(struct matrix_keypad *keypad, int col, bool on)
- {
--	bool level_on = !pdata->active_low;
+-static const uint32_t spitz_row_gpios[] =
+-		{ 12, 17, 91, 34, 36, 38, 39 };
+-static const uint32_t spitz_col_gpios[] =
+-		{ 88, 23, 24, 25, 26, 27, 52, 103, 107, 108, 114 };
 -
- 	if (on) {
--		gpio_direction_output(pdata->col_gpios[col], level_on);
-+		gpiod_direction_output(keypad->col_gpios[col], 1);
- 	} else {
--		gpio_set_value_cansleep(pdata->col_gpios[col], !level_on);
--		if (!pdata->drive_inactive_cols)
--			gpio_direction_input(pdata->col_gpios[col]);
-+		gpiod_set_value_cansleep(keypad->col_gpios[col], 0);
-+		if (!keypad->drive_inactive_cols)
-+			gpiod_direction_input(keypad->col_gpios[col]);
- 	}
- }
+-static struct matrix_keypad_platform_data spitz_mkp_pdata = {
+-	.keymap_data		= &spitz_keymap_data,
+-	.row_gpios		= spitz_row_gpios,
+-	.col_gpios		= spitz_col_gpios,
+-	.num_row_gpios		= ARRAY_SIZE(spitz_row_gpios),
+-	.num_col_gpios		= ARRAY_SIZE(spitz_col_gpios),
+-	.col_scan_delay_us	= 10,
+-	.debounce_ms		= 10,
+-	.wakeup			= 1,
++static const struct software_node_ref_args spitz_mkp_col_gpios[] = {
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 88, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 23, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 24, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 25, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 26, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 27, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 52, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 103, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 107, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 108, GPIO_ACTIVE_HIGH),
++	SOFTWARE_NODE_REFERENCE(&pxa2xx_gpiochip_node, 114, GPIO_ACTIVE_HIGH),
+ };
  
--static void activate_col(const struct matrix_keypad_platform_data *pdata,
--			 int col, bool on)
-+static void activate_col(struct matrix_keypad *keypad, int col, bool on)
- {
--	__activate_col(pdata, col, on);
-+	__activate_col(keypad, col, on);
- 
--	if (on && pdata->col_scan_delay_us)
--		udelay(pdata->col_scan_delay_us);
-+	if (on && keypad->col_scan_delay_us)
-+		udelay(keypad->col_scan_delay_us);
- }
- 
--static void activate_all_cols(const struct matrix_keypad_platform_data *pdata,
--			      bool on)
-+static void activate_all_cols(struct matrix_keypad *keypad, bool on)
- {
- 	int col;
- 
--	for (col = 0; col < pdata->num_col_gpios; col++)
--		__activate_col(pdata, col, on);
-+	for (col = 0; col < keypad->num_col_gpios; col++)
-+		__activate_col(keypad, col, on);
- }
- 
--static bool row_asserted(const struct matrix_keypad_platform_data *pdata,
--			 int row)
-+static bool row_asserted(struct matrix_keypad *keypad, int row)
- {
--	return gpio_get_value_cansleep(pdata->row_gpios[row]) ?
--			!pdata->active_low : pdata->active_low;
-+	return gpiod_get_value_cansleep(keypad->row_gpios[row]);
- }
- 
- static void enable_row_irqs(struct matrix_keypad *keypad)
- {
- 	int i;
- 
--	for (i = 0; i < keypad->pdata->num_row_gpios; i++)
-+	for (i = 0; i < keypad->num_row_gpios; i++)
- 		enable_irq(keypad->row_irqs[i]);
- }
- 
-@@ -95,7 +97,7 @@ static void disable_row_irqs(struct matrix_keypad *keypad)
- {
- 	int i;
- 
--	for (i = 0; i < keypad->pdata->num_row_gpios; i++)
-+	for (i = 0; i < keypad->num_row_gpios; i++)
- 		disable_irq_nosync(keypad->row_irqs[i]);
- }
- 
-@@ -108,39 +110,38 @@ static void matrix_keypad_scan(struct work_struct *work)
- 		container_of(work, struct matrix_keypad, work.work);
- 	struct input_dev *input_dev = keypad->input_dev;
- 	const unsigned short *keycodes = input_dev->keycode;
--	const struct matrix_keypad_platform_data *pdata = keypad->pdata;
- 	uint32_t new_state[MATRIX_MAX_COLS];
- 	int row, col, code;
- 
- 	/* de-activate all columns for scanning */
--	activate_all_cols(pdata, false);
-+	activate_all_cols(keypad, false);
- 
- 	memset(new_state, 0, sizeof(new_state));
- 
--	for (row = 0; row < pdata->num_row_gpios; row++)
--		gpio_direction_input(pdata->row_gpios[row]);
-+	for (row = 0; row < keypad->num_row_gpios; row++)
-+		gpiod_direction_input(keypad->row_gpios[row]);
- 
- 	/* assert each column and read the row status out */
--	for (col = 0; col < pdata->num_col_gpios; col++) {
-+	for (col = 0; col < keypad->num_col_gpios; col++) {
- 
--		activate_col(pdata, col, true);
-+		activate_col(keypad, col, true);
- 
--		for (row = 0; row < pdata->num_row_gpios; row++)
-+		for (row = 0; row < keypad->num_row_gpios; row++)
- 			new_state[col] |=
--				row_asserted(pdata, row) ? (1 << row) : 0;
-+				row_asserted(keypad, row) ? BIT(row) : 0;
- 
--		activate_col(pdata, col, false);
-+		activate_col(keypad, col, false);
- 	}
- 
--	for (col = 0; col < pdata->num_col_gpios; col++) {
-+	for (col = 0; col < keypad->num_col_gpios; col++) {
- 		uint32_t bits_changed;
- 
- 		bits_changed = keypad->last_key_state[col] ^ new_state[col];
- 		if (bits_changed == 0)
- 			continue;
- 
--		for (row = 0; row < pdata->num_row_gpios; row++) {
--			if ((bits_changed & (1 << row)) == 0)
-+		for (row = 0; row < keypad->num_row_gpios; row++) {
-+			if (!(bits_changed & BIT(row)))
- 				continue;
- 
- 			code = MATRIX_SCAN_CODE(row, col, keypad->row_shift);
-@@ -154,7 +155,7 @@ static void matrix_keypad_scan(struct work_struct *work)
- 
- 	memcpy(keypad->last_key_state, new_state, sizeof(new_state));
- 
--	activate_all_cols(pdata, true);
-+	activate_all_cols(keypad, true);
- 
- 	/* Enable IRQs again */
- 	spin_lock_irq(&keypad->lock);
-@@ -181,7 +182,7 @@ static irqreturn_t matrix_keypad_interrupt(int irq, void *id)
- 	disable_row_irqs(keypad);
- 	keypad->scan_pending = true;
- 	schedule_delayed_work(&keypad->work,
--		msecs_to_jiffies(keypad->pdata->debounce_ms));
-+			      msecs_to_jiffies(keypad->debounce_ms));
- 
- out:
- 	spin_unlock_irqrestore(&keypad->lock, flags);
-@@ -225,7 +226,7 @@ static void matrix_keypad_enable_wakeup(struct matrix_keypad *keypad)
- 	int i;
- 
- 	for_each_clear_bit(i, keypad->wakeup_enabled_irqs,
--			   keypad->pdata->num_row_gpios)
-+			   keypad->num_row_gpios)
- 		if (enable_irq_wake(keypad->row_irqs[i]) == 0)
- 			__set_bit(i, keypad->wakeup_enabled_irqs);
- }
-@@ -235,7 +236,7 @@ static void matrix_keypad_disable_wakeup(struct matrix_keypad *keypad)
- 	int i;
- 
- 	for_each_set_bit(i, keypad->wakeup_enabled_irqs,
--			 keypad->pdata->num_row_gpios) {
-+			 keypad->num_row_gpios) {
- 		disable_irq_wake(keypad->row_irqs[i]);
- 		__clear_bit(i, keypad->wakeup_enabled_irqs);
- 	}
-@@ -270,11 +271,14 @@ static int matrix_keypad_resume(struct device *dev)
- static DEFINE_SIMPLE_DEV_PM_OPS(matrix_keypad_pm_ops,
- 				matrix_keypad_suspend, matrix_keypad_resume);
- 
--static int matrix_keypad_init_gpio(struct platform_device *pdev,
--				   struct matrix_keypad *keypad)
-+static int matrix_keypad_init_pdata_gpio(struct platform_device *pdev,
-+				const struct matrix_keypad_platform_data *pdata,
-+				struct matrix_keypad *keypad)
- {
--	const struct matrix_keypad_platform_data *pdata = keypad->pdata;
--	int i, irq, err;
-+	int i, err;
+-static struct platform_device spitz_mkp_device = {
++static const struct property_entry spitz_mkp_properties[] = {
++	PROPERTY_ENTRY_ARRAY_U32("linux,keymap", spitz_keymap),
++	PROPERTY_ENTRY_REF_ARRAY("row-gpios", spitz_mkp_row_gpios),
++	PROPERTY_ENTRY_REF_ARRAY("col-gpios", spitz_mkp_col_gpios),
++	PROPERTY_ENTRY_U32("col-scan-delay-us", 10),
++	PROPERTY_ENTRY_U32("debounce-delay-ms", 10),
++	PROPERTY_ENTRY_BOOL("wakeup-source"),
++	{ }
++};
 +
-+	keypad->num_col_gpios = pdata->num_col_gpios;
-+	keypad->num_row_gpios = pdata->num_row_gpios;
++static const struct platform_device_info spitz_mkp_info __initconst = {
+ 	.name		= "matrix-keypad",
+-	.id		= -1,
+-	.dev		= {
+-		.platform_data	= &spitz_mkp_pdata,
+-	},
++	.id		= PLATFORM_DEVID_NONE,
++	.properties	= spitz_mkp_properties,
+ };
  
- 	/* initialized strobe lines as outputs, activated */
- 	for (i = 0; i < pdata->num_col_gpios; i++) {
-@@ -287,7 +291,12 @@ static int matrix_keypad_init_gpio(struct platform_device *pdev,
- 			return err;
- 		}
- 
--		gpio_direction_output(pdata->col_gpios[i], !pdata->active_low);
-+		keypad->col_gpios[i] = gpio_to_desc(pdata->col_gpios[i]);
 +
-+		if (pdata->active_low ^ gpiod_is_active_low(keypad->col_gpios[i]))
-+			gpiod_toggle_active_low(keypad->col_gpios[i]);
-+
-+		gpiod_direction_output(keypad->col_gpios[i], 1);
- 	}
- 
- 	for (i = 0; i < pdata->num_row_gpios; i++) {
-@@ -300,137 +309,125 @@ static int matrix_keypad_init_gpio(struct platform_device *pdev,
- 			return err;
- 		}
- 
--		gpio_direction_input(pdata->row_gpios[i]);
--	}
--
--	for (i = 0; i < pdata->num_row_gpios; i++) {
--		irq = gpio_to_irq(pdata->row_gpios[i]);
--		if (irq < 0) {
--			err = irq;
--			dev_err(&pdev->dev,
--				"Unable to convert GPIO line %i to irq: %d\n",
--				pdata->row_gpios[i], err);
--			return err;
--		}
-+		keypad->row_gpios[i] = gpio_to_desc(pdata->row_gpios[i]);
- 
--		err = devm_request_any_context_irq(&pdev->dev,
--				irq,
--				matrix_keypad_interrupt,
--				IRQF_TRIGGER_RISING |
--					IRQF_TRIGGER_FALLING,
--				"matrix-keypad", keypad);
--		if (err < 0) {
--			dev_err(&pdev->dev,
--				"Unable to acquire interrupt for GPIO line %i\n",
--				pdata->row_gpios[i]);
--			return err;
--		}
-+		if (pdata->active_low ^ gpiod_is_active_low(keypad->row_gpios[i]))
-+			gpiod_toggle_active_low(keypad->row_gpios[i]);
- 
--		keypad->row_irqs[i] = irq;
-+		gpiod_direction_input(keypad->row_gpios[i]);
- 	}
- 
--	/* initialized as disabled - enabled by input->open */
--	disable_row_irqs(keypad);
--
- 	return 0;
- }
- 
--#ifdef CONFIG_OF
--static struct matrix_keypad_platform_data *
--matrix_keypad_parse_dt(struct device *dev)
-+static int matrix_keypad_init_gpio(struct platform_device *pdev,
-+				   struct matrix_keypad *keypad)
+ static void __init spitz_mkp_init(void)
  {
--	struct matrix_keypad_platform_data *pdata;
--	struct device_node *np = dev->of_node;
--	unsigned int *gpios;
--	int ret, i, nrow, ncol;
--
--	if (!np) {
--		dev_err(dev, "device lacks DT data\n");
--		return ERR_PTR(-ENODEV);
--	}
--
--	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
--	if (!pdata) {
--		dev_err(dev, "could not allocate memory for platform data\n");
--		return ERR_PTR(-ENOMEM);
--	}
-+	bool active_low;
-+	int nrow, ncol;
+-	platform_device_register(&spitz_mkp_device);
++	struct platform_device *pd;
 +	int err;
-+	int i;
- 
--	pdata->num_row_gpios = nrow = gpiod_count(dev, "row");
--	pdata->num_col_gpios = ncol = gpiod_count(dev, "col");
-+	nrow = gpiod_count(&pdev->dev, "row");
-+	ncol = gpiod_count(&pdev->dev, "col");
- 	if (nrow < 0 || ncol < 0) {
--		dev_err(dev, "number of keypad rows/columns not specified\n");
--		return ERR_PTR(-EINVAL);
-+		dev_err(&pdev->dev, "missing row or column GPIOs\n");
-+		return -EINVAL;
- 	}
- 
--	pdata->no_autorepeat = of_property_read_bool(np, "linux,no-autorepeat");
-+	keypad->num_row_gpios = nrow;
-+	keypad->num_col_gpios = ncol;
- 
--	pdata->wakeup = of_property_read_bool(np, "wakeup-source") ||
--			of_property_read_bool(np, "linux,wakeup"); /* legacy */
-+	active_low = device_property_read_bool(&pdev->dev, "gpio-activelow");
- 
--	pdata->active_low = of_property_read_bool(np, "gpio-activelow");
-+	/* initialize strobe lines as outputs, activated */
-+	for (i = 0; i < keypad->num_col_gpios; i++) {
-+		keypad->col_gpios[i] = devm_gpiod_get_index(&pdev->dev, "col",
-+							    i, GPIOD_ASIS);
-+		err = PTR_ERR_OR_ZERO(keypad->col_gpios[i]);
-+		if (err) {
-+			dev_err(&pdev->dev,
-+				"failed to request GPIO for COL%d: %d\n",
-+				i, err);
-+			return err;
-+		}
- 
--	pdata->drive_inactive_cols =
--		of_property_read_bool(np, "drive-inactive-cols");
-+		gpiod_set_consumer_name(keypad->col_gpios[i], "matrix_kbd_col");
- 
--	of_property_read_u32(np, "debounce-delay-ms", &pdata->debounce_ms);
--	of_property_read_u32(np, "col-scan-delay-us",
--						&pdata->col_scan_delay_us);
-+		if (active_low ^ gpiod_is_active_low(keypad->col_gpios[i]))
-+			gpiod_toggle_active_low(keypad->col_gpios[i]);
- 
--	gpios = devm_kcalloc(dev,
--			     pdata->num_row_gpios + pdata->num_col_gpios,
--			     sizeof(unsigned int),
--			     GFP_KERNEL);
--	if (!gpios) {
--		dev_err(dev, "could not allocate memory for gpios\n");
--		return ERR_PTR(-ENOMEM);
-+		gpiod_direction_output(keypad->col_gpios[i], 1);
- 	}
- 
--	for (i = 0; i < nrow; i++) {
--		ret = of_get_named_gpio(np, "row-gpios", i);
--		if (ret < 0)
--			return ERR_PTR(ret);
--		gpios[i] = ret;
--	}
-+	for (i = 0; i < keypad->num_row_gpios; i++) {
-+		keypad->row_gpios[i] = devm_gpiod_get_index(&pdev->dev, "row",
-+							    i, GPIOD_IN);
-+		err = PTR_ERR_OR_ZERO(keypad->row_gpios[i]);
-+		if (err) {
-+			dev_err(&pdev->dev,
-+				"failed to request GPIO for ROW%d: %d\n",
-+				i, err);
-+			return err;
-+		}
- 
--	for (i = 0; i < ncol; i++) {
--		ret = of_get_named_gpio(np, "col-gpios", i);
--		if (ret < 0)
--			return ERR_PTR(ret);
--		gpios[nrow + i] = ret;
--	}
-+		gpiod_set_consumer_name(keypad->row_gpios[i], "matrix_kbd_row");
- 
--	pdata->row_gpios = gpios;
--	pdata->col_gpios = &gpios[pdata->num_row_gpios];
-+		if (active_low ^ gpiod_is_active_low(keypad->row_gpios[i]))
-+			gpiod_toggle_active_low(keypad->row_gpios[i]);
-+	}
- 
--	return pdata;
-+	return 0;
- }
--#else
--static inline struct matrix_keypad_platform_data *
--matrix_keypad_parse_dt(struct device *dev)
 +
-+static int matrix_keypad_setup_interrupts(struct platform_device *pdev,
-+					  struct matrix_keypad *keypad)
- {
--	dev_err(dev, "no platform data defined\n");
-+	int err;
-+	int irq;
-+	int i;
-+
-+	for (i = 0; i < keypad->num_row_gpios; i++) {
-+		irq = gpiod_to_irq(keypad->row_gpios[i]);
-+		if (irq < 0) {
-+			err = irq;
-+			dev_err(&pdev->dev,
-+				"Unable to convert GPIO line %i to irq: %d\n",
-+				i, err);
-+			return err;
-+		}
-+
-+		err = devm_request_any_context_irq(&pdev->dev, irq,
-+						   matrix_keypad_interrupt,
-+						   IRQF_TRIGGER_RISING |
-+							IRQF_TRIGGER_FALLING,
-+						   "matrix-keypad", keypad);
-+		if (err < 0) {
-+			dev_err(&pdev->dev,
-+				"Unable to acquire interrupt for row %i: %d\n",
-+				i, err);
-+			return err;
-+		}
-+
-+		keypad->row_irqs[i] = irq;
-+	}
- 
--	return ERR_PTR(-EINVAL);
-+	/* initialized as disabled - enabled by input->open */
-+	disable_row_irqs(keypad);
-+
-+	return 0;
- }
--#endif
- 
- static int matrix_keypad_probe(struct platform_device *pdev)
- {
--	const struct matrix_keypad_platform_data *pdata;
-+	const struct matrix_keypad_platform_data *pdata =
-+						dev_get_platdata(&pdev->dev);
- 	struct matrix_keypad *keypad;
- 	struct input_dev *input_dev;
-+	bool autorepeat;
-+	bool wakeup;
- 	int err;
- 
--	pdata = dev_get_platdata(&pdev->dev);
--	if (!pdata) {
--		pdata = matrix_keypad_parse_dt(&pdev->dev);
--		if (IS_ERR(pdata))
--			return PTR_ERR(pdata);
--	} else if (!pdata->keymap_data) {
--		dev_err(&pdev->dev, "no keymap data defined\n");
--		return -EINVAL;
--	}
--
- 	keypad = devm_kzalloc(&pdev->dev, sizeof(*keypad), GFP_KERNEL);
- 	if (!keypad)
- 		return -ENOMEM;
-@@ -440,40 +437,72 @@ static int matrix_keypad_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	keypad->input_dev = input_dev;
--	keypad->pdata = pdata;
--	keypad->row_shift = get_count_order(pdata->num_col_gpios);
- 	keypad->stopped = true;
- 	INIT_DELAYED_WORK(&keypad->work, matrix_keypad_scan);
- 	spin_lock_init(&keypad->lock);
- 
-+	keypad->drive_inactive_cols =
-+		device_property_read_bool(&pdev->dev, "drive-inactive-cols");
-+	device_property_read_u32(&pdev->dev, "debounce-delay-ms",
-+				 &keypad->debounce_ms);
-+	device_property_read_u32(&pdev->dev, "col-scan-delay-us",
-+				 &keypad->col_scan_delay_us);
-+
-+	if (pdata) {
-+		keypad->col_scan_delay_us = pdata->col_scan_delay_us;
-+		keypad->debounce_ms = pdata->debounce_ms;
-+		keypad->drive_inactive_cols = pdata->drive_inactive_cols;
-+	}
-+
-+	if (pdata)
-+		err = matrix_keypad_init_pdata_gpio(pdev, pdata, keypad);
-+	else
-+		err = matrix_keypad_init_gpio(pdev, keypad);
++	pd = platform_device_register_full(&spitz_mkp_info);
++	err = PTR_ERR_OR_ZERO(pd);
 +	if (err)
-+		return err;
-+
-+	keypad->row_shift = get_count_order(keypad->num_col_gpios);
-+
-+	err = matrix_keypad_setup_interrupts(pdev, keypad);
-+	if (err)
-+		return err;
-+
- 	input_dev->name		= pdev->name;
- 	input_dev->id.bustype	= BUS_HOST;
- 	input_dev->open		= matrix_keypad_start;
- 	input_dev->close	= matrix_keypad_stop;
- 
--	err = matrix_keypad_build_keymap(pdata->keymap_data, NULL,
--					 pdata->num_row_gpios,
--					 pdata->num_col_gpios,
-+	err = matrix_keypad_build_keymap(pdata ? pdata->keymap_data : NULL,
-+					 NULL,
-+					 keypad->num_row_gpios,
-+					 keypad->num_col_gpios,
- 					 NULL, input_dev);
- 	if (err) {
- 		dev_err(&pdev->dev, "failed to build keymap\n");
- 		return -ENOMEM;
- 	}
- 
--	if (!pdata->no_autorepeat)
-+	autorepeat = !device_property_read_bool(&pdev->dev,
-+						"linux,no-autorepeat");
-+	if (autorepeat && pdata->no_autorepeat)
-+		autorepeat = false;
-+	if (autorepeat)
- 		__set_bit(EV_REP, input_dev->evbit);
-+
- 	input_set_capability(input_dev, EV_MSC, MSC_SCAN);
- 	input_set_drvdata(input_dev, keypad);
- 
--	err = matrix_keypad_init_gpio(pdev, keypad);
--	if (err)
--		return err;
--
- 	err = input_register_device(keypad->input_dev);
- 	if (err)
- 		return err;
- 
--	device_init_wakeup(&pdev->dev, pdata->wakeup);
-+	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source") ||
-+		 /* legacy */
-+		 device_property_read_bool(&pdev->dev, "linux,wakeup");
-+	if (!wakeup && pdata)
-+		wakeup = pdata->wakeup;
-+	device_init_wakeup(&pdev->dev, wakeup);
-+
- 	platform_set_drvdata(pdev, keypad);
- 
- 	return 0;
++		pr_err("failed to create keypad device: %d\n", err);
+ }
+ #else
+ static inline void spitz_mkp_init(void) {}
 -- 
 2.46.0.rc2.264.g509ed76dc8-goog
 
