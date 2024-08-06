@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A74EC52D6F
-	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8369C52D70
+	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 20:27:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4ECABC4AF0C; Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3931BC32786;
-	Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
+	id D1D8FC4AF0C; Tue,  6 Aug 2024 20:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3D2C32786;
+	Tue,  6 Aug 2024 20:27:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722976069;
-	bh=FahPCKGVv21AqJFY1PrZJ1xvbRYs/YhlavGqVjQWHA8=;
+	s=k20201202; t=1722976070;
+	bh=vXIcnMF6mRtpbcmm5cQDutZNPfDGBHuDUhOhrP7K5Qs=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UNDImyJOki7fzf06PTUfrxzcr2mUEBsW1wXoMH/EqCrzTXyqN1FqxHyccwxHgYYRM
-	 qyvTyWD50MRDi6hYA5jqw4UJXzTCT87qzOiGTMwnv/IQF7gCaBhcyfOConp1z8A/Xz
-	 jeSteIfpez18uAbUUBZbpOvZ9og2KU8M1KSFklKhEqTV7H21n7TzkyD35Huhl51HdS
-	 K8tigy4g10/21tEbk3BxZ6ZMZxUYcP8HdSnaT7w/t2QTHspqXjr344PHFFzvkOvIwQ
-	 JMCc7z0LqjtGoAo6ZpuguwVkVmU/vdBAnum+pkiZiH9EDva9STNa++uTLNLFb6IUTL
-	 jxsDZHUtnYHRA==
+	b=alZ0l+kPI+xVcNhpOfHY8zVuwmXVpqlyVzKBFb2khDsfzz+u4ObCf2zZr6ItmVqf/
+	 UtF+g48ownzK57hMurxyDoHRNLuGJIm3gEhRRdZlRPOQXfEyifWUpBPpsscKH7O/jK
+	 iVSEjntn4Kcfhq6KUNcd685JSYgpcFTicjXRf9pAZuNHzh7WZUVpSimHvCGPqIVvgx
+	 KZfsv7K7EZoLrC5/sSduOgu5MnACbVLVkx/rkJopsUFLhxoZecW+IVnwS5R0NmLvsv
+	 oA26oIIBmaAm2BBspkKSE0L/IniFUsnRy9pHO3SmgJaWnmnupHiRJlI2krTN44ab/n
+	 vywn437FcOLSg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3528439D6562;
-	Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2C339D6562;
+	Tue,  6 Aug 2024 20:27:50 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
+Subject: Re: [GIT PULL] arm64: dts: TI K3 fixes for v6.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172297606803.1692635.11206407747437989455.git-patchwork-notify@kernel.org>
-Date: Tue, 06 Aug 2024 20:27:48 +0000
-References: <aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com>
-In-Reply-To: <aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com>
-To: Vignesh Raghavendra <vigneshr@ti.com>
+ <172297606925.1692635.1356321292697962377.git-patchwork-notify@kernel.org>
+Date: Tue, 06 Aug 2024 20:27:49 +0000
+References: <20240806122659.vmasq2qjy6457bbs@peroxide>
+In-Reply-To: <20240806122659.vmasq2qjy6457bbs@peroxide>
+To: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 15 Jul 2024 23:37:42 +0530 you wrote:
-> Hi ARM SoC Maintainers,
+On Tue, 6 Aug 2024 07:26:59 -0500 you wrote:
+> Hi SoC maintainers,
 > 
-> Please pull below PR which consists of a late fix to my earlier pull request:
-> https://lore.kernel.org/linux-arm-kernel/37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com/
+> Please find DT fixups for the v6.11 rc cycle - This tag includes the
+> previous late PR
+> https://patchwork.kernel.org/project/linux-soc/patch/aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com/
 > 
-> The following changes since commit 6406c5d5512c0814b8c155df7f833a98d9069a72:
+> The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
-    https://git.kernel.org/soc/soc/c/03186cc52719
+  - [GIT,PULL] arm64: dts: TI K3 fixes for v6.11
+    https://git.kernel.org/soc/soc/c/d50a762b62cf
 
 You are awesome, thank you!
 -- 
