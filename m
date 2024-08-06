@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 718A4C52D70
-	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 20:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A74EC52D6F
+	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46DCDC4AF0E; Tue,  6 Aug 2024 20:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3025CC32786
-	for <soc@kernel.org>; Tue,  6 Aug 2024 20:27:48 +0000 (UTC)
+	id 4ECABC4AF0C; Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3931BC32786;
+	Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722976068;
-	bh=1PP/nOLyyh+/nBD04AwcngKXwjO2DH+UBmaywpzi4fQ=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=IO3sxHwPVD4Kyo4KI8DcIFF4lDmeSTlQGDuvtmlZaF5k3rtzorp87OWDe5uvpZ4Bv
-	 gUgYHsd+uPhl9ZYMDv66m9qgWgytwb9PPjfVtc/sG0itgemrKUa7/QXWOECa+TyRgd
-	 gx0T412xi2rifnut0jjSdP83YFSCQ2qhspkf8KDLR+0IvjPdQLCB+qyVzfGwh7b3wp
-	 L9Z0NX8qkp1qkbJikAEetfg5RuuEKilbk4aOk4Y4TzMAKm/NN3rwvmwLyuvZhUB8VE
-	 su1mxCP2DYHcZen11NoibXBsrcUrJ7gDzgpInuuW+3fl/jBsQsghaXi+A4ZZ7gUe5F
-	 rMQC7JW2KZnrg==
+	s=k20201202; t=1722976069;
+	bh=FahPCKGVv21AqJFY1PrZJ1xvbRYs/YhlavGqVjQWHA8=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=UNDImyJOki7fzf06PTUfrxzcr2mUEBsW1wXoMH/EqCrzTXyqN1FqxHyccwxHgYYRM
+	 qyvTyWD50MRDi6hYA5jqw4UJXzTCT87qzOiGTMwnv/IQF7gCaBhcyfOConp1z8A/Xz
+	 jeSteIfpez18uAbUUBZbpOvZ9og2KU8M1KSFklKhEqTV7H21n7TzkyD35Huhl51HdS
+	 K8tigy4g10/21tEbk3BxZ6ZMZxUYcP8HdSnaT7w/t2QTHspqXjr344PHFFzvkOvIwQ
+	 JMCc7z0LqjtGoAo6ZpuguwVkVmU/vdBAnum+pkiZiH9EDva9STNa++uTLNLFb6IUTL
+	 jxsDZHUtnYHRA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F227A39D6562;
-	Tue,  6 Aug 2024 20:27:47 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3528439D6562;
+	Tue,  6 Aug 2024 20:27:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172297606634.1692635.142342556379353281.git-patchwork-summary@kernel.org>
-Date: Tue, 06 Aug 2024 20:27:46 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <172297606803.1692635.11206407747437989455.git-patchwork-notify@kernel.org>
+Date: Tue, 06 Aug 2024 20:27:48 +0000
+References: <aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com>
+In-Reply-To: <aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
-  Submitter: Vignesh Raghavendra <vigneshr@ti.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=871462
-  Lore link: https://lore.kernel.org/r/aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com
+On Mon, 15 Jul 2024 23:37:42 +0530 you wrote:
+> Hi ARM SoC Maintainers,
+> 
+> Please pull below PR which consists of a late fix to my earlier pull request:
+> https://lore.kernel.org/linux-arm-kernel/37f251a1-f3bd-402f-ab22-cf786c3871d7@ti.com/
+> 
+> The following changes since commit 6406c5d5512c0814b8c155df7f833a98d9069a72:
+> 
+> [...]
 
-Patch: [GIT,PULL] arm64: dts: TI K3 fixes for v6.11
-  Submitter: Nishanth Menon <nm@ti.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=877057
-  Lore link: https://lore.kernel.org/r/20240806122659.vmasq2qjy6457bbs@peroxide
+Here is the summary with links:
+  - [GIT,PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
+    https://git.kernel.org/soc/soc/c/03186cc52719
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
