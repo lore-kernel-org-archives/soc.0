@@ -1,149 +1,214 @@
-Return-Path: <SRS0=ZZk/=PF=ti.com=nm@kernel.org>
+Return-Path: <SRS0=oviF=PF=gmail.com=dmitry.torokhov@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39ED7C52D6F
-	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 12:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 854D3C52D70
+	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 16:58:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 12512C4AF10; Tue,  6 Aug 2024 12:27:05 +0000 (UTC)
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5D2A9C32786; Tue,  6 Aug 2024 16:58:19 +0000 (UTC)
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4566BC32786;
-	Tue,  6 Aug 2024 12:27:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4566BC32786
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 476CR0uZ066664;
-	Tue, 6 Aug 2024 07:27:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1722947220;
-	bh=SwRpsKfZDOITr5gGoBXGDIDeMkgZxnTSu5h+jX/4kL4=;
-	h=Date:From:To:CC:Subject;
-	b=LTvj6AZLIeA21tukIbZWPMG2SNckBu+cMqhr1iMAp1CQR6tch9UJnJwcG7bQWqw+1
-	 /y1QB5BxpC5DOERj5aXaZUg3ZIPxdJqKSeAI7Dh+Fm4rsOdRdorQw7qO4uqChs6nZI
-	 +hFgs7jIcQrd8OKuwLPrBjUGEhELmVoNqhgBWP1I=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 476CR0mw040119
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 6 Aug 2024 07:27:00 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
- Aug 2024 07:26:59 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 6 Aug 2024 07:27:00 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 476CQxrR102229;
-	Tue, 6 Aug 2024 07:26:59 -0500
-Date: Tue, 6 Aug 2024 07:26:59 -0500
-From: Nishanth Menon <nm@ti.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3B1CDC4AF0C
+	for <soc@kernel.org>; Tue,  6 Aug 2024 16:58:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B1CDC4AF0C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-710afd56c99so39887b3a.0
+        for <soc@kernel.org>; Tue, 06 Aug 2024 09:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722963497; x=1723568297; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AteIhxBYzhJyn1tYeIzpVUFBBzJ416KEbbM9lqDXkQI=;
+        b=N33D5wHxhmjyYQ7aXbYNL/yH61nI2NWpJHY+cSmhvphIABzKLGDHPPyXe9CApVyO3W
+         1l63vfd4IpvLt36i67Fn8erWskV9M2CAxUaXk5SUW+EnBBpZ142Q/ZWXI0i3uUOHIq/V
+         0OiE35tY/llfWTCrQ/EgE8mkWtedFBTTthZ7kEPHwwU3r3sZ/HXkN5gXoiqTBL83hg6y
+         kL8zCFchZ6EtpBM+espkn56MTC2zvrNoJx6BSgYce+vlpFBFXNpIu6CVSjMqnJGOazem
+         9XSX4YWHzoanQYyASMEHZZPOv3+zbV0YoGz6Vg+0Q9iQnrPxbbfolvCdq4v2ecQ/ns+e
+         UbAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722963497; x=1723568297;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AteIhxBYzhJyn1tYeIzpVUFBBzJ416KEbbM9lqDXkQI=;
+        b=a8TxcfJn/e7AwUVho0kY0AYpAXA9zhUGj5MqGcHL9BGMxkUww+/M5NaWqVzn6c7tLZ
+         /ipQUtX6FUUCOnHfzS6osfMqTK1VbAQTJ6H40Q7CitBTBVYNQ3sL0nALHPunHKVxBXZo
+         v8ufUA+rGxuMCiqRlf2bCLbrU8rqj9MmZmDQTxL+fakzPb4z2Du8dwYky+JKUWGoowve
+         VSxDTjC7ALLOo/JPnVf/sBnRzFMjFrBBWDvVGiU4qaqTgzMJcsp3PkeWcwdMmjAz7+kY
+         I8hOOeKR+WpfCyQgj7nDFlTfULpEV7gVEVReOW0QPkg38fNrLWGoNxmBuaLzkV+ikQb5
+         F1Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqBpfPDWtKTGMLi5gC+ealk/j2jqMeKF0/iF6HztksRO6MGAqA9I5oylwiLERNg3fGBmN3nnTBVbFPl10fDA==
+X-Gm-Message-State: AOJu0YziVsXjChtGPaVo9+PpaNlDqrJms6+WC+erVq5GM3hsnftm2Myx
+	JJqS7UUII6WxpG0awWKNNiwZQRT9Jv4FlpnWXlpoSFSaj/g1OMMA
+X-Google-Smtp-Source: AGHT+IGX9QiPDay2/VRkCT54En685+dc1libP8vbkdercbTFcGF1Yfp92C2prgbKNUL7feC46lOMkw==
+X-Received: by 2002:a05:6a00:91d9:b0:705:d6ad:2495 with SMTP id d2e1a72fcca58-71065f1e22emr27662731b3a.12.1722963497198;
+        Tue, 06 Aug 2024 09:58:17 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:5e0f:b2bc:fc41:27a])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7106ec416aasm7185063b3a.70.2024.08.06.09.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 09:58:16 -0700 (PDT)
+Date: Tue, 6 Aug 2024 09:58:14 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL] arm64: dts: TI K3 fixes for v6.11
-Message-ID: <20240806122659.vmasq2qjy6457bbs@peroxide>
+Cc: Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Daniel Mack <daniel@zonque.org>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Linus Walleij <linus.walleij@linaro.org>, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/10] ARM: pxa/gumstix: convert vbus gpio to use
+ software nodes
+Message-ID: <ZrJWJoDdNTLuIViH@google.com>
+References: <20240628180852.1738922-1-dmitry.torokhov@gmail.com>
+ <20240628180852.1738922-4-dmitry.torokhov@gmail.com>
+ <3f7971e1-0576-417b-8aaa-c06e1697908f@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vwawzq3tw7tz25jq"
-Content-Disposition: inline
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
---vwawzq3tw7tz25jq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <3f7971e1-0576-417b-8aaa-c06e1697908f@app.fastmail.com>
 
-Hi SoC maintainers,
+On Tue, Aug 06, 2024 at 09:19:55AM +0200, Arnd Bergmann wrote:
+> On Fri, Jun 28, 2024, at 20:08, Dmitry Torokhov wrote:
+> > Switch vbus gpios from using a custom GPIO lookup table to software
+> > properties using PROPERTY_ENTRY_GPIO() constructs which closely mimic
+> > device tree gpio properties.
+> >
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> 
+> I ran into some randconfig build failures with this one now:
+> 
+> > index c9f0f62187bd..b9eddc691097 100644
+> > --- a/arch/arm/mach-pxa/gumstix.c
+> > +++ b/arch/arm/mach-pxa/gumstix.c
+> > @@ -100,26 +100,22 @@ static void __init gumstix_mmc_init(void)
+> >  #endif
+> > 
+> >  #ifdef CONFIG_USB_PXA25X
+> > -static struct gpiod_lookup_table gumstix_gpio_vbus_gpiod_table = {
+> > -	.dev_id = "gpio-vbus",
+> > -	.table = {
+> > -		GPIO_LOOKUP("gpio-pxa", GPIO_GUMSTIX_USB_GPIOn,
+> > -			    "vbus", GPIO_ACTIVE_HIGH),
+> > -		GPIO_LOOKUP("gpio-pxa", GPIO_GUMSTIX_USB_GPIOx,
+> > -			    "pullup", GPIO_ACTIVE_HIGH),
+> > -		{ },
+> > -	},
+> > +static const struct property_entry spitz_mci_props[] __initconst = {
+> > +	PROPERTY_ENTRY_GPIO("vbus-gpios", &pxa2xx_gpiochip_node,
+> > +			    GPIO_GUMSTIX_USB_GPIOn, GPIO_ACTIVE_HIGH),
+> > +	PROPERTY_ENTRY_GPIO("pullup-gpios", &pxa2xx_gpiochip_node,
+> > +			    GPIO_GUMSTIX_USB_GPIOx, GPIO_ACTIVE_HIGH),
+> > +	{ }
+> >  };
+> > 
+> 
+> This is missing a few #include, the name spitz_mci_props[]
+> is wrong for this file and the array is not referenced anywhere.
 
-Please find DT fixups for the v6.11 rc cycle - This tag includes the
-previous late PR
-https://patchwork.kernel.org/project/linux-soc/patch/aacd1e96-9ff4-4222-9f4=
-d-29e63041f7fb@ti.com/
+Ugh, you are right. Its weird that it does not warn me that the compiler
+did not warn me that it is not used... It built for me with
+pxa_defconfig so I assumed it was all good.
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+Ahh, by default it forces CONFIG_USB_PXA25X to be a module and that
+skips that block in gumstix.c. I'll change it to IS_ENABLED() because it
+should not matter if USB/UDC is built-in or is a module.
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+> 
+> I assume the gumstix_gpio_vbus_info needs to be turned into
+> an swnode, but I haven't figured out how to do this.
 
-are available in the Git repository at:
+It is just a matter of initializing .properties in
+gumstix_gpio_vbus_info. 
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-d=
-t-fixes-for-v6.11
+> 
+> Based on the recent board deprecation discussion, I expect
+> that there are no users and that we will remove this machine
+> early next year, so we don't need to care about making it
+> pretty now, but maybe you can send a patch to make it build
+> again.
 
-for you to fetch changes up to 402d336053a5d827c70ec11109e079811e86e0e8:
+Yes, of course. Could you please try the patch below? And if you see
+failures, please share your .config.
 
-  arm64: dts: ti: k3-j784s4-main: Correct McASP DMAs (2024-08-06 06:39:23 -=
-0500)
+> 
+>     Arnd
 
-----------------------------------------------------------------
-Devicetree fixes for TI K3 platforms for v6.11
+-- 
+Dmitry
 
-Critical fixes for the following:
-* j784s4: Fix for McASP DMA map
-* J722s/AM62p: GPIO ranges fixes
-* k3-am62-verdin-dahlia: sleep-moci fixes for deep-sleep (revert)
+From cff436e3405b7f938e60f693ca7c8410266a893b Mon Sep 17 00:00:00 2001
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date: Tue, 6 Aug 2024 09:12:58 -0700
+Subject: [PATCH] ARM: pxa/gumstix: fix attaching properties to vbus gpio device
 
-----------------------------------------------------------------
-Andrew Halaney (2):
-      arm64: dts: ti: k3-j784s4-evm: Assign only lanes 0 and 1 to PCIe1
-      arm64: dts: ti: k3-j784s4-evm: Consolidate serdes0 references
+Commit f1d6588af93b tried to convert GPIO lookup tables to software
+properties for the vbus gpio device, bit forgot the most important
+step: actually attaching the new properties to the device.
 
-Francesco Dolcini (1):
-      arm64: dts: ti: k3-am62-verdin-dahlia: Keep CTRL_SLEEP_MOCI# regulato=
-r on
+Also fix up the name of the property array to reflect the board name,
+and add missing gpio/property.h and devices.h includes absence of which
+causes compile failures on some configurations.
 
-Jared McArthur (3):
-      arm64: dts: ti: k3-am62p: Add gpio-ranges for mcu_gpio0
-      arm64: dts: ti: k3-am62p: Fix gpio-range for main_pmx0
-      arm64: dts: ti: k3-j722s: Fix gpio-range for main_pmx0
+Switch "#ifdef CONFIG_USB_PXA25X" to "#if IS_ENABLED(CONFIG_USB_PXA25X)"
+because it should not matter if the driver is buolt in or a module, it
+still need vbus controls.
 
-Nishanth Menon (1):
-      Merge tag 'ti-k3-dt-for-v6.11-part2' into ti-k3-dts-next
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: f1d6588af93b ("ARM: pxa/gumstix: convert vbus gpio to use software nodes")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ arch/arm/mach-pxa/gumstix.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Parth Pancholi (1):
-      arm64: dts: ti: k3-j784s4-main: Correct McASP DMAs
+diff --git a/arch/arm/mach-pxa/gumstix.c b/arch/arm/mach-pxa/gumstix.c
+index efa6faa62a2c..1713bdf3b71e 100644
+--- a/arch/arm/mach-pxa/gumstix.c
++++ b/arch/arm/mach-pxa/gumstix.c
+@@ -21,6 +21,7 @@
+ #include <linux/mtd/mtd.h>
+ #include <linux/mtd/partitions.h>
+ #include <linux/gpio/machine.h>
++#include <linux/gpio/property.h>
+ #include <linux/gpio.h>
+ #include <linux/err.h>
+ #include <linux/clk.h>
+@@ -40,6 +41,7 @@
+ #include <linux/platform_data/mmc-pxamci.h>
+ #include "udc.h"
+ #include "gumstix.h"
++#include "devices.h"
+ 
+ #include "generic.h"
+ 
+@@ -99,8 +101,8 @@ static void __init gumstix_mmc_init(void)
+ }
+ #endif
+ 
+-#ifdef CONFIG_USB_PXA25X
+-static const struct property_entry spitz_mci_props[] __initconst = {
++#if IS_ENABLED(CONFIG_USB_PXA25X)
++static const struct property_entry gumstix_vbus_props[] __initconst = {
+ 	PROPERTY_ENTRY_GPIO("vbus-gpios", &pxa2xx_gpiochip_node,
+ 			    GPIO_GUMSTIX_USB_GPIOn, GPIO_ACTIVE_HIGH),
+ 	PROPERTY_ENTRY_GPIO("pullup-gpios", &pxa2xx_gpiochip_node,
+@@ -109,8 +111,9 @@ static const struct property_entry spitz_mci_props[] __initconst = {
+ };
+ 
+ static const struct platform_device_info gumstix_gpio_vbus_info __initconst = {
+-	.name	= "gpio-vbus",
+-	.id	= PLATFORM_DEVID_NONE,
++	.name		= "gpio-vbus",
++	.id		= PLATFORM_DEVID_NONE,
++	.properties	= gumstix_vbus_props,
+ };
+ 
+ static void __init gumstix_udc_init(void)
+-- 
+2.46.0.rc2.264.g509ed76dc8-goog
 
- arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi  | 22 -------------------
- arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi         |  6 ------
- .../boot/dts/ti/k3-am62p-j722s-common-mcu.dtsi     |  2 ++
- arch/arm64/boot/dts/ti/k3-am62p-main.dtsi          |  3 ++-
- arch/arm64/boot/dts/ti/k3-j722s-main.dtsi          |  3 ++-
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts           | 25 +++++++-----------=
-----
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi         |  4 ++--
- 7 files changed, 16 insertions(+), 49 deletions(-)
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
 
---vwawzq3tw7tz25jq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmayFo0ACgkQ3bWEnRc2
-JJ1oKg/9EAHR8Cr6XyueByC0qUGUvjv4gHQMRRx22PRE5uyMvWjIkTfN9I4q8Sfa
-HtG3o6J5TBeGm4DytawgYf++CqQsAE08jfednrkeUwV/NF1jkbtWIJTe3e2OI/n1
-agWFDlJtKHLJwM8QqqtagczKypM8mbl50OU7Pdqgh2Nf06fUFe7/Q98SH8H62/S+
-YCNEp0XZW5rfh167lc0yp9M0RZiFCna/IlM5MbFr7UMkOuzSd91G2cKq3IKqaR8g
-HHIoXacueiOIeqB4vjweTKAFP23Lwp4Yx4gzyMXyvmtSTl8l37JyCjskx941v4XR
-QeGPtLJJ4osPom3yNgy9LgerVPpv4+9ayFJBImmm9EKCVTCIZMfLDOnEZXoZveFx
-u8XMegLIXRNtbBtzdWjjsKm12hC4DIonqPiVriPdoxc3L0cTLEnuW4zx7hyHtlfR
-f+hgVcO+MuJ6UUWEZgsXkVkCeS5sSkwtJT+ssHUOV4e16/ttt60PCdjCNDVNbJ+c
-j3WS/49CZ2A9+gKOYhFVne0yOhjQvRkIu2e0nc9qqea/YB1tMXDI8qPfjbZPeeeq
-VPCKmhJ3XF1eeN4D6QmSHi10Fe4OxHTwGnJC9opxYR+xbspumxfI0Hp6YMo8XYbP
-Pk+SCtMczevJKc8E5ihVKBo5YUqYr8jpYMSkLE+MVVf11c8Pbj4=
-=XSOH
------END PGP SIGNATURE-----
-
---vwawzq3tw7tz25jq--
