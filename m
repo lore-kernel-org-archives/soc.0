@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5022C52D71
-	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 20:08:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 718A4C52D70
+	for <soc@archiver.kernel.org>; Tue,  6 Aug 2024 20:27:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C35A3C4AF0C; Tue,  6 Aug 2024 20:08:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8DFC32786;
-	Tue,  6 Aug 2024 20:08:25 +0000 (UTC)
+	id 46DCDC4AF0E; Tue,  6 Aug 2024 20:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3025CC32786
+	for <soc@kernel.org>; Tue,  6 Aug 2024 20:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722974905;
-	bh=JHwFzt2j6LtuwNQGyyKAIYlrQf7Ta9NhcAoTlos3PCQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=lmnEIZGviYxb9FT/zr+qydMdCxeFYkQQIgjFW2X9XQfUFCNx9HbQlU+aN3Nsqq35j
-	 PeJVQ2I/paEwrczbgoJo8GDBF7ctJKViaTkBeR3Xi2g/vgjqeqOARptHzYSX6tdFbO
-	 iwQwrMBQWHrxiyCh2ogSIEVhl7u32iVHacacddECI2m/pgj8C6wYzpR/Vv6TCpPC7o
-	 U+SiTDbIlbb6w0kz9mqjj3l5k9KHqdty3nAZv88lPt+/yAMewcHahW4B4qBT5H30Xq
-	 ap5Y7Ez+PjyRTPvPFNdtpyo1KoBHrS6MqsF/Wl0LKdke2gsHVbkv0AJYgJbmXTtaYW
-	 m2WXfcRyTHWVA==
+	s=k20201202; t=1722976068;
+	bh=1PP/nOLyyh+/nBD04AwcngKXwjO2DH+UBmaywpzi4fQ=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=IO3sxHwPVD4Kyo4KI8DcIFF4lDmeSTlQGDuvtmlZaF5k3rtzorp87OWDe5uvpZ4Bv
+	 gUgYHsd+uPhl9ZYMDv66m9qgWgytwb9PPjfVtc/sG0itgemrKUa7/QXWOECa+TyRgd
+	 gx0T412xi2rifnut0jjSdP83YFSCQ2qhspkf8KDLR+0IvjPdQLCB+qyVzfGwh7b3wp
+	 L9Z0NX8qkp1qkbJikAEetfg5RuuEKilbk4aOk4Y4TzMAKm/NN3rwvmwLyuvZhUB8VE
+	 su1mxCP2DYHcZen11NoibXBsrcUrJ7gDzgpInuuW+3fl/jBsQsghaXi+A4ZZ7gUe5F
+	 rMQC7JW2KZnrg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2C83824F34;
-	Tue,  6 Aug 2024 20:08:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F227A39D6562;
+	Tue,  6 Aug 2024 20:27:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.11, take 2
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172297490450.1692635.15793970218399487366.git-patchwork-notify@kernel.org>
-Date: Tue, 06 Aug 2024 20:08:24 +0000
-References: <d7810433-71a2-45c2-9095-4abd23c12431@linaro.org>
-In-Reply-To: <d7810433-71a2-45c2-9095-4abd23c12431@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+ <172297606634.1692635.142342556379353281.git-patchwork-summary@kernel.org>
+Date: Tue, 06 Aug 2024 20:27:46 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Fri, 12 Jul 2024 12:09:40 +0200 you wrote:
-> Hi,
-> 
-> Here's a second set of Amlogic ARM64 DT changes for v6.11, with:
-> - Amlogic A5 power domain
-> - Amlogic S4 supplementary device nodes
-> - Watchdog for Amlogic A4
-> 
-> [...]
+Patch: [GIT,PULL] arm64: dts: ti: K3 devicetree updates for v6.11 - part2
+  Submitter: Vignesh Raghavendra <vigneshr@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=871462
+  Lore link: https://lore.kernel.org/r/aacd1e96-9ff4-4222-9f4d-29e63041f7fb@ti.com
 
-Here is the summary with links:
-  - [GIT,PULL] amlogic ARM64 DT updates for v6.11, take 2
-    https://git.kernel.org/soc/soc/c/35b94a99fc67
+Patch: [GIT,PULL] arm64: dts: TI K3 fixes for v6.11
+  Submitter: Nishanth Menon <nm@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=877057
+  Lore link: https://lore.kernel.org/r/20240806122659.vmasq2qjy6457bbs@peroxide
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
