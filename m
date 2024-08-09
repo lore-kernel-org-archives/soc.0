@@ -1,163 +1,160 @@
-Return-Path: <SRS0=NzvZ=PI=jj.aimanufacturers.org=mindi@kernel.org>
+Return-Path: <SRS0=6gsz=PI=ew.tq-group.com=alexander.stein@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76ED4C3DA4A
-	for <soc@archiver.kernel.org>; Fri,  9 Aug 2024 07:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 640D0C3DA4A
+	for <soc@archiver.kernel.org>; Fri,  9 Aug 2024 07:51:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 49834C4AF0E; Fri,  9 Aug 2024 07:07:38 +0000 (UTC)
-Received: from sgrpassageway.dnsapex.com (sgrpassageway.dnsapex.com [142.171.116.123])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 36630C4AF10; Fri,  9 Aug 2024 07:51:17 +0000 (UTC)
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D6743C32782
-	for <soc@kernel.org>; Fri,  9 Aug 2024 07:07:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6743C32782
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=qnd.smartmakeai.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=jj.aimanufacturers.org
-DKIM-Signature: v=1; a=rsa-sha256;
- bh=wTeRmrggqRRdcxLMggj9GaK2H3rRUSlG2bYmp4AE820=; d=qnd.smartmakeai.com;
- h=Message-ID: Date: Subject: From: Reply-To: To: MIME-Version: Content-Type:
- Feedback-ID; i=@qnd.smartmakeai.com; s=mailer; c=relaxed/relaxed;
- t=1723185240;
- b=s9yxo580qrKep7fMMmbHpMy1NI+iBPPwEv7FbB1zzCGXDbMnXs9EdwYeqDcElvc36mjKsiMx3
- HFLQ2GI2/mlH7fm54dxC6s7aDOw8hPCStn+2y+agdfW5KNOkL/BB81jqGYK89P0KdfkHy2MOK
- VCOFhIVJMNpVGtme3L9RfOjqsXt8ZrtUMQ/KXWeCtqFiXWHIguIiLhPERH9d5H6p6rGvwoSH4
- u0NCpcBwDbQsWbnCaA9gMGlzwp8yZ9IFhha00AEYoJtcc4iWcFcJ4eWtOU88/WzFn2LJym+yO
- 4PY5AEE/r/OF6feHJmjks2U1ws0M0DXNR2FiDylhO24MZXmuVA==
-Message-ID: <d261d1a3fdcd6fd0cc389181336f7bccbdb085bb@jj.aimanufacturers.org>
-Date: Fri, 09 Aug 2024 06:34:00 +0000
-Subject: Leading the Industry in High-Quality Die Casting
-From: President & CEO <info@qnd.smartmakeai.com>
-Reply-To: President & CEO <info@promoldcreations.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E4182C4AF09;
+	Fri,  9 Aug 2024 07:51:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4182C4AF09
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1723189875; x=1754725875;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qEKb2tBDFYtPQQYes4QRP4tJM5p3ULThCqzPcDFNfNc=;
+  b=df/LCbdm6b8YyfflnMTODzWWhQXfcFifCQPFAuN1Rjr/jrUqL2bfnR/V
+   h98S2IK6uNTB3iPQHPKrmH3OV7hOLGuZNCxLsjnBTUSRH3Iov2CaT76X+
+   MaM7vKRPOWAbtkNv6q3YiQ1E6KHaIgFtscGHl83c+SnuDruIx3IeGK4+p
+   OYwr8VVA0VsqhDFWVDzNfHZv6b752Kejl1Ntkq/p4KaEDbpmYRuCH8LNy
+   jJCeNvGvAYwRQ7swFwcWI5mUgjyS8uwVRzDeoM4WtlZgx+sKTX+Qp6WfF
+   pp+zLGVkVWJKJtOxNqmXWLQbSZBLFf9J4e7q/z7YblKiXKVuEpetoZrX4
+   w==;
+X-CSE-ConnectionGUID: JwcAz+0XR/aH896pBitJDw==
+X-CSE-MsgGUID: kVdMZKR1RUmNWIVSMJj3Ag==
+X-IronPort-AV: E=Sophos;i="6.09,275,1716242400"; 
+   d="scan'208";a="38329660"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 09 Aug 2024 09:51:11 +0200
+X-CheckPoint: {66B5CA6F-0-F0206917-F54EFEED}
+X-MAIL-CPID: 27227B5B5898C08BF0A2BD19511608BD_4
+X-Control-Analysis: str=0001.0A782F1A.66B5CA6F.0103,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E6E8C163A4B;
+	Fri,  9 Aug 2024 09:51:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1723189866;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=qEKb2tBDFYtPQQYes4QRP4tJM5p3ULThCqzPcDFNfNc=;
+	b=AA13aPQoadQSDdUv+s7cijsOmK61bm3M1gbgjqsMZ1SJ/kkwz2qelWR3Ov56morwxcIApY
+	F3Q3T8cakL6YGCgH2h3benXKQ95OuY7vyPe//NM/2IDJK+B/4BJDZdjaHC1j8V/o33C6Yx
+	e5LNf5Ol3x7oh+oGRPf0zO+jVnUSo8XooBtvWpaWHjz8qkWHq2s6UQJLrtFgF9Zo8bVY48
+	NPiXjXUklM5xqEhpQQ8xesdLf0RsYPK8wpNZPuG83hODi6SF6ayNMdSjoopRyCd93YJOU9
+	NFUoodsMHZbTFHBp5XMbTQJ7hHGOJqshzycYN8qA3+fPZYeXqYriYg2foLyPng==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 List-Id: <soc.lore.kernel.org>
-To: Soc <soc@kernel.org>
+To: soc@kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, Dinh Nguyen <dinguyen@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, Mark Jackson <mpfj@newflow.co.uk>, Tony Lindgren <tony@atomide.com>, Michal Simek <michal.simek@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org, imx@lists.linux.dev, linux-omap@vger.kernel.org, "Rob Herring (Arm)" <robh@kernel.org>
+Subject: Re: [PATCH] ARM: dts: Fix undocumented LM75 compatible nodes
+Date: Fri, 09 Aug 2024 09:51:03 +0200
+Message-ID: <22384730.EfDdHjke4D@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20240808164941.1407327-1-robh@kernel.org>
+References: <20240808164941.1407327-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
- boundary="_=_swift_1723185240_9a9e8e35e6fdd6807337bdd786e9b246_=_"
-Feedback-ID: bn100dn7nl678:regular:wx907rd14kaa2:gy716z4nvxb27
-
-
---_=_swift_1723185240_9a9e8e35e6fdd6807337bdd786e9b246_=_
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Last-TLS-Session-Version: TLSv1.3
 
- Good Afternoon Soc,
+Am Donnerstag, 8. August 2024, 18:49:38 CEST schrieb Rob Herring (Arm):
+> "lm75" without any vendor is undocumented. It works with the Linux
+> kernel since the I2C subsystem will do matches of the compatible string
+> without a vendor prefix to the i2c_device_id and/or driver name.
+>=20
+> Mostly replace "lm75" with "national,lm75" as that's the original part
+> vendor and the compatible which matches what "lm75" matched with. In a
+> couple of cases the node name or compatible gives a clue to the actual
+> part and vendor and a more specific compatible can be used. In these
+> cases, it does change the variant the kernel picks.
+>=20
+> "nct75" is an OnSemi part which is compatible with TI TMP75C based on
+> a comparison of the OnSemi NCT75 datasheet and configuration the Linux
+> driver uses. Adding an OnSemi compatible would be an ABI change.
+>=20
+> "nxp,lm75" is most likely an NXP part. NXP makes a LM75A and LM75B.
+> Both are 11-bit resolution and 100ms sample time, so "national,lm75b" is
+> the closest match.
+>=20
+> While we're here, fix the node names to use the generic name
+> "temperature-sensor".
+>=20
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+> SoC maintainers, Please take this directly.
+> ---
+>  .../aspeed/aspeed-bmc-facebook-greatlakes.dts |  2 +-
+>  .../socfpga/socfpga_cyclone5_vining_fpga.dts  |  4 +--
+>  .../dts/marvell/armada-385-clearfog-gtr.dtsi  |  8 ++---
+>  .../boot/dts/nuvoton/nuvoton-npcm730-kudo.dts | 32 +++++++++----------
+>  .../boot/dts/nuvoton/nuvoton-npcm750-evb.dts  |  6 ++--
+>  arch/arm/boot/dts/nxp/imx/imx53-mba53.dts     |  4 +--
+>  arch/arm/boot/dts/nxp/imx/imx53-tqma53.dtsi   |  4 +--
+>  .../dts/nxp/lpc/lpc4357-ea4357-devkit.dts     |  4 +--
+>  .../boot/dts/nxp/lpc/lpc4357-myd-lpc4357.dts  |  2 +-
+>  arch/arm/boot/dts/ti/omap/am335x-nano.dts     |  2 +-
+>  .../boot/dts/xilinx/zynq-zturn-common.dtsi    |  4 +--
+>  11 files changed, 36 insertions(+), 36 deletions(-)
+>=20
+< [snip]
+> diff --git a/arch/arm/boot/dts/nxp/imx/imx53-mba53.dts b/arch/arm/boot/dt=
+s/nxp/imx/imx53-mba53.dts
+> index 2117de872703..d155b3ec22ef 100644
+> --- a/arch/arm/boot/dts/nxp/imx/imx53-mba53.dts
+> +++ b/arch/arm/boot/dts/nxp/imx/imx53-mba53.dts
+> @@ -175,8 +175,8 @@ expander: pca9554@20 {
+>  		gpio-controller;
+>  	};
+> =20
+> -	sensor2: lm75@49 {
+> -		compatible =3D "lm75";
+> +	sensor2: temperature-sensor@49 {
+> +		compatible =3D "national,lm75";
 
-Want superior prototype services? Look no further=
- than our company.
-We're sure you'll be impressed.
+I checked the old schematics. This is an NXP LM75A, so 'national,lm75a'
+would be the correct compatible.
 
-Our expertise in =
-prototyping, tooling, and mass production sets us
-apart as a professional=
- industry frontrunner. We excel in various
-techniques, including CNC mach=
-ining, SLA and SLS 3D printing, silicone
-molding, metal machining, and in=
-jection tooling. Furthermore, we offer
-a broad choice of materials, encom=
-passing plastics and various metals.
-Plus, you'll have the flexibility to=
- choose from a myriad of surface
-treatments, including polishing, paintin=
-g, silkscreen printing,
-anodizing, electroplating, and spray coating.
-=
+>  		reg =3D <0x49>;
+>  	};
+>  };
+> diff --git a/arch/arm/boot/dts/nxp/imx/imx53-tqma53.dtsi b/arch/arm/boot/=
+dts/nxp/imx/imx53-tqma53.dtsi
+> index b2d7271d1d24..d01c3aee0272 100644
+> --- a/arch/arm/boot/dts/nxp/imx/imx53-tqma53.dtsi
+> +++ b/arch/arm/boot/dts/nxp/imx/imx53-tqma53.dtsi
+> @@ -254,8 +254,8 @@ pmic: mc34708@8 {
+>  		interrupts =3D <6 4>; /* PATA_DATA6, active high */
+>  	};
+> =20
+> -	sensor1: lm75@48 {
+> -		compatible =3D "lm75";
+> +	sensor1: temperature-sensor@48 {
+> +		compatible =3D "national,lm75";
 
-Our dedication to delivering excellence and competitive pricing has
-ea=
-rned us an esteemed reputation, enticing delighted clients from
-every cor=
-ner of the globe. We take pride in serving customers in the
-United Kingdo=
-m, Canada, Japan, and South Korea.
+I checked the old schematics. This is an NXP LM75A, so 'national,lm75a'
+would be the correct compatible.
 
-Here's what one of our delighted cl=
-ients from Switzerland had to say:
-'We are absolutely thrilled with your =
-exceptional craftsmanship,
-meticulous attention to detail, professionalis=
-m, and unwavering
-commitment to meeting deadlines.'
+Best regards,
+Alexander
 
-To get a deeper =
-insight into our service offerings and understand how
-we can customize th=
-em to align with your distinctive preferences,
-please reach out to us tod=
-ay.
+>  		reg =3D <0x48>;
+>  	};
+> =20
+> [snip]
 
-I appreciate your assistance in this matter.
-Eric Li - Plant Man=
-ager - CNC Logistics
-=20
 
---_=_swift_1723185240_9a9e8e35e6fdd6807337bdd786e9b246_=_
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-<!DOCTYPE html>
-<html>
-<head><meta charset=3D"utf-8"/>
-=09<title>Lead=
-ing the Industry in High-Quality Die Casting</title>
-</head>
-<body data=
--autofill-highlight=3D"false">Good Afternoon Soc,<br />
-<br />
-Want sup=
-erior prototype services? Look no further than our company. We're sure you'=
-ll be impressed.<br />
-<br />
-Our expertise in prototyping, tooling, an=
-d mass production sets us apart as a professional industry frontrunner. We =
-excel in various techniques, including CNC machining, SLA and SLS 3D printi=
-ng, silicone molding, metal machining, and injection tooling. Furthermore, =
-we offer a broad choice of materials, encompassing plastics and various met=
-als. Plus, you'll have the flexibility to choose from a myriad of surface t=
-reatments, including polishing, painting, silkscreen printing, anodizing, e=
-lectroplating, and spray coating.<br />
-<br />
-Our dedication to delive=
-ring excellence and competitive pricing has earned us an esteemed reputatio=
-n, enticing delighted clients from every corner of the globe. We take pride=
- in serving customers in the United Kingdom, Canada, Japan, and South Korea=
-.<br />
-<br />
-Here's what one of our delighted clients from Switzerlan=
-d had to say: 'We are absolutely thrilled with your exceptional craftsmansh=
-ip, meticulous attention to detail, professionalism, and unwavering commitm=
-ent to meeting deadlines.'<br />
-<br />
-To get a deeper insight into ou=
-r service offerings and understand how we can customize them to align with =
-your distinctive preferences, please reach out to us today.<br />
-<br />=
-
-I appreciate your assistance in this matter.<br />
-Eric Li - Plant Man=
-ager - CNC Logistics<br />
-<scroll-to-top-button-container data-position-=
-horizontal=3D"right" data-position-vertical=3D"bottom" data-state-active=3D=
-""> <noscript>
-<style type=3D"text/css">scroll-to-top-button-container { =
-display: none !important; }
-</style>
-</noscript> </scroll-to-top-button=
--container></body>
-<scroll-to-top-button-container data-position-horizont=
-al=3D"right" data-position-vertical=3D"bottom" data-state-active=3D"">
-<n=
-oscript>
-<style type=3D"text/css">scroll-to-top-button-container { displa=
-y: none !important; }
-</style>
-</noscript>
-</scroll-to-top-button-con=
-tainer></html>
-
---_=_swift_1723185240_9a9e8e35e6fdd6807337bdd786e9b246_=_--
 
