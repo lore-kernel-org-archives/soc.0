@@ -1,127 +1,165 @@
-Return-Path: <robh@kernel.org>
+Return-Path: <SRS0=LSP4=PI=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D7E8C3DA4A
-	for <soc@archiver.kernel.org>; Fri,  9 Aug 2024 14:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF6C3C3DA4A
+	for <soc@archiver.kernel.org>; Fri,  9 Aug 2024 16:00:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A496C4AF48; Fri,  9 Aug 2024 14:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29E0C4AF17;
-	Fri,  9 Aug 2024 14:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723212414;
-	bh=evwGZM4eri1U2eONrdZCQoX8mPAcQhXgLT4ZmuyFzRc=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=s+qvF8sCtTwyHF56WPQ3eeP2cl8zaXyGa9z49t8SyXv/r7gWKxYShMecPk6ykQVnZ
-	 n4kXCa2PTcoMeq17unwFqmzXgPR7MMu/5lFWXv5TXVXCvgne8conJzRw+WgtCDqSFt
-	 75MSJbIMMSsLhlOUf8VzdsVtTD7ZHCffuRMDXZF8GqHtWOyIEGM37x0ZYrMqvzPWzV
-	 GrdDai06QRpYTPF+2EDN60xa2yY6LakkeFlhW+p1X4ce420yzSZuej2hKmjX3c1dQt
-	 YP6bD7GqRN2fGNGcnQGGFQBzK28lY0exqwq1+aVhvdTDCxi/VbsBU2TgGSOtF9Xbf4
-	 +haFnWpWIs1Uw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52ed741fe46so2412639e87.0;
-        Fri, 09 Aug 2024 07:06:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXVq5v1lMS9jarUqHBY46emXhlf6D5f7CnC+YtrNCWRtDzNWZC25NncsJX0uyj15hEKRWDaomkoTsxP6Z/EcdYuiVSu70b9V4ClN1DatQa1/hVDjyyJlF1h5rOCoishsldgymDiJhLJ0DK9B3gqhZ5/dWlbt0v0WRejm2qUdOzrkWY=
-X-Gm-Message-State: AOJu0YzZR+w4nPUjwisJqvnX4a0yQ6srwRg/MlSbDelUYcKPTaNPIa7z
-	5frIfsShh5BvWKCOF3bhppn3Wg3BhTS4A8ak97bCajUFPs3+a9BhmQ3lelR9dKMpMmq4VUB3eGh
-	Yq3EuMellCi1i/u5/xaLxnrRIFw==
-X-Google-Smtp-Source: AGHT+IFQIYRhSbBm0KnlMj4fnTjoQ3tTreJgwt28LbqvrHl4ZHzIAIYZ/MVmHdZ+lof70cxLYPm635tiKaTvUDOAZSg=
-X-Received: by 2002:a05:6512:3c98:b0:530:e228:77ae with SMTP id
- 2adb3069b0e04-530eea14613mr1284391e87.40.1723212412160; Fri, 09 Aug 2024
- 07:06:52 -0700 (PDT)
+	id B865EC4AF0B; Fri,  9 Aug 2024 16:00:14 +0000 (UTC)
+Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 04BC0C32782
+	for <soc@kernel.org>; Fri,  9 Aug 2024 16:00:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 04BC0C32782
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 066A0138FC65;
+	Fri,  9 Aug 2024 12:00:12 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute4.internal (MEProxy); Fri, 09 Aug 2024 12:00:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1723219212; x=1723305612; bh=z6
+	KzBzXeafkZblPznJTixRwjIgV1GVdoejv+2wiuTU4=; b=KSIeOAqeGOFVAxThW/
+	urcDL0VxXX27giz+YhpE+GRHDGP+z21RErQbkj2XtGWL1NP2zOZDG/lYUXyS625P
+	sTWn1R97NtuT4eqPdh+KcPViUHjFOrzoB1YnW3R4HnZ+BJPNm6l+iJg0bfW2TEcf
+	FUrTJsod5n1M4lx3s7H6Z2blFxkfNKhMFxuFzviAVCKrRM9Vpg69N5T/xPvTmDR+
+	ZgzTb086PkpFrTx26S3t/67Jf1Rc/a06YelJuTdmLr5PHAWAzND7BEsDJNc30XWt
+	xfNpfgBTCPqliiGSh8OAMoNX9xa8TMpP3mB/9B0Xazpy/RFlFb/L6Cq0XnlgMjaY
+	Y3rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1723219212; x=1723305612; bh=z6KzBzXeafkZb
+	lPznJTixRwjIgV1GVdoejv+2wiuTU4=; b=XUk2IQK1dfYJqdn/T4vj2VDHb5gBZ
+	xkp8R+Yb0Vc/gSjq8yCagRuWiyvX+r/0dRLEBeJwF/csMHQqq8oENFvnsAaNtUqB
+	qXJ6DSNbrEXMyIXFN7j0Jso0dnd3g1DqY8n1OctlJSHhckvwLWJAqDZ+Js4xcatI
+	Fv4ZHQ3zAzDBmbsaptD2QFxCNKa+xxagLj3izpBvHIG3RRlcw56RTNhF8KgVtGIM
+	rtBlw1W+Hbk7IfNQHkPW2JGBexsxiruZEsU04LayuuZ448iZpusXZa/OnWjakSm3
+	Lu95FvEcO24+ZURXbzq3moMEXAkOhiyq0ovDJnpN9sYV/wxsjDZaplB7Q==
+X-ME-Sender: <xms:Cz22ZknCYBo_ojixRGKwXLSKQdOzKqe-mIR7Zdl-NJkeZbzD1GamOQ>
+    <xme:Cz22Zj1rAtvi3Q-kwvVK5Le85rlEmqu1XhErSJ2A4DZOMqMYQVlSSr2bVAOR8vrh_
+    nu99sU1DQBftfPbHSE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrleeggdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkufgtgfesthhqredtredtjeenucfh
+    rhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqe
+    enucggtffrrghtthgvrhhnpedvieeggefhhffhgfeuvddvledvffdtgfdvffdtvdfggeeg
+    hfektdefuedtvdeugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggs
+    rdguvgdpnhgspghrtghpthhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    epshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhorhhvrghlughssehlihhn
+    uhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqd
+    hkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehl
+    ihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Cz22ZirP_CVzf9Y4rG1Hz1i21i3e-WIe4-f-NIuEhLtHI21JyQGJjQ>
+    <xmx:Cz22ZgldX_rqdeMYHYYthh7EscHtOyloachBdPzhEYPpA15V7qUh7g>
+    <xmx:Cz22Zi13wBZoaW6Zd2MUqKtTJuCA7NK6s4Pox3t8k25fqg1y8Weuuw>
+    <xmx:Cz22ZnvIZ_9LPW7gZAW-pewLFRs0XmdjD7R-AR9CP1tWM0xeCL_gSg>
+    <xmx:Cz22ZnyiVKZikuUsYstTebM12X1U3us84zy1IrOdqz11e_7cd2v0V7zi>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7069EB6008D; Fri,  9 Aug 2024 12:00:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 MIME-Version: 1.0
-References: <20240808164941.1407327-1-robh@kernel.org> <22384730.EfDdHjke4D@steina-w>
-In-Reply-To: <22384730.EfDdHjke4D@steina-w>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 9 Aug 2024 08:06:37 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+tyKxaDsM2ThXctHhXLXUjCAbDH+90gqDrmMV_-z5PvQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+tyKxaDsM2ThXctHhXLXUjCAbDH+90gqDrmMV_-z5PvQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: Fix undocumented LM75 compatible nodes
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Date: Fri, 09 Aug 2024 18:00:11 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Avi Fishman <avifishman70@gmail.com>, 
-	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, Mark Jackson <mpfj@newflow.co.uk>, 
-	Tony Lindgren <tony@atomide.com>, Michal Simek <michal.simek@amd.com>, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	openbmc@lists.ozlabs.org, imx@lists.linux.dev, linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <3e7ea374-c321-4f80-b22b-96ce34cfaa3e@app.fastmail.com>
+Subject: [GIT PULL] ARM: soc fixes for 6.11, part 1
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 9, 2024 at 1:51=E2=80=AFAM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
->
-> Am Donnerstag, 8. August 2024, 18:49:38 CEST schrieb Rob Herring (Arm):
-> > "lm75" without any vendor is undocumented. It works with the Linux
-> > kernel since the I2C subsystem will do matches of the compatible string
-> > without a vendor prefix to the i2c_device_id and/or driver name.
-> >
-> > Mostly replace "lm75" with "national,lm75" as that's the original part
-> > vendor and the compatible which matches what "lm75" matched with. In a
-> > couple of cases the node name or compatible gives a clue to the actual
-> > part and vendor and a more specific compatible can be used. In these
-> > cases, it does change the variant the kernel picks.
-> >
-> > "nct75" is an OnSemi part which is compatible with TI TMP75C based on
-> > a comparison of the OnSemi NCT75 datasheet and configuration the Linux
-> > driver uses. Adding an OnSemi compatible would be an ABI change.
-> >
-> > "nxp,lm75" is most likely an NXP part. NXP makes a LM75A and LM75B.
-> > Both are 11-bit resolution and 100ms sample time, so "national,lm75b" i=
-s
-> > the closest match.
-> >
-> > While we're here, fix the node names to use the generic name
-> > "temperature-sensor".
-> >
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > ---
-> > SoC maintainers, Please take this directly.
-> > ---
-> >  .../aspeed/aspeed-bmc-facebook-greatlakes.dts |  2 +-
-> >  .../socfpga/socfpga_cyclone5_vining_fpga.dts  |  4 +--
-> >  .../dts/marvell/armada-385-clearfog-gtr.dtsi  |  8 ++---
-> >  .../boot/dts/nuvoton/nuvoton-npcm730-kudo.dts | 32 +++++++++----------
-> >  .../boot/dts/nuvoton/nuvoton-npcm750-evb.dts  |  6 ++--
-> >  arch/arm/boot/dts/nxp/imx/imx53-mba53.dts     |  4 +--
-> >  arch/arm/boot/dts/nxp/imx/imx53-tqma53.dtsi   |  4 +--
-> >  .../dts/nxp/lpc/lpc4357-ea4357-devkit.dts     |  4 +--
-> >  .../boot/dts/nxp/lpc/lpc4357-myd-lpc4357.dts  |  2 +-
-> >  arch/arm/boot/dts/ti/omap/am335x-nano.dts     |  2 +-
-> >  .../boot/dts/xilinx/zynq-zturn-common.dtsi    |  4 +--
-> >  11 files changed, 36 insertions(+), 36 deletions(-)
-> >
-> < [snip]
-> > diff --git a/arch/arm/boot/dts/nxp/imx/imx53-mba53.dts b/arch/arm/boot/=
-dts/nxp/imx/imx53-mba53.dts
-> > index 2117de872703..d155b3ec22ef 100644
-> > --- a/arch/arm/boot/dts/nxp/imx/imx53-mba53.dts
-> > +++ b/arch/arm/boot/dts/nxp/imx/imx53-mba53.dts
-> > @@ -175,8 +175,8 @@ expander: pca9554@20 {
-> >               gpio-controller;
-> >       };
-> >
-> > -     sensor2: lm75@49 {
-> > -             compatible =3D "lm75";
-> > +     sensor2: temperature-sensor@49 {
-> > +             compatible =3D "national,lm75";
->
-> I checked the old schematics. This is an NXP LM75A, so 'national,lm75a'
-> would be the correct compatible.
+The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f0=
+17b:
 
-Thanks for checking. That doesn't change the configuration in the
-driver. lm75 and lm75a are treated the same as both are 9-bit
-resolution. The NXP LM75A is 11-bit resolution and 10Hz which
-corresponds to lm75b in the driver. Though it looks to me like the
-original lm75b was also 9-bit resolution.
+  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
 
-Rob
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-f=
+ixes-6.11-1
+
+for you to fetch changes up to 6b1124c4526fb1648a3921a441515ea8a98b92e4:
+
+  Merge tag 'ti-k3-dt-fixes-for-v6.11' of https://git.kernel.org/pub/scm=
+/linux/kernel/git/ti/linux into arm/fixes (2024-08-07 14:45:45 +0200)
+
+----------------------------------------------------------------
+ARM: soc fixes for 6.11, part 1
+
+There are three sets of patches for the soc tree:
+
+ - Marek Beh=C3=BAn addresses multiple build time regressions caused
+   by changes to the cznic turris-omnia support
+
+ - Dmitry Torokhov fixes a regression in the legacy "gumstix"
+   board code he cleaned up earlier
+
+ - The TI K3 maintainers found multiple bugs in the in gpio,
+   audio and pcie devicetree nodes.
+
+----------------------------------------------------------------
+Andrew Halaney (2):
+      arm64: dts: ti: k3-j784s4-evm: Assign only lanes 0 and 1 to PCIe1
+      arm64: dts: ti: k3-j784s4-evm: Consolidate serdes0 references
+
+Arnd Bergmann (1):
+      Merge tag 'ti-k3-dt-fixes-for-v6.11' of https://git.kernel.org/pub=
+/scm/linux/kernel/git/ti/linux into arm/fixes
+
+Dmitry Torokhov (1):
+      ARM: pxa/gumstix: fix attaching properties to vbus gpio device
+
+Francesco Dolcini (1):
+      arm64: dts: ti: k3-am62-verdin-dahlia: Keep CTRL_SLEEP_MOCI# regul=
+ator on
+
+Jared McArthur (3):
+      arm64: dts: ti: k3-am62p: Add gpio-ranges for mcu_gpio0
+      arm64: dts: ti: k3-am62p: Fix gpio-range for main_pmx0
+      arm64: dts: ti: k3-j722s: Fix gpio-range for main_pmx0
+
+Marek Beh=C3=BAn (6):
+      platform: cznic: turris-omnia-mcu: Make watchdog code optional
+      platform: cznic: turris-omnia-mcu: Make TRNG code optional
+      platform: cznic: turris-omnia-mcu: Make poweroff and wakeup code o=
+ptional
+      platform: cznic: turris-omnia-mcu: Make GPIO code optional
+      doc: platform: cznic: turris-omnia-mcu: Fix sphinx-build warning
+      doc: platform: cznic: turris-omnia-mcu: Use double backticks for a=
+ttribute value
+
+Nishanth Menon (1):
+      Merge tag 'ti-k3-dt-for-v6.11-part2' into ti-k3-dts-next
+
+Parth Pancholi (1):
+      arm64: dts: ti: k3-j784s4-main: Correct McASP DMAs
+
+ .../testing/sysfs-bus-i2c-devices-turris-omnia-mcu |  6 +-
+ arch/arm/mach-pxa/gumstix.c                        | 11 +--
+ arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi  | 22 ------
+ arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi         |  6 --
+ .../boot/dts/ti/k3-am62p-j722s-common-mcu.dtsi     |  2 +
+ arch/arm64/boot/dts/ti/k3-am62p-main.dtsi          |  3 +-
+ arch/arm64/boot/dts/ti/k3-j722s-main.dtsi          |  3 +-
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts           | 25 +++----
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi         |  4 +-
+ drivers/platform/cznic/Kconfig                     | 80 +++++++++++++++=
+-------
+ drivers/platform/cznic/Makefile                    |  8 +--
+ drivers/platform/cznic/turris-omnia-mcu-base.c     |  4 ++
+ drivers/platform/cznic/turris-omnia-mcu.h          | 42 +++++++++++-
+ 13 files changed, 129 insertions(+), 87 deletions(-)
