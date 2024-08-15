@@ -1,355 +1,552 @@
-Return-Path: <SRS0=BLW3=PN=em-1707420.superconsultingwebinar.com=bounce-1707420-1022-1076303-soc=kernel.org@kernel.org>
+Return-Path: <SRS0=sbO0=PO=aspeedtech.com=kevin_chen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53707C52D7B
-	for <soc@archiver.kernel.org>; Wed, 14 Aug 2024 14:07:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B505C3DA7F
+	for <soc@archiver.kernel.org>; Thu, 15 Aug 2024 05:50:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D6E2C4AF09; Wed, 14 Aug 2024 14:07:24 +0000 (UTC)
-Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 12BBBC4AF11; Thu, 15 Aug 2024 05:50:30 +0000 (UTC)
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2116.outbound.protection.outlook.com [40.107.117.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E3BC5C32786
-	for <soc@kernel.org>; Wed, 14 Aug 2024 14:07:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3BC5C32786
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=superconsultingwebinar.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=em-1707420.superconsultingwebinar.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=superconsultingwebinar.com;
- h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
- Feedback-ID:List-Unsubscribe:List-Unsubscribe-Post:Message-ID;
- i=team@superconsultingwebinar.com;
- bh=abTsjT2V1rhkMnQ5ISRXeDGbxjTPI7Iu6gK5ONVFL+E=;
- b=du1utD+R3VQaPl1xgc8Mew0v9TB79KZCICdkbrP+hK6QdnPgKj5aiRErqkdDNDQLzpMgsn6L/9J/
-   Y75gN4sZGGqtqkTjX68aDGtFfPa+64rU2rO4ooL/WX8bqc9lu4v2BaJg3G4RF/QXljL/W9yowRJM
-   3cExEJ6KpbEzQJvwGPk++e/UU+d18OHJYM7XhWuy4+41VM9+hAjFuYTtUiLnSuvtRy0gR61UHqFq
-   fO3G6UFMX5qQ7jvoS6539okJJXVfGo9KJZky/QQdwtzvtg3FnoEWTMaj+km2Q1LkG2dC2srj2oEE
-   S6BMhKFZjcFVAugposrIculpSg0WW7nfFBxxRQ==
-Received: by s4.acemsrvh.com id hnit1k36bm40 for <soc@kernel.org>; Wed, 14 Aug 2024 14:07:22 +0000 (envelope-from <bounce-1707420-1022-1076303-soc=kernel.org@em-1707420.superconsultingwebinar.com>)
-X-Mailer: ActiveCampaign Mailer
-CFBL-Address: fbl-report@acems1.com; report=arf
+	by smtp.kernel.org (Postfix) with ESMTPS id AA462C4AF09;
+	Thu, 15 Aug 2024 05:50:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA462C4AF09
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QZDoZFX5olihASMfTtqxNfJYITw+f/WVIdmsvthS5ryVfUCcefhT9AexrmaEw5bRheJrP38JpBvJ3UCS2QnOUbWH6cAN7k7QIDpVKKyeqEahokLf2wQdkm+bW4gx2Rob+qeUrHKDM63LyTXV9BPKjij3OlyV8swOnMwj8bhDLyhFWfr04RXqnVpviD9cn9oohiqziQ85gPNBPYD98Many2Zp1152TFvXBHw798P3bluxtjdXSTzL3MROzxMKXATQHi33gkD4hM0fSrvFVanZcacpUR9obfqPnBkoauMpDed6BPPyKzb2ofT7AeSRY5+V5j+S4xG0zCKuTpMk1S44eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NgDTQGRYGd16HzOwlfnOfYktkklMkTpH0GbNRvXLLlQ=;
+ b=ysmXp9Hb5Hsfy00xQy742YUw2S0Tjyc3CccnfNFWt9MTVeHU6/HQsiOBua8RVd2vAIc81Z6VPWeiYF9Vfn29Mv+kYSNlwyO39j6bpNQLl77DQaOXicReUstO7FC/DMVVVEEyUTNFUiLBAgkQAEOw5sk3qb+wFA2QezHS9LPwixpjMQqDkNWKMYncSfxh4q+B3Vz3aSPovU4oS0wyjQHIROSlxKOHmuZR/PVsa6EzVMRTUG1ImYjlA62cIE8nXHsgTax45MB1kPkSdAIacpx1a0+Uege0q9F8p/vvuEvpB5ssbYpLqOOtm7AQefPfCMjKdOMjkiiJNRapWkGfYW7lpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NgDTQGRYGd16HzOwlfnOfYktkklMkTpH0GbNRvXLLlQ=;
+ b=oVoyFvPVJkYwD5fiaSXmfwE8yGmhfJfXa3d/raMTPuljucitM3zNK+2tG0yoan/fiba4SvE0J/UH8rtdvXrCxvGwGMY2gqop7auYcG0IquIm2jnP+AycGSail/GIrnqJP9kEg3DwyTJua06B+s4APqns6N//GczIJRX8bOHERy/y21W4/Egb/T4mICLyV4o0k22N8RG9TVQXyGclYxBcdjBh+gQAKj9E243EbLqC2fBKPCocAhaURgMZZmJy3WZud9Uld8E2B8me7jzzYTlvEOFa2WBG+TxjENJYCRyvV3CEMkNOUkuIXR6ZVF7zhCAMCb9JUgaqt3weQNsQjYAEOA==
+Received: from PSAPR06MB4949.apcprd06.prod.outlook.com (2603:1096:301:ad::9)
+ by SEYPR06MB7000.apcprd06.prod.outlook.com (2603:1096:101:1e3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.16; Thu, 15 Aug
+ 2024 05:50:20 +0000
+Received: from PSAPR06MB4949.apcprd06.prod.outlook.com
+ ([fe80::7bdd:639a:6b94:37bf]) by PSAPR06MB4949.apcprd06.prod.outlook.com
+ ([fe80::7bdd:639a:6b94:37bf%7]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
+ 05:50:20 +0000
+From: Kevin Chen <kevin_chen@aspeedtech.com>
 List-Id: <soc.lore.kernel.org>
-To: "Nonprofit Execs & Board Members" <soc@kernel.org>
-From: "Stefanie Stark" <team@superconsultingwebinar.com>
-Subject: Are You A Nonprofit =?UTF-8?Q?Expert=3F?=
-Date: Wed, 14 Aug 2024 09:01:40 -0500
-MIME-Version: 1.0
+To: Krzysztof Kozlowski <krzk@kernel.org>, "robh@kernel.org"
+	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "joel@jms.id.au"
+	<joel@jms.id.au>, "andrew@codeconstruct.com.au"
+	<andrew@codeconstruct.com.au>, "lee@kernel.org" <lee@kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
+	<will@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net"
+	<olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
+	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
+	<sboyd@kernel.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"quic_bjorande@quicinc.com" <quic_bjorande@quicinc.com>,
+	"geert+renesas@glider.be" <geert+renesas@glider.be>,
+	"dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+	"shawnguo@kernel.org" <shawnguo@kernel.org>, "neil.armstrong@linaro.org"
+	<neil.armstrong@linaro.org>, "m.szyprowski@samsung.com"
+	<m.szyprowski@samsung.com>, "nfraprado@collabora.com"
+	<nfraprado@collabora.com>, "u-kumar1@ti.com" <u-kumar1@ti.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-clk@vger.kernel.org"
+	<linux-clk@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
+Subject:
+ =?big5?B?pl7C0DogW1BBVENIIHYxIDAyLzEwXSBkdC1iaW5kaW5nOiBjbGs6IGFzdDI3MDA6?=
+ =?big5?Q?_Add_binding_for_Aspeed_AST27xx_Clock?=
+Thread-Topic: [PATCH v1 02/10] dt-binding: clk: ast2700: Add binding for
+ Aspeed AST27xx Clock
+Thread-Index: AQHa30uIzhKcxQKQN0uLSEZ15MV2a7II2ogAgB7tDRA=
+Date: Thu, 15 Aug 2024 05:50:20 +0000
+Message-ID:
+ <PSAPR06MB49495961B7AEDE4AE26F8ED389802@PSAPR06MB4949.apcprd06.prod.outlook.com>
+References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
+ <20240726110355.2181563-3-kevin_chen@aspeedtech.com>
+ <e13c16db-e1a7-4ee0-867b-b184d421de7f@kernel.org>
+In-Reply-To: <e13c16db-e1a7-4ee0-867b-b184d421de7f@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PSAPR06MB4949:EE_|SEYPR06MB7000:EE_
+x-ms-office365-filtering-correlation-id: c0ccb5d2-d265-4b8b-5f9b-08dcbcee25f4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|921020|38070700018;
+x-microsoft-antispam-message-info:
+ =?big5?B?QmRHa0o4SzF1U3JERzFWb1VmbmhCWSt6U05PSVJLK1pPUml6eFRXNG53OVNzWDFt?=
+ =?big5?B?U2NOQ2Z6RFkzTVpPMGdEclRYMWFweDZGRDVKbkZmWFFQZFVmc2R1cUhaVGwwTGRP?=
+ =?big5?B?VERtVTJKVlBMQlFMRXRZTWRZd0dHZWkzdVU5Vk0zU1lPYWp2VzBVd2d1N3FHOUVv?=
+ =?big5?B?M0E5VFZHVTBIdjJ6NEdoNUJTYkN6RGNYRHVlYXpQUTR4UUlKVnZ5YjdyQnd5cStp?=
+ =?big5?B?dm5ob1JySWhiK1dncWdnUC9nUk1kQzdaZVpLUWl2azkxeUpMR2ZtSlNwd2I0TVBV?=
+ =?big5?B?bDViYVlacUhmR1FuOHdLWjRtMk8vdUtmNTFDOEpqZHJHNjd1Vit3bStselJ1d0hZ?=
+ =?big5?B?Mks2TFNPSHpiNEhBTHRyN0xYTU5Vc2daN2dKL1dtaUlGR1FiNG4wbGZkbElUOElx?=
+ =?big5?B?MnY5WjlmNDZCNGxWVDFaS0FwTjU4elZYWXQrNU1OYTRsTU5lczRCWEZVQ1JSeXBx?=
+ =?big5?B?Q1FLU2E4ZFYyRVBEM3FpYnF5RDdtZHJrUVo1WHkvM2ZhcWlYZ3RtM2RtN01Wd2d2?=
+ =?big5?B?cCtSOC9YZUsyMW5yQTIyUWwvUTg5YzdxNjVSWG5RMndackdvVHNSS2JPNTVia3Vx?=
+ =?big5?B?TnlXYlJENnRuODdLQm9uc1duN1BsdTdHUnJvK0Q4ZnFQVXFwK3RGb2JmdWpORU9C?=
+ =?big5?B?OXpobEZscUtQYlV4aTlPTU91cUZSY1VGeTVVUytWQUFVNHlqTWFFb3RTYUxrMHB6?=
+ =?big5?B?KzlFUWREWklvcVMwOFp1T2swNHloWkxGRlJ6MjJ1aXVpVEZ1cytjcDR3V1hJclh5?=
+ =?big5?B?dFdkUWpGbVZHN1RDYXRlWWJYNVdhTkk0bVE2UzZydEtYZWNlWlpEMHpmUkYrMk83?=
+ =?big5?B?UTRkM3hNbFVDdjNBYVZXOXdSVk1PcEFLTnY1dSs5WGQ4OEtITG4xeGtxWGQ2ckIr?=
+ =?big5?B?T3BHclZzbnNTUWJLbkxRMEZYc3Y0dlVWQ3lQUVlJT1J0N0tFUVU5UkF0QnB4ajRC?=
+ =?big5?B?TTl5T2RQeXJ4VVoyUTlicFNtSmhmR0d4YjNkd1pRaElXeW9LUjR4bmtaRDd5cFpV?=
+ =?big5?B?UmFkWHNOR3JSQncxK2Z1dWptb24zVXR2RGo1WThyNGc4R1RVMEE4Y1ZtbS9ZR2Zz?=
+ =?big5?B?MXJlQ1cwelI2MlFKYUhFQW5LVGwyeWV0ZTdiMUFpZHVIbFhsVStkQkVvOWYvYXd5?=
+ =?big5?B?bnFoZTUrWTZiQytabEdOSW1yNlF0ZkQwcmkzQnV2SExBRTlGRjdCczNnRDJWK1Ev?=
+ =?big5?B?ZmNOSHFKUVhRUEtvTURXc1JqNkRuVnBWQXMrcmw3TnhNWHNoRW9iUTFlaEFzaElo?=
+ =?big5?B?TWs4Sjd0Y1ZXbHN4T0RyQXVOVEY2VloyK1N3MVFhY3M1a0tVYUtXWWs5SjlYTkQ1?=
+ =?big5?B?dWVGRUZhYVhMLzNQbzJZc3luYTM3VjNZUTJGZDNkczBXQ1BKeGEzaFNwZEhCYTY1?=
+ =?big5?B?VmpaY0Z4VW50UWVjcW15Nld3RjdBZjFGbi9IUjJsR2ptZ1ZiK0NUVDJQTDFrbnVv?=
+ =?big5?B?UGgxdHllcmxaTFVwMlNHellrZEZ6MVhlb0hlVXFlV255TUlMQktZdUQzUm55amhG?=
+ =?big5?B?OW1hcHFocktmbEtLL0ZRMDhGUGJUQTRrUm9QZXFUYjcrUXlDakVFR2t0ZkhTa2Qx?=
+ =?big5?B?d2IwZkFldlRBY2ZvaEhEcElNQ3k1Q1JUeWpBMVVmOVRxOUNGN3hoWUlZWXBuM2hY?=
+ =?big5?B?Y2t1TC8xS3hYbkREM2NvY0xZSHlsZXp5UzN0R0ZRcmlZVjBiZ3RVa1FCRFFRMUdO?=
+ =?big5?B?c0F3WDJsMjl6c2Y1SlgweFNXaTNRREhQSDhadEFxOHl3V3hJc3lWNXA3cjJWc1hs?=
+ =?big5?Q?e12TKQ1m8vHniITE?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4949.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(921020)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?big5?B?OTlzMnNCdU11akk2M3pUdmtKU24yQ1hyK3BqVHU4UkxpZjN0T0Q3V3Fhby9JUVU4?=
+ =?big5?B?Uk5jbXhCcUlIQUJYWjgwajdRdTJXcXRSYktmYkZFbldnSUNRY1Yzd29KeWoxVXpO?=
+ =?big5?B?NE5PemU2YkJwRkNrZ3AwUkZPdUw5ZzBKNU5McFcweDl3NmU4Vkw0SHQ5LzcvVExX?=
+ =?big5?B?VU5vRmkzb04wYklWaEd3a3ZwdWR3bjNMMjk1OU5LVEZYQWdsMWVTUmxrRkJ4aHE1?=
+ =?big5?B?NjgwanEybmZ4d3BiOXpvL2R4MDhBSjdTSnpQcmR4NXlvNVIyUzI0NmJVcmxac0ZR?=
+ =?big5?B?VDcxZVFmV2Y4ZTVVUXZtbTUxRXhrSjltQmdqTVpwTlhUb3hjTkkwQ1dVTlFCMC9E?=
+ =?big5?B?SEdFOEZoOENpZjIvbjByY3E2VnE5TUFZYmZOc1REcWdwTERsVGFPbTNnZjdsTm05?=
+ =?big5?B?ZUMxcTQ5K0tXOVFNdUM5SjdIakRqaHArTmV6YVU4RmIxRnlLc1ZOcGVlOU5VdklW?=
+ =?big5?B?MklUN3l0T3IrMTBKaUtFcFlEOW9KSHZxZWpzemc5VXVFa2d3N2VuekdpNUVhZ1JI?=
+ =?big5?B?d01oZUM4KzFUUkFLWHVWOTRsbHV2dHZyVzhkU0FGaGh2VXFTVUwxeFNyOHJBUUc2?=
+ =?big5?B?QnFNRkVidVJqWUp6ZE1lUUpicm80UUkzY29XeC95Yi9wdGMwajF6c0RGQ2JHdHBL?=
+ =?big5?B?TXdQeVFjekxrT1dzTUdLVVB6VzdPcXB4UWtTVmg0UVFhaUpSSDdLeFU4RkJOMDh3?=
+ =?big5?B?TEl5T1hxTHVRbGRLOTIrZnRlbzZFUjRYZFMrelY4bmIwWk1YRzdWeS9xV0Q3dDBJ?=
+ =?big5?B?ak44T2NnUVNjdFNCR3dUS09lcnJmRi9NZmdwbkNlcFAxVUdrUWVXZFVYOWpGdHkr?=
+ =?big5?B?NVc0Q3ZWcllpTXNjS2EyVjlnNEx5NHRZbENDY0JMK21VWGtBd20wQW9TSVdWZ1dm?=
+ =?big5?B?cWJQc2hlSGZUTDBMQ3pncTVUaTlUQ0l6ZmJSTHl5ZnVnSVBBVGU3aTN1WWNSdVFF?=
+ =?big5?B?Wko4RmpUUzNraENBWDV1MXdFTDIzUDBnZ3Z3cjIzcVVYMnp2UXBYS2pKVnR3MmxL?=
+ =?big5?B?WTNsS1UwVTYzK3Q2NlpCZ0dINVNSWGNmazRGeU94N1hidkR6USsxK283V0dOQ1pk?=
+ =?big5?B?aVlLWjNPajZlTkVWZHlVL1lKT1lVeWJ4YStVK1N1SkZKMHpiNytPbDAzWFhPaXla?=
+ =?big5?B?aXNRQ1BsdzFtNXE3bnl2RFd2bWhSNW5hZncrTC8zK2lFN0xDaGI5VEpjNGNCblZU?=
+ =?big5?B?YVFRRkd0Lzl2U1JuYy9VV040cWRpYVU3bTNuanBGMjFJMlpTQnRrL0lBcjFIeTIx?=
+ =?big5?B?ck9zbG1RemRUN3pKb0IxR2pqdFR4T1NUb2IwNmFCdXk5TlgzSldCd3NheWNXN3ZP?=
+ =?big5?B?YUdaYlIwYWJISkFWME92c0lQUFM4Q2xjMzV2b01VaEkxcENtVWR6MStEcFZrMWdU?=
+ =?big5?B?TS9ZM080UXRQcWNuQmlxMHgzMVFScndQZXB5MWlRTytiKzBYc1ptMTNEa0ZtZ2Vv?=
+ =?big5?B?b0hMdFdYSW4vZk9NZStmRjBwR0p3allCZ0c1RkpOMHRZNUJyazNPUU8zSXI2QzBC?=
+ =?big5?B?RVJRdkdBdTY0L2lramEwSFBnRlJoNnFKYlpON3VSdXVaaXFoUGtESk9rZ2c1UlE0?=
+ =?big5?B?R0tSVnI0S05ZUFpWUHVqWXZxV0Jncjd1L3gvdk5oNEhkdFZiZGNQN0ZJdi9tbUcw?=
+ =?big5?B?TU5vLzJyRWY4MFpCUXlneWpuR0M2N2JNY0plZmZtSjhseXd5eHZzMHNYbmhPLzlL?=
+ =?big5?B?a0pqTmJKTUpsQm10NHR6eXkyZC9rTktaSnlWY3FSVzB0Y0trR0pRZkxqeXdoUFZq?=
+ =?big5?B?bUQ5SVNrb3l5aDZ4V3MxRERiUUM4N21UM0Ntb1lnK3lKWGZ1eXJqVFNBUk0vRjZO?=
+ =?big5?B?RW9laEJsZGhWZWxUUk5PNTNxSktzUkZZUnhzMWpCaStkbjBLVXhpRTNJWXRUc01z?=
+ =?big5?B?Ymt5Z2dzNUFIU2hsbWE3RktIZmo5UlhVNjNPR3VpNEJnRHJQc3pJOXlxSHFuamNV?=
+ =?big5?B?SFM4dWp4RTl6ZFNWSmlJUzhjeXVQYTY5K29lVmxndkYvV3FVdDJpejF6K0EzOEZM?=
+ =?big5?Q?W/mlDFyTG3R1kdQ5?=
 Content-Type: multipart/alternative;
- boundary="_=_swift-213324794666bcb8c43b8882.56997922_=_"
-Content-Transfer-Encoding: 7bit
-X-Report-Abuse: Please report abuse here: abuse@acemserv.com
-X-mid: c29jQGtlcm5lbC5vcmcgLCBjMTAyMiAsIG0xNjQyICwgczg2Ng
-x-virtual-mta: s4.acemsrvh.com
-Feedback-ID: 1707420:1707420.1022:s4.acemsrvh.com:activecampaign
-X-250ok-CID: 1707420-1022
-List-Unsubscribe: <https://jimmylarose.activehosted.com/box.php?nl=300&c=1022&m=1642&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>,<mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-1022-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-X-DKIM-Options: s=acdkim1
-Message-ID: <0.0.27.553.1DAEE5348230CEC.0@s4.acemsrvh.com>
+	boundary="_000_PSAPR06MB49495961B7AEDE4AE26F8ED389802PSAPR06MB4949apcp_"
+MIME-Version: 1.0
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4949.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0ccb5d2-d265-4b8b-5f9b-08dcbcee25f4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2024 05:50:20.4404
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oieVhDmGcnOUKEzjfIO+XN0kSBFc7m7whfI8eCR1vPK6t7HtXbk4r8WHDKsEiXP2oHpmRCTXjQoqShXO5g33ZU+lpElVn/PdXHuriBTGUVU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB7000
 
+--_000_PSAPR06MB49495961B7AEDE4AE26F8ED389802PSAPR06MB4949apcp_
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 
+SGkgS3J6aywNCg0KPk1pc3NpbmcgY29tbWl0IG1zZy4NCj4NCj5BIG5pdCwgc3ViamVjdDogZHJv
+cCBzZWNvbmQvbGFzdCwgcmVkdW5kYW50ICJiaW5kaW5ncyIuIFRoZQ0KPiJkdC1iaW5kaW5ncyIg
+cHJlZml4IGlzIGFscmVhZHkgc3RhdGluZyB0aGF0IHRoZXNlIGFyZSBiaW5kaW5ncy4NCj5TZWUg
+YWxzbzoNCj5odHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Ni43LXJjOC9zb3VyY2Uv
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3N1Ym1pdHRpbmctcGF0Y2hlcy5yc3Qj
+TDE4DQo+DQo+UGxlYXNlIHVzZSBzdWJqZWN0IHByZWZpeGVzIG1hdGNoaW5nIHRoZSBzdWJzeXN0
+ZW0uIFlvdSBjYW4gZ2V0IHRoZW0gZm9yDQo+ZXhhbXBsZSB3aXRoIGBnaXQgbG9nIC0tb25lbGlu
+ZSAtLSBESVJFQ1RPUllfT1JfRklMRWAgb24gdGhlIGRpcmVjdG9yeQ0KPnlvdXIgcGF0Y2ggaXMg
+dG91Y2hpbmcuIEZvciBiaW5kaW5ncywgdGhlIHByZWZlcnJlZCBzdWJqZWN0cyBhcmUNCj5leHBs
+YWluZWQgaGVyZToNCj5odHRwczovL3d3dy5rZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL3N1Ym1pdHRpbmctcGF0Y2hlcy5odG1sI2ktZm9yLXBhdGNoLXN1Ym1p
+dHRlcnMNCkFncmVlLCBhbHJlYWR5IGZpeGVkIGluIGFub3RoZXIgY29tbWl0IGluIFJ5YW4ncyBz
+ZXJpZXMuDQpbMy80XSBkdC1iaW5kaW5nczogY2xvY2s6IEFkZCBBU1QyNzAwIGNsb2NrIGJpbmRp
+bmdzIC0gUGF0Y2h3b3JrIChrZXJuZWwub3JnKTxodHRwczovL3BhdGNod29yay5rZXJuZWwub3Jn
+L3Byb2plY3QvbGludXgtY2xrL3BhdGNoLzIwMjQwODA4MDc1OTM3LjI3NTY3MzMtNC1yeWFuX2No
+ZW5AYXNwZWVkdGVjaC5jb20vPg0KDQotLQ0KQmVzdCBSZWdhcmRzLA0KS2V2aW4uIENoZW4NCg0K
+DQoNCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQqxSKXzqsw6IEtyenlzenRvZiBL
+b3psb3dza2kgPGtyemtAa2VybmVsLm9yZz4NCrFIpfOk6bTBOiAyMDI0pn43pOsyNqTpIKRVpMgg
+MDc6MTENCqaspfOqzDogS2V2aW4gQ2hlbiA8a2V2aW5fY2hlbkBhc3BlZWR0ZWNoLmNvbT47IHJv
+YmhAa2VybmVsLm9yZyA8cm9iaEBrZXJuZWwub3JnPjsga3J6aytkdEBrZXJuZWwub3JnIDxrcnpr
+K2R0QGtlcm5lbC5vcmc+OyBjb25vcitkdEBrZXJuZWwub3JnIDxjb25vcitkdEBrZXJuZWwub3Jn
+Pjsgam9lbEBqbXMuaWQuYXUgPGpvZWxAam1zLmlkLmF1PjsgYW5kcmV3QGNvZGVjb25zdHJ1Y3Qu
+Y29tLmF1IDxhbmRyZXdAY29kZWNvbnN0cnVjdC5jb20uYXU+OyBsZWVAa2VybmVsLm9yZyA8bGVl
+QGtlcm5lbC5vcmc+OyBjYXRhbGluLm1hcmluYXNAYXJtLmNvbSA8Y2F0YWxpbi5tYXJpbmFzQGFy
+bS5jb20+OyB3aWxsQGtlcm5lbC5vcmcgPHdpbGxAa2VybmVsLm9yZz47IGFybmRAYXJuZGIuZGUg
+PGFybmRAYXJuZGIuZGU+OyBvbG9mQGxpeG9tLm5ldCA8b2xvZkBsaXhvbS5uZXQ+OyBzb2NAa2Vy
+bmVsLm9yZyA8c29jQGtlcm5lbC5vcmc+OyBtdHVycXVldHRlQGJheWxpYnJlLmNvbSA8bXR1cnF1
+ZXR0ZUBiYXlsaWJyZS5jb20+OyBzYm95ZEBrZXJuZWwub3JnIDxzYm95ZEBrZXJuZWwub3JnPjsg
+cC56YWJlbEBwZW5ndXRyb25peC5kZSA8cC56YWJlbEBwZW5ndXRyb25peC5kZT47IHF1aWNfYmpv
+cmFuZGVAcXVpY2luYy5jb20gPHF1aWNfYmpvcmFuZGVAcXVpY2luYy5jb20+OyBnZWVydCtyZW5l
+c2FzQGdsaWRlci5iZSA8Z2VlcnQrcmVuZXNhc0BnbGlkZXIuYmU+OyBkbWl0cnkuYmFyeXNoa292
+QGxpbmFyby5vcmcgPGRtaXRyeS5iYXJ5c2hrb3ZAbGluYXJvLm9yZz47IHNoYXduZ3VvQGtlcm5l
+bC5vcmcgPHNoYXduZ3VvQGtlcm5lbC5vcmc+OyBuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnIDxu
+ZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPjsgbS5zenlwcm93c2tpQHNhbXN1bmcuY29tIDxtLnN6
+eXByb3dza2lAc2Ftc3VuZy5jb20+OyBuZnJhcHJhZG9AY29sbGFib3JhLmNvbSA8bmZyYXByYWRv
+QGNvbGxhYm9yYS5jb20+OyB1LWt1bWFyMUB0aS5jb20gPHUta3VtYXIxQHRpLmNvbT47IGRldmlj
+ZXRyZWVAdmdlci5rZXJuZWwub3JnIDxkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZz47IGxpbnV4
+LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZyA8bGludXgtYXJtLWtlcm5lbEBsaXN0cy5p
+bmZyYWRlYWQub3JnPjsgbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmcgPGxpbnV4LWFzcGVl
+ZEBsaXN0cy5vemxhYnMub3JnPjsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZyA8bGludXgt
+a2VybmVsQHZnZXIua2VybmVsLm9yZz47IGxpbnV4LWNsa0B2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4
+LWNsa0B2Z2VyLmtlcm5lbC5vcmc+DQqlRKauOiBSZTogW1BBVENIIHYxIDAyLzEwXSBkdC1iaW5k
+aW5nOiBjbGs6IGFzdDI3MDA6IEFkZCBiaW5kaW5nIGZvciBBc3BlZWQgQVNUMjd4eCBDbG9jaw0K
+DQpPbiAyNi8wNy8yMDI0IDEzOjAzLCBLZXZpbiBDaGVuIHdyb3RlOg0KPiBTaWduZWQtb2ZmLWJ5
+OiBLZXZpbiBDaGVuIDxrZXZpbl9jaGVuQGFzcGVlZHRlY2guY29tPg0KDQpNaXNzaW5nIGNvbW1p
+dCBtc2cuDQoNCkEgbml0LCBzdWJqZWN0OiBkcm9wIHNlY29uZC9sYXN0LCByZWR1bmRhbnQgImJp
+bmRpbmdzIi4gVGhlDQoiZHQtYmluZGluZ3MiIHByZWZpeCBpcyBhbHJlYWR5IHN0YXRpbmcgdGhh
+dCB0aGVzZSBhcmUgYmluZGluZ3MuDQpTZWUgYWxzbzoNCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4u
+Y29tL2xpbnV4L3Y2LjctcmM4L3NvdXJjZS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3Mvc3VibWl0dGluZy1wYXRjaGVzLnJzdCNMMTgNCg0KUGxlYXNlIHVzZSBzdWJqZWN0IHByZWZp
+eGVzIG1hdGNoaW5nIHRoZSBzdWJzeXN0ZW0uIFlvdSBjYW4gZ2V0IHRoZW0gZm9yDQpleGFtcGxl
+IHdpdGggYGdpdCBsb2cgLS1vbmVsaW5lIC0tIERJUkVDVE9SWV9PUl9GSUxFYCBvbiB0aGUgZGly
+ZWN0b3J5DQp5b3VyIHBhdGNoIGlzIHRvdWNoaW5nLiBGb3IgYmluZGluZ3MsIHRoZSBwcmVmZXJy
+ZWQgc3ViamVjdHMgYXJlDQpleHBsYWluZWQgaGVyZToNCmh0dHBzOi8vd3d3Lmtlcm5lbC5vcmcv
+ZG9jL2h0bWwvbGF0ZXN0L2RldmljZXRyZWUvYmluZGluZ3Mvc3VibWl0dGluZy1wYXRjaGVzLmh0
+bWwjaS1mb3ItcGF0Y2gtc3VibWl0dGVycw0KDQo+IC0tLQ0KPiAgLi4uL2R0LWJpbmRpbmdzL2Ns
+b2NrL2FzcGVlZCxhc3QyNzAwLWNsay5oICAgIHwgMTgwICsrKysrKysrKysrKysrKysrKw0KDQpU
+aGlzIGlzIHN1cHBvc2VkIHRvIGJlIHBhcnQgb2YgYmluZGluZ3MgYWRkaW5nIHRoZSBjbG9jayBj
+b250cm9sbGVyLg0KDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTgwIGluc2VydGlvbnMoKykNCj4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL2FzcGVlZCxhc3QyNzAw
+LWNsay5oDQo+DQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL2FzcGVl
+ZCxhc3QyNzAwLWNsay5oIGIvaW5jbHVkZS9kdC1iaW5kaW5ncy9jbG9jay9hc3BlZWQsYXN0Mjcw
+MC1jbGsuaA0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjVj
+YTg1NTAzNzM2ZA0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL2luY2x1ZGUvZHQtYmluZGluZ3Mv
+Y2xvY2svYXNwZWVkLGFzdDI3MDAtY2xrLmgNCj4gQEAgLTAsMCArMSwxODAgQEANCj4gKy8qIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkgKi8N
+Cj4gKy8qDQo+ICsgKiBEZXZpY2UgVHJlZSBiaW5kaW5nIGNvbnN0YW50cyBmb3IgQVNUMjcwMCBj
+bG9jayBjb250cm9sbGVyLg0KPiArICoNCj4gKyAqIENvcHlyaWdodCAoYykgMjAyMyBBc3BlZWQg
+VGVjaG5vbG9neSBJbmMuDQo+ICsgKi8NCj4gKw0KPiArI2lmbmRlZiBfX0RUX0JJTkRJTkdTX0NM
+T0NLX0FTVDI3MDBfSA0KPiArI2RlZmluZSBfX0RUX0JJTkRJTkdTX0NMT0NLX0FTVDI3MDBfSA0K
+PiArDQo+ICsvKiBTT0MwIGNsay1nYXRlICovDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfTUNM
+SyAgICgwKQ0KPiArI2RlZmluZSBTQ1UwX0NMS19HQVRFX0VDTEsgICAoMSkNCg0KRHJvcCBhbGwg
+KCkuIE5vdCBuZWVkZWQsIG5vdCB1c2VmdWwuDQoNCj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9H
+Q0xLICAgKDIpDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfVkNMSyAgICgzKQ0KPiArI2RlZmlu
+ZSBTQ1UwX0NMS19HQVRFX0JDTEsgICAoNCkNCj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9EMUNM
+SyAgKDUpDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfUkVGQ0xLICg2KQ0KPiArI2RlZmluZSBT
+Q1UwX0NMS19HQVRFX1VTQjBDTEsgICAgICAgICg3KQ0KPiArI2RlZmluZSBTQ1UwX0NMS19HQVRF
+X1JTVjggICAoOCkNCj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9VU0IxQ0xLICAgICAgICAoOSkN
+Cj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9EMkNMSyAgKDEwKQ0KPiArI2RlZmluZSBTQ1UwX0NM
+S19HQVRFX1JTVjExICAoMTEpDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfUlNWMTIgICgxMikN
+Cj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9ZQ0xLICAgKDEzKQ0KPiArI2RlZmluZSBTQ1UwX0NM
+S19HQVRFX1VTQjJDTEsgICAgICAgICgxNCkNCj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9VQVJU
+NENMSyAgICAgICAoMTUpDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfU0xJQ0xLICgxNikNCj4g
+KyNkZWZpbmUgU0NVMF9DTEtfR0FURV9EQUNDTEsgKDE3KQ0KPiArI2RlZmluZSBTQ1UwX0NMS19H
+QVRFX0RQICAgICAoMTgpDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfUlNWMTkgICgxOSkNCj4g
+KyNkZWZpbmUgU0NVMF9DTEtfR0FURV9DUlQxQ0xLICAgICAgICAoMjApDQo+ICsjZGVmaW5lIFND
+VTBfQ0xLX0dBVEVfQ1JUMkNMSyAgICAgICAgKDIxKQ0KPiArI2RlZmluZSBTQ1UwX0NMS19HQVRF
+X1ZMQ0xLICAoMjIpDQo+ICsjZGVmaW5lIFNDVTBfQ0xLX0dBVEVfRUNDQ0xLICgyMykNCj4gKyNk
+ZWZpbmUgU0NVMF9DTEtfR0FURV9SU0FDTEsgKDI0KQ0KPiArI2RlZmluZSBTQ1UwX0NMS19HQVRF
+X1JWQVMwQ0xLICAgICAgICgyNSkNCj4gKyNkZWZpbmUgU0NVMF9DTEtfR0FURV9VRlNDTEsgKDI2
+KQ0KPiArI2RlZmluZSBTQ1UwX0NMS19HQVRFX0VNTUNDTEsgICAgICAgICgyNykNCj4gKyNkZWZp
+bmUgU0NVMF9DTEtfR0FURV9SVkFTMUNMSyAgICAgICAoMjgpDQo+ICsvKiByZXNlcnZlZCAyOSB+
+IDMxKi8NCg0KSURzIGNhbm5vdCBiZSByZXNlcnZlZC4gSXQgaXMgYSBiaW5kaW5nLCBub3QgYSBo
+YXJkd2FyZSBudW1iZXIuDQoNCj4gKyNkZWZpbmUgU09DMF9DTEtfR0FURV9OVU0gICAgKFNDVTBf
+Q0xLX0dBVEVfUlZBUzFDTEsgKyAxKQ0KDQpObyBkcm9wLiBPdGhlcnMgYXMgd2VsbC4NCg0KQmVz
+dCByZWdhcmRzLA0KS3J6eXN6dG9mDQoNCioqKioqKioqKioqKiogRW1haWwgQ29uZmlkZW50aWFs
+aXR5IE5vdGljZSAqKioqKioqKioqKioqKioqKioqKg0Kp0uzZMFuqfo6DQqlu6tIpfMoqc6o5Kr+
+pfMppWmv4KVdp3S+97FLuOqwVKFBqMOo/Kprq9+rT8VAoUOmcCCleLrdq0Sr/Kl3pKemrKXzqsyh
+Qb3QpUi5caRstmyl87Nxqr6lu7lxpGy2bKXzpKe1b7BlqswsIKjDvdCl36dZp1Kwo6W7uXGkbLZs
+pfOkzqjkqv6l86lNvlC3tKnSprO9xqZMpfOhQ8HCwcKxeqq6plinQCENCg0KRElTQ0xBSU1FUjoN
+ClRoaXMgbWVzc2FnZSAoYW5kIGFueSBhdHRhY2htZW50cykgbWF5IGNvbnRhaW4gbGVnYWxseSBw
+cml2aWxlZ2VkIGFuZC9vciBvdGhlciBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24uIElmIHlvdSBo
+YXZlIHJlY2VpdmVkIGl0IGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcmVw
+bHkgZS1tYWlsIGFuZCBpbW1lZGlhdGVseSBkZWxldGUgdGhlIGUtbWFpbCBhbmQgYW55IGF0dGFj
+aG1lbnRzIHdpdGhvdXQgY29weWluZyBvciBkaXNjbG9zaW5nIHRoZSBjb250ZW50cy4gVGhhbmsg
+eW91Lg0K
 
-
---_=_swift-213324794666bcb8c43b8882.56997922_=_
-Content-Type: text/plain; charset=utf-8
-
-Invitation Only Event  ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ 
-
-**We Need Nonprofit Experts!**
-
-**"Are you ready to share your knowledge and experience with nonprofit organizations? Join us to explore how you can become a Major Gifts Ramp-Up Counselor."** ~ Stefanie Stark, Development Systems International 
-
-https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr1n7ziNTyj_YyX5EWIFmi5m 
-
- SuperConsulting Virtual Call
-October 30, 2024
-10am - 1pm EST
-
-VISIT HERE TO MAKE RESERVATION https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr1n7ziNTyj_YyX5EWIFmi5m
-
-Because you work with
-CHARITABLE ORGANIZATIONS
-
-Dear Colleague In Service,
-
-****Did you know you can add between $24,000 up to $240,000 to your annual income by becoming a fundraising consultant?****
-
-Development Systems International (DSI) is hosting a live INVITATION ONLY 3hr Virtual Teleconference to explore how you can become a Major Gifts Ramp-Up Counselor. This is a private call. It is "Invitation Only." 
-
-**REGISTRATION IS COMPLIMENTARY.** We look forward to spending time with you to better understand your personal and professional goals.
-
-DSI SuperConsulting Virtual Call (3hr)
-
-**October 30, 2024 - 10am-1pm (EST)**
-REGISTRATION OPENS AT 9:45am
-
-VISIT HERE TO MAKE YOUR RESERVATION https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr1n7ziNTyj_YyX5EWIFmi5m  
-
- 
-Development Systems International has been raising hundreds of millions of dollars for charitable organizations for nearly 35 years. How? By serving nonprofit leaders just like you who are ready to share their experience with others.
-
- 
-Please feel free to contact me with your questions at (800) 257-6670.
-
-Sincerely Yours,
-
-**Stefanie Stark, CNC**
-
-President, DSI
-
-Sent to: soc@kernel.org
-
-Unsubscribe https://jimmylarose.acemlnd.com/proc.php?nl=300&c=1022&m=1642&s=678f48a0e320c6856d0620aa2e024acb&act=unsub
-
-National Development Institute, PO Box 1840, Lexington, SC 29071, United States
---_=_swift-213324794666bcb8c43b8882.56997922_=_
-Content-Type: text/html; charset=utf-8
+--_000_PSAPR06MB49495961B7AEDE4AE26F8ED389802PSAPR06MB4949apcp_
+Content-Type: text/html; charset="big5"
 Content-Transfer-Encoding: quoted-printable
 
-<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
-text/html; charset=3Dutf-8"><meta name=3D"viewport" content=3D"width=3Ddevi=
-ce-width, minimal-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalab=
-le=3D0;"><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><meta n=
-ame=3D"format-detection" content=3D"telephone=3Dno, date=3Dno, email=3Dno, =
-address=3Dno"><meta name=3D"x-apple-disable-message-reformatting">=0A<!--[i=
-f (mso 16)]><style type=3D"text/css"> a { text-decoration: none; } </style>=
-<![endif]--> =0A<!--[if gte mso 9]><style> sup { font-size: 100% !important=
-; } </style><![endif]--> =0A<!--[if gte mso 9]><xml><o:OfficeDocumentSettin=
-gs><o:AllowPNG></o:AllowPNG><o:PixelsPerInch>96</o:PixelsPerInch></o:Office=
-DocumentSettings></xml><![endif]--> =0A<!--[if gte mso 9]><style>sup { font=
--size: 100% !important; }</style><![endif]--> =0A<!--[if !mso]><!-- --><lin=
-k href=3D"https://fonts.googleapis.com/css?family=3DRoboto:400,400i,700,700=
-i" rel=3D"stylesheet"> =0A<!--<![endif]--><style type=3D"text/css">#outlook=
- a { padding:0;}.es-button { mso-style-priority:100!important; text-decorat=
-ion:none!important;}a[x-apple-data-detectors] { color:inherit!important; te=
-xt-decoration:none!important; font-size:inherit!important; font-family:inhe=
-rit!important; font-weight:inherit!important; line-height:inherit!important=
-;}.es-desk-hidden { display:none; float:left; overflow:hidden; width:0; max=
--height:0; line-height:0; mso-hide:all;}=0A@media only screen and (max-widt=
-h:600px) {p, ul li, ol li, a { line-height:150%!important } h1, h2, h3, h1 =
-a, h2 a, h3 a { line-height:120% } h1 { font-size:30px!important; text-alig=
-n:center } h2 { font-size:26px!important; text-align:center } h3 { font-siz=
-e:20px!important; text-align:center } .es-header-body h1 a, .es-content-bod=
-y h1 a, .es-footer-body h1 a { font-size:30px!important; text-align:left } =
-.es-header-body h2 a, .es-content-body h2 a, .es-footer-body h2 a { font-si=
-ze:26px!important; text-align:left } .es-header-body h3 a, .es-content-body=
- h3 a, .es-footer-body h3 a { font-size:20px!important; text-align:left } .=
-es-menu td a { font-size:13px!important } .es-header-body p, .es-header-bod=
-y ul li, .es-header-body ol li, .es-header-body a { font-size:16px!importan=
-t } .es-content-body p, .es-content-body ul li, .es-content-body ol li, .es=
--content-body a { font-size:16px!important }=0A .es-footer-body p, .es-foot=
-er-body ul li, .es-footer-body ol li, .es-footer-body a { font-size:16px!im=
-portant } .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li, .es-in=
-foblock a { font-size:12px!important } *[class=3D"gmail-fix"] { display:non=
-e!important } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3 {=
- text-align:center!important } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2,=
- .es-m-txt-r h3 { text-align:right!important } .es-m-txt-l, .es-m-txt-l h1,=
- .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left!important } .es-m-txt-r i=
-mg, .es-m-txt-c img, .es-m-txt-l img { display:inline!important } .es-butto=
-n-border { display:inline-block!important } a.es-button, button.es-button {=
- font-size:20px!important; display:inline-block!important } .es-adaptive ta=
-ble, .es-left, .es-right { width:100%!important }=0A .ac-footer, .es-conten=
-t table, .es-header table, .es-footer table, .es-content, .es-footer, .es-h=
-eader { width:100%!important; max-width:600px!important } .ac-footer td, .a=
-c-footer p, .es-adapt-td { display:block!important; width:100%!important } =
-.adapt-img { width:100%!important; height:auto!important } .es-m-p0 { paddi=
-ng:0px!important } .es-m-p0r { padding-right:0px!important } .es-m-p0l { pa=
-dding-left:0px!important } .es-m-p0t { padding-top:0px!important } .es-m-p0=
-b { padding-bottom:0!important } .es-m-p20b { padding-bottom:20px!important=
- } .es-mobile-hidden, .es-hidden { display:none!important } tr.es-desk-hidd=
-en, td.es-desk-hidden, table.es-desk-hidden { width:auto!important; overflo=
-w:visible!important; float:none!important; max-height:inherit!important; li=
-ne-height:inherit!important } tr.es-desk-hidden { display:table-row!importa=
-nt } table.es-desk-hidden { display:table!important }=0A td.es-desk-menu-hi=
-dden { display:table-cell!important } .es-menu td { width:1%!important } ta=
-ble.es-table-not-adapt, .esd-block-html table { width:auto!important } tabl=
-e.es-social { display:inline-block!important } table.es-social td { display=
-:inline-block!important } .es-desk-hidden { display:table-row!important; wi=
-dth:auto!important; overflow:visible!important; max-height:inherit!importan=
-t } }@media screen and (max-width:384px) {.mail-message-content { width:414=
-px!important } }</style>=0A </head>=0A <body class=3D"es-wrapper-color" dat=
-a-som-added=3D"true" lang=3D"und" style=3D"font-family:roboto, 'helvetica n=
-eue', helvetica, arial, sans-serif;width:100%;-webkit-text-size-adjust:100%=
-;-ms-text-size-adjust:100%;padding:0;Margin:0;background-color:#FFFFFF">   =
-     <div style=3D"display: none !important; padding: 0; height: 1px; font-=
-size: 1px; background-color: inherit !important; opacity: 0; color: transpa=
-rent; mso-line-height-rule: exactly; line-height:1px; mso-hide:all;">=0A   =
-         Invitation Only Event=0A            <div style=3D"display: none; m=
-ax-height: 0px; overflow: hidden;">=0A               =0A&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
-p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=0A =
-           </div>=0A=0A        </div>=0A<table class=3D"es-wrapper" width=
-=3D"100%" cellspacing=3D"0" cellpadding=3D"0" role=3D"none" style=3D"mso-ta=
-ble-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing=
-:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;bac=
-kground-position:center top;background-color:#FFFFFF"><tr><td valign=3D"top=
-" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspacing=3D"0" c=
-lass=3D"es-content" align=3D"center" role=3D"none" style=3D"mso-table-lspac=
-e:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;tabl=
-e-layout:fixed !important;width:100%"><tr><td align=3D"center" bgcolor=3D"#=
-ffffff" style=3D"padding:0;Margin:0;background-color:#ffffff"><table bgcolo=
-r=3D"#ffffff" class=3D"es-content-body" align=3D"center" cellpadding=3D"0" =
-cellspacing=3D"0" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table-rsp=
-ace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transp=
-arent;width:650px"><tr><td align=3D"left"=0Astyle=3D"padding:0;Margin:0;pad=
-ding-top:20px;padding-left:20px;padding-right:20px"><table cellpadding=3D"0=
-" cellspacing=3D"0" width=3D"100%" role=3D"none" style=3D"mso-table-lspace:=
-0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><=
-td align=3D"center" valign=3D"top" style=3D"padding:0;Margin:0;width:610px"=
-><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presenta=
-tion" style=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:co=
-llapse;border-spacing:0px"><tr><td align=3D"left" style=3D"padding:0;Margin=
-:0"><p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust=
-:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida gran=
-de', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:3=
-0px;color:#333333;font-size:20px;text-align:center"><b>We Need Nonprofit Ex=
-perts!</b></p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-=
-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'trebuchet m=
-s', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-ser=
-if;line-height:24px;color:#333333;font-size:16px;text-align:center"><br></p=
->=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust=
-:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida gran=
-de', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:2=
-4px;color:#333333;font-size:16px"><em>"Are you ready to share your knowledg=
-e and experience with nonprofit organizations? Join us to explore how you c=
-an become a Major Gifts Ramp-Up Counselor."</em> ~ Stefanie Stark, Developm=
-ent Systems International=C2=A0</p>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</=
-tr>=0A</table>=0A</td>=0A</tr>=0A=0A <tr><td align=3D"left" style=3D"paddin=
-g:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px"> =0A<!-=
--[if mso]><table style=3D"width:610px" cellpadding=3D"0" cellspacing=3D"0">=
-<tr><td style=3D"width:197px" valign=3D"top"><![endif]--><table cellpadding=
-=3D"0" cellspacing=3D"0" class=3D"es-left" align=3D"left" role=3D"none" sty=
-le=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bo=
-rder-spacing:0px;float:left"><tr><td class=3D"es-m-p0r es-m-p20b" valign=3D=
-"top" align=3D"center" style=3D"padding:0;Margin:0;width:197px"><table cell=
-padding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" style=
-=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bord=
-er-spacing:0px"><tr><td align=3D"center" style=3D"padding:0;Margin:0;font-s=
-ize:0px"><a target=3D"_blank" href=3D"https://jimmylarose.acemlnd.com/lt.ph=
-p?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr1n7ziNTyj_YyX=
-5EWIFmi5m" style=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none=
-;mso-line-height-rule:exactly;text-decoration:underline;color:#0000EE;font-=
-size:14px"><img class=3D"adapt-img"=0Asrc=3D"https://content.app-us1.com/cd=
-n-cgi/image/onerror=3Dredirect,width=3D650,dpr=3D2,fit=3Dscale-down,format=
-=3Dauto/pwp96/2023/05/15/6b670903-5532-4f9a-a7a7-a825092a4464.png" alt styl=
-e=3D"display:block;border:0;outline:none;text-decoration:none;-ms-interpola=
-tion-mode:bicubic" data-cf-ir-is-resized=3D"true" width=3D"197"></a>=0A</td=
->=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A=0A<!--[if mso]></td>=0A<=
-td style=3D"width:20px"></td>=0A<td style=3D"width:393px" valign=3D"top"><!=
-[endif]--><table class=3D"es-right" cellpadding=3D"0" cellspacing=3D"0" ali=
-gn=3D"right" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table-rspace:0=
-pt;border-collapse:collapse;border-spacing:0px;float:right"><tr><td align=
-=3D"left" style=3D"padding:0;Margin:0;width:393px"><table cellpadding=3D"0"=
- cellspacing=3D"0" width=3D"100%" role=3D"presentation" style=3D"mso-table-=
-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px=
-"><tr><td align=3D"center" style=3D"padding:0;Margin:0"><p style=3D"Margin:=
-0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-r=
-ule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans unico=
-de', 'lucida sans', tahoma, sans-serif;line-height:27px;color:#333333;font-=
-size:18px">=C2=A0SuperConsulting Virtual Call<br>October 30, 2024<br>10am -=
- 1pm EST<br><br><strong><a href=3D"https://jimmylarose.acemlnd.com/lt.php?x=
-=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr1n7ziNTyj_YyX5EW=
-IFmi5m" target=3D"_blank"=0Astyle=3D"-webkit-text-size-adjust:none;-ms-text=
--size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;co=
-lor:#0000EE;font-size:18px;font-family:'trebuchet ms', 'lucida grande', 'lu=
-cida sans unicode', 'lucida sans', tahoma, sans-serif">VISIT HERE TO MAKE R=
-ESERVATION</a></strong><br><br>Because you work with<br>CHARITABLE ORGANIZA=
-TIONS</p>=0A=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A =0A<!=
---[if mso]></td>=0A</tr>=0A</table>=0A<![endif]--></td>=0A</tr>=0A=0A <tr><=
-td align=3D"left" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cel=
-lspacing=3D"0" width=3D"100%" role=3D"none" style=3D"mso-table-lspace:0pt;m=
-so-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td al=
-ign=3D"center" valign=3D"top" style=3D"padding:0;Margin:0;width:650px"><tab=
-le cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"=
- style=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collaps=
-e;border-spacing:0px"><tr><td align=3D"center" style=3D"padding:20px;Margin=
-:0;font-size:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellpadd=
-ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace=
-:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr>=
-<td style=3D"padding:0;Margin:0;border-bottom:1px solid #cccccc;background:=
-unset;height:1px;width:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=0A=
-</tr>=0A=0A <tr><td align=3D"left" style=3D"padding:0;Margin:0"><p style=3D=
-"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-=
-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida sa=
-ns unicode', 'lucida sans', tahoma, sans-serif;line-height:19px;color:#3333=
-33;font-size:16px">Dear Colleague In Service,<br><br><strong><em>Did you kn=
-ow you can add between $24,000 up to $240,000 to your annual income by beco=
-ming a fundraising consultant?</em></strong><br><br>Development Systems Int=
-ernational (DSI) is hosting a live INVITATION ONLY 3hr Virtual Teleconferen=
-ce to explore how you can become a Major Gifts Ramp-Up Counselor. This is a=
- private call. It is "Invitation Only." <em>REGISTRATION IS COMPLIMENTARY.<=
-/em> We look forward to spending time with you to better understand your pe=
-rsonal and professional goals.<br><br>DSI SuperConsulting Virtual Call (3hr=
-)<br><strong>October 30, 2024 - 10am-1pm (EST)</strong><br>REGISTRATION OPE=
-NS AT=0A9:45am<br><br><strong><a href=3D"https://jimmylarose.acemlnd.com/lt=
-.php?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr1n7ziNTyj_=
-YyX5EWIFmi5m" target=3D"_blank" style=3D"-webkit-text-size-adjust:none;-ms-=
-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underlin=
-e;color:#0000EE;font-size:16px">VISIT HERE TO MAKE YOUR RESERVATION</a></st=
-rong>=C2=A0=C2=A0</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:no=
-ne;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'treb=
-uchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, s=
-ans-serif;line-height:19px;color:#333333;font-size:16px">=C2=A0<br>Developm=
-ent Systems International has been raising hundreds of millions of dollars =
-for charitable organizations for nearly 35 years. How? By serving nonprofit=
- leaders just like you who are ready to share their experience with others.=
-</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-=
-adjust:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucid=
-a grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-he=
-ight:22px;color:#333333;font-size:16px">=C2=A0<br>Please feel free to conta=
-ct me with your questions at (800) 257-6670.<br><br>Sincerely Yours,<br><br=
-><span style=3D"font-size:18px;line-height:22px"><b><i>Stefanie Stark, CNC<=
-/i></b></span><br><br>President, DSI</p>=0A</td>=0A</tr>=0A</table>=0A</td>=
-=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=
-=0A</td>=0A</tr>=0A</table>=0A=0A <table class=3D"es-footer ac-footer" cell=
-spacing=3D"0" cellpadding=3D"0" align=3D"center" role=3D"none" style=3D"mso=
--table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spac=
-ing:0px;table-layout:fixed !important;width:100%;background-color:transpare=
-nt;background-repeat:repeat;background-position:center top"><tr><td align=
-=3D"center" class=3D"es-footer-body" style=3D"padding:0;Margin:0;background=
--color:transparent;padding-top:20px;padding-bottom:20px;background:inherit;=
-font-family:inherit;font-size:12px;color:inherit"><p style=3D"Margin:0;-web=
-kit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:ex=
-actly;font-family:inherit;line-height:150%;color:inherit;font-size:inherit"=
->Sent to: soc@kernel.org<br><br><a style=3D"-webkit-text-size-adjust:none;-=
-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:under=
-line;color:inherit;font-size:inherit;font-family:inherit;font-weight:inheri=
-t"=0Ahref=3D"https://jimmylarose.acemlnd.com/proc.php?nl=3D300&c=3D1022&m=
-=3D1642&s=3D678f48a0e320c6856d0620aa2e024acb&act=3Dunsub" target=3D"_blank"=
->Unsubscribe</a><br><br><span class=3D"perstag_address" style=3D"color:inhe=
-rit;font-family:inherit;font-size:inherit">National Development Institute, =
-PO Box 1840, Lexington, SC 29071, United States</span></p>=0A=0A</td>=0A</t=
-r>=0A</table>=0A<img src=3D"https://jimmylarose.acemlnd.com/lt.php?x=3D41Zy=
-~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-k2DjFNu1H0Ru0LvjecxzK55Inad5O4=
-1NAoFhR5" border=3D"0" width=3D"1" height=3D"1" style=3D"display:block;widt=
-h:1px!important;min-width:1px!important;max-width:1px!important;height:1px!=
-important;border:0;overflow:hidden;" /><br clear=3D"all" /></body>=0A</html=
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dbig5">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
+olor: rgb(0, 0, 0);">
+Hi Krzk,</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
+olor: rgb(0, 0, 0);">
+&gt;Missing commit msg.</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;A nit, subject: drop second/last, redundant &quot;bindings&quot;. The</=
+div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;&quot;dt-bindings&quot; prefix is already stating that these are bindin=
+gs.</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;See also:</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetr=
+ee/bindings/submitting-patches.rst#L18</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;Please use subject prefixes matching the subsystem. You can get them fo=
+r</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory<=
+/div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;your patch is touching. For bindings, the preferred subjects are</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+&gt;explained here:</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
+olor: rgb(0, 0, 0);">
+&gt;https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-p=
+atches.html#i-for-patch-submitters</div>
+<div class=3D"elementToProof" style=3D"text-align: left; text-indent: 0px; =
+margin: 0px; font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, C=
+alibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+Agree, already fixed in another commit in Ryan's series.</div>
+<div style=3D"text-align: left; text-indent: 0px; margin: 0px; font-family:=
+ Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-s=
+erif; font-size: 11pt; color: rgb(0, 0, 0);">
+<a href=3D"https://patchwork.kernel.org/project/linux-clk/patch/20240808075=
+937.2756733-4-ryan_chen@aspeedtech.com/" id=3D"OWA575e1ac2-732e-ed9d-38b7-6=
+4545afc5721" class=3D"OWAAutoLink" style=3D"margin: 0px;">[3/4] dt-bindings=
+: clock: Add AST2700 clock bindings - Patchwork
+ (kernel.org)</a></div>
+<div style=3D"text-align: left; text-indent: 0px; margin: 0px; font-family:=
+ Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-s=
+erif; font-size: 11pt; color: rgb(0, 0, 0);">
+<br>
+--</div>
+<div style=3D"text-align: left; text-indent: 0px; margin: 0px; font-family:=
+ Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-s=
+erif; font-size: 11pt; color: rgb(0, 0, 0);">
+Best Regards,</div>
+<div style=3D"text-align: left; text-indent: 0px; margin: 0px; font-family:=
+ Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-s=
+erif; font-size: 11pt; color: rgb(0, 0, 0);">
+Kevin. Chen</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+<br>
+</div>
+<div id=3D"appendonsend"></div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<hr style=3D"display: inline-block; width: 98%;">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-family: Calibri, =
+sans-serif; font-size: 11pt; color: rgb(0, 0, 0);"><b>=B1H=A5=F3=AA=CC:</b>=
+&nbsp;Krzysztof Kozlowski &lt;krzk@kernel.org&gt;<br>
+<b>=B1H=A5=F3=A4=E9=B4=C1:</b>&nbsp;2024=A6~7=A4=EB26=A4=E9 =A4U=A4=C8 07:1=
+1<br>
+<b>=A6=AC=A5=F3=AA=CC:</b>&nbsp;Kevin Chen &lt;kevin_chen@aspeedtech.com&gt=
+;; robh@kernel.org &lt;robh@kernel.org&gt;; krzk+dt@kernel.org &lt;krzk+dt@=
+kernel.org&gt;; conor+dt@kernel.org &lt;conor+dt@kernel.org&gt;; joel@jms.i=
+d.au &lt;joel@jms.id.au&gt;; andrew@codeconstruct.com.au &lt;andrew@codecon=
+struct.com.au&gt;;
+ lee@kernel.org &lt;lee@kernel.org&gt;; catalin.marinas@arm.com &lt;catalin=
+.marinas@arm.com&gt;; will@kernel.org &lt;will@kernel.org&gt;; arnd@arndb.d=
+e &lt;arnd@arndb.de&gt;; olof@lixom.net &lt;olof@lixom.net&gt;; soc@kernel.=
+org &lt;soc@kernel.org&gt;; mturquette@baylibre.com &lt;mturquette@baylibre=
+.com&gt;;
+ sboyd@kernel.org &lt;sboyd@kernel.org&gt;; p.zabel@pengutronix.de &lt;p.za=
+bel@pengutronix.de&gt;; quic_bjorande@quicinc.com &lt;quic_bjorande@quicinc=
+.com&gt;; geert+renesas@glider.be &lt;geert+renesas@glider.be&gt;; dmitry.b=
+aryshkov@linaro.org &lt;dmitry.baryshkov@linaro.org&gt;; shawnguo@kernel.or=
+g
+ &lt;shawnguo@kernel.org&gt;; neil.armstrong@linaro.org &lt;neil.armstrong@=
+linaro.org&gt;; m.szyprowski@samsung.com &lt;m.szyprowski@samsung.com&gt;; =
+nfraprado@collabora.com &lt;nfraprado@collabora.com&gt;; u-kumar1@ti.com &l=
+t;u-kumar1@ti.com&gt;; devicetree@vger.kernel.org &lt;devicetree@vger.kerne=
+l.org&gt;;
+ linux-arm-kernel@lists.infradead.org &lt;linux-arm-kernel@lists.infradead.=
+org&gt;; linux-aspeed@lists.ozlabs.org &lt;linux-aspeed@lists.ozlabs.org&gt=
+;; linux-kernel@vger.kernel.org &lt;linux-kernel@vger.kernel.org&gt;; linux=
+-clk@vger.kernel.org &lt;linux-clk@vger.kernel.org&gt;<br>
+<b>=A5D=A6=AE:</b>&nbsp;Re: [PATCH v1 02/10] dt-binding: clk: ast2700: Add =
+binding for Aspeed AST27xx Clock</span>
+<div>&nbsp;</div>
+</div>
+<div class=3D"elementToProof" style=3D"text-align: left; text-indent: 0px; =
+margin: 0px; font-size: 11pt;">
+On 26/07/2024 13:03, Kevin Chen wrote:<br>
+&gt; Signed-off-by: Kevin Chen &lt;kevin_chen@aspeedtech.com&gt;<br>
+<br>
+Missing commit msg.<br>
+<br>
+A nit, subject: drop second/last, redundant &quot;bindings&quot;. The<br>
+&quot;dt-bindings&quot; prefix is already stating that these are bindings.<=
+br>
+See also:<br>
+<a href=3D"https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/d=
+evicetree/bindings/submitting-patches.rst#L18" id=3D"OWAc765d41d-a0f9-b0c5-=
+baad-2beae5ea4795" class=3D"OWAAutoLink" data-auth=3D"NotApplicable">https:=
+//elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/binding=
+s/submitting-patches.rst#L18</a><br>
+<br>
+Please use subject prefixes matching the subsystem. You can get them for<br=
 >
---_=_swift-213324794666bcb8c43b8882.56997922_=_--
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory<br>
+your patch is touching. For bindings, the preferred subjects are<br>
+explained here:<br>
+<a href=3D"https://www.kernel.org/doc/html/latest/devicetree/bindings/submi=
+tting-patches.html#i-for-patch-submitters" id=3D"OWA57550013-5513-06f9-de43=
+-2148e49c0b37" class=3D"OWAAutoLink" data-auth=3D"NotApplicable">https://ww=
+w.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-=
+for-patch-submitters</a><br>
+<br>
+&gt; ---<br>
+&gt;&nbsp; .../dt-bindings/clock/aspeed,ast2700-clk.h&nbsp;&nbsp;&nbsp; | 1=
+80 ++++++++++++++++++<br>
+<br>
+This is supposed to be part of bindings adding the clock controller.<br>
+<br>
+&gt;&nbsp; 1 file changed, 180 insertions(+)<br>
+&gt;&nbsp; create mode 100644 include/dt-bindings/clock/aspeed,ast2700-clk.=
+h<br>
+&gt;<br>
+&gt; diff --git a/include/dt-bindings/clock/aspeed,ast2700-clk.h b/include/=
+dt-bindings/clock/aspeed,ast2700-clk.h<br>
+&gt; new file mode 100644<br>
+&gt; index 000000000000..5ca85503736d<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/include/dt-bindings/clock/aspeed,ast2700-clk.h<br>
+&gt; @@ -0,0 +1,180 @@<br>
+&gt; +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */<br>
+&gt; +/*<br>
+&gt; + * Device Tree binding constants for AST2700 clock controller.<br>
+&gt; + *<br>
+&gt; + * Copyright (c) 2023 Aspeed Technology Inc.<br>
+&gt; + */<br>
+&gt; +<br>
+&gt; +#ifndef __DT_BINDINGS_CLOCK_AST2700_H<br>
+&gt; +#define __DT_BINDINGS_CLOCK_AST2700_H<br>
+&gt; +<br>
+&gt; +/* SOC0 clk-gate */<br>
+&gt; +#define SCU0_CLK_GATE_MCLK&nbsp;&nbsp; (0)<br>
+&gt; +#define SCU0_CLK_GATE_ECLK&nbsp;&nbsp; (1)<br>
+<br>
+Drop all (). Not needed, not useful.<br>
+<br>
+&gt; +#define SCU0_CLK_GATE_GCLK&nbsp;&nbsp; (2)<br>
+&gt; +#define SCU0_CLK_GATE_VCLK&nbsp;&nbsp; (3)<br>
+&gt; +#define SCU0_CLK_GATE_BCLK&nbsp;&nbsp; (4)<br>
+&gt; +#define SCU0_CLK_GATE_D1CLK&nbsp; (5)<br>
+&gt; +#define SCU0_CLK_GATE_REFCLK (6)<br>
+&gt; +#define SCU0_CLK_GATE_USB0CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; (7)<br>
+&gt; +#define SCU0_CLK_GATE_RSV8&nbsp;&nbsp; (8)<br>
+&gt; +#define SCU0_CLK_GATE_USB1CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; (9)<br>
+&gt; +#define SCU0_CLK_GATE_D2CLK&nbsp; (10)<br>
+&gt; +#define SCU0_CLK_GATE_RSV11&nbsp; (11)<br>
+&gt; +#define SCU0_CLK_GATE_RSV12&nbsp; (12)<br>
+&gt; +#define SCU0_CLK_GATE_YCLK&nbsp;&nbsp; (13)<br>
+&gt; +#define SCU0_CLK_GATE_USB2CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; (14)<br>
+&gt; +#define SCU0_CLK_GATE_UART4CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1=
+5)<br>
+&gt; +#define SCU0_CLK_GATE_SLICLK (16)<br>
+&gt; +#define SCU0_CLK_GATE_DACCLK (17)<br>
+&gt; +#define SCU0_CLK_GATE_DP&nbsp;&nbsp;&nbsp;&nbsp; (18)<br>
+&gt; +#define SCU0_CLK_GATE_RSV19&nbsp; (19)<br>
+&gt; +#define SCU0_CLK_GATE_CRT1CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; (20)<br>
+&gt; +#define SCU0_CLK_GATE_CRT2CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; (21)<br>
+&gt; +#define SCU0_CLK_GATE_VLCLK&nbsp; (22)<br>
+&gt; +#define SCU0_CLK_GATE_ECCCLK (23)<br>
+&gt; +#define SCU0_CLK_GATE_RSACLK (24)<br>
+&gt; +#define SCU0_CLK_GATE_RVAS0CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (2=
+5)<br>
+&gt; +#define SCU0_CLK_GATE_UFSCLK (26)<br>
+&gt; +#define SCU0_CLK_GATE_EMMCCLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p; (27)<br>
+&gt; +#define SCU0_CLK_GATE_RVAS1CLK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (2=
+8)<br>
+&gt; +/* reserved 29 ~ 31*/<br>
+<br>
+IDs cannot be reserved. It is a binding, not a hardware number.<br>
+<br>
+&gt; +#define SOC0_CLK_GATE_NUM&nbsp;&nbsp;&nbsp; (SCU0_CLK_GATE_RVAS1CLK +=
+ 1)<br>
+<br>
+No drop. Others as well.<br>
+<br>
+Best regards,<br>
+Krzysztof<br>
+<br>
+</div>
+************* Email Confidentiality Notice ********************<br>
+=A7K=B3d=C1n=A9=FA:<br>
+=A5=BB=ABH=A5=F3(=A9=CE=A8=E4=AA=FE=A5=F3)=A5i=AF=E0=A5]=A7t=BE=F7=B1K=B8=
+=EA=B0T=A1A=A8=C3=A8=FC=AAk=AB=DF=ABO=C5@=A1C=A6p =A5x=BA=DD=ABD=AB=FC=A9w=
+=A4=A7=A6=AC=A5=F3=AA=CC=A1A=BD=D0=A5H=B9q=A4l=B6l=A5=F3=B3q=AA=BE=A5=BB=B9=
+q=A4l=B6l=A5=F3=A4=A7=B5o=B0e=AA=CC, =A8=C3=BD=D0=A5=DF=A7Y=A7R=B0=A3=A5=BB=
+=B9q=A4l=B6l=A5=F3=A4=CE=A8=E4=AA=FE=A5=F3=A9M=BEP=B7=B4=A9=D2=A6=B3=BD=C6=
+=A6L=A5=F3=A1C=C1=C2=C1=C2=B1z=AA=BA=A6X=A7@!<br>
+<br>
+DISCLAIMER:<br>
+This message (and any attachments) may contain legally privileged and/or ot=
+her confidential information. If you have received it in error, please noti=
+fy the sender by reply e-mail and immediately delete the e-mail and any att=
+achments without copying or disclosing
+ the contents. Thank you.
+</body>
+</html>
 
-
+--_000_PSAPR06MB49495961B7AEDE4AE26F8ED389802PSAPR06MB4949apcp_--
