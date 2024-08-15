@@ -1,566 +1,403 @@
-Return-Path: <SRS0=sbO0=PO=aspeedtech.com=kevin_chen@kernel.org>
+Return-Path: <SRS0=YgUR=PO=em-1707420.icnewsupdate.org=bounce-1707420-1032-1076303-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02365C531DD
-	for <soc@archiver.kernel.org>; Thu, 15 Aug 2024 05:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49537C3DA7F
+	for <soc@archiver.kernel.org>; Thu, 15 Aug 2024 16:22:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DDFBAC4AF11; Thu, 15 Aug 2024 05:51:18 +0000 (UTC)
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2103.outbound.protection.outlook.com [40.107.255.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 19A8DC4AF09; Thu, 15 Aug 2024 16:22:01 +0000 (UTC)
+Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AC4C1C4AF09;
-	Thu, 15 Aug 2024 05:51:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC4C1C4AF09
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Hl3+skAaKY3/Z/Tyo+/dGTpssDrdT2afVJKCTGzF2lb7COfUhi7oFCLNXzapdFR1kdvKlXOsC3JtI+Wvcaog6jvXltv3ZpeIOXsoSOGe4crTz+v+Nm0K91sJNMQOE+u95znTdf/oUrA5D5Yb9aqeUuYxSyQWXcmrP/UV5Z2IA5ekBhoah7JEYaNPwsHrhPdqe/VeKZKppkKBfXpdCNttiYVxiJIz3p+ZXXHWU0i+JijSsIZEk5vL9ZdbaHiyh7n+Y4dcfNyCKM8yy0bJG+rx5twFWuQ3B+XcGLBviTRgRaLWt03KJdtzbBOxtJFTk6yElfmoYlkKHNAXbFndO89SBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OmRYhgYHHQpbUViJh60+nCqAcDfOqskUaZT2KO14cMs=;
- b=Yiy5r/GCbiohKOlEduDlI/bR3M3xc5PXSEEdr69VH2IaNMGdCnauZ7n7KgucLrJSMiA0Woa+k/U7t7K0oqPlKxbK7ai7AOvwIeSl7DNpb+tRaMZSqjeUF2X9HUNgBAJ6qpxwM0xpayE/GfDJDi33vEm9AETx/vAcfAS0YAZVuPeLsEP0mRutIahPxt35CyRdHmfjZjCXU7vJeMTtu2+f+TBBYaW2lPzmqdvecbfzw/IAA2qTGlRnPx0TA5g+LKgoBjKf7mqY7VmtVq9S/tAEhxYORUIBcvH0Yn2uXTPtmsKOntXkJ5rRn/U3KNs1XTcXsRJcSkci5/gVibtOo5HMtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OmRYhgYHHQpbUViJh60+nCqAcDfOqskUaZT2KO14cMs=;
- b=BzzaTxnx4MwWiwtZGewoEC7G1X4+HFXVxQZ73SE2ontlg5TREB0HCw4R9C7gYNpOJKgVAnwm70ZvMHdTwfkF7denosA1Z6ptdEFDVipY9j4iIwkmnoOL/fV180PkqgMomjZv7wuiG99Wr5FkoZHScTIhr94BsjPz8afI0OjmvjyMxXkLWiv+C3VRW9qT6YlrGPcWyKmhu5xzKXfxO/R7N2y6Kp8sjl3QcxpNjcNmtpB+pma/JJxcMAvdnViWjrNeTzndPurCgad0fofPsnVp9xsYdWygGh6Ef46Lb2U6SEzHTycDQxSDK2Vx+srbypqFOebT+JeL84PvzFCupLhRtA==
-Received: from PSAPR06MB4949.apcprd06.prod.outlook.com (2603:1096:301:ad::9)
- by SEYPR06MB7000.apcprd06.prod.outlook.com (2603:1096:101:1e3::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.16; Thu, 15 Aug
- 2024 05:51:13 +0000
-Received: from PSAPR06MB4949.apcprd06.prod.outlook.com
- ([fe80::7bdd:639a:6b94:37bf]) by PSAPR06MB4949.apcprd06.prod.outlook.com
- ([fe80::7bdd:639a:6b94:37bf%7]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 05:51:12 +0000
-From: Kevin Chen <kevin_chen@aspeedtech.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id A4835C4AF0D
+	for <soc@kernel.org>; Thu, 15 Aug 2024 16:21:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A4835C4AF0D
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=icnewsupdate.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=em-1707420.icnewsupdate.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=icnewsupdate.org;
+ h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ Feedback-ID:List-Unsubscribe:List-Unsubscribe-Post:Message-ID;
+ i=team@icnewsupdate.org;
+ bh=WrI3T9N6ipOIj0pzh/jwb2bSXlHjxwlpq5dEkv7NWcE=;
+ b=ew8C6tNS6e1MRF1xUDfbuc4Z4Na1Cf+xrAtd5zmlLm4FGVWYBepOIjoIUX7sZ9NkyKoNgLExGdPN
+   VIBEP3Y2/y6QYPrpWWLsFmmJ/MKg0ZR4z5JdXu/b92VLHfbp8AiZ5+HlGugEu+jLmt2XWF6TppWn
+   kqzP1VyAHh+oN/PckXK5x9vrCTvxMjfj+R0Y9x3Oih1sqyOASaow5BxjDEYBZDUrHY2r72LntBtG
+   hoMpx3CV3ENHkMpZxC2aGNUodD0uvv+cscAhghj26h2NNcKXdMbVpxT3Osv7acRZiFzBEVPP+kwu
+   dRq14GJoPi2yVyOtNbdBtuUMjHNQY/Hw+hNTfQ==
+Received: by s4.acemsrvh.com id hnolie36bm4b for <soc@kernel.org>; Thu, 15 Aug 2024 16:21:58 +0000 (envelope-from <bounce-1707420-1032-1076303-soc=kernel.org@em-1707420.icnewsupdate.org>)
+X-Mailer: ActiveCampaign Mailer
+CFBL-Address: fbl-report@acems1.com; report=arf
 List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "joel@jms.id.au"
-	<joel@jms.id.au>, "andrew@codeconstruct.com.au"
-	<andrew@codeconstruct.com.au>, "lee@kernel.org" <lee@kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
-	<will@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net"
-	<olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
-	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
-	<sboyd@kernel.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"quic_bjorande@quicinc.com" <quic_bjorande@quicinc.com>,
-	"geert+renesas@glider.be" <geert+renesas@glider.be>,
-	"dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, "neil.armstrong@linaro.org"
-	<neil.armstrong@linaro.org>, "m.szyprowski@samsung.com"
-	<m.szyprowski@samsung.com>, "nfraprado@collabora.com"
-	<nfraprado@collabora.com>, "u-kumar1@ti.com" <u-kumar1@ti.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
-Subject:
- =?big5?B?pl7C0DogW1BBVENIIHYxIDA3LzEwXSBhcm02NDogYXNwZWVkOiBBZGQgc3VwcG9y?=
- =?big5?Q?t_for_ASPEED_AST2700_BMC_SoC?=
-Thread-Topic: [PATCH v1 07/10] arm64: aspeed: Add support for ASPEED AST2700
- BMC SoC
-Thread-Index: AQHa30uNgfdNeqemVUaxz4JUd+v/wrII29uAgB7x/oQ=
-Date: Thu, 15 Aug 2024 05:51:12 +0000
-Message-ID:
- <PSAPR06MB4949A8DCD5B085514A9E710389802@PSAPR06MB4949.apcprd06.prod.outlook.com>
-References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
- <20240726110355.2181563-8-kevin_chen@aspeedtech.com>
- <b7b3cbc2-5f20-4a78-b189-b509acfee3ac@kernel.org>
-In-Reply-To: <b7b3cbc2-5f20-4a78-b189-b509acfee3ac@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PSAPR06MB4949:EE_|SEYPR06MB7000:EE_
-x-ms-office365-filtering-correlation-id: 05d7e92c-502f-4124-f542-08dcbcee44df
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|921020|38070700018;
-x-microsoft-antispam-message-info:
- =?big5?B?SjArYm5LaGxoRFM4dkhPNnI0ZXpWdGVaaVJlOW1KR0NPWUtnMkRGT1NQd1dJYjhN?=
- =?big5?B?ZStvamRPM3YwRTJZUksveGM5eVdacFMra0FCRE5qWkNOOEIxcTF5ZEdrY2RJWDNJ?=
- =?big5?B?MVNVN3JiNCtJdC8zNERwU2s2YklXRDNzemFMQzF5SWUxVjRML1kvSFkvdFV4OHor?=
- =?big5?B?czVHREZZcVBmL3g4UTllMlU5VmMwcFJEOTV1dFNCUDBybjFFTjR4VWFEQ2g3YmNh?=
- =?big5?B?QVF5cFlzaUZMR3pMTkgyNlVBcmlVQzFkVlhCTE1GK0U4Zm5laFlIN2Y5TXdvYXYr?=
- =?big5?B?L0JHSGtCc3ltMTZxMmhxY3dGc3BVUklydzBENjUzOGsyblNGM3BCa1ZsMEsrSndh?=
- =?big5?B?L2I4TDZGeTZZdmhCWkMva0dBSWFydnhocHJnMXVvUnk1OWVDaXNpY08yS3ZrUGhx?=
- =?big5?B?eUxNQzVnTE9VNkhRTXAxOTRmTFlabjREd0lrSVBnTVZMUTM4YXE0YWxNekRKVy9t?=
- =?big5?B?b3ZvMjFPRFVadnE1aG5ReTFqRFFwVG04SHlBSUpMTUY2SHlybkxTTEx2dDUyb1pp?=
- =?big5?B?cTlNLzViaWVGRVdDM1lncG0ydmloSTBHMDM1OGthZUhLbUd1QVVEWFNIMmJEekxr?=
- =?big5?B?N2xaZ28yNkZiQmZpQ0hLR1N5ZmgzZGtuNW5iM2YybUc3MGdWSmQ0c3UrYzZCVWtS?=
- =?big5?B?U0FvWFlCbmRwc1l3dUduUThwb3lidjUvbllPMzUzZjhPbXkrbmFUaEQ2dUlKRGhu?=
- =?big5?B?aHVCejVYeGtDc2VtcEVtZmpCSGprbXRrUDV4cyt1UGUySWpRZXVuRWEyWU5TOXM3?=
- =?big5?B?ems1RlFQSWlobjhxTlljcTl0ZUYySUV2eEdtMWI5bnhud0gvQ205b3dyeDBhZmYz?=
- =?big5?B?elVmRFNHWFZCNy9HV0tIV1ZCTmdCdEZpOG55Ujlockt6dzIyWHRQbkZXN1R4dFN2?=
- =?big5?B?UVB5aGtQQUhKYjBLV3hsQ2w3b2lkcE9NSnJKU0RlM050dXFEZzRmbU5WN2xXNUtW?=
- =?big5?B?NzNIT1hObndpL0R5RmpQY3l0R3prZytheXBjd1VQRDBRSWp5aUZyZjM5M2JMVkR2?=
- =?big5?B?bXRMUmlRNnorcktWeHI1ZkJlNzUvK1pTWDVwUHZaemtqUVVoWnFwVUZxd21QTktx?=
- =?big5?B?MDVqTWZ5NG9LTWhsa1ZpRS9DVUkvaE9ZRTFrMlU3a2M0TFpSVEtlQmZmQ0ZSbEZX?=
- =?big5?B?UzRqVUEwWWdPQnlna2Z0NDJEZHhpak9WWmUwNHdWOStFNnBKTVhWUzhhazViTndk?=
- =?big5?B?OGE5cGY1ZEcxUXNGcHlsdE15ZjlMNTZ2S1JieEhVL0pUcUhKYXhEME83MVQ2blQy?=
- =?big5?B?RUQ5cnBoL3pSSURkZHZtSy9uS1RVeXdwUGZKUkJ3bEI1MHNNTEJpQVU4SmxTRERH?=
- =?big5?B?M1hndjNnSWJadXJNUE1TajNJVVdSWVdzcVF1RE9RSVpkUXNBUDBxeVVFZUpaYWdF?=
- =?big5?B?VDZBTGN0ZHpINnNCU1ZuZ3JtNUhkR0RCVUNUZjBnMmNUMFlObUFIMUxUbEc4TWVQ?=
- =?big5?B?VEtSa0YxWlZTZ2JselFzVE1wcDJXdjY4YnJxNFcxcHhCUEh6Y3J4ZWphOFVFOHpp?=
- =?big5?B?OXpQMGFZclVGZVlMbGFabWdCaVVpaXJRd2loY0tHeFludTIrazg0TjU4bWNpRWNJ?=
- =?big5?B?NE1FNGhzSEtTMy95VUZkY2k4S3liQktRdzBSb0hWa1RkN0NtN1E4NE1VSmRMWk8r?=
- =?big5?B?YXhzVVhBUG5NYXVTbnBocVIyTTlSSlFsYzhpUnpZWkt6RmhLd3BqeGlOcXZsck53?=
- =?big5?B?WmNkczFGS3R3RE9EZzlTbjRCMHkzMUJZOStLNVQ1ZTRiQVhBcWMyQVAybzNNT25J?=
- =?big5?B?RTU0VlJRZE5tcGhBZlpmVkpRM1lybnA2bmsvM3Bod2p6YkJxS3UvMkpwWWxJTWs1?=
- =?big5?Q?m83mhmKeXcQ=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4949.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(921020)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?big5?B?SVp1SlNSZk9DMk1EN2pld3hrZUlCa29GNWtBY3JDWitLNkt3a1krNCtxbGFQSVZo?=
- =?big5?B?eWFjdWtXSHpoQ0dmemVmRy8rYnBOaFhINGZiN2FqbEtvYlJINEdYSWJPaDV4dGNk?=
- =?big5?B?NG80T1cwRGpwdTVFbXBWOHZLc25yM0JXUWoyaGE5N3ZRYUgyRytlYmNZdEJEaXFy?=
- =?big5?B?U2pIclF6SVo1c2d5czFpNGVEMTZDU3p6bG1mYWpNMFJ2MkVZZ09yMzMxWTN5ZEFD?=
- =?big5?B?eVJBYlFOVys4K3NNZFI0YjlwaEI4UW9Rb0xIcERjNElNZktESmI2VCtTMG1HSTFO?=
- =?big5?B?akYzZDZaSVg4VEI4VkFBZ1RZeHFVdXFDVTJYblZ3Wlp5d1JFcnI4Vm5YcDRRbmpm?=
- =?big5?B?UHdKQ0puRVdsTUJiZWFpRitVYTFjeTFRanNwMDBmYkRNWkNkbFpEMzdaRzI4M0dt?=
- =?big5?B?M1ZjQ09nclhxZUV4OG43RGR6dzlYT01OakNwdk1OODNrWG1YeXl6QWU0aUluNW1o?=
- =?big5?B?STBVWVdBQ2pXczI5QUpoa1hPNlk0YzdxaUhoZDBTWFZKUnRGUUluWU5xSldGWnA2?=
- =?big5?B?OXVVUkJKWkUrd1lsOHN5Si94Tk55RTZMRU9WQkJVY29YNDg5SlN5WFNvVzBmL3lh?=
- =?big5?B?U0xpMkI4ZzBhMVF2eWhHZTRnNFpFYnBZYzhjbitpRHBNSGV1K29RSkN4aHdaWEVW?=
- =?big5?B?SGt1cVFzSnV5N2wwTng1UHJXaDZaZW9hdTZ4SlB1dWQzbDR0bnpoTi9rQnVBaW1V?=
- =?big5?B?eHpla3V3YWNGRU5pYjJ4K0Rrd1h2ZUxjRk10ak9XYjZrODA2cTlVUzJndTN0bTdu?=
- =?big5?B?UTNOZkJ5WnVGNVhNeitPZHFUWUlSNXo3eXJ2MXFSMFgvT0lZMG9ROHF2YkhBMFBx?=
- =?big5?B?bG9GOXBISnZsWGhlME8rSDU2VWhRWUFBNlBYWlZGbUp2enovKzZFaVhMOUMyTHB1?=
- =?big5?B?ZUc4L2hQeDA1cmRtTUpqMC9ZK2h3YUs1b25jMUw0Yy9NTmRqTlhOUnpuektWM1ho?=
- =?big5?B?ZkZ5c1pud3BRMWlybi92a2hidHZqTmQwNkRzY3d0N21DMFJNUVRVNEdSbnR4ZExl?=
- =?big5?B?OWFQMWNQUTY3OWlzVHpkcjZUa3Z1MTBVbkovcFBoQlI3cHZyb0s1Q0ROaC9laWRT?=
- =?big5?B?NVYxTjlRdmdxbzVpanBqd2xaYVZSNkQwTUZnYVZKODRaZ2RQSnVKRmFyeldaUTI4?=
- =?big5?B?RFlGUzBjcFFOcDRJSmtXZ0ZmM1pHMFpBVkdRV3hoRXppMUJ3NXhkNmcyamZGMjI2?=
- =?big5?B?eFY0S3p6Y2xNaHhEU2hSQ1ZlWDVqOUxMTkNVNGlmQWNhUHdVQjhscmRVb04zUzZE?=
- =?big5?B?ZndZb09mbmRUUWZCZDBjOXJuQ1M2czdNS1JGTmZycHZramZaOTBOMUNrcHBDc0ZV?=
- =?big5?B?Vm9iQ1d0TndqYUhVVW93Nll4cVpJNWtxb0k2VjdMSEZCUDB6YUhMUG9EN0FnUG1v?=
- =?big5?B?QVdqUTlJZ0Y3dUU4U25kQlpUYU1iMG5peWxvaFhNWVlOdEdIWlBkcGo4Y3phcWFk?=
- =?big5?B?U25xQ0J1cjRsdXZ3MENWZnFOZ2xybFNINmhtcVRubmd0QlVKK2R0MVlEeUhRTWhZ?=
- =?big5?B?VmgwYVFZZUhCTDVrbkVoYm1QQUFNdkFoQkVJdGMzcy9nVENSY0VVTWdYbVF2aHNn?=
- =?big5?B?ZnVDNklHQjUzSEVNTnpLU2NCSmxtL0ZqSmtrRjVMS2J6Um9BMFZ4dkJUbFVqaFd3?=
- =?big5?B?UGNYbGpnTVVsZGw5UG53R0JJd2JUWHpBSUUzNXdVQXBwSDNGbzBpMVc5YnpYeElM?=
- =?big5?B?WXRzWGRrbzhKSy9sNlM1MWNlV1I4TFl6M00zSmsxWHFzWWVIOE5ISjAwSnA1UXlq?=
- =?big5?B?L1VNZmozcmRPemlBdGMxUkJJYUE4ckg0Q1V6dkk3Q0M0bUdLUHZYVFVDUVJTSndB?=
- =?big5?B?ZUx6bEt6aDlSdHVhTElCc1Q5TVQ3L3Q0NXlwaDNqb0NOdlc2clYwVFNNUVlJUDU4?=
- =?big5?B?ekMyYlplZkdVQm5xK1ovbERGL0NPVmo5TUpkdUhiQlpvQjdsdFhWT0xsbmx2YVNq?=
- =?big5?B?WWp2MFRmem5NZTFGZXdrNnZLRmZqR1o3ZitJRXh2YTdjT20rVS9YelhjTEZOdWI5?=
- =?big5?Q?DZ9iN2vdd5VFvv/9?=
-Content-Type: multipart/alternative;
-	boundary="_000_PSAPR06MB4949A8DCD5B085514A9E710389802PSAPR06MB4949apcp_"
+To: "Nonprofit Execs & Board Members" <soc@kernel.org>
+From: "Inside Charity" <team@icnewsupdate.org>
+Subject: Are You Competing For Nonprofit =?UTF-8?Q?Clients=3F?=
+Date: Thu, 15 Aug 2024 11:15:57 -0500
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4949.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05d7e92c-502f-4124-f542-08dcbcee44df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2024 05:51:12.2999
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wX3DRaSeORRUY3frSXD1OcDmHAtB0sGrLnPf8C8thRGgG7uEKjri1YbifPQd19vnB9uCs86ezmAZKnW44G97NsyjAjJmFo6r2upYpRYG3a0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB7000
+Content-Type: multipart/alternative;
+ boundary="_=_swift-82961945066be29bd2d9e07.65392638_=_"
+Content-Transfer-Encoding: 7bit
+X-Report-Abuse: Please report abuse here: abuse@acemserv.com
+X-mid: c29jQGtlcm5lbC5vcmcgLCBjMTAzMiAsIG0xNjUxICwgczg3Ng
+x-virtual-mta: s4.acemsrvh.com
+Feedback-ID: 1707420:1707420.1032:s4.acemsrvh.com:activecampaign
+X-250ok-CID: 1707420-1032
+List-Unsubscribe: <https://jimmylarose.activehosted.com/box.php?nl=312&c=1032&m=1651&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>,<mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-1032-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-DKIM-Options: s=acdkim1
+Message-ID: <0.0.4F.520.1DAEF2F404B8EFE.0@s4.acemsrvh.com>
 
---_000_PSAPR06MB4949A8DCD5B085514A9E710389802PSAPR06MB4949apcp_
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
 
-SGkgS3J6aywNCg0KPj4gLS0tDQo+PiAgTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICB8ICAz
-ICsrKw0KPj4gIGFyY2gvYXJtNjQvS2NvbmZpZy5wbGF0Zm9ybXMgfCAxNCArKysrKysrKysrKysr
-Kw0KPj4gIDIgZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKQ0KPj4NCj4+IGRpZmYgLS1n
-aXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTDQo+PiBpbmRleCBjMGEzZDllOTM2ODkuLjA4
-NjA5NDMwY2ZlMCAxMDA2NDQNCj4+IC0tLSBhL01BSU5UQUlORVJTDQo+PiArKysgYi9NQUlOVEFJ
-TkVSUw0KPj4gQEAgLTIxMjEsNyArMjEyMSwxMCBAQCBROiAgICAgaHR0cHM6Ly9wYXRjaHdvcmsu
-b3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4LWFzcGVlZC9saXN0Lw0KPj4gIFQ6ICAgZ2l0IGdpdDov
-L2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9qb2VsL2JtYy5naXQNCj4+
-ICBGOiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkLw0KPj4g
-IEY6ICAgYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLw0KPj4gK0Y6ICAgYXJjaC9hcm02NC9ib290
-L2R0cy9hc3BlZWQvDQo+PiAgRjogICBhcmNoL2FybS9tYWNoLWFzcGVlZC8NCj4+ICtGOiAgIGlu
-Y2x1ZGUvZHQtYmluZGluZ3MvY2xvY2svYXNwZWVkLGFzdDI3MDAtY2xrLmgNCj4+ICtGOiAgIGlu
-Y2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQvYXNwZWVkLGFzdDI3MDAtcmVzZXQuaA0KPj4gIE46ICAg
-YXNwZWVkDQo+Pg0KPj4gIEFSTS9BWE0gTFNJIFNPQw0KPj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJt
-NjQvS2NvbmZpZy5wbGF0Zm9ybXMgYi9hcmNoL2FybTY0L0tjb25maWcucGxhdGZvcm1zDQo+PiBp
-bmRleCA2YzZkMTE1MzZiNDIuLjFkYjdiNmYxZWUwYSAxMDA2NDQNCj4+IC0tLSBhL2FyY2gvYXJt
-NjQvS2NvbmZpZy5wbGF0Zm9ybXMNCj4+ICsrKyBiL2FyY2gvYXJtNjQvS2NvbmZpZy5wbGF0Zm9y
-bXMNCj4+IEBAIC00MCw2ICs0MCwyMCBAQCBjb25maWcgQVJDSF9BUFBMRQ0KPj4gICAgICAgICAg
-VGhpcyBlbmFibGVzIHN1cHBvcnQgZm9yIEFwcGxlJ3MgaW4taG91c2UgQVJNIFNvQyBmYW1pbHks
-IHN0YXJ0aW5nDQo+PiAgICAgICAgICB3aXRoIHRoZSBBcHBsZSBNMS4NCj4+DQo+PiArY29uZmln
-IEFSQ0hfQVNQRUVEDQo+PiArICAgICBib29sICJBc3BlZWQgU29DIGZhbWlseSINCj4+ICsgICAg
-IHNlbGVjdCBNQUNIX0FTUEVFRF9HNw0KPj4gKyAgICAgaGVscA0KPj4gKyAgICAgICBTYXkgeWVz
-IGlmIHlvdSBpbnRlbmQgdG8gcnVuIG9uIGFuIEFzcGVlZCBhc3QyNzAwIG9yIHNpbWlsYXINCj4+
-ICsgICAgICAgc2V2ZW50aCBnZW5lcmF0aW9uIEFzcGVlZCBCTUNzLg0KPj4gKw0KPj4gK2NvbmZp
-ZyBNQUNIX0FTUEVFRF9HNw0KPj4gKyAgICAgYm9vbCAiQXNwZWVkIFNvQyBBU1QyNzAwIg0KPg0K
-PlRoZXJlIGFyZSBubyBNQUNIaW5lcyBmb3IgYXJtNjQuIExvb2sgYXQgdGhpcyBjb2RlLiBEbyB5
-b3Ugc2VlIE1BQ0gNCj5hbnl3aGVyZSBlbHNlPyBOby4gVGhlbiB3aHkgQXNwZWVkIG11c3QgYmUg
-ZGlmZmVyZW50Pw0KPg0KPk5vLiBEcm9wLg0KQWdyZWUuDQoNCi0tDQpCZXN0IFJlZ2FyZHMsDQpL
-ZXZpbi4gQ2hlbg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KsUil86rMOiBL
-cnp5c3p0b2YgS296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+DQqxSKXzpOm0wTogMjAyNKZ+N6Tr
-Mjak6SCkVaTIIDA3OjE2DQqmrKXzqsw6IEtldmluIENoZW4gPGtldmluX2NoZW5AYXNwZWVkdGVj
-aC5jb20+OyByb2JoQGtlcm5lbC5vcmcgPHJvYmhAa2VybmVsLm9yZz47IGtyemsrZHRAa2VybmVs
-Lm9yZyA8a3J6aytkdEBrZXJuZWwub3JnPjsgY29ub3IrZHRAa2VybmVsLm9yZyA8Y29ub3IrZHRA
-a2VybmVsLm9yZz47IGpvZWxAam1zLmlkLmF1IDxqb2VsQGptcy5pZC5hdT47IGFuZHJld0Bjb2Rl
-Y29uc3RydWN0LmNvbS5hdSA8YW5kcmV3QGNvZGVjb25zdHJ1Y3QuY29tLmF1PjsgbGVlQGtlcm5l
-bC5vcmcgPGxlZUBrZXJuZWwub3JnPjsgY2F0YWxpbi5tYXJpbmFzQGFybS5jb20gPGNhdGFsaW4u
-bWFyaW5hc0Bhcm0uY29tPjsgd2lsbEBrZXJuZWwub3JnIDx3aWxsQGtlcm5lbC5vcmc+OyBhcm5k
-QGFybmRiLmRlIDxhcm5kQGFybmRiLmRlPjsgb2xvZkBsaXhvbS5uZXQgPG9sb2ZAbGl4b20ubmV0
-Pjsgc29jQGtlcm5lbC5vcmcgPHNvY0BrZXJuZWwub3JnPjsgbXR1cnF1ZXR0ZUBiYXlsaWJyZS5j
-b20gPG10dXJxdWV0dGVAYmF5bGlicmUuY29tPjsgc2JveWRAa2VybmVsLm9yZyA8c2JveWRAa2Vy
-bmVsLm9yZz47IHAuemFiZWxAcGVuZ3V0cm9uaXguZGUgPHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+
-OyBxdWljX2Jqb3JhbmRlQHF1aWNpbmMuY29tIDxxdWljX2Jqb3JhbmRlQHF1aWNpbmMuY29tPjsg
-Z2VlcnQrcmVuZXNhc0BnbGlkZXIuYmUgPGdlZXJ0K3JlbmVzYXNAZ2xpZGVyLmJlPjsgZG1pdHJ5
-LmJhcnlzaGtvdkBsaW5hcm8ub3JnIDxkbWl0cnkuYmFyeXNoa292QGxpbmFyby5vcmc+OyBzaGF3
-bmd1b0BrZXJuZWwub3JnIDxzaGF3bmd1b0BrZXJuZWwub3JnPjsgbmVpbC5hcm1zdHJvbmdAbGlu
-YXJvLm9yZyA8bmVpbC5hcm1zdHJvbmdAbGluYXJvLm9yZz47IG0uc3p5cHJvd3NraUBzYW1zdW5n
-LmNvbSA8bS5zenlwcm93c2tpQHNhbXN1bmcuY29tPjsgbmZyYXByYWRvQGNvbGxhYm9yYS5jb20g
-PG5mcmFwcmFkb0Bjb2xsYWJvcmEuY29tPjsgdS1rdW1hcjFAdGkuY29tIDx1LWt1bWFyMUB0aS5j
-b20+OyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZyA8ZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5v
-cmc+OyBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcgPGxpbnV4LWFybS1rZXJu
-ZWxAbGlzdHMuaW5mcmFkZWFkLm9yZz47IGxpbnV4LWFzcGVlZEBsaXN0cy5vemxhYnMub3JnIDxs
-aW51eC1hc3BlZWRAbGlzdHMub3psYWJzLm9yZz47IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmcgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+OyBsaW51eC1jbGtAdmdlci5rZXJuZWwu
-b3JnIDxsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnPg0KpUSmrjogUmU6IFtQQVRDSCB2MSAwNy8x
-MF0gYXJtNjQ6IGFzcGVlZDogQWRkIHN1cHBvcnQgZm9yIEFTUEVFRCBBU1QyNzAwIEJNQyBTb0MN
-Cg0KT24gMjYvMDcvMjAyNCAxMzowMywgS2V2aW4gQ2hlbiB3cm90ZToNCj4gLS0tDQo+ICBNQUlO
-VEFJTkVSUyAgICAgICAgICAgICAgICAgIHwgIDMgKysrDQo+ICBhcmNoL2FybTY0L0tjb25maWcu
-cGxhdGZvcm1zIHwgMTQgKysrKysrKysrKysrKysNCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTcgaW5z
-ZXJ0aW9ucygrKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvTUFJTlRBSU5FUlMgYi9NQUlOVEFJTkVSUw0K
-PiBpbmRleCBjMGEzZDllOTM2ODkuLjA4NjA5NDMwY2ZlMCAxMDA2NDQNCj4gLS0tIGEvTUFJTlRB
-SU5FUlMNCj4gKysrIGIvTUFJTlRBSU5FUlMNCj4gQEAgLTIxMjEsNyArMjEyMSwxMCBAQCBROiAg
-ICAgaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4LWFzcGVlZC9saXN0
-Lw0KPiAgVDogICBnaXQgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwv
-Z2l0L2pvZWwvYm1jLmdpdA0KPiAgRjogICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvYXJtL2FzcGVlZC8NCj4gIEY6ICAgYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLw0KPiArRjog
-ICBhcmNoL2FybTY0L2Jvb3QvZHRzL2FzcGVlZC8NCj4gIEY6ICAgYXJjaC9hcm0vbWFjaC1hc3Bl
-ZWQvDQo+ICtGOiAgIGluY2x1ZGUvZHQtYmluZGluZ3MvY2xvY2svYXNwZWVkLGFzdDI3MDAtY2xr
-LmgNCj4gK0Y6ICAgaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC9hc3BlZWQsYXN0MjcwMC1yZXNl
-dC5oDQo+ICBOOiAgIGFzcGVlZA0KPg0KPiAgQVJNL0FYTSBMU0kgU09DDQo+IGRpZmYgLS1naXQg
-YS9hcmNoL2FybTY0L0tjb25maWcucGxhdGZvcm1zIGIvYXJjaC9hcm02NC9LY29uZmlnLnBsYXRm
-b3Jtcw0KPiBpbmRleCA2YzZkMTE1MzZiNDIuLjFkYjdiNmYxZWUwYSAxMDA2NDQNCj4gLS0tIGEv
-YXJjaC9hcm02NC9LY29uZmlnLnBsYXRmb3Jtcw0KPiArKysgYi9hcmNoL2FybTY0L0tjb25maWcu
-cGxhdGZvcm1zDQo+IEBAIC00MCw2ICs0MCwyMCBAQCBjb25maWcgQVJDSF9BUFBMRQ0KPiAgICAg
-ICAgICBUaGlzIGVuYWJsZXMgc3VwcG9ydCBmb3IgQXBwbGUncyBpbi1ob3VzZSBBUk0gU29DIGZh
-bWlseSwgc3RhcnRpbmcNCj4gICAgICAgICAgd2l0aCB0aGUgQXBwbGUgTTEuDQo+DQo+ICtjb25m
-aWcgQVJDSF9BU1BFRUQNCj4gKyAgICAgYm9vbCAiQXNwZWVkIFNvQyBmYW1pbHkiDQo+ICsgICAg
-IHNlbGVjdCBNQUNIX0FTUEVFRF9HNw0KPiArICAgICBoZWxwDQo+ICsgICAgICAgU2F5IHllcyBp
-ZiB5b3UgaW50ZW5kIHRvIHJ1biBvbiBhbiBBc3BlZWQgYXN0MjcwMCBvciBzaW1pbGFyDQo+ICsg
-ICAgICAgc2V2ZW50aCBnZW5lcmF0aW9uIEFzcGVlZCBCTUNzLg0KPiArDQo+ICtjb25maWcgTUFD
-SF9BU1BFRURfRzcNCj4gKyAgICAgYm9vbCAiQXNwZWVkIFNvQyBBU1QyNzAwIg0KDQpUaGVyZSBh
-cmUgbm8gTUFDSGluZXMgZm9yIGFybTY0LiBMb29rIGF0IHRoaXMgY29kZS4gRG8geW91IHNlZSBN
-QUNIDQphbnl3aGVyZSBlbHNlPyBOby4gVGhlbiB3aHkgQXNwZWVkIG11c3QgYmUgZGlmZmVyZW50
-Pw0KDQpOby4gRHJvcC4NCg0KQmVzdCByZWdhcmRzLA0KS3J6eXN6dG9mDQoNCioqKioqKioqKioq
-KiogRW1haWwgQ29uZmlkZW50aWFsaXR5IE5vdGljZSAqKioqKioqKioqKioqKioqKioqKg0Kp0uz
-ZMFuqfo6DQqlu6tIpfMoqc6o5Kr+pfMppWmv4KVdp3S+97FLuOqwVKFBqMOo/Kprq9+rT8VAoUOm
-cCCleLrdq0Sr/Kl3pKemrKXzqsyhQb3QpUi5caRstmyl87Nxqr6lu7lxpGy2bKXzpKe1b7Blqsws
-IKjDvdCl36dZp1Kwo6W7uXGkbLZspfOkzqjkqv6l86lNvlC3tKnSprO9xqZMpfOhQ8HCwcKxeqq6
-plinQCENCg0KRElTQ0xBSU1FUjoNClRoaXMgbWVzc2FnZSAoYW5kIGFueSBhdHRhY2htZW50cykg
-bWF5IGNvbnRhaW4gbGVnYWxseSBwcml2aWxlZ2VkIGFuZC9vciBvdGhlciBjb25maWRlbnRpYWwg
-aW5mb3JtYXRpb24uIElmIHlvdSBoYXZlIHJlY2VpdmVkIGl0IGluIGVycm9yLCBwbGVhc2Ugbm90
-aWZ5IHRoZSBzZW5kZXIgYnkgcmVwbHkgZS1tYWlsIGFuZCBpbW1lZGlhdGVseSBkZWxldGUgdGhl
-IGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIHdpdGhvdXQgY29weWluZyBvciBkaXNjbG9zaW5n
-IHRoZSBjb250ZW50cy4gVGhhbmsgeW91Lg0K
 
---_000_PSAPR06MB4949A8DCD5B085514A9E710389802PSAPR06MB4949apcp_
-Content-Type: text/html; charset="big5"
+
+--_=_swift-82961945066be29bd2d9e07.65392638_=_
+Content-Type: text/plain; charset=utf-8
+
+(Because you work with CHARITABLE ORGANIZATIONS)  ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ 
+
+**Are You Competing for Nonprofit Clients?**
+
+VISIT HERE OR PRESS PLAY BUTTON BELOW ARTICLE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
+
+https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U 
+
+Dear Colleague In Service,
+
+When I started my business more than thirty years ago, I wondered how I could compete with the big firms, who had sales people, marketing departments, and were literally the guys who "came from at least fifty miles and carried a briefcase," which is how people tended to describe consultants. And what did I have to offer? My background was eleven years in banking and just five years in the nonprofit world. So, what qualified me to be a consultant, Was I crazy to go up against the "big guys?
+
+VISIT HERE TO READ ENTIRE ARTICLE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
+
+Well, it just happened that five years was the minimum time needed to be in the profession to become a CFRE (Certified Fund Raising Executive). So, I immediately applied to sit for the exam and became a CFRE. Anytime I was called for an interview I stressed the fact that I was a CFRE, and explained what the process was like and that the initials CFRE meant that I passed a written exam and adhered to a code of ethics. Many clients were impressed with that because they did know nonprofit world had a credentialing program.
+
+After I had been in the field ten years, I went through the even more rigorous process and became an ACFRE (Advanced Certified Fund Raising Executive). 
+
+**Then I discovered NANOE and added an important new set of letters to the alphabet soup on my business card -CNC, CNE, and CDE. **
+
+You don't have to get all three but even one of these will give you more viability in the marketplace when job searching and may...VISIT HERE TO READ ENTIRE ARTICLE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
+
+NANOE is pleased to report that over 350,000 nonprofit executives, staff, board members, ministry leaders and volunteers rely NANOE to build financial capacity. We're grateful to all our members and subscribers and want to encourage as many as people as possible to continue to share their experiences. Your written comments and contributions have helped your colleagues navigate this process.
+
+NANOE is here to make sure receive the support you require to navigate unprecedented times.
+
+VISIT HERE TO SUBSCRIBE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
+
+We look forward to hearing from you.
+
+Warmly,
+
+**Linda Lysakowski, CNE, CDE, CNC**
+
+NANOE Member
+
+Sent to: soc@kernel.org
+
+Unsubscribe https://jimmylarose.acemlnd.com/proc.php?nl=312&c=1032&m=1651&s=678f48a0e320c6856d0620aa2e024acb&act=unsub
+
+Inside Charity, 712 H Street NE Suite 1149 , Washington, D.C. 20002, United States
+--_=_swift-82961945066be29bd2d9e07.65392638_=_
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dbig5">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div class=3D"elementToProof" style=3D"margin: 0px; font-family: Aptos, Apt=
-os_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-=
-size: 11pt; color: rgb(0, 0, 0);">
-Hi Krzk,</div>
-<div class=3D"elementToProof" style=3D"margin: 0px; font-family: Aptos, Apt=
-os_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-=
-size: 11pt; color: rgb(0, 0, 0);">
-<br>
-&gt;&gt; ---</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;MAINTAINERS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=
- &nbsp; &nbsp;| &nbsp;3 +++</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;arch/arm64/Kconfig.platforms | 14 ++++++++++++++</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;2 files changed, 17 insertions(+)</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt;</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; diff --git a/MAINTAINERS b/MAINTAINERS</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; index c0a3d9e93689..08609430cfe0 100644</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; --- a/MAINTAINERS</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +++ b/MAINTAINERS</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; @@ -2121,7 +2121,10 @@ Q: &nbsp; &nbsp; https://patchwork.ozlabs.o=
-rg/project/linux-aspeed/list/</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;T: &nbsp; git git://git.kernel.org/pub/scm/linux/kernel/git/=
-joel/bmc.git</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;F: &nbsp; Documentation/devicetree/bindings/arm/aspeed/</div=
->
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;F: &nbsp; arch/arm/boot/dts/aspeed/</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +F: &nbsp; arch/arm64/boot/dts/aspeed/</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;F: &nbsp; arch/arm/mach-aspeed/</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +F: &nbsp; include/dt-bindings/clock/aspeed,ast2700-clk.h</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +F: &nbsp; include/dt-bindings/reset/aspeed,ast2700-reset.h</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;N: &nbsp; aspeed</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt;</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp;ARM/AXM LSI SOC</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.pla=
-tforms</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; index 6c6d11536b42..1db7b6f1ee0a 100644</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; --- a/arch/arm64/Kconfig.platforms</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +++ b/arch/arm64/Kconfig.platforms</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; @@ -40,6 +40,20 @@ config ARCH_APPLE</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;This enables support for Apple's=
- in-house ARM SoC family, starting</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;with the Apple M1.</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt;</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +config ARCH_ASPEED</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; + &nbsp; &nbsp; bool &quot;Aspeed SoC family&quot;</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; + &nbsp; &nbsp; select MACH_ASPEED_G7</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; + &nbsp; &nbsp; help</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; + &nbsp; &nbsp; &nbsp; Say yes if you intend to run on an Aspeed a=
-st2700 or similar</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; + &nbsp; &nbsp; &nbsp; seventh generation Aspeed BMCs.</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; +config MACH_ASPEED_G7</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;&gt; + &nbsp; &nbsp; bool &quot;Aspeed SoC AST2700&quot;</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;There are no MACHines for arm64. Look at this code. Do you see MACH</di=
-v>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;anywhere else? No. Then why Aspeed must be different?</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-&gt;</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
-olor: rgb(0, 0, 0);">
-&gt;No. Drop.</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
-olor: rgb(0, 0, 0);">
-Agree.</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
-olor: rgb(0, 0, 0);">
---</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
-olor: rgb(0, 0, 0);">
-Best Regards,</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 11pt; c=
-olor: rgb(0, 0, 0);">
-Kevin. Chen</div>
-<div id=3D"appendonsend"></div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<hr style=3D"display: inline-block; width: 98%;">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-family: Calibri, =
-sans-serif; font-size: 11pt; color: rgb(0, 0, 0);"><b>=B1H=A5=F3=AA=CC:</b>=
-&nbsp;Krzysztof Kozlowski &lt;krzk@kernel.org&gt;<br>
-<b>=B1H=A5=F3=A4=E9=B4=C1:</b>&nbsp;2024=A6~7=A4=EB26=A4=E9 =A4U=A4=C8 07:1=
-6<br>
-<b>=A6=AC=A5=F3=AA=CC:</b>&nbsp;Kevin Chen &lt;kevin_chen@aspeedtech.com&gt=
-;; robh@kernel.org &lt;robh@kernel.org&gt;; krzk+dt@kernel.org &lt;krzk+dt@=
-kernel.org&gt;; conor+dt@kernel.org &lt;conor+dt@kernel.org&gt;; joel@jms.i=
-d.au &lt;joel@jms.id.au&gt;; andrew@codeconstruct.com.au &lt;andrew@codecon=
-struct.com.au&gt;;
- lee@kernel.org &lt;lee@kernel.org&gt;; catalin.marinas@arm.com &lt;catalin=
-.marinas@arm.com&gt;; will@kernel.org &lt;will@kernel.org&gt;; arnd@arndb.d=
-e &lt;arnd@arndb.de&gt;; olof@lixom.net &lt;olof@lixom.net&gt;; soc@kernel.=
-org &lt;soc@kernel.org&gt;; mturquette@baylibre.com &lt;mturquette@baylibre=
-.com&gt;;
- sboyd@kernel.org &lt;sboyd@kernel.org&gt;; p.zabel@pengutronix.de &lt;p.za=
-bel@pengutronix.de&gt;; quic_bjorande@quicinc.com &lt;quic_bjorande@quicinc=
-.com&gt;; geert+renesas@glider.be &lt;geert+renesas@glider.be&gt;; dmitry.b=
-aryshkov@linaro.org &lt;dmitry.baryshkov@linaro.org&gt;; shawnguo@kernel.or=
-g
- &lt;shawnguo@kernel.org&gt;; neil.armstrong@linaro.org &lt;neil.armstrong@=
-linaro.org&gt;; m.szyprowski@samsung.com &lt;m.szyprowski@samsung.com&gt;; =
-nfraprado@collabora.com &lt;nfraprado@collabora.com&gt;; u-kumar1@ti.com &l=
-t;u-kumar1@ti.com&gt;; devicetree@vger.kernel.org &lt;devicetree@vger.kerne=
-l.org&gt;;
- linux-arm-kernel@lists.infradead.org &lt;linux-arm-kernel@lists.infradead.=
-org&gt;; linux-aspeed@lists.ozlabs.org &lt;linux-aspeed@lists.ozlabs.org&gt=
-;; linux-kernel@vger.kernel.org &lt;linux-kernel@vger.kernel.org&gt;; linux=
--clk@vger.kernel.org &lt;linux-clk@vger.kernel.org&gt;<br>
-<b>=A5D=A6=AE:</b>&nbsp;Re: [PATCH v1 07/10] arm64: aspeed: Add support for=
- ASPEED AST2700 BMC SoC</span>
-<div>&nbsp;</div>
-</div>
-<div style=3D"font-size: 11pt;">On 26/07/2024 13:03, Kevin Chen wrote:<br>
-&gt; ---<br>
-&gt;&nbsp; MAINTAINERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; 3 +++<br>
-&gt;&nbsp; arch/arm64/Kconfig.platforms | 14 ++++++++++++++<br>
-&gt;&nbsp; 2 files changed, 17 insertions(+)<br>
-&gt;<br>
-&gt; diff --git a/MAINTAINERS b/MAINTAINERS<br>
-&gt; index c0a3d9e93689..08609430cfe0 100644<br>
-&gt; --- a/MAINTAINERS<br>
-&gt; +++ b/MAINTAINERS<br>
-&gt; @@ -2121,7 +2121,10 @@ Q:&nbsp;&nbsp;&nbsp;&nbsp; <a href=3D"https://p=
-atchwork.ozlabs.org/project/linux-aspeed/list/" id=3D"OWA810ba2e5-5289-1fdd=
--7a05-0fa291e8f353" class=3D"OWAAutoLink" data-auth=3D"NotApplicable">
-https://patchwork.ozlabs.org/project/linux-aspeed/list/</a><br>
-&gt;&nbsp; T:&nbsp;&nbsp; git git://git.kernel.org/pub/scm/linux/kernel/git=
-/joel/bmc.git<br>
-&gt;&nbsp; F:&nbsp;&nbsp; Documentation/devicetree/bindings/arm/aspeed/<br>
-&gt;&nbsp; F:&nbsp;&nbsp; arch/arm/boot/dts/aspeed/<br>
-&gt; +F:&nbsp;&nbsp; arch/arm64/boot/dts/aspeed/<br>
-&gt;&nbsp; F:&nbsp;&nbsp; arch/arm/mach-aspeed/<br>
-&gt; +F:&nbsp;&nbsp; include/dt-bindings/clock/aspeed,ast2700-clk.h<br>
-&gt; +F:&nbsp;&nbsp; include/dt-bindings/reset/aspeed,ast2700-reset.h<br>
-&gt;&nbsp; N:&nbsp;&nbsp; aspeed<br>
-&gt;&nbsp;<br>
-&gt;&nbsp; ARM/AXM LSI SOC<br>
-&gt; diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platfor=
-ms<br>
-&gt; index 6c6d11536b42..1db7b6f1ee0a 100644<br>
-&gt; --- a/arch/arm64/Kconfig.platforms<br>
-&gt; +++ b/arch/arm64/Kconfig.platforms<br>
-&gt; @@ -40,6 +40,20 @@ config ARCH_APPLE<br>
-&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This enables sup=
-port for Apple's in-house ARM SoC family, starting<br>
-&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; with the Apple M=
-1.<br>
-&gt;&nbsp;<br>
-&gt; +config ARCH_ASPEED<br>
-&gt; +&nbsp;&nbsp;&nbsp;&nbsp; bool &quot;Aspeed SoC family&quot;<br>
-&gt; +&nbsp;&nbsp;&nbsp;&nbsp; select MACH_ASPEED_G7<br>
-&gt; +&nbsp;&nbsp;&nbsp;&nbsp; help<br>
-&gt; +&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Say yes if you intend to run on =
-an Aspeed ast2700 or similar<br>
-&gt; +&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seventh generation Aspeed BMCs.<=
-br>
-&gt; +<br>
-&gt; +config MACH_ASPEED_G7<br>
-&gt; +&nbsp;&nbsp;&nbsp;&nbsp; bool &quot;Aspeed SoC AST2700&quot;<br>
-<br>
-There are no MACHines for arm64. Look at this code. Do you see MACH<br>
-anywhere else? No. Then why Aspeed must be different?<br>
-<br>
-No. Drop.<br>
-<br>
-Best regards,<br>
-Krzysztof<br>
-<br>
-</div>
-************* Email Confidentiality Notice ********************<br>
-=A7K=B3d=C1n=A9=FA:<br>
-=A5=BB=ABH=A5=F3(=A9=CE=A8=E4=AA=FE=A5=F3)=A5i=AF=E0=A5]=A7t=BE=F7=B1K=B8=
-=EA=B0T=A1A=A8=C3=A8=FC=AAk=AB=DF=ABO=C5@=A1C=A6p =A5x=BA=DD=ABD=AB=FC=A9w=
-=A4=A7=A6=AC=A5=F3=AA=CC=A1A=BD=D0=A5H=B9q=A4l=B6l=A5=F3=B3q=AA=BE=A5=BB=B9=
-q=A4l=B6l=A5=F3=A4=A7=B5o=B0e=AA=CC, =A8=C3=BD=D0=A5=DF=A7Y=A7R=B0=A3=A5=BB=
-=B9q=A4l=B6l=A5=F3=A4=CE=A8=E4=AA=FE=A5=F3=A9M=BEP=B7=B4=A9=D2=A6=B3=BD=C6=
-=A6L=A5=F3=A1C=C1=C2=C1=C2=B1z=AA=BA=A6X=A7@!<br>
-<br>
-DISCLAIMER:<br>
-This message (and any attachments) may contain legally privileged and/or ot=
-her confidential information. If you have received it in error, please noti=
-fy the sender by reply e-mail and immediately delete the e-mail and any att=
-achments without copying or disclosing
- the contents. Thank you.
-</body>
-</html>
+<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
+text/html; charset=3Dutf-8"><meta name=3D"viewport" content=3D"width=3Ddevi=
+ce-width, minimal-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalab=
+le=3D0;"><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><meta n=
+ame=3D"format-detection" content=3D"telephone=3Dno, date=3Dno, email=3Dno, =
+address=3Dno"><meta name=3D"x-apple-disable-message-reformatting">=0A<!--[i=
+f (mso 16)]><style type=3D"text/css"> a { text-decoration: none; } </style>=
+<![endif]--> =0A<!--[if gte mso 9]><style> sup { font-size: 100% !important=
+; } </style><![endif]--> =0A<!--[if gte mso 9]><xml><o:OfficeDocumentSettin=
+gs><o:AllowPNG></o:AllowPNG><o:PixelsPerInch>96</o:PixelsPerInch></o:Office=
+DocumentSettings></xml><![endif]--> =0A<!--[if gte mso 9]><style>sup { font=
+-size: 100% !important; }</style><![endif]--><link href=3D"chrome-extension=
+://nffaoalbilbmmfgbnbgppjihopabppdk/inject.css" type=3D"text/css" rel=3D"st=
+ylesheet"> =0A<!--[if !mso]><!-- --><link href=3D"https://fonts.googleapis.=
+com/css?family=3DRoboto:400,400i,700,700i" rel=3D"stylesheet"> =0A<!--<![en=
+dif]--><style type=3D"text/css">#outlook a { padding:0;}.es-button { mso-st=
+yle-priority:100!important; text-decoration:none!important;}a[x-apple-data-=
+detectors] { color:inherit!important; text-decoration:none!important; font-=
+size:inherit!important; font-family:inherit!important; font-weight:inherit!=
+important; line-height:inherit!important;}=0A.es-desk-hidden { display:none=
+; float:left; overflow:hidden; width:0; max-height:0; line-height:0; mso-hi=
+de:all;}@media only screen and (max-width:600px) {p, ul li, ol li, a { line=
+-height:150%!important } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120% } =
+h1 { font-size:30px!important; text-align:center } h2 { font-size:26px!impo=
+rtant; text-align:center } h3 { font-size:20px!important; text-align:center=
+ } .es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a { font=
+-size:30px!important; text-align:left } .es-header-body h2 a, .es-content-b=
+ody h2 a, .es-footer-body h2 a { font-size:26px!important; text-align:left =
+} .es-header-body h3 a, .es-content-body h3 a, .es-footer-body h3 a { font-=
+size:20px!important; text-align:left } .es-menu td a { font-size:13px!impor=
+tant } .es-header-body p, .es-header-body ul li, .es-header-body ol li, .es=
+-header-body a { font-size:16px!important }=0A .es-content-body p, .es-cont=
+ent-body ul li, .es-content-body ol li, .es-content-body a { font-size:16px=
+!important } .es-footer-body p, .es-footer-body ul li, .es-footer-body ol l=
+i, .es-footer-body a { font-size:16px!important } .es-infoblock p, .es-info=
+block ul li, .es-infoblock ol li, .es-infoblock a { font-size:12px!importan=
+t } *[class=3D"gmail-fix"] { display:none!important } .es-m-txt-c, .es-m-tx=
+t-c h1, .es-m-txt-c h2, .es-m-txt-c h3 { text-align:center!important } .es-=
+m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right!=
+important } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { t=
+ext-align:left!important } .es-m-txt-r img, .es-m-txt-c img, .es-m-txt-l im=
+g { display:inline!important } .es-button-border { display:inline-block!imp=
+ortant } a.es-button, button.es-button { font-size:20px!important; display:=
+inline-block!important } .es-adaptive table, .es-left, .es-right { width:10=
+0%!important }=0A .ac-footer, .es-content table, .es-header table, .es-foot=
+er table, .es-content, .es-footer, .es-header { width:100%!important; max-w=
+idth:600px!important } .ac-footer td, .ac-footer p, .es-adapt-td { display:=
+block!important; width:100%!important } .adapt-img { width:100%!important; =
+height:auto!important } .es-m-p0 { padding:0px!important } .es-m-p0r { padd=
+ing-right:0px!important } .es-m-p0l { padding-left:0px!important } .es-m-p0=
+t { padding-top:0px!important } .es-m-p0b { padding-bottom:0!important } .e=
+s-m-p20b { padding-bottom:20px!important } .es-mobile-hidden, .es-hidden { =
+display:none!important } tr.es-desk-hidden, td.es-desk-hidden, table.es-des=
+k-hidden { width:auto!important; overflow:visible!important; float:none!imp=
+ortant; max-height:inherit!important; line-height:inherit!important } tr.es=
+-desk-hidden { display:table-row!important } table.es-desk-hidden { display=
+:table!important }=0A td.es-desk-menu-hidden { display:table-cell!important=
+ } .es-menu td { width:1%!important } table.es-table-not-adapt, .esd-block-=
+html table { width:auto!important } table.es-social { display:inline-block!=
+important } table.es-social td { display:inline-block!important } .es-desk-=
+hidden { display:table-row!important; width:auto!important; overflow:visibl=
+e!important; max-height:inherit!important } }@media screen and (max-width:3=
+84px) {.mail-message-content { width:414px!important } }</style>=0A </head>=
+=0A <body class=3D"es-wrapper-color vsc-initialized" data-som-added=3D"true=
+" lang=3D"und" style=3D"font-family:roboto, 'helvetica neue', helvetica, ar=
+ial, sans-serif;width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adju=
+st:100%;padding:0;Margin:0;background-color:#FFFFFF">        <div style=3D"=
+display: none !important; padding: 0; height: 1px; font-size: 1px; backgrou=
+nd-color: inherit !important; opacity: 0; color: transparent; mso-line-heig=
+ht-rule: exactly; line-height:1px; mso-hide:all;">=0A            (Because y=
+ou work with CHARITABLE ORGANIZATIONS)=0A            <div style=3D"display:=
+ none; max-height: 0px; overflow: hidden;">=0A               =0A&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C=0A            </div>=0A=0A        </div>=0A<table class=3D"es-wra=
+pper" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" role=3D"none" styl=
+e=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bor=
+der-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat=
+:repeat;background-position:center top;background-color:#FFFFFF"><tr><td va=
+lign=3D"top" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspac=
+ing=3D"0" class=3D"es-content" align=3D"center" role=3D"none" style=3D"mso-=
+table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spaci=
+ng:0px;table-layout:fixed !important;width:100%"><tr><td align=3D"center" s=
+tyle=3D"padding:0;Margin:0"><table bgcolor=3D"#ffffff" class=3D"es-content-=
+body" align=3D"center" cellpadding=3D"0" cellspacing=3D"0" role=3D"none" st=
+yle=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;b=
+order-spacing:0px;background-color:transparent;width:650px"><tr><td align=
+=3D"left" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" role=3D"none"=0Astyle=3D"mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td align=3D=
+"center" valign=3D"top" style=3D"padding:0;Margin:0;width:650px"><table cel=
+lpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" style=
+=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bord=
+er-spacing:0px"><tr><td align=3D"center" style=3D"padding:0;Margin:0"><p st=
+yle=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso=
+-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, s=
+ans-serif;line-height:29px;color:#333333;font-size:24px"><strong>Are You Co=
+mpeting for Nonprofit Clients?</strong></p>=0A=0A<p style=3D"Margin:0;-webk=
+it-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exa=
+ctly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'l=
+ucida sans', tahoma, sans-serif;line-height:22px;color:#333333;font-size:18=
+px"><br></p>=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-=
+size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica=
+ neue', helvetica, sans-serif;line-height:22px;color:#333333;font-size:18px=
+"><strong><a target=3D"_blank" style=3D"-webkit-text-size-adjust:none;-ms-t=
+ext-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline=
+;color:#0000EE;font-size:18px;font-family:arial, 'helvetica neue', helvetic=
+a, sans-serif;line-height:22px" href=3D"https://jimmylarose.acemlnd.com/lt.=
+php?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvY=
+yXHMWJXCa6U">VISIT HERE OR PRESS PLAY BUTTON BELOW ARTICLE</a></strong></p>=
+=0A</td>=0A</tr>=0A=0A <tr><td align=3D"center" style=3D"padding:20px;Margi=
+n:0;font-size:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspac=
+e:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr=
+><td style=3D"padding:0;Margin:0;border-bottom:1px solid #cccccc;background=
+:unset;height:1px;width:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=
+=0A</tr>=0A=0A <tr><td align=3D"center" style=3D"padding:0;Margin:0;font-si=
+ze:0px"><a target=3D"_blank" href=3D"https://jimmylarose.acemlnd.com/lt.php=
+?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXH=
+MWJXCa6U" style=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;=
+mso-line-height-rule:exactly;text-decoration:underline;color:#0000EE;font-s=
+ize:14px"><img class=3D"adapt-img" src=3D"https://content.app-us1.com/cdn-c=
+gi/image/fit=3Dscale-down,format=3Dauto,onerror=3Dredirect,width=3D650,dpr=
+=3D2/yqQyB/2024/08/10/4170f46b-e1d8-4970-8ec5-566b5c4ceb6f.jpeg" alt=3D"VIS=
+IT HERE TO LEARN MORE" style=3D"display:block;border:0;outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic" width=3D"650" title=3D"VISIT =
+HERE TO LEARN MORE" data-cf-ir-is-resized=3D"true"></a>=0A</td>=0A</tr>=0A<=
+tr><td align=3D"center" style=3D"padding:20px;Margin:0;font-size:0"><table =
+border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso-table-rspace=
+:0pt;border-collapse:collapse;border-spacing:0px"><tr><td style=3D"padding:=
+0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:1px;widt=
+h:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr><td align=
+=3D"left" style=3D"padding:0;Margin:0"><p style=3D"Margin:0;-webkit-text-si=
+ze-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-=
+family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans=
+', tahoma, sans-serif;line-height:24px;color:#333333;font-size:16px">Dear C=
+olleague In Service,</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust=
+:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'t=
+rebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma=
+, sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A=0A<=
+p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none=
+;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', =
+'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;c=
+olor:#333333;font-size:16px">When I started my business more than thirty ye=
+ars ago, I wondered how I could compete with the big firms, who had sales p=
+eople, marketing departments, and were literally the guys who =E2=80=9Ccame=
+ from at least fifty miles and carried a briefcase,=E2=80=9D which is how p=
+eople tended to describe consultants. And what did I have to offer? My back=
+ground was eleven years in banking and just five years in the nonprofit wor=
+ld. So, what qualified me to be a consultant, Was I crazy to go up against =
+the =E2=80=9Cbig guys?</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adju=
+st:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:=
+'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', taho=
+ma, sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A<p=
+ style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;=
+mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', '=
+lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;co=
+lor:#333333;font-size:16px"><strong><a target=3D"_blank" href=3D"https://ji=
+mmylarose.acemlnd.com/lt.php?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVn=
+Cb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U" style=3D"-webkit-text-size-adjust:non=
+e;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:un=
+derline;color:#0000EE;font-size:16px">VISIT HERE TO READ ENTIRE ARTICLE</a>=
+</strong></p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-t=
+ext-size-adjust:none;mso-line-height-rule:exactly;font-family:'trebuchet ms=
+', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-seri=
+f;line-height:24px;color:#333333;font-size:16px"><br></p>=0A=0A<p style=3D"=
+Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-h=
+eight-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida san=
+s unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;color:#33333=
+3;font-size:16px">Well, it just happened that five years was the minimum ti=
+me needed to be in the profession to become a CFRE (Certified Fund Raising =
+Executive). So, I immediately applied to sit for the exam and became a CFRE=
+. Anytime I was called for an interview I stressed the fact that I was a CF=
+RE, and explained what the process was like and that the initials CFRE mean=
+t that I passed a written exam and adhered to a code of ethics. Many client=
+s were impressed with that because they did know nonprofit world had a cred=
+entialing program.</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:n=
+one;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'tre=
+buchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, =
+sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A<p sty=
+le=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-=
+line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'luci=
+da sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;color:=
+#333333;font-size:16px">After I had been in the field ten years, I went thr=
+ough the even more rigorous process and became an ACFRE (Advanced Certified=
+ Fund Raising Executive).=C2=A0</p>=0A<p style=3D"Margin:0;-webkit-text-siz=
+e-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-f=
+amily:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans'=
+, tahoma, sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p=
+>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adj=
+ust:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida g=
+rande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-heigh=
+t:24px;color:#333333;font-size:16px"><em><strong>Then I discovered NANOE an=
+d added an important new set of letters to the alphabet soup on my business=
+ card =E2=80=94CNC, CNE, and CDE.=C2=A0</strong></em></p>=0A<p style=3D"Mar=
+gin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-heig=
+ht-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans u=
+nicode', 'lucida sans', tahoma, sans-serif;line-height:24px;color:#333333;f=
+ont-size:16px"><br></p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:=
+none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'tr=
+ebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma,=
+ sans-serif;line-height:24px;color:#333333;font-size:16px">You don=E2=80=
+=99t have to get all three but even one of these will give you more viabili=
+ty in the marketplace when job searching and may<strong><a target=3D"_blank=
+" style=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line=
+-height-rule:exactly;text-decoration:underline;color:#0000EE;font-size:16px=
+;font-family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucid=
+a sans', tahoma, sans-serif" href=3D"https://jimmylarose.acemlnd.com/lt.php=
+?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXH=
+MWJXCa6U">...VISIT HERE TO READ ENTIRE ARTICLE</a></strong></p>=0A</td>=0A<=
+/tr>=0A=0A <tr><td align=3D"center" style=3D"padding:20px;Margin:0;font-siz=
+e:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso-ta=
+ble-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td style=
+=3D"padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;hei=
+ght:1px;width:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<=
+/table>=0A</td>=0A</tr>=0A=0A <tr><td align=3D"center" valign=3D"top" style=
+=3D"padding:0;Margin:0;width:650px"><table cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"100%" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso-=
+table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td align=
+=3D"left" style=3D"padding:0;Margin:0"><p style=3D"Margin:0;-webkit-text-si=
+ze-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-=
+family:arial, 'helvetica neue', helvetica, sans-serif;line-height:24px;colo=
+r:#333333;font-size:16px">NANOE is pleased to report that over 350,000 nonp=
+rofit executives, staff, board members, ministry leaders and volunteers rel=
+y NANOE to build financial capacity. We're grateful to all our members and =
+subscribers and want to encourage as many as people as possible to continue=
+ to share their experiences. Your written comments and contributions have h=
+elped your colleagues navigate this process.<br><br>NANOE is here to make s=
+ure receive the support you require to navigate=0Aunprecedented times.<br><=
+br><strong><a target=3D"_blank" style=3D"-webkit-text-size-adjust:none;-ms-=
+text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underlin=
+e;color:#0000EE;font-size:16px;font-family:arial, 'helvetica neue', helveti=
+ca, sans-serif" href=3D"https://jimmylarose.acemlnd.com/lt.php?x=3D3DZy~GDJ=
+JFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U">VIS=
+IT HERE TO SUBSCRIBE</a></strong><br><br>We look forward to hearing from yo=
+u.<br><br>Warmly,</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:no=
+ne;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial=
+, 'helvetica neue', helvetica, sans-serif;line-height:24px;color:#333333;fo=
+nt-size:16px"><br></p>=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none=
+;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:georgia=
+, times, 'times new roman', serif;line-height:33px;color:#333333;font-size:=
+22px"><em><strong>Linda Lysakowski, CNE, CDE, CNC</strong></em></p>=0A<p st=
+yle=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso=
+-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, s=
+ans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A<p styl=
+e=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-l=
+ine-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, san=
+s-serif;line-height:24px;color:#333333;font-size:16px">NANOE Member</p>=0A<=
+/td>=0A</tr>=0A=0A </table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</=
+table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A=0A <table c=
+lass=3D"es-footer ac-footer" cellspacing=3D"0" cellpadding=3D"0" align=3D"c=
+enter" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;bor=
+der-collapse:collapse;border-spacing:0px;table-layout:fixed !important;widt=
+h:100%;background-color:transparent;background-repeat:repeat;background-pos=
+ition:center top"><tr><td align=3D"center" class=3D"es-footer-body" style=
+=3D"padding:0;Margin:0;background-color:transparent;padding-top:20px;paddin=
+g-bottom:20px;background:inherit;font-family:inherit;font-size:12px;color:i=
+nherit"><p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-ad=
+just:none;mso-line-height-rule:exactly;font-family:inherit;line-height:150%=
+;color:inherit;font-size:inherit">Sent to: soc@kernel.org<br><br><a style=
+=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height=
+-rule:exactly;text-decoration:underline;color:inherit;font-size:inherit;fon=
+t-family:inherit;font-weight:inherit"=0Ahref=3D"https://jimmylarose.acemlnd=
+.com/proc.php?nl=3D312&c=3D1032&m=3D1651&s=3D678f48a0e320c6856d0620aa2e024a=
+cb&act=3Dunsub" target=3D"_blank">Unsubscribe</a><br><br><span class=3D"per=
+stag_address" style=3D"color:inherit;font-family:inherit;font-size:inherit"=
+>Inside Charity, 712 H Street NE Suite 1149 , Washington, D.C. 20002, Unite=
+d States</span></p>=0A=0A</td>=0A</tr>=0A</table>=0A<img src=3D"https://jim=
+mylarose.acemlnd.com/lt.php?x=3D41Zy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnC=
+b6s4s-k2DjFNu1X8Ru0LvjegxzK55Inae5.41NAoFhR5" border=3D"0" width=3D"1" heig=
+ht=3D"1" style=3D"display:block;width:1px!important;min-width:1px!important=
+;max-width:1px!important;height:1px!important;border:0;overflow:hidden;" />=
+<br clear=3D"all" /></body>=0A</html>
+--_=_swift-82961945066be29bd2d9e07.65392638_=_--
 
---_000_PSAPR06MB4949A8DCD5B085514A9E710389802PSAPR06MB4949apcp_--
+
