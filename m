@@ -1,403 +1,256 @@
-Return-Path: <SRS0=YgUR=PO=em-1707420.icnewsupdate.org=bounce-1707420-1032-1076303-soc=kernel.org@kernel.org>
+Return-Path: <SRS0=56u5=PP=aspeedtech.com=kevin_chen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49537C3DA7F
-	for <soc@archiver.kernel.org>; Thu, 15 Aug 2024 16:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3279C52D7D
+	for <soc@archiver.kernel.org>; Fri, 16 Aug 2024 04:06:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 19A8DC4AF09; Thu, 15 Aug 2024 16:22:01 +0000 (UTC)
-Received: from s4.acemsrvh.com (s4.acemsrvh.com [192.92.97.244])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 9E339C4AF13; Fri, 16 Aug 2024 04:06:46 +0000 (UTC)
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2097.outbound.protection.outlook.com [40.107.255.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A4835C4AF0D
-	for <soc@kernel.org>; Thu, 15 Aug 2024 16:21:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A4835C4AF0D
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=icnewsupdate.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=em-1707420.icnewsupdate.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=acdkim1; d=icnewsupdate.org;
- h=To:From:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
- Feedback-ID:List-Unsubscribe:List-Unsubscribe-Post:Message-ID;
- i=team@icnewsupdate.org;
- bh=WrI3T9N6ipOIj0pzh/jwb2bSXlHjxwlpq5dEkv7NWcE=;
- b=ew8C6tNS6e1MRF1xUDfbuc4Z4Na1Cf+xrAtd5zmlLm4FGVWYBepOIjoIUX7sZ9NkyKoNgLExGdPN
-   VIBEP3Y2/y6QYPrpWWLsFmmJ/MKg0ZR4z5JdXu/b92VLHfbp8AiZ5+HlGugEu+jLmt2XWF6TppWn
-   kqzP1VyAHh+oN/PckXK5x9vrCTvxMjfj+R0Y9x3Oih1sqyOASaow5BxjDEYBZDUrHY2r72LntBtG
-   hoMpx3CV3ENHkMpZxC2aGNUodD0uvv+cscAhghj26h2NNcKXdMbVpxT3Osv7acRZiFzBEVPP+kwu
-   dRq14GJoPi2yVyOtNbdBtuUMjHNQY/Hw+hNTfQ==
-Received: by s4.acemsrvh.com id hnolie36bm4b for <soc@kernel.org>; Thu, 15 Aug 2024 16:21:58 +0000 (envelope-from <bounce-1707420-1032-1076303-soc=kernel.org@em-1707420.icnewsupdate.org>)
-X-Mailer: ActiveCampaign Mailer
-CFBL-Address: fbl-report@acems1.com; report=arf
+	by smtp.kernel.org (Postfix) with ESMTPS id AC4ABC4AF09;
+	Fri, 16 Aug 2024 04:06:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC4ABC4AF09
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IUMjzYFgtjfUGuJbPxwPysjXgcZWz79QL54Y1cDfzbmJKHMZjJQnAT2I0ow3B5hsiUfEFYtzmtK8JyIBaWzLI5S3HXvZrmqTjSw/O8qCVcW8dEBPU/6hIZdBF3fpzE1NKg/5mdgqtY2lsNBDuehyJFj2nRJOdoIrGvPhdlznUt1MMkN5CV4QwiqgPj4Bl3HM9hfkxXALPfn469xkNAwQsiggisO9BIUn/S4D1pSVb4MJq7DwujM3UgYFeXzVYqYA8q50NeJaW1CVgHFExl0vi0l+jjrcz+4THxtK1XXYgGBNL84RJWzIimo0thEwwugjWlUQ6Dg4wD9LHyGEyu1asA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7jr2d3KjUOPLaX+/JhOqtZh44JIEMo0AAUMKJxWOaqw=;
+ b=x5uD3T3lQuvx1kjzrhFDjy+OLQNQOXGfYQYVoaV+pfESyOBsT9rV/eSy+o7BZx459we4UgDC346oevkt1LsdOvfHvdTcn5Z6DE755RDQcDMM3dE6zo6xp80EjCfgEMOm7IJieJPsyLDX2Pulg0n3MFJVwhIv0EUqIFK39CeRQZVs++A5uljXwUYCOo2DhlOSVVO7/6EioFJq5bOCJPVuZ4O3vKW8IDQ0jNWTnLRMx8Bp2NenGy+LwyHS1GuvKRqU8Dgv5mtLqcEazprWQGtF38xVBzP6e5xUwXNUOecOI2TeOXt92AVIC0nKZgDVNRrw0w/5kJgjMnAHNEq9XhU0HA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7jr2d3KjUOPLaX+/JhOqtZh44JIEMo0AAUMKJxWOaqw=;
+ b=Z5u8q7hYDUE3gV1smEm/RTEagi0iqglB3xvdXADkGLFCPkM/P8K6UYHXJ+Q3SKJiSx5GJkqC0gBVQjwEuLtU7qSWPQrLlEA8hlwqHHwm7lwJr9JgE+/QkQQc0fZap70fqWtbGqZ3tHV502zR1pHrjHA7udO9LuOevZ8PZ3tXVWpaYfrcvfE6cCPvoXy3nuayNw88+lJZ5xnIvMDL059nbb8swrMVD7owfVI23renkgd78nUkQwnQOZk6EDZU7hPapxc4AsmTZmvCJ0PApntR31ijCt2BElDTkOSt+mLh0WNtY+/2BOEhC3ZZdbQgJu9nYqZn+wR2+6BJEyF09hmN4g==
+Received: from PSAPR06MB4949.apcprd06.prod.outlook.com (2603:1096:301:ad::9)
+ by KL1PR0601MB5510.apcprd06.prod.outlook.com (2603:1096:820:ba::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Fri, 16 Aug
+ 2024 04:06:39 +0000
+Received: from PSAPR06MB4949.apcprd06.prod.outlook.com
+ ([fe80::7bdd:639a:6b94:37bf]) by PSAPR06MB4949.apcprd06.prod.outlook.com
+ ([fe80::7bdd:639a:6b94:37bf%7]) with mapi id 15.20.7875.018; Fri, 16 Aug 2024
+ 04:06:38 +0000
+From: Kevin Chen <kevin_chen@aspeedtech.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "Nonprofit Execs & Board Members" <soc@kernel.org>
-From: "Inside Charity" <team@icnewsupdate.org>
-Subject: Are You Competing For Nonprofit =?UTF-8?Q?Clients=3F?=
-Date: Thu, 15 Aug 2024 11:15:57 -0500
+CC: "soc@kernel.org" <soc@kernel.org>, "m.szyprowski@samsung.com"
+	<m.szyprowski@samsung.com>, "nfraprado@collabora.com"
+	<nfraprado@collabora.com>, "olof@lixom.net" <olof@lixom.net>,
+	"will@kernel.org" <will@kernel.org>, "mturquette@baylibre.com"
+	<mturquette@baylibre.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-clk@vger.kernel.org"
+	<linux-clk@vger.kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "sboyd@kernel.org"
+	<sboyd@kernel.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"u-kumar1@ti.com" <u-kumar1@ti.com>, "arnd@arndb.de" <arnd@arndb.de>,
+	"joel@jms.id.au" <joel@jms.id.au>, "quic_bjorande@quicinc.com"
+	<quic_bjorande@quicinc.com>, "lee@kernel.org" <lee@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "neil.armstrong@linaro.org"
+	<neil.armstrong@linaro.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "dmitry.baryshkov@linaro.org"
+	<dmitry.baryshkov@linaro.org>, "shawnguo@kernel.org" <shawnguo@kernel.org>,
+	"geert+renesas@glider.be" <geert+renesas@glider.be>, "Rob Herring (Arm)"
+	<robh@kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH v1 00/10] Introduce ASPEED AST27XX BMC SoC
+Thread-Topic: [PATCH v1 00/10] Introduce ASPEED AST27XX BMC SoC
+Thread-Index: AQHa30uF0np0rPVCvEWxq1tD4p2I8LII+5GAgAAGyICAIEPl8A==
+Date: Fri, 16 Aug 2024 04:06:38 +0000
+Message-ID:
+ <PSAPR06MB4949E84E4B4CF39991FCF9BE89812@PSAPR06MB4949.apcprd06.prod.outlook.com>
+References: <20240726110355.2181563-1-kevin_chen@aspeedtech.com>
+ <172199921352.1507193.4411331020670815695.robh@kernel.org>
+ <241ceb9b-b29f-41fd-8987-2feba2e5e08e@kernel.org>
+In-Reply-To: <241ceb9b-b29f-41fd-8987-2feba2e5e08e@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PSAPR06MB4949:EE_|KL1PR0601MB5510:EE_
+x-ms-office365-filtering-correlation-id: 7558dfbc-e94e-401d-a030-08dcbda8d39d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?QlhBQ2l0aWRhOFlnbjgxUlFWTlZOU3I1Ujg1MGM2Mm45VkY2ZnRqNEJNQVBU?=
+ =?utf-8?B?NEFieWVsUVMxSzQ3RGdEYVFBZnNvVWFGUzBWUmlKSW41K0hYM3M2YjJ4R0k4?=
+ =?utf-8?B?TnVjY3Qwb21uaklYZmdBZmlxRC9uSHBaWmhpaUdPOGZ6NklrSENnNW1pbjBu?=
+ =?utf-8?B?eGhySUJVbE40NlBNSjVNZTZSQjJZeEVKRFlVTm5WYldFTHZ5dzNkMENUVDha?=
+ =?utf-8?B?RVBMWXlmZkNZOGZYSkJtTHYxQTRrLzk4YVdrc0RYWk9pUjZIVXEzOEZoNHVE?=
+ =?utf-8?B?QmJEdXJOQWlJWWlTVE16eG43OXhlS2M4TDcyRlJxQnF0L1k4TUM1aXUwUWc5?=
+ =?utf-8?B?bFhLM3FaU0k2eW5PYlNWYmFjUjRYQXBVR3dRdGVkWlRnYmFSbG45RTlhVm5w?=
+ =?utf-8?B?MzlzYWZtUEw3d3NxMVRzNFhuUS82SEc4UTkyTXRYZ0VlNDAyUjJuejZBT1pi?=
+ =?utf-8?B?ZXgxNnl3N2l0VHZVQUUwbVp3NzJrbFFTcVl2cXEwK2QyNlpWa0NUeUNwdXNq?=
+ =?utf-8?B?U1NpWGQyTzFOL2UwWGhZcnl4ZTJFRng2NDBpMUsrRmNnQWJ3QW1nQ3Q2dUwx?=
+ =?utf-8?B?S25XOSt5SiszT2dqdmkvenhHWmtrQjVQVXpxbXd1ZHhKN09vSTFwVDRtVjY0?=
+ =?utf-8?B?ZjVod09URzdxVnFVODUxUUtKV2NITXg2V2R0L3NCUE9FTzBpdEZMRjE1aTh5?=
+ =?utf-8?B?TVhSdFpXa3lqbmcraFFIcTNiMEdOVm1DTmJKT1MrakRGam5CMkNDYStJM0lY?=
+ =?utf-8?B?aUw4K1V4cmw2YVE1MUphNGg4MjhCZWVzb1l5TlRWNklYQUdpK1k0eVZ4WmlC?=
+ =?utf-8?B?QWVXckhDWnNOUlBxK1I1Ry9telQ2Z2lUUENsZHl0QVBocExEa0lEWkJISFVJ?=
+ =?utf-8?B?UE9uc1M2dlBIMWZVVGVydUdLZVhGTk5vQ0s1dEFzT2xFZzMwcWdQdUlHUmYw?=
+ =?utf-8?B?RW5Kek8yNHZGQWQ3aXNwVzZLckZPMHZYTFVpSXExaHk3NHJLM014d0RVQlUv?=
+ =?utf-8?B?K3BPTG0wOGcvZWRrT1JCNTNuN2tmM2dHRVFCUVlJZE1lQmJhY0hiWkxmdHYy?=
+ =?utf-8?B?N2tPUDUvemZrSzZNNFVaQ2RBcmlPdnJZNGpjUGZvUzNoVVRBN0tyUzdYSjVj?=
+ =?utf-8?B?VmJEU1NoRVBGdTI4MFBvcUFGekZNNU9WOE5IMGZkeTVUQW9NbUNmSDI3bzZz?=
+ =?utf-8?B?K2ZTY2VnU1UzUmh4QTVhbG1ia2lkaFhGaUZzb0pqNnpRVi9rcHA2M1hJeWRp?=
+ =?utf-8?B?YXBuL2NEYXJrUzJsZ0R3a0dXa25Lamx4L1RXekN4ckZ4M1IwaGZ0R1BNS25R?=
+ =?utf-8?B?bHh5V0VPbG54WC9wSFB1NlcyZytXZWpOQXFnQk54NmtkVkdta0FTOVZKOGN6?=
+ =?utf-8?B?R0ltcllaL1djYmhOdjNVbk80a29mUHQ2TjVpU0xQSmppRFNGWW9WNDdnMmRF?=
+ =?utf-8?B?OFFZbVVGM2FWRFdrN2JNajdDVHJPdXRqUENLcUhCSVF5YWZ2Q0dGQ2lqTFF0?=
+ =?utf-8?B?U3lud3FEMWFsNEJtZ3dxbUY5NUlzS0FRMTdhTUNmbnZCWG1NZDdFV3A4T2Fl?=
+ =?utf-8?B?UkhPRzlwSWtXckdiUU9vTEo1bjVQL3BxTm4rT2JEQW1admxVZ2NBL1pLSTdM?=
+ =?utf-8?B?ZkpIVVBSbmZHNmlDZ2dpNTlYZDZhRVdzSWFqR3UwVG9mUEJVQzhjUFlhNklk?=
+ =?utf-8?B?L0tJbDRrNUY5cHJVMEpIOXlUQzhqMDMvSUROcExFNGZYN1lGTit5TDhTRVRO?=
+ =?utf-8?B?RWl6WHZBVnFPaCsxT3k3SktyeWJJekJwb0VlTXJ2WWNaOTUwRjIxdGhvblNo?=
+ =?utf-8?B?eEtEOG9xOWg2Z1M0N3lwdmVPRGpqUmtWNDJBTG1leWlhemhzNFlKaFcxd21J?=
+ =?utf-8?B?NHNkTXpBRUNuRnFNVHljMmZFWlZmTjNQZFhuM0hra3hTRmc9PQ==?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4949.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?Tk0wY1RoSXVNK0c2R0cxVXBXZjFUdVRNMUwvZlRmVFZOakpualhuMG56SStV?=
+ =?utf-8?B?NDV4dDdvVHVPeGZFeE82WW1kKzRPSXNtaERuYW9KM05FM2tDUE9lQ0hhQStr?=
+ =?utf-8?B?cHVFNW1JMklpS21IQ2V5c0lseSs2YzhCY0hvV2MwRVc3eUtOUUN1UjF3a0xR?=
+ =?utf-8?B?NzlvUnlyRkNCU1Vua3FjQlRVNGxBbTFkbkFUNXdYbXg5UzhpME9lZW5TaHQr?=
+ =?utf-8?B?Y0xVMEt6Ty9maEtJMkFSRTJGdW0zR29pSFJoQkVMMFh5U2l6SE1rUUFCUVc3?=
+ =?utf-8?B?enFrZVg5eENNdEZIMExBMlpyQXNQQ3dYRDl2SzdpQjNJSHJYcmtxdjd0M0Fp?=
+ =?utf-8?B?S3FWdVprc1kvTHVURERrb2hNam1BUCsvN0lvMEZFc0NYelUvMnVlTnU0TTVy?=
+ =?utf-8?B?bTZDbmRCT3pYZDR6OXV2ZEw2SHgyb21pYTMxSzkza3VmSTZmT0tNbWFtNU9F?=
+ =?utf-8?B?VWZBZzVad2s3R0x1MUFWRVZyTFQ3OFNMT2tLRXVHMzVyUTV5eS95dHVadWt4?=
+ =?utf-8?B?NkZOVXdtczM1dXBmMTRlNDZnNzh1Z3ljdERjM3I4eUc3alNUaVhjMEdSNjV5?=
+ =?utf-8?B?VWU1blRETDlETzhPYnhTZU9CS0M2VGY3T1EyVitnbDNhZkRyeG9obkJ3S2pM?=
+ =?utf-8?B?MVo1YTRTeStqREZLTFAreTE3ZUtIN2t0QTc2NTVOYVVWc0tqMVhSdUl3MmNH?=
+ =?utf-8?B?T3h1OXpFS0NudFU3QnI5bGVQR09FNUw4c3ZZY2d4TTdTdlkzSkxLQUlZbGVT?=
+ =?utf-8?B?dDJBT0dUMjkyQmIzL3dTTE1RMDFCZGpVLzlZOTRIczZxMDBzQ0MrSjV5ZmtV?=
+ =?utf-8?B?K1RhMEp5SnIwLzBkakhvWURoYmFQNUd6a25vQ1Nkc0tDRW9oY3lGOC9PdXhZ?=
+ =?utf-8?B?dTVzVmJzYkVQTkxlZmhtdTZMOXl5U2toU0swbEw5TEdFS0JuSWhCeGRkVjFS?=
+ =?utf-8?B?QVZmREV0RmdyMGY2UmZ2cXBMT2Nxb3hXamRXa3pBeElpR05pVDRMSkluRXg5?=
+ =?utf-8?B?dWtaR3Fvc09ESllhaW81b3JNVk1OYXJBTk85dDNVVFZJMU5oRmJrazArWlk0?=
+ =?utf-8?B?TzdMcVBQTG5XQ1JWS0c4QW1WQ3BncmZQd1JwQWdwZkJjM0x0S285WHlGNTA1?=
+ =?utf-8?B?Wkk4OC92QU5RdUxKYlFTaUtaUVFMdys0aEZ0SFJVOHp6ZHlCYzc5NjJTNGE5?=
+ =?utf-8?B?SVB3Y2s5aVcyZ0I3dlFCSFQ1aEgrVjZnVkhVbHdHeDZCUTJIZ3FwenYrM2Ja?=
+ =?utf-8?B?MDF6VVA4VHhHR2tZSFpJMUowQ0V4c0doblF1cVlCQjBvcEV2YUpIK3FsWXhR?=
+ =?utf-8?B?VGJ5SDMzMURKZzQ3R1oyRDIvVEM2RE5NWjRKQzRGeXYyU0VlMkJlbzhkUW9L?=
+ =?utf-8?B?Tzk2ZkI5enlYTGFneUVKalVKNlozSVlZdFkrQktHcEtzK1VybXBHUlpkdGhU?=
+ =?utf-8?B?YnlBWEs0dFlkQmhYa29jSVdhK01VbEI1Qy9NT2RCaUN5RkhNb1p3eFo0UHhT?=
+ =?utf-8?B?UmZpb2RUSFdaQ0paMzViWVpjUnBDdUdvUnpZcDN2TFZ5SkJwQkVvb1g3RmRN?=
+ =?utf-8?B?R0ZkMGdRNWFVSU9WeWV5YnBnb1FlR2Z5bmdSMER3NmF5ZnIyVTdJVEdBNFBE?=
+ =?utf-8?B?VkJ1bERSZGlsWmJJOXZiVFZkckI0eTFVRDBNVG9haXFCR0FaL0J4dEF1R0ZY?=
+ =?utf-8?B?WUo3Ylg1cENVVmROalpEK3lENHhFUWlNUk8xOE02dmdMRWlqU05uMG5iNDZH?=
+ =?utf-8?B?c3d4K3Z3T2pBVlFZOGc5aGl6Z2t2ajlSZmZ2MVhET2tlSW9ycnB2RUZ3Nzlt?=
+ =?utf-8?B?WXJaMm5zeXQ0TGpkK3d1S0F1SFVYck9xSnMvdHEzQ2lVRFZVd0VwUEhrK3Iv?=
+ =?utf-8?B?czdUbStEbE44L2M2L3pSUndnT0lMQTY1TkpOQ2I0UEQ4QVJtVXNENTNGbTVI?=
+ =?utf-8?B?dXEyM295bC92QU5WVDFrVFFwUmRtTlQxTGVIdVZwSjdFMDJLME1QUXFIVVZ5?=
+ =?utf-8?B?VUtCQVA3cDgyOGU5cjVmT041bHRGTVlCaFlaVGxMb0tXL1ZpOVVIU2VqcWdh?=
+ =?utf-8?B?c2RmVjRXMUxGdkNJQWJxZjFzakJqMFV3Nm8rWTNaNSsveDQyMnZpTVE5LzhI?=
+ =?utf-8?B?aGFzYzVMK3VqckFRcFRyNWU0U05Ka2psb2h6cndjRTBpL2JCTVZhTWNXQytw?=
+ =?utf-8?B?T2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
- boundary="_=_swift-82961945066be29bd2d9e07.65392638_=_"
-Content-Transfer-Encoding: 7bit
-X-Report-Abuse: Please report abuse here: abuse@acemserv.com
-X-mid: c29jQGtlcm5lbC5vcmcgLCBjMTAzMiAsIG0xNjUxICwgczg3Ng
-x-virtual-mta: s4.acemsrvh.com
-Feedback-ID: 1707420:1707420.1032:s4.acemsrvh.com:activecampaign
-X-250ok-CID: 1707420-1032
-List-Unsubscribe: <https://jimmylarose.activehosted.com/box.php?nl=312&c=1032&m=1651&s=678f48a0e320c6856d0620aa2e024acb&funcml=unsub2&luha=1>,<mailto:unsubscribe-62af7f3e0ac57cd47b9ac9c12d017d38-1032-678f48a0e320c6856d0620aa2e024acb@s4.acemsrvh.com>
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-X-DKIM-Options: s=acdkim1
-Message-ID: <0.0.4F.520.1DAEF2F404B8EFE.0@s4.acemsrvh.com>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4949.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7558dfbc-e94e-401d-a030-08dcbda8d39d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2024 04:06:38.1874
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8WrHparH9kLCOii1ss2kcsmyGt66ZsWOxZp70VfDk/iNpS9ITbD05H17yD8Ezl/hek+AXQTZzEZALiB63n4JraazktHFGav8XgIAYA4BfAE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5510
 
-
-
-
---_=_swift-82961945066be29bd2d9e07.65392638_=_
-Content-Type: text/plain; charset=utf-8
-
-(Because you work with CHARITABLE ORGANIZATIONS)  ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ 
-
-**Are You Competing for Nonprofit Clients?**
-
-VISIT HERE OR PRESS PLAY BUTTON BELOW ARTICLE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
-
-https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U 
-
-Dear Colleague In Service,
-
-When I started my business more than thirty years ago, I wondered how I could compete with the big firms, who had sales people, marketing departments, and were literally the guys who "came from at least fifty miles and carried a briefcase," which is how people tended to describe consultants. And what did I have to offer? My background was eleven years in banking and just five years in the nonprofit world. So, what qualified me to be a consultant, Was I crazy to go up against the "big guys?
-
-VISIT HERE TO READ ENTIRE ARTICLE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
-
-Well, it just happened that five years was the minimum time needed to be in the profession to become a CFRE (Certified Fund Raising Executive). So, I immediately applied to sit for the exam and became a CFRE. Anytime I was called for an interview I stressed the fact that I was a CFRE, and explained what the process was like and that the initials CFRE meant that I passed a written exam and adhered to a code of ethics. Many clients were impressed with that because they did know nonprofit world had a credentialing program.
-
-After I had been in the field ten years, I went through the even more rigorous process and became an ACFRE (Advanced Certified Fund Raising Executive). 
-
-**Then I discovered NANOE and added an important new set of letters to the alphabet soup on my business card -CNC, CNE, and CDE. **
-
-You don't have to get all three but even one of these will give you more viability in the marketplace when job searching and may...VISIT HERE TO READ ENTIRE ARTICLE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
-
-NANOE is pleased to report that over 350,000 nonprofit executives, staff, board members, ministry leaders and volunteers rely NANOE to build financial capacity. We're grateful to all our members and subscribers and want to encourage as many as people as possible to continue to share their experiences. Your written comments and contributions have helped your colleagues navigate this process.
-
-NANOE is here to make sure receive the support you require to navigate unprecedented times.
-
-VISIT HERE TO SUBSCRIBE https://jimmylarose.acemlnd.com/lt.php?x=3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U
-
-We look forward to hearing from you.
-
-Warmly,
-
-**Linda Lysakowski, CNE, CDE, CNC**
-
-NANOE Member
-
-Sent to: soc@kernel.org
-
-Unsubscribe https://jimmylarose.acemlnd.com/proc.php?nl=312&c=1032&m=1651&s=678f48a0e320c6856d0620aa2e024acb&act=unsub
-
-Inside Charity, 712 H Street NE Suite 1149 , Washington, D.C. 20002, United States
---_=_swift-82961945066be29bd2d9e07.65392638_=_
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE html><html>=0A<head><meta http-equiv=3D"Content-Type" content=3D"=
-text/html; charset=3Dutf-8"><meta name=3D"viewport" content=3D"width=3Ddevi=
-ce-width, minimal-ui, initial-scale=3D1.0, maximum-scale=3D1.0, user-scalab=
-le=3D0;"><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><meta n=
-ame=3D"format-detection" content=3D"telephone=3Dno, date=3Dno, email=3Dno, =
-address=3Dno"><meta name=3D"x-apple-disable-message-reformatting">=0A<!--[i=
-f (mso 16)]><style type=3D"text/css"> a { text-decoration: none; } </style>=
-<![endif]--> =0A<!--[if gte mso 9]><style> sup { font-size: 100% !important=
-; } </style><![endif]--> =0A<!--[if gte mso 9]><xml><o:OfficeDocumentSettin=
-gs><o:AllowPNG></o:AllowPNG><o:PixelsPerInch>96</o:PixelsPerInch></o:Office=
-DocumentSettings></xml><![endif]--> =0A<!--[if gte mso 9]><style>sup { font=
--size: 100% !important; }</style><![endif]--><link href=3D"chrome-extension=
-://nffaoalbilbmmfgbnbgppjihopabppdk/inject.css" type=3D"text/css" rel=3D"st=
-ylesheet"> =0A<!--[if !mso]><!-- --><link href=3D"https://fonts.googleapis.=
-com/css?family=3DRoboto:400,400i,700,700i" rel=3D"stylesheet"> =0A<!--<![en=
-dif]--><style type=3D"text/css">#outlook a { padding:0;}.es-button { mso-st=
-yle-priority:100!important; text-decoration:none!important;}a[x-apple-data-=
-detectors] { color:inherit!important; text-decoration:none!important; font-=
-size:inherit!important; font-family:inherit!important; font-weight:inherit!=
-important; line-height:inherit!important;}=0A.es-desk-hidden { display:none=
-; float:left; overflow:hidden; width:0; max-height:0; line-height:0; mso-hi=
-de:all;}@media only screen and (max-width:600px) {p, ul li, ol li, a { line=
--height:150%!important } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120% } =
-h1 { font-size:30px!important; text-align:center } h2 { font-size:26px!impo=
-rtant; text-align:center } h3 { font-size:20px!important; text-align:center=
- } .es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a { font=
--size:30px!important; text-align:left } .es-header-body h2 a, .es-content-b=
-ody h2 a, .es-footer-body h2 a { font-size:26px!important; text-align:left =
-} .es-header-body h3 a, .es-content-body h3 a, .es-footer-body h3 a { font-=
-size:20px!important; text-align:left } .es-menu td a { font-size:13px!impor=
-tant } .es-header-body p, .es-header-body ul li, .es-header-body ol li, .es=
--header-body a { font-size:16px!important }=0A .es-content-body p, .es-cont=
-ent-body ul li, .es-content-body ol li, .es-content-body a { font-size:16px=
-!important } .es-footer-body p, .es-footer-body ul li, .es-footer-body ol l=
-i, .es-footer-body a { font-size:16px!important } .es-infoblock p, .es-info=
-block ul li, .es-infoblock ol li, .es-infoblock a { font-size:12px!importan=
-t } *[class=3D"gmail-fix"] { display:none!important } .es-m-txt-c, .es-m-tx=
-t-c h1, .es-m-txt-c h2, .es-m-txt-c h3 { text-align:center!important } .es-=
-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right!=
-important } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { t=
-ext-align:left!important } .es-m-txt-r img, .es-m-txt-c img, .es-m-txt-l im=
-g { display:inline!important } .es-button-border { display:inline-block!imp=
-ortant } a.es-button, button.es-button { font-size:20px!important; display:=
-inline-block!important } .es-adaptive table, .es-left, .es-right { width:10=
-0%!important }=0A .ac-footer, .es-content table, .es-header table, .es-foot=
-er table, .es-content, .es-footer, .es-header { width:100%!important; max-w=
-idth:600px!important } .ac-footer td, .ac-footer p, .es-adapt-td { display:=
-block!important; width:100%!important } .adapt-img { width:100%!important; =
-height:auto!important } .es-m-p0 { padding:0px!important } .es-m-p0r { padd=
-ing-right:0px!important } .es-m-p0l { padding-left:0px!important } .es-m-p0=
-t { padding-top:0px!important } .es-m-p0b { padding-bottom:0!important } .e=
-s-m-p20b { padding-bottom:20px!important } .es-mobile-hidden, .es-hidden { =
-display:none!important } tr.es-desk-hidden, td.es-desk-hidden, table.es-des=
-k-hidden { width:auto!important; overflow:visible!important; float:none!imp=
-ortant; max-height:inherit!important; line-height:inherit!important } tr.es=
--desk-hidden { display:table-row!important } table.es-desk-hidden { display=
-:table!important }=0A td.es-desk-menu-hidden { display:table-cell!important=
- } .es-menu td { width:1%!important } table.es-table-not-adapt, .esd-block-=
-html table { width:auto!important } table.es-social { display:inline-block!=
-important } table.es-social td { display:inline-block!important } .es-desk-=
-hidden { display:table-row!important; width:auto!important; overflow:visibl=
-e!important; max-height:inherit!important } }@media screen and (max-width:3=
-84px) {.mail-message-content { width:414px!important } }</style>=0A </head>=
-=0A <body class=3D"es-wrapper-color vsc-initialized" data-som-added=3D"true=
-" lang=3D"und" style=3D"font-family:roboto, 'helvetica neue', helvetica, ar=
-ial, sans-serif;width:100%;-webkit-text-size-adjust:100%;-ms-text-size-adju=
-st:100%;padding:0;Margin:0;background-color:#FFFFFF">        <div style=3D"=
-display: none !important; padding: 0; height: 1px; font-size: 1px; backgrou=
-nd-color: inherit !important; opacity: 0; color: transparent; mso-line-heig=
-ht-rule: exactly; line-height:1px; mso-hide:all;">=0A            (Because y=
-ou work with CHARITABLE ORGANIZATIONS)=0A            <div style=3D"display:=
- none; max-height: 0px; overflow: hidden;">=0A               =0A&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
-=E2=80=8C=0A            </div>=0A=0A        </div>=0A<table class=3D"es-wra=
-pper" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" role=3D"none" styl=
-e=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bor=
-der-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat=
-:repeat;background-position:center top;background-color:#FFFFFF"><tr><td va=
-lign=3D"top" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspac=
-ing=3D"0" class=3D"es-content" align=3D"center" role=3D"none" style=3D"mso-=
-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spaci=
-ng:0px;table-layout:fixed !important;width:100%"><tr><td align=3D"center" s=
-tyle=3D"padding:0;Margin:0"><table bgcolor=3D"#ffffff" class=3D"es-content-=
-body" align=3D"center" cellpadding=3D"0" cellspacing=3D"0" role=3D"none" st=
-yle=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;b=
-order-spacing:0px;background-color:transparent;width:650px"><tr><td align=
-=3D"left" style=3D"padding:0;Margin:0"><table cellpadding=3D"0" cellspacing=
-=3D"0" width=3D"100%" role=3D"none"=0Astyle=3D"mso-table-lspace:0pt;mso-tab=
-le-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td align=3D=
-"center" valign=3D"top" style=3D"padding:0;Margin:0;width:650px"><table cel=
-lpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" style=
-=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;bord=
-er-spacing:0px"><tr><td align=3D"center" style=3D"padding:0;Margin:0"><p st=
-yle=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso=
--line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, s=
-ans-serif;line-height:29px;color:#333333;font-size:24px"><strong>Are You Co=
-mpeting for Nonprofit Clients?</strong></p>=0A=0A<p style=3D"Margin:0;-webk=
-it-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exa=
-ctly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'l=
-ucida sans', tahoma, sans-serif;line-height:22px;color:#333333;font-size:18=
-px"><br></p>=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-=
-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica=
- neue', helvetica, sans-serif;line-height:22px;color:#333333;font-size:18px=
-"><strong><a target=3D"_blank" style=3D"-webkit-text-size-adjust:none;-ms-t=
-ext-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline=
-;color:#0000EE;font-size:18px;font-family:arial, 'helvetica neue', helvetic=
-a, sans-serif;line-height:22px" href=3D"https://jimmylarose.acemlnd.com/lt.=
-php?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvY=
-yXHMWJXCa6U">VISIT HERE OR PRESS PLAY BUTTON BELOW ARTICLE</a></strong></p>=
-=0A</td>=0A</tr>=0A=0A <tr><td align=3D"center" style=3D"padding:20px;Margi=
-n:0;font-size:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellpad=
-ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspac=
-e:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr=
-><td style=3D"padding:0;Margin:0;border-bottom:1px solid #cccccc;background=
-:unset;height:1px;width:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=
-=0A</tr>=0A=0A <tr><td align=3D"center" style=3D"padding:0;Margin:0;font-si=
-ze:0px"><a target=3D"_blank" href=3D"https://jimmylarose.acemlnd.com/lt.php=
-?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXH=
-MWJXCa6U" style=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;=
-mso-line-height-rule:exactly;text-decoration:underline;color:#0000EE;font-s=
-ize:14px"><img class=3D"adapt-img" src=3D"https://content.app-us1.com/cdn-c=
-gi/image/fit=3Dscale-down,format=3Dauto,onerror=3Dredirect,width=3D650,dpr=
-=3D2/yqQyB/2024/08/10/4170f46b-e1d8-4970-8ec5-566b5c4ceb6f.jpeg" alt=3D"VIS=
-IT HERE TO LEARN MORE" style=3D"display:block;border:0;outline:none;text-de=
-coration:none;-ms-interpolation-mode:bicubic" width=3D"650" title=3D"VISIT =
-HERE TO LEARN MORE" data-cf-ir-is-resized=3D"true"></a>=0A</td>=0A</tr>=0A<=
-tr><td align=3D"center" style=3D"padding:20px;Margin:0;font-size:0"><table =
-border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" cellspacing=
-=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso-table-rspace=
-:0pt;border-collapse:collapse;border-spacing:0px"><tr><td style=3D"padding:=
-0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:1px;widt=
-h:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<tr><td align=
-=3D"left" style=3D"padding:0;Margin:0"><p style=3D"Margin:0;-webkit-text-si=
-ze-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-=
-family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans=
-', tahoma, sans-serif;line-height:24px;color:#333333;font-size:16px">Dear C=
-olleague In Service,</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust=
-:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'t=
-rebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma=
-, sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A=0A<=
-p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none=
-;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', =
-'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;c=
-olor:#333333;font-size:16px">When I started my business more than thirty ye=
-ars ago, I wondered how I could compete with the big firms, who had sales p=
-eople, marketing departments, and were literally the guys who =E2=80=9Ccame=
- from at least fifty miles and carried a briefcase,=E2=80=9D which is how p=
-eople tended to describe consultants. And what did I have to offer? My back=
-ground was eleven years in banking and just five years in the nonprofit wor=
-ld. So, what qualified me to be a consultant, Was I crazy to go up against =
-the =E2=80=9Cbig guys?</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adju=
-st:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:=
-'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', taho=
-ma, sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A<p=
- style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;=
-mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', '=
-lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;co=
-lor:#333333;font-size:16px"><strong><a target=3D"_blank" href=3D"https://ji=
-mmylarose.acemlnd.com/lt.php?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVn=
-Cb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U" style=3D"-webkit-text-size-adjust:non=
-e;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:un=
-derline;color:#0000EE;font-size:16px">VISIT HERE TO READ ENTIRE ARTICLE</a>=
-</strong></p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-t=
-ext-size-adjust:none;mso-line-height-rule:exactly;font-family:'trebuchet ms=
-', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-seri=
-f;line-height:24px;color:#333333;font-size:16px"><br></p>=0A=0A<p style=3D"=
-Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-h=
-eight-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida san=
-s unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;color:#33333=
-3;font-size:16px">Well, it just happened that five years was the minimum ti=
-me needed to be in the profession to become a CFRE (Certified Fund Raising =
-Executive). So, I immediately applied to sit for the exam and became a CFRE=
-. Anytime I was called for an interview I stressed the fact that I was a CF=
-RE, and explained what the process was like and that the initials CFRE mean=
-t that I passed a written exam and adhered to a code of ethics. Many client=
-s were impressed with that because they did know nonprofit world had a cred=
-entialing program.</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:n=
-one;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'tre=
-buchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, =
-sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A<p sty=
-le=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-=
-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'luci=
-da sans unicode', 'lucida sans', tahoma, sans-serif;line-height:24px;color:=
-#333333;font-size:16px">After I had been in the field ten years, I went thr=
-ough the even more rigorous process and became an ACFRE (Advanced Certified=
- Fund Raising Executive).=C2=A0</p>=0A<p style=3D"Margin:0;-webkit-text-siz=
-e-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-f=
-amily:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans'=
-, tahoma, sans-serif;line-height:24px;color:#333333;font-size:16px"><br></p=
->=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adj=
-ust:none;mso-line-height-rule:exactly;font-family:'trebuchet ms', 'lucida g=
-rande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif;line-heigh=
-t:24px;color:#333333;font-size:16px"><em><strong>Then I discovered NANOE an=
-d added an important new set of letters to the alphabet soup on my business=
- card =E2=80=94CNC, CNE, and CDE.=C2=A0</strong></em></p>=0A<p style=3D"Mar=
-gin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-heig=
-ht-rule:exactly;font-family:'trebuchet ms', 'lucida grande', 'lucida sans u=
-nicode', 'lucida sans', tahoma, sans-serif;line-height:24px;color:#333333;f=
-ont-size:16px"><br></p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:=
-none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'tr=
-ebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma,=
- sans-serif;line-height:24px;color:#333333;font-size:16px">You don=E2=80=
-=99t have to get all three but even one of these will give you more viabili=
-ty in the marketplace when job searching and may<strong><a target=3D"_blank=
-" style=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line=
--height-rule:exactly;text-decoration:underline;color:#0000EE;font-size:16px=
-;font-family:'trebuchet ms', 'lucida grande', 'lucida sans unicode', 'lucid=
-a sans', tahoma, sans-serif" href=3D"https://jimmylarose.acemlnd.com/lt.php=
-?x=3D3DZy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXH=
-MWJXCa6U">...VISIT HERE TO READ ENTIRE ARTICLE</a></strong></p>=0A</td>=0A<=
-/tr>=0A=0A <tr><td align=3D"center" style=3D"padding:20px;Margin:0;font-siz=
-e:0"><table border=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" c=
-ellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso-ta=
-ble-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td style=
-=3D"padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;hei=
-ght:1px;width:100%;margin:0px"></td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A<=
-/table>=0A</td>=0A</tr>=0A=0A <tr><td align=3D"center" valign=3D"top" style=
-=3D"padding:0;Margin:0;width:650px"><table cellpadding=3D"0" cellspacing=3D=
-"0" width=3D"100%" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso-=
-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td align=
-=3D"left" style=3D"padding:0;Margin:0"><p style=3D"Margin:0;-webkit-text-si=
-ze-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-=
-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:24px;colo=
-r:#333333;font-size:16px">NANOE is pleased to report that over 350,000 nonp=
-rofit executives, staff, board members, ministry leaders and volunteers rel=
-y NANOE to build financial capacity. We're grateful to all our members and =
-subscribers and want to encourage as many as people as possible to continue=
- to share their experiences. Your written comments and contributions have h=
-elped your colleagues navigate this process.<br><br>NANOE is here to make s=
-ure receive the support you require to navigate=0Aunprecedented times.<br><=
-br><strong><a target=3D"_blank" style=3D"-webkit-text-size-adjust:none;-ms-=
-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underlin=
-e;color:#0000EE;font-size:16px;font-family:arial, 'helvetica neue', helveti=
-ca, sans-serif" href=3D"https://jimmylarose.acemlnd.com/lt.php?x=3D3DZy~GDJ=
-JFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnCb6s4s-ky.0eFr137ziNTzjvYyXHMWJXCa6U">VIS=
-IT HERE TO SUBSCRIBE</a></strong><br><br>We look forward to hearing from yo=
-u.<br><br>Warmly,</p>=0A=0A<p style=3D"Margin:0;-webkit-text-size-adjust:no=
-ne;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial=
-, 'helvetica neue', helvetica, sans-serif;line-height:24px;color:#333333;fo=
-nt-size:16px"><br></p>=0A<p style=3D"Margin:0;-webkit-text-size-adjust:none=
-;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:georgia=
-, times, 'times new roman', serif;line-height:33px;color:#333333;font-size:=
-22px"><em><strong>Linda Lysakowski, CNE, CDE, CNC</strong></em></p>=0A<p st=
-yle=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso=
--line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, s=
-ans-serif;line-height:24px;color:#333333;font-size:16px"><br></p>=0A<p styl=
-e=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-l=
-ine-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, san=
-s-serif;line-height:24px;color:#333333;font-size:16px">NANOE Member</p>=0A<=
-/td>=0A</tr>=0A=0A </table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</=
-table>=0A</td>=0A</tr>=0A</table>=0A</td>=0A</tr>=0A</table>=0A=0A <table c=
-lass=3D"es-footer ac-footer" cellspacing=3D"0" cellpadding=3D"0" align=3D"c=
-enter" role=3D"none" style=3D"mso-table-lspace:0pt;mso-table-rspace:0pt;bor=
-der-collapse:collapse;border-spacing:0px;table-layout:fixed !important;widt=
-h:100%;background-color:transparent;background-repeat:repeat;background-pos=
-ition:center top"><tr><td align=3D"center" class=3D"es-footer-body" style=
-=3D"padding:0;Margin:0;background-color:transparent;padding-top:20px;paddin=
-g-bottom:20px;background:inherit;font-family:inherit;font-size:12px;color:i=
-nherit"><p style=3D"Margin:0;-webkit-text-size-adjust:none;-ms-text-size-ad=
-just:none;mso-line-height-rule:exactly;font-family:inherit;line-height:150%=
-;color:inherit;font-size:inherit">Sent to: soc@kernel.org<br><br><a style=
-=3D"-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height=
--rule:exactly;text-decoration:underline;color:inherit;font-size:inherit;fon=
-t-family:inherit;font-weight:inherit"=0Ahref=3D"https://jimmylarose.acemlnd=
-.com/proc.php?nl=3D312&c=3D1032&m=3D1651&s=3D678f48a0e320c6856d0620aa2e024a=
-cb&act=3Dunsub" target=3D"_blank">Unsubscribe</a><br><br><span class=3D"per=
-stag_address" style=3D"color:inherit;font-family:inherit;font-size:inherit"=
->Inside Charity, 712 H Street NE Suite 1149 , Washington, D.C. 20002, Unite=
-d States</span></p>=0A=0A</td>=0A</tr>=0A</table>=0A<img src=3D"https://jim=
-mylarose.acemlnd.com/lt.php?x=3D41Zy~GDJJFjP6pSqyA~IUeCe2nQljgLuk-cvjKHFVnC=
-b6s4s-k2DjFNu1X8Ru0LvjegxzK55Inae5.41NAoFhR5" border=3D"0" width=3D"1" heig=
-ht=3D"1" style=3D"display:block;width:1px!important;min-width:1px!important=
-;max-width:1px!important;height:1px!important;border:0;overflow:hidden;" />=
-<br clear=3D"all" /></body>=0A</html>
---_=_swift-82961945066be29bd2d9e07.65392638_=_--
-
-
+SGkgS3J6aywNCg0KSSB3aWxsIHNlcGFyYXRlIGNsb2NrIHBhcnQgaW4gdGhlIHYzIHBhdGNoIGlu
+dG8gUnlhbidzIGNsb2NrIHNlcmllcy4NCg0KPg0KPiBPbiAyNi8wNy8yMDI0IDE1OjA5LCBSb2Ig
+SGVycmluZyAoQXJtKSB3cm90ZToNCj4gPg0KPiA+IE9uIEZyaSwgMjYgSnVsIDIwMjQgMTk6MDM6
+NDUgKzA4MDAsIEtldmluIENoZW4gd3JvdGU6DQo+ID4+IFRoaXMgcGF0Y2hzZXQgYWRkcyBpbml0
+aWFsIHN1cHBvcnQgZm9yIHRoZSBBU1BFRUQuDQo+ID4+IEFTVDI3WFggQm9hcmQgTWFuYWdlbWVu
+dCBjb250cm9sbGVyIChCTUMpIFNvQyBmYW1pbHkuDQo+ID4+DQo+ID4+IEFTVDI3MDAgaXMgQVNQ
+RUVEJ3MgOHRoLWdlbmVyYXRpb24gc2VydmVyIG1hbmFnZW1lbnQgcHJvY2Vzc29yLg0KPiA+PiBG
+ZWF0dXJpbmcgYSBxdWFkLWNvcmUgQVJNIENvcnRleCBBMzUgNjQtYml0IHByb2Nlc3NvciBhbmQg
+dHdvDQo+ID4+IGluZGVwZW5kZW50IEFSTSBDb3J0ZXggTTQgcHJvY2Vzc29ycw0KPiA+Pg0KPiA+
+PiBUaGlzIHBhdGNoc2V0IGFkZHMgbWluaW1hbCBhcmNoaXRlY3R1cmUgYW5kIGRyaXZlcnMgc3Vj
+aCBhczoNCj4gPj4gQ2xvY2tzb3VyY2UsIENsb2NrIGFuZCBSZXNldA0KPiA+Pg0KPiA+PiBUaGlz
+IHBhdGNoc2V0IHdhcyB0ZXN0ZWQgb24gdGhlIEFTUEVFRCBBU1QyNzAwIGV2YWx1YXRpb24gYm9h
+cmQuDQo+ID4+DQo+ID4+IEtldmluIENoZW4gKDEwKToNCj4gPj4gICBkdC1iaW5kaW5nOiBtZmQ6
+IGFzcGVlZCxhc3QyeDAwLXNjdTogQWRkIGJpbmRpbmcgZm9yIEFTUEVFRCBBU1QyNzAwDQo+ID4+
+ICAgICBTQ1UNCj4gPj4gICBkdC1iaW5kaW5nOiBjbGs6IGFzdDI3MDA6IEFkZCBiaW5kaW5nIGZv
+ciBBc3BlZWQgQVNUMjd4eCBDbG9jaw0KPiA+PiAgIGNsazogYXN0MjcwMDogYWRkIGNsb2NrIGNv
+bnRyb2xsZXINCj4gPj4gICBkdC1iaW5kaW5nczogcmVzZXQ6IGFzdDI3MDA6IEFkZCBiaW5kaW5n
+IGZvciBBU1BFRUQgQVNUMjcwMCBSZXNldA0KPiA+PiAgIGR0LWJpbmRpbmdzOiBhcm06IGFzcGVl
+ZDogQWRkIG1haW50YWluZXINCj4gPj4gICBkdC1iaW5kaW5nczogYXJtOiBhc3BlZWQ6IEFkZCBh
+c3BlZWQsYXN0MjcwMC1ldmIgY29tcGF0aWJsZSBzdHJpbmcNCj4gPj4gICBhcm02NDogYXNwZWVk
+OiBBZGQgc3VwcG9ydCBmb3IgQVNQRUVEIEFTVDI3MDAgQk1DIFNvQw0KPiA+PiAgIGFybTY0OiBk
+dHM6IGFzcGVlZDogQWRkIGluaXRpYWwgQVNUMjdYWCBkZXZpY2UgdHJlZQ0KPiA+PiAgIGFybTY0
+OiBkdHM6IGFzcGVlZDogQWRkIGluaXRpYWwgQVNUMjcwMCBFVkIgZGV2aWNlIHRyZWUNCj4gPj4g
+ICBhcm02NDogZGVmY29uZmlnOiBBZGQgQVNQRUVEIEFTVDI3MDAgZmFtaWx5IHN1cHBvcnQNCj4g
+Pj4NCj4gPj4gIC4uLi9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1sICAgICAgICAgICB8
+ICAgIDYgKw0KPiA+PiAgLi4uL2JpbmRpbmdzL21mZC9hc3BlZWQsYXN0MngwMC1zY3UueWFtbCAg
+ICAgIHwgICAgMyArDQo+ID4+ICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgICAzICsNCj4gPj4gIGFyY2gvYXJtNjQvS2NvbmZpZy5wbGF0Zm9ybXMgICAg
+ICAgICAgICAgICAgICB8ICAgMTQgKw0KPiA+PiAgYXJjaC9hcm02NC9ib290L2R0cy9NYWtlZmls
+ZSAgICAgICAgICAgICAgICAgIHwgICAgMSArDQo+ID4+ICBhcmNoL2FybTY0L2Jvb3QvZHRzL2Fz
+cGVlZC9NYWtlZmlsZSAgICAgICAgICAgfCAgICA0ICsNCj4gPj4gIGFyY2gvYXJtNjQvYm9vdC9k
+dHMvYXNwZWVkL2FzcGVlZC1nNy5kdHNpICAgICB8ICAyMTcgKysrDQo+ID4+ICBhcmNoL2FybTY0
+L2Jvb3QvZHRzL2FzcGVlZC9hc3QyNzAwLWV2Yi5kdHMgICAgfCAgIDUwICsNCj4gPj4gIGFyY2gv
+YXJtNjQvY29uZmlncy9kZWZjb25maWcgICAgICAgICAgICAgICAgICB8ICAgIDEgKw0KPiA+PiAg
+ZHJpdmVycy9jbGsvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMSArDQo+
+ID4+ICBkcml2ZXJzL2Nsay9jbGstYXN0MjcwMC5jICAgICAgICAgICAgICAgICAgICAgfCAxMTY2
+DQo+ICsrKysrKysrKysrKysrKysrDQo+ID4+ICAuLi4vZHQtYmluZGluZ3MvY2xvY2svYXNwZWVk
+LGFzdDI3MDAtY2xrLmggICAgfCAgMTgwICsrKw0KPiA+PiAgLi4uL2R0LWJpbmRpbmdzL3Jlc2V0
+L2FzcGVlZCxhc3QyNzAwLXJlc2V0LmggIHwgIDEyNiArKw0KPiA+PiAgMTMgZmlsZXMgY2hhbmdl
+ZCwgMTc3MiBpbnNlcnRpb25zKCspICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gPj4gYXJjaC9hcm02
+NC9ib290L2R0cy9hc3BlZWQvTWFrZWZpbGUNCj4gPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNo
+L2FybTY0L2Jvb3QvZHRzL2FzcGVlZC9hc3BlZWQtZzcuZHRzaQ0KPiA+PiAgY3JlYXRlIG1vZGUg
+MTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvYXNwZWVkL2FzdDI3MDAtZXZiLmR0cw0KPiA+PiAg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL2Nsay1hc3QyNzAwLmMgIGNyZWF0ZSBtb2Rl
+IDEwMDY0NA0KPiA+PiBpbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL2FzcGVlZCxhc3QyNzAwLWNs
+ay5oDQo+ID4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC9h
+c3BlZWQsYXN0MjcwMC1yZXNldC5oDQo+ID4+DQo+ID4+IC0tDQo+ID4+IDIuMzQuMQ0KPiA+Pg0K
+PiA+Pg0KPiA+Pg0KPiA+DQo+ID4NCj4gPiBNeSBib3QgZm91bmQgbmV3IERUQiB3YXJuaW5ncyBv
+biB0aGUgLmR0cyBmaWxlcyBhZGRlZCBvciBjaGFuZ2VkIGluDQo+ID4gdGhpcyBzZXJpZXMuDQo+
+ID4NCj4gPiBTb21lIHdhcm5pbmdzIG1heSBiZSBmcm9tIGFuIGV4aXN0aW5nIFNvQyAuZHRzaS4g
+T3IgcGVyaGFwcyB0aGUNCj4gPiB3YXJuaW5ncyBhcmUgZml4ZWQgYnkgYW5vdGhlciBzZXJpZXMu
+IFVsdGltYXRlbHksIGl0IGlzIHVwIHRvIHRoZQ0KPiA+IHBsYXRmb3JtIG1haW50YWluZXIgd2hl
+dGhlciB0aGVzZSB3YXJuaW5ncyBhcmUgYWNjZXB0YWJsZSBvciBub3QuIE5vDQo+ID4gbmVlZCB0
+byByZXBseSB1bmxlc3MgdGhlIHBsYXRmb3JtIG1haW50YWluZXIgaGFzIGNvbW1lbnRzLg0KPiA+
+DQo+ID4gSWYgeW91IGFscmVhZHkgcmFuIERUIGNoZWNrcyBhbmQgZGlkbid0IHNlZSB0aGVzZSBl
+cnJvcihzKSwgdGhlbiBtYWtlDQo+ID4gc3VyZSBkdC1zY2hlbWEgaXMgdXAgdG8gZGF0ZToNCj4g
+Pg0KPiA+ICAgcGlwMyBpbnN0YWxsIGR0c2NoZW1hIC0tdXBncmFkZQ0KPiA+DQo+ID4NCj4gPiBO
+ZXcgd2FybmluZ3MgcnVubmluZyAnbWFrZSBDSEVDS19EVEJTPXkgYXNwZWVkL2FzdDI3MDAtZXZi
+LmR0YicgZm9yDQo+IDIwMjQwNzI2MTEwMzU1LjIxODE1NjMtMS1rZXZpbl9jaGVuQGFzcGVlZHRl
+Y2guY29tOg0KPg0KPiBLZXZpbiwNCj4gSnVzdCB0byBjbGFyaWZ5LiBMb29raW5nIGF0IHRoZSBw
+YXRjaGVzIGl0IHdhcyBxdWl0ZSBvYnZpb3VzIHlvdSBkaWQgbm90IHRlc3QgaXQNCj4gd2l0aCBk
+dGJzX2NoZWNrLiBGb3IgYSBuZXcgYXJtNjQgcGxhdGZvcm0gd2l0aG91dCBhbnkgbGVnYWN5LCBo
+YXZpbmcgMA0KPiB3YXJuaW5ncyBpcyBhIG11c3QuDQpBZ3JlZS4NCg0KPg0KPiBDb25zaWRlciBE
+b2N1bWVudGF0aW9uL3Byb2Nlc3MvbWFpbnRhaW5lci1zb2MtY2xlYW4tZHRzLnJzdCBiZWluZyBp
+bXBsaWVkDQo+IGZvciB0aGlzIHBsYXRmb3JtLg0KPg0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlz
+enRvZg0KDQotLQ0KQmVzdCBSZWdhcmRzLA0KS2V2aW4uQ2hlbg0KKioqKioqKioqKioqKiBFbWFp
+bCBDb25maWRlbnRpYWxpdHkgTm90aWNlICoqKioqKioqKioqKioqKioqKioqDQrlhY3osqzogbLm
+mI46DQrmnKzkv6Hku7Yo5oiW5YW26ZmE5Lu2KeWPr+iDveWMheWQq+apn+Wvhuizh+ioiu+8jOS4
+puWPl+azleW+i+S/neitt+OAguWmgiDlj7Dnq6/pnZ7mjIflrprkuYvmlLbku7bogIXvvIzoq4vk
+u6Xpm7vlrZDpg7Xku7bpgJrnn6XmnKzpm7vlrZDpg7Xku7bkuYvnmbzpgIHogIUsIOS4puiri+er
+i+WNs+WIqumZpOacrOmbu+WtkOmDteS7tuWPiuWFtumZhOS7tuWSjOmKt+avgOaJgOacieikh+WN
+sOS7tuOAguisneisneaCqOeahOWQiOS9nCENCg0KRElTQ0xBSU1FUjoNClRoaXMgbWVzc2FnZSAo
+YW5kIGFueSBhdHRhY2htZW50cykgbWF5IGNvbnRhaW4gbGVnYWxseSBwcml2aWxlZ2VkIGFuZC9v
+ciBvdGhlciBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24uIElmIHlvdSBoYXZlIHJlY2VpdmVkIGl0
+IGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcmVwbHkgZS1tYWlsIGFuZCBp
+bW1lZGlhdGVseSBkZWxldGUgdGhlIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIHdpdGhvdXQg
+Y29weWluZyBvciBkaXNjbG9zaW5nIHRoZSBjb250ZW50cy4gVGhhbmsgeW91Lg0K
