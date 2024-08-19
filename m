@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814F4C52D7C
-	for <soc@archiver.kernel.org>; Mon, 19 Aug 2024 03:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9916DC3DA4A
+	for <soc@archiver.kernel.org>; Mon, 19 Aug 2024 03:57:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 63ECCC4AF13; Mon, 19 Aug 2024 03:57:00 +0000 (UTC)
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	id 8A0DEC32782; Mon, 19 Aug 2024 03:57:01 +0000 (UTC)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5A1A5C32782;
-	Mon, 19 Aug 2024 03:56:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A1A5C32782
+	by smtp.kernel.org (Postfix) with ESMTPS id 8538EC4AF10;
+	Mon, 19 Aug 2024 03:57:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8538EC4AF10
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-202508cb8ebso1464665ad.3;
-        Sun, 18 Aug 2024 20:56:58 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-201f2b7fe0dso23908305ad.1;
+        Sun, 18 Aug 2024 20:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724039817; x=1724644617; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1724039819; x=1724644619; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P7CqcOuZDb75sy7+rOEgJahiFqYT4oGOo9E7PnEA6vQ=;
-        b=DCSHiOnfe4DFx3RJFmjiWvnfurZ6UUnAKduK1gv3SPUg7mOBB5d09SqsKekmgcv/ZP
-         3Mv6hm+dFQDjBWKeyt9hWnAf7+lAzmffTBYVhBCH6csQoGyFAzsKiBPj2SH0B9gXPFJj
-         +ULmpulAoUnTvD710x+wT30DpQUAvZpBq7hPe4VRYgPOPbxBqgaNBL/YPoI1gPl/qINc
-         +SY5b+LCpnDYdpGJ4PrWc4hyx4B6BpzhCjH7B83hv79AxufCFmpVFYVqBhKgztjIqXTT
-         tjkLGJwC5fuEg3DVPuNctx8JREUZ9vEasOu+WJFE5fYDr8+7g1VT2Ifq61giEBkDM3GQ
-         Eo6A==
+        bh=hMxiBVm1dCy/VMbf3k3ryTxM8vkKELICEPudxbPC0sY=;
+        b=bLGdpNJMT/TwwQ2dw/JDOTZzkapJM3b07Nv0UPoXT8OWMaZZCB6dejgBZs8bNizNsG
+         EnldzkHWP/AW+62sElVxxpAVwYpBk6JH5LqSWyPUhskUzGNR/4H9xZ6FNn9NdELZkXZ5
+         FDMdGG8BqReqWvcEkE/E5fBHA+g+GTeoo4M2pPfPprCbDNOXhx0WH28t05tGswKVz5CJ
+         zXPMREHMp8V8y4v3Akbza/vLu6wHd2oMB8I5Ic4uwQOE3oyWTUAfK/dQUllOG7S+Psl+
+         lzYIfPaolM2fumVpvN9qxML+e8inOquk4JYdHLP0H+CWqAQU3S3Z4736hI8eP9EDjE2n
+         nfxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724039817; x=1724644617;
+        d=1e100.net; s=20230601; t=1724039819; x=1724644619;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P7CqcOuZDb75sy7+rOEgJahiFqYT4oGOo9E7PnEA6vQ=;
-        b=dGzlEzh/dDbyMl2lxDk36gLRzy3Q5mhUzjXXqSjpzqs9GlmBDQ6myXZpq7GwttQzbJ
-         c1W5nOsyoTEZoT5w5EKHUEOeBMG1jGTfw7F1kFGdO48m4Jc8mC4F2L0nTNngHeJGhb7l
-         ixl1UnRaeo9/jOrPLe7F+Bt8st2hgd6vApTYkylRlpqr8VFvem8i5ZsnTpLw6r6Dotct
-         k+Gnhgu/nTgIykx6wsqvS3Gbe0XokKmzCGtbY+NAI24o/Wn4OdjwD8khrzWvDuHOeedz
-         avR/YrcR8jkl0INK/l9Zx3aUEJmnx9G0D90iasB50PWKHW7FTlCkGi84Api6lUrhInW3
-         vPxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUL86amH/+bCZQPtyUOE9Px6fPmXArvRzfYSq77kcA9lq7x62RVvohE/zBWGWhRjGzyd2OW6P0kgLhnTDtHLEJFC9pHS2nLfBPWS+ZoMZ0pUgJovyHaTSox3JqYimiNBi2yR9EauwLF
-X-Gm-Message-State: AOJu0YwEVUYOJrSe6kg9dmsBmW6SjWU9XMFFGAM2/yI+yQb1vqdMCJzx
-	lzMlWhSajUDo6KISp1dIKhpW4MAT9jhDhoPpIE0dYSuOyKlxWr74RNS09g==
-X-Google-Smtp-Source: AGHT+IHU3gTDF66CcveSfeiQQiYyefEN8k1+ovIorB/+adjVvyzhffeIf5B5McTX4Ndz9vCpa3LrFQ==
-X-Received: by 2002:a17:902:db11:b0:202:4d18:9df7 with SMTP id d9443c01a7336-2024d18a21bmr10607375ad.33.1724039816578;
-        Sun, 18 Aug 2024 20:56:56 -0700 (PDT)
+        bh=hMxiBVm1dCy/VMbf3k3ryTxM8vkKELICEPudxbPC0sY=;
+        b=PFgo8D37+HQLfwYEtgCoeriBoywO6prd6uGV9iBgdI5C236fLnFyxQPvKjEsQQpqKh
+         Ho7MzkL3xn394T6/C4gaIew99XM4HZILtmutN13gjuGkMGeqhYL5ExFFt4I//WWYjeil
+         CfRk1avr36sbJzeOrJjheyjL7+AoMAgy5GBPssIXT4ROhjmNr9Eyaz1+LJjPFQvlssW5
+         e7Ny8bPEjYh02zLKRrOlGW+vfhTj6NxffLe039Hn0tnz1hcfw9byYHCe4hABzQ5sW8kC
+         BDUDbrg6+doie2tbLki+O6WFW5v7vm1+ghQRMI7AviSUqoIC+/iMZpequfxDhGbJeFIl
+         vRgw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1brGu84WoglHOPAfdHDyh3OQ11wzdST9+oTp0+7Jc4j555HJBiSAcoZiQICdhB3KSMGSz7HPUje+9Kq3B1z3V+saFFflibEfyPh5S0A2WmVM+/3Zf0w2DhICoQ3GOhNLK0dh+nI4Q
+X-Gm-Message-State: AOJu0YwLWsw7+8RZZQOyFmU/M5rdUH6bswSj/VqtGxZ86344RC1L05me
+	otEGRXGoiy9IbYwpKJl/RTsN6Il3bIrbvb2V39nWklC6OIA8A5AgEjgcng==
+X-Google-Smtp-Source: AGHT+IEtQA3Sp2nVh0hsGcQt+DqddhpLy0t+34/lJMSE8+lE689mWVXGMwN6DWTsoCCP0VOnd/l4lw==
+X-Received: by 2002:a17:902:db07:b0:202:4724:b700 with SMTP id d9443c01a7336-2024724b8d6mr16176115ad.58.1724039818753;
+        Sun, 18 Aug 2024 20:56:58 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f0375649sm55784435ad.124.2024.08.18.20.56.54
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f0375649sm55784435ad.124.2024.08.18.20.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Aug 2024 20:56:56 -0700 (PDT)
+        Sun, 18 Aug 2024 20:56:58 -0700 (PDT)
 From: Jacky Huang <ychuang570808@gmail.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -64,9 +64,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	soc@kernel.org,
 	schung@nuvoton.com,
 	ychuang3@nuvoton.com
-Subject: [PATCH 2/3] arm64: dts: nuvoton: ma35d1: Add pinctrl and gpio nodes
-Date: Mon, 19 Aug 2024 03:56:46 +0000
-Message-Id: <20240819035647.306-3-ychuang570808@gmail.com>
+Subject: [PATCH 3/3] arm64: dts: nuvoton: ma35d1: Add uart pinctrl settings
+Date: Mon, 19 Aug 2024 03:56:47 +0000
+Message-Id: <20240819035647.306-4-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240819035647.306-1-ychuang570808@gmail.com>
 References: <20240819035647.306-1-ychuang570808@gmail.com>
@@ -75,174 +75,222 @@ Content-Transfer-Encoding: 8bit
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-Added the pinctrl node and its subnodes, the gpioa through gpion
-nodes, to the MA35D1 device tree.
+Enable all UART nodes presented on som and iot boards, and add pinctrl
+function settings to these nodes.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- arch/arm64/boot/dts/nuvoton/ma35d1.dtsi | 149 ++++++++++++++++++++++++
- 1 file changed, 149 insertions(+)
+ .../boot/dts/nuvoton/ma35d1-iot-512m.dts      | 80 +++++++++++++++++-
+ .../boot/dts/nuvoton/ma35d1-som-256m.dts      | 83 ++++++++++++++++++-
+ 2 files changed, 155 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-index a6b34e3e8b10..e51b98f5bdce 100644
---- a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-@@ -95,6 +95,155 @@ clk: clock-controller@40460200 {
- 			clocks = <&clk_hxt>;
- 		};
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
+index b89e2be6abae..9482bec1aa57 100644
+--- a/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
+@@ -14,6 +14,10 @@ / {
  
-+		pinctrl: pinctrl@40040000 {
-+			compatible = "nuvoton,ma35d1-pinctrl";
-+			reg = <0x0 0x40040000 0x0 0xc00>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			nuvoton,sys = <&sys>;
-+			ranges = <0x0 0x0 0x40040000 0x400>;
+ 	aliases {
+ 		serial0 = &uart0;
++		serial10 = &uart10;
++		serial12 = &uart12;
++		serial13 = &uart13;
++		serial14 = &uart14;
+ 	};
+ 
+ 	chosen {
+@@ -33,10 +37,6 @@ clk_hxt: clock-hxt {
+ 	};
+ };
+ 
+-&uart0 {
+-	status = "okay";
+-};
+-
+ &clk {
+ 	assigned-clocks = <&clk CAPLL>,
+ 			  <&clk DDRPLL>,
+@@ -54,3 +54,75 @@ &clk {
+ 			   "integer",
+ 			   "integer";
+ };
 +
-+			gpioa: gpio@0 {
-+				reg = <0x0 0x40>;
-+				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPA_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiob: gpio@40 {
-+				reg = <0x40 0x40>;
-+				interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPB_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpioc: gpio@80 {
-+				reg = <0x80 0x40>;
-+				interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPC_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiod: gpio@c0 {
-+				reg = <0xc0 0x40>;
-+				interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPD_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpioe: gpio@100 {
-+				reg = <0x100 0x40>;
-+				interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPE_GATE>;
-+				#gpio-cells = <2>;
-+				gpio-controller;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiof: gpio@140 {
-+				reg = <0x140 0x40>;
-+				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPF_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiog: gpio@180 {
-+				reg = <0x180 0x40>;
-+				interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPG_GATE>;
-+				#gpio-cells = <2>;
-+				gpio-controller;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpioh: gpio@1c0 {
-+				reg = <0x1c0 0x40>;
-+				interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPH_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpioi: gpio@200 {
-+				reg = <0x200 0x40>;
-+				interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPI_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpioj: gpio@240 {
-+				reg = <0x240 0x40>;
-+				interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPJ_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiok: gpio@280 {
-+				reg = <0x280 0x40>;
-+				interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPK_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiol: gpio@2c0 {
-+				reg = <0x2c0 0x40>;
-+				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPL_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpiom: gpio@300 {
-+				reg = <0x300 0x40>;
-+				interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPM_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
-+
-+			gpion: gpio@340 {
-+				reg = <0x340 0x40>;
-+				interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk GPN_GATE>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+			};
++&pinctrl {
++	uart-grp {
++		pinctrl_uart0: uart0-pins {
++			nuvoton,pins = <4 14 1>,
++				       <4 15 1>;
++			bias-disable;
++			power-source = <1>;
 +		};
 +
- 		uart0: serial@40700000 {
- 			compatible = "nuvoton,ma35d1-uart";
- 			reg = <0x0 0x40700000 0x0 0x100>;
++		pinctrl_uart10: uart10-pins {
++			nuvoton,pins = <7 4 2>,
++				       <7 5 2>,
++				       <7 6 2>,
++				       <7 7 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart12: uart12-pins {
++			nuvoton,pins = <2 13 2>,
++				       <2 14 2>,
++				       <2 15 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart13: uart13-pins {
++			nuvoton,pins = <7 12 3>,
++				       <7 13 3>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart14: uart14-pins {
++			nuvoton,pins = <7 14 2>,
++				       <7 15 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++	};
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart0>;
++	status = "okay";
++};
++
++&uart10 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart10>;
++	status = "okay";
++};
++
++&uart12 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart12>;
++	status = "okay";
++};
++
++&uart13 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart13>;
++	status = "okay";
++};
++
++&uart14 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart14>;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
+index a1ebddecb7f8..f6f20a17e501 100644
+--- a/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
+@@ -14,6 +14,10 @@ / {
+ 
+ 	aliases {
+ 		serial0 = &uart0;
++		serial11 = &uart11;
++		serial12 = &uart12;
++		serial14 = &uart14;
++		serial16 = &uart16;
+ 	};
+ 
+ 	chosen {
+@@ -33,10 +37,6 @@ clk_hxt: clock-hxt {
+ 	};
+ };
+ 
+-&uart0 {
+-	status = "okay";
+-};
+-
+ &clk {
+ 	assigned-clocks = <&clk CAPLL>,
+ 			  <&clk DDRPLL>,
+@@ -54,3 +54,78 @@ &clk {
+ 			   "integer",
+ 			   "integer";
+ };
++
++&pinctrl {
++	uart-grp {
++		pinctrl_uart0: uart0-pins {
++			nuvoton,pins = <4 14 1>,
++				       <4 15 1>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart11: uart11-pins {
++			nuvoton,pins = <11 0 2>,
++				       <11 1 2>,
++				       <11 2 2>,
++				       <11 3 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart12: uart12-pins {
++			nuvoton,pins = <8 1 2>,
++				       <8 2 2>,
++				       <8 3 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart14: uart14-pins {
++			nuvoton,pins = <8 5 2>,
++				       <8 6 2>,
++				       <8 7 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++
++		pinctrl_uart16: uart16-pins {
++			nuvoton,pins = <10 0 2>,
++				       <10 1 2>,
++				       <10 2 2>,
++				       <10 3 2>;
++			bias-disable;
++			power-source = <1>;
++		};
++	};
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart0>;
++	status = "okay";
++};
++
++&uart11 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart11>;
++	status = "okay";
++};
++
++&uart12 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart12>;
++	status = "okay";
++};
++
++&uart14 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart14>;
++	status = "okay";
++};
++
++&uart16 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart16>;
++	status = "okay";
++};
 -- 
 2.34.1
 
