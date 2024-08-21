@@ -1,78 +1,78 @@
-Return-Path: <SRS0=ip86=PT=baylibre.com=khilman@kernel.org>
+Return-Path: <SRS0=GX9E=PU=pdp7.com=drew@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A01FC3DA4A
-	for <soc@archiver.kernel.org>; Tue, 20 Aug 2024 22:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 110AEC52D7C
+	for <soc@archiver.kernel.org>; Wed, 21 Aug 2024 09:01:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 029F7C4AF15; Tue, 20 Aug 2024 22:03:13 +0000 (UTC)
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	id C578FC4AF09; Wed, 21 Aug 2024 09:01:43 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4BC06C4AF10
-	for <soc@kernel.org>; Tue, 20 Aug 2024 21:58:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BC06C4AF10
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71423273c62so158557b3a.0
-        for <soc@kernel.org>; Tue, 20 Aug 2024 14:58:48 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3B9BAC32782
+	for <soc@kernel.org>; Wed, 21 Aug 2024 09:01:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B9BAC32782
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4281c164408so51159365e9.1
+        for <soc@kernel.org>; Wed, 21 Aug 2024 02:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1724191128; x=1724795928; darn=kernel.org;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QEgGWQlUSnnU2Zps1tcbs1WwAWKn9iZ2WAjfctmM1R0=;
-        b=yW0Edh+FBDyWAEuTtWVdUZPHf9tuHAhjyK/PujetE4yj7GX6EfCXhHPdkZXxpTzczZ
-         TWx/uBu4/ymz/ay4qlfhErfncXBNkQAnnHE/6xdX6IDj/1QKDpzq+iwEBshUVBUWaKD7
-         K1YMUVLGJiOKJHbk9Bi8EvECLDg++hcSAkpbMwaZomqfuTL8gbhsA7GQvt3Toi7EEnmR
-         pqsOWrbiU5lyU2yBkuK1i0pE8PzngSjV90XSnye/8z4XbjE03gn03RbCBI7dbRNV9haC
-         ByCG7gcfGgO9zXZk9hyXImgBlX17f01EHHWx35F2QStB3hkuXI1Mf9AWIvRI0EF15iM7
-         HO6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724191128; x=1724795928;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1724230900; x=1724835700; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QEgGWQlUSnnU2Zps1tcbs1WwAWKn9iZ2WAjfctmM1R0=;
-        b=prToQ/BGtQ6Qk3OqbuxqopuLRabV2jQlv0IieRzKN6Tn7SboJe8lkEaaU2UJyoBE8Q
-         7BYjesL5E063BYFtKbrp2M/fd76qTsj4yJKcWCNLG+ZLIlEy0dhhvp8TrDSPYBirghsN
-         9oR40O7cahEmm8WX5kzKNEbUJLTMxCiVFiqqOnmvByqdqWPtabAq5Vc0SL7uG3wWQHmc
-         wy1breTMaEbDR2a/Y3ccBj5vAa88/+8XpL/+5CebqetLg+/d+U5YNpFJMz8L7JlrcMX4
-         T3c41V1bqU9f+LrVarjaFqXfzjatPP96w+LG5P29ZwtMmo1Xhan5MFPLO3aJlgyDRxSk
-         Oxhw==
-X-Gm-Message-State: AOJu0YzyUPlRLmGyzDDJmzwmo0oIdQ3HnrP58FJL67VtQF2m/YPf74hX
-	QJt8GtwvIo5QTybcPfWd9TSf8GLeOuC+FiWY4H/vBanr09Q9nYM55x/nVFej9Sp2tfpVBu6p1zx
-	q
-X-Google-Smtp-Source: AGHT+IHxgAde67vviUGkH8iD44TRlisQATJTZybthdi38Y4uYu1e7xRdwxNjGvFMVp0/Ry8T8TQN8g==
-X-Received: by 2002:a05:6a20:b598:b0:1c6:b0cc:c50f with SMTP id adf61e73a8af0-1cad8162296mr801207637.25.1724191127576;
-        Tue, 20 Aug 2024 14:58:47 -0700 (PDT)
-Received: from localhost ([71.212.170.185])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71420c8f8fdsm341634b3a.146.2024.08.20.14.58.46
+        bh=BqqM9bltdl7ERWZlDB/xDu0XlTf9F8/Bo40tfa0qccE=;
+        b=0r/zPSl0RAsy8SN72ggyQQTkdZgtPqRvJsn0mt+0jU/SEQpBR60nlWAOVmwroUO8zT
+         QHNvZu8qhx/3WMtEUWtgIo5Ecp2L5GXfFTkRQDAJ2o8+bYLj/vnze6Io+zpqDEUgvXH9
+         +02UpAkt8pIXsBDz7C8/zcjcRXRG9uT1XKYGURzQCs0BU/i8iatLhuqkQwp6n233ZMzg
+         2Z3gN49f05lnvLNgTO2sIhXX9MWfBT+kUjaCMZz0/yImv+kER8WgZw0raQEOBSpKvWJa
+         m0HyBCo3X2klTiKC+bwFbS2Xk6SAdm1mY63PjrM+RY2JL8g8Ntt1JNOqXZmqGp7KWw8h
+         WF3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724230900; x=1724835700;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BqqM9bltdl7ERWZlDB/xDu0XlTf9F8/Bo40tfa0qccE=;
+        b=AsbRyOgZ109IMwHC7l9nvgCv9iu2rABYhdisRhMKOUSWYAlup3KBEyecak/VZWkgU7
+         Gx/STB2SSlqXkUVW7Qn5CMnYBNH+6KhncTtLlDfWDIVr1M32EP7cXVjZRGBZcv+5Tvol
+         JBrTxBygeIE9jjFUzjjhxPmVjJfGuDTOAj9HjB2Kqv+xoYD63caaElCoRqPJM5RNXe9X
+         O7sQYuxRjfZ+tpr7XeB59OAKqpYj4s22j2cMjqfm/FE2p8nZakDmBu3M2QFBehI2OsLf
+         CXKIA8lqiF0T/29TMxuda5SWh2yTKJaEZG7K6JDJdZChSHa/cyqDG6ERhhFO/6iHzJxy
+         tthg==
+X-Gm-Message-State: AOJu0YynwVP1WEEoO1NdxMj+Q6v2GV2uMQay2PqHCOUWHME9wmlCnKyA
+	XU/x9eZxyX534Pdq4j8rIuxHFpnVTmSdbKXzJrV0YdCyDOTqGvmSZJOyPdW3LlIGGqAKmxuCu1u
+	/qmE=
+X-Google-Smtp-Source: AGHT+IFvRpxwoefPfsPJKT7RyLtcLqtQGYbN7c2LTwxuGtgb6LyU4gPYatIPuNkyVwMXdBcT7xS4NA==
+X-Received: by 2002:a05:600c:1d83:b0:428:c0a:27ea with SMTP id 5b1f17b1804b1-42abd212819mr12286595e9.12.1724230899932;
+        Wed, 21 Aug 2024 02:01:39 -0700 (PDT)
+Received: from x1 ([31.217.165.17])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42abed8b86bsm18002035e9.4.2024.08.21.02.01.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 14:58:46 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
+        Wed, 21 Aug 2024 02:01:39 -0700 (PDT)
+Date: Wed, 21 Aug 2024 12:01:37 +0300
+From: Drew Fustini <drew@pdp7.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org
-Subject: [GIT PULL] OMAP fixes for v6.11-rc
-Date: Tue, 20 Aug 2024 14:58:46 -0700
-Message-ID: <7h4j7eyhyh.fsf@baylibre.com>
+Cc: Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>,
+	Kanak Shilledar <kanakshilledar@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v6.12
+Message-ID: <ZsWs8QiVruMXjzPc@x1>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-As discussed here[1], I'll be stepping in to help support on the legacy
-OMAP devices, so here's a first pull from me with a fix for the v6.11-rc
-cycle.
+Hi Arnd,
 
-Please pull,
+Please pull these thead dts changes. I've run W=1 dtbs_check and they
+have been in linux-next since August 9th.
 
-Kevin
-
-[1] https://lore.kernel.org/all/20240709135930.3405-1-tony@atomide.com/
-
-
-
+Thanks,
+Drew
 
 The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
@@ -80,20 +80,39 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.11/fixes-signed
+  https://github.com/pdp7/linux.git tags/thead-dt-for-v6.12
 
-for you to fetch changes up to 5062d9c0cbbc202e495e9b20f147f64ef5cc2897:
+for you to fetch changes up to 2d98fea7491a00dccd61fee019843b262e60f819:
 
-  ARM: dts: omap3-n900: correct the accelerometer orientation (2024-08-05 11:02:39 -0700)
-
-----------------------------------------------------------------
-OMAP fixes for v6.11-rc
-
-- omap3-n900: fix accelerometer orientation
+  riscv: dts: thead: change TH1520 SPI node to use clock controller (2024-08-08 09:19:46 -0700)
 
 ----------------------------------------------------------------
-Sicelo A. Mhlongo (1):
-      ARM: dts: omap3-n900: correct the accelerometer orientation
+T-HEAD Devicetrees for v6.12
 
- arch/arm/boot/dts/ti/omap/omap3-n900.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Add SPI controller node to th1520.dtsi and enable spi0 on the BeagleV
+Ahead and LicheePi 4A.
+
+The TH1520 AP_SYS clock driver landed in v6.11 so convert multiple
+peripherals like mmc and uart from fixed clocks to the clock controller.
+
+All of these patches have been in linux-next since next-20240809.
+
+Signed-off-by: Drew Fustini <drew@pdp7.com>
+
+----------------------------------------------------------------
+Drew Fustini (6):
+      riscv: dts: thead: Add TH1520 AP_SUBSYS clock controller
+      riscv: dts: thead: change TH1520 uart nodes to use clock controller
+      riscv: dts: thead: change TH1520 mmc nodes to use clock controller
+      riscv: dts: thead: update TH1520 dma and timer nodes to use clock controller
+      riscv: dts: thead: add clock to TH1520 gpio nodes
+      riscv: dts: thead: change TH1520 SPI node to use clock controller
+
+Kanak Shilledar (1):
+      riscv: dts: thead: add basic spi node
+
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 17 ++---
+ .../boot/dts/thead/th1520-lichee-module-4a.dtsi    | 12 ----
+ arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts  |  5 ++
+ arch/riscv/boot/dts/thead/th1520.dtsi              | 83 ++++++++++++----------
+ 4 files changed, 56 insertions(+), 61 deletions(-)
