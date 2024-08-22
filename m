@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B8E5C3DA4A
-	for <soc@archiver.kernel.org>; Thu, 22 Aug 2024 08:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 867AEC5321D
+	for <soc@archiver.kernel.org>; Thu, 22 Aug 2024 08:52:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 35503C4AF0F; Thu, 22 Aug 2024 08:52:13 +0000 (UTC)
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	id 4D939C4AF11; Thu, 22 Aug 2024 08:52:14 +0000 (UTC)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 79FC5C4AF0C
-	for <soc@kernel.org>; Thu, 22 Aug 2024 08:52:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 79FC5C4AF0C
+	by smtp.kernel.org (Postfix) with ESMTPS id BD6BBC4AF0B
+	for <soc@kernel.org>; Thu, 22 Aug 2024 08:52:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BD6BBC4AF0B
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:410c:b78a:c35b:cd3e])
-	by michel.telenet-ops.be with bizsmtp
-	id 2ws22D00B22R5AR06ws2lE; Thu, 22 Aug 2024 10:52:02 +0200
+	by baptiste.telenet-ops.be with bizsmtp
+	id 2ws22D00B22R5AR01ws2p5; Thu, 22 Aug 2024 10:52:04 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sh3Y0-000VWu-1Q;
+	id 1sh3Y0-000VWs-16;
 	Thu, 22 Aug 2024 10:52:02 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sh3Y2-002L5p-AK;
+	id 1sh3Y2-002L5j-8Q;
 	Thu, 22 Aug 2024 10:52:02 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -36,39 +36,52 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/3] Renesas DT binding updates for v6.12
-Date: Thu, 22 Aug 2024 10:51:52 +0200
-Message-Id: <cover.1724316483.git.geert+renesas@glider.be>
+Subject: [GIT PULL 0/3] Renesas SoC updates for v6.12
+Date: Thu, 22 Aug 2024 10:51:50 +0200
+Message-Id: <cover.1724316478.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1724316478.git.geert+renesas@glider.be>
-References: <cover.1724316478.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+	Hi SoC folks,
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+This is my first pull request for the inclusion of Renesas SoC updates
+for v6.12.
 
-are available in the Git repository at:
+It consists of 3 parts:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.12-tag1
+  [GIT PULL 1/3] Renesas ARM defconfig updates for v6.12
 
-for you to fetch changes up to 9f766e8f5c2366d7237735a826084569b5705cf4:
+    - Enable support for AK4619 codecs and Renesas R-Car Ethernet-TSN
+      controllers in the ARM64 defconfig,
+    - Enable slab hardening and kmalloc buckets in the Renesas ARM
+      defconfig.
 
-  dt-bindings: reset: renesas: Document RZ/G2M v3.0 (r8a774a3) reset module (2024-07-30 10:50:47 +0200)
+  [GIT PULL 2/3] Renesas DT binding updates for v6.12
 
-----------------------------------------------------------------
-Renesas DT binding updates for v6.12
+    - Document support for the Renesas RZ/G2M v3.0 (r8a774a3) SoC.
 
-  - Document support for the Renesas RZ/G2M v3.0 (r8a774a3) SoC.
+  [GIT PULL 3/3] Renesas DTS updates for v6.12
 
-----------------------------------------------------------------
-Oliver Rhodes (3):
-      dt-bindings: soc: renesas: Document RZ/G2M v3.0 (r8a774a3) SoC
-      dt-bindings: power: renesas: Document RZ/G2M v3.0 (r8a774a3) SYSC binding
-      dt-bindings: reset: renesas: Document RZ/G2M v3.0 (r8a774a3) reset module
+    - Add support for sound, push switches, and GP LEDs on the Gray Hawk
+      Single development board,
+    - Add missing iommus properties on R-Car Gen3/Gen4 and RZ/G2 SoCs,
+    - Add PWM support for the R-Car V4M SoC,
+    - Improve Ethernet descriptions on the RZ/G2L, RZ/G2LC, and RZ/G2UL
+      SMARC SoMs,
+    - Add DMAC support for the RZ/G3S SoC,
+    - Add CAN-FD support for the R-Car V4M SoC and the Gray Hawk Single
+      development board.
 
- .../devicetree/bindings/power/renesas,rcar-sysc.yaml         |  1 +
- Documentation/devicetree/bindings/reset/renesas,rst.yaml     |  1 +
- Documentation/devicetree/bindings/soc/renesas/renesas.yaml   | 12 ++++++++++++
- 3 files changed, 14 insertions(+)
+Thanks for pulling!
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
