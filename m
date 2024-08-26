@@ -1,82 +1,128 @@
-Return-Path: <SRS0=zPBE=PZ=linaro.org=linus.walleij@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD2D0C5321E
-	for <soc@archiver.kernel.org>; Mon, 26 Aug 2024 08:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D76C5321D
+	for <soc@archiver.kernel.org>; Mon, 26 Aug 2024 14:52:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 86E1CC8CDE4; Mon, 26 Aug 2024 08:52:16 +0000 (UTC)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8A29BC8CDDA
-	for <soc@kernel.org>; Mon, 26 Aug 2024 08:52:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8A29BC8CDDA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5334adf7249so4829166e87.3
-        for <soc@kernel.org>; Mon, 26 Aug 2024 01:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724662333; x=1725267133; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iLPgq4j7K2LiYLxuRxf5ckNN955ctmmarm/caOOsssA=;
-        b=aulQQOf/ZXs/J/cJei93CaHguxEQaOHd7UNfdy3ZcCBW9xWG57rkDQPNMAiGgo1U4Y
-         Zt7+U/YrpadRpw5v17VqtkVS/JKFodEXGpIzPNnRpMoNUQ7tJkBR9HtfZW9/lCbKMdAe
-         qw7yLJ4m+o/u/BzPkwFOCY5BFeD9OcxkeGMNugHki/Llu4w5b4XEzgLPEEiWCTyfleND
-         bc9RuSc8DqhVX0+aDTyDH9yU7QYltS+jVOaX1u351T9/jGkT+DUOTqhHIjgaCreLpAf1
-         LhxYxKmEHoTiCXiqQZ4qYnDPgSI48W5NtX2lwkCqt8qH8G67fnzlW5bRuG2O9nXMPwyl
-         Upag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724662333; x=1725267133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iLPgq4j7K2LiYLxuRxf5ckNN955ctmmarm/caOOsssA=;
-        b=BP9XR2mufETiAPJISMfnbRZ5KdAxktdXBeqtevUuiYhk8NgefvJfzdK/g6aMWUv2mz
-         B03jQT/6LurYXezY7DAs8n1Q43C9Aa35J3qW1jshgmo5qR+BmKMeoLs/Fx1vQx9hwB69
-         VgkTymDb8qvzyWF0F2Gbv+hjKbFU7bebI73QsOhkzDSLWlLJrT59guI75sX84yFAqlZP
-         ABN+WAJDWoh+Vjghtc/0DZTDxaarNRDNmPhMmuaH+ERIVSraycQS6z9e/dTaanUyGTvC
-         E14j/CpKDEPHr4lTs4xnqBOB9gFha89adMIdxwR7iUXSUCelVUZUdhFlg9n3GZZXfCcr
-         6IrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWiYnLvg28b/+ir2oGySEek4low7kdu1Ho1SGxgFjt0ZRFJKcMkLyseyd/rS1I+ya3uJJs=@kernel.org
-X-Gm-Message-State: AOJu0YzkSM7sxUGtbrJfnJHpgo+1/v1yazJPUgslH/DY+5fwgp0kZP7P
-	2GCBopr582lO6xMtZaC/NSeXkrTBok5mn8JOMdaJC0BFTukjGuyF1/w1BvrqONMypMuHOjJEyEm
-	W2nhnTRT1dl0pWJGkuvGsuW0pJM2cQSvP8HFwNg==
-X-Google-Smtp-Source: AGHT+IHdurCu1h8I5sDDWlcStXgFvab4u4dfQ3BDVkKhxSBCdaAQCimGjSbIMIoVyf3zCgPHH//JMjG8dg09AgOyRLc=
-X-Received: by 2002:a05:6512:334d:b0:534:375f:97de with SMTP id
- 2adb3069b0e04-534387bdfc1mr4983010e87.58.1724662333113; Mon, 26 Aug 2024
- 01:52:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240805014710.1961677-1-dmitry.torokhov@gmail.com>
- <CACRpkdYFc8vuz__7DkFSMFxUC=LSwCJmEun2KXgUvPMq+_e17A@mail.gmail.com> <ZsiygIj9SiP4O0OM@google.com>
-In-Reply-To: <ZsiygIj9SiP4O0OM@google.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 26 Aug 2024 10:52:02 +0200
-Message-ID: <CACRpkdZ_y=2WKCLwi5or-=MasvNw2bcxht6a+bFjV=yAfvQhdQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Remove support for platform data from matrix keypad driver
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+	id E400CC52FC9; Mon, 26 Aug 2024 14:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A92C52FD6;
+	Mon, 26 Aug 2024 14:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724683931;
+	bh=3qDAuzVhQbt9+Jfd9ZZ7QkhWRIPzbTN/j1RwVsmTv5A=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=Bw2y0gQHTbM/OazPSRnoBxAjZCvKThAmieYxrSoEKKU47Vu0VVaLIQL7I7GKCrARY
+	 7aeI44kMd5btWMF0CbYAC4CHAM2H8NBJQC2ozDGXAkYD9FiJTn215dAcNCdFDiLK8v
+	 KSIOp3s3htHWJWSkOufXCYw6r7ZSdduCZ/lslrN8+W3T6ewiXCgcVyTr65uCU3AxDD
+	 altJF0OfQyHxfNFFX0vE9hcJu6bPqlTlkEspn40aIikhK++q6o6Jb9IqO13BvYfHzA
+	 xEtExyY0acYGQM5jxAOcwEB/AodAJTxALW4B7MzGdj7OkZq+AQzXBjYZfOWFrutGbl
+	 saYKHCQeIYHEg==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Haojian Zhuang <haojian.zhuang@gmail.com>, Daniel Mack <daniel@zonque.org>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Murali Nalajala <quic_mnalajal@quicinc.com>,
+	Richard Acayan <mailingradian@gmail.com>,
+	Volodymyr Babchuk <Volodymyr_Babchuk@epam.com>
+Subject: [GIT PULL] Qualcomm driver fixes for v6.11
+Date: Mon, 26 Aug 2024 09:52:08 -0500
+Message-ID: <20240826145209.1646159-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.45.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 23, 2024 at 6:02=E2=80=AFPM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
 
-> I'm glad that we agree that we do not want the elaborate merge process
-> and instead push the changes through one tree in one shot we just need
-> to decide which one - soc or input. I am fine with using either.
+The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
-I'm also fine with either, but let's take the input tree because the
-you're in direct control of it so it will be easier.
+  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
 
-Yours,
-Linus Walleij
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.11
+
+for you to fetch changes up to c158ceb826068a8bbe3c9e78df420f47ba53c8a8:
+
+  soc: qcom: pd-mapper: Fix singleton refcount (2024-08-21 09:50:48 -0500)
+
+----------------------------------------------------------------
+Qualcomm driver fixes for v6.11
+
+This corrects the tzmem virt-to-phys conversion, which caused issues for
+the uefisecapp implementation of EFI variable access. SDM670 is excluded
+from tzmem usage due to reported issues.
+
+The SCM get wait queue context call is corrected to be marked ATOMIC and
+some dead code in qseecom, following the tzmem conversion, is removed.
+
+The memory backing command DB is remapped writecombined, to avoid XPU
+violations when Linux runs without the Qualcomm hypervisor.
+
+Two compile fixes are added for pd-mapper, and the broken reference
+count is corrected, to make pd-mapper deal with remoteprocs going away.
+
+In pmic_glink a race condition where the client callbacks might be
+called before we returned the client handle is corrected. The broken conditions
+for when to signal that the firmware is going down is also corrected.
+
+In the pmic_glink UCSI driver, the ucsi_unregister() is moved out of the
+pdr callback, as this is being invoked in atomic context.
+
+Konrad's email address is updated in MAINTAINERS, and related mailmap
+entries are added.
+
+----------------------------------------------------------------
+Andrew Halaney (1):
+      soc: qcom: pd-mapper: Depend on ARCH_QCOM || COMPILE_TEST
+
+Arnd Bergmann (1):
+      soc: qcom: pd-mapper: mark qcom_pdm_domains as __maybe_unused
+
+Bartosz Golaszewski (2):
+      firmware: qcom: tzmem: fix virtual-to-physical address conversion
+      firmware: qcom: qseecom: remove unused functions
+
+Bjorn Andersson (4):
+      soc: qcom: pmic_glink: Fix race during initialization
+      usb: typec: ucsi: Move unregister out of atomic section
+      soc: qcom: pmic_glink: Actually communicate when remote goes down
+      soc: qcom: pd-mapper: Fix singleton refcount
+
+Konrad Dybcio (2):
+      mailmap: Add an entry for Konrad Dybcio
+      MAINTAINERS: Update Konrad Dybcio's email address
+
+Murali Nalajala (1):
+      firmware: qcom: scm: Mark get_wq_ctx() as atomic call
+
+Richard Acayan (1):
+      firmware: qcom: tzmem: disable sdm670 platform
+
+Volodymyr Babchuk (1):
+      soc: qcom: cmd-db: Map shared memory as WC, not WB
+
+ .mailmap                                   |  2 ++
+ MAINTAINERS                                |  6 ++--
+ drivers/firmware/qcom/qcom_scm-smc.c       |  2 +-
+ drivers/firmware/qcom/qcom_tzmem.c         | 33 ++++++++++++++--------
+ drivers/power/supply/qcom_battmgr.c        | 16 +++++++----
+ drivers/soc/qcom/Kconfig                   |  2 +-
+ drivers/soc/qcom/cmd-db.c                  |  2 +-
+ drivers/soc/qcom/pmic_glink.c              | 40 ++++++++++++++++++--------
+ drivers/soc/qcom/pmic_glink_altmode.c      | 17 +++++++----
+ drivers/soc/qcom/qcom_pd_mapper.c          |  4 ++-
+ drivers/usb/typec/ucsi/ucsi_glink.c        | 43 ++++++++++++++++++++--------
+ include/linux/firmware/qcom/qcom_qseecom.h | 45 ------------------------------
+ include/linux/soc/qcom/pmic_glink.h        | 11 ++++----
+ 13 files changed, 120 insertions(+), 103 deletions(-)
