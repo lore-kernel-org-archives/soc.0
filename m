@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B06AC54734
-	for <soc@archiver.kernel.org>; Tue, 27 Aug 2024 11:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C030C54735
+	for <soc@archiver.kernel.org>; Tue, 27 Aug 2024 11:48:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 350D5C8B7B9; Tue, 27 Aug 2024 11:33:04 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	id 58951C4D02C; Tue, 27 Aug 2024 11:48:45 +0000 (UTC)
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B5604C8B7B3;
-	Tue, 27 Aug 2024 11:33:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5604C8B7B3
+	by smtp.kernel.org (Postfix) with ESMTPS id 9E8B6C4CB12;
+	Tue, 27 Aug 2024 11:48:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E8B6C4CB12
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WtQPQ6nv8zyQZN;
-	Tue, 27 Aug 2024 19:32:10 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4WtQk72bvFz1xwMP;
+	Tue, 27 Aug 2024 19:46:39 +0800 (CST)
 Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-	by mail.maildlp.com (Postfix) with ESMTPS id 21F41140137;
-	Tue, 27 Aug 2024 19:32:58 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 8F313140120;
+	Tue, 27 Aug 2024 19:48:36 +0800 (CST)
 Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
  (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 27 Aug
- 2024 19:32:57 +0800
-Message-ID: <01b3fb18-577b-6a1a-dbe7-708adbe2e4cd@huawei.com>
-Date: Tue, 27 Aug 2024 19:32:56 +0800
+ 2024 19:48:35 +0800
+Message-ID: <de0d4cb2-c668-1d7f-2893-a42840a2b53b@huawei.com>
+Date: Tue, 27 Aug 2024 19:48:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v2 5/6] soc: hisilicon: kunpeng_hccs: Add used HCCS types
- sysfs
+Subject: Re: [PATCH v2 6/6] soc: hisilicon: kunpeng_hccs: Support low power
+ feature for the specified HCCS type
 To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 List-Id: <soc.lore.kernel.org>
 CC: <xuwei5@hisilicon.com>, <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
@@ -40,272 +40,261 @@ CC: <xuwei5@hisilicon.com>, <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
 	<wanghuiqiang@huawei.com>, <liuyonglong@huawei.com>
 References: <20240718071134.31155-1-lihuisong@huawei.com>
  <20240823031059.32579-1-lihuisong@huawei.com>
- <20240823031059.32579-6-lihuisong@huawei.com>
- <20240823094741.0000084d@Huawei.com>
+ <20240823031059.32579-7-lihuisong@huawei.com>
+ <20240823095851.0000004e@Huawei.com>
 From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20240823094741.0000084d@Huawei.com>
+In-Reply-To: <20240823095851.0000004e@Huawei.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.67.121.59]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemm600004.china.huawei.com (7.193.23.242)
 
+Hi Jonathan,
 
-在 2024/8/23 16:47, Jonathan Cameron 写道:
-> On Fri, 23 Aug 2024 11:10:58 +0800
+Thanks for your review again.
+Your proposal are good and are also more worth to enhance code.
+How about use guard() for all sysfs interface in furture patch?
+I want to support this feature first.
+
+Huisong
+
+
+在 2024/8/23 16:58, Jonathan Cameron 写道:
+> On Fri, 23 Aug 2024 11:10:59 +0800
 > Huisong Li <lihuisong@huawei.com> wrote:
 >
->> Current, to find which HCC types are used on the platform the user needs
->> to scan the type attribute of all ports, which is unfriendly to the user.
->> So add the sysfs to show all HCCS types used on the platform.
-> Really minor point, but it might be nice to add a little info here on
-> the sort of changes that occur in the interface between versions?
-> Even if that's just a reference to next patch which shows that the
-> HCCS-V2 has power control that original version didn't.
-Yes, you are right. I will add some words like this.
+>> Add the low power feature for the specified HCCS type by increasing
+>> and decreasing the used lane number of these HCCS ports on platform.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> Hi Huisong,
 >
-> That will help motivate the patch.
+> A few comments inline, but all minor things.
 >
-> Also good to argue why it is worth aggregating this info in one attribute
-> rather than just letting user space search for it in the topology below
-> this point.  (Something about global controls I guess?)
-Good point. Thanks.
+> With at least the "none" string print dropped as it's in an error path
+> that shouldn't be hit you can add
+You are correct.
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 >
-> Also, for future, the hcc_unregister_pcc_channel() would be nicely
-> handled with a devm_add_action_or_reset() removing the need
-> for the various gotos in probe.
->
-> Similar applied to hcc_remove_top_dirs and remove() callback can
-> go away entirely which would be an added bonus.
-The devm_add action or reset you proposed is good way to keep simply code.
-It is more recommanded if we add new code. I like it.
-The current removing way is a traditional one and also understand easier.
-So I'm not very motivated to modify it. Thanks for your suggestion.😁
+> The early return comment and whitespace suggestion are things you
+> can act on if you liek for v2.
 >
 > Jonathan
 >
->
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
 >> ---
->>   .../sysfs-devices-platform-kunpeng_hccs       |   8 ++
->>   drivers/soc/hisilicon/kunpeng_hccs.c          | 102 +++++++++++++++++-
->>   drivers/soc/hisilicon/kunpeng_hccs.h          |  15 +++
->>   3 files changed, 124 insertions(+), 1 deletion(-)
+>>   .../sysfs-devices-platform-kunpeng_hccs       |  37 ++
+>>   drivers/soc/hisilicon/Kconfig                 |   7 +-
+>>   drivers/soc/hisilicon/kunpeng_hccs.c          | 378 +++++++++++++++++-
+>>   drivers/soc/hisilicon/kunpeng_hccs.h          |  14 +
+>>   4 files changed, 433 insertions(+), 3 deletions(-)
 >>
 >> diff --git a/Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs b/Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
->> index 1666340820f7..d4c355e0e0bb 100644
+>> index d4c355e0e0bb..d1b3a95a5518 100644
 >> --- a/Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
 >> +++ b/Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
->> @@ -79,3 +79,11 @@ Description:
->>   			           indicates a lane.
->>   		crc_err_cnt:  (RO) CRC err count on this port.
->>   		============= ==== =============================================
+>> @@ -87,3 +87,40 @@ Contact:	Huisong Li <lihuisong@huawei.com>
+>>   Description:
+>>   		This interface is used to show all HCCS types used on the
+>>   		platform, like, HCCS-v1, HCCS-v2 and so on.
 >> +
->> +What:		/sys/devices/platform/HISI04Bx:00/used_types
+>> +What:		/sys/devices/platform/HISI04Bx:00/available_inc_dec_lane_types
+>> +What:		/sys/devices/platform/HISI04Bx:00/dec_lane_of_type
+>> +What:		/sys/devices/platform/HISI04Bx:00/inc_lane_of_type
 >> +Date:		August 2024
 >> +KernelVersion:	6.12
 >> +Contact:	Huisong Li <lihuisong@huawei.com>
 >> +Description:
->> +		This interface is used to show all HCCS types used on the
->> +		platform, like, HCCS-v1, HCCS-v2 and so on.
->> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
->> index 418e4ee5d9e5..623e7b7ed39a 100644
->> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
->> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
->> @@ -21,11 +21,14 @@
->>    *    - if all enabled ports are in linked
->>    *    - if all linked ports are in full lane
->>    *    - CRC error count sum
->> + *
->> + * - Retrieve all HCCS types used on the platform.
->>    */
->>   #include <linux/acpi.h>
->>   #include <linux/iopoll.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/sysfs.h>
->> +#include <linux/types.h>
->>   
->>   #include <acpi/pcc.h>
->>   
->> @@ -53,6 +56,15 @@ static struct hccs_chip_info *kobj_to_chip_info(struct kobject *k)
->>   	return container_of(k, struct hccs_chip_info, kobj);
->>   }
->>   
->> +static struct hccs_dev *device_kobj_to_hccs_dev(struct kobject *k)
+>> +		These interfaces under /sys/devices/platform/HISI04Bx/ are
+>> +		used to support the low power consumption feature of some
+>> +		HCCS types by changing the number of lanes used. The interfaces
+>> +		changing the number of lanes used are 'dec_lane_of_type' and
+>> +		'inc_lane_of_type' which require root privileges. These
+>> +		interfaces aren't exposed if no HCCS type on platform support
+>> +		this feature. Please note that decreasing lane number is only
+>> +		allowed if all the specified HCCS ports are not busy.
+>> +
+>> +		The low power consumption interfaces are as follows:
+>> +
+>> +		============================= ==== ================================
+>> +		available_inc_dec_lane_types: (RO) available HCCS types (string) to
+>> +						   increase and decrease the number
+>> +						   of lane used, e.g. HCCS-v2.
+> See below. There is an apparent value of 'none' available, but I think in reality the
+> interface doesn't exist if that is present. So drop it as it will just cause confusion.
+Ack
+>
+>> +		dec_lane_of_type:             (WO) input HCCS type supported
+>> +						   decreasing lane to decrease the
+>> +						   used lane number of all specified
+>> +						   HCCS type ports on platform to
+>> +						   the minimum.
+>> +						   You can query the 'cur_lane_num'
+>> +						   to get the minimum lane number
+>> +						   after executing successfully.
+>> +		inc_lane_of_type:             (WO) input HCCS type supported
+>> +						   increasing lane to increase the
+>> +						   used lane number of all specified
+>> +						   HCCS type ports on platform to
+>> +						   the full lane state.
+>> +		============================= ==== ================================
+>> +static int hccs_wait_serdes_adapt_completed(struct hccs_dev *hdev, u8 type)
 >> +{
->> +	struct device *dev = container_of(k, struct device, kobj);
->> +	struct platform_device *pdev =
->> +			container_of(dev, struct platform_device, dev);
+>> +#define HCCS_MAX_WAIT_CNT_FOR_ADAPT	10
+>> +#define HCCS_QUERY_ADAPT_RES_DELAY_MS	100
+>> +#define HCCS_SERDES_ADAPT_OK		0
 >> +
->> +	return platform_get_drvdata(pdev);
->> +}
+>> +	struct hccs_inc_lane_req_param *req_param;
+>> +	u8 wait_cnt = HCCS_MAX_WAIT_CNT_FOR_ADAPT;
+>> +	struct hccs_desc desc;
+>> +	u8 adapt_res;
+>> +	int ret;
 >> +
->>   struct hccs_register_ctx {
->>   	struct device *dev;
->>   	u8 chan_id;
->> @@ -670,6 +682,55 @@ static int hccs_get_hw_info(struct hccs_dev *hdev)
->>   	return 0;
->>   }
->>   
->> +static u16 hccs_calc_used_type_num(struct hccs_dev *hdev,
->> +				   unsigned long *hccs_ver)
->> +{
->> +	struct hccs_chip_info *chip;
->> +	struct hccs_port_info *port;
->> +	struct hccs_die_info *die;
->> +	u16 used_type_num = 0;
->> +	u16 i, j, k;
->> +
->> +	for (i = 0; i < hdev->chip_num; i++) {
->> +		chip = &hdev->chips[i];
->> +		for (j = 0; j < chip->die_num; j++) {
->> +			die = &chip->dies[j];
->> +			for (k = 0; k < die->port_num; k++) {
->> +				port = &die->ports[k];
->> +				set_bit(port->port_type, hccs_ver);
->> +			}
+>> +	do {
+>> +		hccs_init_req_desc(&desc);
+>> +		req_param = (struct hccs_inc_lane_req_param *)desc.req.data;
+>> +		req_param->port_type = type;
+>> +		req_param->opt_type = HCCS_GET_ADAPT_RES;
+>> +		ret = hccs_pcc_cmd_send(hdev, HCCS_PM_INC_LANE, &desc);
+>> +		if (ret) {
+>> +			dev_err(hdev->dev, "query adapting result failed, ret = %d.\n",
+>> +				ret);
+>> +			return ret;
 >> +		}
+>> +		adapt_res = *((u8 *)&desc.rsp.data);
+>> +		if (adapt_res == HCCS_SERDES_ADAPT_OK)
+>> +			break;
+> return 0; here perhaps?
+
+It's ok. And then we can directly return failure if timeout.
+
+>
+>> +
+>> +		msleep(HCCS_QUERY_ADAPT_RES_DELAY_MS);
+>> +	} while (--wait_cnt);
+>> +
+>> +	if (adapt_res != HCCS_SERDES_ADAPT_OK) {
+> With above early exit in good path, this can be unconditional perhaps?
+Yes
+>
+>> +		dev_err(hdev->dev, "wait for adapting completed timeout.\n");
+>> +		return -ETIMEDOUT;
 >> +	}
 >> +
->> +	for_each_set_bit(i, hccs_ver, HCCS_IP_MAX + 1)
->> +		used_type_num++;
->> +
->> +	return used_type_num;
+>> +	return ret;
 >> +}
->> +
->> +static int hccs_init_type_name_maps(struct hccs_dev *hdev)
->> +{
->> +	DECLARE_BITMAP(hccs_ver, HCCS_IP_MAX + 1) = {};
->> +	unsigned int i;
->> +	u16 idx = 0;
->> +
->> +	hdev->used_type_num = hccs_calc_used_type_num(hdev, hccs_ver);
->> +	hdev->type_name_maps = devm_kcalloc(hdev->dev, hdev->used_type_num,
->> +					    sizeof(struct hccs_type_name_map),
->> +					    GFP_KERNEL);
->> +	if (!hdev->type_name_maps)
->> +		return -ENOMEM;
->> +
->> +	for_each_set_bit(i, hccs_ver, HCCS_IP_MAX + 1) {
->> +		hdev->type_name_maps[idx].type = i;
->> +		sprintf(hdev->type_name_maps[idx].name,
->> +			"%s%u", HCCS_IP_PREFIX, i);
->> +		idx++;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>   static int hccs_query_port_link_status(struct hccs_dev *hdev,
->>   				       const struct hccs_port_info *port,
->>   				       struct hccs_link_status *link_status)
->> @@ -830,7 +891,7 @@ static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
->>   {
->>   	const struct hccs_port_info *port = kobj_to_port_info(kobj);
->>   
->> -	return sysfs_emit(buf, "HCCS-v%u\n", port->port_type);
->> +	return sysfs_emit(buf, "%s%u\n", HCCS_IP_PREFIX, port->port_type);
->>   }
->>   static struct kobj_attribute hccs_type_attr = __ATTR_RO(type);
->>   
->> @@ -1134,6 +1195,33 @@ static const struct kobj_type hccs_chip_type = {
->>   	.default_groups = hccs_chip_default_groups,
->>   };
->>   
->> +
->> +static ssize_t used_types_show(struct kobject *kobj,
->> +			       struct kobj_attribute *attr, char *buf)
+>> +static ssize_t inc_lane_of_type_store(struct kobject *kobj, struct kobj_attribute *attr,
+>> +			      const char *buf, size_t count)
 >> +{
 >> +	struct hccs_dev *hdev = device_kobj_to_hccs_dev(kobj);
->> +	int len = 0;
->> +	u16 i;
+>> +	bool full_lane;
+>> +	u8 port_type;
+>> +	int ret;
 >> +
->> +	for (i = 0; i < hdev->used_type_num - 1; i++)
->> +		len += sysfs_emit(&buf[len], "%s ", hdev->type_name_maps[i].name);
->> +	len += sysfs_emit(&buf[len], "%s\n", hdev->type_name_maps[i].name);
+>> +	ret = hccs_parse_pm_port_type(hdev, buf, &port_type);
+>> +	if (ret)
+>> +		return ret;
 >> +
->> +	return len;
+>> +	mutex_lock(&hdev->lock);
+> Another comment for a future patch series perhaps.
+>
+> guard(mutex)(&hdev->lock); in all these will make the code quite a bit cleaner.
+This is a good way. very nice and simple.
+But many sysfs interfaces in this driver have used mutex_lock/mutex_unlock.
+So is it better for us to keep the same mutex lock way in this patch and 
+use guard() for all sysfs interface in furture patch?
+>> +	ret = hccs_get_all_spec_port_full_lane_sta(hdev, port_type, &full_lane);
+>> +	if (ret || full_lane)
+>> +		goto out;
+>> +
+>> +	ret = hccs_start_inc_lane(hdev, port_type);
+>> +out:
+>> +	mutex_unlock(&hdev->lock);
+>> +	return ret == 0 ? count : ret;
 >> +}
->> +static struct kobj_attribute used_types_attr =
->> +		__ATTR(used_types, 0444, used_types_show, NULL);
+>> +static struct kobj_attribute inc_lane_of_type_attr =
+>> +		__ATTR(inc_lane_of_type, 0200, NULL, inc_lane_of_type_store);
 >> +
->> +static void hccs_remove_misc_sysfs(struct hccs_dev *hdev)
+>> +static ssize_t available_inc_dec_lane_types_show(struct kobject *kobj,
+>> +						 struct kobj_attribute *attr,
+>> +						 char *buf)
 >> +{
->> +	sysfs_remove_file(&hdev->dev->kobj, &used_types_attr.attr);
->> +}
+>> +	struct hccs_dev *hdev = device_kobj_to_hccs_dev(kobj);
 >> +
->> +static int hccs_add_misc_sysfs(struct hccs_dev *hdev)
->> +{
->> +	return sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
->> +}
+>> +	if (hdev->caps & HCCS_CAPS_HCCS_V2_PM)
+>> +		return sysfs_emit(buf, "%s\n",
+>> +				  hccs_port_type_to_name(hdev, HCCS_V2));
 >> +
->>   static void hccs_remove_die_dir(struct hccs_die_info *die)
->>   {
->>   	struct hccs_port_info *port;
->> @@ -1168,6 +1256,8 @@ static void hccs_remove_topo_dirs(struct hccs_dev *hdev)
+>> +	return sysfs_emit(buf, "%s\n", "none");
+> Can we get here? I thought this was only registered if the condition
+> above is true?
+>
+> Maybe worth keeping a fallback here as a code hardening measure, but
+> perhaps return -EINVAL; is fine?
+Ack
+>
+>
+>> +}
+>> +static struct kobj_attribute available_inc_dec_lane_types_attr =
+>> +		__ATTR(available_inc_dec_lane_types, 0444,
+>> +		       available_inc_dec_lane_types_show, NULL);
 >>   
->>   	for (i = 0; i < hdev->chip_num; i++)
->>   		hccs_remove_chip_dir(&hdev->chips[i]);
+>>   static ssize_t used_types_show(struct kobject *kobj,
+>>   			       struct kobj_attribute *attr, char *buf)
+>> @@ -1215,11 +1553,49 @@ static struct kobj_attribute used_types_attr =
+>>   static void hccs_remove_misc_sysfs(struct hccs_dev *hdev)
+>>   {
+>>   	sysfs_remove_file(&hdev->dev->kobj, &used_types_attr.attr);
 >> +
->> +	hccs_remove_misc_sysfs(hdev);
+>> +	if (!(hdev->caps & HCCS_CAPS_HCCS_V2_PM))
+>> +		return;
+>> +
+>> +	sysfs_remove_file(&hdev->dev->kobj,
+>> +			  &available_inc_dec_lane_types_attr.attr);
+>> +	sysfs_remove_file(&hdev->dev->kobj, &dec_lane_of_type_attr.attr);
+>> +	sysfs_remove_file(&hdev->dev->kobj, &inc_lane_of_type_attr.attr);
 >>   }
 >>   
->>   static int hccs_create_hccs_dir(struct hccs_dev *hdev,
->> @@ -1263,6 +1353,12 @@ static int hccs_create_topo_dirs(struct hccs_dev *hdev)
->>   		}
->>   	}
+>>   static int hccs_add_misc_sysfs(struct hccs_dev *hdev)
+>>   {
+>> -	return sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
+>> +	int ret;
+>> +
+>> +	ret = sysfs_create_file(&hdev->dev->kobj, &used_types_attr.attr);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (!(hdev->caps & HCCS_CAPS_HCCS_V2_PM))
+>> +		return 0;
+>> +
+>> +	ret = sysfs_create_file(&hdev->dev->kobj,
+>> +				&available_inc_dec_lane_types_attr.attr);
+>> +	if (ret)
+>> +		goto used_types_remove;
+>> +
+>> +	ret = sysfs_create_file(&hdev->dev->kobj, &dec_lane_of_type_attr.attr);
+>> +	if (ret)
+>> +		goto inc_dec_lane_types_remove;
+> I can sort of see why no line break makes some sense here given these
+> two files are closely related, but I'd still add one here as I think
+> visual consistency is more important for readability reasons.
+Ack
+>
+>> +	ret = sysfs_create_file(&hdev->dev->kobj, &inc_lane_of_type_attr.attr);
+>> +	if (ret)
+>> +		goto dec_lane_of_type_remove;
+>> +
+>> +	return 0;
+>> +
+>> +dec_lane_of_type_remove:
+>> +	sysfs_remove_file(&hdev->dev->kobj, &dec_lane_of_type_attr.attr);
+>> +inc_dec_lane_types_remove:
+>> +	sysfs_remove_file(&hdev->dev->kobj,
+>> +			  &available_inc_dec_lane_types_attr.attr);
+>> +used_types_remove:
+>> +	sysfs_remove_file(&hdev->dev->kobj, &used_types_attr.attr);
+>> +	return ret;
+>>   }
 >>   
->> +	ret = hccs_add_misc_sysfs(hdev);
->> +	if (ret) {
->> +		dev_err(hdev->dev, "create misc sysfs interface failed, ret = %d\n", ret);
->> +		goto err;
->> +	}
->> +
->>   	return 0;
->>   err:
->>   	for (k = 0; k < id; k++)
->> @@ -1313,6 +1409,10 @@ static int hccs_probe(struct platform_device *pdev)
->>   	if (rc)
->>   		goto unregister_pcc_chan;
->>   
->> +	rc = hccs_init_type_name_maps(hdev);
->> +	if (rc)
->> +		goto unregister_pcc_chan;
->> +
->>   	rc = hccs_create_topo_dirs(hdev);
->>   	if (rc)
->>   		goto unregister_pcc_chan;
->> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.h b/drivers/soc/hisilicon/kunpeng_hccs.h
->> index 5e12a1e1474e..401df4694aec 100644
->> --- a/drivers/soc/hisilicon/kunpeng_hccs.h
->> +++ b/drivers/soc/hisilicon/kunpeng_hccs.h
->> @@ -10,6 +10,19 @@
->>    * | P0 | P1 | P2 | P3 | P0 | P1 | P2 | P3 | P0 | P1 | P2 | P3 |P0 | P1 | P2 | P3 |
->>    */
->>   
->> +enum hccs_port_type {
->> +	HCCS_V1 = 1,
->> +	HCCS_V2,
->> +};
->> +
->> +#define HCCS_IP_PREFIX	"HCCS-v"
->> +#define HCCS_IP_MAX		255
->> +#define HCCS_NAME_MAX_LEN	9
->> +struct hccs_type_name_map {
->> +	u8 type;
->> +	char name[HCCS_NAME_MAX_LEN + 1];
->> +};
->> +
->>   /*
->>    * This value cannot be 255, otherwise the loop of the multi-BD communication
->>    * case cannot end.
->> @@ -74,6 +87,8 @@ struct hccs_dev {
->>   	u64 caps;
->>   	u8 chip_num;
->>   	struct hccs_chip_info *chips;
->> +	u16 used_type_num;
->> +	struct hccs_type_name_map *type_name_maps;
->>   	u8 chan_id;
->>   	struct mutex lock;
->>   	struct hccs_mbox_client_info cl_info;
+>>   static void hccs_remove_die_dir(struct hccs_die_info *die)
 > .
