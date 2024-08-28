@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 263B5C7112F
-	for <soc@archiver.kernel.org>; Wed, 28 Aug 2024 20:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AE7EC7113C
+	for <soc@archiver.kernel.org>; Wed, 28 Aug 2024 20:43:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 152E9C4CEC2; Wed, 28 Aug 2024 20:43:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38E7C4CEC0;
-	Wed, 28 Aug 2024 20:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724877790;
-	bh=EaJLe82TXN88G1v01KjVI/jEPNK54z+8fVFiVWRXOZg=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=DdVy1gOG/BHCsXmPj1qIAmOcBphII/JTylQZ1q35DPD1WIo8ANWNkXx6aIlC+6sVe
-	 faniGTy1QWmAvLlB7DiG/G+2Xdvj92AOOene4fmf1lHwWn6Cjhc5bY4cS4iJxTkfHF
-	 6JDxHfvez+XetrcvA/3c1xdu9ZginyGK4LLbkd9dnT6+YzESJz9raZRtt1RtVpOlHP
-	 VpWKAAzSk0NfdGuCmSxOsFkS2Pp0jI0tYWbQRDGmXtMdc4OG7/AmeNphbNvqk9nWGl
-	 BSaEotWEvhEV5qeVy12Xo/eBdaV9PFG8C3+8kUGqEiUsI2dCp0rJ4azwcnvtm6LMze
-	 3jLMYceT3FANQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 719813809A80;
+	id 5D158C4CEC1; Wed, 28 Aug 2024 20:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E7DC4CEC0;
 	Wed, 28 Aug 2024 20:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724877791;
+	bh=9HpIF2l5heOPAKgNArRCO8M+ZSRcfZqGspbum9uVAw0=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=a042dOKQfLUMMvuEEQV9HZC5953oKwfNTZTKUbIvct25nZQ4q4K643OR3jYOYY4oT
+	 6ON3U++cMBto6Ye1AHV8GRfMiFIl4GEgD5JFlpOYY3Wt1FSuvxzLShQUZxaAEzyrP9
+	 sUspeIXfMNnpz/O2Yr51LP24xA5aeOx4+RITjCPxQqU4bcPNlacJ0pAv022pylq2VB
+	 U1noDbtXK+JJSy9TxIoTuPpfuXw1hMnOd/Kyjn3iV3YyNEMBVxCv1SKIvo7ODaMjJx
+	 T9qTw76w21b5T8N0bJ/s3I9M2j9BjynpCTO2DkAo4D1CdSL1IBEC0waIG7xMHGccuT
+	 S6aVMEf4RfMKw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B3A3F3809A80;
+	Wed, 28 Aug 2024 20:43:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm driver fixes for v6.11
+Subject: Re: [GIT PULL] RISC-V soc driver fixes for v6.11-rc6
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172487779024.1420116.9386510999887393227.git-patchwork-notify@kernel.org>
-Date: Wed, 28 Aug 2024 20:43:10 +0000
-References: <20240826145209.1646159-1-andersson@kernel.org>
-In-Reply-To: <20240826145209.1646159-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <172487779149.1420116.12375411653791659521.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Aug 2024 20:43:11 +0000
+References: <20240828-fidelity-almighty-18d5434aaef0@spud>
+In-Reply-To: <20240828-fidelity-almighty-18d5434aaef0@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 26 Aug 2024 09:52:08 -0500 you wrote:
-> The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+On Wed, 28 Aug 2024 16:26:40 +0100 you wrote:
+> Hey Arnd,
 > 
->   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+> Please pull a single fix for 6.11, as things have been rather quiet on
+> this front over the summer.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.11
+> Cheers,
+> Conor.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Qualcomm driver fixes for v6.11
-    https://git.kernel.org/soc/soc/c/d8f2638b835c
+  - [GIT,PULL] RISC-V soc driver fixes for v6.11-rc6
+    https://git.kernel.org/soc/soc/c/3536c01d6577
 
 You are awesome, thank you!
 -- 
