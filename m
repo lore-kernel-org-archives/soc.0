@@ -1,86 +1,81 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1317C5B54A
-	for <soc@archiver.kernel.org>; Wed, 28 Aug 2024 15:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0043EC7113C
+	for <soc@archiver.kernel.org>; Wed, 28 Aug 2024 20:41:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85538C51595; Wed, 28 Aug 2024 15:26:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A30EC51590;
-	Wed, 28 Aug 2024 15:26:42 +0000 (UTC)
+	id CBFB0C4CEC2; Wed, 28 Aug 2024 20:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5942C4CEC0
+	for <soc@kernel.org>; Wed, 28 Aug 2024 20:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724858803;
-	bh=ZoERSQbjaOWh1gtlRlRypBVPk3FVstEDzvne1n0+4L0=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=gXu3J3Q6ji3pcOppqROGFvS52Itk4D2BM/KNtMctMB3kg6X+XrMJDJVVRLNkFyB28
-	 l+qcMi97tg0VEJ8lJEC2/aox3OY/8G9xhzcGV4fAJddNWaIVVfUnYuyZcOkp3fLm3A
-	 nIicJw+5vpylSqkXelHRUgkYOEGi3XM89RTpdXcOiTauLwjEg9v2bWza15Qqvc5BuA
-	 lUm8kdaZw57XO1uLaBS5ezbGvy4iECcF4YQapHoHDxc4HZpyQoL+/LCkJI+Yj1QMKA
-	 x4h1pMPhREYP9ovye66yTANtAJFOdJ0ySQWm1BG/oQzIHSclNlQmo0W3n+gd6fietm
-	 gjXPC4gmRUUMg==
-Date: Wed, 28 Aug 2024 16:26:40 +0100
-From: Conor Dooley <conor@kernel.org>
+	s=k20201202; t=1724877718;
+	bh=4gN2P0AUMxBhy96ANkyRiIchZe4fbPYSNPJHIekwoeI=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=KOE1z4IiHPRI2qOB+/42DuvPPGxg7HvFviJx/mnlhWrHXNJ0fXOfYW02SFDoZWgL/
+	 zlqEKUvLTGhGnsKYEEoY6Yl9LQIFftn2VZyon2IrSGgbo+oEDYPwBBoCn7B9yT9omi
+	 Y6IpH4KrfnWKPmq6min4kpNx/anTjXGcIGhDCc7t/J1qsk1IYyvKA0r5Tv7oW5Jr5R
+	 0MTY4RzhBtjyRujpX6oVVZVbLxMRZqnZ4KYL/WJ5SnVyOB+LxxxcqqcTCp4JkkEfZy
+	 xoQXclS66b3xP/VFtEaBr/rb00dfNCbGqT68wxN1446rpafqSyxPSV17CXUbZfet5/
+	 KIuTgFL/bLyHw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 005BB3809A80;
+	Wed, 28 Aug 2024 20:41:59 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <172487771881.1420116.6426091405347481184.git-patchwork-summary@kernel.org>
+Date: Wed, 28 Aug 2024 20:41:58 +0000
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V soc driver fixes for v6.11-rc6
-Message-ID: <20240828-fidelity-almighty-18d5434aaef0@spud>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="tkJBe2+XzIuRNfpc"
-Content-Disposition: inline
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
+
+Patch: [GIT,PULL] Qualcomm driver fixes for v6.11
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883388
+  Lore link: https://lore.kernel.org/r/20240826145209.1646159-1-andersson@kernel.org
+
+Patch: [GIT,PULL] RISC-V soc driver fixes for v6.11-rc6
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=884358
+  Lore link: https://lore.kernel.org/r/20240828-fidelity-almighty-18d5434aaef0@spud
+
+Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree fixes for v6.11
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883411
+  Lore link: https://lore.kernel.org/r/20240826152426.1648383-1-andersson@kernel.org
+
+Patch: [GIT,PULL] Qualcomm Arm64 defconfig fix for 6.11
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883392
+  Lore link: https://lore.kernel.org/r/20240826145736.1646729-1-andersson@kernel.org
+
+Patch: [GIT,PULL] OMAP fixes for v6.11-rc
+  Submitter: Kevin Hilman <khilman@baylibre.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=881499
+  Lore link: https://lore.kernel.org/r/7h4j7eyhyh.fsf@baylibre.com
 
 
---tkJBe2+XzIuRNfpc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Total patches: 5
 
-Hey Arnd,
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Please pull a single fix for 6.11, as things have been rather quiet on
-this front over the summer.
 
-Cheers,
-Conor.
-
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
-
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-soc-fixes-for-v6.11-rc6
-
-for you to fetch changes up to 591940e22e287fb64ac07be275e343d860cb72d6:
-
-  firmware: microchip: fix incorrect error report of programming:timeout on success (2024-08-22 20:47:16 +0100)
-
-----------------------------------------------------------------
-RISC-V soc fixes for v6.11-rc6
-
-Prevent an erroneous unconditional report of a timeout during firmware
-upload in the mpfs-auto-update driver.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Steve Wilkins (1):
-      firmware: microchip: fix incorrect error report of programming:timeout on success
-
- drivers/firmware/microchip/mpfs-auto-update.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---tkJBe2+XzIuRNfpc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZs9BsAAKCRB4tDGHoIJi
-0gScAP497y8a5x23Y7/lmtqrptUo+066U7NdJ1/pSOB4HTaXAAD+LQRAWkVLxn4K
-LG9Ha/nXoCN/9hJaQ3mRnO6VLlRfEgA=
-=uRMf
------END PGP SIGNATURE-----
-
---tkJBe2+XzIuRNfpc--
