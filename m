@@ -4,76 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0043EC7113C
-	for <soc@archiver.kernel.org>; Wed, 28 Aug 2024 20:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E14A3C7112F
+	for <soc@archiver.kernel.org>; Wed, 28 Aug 2024 20:41:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CBFB0C4CEC2; Wed, 28 Aug 2024 20:41:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5942C4CEC0
-	for <soc@kernel.org>; Wed, 28 Aug 2024 20:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724877718;
-	bh=4gN2P0AUMxBhy96ANkyRiIchZe4fbPYSNPJHIekwoeI=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=KOE1z4IiHPRI2qOB+/42DuvPPGxg7HvFviJx/mnlhWrHXNJ0fXOfYW02SFDoZWgL/
-	 zlqEKUvLTGhGnsKYEEoY6Yl9LQIFftn2VZyon2IrSGgbo+oEDYPwBBoCn7B9yT9omi
-	 Y6IpH4KrfnWKPmq6min4kpNx/anTjXGcIGhDCc7t/J1qsk1IYyvKA0r5Tv7oW5Jr5R
-	 0MTY4RzhBtjyRujpX6oVVZVbLxMRZqnZ4KYL/WJ5SnVyOB+LxxxcqqcTCp4JkkEfZy
-	 xoQXclS66b3xP/VFtEaBr/rb00dfNCbGqT68wxN1446rpafqSyxPSV17CXUbZfet5/
-	 KIuTgFL/bLyHw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 005BB3809A80;
+	id C7198C4CEC1; Wed, 28 Aug 2024 20:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B14C4CEC0;
 	Wed, 28 Aug 2024 20:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724877719;
+	bh=kXTksRHsVnj2pboD5GXRdiQbTQESXhi05lsPelN3yYo=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=ifZi734xXWWu+ATdhRwnLHNs+G0cJWYEiaCrQr2R5Xiic4VzDxl6f3K1xmUqaX5aC
+	 JhZhDhveWqIC5o+gp4oREk3nGJ+yZm36vs603e1I0rm/QNl7PxGbpNg2dkp0d7B6/r
+	 xMKfxC/nbV3m2nIWo0HHcswVCI3zmD5zxWIX+TEe1COmjeU7KCAEqfkeBlGfUJoojf
+	 kq6o89PdzDPVSzG40gnb+hZqxKVuP9QeeJWC2Ji9qEfjDtXSJURRe5mP62CLUiA5B0
+	 MLWwsWb2QiEF0JYfkkEPjsFoQ4LLiRtBZjRWqFxemaJ0SQUOXq6a+R4heJBIkmgvq0
+	 uUgoqvf9EZm9A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 21A043809A80;
+	Wed, 28 Aug 2024 20:42:01 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Qualcomm driver fixes for v6.11
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172487771881.1420116.6426091405347481184.git-patchwork-summary@kernel.org>
-Date: Wed, 28 Aug 2024 20:41:58 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <172487772003.1420116.6229088176882286278.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Aug 2024 20:42:00 +0000
+References: <20240826145209.1646159-1-andersson@kernel.org>
+In-Reply-To: <20240826145209.1646159-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Qualcomm driver fixes for v6.11
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883388
-  Lore link: https://lore.kernel.org/r/20240826145209.1646159-1-andersson@kernel.org
+On Mon, 26 Aug 2024 09:52:08 -0500 you wrote:
+> The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+> 
+>   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.11
+> 
+> [...]
 
-Patch: [GIT,PULL] RISC-V soc driver fixes for v6.11-rc6
-  Submitter: Conor Dooley <conor@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=884358
-  Lore link: https://lore.kernel.org/r/20240828-fidelity-almighty-18d5434aaef0@spud
+Here is the summary with links:
+  - [GIT,PULL] Qualcomm driver fixes for v6.11
+    https://git.kernel.org/soc/soc/c/d8f2638b835c
 
-Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree fixes for v6.11
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883411
-  Lore link: https://lore.kernel.org/r/20240826152426.1648383-1-andersson@kernel.org
-
-Patch: [GIT,PULL] Qualcomm Arm64 defconfig fix for 6.11
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883392
-  Lore link: https://lore.kernel.org/r/20240826145736.1646729-1-andersson@kernel.org
-
-Patch: [GIT,PULL] OMAP fixes for v6.11-rc
-  Submitter: Kevin Hilman <khilman@baylibre.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=881499
-  Lore link: https://lore.kernel.org/r/7h4j7eyhyh.fsf@baylibre.com
-
-
-Total patches: 5
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
