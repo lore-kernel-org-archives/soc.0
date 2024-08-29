@@ -1,34 +1,34 @@
-Return-Path: <SRS0=A9ay=P4=outlook.com=defensoriasag@kernel.org>
+Return-Path: <SRS0=WUvC=P4=suntechno.co.jp=m-nishimura@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A7B6C8303E
-	for <soc@archiver.kernel.org>; Thu, 29 Aug 2024 18:31:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99ED5CA0EC0
+	for <soc@archiver.kernel.org>; Thu, 29 Aug 2024 22:11:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4907BC4CEC1; Thu, 29 Aug 2024 18:31:29 +0000 (UTC)
+	id 6341AC4CEC5; Thu, 29 Aug 2024 22:11:33 +0000 (UTC)
 Received: from hz-hc-03.sysprovider.com (hz-hc-03.sysprovider.com [185.250.202.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 078DEC4CEC5
-	for <soc@kernel.org>; Thu, 29 Aug 2024 18:31:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 078DEC4CEC5
+	by smtp.kernel.org (Postfix) with ESMTPS id 5C0EDC4CEC1
+	for <soc@kernel.org>; Thu, 29 Aug 2024 22:11:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C0EDC4CEC1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=neteris.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=outlook.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=suntechno.co.jp
 Received: from [178.215.236.220]
 	by hz-hc-03.sysprovider.com with esmtp (Exim 4.96-58-g4e9ed49f8)
-	(envelope-from <defensoriasag@outlook.com>)
-	id 1sjjva-0004VJ-0l
+	(envelope-from <m-nishimura@suntechno.co.jp>)
+	id 1sjnMY-0003o1-1j
 	for soc@kernel.org;
-	Thu, 29 Aug 2024 20:31:26 +0200
-Reply-To: roykessier@yandex.com
-From: Sr. Roy Kessier <marketing@neteris.com>
+	Fri, 30 Aug 2024 00:11:30 +0200
+Reply-To: info@elibertytrust.us
+From: Roy Kessier  <jonathan.capeluto@neteris.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: =?UTF-8?B?U2VociBnZWVocnRlciBFbXBmw6RuZ2VyOg==?=
-Date: 29 Aug 2024 11:31:26 -0700
-Message-ID: <20240829113125.A275FE82A1D7A994@neteris.com>
+Subject: =?UTF-8?B?SW50ZXJuYXRpb25hbGUgV8OkaHJ1bmdzZm9uZHMgKElXRik=?=
+Date: 29 Aug 2024 15:11:30 -0700
+Message-ID: <20240829151129.FBC6EA3698516CF0@neteris.com>
 MIME-Version: 1.0
 Content-Type: text/plain;
 	charset="utf-8"
@@ -62,7 +62,7 @@ direkt auf Ihr Bankkonto zu =C3=BCberweisen.
 Um einen reibungslosen und problemlosen Zahlungsvorgang zu=20
 gew=C3=A4hrleisten, kontaktieren Sie bitte unseren Vertreter, Herrn=20
 Roy Kessier, unter der folgenden E-Mail-Adresse:
-E-Mail: roykessier@yandex.com
+E-Mail: info@elibertytrust.us
 
 Bitte teilen Sie uns auch Ihre WhatsApp-Nummer mit, um die=20
 Kommunikation zu erleichtern.
@@ -71,4 +71,4 @@ Vielen Dank f=C3=BCr Ihre Aufmerksamkeit in dieser Angelegenheit.
 
 Aufrichtig,
 Herr Roy Kessier
-roykessier@yandex.com
+info@elibertytrust.us
