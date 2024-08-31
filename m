@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8661CA101D
-	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57395CA101D
+	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DCCAEC4CEC0; Sat, 31 Aug 2024 09:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45F9C4CEC7;
-	Sat, 31 Aug 2024 09:21:29 +0000 (UTC)
+	id 497E5C4CEC7; Sat, 31 Aug 2024 09:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C70C4CEC0;
+	Sat, 31 Aug 2024 09:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725096091;
-	bh=fZXp5znfN0w2WN+UlYs07thNJDMXh+5ZEjk8LG8Hru4=;
+	s=k20201202; t=1725096094;
+	bh=8BMIGuOiKNipiQV7zt2ZZvMZ3wYh4xdIWqHGjkxp12s=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YWCmo/SUPrjaQbDNNSRYHUKFu0qzqsXDRFULweViPBp/DxX+CymjsbDVnF8Ew/51g
-	 OVG8URY+mkpIdH+yEPCf3jSTGTtd3Da3Qbf5rVNUwc8H4/y/Eqnjf0f3ufaJLAeMf0
-	 DzcNR+GD8M5y1FxMZZmXTytwstxKiXsGH+tZUEKv57EUVQud7moIby2Dnw7aYPPTqb
-	 x+bb6FihjFqCic3bB/qwbXj3Oiu9d3JIBqV+niZzUmjg3NgdtoXtzlIOltulvVLc9+
-	 1+LZCJWiOR2ZYmg/OR7xQrY8mVUTb4R96ST3GXWU5sjvTRiATjiAB1ifYWDtesFuQE
-	 bkoArSCsNZgmw==
+	b=NpbCJmHQapth6GWzEEe7iOcLdIuC5NtXGVkNNbBin213ym+2cjnuSzQLvSGAM72MZ
+	 a4CmSxkZDkK5vJf+oRIV4ZrXxl/4TNRLSdumgfVJA2voO1YfD6jc6sTwvHDzmSR+OI
+	 pM/AszcBSo8ZR9jnRUcKPpJgoWQhu03WQVVezCm9aIhu9Omc+9kNGLVYHS/B8+VEhY
+	 JCxQITxtuUZzctLefd0+TqCiEl2YKMu+IANkBWwPM7+CZYJV8PjsR3fYm6dwZJVARl
+	 V3MQ1JwYn9EN54F99N6WTimjLrQLpusjl+ZitTMDIjPdY6WlWM1JDLnAe7bKGpAfVa
+	 WuAtWJ+7j4qtA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v5 14/16] firmware: turris-mox-rwtm: Use EOPNOTSUPP instead of ENOSYS
-Date: Sat, 31 Aug 2024 11:20:48 +0200
-Message-ID: <20240831092050.23093-15-kabel@kernel.org>
+Subject: [PATCH v5 15/16] firmware: turris-mox-rwtm: Use ALIGN() instead of hardcoding
+Date: Sat, 31 Aug 2024 11:20:49 +0200
+Message-ID: <20240831092050.23093-16-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240831092050.23093-1-kabel@kernel.org>
 References: <20240831092050.23093-1-kabel@kernel.org>
@@ -41,47 +41,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Checkpatch warns agains -ENOSYS:
-  WARNING: ENOSYS means 'invalid syscall nr' and nothing else
-Use EOPNOTSUPP instead.
+Use ALIGN(max, 4) instead of hardcoding ((max + 3) & ~3).
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 52f97235c3a6..a9391705f5b4 100644
+index a9391705f5b4..0c7d8c96ea17 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -137,7 +137,7 @@ static int mox_get_status(enum mbox_cmd cmd, u32 retval)
- 	else if (MBOX_STS_ERROR(retval) == MBOX_STS_FAIL)
- 		return -(int)MBOX_STS_VALUE(retval);
- 	else if (MBOX_STS_ERROR(retval) == MBOX_STS_BADCMD)
--		return -ENOSYS;
-+		return -EOPNOTSUPP;
- 	else if (MBOX_STS_ERROR(retval) != MBOX_STS_SUCCESS)
- 		return -EIO;
- 	else
-@@ -185,7 +185,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 	if (ret == -ENODATA) {
- 		dev_warn(dev,
- 			 "Board does not have manufacturing information burned!\n");
--	} else if (ret == -ENOSYS) {
-+	} else if (ret == -EOPNOTSUPP) {
- 		dev_notice(dev,
- 			   "Firmware does not support the BOARD_INFO command\n");
- 	} else if (ret < 0) {
-@@ -219,7 +219,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
- 	ret = mox_get_status(MBOX_CMD_ECDSA_PUB_KEY, reply->retval);
- 	if (ret == -ENODATA) {
- 		dev_warn(dev, "Board has no public key burned!\n");
--	} else if (ret == -ENOSYS) {
-+	} else if (ret == -EOPNOTSUPP) {
- 		dev_notice(dev,
- 			   "Firmware does not support the ECDSA_PUB_KEY command\n");
- 	} else if (ret < 0) {
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <crypto/sha2.h>
++#include <linux/align.h>
+ #include <linux/armada-37xx-rwtm-mailbox.h>
+ #include <linux/completion.h>
+ #include <linux/container_of.h>
+@@ -268,7 +269,7 @@ static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 	msg.command = MBOX_CMD_GET_RANDOM;
+ 	msg.args[0] = 1;
+ 	msg.args[1] = rwtm->buf_phys;
+-	msg.args[2] = (max + 3) & ~3;
++	msg.args[2] = ALIGN(max, 4);
+ 
+ 	if (!wait) {
+ 		if (!mutex_trylock(&rwtm->busy))
 -- 
 2.44.2
 
