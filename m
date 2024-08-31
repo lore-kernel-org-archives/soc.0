@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 985E8CD1293
-	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFFDDCA101D
+	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 82EA9C4CEC5; Sat, 31 Aug 2024 09:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79FA5C4CEC7;
-	Sat, 31 Aug 2024 09:21:15 +0000 (UTC)
+	id E2D1BC4CEC7; Sat, 31 Aug 2024 09:21:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8EDC4CEC0;
+	Sat, 31 Aug 2024 09:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725096077;
-	bh=XY9/bsfo6LS1W4K5qQLLhTvcREhj+N6mql29QGQClgg=;
+	s=k20201202; t=1725096079;
+	bh=NQryTML5jdSBcx2G6HYZdjf8LG1gasfjM7xFkLaZRnE=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L/vWnI7VznqDa1rwskHQmfkF90sFClAZ6P8rGfbS3CkJF1IFh11sNPGx806esTjat
-	 wBkvBF7bhhTya14BeMsd0re8esjrCHyIJlEGRxXfA8f3YdxpdktXg0Rnsh/BMb6n81
-	 j1aGZO+LbzpF4xwiB6kZ7zaw71Xv/z4EOU0KKVj9wQIRlZkLGOJiHYw4wTXCARf6lB
-	 Wlroog8elJKB83TIHRiYhfW0YrbvFRjvo7pWWacQ4KcXTTfppe+dp02FAj+8wxb/Lh
-	 t1r9bVtVAWY8Y+uRT9vtBEGBSnggEj+RXTWcu6FsrLfB4K0OP9IIoVS2h8aHtUY11s
-	 uuhzZkmZG5rkA==
+	b=F106tJvZpJ++0HD/HECBAjT9NcEMrUVIake43pJdPbd9z5y3LGWF8vUMw9bsYqDBu
+	 Kg6irowqG2Lbu/bImAJSQinXgMmEhFL+G7GISRi8tJEtSNjedVOoSDvFv/CDlbDVL6
+	 32WIQS/dcNf9oYY6RQQn3naahA+RD7Sr7/OY7/I3KjY3jsv/iQ105LvEsmg8yQnrrb
+	 SqA3LL8fMT7ELZOOhNKEtLfuD3a+cqyPHQ3egBMbA4Istn/vtj/oa5/FIHglIaypSC
+	 G6BK75qTUUtbgqTqPQHQH2iPrd1uPU9oiTmSZfpsBNgrniQj1HnQcYeBbPXC0RfkDq
+	 lXexvuI8c2iSQ==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v5 08/16] firmware: turris-mox-rwtm: Simplify debugfs code
-Date: Sat, 31 Aug 2024 11:20:42 +0200
-Message-ID: <20240831092050.23093-9-kabel@kernel.org>
+Subject: [PATCH v5 09/16] firmware: turris-mox-rwtm: Convert rest to devm_* and get rid of driver .remove()
+Date: Sat, 31 Aug 2024 11:20:43 +0200
+Message-ID: <20240831092050.23093-10-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240831092050.23093-1-kabel@kernel.org>
 References: <20240831092050.23093-1-kabel@kernel.org>
@@ -41,98 +41,86 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Simplify debugfs code: do not check for errors, as debugfs errors should
-be ignored, and use devm action for dropping the debugfs directory.
+Use devm resource management for driver's mailbox. This allows us to get
+rid of the driver's .remove() method and the gotos in .probe().
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 44 ++++++++----------------------
- 1 file changed, 11 insertions(+), 33 deletions(-)
+ drivers/firmware/turris-mox-rwtm.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 97b40982a3e7..0462c345778c 100644
+index 0462c345778c..dd0dbaa9de72 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -91,7 +91,6 @@ struct mox_rwtm {
- 	 * It should be rewritten via crypto API once akcipher API is available
- 	 * from userspace.
- 	 */
--	struct dentry *debugfs_root;
- 	u32 last_sig[MOX_ECC_SIGNATURE_WORDS];
- 	bool last_sig_done;
- #endif
-@@ -404,39 +403,23 @@ static const struct file_operations do_sign_fops = {
- 	.llseek	= no_llseek,
- };
- 
--static int rwtm_register_debugfs(struct mox_rwtm *rwtm)
-+static void rwtm_debugfs_release(void *root)
- {
--	struct dentry *root, *entry;
--
--	root = debugfs_create_dir("turris-mox-rwtm", NULL);
--
--	if (IS_ERR(root))
--		return PTR_ERR(root);
--
--	entry = debugfs_create_file_unsafe("do_sign", 0600, root, rwtm,
--					   &do_sign_fops);
--	if (IS_ERR(entry))
--		goto err_remove;
--
--	rwtm->debugfs_root = root;
--
--	return 0;
--err_remove:
- 	debugfs_remove_recursive(root);
--	return PTR_ERR(entry);
- }
- 
--static void rwtm_unregister_debugfs(struct mox_rwtm *rwtm)
-+static void rwtm_register_debugfs(struct mox_rwtm *rwtm)
- {
--	debugfs_remove_recursive(rwtm->debugfs_root);
-+	struct dentry *root;
-+
-+	root = debugfs_create_dir("turris-mox-rwtm", NULL);
-+
-+	debugfs_create_file_unsafe("do_sign", 0600, root, rwtm, &do_sign_fops);
-+
-+	devm_add_action_or_reset(rwtm->dev, rwtm_debugfs_release, root);
- }
- #else
--static inline int rwtm_register_debugfs(struct mox_rwtm *rwtm)
--{
--	return 0;
--}
--
--static inline void rwtm_unregister_debugfs(struct mox_rwtm *rwtm)
-+static inline void rwtm_register_debugfs(struct mox_rwtm *rwtm)
- {
+@@ -424,6 +424,11 @@ static inline void rwtm_register_debugfs(struct mox_rwtm *rwtm)
  }
  #endif
-@@ -500,11 +483,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
- 		goto free_channel;
+ 
++static void rwtm_devm_mbox_release(void *mbox)
++{
++	mbox_free_channel(mbox);
++}
++
+ static void rwtm_firmware_symlink_drop(void *parent)
+ {
+ 	sysfs_remove_link(parent, DRIVER_NAME);
+@@ -462,6 +467,10 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 		return ret;
  	}
  
--	ret = rwtm_register_debugfs(rwtm);
--	if (ret < 0) {
--		dev_err(dev, "Failed creating debugfs entries: %i\n", ret);
++	ret = devm_add_action_or_reset(dev, rwtm_devm_mbox_release, rwtm->mbox);
++	if (ret)
++		return ret;
++
+ 	ret = mox_get_board_info(rwtm);
+ 	if (ret < 0)
+ 		dev_warn(dev, "Cannot read board information: %i\n", ret);
+@@ -470,7 +479,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_notice(dev,
+ 			   "Firmware does not support the GET_RANDOM command\n");
 -		goto free_channel;
--	}
-+	rwtm_register_debugfs(rwtm);
++		return ret;
+ 	}
  
- 	dev_info(dev, "HWRNG successfully registered\n");
+ 	rwtm->hwrng.name = DRIVER_NAME "_hwrng";
+@@ -480,7 +489,7 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 	ret = devm_hwrng_register(dev, &rwtm->hwrng);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Cannot register HWRNG: %i\n", ret);
+-		goto free_channel;
++		return ret;
+ 	}
  
-@@ -528,7 +507,6 @@ static void turris_mox_rwtm_remove(struct platform_device *pdev)
- {
- 	struct mox_rwtm *rwtm = platform_get_drvdata(pdev);
+ 	rwtm_register_debugfs(rwtm);
+@@ -497,17 +506,6 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 					 firmware_kobj);
  
--	rwtm_unregister_debugfs(rwtm);
- 	mbox_free_channel(rwtm->mbox);
+ 	return 0;
+-
+-free_channel:
+-	mbox_free_channel(rwtm->mbox);
+-	return ret;
+-}
+-
+-static void turris_mox_rwtm_remove(struct platform_device *pdev)
+-{
+-	struct mox_rwtm *rwtm = platform_get_drvdata(pdev);
+-
+-	mbox_free_channel(rwtm->mbox);
  }
  
+ static const struct of_device_id turris_mox_rwtm_match[] = {
+@@ -520,7 +518,6 @@ MODULE_DEVICE_TABLE(of, turris_mox_rwtm_match);
+ 
+ static struct platform_driver turris_mox_rwtm_driver = {
+ 	.probe	= turris_mox_rwtm_probe,
+-	.remove_new = turris_mox_rwtm_remove,
+ 	.driver	= {
+ 		.name		= DRIVER_NAME,
+ 		.of_match_table	= turris_mox_rwtm_match,
 -- 
 2.44.2
 
