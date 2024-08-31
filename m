@@ -1,103 +1,54 @@
-Return-Path: <SRS0=YLFc=P6=tuxon.dev=claudiu.beznea@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEB5CA1018
-	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 12:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98DB5CD3422
+	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 19:13:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F1B7BC4CEC8; Sat, 31 Aug 2024 12:11:22 +0000 (UTC)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 69F53C4CEC0
-	for <soc@kernel.org>; Sat, 31 Aug 2024 12:11:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 69F53C4CEC0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42bc19e94bdso6105915e9.3
-        for <soc@kernel.org>; Sat, 31 Aug 2024 05:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1725106280; x=1725711080; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=feytde++Ztupo3vQgj2y9NbMxC3wNTfdLdqPpTIHuHI=;
-        b=qfbju3Hkebbw+uA1KfLFje27wfLl4Kft2lohCVTxGzaQ+DM3wUUEugnoX2pJ1K6l+5
-         xBol1euUiQeU8XpYhXWSczi+KemLOt6+/F/JKSRwomHI4E5ASp7+jzzDRDXY/6tPyG4n
-         1jrLvkniqmeLbm6HQ5X2CBemFKQxdeR/3lPU9tjAVGcVBl/IZ5b7YF7tdreFU42k4L5U
-         XZaKdJMXiqhnKz46nYrViJNc1zD5WniS5MGr5YzpgPvY/iSz+tbwBpcyatIf8wTNIEC3
-         uWaQhjnLCeM0cfYB5nz3nEfixzBbBg+2CFyGnJbnJymXbKVE3yxHg6wjG/Ci2rtRlbxv
-         +GAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725106280; x=1725711080;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=feytde++Ztupo3vQgj2y9NbMxC3wNTfdLdqPpTIHuHI=;
-        b=mpiLRp2HHpcnqKKpBBxVi5H4TwkJ1bGBtxb3wY16VgY4VPZGNrvgmX5XJ8d9evKjDb
-         xcrDYLB5MAaXdHL65HT+UvaA9uyGya5zasVKFLHUDxvP9o0IrOGRmzwdrqfuUEw0YYr5
-         ylLblcd+ArchEUT5PkXsfF0MeIvh4ow41/cAdTOjNYFh5W2QJPDPPC+0ip4S5x/m25Ut
-         8lodn66FCXcAQETEbreu433mLiX+jakg5a0I+p4JQQGofAwTzMPHgywwBgp7UvlXlRt6
-         +2jNiO0ApERzinZ/4v+OVhjt/Y31l1gtD7GrYMXy3X0RJqANpXaGNUubkYlLRjSSQLbj
-         oH4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUXhyqfXCOLru4828GVBJvGVSRt3JRLT+o0qcgTu5ueqHQefdlMA9MzALU4DtdmDdf0vUg=@kernel.org
-X-Gm-Message-State: AOJu0Ywoh79a1g0eZCKiXgZgyEVt3u2tCBlNdEEhk/VHXDOhh/rY18As
-	s2HDLOCKrHXBWOYsXjtr6z7uoTA/mdd35d8ezZkK6Sx4TIsQcwhZcLlWagdlsO4=
-X-Google-Smtp-Source: AGHT+IHuKpEMuQpTNGxnlqsC4REKBZT8yLOzdGRaRbJNR5BWy+p338FBElfkf9avmR4GBihGHTuXaQ==
-X-Received: by 2002:a05:600c:3b97:b0:426:59aa:e2fe with SMTP id 5b1f17b1804b1-42bb01c2071mr64671655e9.19.1725106279378;
-        Sat, 31 Aug 2024 05:11:19 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6e33f5esm74010555e9.39.2024.08.31.05.11.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Aug 2024 05:11:18 -0700 (PDT)
-Message-ID: <97adf680-8fa6-4b34-86d9-d12c6031de3b@tuxon.dev>
-Date: Sat, 31 Aug 2024 15:11:17 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Microchip AT91 fixes for v6.11
-Content-Language: en-US
+	id 527F2C4CEC0; Sat, 31 Aug 2024 19:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B33C4CEC8;
+	Sat, 31 Aug 2024 19:13:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725131638;
+	bh=U6T7mw1d4OGGfnaoEfzpw2v28SOTPVl5mQaHULrTzPA=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=r1r3Rv0R8G003aS9kDdGn28HV0AqNG28f4jAM+xxAf+caHkeWcs/j28FCa8j5KWMp
+	 aIji8PITGZEozd6UR0ss4PpUOHvaZrF6LAFggU7K0uKAW0Pz9LNltzrwq7CFHM+RmO
+	 rZYTXM1Rxw2WQKGMdXEM12ckcjz9616MKAfNjWXnRfA85YV5G1xZXaKhTUQr41KH0l
+	 NtnqLqNKRx15LiJVHKRAJ01oCrl4+FgjGERawsJLAWsJOzKbrvTEu6NiQFTdWmm4Sq
+	 qT9/enn4COu9SfRZPSBeD+RG21Jq5jkIUXKfED3R4c1t9FmnymQXQHhPZO339NI71N
+	 5I5Nf1pZiLirA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEC53809A80;
+	Sat, 31 Aug 2024 19:13:59 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for 6.11, part 2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <a0cf5f32-3250-48de-bc04-445ae1459b0c@app.fastmail.com>
+References: <a0cf5f32-3250-48de-bc04-445ae1459b0c@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <a0cf5f32-3250-48de-bc04-445ae1459b0c@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.11-2
+X-PR-Tracked-Commit-Id: 9cc7b1705141d1a077493dc107ed626e8dc84681
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 35667a2969d80a08b1df4066cbf282fc5d875cc4
+Message-Id: <172513163846.2915779.8366939144023883866.pr-tracker-bot@kernel.org>
+Date: Sat, 31 Aug 2024 19:13:58 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- arm <arm@kernel.org>, soc@kernel.org
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-arm-kernel@lists.infradead.org
-References: <20240826170749.3271888-1-claudiu.beznea@tuxon.dev>
- <2aa68d3e-9d9d-447c-a2a4-5cfbb4062ae0@app.fastmail.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <2aa68d3e-9d9d-447c-a2a4-5cfbb4062ae0@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 
+The pull request you sent on Sat, 31 Aug 2024 10:03:51 +0000:
 
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.11-2
 
-On 30.08.2024 22:57, Arnd Bergmann wrote:
-> On Mon, Aug 26, 2024, at 17:07, Claudiu Beznea wrote:
->> The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
->>
->>   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
->>
->> are available in the Git repository at:
->>
->>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
->> at91-fixes-6.11
-> 
-> Something went wrong in your pull request, presumably an incorrect
-> "insteadof" entry in your .gitconfig caused the wrong URL for your tree.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/35667a2969d80a08b1df4066cbf282fc5d875cc4
 
-Sorry for that!
+Thank you!
 
-> 
-> I instead pulled from 
-> https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
-
-That's the right link. Thank you for taking care of it.
-
-Claudiu Beznea
-
-
-> 
->       Arnd
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
