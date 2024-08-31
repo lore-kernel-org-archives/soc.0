@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97CAECD1293
-	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9958CD1293
+	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 545D1C4CEC5; Sat, 31 Aug 2024 09:20:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412EFC4CEC0;
-	Sat, 31 Aug 2024 09:20:56 +0000 (UTC)
+	id B2F69C4CEC8; Sat, 31 Aug 2024 09:21:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3CFC4CEC9;
+	Sat, 31 Aug 2024 09:20:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725096058;
-	bh=e2qW98woVql76+Fvbe33IheolOdNNRlNL7mpmjhYTEA=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=DU+sLfDVIkMbVHw4Xw+GjzTcBLckiDGvoHj1JogCNZ9QGBSjEBpsd+s1spcDsx0Cz
-	 9/6MzizBXTEp6FA+KdQZ7wjLUWNVisoHzX1Jq6rX2zhh3eNi1/5XAWfdyhogcBSgqC
-	 11VCuekYzxBb9GF/4Vq8rV+qfWnqKI/f+AjOBqEHK7TEgs+Zb7inGwvDHIrR0y5iU0
-	 zr94Zvzi9OpToyANGegLyWqDW8o22++vTPUBfCkJWTs6RamEQY2uhE6YM+ijstlHay
-	 OPI+62J9uVO0gzpEGN2EqXX/VkwfMrIcQEjOiPZxsh8TryuALTIiIcu2E6uJ210ZlB
-	 oc03nO5DZfagQ==
+	s=k20201202; t=1725096060;
+	bh=Abfd6J238robHdsfA+mAo+HtZEUoV4Xe3/uHVf1Dd3U=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nF7pMQ8BD3iplkCYTqQvrnL6VGdUT2QPtjVAzq9ShFZWUjbAuJaibYtKWoTsFvRdk
+	 qkTtBilEXtkKUiip1VkHeTQsmBc1AcEtK9qU37xPqhjh4x5FPhr/olKWxhQemTMfEC
+	 2KpYz+/VY2Pl8FX6LxMyLf3jSHoV1B1zLLOj6Sfm6Fy3C2TvkVnh1v8l53InxbetLb
+	 irHpvjF1N+yWUTDyJEKls5tlB6JXkw3hf/RXbk/a62z0bLZIkAmFaHGRsk6y1NakiF
+	 KrJqwlotYfpYH8XwFGULInep973IUidtztUexbAWVyqC8j1thNnGhK2agX1LC3GNeQ
+	 STXGSnUaFdQAQ==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,53 +31,74 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v5 00/16] Updates for turris-mox-rwtm driver
-Date: Sat, 31 Aug 2024 11:20:34 +0200
-Message-ID: <20240831092050.23093-1-kabel@kernel.org>
+Subject: [PATCH v5 01/16] firmware: turris-mox-rwtm: Use macro constant instead of hardcoded 4096
+Date: Sat, 31 Aug 2024 11:20:35 +0200
+Message-ID: <20240831092050.23093-2-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
+In-Reply-To: <20240831092050.23093-1-kabel@kernel.org>
+References: <20240831092050.23093-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
+The 4096 bytes limit in mox_hwrng_read() is due to the DMA buffer being
+allocated to one PAGE_SIZE bytes. Use new local macro constant
+RWTM_DMA_BUFFER_SIZE at allocation time and when used in mox_hwrng_read().
 
-this is v5 of refactors and cleanups for the turris-mox-rwtm driver.
-Back on 15th July [1] you said that I should separate bugfixes in
-another series, which you already applied. I forgot to send the rest
-once 6.11 merge window closed.
+Use SZ_4K instead of PAGE_SIZE. Although PAGE_SIZE is never set to a
+larger value on Armada 3720, it theoretically could, and this would be a
+waste of space.
 
-So here they are.
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+---
+ drivers/firmware/turris-mox-rwtm.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Marek
-
-[1] https://lore.kernel.org/soc/4b4785ca-0fba-4227-8186-c5da08d38eb2@app.fastmail.com/
-
-Marek Behún (16):
-  firmware: turris-mox-rwtm: Use macro constant instead of hardcoded
-    4096
-  firmware: turris-mox-rwtm: Use ETH_ALEN instead of hardcoded 6
-  firmware: turris-mox-rwtm: Use the boolean type where appropriate
-  firmware: turris-mox-rwtm: Hide signature related constants behind
-    macros
-  firmware: turris-mox-rwtm: Fix driver includes
-  firmware: turris-mox-rwtm: Use sysfs_emit() instead of sprintf()
-  firmware: turris-mox-rwtm: Don't create own kobject type
-  firmware: turris-mox-rwtm: Simplify debugfs code
-  firmware: turris-mox-rwtm: Convert rest to devm_* and get rid of
-    driver .remove()
-  firmware: turris-mox-rwtm: Use dev_err_probe() where possible
-  firmware: turris-mox-rwtm: Drop redundant device pointer
-  firmware: turris-mox-rwtm: Use devm_mutex_init() instead of
-    mutex_init()
-  firmware: turris-mox-rwtm: Use container_of() instead of hwrng .priv
-    member
-  firmware: turris-mox-rwtm: Use EOPNOTSUPP instead of ENOSYS
-  firmware: turris-mox-rwtm: Use ALIGN() instead of hardcoding
-  firmware: turris-mox-rwtm: Deduplicate command execution code
-
- drivers/firmware/turris-mox-rwtm.c | 380 ++++++++++++-----------------
- 1 file changed, 153 insertions(+), 227 deletions(-)
-
+diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
+index 3e7f186d239a..67d7b65da174 100644
+--- a/drivers/firmware/turris-mox-rwtm.c
++++ b/drivers/firmware/turris-mox-rwtm.c
+@@ -11,14 +11,18 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/hw_random.h>
+ #include <linux/mailbox_client.h>
++#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/sizes.h>
+ #include <linux/slab.h>
+ 
+ #define DRIVER_NAME		"turris-mox-rwtm"
+ 
++#define RWTM_DMA_BUFFER_SIZE	SZ_4K
++
+ /*
+  * The macros and constants below come from Turris Mox's rWTM firmware code.
+  * This firmware is open source and it's sources can be found at
+@@ -287,8 +291,7 @@ static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 	struct armada_37xx_rwtm_tx_msg msg;
+ 	int ret;
+ 
+-	if (max > 4096)
+-		max = 4096;
++	max = min(max, RWTM_DMA_BUFFER_SIZE);
+ 
+ 	msg.command = MBOX_CMD_GET_RANDOM;
+ 	msg.args[0] = 1;
+@@ -479,8 +482,8 @@ static int turris_mox_rwtm_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	rwtm->dev = dev;
+-	rwtm->buf = dmam_alloc_coherent(dev, PAGE_SIZE, &rwtm->buf_phys,
+-					GFP_KERNEL);
++	rwtm->buf = dmam_alloc_coherent(dev, RWTM_DMA_BUFFER_SIZE,
++					&rwtm->buf_phys, GFP_KERNEL);
+ 	if (!rwtm->buf)
+ 		return -ENOMEM;
+ 
 -- 
 2.44.2
 
