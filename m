@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30CE1CD1293
-	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90923CA101D
+	for <soc@archiver.kernel.org>; Sat, 31 Aug 2024 09:21:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1ED83C4CEC9; Sat, 31 Aug 2024 09:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1668FC4CEC0;
-	Sat, 31 Aug 2024 09:21:00 +0000 (UTC)
+	id 7F46FC4CEC7; Sat, 31 Aug 2024 09:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7670CC4CECB;
+	Sat, 31 Aug 2024 09:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725096063;
-	bh=1I034L4LLf9or8F0uskNWOW/awQZlwNsmaQxnhu9RK0=;
+	s=k20201202; t=1725096065;
+	bh=iAZ6bIn+WN0rB7kQZOlw9v8V713pYkJzGxek3pkoSX4=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dIU0akJ/rw4csfbTNcG4OL7XcNbKsI73eKwi2TthWaaLGnyQ4UFYKZAOzjw+htgdN
-	 263IT5FD9EiW0xKoKKT+xkB68rF4dWfNmoHqWOGIrVm+94JnxjZDYqcl2fJwgLqaJP
-	 pIc6MVihsRFr8fvWjK7gHuRze64XSicdUEHltxUWZW3B3DcrO+aBVex3HRKGmZI1BF
-	 mGuXjhB61Vdvy5kZgx3DK3ei2sAlwmjf5kh+0vMx2+yyb7IPrfAMe5Yvo8nhTISOqT
-	 pK6/GecHWzRDX/IU8o15djrD6M/op+RkRuUzwCwDCJW8y6pari75y5MZij7eTvaPk4
-	 fQxxu3NT1yjRQ==
+	b=ItIIsvmjyr9LKF5S9W295eiejNSDyOamHEMP3cicTOXJho4jQUgEy/8SNSS0z8JiW
+	 b1Rpu0jzDMdoNR8W6eQfiEwvMwiQxbj7oVQRKC/e713k3pSz8zALNIT5AuzPpV3Q5N
+	 LbWEj68PTIT1HOPGbe3WSAASknf+sS7mDPa98WzuXGH3lBFlQaNm+imyAT72lb9j/Z
+	 pdVa6bgWbFnq/iNYmuAZpp8M1LGhMukm7llssAMrN/P2QQs9/2wW8oboqdx1G1nbTG
+	 oALiSH5nHyqkEpgBbVOWOnkWkqEKCiGsg81CDoEHfXToK6fqX/EvNBNJasacgoNcof
+	 sB4qPLSRX3lRA==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -31,9 +31,9 @@ To: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v5 02/16] firmware: turris-mox-rwtm: Use ETH_ALEN instead of hardcoded 6
-Date: Sat, 31 Aug 2024 11:20:36 +0200
-Message-ID: <20240831092050.23093-3-kabel@kernel.org>
+Subject: [PATCH v5 03/16] firmware: turris-mox-rwtm: Use the boolean type where appropriate
+Date: Sat, 31 Aug 2024 11:20:37 +0200
+Message-ID: <20240831092050.23093-4-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240831092050.23093-1-kabel@kernel.org>
 References: <20240831092050.23093-1-kabel@kernel.org>
@@ -41,36 +41,88 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Use the ETH_ALEN macro instead of hardcoded 6 for MAC address length.
+Use the boolean type for has_board_info, has_pubkey and last_sig_done
+members of the driver's private structure.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
 ---
- drivers/firmware/turris-mox-rwtm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/firmware/turris-mox-rwtm.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index 67d7b65da174..d3ce093d4835 100644
+index d3ce093d4835..8875c35f9b19 100644
 --- a/drivers/firmware/turris-mox-rwtm.c
 +++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -10,6 +10,7 @@
- #include <linux/debugfs.h>
- #include <linux/dma-mapping.h>
- #include <linux/hw_random.h>
-+#include <linux/if_ether.h>
- #include <linux/mailbox_client.h>
- #include <linux/minmax.h>
- #include <linux/module.h>
-@@ -69,7 +70,7 @@ struct mox_rwtm {
- 	int has_board_info;
+@@ -19,6 +19,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/sizes.h>
+ #include <linux/slab.h>
++#include <linux/types.h>
+ 
+ #define DRIVER_NAME		"turris-mox-rwtm"
+ 
+@@ -67,13 +68,13 @@ struct mox_rwtm {
+ 	struct completion cmd_done;
+ 
+ 	/* board information */
+-	int has_board_info;
++	bool has_board_info;
  	u64 serial_number;
  	int board_version, ram_size;
--	u8 mac_address1[6], mac_address2[6];
-+	u8 mac_address1[ETH_ALEN], mac_address2[ETH_ALEN];
+ 	u8 mac_address1[ETH_ALEN], mac_address2[ETH_ALEN];
  
  	/* public key burned in eFuse */
- 	int has_pubkey;
+-	int has_pubkey;
++	bool has_pubkey;
+ 	u8 pubkey[135];
+ 
+ #ifdef CONFIG_DEBUG_FS
+@@ -85,7 +86,7 @@ struct mox_rwtm {
+ 	 */
+ 	struct dentry *debugfs_root;
+ 	u32 last_sig[34];
+-	int last_sig_done;
++	bool last_sig_done;
+ #endif
+ };
+ 
+@@ -229,7 +230,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
+ 				  reply->status[5]);
+ 		reply_to_mac_addr(rwtm->mac_address2, reply->status[6],
+ 				  reply->status[7]);
+-		rwtm->has_board_info = 1;
++		rwtm->has_board_info = true;
+ 
+ 		pr_info("Turris Mox serial number %016llX\n",
+ 			rwtm->serial_number);
+@@ -256,7 +257,7 @@ static int mox_get_board_info(struct mox_rwtm *rwtm)
+ 	} else {
+ 		u32 *s = reply->status;
+ 
+-		rwtm->has_pubkey = 1;
++		rwtm->has_pubkey = true;
+ 		sprintf(rwtm->pubkey,
+ 			"%06x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x",
+ 			ret, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7],
+@@ -352,7 +353,7 @@ static ssize_t do_sign_read(struct file *file, char __user *buf, size_t len,
+ 
+ 	/* 2 arrays of 17 32-bit words are 136 bytes */
+ 	ret = simple_read_from_buffer(buf, len, ppos, rwtm->last_sig, 136);
+-	rwtm->last_sig_done = 0;
++	rwtm->last_sig_done = false;
+ 
+ 	return ret;
+ }
+@@ -418,7 +419,7 @@ static ssize_t do_sign_write(struct file *file, const char __user *buf,
+ 	 */
+ 	memcpy(rwtm->last_sig, rwtm->buf + 68, 136);
+ 	cpu_to_be32_array(rwtm->last_sig, rwtm->last_sig, 34);
+-	rwtm->last_sig_done = 1;
++	rwtm->last_sig_done = true;
+ 
+ 	mutex_unlock(&rwtm->busy);
+ 	return len;
 -- 
 2.44.2
 
