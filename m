@@ -1,82 +1,68 @@
-Return-Path: <andy@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52E9DCA0ED3
-	for <soc@archiver.kernel.org>; Mon,  2 Sep 2024 12:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6A28CD13CF
+	for <soc@archiver.kernel.org>; Mon,  2 Sep 2024 12:59:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1950EC4CECA; Mon,  2 Sep 2024 12:55:39 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 10B84C4CEC7;
-	Mon,  2 Sep 2024 12:55:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 10B84C4CEC7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: 3aenheQRTTKvYXurvjjNVQ==
-X-CSE-MsgGUID: fbf3/m7ASZ2LHxe8fajcMA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="27738625"
-X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="27738625"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 05:55:37 -0700
-X-CSE-ConnectionGUID: yW609ukaQxG6TO3siCu3Gg==
-X-CSE-MsgGUID: ORvfqQgLQAW6I/dFCR85nQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="64571554"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 05:55:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andy@kernel.org>)
-	id 1sl6ag-00000004Mjx-2qxL;
-	Mon, 02 Sep 2024 15:55:30 +0300
-Date: Mon, 2 Sep 2024 15:55:30 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+	id BC48EC4AF0C; Mon,  2 Sep 2024 12:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CE7C4CEC2;
+	Mon,  2 Sep 2024 12:59:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725281990;
+	bh=mETC2XQEN/dbo+m7Bk6KEfA/0ErXK0XUjEJTheXzRIQ=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=cHBX4mMjLbk1WmJkyY/kSc5iGIjaGu8YRxn/cDchXX7L7idwXJFv+vQwAMKsMmTEh
+	 TW8lXhLRmki7mDyDR7vvJYDsylZ9lmKiQC3vH8g5/+cz0TXARoZYBpXcrWoxz84Yar
+	 9kVkdcpsZWAlS5+Ul6VnNrW31Ytq5abGYteaHIkFJn2wWCLF7VOAli/pzuBW7r7Lc+
+	 4/Tkrtxz9NtCJ3LDnELh3AhxN3z0MPtwfzdbBvhmVpzwvslOpeCWcRKi2ukUwucDkr
+	 VbX+JgK3HMB8R191prJkJKYZIl3q6q0u4rU7dtP+HptZz825u2oZSEeJ/nz7zzTkXq
+	 v2sfMGFDE8T4A==
+Date: Mon, 2 Sep 2024 14:59:45 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
-	arm@kernel.org, Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
+Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	arm@kernel.org, Hans de Goede <hdegoede@redhat.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, 
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
 Subject: Re: [PATCH leds 1/8] turris-omnia-mcu-interface.h: Move command
  execution function to global header
-Message-ID: <ZtW1wuUCvQQSPBH2@smile.fi.intel.com>
+Message-ID: <t3fazdw4aasl4oejkfowbavgxmwvvy6du2wvcku4wmstqn7cth@pvcgwzyzwsu5>
 References: <20240902124104.14297-1-kabel@kernel.org>
  <20240902124104.14297-2-kabel@kernel.org>
+ <ZtW1wuUCvQQSPBH2@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240902124104.14297-2-kabel@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <ZtW1wuUCvQQSPBH2@smile.fi.intel.com>
 
-On Mon, Sep 02, 2024 at 02:40:57PM +0200, Marek Behún wrote:
-> Move the command execution functions from the turris-omnia-mcu platform
-> driver private header to the global turris-omnia-mcu-interface.h header,
-> so that they can be used by the LED driver.
+On Mon, Sep 02, 2024 at 03:55:30PM +0300, Andy Shevchenko wrote:
+> On Mon, Sep 02, 2024 at 02:40:57PM +0200, Marek Behún wrote:
+> > Move the command execution functions from the turris-omnia-mcu platform
+> > driver private header to the global turris-omnia-mcu-interface.h header,
+> > so that they can be used by the LED driver.
+> 
+> ...
+> 
+> >  #include <linux/bitfield.h>
+> > +#include <linux/bitops.h>
+> 
+> >  #include <linux/bits.h>
+> 
+> You may drop this one now, as guaranteed by bitops.h.
 
-...
+Hi Andy,
 
->  #include <linux/bitfield.h>
-> +#include <linux/bitops.h>
+How do I know that including bit.sh won't be ever deleted from
+bitops.h?
 
->  #include <linux/bits.h>
+Is there some database which symbols are supposed to be provided by
+which header, and not just randomly included from another header?
 
-You may drop this one now, as guaranteed by bitops.h.
-
-> +#include <linux/types.h>
-> +#include <asm/byteorder.h>
-> +#include <asm/unaligned.h>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Marek
