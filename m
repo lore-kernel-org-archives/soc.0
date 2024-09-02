@@ -1,98 +1,164 @@
-Return-Path: <SRS0=ieK5=QA=huawei.com=xuwei5@kernel.org>
+Return-Path: <SRS0=5qeS=QA=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83250CA0ED3
-	for <soc@archiver.kernel.org>; Mon,  2 Sep 2024 07:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987ACCD13CF
+	for <soc@archiver.kernel.org>; Mon,  2 Sep 2024 10:16:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 558D8C4CEC6; Mon,  2 Sep 2024 07:51:30 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5EDC3C4CEC6; Mon,  2 Sep 2024 10:16:11 +0000 (UTC)
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BBBF6C4CEC2;
-	Mon,  2 Sep 2024 07:51:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BBBF6C4CEC2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Wy1CD5W8nzyRM5;
-	Mon,  2 Sep 2024 15:50:48 +0800 (CST)
-Received: from kwepemd500014.china.huawei.com (unknown [7.221.188.63])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7880018010A;
-	Mon,  2 Sep 2024 15:51:24 +0800 (CST)
-Received: from [10.67.121.2] (10.67.121.2) by kwepemd500014.china.huawei.com
- (7.221.188.63) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Mon, 2 Sep
- 2024 15:51:23 +0800
-Message-ID: <66D56E7B.9040502@hisilicon.com>
-Date: Mon, 2 Sep 2024 15:51:23 +0800
-From: Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 99846C4CEC2
+	for <soc@kernel.org>; Mon,  2 Sep 2024 10:16:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 99846C4CEC2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id C92021380366;
+	Mon,  2 Sep 2024 06:16:08 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Mon, 02 Sep 2024 06:16:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725272168;
+	 x=1725358568; bh=3RNolP0Fo/GSx4B9IVA751JpgSB5qu66Jzzq2ZzhW5o=; b=
+	eswqT4+kmM9y1ZYn3In9gFzhOS2csprktMPRjMHRe/gaK25CIc6SgXNQXTjo8Wa6
+	jXmC2wkMn5BtLXhHHt+6xNogKhOvkO6AUAAQsOiZ5nssDIiVYzdakHa1x3rAXl22
+	bA6DTspqAz53Dbl3SKNjf3fhn11sxjtMBBF8qwOgJSlx6gwpf3l/00PfOudUyJOD
+	N62jErUHi3spuhKABZyv4uKFCZBOYePT+vLDideOnSkYH+nNZOzQf8QERsYm6/6z
+	YF7vX2u6krQg9HJA5XgZqsVLNWLBbghGXpmwlSBbjEplONaJyCuC2nYppHf3OXi4
+	lAANex0FtnYzPfx47tLLYg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725272168; x=
+	1725358568; bh=3RNolP0Fo/GSx4B9IVA751JpgSB5qu66Jzzq2ZzhW5o=; b=e
+	+ExLf/fMAWshxJVvPU1X5yEAdOHmK9hNB/yqQ8kxmmyTLD9dpvXsUA9mt0wMpRBR
+	B4QmKgK8Egjn6RxhnaL9URjmo66lCeEnwLLsEHmsPXIR9lQkQZswPrb+GbLyEjuF
+	T/AfVyywjsTrFM2lQfzFag0I4DWVjbAmEBviZeeD/1S4bL4HjqWmvpSvxnTg2JuF
+	EdUYQvyhYVV3hAgINmXuKz44cQ4sIJoRa6lzwNVOaFk/fDzVtQypNHdmKQYbYivV
+	cvdU2uxnoM5IrJAEqai7L6UtWdV2Ib/lph2qViDl4WnAp22ysWUbQYIqXRWkJMd5
+	rPYDYkIKoWfAPwGkXPK5w==
+X-ME-Sender: <xms:aJDVZm5k9mjxtlOIpXK9ChinEhWo609Ro2nvgiHoILV06Mjeyy7MiQ>
+    <xme:aJDVZv6ygVCfotEnPBexS1EfrO2vKvnkwttQLJ1F-hEwbxrbra3n1coDUtGzwHpAa
+    p2_qaojohSkRvOwirg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehfedgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepudeffeetfeekveffkeeuheffteevuefhvdeuteeg
+    udfghefhffehffejhfdugeeinecuffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrh
+    hnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhn
+    rdgtohhmpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouh
+    hprdgvuhdprhgtphhtthhopehsohgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegs
+    rgholhhurdhluheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuh
+    igqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgt
+    phhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhgpd
+    hrtghpthhtohepgihirgholhgvihdrfigrnhhgseifihhnughrihhvvghrrdgtohhm
+X-ME-Proxy: <xmx:aJDVZlfCkQv5YD1df9WF3UxV8-73LSebwlij2g30dyCjtygfi9GwJw>
+    <xmx:aJDVZjJVwcDSlCvpIjUMNajK4iw7UrvwyBsL1SfT0JoBDGE-8E5TBg>
+    <xmx:aJDVZqL2N-eo5zr8upQI_c6H1_jYkgDdHfM34Vxk1I5Srhf9VL9Kxw>
+    <xmx:aJDVZkwrqBQecRS2uMx6CwFSTma0df7hJs2WjIA-zQ6hHauyqYgw7g>
+    <xmx:aJDVZrr41cGF5Hg3e63WAQOgDseqUDR6ogJbcjhun26z1kfb7FSYBlGZ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 471F92220087; Mon,  2 Sep 2024 06:16:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 MIME-Version: 1.0
-To: Huisong Li <lihuisong@huawei.com>
+Date: Mon, 02 Sep 2024 10:15:34 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <krzk@kernel.org>,
-	<Jonathan.Cameron@Huawei.com>, <wanghuiqiang@huawei.com>,
-	<liuyonglong@huawei.com>, <xuwei5@hisilicon.com>
-Subject: Re: [PATCH v3 0/6] Add some features and bugfix for kunpeng_hccs
-References: <20240828104956.20214-1-lihuisong@huawei.com>
-In-Reply-To: <20240828104956.20214-1-lihuisong@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.121.2]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemd500014.china.huawei.com (7.221.188.63)
+To: "Christophe Leroy" <christophe.leroy@csgroup.eu>, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Cc: "Herve Codina" <herve.codina@bootlin.com>,
+ "Xiaolei Wang" <xiaolei.wang@windriver.com>,
+ "Baolu Lu" <baolu.lu@linux.intel.com>
+Message-Id: <cc725b99-12f3-4476-948c-8b00af563dfd@app.fastmail.com>
+In-Reply-To: <dfafbd92-1e61-4e80-aa5c-2bfbe1defbeb@csgroup.eu>
+References: <dfafbd92-1e61-4e80-aa5c-2bfbe1defbeb@csgroup.eu>
+Subject: Re: [GIT PULL] SOC FSL for 6.12
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Huisong,
+On Wed, Aug 28, 2024, at 13:44, Christophe Leroy wrote:
+> Hi Arnd,
+>
+> Please pull the following Freescale Soc Drivers changes for 6.12:
+> - A series from Herv=C3=A9 Codina that bring support for the newer ver=
+sion of=20
+> QMC (QUICC Multi-channel Controller) and TSA (Time Slots Assigner) fou=
+nd=20
+> on MPC 83xx micro-controllers.
+> - Misc changes for qbman freescale drivers
+>
+> There are no conflicts with latest linux-next tree.
 
-On 2024/8/28 18:49, Huisong Li wrote:
-> This series is aimed to support the low power feature and add used
-> HCCS types sysfs. And fix some bugfix to harden codes by the way.
-> 
-> ---
->  v3:
->   - add Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>.
->   - drop 'none' string print according to Jonathan's suggestion.
->   - early return in hccs_wait_serdes_adapt_completed.
->   - fix commit log in patch[2/6], patch[3/6] and patch[5/6]
-> 
->  v2:
->   - remove "this patch" words in commit log suggested by Krzyszto.
->   - use for_each_set_bit to replace the cycle scanning all HCCS IP.
->   - add a patch to rename the 'lane_mode' to 'max_lane_num' to make it
->     easy to see.
->   - add doc description into the code patch.
->   - rename the name of the low power interface.
->   - adjust the increasing and decreasing lane interface description.
->   - do not create available_inc_dec_lane_types when no HCCS type support
->     low power.
-> ---
-> 
-> Huisong Li (6):
->   soc: hisilicon: kunpeng_hccs: Fix a PCC typo
->   soc: hisilicon: kunpeng_hccs: Return failure on having not die or port
->     information
->   soc: hisilicon: kunpeng_hccs: Add the check for base address and size
->     of shared memory
->   soc: hisilicon: kunpeng_hccs: Fix the 'lane_mode' field name in port
->     info structure to 'max_lane_num'
->   soc: hisilicon: kunpeng_hccs: Add used HCCS types sysfs
->   soc: hisilicon: kunpeng_hccs: Support low power feature for the
->     specified HCCS type
-> 
->  .../sysfs-devices-platform-kunpeng_hccs       |  45 ++
->  drivers/soc/hisilicon/Kconfig                 |   7 +-
->  drivers/soc/hisilicon/kunpeng_hccs.c          | 514 +++++++++++++++++-
->  drivers/soc/hisilicon/kunpeng_hccs.h          |  33 +-
->  4 files changed, 580 insertions(+), 19 deletions(-)
-> 
+Hi Christophe,
 
-Thanks!
-Series applied to the Hisilicon driver tree.
-But it is already rc6, maybe I will send the PR in the next cycle if no conflict.
+I've tried pulling this but ran into a few issues here, none of which
+are related to the actual patches in your branch that look totally
+fine to me:
 
-Best Regards,
-Wei
+> The following changes since commit 5be63fc19fcaa4c236b307420483578a569=
+86a37:
+>
+>    Linux 6.11-rc5 (2024-08-25 19:07:11 +1200)
+>
+> are available in the Git repository at:
+>
+>    https://github.com/chleroy/linux.git tags/soc_fsl-6.12-1
+>
+> for you to fetch changes up to 1fe683bf6113da3cb694bc18ae655b2ee10ba39=
+3:
+>
+>    Merge branch 'support-for-quicc-engine-tsa-and-qmc' (2024-08-25=20
+> 20:48:47 +0200)
+
+- There is no tag description in here, which would give me an empty
+  changelog text for the merge commit, or force me to summarize your
+  contents myself. Please describe the contents of your branch in a coup=
+le
+  of short paragraphs, in a way that helps me and future readers of
+  the changelog understand what kind of work is being done. Don't
+  repeat the oneline commit messages of the individual patches though,
+  as they show up right under your summary anyway.
+
+- You have not signed the tag, so there is no way for me to verify that
+  you are actually the person that uploaded the branch. Ideally this
+  should be signed with a gpg key that is on the kernel keyring, but
+  even a brand new key is better than nothing because that way I can
+  at least check that your next pull requests are signed by the same
+  account as this one. Since you use a github.com account, this is
+  even more important, as I can't easily see if you are the only person
+  that is able to push to the github user 'chleroy'.
+  Using a git tree on either git.kernel.org or your own domain would
+  be ideal here, but github works if that is all you can easily do.
+
+- My branch is based on 6.11-rc4, while your tag is on top of 6.11-rc5,
+  so pulling it into my tree would require a backmerge that I try to
+  avoid (it shows up when Linus pulls from me). Please rebase on
+  an earlier -rc, ideally 6.11-rc1 unless you have a reason to need
+  something later.
+
+- Please add the linux-arm-kernel and powerpc mailing lists to cc
+  for the pull request, so the PR gets properly archived. I saw this
+  was missing because I could not apply it using
+
+    b4 pr dfafbd92-1e61-4e80-aa5c-2bfbe1defbeb@csgroup.eu
+
+  This command failed as none of the mailing list archives have
+  your message ID.
+
+Please resend with all of the above changed.
+
+       Arnd
