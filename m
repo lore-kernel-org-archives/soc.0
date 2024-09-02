@@ -4,40 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C78CA0ED3
-	for <soc@archiver.kernel.org>; Mon,  2 Sep 2024 13:17:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CB57CA0ED3
+	for <soc@archiver.kernel.org>; Mon,  2 Sep 2024 13:23:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9F5A2C4AF09; Mon,  2 Sep 2024 13:17:26 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	id 3EB88C4AF0C; Mon,  2 Sep 2024 13:23:13 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 92A75C4CEC7;
-	Mon,  2 Sep 2024 13:17:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 92A75C4CEC7
+	by smtp.kernel.org (Postfix) with ESMTPS id A5A69C4CEC2;
+	Mon,  2 Sep 2024 13:23:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5A69C4CEC2
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: lcTes7kzSUGta2fBpk4OPg==
-X-CSE-MsgGUID: uMzpJ0FBRSu/9N51Y3pC+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="23670331"
+X-CSE-ConnectionGUID: aK4nCKs4TnmDKMb0542kOQ==
+X-CSE-MsgGUID: 16z9Vz8kT6WbMelIq46bGw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="41363582"
 X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="23670331"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 06:17:25 -0700
-X-CSE-ConnectionGUID: mx18IN+4QvSTKALky29K8w==
-X-CSE-MsgGUID: 4sELQTiDQZG6g99mY0T2Vg==
+   d="scan'208";a="41363582"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 06:23:11 -0700
+X-CSE-ConnectionGUID: u6+aIGH0SfyA1obri/uWWg==
+X-CSE-MsgGUID: 5FjHlDoITn61o1HNa8vzDA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="95421338"
+   d="scan'208";a="64292077"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 06:17:20 -0700
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 06:23:07 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andy@kernel.org>)
-	id 1sl6vj-00000004NQu-20HD;
-	Mon, 02 Sep 2024 16:17:15 +0300
-Date: Mon, 2 Sep 2024 16:17:15 +0300
+	id 1sl71M-00000004NaA-1diX;
+	Mon, 02 Sep 2024 16:23:04 +0300
+Date: Mon, 2 Sep 2024 16:23:04 +0300
 From: Andy Shevchenko <andy@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
 	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
@@ -46,42 +45,48 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
 	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Andrew Lunn <andrew@lunn.ch>,
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH leds 5/8] leds: turris-omnia: Notify sysfs on MCU global
- LEDs brightness change
-Message-ID: <ZtW625-GePwV8ffA@smile.fi.intel.com>
+Subject: Re: [PATCH leds 1/8] turris-omnia-mcu-interface.h: Move command
+ execution function to global header
+Message-ID: <ZtW8OI6ivN_1CRUE@smile.fi.intel.com>
 References: <20240902124104.14297-1-kabel@kernel.org>
- <20240902124104.14297-6-kabel@kernel.org>
+ <20240902124104.14297-2-kabel@kernel.org>
+ <ZtW1wuUCvQQSPBH2@smile.fi.intel.com>
+ <t3fazdw4aasl4oejkfowbavgxmwvvy6du2wvcku4wmstqn7cth@pvcgwzyzwsu5>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240902124104.14297-6-kabel@kernel.org>
+In-Reply-To: <t3fazdw4aasl4oejkfowbavgxmwvvy6du2wvcku4wmstqn7cth@pvcgwzyzwsu5>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Sep 02, 2024 at 02:41:01PM +0200, Marek Behún wrote:
-> Recall that on Turris Omnia, the LED controller has a global brightness
-> property, which allows the user to make the front LED panel dimmer.
-> 
-> There is also a button on the front panel, which by default is
-> configured so that pressing it changes the global brightness to a lower
-> value (unless it is at 0%, in which case pressing the button changes the
-> global brightness to 100%).
-> 
-> Newer versions of the MCU firmware support informing the SOC that the
-> brightness was changed by button press event via an interrupt.
-> 
-> Now that we have the turris-omnia-mcu driver, which adds support for MCU
-> interrupts, add the ability to inform the userspace (via a sysfs
-> notification) that the global brightness was changed.
+On Mon, Sep 02, 2024 at 02:59:45PM +0200, Marek Behún wrote:
+> On Mon, Sep 02, 2024 at 03:55:30PM +0300, Andy Shevchenko wrote:
+> > On Mon, Sep 02, 2024 at 02:40:57PM +0200, Marek Behún wrote:
 
 ...
 
-> +	ret = devm_device_add_group(dev, &omnia_led_controller_group);
+> > >  #include <linux/bitfield.h>
+> > > +#include <linux/bitops.h>
+> > 
+> > >  #include <linux/bits.h>
+> > 
+> > You may drop this one now, as guaranteed by bitops.h.
+> 
+> How do I know that including bit.sh won't be ever deleted from
+> bitops.h?
 
-AFAIU the intention is to remove that API, hence this shall not be used.
-Greg?
+How do I?
 
-https://lore.kernel.org/lkml/20221109140711.105222-1-gregkh@linuxfoundation.org/
+Somebody should start writing documentation (and tooling?) for all this
+header dependency hell we have in the Linux kernel project.
+
+> Is there some database which symbols are supposed to be provided by
+> which header, and not just randomly included from another header?
+
+Bottom line, more explicit inclusions are fine, but here is a proverb:
+"make a fool pray to God, he will break his forehead."
+
+Means that either radical approach (none or all) is not good.
 
 -- 
 With Best Regards,
