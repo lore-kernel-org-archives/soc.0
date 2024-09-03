@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01378CD3447
-	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 15:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9EE1CD3447
+	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 15:56:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D5D12C4AF0C; Tue,  3 Sep 2024 15:56:42 +0000 (UTC)
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	id AC499C4CECB; Tue,  3 Sep 2024 15:56:51 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C3DE0C4CEC8;
-	Tue,  3 Sep 2024 15:56:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3DE0C4CEC8
+	by smtp.kernel.org (Postfix) with ESMTPS id 658ACC4CEC8;
+	Tue,  3 Sep 2024 15:56:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 658ACC4CEC8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 483FuXiG085518;
-	Tue, 3 Sep 2024 10:56:33 -0500
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 483FulIV053355;
+	Tue, 3 Sep 2024 10:56:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1725378993;
-	bh=UEZJ4sFP7ETW1sRIaOC+SDQVPQJW2Qe93LABTVWeSOA=;
+	s=ti-com-17Q1; t=1725379007;
+	bh=lNboAUPHi4YBTwEpNuGV9LWf+wbkGzQEcG6L8MZqy38=;
 	h=Date:From:To:CC:Subject;
-	b=DFcQ5cOYWq4gkrcjSrXGucgTW9qoTG2Wzn9lWBaY2miwlBTd4D2wQ2MkXhuRp0lag
-	 IkjRPogJLN3Vx8MoJ9UGDaLx5qMMuRDMXeU/mmEtbjkdg10IMmVDdUKD0BlSap4ifi
-	 Zad+g6UA2DBpdA5VUQ+Wu+ld44m8nwwiZKKmZ0ho=
+	b=ROpa+ORreO1reUsrAxEwguBwGT5qLJEv/+TR8pYb0OXAmawtp4zbfs5wr/XtZTRfv
+	 e80BLgf6nDJNM0mW9QJ4hG5QkMby2LBmWIeZZi/piTVT62QRBu81vzImJT7J/dubXA
+	 3TL+0ug8VxbXivXl5B43yGJYAlQ0yCbqFefu0p2A=
 Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 483FuXps070548
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 483FulGV070614
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 3 Sep 2024 10:56:33 -0500
+	Tue, 3 Sep 2024 10:56:47 -0500
 Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
  (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 3
- Sep 2024 10:56:32 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
+ Sep 2024 10:56:47 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
  (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 3 Sep 2024 10:56:32 -0500
+ Frontend Transport; Tue, 3 Sep 2024 10:56:47 -0500
 Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 483FuWBN036900;
-	Tue, 3 Sep 2024 10:56:32 -0500
-Date: Tue, 3 Sep 2024 10:56:32 -0500
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 483FulXb002487;
+	Tue, 3 Sep 2024 10:56:47 -0500
+Date: Tue, 3 Sep 2024 10:56:47 -0500
 From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony
- Lindgren <tony@atomide.com>
-Subject: [GIT PULL 1/3] soc: ti: Driver updates for v6.12
-Message-ID: <20240903155632.525twuumykwnfkiz@subtitle>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>
+Subject: [GIT PULL 2/3] arm64: defconfig: TI K3 platform updates for v6.12
+Message-ID: <20240903155647.jy2uparewobeekrd@dreamless>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="m7ebxaqyq4z7akcy"
+	protocol="application/pgp-signature"; boundary="liknjytimeji63s3"
 Content-Disposition: inline
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
---m7ebxaqyq4z7akcy
+--liknjytimeji63s3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -71,42 +70,24 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
-er-soc-for-v6.12
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-c=
+onfig-for-v6.12
 
-for you to fetch changes up to 68123510b7c1c610387dd306f92ff539c3c546b5:
+for you to fetch changes up to e8c643daeaa9040e18f8349993b9bc504e9d2117:
 
-  soc: ti: pm33xx: do device_node auto cleanup (2024-08-28 12:18:02 -0500)
-
-----------------------------------------------------------------
-TI SoC driver updates for v6.12
-
-- pm33xx/knav_qmss_queue/pruss: Cleanups around device_node scope based cle=
-anups
-- knav: Additional fixes around of property
-- k3-ringacc: Optimizations for data structure
+  arm64: defconfig: Enable E5010 JPEG Encoder (2024-08-28 12:22:58 -0500)
 
 ----------------------------------------------------------------
-Christophe JAILLET (1):
-      soc: ti: k3-ringacc: Constify struct k3_ring_ops
+TI K3 defconfig updates for v6.12
 
-Kousik Sanagavarapu (4):
-      soc: ti: pruss: factor out memories setup
-      soc: ti: pruss: do device_node auto cleanup
-      soc: ti: knav_qmss_queue: do device_node auto cleanup
-      soc: ti: pm33xx: do device_node auto cleanup
+- Enable E5010 JPEG Encoder as kernel module
 
-Rob Herring (Arm) (2):
-      soc: ti: knav: Drop unnecessary check for property presence
-      soc: ti: knav: Use of_property_read_variable_u32_array()
+----------------------------------------------------------------
+Devarsh Thakkar (1):
+      arm64: defconfig: Enable E5010 JPEG Encoder
 
- drivers/soc/ti/k3-ringacc.c      |  12 +--
- drivers/soc/ti/knav_dma.c        |  22 ++---
- drivers/soc/ti/knav_qmss_queue.c | 105 +++++++++++------------
- drivers/soc/ti/pm33xx.c          |  52 +++++-------
- drivers/soc/ti/pruss.c           | 176 ++++++++++++++++++-----------------=
-----
- 5 files changed, 166 insertions(+), 201 deletions(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 --=20
 Regards,
@@ -114,24 +95,24 @@ Nishanth Menon
 Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
  849D 1736 249D
 
---m7ebxaqyq4z7akcy
+--liknjytimeji63s3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmbXMaoACgkQ3bWEnRc2
-JJ1pHg/9H8TVXIuY7A9yGfeXU0u0R9pxvdyL0jTM75Ljo7EU5Y4YFqlmXdRSNBml
-xQ75Gt3MQ8r0nc8504GlvnWc0TshBLewo+YN8RdYjHOo13wwiW2gDgpuROx74x9c
-HCEAtzmUfwO2JzE0NhlmzmZ9hpWnRakxzuDa55+ySE28T9cH2JyGjMnnJ4o6VG06
-vfhgwBHdYssKBFCCuMuT+Thajp1eyzb/Kw2RxCUcNUF5E2ROaZs7JaAJU26cLBUT
-IW9OiadTuAoDnq8PFdz00u4ECgDNnGFwb2waUFvxZPbcyuvnndMbfYIZBwlNRhNa
-jqhA1GGWks3yHabNdrh6MESgp5IqfudFM4zpoAcaHtyevdKrWtNVAJfRKMxLF6L8
-3C6dNp48uqV1RO8ydVL3Tr5C9LZOKblF+fyx+gKlYFA8OLvj6nnCZqzZ7ScaY3Oc
-tZOHsfvMv2fQ6KqjXAQs6Js3wPQ5a6jSaYmcXPVjzREFd4iT3WYAh6yKx5GI0j85
-6X9zdP8Z5WaU7ok9j/OwmCJfTVNMkmaItf5Yyu4tqE99BhuNr/DCPYvmu2NDOnVB
-iS2jQNYZwuguWjdm9cSjIwMwVwtbBolTeNMEOIXdx064T51fdXSJup532YSxGBk4
-sZ+xXExQxP9xwibyj3RREYClrKKcZ5uzC6yvCxt2UMNs7v6B624=
-=H3p9
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmbXMbkACgkQ3bWEnRc2
+JJ05/g//TJEYAMPe4pTqwhF/aZH/Ys/pKjbzPpAAAaEpNUw9RYjWLaLykeVkImCN
+HukIc3AyfNQMgrUOVjXZacyhXQ6/CY40BvfpQeiTcj8inM/h6Z2JFqjY7KIuRc4a
+3ll1//Y2CEx01JtAJ6acLtMhVPvpEdDJ8e7zVpP68DRDyJ5iqkmoI8EbAzwgXFrG
+Q5poIXM6f7kKvrhRxzY7Z6W3sjwvUtjK7t55J6rjQxcm3YXAzroUyel92AmzIEhm
+gniJ5POXiO+q0D+t7XGUa62qNga0Rz0CCNdTYQd3CRsrXyh2xkmHxHgjd1Tekng0
+XNbCB+uL0W2dP7dHvr1Ic1UwJi41wxmxWeMs6EfqYYmDLcUC/Zyd2QCkcGQfh3WS
+ON3YEGbAAlQzui4UL7ZBeF1Z4c5gQf2OrvsPCdougZ+U8C9SR74VW2cglOZIl9hM
+LcfuiRM5Vi3LgFlzH5SeSIaiwjDjZZIPxy11vuqmmFA0jE8RB4W/Gy2RRFNsa/de
+M1ez3Pz9bvp9d8Ee5+V1uPvasyA+p+TgZat1LB4+b0R6QmTx45a8y1i5BSY3O9ef
+x2RdHxWr0+DcP1wPwVxLNsvqVq8KWid4Lknsrv7p2sIcUVhfU2OWtRyj0xh3Lk7N
++PpXdxuSNFOJmakQLav3dCovdXd1SKRUWBb1mRCYFpqNTNPxUsY=
+=2WIJ
 -----END PGP SIGNATURE-----
 
---m7ebxaqyq4z7akcy--
+--liknjytimeji63s3--
