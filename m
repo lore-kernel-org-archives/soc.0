@@ -1,105 +1,95 @@
-Return-Path: <SRS0=OJnQ=QB=arndb.de=arnd@kernel.org>
+Return-Path: <kabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81733CD342D
-	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 08:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 786DDCD3420
+	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 10:19:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 547ADC4CECD; Tue,  3 Sep 2024 08:06:09 +0000 (UTC)
-Received: from pfhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9CAEAC4CEC8
-	for <soc@kernel.org>; Tue,  3 Sep 2024 08:06:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9CAEAC4CEC8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 868D811401E9;
-	Tue,  3 Sep 2024 04:06:05 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-01.internal (MEProxy); Tue, 03 Sep 2024 04:06:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725350765;
-	 x=1725437165; bh=5r93MWaJJQSMO5oail0RmsFtM4vGFRa2fu0nxIJMlgg=; b=
-	CcASwc66w65rrfPDWz2b3SruDBIOppw36WzPT4bwEJWBmXJ9lUjqLWeXQohgpVjN
-	mhvsW130XSbCClvYXUm3dWcetDwUNNog+NTQala830a69hIGUUX5ZaJVtsZQs/8R
-	q+zUU2wJWewMpdAK2r6Vr/a47NQjWZ+tPEYVRpWroLHEEXP9dx/UAWh/jYEAYBWj
-	7jBFSu6N1MvdaEnO2ilDoK42pAwhjjn18ZxlJVFDB3jLOE2O4qyoTCoCPZ2uU/hZ
-	otEQcqTRZGguPWu76HOmdFvhRONHxg2x0QyNkxuySrEgH/8KpC9RWCAFe2EvoJTM
-	RtIxR5JM2qDiDEJ+eEk6BQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725350765; x=
-	1725437165; bh=5r93MWaJJQSMO5oail0RmsFtM4vGFRa2fu0nxIJMlgg=; b=i
-	UjAj74EOU5tFHf7eGIe93aS8YDUNUs0oSiQcT6bciu6tkxieWOBXaAEVBFqJBsIf
-	6ZHs6MjQ4qdGLYwP5f67sXj7iuCImHAM5efVtjWzSS6jFF9U0WijlLhwBCszv/l1
-	spu5VJYA/kXcGTfNEbEOOGW7l2le5Cb5q7zkL2X+UQbeltj5kxmzz/2tQz+RxFPB
-	q/WikrTPArQSNeVMyuLuw6OHZOSiG5inUtjkTzDlelzDB1r3G1RYdp6p0WAgrO9d
-	Kvinb55pUND8G/7lwkzeSSCsRclWnK3JK6yNrUZwPpYtI/otP7K2H/koYf8V6Fs6
-	77+/i7V+4SQqSd6kJmyag==
-X-ME-Sender: <xms:bcPWZuVXhOzOuucmpaBTj9L9RNbsTiavjNvovY5IZ9BYELKoAAL-8w>
-    <xme:bcPWZoY4jRHKEB8JE2uTnsHcfV0vEFf8iBkaS7zJCRSqC6qkMtLtYnNo4LuGttDMW
-    PDqUnWijeTqPwgEcP0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehgedgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeek
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehhvghrvhgvrdgtohguihhnrgessg
-    hoohhtlhhinhdrtghomhdprhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohies
-    tghsghhrohhuphdrvghupdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepsggrohhluhdrlhhusehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthht
-    oheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurd
-    horhhgpdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggs
-    shdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopeigihgrohhlvghirdifrghnghesfihinhgurhhivhgv
-    rhdrtghomh
-X-ME-Proxy: <xmx:bcPWZs2qslYJ2EH4QUzntUrsIdITPsIqFaMX7ZhO5I45bYUABOvHqA>
-    <xmx:bcPWZig1GfkWF5gTEJ5fA2Ejcz8FAwVhP6Jze7Gygsw_Ae-uWx2MQw>
-    <xmx:bcPWZoalSO7pT5yfbFhlI6lkqFfFgjhTe_JjdZMUaPcpzynxoE97Uw>
-    <xmx:bcPWZqTEWaByDSNVPeMTFfSZBk0XmEt3xmboOudgPOfzB9wfhDUULQ>
-    <xmx:bcPWZoDfF_ktGnKJ-0CKQia_rjw0bQeHcOaMTG8yrZZKUfHztqFDzY5G>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 7C4A022202A0; Tue,  3 Sep 2024 03:04:33 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-MIME-Version: 1.0
-Date: Tue, 03 Sep 2024 07:04:13 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
+	id 44BD6C4CEC5; Tue,  3 Sep 2024 10:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7637EC4CEC4;
+	Tue,  3 Sep 2024 10:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725358776;
+	bh=zOl5UJC+OXlvlIIJzVEwApk7WtJxOv98Ox7oX7DxnF4=;
+	h=From:To:List-Id:Cc:Subject:Date:From;
+	b=LTGKq8JoP+YyyTcGlGu61iCZW9Yeoldxa8gQzwxkCw6JENEFy9e5uhFydCRZ7lYOD
+	 R+ortx9yNk8Onace9hrQ7gz+q2zJetkfhyaeK+DHDMsj5RkOOZKWkt0VZkR2yzdlVd
+	 gR4KuUFmN35APHoQJoKrrEzg9nxHY3aN2xUo680oIXf59gsSl6QEtaxRbNll/WVRbz
+	 r6SPSuVwBAmP81b1AVfiZji6x2L9yVM7hbKwrRfkjEwyDFz3LOGlNO4CAIryyWRk5M
+	 3YUgjCni0nvuxa9iiIK0mV5S1eBJEJ424hrGoqeTGrloJDmhqoO7urS+dVzmxs4SQV
+	 mfiSOs23BNbBQ==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Lee Jones <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: "Christophe Leroy" <christophe.leroy@csgroup.eu>, soc@kernel.org
-Cc: "Herve Codina" <herve.codina@bootlin.com>,
- "Xiaolei Wang" <xiaolei.wang@windriver.com>,
- "Baolu Lu" <baolu.lu@linux.intel.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
- "Linux ARM" <linux-arm-kernel@lists.infradead.org>
-Message-Id: <3c8bd8bb-36d0-4265-a6d9-95b4767c911d@app.fastmail.com>
-In-Reply-To: <326d9a7d-7674-4c28-aa40-dd2c190244dd@csgroup.eu>
-References: <326d9a7d-7674-4c28-aa40-dd2c190244dd@csgroup.eu>
-Subject: Re: [GIT PULL] SOC FSL for 6.12 (retry)
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Cc: Pavel Machek <pavel@ucw.cz>,
+	linux-leds@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH leds v2 00/11] Turris Omnia LED driver changes
+Date: Tue,  3 Sep 2024 12:19:19 +0200
+Message-ID: <20240903101930.16251-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.44.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 3, 2024, at 06:36, Christophe Leroy wrote:
-> Hi Arnd,
->
-> Please pull the following Freescale Soc Drivers changes for 6.12
->
-> There are no conflicts with latest linux-next tree.
+Hello Lee,
 
-Thanks, pulled now.
+this is v2 of Turris Omnia LED driver changes.
+v1 can be found at
+  https://lore.kernel.org/linux-leds/20240902124104.14297-1-kabel@kernel.org/
 
-     Arnd
+This series is for 6.12, but it depends on changes that have been
+merged to 6.11-rc3. Your for-leds-next branch is based on 6.11-rc1, so
+it won't apply there.
+
+Changes since v1:
+- patch 2 does away also with i2c_master_send() call, in favor of
+  omnia_cmd_write()
+- patch 5 was rewritten to not use devm_device_add_group() anymore,
+  since this function was deprecated. Instead, the sysfs_put() call for
+  the "brightness" node is done the first time the IRQ handler is
+  called, instead of driver probe.
+- the changes were done with 100 columns limit in mind
+- added 3 more "cosmetic" patches
+
+Marek
+
+Marek Behún (11):
+  turris-omnia-mcu-interface.h: Move command execution function to
+    global header
+  leds: turris-omnia: Use command execution functions from the MCU
+    driver
+  turris-omnia-mcu-interface.h: Add LED commands related definitions to
+    global header
+  leds: turris-omnia: Use global header for MCU command definitions
+  leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
+  platform: cznic: turris-omnia-mcu: Inform about missing LED panel
+    brightness change interrupt feature
+  leds: turris-omnia: Inform about missing LED gamma correction feature
+    in the MCU driver
+  leds: turris-omnia: Use dev_err_probe() where appropriate
+  leds: turris-omnia: Use uppercase first letter in all comments
+  leds: turris-omnia: Use 100 columns in the rest of the code
+  ARM: dts: turris-omnia: Add global LED brightness change interrupt
+
+ .../dts/marvell/armada-385-turris-omnia.dts   |   1 +
+ drivers/leds/leds-turris-omnia.c              | 283 +++++++-----------
+ .../platform/cznic/turris-omnia-mcu-base.c    |   3 +
+ drivers/platform/cznic/turris-omnia-mcu.h     | 130 --------
+ include/linux/turris-omnia-mcu-interface.h    | 148 ++++++++-
+ 5 files changed, 257 insertions(+), 308 deletions(-)
+
+-- 
+2.44.2
+
