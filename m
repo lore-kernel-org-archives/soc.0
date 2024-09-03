@@ -1,119 +1,175 @@
-Return-Path: <robh@kernel.org>
+Return-Path: <SRS0=of/H=QB=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7B76CD3439
-	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 14:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F6ACCD343D
+	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 14:52:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6F9C8C4CEC7; Tue,  3 Sep 2024 14:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A63C4CEC9;
-	Tue,  3 Sep 2024 14:26:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725373608;
-	bh=Hj1yivyYJankQDXcGlg/R1Vke/ZctiA++fiXMrswr54=;
-	h=Date:From:To:List-Id:Cc:In-Reply-To:References:Subject:From;
-	b=IkbCYtHdw6Ew4ZzvsoQISiVKPOZMpn0ovpdwamRhGSlsqS5CsVFCXJH1c/1AtPHo1
-	 SJmP8fN9RaUGdFhyZgZ+9lXDrJH6ciENVmKJD4r5YhU0Mh7WFzhcHpbiC5p+9huE69
-	 DPe6ftVLe/+qQVYQm3jqto90bUMmyM5o4flToJ/L8e9Y9Scnwzu06wclbVRr/Xf/n6
-	 Sjqa1d9NeB44QGpcSYDV3+9cNt8n5eIcz21CXLOZ0X1XoJybAYSbfDmhIe7EZ1r3sL
-	 3oMV3hQbQKOjXpHhZElJy5O95+zME1De+GltV5rmrANeyD7gyp7/oFTaFE4LXsBpdr
-	 4xJqbOWreOjEQ==
-Date: Tue, 03 Sep 2024 09:26:47 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
+	id 0E2A2C4CEC6; Tue,  3 Sep 2024 14:52:23 +0000 (UTC)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 017B0C4CEC4
+	for <soc@kernel.org>; Tue,  3 Sep 2024 14:52:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 017B0C4CEC4
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:b015:4053:6b25:396c])
+	by baptiste.telenet-ops.be with cmsmtp
+	id 7qsK2D0040nYyzV01qsKfT; Tue, 03 Sep 2024 16:52:19 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1slUtE-001zes-95;
+	Tue, 03 Sep 2024 16:52:19 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1slUtH-003oSy-0d;
+	Tue, 03 Sep 2024 16:52:19 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-Cc: =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, Lee Jones <lee@kernel.org>, 
- Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy@kernel.org>, 
- Pavel Machek <pavel@ucw.cz>, arm@kernel.org, linux-leds@vger.kernel.org, 
- Hans de Goede <hdegoede@redhat.com>, soc@kernel.org, 
- Arnd Bergmann <arnd@arndb.de>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-In-Reply-To: <20240903101930.16251-1-kabel@kernel.org>
-References: <20240903101930.16251-1-kabel@kernel.org>
-Message-Id: <172537335178.875540.10164997021345385818.robh@kernel.org>
-Subject: Re: [PATCH leds v2 00/11] Turris Omnia LED driver changes
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DTS updates for v6.12 (take two)
+Date: Tue,  3 Sep 2024 16:52:17 +0200
+Message-Id: <cover.1725374275.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+	Hi SoC folks,
 
-On Tue, 03 Sep 2024 12:19:19 +0200, Marek Behún wrote:
-> Hello Lee,
-> 
-> this is v2 of Turris Omnia LED driver changes.
-> v1 can be found at
->   https://lore.kernel.org/linux-leds/20240902124104.14297-1-kabel@kernel.org/
-> 
-> This series is for 6.12, but it depends on changes that have been
-> merged to 6.11-rc3. Your for-leds-next branch is based on 6.11-rc1, so
-> it won't apply there.
-> 
-> Changes since v1:
-> - patch 2 does away also with i2c_master_send() call, in favor of
->   omnia_cmd_write()
-> - patch 5 was rewritten to not use devm_device_add_group() anymore,
->   since this function was deprecated. Instead, the sysfs_put() call for
->   the "brightness" node is done the first time the IRQ handler is
->   called, instead of driver probe.
-> - the changes were done with 100 columns limit in mind
-> - added 3 more "cosmetic" patches
-> 
-> Marek
-> 
-> Marek Behún (11):
->   turris-omnia-mcu-interface.h: Move command execution function to
->     global header
->   leds: turris-omnia: Use command execution functions from the MCU
->     driver
->   turris-omnia-mcu-interface.h: Add LED commands related definitions to
->     global header
->   leds: turris-omnia: Use global header for MCU command definitions
->   leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
->   platform: cznic: turris-omnia-mcu: Inform about missing LED panel
->     brightness change interrupt feature
->   leds: turris-omnia: Inform about missing LED gamma correction feature
->     in the MCU driver
->   leds: turris-omnia: Use dev_err_probe() where appropriate
->   leds: turris-omnia: Use uppercase first letter in all comments
->   leds: turris-omnia: Use 100 columns in the rest of the code
->   ARM: dts: turris-omnia: Add global LED brightness change interrupt
-> 
->  .../dts/marvell/armada-385-turris-omnia.dts   |   1 +
->  drivers/leds/leds-turris-omnia.c              | 283 +++++++-----------
->  .../platform/cznic/turris-omnia-mcu-base.c    |   3 +
->  drivers/platform/cznic/turris-omnia-mcu.h     | 130 --------
->  include/linux/turris-omnia-mcu-interface.h    | 148 ++++++++-
->  5 files changed, 257 insertions(+), 308 deletions(-)
-> 
-> --
-> 2.44.2
-> 
-> 
+This is my second pull request for the inclusion of Renesas SoC updates
+for v6.12.
 
+The following changes since commit ab7d885a33a7ef328a97ccae0d1340b68c3db9ad:
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+  arm64: dts: renesas: gray-hawk-single: Add CAN-FD support (2024-08-20 09:40:52 +0200)
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+are available in the Git repository at:
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.12-tag2
 
-  pip3 install dtschema --upgrade
+for you to fetch changes up to cc41aa93bbafdfe4c4c9026d307adbb89c1d80fa:
 
+  arm64: dts: renesas: r8a779h0: Add family fallback for CSISP IP (2024-09-03 10:23:02 +0200)
 
-New warnings running 'make CHECK_DTBS=y marvell/armada-385-turris-omnia.dtb' for 20240903101930.16251-1-kabel@kernel.org:
+----------------------------------------------------------------
+Renesas DTS updates for v6.12 (take two)
 
-arch/arm/boot/dts/marvell/armada-385-turris-omnia.dtb: led-controller@2b: 'interrupts-extended' does not match any of the regexes: '^multi-led@[0-9a-b]$', 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/leds/cznic,turris-omnia-leds.yaml#
+  - Add support for Ethernet TSN and PCIe on the R-Car V4H SoC and the
+    White-Hawk (Single) development board,
+  - Add display support for the RZ/G2UL SoC and the RZ/G2UL SMARC EVk
+    board,
+  - Add I2C support for the RZ/G3S SoC and the RZ/G3S SMARC EVK board,
+  - Add support for HDMI audio on the RZ/G2L and RZ/G2LC SMARC EVK
+    boards,
+  - Add initial support for the RZ/V2H(P) (R9A09G057) SoC and the RZ/V2H
+    EVK board,
+  - Miscellaneous fixes and improvements.
 
+Note that this includes DT binding definitions for the new RZ/V2H(P)
+SoC, which are shared by the clock driver and DT source files.  However,
+due to an earlier oversight on my side, the actual DT binding definition
+commit is not shared, but duplicated in the clock tree.
 
+Thanks for pulling!
 
+----------------------------------------------------------------
+Biju Das (7):
+      arm64: dts: renesas: r9a07g0{43,44,54}: Move regulator-vbus device node
+      arm64: dts: renesas: r9a07g043u: Add FCPVD node
+      arm64: dts: renesas: r9a07g043u: Add VSPD node
+      arm64: dts: renesas: r9a07g043u: Add DU node
+      arm64: dts: renesas: rzg2l-smarc: Enable HDMI audio
+      arm64: dts: renesas: rzg2lc-smarc: Enable HDMI audio
+      arm64: dts: renesas: r9a07g043u11-smarc: Enable DU
 
+Claudiu Beznea (3):
+      arm64: dts: renesas: r9a08g045: Add I2C nodes
+      arm64: dts: renesas: rzg3s-smarc: Enable I2C0 node
+      arm64: dts: renesas: rzg3s-smarc-som: Enable I2C1 node
 
+Geert Uytterhoeven (1):
+      Merge tag 'renesas-r9a09g057-dt-binding-defs-tag' into renesas-dts-for-v6.12
+
+Lad Prabhakar (14):
+      arm64: dts: renesas: r9a08g045: Correct GICD and GICR sizes
+      arm64: dts: renesas: r9a07g043u: Correct GICD and GICR sizes
+      arm64: dts: renesas: r9a07g054: Correct GICD and GICR sizes
+      arm64: dts: renesas: r9a07g044: Correct GICD and GICR sizes
+      dt-bindings: clock: renesas: Document RZ/V2H(P) SoC CPG
+      dt-bindings: soc: renesas: Document RZ/V2H EVK board
+      arm64: dts: renesas: Add initial SoC DTSI for RZ/V2H(P) SoC
+      arm64: dts: renesas: Add initial DTS for RZ/V2H EVK board
+      arm64: dts: renesas: r9a09g057: Add OSTM0-OSTM7 nodes
+      arm64: dts: renesas: r9a09g057: Add RIIC0-RIIC8 nodes
+      arm64: dts: renesas: r9a09g057: Add SDHI0-SDHI2 nodes
+      arm64: dts: renesas: r9a09g057: Add WDT0-WDT3 nodes
+      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Enable OSTM, I2C, and SDHI
+      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Enable watchdog
+
+Niklas Söderlund (8):
+      arm64: dts: renesas: r8a779g0: R-Car Ethernet TSN support
+      arm64: dts: renesas: white-hawk-single: Wire-up Ethernet TSN
+      arm64: dts: renesas: r8a779g0: Add family fallback for VIN IP
+      arm64: dts: renesas: r8a779a0: Add family fallback for VIN IP
+      arm64: dts: renesas: r8a779h0: Add family fallback for VIN IP
+      arm64: dts: renesas: r8a779g0: Add family fallback for CSISP IP
+      arm64: dts: renesas: r8a779a0: Add family fallback for CSISP IP
+      arm64: dts: renesas: r8a779h0: Add family fallback for CSISP IP
+
+Yoshihiro Shimoda (2):
+      arm64: dts: renesas: r8a779g0: Add PCIe Host and Endpoint nodes
+      arm64: dts: renesas: white-hawk-cpu-common: Enable PCIe Host ch0
+
+ .../bindings/clock/renesas,rzv2h-cpg.yaml          |  80 ++++
+ .../devicetree/bindings/soc/renesas/renesas.yaml   |   2 +
+ arch/arm64/boot/dts/renesas/Makefile               |   5 +
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi          | 108 +++--
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi          | 202 +++++++-
+ .../dts/renesas/r8a779g2-white-hawk-single.dts     |  51 ++
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |  54 ++-
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi         |   4 +
+ arch/arm64/boot/dts/renesas/r9a07g043u.dtsi        |  53 ++-
+ .../dts/renesas/r9a07g043u11-smarc-du-adv7513.dtso |  62 +++
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |   8 +-
+ arch/arm64/boot/dts/renesas/r9a07g044c2-smarc.dts  |   3 +
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi         |   8 +-
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |  92 +++-
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi         | 513 +++++++++++++++++++++
+ .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    | 256 ++++++++++
+ arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi   |   3 -
+ .../boot/dts/renesas/rz-smarc-du-adv7513.dtsi      |  76 +++
+ .../boot/dts/renesas/rzg2l-smarc-pinfunction.dtsi  |   6 +
+ arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |  30 ++
+ arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |  33 ++
+ arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   |   5 +
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi       |   7 +
+ .../boot/dts/renesas/white-hawk-cpu-common.dtsi    |  18 +
+ include/dt-bindings/clock/renesas,r9a09g057-cpg.h  |  21 +
+ 25 files changed, 1617 insertions(+), 83 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/renesas,rzv2h-cpg.yaml
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g043u11-smarc-du-adv7513.dtso
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/rz-smarc-du-adv7513.dtsi
+ create mode 100644 include/dt-bindings/clock/renesas,r9a09g057-cpg.h
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
