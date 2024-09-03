@@ -1,94 +1,108 @@
-Return-Path: <SRS0=sv4b=QB=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=OJnQ=QB=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19A9BCD13CF
-	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 11:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E22CD3430
+	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 13:21:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6738C4CEC5; Tue,  3 Sep 2024 11:06:33 +0000 (UTC)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 805BFC4CEC8; Tue,  3 Sep 2024 13:21:49 +0000 (UTC)
+Received: from pfhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CCFF8C4CEC4
-	for <soc@kernel.org>; Tue,  3 Sep 2024 11:06:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCFF8C4CEC4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5343d2af735so5079377e87.1
-        for <soc@kernel.org>; Tue, 03 Sep 2024 04:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725361591; x=1725966391; darn=kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=V8DEEQFam0EEBOR4AupnSXl0ISxgp+Mzb+eoFbChIc8=;
-        b=zXduFxLssWPoxKaYIc1GQt/cKi9Yu5yaUXBR6wKPnUG5yRxbrtn4ooCxNahMSc8TF9
-         D0v8ca0Y6hGJBw5MJ7H6yamLuwr6xH+9tU7OMdrX6EQGOOiiU5MQJEMzMRB5MpgFHR1k
-         5q9m+dQVPI9pj8ymLVY8sHwGdQINGWspy84IzlegrpXnsayabaqyJFcVBOd8z27dpsCg
-         GcTjEh7M5mamZ/QQSyUPapWwBrZ86Eq7WsOcBZqUYY2FV6IG7iJJuw37L2Br/cMYkxM2
-         kyZK8A0IrpZ4jsplu69liPF5nbHgOHOzLViyEpKlRq8XkXukVnWvjrw6kuEN4DTWUjSw
-         qFyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725361591; x=1725966391;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V8DEEQFam0EEBOR4AupnSXl0ISxgp+Mzb+eoFbChIc8=;
-        b=ucpYnNI4FtISH61dfjG0uIbJkdCIXcxvxMs56mODSl0bOz72TTQdd9iPifGE19Xj0K
-         PYsqXTuqPgxeA2AewLRP2CSn+iVKjhDQxRqTPUk96OGFCj2n5SshGiqLFqT4+kpJp7n2
-         hgynTvgPOYBNY5kxFLEJwH11dSO6UcywBuzwZvAP2UEQzgB1XsVMYeTlTk8Me5Rwdsr1
-         T96HB78JiEFniM7n/NcU0oOoqL3lD2957PAUoupKYYTNo/Ru+noHPQuvMBOjzQ14RRDX
-         WZvAz3mmYDoqNdPKf6t91WJNsQ+fylVS3VpQKETOLDtVVPX4FFaUfEATQgDd88rce4co
-         GPHQ==
-X-Gm-Message-State: AOJu0Yzl3c4q0LzfxV9vMFCOKff7fcMAZCO+o0XL1fEzkfxfHnvKS4Mo
-	fF8FxwW26t7AmPc8QpD23ydjKhyDXqfgaZn+Vo6RZTCQm/NY75IZzlPZCeUtEJi591Jebmggvgt
-	H6FXJWQ6uJFO+m6QZxH1xb9hZ67DzM4kMFWN+aAE0VIGdY9EK8NE=
-X-Google-Smtp-Source: AGHT+IHajMjuDn/tQ2Az3Wc46UKC6VDtLNIqkRciHP4/wT4NeKMphJGvl9EFA5MOMgaKCiQhvguJX/tDNoQltSkvkGM=
-X-Received: by 2002:a05:6512:68c:b0:52c:d76f:7f61 with SMTP id
- 2adb3069b0e04-53546bb4d04mr6951677e87.56.1725361589978; Tue, 03 Sep 2024
- 04:06:29 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id C0BFAC4CEC4;
+	Tue,  3 Sep 2024 13:21:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C0BFAC4CEC4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id C406D1140227;
+	Tue,  3 Sep 2024 09:21:46 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Tue, 03 Sep 2024 09:21:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725369706;
+	 x=1725456106; bh=6uAg9vdYou7CPE1C/iTNIR5JX9ARrPpI3BYjJuX3CTQ=; b=
+	CxfvmrV2scOeCBa+R/XV5lhFzS0KctzvlnqO6wT7o8GiayG4pFvhEcQXoSx/1B1x
+	hurRrqKVjAm9CHao7LI9+UW0wnCDw4CNtYTcuMQcJqSQwOUnpVEi+11Dq/OSUMYs
+	41P5ptEkmCt/fejpXkqdcob2rY30MFoW5PKWBv6jfJSNAqtPEa84QSFhBQnVHuce
+	txuahYPLccvjaYvfmacmUHZ0t/8KWOYaivySqtSKVC19btH//N3RLc2XELqN3aiC
+	o0xAltMWY/TE8a58Av/jrn6EjOzWLP8NnRLw1JnD52Avm1BdEj0sVnnG7W3Xq+69
+	6IJkKMVsrFB90dtJrtvm1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725369706; x=
+	1725456106; bh=6uAg9vdYou7CPE1C/iTNIR5JX9ARrPpI3BYjJuX3CTQ=; b=T
+	yM2PDfFGKzG9MECFSzd1DLJPkSiYjmgmfBTs2bZA9HbYViKwp18xfB7ItpSOT//w
+	sY2Fuc/oWsktrJ1ts6uygxU85jSdqXN26fQXBYQqfVA3DTslrDv2cbHGTDqMBYjA
+	+eWVoXRqBdx+W7H/7TwEOz9magM+idGiUgJrhtioibxhFtzfne2M0RU3OPkwhQm4
+	DT18iAbWQK+8qB56ZBTiFsUq0ZALCCERS+3wGrNFfetp4RnyU4EZSmZfcKmwZKKJ
+	yUBpZITI+5XocqqRqdRS+HmEaHcNG1BdC2uvMHqCzjCPww02h+rMh48etOxCXzQf
+	9Lo0lmCoI0yB1AaG+ec+A==
+X-ME-Sender: <xms:ag3XZk9xlec1MNjqXNyjFRHYPel7qR2UtFv2s3OaMuU04NIhbVe83A>
+    <xme:ag3XZstUOB2pXp64a3lYxFDD4RrUsJBU1ZAM2ydcC5VV3ctM5JQIqFVqKyOgISroq
+    9KufEftpM3Pg7f0jnw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehhedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
+    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddv
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnh
+    htsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepshgvsggrshhtihgrnhdrhhgvshhs
+    vghlsggrrhhthhesghhmrghilhdrtghomhdprhgtphhtthhopegrnhguhieskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheprghrmheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    khgrsggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepihhl
+    phhordhjrghrvhhinhgvnheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhope
+    grnhgurhgvfieslhhunhhnrdgthh
+X-ME-Proxy: <xmx:ag3XZqDUrjlzIYiIPzU7AiP7mZKKJRi_uPl4WpTiqRiwWGXwaPooFA>
+    <xmx:ag3XZke026oHq9pL-JmBLdkkQJwchi69dvPcUikcJx6BAR6D4f-t2Q>
+    <xmx:ag3XZpNQOyM8491IcMyp-OJ-W-t2W1W1rNwxm2aAD0SMjvUjsJfhmQ>
+    <xmx:ag3XZun8D40sPTs8FEcOJY9VLsio50aO82ebjE1Mqg1I3bZ9mCdNQA>
+    <xmx:ag3XZukbMymzv_WXBwnbzdEUoKzYnF1rIckiyrQSzae62kNFGKVKX29a>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4F4902220083; Tue,  3 Sep 2024 09:21:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 3 Sep 2024 13:06:19 +0200
-Message-ID: <CACRpkdahXECZXWA5uv=SZtkzU0E++fQj7QWK8kYuH0-asLUPqg@mail.gmail.com>
-Subject: [GIT PULL] Integrator fixes for v6.12
+Date: Tue, 03 Sep 2024 15:21:15 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ "Lee Jones" <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: "Pavel Machek" <pavel@ucw.cz>, linux-leds@vger.kernel.org, soc@kernel.org,
+ "Gregory Clement" <gregory.clement@bootlin.com>, arm <arm@kernel.org>,
+ "Andy Shevchenko" <andy@kernel.org>, "Hans de Goede" <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "Andrew Lunn" <andrew@lunn.ch>,
+ "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>
+Message-Id: <fce1d0ed-d7e3-401a-9132-0b5c1571398c@app.fastmail.com>
+In-Reply-To: <20240903101930.16251-11-kabel@kernel.org>
+References: <20240903101930.16251-1-kabel@kernel.org>
+ <20240903101930.16251-11-kabel@kernel.org>
+Subject: Re: [PATCH leds v2 10/11] leds: turris-omnia: Use 100 columns in the rest of
+ the code
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi SoC folks,
+On Tue, Sep 3, 2024, at 12:19, Marek Beh=C3=BAn wrote:
+> There are 7 more places in the code where the 100 column limit can be
+> used to make the code more uniform. Do it.
+>
+> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
 
-here are some ARM Integrator fixes for the v6.12 kernel cycle,
-details in the signed tag.
+I feel like it's ok to use either 80-character or 100-character line
+lengths in a file, but I don't see much value in changing from one to
+another here, maybe just drop this patch.
 
-Please pull it in!
-
-Yours,
-Linus Walleij
-
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
-
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-tags/integrator-v6.12
-
-for you to fetch changes up to 15a62b81175885b5adfcaf49870466e3603f06c7:
-
-  bus: integrator-lm: fix OF node leak in probe() (2024-09-02 10:18:43 +0200)
-
-----------------------------------------------------------------
-Integrator fixes for the v6.12 kernel cycle, some of_node_put():s
-were missing in the SoC drivers.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      ARM: versatile: fix OF node leak in CPUs prepare
-      bus: integrator-lm: fix OF node leak in probe()
-
- arch/arm/mach-versatile/platsmp-realview.c | 1 +
- drivers/bus/arm-integrator-lm.c            | 1 +
- 2 files changed, 2 insertions(+)
+       Arnd
