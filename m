@@ -1,76 +1,137 @@
-Return-Path: <SRS0=HPBY=QB=lunn.ch=andrew@kernel.org>
+Return-Path: <SRS0=EMoo=QB=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FE9CD3448
-	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 15:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01378CD3447
+	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 15:56:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 88416C4AF0F; Tue,  3 Sep 2024 15:56:39 +0000 (UTC)
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id D5D12C4AF0C; Tue,  3 Sep 2024 15:56:42 +0000 (UTC)
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 18A33C4CEC9;
-	Tue,  3 Sep 2024 15:56:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 18A33C4CEC9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=dLrp3ZxRXHd3ZuhyiaBxb0aOt9XQW5+dH/UrXRC7tYQ=; b=Qy
-	/sQZNp4dpPEMV8L+MzsXPVkULGRjRAfhMiGV4HcR4w8tRLvKallJI44QKlszZsXv5gWbNtdFfVeB1
-	Oxi7kNkV2xxiBtc2Y3bBM09VnIKamALZuTH/m97TcyEafI2mI5EtV+w/pBuG8eo/aNWIigAnBPWCP
-	VXpVDCnuHpkGv8U=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1slVtN-006Riv-VY; Tue, 03 Sep 2024 17:56:29 +0200
-Date: Tue, 3 Sep 2024 17:56:29 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id C3DE0C4CEC8;
+	Tue,  3 Sep 2024 15:56:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3DE0C4CEC8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 483FuXiG085518;
+	Tue, 3 Sep 2024 10:56:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1725378993;
+	bh=UEZJ4sFP7ETW1sRIaOC+SDQVPQJW2Qe93LABTVWeSOA=;
+	h=Date:From:To:CC:Subject;
+	b=DFcQ5cOYWq4gkrcjSrXGucgTW9qoTG2Wzn9lWBaY2miwlBTd4D2wQ2MkXhuRp0lag
+	 IkjRPogJLN3Vx8MoJ9UGDaLx5qMMuRDMXeU/mmEtbjkdg10IMmVDdUKD0BlSap4ifi
+	 Zad+g6UA2DBpdA5VUQ+Wu+ld44m8nwwiZKKmZ0ho=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 483FuXps070548
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 3 Sep 2024 10:56:33 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 3
+ Sep 2024 10:56:32 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 3 Sep 2024 10:56:32 -0500
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 483FuWBN036900;
+	Tue, 3 Sep 2024 10:56:32 -0500
+Date: Tue, 3 Sep 2024 10:56:32 -0500
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
-	arm@kernel.org, Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH leds v2 08/11] leds: turris-omnia: Use dev_err_probe()
- where appropriate
-Message-ID: <224af639-babd-4d6e-813b-70fe07d5e337@lunn.ch>
-References: <20240903101930.16251-1-kabel@kernel.org>
- <20240903101930.16251-9-kabel@kernel.org>
- <CAHp75VfEnuJb2s4QWJ3NNeXcx+qwNXf2ypJ6A35ECOEf+TA9EQ@mail.gmail.com>
+To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony
+ Lindgren <tony@atomide.com>
+Subject: [GIT PULL 1/3] soc: ti: Driver updates for v6.12
+Message-ID: <20240903155632.525twuumykwnfkiz@subtitle>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m7ebxaqyq4z7akcy"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VfEnuJb2s4QWJ3NNeXcx+qwNXf2ypJ6A35ECOEf+TA9EQ@mail.gmail.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Tue, Sep 03, 2024 at 01:45:49PM +0300, Andy Shevchenko wrote:
-> On Tue, Sep 3, 2024 at 1:20 PM Marek Behún <kabel@kernel.org> wrote:
-> >
-> > Use dev_err_probe() instead of dev_err() + separate return where
-> > appropriate.
-> 
-> ...
-> 
-> > +       if (ret)
-> > +               return dev_err_probe(dev, ret, "Cannot set LED %pOF to software mode\n", np);
-> 
-> Side note: Not sure how np is being used besides the messaging. If
-> it's only for the messaging, I would rather see %pfw and fwnode based
-> approach.
+--m7ebxaqyq4z7akcy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This board has a number of Ethernet switches described in DT.  Nobody
-takes ACPI seriously for any sort of complex networking. So using
-fwnode is probably pointless, this board will probably never be used
-with anything other than DT.
+Hi,
 
-	 Andrew
+The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+
+  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
+er-soc-for-v6.12
+
+for you to fetch changes up to 68123510b7c1c610387dd306f92ff539c3c546b5:
+
+  soc: ti: pm33xx: do device_node auto cleanup (2024-08-28 12:18:02 -0500)
+
+----------------------------------------------------------------
+TI SoC driver updates for v6.12
+
+- pm33xx/knav_qmss_queue/pruss: Cleanups around device_node scope based cle=
+anups
+- knav: Additional fixes around of property
+- k3-ringacc: Optimizations for data structure
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      soc: ti: k3-ringacc: Constify struct k3_ring_ops
+
+Kousik Sanagavarapu (4):
+      soc: ti: pruss: factor out memories setup
+      soc: ti: pruss: do device_node auto cleanup
+      soc: ti: knav_qmss_queue: do device_node auto cleanup
+      soc: ti: pm33xx: do device_node auto cleanup
+
+Rob Herring (Arm) (2):
+      soc: ti: knav: Drop unnecessary check for property presence
+      soc: ti: knav: Use of_property_read_variable_u32_array()
+
+ drivers/soc/ti/k3-ringacc.c      |  12 +--
+ drivers/soc/ti/knav_dma.c        |  22 ++---
+ drivers/soc/ti/knav_qmss_queue.c | 105 +++++++++++------------
+ drivers/soc/ti/pm33xx.c          |  52 +++++-------
+ drivers/soc/ti/pruss.c           | 176 ++++++++++++++++++-----------------=
+----
+ 5 files changed, 166 insertions(+), 201 deletions(-)
+
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--m7ebxaqyq4z7akcy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmbXMaoACgkQ3bWEnRc2
+JJ1pHg/9H8TVXIuY7A9yGfeXU0u0R9pxvdyL0jTM75Ljo7EU5Y4YFqlmXdRSNBml
+xQ75Gt3MQ8r0nc8504GlvnWc0TshBLewo+YN8RdYjHOo13wwiW2gDgpuROx74x9c
+HCEAtzmUfwO2JzE0NhlmzmZ9hpWnRakxzuDa55+ySE28T9cH2JyGjMnnJ4o6VG06
+vfhgwBHdYssKBFCCuMuT+Thajp1eyzb/Kw2RxCUcNUF5E2ROaZs7JaAJU26cLBUT
+IW9OiadTuAoDnq8PFdz00u4ECgDNnGFwb2waUFvxZPbcyuvnndMbfYIZBwlNRhNa
+jqhA1GGWks3yHabNdrh6MESgp5IqfudFM4zpoAcaHtyevdKrWtNVAJfRKMxLF6L8
+3C6dNp48uqV1RO8ydVL3Tr5C9LZOKblF+fyx+gKlYFA8OLvj6nnCZqzZ7ScaY3Oc
+tZOHsfvMv2fQ6KqjXAQs6Js3wPQ5a6jSaYmcXPVjzREFd4iT3WYAh6yKx5GI0j85
+6X9zdP8Z5WaU7ok9j/OwmCJfTVNMkmaItf5Yyu4tqE99BhuNr/DCPYvmu2NDOnVB
+iS2jQNYZwuguWjdm9cSjIwMwVwtbBolTeNMEOIXdx064T51fdXSJup532YSxGBk4
+sZ+xXExQxP9xwibyj3RREYClrKKcZ5uzC6yvCxt2UMNs7v6B624=
+=H3p9
+-----END PGP SIGNATURE-----
+
+--m7ebxaqyq4z7akcy--
