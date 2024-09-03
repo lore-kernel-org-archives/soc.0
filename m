@@ -1,108 +1,119 @@
-Return-Path: <SRS0=OJnQ=QB=arndb.de=arnd@kernel.org>
+Return-Path: <robh@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E22CD3430
-	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 13:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7B76CD3439
+	for <soc@archiver.kernel.org>; Tue,  3 Sep 2024 14:26:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 805BFC4CEC8; Tue,  3 Sep 2024 13:21:49 +0000 (UTC)
-Received: from pfhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C0BFAC4CEC4;
-	Tue,  3 Sep 2024 13:21:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C0BFAC4CEC4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id C406D1140227;
-	Tue,  3 Sep 2024 09:21:46 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Tue, 03 Sep 2024 09:21:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725369706;
-	 x=1725456106; bh=6uAg9vdYou7CPE1C/iTNIR5JX9ARrPpI3BYjJuX3CTQ=; b=
-	CxfvmrV2scOeCBa+R/XV5lhFzS0KctzvlnqO6wT7o8GiayG4pFvhEcQXoSx/1B1x
-	hurRrqKVjAm9CHao7LI9+UW0wnCDw4CNtYTcuMQcJqSQwOUnpVEi+11Dq/OSUMYs
-	41P5ptEkmCt/fejpXkqdcob2rY30MFoW5PKWBv6jfJSNAqtPEa84QSFhBQnVHuce
-	txuahYPLccvjaYvfmacmUHZ0t/8KWOYaivySqtSKVC19btH//N3RLc2XELqN3aiC
-	o0xAltMWY/TE8a58Av/jrn6EjOzWLP8NnRLw1JnD52Avm1BdEj0sVnnG7W3Xq+69
-	6IJkKMVsrFB90dtJrtvm1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725369706; x=
-	1725456106; bh=6uAg9vdYou7CPE1C/iTNIR5JX9ARrPpI3BYjJuX3CTQ=; b=T
-	yM2PDfFGKzG9MECFSzd1DLJPkSiYjmgmfBTs2bZA9HbYViKwp18xfB7ItpSOT//w
-	sY2Fuc/oWsktrJ1ts6uygxU85jSdqXN26fQXBYQqfVA3DTslrDv2cbHGTDqMBYjA
-	+eWVoXRqBdx+W7H/7TwEOz9magM+idGiUgJrhtioibxhFtzfne2M0RU3OPkwhQm4
-	DT18iAbWQK+8qB56ZBTiFsUq0ZALCCERS+3wGrNFfetp4RnyU4EZSmZfcKmwZKKJ
-	yUBpZITI+5XocqqRqdRS+HmEaHcNG1BdC2uvMHqCzjCPww02h+rMh48etOxCXzQf
-	9Lo0lmCoI0yB1AaG+ec+A==
-X-ME-Sender: <xms:ag3XZk9xlec1MNjqXNyjFRHYPel7qR2UtFv2s3OaMuU04NIhbVe83A>
-    <xme:ag3XZstUOB2pXp64a3lYxFDD4RrUsJBU1ZAM2ydcC5VV3ctM5JQIqFVqKyOgISroq
-    9KufEftpM3Pg7f0jnw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehhedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddv
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnh
-    htsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepshgvsggrshhtihgrnhdrhhgvshhs
-    vghlsggrrhhthhesghhmrghilhdrtghomhdprhgtphhtthhopegrnhguhieskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheprghrmheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    khgrsggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrd
-    horhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepihhl
-    phhordhjrghrvhhinhgvnheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhope
-    grnhgurhgvfieslhhunhhnrdgthh
-X-ME-Proxy: <xmx:ag3XZqDUrjlzIYiIPzU7AiP7mZKKJRi_uPl4WpTiqRiwWGXwaPooFA>
-    <xmx:ag3XZke026oHq9pL-JmBLdkkQJwchi69dvPcUikcJx6BAR6D4f-t2Q>
-    <xmx:ag3XZpNQOyM8491IcMyp-OJ-W-t2W1W1rNwxm2aAD0SMjvUjsJfhmQ>
-    <xmx:ag3XZun8D40sPTs8FEcOJY9VLsio50aO82ebjE1Mqg1I3bZ9mCdNQA>
-    <xmx:ag3XZukbMymzv_WXBwnbzdEUoKzYnF1rIckiyrQSzae62kNFGKVKX29a>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4F4902220083; Tue,  3 Sep 2024 09:21:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	id 6F9C8C4CEC7; Tue,  3 Sep 2024 14:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A63C4CEC9;
+	Tue,  3 Sep 2024 14:26:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725373608;
+	bh=Hj1yivyYJankQDXcGlg/R1Vke/ZctiA++fiXMrswr54=;
+	h=Date:From:To:List-Id:Cc:In-Reply-To:References:Subject:From;
+	b=IkbCYtHdw6Ew4ZzvsoQISiVKPOZMpn0ovpdwamRhGSlsqS5CsVFCXJH1c/1AtPHo1
+	 SJmP8fN9RaUGdFhyZgZ+9lXDrJH6ciENVmKJD4r5YhU0Mh7WFzhcHpbiC5p+9huE69
+	 DPe6ftVLe/+qQVYQm3jqto90bUMmyM5o4flToJ/L8e9Y9Scnwzu06wclbVRr/Xf/n6
+	 Sjqa1d9NeB44QGpcSYDV3+9cNt8n5eIcz21CXLOZ0X1XoJybAYSbfDmhIe7EZ1r3sL
+	 3oMV3hQbQKOjXpHhZElJy5O95+zME1De+GltV5rmrANeyD7gyp7/oFTaFE4LXsBpdr
+	 4xJqbOWreOjEQ==
+Date: Tue, 03 Sep 2024 09:26:47 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Date: Tue, 03 Sep 2024 15:21:15 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- "Lee Jones" <lee@kernel.org>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: "Pavel Machek" <pavel@ucw.cz>, linux-leds@vger.kernel.org, soc@kernel.org,
- "Gregory Clement" <gregory.clement@bootlin.com>, arm <arm@kernel.org>,
- "Andy Shevchenko" <andy@kernel.org>, "Hans de Goede" <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "Andrew Lunn" <andrew@lunn.ch>,
- "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>
-Message-Id: <fce1d0ed-d7e3-401a-9132-0b5c1571398c@app.fastmail.com>
-In-Reply-To: <20240903101930.16251-11-kabel@kernel.org>
+Cc: =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, Lee Jones <lee@kernel.org>, 
+ Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy@kernel.org>, 
+ Pavel Machek <pavel@ucw.cz>, arm@kernel.org, linux-leds@vger.kernel.org, 
+ Hans de Goede <hdegoede@redhat.com>, soc@kernel.org, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+In-Reply-To: <20240903101930.16251-1-kabel@kernel.org>
 References: <20240903101930.16251-1-kabel@kernel.org>
- <20240903101930.16251-11-kabel@kernel.org>
-Subject: Re: [PATCH leds v2 10/11] leds: turris-omnia: Use 100 columns in the rest of
- the code
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <172537335178.875540.10164997021345385818.robh@kernel.org>
+Subject: Re: [PATCH leds v2 00/11] Turris Omnia LED driver changes
 
-On Tue, Sep 3, 2024, at 12:19, Marek Beh=C3=BAn wrote:
-> There are 7 more places in the code where the 100 column limit can be
-> used to make the code more uniform. Do it.
->
-> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
 
-I feel like it's ok to use either 80-character or 100-character line
-lengths in a file, but I don't see much value in changing from one to
-another here, maybe just drop this patch.
+On Tue, 03 Sep 2024 12:19:19 +0200, Marek Behún wrote:
+> Hello Lee,
+> 
+> this is v2 of Turris Omnia LED driver changes.
+> v1 can be found at
+>   https://lore.kernel.org/linux-leds/20240902124104.14297-1-kabel@kernel.org/
+> 
+> This series is for 6.12, but it depends on changes that have been
+> merged to 6.11-rc3. Your for-leds-next branch is based on 6.11-rc1, so
+> it won't apply there.
+> 
+> Changes since v1:
+> - patch 2 does away also with i2c_master_send() call, in favor of
+>   omnia_cmd_write()
+> - patch 5 was rewritten to not use devm_device_add_group() anymore,
+>   since this function was deprecated. Instead, the sysfs_put() call for
+>   the "brightness" node is done the first time the IRQ handler is
+>   called, instead of driver probe.
+> - the changes were done with 100 columns limit in mind
+> - added 3 more "cosmetic" patches
+> 
+> Marek
+> 
+> Marek Behún (11):
+>   turris-omnia-mcu-interface.h: Move command execution function to
+>     global header
+>   leds: turris-omnia: Use command execution functions from the MCU
+>     driver
+>   turris-omnia-mcu-interface.h: Add LED commands related definitions to
+>     global header
+>   leds: turris-omnia: Use global header for MCU command definitions
+>   leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
+>   platform: cznic: turris-omnia-mcu: Inform about missing LED panel
+>     brightness change interrupt feature
+>   leds: turris-omnia: Inform about missing LED gamma correction feature
+>     in the MCU driver
+>   leds: turris-omnia: Use dev_err_probe() where appropriate
+>   leds: turris-omnia: Use uppercase first letter in all comments
+>   leds: turris-omnia: Use 100 columns in the rest of the code
+>   ARM: dts: turris-omnia: Add global LED brightness change interrupt
+> 
+>  .../dts/marvell/armada-385-turris-omnia.dts   |   1 +
+>  drivers/leds/leds-turris-omnia.c              | 283 +++++++-----------
+>  .../platform/cznic/turris-omnia-mcu-base.c    |   3 +
+>  drivers/platform/cznic/turris-omnia-mcu.h     | 130 --------
+>  include/linux/turris-omnia-mcu-interface.h    | 148 ++++++++-
+>  5 files changed, 257 insertions(+), 308 deletions(-)
+> 
+> --
+> 2.44.2
+> 
+> 
 
-       Arnd
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y marvell/armada-385-turris-omnia.dtb' for 20240903101930.16251-1-kabel@kernel.org:
+
+arch/arm/boot/dts/marvell/armada-385-turris-omnia.dtb: led-controller@2b: 'interrupts-extended' does not match any of the regexes: '^multi-led@[0-9a-b]$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/leds/cznic,turris-omnia-leds.yaml#
+
+
+
+
+
