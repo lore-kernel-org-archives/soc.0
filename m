@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F31CD4F24
-	for <soc@archiver.kernel.org>; Wed,  4 Sep 2024 19:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B8E3CD4F24
+	for <soc@archiver.kernel.org>; Wed,  4 Sep 2024 19:48:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AC163C4CEC8; Wed,  4 Sep 2024 19:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD95C4CEC2;
-	Wed,  4 Sep 2024 19:32:29 +0000 (UTC)
+	id 4FA80C4CEC8; Wed,  4 Sep 2024 19:48:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91834C4CEC2;
+	Wed,  4 Sep 2024 19:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725478350;
-	bh=CoSHc/uwcCheAIeCjQNOGGkVLKV9Vx9ISQxOjA5g+7A=;
+	s=k20201202; t=1725479309;
+	bh=xsUoScYxpzbryo8iIoP5ta/J0lMeuRcpjTj8DGoTEkg=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=h++20Q4vKdV2h2DYopceBXEmt8k2O1ng8E7WKWkrjNPuC9rBLmvLEJliTRYI7AuhS
-	 Rtj0ivTdjEVUVvYeFscWUg49KuYGXrsg1gnnOw/K1OPWPDFrtAciYdOOmlmw9KGIBF
-	 3eAi7JRYgyD8N8DGYZYjogd0S2pfSg2Mx6AVcTDnY7s1nrNRC1OmxrBxahhC1BSe23
-	 zuGzcSPy7niCkSLHVltA0DIERJf5paW/jGVeeX5ccrRXrGmiEA2KXWb+ZzIOY0XNzL
-	 AbKret6V13NhpGsv3oXOIyeNY7WHVATX4F0Z7FDFiG8lwgE2Y69FRs6l3obcjgi8lT
-	 f/BZhduq9Y3jw==
+	b=i7F1mgTOPB890DROpc3kKie4GXlWiZn7dJNiX9yBwyTdw6G6h+ZpfHWtborT42zre
+	 lpSqxbW2hzMU7zAo1aZ52sUKTZpND9CCTqfhgkiXdmrpZbTmwPUFAIzf5I9MARuNyN
+	 RzqkNnTIusy1sZw8zaHZOlfX46LkXVh3B1mr3Q4N6cbTcsyf4aJXS4EDEKL3GYapts
+	 uxV2TSAzE9rU3YB4ml7lOR7/jqsAseZxCdZMXx6MdG6RkjjLFem3OhzXHmBK0Iu3fn
+	 +gT7w8c66G/BkTgMHIOgrwz9K9/SArh+Czbkmi2Qrm7bYne4bBV+tiIJrDDP5ZMCq2
+	 9bavCc/u0r/yA==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -29,14 +29,10 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Rayyan Ansari <rayyan.ansari@linaro.org>,
-	Luca Weiss <luca@lucaweiss.eu>,
-	Bingwu Zhang <xtexchooser@duck.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Rayyan Ansari <rayyan@ansari.sh>
-Subject: [GIT PULL] Qualcomm Arm32 DeviceTree updates for v6.12
-Date: Wed,  4 Sep 2024 14:32:27 -0500
-Message-ID: <20240904193228.15466-1-andersson@kernel.org>
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [GIT PULL] Qualcomm Arm64 defconfig updates for v6.12
+Date: Wed,  4 Sep 2024 14:48:26 -0500
+Message-ID: <20240904194827.16766-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,67 +44,21 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.12
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.12
 
-for you to fetch changes up to a11a87a9a66e5ec1213c712ae681dbda37c2b1b8:
+for you to fetch changes up to 115c14ee54aae1d61d2405f9b31f67c1e8947f4e:
 
-  ARM: dts: qcom: add generic compat string to RPM glink channels (2024-08-14 21:41:43 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm32 DeviceTree updates for v6.12
-
-MSM8226 gains CPU frequency scaling support and CPU thermal zones wired
-up. The Nokia Lumia 630 and 830 gains inertial sensors.
-
-Samsung Galaxy S5 gains pstore functionality.
-
-A range of fixes for DeviceTree validation issues are added.
+  arm64: defconfig: build CONFIG_REGULATOR_QCOM_REFGEN as module (2024-08-14 21:51:08 -0500)
 
 ----------------------------------------------------------------
-Bingwu Zhang (1):
-      ARM: dts: qcom: msm8974pro-samsung-klte: Add pstore node
+Qualcomm Arm64 defconfig updates for v6.12
 
+Enable the Qualcomm refgen regulator driver, being introduced in SM8350
+for DSI, as a module.
+
+----------------------------------------------------------------
 Dmitry Baryshkov (1):
-      ARM: dts: qcom: add generic compat string to RPM glink channels
+      arm64: defconfig: build CONFIG_REGULATOR_QCOM_REFGEN as module
 
-Luca Weiss (3):
-      ARM: dts: qcom: msm8226: Add CPU frequency scaling support
-      ARM: dts: qcom: msm8226: Hook up CPU cooling
-      ARM: dts: qcom: msm8226: Convert APCS usages to mbox interface
-
-Rayyan Ansari (9):
-      ARM: dts: qcom: pma8084: add pon node
-      ARM: dts: qcom: apq8064-pins: correct error in drive-strength property
-      ARM: dts: qcom: asus,nexus7-flo: remove duplicate pinctrl handle in i2c nodes
-      ARM: dts: qcom: apq8064: adhere to pinctrl dtschema
-      ARM: dts: qcom: ipq8064: adhere to pinctrl dtschema
-      ARM: dts: qcom: ipq4019: adhere to pinctrl dtschema
-      ARM: dts: qcom: apq8064: drop reg-names on sata-phy node
-      ARM: dts: qcom: {a,i}pq8064: correct clock-names in sata node
-      ARM: dts: qcom: msm8226-microsoft-common: Add inertial sensors
-
- arch/arm/boot/dts/qcom/pma8084.dtsi                |  16 +-
- .../boot/dts/qcom/qcom-apq8064-asus-nexus7-flo.dts |   4 -
- arch/arm/boot/dts/qcom/qcom-apq8064-cm-qs600.dts   |  25 +-
- arch/arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts    |  25 +-
- arch/arm/boot/dts/qcom/qcom-apq8064-pins.dtsi      | 362 ++++++++-------------
- .../qcom/qcom-apq8064-sony-xperia-lagan-yuga.dts   |  10 +-
- arch/arm/boot/dts/qcom/qcom-apq8064.dtsi           |  39 ++-
- arch/arm/boot/dts/qcom/qcom-apq8084.dtsi           |   2 +-
- arch/arm/boot/dts/qcom/qcom-ipq4018-ap120c-ac.dtsi |  34 +-
- arch/arm/boot/dts/qcom/qcom-ipq4018-jalapeno.dts   |  27 +-
- arch/arm/boot/dts/qcom/qcom-ipq4019-ap.dk01.1.dtsi |  26 +-
- arch/arm/boot/dts/qcom/qcom-ipq4019-ap.dk04.1.dtsi |  14 +-
- .../boot/dts/qcom/qcom-ipq4019-ap.dk07.1-c1.dts    |   8 +-
- .../boot/dts/qcom/qcom-ipq4019-ap.dk07.1-c2.dts    |   2 +-
- arch/arm/boot/dts/qcom/qcom-ipq4019-ap.dk07.1.dtsi |   6 +-
- arch/arm/boot/dts/qcom/qcom-ipq8064-ap148.dts      |  11 +-
- arch/arm/boot/dts/qcom/qcom-ipq8064-rb3011.dts     |  76 ++---
- arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi           | 116 +++----
- .../dts/qcom/qcom-msm8226-microsoft-common.dtsi    |  26 ++
- .../dts/qcom/qcom-msm8226-microsoft-moneypenny.dts |   3 +
- arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           | 136 +++++++-
- .../boot/dts/qcom/qcom-msm8926-microsoft-tesla.dts |   3 +
- arch/arm/boot/dts/qcom/qcom-msm8974.dtsi           |   4 +-
- .../qcom/qcom-msm8974pro-samsung-klte-common.dtsi  |  13 +
- 24 files changed, 500 insertions(+), 488 deletions(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
