@@ -1,197 +1,65 @@
-Return-Path: <SRS0=J1cx=QC=yeah.net=shawnguo2@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF6CCD484C
-	for <soc@archiver.kernel.org>; Wed,  4 Sep 2024 14:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94520CD484A
+	for <soc@archiver.kernel.org>; Wed,  4 Sep 2024 14:52:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 62101C4CECA; Wed,  4 Sep 2024 14:35:00 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
-	by smtp.kernel.org (Postfix) with ESMTP id DC23CC4CEC3;
-	Wed,  4 Sep 2024 14:34:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC23CC4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=H/NDy
-	R/ItK+Lbs72oZbvRAK+iE3r/454WBpxdLxx3BQ=; b=MYvdhG5DgZ2bVDcR2KaC3
-	quwCq2pAABBmhUNej8lMf4Ez7rYphbq/Kkxs+oHgk718dEW3EZ+au4EZAlGcGh8F
-	7mAiSnsQffUCNkSSftZYK41/Esb3YhZWrmpF+ZFFyV7L3QeueDcuu3IcErA5vBgx
-	U/1nZp9A4e+uJhsYkwJ4c0=
-Received: from localhost.localdomain (unknown [114.216.210.89])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgCHd9UEcNhmUkhrAA--.17423S5;
-	Wed, 04 Sep 2024 22:34:47 +0800 (CST)
-From: Shawn Guo <shawnguo2@yeah.net>
+	id 82975C4CECB; Wed,  4 Sep 2024 14:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C123EC4CEC3;
+	Wed,  4 Sep 2024 14:52:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725461536;
+	bh=xVR+mPcyEgGmpXVWMWXMbgCvErzCkqJ+KiBfrn+9naw=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=LPuhZIDZ95cRViyQcuF0UoUPlqZfr6jUEHkAlRhRKH0p1S597SYhgXNBD9EqOYAOX
+	 iwbCwDnvfYsOoQTIw4Yj5m4dL/kVoveEkxOD9bo+lq6edL7Y1GSkiwGZp4kXrlWeL5
+	 T9eNsrOWK14iII+FCjuNkTV47UUySkz3K94yUvFBNfyn8a00MW2KK9CGu6xYIOzGD+
+	 6YvnGZKx5tDe+DKWpbakSmwFGOZzaeaUfS9+rQTBP6ME8zSIrEhAr/V2g7QCM5Vl0W
+	 yQp5VGEuk22IYjmSC0PXIW9TA/DY6h4gzU0fO7y1Gp712lqSfanSJMxRKCWixgSlmN
+	 vLIEoz9eC5fNA==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	kernel@pengutronix.de,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/6] i.MX ARM device tree changes for 6.12
-Date: Wed,  4 Sep 2024 22:34:37 +0800
-Message-Id: <20240904143439.211552-4-shawnguo2@yeah.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240904143439.211552-1-shawnguo2@yeah.net>
-References: <20240904143439.211552-1-shawnguo2@yeah.net>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [GIT PULL] One more Qualcomm driver fix for v6.11
+Date: Wed,  4 Sep 2024 09:52:13 -0500
+Message-ID: <20240904145214.4089-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgCHd9UEcNhmUkhrAA--.17423S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JrW5Kw1DZw1fZF4kAr1kKrg_yoW3GFyDpa
-	ySkrZrGrs7Cr1aq34UJr40g3s8Zw1jvr1rZr15Gay8KF43Za4UXr9aywn3t345ZFWrG3WS
-	kr1kur97JrWkuaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j7BMNUUUUU=
-X-Originating-IP: [114.216.210.89]
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBBVQZWbYPvF8rQAAsE
 
-From: Shawn Guo <shawnguo@kernel.org>
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+The following changes since commit c158ceb826068a8bbe3c9e78df420f47ba53c8a8:
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+  soc: qcom: pd-mapper: Fix singleton refcount (2024-08-21 09:50:48 -0500)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-6.12
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.11-2
 
-for you to fetch changes up to c30f4711b8bf938c447750f31eb6ad00a67782b1:
+for you to fetch changes up to db213b0cfe3268d8b1d382b3bcc999c687a2567f:
 
-  ARM: dts: imx28-lwe: Remove saif[01] definitions (2024-09-03 16:23:20 +0800)
-
-----------------------------------------------------------------
-i.MX ARM device tree changes for 6.12:
-
-- A series from Fabio Estevam to fix dt-schema warnings on i.MX23,
-  i.MX28 and i.MX27 device trees
-- A bunch of changes from Krzysztof Kozlowski that corrects TQ Systems
-  DTS patterns in MAINTAINERS file and fix various dt-schema warnings
-- A couple changes from Liu Ying to improve HDMI support on i.MX53 QSB
-  board
-- A series from Lukasz Majewski to update imx28-lwe device tree, fixing
-  partition definitions, reducing SPI frequency and cleaning up SAIF
-- A series from Markus Niebel to improve TQ-Systems device trees, adding
-  iio-hwmon device, using better compatible for LM75 temp sensor, moving
-  I2C3 pinmux to a better place
+  firmware: qcom: uefisecapp: Fix deadlock in qcuefi_acquire() (2024-08-30 22:17:50 -0500)
 
 ----------------------------------------------------------------
-Elinor Montmasson (1):
-      ARM: dts: imx6: update spdif sound card node properties
+One more Qualcomm driver fix for v6.11
 
-Fabio Estevam (5):
-      ARM: dts: imx6sx-udoo-neo: Properly configure ENET_REF
-      ARM: dts: imx1/imx27: Use dma-controller as node name
-      ARM: dts: imx28-apx4devkit: Fix the regulator description
-      ARM: dts: imx23/8: Rename apbh and apbx nodes
-      ARM: dts: imx28-tx28: Fix the fsl,saif-master usage
+This resolves a deadlock in the Qualcomm uefisecapp driver following the
+attempt to acquire global context is acquired in the case the device
+isn't probed.
 
-Krzysztof Kozlowski (10):
-      MAINTAINERS: correct TQ Systems DTS patterns
-      ARM: dts: imx7d-zii-rmu2: fix Ethernet PHY pinctrl property
-      ARM: dts: imx7: align pin config nodes with bindings
-      ARM: dts: imx7d-sdb: align pin config nodes with bindings
-      ARM: dts: imx6ul-geam: fix fsl,pins property in tscgrp pinctrl
-      ARM: dts: imx6ull-seeed-npi: fix fsl,pins property in tscgrp pinctrl
-      ARM: dts: imx6ul-tx6ul: drop empty pinctrl placeholder
-      ARM: dts: imx6ul: align pin config nodes with bindings
-      ARM: dts: imx6sl: align pin config nodes with bindings
-      ARM: dts: imx6qdl: align pin config nodes with bindings
+----------------------------------------------------------------
+Dan Carpenter (1):
+      firmware: qcom: uefisecapp: Fix deadlock in qcuefi_acquire()
 
-Liu Ying (2):
-      ARM: dts: imx53-qsb-hdmi: Do not disable TVE
-      ARM: dts: imx53-qsb-hdmi: Merge display0 node
-
-Lukasz Majewski (3):
-      ARM: dts: imx28-lwe: Fix partitions definitions
-      ARM: dts: imx28-lwe: Reduce maximal SPI frequency
-      ARM: dts: imx28-lwe: Remove saif[01] definitions
-
-Markus Niebel (6):
-      ARM: dts: imx7-mba7: add iio-hwmon support
-      ARM: dts: imx7-mba7: improve compatible for LM75 temp sensor
-      ARM: dts: imx6qdl-tqma6: move i2c3 pinmux to imx6qdl-tqma6b
-      ARM: dts: imx6qdl-tqma6: improve compatible for LM75 temp sensor
-      ARM: dts: imx6qdl-mba6: improve compatible for LM75 temp sensor
-      ARM: dts: imx6qdl-mba6b: remove doubled entry for I2C1 pinmux
-
- MAINTAINERS                                        |   5 +-
- arch/arm/boot/dts/nxp/imx/imx1.dtsi                |   2 +-
- arch/arm/boot/dts/nxp/imx/imx27.dtsi               |   2 +-
- arch/arm/boot/dts/nxp/imx/imx53-qsb-hdmi.dtso      |   6 -
- arch/arm/boot/dts/nxp/imx/imx6q-cm-fx6.dts         |  15 +-
- arch/arm/boot/dts/nxp/imx/imx6q-prti6q.dts         |  15 +-
- arch/arm/boot/dts/nxp/imx/imx6q-tbs2910.dts        |   9 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-apalis.dtsi      |  15 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-apf6dev.dtsi     |   9 +-
- .../boot/dts/nxp/imx/imx6qdl-aristainetos2.dtsi    |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-colibri.dtsi     |  15 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-cubox-i.dtsi     |   9 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw52xx.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw53xx.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw54xx.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw553x.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw560x.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw5903.dtsi      |  10 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw5904.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw5910.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-gw5912.dtsi      |   4 +-
- .../arm/boot/dts/nxp/imx/imx6qdl-hummingboard.dtsi |   9 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-icore-rqs.dtsi   |   8 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-mba6a.dtsi       |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-mba6b.dtsi       |  11 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-sabreauto.dtsi   |  13 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6.dtsi       |  14 -
- arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6a.dtsi      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6b.dtsi      |  20 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-tx6.dtsi         |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-var-dart.dtsi    |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-var-som.dtsi     |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6qdl-wandboard.dtsi   |   9 +-
- arch/arm/boot/dts/nxp/imx/imx6sl-evk.dts           |  12 +-
- arch/arm/boot/dts/nxp/imx/imx6sl-warp.dts          |   8 +-
- arch/arm/boot/dts/nxp/imx/imx6sx-sabreauto.dts     |   9 +-
- arch/arm/boot/dts/nxp/imx/imx6sx-sdb.dtsi          |   9 +-
- arch/arm/boot/dts/nxp/imx/imx6sx-udoo-neo.dtsi     |   5 +
- arch/arm/boot/dts/nxp/imx/imx6ul-14x14-evk.dtsi    |   4 +-
- .../boot/dts/nxp/imx/imx6ul-ccimx6ulsbcexpress.dts |   4 +-
- .../arm/boot/dts/nxp/imx/imx6ul-ccimx6ulsbcpro.dts |  14 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-ccimx6ulsom.dtsi  |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-geam.dts          |   6 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-isiot.dtsi        |   4 +-
- .../boot/dts/nxp/imx/imx6ul-kontron-bl-common.dtsi |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-liteboard.dts     |   2 +-
- .../nxp/imx/imx6ul-phytec-segin-peb-wlbt-05.dtsi   |   4 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-phytec-segin.dtsi |   6 +-
- .../boot/dts/nxp/imx/imx6ul-tqma6ul-common.dtsi    |   2 +-
- .../boot/dts/nxp/imx/imx6ul-tx6ul-mainboard.dts    |   2 +-
- arch/arm/boot/dts/nxp/imx/imx6ul-tx6ul.dtsi        |  18 +-
- .../boot/dts/nxp/imx/imx6ull-myir-mys-6ulx.dtsi    |   8 +-
- .../dts/nxp/imx/imx6ull-seeed-npi-dev-board.dtsi   |  20 +-
- arch/arm/boot/dts/nxp/imx/imx6ull-seeed-npi.dtsi   |   6 +-
- arch/arm/boot/dts/nxp/imx/imx6ulz-bsh-smm-m2.dts   |   2 +-
- arch/arm/boot/dts/nxp/imx/imx7-colibri.dtsi        |   2 +-
- arch/arm/boot/dts/nxp/imx/imx7-mba7.dtsi           |   8 +-
- arch/arm/boot/dts/nxp/imx/imx7d-nitrogen7.dts      |   4 +-
- arch/arm/boot/dts/nxp/imx/imx7d-pico.dtsi          |  20 +-
- arch/arm/boot/dts/nxp/imx/imx7d-remarkable2.dts    |   8 +-
- arch/arm/boot/dts/nxp/imx/imx7d-sdb-reva.dts       |  34 +-
- arch/arm/boot/dts/nxp/imx/imx7d-sdb.dts            | 608 ++++++++++-----------
- arch/arm/boot/dts/nxp/imx/imx7d-zii-rmu2.dts       |   2 +-
- arch/arm/boot/dts/nxp/imx/imx7s-warp.dts           |   4 +-
- arch/arm/boot/dts/nxp/imx/mba6ulx.dtsi             |   6 +-
- arch/arm/boot/dts/nxp/mxs/imx23-evk.dts            |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx23-olinuxino.dts      |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx23-sansa.dts          |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx23-stmp378x_devb.dts  |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx23-xfi3.dts           |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx23.dtsi               |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx28-apx4devkit.dts     |  20 +-
- arch/arm/boot/dts/nxp/mxs/imx28-cfa10037.dts       |   4 +-
- arch/arm/boot/dts/nxp/mxs/imx28-lwe.dtsi           |  38 +-
- arch/arm/boot/dts/nxp/mxs/imx28-tx28.dts           |   2 +-
- arch/arm/boot/dts/nxp/mxs/imx28.dtsi               |   4 +-
- 76 files changed, 617 insertions(+), 570 deletions(-)
-
+ drivers/firmware/qcom/qcom_qseecom_uefisecapp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
