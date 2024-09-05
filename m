@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 338C0CD5BC0
-	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 12:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10BB7CD5BC2
+	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 12:50:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E3AE6C4CEC7; Thu,  5 Sep 2024 12:47:49 +0000 (UTC)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	id E3442C4CEC4; Thu,  5 Sep 2024 12:50:28 +0000 (UTC)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 419B7C4CEC3
-	for <soc@kernel.org>; Thu,  5 Sep 2024 12:47:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 419B7C4CEC3
+	by smtp.kernel.org (Postfix) with ESMTPS id 916BAC4CEC3
+	for <soc@kernel.org>; Thu,  5 Sep 2024 12:50:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 916BAC4CEC3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3787ddbd5a2so408349f8f.0
-        for <soc@kernel.org>; Thu, 05 Sep 2024 05:47:48 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374ba78f192so408198f8f.3
+        for <soc@kernel.org>; Thu, 05 Sep 2024 05:50:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725540466; x=1726145266; darn=kernel.org;
+        d=linaro.org; s=google; t=1725540626; x=1726145426; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nrk4B/qGNUdaCVWJVOZf6rns7BLg+A0NUX/JpMGGFeM=;
-        b=YWWagRyXb4I0zwKAyutusI+6V2LD6Ogd1wyrgqkH6ovGnj9+PsWtW8nU+edVZcRuju
-         U1CVK80pe3bI7Cul8eT37e7wQybvVKlp9lRo1+UC/jCJmUl0PAxD+LDpMy+fBU7id4VM
-         +UFW9J6nM3vpul0V+gAZmZoyr5M+8Tvz2qPO03fMQXps9v4EVAuvOKirONEhWo0pXFH/
-         bpAb9Vhrm05/6+sHb3nPo9AZNpbgiA3jiDOfoMEyf1ySEHqiGkpXLdVnU1yHsaJsTaUt
-         b5Mg1fLCXetNE4IEctLWeykHNUfdAPSmFXF9z0vn1RFzrOTKy739b5OnHymiqz3tVWKY
-         khqQ==
+        bh=221xxfyJ53mX+6ACnkwXA9o5xP4GeLc1zCb9rE8xus0=;
+        b=NKG/HT6m4BJeZ9J20QDyvNpUaZ/CBq6EUbpqwCrDs5qJ0sWBgfTWEl3IHTpgu/WtFJ
+         181OgdjETq30nVPhR9u31UfXvriwm4d8nQYx/CJWWiYwqFuQYP/j3lxmf8WYcJQuHGvM
+         UXvjD17LY72wi0grbSGyJSd5c2MWlnLwFhw4n6rDat5vRg7TbT92gqptNBYdrslFxkyk
+         gaENLgmuiTcuC80RaROZIhqAU2IqyqwhEhYLX2kXOAawncW+Dqb4PYNT9cU9Nut3jTKI
+         RM0UUxdQt2Lgkso7Y04N+pq5UjaDwV8zIjkxoew6bdSQ6+SAVDip5RAkaYpPn+2VtPeB
+         6gAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725540466; x=1726145266;
+        d=1e100.net; s=20230601; t=1725540626; x=1726145426;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nrk4B/qGNUdaCVWJVOZf6rns7BLg+A0NUX/JpMGGFeM=;
-        b=Qnqs0THWAccf+7B0XVwnmydSx+TK5ZTHw0EyNZNFWITZ9V6U/WJ4yGllhuHxcoNFWL
-         c+x4idgH+QsDnyKXJ2QZ9dGBlBpNPNMXWY2ejEcshh6mI1XzvGxvsd7ReTn4UxIiYwog
-         if+XAp3a/nV1OSVeiP+lrguYlDtT782VrRB1J134RlUAPgfhivpBoqbIahXR3teXHFnE
-         m7dS0zjI4U/UKWyAB6eNcxUZ/cJJqDN/2PuTjvSAZdf0DMjaFo4TC+aByYRAJ83WhyuR
-         QV+O9icEWeKNHbTCXJi3XnwcpX/IvtzsVLOO3ODP9s10q5Lhk5MV4Au8EfuvDN7qx59Y
-         whiw==
-X-Gm-Message-State: AOJu0YxxEOwXzB1Twn3nJPLz8Y7GbR8ysMNzJPIxiwbpwr00wxI05Qw7
-	tXaSSjoEdg1nOFVldTbRz3XtRAR2uNE1nTqpsX47mncDaASxElIr+BcxIUizFq9iBIN/XKL8LtM
-	n
-X-Google-Smtp-Source: AGHT+IHf0iYbRCgb9G5+xSIhuBBVI4n86LROgBs7UgYF9s8Ff3uqlS3m6Zcht7BRO/IuEFPxKw3ISQ==
-X-Received: by 2002:a5d:4f92:0:b0:374:c2b0:6fee with SMTP id ffacd0b85a97d-374fa052da8mr7727620f8f.59.1725540466094;
-        Thu, 05 Sep 2024 05:47:46 -0700 (PDT)
+        bh=221xxfyJ53mX+6ACnkwXA9o5xP4GeLc1zCb9rE8xus0=;
+        b=jx7N5olKNlzcHPK3sSSn5SOT/Kd0M/DFl7CJGShTu4Tuy6jGzg0PeYeik03zejBE87
+         kNKU25MFMeosnCspopZ0TScBCdy+rHyJqDjnBoFmTgrIqOwQLAIK9j3XOm06jXqD4r54
+         FzoW/yUAknKJ3YAmMruIfu3Ra7ZFgfzSjtHvtAEi+J8zmcuIxo86SBFaVIir5VbpnNAY
+         N9bTsLJ87YJC3zM5dmqRVaa6xWb9pRCSE0FRhTi8REngiU5jvs65oDQFEAYIodjy9k2U
+         q5il3EOoyQmzyhyjHiEfR/VWKBAe18+U8zzNKgoq7074kmFawZQD70CkM8uPcLYRd9cR
+         9ATw==
+X-Gm-Message-State: AOJu0YyKrphUtozcW45OETimU7gn8zju8h7W/AfHVfnLycUc5vlkTzba
+	/gCmQLOqwKnBsDbfPvqNMGhJEHlyVAL5CagN7r4HtEfqPa1+Xj3T6vHowy865LjQPLwmKQHaO2M
+	q
+X-Google-Smtp-Source: AGHT+IEZsNslNpypB9kxXEMsFiN7AqhU9MSx8Ef7Bti53D03NKtmUuatWvhEXto6adQ8opjZAHKXug==
+X-Received: by 2002:adf:fc08:0:b0:374:c2cf:c017 with SMTP id ffacd0b85a97d-376dea47344mr4489797f8f.46.1725540625727;
+        Thu, 05 Sep 2024 05:50:25 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:4a45:fd0d:4bfe:dc52? ([2a01:e0a:982:cbb0:4a45:fd0d:4bfe:dc52])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374bcdef309sm15002876f8f.71.2024.09.05.05.47.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374bde83ebdsm14630059f8f.48.2024.09.05.05.50.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Sep 2024 05:47:45 -0700 (PDT)
-Message-ID: <577ad7fe-19b1-468a-b994-573855493fd7@linaro.org>
-Date: Thu, 5 Sep 2024 14:47:45 +0200
+        Thu, 05 Sep 2024 05:50:25 -0700 (PDT)
+Message-ID: <cc8fb460-5ac0-4b16-8490-8ac9f89f1b7f@linaro.org>
+Date: Thu, 5 Sep 2024 14:50:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic drivers updates for v6.12
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.12
 Reply-To: neil.armstrong@linaro.org
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org, arm@kernel.org
@@ -94,7 +94,10 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a couple of new SoC IDs and meson-gx-ao-secure compatibles.
+Here's a set of Amlogic ARM64 DT changes for v6.12, with:
+- The final DT fixes to solve all remaining bindings check errors
+- Amlogic A4/A5/T7/C4 & S4 base peripheral nodes
+- New Amlogic C3 AW419 Reference Board
 
 Thanks,
 Neil
@@ -105,22 +108,104 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.12
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.12
 
-for you to fetch changes up to 009ff80bfaec1aa3fa48bbe5e2903c95931a6f37:
+for you to fetch changes up to e202307b75660aad42fafbb0d3df2c9dadf019ec:
 
-   soc: amlogic: meson-gx-socinfo: add new SoCs id (2024-08-20 17:27:27 +0200)
-
-----------------------------------------------------------------
-Amlogic drivers changes for v6.12:
-- Support new Amlogic SoCs in meson-gx-ao-secure & meson-gx-socinfo
+   arm64: dts: amlogic: gxlx-s905l-p271: drop saradc gxlx compatible (2024-09-05 09:10:28 +0200)
 
 ----------------------------------------------------------------
-Xianwei Zhao (2):
-       dt-bindings: arm: amlogic: meson-gx-ao-secure: support more SoCs
-       soc: amlogic: meson-gx-socinfo: add new SoCs id
+Amlogic ARM64 DT changes for v6.12:
+- New Boards:
+   - AW419 (Amlogic C3)
+- Power Controller node for Amlogic A5 SoC
+- Always-On Secure node for Amlogig A4/T7/C4 & S4 SoCs
+- Amlogic A4 & C3 hardware support:
+   - PLL, SPICC, NOND, SDCard, Ethernet, Watchdog
+- Final fixes for DTBs check:
+   - add clock and clock-names to sound cards
+   - drop saradc gxlx compatible
 
-  .../bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml | 16 ++++++++++++----
-  drivers/soc/amlogic/meson-gx-socinfo.c                   | 10 ++++++++++
-  2 files changed, 22 insertions(+), 4 deletions(-)
+----------------------------------------------------------------
+Huqiang Qin (1):
+       arm64: dts: amlogic: add watchdog node for A4 SoCs
 
+Neil Armstrong (2):
+       arm64: dts: amlogic: add clock and clock-names to sound cards
+       arm64: dts: amlogic: gxlx-s905l-p271: drop saradc gxlx compatible
+
+Xianwei Zhao (10):
+       arm64: dts: amlogic: a5: add power domain controller node
+       arm64: dts: amlogic: enable some device nodes for S4
+       arm64: dts: amlogic: s4: add ao secure node
+       arm64: dts: amlogic: c3: add ao secure node
+       arm64: dts: amlogic: t7: add ao secure node
+       arm64: dts: amlogic: a4: add ao secure node
+       dt-bindings: clock: fix C3 PLL input parameter
+       arm64: dts: amlogic: add some device nodes for C3
+       arm64: dts: amlogic: add C3 AW419 board
+       arm64: dts: amlogic: c3: fix dtbcheck warning
+
+  .../bindings/clock/amlogic,c3-pll-clkc.yaml        |   7 +-
+  arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+  arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi |  14 +
+  arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |  10 +
+  .../boot/dts/amlogic/amlogic-c3-c302x-aw409.dts    | 231 ++++++++++
+  .../boot/dts/amlogic/amlogic-c3-c308l-aw419.dts    | 260 +++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        | 503 ++++++++++++++++++++-
+  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |   8 +
+  arch/arm64/boot/dts/amlogic/meson-axg-s400.dts     |   4 +
+  arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts  |   4 +
+  .../boot/dts/amlogic/meson-g12a-radxa-zero.dts     |   4 +
+  arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts  |   4 +
+  arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    |   4 +
+  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |   4 +
+  .../dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts  |   4 +
+  .../meson-g12b-bananapi-cm4-mnt-reform2.dts        |   4 +
+  .../boot/dts/amlogic/meson-g12b-bananapi.dtsi      |   4 +
+  .../boot/dts/amlogic/meson-g12b-dreambox.dtsi      |   6 +
+  .../arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts |   4 +
+  .../boot/dts/amlogic/meson-g12b-gtking-pro.dts     |   4 +
+  arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |   4 +
+  .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     |   4 +
+  .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     |   4 +
+  .../boot/dts/amlogic/meson-g12b-odroid-n2l.dts     |   4 +
+  .../boot/dts/amlogic/meson-g12b-radxa-zero2.dts    |   4 +
+  .../boot/dts/amlogic/meson-g12b-ugoos-am6.dts      |   4 +
+  .../boot/dts/amlogic/meson-gx-libretech-pc.dtsi    |   4 +
+  .../arm64/boot/dts/amlogic/meson-gx-p23x-q20x.dtsi |   4 +
+  arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts |   4 +
+  .../boot/dts/amlogic/meson-gxbb-nanopi-k2.dts      |   4 +
+  .../boot/dts/amlogic/meson-gxbb-nexbox-a95x.dts    |   4 +
+  .../arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts |   4 +
+  arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts    |   4 +
+  arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts    |   4 +
+  .../boot/dts/amlogic/meson-gxbb-vega-s95.dtsi      |   4 +
+  .../boot/dts/amlogic/meson-gxbb-wetek-hub.dts      |   4 +
+  .../boot/dts/amlogic/meson-gxbb-wetek-play2.dts    |   4 +
+  .../dts/amlogic/meson-gxl-s805x-libretech-ac.dts   |   4 +
+  .../boot/dts/amlogic/meson-gxl-s805x-p241.dts      |   4 +
+  .../dts/amlogic/meson-gxl-s905x-khadas-vim.dts     |   4 +
+  .../amlogic/meson-gxl-s905x-libretech-cc-v2.dts    |   4 +
+  .../dts/amlogic/meson-gxl-s905x-libretech-cc.dts   |   4 +
+  .../boot/dts/amlogic/meson-gxl-s905x-p212.dts      |   4 +
+  .../boot/dts/amlogic/meson-gxl-s905x-vero4k.dts    |   5 +
+  .../boot/dts/amlogic/meson-gxlx-s905l-p271.dts     |   4 -
+  .../boot/dts/amlogic/meson-gxm-khadas-vim2.dts     |   4 +
+  .../arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dts |   4 +
+  arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dts |   4 +
+  arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi |   4 +
+  .../dts/amlogic/meson-libretech-cottonwood.dtsi    |   4 +
+  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     | 145 ++++++
+  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          | 136 ++++++
+  .../boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dts |   4 +
+  .../boot/dts/amlogic/meson-sm1-a95xf3-air.dts      |   4 +
+  .../boot/dts/amlogic/meson-sm1-bananapi-m2-pro.dts |   4 +
+  .../boot/dts/amlogic/meson-sm1-bananapi-m5.dts     |   4 +
+  arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts  |   4 +
+  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi  |   4 +
+  arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts   |   4 +
+  .../boot/dts/amlogic/meson-sm1-x96-air-gbit.dts    |   4 +
+  arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts  |   4 +
+  61 files changed, 1511 insertions(+), 11 deletions(-)
+  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3-c308l-aw419.dts
