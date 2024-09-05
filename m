@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25E9CD4F22
-	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 00:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC79CD4F4A
+	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 00:12:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9BA6CC4CEC3; Thu,  5 Sep 2024 00:11:26 +0000 (UTC)
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	id 55575C4CEC3; Thu,  5 Sep 2024 00:12:16 +0000 (UTC)
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CE7E0C4CEC2
-	for <soc@kernel.org>; Thu,  5 Sep 2024 00:11:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE7E0C4CEC2
+	by smtp.kernel.org (Postfix) with ESMTPS id 9D903C4CECA
+	for <soc@kernel.org>; Thu,  5 Sep 2024 00:12:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9D903C4CECA
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-717594b4ce7so172935b3a.0
-        for <soc@kernel.org>; Wed, 04 Sep 2024 17:11:23 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2d8a744aa9bso102700a91.3
+        for <soc@kernel.org>; Wed, 04 Sep 2024 17:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725495083; x=1726099883; darn=kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725495134; x=1726099934; darn=kernel.org;
         h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=WBb2m4LRqIVhYecRL8ia2k0mOHcNoJOjR2lFU/Vhyqs=;
-        b=kEP8moK+XCWZCp3d+pU/8Y/47giXNDOK/xt3nMXNG68ekLioyohLBjxgP+pqvxRa+N
-         xgjFNfARorRPXP//gHRja6+HcIxAFTWqEKZir47I9f/s9eRDL4ExM1BJxuUoxWRdTcmI
-         QKkB7O5Y/mEVDdlQetiQAP2xVWA4oPwP2Wo/BluEMs8PqY5ErAZeywpKxdN2lnsy9Zli
-         4qYOoeI2g/DaVnIwh64xjz226MpHvFmwNcogay1U/axybVn77Hv+7rfvNKMQsqLu4Jv2
-         eOdNYL6q69rcFK4AFfGdlsvW+uDBieWPbg7tL1tA+GQCeG8tK6kfGZaI3uTTBTE193bo
-         +2tg==
+        bh=wL4u12NV1VQuj60Ffym57Y1XbUkuHQYZgv+GZJbTtq4=;
+        b=eixLWNVq0QPcwgtSc+9r3bY3zEKwie3c+hJ+fjpbU+P4bAvESlj+X7HTOqXijYvbQt
+         7OILBr6lyZ9lEZHb8ODmyJvgMru4rI1Or6/dLKrQjZilzTImlNXisO3ilTBDkvpjhgHN
+         shWOJFTnMr5fXE4F3K8eXwupazvvseHynna6o63szFn8CTLzt9V3gjI89j+sG+AmS1fl
+         g5u/mx8ekfT63ESjFMpU3FB11ENbM3WVpn9iyCTIq3DfLBjRChfyYOkOkNVkZ/XHgGW/
+         rxphnZZ+HqloOt8GkhKFkAP+NEqo7A+mAe8MlvW6WVsyV30G3YqeC6xnt4rcYzETCuZN
+         iLAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725495083; x=1726099883;
+        d=1e100.net; s=20230601; t=1725495134; x=1726099934;
         h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WBb2m4LRqIVhYecRL8ia2k0mOHcNoJOjR2lFU/Vhyqs=;
-        b=efsxdN9EtWtY14JISu5HNtDdPDfH/jJS2PEngl2BdMOuMWr058hWFagjDPHNqVN1kY
-         zzZ1l522lqYTySZnk+/OEfYyQYfp2hzaHb5NFi81U4k3FEE+AFsJj9+eckIrp/kIY7RP
-         ZoUP/KpowWC3WFP+SYL5PyK4QkAkFGrKlUk0QK7nwk6oBQOIum5jFzOi2jAv0Rf0/Dco
-         vZz9siDUxCgMu0TEqLVdOuAU4fXL3AWqUQggGax9Fq0Mbz1AGYLRALkOfYNvei9B5d9Z
-         ehrdaFehT5ujwGfTIN7lD4pCmSDyZVN0i7bP0lqzMg7GaogCMS2JQ46BZFMzROBkF50P
-         YbKw==
-X-Gm-Message-State: AOJu0Yx/iQAzTRdYtHYQAjnUGkpMe0hKlVzesZZ72jp3TjFxM2ozISG4
-	auo+T++/AVMOHiBeGp9TEmf2CN9PLAjft1J+9AfSuOPK1NAAUo+gC+jpHihEl+jSj55R7r8zu/W
-	e
-X-Google-Smtp-Source: AGHT+IEispmsRDT/jVl+Mi6E0JuyUc+QsYEaQ8/O5NzZYXN3oQwk+xP3FkJL7y6A7+ov8gEQTBNBJg==
-X-Received: by 2002:a05:6a00:2e8f:b0:705:c0a1:61c9 with SMTP id d2e1a72fcca58-715dfb127c2mr26216960b3a.9.1725495082771;
-        Wed, 04 Sep 2024 17:11:22 -0700 (PDT)
+        bh=wL4u12NV1VQuj60Ffym57Y1XbUkuHQYZgv+GZJbTtq4=;
+        b=rPtWFgDxYwhsdVgPvIJ26joeyf0Nz9zQQqH68SuiJ95ipn0mkc7DwH7ZJD/+cxeIIw
+         ShhgdhyM763a+3RHk7uanAmH96lRbtJWuzQPyjpFkePpTpEyGCwmiG3itrURET+MSCzl
+         zWMbop/jhxJsWnW+pgR/lvcGwhQKrQVCpHusTfXdIErplnMvRPifWfCjP8gH003D9g7A
+         Cvszm3Z8/EhfKFVHqzqynV8MRqm1U6fmuZttlNKt7yAISRhWxnv9rtx2kqkaAWRpE1qI
+         nlQMt5OBDK+sdJAPZP3NnNqvuucxcBKVk/rpET88NKwkAQ47fEJvDIdojWf77d8qja0B
+         NDhg==
+X-Gm-Message-State: AOJu0Yw87iQRMPmt0bV6w36yK7FpsiiXXwrUebl+26jbIx+n69mrCFcD
+	3csv+ibBUnzUyw+pALnjEqYJEOj4yOiWZx5C2Gs8+8fxXvnpir3DetTAz9IsBgJkmZMl6KrIWH2
+	Q
+X-Google-Smtp-Source: AGHT+IHRgKHREGcL6/nlj6uLIcHmZYxDODMrBfRBQC3/5avKjZqTeGkLfatx8jlHlDO1tmkfRdykTA==
+X-Received: by 2002:a17:90a:c244:b0:2c8:e888:26a2 with SMTP id 98e67ed59e1d1-2d89728c0c5mr14359797a91.13.1725495133815;
+        Wed, 04 Sep 2024 17:12:13 -0700 (PDT)
 Received: from localhost ([71.212.170.185])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbdadd48sm1903769a12.79.2024.09.04.17.11.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8ace66f14sm8981201a91.20.2024.09.04.17.12.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 17:11:22 -0700 (PDT)
+        Wed, 04 Sep 2024 17:12:13 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: linux-omap@vger.kernel.org
-Subject: [GIT PULL] ARM: OMAP2+: misc driver updates for v6.12
-Date: Wed, 04 Sep 2024 17:11:22 -0700
-Message-ID: <7hcyljarit.fsf@baylibre.com>
+Subject: [GIT PULL] ARM: OMAP1/2: misc SoC updates for v6.12
+Date: Wed, 04 Sep 2024 17:12:13 -0700
+Message-ID: <7h8qw7arhe.fsf@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -67,25 +67,26 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.12/drivers-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.12/soc-signed
 
-for you to fetch changes up to 9aee8262445d185960431e972e2d997e6aba3de0:
+for you to fetch changes up to 1934b0c82e980df4c9503315bed4e178905cc1d8:
 
-  ARM: OMAP2+: Remove obsoleted declaration for gpmc_onenand_init (2024-08-30 10:57:24 -0700)
-
-----------------------------------------------------------------
-ARM: OMAP2+: misc driver updates for v6.12
+  ARM: OMAP1: Remove unused declarations in arch/arm/mach-omap1/pm.h (2024-08-20 12:18:12 -0700)
 
 ----------------------------------------------------------------
-Dhruva Gole (1):
-      bus: ti-sysc: Remove excess struct member 'disable_on_idle' description
+ARM: OMAP1/2: misc SoC updates for v6.12
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      ARM: omap2: Switch to use kmemdup_array()
+
+Dr. David Alan Gilbert (1):
+      ARM: omap1: Remove unused struct 'dma_link_info'
 
 Gaosheng Cui (1):
-      ARM: OMAP2+: Remove obsoleted declaration for gpmc_onenand_init
+      ARM: OMAP1: Remove unused declarations in arch/arm/mach-omap1/pm.h
 
-Rob Herring (Arm) (1):
-      bus: ti-sysc: Use of_property_present()
-
- drivers/bus/ti-sysc.c     |  7 ++-----
- include/linux/omap-gpmc.h | 10 ----------
- 2 files changed, 2 insertions(+), 15 deletions(-)
+ arch/arm/mach-omap1/omap-dma.c    | 13 -------------
+ arch/arm/mach-omap1/pm.h          |  4 ----
+ arch/arm/mach-omap2/omap_device.c |  2 +-
+ 3 files changed, 1 insertion(+), 18 deletions(-)
