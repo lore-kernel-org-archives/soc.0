@@ -4,64 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CBB4CD4F4A
-	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 00:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25E9CD4F22
+	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 00:11:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3DF3CC4CEC3; Thu,  5 Sep 2024 00:10:43 +0000 (UTC)
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	id 9BA6CC4CEC3; Thu,  5 Sep 2024 00:11:26 +0000 (UTC)
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 406BEC4CEC2
-	for <soc@kernel.org>; Thu,  5 Sep 2024 00:10:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 406BEC4CEC2
+	by smtp.kernel.org (Postfix) with ESMTPS id CE7E0C4CEC2
+	for <soc@kernel.org>; Thu,  5 Sep 2024 00:11:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE7E0C4CEC2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7140ff4b1e9so158524b3a.3
-        for <soc@kernel.org>; Wed, 04 Sep 2024 17:10:39 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-717594b4ce7so172935b3a.0
+        for <soc@kernel.org>; Wed, 04 Sep 2024 17:11:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725495039; x=1726099839; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/J+m7xtAiLQbYPxO7KC9XqOGseWC15fR3u3v8pH/Qo=;
-        b=3VrO6tO5UePa3e9hTH28LhxerR6zlPF/sj4BiwW+24QERWvI5OwpVWq3WGQeh7m16F
-         k77uxLkLJANiMuFdpm8HYtVuyduu60zMxLtyzyY4e3nf7aYmd54KhK1ttv0/yjlqkYKz
-         EpdvwlHlQYNeS7vhwskrpKVfDBkZsqN06J7JlUqqSvjW3k3YCHtZqqj6Dn+X7QnMyxP+
-         mrbwmMSbW04ASH78VV20edBAJs1IMfrujC9hovoAZxNawEjGuyxD8VOUGwU+I8wNPUZC
-         eL+uZAqh4Bc5JZ6PTOoJ/LEnpxpTIhLNqukUT2rS8vJnxMl6OxyXuBo4ULro0IPaoFsM
-         03BQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725495083; x=1726099883; darn=kernel.org;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WBb2m4LRqIVhYecRL8ia2k0mOHcNoJOjR2lFU/Vhyqs=;
+        b=kEP8moK+XCWZCp3d+pU/8Y/47giXNDOK/xt3nMXNG68ekLioyohLBjxgP+pqvxRa+N
+         xgjFNfARorRPXP//gHRja6+HcIxAFTWqEKZir47I9f/s9eRDL4ExM1BJxuUoxWRdTcmI
+         QKkB7O5Y/mEVDdlQetiQAP2xVWA4oPwP2Wo/BluEMs8PqY5ErAZeywpKxdN2lnsy9Zli
+         4qYOoeI2g/DaVnIwh64xjz226MpHvFmwNcogay1U/axybVn77Hv+7rfvNKMQsqLu4Jv2
+         eOdNYL6q69rcFK4AFfGdlsvW+uDBieWPbg7tL1tA+GQCeG8tK6kfGZaI3uTTBTE193bo
+         +2tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725495039; x=1726099839;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L/J+m7xtAiLQbYPxO7KC9XqOGseWC15fR3u3v8pH/Qo=;
-        b=Qm+uEaayGcVXqcxAW21pD5pxygey91wUXk+3aT/jLc+zx+7y/DRShw6U+D+SGgmYVV
-         qRNKjcso3ywyis/NtqG2420b0TdMRvrG7B+6D8gRktL7VCJwv22e8w/pdCAwefkogwnd
-         UlWcToazAlK1Iqhab57sZJ9c7neGI123ftaHqR3QS22A/+Vm1H3KFo53UoUfUNA6EoJf
-         ZhQ8QZatij52kIHsyV6mqRYj3ZRjrPS+gt047rVp+G4Y4Ovy1msDHhqbXNKzJfcsuXl8
-         sh/jQhz1JDmCJ3LJQEVXmOY+hDAyBgDqkAsCxlOj5MTVNPLqp8ljlVMAMJCg+kmcqQC+
-         GNfA==
-X-Gm-Message-State: AOJu0YwxUSmojrhLGkzbqt4h3lZNrh5D+WAI5iuKCpnpIUKQp4jSCjcp
-	M4XkvX3l3pQ1e/TpfUl663BDla9YX2Bywa1V/6JzOa4wHRkSZgO5OgaeONTjxOhvwhL9d6Qn4In
-	x
-X-Google-Smtp-Source: AGHT+IFr8ZgCjKP12FAginmMBgyBrcf86BKu8ZxaYyiTyrv9SpdDyLEWBNbAAE5ds/o79vsyYkzA3g==
-X-Received: by 2002:a05:6a00:cd6:b0:710:6f54:bcac with SMTP id d2e1a72fcca58-7173c1e0fa1mr15844982b3a.1.1725495038993;
-        Wed, 04 Sep 2024 17:10:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725495083; x=1726099883;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WBb2m4LRqIVhYecRL8ia2k0mOHcNoJOjR2lFU/Vhyqs=;
+        b=efsxdN9EtWtY14JISu5HNtDdPDfH/jJS2PEngl2BdMOuMWr058hWFagjDPHNqVN1kY
+         zzZ1l522lqYTySZnk+/OEfYyQYfp2hzaHb5NFi81U4k3FEE+AFsJj9+eckIrp/kIY7RP
+         ZoUP/KpowWC3WFP+SYL5PyK4QkAkFGrKlUk0QK7nwk6oBQOIum5jFzOi2jAv0Rf0/Dco
+         vZz9siDUxCgMu0TEqLVdOuAU4fXL3AWqUQggGax9Fq0Mbz1AGYLRALkOfYNvei9B5d9Z
+         ehrdaFehT5ujwGfTIN7lD4pCmSDyZVN0i7bP0lqzMg7GaogCMS2JQ46BZFMzROBkF50P
+         YbKw==
+X-Gm-Message-State: AOJu0Yx/iQAzTRdYtHYQAjnUGkpMe0hKlVzesZZ72jp3TjFxM2ozISG4
+	auo+T++/AVMOHiBeGp9TEmf2CN9PLAjft1J+9AfSuOPK1NAAUo+gC+jpHihEl+jSj55R7r8zu/W
+	e
+X-Google-Smtp-Source: AGHT+IEispmsRDT/jVl+Mi6E0JuyUc+QsYEaQ8/O5NzZYXN3oQwk+xP3FkJL7y6A7+ov8gEQTBNBJg==
+X-Received: by 2002:a05:6a00:2e8f:b0:705:c0a1:61c9 with SMTP id d2e1a72fcca58-715dfb127c2mr26216960b3a.9.1725495082771;
+        Wed, 04 Sep 2024 17:11:22 -0700 (PDT)
 Received: from localhost ([71.212.170.185])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d501dde269sm1170670a12.88.2024.09.04.17.10.38
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbdadd48sm1903769a12.79.2024.09.04.17.11.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 17:10:38 -0700 (PDT)
+        Wed, 04 Sep 2024 17:11:22 -0700 (PDT)
 From: Kevin Hilman <khilman@baylibre.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: linux-omap@vger.kernel.org
-Subject: [GIT PULL] ARM: dts: ti: mix am335x cleanups for v6.12
-Date: Wed, 04 Sep 2024 17:10:38 -0700
-Message-ID: <7hh6avark1.fsf@baylibre.com>
+Subject: [GIT PULL] ARM: OMAP2+: misc driver updates for v6.12
+Date: Wed, 04 Sep 2024 17:11:22 -0700
+Message-ID: <7hcyljarit.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
 The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
@@ -69,33 +67,25 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags=
-/omap-for-v6.12/dt-signed
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.12/drivers-signed
 
-for you to fetch changes up to 22644cc0443550258f8710bd1613d483f82e8196:
+for you to fetch changes up to 9aee8262445d185960431e972e2d997e6aba3de0:
 
-  ARM: dts: ti: omap: am335x-wega: Fix audio clock provider (2024-07-30 15:=
-19:13 -0700)
+  ARM: OMAP2+: Remove obsoleted declaration for gpmc_onenand_init (2024-08-30 10:57:24 -0700)
 
 ----------------------------------------------------------------
-ARM: dts: ti: mix am335x cleanups for v6.12
+ARM: OMAP2+: misc driver updates for v6.12
 
 ----------------------------------------------------------------
-Colin Foster (1):
-      ARM: dts: am335x-bone-common: Increase MDIO reset deassert time
+Dhruva Gole (1):
+      bus: ti-sysc: Remove excess struct member 'disable_on_idle' description
 
-Dominik Haller (1):
-      ARM: dts: ti: omap: am335x-wega: Fix audio clock provider
+Gaosheng Cui (1):
+      ARM: OMAP2+: Remove obsoleted declaration for gpmc_onenand_init
 
-Rafa=C5=82 Mi=C5=82ecki (1):
-      ARM: dts: omap: am335x-bone: convert NVMEM content to layout syntax
+Rob Herring (Arm) (1):
+      bus: ti-sysc: Use of_property_present()
 
-Steffen Hemer (1):
-      ARM: dts: ti: omap: am335x-regor: Fix RS485 settings
-
- arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi | 66 +++++++++++++++++++=
-++++++++++++++++++++++++++---------------------
- arch/arm/boot/dts/ti/omap/am335x-boneblue.dts     | 12 ++++++++----
- arch/arm/boot/dts/ti/omap/am335x-regor.dtsi       | 10 +++++++++-
- arch/arm/boot/dts/ti/omap/am335x-wega.dtsi        |  7 +++----
- 4 files changed, 65 insertions(+), 30 deletions(-)
+ drivers/bus/ti-sysc.c     |  7 ++-----
+ include/linux/omap-gpmc.h | 10 ----------
+ 2 files changed, 2 insertions(+), 15 deletions(-)
