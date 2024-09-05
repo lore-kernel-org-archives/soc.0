@@ -1,211 +1,235 @@
-Return-Path: <SRS0=T2Xw=QD=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <SRS0=kvJR=QD=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10BB7CD5BC2
-	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 12:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9AFCCD5BC8
+	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 13:23:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E3442C4CEC4; Thu,  5 Sep 2024 12:50:28 +0000 (UTC)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id B4566C4CEC7; Thu,  5 Sep 2024 13:23:58 +0000 (UTC)
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 916BAC4CEC3
-	for <soc@kernel.org>; Thu,  5 Sep 2024 12:50:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 916BAC4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374ba78f192so408198f8f.3
-        for <soc@kernel.org>; Thu, 05 Sep 2024 05:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725540626; x=1726145426; darn=kernel.org;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=221xxfyJ53mX+6ACnkwXA9o5xP4GeLc1zCb9rE8xus0=;
-        b=NKG/HT6m4BJeZ9J20QDyvNpUaZ/CBq6EUbpqwCrDs5qJ0sWBgfTWEl3IHTpgu/WtFJ
-         181OgdjETq30nVPhR9u31UfXvriwm4d8nQYx/CJWWiYwqFuQYP/j3lxmf8WYcJQuHGvM
-         UXvjD17LY72wi0grbSGyJSd5c2MWlnLwFhw4n6rDat5vRg7TbT92gqptNBYdrslFxkyk
-         gaENLgmuiTcuC80RaROZIhqAU2IqyqwhEhYLX2kXOAawncW+Dqb4PYNT9cU9Nut3jTKI
-         RM0UUxdQt2Lgkso7Y04N+pq5UjaDwV8zIjkxoew6bdSQ6+SAVDip5RAkaYpPn+2VtPeB
-         6gAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725540626; x=1726145426;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=221xxfyJ53mX+6ACnkwXA9o5xP4GeLc1zCb9rE8xus0=;
-        b=jx7N5olKNlzcHPK3sSSn5SOT/Kd0M/DFl7CJGShTu4Tuy6jGzg0PeYeik03zejBE87
-         kNKU25MFMeosnCspopZ0TScBCdy+rHyJqDjnBoFmTgrIqOwQLAIK9j3XOm06jXqD4r54
-         FzoW/yUAknKJ3YAmMruIfu3Ra7ZFgfzSjtHvtAEi+J8zmcuIxo86SBFaVIir5VbpnNAY
-         N9bTsLJ87YJC3zM5dmqRVaa6xWb9pRCSE0FRhTi8REngiU5jvs65oDQFEAYIodjy9k2U
-         q5il3EOoyQmzyhyjHiEfR/VWKBAe18+U8zzNKgoq7074kmFawZQD70CkM8uPcLYRd9cR
-         9ATw==
-X-Gm-Message-State: AOJu0YyKrphUtozcW45OETimU7gn8zju8h7W/AfHVfnLycUc5vlkTzba
-	/gCmQLOqwKnBsDbfPvqNMGhJEHlyVAL5CagN7r4HtEfqPa1+Xj3T6vHowy865LjQPLwmKQHaO2M
-	q
-X-Google-Smtp-Source: AGHT+IEZsNslNpypB9kxXEMsFiN7AqhU9MSx8Ef7Bti53D03NKtmUuatWvhEXto6adQ8opjZAHKXug==
-X-Received: by 2002:adf:fc08:0:b0:374:c2cf:c017 with SMTP id ffacd0b85a97d-376dea47344mr4489797f8f.46.1725540625727;
-        Thu, 05 Sep 2024 05:50:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4a45:fd0d:4bfe:dc52? ([2a01:e0a:982:cbb0:4a45:fd0d:4bfe:dc52])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374bde83ebdsm14630059f8f.48.2024.09.05.05.50.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Sep 2024 05:50:25 -0700 (PDT)
-Message-ID: <cc8fb460-5ac0-4b16-8490-8ac9f89f1b7f@linaro.org>
-Date: Thu, 5 Sep 2024 14:50:24 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 284E3C4CEC4
+	for <soc@kernel.org>; Thu,  5 Sep 2024 13:23:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 284E3C4CEC4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2CED0114027F;
+	Thu,  5 Sep 2024 09:23:56 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Thu, 05 Sep 2024 09:23:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725542636;
+	 x=1725629036; bh=fY+Pos6oeB0Ir967LtcUDK7rxN7His5a1kcumbhcDmM=; b=
+	YaejBSKOxQsoBWBrQc4uQhRLDxSOG56GyPZUvwW85M4RAET28nPXcQqfKped8QpU
+	/Jn8RQdpS4rEQxjNdimFw/gYdacFhbjTfgQD/JE5QnbiOY0r0oZNK6wgG2KxXh1d
+	kX/QrIWEFWHZZJGyhrK+DjUmaxI9ntZSUFH8Ut9tSgaS7TfcWMPz6US8pwOWlH4u
+	Z0NBmv06jqRrDU0U/+dDQXz0oVgsaqBAzisI2Grclw8hmJWL+xAgN2UUIAipAPEx
+	8lLvAFSmhaL/qLVoMS4m2mhsFI5LR9F9GNkPNCVUF+shmWFsyHTzo7N9A10fv7wg
+	5jQtw0wMTc8I4Vbk5ChQrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725542636; x=
+	1725629036; bh=fY+Pos6oeB0Ir967LtcUDK7rxN7His5a1kcumbhcDmM=; b=r
+	slMrtSm9OMLj9Qvj5eof9ECORPLAMv/xA9v5HTIQwKJg/ZfITjqQNFvTOQPbD3k9
+	dFODs9GSN4rpZFEnaxAfZyMtYatu1/RYI36kJJvJ31paSd1I2lQ0SLQDDCFmv+Eq
+	QvKpMVEIoYGC/35M/KnNgHJlL6Qp8jO1BZD1CU1BzSm3S/yBBUwY2G+vRVMkbzd2
+	cNz+oh+S7Q76DqlvDkczxWWA51HAs78t3y90DlXW4vS7m/LnkHRQLMjlapWIvA+f
+	ZnX6pnkmUBIbOblrHIRHNW/BFC7C4wEFiyqkmt3Q2nwgKwTw26sEzh6Rq+xNYDDR
+	5h/uhIae4/ENJozq8Mhnw==
+X-ME-Sender: <xms:67DZZoA5pZp2NMCErlSXp12rf6Pn8bemUrwnjhpliE-HiHzw-gkeZg>
+    <xme:67DZZqiX-JOcYh-lQyhxWolh8ruMQqU3JXGNhDwhX9bz4ZmMNxGwLSKzqDVOwkV0a
+    zqlGxuXHmFlZWm8-us>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehledgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
+    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepiedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrmhhivghnsehflhgvthihrdhnvg
+    htpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhu
+    gidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtg
+    hpthhtoheplhhinhhugidqrhhotghktghhihhpsehlihhsthhsrdhinhhfrhgruggvrggu
+    rdhorhhgpdhrtghpthhtohepohhlohhfsehlihigohhmrdhnvghtpdhrtghpthhtohephh
+    gvihhkohesshhnthgvtghhrdguvg
+X-ME-Proxy: <xmx:67DZZrnaWc_lQ-q4Rtp8gqZU4ZQEn-Q_ttuOBsxORryr8pwGHVvcew>
+    <xmx:67DZZuzCM1luWnpE8ekPSCijLjWDJufvZFh_3e6ntTx2NRfU72sr-w>
+    <xmx:67DZZtTK_RGDQQWn2TmAqr6Gq_7t2WAWAH8UEV6dTep8oFXwAzl8oA>
+    <xmx:67DZZpZwoAHQUpwzur4MGRbyAevKkrUfkD7cNZBvw_E5PLDlRVxHzg>
+    <xmx:7LDZZmKAf17-4fslsQCsmyZ_eTda6CcXvtdjFpPsxtTFOKPBAfW8eA5D>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B9B442220071; Thu,  5 Sep 2024 09:23:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v6.12
-Reply-To: neil.armstrong@linaro.org
+Date: Thu, 05 Sep 2024 13:23:34 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Damien FLETY" <damien@flety.net>, "Olof Johansson" <olof@lixom.net>,
+ "Heiko Stuebner" <heiko@sntech.de>, linux-rockchip@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: "soc@kernel.org" <soc@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Message-Id: <52a52558-2f7a-41ca-a0ee-98ef4eca3e6e@app.fastmail.com>
+In-Reply-To: 
+ <CBBY-R4n8r7s8-gRkQLEWfFmBE-2ncks_UUQnnajujY-KYz4Xug2rwDI_pOZYLBi2d3qy-gP9c4l0i61ptlm39t_wscyvJPVV5CTlsdm-as=@flety.net>
+References: 
+ <bZF0liAaH-7lJuzf_4iIfAWAgwYauu7IpIJMMpY7BT8mZXiKZFZ797Sa9gONDEt2wIFlLd4l10qSfs44ZAiBJ7_c3yvAFci4kuOdeYy7ZQU=@flety.net>
+ <CBBY-R4n8r7s8-gRkQLEWfFmBE-2ncks_UUQnnajujY-KYz4Xug2rwDI_pOZYLBi2d3qy-gP9c4l0i61ptlm39t_wscyvJPVV5CTlsdm-as=@flety.net>
+Subject: Re: PATCH: Turing RK1 DTB Fan
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Aug 1, 2024, at 08:41, Damien FLETY wrote:
+> Sorry I'm not accustomed to patch and even less kernel patches...
+>
+> Add support for Turing RK1 official fan
+> ---
 
-Here's a set of Amlogic ARM64 DT changes for v6.12, with:
-- The final DT fixes to solve all remaining bindings check errors
-- Amlogic A4/A5/T7/C4 & S4 base peripheral nodes
-- New Amlogic C3 AW419 Reference Board
 
-Thanks,
-Neil
+Hi Damien,
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+I found this patch in the backlog and noticed that you sent it to the
+wrong place. Please address future versions to Heiko St=C3=BCbner and the
+linux-rockchip mailing list (added to Cc here).
 
-   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+I have not checked the actual patch contents in detail, but please
+ensure you follow these steps:
 
-are available in the Git repository at:
+- Make sure that your patch description (everything above the first
+  three dashes, ---) makes sense as a git changelog text. See
+  'git log arch/arm64/boot/dts/rockchip' for other examples)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.12
+- Add a Signed-off-by line, as documented in
+  Documentation/process/submitting-patches.rst
 
-for you to fetch changes up to e202307b75660aad42fafbb0d3df2c9dadf019ec:
+- Use 'git send-email' to send the patch in a form that can
+  be applied from the mailing list.
 
-   arm64: dts: amlogic: gxlx-s905l-p271: drop saradc gxlx compatible (2024-09-05 09:10:28 +0200)
+      Arnd
 
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v6.12:
-- New Boards:
-   - AW419 (Amlogic C3)
-- Power Controller node for Amlogic A5 SoC
-- Always-On Secure node for Amlogig A4/T7/C4 & S4 SoCs
-- Amlogic A4 & C3 hardware support:
-   - PLL, SPICC, NOND, SDCard, Ethernet, Watchdog
-- Final fixes for DTBs check:
-   - add clock and clock-names to sound cards
-   - drop saradc gxlx compatible
+(fullquote below, no further comments)
 
-----------------------------------------------------------------
-Huqiang Qin (1):
-       arm64: dts: amlogic: add watchdog node for A4 SoCs
-
-Neil Armstrong (2):
-       arm64: dts: amlogic: add clock and clock-names to sound cards
-       arm64: dts: amlogic: gxlx-s905l-p271: drop saradc gxlx compatible
-
-Xianwei Zhao (10):
-       arm64: dts: amlogic: a5: add power domain controller node
-       arm64: dts: amlogic: enable some device nodes for S4
-       arm64: dts: amlogic: s4: add ao secure node
-       arm64: dts: amlogic: c3: add ao secure node
-       arm64: dts: amlogic: t7: add ao secure node
-       arm64: dts: amlogic: a4: add ao secure node
-       dt-bindings: clock: fix C3 PLL input parameter
-       arm64: dts: amlogic: add some device nodes for C3
-       arm64: dts: amlogic: add C3 AW419 board
-       arm64: dts: amlogic: c3: fix dtbcheck warning
-
-  .../bindings/clock/amlogic,c3-pll-clkc.yaml        |   7 +-
-  arch/arm64/boot/dts/amlogic/Makefile               |   1 +
-  arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi |  14 +
-  arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |  10 +
-  .../boot/dts/amlogic/amlogic-c3-c302x-aw409.dts    | 231 ++++++++++
-  .../boot/dts/amlogic/amlogic-c3-c308l-aw419.dts    | 260 +++++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        | 503 ++++++++++++++++++++-
-  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi        |   8 +
-  arch/arm64/boot/dts/amlogic/meson-axg-s400.dts     |   4 +
-  arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts  |   4 +
-  .../boot/dts/amlogic/meson-g12a-radxa-zero.dts     |   4 +
-  arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts  |   4 +
-  arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    |   4 +
-  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |   4 +
-  .../dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts  |   4 +
-  .../meson-g12b-bananapi-cm4-mnt-reform2.dts        |   4 +
-  .../boot/dts/amlogic/meson-g12b-bananapi.dtsi      |   4 +
-  .../boot/dts/amlogic/meson-g12b-dreambox.dtsi      |   6 +
-  .../arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts |   4 +
-  .../boot/dts/amlogic/meson-g12b-gtking-pro.dts     |   4 +
-  arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts  |   4 +
-  .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     |   4 +
-  .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     |   4 +
-  .../boot/dts/amlogic/meson-g12b-odroid-n2l.dts     |   4 +
-  .../boot/dts/amlogic/meson-g12b-radxa-zero2.dts    |   4 +
-  .../boot/dts/amlogic/meson-g12b-ugoos-am6.dts      |   4 +
-  .../boot/dts/amlogic/meson-gx-libretech-pc.dtsi    |   4 +
-  .../arm64/boot/dts/amlogic/meson-gx-p23x-q20x.dtsi |   4 +
-  arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts |   4 +
-  .../boot/dts/amlogic/meson-gxbb-nanopi-k2.dts      |   4 +
-  .../boot/dts/amlogic/meson-gxbb-nexbox-a95x.dts    |   4 +
-  .../arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts |   4 +
-  arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dts    |   4 +
-  arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dts    |   4 +
-  .../boot/dts/amlogic/meson-gxbb-vega-s95.dtsi      |   4 +
-  .../boot/dts/amlogic/meson-gxbb-wetek-hub.dts      |   4 +
-  .../boot/dts/amlogic/meson-gxbb-wetek-play2.dts    |   4 +
-  .../dts/amlogic/meson-gxl-s805x-libretech-ac.dts   |   4 +
-  .../boot/dts/amlogic/meson-gxl-s805x-p241.dts      |   4 +
-  .../dts/amlogic/meson-gxl-s905x-khadas-vim.dts     |   4 +
-  .../amlogic/meson-gxl-s905x-libretech-cc-v2.dts    |   4 +
-  .../dts/amlogic/meson-gxl-s905x-libretech-cc.dts   |   4 +
-  .../boot/dts/amlogic/meson-gxl-s905x-p212.dts      |   4 +
-  .../boot/dts/amlogic/meson-gxl-s905x-vero4k.dts    |   5 +
-  .../boot/dts/amlogic/meson-gxlx-s905l-p271.dts     |   4 -
-  .../boot/dts/amlogic/meson-gxm-khadas-vim2.dts     |   4 +
-  .../arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dts |   4 +
-  arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dts |   4 +
-  arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi |   4 +
-  .../dts/amlogic/meson-libretech-cottonwood.dtsi    |   4 +
-  .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     | 145 ++++++
-  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          | 136 ++++++
-  .../boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dts |   4 +
-  .../boot/dts/amlogic/meson-sm1-a95xf3-air.dts      |   4 +
-  .../boot/dts/amlogic/meson-sm1-bananapi-m2-pro.dts |   4 +
-  .../boot/dts/amlogic/meson-sm1-bananapi-m5.dts     |   4 +
-  arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts  |   4 +
-  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi  |   4 +
-  arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts   |   4 +
-  .../boot/dts/amlogic/meson-sm1-x96-air-gbit.dts    |   4 +
-  arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts  |   4 +
-  61 files changed, 1511 insertions(+), 11 deletions(-)
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3-c308l-aw419.dts
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi=20
+> b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+> index dbaa94ca69f4..1e4d2d3c469f 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+> @@ -65,6 +65,47 @@ vcc_1v1_nldo_s3: vcc-1v1-nldo-s3-regulator {
+>         };
+>  };
+>=20
+> +&package_thermal {
+> +       polling-delay =3D <1000>;
+> +
+> +       trips {
+> +               trip_passive: trip_passive {
+> +                       temperature =3D <40000>;
+> +                       hysteresis =3D <2000>;
+> +                       type =3D "passive";
+> +               };
+> +    trip_active: trip_active {
+> +                       temperature =3D <45000>;
+> +                       hysteresis =3D <2000>;
+> +                       type =3D "active";
+> +               };
+> +    trip_hot: trip_hot {
+> +                       temperature =3D <80000>;
+> +                       hysteresis =3D <2000>;
+> +                       type =3D "hot";
+> +               };
+> +       };
+> +
+> +       cooling-maps {
+> +               map0 {
+> +                       trip =3D <&trip_passive>;
+> +                       cooling-device =3D <&fan 0 1>;
+> +               };
+> +    map1 {
+> +      trip =3D <&trip_active>;
+> +      cooling-device =3D <&fan 1 4>;
+> +    };
+> +    map2 {
+> +      trip =3D <&trip_hot>;
+> +      cooling-device =3D <&fan 4 5>;
+> +    };
+> +    map3 {
+> +      trip =3D <&package_crit>;
+> +      cooling-device =3D <&fan 5 5>;
+> +    };
+> +       };
+> +};
+> +
+>  &combphy2_psu {
+>         status =3D "okay";
+>  };
+>
+> Le jeudi 1 ao=C3=BBt 2024 =C3=A0 10:16, Damien FLETY <damien@flety.net=
+> a =C3=A9crit :
+>>=20
+>> Support the official cooling fan on Turing RK1.
+>>=20
+>> --- rk3588-turing-rk1.dtsi 2024-08-01 08:07:42.967506469 +0000
+>> +++ src/linux/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi 202=
+4-08-01 08:08:58.292765373 +0000
+>> @@ -65,47 +65,6 @@
+>>   };
+>>  };
+>> =20
+>> -&package_thermal {
+>> - polling-delay =3D <1000>;
+>> -
+>> - trips {
+>> - trip_passive: trip_passive {
+>> - temperature =3D <40000>;
+>> - hysteresis =3D <2000>;
+>> - type =3D "passive";
+>> - };
+>> -    trip_active: trip_active {
+>> - temperature =3D <45000>;
+>> - hysteresis =3D <2000>;
+>> - type =3D "active";
+>> - };
+>> -    trip_hot: trip_hot {
+>> - temperature =3D <80000>;
+>> - hysteresis =3D <2000>;
+>> - type =3D "hot";
+>> - };
+>> - };
+>> -
+>> - cooling-maps {
+>> - map0 {
+>> - trip =3D <&trip_passive>;
+>> - cooling-device =3D <&fan 0 1>;
+>> - };
+>> -    map1 {
+>> -      trip =3D <&trip_active>;
+>> -      cooling-device =3D <&fan 1 4>;
+>> -    };
+>> -    map2 {
+>> -      trip =3D <&trip_hot>;
+>> -      cooling-device =3D <&fan 4 5>;
+>> -    };
+>> -    map3 {
+>> -      trip =3D <&package_crit>;
+>> -      cooling-device =3D <&fan 5 5>;
+>> -    };
+>> - };
+>> -};
+>> -
+>>  &combphy2_psu {
+>>   status =3D "okay";
+>>  };
+>>=20
+>>=20
+>> Damien FLETY
