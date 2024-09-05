@@ -1,60 +1,53 @@
-Return-Path: <wens@kernel.org>
+Return-Path: <SRS0=zQxs=QD=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8801BCD5BCC
-	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 16:16:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC91ACD5BB8
+	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 19:59:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5DDDBC4CEC5; Thu,  5 Sep 2024 16:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A86C4CEC7;
-	Thu,  5 Sep 2024 16:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725552970;
-	bh=K6MydERYdIY0Z+ZpKp75OHZXyI16kJo0Xh/WOFWcOGM=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=MXcMh+m/7PBt7JdXIct10BfgDpoQf4GTSYKpC4Lsur52oi8B2yVXVpKKvBm6WAz1J
-	 YRB616jrmdCl+OhUDjNdA3is8kCpCCZKtd1bXLilZ2yF5P2g0fxwUQjKnpHWnOXRo0
-	 fzlOlaRHrLMSwLD1x5huz/0CCzJz50uyQxEl58eRNqyYHgowZ9xmSNIlVQgQm7VuJL
-	 hOpl8B0brCo9NCEsKLQfODPiMTeqbteQe+3GXZK+nDDdQJNsPauK5PzDs2eCNzWcxR
-	 pW/dKCsM6X7WakFsmE8MRa1Og0TlS9/pjMPE+wgDeuF8Q0J/kR1rHGiwL8MvyY2Caf
-	 eRbvOrwHv1zvg==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 08C205F882; Fri,  6 Sep 2024 00:16:07 +0800 (CST)
-Date: Fri, 6 Sep 2024 00:16:06 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
+	id C4732C4CEC7; Thu,  5 Sep 2024 19:59:59 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 75389C4CEC3;
+	Thu,  5 Sep 2024 19:59:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 75389C4CEC3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DCD7EE0003;
+	Thu,  5 Sep 2024 19:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1725566395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PaEVwI8SIDhsZjwFTiM6E6Aop21nF7kHvGWkD3z7b7c=;
+	b=JlltqpiPDonUJx4MhlHGMVvw97qu7DaHsPXPBUpkI0wSGxLYrYcgcS7uE62bpRVzpk0xms
+	BsWrhmVw/iZiP26ODUrrm74kGGF21mh9VkzHsrpwwlZGPfRV56f83bJUcb7VTqx1vqx6/V
+	lblo8TwrJ5w59QdRmvoGjsD42dgF6QoSOmMfYI4DN7ipoAJ4wBblYJlp/pObPfhBv1MOib
+	ri7dachGWIt1o5SoFCe0x4bxlzbudoN3JCAoxakWSb7I5Pmu12hXrkzQV91Sh0AaK48mOb
+	/hjMyX63tK6VqPDUG5QPWYpK2tFnadojcG7SJPg8ONWlpRReYYN/eirBOpKRgQ==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner SoC device tree changes for 6.12
-Message-ID: <ZtnZRhTwsBeO7Qtb@wens.tw>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: arm for v6.12 (#1)
+Date: Thu, 05 Sep 2024 21:59:54 +0200
+Message-ID: <871q1xrhvp.fsf@BLaptop.bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bj71I9tp/XVtj0o/"
-Content-Disposition: inline
-
-
---bj71I9tp/XVtj0o/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
 Hi,
 
-Here's the Allwinner device tree changes for 6.12. Not a lot of stuff
-for this cycle. How the PMIC is talked to was reworked to make it work
-better with U-boot. And there's one new board, and the charger for that
-series of boards was enabled. Last, thermal trip points for the GPU
-were added for the A64.
+Here is the first pull request for arm for mvebu for v6.12.
 
-Please pull.
-
-
-Thanks
-ChenYu
-
+Gregory
 
 The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
@@ -62,59 +55,35 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.12
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-arm-6.12-1
 
-for you to fetch changes up to 89f1a037e97cb2ec0948eb92bca17e7d8c4fc824:
+for you to fetch changes up to dea56c781ed3d1621b7a8fb7707037f644847c42:
 
-  arm64: dts: allwinner: a64: Add GPU thermal trips to the SoC dtsi (2024-09-04 22:43:49 +0800)
-
-----------------------------------------------------------------
-Allwinner SoC device tree changes for 6.12
-
-ARM64 device tree and binding-only changes
-- Move PMIC on RG35XX boards from RSB (Allwinner proprietary bus) to I2C
-- Introduce Anbernic RG35XX-SP board
-- Enable charger on RG35XX boards
-- Add thermal trip points for Allwinner A64 GPU
+  ARM: dove: Drop a write-only variable (2024-09-02 16:11:28 +0200)
 
 ----------------------------------------------------------------
-Chris Morgan (5):
-      dt-bindings: arm: sunxi: Add Anbernic RG35XXSP
-      arm64: dts: allwinner: h616: Add r_i2c pinctrl nodes
-      arm64: dts: allwinner: h616: Change RG35XX Series from r_rsb to r_i2c
-      arm64: dts: allwinner: h700: Add Anbernic RG35XX-SP
-      arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
+mvebu arm for 6.12 (part 1)
 
-Dragan Simic (1):
-      arm64: dts: allwinner: a64: Add GPU thermal trips to the SoC dtsi
+Fix a few warning error with W=3D1
+Switch orion5x to new sys-off handler API
 
- Documentation/devicetree/bindings/arm/sunxi.yaml   |  9 ++++--
- arch/arm64/boot/dts/allwinner/Makefile             |  3 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      | 16 ++++++++++
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     |  2 ++
- .../allwinner/sun50i-h700-anbernic-rg35xx-2024.dts | 27 +++++++++++++++--
- .../allwinner/sun50i-h700-anbernic-rg35xx-sp.dts   | 34 ++++++++++++++++++++++
- 6 files changed, 85 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-sp.dts
+----------------------------------------------------------------
+Andrew Davis (1):
+      ARM: orion5x: Switch to new sys-off handler API
 
---bj71I9tp/XVtj0o/
-Content-Type: application/pgp-signature; name="signature.asc"
+Uwe Kleine-K=C3=B6nig (2):
+      ARM: mvebu: Warn about memory chunks too small for DDR training
+      ARM: dove: Drop a write-only variable
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmbZ2UYACgkQOJpUIZwP
-JDCWZRAAyBoANbGZGTYGIrQbHHF/vksDhE7CTxMq+HD0Vjqnf8KshyvKUHqQ0vtf
-//rFjGpYx7jveFsR7apGnm13L0Y6Ju9NvYQ2BBfDzSrWbo8qaxB8zhlNl8YpuC9n
-4q4J5PVMTDKJP0m48trGp9iumakkTUh/TxKHwH7wtmvEpTqvoFDtAV9qb+aj9GWp
-I7oKEzYT4x3ofp+ya7mdZyaivj1yP1fPL4qsBos+KgsREm63cFczjK2NSDuyQRqO
-kJrJG3TqU/uKLjQhMxEhsG7LYYtgiX++FVsE+IUrM2/y5DLW+o6oZfQfeZChqcKl
-RV2UMJ20733nB66Y6tQ5OJRFZ9hhK2NaW0kVKMiKDD3EcPIAMQuNhoyb30/61sSb
-sv/ki4gE0/3+Pu3u1xtXb7oXWeEebL9CXM68z8HAdyY5+xMbew5t5ED65IRUEbdP
-vPwdALZn1L7D2SswiBWHFgbqWTS8JSJkgGALpYUrotY7ovNcF7V12OQ99ZR7DVpE
-Xs53efo8/tSWoPgJ1O/Qm5lgw4PDB6tY48RJ025zNWQ00SKgsm+6tIvbh9GqxyUN
-Kl01AMykabNHFxSAlTFdbuFomQoc3HQJBeiFKU8U9UAopkhlxO9xdTisqiJhjJVy
-2RIoVowPebPcSVS81lGjIjhv5PEAUmhYxGDK4LB2udVr+EQjmLQ=
-=An6s
------END PGP SIGNATURE-----
-
---bj71I9tp/XVtj0o/--
+ arch/arm/mach-dove/common.c                    | 4 ++--
+ arch/arm/mach-mvebu/board-v7.c                 | 3 +++
+ arch/arm/mach-orion5x/board-mss2.c             | 2 +-
+ arch/arm/mach-orion5x/dns323-setup.c           | 6 +++---
+ arch/arm/mach-orion5x/kurobox_pro-setup.c      | 2 +-
+ arch/arm/mach-orion5x/mv2120-setup.c           | 2 +-
+ arch/arm/mach-orion5x/net2big-setup.c          | 2 +-
+ arch/arm/mach-orion5x/terastation_pro2-setup.c | 2 +-
+ arch/arm/mach-orion5x/ts209-setup.c            | 2 +-
+ arch/arm/mach-orion5x/ts409-setup.c            | 2 +-
+ 10 files changed, 15 insertions(+), 12 deletions(-)
