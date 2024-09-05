@@ -1,65 +1,99 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <wens@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11459CD5BCB
-	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 15:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B043CCD5BCC
+	for <soc@archiver.kernel.org>; Thu,  5 Sep 2024 16:12:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F08E8C4CEC5; Thu,  5 Sep 2024 15:40:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA434C4CEC3;
-	Thu,  5 Sep 2024 15:40:43 +0000 (UTC)
+	id 6B8E7C4CEC7; Thu,  5 Sep 2024 16:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293E2C4CEC3;
+	Thu,  5 Sep 2024 16:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725550843;
-	bh=z/yJgCmyTs6i6WXdm5o/VJ3W5oy/MWA56O4rN2L+4kY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=LnwJF1lYHDwguvgZAp/ci59LnCWqnahRirlWg0iJTuv2td7u0vQrL9hA5FztYiCuM
-	 opensYp8Vvs4GNP5Q8PGM1xPdoEWRAcIeLLDdeJjHz5ePgLCRnbO9kLDmBFMUH5mR6
-	 woU6tVck/L5o9791VLk9ys1X5TrmbF1tg95jMhSG78LJq34xUbWcX9lSMT4xTmnBCR
-	 IyY26nJb87dGhWtLfEmoWlOEuOR9ivDVB1xi+S/ahAM7Immcu1DdUy1xeU9/30fNcX
-	 5D2GhwT2S14v0uPTwkL5AjZOqzUI9wd14m4KSkiHuJzD53kz+p7XK8FKC2KidUIuQs
-	 ky84kEFimYJRA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EC9D83806651;
-	Thu,  5 Sep 2024 15:40:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Reset controller updates for v6.12
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <172555084474.1737985.2386860818528806482.git-patchwork-notify@kernel.org>
-Date: Thu, 05 Sep 2024 15:40:44 +0000
-References: <20240904103921.1479579-1-p.zabel@pengutronix.de>
-In-Reply-To: <20240904103921.1479579-1-p.zabel@pengutronix.de>
-To: Philipp Zabel <p.zabel@pengutronix.de>
+	s=k20201202; t=1725552727;
+	bh=IFF9ZfIb8PFwjfqH8bgDXiv+AA5USyRSh780LD7aKtk=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=IQGZ/VKYZF/4gFzIy8uoecAjZgBGyXtruGp1LEZCHk7nZtVurf4d9Yhk3SHwNNQ6j
+	 gud29gIVD5TOcXLlIYRAHMbhFdR/xLFe3+Te66Vo8s6dEvnwmup9iwWcNv/Gnj+Dfr
+	 D7ddvLxHFvmUWekwmizyFcxf07MIRw6zqfqyjSYLZrJUjvZgjrbtd7T/nY3njTYt2P
+	 cBQp5KR7tqWi33X4P4cfskNJoyHLBhBcZa0Xq954V5lXkh381sQaso2B227ypNCcsr
+	 UvOPCUEf4YBMWhqsstbSgfYhEwZ4sc6oYdU8gf4TL4PcE4ZI+9EMdLmU5xKMdTuvLP
+	 EE87ygPDrf2vg==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 4F3C05F882; Fri,  6 Sep 2024 00:12:02 +0800 (CST)
+Date: Fri, 6 Sep 2024 00:12:02 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
-
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Wed,  4 Sep 2024 12:39:21 +0200 you wrote:
-> Dear arm-soc maintainers,
-> 
-> The following changes since commit 47ac09b91befbb6a235ab620c32af719f8208399:
-> 
->   Linux 6.11-rc4 (2024-08-18 13:17:27 -0700)
-> 
-> are available in the Git repository at:
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] Reset controller updates for v6.12
-    https://git.kernel.org/soc/soc/c/311ef8837ff2
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner SoC driver changes for 6.12
+Message-ID: <ZtnYUswjHdLRYq8Y@wens.tw>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1M46xnqRrRrzkmfl"
+Content-Disposition: inline
 
 
+--1M46xnqRrRrzkmfl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi,
+
+Not a lot of stuff for this cycle. Just one commit for drivers.
+
+Please pull.
+
+
+Thanks
+ChenYu
+
+
+The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+
+  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-drivers-for-6.12
+
+for you to fetch changes up to 7ad250e13ff8a275ba846fd223288f01f5d3857c:
+
+  bus: sunxi-rsb: Simplify code with dev_err_probe() (2024-09-05 23:20:47 +0800)
+
+----------------------------------------------------------------
+Allwinner SoC driver changes for 6.12
+
+- Simplify sunxi-rsb driver probe function using dev_err_probe()
+
+----------------------------------------------------------------
+Zhang Zekun (1):
+      bus: sunxi-rsb: Simplify code with dev_err_probe()
+
+ drivers/bus/sunxi-rsb.c | 34 +++++++++++++---------------------
+ 1 file changed, 13 insertions(+), 21 deletions(-)
+
+--1M46xnqRrRrzkmfl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmbZ2FEACgkQOJpUIZwP
+JDAINhAAq2LPi0AGk9E5+wL1K2jOUWwd4o0JS0ofmRoKbXFpYA8o+b5RgjLYjqu9
+vsOHL8alT81eazFWPugI7i4AV9qo9x8InKU3QjYiEkCaeXsP931YDSTJ/Oz9nmsT
+EYGou1GQ/inMPQ/cgkGCTXahcUMUZ7o6iOvCDmcQGA73G/oSLzx2WKnpRxedETvL
+1VCCp2cuQ6x/S2zgAXqK8mwmVzweFCZSEvJ8fMD0AFutcHRWbXKKBijEbXOhPgPs
+qLzSoD1NQjKOmiOrTTLogZEl7vSjujJ2dGW/sL6/m28S/dq2RyXh59AO0MqNSzBC
+7ABpLiTOiDIlF4ZzYsIBpm932X5Aexhfm9BC2h7f4jnxr1zhFTU4pgLro0CF7XTI
+u60HZHx/KQtCyVyi4GMe9947AZPqzj9PL/0jkA296KYJBiL7eQmtwZze14FmbxiA
+ORpMGdiTAuoBmnjW0tymlb2JAon8VwcRb7uTdFtS4/vLFqzH7Yh26gZdRVKpU07r
+zKn0Fz6aTZBCdzc+Rw/nhDGhBS5SrLskbYTfcKCOwMp8215OzT0J/7sfI0zDEClh
+SU0TtFzDCLvG8x7W/UTk4R/qfGpk9f4kbzIFed/N7G+n8Yxc3dUIql6ENIWKoH3x
+Mf1D/daCfja64q8DD8QOwPCb+QWWStScUgbmy+lVrNK7u6e2qXg=
+=CaBt
+-----END PGP SIGNATURE-----
+
+--1M46xnqRrRrzkmfl--
