@@ -4,51 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28152E6FE3D
-	for <soc@archiver.kernel.org>; Fri,  6 Sep 2024 18:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54558E6FE41
+	for <soc@archiver.kernel.org>; Fri,  6 Sep 2024 18:06:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E38DBC4CECA; Fri,  6 Sep 2024 18:06:54 +0000 (UTC)
+	id 1D63AC4CEC7; Fri,  6 Sep 2024 18:06:55 +0000 (UTC)
 Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5203C4CEC7;
+	by smtp.kernel.org (Postfix) with ESMTPS id E51DAC4CEC4;
 	Fri,  6 Sep 2024 18:06:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5203C4CEC7
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E51DAC4CEC4
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 1AD77C0000FF;
-	Fri,  6 Sep 2024 11:06:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 1AD77C0000FF
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id DCC54C0000FD;
+	Fri,  6 Sep 2024 11:06:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com DCC54C0000FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1725646007;
-	bh=HH8NtsunwQns1uNnTpjRV7dgtaL+15wKzRmdamiYryM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QvUCD9BYDid0rkz1VSGHCX4ok67Ca1OBjL+HNIs3sixh7t1wBvjK80jXUoiSrwOTt
-	 bAJi4P4ZRql2Qzv1AwvVP4u+QCxAU7Kz0QxC/8IRZYT79D8Kcyn4gysfVOKwsSNtXb
-	 YbE3eM1XKDy8uzQ5HDP9keHC/HNPSRZICsFJV6nc=
+	s=dkimrelay; t=1725646006;
+	bh=qX6fgQ4xijJuWZ2NZcUfzLnw0szGt+49W5RDYFTYYNo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Qu/KP5JKU4d1kYE/N6Og4i6zgysCjsuxg3r/efxAmcXZ9NNKBrB3354SQ+iO96hHK
+	 O06VVKWMNu+r0nBy6aTItxN6oP5gOiFTPGOXR/PVUxdXOLmVRpTLNrBOXY6hV5WE1e
+	 4H2dfnsG2ThCpt4YD0QF7Ti5N92JFShEzxZetbP0=
 Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id BD49318041CAD2;
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 7543318041CAC6;
 	Fri,  6 Sep 2024 11:06:46 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: Stefan Wahren <wahrenst@gmx.net>,
+	Conor Dooley <conor.dooley@microchip.com>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Artur Weber <aweber.kernel@gmail.com>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Rob Herring <robh@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 3/4] Broadcom drivers changes for 6.12
-Date: Fri,  6 Sep 2024 11:06:42 -0700
-Message-ID: <20240906180643.2275460-3-florian.fainelli@broadcom.com>
+Subject: [GIT PULL 1/4] Broadcom devicetree changes for 6.12
+Date: Fri,  6 Sep 2024 11:06:40 -0700
+Message-ID: <20240906180643.2275460-1-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240906180643.2275460-1-florian.fainelli@broadcom.com>
-References: <20240906180643.2275460-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
@@ -57,22 +61,58 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.12/drivers
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.12/devicetree
 
-for you to fetch changes up to 70c2cf283c2ff475e3a07d62ead91a11b18376b1:
+for you to fetch changes up to 2192ef5e4bd140db22c46cd35ca64731d2e4ba33:
 
-  firmware: raspberrypi: Improve timeout warning (2024-08-13 13:21:28 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom SoC driver updates for 6.12, please
-pull the following:
-
-- Stefan improves the timeout warning within the Raspberry Pi firmware
-  driver
+  dt-bindings: interrupt-controller: convert bcm2836-l1-intc to yaml (2024-08-20 11:49:16 -0700)
 
 ----------------------------------------------------------------
-Stefan Wahren (1):
-      firmware: raspberrypi: Improve timeout warning
+This pull request contains Broadcom SoCs Device Tree changes for 6.12,
+please pull the following:
 
- drivers/firmware/raspberrypi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+- Krzysztof documents the AVS monitor binding present on 2711 (Raspberry
+  Pi 4)
+
+- Rafal updates the Broadcom Northstar DTS files to use the recent NVMEM
+  binding
+
+- Artur factors the nodes between the BCM21664 and BCM23550 SoCs since
+  they are nearly identical
+
+- Stefan converts the bcm2835-system-timer and bcm2836-l1-intc to a YAML
+  binding syntax
+
+----------------------------------------------------------------
+Artur Weber (2):
+      ARM: dts: broadcom: bcm21664: Move chosen node into Garnet DTS
+      ARM: dts: bcm-mobile: Split out nodes used by both BCM21664 and BCM23550
+
+Krzysztof Kozlowski (1):
+      dt-bindings: soc: bcm: document brcm,bcm2711-avs-monitor
+
+Rafał Miłecki (1):
+      ARM: dts: broadcom: convert NVMEM content to layout syntax
+
+Stefan Wahren (2):
+      dt-bindings: timer: convert bcm2835-system-timer bindings to YAML
+      dt-bindings: interrupt-controller: convert bcm2836-l1-intc to yaml
+
+ .../interrupt-controller/brcm,bcm2836-l1-intc.txt  |  37 ---
+ .../interrupt-controller/brcm,bcm2836-l1-intc.yaml |  51 +++
+ .../bindings/soc/bcm/brcm,bcm2711-avs-monitor.yaml |  44 +++
+ .../bindings/timer/brcm,bcm2835-system-timer.txt   |  22 --
+ .../bindings/timer/brcm,bcm2835-system-timer.yaml  |  50 +++
+ arch/arm/boot/dts/broadcom/bcm21664-garnet.dts     |   4 +
+ arch/arm/boot/dts/broadcom/bcm21664.dtsi           | 342 ++-----------------
+ arch/arm/boot/dts/broadcom/bcm2166x-common.dtsi    | 334 +++++++++++++++++++
+ arch/arm/boot/dts/broadcom/bcm23550.dtsi           | 370 ++-------------------
+ .../arm/boot/dts/broadcom/bcm53016-meraki-mr32.dts |  12 +-
+ .../dts/broadcom/bcm958625-meraki-mx6x-common.dtsi |  12 +-
+ 11 files changed, 556 insertions(+), 722 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm2836-l1-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm2836-l1-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/bcm/brcm,bcm2711-avs-monitor.yaml
+ delete mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
+ create mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
+ create mode 100644 arch/arm/boot/dts/broadcom/bcm2166x-common.dtsi
