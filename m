@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EDB5ECE577
-	for <soc@archiver.kernel.org>; Mon,  9 Sep 2024 19:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC9BAECE577
+	for <soc@archiver.kernel.org>; Mon,  9 Sep 2024 19:05:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 23A8AC4CECB; Mon,  9 Sep 2024 19:05:37 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id CCE52C4CECB; Mon,  9 Sep 2024 19:05:44 +0000 (UTC)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0EDF2C4CEC5;
-	Mon,  9 Sep 2024 19:05:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0EDF2C4CEC5
+	by smtp.kernel.org (Postfix) with ESMTPS id E607EC4CEC5;
+	Mon,  9 Sep 2024 19:05:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E607EC4CEC5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42cb7a2e4d6so12465875e9.0;
-        Mon, 09 Sep 2024 12:05:35 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42cb0f28bfbso21276925e9.1;
+        Mon, 09 Sep 2024 12:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725908734; x=1726513534; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1725908742; x=1726513542; darn=kernel.org;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vbR0PZLn8KEJqZCbPZ7+I0eYG+gLo1W6JWcnEjwvfiI=;
-        b=Qxx9WdAANYYAFYSt63n+sC2OSpttXQVTeF+3BqBdCAtvPr9IgI1M3MJrcT0EtiyziB
-         0BBZ6LN0wjq1qE+fVjGL0HSyN3gkuxdPfLXm+UvqOolsLLiWxprXEMHF/wTJSwxgl98n
-         SdwQNjEKIYyd4jK9jyGTef4TUPI7yMpDdZlWau1PvmPoVuEKXSDwN2JqpDLiZMVluqu0
-         0O30mZRQbEdgJ7a4+gQeThSxuW+wQITwuFQBzzLlZTajkkz3ZICSt8+CRZYo5nETkirC
-         eojae6mtPAqHXE8gB5oWpZUSZaYscBxJQCEiTgMbq8Ur9rfDLAQbtYVtS2U85UyK6r4m
-         Fs3A==
+        bh=hzdIyFwes5E7fNP0XbG/FRyMiugQp0LAX05kqVps+ao=;
+        b=QGdU4jah/leYkK7EMsTPR0Tyeocj2ivzx60TgjyzA5UiEmhHbjCbhD9QdNVCWVtRrX
+         QNkfUtLoY19u//2KrAhPBzuiJRv7wxSQTfC0FKqzoykzB3ZNFZ2FO1W4Bb27KHyo7vqb
+         ToUM8e+T4Nvb9nfZqsM/vHX1Oeugsu+yPTkrrZSbsCVkkyuWgxM28888y2cX+5eq+wbA
+         sBri5A9OYUb/oou/xkdFyIx3dDxRn9X2YnZYWekrWK0Jro9tuDfaKZ9+iWvUmPK+FM70
+         UCHoPikwukBkZxB8E8p9vKcRU/EnrEDy8Q3VSb8KQsoUrXq054W2fUjpTYijxL/uG18J
+         yTaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725908734; x=1726513534;
+        d=1e100.net; s=20230601; t=1725908742; x=1726513542;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vbR0PZLn8KEJqZCbPZ7+I0eYG+gLo1W6JWcnEjwvfiI=;
-        b=sZWoU3NFLbR0/6S0izo0rC3ZYHM6B0z6TMv9KEhPCmEBSmi/uJzhpg+EJ6sCFLVixQ
-         LUqfWh2lwRCQgAIYMcyX6/aIsnkoMG/IIkWYGfiu6rh5h9guczjvl1gEEl0qJQ2ut0RR
-         B+lqBBUeIZh/Xgd4yf9/b6G9gwbCHjkqpj9Pn944d22PRdA1scBk8JtxMz7pKeSv5FeV
-         tooqwbm3+60Jg/WV+//YtxlXptbeMdRj0cljUiHZBBYfmh782kmALQjNBuFBA6pc/0gL
-         sxytJsAfc3kgYHvDWgSwEkUe/OwW930c1EV+2k9eXCM/nSUdTnDjfCcrc4olAJZB3QpD
-         nIHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVs3MNaW6EWK2vnFnkuw1uVwvEZFveBz3AvT+IMSbfOvsHuu5NqtYhgwrl70Wiydc/AtlM=@kernel.org
-X-Gm-Message-State: AOJu0Ywc6rvKKrAv8LpvCFRntaBciweiwb+Kd68tctwr03TvIWeBna8c
-	NyQpzGfI3IvgGi+t3zKJPi5Hmqwb+qwrzUSltVooJ1Yn6TC4gkmB4uHnR7RQ
-X-Google-Smtp-Source: AGHT+IH0TzUYyYsevLleC+rS2ZAVnsx+hOwAP0rCTluKg89U8LDqEzQqbMrX4w5CBJ2m57ApYZDNPg==
-X-Received: by 2002:adf:e3c9:0:b0:368:74c0:6721 with SMTP id ffacd0b85a97d-37889674a48mr7141512f8f.38.1725908733434;
-        Mon, 09 Sep 2024 12:05:33 -0700 (PDT)
+        bh=hzdIyFwes5E7fNP0XbG/FRyMiugQp0LAX05kqVps+ao=;
+        b=Ircb/htvd/kM51Ryo/mNQalxC+pNekrrzASUvOV+zpGaI5RzD1hMFPQD2Bm5C0FTvf
+         BdCkbP0FjO+gHD6m/R4eCjOJUguW8Yo3XpD9LB6SEab8VRhFdkSw0KhmGGAIfkShQM8x
+         Qaz3hExedtWtMu14ydIWLskAEvybrc+HrGKQP5ytzKOb0yb3HhN20r7Waas0Xz2eob3m
+         Tayc3pwn0kyFghmK2CPn6Qn2pFumeBc1u4dDafzS9tYGo+9UooApo7evMF9NJp1Wa5/w
+         RelBVocozgpUHpHbk5vFTLxEqedOdETAVdTwVEjMPLxG2xPvxske3+aElq5Mjks44WLT
+         jlVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXXBrfukcBN96EHEHdmkzxGCvQE/yCoSLYExU06fZX6xz8sU3RKlv95hj1rt1nBcHD2Ur4=@kernel.org
+X-Gm-Message-State: AOJu0Yzyp8sj5CNTIVRL85BRgloS2LJi0kNFct9/ejxgKCmj2vSeKx+y
+	Hfz4yWPUwVUHS3XchZ8nxYc9URaoSNdBZKSNkVEqBbw40nhzLbhsmlDjpqcz
+X-Google-Smtp-Source: AGHT+IGGFS6+SNzhStLak4DTSssNfwHMJp+x/lO5SGNb0RMvaiFuXTAvIydG+lDYr7vGpowfqu+5Yw==
+X-Received: by 2002:a05:600c:1d9f:b0:42c:bf0b:c489 with SMTP id 5b1f17b1804b1-42cbf0bc58cmr456635e9.18.1725908742222;
+        Mon, 09 Sep 2024 12:05:42 -0700 (PDT)
 Received: from [192.168.2.177] ([81.0.7.156])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42c9a5eed16sm125075245e9.0.2024.09.09.12.05.32
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cae117aeesm88930315e9.6.2024.09.09.12.05.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Sep 2024 12:05:32 -0700 (PDT)
-Message-ID: <059656ad-5365-4097-86a1-f4ba43edf5da@gmail.com>
-Date: Mon, 9 Sep 2024 21:05:32 +0200
+        Mon, 09 Sep 2024 12:05:41 -0700 (PDT)
+Message-ID: <bfa9ab87-9de8-41fc-bfd1-de5ec324cfe0@gmail.com>
+Date: Mon, 9 Sep 2024 21:05:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US, ca-ES, es-ES
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
 Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>,
  "moderated list:ARM/Mediatek SoC support"
  <linux-mediatek@lists.infradead.org>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] MediaTek arm64 DTS updates for v6.12
+Subject: [GIT PULL] MediaTek driver updates for v6.12
 Autocrypt: addr=matthias.bgg@gmail.com; keydata=
  xsFNBFP1zgUBEAC21D6hk7//0kOmsUrE3eZ55kjc9DmFPKIz6l4NggqwQjBNRHIMh04BbCMY
  fL3eT7ZsYV5nur7zctmJ+vbszoOASXUpfq8M+S5hU2w7sBaVk5rpH9yW8CUWz2+ZpQXPJcFa
@@ -111,18 +111,17 @@ Autocrypt: addr=matthias.bgg@gmail.com; keydata=
  7vjYyrcyAOarX2X5pvMQvpAMADGf2Z3wrCsDdG25w2HztweUNd9QEprtJG8GNNzMOD4cQ82T
  a7eGvPWPeXauWJDLVR9jHtWT9Ot3BQgmApLxACvwvD1a69jaFKov28SPHxUCQ9Y1Y/Ct
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 Hi Arnd,
 
-Please find below the patches for the MediaTek device trees.
-As you can see it's quite a bit, but several of them are actually fixing 
-problems that were encountered. Would be great if you could find the time to 
-pull them. Sorry for the delay.
+Please find below the changes for the SoC driver for MediaTek. Sorry for the 
+delay. Hope we are still in time to get the patches in.
 
 Matthias
 
 ---
+
 
 The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 
@@ -131,127 +130,30 @@ The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
 are available in the Git repository at:
 
    https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ 
-tags/v6.11-next-dts64
+tags/v6.11-next-soc
 
-for you to fetch changes up to a9efc40fd601cf779eab4e420d8da3372e4302cf:
+for you to fetch changes up to d1e5d531d20b085bb83d9ab1868ed99fdeb0cc42:
 
-   arm64: dts: mediatek: add audio support for mt8365-evk (2024-09-09 16:41:36 
-+0200)
-
-----------------------------------------------------------------
-mt63xx:
-- add ADC node to the different PMICs
-
-mt7981:
-- Add SPI controller nodes.
-
-mt8183:
-- use referenced label for DSI endpoint.
-- disable soc_data efuse node, which does not has any cell definde
-   (kukui).
-- fix the regulator tree (kukui).
-- fix potential deadlock by removing not needed clock in the MFG async
-   power domain.
-- add DPI node.
-
-mt8186:
-- fix opp-supported-hw mask for GPU.
-- add lvts thermal sensor node.
-- add thermal zones.
-- fix reserved memory region of ADSP firmware (corsola).
-- add power domain to DPI node.
-- add SVS node.
-- fix internal display by disabling the external display temporarily
-   (corsola).
-
-mt8188:
-- add thermal sensor for the AP.
-- add thermal zones.
-
-mt8195:
-- fix pull resistance for hdmi pins (cherry).
-- remove keyboard backlight node (cherry), this is detected through
-   ChromeOS EC communication.
-- fix warning in mdp3 driver by providing a phandel to the SCP.
-- fix probe error of the USB controller by disabeling USB3 on the
-   controller (cherry).
-- assign per default both phys to the USB controller (cherry).
-- fix binding validation by re-ordering the dp_intf clocks.
-
-mt8365:
-- add AFE audio controller.
-- add AFE and audio codec support (evk).
-
-mt8395:
-- fix probe error of the USB controller by disabeling USB3 on the
-   controller (radax-nio-12l).
-- assign per default both phys to the USB controller (genio, kontron,
-   radax).
+   soc: mediatek: mtk-mutex: Reduce type size for mtk_mutex_data members 
+(2024-07-30 10:58:46 +0200)
 
 ----------------------------------------------------------------
-Alexandre Mergnat (2):
-       arm64: dts: mediatek: add afe support for mt8365 SoC
-       arm64: dts: mediatek: add audio support for mt8365-evk
+pmic warpper:
+- reduce size by constifying data structures
+- use devm_clk_bulk_det_all_enable
 
-AngeloGioacchino Del Regno (2):
-       arm64: dts: mediatek: mt8186: Fix supported-hw mask for GPU OPPs
-       arm64: dts: mediatek: Add ADC node on MT6357, MT6358, MT6359 PMICs
+mutex:
+- reduce size by changing variable bit size
 
-Chen-Yu Tsai (7):
-       arm64: dts: mediatek: mt8183-kukui-jacuzzi: Simplify DSI endpoint replacement
-       arm64: dts: mediatek: mt8195-cherry: Mark USB 3.0 on xhci1 as disabled
-       arm64: dts: mediatek: mt8395-nio-12l: Mark USB 3.0 on xhci1 as disabled
-       arm64: dts: mediatek: mt8195: Assign USB 3.0 PHY to xhci1 by default
-       arm64: dts: mt8183-kukui: clean up regulator tree
-       arm64: dts: mediatek: mt8195: Correct clock order for dp_intf*
-       arm64: dts: mediatek: mt8186-corsola: Disable DPI display interface
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+       soc: mediatek: mtk-mutex: Reduce type size for mtk_mutex_data members
 
-Fei Shao (1):
-       arm64: dts: mediatek: mt8186-corsola: Update ADSP reserved memory region
+Christophe JAILLET (3):
+       soc: mediatek: pwrap: Constify struct pmic_wrapper_type
+       soc: mediatek: pwrap: Constify some struct int[]
+       soc: mediatek: pwrap: Use devm_clk_bulk_get_all_enable()
 
-Nicolas Pitre (4):
-       arm64: dts: mediatek: mt8186: add lvts definitions
-       arm64: dts: mediatek: mt8186: add default thermal zones
-       arm64: dts: mediatek: mt8188: add lvts definitions
-       arm64: dts: mediatek: mt8188: add default thermal zones
-
-Nícolas F. R. A. Prado (4):
-       arm64: dts: mediatek: cherry: Specify pull resistance for RSEL GPIOs
-       arm64: dts: mediatek: mt8195-cherry: Remove keyboard-backlight node
-       arm64: dts: mediatek: mt8195: Add SCP phandle to MDP3 DMA controller
-       arm64: dts: mediatek: mt8183-kukui: Disable unused efuse at 8000000
-
-Pi-Hsun Shih (1):
-       arm64: dts: mt8183: add dpi node to mt8183
-
-Pin-yen Lin (1):
-       arm64: dts: mediatek: mt8183: Remove clock from mfg_async power domain
-
-Rafał Miłecki (1):
-       arm64: dts: mediatek: mt7981: add SPI controllers
-
-Rohit Agarwal (2):
-       arm64: dts: mediatek: mt8186: Add power domain for DPI
-       arm64: dts: mediatek: mt8186: Add svs node
-
-  arch/arm64/boot/dts/mediatek/mt6357.dtsi           |   5 +
-  arch/arm64/boot/dts/mediatek/mt6358.dtsi           |   5 +
-  arch/arm64/boot/dts/mediatek/mt6359.dtsi           |   5 +
-  arch/arm64/boot/dts/mediatek/mt7981b.dtsi          |  42 ++
-  .../boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  13 +-
-  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  26 +-
-  arch/arm64/boot/dts/mediatek/mt8183.dtsi           |  13 +-
-  arch/arm64/boot/dts/mediatek/mt8186-corsola.dtsi   |   5 +-
-  arch/arm64/boot/dts/mediatek/mt8186.dtsi           | 345 ++++++++++++++-
-  arch/arm64/boot/dts/mediatek/mt8188.dtsi           | 482 +++++++++++++++++++++
-  .../boot/dts/mediatek/mt8195-cherry-dojo-r1.dts    |  11 +-
-  .../boot/dts/mediatek/mt8195-cherry-tomato-r2.dts  |  11 +-
-  .../boot/dts/mediatek/mt8195-cherry-tomato-r3.dts  |  11 +-
-  arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi    |   6 +-
-  arch/arm64/boot/dts/mediatek/mt8195.dtsi           |  15 +-
-  arch/arm64/boot/dts/mediatek/mt8365-evk.dts        |  86 ++++
-  arch/arm64/boot/dts/mediatek/mt8365.dtsi           |  43 +-
-  .../boot/dts/mediatek/mt8395-genio-1200-evk.dts    |   2 -
-  .../dts/mediatek/mt8395-kontron-3-5-sbc-i1200.dts  |   1 +
-  .../boot/dts/mediatek/mt8395-radxa-nio-12l.dts     |   2 +
-  20 files changed, 1066 insertions(+), 63 deletions(-)
+  drivers/soc/mediatek/mtk-mutex.c     |  52 +++++++--------
+  drivers/soc/mediatek/mtk-pmic-wrap.c | 118 +++++++++--------------------------
+  2 files changed, 56 insertions(+), 114 deletions(-)
