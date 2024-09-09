@@ -1,72 +1,71 @@
-Return-Path: <SRS0=EDZP=QG=sntech.de=heiko@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2574BECE577
-	for <soc@archiver.kernel.org>; Sun,  8 Sep 2024 21:52:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC02ECE579
+	for <soc@archiver.kernel.org>; Mon,  9 Sep 2024 09:04:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0D779C4CEC6; Sun,  8 Sep 2024 21:52:23 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6D67DC4CEC3;
-	Sun,  8 Sep 2024 21:52:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D67DC4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=fWksfkF/dfTEvvEEssbvTf51SW/1LayFIfu3J119k6A=; b=EQEkcpn52a7drlMn0gd5ZJCVHR
-	YmQ4JDwC6esRe7dqIswvh62IB59ZUp0fiwdH+sF7iC6Raz/sw62N5zpyLN1UL2d+Aio2UzxjMQf+/
-	31Po+l0fOMgqn2s6Ya7ZrUjnY9hEmCUFcw+xLQ6fseBuFiAQuvaPYeBxbDbkYJ4fSwv9VCHpz9uD3
-	1ehsZFu/tVg6/dPMR8Y6TEvx/mh6+AgA/aIah8cTx71BaU5Ko05aHal5mJHoyBFoo95dQC07BrQnM
-	1jQK/rxfHQFlkYTzzo3TXHztDJ+mlNCTKSUMwU3cFRGrU0PG2Y5dUGOTd+7rxEowlKcYwclemyA+d
-	9bWnD7PA==;
-Received: from i5e8616cc.versanet.de ([94.134.22.204] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1snPpT-0004Ic-JX; Sun, 08 Sep 2024 23:52:19 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
+	id DEB3FC4CEC6; Mon,  9 Sep 2024 09:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F520C4CEC5;
+	Mon,  9 Sep 2024 09:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725872661;
+	bh=21XZgZhhL5UrKCuLusQQvPQ+rZd4NBRQIgirkMHUuQU=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=A+HBD4wZpTR/Ado+/zpqSuVbg8SdVRW9jYJ9ZRrKeitPSVMMzQqYN+Euw7OdhPG2B
+	 kdZgpgotkeHgfYeJ5E/mJi5HLB6ijqfYbGHc06HN+vWLKNFqfLdnt5OhTXOYkgkpvs
+	 t4bw70fZKJnbBAlgcFQWHbRLYXoPV7FcaE2bbciFRjCE5MZc0/D5FWCSq8NDzqaZRO
+	 DGOFSZikUaehqkiXQolI1Y2GLybWkpeyqID+iUY2oozgHhdkeOLsWbvNwCjPZgGeWa
+	 UBgTZWaPaKesMVteHj79ApfNCxd1LYRhlf0nmHTKq9VyN5WYhJSvXeTtEwx3F0E44v
+	 aPllUjdnpytqw==
+From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip driver changes for 6.12 #2
-Date: Sun, 08 Sep 2024 23:54:35 +0200
-Message-ID: <3004026.A7TYtsqqnE@diego>
+To: soc@kernel.org,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] platform: cznic: turris-omnia-mcu: fix HW_RANDOM dependency
+Date: Mon,  9 Sep 2024 11:04:09 +0000
+Message-Id: <20240909110417.247453-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit e1aaecacfa135cd264a0db331d3ab8b2a04a54a3:
+From: Arnd Bergmann <arnd@arndb.de>
 
-  soc: rockchip: grf: Add rk3576 default GRF values (2024-08-23 12:33:58 +0200)
+There is still a build failure when the rwrng support is in a loadable
+module but the mcu driver is built-in:
 
-are available in the Git repository at:
+arm-linux-gnueabi-ld: drivers/platform/cznic/turris-omnia-mcu-trng.o: in function `omnia_mcu_register_trng':
+turris-omnia-mcu-trng.c:(.text.omnia_mcu_register_trng+0x11c): undefined reference to `devm_hwrng_register'
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.12-rockchip-drivers-2
+Change the dependency to explicitly disallow the broken
+configuration.
 
-for you to fetch changes up to 59420d8ad7809827524824a3891d6a081e735449:
+Fixes: 41bb142a4028 ("platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/platform/cznic/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  dt-bindings: arm: rockchip: Add rk3576 compatible string to pmu.yaml (2024-09-04 00:00:01 +0200)
-
-----------------------------------------------------------------
-One new pmu compatible for rk3576
-
-----------------------------------------------------------------
-Detlev Casanova (1):
-      dt-bindings: arm: rockchip: Add rk3576 compatible string to pmu.yaml
-
- Documentation/devicetree/bindings/arm/rockchip/pmu.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-
+diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
+index a111eca8ff57..49c383eb6785 100644
+--- a/drivers/platform/cznic/Kconfig
++++ b/drivers/platform/cznic/Kconfig
+@@ -70,7 +70,7 @@ config TURRIS_OMNIA_MCU_TRNG
+ 	bool "Turris Omnia MCU true random number generator"
+ 	default y
+ 	depends on TURRIS_OMNIA_MCU_GPIO
+-	depends on HW_RANDOM
++	depends on HW_RANDOM=y || HW_RANDOM=TURRIS_OMNIA_MCU
+ 	help
+ 	  Say Y here to add support for the true random number generator
+ 	  provided by CZ.NIC's Turris Omnia MCU.
+-- 
+2.39.2
 
