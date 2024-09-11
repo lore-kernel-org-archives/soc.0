@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F2C1EE021F
-	for <soc@archiver.kernel.org>; Wed, 11 Sep 2024 09:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 161F7EE4980
+	for <soc@archiver.kernel.org>; Wed, 11 Sep 2024 09:00:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CA706C4CECE; Wed, 11 Sep 2024 09:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A3BC4CEC6;
-	Wed, 11 Sep 2024 09:00:29 +0000 (UTC)
+	id 047C2C4CEC6; Wed, 11 Sep 2024 09:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2FBCC4CEC5;
+	Wed, 11 Sep 2024 09:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726045229;
-	bh=UEG12TarpOSQKwbg/QGw4c3xh83d8TZmgyRH8j7pAjk=;
+	s=k20201202; t=1726045230;
+	bh=9EeRDuJf62r+pX8tkPxLZVRbQWHVpOWH5P7VFMbVBbk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=FVox1tQxLExaV9sl4vncqJW8gXqjR4nChJ0NpyjZnN1gEfSpHeqXynQ++Xx6K0LAV
-	 SkRa7sT2u/ztWcuQh/zD3BIyCwwbOEXKQjSRywA5bf0uaqOnXlY6T+XD4inZ4pdBwl
-	 k0VisXMow6dzZc49NtSR2QXbPaB6Pej+yupZkj//j1kumDjisJwDtrK64ndcmzSCvq
-	 3BKoeDittMFy7H0v7o1uxsePIDzhFbfagqSsyYLAo/VBp1/ANS4a8qZxnjdsJKsMyD
-	 rUJnHTkoc+pNfihcpRt9IGAop96nr6+6lvfRXwzEeySRklhFWC9mQiJ13xiJl56dco
-	 6zwpK6R4h21qQ==
+	b=TPdsEueZxV+0gC9imvHKUUdTXdvUZMHmb7sxBEHjXjSQTKcH0tBQRghn2h7ye6F4m
+	 p9IKVuzzct0Hmf5NEIS4O1KP3DmmCWq9t3CSyzQ6SvhZWE8+t7ewUtbDbuOXF5WCvz
+	 cWMQtBohT7/qIWCjAbvFP7uv+ftlTaiieDEpfgZEHeR2pbgsH3djtUoeR8f0+PpjLj
+	 mkX1WnmdLSQfmtsT4D+UuqSCgpYpeS0xmtAn6PNsGkHqQMntbqMzBy6gO8+U63/QCk
+	 aHQ7mUh5JIiegd7Vq458Bhq0D9UElQ8tuY5lVaWLZ0lDX0xn6Zbkbb+qu/MAKyQX3X
+	 SX5qwrtWV1h7w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ED6ED3822FA4;
-	Wed, 11 Sep 2024 09:00:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B573822FA4;
+	Wed, 11 Sep 2024 09:00:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform: cznic: turris-omnia-mcu: fix HW_RANDOM dependency
+Subject: Re: [GIT PULL] RISC-V soc fixes for v6.11-final
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172604523076.547769.5260333395127785386.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Sep 2024 09:00:30 +0000
-References: <20240909110417.247453-1-arnd@kernel.org>
-In-Reply-To: <20240909110417.247453-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+ <172604523201.547769.12598544714625487965.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Sep 2024 09:00:32 +0000
+References: <20240909-hybrid-groovy-601a33b5b309@spud>
+In-Reply-To: <20240909-hybrid-groovy-601a33b5b309@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon,  9 Sep 2024 11:04:09 +0000 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 9 Sep 2024 15:33:36 +0100 you wrote:
+> Hey Arnd,
 > 
-> There is still a build failure when the rwrng support is in a loadable
-> module but the mcu driver is built-in:
+> Here's the fix that was being discussed on IRC over the weekend.
 > 
-> arm-linux-gnueabi-ld: drivers/platform/cznic/turris-omnia-mcu-trng.o: in function `omnia_mcu_register_trng':
-> turris-omnia-mcu-trng.c:(.text.omnia_mcu_register_trng+0x11c): undefined reference to `devm_hwrng_register'
+> Cheers,
+> conor.
 > 
 > [...]
 
 Here is the summary with links:
-  - platform: cznic: turris-omnia-mcu: fix HW_RANDOM dependency
-    https://git.kernel.org/soc/soc/c/b97acde6f984
+  - [GIT,PULL] RISC-V soc fixes for v6.11-final
+    https://git.kernel.org/soc/soc/c/0e7af99aef5f
 
 You are awesome, thank you!
 -- 
