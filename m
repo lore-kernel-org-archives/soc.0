@@ -1,54 +1,105 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <wens@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1E9BEE499C
-	for <soc@archiver.kernel.org>; Wed, 11 Sep 2024 18:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6497EEB563
+	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 08:31:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 762C8C4CECC; Wed, 11 Sep 2024 18:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE63C4CEC0;
-	Wed, 11 Sep 2024 18:31:00 +0000 (UTC)
+	id 6D657C4CEC6; Thu, 12 Sep 2024 08:31:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D14C4CEC3;
+	Thu, 12 Sep 2024 08:31:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726079460;
-	bh=PJu19hHRtBZxiY71l+HTEvh4vWY6Vbzn9N0RtMa9Em8=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=EZ0vavJ4S+kyuOk4960uPV7NkQH3zQ5QtMD7xoAFxITYoBQKHLRW0w13gzg+3twW3
-	 tbM+bmS6/khiUVIQCFMg+P5STS9QCAFkPqFnX0VKPZIOqdrJhirgqryR9l8GfkBUFl
-	 Os+QZmmAgbNMl6f5uuZ6QBSFMMIskEysEkKeZHYpMH07H6JASxqpAitJaOAOktkBML
-	 er5V85NJcwlKj1M5LPxv+qIzCulgaPmnNT7ZUeTGPON8ju0F/aD7vtLG6rkvI+giQX
-	 jlVuKFuAjcveaAxr+p9xQhGiWpKC/bAbUItawr3NesIL8DtDSzR43rQF2rabPUzKGl
-	 vDud/VQY+Y7uQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE3233806656;
-	Wed, 11 Sep 2024 18:31:02 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.11, part 3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <58c9776e-0e3a-4b00-bea8-47a7bcf2af37@app.fastmail.com>
-References: <58c9776e-0e3a-4b00-bea8-47a7bcf2af37@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <58c9776e-0e3a-4b00-bea8-47a7bcf2af37@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.11-3
-X-PR-Tracked-Commit-Id: 0e7af99aef5f58b4bae00e45fd1c2626a987f7bb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 77f587896757708780a7e8792efe62939f25a5ab
-Message-Id: <172607946129.1012158.17735590154685557004.pr-tracker-bot@kernel.org>
-Date: Wed, 11 Sep 2024 18:31:01 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	s=k20201202; t=1726129861;
+	bh=BnoeUpGqWxHWbBjwHyTUp1LxWEYQAvgqgD4Qow0g4hA=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=YYXe7yf1S2wKkmyjtB60HDUrLUBgYvCaB4KDq3YHHRZONjhFWFHxlDQnq1owxoSJc
+	 +zwoM4PYcIOXrpZ+cCzSKJYSSnUnMdTcudpQx5FRqm1oBLNBjQBiioL/4Z2tHuTX1P
+	 0UKCiEDD4RjaivZ4jI0fB9kraFNNUEurkCaJP0ISdL0HHlDbcjCGtONodSnigHds3e
+	 UoBhlHzu/MitM9ysEWRyd2nNcixoxcYyuPcP1UcDrF45hKuhp8/8d4vv5xQYJbKh0C
+	 +I1XNBzR+OUGL/VYzldHwcHcIT9UNNR9UrJlVxzLYal/EtT698exwG00UClxWUaSGb
+	 dzycGIULqq9gw==
+Received: by wens.tw (Postfix, from userid 1000)
+	id CCD025F9F2; Thu, 12 Sep 2024 16:30:56 +0800 (CST)
+Date: Thu, 12 Sep 2024 16:30:56 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner SoC device tree changes for 6.12 part 2
+Message-ID: <ZuKmwD8VQrvNx8ir@wens.tw>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="suWzmaiDCCl7fJWq"
+Content-Disposition: inline
 
-The pull request you sent on Wed, 11 Sep 2024 15:08:02 +0000:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.11-3
+--suWzmaiDCCl7fJWq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/77f587896757708780a7e8792efe62939f25a5ab
+Hi,
 
-Thank you!
+Here are a couple more Allwinner device tree changes for 6.12.
+Please consider pulling them.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Thanks
+ChenYu
+
+
+The following changes since commit 89f1a037e97cb2ec0948eb92bca17e7d8c4fc824:
+
+  arm64: dts: allwinner: a64: Add GPU thermal trips to the SoC dtsi (2024-0=
+9-04 22:43:49 +0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunx=
+i-dt-for-6.12-2
+
+for you to fetch changes up to 605f56405a6719dfdc9f91464c082856cd929d6c:
+
+  arm64: dts: allwinner: h5: NanoPi NEO Plus2: Use regulators for pio (2024=
+-09-11 16:54:32 +0800)
+
+----------------------------------------------------------------
+Allwinner SoC device tree changes for 6.12 part 2
+
+ARM64 device tree and binding-only changes
+- Add system and pin voltage regulator supplies for NanoPi NEO Plus2
+
+----------------------------------------------------------------
+Kry=C5=A1tof =C4=8Cern=C3=BD (2):
+      arm64: dts: allwinner: h5: NanoPi Neo Plus2: Fix regulators
+      arm64: dts: allwinner: h5: NanoPi NEO Plus2: Use regulators for pio
+
+ .../dts/allwinner/sun50i-h5-nanopi-neo-plus2.dts   | 37 ++++++++++++++++++=
+++++
+ 1 file changed, 37 insertions(+)
+
+--suWzmaiDCCl7fJWq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmbipsAACgkQOJpUIZwP
+JDCueg//QN0lPcrwhM6PhSAr0gHmWL0r/Vg46hwME7sKnyIqvRJWUCqENTJ1WSg6
+at1tcuxp2kaS059vWB3T6kqgwboFZ3Ydf3iLVct2jKKM/AvLB4Wm37lk41tmWYEw
+IVAT7Vym1L6wz25mKp0d+jWbXO6bDPaKXsCEVraEa034c1DXMddlFCc1gSMYofhY
+Bx/hTAu51BHfT9kA0kDKwTl2ua6lLnhZld4+fTsMNFgDtTDMTJPJa4DqPi5Z5INP
+PJt28aILbbGbiCDhWzX3RIYYQa8g2vqcHtmtoiUG6aSL5/jjxG0ts1LMpShMSpJd
+u3rpD/ziQPn3j3lz9BWPi1OmqIvaax01hWAJ0LJ1IV4ZoPEljDozhNw6ZK+dDoes
+apVu3fE43HlOq8tyI4gkWu/lzLuY3nXtIgCL1raeAK1u42LAQ5EbdY4OcrhE/yOh
+k3JkoOOk+N/So8c8tWW0uTQ+pzt09uJ+ktPkLhV4YHAYTjtFCQmKbw7T3JmlP8FZ
+3S6nAKLwenakdWzxGjj7lep7L8QCYf73sA/GnEX4m7woQfiMZbS1hPiNN/FjnKjf
+EY8TlayAvbSSMO9SKffGpqc/9e/RllcYcoavUNFKmoVjE+9OWuG0u42zDZl83BZt
+5oPu2qsYMZ5cdvHuAQmtZofFSoSrB4arohM77hu22+0fNhWZpUo=
+=TB6J
+-----END PGP SIGNATURE-----
+
+--suWzmaiDCCl7fJWq--
