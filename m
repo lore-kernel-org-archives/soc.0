@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD75EEE25C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C563DEEE266
 	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 70EC4C4FDFB; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 44DE0C4E697;
+	id CE200C4CEDB; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A9EFC4FE14;
 	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726165216;
-	bh=hqLKfdHAqsp9ubtvrEhSZkll8xQwV4IE1tn0OaSzusw=;
+	bh=OpMw8H1Uy7VJPtjkQlzz7ECyPIAIof/IYlkKaagHA0A=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=TuNxeGlgwVKz/YJpZgUWMzbRDtDYEboaVjUlEKcS2+wgLqz6ztXfxtPMRGFZqVbCH
-	 FB+LRvTghTeBCuVTpItqFOwLWAJQ2zLuVjA7AlekNdJLKITvPN9OAv8wjixp6TTApb
-	 G6dPauL0xsbsCxgHuUGhub98eMkgCC1M/RhbPYQLjl03VxLc1i7Hn+Ile6nfJhAH+V
-	 ZWaHu7cAz0Dn9T0nnxoKfc+xlD6CXjQ+Rlge+JRtL8afAVLk8Bin0hH+Q4UVTDAv5S
-	 QifGt/AbVtR3gnHUORcEolBkDzwwXMX0gRzPM2w5xjAZVzvT2uPyZKDtplhhFj/9Pb
-	 atvsp9pAD618g==
+	b=G4O9Ae/lhd1rutXXY24q0dKWpQIomRNl4m214Bfu2bgdMVx9xfHnb+6c3TUJBevKd
+	 mzZS/aoukhzlJ9KJko4M4o9GMvySthPWYCYNudpA5CKbr1K+kD2bR9fmojrUCka/CE
+	 TB/JhSMymx2DDrOu4xq9lmrY4UU+CXM/R4CesDogkazfKSGGiTyIWWDGcuf4dus1EL
+	 QCj194O54v1+mKNXilv+3ZFCHWpn3A9wHw5l8owgjyzYwSnxkuzVdAAFY8XT5U/R1b
+	 HgilmUrTGjYdX3WB3V6WsKvK8UeNwmM97+PxBku2AjqmrXkCB0XslEVr8Vsue5+CQE
+	 NiY0Ny6lhEUng==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 380BBEEE25E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90CB5EEE25C;
 	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
 From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
-Date: Thu, 12 Sep 2024 19:25:01 +0100
-Subject: [PATCH 16/21] dt-bindings: i2c: add i2c/twi driver documentation
+Date: Thu, 12 Sep 2024 19:25:05 +0100
+Subject: [PATCH 20/21] arm64: defconfig: sc598 add minimal changes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240912-test-v1-16-458fa57c8ccf@analog.com>
+Message-Id: <20240912-test-v1-20-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 List-Id: <soc.lore.kernel.org>
@@ -55,11 +55,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=2351;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=2190;
  i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
- bh=NgI2mAXMr6wvtJUHYjzwLK7MgsJEKL9nzTeZkQleGms=;
- b=vhXEAs59UNXXy2CwczdwdKItNi03+ogGqzUK0a77UzJPEDl1pzu4/spYs4pnuCUKynl1Z68j+
- HK1C/dGXcNECHVI1d4QCirnLQUyMOWAsGojtV0CO7eu/mjENPi367XQ
+ bh=MHsHd+C/PIZW+6c/4XvADztERNqdGgexUrpmw/8Uj1o=;
+ b=ckE38LhnghBiz6ehY1LUpgPtxnhxp0i91l16hEWoTdfUkJhwgYv0et/QDYoVF7isUu1LLusPS
+ 15YeKF/PimUDG9n6SDxoWDjeMljd29/pxhd07rkP9NiynxSaD1LZVEI
 X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
  pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
 X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
@@ -69,94 +69,71 @@ Reply-To: arturs.artamonovs@analog.com
 
 From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Add I2C driver bindings.
+Add ADSP-SC598 defconfig
 
 Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
+Co-developed-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
+Signed-off-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 ---
- Documentation/devicetree/bindings/i2c/adi,twi.yaml | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ arch/arm64/configs/defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/adi,twi.yaml b/Documentation/devicetree/bindings/i2c/adi,twi.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..e935b09066cf806c89a796fdd5fe73ee0b644432
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/adi,twi.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/adi,twi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices I2C Peripheral for SC5XX Processor Family
-+
-+maintainers:
-+  - Arturs Artamonovs <arturs.artamonovs@analog.com>
-+  - Utsav Agarwal <Utsav.Agarwal@analog.com>
-+
-+description: |
-+  Analog Devices I2C Peripheral driver for SC5XX Processor Family
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,twi
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-khz:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - "#address-cells"
-+  - "#size-cells"
-+  - reg
-+  - interrupts
-+  - clock-khz
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/adi-sc5xx-clock.h>
-+
-+    i2c0: twi@31001400 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      compatible = "adi,twi";
-+      reg = <0x31001400 0xFF>;
-+      interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
-+      clock-khz = <100>;
-+      clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-+      clock-names = "sclk0";
-+      status = "disabled";
-+    };
-+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 362df939026383a26ee23485d1ec25b252b90d5d..7801dd7d7d65bc504dc6e2945f92f261f2911115 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -67,6 +67,7 @@ CONFIG_ARCH_SEATTLE=y
+ CONFIG_ARCH_INTEL_SOCFPGA=y
+ CONFIG_ARCH_STM32=y
+ CONFIG_ARCH_SYNQUACER=y
++CONFIG_ARCH_SC59X_64=y
+ CONFIG_ARCH_TEGRA=y
+ CONFIG_ARCH_TESLA_FSD=y
+ CONFIG_ARCH_SPRD=y
+@@ -473,6 +474,7 @@ CONFIG_SERIAL_8250_OMAP=y
+ CONFIG_SERIAL_8250_MT6577=y
+ CONFIG_SERIAL_8250_UNIPHIER=y
+ CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_SERIAL_ADI_UART=y
+ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_SERIAL_MESON=y
+@@ -513,6 +515,7 @@ CONFIG_TCG_TIS_I2C_CR50=m
+ CONFIG_TCG_TIS_I2C_INFINEON=y
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_I2C_MUX=y
++CONFIG_I2C_ADI_TWI=y
+ CONFIG_I2C_MUX_PCA954x=y
+ CONFIG_I2C_BCM2835=m
+ CONFIG_I2C_CADENCE=m
+@@ -539,6 +542,7 @@ CONFIG_I2C_UNIPHIER_F=y
+ CONFIG_I2C_RCAR=y
+ CONFIG_I2C_CROS_EC_TUNNEL=y
+ CONFIG_SPI=y
++CONFIG_SPI_ADI=y
+ CONFIG_SPI_ARMADA_3700=y
+ CONFIG_SPI_BCM2835=m
+ CONFIG_SPI_BCM2835AUX=m
+@@ -637,6 +641,7 @@ CONFIG_PINCTRL_SM8450_LPASS_LPI=m
+ CONFIG_PINCTRL_SC8280XP_LPASS_LPI=m
+ CONFIG_PINCTRL_SM8550_LPASS_LPI=m
+ CONFIG_PINCTRL_SM8650_LPASS_LPI=m
++CONFIG_GPIO_ADI_ADSP_PORT=y
+ CONFIG_GPIO_ALTERA=m
+ CONFIG_GPIO_DAVINCI=y
+ CONFIG_GPIO_DWAPB=y
+@@ -1512,6 +1517,7 @@ CONFIG_RESET_QCOM_AOSS=y
+ CONFIG_RESET_QCOM_PDC=m
+ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
+ CONFIG_RESET_TI_SCI=y
++CONFIG_RESET_SC5XX=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_CAN_TRANSCEIVER=m
+ CONFIG_PHY_SUN4I_USB=y
 
 -- 
 2.25.1
