@@ -1,105 +1,57 @@
-Return-Path: <wens@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6497EEB563
-	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 08:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D97EED60A
+	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 14:30:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6D657C4CEC6; Thu, 12 Sep 2024 08:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D14C4CEC3;
-	Thu, 12 Sep 2024 08:31:01 +0000 (UTC)
+	id BC3AAC4CEC5; Thu, 12 Sep 2024 14:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6568C4CEC3
+	for <soc@kernel.org>; Thu, 12 Sep 2024 14:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726129861;
-	bh=BnoeUpGqWxHWbBjwHyTUp1LxWEYQAvgqgD4Qow0g4hA=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=YYXe7yf1S2wKkmyjtB60HDUrLUBgYvCaB4KDq3YHHRZONjhFWFHxlDQnq1owxoSJc
-	 +zwoM4PYcIOXrpZ+cCzSKJYSSnUnMdTcudpQx5FRqm1oBLNBjQBiioL/4Z2tHuTX1P
-	 0UKCiEDD4RjaivZ4jI0fB9kraFNNUEurkCaJP0ISdL0HHlDbcjCGtONodSnigHds3e
-	 UoBhlHzu/MitM9ysEWRyd2nNcixoxcYyuPcP1UcDrF45hKuhp8/8d4vv5xQYJbKh0C
-	 +I1XNBzR+OUGL/VYzldHwcHcIT9UNNR9UrJlVxzLYal/EtT698exwG00UClxWUaSGb
-	 dzycGIULqq9gw==
-Received: by wens.tw (Postfix, from userid 1000)
-	id CCD025F9F2; Thu, 12 Sep 2024 16:30:56 +0800 (CST)
-Date: Thu, 12 Sep 2024 16:30:56 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
+	s=k20201202; t=1726151430;
+	bh=VvcbObJJa5YG3+bxuNB8Ohl/0PxMnQl5eli6ctTkKPA=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=U12Jm8R6lUlqMuG4RMi2zZZPb3DejqMxx4r3wNFnQAeAZXjb1dCuWuWF0OlPaiisx
+	 zKF1oy5bHZ0R1F4TmMod5hVgjF64zBJRjzpz8J3XFkml3OKMb0r50aX0bjx42UlN6H
+	 xXdZXjGJteZHRfL6SunbSIxMRtwCFftI5M098YZurfogEpCWIqU/qnR2gXTDHiI/M2
+	 hQW9Rz4fy6Puiu/uyQTicK5MbdAIxPxLm7WIjzcisCi0/P14kh2cgp57aEwBsyXSYp
+	 GfSHAAJmoNyDLJe9OlxVhOEKvW9+sqU1dexfPc3rS43vIEvECf3C3lPpsTKY5u1n1e
+	 WKZQNJXmKAeYg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2B163822D1B;
+	Thu, 12 Sep 2024 14:30:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <172615143153.1611582.14929195022048265508.git-patchwork-summary@kernel.org>
+Date: Thu, 12 Sep 2024 14:30:31 +0000
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner SoC device tree changes for 6.12 part 2
-Message-ID: <ZuKmwD8VQrvNx8ir@wens.tw>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="suWzmaiDCCl7fJWq"
-Content-Disposition: inline
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
+
+Patch: [GIT,PULL] Allwinner SoC device tree changes for 6.12 part 2
+  Submitter: Chen-Yu Tsai <wens@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=889648
+  Lore link: https://lore.kernel.org/r/ZuKmwD8VQrvNx8ir@wens.tw
 
 
---suWzmaiDCCl7fJWq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Total patches: 1
 
-Hi,
-
-Here are a couple more Allwinner device tree changes for 6.12.
-Please consider pulling them.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Thanks
-ChenYu
-
-
-The following changes since commit 89f1a037e97cb2ec0948eb92bca17e7d8c4fc824:
-
-  arm64: dts: allwinner: a64: Add GPU thermal trips to the SoC dtsi (2024-0=
-9-04 22:43:49 +0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunx=
-i-dt-for-6.12-2
-
-for you to fetch changes up to 605f56405a6719dfdc9f91464c082856cd929d6c:
-
-  arm64: dts: allwinner: h5: NanoPi NEO Plus2: Use regulators for pio (2024=
--09-11 16:54:32 +0800)
-
-----------------------------------------------------------------
-Allwinner SoC device tree changes for 6.12 part 2
-
-ARM64 device tree and binding-only changes
-- Add system and pin voltage regulator supplies for NanoPi NEO Plus2
-
-----------------------------------------------------------------
-Kry=C5=A1tof =C4=8Cern=C3=BD (2):
-      arm64: dts: allwinner: h5: NanoPi Neo Plus2: Fix regulators
-      arm64: dts: allwinner: h5: NanoPi NEO Plus2: Use regulators for pio
-
- .../dts/allwinner/sun50i-h5-nanopi-neo-plus2.dts   | 37 ++++++++++++++++++=
-++++
- 1 file changed, 37 insertions(+)
-
---suWzmaiDCCl7fJWq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmbipsAACgkQOJpUIZwP
-JDCueg//QN0lPcrwhM6PhSAr0gHmWL0r/Vg46hwME7sKnyIqvRJWUCqENTJ1WSg6
-at1tcuxp2kaS059vWB3T6kqgwboFZ3Ydf3iLVct2jKKM/AvLB4Wm37lk41tmWYEw
-IVAT7Vym1L6wz25mKp0d+jWbXO6bDPaKXsCEVraEa034c1DXMddlFCc1gSMYofhY
-Bx/hTAu51BHfT9kA0kDKwTl2ua6lLnhZld4+fTsMNFgDtTDMTJPJa4DqPi5Z5INP
-PJt28aILbbGbiCDhWzX3RIYYQa8g2vqcHtmtoiUG6aSL5/jjxG0ts1LMpShMSpJd
-u3rpD/ziQPn3j3lz9BWPi1OmqIvaax01hWAJ0LJ1IV4ZoPEljDozhNw6ZK+dDoes
-apVu3fE43HlOq8tyI4gkWu/lzLuY3nXtIgCL1raeAK1u42LAQ5EbdY4OcrhE/yOh
-k3JkoOOk+N/So8c8tWW0uTQ+pzt09uJ+ktPkLhV4YHAYTjtFCQmKbw7T3JmlP8FZ
-3S6nAKLwenakdWzxGjj7lep7L8QCYf73sA/GnEX4m7woQfiMZbS1hPiNN/FjnKjf
-EY8TlayAvbSSMO9SKffGpqc/9e/RllcYcoavUNFKmoVjE+9OWuG0u42zDZl83BZt
-5oPu2qsYMZ5cdvHuAQmtZofFSoSrB4arohM77hu22+0fNhWZpUo=
-=TB6J
------END PGP SIGNATURE-----
-
---suWzmaiDCCl7fJWq--
