@@ -1,103 +1,164 @@
-Return-Path: <SRS0=6lXu=QK=gmail.com=alexander.sverdlin@kernel.org>
+Return-Path: <devnull+arturs.artamonovs.analog.com@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FE44EED60E
-	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 14:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DAF0EEE241
+	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 047C2C4CEC4; Thu, 12 Sep 2024 14:49:13 +0000 (UTC)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 21E0BC4CEC3
-	for <soc@kernel.org>; Thu, 12 Sep 2024 14:49:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21E0BC4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a8d64b27c45so168166966b.3
-        for <soc@kernel.org>; Thu, 12 Sep 2024 07:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726152550; x=1726757350; darn=kernel.org;
-        h=user-agent:mime-version:message-id:cc:to:subject:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/mI+z55kCx1KndQZOmeZl0eyn7TLNxfxyGQZqGu0dOc=;
-        b=mWybohKP31GEs0Zp3pgz3JNIqoG+WZxWWMsCfsTJBqIHJ7FuxLvmjPc2LqJjICbh9p
-         /W9aU4RPt0U5NuguqLsWWV3r+E4mU/l/rRtFloYerK2k2gFXRYPhrsEgaEbAP/qYc1BM
-         2KEOABhkVxZTfB+Svm8bRtujDbimcYdwukbE+/ZcyUZnO+29d91FcJBpRlanphSwFiiz
-         0AKI8sK2PO/Qw37oJ3okhZLLz66a3r9QSrPM9xZFItEuW4H97XAUUOlnx95+ynKBCwJ2
-         x8cJZf8KdCwq3CdiW9RZjbwF74DvgokR/nxYrEh8qjqvAaeVVx4z1/9HdoJnxwdAyOw2
-         IvYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726152550; x=1726757350;
-        h=user-agent:mime-version:message-id:cc:to:subject:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/mI+z55kCx1KndQZOmeZl0eyn7TLNxfxyGQZqGu0dOc=;
-        b=vfUOD2iQD64aHM1obWKHvbomXN3V+6UPJyL1FeMYEcfE51p584Q+BD+27hjwc0VwRN
-         cqv7VrwCYAvjCtpLh+2C8xinUtwP2Hjco/Qdt/M73jQiIrBBNsCEEPOEIebClTMk/dVm
-         pgGYDnOY1NOHdGEqqVhzRqF+JTjdOgpmgMlHGpjA3AIkMW+WYRqvqtZJV8lyarqSltsp
-         w06Rm+xDa+WKUCoJxXyNBXdRi/CwlFhWZH3aeFa3eLnCQ9QVkLddkJ35AmghK6Ir9k9y
-         3wvbl6FrZLpNjv3RyMZByTM5vmyvxzTjp9wlI6/lAFpVCDsM9Q+5qnsf/d8vJ7JRb8AE
-         JMCg==
-X-Gm-Message-State: AOJu0YwnowOCpa/2X0UI5+ZgRT1oxzKaOa6Ppuq1VL4IXkoaP+aKnPdK
-	VMMixoSmBxo9M8szvLsWKUWNAjmViwvwiNi5lcR+QqV8Qd+CrHl6Av6ZDA==
-X-Google-Smtp-Source: AGHT+IGK/2lzat1JNTjO/8CeM3ri3aHbpupfDnRkvW450uDgb5zbq2xDTjxNMVEw8WkibjYnDpvzeQ==
-X-Received: by 2002:a17:907:f717:b0:a89:f5f6:395 with SMTP id a640c23a62f3a-a902940804dmr309955366b.1.1726152549769;
-        Thu, 12 Sep 2024 07:49:09 -0700 (PDT)
-Received: from giga-mm-1.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25833887sm757667966b.28.2024.09.12.07.49.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 07:49:09 -0700 (PDT)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Thu, 12 Sep 2024 16:21:06 +0200
-Subject: [PATCH] dmaengine: cirrus: use snprintf() to calm down gcc 13.3.0
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Nikita Shubin <nikita.shubin@maquefel.me>
-Message-ID: <b1f03ac53b358c135516bec98e626c98aee9d867.camel@gmail.com>
+	id D6F14C4AF0D; Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1314C4CEC3;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726165214;
+	bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+	h=From:Subject:Date:List-Id:To:Cc:Reply-To:From;
+	b=CPsmgtEMMAtyNjuTtYzJv2ymvFQzEQ0PP4IxrBdr25a91/xfA+vLhNsSL+sUbEenZ
+	 pnswG6UKzPGA3YNk0qQSUQCjyTyrSSHYiRpO5q6F/kJ4uTcf4RAHSqE1IviTh391YH
+	 LKwVAYm+pHsrWoYTohF3ihvZtSMZZl2stoW3B9u1nAmd+ymbmPPmHRjZ2ixy5YTA5g
+	 29/F5vNMp75kXNPU1jh5NV0QUUrwuLjW4nf/0ah2QpS+z28d2jKOzGh8ljkpwWfo+Z
+	 okGMUadVfBH17b24RjwzDTPHAc88HGbAbD3zk/VmYj0a/3gErJdJXm9vc/gOPciRmZ
+	 DM5sYzwjSuwLg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9552CEED61F;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
+Subject: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
+Date: Thu, 12 Sep 2024 19:24:45 +0100
+Message-Id: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 MIME-Version: 1.0
-User-Agent: Evolution 3.52.4 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO0x42YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSwNL3ZLU4hJdi9Rk0zRzs7RUsxQjJaDSgqLUtMwKsDHRsbW1ACfUB0l
+ WAAAA
+X-Change-ID: 20240909-test-8ec5f76fe6d2
+List-Id: <soc.lore.kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Utsav Agarwal <Utsav.Agarwal@analog.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>, 
+ Andi Shyti <andi.shyti@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ linux-serial@vger.kernel.org, 
+ Arturs Artamonovs <arturs.artamonovs@analog.com>, adsp-linux@analog.com, 
+ Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
+ Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+X-Mailer: b4 0.15-dev-7be4f
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=5160;
+ i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
+ bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+ b=zbt6V9124O55F0SjvPefnGSMeoqnQ6n0nQAX5r5d9ePtZmwiyfZElo/Gxg9IU9a3CrDXAI7ll
+ FFhs3bUdzCqBvTjA8ZWx3jPfHROQJaT88gsBroCxlNiuQ/0z7ZsVUF8
+X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
+ pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
+X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
+ with auth_id=206
+X-Original-From: Arturs Artamonovs <arturs.artamonovs@analog.com>
+Reply-To: arturs.artamonovs@analog.com
 
-Even though it's a false positive (highest channel number is "9"), refer to
-"struct ep93xx_edma_data edma_m2p", we can avoid new warning by using
-snprintf().
+This set of patches based on ADI fork of Linux Kerenl that support family of ADSP-SC5xx
+SoC's and used by customers for some time . Patch series contains minimal set
+of changes to add ADSP-SC598 support to upstream kernel. This series include
+UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on EV-SC598-SOM
+board into serial shell and able to reset the board. Current SOM board
+requires I2C expander to enable UART output.
 
-   drivers/dma/ep93xx_dma.c: In function 'ep93xx_dma_of_probe':
->> drivers/dma/ep93xx_dma.c:1365:51: warning: '%u' directive writing between 1 and 8 bytes into a region of size 2 [-Wformat-overflow=]
-    1365 |                         sprintf(dma_clk_name, "m2p%u", i);
-         |                                                   ^~
-   drivers/dma/ep93xx_dma.c:1365:47: note: directive argument in the range [0, 16777216]
-    1365 |                         sprintf(dma_clk_name, "m2p%u", i);
-         |                                               ^~~~~~~
-   drivers/dma/ep93xx_dma.c:1365:25: note: 'sprintf' output between 5 and 12 bytes into a destination of size 5
-    1365 |                         sprintf(dma_clk_name, "m2p%u", i);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
+ADSP-SC5xx related bug fixes and improvments.
 
-Fixes: 4e8ad5ed845b ("dmaengine: cirrus: Convert to DT for Cirrus EP93xx")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202409122133.NctarRoK-lkp@intel.com/
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
 ---
- drivers/dma/ep93xx_dma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Arturs Artamonovs (21):
+      arm64: Add ADI ADSP-SC598 SoC
+      reset: Add driver for ADI ADSP-SC5xx reset controller
+      dt-bindigs: arm64: adi,sc598 bindings
+      dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC bindings
+      clock:Add driver for ADI ADSP-SC5xx PLL
+      include: dt-binding: clock: add adi clock header file
+      clock: Add driver for ADI ADSP-SC5xx clock
+      dt-bindings: clock: adi,sc5xx-clocks: add bindings
+      gpio: add driver for ADI ADSP-SC5xx platform
+      dt-bindings: gpio: adi,adsp-port-gpio: add bindings
+      irqchip: Add irqchip for ADI ADSP-SC5xx platform
+      dt-bindings: irqchip: adi,adsp-pint: add binding
+      pinctrl: Add drivers for ADI ADSP-SC5xx platform
+      dt-bindings: pinctrl: adi,adsp-pinctrl: add bindings
+      i2c: Add driver for ADI ADSP-SC5xx platforms
+      dt-bindings: i2c: add i2c/twi driver documentation
+      serial: adi,uart: Add driver for ADI ADSP-SC5xx
+      dt-bindings: serial: adi,uart4: add adi,uart4 driver documentation
+      arm64: dts: adi: sc598: add device tree
+      arm64: defconfig: sc598 add minimal changes
+      MAINTAINERS: add adi sc5xx maintainers
 
-diff --git a/drivers/dma/ep93xx_dma.c b/drivers/dma/ep93xx_dma.c
-index d084bd123c1c..b18cfb60857b 100644
---- a/drivers/dma/ep93xx_dma.c
-+++ b/drivers/dma/ep93xx_dma.c
-@@ -1404,9 +1404,9 @@ static struct ep93xx_dma_engine *ep93xx_dma_of_probe(struct platform_device *pde
- 		edmac->edma = edma;
- 
- 		if (edma->m2m)
--			sprintf(dma_clk_name, "m2m%u", i);
-+			snprintf(dma_clk_name, sizeof(dma_clk_name), "m2m%u", i);
- 		else
--			sprintf(dma_clk_name, "m2p%u", i);
-+			snprintf(dma_clk_name, sizeof(dma_clk_name), "m2p%u", i);
- 
- 		edmac->clk = devm_clk_get(dev, dma_clk_name);
- 		if (IS_ERR(edmac->clk)) {
+ .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  |   24 +
+ .../bindings/clock/adi,sc5xx-clocks.yaml           |   65 ++
+ .../bindings/gpio/adi,adsp-port-gpio.yaml          |   69 ++
+ Documentation/devicetree/bindings/i2c/adi,twi.yaml |   71 ++
+ .../interrupt-controller/adi,adsp-pint.yaml        |   51 +
+ .../bindings/pinctrl/adi,adsp-pinctrl.yaml         |   83 ++
+ .../devicetree/bindings/serial/adi,uart.yaml       |   85 ++
+ .../bindings/soc/adi/adi,reset-controller.yaml     |   38 +
+ MAINTAINERS                                        |   22 +
+ arch/arm64/Kconfig.platforms                       |   13 +
+ arch/arm64/boot/dts/Makefile                       |    1 +
+ arch/arm64/boot/dts/adi/Makefile                   |    2 +
+ arch/arm64/boot/dts/adi/sc598-som-ezkit.dts        |   14 +
+ arch/arm64/boot/dts/adi/sc598-som.dtsi             |   58 ++
+ arch/arm64/boot/dts/adi/sc59x-64.dtsi              |  367 +++++++
+ arch/arm64/configs/defconfig                       |    6 +
+ drivers/clk/Kconfig                                |    9 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/adi/Makefile                           |    4 +
+ drivers/clk/adi/clk-adi-pll.c                      |  151 +++
+ drivers/clk/adi/clk-adi-sc598.c                    |  329 ++++++
+ drivers/clk/adi/clk.h                              |   99 ++
+ drivers/gpio/Kconfig                               |    8 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-adi-adsp-port.c                  |  145 +++
+ drivers/i2c/busses/Kconfig                         |   17 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-adi-twi.c                   |  940 ++++++++++++++++++
+ drivers/irqchip/Kconfig                            |    9 +
+ drivers/irqchip/Makefile                           |    2 +
+ drivers/irqchip/irq-adi-adsp.c                     |  310 ++++++
+ drivers/pinctrl/Kconfig                            |   12 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/pinctrl-adsp.c                     |  919 +++++++++++++++++
+ drivers/reset/Makefile                             |    1 +
+ drivers/soc/Makefile                               |    1 +
+ drivers/soc/adi/Makefile                           |    5 +
+ drivers/soc/adi/system.c                           |  257 +++++
+ drivers/tty/serial/Kconfig                         |   19 +-
+ drivers/tty/serial/Makefile                        |    1 +
+ drivers/tty/serial/adi_uart.c                      | 1045 ++++++++++++++++++++
+ include/dt-bindings/clock/adi-sc5xx-clock.h        |   93 ++
+ include/dt-bindings/pinctrl/adi-adsp.h             |   19 +
+ include/linux/soc/adi/adsp-gpio-port.h             |   85 ++
+ include/linux/soc/adi/cpu.h                        |  107 ++
+ include/linux/soc/adi/rcu.h                        |   55 ++
+ include/linux/soc/adi/sc59x.h                      |  147 +++
+ include/linux/soc/adi/system_config.h              |   65 ++
+ include/uapi/linux/serial_core.h                   |    3 +
+ 49 files changed, 5829 insertions(+), 1 deletion(-)
+---
+base-commit: da3ea35007d0af457a0afc87e84fddaebc4e0b63
+change-id: 20240909-test-8ec5f76fe6d2
+
+Best regards,
 -- 
-2.46.0
+Arturs Artamonovs <arturs.artamonovs@analog.com>
+
+
