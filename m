@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B0B4EEE25E
-	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76C3EEEE25F
+	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5AA9FC4FDE8; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A5D9C4DE1D;
-	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
+	id 2AD1BC4E671; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1D39C4DE09;
+	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726165216;
-	bh=oSjrrK3HqKhPT33RcO6IzP0otSDj5oLxA3L//E5mLLM=;
+	bh=8dglV35vXsS56WaqjDfOErmL3gBQcYZfYc41JKx0CZY=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=ZBgovuk4Hmeg31duJmpMD5IkpfU1yqAXvOUqprtaGW7lnQ/i4A7hMLDuaVdTTfmdl
-	 xm0uyrsh6hsIHwYn7AjuDjUi8POBe3jhXSUomB0l5MbYL3d3hrzR0S649xhYSdcBHD
-	 zgihQ9G35kZ6Ax5wrDNHT7LNKuUK/CCtIZUQInDl4d4oe3QttARxl315wZDlTPCXjC
-	 Sxg77EdYyLhxzuyZrI3D0hot7hsgXJIRguMhvA2gL69DuwauG8twOk1SR65NMBaL2+
-	 Og4tAeP6bVsSKEDED4ea3Ecft9pU2rAGTcxgsxZzjQ7soFrR4SqRUftBIeHvID5/EW
-	 R0J+i569YU2zw==
+	b=a/FMMgWZnAfOevYv8VZ5xuo6wb7rOnkmAgiyborp47SLyRN4TjrZjBkTTxa6QD2m/
+	 X6W8xJP9qpHTqMZ1RQzNiPEzffOELQ7spZ0OhvjO6IsCLcBRUlRNqgOVU7rxGiRxii
+	 Hv9vmdKcQmdpXz8c2lDkbHkzGMDki3MQG1yVmx2zuoAEAsH3b3Azs0Y/Pq9eF/j0nR
+	 4GheDbvPtIqy1MNqikzfNaTkzHLqGNrCwYh29ePKWkmxWA/9DlSYrv4JjH0JJg4MoL
+	 vRSqbdQzngPrm1hJukVPX5GhDWpsNfn5MlbRmcn9gpHn/La4JRluNKph2Xo1I+p7N8
+	 CwBYp/U26rZ9w==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E269EEE25C;
-	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E54AEEEE25E;
+	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
-Date: Thu, 12 Sep 2024 19:25:00 +0100
-Subject: [PATCH 15/21] i2c: Add driver for ADI ADSP-SC5xx platforms
+Date: Thu, 12 Sep 2024 19:24:58 +0100
+Subject: [PATCH 13/21] pinctrl: Add drivers for ADI ADSP-SC5xx platform
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240912-test-v1-15-458fa57c8ccf@analog.com>
+Message-Id: <20240912-test-v1-13-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 List-Id: <soc.lore.kernel.org>
@@ -55,11 +55,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=30323;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=29319;
  i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
- bh=3JNx5RiekCNc4Kpql+FHMF5vouOGWncXg0juhBgUj+k=;
- b=6/RCpfUMh/Zue+vifS5T5HepAnaEA6vIxJmq7ObeaWwcWW79yzW3TpgFjeP61ysJTAof/L/un
- UNPr8cBh6ohDBn4LpmAAXKg0qKhzapdh46srJPDla/DB9jGsu4Dn4mn
+ bh=GfxjQyaWdYihVTbmYZ8dKtXQxxhTt6kZCTW4eIPAJo8=;
+ b=zU6rjIlKSsjPtuH6NdYWdBwgPpnIdUtfa9gVkK3cZ7u4PLhzAukEglamykqFZw7ApY9Cfx3+2
+ It5Yp2iMV2rAd9LiruUBX0WregtYH77bbVy5fdt8vbuKDYe0U/ufjg6
 X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
  pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
 X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
@@ -69,7 +69,8 @@ Reply-To: arturs.artamonovs@analog.com
 
 From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Add support for I2C on SC5xx
+Add ADSP-SC5xx pinctrler:
+ - Support switching GPIO pin functions.
 
 Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
@@ -77,997 +78,971 @@ Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 ---
- drivers/i2c/busses/Kconfig       |  17 +
- drivers/i2c/busses/Makefile      |   1 +
- drivers/i2c/busses/i2c-adi-twi.c | 940 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 958 insertions(+)
+ drivers/pinctrl/Kconfig        |  12 +
+ drivers/pinctrl/Makefile       |   1 +
+ drivers/pinctrl/pinctrl-adsp.c | 919 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 932 insertions(+)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a22f9125322a723b31925fd86b26ef0b8d3b8a19..f672a2c715ca15ece74ee694596318976da88dfd 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -518,6 +518,23 @@ config I2C_BRCMSTB
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 7e4f93a3bc7ac9bcafc92ddb795569d7cca6474d..ffc0946c5b416c29803e195016867aee8f09afe1 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -31,6 +31,18 @@ config DEBUG_PINCTRL
+ 	help
+ 	  Say Y here to add some extra checks and diagnostics to PINCTRL calls.
  
- 	  If you do not need I2C interface, say N.
++config PINCTRL_ADSP
++	bool "ADSP-SC5XX pinctrl driver"
++	depends on ARCH_SC59X_64
++	depends on OF
++	select PINMUX
++	select GPIOLIB
++	select GENERIC_PINCONF
++	help
++	  Say Y here to enable the ADSP-SC5XX pinctrl driver. This is required for
++	  correct peripheral functionality on the SoC.
++
++
+ config PINCTRL_AMD
+ 	bool "AMD GPIO pin control"
+ 	depends on HAS_IOMEM
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index cc809669405ab6c6905fe0b2380f91b211a2d470..6b340bf0ee8c0267cbbdee3d14db605a340433c6 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_PINCONF)		+= pinconf.o
+ obj-$(CONFIG_GENERIC_PINCONF)	+= pinconf-generic.o
+ obj-$(CONFIG_OF)		+= devicetree.o
  
-+config I2C_ADI_TWI
-+     tristate "ADI TWI I2C support"
-+     depends on ARCH_SC59X_64 || ARCH_SC59X
-+     help
-+       This is the I2C bus driver for ADI on-chip TWI interface.
-+
-+       This driver can also be built as a module.  If so, the module
-+       will be called i2c-adi-twi.
-+
-+config I2C_ADI_TWI_CLK_KHZ
-+    int "ADI TWI I2C clock (kHz)"
-+    depends on I2C_ADI_TWI
-+    range 21 400
-+    default 50
-+    help
-+      The unit of the TWI clock is kHz.
-+
- config I2C_CADENCE
- 	tristate "Cadence I2C Controller"
- 	depends on ARCH_ZYNQ || ARM64 || XTENSA || RISCV || COMPILE_TEST
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 78d0561339e5beadcb810196be1139a4248469b4..421d637cfbc91af5a69895e76a255b2ef47f4081 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -48,6 +48,7 @@ obj-$(CONFIG_I2C_AU1550)	+= i2c-au1550.o
- obj-$(CONFIG_I2C_AXXIA)		+= i2c-axxia.o
- obj-$(CONFIG_I2C_BCM2835)	+= i2c-bcm2835.o
- obj-$(CONFIG_I2C_BCM_IPROC)	+= i2c-bcm-iproc.o
-+obj-$(CONFIG_I2C_ADI_TWI)	+= i2c-adi-twi.o
- obj-$(CONFIG_I2C_CADENCE)	+= i2c-cadence.o
- obj-$(CONFIG_I2C_CBUS_GPIO)	+= i2c-cbus-gpio.o
- obj-$(CONFIG_I2C_CPM)		+= i2c-cpm.o
-diff --git a/drivers/i2c/busses/i2c-adi-twi.c b/drivers/i2c/busses/i2c-adi-twi.c
++obj-$(CONFIG_PINCTRL_ADSP)	+= pinctrl-adsp.o
+ obj-$(CONFIG_PINCTRL_AMD)	+= pinctrl-amd.o
+ obj-$(CONFIG_PINCTRL_APPLE_GPIO) += pinctrl-apple-gpio.o
+ obj-$(CONFIG_PINCTRL_ARTPEC6)	+= pinctrl-artpec6.o
+diff --git a/drivers/pinctrl/pinctrl-adsp.c b/drivers/pinctrl/pinctrl-adsp.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..4af3991f5fc8709df196f58816ed7a96fd1dac2d
+index 0000000000000000000000000000000000000000..ce86e579e5601203a446c09b5b5f7f60aba6d02a
 --- /dev/null
-+++ b/drivers/i2c/busses/i2c-adi-twi.c
-@@ -0,0 +1,940 @@
++++ b/drivers/pinctrl/pinctrl-adsp.c
+@@ -0,0 +1,919 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * ADI On-Chip Two Wire Interface Driver
++ * Analog Devices ADSP family pinctrl driver.
 + *
 + * Copyright 2022-2024 - Analog Devices Inc.
 + */
 +
-+#include <linux/module.h>
-+#include <linux/i2c.h>
++#include <linux/of.h>
++#include <linux/pinctrl/pinconf.h>
++#include <linux/pinctrl/pinmux.h>
 +#include <linux/platform_device.h>
-+#include <linux/delay.h>
-+#include <linux/of_device.h>
-+#include <linux/clk.h>
++#include <linux/printk.h>
++#include <linux/soc/adi/adsp-gpio-port.h>
 +
++#include "core.h"
++#include "pinconf.h"
++#include "pinctrl-utils.h"
 +
-+/* TWI_PRESCALE Masks */
-+#define	TWI_ENA		0x0080	/* TWI Enable */
++/* Convert from pinmux constants in device tree to actual settings */
++#define ADSP_PINMUX_PIN(p) ((p & 0xffffff00) >> 8)
++#define ADSP_PINMUX_FUNC(p) (p & 0xff)
 +
-+/* TWI_MASTER_CTL Masks	*/
-+#define	MEN		0x0001	/* Master Mode Enable          */
-+#define	MDIR		0x0004	/* Master Transmit Direction (RX/TX*) */
-+#define	FAST		0x0008	/* Use Fast Mode Timing Specs  */
-+#define	STOP		0x0010	/* Issue Stop Condition        */
-+#define	RSTART		0x0020	/* Repeat Start or Stop* At End Of Transfer */
-+#define	SDAOVR		0x4000	/* Serial Data Override        */
-+#define	SCLOVR		0x8000	/* Serial Clock Override       */
++/* Details of the PORT_MUX register */
++#define ADSP_PORT_PORT_MUX_BITS 2
++#define ADSP_PORT_PORT_MUX_MASK GENMASK(1, 0)
 +
-+/* TWI_MASTER_STAT Masks */
-+#define	LOSTARB		0x0002	/* Lost Arbitration Indicator (Xfer Aborted) */
-+#define	ANAK		0x0004	/* Address Not Acknowledged    */
-+#define	DNAK		0x0008	/* Data Not Acknowledged       */
-+#define	BUFRDERR	0x0010	/* Buffer Read Error           */
-+#define	BUFWRERR	0x0020	/* Buffer Write Error          */
-+#define	SDASEN		0x0040	/* Serial Data Sense           */
-+#define	BUSBUSY		0x0100	/* Bus Busy Indicator          */
++/* Number of pin alternate functions, see pin_functions array */
++#define ADSP_NUMBER_OF_PIN_FUNCTIONS ARRAY_SIZE(pin_functions)
 +
-+/* TWI_INT_SRC and TWI_INT_ENABLE Masks	*/
-+#define	MCOMP		0x0010	/* Master Transfer Complete    */
-+#define	MERR		0x0020	/* Master Transfer Error       */
-+#define	XMTSERV		0x0040	/* Transmit FIFO Service       */
-+#define	RCVSERV		0x0080	/* Receive FIFO Service        */
++/* Information for drive strength registers */
++#define ADSP_PADS_DS_BITS				3
++#define ADSP_PADS_DS_PINS_PER_REG		8
++#define ADSP_PADS_DS_HIGH				2
++#define ADSP_PADS_DS_LOW				1
 +
-+/* TWI_FIFO_STAT Masks */
-+#define	XMTSTAT		0x0003	/* Transmit FIFO Status                  */
-+#define	XMT_FULL	0x0003	/* Transmit FIFO Full (2 Bytes To Write) */
-+#define	RCVSTAT		0x000C	/* Receive FIFO Status                   */
++/* Information for pull up/pull down enable registers */
++#define ADSP_PADS_PUD_PINS_PER_REG		16
 +
-+/* SMBus mode*/
-+#define TWI_I2C_MODE_STANDARD		1
-+#define TWI_I2C_MODE_STANDARDSUB	2
-+#define TWI_I2C_MODE_COMBINED		3
-+#define TWI_I2C_MODE_REPEAT		4
++#define ADSP_PADS_REG_PCFG0				0x04
++#define ADSP_PADS_REG_PCFG1				0x08
++/* Convert from pin number (e.g. 0-143) to drive strength register offset */
++#define ADSP_PADS_PORTx_DS(p)			(0x0c + 0x04*(p/ADSP_PADS_DS_PINS_PER_REG))
++#define ADSP_PADS_NONPORTS_DS			0x50
++/* Convert from pin number to pull up enable register offset */
++#define ADSP_PADS_PORTx_PUE(p)			(0x98 + 0x04*(p/ADSP_PADS_PUD_PINS_PER_REG))
++/* Convert from pin number to pull down enable register offset */
++#define ADSP_PADS_PORTx_PDE(p)			(0xc4 + 0x04*(p/ADSP_PADS_PUD_PINS_PER_REG))
++
++/* Non GPIO PORT drive strength settings */
++#define ADSP_NONPORTS_DS_CKOUT			0
++#define ADSP_NONPORTS_DS_RESOUTB		1
++#define ADSP_NONPORTS_DS_FAULTB			2
++#define ADSP_NONPORTS_DS_LP1CK			3
++#define ADSP_NONPORTS_DS_LP0CK			4
++#define ADSP_NONPORTS_DS_OSPI			5
++
++/* DAI pad configuration offsets */
++#define ADSP_PADS_REG_DAI0_0_DS			0x78
++#define ADSP_PADS_REG_DAI0_1_DS			0x7c
++#define ADSP_PADS_REG_DAI1_0_DS			0x80
++#define ADSP_PADS_REG_DAI1_1_DS			0x84
++
++#define ADSP_PADS_REG_DAI0_PUE			0xbc
++#define ADSP_PADS_REG_DAI1_PUE			0xc0
++#define ADSP_PADS_REG_DAI0_PDE			0xfc
++#define ADSP_PADS_REG_DAI1_PDE			0x100
 +
 +/*
-+ * ADI twi registers layout
++ * Represents a function setting for pins, controls the mux modes essentially
 + */
-+struct adi_twi_regs {
-+	u16 clkdiv;
-+	u16 dummy1;
-+	u16 control;
-+	u16 dummy2;
-+	u16 slave_ctl;
-+	u16 dummy3;
-+	u16 slave_stat;
-+	u16 dummy4;
-+	u16 slave_addr;
-+	u16 dummy5;
-+	u16 master_ctl;
-+	u16 dummy6;
-+	u16 master_stat;
-+	u16 dummy7;
-+	u16 master_addr;
-+	u16 dummy8;
-+	u16 int_stat;
-+	u16 dummy9;
-+	u16 int_mask;
-+	u16 dummy10;
-+	u16 fifo_ctl;
-+	u16 dummy11;
-+	u16 fifo_stat;
-+	u16 dummy12;
-+	u32 __pad[20];
-+	u16 xmt_data8;
-+	u16 dummy13;
-+	u16 xmt_data16;
-+	u16 dummy14;
-+	u16 rcv_data8;
-+	u16 dummy15;
-+	u16 rcv_data16;
-+	u16 dummy16;
++struct adsp_pin_function {
++	const char *name;
++	/* 0 for gpio, 1-4 for alt functions 0-3 */
++	uint8_t mode;
 +};
 +
-+struct adi_twi_iface {
-+	int			irq;
-+	spinlock_t		lock;
-+	char			read_write;
-+	u8			command;
-+	u8			*transPtr;
-+	int			readNum;
-+	int			writeNum;
-+	int			cur_mode;
-+	int			manual_stop;
-+	int			result;
-+	unsigned int		twi_clk;
-+	struct i2c_adapter	adap;
-+	struct completion	complete;
-+	struct i2c_msg		*pmsg;
-+	int			msg_num;
-+	int			cur_msg;
-+	u16			saved_clkdiv;
-+	u16			saved_control;
-+	struct adi_twi_regs __iomem *regs_base;
-+	struct clk *sclk;
++/*
++ * Available pin function settings in the pin mux for GPIO-associated pins
++ */
++static const struct adsp_pin_function pin_functions[] = {
++	{
++		.name = "gpio",
++		.mode = 0,
++	}, {
++		.name = "alt0",
++		.mode = 1,
++	}, {
++		.name = "alt1",
++		.mode = 2,
++	}, {
++		.name = "alt2",
++		.mode = 3,
++	}, {
++		.name = "alt3",
++		.mode = 4,
++	}
 +};
 +
-+static void adi_twi_handle_interrupt(struct adi_twi_iface *iface,
-+					unsigned short twi_int_status,
-+					bool polling)
++/*
++ * One pinctrl instance per chip, unifies the interface to the port mux and pad
++ * conf registers in the PORT instances
++ * @todo pads registers should be routed through system configuration abstraction
++ *       to remove the need for feature testing/listing "missing" registers here
++ */
++struct adsp_pinctrl {
++	struct device *dev;
++	struct pinctrl_dev *pin_dev;
++	void __iomem *regs;
++	const char **group_names;
++	unsigned int *pins;
++	spinlock_t lock;
++	size_t num_ports;
++	uint32_t *pin_counts;
++	uint32_t total_pins;
++
++	/* Are the drive strength registers missing on this part? */
++	bool ds_missing;
++
++	/* Are the pull up/down enable registers missing on this part? */
++	bool pude_missing;
++};
++
++/*
++ * Custom pinconf properties
++ */
++#define ADSP_PIN_CONFIG_TRU_TOGGLE (PIN_CONFIG_END+1)
++
++static const struct pinconf_generic_params adsp_custom_bindings[] = {
++	/* Configure this pin as a toggle pin which flip each time a trigger event
++	 * is received by the pin controller from the TRU
++	 */
++	{"adi,tru-toggle", ADSP_PIN_CONFIG_TRU_TOGGLE, 0}
++};
++
++static const struct pin_config_item adsp_conf_items[] = {
++	PCONFDUMP(ADSP_PIN_CONFIG_TRU_TOGGLE, "tru-toggle", NULL, false),
++};
++
++/* does not need lock */
++static void adsp_set_pin_gpio(struct adsp_gpio_port *port, unsigned int offset, bool gpio)
 +{
-+	u16 writeValue;
-+	unsigned short mast_stat = ioread16(&iface->regs_base->master_stat);
-+
-+	if (twi_int_status & XMTSERV) {
-+		if (iface->writeNum <= 0) {
-+			/* start receive immediately after complete sending in
-+			 * combine mode.
-+			 */
-+			if (iface->cur_mode == TWI_I2C_MODE_COMBINED) {
-+				writeValue = ioread16(&iface->regs_base->master_ctl) | MDIR;
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+			} else if (iface->manual_stop) {
-+				writeValue = ioread16(&iface->regs_base->master_ctl) | STOP;
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+			} else if (iface->cur_mode == TWI_I2C_MODE_REPEAT &&
-+				   iface->cur_msg + 1 < iface->msg_num) {
-+
-+				if (iface->pmsg[iface->cur_msg + 1].flags & I2C_M_RD) {
-+					writeValue = ioread16(&iface->regs_base->master_ctl)
-+							      | MDIR;
-+					iowrite16(writeValue, &iface->regs_base->master_ctl);
-+				} else {
-+					writeValue = ioread16(&iface->regs_base->master_ctl)
-+							      & ~MDIR;
-+					iowrite16(writeValue, &iface->regs_base->master_ctl);
-+				}
-+
-+			}
-+		}
-+		/* Transmit next data */
-+		while (iface->writeNum > 0 &&
-+		       (ioread16(&iface->regs_base->fifo_stat) & XMTSTAT) != XMT_FULL) {
-+			iowrite16(*(iface->transPtr++), &iface->regs_base->xmt_data8);
-+			iface->writeNum--;
-+		}
-+	}
-+	if (twi_int_status & RCVSERV) {
-+		while (iface->readNum > 0 &&
-+		       (ioread16(&iface->regs_base->fifo_stat) & RCVSTAT)) {
-+			/* Receive next data */
-+			*(iface->transPtr) = ioread16(&iface->regs_base->rcv_data8);
-+			if (iface->cur_mode == TWI_I2C_MODE_COMBINED) {
-+				/* Change combine mode into sub mode after
-+				 * read first data.
-+				 */
-+				iface->cur_mode = TWI_I2C_MODE_STANDARDSUB;
-+				/* Get read number from first byte in block
-+				 * combine mode.
-+				 */
-+				if (iface->readNum == 1 && iface->manual_stop)
-+					iface->readNum = *iface->transPtr + 1;
-+			}
-+			iface->transPtr++;
-+			iface->readNum--;
-+		}
-+
-+		if (iface->readNum == 0) {
-+			if (iface->manual_stop) {
-+				/* Temporary workaround to avoid possible bus stall -
-+				 * Flush FIFO before issuing the STOP condition
-+				 */
-+				ioread16(&iface->regs_base->rcv_data16);
-+				writeValue = ioread16(&iface->regs_base->master_ctl) | STOP;
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+			} else if (iface->cur_mode == TWI_I2C_MODE_REPEAT &&
-+					iface->cur_msg + 1 < iface->msg_num) {
-+				if (iface->pmsg[iface->cur_msg + 1].flags & I2C_M_RD) {
-+					writeValue = ioread16(&iface->regs_base->master_ctl) |
-+						     MDIR;
-+					iowrite16(writeValue, &iface->regs_base->master_ctl);
-+				} else {
-+					writeValue = ioread16(&iface->regs_base->master_ctl) &
-+						     ~MDIR;
-+					iowrite16(writeValue, &iface->regs_base->master_ctl);
-+				}
-+			}
-+		}
-+	}
-+	if (twi_int_status & MERR) {
-+		iowrite16(0, &iface->regs_base->int_mask);
-+		iowrite16(0x3e, &iface->regs_base->master_stat);
-+		iowrite16(0, &iface->regs_base->master_ctl);
-+		iface->result = -EIO;
-+
-+		if (mast_stat & LOSTARB)
-+			dev_dbg(&iface->adap.dev, "Lost Arbitration\n");
-+		if (mast_stat & ANAK)
-+			dev_dbg(&iface->adap.dev, "Address Not Acknowledged\n");
-+		if (mast_stat & DNAK)
-+			dev_dbg(&iface->adap.dev, "Data Not Acknowledged\n");
-+		if (mast_stat & BUFRDERR)
-+			dev_dbg(&iface->adap.dev, "Buffer Read Error\n");
-+		if (mast_stat & BUFWRERR)
-+			dev_dbg(&iface->adap.dev, "Buffer Write Error\n");
-+
-+		/* Faulty slave devices, may drive SDA low after a transfer
-+		 * finishes. To release the bus this code generates up to 9
-+		 * extra clocks until SDA is released.
-+		 */
-+
-+		if (ioread16(&iface->regs_base->master_stat) & SDASEN) {
-+			int cnt = 9;
-+
-+			do {
-+				iowrite16(SCLOVR, &iface->regs_base->master_ctl);
-+				udelay(6);
-+				iowrite16(0, &iface->regs_base->master_ctl);
-+				udelay(6);
-+			} while ((ioread16(&iface->regs_base->master_stat) & SDASEN) && cnt--);
-+
-+			iowrite16(SDAOVR | SCLOVR, &iface->regs_base->master_ctl);
-+			udelay(6);
-+			iowrite16(SDAOVR, &iface->regs_base->master_ctl);
-+			udelay(6);
-+			iowrite16(0, &iface->regs_base->master_ctl);
-+		}
-+
-+		/* If it is a quick transfer, only address without data,
-+		 * not an err, return 1.
-+		 */
-+		if (iface->cur_mode == TWI_I2C_MODE_STANDARD &&
-+			iface->transPtr == NULL &&
-+			(twi_int_status & MCOMP) && (mast_stat & DNAK))
-+			iface->result = 1;
-+
-+		if (!polling)
-+			complete(&iface->complete);
-+		return;
-+	}
-+	if (twi_int_status & MCOMP) {
-+		if (twi_int_status & (XMTSERV | RCVSERV) &&
-+			(ioread16(&iface->regs_base->master_ctl) & MEN) == 0 &&
-+			(iface->cur_mode == TWI_I2C_MODE_REPEAT ||
-+			iface->cur_mode == TWI_I2C_MODE_COMBINED)) {
-+			iface->result = -1;
-+			iowrite16(0, &iface->regs_base->int_mask);
-+			iowrite16(0, &iface->regs_base->master_ctl);
-+		} else if (iface->cur_mode == TWI_I2C_MODE_COMBINED) {
-+			if (iface->readNum == 0) {
-+				/* set the read number to 1 and ask for manual
-+				 * stop in block combine mode
-+				 */
-+				iface->readNum = 1;
-+				iface->manual_stop = 1;
-+				writeValue = ioread16(&iface->regs_base->master_ctl) | (0xff << 6);
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+			} else {
-+				/* set the readd number in other
-+				 * combine mode.
-+				 */
-+				writeValue = (ioread16(&iface->regs_base->master_ctl)
-+					     & (~(0xff << 6))) | (iface->readNum << 6);
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+			}
-+			/* remove restart bit and enable master receive */
-+			writeValue = ioread16(&iface->regs_base->master_ctl) & ~RSTART;
-+			iowrite16(writeValue, &iface->regs_base->master_ctl);
-+		} else if (iface->cur_mode == TWI_I2C_MODE_REPEAT &&
-+				iface->cur_msg + 1 < iface->msg_num) {
-+			iface->cur_msg++;
-+			iface->transPtr = iface->pmsg[iface->cur_msg].buf;
-+			iface->writeNum = iface->readNum =
-+				iface->pmsg[iface->cur_msg].len;
-+			/* Set Transmit device address */
-+			iowrite16(iface->pmsg[iface->cur_msg].addr, &iface->regs_base->master_addr);
-+			if (iface->pmsg[iface->cur_msg].flags & I2C_M_RD)
-+				iface->read_write = I2C_SMBUS_READ;
-+			else {
-+				iface->read_write = I2C_SMBUS_WRITE;
-+				/* Transmit first data */
-+				if (iface->writeNum > 0) {
-+					iowrite16(*(iface->transPtr++),
-+						 &iface->regs_base->xmt_data8);
-+					iface->writeNum--;
-+				}
-+			}
-+
-+			if (iface->pmsg[iface->cur_msg].len <= 255) {
-+				writeValue = (ioread16(&iface->regs_base->master_ctl)
-+					     & (~(0xff << 6)))
-+					     | (iface->pmsg[iface->cur_msg].len << 6);
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+				iface->manual_stop = 0;
-+			} else {
-+				writeValue = (ioread16(&iface->regs_base->master_ctl)
-+					     | (0xff << 6));
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+				iface->manual_stop = 1;
-+			}
-+
-+			/* remove restart bit before last message */
-+			if (iface->cur_msg + 1 == iface->msg_num) {
-+				writeValue = ioread16(&iface->regs_base->master_ctl) & ~RSTART;
-+				iowrite16(writeValue, &iface->regs_base->master_ctl);
-+			}
-+
-+		} else {
-+			iface->result = 1;
-+			iowrite16(0, &iface->regs_base->int_mask);
-+			iowrite16(0, &iface->regs_base->master_ctl);
-+		}
-+		if (!polling)
-+			complete(&iface->complete);
-+	}
-+}
-+
-+/* Interrupt handler */
-+static irqreturn_t adi_twi_handle_all_interrupts(struct adi_twi_iface *iface,
-+						 bool polling)
-+{
-+	irqreturn_t handled = IRQ_NONE;
-+	unsigned short twi_int_status;
-+
-+	while (1) {
-+		twi_int_status = ioread16(&iface->regs_base->int_stat);
-+		if (!twi_int_status)
-+			return handled;
-+		/* Clear interrupt status */
-+		iowrite16(twi_int_status, &iface->regs_base->int_stat);
-+		adi_twi_handle_interrupt(iface, twi_int_status, polling);
-+		handled = IRQ_HANDLED;
-+	}
-+}
-+
-+static irqreturn_t adi_twi_interrupt_entry(int irq, void *dev_id)
-+{
-+	struct adi_twi_iface *iface = dev_id;
-+	unsigned long flags;
-+	irqreturn_t handled;
-+
-+	spin_lock_irqsave(&iface->lock, flags);
-+	handled = adi_twi_handle_all_interrupts(iface, false);
-+	spin_unlock_irqrestore(&iface->lock, flags);
-+	return handled;
++	if (gpio)
++		__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_FER_CLEAR);
++	else
++		__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_FER_SET);
 +}
 +
 +/*
-+ * One i2c master transfer
++ * Configure a pin either for gpio or an alternate function
 + */
-+static int adi_twi_do_master_xfer(struct i2c_adapter *adap,
-+				struct i2c_msg *msgs, int num, bool polling)
++static void adsp_portmux_setup(struct adsp_gpio_port *port, unsigned int offset,
++	const struct adsp_pin_function *func)
 +{
-+	struct adi_twi_iface *iface = adap->algo_data;
-+	struct i2c_msg *pmsg;
-+	int rc = 0;
-+	u16 writeValue;
++	if (func->mode == 0) {
++		adsp_set_pin_gpio(port, offset, true);
++	} else {
++		unsigned long flags;
++		u32 val;
++		u32 f = (func->mode - 1) & ADSP_PORT_PORT_MUX_MASK;
 +
-+	if (!(ioread16(&iface->regs_base->control) & TWI_ENA))
-+		return -ENXIO;
++		spin_lock_irqsave(&port->lock, flags);
 +
-+	if (ioread16(&iface->regs_base->master_stat) & BUSBUSY)
-+		return -EAGAIN;
++		val = __adsp_gpio_readl(port, ADSP_PORT_REG_PORT_MUX);
++		val &= ~(ADSP_PORT_PORT_MUX_MASK << (ADSP_PORT_PORT_MUX_BITS * offset));
++		val |= f << (ADSP_PORT_PORT_MUX_BITS * offset);
++		__adsp_gpio_writel(port, val, ADSP_PORT_REG_PORT_MUX);
 +
-+	iface->pmsg = msgs;
-+	iface->msg_num = num;
-+	iface->cur_msg = 0;
++		spin_unlock_irqrestore(&port->lock, flags);
 +
-+	pmsg = &msgs[0];
-+	if (pmsg->flags & I2C_M_TEN) {
-+		dev_err(&adap->dev, "10 bits addr not supported!\n");
++		adsp_set_pin_gpio(port, offset, false);
++	}
++}
++
++/* pin control operations */
++static int adsp_pinctrl_get_groups_count(struct pinctrl_dev *pctldev)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++
++	return adsp_pinctrl->total_pins;
++}
++
++static const char *adsp_pinctrl_get_group_name(struct pinctrl_dev *pctldev,
++	unsigned int selector)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++
++	return adsp_pinctrl->group_names[selector];
++}
++
++static int adsp_pinctrl_get_group_pins(struct pinctrl_dev *pctldev, unsigned int selector,
++	const unsigned int **pins, unsigned int *num_pins)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++	*pins = &adsp_pinctrl->pins[selector];
++	*num_pins = 1;
++	return 0;
++}
++
++static int adsp_pinctrl_dt_subnode_to_map(struct pinctrl_dev *pctldev,
++	struct device_node *np, struct pinctrl_map **map, unsigned int *reserved_maps,
++	unsigned int *num_maps)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++	//struct property *prop;
++	const char *group;
++	unsigned long *configs;
++	unsigned int num_configs, num_pins;
++	unsigned int reserve = 0;
++	//uint32_t pinmux;
++	//const __be32 *p;
++	u32 array[2];
++	int sz, i;
++	int ret;
++
++	num_pins = of_property_count_u32_elems(np, "pinmux");
++	if (num_pins <= 0) {
++		dev_err(adsp_pinctrl->dev, "Must have at least one `pinmux` entry in %pOFn.\n",
++			np);
 +		return -EINVAL;
 +	}
 +
-+	if (iface->msg_num > 1)
-+		iface->cur_mode = TWI_I2C_MODE_REPEAT;
-+	iface->manual_stop = 0;
-+	iface->transPtr = pmsg->buf;
-+	iface->writeNum = iface->readNum = pmsg->len;
-+	iface->result = 0;
-+	if (!polling)
-+		init_completion(&(iface->complete));
-+	/* Set Transmit device address */
-+	iowrite16(pmsg->addr, &iface->regs_base->master_addr);
++	ret = pinconf_generic_parse_dt_config(np, pctldev, &configs, &num_configs);
++	if (ret)
++		return ret;
 +
-+	/* FIFO Initiation. Data in FIFO should be
-+	 *  discarded before start a new operation.
-+	 */
-+	iowrite16(0x3, &iface->regs_base->fifo_ctl);
-+	iowrite16(0, &iface->regs_base->fifo_ctl);
++	/* One configuration for the whole group, potentially */
++	reserve = num_pins;
++	if (num_configs)
++		reserve = reserve * 2;
 +
-+	if (pmsg->flags & I2C_M_RD)
-+		iface->read_write = I2C_SMBUS_READ;
-+	else {
-+		iface->read_write = I2C_SMBUS_WRITE;
-+		/* Transmit first data */
-+		if (iface->writeNum > 0) {
-+			iowrite16(*(iface->transPtr++), &iface->regs_base->xmt_data8);
-+			iface->writeNum--;
++	ret = pinctrl_utils_reserve_map(pctldev, map, reserved_maps, num_maps, reserve);
++	if (ret)
++		goto exit;
++
++	sz = of_property_read_variable_u32_array(np, "pinmux", array, 2, 2);
++	sz = (sz == -EINVAL) ? 0 : sz; /* Missing property is OK */
++	if (sz < 0)
++		return dev_err_probe(adsp_pinctrl->dev, sz, "invalid pinmux\n");
++
++
++	for (i = 0; i < sz; i += 2) {
++		u32 pin = array[i];
++		u32 func = array[i + 1];
++
++		if (func >= ADSP_NUMBER_OF_PIN_FUNCTIONS) {
++			dev_err(adsp_pinctrl->dev,
++				"Function number %d is not available for pin %d in %pOFn.n\n",
++				func, pin, np);
++			goto exit;
++		}
++
++		group = adsp_pinctrl->group_names[pin];
++		ret = pinctrl_utils_add_map_mux(pctldev, map, reserved_maps, num_maps,
++			group, pin_functions[func].name);
++		if (ret)
++			goto exit;
++
++		if (num_configs) {
++			ret = pinctrl_utils_add_map_configs(pctldev, map, reserved_maps, num_maps,
++				group, configs, num_configs, PIN_MAP_TYPE_CONFIGS_GROUP);
++			if (ret)
++				goto exit;
 +		}
 +	}
 +
-+	/* clear int stat */
-+	iowrite16(MERR | MCOMP | XMTSERV | RCVSERV, &iface->regs_base->int_stat);
++	ret = 0;
++exit:
++	kfree(configs);
++	return ret;
++}
 +
-+	/* Interrupt mask . Enable XMT, RCV interrupt */
-+	iowrite16(MCOMP | MERR | RCVSERV | XMTSERV, &iface->regs_base->int_mask);
++/**
++ * Handle device tree structures like:
++ *
++ * pinctrl_uart0_hwflow: uart0_hwflow_pins {
++ *   pins_rxtx_ {
++ *     pinmux = <1>, <2>;
++ *     some-padconf-flag;
++ *   };
++ *   pins_hwflow {
++ *     pinmux = <3>, <4>;
++ *     some-other-padconf-flag;
++ *   };
++ * };
++ *
++ * where &pinctrl_uart0_hwflow is passed as an entry in pinctrl-0 on uart driver and
++ * enables all sub-pins at once
++ */
++static int adsp_pinctrl_dt_node_to_map(struct pinctrl_dev *pctldev,
++	struct device_node *np, struct pinctrl_map **map, unsigned int *num_maps)
++{
++	unsigned int reserved_maps;
++	struct device_node *child_np;
++	int ret;
 +
-+	if (pmsg->len <= 255)
-+		iowrite16(pmsg->len << 6, &iface->regs_base->master_ctl);
-+	else {
-+		iowrite16(0xff << 6, &iface->regs_base->master_ctl);
-+		iface->manual_stop = 1;
++	reserved_maps = 0;
++	*map = NULL;
++	*num_maps = 0;
++
++	for_each_child_of_node(np, child_np) {
++		ret = adsp_pinctrl_dt_subnode_to_map(pctldev, child_np, map,
++					&reserved_maps, num_maps);
++		if (ret < 0)
++			goto exit;
++	}
++	return 0;
++
++exit:
++	pinctrl_utils_free_map(pctldev, *map, *num_maps);
++	return ret;
++}
++
++static const struct pinctrl_ops adsp_pctlops = {
++	.get_groups_count = adsp_pinctrl_get_groups_count,
++	.get_group_name = adsp_pinctrl_get_group_name,
++	.get_group_pins = adsp_pinctrl_get_group_pins,
++	.dt_node_to_map = adsp_pinctrl_dt_node_to_map,
++	.dt_free_map = pinconf_generic_dt_free_map,
++};
++
++/* pin mux operations */
++static int adsp_pinmux_get_functions_count(struct pinctrl_dev *pctldev)
++{
++	return ADSP_NUMBER_OF_PIN_FUNCTIONS;
++}
++
++static const char *adsp_pinmux_get_function_name(struct pinctrl_dev *pctldev,
++	unsigned int selector)
++{
++	return pin_functions[selector].name;
++}
++
++static int adsp_pinmux_get_function_groups(struct pinctrl_dev *pctldev,
++	unsigned int selector, const char * const **groups, unsigned * const num_groups)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++
++	*groups = adsp_pinctrl->group_names;
++	*num_groups = adsp_pinctrl->total_pins;
++	return 0;
++}
++
++/* Each group is exactly 1 pin and group id == pin id */
++static int adsp_pinmux_set_mux(struct pinctrl_dev *pctldev, unsigned int func,
++	unsigned int group)
++{
++	struct adsp_gpio_port *port;
++	struct pinctrl_gpio_range *range;
++	u32 offset;
++
++	range = pinctrl_find_gpio_range_from_pin(pctldev, group);
++	if (!range || !range->gc)
++		return -EPROBE_DEFER;
++
++	offset = group - range->pin_base;
++
++	port = to_adsp_gpio_port(range->gc);
++	adsp_portmux_setup(port, offset, &pin_functions[func]);
++
++	return 0;
++}
++
++static int adsp_pinmux_request_gpio(struct pinctrl_dev *pctldev,
++	struct pinctrl_gpio_range *range, unsigned int pin)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(range->gc);
++	u32 offset = pin - range->pin_base;
++
++	adsp_set_pin_gpio(port, offset, true);
++	return 0;
++}
++
++static void adsp_pinmux_release_gpio(struct pinctrl_dev *pctldev,
++	struct pinctrl_gpio_range *range, unsigned int pin)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(range->gc);
++	u32 offset = pin - range->pin_base;
++
++	adsp_set_pin_gpio(port, offset, false);
++}
++
++static const struct pinmux_ops adsp_pmxops = {
++	.get_functions_count = adsp_pinmux_get_functions_count,
++	.get_function_name = adsp_pinmux_get_function_name,
++	.get_function_groups = adsp_pinmux_get_function_groups,
++	.set_mux = adsp_pinmux_set_mux,
++	.gpio_request_enable = adsp_pinmux_request_gpio,
++	.gpio_disable_free = adsp_pinmux_release_gpio,
++};
++
++/* pin configuration operations */
++static bool __adsp_pinconf_is_pue(struct adsp_pinctrl *p, unsigned int pin)
++{
++	u32 offset = ADSP_PADS_PORTx_PUE(pin);
++	u32 val, bit;
++
++	if (p->pude_missing)
++		return 0;
++
++	val = readl(p->regs + offset);
++	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
++	return !!(val & bit);
++}
++
++static bool __adsp_pinconf_is_pde(struct adsp_pinctrl *p, unsigned int pin)
++{
++	u32 offset = ADSP_PADS_PORTx_PDE(pin);
++	u32 val, bit;
++
++	if (p->pude_missing)
++		return 0;
++
++	val = readl(p->regs + offset);
++	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
++	return !!(val & bit);
++}
++
++static u32 __adsp_pinconf_get_ds(struct adsp_pinctrl *p, unsigned int pin)
++{
++	u32 offset = ADSP_PADS_PORTx_DS(pin);
++	u32 val, shift, mask;
++
++	if (p->ds_missing)
++		return 0;
++
++	val = readl(p->regs + offset);
++	shift = (pin & (ADSP_PADS_DS_PINS_PER_REG-1)) * ADSP_PADS_DS_BITS;
++	mask = GENMASK(ADSP_PADS_DS_BITS-1, 0) << shift;
++	val = val & mask;
++
++	if (val == ADSP_PADS_DS_HIGH)
++		return 1;
++	return 0;
++}
++
++/* seems we return -EINVAL for disabled static option, -ENOTSUPP for not supported,
++ * and otherwise the argument is included in config
++ */
++static int adsp_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin,
++	unsigned long *config)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++	struct pinctrl_gpio_range *range;
++	struct adsp_gpio_port *port;
++	u32 offset, val;
++	u32 param = pinconf_to_config_param(*config);
++	u32 arg = 0;
++
++	switch (param) {
++	case PIN_CONFIG_BIAS_DISABLE:
++		if (__adsp_pinconf_is_pue(adsp_pinctrl, pin) ||
++		    __adsp_pinconf_is_pde(adsp_pinctrl, pin))
++			return -EINVAL;
++		break;
++	case PIN_CONFIG_BIAS_PULL_DOWN:
++		if (!__adsp_pinconf_is_pde(adsp_pinctrl, pin))
++			return -EINVAL;
++		break;
++	case PIN_CONFIG_BIAS_PULL_UP:
++		if (!__adsp_pinconf_is_pue(adsp_pinctrl, pin))
++			return -EINVAL;
++		break;
++	case PIN_CONFIG_DRIVE_STRENGTH:
++		arg = __adsp_pinconf_get_ds(adsp_pinctrl, pin);
++		break;
++	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
++		range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, pin);
++		offset = pin - range->pin_base;
++		port = to_adsp_gpio_port(range->gc);
++
++		if (!(port->open_drain & BIT(offset)))
++			return -EINVAL;
++		break;
++	case PIN_CONFIG_DRIVE_PUSH_PULL:
++		range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, pin);
++		offset = pin - range->pin_base;
++		port = to_adsp_gpio_port(range->gc);
++
++		if (port->open_drain & BIT(offset))
++			return -EINVAL;
++		break;
++	case ADSP_PIN_CONFIG_TRU_TOGGLE:
++		range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, pin);
++		offset = pin - range->pin_base;
++		port = to_adsp_gpio_port(range->gc);
++
++		val = __adsp_gpio_readl(port, ADSP_PORT_REG_TRIG_TGL);
++		if (!(val & BIT(offset)))
++			return -EINVAL;
++		break;
++	default:
++		return -EOPNOTSUPP;
 +	}
 +
-+	/* Master enable */
-+	writeValue = ioread16(&iface->regs_base->master_ctl) |
-+		     MEN |
-+		     ((iface->msg_num > 1) ? RSTART : 0) |
-+		     ((iface->read_write == I2C_SMBUS_READ) ? MDIR : 0) |
-+		     ((iface->twi_clk > 100) ? FAST : 0);
++	*config = pinconf_to_config_packed(param, arg);
 +
-+	iowrite16(writeValue, &iface->regs_base->master_ctl);
++	return 0;
++}
 +
-+	if (polling) {
-+		int timeout = 50000;
++static void __adsp_pinconf_pue(struct adsp_pinctrl *p, unsigned int pin, bool state)
++{
++	u32 offset = ADSP_PADS_PORTx_PUE(pin);
++	u32 val, bit;
 +
-+		for (;;) {
-+			irqreturn_t handled = adi_twi_handle_all_interrupts(
-+								iface, true);
-+			if (handled == IRQ_HANDLED && iface->result)
-+				break;
-+			if (--timeout == 0) {
-+				iface->result = -1;
-+				dev_err(&adap->dev, "master polling timeout");
-+				break;
-+			}
-+		}
-+	} else { /* interrupt driven */
-+		while (!iface->result) {
-+			if (!wait_for_completion_timeout(&iface->complete,
-+				adap->timeout)) {
-+				iface->result = -1;
-+				dev_err(&adap->dev, "master transfer timeout");
-+			}
-+		}
++	if (p->pude_missing) {
++		dev_warn(p->dev,
++			 "Pull Up Enable is not supported by this PADS HW (tried to set PUE for pin %d)\n",
++			 pin);
++		return;
 +	}
 +
-+	if (iface->result == 1)
-+		rc = iface->cur_msg + 1;
++	val = readl(p->regs + offset);
++	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
++
++	if (state)
++		writel(val | bit, p->regs + offset);
 +	else
-+		rc = iface->result;
-+
-+	return rc;
++		writel(val & ~bit, p->regs + offset);
 +}
 +
-+/*
-+ * Generic i2c master transfer entrypoint
-+ */
-+static int adi_twi_master_xfer(struct i2c_adapter *adap,
-+				struct i2c_msg *msgs, int num)
++static void __adsp_pinconf_pde(struct adsp_pinctrl *p, unsigned int pin, bool state)
 +{
-+	return adi_twi_do_master_xfer(adap, msgs, num, false);
-+}
++	u32 offset = ADSP_PADS_PORTx_PDE(pin);
++	u32 val, bit;
 +
-+static int adi_twi_master_xfer_atomic(struct i2c_adapter *adap,
-+				struct i2c_msg *msgs, int num)
-+{
-+	return adi_twi_do_master_xfer(adap, msgs, num, true);
-+}
-+
-+/*
-+ * One I2C SMBus transfer
-+ */
-+static int adi_twi_do_smbus_xfer(struct i2c_adapter *adap, u16 addr,
-+			unsigned short flags, char read_write,
-+			u8 command, int size, union i2c_smbus_data *data,
-+			bool polling)
-+{
-+	struct adi_twi_iface *iface = adap->algo_data;
-+	int rc = 0;
-+	u16 writeValue;
-+
-+	if (!(ioread16(&iface->regs_base->control) & TWI_ENA))
-+		return -ENXIO;
-+
-+	if (ioread16(&iface->regs_base->master_stat) & BUSBUSY)
-+		return -EAGAIN;
-+
-+	iface->writeNum = 0;
-+	iface->readNum = 0;
-+
-+	/* Prepare datas & select mode */
-+	switch (size) {
-+	case I2C_SMBUS_QUICK:
-+		iface->transPtr = NULL;
-+		iface->cur_mode = TWI_I2C_MODE_STANDARD;
-+		break;
-+	case I2C_SMBUS_BYTE:
-+		if (data == NULL)
-+			iface->transPtr = NULL;
-+		else {
-+			if (read_write == I2C_SMBUS_READ)
-+				iface->readNum = 1;
-+			else
-+				iface->writeNum = 1;
-+			iface->transPtr = &data->byte;
-+		}
-+		iface->cur_mode = TWI_I2C_MODE_STANDARD;
-+		break;
-+	case I2C_SMBUS_BYTE_DATA:
-+		if (read_write == I2C_SMBUS_READ) {
-+			iface->readNum = 1;
-+			iface->cur_mode = TWI_I2C_MODE_COMBINED;
-+		} else {
-+			iface->writeNum = 1;
-+			iface->cur_mode = TWI_I2C_MODE_STANDARDSUB;
-+		}
-+		iface->transPtr = &data->byte;
-+		break;
-+	case I2C_SMBUS_WORD_DATA:
-+		if (read_write == I2C_SMBUS_READ) {
-+			iface->readNum = 2;
-+			iface->cur_mode = TWI_I2C_MODE_COMBINED;
-+		} else {
-+			iface->writeNum = 2;
-+			iface->cur_mode = TWI_I2C_MODE_STANDARDSUB;
-+		}
-+		iface->transPtr = (u8 *)&data->word;
-+		break;
-+	case I2C_SMBUS_PROC_CALL:
-+		iface->writeNum = 2;
-+		iface->readNum = 2;
-+		iface->cur_mode = TWI_I2C_MODE_COMBINED;
-+		iface->transPtr = (u8 *)&data->word;
-+		break;
-+	case I2C_SMBUS_BLOCK_DATA:
-+		if (read_write == I2C_SMBUS_READ) {
-+			iface->readNum = 0;
-+			iface->cur_mode = TWI_I2C_MODE_COMBINED;
-+		} else {
-+			iface->writeNum = data->block[0] + 1;
-+			iface->cur_mode = TWI_I2C_MODE_STANDARDSUB;
-+		}
-+		iface->transPtr = data->block;
-+		break;
-+	case I2C_SMBUS_I2C_BLOCK_DATA:
-+		if (read_write == I2C_SMBUS_READ) {
-+			iface->readNum = data->block[0];
-+			iface->cur_mode = TWI_I2C_MODE_COMBINED;
-+		} else {
-+			iface->writeNum = data->block[0];
-+			iface->cur_mode = TWI_I2C_MODE_STANDARDSUB;
-+		}
-+		iface->transPtr = (u8 *)&data->block[1];
-+		break;
-+	default:
-+		return -1;
++	if (p->pude_missing) {
++		dev_warn(p->dev,
++			 "Pull Down Enable is not supported by this PADS HW (tried to set PDE for pin %d)\n",
++			 pin);
++		return;
 +	}
 +
-+	iface->result = 0;
-+	iface->manual_stop = 0;
-+	iface->read_write = read_write;
-+	iface->command = command;
-+	if (!polling)
-+		init_completion(&(iface->complete));
++	val = readl(p->regs + offset);
++	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
 +
-+	/* FIFO Initiation. Data in FIFO should be discarded before
-+	 * start a new operation.
-+	 */
-+	iowrite16(0x3, &iface->regs_base->fifo_ctl);
-+	iowrite16(0, &iface->regs_base->fifo_ctl);
++	if (state)
++		writel(val | bit, p->regs + offset);
++	else
++		writel(val & ~bit, p->regs + offset);
++}
 +
-+	/* clear int stat */
-+	iowrite16(MERR | MCOMP | XMTSERV | RCVSERV, &iface->regs_base->int_stat);
++static void __adsp_pinconf_ds(struct adsp_pinctrl *p, unsigned int pin, bool high)
++{
++	u32 offset = ADSP_PADS_PORTx_DS(pin);
++	u32 val, shift, mask;
 +
-+	/* Set Transmit device address */
-+	iowrite16(addr, &iface->regs_base->master_addr);
++	if (p->ds_missing) {
++		dev_warn(p->dev,
++			"Drive strength is not supported by this PADS HW (tried to set drive strength for pin %d)\n",
++			pin);
++		return;
++	}
 +
-+	switch (iface->cur_mode) {
-+	case TWI_I2C_MODE_STANDARDSUB:
-+		iowrite16(iface->command, &iface->regs_base->xmt_data8);
++	val = readl(p->regs + offset);
++	shift = (pin & (ADSP_PADS_DS_PINS_PER_REG-1)) * ADSP_PADS_DS_BITS;
++	mask = GENMASK(ADSP_PADS_DS_BITS-1, 0) << shift;
++	val = val & ~mask;
 +
-+		writeValue = MCOMP | MERR;
-+		if (iface->read_write == I2C_SMBUS_READ)
-+			writeValue |= RCVSERV;
-+		else
-+			writeValue |= XMTSERV;
++	if (high)
++		writel(val | (ADSP_PADS_DS_HIGH << shift), p->regs + offset);
++	else
++		writel(val | (ADSP_PADS_DS_LOW << shift), p->regs + offset);
++}
 +
-+		iowrite16(writeValue, &iface->regs_base->int_mask);
++static int adsp_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
++	unsigned long *config, unsigned int num_configs)
++{
++	struct adsp_pinctrl *adsp_pinctrl = pinctrl_dev_get_drvdata(pctldev);
++	struct pinctrl_gpio_range *range;
++	struct adsp_gpio_port *port;
++	u32 param, arg, val;
++	u32 offset;
++	int cfg;
++	int ret = 0;
++	unsigned long flags;
 +
-+		if (iface->writeNum + 1 <= 255)
-+			iowrite16((iface->writeNum + 1) << 6, &iface->regs_base->master_ctl);
-+		else {
-+			iowrite16(0xff << 6, &iface->regs_base->master_ctl);
-+			iface->manual_stop = 1;
-+		}
-+		/* Master enable */
-+		writeValue = ioread16(&iface->regs_base->master_ctl) | MEN;
-+		if (iface->twi_clk > 100)
-+			writeValue |= FAST;
-+		iowrite16(writeValue, &iface->regs_base->master_ctl);
-+		break;
-+	case TWI_I2C_MODE_COMBINED:
-+		iowrite16(iface->command, &iface->regs_base->xmt_data8);
-+		iowrite16(MCOMP | MERR | RCVSERV | XMTSERV, &iface->regs_base->int_mask);
++	spin_lock_irqsave(&adsp_pinctrl->lock, flags);
 +
-+		if (iface->writeNum > 0)
-+			iowrite16((iface->writeNum + 1) << 6, &iface->regs_base->master_ctl);
-+		else
-+			iowrite16(0x1 << 6, &iface->regs_base->master_ctl);
-+		/* Master enable */
-+		writeValue = ioread16(&iface->regs_base->master_ctl) | MEN | RSTART;
-+		if (iface->twi_clk > 100)
-+			writeValue |= FAST;
-+		iowrite16(writeValue, &iface->regs_base->master_ctl);
-+		break;
-+	default:
-+		iowrite16(0, &iface->regs_base->master_ctl);
-+		if (size != I2C_SMBUS_QUICK) {
-+			/* Don't access xmit data register when this is a
-+			 * read operation.
++	for (cfg = 0; cfg < num_configs; ++cfg) {
++		param = pinconf_to_config_param(config[cfg]);
++		arg = pinconf_to_config_argument(config[cfg]);
++
++		switch (param) {
++		case PIN_CONFIG_BIAS_DISABLE:
++			__adsp_pinconf_pue(adsp_pinctrl, pin, false);
++			__adsp_pinconf_pde(adsp_pinctrl, pin, false);
++			break;
++		case PIN_CONFIG_BIAS_PULL_DOWN:
++			__adsp_pinconf_pde(adsp_pinctrl, pin, !!arg);
++			break;
++		case PIN_CONFIG_BIAS_PULL_UP:
++			__adsp_pinconf_pue(adsp_pinctrl, pin, !!arg);
++			break;
++		case PIN_CONFIG_DRIVE_STRENGTH:
++			/* This only supports high/low-speed drive strength (see HRM)
++			 * so assume any positive value means we would like high-speed strength
 +			 */
-+			if (iface->read_write != I2C_SMBUS_READ) {
-+				if (iface->writeNum > 0) {
-+					iowrite16(*(iface->transPtr++),
-+						  &iface->regs_base->xmt_data8);
-+					if (iface->writeNum <= 255)
-+						iowrite16(iface->writeNum << 6,
-+							  &iface->regs_base->master_ctl);
-+					else {
-+						iowrite16(0xff << 6, &iface->regs_base->master_ctl);
-+						iface->manual_stop = 1;
-+					}
-+					iface->writeNum--;
-+				} else {
-+					iowrite16(iface->command, &iface->regs_base->xmt_data8);
-+					iowrite16(1 << 6, &iface->regs_base->master_ctl);
-+				}
++			__adsp_pinconf_ds(adsp_pinctrl, pin, !!arg);
++			break;
++		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
++			range = pinctrl_find_gpio_range_from_pin(pctldev, pin);
++			offset = pin - range->pin_base;
++			port = to_adsp_gpio_port(range->gc);
++
++			spin_lock(&port->lock);
++			val = __adsp_gpio_readw(port, ADSP_PORT_REG_DATA);
++			val &= BIT(offset);
++
++			if (val) {
++				/* open drain with value of 1 => configure as input */
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_CLEAR);
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_SET);
 +			} else {
-+				if (iface->readNum > 0 && iface->readNum <= 255)
-+					iowrite16(iface->readNum << 6,
-+						  &iface->regs_base->master_ctl);
-+				else if (iface->readNum > 255) {
-+					iowrite16(0xff << 6, &iface->regs_base->master_ctl);
-+					iface->manual_stop = 1;
-+				} else
-+					break;
++				/* open drain with value of 0 => configure as output, drive 0 */
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_CLEAR);
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DATA_CLEAR);
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_SET);
 +			}
-+		}
-+		writeValue = MCOMP | MERR;
-+		if (iface->read_write == I2C_SMBUS_READ)
-+			writeValue |= RCVSERV;
-+		else
-+			writeValue |= XMTSERV;
-+		iowrite16(writeValue, &iface->regs_base->int_mask);
 +
-+		/* Master enable */
-+		writeValue = ioread16(&iface->regs_base->master_ctl) | MEN |
-+			     ((iface->read_write == I2C_SMBUS_READ) ? MDIR : 0) |
-+			     ((iface->twi_clk > 100) ? FAST : 0);
-+		iowrite16(writeValue, &iface->regs_base->master_ctl);
-+		break;
-+	}
++			port->open_drain |= BIT(offset);
++			spin_unlock(&port->lock);
++			break;
++		case PIN_CONFIG_DRIVE_PUSH_PULL:
++			range = pinctrl_find_gpio_range_from_pin(pctldev, pin);
++			offset = pin - range->pin_base;
++			port = to_adsp_gpio_port(range->gc);
 +
-+	if (polling) {
-+		int timeout = 50000;
++			spin_lock(&port->lock);
 +
-+		for (;;) {
-+			irqreturn_t handled = adi_twi_handle_all_interrupts(
-+								iface, true);
-+			if (handled == IRQ_HANDLED && iface->result)
-+				break;
-+			if (--timeout == 0) {
-+				iface->result = -1;
-+				dev_err(&adap->dev, "smbus polling timeout");
-+				break;
++			/*
++			 * by default make the pin an input when exiting open drain mode;
++			 * user can correct later with GPIO in/out configuration
++			 */
++			if (port->open_drain & BIT(offset)) {
++				port->open_drain &= ~BIT(offset);
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_CLEAR);
++				__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_SET);
 +			}
-+		}
-+	} else { /* interrupt driven */
-+		while (!iface->result) {
-+			if (!wait_for_completion_timeout(&iface->complete,
-+				adap->timeout)) {
-+				iface->result = -1;
-+				dev_err(&adap->dev, "smbus transfer timeout");
-+			}
++
++			spin_unlock(&port->lock);
++			break;
++		case ADSP_PIN_CONFIG_TRU_TOGGLE:
++			range = pinctrl_find_gpio_range_from_pin(pctldev, pin);
++			offset = pin - range->pin_base;
++			port = to_adsp_gpio_port(range->gc);
++
++			spin_lock(&port->lock);
++			val = __adsp_gpio_readl(port, ADSP_PORT_REG_TRIG_TGL);
++			val |= BIT(offset);
++			__adsp_gpio_writel(port, val, ADSP_PORT_REG_TRIG_TGL);
++			spin_unlock(&port->lock);
++			break;
++		default:
++			ret = -EOPNOTSUPP;
++			goto end;
 +		}
 +	}
 +
-+	rc = (iface->result >= 0) ? 0 : -1;
-+
-+	return rc;
++end:
++	spin_unlock_irqrestore(&adsp_pinctrl->lock, flags);
++	return ret;
 +}
 +
-+/*
-+ * Generic I2C SMBus transfer entrypoint
-+ */
-+static int adi_twi_smbus_xfer(struct i2c_adapter *adap, u16 addr,
-+			unsigned short flags, char read_write,
-+			u8 command, int size, union i2c_smbus_data *data)
++/* Config for all pins must match or we have an error regarding group structure */
++static int adsp_pinconf_group_get(struct pinctrl_dev *pctldev, unsigned int group,
++	unsigned long *config)
 +{
-+	return adi_twi_do_smbus_xfer(adap, addr, flags,
-+			read_write, command, size, data, false);
-+}
++	const unsigned int *pins;
++	unsigned int npins, i;
++	unsigned long first;
++	int ret;
 +
-+static int adi_twi_smbus_xfer_atomic(struct i2c_adapter *adap, u16 addr,
-+			unsigned short flags, char read_write,
-+			u8 command, int size, union i2c_smbus_data *data)
-+{
-+	return adi_twi_do_smbus_xfer(adap, addr, flags,
-+			read_write, command, size, data, true);
-+}
++	ret = adsp_pinctrl_get_group_pins(pctldev, group, &pins, &npins);
++	if (ret)
++		return ret;
 +
-+/*
-+ * Return what the adapter supports
-+ */
-+static u32 adi_twi_functionality(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
-+	       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
-+	       I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_PROC_CALL |
-+	       I2C_FUNC_I2C | I2C_FUNC_SMBUS_I2C_BLOCK;
-+}
++	for (i = 0; i < npins; ++i) {
++		ret = adsp_pinconf_get(pctldev, pins[i], config);
++		if (ret)
++			return ret;
 +
-+static const struct i2c_algorithm adi_twi_algorithm = {
-+	.master_xfer	    = adi_twi_master_xfer,
-+	.master_xfer_atomic = adi_twi_master_xfer_atomic,
-+	.smbus_xfer	    = adi_twi_smbus_xfer,
-+	.smbus_xfer_atomic  = adi_twi_smbus_xfer_atomic,
-+	.functionality	    = adi_twi_functionality,
-+};
++		if (i == 0)
++			first = *config;
 +
-+#ifdef CONFIG_PM_SLEEP
-+static int i2c_adi_twi_suspend(struct device *dev)
-+{
-+	struct adi_twi_iface *iface = dev_get_drvdata(dev);
-+
-+	iface->saved_clkdiv = ioread16(&iface->regs_base->clkdiv);
-+	iface->saved_control = ioread16(&iface->regs_base->control);
-+
-+	free_irq(iface->irq, iface);
-+
-+	/* Disable TWI */
-+	iowrite16(iface->saved_control & ~TWI_ENA, &iface->regs_base->control);
++		if (first != *config)
++			return -EOPNOTSUPP;
++	}
 +
 +	return 0;
 +}
 +
-+static int i2c_adi_twi_resume(struct device *dev)
++static int adsp_pinconf_group_set(struct pinctrl_dev *pctldev, unsigned int group,
++	unsigned long *configs, unsigned int num_configs)
 +{
-+	struct adi_twi_iface *iface = dev_get_drvdata(dev);
++	const unsigned int *pins;
++	unsigned int npins, i;
++	int ret;
 +
-+	int rc = request_irq(iface->irq, adi_twi_interrupt_entry,
-+		0, to_platform_device(dev)->name, iface);
-+	if (rc) {
-+		dev_err(dev, "Can't get IRQ %d !\n", iface->irq);
-+		return -ENODEV;
++	ret = adsp_pinctrl_get_group_pins(pctldev, group, &pins, &npins);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < npins; ++i) {
++		ret = adsp_pinconf_set(pctldev, pins[i], configs, num_configs);
++		if (ret)
++			return ret;
 +	}
-+
-+	/* Resume TWI interface clock as specified */
-+	iowrite16(iface->saved_clkdiv, &iface->regs_base->clkdiv);
-+
-+	/* Resume TWI */
-+	iowrite16(iface->saved_control, &iface->regs_base->control);
 +
 +	return 0;
 +}
 +
-+static SIMPLE_DEV_PM_OPS(i2c_adi_twi_pm,
-+			 i2c_adi_twi_suspend, i2c_adi_twi_resume);
-+#define I2C_ADI_TWI_PM_OPS	(&i2c_adi_twi_pm)
-+#else
-+#define I2C_ADI_TWI_PM_OPS	NULL
++static const struct pinconf_ops adsp_confops = {
++	.is_generic = true,
++	.pin_config_get = adsp_pinconf_get,
++	.pin_config_set = adsp_pinconf_set,
++	.pin_config_group_get = adsp_pinconf_group_get,
++	.pin_config_group_set = adsp_pinconf_group_set,
++#ifdef CONFIG_DEBUG_FS
++	.pin_config_config_dbg_show = pinconf_generic_dump_config,
 +#endif
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id adi_twi_of_match[] = {
-+	{
-+		.compatible = "adi,twi",
-+	},
-+	{},
 +};
-+MODULE_DEVICE_TABLE(of, adi_twi_of_match);
-+#endif
 +
-+static int i2c_adi_twi_probe(struct platform_device *pdev)
++/*
++ * We want to make one group per pin so that we can refer to the pins by group
++ * later on when mux assignments are made
++ */
++static int adsp_pinctrl_init_groups(struct adsp_pinctrl *adsp_pinctrl,
++	struct pinctrl_desc *desc)
 +{
-+	struct adi_twi_iface *iface;
-+	struct i2c_adapter *p_adap;
-+	struct resource *res;
-+	const struct of_device_id *match;
-+	struct device_node *node = pdev->dev.of_node;
-+	int rc;
-+	unsigned int clkhilow;
-+	u16 writeValue;
++	struct device *dev = adsp_pinctrl->dev;
++	struct pinctrl_pin_desc *all_pins;
++	size_t port, pin;
++	unsigned int i, pin_total;
++	int num_ports;
++	int ret;
 +
-+	iface = devm_kzalloc(&pdev->dev, sizeof(*iface), GFP_KERNEL);
-+	if (!iface)
++	num_ports = of_property_count_u32_elems(dev->of_node, "adi,port-sizes");
++
++	if (num_ports < 0)
++		return num_ports;
++
++	if (num_ports == 0) {
++		dev_err(dev, "pinctrl missing `adi,port-sizes` port size definition\n");
++		return -ENOENT;
++	}
++
++	adsp_pinctrl->num_ports = num_ports;
++
++	adsp_pinctrl->pin_counts = devm_kcalloc(dev, sizeof(*adsp_pinctrl->pin_counts),
++		num_ports, GFP_KERNEL);
++	if (!adsp_pinctrl->pin_counts)
 +		return -ENOMEM;
 +
-+	spin_lock_init(&(iface->lock));
++	ret = of_property_read_u32_array(dev->of_node, "adi,port-sizes",
++		adsp_pinctrl->pin_counts, num_ports);
++	if (ret)
++		return ret;
 +
-+	match = of_match_device(of_match_ptr(adi_twi_of_match), &pdev->dev);
-+	if (match) {
-+		if (of_property_read_u32(node, "clock-khz",
-+			&iface->twi_clk))
-+			iface->twi_clk = 50;
-+	} else
-+		iface->twi_clk = CONFIG_I2C_ADI_TWI_CLK_KHZ;
++	pin_total = 0;
 +
-+	iface->sclk = devm_clk_get(&pdev->dev, "sclk0");
-+	if (IS_ERR(iface->sclk)) {
-+		if (PTR_ERR(iface->sclk) != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "Missing i2c clock\n");
-+		return PTR_ERR(iface->sclk);
++	for (i = 0; i < num_ports; ++i)
++		pin_total += adsp_pinctrl->pin_counts[i];
++
++	adsp_pinctrl->total_pins = pin_total;
++
++	all_pins = devm_kcalloc(dev, sizeof(*all_pins), adsp_pinctrl->total_pins,
++		GFP_KERNEL);
++
++	adsp_pinctrl->pins = devm_kcalloc(dev, sizeof(adsp_pinctrl->pins),
++		adsp_pinctrl->total_pins, GFP_KERNEL);
++	if (!adsp_pinctrl->pins)
++		return -ENOMEM;
++
++	adsp_pinctrl->group_names = devm_kcalloc(dev, sizeof(*adsp_pinctrl->group_names),
++		adsp_pinctrl->total_pins, GFP_KERNEL);
++	if (!adsp_pinctrl->group_names)
++		return -ENOMEM;
++
++	i = 0;
++	for (port = 0; port < adsp_pinctrl->num_ports; ++port) {
++		for (pin = 0; pin < adsp_pinctrl->pin_counts[port]; ++pin) {
++			adsp_pinctrl->group_names[i] = devm_kasprintf(dev, GFP_KERNEL,
++				"p%c%zu", (char) ('A' + port), pin);
++			adsp_pinctrl->pins[i] = i;
++
++			all_pins[i].name = adsp_pinctrl->group_names[i];
++			all_pins[i].number = i;
++			i += 1;
++		}
 +	}
 +
-+	/* Find and map our resources */
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (res == NULL) {
-+		dev_err(&pdev->dev, "Cannot get IORESOURCE_MEM\n");
-+		return -ENOENT;
-+	}
-+
-+	iface->regs_base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(iface->regs_base)) {
-+		dev_err(&pdev->dev, "Cannot map IO\n");
-+		return PTR_ERR(iface->regs_base);
-+	}
-+
-+	iface->irq = platform_get_irq(pdev, 0);
-+	if (iface->irq < 0) {
-+		dev_err(&pdev->dev, "No IRQ specified\n");
-+		return -ENOENT;
-+	}
-+
-+	p_adap = &iface->adap;
-+	p_adap->nr = pdev->id;
-+	strscpy(p_adap->name, pdev->name, sizeof(p_adap->name));
-+	p_adap->algo = &adi_twi_algorithm;
-+	p_adap->algo_data = iface;
-+	p_adap->class = I2C_CLASS_DEPRECATED;
-+	p_adap->dev.parent = &pdev->dev;
-+	p_adap->dev.of_node = node;
-+	p_adap->timeout = 5 * HZ;
-+	p_adap->retries = 3;
-+
-+	rc = devm_request_irq(&pdev->dev, iface->irq, adi_twi_interrupt_entry,
-+		0, pdev->name, iface);
-+	if (rc) {
-+		dev_err(&pdev->dev, "Can't get IRQ %d !\n", iface->irq);
-+		rc = -ENODEV;
-+		goto out_error;
-+	}
-+
-+	/* Set TWI internal clock as 10MHz */
-+	clk_prepare_enable(iface->sclk);
-+	if (rc) {
-+		dev_err(&pdev->dev, "Could not enable sclk\n");
-+		goto out_error;
-+	}
-+
-+	writeValue = ((clk_get_rate(iface->sclk) / 1000 / 1000 + 5) / 10) & 0x7F;
-+	iowrite16(writeValue, &iface->regs_base->control);
-+
-+	/*
-+	 * We will not end up with a CLKDIV=0 because no one will specify
-+	 * 20kHz SCL or less in Kconfig now. (5 * 1000 / 20 = 250)
-+	 */
-+	clkhilow = ((10 * 1000 / iface->twi_clk) + 1) / 2;
-+
-+	/* Set Twi interface clock as specified */
-+	writeValue = (clkhilow << 8) | clkhilow;
-+	iowrite16(writeValue, &iface->regs_base->clkdiv);
-+
-+	/* Enable TWI */
-+	writeValue = ioread16(&iface->regs_base->control) | TWI_ENA;
-+	iowrite16(writeValue, &iface->regs_base->control);
-+
-+	rc = i2c_add_numbered_adapter(p_adap);
-+	if (rc < 0)
-+		goto disable_clk;
-+
-+	platform_set_drvdata(pdev, iface);
-+
-+	dev_info(&pdev->dev, "ADI on-chip I2C TWI Controller, regs_base@%p\n",
-+		iface->regs_base);
++	desc->pins = all_pins;
++	desc->npins = adsp_pinctrl->total_pins;
 +
 +	return 0;
-+
-+disable_clk:
-+	clk_disable_unprepare(iface->sclk);
-+
-+out_error:
-+	return rc;
 +}
 +
-+static void i2c_adi_twi_remove(struct platform_device *pdev)
++static void adsp_set_nongpio_ds(struct adsp_pinctrl *p, int type, bool high)
 +{
-+	struct adi_twi_iface *iface = platform_get_drvdata(pdev);
++	u32 val = readl(p->regs + ADSP_PADS_NONPORTS_DS);
++	u32 shift = ADSP_PADS_DS_BITS * type;
++	u32 mask = GENMASK(ADSP_PADS_DS_BITS-1, 0) << shift;
 +
-+	clk_disable_unprepare(iface->sclk);
-+	i2c_del_adapter(&(iface->adap));
++	val = val & ~mask;
++
++	if (high)
++		writel(val | (ADSP_PADS_DS_HIGH << shift), p->regs + ADSP_PADS_NONPORTS_DS);
++	else
++		writel(val | (ADSP_PADS_DS_LOW << shift), p->regs + ADSP_PADS_NONPORTS_DS);
 +}
 +
-+static struct platform_driver i2c_adi_twi_driver = {
-+	.probe		= i2c_adi_twi_probe,
-+	.remove		= i2c_adi_twi_remove,
-+	.driver		= {
-+		.name	= "i2c-adi-twi",
-+		.pm	= I2C_ADI_TWI_PM_OPS,
-+		.of_match_table = of_match_ptr(adi_twi_of_match),
++static int adsp_pinctrl_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	struct adsp_pinctrl *adsp_pinctrl;
++	struct pinctrl_desc *pnctrl_desc;
++	struct resource *res;
++	u32 val;
++	int ret;
++
++	adsp_pinctrl = devm_kzalloc(dev, sizeof(*adsp_pinctrl), GFP_KERNEL);
++	if (!adsp_pinctrl)
++		return -ENOMEM;
++
++	adsp_pinctrl->dev = dev;
++	pnctrl_desc = devm_kzalloc(dev, sizeof(*pnctrl_desc), GFP_KERNEL);
++	if (!pnctrl_desc)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	adsp_pinctrl->regs = devm_ioremap_resource(dev, res);
++	if (IS_ERR(adsp_pinctrl->regs))
++		return PTR_ERR(adsp_pinctrl->regs);
++
++	/* Different features are available in different hw revisions; no way to read this
++	 * from an ID register so the missing features need to be specified in dts
++	 */
++	adsp_pinctrl->ds_missing = of_property_read_bool(np, "adi,no-drive-strength");
++	adsp_pinctrl->pude_missing = of_property_read_bool(np, "adi,no-pull-up-down");
++
++	/* Only if requested, adjust non-port drive strengths */
++	ret = of_property_read_u32(np, "adi,clkout-drive-strength", &val);
++	if (!ret)
++		adsp_set_nongpio_ds(adsp_pinctrl, ADSP_NONPORTS_DS_CKOUT, !!val);
++
++	ret = of_property_read_u32(np, "adi,resoutb-drive-strength", &val);
++	if (!ret)
++		adsp_set_nongpio_ds(adsp_pinctrl, ADSP_NONPORTS_DS_RESOUTB, !!val);
++
++	ret = of_property_read_u32(np, "adi,faultb-drive-strength", &val);
++	if (!ret)
++		adsp_set_nongpio_ds(adsp_pinctrl, ADSP_NONPORTS_DS_FAULTB, !!val);
++
++	ret = of_property_read_u32(np, "adi,lp1ck-drive-strength", &val);
++	if (!ret)
++		adsp_set_nongpio_ds(adsp_pinctrl, ADSP_NONPORTS_DS_LP1CK, !!val);
++
++	ret = of_property_read_u32(np, "adi,lp0ck-drive-strength", &val);
++	if (!ret)
++		adsp_set_nongpio_ds(adsp_pinctrl, ADSP_NONPORTS_DS_LP0CK, !!val);
++
++	ret = of_property_read_u32(np, "adi,ospi-drive-strength", &val);
++	if (!ret)
++		adsp_set_nongpio_ds(adsp_pinctrl, ADSP_NONPORTS_DS_OSPI, !!val);
++
++	pnctrl_desc->name = dev_name(dev);
++	pnctrl_desc->pctlops = &adsp_pctlops;
++	pnctrl_desc->confops = &adsp_confops;
++	pnctrl_desc->pmxops = &adsp_pmxops;
++	pnctrl_desc->owner = THIS_MODULE;
++	pnctrl_desc->num_custom_params = ARRAY_SIZE(adsp_custom_bindings);
++	pnctrl_desc->custom_params = adsp_custom_bindings;
++	pnctrl_desc->custom_conf_items = adsp_conf_items;
++
++	spin_lock_init(&adsp_pinctrl->lock);
++	ret = adsp_pinctrl_init_groups(adsp_pinctrl, pnctrl_desc);
++	if (ret)
++		return ret;
++
++	ret = devm_pinctrl_register_and_init(dev, pnctrl_desc, adsp_pinctrl,
++		&adsp_pinctrl->pin_dev);
++	if (ret)
++		return ret;
++
++	platform_set_drvdata(pdev, adsp_pinctrl);
++	ret = pinctrl_enable(adsp_pinctrl->pin_dev);
++	return ret;
++}
++
++static const struct of_device_id adsp_pinctrl_of_match[] = {
++	{ .compatible = "adi,adsp-pinctrl", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, adsp_pinctrl_of_match);
++
++static struct platform_driver adsp_pinctrl_driver = {
++	.driver = {
++		.name = "adsp-pinctrl",
++		.of_match_table = adsp_pinctrl_of_match,
++		.suppress_bind_attrs = true,
 +	},
++	.probe = adsp_pinctrl_probe,
 +};
 +
-+static int __init i2c_adi_twi_init(void)
++static int __init adsp_pinctrl_init(void)
 +{
-+	return platform_driver_register(&i2c_adi_twi_driver);
++	return platform_driver_register(&adsp_pinctrl_driver);
 +}
 +
-+static void __exit i2c_adi_twi_exit(void)
-+{
-+	platform_driver_unregister(&i2c_adi_twi_driver);
-+}
++/*
++ * We want the pinctrl driver to be available at arch init time not at the
++ * later device init time
++ */
++arch_initcall(adsp_pinctrl_init);
 +
-+subsys_initcall(i2c_adi_twi_init);
-+module_exit(i2c_adi_twi_exit);
-+
-+MODULE_AUTHOR("Bryan Wu, Sonic Zhang");
-+MODULE_DESCRIPTION("ADI on-chip I2C TWI Controller Driver");
++MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
++MODULE_DESCRIPTION("Analog Devices Pinctrl driver");
 +MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:i2c-adi-twi");
 \ No newline at end of file
 
 -- 
