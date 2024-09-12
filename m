@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22804EEE241
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD75EEE25C
 	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 38FE8C4E690; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F8A2C4DE0D;
+	id 70EC4C4FDFB; Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44DE0C4E697;
 	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726165216;
-	bh=aZKeGq4p5ipcsfiHoGVqu/Fn0FE33lt6G4aL/LyS4+0=;
+	bh=hqLKfdHAqsp9ubtvrEhSZkll8xQwV4IE1tn0OaSzusw=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=fK1Pb8cG3z+/8jCD4Mx4QxLB2vLsDp7cG37wm+XmXsYjUIffIMwGIL8/mAL7q6K9d
-	 XKTWOIKPPQRk4EsWs/55sfQJgYY7vdD7f2yJF2VLk3YtC6DYQSz3E/xSNsHvutGuok
-	 GObHbJ+mgfV3e6TBGFgrCh7RnDRwMqiI0ILPg8qTfuWlNfaRCTj2V04EgEDdozfAQ+
-	 OZvLp4naGYz6DqDGAemV1taZpFZqMl1x5pp1WGbzV0FQHIs46lm0VJ/lTbiaY1v6gu
-	 j9LJJvQZkj1EMHeIbsd0AfTSEcR4R15imLc9RlnlGbDNVmZguJf6AicsvkNZ0kCMuZ
-	 GsJu3myD73mlg==
+	b=TuNxeGlgwVKz/YJpZgUWMzbRDtDYEboaVjUlEKcS2+wgLqz6ztXfxtPMRGFZqVbCH
+	 FB+LRvTghTeBCuVTpItqFOwLWAJQ2zLuVjA7AlekNdJLKITvPN9OAv8wjixp6TTApb
+	 G6dPauL0xsbsCxgHuUGhub98eMkgCC1M/RhbPYQLjl03VxLc1i7Hn+Ile6nfJhAH+V
+	 ZWaHu7cAz0Dn9T0nnxoKfc+xlD6CXjQ+Rlge+JRtL8afAVLk8Bin0hH+Q4UVTDAv5S
+	 QifGt/AbVtR3gnHUORcEolBkDzwwXMX0gRzPM2w5xjAZVzvT2uPyZKDtplhhFj/9Pb
+	 atvsp9pAD618g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07F27EEE240;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 380BBEEE25E;
 	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
 From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
-Date: Thu, 12 Sep 2024 19:24:59 +0100
-Subject: [PATCH 14/21] dt-bindings: pinctrl: adi,adsp-pinctrl: add bindings
+Date: Thu, 12 Sep 2024 19:25:01 +0100
+Subject: [PATCH 16/21] dt-bindings: i2c: add i2c/twi driver documentation
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240912-test-v1-14-458fa57c8ccf@analog.com>
+Message-Id: <20240912-test-v1-16-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 List-Id: <soc.lore.kernel.org>
@@ -55,11 +55,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=3857;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=2351;
  i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
- bh=8cIHFW2VHjXFP2WdC7ohf0MOYH4XA2BareGL3V29WFU=;
- b=fK46p873AmYdSJ17NDk9Nq0m1iWXpEzwV7H2MptZzhNyghpOJrlmoWDjpnQS17mhBhGwihE3U
- SVtUZ+iSYzCB+MHGX3zfxt3/UF5DP84N3NJOWd5Mmeie3LXzznZn1XN
+ bh=NgI2mAXMr6wvtJUHYjzwLK7MgsJEKL9nzTeZkQleGms=;
+ b=vhXEAs59UNXXy2CwczdwdKItNi03+ogGqzUK0a77UzJPEDl1pzu4/spYs4pnuCUKynl1Z68j+
+ HK1C/dGXcNECHVI1d4QCirnLQUyMOWAsGojtV0CO7eu/mjENPi367XQ
 X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
  pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
 X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
@@ -69,7 +69,7 @@ Reply-To: arturs.artamonovs@analog.com
 
 From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Add PINCTRL driver bindings.
+Add I2C driver bindings.
 
 Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
@@ -77,124 +77,86 @@ Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 ---
- .../bindings/pinctrl/adi,adsp-pinctrl.yaml         | 83 ++++++++++++++++++++++
- include/dt-bindings/pinctrl/adi-adsp.h             | 19 +++++
- 2 files changed, 102 insertions(+)
+ Documentation/devicetree/bindings/i2c/adi,twi.yaml | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/adi,adsp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/adi,adsp-pinctrl.yaml
+diff --git a/Documentation/devicetree/bindings/i2c/adi,twi.yaml b/Documentation/devicetree/bindings/i2c/adi,twi.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..073442b4f680bf536f631b4c17a1d3195c2233d6
+index 0000000000000000000000000000000000000000..e935b09066cf806c89a796fdd5fe73ee0b644432
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/adi,adsp-pinctrl.yaml
-@@ -0,0 +1,83 @@
++++ b/Documentation/devicetree/bindings/i2c/adi,twi.yaml
+@@ -0,0 +1,71 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/pinctrl/adi,adsp-pinctrl.yaml#
++$id: http://devicetree.org/schemas/i2c/adi,twi.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Analog Devices Pinmuxing Control for SC5XX Processor Family
++title: Analog Devices I2C Peripheral for SC5XX Processor Family
 +
 +maintainers:
 +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
 +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
 +
 +description: |
-+  Pinmuxing Control Driver for Configuring Processor Pins/Pads
++  Analog Devices I2C Peripheral driver for SC5XX Processor Family
 +
 +properties:
 +  compatible:
 +    enum:
-+      - adi,adsp-pinctrl
++      - adi,twi
 +
 +  "#address-cells":
 +    const: 1
 +
 +  "#size-cells":
-+    const: 1
++    const: 0
 +
 +  reg:
 +    maxItems: 1
 +
-+  "adi,port-sizes":
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    maxItems: 9
-+    description: Space delimited integer list denoting number of pins per port
-+      Ports A-I exist, so this is up to 9 items long
++  interrupts:
++    maxItems: 1
 +
-+  "adi,no-drive-strength":
-+    type: boolean
-+    description: Indicate missing drive strength registers
++  clock-khz:
++    $ref: /schemas/types.yaml#/definitions/uint32
 +
-+  "adi,no-pull-up-down":
-+    type: boolean
-+    description: Indicate missing pull up/down enable registers
++  clocks:
++    maxItems: 1
 +
-+patternProperties:
-+  '-pins$':
-+    type: object
-+    additionalProperties: false
-+
-+    properties:
-+      pins:
-+        type: object
-+        description: |
-+          A pinctrl node should contain a pin property, specifying the actual
-+          pins to use.
-+
-+        properties:
-+          pinmux:
-+            $ref: /schemas/types.yaml#/definitions/uint32-array
-+            description: |
-+              pinmux is used to specify which of the available functionalities
-+              for a given pin are actually used.
-+
-+        additionalProperties: false
++  clock-names:
++    maxItems: 1
 +
 +required:
 +  - compatible
 +  - "#address-cells"
 +  - "#size-cells"
 +  - reg
-+  - "adi,port-sizes"
++  - interrupts
++  - clock-khz
++  - clocks
++  - clock-names
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    pinctrl0: pinctrl@31004600 {
-+      compatible = "adi,adsp-pinctrl";
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/clock/adi-sc5xx-clock.h>
++
++    i2c0: twi@31001400 {
 +      #address-cells = <1>;
-+      #size-cells = <1>;
-+      reg = <0x31004600 0x400>;
-+      adi,port-sizes = <16 16 16 16 16 16 16 16 7>;
++      #size-cells = <0>;
++      compatible = "adi,twi";
++      reg = <0x31001400 0xFF>;
++      interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
++      clock-khz = <100>;
++      clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
++      clock-names = "sclk0";
++      status = "disabled";
 +    };
 +
-diff --git a/include/dt-bindings/pinctrl/adi-adsp.h b/include/dt-bindings/pinctrl/adi-adsp.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..dc5b86a0d9190acdd242a6ba4972c3aac7a61821
---- /dev/null
-+++ b/include/dt-bindings/pinctrl/adi-adsp.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0*/
-+/*
-+ * Macros for populating pinmux properties on the pincontroller
-+ *
-+ * Copyright 2022-2024 - Analog Devices Inc.
-+ */
-+
-+#ifndef DT_BINDINGS_PINCTRL_ADI_ADSP_H
-+#define DT_BINDINGS_PINCTRL_ADI_ADSP_H
-+
-+#define ADI_ADSP_PINFUNC_GPIO     0
-+#define ADI_ADSP_PINFUNC_ALT0     1
-+#define ADI_ADSP_PINFUNC_ALT1     2
-+#define ADI_ADSP_PINFUNC_ALT2     3
-+#define ADI_ADSP_PINFUNC_ALT3     4
-+
-+#define ADI_ADSP_PINMUX(port, pin, func) ((((port - 'A')*16 + pin) << 8) + func)
-+
-+#endif
 
 -- 
 2.25.1
