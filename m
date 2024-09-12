@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0F0FEEE253
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFBC0EEE25B
 	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9505EC4CEF1; Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 728C1C4CEEB;
+	id C9438C4DDEB; Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB3FDC4CEF7;
 	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726165215;
-	bh=XLB5gYmYmYt1/pzwpQI2EzPtJ4lJYhpSRMjF4adIEI0=;
+	bh=zo8Goznet6ybriL8A1oNytPyx903mkSFkDLvialibwA=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=nxyh3iQBMDqitWf0A2v06aU5QKuSIbEwzxnTTimC7D3X1BkWubdsQ4q8jVbEryGbi
-	 rUBWqb+TkokzJfPJNkXheYGOrYsEtyo0lg60+lAeo3Qa8TPHq5WCp2YhLe4NLN4YFb
-	 bxKtX67dDWamAtMecKA6XNCnyEY69ectATX+f1V6xPH/GwffFNFWEAn988OPKYYL5z
-	 0QYNDJNYF42W5C6f839u//EGx84uoVXGzR9mXPZ5NTMeqql4sptMZR/dej82135fqT
-	 kWR1BO97MTgLx2nzSo66CRRKvWH22E+0cvGMdmTnWrUrZacvBRTIvRp9P1mUgl2ZFD
-	 8eBg8TV/VJ/iA==
+	b=uMZri+oKwmTs5eBoAMUzB+ve580v9zqiyg9chdR/CRax+PpAdAhFG8bLV+n4AefGk
+	 a03JxdrOsPPHvg8M7McvFzOE8YUH0WHTScLQQV4rn6CsSA/EwZNDHkymPI0TnZ+0+n
+	 I7OJ5/JZ7ERndhzU5oulxnSguoIc/TZz+cqOHtxwkYRAv3KpRuFuPdrtqc+x12hNAx
+	 da7WmOZ/rS7H9LQJkPvqmU8qnuCNz5zrccwuP3osud1gdxFEIW5jrTVee1RNKMb2d8
+	 KNhtRtyoyvAsg08gOpn7xTH4/O2VI7asQreGvZIhQpbDpxvjJdw1U3GRkXuQ79bIo8
+	 3VbA+wSIYy7Hg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B9BEEE249;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A30B9EEE240;
 	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
-Date: Thu, 12 Sep 2024 19:24:53 +0100
-Subject: [PATCH 08/21] dt-bindings: clock: adi,sc5xx-clocks: add bindings
+Date: Thu, 12 Sep 2024 19:24:55 +0100
+Subject: [PATCH 10/21] dt-bindings: gpio: adi,adsp-port-gpio: add bindings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240912-test-v1-8-458fa57c8ccf@analog.com>
+Message-Id: <20240912-test-v1-10-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 List-Id: <soc.lore.kernel.org>
@@ -55,11 +55,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=2454;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=2563;
  i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
- bh=FK1wS84c2c1JDb4uWuVca0i/beOgHv9nSZqxSxH0SWg=;
- b=w9Z7BRtwc4qeUvwgaNEz4dzqKZcH31enCAS4yvArHHPswdjADO8AxrRW0gyDV2QCF3wcyNrPw
- j4K3L4sgrtNCmK2g91XXJ+PsJqO7i2uu1EE2pvYlXMzGPgxvJ1TDhsJ
+ bh=cfOfuzOPLZMfuiN15jp5jl3DQDp54rB8wtv1oWhiCQQ=;
+ b=sCywtZ4XrQYa/PO5ZEQL4TN0cv+Zg4tyhTVMbmf3ThpCbmUIkz2SdELt230uY5LEcIXMW/KtL
+ jeBKoWMuk8dAQE3Ql2FcLeK81laxlcnGLBAVzEhv+u8dGAgfPzQM8be
 X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
  pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
 X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
@@ -69,7 +69,7 @@ Reply-To: arturs.artamonovs@analog.com
 
 From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Add ADSP-SC5xx clock bindings.
+Add ADSP-SC5xx GPIO driver bindings.
 
 Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
@@ -77,80 +77,84 @@ Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 ---
- .../bindings/clock/adi,sc5xx-clocks.yaml           | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ .../bindings/gpio/adi,adsp-port-gpio.yaml          | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/adi,sc5xx-clocks.yaml b/Documentation/devicetree/bindings/clock/adi,sc5xx-clocks.yaml
+diff --git a/Documentation/devicetree/bindings/gpio/adi,adsp-port-gpio.yaml b/Documentation/devicetree/bindings/gpio/adi,adsp-port-gpio.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..a092ebdefdcf89a635cdcf1073921efd28a38386
+index 0000000000000000000000000000000000000000..3d7899ce759193296ce787d09d742824277f37f8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/adi,sc5xx-clocks.yaml
-@@ -0,0 +1,65 @@
++++ b/Documentation/devicetree/bindings/gpio/adi,adsp-port-gpio.yaml
+@@ -0,0 +1,69 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/clock/adi,sc5xx-clocks.yaml#
++$id: http://devicetree.org/schemas/gpio/adi,adsp-port-gpio.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Clock Tree Drivers for Analog Devices ADSP-SC5XX Processors
++title: Analog Devices GPIO Port Driver for SC5XX-family processors
 +
 +maintainers:
 +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
 +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
 +
 +description: |
-+  These drivers read in the processors CDU (clock distribution unit)
-+  and CGU (clock generation unit) values to determine various clock
-+  rates
++  Analog Devices GPIO Port Driver for SC5XX-family processors
 +
 +properties:
 +  compatible:
 +    enum:
-+      - adi,sc598-clocks # 64-Bit SC598 processor
++      - adi,adsp-port-gpio
 +
-+  '#clock-cells':
-+    const: 1
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++  gpio-ranges:
++    description: Associated pinmux controller and the GPIO range values
++
++  adi,pint:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: Associated pin interrupt controller driver
++    items:
++      - items:
++          - description: phandle to pin interrupt controller driver
++          - description: interrupt value
 +
 +  reg:
-+    minItems: 3
-+    maxItems: 4
-+
-+  clocks:
-+    description:
-+      Specifies the CLKIN0 and CLKIN1 reference clock(s) from which the
-+      output frequencies are derived via CDU+CGU
-+    minItems: 2
-+    maxItems: 2
-+
-+  clock-names:
-+    description:
-+      String reference names for CLKIN0 and CLKIN1
-+    minItems: 2
-+    maxItems: 2
++    description: PORT GPIO control registers
 +
 +required:
 +  - compatible
 +  - reg
-+  - clocks
-+  - '#clock-cells'
-+  - clock-names
++  - "#gpio-cells"
++  - gpio-controller
++  - gpio-ranges
++  - adi,pint
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    clk3: clocks@3108d000 {
-+        compatible = "adi,sc598-clocks";
-+        reg = <0x3108d000 0x1000>,
-+              <0x3108e000 0x1000>,
-+              <0x3108f000 0x1000>,
-+              <0x310a9000 0x1000>;
-+        #clock-cells = <1>;
-+        clocks = <&sys_clkin0>, <&sys_clkin1>;
-+        clock-names = "sys_clkin0", "sys_clkin1";
-+        status = "okay";
++    gpa: gport@31004000 {
++      compatible = "adi,adsp-port-gpio";
++      gpio-controller;
++      #gpio-cells = <2>;
++      reg = <0x31004000 0x7F>;
++      gpio-ranges = <&pinctrl0 0 0 16>;
++      adi,pint = <&pint0 1>;
 +    };
 +
++    gpb: gport@31004080 {
++      compatible = "adi,adsp-port-gpio";
++      gpio-controller;
++      #gpio-cells = <2>;
++      reg = <0x31004080 0x7F>;
++      gpio-ranges = <&pinctrl0 0 16 16>;
++      adi,pint = <&pint0 0>;
++    };
++...
 
 -- 
 2.25.1
