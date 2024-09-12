@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46021EEE24B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A32EEEE250
 	for <soc@archiver.kernel.org>; Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0B878C4CED3; Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DCB0CC4CECC;
-	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+	id 2D015C4CEE0; Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 09CB5C4CED6;
+	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726165214;
-	bh=8dLWDvRZuiv72Q6TAOn6fVt/7YqsuabBUo+o+OGlMyU=;
+	s=k20201202; t=1726165215;
+	bh=ak6ugCgePWMuuhlzPto+EIgq5Wrvc9n4HiCJ3WjxHWQ=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=VqbMc3sSe8XPTG4aKjwtiE7Ni38ETDWMg2YaoyQj7Ap+AW4yBW3ayi7HRhFroDntm
-	 UUj2V4/FktWKGOjQwHeJCWz045YFBknAMWUsHrn/XnjE0+HsDdz7rzHJd9/OLCgXtr
-	 q90ZrDsheE67UQeZrZ9jWZivro2/1ud8zeRFV993OPZShptIbUWs4qbHRhcFycZRup
-	 q/YRQxYfdk0Gyv3lVZyuHI6KXM5NigLBVeitSvHP/5iY/2QVFvTeOkUOvfrs2RbwWq
-	 zfO51uwg4F+NWYmvAVexw2j+KGwoxWb2nsoJUptPgbbd3LWfBoDI6XuV58xMFwHy1x
-	 UFg7epqSnfPfg==
+	b=DUGaqXxKWQ2MyRKhDWTrsqb+VrBv8RZ11ecnbCzhgP7f8KSEmrTbAEpxnIVj+myoh
+	 i6vJvOJ3h0DJ8k/Yqhzvd93jJ15bvbF40c3v9SwoIZLKrxkoT3GwEjr0fY6OOTNl1j
+	 QahLrP7nr+COk9hi5X1cSksbR0qPCU9+hpoHbTjbBEUj7Jm1ZlmTR5dCzEGLVMBEnq
+	 6q3Qf/6LsmPC4HjFOnHw0Pd1kj+QeAWvUuBu+fp19HOUoSWP+nI16dMDhTM8fZkQgX
+	 M32Hjuz9y0MEgl+yUFIL4hY4TTmg6/b/Vm/1+ccHHKPCWuTwsz9dyNiffmKtapk8JN
+	 wR1KeZA7BuItQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC2E4EED63C;
-	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AB1EED63D;
+	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
-Date: Thu, 12 Sep 2024 19:24:47 +0100
-Subject: [PATCH 02/21] reset: Add driver for ADI ADSP-SC5xx reset
- controller
+Date: Thu, 12 Sep 2024 19:24:49 +0100
+Subject: [PATCH 04/21] dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC
+ bindings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240912-test-v1-2-458fa57c8ccf@analog.com>
+Message-Id: <20240912-test-v1-4-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 List-Id: <soc.lore.kernel.org>
@@ -56,11 +56,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=1107;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=1623;
  i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
- bh=6HpYjgEvmaMOI/Jb3fHri0mjaXqIkqikV6XKYOwo4UI=;
- b=IH2NvBCHpRs5VQkod2iVyDR1RXm8CLNExn4siWAW8bwa8goIT5CiqggFT6fdO8v5CDutT0SE6
- WCDnOQOeLYoANdKpXf80tUdcgMKb+KnMrk8RHqJ8/Q6xePGfmRj1xJJ
+ bh=J/EuJUpRixtiC/Xhn+9Y770N03I2X4hm7a/3wJC2XVg=;
+ b=R9KdkvfGVHCd5bCvdZq8qKxmeajLuKI+hlHTFb+pbWAQDWDoXhfEOnOZ5i5NTWG/+O7XX5yRE
+ y6kVkSWYiyfBVn1snKVwFxUZTDwNmRMmpVlpC0KLbcw86AkHCFcMMrz
 X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
  pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
 X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
@@ -70,32 +70,48 @@ Reply-To: arturs.artamonovs@analog.com
 
 From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Adding support for ADI ADSP reset controller. This driver allows
-trigger a software reset.
+add  SoC ADSP-SC5xx
 
 Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
-Co-developed-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 Signed-off-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 ---
- drivers/reset/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-index 27b0bbdfcc044ba58de9df09725ddef7b601c3ea..4d9e83b7ab38287336175d3804f9d2d4d2894595 100644
---- a/drivers/reset/Makefile
-+++ b/drivers/reset/Makefile
-@@ -4,6 +4,7 @@ obj-y += hisilicon/
- obj-y += starfive/
- obj-y += sti/
- obj-y += tegra/
-+obj-$(CONFIG_RESET_SC5XX) += reset-sc5xx.o
- obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
- obj-$(CONFIG_RESET_ATH79) += reset-ath79.o
- obj-$(CONFIG_RESET_AXS10X) += reset-axs10x.o
+diff --git a/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml b/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..fc37242b32b9ca9b82fd5b3e0288642e8c4fd9f0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml
+@@ -0,0 +1,24 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/analog/adi,sc5xx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices SC59X 64-Bit ARM-based Processor Families
++
++maintainers:
++  - Arturs Artamonovs <arturs.artamonovs@analog.com>
++  - Utsav Agarwal <Utsav.Agarwal@analog.com>
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    description: SC59X 64-Bit Boards
++    items:
++      - enum:
++          - adi,sc598-som-ezkit                # Analog Devices SC598 EZKit
++          - adi,sc598-som-ezlite               # Analog Devices SC598 EZLite
++      - const: adi,sc59x-64
++
++additionalProperties: true
 
 -- 
 2.25.1
