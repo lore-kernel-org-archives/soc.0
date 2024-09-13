@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CADDFA374A
-	for <soc@archiver.kernel.org>; Fri, 13 Sep 2024 12:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14826EEE26C
+	for <soc@archiver.kernel.org>; Fri, 13 Sep 2024 12:31:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 35C5FC4AF0D; Fri, 13 Sep 2024 12:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8558C4CED0;
-	Fri, 13 Sep 2024 12:31:44 +0000 (UTC)
+	id 079CFC4AF0C; Fri, 13 Sep 2024 12:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5C2C4AF0B;
+	Fri, 13 Sep 2024 12:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726230708;
-	bh=mrhLbGM4zoekNVG+dFW0cVAaZNJ+Oig1GARw4aCabIs=;
+	s=k20201202; t=1726230711;
+	bh=s3xJG6D/pwss0IUNp6uxa7NHr8odZ+slvD78tK31x2M=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ArTAL3UWlbLLOH4w85SXP9jpoByqVr9vuOi3X5I2pxo4yps4YdPhvpiv4PEGAVK57
-	 +xqOWf9PEJl63MPKBnV2z3tcUAvN4/ELH5x5qH74IerXHufnPOyBBoxaeMXAmq+t/J
-	 yZTkE1nyRyh4zcZqrQS42FSHj3wB/02ZyUefNQDn0NWb+IUgGmISworgFgqBIpJAfS
-	 vCy579CV5iH24Mt9KNCS/+8OvA8XJnbtLFxmQLUzYfYqwwpKGfPIXMTxeQ06r1kv3H
-	 qgoMnW6sWhut13vpdSq7XexMfOznmjuMsuGAci4sP2tWZRhpKlEJSQfEpHnFDGfsZk
-	 UHLeHd/EPDYmQ==
+	b=t20rxUl98iOlGiz0BL79OVk/wy4qcf9gWzFWBrT0ZR/CUdRmHMBBdTmnOQmcq9dsv
+	 NmrOpqvl+cLusyC8XIG6IM5dTQxbHxfbPOFSl48wPKd1jwnnH0w+gGmR65nwv9945u
+	 Y3mHdyQxEAonHp2G3SvmkD9SIlvkTnA2fiyGN4iM+V8BaWQa9BSg0LzPIenucqF56n
+	 EXqOCHvYqVSB8PNwIxy5+qCfuDYh/F23c36cvvpF4HK/XIWr1en5zKy9hW18ZHLJag
+	 EJlD7cXNiWmLgj3WY394PnvjZLrpwWMR98vrYcvm+JKSqQiNGJAJEL4uCvV4q1SsVW
+	 s3qqJu+X0Fzfg==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To: Lee Jones <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
@@ -39,9 +39,9 @@ Cc: Pavel Machek <pavel@ucw.cz>,
 	Conor Dooley <conor+dt@kernel.org>,
 	devicetree@vger.kernel.org,
 	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH leds v3 10/11] leds: turris-omnia: Use uppercase first letter in all comments
-Date: Fri, 13 Sep 2024 14:31:02 +0200
-Message-ID: <20240913123103.21226-11-kabel@kernel.org>
+Subject: [PATCH leds v3 11/11] ARM: dts: turris-omnia: Add global LED brightness change interrupt
+Date: Fri, 13 Sep 2024 14:31:03 +0200
+Message-ID: <20240913123103.21226-12-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240913123103.21226-1-kabel@kernel.org>
 References: <20240913123103.21226-1-kabel@kernel.org>
@@ -49,47 +49,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Change first letter of 4 more comments to uppercase to make the driver
-comments uniform.
+When global LED brightness is changed by pressing the front button on
+Turris Omnia, the MCU can produce an interrupt to the CPU. Add the
+description of this interrupt to the LED controller node.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/leds/leds-turris-omnia.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/leds/leds-turris-omnia.c b/drivers/leds/leds-turris-omnia.c
-index 298bdffd8c40..d7e5f6de0f14 100644
---- a/drivers/leds/leds-turris-omnia.c
-+++ b/drivers/leds/leds-turris-omnia.c
-@@ -235,13 +235,13 @@ static int omnia_led_register(struct i2c_client *client, struct omnia_led *led,
- 	 */
- 	cdev->default_trigger = omnia_hw_trigger.name;
- 
--	/* put the LED into software mode */
-+	/* Put the LED into software mode */
- 	ret = omnia_cmd_write_u8(client, OMNIA_CMD_LED_MODE, OMNIA_CMD_LED_MODE_LED(led->reg) |
- 							     OMNIA_CMD_LED_MODE_USER);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Cannot set LED %pOF to software mode\n", np);
- 
--	/* disable the LED */
-+	/* Disable the LED */
- 	ret = omnia_cmd_write_u8(client, OMNIA_CMD_LED_STATE, OMNIA_CMD_LED_STATE_LED(led->reg));
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Cannot set LED %pOF brightness\n", np);
-@@ -455,10 +455,10 @@ static void omnia_leds_remove(struct i2c_client *client)
- 	if (leds->brightness_kn)
- 		sysfs_put(leds->brightness_kn);
- 
--	/* put all LEDs into default (HW triggered) mode */
-+	/* Put all LEDs into default (HW triggered) mode */
- 	omnia_cmd_write_u8(client, OMNIA_CMD_LED_MODE, OMNIA_CMD_LED_MODE_LED(OMNIA_BOARD_LEDS));
- 
--	/* set all LEDs color to [255, 255, 255] */
-+	/* Set all LEDs color to [255, 255, 255] */
- 	omnia_cmd_set_color(client, OMNIA_BOARD_LEDS, 255, 255, 255);
- }
- 
+diff --git a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
+index 43202890c959..83fe00abd652 100644
+--- a/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
++++ b/arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts
+@@ -251,6 +251,7 @@ mcu: system-controller@2a {
+ 			led-controller@2b {
+ 				compatible = "cznic,turris-omnia-leds";
+ 				reg = <0x2b>;
++				interrupts-extended = <&mcu 11 IRQ_TYPE_NONE>;
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				status = "okay";
 -- 
 2.44.2
 
