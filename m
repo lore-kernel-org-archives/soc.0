@@ -1,114 +1,106 @@
-Return-Path: <SRS0=mfTL=QM=intel.com=lkp@kernel.org>
+Return-Path: <SRS0=h/KC=QM=web.de=Markus.Elfring@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0040C0219D
-	for <soc@archiver.kernel.org>; Sat, 14 Sep 2024 14:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1984C021A8
+	for <soc@archiver.kernel.org>; Sat, 14 Sep 2024 17:15:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 86BFBC4CED0; Sat, 14 Sep 2024 14:30:13 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 786B1C4CECD; Sat, 14 Sep 2024 17:15:49 +0000 (UTC)
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DCC25C4CEC0;
-	Sat, 14 Sep 2024 14:30:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCC25C4CEC0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726324212; x=1757860212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vj0dap+8opSjreuwJLUhajPAlrqrGKJV97jnetQYfZ4=;
-  b=m0KnTf4DaMYsO2AmcRs94chYGo3d9hgfVrySy9U3IN893/SRFQRbCpTV
-   Ywb+Ky+ZAG7mnL224Ane3Dr0dWtsQMmIj1Xc/Ofa6is7/7FsuHzjzzZ0D
-   HwTFh9Q3QyuY2l6ge5zHBeR1rqkHCeipTP8omPDBbCY8QMjVRshimKw43
-   9ElLYSBlxra2+tPg99omM7dHAB7V3PpZnH7EicV1ymbiBdlqJN+oltNCp
-   u9QNKtzm6cWCcuot6vNNSG5MYWP5ntak+Oq3d5qxc72TU3tSjgWv5TWuh
-   dRrOGUDn4O+0TiAMCQ70Akyqw/6uXXJuJWfIYpN4arwnvku6NYx2OLKAP
-   A==;
-X-CSE-ConnectionGUID: YAPNKGWNS82rAGwD4HCsiQ==
-X-CSE-MsgGUID: 4VWFdaE6SYWa76/p2XlzbQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11195"; a="25312611"
-X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
-   d="scan'208";a="25312611"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 07:30:11 -0700
-X-CSE-ConnectionGUID: L/RndIocTvCEN1pVWjT92w==
-X-CSE-MsgGUID: RM/ZJeCFSvqM+AIx3hfyiw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
-   d="scan'208";a="91682817"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 14 Sep 2024 07:30:04 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1spTmj-0007qK-2B;
-	Sat, 14 Sep 2024 14:30:01 +0000
-Date: Sat, 14 Sep 2024 22:29:11 +0800
-From: kernel test robot <lkp@intel.com>
-List-Id: <soc.lore.kernel.org>
-To: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Greg Malysa <greg.malysa@timesys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Utsav Agarwal <Utsav.Agarwal@analog.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-	Arturs Artamonovs <arturs.artamonovs@analog.com>,
-	adsp-linux@analog.com,
-	Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Subject: Re: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
-Message-ID: <202409142215.olyOwnPE-lkp@intel.com>
-References: <20240912-test-v1-9-458fa57c8ccf@analog.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E87BDC4CEC0;
+	Sat, 14 Sep 2024 17:15:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E87BDC4CEC0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1726334120; x=1726938920; i=markus.elfring@web.de;
+	bh=+t3z0lY6Wi+QQz/YvzzBvM5zQR/hzCVK35DvfY6u49Y=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=TH/qJUv8lAJ14MX+E2pXRcb1BUh3hlwtFZLXhV32TWTdJ7D+8uM5xYeUyxHs2bhQ
+	 tlHklcZxZzNdAkXLs1G3U7g5ht+F55QTAfWmerg4lsuMGtxcYxz6ZygtMq68LQSYu
+	 aYVJYu+cw/pX8rLWzjsvXKepiK3iwrQww+MV/eKe+f/8jEBQsuVYlqCFqm8PGXa7I
+	 D4rHd+tvzjvbp9emltm0GzmnIb0hEznVvWKp1IPc2GiXnkXVCggtndXSt8TZIW4sN
+	 oehA2YEHuyNyyqxlsP3Cq5aACKvUkOc4/8sWMXvhHy/RsxD6RM4522v5ebbxiXSRO
+	 QIEY+d5ooXOnHL8gXQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MDMzC-1sgCh40IFy-0082Wi; Sat, 14
+ Sep 2024 19:15:20 +0200
+Message-ID: <b6af2603-7f72-47d7-98b9-6dc2761dfb74@web.de>
+Date: Sat, 14 Sep 2024 19:15:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240912-test-v1-9-458fa57c8ccf@analog.com>
+User-Agent: Mozilla Thunderbird
+List-Id: <soc.lore.kernel.org>
+To: Arturs Artamonovs <Arturs.Artamonovs@analog.com>,
+ Greg Malysa <greg.malysa@timesys.com>,
+ Nathan Barrett-Morrison <nathan.morrison@timesys.com>,
+ Utsav Agarwal <Utsav.Agarwal@analog.com>,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-serial@vger.kernel.org, devicetree@vger.kernel.org, soc@kernel.org,
+ Andi Shyti <andi.shyti@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Olof Johansson
+ <olof@lixom.net>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, adsp-linux@analog.com
+References: <20240912-test-v1-1-458fa57c8ccf@analog.com>
+Subject: Re: [PATCH 01/21] arm64: Add ADI ADSP-SC598 SoC
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240912-test-v1-1-458fa57c8ccf@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pV0uTKYfcGUMdOgO9MqJT1BRxvTzoHwr5Vt05L/dgQGDXgjMhkQ
+ pN+/bQrdI/vRORvoUUSM59SmOZ0GwvJ4rTFRAe2GZND4ey7VoodFBr8goj1Q0BfJBY3hFzX
+ eICHcTkByWsNPptIFinbcj9lNfn7FsAuDf967yNX0P9v31RBZN885aP1YeFm2IZxyD3Bemk
+ 1XQQN9Vdeu1OggOAxtuYA==
+UI-OutboundReport: notjunk:1;M01:P0:WR3H5j/uLjc=;Z3lo8gIY+Jv7jyzsqSgLVpi7AAD
+ NUy/0l7boyOp4GUAXV0lTzdayMVEksKGX3YxME1Cn/Rxm2VRAEJtR/NiEq3NmX7cclzekYXnV
+ /YPgqMyHrwIEd+1lBVxRbyXshXW1/TzslerwGXYG/SlnLGgIDMEqnzVn4kwQLZBVjjhRlTmSh
+ SqzuC7r/VH4w0I/uTnpJOim3RD7OssNKnRk9qXwxTKNrjfWECCdJlG8rFd+IRDShlg8OGcVRS
+ XUv8bLAl93Bceyc5Qg2svL54Akk6wH9AS+M5GgL+5w/7AMajN8p4CtKJo+Dtr6DP/fHUCLabP
+ iV37/Z279FU9QcWQfEuBwRZJs3/uZHYcdb9MGu/r0/kptCPDpce3X92jImMITfbAqpiZmLqFN
+ 7zuA8Ox3XgmgZ/Y81/PwdemgweyJ7YdEXq8BbKNRxNxCiiMEjLj8Wh2sCD+XjyF4+/j2WdQ6m
+ 1fK/Vjehec4fHIYFR0gyteRqpW0yLjBdk/42QqsGrCwDu0nlry/VEiMO5CDBWu095Vg5S8NfB
+ 8ushY0UKPp7ZGv6dMPE1rG//7OJkh9FFHNnNItv8tfxgDD56MrbttOo7r7UsPPwQs14mFKhjo
+ P0IT6pyL17kH6VF+wlCp+tfsOhwez6fkHauGXHfvjAPauiecoEk6Ww6wxekFSjMsf5QkmcG1T
+ S51de4azvhLzYpG1895bZq8oJAlqyFyKkI5m0PvDQuDtzHvCbHqfsvqaxcdjDDNp/d5wduvbd
+ 4yhXFOpIYYhmnFM+OoyIjlVx7p4nESJnylU8oiUlNYGrM+xggceMQL47pv/xSMYbgg+67nGGQ
+ wxEW3VdgLj1pzALYjwlXTOrw==
 
-Hi Arturs,
+=E2=80=A6
+> +++ b/drivers/soc/adi/system.c
+> @@ -0,0 +1,257 @@
+=E2=80=A6
+> +static void adi_system_config_remove(struct platform_device *pdev)
++{
+> +	struct adi_system_config *config =3D platform_get_drvdata(pdev);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&adi_system_config_lock, flags);
+> +	list_del(&config->list);
+> +	spin_unlock_irqrestore(&adi_system_config_lock, flags);
+> +}
+=E2=80=A6
 
-kernel test robot noticed the following build errors:
+Under which circumstances would you become interested to apply a statement
+like =E2=80=9Cguard(spinlock_irqsave)(&adi_system_config_lock);=E2=80=9D?
+https://elixir.bootlin.com/linux/v6.11-rc7/source/include/linux/spinlock.h=
+#L572
 
-[auto build test ERROR on da3ea35007d0af457a0afc87e84fddaebc4e0b63]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arturs-Artamonovs-via-B4-Relay/arm64-Add-ADI-ADSP-SC598-SoC/20240913-022308
-base:   da3ea35007d0af457a0afc87e84fddaebc4e0b63
-patch link:    https://lore.kernel.org/r/20240912-test-v1-9-458fa57c8ccf%40analog.com
-patch subject: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
-config: arm64-randconfig-r071-20240914 (https://download.01.org/0day-ci/archive/20240914/202409142215.olyOwnPE-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409142215.olyOwnPE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409142215.olyOwnPE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: drivers/gpio/gpio-adi-adsp-port.o: in function `adsp_gpio_probe':
->> gpio-adi-adsp-port.c:(.text+0x1cc): undefined reference to `adsp_attach_pint_to_gpio'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Markus
