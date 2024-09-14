@@ -4,103 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86C96C02181
-	for <soc@archiver.kernel.org>; Sat, 14 Sep 2024 07:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCD4AC0219D
+	for <soc@archiver.kernel.org>; Sat, 14 Sep 2024 14:19:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40A15C4CED1; Sat, 14 Sep 2024 07:51:55 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	id 920BAC4CED1; Sat, 14 Sep 2024 14:19:12 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 96B5BC4CEC0;
-	Sat, 14 Sep 2024 07:51:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 96B5BC4CEC0
+	by smtp.kernel.org (Postfix) with ESMTPS id 21D77C4CEC0;
+	Sat, 14 Sep 2024 14:19:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21D77C4CEC0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726300314; x=1757836314;
+  t=1726323552; x=1757859552;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OKnTmCysulXKbT4ZKNh5klyTLSHK15YdICCeMSP/N9o=;
-  b=fhmF4/vTATu46LsdtjZycXOlXt40gnyZa0zzA5uMbstbT5d8ACSl+oG6
-   noQ12xVLWkn0yX5e4LhQ5r3+V3hwKYjB+IbidMDxIYpK/YWZUKv+bzizA
-   m4+uB0++hD5amybRxAWZw4PIpkQEUGx9rNkYBmaH8kYT6DKDrHRalC2bm
-   ga7gfqqE+uydg/aUZaQSzPlR1/QX00dnv9m7N8QnxxF6493TGOAsCo1/a
-   PhLEOREr6Y48u7E0GoykQ35XCL3vRHmHtoCNuBN+zwLSJooqN6PyaE88g
-   xcI7R9UxiMiSeyD9h0R6KZ5C2O2hUEdl4sNVsn0NI0HHC9RxE1O4mMYQt
-   g==;
-X-CSE-ConnectionGUID: VS79RTd1RF6RzSIPDPGOCg==
-X-CSE-MsgGUID: PFyBMmjkQXeIDNA07VPf1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25329335"
-X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="25329335"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 00:51:53 -0700
-X-CSE-ConnectionGUID: ZqZxkgsFSfejP6fPpLpfSA==
-X-CSE-MsgGUID: 5pLASHcsRF6ca0W7KIuHVQ==
+  bh=N9wMgdRefGu42K7ypeuSJnPQEd7Ns/OJA/BRmLa/8qc=;
+  b=USgBtCjVcxufnJh9KVshcT6/3aSddwTsIRIxa+Ulnels+esyy0gAXEV5
+   PNr3wAGmQi8cgru5XhKuinNueGZcFwEpm0rFBztt5uzCOm77k2vLGLJU8
+   2Z0nq27B7TjEI7DJoTe7/EdyIwRLmoUR1k52Aw1Pn1DFwN9oPTKN+mZ89
+   5/lXiJhlrhm+GJzMLX1Mhlf9P2/34yeY6EVYNhPS5vqmsBlvYHMF7bI2d
+   B5TUdbze0dKXJUHn/R8R474SKgwNYd1eqwdvgifl5IWm2sUDwklZOlq42
+   WYUJr/ZbWJm4IEPZKh9j9LYBAqTaXcSxhb7V6s8fKHnYXNlTpGjUTA82N
+   w==;
+X-CSE-ConnectionGUID: MGj6LDNYTEa0ueo+8eGmLg==
+X-CSE-MsgGUID: M+SfikP9SZeWPAWYB0SJ2g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11195"; a="25090389"
+X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
+   d="scan'208";a="25090389"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 07:19:11 -0700
+X-CSE-ConnectionGUID: bLVvHNP4RYS89Cob7sBRYA==
+X-CSE-MsgGUID: 1WBix8DISMO95aCgNnVb5w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="68666216"
+X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
+   d="scan'208";a="99080744"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 14 Sep 2024 00:51:49 -0700
+  by orviesa002.jf.intel.com with ESMTP; 14 Sep 2024 07:19:03 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spNZK-0007Vq-1y;
-	Sat, 14 Sep 2024 07:51:46 +0000
-Date: Sat, 14 Sep 2024 15:50:51 +0800
+	id 1spTc5-0007pg-0v;
+	Sat, 14 Sep 2024 14:19:01 +0000
+Date: Sat, 14 Sep 2024 22:18:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Lee Jones <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
+To: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Greg Malysa <greg.malysa@timesys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH leds v3 02/11] leds: turris-omnia: Use command execution
- functions from the MCU driver
-Message-ID: <202409141525.4s6yDTJw-lkp@intel.com>
-References: <20240913123103.21226-3-kabel@kernel.org>
+	Conor Dooley <conor+dt@kernel.org>,
+	Utsav Agarwal <Utsav.Agarwal@analog.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+	Arturs Artamonovs <arturs.artamonovs@analog.com>,
+	adsp-linux@analog.com,
+	Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Subject: Re: [PATCH 07/21] clock: Add driver for ADI ADSP-SC5xx clock
+Message-ID: <202409142102.LvuMEIro-lkp@intel.com>
+References: <20240912-test-v1-7-458fa57c8ccf@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240913123103.21226-3-kabel@kernel.org>
+In-Reply-To: <20240912-test-v1-7-458fa57c8ccf@analog.com>
 
-Hi Marek,
+Hi Arturs,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on next-20240913]
-[also build test ERROR on v6.11-rc7]
-[cannot apply to lee-leds/for-leds-next robh/for-next linus/master v6.11-rc7 v6.11-rc6 v6.11-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on da3ea35007d0af457a0afc87e84fddaebc4e0b63]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Beh-n/turris-omnia-mcu-interface-h-Move-command-execution-function-to-global-header/20240913-203320
-base:   next-20240913
-patch link:    https://lore.kernel.org/r/20240913123103.21226-3-kabel%40kernel.org
-patch subject: [PATCH leds v3 02/11] leds: turris-omnia: Use command execution functions from the MCU driver
-config: i386-buildonly-randconfig-002-20240914 (https://download.01.org/0day-ci/archive/20240914/202409141525.4s6yDTJw-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Arturs-Artamonovs-via-B4-Relay/arm64-Add-ADI-ADSP-SC598-SoC/20240913-022308
+base:   da3ea35007d0af457a0afc87e84fddaebc4e0b63
+patch link:    https://lore.kernel.org/r/20240912-test-v1-7-458fa57c8ccf%40analog.com
+patch subject: [PATCH 07/21] clock: Add driver for ADI ADSP-SC5xx clock
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141525.4s6yDTJw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409141525.4s6yDTJw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409142102.LvuMEIro-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+includecheck warnings: (new ones prefixed by >>)
+>> drivers/clk/adi/clk-adi-sc598.c: linux/clk.h is included more than once.
 
->> ERROR: modpost: "omnia_cmd_write_read" [drivers/leds/leds-turris-omnia.ko] undefined!
+vim +9 drivers/clk/adi/clk-adi-sc598.c
+
+   > 9	#include <linux/clk.h>
+    10	#include <linux/clk-provider.h>
+  > 11	#include <linux/clk.h>
+    12	#include <linux/err.h>
+    13	#include <linux/module.h>
+    14	#include <linux/of_address.h>
+    15	
 
 -- 
 0-DAY CI Kernel Test Service
