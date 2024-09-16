@@ -4,27 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ABE3C3ABB2
-	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 06:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2402DC3ABA2
+	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 06:45:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 36CEEC4AF0E; Mon, 16 Sep 2024 06:44:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779A5C4CEC5;
-	Mon, 16 Sep 2024 06:44:26 +0000 (UTC)
+	id 0CE70C4CED0; Mon, 16 Sep 2024 06:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E9EC4CECD;
+	Mon, 16 Sep 2024 06:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726469074;
-	bh=H9hFw05L/Vel2NmMS5LdaByAMMYNDoeQZVFZ0BCxenc=;
+	s=k20201202; t=1726469129;
+	bh=7DM+Ov2/kRA3gd1/9xGIMENF6W/b0RWY2rLuI3u+crk=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=sGOdMWJGcBVfSTewzvrbH35X5Fl49Rl4ggKhe23bhxqyTY0UNRlQYG66/iFaRjqMz
-	 naRPiBZYDpAsJP9x3nbKKmK1iZFtiWIx4o7U1AaXWLp0om2bz7NXMpNhMfBR2C7KAH
-	 ao60mAA9h+j+cY9dVha7NGK8dR88t7gdH4KQFzGsDWOvrK17/EJ8hifX3kVgKObXoi
-	 Ce1d+hQ6UXugCduAsrNtYnAXmOqGq2f+2tXItIsjqKyYxQOF4vhIgW6RlCCu98pR21
-	 mc/g4hnEwQqQfOfC5XZg1+3NVTcGkPwCypR+xVSJjzZiqea2g1Ii9jb7p3iLOheSsH
-	 MkIz7J4g3Dymg==
-Message-ID: <7e242bbe-5ffa-464d-b5b4-36f42e511b2c@kernel.org>
-Date: Mon, 16 Sep 2024 08:44:24 +0200
+	b=r6sltMgRvPI+I1mKnDaWpMYk7jSIsBDzE+MOjwz4HouFlKs/2kEM8ByZeSknlJpqn
+	 a5ZNk2ve8PvE/CF0STNksoUlLmvc/yRpoDMkuzlqYw9HsZehzwSqYH8mcPfvB1mkJg
+	 3GztLlI7rgTXjs8yYBuHYLjHYBhToDsZL5bJazN4NhCD4VhctDpwdQH5LD2l+/+MKe
+	 ot7gyB2aUcnLr26dUXtrQtmNm4NIlvLWhS8qNGVI+BLeKOVaSm+sNE5odI3m/A5vzH
+	 AQlZlbn+IX3cBCjZw8RMZxI+Y4RIaw+j4Q3SKxJNUwjYIJ4AGVTpmATomnEGIxbY0E
+	 zznreorfRbQew==
+Message-ID: <7796208a-14cf-470e-8d95-bfdd6a1ec2b5@kernel.org>
+Date: Mon, 16 Sep 2024 08:45:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/21] dt-bindigs: arm64: adi,sc598 bindings
+Subject: Re: [PATCH 04/21] dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC
+ bindings
 List-Id: <soc.lore.kernel.org>
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
@@ -44,7 +45,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-3-458fa57c8ccf@analog.com>
+ <20240912-test-v1-4-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -90,90 +91,67 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-3-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-4-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> Bindigs for ADI ADSP-SC5xx reset controller
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-
-It is dt-bindings: soc: adi:... if it was in soc.
-
-
+> add  SoC ADSP-SC5xx
 > 
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
-> Co-developed-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 > Signed-off-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 > ---
->  .../bindings/soc/adi/adi,reset-controller.yaml     | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
+>  .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  | 24 ++++++++++++++++++++++
+
+There is no arm64 prefix above. Fix subject.
+
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
+>  1 file changed, 24 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/adi/adi,reset-controller.yaml b/Documentation/devicetree/bindings/soc/adi/adi,reset-controller.yaml
-
-Nope, don't just dump stuff to soc. This is reset controller so goes to
-reset.
-
+> diff --git a/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml b/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..7a6df1cfb709d818d5e3dbcd202938d6aaaaaa9b
+> index 0000000000000000000000000000000000000000..fc37242b32b9ca9b82fd5b3e0288642e8c4fd9f0
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/adi/adi,reset-controller.yaml
-> @@ -0,0 +1,38 @@
+> +++ b/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml
+> @@ -0,0 +1,24 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/soc/adi/adi,reset-controller.yaml#
+> +$id: http://devicetree.org/schemas/arm/analog/adi,sc5xx.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Analog Devices Reset Controller for SC5XX processor family
+> +title: Analog Devices SC59X 64-Bit ARM-based Processor Families
 > +
 > +maintainers:
 > +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
 > +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
 > +
-> +description: |
-> +  SHARC and ARM core reset control unit for starting/stopping/resetting
-> +  processors
-> +
 > +properties:
+> +  $nodename:
+> +    const: '/'
 > +  compatible:
-> +    enum:
-> +      - adi,reset-controller
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    rcu: rcu@3108c000 {
+> +    description: SC59X 64-Bit Boards
+> +    items:
+> +      - enum:
+> +          - adi,sc598-som-ezkit                # Analog Devices SC598 EZKit
+> +          - adi,sc598-som-ezlite               # Analog Devices SC598 EZLite
+> +      - const: adi,sc59x-64
 
-Drop unused label.
+sc59x is incorrect. Enum above says sc598. Define what is the SoC here.
+You cannot have compatible for families.
 
-> +      compatible = "adi,reset-controller";
-> +      reg = <0x3108c000 0x1000>;
-> +      status = "okay";
-
-Drop
-
-> +    };
 > +
+> +additionalProperties: true
 > 
 
 Best regards,
