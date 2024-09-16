@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C42C3ABB2
-	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 12:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92C0FC3ABCE
+	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 12:50:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 51DB4C4CEC7; Mon, 16 Sep 2024 12:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A2BC4CEC4;
-	Mon, 16 Sep 2024 12:50:30 +0000 (UTC)
+	id 839EAC4CEC7; Mon, 16 Sep 2024 12:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E279C4CEC4;
+	Mon, 16 Sep 2024 12:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726491030;
-	bh=1FHQ/Pk8ASyqmm5Vc6rTwBVID2dJYwIxYatzj5Y8dug=;
+	s=k20201202; t=1726491031;
+	bh=7O3k5BJXzSP03glxRdfndy3nZAlKKLS0txnqq3RfT2k=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=GVpG91XheR7xxhrniSIY8Dk8yKhwIdDPcJ/eP2oGfn2UxmCdIyVEg7b/cuJGn8e4B
-	 Q2eCei71W3diWHCXkICHyccdBGfeojro02E8xTueqHaL0OrfbI9+GSeUPFO0ZSsR9Y
-	 Xfd84Mr9m/jpoLG87y8G7YVPP1ARGc+sm3/C/fcpKWqZ4qSzwK3y5TnFT7Z9Lid+8w
-	 fulM9oM++9lpMe8UrhluAt4Pgu4IvxStxgbA4selxhWECAD49S2iyMDi5/VHXeKXMB
-	 RCg8l0ihrbyNfbdMtlXXKTpkMGLFnnDv7HVaiyb3JMNnoHU3+LgU4jIlZ18mI7sw0X
-	 LsnLejsEmNsnw==
+	b=LZklKZJMP0LoZhU3t3W7+eeEssDeX7kt0SzvTIW0MVfF/I7AfNDvyvqfj0zno5oDt
+	 6RIoGfos0nCV/0OBOGentH3b9nEYe8Rc5BAkpowtCSL8BcMBf0cdtpMKHRnwPFW0Ye
+	 zOByWjIQ9QeWL9mw9JM2vpgAsEActMSnFjqmagu4SDM2mCI4iLAl2k2v3xEtKlv56p
+	 A4mIDnj1eK4rMecWsB8FeWZSbNJmi7EQMpeT1VVuNDTB6yn7O3v9kb7wgYfXbX+TkS
+	 YWmyt6/gwo2I27eRM9wCTwSWZRfjv7qbVRM0DJWsm3ybOPjSmavCpmdJyYWDUnsoMV
+	 +zHmdPHjiBXmA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB3AD3806644;
-	Mon, 16 Sep 2024 12:50:32 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BFE3806644;
+	Mon, 16 Sep 2024 12:50:34 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dmaengine: cirrus: use snprintf() to calm down gcc 13.3.0
+Subject: Re: [PATCH] pinctrl: ep93xx: Fix raster pins typo
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172649103177.3685310.13348352806380971292.git-patchwork-notify@kernel.org>
-Date: Mon, 16 Sep 2024 12:50:31 +0000
-References: <b1f03ac53b358c135516bec98e626c98aee9d867.camel@gmail.com>
-In-Reply-To: <b1f03ac53b358c135516bec98e626c98aee9d867.camel@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ <172649103300.3685310.9126831526608464414.git-patchwork-notify@kernel.org>
+Date: Mon, 16 Sep 2024 12:50:33 +0000
+References: <20240913045829.11904-1-nikita.shubin@maquefel.me>
+In-Reply-To: <20240913045829.11904-1-nikita.shubin@maquefel.me>
+To: Nikita Shubin <nikita.shubin@maquefel.me>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,27 +42,20 @@ Hello:
 This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 12 Sep 2024 16:21:06 +0200 you wrote:
-> Even though it's a false positive (highest channel number is "9"), refer to
-> "struct ep93xx_edma_data edma_m2p", we can avoid new warning by using
-> snprintf().
+On Fri, 13 Sep 2024 07:58:29 +0300 you wrote:
+> Fix raster_on_sdram0_pins used in PMX_GROUP() instead of
+> raster_on_sdram3_pins as it should be.
 > 
->    drivers/dma/ep93xx_dma.c: In function 'ep93xx_dma_of_probe':
-> >> drivers/dma/ep93xx_dma.c:1365:51: warning: '%u' directive writing between 1 and 8 bytes into a region of size 2 [-Wformat-overflow=]
->     1365 |                         sprintf(dma_clk_name, "m2p%u", i);
->          |                                                   ^~
->    drivers/dma/ep93xx_dma.c:1365:47: note: directive argument in the range [0, 16777216]
->     1365 |                         sprintf(dma_clk_name, "m2p%u", i);
->          |                                               ^~~~~~~
->    drivers/dma/ep93xx_dma.c:1365:25: note: 'sprintf' output between 5 and 12 bytes into a destination of size 5
->     1365 |                         sprintf(dma_clk_name, "m2p%u", i);
->          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Fixes: d1661439f5a3 ("pinctrl: add a Cirrus ep93xx SoC pin controller")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202409130426.1OzNAC9M-lkp@intel.com/
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 > 
 > [...]
 
 Here is the summary with links:
-  - dmaengine: cirrus: use snprintf() to calm down gcc 13.3.0
-    https://git.kernel.org/soc/soc/c/d7333f9d3377
+  - pinctrl: ep93xx: Fix raster pins typo
+    https://git.kernel.org/soc/soc/c/7427c5b34fbe
 
 You are awesome, thank you!
 -- 
