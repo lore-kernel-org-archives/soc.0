@@ -1,76 +1,186 @@
-Return-Path: <krzk@kernel.org>
+Return-Path: <SRS0=FrRY=QO=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB0E3C3ABB2
-	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 14:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63516C3ABA2
+	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 16:30:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9EE4BC4CED1; Mon, 16 Sep 2024 14:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D35C4CEC4;
-	Mon, 16 Sep 2024 14:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726497196;
-	bh=Z/CvUXkaSdf/EtGRsR+rg0pbyNHYk1lP5H8wfJohrCk=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=RHTXLGmwdBWmuGb1YCSXlEJ6JJXRy/aEN74KjHz655i3E4ib/JztMDMuelv4m/fxh
-	 7yZs2ijP1K40DcUcVQvAxZj7vouCPpyjrQGsuUzFD7aqM2OuLpm+seZHIobCKx+cbe
-	 Ox9XZvDpzxojPEY4eHzYxo2oOorxaPmD1rWbOXOyTOpoFdK1a3pfoFBkPvPo/e24B4
-	 wfCKzHazw7j+AWiwDU9+RyCIbHBjrysLRBWVwCz8xE/Wix4mcraIy5dfcm9I1TglrN
-	 5+5zMHfY8ErDkz2e0KwSWQw4eeB6NAg+gRfD6TYDSmy2xR95i9S4TNlFy1EwVTSx7e
-	 mxgypYXzaL8+w==
-Date: Mon, 16 Sep 2024 16:33:13 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH leds v3 05/11] dt-bindings: leds:
- cznic,turris-omnia-leds: Allow interrupts property
-Message-ID: <rchpwlmgzsoj37oz6plzqcyxdyzpcdqtpmzik2gcflakeca3rm@vcdrovzs4nzh>
-References: <20240913123103.21226-1-kabel@kernel.org>
- <20240913123103.21226-6-kabel@kernel.org>
+	id 2E92FC4CEC5; Mon, 16 Sep 2024 16:30:41 +0000 (UTC)
+Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 83D7BC4CEC4
+	for <soc@kernel.org>; Mon, 16 Sep 2024 16:30:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83D7BC4CEC4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 834B51140322;
+	Mon, 16 Sep 2024 12:30:38 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Mon, 16 Sep 2024 12:30:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1726504238; x=1726590638; bh=TO
+	ErWWmlsrN6/7w+l7WG9QUiNt0psI2e8M+zi33bnpc=; b=Jjwu9EweZK1zN1wFGD
+	douoptrL+3OFzTNtAMt/V4q3RvgsQdsRChPnlEFsZuEOrsIIJwT6fdvqph36GCwW
+	ay8Zb5X7ydw/6G1H26O/V/YTdVlUjvCk/Bn6cD+xR2Bu4GSDvdvM8rfFfBkHsvxL
+	+RucP1S/gwtvszQxvaILbw5nq3T8T4Q1W+QuVRGbGFAnDiTrHr41jLhxNbOdsbHa
+	YuUHMyjlEC7kZ5azyUPpHRlto2cnZPJJKAt84Z7Rjo1YWfqTPhFz7IZYq/RNNMix
+	fJpmKtRxutkI/8vNPVGqTaD+a8aJlJtDq3HpAYfKt7nebm3eIHZ8PTW5P0vY0M++
+	LBPw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1726504238; x=1726590638; bh=TOErWWmlsrN6/
+	7w+l7WG9QUiNt0psI2e8M+zi33bnpc=; b=SPSC1aRhAA39kc0nIfNP5rjgX1cKy
+	PoIXfjdHedPAr2BPlpkcOnDJgugUfpYMViYX4XCIrIU4Op1U4EOg9DFc2eMjiycu
+	N9IveiiaxYdM4Ryco0LsBbDClas/1E/0M/b16sIpZCqrEiME2j5tJPyzx0YXOkcm
+	q5ywojycVWtoirsAOIdlPCKQvm44xgzl3327M3RtZxEHFSFqwowwDLSqRTEg+woT
+	cPBPfXdx0+o1y+Gjoo+TPGLfz3TYobBTMI8tqjUrFZM33TM55GhBcINxeF0xJD9n
+	RHvNC+4IP8jRisxs1awoqPSYGM+aD3dyQTOL6C9tTr9l2HazlJ2coAIOg==
+X-ME-Sender: <xms:Ll3oZm42iB_gzmb_xcysooULcPZJnh_Smh9Moi6G7-v8RStdMzuOeQ>
+    <xme:Ll3oZv4cRKetJVujOuvyRCpD7KIQEOlJMZxL_Y9LLml9u0fbwtnNtiXB3r0eTyqPp
+    wIqK110ykecvF6vRew>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudekhedguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkufgtgfesthhqredtredtjeen
+    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
+    gvqeenucggtffrrghtthgvrhhnpeelveehkeffgfdtheekveehhfdtheefkefggeekheeu
+    hffgheejteevgfdtuddvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhm
+    ohguvgepshhmthhpohhuthdprhgtphhtthhopehsohgtsehkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrh
+    gruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdr
+    khgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:Ll3oZlfklF9X12kbua5voodlyrQf-PIelxyguA05YpYGYPis0I9q0A>
+    <xmx:Ll3oZjLPoq4vzce2nUVpCjIMyZc12axhHhRZh9eJ7BPSKGEa6R-meA>
+    <xmx:Ll3oZqLo1DsfUTxMImF_ZjEvgh8Ljl47gVqSCz9-MqtpNAtuq1_2kg>
+    <xmx:Ll3oZkw15zR8ojJJ8YaF8NcNZwu-0KdjLIahyACRSHM1Dye8-xBipg>
+    <xmx:Ll3oZm14jDkCJmiaJvgx0cfsyKyOAbc_WborN3QT5VLWmBk0wfRZ71jw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 08272222006F; Mon, 16 Sep 2024 12:30:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 MIME-Version: 1.0
+Date: Mon, 16 Sep 2024 16:29:47 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <a40b4b3a-5d61-4bef-b367-745ba058be9e@app.fastmail.com>
+Subject: [GIT PULL 0/4] 
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240913123103.21226-6-kabel@kernel.org>
 
-On Fri, Sep 13, 2024 at 02:30:57PM +0200, Marek Beh=C3=BAn wrote:
-> Extend the cznic,turris-omnia-leds binding with interrupts property,
-> specifying the global LED brightness changed by button press interrupt.
->=20
-> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
-> ---
->  .../devicetree/bindings/leds/cznic,turris-omnia-leds.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/leds/cznic,turris-omnia-le=
-ds.yaml b/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.ya=
-ml
-> index 34ef5215c150..f52f6304c79e 100644
-> --- a/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml
-> +++ b/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml
-> @@ -23,6 +23,12 @@ properties:
->      description: I2C slave address of the microcontroller.
->      maxItems: 1
-> =20
-> +  interrupts:
-> +    description:
-> +      Specifier for the global LED brightness changed by front button pr=
-ess
-> +      interrupt.
+Hi Linus,
 
-This "front button press" concerns me that you just hooked here
-gpio-key. Are you sure that this is the physical interrupt line going to
-this device?
+These are the usual four branches from the SoC tree, with around
+900 non-merge changesets from 220 individual authors. I hope to
+send one more pull request later for the conversion of ep93xx
+to devicetree, but I still applied regression fixes to that one
+today so I'm giving it some more time to make sure it won't
+cause other stuff to fail.
 
-Best regards,
-Krzysztof
+There are four platforms that make up most of the changes
+by size and number of patches:
 
+ - NXP gets a lot of minor DT improvements as well as a
+   good chunk of the driver updates, but only three new
+   machines.
+ - Rockchips and Aspeed have the largest size overall,
+   mainly from new board additions, so there are fewer
+   patches.
+ - Qualcomm as usual has a lot of everything including
+   several new Snapdragon X1E laptops.
+
+Another small but notable addition is initial support for
+the Raspberry Pi 5, which has taken a while to get into
+shape.
+
+The driver changes are somewhat larger than normal, but
+are still dwarfed by the devicetree updates.
+
+The most active contributers by number of patches are:
+     62 Krzysztof Kozlowski
+     43 Frank Li
+     37 Herve Codina
+     35 Nikita Shubin
+     22 Heiko Stuebner
+     18 Yang Chen
+     16 Marek Beh=C3=BAn
+     16 Geert Uytterhoeven
+     15 Peng Fan
+     14 Markus Niebel
+     14 Lad Prabhakar
+     14 Beleswar Padhi
+     12 Xianwei Zhao
+     12 Rayyan Ansari
+     11 Svyatoslav Ryhel
+     11 Peter Yin
+     11 Konrad Dybcio
+     11 Fabio Estevam
+     11 Dang Huynh
+     11 Cristian Marussi
+     11 Alexander Stein
+     10 Sudeep Holla
+     10 Marek Vasut
+     10 Diogo Ivo
+
+Dirstat:
+   0.4% Documentation/devicetree/bindings/arm/
+   0.7% Documentation/devicetree/bindings/clock/
+   0.6% Documentation/devicetree/bindings/pinctrl/
+   0.7% Documentation/devicetree/bindings/soc/fsl/cpm_qe/
+   0.3% Documentation/devicetree/bindings/soc/
+   0.6% Documentation/devicetree/bindings/
+  11.3% arch/arm/boot/dts/aspeed/
+   1.6% arch/arm/boot/dts/broadcom/
+   0.3% arch/arm/boot/dts/microchip/
+   2.6% arch/arm/boot/dts/nvidia/
+   2.1% arch/arm/boot/dts/nxp/imx/
+   1.3% arch/arm/boot/dts/qcom/
+   0.6% arch/arm/boot/dts/rockchip/
+   1.9% arch/arm/boot/dts/st/
+   0.3% arch/arm/boot/dts/
+   0.4% arch/arm/
+   2.1% arch/arm64/boot/dts/amlogic/
+   0.5% arch/arm64/boot/dts/broadcom/
+   9.8% arch/arm64/boot/dts/freescale/
+   1.7% arch/arm64/boot/dts/mediatek/
+   0.3% arch/arm64/boot/dts/nuvoton/
+   1.6% arch/arm64/boot/dts/nvidia/
+   9.5% arch/arm64/boot/dts/qcom/
+   4.1% arch/arm64/boot/dts/renesas/
+  20.2% arch/arm64/boot/dts/rockchip/
+   2.8% arch/arm64/boot/dts/ti/
+   0.6% arch/arm64/boot/dts/
+   0.3% arch/riscv/boot/dts/sophgo/
+   0.4% drivers/firmware/arm_ffa/
+   1.0% drivers/firmware/arm_scmi/transports/
+   4.5% drivers/firmware/arm_scmi/vendors/imx/
+   1.6% drivers/firmware/arm_scmi/
+   0.2% drivers/firmware/imx/
+   0.8% drivers/firmware/
+   0.3% drivers/input/keyboard/
+   0.2% drivers/memory/samsung/
+   0.8% drivers/memory/tegra/
+   0.5% drivers/memory/
+   1.1% drivers/reset/
+   0.2% drivers/rtc/
+   2.9% drivers/soc/fsl/qe/
+   0.3% drivers/soc/mediatek/
+   0.6% drivers/soc/qcom/
+   0.5% drivers/soc/ti/
+   0.3% drivers/soc/
+   1.5% include/dt-bindings/clock/
+   0.2% include/linux/
