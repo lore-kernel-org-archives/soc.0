@@ -4,28 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C78CBC3ABA2
-	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 06:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F3FFC3ABB2
+	for <soc@archiver.kernel.org>; Mon, 16 Sep 2024 06:50:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A4F06C4AF0B; Mon, 16 Sep 2024 06:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB561C4CEC4;
-	Mon, 16 Sep 2024 06:48:05 +0000 (UTC)
+	id F2231C4AF0B; Mon, 16 Sep 2024 06:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA69C4CEC4;
+	Mon, 16 Sep 2024 06:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726469295;
-	bh=V5pOIKNK/iaYsbW5aFd2nxQlgjiwL2xKi+uzlHVVSLc=;
+	s=k20201202; t=1726469439;
+	bh=x4zKM6dHXR4Yem4FMLNEqU3wDBCmOyQz0b+ZFXsjo+k=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=qpidWDCVMKahZQWfPqTbqjccBRhUCSoWLPEu1duJiIAMaF5lMLq4nJ0NBEQ4UYAbJ
-	 5sYQpW01tSP9ZPBDqPpsoqnPiQCVoJHgxfTW0CoF5D4AvzTIEFSSIMH6fCSX9sBt0/
-	 knnN/1K0umkdq52aiFsq0n0OrDNC5VujVwI2Bo8Dqbj2x5fxAgGEWX4airQqa3R+S0
-	 8JbydBPNK/R5e0NX+a0LO3znSfXDiw5xoS2rT3Nlx+J6w8olNIu5n7RtX1z2yfSTo/
-	 05sKuYhr45aw9mp5G852Fdt3zQ6j/HFfqeBbSZll1sRqMzHfbbn31YVbQeJjj635N8
-	 qPoQaw2oGzo7Q==
-Message-ID: <39f7ad59-f853-4a98-8832-d6d7b5a50ad6@kernel.org>
-Date: Mon, 16 Sep 2024 08:48:03 +0200
+	b=Y9BU/6iEsuC3ZxlE3Z1jalrWB0NnAOsY7syK/TpdTw1Yqj/X1o+ZpyT5pGXykgMlv
+	 9xu2mfM8L9cVvgi9wAXp/Lr18n7pHaPKhP5IJqTX5MTAVA3f3KgoExLLoyD1Dg+b1B
+	 VkicFtyd1KNVM4XTf4bHBtulXXw75jyyAeaOZ0Vc6CGBksDyanFsiJqNfTQnW2HqW4
+	 0AyBNr2MlyC+fnew1zDIn0wU2Ci4/sP8vRAu9CVt8Ow1542DcuFIlahn/7677xe2ez
+	 nabclv+oSVqELZ5DH7+duWUrLhoSDOkf+YkDL2uooKxWDG017nVXz/Oq6FooV16OdS
+	 HzsuflNzuDfcw==
+Message-ID: <f2c6cc62-e063-4482-a516-c6aa78d205cc@kernel.org>
+Date: Mon, 16 Sep 2024 08:50:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/21] include: dt-binding: clock: add adi clock header
- file
+Subject: Re: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
 List-Id: <soc.lore.kernel.org>
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
@@ -45,7 +44,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-6-458fa57c8ccf@analog.com>
+ <20240912-test-v1-9-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,25 +90,38 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-6-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-9-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> Add adi clock driver header file
+> Add ADSP-SC5xx GPIO driver.
+> - Support all GPIO ports
+> - Each gpio support seperate PINT interrupt controller
 > 
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
-> ---
->  include/dt-bindings/clock/adi-sc5xx-clock.h | 93 +++++++++++++++++++++++++++++
 
-Also, filename as compatible, which would be easily visible if you
-organized the patches correctly.
+Your SoB chain is odd. Author is Greg, but Greg is not the first person
+in the chain? And no final SoB? This is really odd and not correct. I am
+not sure what you even want to say here.
+
+...
+
+> +
+> +module_platform_driver(adsp_gpio_driver);
+> +
+> +MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
+> +MODULE_DESCRIPTION("Analog Devices GPIO driver");
+> +MODULE_LICENSE("GPL v2");
+> \ No newline at end of file
+
+Please review all your patches before sending for such stuff.
 
 Best regards,
 Krzysztof
