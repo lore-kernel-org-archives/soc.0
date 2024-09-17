@@ -1,81 +1,54 @@
-Return-Path: <torvalds@linuxfoundation.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A200C35FF3
-	for <soc@archiver.kernel.org>; Tue, 17 Sep 2024 08:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2481BC36000
+	for <soc@archiver.kernel.org>; Tue, 17 Sep 2024 09:48:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 648CDC4CECE; Tue, 17 Sep 2024 08:46:38 +0000 (UTC)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 21F6EC4CEC6
-	for <soc@kernel.org>; Tue, 17 Sep 2024 08:46:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21F6EC4CEC6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f75de9a503so56514101fa.0
-        for <soc@kernel.org>; Tue, 17 Sep 2024 01:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1726562795; x=1727167595; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aJBhudlylQx20T8DaheWHIktldjYtmdayChYHIL8RnQ=;
-        b=SvD0XH8vdsosFBqJPqzIpHU6SrCS8VDj8OVtAL08A6PEPVVkDo3eRNh1BSLi4aEDFz
-         tbLRYhmpoPEunUuBSXFfzcHdPa5BfTSu9PyIlrd4XUSe3nKD7mHtXGvpyEe/MYT25u6F
-         JKH0VO9wXvlV49nMOmbihPB0PNvPt6qsxpr7E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726562795; x=1727167595;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aJBhudlylQx20T8DaheWHIktldjYtmdayChYHIL8RnQ=;
-        b=JZLuS6FexXQQLz4NLUW94rHppPACtaA2G+DoPqfM+KAeDXDlbpbSZRURo2iuJ1rb8q
-         HIpQ6OxGDp/Rt4l5AfE+aPZZSK/bC+mZFwGESxwARr3xfBfNcHZbASDADITMhCQpvpU1
-         XCDEp56IeWFCLbeWk+e2P81Fo2kdMzVbybrUX/djWULNJgsUiVVXsceG5+SMExrAotYY
-         RcB69Ai0vEE/eocSgphIJpGpQ4Z/IsBxOQiHaItXyw7jSvzz9hSqVdLTkI7SLJVHxZSB
-         4CwqJmsG0BsjSk6svinKsD0mXfHtxgbAVbtsE9ohqMRYmNfwU09xTX8oy2+PdjYyNv3e
-         uRow==
-X-Gm-Message-State: AOJu0YyfgyAcDarQu9kxbqAADm7owuC8aom3FKK5sSLeyr0tnZxeGWaz
-	eQCLEYWO1tU0LBGTS+LyvN4EKX15hCcDkYiyhA8nTGGx4aLDYmBNpdB1BVcpbA6fgmh5jT9GIJy
-	QtDf2Bg==
-X-Google-Smtp-Source: AGHT+IFQ9KCH3l433iO41hzF2zrUGpOaufs++YFyk72piW+9FQAsTEkEgeG2ngg+yF4XRk2D2XYi0Q==
-X-Received: by 2002:a2e:711:0:b0:2ef:2d3a:e70a with SMTP id 38308e7fff4ca-2f787dc855cmr61668311fa.18.1726562794669;
-        Tue, 17 Sep 2024 01:46:34 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f79d485f2csm10320961fa.115.2024.09.17.01.46.33
-        for <soc@kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Sep 2024 01:46:33 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f759688444so45420991fa.1
-        for <soc@kernel.org>; Tue, 17 Sep 2024 01:46:33 -0700 (PDT)
-X-Received: by 2002:a05:651c:b06:b0:2f3:fae3:83a7 with SMTP id
- 38308e7fff4ca-2f787f58477mr91757961fa.43.1726562792876; Tue, 17 Sep 2024
- 01:46:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <a40b4b3a-5d61-4bef-b367-745ba058be9e@app.fastmail.com> <212ba952-faee-42f8-959d-c2a8d3dc89a7@app.fastmail.com>
-In-Reply-To: <212ba952-faee-42f8-959d-c2a8d3dc89a7@app.fastmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 17 Sep 2024 10:46:15 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wh3C2F3aO+Ky8CUQDM7+tUSxkCRRCVcLH+yuhaLoao=vg@mail.gmail.com>
-Message-ID: <CAHk-=wh3C2F3aO+Ky8CUQDM7+tUSxkCRRCVcLH+yuhaLoao=vg@mail.gmail.com>
+	id E627FC4CECF; Tue, 17 Sep 2024 09:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B70C4CEC6;
+	Tue, 17 Sep 2024 09:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726566484;
+	bh=in0240nTWtpue0E5W9ePuFa+MTZ7JrJvOvZGw3gdGU4=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=dAnA4k528xoZo59QqQXvF4CXWid+dw3WuYXDi6tH8mwguTc0Iz0TbxjSrPJRzrt3f
+	 VOEmSRZmr8SO7z7iAhAO0EHWx6zPAzwBbpeKUkG0IBWyhb00wtdB051DOZzeDhmiPD
+	 4xns9R4SIg/484Gmf1ka7UNX54JZTdDJLRMe5O5cV5To5I3Ze2ZootPa7c7Zhs+jqh
+	 S370+ZfVN/NiM8O/JfqnuiggjPTSnptGdvwVoRsfBg5yXZ/gF7PIuGJiToxNANNBFK
+	 9KSXoNT+r1TguQiydJH4zQ2VLacEkKcuvybJdIVpTsmgDGgxv85ZXzO1Z6uuydG3Qa
+	 4Pcc6Lc8yokqw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2323809A80;
+	Tue, 17 Sep 2024 09:48:07 +0000 (UTC)
 Subject: Re: [GIT PULL 1/4] soc: devicetree updates for 6.12
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <212ba952-faee-42f8-959d-c2a8d3dc89a7@app.fastmail.com>
+References: <a40b4b3a-5d61-4bef-b367-745ba058be9e@app.fastmail.com> <212ba952-faee-42f8-959d-c2a8d3dc89a7@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lore.kernel.org>
+X-PR-Tracked-Message-Id: <212ba952-faee-42f8-959d-c2a8d3dc89a7@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-6.12
+X-PR-Tracked-Commit-Id: 168c3e0d443599dd370710243fbf5c815fad7890
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7b17f5ebd5fc5e9275eaa5af3d0771f2a7b01bbf
+Message-Id: <172656648638.78027.25795316916626812.pr-tracker-bot@kernel.org>
+Date: Tue, 17 Sep 2024 09:48:06 +0000
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 
-On Mon, 16 Sept 2024 at 18:32, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> soc: devicetree updates for 6.12
+The pull request you sent on Mon, 16 Sep 2024 16:31:29 +0000:
 
-Yes, the diffstat is large, but I'd still have liked to see it as part
-of the pull request...
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-dt-6.12
 
-Your other pull requests do seem to have it, but this was missing it.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7b17f5ebd5fc5e9275eaa5af3d0771f2a7b01bbf
 
-            Linus
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
