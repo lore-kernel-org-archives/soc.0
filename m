@@ -1,48 +1,51 @@
-Return-Path: <maintainers+bounces-help@linux.kernel.org>
+Return-Path: <konstantin@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B941CCD1A0
-	for <soc@archiver.kernel.org>; Wed, 18 Sep 2024 11:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B03ADCE8D5C
+	for <soc@archiver.kernel.org>; Thu, 19 Sep 2024 08:23:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EC026C4CEC3; Wed, 18 Sep 2024 11:53:58 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D048B189F32
-	for <soc@kernel.org>; Wed, 18 Sep 2024 11:53:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.kernel.org;
-	s=subspace; t=1726660438;
-	bh=gsLAgwgrrrJd8ZJpEdwnhFKgavJ1HjWpr6wSJsTrBnc=;
-	h=Subject:From:To:Date:From;
-	b=JzNVHdmVuIXkXE5D3lvv4ibDyPnh7Qde88a9hCQ44LAxaOmjGuflH0iec6hHx9MNN
-	 7U6/a+J10weyGVD8eNBqSvcnMuoag1tUviNdCCDIOvDTcKssR0soinU2LNTvMQ3Re1
-	 fLx/MSzo41SSn/xoAyfCQszx6qCCCMCtEWkq2pbw=
-Subject: =?utf-8?q?Welcome_to_maintainers=40linux.kernel.org?=
-From: maintainers+help@linux.kernel.org
+	id 63321C4CEC6; Thu, 19 Sep 2024 08:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D92BC4CEC4;
+	Thu, 19 Sep 2024 08:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1726734230;
+	bh=g4lRFBu2pFhycGu71QfqA5RZhuiFts/exn4I0Dgjxpk=;
+	h=Date:From:List-Id:To:Subject:From;
+	b=pm8SzSedSVBXUWtjFMgHhHQ8JzeMCqDx3I1f9eWEezu8IOyrQ/2/J4cLk7F7PnAqC
+	 Oktm/kbf73LN15LE+wjwwrAuFHH8mDD+31LRn8J0mlM1FyDysXLItvv9XBlkZ6UbHD
+	 /gDedvIxVO1yxOxWLlFsLeMqdrta0SOEAHpqiOs0=
+Date: Thu, 19 Sep 2024 04:23:46 -0400
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Message-ID: <1726660438-12781-mlmmj-21e54ae2@linux.kernel.org>
-Date: Wed, 18 Sep 2024 11:53:58 +0000
+Subject: Making this a real mailing list
+Message-ID: <20240919-rousing-jumping-magpie-c4c611@lemur>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
 
-Greetings!
+Hello, all:
 
-This is the mlmmj program managing the <maintainers@linux.kernel.org>
-mailing list.
+A long time ago now we set up soc@kernel.org as a "pseudo-list" that uses some
+postfix magic to pretend it's a real list in order to be archived on
+lore.kernel.org. This setup is a one-off arrangement that periodically causes
+unexpected problems.
 
-An administrator has subscribed you to the normal version of the list.
+I suggest we do the following:
 
-The email address you are subscribed with is <soc@kernel.org>.
+- set up a real mailing list called soc@lists.linux.dev
+- configure it to also accept soc@kernel.org as a valid list address for
+  continuity purposes
+- subscribe current members of soc@kernel.org to the new list
+- update patchwork to make sure it receives the new list data
+- update MAINTAINERS to change `M: soc@kernel.org` to `L: soc@lists.linux.dev`
 
-If you ever wish to unsubscribe, send a message to
-<maintainers+unsubscribe@linux.kernel.org> using this email address. The
-subject and the body of the message can be anything. You will then receive
-confirmation or further instructions.
+I don't see any downsides compared to the current setup, but please send any
+objections if you think of any. Otherwise I'll go ahead with the change in the
+near future.
 
-For other information and help about this list, send a message to
-<maintainers+help@linux.kernel.org>.
-
-
+Best regards,
+-K
