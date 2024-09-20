@@ -1,51 +1,58 @@
-Return-Path: <konstantin@linuxfoundation.org>
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B03ADCE8D5C
-	for <soc@archiver.kernel.org>; Thu, 19 Sep 2024 08:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889446FB6
+	for <soc@lists.linux.dev>; Fri, 20 Sep 2024 10:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726828156; cv=none; b=DdeKVzS/rro5N+TpOyuJ+kTqhUxSRdbqThYJKDtl0s6TlXAdUQsCcSVk4G0t1p5WWMRfZPM7BZmSZ10HnzZ+dtmi9lO6X9+8el1wdqM32MBGZZn5WplO/4j34srtjw+qGu9b9qn/6Qrwh1vtiJhNshYAHxwkCc9Eyh6WjzzF0/Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726828156; c=relaxed/simple;
+	bh=/OpyCt4pxE+qa0WqRfCmWjhyFM7LodWNLthHTFOTazU=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JY5UfOAZyLTPdVdTfmxGO/rPnmzVeJQ7uqkhU3frZlt5XsrepHXirwgfPT3NprJOHNJYQd/bPrePpsYjqkfGy1n+wRGpu8eJ+I3lKDux1LiMiDKYBoNZ05p7zcM5IQP+L5TKTnMmAjQHqVR5/wgzFTzy4lmN8LqT3OAsOOxzioo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=moVzB3s/; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="moVzB3s/"
 Received: by smtp.kernel.org (Postfix)
-	id 63321C4CEC6; Thu, 19 Sep 2024 08:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D92BC4CEC4;
-	Thu, 19 Sep 2024 08:23:49 +0000 (UTC)
+	id 227E6C4CECD; Fri, 20 Sep 2024 10:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77951C4CEC3;
+	Fri, 20 Sep 2024 10:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726734230;
-	bh=g4lRFBu2pFhycGu71QfqA5RZhuiFts/exn4I0Dgjxpk=;
-	h=Date:From:List-Id:To:Subject:From;
-	b=pm8SzSedSVBXUWtjFMgHhHQ8JzeMCqDx3I1f9eWEezu8IOyrQ/2/J4cLk7F7PnAqC
-	 Oktm/kbf73LN15LE+wjwwrAuFHH8mDD+31LRn8J0mlM1FyDysXLItvv9XBlkZ6UbHD
-	 /gDedvIxVO1yxOxWLlFsLeMqdrta0SOEAHpqiOs0=
-Date: Thu, 19 Sep 2024 04:23:46 -0400
+	s=korg; t=1726828156;
+	bh=/OpyCt4pxE+qa0WqRfCmWjhyFM7LodWNLthHTFOTazU=;
+	h=Date:From:List-Id:To:Subject:References:In-Reply-To:From;
+	b=moVzB3s/G42MkIPUze06a/E5ZBFruk8zIhgQAPGVqqZGF2FuY7hZ7ZwEayO2Vimh4
+	 i4NqBWDV9ErqGI+6V5Jd7oaRV1qlKrUyyPjLl6mE5+xokKmirWyq6+5hTq7dMuHpDL
+	 2mNHptu4VdmXZHK8StYIqlD9iYzXz4RDbMnKXE+M=
+Date: Fri, 20 Sep 2024 06:29:11 -0400
 From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: Making this a real mailing list
-Message-ID: <20240919-rousing-jumping-magpie-c4c611@lemur>
+Subject: Re: Making this a real mailing list
+Message-ID: <20240920-dangerous-wildcat-of-genius-0b20ab@lemur>
+References: <20240919-rousing-jumping-magpie-c4c611@lemur>
+Precedence: bulk
+X-Mailing-List: soc@lists.linux.dev
+List-Id: <soc.lists.linux.dev>
+List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
+List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20240919-rousing-jumping-magpie-c4c611@lemur>
 
-Hello, all:
+On Thu, Sep 19, 2024 at 04:23:46AM GMT, Konstantin Ryabitsev wrote:
+> - set up a real mailing list called soc@lists.linux.dev
+> - configure it to also accept soc@kernel.org as a valid list address for
+>   continuity purposes
+> - subscribe current members of soc@kernel.org to the new list
+> - update patchwork to make sure it receives the new list data
 
-A long time ago now we set up soc@kernel.org as a "pseudo-list" that uses some
-postfix magic to pretend it's a real list in order to be archived on
-lore.kernel.org. This setup is a one-off arrangement that periodically causes
-unexpected problems.
+This is now done. This message will serve as a test to make sure it's working
+correctly and the archives are properly propagating.
 
-I suggest we do the following:
+> - update MAINTAINERS to change `M: soc@kernel.org` to `L: soc@lists.linux.dev`
 
-- set up a real mailing list called soc@lists.linux.dev
-- configure it to also accept soc@kernel.org as a valid list address for
-  continuity purposes
-- subscribe current members of soc@kernel.org to the new list
-- update patchwork to make sure it receives the new list data
-- update MAINTAINERS to change `M: soc@kernel.org` to `L: soc@lists.linux.dev`
+I will work on this next.
 
-I don't see any downsides compared to the current setup, but please send any
-objections if you think of any. Otherwise I'll go ahead with the change in the
-near future.
-
-Best regards,
 -K
