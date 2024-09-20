@@ -1,58 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889446FB6
-	for <soc@lists.linux.dev>; Fri, 20 Sep 2024 10:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F1E55887;
+	Fri, 20 Sep 2024 11:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726828156; cv=none; b=DdeKVzS/rro5N+TpOyuJ+kTqhUxSRdbqThYJKDtl0s6TlXAdUQsCcSVk4G0t1p5WWMRfZPM7BZmSZ10HnzZ+dtmi9lO6X9+8el1wdqM32MBGZZn5WplO/4j34srtjw+qGu9b9qn/6Qrwh1vtiJhNshYAHxwkCc9Eyh6WjzzF0/Q=
+	t=1726830246; cv=none; b=GKBJQS8axHZ589C1VTPDpn7IrzSMaHS7Hdgb3RCuAJ0shIo/LXMIV1ubOR8cldqS5U1r4rCVkrolDWOZqVbN+E13nr64JvXku9FU4IMvNd77kJP5rRr2ps0bwzQo1GsB7Vm+BEJuWJotAp5rbKmt9ZKXtqH+McmsLVFmLIVrBXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726828156; c=relaxed/simple;
-	bh=/OpyCt4pxE+qa0WqRfCmWjhyFM7LodWNLthHTFOTazU=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JY5UfOAZyLTPdVdTfmxGO/rPnmzVeJQ7uqkhU3frZlt5XsrepHXirwgfPT3NprJOHNJYQd/bPrePpsYjqkfGy1n+wRGpu8eJ+I3lKDux1LiMiDKYBoNZ05p7zcM5IQP+L5TKTnMmAjQHqVR5/wgzFTzy4lmN8LqT3OAsOOxzioo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=moVzB3s/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726830246; c=relaxed/simple;
+	bh=00KpENy9RAHDQ6vIrsWKsLWRzDD2uX+wnmARMq1n1aE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lntPG8W9cOLOMot07sLH3YXJ9YtkddXSkktvzLH+IRXQJOV4zREIw4PLJ7cn5KzfnuuF2vImOAtKqcEhXKcJIJDxbhXO5ot++1MwUtScpP5Nd8R6BwtrseIxhc3ZGgUTJgZASxySrmFMUd4lX+XdKFaSC904/QnDS6U/oYRp2ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g1QQUt1z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="moVzB3s/"
-Received: by smtp.kernel.org (Postfix)
-	id 227E6C4CECD; Fri, 20 Sep 2024 10:29:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77951C4CEC3;
-	Fri, 20 Sep 2024 10:29:15 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g1QQUt1z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21E5CC4CEC6;
+	Fri, 20 Sep 2024 11:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726828156;
-	bh=/OpyCt4pxE+qa0WqRfCmWjhyFM7LodWNLthHTFOTazU=;
-	h=Date:From:List-Id:To:Subject:References:In-Reply-To:From;
-	b=moVzB3s/G42MkIPUze06a/E5ZBFruk8zIhgQAPGVqqZGF2FuY7hZ7ZwEayO2Vimh4
-	 i4NqBWDV9ErqGI+6V5Jd7oaRV1qlKrUyyPjLl6mE5+xokKmirWyq6+5hTq7dMuHpDL
-	 2mNHptu4VdmXZHK8StYIqlD9iYzXz4RDbMnKXE+M=
-Date: Fri, 20 Sep 2024 06:29:11 -0400
+	s=korg; t=1726830245;
+	bh=00KpENy9RAHDQ6vIrsWKsLWRzDD2uX+wnmARMq1n1aE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=g1QQUt1zjeZQEPsAV6agqC9wB1FLcEC6UwKOHMgbl3vetjfn/jx+9mKP+PlrUjEai
+	 uANRNMZKJCH4PHSBT0jWK+nfKZqFSuK1aUlalCKz9CGlnX6MydJySOFxG/LmwzKp0l
+	 sNViqCFwczjY1SkCLxgu3DCwnDtfeptuEo9yeU+Q=
 From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: soc@kernel.org
-Subject: Re: Making this a real mailing list
-Message-ID: <20240920-dangerous-wildcat-of-genius-0b20ab@lemur>
-References: <20240919-rousing-jumping-magpie-c4c611@lemur>
+Subject: [PATCH 0/2] MAINTAINERS: ensure that mailing lists are L: not M:
+Date: Fri, 20 Sep 2024 07:03:25 -0400
+Message-Id: <20240920-maintainers-m-to-l-tweak-v1-0-ea80b5cd3420@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240919-rousing-jumping-magpie-c4c611@lemur>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH1W7WYC/x2MQQqAIBAAvxJ7bsEsCftKdBDbaqksVCqQ/p50m
+ MMcZhIE8kwBuiKBp4sDHy5LVRZgF+NmQh6zgxSyEbrSuBt2MUM+4I7xwA3jTWZFo6RWVrWithJ
+ yfnqa+PnX/fC+H+m6+L5qAAAA
+X-Change-ID: 20240919-maintainers-m-to-l-tweak-a5295c5703c2
+To: torvalds@linux-foundation.org
+Cc: linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, 
+ soc@lists.linux.dev, Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+X-Mailer: b4 0.15-dev-dedf8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=765;
+ i=konstantin@linuxfoundation.org; h=from:subject:message-id;
+ bh=00KpENy9RAHDQ6vIrsWKsLWRzDD2uX+wnmARMq1n1aE=;
+ b=owGbwMvMwCW27YjM47CUmTmMp9WSGNLehi2cY3nA5Uy+gE59zvts7sN35hwoSPsevb7z+8Wag
+ 1Kdd4wUOkpZGMS4GGTFFFnK9sVuCip86CGX3mMKM4eVCWQIAxenAEyk5j4jw87QoIPNz0wSZr+S
+ 2pZ5+4vPLhWR+Q/CPu79GnC8KUt9+hFGhruTThYletpXic9e/4z5oPThW7zLP4n8rlqZpjNz6U7
+ WUk4A
+X-Developer-Key: i=konstantin@linuxfoundation.org; a=openpgp;
+ fpr=DE0E66E32F1FDD0902666B96E63EDCA9329DD07E
 
-On Thu, Sep 19, 2024 at 04:23:46AM GMT, Konstantin Ryabitsev wrote:
-> - set up a real mailing list called soc@lists.linux.dev
-> - configure it to also accept soc@kernel.org as a valid list address for
->   continuity purposes
-> - subscribe current members of soc@kernel.org to the new list
-> - update patchwork to make sure it receives the new list data
+Linus,
 
-This is now done. This message will serve as a test to make sure it's working
-correctly and the archives are properly propagating.
+I noticed several subsystems where M: entries were pointing at mailing
+lists instead of real people. These two small patches properly mark
+mailing list destinations with L:, which avoids potential problems with
+automation.
 
-> - update MAINTAINERS to change `M: soc@kernel.org` to `L: soc@lists.linux.dev`
+Signed-off-by: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+---
+Konstantin Ryabitsev (2):
+      MAINTAINERS: fix PKTCDVD DRIVER to use L: for the list address
+      MAINTAINERS: use the canonical soc mailing list address and mark it as L:
 
-I will work on this next.
+ MAINTAINERS | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: de848da12f752170c2ebe114804a985314fd5a6a
+change-id: 20240919-maintainers-m-to-l-tweak-a5295c5703c2
 
--K
+Best regards,
+-- 
+Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+
