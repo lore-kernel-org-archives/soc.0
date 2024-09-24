@@ -1,114 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5325F224D7
-	for <soc@lists.linux.dev>; Tue, 24 Sep 2024 13:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DBD8C06
+	for <soc@lists.linux.dev>; Tue, 24 Sep 2024 14:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727183958; cv=none; b=mX3XziX0XuV04r7tsZQbrrXCYQvvco1dNRq0UyC8JO4ilJM1dbV5QUUM1vRQPIWDmPRcDXBBCwmMTuaLLr3V9vyRydRnYycUxX+DQklIIRH6OCNvwuQXaZpoqdIuOXOIP2WWebOYHOIUvIRYSiaG8DeiT5yvdkjCJ4GusuBAaLc=
+	t=1727186763; cv=none; b=ioWRF8YKLsv+CZoKyXN/e9PIvsBRSJ0T5GqlTXrF3OiCmKyhI9VeQ/8NfM1T+nIXNe3BvX19zf6zADA9GD6vd6JCLGIqDchc0KtwsJU4aYCXs9mBoLQEibfn7XTXxEmIUhKuN/HWgwtNeZ0G4uvImryVqTks9gNORVj7IZpGE+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727183958; c=relaxed/simple;
-	bh=RnBo0J9Olxupu69OMLCYFmLC/A9T2H08JGrElcFUVCE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BHa/9t129ROaKLKjr5YvzuZM0g0fg7z5bvTKqsZlZAqsmK2mBDYMHqD3Dt4pz8s1xmajOnJkSm1kU51Uh3rQJRbosJGA6ea+jvtsj9fpWZH4ryKqnLLN8TdTcRchFJrHTcMS1DLqXa43e3M2/1TsAUVxoraIokNksky79w+j7Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYkDkijA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727186763; c=relaxed/simple;
+	bh=YJSpLiSt8Lk2aNqzxMqV5s+yzU2yYXY0HPU9GFppqvA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GlCn8wNY2DJbNu0gf1aWRclZxEoAuR5MUSAFdPey/yHHTUW4BIr6lXTUjw+4QMv4Y12LlKfnCwaj7aut1++bqnC6q9imvGab3/2DAuRsuUHaUrGz1gOB39MJ4dF9TDeQTkZiR7A94A4oMh36Lg1wpz10tDv2oEXMNSyGrhPlbgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=pVJbQPsP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYkDkijA"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="pVJbQPsP"
 Received: by smtp.kernel.org (Postfix)
-	id 1D424C4CEC6; Tue, 24 Sep 2024 13:19:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1203C4CEC4;
-	Tue, 24 Sep 2024 13:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727183958;
-	bh=RnBo0J9Olxupu69OMLCYFmLC/A9T2H08JGrElcFUVCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kYkDkijAhU9EQjaqTjQNWbiOvUYY3KF7YEvIbvwzvlxsza/fVtRwvT+mfyMGNTGls
-	 ZReV88yNqEPEMoHhA/TMixCEljg9oUXUg6efY3udkv6LSgVMiJqQoZXLfVuSBfuVEi
-	 2HMAvsrITfkyo20waNumNeBuyhMhDqj2hdf0k1L8q+oDwsbd2qyXdhIai4Dtg86I1C
-	 +ftPuHyzaoNBeUbEO1FybUFPL9STQURr58/H9MdjJ+L8e8obyVW9iF3ZvS4TENH8En
-	 O6HNhz2seIp8y2ZKl5Hjcmh0/nlx5taAQjhPXPp2/kLU4YUTnbYJO0jq2Iwwh0rLFh
-	 yiPFg0eEs1ZBw==
-Date: Tue, 24 Sep 2024 14:19:12 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	linux-arm-kernel@lists.infradead.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Will Deacon <will@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Subject: Re: [PATCH] Documentation/process: maintainer-soc: clarify
- submitting patches
-Message-ID: <20240924-powdery-driver-e66ea543d634@spud>
-References: <20240924130831.38861-1-krzysztof.kozlowski@linaro.org>
+	id A150EC4CECF; Tue, 24 Sep 2024 14:06:01 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B0C40C4CEC4;
+	Tue, 24 Sep 2024 14:05:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B0C40C4CEC4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1727186759; x=1758722759;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YJSpLiSt8Lk2aNqzxMqV5s+yzU2yYXY0HPU9GFppqvA=;
+  b=pVJbQPsPG3dk6N/uGwX5y9Oq4TYJSdjAqRblBTPEA32EXEiR90szSme1
+   Jlm+I/0QMbPTfaJsdNLjWYMgQn8L7vRHuQAZ68KILw3Qw2l8fX62arodb
+   YlbOYDfBFCI8TyuC6LDnCKBzCNHQi7ZwhsjO2j+yGlpIIhk63GS6caqFk
+   Mm9RvKcKvZe7xWpOJeOCZxgPCSBrjXS+rmHQ7iIQ8ZxN13sETNpdEe/FQ
+   TStwS1hrKRwZtM3HsDZdfjIy0Q+oFY/iYD3XwPiyy94nRHsoyftedNFy6
+   42OpYLIuJgRAhSjw7dGquh9ROkOfvNJ95f5DrkQa8yoHLBSR22LLQRMJJ
+   A==;
+X-CSE-ConnectionGUID: P0BX6q2GSA2yLug+77A/7Q==
+X-CSE-MsgGUID: /ZwffnThTUyCqbPG7pZiYw==
+X-IronPort-AV: E=Sophos;i="6.10,254,1719903600"; 
+   d="scan'208";a="35400960"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Sep 2024 07:05:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 24 Sep 2024 07:05:29 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Tue, 24 Sep 2024 07:05:28 -0700
+Message-ID: <6d6ab21d-44fa-491c-98f7-8a2d8ab86c62@microchip.com>
+Date: Tue, 24 Sep 2024 16:05:45 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="zfCvDNqwNswvUFbP"
-Content-Disposition: inline
-In-Reply-To: <20240924130831.38861-1-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: microchip soc maintainance change proposal
+Content-Language: en-US, fr-FR
+To: Conor Dooley <conor@kernel.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+CC: Daire McNamara <daire.mcnamara@microchip.com>, <soc@kernel.org>
+References: <20240924-overtime-entourage-bcf3d6ff8c80@spud>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20240924-overtime-entourage-bcf3d6ff8c80@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 24/09/2024 at 13:46, Conor Dooley wrote:
+> Hey folks,
+> 
+> I mentioned this to Arnd and Alexandre at LPC, and to Nicolas before
+> that, but I would like to propose some changes to how the Microchip soc
+> support is maintained - mostly affecting the riscv side of things that
+> I've been maintaining in my personal tree, alongside other platforms.
+> I'd like to propose moving those from my tree, into the at91 tree.
 
---zfCvDNqwNswvUFbP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't know if the "at91" naming will remain a right designation of 
+what we're doing in the future, but well, let's stick to it for now.
+Some find it a little too much tight to the old Atmel brand...
 
-On Tue, Sep 24, 2024 at 03:08:31PM +0200, Krzysztof Kozlowski wrote:
+> While the dts bits for the arm and riscv platforms have no overlap
+> and nothing is particularly gained from me moving which tree
+> location they're in, I'm far more interested in disambiguating the tree
+> that soc and/or firmware bindings and drivers end up in.
+> 
+> I was going to add the bindings/soc/microchip directory to the
+> maintainers entry I have for drivers/soc/microchip, but while doing
+> that, I noticed that there have been recent patches for sam and sparx5
 
->  Most of these submaintainers have their own trees where they stage patch=
-es,
->  sending pull requests to the main SoC tree.  These trees are usually, bu=
-t not
-> -always, listed in MAINTAINERS.  The main SoC maintainers can be reached =
-via the
-> -alias soc@kernel.org if there is no platform-specific maintainer, or if =
-they
-> -are unresponsive.
-> +always, listed in MAINTAINERS.
+FYI: and we have the older drivers/soc/atmel directory (which is caught 
+by "ARM/Microchip (AT91) SoC support" entry).
 
-I probably had some specific case in mind with that original wording. I
-presume it still holds true for some smaller platforms, but I cannot
-remember the specific case that prompted it. I'll have to see if I can
-figure out which platforms they are (if any) and get the tree added.
+> bits that have added files to that bindings directory that went via at91
+> and I figure it's almost certain that there'll be drivers added before
+> too long. Having a single location, like we do at the moment for clocks,
+> would make the route upstream for things a bit clearer - and I figured
+> that while moving one thing, might as well move the firmware and dts
+> stuff too.
+> 
+> My assumption is that the riscv dts bits would retain their own branch,
+> and that I'd still send the PRs for them and for the firmware stuff given
+> that there's no !riscv soc content in that directory yet - and I don't
+> want to saddle Claudiu with more work for devices he probably doesn't
+> care about...
+> 
+> Seem reasonable?
 
-Cheers,
-Conor.
+That's fine with me Conor. It makes a lot of sense as we're working on 
+more and more topics together.
 
->  What the SoC tree is not, however, is a location for architecture-specif=
-ic code
->  changes.  Each architecture has its own maintainers that are responsible=
- for
->  architectural details, CPU errata and the like.
-> =20
-> +Submitting Patches for Given SoC
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +All usual platform related patches should be sent via SoC submaintainers
-> +(platform-specific maintainers.  This includes also changes to per-platf=
-orm or
-   ^ this is unclosed.
+Best regards,
+   Nicolas
 
-> +shared defconfigs (scripts/get_maintainer.pl might not provide correct
-> +addresses in such case).
-
---zfCvDNqwNswvUFbP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvK8MgAKCRB4tDGHoIJi
-0sh0AQDVXJTXuaqi2pJxajpj22bKua48K7IZCGr3djc3a/PL5gD/QrBRd0Agv9Ae
-P1sJtZkwkxLEwkjVPpESct8/C07Oewg=
-=YREJ
------END PGP SIGNATURE-----
-
---zfCvDNqwNswvUFbP--
