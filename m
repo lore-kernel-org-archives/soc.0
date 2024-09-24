@@ -1,132 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC703139D
-	for <soc@lists.linux.dev>; Sun, 22 Sep 2024 12:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70034155743
+	for <soc@lists.linux.dev>; Tue, 24 Sep 2024 09:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727009671; cv=none; b=OnxV5VrIxtPdnNG4Wl8qWNTTFzN0wiwcPPLmRzNq0dndLAgEVYTLZ2HjaTLL4h3qc8/zOUugEEtjvPtKJWk5LgtfCGLe79nq5QbPL7wa5zoWTYbXLoP97nEaehKbViFwzW+pKe7CMlCzJ2Y+eYFBq1g/Gs7XIuI1YuvVGhtDNc4=
+	t=1727169873; cv=none; b=SkG77vrnDFTciSfKPnwxHhNdcaWxSrnhO9ly+RFjgsY37n+bqiURmeNq2+2D0w6zPiHpIeFZnzCPmzJt1voo48fjTYB4oocA2kqBoIiKXyJZjDZk+KBNga2+3XDSt5zgTfFt7t2jJU51ab4XJWMn1Dz+kKZQX1a8PpknZv9YgU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727009671; c=relaxed/simple;
-	bh=9hTuPr+B3KHIKAelhdUk9LKb6pM45k0P8KmcpTyBYr0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EmwktS5nDtKRfUNi7QwZf/2U+lFJ/AvH0ZV02IJjnE1k17kNODVEC+xNsy3HnCy0IyAnLVYfeHhqgYYD/XG0Zm1qEHgNExtEruacgnb6h4y5KE0WhouXSIfwvjGSZJn/pKTQZg4dcqy6Ok7Zvubg2XLEiK2CZ1F/1y+fhUafhLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FIi31+C/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727169873; c=relaxed/simple;
+	bh=dI0ztOadlf/S1pnakLt/oKsQkgAk4v6rBGf1+7LWnOQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PVBKE5Uv/22NaxATKnNWsrYOn9iHBrfsfN0ibTWO97azt+vFl22ITRzTgEDqfT2IxWJXJEQc9UgMCuYXE8V3TGW2lMrN1rtwJpdoRvUjg1gfJUSe7Hq6zrik4VJcPlkfNG4ZVQjXajXJLTpWU2KLwZohDfoFbBcxSXxJQ9q7r+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SoJ2l4jk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FIi31+C/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SoJ2l4jk"
 Received: by smtp.kernel.org (Postfix)
-	id 21002C4CEC6; Sun, 22 Sep 2024 12:54:30 +0000 (UTC)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 00B89C4CEC4; Tue, 24 Sep 2024 09:24:33 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 200C3C4CEC3
-	for <soc@kernel.org>; Sun, 22 Sep 2024 12:54:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 200C3C4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42bb7298bdeso44146425e9.1
-        for <soc@kernel.org>; Sun, 22 Sep 2024 05:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727009667; x=1727614467; darn=kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=V9+EtBR3azzcqkeGxUhNS4gUNER4YDA+9BTF7UuDVDg=;
-        b=FIi31+C/DQ8Z8YzKmb+GLoG0XgIRxndC8yy1h5beHB/RsPZGxTBg6DBFRl2jEmko7j
-         XyMDDHaecp1VeaimI/vjWOlhK5d4VJj1qxuwtAfEznumcsU+6h/hsA0AZYERZYy4UmZN
-         y434xQlEEvqY5tEIXdMod90AoJ4dvacFQKiJb4MZXnzQ5OmcvRQ7HzZgpGau0ZPpZXku
-         5KDV/WCv2K/b0/JJvMCPns1TnOEkVwJZBKw3x1SOk6ER6k4OTVVDRGaACSUwrVB7vw85
-         /JSSdq+xCQ5X8AIMY61yBT1DHPj9IQuOnoz8VnyANEysPRo4N/+T8wzwdUx6tyZiW9zr
-         y39A==
+	by smtp.kernel.org (Postfix) with ESMTPS id BF2D5C4CEC5
+	for <soc@kernel.org>; Tue, 24 Sep 2024 09:24:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BF2D5C4CEC5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727169870;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Bc2XIgIruT3HvUSS07XrwLzqaOB5PyjnEV1kT6BR7U4=;
+	b=SoJ2l4jkwZP2VGe+bTdFNxpmrMsT5k0xtJzTLhTojBoqUC3/5aizhJ7xwLfgiOgvd1usWp
+	55gSoigaLmXfyOVhgkbleam7I5yvS9PekYOyBbBzplspUe1KER7S86QkMn50hkZAXo4rmB
+	ytAn+fndfi4Gmc5S6yxxmfPFcJ/wWtg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-622-eRQidZJ-PsWFjbRjDpBk8g-1; Tue, 24 Sep 2024 05:24:29 -0400
+X-MC-Unique: eRQidZJ-PsWFjbRjDpBk8g-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3756212a589so3498255f8f.2
+        for <soc@kernel.org>; Tue, 24 Sep 2024 02:24:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727009667; x=1727614467;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V9+EtBR3azzcqkeGxUhNS4gUNER4YDA+9BTF7UuDVDg=;
-        b=HGgXFD+SZ3uw4KSioKKhNN/GB/lVJ1VoGonP/waS0cpF+hhMQz6oE/x87L7Jy7Tx8K
-         eZBXPOFbfhxGea/tzcw0WkK18F90KJj6PdzZr8TN/LnpflrL2EnHRf/nVhl+UNqkr/nt
-         vu8w/X5bv2UnvuGXPwhnk7MlbDmjyHbietSTQt8GFTxPVDstOI5uOXfgZDK5aXM/Jzlm
-         6X3TM0v0J2rxVmlefNhK9rPVcrRUQruD4ANhX3RF/eQUWKrHGPh6FDqaYNFimJuJLWDN
-         tp9/fIWsXBxdaHDkFSCU8xrtKJtOSTphmbwBEdZWjCt6s/h+3tMAmG8ZsDEZe8IkpL96
-         N1Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCWvQO6eKqu9dCDKmYz8htR9rSYljRXHIP84yy+a0t2JLT/8H6XU2ZAf4jplZYSFaS+Ma5A=@kernel.org
-X-Gm-Message-State: AOJu0YzehBjvXEGA7WRQGnmOeiR3iBs9ygPaRB7JdAuDGqWj6pEAcw2l
-	n8Wh5q0sPLyt2RWteFwl48rOgO+R9bZm5XzTJiaFXmaV7rhH7Fgg
-X-Google-Smtp-Source: AGHT+IF4D1kWTYZjKNx8py68FOu1UyJ8Wf/u8gPHCfJTfC6kxaEL9TAyMJ5BZUL3jusB7/scEDTIFg==
-X-Received: by 2002:a05:600c:350a:b0:426:62c5:4731 with SMTP id 5b1f17b1804b1-42e7add6bb0mr87514665e9.29.1727009667039;
-        Sun, 22 Sep 2024 05:54:27 -0700 (PDT)
-Received: from giga-mm-1.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e754c5404sm100031895e9.39.2024.09.22.05.54.25
+        d=1e100.net; s=20230601; t=1727169868; x=1727774668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bc2XIgIruT3HvUSS07XrwLzqaOB5PyjnEV1kT6BR7U4=;
+        b=TcLmPlh149gy+fl0PpW4qI1h3aqIuOsTBowHGGEk1homgr2be2dqwkumJ3v/UuTMjQ
+         iUAi1GrWmvvqDAjHHDXCrSBvGaymUKc4r3do8jySnjSt4kClTS47H6qBX6QpjSkhA8mz
+         naQbVjwZRHanVUNl46gE26LWfTqIE2kb65OrjGr7F0EJCrLeSsuHN4guKQwkAnVdF4Ke
+         g7i/+kMIxGDNMxKm2MgVxBkTuBvEEY4BvDpnKexYsDbiWryoDEjlz0cxsR1wsgsrh+ns
+         i1bbmBlX0RPNvLEtNG4keyvRsLuxakj7BOZHRPSATRmAzMP8aM0tyGENtrGGytMTko09
+         dVmw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP+liQYF3XPl3ZtmFRYuM6Qt5Z7OjYbz8bHj4p2RZ0+A7x7QoT7ORJ3VszrHxeqqp6lKg=@kernel.org
+X-Gm-Message-State: AOJu0Yy0LwKfxkKqjPH7UACQM0YmLX3WrRSx9DcJx9jnCH07G4miVdoq
+	fnb1Lz9xPAJpA8RQDFeq8iIum64WfmsHM7zaA7zDQbtHwD3COzv/4HWXhLx61AgabNUrKZnsrAD
+	BsWo4h9v7q83oKUDx9A9VAH5j9M6J92qhQgsPc9HBh8s=
+X-Received: by 2002:adf:f64e:0:b0:371:8dd3:27c8 with SMTP id ffacd0b85a97d-37a42279eb8mr12970178f8f.23.1727169868043;
+        Tue, 24 Sep 2024 02:24:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGtB9eM4bgR0oA/7C9qfTMCUdblSA96IAhCJIqTblqLM8bL7ZbpHCQHUESQulyuXbPD8W6YbQ==
+X-Received: by 2002:adf:f64e:0:b0:371:8dd3:27c8 with SMTP id ffacd0b85a97d-37a42279eb8mr12970160f8f.23.1727169867654;
+        Tue, 24 Sep 2024 02:24:27 -0700 (PDT)
+Received: from lbulwahn-thinkpadx1carbongen9.rmtde.csb ([2a02:810d:7e40:14b0:4ce1:e394:7ac0:6905])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cbc2c215asm1079306f8f.45.2024.09.24.02.24.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Sep 2024 05:54:26 -0700 (PDT)
-Message-ID: <194f2e20d40a496f9e9f23392ee911900a7c30b7.camel@gmail.com>
-Subject: Re: [PATCH] net: cirrus: use u8 for addr to calm down sparse
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Nikita Shubin <nikita.shubin@maquefel.me>, Arnd Bergmann
- <arnd@arndb.de>,  soc@kernel.org
-Cc: linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Date: Sun, 22 Sep 2024 14:54:50 +0200
-In-Reply-To: <20240922065212.7483-1-nikita.shubin@maquefel.me>
-References: <20240922065212.7483-1-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 
+        Tue, 24 Sep 2024 02:24:26 -0700 (PDT)
+From: Lukas Bulwahn <lbulwahn@redhat.com>
+X-Google-Original-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+To: Nikita Shubin <nikita.shubin@maquefel.me>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: [PATCH] soc: ep93xx: drop reference to removed EP93XX_SOC_COMMON config
+Date: Tue, 24 Sep 2024 11:24:23 +0200
+Message-ID: <20240924092423.50734-1-lukas.bulwahn@redhat.com>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Nikita!
+From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
-On Sun, 2024-09-22 at 09:52 +0300, Nikita Shubin wrote:
-> ep93xx_eth.c:805:40: sparse: sparse: incorrect type in argument 2
-> 				=C2=A0=C2=A0=C2=A0=C2=A0 (different address spaces)
-> ep93xx_eth.c:805:40: sparse: expected unsigned char const [usertype] *add=
-r
-> ep93xx_eth.c:805:40: sparse: got void [noderef] __iomem *
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202409212354.9CiUem7B-lkp@i=
-ntel.com/
-> Fixes: 858555bb5598 ("net: cirrus: add DT support for Cirrus EP93xx")
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Commit 6eab0ce6e1c6 ("soc: Add SoC driver for Cirrus ep93xx") adds the
+config EP93XX_SOC referring to the config EP93XX_SOC_COMMON.
 
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Within the same patch series of the commit above, the commit 046322f1e1d9
+("ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms") then removes the
+config EP93XX_SOC_COMMON. With that the reference to this config is
+obsolete.
 
-> ---
-> =C2=A0drivers/net/ethernet/cirrus/ep93xx_eth.c | 4 +++-
-> =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/ethernet/cirrus/ep93xx_eth.c b/drivers/net/ether=
-net/cirrus/ep93xx_eth.c
-> index 2523d9c9d1b8..c2007cd86416 100644
-> --- a/drivers/net/ethernet/cirrus/ep93xx_eth.c
-> +++ b/drivers/net/ethernet/cirrus/ep93xx_eth.c
-> @@ -771,6 +771,7 @@ static int ep93xx_eth_probe(struct platform_device *p=
-dev)
-> =C2=A0	struct resource *mem;
-> =C2=A0	void __iomem *base_addr;
-> =C2=A0	struct device_node *np;
-> +	u8 addr[ETH_ALEN];
-> =C2=A0	u32 phy_id;
-> =C2=A0	int irq;
-> =C2=A0	int err;
-> @@ -802,7 +803,8 @@ static int ep93xx_eth_probe(struct platform_device *p=
-dev)
-> =C2=A0		goto err_out;
-> =C2=A0	}
-> =C2=A0
-> -	eth_hw_addr_set(dev, base_addr + 0x50);
-> +	memcpy_fromio(addr, base_addr + 0x50, ETH_ALEN);
-> +	eth_hw_addr_set(dev, addr);
-> =C2=A0	dev->ethtool_ops =3D &ep93xx_ethtool_ops;
-> =C2=A0	dev->netdev_ops =3D &ep93xx_netdev_ops;
-> =C2=A0	dev->features |=3D NETIF_F_SG | NETIF_F_HW_CSUM;
+Simplify the expression in the EP93XX_SOC config definition.
 
---=20
-Alexander Sverdlin.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+---
+ drivers/soc/cirrus/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/soc/cirrus/Kconfig b/drivers/soc/cirrus/Kconfig
+index f2fd0e16a196..d8b3b1e68998 100644
+--- a/drivers/soc/cirrus/Kconfig
++++ b/drivers/soc/cirrus/Kconfig
+@@ -6,7 +6,7 @@ config EP93XX_SOC
+ 	bool "Cirrus EP93xx chips SoC"
+ 	select SOC_BUS
+ 	select AUXILIARY_BUS
+-	default y if !EP93XX_SOC_COMMON
++	default y
+ 	help
+ 	  Enable support SoC for Cirrus EP93xx chips.
+ 
+-- 
+2.46.1
 
