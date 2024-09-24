@@ -1,107 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42057155743
-	for <soc@lists.linux.dev>; Tue, 24 Sep 2024 09:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECCC43F9D5
+	for <soc@lists.linux.dev>; Tue, 24 Sep 2024 11:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727170220; cv=none; b=h2HZ4vgFE+K4j8+8RbWKslZ/2D675xf3vF2GmQqPOO5l/nhjmyFLG5sQX/2FySaqigFtGcljuGCWjbOA7PeLbzdl006tt2/9ltO+Tsg7+JrJjMbr7sy8dh6kF1BPjKi1/D5CkbSThoFsMXUvnBcIsyPl3V+fXasHSWfRbMrumdY=
+	t=1727178380; cv=none; b=ny0AzfOSXWaeRjxBofMVaSKLeMbz8rwGFCdHZVfrFRV9PC9T6VkxNc3r0rtgXv7dQLfIIkoDHa20uZ/csQuHy0vErCWT1DFfEFJfN7U++CUUqy4F59Z0vqLhTlbMuwJCIa8+HhUelyuBd5WPCmD5M9nvetkl0YF2hLE3NYIiooE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727170220; c=relaxed/simple;
-	bh=Lb2KsVVVaTMN3KohSpkn8V7UrH3zKzLtjp8hlZHmE9k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W/Bk/fJWJK9NY63b6V8M97T7TjlBLU/7dlKpdjVyRS7KiM4LKMOJRMSq0xRz1IhHgfyiz2VixKK/0gzVmbAo2fhYvF4+JkwuhwlDUYWesKEn4z5R+BJXrGdx3SZe2hmSt/Ck4vHjF9ciBbNi1rslnEsm/7rs6ABKM262XAqsZLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=P3vFb5rY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727178380; c=relaxed/simple;
+	bh=6DhmIaSyUm5rO9r22RHuvlNx7CM1fcGSKzSl5E4kAfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oF2GIotmcTAIFsTrXf/FHg/Vz3rs57KrExxKngN2+AvWeSnbQS0Z7m7w52ddb5fTwRZHcs7lYJNeTV+lvcLEeKbdmiaAbJiKIJpvGl/K4OGbhP2gblQOXzBls5Oyy2R2jZKOashTAbqm1iUS0xcZfOUNgJPY+OGhyWRadlLy5JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t4wTUJDQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="P3vFb5rY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t4wTUJDQ"
 Received: by smtp.kernel.org (Postfix)
-	id DA3ABC4CEC6; Tue, 24 Sep 2024 09:30:17 +0000 (UTC)
-Received: from forward501d.mail.yandex.net (forward501d.mail.yandex.net [178.154.239.209])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 43E05C4CEC4
-	for <soc@kernel.org>; Tue, 24 Sep 2024 09:30:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43E05C4CEC4
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=maquefel.me
-Received: from mail-nwsmtp-smtp-production-main-47.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-47.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:8f4f:0:640:c72e:0])
-	by forward501d.mail.yandex.net (Yandex) with ESMTPS id 4126D612E0;
-	Tue, 24 Sep 2024 12:30:02 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-47.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 0UP8338Z0qM0-hynlEMjE;
-	Tue, 24 Sep 2024 12:30:01 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
-	t=1727170201; bh=Lb2KsVVVaTMN3KohSpkn8V7UrH3zKzLtjp8hlZHmE9k=;
-	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-	b=P3vFb5rYQj4PNXwXDXwqol7bsbhX0wHv+Y9/ve/DM2xmC0C9Hc94xeDM49P0PRvke
-	 dX0qdgH7c1IyGzJjvPm450GFC2n2IfomKNvc+tPa1mxXpOeNO7xPjPRu0XAkUtEKJD
-	 Y8Q330wZKfQFwTtiH2Qce5sahpMZP76+jgndavE0=
-Authentication-Results: mail-nwsmtp-smtp-production-main-47.klg.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <be5d4d09e9e4a6adffd934878697679797c9ce33.camel@maquefel.me>
-Subject: Re: [PATCH] soc: ep93xx: drop reference to removed
- EP93XX_SOC_COMMON config
-From: Nikita Shubin <nikita.shubin@maquefel.me>
-To: Lukas Bulwahn <lbulwahn@redhat.com>, Alexander Sverdlin
-	 <alexander.sverdlin@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Arnd Bergmann
-	 <arnd@arndb.de>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, Lukas
-	Bulwahn <lukas.bulwahn@redhat.com>
-Date: Tue, 24 Sep 2024 12:30:01 +0300
-In-Reply-To: <20240924092423.50734-1-lukas.bulwahn@redhat.com>
-References: <20240924092423.50734-1-lukas.bulwahn@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+	id 87BC2C4CEC7; Tue, 24 Sep 2024 11:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1957CC4CEC4;
+	Tue, 24 Sep 2024 11:46:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727178379;
+	bh=6DhmIaSyUm5rO9r22RHuvlNx7CM1fcGSKzSl5E4kAfQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=t4wTUJDQJ8FTqvST5jlVQ6ue1eZTljHHBkU6saTnNs7XnSNBBgyBElhb7IuaoYhVH
+	 rYguBKbDK0529Xh190pb3XAYO9senRraXRNx/GXpTEnPhwYUk9E0+p+brEgD//hsPb
+	 0rk0wlvDgy6KUYbdOatKFdnV9y4s1zS9cqwtnTz+OsZWqHcUGwyw5DHx7j6URhFFo4
+	 ZwZ3ktWp1oqqhEtsuR6W6ptlRaXRihrvujOOouHLvVLLnVAJq+hUSiyeFJSQy732aV
+	 yjn3vKasxKcYkRYCCa9mvVJPgzQ1S/oPePBtPuwpczcyynov2SFLgysDFLvpax3842
+	 /ud7XKn4vDQ8w==
+Date: Tue, 24 Sep 2024 12:46:15 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: Daire McNamara <daire.mcnamara@microchip.com>, conor@kernel.org,
+	soc@kernel.org
+Subject: microchip soc maintainance change proposal
+Message-ID: <20240924-overtime-entourage-bcf3d6ff8c80@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="47Pl5gbWTvb5cJSo"
+Content-Disposition: inline
 
-Hi Lukas!
 
-Thank you for catching this!
+--47Pl5gbWTvb5cJSo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Nikita Shubin <nikita.shubin@maquefel.me>
 
-On Tue, 2024-09-24 at 11:24 +0200, Lukas Bulwahn wrote:
-> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
->=20
-> Commit 6eab0ce6e1c6 ("soc: Add SoC driver for Cirrus ep93xx") adds
-> the
-> config EP93XX_SOC referring to the config EP93XX_SOC_COMMON.
->=20
-> Within the same patch series of the commit above, the commit
-> 046322f1e1d9
-> ("ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms") then removes
-> the
-> config EP93XX_SOC_COMMON. With that the reference to this config is
-> obsolete.
->=20
-> Simplify the expression in the EP93XX_SOC config definition.
->=20
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-> ---
-> =C2=A0drivers/soc/cirrus/Kconfig | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/soc/cirrus/Kconfig b/drivers/soc/cirrus/Kconfig
-> index f2fd0e16a196..d8b3b1e68998 100644
-> --- a/drivers/soc/cirrus/Kconfig
-> +++ b/drivers/soc/cirrus/Kconfig
-> @@ -6,7 +6,7 @@ config EP93XX_SOC
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "Cirrus EP93xx chips=
- SoC"
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select SOC_BUS
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select AUXILIARY_BUS
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default y if !EP93XX_SOC_COMMO=
-N
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default y
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable support SoC=
- for Cirrus EP93xx chips.
-> =C2=A0
+Hey folks,
 
+I mentioned this to Arnd and Alexandre at LPC, and to Nicolas before
+that, but I would like to propose some changes to how the Microchip soc
+support is maintained - mostly affecting the riscv side of things that
+I've been maintaining in my personal tree, alongside other platforms.
+I'd like to propose moving those from my tree, into the at91 tree.
+While the dts bits for the arm and riscv platforms have no overlap
+and nothing is particularly gained from me moving which tree
+location they're in, I'm far more interested in disambiguating the tree
+that soc and/or firmware bindings and drivers end up in.
+
+I was going to add the bindings/soc/microchip directory to the
+maintainers entry I have for drivers/soc/microchip, but while doing
+that, I noticed that there have been recent patches for sam and sparx5
+bits that have added files to that bindings directory that went via at91
+and I figure it's almost certain that there'll be drivers added before
+too long. Having a single location, like we do at the moment for clocks,
+would make the route upstream for things a bit clearer - and I figured
+that while moving one thing, might as well move the firmware and dts
+stuff too.
+
+My assumption is that the riscv dts bits would retain their own branch,
+and that I'd still send the PRs for them and for the firmware stuff given
+that there's no !riscv soc content in that directory yet - and I don't
+want to saddle Claudiu with more work for devices he probably doesn't
+care about...
+
+Seem reasonable?
+
+Cheers,
+Conor.
+
+--47Pl5gbWTvb5cJSo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvKmhwAKCRB4tDGHoIJi
+0iJ3AP9ZMrTDm6nX9lTKvZlE/xlhbrMLOylSFAshsIrToe2ssAEA4KHnkZpSUzq4
+MHhZuNPZ7qxnM4Ml7dfLuTw+BFX7Qgs=
+=0sZL
+-----END PGP SIGNATURE-----
+
+--47Pl5gbWTvb5cJSo--
