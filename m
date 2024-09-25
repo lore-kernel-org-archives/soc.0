@@ -1,68 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021A114B950
-	for <soc@lists.linux.dev>; Wed, 25 Sep 2024 07:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FE8154C0E
+	for <soc@lists.linux.dev>; Wed, 25 Sep 2024 09:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727249657; cv=none; b=VeVO6FT0T9ZtXY66/Hp0wWTT7nhp0xbkHFWy5QIE9/vSeZNRjXDhJoPb3UJ0s9oePpLZDjqRI1zh1E87YkJd7ofoTwxieikBQh0hAxywR6bMJtVDeZUqLVUDiC7T5iLr+YhHtQpQUsNauPIwjAo/wOCasatZMnYArLljlVpREis=
+	t=1727258090; cv=none; b=PdonnRlhukG8HFdPSZNNGBkv5l6RmWcJbPZ8pKsey1hqbnJbSpwz3KjthVPH8r8/CAulZPXwUmj47IbwiiSdlINkoFjz3GdeFfhjlzpS0DVSEVGSmEKcpzJfYOZ3jGX9aO1bH+YPGXk113oR9ZbasKSUBqVWragm06dxfcamxTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727249657; c=relaxed/simple;
-	bh=isFwFaRTFKj16YSv9nhDGr6kCwogz7fMPgWT9GbIAac=;
+	s=arc-20240116; t=1727258090; c=relaxed/simple;
+	bh=34wuirK0L4D6jQbHrbv5p+25SdyD8YI5ZOohEg82MhY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PVYagVlhrH5j2wBjWxOMCz0RahUPaUdqGD5C6dftAwK/AE+vmF+XQDjxkvXKQI+BSulseo/qMXOIoOR2LDbh/QFk+4kMj7Bob3STjdGTpli7ViLdh8NjyyVyxxtUE94ujoRiX7NLuOJnbsi6+uSCE5hax/hcGLapXpxsCkl3Z9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=njCSsye+; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=nDmVGqamf9CZyc5AOZoEC7ESJ0vdccf/54JxHwkdlRDF2Q0UEBbF4JaIVtyGGRicHXzJ+Of1/dsvdTvY0HNOuNB/U9NSzF60OWDEQ5fwJIQw+QWBzThdF4uFZUoAZqB6xpYj0yjMshhgjGIgMn6Ye2bXqHrHoxiUJiirFzLDz9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HWIEQjA8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="njCSsye+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HWIEQjA8"
 Received: by smtp.kernel.org (Postfix)
-	id A0288C4CEC3; Wed, 25 Sep 2024 07:34:16 +0000 (UTC)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	id 8C37EC4CECE; Wed, 25 Sep 2024 09:54:49 +0000 (UTC)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F657C4CEC6
-	for <soc@kernel.org>; Wed, 25 Sep 2024 07:34:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F657C4CEC6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cb8dac900so62728615e9.3
-        for <soc@kernel.org>; Wed, 25 Sep 2024 00:34:14 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8DC60C4CEC3
+	for <soc@kernel.org>; Wed, 25 Sep 2024 09:54:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DC60C4CEC3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42e6dbc8c7dso10007035e9.1
+        for <soc@kernel.org>; Wed, 25 Sep 2024 02:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1727249653; x=1727854453; darn=kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8evR+3sFy/NMuSZynjpwriRL4R87o5mqb1UEgxBo7Q=;
-        b=njCSsye+Z4yDylqUwvdnrm56PXoPX1O999dfUNN61WXKUVw1iaY4gVoRP+tEtXlUXT
-         amztDkmtP4ZNtD2xUSQSmBbPJXA5uFVkymAZ95EKLEdhedN4mHi3LV66W6tCHgr6ErRj
-         WCsuDaL6Jj63ykYkhUE3oi3/T0KQcBml9cGQ3i+GscaCEJeGaKcFZENY6fwzGgloqJFX
-         1gHIjgu9le5QxztIikGJEq9a1bQs2sAi6TXsGAQAjZvS18NTgnKHSBxS+QPps76llpH8
-         lOP/3VD6EdOHKTbydK/3QXdhZK6FXJa40gWw+drIBJuR4SLNGlJv3qnSSzQGRe3MHZ2n
-         5MgQ==
+        d=linaro.org; s=google; t=1727258087; x=1727862887; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1cXiR6Xltjt+awh9RdC/PODyvQNRIeHhu1r3uefkfSc=;
+        b=HWIEQjA8HFERP4BoBIkYVSPBDur4MJhX3IiqbHVRk6wm3rEq3zR8m9TtrJoKBvDjtY
+         tHp5YBZOPF48P4BhRbSNPvcgtYQ1KOx9x1LP8G3s7+af+7tkhQOrI3rwRdWjpJ62ycie
+         KIEuIPJEE2fLleFP25kg79gPjCV8Qz83de91HI2B5ygriTh23ja+j+piBwslN/5x3RhY
+         hhUcmZzLWbybdTZ1j2OyBl4x269v55DQkUYWVOh+wmfQ8ned3juHPgRrNJ/IqzoXkmSS
+         O4+XOslsXj5T7n76p76wIDfG/feSIe7TEk3dXgnCrqpnC7HBUtFX1SSpoVyF8WS3tBsA
+         xovw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727249653; x=1727854453;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n8evR+3sFy/NMuSZynjpwriRL4R87o5mqb1UEgxBo7Q=;
-        b=NEiOBIGYdX11g96l5h1NsjoOuXFPctmU95KkzIT0LjHjz1r5aRNf2E593sOBfYk5G2
-         ycDgh0NRMIqkj/IB+2DMF56Nts4Xxwx6cPdP4FwY3QOrKisB2UBxhJ8/733Ro+P7YBSm
-         oadcCWpiRzVEzwxczlx0Fc6OUOI6M+F6CgNdUxB7euEt6zapPbwYb+Cz5lnBURO2cpWq
-         c7VWB/n4FgdOZ/94j0q+5verPe6efhsKL2hNZjXh/m7Ol+WjUX5P3NTsUl1b/wz4AbSs
-         bJYn51Tj5tbTu4+NS/KtMUkwk2T1C1oihOVriuuheFdrg6NBVOgGcOXP3vkrLHYcmNJh
-         Y+1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUPfewGPrB7KExuEKJxF77cPqMzSkVIzgNzhN+fzA6cRIe7dCV3nkFP4a1QzRsIxAzfT74=@kernel.org
-X-Gm-Message-State: AOJu0YyvkdVB3Q1RbC0hpo4zHY0QSgHmtxdKwaZ/S6rqIfxRkLYFF75N
-	Z2HcVU0Mh2Gd7W+YbvXavur8UoN6lWOpi50l36b6kz9xydWBMmy4qii20T9+CLE=
-X-Google-Smtp-Source: AGHT+IF02GPx8xRrQ7QHLnv6LSOWPvwNOG7tn+YhUooj0p7JLAW1CQ4VB97iDTrVE3o+2k/r3fIJKw==
-X-Received: by 2002:a5d:5d86:0:b0:37c:c51b:8d9b with SMTP id ffacd0b85a97d-37cc51b8e5emr496665f8f.40.1727249652399;
-        Wed, 25 Sep 2024 00:34:12 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.115])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a17d30sm9671075e9.40.2024.09.25.00.34.11
+        d=1e100.net; s=20230601; t=1727258087; x=1727862887;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1cXiR6Xltjt+awh9RdC/PODyvQNRIeHhu1r3uefkfSc=;
+        b=YT8XTp5h/EitEo8cqq5/2RL582hVEywDp39r3teJK6Z5ZSPWz23sDioU8B/SDMO8hr
+         hbnggpnydOOQx7S2RhehNFZ6XRTcctWk0tYVapm6pwYUVaNq4s5SJ91+0ksSlzIlusTc
+         ptgbsP9830dByIJI1uDhG5TNaMdejAA6dTm3WdszRUVdB01NefVZ+23BOdDxdixfqBYc
+         RuxoWUTLhbRLtRSyr5UqhUBovGakpwZ6vif046xaCC5UUI3WonBUVTeGRy5/nhKRseYi
+         7nZO9UvkFHiZ9SWZNrvPbLMA4+3ZIG+a3EOV2plbXpKdIv+4nXPD5u6RnIv/rIQ/eQNm
+         Fyrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUhU9JjdSI/x2l7razO7kyXhT8e7RgW74Y7jTbBF3utCXWYTqz+J0N8HSU7bePNaPWQiv8=@kernel.org
+X-Gm-Message-State: AOJu0YyhPyDVAd2GOtcORz67AhEnaWLweVDM9KzXlfJiKss45CyIgQxl
+	ORq9NqoQlLfJW/WBiivinovB4WxiXh3YHLsKT9c9GSisz27UTJ/EhX/LSmNhKOI=
+X-Google-Smtp-Source: AGHT+IG0refFTe5TyUaGgmhQ6uzLehrlX7ax3e9FpVy17D0N4EKtGryX81kxNl2GE6Jjo3NCnZ+2xA==
+X-Received: by 2002:a05:600c:470d:b0:42c:aeee:da87 with SMTP id 5b1f17b1804b1-42e9624f704mr6326135e9.9.1727258086779;
+        Wed, 25 Sep 2024 02:54:46 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.211.167])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e969e188csm13086625e9.3.2024.09.25.02.54.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Sep 2024 00:34:12 -0700 (PDT)
-Message-ID: <70f1981a-5956-4abb-afd2-4321f4b21e8b@tuxon.dev>
-Date: Wed, 25 Sep 2024 10:34:10 +0300
+        Wed, 25 Sep 2024 02:54:46 -0700 (PDT)
+Message-ID: <f1f5f503-b927-4bfe-b55d-d8fd343a2ba1@linaro.org>
+Date: Wed, 25 Sep 2024 11:54:43 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -70,75 +71,103 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: microchip soc maintainance change proposal
+Subject: Re: [PATCH] Documentation/process: maintainer-soc: clarify submitting
+ patches
+To: Conor Dooley <conor@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ linux-arm-kernel@lists.infradead.org, workflows@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Will Deacon <will@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, =?UTF-8?Q?Heiko_St=C3=BCbner?=
+ <heiko@sntech.de>
+References: <20240924130831.38861-1-krzysztof.kozlowski@linaro.org>
+ <20240924-powdery-driver-e66ea543d634@spud>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Conor Dooley <conor@kernel.org>,
- Daire McNamara <daire.mcnamara@microchip.com>, soc@kernel.org
-References: <20240924-overtime-entourage-bcf3d6ff8c80@spud>
- <6d6ab21d-44fa-491c-98f7-8a2d8ab86c62@microchip.com>
- <202409241424582a8b426d@mail.local>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <202409241424582a8b426d@mail.local>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240924-powdery-driver-e66ea543d634@spud>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 24.09.2024 17:24, Alexandre Belloni wrote:
-> On 24/09/2024 16:05:45+0200, Nicolas Ferre wrote:
->> On 24/09/2024 at 13:46, Conor Dooley wrote:
->>> Hey folks,
->>>
->>> I mentioned this to Arnd and Alexandre at LPC, and to Nicolas before
->>> that, but I would like to propose some changes to how the Microchip soc
->>> support is maintained - mostly affecting the riscv side of things that
->>> I've been maintaining in my personal tree, alongside other platforms.
->>> I'd like to propose moving those from my tree, into the at91 tree.
->>
->> I don't know if the "at91" naming will remain a right designation of what
->> we're doing in the future, but well, let's stick to it for now.
->> Some find it a little too much tight to the old Atmel brand...
->>
+On 24/09/2024 15:19, Conor Dooley wrote:
+> On Tue, Sep 24, 2024 at 03:08:31PM +0200, Krzysztof Kozlowski wrote:
 > 
-> We could take this opportunity to rename the tree microchip or mchp. 
-
-+1
-
+>>  Most of these submaintainers have their own trees where they stage patches,
+>>  sending pull requests to the main SoC tree.  These trees are usually, but not
+>> -always, listed in MAINTAINERS.  The main SoC maintainers can be reached via the
+>> -alias soc@kernel.org if there is no platform-specific maintainer, or if they
+>> -are unresponsive.
+>> +always, listed in MAINTAINERS.
 > 
->>> While the dts bits for the arm and riscv platforms have no overlap
->>> and nothing is particularly gained from me moving which tree
->>> location they're in, I'm far more interested in disambiguating the tree
->>> that soc and/or firmware bindings and drivers end up in.
->>>
->>> I was going to add the bindings/soc/microchip directory to the
->>> maintainers entry I have for drivers/soc/microchip, but while doing
->>> that, I noticed that there have been recent patches for sam and sparx5
->>
->> FYI: and we have the older drivers/soc/atmel directory (which is caught by
->> "ARM/Microchip (AT91) SoC support" entry).
->>
->>> bits that have added files to that bindings directory that went via at91
->>> and I figure it's almost certain that there'll be drivers added before
->>> too long. Having a single location, like we do at the moment for clocks,
->>> would make the route upstream for things a bit clearer - and I figured
->>> that while moving one thing, might as well move the firmware and dts
->>> stuff too.
->>>
->>> My assumption is that the riscv dts bits would retain their own branch,
->>> and that I'd still send the PRs for them and for the firmware stuff given
->>> that there's no !riscv soc content in that directory yet - and I don't
->>> want to saddle Claudiu with more work for devices he probably doesn't
->>> care about...
->>>
->>> Seem reasonable?
->>
->> That's fine with me Conor. It makes a lot of sense as we're working on more
->> and more topics together.
+> I probably had some specific case in mind with that original wording. I
+> presume it still holds true for some smaller platforms, but I cannot
+> remember the specific case that prompted it. I'll have to see if I can
+> figure out which platforms they are (if any) and get the tree added.
 > 
-> Looks good to me.
-
-Looks good to me, too.
-
+> Cheers,
+> Conor.
 > 
+>>  What the SoC tree is not, however, is a location for architecture-specific code
+>>  changes.  Each architecture has its own maintainers that are responsible for
+>>  architectural details, CPU errata and the like.
+>>  
+>> +Submitting Patches for Given SoC
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> +
+>> +All usual platform related patches should be sent via SoC submaintainers
+>> +(platform-specific maintainers.  This includes also changes to per-platform or
+>    ^ this is unclosed.
+
+Ack. I have v2 with minor text changes in other places as well. I will
+send soon.
+
+Best regards,
+Krzysztof
+
