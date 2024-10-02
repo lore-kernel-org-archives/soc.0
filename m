@@ -1,104 +1,198 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAEF10A1F
-	for <soc@lists.linux.dev>; Wed,  2 Oct 2024 03:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED791E633E
+	for <soc@lists.linux.dev>; Wed,  2 Oct 2024 10:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727840945; cv=none; b=WEUNxlV8+MgG3jnsRYK+WxgrvpH2/nH3o1kAsEzxJLWWeYSbwPRc6xSi3Cupnkwungp8pez3EoMGqt1qpMAwVO2MC1dpB3CqGOE/62O0op77LKKmELJ9mg/gaOoZA6unDQ8iFkQDk+tVlNeoO/EzZcW42zTmaFbNxhSiZCnoKew=
+	t=1727864983; cv=none; b=hkWTTH0HW0n4u9RWd4LiZpNiRYCDPWshRC0EZv0VZ6y5SFWyYqAlAKaOvFmJnM+nguSDCz5FcERjpMl2Kev2thyyV2dPmj3opK/P1lzEhyCg1aOXcJw3q7r34JXDiO9YSasxcesxJZwATnnaUlxA4Uh0hBBk3bh5+12lOfeQfmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727840945; c=relaxed/simple;
-	bh=nAEKTIpBmymWLR+e+hBkypCfwSNJotZOEB0oMjBgW3A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qU4qu5t4/IvrbAjRIHOfoleV9IjSX2VsStbe7p6d9KuKAvjxUy3Sne1aR7UcUDdljiGu09nRo/X9lqJn/dqmhkADqy5qf/ep0YVtFFbmfAH3i6ywGTOT5cGQ79SQVrzqmbK80v8ivDLl/v11KksWtydxxLGEK9z/ApbSZ81MrCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Af2UjTVf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727864983; c=relaxed/simple;
+	bh=LDK9u0Rh2qGiHVfadHoNtSjm2vY0JJcNEyZQH38Ru+k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=K3zkJyw4B15g1C+957IxdC7qPSKeewZ4JthXapsZ2NUkCrkTiKghRv384QWQwiYxJPyjh0uStYPvkVrru1OV7gUkbsDMDEh1dAuMbfsT74KJ6JnoCoIPkTcqa72cYJ9+IU6kXRF0Yp8Ff5myoxAtMCVO0CJWrbwRp819gDT5HIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yB1oAT7E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MhIpu/ca; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Af2UjTVf"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yB1oAT7E";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MhIpu/ca"
 Received: by smtp.kernel.org (Postfix)
-	id 42641C4CEDD; Wed,  2 Oct 2024 03:49:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21497C4CED5;
-	Wed,  2 Oct 2024 03:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727840945;
-	bh=nAEKTIpBmymWLR+e+hBkypCfwSNJotZOEB0oMjBgW3A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Af2UjTVfNh6y+KURqioy4b8Bj7Yu5BpvrE0pOuTAaCdsWVGE8VQdAPbay4eP9DqPg
-	 vWMLCMNoxrjpq2dgf0Gkki5SuP7pwmk7jkH2meg7cuorJVxX/VF75raABEWvzkaMHi
-	 vhhxdgRpR3b7B5ke0UhpF0oO9c3sZ7F6qfo5LaAZzh2DiImZJl6yUno80Km9y1f2VX
-	 IIlH0yPKwIL8OBus0S8hdF72eqSA5xm2L3CztnHUgtzPMXEtvUhtadchDi41GC6Mt7
-	 Ca1gozPG5gv1ZiW5uDRIVS53lJA/EuDl2IF4CK5RlPgdKNeNXNE2aGU70QMIY0HzW0
-	 QHOaUeFAAHJ5A==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5399675e14cso3479989e87.3;
-        Tue, 01 Oct 2024 20:49:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU58Fc8KglB08T+PH+9AfIXKmukF7t5Y85fsmEpgWdGQM5I1vpGobZjDYKNm6uV2K82C2lEIfU=@kernel.org, AJvYcCUQqgMhR4XWzKF4idnv2aWZ7G2GYuj5bjK0XQw2XYVBW3P3DqQm5GRGCMtv9vsK/JslY3ZpQyVW@kernel.org, AJvYcCUrkDxh1096ouFwn1EQ92hMlpDrEqh8zuTBVBHwVZgsXVqlArzB2GzQaOuX8vY8bh2Q8QW6LCPXk0w=@kernel.org, AJvYcCVgF+ej8780y84dt9828s8tj3j3eVnVfm4zLGlH+AGqOk2uTTuvTq+qmeBmInEQNmZwu7UWp3cfSQ==@kernel.org, AJvYcCVlK+LAWgsFfxqSe8T2201vgHHt6m3Owx9soQIXRU1DedQSXt9TmuavZkoQuKSosX18irpN@kernel.org, AJvYcCWWieru/AHqcDR/cvmUOBOIKwlPOOsurz0qp0lXzXWaJ6eWqo/iZ+5AsvLLcAd/D4gwXfyg2g==@kernel.org, AJvYcCWcIdvFCDLC0mlHnHLFO7sRkR2Vt2iSRCNWOHWki17Gp2K3I/NnEOaHof9XZKWe4imwHaAdThPz3A==@kernel.org
-X-Gm-Message-State: AOJu0YwxuuCowpcCfPo2AnGlc1+FOsSgG2Z9ou5B+ee/osHd4jUAgFnP
-	7BeUBb80vDVjM1BTvPIZw17Ipbb83ODRp9CtdRTt3ahcpIPcBOGmr938nnIWji/lgVyxyIdOmXA
-	Nmxuz61al94Ue7DCG2YMY0Fmovg==
-X-Google-Smtp-Source: AGHT+IEqtnQCtoRUlnvKJ/juvutRb8LD+WF2Ji1IL7egoXyMFlaAGJMVK219VrK0qM0doCIPbjzZD5sR9nPD1sht5+g=
-X-Received: by 2002:a05:6512:1113:b0:533:4638:df40 with SMTP id
- 2adb3069b0e04-539a067f65cmr743356e87.27.1727840943291; Tue, 01 Oct 2024
- 20:49:03 -0700 (PDT)
+	id A5933C4CED2; Wed,  2 Oct 2024 10:29:42 +0000 (UTC)
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2FD00C4CEC5;
+	Wed,  2 Oct 2024 10:29:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2FD00C4CEC5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1727864979;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6PJVrnVEM5cfMb5vScxdTKMt9fhDfO9Z+hAavmEhwIU=;
+	b=yB1oAT7E1XlN630uOzFK88nJIYEI99pPkqNC7MzylFVOj1IHHLL4wQdAvyaZyP4PagTpOx
+	bxnuVy3hPxeaRunRUQWRz7PLnx8jC0XM/QBipRCtwDXt5yk/GnTnLgawl6+Jpj357eInF4
+	feHK1LkX8aAxPoSFSnq6FIiAbwkHqopcOJoxhHy670GOTPC6bBLMxPFLRA0TkjO6QuHrgM
+	dnySzEfNcKCD4u6/Ie7tYBxX+e2CISpmNjazTC0R1oQIBq9Ylik81p5JcGwgXjOL58GSxN
+	55PJEsrPb5JN7Vz1JoYqp0HGychuDbfIpdbgbOUe0N70jPiGXLaRsgrf6hFtoQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1727864979;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6PJVrnVEM5cfMb5vScxdTKMt9fhDfO9Z+hAavmEhwIU=;
+	b=MhIpu/cax/LLZ8lM46QyQvLchwXnRKNKa5cv+msYl2uLTyj87E3kBnHwolI8nutZOK39SI
+	uCKJQkyTfUQG9jCQ==
+To: Arturs Artamonovs via B4 Relay
+ <devnull+arturs.artamonovs.analog.com@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Greg Malysa
+ <greg.malysa@timesys.com>, Philipp Zabel <p.zabel@pengutronix.de>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, Utsav Agarwal <Utsav.Agarwal@analog.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
+ Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
+ <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson
+ <olof@lixom.net>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-serial@vger.kernel.org, Arturs Artamonovs
+ <arturs.artamonovs@analog.com>, adsp-linux@analog.com, Arturs Artamonovs
+ <Arturs.Artamonovs@analog.com>, Nathan Barrett-Morrison
+ <nathan.morrison@timesys.com>
+Subject: Re: [PATCH 11/21] irqchip: Add irqchip for ADI ADSP-SC5xx platform
+In-Reply-To: <20240912-test-v1-11-458fa57c8ccf@analog.com>
+References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
+ <20240912-test-v1-11-458fa57c8ccf@analog.com>
+Date: Wed, 02 Oct 2024 12:29:38 +0200
+Message-ID: <87ed4yyezx.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240930223550.353882-1-rosenp@gmail.com> <20240930223550.353882-3-rosenp@gmail.com>
-In-Reply-To: <20240930223550.353882-3-rosenp@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 1 Oct 2024 22:48:50 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKNMhUy3HUAanod27FnJAz35w7FLp7tp0Uo3SeVbG7EGw@mail.gmail.com>
-Message-ID: <CAL_JsqKNMhUy3HUAanod27FnJAz35w7FLp7tp0Uo3SeVbG7EGw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ARM: dts: assign reg to memory nodes
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Antoine Tenart <atenart@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Jesper Nilsson <jesper.nilsson@axis.com>, 
-	Lars Persson <lars.persson@axis.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
-	"maintainer:SPEAR PLATFORM/CLOCK/PINCTRL SUPPORT" <soc@kernel.org>, Marek Vasut <marex@denx.de>, Jisheng Zhang <jszhang@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, David Lechner <david@lechnology.com>, Nishanth Menon <nm@ti.com>, 
-	Santosh Shilimkar <ssantosh@kernel.org>, Tony Lindgren <tony@atomide.com>, 
-	Enric Balletbo i Serra <eballetbo@gmail.com>, Javier Martinez Canillas <javier@dowhile0.org>, 
-	Alexey Charkov <alchark@gmail.com>, Denis Burkov <hitechshell@mail.ru>, Arnd Bergmann <arnd@arndb.de>, 
-	Stefan Wahren <wahrenst@gmx.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	=?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
-	Nicolas Chauvet <kwizart@gmail.com>, Tomasz Maciej Nowak <tmn505@gmail.com>, 
-	Robert Eckelmann <longnoserob@gmail.com>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:ARM/Amlogic Meson SoC support" <linux-amlogic@lists.infradead.org>, 
-	"moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-aspeed@lists.ozlabs.org>, 
-	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" <linux-rpi-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
-	"moderated list:ARM/NUVOTON NPCM ARCHITECTURE" <openbmc@lists.ozlabs.org>, 
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
-	"open list:TQ SYSTEMS BOARD & DRIVER SUPPORT" <linux@ew.tq-group.com>, 
-	"open list:DH ELECTRONICS IMX6 DHCOM/DHCOR BOARD SUPPORT" <kernel@dh-electronics.com>, 
-	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>, 
-	"open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>, 
-	"open list:ARM/RISC-V/RENESAS ARCHITECTURE" <linux-renesas-soc@vger.kernel.org>, 
-	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
-	"open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
-	"open list:OMAP DEVICE TREE SUPPORT" <linux-omap@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Mon, Sep 30, 2024 at 5:36=E2=80=AFPM Rosen Penev <rosenp@gmail.com> wrot=
-e:
+On Thu, Sep 12 2024 at 19:24, Arturs Artamonovs via wrote:
+> From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 >
-> Fixes dtc warnings:
+> Support seting extra indepdendent interrupt on pin activity.
 
-Unfortunately we cannot make this change treewide. Any platform that
-relies on the ATAGS to DT bootloader support in the kernel
-decompressor expects /memory.
+So the subject says it adds a new interrupt chip. Now the changelog
+mumbles about support of something extra.
 
-Rob
+Please describe your changes properly and explain what this is
+about. Also spell check your change log.
+
+> +struct adsp_pint {
+> +	struct irq_chip chip;
+> +	void __iomem *regs;
+> +	struct irq_domain *domain;
+> +	unsigned int irq;
+
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#struct-declarations-and-initializers
+
+And please read and follow the rest of that document too.
+
+> + * This relies on the default configuration of the hardware, which we do not
+> + * expose an interface to change.
+> + */
+> +int adsp_attach_pint_to_gpio(struct adsp_gpio_port *port)
+
+Where is this function declared and where is it used?
+
+> +static void adsp_pint_dispatch_irq(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	struct adsp_pint *pint = to_adsp_pint(chip);
+> +	unsigned int type = irqd_get_trigger_type(&desc->irq_data);
+> +	u32 pos = BIT(desc->irq_data.hwirq);
+> +
+> +	/* for both edge interrupt, toggle invert bit to catch next edge */
+> +	if (type == IRQ_TYPE_EDGE_BOTH) {
+> +		u32 invert = readl(pint->regs + ADSP_PINT_REG_INVERT_SET) & pos;
+> +
+> +		if (invert)
+> +			writel(pos, pint->regs + ADSP_PINT_REG_INVERT_CLEAR);
+> +		else
+> +			writel(pos, pint->regs + ADSP_PINT_REG_INVERT_SET);
+
+What protects pint->regs against concurrent modifications?
+
+> +static void adsp_pint_irq_mask(struct irq_data *d)
+> +{
+> +	struct adsp_pint *pint = irq_data_get_irq_chip_data(d);
+> +
+> +	writel(BIT(d->hwirq), pint->regs + ADSP_PINT_REG_MASK_CLEAR);
+
+Same question.
+
+> +static int adsp_pint_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct adsp_pint *pint;
+> +
+> +	pint = devm_kzalloc(dev, sizeof(*pint), GFP_KERNEL);
+> +	if (!pint)
+> +		return -ENOMEM;
+> +
+> +	pint->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(pint->regs))
+> +		return PTR_ERR(pint->regs);
+> +
+> +	pint->chip.name = "adsp-pint";
+> +	pint->chip.irq_ack = adsp_pint_irq_ack;
+> +	pint->chip.irq_mask = adsp_pint_irq_mask;
+> +	pint->chip.irq_unmask = adsp_pint_irq_unmask;
+> +	pint->chip.irq_set_type = adsp_pint_irq_set_type;
+> +	// @todo potentially only SEC supports wake options, not gic
+> +
+> +	// @todo determine if we actually need a raw spinlock
+
+This should have been determined before posting, no?
+
+> +	pint->domain = irq_domain_add_linear(np, ADSP_PINT_IRQS,
+> +		&adsp_irq_domain_ops, pint);
+
+devm_irq_domain_instantiate()
+
+> +	if (!pint->domain) {
+> +		dev_err(dev, "Could not create irq domain\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	pint->irq = platform_get_irq(pdev, 0);
+> +	if (!pint->irq) {
+> +		dev_err(dev, "Could not find parent interrupt for port\n");
+> +		return -EINVAL;
+
+Then this would not leak the interrupt domain. Also why is this not
+checked _before_ instantiating the domain?
+
+> +static int __init adsp_pint_init(void)
+> +{
+> +	return platform_driver_register(&adsp_pint_driver);
+> +}
+> +
+
+Pointless new line
+
+> +arch_initcall(adsp_pint_init);
+> +
+> +MODULE_DESCRIPTION("Analog Devices IRQChip driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
+> \ No newline at end of file
+
+This message has a meaning, no?
+
+Thanks,
+
+        tglx
