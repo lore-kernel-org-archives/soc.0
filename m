@@ -1,115 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0E01CEEA4
-	for <soc@lists.linux.dev>; Tue,  1 Oct 2024 21:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAEF10A1F
+	for <soc@lists.linux.dev>; Wed,  2 Oct 2024 03:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727819913; cv=none; b=su31jHHWJgBgrfR3C2UAUQQMEX6spf0cZqhccwxMBgRS/drEwirnRDFao04pV0w4HCiuupqKt/KN/N+3PWOAm3AWKAftCXOMBNxGQFl2N5+DwpJUKeZqzPzgHxl7fZS3xU78btGpb7NsdGNs69ePoR+1xvogxTQwWACX7rSIjc0=
+	t=1727840945; cv=none; b=WEUNxlV8+MgG3jnsRYK+WxgrvpH2/nH3o1kAsEzxJLWWeYSbwPRc6xSi3Cupnkwungp8pez3EoMGqt1qpMAwVO2MC1dpB3CqGOE/62O0op77LKKmELJ9mg/gaOoZA6unDQ8iFkQDk+tVlNeoO/EzZcW42zTmaFbNxhSiZCnoKew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727819913; c=relaxed/simple;
-	bh=90cj3MZQ2bSTZsUCDSDy7qQ6PfIFyQv5SQPEYusdK10=;
+	s=arc-20240116; t=1727840945; c=relaxed/simple;
+	bh=nAEKTIpBmymWLR+e+hBkypCfwSNJotZOEB0oMjBgW3A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YumyWXTqbaGYhHcuq42bIu773DX9qJHwjxmx4KxcGfnJIqQ2YdZ4+A1q+lu1MQZaYg8+w6ON6D62MR/vnwsq1DGwF6YQ4cNUl6mD3YYR+lHaWfy3xnLIiaaCt8oIB7pOdDGHZAZRdnYhyNy7TP1D7vUMxJtmhs9pip3Ks5iQ9fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=KCAxwzEG; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=qU4qu5t4/IvrbAjRIHOfoleV9IjSX2VsStbe7p6d9KuKAvjxUy3Sne1aR7UcUDdljiGu09nRo/X9lqJn/dqmhkADqy5qf/ep0YVtFFbmfAH3i6ywGTOT5cGQ79SQVrzqmbK80v8ivDLl/v11KksWtydxxLGEK9z/ApbSZ81MrCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Af2UjTVf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="KCAxwzEG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Af2UjTVf"
 Received: by smtp.kernel.org (Postfix)
-	id C45B9C4CED1; Tue,  1 Oct 2024 21:58:31 +0000 (UTC)
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 239AAC4CECD
-	for <soc@kernel.org>; Tue,  1 Oct 2024 21:58:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 239AAC4CECD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=timesys.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=timesys.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3a0cad8a0a5so31170335ab.1
-        for <soc@kernel.org>; Tue, 01 Oct 2024 14:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1727819908; x=1728424708; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ypgub8lGo9uIxhP/Ts+gM6FIKRMUkTQXJvJ7axKC0No=;
-        b=KCAxwzEGDGN9K3IU/NkRrIKudZsr7BcCTC4cGlAQD5wV4xW4j1dt1GN8wvrqWQ1Ops
-         oem1XI0Mw8A2g6YXdGWSbujCSAQZQH0fTFIrOwXlC3E3/X1q0GGJuROixVuwbQ+pJgHf
-         4Jf3o5vr2YnHQtO9mKzB/mCGD/h83bTbbAypns+T/BgjpVdPu6jSNkeQYUQL2w67UZQ+
-         rCGgDkh6bNp3K750P3jqzue8wNSEwhF5y9KClIFL0JLght2ZL3l02+w6X9VpGOXF7gHg
-         5KjLleAtJvDzQWhcyuhjPivwF7KSEEPQgOidrSG1R5uw4djtspKmnJXkAhYlACoM2Xlg
-         d5MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727819908; x=1728424708;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ypgub8lGo9uIxhP/Ts+gM6FIKRMUkTQXJvJ7axKC0No=;
-        b=Z/MKLxIrEPtJoM5f92h7FGn0WdNsyfcOuL26mX9SR5hqJrFIMg1+NTSlt1eX4F7da6
-         DmEhDApRUQtfba4Ibv3uoeKjbTJMowwmzIi+KCf3uKgolaCQgfPj6ltUR4KUAVa4NleR
-         9iPHWc4jjgOYmouC8alconc8a+heajko8rtVA+XKSg6Y/SeIbsft0mJrNL32dfU+j+Hx
-         O4YF96Co0727PsY/pNsImCLMO/UpYalNwx/xIgA3dhbQsbn/Fi3D3SQHGxqLPbuHnkbj
-         F0zXy5oxNtyRtlc2NDsbtMZ+SFK7owALv5XRZXz5a4X0Gxe0+dscwK6XARnRFpVwb9qm
-         Ro6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVEwWRd/eaGd3kJBnl1a2BAGEXP2QP06MUyja8YbcpXvfkpAizG1AZT4/uztzLL9uEAj0U=@kernel.org
-X-Gm-Message-State: AOJu0YzoD9pSpciRfdu/PbFNW+ibbfvDqQMsRYoKVKPPk+WZPT5HoQt9
-	XtJWVG9Hgtj4hLMx1yS/AjmLKkoT3GP0SyTWAJKEGDuGWUBJQThYhzJyOyo29zdtEHyT6Zhqedm
-	BBextKbADbD9w91bYlDwN6dAVKq/E4hpwueGs
-X-Google-Smtp-Source: AGHT+IG8Mbwj1HalbNL61KqJPzFf+za9Ivu70OdRA7nBBfmVxjXJSGKtMf6v6sdYVH+UJ6WqSeqKg1y+vZZ3u8imlbI=
-X-Received: by 2002:a05:6e02:1c87:b0:3a0:a4ac:ee36 with SMTP id
- e9e14a558f8ab-3a365918466mr10985925ab.5.1727819908246; Tue, 01 Oct 2024
- 14:58:28 -0700 (PDT)
+	id 42641C4CEDD; Wed,  2 Oct 2024 03:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21497C4CED5;
+	Wed,  2 Oct 2024 03:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727840945;
+	bh=nAEKTIpBmymWLR+e+hBkypCfwSNJotZOEB0oMjBgW3A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Af2UjTVfNh6y+KURqioy4b8Bj7Yu5BpvrE0pOuTAaCdsWVGE8VQdAPbay4eP9DqPg
+	 vWMLCMNoxrjpq2dgf0Gkki5SuP7pwmk7jkH2meg7cuorJVxX/VF75raABEWvzkaMHi
+	 vhhxdgRpR3b7B5ke0UhpF0oO9c3sZ7F6qfo5LaAZzh2DiImZJl6yUno80Km9y1f2VX
+	 IIlH0yPKwIL8OBus0S8hdF72eqSA5xm2L3CztnHUgtzPMXEtvUhtadchDi41GC6Mt7
+	 Ca1gozPG5gv1ZiW5uDRIVS53lJA/EuDl2IF4CK5RlPgdKNeNXNE2aGU70QMIY0HzW0
+	 QHOaUeFAAHJ5A==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5399675e14cso3479989e87.3;
+        Tue, 01 Oct 2024 20:49:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU58Fc8KglB08T+PH+9AfIXKmukF7t5Y85fsmEpgWdGQM5I1vpGobZjDYKNm6uV2K82C2lEIfU=@kernel.org, AJvYcCUQqgMhR4XWzKF4idnv2aWZ7G2GYuj5bjK0XQw2XYVBW3P3DqQm5GRGCMtv9vsK/JslY3ZpQyVW@kernel.org, AJvYcCUrkDxh1096ouFwn1EQ92hMlpDrEqh8zuTBVBHwVZgsXVqlArzB2GzQaOuX8vY8bh2Q8QW6LCPXk0w=@kernel.org, AJvYcCVgF+ej8780y84dt9828s8tj3j3eVnVfm4zLGlH+AGqOk2uTTuvTq+qmeBmInEQNmZwu7UWp3cfSQ==@kernel.org, AJvYcCVlK+LAWgsFfxqSe8T2201vgHHt6m3Owx9soQIXRU1DedQSXt9TmuavZkoQuKSosX18irpN@kernel.org, AJvYcCWWieru/AHqcDR/cvmUOBOIKwlPOOsurz0qp0lXzXWaJ6eWqo/iZ+5AsvLLcAd/D4gwXfyg2g==@kernel.org, AJvYcCWcIdvFCDLC0mlHnHLFO7sRkR2Vt2iSRCNWOHWki17Gp2K3I/NnEOaHof9XZKWe4imwHaAdThPz3A==@kernel.org
+X-Gm-Message-State: AOJu0YwxuuCowpcCfPo2AnGlc1+FOsSgG2Z9ou5B+ee/osHd4jUAgFnP
+	7BeUBb80vDVjM1BTvPIZw17Ipbb83ODRp9CtdRTt3ahcpIPcBOGmr938nnIWji/lgVyxyIdOmXA
+	Nmxuz61al94Ue7DCG2YMY0Fmovg==
+X-Google-Smtp-Source: AGHT+IEqtnQCtoRUlnvKJ/juvutRb8LD+WF2Ji1IL7egoXyMFlaAGJMVK219VrK0qM0doCIPbjzZD5sR9nPD1sht5+g=
+X-Received: by 2002:a05:6512:1113:b0:533:4638:df40 with SMTP id
+ 2adb3069b0e04-539a067f65cmr743356e87.27.1727840943291; Tue, 01 Oct 2024
+ 20:49:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240912-test-v1-0-458fa57c8ccf@analog.com> <20240912-test-v1-9-458fa57c8ccf@analog.com>
- <CACRpkdZb6AhxB7XEtOsxV5_oa=c1h2+ZApLFsTS_MQs-cjLmsg@mail.gmail.com>
-In-Reply-To: <CACRpkdZb6AhxB7XEtOsxV5_oa=c1h2+ZApLFsTS_MQs-cjLmsg@mail.gmail.com>
-From: Greg Malysa <greg.malysa@timesys.com>
-Date: Tue, 1 Oct 2024 17:57:16 -0400
-Message-ID: <CAAjXUapu1DBqnk24ng0izU7opn67YxiwpGpFtqrBmqNgyCxRVA@mail.gmail.com>
-Subject: Re: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Utsav Agarwal <Utsav.Agarwal@analog.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andi Shyti <andi.shyti@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-serial@vger.kernel.org, adsp-linux@analog.com, 
-	Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+References: <20240930223550.353882-1-rosenp@gmail.com> <20240930223550.353882-3-rosenp@gmail.com>
+In-Reply-To: <20240930223550.353882-3-rosenp@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 1 Oct 2024 22:48:50 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKNMhUy3HUAanod27FnJAz35w7FLp7tp0Uo3SeVbG7EGw@mail.gmail.com>
+Message-ID: <CAL_JsqKNMhUy3HUAanod27FnJAz35w7FLp7tp0Uo3SeVbG7EGw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: dts: assign reg to memory nodes
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Antoine Tenart <atenart@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Jesper Nilsson <jesper.nilsson@axis.com>, 
+	Lars Persson <lars.persson@axis.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	"maintainer:SPEAR PLATFORM/CLOCK/PINCTRL SUPPORT" <soc@kernel.org>, Marek Vasut <marex@denx.de>, Jisheng Zhang <jszhang@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, David Lechner <david@lechnology.com>, Nishanth Menon <nm@ti.com>, 
+	Santosh Shilimkar <ssantosh@kernel.org>, Tony Lindgren <tony@atomide.com>, 
+	Enric Balletbo i Serra <eballetbo@gmail.com>, Javier Martinez Canillas <javier@dowhile0.org>, 
+	Alexey Charkov <alchark@gmail.com>, Denis Burkov <hitechshell@mail.ru>, Arnd Bergmann <arnd@arndb.de>, 
+	Stefan Wahren <wahrenst@gmx.net>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	=?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+	Nicolas Chauvet <kwizart@gmail.com>, Tomasz Maciej Nowak <tmn505@gmail.com>, 
+	Robert Eckelmann <longnoserob@gmail.com>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:ARM/Amlogic Meson SoC support" <linux-amlogic@lists.infradead.org>, 
+	"moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-aspeed@lists.ozlabs.org>, 
+	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" <linux-rpi-kernel@lists.infradead.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
+	"moderated list:ARM/NUVOTON NPCM ARCHITECTURE" <openbmc@lists.ozlabs.org>, 
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
+	"open list:TQ SYSTEMS BOARD & DRIVER SUPPORT" <linux@ew.tq-group.com>, 
+	"open list:DH ELECTRONICS IMX6 DHCOM/DHCOR BOARD SUPPORT" <kernel@dh-electronics.com>, 
+	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>, 
+	"open list:ARM/RISC-V/RENESAS ARCHITECTURE" <linux-renesas-soc@vger.kernel.org>, 
+	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
+	"open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	"open list:OMAP DEVICE TREE SUPPORT" <linux-omap@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
-
-Thanks for the review.
-
-> > +       __adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_SET);
+On Mon, Sep 30, 2024 at 5:36=E2=80=AFPM Rosen Penev <rosenp@gmail.com> wrot=
+e:
 >
-> Interrupt enable in the direction function? No thanks, poke the
-> interrupt registers in your irqchip if you make one (you currently
-> do not) in this case I'd say just disable all interrupts in probe()
-> using something like writew(base + ADSP_PORT_REG_INEN_SET, 0xffff)
-> and be done with it.
->
+> Fixes dtc warnings:
 
-This will come up next time too so I wanted to mention that INEN here
-means "input enable." The PORT design has two registers for
-controlling pin direction, one to enable/disable output drivers (DIR)
-and one to enable input drivers (INEN) to be able to read the pin
-state from the gpio data register. If I recall the bare metal
-reference code toggled both but we can review if setting INEN for all
-pins and leaving it is acceptable as well to simplify things.
+Unfortunately we cannot make this change treewide. Any platform that
+relies on the ATAGS to DT bootloader support in the kernel
+decompressor expects /memory.
 
-Thanks,
-Greg
-
--- 
-Greg Malysa
-Timesys Corporation
+Rob
