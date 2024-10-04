@@ -1,101 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FA53AC2B
-	for <soc@lists.linux.dev>; Thu,  3 Oct 2024 05:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423731AE018
+	for <soc@lists.linux.dev>; Fri,  4 Oct 2024 22:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727932889; cv=none; b=ewSVAmTAHv8KLRG14A9XYwJ+YBVtncZJnNF5UR7TSWjzfcSI2TNJ8ARCREFpMNxQt0ZrR0H35xqovCA1Qc2mcihaUXhryXtjHPGN9cwXKuS5vyrgZtOsbF8pVdtJcgHXesVqMM1E+Zo4KyXDWhR/MvYTROLiTknjQ7mURclxVpU=
+	t=1728079755; cv=none; b=X2wnoM0Mru8Lz5rBXORpZCfiNNdomksHDZhgFZNRHal4rIsdPoDMykbLFkpce/pvtzbxNjEBFpqlc0pFEJ8Yt8cJmMDQ+2tIl3rtGHn532R7o+dXUS739Tifsz9OVC5XgBd6aE+MwioPs8pXwenL9Qr7Om3MadASiy+0tXBz0Ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727932889; c=relaxed/simple;
-	bh=TLlYfqsej1jvMOodcxUf7H4bpjzZHIIQhryYVpzqnd0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=uxTsx7RVkfKEcaVGockWuQlDDzYAxa6r2ztS4oMsW9A2pcbvw2yLU97zY7uftpdSVYTdlVInvJU+5yHrzoZXgKnFCNJtPm0tFNuGk9iXUv1OBqS//XdNu7VBcJEn+mb3yxKMYRaaakPvED/Tv8hku7xm62+D1zlR1dgTQlQisGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728079755; c=relaxed/simple;
+	bh=TIg3IMhaT0ye8GFuRZW78WuPRs5cCfT/FubBhjwyMUE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=G7yB/pKyD8BrW0+bm9WkwA1054W7j2xy0LxitMAWPWWTt5TKik/Uho/ZpFEHZJrXa9xMJpQV0Yh7l1kknBzLWJ8Lq6LyV+uDBLL7I25ZaVvj5Xpm8WbvKKroYMZyVWkITL9MqAG9gGHyiNWo2yVxyOKN7D52R+po8DRfnZY43S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=P3jhJVM0; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="P3jhJVM0"
 Received: by smtp.kernel.org (Postfix)
-	id 69D80C4CECC; Thu,  3 Oct 2024 05:21:29 +0000 (UTC)
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 36F2EC4CECC; Fri,  4 Oct 2024 22:09:15 +0000 (UTC)
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 06FD7C4CEC7
-	for <soc@kernel.org>; Thu,  3 Oct 2024 05:21:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06FD7C4CEC7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4XK0QY4jZbz9sPd;
-	Thu,  3 Oct 2024 07:21:25 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pJL9cLjZYQ63; Thu,  3 Oct 2024 07:21:25 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4XK0QY3xKXz9rvV;
-	Thu,  3 Oct 2024 07:21:25 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 759BB8B766;
-	Thu,  3 Oct 2024 07:21:25 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id LiKfHjcgrxAl; Thu,  3 Oct 2024 07:21:25 +0200 (CEST)
-Received: from [192.168.233.90] (unknown [192.168.233.90])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3D0028B763;
-	Thu,  3 Oct 2024 07:21:25 +0200 (CEST)
-Message-ID: <c954bdb0-0c16-491a-8662-37e58f07208f@csgroup.eu>
-Date: Thu, 3 Oct 2024 07:21:24 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 58F2EC4CEC6
+	for <soc@kernel.org>; Fri,  4 Oct 2024 22:09:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 58F2EC4CEC6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71dba8b05cbso2576584b3a.3
+        for <soc@kernel.org>; Fri, 04 Oct 2024 15:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1728079751; x=1728684551; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TIg3IMhaT0ye8GFuRZW78WuPRs5cCfT/FubBhjwyMUE=;
+        b=P3jhJVM0IRh+M46L1wu5lCKhe+YK8wGmFqT8bGLyrpVTV6KlrsFMGLVvg7QVIS7BFY
+         cjx35IqlSwmluyRobjUM1UTUFq9JjZ9Cpe2woAZFxKbheWXa8u2S2exvTY6OyCBfKw6z
+         O4qjY8pqJrN2wwHdblQCg8va4IUjicVJYfcHlXyyJY9e3wX6YpeEWej4vivKJVeNtJ2r
+         /AnnSBDW4O8vhnym59CXttU0UPGtm2POwQno6FNKFjO9YCRhnzpv3JFgmTAIgGqaqJCn
+         XHTnP8jwWkeOkYXgy3KVU/1dNAER/hbZLOEE4zdqTmJTN68QNks6PYppOF4UKPzM6zCt
+         C7Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728079751; x=1728684551;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TIg3IMhaT0ye8GFuRZW78WuPRs5cCfT/FubBhjwyMUE=;
+        b=iJs4DuVj8QgvLPURZ8ybd9tFfnkxqlmx+UKfxsZx/pVpoaPnUpVepvBrRop2MI31l7
+         DfnAkvXACsOgrKaNHruxCIzVHwGtMF/CzxZOJKp1nwUINs2ChImvHyk3X1Ct9uhljuH7
+         qYwg5BM5IJoFrZaNUEWCXPVUJq/0LN6oCNB/ftIkTg5BK5MaXZMTyYwiPuIiLjbDEQpE
+         90MQiIKeRGWaIDs4EHdqQe4J3uE+1EQr0t1Knw6AKcXdfO+qCfFidE4chQKyBgzlU/lu
+         lvSD0Whm3Jf7Myakbz9xbzs/gssDOfEtEFnVrV+FUSASwsM60IhqDVVaPWRFwuRL4JfE
+         f19w==
+X-Forwarded-Encrypted: i=1; AJvYcCVj3DdMfT537tg9NpdAGjRODRUIio+VAXi4tZKI5QlDrEfFgqisGc/4VDYHHiNBDOv8P4Y=@kernel.org
+X-Gm-Message-State: AOJu0Ywm8XXTSl2pKqXvZoDhQLk48VOWCJOIBr8YM+SXFgpKnXIT2j1q
+	crJNh6t2BK5fT2WnuQ6k/1bsKmbWV/9t+KtkDNo3cM+krrVb45sFCtHhUW5QUMo=
+X-Google-Smtp-Source: AGHT+IG069EnxRv30+3RjzhAK77wi1qDO55xqPHdUqxs7JXDSV/D/reKudXwRnQMxPPARwBk4/0s5A==
+X-Received: by 2002:a05:6a00:cd1:b0:717:8a87:7d02 with SMTP id d2e1a72fcca58-71de245eb16mr7947141b3a.23.1728079751622;
+        Fri, 04 Oct 2024 15:09:11 -0700 (PDT)
+Received: from localhost ([71.212.170.185])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0cd5006sm360165b3a.77.2024.10.04.15.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2024 15:09:11 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, Jonathan
+ Corbet <corbet@lwn.net>, linux-arm-kernel@lists.infradead.org,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Linus Walleij
+ <linus.walleij@linaro.org>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Will Deacon <will@kernel.org>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Geert Uytterhoeven
+ <geert+renesas@glider.be>, Conor Dooley <conor@kernel.org>, Heiko
+ =?utf-8?Q?St=C3=BCbner?=
+ <heiko@sntech.de>
+Subject: Re: [PATCH v2] Documentation/process: maintainer-soc: clarify
+ submitting patches
+In-Reply-To: <20240925095635.30452-1-krzysztof.kozlowski@linaro.org>
+References: <20240925095635.30452-1-krzysztof.kozlowski@linaro.org>
+Date: Fri, 04 Oct 2024 15:09:10 -0700
+Message-ID: <7h4j5rjzax.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [GIT PULL] SOC FSL fixes for 6.12
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: Herve Codina <herve.codina@bootlin.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-Please pull the following Freescale Soc Drivers fixes for 6.12
+> Patches for SoCs are expected to be picked up by SoC submaintainers.
+> The main SoC maintainers should be addressed only in few cases.
+>
+> Rewrite the section about maintainer handling to document above
+> expectation.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Conor Dooley <conor@kernel.org>
+> Cc: Heiko St=C3=BCbner <heiko@sntech.de>
 
-Thanks
-Christophe
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 
-The following changes since commit 7a99b1c0bce5cf8c554ceecd29ad1e8085557fd3:
+Thanks for writing this up Krzysztof,
 
-   Merge branch 'support-for-quicc-engine-tsa-and-qmc' (2024-09-03 
-07:51:34 +0200)
-
-are available in the Git repository at:
-
-   https://github.com/chleroy/linux.git tags/soc_fsl-6.12-3
-
-for you to fetch changes up to 1117b916f541fc8e4ce812843555432022e5aa0e:
-
-   soc: fsl: cpm1: qmc: Fix unused data compilation warning (2024-10-02 
-23:29:38 +0200)
-
-----------------------------------------------------------------
-FSL SOC fixes for v6.12:
-
-- Fix a "cast to pointer from integer of different size" build error
-due to IS_ERROR_VALUE() used with something which is not a pointer.
-
-- Fix an unused data build warning.
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-       soc: fsl: cpm1: qmc: Do not use IS_ERR_VALUE() on error pointers
-
-Herve Codina (1):
-       soc: fsl: cpm1: qmc: Fix unused data compilation warning
-
-  drivers/soc/fsl/qe/qmc.c | 11 +++++------
-  1 file changed, 5 insertions(+), 6 deletions(-)
+Kevin
