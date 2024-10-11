@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C8820FA99
-	for <soc@lists.linux.dev>; Fri, 11 Oct 2024 10:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FB82141B5
+	for <soc@lists.linux.dev>; Fri, 11 Oct 2024 11:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728644375; cv=none; b=sCtYi5XZKP0XRC/BRijYgGHJsm/FFO3zLuP8Akp5UKDZM6a3MBHcN8s87x0fGIZf1HELkUESmWIA7clViMgiuU+Wv7db9kt+erGB+qXRKIVMm7UlfOaLjnw3FdPgPnsJ+hd5VnutKb6LPgAvzj8oJhvjA1SyCIvLydaxasReH4U=
+	t=1728645268; cv=none; b=pceJqNAEdjnYWzn4t2pBayZnrxqqPVZMHeOJfY4ZRkUOO5HYYmS5FcsEdbCjZ03HKrv2eTelcTGf8bqiyKt5HVNOIiJsTvGsXfZ6C4M92msrwqOwVig/ORDekdLrNo7eWSBLzzQgEATSo4lPX8C+Ls7b7t0hdZh7/yF0T8JBiB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728644375; c=relaxed/simple;
-	bh=av8bEjrXXRS5pKn3LsPGgurTIoZmVDJ0yAqW4jZvems=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hIKO1UtKlgr9oAfzLqwASNbk7FObS/ZFG7LKlyzKI68lMmmcv/E9R+2R7z16icuB9lkUNQt74fySDIX1f+3IHJxUpHXswGn4yIvGK2JUl58qUnwIzcA6BHdSZ4inu6ockO6vW/1JjH/uNB1fxnUw0tQLrokLLB78sm3kvUEVVPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSYbpXHf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728645268; c=relaxed/simple;
+	bh=7clhKU2/+f+UzV2XmxVJrsBEDtV/SxskmzZsp9ZGuY4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=U8YI5zCfKsCW0QVUe8G2SLpYLe7NgWkF1Bab2uc3U3HVTai9KgMGyGylnZlz8PQNxsh6/SsEZIe+V1oO6kuumMhvhauV7zeH0O5q9gr7886h6CjZeXio0BkKzIbtfRV0nwDV1/KQLt0ZPnn7CveuVTLW2EeLBffzZ4aHCMaeUCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRfWN4G/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSYbpXHf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRfWN4G/"
 Received: by smtp.kernel.org (Postfix)
-	id 7DF17C4CECD; Fri, 11 Oct 2024 10:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687FFC4CEC3;
-	Fri, 11 Oct 2024 10:59:35 +0000 (UTC)
+	id E822BC4CECD; Fri, 11 Oct 2024 11:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2802C4CEC3
+	for <soc@kernel.org>; Fri, 11 Oct 2024 11:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728644375;
-	bh=av8bEjrXXRS5pKn3LsPGgurTIoZmVDJ0yAqW4jZvems=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bSYbpXHfmPgFIBoQEjsP/rV+tC+6pjPd2I4Q/6jqr4FQadcyv+UpouibW9nx+TI50
-	 r2m4kqkUzZVghbeaP4M52x5iKprW2ITbRKxqXwlFZM6KyOQuD91khRoDdSMgS3Osv+
-	 hIR6UmZ37+tMPo+/IQwbPIX3PgKPfKiSbKPX64RleqbngdgvzqQoqxToUXRnnwOeGu
-	 dJXnymzqxLPJ8l+Qow1EnWM0lyzAsfzpoHJTOH6mcIKn4bo9qXGlPG/WXT0Sv1GsyU
-	 7jtlIV0HUwlqkrouUjeikiFeIf4iP/VaMze1GmMV0l+8VulSAzhC/4lCs3sCarwW1o
-	 YhnTEJDAevM4A==
+	s=k20201202; t=1728645265;
+	bh=7clhKU2/+f+UzV2XmxVJrsBEDtV/SxskmzZsp9ZGuY4=;
+	h=Subject:From:Date:To:Cc:From;
+	b=CRfWN4G/LHh6DmA7SfDudILaGNGBEAHbnMoqJ+fn0SpzRAzMRxW480lep0UuRMvs5
+	 gHjSYEQEuwFVTr4LZnr5CAu59PhAunPM3tnfIFzSwRBZg6EEzsxyUDhzFid+o+RNpF
+	 1YuG6nKbm7BZBNwH2bgPa7WLjO+EXfLOcOPUnJOSmupissa8elnncv2zan3rh/LAu6
+	 /G6vpFJF5SiazmE3Y8MbrIf65o+Og3crGpmxUeEWffn2pj8lLvQz8zuTkubVRwoVpX
+	 nS9TZ62/sfO0hVMtw3RXXh6YHrlaQXXuyB++tgtEahvVadTrol95RoV7VkAgvv0vir
+	 RePDyGUcWDrqA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E773822E4C;
-	Fri, 11 Oct 2024 10:59:41 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 76FF63822E4C;
+	Fri, 11 Oct 2024 11:14:31 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,46 +38,34 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] Documentation/process: maintainer-soc: clarify submitting
- patches
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172864437998.2676212.18406877190424948513.git-patchwork-notify@kernel.org>
-Date: Fri, 11 Oct 2024 10:59:39 +0000
-References: <20240925095635.30452-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240925095635.30452-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <172864527010.2676212.6238641393191356956.git-patchwork-summary@kernel.org>
+Date: Fri, 11 Oct 2024 11:14:30 +0000
+To: soc@kernel.org
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Wed, 25 Sep 2024 11:56:35 +0200 you wrote:
-> Patches for SoCs are expected to be picked up by SoC submaintainers.
-> The main SoC maintainers should be addressed only in few cases.
-> 
-> Rewrite the section about maintainer handling to document above
-> expectation.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Conor Dooley <conor@kernel.org>
-> Cc: Heiko Stübner <heiko@sntech.de>
-> 
-> [...]
+Patch: [GIT,PULL] SOC FSL fixes for 6.12
+  Submitter: Christophe Leroy <christophe.leroy@csgroup.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=895079
+  Lore link: https://lore.kernel.org/r/c954bdb0-0c16-491a-8662-37e58f07208f@csgroup.eu
 
-Here is the summary with links:
-  - [v2] Documentation/process: maintainer-soc: clarify submitting patches
-    https://git.kernel.org/soc/soc/c/29ce0bca6d5f
+Patch: [GIT,PULL,1/1] Broadcom devicetree fixes for 6.12
+  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=896885
+  Lore link: https://lore.kernel.org/r/20241008220440.23182-1-florian.fainelli@broadcom.com
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
