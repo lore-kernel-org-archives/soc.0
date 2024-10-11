@@ -1,168 +1,216 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2160618BC1F
-	for <soc@lists.linux.dev>; Wed,  9 Oct 2024 10:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F406320FA9A
+	for <soc@lists.linux.dev>; Fri, 11 Oct 2024 10:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728468304; cv=none; b=fDlvbpNg6x+VcjhVFUUlYrQ3WrgFq3z5ik/2+8wYha4W4kN9VFDi7zYrudtZvxYKyV93rzoFKfTZflEIjfDXTPfXIOaJfc8ED9LtQOel93c6mx54SxOf8CeGnBAtflJkQ7a1g4vJFvDVC0CvupZTu1vLWWvniIUld/e6vX+PS8A=
+	t=1728644342; cv=none; b=P2pJzrn5ODi2inJcpvOSJeHQElPyPLPgP2MVAaE+B8PBLIbwCaE5AAwSusrbjwAkR7gUuPXQLc1b1s35unJ05CuZgLrXVTL4F7Hm6N6CMEt5V1X+seoY5NDRDJWyuqT84ZqN+WmiJXm5uwZj/plYp+u0c6ODd0oIjtLJiG0itBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728468304; c=relaxed/simple;
-	bh=zcrhkQU3a/I3nldi+jyZLPEYX6EbLf6WARSWbNo2SXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LJt19TnhUKu3d1BWTnlB6HEzMqIYt6fze1ouTB7sSGAn9Ggvkz3xd80+aCvkRBKEXSDTQkLUwnw3/spfw2adAQ4YzeewrrhCJPpeTibvNBk+rIe4zdMVh0ZZYrWXIEqqA19b/JFHruVnpA8nbeH81XATHUJddzS1j2l2A+gh438=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QosHPxkJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728644342; c=relaxed/simple;
+	bh=nG3sH/udqWBuICidES3Xv39KY8zF3CEaMSCdGg5TpAY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=B8ceVtlO0dPKc7Fi9lLldyHAfD03hLIEAo/ET4ccQTxci/Fy/72IVIDH+l0bvEzTTnkAjLg6jM631qw287oyWxrUXG9IUPRxfvOuIi/eLTOsDVKfIGyQue7Le0W9JXPI5KHv7osDHQaflRrAksJnHimqu0L1aPqs4jqrGCXQhlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OlQ3q8b7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QosHPxkJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OlQ3q8b7"
 Received: by smtp.kernel.org (Postfix)
-	id D5C85C4AF0B; Wed,  9 Oct 2024 10:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BDBC4CEC5;
-	Wed,  9 Oct 2024 10:05:00 +0000 (UTC)
+	id A6D24C4CECD; Fri, 11 Oct 2024 10:59:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911C4C4CEC3
+	for <soc@kernel.org>; Fri, 11 Oct 2024 10:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728468303;
-	bh=zcrhkQU3a/I3nldi+jyZLPEYX6EbLf6WARSWbNo2SXA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QosHPxkJTXDemqEEkGWzxzp/BNx3OxfQI+DWZjB+eV46HKTPLAgvXc+y/Vv+n2u4w
-	 g4MMMwzchRY2fPwwSNEtVVPYO71tglAWcndvL0pn8M9CimRzZoWt3xvtcCCUTT72e+
-	 YbZHq4IEaIElCXnfLuR0gkkgE78Ff4zq7ZLf9/CJuimsaVGy2n0cKcKiK1gcSAXC5p
-	 frKwu37G+oYFPnoNhahoKcwsmJN6LtiZ8UJSvkYihUjv8I58AckfZJeGvTvqPY4pFi
-	 K6AmyFamB1f6ZTA1K4EK54EFT8Kf1YizI+13709GSKLTp+5ib4bJyWCmKPreO0XB3P
-	 A5P2qhc993wBw==
-Date: Wed, 9 Oct 2024 11:04:57 +0100
-From: Lee Jones <lee@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH leds v3 06/11] leds: turris-omnia: Notify sysfs on MCU
- global LEDs brightness change
-Message-ID: <20241009100457.GA276481@google.com>
-References: <20240913123103.21226-1-kabel@kernel.org>
- <20240913123103.21226-7-kabel@kernel.org>
+	s=k20201202; t=1728644341;
+	bh=nG3sH/udqWBuICidES3Xv39KY8zF3CEaMSCdGg5TpAY=;
+	h=Subject:From:Date:To:Cc:From;
+	b=OlQ3q8b782TkH80eLn7ypannqzpOFK3TZsFmyf7PPlN/4ZWb9wO2BIVi3SVjsgZMk
+	 cV0MdO/pE8a6zRgWREpKIKXXNAadOKqtSVKoAR2uTdVGN9x/LZJJbc1LuqwldXBSNb
+	 8CPFCHv8gfinDsKuhjumUm87BcXreo3/uKUblmej8cvnOyyldmS2ERDqUG6BPNV9OI
+	 CgrwblbrKySa546Tvlw7VvP701UWyXB0fuFwVT2YacYN5nlG9E5Iy+CLuvcdj4ToYd
+	 CoQwlto4p9cQqOvZyb/9i70pTNkKAaWJ5ucHfJZIKVAPj9ItFs+98EXdaooAaC5y8k
+	 FP6X65zB3T8kA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3AE723822E4C;
+	Fri, 11 Oct 2024 10:59:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240913123103.21226-7-kabel@kernel.org>
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <172864434580.2676212.10667209783475884371.git-patchwork-summary@kernel.org>
+Date: Fri, 11 Oct 2024 10:59:05 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Fri, 13 Sep 2024, Marek Behún wrote:
+Hello:
 
-> Recall that on Turris Omnia, the LED controller has a global brightness
-> property, which allows the user to make the front LED panel dimmer.
-> 
-> There is also a button on the front panel, which by default is
-> configured so that pressing it changes the global brightness to a lower
-> value (unless it is at 0%, in which case pressing the button changes the
-> global brightness to 100%).
-> 
-> Newer versions of the MCU firmware support informing the SOC that the
-> brightness was changed by button press event via an interrupt.
-> 
-> Now that we have the turris-omnia-mcu driver, which adds support for MCU
-> interrupts, add the ability to inform the userspace (via a sysfs
-> notification) that the global brightness was changed.
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
->  drivers/leds/leds-turris-omnia.c | 37 ++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/drivers/leds/leds-turris-omnia.c b/drivers/leds/leds-turris-omnia.c
-> index 82cf58fbe946..a87cdb58e476 100644
-> --- a/drivers/leds/leds-turris-omnia.c
-> +++ b/drivers/leds/leds-turris-omnia.c
-> @@ -33,6 +33,7 @@ struct omnia_leds {
->  	struct i2c_client *client;
->  	struct mutex lock;
->  	bool has_gamma_correction;
-> +	struct kernfs_node *brightness_kn;
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-Variable nomenclature should be self documenting.
+Series: [GIT,PULL,1/4] Broadcom devicetree changes for 6.12
+  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=887863
+  Lore link: https://lore.kernel.org/r/20240906180643.2275460-1-florian.fainelli@broadcom.com
+    Patches: [GIT,PULL,1/4] Broadcom devicetree changes for 6.12
 
-What is kn?  Please improve this.
+Series: Updates for turris-mox-rwtm driver
+  Submitter: Marek Behún <kabel@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=885436
+  Lore link: https://lore.kernel.org/r/20240831092050.23093-1-kabel@kernel.org
+    Patches: [v5,01/16] firmware: turris-mox-rwtm: Use macro constant instead of hardcoded 4096
+             [v5,02/16] firmware: turris-mox-rwtm: Use ETH_ALEN instead of hardcoded 6
+             [v5,03/16] firmware: turris-mox-rwtm: Use the boolean type where appropriate
+             [v5,04/16] firmware: turris-mox-rwtm: Hide signature related constants behind macros
+             [v5,05/16] firmware: turris-mox-rwtm: Fix driver includes
+             [v5,06/16] firmware: turris-mox-rwtm: Use sysfs_emit() instead of sprintf()
+             [v5,07/16] firmware: turris-mox-rwtm: Don't create own kobject type
+             [v5,08/16] firmware: turris-mox-rwtm: Simplify debugfs code
+             [v5,09/16] firmware: turris-mox-rwtm: Convert rest to devm_* and get rid of driver .remove()
+             [v5,10/16] firmware: turris-mox-rwtm: Use dev_err_probe() where possible
+             [v5,11/16] firmware: turris-mox-rwtm: Drop redundant device pointer
+             [v5,12/16] firmware: turris-mox-rwtm: Use devm_mutex_init() instead of mutex_init()
+             [v5,13/16] firmware: turris-mox-rwtm: Use container_of() instead of hwrng .priv member
+             [v5,14/16] firmware: turris-mox-rwtm: Use EOPNOTSUPP instead of ENOSYS
+             [v5,15/16] firmware: turris-mox-rwtm: Use ALIGN() instead of hardcoding
+             [v5,16/16] firmware: turris-mox-rwtm: Deduplicate command execution code
 
->  	struct omnia_led leds[];
->  };
->  
-> @@ -357,6 +358,21 @@ static struct attribute *omnia_led_controller_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(omnia_led_controller);
->  
-> +static irqreturn_t omnia_brightness_changed_handler(int irq, void *dev_id)
+Patch: dmaengine: cirrus: check that output may be truncated
+  Submitter: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=891793
+  Lore link: https://lore.kernel.org/r/2bf9c37aad8f085839f9c63104f7275742f51945.camel@gmail.com
 
-Why dev_id?  This appears to be driver data.  ddata sounds more applicable.
+Patch: soc: ep93xx: drop reference to removed EP93XX_SOC_COMMON config
+  Submitter: Lukas Bulwahn <lbulwahn@redhat.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=892367
+  Lore link: https://lore.kernel.org/r/20240924092423.50734-1-lukas.bulwahn@redhat.com
 
-> +{
-> +	struct omnia_leds *leds = dev_id;
-> +
-> +	if (unlikely(!leds->brightness_kn)) {
-> +		leds->brightness_kn = sysfs_get_dirent(leds->client->dev.kobj.sd, "brightness");
+Patch: [GIT,PULL] Qualcomm Arm32 DeviceTree updates for v6.12
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=886942
+  Lore link: https://lore.kernel.org/r/20240904193228.15466-1-andersson@kernel.org
 
-NACK.  This will sleep in IRQ context.
+Patch: [GIT,PULL] SOC FSL fixes for 6.12
+  Submitter: Christophe Leroy <christophe.leroy@csgroup.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=895079
+  Lore link: https://lore.kernel.org/r/c954bdb0-0c16-491a-8662-37e58f07208f@csgroup.eu
 
-> +		if (!leds->brightness_kn)
-> +			return IRQ_NONE;
-> +	}
-> +
-> +	sysfs_notify_dirent(leds->brightness_kn);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
->  static int omnia_mcu_get_features(const struct i2c_client *client)
->  {
->  	struct i2c_client mcu_client = *client;
-> @@ -420,6 +436,14 @@ static int omnia_leds_probe(struct i2c_client *client)
->  			 "Consider upgrading MCU firmware with the omnia-mcutool utility.\n");
->  	}
->  
-> +	if (ret & OMNIA_FEAT_BRIGHTNESS_INT) {
-> +		ret = devm_request_any_context_irq(dev, client->irq,
-> +						   omnia_brightness_changed_handler, IRQF_ONESHOT,
-> +						   "leds-turris-omnia", leds);
-> +		if (ret <= 0)
-> +			return dev_err_probe(dev, ret ?: -ENXIO, "Cannot request brightness IRQ\n");
-> +	}
-> +
->  	mutex_init(&leds->lock);
->  
->  	ret = devm_led_trigger_register(dev, &omnia_hw_trigger);
-> @@ -442,6 +466,19 @@ static int omnia_leds_probe(struct i2c_client *client)
->  
->  static void omnia_leds_remove(struct i2c_client *client)
->  {
-> +	struct omnia_leds *leds = i2c_get_clientdata(client);
-> +
-> +	/*
-> +	 * We need to free the brightness IRQ here, before putting away the brightness sysfs node.
-> +	 * Otherwise devres would free the interrupt only after the sysfs node is removed, and if
-> +	 * an interrupt occurred between those two events, it would use a removed sysfs node.
-> +	 */
-> +	devm_free_irq(&client->dev, client->irq, leds);
-> +
-> +	/* Now put away the sysfs node we got the first time the interrupt handler was called */
-> +	if (leds->brightness_kn)
-> +		sysfs_put(leds->brightness_kn);
-> +
->  	/* put all LEDs into default (HW triggered) mode */
->  	omnia_cmd_write_u8(client, OMNIA_CMD_LED_MODE, OMNIA_CMD_LED_MODE_LED(OMNIA_BOARD_LEDS));
->  
-> -- 
-> 2.44.2
-> 
+Series: [GIT,PULL,1/3] soc: ti: Driver updates for v6.12
+  Submitter: Nishanth Menon <nm@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=886379
+  Lore link: https://lore.kernel.org/r/20240903155632.525twuumykwnfkiz@subtitle
+    Patches: [GIT,PULL,1/3] soc: ti: Driver updates for v6.12
+             [GIT,PULL,2/3] arm64: defconfig: TI K3 platform updates for v6.12
+             [GIT,PULL,3/3] arm64: dts: ti: K3 devicetree updates for v6.12
+
+Patch: MAINTAINERS: Update EP93XX ARM ARCHITECTURE maintainer
+  Submitter: Nikita Shubin <nikita.shubin@maquefel.me>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=890968
+  Lore link: https://lore.kernel.org/r/20240917163401.6501-1-nikita.shubin@maquefel.me
+
+Patch: dmaengine: cirrus: ERR_CAST() ioremap error
+  Submitter: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=891792
+  Lore link: https://lore.kernel.org/r/d4b542f1d678796fbf094ebcc77295af3617bca0.camel@gmail.com
+
+Patch: [GIT,PULL] Microchip AT91 device tree updates for v6.12
+  Submitter: claudiu beznea <claudiu.beznea@tuxon.dev>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=885553
+  Lore link: https://lore.kernel.org/r/20240901133110.2038675-2-claudiu.beznea@tuxon.dev
+
+Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree updates for v6.12
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=886980
+  Lore link: https://lore.kernel.org/r/20240904215752.24465-1-andersson@kernel.org
+
+Patch: [GIT,PULL] Qualcomm Arm64 defconfig updates for v6.12
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=886951
+  Lore link: https://lore.kernel.org/r/20240904194827.16766-1-andersson@kernel.org
+
+Patch: [GIT,PULL] RISC-V Sophgo Devicetrees for v6.12
+  Submitter: Chen Wang <unicorn_wang@outlook.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=886513
+  Lore link: https://lore.kernel.org/r/MA0P287MB28228F4FC59B057DF57D9A11FE9C2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+
+Patch: [GIT,PULL] SOC FSL for 6.12 (retry)
+  Submitter: Christophe Leroy <christophe.leroy@csgroup.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=886098
+  Lore link: https://lore.kernel.org/r/326d9a7d-7674-4c28-aa40-dd2c190244dd@csgroup.eu
+
+Patch: [GIT,PULL] RISC-V T-HEAD Devicetrees for v6.12
+  Submitter: Drew Fustini <drew@pdp7.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=881669
+  Lore link: https://lore.kernel.org/r/ZsWs8QiVruMXjzPc@x1
+
+Series: [GIT,PULL,1/3] samsung: drivers for v6.12
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883788
+  Lore link: https://lore.kernel.org/r/20240827121638.29707-1-krzysztof.kozlowski@linaro.org
+    Patches: [GIT,PULL,1/3] samsung: drivers for v6.12
+             [GIT,PULL,2/3] arm64: dts: samsung: dt for v6.12
+
+Series: MAINTAINERS: ensure that mailing lists are L: not M:
+  Submitter: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=891692
+  Lore link: https://lore.kernel.org/r/20240920-maintainers-m-to-l-tweak-v1-0-ea80b5cd3420@linuxfoundation.org
+    Patches: [1/2] MAINTAINERS: fix PKTCDVD DRIVER to use L: for the list address
+             [2/2] MAINTAINERS: use the canonical soc mailing list address and mark it as L:
+
+Patch: net: cirrus: use u8 for addr to calm down sparse
+  Submitter: Nikita Shubin <nikita.shubin@maquefel.me>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=891882
+  Lore link: https://lore.kernel.org/r/20240922065212.7483-1-nikita.shubin@maquefel.me
+
+Patch: [GIT,PULL,1/1] Broadcom devicetree fixes for 6.12
+  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=896885
+  Lore link: https://lore.kernel.org/r/20241008220440.23182-1-florian.fainelli@broadcom.com
+
+Patch: [GIT,PULL] Microchip AT91 defconfig updates for v6.12
+  Submitter: claudiu beznea <claudiu.beznea@tuxon.dev>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=885552
+  Lore link: https://lore.kernel.org/r/20240901133110.2038675-1-claudiu.beznea@tuxon.dev
+
+Patch: [GIT,PULL] memory: drivers for v6.12
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=883800
+  Lore link: https://lore.kernel.org/r/20240827122926.30794-1-krzysztof.kozlowski@linaro.org
+
+Patch: [v2] Documentation/process: maintainer-soc: clarify submitting patches
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=892731
+  Lore link: https://lore.kernel.org/r/20240925095635.30452-1-krzysztof.kozlowski@linaro.org
+
+
+Total patches: 41
 
 -- 
-Lee Jones [李琼斯]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
