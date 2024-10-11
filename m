@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D56B19F110
-	for <soc@lists.linux.dev>; Fri, 11 Oct 2024 10:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A12719F110
+	for <soc@lists.linux.dev>; Fri, 11 Oct 2024 10:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728644346; cv=none; b=cCUYFrpVYkWLUn8ZU8I5IsJNlUIc5/JHjxDG5ic+a49E/wxZQMC9nHj6LrtOAKLHWXYNLNdZaIRky2+oSxnpssO4IIJBcPBDHwDIf6op+zqw0N0VkMBmUuddTrv9xUhFIZLZZjchu0Mkc3wr7OwM/OLMHd8sV3Vls/DAViIoTgQ=
+	t=1728644347; cv=none; b=TALGUDptYbOxHBh9D/0m1dc5ND/a0aaydvd0zrgCnyfGGltieIWFJb56QswYXkuhD+mF5y9NIpYUG3tXl22mt5tGSOVXI+I2rxmGv+5KKsPXcINgIGup6DF2h6TEyX6S59BdoANt+TQNhpaTnGk+9IkitTesexpRLIShfNFMCUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728644346; c=relaxed/simple;
-	bh=DTByobLbOSE0KkIFIZU3w88NuG/k7PYOkJAxOVDa6k0=;
+	s=arc-20240116; t=1728644347; c=relaxed/simple;
+	bh=SKk/s7c0lgH9zBZrCaxi3q1fnO1EHp8HLhxBqKY1iHo=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VBxBCJjnj84jBOt1pPrBaoTdQQYAxPtbx5fU/ALk2B0cj7pIhAX98+IV19mgMSARAUsBifAc8Us2TmHQx5PVm/rYl5xoexIuwB7uAGIPQBP8R9G0YnxlO6nuW9wn5jjljcJzq4aMPTmjBHHIWmFji2yN9d6lp3szW9/TI3SA6wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pWLsInVc; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=LXqvWZCfXluAML5s0cMJAAmXw+qL8Gg5+TzlsDTrcwzDpUYXf6VHL+DFP6QTFFl1eYmJsl0Q+HNUXs34RvT24f9m5VerN7FTIU8zfute0qDXxW/JzLGPV6IsXTHqaNH0Mioy5J9txum8K0AndmOaqLiFk/yZao25FMmykyQhuno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UsvnTOC3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pWLsInVc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UsvnTOC3"
 Received: by smtp.kernel.org (Postfix)
-	id BCE6EC4CECD; Fri, 11 Oct 2024 10:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A409FC4CEC3;
-	Fri, 11 Oct 2024 10:59:05 +0000 (UTC)
+	id 451B2C4CECC; Fri, 11 Oct 2024 10:59:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF08C4CEC3;
+	Fri, 11 Oct 2024 10:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728644345;
-	bh=DTByobLbOSE0KkIFIZU3w88NuG/k7PYOkJAxOVDa6k0=;
+	s=k20201202; t=1728644347;
+	bh=SKk/s7c0lgH9zBZrCaxi3q1fnO1EHp8HLhxBqKY1iHo=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=pWLsInVcLEmTW0JPRGD72NNds/2qp54DTRf0q+HTfngdrCI7ZT0Gm8J8KBtQX4iXe
-	 Z6ceEiIcNfGZvkEeEim93zuNMftQLgnPMO9CuDoCqPhYWbL2h4zlQICaB3so4ROni2
-	 NfOv2RXfGyo8Y7G+N86JgyKxyjCiJwYcfb6ljImvmHsfEZieZjE06iLtapYVetY7bl
-	 MzJt+uvL/Yv3k88WhNT7tH7PEP8fNe3ZdiLGs3ai0+kf+6dWQKeloCUoA5vVhesbQi
-	 5AR88yx1EOnhbQugyNhoQQ5v3T3rLSHswJFGvsOfAvk2IeVqOjn9evbLmzD0maOfIE
-	 z1ifJcH7x/65g==
+	b=UsvnTOC31WYGTm0GNFdTyZvk5B0EZTU/xQRpK582FQXZvAhgQ80jumkBJTpy7Tczg
+	 2PRM12gnaWI1gBpu81vYgLhuE4BLc+vfNLLZHfU5SoJOMnkhRUpM4E9mwWZKKquKja
+	 BU1AKT8pPB4RZMgvRHac0HaIVqX9FEWGI/bo5pCbHCJA5vcZ46C5gM/G8FIWHCZLTj
+	 7ZJnqhiemRZJ0aU3btZJP7vWrxsPLCELP7tEG/DB2YwWH7COKW1eJvf65WkcipgziN
+	 gLWWLBVZ5BREcOFgkljl3GGkiks8afh+MQwoJ87u12hP/uGGskPQ2Dn6C0UpD2OmG4
+	 puK6IPWVF7GCw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DBA3822E4C;
-	Fri, 11 Oct 2024 10:59:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEDA3822E4C;
+	Fri, 11 Oct 2024 10:59:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,15 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dmaengine: cirrus: check that output may be truncated
+Subject: Re: [PATCH] soc: ep93xx: drop reference to removed EP93XX_SOC_COMMON
+ config
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <172864434998.2676212.13647220430482787547.git-patchwork-notify@kernel.org>
-Date: Fri, 11 Oct 2024 10:59:09 +0000
-References: <2bf9c37aad8f085839f9c63104f7275742f51945.camel@gmail.com>
-In-Reply-To: <2bf9c37aad8f085839f9c63104f7275742f51945.camel@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ <172864435148.2676212.8223982374844882665.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Oct 2024 10:59:11 +0000
+References: <20240924092423.50734-1-lukas.bulwahn@redhat.com>
+In-Reply-To: <20240924092423.50734-1-lukas.bulwahn@redhat.com>
+To: Lukas Bulwahn <lbulwahn@redhat.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,19 +55,22 @@ Hello:
 This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 21 Sep 2024 01:21:55 +0200 you wrote:
-> ep93xx_dma.c: In function 'ep93xx_dma_of_probe':
-> ep93xx_dma.c:1409:74: warning: '%u' directive output may be truncated
-> 			       writing between 1 and 8 bytes into a region
-> 			       of size 2 [-Wformat-truncation=]
-> 		snprintf(dma_clk_name, sizeof(dma_clk_name), "m2p%u", i);
-> 		                                                 ^~
+On Tue, 24 Sep 2024 11:24:23 +0200 you wrote:
+> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+> 
+> Commit 6eab0ce6e1c6 ("soc: Add SoC driver for Cirrus ep93xx") adds the
+> config EP93XX_SOC referring to the config EP93XX_SOC_COMMON.
+> 
+> Within the same patch series of the commit above, the commit 046322f1e1d9
+> ("ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms") then removes the
+> config EP93XX_SOC_COMMON. With that the reference to this config is
+> obsolete.
 > 
 > [...]
 
 Here is the summary with links:
-  - dmaengine: cirrus: check that output may be truncated
-    https://git.kernel.org/soc/soc/c/26d77ce57479
+  - soc: ep93xx: drop reference to removed EP93XX_SOC_COMMON config
+    https://git.kernel.org/soc/soc/c/84db6f27b26b
 
 You are awesome, thank you!
 -- 
