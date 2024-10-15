@@ -1,62 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D47183CA5
-	for <soc@lists.linux.dev>; Fri, 11 Oct 2024 16:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D951B6D0C
+	for <soc@lists.linux.dev>; Tue, 15 Oct 2024 18:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728664800; cv=none; b=Y6/NqjUSsGFvJGP1RCFu/Ls+IF76Piuz7QArGbzKal+HMOY8r5Xap1tYwpEsDS5F94WS3+L7Hvy3uaNGuS3qKDCEVFLvmVzPSGEIJcJvGb4G6YDmIL0kw2ur/umI2qog3Un4W9A9GMTxsZlhBBiUupDrsPyw7HoozPUdbPevqLQ=
+	t=1729018248; cv=none; b=lC2Tzcwky63jaB631GKDX7bifQIYxiSh1Gnbrn2TpMC/Bgc51Wv/3I0+5Dw+tjW1bD7W+FAx2dcZLASSBTs/oplUrptzTVqe/QJVvAbs4A+S4k2a+NRy8OHibV7SR9wVUddb0s+pwC2I0JqTzmYCrxkSLHHKLc4dssmCNqEMJGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728664800; c=relaxed/simple;
-	bh=gUqCGTOrW5J6kJqLgXlfQwlRZc57OcmafMNeztF/PKk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RVh3SKn8X7NKPWZd8LEqMGVOEWma2h9ifRS0aPQFxr/T4PL9TWVorQVvHVQOoVYReXAAUGSjNjnXmArkFdFvyO3l2JVBfVqjTKFhSpCKyD4etn/cd9s4PH7YR1Y+kjTSpbRyqmfQF3NThCMPlXW6dsKB34WgKntmmA+ArGGc4k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZIMiPZwj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZIMiPZwj"
+	s=arc-20240116; t=1729018248; c=relaxed/simple;
+	bh=DpfY7ctXZ4SkPBO61b9HhqnCPoJ3prBnbUsqyP3sMmk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uOsDXlTj5PoHqp2PiAn1S8OPJgJAt+D/y3zhqUQOrRrTeXO2qfJJxK1+tF5SoltsCHw9z+JLqf6S9iarAjOG9mUi+Vy3Bf5Fvw9m+QAnIq1bo3diFRlWdU/yhLOEx8n362IrA3kvvES8tRlyvC4/eoUhv/fWn1qt9oiDncCnoPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 1906DC4AF09; Fri, 11 Oct 2024 16:40:00 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AF709C4CED0;
-	Fri, 11 Oct 2024 16:39:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF709C4CED0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57859FF809;
-	Fri, 11 Oct 2024 16:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728664789;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=VzMpMzlj6+bE25cKmeC7xJuDA+veVv6vu4YkX/UNBJY=;
-	b=ZIMiPZwjV5350c8B++pXe0nsPbE7pqRAKYT7kBhfEZ82aeNu8gPhjkeDiQZdXOcNvocwaO
-	AZ7kBRcAyYXoMkLu0Ua0BT+xf7O7ORPFzOSYGK53751qvL5T+GM+0WYNM5sE2unF9pYs5z
-	GH6nAbXPybqUFZqD3xPQFnqra/JJ7ZYCj9idHfxBoxWuySDmycuW1samp9SXYCYWK0Krh9
-	ajwQ9wk6aWvOTjHzPjcMvI7GilKktgDvqPqsHh3k1g5cigobHEEiXvs5PvOx8LL1k9zUw4
-	ZSe0FYHo50rdLQWBF75bmPda0U0oeO+5iW8+9T15Dus4wbglI+F7FwNkf6wzvg==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: fixes for v6.12 (#1)
-Date: Fri, 11 Oct 2024 18:39:47 +0200
-Message-ID: <87ldyud25o.fsf@BLaptop.bootlin.com>
+	id 278FAC4AF0B; Tue, 15 Oct 2024 18:50:48 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 55E7CC4CECF;
+	Tue, 15 Oct 2024 18:50:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 55E7CC4CECF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3A94DA7;
+	Tue, 15 Oct 2024 11:51:13 -0700 (PDT)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5B08F3F58B;
+	Tue, 15 Oct 2024 11:50:43 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: [GIT PULL] firmware: arm_ffa: Fixes for v6.12
+Date: Tue, 15 Oct 2024 19:50:37 +0100
+Message-Id: <20241015185037.1000435-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Hi ARM SoC Team,
 
-Here is the first pull request for fixes for mvebu for v6.12.
+Please pull !
 
-Gregory
+Regards,
+Sudeep
+
+-->8
 
 The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
@@ -64,20 +58,25 @@ The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-fixes-6.12-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fixes-6.12
 
-for you to fetch changes up to 841dd5b122b4b8080ede69c5f72fd6057da43f8a:
+for you to fetch changes up to b0798838418abe996d9b618d341d865462264cbe:
 
-  arm64: dts: marvell: cn9130-sr-som: fix cp0 mdio pin numbers (2024-10-07 10:05:35 +0200)
-
-----------------------------------------------------------------
-mvebu fixes for 6.12 (part 1)
-
-Fix cp0 mdio pin numbers on SolidRun CN9130 SoM
+  firmware: arm_ffa: Avoid string-fortify warning caused by memcpy() (2024-10-15 13:50:10 +0100)
 
 ----------------------------------------------------------------
-Josua Mayer (1):
-      arm64: dts: marvell: cn9130-sr-som: fix cp0 mdio pin numbers
+Arm FF-A fixes for v6.12
 
- arch/arm64/boot/dts/marvell/cn9130-sr-som.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Couple of fixes to avoid string-fortify warnings in export_uuid()
+and memcpy() from the recently added functions to support
+FFA_MSG_SEND_DIRECT_REQ2 and FFA_MSG_SEND_DIRECT_RESP2.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      firmware: arm_ffa: Avoid string-fortify warning in export_uuid()
+
+Gavin Shan (1):
+      firmware: arm_ffa: Avoid string-fortify warning caused by memcpy()
+
+ drivers/firmware/arm_ffa/driver.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
