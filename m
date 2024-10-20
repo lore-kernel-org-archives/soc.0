@@ -1,239 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEF9179BD
-	for <soc@lists.linux.dev>; Fri, 18 Oct 2024 12:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD34192B79
+	for <soc@lists.linux.dev>; Sun, 20 Oct 2024 14:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729253125; cv=none; b=Ij7iqk9nkYuAvKm/9L4oOBtj0LqJm3z2zHNPevC3QWqWuAHvm76+msI/LRiAh1i/usv0SUoCWLO7XgRMMD3oW4jFD6zPhJfc/csWHVji7c9gA8Or+5AMvjhL/v1jZlHGJJz9wbcoeqNtlF+cUNQm+hBzEVMBZuKK2rgn6gbGlXs=
+	t=1729434972; cv=none; b=Qv6BiPxxJENLfSMPQBk4wW24M1zQeV4LZJai8/sLFBcQTnuGAx2Uf0W+tdsk2b6HU+7liPfTD2LIxYgb8SKwHbNIvTEN8+rqpbv7OZlbq22fZbImtHXXtFPUtuI1T2n0RLnYGqmWLLUtPSq4rQMTq+HsR8YXZgQWctxWRJWBcQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729253125; c=relaxed/simple;
-	bh=zdaEqqHPPeOo/0t0n/PB/TQ/aDe31pJ6VItsmuRPVDM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rCqKPZUJMNo5wRMax3ny24wey7sQUw/m28FqIaAlYXepOmS6ZLjdwaE7ig4HjayfkGqOIIlSwhQjDonT2AzyDB6GA1ZYc68eSC4nu4d3PK+nZpikSWNKgVa8vqz05MM/0MFNoJnEvf63sK4e1mza2ujDCRp8gAZIihp5ULIDDQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729434972; c=relaxed/simple;
+	bh=nI7CzD0dROhg5LFR+SbTGgNA8U3esGCj22cTRyP1R+k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UAbjspOXJ0z4gSp3y30L8pCrF0+BqAIFscpclyuUfuNrB4RW/d/zVPjM2uAQtAUWUggTS2mH4WT4DvRk3nsJcPPBVfCyn9lytr4BkX92OdSGdCUmQ8sLT8A5dtINBD/tkQ30zSYhKY02EKdfh+DSv8ZA6RMAS8wWvF4vEqpJGds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=Z+tiN8GO; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="Z+tiN8GO"
 Received: by smtp.kernel.org (Postfix)
-	id B8C01C4CEC3; Fri, 18 Oct 2024 12:05:25 +0000 (UTC)
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id AC46AC4CEE5; Sun, 20 Oct 2024 14:36:11 +0000 (UTC)
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CCEA9C4CEC6
-	for <soc@kernel.org>; Fri, 18 Oct 2024 12:05:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCEA9C4CEC6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:9a0:3f16:2bd7:49ca])
-	by andre.telenet-ops.be with cmsmtp
-	id Ro5E2D00G1MdCM201o5E0M; Fri, 18 Oct 2024 14:05:15 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1t1lj1-003zSJ-Fz;
-	Fri, 18 Oct 2024 14:05:14 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1t1ljG-005ssf-FQ;
-	Fri, 18 Oct 2024 14:05:14 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas DTS updates for v6.13
-Date: Fri, 18 Oct 2024 14:05:07 +0200
-Message-Id: <cover.1729252769.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F9C3C4CEE7
+	for <soc@kernel.org>; Sun, 20 Oct 2024 14:36:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F9C3C4CEE7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e2b549799eso2654171a91.3
+        for <soc@kernel.org>; Sun, 20 Oct 2024 07:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1729434969; x=1730039769; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kKUwNFi+RGRukUqB0kD8s+grnaOyo0LZlXvjUDFIUlI=;
+        b=Z+tiN8GOAg3WDfTpx3kjHGxYuSrzyJtCT6M/00IHPnatsNO25znPmnGBYOidZD943o
+         13JhHSrZGqBE+zxXNdI+ffh4OO5NNaA9+1AToVR1JeUt3a9OT0aUJfhRyBaqS9wme2PV
+         4nFS5pivtgb3eDPG5oE7B9yvlFxn8DGmhZELZmklg0ZR0sUHluTZOF1RGsBjJ7vFkd0d
+         ZWWtm3UgqE2Ee9kLCkY8COtDgkvD9v6K/Ur89zYK67QczCFluZpXQjx4Qa6xP3rFUBck
+         OdgrYUyPPE50ECNIIhaNlzy+C2wCPnBMen5mcSNCV4r8ixxu2f+Myp4Ox0yY86xer/9p
+         y0kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729434969; x=1730039769;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kKUwNFi+RGRukUqB0kD8s+grnaOyo0LZlXvjUDFIUlI=;
+        b=MGa/2nlty+ryVzoPn2/koWgiZPEQgDuDrzp7fHDx8qEzjNojcnRtQTCv4VOFQ/Ne65
+         28mJ29KDjekhfJY2QkQqg6fO6RsIBNWTcq92hoRy4EoYF/bywfoffEiSjUldguHCIK0F
+         IJoYVFmj1XOqDx2hbmCmj/9cmZzpdd5MiinpT889qNziXGls6HnXkGb8DDfM4HNcFbsc
+         eyGBMtH8LuSaCzw3jwbUV85plsll07K1oDDvwcZTO0zZWqgz7H3OJfz7l2Gsfr9xADW1
+         2ibvJ1+5i865GtGAHgoJizpwoJ+nG1GjMUboXKyoyknG6WNc+PaWrsF9R3iaAwgz8dqY
+         aYaA==
+X-Gm-Message-State: AOJu0YwanKs4ROhlSvuY4LFeW+b0DXbCSpYalC9KVeV2P3Oo/a9qoqtx
+	N96jzwOyXFSPqz1QnWBDnRIMndBzhn3TAP4oMcZKpfSEykcGcY+ebz1RSmPbbhFZTFYhcUf410v
+	A
+X-Google-Smtp-Source: AGHT+IGJNYH1gN14k1HjiG8KMaOw8wGH7bmIO29hzeC6OSNwC+ZYDPZ5SQj59jaNoa9SfDiMXNrNKg==
+X-Received: by 2002:a17:90a:e392:b0:2e2:cd5e:7eef with SMTP id 98e67ed59e1d1-2e5618d9edamr9931854a91.27.1729434968747;
+        Sun, 20 Oct 2024 07:36:08 -0700 (PDT)
+Received: from x1 (71-34-69-82.ptld.qwest.net. [71.34.69.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5ad4ed825sm1572538a91.35.2024.10.20.07.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Oct 2024 07:36:08 -0700 (PDT)
+Date: Sun, 20 Oct 2024 07:36:06 -0700
+From: Drew Fustini <drew@pdp7.com>
+To: soc@kernel.org
+Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>, Conor Dooley <conor+dt@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v6.13
+Message-ID: <ZxUVVk9gWJAVrp0g@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-	Hi SoC folks,
+Hi Arnd,
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Please pull these thead dts changes. I've run W=1 dtbs_check and they
+have been in linux-next since October 15th.
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+Thanks,
+Drew
+
+The following changes since commit 8e929cb546ee42c9a61d24fae60605e9e3192354:
+
+  Linux 6.12-rc3 (2024-10-13 14:33:32 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.13-tag1
+  git@github.com:pdp7/linux.git tags/thead-dt-for-v6.13
 
-for you to fetch changes up to 1e03bd2cf0d68a4138f2347bd77ef12b8726d214:
+for you to fetch changes up to 2a3bf75a9408c40403aab39336274c8010b4c815:
 
-  arm64: dts: renesas: rzg3s-smarc: Use interrupts-extended for gpio-keys (2024-10-14 10:16:17 +0200)
-
-----------------------------------------------------------------
-Renesas DTS updates for v6.13
-
-  - Add support for PCIe on the R-Car V4M SoC and the Gray Hawk
-    development board,
-  - Add support for watchdog, OS timer, keyboard switch, SDHI, and MMCIF
-    on the Genmai development board,
-  - Add support for watchdog on the RSK+RZA1 development board,
-  - Add support for QSPI NOR FLASH on the RZ/G2UL SMARC SoM,
-  - Add support for E-FUSE on the R-Car V3U, S4-8, V4H, and V4M SoCs,
-  - Use interrupts-extended where it makes sense,
-  - Miscellaneous fixes and improvements.
-
-Thanks for pulling!
+  riscv: dts: thead: remove enabled property for spi0 (2024-10-15 10:01:18 -0700)
 
 ----------------------------------------------------------------
-Biju Das (2):
-      arm64: dts: renesas: rzg2ul-smarc-som: Enable serial NOR flash
-      arm64: dts: renesas: rz{g2l,g2lc}-smarc-som: Update partition table for spi-nor flash
+T-HEAD Devicetrees for v6.13
 
-Geert Uytterhoeven (28):
-      arm64: dts: renesas: rcar-gen4: Switch PCIe to reset-gpios
-      ARM: dts: renesas: rskrza1: Enable watchdog timer
-      arm64: dts: renesas: beacon-renesom: Switch to mic-det-gpios
-      ARM: dts: renesas: rcar-gen2: Switch HS-USB to renesas,enable-gpios
-      arm64: dts: renesas: r8a779a0: Add E-FUSE node
-      arm64: dts: renesas: r8a779f0: Add E-FUSE node
-      arm64: dts: renesas: r8a779g0: Add OTP_MEM node
-      arm64: dts: renesas: r8a779h0: Add OTP_MEM node
-      ARM: dts: renesas: Use interrupts-extended for Ethernet MACs
-      ARM: dts: renesas: Use interrupts-extended for Ethernet PHYs
-      ARM: dts: renesas: Use interrupts-extended for HDMI bridges
-      ARM: dts: renesas: Use interrupts-extended for PMICs
-      ARM: dts: renesas: Use interrupts-extended for touchpanels
-      ARM: dts: renesas: Use interrupts-extended for video decoders
-      ARM: dts: renesas: iwg22d-sodimm: Use interrupts-extended for port expander
-      ARM: dts: renesas: r8a7742-iwg21m: Use interrupts-extended for RTC
-      ARM: dts: renesas: kzm9g: Use interrupts-extended for I/O expander
-      ARM: dts: renesas: kzm9g: Use interrupts-extended for sensors
-      arm64: dts: renesas: Use interrupts-extended for DisplayPort bridges
-      arm64: dts: renesas: Use interrupts-extended for Ethernet PHYs
-      arm64: dts: renesas: Use interrupts-extended for HDMI bridges
-      arm64: dts: renesas: Use interrupts-extended for I/O expanders
-      arm64: dts: renesas: Use interrupts-extended for PMICs
-      arm64: dts: renesas: Use interrupts-extended for USB muxes
-      arm64: dts: renesas: Use interrupts-extended for video decoders
-      arm64: dts: renesas: Use interrupts-extended for WLAN
-      arm64: dts: renesas: beacon-renesom: Use interrupts-extended for touchscreen
-      arm64: dts: renesas: rzg3s-smarc: Use interrupts-extended for gpio-keys
+Add nodes for pin controllers on the T-Head TH1520 RISC-V SoC. The
+yaml binding and pinctrl-th1520 driver has been merged into next by
+Linus W and will be included in the 6.13 pinctrl PR.
 
-Sean Anderson (5):
-      arm64: dts: renesas: salvator-xs: Add SD/OE pin properties
-      arm64: dts: renesas: ulcb: Add SD/OE pin properties
-      arm64: dts: renesas: salvator-x: Add SD/OE pin properties
-      arm64: dts: renesas: hihope: Add SD/OE pin properties
-      arm64: dts: renesas: beacon: Add SD/OE pin properties
+The TH1520 GPIO controllers are already supported by the gpio-dwapb
+driver. This PR improves GPIO support by adding GPIO ranges and GPIO
+line names for the BeagleV Ahead and LicheePi 4A boards. Support is
+added for the built-in LEDs on the Ahead board.
 
-Wolfram Sang (16):
-      ARM: dts: renesas: genmai: Fix partition size for QSPI NOR Flash
-      ARM: dts: renesas: genmai: Enable watchdog
-      ARM: dts: renesas: genmai: Enable OS timer modules
-      ARM: dts: renesas: genmai: Sort nodes
-      ARM: dts: renesas: genmai: Define keyboard switch
-      ARM: dts: renesas: Genmai: Update audio codec device node
-      ARM: dts: renesas: Remove 'reg-io-width' properties from MMCIF nodes
-      ARM: dts: renesas: marzen: Use interrupts-extended for gpio-keys
-      ARM: dts: renesas: rskrza1: Use interrupts-extended for gpio-keys
-      ARM: dts: renesas: rza2mevb: Use interrupts-extended for gpio-keys
-      ARM: dts: renesas: Add proper node names to (L)BSC devices
-      ARM: dts: renesas: r8a7778: Rename 'bsc' to 'lbsc'
-      ARM: dts: renesas: Use proper node names for keys
-      ARM: dts: renesas: r7s72100: 'bus-width' is a board property
-      ARM: dts: renesas: genmai: Enable SDHI0
-      ARM: dts: renesas: genmai: Enable MMCIF
+Signed-off-by: Drew Fustini <drew@pdp7.com>
 
-Yoshihiro Shimoda (2):
-      arm64: dts: renesas: r8a779h0: Add PCIe Host and Endpoint nodes
-      arm64: dts: renesas: r8a779h0: gray-hawk-single: Enable PCIe Host
+----------------------------------------------------------------
+Drew Fustini (1):
+      riscv: dts: thead: remove enabled property for spi0
 
- arch/arm/boot/dts/renesas/emev2-kzm9d.dts          |  11 +-
- arch/arm/boot/dts/renesas/iwg20d-q7-common.dtsi    |   3 +-
- arch/arm/boot/dts/renesas/iwg20d-q7-dbcm-ca.dtsi   |   3 +-
- arch/arm/boot/dts/renesas/r7s72100-genmai.dts      | 199 +++++++++++++++------
- arch/arm/boot/dts/renesas/r7s72100-rskrza1.dts     |  14 +-
- arch/arm/boot/dts/renesas/r7s72100.dtsi            |   4 +-
- arch/arm/boot/dts/renesas/r7s9210-rza2mevb.dts     |   3 +-
- arch/arm/boot/dts/renesas/r8a73a4-ape6evm.dts      |   3 +-
- arch/arm/boot/dts/renesas/r8a73a4.dtsi             |   2 -
- .../boot/dts/renesas/r8a7740-armadillo800eva.dts   |   3 +-
- arch/arm/boot/dts/renesas/r8a7742-iwg21d-q7.dts    |   3 +-
- arch/arm/boot/dts/renesas/r8a7742-iwg21m.dtsi      |   3 +-
- arch/arm/boot/dts/renesas/r8a7742.dtsi             |   2 -
- arch/arm/boot/dts/renesas/r8a7743-sk-rzg1m.dts     |   3 +-
- arch/arm/boot/dts/renesas/r8a7743.dtsi             |   1 -
- arch/arm/boot/dts/renesas/r8a7744.dtsi             |   1 -
- .../dts/renesas/r8a7745-iwg22d-sodimm-dbhd-ca.dts  |   3 +-
- .../arm/boot/dts/renesas/r8a7745-iwg22d-sodimm.dts |   3 +-
- arch/arm/boot/dts/renesas/r8a7745-sk-rzg1e.dts     |   3 +-
- arch/arm/boot/dts/renesas/r8a7745.dtsi             |   1 -
- arch/arm/boot/dts/renesas/r8a77470-iwg23s-sbc.dts  |   6 +-
- arch/arm/boot/dts/renesas/r8a7778-bockw.dts        |   5 +-
- arch/arm/boot/dts/renesas/r8a7778.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7779-marzen.dts       |   9 +-
- arch/arm/boot/dts/renesas/r8a7779.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7790-lager.dts        |  25 ++-
- arch/arm/boot/dts/renesas/r8a7790-stout.dts        |  15 +-
- arch/arm/boot/dts/renesas/r8a7790.dtsi             |   2 -
- arch/arm/boot/dts/renesas/r8a7791-koelsch.dts      |  17 +-
- arch/arm/boot/dts/renesas/r8a7791-porter.dts       |  12 +-
- arch/arm/boot/dts/renesas/r8a7791.dtsi             |   1 -
- arch/arm/boot/dts/renesas/r8a7792-blanche.dts      |   9 +-
- arch/arm/boot/dts/renesas/r8a7792-wheat.dts        |   3 +-
- arch/arm/boot/dts/renesas/r8a7792.dtsi             |   2 +-
- arch/arm/boot/dts/renesas/r8a7793-gose.dts         |  15 +-
- arch/arm/boot/dts/renesas/r8a7793.dtsi             |   1 -
- arch/arm/boot/dts/renesas/r8a7794-alt.dts          |  14 +-
- arch/arm/boot/dts/renesas/r8a7794-silk.dts         |   9 +-
- arch/arm/boot/dts/renesas/r8a7794.dtsi             |   1 -
- arch/arm/boot/dts/renesas/sh73a0-kzm9g.dts         |  17 +-
- arch/arm/boot/dts/renesas/sh73a0.dtsi              |   1 -
- .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |  10 +-
- .../arm64/boot/dts/renesas/beacon-renesom-som.dtsi |  11 +-
- arch/arm64/boot/dts/renesas/cat875.dtsi            |   3 +-
- arch/arm64/boot/dts/renesas/condor-common.dtsi     |   6 +-
- arch/arm64/boot/dts/renesas/draak.dtsi             |   6 +-
- arch/arm64/boot/dts/renesas/ebisu.dtsi             |  17 +-
- arch/arm64/boot/dts/renesas/hihope-common.dtsi     |   5 +-
- arch/arm64/boot/dts/renesas/hihope-rzg2-ex.dtsi    |   3 +-
- arch/arm64/boot/dts/renesas/r8a774c0-cat874.dts    |   9 +-
- .../renesas/r8a77970-eagle-function-expansion.dtso |   7 +-
- arch/arm64/boot/dts/renesas/r8a77970-eagle.dts     |   6 +-
- arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts     |   6 +-
- arch/arm64/boot/dts/renesas/r8a77980-v3hsk.dts     |   6 +-
- .../boot/dts/renesas/r8a779a0-falcon-cpu.dtsi      |   3 +-
- arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts    |   3 +-
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |   8 +
- .../boot/dts/renesas/r8a779f0-spider-cpu.dtsi      |   2 +-
- .../boot/dts/renesas/r8a779f0-spider-ethernet.dtsi |   9 +-
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi          |   8 +
- arch/arm64/boot/dts/renesas/r8a779f4-s4sk.dts      |   6 +-
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |   5 +
- .../dts/renesas/r8a779g2-white-hawk-single.dts     |   3 +-
- .../boot/dts/renesas/r8a779h0-gray-hawk-single.dts |  31 +++-
- arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |  72 ++++++++
- arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi   |  21 ++-
- arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |   3 +-
- arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi  |  18 +-
- arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |   3 +-
- arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi  |  51 +++++-
- arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   |   6 +-
- arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi       |   9 +-
- arch/arm64/boot/dts/renesas/salvator-common.dtsi   |  11 +-
- arch/arm64/boot/dts/renesas/salvator-x.dtsi        |   2 +
- arch/arm64/boot/dts/renesas/salvator-xs.dtsi       |   2 +
- arch/arm64/boot/dts/renesas/ulcb-kf.dtsi           |  18 +-
- arch/arm64/boot/dts/renesas/ulcb.dtsi              |   8 +-
- .../boot/dts/renesas/white-hawk-cpu-common.dtsi    |  11 +-
- .../boot/dts/renesas/white-hawk-ethernet.dtsi      |   6 +-
- arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi  |   4 +
- 80 files changed, 503 insertions(+), 351 deletions(-)
+Emil Renner Berthing (7):
+      riscv: dts: thead: Add TH1520 pin control nodes
+      riscv: dts: thead: Add TH1520 GPIO ranges
+      riscv: dts: thead: Adjust TH1520 GPIO labels
+      riscv: dts: thead: Add Lichee Pi 4M GPIO line names
+      riscv: dts: thead: Add TH1520 pinctrl settings for UART0
+      riscv: dtb: thead: Add BeagleV Ahead LEDs
+      riscv: dts: thead: Add missing GPIO clock-names
 
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 86 +++++++++++++++++++++-
+ .../boot/dts/thead/th1520-lichee-module-4a.dtsi    | 39 ++++++++++
+ arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts  | 30 +++++++-
+ arch/riscv/boot/dts/thead/th1520.dtsi              | 70 ++++++++++++++----
+ 4 files changed, 202 insertions(+), 23 deletions(-)
