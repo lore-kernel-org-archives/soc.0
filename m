@@ -1,132 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD34192B79
-	for <soc@lists.linux.dev>; Sun, 20 Oct 2024 14:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9331A1E5722
+	for <soc@lists.linux.dev>; Mon, 21 Oct 2024 11:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729434972; cv=none; b=Qv6BiPxxJENLfSMPQBk4wW24M1zQeV4LZJai8/sLFBcQTnuGAx2Uf0W+tdsk2b6HU+7liPfTD2LIxYgb8SKwHbNIvTEN8+rqpbv7OZlbq22fZbImtHXXtFPUtuI1T2n0RLnYGqmWLLUtPSq4rQMTq+HsR8YXZgQWctxWRJWBcQI=
+	t=1729510558; cv=none; b=OfI9Ecra3HxhqLzeQ9VHRmuKIWfH1bXhNmer5IzVSPHrPEDFxjIUmieBifqJznFKifb35WjLsF4lgyRGdgfiCuaMtXM7DluVqWF9e2Y+nS2M8x9P4H1rOgV/sAvkJCtNZ9yIvmWpa5HU7M9b4zIbnMbAgO1PMKG1aYDGLQmll8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729434972; c=relaxed/simple;
-	bh=nI7CzD0dROhg5LFR+SbTGgNA8U3esGCj22cTRyP1R+k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UAbjspOXJ0z4gSp3y30L8pCrF0+BqAIFscpclyuUfuNrB4RW/d/zVPjM2uAQtAUWUggTS2mH4WT4DvRk3nsJcPPBVfCyn9lytr4BkX92OdSGdCUmQ8sLT8A5dtINBD/tkQ30zSYhKY02EKdfh+DSv8ZA6RMAS8wWvF4vEqpJGds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=Z+tiN8GO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729510558; c=relaxed/simple;
+	bh=wjEkgv5CAVmSpH67LEGbvjgimQJCJNpm5j2igM88oRE=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=FJdszfnKZ/MxnNOQ5lAnG07CribaoIWy4klQs8j1R7jFnGPS+U3pzcjez8YS4F0Sa4uL4WoQk9ZFcMkcozaT9LLEIvGavz/i2eHsQfifgPMMEVooKjuuSAM01CCrGmt5kEEyKGEer+0kpPEkPeNfh678luvkjJV5QMSeGzqBogo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=etxuSRf/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="Z+tiN8GO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="etxuSRf/"
 Received: by smtp.kernel.org (Postfix)
-	id AC46AC4CEE5; Sun, 20 Oct 2024 14:36:11 +0000 (UTC)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	id 31994C4CEF0; Mon, 21 Oct 2024 11:35:58 +0000 (UTC)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7F9C3C4CEE7
-	for <soc@kernel.org>; Sun, 20 Oct 2024 14:36:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F9C3C4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e2b549799eso2654171a91.3
-        for <soc@kernel.org>; Sun, 20 Oct 2024 07:36:10 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id A3BF9C4CEC3
+	for <soc@kernel.org>; Mon, 21 Oct 2024 11:35:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A3BF9C4CEC3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539fe02c386so5320791e87.0
+        for <soc@kernel.org>; Mon, 21 Oct 2024 04:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1729434969; x=1730039769; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kKUwNFi+RGRukUqB0kD8s+grnaOyo0LZlXvjUDFIUlI=;
-        b=Z+tiN8GOAg3WDfTpx3kjHGxYuSrzyJtCT6M/00IHPnatsNO25znPmnGBYOidZD943o
-         13JhHSrZGqBE+zxXNdI+ffh4OO5NNaA9+1AToVR1JeUt3a9OT0aUJfhRyBaqS9wme2PV
-         4nFS5pivtgb3eDPG5oE7B9yvlFxn8DGmhZELZmklg0ZR0sUHluTZOF1RGsBjJ7vFkd0d
-         ZWWtm3UgqE2Ee9kLCkY8COtDgkvD9v6K/Ur89zYK67QczCFluZpXQjx4Qa6xP3rFUBck
-         OdgrYUyPPE50ECNIIhaNlzy+C2wCPnBMen5mcSNCV4r8ixxu2f+Myp4Ox0yY86xer/9p
-         y0kg==
+        d=linaro.org; s=google; t=1729510554; x=1730115354; darn=kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iZgQWwMbz3AUs2e2HBzZnynxlTDrH79hehgeaCylcnQ=;
+        b=etxuSRf/70UlTAaACr4cb0o9w95ER/y6CT7KS5sQ5D3QwG/mk0y0Zj4zO/+pQbhbqw
+         cX6x1fd3kGGzQM0iLNYYNA0ta3LrZPoyiXyolD1VGV5Cj8A1bD7Kuj9eXpualy6ndiH5
+         b3XHSyC+y/Ow6FjZVSzgpxVRJwt3Hm4YUFAYWHyGeh15lXufiww7HhbUmh2KRV/7PhRH
+         RdkvOa2viVXSI0bj0hVq2Vwdd8S7xjU0EvH5QqMaXAk7IGrYL5mIkP+jhet4BH06CR5Z
+         6b6ypl1bsjJmDWc5CE6sJLUuWhH8gu/xQFDKJ+fMnDT2YE1RqRtYCG7wLK2d+WQKwfI0
+         kbuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729434969; x=1730039769;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kKUwNFi+RGRukUqB0kD8s+grnaOyo0LZlXvjUDFIUlI=;
-        b=MGa/2nlty+ryVzoPn2/koWgiZPEQgDuDrzp7fHDx8qEzjNojcnRtQTCv4VOFQ/Ne65
-         28mJ29KDjekhfJY2QkQqg6fO6RsIBNWTcq92hoRy4EoYF/bywfoffEiSjUldguHCIK0F
-         IJoYVFmj1XOqDx2hbmCmj/9cmZzpdd5MiinpT889qNziXGls6HnXkGb8DDfM4HNcFbsc
-         eyGBMtH8LuSaCzw3jwbUV85plsll07K1oDDvwcZTO0zZWqgz7H3OJfz7l2Gsfr9xADW1
-         2ibvJ1+5i865GtGAHgoJizpwoJ+nG1GjMUboXKyoyknG6WNc+PaWrsF9R3iaAwgz8dqY
-         aYaA==
-X-Gm-Message-State: AOJu0YwanKs4ROhlSvuY4LFeW+b0DXbCSpYalC9KVeV2P3Oo/a9qoqtx
-	N96jzwOyXFSPqz1QnWBDnRIMndBzhn3TAP4oMcZKpfSEykcGcY+ebz1RSmPbbhFZTFYhcUf410v
-	A
-X-Google-Smtp-Source: AGHT+IGJNYH1gN14k1HjiG8KMaOw8wGH7bmIO29hzeC6OSNwC+ZYDPZ5SQj59jaNoa9SfDiMXNrNKg==
-X-Received: by 2002:a17:90a:e392:b0:2e2:cd5e:7eef with SMTP id 98e67ed59e1d1-2e5618d9edamr9931854a91.27.1729434968747;
-        Sun, 20 Oct 2024 07:36:08 -0700 (PDT)
-Received: from x1 (71-34-69-82.ptld.qwest.net. [71.34.69.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5ad4ed825sm1572538a91.35.2024.10.20.07.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2024 07:36:08 -0700 (PDT)
-Date: Sun, 20 Oct 2024 07:36:06 -0700
-From: Drew Fustini <drew@pdp7.com>
-To: soc@kernel.org
-Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v6.13
-Message-ID: <ZxUVVk9gWJAVrp0g@x1>
+        d=1e100.net; s=20230601; t=1729510554; x=1730115354;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iZgQWwMbz3AUs2e2HBzZnynxlTDrH79hehgeaCylcnQ=;
+        b=SFIlBWBoOxr8v8DpbZh2cJJKiNct/nGFsIgyJZX9cOgZu8Yuwl8chOT7YYie0BaezS
+         JDfd35bGCFbAjpUObqpIsWHFdhVKuexDfvqEZQ8RQjFET/MrBip1fSVvXUWEqMDq8GAR
+         5jy4lcvK3R7twmRcAnTS5WJcPkt7FejhNHxdeLtN/fjvWNWq/sUiSqPkd3QmS+H6LrmX
+         WSWbdpNv2ul/pYWDogX7tM36HPZaiY+aDRPwqZk9R+oohJ0iricdfJTC//ZtkLPXH6yN
+         Wg48qcgrIWP8N3fOr47N+fKEbi4BWZ6PfxBuhjn08qHszp5LsquyjHGw3ku+FnR0PIve
+         TSlg==
+X-Gm-Message-State: AOJu0YxlOzxFNfjcp+qzx9MzUe2vLz4AzvJ5880Q6aWn/23ec/uG4EqY
+	H6OjrxQ5ikq71EjNLTTvLdmHX/UWkVcuvQV+qTRswdGiWAeskd5ZN0eMKjpl3diKXfbst8KpWJb
+	ttaBIyvHajbr7PDQmL3p0STNfyUC13a8kM5wvA1L/jDEhoVYNUbs=
+X-Google-Smtp-Source: AGHT+IGDImnSVd1NLeuo7wYNgA6MxgRIRW9nTKeOGsGXoBPPdVcGHYm3tvFiqJHdTx4L867VbSqk0VGDIldyo88XqSE=
+X-Received: by 2002:a05:6512:3d10:b0:539:f775:c0bc with SMTP id
+ 2adb3069b0e04-53a15b9b1c3mr3831790e87.29.1729510554065; Mon, 21 Oct 2024
+ 04:35:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 21 Oct 2024 13:35:42 +0200
+Message-ID: <CACRpkda5rix2JLYpexXTeGqKBcHeWxZx7A49jYCCmDPU7CFLSA@mail.gmail.com>
+Subject: [GIT PULL] Ux500 DTS updates for v6.13
+To: SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arnd,
+Hi SoC folks,
 
-Please pull these thead dts changes. I've run W=1 dtbs_check and they
-have been in linux-next since October 15th.
+these are some Ux500 DTS updates for the v6.13 kernel.
+Details in the signed tag. Please pull them in!
 
-Thanks,
-Drew
+Yours,
+Linus Walleij
 
-The following changes since commit 8e929cb546ee42c9a61d24fae60605e9e3192354:
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-  Linux 6.12-rc3 (2024-10-13 14:33:32 -0700)
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
 are available in the Git repository at:
 
-  git@github.com:pdp7/linux.git tags/thead-dt-for-v6.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ux500-dts-for-v6.13
 
-for you to fetch changes up to 2a3bf75a9408c40403aab39336274c8010b4c815:
+for you to fetch changes up to 54b6c3795484ed2f5e63a66267cda8611c87d3cf:
 
-  riscv: dts: thead: remove enabled property for spi0 (2024-10-15 10:01:18 -0700)
-
-----------------------------------------------------------------
-T-HEAD Devicetrees for v6.13
-
-Add nodes for pin controllers on the T-Head TH1520 RISC-V SoC. The
-yaml binding and pinctrl-th1520 driver has been merged into next by
-Linus W and will be included in the 6.13 pinctrl PR.
-
-The TH1520 GPIO controllers are already supported by the gpio-dwapb
-driver. This PR improves GPIO support by adding GPIO ranges and GPIO
-line names for the BeagleV Ahead and LicheePi 4A boards. Support is
-added for the built-in LEDs on the Ahead board.
-
-Signed-off-by: Drew Fustini <drew@pdp7.com>
+  ARM: dts: Reconfigure the MC2 eMMC interface (2024-10-21 13:31:33 +0200)
 
 ----------------------------------------------------------------
-Drew Fustini (1):
-      riscv: dts: thead: remove enabled property for spi0
+Ux500 DTS file updates for the v6.13 kernel cycle:
+- Add touchkeys to the Samsung Codina variants
+- Re-work the Codina device tree for eMMC
 
-Emil Renner Berthing (7):
-      riscv: dts: thead: Add TH1520 pin control nodes
-      riscv: dts: thead: Add TH1520 GPIO ranges
-      riscv: dts: thead: Adjust TH1520 GPIO labels
-      riscv: dts: thead: Add Lichee Pi 4M GPIO line names
-      riscv: dts: thead: Add TH1520 pinctrl settings for UART0
-      riscv: dtb: thead: Add BeagleV Ahead LEDs
-      riscv: dts: thead: Add missing GPIO clock-names
+----------------------------------------------------------------
+Linus Walleij (2):
+      ARM: dts: ux500: Add touchkeys to Codinas
+      ARM: dts: Reconfigure the MC2 eMMC interface
 
- arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 86 +++++++++++++++++++++-
- .../boot/dts/thead/th1520-lichee-module-4a.dtsi    | 39 ++++++++++
- arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts  | 30 +++++++-
- arch/riscv/boot/dts/thead/th1520.dtsi              | 70 ++++++++++++++----
- 4 files changed, 202 insertions(+), 23 deletions(-)
+ arch/arm/boot/dts/st/ste-dbx5x0-pinctrl.dtsi       | 49 ++++++++++++++++++++++
+ .../boot/dts/st/ste-ux500-samsung-codina-tmo.dts   |  1 +
+ arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts  | 27 +++++++-----
+ 3 files changed, 66 insertions(+), 11 deletions(-)
