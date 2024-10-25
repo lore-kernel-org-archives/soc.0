@@ -1,66 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3748721A4BA
-	for <soc@lists.linux.dev>; Fri, 25 Oct 2024 15:06:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F152F21A4B2
+	for <soc@lists.linux.dev>; Fri, 25 Oct 2024 15:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729868761; cv=none; b=NowiaTCeW4ncT8DP1n+JYMNjO8vKI1H8jNXbCn9teINPOMKv0h/v9kefCXJ6MdsBn7tO6W1UoalV3qcPs1kPOK0eWn7ai5C8fLeqzPvYiTov1gLgoiiTkx63H2PTwnSm3mXGKPVsl4QVYLx4/meqoudFNLRYCwZztbpyybs5ylU=
+	t=1729868763; cv=none; b=r1TBv4RSm0OXXCoGyb5mNnn2PHU8as4NrBcHJcvdnG3RwoHVHWtPv2gZgsT7SfVR5tNNL+9kM8/AfxY/ECJrnLm1GQoNg53gEA0W0mFldHXoY4+ejIDz1EmIjdH26a3xCEwp+WwkgZV4sDzzkM2vGU4GzFYwWVKXdzzetVPmWtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729868761; c=relaxed/simple;
-	bh=4yUalD770YGcCi3aC/tYZ/6aDhy4qrpg2LX3Mvo4ljU=;
+	s=arc-20240116; t=1729868763; c=relaxed/simple;
+	bh=6gLfcItkltgqW9XruEeIVu18tltGP71m8QHjikgtyIM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MlRc1YAx2CEp5EmMTqtyhWx5pKHQbI13p5Euv3g/gSfl+hYRFKXt796wfwGjYYnsqOEM9PjB4Si0awXzE8xoyuBz0yk3mkRLRll7Ijyt1bvEkFKuXiEAcvXeZ1yT73iqNGQqGIiTfv/bB1OiBTwq1V2TQYscB3+gbg/JEOR6r3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jYdMA2gx; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:MIME-Version; b=g+F9C7jgTmeHHNpclEgvhNNXFYPtWH4eJ3ois+ZehFguOuMnKalPECOOEjy8ZIPO/TL7SQ7O0+CYyJzKye0scs2uyOhC51a74+aKvbOXcVckeAECRmIGwA7bPXE4Y0VSzW7tZxTxZXAwskuAjWh58tLYtUpEKfZNaIcjAUNxc3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OXQha2jT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYdMA2gx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OXQha2jT"
 Received: by smtp.kernel.org (Postfix)
-	id C2339C4CEE4; Fri, 25 Oct 2024 15:06:00 +0000 (UTC)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	id 8B8EFC4CEC3; Fri, 25 Oct 2024 15:06:02 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DBE2AC4AF09;
-	Fri, 25 Oct 2024 15:05:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DBE2AC4AF09
+	by smtp.kernel.org (Postfix) with ESMTPS id B0499C4CECD;
+	Fri, 25 Oct 2024 15:06:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B0499C4CECD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fb50e84ec7so18504011fa.1;
-        Fri, 25 Oct 2024 08:05:59 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37d41894a32so1655426f8f.1;
+        Fri, 25 Oct 2024 08:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729868758; x=1730473558; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1729868760; x=1730473560; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i3N7tIFZ/AxOAsyxDDEDsOJgBWk6XC0sx5+hvyvRCSE=;
-        b=jYdMA2gxUviz39FKujw074HbRJ3iCiB2q43snG9jGMOQw+2ujiWMgE7CTfJ0Nu+mY6
-         rmf2VnBVV6gRkJ2CZhZFB3Z/nPh9hrhv0wtGvaE9FjhlfTEF1iTBI87ZqEo6h1TVoXkP
-         ZxeJkzfVSctm41eoYzxbcMMSmA7aX0ewgH2wQ5yZABbIs7l6jF6Vq8ycaCEBfLZ2ZbCH
-         V5pPLNaBNC946es9Nd04rvN4OkdvdK4O0ox9gmALjVArGItBCJMJl+DfP7S3B1GhjGrr
-         fN2ETiXHP7fTGPHW9rVWBbUDd3qwZEGYp2hiGQimqSbWfNGyjl9azSmiHRMgmHcfw9lo
-         o3hQ==
+        bh=NjNHunCnOdN+Wqqw9EShNJBoIyMpofWELciNyHFIroY=;
+        b=OXQha2jTeY6zku1b+COL/8wCcrrsj0WQskNA0tTTGh1aBolg+6McPash0Mv1V+PoBr
+         0p/ebfak0DIhJyp5IkaBAuJjEZsNtOeUE45kFfGx2BqHypKimYVqDQVa695crO7l5JHT
+         avpZtYUE55oHrNS0l7HhpLnJEraphopu9GPO9fyDf7hLGiHWvzll+GDfOmM5vA2woVyO
+         jas+n180kj5+xcYE9+6Mn/Kig04Q+CylI6mfmX+XQ6axw0GpVy/VTaiVELxu8msBp8zz
+         Uxl3kXn1MWiWKF05ezRZeD8/1EmNnA0ZvPXsmvlCX2q/pKTxwJRhthWJGygd7+4XJjSl
+         Zgmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729868758; x=1730473558;
+        d=1e100.net; s=20230601; t=1729868760; x=1730473560;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i3N7tIFZ/AxOAsyxDDEDsOJgBWk6XC0sx5+hvyvRCSE=;
-        b=ZBGLl+XEJmpbydVa/2tu7maa7cs+hlpOrIfUl0iCAH551cuCzCkZk/feN6oPEX9wP5
-         A2JAlECuOo3YcsyFpXLxvT/c0384o25eiOPeuVE3znHlbvRrBW59pHrOQqf6MhOOioQG
-         SUcS4K3qq2FpGUzaykUXYm4cjyV0/oufsJFHr1Ko8aCAQ5d8cBoiQ7h0kc3+DDHGTY0N
-         uAJhhhMqyISeW77Yph5uHvtbfnJVLZ0zDRgeDH4OY/FyqvKo6xUcrM+VTHljYdscuVAd
-         9gJz8cJvIFGsfWjjOv1jlI4wlPWHOI507FbYOqyExpG3V9t2Fa8HO21OvAf2GWESknGF
-         Y9JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuJu2/wVVJ2UH811OhLV6Qtd7A8aZJw2ETsjbe+gb2liWxmR2nbGnEXbp5baWP4cVaUWQ=@kernel.org
-X-Gm-Message-State: AOJu0Yxsxzaygbh8vboKLZfSSguwxOl/dkRTZ5MNUokAVCmBw1kXRjJx
-	azVPEYN39BbQkq+9TmNp7kQzAoGkopW9aBeHk7NbUgJdS1PClPcIUAZg5kCO
-X-Google-Smtp-Source: AGHT+IFrsZWEoyBnhS3RPaZ5Zmw4dvGHO73/aCwUsgK5sZG6dgINNxsk3Az1YMPxmoJf6izmtskC8g==
-X-Received: by 2002:a2e:a9a4:0:b0:2fb:2b5d:215d with SMTP id 38308e7fff4ca-2fca81c1cc1mr40595521fa.7.1729868757321;
-        Fri, 25 Oct 2024 08:05:57 -0700 (PDT)
+        bh=NjNHunCnOdN+Wqqw9EShNJBoIyMpofWELciNyHFIroY=;
+        b=AWGfiGK5CWp+RLjf7j2W9jQgxY2s3QAok5iHR81Q/Fo6Nxtz/22zeTRj7wV9EA3rh/
+         WEK1bhvdqbuv74USDTxMF5dC3grZszxPp3xrl4sPkDVPQi8mPu8YKR5DEsH/fgL0SP4W
+         mvrsX4SWT/B52UK5XzjPkScVnXpECo7ac0uYPgzOxAK+pPtTTRc+tmCrfYY725PaJHSQ
+         MFyTBmLWb0X2h5GH+I3F4AEynsBF2MYXzGLzpw5c92luxBqpz0koSEMvEEaMI4VKotKC
+         IUBmfyVFTrosNXPwvy5xkSIW23LTqloVJzp8UYRINPe+cfAkQUZwZsoeI4ol+zs8l15a
+         8aaA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1K9p4twQT82tYeUVVMZeMTkT4S1SdzulFUpYkHjVJztZY74xrbS22jOoF7vr19dz5sKQ=@kernel.org
+X-Gm-Message-State: AOJu0Yz8YfDpTto8xbAlGGCArP40TXtAZZjSF55/lIlvu/u7xd/6vwrx
+	K0Pvw84Ipajd3pBrSBIirAp8DsCoBm9XZlCL83OFxTlgxpsK1hDdABXXCXoh
+X-Google-Smtp-Source: AGHT+IHf8K+VrApDwK2P3P4VzLDOtAw06mB6pfqZu+1G2ln33vZP4xxaLpqz2VXts9l5TmzwFrO2TA==
+X-Received: by 2002:a05:6000:1a54:b0:37c:f561:1130 with SMTP id ffacd0b85a97d-3803ac0c1cbmr4825990f8f.18.1729868758329;
+        Fri, 25 Oct 2024 08:05:58 -0700 (PDT)
 Received: from localhost (p200300e41f26ec00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f26:ec00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4318b57b472sm52204835e9.43.2024.10.25.08.05.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b91f43sm1741743f8f.92.2024.10.25.08.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 08:05:56 -0700 (PDT)
+        Fri, 25 Oct 2024 08:05:58 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -68,9 +68,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/3] dt-bindings: Changes for v6.13-rc1
-Date: Fri, 25 Oct 2024 17:05:52 +0200
-Message-ID: <20241025150555.2558582-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/3] arm64: tegra: Device tree changes for v6.13-rc1
+Date: Fri, 25 Oct 2024 17:05:53 +0200
+Message-ID: <20241025150555.2558582-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241025150555.2558582-1-thierry.reding@gmail.com>
 References: <20241025150555.2558582-1-thierry.reding@gmail.com>
@@ -91,23 +91,45 @@ The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.13-dt-bindings
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.13-arm64-dt
 
-for you to fetch changes up to 1f451e2493a66345aefd13490d058e46dc25b459:
+for you to fetch changes up to 2433e22233f07b2e03034fffcbaf6c26b5838bb6:
 
-  dt-bindings: arm: Tegra234 Industrial Module (2024-10-21 14:53:37 +0200)
+  arm64: tegra: smaug: Declare cros-ec extcon (2024-10-24 19:23:01 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v6.13-rc1
+arm64: tegra: Device tree changes for v6.13-rc1
 
-This adds documentation for the AGX Orin industrial module.
+Changes in this batch add an device tree file for the industrial module
+version of the Jetson AGX Orin Developer Kit. There are also some fixes
+for the Jetson TX1 and new features such as touchscreen, temperature
+sensor and USB-C extcon support for Smaug (a.k.a. Pixel C).
 
 ----------------------------------------------------------------
 Dara Stotland (1):
-      dt-bindings: arm: Tegra234 Industrial Module
+      arm64: tegra: Create SKU8 AGX Orin board file
 
- Documentation/devicetree/bindings/arm/tegra.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Diogo Ivo (2):
+      arm64: tegra: Add SDMMC sdr104-offsets for Tegra X1
+      arm64: tegra: smaug: Declare cros-ec extcon
+
+Jasper Korten (2):
+      arm64: dts: nvidia: tegra210-smaug: Add touchscreen node
+      arm64: dts: nvidia: tegra210-smaug: Add TMP451 temperature sensor node
+
+Tomasz Maciej Nowak (1):
+      arm64: tegra: p2180: Add mandatory compatible for WiFi node
+
+ arch/arm64/boot/dts/nvidia/Makefile                |   1 +
+ arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi     |   2 +-
+ arch/arm64/boot/dts/nvidia/tegra210-smaug.dts      |  27 +
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   2 +
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  | 544 +-------------------
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0008.dts  |  11 +
+ .../boot/dts/nvidia/tegra234-p3737-0000+p3701.dtsi | 547 +++++++++++++++++++++
+ 7 files changed, 591 insertions(+), 543 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0008.dts
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701.dtsi
