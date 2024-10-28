@@ -1,113 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC05126BF1
-	for <soc@lists.linux.dev>; Sun, 27 Oct 2024 23:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD874A47
+	for <soc@lists.linux.dev>; Mon, 28 Oct 2024 03:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730071904; cv=none; b=n3R5QpOYIyOAB6rWwhH8/K9l6PdbtEAT2PAj6WcFVMqk/WkzW+2B8xHxMv9hdJSTDQB7Dz2iu2N+yJkGgZZ7oWWEmw62ZvahVVMd9CAqhN56SpPXqE5H6CUZ6UhGBY3jgT82JLvYtDrQg2N32k3j7KImr7pGd+JdVLKQJYuj+tg=
+	t=1730087703; cv=none; b=TGX+DE5oEW3M1AxNmtcYLSGGQYK64qTdmQQj/QubK0z/bJwgTQ/hpS9Ism1VEm1EZ7usfEJ6WJZEvF+pWlWd8TtklldRb0DOIqN5XL+ve/LLSOA1xtTl0mWScQ4jJUDhBjRusoV1lhNjmTTnky+g9MBL4n/tnns6qIHm5db72Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730071904; c=relaxed/simple;
-	bh=jwjn/61q6vzgnaw8czf9Nb8oMQOKAjZP50jDFJAI1UM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X6HBgl+WiZ1GPtTh9QHJhbtpeNSBcEd2KpfILbGr/1Tu40wyd0wDn2pIB0oJae06uR8gX8g+328w6rIebgQvAc6MVi7iR5aykinIAkH0zcWw5XCseGp1ctKMpY9ALk0uWoENx8g0O7XelcImnIeu+63b0ET2BSdyPrIZaORk/aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730087703; c=relaxed/simple;
+	bh=K1SYdMufPEu4Pz6UKbEUR4wqQsMmcb/g32ziiy2TALo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Evnk/GdFi8a2R85TuGArazoCJqEzpsSHCv8sGRaQCYm0RcWOHJ+QjFe9rizYzicVmJuvvGX5zRnpHMUlMgEYtTj2BfxMJoaax/cxtkPIDPT/Wli9QlFbLaZdKC85cHEM6EeRpgTMpfJyx0wvNsG+ZG5Q1smEFHFdsgEVpVuNbs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=k1gU0/Ub; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="k1gU0/Ub"
 Received: by smtp.kernel.org (Postfix)
-	id 6D8A7C4CEE8; Sun, 27 Oct 2024 23:31:44 +0000 (UTC)
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 62FBDC4CEE9; Mon, 28 Oct 2024 03:55:03 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.209])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0FCDDC4CEC3;
-	Sun, 27 Oct 2024 23:31:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0FCDDC4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Date: Mon, 28 Oct 2024 07:31:39 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>
-Cc: Yangyu Chen <cyy@cyyself.name>, Jisheng Zhang <jszhang@kernel.org>,
-	Jesse Taube <mr.bossman075@gmail.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Icenowy Zheng <uwu@icenowy.me>,
-	Meng Zhang <zhangmeng.kevin@spacemit.com>,
-	Meng Zhang <kevin.z.m@hotmail.com>, soc@kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2] MAINTAINERS: setup support for SpacemiT SoC tree
-Message-ID: <20241027233139-GYA86372@gentoo>
-References: <20241028-00-k1-maintainer-v2-1-272c9834220d@gentoo.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 5C4E4C4CEC7;
+	Mon, 28 Oct 2024 03:55:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C4E4C4CEC7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 416C0C0000E3;
+	Sun, 27 Oct 2024 20:54:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 416C0C0000E3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1730087695;
+	bh=K1SYdMufPEu4Pz6UKbEUR4wqQsMmcb/g32ziiy2TALo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=k1gU0/UbquGHYFXStJJpIByA7sBpwAX34sbe0QiycE+GGBfVDawcamexwAkpWip6t
+	 V13JGDq4rLMDSfTujLibcGXIzt5Yeoqx/QpZOrJ92wPbOs9bl4VZgaGa8OmaO7z5tT
+	 VlsM0OXhVu2Cul3R6LLJOdghJTc9OCqcq+zSMRug=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id DEE9918041CAC6;
+	Sun, 27 Oct 2024 20:54:54 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: soc@kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/2] Broadcom defconfig changes for 6.13
+Date: Sun, 27 Oct 2024 20:54:48 -0700
+Message-ID: <20241028035449.734504-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241028-00-k1-maintainer-v2-1-272c9834220d@gentoo.org>
+Content-Transfer-Encoding: 8bit
 
-HI
-On 07:04 Mon 28 Oct     , Yixun Lan wrote:
-> Add myself as maintainer of SpacemiT's SoC tree, which
-> suggested by Conor [1].
-> 
-> Link: https://lore.kernel.org/all/20241018234615-GYA2124001@gentoo/ [1]
-> Signed-off-by: Yixun Lan <dlan@gentoo.org>
-> ---
-> This will setup proper maintainer info about Spacemit's kernel tree,
-> which should help to take soc and device tree patches, and send the
-> pull request up to Arnd's soc tree.
-> 
-> I asked Kevin to host the kernel tree under SpacemiT's account
-> on github, which should help people to get access more easily,
-> and promote the tree a little bit.
-> 
-> I could take this patch through this spacemit's soc tree if no objection,
-> of cource, after got ACK.
-> ---
-> Changes in v2:
-> - drop RISC-V exclude dts
-> - add mailinglist info
-> - Link to v1: https://lore.kernel.org/r/20241023-00-k1-maintainer-v1-1-c06b791cc2ee@gentoo.org
-> ---
->  MAINTAINERS | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e9659a5a7fb3347d649855992a559e3526d18443..88fe4ca801537eff7eb5001406a611ef80632b5d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19814,6 +19814,15 @@ F:	arch/riscv/boot/dts/thead/
->  F:	drivers/clk/thead/clk-th1520-ap.c
->  F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
->  
-> +RISC-V SPACEMIT SoC Support
-> +M:	Yixun Lan <dlan@gentoo.org>
-> +L:	linux-riscv@lists.infradead.org
-> +S:	Maintained
-> +T:	git https://github.com/spacemit-com/linux
-> +F:	arch/riscv/boot/dts/spacemit/
-> +N:	spacemit
-> +K:	spacemit
-> +
-strictly, I should put these before THEAD section, to keep it sorted
-I will fix this while applying the patch if no other comments received..
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
->  RNBD BLOCK DRIVERS
->  M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
->  M:	Jack Wang <jinpu.wang@ionos.com>
-> 
-> ---
-> base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
-> change-id: 20241023-00-k1-maintainer-46eb3f31e6f2
-> 
-> Best regards,
-> -- 
-> Yixun Lan <dlan@gentoo.org>
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
--- 
-Yixun Lan (dlan)
-Gentoo Linux Developer
-GPG Key ID AABEFD55
+are available in the Git repository at:
+
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.13/defconfig
+
+for you to fetch changes up to a1b87bee1bc2259e8178c40fa914b3237836f7a9:
+
+  ARM: multi_v7_defconfig: Enable debugging symbols by default (2024-10-08 15:01:34 -0700)
+
+----------------------------------------------------------------
+This pull request contains a multi_v7_defconfig update:
+
+- Florian aligns the ARM64 and ARM multi_v7_defconfig by enabling the
+  kernel with debugging symbols by default and using the toolchain's
+  dwarf version
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      ARM: multi_v7_defconfig: Enable debugging symbols by default
+
+ arch/arm/configs/multi_v7_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
