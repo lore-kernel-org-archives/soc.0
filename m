@@ -1,114 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A9C202F99
-	for <soc@lists.linux.dev>; Tue, 29 Oct 2024 07:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C8B1DF99F;
+	Tue, 29 Oct 2024 08:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730188436; cv=none; b=VpwNMvfvjgHV2zLItw0gqw5IOZfn/5G8FvChsO3QkAABQdlI72llsFC4Lt1/BlhmGh0DgPXwEQ41fuapIYZvRkkcek8wbSIZKa0BJ9tozEf7JP9PURG4WH+SEBpSlBmxFHLEfPs/t4hGS/NZE/Bg+UczcKvchmuYKl6G8TKrWbA=
+	t=1730188994; cv=none; b=LUpsgsaTYFhopOeuMBNr9Z3HFCT+LIgEqSEkCQ6WfMeyGfZ4kGAGaXHgF8ZVJwDZtqN7AGrNExCta37uyB7u1z2ZHuCCGPb9QEFKuBlagxLnxcoA012ck6k0BHjA4Jo9gamNcefiFiMNG/+cNmejaPZ1f+dnZoXNbRPg8FR+38w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730188436; c=relaxed/simple;
-	bh=KsjPCtV8NQo2f8cWR9Xgy22vudGexF0FRJzmq90JWtQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bm5UQBN/qSLb6mQtsWqmIMclkPtfSIuklotuT3UzYlCTbvsRAn22IK5f5A3DrgD5nPM9tR8oqBMGOuG0GVyT3wH0Bp2XmhgPMQi7+Z6xxy8KNe550Wk1sbD1kWFgsiMNbLk69fiZsLN2ChSrEQNkysbdGqWx14HLHMT75cSxmzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d50/bIAN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730188994; c=relaxed/simple;
+	bh=/xUZ3coZ6gf0W/FIhSNP+3W6dQQSH6hXnIrXeTA8pgs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FZB2fumrZmBax9sQHnCqvLqJ6RiBu6FoXlc6V+19GTYLIi6UNv9Vjti3nxDcuR7eXCT2CFnotX/OgDlsAcOuP0jVpgQONAsgpFyUQMMomDp6KWFqmw8psSIlU7oLa7S7EiE9R2orQLNPNeoDPK+IUav2xHiwtekRcTW0O/5BXSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=E9WrE7ko; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d50/bIAN"
-Received: by smtp.kernel.org (Postfix)
-	id CA82AC4CECD; Tue, 29 Oct 2024 07:53:55 +0000 (UTC)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9DE22C4CEE7
-	for <soc@kernel.org>; Tue, 29 Oct 2024 07:53:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DE22C4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43160c5bad8so5639365e9.3
-        for <soc@kernel.org>; Tue, 29 Oct 2024 00:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730188432; x=1730793232; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1PWSKsonNDrTWkbxkIHIq6fERLhyZhv2JFfOwChp3PQ=;
-        b=d50/bIANqSszFsc0kNLcLfzPg0KSEX2tOb0f7C6tCg3BCsMRaR7s7jBHrU7RlBT/7r
-         5lOLiJ9XH25nTpWVhIsnruEYQkF6dsAQRommk0QOew5tBbkeaAwXD/Bw7bJXwD5KXBAY
-         6fJ1m6aWoEUwlUCFW5muAPxjDwPKQZFCfDUHIRTs44bOZLHxtG66GNlfH07qQ4tr9tvr
-         /1/80giQD2hCgcD3ujx0PLATEFLKOvjx6Y7sRsBPJpY1ZVDIkJpOvHmblumHH24OE0k0
-         9wS3nH7fKNRJ+8MoA4lkH9fhP7X70KFQP7ESIFe4BZozx0nrUSFwNS/O/F7tmUvmiFwu
-         PKGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730188432; x=1730793232;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1PWSKsonNDrTWkbxkIHIq6fERLhyZhv2JFfOwChp3PQ=;
-        b=tKsLomQ5WXlsRRokV4o8qGbKF7Dsm8INaimvIV264JsZ9PzgAGPsnivi2GBlfHHmeU
-         s9oqJP8lrP+veqZDrK6CsXoIt5+7SzQtKghP+2fSiXSNkn4ov2KM6NKXHiBU0YwV/Ppd
-         +5e5owH4UNcLMeCsN2rm2FOHzZCNy8GRNlDthf2FUevk+F3W9uoF+aNFkKAG6CUjt1uC
-         B2eoON+8zKUDRGdRSjvOnjTSW39RgVnwcl4/sX8dBfooJVDVhcYyLJtNwtz6lvPQU3a7
-         SqC59TiOvZVZO5bhGjAfRE6GIyHbCDepE1Tvv281Qr7s5ecbPqUYFBTvnAttgZIOOAN0
-         68RA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYgmueTA7wV9rIxOz8ymmkCMs11u7zz8Dt7u3sLR3AVeztpm8P0UAUCL0AXKdlnBImQA8=@kernel.org
-X-Gm-Message-State: AOJu0YzQxur8wD3N18n0O334ajUPXuw9gw2RqJ7x3iGxfZAFfUdvoHUN
-	Jz/CycnoH04z1h9N5KIE824AtUkURJGkoNkHLQrsX0epauDCXX1ZY71kDNWU/XM=
-X-Google-Smtp-Source: AGHT+IEo2H0HuNGG3T1G8gRQ4j09F1Tx7ARRpFQfrGtgBnln1DVpGWZgDlCNPMYtiYTwQ6xUjK8ajQ==
-X-Received: by 2002:a05:600c:3b13:b0:431:55f3:d34b with SMTP id 5b1f17b1804b1-4319aca248dmr40337185e9.3.1730188431861;
-        Tue, 29 Oct 2024 00:53:51 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.211.167])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4319359527asm134564545e9.16.2024.10.29.00.53.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2024 00:53:51 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.13
-Date: Tue, 29 Oct 2024 08:53:47 +0100
-Message-ID: <20241029075348.19580-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="E9WrE7ko"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=iFdAzUkd+0GcTyGkQ9/oIIo1dvmqpp5hrlTc3EhXZOY=; b=E9WrE7kocNrMH0KBtISYyOsT32
+	PSMSsRWWc5ttyuBz9k08bNtdV2pmnSIxLwf8TSavrfVanzPnFH+vFeWHa8X18XX4W7rs2HhWaEF39
+	lMenGv8tWDu71gfI8++INuZmUySPZj8ECT1w4N5VRO5xYI/DzO+6lz3e6/1j5NgdinKJL8R+6sYWF
+	eWDftBCWLy1wRDPEblOrOj+6ShySW3PiIVJ9DC83Ds6qlsvQRzdWknfrBAB0lg5znZL0QsVoR8zpi
+	LB5SGxCh96C1CN9NxF/9ho2aS0Rb79rGDcq/QHH7rG9oiG32K6IP9wBS4BK0I3BhMQOOMdoFjeky8
+	DpvOJkLg==;
+Received: from [185.156.123.69] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1t5hAk-0002ap-A3; Tue, 29 Oct 2024 09:01:50 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Herve Codina <herve.codina@bootlin.com>, Qiang Zhao <qiang.zhao@nxp.com>,
+ Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+ Huisong Li <lihuisong@huawei.com>, Linus Walleij <linusw@kernel.org>,
+ Imre Kaloz <kaloz@openwrt.org>, Karol Gugala <kgugala@antmicro.com>,
+ Mateusz Holenko <mholenko@antmicro.com>, Gabriel Somlo <gsomlo@gmail.com>,
+ Yinbo Zhu <zhuyinbo@loongson.cn>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Conor Dooley <conor.dooley@microchip.com>,
+ Daire McNamara <daire.mcnamara@microchip.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, Nishanth Menon <nm@ti.com>,
+ Santosh Shilimkar <ssantosh@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Duje =?utf-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>,
+ Mark Brown <broonie@kernel.org>, David Wu <david.wu@rock-chips.com>,
+ Jianqun Xu <jay.xu@rock-chips.com>,
+ Jay Buddhabhatti <jay.buddhabhatti@amd.com>,
+ Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+ Izhar Ameer Shaikh <izhar.ameer.shaikh@amd.com>,
+ Naman Trivedi Manojbhai <naman.trivedimanojbhai@amd.com>,
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ linux-mediatek@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH] soc: Switch back to struct platform_driver::remove()
+Date: Tue, 29 Oct 2024 09:01:46 +0100
+Message-ID: <5089490.31r3eYUQgx@phil>
+In-Reply-To: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
+References: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Am Dienstag, 29. Oktober 2024, 08:48:58 CET schrieb Uwe Kleine-K=F6nig:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
+>=20
+> Convert all platform drivers below drivers/soc to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
+>=20
+> On the way do a few whitespace changes to make indention consistent.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
-are available in the Git repository at:
+>  drivers/soc/rockchip/io-domain.c            | 8 ++++----
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.13
+=46or the Rockchip part:
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
-for you to fetch changes up to 1f1d847a657523e182df87f88158b607afe7d559:
 
-  arm64: defconfig: Update defconfig with now user-visible CONFIG_FSL_IFC (2024-10-14 20:10:47 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.13
-
-1. Freescale IFC: Split handling of child nodes in the bindings to
-   fix dtbs_check warning.
-2. ARM64 defconfig: Nothing selects CONFIG_FSL_IFC anymore since
-   commit 9ba0cae3cac0 ("memory: fsl_ifc: Make FSL_IFC config visible
-   and selectable") and actually CONFIG_MTD_NAND_FSL_IFC depends on it
-   now.  Enable CONFIG_FSL_IFC in ARM64 defconfig, so users of it won't
-   lose these two drivers.
-
-----------------------------------------------------------------
-Esben Haabendal (1):
-      arm64: defconfig: Update defconfig with now user-visible CONFIG_FSL_IFC
-
-Frank Li (1):
-      dt-bindings: memory-controllers: fsl,ifc: split child node differences
-
- .../bindings/memory-controllers/fsl/fsl,ifc.yaml   | 32 ++++++++++++++++++----
- arch/arm64/configs/defconfig                       |  1 +
- 2 files changed, 28 insertions(+), 5 deletions(-)
