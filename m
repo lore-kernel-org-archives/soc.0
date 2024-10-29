@@ -1,804 +1,114 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2502036EC
-	for <soc@lists.linux.dev>; Tue, 29 Oct 2024 07:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A9C202F99
+	for <soc@lists.linux.dev>; Tue, 29 Oct 2024 07:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730188155; cv=none; b=HMeSWlPJmXf2WvA+0Goy/blmK/NJk6H50StgUML5EaGdqEHyJxfV6Zr9Oh89Hgkr3KHoayzIa/HfQjQWq+dXsW4RjQmnm/lW/UKSLs7RsYyJgFJpmQuLC1u4znUDCCDk3+GsMX6p6poWOe4LcUS57V7kPNDxtDkBo0MAWQBIc6A=
+	t=1730188436; cv=none; b=VpwNMvfvjgHV2zLItw0gqw5IOZfn/5G8FvChsO3QkAABQdlI72llsFC4Lt1/BlhmGh0DgPXwEQ41fuapIYZvRkkcek8wbSIZKa0BJ9tozEf7JP9PURG4WH+SEBpSlBmxFHLEfPs/t4hGS/NZE/Bg+UczcKvchmuYKl6G8TKrWbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730188155; c=relaxed/simple;
-	bh=fnnipu1v9HmdJU4ysZHd39XDD27bDCU235ZUeCAg6nQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=stXgh3x7D/B+sL7mXlpY8A/PKPRObrqMSgqM6Lj0tkPHU+uxDhdKbJmZeMoV0/lG07Cujg5GwYM156yM8c4A6nmeZSOz7jzdTu0h+A2cjc/1erxLedduoTM2uvls4d3zpCzL55XRasfYEC/x64vtl6r6bgiGgEGRTgOuDRE6DWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=YtcO9SMu; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1730188436; c=relaxed/simple;
+	bh=KsjPCtV8NQo2f8cWR9Xgy22vudGexF0FRJzmq90JWtQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bm5UQBN/qSLb6mQtsWqmIMclkPtfSIuklotuT3UzYlCTbvsRAn22IK5f5A3DrgD5nPM9tR8oqBMGOuG0GVyT3wH0Bp2XmhgPMQi7+Z6xxy8KNe550Wk1sbD1kWFgsiMNbLk69fiZsLN2ChSrEQNkysbdGqWx14HLHMT75cSxmzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d50/bIAN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YtcO9SMu"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb6110c8faso46428851fa.1
-        for <soc@lists.linux.dev>; Tue, 29 Oct 2024 00:49:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d50/bIAN"
+Received: by smtp.kernel.org (Postfix)
+	id CA82AC4CECD; Tue, 29 Oct 2024 07:53:55 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9DE22C4CEE7
+	for <soc@kernel.org>; Tue, 29 Oct 2024 07:53:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DE22C4CEE7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43160c5bad8so5639365e9.3
+        for <soc@kernel.org>; Tue, 29 Oct 2024 00:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730188149; x=1730792949; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1730188432; x=1730793232; darn=kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QCw635TGuENx07EaRSTZGCzhpZFETm5Vel7NYeU7n3E=;
-        b=YtcO9SMuWK68Z3RtfR93VKB8WiEepywe+MPVmtY3Ho7SxCHgZPg1GI2IET/xlJdS+9
-         OIWuB05vwaPn9mVVZp8UgB+Zolupjybbw/TxM0LZjLVS/2DYFjm0jttpgEA0YpQM+Idn
-         bFn2YlvShE3v0YOrBaDDSlayop8UORjQuOWYv/Z22k5pvW7CR9k/8YgNMAdMDsXSPDal
-         y+MOOAw7aX9+B1QbJAFUqi+86aeb9z7JKPoqagDlWYS+V5LJ8Oo6SEVeXcnEjzCmPvSM
-         N/GW+U2nZHffa4Eq6PyQ4Ih9k8Q6V3RweeQ+sBvfZhhCHMvbBmlgR9Uh2HzEiADlW/6l
-         BZdw==
+        bh=1PWSKsonNDrTWkbxkIHIq6fERLhyZhv2JFfOwChp3PQ=;
+        b=d50/bIANqSszFsc0kNLcLfzPg0KSEX2tOb0f7C6tCg3BCsMRaR7s7jBHrU7RlBT/7r
+         5lOLiJ9XH25nTpWVhIsnruEYQkF6dsAQRommk0QOew5tBbkeaAwXD/Bw7bJXwD5KXBAY
+         6fJ1m6aWoEUwlUCFW5muAPxjDwPKQZFCfDUHIRTs44bOZLHxtG66GNlfH07qQ4tr9tvr
+         /1/80giQD2hCgcD3ujx0PLATEFLKOvjx6Y7sRsBPJpY1ZVDIkJpOvHmblumHH24OE0k0
+         9wS3nH7fKNRJ+8MoA4lkH9fhP7X70KFQP7ESIFe4BZozx0nrUSFwNS/O/F7tmUvmiFwu
+         PKGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730188149; x=1730792949;
+        d=1e100.net; s=20230601; t=1730188432; x=1730793232;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QCw635TGuENx07EaRSTZGCzhpZFETm5Vel7NYeU7n3E=;
-        b=YvwHnGeLQa8CbJAPKt/FjM6UEvjtGPKqO60qLGQdRCl5cfcbCbLaAa95KVbmCDpO6w
-         /YIWz7vc4Sb9anXTBaj1eTAKqTdhf5rkB2Bt/uvyYD2TxoBK6jvqHEOg2nM6naS8UqX+
-         CG+V9l03cQ5vLlqWvH+fWMegL/akxU6lB0o+nHMXkU8lpTiHL1/sfQm1viutceaGwT85
-         L378mydifW8rwIO9oXixZK42JaM6TOZ5T1iN7NINTIXsNO4DSI0X1jGPptkkc0NGyHXL
-         xL7DUvxOdA0bEAIYcgwYHjD4jVR8BuwLBOJm1WwIYhJEX/SnXSzbinKsxLoPEnlfYN3J
-         PvLw==
-X-Forwarded-Encrypted: i=1; AJvYcCUekxb6+FL1P6wxuxRF91qE4qaXaCNKZixH9+enqKuuFaUJjwIxZwO6l3ZXG90obMdOiPQ=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyaTNwjw7M6yHeegdNToktRo7AZUEjuh9Tr84WdBO3Sfpdeayxa
-	iDAAy/PhArgMSqzLi/lMZkQwUKO3fcmud5cPbvMVVe/TydPpFS/Zu6RXemb/R38=
-X-Google-Smtp-Source: AGHT+IEiy2uM0QbU0rGfI+6lQhTGNKNRDAhi18c5OfAAL1QDrCnK1OjCXdp0JS6eDw82pAWqu+69qg==
-X-Received: by 2002:a05:6512:3ca1:b0:539:edf4:68b4 with SMTP id 2adb3069b0e04-53b34a320e7mr3505181e87.57.1730188149240;
-        Tue, 29 Oct 2024 00:49:09 -0700 (PDT)
-Received: from localhost (p50915d2d.dip0.t-ipconnect.de. [80.145.93.45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b1cc0asm11850202f8f.10.2024.10.29.00.49.08
+        bh=1PWSKsonNDrTWkbxkIHIq6fERLhyZhv2JFfOwChp3PQ=;
+        b=tKsLomQ5WXlsRRokV4o8qGbKF7Dsm8INaimvIV264JsZ9PzgAGPsnivi2GBlfHHmeU
+         s9oqJP8lrP+veqZDrK6CsXoIt5+7SzQtKghP+2fSiXSNkn4ov2KM6NKXHiBU0YwV/Ppd
+         +5e5owH4UNcLMeCsN2rm2FOHzZCNy8GRNlDthf2FUevk+F3W9uoF+aNFkKAG6CUjt1uC
+         B2eoON+8zKUDRGdRSjvOnjTSW39RgVnwcl4/sX8dBfooJVDVhcYyLJtNwtz6lvPQU3a7
+         SqC59TiOvZVZO5bhGjAfRE6GIyHbCDepE1Tvv281Qr7s5ecbPqUYFBTvnAttgZIOOAN0
+         68RA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYgmueTA7wV9rIxOz8ymmkCMs11u7zz8Dt7u3sLR3AVeztpm8P0UAUCL0AXKdlnBImQA8=@kernel.org
+X-Gm-Message-State: AOJu0YzQxur8wD3N18n0O334ajUPXuw9gw2RqJ7x3iGxfZAFfUdvoHUN
+	Jz/CycnoH04z1h9N5KIE824AtUkURJGkoNkHLQrsX0epauDCXX1ZY71kDNWU/XM=
+X-Google-Smtp-Source: AGHT+IEo2H0HuNGG3T1G8gRQ4j09F1Tx7ARRpFQfrGtgBnln1DVpGWZgDlCNPMYtiYTwQ6xUjK8ajQ==
+X-Received: by 2002:a05:600c:3b13:b0:431:55f3:d34b with SMTP id 5b1f17b1804b1-4319aca248dmr40337185e9.3.1730188431861;
+        Tue, 29 Oct 2024 00:53:51 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.211.167])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4319359527asm134564545e9.16.2024.10.29.00.53.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2024 00:49:08 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-Cc: Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Qiang Zhao <qiang.zhao@nxp.com>,
-	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-	Huisong Li <lihuisong@huawei.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Imre Kaloz <kaloz@openwrt.org>,
-	Karol Gugala <kgugala@antmicro.com>,
-	Mateusz Holenko <mholenko@antmicro.com>,
-	Gabriel Somlo <gsomlo@gmail.com>,
-	Yinbo Zhu <zhuyinbo@loongson.cn>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Nishanth Menon <nm@ti.com>,
-	Santosh Shilimkar <ssantosh@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	=?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
-	Mark Brown <broonie@kernel.org>,
-	David Wu <david.wu@rock-chips.com>,
-	Jianqun Xu <jay.xu@rock-chips.com>,
-	Jay Buddhabhatti <jay.buddhabhatti@amd.com>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-	Izhar Ameer Shaikh <izhar.ameer.shaikh@amd.com>,
-	Naman Trivedi Manojbhai <naman.trivedimanojbhai@amd.com>,
-	linux-arm-kernel@lists.infradead.org,
-	soc@lists.linux.dev,
-	linux-aspeed@lists.ozlabs.org,
+        Tue, 29 Oct 2024 00:53:51 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	linux-mediatek@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] soc: Switch back to struct platform_driver::remove()
-Date: Tue, 29 Oct 2024 08:48:58 +0100
-Message-ID: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v6.13
+Date: Tue, 29 Oct 2024 08:53:47 +0100
+Message-ID: <20241029075348.19580-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=26321; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=fnnipu1v9HmdJU4ysZHd39XDD27bDCU235ZUeCAg6nQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBnIJNr/CHo9H03UCk92GQ+eXG9SjbKcOiSiGJM3 fvPNk4tk5+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZyCTawAKCRCPgPtYfRL+ Tr7WB/4oG7s/vSEelL6mw2Yv4b8acJHHEU0TymDWXfks0AghGYPP09hc+oS3icrfHXQ+BGjoJ4m iHzustxNtNbSMlEMziFj5toAnzAckkrZOp+HBPNyMa6BZ4d+Rev8bbiv3EEqHAW9yMSptFqS29R up+wNm2mTkdJHQA/zBMf2mzB1CBTyNq1QzyQi/v310HaL+LmsmSZnWwtmGV1a4ZmcgG9yYjrClI ThNQA3UAlM0/Dh4et/gbxxYd5I+GEuCgjI7dMaXzy9TqsfGaytroA4rHca5F+CuNw1WH8L0Nmz+ bnCkMH4JmUhw0NplwXtSNUoyb5xFcEUpWyvq7xgBzBLWuZcY
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
-After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-return void") .remove() is (again) the right callback to implement for
-platform drivers.
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-Convert all platform drivers below drivers/soc to use .remove(), with
-the eventual goal to drop struct platform_driver::remove_new(). As
-.remove() and .remove_new() have the same prototypes, conversion is done
-by just changing the structure member name in the driver initializer.
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
-On the way do a few whitespace changes to make indention consistent.
+are available in the Git repository at:
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
-Hello,
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.13
 
-I did a single patch for all of drivers/soc. While I usually prefer to
-do one logical change per patch, this seems to be overengineering here
-as the individual changes are really trivial and shouldn't be much in
-the way for stable backports.
+for you to fetch changes up to 1f1d847a657523e182df87f88158b607afe7d559:
 
-There is no dedicated maintainer for all of drivers/soc, but I'd expect
-it to be ok to be picked up by the arm soc team.
+  arm64: defconfig: Update defconfig with now user-visible CONFIG_FSL_IFC (2024-10-14 20:10:47 +0200)
 
-This is based on today's next, if conflicts arise when you apply it at
-some later time and don't want to resolve them, feel free to just drop
-the changes to the conflicting files. I'll notice and followup at a
-later time then. Or ask me for a fixed resend.
+----------------------------------------------------------------
+Memory controller drivers for v6.13
 
-Best regards
-Uwe
+1. Freescale IFC: Split handling of child nodes in the bindings to
+   fix dtbs_check warning.
+2. ARM64 defconfig: Nothing selects CONFIG_FSL_IFC anymore since
+   commit 9ba0cae3cac0 ("memory: fsl_ifc: Make FSL_IFC config visible
+   and selectable") and actually CONFIG_MTD_NAND_FSL_IFC depends on it
+   now.  Enable CONFIG_FSL_IFC in ARM64 defconfig, so users of it won't
+   lose these two drivers.
 
- drivers/soc/aspeed/aspeed-lpc-ctrl.c        | 2 +-
- drivers/soc/aspeed/aspeed-lpc-snoop.c       | 2 +-
- drivers/soc/aspeed/aspeed-p2a-ctrl.c        | 2 +-
- drivers/soc/aspeed/aspeed-uart-routing.c    | 2 +-
- drivers/soc/fsl/dpaa2-console.c             | 2 +-
- drivers/soc/fsl/qe/qmc.c                    | 2 +-
- drivers/soc/fsl/qe/tsa.c                    | 2 +-
- drivers/soc/fujitsu/a64fx-diag.c            | 2 +-
- drivers/soc/hisilicon/kunpeng_hccs.c        | 2 +-
- drivers/soc/ixp4xx/ixp4xx-npe.c             | 2 +-
- drivers/soc/ixp4xx/ixp4xx-qmgr.c            | 2 +-
- drivers/soc/litex/litex_soc_ctrl.c          | 2 +-
- drivers/soc/loongson/loongson2_guts.c       | 2 +-
- drivers/soc/mediatek/mtk-devapc.c           | 2 +-
- drivers/soc/mediatek/mtk-mmsys.c            | 2 +-
- drivers/soc/mediatek/mtk-socinfo.c          | 2 +-
- drivers/soc/microchip/mpfs-sys-controller.c | 2 +-
- drivers/soc/pxa/ssp.c                       | 2 +-
- drivers/soc/qcom/icc-bwmon.c                | 2 +-
- drivers/soc/qcom/llcc-qcom.c                | 2 +-
- drivers/soc/qcom/ocmem.c                    | 2 +-
- drivers/soc/qcom/pmic_glink.c               | 2 +-
- drivers/soc/qcom/qcom_aoss.c                | 2 +-
- drivers/soc/qcom/qcom_gsbi.c                | 2 +-
- drivers/soc/qcom/qcom_stats.c               | 2 +-
- drivers/soc/qcom/ramp_controller.c          | 4 ++--
- drivers/soc/qcom/rmtfs_mem.c                | 2 +-
- drivers/soc/qcom/rpm-proc.c                 | 2 +-
- drivers/soc/qcom/rpm_master_stats.c         | 2 +-
- drivers/soc/qcom/smem.c                     | 2 +-
- drivers/soc/qcom/smp2p.c                    | 2 +-
- drivers/soc/qcom/smsm.c                     | 6 +++---
- drivers/soc/qcom/socinfo.c                  | 2 +-
- drivers/soc/rockchip/io-domain.c            | 8 ++++----
- drivers/soc/samsung/exynos-chipid.c         | 4 ++--
- drivers/soc/tegra/cbb/tegra194-cbb.c        | 2 +-
- drivers/soc/ti/k3-ringacc.c                 | 2 +-
- drivers/soc/ti/knav_dma.c                   | 4 ++--
- drivers/soc/ti/knav_qmss_queue.c            | 2 +-
- drivers/soc/ti/pm33xx.c                     | 2 +-
- drivers/soc/ti/pruss.c                      | 4 ++--
- drivers/soc/ti/smartreflex.c                | 2 +-
- drivers/soc/ti/wkup_m3_ipc.c                | 2 +-
- drivers/soc/xilinx/xlnx_event_manager.c     | 2 +-
- drivers/soc/xilinx/zynqmp_power.c           | 2 +-
- 45 files changed, 54 insertions(+), 54 deletions(-)
+----------------------------------------------------------------
+Esben Haabendal (1):
+      arm64: defconfig: Update defconfig with now user-visible CONFIG_FSL_IFC
 
-diff --git a/drivers/soc/aspeed/aspeed-lpc-ctrl.c b/drivers/soc/aspeed/aspeed-lpc-ctrl.c
-index e87038009d1b..ee58151bd69e 100644
---- a/drivers/soc/aspeed/aspeed-lpc-ctrl.c
-+++ b/drivers/soc/aspeed/aspeed-lpc-ctrl.c
-@@ -353,7 +353,7 @@ static struct platform_driver aspeed_lpc_ctrl_driver = {
- 		.of_match_table = aspeed_lpc_ctrl_match,
- 	},
- 	.probe = aspeed_lpc_ctrl_probe,
--	.remove_new = aspeed_lpc_ctrl_remove,
-+	.remove = aspeed_lpc_ctrl_remove,
- };
- 
- module_platform_driver(aspeed_lpc_ctrl_driver);
-diff --git a/drivers/soc/aspeed/aspeed-lpc-snoop.c b/drivers/soc/aspeed/aspeed-lpc-snoop.c
-index 888b5840c015..9ab5ba9cf1d6 100644
---- a/drivers/soc/aspeed/aspeed-lpc-snoop.c
-+++ b/drivers/soc/aspeed/aspeed-lpc-snoop.c
-@@ -366,7 +366,7 @@ static struct platform_driver aspeed_lpc_snoop_driver = {
- 		.of_match_table = aspeed_lpc_snoop_match,
- 	},
- 	.probe = aspeed_lpc_snoop_probe,
--	.remove_new = aspeed_lpc_snoop_remove,
-+	.remove = aspeed_lpc_snoop_remove,
- };
- 
- module_platform_driver(aspeed_lpc_snoop_driver);
-diff --git a/drivers/soc/aspeed/aspeed-p2a-ctrl.c b/drivers/soc/aspeed/aspeed-p2a-ctrl.c
-index 8610ddacc7bc..6cc943744e12 100644
---- a/drivers/soc/aspeed/aspeed-p2a-ctrl.c
-+++ b/drivers/soc/aspeed/aspeed-p2a-ctrl.c
-@@ -431,7 +431,7 @@ static struct platform_driver aspeed_p2a_ctrl_driver = {
- 		.of_match_table = aspeed_p2a_ctrl_match,
- 	},
- 	.probe = aspeed_p2a_ctrl_probe,
--	.remove_new = aspeed_p2a_ctrl_remove,
-+	.remove = aspeed_p2a_ctrl_remove,
- };
- 
- module_platform_driver(aspeed_p2a_ctrl_driver);
-diff --git a/drivers/soc/aspeed/aspeed-uart-routing.c b/drivers/soc/aspeed/aspeed-uart-routing.c
-index a2195f062e01..0191e36e66e1 100644
---- a/drivers/soc/aspeed/aspeed-uart-routing.c
-+++ b/drivers/soc/aspeed/aspeed-uart-routing.c
-@@ -589,7 +589,7 @@ static struct platform_driver aspeed_uart_routing_driver = {
- 		.of_match_table = aspeed_uart_routing_table,
- 	},
- 	.probe = aspeed_uart_routing_probe,
--	.remove_new = aspeed_uart_routing_remove,
-+	.remove = aspeed_uart_routing_remove,
- };
- 
- module_platform_driver(aspeed_uart_routing_driver);
-diff --git a/drivers/soc/fsl/dpaa2-console.c b/drivers/soc/fsl/dpaa2-console.c
-index 6dbc77db7718..6310f54e68a2 100644
---- a/drivers/soc/fsl/dpaa2-console.c
-+++ b/drivers/soc/fsl/dpaa2-console.c
-@@ -320,7 +320,7 @@ static struct platform_driver dpaa2_console_driver = {
- 		   .of_match_table = dpaa2_console_match_table,
- 		   },
- 	.probe = dpaa2_console_probe,
--	.remove_new = dpaa2_console_remove,
-+	.remove = dpaa2_console_remove,
- };
- module_platform_driver(dpaa2_console_driver);
- 
-diff --git a/drivers/soc/fsl/qe/qmc.c b/drivers/soc/fsl/qe/qmc.c
-index 19cc581b06d0..29d7fd7d5b21 100644
---- a/drivers/soc/fsl/qe/qmc.c
-+++ b/drivers/soc/fsl/qe/qmc.c
-@@ -2092,7 +2092,7 @@ static struct platform_driver qmc_driver = {
- 		.of_match_table = of_match_ptr(qmc_id_table),
- 	},
- 	.probe = qmc_probe,
--	.remove_new = qmc_remove,
-+	.remove = qmc_remove,
- };
- module_platform_driver(qmc_driver);
- 
-diff --git a/drivers/soc/fsl/qe/tsa.c b/drivers/soc/fsl/qe/tsa.c
-index f0889b3fcaf2..515da9b45c2c 100644
---- a/drivers/soc/fsl/qe/tsa.c
-+++ b/drivers/soc/fsl/qe/tsa.c
-@@ -1086,7 +1086,7 @@ static struct platform_driver tsa_driver = {
- 		.of_match_table = of_match_ptr(tsa_id_table),
- 	},
- 	.probe = tsa_probe,
--	.remove_new = tsa_remove,
-+	.remove = tsa_remove,
- };
- module_platform_driver(tsa_driver);
- 
-diff --git a/drivers/soc/fujitsu/a64fx-diag.c b/drivers/soc/fujitsu/a64fx-diag.c
-index 330901893577..76cb0b6a221c 100644
---- a/drivers/soc/fujitsu/a64fx-diag.c
-+++ b/drivers/soc/fujitsu/a64fx-diag.c
-@@ -142,7 +142,7 @@ static struct platform_driver a64fx_diag_driver = {
- 		.acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
- 	},
- 	.probe = a64fx_diag_probe,
--	.remove_new = a64fx_diag_remove,
-+	.remove = a64fx_diag_remove,
- };
- 
- module_platform_driver(a64fx_diag_driver);
-diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-index e882a61636ec..8f51e59c9bb1 100644
---- a/drivers/soc/hisilicon/kunpeng_hccs.c
-+++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-@@ -1348,7 +1348,7 @@ MODULE_DEVICE_TABLE(acpi, hccs_acpi_match);
- 
- static struct platform_driver hccs_driver = {
- 	.probe = hccs_probe,
--	.remove_new = hccs_remove,
-+	.remove = hccs_remove,
- 	.driver = {
- 		.name = "kunpeng_hccs",
- 		.acpi_match_table = hccs_acpi_match,
-diff --git a/drivers/soc/ixp4xx/ixp4xx-npe.c b/drivers/soc/ixp4xx/ixp4xx-npe.c
-index 34a6f187c220..33e2e0366f19 100644
---- a/drivers/soc/ixp4xx/ixp4xx-npe.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-npe.c
-@@ -759,7 +759,7 @@ static struct platform_driver ixp4xx_npe_driver = {
- 		.of_match_table = ixp4xx_npe_of_match,
- 	},
- 	.probe = ixp4xx_npe_probe,
--	.remove_new = ixp4xx_npe_remove,
-+	.remove = ixp4xx_npe_remove,
- };
- module_platform_driver(ixp4xx_npe_driver);
- 
-diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-index cb112f3643e9..475e229039e3 100644
---- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-@@ -461,7 +461,7 @@ static struct platform_driver ixp4xx_qmgr_driver = {
- 		.of_match_table = ixp4xx_qmgr_of_match,
- 	},
- 	.probe = ixp4xx_qmgr_probe,
--	.remove_new = ixp4xx_qmgr_remove,
-+	.remove = ixp4xx_qmgr_remove,
- };
- module_platform_driver(ixp4xx_qmgr_driver);
- 
-diff --git a/drivers/soc/litex/litex_soc_ctrl.c b/drivers/soc/litex/litex_soc_ctrl.c
-index 72c44119dd54..d08bfc8ef7be 100644
---- a/drivers/soc/litex/litex_soc_ctrl.c
-+++ b/drivers/soc/litex/litex_soc_ctrl.c
-@@ -131,7 +131,7 @@ static struct platform_driver litex_soc_ctrl_driver = {
- 		.of_match_table = litex_soc_ctrl_of_match,
- 	},
- 	.probe = litex_soc_ctrl_probe,
--	.remove_new = litex_soc_ctrl_remove,
-+	.remove = litex_soc_ctrl_remove,
- };
- 
- module_platform_driver(litex_soc_ctrl_driver);
-diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
-index ef352a0f5022..ae42e3a9127f 100644
---- a/drivers/soc/loongson/loongson2_guts.c
-+++ b/drivers/soc/loongson/loongson2_guts.c
-@@ -169,7 +169,7 @@ static struct platform_driver loongson2_guts_driver = {
- 		.of_match_table = loongson2_guts_of_match,
- 	},
- 	.probe = loongson2_guts_probe,
--	.remove_new = loongson2_guts_remove,
-+	.remove = loongson2_guts_remove,
- };
- 
- static int __init loongson2_guts_init(void)
-diff --git a/drivers/soc/mediatek/mtk-devapc.c b/drivers/soc/mediatek/mtk-devapc.c
-index 56cc345552a4..2a1adcb87d4e 100644
---- a/drivers/soc/mediatek/mtk-devapc.c
-+++ b/drivers/soc/mediatek/mtk-devapc.c
-@@ -301,7 +301,7 @@ static void mtk_devapc_remove(struct platform_device *pdev)
- 
- static struct platform_driver mtk_devapc_driver = {
- 	.probe = mtk_devapc_probe,
--	.remove_new = mtk_devapc_remove,
-+	.remove = mtk_devapc_remove,
- 	.driver = {
- 		.name = "mtk-devapc",
- 		.of_match_table = mtk_devapc_dt_match,
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 938240714e54..bb4639ca0b8c 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -487,7 +487,7 @@ static struct platform_driver mtk_mmsys_drv = {
- 		.of_match_table = of_match_mtk_mmsys,
- 	},
- 	.probe = mtk_mmsys_probe,
--	.remove_new = mtk_mmsys_remove,
-+	.remove = mtk_mmsys_remove,
- };
- module_platform_driver(mtk_mmsys_drv);
- 
-diff --git a/drivers/soc/mediatek/mtk-socinfo.c b/drivers/soc/mediatek/mtk-socinfo.c
-index 74672a9d6d13..123b12cd2543 100644
---- a/drivers/soc/mediatek/mtk-socinfo.c
-+++ b/drivers/soc/mediatek/mtk-socinfo.c
-@@ -187,7 +187,7 @@ static void mtk_socinfo_remove(struct platform_device *pdev)
- 
- static struct platform_driver mtk_socinfo = {
- 	.probe = mtk_socinfo_probe,
--	.remove_new = mtk_socinfo_remove,
-+	.remove = mtk_socinfo_remove,
- 	.driver = {
- 		.name = "mtk-socinfo",
- 	},
-diff --git a/drivers/soc/microchip/mpfs-sys-controller.c b/drivers/soc/microchip/mpfs-sys-controller.c
-index 7a4936019329..30bc45d17d34 100644
---- a/drivers/soc/microchip/mpfs-sys-controller.c
-+++ b/drivers/soc/microchip/mpfs-sys-controller.c
-@@ -232,7 +232,7 @@ static struct platform_driver mpfs_sys_controller_driver = {
- 		.of_match_table = mpfs_sys_controller_of_match,
- 	},
- 	.probe = mpfs_sys_controller_probe,
--	.remove_new = mpfs_sys_controller_remove,
-+	.remove = mpfs_sys_controller_remove,
- };
- module_platform_driver(mpfs_sys_controller_driver);
- 
-diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
-index 854d32e04558..bb0062c165fe 100644
---- a/drivers/soc/pxa/ssp.c
-+++ b/drivers/soc/pxa/ssp.c
-@@ -197,7 +197,7 @@ static const struct platform_device_id ssp_id_table[] = {
- 
- static struct platform_driver pxa_ssp_driver = {
- 	.probe		= pxa_ssp_probe,
--	.remove_new	= pxa_ssp_remove,
-+	.remove		= pxa_ssp_remove,
- 	.driver		= {
- 		.name		= "pxa2xx-ssp",
- 		.of_match_table	= of_match_ptr(pxa_ssp_of_ids),
-diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
-index f9235bc3aa3b..3dfa448bf8cf 100644
---- a/drivers/soc/qcom/icc-bwmon.c
-+++ b/drivers/soc/qcom/icc-bwmon.c
-@@ -872,7 +872,7 @@ MODULE_DEVICE_TABLE(of, bwmon_of_match);
- 
- static struct platform_driver bwmon_driver = {
- 	.probe = bwmon_probe,
--	.remove_new = bwmon_remove,
-+	.remove = bwmon_remove,
- 	.driver = {
- 		.name = "qcom-bwmon",
- 		.of_match_table = bwmon_of_match,
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index a470285f54a8..99fc6f7f35f0 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -3510,7 +3510,7 @@ static struct platform_driver qcom_llcc_driver = {
- 		.of_match_table = qcom_llcc_of_match,
- 	},
- 	.probe = qcom_llcc_probe,
--	.remove_new = qcom_llcc_remove,
-+	.remove = qcom_llcc_remove,
- };
- module_platform_driver(qcom_llcc_driver);
- 
-diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-index ff8df7d75d6b..9c3bd37b6579 100644
---- a/drivers/soc/qcom/ocmem.c
-+++ b/drivers/soc/qcom/ocmem.c
-@@ -439,7 +439,7 @@ MODULE_DEVICE_TABLE(of, ocmem_of_match);
- 
- static struct platform_driver ocmem_driver = {
- 	.probe = ocmem_dev_probe,
--	.remove_new = ocmem_dev_remove,
-+	.remove = ocmem_dev_remove,
- 	.driver = {
- 		.name = "ocmem",
- 		.of_match_table = ocmem_of_match,
-diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-index baa4ac6704a9..caf3f63d940e 100644
---- a/drivers/soc/qcom/pmic_glink.c
-+++ b/drivers/soc/qcom/pmic_glink.c
-@@ -399,7 +399,7 @@ MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
- 
- static struct platform_driver pmic_glink_driver = {
- 	.probe = pmic_glink_probe,
--	.remove_new = pmic_glink_remove,
-+	.remove = pmic_glink_remove,
- 	.driver = {
- 		.name = "qcom_pmic_glink",
- 		.of_match_table = pmic_glink_of_match,
-diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
-index 60af26667bce..0320ad3b9148 100644
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -664,7 +664,7 @@ static struct platform_driver qmp_driver = {
- 		.suppress_bind_attrs = true,
- 	},
- 	.probe = qmp_probe,
--	.remove_new = qmp_remove,
-+	.remove = qmp_remove,
- };
- module_platform_driver(qmp_driver);
- 
-diff --git a/drivers/soc/qcom/qcom_gsbi.c b/drivers/soc/qcom/qcom_gsbi.c
-index f04b9a324ea9..8f1158e0c631 100644
---- a/drivers/soc/qcom/qcom_gsbi.c
-+++ b/drivers/soc/qcom/qcom_gsbi.c
-@@ -232,7 +232,7 @@ static struct platform_driver gsbi_driver = {
- 		.of_match_table	= gsbi_dt_match,
- 	},
- 	.probe = gsbi_probe,
--	.remove_new = gsbi_remove,
-+	.remove = gsbi_remove,
- };
- 
- module_platform_driver(gsbi_driver);
-diff --git a/drivers/soc/qcom/qcom_stats.c b/drivers/soc/qcom/qcom_stats.c
-index c429d5154aae..5de99cf59b9f 100644
---- a/drivers/soc/qcom/qcom_stats.c
-+++ b/drivers/soc/qcom/qcom_stats.c
-@@ -274,7 +274,7 @@ MODULE_DEVICE_TABLE(of, qcom_stats_table);
- 
- static struct platform_driver qcom_stats = {
- 	.probe = qcom_stats_probe,
--	.remove_new = qcom_stats_remove,
-+	.remove = qcom_stats_remove,
- 	.driver = {
- 		.name = "qcom_stats",
- 		.of_match_table = qcom_stats_table,
-diff --git a/drivers/soc/qcom/ramp_controller.c b/drivers/soc/qcom/ramp_controller.c
-index e9a0cca07189..349bdfbc61ef 100644
---- a/drivers/soc/qcom/ramp_controller.c
-+++ b/drivers/soc/qcom/ramp_controller.c
-@@ -331,8 +331,8 @@ static struct platform_driver qcom_ramp_controller_driver = {
- 		.of_match_table = qcom_ramp_controller_match_table,
- 		.suppress_bind_attrs = true,
- 	},
--	.probe  = qcom_ramp_controller_probe,
--	.remove_new = qcom_ramp_controller_remove,
-+	.probe = qcom_ramp_controller_probe,
-+	.remove = qcom_ramp_controller_remove,
- };
- 
- static int __init qcom_ramp_controller_init(void)
-diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
-index df850d073102..33603b8fd8f3 100644
---- a/drivers/soc/qcom/rmtfs_mem.c
-+++ b/drivers/soc/qcom/rmtfs_mem.c
-@@ -315,7 +315,7 @@ MODULE_DEVICE_TABLE(of, qcom_rmtfs_mem_of_match);
- 
- static struct platform_driver qcom_rmtfs_mem_driver = {
- 	.probe = qcom_rmtfs_mem_probe,
--	.remove_new = qcom_rmtfs_mem_remove,
-+	.remove = qcom_rmtfs_mem_remove,
- 	.driver  = {
- 		.name  = "qcom_rmtfs_mem",
- 		.of_match_table = qcom_rmtfs_mem_of_match,
-diff --git a/drivers/soc/qcom/rpm-proc.c b/drivers/soc/qcom/rpm-proc.c
-index 2995d9b90190..2466d0400c2e 100644
---- a/drivers/soc/qcom/rpm-proc.c
-+++ b/drivers/soc/qcom/rpm-proc.c
-@@ -53,7 +53,7 @@ MODULE_DEVICE_TABLE(of, rpm_proc_of_match);
- 
- static struct platform_driver rpm_proc_driver = {
- 	.probe = rpm_proc_probe,
--	.remove_new = rpm_proc_remove,
-+	.remove = rpm_proc_remove,
- 	.driver = {
- 		.name = "qcom-rpm-proc",
- 		.of_match_table = rpm_proc_of_match,
-diff --git a/drivers/soc/qcom/rpm_master_stats.c b/drivers/soc/qcom/rpm_master_stats.c
-index 086fe4ba6707..49e4f9457279 100644
---- a/drivers/soc/qcom/rpm_master_stats.c
-+++ b/drivers/soc/qcom/rpm_master_stats.c
-@@ -155,7 +155,7 @@ static const struct of_device_id rpm_master_table[] = {
- 
- static struct platform_driver master_stats_driver = {
- 	.probe = master_stats_probe,
--	.remove_new = master_stats_remove,
-+	.remove = master_stats_remove,
- 	.driver = {
- 		.name = "qcom_rpm_master_stats",
- 		.of_match_table = rpm_master_table,
-diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-index 0d1ccf3ef108..b8e9f5068ca1 100644
---- a/drivers/soc/qcom/smem.c
-+++ b/drivers/soc/qcom/smem.c
-@@ -1257,7 +1257,7 @@ MODULE_DEVICE_TABLE(of, qcom_smem_of_match);
- 
- static struct platform_driver qcom_smem_driver = {
- 	.probe = qcom_smem_probe,
--	.remove_new = qcom_smem_remove,
-+	.remove = qcom_smem_remove,
- 	.driver  = {
- 		.name = "qcom-smem",
- 		.of_match_table = qcom_smem_of_match,
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index cefcbd61c628..9295a13ae996 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -698,7 +698,7 @@ MODULE_DEVICE_TABLE(of, qcom_smp2p_of_match);
- 
- static struct platform_driver qcom_smp2p_driver = {
- 	.probe = qcom_smp2p_probe,
--	.remove_new = qcom_smp2p_remove,
-+	.remove = qcom_smp2p_remove,
- 	.driver  = {
- 		.name  = "qcom_smp2p",
- 		.of_match_table = qcom_smp2p_of_match,
-diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
-index ffe78ae34386..e803ea342c97 100644
---- a/drivers/soc/qcom/smsm.c
-+++ b/drivers/soc/qcom/smsm.c
-@@ -682,9 +682,9 @@ MODULE_DEVICE_TABLE(of, qcom_smsm_of_match);
- 
- static struct platform_driver qcom_smsm_driver = {
- 	.probe = qcom_smsm_probe,
--	.remove_new = qcom_smsm_remove,
--	.driver  = {
--		.name  = "qcom-smsm",
-+	.remove = qcom_smsm_remove,
-+	.driver = {
-+		.name = "qcom-smsm",
- 		.of_match_table = qcom_smsm_of_match,
- 	},
- };
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 21ab8c699251..01a0bb71638b 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -825,7 +825,7 @@ static void qcom_socinfo_remove(struct platform_device *pdev)
- 
- static struct platform_driver qcom_socinfo_driver = {
- 	.probe = qcom_socinfo_probe,
--	.remove_new = qcom_socinfo_remove,
-+	.remove = qcom_socinfo_remove,
- 	.driver  = {
- 		.name = "qcom-socinfo",
- 	},
-diff --git a/drivers/soc/rockchip/io-domain.c b/drivers/soc/rockchip/io-domain.c
-index fd9fd31f71c2..f94985a905c2 100644
---- a/drivers/soc/rockchip/io-domain.c
-+++ b/drivers/soc/rockchip/io-domain.c
-@@ -742,10 +742,10 @@ static void rockchip_iodomain_remove(struct platform_device *pdev)
- }
- 
- static struct platform_driver rockchip_iodomain_driver = {
--	.probe   = rockchip_iodomain_probe,
--	.remove_new = rockchip_iodomain_remove,
--	.driver  = {
--		.name  = "rockchip-iodomain",
-+	.probe = rockchip_iodomain_probe,
-+	.remove = rockchip_iodomain_remove,
-+	.driver = {
-+		.name = "rockchip-iodomain",
- 		.of_match_table = rockchip_iodomain_match,
- 	},
- };
-diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
-index 23cc20896b85..e37dde1fb588 100644
---- a/drivers/soc/samsung/exynos-chipid.c
-+++ b/drivers/soc/samsung/exynos-chipid.c
-@@ -198,8 +198,8 @@ static struct platform_driver exynos_chipid_driver = {
- 		.name = "exynos-chipid",
- 		.of_match_table = exynos_chipid_of_device_ids,
- 	},
--	.probe	= exynos_chipid_probe,
--	.remove_new = exynos_chipid_remove,
-+	.probe = exynos_chipid_probe,
-+	.remove = exynos_chipid_remove,
- };
- module_platform_driver(exynos_chipid_driver);
- 
-diff --git a/drivers/soc/tegra/cbb/tegra194-cbb.c b/drivers/soc/tegra/cbb/tegra194-cbb.c
-index 9cbc562ae7d3..846b17ffc2f9 100644
---- a/drivers/soc/tegra/cbb/tegra194-cbb.c
-+++ b/drivers/soc/tegra/cbb/tegra194-cbb.c
-@@ -2330,7 +2330,7 @@ static const struct dev_pm_ops tegra194_cbb_pm = {
- 
- static struct platform_driver tegra194_cbb_driver = {
- 	.probe = tegra194_cbb_probe,
--	.remove_new = tegra194_cbb_remove,
-+	.remove = tegra194_cbb_remove,
- 	.driver = {
- 		.name = "tegra194-cbb",
- 		.of_match_table = of_match_ptr(tegra194_cbb_match),
-diff --git a/drivers/soc/ti/k3-ringacc.c b/drivers/soc/ti/k3-ringacc.c
-index 8c0102968351..82a15cad1c6c 100644
---- a/drivers/soc/ti/k3-ringacc.c
-+++ b/drivers/soc/ti/k3-ringacc.c
-@@ -1562,7 +1562,7 @@ static void k3_ringacc_remove(struct platform_device *pdev)
- 
- static struct platform_driver k3_ringacc_driver = {
- 	.probe		= k3_ringacc_probe,
--	.remove_new	= k3_ringacc_remove,
-+	.remove		= k3_ringacc_remove,
- 	.driver		= {
- 		.name	= "k3-ringacc",
- 		.of_match_table = k3_ringacc_of_match,
-diff --git a/drivers/soc/ti/knav_dma.c b/drivers/soc/ti/knav_dma.c
-index fb0746d8caad..a25ebe6cd503 100644
---- a/drivers/soc/ti/knav_dma.c
-+++ b/drivers/soc/ti/knav_dma.c
-@@ -783,8 +783,8 @@ MODULE_DEVICE_TABLE(of, of_match);
- 
- static struct platform_driver knav_dma_driver = {
- 	.probe	= knav_dma_probe,
--	.remove_new = knav_dma_remove,
--	.driver = {
-+	.remove	= knav_dma_remove,
-+	.driver	= {
- 		.name		= "keystone-navigator-dma",
- 		.of_match_table	= of_match,
- 	},
-diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
-index b4051cb932c4..ea52425864a9 100644
---- a/drivers/soc/ti/knav_qmss_queue.c
-+++ b/drivers/soc/ti/knav_qmss_queue.c
-@@ -1892,7 +1892,7 @@ static void knav_queue_remove(struct platform_device *pdev)
- 
- static struct platform_driver keystone_qmss_driver = {
- 	.probe		= knav_queue_probe,
--	.remove_new	= knav_queue_remove,
-+	.remove		= knav_queue_remove,
- 	.driver		= {
- 		.name	= "keystone-navigator-qmss",
- 		.of_match_table = keystone_qmss_of_match,
-diff --git a/drivers/soc/ti/pm33xx.c b/drivers/soc/ti/pm33xx.c
-index 8169885ab1e0..dfdff186c805 100644
---- a/drivers/soc/ti/pm33xx.c
-+++ b/drivers/soc/ti/pm33xx.c
-@@ -591,7 +591,7 @@ static struct platform_driver am33xx_pm_driver = {
- 		.name   = "pm33xx",
- 	},
- 	.probe = am33xx_pm_probe,
--	.remove_new = am33xx_pm_remove,
-+	.remove = am33xx_pm_remove,
- };
- module_platform_driver(am33xx_pm_driver);
- 
-diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-index 3ec758f50e24..d7634bf5413a 100644
---- a/drivers/soc/ti/pruss.c
-+++ b/drivers/soc/ti/pruss.c
-@@ -593,8 +593,8 @@ static struct platform_driver pruss_driver = {
- 		.name = "pruss",
- 		.of_match_table = pruss_of_match,
- 	},
--	.probe  = pruss_probe,
--	.remove_new = pruss_remove,
-+	.probe = pruss_probe,
-+	.remove = pruss_remove,
- };
- module_platform_driver(pruss_driver);
- 
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index 38add2ab5613..ced3a73929e3 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -969,7 +969,7 @@ MODULE_DEVICE_TABLE(of, omap_sr_match);
- 
- static struct platform_driver smartreflex_driver = {
- 	.probe		= omap_sr_probe,
--	.remove_new     = omap_sr_remove,
-+	.remove         = omap_sr_remove,
- 	.shutdown	= omap_sr_shutdown,
- 	.driver		= {
- 		.name	= DRIVER_NAME,
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index 88f774db9208..79dde9a7ec63 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -755,7 +755,7 @@ MODULE_DEVICE_TABLE(of, wkup_m3_ipc_of_match);
- 
- static struct platform_driver wkup_m3_ipc_driver = {
- 	.probe = wkup_m3_ipc_probe,
--	.remove_new = wkup_m3_ipc_remove,
-+	.remove = wkup_m3_ipc_remove,
- 	.driver = {
- 		.name = "wkup_m3_ipc",
- 		.of_match_table = wkup_m3_ipc_of_match,
-diff --git a/drivers/soc/xilinx/xlnx_event_manager.c b/drivers/soc/xilinx/xlnx_event_manager.c
-index 85df6b9c04ee..a572d15f6161 100644
---- a/drivers/soc/xilinx/xlnx_event_manager.c
-+++ b/drivers/soc/xilinx/xlnx_event_manager.c
-@@ -711,7 +711,7 @@ static void xlnx_event_manager_remove(struct platform_device *pdev)
- 
- static struct platform_driver xlnx_event_manager_driver = {
- 	.probe = xlnx_event_manager_probe,
--	.remove_new = xlnx_event_manager_remove,
-+	.remove = xlnx_event_manager_remove,
- 	.driver = {
- 		.name = "xlnx_event_manager",
- 	},
-diff --git a/drivers/soc/xilinx/zynqmp_power.c b/drivers/soc/xilinx/zynqmp_power.c
-index 411d33f2fb05..ae59bf16659a 100644
---- a/drivers/soc/xilinx/zynqmp_power.c
-+++ b/drivers/soc/xilinx/zynqmp_power.c
-@@ -408,7 +408,7 @@ MODULE_DEVICE_TABLE(of, pm_of_match);
- 
- static struct platform_driver zynqmp_pm_platform_driver = {
- 	.probe = zynqmp_pm_probe,
--	.remove_new = zynqmp_pm_remove,
-+	.remove = zynqmp_pm_remove,
- 	.driver = {
- 		.name = "zynqmp_power",
- 		.of_match_table = pm_of_match,
+Frank Li (1):
+      dt-bindings: memory-controllers: fsl,ifc: split child node differences
 
-base-commit: 6fb2fa9805c501d9ade047fc511961f3273cdcb5
--- 
-2.45.2
+ .../bindings/memory-controllers/fsl/fsl,ifc.yaml   | 32 ++++++++++++++++++----
+ arch/arm64/configs/defconfig                       |  1 +
+ 2 files changed, 28 insertions(+), 5 deletions(-)
