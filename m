@@ -1,74 +1,54 @@
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE161DFE0F;
-	Tue, 29 Oct 2024 09:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CF52071E0
+	for <soc@lists.linux.dev>; Tue, 29 Oct 2024 13:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730192645; cv=none; b=CTU/jCUaG+PZAVQtXs8kB7xnvNYWR5N9RbADgsr6v75m8+oJ09oPrAsAs9aRESqTi0+u5pG8sCET7y8kdnG9gKWngSThPegTRvbzRrQbQUmsMxjGmakcgdhyLMZz8C8H1YZk1wnbhk9+P9/ZCjM3NKmLMBgqimwVu2Er+KGCef8=
+	t=1730210193; cv=none; b=ARUePmRfaCEIc5vj+QrXXca07YflRG87ruFYKLudqC+7T5C1UIiUtQEvAWXYNyzN7FeKUOovWueI/SfJm6kkUZuRH7ah6WzNJjQswmaoEsLTkAs2Xa//+Ak1gC+FNwB4oWHrTPzOXqYk84CHInu56zpzrcZ/uvx+TSFzOBQNGwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730192645; c=relaxed/simple;
-	bh=IJe8ON7eBy5QAAgaLfm92pA+IoRN4Z1tGU93HN2HGcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=flVqOiP3OaonDeTAg4BlOGnnK8eZa4j7HiRjqG535f4qkSOTrIzhxFJjXU/mdnW+CxNgNSMwL7YdlusKzoutkekLZbxx2QeIVf4DJECpa7/cdrId175tTacFB+AjHkNFv1MSPtSzFYTGKtMYrDtOS16Xc8b0ulhEMBNutVQFM9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WkhI/DVq; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1730210193; c=relaxed/simple;
+	bh=vgzAeV+QgCiYr0n/cWTXTZqBE4QIkiily2oQVrtjb0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LV2RWQ/GIjF9aFUzsVprmWOuQpSzfMjOzCnAeQtnvA8Zuqox0D4P8p+iVrLDngig4HKutWhMPHLlgpqmdWxKB8hcuLNmtw5LFr/WRQuPBDUOJzFRixjGmP0ibOZBMLfEPD70HfuIN4acSWjp04+g5lAHTQuee3gbxNxqKQz11jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZY8zWP1X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WkhI/DVq"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C68791BF204;
-	Tue, 29 Oct 2024 09:03:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730192635;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hpAfK6tyrvwMS8L2PbzrGqnbfuzjHJrlMvInkHIHnZI=;
-	b=WkhI/DVqn/dDgEGXg5ze24s00SnuWWK8bmgYFAQaSQSgHS/3+b0O5sNNKTStjAxR/jf+4h
-	0o6b25F5CM6hzS4ApkL7rjJteF/3WsvIXr9Is7v7RNPDr1hM6SgZtytzIUP4gZ5dtlEpLg
-	COgrRCbWe5DTxWzSVRzksGVJyb597rnqQCl5AJLLhtHIb4htqmGNuaCLmKvnbildk9oQPe
-	IqjYlYEsv6PJq4Tpe9bBIT7sk8n1gJbWFWN3kIUiX2Dd+Sk2UHidAD1P51iPnXfsSARzVl
-	nu+FDRAug3FdoWJxDLz5FVgjrXmtG+m82/IUNQdOKDRvvPwaBoAqjYk9s9Gx2w==
-Date: Tue, 29 Oct 2024 10:03:47 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Joel
- Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Qiang Zhao
- <qiang.zhao@nxp.com>, Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
- Huisong Li <lihuisong@huawei.com>, Linus Walleij <linusw@kernel.org>, Imre
- Kaloz <kaloz@openwrt.org>, Karol Gugala <kgugala@antmicro.com>, Mateusz
- Holenko <mholenko@antmicro.com>, Gabriel Somlo <gsomlo@gmail.com>, Yinbo
- Zhu <zhuyinbo@loongson.cn>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Conor
- Dooley <conor.dooley@microchip.com>, Daire McNamara
- <daire.mcnamara@microchip.com>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Alim Akhtar <alim.akhtar@samsung.com>, Thierry Reding
- <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
- Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>, Michal
- Simek <michal.simek@amd.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Duje =?UTF-8?B?TWloYW5vdmnEhw==?=
- <duje.mihanovic@skole.hr>, Mark Brown <broonie@kernel.org>, David Wu
- <david.wu@rock-chips.com>, Jianqun Xu <jay.xu@rock-chips.com>, Jay
- Buddhabhatti <jay.buddhabhatti@amd.com>, Radhey Shyam Pandey
- <radhey.shyam.pandey@amd.com>, Izhar Ameer Shaikh
- <izhar.ameer.shaikh@amd.com>, Naman Trivedi Manojbhai
- <naman.trivedimanojbhai@amd.com>, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, linux-mediatek@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] soc: Switch back to struct platform_driver::remove()
-Message-ID: <20241029100347.542b56d4@bootlin.com>
-In-Reply-To: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
-References: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZY8zWP1X"
+Received: by smtp.kernel.org (Postfix)
+	id 05E9DC4CEEB; Tue, 29 Oct 2024 13:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA70C4CECD;
+	Tue, 29 Oct 2024 13:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730210192;
+	bh=vgzAeV+QgCiYr0n/cWTXTZqBE4QIkiily2oQVrtjb0I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZY8zWP1XnhZgBzD+SikMIkIRxcTDr/w3Yax+kVTscDIRcIdhPHFXedYjsfGrsjpLt
+	 lMSq/7VFd2Q9ZO5hVpj6o2tnjiklMWQ+vtPc77yS0zJeIfoZE/BjS6ZjHNXm3PsK+Z
+	 FaT528cVnSEE7kkGHkH6YeD9vnZ7DmzpwAEmV4UYEFHeByBLEbP3DXIjLu1RWmo+ZV
+	 2Bj3NTFdM0S9N+U0i2dBRn+rvAytTLw1esqt4xZfadASklMxZwYubp1C9mK2Jr0psa
+	 LpxsR/7yuVzt6t8uDLiyYHxACvqvjqsTSeii/Lf9ppA4gXY986TEcRvocVzeqRDOM5
+	 Z80yIcuUAOpJA==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>,
+	linux-leds@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH leds v4 00/12] Turris Omnia LED driver changes
+Date: Tue, 29 Oct 2024 14:56:09 +0100
+Message-ID: <20241029135621.12546-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -77,31 +57,57 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: herve.codina@bootlin.com
 
-Hi Uwe,
+Hello Lee,
 
-On Tue, 29 Oct 2024 08:48:58 +0100
-Uwe Kleine-König <u.kleine-koenig@baylibre.com> wrote:
+this is v4 of Turris Omnia LED driver changes.
+v1, v2 and v3 can be found at
+  https://lore.kernel.org/linux-leds/20240902124104.14297-1-kabel@kernel.org/
+  https://lore.kernel.org/linux-leds/20240903101930.16251-1-kabel@kernel.org/
+  https://lore.kernel.org/linux-leds/20240913123103.21226-1-kabel@kernel.org/
 
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
-> 
-> Convert all platform drivers below drivers/soc to use .remove(), with
-> the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
-> 
-> On the way do a few whitespace changes to make indention consistent.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-> ---
-...
->  drivers/soc/fsl/qe/qmc.c                    | 2 +-
->  drivers/soc/fsl/qe/tsa.c                    | 2 +-
+Changes since v3:
+- fixed kernel test robot warning for patch 2 by adding dependency to
+  the TURRIS_OMNIA_MCU module
+- added Krzysztof's Acked-by to patch 5
+- added patch documenting driver private `struct omnia_leds` and
+  `struct omnia_led`
+- addressed your notes for patch 7 (6 in v3)
+- added `select TURRIS_OMNIA_MCU_GPIO` to KConfig. The driver already
+  depends on TURRIS_OMNIA_MCU, but for the global brightness changed
+  interrupt it needs the GPIO functionality from the turris-omnia-mcu
+  driver
 
-Acked-by: Herve Codina <herve.codina@bootlin.com> # for fsl/qe/{qmc,tsa}.c
+Marek
 
-Best regards,
-Hervé
+Marek Behún (12):
+  turris-omnia-mcu-interface.h: Move command execution function to
+    global header
+  leds: turris-omnia: Use command execution functions from the MCU
+    driver
+  turris-omnia-mcu-interface.h: Add LED commands related definitions to
+    global header
+  leds: turris-omnia: Use global header for MCU command definitions
+  dt-bindings: leds: cznic,turris-omnia-leds: Allow interrupts property
+  leds: turris-omnia: Document driver private structures
+  leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
+  platform: cznic: turris-omnia-mcu: Inform about missing LED panel
+    brightness change interrupt feature
+  leds: turris-omnia: Inform about missing LED gamma correction feature
+    in the MCU driver
+  leds: turris-omnia: Use dev_err_probe() where appropriate
+  leds: turris-omnia: Use uppercase first letter in all comments
+  ARM: dts: turris-omnia: Add global LED brightness change interrupt
+
+ .../leds/cznic,turris-omnia-leds.yaml         |   8 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   1 +
+ drivers/leds/Kconfig                          |   2 +
+ drivers/leds/leds-turris-omnia.c              | 291 ++++++++----------
+ .../platform/cznic/turris-omnia-mcu-base.c    |   3 +
+ drivers/platform/cznic/turris-omnia-mcu.h     | 130 --------
+ include/linux/turris-omnia-mcu-interface.h    | 148 ++++++++-
+ 7 files changed, 288 insertions(+), 295 deletions(-)
+
+-- 
+2.45.2
+
