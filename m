@@ -1,87 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C417F1E1C3B
-	for <soc@lists.linux.dev>; Wed, 30 Oct 2024 09:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4661D1519
+	for <soc@lists.linux.dev>; Wed, 30 Oct 2024 20:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730280240; cv=none; b=lrwI9AJZs3imgqr8SakZfJ7/9xeAnhaxm7ygQQXW6EPSjoYPNX+JpuSKRZg6r8lrBNQKZebw5VMrYwRXTU9VavQEiZ8ydFGXmMxC2z2MRbpkhtiWvCK4zK26KIqOY4hZrioqiWHAZywc2Qw7pfxhgNFHqvVXxim762Qireq0h9o=
+	t=1730320480; cv=none; b=pnjJF6Xgb7g62FeiDw5ukcnk53FZUruNnvXVa+4vuwxxhUIHTkC93KdkKuFxS0q82Ltbx5I5Bf/fw/bEAAPwQ+r/wIxT8n56+ALC0lMO8Eed6YVNnpLe8vfLKcMUu6PiG6mWmgF68L5tIEPBChIjyuZg2SU6zsn+Kol8BHVVyHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730280240; c=relaxed/simple;
-	bh=39agN+7fluEn5zSbv1mqaohmS5Rxwg23faBhpcJb9Q4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=c2nEGw9eu3QEl32V+0y0toQGwe0z18RV1/pNgqlWSPj59EpztuSIR9HmAfO5XEX0VWNj9A75knfD+8CTt26tfVGM/BfSUFSQlxxGwYdzXAXMnAZq3Zj2rgCd5tkWZAGukW4zTX2X8FGrmJhwVA+OQW42LICpGW8uQHpDRzEg4bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=KTPms5k8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730320480; c=relaxed/simple;
+	bh=EJJO/HKqSPcRZoRs7N53d81QbG0Ckyd+9nHPbb89Xo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PK+9XSuXnHEpbWQceduKB8x64WqohQ+A6ZcDEz1O6szfkO0Ln4wqZdxbXXBvdXjdD7DDcabhRjI1SNZx1UoccsAQLX7R7onMQJo7i8qND/gUm4JQngu36g5vUJvIfL8j7FFRlurEM7nJobRqUfrZ4nSbAoqHHHJ8aGIzX5RLsQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCgyMKza; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="KTPms5k8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCgyMKza"
 Received: by smtp.kernel.org (Postfix)
-	id B6E33C4CEE8; Wed, 30 Oct 2024 09:24:00 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 308B5C4CED7; Wed, 30 Oct 2024 20:34:40 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9CD17C4CEE6;
-	Wed, 30 Oct 2024 09:23:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9CD17C4CEE6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Hisw5ieYkqzn1NRZL7F74ibhzAvrAfnC7G8H4VNcj1I=; b=KTPms5k8M8jMZJkCdocaT5J4wk
-	NNtPnpxMuiUvqlxZqyMKPGzQcdpldANfZBuUXN3KLKREjmsnoIYnFfUu1esLVPYRR8To1D13BRZbp
-	/sgI8ULRQaeSKTko7SR5Qi+UurM9RBQEQH/VMOtuYttQm7fA3m6sTT5xTo3JcRUYR1T0UuaoAd7vj
-	pOQ+tE1Fb4jPQLKP/ayS4RJ9sHP58HkuExJssqffErwPML9xOJfMBZWtcPWhXOZsNraqPLB39xR28
-	dEjjFSSY4Ai2wDoPGLgagI6q4STcAd+X9Jk+fG5+xf+BaSFRglsOH9KWAUHF8Oq+ZuhnkGt+t7Eyz
-	wI3YnyJA==;
-Received: from [185.156.123.69] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1t64vl-0000lm-Qb; Wed, 30 Oct 2024 10:23:57 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip driver changes for 6.13 #1
-Date: Wed, 30 Oct 2024 10:23:57 +0100
-Message-ID: <4605658.LvFx2qVVIh@phil>
+	by smtp.kernel.org (Postfix) with ESMTPS id 71117C4CECE;
+	Wed, 30 Oct 2024 20:34:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 71117C4CECE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730320479; x=1761856479;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EJJO/HKqSPcRZoRs7N53d81QbG0Ckyd+9nHPbb89Xo4=;
+  b=hCgyMKza1YpBJDioBdWMTrI9Xpi/JObdWpcrPUT8dZBD78AC/kiXnpfQ
+   WZ5HldmXNgt95VE0DPsLJxuFGyOslIr7JVAoM0rhKJ9gvOciOpXXGo9CX
+   ALZDzBuhW7SsweFG3DuOgLGS28wdGdF33JGu3F8H4WnOUDQ7Idg1TKuJz
+   8WqjLacJA8ap4mkPL30hO2kQ4aJeX7OUq9wjD32t9CJezG2SspSAg0xTm
+   8bieq/ddz4LGFY0zAt261/iq6CLFlomT4/keuSusXMTJDDBh/GRIeM7YO
+   3JtnfuTCppPQOSPbCRSzenjIFrUErdNEtdc7kdrl5tuhPOWfI/6GUubS1
+   A==;
+X-CSE-ConnectionGUID: 3JOGSGUPSPmTjrxZCc4IQw==
+X-CSE-MsgGUID: +fI92+CWRoONUQoVzSOu6g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="41440270"
+X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
+   d="scan'208";a="41440270"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 13:34:38 -0700
+X-CSE-ConnectionGUID: Yes14h7CQ0qGk6qKs+ijyg==
+X-CSE-MsgGUID: OLkSKFVoQCC7m3bRKRunng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
+   d="scan'208";a="83247480"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 30 Oct 2024 13:34:33 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t6FOg-000fHY-1u;
+	Wed, 30 Oct 2024 20:34:30 +0000
+Date: Thu, 31 Oct 2024 04:34:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Lee Jones <lee@kernel.org>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, Pavel Machek <pavel@ucw.cz>,
+	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
+	arm@kernel.org, Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH leds v4 07/12] leds: turris-omnia: Notify sysfs on MCU
+ global LEDs brightness change
+Message-ID: <202410310400.K6KRpgOx-lkp@intel.com>
+References: <20241029135621.12546-8-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241029135621.12546-8-kabel@kernel.org>
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Hi Marek,
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+kernel test robot noticed the following build warnings:
 
-are available in the Git repository at:
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.12-rc5]
+[cannot apply to lee-leds/for-leds-next robh/for-next next-20241030]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.13-armsoc/drivers1
+url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Beh-n/turris-omnia-mcu-interface-h-Move-command-execution-function-to-global-header/20241029-215858
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241029135621.12546-8-kabel%40kernel.org
+patch subject: [PATCH leds v4 07/12] leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
+config: x86_64-kismet-CONFIG_TURRIS_OMNIA_MCU_GPIO-CONFIG_LEDS_TURRIS_OMNIA-0-0 (https://download.01.org/0day-ci/archive/20241031/202410310400.K6KRpgOx-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20241031/202410310400.K6KRpgOx-lkp@intel.com/reproduce)
 
-for you to fetch changes up to 22e027cc74488dba49f19f943c2da02726261f08:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410310400.K6KRpgOx-lkp@intel.com/
 
-  dt-bindings: soc: rockchip: add rk3588 mipi dcphy syscon (2024-10-27 21:28:05 +0100)
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for TURRIS_OMNIA_MCU_GPIO when selected by LEDS_TURRIS_OMNIA
+   WARNING: unmet direct dependencies detected for TURRIS_OMNIA_MCU_GPIO
+     Depends on [n]: CZNIC_PLATFORMS [=y] && TURRIS_OMNIA_MCU [=y] && GPIOLIB [=n] && OF [=y]
+     Selected by [y]:
+     - LEDS_TURRIS_OMNIA [=y] && NEW_LEDS [=y] && LEDS_CLASS_MULTICOLOR [=y] && I2C [=y] && (MACH_ARMADA_38X || COMPILE_TEST [=y]) && OF [=y] && TURRIS_OMNIA_MCU [=y]
 
-----------------------------------------------------------------
-Compatibles for some additional "General Register Files" syscons
-
-----------------------------------------------------------------
-Frank Wang (2):
-      dt-bindings: soc: rockchip: add rk3576 vo1-grf syscon
-      dt-bindings: soc: rockchip: add rk3576 usb2phy syscon
-
-Heiko Stuebner (1):
-      dt-bindings: soc: rockchip: add rk3588 mipi dcphy syscon
-
- Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
