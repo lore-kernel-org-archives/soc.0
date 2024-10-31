@@ -1,70 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4661D1519
-	for <soc@lists.linux.dev>; Wed, 30 Oct 2024 20:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C36519414E
+	for <soc@lists.linux.dev>; Thu, 31 Oct 2024 09:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730320480; cv=none; b=pnjJF6Xgb7g62FeiDw5ukcnk53FZUruNnvXVa+4vuwxxhUIHTkC93KdkKuFxS0q82Ltbx5I5Bf/fw/bEAAPwQ+r/wIxT8n56+ALC0lMO8Eed6YVNnpLe8vfLKcMUu6PiG6mWmgF68L5tIEPBChIjyuZg2SU6zsn+Kol8BHVVyHg=
+	t=1730365333; cv=none; b=GmtTJVbjK2wXHIuJQawC4PRPbHZ53Zhpvo32XD8MNybsKA9U0j6EisuUKd31rls9isNpZPUQ3fd/tBOVVDhVxSyYFtBwJMTDkuuvHE0lR6yboiIVX4kzGK+AX6G2TKQnoEm8evAYWKdh2WRoaZH6wLvDRPlHkEVjEe25svqKcSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730320480; c=relaxed/simple;
-	bh=EJJO/HKqSPcRZoRs7N53d81QbG0Ckyd+9nHPbb89Xo4=;
+	s=arc-20240116; t=1730365333; c=relaxed/simple;
+	bh=7wg0X9kZZS7PBL5jMc02efri3UqXq/hrwkpInqVrfxI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PK+9XSuXnHEpbWQceduKB8x64WqohQ+A6ZcDEz1O6szfkO0Ln4wqZdxbXXBvdXjdD7DDcabhRjI1SNZx1UoccsAQLX7R7onMQJo7i8qND/gUm4JQngu36g5vUJvIfL8j7FFRlurEM7nJobRqUfrZ4nSbAoqHHHJ8aGIzX5RLsQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCgyMKza; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=B3aB8nXgwpN40EyZZ131k/tSVI1vYmAzTaVLV9JGA7LDmbVLyPCfZZ6Qs+KXt1CgSZJkIYxKxPzJSrWkyuVv4DepZEv+de5KK1tLNGaEiFjbOGnEameto1eq3aaoRcJg2aql29ZHaS957eueREdJKh0iOBLyzbZZJB3yvhoWNYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KfafWrtT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCgyMKza"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KfafWrtT"
 Received: by smtp.kernel.org (Postfix)
-	id 308B5C4CED7; Wed, 30 Oct 2024 20:34:40 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	id 18892C4CED7; Thu, 31 Oct 2024 09:02:13 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 71117C4CECE;
-	Wed, 30 Oct 2024 20:34:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 71117C4CECE
+	by smtp.kernel.org (Postfix) with ESMTPS id 11EB1C4CED3;
+	Thu, 31 Oct 2024 09:02:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 11EB1C4CED3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730320479; x=1761856479;
+  t=1730365332; x=1761901332;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EJJO/HKqSPcRZoRs7N53d81QbG0Ckyd+9nHPbb89Xo4=;
-  b=hCgyMKza1YpBJDioBdWMTrI9Xpi/JObdWpcrPUT8dZBD78AC/kiXnpfQ
-   WZ5HldmXNgt95VE0DPsLJxuFGyOslIr7JVAoM0rhKJ9gvOciOpXXGo9CX
-   ALZDzBuhW7SsweFG3DuOgLGS28wdGdF33JGu3F8H4WnOUDQ7Idg1TKuJz
-   8WqjLacJA8ap4mkPL30hO2kQ4aJeX7OUq9wjD32t9CJezG2SspSAg0xTm
-   8bieq/ddz4LGFY0zAt261/iq6CLFlomT4/keuSusXMTJDDBh/GRIeM7YO
-   3JtnfuTCppPQOSPbCRSzenjIFrUErdNEtdc7kdrl5tuhPOWfI/6GUubS1
-   A==;
-X-CSE-ConnectionGUID: 3JOGSGUPSPmTjrxZCc4IQw==
-X-CSE-MsgGUID: +fI92+CWRoONUQoVzSOu6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="41440270"
-X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
-   d="scan'208";a="41440270"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 13:34:38 -0700
-X-CSE-ConnectionGUID: Yes14h7CQ0qGk6qKs+ijyg==
-X-CSE-MsgGUID: OLkSKFVoQCC7m3bRKRunng==
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7wg0X9kZZS7PBL5jMc02efri3UqXq/hrwkpInqVrfxI=;
+  b=KfafWrtTmM2+Y6TaZmr22wPf76uGDLsqDo2B/hDcMTKyzBtLhmVE0j5z
+   QMwaxlH475ErQ6igShHJgP31CThziu2zoDAONE8FcnLFT9JCxuujT9f/S
+   8MZmbDqPv7S3juBMTy8AVJ7sQMr75MgK2/mYuqqEOpbIK3PlqmBVxn5qI
+   WCxE4t3QRv81IHln79POYrpKgxPwlI4pGuoWgCLxzaoQGwj5GDolyae5u
+   mXESDUsMQPOvNkLhfuBI6k+4XgL41AyDdZTjOSvEXbqHEGM+IVRVIPdrt
+   x1Qr2PiNcxUdwME8fNEuDRUTrDtgWmGBks0PWUGn3w+l2xUwDe/1X6YMV
+   Q==;
+X-CSE-ConnectionGUID: cGJ6xP1bQuiGzzNqQTw3Mw==
+X-CSE-MsgGUID: WzZTlEyuSgG1k8LTtEcSCQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="40668912"
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
+   d="scan'208";a="40668912"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 02:02:10 -0700
+X-CSE-ConnectionGUID: t/ukF9+VTSeT169OFp800A==
+X-CSE-MsgGUID: yGJx0jYmROePN3OiTnGSwA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
-   d="scan'208";a="83247480"
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
+   d="scan'208";a="120028737"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 30 Oct 2024 13:34:33 -0700
+  by orviesa001.jf.intel.com with ESMTP; 31 Oct 2024 02:02:06 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t6FOg-000fHY-1u;
-	Wed, 30 Oct 2024 20:34:30 +0000
-Date: Thu, 31 Oct 2024 04:34:26 +0800
+	id 1t6R47-000ftZ-1H;
+	Thu, 31 Oct 2024 09:02:03 +0000
+Date: Thu, 31 Oct 2024 17:01:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
 	Lee Jones <lee@kernel.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, Pavel Machek <pavel@ucw.cz>,
-	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
-	arm@kernel.org, Andy Shevchenko <andy@kernel.org>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>,
 	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Andrew Lunn <andrew@lunn.ch>,
@@ -73,19 +72,20 @@ Cc: Paul Gazzillo <paul@pgazz.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
 	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH leds v4 07/12] leds: turris-omnia: Notify sysfs on MCU
- global LEDs brightness change
-Message-ID: <202410310400.K6KRpgOx-lkp@intel.com>
-References: <20241029135621.12546-8-kabel@kernel.org>
+Subject: Re: [PATCH leds v4 02/12] leds: turris-omnia: Use command execution
+ functions from the MCU driver
+Message-ID: <202410311612.0OkxKVgC-lkp@intel.com>
+References: <20241029135621.12546-3-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20241029135621.12546-8-kabel@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241029135621.12546-3-kabel@kernel.org>
 
 Hi Marek,
 
@@ -100,22 +100,116 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Beh-n/turris-omnia-mcu-interface-h-Move-command-execution-function-to-global-header/20241029-215858
 base:   linus/master
-patch link:    https://lore.kernel.org/r/20241029135621.12546-8-kabel%40kernel.org
-patch subject: [PATCH leds v4 07/12] leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
-config: x86_64-kismet-CONFIG_TURRIS_OMNIA_MCU_GPIO-CONFIG_LEDS_TURRIS_OMNIA-0-0 (https://download.01.org/0day-ci/archive/20241031/202410310400.K6KRpgOx-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20241031/202410310400.K6KRpgOx-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20241029135621.12546-3-kabel%40kernel.org
+patch subject: [PATCH leds v4 02/12] leds: turris-omnia: Use command execution functions from the MCU driver
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20241031/202410311612.0OkxKVgC-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241031/202410311612.0OkxKVgC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410310400.K6KRpgOx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410311612.0OkxKVgC-lkp@intel.com/
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for TURRIS_OMNIA_MCU_GPIO when selected by LEDS_TURRIS_OMNIA
-   WARNING: unmet direct dependencies detected for TURRIS_OMNIA_MCU_GPIO
-     Depends on [n]: CZNIC_PLATFORMS [=y] && TURRIS_OMNIA_MCU [=y] && GPIOLIB [=n] && OF [=y]
-     Selected by [y]:
-     - LEDS_TURRIS_OMNIA [=y] && NEW_LEDS [=y] && LEDS_CLASS_MULTICOLOR [=y] && I2C [=y] && (MACH_ARMADA_38X || COMPILE_TEST [=y]) && OF [=y] && TURRIS_OMNIA_MCU [=y]
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/leds/leds-turris-omnia.c:8:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:22:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/leds/leds-turris-omnia.c:409:12: warning: stack frame size (2064) exceeds limit (2048) in 'omnia_leds_probe' [-Wframe-larger-than]
+     409 | static int omnia_leds_probe(struct i2c_client *client)
+         |            ^
+   5 warnings generated.
+
+
+vim +/omnia_leds_probe +409 drivers/leds/leds-turris-omnia.c
+
+43e9082fbccc7d Marek Behún         2023-09-18  408  
+4934630409cb60 Uwe Kleine-König    2022-11-18 @409  static int omnia_leds_probe(struct i2c_client *client)
+089381b27abe28 Marek Behún         2020-07-23  410  {
+089381b27abe28 Marek Behún         2020-07-23  411  	struct device *dev = &client->dev;
+122d57e2960c81 Krzysztof Kozlowski 2024-08-16  412  	struct device_node *np = dev_of_node(dev);
+089381b27abe28 Marek Behún         2020-07-23  413  	struct omnia_leds *leds;
+089381b27abe28 Marek Behún         2020-07-23  414  	struct omnia_led *led;
+089381b27abe28 Marek Behún         2020-07-23  415  	int ret, count;
+089381b27abe28 Marek Behún         2020-07-23  416  
+089381b27abe28 Marek Behún         2020-07-23  417  	count = of_get_available_child_count(np);
+089381b27abe28 Marek Behún         2020-07-23  418  	if (!count) {
+089381b27abe28 Marek Behún         2020-07-23  419  		dev_err(dev, "LEDs are not defined in device tree!\n");
+089381b27abe28 Marek Behún         2020-07-23  420  		return -ENODEV;
+089381b27abe28 Marek Behún         2020-07-23  421  	} else if (count > OMNIA_BOARD_LEDS) {
+089381b27abe28 Marek Behún         2020-07-23  422  		dev_err(dev, "Too many LEDs defined in device tree!\n");
+089381b27abe28 Marek Behún         2020-07-23  423  		return -EINVAL;
+089381b27abe28 Marek Behún         2020-07-23  424  	}
+089381b27abe28 Marek Behún         2020-07-23  425  
+089381b27abe28 Marek Behún         2020-07-23  426  	leds = devm_kzalloc(dev, struct_size(leds, leds, count), GFP_KERNEL);
+089381b27abe28 Marek Behún         2020-07-23  427  	if (!leds)
+089381b27abe28 Marek Behún         2020-07-23  428  		return -ENOMEM;
+089381b27abe28 Marek Behún         2020-07-23  429  
+089381b27abe28 Marek Behún         2020-07-23  430  	leds->client = client;
+089381b27abe28 Marek Behún         2020-07-23  431  	i2c_set_clientdata(client, leds);
+089381b27abe28 Marek Behún         2020-07-23  432  
+43e9082fbccc7d Marek Behún         2023-09-18  433  	ret = omnia_mcu_get_features(client);
+43e9082fbccc7d Marek Behún         2023-09-18  434  	if (ret < 0) {
+43e9082fbccc7d Marek Behún         2023-09-18  435  		dev_err(dev, "Cannot determine MCU supported features: %d\n",
+43e9082fbccc7d Marek Behún         2023-09-18  436  			ret);
+43e9082fbccc7d Marek Behún         2023-09-18  437  		return ret;
+43e9082fbccc7d Marek Behún         2023-09-18  438  	}
+43e9082fbccc7d Marek Behún         2023-09-18  439  
+43e9082fbccc7d Marek Behún         2023-09-18  440  	leds->has_gamma_correction = ret & FEAT_LED_GAMMA_CORRECTION;
+43e9082fbccc7d Marek Behún         2023-09-18  441  	if (!leds->has_gamma_correction) {
+43e9082fbccc7d Marek Behún         2023-09-18  442  		dev_info(dev,
+43e9082fbccc7d Marek Behún         2023-09-18  443  			 "Your board's MCU firmware does not support the LED gamma correction feature.\n");
+43e9082fbccc7d Marek Behún         2023-09-18  444  		dev_info(dev,
+43e9082fbccc7d Marek Behún         2023-09-18  445  			 "Consider upgrading MCU firmware with the omnia-mcutool utility.\n");
+43e9082fbccc7d Marek Behún         2023-09-18  446  	}
+43e9082fbccc7d Marek Behún         2023-09-18  447  
+089381b27abe28 Marek Behún         2020-07-23  448  	mutex_init(&leds->lock);
+089381b27abe28 Marek Behún         2020-07-23  449  
+cbd6954fecbeb8 Marek Behún         2023-09-18  450  	ret = devm_led_trigger_register(dev, &omnia_hw_trigger);
+cbd6954fecbeb8 Marek Behún         2023-09-18  451  	if (ret < 0) {
+cbd6954fecbeb8 Marek Behún         2023-09-18  452  		dev_err(dev, "Cannot register private LED trigger: %d\n", ret);
+cbd6954fecbeb8 Marek Behún         2023-09-18  453  		return ret;
+cbd6954fecbeb8 Marek Behún         2023-09-18  454  	}
+cbd6954fecbeb8 Marek Behún         2023-09-18  455  
+089381b27abe28 Marek Behún         2020-07-23  456  	led = &leds->leds[0];
+122d57e2960c81 Krzysztof Kozlowski 2024-08-16  457  	for_each_available_child_of_node_scoped(np, child) {
+089381b27abe28 Marek Behún         2020-07-23  458  		ret = omnia_led_register(client, led, child);
+122d57e2960c81 Krzysztof Kozlowski 2024-08-16  459  		if (ret < 0)
+089381b27abe28 Marek Behún         2020-07-23  460  			return ret;
+089381b27abe28 Marek Behún         2020-07-23  461  
+089381b27abe28 Marek Behún         2020-07-23  462  		led += ret;
+089381b27abe28 Marek Behún         2020-07-23  463  	}
+089381b27abe28 Marek Behún         2020-07-23  464  
+089381b27abe28 Marek Behún         2020-07-23  465  	return 0;
+089381b27abe28 Marek Behún         2020-07-23  466  }
+089381b27abe28 Marek Behún         2020-07-23  467  
 
 -- 
 0-DAY CI Kernel Test Service
