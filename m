@@ -1,110 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C3FF9D9
-	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 12:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F78761FDF
+	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 14:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730465604; cv=none; b=uqvGytQp7U4SJRNmtqepHH6SCoabTe2ZTipM3xFp43l6Od6/Vm7vKF/aVro372MCUMJ4E9nwzASXCKRd0+sGrWc29Fh25av3vdtzf1n9HM9V5sPhaN8JDWu92OCbt5Wh448lKu6tcodm0tz74zRiQgB2h3GpurZJQ7RbPUit9bU=
+	t=1730471057; cv=none; b=XJ8CnANhvnq42xd4PHAKUAZtdtmkFs2brU7+8IpL0+I3ovWY3ePULgAEnlKolXLvHj52SHvu3PMLA4p0nU2tusgqBx3Fc1vekDkIQg7TLGhEV5aQrq8BGHAL+2QFIXzcP6XiEl+UUc1gDZbB3NAn1MnIZrDc8bhWlRWAlsVoPYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730465604; c=relaxed/simple;
-	bh=YxqeZ7LX07PGvJAs/E7ZS9RloREB37FNC94Qfz16COA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=fyIZHCXyLFc8hHcRQF+8+4S8qI9JsKJxWUT+zHlh9TabpNfc+Qoaa+zYTbg1I/hC0B+6rHfFB0K5IDHO18lJk49sR//NgeGjjBnYnBkbDaT6O/Jcc9tphKa18apNSHssTdRXZbKuHWvtGU43dBoZAryu0bKaHip0L+O4KtfYF8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=monstr-eu.20230601.gappssmtp.com header.i=@monstr-eu.20230601.gappssmtp.com header.b=ye/LQCm4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730471057; c=relaxed/simple;
+	bh=9eJSBsDX1KEPOrBzjZskYTFJm1CTJz8fA/XLt1OpIv8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XDDTQK6HSjdSv6P8R+E+Ea1RWOBODgxXFPCS1+Q3/34kAL+feo2plsdmRmjKhG+dFbkQCTwgAKySnc2TjgbC/a4mu8j14dpW+BKiOcxj8TRcmMzp2ScaG4oOchXocmtaPoAXme821eePOh+KvaW1Yjf4wdcbepbA6z+l3bgMju0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bDT1OGHA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20230601.gappssmtp.com header.i=@monstr-eu.20230601.gappssmtp.com header.b="ye/LQCm4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bDT1OGHA"
 Received: by smtp.kernel.org (Postfix)
-	id 241D5C4CECE; Fri,  1 Nov 2024 12:53:24 +0000 (UTC)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5FCFAC4CECD
-	for <soc@kernel.org>; Fri,  1 Nov 2024 12:53:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5FCFAC4CECD
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e29687f4cc6so1581928276.2
-        for <soc@kernel.org>; Fri, 01 Nov 2024 05:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20230601.gappssmtp.com; s=20230601; t=1730465600; x=1731070400; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tQf8a9cyuQhF9yrIlb01NAr4V5CwM2Bx+c7NhZntXuo=;
-        b=ye/LQCm4ta5ywq7p4AlfQvk6c3fTe2+ONMkoh7RAAvFfKk9HNBLgBQcHYNIaep1NXS
-         Cka0OvyKfJvG9QvZZEt2mqXqsR9Cqnmk1onqiok0GurmMKJmk+/OWAcbclnuRRGHJ6+I
-         hCeXwuxUGkorWHl+cjEkfDb8yxgOZagSOzpXiwwJ5iR2budvPpZQv1dM773MGPoGxGtn
-         nH1LMC57EtuarMCvLOBAzNnQTCqKfNF5rwRNRTkx6dwNEQmOqakd8HHyzeK8KREqRuZP
-         mh0Vbrw45NNNmh6tjwQ/D35iM5teCagjeG/9syaksjer+JYYtbGSye22F6XXExwsejl6
-         LbQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730465600; x=1731070400;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tQf8a9cyuQhF9yrIlb01NAr4V5CwM2Bx+c7NhZntXuo=;
-        b=pf55qu54PNb0zZutFs8BOsk6qjL5ABuBmSBbllQJjDrE2j7Aap6F2JIUDcrNOJQjzl
-         +Fiznsx8CBlgWaTmMKG3UDdSB6Frp7R2KfJdAF2SpBk75g6VSbwnuw9h4dIUNUN43vE1
-         DQ3Ns5MTD+9DDMmDFzZkqky35qKgXTKxoyBdJwRPqwRbz0BrS7LIvd4HNmUPnl7dlH1M
-         rFKATKrs6og7in9DVdEN3ZMc06bwEDEUR33ip/Z0sl1Jxd9qLnnjKJUNc9G0K/6d/Mgq
-         uy+2RDaxfCIkhuYWK0ZNp1V1iiW1Edgl623J+ftvue1S3eMZKZCu46Oc4hyq95dRmupC
-         7wpg==
-X-Gm-Message-State: AOJu0Yz7WzdBwoG9ziGRloJ33LorTuVdcKe+AeSzDlefSav0lTE6GxkU
-	LHFLSoXvnlO5moLO3JRqO1P06eOnagP04xLe9I8TH2dct+965f2QUcJ/YCKmxixXCfKikUuhE/g
-	q/MtF2XFzJMfvvw5HXGD9DoVDS2FnrIZs0d+EH0zWD01+twPRjOce
-X-Google-Smtp-Source: AGHT+IG1ahQw3qC+9Y4Iy2xBQRRLYy86ES6yLyrdUIrfkc3nZ5jEjEIXHn7dXrv3mSphF0f70JvgyciAVVSAKFz+H7k=
-X-Received: by 2002:a05:6902:b0e:b0:e30:cbde:1252 with SMTP id
- 3f1490d57ef6-e330266ec61mr2258969276.36.1730465599885; Fri, 01 Nov 2024
- 05:53:19 -0700 (PDT)
+	id BAE88C4CED1; Fri,  1 Nov 2024 14:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05869C4CECD;
+	Fri,  1 Nov 2024 14:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730471056;
+	bh=9eJSBsDX1KEPOrBzjZskYTFJm1CTJz8fA/XLt1OpIv8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bDT1OGHAuCUOX83geBDrrex/2Wbius8C9uJlBz1UQpqHeZqsUPBIwBpxVqPSHrU9h
+	 AIR5lz2JerpzIgrxCc/kcer0CTjgsK2e73bLndAHIi1YA0tHosN2V/ayjwe7sf5PED
+	 ScN9b1YIZuUx8aQHJa/+tME+rBj1Iq9LqPE/9qSMPfjwaSafGFXVHwhdevWU/do0Hl
+	 E0A6JMTZok+dpFXkOIVpS5HazoP+ipRD/WJsgR6ZV1SSYeslu+ZaA4zBULkdsO8M1U
+	 koGS/Eg3/8tdGrAtGs2U3tsUwJh6/bgBO57BfFwvc/Uotui33XyKvqk4YOtlIUqhxu
+	 y/ZbpgMIoqVgg==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Fabien Parent <fabien.parent@linaro.org>
+Subject: [GIT PULL] Qualcomm Arm64 DeviceTree fix for v6.12
+Date: Fri,  1 Nov 2024 09:24:13 -0500
+Message-ID: <20241101142414.737828-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Michal Simek <monstr@monstr.eu>
-Date: Fri, 1 Nov 2024 13:53:08 +0100
-Message-ID: <CAHTX3dKLb4nOVpVvnwyxE6zJZNXpiB4hh=WzpKWwhqP7aLobjw@mail.gmail.com>
-Subject: [GIT PULL] ARM: Zynq SoC changes for 6.13
-To: SoC Team <soc@kernel.org>
-Cc: linux-arm <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
-please pull this cleanup patch to your tree.
+The following changes since commit dfbe93f32c12f5628bd83303e10ba63621c259ae:
 
-Thanks,
-Michal
-
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+  arm64: dts: qcom: x1e80100: Fix Adreno SMMU global interrupt (2024-08-14 21:36:45 -0500)
 
 are available in the Git repository at:
 
-  https://github.com/Xilinx/linux-xlnx.git tags/zynq-soc-for-6.13
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.12
 
-for you to fetch changes up to 4972111505158555b9b256f17b032463381bb38e:
+for you to fetch changes up to d92e9ea2f0f918d7b01cbacb838288bffccc8954:
 
-  ARM: zynq: Remove unused zynq_slcr_init() declaration (2024-10-02
-09:13:08 +0200)
-
-----------------------------------------------------------------
-ARM: Zynq SoC changes for 6.13
-
-- cleanup zynq_slcr_init()
+  arm64: dts: qcom: msm8939: revert use of APCS mbox for RPM (2024-09-04 15:36:17 -0500)
 
 ----------------------------------------------------------------
-Gaosheng Cui (1):
-      ARM: zynq: Remove unused zynq_slcr_init() declaration
+Qualcomm Arm64 DeviceTree fix for v6.12
 
- arch/arm/mach-zynq/common.h | 1 -
- 1 file changed, 1 deletion(-)
+This reverts the conversion to use the mailbox binding for RPM IPC
+interrupts, as this broke boot on msm8939.
 
+----------------------------------------------------------------
+Fabien Parent (1):
+      arm64: dts: qcom: msm8939: revert use of APCS mbox for RPM
 
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+ arch/arm64/boot/dts/qcom/msm8939.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
