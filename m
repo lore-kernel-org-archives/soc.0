@@ -1,52 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB261CB337
-	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 16:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C971CEEA1
+	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 19:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730477697; cv=none; b=Z1Rklh2ylSp5CjRP89soL2I2f8GgDXufYgOscW5JGF99Oa2+CuHyXE8lFA/KXKGtbJpMbefylTcAVlW3SQYAolRz+E+xGB7buui7DwFRcChmKbwnlSadRrk/l4pNY1Mxkz+21OOmDxeIpnrYkPUSlm0CZc6Zeu2s8aIYZupYtXI=
+	t=1730487648; cv=none; b=ZjSp8IHi3JawzeGnGEbLL2BfxhwI4JW3jCcWO8EVhpokTeqbVQurpYiWNd0suRegyNf2pA+DRQy2hmu6PJ28xAeH4vqboEECa9Nmiip+1StlMycRCw7KQ8H6h5UOZgpaWtOb478KZqCOxEZX6T13Tcwim9RUZWDv6lNltasj6jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730477697; c=relaxed/simple;
-	bh=/KS/SG1ZMGsVtQYssxXqdBZU7mlChx4+IvLbta2AuOc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OcjGIFJNz2RrxEf9X11KN5UDS4EQAcMKWVATLVXjQSNVecIolTkMBOd+ATGP4hpS06Sn4Tb5dfkdAY3Fa2mMeAJbpRwsJhOvPDwC0cwYZDw1t+rLQoGhOF84F/Wfv3mS6LioqQGCDKoG7RP8cMwLrpk6BQ+gSzjfo+IrmbrQaYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rRGQsaNj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730487648; c=relaxed/simple;
+	bh=W46vRNXJQ3DYG85XuJzSRWclYlvTlL4zg845K6CRZCA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BfuiCgJ4VOT7q2XEj8xv+AChI5uv5StD93GYYVbl8fNTpdUSAJGcg00iRohVeu6PO40np0ZC7tYixtKbFG91XWrVCidINk3dRzr5d9oAr9OLlooDCkk8bPCDRzfGyS0agb8PVlFse7KNFn1cJlgk/nPDbEj2y3rtQZmjAWshx84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ButoImwo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rRGQsaNj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ButoImwo"
 Received: by smtp.kernel.org (Postfix)
-	id 4081CC4CED5; Fri,  1 Nov 2024 16:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F30C4CED1;
-	Fri,  1 Nov 2024 16:14:55 +0000 (UTC)
+	id 392F8C4CED3; Fri,  1 Nov 2024 19:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E147C4CECD;
+	Fri,  1 Nov 2024 19:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730477697;
-	bh=/KS/SG1ZMGsVtQYssxXqdBZU7mlChx4+IvLbta2AuOc=;
+	s=k20201202; t=1730487648;
+	bh=W46vRNXJQ3DYG85XuJzSRWclYlvTlL4zg845K6CRZCA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=rRGQsaNjDJ9TQc5BqrmRi7jYw5Ye17yE6gqW7dgkuH6/enG83R5PtQgUVfaFR62b6
-	 Ecv+BaZ95R8KJqB/8wALea0NBvH4Ebj9x8S94Rkhr/cfeHsZiU81SBZaBWUaii0zqr
-	 jWl3ACdhxBKe06nHsvJ4DN9jCaX1fMXMsmG5qdVRYTdla4SDMuyPF1QM5hqa1+Jq2h
-	 xaGFXjD5HBJu5MAP6jdDCSf+3PjIjeuRaaq3Xt/QoQphugYIGeD2mP7UfrvsfrCZ4r
-	 LhlyFWcfIEiOyr5vAQVkW3KAYkPYTriEJmTZdw8UF0bv7muG0VKEyhDPjFyez5I7my
-	 n6bL9jiP//XlA==
-From: Bjorn Andersson <andersson@kernel.org>
+	b=ButoImwoCq378qyIV85eoAD9Tah4KmUhx+wX42uKQlh72/RlaarNB/yfn7mb/oi5+
+	 KisqDRQt6SRDjP24OrRKEmNilBL5YIFqT9ikNDr3aq2Z5II4Y7KyHyIMs58ectjWVN
+	 D9jtc61Uh3scSaFUPg6bNx8JYHMS1iBHHeBqPEl7iLLlq3o8Ltc+etM9gfAeXRfLNh
+	 uqom2R3NxYb5EqNlwaztmn8fkIyCvW7e0fQ+lYbDQv6ioOucN4BdDhpuSzKGiqJ8Fh
+	 6644Tkn9S2msBoVFkBEjymMwBQSiDaTa/3ifN5d53WIY6yTnjWUBSrC3aSaztpQaqu
+	 dSqwYLZwzOXDA==
+From: Dinh Nguyen <dinguyen@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Charles Han <hanchunchao@inspur.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-	Qingqing Zhou <quic_qqzhou@quicinc.com>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Simon Horman <horms@kernel.org>
-Subject: [GIT PULL] Qualcomm driver fixes for v6.12
-Date: Fri,  1 Nov 2024 11:14:54 -0500
-Message-ID: <20241101161455.746290-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.45.2
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL] ARM: socfpga: update for v6.13
+Date: Fri,  1 Nov 2024 14:00:46 -0500
+Message-Id: <20241101190046.912598-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -55,68 +43,25 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-
 The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.12
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.13
 
-for you to fetch changes up to f8c879192465d9f328cb0df07208ef077c560bb1:
+for you to fetch changes up to 44dae95e61288a72a8a182e7c68a9a72a36496dc:
 
-  soc: qcom: pmic_glink: Handle GLINK intent allocation rejections (2024-10-24 13:03:37 -0500)
-
-----------------------------------------------------------------
-Qualcomm driver fixes for v6.12
-
-The Qualcomm EDAC driver's configuration of interrupts is made optional,
-to avoid violating security constriants on X Elite platform .
-
-The SCM drivers' detection mechanism for the presence of SHM bridge in QTEE,
-is corrected to handle the case where firmware successfully returns that
-the interface isn't supported.
-
-The GLINK driver and the PMIC GLINK interface is updated to handle
-buffer allocation issues during initialization of the communication
-channel.
-
-Allocation error handling in the socinfo dirver is corrected, and then
-the fix is corrected.
+  ARM: dts: socfpga: Fix at24 EEPROM node names (2024-10-01 21:35:49 -0500)
 
 ----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      firmware: qcom: scm: fix a NULL-pointer dereference
+SoCFPGA DTS updates for v6.13
+- Fix dts warning for at24 EEPROM node names
 
-Bjorn Andersson (2):
-      rpmsg: glink: Handle rejected intent request better
-      soc: qcom: pmic_glink: Handle GLINK intent allocation rejections
+----------------------------------------------------------------
+Rob Herring (Arm) (1):
+      ARM: dts: socfpga: Fix at24 EEPROM node names
 
-Charles Han (1):
-      soc: qcom: Add check devm_kasprintf() returned value
-
-Johan Hovold (1):
-      firmware: qcom: scm: suppress download mode error
-
-Manikanta Mylavarapu (1):
-      soc: qcom: socinfo: fix revision check in qcom_socinfo_probe()
-
-Qingqing Zhou (1):
-      firmware: qcom: scm: Return -EOPNOTSUPP for unsupported SHM bridge enabling
-
-Rajendra Nayak (1):
-      EDAC/qcom: Make irq configuration optional
-
-Simon Horman (1):
-      MAINTAINERS: Qualcomm SoC: Match reserved-memory bindings
-
- MAINTAINERS                        |  2 +-
- drivers/edac/qcom_edac.c           |  8 +++++---
- drivers/firmware/qcom/qcom_scm.c   | 17 ++++++++++++++---
- drivers/rpmsg/qcom_glink_native.c  | 10 +++++++---
- drivers/soc/qcom/llcc-qcom.c       |  3 +++
- drivers/soc/qcom/pmic_glink.c      | 25 ++++++++++++++++++++++---
- drivers/soc/qcom/socinfo.c         |  8 +++++++-
- include/linux/soc/qcom/llcc-qcom.h |  2 ++
- 8 files changed, 61 insertions(+), 14 deletions(-)
+ arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_vining_fpga.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
