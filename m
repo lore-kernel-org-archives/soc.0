@@ -1,98 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C791386C9
-	for <soc@lists.linux.dev>; Thu, 31 Oct 2024 17:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EFB15697B
+	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 09:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730395662; cv=none; b=K7G9yd6PeARm1xGeIA+iI5pftDsD8+zRvGenO2h8H1bn2JYrlfSFrdorpYKmdaw1IeDLsZPtz5f4UFrDU5tTmhlolisn8bXAf6fGCNcCUiFhe2w1lrhU12NCwuRb6oEjbeI8LaFwDy1rQr9aCkRlwJ/7KhF8aeZgyCDfGK5VZX4=
+	t=1730452026; cv=none; b=lPel8XmqoypV24RM129TBWVvZlZwZao+cq/Q4a0/uedW0J3Ve/IareSgmZUs3rj6dEFVTrkh9eiPMf1tH7Afyp17boCz3vyx86+L5ZQ9N189yG7T1Ywo2O/QxR7ios+uuLf8lmfe4+MJINO99pHYznCyPyBWp5b5GAp3XTJi7SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730395662; c=relaxed/simple;
-	bh=VmTRd6vbd5JE8kutjmGMEDatH/+Hr/uEeRi/O43jtRE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jruiRbcaz0P839Lp0XCg8256Zg7S6W0JRAtEqaMHWVThKW7dBgWDvLe4edOeQrLvYNjS+kkLRhjgVBtLxYscrQ3WQfOEff5rltA3/W4kluaPk78elwid83cdL6Mnctiy8CcB4ax1DTCeYAzUzXbg+BJffn7apBxPFCd7o49Doyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730452026; c=relaxed/simple;
+	bh=au6DvCGi2ofQg8+cR/1MjKC1NLEquWt46MHDxvgHaik=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=aaS9sSLby11KTvckqeYEInMN4jxI3BSeP6tHHSLC+SNQl+qqzvhB0phAluQSIhi3+mxttuaVoKQ/quStTBlss96fcoYZl7zZKihCz6khsq7Z4D4UuJQn1mVIudsqz96LCNru2zzSw1hz8z5m+oxmplYy+dLHIKANYeYS0VOqU54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=KACk9jY1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OBQwM93n; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="KACk9jY1";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OBQwM93n"
 Received: by smtp.kernel.org (Postfix)
-	id B583FC4CED0; Thu, 31 Oct 2024 17:27:41 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 75F2EC4CEC3;
-	Thu, 31 Oct 2024 17:27:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 75F2EC4CEC3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39CD41063;
-	Thu, 31 Oct 2024 10:28:08 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 521D83F73B;
-	Thu, 31 Oct 2024 10:27:37 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Fixes for v6.12(Round 2)
-Date: Thu, 31 Oct 2024 17:27:34 +0000
-Message-Id: <20241031172734.3109140-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	id 5456FC4CED7; Fri,  1 Nov 2024 09:07:06 +0000 (UTC)
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0B210C4CECD;
+	Fri,  1 Nov 2024 09:07:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B210C4CECD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 9C96B2540116;
+	Fri,  1 Nov 2024 05:07:02 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 01 Nov 2024 05:07:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1730452022;
+	 x=1730538422; bh=ptrMptqpHML6avdgCBsl/8si5BVINdgSZ3YHqn4Y0iI=; b=
+	KACk9jY1rDMHXUf3M9b1lRqSeU5hqJWRSHhrxqjDELnJ9Pcaki/Q6KCBnDmyj47l
+	uDiYRGBtN5tnKNnbOvNDoOkbclktrJF3cPvMtpQl3TYVh6A2b0timBzrxPcXJ1PY
+	9jszSwIeok4PZHUhf834LI0t439bW3wunjKwHJlVEG/zXVO50hI+BiiI9EWyZ6HQ
+	q7xgs73drUOy7x5F+H9FNmzjwvqmuS1c8ahcgFM51nGGAJ4Zux+v/HOMVyQcN+xr
+	RsachJfv05cCig42slTnX42CJS8KQgTVQOKJtiiPXI+tdGzAgCvNK1V2TIFegmKQ
+	q6KB17FjbKt7rf5OIVWUeQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1730452022; x=
+	1730538422; bh=ptrMptqpHML6avdgCBsl/8si5BVINdgSZ3YHqn4Y0iI=; b=O
+	BQwM93nmoPFnVZ4BaE2pAfq6jzEmuIugLhXd3lXil6RDU5/hayWFiTJKB0+Xoqsf
+	meiiB1zS1g9KL+jA57SZOGPjpPtcIg5RA7feNKxqygmrjZmqDPOeU7+1EzTthVcF
+	eeIdm3Zu0zFcqBDt2My9JXOngl9dEnSdcSmi2UubfUjOtf2DS58DcbwzRizopJds
+	nWP49RfbomIViZHOk55kpr7aqB4PXgnro+wjMALPzJMK20o7TmUxzjk4EIBJwqZj
+	Yx2iZVumBK17yEBMOvrKmmwgjbMK9J472N5ub2BjVhwRqCr1pfRqgyWZwbNYtjkZ
+	CRxl3fAMGRwyOo0Ubkw9A==
+X-ME-Sender: <xms:NZokZ86iW98lj5FIM-abECb2QId5Ksi38sQyZgWaFqPylJM90d7EFw>
+    <xme:NZokZ96BJ3BRnLMMFL-Edccvv7RrwTC9ZEdQK9V_rHgWHuRhp6NTsZjhRbfd-8YnR
+    sGIzt-pf4ROEzBwnjg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeklecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffrtefo
+    kffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsuc
+    dlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfh
+    rhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqe
+    enucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedu
+    geduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeduledpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepghhrvghgohhrhidrtghlvghmvghnthessg
+    hoohhtlhhinhdrtghomhdprhgtphhtthhopehsvggsrghsthhirghnrdhhvghsshgvlhgs
+    rghrthhhsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomh
+    dprhgtphhtthhopegrnhguhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrmhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehkrggsvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehk
+    rhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:NZokZ7cXiHMXW-PagXJoFLnZvqlZL1US1g3aR15iwy3Rq95Tdje55Q>
+    <xmx:NZokZxLv10mVCsfL7mEYlMhcG_k4YWQJL824Rppt4vsmQrJYWpA07Q>
+    <xmx:NZokZwK7lq71Hprc68vq5b8U2vzOjjz_AayCDQ5IdtAA2vBLECGTGA>
+    <xmx:NZokZywI8GT5gIU9rZhkxYJ6mVNk3pBFKCwTBppl-uAMY7vju2SwaA>
+    <xmx:NpokZ1BtMdVFpaLLg3jDOzf3inOOV_fgjc8Y1R-iXjORm-VD6LOCG0Ou>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id EC8F82220072; Fri,  1 Nov 2024 05:07:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Fri, 01 Nov 2024 10:06:40 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "kernel test robot" <lkp@intel.com>,
+ =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>, "Lee Jones" <lee@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Pavel Machek" <pavel@ucw.cz>, linux-leds@vger.kernel.org, soc@kernel.org,
+ "Gregory Clement" <gregory.clement@bootlin.com>, arm <arm@kernel.org>,
+ "Andy Shevchenko" <andy@kernel.org>, "Hans de Goede" <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "Andrew Lunn" <andrew@lunn.ch>,
+ "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+ "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Message-Id: <98d3ab51-e7db-46b0-8268-b111e115a281@app.fastmail.com>
+In-Reply-To: <202410311612.0OkxKVgC-lkp@intel.com>
+References: <20241029135621.12546-3-kabel@kernel.org>
+ <202410311612.0OkxKVgC-lkp@intel.com>
+Subject: Re: [PATCH leds v4 02/12] leds: turris-omnia: Use command execution functions
+ from the MCU driver
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi ARM SoC Team,
+On Thu, Oct 31, 2024, at 10:01, kernel test robot wrote:
+>
+> kernel test robot noticed the following build warnings:
 
-Please pull ! Sorry for the late pull request. The ones that need to go
-for v6.12 stable carry fixes tags, so it is ok if you pull it for v6.13
-if its too late.
+>>> drivers/leds/leds-turris-omnia.c:409:12: warning: stack frame size (2064) exceeds limit (2048) in 'omnia_leds_probe' [-Wframe-larger-than]
+>      409 | static int omnia_leds_probe(struct i2c_client *client)
+>          |            ^
 
-Regards,
-Sudeep
+The problem here is the i2c_client on the stack, you can't
+do that:
 
--->8
+ static int omnia_mcu_get_features(const struct i2c_client *client)
+ {
++	struct i2c_client mcu_client = *client;
+ 	u16 reply;
 
-The following changes since commit da1642bc97c4ef67f347edcd493bd0a52f88777b:
+I haven't looked at this in detail, but there is usually a
+trivial alternative.
 
-  firmware: arm_scmi: Queue in scmi layer for mailbox implementation (2024-10-14 21:36:46 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-6.12-2
-
-for you to fetch changes up to 54962707f8b8b53812d3d7fca279a68c6e18faae:
-
-  firmware: arm_scmi: Use vendor string in max-rx-timeout-ms (2024-10-28 14:49:27 +0000)
-
-----------------------------------------------------------------
-Arm SCMI fixes for v6.12(part 2)
-
-Couple of fixes to address slab-use-after-free in scmi_bus_notifier()
-via scmi_dev->name and possible incorrect clear channel transport
-operation on A2P channel if some sort of P2A only messages are initiated
-on A2P channel(occurs when stress tested passing /dev/random to the
-channel).
-
-Apart from this, there are fixes to address missing "arm" prefix in the
-recently added property max-rx-timeout-ms which was missed in the review
-but was identified when further additions to the same binding were
-getting reviewed.
-
-----------------------------------------------------------------
-Cristian Marussi (3):
-      firmware: arm_scmi: Reject clear channel request on A2P
-      dt-bindings: firmware: arm,scmi: Add missing vendor string
-      firmware: arm_scmi: Use vendor string in max-rx-timeout-ms
-
-Xinqi Zhang (1):
-      firmware: arm_scmi: Fix slab-use-after-free in scmi_bus_notifier()
-
- Documentation/devicetree/bindings/firmware/arm,scmi.yaml |  2 +-
- drivers/firmware/arm_scmi/bus.c                          |  7 ++++---
- drivers/firmware/arm_scmi/common.h                       |  2 ++
- drivers/firmware/arm_scmi/driver.c                       | 10 ++++++++--
- 4 files changed, 15 insertions(+), 6 deletions(-)
+     Arnd
