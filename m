@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460901D2718
-	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 20:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B801CDFCE
+	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 20:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730492431; cv=none; b=W0jnueoXTr6Tv+mVRprShO5mcj4fKthvor9d6dJh4tF69XdBhEO1FzcC5LcMz2EpxTl8nCHjsrDLLiInKs4RqjB8PfJlW/7E6WNGEpMEmN4uSn6K0QugvvA8NPybUhCgtDR4jxbXjfk0RVOGfHoy4jYuCYI2lRH07aMuExxKAxk=
+	t=1730492432; cv=none; b=bvnZpx+OQTsOP0Zanj7GjBN1U4CXSK/rA/c85QVZed3ZmAufTgIYDQhjNfKcU1MTQevEQpv9JphFRQQLTB8CXUArrr0TUchkJxqbq/Xw4m1URBp8j5QuqkB4FNZeV9a9ALPGGSKxN9c9NXe4MyfA0FKI8ig8nTA0tyNYCw3VFWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730492431; c=relaxed/simple;
-	bh=zhhGeeToYTifhF5d7vxydfiS8WbuYR1Hi5c+UOzg7ME=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=ebYHrNel7sEMRtFvIJkPyKjBFcYqHC/NQNGpRzl2ftRMjA4xlOVntn8ys79lrnQJzJcbTHmp5Ny+2cAOVhBUAa1qX7qxi6UtTo4ZhhYeWxTMVfS6XdDIXMOHanKFDqatkhGyArvo8kFH8W/MBVIQ/0h7gXiktDMQkfhC2AL8Xzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R0gg5NAM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730492432; c=relaxed/simple;
+	bh=aV/y4pfhv7cuNkTFpldivxl/nVI8tyr2ONvF5Z3dIT0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uTv/zcyyPHAxiuRZ5uGDWBIqp/JwJ9qZmMoONUurEGWjTLYwF4fzhj0YhkMrjDseSSIYReRJDJTkY357wpNNXtQmMugnA/aBSry9K6+sNWm64Me6Ig94cPrgp9gXNKZNC5w3rr6yKmbsXtTa3QPH4RXGrX5pmkVgrBvhfcdfw1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPo75Vfy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R0gg5NAM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPo75Vfy"
 Received: by smtp.kernel.org (Postfix)
-	id E1496C4CED1; Fri,  1 Nov 2024 20:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAAAC4CECD
-	for <soc@kernel.org>; Fri,  1 Nov 2024 20:20:30 +0000 (UTC)
+	id 2F777C4CED1; Fri,  1 Nov 2024 20:20:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192A6C4CECD;
+	Fri,  1 Nov 2024 20:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730492430;
-	bh=zhhGeeToYTifhF5d7vxydfiS8WbuYR1Hi5c+UOzg7ME=;
-	h=Subject:From:Date:To:Cc:From;
-	b=R0gg5NAMPVI6gn5VKaI2N2hsscU6ndV1qG8VBqTTe8eaKmHp3rMqeIlZcPoeHbQzt
-	 Zu6z392UUjxig51CLXu0Xy+BptZwx3gBjrbawDPJWlVquHZt1dpka5QyC1raycE2aA
-	 eL0OjBD5JUTcdkZl3uSwthaNlV86iVzR7G/ohHtbRjqL3aXX7zcRqKLjGgBkMc73aX
-	 FZ543TSAeakHLBDtXTvEjLE8BPL6v3PWyJvJNZBNcZrRxpaG9sy3jtMhu0sgqsrJHL
-	 SSXz2b5Ejvpfy1ZYaSHETa0fnt4oqwPFXR7G8fhPaFXo4poRxF+GeNjgnRGUJLKepe
-	 /caQlZJl8OvPg==
+	s=k20201202; t=1730492432;
+	bh=aV/y4pfhv7cuNkTFpldivxl/nVI8tyr2ONvF5Z3dIT0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TPo75VfyD6yFsOP1ZSZhMYBHukvbhdsSg+Nupigkk+UImcJmq+MqYpueBbrgy0m6k
+	 LGkrV10vRv8yGZsA24v6qUhFncGYuOGy4c7580zTykYbO44tgHm9sft3iIH0J1WwEA
+	 BhFha9KXEZetZZcKuTGdPkssWH+AtW4JWk6Qn8y0R82zC84nXksy7iByUQ+SB74Ym2
+	 rsRUWLZzpxaHsIhQg94Xtr1UtU2Dw65zXidDM1wuYSI+derCAJ9X9UCLPRxsZ4a99/
+	 Ct1uO4QQ2vPI2rUHj9RXB7Fiv+JeWsIBW51GlnDI72EzE2K0Pyd0Yog3i0QFc6C3sd
+	 c9DC9/5E9L1RQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 339F73AB8A94;
-	Fri,  1 Nov 2024 20:20:40 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C0E3AB8A94;
+	Fri,  1 Nov 2024 20:20:41 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,34 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree fix for v6.12
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173049243866.2836087.13606734769413601728.git-patchwork-summary@kernel.org>
-Date: Fri, 01 Nov 2024 20:20:38 +0000
-To: soc@kernel.org
+ <173049244023.2836087.18249063042755138534.git-patchwork-notify@kernel.org>
+Date: Fri, 01 Nov 2024 20:20:40 +0000
+References: <20241101142414.737828-1-andersson@kernel.org>
+In-Reply-To: <20241101142414.737828-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree fix for v6.12
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=905440
-  Lore link: https://lore.kernel.org/r/20241101142414.737828-1-andersson@kernel.org
+On Fri,  1 Nov 2024 09:24:13 -0500 you wrote:
+> The following changes since commit dfbe93f32c12f5628bd83303e10ba63621c259ae:
+> 
+>   arm64: dts: qcom: x1e80100: Fix Adreno SMMU global interrupt (2024-08-14 21:36:45 -0500)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.12
+> 
+> [...]
 
-Patch: [GIT,PULL] More Qualcomm Arm64 DeviceTree fixes for v6.12
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=905449
-  Lore link: https://lore.kernel.org/r/20241101143206.738617-1-andersson@kernel.org
+Here is the summary with links:
+  - [GIT,PULL] Qualcomm Arm64 DeviceTree fix for v6.12
+    https://git.kernel.org/soc/soc/c/51c4bae06685
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
