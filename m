@@ -1,77 +1,178 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E2B1D151F
-	for <soc@lists.linux.dev>; Fri,  1 Nov 2024 20:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C2A158DC4
+	for <soc@lists.linux.dev>; Sat,  2 Nov 2024 23:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730492434; cv=none; b=SBHM9V9GofPmIG5zeMvRzLTHCrp3umxgZmq7AWayVSkI1FMjVbmbWNgCSJLNpYWuqSyC48QUl9wLJ9NdDhn65hXodk2zhg3orqKCBGpQw7hJoWQ0H/HJRBirX8drCRZKkmS5//efraC7u1lIl2rZzHuee1A2f78KsZPiwVhCI0E=
+	t=1730589597; cv=none; b=QVUL4sOvIRJa8P5aGMqGt28ExBqpbBoKk9TfxGtDPlZhBWtmydmU1c2+hJJ/8Rgh4CtS6fEb5c7++Fkg9kjduemOudLVTTcyxmIBNQc2mmBimIHzQpDOWFXENzvRv9byEVj6iAqo7YVGV1RS1zM8DjQTYnd3nJnPKFcV+TPXlRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730492434; c=relaxed/simple;
-	bh=jePjMqxvOvwWvSx6henE14O0a/a1NukQW6eC8sL471A=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hhA/2s3noYt7pGEFuTU2u4GLQVHVLrMN6UR9ymmusijgU+Np36CQtvgQK+rLb9g9ZUYQvPsTDQvyaIo/REQOjoCrIYXwJYFxbDC+m9K0ROmGywRd059VfgUbJS6q9/Jhs9LMVIcjSw7k8Skv2pVyv1nsGDUdqCC8FwEx/ZhFlVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDpgKKDh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730589597; c=relaxed/simple;
+	bh=/BnZgvaqjscf0IvYfmdX4PIdhBAXfbRaWA+hx7RV3fE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=txAaYL7oT6WY2KZl94WjHw+0MYVh544rXNqKNvzjOQ1ooXX84NKqika73aV1+5q867l0gekm6ZNIGJplx6z+noXHjTdv1a5VPj8M8vMvAD21PJgvz0c9N83lt+wz+Dqfdibadrd36WO/xKr1SZZwN//g5NS14AaUuFT9XZ5qqIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V8ph0RKJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDpgKKDh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V8ph0RKJ"
 Received: by smtp.kernel.org (Postfix)
-	id B49EFC4AF09; Fri,  1 Nov 2024 20:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DFA2C4CECD;
-	Fri,  1 Nov 2024 20:20:33 +0000 (UTC)
+	id CF282C4CED2; Sat,  2 Nov 2024 23:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B57CC4CEC3;
+	Sat,  2 Nov 2024 23:19:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730492433;
-	bh=jePjMqxvOvwWvSx6henE14O0a/a1NukQW6eC8sL471A=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WDpgKKDhtXqiIwjM1z78luHbCgLQauML98T+hKZH0jbQYEirXcVyKEWdc5I2akqIt
-	 K75QGoXOVSF9px/ILP+MYMVHhUXtHN+d0I87pVRSNaCtruj6b9glN37CbwatKzTU4R
-	 df91hq1N0S/ICG2zPO6AMWYcAkDeZspryLb3N7YhFtxAOmNyP9igm1M2Pn8/5G2HIu
-	 JhC32zTnUBzi9qJzOnrDnWTrztRFNvmQlcpOLm/Ydze9Jcof3ds/rqsbqrvesxx5K0
-	 28BhZQXjyScOn5hvylrDy2EqlXhSxnDXjVNNPgnhJN3Yy8FZLvCwo5KgUVP8p2y7fX
-	 CHE/7fgIJFX7g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEE53AB8A94;
-	Fri,  1 Nov 2024 20:20:42 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1730589596;
+	bh=/BnZgvaqjscf0IvYfmdX4PIdhBAXfbRaWA+hx7RV3fE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=V8ph0RKJ9/nHSPRyxYP8hMtmj3Jfq+78V3LGhWV0DZ2GKHOA4oQ/iSHPWq/0F1mSW
+	 f/eAernmmhsbQ/TyHwv6YWNliDuuEEsSy7YA653OHm1uQtvx5wYWScMWU6/deMdKg3
+	 pczg76sQ3lCtXoinx625QxBpmzCai+SQZzdq61ByXhWdP/r9aUgxDqo8AqB/Gg7T5X
+	 CR7FZyUvy88+hj8x8siUyAJPlFBPkGNVmBD+kAZ724H3CqJVTbiw59FqTPaR12X2Qp
+	 0dbROLlF91p+NDq/i674qvhQRFyYsK2RtpPrMVYDUh1hylA0d3//IyxE3Sqwov/ZQY
+	 dx4HGdMnS6MFQ==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Nikunj Kela <quic_nkela@quicinc.com>,
+	Zhang Zekun <zhangzekun11@huawei.com>,
+	Lijuan Gao <quic_lijuang@quicinc.com>,
+	Tengfei Fan <quic_tengfan@quicinc.com>,
+	Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Jingyi Wang <quic_jingyw@quicinc.com>,
+	Julia Lawall <Julia.Lawall@inria.fr>,
+	=?UTF-8?q?J=C3=A9r=C3=B4me=20de=20Bretagne?= <jerome.debretagne@gmail.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Konrad Dybcio <quic_kdybcio@quicinc.com>,
+	Kyle Deng <quic_chunkaid@quicinc.com>,
+	Maya Matuszczyk <maccraft123mc@gmail.com>,
+	Zhenhua Huang <quic_zhenhuah@quicinc.com>
+Subject: [GIT PULL] Qualcomm driver updates for v6.13
+Date: Sat,  2 Nov 2024 18:19:48 -0500
+Message-ID: <20241102231953.871067-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] More Qualcomm Arm64 DeviceTree fixes for v6.12
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <173049244148.2836087.17419566280659341745.git-patchwork-notify@kernel.org>
-Date: Fri, 01 Nov 2024 20:20:41 +0000
-References: <20241101143206.738617-1-andersson@kernel.org>
-In-Reply-To: <20241101143206.738617-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: soc@kernel.org
-
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Fri,  1 Nov 2024 09:32:05 -0500 you wrote:
-> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-> 
->   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.12-2
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] More Qualcomm Arm64 DeviceTree fixes for v6.12
-    https://git.kernel.org/soc/soc/c/566064e57066
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.13
+
+for you to fetch changes up to d088afa7de3cbe689954dad49e7058d2c4b8944c:
+
+  soc: qcom: socinfo: add QCS9100 ID (2024-10-29 15:09:02 -0500)
+
+----------------------------------------------------------------
+Qualcomm driver updates for v6.13
+
+Enable QSEECOM, and thereby access to EFI variables, for Lenovo Yoga
+Slim 7x, Dell XPS 13, Microsoft Surface Pro 9.
+
+Last Level Cache Controller (LLCC) driver code is shuffled, to improve
+readability of the tables.
+
+The Qualcomm socinfo driver gains support for QCS615, QCS9100, SAR1130P,
+SAR2130P, and SA8255P.
+
+A few drivers are simplified using dev_err_probe() and guard(), and a
+few kernel-doc issues are corrected.
+
+Mentioning of the #linux-msm IRC channel is added to the MAINTAINERS
+file.
+
+----------------------------------------------------------------
+Aleksandrs Vinarskis (1):
+      firmware: qcom: scm: Allow QSEECOM on Dell XPS 13 9345
+
+Bjorn Andersson (1):
+      soc: qcom: pd-mapper: Add QCM6490 PD maps
+
+Dan Carpenter (1):
+      soc: qcom: geni-se: fix array underflow in geni_se_clk_tbl_get()
+
+Dmitry Baryshkov (4):
+      dt-bindings: arm: qcom,ids: add SoC ID for SAR2130P and SAR1130P
+      soc: qcom: socinfo: add SoC IDs for SAR1130P and SAR2130P
+      dt-bindings: firmware: qcom,scm: Add SAR2130P compatible
+      dt-bindings: soc: qcom,aoss-qmp: Add SAR2130P compatible
+
+Jingyi Wang (1):
+      dt-bindings: soc: qcom: add qcom,qcs8300-imem compatible
+
+Julia Lawall (1):
+      soc: qcom: qmi: Reorganize kerneldoc parameter names
+
+Jérôme de Bretagne (1):
+      firmware: qcom: scm: Allow QSEECOM on Microsoft Surface Pro 9 5G
+
+Konrad Dybcio (2):
+      soc: qcom: llcc: Use designated initializers for LLC settings
+      soc: qcom: smem: Fix up kerneldoc
+
+Krzysztof Kozlowski (4):
+      qcom: MAINTAINERS: add linux-msm IRC on OFTC
+      soc: qcom: pbs: simplify locking with guard()
+      soc: qcom: smem_state: simplify locking with guard()
+      dt-bindings: soc: qcom: aoss-qmp: Add SM8750
+
+Kyle Deng (1):
+      dt-bindings: soc: qcom,aoss-qmp: Document the QCS8300 AOSS channel
+
+Lijuan Gao (2):
+      dt-bindings: arm: qcom,ids: add SoC ID for QCS615
+      soc: qcom: socinfo: Add QCS615 SoC ID table entry
+
+Maya Matuszczyk (1):
+      firmware: qcom: scm:  Allow QSEECOM on Lenovo Yoga Slim 7x
+
+Nikunj Kela (4):
+      dt-bindings: firmware: qcom,scm: document support for SA8255p
+      dt-bindings: soc: qcom: aoss-qmp: document support for SA8255p
+      dt-bindings: arm: qcom: add the SoC ID for SA8255P
+      soc: qcom: socinfo: add support for SA8255P
+
+Tengfei Fan (2):
+      dt-bindings: arm: qcom,ids: add SoC ID for QCS9100
+      soc: qcom: socinfo: add QCS9100 ID
+
+Zhang Zekun (3):
+      soc: qcom: rpmh-rsc: Simplify code with dev_err_probe()
+      soc: qcom: smem: Simplify code with dev_err_probe()
+      soc: qcom: smp2p: Simplify code with dev_err_probe()
+
+Zhenhua Huang (1):
+      dt-bindings: firmware: qcom,scm: document SCM on QCS8300 SoCs
+
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |    4 +
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |    4 +
+ .../devicetree/bindings/sram/qcom,imem.yaml        |    1 +
+ MAINTAINERS                                        |    3 +
+ drivers/firmware/qcom/qcom_scm.c                   |    3 +
+ drivers/soc/qcom/llcc-qcom.c                       | 2644 ++++++++++++++++++--
+ drivers/soc/qcom/qcom-geni-se.c                    |    3 +-
+ drivers/soc/qcom/qcom-pbs.c                        |   22 +-
+ drivers/soc/qcom/qcom_pd_mapper.c                  |    1 +
+ drivers/soc/qcom/qmi_interface.c                   |    2 +-
+ drivers/soc/qcom/rpmh-rsc.c                        |    9 +-
+ drivers/soc/qcom/smem.c                            |   16 +-
+ drivers/soc/qcom/smem_state.c                      |   12 +-
+ drivers/soc/qcom/smp2p.c                           |    9 +-
+ drivers/soc/qcom/socinfo.c                         |    5 +
+ include/dt-bindings/arm/qcom,ids.h                 |    5 +
+ 16 files changed, 2432 insertions(+), 311 deletions(-)
