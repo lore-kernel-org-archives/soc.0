@@ -1,69 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AAE1CB9E5
-	for <soc@lists.linux.dev>; Mon,  4 Nov 2024 18:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755D41B5EBC
+	for <soc@lists.linux.dev>; Mon,  4 Nov 2024 19:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730746298; cv=none; b=clZ/jqal/VZdjEsCIu/wfzMxNnR+GAhTnjKsHUevqBOlSHXLYZ9FrHs0RVFo63PUPiFOn/Omj7QtNqOLgfJzDwrBlom1Veg2Nc5CDL5q9qJFetDpyFYiiphwjkmFbMTPRZHuM17DubIMi1eZnvaUHvJu4LKaLaWlgK2RjaZMfcQ=
+	t=1730747030; cv=none; b=S9rT8dapcBmHUaTgelaCwAXAiK6BD8Cu1HF5EKtD+cQwJKkqaF+IF+DSKPXIBvFFk5s7nVUdymvbLDhC6XShU85iU3DUl9u6bQzJZaep8PBl41+s66s/FrU2vuVFQ6ab6Dswd2Kuwq0EBXybVyfdgavwo5wG8z5WxHd16827ceU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730746298; c=relaxed/simple;
-	bh=a22lLUTFqP/yxTWz5lNuOqkZR4F8l0Y7soEfFfZvwBk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jTizA0qJs/VY2yAIgaXfvHFKy+JuoZAGlwTFvjJuRwdD+YEmHZpJO2DA0gSyL+jIPr6rcz3iQILVJj9aUlzwwUD66R8hYub2399ODZHltNi3i5LsCpEjJZ7eJjEATzDEBxmeG7U1jO0538nAfiObpUEoyGggcYU1b5vk9CDARpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ObK1KmPi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730747030; c=relaxed/simple;
+	bh=XvdhWma09IaLleTvj56ROWEfmVpcN86+tOqmtSMn5Qo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QqJ/ubaQ1tNS/S/8KOJ8fI9jwgSFsNv8l/MPQd2Xf8UONlmej7YgVl9FikQorEDaUE6vGXxR3+qFGtgYTcqwzwb2Yzc/SkWubKWs8YBdWXEPHsJYmqhDVL90/8zFMST0a6dzAIbFYymEPprNGBltszeCdyO9mjhbutR3KBrhch8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Mk6xTTaZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ObK1KmPi"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Mk6xTTaZ"
 Received: by smtp.kernel.org (Postfix)
-	id 66B5FC4CED0; Mon,  4 Nov 2024 18:51:38 +0000 (UTC)
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	id 5FB65C4CED0; Mon,  4 Nov 2024 19:03:50 +0000 (UTC)
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5D4A7C4CECE
-	for <soc@kernel.org>; Mon,  4 Nov 2024 18:51:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D4A7C4CECE
+	by smtp.kernel.org (Postfix) with ESMTPS id 30060C4CECE
+	for <soc@kernel.org>; Mon,  4 Nov 2024 19:03:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30060C4CECE
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20cb7139d9dso41489695ad.1
-        for <soc@kernel.org>; Mon, 04 Nov 2024 10:51:36 -0800 (PST)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20bb39d97d1so43027335ad.2
+        for <soc@kernel.org>; Mon, 04 Nov 2024 11:03:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730746295; x=1731351095; darn=kernel.org;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4GL6OlsCw/1Iw3ML1pJSqsdxrGB8NVV7bwhorGsY4FA=;
-        b=ObK1KmPiUvaoavCNWOVsHyekbir/Td8AoXXr0psPPuiZWjcIUnMRLmkzIW2J5XCovz
-         tBntK7lSEhsnKaAQd+W/Jd5O7jpmzX1SO/pgqXoTkg/u3MR9TcJqcVezI8muXOg2258I
-         /wNLnPg5zU3pLuam34w4rPT85e+LwVtHqAHP3eF9Zt3ZiJPk0Q0Okqor6O0xzy9vGy9U
-         aDOpzTEQ43fD3AzsThFyVVZ2iIpp0cuwjlK0Zu874VSw9+l12C0eQQFLVnq7C63h7hq1
-         PrbLzhznasYphb5FvKWxLnES4etV+oQLStbM3TC3fIJZD51tGoGX2gBBvCiZoo5mFoPh
-         NA8A==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730747027; x=1731351827; darn=kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NA8fP/yMJX4YrX/4tkNWkXd8CoB5Q4SliEG8XZe06KY=;
+        b=Mk6xTTaZR3+tJaCTQU2hwzaw+lew2zkDCLhhXfJ03tyw4o1orOzlvlHlwHA96hS3Ra
+         SAbRXeozq60ptC07IYovjLApqzEIwLVc5ZFW3J+dBlkoqtgURBb5u960jt9+XQ3RH4cv
+         0tl7F0xNqwmuxZDnBnu7yZ52ihMsz7zYKEsCAhWT/XK8HZrTt5hXfz4c91GHdsG9ZtDr
+         HRXjdrRNOMBpUmVbH5IN3Ea7xm+wu8myv3BecFEKh+imfKMP9VpCLfCelnHNFIxEMdDx
+         9fbWfbj2Z50Ya2Ru3rXzmElHC2LzKjl1gJow1XITvVvCqjZU8MHz9FVbxSFATFX2VoWG
+         yk8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730746295; x=1731351095;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4GL6OlsCw/1Iw3ML1pJSqsdxrGB8NVV7bwhorGsY4FA=;
-        b=VkzjQdvFL65rkviRg3e5CTwDk/lYhKmGSHygYDS2YMSUY401zgvdJJQFw+2h8u5s8+
-         Qs/zoCal/XETdMcz/htlnS62gUaAjBbchy1uGzhvc5T4DHMPSg54pftsM9UFaJ+7cDqx
-         iXKH5n0uprgYNzCOz5a4LucRkmYFZGDN5lEl/ZBl3QNbUtOVAH3Y6ckW66zSATA9TTs9
-         EVJ0VbOsWwtqLz6ejJCutA7db+46kvFB0qBvW4suB7NlvcXFjz+Hd+p28dJjDpY8kzHj
-         7pBxVwjRNk6+hUcaRuIeP2FVrUSILuQNAN+xmGuuNhwE9HlZYNCOVlnLI+coBVAEuBau
-         EWpg==
-X-Gm-Message-State: AOJu0Yz3sqlUtVbXmQpufJVOX0tjvWaGWNZAJ7ZWnETYsXLdU4eqOnp9
-	mhBf+XVZuQKzmb9FIl0L5ejJNUrASEJJl0/MDlJN5EmWoiPtqyXfG151glLOAfueNURvFxZP5zj
-	oFQs=
-X-Google-Smtp-Source: AGHT+IGzpsJFLBBw3vdrPJOV+n4vGe3wFsVOs9lQV6Gx+kfr37V1BYgA0GZsaPx09/UbeM2AdnSQng==
-X-Received: by 2002:a17:903:2445:b0:20c:bcd8:5ccb with SMTP id d9443c01a7336-210c6c0610amr475618745ad.30.1730746295454;
-        Mon, 04 Nov 2024 10:51:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730747027; x=1731351827;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NA8fP/yMJX4YrX/4tkNWkXd8CoB5Q4SliEG8XZe06KY=;
+        b=XCHCpEbskBXZcqZZnbU5e9pvnG7g/GJhdxLepru1zqTeQ0jrXHQ89d3TfLnS6wTuf0
+         S90PHAuO8buU7KB2qE6AbWpJs4BpuWX8v5ugqA98IRsPl0K+7LjMPrYwpx9HT7kAHRC0
+         JpGbwKAnicXeJ4nb6cqZc8felyEvj31LQuM0Wo/hpGyCZOpRfMQEPHHNE7pS0JmRn7Y/
+         we6onozu7rOPSaND14Mrcz1pkjpRbGOSwYVXxfKn2dS4xAp/0sJIEB++QC9p5GnqPBVk
+         rYnS9BpoyZ8h4HW7L1ki94+8UvDTsvxVrnV5V2A2rmU7rDeYIYy8LPhX6N8AGT6JnTfP
+         2b2A==
+X-Gm-Message-State: AOJu0YwTJbFJqMEQIPpu39b3jXe+D20XO236t7ohwgyAN+vTEDK9WrsQ
+	eQBsDWL9BYbDoXFKc8ifN6Uox2QIRPMxVJvZ6QlbC98FBHcK+D0jgZwZclF4n1G8fWdVcIVAnCQ
+	Ky6Q=
+X-Google-Smtp-Source: AGHT+IHCn+jwQGkArcOzaPbcwgPSYj2Q9cK06QQu8ytXtnA4Uxk3VIEJ5QKuxauHvt2qnIwQYyPqwg==
+X-Received: by 2002:a17:902:cf12:b0:20d:2e83:6995 with SMTP id d9443c01a7336-210f76d6750mr286890785ad.47.1730747027167;
+        Mon, 04 Nov 2024 11:03:47 -0800 (PST)
 Received: from localhost ([97.126.177.194])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a2b39sm64589225ad.145.2024.11.04.10.51.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211318b562fsm41688915ad.169.2024.11.04.11.03.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 10:51:35 -0800 (PST)
+        Mon, 04 Nov 2024 11:03:46 -0800 (PST)
 From: Kevin Hilman <khilman@baylibre.com>
 To: soc@kernel.org
 Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: dts: OMAP updates for v6.13
-Date: Mon, 04 Nov 2024 10:51:34 -0800
-Message-ID: <7hmsieomrt.fsf@baylibre.com>
+Subject: Re: [GIT PULL] ARM: dts: OMAP updates for v6.13
+In-Reply-To: <7hmsieomrt.fsf@baylibre.com>
+References: <7hmsieomrt.fsf@baylibre.com>
+Date: Mon, 04 Nov 2024 11:03:46 -0800
+Message-ID: <7hikt2om7h.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -72,86 +75,23 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Kevin Hilman <khilman@baylibre.com> writes:
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+>
+>   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.13/dt-signed
+>
+> for you to fetch changes up to 13746595a1581e09289adf9b5202e237c5e0814b:
+>
+>   ARM: dts: omap4-kc1: fix twl6030 power node (2024-11-04 10:42:22 -0800)
 
-are available in the Git repository at:
+Oops, ignore this one.  I got an email from linux-next that one of these
+patches is missing an SoB.  Will fixup and resend.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.13/dt-signed
+I deleted this tag to avoid pulling the wrong one.
 
-for you to fetch changes up to 13746595a1581e09289adf9b5202e237c5e0814b:
-
-  ARM: dts: omap4-kc1: fix twl6030 power node (2024-11-04 10:42:22 -0800)
-
-----------------------------------------------------------------
-ARM: dts: OMAP updates for v6.13
-
-Misc. minor updates for OMAP3, OMAP4, AM3 and DRA7 platforms.
-
-----------------------------------------------------------------
-Andreas Kemnade (10):
-      ARM: dts: omap: omap4-epson-embt2ws: define GPIO regulators
-      ARM: dts: omap: omap4-epson-embt2ws: wire up regulators
-      ARM: dts: omap: omap4-epson-embt2ws: add unknown gpio outputs
-      ARM: dts: omap: omap4-epson-embt2ws: add GPIO expander
-      ARM: dts: ti/omap: use standard node name for twl4030 charger
-      ARM: dts: ti/omap: dra7: fix redundant clock divider definition
-      ARM: ti/omap: omap3-gta04a5: add Bluetooth
-      ARM: dts: omap36xx: declare 1GHz OPP as turbo again
-      ARM: dts: ti/omap: omap4-epson-embt2ws: add charger
-      ARM: dts: omap4-kc1: fix twl6030 power node
-
-Geert Uytterhoeven (1):
-      ARM: dts: am335x-bone-common: Increase MDIO reset deassert delay to 50ms
-
-Marcus Folkesson (1):
-      ARM: dts: ti: dra7: Remove double include of clock bindings
-
-Rob Herring (Arm) (1):
-      ARM: dts: ti/omap: Fix at24 EEPROM node names
-
-Roger Quadros (3):
-      ARM: dts: ti: drop linux,mtd-name from NAND nodes
-      ARM: dts: ti: omap: am335x-baltos: drop "gpmc,device-nand" from NAND node
-      ARM: dts: ti: omap3434-sdp: drop linux,mtd-name from onenand node
-
- arch/arm/boot/dts/ti/omap/am335x-baltos.dtsi       |   3 +--
- arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi  |  12 ++++-----
- arch/arm/boot/dts/ti/omap/am335x-boneblue.dts      |   2 +-
- arch/arm/boot/dts/ti/omap/am335x-pdu001.dts        |   6 ++---
- arch/arm/boot/dts/ti/omap/am335x-shc.dts           |   2 +-
- arch/arm/boot/dts/ti/omap/am3517-som.dtsi          |   1 -
- arch/arm/boot/dts/ti/omap/am3874-iceboard.dts      |   8 +++---
- arch/arm/boot/dts/ti/omap/am437x-cm-t43.dts        |   2 +-
- arch/arm/boot/dts/ti/omap/am437x-idk-evm.dts       |   2 +-
- arch/arm/boot/dts/ti/omap/am437x-sbc-t43.dts       |   2 +-
- arch/arm/boot/dts/ti/omap/am437x-sk-evm.dts        |   2 +-
- arch/arm/boot/dts/ti/omap/am43x-epos-evm.dts       |   2 +-
- arch/arm/boot/dts/ti/omap/am57xx-cl-som-am57x.dts  |   2 +-
- arch/arm/boot/dts/ti/omap/am57xx-sbc-am57x.dts     |   2 +-
- arch/arm/boot/dts/ti/omap/dm8148-evm.dts           |   1 -
- arch/arm/boot/dts/ti/omap/dm8168-evm.dts           |   1 -
- arch/arm/boot/dts/ti/omap/dra62x-j5eco-evm.dts     |   1 -
- arch/arm/boot/dts/ti/omap/dra7.dtsi                |   1 -
- arch/arm/boot/dts/ti/omap/dra7xx-clocks.dtsi       |   1 -
- arch/arm/boot/dts/ti/omap/logicpd-som-lv.dtsi      |   1 -
- arch/arm/boot/dts/ti/omap/logicpd-torpedo-som.dtsi |   3 +--
- arch/arm/boot/dts/ti/omap/omap3-cm-t3x.dtsi        |   2 +-
- arch/arm/boot/dts/ti/omap/omap3-evm-37xx.dts       |   1 -
- arch/arm/boot/dts/ti/omap/omap3-evm.dts            |   1 -
- arch/arm/boot/dts/ti/omap/omap3-gta04.dtsi         |   2 +-
- arch/arm/boot/dts/ti/omap/omap3-gta04a5.dts        |  10 ++++++++
- arch/arm/boot/dts/ti/omap/omap3-igep.dtsi          |   1 -
- arch/arm/boot/dts/ti/omap/omap3-ldp.dts            |   1 -
- arch/arm/boot/dts/ti/omap/omap3-overo-base.dtsi    |   1 -
- arch/arm/boot/dts/ti/omap/omap3-sb-t35.dtsi        |   2 +-
- arch/arm/boot/dts/ti/omap/omap3430-sdp.dts         |   2 --
- arch/arm/boot/dts/ti/omap/omap36xx.dtsi            |   1 +
- arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts  | 211 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----
- arch/arm/boot/dts/ti/omap/omap4-kc1.dts            |   6 +----
- arch/arm/boot/dts/ti/omap/omap5-cm-t54.dts         |   2 +-
- arch/arm/boot/dts/ti/omap/omap5-sbc-t54.dts        |   2 +-
- arch/arm/boot/dts/ti/omap/twl4030.dtsi             |   2 +-
- 37 files changed, 248 insertions(+), 56 deletions(-)
-
+Kevin
