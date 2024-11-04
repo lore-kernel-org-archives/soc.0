@@ -1,81 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799782AE93
-	for <soc@lists.linux.dev>; Mon,  4 Nov 2024 13:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3581F95E
+	for <soc@lists.linux.dev>; Mon,  4 Nov 2024 14:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730726814; cv=none; b=LvClXV7RvsCVDC8iarrn9ZmOMJD/8e8ZPe4HB+Sxd2WF5BR7PEt/KnxHmvuunO68jq9uNop7h/FukhaoDIma31rbSu+x8qrFRGOJLltNjgCSFxEIM3AkLS8Wnal/N/+WaNMIe2JVXIOx6sSbeYlchtMwI4B77iROUlKEWn7OClE=
+	t=1730729972; cv=none; b=A8LMbUgLoWndsoR203WQhWpQESYICXtpF/IuSx4QbE5PG25OiUqdwCwSGwnRmcxxPZeXsW73ZDtf7C77NfSBghCJE4oziTeOmC81VJAN5c74BdrPf54k/o7fQdw33tdTG44blB9QViXTkjvrwV7j9VEFfDrEgKDXYVHxElJuW1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730726814; c=relaxed/simple;
-	bh=WaZx01qD9NePzFDEReTPriogCvM/kSBfUzCS/dqVna0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=e7pPkm48HixhWJcyF1lLPZM40lQ0QjnDuUI7a/aMy9uDaDoeWZep/V+dhBXOH7qEC01w4AV8oVfb57P0SFQcF/tw+ca8dd2liVeyBuBkPZOgXfM3wGa2+t5j48ZPwB+nLlmCswNs9Q9tSUINmbTfc+iJ9pgDQ4ALc2gXbzIineg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730729972; c=relaxed/simple;
+	bh=JhFNXixVI6LoLn/UIp5izX3h/kj/BU4WbxVI+NQJB8E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b/Rr+5JWarpTgTo32C0IgVtMONdTnQcaKZA+PLdnjG/8FRKhPmv/yGMGuQQNz6EjKnAlQOvLm2Wujyg6+znIvASyisvHmCDpTsBuqlBQdo4uKeDFinJlF8oTGO1huBOGCENu2n5MZQV9I7j4UCXNhC7p+qgPff2PpjCW46Jy9nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXLq86xt; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXLq86xt"
 Received: by smtp.kernel.org (Postfix)
-	id 1FF89C4CED1; Mon,  4 Nov 2024 13:26:54 +0000 (UTC)
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 254BCC4CED2
-	for <soc@kernel.org>; Mon,  4 Nov 2024 13:26:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 254BCC4CED2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:ae0d:26ef:36dd:9be1])
-	by xavier.telenet-ops.be with cmsmtp
-	id YdSh2D00K31l0Qj01dShZH; Mon, 04 Nov 2024 14:26:43 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1t7x65-006FvN-Ss;
-	Mon, 04 Nov 2024 14:26:41 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1t7x6P-000BJz-J1;
-	Mon, 04 Nov 2024 14:26:41 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/2] Renesas ARM defconfig updates for v6.13
-Date: Mon,  4 Nov 2024 14:26:39 +0100
-Message-Id: <cover.1730726154.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1730726152.git.geert+renesas@glider.be>
-References: <cover.1730726152.git.geert+renesas@glider.be>
+	id 26546C4CED7; Mon,  4 Nov 2024 14:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64086C4CECE;
+	Mon,  4 Nov 2024 14:19:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730729972;
+	bh=JhFNXixVI6LoLn/UIp5izX3h/kj/BU4WbxVI+NQJB8E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mXLq86xt7G/cozgLlRT60EhML9LfBKQyBX8q+JyBgaMd7xPHJ0oRFgmJFtcFbbTch
+	 GDI2k3yOtHobgsBTE5MEZiiRqXHhU40IMoWtHnCkq7vYpW5Oal6N/MLRD0Hn+HrGO3
+	 F9VgOGeQkv24b1O5dSwb0Eb+b2dkVRPUMdOtCyUVB1P4aWUHqWJrBdtiKfG3jgj8iP
+	 8IKLxow7ku2QH+iTEcVvIX9Nc2Mfo/BMvKeuZXVow5k1WjpAim5Tw4YT37r7svjBiC
+	 rhtlb8nF40gjFd2g1xvUrVQnhZXPZ51ZvCfbWKqXpjmUF4yGiprJTUPJK/xfpK8dYY
+	 n4FuvaWjbLozg==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>,
+	linux-leds@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH leds v5 00/12] Turris Omnia LED driver changes
+Date: Mon,  4 Nov 2024 15:19:12 +0100
+Message-ID: <20241104141924.18816-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Hello Lee,
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+this is v5 of Turris Omnia LED driver changes.
+v1 to v4 can be found at
+  https://lore.kernel.org/linux-leds/20240902124104.14297-1-kabel@kernel.org/
+  https://lore.kernel.org/linux-leds/20240903101930.16251-1-kabel@kernel.org/
+  https://lore.kernel.org/linux-leds/20240913123103.21226-1-kabel@kernel.org/
+  https://lore.kernel.org/linux-leds/20241029135621.12546-1-kabel@kernel.org/
 
-are available in the Git repository at:
+Changes since v4:
+- patch 2: correctly get MCU I2C device with device_find_child() when
+  trying to determine features supported by MCU firmware
+- patch 7: don't select TURRIS_OMNIA_MCU_GPIO, depend on it instead.
+  Selecting it causes kernel test robot to warn on some unmet
+  dependencies since GPIOLIB is dependency for TURRIS_OMNIA_MCU_GPIO
+- patch 7: request brighhtness changed IRQ only if it is defined in
+  the device-tree
+- patch 7: fix check for return value of devm_request_threaded_irq()
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.13-tag1
+Marek
 
-for you to fetch changes up to c520bbb523304ba98de9ffeeb0ef289921434125:
+Marek Behún (12):
+  turris-omnia-mcu-interface.h: Move command execution function to
+    global header
+  leds: turris-omnia: Use command execution functions from the MCU
+    driver
+  turris-omnia-mcu-interface.h: Add LED commands related definitions to
+    global header
+  leds: turris-omnia: Use global header for MCU command definitions
+  dt-bindings: leds: cznic,turris-omnia-leds: Allow interrupts property
+  leds: turris-omnia: Document driver private structures
+  leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
+  platform: cznic: turris-omnia-mcu: Inform about missing LED panel
+    brightness change interrupt feature
+  leds: turris-omnia: Inform about missing LED gamma correction feature
+    in the MCU driver
+  leds: turris-omnia: Use dev_err_probe() where appropriate
+  leds: turris-omnia: Use uppercase first letter in all comments
+  ARM: dts: turris-omnia: Add global LED brightness change interrupt
 
-  arm64: defconfig: Enable VBATTB clock and Renesas RTCA-3 (2024-11-03 12:33:11 +0100)
+ .../leds/cznic,turris-omnia-leds.yaml         |   8 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   1 +
+ drivers/leds/Kconfig                          |   1 +
+ drivers/leds/leds-turris-omnia.c              | 318 +++++++++---------
+ .../platform/cznic/turris-omnia-mcu-base.c    |   3 +
+ drivers/platform/cznic/turris-omnia-mcu.h     | 130 -------
+ include/linux/turris-omnia-mcu-interface.h    | 148 +++++++-
+ 7 files changed, 312 insertions(+), 297 deletions(-)
 
-----------------------------------------------------------------
-Renesas ARM defconfig updates for v6.13
+-- 
+2.45.2
 
-  - Enable Battery Backup Function (VBATTB) and RTC support for the
-    RZ/G3S SoC and the RZ/G3S SMARC SoM.
-
-----------------------------------------------------------------
-Claudiu Beznea (1):
-      arm64: defconfig: Enable VBATTB clock and Renesas RTCA-3
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
