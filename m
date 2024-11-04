@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5C0AD24
-	for <soc@lists.linux.dev>; Mon,  4 Nov 2024 14:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CED3398B
+	for <soc@lists.linux.dev>; Mon,  4 Nov 2024 14:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730729992; cv=none; b=SE4JhU+vweOa7lwTmzkz4QZwYlUK0B2h7KDSEAU2f1kN841ekP/JVGEX1jb5+zsO9cpszpalBMHsI6yaidOwTrCNF6p0VHXv9zu/IIZCNucVZITSuav9RgjNVwMXa4RhVWfe001CDuan7VvXcs3Ktrsb3kBt3AlQLZeOikjcF1A=
+	t=1730729996; cv=none; b=uICGa0jXLlGkk/GSCS45uWFDK2zgzOTrxA+h1G3tx1d0b1lW57N3gUB0kIi4ISYagtWlZ5d7A6dyXst3b0Z32/rOJ4UadNsqy6GWp6mMVjc1ZsH4+NcAXzG7NXD+fTMbhaONsLigkiJExvtdL9/vS+h8GdRz6g3aagu9R1d7CiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730729992; c=relaxed/simple;
-	bh=IL6ApZj/AEN4ogtSsw2hRDlMG6U3NVDiHfarNqZTetA=;
+	s=arc-20240116; t=1730729996; c=relaxed/simple;
+	bh=rTAIY6aQ5hb64k5weAhBRvT5KfxwL7qw3p8nyT7tcWs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Su0j3/GoYsuSy1q2Yq/l9iZrtIZlSXU4ITBMPREOhHgIAjRqCDeR3WKZMROV/c60BoVJdAxPkd1qKk/NpVLFEjDyd5pm11WQ4LChWFRYstavDbxsD35badrMkxPC7Jqb7ltLiJUqCRy1odbekfaU5YmZreKZOtm6pFjvnz9zOi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I3IYBSb7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=ByNtMW/QUdG9jDmsYfKyD9CbDjcLvMy4oyd8vabnMxsVYM94syHRBXoa1VsUESv8Sy6RJwBfC+UxewQt0Q1ijEHznPDV3dlK9gE9NblCbjyggYCkmCeUrOUSwCLhCmLRiMLRrT1m07bIWygqvtrAuINxoJC2wAPgrl0WebyoFvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TriR2BpN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I3IYBSb7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TriR2BpN"
 Received: by smtp.kernel.org (Postfix)
-	id B4EE2C4AF0C; Mon,  4 Nov 2024 14:19:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE647C4CED2;
-	Mon,  4 Nov 2024 14:19:48 +0000 (UTC)
+	id C82D0C4CED0; Mon,  4 Nov 2024 14:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D39CC4CED5;
+	Mon,  4 Nov 2024 14:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730729992;
-	bh=IL6ApZj/AEN4ogtSsw2hRDlMG6U3NVDiHfarNqZTetA=;
+	s=k20201202; t=1730729996;
+	bh=rTAIY6aQ5hb64k5weAhBRvT5KfxwL7qw3p8nyT7tcWs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=I3IYBSb7xqbhf/xrxG9aeUpCxW5cDBX8vb4IgsqY4dWay8VPnglmCXpA8J+7eQtvN
-	 WbKW+IDLv9D9sD6EPSgP3zhPitQmrzThubRwPz6PLbnlbQujWHGDBzlNchq3QyPGsM
-	 PCpe16y8X8FlSbFUppTsjSuKOc5lO62vHyzVKcwrE7uWCry3brGx5GOX6eXXa00ZtU
-	 xM2TabW4nDXffivE99LGchAf1TOSmZu+MpQNhdjiuTASiBRfwj4MsEwqt26hrxgVjU
-	 s4dGLrcP9NZuC121jUto6vthrwQaIlcW+c0H453fo/UhUdPrT4iAKdD/2iCxdukdQc
-	 alOI5kkjB0JzQ==
+	b=TriR2BpNeEIc6o1Ght8c2kGxwvaLn/is7DQ/L3QYweYlrqVilNA//Zmg2d4Ev0ru/
+	 /yTafdUmKjt3kC6j1jc8PphJd3R++zesLmMvz/6RLQJMiPJYxFpDVJ9r7Vz8QYqtci
+	 gHqeuqipjttdKUZteUVMQ169c46n/je14GZLhcYgPwWTJVGm+ExW0aU460Y1iMtr6A
+	 xnyXmGVqTDmy2kDNItDSG1OmoxZelogk0lSvLEPxbYN/kI4s8F58wNtuVyUWIinUTq
+	 MQF0p6KiXbs2WUnL2+vRu4oTvrEkRgLgfdISeAaz/dYls2HeaKBwqxuTzPu+ZOlfmj
+	 CUjD3oGUYKF0w==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To: Lee Jones <lee@kernel.org>
 Cc: Pavel Machek <pavel@ucw.cz>,
@@ -45,11 +45,10 @@ Cc: Pavel Machek <pavel@ucw.cz>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	devicetree@vger.kernel.org,
-	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH leds v5 05/12] dt-bindings: leds: cznic,turris-omnia-leds: Allow interrupts property
-Date: Mon,  4 Nov 2024 15:19:17 +0100
-Message-ID: <20241104141924.18816-6-kabel@kernel.org>
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH leds v5 06/12] leds: turris-omnia: Document driver private structures
+Date: Mon,  4 Nov 2024 15:19:18 +0100
+Message-ID: <20241104141924.18816-7-kabel@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241104141924.18816-1-kabel@kernel.org>
 References: <20241104141924.18816-1-kabel@kernel.org>
@@ -62,48 +61,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Extend the cznic,turris-omnia-leds binding with interrupts property,
-specifying the global LED brightness changed by button press interrupt.
+Add documentation for driver private structures, `struct omnia_leds` and
+`struct omnia_led`.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/leds/cznic,turris-omnia-leds.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/leds/leds-turris-omnia.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml b/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml
-index 34ef5215c150..f52f6304c79e 100644
---- a/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml
-+++ b/Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml
-@@ -23,6 +23,12 @@ properties:
-     description: I2C slave address of the microcontroller.
-     maxItems: 1
+diff --git a/drivers/leds/leds-turris-omnia.c b/drivers/leds/leds-turris-omnia.c
+index 50fef4389c93..7d2ed0c6500a 100644
+--- a/drivers/leds/leds-turris-omnia.c
++++ b/drivers/leds/leds-turris-omnia.c
+@@ -19,6 +19,15 @@
+ /* MCU controller I2C address 0x2a, needed for detecting MCU features */
+ #define OMNIA_MCU_I2C_ADDR	0x2a
  
-+  interrupts:
-+    description:
-+      Specifier for the global LED brightness changed by front button press
-+      interrupt.
-+    maxItems: 1
-+
-   "#address-cells":
-     const: 1
++/**
++ * struct omnia_led - per-LED part of driver private data structure
++ * @mc_cdev:		multi-color LED class device
++ * @subled_info:	per-channel information
++ * @cached_channels:	cached values of per-channel brightness that was sent to the MCU
++ * @on:			whether the LED was set on
++ * @hwtrig:		whether the LED blinking was offloaded to the MCU
++ * @reg:		LED identifier to the MCU
++ */
+ struct omnia_led {
+ 	struct led_classdev_mc mc_cdev;
+ 	struct mc_subled subled_info[OMNIA_LED_NUM_CHANNELS];
+@@ -29,6 +38,13 @@ struct omnia_led {
  
-@@ -56,6 +62,7 @@ additionalProperties: false
- examples:
-   - |
+ #define to_omnia_led(l)		container_of(l, struct omnia_led, mc_cdev)
  
-+    #include <dt-bindings/interrupt-controller/irq.h>
-     #include <dt-bindings/leds/common.h>
- 
-     i2c {
-@@ -65,6 +72,7 @@ examples:
-         led-controller@2b {
-             compatible = "cznic,turris-omnia-leds";
-             reg = <0x2b>;
-+            interrupts-extended = <&mcu 11 IRQ_TYPE_NONE>;
-             #address-cells = <1>;
-             #size-cells = <0>;
- 
++/**
++ * struct omnia_leds - driver private data structure
++ * @client:			I2C client device
++ * @lock:			mutex to protect
++ * @has_gamma_correction:	whether the MCU firmware supports gamma correction
++ * @leds:			flexible array of per-LED data
++ */
+ struct omnia_leds {
+ 	struct i2c_client *client;
+ 	struct mutex lock;
 -- 
 2.45.2
 
