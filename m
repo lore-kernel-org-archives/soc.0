@@ -1,80 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7731F185954
-	for <soc@lists.linux.dev>; Tue,  5 Nov 2024 03:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B48318F2F7
+	for <soc@lists.linux.dev>; Tue,  5 Nov 2024 09:07:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730777167; cv=none; b=sAFOMEMgLo0ukeUM3SumnEg+fcOpIO9l2RC8ePAYhbgpj5+mLT17WX711TtmqHqzhTIRzFKMp0pjLJyju+qQyjS94HGxsJgmbyljs4gMvgaTmFH5JcD3biFnzsePETRKEnU9HTwpTQoCLeD7V5/sCdtPrc3+CTUn/ECg1N9860A=
+	t=1730797678; cv=none; b=HsAeXhlq8uwmk5oHGibHEo7vxWNYpkcli0HbHuu1+kTvYKzy2SkNSsTz1QkezpGChphZ8Drx9T8mfNsxH8ZohX1CY55R1ofPTDdugi05zJMyQv6NbS6SN8exikeOPVlOVB/gwKdiOV5BAxVoYX3i6lzzwRTBmJQNZ6tackZUTJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730777167; c=relaxed/simple;
-	bh=H3V8QZZl/ANZDQGwjdKAQwgsQgaEeVu8bl2VnMkliGo=;
+	s=arc-20240116; t=1730797678; c=relaxed/simple;
+	bh=pmGq4bxmNkXH43e+/yMhBxMa+keTYDeRSUEaiaZ43bQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I48NQcd0gFfhrC10q8gVJ4FlxpeHbrr/5IQgn6NZ1+3Ik+MGSBwf/U3QT1IzttFRVG7fYFjh87rKX7EN+QMoNpXPSPDpXKZkX/R8EdbW7erxqLrKImdPBm7IVydIXHrmvx+pNJ450iSqQTNEamLSGmgx9wfu2PIFqST8v6n2q/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VcF7TQHm; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gODSsSZIzxGYkiAIk6RehcCkVxEE1T+urA0+lwWkH8mXAkhHUevHj8wkReeTEyVbf4ZtN98YRVeZShBj1twvMCfbIxdPsqIQHsX7eI1cN9BUGMD9PptNOYrFlb63yHJuicOzY6O+ZwULfRXw0U1yD+PP702l4vN3LaSDL7y9reo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tM/s6U06; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VcF7TQHm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tM/s6U06"
 Received: by smtp.kernel.org (Postfix)
-	id F3E6AC4CED9; Tue,  5 Nov 2024 03:26:06 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 262CBC4CED3;
-	Tue,  5 Nov 2024 03:26:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 262CBC4CED3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730777166; x=1762313166;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=H3V8QZZl/ANZDQGwjdKAQwgsQgaEeVu8bl2VnMkliGo=;
-  b=VcF7TQHmYPE9TQ84fVnX6SL9QgLzVbOjfm7eegMHU1ebqO0DxBJToNrd
-   vjREW+uX6sKLF/H3xB8GsXpTwSdlUb5YaN3/lR1yqOJIYBIyIe4ujvSXU
-   Im5rKwhSVHF7rCipBf93k7vTJKacObGsqigQqPn8qOTdcp78qPaC+Dz4A
-   PJtan95YOlNeNCLJwSoovuRF0yToR4tY7ovc79WS7EqysSK/M3TYd+z1/
-   cyMVqZOsJl8awxZRX2d39PtltD2jSeKZdJJLA4LWbQWiAQU0eeZsjNiP/
-   CQjsO/f+1wawB6Uspje77U15Hr2LwuKqUsnvJBBrqIUp9nR7E/2yCRfqV
-   g==;
-X-CSE-ConnectionGUID: gD1x3SX4ROqH7BIV8uMKaA==
-X-CSE-MsgGUID: olkHp/P1QP+BNZf2TxEXPQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="55906224"
-X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
-   d="scan'208";a="55906224"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 19:26:05 -0800
-X-CSE-ConnectionGUID: KWHu0FwZTgCqktjXEqHSsA==
-X-CSE-MsgGUID: fh5TW4D9QFiGV+bTPr4gmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
-   d="scan'208";a="87788402"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Nov 2024 19:26:01 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8ACc-000lYH-2e;
-	Tue, 05 Nov 2024 03:25:58 +0000
-Date: Tue, 5 Nov 2024 11:25:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Lee Jones <lee@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, Pavel Machek <pavel@ucw.cz>,
-	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
-	arm@kernel.org, Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH leds v5 07/12] leds: turris-omnia: Notify sysfs on MCU
- global LEDs brightness change
-Message-ID: <202411051138.jzDE6sBH-lkp@intel.com>
-References: <20241104141924.18816-8-kabel@kernel.org>
+	id EDE6CC4CED9; Tue,  5 Nov 2024 09:07:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68519C4CECF;
+	Tue,  5 Nov 2024 09:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730797677;
+	bh=pmGq4bxmNkXH43e+/yMhBxMa+keTYDeRSUEaiaZ43bQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tM/s6U06yMCdIMZ+I6yPyi159xDRefUguxRfmo4V22GQy/aYgZTJBt36mG8iwHqFd
+	 NozJbUa5TbWLQFh+wGxtFttgp5o/jYvONUZCBQnTafkoSoYYYOBF83t+95rxrWaVrS
+	 /hgJMdO1QYub5jPqWu0EUJ2eNh0Wf4Tkl05ORdDTx0B89q8wS7nVN7VR91mkDfX3VX
+	 cRuVMsw5vy4m+d4aVnBgl2teXhjI8aZ2CyPv3SkTFEaFcyb8BNPjSffrIqcwFNtx6V
+	 MFMgjYB6JxbxCsGxGz9ueLr3wND9JQJHP/gv9SVb3AobG6xiXhHPoZG1NjwqvdnNGz
+	 AX1ZVGO1dqgXg==
+Date: Tue, 5 Nov 2024 10:07:51 +0100
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	arm@kernel.org, Hans de Goede <hdegoede@redhat.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH leds v5 02/12] leds: turris-omnia: Use command execution
+ functions from the MCU driver
+Message-ID: <y57d4i3kzk2w7bceuikfrr37ba2iwzdysj3ojjhexrvq6il23f@kkglnapi552l>
+References: <20241104141924.18816-1-kabel@kernel.org>
+ <20241104141924.18816-3-kabel@kernel.org>
+ <ZyjfbOkJgpWVvj9v@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -84,60 +53,69 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241104141924.18816-8-kabel@kernel.org>
+In-Reply-To: <ZyjfbOkJgpWVvj9v@smile.fi.intel.com>
 
-Hi Marek,
+On Mon, Nov 04, 2024 at 04:51:24PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 04, 2024 at 03:19:14PM +0100, Marek Behún wrote:
+> > Use the MCU command execution functions from the MCU driver instead of
+> > the ad-hoc implementation in the LED driver. This allows as to drop the
+> > LED driver implementation, which is a duplicate.
+> 
+> ...
+> 
+> > +static int omnia_match_mcu_client(struct device *dev, void *data)
+> > +{
+> > +	struct i2c_client *client;
+> > +
+> > +	client = i2c_verify_client(dev);
+> > +	if (!client)
+> > +		return 0;
+> > +
+> > +	return client->addr == OMNIA_MCU_I2C_ADDR;
+> > +}
+> > +
+> > +static int omnia_find_mcu_and_get_features(struct device *dev)
+> > +{
+> > +	struct device *mcu_dev;
+> > +	int ret;
+> > +
+> > +	mcu_dev = device_find_child(dev->parent, NULL, omnia_match_mcu_client);
+> > +	if (!mcu_dev)
+> > +		return -ENODEV;
+> > +
+> > +	ret = omnia_mcu_get_features(i2c_verify_client(mcu_dev));
+> > +
+> > +	put_device(mcu_dev);
+> > +
+> > +	return ret;
+> >  }
+> 
+> I'm wondering why the MCU driver (and node) is not represented as syscon
+> (with some regmap beneath it).
+> 
+> In such a case it would be something like
+> 
+>   foo = syscon_regmap_lookup_by_compatible();
+> 
+> here instead of all these dances.
 
-kernel test robot noticed the following build errors:
+Hi Andy,
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.12-rc6]
-[cannot apply to lee-leds/for-leds-next robh/for-next next-20241104]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+the MCU interface is command-reply oriented. It is incompatible with
+regmap. I investigated this back in 2019 and explained to Jacek why it
+is not possible, but can't find the e-mail on mailing lists, so I am
+attaching it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Beh-n/turris-omnia-mcu-interface-h-Move-command-execution-function-to-global-header/20241104-223435
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241104141924.18816-8-kabel%40kernel.org
-patch subject: [PATCH leds v5 07/12] leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
-config: arm-randconfig-003-20241105 (https://download.01.org/0day-ci/archive/20241105/202411051138.jzDE6sBH-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411051138.jzDE6sBH-lkp@intel.com/reproduce)
+So regmap is most probably not possible, unless things changed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411051138.jzDE6sBH-lkp@intel.com/
+It is possible to add MCU node to the DT binding and find the device
+that way. But if the device-tree does not contain the MCU node, the
+driver would still have to fall back to this dance, for backwards
+compatibility. Otherwise it would not be able to determine whether gamma
+correction is supported with old device tree, as it does currently.
 
-All errors (new ones prefixed by >>):
+I guess I could break backwards compatibility with old device tree with
+this small feature. I don't think there are any users that don't use
+TurrisOS, do upgrade the kernel, but don't upgrade the device-tree...
 
-   arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `omnia_cmd_set_color':
->> include/linux/turris-omnia-mcu-interface.h:275:(.text+0x5a): undefined reference to `omnia_cmd_write_read'
-   arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `omnia_cmd_read_u16':
-   include/linux/turris-omnia-mcu-interface.h:311:(.text+0xaa): undefined reference to `omnia_cmd_write_read'
-   arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `gamma_correction_show':
-   include/linux/turris-omnia-mcu-interface.h:311:(.text+0x1a2): undefined reference to `omnia_cmd_write_read'
-   arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `omnia_cmd_write_u8':
-   include/linux/turris-omnia-mcu-interface.h:275:(.text+0x1c8): undefined reference to `omnia_cmd_write_read'
-   arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `brightness_show':
-   include/linux/turris-omnia-mcu-interface.h:311:(.text+0x4c2): undefined reference to `omnia_cmd_write_read'
-
-
-vim +275 include/linux/turris-omnia-mcu-interface.h
-
-9f74fe5691025f Marek Behún 2024-11-04  267  
-9f74fe5691025f Marek Behún 2024-11-04  268  int omnia_cmd_write_read(const struct i2c_client *client,
-9f74fe5691025f Marek Behún 2024-11-04  269  			 void *cmd, unsigned int cmd_len,
-9f74fe5691025f Marek Behún 2024-11-04  270  			 void *reply, unsigned int reply_len);
-9f74fe5691025f Marek Behún 2024-11-04  271  
-9f74fe5691025f Marek Behún 2024-11-04  272  static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
-9f74fe5691025f Marek Behún 2024-11-04  273  				  unsigned int len)
-9f74fe5691025f Marek Behún 2024-11-04  274  {
-9f74fe5691025f Marek Behún 2024-11-04 @275  	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
-9f74fe5691025f Marek Behún 2024-11-04  276  }
-9f74fe5691025f Marek Behún 2024-11-04  277  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Marek
