@@ -1,153 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9855A1D2B10
-	for <soc@lists.linux.dev>; Tue,  5 Nov 2024 10:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CDB1D95A2
+	for <soc@lists.linux.dev>; Tue,  5 Nov 2024 14:49:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730803965; cv=none; b=SsWm8FTUPEg0KylDdYtfZiJufNcHyGwh8OjbzBO15wttLYMgS27h1g1tiBxx/oaBB85XnaS90MZDzI5faNkqn0a+FZPidDwUZr+Uj6kqaCabc9malYn+SmpitboVZhjbuUPHrld05JwK1CH+xuAKpmrkpu70XPiMCGUAlEkdKJQ=
+	t=1730818193; cv=none; b=Z4LyJv6xqeuNE1fRsF35Z0bbOqmF1wbD7lZmdcMA159bhlzvE7PKt6jy4ZmzMk3iLtsl8Oi2JKmlFYQWQs+fUfO7C5rB74qKjxbZIlB9DmzQP9fWFMmDeTIyQxSHCYK9vlFiwRS+7OMLYSJWcwRD8t0GmtyyF+zJzjw6yelPrTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730803965; c=relaxed/simple;
-	bh=D7OKzIFLWDxMKxbYiwuULHL6gd5L9mo+9tr/4++FAnM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hxy9EVXW4pKFFMrLsOIx97HubzM9f1cuSYkY87+pLoKRIp1HutsVbuIdrlupb9a4NUG6Fo9EuM1hLkIFcO9zwdBR701EWgyIRmdCYkhPLk/3qlw/J0yXCs7fUvG8+y24NbsuizbQeXbbWXXkerpRlb0/kd4u4Hnt9aW2G92XBpk=
+	s=arc-20240116; t=1730818193; c=relaxed/simple;
+	bh=eVgItqG+GImhCC0U26TnBXZER+rPehddUZBS6jR1FGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LlETE0laT7B84rdgCVC1sCX7qJJfF72nfkWOkSiYE3gcKWeiLhm4jLBFkcpYU4JuHSx0YuTYxWqxgXA25xTleBKB6YHF5c6wv7+mM7pzbaGwpgL4Qqy585/muQqAcPy/XPjx/+7P531uVJOqgof67z3du/98dO49m63Q8FK6Dzk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 47934C4CED0; Tue,  5 Nov 2024 10:52:45 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 0F457C4AF0C; Tue,  5 Nov 2024 14:49:53 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1B1E0C4CECF
-	for <soc@kernel.org>; Tue,  5 Nov 2024 10:52:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B1E0C4CECF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1t8HAv-00054d-6F; Tue, 05 Nov 2024 11:52:41 +0100
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [GIT PULL] Reset controller updates for v6.13
-Date: Tue,  5 Nov 2024 11:52:29 +0100
-Message-Id: <20241105105229.3729474-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.39.5
+	by smtp.kernel.org (Postfix) with ESMTPS id D501CC4CED0;
+	Tue,  5 Nov 2024 14:49:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D501CC4CED0
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: 9sQ/0tMdSxGQFneyAC9/Zg==
+X-CSE-MsgGUID: jVglFMy2S163XkhSU/pUGQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="34354562"
+X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
+   d="scan'208";a="34354562"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 06:49:52 -0800
+X-CSE-ConnectionGUID: lluOpqQhSSSA9uNkzDRNfg==
+X-CSE-MsgGUID: 3TQ5IxQWSI2uPWt4rP1zNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="88833322"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 06:49:48 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andy@kernel.org>)
+	id 1t8KsK-0000000BR9F-1Uni;
+	Tue, 05 Nov 2024 16:49:44 +0200
+Date: Tue, 5 Nov 2024 16:49:44 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
+	arm@kernel.org, Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH leds v5 02/12] leds: turris-omnia: Use command execution
+ functions from the MCU driver
+Message-ID: <ZyowiA5ibJTO_Lc8@smile.fi.intel.com>
+References: <20241104141924.18816-1-kabel@kernel.org>
+ <20241104141924.18816-3-kabel@kernel.org>
+ <ZyjfbOkJgpWVvj9v@smile.fi.intel.com>
+ <y57d4i3kzk2w7bceuikfrr37ba2iwzdysj3ojjhexrvq6il23f@kkglnapi552l>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+In-Reply-To: <y57d4i3kzk2w7bceuikfrr37ba2iwzdysj3ojjhexrvq6il23f@kkglnapi552l>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Dear arm-soc maintainers,
+On Tue, Nov 05, 2024 at 10:07:51AM +0100, Marek Behún wrote:
+> On Mon, Nov 04, 2024 at 04:51:24PM +0200, Andy Shevchenko wrote:
+> > On Mon, Nov 04, 2024 at 03:19:14PM +0100, Marek Behún wrote:
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+...
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+> > I'm wondering why the MCU driver (and node) is not represented as syscon
+> > (with some regmap beneath it).
+> > 
+> > In such a case it would be something like
+> > 
+> >   foo = syscon_regmap_lookup_by_compatible();
+> > 
+> > here instead of all these dances.
+> 
+> Hi Andy,
+> 
+> the MCU interface is command-reply oriented. It is incompatible with
+> regmap.
 
-are available in the Git repository at:
+I'm not sure I understand the impediment here. There are plenty of hardware
+that uses the similar approach and well compatible with regmap (assuming
+custom ->read*() / ->write*() callbacks)...
 
-  git://git.pengutronix.de/pza/linux.git tags/reset-for-v6.13
+> I investigated this back in 2019 and explained to Jacek why it
+> is not possible, but can't find the e-mail on mailing lists, so I am
+> attaching it.
 
-for you to fetch changes up to cf3e10cc0e88bba51d330ef851bcffa0bce1070c:
+...but I'm not insisting you to revisit this right now, just maybe
+you can think more about this again at some point.
 
-  misc: lan966x_pci: Fix dtc warn 'Missing interrupt-parent' (2024-11-04 14:34:25 +0100)
+> So regmap is most probably not possible, unless things changed.
+> 
+> It is possible to add MCU node to the DT binding and find the device
+> that way. But if the device-tree does not contain the MCU node, the
+> driver would still have to fall back to this dance, for backwards
+> compatibility. Otherwise it would not be able to determine whether gamma
+> correction is supported with old device tree, as it does currently.
+> 
+> I guess I could break backwards compatibility with old device tree with
+> this small feature. I don't think there are any users that don't use
+> TurrisOS, do upgrade the kernel, but don't upgrade the device-tree...
 
-----------------------------------------------------------------
-Reset controller updates for v6.13
+-- 
+With Best Regards,
+Andy Shevchenko
 
-* Split the Amlogic reset-meson driver into platform and auxiliary
-  bus drivers. Add support for the reset controller in the G12 and
-  SM1 audio clock controllers.
-* Replace the list of boolean parameters to the internal
-  reset_control_get functions with an enum reset_flags bitfield,
-  to make the code more self-descriptive.
-* Add devres helpers to request pre-deasserted (and automatically
-  re-asserting during cleanup) reset controls. This allows reducing
-  boilerplate in drivers that deassert resets for the lifetime of a
-  device.
-* Use the new auto-deasserting devres helpers in reset-uniphier-glue
-  as an example.
-* Add support for the LAN966x PCI device in drivers/misc, as a
-  dependency for the following reset-microchip-sparx5 patches.
-* Add support for being used on the LAN966x PCI device to the
-  reset-microchip-sparx5 driver.
 
-Commit 86f134941a4b ("MAINTAINERS: Add the Microchip LAN966x PCI driver
-entry") introduces a trivial merge conflict with commit 7280f01e79cc
-("net: lan969x: add match data for lan969x") from the net-next tree [1].
-
-[1] https://lore.kernel.org/all/20241101122505.3eacd183@canb.auug.org.au/
-
-----------------------------------------------------------------
-ClÃ©ment LÃ©ger (2):
-      reset: mchp: sparx5: Allow building as a module
-      reset: mchp: sparx5: set the dev member of the reset controller
-
-Herve Codina (6):
-      misc: Add support for LAN966x PCI device
-      MAINTAINERS: Add the Microchip LAN966x PCI driver entry
-      reset: mchp: sparx5: Map cpu-syscon locally in case of LAN966x
-      reset: mchp: sparx5: Add MCHP_LAN966X_PCI dependency
-      misc: lan966x_pci: Fix dtc warns 'missing or empty reg/ranges property'
-      misc: lan966x_pci: Fix dtc warn 'Missing interrupt-parent'
-
-Jerome Brunet (9):
-      reset: amlogic: convert driver to regmap
-      reset: amlogic: use generic data matching function
-      reset: amlogic: make parameters unsigned
-      reset: amlogic: add driver parameters
-      reset: amlogic: use reset number instead of register count
-      reset: amlogic: add reset status support
-      reset: amlogic: move drivers to a dedicated directory
-      reset: amlogic: split the device core and platform probe
-      reset: amlogic: add auxiliary reset driver support
-
-Philipp Zabel (4):
-      reset: amlogic: Fix small whitespace issue
-      reset: replace boolean parameters with flags parameter
-      reset: Add devres helpers to request pre-deasserted reset controls
-      reset: uniphier-glue: Use devm_reset_control_bulk_get_shared_deasserted()
-
- MAINTAINERS                                        |   6 +
- drivers/misc/Kconfig                               |  24 ++
- drivers/misc/Makefile                              |   3 +
- drivers/misc/lan966x_pci.c                         | 215 ++++++++++++++++
- drivers/misc/lan966x_pci.dtso                      | 177 +++++++++++++
- drivers/pci/quirks.c                               |   1 +
- drivers/reset/Kconfig                              |  19 +-
- drivers/reset/Makefile                             |   3 +-
- drivers/reset/amlogic/Kconfig                      |  27 ++
- drivers/reset/amlogic/Makefile                     |   4 +
- .../reset/{ => amlogic}/reset-meson-audio-arb.c    |   0
- drivers/reset/amlogic/reset-meson-aux.c            | 136 ++++++++++
- drivers/reset/amlogic/reset-meson-common.c         | 142 +++++++++++
- drivers/reset/amlogic/reset-meson.c                | 105 ++++++++
- drivers/reset/amlogic/reset-meson.h                |  28 +++
- drivers/reset/core.c                               | 119 ++++++---
- drivers/reset/reset-meson.c                        | 159 ------------
- drivers/reset/reset-microchip-sparx5.c             |  38 ++-
- drivers/reset/reset-uniphier-glue.c                |  24 +-
- include/linux/reset.h                              | 274 ++++++++++++++++-----
- include/soc/amlogic/reset-meson-aux.h              |  23 ++
- 21 files changed, 1235 insertions(+), 292 deletions(-)
- create mode 100644 drivers/misc/lan966x_pci.c
- create mode 100644 drivers/misc/lan966x_pci.dtso
- create mode 100644 drivers/reset/amlogic/Kconfig
- create mode 100644 drivers/reset/amlogic/Makefile
- rename drivers/reset/{ => amlogic}/reset-meson-audio-arb.c (100%)
- create mode 100644 drivers/reset/amlogic/reset-meson-aux.c
- create mode 100644 drivers/reset/amlogic/reset-meson-common.c
- create mode 100644 drivers/reset/amlogic/reset-meson.c
- create mode 100644 drivers/reset/amlogic/reset-meson.h
- delete mode 100644 drivers/reset/reset-meson.c
- create mode 100644 include/soc/amlogic/reset-meson-aux.h
