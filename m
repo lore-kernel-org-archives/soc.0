@@ -1,62 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466661DE3C2
-	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 10:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C901DB377
+	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 11:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730890400; cv=none; b=JsBszxHFjGQIZXsFqMFq0RgOfxFuD8+wtQHN5NqMe8XZhEp6N/cW8BeS04xBQVT08QT3vSFI9cxG994N1FKD4odsB3hZQ+f4LPk3M4lx/IjIFyPqGEx6R+2czWfBA4GCzv8VG3vxwMJJC6OlPp+72Go5AbqZy2l9OaxgKVa4jAk=
+	t=1730890922; cv=none; b=lh+qxI7gdMA5mqHQC4SmvkE0dSHLFBT+ooUONFfZxBlmqstw+cJPL38Ny7hxMFJ9Kq5MrgjHo1TLYT/OZobkieV+S2GtgHT3W6/GWN76v4Subu0jYA+lraflz0pQNROWOo786CNX3S7J/hUPIucOYggqEpYg9GtINu4Mjuoz4g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730890400; c=relaxed/simple;
-	bh=5PHI4fPaMZ58YGXZOlVUlk2Z8m0C506quXMMgauBu/8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tQM36PG1DKqpvXN2nja8YOQi1dYRu6SIwm6A1qHRcCiyFj8XPOr4GTtPsfXIgYoRyNGuEWiiDN7ynfeyiAkI69aJWULfbDN8AnV8ZijSBXHCmJbE8LL6VKRP1m6r78dF5CRdhZvdUTkP7CXFDnm6w9bhAKTF05q8S+GJU1DeyMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VF2UhJsT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730890922; c=relaxed/simple;
+	bh=R4KFIpTwSYwi0uSTr4qqyTaoElUcnWINoFL/IwPq+6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AhhA1T1OMZyT853N6hV6w0vaoEwXrqjOSpGwgOx6xFpPxsepCvwYDp6mHlc+goB01N0d0v1eVQat49+mr8XOY7WNKzK0bJSBvHU+Is4ge8VI/P2Pf8ODElnv3N1rTstqHSJo4FJ85jDMwmU8vYkV2wRI8+W4+O2nuFFc620+u+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSg9NINL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VF2UhJsT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSg9NINL"
 Received: by smtp.kernel.org (Postfix)
-	id F0AD7C4AF0B; Wed,  6 Nov 2024 10:53:19 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5D85CC4CECD;
-	Wed,  6 Nov 2024 10:53:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D85CC4CECD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 18CC4240002;
-	Wed,  6 Nov 2024 10:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730890390;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j480Ld0gUMh0K3CHAhi0RY/yU5j2pbiXxo67wU5UQ7c=;
-	b=VF2UhJsTwUI53MhfXbHVKdTByUSYaNT3JHKD1+OVTTLQSG+fqFS0b7b7J1K1GNE9jfTiRU
-	TySuIorlpETcGEMQ20f+ltX2ywlwKDtAtnGBricFogGuoYUT9fYZc2hEux33Ev0RoMTE+k
-	NB2odWNfJ8uz4SucgD6aD9VBsAsEHmWnbCginvGjMB6tS0G3r1dcEnU0naBvBxLbP+tIVN
-	xE1K0ap6nxtsLF0BoxFyPyFx1HxavpFHIj32EFBBaplh+H0A/cu8nH27BD/h2uyNIUk+OI
-	2jmNxRoqfVJdGRHh6vIaHuu7HkoZnLfrCNZvMWUiy8UGi69aCEv/dQEuaP03WA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Lee Jones <lee@kernel.org>, Marek =?utf-8?Q?Beh=C3=BAn?=
- <kabel@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, Arnd Bergmann
- <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy Shevchenko
- <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?Q?J?=
- =?utf-8?Q?=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Sebastian
- Hesselbarth <sebastian.hesselbarth@gmail.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH leds v5 01/12] turris-omnia-mcu-interface.h: Move
- command execution function to global header
-In-Reply-To: <20241106102840.GN1807686@google.com>
+	id 7D94DC4AF0C; Wed,  6 Nov 2024 11:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AB4C4CECD;
+	Wed,  6 Nov 2024 11:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730890922;
+	bh=R4KFIpTwSYwi0uSTr4qqyTaoElUcnWINoFL/IwPq+6k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nSg9NINL3R1lnxQ7wJvkKF2/r1poB6BGYDQXWyGUchyJkytMyV1TsgUvAqcEv0frq
+	 WLAHXnmiRKUZipI5y/cCOmR77kqvRNA+I3wRDLI97UZIbSpcVELBKdIlOHi12B1PxV
+	 Rt8iaW/62qf0oAAyolbkPPE2p6T/6N+t/Z1qa2qJMoaBwUBijpBFZ/is6GOiQRajys
+	 Z/CDwCftb2a5U8kCBvAnok3JSCvhVCxAGxWQTINCrP5kKFomGaJgMYhdURg5uSof5v
+	 frD6XXrgfKx2JBzoT7uSs8UF+EW9YKjdGbEBvzbEQP8HlD5Peqnr/Mqrs4YcPudCRz
+	 621hjCV/w/t9w==
+Date: Wed, 6 Nov 2024 11:01:56 +0000
+From: Lee Jones <lee@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH leds v5 01/12] turris-omnia-mcu-interface.h: Move command
+ execution function to global header
+Message-ID: <20241106110156.GS1807686@google.com>
 References: <20241104141924.18816-1-kabel@kernel.org>
  <20241104141924.18816-2-kabel@kernel.org>
  <20241106102840.GN1807686@google.com>
-Date: Wed, 06 Nov 2024 11:53:08 +0100
-Message-ID: <87msic8wh7.fsf@BLaptop.bootlin.com>
+ <87msic8wh7.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -64,38 +56,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87msic8wh7.fsf@BLaptop.bootlin.com>
 
-Lee Jones <lee@kernel.org> writes:
+On Wed, 06 Nov 2024, Gregory CLEMENT wrote:
 
-> On Mon, 04 Nov 2024, Marek Beh=C3=BAn wrote:
->
->> Move the command execution functions from the turris-omnia-mcu platform
->> driver private header to the global turris-omnia-mcu-interface.h header,
->> so that they can be used by the LED driver.
->>=20
->> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
->> ---
->>  .../platform/cznic/turris-omnia-mcu-base.c    |   1 +
->>  drivers/platform/cznic/turris-omnia-mcu.h     | 130 -----------------
->>  include/linux/turris-omnia-mcu-interface.h    | 136 +++++++++++++++++-
->>  3 files changed, 136 insertions(+), 131 deletions(-)
->
-> Who needs to Ack this for me to take it via the LED tree?
+> Lee Jones <lee@kernel.org> writes:
+> 
+> > On Mon, 04 Nov 2024, Marek Behún wrote:
+> >
+> >> Move the command execution functions from the turris-omnia-mcu platform
+> >> driver private header to the global turris-omnia-mcu-interface.h header,
+> >> so that they can be used by the LED driver.
+> >> 
+> >> Signed-off-by: Marek Behún <kabel@kernel.org>
+> >> ---
+> >>  .../platform/cznic/turris-omnia-mcu-base.c    |   1 +
+> >>  drivers/platform/cznic/turris-omnia-mcu.h     | 130 -----------------
+> >>  include/linux/turris-omnia-mcu-interface.h    | 136 +++++++++++++++++-
+> >>  3 files changed, 136 insertions(+), 131 deletions(-)
+> >
+> > Who needs to Ack this for me to take it via the LED tree?
+> 
+> Usually, it's Arnd who takes these patches, so it could be him who needs
+> to acknowledge them. However, Marek is the maintainer of this driver, so
+> I think it's already okay for you to take it.
 
-Usually, it's Arnd who takes these patches, so it could be him who needs
-to acknowledge them. However, Marek is the maintainer of this driver, so
-I think it's already okay for you to take it.
+Okay, let's leave it for a little while.
 
+If Arnd does not protest, I'll take it in for v6.14.
 
-Gregory
-
->
-> --=20
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+Lee Jones [李琼斯]
