@@ -1,131 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE6718C00E
-	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 11:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A603F1DED58
+	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 12:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730891256; cv=none; b=VnvpMK7KyiVsp/jkTzvvGHk+ag7AT6EIXLIuc3gfqCEihfDoX/6jpZNKeQ9eiaHaLp5QDkKhr8oop7JT4UdXx1QEMmO8Qy6VtZldrn2GacIoP6OJMy9KNPZEWfzPl17UbO5yEmN9LKyJ/Aep3RDBSBenYWCtyiuxvUJFvAh/Fog=
+	t=1730895448; cv=none; b=YEMgaMXE3umW6agKXNvGhzdvuKtvftY2IK2SbKLgKg5DrPVM7Hywb0iWzrQtgbSeZdheoXqkGYzXJmbWzHcg2tEpIZjA1XvFaIXPyoHStiHmwTCbXLvNZaINbv5i37RiK1T8/Gr2AW1NTlcA5qG3ec2+ADmIxjy8l5lTwludsu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730891256; c=relaxed/simple;
-	bh=vK1xVMIZlvbW+4JVIa3lQbkLtS9Q8F8oR8T6F4m9ayk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kYB4bodY4VwqH0Z19UEBDtCBl4DpS5Emise3L3fH7h5pjvzHGAVZaQznuBI2oNfmPa35ZnTHKmAbuXMzbfQA6CJ6OtV3HP1KDAOiOYrD6Tx1Cs7nfFiXJ9CdUeK8nfFNu6dZcuzhFGJlsG54YE026ivliioRunObpGXLto5ZuD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730895448; c=relaxed/simple;
+	bh=i/wM7PZHZFJEg7x+YJLArxESnTqOgu6l1Q1hRu+GCfc=;
+	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kgrqcZhoGi8I6qhJjXAs0VPFxdfFN2azAWi7PUJfHfZLU3CdakhKdsIskEDh4r3ZDZwra1nrhCWSQD2ZEPEVFcJORQQfXZVEpPg7B8Dh8JNzfRiTqXg/nuxejByA0WDdMrmP2Q6dmhKoLM5c1nej3JY/Gma/CH50RC5FWXa/ids=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=y1FjKAkQ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="y1FjKAkQ"
 Received: by smtp.kernel.org (Postfix)
-	id EEFBEC4CED2; Wed,  6 Nov 2024 11:07:35 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id B9CE3C4CECD;
-	Wed,  6 Nov 2024 11:07:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B9CE3C4CECD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB52A1063;
-	Wed,  6 Nov 2024 03:08:01 -0800 (PST)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B282B3F6A8;
-	Wed,  6 Nov 2024 03:07:30 -0800 (PST)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.13
-Date: Wed,  6 Nov 2024 11:07:27 +0000
-Message-Id: <20241106110727.4007489-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	id 83F47C4AF0B; Wed,  6 Nov 2024 12:17:28 +0000 (UTC)
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C5693C4CECD;
+	Wed,  6 Nov 2024 12:17:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5693C4CECD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4A6CH8Ju067692;
+	Wed, 6 Nov 2024 06:17:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1730895428;
+	bh=Nd7Yyls8bxkG0sJ+SExvF+TjygQKqRXiCTn67uB60tY=;
+	h=Date:From:To:CC:Subject;
+	b=y1FjKAkQy+DIMAOY3LAIOFtY+pK8j13tRSL3QiLK0iDhwAa64FEkdG8O4m0cOFXtt
+	 1oM+AX6hbxLjzxg0s7vvsOFba/ioeifLpN2ndhMvOpTygMNSpM1KD2q3LEBUsNncy/
+	 3KDsQa3Ee43nX60nSKytjiuJH1cF1I8lie13uEyk=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A6CH8Hb017034;
+	Wed, 6 Nov 2024 06:17:08 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 6
+ Nov 2024 06:17:08 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 6 Nov 2024 06:17:07 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A6CH8Qn083811;
+	Wed, 6 Nov 2024 06:17:08 -0600
+Date: Wed, 6 Nov 2024 06:17:08 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony
+ Lindgren <tony@atomide.com>
+Subject: [GIT PULL] soc: ti: Driver updates for v6.13
+Message-ID: <20241106121708.rso5wvc7wbhfi6xk@maverick>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ih4nfsy4jsvbujjr"
+Content-Disposition: inline
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hi ARM SoC Team,
+--ih4nfsy4jsvbujjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please pull ! Sorry for the late PR but most of the changes are in -next
-for a while now.
+Hi,
 
-Regards,
-Sudeep
+Please pull
 
--->8
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-The following changes since commit 54962707f8b8b53812d3d7fca279a68c6e18faae:
-
-  firmware: arm_scmi: Use vendor string in max-rx-timeout-ms (2024-10-28 14:49:27 +0000)
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.13
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
+er-soc-for-v6.13
 
-for you to fetch changes up to 109aa654f85c5141e813b2cd1bd36d90be678407:
+for you to fetch changes up to a4c14f509509a6a24f25edb7619f55f204a8433f:
 
-  firmware: arm_scpi: Check the DVFS OPP count returned by the firmware (2024-11-06 10:48:13 +0000)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.13
-
-Just couple of main additions:
-1. Support for variable I/O width within ARM SCMI shared memory area.
-
-   Some shared memory areas might only support a certain access width,
-   such as 32-bit, which memcpy_{from,to}_io() does not adhere to at least
-   on ARM64 by making both 8-bit and 64-bit accesses to such memory.
-
-    This support updates the shmem layer to support reading from and
-    writing to such shared memory area using the specified I/O width
-    in the Device Tree. The various transport layers making use of the
-    shmem.c code are updated accordingly to pass the I/O accessors that
-    they store. The device tree bindings are also updated for the same.
-
-2. Extension of SCMI transport bindings to add more properties
-
-   SCMI transports are characterized by a number of properties. The
-   values assumed by some of them tightly depend on the choices taken at
-   design time and on the overall archiecture of the specific platform:
-   things like timeouts, maximum message size and number of in-flight
-   messages are closely tied to the architecture of the platform like
-   number of SCMI agents on the system, physical memory available to the
-   SCMI platform and so on. Such details are not discoverable as they are
-   outside the scope of the SCMI protocol specification.
-
-   Currently such properties are simple default values defined at build
-   time, but the increasing number and variety of platforms using SCMI
-   with a wide range of designs has increased the need to have a way to
-   describe such properties across all these platforms.
-
-Apart from the above two, there is one NULL pointer dereference fix for
-very age old SCPI protocol driver which seems to be still in use on few
-platforms.
+  firmware: ti_sci: Remove use of of_match_ptr() helper (2024-10-25 12:56:3=
+7 -0500)
 
 ----------------------------------------------------------------
-Cristian Marussi (5):
-      firmware: arm_scmi: Account for SHMEM memory overhead
-      firmware: arm_scmi: Calculate virtio PDU max size dynamically
-      dt-bindings: firmware: arm,scmi: Introduce more transport properties
-      firmware: arm_scmi: Use max_msg and max_msg_size devicetree properties
-      firmware: arm_scmi: Relocate atomic_threshold to scmi_desc
+TI SoC driver updates for v6.13
 
-Florian Fainelli (2):
-      dt-bindings: sram: Document reg-io-width property
-      firmware: arm_scmi: Support 'reg-io-width' property for shared memory
+- knav_qmss_queue: Cleanups around request_irq params and redundant code.
+- ti_sci: Power management ops in preperation for suspend/resume capability.
+  Also includes dependency patch to export dev_pm_qos_read_value
+  (acked by Rafael).
 
-Luo Qiu (1):
-      firmware: arm_scpi: Check the DVFS OPP count returned by the firmware
+----------------------------------------------------------------
+Alessandro Zanni (1):
+      soc: ti: knav_qmss_queue: Drop redundant continue statement
 
- .../devicetree/bindings/firmware/arm,scmi.yaml     | 15 ++++
- Documentation/devicetree/bindings/sram/sram.yaml   |  6 ++
- drivers/firmware/arm_scmi/common.h                 | 45 ++++++++++--
- drivers/firmware/arm_scmi/driver.c                 | 42 ++++++-----
- drivers/firmware/arm_scmi/shmem.c                  | 85 ++++++++++++++++++++--
- drivers/firmware/arm_scmi/transports/mailbox.c     | 15 ++--
- drivers/firmware/arm_scmi/transports/optee.c       | 19 +++--
- drivers/firmware/arm_scmi/transports/smc.c         | 13 +++-
- drivers/firmware/arm_scmi/transports/virtio.c      | 15 ++--
- drivers/firmware/arm_scpi.c                        |  3 +
- 10 files changed, 204 insertions(+), 54 deletions(-)
+Andrew Davis (1):
+      firmware: ti_sci: Remove use of of_match_ptr() helper
+
+Dave Gerlach (1):
+      firmware: ti_sci: Introduce Power Management Ops
+
+Georgi Vlaev (1):
+      firmware: ti_sci: Add support for querying the firmware caps
+
+Jinjie Ruan (1):
+      soc: ti: knav_qmss_queue: Use IRQF_NO_AUTOEN flag in request_irq()
+
+Kevin Hilman (1):
+      firmware: ti_sci: add CPU latency constraint management
+
+Markus Schneider-Pargmann (1):
+      PM: QoS: Export dev_pm_qos_read_value
+
+Vibhore Vardhan (1):
+      firmware: ti_sci: Add system suspend and resume call
+
+ drivers/base/power/qos.c               |   1 +
+ drivers/firmware/ti_sci.c              | 489 +++++++++++++++++++++++++++++=
++++-
+ drivers/firmware/ti_sci.h              | 143 +++++++++-
+ drivers/soc/ti/knav_qmss_queue.c       |   6 +-
+ include/linux/soc/ti/ti_sci_protocol.h |  30 ++
+ 5 files changed, 662 insertions(+), 7 deletions(-)
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--ih4nfsy4jsvbujjr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmcrXj0ACgkQ3bWEnRc2
+JJ36TxAAh4kYatZvq4I71XeciAfFK6VujsT+qEMjXfxf077vPRRiJkvjV3Kr0Yok
+RvuYgSysH7zx5vFYEnvImlgE7cesq5DQeXeMalFSv4QSU+wKgDI5K7EJefAfXX1x
+0BFQG1cIcdMJ1D1etL/evVrB2KG7V/zsouVVRvlx2rAmqVYREYFasO1GbbB4P4Df
+UTHFORVlqRby3HuoLujCBULsE8giPx0XJEu2qgOVbgKjzaeXcVOkqS17W//EszTZ
+8bRiGDhF73oWoDyzo5ERgNI4QyaWAQJSfROt3Atm4DBYiAkWvrPT4JoLhrZRvJ1v
+1OYLxs5sCFY/uv2Fryq1fCPmYSV5JXorgOfJRdPa2LDURZvBaFn744brbz1yFtAT
+QaxalE5ISlN+PeanHtqJ1Cov02BxdT1hv2nhmCPUWaOM2iQ+3wD9rQiww1qhQmgR
+XthNmZ2l7toBzdw3zKvX5CN9FbMZ5oXRLvWG8/NzXcFGjJbxBm9wqRVaCLSqA8Cl
+vq8KTTb1XTTVveBc1rOBfQ5EiF6GKRlqMcpzY5NcSpfJRgzCST43EgZsWm8y8aO5
+XQK8n04nF7QLP4MLvVr8O41xDXaB+oO95y2PgbVNgz/Ktijakxc4/2Dn8gJrqnsV
+G9SXyl7SaLch0YYlArACBiZeIIkCVr2EGsUMRkRrGHRTl5tE7kI=
+=3YLN
+-----END PGP SIGNATURE-----
+
+--ih4nfsy4jsvbujjr--
