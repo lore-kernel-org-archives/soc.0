@@ -1,141 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E00201011
-	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 13:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B6120127C
+	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 15:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730901464; cv=none; b=u4sW5ifvb3Goi8H/rZ84gtLnP7uOgpHPau3gwSyElxuliSbS0CsGAlcKSxFUs/Jyle8xC2qcrPjq74woKeHZn7NYRF/cKofBm4iq67w327VIr/46unPWhjl+YcHnYfl14VAN59W5cKlUdE6RtwmxX5cBJDmpuW563dIJs38YRKc=
+	t=1730908428; cv=none; b=J4stODPOKqq3fFYqrLsekdpnzqOti7oOsmsbF0uhQqXqu4EYZlzUGNDZhqMFS1mRmW9WveGhG7SqYVZhEKBwF8q8bzBLj57aBK+H5mWhuq38kVUV04Io9ZZdefjFYIeh9tre8Ga4oAUWXRSkmNipNR8uMZmjVUrm0UYQ+fRYjOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730901464; c=relaxed/simple;
-	bh=BwPjfhJ6zHiv9ahOO5Y1SN2iWZaAKh737Ie2cZw3Ipw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=WTVcxaMFVJmIliHZCIyeAn9fPOLnj2//sUEielbg44IdPm/HpIQO+M4s5+hFRwFJpIAlyUMhr9/uGOdgCxafvGDnYve/4Gi88AaMlkNM2tjS4+m43RV0Kxd0QURf3KI5R522InWatUOwXK8ZVzPfXE71K2rMSwxvkH/6PxzXXys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TesP+4rK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730908428; c=relaxed/simple;
+	bh=Yr2XYRl/QEdKuVaJlW7cGh64FWbceGPSwehS2+4ZYYQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uxPwzc8gBYcHSRpd7QHBA4le8Ai0MkO7A73YQ9ssblAVDkv+btYhylzotcgK1tAHzYJE+NN8mr1GoMl32fAuWCfS+Da19i7RNYf1L2Cj3d9d5k7TEp3FXRXObu/Pu2yF5ivqxtUDSjVdQHAZmcYQ8AJ8WJHyLz+4uX26U16OnFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfFzh+gp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TesP+4rK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfFzh+gp"
 Received: by smtp.kernel.org (Postfix)
-	id 2474BC4CED6; Wed,  6 Nov 2024 13:57:44 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 00500C4CED7;
-	Wed,  6 Nov 2024 13:57:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 00500C4CED7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4A6Dvced099950;
-	Wed, 6 Nov 2024 07:57:38 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1730901459;
-	bh=DSqnZgLZFmjR/zI09hPj35lExE9DozM7LRLSXNYuBeQ=;
-	h=Date:Subject:From:To:CC:References:In-Reply-To;
-	b=TesP+4rKGnJ6jtqqLzP9Yqm7ZsdGP4CH/HkGIMrdU7rORd+CDqLAdBQPBByR0pt9h
-	 wKcpnT7GG0WfBuolJIb4Ql/ADKwPuxA0QQZzdbYQySqDtt/g8Ql85pOVxuWKb/CgoS
-	 SZbL38q62GI1j1jAUcYp20FiVjtzyNuMcCCrNhLM=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4A6DvcYS002611
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 6 Nov 2024 07:57:38 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 6
- Nov 2024 07:57:38 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 6 Nov 2024 07:57:38 -0600
-Received: from [172.24.227.94] (uda0132425.dhcp.ti.com [172.24.227.94])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A6DvZWm062961;
-	Wed, 6 Nov 2024 07:57:36 -0600
-Message-ID: <b13eabeb-48dd-493e-a7c7-fd247c971ae8@ti.com>
-Date: Wed, 6 Nov 2024 19:27:35 +0530
+	id CC066C4CECD; Wed,  6 Nov 2024 15:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91842C4CEC6;
+	Wed,  6 Nov 2024 15:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730908427;
+	bh=Yr2XYRl/QEdKuVaJlW7cGh64FWbceGPSwehS2+4ZYYQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OfFzh+gpMFce0Fw/iuVG9A/dYiMutG7db+ng9KugAl5GTmCnU2rqu/GltNtFi/J8a
+	 m+vSiqNyhX7MC2j+6ntwv9Sd1Z0T5i+xIRiq9iwWdWYPBlfSpED6TqfghkY0x/jf5W
+	 QltD5dbWEBOPgC/7O6AgYNttzob6cEXSHLcAJTec/ogxiaLG0w1oh2ZvuQuwZb0Y+c
+	 HfiDT+ZB0CY4ovr0t+LPWpiQlVinrXmX90nT1jyPt79av7cmFuE2l/wlRy4COpklun
+	 Httl/H0wn0R+h2NkIOaKl9ZcqkU3P+Tz/1yQXAid3E0wSi2AMAdrDCwcCk70Qdp1wl
+	 YmuGdaANQrA5w==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 326B95FB0F; Wed,  6 Nov 2024 23:53:45 +0800 (CST)
+Date: Wed, 6 Nov 2024 23:53:45 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: soc@kernel.org
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Allwinner fixes for 6.12
+Message-ID: <ZyuRCalH2vhHXm0Q@wens.tw>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [GIT PULL 2/2] arm64: defconfig: Updates for v6.13 for TI K3
- platforms
-From: Vignesh Raghavendra <vigneshr@ti.com>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm-soc
-	<arm@kernel.org>, SoC <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
-References: <3ded4795-2186-4e06-bda6-9c9a65a3fdb9@ti.com>
-Content-Language: en-US
-In-Reply-To: <3ded4795-2186-4e06-bda6-9c9a65a3fdb9@ti.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------0BYMO8heXxr4akuBJs0wGJ5K"
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jHvUgcaLkj0lpz+u"
+Content-Disposition: inline
 
---------------0BYMO8heXxr4akuBJs0wGJ5K
-Content-Type: multipart/mixed; boundary="------------Wti14dmmowaCZOnaHPCZPIia";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-Cc: Tero Kristo <kristo@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Message-ID: <b13eabeb-48dd-493e-a7c7-fd247c971ae8@ti.com>
-Subject: [GIT PULL 2/2] arm64: defconfig: Updates for v6.13 for TI K3
- platforms
-References: <3ded4795-2186-4e06-bda6-9c9a65a3fdb9@ti.com>
-In-Reply-To: <3ded4795-2186-4e06-bda6-9c9a65a3fdb9@ti.com>
 
---------------Wti14dmmowaCZOnaHPCZPIia
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+--jHvUgcaLkj0lpz+u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758e=
-dc:
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--config-for-v6.13
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi-fixes-for-6.12
 
-for you to fetch changes up to 8461bcf0a3d9d39ff9d858c06c2c820f711a8182:
+for you to fetch changes up to dd36ad71ad65968f97630808bc8d605c929b128e:
 
-  arm64: defconfig: Enable PCF857X GPIO expander (2024-10-28 20:42:47 +05=
-30)
+  ARM: dts: cubieboard4: Fix DCDC5 regulator constraints (2024-10-25 23:27:34 +0800)
 
 ----------------------------------------------------------------
-TI K3 defconfig updates for v6.13
+Allwinner fixes for 6.12
 
-Enable driver for GPIO PCF857x I2C GPIO expander present on multiple TI
-boards
+- Fix DCDC5 voltage range on Cubieboard 4
 
 ----------------------------------------------------------------
-Wadim Egorov (1):
-      arm64: defconfig: Enable PCF857X GPIO expander
+Andre Przywara (1):
+      ARM: dts: cubieboard4: Fix DCDC5 regulator constraints
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/allwinner/sun9i-a80-cubieboard4.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---------------Wti14dmmowaCZOnaHPCZPIia--
-
---------------0BYMO8heXxr4akuBJs0wGJ5K
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+--jHvUgcaLkj0lpz+u
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmcrdc8FAwAAAAAACgkQxEYeRXyRFuM9
-sQgArcKMxrJqwx6+LcLpHZ3B8pOnVUXjfvva32PE059xUWqB636BxhMl/kGVlrxtUpPayNBTLniY
-QpQ/Fr/NnCDwuv0nhUEA+SQcChb8onDT0/hBAj5Y37vnQPQuywHRIrv9smXjsuFiM8gPt/ybi8+f
-V2XK6jrf9gFRpLBq/+mxqYt5/zbNeg5/oUge53EoT9v7MogH/ek3bI2zDu66jW+nwETGjyxk77F5
-eUEWSK/4M1vzfiapnmxW6h3jezQzlDAMqdjk2ezCMBUfQjYIPyOdDwGgB3iU5rH0SdVvC7fbV73I
-viUwcJ81+a9224s3MXWPiPWpyc3+riaEf+nRAPQGfw==
-=LJ9D
+iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmcrkQYACgkQOJpUIZwP
+JDB6MQ//QVdW64jrLwkNDuuGxduDftgFwTMCo5z+d6T1YcO4MbupEBFBrgKF7ozC
+BbtkG3jsauDDLNw/5vC6UKnF8b68JuTfCkTiJna9NwQ/wl0cYXcIBophtHw2oMW+
+d1nE0CaIOOAVG5kfNbVH6V2bEP4xBkx6+QG2hxzTiyWPri3u1mUNS/vijkOG/PB/
+Tg0XMDbORapVpof1BgDYBQMk4TjEGev3XITifaFbdYvOJSBu6iV1sM8vSw0V7kBP
+B8gkYJe7f4ylDQDJuhlxW6muXgVgYFj1CyfeEzGeN0VGt1U0BScYElI/sOf8m7RP
+RxYS5ay2zMciA5JJJL/+YGnYCEpOTXKGjOdWGRX95Zc05nx2TSk/6NK9e8XsUpRC
+ewPDXNtsHiN8UzLYO8clVOWZnKgy+sWpBzL6CC7MmABo5jU4LYImKDqrHGnSfFCQ
+lqgTpQ8b2jno8WDWHFLeoKaG8V18o07FYXhlCx518wOG8JiBrXLLiGshpldZDy8Y
+57N4FjoLnU2YcOI4XEQ/YPPMcfQYm11akAeIOr4xUmuKdNts4nLmSeDOsSSYiq8d
+76cyoKDI/BlnAjl1zfvJFhMma56vkDwsG3dH176dFPMJaAD47/YotL1FY8cpQp0b
+F7It7eZtO4qgcMyLoKIDOiwt+IRzTm4MLDHV99Ju5nHqm3GOJCg=
+=2lyZ
 -----END PGP SIGNATURE-----
 
---------------0BYMO8heXxr4akuBJs0wGJ5K--
+--jHvUgcaLkj0lpz+u--
