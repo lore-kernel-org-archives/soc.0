@@ -1,67 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BBC1F9EBA
-	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 13:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2F820011B
+	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 13:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730900654; cv=none; b=EAX6A1XNVXYoiq2jaUtAA2LN7voJ/e7T46LMBgEScR4bxxI2UECGz3JJ73mpWtbhgHUyFMe8EIVhrBgK5T8thm5Y2ptiyglWHeSguag4X2AUfS3pPvAlLHEln+eRSx+I+4MTMuBQAufYbdcycyTqbXrVSDLcRodHcvaEyHkpq90=
+	t=1730900761; cv=none; b=s9pBpMEfwo6whvE4vovKQzEzEEgq5LWslppC6946jOuQf2l2I2Fr6nStiOFoRgU1XCh5rvrAOfKjBMLJDuSKjXjHnanNINWhri2JQtReC4FkkF5TAavB1HCWk83pWySFK88MKq58paa4tzr3F5Z+noS9T3mAEmtGV908vhC0SGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730900654; c=relaxed/simple;
-	bh=NE+UZNzgFFGQh39BsJFRBKNaj2RekgtSb0QOv385gSM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=oXwQQI+wiO3gE8n0VQuSlfqgWmhuU3m2YOzGYld+F2ggE/sRCgdrbiPY1wP43tK8q9rbCnpKy9k7LYhKuolAjEKuXQIucPhdLIrFPGK4xCv+VGc9Og093v3ov+BXf1tgumFtr/O/wL9XJDnD85m3CbuhYukfevjhmbouvpSPGtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UE6vXa3K; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730900761; c=relaxed/simple;
+	bh=vSUkj+Bq7bqCAk7/gcp4qEs9ljIAVfgjhVyGYQGltXY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=UgrF7+LJtNqwXkqdV2SvCWRUCKKOggH2IlkJsFZ1IbwunOscha1ZynlIxUQzKrSHWaLR9ESTVraVABQVfR6DrpxpONmtk1ZlZmKdq4XqH+m09ewpmVdqBexIo1bb2h3qVoe1gystq4hcM5LvSK0pzGPToVuSZbET3Br1CM/9Sow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hV5SOyvf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UE6vXa3K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hV5SOyvf"
 Received: by smtp.kernel.org (Postfix)
-	id 12AA6C4CED6; Wed,  6 Nov 2024 13:44:14 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	id 14401C4CED3; Wed,  6 Nov 2024 13:46:01 +0000 (UTC)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0C71EC4CED3
-	for <soc@kernel.org>; Wed,  6 Nov 2024 13:44:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C71EC4CED3
+	by smtp.kernel.org (Postfix) with ESMTPS id 21067C4CECC
+	for <soc@kernel.org>; Wed,  6 Nov 2024 13:45:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21067C4CECC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4315f24a6bbso52708235e9.1
-        for <soc@kernel.org>; Wed, 06 Nov 2024 05:44:12 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-539d9fffea1so6932501e87.2
+        for <soc@kernel.org>; Wed, 06 Nov 2024 05:45:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730900651; x=1731505451; darn=kernel.org;
+        d=linaro.org; s=google; t=1730900758; x=1731505558; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1t9SmRdC1grTnxYfq0WRsgynjzOVFKr29y6dkcaAKA=;
-        b=UE6vXa3K42h7LFCQqiBsfsJOERp7iptiIQpzCNJDpoDrXy8BNa/2v10aYJxJq29cNa
-         NHs+3T80k+2jQZKoegQxQtOiw3RhIRvOpcOGAI1GmcOksIxtZQoO4G8y/dI8Ddvm/WQ/
-         FBrqxNVUOutxSYlWhy1l6R8n2Rz/ib69L4L1FlpPR1aUckppbAzMLUoSTZ32y5KwpKjw
-         zHXhdPn/WAufcUCrxdUOlqwWQK7JvM7xL+F9/S4VI9cH0IDawCj+eM4pxd+ZEPuAe3eV
-         /k/fu7TMQbyEvcpK15DS+7U8JMIQZ7fnH8fjtlxZspwtPj5qXsFohMRTOnC0n1MhxSQX
-         39ew==
+        bh=ehYC5jyHQqP2TfK80B/7xWqvzi8c0/X0fL6unhG4urs=;
+        b=hV5SOyvfqDV3rDw4HJBJq05Xjczn+W/E2nPMO4bLd7nUWRuQBVl1P0OVKm0V+bT6Dp
+         d8I4+oQWGO8CZNyR1P+2GlPKkzSiCg4HCipAnQ0wGJ3rNuad0RlciONtOr/+RtuQZ4EE
+         h+fCSbsnb/LB+kN8gYqaGv3H5MjuTK/pKA9QyhGZas87MpmTa+ywalpzJ5sgxnbDMztB
+         zNX+8IKEKkequs2mG0aAMgud17XBm0XgelLakz0o8p8WQpZjNvFGgVFd20s7iHHNzXON
+         CTNT4kbPQAl0dlmIlFmsLRvGHnpQ9/LrCtEs6IyTYHLd7yHRkyUINK8zjJVl5RSFCnQi
+         pyEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730900651; x=1731505451;
+        d=1e100.net; s=20230601; t=1730900758; x=1731505558;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1t9SmRdC1grTnxYfq0WRsgynjzOVFKr29y6dkcaAKA=;
-        b=cnk1VLjlGtAai0HTNu0rLpr0acuaiq3ShfMm3k5r7kelHUHBoPJFWGjLROI6Mw8XUF
-         UN/6BNhn12SLROH+WzrTevlJB5uyKAd0GeGISDuVD3XoqpujieJI/smLtoFiNWs2s8wU
-         HMrSkG9mWq26KFJtWGPoyupLT5i2w2kbC/2PgQCXBEOhUjF4KtRpxwZlgwZECU2pHbAa
-         MEmqgL1ucUZ4gyW/YZuBGistK82hoR/dWK2ZAasrfyXdYqsILvPxfn4XPbxs3yoOlbob
-         k5WlsljzwVCN1EG5AKG4d/zCAU0rr0c68c4fLC/mgC3VOURZV9mZIUQOh1dz2r9n2gTA
-         4nDA==
-X-Gm-Message-State: AOJu0YxgoqZR2cN4302zS/PJxvOazViRAJjxLeWxeMwGgPaNO8nlIwxR
-	2wzS5AbsDn6I2lJX1TtZjJUvyHiRcHEU7FxgHd2Kzu0+a+1gcfmFNdFI98MLkkfuPIOu/DhOxDE
-	bS90=
-X-Google-Smtp-Source: AGHT+IEDfXHPYnEzdKdGDOIx5isWt6UJom2MOYrbNvWHKRq/DHETWuaNiRBX5ymPlQgTN2VRGVjI+g==
-X-Received: by 2002:a05:600c:524c:b0:426:5e91:3920 with SMTP id 5b1f17b1804b1-4319ad24a7fmr381006385e9.29.1730900651357;
-        Wed, 06 Nov 2024 05:44:11 -0800 (PST)
-Received: from [172.16.23.252] ([89.101.134.25])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432aa6ae726sm22960195e9.3.2024.11.06.05.44.09
+        bh=ehYC5jyHQqP2TfK80B/7xWqvzi8c0/X0fL6unhG4urs=;
+        b=gtF4ao2LKQcxIdMRYVyXWeEvDmqqz0JuRA1vcBDnVpAIY64qQaklg9EnEYuJJcikT8
+         e24Wrt1J813glq1eO1ktKPkXul/miApPDcsHxbf6WaCeEE3eqjgEQhgLfhyKr6cJDOYb
+         SwHwoHWZTwU8xiqoyY3YAgS8rb+sxyMnK0NPbc8dhypY47IZ8THuLn23ewog0bIb7Th4
+         E55W0Tm7ks2+glYGa7xqxTDJGUcwBVkKVQNdroIzmTFyRPzWlBGVm+OaJkML4qp4g7CX
+         wANM36DQnc1K4BkngwHYdF0NuEm9Ilr/8/Fx3D/xVo3biPoarkuWaPDjAYKbjhG2YgUg
+         GRtg==
+X-Gm-Message-State: AOJu0Yx1MhtLR6o1LuGTJ+J7wFinwsnMwXXpe5BFOyf66jolKwia65E4
+	ieMfg1AkPtX5rsMONqK9J/znGQ4B0lGzbjYuGKdbxaqxXBDpaq3YRJ2olf26Q6UOsd3CzmBnsaw
+	CqeU=
+X-Google-Smtp-Source: AGHT+IG36xkVt+ks+JYrBPCyJZNNr5to2RevB/PEtfvJ914bM+YQAJ+CS5sRJcV8XkOk11ShH2fhow==
+X-Received: by 2002:a05:6512:3ba3:b0:539:eb44:7ec3 with SMTP id 2adb3069b0e04-53b3490fabamr19945832e87.31.1730900758178;
+        Wed, 06 Nov 2024 05:45:58 -0800 (PST)
+Received: from [172.16.23.252] ([154.14.63.34])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432aa5b60cfsm23255865e9.7.2024.11.06.05.45.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 05:44:10 -0800 (PST)
-Message-ID: <ffaa3755-8c5d-4fc3-86bf-9129d3889bff@linaro.org>
-Date: Wed, 6 Nov 2024 14:44:09 +0100
+        Wed, 06 Nov 2024 05:45:57 -0800 (PST)
+Message-ID: <6fb3d64a-3913-4db0-9cdc-336af32a88a9@linaro.org>
+Date: Wed, 6 Nov 2024 14:45:55 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM DT updates for v6.13
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.13
 Reply-To: neil.armstrong@linaro.org
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -105,9 +105,8 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's the first set of fixes towards fixing all bindings check errors,
-this set + the dt-bindings fixes picked by other subsystems fixes most
-of the errors.
+Here's a set of Amlogic ARM64 DT changes for v6.13, with
+PWM for A1 & C3, missing properties & typo fix.
 
 Thanks,
 Neil
@@ -118,44 +117,30 @@ The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm-dt-for-v6.13
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.13
 
-for you to fetch changes up to 2b901e9ef05d84e99582607e85393a6eba0e2363:
-amlogic-arm-dt-for-v6.13
-   ARM: dts: amlogic: meson8/8b: remove invalid pinctrl reg (2024-10-17 10:21:32 +0200)
+for you to fetch changes up to be90cd4bd422e8ae235f534a2fa46d40dae0816b:
 
-----------------------------------------------------------------
-Amlogic ARM DT changes for v6.13:
-- DT fixes to pass bindings chedk, including:
-  - fixing nodes names
-  - dropping meson6 ATV1200 board
-  - add missing properties
+   arm64: dts: amlogic: Add Amlogic C3 PWM (2024-10-09 09:57:50 +0200)
 
 ----------------------------------------------------------------
-Neil Armstrong (12):
-       ARM: dts: amlogic: meson6: fix clk81 node name
-       ARM: dts: amlogic: meson8: fix soc thermal-zone node name
-       ARM: dts: amlogic: meson8: fix ao_arc_sram node name
-       ARM: dts: amlogic: meson6: remove support for ATV1200 board
-       ARM: dts: amlogic: meson8b-odroidc1: fix invalid reset-gpio
-       ARM: dts: amlogic: fix /memory node name
-       ARM: dts: amlogic: meson8: use correct pinctrl bank node name
-       ARM: dts: amlogic: add missing phy-mode in ethmac node
-       ARM: dts: amlogic: meson8-minix-neo-x8: fix invalid pnictrl-names
-       ARM: dts: amlogic: meson8b-ec100: add missing clocks property in sound card
-       ARM: dts: amlogic: meson8b-ec100: add missing gpio-line-names entry
-       ARM: dts: amlogic: meson8/8b: remove invalid pinctrl reg
+Amlogic ARM64 DT changes for v6.13:
+- Add PWM nodes for Amlogic A1 & C3
+- Addd missing power-domains properties
+- Fix G12 uart node name
 
-  arch/arm/boot/dts/amlogic/Makefile                |  2 -
-  arch/arm/boot/dts/amlogic/meson6-atv1200.dts      | 33 ----------
-  arch/arm/boot/dts/amlogic/meson6.dtsi             | 73 -----------------------
-  arch/arm/boot/dts/amlogic/meson8-minix-neo-x8.dts |  5 +-
-  arch/arm/boot/dts/amlogic/meson8.dtsi             | 32 +++++-----
-  arch/arm/boot/dts/amlogic/meson8b-ec100.dts       |  8 ++-
-  arch/arm/boot/dts/amlogic/meson8b-mxq.dts         |  2 +-
-  arch/arm/boot/dts/amlogic/meson8b-odroidc1.dts    |  4 +-
-  arch/arm/boot/dts/amlogic/meson8b.dtsi            | 32 +++++-----
-  arch/arm/boot/dts/amlogic/meson8m2-mxiii-plus.dts |  2 +-
-  10 files changed, 43 insertions(+), 150 deletions(-)
-  delete mode 100644 arch/arm/boot/dts/amlogic/meson6-atv1200.dts
-  delete mode 100644 arch/arm/boot/dts/amlogic/meson6.dtsi
+----------------------------------------------------------------
+George Stark (2):
+       arm64: dts: meson: a1: add definitions for meson PWM
+       arm64: dts: meson: a1: bind power domain to temperature sensor
+
+Kelvin Zhang (1):
+       arm64: dts: amlogic: Add Amlogic C3 PWM
+
+Theo Debrouwere (1):
+       arm64: dts: meson-g12-common: fix uart-ao-a typo
+
+  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi       | 364 ++++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/meson-a1.dtsi         | 216 +++++++++++++
+  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi |   2 +-
+  3 files changed, 581 insertions(+), 1 deletion(-)
