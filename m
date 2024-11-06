@@ -1,161 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A603F1DED58
-	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 12:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BBC1F9EBA
+	for <soc@lists.linux.dev>; Wed,  6 Nov 2024 13:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730895448; cv=none; b=YEMgaMXE3umW6agKXNvGhzdvuKtvftY2IK2SbKLgKg5DrPVM7Hywb0iWzrQtgbSeZdheoXqkGYzXJmbWzHcg2tEpIZjA1XvFaIXPyoHStiHmwTCbXLvNZaINbv5i37RiK1T8/Gr2AW1NTlcA5qG3ec2+ADmIxjy8l5lTwludsu8=
+	t=1730900654; cv=none; b=EAX6A1XNVXYoiq2jaUtAA2LN7voJ/e7T46LMBgEScR4bxxI2UECGz3JJ73mpWtbhgHUyFMe8EIVhrBgK5T8thm5Y2ptiyglWHeSguag4X2AUfS3pPvAlLHEln+eRSx+I+4MTMuBQAufYbdcycyTqbXrVSDLcRodHcvaEyHkpq90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730895448; c=relaxed/simple;
-	bh=i/wM7PZHZFJEg7x+YJLArxESnTqOgu6l1Q1hRu+GCfc=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kgrqcZhoGi8I6qhJjXAs0VPFxdfFN2azAWi7PUJfHfZLU3CdakhKdsIskEDh4r3ZDZwra1nrhCWSQD2ZEPEVFcJORQQfXZVEpPg7B8Dh8JNzfRiTqXg/nuxejByA0WDdMrmP2Q6dmhKoLM5c1nej3JY/Gma/CH50RC5FWXa/ids=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=y1FjKAkQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730900654; c=relaxed/simple;
+	bh=NE+UZNzgFFGQh39BsJFRBKNaj2RekgtSb0QOv385gSM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=oXwQQI+wiO3gE8n0VQuSlfqgWmhuU3m2YOzGYld+F2ggE/sRCgdrbiPY1wP43tK8q9rbCnpKy9k7LYhKuolAjEKuXQIucPhdLIrFPGK4xCv+VGc9Og093v3ov+BXf1tgumFtr/O/wL9XJDnD85m3CbuhYukfevjhmbouvpSPGtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UE6vXa3K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="y1FjKAkQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UE6vXa3K"
 Received: by smtp.kernel.org (Postfix)
-	id 83F47C4AF0B; Wed,  6 Nov 2024 12:17:28 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 12AA6C4CED6; Wed,  6 Nov 2024 13:44:14 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C5693C4CECD;
-	Wed,  6 Nov 2024 12:17:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5693C4CECD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4A6CH8Ju067692;
-	Wed, 6 Nov 2024 06:17:08 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1730895428;
-	bh=Nd7Yyls8bxkG0sJ+SExvF+TjygQKqRXiCTn67uB60tY=;
-	h=Date:From:To:CC:Subject;
-	b=y1FjKAkQy+DIMAOY3LAIOFtY+pK8j13tRSL3QiLK0iDhwAa64FEkdG8O4m0cOFXtt
-	 1oM+AX6hbxLjzxg0s7vvsOFba/ioeifLpN2ndhMvOpTygMNSpM1KD2q3LEBUsNncy/
-	 3KDsQa3Ee43nX60nSKytjiuJH1cF1I8lie13uEyk=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A6CH8Hb017034;
-	Wed, 6 Nov 2024 06:17:08 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 6
- Nov 2024 06:17:08 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 6 Nov 2024 06:17:07 -0600
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A6CH8Qn083811;
-	Wed, 6 Nov 2024 06:17:08 -0600
-Date: Wed, 6 Nov 2024 06:17:08 -0600
-From: Nishanth Menon <nm@ti.com>
-To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony
- Lindgren <tony@atomide.com>
-Subject: [GIT PULL] soc: ti: Driver updates for v6.13
-Message-ID: <20241106121708.rso5wvc7wbhfi6xk@maverick>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0C71EC4CED3
+	for <soc@kernel.org>; Wed,  6 Nov 2024 13:44:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C71EC4CED3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4315f24a6bbso52708235e9.1
+        for <soc@kernel.org>; Wed, 06 Nov 2024 05:44:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730900651; x=1731505451; darn=kernel.org;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1t9SmRdC1grTnxYfq0WRsgynjzOVFKr29y6dkcaAKA=;
+        b=UE6vXa3K42h7LFCQqiBsfsJOERp7iptiIQpzCNJDpoDrXy8BNa/2v10aYJxJq29cNa
+         NHs+3T80k+2jQZKoegQxQtOiw3RhIRvOpcOGAI1GmcOksIxtZQoO4G8y/dI8Ddvm/WQ/
+         FBrqxNVUOutxSYlWhy1l6R8n2Rz/ib69L4L1FlpPR1aUckppbAzMLUoSTZ32y5KwpKjw
+         zHXhdPn/WAufcUCrxdUOlqwWQK7JvM7xL+F9/S4VI9cH0IDawCj+eM4pxd+ZEPuAe3eV
+         /k/fu7TMQbyEvcpK15DS+7U8JMIQZ7fnH8fjtlxZspwtPj5qXsFohMRTOnC0n1MhxSQX
+         39ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730900651; x=1731505451;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1t9SmRdC1grTnxYfq0WRsgynjzOVFKr29y6dkcaAKA=;
+        b=cnk1VLjlGtAai0HTNu0rLpr0acuaiq3ShfMm3k5r7kelHUHBoPJFWGjLROI6Mw8XUF
+         UN/6BNhn12SLROH+WzrTevlJB5uyKAd0GeGISDuVD3XoqpujieJI/smLtoFiNWs2s8wU
+         HMrSkG9mWq26KFJtWGPoyupLT5i2w2kbC/2PgQCXBEOhUjF4KtRpxwZlgwZECU2pHbAa
+         MEmqgL1ucUZ4gyW/YZuBGistK82hoR/dWK2ZAasrfyXdYqsILvPxfn4XPbxs3yoOlbob
+         k5WlsljzwVCN1EG5AKG4d/zCAU0rr0c68c4fLC/mgC3VOURZV9mZIUQOh1dz2r9n2gTA
+         4nDA==
+X-Gm-Message-State: AOJu0YxgoqZR2cN4302zS/PJxvOazViRAJjxLeWxeMwGgPaNO8nlIwxR
+	2wzS5AbsDn6I2lJX1TtZjJUvyHiRcHEU7FxgHd2Kzu0+a+1gcfmFNdFI98MLkkfuPIOu/DhOxDE
+	bS90=
+X-Google-Smtp-Source: AGHT+IEDfXHPYnEzdKdGDOIx5isWt6UJom2MOYrbNvWHKRq/DHETWuaNiRBX5ymPlQgTN2VRGVjI+g==
+X-Received: by 2002:a05:600c:524c:b0:426:5e91:3920 with SMTP id 5b1f17b1804b1-4319ad24a7fmr381006385e9.29.1730900651357;
+        Wed, 06 Nov 2024 05:44:11 -0800 (PST)
+Received: from [172.16.23.252] ([89.101.134.25])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432aa6ae726sm22960195e9.3.2024.11.06.05.44.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Nov 2024 05:44:10 -0800 (PST)
+Message-ID: <ffaa3755-8c5d-4fc3-86bf-9129d3889bff@linaro.org>
+Date: Wed, 6 Nov 2024 14:44:09 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ih4nfsy4jsvbujjr"
-Content-Disposition: inline
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-
---ih4nfsy4jsvbujjr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM DT updates for v6.13
+Reply-To: neil.armstrong@linaro.org
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Please pull
+Here's the first set of fixes towards fixing all bindings check errors,
+this set + the dt-bindings fixes picked by other subsystems fixes most
+of the errors.
+
+Thanks,
+Neil
 
 The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
-er-soc-for-v6.13
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm-dt-for-v6.13
 
-for you to fetch changes up to a4c14f509509a6a24f25edb7619f55f204a8433f:
-
-  firmware: ti_sci: Remove use of of_match_ptr() helper (2024-10-25 12:56:3=
-7 -0500)
+for you to fetch changes up to 2b901e9ef05d84e99582607e85393a6eba0e2363:
+amlogic-arm-dt-for-v6.13
+   ARM: dts: amlogic: meson8/8b: remove invalid pinctrl reg (2024-10-17 10:21:32 +0200)
 
 ----------------------------------------------------------------
-TI SoC driver updates for v6.13
-
-- knav_qmss_queue: Cleanups around request_irq params and redundant code.
-- ti_sci: Power management ops in preperation for suspend/resume capability.
-  Also includes dependency patch to export dev_pm_qos_read_value
-  (acked by Rafael).
+Amlogic ARM DT changes for v6.13:
+- DT fixes to pass bindings chedk, including:
+  - fixing nodes names
+  - dropping meson6 ATV1200 board
+  - add missing properties
 
 ----------------------------------------------------------------
-Alessandro Zanni (1):
-      soc: ti: knav_qmss_queue: Drop redundant continue statement
+Neil Armstrong (12):
+       ARM: dts: amlogic: meson6: fix clk81 node name
+       ARM: dts: amlogic: meson8: fix soc thermal-zone node name
+       ARM: dts: amlogic: meson8: fix ao_arc_sram node name
+       ARM: dts: amlogic: meson6: remove support for ATV1200 board
+       ARM: dts: amlogic: meson8b-odroidc1: fix invalid reset-gpio
+       ARM: dts: amlogic: fix /memory node name
+       ARM: dts: amlogic: meson8: use correct pinctrl bank node name
+       ARM: dts: amlogic: add missing phy-mode in ethmac node
+       ARM: dts: amlogic: meson8-minix-neo-x8: fix invalid pnictrl-names
+       ARM: dts: amlogic: meson8b-ec100: add missing clocks property in sound card
+       ARM: dts: amlogic: meson8b-ec100: add missing gpio-line-names entry
+       ARM: dts: amlogic: meson8/8b: remove invalid pinctrl reg
 
-Andrew Davis (1):
-      firmware: ti_sci: Remove use of of_match_ptr() helper
-
-Dave Gerlach (1):
-      firmware: ti_sci: Introduce Power Management Ops
-
-Georgi Vlaev (1):
-      firmware: ti_sci: Add support for querying the firmware caps
-
-Jinjie Ruan (1):
-      soc: ti: knav_qmss_queue: Use IRQF_NO_AUTOEN flag in request_irq()
-
-Kevin Hilman (1):
-      firmware: ti_sci: add CPU latency constraint management
-
-Markus Schneider-Pargmann (1):
-      PM: QoS: Export dev_pm_qos_read_value
-
-Vibhore Vardhan (1):
-      firmware: ti_sci: Add system suspend and resume call
-
- drivers/base/power/qos.c               |   1 +
- drivers/firmware/ti_sci.c              | 489 +++++++++++++++++++++++++++++=
-+++-
- drivers/firmware/ti_sci.h              | 143 +++++++++-
- drivers/soc/ti/knav_qmss_queue.c       |   6 +-
- include/linux/soc/ti/ti_sci_protocol.h |  30 ++
- 5 files changed, 662 insertions(+), 7 deletions(-)
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-
---ih4nfsy4jsvbujjr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmcrXj0ACgkQ3bWEnRc2
-JJ36TxAAh4kYatZvq4I71XeciAfFK6VujsT+qEMjXfxf077vPRRiJkvjV3Kr0Yok
-RvuYgSysH7zx5vFYEnvImlgE7cesq5DQeXeMalFSv4QSU+wKgDI5K7EJefAfXX1x
-0BFQG1cIcdMJ1D1etL/evVrB2KG7V/zsouVVRvlx2rAmqVYREYFasO1GbbB4P4Df
-UTHFORVlqRby3HuoLujCBULsE8giPx0XJEu2qgOVbgKjzaeXcVOkqS17W//EszTZ
-8bRiGDhF73oWoDyzo5ERgNI4QyaWAQJSfROt3Atm4DBYiAkWvrPT4JoLhrZRvJ1v
-1OYLxs5sCFY/uv2Fryq1fCPmYSV5JXorgOfJRdPa2LDURZvBaFn744brbz1yFtAT
-QaxalE5ISlN+PeanHtqJ1Cov02BxdT1hv2nhmCPUWaOM2iQ+3wD9rQiww1qhQmgR
-XthNmZ2l7toBzdw3zKvX5CN9FbMZ5oXRLvWG8/NzXcFGjJbxBm9wqRVaCLSqA8Cl
-vq8KTTb1XTTVveBc1rOBfQ5EiF6GKRlqMcpzY5NcSpfJRgzCST43EgZsWm8y8aO5
-XQK8n04nF7QLP4MLvVr8O41xDXaB+oO95y2PgbVNgz/Ktijakxc4/2Dn8gJrqnsV
-G9SXyl7SaLch0YYlArACBiZeIIkCVr2EGsUMRkRrGHRTl5tE7kI=
-=3YLN
------END PGP SIGNATURE-----
-
---ih4nfsy4jsvbujjr--
+  arch/arm/boot/dts/amlogic/Makefile                |  2 -
+  arch/arm/boot/dts/amlogic/meson6-atv1200.dts      | 33 ----------
+  arch/arm/boot/dts/amlogic/meson6.dtsi             | 73 -----------------------
+  arch/arm/boot/dts/amlogic/meson8-minix-neo-x8.dts |  5 +-
+  arch/arm/boot/dts/amlogic/meson8.dtsi             | 32 +++++-----
+  arch/arm/boot/dts/amlogic/meson8b-ec100.dts       |  8 ++-
+  arch/arm/boot/dts/amlogic/meson8b-mxq.dts         |  2 +-
+  arch/arm/boot/dts/amlogic/meson8b-odroidc1.dts    |  4 +-
+  arch/arm/boot/dts/amlogic/meson8b.dtsi            | 32 +++++-----
+  arch/arm/boot/dts/amlogic/meson8m2-mxiii-plus.dts |  2 +-
+  10 files changed, 43 insertions(+), 150 deletions(-)
+  delete mode 100644 arch/arm/boot/dts/amlogic/meson6-atv1200.dts
+  delete mode 100644 arch/arm/boot/dts/amlogic/meson6.dtsi
