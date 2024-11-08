@@ -1,125 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A741E0DEC
-	for <soc@lists.linux.dev>; Fri,  8 Nov 2024 09:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353CC194A48
+	for <soc@lists.linux.dev>; Fri,  8 Nov 2024 12:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731058678; cv=none; b=dvnnijymdTB0jsYNPunh4mHwVbDBZiJdi3DgPQnn/1F4NCURRWMiYrKYtwB2XDz7JkrB8sazNA1Fcr1QBB/Yo8TZ9mv5akEFsn6pNPmQQXmpA7V/wQ3Q5EQjDbTRMcUBuLOLzfRoQ/5QfuwCuNg+2wrOC9vEQcwSJPKsuAII5Ek=
+	t=1731069652; cv=none; b=r4VYlDx6WK5RKuz9NyIbY3Net+eOjcF2q82yiHQkuz6CdnCegvnu1UH5maNQkwDUIdeKcEsrhWjcjSCiOqegR2pxQqLBLSEtldxg7fo3cYmiqJVs3ZIwcl3IiSUcQAaBWktPbGNbaIMhUlLAWcVU13jIOuV8866DYxjwz2gLNU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731058678; c=relaxed/simple;
-	bh=/xq32m1EqGR28wC1AgX9th2fAlozUxx1pWbZBTrr/sA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=URvE4ahHTqV45FiEGldkWUqWq498b6dk4+GEJmPdvb2/bBHDRpP3vtY054WIfsAmXzcCNR5l4IH3MnK9L5wQceGLdxfI2tY8c7sKZNOacCdkUZrjG3AbGcIZYbNy5EfParWyRO05O0mMmFjNmENB1vBCX2QyXRnmQCPHAHIvcfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uOFhwkpO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731069652; c=relaxed/simple;
+	bh=UKvKggqPEPvzWSsamB4vY+rjWQ9oIe3nzf9VUWVuo9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JDbQUy96KaE3VR1cAt+cNbcog/8IATIuYLjbDR4p3Vp5ptFy4OZ4HfyXQBJDBzaNbP6/n66LLoTAWs6V00B0sczYgWArx106/EUlrVfa+UJeHzwDiu43q+VoXwjimy2uJvkEbx5fucj82WODFaqCiVmJn18sGj/3KiAuijWAsYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSJgyTc2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uOFhwkpO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSJgyTc2"
 Received: by smtp.kernel.org (Postfix)
-	id 625A6C4CECE; Fri,  8 Nov 2024 09:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85282C4CECD;
-	Fri,  8 Nov 2024 09:37:57 +0000 (UTC)
+	id EA623C4AF0F; Fri,  8 Nov 2024 12:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A201C4CECE;
+	Fri,  8 Nov 2024 12:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731058678;
-	bh=/xq32m1EqGR28wC1AgX9th2fAlozUxx1pWbZBTrr/sA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=uOFhwkpOOQAcm+pAT9+yJZJaN3cd7VsTGNyqmEq0ymk+EpbpkJ9gsM6isRNUH7u+b
-	 LRO8Z7qO0F91gt9ENdqCDnzsgZGGaOrNWdOgK2x8dAg6//1J0KAQ0vBDwRwdqqifGt
-	 yXJWp7dWxoldOE6SnH/CuguGJLXnaxfB7BMoCYkxXZBJ4pnk1mavpWhkM0luar2f6p
-	 Z572qMjQti6sHQpU6uBCL6/h5JOQECJiugOZjiilAYhdKBO5U2kLp8OtJgM0U9HNxc
-	 SOK0PF8O1k9F5elIaAnrqGQ+9PuSoUGmnF1OUdoHknviK9VCfkwQfPimNZ5o7keYz0
-	 6H6FS7tIari+A==
-Date: Fri, 8 Nov 2024 09:37:55 +0000
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V Devicetrees for v6.13
-Message-ID: <20241108-washboard-material-6b9ff196063d@spud>
+	s=k20201202; t=1731069651;
+	bh=UKvKggqPEPvzWSsamB4vY+rjWQ9oIe3nzf9VUWVuo9Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nSJgyTc2C/pdKPz2jRI3WAv07XAuFDR766GzMLiVHJMcE9x1ybiBJKQdmq3WrjhAG
+	 UxC8d3jBAa577xmGvoxxg5tlmNnp2r6HdhDx6LSVgY9yXEthuKHrQCT5OFC/IWiw9l
+	 taBICZ3yY51PKerjizOZAyfugyLTIqdkb+wuGbSLiOSB/A+EJeIqviokWgu6cb0qO3
+	 7e19yqAeZN89+xUV4G+CMKDU8YHLoyWM8dP+Q12Q6IGyDZJHdmuh8Lnmzewnvs7gws
+	 hM+ULZbP0o9GYveDprQE8s7vH8C6l1nh+z9ULXxtxJ4zUwTnvbSRoedTH1UmXRFm7t
+	 Vx/k+Llb0WvoQ==
+Date: Fri, 8 Nov 2024 13:40:45 +0100
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Lee Jones <lee@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, 
+	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, oe-kbuild-all@lists.linux.dev, Pavel Machek <pavel@ucw.cz>, 
+	linux-leds@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH leds v5 07/12] leds: turris-omnia: Notify sysfs on MCU
+ global LEDs brightness change
+Message-ID: <iez6ilisqdaguwkxofc3njwqjtooneydzflxep4oafcsqujmnt@sjjybtqpzebz>
+References: <20241104141924.18816-8-kabel@kernel.org>
+ <202411051138.jzDE6sBH-lkp@intel.com>
+ <20241106102919.GO1807686@google.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FZLg+64WqNyvpcXG"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241106102919.GO1807686@google.com>
 
+On Wed, Nov 06, 2024 at 10:29:19AM +0000, Lee Jones wrote:
+> On Tue, 05 Nov 2024, kernel test robot wrote:
+> 
+> > Hi Marek,
+> > 
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on linus/master]
+> > [also build test ERROR on v6.12-rc6]
+> > [cannot apply to lee-leds/for-leds-next robh/for-next next-20241104]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Beh-n/turris-omnia-mcu-interface-h-Move-command-execution-function-to-global-header/20241104-223435
+> > base:   linus/master
+> > patch link:    https://lore.kernel.org/r/20241104141924.18816-8-kabel%40kernel.org
+> > patch subject: [PATCH leds v5 07/12] leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
+> > config: arm-randconfig-003-20241105 (https://download.01.org/0day-ci/archive/20241105/202411051138.jzDE6sBH-lkp@intel.com/config)
+> > compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411051138.jzDE6sBH-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202411051138.jzDE6sBH-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `omnia_cmd_set_color':
+> > >> include/linux/turris-omnia-mcu-interface.h:275:(.text+0x5a): undefined reference to `omnia_cmd_write_read'
+> >    arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `omnia_cmd_read_u16':
+> >    include/linux/turris-omnia-mcu-interface.h:311:(.text+0xaa): undefined reference to `omnia_cmd_write_read'
+> >    arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `gamma_correction_show':
+> >    include/linux/turris-omnia-mcu-interface.h:311:(.text+0x1a2): undefined reference to `omnia_cmd_write_read'
+> >    arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `omnia_cmd_write_u8':
+> >    include/linux/turris-omnia-mcu-interface.h:275:(.text+0x1c8): undefined reference to `omnia_cmd_write_read'
+> >    arm-linux-gnueabi-ld: drivers/leds/leds-turris-omnia.o: in function `brightness_show':
+> >    include/linux/turris-omnia-mcu-interface.h:311:(.text+0x4c2): undefined reference to `omnia_cmd_write_read'
+> > 
+> > 
+> > vim +275 include/linux/turris-omnia-mcu-interface.h
+> > 
+> > 9f74fe5691025f Marek Behún 2024-11-04  267  
+> > 9f74fe5691025f Marek Behún 2024-11-04  268  int omnia_cmd_write_read(const struct i2c_client *client,
+> > 9f74fe5691025f Marek Behún 2024-11-04  269  			 void *cmd, unsigned int cmd_len,
+> > 9f74fe5691025f Marek Behún 2024-11-04  270  			 void *reply, unsigned int reply_len);
+> > 9f74fe5691025f Marek Behún 2024-11-04  271  
+> > 9f74fe5691025f Marek Behún 2024-11-04  272  static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
+> > 9f74fe5691025f Marek Behún 2024-11-04  273  				  unsigned int len)
+> > 9f74fe5691025f Marek Behún 2024-11-04  274  {
+> > 9f74fe5691025f Marek Behún 2024-11-04 @275  	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
+> > 9f74fe5691025f Marek Behún 2024-11-04  276  }
+> > 9f74fe5691025f Marek Behún 2024-11-04  277  
+> 
+> Is this real or a false positive?
 
---FZLg+64WqNyvpcXG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey,
-
-Please pull a handful of changes, mostly for StarFive.
-Branch is based on rc3 instead of rc1 as I'd usually do, because rc{1,2}
-was not booting for me.
-
-Cheers,
-Conor.
-
-The following changes since commit 8e929cb546ee42c9a61d24fae60605e9e3192354:
-
-  Linux 6.12-rc3 (2024-10-13 14:33:32 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.13
-
-for you to fetch changes up to c8b72c301dbe71a7a55298d542dff7b2c3612765:
-
-  riscv: dts: starfive: add DeepComputing FML13V01 board device tree (2024-10-31 12:22:53 +0000)
-
-----------------------------------------------------------------
-RISC-V Devicetrees for v6.13
-
-StarFive:
-Support for the DeepComputing FML13V01, a Framework laptop compatible
-with a JH7110. This board is fairly different to the more standard SBCs
-offerings that the kernel already supports, so there's also some
-refactoring of jh7110-common.dtsi to move out nodes unused on the new
-board.
-
-Spacemit:
-A vendor prefix I grabbed from the basic support series, since its
-dependencies are not yet ready but peripheral drivers have started being
-merged.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Guodong Xu (2):
-      riscv: dts: starfive: jh7110-common: revised device node
-      riscv: dts: starfive: jh7110-common: move usb0 config to board dts
-
-Sandie Cao (3):
-      dt-bindings: vendor: add deepcomputing
-      dt-bindings: riscv: starfive: add deepcomputing,fml13v01
-      riscv: dts: starfive: add DeepComputing FML13V01 board device tree
-
-Yangyu Chen (1):
-      dt-bindings: vendor-prefixes: add spacemit
-
- .../devicetree/bindings/riscv/starfive.yaml        |  1 +
- .../devicetree/bindings/vendor-prefixes.yaml       |  4 ++++
- arch/riscv/boot/dts/starfive/Makefile              |  1 +
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi    | 10 ---------
- .../dts/starfive/jh7110-deepcomputing-fml13v01.dts | 17 +++++++++++++++
- arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts | 22 +++++++++++++++++++
- .../boot/dts/starfive/jh7110-pine64-star64.dts     | 22 +++++++++++++++++++
- .../dts/starfive/jh7110-starfive-visionfive-2.dtsi | 25 ++++++++++++++++++++++
- 8 files changed, 92 insertions(+), 10 deletions(-)
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-deepcomputing-fml13v01.dts
-
---FZLg+64WqNyvpcXG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZy3b8wAKCRB4tDGHoIJi
-0utQAQCSF9dqJxTjp9MWhEbjOcDFgds1awTrkTDJQgpQbXvkZQEAl2q5mEB0buiI
-fchglJX2dd4H/IsV8AY7gR8cJKyRjQU=
-=ItIu
------END PGP SIGNATURE-----
-
---FZLg+64WqNyvpcXG--
+It is real. Happens when LEDS_TURRIS_OMNIA=y and TURRIS_OMNIA_MCU=m.
+LEDS_TURRIS_OMNIA must depend on both TURRIS_OMNIA_MCU and
+TURRIS_OMNIA_MCU_GPIO, not just the latter.
