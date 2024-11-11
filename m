@@ -1,295 +1,279 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9840019F40A
-	for <soc@lists.linux.dev>; Mon, 11 Nov 2024 14:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6EF849625
+	for <soc@lists.linux.dev>; Mon, 11 Nov 2024 15:34:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731334746; cv=none; b=IWRc8hbcOCHKQQZziioBpVW0hZpUrWMzBhr7qf9qvzDWgoKptJ3YWE+TK4XGiYaZsj/jxy5KaPJfCV7iYQNXwOfBsABpU5bEjBrw1kT9PBPvLHdESDQDxBRyjCWC9FqS2bVLaBEkOhGiijbDPa8q0JgtmNBVf+7S0P6jHZHlcdo=
+	t=1731339269; cv=none; b=oTBaL71DN1x+R5/4x2Grvbl+gF6pCzwHAw8xB33zdO2k5XKr2Ug+4Pc3/JRVd/aNk7BIOB4vu+LNl0tyOuBM/SwVdM0yKQco1ihquFAzhrqtQKmWq+4xzy72RNc5mOHF0SOilw6sW+pMd5XLSHnCvqW4tUP8F8qC13sZivl8tfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731334746; c=relaxed/simple;
-	bh=lMzik5o2zBHszPj4x+VSYPUbKw9fMBzUfko7NQ0We7U=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=OTAcTJ+P3oEdyVPQNz7UcXu3vtsPqFC6Id7h4ppjS+g5cuDWVPLveXAp2DBtfCQkEAL8UwHwz63ZvwCGJzsu9y4COxtWnym7i8T1sKqTJ+iWGxHGmiVJ/Nyq3PzAjIoNB8Zm/VvKdWFgtvUu3nzJIArVxbyUvnU/OtpBp3kdvzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b=D4YnzTza; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731339269; c=relaxed/simple;
+	bh=gT9VqfRP3ewkwqJTEBBj5DpaKohyliv2bARVcWMiIM8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=knoNqPnALyi7/BS1mi5WBSWfgfXQEfIUGdrVeLhRMx9Eq5kV+GSVLVefS0rcxYhcoO9N2wls0WbacQAmC++eerCLgQ7Nw68urd6DkPEBrZbW3HRer0eTi561YtZRQJIpzU/UPNgQAbDrz46HheK44vuG42MJcShHjktOEB3CxYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=CxgKWUHS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b="D4YnzTza"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="CxgKWUHS"
 Received: by smtp.kernel.org (Postfix)
-	id 3B73CC4CECF; Mon, 11 Nov 2024 14:19:06 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	id 46D09C4CED5; Mon, 11 Nov 2024 15:34:29 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 616B7C4CED6
-	for <soc@kernel.org>; Mon, 11 Nov 2024 14:19:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 616B7C4CED6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 52B6042118;
-	Mon, 11 Nov 2024 14:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1731334733; bh=lMzik5o2zBHszPj4x+VSYPUbKw9fMBzUfko7NQ0We7U=;
-	h=Date:From:Subject:To:Cc;
-	b=D4YnzTza0fBoik+WOmYIyrsxf8zA8ajYxQ0QtEMPHp2RzeP68lKmAszEPSlkblLM6
-	 xP6lk1DLEKImX4ZrMMr6yNyjqagpss04e9sP1gISIG4tfyA8Om+DCoQ9aim3mIxpSp
-	 YeX42KTwIWZRKhcLcd/TooOtsTKBkLXVI4SUuOOlzX4RhkSyHyqLY/kAj3VwlWrrIK
-	 j6RgjIuBge/Vgde9HV+CoB26x/NGZRFp5pb+XnU2j2e7zaFpEZk/AUJlWEEMEanExS
-	 tXZtzLO5KK57JA86E1LtuB2OjLv2mEMkr0QxQHu85qC/kJQMnuRUQbgsNJyjdEGmMM
-	 bhGmXnY9NbSTg==
-Message-ID: <a8a19596-5d46-4562-9555-3b3ae7a5a3e5@marcan.st>
-Date: Mon, 11 Nov 2024 23:18:52 +0900
+	by smtp.kernel.org (Postfix) with ESMTPS id A51E0C4CED6;
+	Mon, 11 Nov 2024 15:34:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A51E0C4CED6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=SAGiYdxZNLXobUA02V5AK0lpEE5EWN2wLDUbcZRXya0=; b=CxgKWUHSY0Csj7WahkKZpcA60n
+	I9L9CKPtPDaKK0hvLhdX68A83wKH2e+Opp4jeiiCHdkqQnF6lpPe31gmrh6CpIT1GWLwwVBhP38/N
+	/OuWyEmLeHYfifH51SQ3vtTcfWE8wAxPxXbwPKnU3HVhoGO7ildnIzmmX6Oh7rJQhE/0CfVoh1ZVy
+	xocpwlF+UJBKh/z12oDnwGy72bBj4jgN3kfzjHHQ8Naygyo1rcQMV+qdSActfvn9A3ZeZDootEqno
+	wS9ltgtzU/id5Uho6xgZh4I5f18NnhMeu+1ZUXTDGt1BthoHRiB+hzS8pHNLEmtiN+SKlUola5QPq
+	5rvXOL0A==;
+Received: from i53875b28.versanet.de ([83.135.91.40] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1tAWQo-00046D-QY; Mon, 11 Nov 2024 16:34:22 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 6.13 #2
+Date: Mon, 11 Nov 2024 16:34:22 +0100
+Message-ID: <3313711.oiGErgHkdL@diego>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC DT updates for v6.13
-To: SoC Team <soc@kernel.org>
-Content-Language: en-US
-Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi SoC folks,
+Hi SoC-people
 
-Please merge these DT changes for v6.13.
+please find below and in a subsequent pull-request
+some more Rockchip changes for for 6.13 .
 
-This batch adds a bunch of pre-M1 Apple iDevice SoC and board device
-trees. These are bare-bones right now, just basic bring-up.
+More of the same as in part1 essentially :-) .
 
--Hector
+Please pull.
+Thanks
+Heiko
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+The following changes since commit 46fa3fee0b1c027862b04717b51630195c253a30:
+
+  arm64: dts: rockchip: Add rk3588-orangepi-5b device tree (2024-10-25 08:48:01 +0200)
 
 are available in the Git repository at:
 
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.13-rockchip-dts64-2
 
-for you to fetch changes up to 5c9de6f45db36b8a74c12e448cf9db87c97bf1e5:
+for you to fetch changes up to 409e01f32787d7327fd732396d08c52051ab4746:
 
-  arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE (2024-10-26 00:14:46 +0900)
-
-----------------------------------------------------------------
-Apple SoC DT updates for 6.13:
-
-- Added base DTs for a bunch of non-Mac Apple iDevices (pre-M1)
+  arm64: dts: rockchip: use less broad pinctrl for pcie3x1 on Radxa E25 (2024-11-11 16:31:35 +0100)
 
 ----------------------------------------------------------------
-Konrad Dybcio (8):
-      arm64: dts: apple: Add A7 devices
-      arm64: dts: apple: Add A8 devices
-      arm64: dts: apple: Add A8X devices
-      arm64: dts: apple: Add A9 devices
-      arm64: dts: apple: Add A9X devices
-      arm64: dts: apple: Add A10 devices
-      arm64: dts: apple: Add A10X devices
-      arm64: dts: apple: Add A11 devices
+More new boards: Rock-5C, Banana Pi P2 Pro
 
-Nick Chan (12):
-      dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
-      dt-bindings: watchdog: apple,wdt: Add A7-A11 compatibles
-      dt-bindings: pinctrl: apple,pinctrl: Add A7-A11 compatibles
-      dt-bindings: arm: apple: Add A7 devices
-      dt-bindings: arm: apple: Add A8 devices
-      dt-bindings: arm: apple: Add A8X devices
-      dt-bindings: arm: apple: Add A9 devices
-      dt-bindings: arm: apple: Add A9X devices
-      dt-bindings: arm: apple: Add A10 devices
-      dt-bindings: arm: apple: Add A10X devices
-      dt-bindings: arm: apple: Add A11 devices
-      arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE
+HDMI output enabled on a huge number of rk3588 boards, now that we
+have the ability to do that.
 
- Documentation/devicetree/bindings/arm/apple.yaml   | 160 +++++++++++++-
- Documentation/devicetree/bindings/arm/cpus.yaml    |   8 +-
- .../devicetree/bindings/pinctrl/apple,pinctrl.yaml |   5 +
- .../devicetree/bindings/watchdog/apple,wdt.yaml    |   5 +
- arch/arm64/Kconfig.platforms                       |   4 +-
- arch/arm64/boot/dts/apple/Makefile                 |  53 +++++
- arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi         |  51 +++++
- arch/arm64/boot/dts/apple/s5l8960x-air1.dtsi       |  51 +++++
- arch/arm64/boot/dts/apple/s5l8960x-common.dtsi     |  48 +++++
- arch/arm64/boot/dts/apple/s5l8960x-j71.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j72.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j73.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j85.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j85m.dts        |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j86.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j86m.dts        |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j87.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-j87m.dts        |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-mini2.dtsi      |  51 +++++
- arch/arm64/boot/dts/apple/s5l8960x-mini3.dtsi      |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-n51.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x-n53.dts         |  14 ++
- arch/arm64/boot/dts/apple/s5l8960x.dtsi            | 113 ++++++++++
- arch/arm64/boot/dts/apple/s800-0-3-common.dtsi     |  48 +++++
- arch/arm64/boot/dts/apple/s8000-j71s.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8000-j72s.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8000-n66.dts            |  15 ++
- arch/arm64/boot/dts/apple/s8000-n69u.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8000-n71.dts            |  15 ++
- arch/arm64/boot/dts/apple/s8000.dtsi               | 144 +++++++++++++
- arch/arm64/boot/dts/apple/s8001-common.dtsi        |  48 +++++
- arch/arm64/boot/dts/apple/s8001-j127.dts           |  14 ++
- arch/arm64/boot/dts/apple/s8001-j128.dts           |  14 ++
- arch/arm64/boot/dts/apple/s8001-j98a.dts           |  14 ++
- arch/arm64/boot/dts/apple/s8001-j99a.dts           |  14 ++
- arch/arm64/boot/dts/apple/s8001-pro.dtsi           |  44 ++++
- arch/arm64/boot/dts/apple/s8001.dtsi               | 133 ++++++++++++
- arch/arm64/boot/dts/apple/s8003-j71t.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8003-j72t.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8003-n66m.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8003-n69.dts            |  15 ++
- arch/arm64/boot/dts/apple/s8003-n71m.dts           |  15 ++
- arch/arm64/boot/dts/apple/s8003.dtsi               |  21 ++
- arch/arm64/boot/dts/apple/s800x-6s.dtsi            |  49 +++++
- arch/arm64/boot/dts/apple/s800x-ipad5.dtsi         |  43 ++++
- arch/arm64/boot/dts/apple/s800x-se.dtsi            |  49 +++++
- arch/arm64/boot/dts/apple/t7000-6.dtsi             |  50 +++++
- arch/arm64/boot/dts/apple/t7000-common.dtsi        |  36 ++++
- arch/arm64/boot/dts/apple/t7000-handheld.dtsi      |  27 +++
- arch/arm64/boot/dts/apple/t7000-j42d.dts           |  31 +++
- arch/arm64/boot/dts/apple/t7000-j96.dts            |  14 ++
- arch/arm64/boot/dts/apple/t7000-j97.dts            |  14 ++
- arch/arm64/boot/dts/apple/t7000-mini4.dtsi         |  51 +++++
- arch/arm64/boot/dts/apple/t7000-n102.dts           |  48 +++++
- arch/arm64/boot/dts/apple/t7000-n56.dts            |  14 ++
- arch/arm64/boot/dts/apple/t7000-n61.dts            |  14 ++
- arch/arm64/boot/dts/apple/t7000.dtsi               | 125 +++++++++++
- arch/arm64/boot/dts/apple/t7001-air2.dtsi          |  74 +++++++
- arch/arm64/boot/dts/apple/t7001-j81.dts            |  14 ++
- arch/arm64/boot/dts/apple/t7001-j82.dts            |  14 ++
- arch/arm64/boot/dts/apple/t7001.dtsi               | 123 +++++++++++
- arch/arm64/boot/dts/apple/t8010-7.dtsi             |  43 ++++
- arch/arm64/boot/dts/apple/t8010-common.dtsi        |  48 +++++
- arch/arm64/boot/dts/apple/t8010-d10.dts            |  14 ++
- arch/arm64/boot/dts/apple/t8010-d101.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8010-d11.dts            |  14 ++
- arch/arm64/boot/dts/apple/t8010-d111.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8010-ipad6.dtsi         |  44 ++++
- arch/arm64/boot/dts/apple/t8010-ipad7.dtsi         |  14 ++
- arch/arm64/boot/dts/apple/t8010-j171.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8010-j172.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8010-j71b.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8010-j72b.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8010-n112.dts           |  47 +++++
- arch/arm64/boot/dts/apple/t8010.dtsi               | 133 ++++++++++++
- arch/arm64/boot/dts/apple/t8011-common.dtsi        |  46 ++++
- arch/arm64/boot/dts/apple/t8011-j105a.dts          |  16 ++
- arch/arm64/boot/dts/apple/t8011-j120.dts           |  16 ++
- arch/arm64/boot/dts/apple/t8011-j121.dts           |  16 ++
- arch/arm64/boot/dts/apple/t8011-j207.dts           |  16 ++
- arch/arm64/boot/dts/apple/t8011-j208.dts           |  16 ++
- arch/arm64/boot/dts/apple/t8011-pro2.dtsi          |  42 ++++
- arch/arm64/boot/dts/apple/t8011.dtsi               | 141 +++++++++++++
- arch/arm64/boot/dts/apple/t8015-8.dtsi             |  13 ++
- arch/arm64/boot/dts/apple/t8015-8plus.dtsi         |   9 +
- arch/arm64/boot/dts/apple/t8015-common.dtsi        |  48 +++++
- arch/arm64/boot/dts/apple/t8015-d20.dts            |  14 ++
- arch/arm64/boot/dts/apple/t8015-d201.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8015-d21.dts            |  14 ++
- arch/arm64/boot/dts/apple/t8015-d211.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8015-d22.dts            |  14 ++
- arch/arm64/boot/dts/apple/t8015-d221.dts           |  14 ++
- arch/arm64/boot/dts/apple/t8015-x.dtsi             |  13 ++
- arch/arm64/boot/dts/apple/t8015.dtsi               | 234 +++++++++++++++++++++
- 94 files changed, 3298 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-air1.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j71.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j72.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j73.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j85.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j85m.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j86.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j86m.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j87.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j87m.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-mini2.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-mini3.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-n51.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-n53.dts
- create mode 100644 arch/arm64/boot/dts/apple/s5l8960x.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s800-0-3-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s8000-j71s.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8000-j72s.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8000-n66.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8000-n69u.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8000-n71.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8000.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s8001-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s8001-j127.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8001-j128.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8001-j98a.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8001-j99a.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8001-pro.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s8001.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s8003-j71t.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8003-j72t.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8003-n66m.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8003-n69.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8003-n71m.dts
- create mode 100644 arch/arm64/boot/dts/apple/s8003.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s800x-6s.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s800x-ipad5.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/s800x-se.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7000-6.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7000-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7000-handheld.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7000-j42d.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7000-j96.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7000-j97.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7000-mini4.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7000-n102.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7000-n56.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7000-n61.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7000.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7001-air2.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t7001-j81.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7001-j82.dts
- create mode 100644 arch/arm64/boot/dts/apple/t7001.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8010-7.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8010-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8010-d10.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-d101.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-d11.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-d111.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-ipad6.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8010-ipad7.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8010-j171.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-j172.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-j71b.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-j72b.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010-n112.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8010.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8011-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8011-j105a.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8011-j120.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8011-j121.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8011-j207.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8011-j208.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8011-pro2.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8011.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8015-8.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8015-8plus.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8015-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8015-d20.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8015-d201.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8015-d21.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8015-d211.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8015-d22.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8015-d221.dts
- create mode 100644 arch/arm64/boot/dts/apple/t8015-x.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t8015.dtsi
+A new RK356x variant - the RK3566T (with lower max-frequencies). The
+variant was already in use on some boards which then encoded those OPP
+differences in the board files itself. This moves this to saner place.
+
+Fixed-regulator nowadays has a preferred node-naming scheme set in the
+binding and we had accumulated a number of different styles over time.
+A change brings all of them in line for arm64 dts files.
+
+----------------------------------------------------------------
+Andy Yan (3):
+      arm64: dts: rockchip: Enable HDMI0 for rk3588 Cool Pi CM5 EVB
+      arm64: dts: rockchip: Enable HDMI display for rk3588 Cool Pi 4B
+      arm64: dts: rockchip: Enable HDMI display for rk3588 Cool Pi GenBook
+
+Chen-Yu Tsai (1):
+      arm64: dts: rockchip: orangepi-5-plus: Enable GPU
+
+Chris Morgan (3):
+      arm64: dts: rockchip: correct analog audio name on Indiedroid Nova
+      arm64: dts: rockchip: Enable GPU on Indiedroid Nova
+      arm64: dts: rockchip: Enable HDMI0 on Indiedroid Nova
+
+Detlev Casanova (1):
+      arm64: dts: rockchip: Remove non-removable flag from sdmmc on rk3576-sige5
+
+Dmitry Yashin (2):
+      dt-bindings: arm: rockchip: add Banana Pi P2 Pro board
+      arm64: dts: rockchip: add Banana Pi P2 Pro board
+
+Dragan Simic (4):
+      arm64: dts: rockchip: Add OPP voltage ranges to RK3399 OP1 SoC dtsi
+      arm64: dts: rockchip: Update CPU OPP voltages in RK356x SoC dtsi
+      arm64: dts: rockchip: Prepare RK356x SoC dtsi files for per-variant OPPs
+      arm64: dts: rockchip: Add new SoC dtsi for the RK3566T variant
+
+FUKAUMI Naoki (4):
+      arm64: dts: rockchip: sort rk3588s-rock5a properly in Makefile
+      dt-bindings: arm: rockchip: add Radxa ROCK 5C
+      arm64: dts: rockchip: add Radxa ROCK 5C
+      arm64: dts: rockchip: use less broad pinctrl for pcie3x1 on Radxa E25
+
+Johan Jonker (1):
+      arm64: dts: rockchip: adapt regulator nodenames to preferred form
+
+Jonas Karlman (4):
+      arm64: dts: rockchip: Enable HDMI0 on FriendlyElec CM3588 NAS
+      arm64: dts: rockchip: Enable HDMI on Hardkernel ODROID-M2
+      arm64: dts: rockchip: Enable GPU on NanoPi R6C/R6S
+      arm64: dts: rockchip: Enable HDMI on NanoPi R6C/R6S
+
+Rick Wertenbroek (1):
+      arm64: dts: rockchip: enable USB3 on NanoPC-T6
+
+ .../devicetree/bindings/arm/rockchip.yaml          |  10 +
+ arch/arm64/boot/dts/rockchip/Makefile              |   4 +-
+ .../boot/dts/rockchip/px30-engicam-common.dtsi     |   4 +-
+ arch/arm64/boot/dts/rockchip/px30-evb.dts          |   2 +-
+ .../boot/dts/rockchip/px30-firefly-jd4-core-mb.dts |   4 +-
+ .../boot/dts/rockchip/px30-firefly-jd4-core.dtsi   |   2 +-
+ .../boot/dts/rockchip/px30-ringneck-haikou.dts     |  10 +-
+ arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi    |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3308-bpi-p2-pro.dts | 362 ++++++++
+ arch/arm64/boot/dts/rockchip/rk3308-evb.dts        |  20 +-
+ arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts     |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3308-rock-pi-s.dts  |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts    |  12 +-
+ .../boot/dts/rockchip/rk3326-anbernic-rg351m.dtsi  |   2 +-
+ .../boot/dts/rockchip/rk3326-gameforce-chi.dts     |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi |   4 +-
+ arch/arm64/boot/dts/rockchip/rk3328-a1.dts         |   4 +-
+ arch/arm64/boot/dts/rockchip/rk3328-evb.dts        |   8 +-
+ arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2.dtsi |   8 +-
+ .../boot/dts/rockchip/rk3328-orangepi-r1-plus.dtsi |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3328-roc.dtsi       |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3328-rock-pi-e.dts  |   8 +-
+ arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi       |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3368-geekbox.dts    |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-lba3368.dts    |  14 +-
+ .../arm64/boot/dts/rockchip/rk3368-lion-haikou.dts |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3368-lion.dtsi      |   2 +-
+ .../boot/dts/rockchip/rk3368-orion-r68-meta.dts    |  18 +-
+ arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dts    |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-r88.dts        |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3399-eaidk-610.dts  |  16 +-
+ arch/arm64/boot/dts/rockchip/rk3399-evb.dts        |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    |  16 +-
+ .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |  22 +-
+ arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts  |   4 +-
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |  20 +-
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi       |  20 +-
+ arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dts |  18 +-
+ .../boot/dts/rockchip/rk3399-khadas-edge.dtsi      |  14 +-
+ .../boot/dts/rockchip/rk3399-kobol-helios64.dts    |  28 +-
+ arch/arm64/boot/dts/rockchip/rk3399-leez-p710.dts  |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts  |   4 +-
+ arch/arm64/boot/dts/rockchip/rk3399-nanopi-m4.dtsi |   8 +-
+ .../arm64/boot/dts/rockchip/rk3399-nanopi-neo4.dts |   6 +-
+ .../arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dtsi |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3399-op1.dtsi       |  52 +-
+ arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts   |  16 +-
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  26 +-
+ .../boot/dts/rockchip/rk3399-pinephone-pro.dts     |  12 +-
+ .../arm64/boot/dts/rockchip/rk3399-puma-haikou.dts |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  14 +-
+ .../boot/dts/rockchip/rk3399-roc-pc-mezzanine.dts  |   6 +-
+ .../arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi    |  20 +-
+ .../boot/dts/rockchip/rk3399-rock-4c-plus.dts      |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |  18 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rock960.dtsi   |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi |  22 +-
+ arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi  |  16 +-
+ .../boot/dts/rockchip/rk3399pro-vmarc-som.dtsi     |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3566-base.dtsi      |  35 +
+ arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi  |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3566-pinetab2.dtsi  |  18 +-
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts |  18 +-
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts |  12 +-
+ .../boot/dts/rockchip/rk3566-radxa-cm3-io.dts      |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3566-radxa-cm3.dtsi |   8 +-
+ .../boot/dts/rockchip/rk3566-radxa-zero-3.dtsi     |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3566-roc-pc.dts     |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3566-rock-3c.dts    |  18 +-
+ .../boot/dts/rockchip/rk3566-soquartz-blade.dts    |   6 +-
+ .../boot/dts/rockchip/rk3566-soquartz-cm4.dts      |   6 +-
+ .../boot/dts/rockchip/rk3566-soquartz-model-a.dts  |  10 +-
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi  |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3566.dtsi           | 116 ++-
+ arch/arm64/boot/dts/rockchip/rk3566t.dtsi          |  90 ++
+ arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts |  22 +-
+ arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   |  16 +-
+ .../boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi   |  10 +-
+ arch/arm64/boot/dts/rockchip/rk3568-lubancat-2.dts |  16 +-
+ .../arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi |  18 +-
+ arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts  |  12 +-
+ .../arm64/boot/dts/rockchip/rk3568-radxa-cm3i.dtsi |  10 +-
+ arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts  |  16 +-
+ arch/arm64/boot/dts/rockchip/rk3568-roc-pc.dts     |  18 +-
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts    |  26 +-
+ .../rk3568-wolfvision-pf5-io-expander.dtso         |   6 +-
+ .../boot/dts/rockchip/rk3568-wolfvision-pf5.dts    |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 113 ++-
+ .../dts/rockchip/{rk356x.dtsi => rk356x-base.dtsi} |  81 --
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |   1 -
+ .../arm64/boot/dts/rockchip/rk3588-armsom-lm7.dtsi |   4 +-
+ .../boot/dts/rockchip/rk3588-armsom-sige7.dts      |  10 +-
+ arch/arm64/boot/dts/rockchip/rk3588-armsom-w3.dts  |   8 +-
+ .../boot/dts/rockchip/rk3588-coolpi-cm5-evb.dts    |  59 +-
+ .../dts/rockchip/rk3588-coolpi-cm5-genbook.dts     |  63 +-
+ .../arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi |   8 +-
+ .../dts/rockchip/rk3588-edgeble-neu6a-common.dtsi  |   6 +-
+ .../boot/dts/rockchip/rk3588-edgeble-neu6a-io.dtsi |   8 +-
+ .../dts/rockchip/rk3588-edgeble-neu6a-wifi.dtso    |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts   |  22 +-
+ arch/arm64/boot/dts/rockchip/rk3588-fet3588-c.dtsi |  12 +-
+ .../rockchip/rk3588-friendlyelec-cm3588-nas.dts    |  47 ++
+ arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts     |  20 +-
+ .../boot/dts/rockchip/rk3588-nanopc-t6-lts.dts     |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dts  |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi |  54 +-
+ arch/arm64/boot/dts/rockchip/rk3588-ok3588-c.dts   |  14 +-
+ .../boot/dts/rockchip/rk3588-orangepi-5-plus.dts   |  15 +-
+ .../arm64/boot/dts/rockchip/rk3588-quartzpro64.dts |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts    |  12 +-
+ .../boot/dts/rockchip/rk3588-tiger-haikou.dts      |  14 +-
+ arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi     |   6 +-
+ .../arm64/boot/dts/rockchip/rk3588-toybrick-x0.dts |  20 +-
+ .../arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts |  67 +-
+ .../boot/dts/rockchip/rk3588s-gameforce-ace.dts    |  10 +-
+ .../boot/dts/rockchip/rk3588s-indiedroid-nova.dts  |  69 +-
+ .../boot/dts/rockchip/rk3588s-khadas-edge2.dts     |  10 +-
+ .../arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi |  68 +-
+ arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts |  47 ++
+ .../arm64/boot/dts/rockchip/rk3588s-orangepi-5.dts |   2 +-
+ .../boot/dts/rockchip/rk3588s-orangepi-5.dtsi      |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts   |  12 +-
+ arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts   | 920 +++++++++++++++++++++
+ 128 files changed, 2674 insertions(+), 775 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3308-bpi-p2-pro.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-base.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566t.dtsi
+ rename arch/arm64/boot/dts/rockchip/{rk356x.dtsi => rk356x-base.dtsi} (96%)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts
+
+
 
