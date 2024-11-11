@@ -1,109 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A508F12C54B
-	for <soc@lists.linux.dev>; Mon, 11 Nov 2024 09:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0332716A930
+	for <soc@lists.linux.dev>; Mon, 11 Nov 2024 09:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731318842; cv=none; b=HXbmLSMjwgNr2HNYonEa62qRuBfKBbY+s1xBNwIwD16GpBYYHw9Xk9fL2hm9f+FAsOJW3rVxAmQV6v1Lpw4/IiI5FE7Jh2JQHTZjjTDxhJKHCc2GtThu3313CuwqOaGJyrA3zGg507MoxRavFUEMAr+mwEB5pbNm6XXk1puitAA=
+	t=1731319188; cv=none; b=dTL7FL3ZYuwP6XArLysYJ20zxY+5HERmK6vQpKTdhetwK0CJ1ys/wvKRL8kSxAL6b4q5aKTzPY204M0opFB8LXQV65RIj8kcQX6ZpfvPH0MBavGRdhXcGT4/oAlYvhJMKe4APnWO2N3X/XFbfM4EWQneI8Md3yd4dsMg+xM+HcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731318842; c=relaxed/simple;
-	bh=Yks4ge+rwDjiskVZgYt7FsPDb2TSXpo5E1jHMPRbquY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=V6wa/CNPQU+AwkSsFiMIYk2GcXRSu4tCAc3foAo7KgPiCd1nvuv3yb1/y0iioHhZoUUUqe6enoWog2/CM2X1H6Ckd3yHtAcF++lDG1Yoi7Lna9MQcKMCBqauy5hfmy3JyW0SK8ezbGBUtu0yr/6DE50jw9sWnALRgWDAyA6mzEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBx9wwWR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731319188; c=relaxed/simple;
+	bh=F9qoOuyyr+mmJPW+dop1MkettG/y+6zB6pVy4UIXjYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AJ8frkv6Df7WKG0m/Ksy/qGvoiOeEEWBoSB1lKf+ChVUrLepuHMix8KLffvEtkwOmCBuJOYjN3dfoL/h7cchZLnwU06lJVhPQ/NutoWIbK6JSL2SkXmY0oyffKZxSL2z0vWwwwKUmJgIf5XNucPTsXQGl4X9rcG7h+gF7q4qbTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6C6+A5G; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBx9wwWR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6C6+A5G"
 Received: by smtp.kernel.org (Postfix)
-	id 46DDBC4CED6; Mon, 11 Nov 2024 09:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D65C4CED0;
-	Mon, 11 Nov 2024 09:54:00 +0000 (UTC)
+	id BC36FC4AF09; Mon, 11 Nov 2024 09:59:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1C4C4CED0;
+	Mon, 11 Nov 2024 09:59:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731318842;
-	bh=Yks4ge+rwDjiskVZgYt7FsPDb2TSXpo5E1jHMPRbquY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=LBx9wwWR0U5NXiF7ZSsu9kZFce8BQMszcvbkrCeQtma3QM9knqv60YzdIyNTP0/wh
-	 xRoW0g+oQf/alHaj87O9zQqXOFbqyC3vIduiA33GQi1Yucxny0R/WWh+vme32s1O3u
-	 SfO/2+kxXQvhXh+g7iTV01MAMbEACJCF5oxVpBqbnVO4kfgdltZyBTlk1R9XPQfDRG
-	 mUGjERQYkla50hUwgN+9R2AiQs+DpJfG6hpC2HBChUrw/rLpslmjRXZkeqp386Dfov
-	 w9dWzCWtakP8HZ1pGHtJdMEWzM3UnyVHr94EzFEH8ySmNqS2gT/bia2k3oU+y5vU54
-	 nEYokZBmlLj5g==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH] firmware: turris-mox-rwtm: Document the driver private data structure
-Date: Mon, 11 Nov 2024 10:53:57 +0100
-Message-ID: <20241111095357.31932-1-kabel@kernel.org>
-X-Mailer: git-send-email 2.45.2
+	s=k20201202; t=1731319187;
+	bh=F9qoOuyyr+mmJPW+dop1MkettG/y+6zB6pVy4UIXjYw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U6C6+A5GUhW2rTHadWoq7x2un5Viu40NvB37uZhls0Ui52rW1MaNgO6XaOcq0A8aY
+	 2MZ31DveZZPD6WX2Kx35k3Q+VonEJFa8ssnfJPegLH+aK8wVWHJsqUFK6K8WPj1mgd
+	 /uClXf5Ic+rcw2T/35W2Fk0k1exPXblZaq2X+BAXWA4AgIVqk0pI6YytTELMvhSqCh
+	 GbXTIDrYE9lOqOH+9JDch0cNmHYhPXSDQxWL4lL59TEQ8QkdFKlbnl+KQ3bnW/fgBw
+	 tCl2a+wv3mHn/X4H2TUwIWmnVLpioj4C5w0WXnomSTNVqe8PggFVseL24g7wEWusop
+	 XKSmevLjDiZbw==
+Date: Mon, 11 Nov 2024 10:59:41 +0100
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH leds v6 06/12] leds: turris-omnia: Document driver
+ private structures
+Message-ID: <ngsutkonewjinwkubhqcdv3lkozry3wix2iirgzd3lu6ibyje6@jygzkq3ejjw2>
+References: <20241108132845.31005-1-kabel@kernel.org>
+ <20241108132845.31005-7-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241108132845.31005-7-kabel@kernel.org>
 
-Add more comprehensive documentation for the driver private data
-structure, `struct mox_rwtm`.
+On Fri, Nov 08, 2024 at 02:28:39PM +0100, Marek Beh˙n wrote:
+> +/**
+> + * struct omnia_leds - driver private data structure
+> + * @client:			I2C client device
+> + * @lock:			mutex to protect
 
-Signed-off-by: Marek Beh√∫n <kabel@kernel.org>
----
- drivers/firmware/turris-mox-rwtm.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+This should be:
+  mutex to protect cached state
 
-diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
-index f3bc0d427825..47fe6261f5a3 100644
---- a/drivers/firmware/turris-mox-rwtm.c
-+++ b/drivers/firmware/turris-mox-rwtm.c
-@@ -61,6 +61,27 @@ enum mbox_cmd {
- 	MBOX_CMD_OTP_WRITE	= 8,
- };
- 
-+/**
-+ * struct mox_rwtm - driver private data structure
-+ * @mbox_client:	rWTM mailbox client
-+ * @mbox:		rWTM mailbox channel
-+ * @hwrng:		RNG driver structure
-+ * @reply:		last mailbox reply, filled in receive callback
-+ * @buf:		DMA buffer
-+ * @buf_phys:		physical address of the DMA buffer
-+ * @busy:		mutex to protect mailbox command execution
-+ * @cmd_done:		command done completion
-+ * @has_board_info:	whether board information is present
-+ * @serial_number:	serial number of the device
-+ * @board_version:	board version / revision of the device
-+ * @ram_size:		RAM size of the device
-+ * @mac_address1:	first MAC address of the device
-+ * @mac_address2:	second MAC address of the device
-+ * @has_pubkey:		whether board ECDSA public key is present
-+ * @pubkey:		board ECDSA public key
-+ * @last_sig:		last ECDSA signature generated with board ECDSA private key
-+ * @last_sig_done:	whether the last ECDSA signing is complete
-+ */
- struct mox_rwtm {
- 	struct mbox_client mbox_client;
- 	struct mbox_chan *mbox;
-@@ -74,13 +95,11 @@ struct mox_rwtm {
- 	struct mutex busy;
- 	struct completion cmd_done;
- 
--	/* board information */
- 	bool has_board_info;
- 	u64 serial_number;
- 	int board_version, ram_size;
- 	u8 mac_address1[ETH_ALEN], mac_address2[ETH_ALEN];
- 
--	/* public key burned in eFuse */
- 	bool has_pubkey;
- 	u8 pubkey[135];
- 
--- 
-2.45.2
+Sigh. Will send v7.
 
+Marek
