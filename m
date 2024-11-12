@@ -1,37 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356062003B7
-	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 15:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C47200C96
+	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 15:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731424992; cv=none; b=S3bVX+n0e+YYcocRm2MWptwHHuMuXZpW6vlfr2lxm+WsOtGYCvtPAxL09zkWGOScKxsVBH95SnuYSW+8orqXuYQ3lGzJk6eTv27P6UOC51t4tYdUhNtwT/ErsT71SA00KDhI8F5FqB16uwdcRdZpFOq4eXGsUUQLMiy47l1k6Bo=
+	t=1731425070; cv=none; b=Odt8gQQow10vDqf2xWZ+P6QdkhaZtc+ymyxQV+2NxWYNXVefR1E4osZ2jfroFxdSyRt6ru8NDiHlGI3I+9EHeRKWSU+r1vj/cevu+yue9ovXz9/3otRdiOk3701LliIM0H4wSNF/uHxhPpdHSYHXZxvJIXjD0Kxp5OBMT1oQUzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731424992; c=relaxed/simple;
-	bh=WfFWnJa+j64vTruGJXw3AHbj3E7ubo2o9XhalTEKqME=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cYWHUIo+hMMtiTTb9u56y1BURwgWLFx4paPulNy3f4RUPVLk7G9S7hI2NBpZPT4vHmQHgQXTpMXsg5ZuHlKgAizoQP48FuKcL5EBcTUnW8Qz7S7MXpLJxrpKnhMPN8YL8Oy0S2LDz6EVcAYMv5t9ckYXtshCP1+GnFgPV/KQIPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBh09ETz; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBh09ETz"
+	s=arc-20240116; t=1731425070; c=relaxed/simple;
+	bh=uQV0n8yCC06ltoSjlnTAEx6volrcn7obATZz9RHAyIQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=C3EzFXwuUOFrNLzCDKkAO/Bt6783yQrS5V8kG21elDBmJ3UQurUtTdrtfsCm2aiiJQyDwAoKKIbQ8h5ZYHWL1vJsbA1p25R93/JgPIC7bjSGCGZzbAQxqz711xZewY0UEVwRtb57u5nyiI99lfuC2EyyFlrZ1lWwxBkH3tEtW60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id D5B6FC4CED6; Tue, 12 Nov 2024 15:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01C2C4CED0;
-	Tue, 12 Nov 2024 15:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731424991;
-	bh=WfFWnJa+j64vTruGJXw3AHbj3E7ubo2o9XhalTEKqME=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LBh09ETzDYEkkA0ekEqTBjG11uOxJ9O+QKw2xzDq5Q5oMgJSnQ5hQ8iWdOUTwOD0m
-	 SyQSMTvm8CLFJMy7c8P+HTFdTz7HRGjkmPKO3dzmp/MNQqse3Clc5MNKaFSia3+lPB
-	 1hNJ+hQEsuphN7A44mkHq7n7HzB3DDP2OSFnfs/Nxw/N3TAmNacOF3KYnVOy0jkcXR
-	 Qb9Gby8l+CupiiXCwMds69A7rRhIRjgbhi8TRgLymeiRSimGDeDKoSkxnyshO+4YbY
-	 fIZtvZM2THcFzqJhFWEJzmxbTJW3uD9uGpjcmt50w4WsHB9DwT3Gj3fkGPdCpxBANa
-	 wFwFMGrHi9fDg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B623809A80;
-	Tue, 12 Nov 2024 15:23:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 8CCD5C4CED6; Tue, 12 Nov 2024 15:24:30 +0000 (UTC)
+Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [195.130.137.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 284B9C4CED5
+	for <soc@kernel.org>; Tue, 12 Nov 2024 15:24:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 284B9C4CED5
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+	by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4Xnqvl4Sytz4wy1L
+	for <soc@kernel.org>; Tue, 12 Nov 2024 16:24:19 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:78de:3cf6:79c5:d375])
+	by albert.telenet-ops.be with cmsmtp
+	id brQ92D00l4mJWgD06rQ9ME; Tue, 12 Nov 2024 16:24:11 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tAsk8-006q6m-9e;
+	Tue, 12 Nov 2024 16:24:09 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tAskT-001eqb-Pu;
+	Tue, 12 Nov 2024 16:24:09 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas fixes for v6.12
+Date: Tue, 12 Nov 2024 16:24:05 +0100
+Message-Id: <cover.1731424916.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,39 +55,42 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Reset controller updates for v6.13
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <173142500173.562452.11451762687158072229.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 15:23:21 +0000
-References: <20241105105229.3729474-1-p.zabel@pengutronix.de>
-In-Reply-To: <20241105105229.3729474-1-p.zabel@pengutronix.de>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: soc@kernel.org
 
-Hello:
+	Hi SoC folks,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following changes since commit 42f7652d3eb527d03665b09edac47f85fb600924:
 
-On Tue,  5 Nov 2024 11:52:29 +0100 you wrote:
-> Dear arm-soc maintainers,
-> 
-> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-> 
->   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-> 
-> are available in the Git repository at:
-> 
-> [...]
+  Linux 6.12-rc4 (2024-10-20 15:19:38 -0700)
 
-Here is the summary with links:
-  - [GIT,PULL] Reset controller updates for v6.13
-    https://git.kernel.org/soc/soc/c/7d6f7cfc34a2
+are available in the Git repository at:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v6.12-tag1
 
+for you to fetch changes up to 124f4f1a18696c4198f9f903fd74034ea8b7d352:
 
+  MAINTAINERS: Re-add cancelled Renesas driver sections (2024-11-11 11:11:17 +0100)
+
+----------------------------------------------------------------
+Renesas fixes for v6.12
+
+  - Re-add cancelled Renesas driver sections to the MAINTAINERS file.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      MAINTAINERS: Re-add cancelled Renesas driver sections
+
+ MAINTAINERS | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
