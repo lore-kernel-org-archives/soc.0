@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F03343AA1
-	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 15:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED40200B9E
+	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 15:21:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731424223; cv=none; b=J4hX5V7tvWKQLv9B8q1MJ1h27n1Unf7hxiMliqkOeNFSKSxwMda6kZHmuqSpVmdTdPvD31tamHMtmkeCOcDFs1ZkgPDMLheZ0oQzeB84uH9PSSZU3u7Sc9xHSdnRb8JTM+xARPCNDeSoRpDQLfoxJYDtEXxapYA5iu01LKu8KYo=
+	t=1731424904; cv=none; b=r08071zkzMl+k6YaW7d3AraaZFMM+c2kkeD8Dn2gATemfHwkxH4xkcjB9x4QuxdZlZAtrWvDKaTkNJqvo8XBbJD2WyeJjSmoh+1CIFJNnN3BuquDsRn0sjGI8mDCZOiK3AAnwohqzHsiONHK2DKzZrX7AlYc6OsMFdCjFE7egQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731424223; c=relaxed/simple;
-	bh=hCXlWcMA+z9gup3smO+UbY2JXWAXl2DhyCjpf5vdeb0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QGlwii7/sgLG5hTeQJQkyxxv/cUm74w9owbof6NVIdo1h5bxGTEDq6kjML3WwkVd4Pb2N4zKGhYJORRI9LDmagmco9SbdpdbR5IvxWKGOo7sAEz0dkF3Gwxjux0czYxc7ZFK3Tzaa6pJynaoFRGPkP+kwwT5fwqouseLUonoLd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ss3V5s0T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731424904; c=relaxed/simple;
+	bh=ufHKGV4URGIBzjbpyv3RC4dVxUcwO4oXGVwO1pcP0nE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=MMxTWjb5JQ4GHxFTsvaCsAtooYFt/xhDVjXd9Zy0PXdy6s0TaZBdzMGW8UWPYZf/PVPYWomTAnVS1lz/DeiDKjEtYIKbAhUvpt/W2LH0PfcFWb2XHi+rnm9rbtaz/HsoPgfWU46EoBKN7n9PSs1lvHJmkUojzruo5GvuG1DpaF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEz40Hkh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ss3V5s0T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEz40Hkh"
 Received: by smtp.kernel.org (Postfix)
-	id A5F1FC4CED5; Tue, 12 Nov 2024 15:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FBADC4CED0;
-	Tue, 12 Nov 2024 15:10:22 +0000 (UTC)
+	id 16ECCC4CED6; Tue, 12 Nov 2024 15:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FA3C4CED0
+	for <soc@kernel.org>; Tue, 12 Nov 2024 15:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731424222;
-	bh=hCXlWcMA+z9gup3smO+UbY2JXWAXl2DhyCjpf5vdeb0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Ss3V5s0TehduOr3f3HZ5GnU5GaPTnQZBm4Bkp7b9eX2u00sbwyxO3eRpIfuYJfao9
-	 koHoeON/rUrDgxD6UfX6dIGsukJwn4xC0sBZWtit37IrEQSBbKKrijYNAOMN2Z1dpH
-	 1SEqBp2nyTExRup+pVFsmJrz63UCi/+/ZDtCYULEPywH5QOj1Aao5ZNJzMiFjerkDm
-	 BlHuT40bgj08cHl3lewBnYNxHCtu+a1gvoQZ0w33lDqOH9jv+ge3nHoU1iPyIIcJG6
-	 yiWvAxXHJEtQtjglUVdF5EpphhMf0nx+wNtyYZS05vaY/ujMyRhYsKTeLoFFEpYHoY
-	 nAvw1/0Kj7Gkw==
+	s=k20201202; t=1731424904;
+	bh=ufHKGV4URGIBzjbpyv3RC4dVxUcwO4oXGVwO1pcP0nE=;
+	h=Subject:From:Date:To:Cc:From;
+	b=aEz40HkhWOogoLW4cxGYFXQgplX+fEc2Yr8+apTBV6JnKCqiNrMEMvT6W9vd0Gj/+
+	 6sy/ZqB2krJV8awYIeNTs2iTtxhHHtujT3TxiOUFwB1aVuLvaxLeftl6AE988k0jQv
+	 aSEcksF1MC58L+W6SBcguLJn3loFl79tcgUfeqgd9LL9hjrp7TWisI6JfivBNiOiPq
+	 oOyS6BQQkLjcvUAYr7mYH3RO7C+9uD+inwlqI+LzqhzCXf/z94pkPx9IVRrVE+gXz0
+	 JO51FjBkNNciYriLgxeVOkJXxJt0fyrLrGZBguVbmGtWeLbegRLlXGN3hSqH3KD9QZ
+	 4/bS4v/pZqMYA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACE43809A80;
-	Tue, 12 Nov 2024 15:10:33 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 377023809A80;
+	Tue, 12 Nov 2024 15:21:55 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,37 +38,28 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm driver fixes for v6.12
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173142423278.559138.5335288295605177631.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 15:10:32 +0000
-References: <20241101161455.746290-1-andersson@kernel.org>
-In-Reply-To: <20241101161455.746290-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <173142491368.562452.8847884321731357579.git-patchwork-summary@kernel.org>
+Date: Tue, 12 Nov 2024 15:21:53 +0000
+To: soc@kernel.org
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri,  1 Nov 2024 11:14:54 -0500 you wrote:
-> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-> 
->   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-fixes-for-6.12
-> 
-> [...]
+Patch: [GIT,PULL] Allwinner fixes for 6.12
+  Submitter: Chen-Yu Tsai <wens@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=907013
+  Lore link: https://lore.kernel.org/r/ZyuRCalH2vhHXm0Q@wens.tw
 
-Here is the summary with links:
-  - [GIT,PULL] Qualcomm driver fixes for v6.12
-    https://git.kernel.org/soc/soc/c/bbfbb5795863
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
