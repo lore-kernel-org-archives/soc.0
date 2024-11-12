@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF5C2010E3
-	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 22:31:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B0C2010E3
+	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 22:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731450706; cv=none; b=fzCcC5dIYcpe9eDjJP8bnoLcEPKKE9aDAs+q+Yi5gtnxhNR76mVkZEgBInrwRPv5tQfB1EwK+9wFM2UrAet48G0j362Ox75pu1GgNxE47zzzbEMqlUYJXlwOkcAkNJyxnqVYY0yWGNztRnU0w5dkymhRPbn3Haq83C01ATnvtcE=
+	t=1731450708; cv=none; b=UYg3oiEkU4yTqIxNsMDAUa+zazgyECn70moxtw8Vuaw7ervdsB7LfoYtcgikJYUPcQjhRwjLbycKQhw1mvy2gYx9fBW+tEHBqX4CjlynIvjyI3PGqjnrbbuMjfWSOFW0Mf8yW9PhzZl7aSbywe9eHprOUjvlRQf3ZPAiMy0PM20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731450706; c=relaxed/simple;
-	bh=HhaMUTS+TVrdOyNJnD1/QHxEat+PeIQq081iYSlrh48=;
+	s=arc-20240116; t=1731450708; c=relaxed/simple;
+	bh=Fz6+QLj1M5lzPUhpYX23YGf8gyTNH8Mn1aNurX9I96w=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PerCeim5+D3KvlPdwMkw5TZXyQrbbnUWw/Q1rKx0olHSyzd1nCL1rWv990MXQqDOTs9dOY1+Uhm6dJlMrG/4Ws2ujdGQq+X3qB47AeVfAABq7IW/Yh2fgHoXiTVmMwLmcji5yYvHB1sFhLp+dIzv29mTNZ6ecufZ6j167pVn1nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NFk1qJ+a; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=eCtFCIfrT8oZq4HAA84adn9hTLhO0jxGRuYRs5vW+FJoqnnSCkR4274DpF64C0XFm5WBabuN1vtnFrHfNsVwvnez//+vmkBxXVdnVzcjNBV9u/NrovG6LLYqINenOl15+uJyDMUTCZM1e6J/yo1KdxTpbv4kYCogi+ylALZvQ8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5mQCfKU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NFk1qJ+a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5mQCfKU"
 Received: by smtp.kernel.org (Postfix)
-	id 5190FC4CED6; Tue, 12 Nov 2024 22:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7EBC4CECD;
-	Tue, 12 Nov 2024 22:31:46 +0000 (UTC)
+	id C3A61C4CED7; Tue, 12 Nov 2024 22:31:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE153C4CED5;
+	Tue, 12 Nov 2024 22:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731450706;
-	bh=HhaMUTS+TVrdOyNJnD1/QHxEat+PeIQq081iYSlrh48=;
+	s=k20201202; t=1731450707;
+	bh=Fz6+QLj1M5lzPUhpYX23YGf8gyTNH8Mn1aNurX9I96w=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=NFk1qJ+atSPxJKbRy3G00orPRlWhXD8m011VNBWi2Zi0oLk+9Z+IEy7R3WuvY4p10
-	 AZIeTjJ7vXS5UuDLeJqF7vDbyYrF3oyZuholZ1NzurzUBEZi7V9grWNCjMVHNmMnRF
-	 Rn2RN4pApu+McnSwcn9Cfw9Xy/J210Fc3/O26ZlEFeuCbfPMdjRlYwyTe0OxOvoyJC
-	 6Aviya6R7Axd2jWwbmk8HcdmDOWF3xLhG2haVsG7qyR8oRZVZHrM8G3sDaxnpJCRXm
-	 pPkoieqGgwJeofEwQrAjlXX+TsvSqc+miv1llJdLgz6H4iMaHvScCPxogmqkvsp7hX
-	 tJVOtpb5n1RQw==
+	b=b5mQCfKUjn3OrO3O3LPiBXO1T+jM22TmCsm66vraoyaTvrOtRKq7DjXUEVxowRRLB
+	 vCMgkf+Rkh46uQpz1yI1OtTgzBvu3i0eIIV4dFkYsQNh3rSbaqfNOLI46Otm2h5cQ/
+	 F01m4mLI76xihAndSRdjjNeiV4ItZENQ9P7Rqm+Y1Feka+ggc21u1vJ9GWDkNrin8y
+	 CUG522GzTdIa1FhNod5iGOJwBdJUaBrRRyW9T++dH7rV9H4SOiiMjuYxTg4c01y8Sd
+	 z/SoAxzylvoANpZGDGGS8cP6aHvrPgn8dmx9hXarpR3UF0birtiYAJhutb5qmh+vXf
+	 90pQoGmJPRs+A==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE4523809A80;
-	Tue, 12 Nov 2024 22:31:57 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33A963809A80;
+	Tue, 12 Nov 2024 22:31:59 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: ZynqMP DT changes for 6.13
+Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.13
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173145071623.694695.8061017031050405757.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 22:31:56 +0000
-References: <CAHTX3d+x1WrXhsp6+PQbo-B3T9q21tqE1RkhVsh0r7my3vH37g@mail.gmail.com>
-In-Reply-To: <CAHTX3d+x1WrXhsp6+PQbo-B3T9q21tqE1RkhVsh0r7my3vH37g@mail.gmail.com>
-To: Michal Simek <monstr@monstr.eu>
+ <173145071775.694695.9137357646375285074.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Nov 2024 22:31:57 +0000
+References: <6fb3d64a-3913-4db0-9cdc-336af32a88a9@linaro.org>
+In-Reply-To: <6fb3d64a-3913-4db0-9cdc-336af32a88a9@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,19 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 1 Nov 2024 13:42:32 +0100 you wrote:
+On Wed, 6 Nov 2024 14:45:55 +0100 you wrote:
 > Hi,
 > 
-> please pull these 3 patches to your tree.
+> Here's a set of Amlogic ARM64 DT changes for v6.13, with
+> PWM for A1 & C3, missing properties & typo fix.
 > 
 > Thanks,
-> Michal
+> Neil
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: ZynqMP DT changes for 6.13
-    https://git.kernel.org/soc/soc/c/8b474333fcb7
+  - [GIT,PULL] amlogic ARM64 DT updates for v6.13
+    https://git.kernel.org/soc/soc/c/f0cba6f52394
 
 You are awesome, thank you!
 -- 
