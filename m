@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2972D481AF
-	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 22:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8BA481AF
+	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 22:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731450702; cv=none; b=Jrh6pVFl9PWjWLPl/pcozRkBYzxTqDXpfwqqXWfUtgrj2gqQi/Ti+yVjoaJIlHyyOLs+ylGsg9+XMhQEMHdTL7XmvP0YNDqGjstP3HUZgyGVW4/opQhJhA4HyKp7RuC7aq1evoTZ5Z4Se0lFN/9LqgktqGEKaCY/sLwu/EK8DR8=
+	t=1731450703; cv=none; b=k4GKDuYJHn/249MLD4CIMkuWv2m8ANoXnPc0ajwp4WEPijQV1ECOVZyQoVu84kpjFkX/nkg7zyMxABYQtuevYbmDBWyPj2Hg5d6FBSvk/PVyvpoQz3h5T+3ZEMQU0xU5xxGpD8yQCTMfa2M2M3zEXKyUb524rwYfxLJEr0L5tTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731450702; c=relaxed/simple;
-	bh=caIFQfYwaESkj72Rt+PWV++24sspy3K6nyiB8jAPmYo=;
+	s=arc-20240116; t=1731450703; c=relaxed/simple;
+	bh=vRW20RSQKY0/+IICMR7sV/ZowlMmORLc3L9lWu+5MZ8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eyP48A+kbespWb8XpzS8akDJTu4SwxXUBQkpelVQAoMPfX1GcKR9maYvHxsCgdim1A5Q0NWmN9kl+RlzWgtiSsgjya5CljN20WdCf9IBD+c7vZlE9cq19uel+rLwpWJnQu3qr3QrXOnj6vhyBIzFP7YVECnYdWmr3ehhF9A5Jfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckJpAoSw; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=RjOLb6y/8LZFGnTPK15cd1dWxWI70qMezdy4A5r6xqAV5L/CtEwcqfNVIFPw1dx4B7zwLxTD41JET5llcXZU4VaosOKJ8yWtJydI4ZDBrWat58n/bmc8WgYwJ2JYwGcFD47fmtrhUoo6Y690QYenf6BPmFjB3ELtGNjNmzXlc3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jp3jW3Yd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckJpAoSw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jp3jW3Yd"
 Received: by smtp.kernel.org (Postfix)
-	id C7AB3C4CED6; Tue, 12 Nov 2024 22:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B32C4CECD;
-	Tue, 12 Nov 2024 22:31:41 +0000 (UTC)
+	id 546FEC4CED6; Tue, 12 Nov 2024 22:31:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F236C4CECD;
+	Tue, 12 Nov 2024 22:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731450701;
-	bh=caIFQfYwaESkj72Rt+PWV++24sspy3K6nyiB8jAPmYo=;
+	s=k20201202; t=1731450703;
+	bh=vRW20RSQKY0/+IICMR7sV/ZowlMmORLc3L9lWu+5MZ8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ckJpAoSwy84bNUKyh8391qjyKuFXcaF+bgz0ZiIxc7IXAU+RjfsOsGQHZp5tWZKZa
-	 +FGfL37ryrO0f88/H8rVTmaX4YnLBl2al06AxjzoiXMCUyRIQJej47zYERUq/BoLp7
-	 YPnGhkurrRLWR52WCyiuM5LE4/ROpAe0eNCtxYUfcuWj1nB8LuloRrc/Sod+OWqZQ5
-	 CdEUdfonezpNdooeDXfqJgwAs98d22Ed3YtluS0bbPTHzLZndGp50RTSj7nq/AK30s
-	 9uek9WCx3JGwiSB/1pJxDnXw9MSol1cJnyPK9Q/wwqm0jYFkZSwTHQy2gWWVJX6jOO
-	 /e9sPI5RkvCHg==
+	b=jp3jW3Yd0TNrr0i8k3GiD7JZlxBLzyrBtp1u7k0o6PlWiQnku7o6LH3+QPYV790x1
+	 yPfx2xhnjWiSuqw+75tWWnnMab9zdnBsSB1UCAjipavGukWqugtPqc29pMmWiQnza4
+	 4wh/XGRVpl1c9Fu2qL36Y9puIWUvm5It7PUiMMJv7IJSTv1r6VVeZVCWgbI2l2Idgw
+	 pdRoJE40X/vajfpCAWmfxxNVn8lVhjJMQwTNwJt9chk7OTu9Si+rzYwOOgPHAawj1M
+	 2mM2Y3iKoX9/XLxKPDmxA5cppshwfkaW4SyM5OaikQsbYytDj8zm0SiYx3HA3uOYZv
+	 DBPxWG06+NupA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C533809A80;
-	Tue, 12 Nov 2024 22:31:53 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE9E3809A80;
+	Tue, 12 Nov 2024 22:31:54 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] Broadcom defconfig changes for 6.13
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.13
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173145071173.694695.11762950287505541905.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 22:31:51 +0000
-References: <20241028035449.734504-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20241028035449.734504-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
+ <173145071323.694695.15300147128993085593.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Nov 2024 22:31:53 +0000
+References: <MA0P287MB2822DC23E1EE47A5C7D41476FE532@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <MA0P287MB2822DC23E1EE47A5C7D41476FE532@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+To: Chen Wang <unicorn_wang@outlook.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,22 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 27 Oct 2024 20:54:48 -0700 you wrote:
-> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+On Wed, 6 Nov 2024 09:12:30 +0800 you wrote:
+> Hey Arnd,
 > 
->   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+> Please pull dt changes for RISC-V/Sophgo.
 > 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.13/defconfig
+> Thanks,
+> Chen.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Broadcom defconfig changes for 6.13
-    https://git.kernel.org/soc/soc/c/7d33d08f3c0d
-  - [GIT,PULL,2/2] Broadcom soc changes for 6.13
-    https://git.kernel.org/soc/soc/c/1c8f196da9fc
+  - [GIT,PULL] RISC-V Sophgo Devicetrees for v6.13
+    https://git.kernel.org/soc/soc/c/44533285bdaf
 
 You are awesome, thank you!
 -- 
