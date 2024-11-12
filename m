@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FF120ADDC
-	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 22:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF5C2010E3
+	for <soc@lists.linux.dev>; Tue, 12 Nov 2024 22:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731450705; cv=none; b=TUJFq+6rEp5XTbvh5l3OvB430zqYomiqP37NjkTPzdBbJUXgM+AgSbg7MtZG0JMcJ583gFbvoq0N05JM25EDx10h94yDqm3BeQshtSqrLl28ubEO6WLMR2JK4zWA2vZ4PveeJENra80Kydh5fOAR7Q2uC6dcBOMV8+yRBLg/FPo=
+	t=1731450706; cv=none; b=fzCcC5dIYcpe9eDjJP8bnoLcEPKKE9aDAs+q+Yi5gtnxhNR76mVkZEgBInrwRPv5tQfB1EwK+9wFM2UrAet48G0j362Ox75pu1GgNxE47zzzbEMqlUYJXlwOkcAkNJyxnqVYY0yWGNztRnU0w5dkymhRPbn3Haq83C01ATnvtcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731450705; c=relaxed/simple;
-	bh=MgtJu38R4vswG76J2y8a2XhCeJgCU+QDCBGCqgiMmik=;
+	s=arc-20240116; t=1731450706; c=relaxed/simple;
+	bh=HhaMUTS+TVrdOyNJnD1/QHxEat+PeIQq081iYSlrh48=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=e6sdyqhCEJEi/BHRfMzob8/SDyq3iCV+TjMmZKussJdFlY776EuRzDRE7XF+YHDAP+97it4SzNkHiad4kOPZzmX7YFWR8W206/3HzlRjYvi7CCxzswDYPKL+SkbAcQzxfjImSMh+gV766VzLPBHjCj14wohah2sHoR/+ChJHDgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WLCInLKd; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=PerCeim5+D3KvlPdwMkw5TZXyQrbbnUWw/Q1rKx0olHSyzd1nCL1rWv990MXQqDOTs9dOY1+Uhm6dJlMrG/4Ws2ujdGQq+X3qB47AeVfAABq7IW/Yh2fgHoXiTVmMwLmcji5yYvHB1sFhLp+dIzv29mTNZ6ecufZ6j167pVn1nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NFk1qJ+a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WLCInLKd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NFk1qJ+a"
 Received: by smtp.kernel.org (Postfix)
-	id D115FC4CED5; Tue, 12 Nov 2024 22:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB20AC4CECD;
-	Tue, 12 Nov 2024 22:31:44 +0000 (UTC)
+	id 5190FC4CED6; Tue, 12 Nov 2024 22:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7EBC4CECD;
+	Tue, 12 Nov 2024 22:31:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731450704;
-	bh=MgtJu38R4vswG76J2y8a2XhCeJgCU+QDCBGCqgiMmik=;
+	s=k20201202; t=1731450706;
+	bh=HhaMUTS+TVrdOyNJnD1/QHxEat+PeIQq081iYSlrh48=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WLCInLKdtrUq8nO6VdtIwmHaalMi4oC2rDGxCLB4SQ2A9tSKgegbZiVZhvK9aD852
-	 Az8b2KTKAop75cG3NHMra9rPtMhI+VRcG7bPlcIboN9qWILGO0c6DdJ0+6NBqTmlQr
-	 Q/q9pr0Q7O5IOiiU5vE2OcsAXkIN+3rKV3ksKUYDXZ0x93lmsZZJD42s42BdScvdt2
-	 0ZztP5LrATKCxmTLzEh9gIBeswLyvwD3JxwOQvEHc9riFBMtVDQ3hd3zk8+7sOhSeg
-	 VCbWyphBv3bz+xqa9XMaxuetk/dM5svKzJ+5KqfqU6XNCNTCeWRXy4a2mK7x2zEdly
-	 49Jl1Ps2F3NCQ==
+	b=NFk1qJ+atSPxJKbRy3G00orPRlWhXD8m011VNBWi2Zi0oLk+9Z+IEy7R3WuvY4p10
+	 AZIeTjJ7vXS5UuDLeJqF7vDbyYrF3oyZuholZ1NzurzUBEZi7V9grWNCjMVHNmMnRF
+	 Rn2RN4pApu+McnSwcn9Cfw9Xy/J210Fc3/O26ZlEFeuCbfPMdjRlYwyTe0OxOvoyJC
+	 6Aviya6R7Axd2jWwbmk8HcdmDOWF3xLhG2haVsG7qyR8oRZVZHrM8G3sDaxnpJCRXm
+	 pPkoieqGgwJeofEwQrAjlXX+TsvSqc+miv1llJdLgz6H4iMaHvScCPxogmqkvsp7hX
+	 tJVOtpb5n1RQw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D313809A80;
-	Tue, 12 Nov 2024 22:31:56 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE4523809A80;
+	Tue, 12 Nov 2024 22:31:57 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Allwinner device tree changes for 6.13 part 2
+Subject: Re: [GIT PULL] arm64: dts: ZynqMP DT changes for 6.13
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173145071473.694695.9263460300922820023.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 22:31:54 +0000
-References: <ZzC-OF57MT_yCeWH@wens.tw>
-In-Reply-To: <ZzC-OF57MT_yCeWH@wens.tw>
-To: Chen-Yu Tsai <wens@kernel.org>
+ <173145071623.694695.8061017031050405757.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Nov 2024 22:31:56 +0000
+References: <CAHTX3d+x1WrXhsp6+PQbo-B3T9q21tqE1RkhVsh0r7my3vH37g@mail.gmail.com>
+In-Reply-To: <CAHTX3d+x1WrXhsp6+PQbo-B3T9q21tqE1RkhVsh0r7my3vH37g@mail.gmail.com>
+To: Michal Simek <monstr@monstr.eu>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 10 Nov 2024 22:07:52 +0800 you wrote:
-> The following changes since commit fcfbb8d9ec584c256c0a6e1ae3174a21b007f399:
+On Fri, 1 Nov 2024 13:42:32 +0100 you wrote:
+> Hi,
 > 
->   arm64: allwinner: a100: Add MMC related nodes (2024-11-02 19:32:40 +0800)
+> please pull these 3 patches to your tree.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.13-2
+> Thanks,
+> Michal
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Allwinner device tree changes for 6.13 part 2
-    https://git.kernel.org/soc/soc/c/36255ab49361
+  - [GIT,PULL] arm64: dts: ZynqMP DT changes for 6.13
+    https://git.kernel.org/soc/soc/c/8b474333fcb7
 
 You are awesome, thank you!
 -- 
