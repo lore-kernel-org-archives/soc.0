@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE621E25E4
-	for <soc@lists.linux.dev>; Fri, 15 Nov 2024 19:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223411E283F
+	for <soc@lists.linux.dev>; Fri, 15 Nov 2024 19:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731699494; cv=none; b=biDlnGsM8ABXA96FYJ4eUoB6LXpjzwCEOIry0xq91uOa443p3kFD+kz8PGpzogYLjUAySckPFw09PLYuhCY4MeMvaNhgYnkhQDUFdKabbj/gJBgTu5xrZR8U681crrGkUqGhHOtgCZCmpfYgCEeRjhbhFcyncNNhEjzeeTiRMyE=
+	t=1731699530; cv=none; b=H6Jgd97JQqZMdUVdgU4H8gWar8ftEOUjRpzLsp4cITcUMN/pZ49W1KFddk7CeTJFMvIBWqDveZgLun+PzVy4ybzSjZSwspNVMbEU5slcOrJx4ZPseWql4Sy6cFe7mCnBR4hZEZg3pK21cUMbAbYJsyllkQ253dtOxMxDRep54I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731699494; c=relaxed/simple;
-	bh=n+Y3/vywDHOX4fTfCMH9P93v6vPkfw+CgMztsz7Apq4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q0UCLz5+jAcglIvxJhf270Esfpon/VAE3DhmudF5cNTRfCNpyPfDDCNOnMWtODNLkvNC9oZPIYGy+BhmdoGC3KJ1CcYdqYrNHLXI+EU84jDBG5+ckut0rOR6ELKO1oWMt9NujaIlV6cjJVOk0KsrFJlB/oBdG/3q/946bd65t5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pp3GKUJM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731699530; c=relaxed/simple;
+	bh=Ta89hoZlKOxfpyHkQBO+QgPfHl3czdx7coDCK9JfVdg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dz3ivDR46KZNqTLWMclBkdIjcfy1fxhxNpVt+iL6vNnxcZ9kzE+fBZn4QtsA+fnmSseQjIaKWu6vU59AJ90uqxY5KC7PBoMVACQz5dDO084bA2/ue5TPxkF5GhgjU66O5rJJBEH4PuNf62UlG4Nlc9vCBKoUxiBBYodMF1R8YYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jvWXf89i; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pp3GKUJM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jvWXf89i"
 Received: by smtp.kernel.org (Postfix)
-	id 24F7EC4CED5; Fri, 15 Nov 2024 19:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31FCC4CECF;
-	Fri, 15 Nov 2024 19:38:13 +0000 (UTC)
+	id D127EC4CED4; Fri, 15 Nov 2024 19:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97599C4CECF;
+	Fri, 15 Nov 2024 19:38:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731699494;
-	bh=n+Y3/vywDHOX4fTfCMH9P93v6vPkfw+CgMztsz7Apq4=;
+	s=k20201202; t=1731699529;
+	bh=Ta89hoZlKOxfpyHkQBO+QgPfHl3czdx7coDCK9JfVdg=;
 	h=From:To:Cc:Subject:Date:From;
-	b=pp3GKUJMRCunUAVAnnI9VLqbDpINKZGFIz6PzOjN31bBurFIxtvwzNGrMouqkQhMa
-	 iQqmLmHdv+qSs6AlYPCOuPht677bOxJjTJtrOfQz3eZl8nMHuxGY28H9w0ANDMm+NJ
-	 yFNyM+k1UitETiP1erYg39wFKkzxpdoZ0RALM1/RU3k3w83BzPy3a4imNniVQ5gcAm
-	 nqdUq9z2TkTn7PMIRQEDpUmZXM+y+I2lVwZc9FX4K1aGhXliSvmodW5IkqRdzuiSe/
-	 eau432BbgxX013DWqCIpE70QIpftfchjBBv9C8CiBleFPlsYXvlGvDMO8VtUibmiDB
-	 DR8FXrPFjSjuA==
+	b=jvWXf89iDBZYVTcgpi+pQFVPTvIpHvirLtmIYLVWZlgbmXfrQQL6qCw4qt1BPniWd
+	 mEaamc16R/c6CXqA83+XEoBlEQ6kLUb2Ca32qel26gBp09bx+VbsSLgP3JzhsGM7xJ
+	 1ia7enQ+S+YHGpHcS/sUKyOoAZmCbxFZVWJOUgkpk0vqgn/FJ708frTIyBne9SLDXd
+	 MYQpXwiygwPHuFhRi08geoipFfFn2D50gI7W0qsSr6vOqUdkRa5P9D+NoHL9zRL4vP
+	 r40rQOyDo4FdVCdG0M4lkJGZ5ixfnFWHZGEzukVFbA4uvdxbuPkFBnwwe0EJgVGivY
+	 kyyI3jqBsC9yg==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: soc@kernel.org,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
+To: Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@kernel.org,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>
-Cc: devicetree@vger.kernel.org,
+Cc: linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: amd: Remove unused and undocumented "amd,zlib-support" property
-Date: Fri, 15 Nov 2024 13:37:40 -0600
-Message-ID: <20241115193740.3622591-2-robh@kernel.org>
+Subject: [PATCH] arm: dts: spear13xx: Remove unused and undocumented "pl022,slave-tx-disable" property
+Date: Fri, 15 Nov 2024 13:38:34 -0600
+Message-ID: <20241115193835.3623725-1-robh@kernel.org>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -47,41 +48,55 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove "amd,zlib-support" property which is both unused in the kernel and
-undocumented. Most likely they are leftovers from downstream.
+Remove "pl022,slave-tx-disable" property which is both unused in the kernel
+and undocumented. Most likely they are leftovers from downstream.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
-SoC maintainers, please take this directly.
+ arch/arm/boot/dts/st/spear1310-evb.dts | 2 --
+ arch/arm/boot/dts/st/spear1340-evb.dts | 2 --
+ 2 files changed, 4 deletions(-)
 
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts | 1 -
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts | 1 -
- 2 files changed, 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts
-index 1a65f1ec183d..7c82d90e940d 100644
---- a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts
-+++ b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts
-@@ -27,7 +27,6 @@ psci {
- 
- &ccp0 {
- 	status = "okay";
--	amd,zlib-support = <1>;
- };
- 
- /**
-diff --git a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts
-index 52f8d36295a8..58e2b0a6f841 100644
---- a/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts
-+++ b/arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts
-@@ -27,7 +27,6 @@ psci {
- 
- &ccp0 {
- 	status = "okay";
--	amd,zlib-support = <1>;
- };
- 
- /**
+diff --git a/arch/arm/boot/dts/st/spear1310-evb.dts b/arch/arm/boot/dts/st/spear1310-evb.dts
+index 18191a87f07c..ad216571ba57 100644
+--- a/arch/arm/boot/dts/st/spear1310-evb.dts
++++ b/arch/arm/boot/dts/st/spear1310-evb.dts
+@@ -353,7 +353,6 @@ stmpe610@0 {
+ 					spi-max-frequency = <1000000>;
+ 					spi-cpha;
+ 					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+ 					pl022,com-mode = <0>;
+ 					pl022,rx-level-trig = <0>;
+ 					pl022,tx-level-trig = <0>;
+@@ -385,7 +384,6 @@ flash@1 {
+ 					spi-cpol;
+ 					spi-cpha;
+ 					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+ 					pl022,com-mode = <0x2>;
+ 					pl022,rx-level-trig = <0>;
+ 					pl022,tx-level-trig = <0>;
+diff --git a/arch/arm/boot/dts/st/spear1340-evb.dts b/arch/arm/boot/dts/st/spear1340-evb.dts
+index cea624fc745c..9b515b21a633 100644
+--- a/arch/arm/boot/dts/st/spear1340-evb.dts
++++ b/arch/arm/boot/dts/st/spear1340-evb.dts
+@@ -446,7 +446,6 @@ flash@0 {
+ 					spi-cpol;
+ 					spi-cpha;
+ 					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+ 					pl022,com-mode = <0x2>;
+ 					pl022,rx-level-trig = <0>;
+ 					pl022,tx-level-trig = <0>;
+@@ -461,7 +460,6 @@ stmpe610@1 {
+ 					spi-cpha;
+ 					reg = <1>;
+ 					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+ 					pl022,com-mode = <0>;
+ 					pl022,rx-level-trig = <0>;
+ 					pl022,tx-level-trig = <0>;
 -- 
 2.45.2
 
