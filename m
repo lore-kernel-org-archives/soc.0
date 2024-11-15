@@ -1,105 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6133629429
-	for <soc@lists.linux.dev>; Thu, 14 Nov 2024 14:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB431BBBE4
+	for <soc@lists.linux.dev>; Fri, 15 Nov 2024 15:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731593309; cv=none; b=CgQhsTNdsEkxwJnLgG51MzF6oY155IaBEDH/crFY/71tO4fKdg1yruMU9CYKfv+OqAzDHLW8rxcjlZJ1FE6Z13spgfe7wjb/y3DFovAyE3xBVgrKsukCDmQOlMt8A8+MxzNgJVcj4c8bLq1n4Vtz1UCgW4tZ/x7tmFBgU1GaINA=
+	t=1731683405; cv=none; b=pI+gcqFjR4L1wqa9O+ttE/yo3yPMoUj9tEAGy/JonjVavEPsoPTAsNtrlMm53C+3BOZzdthslIM5SU1WXkeiLmeMmLysDnH3MvPoBYsAb4GbX07FGUPoilhbMe1kca/CiaAdAzJhOxyKDeieoSBSNArNini2R1QmfnbFP4YC/J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731593309; c=relaxed/simple;
-	bh=4tmLsYzGf/MJXXRAi6PqnuCEZuoR301b1aVT0OhXBcA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=tzFkOUrJ8hfdM8cM8d8Eav3+34HBGGOZYffWwa+7Qgxo4pid/0pjkMQRSV9T9rioS/w8qN4eC1IgldqWnL53amurX3ft98sqyTnldOisJIQUn8Tu1KdZ6doXlK9GsE9XGLzgg3hBkZOYVb2FG7EpQDDRASOz8fN9lv5Sp5PXQxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id EBC21C4CED4; Thu, 14 Nov 2024 14:08:28 +0000 (UTC)
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7A1A6C4CECD
-	for <soc@kernel.org>; Thu, 14 Nov 2024 14:08:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A1A6C4CECD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Xq27F2SZsz9sSc;
-	Thu, 14 Nov 2024 15:08:25 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJP1MnpOcJTL; Thu, 14 Nov 2024 15:08:25 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Xq27C6DdPz9sSd;
-	Thu, 14 Nov 2024 15:08:23 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id C73C08B7A0;
-	Thu, 14 Nov 2024 15:08:23 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 3a5FcjBVyalq; Thu, 14 Nov 2024 15:08:23 +0100 (CET)
-Received: from [192.168.232.55] (unknown [192.168.232.55])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 822F78B763;
-	Thu, 14 Nov 2024 15:08:23 +0100 (CET)
-Message-ID: <c3c4961b-fe2a-4fcc-a7a1-f8b5352e09a2@csgroup.eu>
-Date: Thu, 14 Nov 2024 15:08:23 +0100
+	s=arc-20240116; t=1731683405; c=relaxed/simple;
+	bh=s5QVE4NaR83/7M7PtsqGvjOLW1yP8l0947gtgLTI/pA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=BMG3wuNFRosZJShMbfqwsulh0XEePBPRNjL92msaQzEwLjBft3OFTpveb4U0NxOxeDPiRMHal/hQIVfQBD095DMTC1q9GxGM4piSTzoQeZDFZQRpsB3Pestz7hcpb3x9EiyFqoP4k8Bwtip60bJHLhZJC5WYmIAfStYP/6lenxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nOXSJWzh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=deXa/Hdn; arc=none smtp.client-ip=202.12.124.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nOXSJWzh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="deXa/Hdn"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 0B88D2540176;
+	Fri, 15 Nov 2024 10:10:02 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 15 Nov 2024 10:10:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1731683401;
+	 x=1731769801; bh=nLE+UOTS7yHdog6ETbMGcYAEjTIcnW2Hb1xbsSa24qU=; b=
+	nOXSJWzhDQ7uEdSXslDHBBwBRSTNC8fnK/NE/YQCB6PI/LdSdoPJ2JKAQIvUpeVw
+	+Q794Wy/0b76KSlKhJNHNQ25mJhL8725nuoWbTKcZ9NMI2TRQaOdF7p8RM58Bad2
+	HWluM9ucfcS+fB5MkBIJ51JOOJyNCz6gpla1WLh6uM6aZOuSj8EUd6tTF2QPr/YM
+	p7jncsqs3egS4TVeh8djL6TZBF/wor//7nQYrQd4ZHGSsAmxokbA+9QwtjLMHFew
+	OgIQetlun9Gc+1dt0cBnUaPaKTbwRiUqUcwcxKcEKa7oQA9KU7vh0dTgmwxMNetQ
+	u+FrkHosWsrrGZhk2WMdyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1731683401; x=
+	1731769801; bh=nLE+UOTS7yHdog6ETbMGcYAEjTIcnW2Hb1xbsSa24qU=; b=d
+	eXa/HdnRwNcPVOz9naGBFMhieyx9xKP+9Lb270gD7hW6j+bE7mY/xtgIM8Hv4Rio
+	v/0HlWHx6Te0u9/j+jcM3nPsZIMYSmQTkxWaJ5KgYlmFUYe0zDoInZCr3LTtPbQP
+	28fTozk4Zv2EsVLtBmhgy0TkCiCnGv0VL6ve38KdZ10VYLeCyVZ/ws6z1dspiwPt
+	ipftlke+cQaItb4XA22Z/uIqtc/DTImPhhsF3f54uKMUDqnc5m1ryDiM3L89zseI
+	77oACeSe2jaOEFwU7yUfjs/vI+Sj4Al/Ixd8AvZZnhxgMuJVeVp0riNu83zuC2CR
+	4SHVJAwdKDfBSQp+WbXuA==
+X-ME-Sender: <xms:SWQ3Z7wC3cCbw6nUGAgMVd46TBZ5uAnOYaBtv2ddjcS2KPAwRDVW4A>
+    <xme:SWQ3ZzQu1YPT3qeD89nLlInWzRzg6HSfp447g4iPk0vUfodpruAxYqefN2dPww9nA
+    1-lKW69DRMLP1dyYes>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrvdeggdejtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttden
+    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
+    gvqeenucggtffrrghtthgvrhhnpeelheevjeevgffhteeiveffgedtvedvteekleefgeel
+    ffeuvefhudetieehgfelveenucffohhmrghinhepsghlrghiiigvrdgtohhmpdhkvghrnh
+    gvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedugedpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdr
+    tghomhdprhgtphhtthhopehjrghmvghsrdgtohifghhilhhlsegslhgrihiivgdrtghomh
+    dprhgtphhtthhopehmrghtthhhvgifrdhrvggufhgvrghrnhessghlrghiiigvrdgtohhm
+    pdhrtghpthhtohepnhgvihhlrdhjohhnvghssegslhgrihiivgdrtghomhdprhgtphhtth
+    hopehnihhkohhlrghoshdrphgrshgrlhhouhhkohhssegslhgrihiivgdrtghomhdprhgt
+    phhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhrii
+    hkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:SWQ3Z1W8l1AmoJ--C8_Z8WY90ySNt3vYnVjiEucoY3qO6S5pgP253A>
+    <xmx:SWQ3Z1j6Dj1RHATybGvOg7F4c4dmq8pULORdF6D3npJ_sZLxehL3wA>
+    <xmx:SWQ3Z9Brr8nDHRZLRI4_Ug5OfGNuUoDSsO6cgWWv7rUPLMdPpu57UQ>
+    <xmx:SWQ3Z-JjNL-O0kEz6pY9YJ7r-GojJ5UZ5ISMJix1UO9-zW6qgpMJEA>
+    <xmx:SWQ3Z1wtsBDS6K2uC0fhZz913LWUaa_TbAZd4LA3dHMmlZTgXu49Y6NN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 46E032220072; Fri, 15 Nov 2024 10:10:01 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [GIT PULL] SOC FSL for 6.13
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: Herve Codina <herve.codina@bootlin.com>,
+Date: Fri, 15 Nov 2024 16:09:30 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Niko Pasaloukos" <nikolaos.pasaloukos@blaize.com>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "James Cowgill" <james.cowgill@blaize.com>,
+ "Matt Redfearn" <matthew.redfearn@blaize.com>,
+ "Neil Jones" <neil.jones@blaize.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Olof Johansson" <olof@lixom.net>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+ "soc@lists.linux.dev" <soc@lists.linux.dev>
+Message-Id: <141c7d39-9f0e-4c1c-86c5-149328ab979a@app.fastmail.com>
+In-Reply-To: 
+ <20241115-blaize-blzp1600_init_board_support-v5-0-c09094e63dc5@blaize.com>
+References: 
+ <20241115-blaize-blzp1600_init_board_support-v5-0-c09094e63dc5@blaize.com>
+Subject: Re: [PATCH v5 0/6] Add support for Blaize BLZP1600 SoC
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+On Fri, Nov 15, 2024, at 15:58, Niko Pasaloukos wrote:
+> Blaize, Inc. (www.blaize.com) is a SoC designer and manufacturer
+> with integrated programmable Graph-Streaming-Processors for AI
+> and ML. This series adds support for the Blaize BLZP1600 SoC.
+>
+> The SoC can run as either a PCIe based accelerator in a host
+> system, or as a stand alone SoC running Linux on its integrated
+> dual core ARM Cortex A53 cluster.
+>
+> The SoC includes a suite of peripherals, support for which will
+> be added later.
+>
+> This first series is just the basics to get the upstream
+> kernel to boot with a UART console and ARM SCMI based
+> clocks and resets.
+>
 
-Please pull the following Freescale Soc Drivers changes for 6.13
+Hi Niko,
 
-Thanks
-Christophe
+This version looks good to me, but it's likely that others
+still have review comments. Either way I should let you know
+of the next steps for merging the series.
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
+Since the 6.13 development cycle is now over (the
+merge window starts once Linus publishes 6.12
+this weekend), the earliest release to merge this
+into is now 6.14.
 
-   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+Once 6.13-rc1 is out and the patch review is complete,
+you can submit the patches for inclusion by sending
+to:soc@lists.linux.dev (formerly soc@kernel.org).
+This is usually done as a pull request, but separate
+patches are fine as well, especially if you don't yet
+have a kernel.org account.
 
-are available in the Git repository at:
+After the entry to the MAINTAINERS file is merged,
+I suggest you also apply for a kernel.org account,
+see [1]. You probably also read the documentation at
+[2] about the usual process, let me know if you
+have questions about that.
 
-   https://github.com/chleroy/linux.git tags/soc_fsl-6.13-1
+       Arnd
 
-for you to fetch changes up to cb3daa51db819a172e9524e96e2ed96b4237e51a:
-
-   soc: fsl: cpm1: qmc: Set the ret error code on platform_get_irq() 
-failure (2024-11-14 08:26:15 +0100)
-
-----------------------------------------------------------------
-FSL SOC changes for 6.13:
-
-- Fix a missing of_node_put() in RCPM
-- Fix a missing error code on failure in CPM1 QMC
-- Switch to using for_each_available_child_of_node_scoped() in CPM1 TSA
-
-----------------------------------------------------------------
-Herve Codina (1):
-       soc: fsl: cpm1: qmc: Set the ret error code on platform_get_irq() 
-failure
-
-Javier Carrasco (2):
-       soc: fsl: cpm1: tsa: switch to 
-for_each_available_child_of_node_scoped()
-       soc: fsl: rcpm: fix missing of_node_put() in 
-copy_ippdexpcr1_setting()
-
-  drivers/soc/fsl/qe/qmc.c |  4 +++-
-  drivers/soc/fsl/qe/tsa.c | 28 ++++------------------------
-  drivers/soc/fsl/rcpm.c   |  1 +
-  3 files changed, 8 insertions(+), 25 deletions(-)
+[1] https://korg.docs.kernel.org/accounts.html
+[2] https://www.kernel.org/doc/Documentation/process/maintainer-soc.rst
