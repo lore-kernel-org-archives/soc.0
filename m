@@ -1,44 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223411E283F
-	for <soc@lists.linux.dev>; Fri, 15 Nov 2024 19:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8891D5173
+	for <soc@lists.linux.dev>; Fri, 15 Nov 2024 19:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731699530; cv=none; b=H6Jgd97JQqZMdUVdgU4H8gWar8ftEOUjRpzLsp4cITcUMN/pZ49W1KFddk7CeTJFMvIBWqDveZgLun+PzVy4ybzSjZSwspNVMbEU5slcOrJx4ZPseWql4Sy6cFe7mCnBR4hZEZg3pK21cUMbAbYJsyllkQ253dtOxMxDRep54I8=
+	t=1731700306; cv=none; b=WVRMwhVbzHOxITJ4YkMcp6rDw2hxYPPCIoGPIqQnWz1BBRAbdrV/WRiIQ/plM7SDJtQul99DJe96WHQZBnFWv577bt2se86ozGyEv9OFX0Fb77pFjblovWP9E1GVLQm4gVcIfX1/iUKSMb1sw5pzg3oqI8Bz6yZKlNyiMYvj7es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731699530; c=relaxed/simple;
-	bh=Ta89hoZlKOxfpyHkQBO+QgPfHl3czdx7coDCK9JfVdg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dz3ivDR46KZNqTLWMclBkdIjcfy1fxhxNpVt+iL6vNnxcZ9kzE+fBZn4QtsA+fnmSseQjIaKWu6vU59AJ90uqxY5KC7PBoMVACQz5dDO084bA2/ue5TPxkF5GhgjU66O5rJJBEH4PuNf62UlG4Nlc9vCBKoUxiBBYodMF1R8YYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jvWXf89i; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731700306; c=relaxed/simple;
+	bh=e8LT/AOosJE1s+TaGvF+vfwCSygOro0BM++afUbz9Yw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rW5M5M4PCk+5mChaoaQklPy46Ja3mTu6XOrDlfjvzhufn1b3//nSKmWh+fPl2EIKI7hmPHlRIPdEQ2anfhXbT1lXPrnOyHhvJ3tPB3RhsGUag3M2wPvWIJIBwNMC2YztqLr9V1ZgO6AEfbMKM+qHDcPWEbVBfTA5tRlxZdxdtVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kM0CWeIM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jvWXf89i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kM0CWeIM"
 Received: by smtp.kernel.org (Postfix)
-	id D127EC4CED4; Fri, 15 Nov 2024 19:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97599C4CECF;
-	Fri, 15 Nov 2024 19:38:49 +0000 (UTC)
+	id 3EA08C4CED4; Fri, 15 Nov 2024 19:51:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE41FC4CECF;
+	Fri, 15 Nov 2024 19:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731699529;
-	bh=Ta89hoZlKOxfpyHkQBO+QgPfHl3czdx7coDCK9JfVdg=;
+	s=k20201202; t=1731700306;
+	bh=e8LT/AOosJE1s+TaGvF+vfwCSygOro0BM++afUbz9Yw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=jvWXf89iDBZYVTcgpi+pQFVPTvIpHvirLtmIYLVWZlgbmXfrQQL6qCw4qt1BPniWd
-	 mEaamc16R/c6CXqA83+XEoBlEQ6kLUb2Ca32qel26gBp09bx+VbsSLgP3JzhsGM7xJ
-	 1ia7enQ+S+YHGpHcS/sUKyOoAZmCbxFZVWJOUgkpk0vqgn/FJ708frTIyBne9SLDXd
-	 MYQpXwiygwPHuFhRi08geoipFfFn2D50gI7W0qsSr6vOqUdkRa5P9D+NoHL9zRL4vP
-	 r40rQOyDo4FdVCdG0M4lkJGZ5ixfnFWHZGEzukVFbA4uvdxbuPkFBnwwe0EJgVGivY
-	 kyyI3jqBsC9yg==
+	b=kM0CWeIMyWAwhB/2KIJxJtAIXBIQhqECMZ6A55SL1qgpFMu7+dof0lHfwCmW09fag
+	 riSj0GO8PpbyI3IhjaOX4il0R+hmOUj/UHgcvK148NNo6WRCyQFXqu0a3kGKQ0r2P0
+	 soO2hmDrSOkcf7FQe/iTueU2XivEQXlkt4QnTYbqRLlMwvNVXDh3eprmepwSw/QpKn
+	 Rjjd0AGyB33mAS6H1EzUMZzFkQSNKIvW/KLmnz07XwVXD6CEyp8z2H7b0VlUE13SL2
+	 aQAwdeUNoVnCDgroR0yQHjp9MWYPS6Ma5XsiHIkMsUFml9hSeLn2fevaRXVWHs+AWG
+	 kG2MPaEyHn0GA==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	soc@kernel.org,
+To: soc@kernel.org,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
+Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] arm: dts: spear13xx: Remove unused and undocumented "pl022,slave-tx-disable" property
-Date: Fri, 15 Nov 2024 13:38:34 -0600
-Message-ID: <20241115193835.3623725-1-robh@kernel.org>
+Subject: [PATCH RESEND] arm64: dts: apm: Remove unused and undocumented "bus_num" property
+Date: Fri, 15 Nov 2024 13:50:49 -0600
+Message-ID: <20241115195049.3637454-2-robh@kernel.org>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -48,55 +46,49 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove "pl022,slave-tx-disable" property which is both unused in the kernel
-and undocumented. Most likely they are leftovers from downstream.
+Remove "bus_num" property which is both unused in the kernel and
+undocumented. Most likely they are leftovers from downstream.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- arch/arm/boot/dts/st/spear1310-evb.dts | 2 --
- arch/arm/boot/dts/st/spear1340-evb.dts | 2 --
- 2 files changed, 4 deletions(-)
+SoC Maintainers, please take directly.
 
-diff --git a/arch/arm/boot/dts/st/spear1310-evb.dts b/arch/arm/boot/dts/st/spear1310-evb.dts
-index 18191a87f07c..ad216571ba57 100644
---- a/arch/arm/boot/dts/st/spear1310-evb.dts
-+++ b/arch/arm/boot/dts/st/spear1310-evb.dts
-@@ -353,7 +353,6 @@ stmpe610@0 {
- 					spi-max-frequency = <1000000>;
- 					spi-cpha;
- 					pl022,interface = <0>;
--					pl022,slave-tx-disable;
- 					pl022,com-mode = <0>;
- 					pl022,rx-level-trig = <0>;
- 					pl022,tx-level-trig = <0>;
-@@ -385,7 +384,6 @@ flash@1 {
- 					spi-cpol;
- 					spi-cpha;
- 					pl022,interface = <0>;
--					pl022,slave-tx-disable;
- 					pl022,com-mode = <0x2>;
- 					pl022,rx-level-trig = <0>;
- 					pl022,tx-level-trig = <0>;
-diff --git a/arch/arm/boot/dts/st/spear1340-evb.dts b/arch/arm/boot/dts/st/spear1340-evb.dts
-index cea624fc745c..9b515b21a633 100644
---- a/arch/arm/boot/dts/st/spear1340-evb.dts
-+++ b/arch/arm/boot/dts/st/spear1340-evb.dts
-@@ -446,7 +446,6 @@ flash@0 {
- 					spi-cpol;
- 					spi-cpha;
- 					pl022,interface = <0>;
--					pl022,slave-tx-disable;
- 					pl022,com-mode = <0x2>;
- 					pl022,rx-level-trig = <0>;
- 					pl022,tx-level-trig = <0>;
-@@ -461,7 +460,6 @@ stmpe610@1 {
- 					spi-cpha;
- 					reg = <1>;
- 					pl022,interface = <0>;
--					pl022,slave-tx-disable;
- 					pl022,com-mode = <0>;
- 					pl022,rx-level-trig = <0>;
- 					pl022,tx-level-trig = <0>;
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 2 --
+ arch/arm64/boot/dts/apm/apm-storm.dtsi     | 1 -
+ 2 files changed, 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+index ea5721ea02f0..5a64239b4708 100644
+--- a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+@@ -809,7 +809,6 @@ i2c1: i2c@10511000 {
+ 			interrupts = <0 0x45 0x4>;
+ 			#clock-cells = <1>;
+ 			clocks = <&sbapbclk 0>;
+-			bus_num = <1>;
+ 		};
+ 
+ 		i2c4: i2c@10640000 {
+@@ -819,7 +818,6 @@ i2c4: i2c@10640000 {
+ 			reg = <0x0 0x10640000 0x0 0x1000>;
+ 			interrupts = <0 0x3a 0x4>;
+ 			clocks = <&i2c4clk 0>;
+-			bus_num = <4>;
+ 		};
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+index 6ad4703925dc..872093b05ce1 100644
+--- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+@@ -851,7 +851,6 @@ i2c0: i2c@10512000 {
+ 			interrupts = <0 0x44 0x4>;
+ 			#clock-cells = <1>;
+ 			clocks = <&ahbclk 0>;
+-			bus_num = <0>;
+ 		};
+ 
+ 		phy1: phy@1f21a000 {
 -- 
 2.45.2
 
