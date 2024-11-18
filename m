@@ -1,71 +1,81 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7184D19007E;
-	Sat, 16 Nov 2024 09:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F831CABF;
+	Mon, 18 Nov 2024 01:33:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731750134; cv=none; b=jes+BuRRteapwFVfN+9hwaDm8k2m7TZL/qjrayl864lC68RToAtZlvHFerutMQGiZbSdmpeRppYjelL0seZtugFVTj9gmMEhNYrNv9D8TuC94s8VbG/tvWKqUEUvLRrrNJN4aVt7AOu9tNIrydWHmPD54X68tcqFD2iyNcfq89E=
+	t=1731893645; cv=none; b=aMzvcPreuDN1NQw4jsPYoVrDLzEXd0NftP3AjBf3uPO3v9fn+kGgBr8MnZIIp79hokHv/oC8GkcRcdY2nwfiMCtQ7yT0WoISqeORFgx9pkhqFAtxR8+R3hEhonPntfDCj1k7xyXgiFbreaU6VWVX7A3itg7Q346ULCtuGT57aE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731750134; c=relaxed/simple;
-	bh=U9emRweIjDuCq5Hej5AucUk8uRA06S0B+7MpUGrg5qY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oYFMwQ29ipAeYp7d8zk6uXw0fYNfuDpTv0tRYZfzOGLFY8d0b7pn0IdLc0njHbto1uPON5tKrDImD7ppLgXqDUwY9knFUwmIuV9/l3lWADiXRPDLJ8hixVs7H9Z7APWs3uE6xGrxe1lYntm+oU1b9npIeMLTWxVtDZ8TEhZt0jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=J2KXX/Su; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="J2KXX/Su"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1731750127;
-	bh=6Yr3v8h2TldfiCcRyReOQGJPZNnddjXSKjFgGcIyKP8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=J2KXX/SuxtCkozOltk8pyFMZIPW8v6gjTXxskXui5BZL4pooA3xpBeg2DRtSe4Eji
-	 4bVTdh6R+RO+fB01qsqbd5WIJqB4Scw7nND4rkZ9ZF5DeLcvkJvcXv833vANEYsmN1
-	 sl2ICJ3VxsWrfSD7SeBppusvX1XaSNUBWia40JVc=
-Received: from [192.168.124.9] (unknown [113.200.174.68])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id CA72D1A3F68;
-	Sat, 16 Nov 2024 04:42:05 -0500 (EST)
-Message-ID: <0509da76bd3be0d4c7ff433da854ae74cd367d5b.camel@xry111.site>
+	s=arc-20240116; t=1731893645; c=relaxed/simple;
+	bh=8mOs4oxYbYD+FWRf6UUyMcunl959DqhJVom8TB+XMh0=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=OgrXyEz9DIRVCMaT3eA9GtYxdKR23VLFdsOzXgKwNVciifflg55xxu6ILLQHTzn/0BMHefNNufeXcTLuyRqK9QfFSfPosteEs2SgjznmpLlvEZFpkaDNiARrH9O0z/jYTHMvkeDLo56WWDpD59aB9+RPYcINe5tw6aU1cgIdxjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8DxmeB_mTpnieNAAA--.62190S3;
+	Mon, 18 Nov 2024 09:33:51 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMBxqsF9mTpn1N1aAA--.6147S2;
+	Mon, 18 Nov 2024 09:33:50 +0800 (CST)
 Subject: Re: [PATCH] soc: loongson: add Loongson Security Module driver
-From: Xi Ruoyao <xry111@xry111.site>
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>, arnd@arndb.de, olof@lixom.net
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	loongarch@lists.linux.dev
-Date: Sat, 16 Nov 2024 17:42:02 +0800
-In-Reply-To: <20241116085729.12651-1-zhaoqunqin@loongson.cn>
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: arnd@arndb.de, olof@lixom.net, soc@lists.linux.dev,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
 References: <20241116085729.12651-1-zhaoqunqin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 
+ <0509da76bd3be0d4c7ff433da854ae74cd367d5b.camel@xry111.site>
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Message-ID: <f580c60d-3608-0f82-9639-34f529825cde@loongson.cn>
+Date: Mon, 18 Nov 2024 09:32:02 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <0509da76bd3be0d4c7ff433da854ae74cd367d5b.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMBxqsF9mTpn1N1aAA--.6147S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-
+	e5UUUUU==
 
-On Sat, 2024-11-16 at 16:57 +0800, Qunqin Zhao wrote:
-> +config LOONGSON_SE
-> +	tristate "LOONGSON SECURITY MODULE Interface"
 
-"Loongson Security Module" as there's no reason to use all upper-case
-form here.
+在 2024/11/16 下午5:42, Xi Ruoyao 写道:
+> On Sat, 2024-11-16 at 16:57 +0800, Qunqin Zhao wrote:
+>> +config LOONGSON_SE
+>> +	tristate "LOONGSON SECURITY MODULE Interface"
+> "Loongson Security Module" as there's no reason to use all upper-case
+> form here.
 
-> +	depends on LOONGARCH && ACPI
-> +	help
-> +	=C2=A0 The Loongson security module provides the control for
-> hardware
-> +	=C2=A0 encryption acceleration devices. Each device uses at least
-> one
-> +	=C2=A0 channel to interacts with security module, and each channel
-> may
-> +	=C2=A0 has its own buffer provided by security module.
+Agreed.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Thanks.
+
+>> +	depends on LOONGARCH && ACPI
+>> +	help
+>> +	  The Loongson security module provides the control for
+>> hardware
+>> +	  encryption acceleration devices. Each device uses at least
+>> one
+>> +	  channel to interacts with security module, and each channel
+>> may
+>> +	  has its own buffer provided by security module.
+
