@@ -1,335 +1,140 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CD738FAD;
-	Mon, 18 Nov 2024 01:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819722D627
+	for <soc@lists.linux.dev>; Mon, 18 Nov 2024 03:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731894764; cv=none; b=i4cRsFNMyMmcE86MHjgnudM/H90L/QEBskfMudRgETu2+MMfCrbDGQjiMjk6sN0u87JTEl+oNjHQ92nzFAEMIRxz8Hf5LGMxqfv7qf9pAfFtBpnUgzDk/bX0Wqq/76m7hq3FO1WlWNRZ0uXtVFx0Kw8sdojAIuZTEBeNEM7Bfa4=
+	t=1731902027; cv=none; b=dQWPCb7Y8wlacyIgBNc/3YGxkztzrTuQlC5EyjYbIQ9aFyodcGbahECVRn4t57CEDlag2s7DFmQBDRruH6YBc4QhCSFWleAh/2KzEzRYHVUQtmdW78+Kw9mgfy6u5f0fIxdqzf+u+j6Ird5Pm0MFdj9RxLaLDiluRPxlMJstJwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731894764; c=relaxed/simple;
-	bh=ywldCGbOjprysDrs4YKld2feiC2yusHyMUc50wI/AtE=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=fcQd3d6Uevnl8ANTh6ia3hYg0lznGBH8o5AWpmY7/IGzwCnzPkphbF5TBzYt9q4l2WS88rZah89OfOQgk8Hwgfh1GbUyA/Xakh86ZSksC4KG3xqYd958fo49E0oDfiavQuyhURrPjy/B9d9jRgfx62qTbedVY/EQFgKTerSuC74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.164])
-	by gateway (Coremail) with SMTP id _____8CxieHmnTpnH+ZAAA--.64513S3;
-	Mon, 18 Nov 2024 09:52:39 +0800 (CST)
-Received: from [10.20.42.164] (unknown [10.20.42.164])
-	by front1 (Coremail) with SMTP id qMiowMCxOMHinTpnw+JaAA--.6193S2;
-	Mon, 18 Nov 2024 09:52:36 +0800 (CST)
-Subject: Re: [PATCH] soc: loongson: add Loongson Security Module driver
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: arnd@arndb.de, olof@lixom.net, soc@lists.linux.dev,
- linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20241116085729.12651-1-zhaoqunqin@loongson.cn>
- <8efcd579-15d5-4ea2-bbb9-f9b4969f031f@wanadoo.fr>
-From: Zhao Qunqin <zhaoqunqin@loongson.cn>
-Message-ID: <4674b202-ec33-e20a-85a8-4591679488ac@loongson.cn>
-Date: Mon, 18 Nov 2024 09:50:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1731902027; c=relaxed/simple;
+	bh=757AscSd7zeiv7j6vKkam3CidywRcEO/KEooyL092no=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n3TD1+UoGfNCgnF/9diTNTuXq5iLFKNR/6zovIgPZztkhRKsNgbvraz2IuoUlPZvKrsTfIJy42zrB71dfIO1bdvDGZ8eWr5c9+sVvA1c/gA8n4NTI3gPl2WeMiNfx3KLLOZtel/lvYanb2pRPgFzgP1z48dJrceutL8oG5k7gD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zuRgBv6j; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zuRgBv6j"
+Received: by smtp.kernel.org (Postfix)
+	id 1EC81C4CEDB; Mon, 18 Nov 2024 03:53:47 +0000 (UTC)
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 05175C4CECF
+	for <soc@kernel.org>; Mon, 18 Nov 2024 03:53:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 05175C4CECF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7ee51d9ae30so1029844a12.1
+        for <soc@kernel.org>; Sun, 17 Nov 2024 19:53:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731902025; x=1732506825; darn=kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iziczI7ZYYRzrx5DXDLTU2aWQXZX8V3J+sI1zP/uoWY=;
+        b=zuRgBv6j62J02KofVYjEMJKssR77/bGhNzqXA/F6Upiw8vY9yVHOq5gAiwvdoeis7R
+         6T/Gvs5GfbJUya77ZDe3FUksCW5mbv0sUHXwHDAqHmeRTynWS45Qts6ujErcdFgosbUV
+         LEJ3bTAUxI9XP2ONZP5FBU9hlucysvLna4zdQogYJq6siNnwZjv1pnGfpFhinn3rRe2U
+         cCyNkuewxvkfPlaCE44DJCeZxq2K8+qOtcu6ufnRzb3y3wBXcjlw3gDopcetm8A2kAM4
+         +qx+rrXon5smNa0LlpI9UWFIv9ddRHthapvzKcFkdSejhlBgBJqax1zZvHIIdNDMNqQL
+         E7ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731902025; x=1732506825;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iziczI7ZYYRzrx5DXDLTU2aWQXZX8V3J+sI1zP/uoWY=;
+        b=kwyw5L5m0C9JaOJ3igbNh4D5Irh/fHSvLd3cPDf7kY/rfIwArknScBLGuxI8uhmaJo
+         u/5CxrKb95Zx5dNDslozaGjQDP+BjPRea33l3ZMi3P8fN06qY4etw66rdcqrlUdIaEJO
+         KTk0Y1R/LwwCGLa1UNZzI4XXnEdag+S68k+CYw36uV216y0BLdGwQVmIJxjm5IFHwt8D
+         LS9M+zurXrJWkrUPtcnIAZZ+fpnfIGrrVQ8B2UotDA0TR1hEcC4/ztMccjgJC7LxBISF
+         s2hwEAszjQHTOpCb6c+xzd/rco2YrDtnclvgA3t3eipee8N2mVH95KzyyGxLY121KDm+
+         5eGg==
+X-Forwarded-Encrypted: i=1; AJvYcCXIc+8QtXtr37iekfMMNd+KcMyCGF9+df3SpisLtyVMOqFS6guB7eEminCZ/nZjHtFBwYU=@kernel.org
+X-Gm-Message-State: AOJu0Yzod5mh1JO11LApK76v9Iw9XaZ57U4v+Co167PPldCrzpQ5kmbo
+	gG7HFwrVWpo/wAY71TncMi3l8dTCUfKCbgyi69QVyG9DjdmwhtSNfosOjjHffmw=
+X-Google-Smtp-Source: AGHT+IGYl9W0UXIVLMASe6ljQEHSvMFAGPTR22VIIByVAeNekYNbpUP8Pv6DHUaufX/uZNV/YdmOCg==
+X-Received: by 2002:a05:6a20:840d:b0:1d9:3acf:8bdc with SMTP id adf61e73a8af0-1dc90c05eafmr19652857637.46.1731902025266;
+        Sun, 17 Nov 2024 19:53:45 -0800 (PST)
+Received: from localhost ([122.172.86.146])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7247711e005sm5159648b3a.72.2024.11.17.19.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Nov 2024 19:53:44 -0800 (PST)
+Date: Mon, 18 Nov 2024 09:23:42 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm: dts: spear13xx: Remove unused and undocumented
+ "pl022,slave-tx-disable" property
+Message-ID: <20241118035342.ej5pxzrn2lildyzk@vireshk-i7>
+References: <20241115193835.3623725-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <8efcd579-15d5-4ea2-bbb9-f9b4969f031f@wanadoo.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:qMiowMCxOMHinTpnw+JaAA--.6193S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Xr4UJrWxur1rZrWxuFy8Zwc_yoWfZr4rpF
-	n5JFW5GryUJrn3Jr15tryUXFy5Ar18G3ZrJFnaqF1UJrsrAr1jgr1UXF1q9r1xAr48Jr1j
-	qr18WrsruF17J3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-	Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-	cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
-	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2uc_DUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241115193835.3623725-1-robh@kernel.org>
 
+On 15-11-24, 13:38, Rob Herring (Arm) wrote:
+> Remove "pl022,slave-tx-disable" property which is both unused in the kernel
+> and undocumented. Most likely they are leftovers from downstream.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  arch/arm/boot/dts/st/spear1310-evb.dts | 2 --
+>  arch/arm/boot/dts/st/spear1340-evb.dts | 2 --
+>  2 files changed, 4 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/st/spear1310-evb.dts b/arch/arm/boot/dts/st/spear1310-evb.dts
+> index 18191a87f07c..ad216571ba57 100644
+> --- a/arch/arm/boot/dts/st/spear1310-evb.dts
+> +++ b/arch/arm/boot/dts/st/spear1310-evb.dts
+> @@ -353,7 +353,6 @@ stmpe610@0 {
+>  					spi-max-frequency = <1000000>;
+>  					spi-cpha;
+>  					pl022,interface = <0>;
+> -					pl022,slave-tx-disable;
+>  					pl022,com-mode = <0>;
+>  					pl022,rx-level-trig = <0>;
+>  					pl022,tx-level-trig = <0>;
+> @@ -385,7 +384,6 @@ flash@1 {
+>  					spi-cpol;
+>  					spi-cpha;
+>  					pl022,interface = <0>;
+> -					pl022,slave-tx-disable;
+>  					pl022,com-mode = <0x2>;
+>  					pl022,rx-level-trig = <0>;
+>  					pl022,tx-level-trig = <0>;
+> diff --git a/arch/arm/boot/dts/st/spear1340-evb.dts b/arch/arm/boot/dts/st/spear1340-evb.dts
+> index cea624fc745c..9b515b21a633 100644
+> --- a/arch/arm/boot/dts/st/spear1340-evb.dts
+> +++ b/arch/arm/boot/dts/st/spear1340-evb.dts
+> @@ -446,7 +446,6 @@ flash@0 {
+>  					spi-cpol;
+>  					spi-cpha;
+>  					pl022,interface = <0>;
+> -					pl022,slave-tx-disable;
+>  					pl022,com-mode = <0x2>;
+>  					pl022,rx-level-trig = <0>;
+>  					pl022,tx-level-trig = <0>;
+> @@ -461,7 +460,6 @@ stmpe610@1 {
+>  					spi-cpha;
+>  					reg = <1>;
+>  					pl022,interface = <0>;
+> -					pl022,slave-tx-disable;
+>  					pl022,com-mode = <0>;
+>  					pl022,rx-level-trig = <0>;
+>  					pl022,tx-level-trig = <0>;
 
-在 2024/11/16 下午5:31, Christophe JAILLET 写道:
-> Le 16/11/2024 à 09:57, Qunqin Zhao a écrit :
->> This driver supports Loongson Security Module, which
->> provides the control for it's hardware encryption
->> acceleration child devices.
->>
->> Only ACPI firmware is supported.
->>
->> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
->> ---
->>   MAINTAINERS                        |   7 +
->>   drivers/soc/loongson/Kconfig       |   9 +
->>   drivers/soc/loongson/Makefile      |   1 +
->>   drivers/soc/loongson/loongson_se.c | 542 +++++++++++++++++++++++++++++
->>   include/soc/loongson/se.h          | 135 +++++++
->>   5 files changed, 694 insertions(+)
->>   create mode 100644 drivers/soc/loongson/loongson_se.c
->>   create mode 100644 include/soc/loongson/se.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index fdeb3d12c..85fff2eb7 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -13379,6 +13379,13 @@ S:    Maintained
->>   F: Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
->>   F:    drivers/soc/loongson/loongson2_guts.c
->>   +LOONGSON SECURITY MODULE DRIVER
->> +M:    Qunqin Zhao <zhaoqunqin@loongson.cn>
->> +L:    loongarch@lists.linux.dev
->> +S:    Maintained
->> +F:    drivers/soc/loongson/loongson_se.c
->> +F:    include/soc/loongson/se.h
->> +
->>   LOONGSON-2 SOC SERIES PM DRIVER
->>   M:    Yinbo Zhu <zhuyinbo@loongson.cn>
->>   L:    linux-pm@vger.kernel.org
->> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
->> index 368344943..93ef1d205 100644
->> --- a/drivers/soc/loongson/Kconfig
->> +++ b/drivers/soc/loongson/Kconfig
->> @@ -27,3 +27,12 @@ config LOONGSON2_PM
->>         Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up 
->> methods
->>         (USB, GMAC, PWRBTN, etc.). This driver was to add power 
->> management
->>         controller support that base on dts for Loongson-2 series SoCs.
->> +
->> +config LOONGSON_SE
->> +    tristate "LOONGSON SECURITY MODULE Interface"
->> +    depends on LOONGARCH && ACPI
->> +    help
->> +      The Loongson security module provides the control for hardware
->> +      encryption acceleration devices. Each device uses at least one
->> +      channel to interacts with security module, and each channel may
->
-> s/interacts/interact/
->
->> +      has its own buffer provided by security module.
->
-> s/has/have/
->
->> diff --git a/drivers/soc/loongson/Makefile 
->> b/drivers/soc/loongson/Makefile
->> index 4118f50f5..503075042 100644
->> --- a/drivers/soc/loongson/Makefile
->> +++ b/drivers/soc/loongson/Makefile
->> @@ -5,3 +5,4 @@
->>     obj-$(CONFIG_LOONGSON2_GUTS)        += loongson2_guts.o
->>   obj-$(CONFIG_LOONGSON2_PM)        += loongson2_pm.o
->> +obj-$(CONFIG_LOONGSON_SE)        += loongson_se.o
->> diff --git a/drivers/soc/loongson/loongson_se.c 
->> b/drivers/soc/loongson/loongson_se.c
->> new file mode 100644
->> index 000000000..d85db8423
->> --- /dev/null
->> +++ b/drivers/soc/loongson/loongson_se.c
->
-> ...
->
->> +static int loongson_se_get_res(struct loongson_se *se, u32 int_bit, 
->> u32 cmd,
->> +                   struct se_data *res)
->> +{
->> +    int err = 0;
->> +
->> +    res->int_bit = int_bit;
->> +
->> +    if (se_get_response(se, res)) {
->> +        dev_err(se->dev, "Int 0x%x get response fail.\n", int_bit);
->> +        return -EFAULT;
->> +    }
->> +
->> +    /* Check response */
->> +    if (res->u.res.cmd == cmd)
->> +        err = 0;
->
-> Not needed, err is already 0.
->
->> +    else {
->> +        dev_err(se->dev, "Response cmd is 0x%x, not expect cmd 
->> 0x%x.\n",
->> +            res->u.res.cmd, cmd);
->> +        err = -EFAULT;
->> +    }
->> +
->> +    return err;
->> +}
->
-> ...
->
->> +static int loongson_se_set_msg(struct lsse_ch *ch)
->> +{
->> +    struct loongson_se *se = ch->se;
->> +    struct se_data req = {0};
->> +    struct se_data res = {0};
->> +    int err;
->> +
->> +    req.int_bit = SE_INT_SETUP;
->> +    req.u.gcmd.cmd = SE_CMD_SETMSG;
->> +    /* MSG off */
->> +    req.u.gcmd.info[0] = ch->id;
->> +    req.u.gcmd.info[1] = ch->smsg - se->mem_base;
->> +    req.u.gcmd.info[2] = ch->msg_size;
->> +
->> +    dev_dbg(se->dev, "Set Channel %d msg off 0x%x, msg size %d\n",
->> +        ch->id, req.u.gcmd.info[1], req.u.gcmd.info[2]);
->> +
->> +    err = se_send_genl_cmd(se, &req, &res, 5);
->> +    if (res.u.res.cmd_ret)
->
-> In the fnction above, we test (err || ...)
-> Is it needed here as well (or can it be removed in se_send_genl_cmd())
->
-> Also, below se_send_genl_cmd() errors are checked only with err.
-> Should it be consistent?
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-The above function may need to be tried again, so both values need to be 
-checked.
-
-However, this function only needs to return an error value.
-
-Others agreed.
-
-Thanks.
-
->
->> +        return res.u.res.cmd_ret;
->> +
->> +    return err;
->> +}
->
-> ...
->
->> +void se_deinit_ch(struct lsse_ch *ch)
->> +{
->> +    struct loongson_se *se = ch->se;
->> +    unsigned long flag;
->> +    int first, nr;
->> +    int id = ch->id;
->> +
->> +    if (!se) {
->> +        pr_err("SE has bot been initialized\n");
->> +        return;
->> +    }
->> +
->> +    if (id == 0 || id > SE_CH_MAX) {
->> +        dev_err(se->dev, "Channel number %d is invalid\n", id);
->> +        return;
->> +    }
->> +
->> +    if (!se_ch_status(se, BIT(id))) {
->> +        dev_err(se->dev, "Channel number %d has not been 
->> initialized\n", id);
->> +        return;
->> +    }
->> +
->> +    spin_lock_irqsave(&se->dev_lock, flag);
->> +
->> +    se->ch_status &= ~BIT(ch->id);
->> +
->> +    first = (ch->data_buffer - se->mem_base) / PAGE_SIZE;
->> +    nr = round_up(ch->data_size, PAGE_SIZE) / PAGE_SIZE;
->> +    bitmap_clear(se->mem_map, first, nr);
->> +
->> +    first = (ch->smsg - se->mem_base) / PAGE_SIZE;
->> +    nr = round_up(ch->msg_size, PAGE_SIZE) / PAGE_SIZE;
->> +    bitmap_clear(se->mem_map, first, nr);
->> +
->> +    se_disable_int(se, ch->int_bit);
->> +
->> +    spin_unlock_irqrestore(&se->dev_lock, flag);
->> +
->
-> Uneeded empty line
->
->> +}
->> +EXPORT_SYMBOL_GPL(se_deinit_ch);
->> +
->> +static int loongson_se_probe(struct platform_device *pdev)
->> +{
->> +    struct loongson_se *se;
->> +    struct device *dev = &pdev->dev;
->> +    int nr_irq, irq, err, size;
->> +
->> +    se = devm_kmalloc(dev, sizeof(*se), GFP_KERNEL);
->> +    if (!se)
->> +        return -ENOMEM;
->> +    se->dev = dev;
->> +    dev_set_drvdata(dev, se);
->> +    init_completion(&se->cmd_completion);
->> +    spin_lock_init(&se->cmd_lock);
->> +    spin_lock_init(&se->dev_lock);
->> +    /* Setup DMA buffer */
->> +    dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
->> +    if (device_property_read_u32(dev, "dmam_size", &size))
->> +        return -ENODEV;
->> +    size = roundup_pow_of_two(size);
->> +    se->mem_base = dmam_alloc_coherent(dev, size, &se->mem_addr, 
->> GFP_KERNEL);
->> +    if (!se->mem_base)
->> +        return -ENOMEM;
->> +    memset(se->mem_base, 0, size);
->
-> I don't think that it is needed. dmam_alloc_coherent() should return 
-> zeroed memory.
->
->> +    se->mem_map_pages = size / PAGE_SIZE;
->> +    se->mem_map = devm_bitmap_zalloc(dev, se->mem_map_pages, 
->> GFP_KERNEL);
->> +    if (!se->mem_map)
->> +        return -ENOMEM;
->> +
->> +    se->base = devm_platform_ioremap_resource(pdev, 0);
->> +    if (IS_ERR(se->base))
->> +        return PTR_ERR(se->base);
->> +
->> +    nr_irq = platform_irq_count(pdev);
->> +    if (nr_irq <= 0)
->> +        return -ENODEV;
->> +    while (nr_irq) {
->> +        irq = platform_get_irq(pdev, --nr_irq);
->> +        if (irq < 0)
->> +            return -ENODEV;
->> +        /* Use the same interrupt handler address.
->> +         * Determine which irq it is accroding
->> +         * SE_S2LINT_STAT register.
->> +         */
->> +        err = devm_request_irq(dev, irq, se_irq, 0,
->> +                       "loongson-se", se);
->> +        if (err)
->> +            dev_err(dev, "failed to request irq: %d\n", err);
->> +    }
->> +
->> +    err = se_init_hw(se, se->mem_addr, size);
->> +    if (err)
->> +        se_disable_hw(se);
->> +
->> +    return err;
->> +}
->> +
->> +static struct acpi_device_id loongson_se_acpi_match[] = {
->
-> const?
->
->> +    {"LOON0011", 0},
->> +    {}
->> +};
->> +MODULE_DEVICE_TABLE(acpi, loongson_se_acpi_match);
->
-> ...
->
-> CJ
-
+-- 
+viresh
