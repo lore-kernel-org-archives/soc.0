@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778D01CC15C;
-	Tue, 19 Nov 2024 13:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7F91C2454;
+	Tue, 19 Nov 2024 13:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732021445; cv=none; b=DmCbu4/s9arXqB5jHrRXkz++tH7Ipn7/Tg460R3bpGErGnPIJPutmgaU3Fk+B2/h1l98PfbKmCKf+kahtrFOltv1t2wkQCTVrWRyjbImnPGq7vtxkQPkx+HWW5i83MGwz5qSytg1OBmtxSkZV/8aFSnQgwAgyNSW1/zRlDMFuRw=
+	t=1732021527; cv=none; b=eYo6hnNgvcdlD3Ev3V0Pv4kcjvOgQCE3/esbrU1byNf1pe7R86zz3vuQZERITi7RmgP4w9Wc2zYVj3+A0TkT+B7LzNKV3MJrEfTr5VpPdf0Dt/pFKBs0d+vP8scKElJSZ0R1/nZoSSn+i7ZmYqpGrAqW+6pqdcRSiIfkf1SKAjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732021445; c=relaxed/simple;
-	bh=bfScoq1gnxWUeK0M4zoTkRe0Pzy1yvfZwjXSt62mLjM=;
+	s=arc-20240116; t=1732021527; c=relaxed/simple;
+	bh=p/IHHok2wOrODlJQF1SeqZvtvKHUNu8+gXKwDk4gZmI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i5fTHRz6temGHTXpZ7n4EGM1gOdbBOmb0tb5KLT1hYGaX6ZIAmbtu1BnITu7uEgiA7gpuWcxybgWghdQxRhsha72jHfr3J/4HI55o94tgLbTaPoHgTqdwjrMwvaahIquWJDhOQqfi38NY6HpbE7Gu53nvIzPJiuRLdoyGLniGUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dDKpcU5C; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=mO2zeKP1dDzmpAVtdjCaqcz7/DFSwjfzyU8DbO8ficSBCDxdQagfpRNHPNG/q05zpOn1R5CfydVktKqdb5KD0QRNDqzJGJRFXUs8nD2veUWzgi1RuF0xpPLYX/PUH09wMBySNEkmjucZxF8btnIVtX5Exu3enW0lXFK9rj7pS/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5lrCnmc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dDKpcU5C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE3BC4CECF;
-	Tue, 19 Nov 2024 13:04:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5lrCnmc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F07C4CED0;
+	Tue, 19 Nov 2024 13:05:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732021445;
-	bh=bfScoq1gnxWUeK0M4zoTkRe0Pzy1yvfZwjXSt62mLjM=;
+	s=k20201202; t=1732021526;
+	bh=p/IHHok2wOrODlJQF1SeqZvtvKHUNu8+gXKwDk4gZmI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dDKpcU5CG4EZS/3XNkQGhOr7KLp77qoQGUJszrNnQ4HJnahviXTGCAKydO2Ocrz3Y
-	 E3aFPTcepoDnmwn07QDL/IxzFuYrN34zOPNuV95mB8rL2eLjp9+/I7bh/xAn3pE8QV
-	 7e50bFsfS9XK2JCiZyauzuosDaQJiOdMeFQnot3Gp06emDoIcTf140JnAGeutfMzEM
-	 8IAdCPCRi7OaFsO9hQsaPZx/gH/NZ06j6aP1Rhd9rAPTeDup+HkQ/mWGqUQwI9ilgu
-	 OHytfokSg2OsgXTGgYhISkW47eeAmB2HFOXiQFjuBQZeKpQ6y79jFsgtP2uomKZQ1f
-	 iAXMVcRoPGy1A==
-Message-ID: <78dc8893-bd5e-42eb-b21f-b790e029b55a@kernel.org>
-Date: Tue, 19 Nov 2024 14:03:59 +0100
+	b=V5lrCnmc85yOXxzYRP047GcfnOrR9baMhy9S6fxFEVTM3b0tGlYvrdnH9PwGX3SUI
+	 ILCj13sbymkIVQ+AhuVQ/70GqoRKmmsu+Zo9kGLQvG42pNnv9E1kT6Ul87aV0eET7C
+	 jty7w7tkWNrIhKPPJsfako2AC6iQbyUfrjntmA2d3arCLihOnziPCAGAjT1qp3pjxY
+	 oZ2a1jqiCVmwghZyTk9pjZiRzC+pUhEIRJ4S/Iyjx1rIqapwT+dfnuCiwDcoWpdmcP
+	 TrgTc1sdSJ8w9gTIjkgKFZSJseR1jnnPwTkwG9XYN3l2/nbE6rfSM1frlptFnfGxi1
+	 FYDzWrVidox1g==
+Message-ID: <c1885e24-8051-4c91-9870-18eb4218a2ff@kernel.org>
+Date: Tue, 19 Nov 2024 14:05:20 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,7 +35,7 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/6] arm64: Add Blaize BLZP1600 SoC family
+Subject: Re: [PATCH v5 1/6] dt-bindings: Add Blaize vendor prefix
 To: Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, James Cowgill
@@ -49,7 +49,7 @@ Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
  <linux-arm-kernel@lists.infradead.org>,
  "soc@lists.linux.dev" <soc@lists.linux.dev>
 References: <20241115-blaize-blzp1600_init_board_support-v5-0-c09094e63dc5@blaize.com>
- <20241115-blaize-blzp1600_init_board_support-v5-3-c09094e63dc5@blaize.com>
+ <20241115-blaize-blzp1600_init_board_support-v5-1-c09094e63dc5@blaize.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -95,20 +95,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241115-blaize-blzp1600_init_board_support-v5-3-c09094e63dc5@blaize.com>
+In-Reply-To: <20241115-blaize-blzp1600_init_board_support-v5-1-c09094e63dc5@blaize.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/11/2024 15:58, Niko Pasaloukos wrote:
-> Add ARCH_BLAIZE SoC family to the arm64 architecture to
-> support the BLZP1600 System-On-Module and the Carrier-Board-2
-> development board.
+> Blaize, Inc. (www.blaize.com) is a SoC manufacturer with integrated
+> programmable Graph-Streaming-Processors for AI and ML.
 > 
-> Reviewed-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 > Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+Here and in all other patches - you still have the same checkpatch
+warning I asked to fix.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+git format-patch -6 -v5
+scripts/checkpatch.pl v5*
+
+Your SoB does not match From. This MUST be fixed.
 
 Best regards,
 Krzysztof
