@@ -1,235 +1,799 @@
-Received: from mx08-0063e101.pphosted.com (mx08-0063e101.pphosted.com [185.183.31.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF6E1D04A6
-	for <soc@lists.linux.dev>; Tue, 19 Nov 2024 16:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.183.31.155
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732033450; cv=fail; b=cksK5P9dNNRsiiZCYxGEWw3vIXb9jbnwFm5IJqn4y1/syIN8MA/3Txx5ZtKY2LGK2i8KYeAV2IucVlWSXCLiI/CUof6vB8b9JHlYl2hX9Cdj5IgAbBNCfaVZOoA/u/izCB08xlxP2rCERhmj8a9Gw0oG6WAp4OTHOkE5Nm0FsQ4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732033450; c=relaxed/simple;
-	bh=TL4ASsdIJSmzNHx/EC6uUpoSCdvYvYeoJNgvzfCeWco=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=oA1xrOB8kfFTdQoAm/qqpmJbhQEDltNL3MCpDKXPfIct22vZRtsC57R1ZjmMPVREBWkzC/6xSCln7WHBwYeiUSJMmUj9bAikQd1r4abHN463DxaKMyCAe+6DI3hCzsSwkOJWgGD+RgVZc4LffxyC4yGWBtXqL+bl1pw3diUGBmU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=blaize.com; spf=pass smtp.mailfrom=blaize.com; dkim=pass (1024-bit key) header.d=BLAIZE.COM header.i=@BLAIZE.COM header.b=YY02I0mb; arc=fail smtp.client-ip=185.183.31.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=blaize.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blaize.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=BLAIZE.COM header.i=@BLAIZE.COM header.b="YY02I0mb"
-Received: from pps.filterd (m0247494.ppops.net [127.0.0.1])
-	by mx08-0063e101.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJFmDdb002806;
-	Tue, 19 Nov 2024 16:23:55 GMT
-Received: from ma0pr01cu012.outbound.protection.outlook.com (mail-southindiaazlp17011024.outbound.protection.outlook.com [40.93.131.24])
-	by mx08-0063e101.pphosted.com (PPS) with ESMTPS id 42xhkxhbn6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Nov 2024 16:23:54 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qqd/jJBsjht/wDNLOB0fddSfqSPQVkVtKVmQn9zCt/LW04rFxcqT71cauEQu9mnwdvTVy/qS/SEU1ddpPoNoDVLLd/s2KTN39U6FhEtbiq3/5/oMslDo3V76WYj99FBcDVbQP3aWLYQ8Qi46XG8brQoQB7qZT4BES/OMMpgcM0BmhcrYnr7YNyWLEi2K2f6TywPZEv9qUMeuD/vcC7vKqLLeQCBpQyFgrzeTfqH5uvPEymE6SqC6kDIl6JIljrrmoJ5A/ardLPAwYU4DTvk9N4Yn4zLrr7YJblqHd+Y9OHlfJ6Y1En33xv00E0g5VOhox6UVmJADOsQ22DoIIpUMhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TL4ASsdIJSmzNHx/EC6uUpoSCdvYvYeoJNgvzfCeWco=;
- b=eODHbs/pmzL9bb4f2GgkUCAUT2VOrO1zLuDPFgUKnqMi4B08EvbAdn+8ThlxaGtwEhiqhh4iBwglspURiFV8FDQiyF9H+QpQ9Hr3wwkdjnrQ8v0JjCI5hjMWc4HdduBDGX7o6YfcVFmV+tHX3Ivledw8ZSzl0AxcmYsS/YBJjBq4HojaDhLNL9hFGVqA7GAvIbtyA9On1OI7lgNqr85o5iJLAWj5KPmifG/4g9GJ7DL6Kv8JmRbh9GdzrR+n6n0/zDpVRY0QjrwJuFusI0m1HVsIIIDJxldIMpA7RDCZ8GUmlz4yfhfJy2bnol0UYLQoydhjSNEW+NfNziif/AbsXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=blaize.com; dmarc=pass action=none header.from=blaize.com;
- dkim=pass header.d=blaize.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=BLAIZE.COM;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TL4ASsdIJSmzNHx/EC6uUpoSCdvYvYeoJNgvzfCeWco=;
- b=YY02I0mbOuSSitqleH0U0IHlx9Y2aeRvx8MGyPAjw7/kXvpXYIrgcdhZ6RFaZQjCOub3eyUjntBtMAS8anh9cHkpk6dn9q3IL4XQBwBNCiqdb0SoOV7oKRrDxi5ONkcuZYZ4Kjn9+f3Ne6EzLdRthbDIuR3sHnadI4L3W3G0oK4=
-Received: from MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:12a::5)
- by PN3PR01MB6292.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:83::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.24; Tue, 19 Nov
- 2024 16:23:48 +0000
-Received: from MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::309a:12cf:74a4:5655]) by MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::309a:12cf:74a4:5655%3]) with mapi id 15.20.8158.023; Tue, 19 Nov 2024
- 16:23:48 +0000
-Message-ID: <807848dc-f299-4eb7-af7a-9f7575ff82b8@blaize.com>
-Date: Tue, 19 Nov 2024 16:23:42 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/6] dt-bindings: Add Blaize vendor prefix
-To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        James Cowgill <james.cowgill@blaize.com>,
-        Matt Redfearn <matthew.redfearn@blaize.com>,
-        Neil Jones <neil.jones@blaize.com>,
-        Catalin Marinas
- <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>
-Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
-        "soc@lists.linux.dev" <soc@lists.linux.dev>
-References: <20241115-blaize-blzp1600_init_board_support-v5-0-c09094e63dc5@blaize.com>
- <20241115-blaize-blzp1600_init_board_support-v5-1-c09094e63dc5@blaize.com>
- <c1885e24-8051-4c91-9870-18eb4218a2ff@kernel.org>
- <bc471aeb-e9fd-4aa9-9bcc-a59d3c2e47b8@blaize.com>
- <c866d4e8-77ee-48ca-b6a8-5f56896b072e@kernel.org>
- <09170fdb-018a-401e-a186-ccd0f5e993d8@blaize.com>
- <38c2c941-42e1-4d7c-aaa2-3c11dcea4e05@kernel.org>
-Content-Language: en-US
-From: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
-In-Reply-To: <38c2c941-42e1-4d7c-aaa2-3c11dcea4e05@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0121.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:9f::13) To MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:12a::5)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5A960DCF;
+	Wed, 20 Nov 2024 09:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732095305; cv=none; b=kuBsspQfU/XiEpEUvLNZdswF+wgt9dkGE6w1oK4eYmSEd05gkWqz3raumZMYCx8fCUMixVYhxramJqC7FxxP+Tvsmru5qd9hu8pu369tkQ99+hiF/tDAG/1BzHjYogLXm+Ov/jINmbrcDSvL2bUT59CJd2SZVeHupBybVf7Hx0M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732095305; c=relaxed/simple;
+	bh=ZWYRGhoKGMSSI03lwUow+TFidI35Xfhe/lKoPFnSKEU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FmBAvSkLAB9GWVDYw9HtZNbhhHYWuilYoolthCPEhx6V7GsUfaxKUmfcEKG/+ctta6Z3AIrGvZ0zQP88K8NtdvEN1U6Z0xonw3EHmkEitgXxsxEnf1hfgfJg5X68BwzYTccwr/TN2WUOg2FT/MwvMWFvDuLu//Wq5fbs1NdmMuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.54.90])
+	by gateway (Coremail) with SMTP id _____8DxGeH1rD1n0YhDAA--.1317S3;
+	Wed, 20 Nov 2024 17:33:41 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.54.90])
+	by front1 (Coremail) with SMTP id qMiowMAx7uD1rD1nRv5eAA--.8707S2;
+	Wed, 20 Nov 2024 17:33:41 +0800 (CST)
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+To: arnd@arndb.de,
+	olof@lixom.net
+Cc: soc@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	xry111@xry111.site,
+	christophe.jaillet@wanadoo.fr,
+	Qunqin Zhao <zhaoqunqin@loongson.cn>
+Subject: [PATCH V2] soc: loongson: add Loongson Security Module driver
+Date: Wed, 20 Nov 2024 17:31:21 +0800
+Message-Id: <20241120093121.2242-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0PR01MB10184:EE_|PN3PR01MB6292:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f3e3c58-3137-488e-2b93-08dd08b68bac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?d3JsaFNQbW5IWldDWTBNRUZldk1OTFh0MnIrUEU0S2xBZWNaSnlIb2ZSUzkr?=
- =?utf-8?B?citKb0NITTFCYnFQa1NWeEFJS2JtNEE1VU4zcFhhZEVaZWhGaVd2NjllZDcw?=
- =?utf-8?B?ZmZpM3ROaXRoVFRqd1pYSFpLeGdFTTlORTNWdlN6QXcrTmdyKzhCTEEwYitV?=
- =?utf-8?B?c3BmNDhYMVNCUFlxZFVXOWlPMnNUTDVTVXNmTkJzZmJnWGRUZUdVeGcxSTBj?=
- =?utf-8?B?UDExWGVkeCtMRUtFcWRhc3Bkb1R2VWkweGdIdWUxRHUwS1ozenFyT3JmYXAr?=
- =?utf-8?B?aE1jU0lFRDByS2JUajU3ZHlBYWtGam1DS1dmTmswOGdQKzlYMURWREF3d0Za?=
- =?utf-8?B?bGJDQk1xSmErZmMrSk9qbGl6b011RzN3dWlhWGVPczFLQVp3cFM2T1hLZ0Zn?=
- =?utf-8?B?MHVoWVNVU3RnTFNtQ2E4OWEwTy9GNklXcnhPUGtyZlJ3Y2FQM1hEU29oVFc4?=
- =?utf-8?B?dFkyQ0o0QVV6OEJjcGE5WEY4WEhPaDRMZndSVTJxb2Y1WWNISVFIa0JrejJl?=
- =?utf-8?B?RjVnZmtPNnFYeVk3MFROOWE2VnAvODFSbjdhS0d4Uis1UnNHYjJOQWxDcloy?=
- =?utf-8?B?TUFhQ29GQlVZaHJsQXE3R3E4SjBIcUYzblZZRE5NY3pLTmxEWVFyV2FNYmpG?=
- =?utf-8?B?bWxNZ2RNek1yc2NhdjV5WmZXZWI1d1g3WHovRFNXdk5wcW5HZXlnNVU1Y0Z2?=
- =?utf-8?B?T2VtQ01nU1UxUXRpVWJiNnFSbkhGUktqSndBZituSUUrd0lHRDFxcUFieXoz?=
- =?utf-8?B?ZnZvQUVLTWJEWWZGVWtqTDJlWU9yd1VkdGpmVndUbjk1dk40ejdwNkl6WXpx?=
- =?utf-8?B?b0M5VmErd2hUcnBIeWRCN0VMMjlnOG9Id25zczlWWjJnRVMzMmwxM3NlN255?=
- =?utf-8?B?dlR6TTM4L09ZQ0xPZnRPY25WMWdvY3hUT3dZQ2VydVNyRDFKWDhwYlJ3a1Zp?=
- =?utf-8?B?ekQwR0VsOE9TaTM4NndkWFlKVExzQjZXT0FoV1RJYnJXVEZMUkluK1dXMUla?=
- =?utf-8?B?eld3TTFNaTJtZWNDS1NlUkVoejVuZzBZN3l1UjhhYkdGSXZiRmNDMnpDaDB1?=
- =?utf-8?B?eldLRUorZjhvNndUT05sb2FqRjdQMHNJa254MDJ3MDBDUFZOMEx2VVJjaHlD?=
- =?utf-8?B?c1pTMytxc290V1BoeHorRmx4M2ZwQ3RMZmVtSG9HR3lqZDdSVmxSMUJXQ1cy?=
- =?utf-8?B?SEo5SmY1ZzREL0UrMmd0RUpPL2NOb0VHUFoyNGFMMlRBYTU3SmFNaVN0dC9z?=
- =?utf-8?B?b3d6d2VNcDlkbXJLVi9tZ05GdVk1ZFRRNVprS1NNRXUwTDdmcVZlZFJGdW9k?=
- =?utf-8?B?aFJaUDFGWG1EYjc4VUQwa1VCMGdRL1Fkd1J0T2YxUjlJRGJ1T1hMYTZLbzFR?=
- =?utf-8?B?ck1PQ0JuTDJqdWFoYmVPUkNldk9sNGN2Y2xnMjhWV21QNnNYSGl2bjhkbk5h?=
- =?utf-8?B?enNiVU1XRzlCRW14QXpReE1obVI2eTlRYkJkTnJQVjN5ekhyUnRteGZWc0lp?=
- =?utf-8?B?L2Y4WTVoTmljME1GMmtraWZzV1dwV2JkWGtHOTkvZTZTdFR4N3dTUE4zcGlw?=
- =?utf-8?B?QnVRalNRV0N4aXpzaTdYbFJ0eVdSYnhjbGlHRW4xdmREaE9DOFB0N0dJTkJa?=
- =?utf-8?B?UzR2aFBOK3l6Tm40RnB3RmZrYnhGOVE4M25rUTFjSlRzS0YvZ1hOWlRxNEN0?=
- =?utf-8?B?aHFlenZNU0tlQjlNTG44LytJNU50QlEzMEFIcFVXVEswaTEwcGFVb0VWSzE4?=
- =?utf-8?B?L3NBMDJaVklqSER0RG40QTlEczRiZjljK0o4SEZNN2NSeVhxQUpKQnlnaDlD?=
- =?utf-8?Q?pa42k0dVGeXDKXBSI8IhKXcggIkXQmj5rhZyI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UEhvMmd4bktMYklBejdmZW10dDd0aExuK1JXa0E4ZUFZcU5MTGI5endZV2d4?=
- =?utf-8?B?NldPbWtvNGd4clRzOXVFbjQ4RjFLSW95UHlvSWltOHQ1N2tHWmx1dXBsWG53?=
- =?utf-8?B?V3ptMGNkaVRCSXc1S1hLRWMrVmgrUDBCQUl1U0oyOU9UbDhOOS9ia1c4WlIx?=
- =?utf-8?B?a1ZQQkJiQzhsYXJ1cGdZZk9ubk42OHhtNENsUGh3cjRCSGgvV1d2M3hYdS81?=
- =?utf-8?B?ejdySVlDUHZ2TG1lcVkyVEJ3eVR6dzBmTEpnT1RDaGVSUE1FSkppQm5Ecjhj?=
- =?utf-8?B?YlVxM0g0eWxvdWF6WEhwdFlyOEtQcXFMdHdDUmpUMG13TTJYY3hhL05HbU80?=
- =?utf-8?B?WVBTd042ektLM3JvS3lHSUVxTlZQTDJZTC9NZGRSNmtkeGthcXdhV2dnZWw0?=
- =?utf-8?B?VXJva3lHb2dtb1BjMzNpQzBlRXYwakJkMWZjMC9COE5Fc3dQRUNpZldtb0RF?=
- =?utf-8?B?cG03cWZJZm5VczJoSXhLVlNrQk5SM3lXUnBUOVFOWEZWWXcvRTdTZUdMWHdZ?=
- =?utf-8?B?bUNxb3VlSmRXbHdrMzFQcm0zVzE4RFJDQkpuaXBFMFd5V2NWVU9Dak1JQzdC?=
- =?utf-8?B?bWNmaEJWNDRsRkVOR3F2TTFMKy9MYnRlWkxjOFVHcjloWkFFOWVkcVJjWldG?=
- =?utf-8?B?NFBYK3cvMFRwU0hrU2FZdlJTM2lvbkc3eC93WGtINU1pSEVZN1NleWhpS0sx?=
- =?utf-8?B?OEtTeEtySzhFNUZSM0RXT2JYeTR0VFF2RGZ5QmU0bXRldHhaTlB0ZnJucyt0?=
- =?utf-8?B?VGRuTEpBRGdKTFB1cExKWTMxbi9pNHNXS2ZvdDZYQnZuNm1lNTJudHB2V2Ir?=
- =?utf-8?B?OXcrNE9STzkzWVNJc0VNNHZPVm9rNms0Z1Y4UGVaaUVrVks0eTVWTSt2dmtj?=
- =?utf-8?B?UGtYNEQ2WlR0MkFXSU1SU3ovbEpwYUZTakNsNTF5ZDVqdUpzLzRpREJQRjlo?=
- =?utf-8?B?ZEpGQWRTaFVvTUdoQjV2c0plNzBuaCtqN1FlMHZycC9iMFN6L1g1WTBNUW1W?=
- =?utf-8?B?YVJHUysyNjZjZmpGVFJrL1pwQWZWckl1L0pLSWM0RktRemJQMEgvVG9EY3hH?=
- =?utf-8?B?eWcrRnVTV1pZZVBqOGdMVlppQlFySUJtaWZ1QTk3aGZLTWFUSjA2bVlUY256?=
- =?utf-8?B?N0pnVmhsYms3RkllVWdoNTdEcG4zYU9ia1BXZ0hTTmZqSGo4ZEJ3a3JkWlFp?=
- =?utf-8?B?RmZURkNORDNEY3EwQ2ZUdUNtbVowWSsrNWp3cE9QdC9PbDRVTHFRWmtQWTFC?=
- =?utf-8?B?TEJkdWZRbERUcHhnellsdXhoOENLT3RxL09PTVhzZWYzUnUyRU1Fd2ZOVXNu?=
- =?utf-8?B?amZSZVJoNTJkS2k0VkZ4UFoxckZMYzdqdkw1eUpUN0hCajd1T3BnZ1FrNEk4?=
- =?utf-8?B?b0VXTitycW1HZFJIQVQ2bm5PT2dCVzluZHFLODFhTFF6NHhFcC9LU3hJdGhu?=
- =?utf-8?B?OEJoM3ZOby9wNUZKc2c5REZ3elVxMGtjdlpqZkJDVDd2RmxPMmpWa24yRVVJ?=
- =?utf-8?B?MkwyV1FmN2xGb0tsSEhPZXFVUDRWWFYzMmN4VHlkQlF5L2J2NHRuOHJOR0xC?=
- =?utf-8?B?S0JCMTA3SjVhL0xpMWZrN2pJbU02WmJ1ZWYzK2FubXN0T2pRVVlWUDFVNGZL?=
- =?utf-8?B?T1dBVCtNVXdYb3BJREpQdGtocnRzRWRaZW9KQ3A5SE9BTEV3amNiYm9ZNWNv?=
- =?utf-8?B?Qm5Hc2Nob0R3WGQ4WlYzZjlKR1pDa3VxdllLVjlmdmFzYjl0WTJES0kzaWQv?=
- =?utf-8?B?cEhkTEFlaEZqK1NLUWNrNVg3S1UxQytJR01BZVJpcmdhUnA4YkxGN0xRbXJD?=
- =?utf-8?B?Y3hKQnB1a1F0QkM4NzY2V3ArNVZXQ3NjUzNYZWJLdlJRR2RuM0xrcys0cUdw?=
- =?utf-8?B?bDJMamdQZC9oRVNlWWg1TEFXa2lLZzY3Wk1ZZGRPRWh6a24zeFlVR3N6eWl1?=
- =?utf-8?B?Z0JkYnhzTnFKWUEyUFNrM1o5MERJWm5sWVRMcXB4bW9kMjRoLzVnYTRPbmNs?=
- =?utf-8?B?UWlKNTZaN2ZQZWsrcGlsK0hGQzloQ284WmJLUkFZWUY1NEd6eEcySHdCelRY?=
- =?utf-8?B?U1Z5MUc0eXVOdW1ydGRIQjFQK2pFVU93OVhLS3hlRnlsN2ZMWDdjdWE2bGpI?=
- =?utf-8?B?NVdxSVdZRWxBSnZMblN6R1hRTkI0ZGJUejg3N2c4WlJlK05ybFJuSE9QK01j?=
- =?utf-8?Q?url/P9xiI5OhFjicJjJ3N4U=3D?=
-X-OriginatorOrg: blaize.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f3e3c58-3137-488e-2b93-08dd08b68bac
-X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2024 16:23:48.0376
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 9d1c3c89-8615-4064-88a7-bb1a8537c779
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xj10aIZiWVvG90gupK8A5Dn4oSX50Khrs1ND6+jqgG4Tmajob2dDovjKh/+qgtd8sP+FjWEH+WIyad7mclzrG8GAwKjJJJW2lVjEXuuR7yY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB6292
-X-Authority-Analysis: v=2.4 cv=EPtU0EZC c=1 sm=1 tr=0 ts=673cbb9b cx=c_pps a=yS01Tg43EjyficN/GFY56g==:117 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=4MthsM0t3ikA:10
- a=-5LYVjoNHPMA:10 a=VwQbUJbxAAAA:8 a=3HDBlxybAAAA:8 a=SrsycIMJAAAA:8 a=3AJrCuAVmkvt_Fz8LK4A:9 a=QEXdDO2ut3YA:10 a=TucxLVmUXSYA:10 a=laEoCiVfU_Unz3mSdgXN:22 a=zapPnUM7SFj2ezx6rUw-:22
-X-Proofpoint-ORIG-GUID: WcjMaicwJRPZJoal8uXetvwP1ZGsfNoC
-X-Proofpoint-GUID: WcjMaicwJRPZJoal8uXetvwP1ZGsfNoC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-19_08,2024-11-18_01,2024-09-30_01
-X-Proofpoint-Spam-Reason: orgsafe
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAx7uD1rD1nRv5eAA--.8707S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9fXoW3uF4DCF4fCFWrAF43Zw15Jrc_yoW8Cw1UKo
+	WIvFn3Za1rJrn7ArW09r1FqrWxZa4YkayYyws3ZrZ293WUJF13tFW8Ww43GFs3uFWrtr15
+	u34YqrWruF4akrn5l-sFpf9Il3svdjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf
+	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
+	UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
+	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
+	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
+	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+	CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUUU
 
-On 19/11/2024 15:52, Krzysztof Kozlowski wrote:
-> On 19/11/2024 16:23, Nikolaos Pasaloukos wrote:
->> Hi Krzysztof,
->>
->> That's a very tricky error to pick it up. `checkpatch` on my end doesn't produce
->> an error. The header file on my patches starts as:
->> 'From: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>'
->> I had set the mail account as Forname: Nikolaos, Surname: Pasaloukos and
->> preferred name as Niko. It is an Outlook365 issue I think.
->>
->> That said, when I was trying to send my patches, the mail server was converting
->> my name 'Nikolaos Pasaloukos' to the preferred name 'Niko Pasaloukos'.
-> Usually it is not a problem to commit patches with one name and send
-> with other - git send-email will properly add two From headers like:
-> https://urldefense.com/v3/__https://lore.kernel.org/all/20241119154245.442961-4-pablo@netfilter.org/__;!!FddXBOku!jmi9Ec3WZ4N6TfC0XlHzSmeISVpB19XDD-TfRyCDgkc6WpnZnjDJMz4bZWeoOY8X6YaL9GnapF-AIw-Cjyer$
->
-> If your git history has correct From matching SoB, then indeed
-> checkpatch on your end will not complain.
->
-> If that is the case, it means your SMTP server *rewrites* the From
-> header. Not nice... but what to expect from Microsoft? They learnt open
-> source just recently and before open source was communism for them...
->
-> You can change your local name to match whatever Microsoft wants to set
-> or you can use b4 relay to send the patches.
+This driver supports Loongson Security Module, which
+provides the control for it's hardware encryption
+acceleration child devices.
 
-I'll add your Reviewed-by on the patches and I will send again v5 patches
-using the b4 relay endpoint instead of my SMTP server.
+Only ACPI firmware is supported.
 
->
-> https://urldefense.com/v3/__https://b4.docs.kernel.org/en/latest/contributor/send.html__;!!FddXBOku!jmi9Ec3WZ4N6TfC0XlHzSmeISVpB19XDD-TfRyCDgkc6WpnZnjDJMz4bZWeoOY8X6YaL9GnapF-AI5htzUil$
->
->> Do I need to resend v5 again after this is fixed, having applied all the
->> additional Reviewed-by? What would be my next step here?
-> Yes, please resend a v5 with tags applied and fixed problem with From/SoB.
->
->
-> Best regards,
-> Krzysztof
+Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+---
+Changes in v2:
+	- Removed useless memset() in probe.
+	- Cleaned up coding style.
+	- Corrected the spelling.
 
-Thank you for helping me out.
+ MAINTAINERS                        |   7 +
+ drivers/soc/loongson/Kconfig       |   9 +
+ drivers/soc/loongson/Makefile      |   1 +
+ drivers/soc/loongson/loongson_se.c | 523 +++++++++++++++++++++++++++++
+ include/soc/loongson/se.h          | 135 ++++++++
+ 5 files changed, 675 insertions(+)
+ create mode 100644 drivers/soc/loongson/loongson_se.c
+ create mode 100644 include/soc/loongson/se.h
 
-Best regards,
-Nikolaos Pasaloukos
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fdeb3d12c..85fff2eb7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13379,6 +13379,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+ F:	drivers/soc/loongson/loongson2_guts.c
+ 
++LOONGSON SECURITY MODULE DRIVER
++M:	Qunqin Zhao <zhaoqunqin@loongson.cn>
++L:	loongarch@lists.linux.dev
++S:	Maintained
++F:	drivers/soc/loongson/loongson_se.c
++F:	include/soc/loongson/se.h
++
+ LOONGSON-2 SOC SERIES PM DRIVER
+ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+ L:	linux-pm@vger.kernel.org
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+index 368344943..20a5d90c3 100644
+--- a/drivers/soc/loongson/Kconfig
++++ b/drivers/soc/loongson/Kconfig
+@@ -27,3 +27,12 @@ config LOONGSON2_PM
+ 	  Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
+ 	  (USB, GMAC, PWRBTN, etc.). This driver was to add power management
+ 	  controller support that base on dts for Loongson-2 series SoCs.
++
++config LOONGSON_SE
++	tristate "Loongson Security Module Interface"
++	depends on LOONGARCH && ACPI
++	help
++	  The Loongson security module provides the control for hardware
++	  encryption acceleration devices. Each device uses at least one
++	  channel to interact with security module, and each channel may
++	  have its own buffer provided by security module.
+diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
+index 4118f50f5..503075042 100644
+--- a/drivers/soc/loongson/Makefile
++++ b/drivers/soc/loongson/Makefile
+@@ -5,3 +5,4 @@
+ 
+ obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
+ obj-$(CONFIG_LOONGSON2_PM)		+= loongson2_pm.o
++obj-$(CONFIG_LOONGSON_SE)		+= loongson_se.o
+diff --git a/drivers/soc/loongson/loongson_se.c b/drivers/soc/loongson/loongson_se.c
+new file mode 100644
+index 000000000..442593a64
+--- /dev/null
++++ b/drivers/soc/loongson/loongson_se.c
+@@ -0,0 +1,523 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (C) 2024 Loongson Technology Corporation Limited
++ */
++
++#include <linux/acpi.h>
++#include <linux/cdev.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/iopoll.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <soc/loongson/se.h>
++
++/*
++ * The Loongson Security Module provides the control for hardware
++ * encryption acceleration child devices. The SE framework is
++ * shown as follows:
++ *
++ *                   +------------+
++ *                   |    CPU     |
++ *                   +------------+
++ *			^	^
++ *	            DMA |	| IRQ
++ *			v	v
++ *        +-----------------------------------+
++ *        |     Loongson Security Module      |
++ *        +-----------------------------------+
++ *             ^                ^
++ *    channel0 |       channel1 |
++ *             v                v
++ *        +-----------+    +----------+
++ *        | sub-dev0  |    | sub-dev1 |  ..... Max sub-dev31
++ *        +-----------+    +----------+
++ *
++ * The CPU cannot directly communicate with SE's sub devices,
++ * but sends commands to SE, which processes the commands and
++ * sends them to the corresponding sub devices.
++ */
++
++static inline u32 se_readl(struct loongson_se *se, u32 off)
++{
++	return readl(se->base + off);
++}
++
++static inline void se_writel(struct loongson_se *se, u32 val, u32 off)
++{
++	writel(val, se->base + off);
++}
++
++static inline bool se_ch_status(struct loongson_se *se, u32 int_bit)
++{
++	return !!(se->ch_status & int_bit);
++}
++
++static void se_enable_int(struct loongson_se *se, u32 int_bit)
++{
++	unsigned long flag;
++	u32 tmp;
++
++	spin_lock_irqsave(&se->dev_lock, flag);
++
++	tmp = se_readl(se, SE_S2LINT_EN);
++	tmp |= int_bit;
++	se_writel(se, tmp, SE_S2LINT_EN);
++
++	spin_unlock_irqrestore(&se->dev_lock, flag);
++}
++
++static void se_disable_int(struct loongson_se *se, u32 int_bit)
++{
++	unsigned long flag;
++	u32 tmp;
++
++	spin_lock_irqsave(&se->dev_lock, flag);
++
++	tmp = se_readl(se, SE_S2LINT_EN);
++	tmp &= ~(int_bit);
++	se_writel(se, tmp, SE_S2LINT_EN);
++
++	spin_unlock_irqrestore(&se->dev_lock, flag);
++}
++
++static int se_send_requeset(struct loongson_se *se, struct se_data *req)
++{
++	unsigned long flag;
++	u32 status;
++	int err;
++	int i;
++
++	if (!se || !req)
++		return -EINVAL;
++
++	if (se_readl(se, SE_L2SINT_STAT) ||
++	    !(se_readl(se, SE_L2SINT_EN) & req->int_bit))
++		return -EBUSY;
++
++	spin_lock_irqsave(&se->cmd_lock, flag);
++
++	for (i = 0; i < ARRAY_SIZE(req->u.data); i++)
++		se_writel(se, req->u.data[i], SE_DATA_S + i * 4);
++	se_writel(se, req->int_bit, SE_L2SINT_SET);
++	err = readl_relaxed_poll_timeout_atomic(se->base + SE_L2SINT_STAT, status,
++						!(status & req->int_bit), 10, 10000);
++
++	spin_unlock_irqrestore(&se->cmd_lock, flag);
++
++	return err;
++}
++
++static int se_get_response(struct loongson_se *se, struct se_data *res)
++{
++	unsigned long flag;
++	int i;
++
++	if (!se || !res)
++		return -EINVAL;
++
++	if ((se_readl(se, SE_S2LINT_STAT) & res->int_bit) == 0)
++		return -EBUSY;
++
++	spin_lock_irqsave(&se->cmd_lock, flag);
++
++	for (i = 0; i < ARRAY_SIZE(res->u.data); i++)
++		res->u.data[i] = se_readl(se, SE_DATA_L + i * 4);
++	se_writel(se, res->int_bit, SE_S2LINT_CL);
++
++	spin_unlock_irqrestore(&se->cmd_lock, flag);
++
++	return 0;
++}
++
++static int loongson_se_get_res(struct loongson_se *se, u32 int_bit, u32 cmd,
++			       struct se_data *res)
++{
++	res->int_bit = int_bit;
++
++	if (se_get_response(se, res)) {
++		dev_err(se->dev, "Int 0x%x get response fail.\n", int_bit);
++		return -EFAULT;
++	}
++
++	/* Check response */
++	if (res->u.res.cmd != cmd) {
++		dev_err(se->dev, "Response cmd is 0x%x, not expect cmd 0x%x.\n",
++			res->u.res.cmd, cmd);
++		return -EFAULT;
++	}
++
++	return 0;
++}
++
++static int se_send_genl_cmd(struct loongson_se *se, struct se_data *req,
++			    struct se_data *res, int retry)
++{
++	int err, cnt = 0;
++
++try_again:
++	if (cnt++ >= retry) {
++		err = -ETIMEDOUT;
++		goto out;
++	}
++
++	dev_dbg(se->dev, "%d time send cmd 0x%x\n", cnt, req->u.gcmd.cmd);
++
++	err = se_send_requeset(se, req);
++	if (err)
++		goto try_again;
++
++	if (!wait_for_completion_timeout(&se->cmd_completion, HZ)) {
++		se_enable_int(se, req->int_bit);
++		goto try_again;
++	}
++	err = loongson_se_get_res(se, req->int_bit, req->u.gcmd.cmd, res);
++	if (err || res->u.res.cmd_ret) {
++		se_enable_int(se, req->int_bit);
++		goto try_again;
++	}
++
++out:
++	se_enable_int(se, req->int_bit);
++
++	return err;
++}
++
++static int loongson_se_set_msg(struct lsse_ch *ch)
++{
++	struct loongson_se *se = ch->se;
++	struct se_data req = {0};
++	struct se_data res = {0};
++	int err;
++
++	req.int_bit = SE_INT_SETUP;
++	req.u.gcmd.cmd = SE_CMD_SETMSG;
++	/* MSG off */
++	req.u.gcmd.info[0] = ch->id;
++	req.u.gcmd.info[1] = ch->smsg - se->mem_base;
++	req.u.gcmd.info[2] = ch->msg_size;
++
++	dev_dbg(se->dev, "Set Channel %d msg off 0x%x, msg size %d\n",
++		ch->id, req.u.gcmd.info[1], req.u.gcmd.info[2]);
++
++	err = se_send_genl_cmd(se, &req, &res, 5);
++	if (res.u.res.cmd_ret)
++		return res.u.res.cmd_ret;
++
++	return err;
++}
++
++static irqreturn_t se_irq(int irq, void *dev_id)
++{
++	struct loongson_se *se = (struct loongson_se *)dev_id;
++	struct lsse_ch *ch;
++	u32 int_status;
++
++	int_status = se_readl(se, SE_S2LINT_STAT);
++
++	dev_dbg(se->dev, "%s int status is 0x%x\n", __func__, int_status);
++
++	se_disable_int(se, int_status);
++
++	if (int_status & SE_INT_SETUP) {
++		complete(&se->cmd_completion);
++		int_status &= ~SE_INT_SETUP;
++	}
++
++	while (int_status) {
++		int id = __ffs(int_status);
++
++		ch = &se->chs[id];
++		if (ch->complete)
++			ch->complete(ch);
++		int_status &= ~BIT(id);
++		se_writel(se, BIT(id), SE_S2LINT_CL);
++	}
++
++	return IRQ_HANDLED;
++}
++
++static int se_init_hw(struct loongson_se *se, dma_addr_t addr, int size)
++{
++	struct se_data req;
++	struct se_data res;
++	int err, retry = 5;
++
++	se_enable_int(se, SE_INT_SETUP);
++
++	/* Start engine */
++	memset(&req, 0, sizeof(struct se_data));
++	memset(&res, 0, sizeof(struct se_data));
++	req.int_bit = SE_INT_SETUP;
++	req.u.gcmd.cmd = SE_CMD_START;
++	err = se_send_genl_cmd(se, &req, &res, retry);
++	if (err)
++		return err;
++
++	/* Get Version */
++	memset(&req, 0, sizeof(struct se_data));
++	memset(&res, 0, sizeof(struct se_data));
++	req.int_bit = SE_INT_SETUP;
++	req.u.gcmd.cmd = SE_CMD_GETVER;
++	err = se_send_genl_cmd(se, &req, &res, retry);
++	if (err)
++		return err;
++	se->version = res.u.res.info[0];
++
++	/* Set shared mem */
++	memset(&req, 0, sizeof(struct se_data));
++	memset(&res, 0, sizeof(struct se_data));
++	req.int_bit = SE_INT_SETUP;
++	req.u.gcmd.cmd = SE_CMD_SETBUF;
++	/* MMAP */
++	req.u.gcmd.info[0] = addr & 0xffffffff;
++	req.u.gcmd.info[1] = addr >> 32;
++	/* MASK */
++	req.u.gcmd.info[2] = ~(size - 1);
++	req.u.gcmd.info[3] = 0xffffffff;
++	err = se_send_genl_cmd(se, &req, &res, retry);
++	if (err)
++		return err;
++	pr_debug("Set win mmap 0x%llx, mask 0x%llx\n",
++		 ((u64)req.u.gcmd.info[1] << 32) | req.u.gcmd.info[0],
++		 ((u64)req.u.gcmd.info[3] << 32) | req.u.gcmd.info[2]);
++
++	return err;
++}
++
++static void se_disable_hw(struct loongson_se *se)
++{
++	struct se_data req = {0};
++	struct se_data res = {0};
++
++	/* Stop engine */
++	req.int_bit = SE_INT_SETUP;
++	req.u.gcmd.cmd = SE_CMD_STOP;
++	se_send_genl_cmd(se, &req, &res, 5);
++	se_disable_int(se, SE_INT_ALL);
++}
++
++/*
++ * Called by SE's child device driver.
++ */
++int se_send_ch_requeset(struct lsse_ch *ch)
++{
++	struct loongson_se *se;
++	u32 status, int_bit;
++
++	se = ch->se;
++	int_bit = ch->int_bit;
++	if ((se_readl(se, SE_L2SINT_STAT) & int_bit) ||
++	    !(se_readl(se, SE_L2SINT_EN) & int_bit))
++		return -EBUSY;
++
++	se_enable_int(se, int_bit);
++	se_writel(se, int_bit, SE_L2SINT_SET);
++
++	return readl_relaxed_poll_timeout_atomic(se->base + SE_L2SINT_STAT, status,
++						 !(status & int_bit), 10, 10000);
++
++}
++EXPORT_SYMBOL_GPL(se_send_ch_requeset);
++
++/*
++ * se_init_ch() - Init the channel used by child device.
++ *
++ * Allocate the shared memory agreed upon with SE on SE probe,
++ * and register the callback function when the data processing
++ * in this channel is completed.
++ */
++struct lsse_ch *se_init_ch(struct device *dev, int id, int data_size, int msg_size,
++			   void *priv, void (*complete)(struct lsse_ch *se_ch))
++{
++	struct loongson_se *se = dev_get_drvdata(dev);
++	struct lsse_ch *ch;
++	unsigned long flag;
++	int data_first, data_nr;
++	int msg_first, msg_nr;
++
++	if (!se) {
++		pr_err("SE has bot been initialized\n");
++		return NULL;
++	}
++
++	if (id > SE_CH_MAX) {
++		dev_err(se->dev, "Channel number %d is invalid\n", id);
++		return NULL;
++	}
++
++	if (se_ch_status(se, BIT(id))) {
++		dev_err(se->dev, "Channel number %d has been initialized\n", id);
++		return NULL;
++	}
++
++	spin_lock_irqsave(&se->dev_lock, flag);
++
++	ch = &se->chs[id];
++	ch->se = se;
++	ch->id = id;
++	ch->int_bit = BIT(id);
++	se->ch_status |= BIT(id);
++
++	data_nr = round_up(data_size, PAGE_SIZE) / PAGE_SIZE;
++	data_first = bitmap_find_next_zero_area(se->mem_map, se->mem_map_pages,
++						0, data_nr, 0);
++	if (data_first >= se->mem_map_pages) {
++		dev_err(se->dev, "Insufficient memory space\n");
++		spin_unlock_irqrestore(&se->dev_lock, flag);
++		return NULL;
++	}
++
++	bitmap_set(se->mem_map, data_first, data_nr);
++	ch->data_buffer = se->mem_base + data_first * PAGE_SIZE;
++	ch->data_addr = se->mem_addr + data_first * PAGE_SIZE;
++	ch->data_size = data_size;
++
++	msg_nr = round_up(msg_size, PAGE_SIZE) / PAGE_SIZE;
++	msg_first = bitmap_find_next_zero_area(se->mem_map, se->mem_map_pages,
++					       0, msg_nr, 0);
++	if (msg_first >= se->mem_map_pages) {
++		dev_err(se->dev, "Insufficient memory space\n");
++		bitmap_clear(se->mem_map, data_first, data_nr);
++		spin_unlock_irqrestore(&se->dev_lock, flag);
++		return NULL;
++	}
++
++	bitmap_set(se->mem_map, msg_first, msg_nr);
++	ch->smsg = se->mem_base + msg_first * PAGE_SIZE;
++	ch->rmsg = ch->smsg + msg_size / 2;
++	ch->msg_size = msg_size;
++	ch->complete = complete;
++	ch->priv = priv;
++	spin_lock_init(&ch->ch_lock);
++
++	spin_unlock_irqrestore(&se->dev_lock, flag);
++
++	if (loongson_se_set_msg(ch)) {
++		dev_err(se->dev, "Channel %d setup message address failed\n", id);
++		return NULL;
++	}
++
++	se_enable_int(se, ch->int_bit);
++
++	return ch;
++}
++EXPORT_SYMBOL_GPL(se_init_ch);
++
++void se_deinit_ch(struct lsse_ch *ch)
++{
++	struct loongson_se *se = ch->se;
++	unsigned long flag;
++	int first, nr;
++	int id = ch->id;
++
++	if (!se) {
++		pr_err("SE has bot been initialized\n");
++		return;
++	}
++
++	if (id > SE_CH_MAX) {
++		dev_err(se->dev, "Channel number %d is invalid\n", id);
++		return;
++	}
++
++	if (!se_ch_status(se, BIT(id))) {
++		dev_err(se->dev, "Channel number %d has not been initialized\n", id);
++		return;
++	}
++
++	spin_lock_irqsave(&se->dev_lock, flag);
++	se->ch_status &= ~BIT(ch->id);
++
++	first = (ch->data_buffer - se->mem_base) / PAGE_SIZE;
++	nr = round_up(ch->data_size, PAGE_SIZE) / PAGE_SIZE;
++	bitmap_clear(se->mem_map, first, nr);
++
++	first = (ch->smsg - se->mem_base) / PAGE_SIZE;
++	nr = round_up(ch->msg_size, PAGE_SIZE) / PAGE_SIZE;
++	bitmap_clear(se->mem_map, first, nr);
++
++	se_disable_int(se, ch->int_bit);
++	spin_unlock_irqrestore(&se->dev_lock, flag);
++
++}
++EXPORT_SYMBOL_GPL(se_deinit_ch);
++
++static int loongson_se_probe(struct platform_device *pdev)
++{
++	struct loongson_se *se;
++	struct device *dev = &pdev->dev;
++	int nr_irq, irq, err, size;
++
++	se = devm_kmalloc(dev, sizeof(*se), GFP_KERNEL);
++	if (!se)
++		return -ENOMEM;
++	se->dev = dev;
++	dev_set_drvdata(dev, se);
++	init_completion(&se->cmd_completion);
++	spin_lock_init(&se->cmd_lock);
++	spin_lock_init(&se->dev_lock);
++	/* Setup DMA buffer */
++	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
++	if (device_property_read_u32(dev, "dmam_size", &size))
++		return -ENODEV;
++	size = roundup_pow_of_two(size);
++	se->mem_base = dmam_alloc_coherent(dev, size, &se->mem_addr, GFP_KERNEL);
++	if (!se->mem_base)
++		return -ENOMEM;
++	se->mem_map_pages = size / PAGE_SIZE;
++	se->mem_map = devm_bitmap_zalloc(dev, se->mem_map_pages, GFP_KERNEL);
++	if (!se->mem_map)
++		return -ENOMEM;
++
++	se->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(se->base))
++		return PTR_ERR(se->base);
++
++	nr_irq = platform_irq_count(pdev);
++	if (nr_irq <= 0)
++		return -ENODEV;
++	while (nr_irq) {
++		irq = platform_get_irq(pdev, --nr_irq);
++		if (irq < 0)
++			return -ENODEV;
++		/* Use the same interrupt handler address.
++		 * Determine which irq it is accroding
++		 * SE_S2LINT_STAT register.
++		 */
++		err = devm_request_irq(dev, irq, se_irq, 0,
++				       "loongson-se", se);
++		if (err)
++			dev_err(dev, "failed to request irq: %d\n", err);
++	}
++
++	err = se_init_hw(se, se->mem_addr, size);
++	if (err)
++		se_disable_hw(se);
++
++	return err;
++}
++
++static const struct acpi_device_id loongson_se_acpi_match[] = {
++	{"LOON0011", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, loongson_se_acpi_match);
++
++static struct platform_driver loongson_se_driver = {
++	.probe   = loongson_se_probe,
++	.driver  = {
++		.name  = "loongson-se",
++		.acpi_match_table = loongson_se_acpi_match,
++	},
++};
++module_platform_driver(loongson_se_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Loongson Technology Corporation");
++MODULE_DESCRIPTION("Loongson Security Module driver");
+diff --git a/include/soc/loongson/se.h b/include/soc/loongson/se.h
+new file mode 100644
+index 000000000..825d5b294
+--- /dev/null
++++ b/include/soc/loongson/se.h
+@@ -0,0 +1,135 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/* Copyright (C) 2024 Loongson Technology Corporation Limited */
++
++#ifndef __LOONGSON_SE_H__
++#define __LOONGSON_SE_H__
++
++#define SE_DATA_S			0x0
++#define SE_DATA_L			0x20
++#define SE_S2LINT_STAT			0x88
++#define SE_S2LINT_EN			0x8c
++#define SE_S2LINT_SET			0x90
++#define SE_S2LINT_CL			0x94
++#define SE_L2SINT_STAT			0x98
++#define SE_L2SINT_EN			0x9c
++#define SE_L2SINT_SET			0xa0
++#define SE_L2SINT_CL			0xa4
++
++/* INT bit definition */
++#define SE_INT_SETUP			BIT(0)
++#define SE_INT_SM2			BIT(0)
++#define SE_INT_SM3			BIT(0)
++#define SE_INT_SM4			BIT(0)
++#define SE_INT_RNG			BIT(0)
++#define SE_INT_TPM			BIT(5)
++#define SE_INT_ALL			0xffffffff
++
++#define SE_CMD_START			0x0
++#define SE_CMD_STOP			0x1
++#define SE_CMD_GETVER			0x2
++#define SE_CMD_SETBUF			0x3
++#define SE_CMD_SETMSG			0x4
++
++#define SE_CMD_RNG			0x100
++
++#define SE_CMD_SM2_SIGN			0x200
++#define SE_CMD_SM2_VSIGN		0x201
++
++#define SE_CMD_SM3_DIGEST		0x300
++#define SE_CMD_SM3_UPDATE		0x301
++#define SE_CMD_SM3_FINISH		0x302
++
++#define SE_CMD_SM4_ECB_ENCRY		0x400
++#define SE_CMD_SM4_ECB_DECRY		0x401
++#define SE_CMD_SM4_CBC_ENCRY		0x402
++#define SE_CMD_SM4_CBC_DECRY		0x403
++#define SE_CMD_SM4_CTR			0x404
++
++#define SE_CMD_TPM			0x500
++#define SE_CMD_ZUC_INIT_READ		0x600
++#define SE_CMD_ZUC_READ			0x601
++
++#define SE_CMD_SDF			0x700
++
++#define SE_CH_MAX			32
++
++#define SE_CH_RNG			1
++#define SE_CH_SM2			2
++#define SE_CH_SM3			3
++#define SE_CH_SM4			4
++#define SE_CH_TPM			5
++#define SE_CH_ZUC			6
++#define SE_CH_SDF			7
++
++struct se_msg {
++	u32 cmd;
++	u32 data_off;
++	u32 data_len;
++	u32 info[5];
++};
++
++struct se_cmd {
++	u32 cmd;
++	u32 info[7];
++};
++
++struct se_res {
++	u32 cmd;
++	u32 cmd_ret;
++	u32 info[6];
++};
++
++struct se_data {
++	u32 int_bit;
++	union {
++		u32 data[8];
++		struct se_cmd gcmd;
++		struct se_res res;
++	} u;
++};
++
++struct lsse_ch {
++	u32 id;
++	u32 int_bit;
++	struct loongson_se *se;
++	void *priv;
++	spinlock_t ch_lock;
++	void *smsg;
++	void *rmsg;
++	int msg_size;
++	void *data_buffer;
++	dma_addr_t data_addr;
++	int data_size;
++
++	void (*complete)(struct lsse_ch *se_ch);
++};
++
++struct loongson_se {
++	struct device *dev;
++	void __iomem *base;
++	u32 version;
++	u32 ch_status;
++	spinlock_t cmd_lock;
++	spinlock_t dev_lock;
++
++	/* Interaction memory */
++	void *mem_base;
++	dma_addr_t mem_addr;
++	unsigned long *mem_map;
++	int mem_map_pages;
++	void *smsg;
++	void *rmsg;
++
++	/* Synchronous CMD */
++	struct completion cmd_completion;
++
++	/* Channel */
++	struct lsse_ch chs[SE_CH_MAX];
++};
++
++struct lsse_ch *se_init_ch(struct device *dev, int id, int data_size, int msg_size,
++			   void *priv, void (*complete)(struct lsse_ch *se_ch));
++void se_deinit_ch(struct lsse_ch *ch);
++int se_send_ch_requeset(struct lsse_ch *ch);
++
++#endif
+
+base-commit: daa20223dee942ebea45bc72b517480af226c370
+-- 
+2.43.0
 
