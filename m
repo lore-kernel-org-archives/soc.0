@@ -1,63 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459C31C07F9;
-	Wed, 20 Nov 2024 23:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2805013DBB6;
+	Wed, 27 Nov 2024 19:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732146615; cv=none; b=fNU6/az7y34+Z3JjOQUiXPCdTfBpAFSJIQfgf0ICPWoj6TMCoY74pUzmTFVweFvBdairST06WwBPPjeZeQoBp+ipnJEvnvp2dJxuXIbMEnjiZVHz8A84SbmORHqTuGv6ELchVS2zTGnqiT9sSu0pTaoxdolpwLJmS6U18cc5KAs=
+	t=1732735559; cv=none; b=P7AyoKU1sflHIF4acTBBKBVlCMMqwNXa4Omm6R0SfiMmQX15XefcO/6htIRDsqSKnAnjBxhgQxP6YTPqg/5xF0EV1wnNPxTO1FCm6rkZPjCMlNolK2P7VULX0latVIU9HgbaTw+GdYSEFlfegEF6xvbeTm9xMlN9Hib1wWqkOvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732146615; c=relaxed/simple;
-	bh=OqAjSpUUNBYiOdRxJEe7prLlAds3BTXXfb9idsZe2eo=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=ixolbBwKrW3NKyfXxoFQj38jcg5idScyzRtpwhO3xMxpdKdJwcdBQu8B8yDQ/nrgNF3KHYlJApl8BQwQS303LM9Ciy9W89VubYa019V+45A0T6YiinM6UEm7YevCQmuaMtnsU9zcSpJtkru4vOOIlo4jcV1rjW5MMlmFYmvmBnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iu6YEBtC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732735559; c=relaxed/simple;
+	bh=LvmHpaWsiLGTPibuZ7yWpqo4clNPX7pnbNk8sleUTwA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ceWtb7guIfEe2fg62y2utf1Ibcmw/wVXUbh+QiLpIpMwdRQJrTwAuC2OstaVF+YnZ8L1DyrM1UVNJMR16dSDQHqxJpgXOLaDHEEGSS5xf97txfJa7tb5VDihXoRyUOvqreimYhYdCFtzcRxp+hiJqyL0EYuFMLK5DaVK409zWSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQ70w9m6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iu6YEBtC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272DCC4CED3;
-	Wed, 20 Nov 2024 23:50:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQ70w9m6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3653C4CECC;
+	Wed, 27 Nov 2024 19:25:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732146615;
-	bh=OqAjSpUUNBYiOdRxJEe7prLlAds3BTXXfb9idsZe2eo=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=iu6YEBtCWcmALJTzIhwSZrMuKxxJy6zlrhO702EzXJf/PWYzwqeUW/pWB606NlaGY
-	 nNYlFOHfMC8161hxjmfJAq8S1ZMEZ77Zvu46C1qAOBIjZ8dpl9fyqnPdbopGEetw8o
-	 RN2D/yK7IXTFG799T1RdbAFGrnZgmU4pDbt9b6so1PxjvfracZoSpSrxfKIY2I1JAB
-	 dJuZKLWCz3pEkr7PG+nGZYaEiO4CgK8k+PrU1DBKsA7itBjM+OpYNc5SwQXphMb5YG
-	 yqjnVknIxj43WI61mY/WBqOw6TpwfpC8kUHUqqlWRHZDtdC3uwHn/OZj8m3xt/opI9
-	 l31D3id9O9DaA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E443809A80;
-	Wed, 20 Nov 2024 23:50:28 +0000 (UTC)
-Subject: Re: [GIT PULL 3/4] ARM: soc updates for 6.13
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <8eb10ff6-08f3-4efc-8839-1d7559bb8c6f@app.fastmail.com>
-References: <d58cbbc9-e5b0-49c3-8cf7-d0726e796e92@app.fastmail.com> <8eb10ff6-08f3-4efc-8839-1d7559bb8c6f@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lists.linux.dev>
-X-PR-Tracked-Message-Id: <8eb10ff6-08f3-4efc-8839-1d7559bb8c6f@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.13
-X-PR-Tracked-Commit-Id: 9c6cb0377534e77265ea673fd4834f858d5d1a6f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 43fb83c17ba2d63dfb798f0be7453ed55ca3f9c2
-Message-Id: <173214662694.1393168.5527301233918920474.pr-tracker-bot@kernel.org>
-Date: Wed, 20 Nov 2024 23:50:26 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	s=k20201202; t=1732735559;
+	bh=LvmHpaWsiLGTPibuZ7yWpqo4clNPX7pnbNk8sleUTwA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=MQ70w9m6MasuDm59oyN3C2+4FQnIQD08QODGBWdNj04cRVs6ffOk9WH4yrFxIE0yz
+	 yGBzZiEhQoxpCfUF2var9/r3m8N7UQArDBKuunJUqn/uEZEfHOIOZ+kvFyjqy7hjXA
+	 Y8dzmCk7XwUGe+hkpLRzMXyBira3hzkbMU5OnTlHcwgwB+yiCI2vHhPKyZWa0KocUv
+	 9GIqi9WpzDHucgcOTqfYN4PpvCsIZ2NNz0QPvG96JuPF2SW5ufiebvvMN1FP7pFKea
+	 UuChfx7Nzos0SGroHiYAdB63i1SZYzBfw3i3ivjbEJZE4LNo5EYuJJktfvevEeTy35
+	 Hwctu7ZHwuaJQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Wed, 27 Nov 2024 19:24:40 +0000
+Subject: [PATCH] ARM: imx_*_defconfig: Fix i.MX pinctrl enablement
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241127-imx-pinctrl-enable-v1-1-d3431a98253b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPdxR2cC/x3MQQqAIBBA0avErBtIyaSuEi3UxhooC40IwrsnL
+ d/i/xcSRaYEQ/VCpJsTH6FA1BW41YSFkOdikI1shZAaeX/w5OCuuCEFYzdC71SnjbJK2x5KeEb
+ y/PzTccr5AxrmlZRkAAAA
+X-Change-ID: 20241127-imx-pinctrl-enable-fc567a5b57b9
+To: Russell King <linux@armlinux.org.uk>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Esben Haabendal <esben@geanix.com>
+Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1772; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=LvmHpaWsiLGTPibuZ7yWpqo4clNPX7pnbNk8sleUTwA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnR3JDS5fbsq6RUbHGhH+FD7nNrEDxNnEzj9wjItiT
+ tiBJMnuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ0dyQwAKCRAk1otyXVSH0GRqB/
+ 0QevSDMqjV7z2IZEUNybXCoiOgt1G9j3SwrjYejb0ukcADztwpxBJiZrtEtBVtDCSslxz4VeNbKwFM
+ mT5qegrGRBOJwu3fXmoSkUQ9BGG2qU8PdFXHMNvJL9s0NXZxqm3ZmzDi6tIkTYApw7WeGmBljNntRE
+ PdypRDnfX3M7hsycjnQTJsyC37bBg/I9aNxqi4hlllqLbjf+M8yBG7nx9G4zLMhFl7Px/lp+JjL6jl
+ TiTGWw0tUo8TnehY6xnIb2yRbt+du6x0Q/sdxqbEsCX9i9rGo62Ul/6l7YX3kxCREkgTSSIeLMsXt8
+ 7pW2FCyELp+ys2eVoRdT0EsXfjBSG1
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The pull request you sent on Thu, 21 Nov 2024 00:02:53 +0100:
+When the i.MX pinctrl drivers were made user controllable by 17d210018914
+("ARM: imx: Allow user to disable pinctrl") the select of pinctrl by the
+arch code was removed. This change means that for the i.MX specific
+defconfigs nothing enables the base PINCTRL Kconfig and things that depend
+on it (eg, audio on the i.MX6 UDOO boards) stop working. Explicitly enable
+PINCTRL in these configs to restore functionality with them.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.13
+Fixes: 17d210018914 ("ARM: imx: Allow user to disable pinctrl")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm/configs/imx_v4_v5_defconfig | 1 +
+ arch/arm/configs/imx_v6_v7_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/43fb83c17ba2d63dfb798f0be7453ed55ca3f9c2
+diff --git a/arch/arm/configs/imx_v4_v5_defconfig b/arch/arm/configs/imx_v4_v5_defconfig
+index 875c8cdbada7d662994c9301c1caf5d30d7407e3..1af29d12129d01b0de0b9dde30eb9b43c5a83071 100644
+--- a/arch/arm/configs/imx_v4_v5_defconfig
++++ b/arch/arm/configs/imx_v4_v5_defconfig
+@@ -83,6 +83,7 @@ CONFIG_I2C_IMX=y
+ CONFIG_SPI=y
+ CONFIG_SPI_IMX=y
+ CONFIG_SPI_SPIDEV=y
++CONFIG_PINCTRL=y
+ CONFIG_GPIO_SYSFS=y
+ CONFIG_GPIO_MXC=y
+ CONFIG_W1=y
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index 0beecdde55f58330494b98ea0f1ecf9c04643e14..73f7aa7e75f71e304ac4c4c64277066d1c03a72a 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -204,6 +204,7 @@ CONFIG_SPI_FSL_QUADSPI=y
+ CONFIG_SPI_GPIO=y
+ CONFIG_SPI_IMX=y
+ CONFIG_SPI_FSL_DSPI=y
++CONFIG_PINCTRL=y
+ CONFIG_PINCTRL_IMX8MM=y
+ CONFIG_PINCTRL_IMX8MN=y
+ CONFIG_PINCTRL_IMX8MP=y
 
-Thank you!
+---
+base-commit: aaf20f870da056752f6386693cc0d8e25421ef35
+change-id: 20241127-imx-pinctrl-enable-fc567a5b57b9
 
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Mark Brown <broonie@kernel.org>
+
