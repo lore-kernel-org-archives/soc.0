@@ -1,112 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2805013DBB6;
-	Wed, 27 Nov 2024 19:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2B6202F84;
+	Wed, 27 Nov 2024 19:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732735559; cv=none; b=P7AyoKU1sflHIF4acTBBKBVlCMMqwNXa4Omm6R0SfiMmQX15XefcO/6htIRDsqSKnAnjBxhgQxP6YTPqg/5xF0EV1wnNPxTO1FCm6rkZPjCMlNolK2P7VULX0latVIU9HgbaTw+GdYSEFlfegEF6xvbeTm9xMlN9Hib1wWqkOvA=
+	t=1732736187; cv=none; b=JjkL5D9hpvCERg4h6SxqwVlox+HVcY3zj608f+gg7OOO1UDCB5VkW9QWoQR96KdatZuT+VBctL0qtxiSLRv000Rag89LXvnVZ4kbZHV4Ch0MR1f2d66HywBmh90ZHqYqoj5gwY4YkgnRlxS0bmYt4ATepPYn2Fgl8ILqmGP3F/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732735559; c=relaxed/simple;
-	bh=LvmHpaWsiLGTPibuZ7yWpqo4clNPX7pnbNk8sleUTwA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ceWtb7guIfEe2fg62y2utf1Ibcmw/wVXUbh+QiLpIpMwdRQJrTwAuC2OstaVF+YnZ8L1DyrM1UVNJMR16dSDQHqxJpgXOLaDHEEGSS5xf97txfJa7tb5VDihXoRyUOvqreimYhYdCFtzcRxp+hiJqyL0EYuFMLK5DaVK409zWSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQ70w9m6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732736187; c=relaxed/simple;
+	bh=oKtZKcmXb2M6spKPqMefrmKou8p8fKIrTlFjEhi5x+Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QgeOr3ImJo+XKwq7AtzxPsJGBZAqxCm4m5dzTiNYkehesbsQ2PF4afdtDZW3ZsfLVfek48jEprHTOxHMKQhyKqcQQVewEYPuoLA4VDKMos4ssww0U0dUl/OIyoavAt2hupuDuQrGDRGNSU+hIJGUek6m3tOQKmKB7LmGMakmMsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fnaYfYac; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQ70w9m6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3653C4CECC;
-	Wed, 27 Nov 2024 19:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732735559;
-	bh=LvmHpaWsiLGTPibuZ7yWpqo4clNPX7pnbNk8sleUTwA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=MQ70w9m6MasuDm59oyN3C2+4FQnIQD08QODGBWdNj04cRVs6ffOk9WH4yrFxIE0yz
-	 yGBzZiEhQoxpCfUF2var9/r3m8N7UQArDBKuunJUqn/uEZEfHOIOZ+kvFyjqy7hjXA
-	 Y8dzmCk7XwUGe+hkpLRzMXyBira3hzkbMU5OnTlHcwgwB+yiCI2vHhPKyZWa0KocUv
-	 9GIqi9WpzDHucgcOTqfYN4PpvCsIZ2NNz0QPvG96JuPF2SW5ufiebvvMN1FP7pFKea
-	 UuChfx7Nzos0SGroHiYAdB63i1SZYzBfw3i3ivjbEJZE4LNo5EYuJJktfvevEeTy35
-	 Hwctu7ZHwuaJQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 27 Nov 2024 19:24:40 +0000
-Subject: [PATCH] ARM: imx_*_defconfig: Fix i.MX pinctrl enablement
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fnaYfYac"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ffc76368c6so1299811fa.0;
+        Wed, 27 Nov 2024 11:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732736184; x=1733340984; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oKtZKcmXb2M6spKPqMefrmKou8p8fKIrTlFjEhi5x+Q=;
+        b=fnaYfYacelItF0UjejE61PODGeGAuZym1NGnnexRVNBZOXqNlLZ5Bu9LomUey+Tf01
+         SZu3d9dhS5STZeu54Q5dIPlDhmJOo3F7uKgFbkQE6jTruOFbrNX7OBPQdThKhyY35FLM
+         SyyvNuHvDuCsL5SzLu9/0BheWfJAsB8/KmNtO5xJIziiKOOcpGsmHcQ0b+dXB/5nfI9A
+         xFYtxr9IjtzAs4jPkh1shkyoC6EI+V31fnTyN6bKl6pZy+ldiXqI5iQiIxWwhW60CzR9
+         /C7RjKEuIKiYaoyIjBFqSajdeoWqs9GqwI2J4Hq2Jr8VkX56bOb25F1qPoIa3306bgSZ
+         wKuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732736184; x=1733340984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oKtZKcmXb2M6spKPqMefrmKou8p8fKIrTlFjEhi5x+Q=;
+        b=VlOQ+B3RUAQcRfEMGKoYDfuO8L6WzVk8uPtVOaOKD6DFFtEW2hKRsZlKnT1Ww1xB43
+         rl/IBfjTINT1rpf4HaHbC0r5eNt6X0fvVAFvGQDE2iBXvJ0HBvZB/HQwD/dvm/HO7zso
+         c6FXrbFbDEyrZaOMdMu4kzl9AdD9jlG4b2aH1fwrZCuMq1TTBKcD4nxRg2XIg0Iva3u2
+         NM3rzbdk/nutqUhBRRamZRj9Xl3j2TvYjY88i8F6CVcRU9Yr7iJgLQNnkkFQMoKt4OF5
+         fLmsRH2eNPMyqxyQVDy7yJzMtZku/HBWQL96EXcVDt0VlRIPO3OBXr7K/oCvJJ5w31nf
+         JYig==
+X-Forwarded-Encrypted: i=1; AJvYcCUF18slYOXLVpBZhWdpSD2ZDKrFH/j+Qo+MgavJaEPYFSjQ2Rnck9CkaG6wY9GbQa1jwYHw@lists.linux.dev, AJvYcCUi1DoRIxg6iVqtG0U5ASWHaWzeS3KpgQ0b7xBVOKOzqm/21rb15PaJ8ALwXDFEc/DhiCg=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxMoQT9HFk5i6te2G/h1ec8L3ixlThtrJvx6KwAu5+R/WNPRhdI
+	qh5woD1T7++h958Dl3n/0TT2cE5s+m9wNmwivwrk9fMKqqjUaQubLSqA4XGmCscRa9rm48nVKDq
+	vzZb2gHiCzkvDIWW8GoMQ3E9bLNk=
+X-Gm-Gg: ASbGncsJJCPtmk+USIVsPEBUojDLq7DxcnSEdip11dhY7o5tcXp6Q5Kv3HlV1PAAW/J
+	S1AyW/pHnyB6OPaCUAzlIld/s1WcJCmAJfgfWgZboZenqdsvTdrVvIDLShkcQ4A==
+X-Google-Smtp-Source: AGHT+IFPeS8nF9rsPbtVwAeT0yJgfR0bmbDXQw0nAIv58Wn7uVNgUUVKZ7ZtSZ3kSyKequY0RNGC6L25fA0S8ZLitnQ=
+X-Received: by 2002:a05:651c:2119:b0:2ff:a8dc:6fb8 with SMTP id
+ 38308e7fff4ca-2ffd5fcc1f1mr40204551fa.8.1732736184044; Wed, 27 Nov 2024
+ 11:36:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241127-imx-pinctrl-enable-v1-1-d3431a98253b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPdxR2cC/x3MQQqAIBBA0avErBtIyaSuEi3UxhooC40IwrsnL
- d/i/xcSRaYEQ/VCpJsTH6FA1BW41YSFkOdikI1shZAaeX/w5OCuuCEFYzdC71SnjbJK2x5KeEb
- y/PzTccr5AxrmlZRkAAAA
-X-Change-ID: 20241127-imx-pinctrl-enable-fc567a5b57b9
-To: Russell King <linux@armlinux.org.uk>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Esben Haabendal <esben@geanix.com>
-Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
- imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-9b746
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1772; i=broonie@kernel.org;
- h=from:subject:message-id; bh=LvmHpaWsiLGTPibuZ7yWpqo4clNPX7pnbNk8sleUTwA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnR3JDS5fbsq6RUbHGhH+FD7nNrEDxNnEzj9wjItiT
- tiBJMnuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ0dyQwAKCRAk1otyXVSH0GRqB/
- 0QevSDMqjV7z2IZEUNybXCoiOgt1G9j3SwrjYejb0ukcADztwpxBJiZrtEtBVtDCSslxz4VeNbKwFM
- mT5qegrGRBOJwu3fXmoSkUQ9BGG2qU8PdFXHMNvJL9s0NXZxqm3ZmzDi6tIkTYApw7WeGmBljNntRE
- PdypRDnfX3M7hsycjnQTJsyC37bBg/I9aNxqi4hlllqLbjf+M8yBG7nx9G4zLMhFl7Px/lp+JjL6jl
- TiTGWw0tUo8TnehY6xnIb2yRbt+du6x0Q/sdxqbEsCX9i9rGo62Ul/6l7YX3kxCREkgTSSIeLMsXt8
- 7pW2FCyELp+ys2eVoRdT0EsXfjBSG1
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20241127-imx-pinctrl-enable-v1-1-d3431a98253b@kernel.org>
+In-Reply-To: <20241127-imx-pinctrl-enable-v1-1-d3431a98253b@kernel.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 27 Nov 2024 16:36:12 -0300
+Message-ID: <CAOMZO5CbgmGpJvurf0Ctomj5dDOt=dC5X8XvwaqsM9Ce_uXhUQ@mail.gmail.com>
+Subject: Re: [PATCH] ARM: imx_*_defconfig: Fix i.MX pinctrl enablement
+To: Mark Brown <broonie@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, Esben Haabendal <esben@geanix.com>, 
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When the i.MX pinctrl drivers were made user controllable by 17d210018914
-("ARM: imx: Allow user to disable pinctrl") the select of pinctrl by the
-arch code was removed. This change means that for the i.MX specific
-defconfigs nothing enables the base PINCTRL Kconfig and things that depend
-on it (eg, audio on the i.MX6 UDOO boards) stop working. Explicitly enable
-PINCTRL in these configs to restore functionality with them.
+On Wed, Nov 27, 2024 at 4:25=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> When the i.MX pinctrl drivers were made user controllable by 17d210018914
+> ("ARM: imx: Allow user to disable pinctrl") the select of pinctrl by the
+> arch code was removed. This change means that for the i.MX specific
+> defconfigs nothing enables the base PINCTRL Kconfig and things that depen=
+d
+> on it (eg, audio on the i.MX6 UDOO boards) stop working. Explicitly enabl=
+e
+> PINCTRL in these configs to restore functionality with them.
+>
+> Fixes: 17d210018914 ("ARM: imx: Allow user to disable pinctrl")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Fixes: 17d210018914 ("ARM: imx: Allow user to disable pinctrl")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm/configs/imx_v4_v5_defconfig | 1 +
- arch/arm/configs/imx_v6_v7_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+I submitted the same fix:
 
-diff --git a/arch/arm/configs/imx_v4_v5_defconfig b/arch/arm/configs/imx_v4_v5_defconfig
-index 875c8cdbada7d662994c9301c1caf5d30d7407e3..1af29d12129d01b0de0b9dde30eb9b43c5a83071 100644
---- a/arch/arm/configs/imx_v4_v5_defconfig
-+++ b/arch/arm/configs/imx_v4_v5_defconfig
-@@ -83,6 +83,7 @@ CONFIG_I2C_IMX=y
- CONFIG_SPI=y
- CONFIG_SPI_IMX=y
- CONFIG_SPI_SPIDEV=y
-+CONFIG_PINCTRL=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_MXC=y
- CONFIG_W1=y
-diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-index 0beecdde55f58330494b98ea0f1ecf9c04643e14..73f7aa7e75f71e304ac4c4c64277066d1c03a72a 100644
---- a/arch/arm/configs/imx_v6_v7_defconfig
-+++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -204,6 +204,7 @@ CONFIG_SPI_FSL_QUADSPI=y
- CONFIG_SPI_GPIO=y
- CONFIG_SPI_IMX=y
- CONFIG_SPI_FSL_DSPI=y
-+CONFIG_PINCTRL=y
- CONFIG_PINCTRL_IMX8MM=y
- CONFIG_PINCTRL_IMX8MN=y
- CONFIG_PINCTRL_IMX8MP=y
+https://lore.kernel.org/imx/d718ddd2-d473-4455-b21a-15024e46787c@roeck-us.n=
+et/T/#mc71dc21d99e0b013c5ce46c0d90940fd8806ae9a
 
----
-base-commit: aaf20f870da056752f6386693cc0d8e25421ef35
-change-id: 20241127-imx-pinctrl-enable-fc567a5b57b9
+but as Guenter pointed out, there are other defconfigs that select
+ARCH_MXC, so this change is incomplete.
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+It will also cause regressions for people that have their own
+defconfigs (where PINCTRL is not selected).
 
+Then I came up with a v2 that simply re-select PINCTRL as a minimal
+fix for the regressions:
+
+https://lore.kernel.org/linux-arm-kernel/f65d65b3-b60c-4c5c-a002-81370821ee=
+1f@app.fastmail.com/T/#u
