@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486B320C00C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4865E20B81B;
 	Wed,  4 Dec 2024 16:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733328394; cv=none; b=O4lBXMy5CbB2XwAZsC+5ppLGQrZriwlcEF9l/LX60VgSiJ2Ale//gGpxbvssIMHg/VEejWxLBkDIx6ewKwl+l/86gJH6i2Z/tJQtZvE/Y61215pXlcBPPuhIefbmvVio7+/kLJLPxYAB/na4xcxJEQjwbZbxXCsvfDCzV+Zs6VQ=
+	t=1733328394; cv=none; b=KFT7S5tf66Kl2VLKG2JVzv0+vfkJkEsqIWK3DeZJR7UQ02G752i91zUymOyl3tDvbi1usdLSE4w4LJ51n46SkzaWJhHOE6CNQy7zpJUlrPWHs1iPQt6hNX1qY5Lap4M1G2YLU57PRlEtL6ooQAAOIsvYZsx39DMQIUP0IPzjSEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733328394; c=relaxed/simple;
-	bh=HNblYFGy1Ig37KXJlD6WXui3N0XjQbqGnX6arBwFr9Y=;
+	bh=wAsPvRdwvf4EGb7r/h+7/Kb530DijpuY7cPegHSkeFA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B6apyjMZPIccNh74GPHsIWdFUPNHOurJjiGAuDtMjQt6Z2WHuzfOJIgcZnn+JgSmtiWh/dCsAkdPJlM5QGRppBtuXUy3N+E9iVg8Ny/vzE/cE0kWK2xJFdCSbgsTATe/j4vog7rfvw7qCjkJ/OqUkKK/ycVJoTEKyE8gEFVBasY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Px9j/j1R; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=RF4ZQqmx9NrrT4FVxx9pEW3EDf0m9xVJwSTyYJCGBNIQeAWezxrfauscxO/RWMU9P/24PGlKFx/6h9OlMyVq810D8xiAdxuCzF5cfgTvBsN44uSN9aTwFzw4PvlCEmJBvn8VnjhzoiwCtghcKmkkngNfghMcFIarfO2g6lJPFQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FaP9pl7I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Px9j/j1R"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CC34FC4CEDF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FaP9pl7I"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6EA6C4CEEA;
 	Wed,  4 Dec 2024 16:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733328393;
-	bh=HNblYFGy1Ig37KXJlD6WXui3N0XjQbqGnX6arBwFr9Y=;
+	s=k20201202; t=1733328394;
+	bh=wAsPvRdwvf4EGb7r/h+7/Kb530DijpuY7cPegHSkeFA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Px9j/j1RYWiymXMQuwRWRP1t0khCqGyFfnLMx98swNGzusdiUxG+KZjFMP173VjxM
-	 6DEtbx7H45nkpLzaSDf/t+ilxtmUMeYSJ2mVvfEpOjFTYxuGzdExt5y0NOP3ExS/zD
-	 ylRaiKa9/k9055RDcWvCPIT3N0mHcwpq3xOsQKaQEoRi76jvsawthlaOgKZaMpFIRb
-	 MrABEiVVNfE2jMZ/B0/s9XjzPbS4hoevz3q0otO4IHA2Fh0uqTH1Pp5dgwbQT5nDFd
-	 753501H+cxKBpXhZgU//4gvwXQBlV0UhZn/ywALiR8Wu4c8cKT11wTvXwZZVAUL3wn
-	 jqLDQpEzJSFtg==
+	b=FaP9pl7IriAWHBBCuuOzeoYAA7Lxdxjx6C6YJEJ76Hbtgq7roFkIr2CM6xmYSlB+R
+	 EWJ6CM5pvuR3tQy71X09hpnWO1daXPe3q8/0gfatpu97IyxXGmNanrAV/N6TkPvgwu
+	 JFQkfYNBiBxZtSubW4Yj++6gJWIBvOyCidT+oEHWfcsbDLTa6+jjJp6kBuoYCMkvos
+	 i3xggVrwhEx/EVRNYPbMCafFilSnWMag7xAKaxTkrBK7HFLezKCpbkHg78r+yJQ+2W
+	 812DQpBN/VhbrsUIx4tl4g/XpCL+bNWLZuv0J4hi+1kW7tZvD7PpU09pGEVOl47THe
+	 fdzolChHeOfrQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4B18E7716B;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1FAE7716E;
 	Wed,  4 Dec 2024 16:06:33 +0000 (UTC)
 From: Nikolaos Pasaloukos via B4 Relay <devnull+nikolaos.pasaloukos.blaize.com@kernel.org>
-Date: Wed, 04 Dec 2024 16:05:24 +0000
-Subject: [PATCH v5 1/6] dt-bindings: Add Blaize vendor prefix
+Date: Wed, 04 Dec 2024 16:05:26 +0000
+Subject: [PATCH v5 3/6] arm64: Add Blaize BLZP1600 SoC family
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241204-blaize-blzp1600_init_board_support-v5-1-b642bcc49307@blaize.com>
+Message-Id: <20241204-blaize-blzp1600_init_board_support-v5-3-b642bcc49307@blaize.com>
 References: <20241204-blaize-blzp1600_init_board_support-v5-0-b642bcc49307@blaize.com>
 In-Reply-To: <20241204-blaize-blzp1600_init_board_support-v5-0-b642bcc49307@blaize.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -52,13 +52,14 @@ To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
+ linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733328392; l=977;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733328392; l=981;
  i=nikolaos.pasaloukos@blaize.com; s=20241111; h=from:subject:message-id;
- bh=1p4NJqsf17xN5CcZrMIAnl7jCYm1QXfL6oCC9V0Tk3w=;
- b=64y+oANFB0qQeuvkTUwTBMYbGMUUYnye9j461IexzjJ3LzVVGMKHRB8OKKbjV+SjZIL33zGBK
- ErfzePQmuiWCkbKLCNzjqpIJKUpD9tO7Fv5YXop3zeoCbjx20OilcNE
+ bh=ndFGNT8hlTjNTdZtp9EMF7h9pwy1ILkNSgtZflY+7U4=;
+ b=MyPoGjnzkT21+M12LN3XkWoTRhNAyGCpyFpNDXLknKSuLzlcwQhBBIbe5pcXYqfNGx9v/CqLu
+ t5ia9ty7GHHBS4ZxaodUF1IJmzo724S4lb0JwYXNOTplVUljFFUTE8W
 X-Developer-Key: i=nikolaos.pasaloukos@blaize.com; a=ed25519;
  pk=gGEjGCXdSuvCJPIiu0p0UeiPcW5LC710Z6KGN/dzo3g=
 X-Endpoint-Received: by B4 Relay for
@@ -68,28 +69,33 @@ Reply-To: nikolaos.pasaloukos@blaize.com
 
 From: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
 
-Blaize, Inc. (www.blaize.com) is a SoC manufacturer with integrated
-programmable Graph-Streaming-Processors for AI and ML.
+Add ARCH_BLAIZE SoC family to the arm64 architecture to
+support the BLZP1600 System-On-Module and the Carrier-Board-2
+development board.
 
 Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Matt Redfearn <matt.redfearn@blaize.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/Kconfig.platforms | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index b320a39de7fe40ce4d97ed3ea264a5971a3428dd..809086061a1992567ca6c5d404fbcee8a33ee300 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -216,6 +216,8 @@ patternProperties:
-     description: Shenzhen BigTree Tech Co., LTD
-   "^bitmain,.*":
-     description: Bitmain Technologies
-+  "^blaize,.*":
-+    description: Blaize, Inc.
-   "^blutek,.*":
-     description: BluTek Power
-   "^boe,.*":
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 6c6d11536b42ec6e878db8d355c17994c2500d7b..08dd5b3b2d7381a01bd5c4347c29202edff3495f 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -101,6 +101,11 @@ config ARCH_BITMAIN
+ 	help
+ 	  This enables support for the Bitmain SoC Family.
+ 
++config ARCH_BLAIZE
++	bool "Blaize SoC Platforms"
++	help
++	  This enables support for the Blaize SoC family
++
+ config ARCH_EXYNOS
+ 	bool "Samsung Exynos SoC family"
+ 	select COMMON_CLK_SAMSUNG
 
 -- 
 2.43.0
