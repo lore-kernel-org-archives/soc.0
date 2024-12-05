@@ -1,42 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3064720C00E
-	for <soc@lists.linux.dev>; Thu,  5 Dec 2024 11:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289FF20D4E1
+	for <soc@lists.linux.dev>; Thu,  5 Dec 2024 11:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733399002; cv=none; b=Q7tHFgWvM6LFOIkmUvZxVfbbwzejgeYipSwSmiygfy2Y/ESmSyAPdKzi6bAiXHw9NRRlesMYLdYinXp7kFYIOpuh69Bdgp/+fwFgxONLrSPqEdzRcO+19Tnn5TB2CuXV0hhpG7mh77NA0B973svRsfCfG0wE9pZL8SDH+Z9VKbU=
+	t=1733399035; cv=none; b=Lj9TRkpKpDVjBYVTrWjn3Uu32MFrcfYDp9ncmJqmGCPFnGMWQw73NY/oZvr80zrj8dXSy00pJzSPEy6hQpuQ1qnomWg1Bpy2SgRWSSwWrHGED9mOWsBxkELchmC84DGJGNhHCbi3eKYfDwW3dtb/IktPT8EsE5FTOcqJ5WxNFKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733399002; c=relaxed/simple;
-	bh=SIsck4iYVwktMd9irnc1d0A0ptQJpYSH5DyZu8iLaz0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qbQpgUn7Aj/o+Q6VkAGhjQnp9/vhuWbP72ZU4yRwtt+KQQswwNk8OWcThczffo/ihvlbPuWDLQ0lYNaJWmV7Y7BTxeRK4lUqoqMZ9rwtNyedFEK0QLdZbk4prln7J/meQoC4YljWdGPW4bebM1/5nwIT8SGWw1xO3VJUICh/f44=
+	s=arc-20240116; t=1733399035; c=relaxed/simple;
+	bh=o4Nw1On8duC+30aMkioSM7+mKmUV5sy4yMqGMi/MLjQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IlCb+wPLDvHBjIrGNsdHjxCjmxXmb622IZtWFC+cYIhqmdGN/gQf9KWHiAll6DzfiuZ6nt8UDVn3lZfTY9SsBY9Q5yKi6sf2GoAJJHbrJBDFT/jgTPN2MrEhwjfLgQ0qo37EaBKDJSAbzib9nHLzmyyfl5868fzyuNRvmW/MT4g=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id CB043C4CEDF; Thu,  5 Dec 2024 11:43:20 +0000 (UTC)
+	id EA323C4AF0B; Thu,  5 Dec 2024 11:43:54 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id BA69CC4CED1;
-	Thu,  5 Dec 2024 11:43:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BA69CC4CED1
+	by smtp.kernel.org (Postfix) with ESMTP id 30142C4CED1;
+	Thu,  5 Dec 2024 11:43:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30142C4CED1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB9A4FEC;
-	Thu,  5 Dec 2024 03:43:42 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E0A6FEC;
+	Thu,  5 Dec 2024 03:44:20 -0800 (PST)
 Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 54C673F71E;
-	Thu,  5 Dec 2024 03:43:13 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 08BB13F71E;
+	Thu,  5 Dec 2024 03:43:50 -0800 (PST)
 From: Sudeep Holla <sudeep.holla@arm.com>
 To: ARM SoC Team <arm@kernel.org>,
 	SoC Team <soc@kernel.org>,
 	ALKML <linux-arm-kernel@lists.infradead.org>
 Cc: Sudeep Holla <sudeep.holla@arm.com>,
 	Arnd Bergmann <arnd@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
 	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] arm64: dts: juno: Fixes for v6.13
-Date: Thu,  5 Dec 2024 11:43:02 +0000
-Message-Id: <20241205114302.708433-1-sudeep.holla@arm.com>
+Subject: [GIT PULL] firmware: arm_scmi: Fix for v6.13
+Date: Thu,  5 Dec 2024 11:43:48 +0000
+Message-Id: <20241205114348.708618-1-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -61,22 +60,24 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/juno-fix-6.13
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fix-6.13
 
-for you to fetch changes up to 4f776d81bf927a4f25d5e32a4d0df08ee509dd6c:
+for you to fetch changes up to 514b2262ade48a0503ac6aa03c3bfb8c5be69b21:
 
-  arm64: dts: fvp: Update PCIe bus-range property (2024-12-05 10:28:26 +0000)
-
-----------------------------------------------------------------
-Armv8 Juno fix for v6.13
-
-Just a single fix updating the PCIe bus address range to accommodate
-the full ECAM window of 256MB available on most of the recent versions
-of RevC FVP models.
+  firmware: arm_scmi: Fix i.MX build dependency (2024-12-03 15:47:11 +0000)
 
 ----------------------------------------------------------------
-Aneesh Kumar K.V (Arm) (1):
-      arm64: dts: fvp: Update PCIe bus-range property
+Arm SCMI fix for v6.13
 
- arch/arm64/boot/dts/arm/fvp-base-revc.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fix for the build issue in the ASoC driver with the SCMI support by
+enforcing the link-time dependency if IMX_SCMI_MISC_DRV is a loadable
+module but not if that is disabled.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      firmware: arm_scmi: Fix i.MX build dependency
+
+ drivers/firmware/arm_scmi/vendors/imx/Kconfig | 1 +
+ drivers/firmware/imx/Kconfig                  | 1 -
+ sound/soc/fsl/Kconfig                         | 2 +-
+ 3 files changed, 2 insertions(+), 2 deletions(-)
