@@ -1,97 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B6C20C485;
-	Wed,  4 Dec 2024 16:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687482391BC;
+	Thu,  5 Dec 2024 08:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733328394; cv=none; b=GTDm1O6/IS/wSXXabEZO2IttJiUMAg+3QWRbpr2LVbm3mKTh/yZcB2ILEYXr+gRkgBJkG1Eu2WaWmc8Vmu7Xc/V2kIz5LIqlC8ibXUs8i34gM399Zuj4aKgvb0yWI7D0e1SCDUA1zt+1D0BVRCGji1jWM08gOPLDWVu2DdSoXPc=
+	t=1733386612; cv=none; b=p3nJedMZnqEyvqm1z7JdrWLy7M/lkVPJTuMCZVkfwgv9Vx+POVDBuz8sD8i0IfsqRxxOycmxZtBTTu12v3R7MgosQzTXBUdGXxoP53SaxqfOkLWWEAwM8SuezPefAvUiD8oyeHYOWGRabLsuWeJY+Z3cvm4SwhTdBJ0o8Q2gm2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733328394; c=relaxed/simple;
-	bh=9TaGX6HffgIlLj9EAnKA1F6OunD1In0MqPvuPOMdWXA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DLh+DVTwrY7scoI11zIYiM4ae5aI4ZG6lDoZnw/YoUWVlrtCMRsXleXtzh6qDAxrwrPztJP4qUJoDnQJZgNagpuXDRyUq0w8xv4JOozAwbqjK3NEKadjK/eGFRFIZQsrxLRjOdqFRp0gVDHyhX7lo5GL+7FlOvYifG9b/QpD0uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnTVeGA0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733386612; c=relaxed/simple;
+	bh=v5YMVBLFaNQyG3N8yGkbXOj72cn8bq1dBgHNk+/bZkY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oDpeUqk0GBT3ocochk9WJhgnTRomsdscEr3w/O0M9zK+BGe0OmUXIsV6ZU37qGSakvUIvZbBuVtuqtz2GsTO7j6X4H8SRT7YFNLQtQIHC+w0nd5Fa5LLR9jpc8xMxKqxKUu2JqZCy9hSKILI5bEZnaAHgXQJ8/ryTuUMhmwG4K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIKVnjdg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnTVeGA0"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A7C0C4CEE6;
-	Wed,  4 Dec 2024 16:06:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIKVnjdg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BDCBC4CED1;
+	Thu,  5 Dec 2024 08:16:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733328394;
-	bh=9TaGX6HffgIlLj9EAnKA1F6OunD1In0MqPvuPOMdWXA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AnTVeGA0A6liJtCNIb9Hf3VZOUxRJvBYCS5i9F9Ndy3tUPgliLORfJf+jRtDSq84+
-	 vt0HezbZJH7g7gBZxdU1r7ad+x+IyTG5wJ/OV+4pin2MikG/cx1kB49cDwVquqIZq6
-	 mO3obxNWSx9M7rfk1LC+s9QZivgHOwnCgA9aKrvKOCLW2mdCZnoluZc02NfKMROonm
-	 PHv/U5LUtkowAC+lQNoyS810kz/fKf1JQvkype6jSnEU9u6M+5T9A6HWs9mJ7n2Ezj
-	 u5xiA1IWbZPdySbDNmzkBSoCHRBVSkwuwfv3bL9vv9+WTMUF5tPPWMYNanaxCo50G6
-	 CO7PsGA/mSBCA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DE10E7716D;
-	Wed,  4 Dec 2024 16:06:34 +0000 (UTC)
-From: Nikolaos Pasaloukos via B4 Relay <devnull+nikolaos.pasaloukos.blaize.com@kernel.org>
-Date: Wed, 04 Dec 2024 16:05:28 +0000
-Subject: [PATCH v5 5/6] arm64: defconfig: Enable Blaize BLZP1600 platform
+	s=k20201202; t=1733386612;
+	bh=v5YMVBLFaNQyG3N8yGkbXOj72cn8bq1dBgHNk+/bZkY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AIKVnjdgpYOAF4L/6FlAtcAhJFHh4xev7UfxqA2l+ZnfHiqERX+6EzaroIgUXXCpU
+	 Dua6HfKGySb7XskcQ8aLXSe2HsTJWmL1JhBadbTlhsH4xyADdIzeS3CcvZq3kKGdMt
+	 f9ajM0l9i42fm5iQrRT1UI31re78agJ6VtmKlKw4qAZNzdTiIQSnF21wK9TSoXr2gd
+	 lBmmQ6rhA67MZfxWmIaFiw+S3pP7xk6T/kMPRYw4Y+WDzEi2lSMMV7qvcy7q4HgWLc
+	 4vC75sqN1clPjRixrDBcO+9ZtGPtFYySgGJhgpQeMYGlYrAjj9NgnzLC7XIMLIRipk
+	 HNeCNmNKMhyOg==
+Date: Thu, 5 Dec 2024 09:16:49 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	James Cowgill <james.cowgill@blaize.com>, Matt Redfearn <matt.redfearn@blaize.com>, 
+	Neil Jones <neil.jones@blaize.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
+Subject: Re: [PATCH v5 6/6] MAINTAINER: Add entry for Blaize SoC
+Message-ID: <h5awakp52e6pxnnfrclhtlhhs3i66twvmqwlf5vmnfwk2xhbwr@marp6wti72ti>
+References: <20241204-blaize-blzp1600_init_board_support-v5-0-b642bcc49307@blaize.com>
+ <20241204-blaize-blzp1600_init_board_support-v5-6-b642bcc49307@blaize.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241204-blaize-blzp1600_init_board_support-v5-5-b642bcc49307@blaize.com>
-References: <20241204-blaize-blzp1600_init_board_support-v5-0-b642bcc49307@blaize.com>
-In-Reply-To: <20241204-blaize-blzp1600_init_board_support-v5-0-b642bcc49307@blaize.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- James Cowgill <james.cowgill@blaize.com>, 
- Matt Redfearn <matt.redfearn@blaize.com>, 
- Neil Jones <neil.jones@blaize.com>, 
- Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733328392; l=754;
- i=nikolaos.pasaloukos@blaize.com; s=20241111; h=from:subject:message-id;
- bh=p64eXXaIQjoPOizS0+i1yI0HfKEd6m8yRHyu9K+W+GE=;
- b=xiq+hGJ+bcWw9onTf2uX5rlzKc+E1DAv8+JHh2rcSL/LF3Oc1dtqsHetuoJ932y4rTYThe8Fn
- rIPtAh8dlLZB3H2WKbc3Znaeet/Fc4TWBTSF3E21T/UXhTtbp5us5MH
-X-Developer-Key: i=nikolaos.pasaloukos@blaize.com; a=ed25519;
- pk=gGEjGCXdSuvCJPIiu0p0UeiPcW5LC710Z6KGN/dzo3g=
-X-Endpoint-Received: by B4 Relay for
- nikolaos.pasaloukos@blaize.com/20241111 with auth_id=274
-X-Original-From: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
-Reply-To: nikolaos.pasaloukos@blaize.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241204-blaize-blzp1600_init_board_support-v5-6-b642bcc49307@blaize.com>
 
-From: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+On Wed, Dec 04, 2024 at 04:05:29PM +0000, Nikolaos Pasaloukos wrote:
+> Add MAINTAINERS entry for Blaize SoC platform with a list of
+> maintainers.
+> 
+> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+> ---
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 273a84483b74543b510de7b08804bbd1f6514358..43846a23f9d990ae9fe066e65ed2bdd36376e327 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2238,6 +2238,15 @@ F:	arch/arm64/boot/dts/bitmain/
+>  F:	drivers/clk/clk-bm1880.c
+>  F:	drivers/pinctrl/pinctrl-bm1880.c
+>  
+> +ARM/BLAIZE ARCHITECTURE
+> +M:	James Cowgill <james.cowgill@blaize.com>
+> +M:	Matt Redfearn <matt.redfearn@blaize.com>
+> +M:	Neil Jones <neil.jones@blaize.com>
+> +M:	Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
 
-Enable ARCH_BLAIZE to support the BLZP1600 SoC and the CB2
-development board.
+Just to be clear: this is list of active maintainers, so all above are
+supposed to perform reviews or maintainer duties. This is not
+credits/managers/I-need-to-please-someone list.
 
-Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+With the assumption these are active maintainers:
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5fdbfea7a5b295c4569f34773394ffe6eda778e9..4921669f89ae0a89e0c1489a2a4359be9698e5a2 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -44,6 +44,7 @@ CONFIG_ARCH_BCM_IPROC=y
- CONFIG_ARCH_BCMBCA=y
- CONFIG_ARCH_BRCMSTB=y
- CONFIG_ARCH_BERLIN=y
-+CONFIG_ARCH_BLAIZE=y
- CONFIG_ARCH_EXYNOS=y
- CONFIG_ARCH_SPARX5=y
- CONFIG_ARCH_K3=y
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-2.43.0
+They should also ack it to confirm they understand the burden.
 
+Best regards,
+Krzysztof
 
