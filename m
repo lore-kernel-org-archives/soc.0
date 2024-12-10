@@ -1,58 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9805215706
-	for <soc@lists.linux.dev>; Mon,  9 Dec 2024 09:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3576423DE8E
+	for <soc@lists.linux.dev>; Tue, 10 Dec 2024 10:11:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733737739; cv=none; b=lQplfBN1hRBKN7dDG7VEN4s7WfBsJGLZFWhXUQCrXlnXXyDOX7i7kbExYShpj8j28GwQXD+OsAJJNyc6S8Bh9j80vv/ZiyGXvc899xfBD5eqMmz8JcWlPW4KR7Y3I7Ix5h5w3IW/tNBUH5BtxiMN5y3nlmP0Hc/p6zLfSx7Ee1c=
+	t=1733825482; cv=none; b=ceuNH+1NYEQJMbTg3gjSAQhgTveGmMolIboMgwK8oRpWACgMhcgFHEU6xfPSuFSDen9ZfJ29TCwO7wVqUIFnatpCZjOJ+CjMkRgDTdpshwomxmPMiem2gJStZVGxrn+YTxMhiO5tBUrrY/ZQvOQ/uO9fTntQ9/QyWeHUsfj8YLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733737739; c=relaxed/simple;
-	bh=U0CufWdAaA6Me8Q0Og61NZHfw77qNzDNc3cWfEPpdZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tEM/DJiQF0HVNWnFTDoPafDqfIEBkd4OlYP05UbT3p5BQY5JcXbFBzsNe2MesKTD16JBd+0i3GNZxMuZqIpe61jZu6ZkB60lxRpaXcFTQ2/Nm0EBlMDRe3DdVFaiHyTbMYkWIDHi+ujHiTavfBg8iNba5bZOPsDnQ20UW96Airc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rhH4UrUL; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rhH4UrUL"
+	s=arc-20240116; t=1733825482; c=relaxed/simple;
+	bh=/b0oc4Nc4tfuikK3n267Z9evOMOl25jjfV/trqaVjmM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=m0FCgUIEZ+y4xfiam75DASl/E6nikuUUEwD/doUueNh2wrwrKp3lAY9Q6rxk69si3VLSSw90xZLDiVW9+NGjqbNVqffnOEA4wl0BcifAnQx7S4J73pdFqMBXOJ9vf8myjAsGHPEYk1LL4PK5BOeehSDW6jfe5H+QZ8Gil4SplFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 90692C4CEE3; Mon,  9 Dec 2024 09:48:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346A9C4CED1;
-	Mon,  9 Dec 2024 09:48:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733737739;
-	bh=U0CufWdAaA6Me8Q0Og61NZHfw77qNzDNc3cWfEPpdZA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rhH4UrULssmgCqsspl3KJzRUsXeB8VE3f/jZTl9Clb9CSlLpM4aCumCH0Pm9KNSOy
-	 AZGNhXgOvL1tMbpmSteqJV7ISBUOCJFgqewmU4F7zpyX6gD76sMFhLvi2ca9bha5J/
-	 3Yi2+oSBfOfoi0liJffY8vqo+oYdzUGBx/aTw23ndad3E3fNNl19IdVW4+X1tp96zw
-	 IMl1XaO5rVYZPpi6ksioU/eoPHdVXhfhxLE93OmnnaveNtDVgjYeEEbd50WkxPqfKU
-	 AgdnXIoa+Gw6W3MiJ9mYgtoNg5nigWTz6vpEpDfw5UTRdHlH5cvRzZwWrfMkEixUuz
-	 8cFPkfbPC+Exw==
-Date: Mon, 9 Dec 2024 10:48:53 +0100
-From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH leds v7 00/11] Turris Omnia LED driver changes
-Message-ID: <sn4jz4tqo6cywpg3vwugl4heh5qt7e2uhmvvnu3l2cf4jj22af@azybtpl5bm63>
-References: <20241111100355.6978-1-kabel@kernel.org>
+	id D7017C4CEE0; Tue, 10 Dec 2024 10:11:21 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 02F10C4CEDD;
+	Tue, 10 Dec 2024 10:11:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02F10C4CEDD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 288E1113E;
+	Tue, 10 Dec 2024 02:11:47 -0800 (PST)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1F6D43F58B;
+	Tue, 10 Dec 2024 02:11:18 -0800 (PST)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL v2] firmware: arm_ffa: Fix for v6.13
+Date: Tue, 10 Dec 2024 10:11:13 +0000
+Message-Id: <20241210101113.3232602-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241111100355.6978-1-kabel@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hello Lee,
+Hi ARM SoC Team,
 
-will you be taking this series for 6.14?
+Please pull ! Sorry for the confusion, this is updated PR with wrong patch
+dropped.
 
-Marek
+Regards,
+Sudeep
+
+-->8
+
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fix-6.13
+
+for you to fetch changes up to 6fe437cfe2cdc797b03f63b338a13fac96ed6a08:
+
+  firmware: arm_ffa: Fix the race around setting ffa_dev->properties (2024-12-04 09:59:54 +0000)
+
+----------------------------------------------------------------
+Arm FF-A fix for v6.13
+
+A single fix to address a possible race around setting ffa_dev->properties
+in ffa_device_register() by updating ffa_device_register() to take all
+the partition information received from the firmware and updating the
+struct ffa_device accordingly before registering the device to the
+bus/driver model in the kernel.
+
+----------------------------------------------------------------
+Levi Yun (1):
+      firmware: arm_ffa: Fix the race around setting ffa_dev->properties
+
+ drivers/firmware/arm_ffa/bus.c    | 15 +++++++++++----
+ drivers/firmware/arm_ffa/driver.c |  7 +------
+ include/linux/arm_ffa.h           | 13 ++++++++-----
+ 3 files changed, 20 insertions(+), 15 deletions(-)
