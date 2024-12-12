@@ -1,35 +1,39 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534F5206294;
-	Wed, 11 Dec 2024 22:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9267C213E6B
+	for <soc@lists.linux.dev>; Thu, 12 Dec 2024 15:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733956373; cv=none; b=kE+2n4gWzSKcRw5BaljCtg85wKO7DXr9mB05SeEzjL7RnO/4pDaPG7Yil2OyrJlBa1zgFBVWKbezxahVzsm7MMUsBH66Pm6SeFynQC7G0gPNB4UfwXQSQtvuNU9R69tPle9nqo2GlSBpzEQC9qrS2dBMZQy/THtrtcJ/+hpQirk=
+	t=1734018772; cv=none; b=WsS4EmcQyLxWpWDpKfeVPLiW/X3MB4fOhyXzNljvSAQ4CkgXoe9aA3P35O2cA2iKIbGG0L0V1k+VB9ysZdyK9EFgPCn7tER7YSetnUGqzW8J+SM248j63RHQV616RHqPFQdC4WnN3hDXr8GqSVavQegLYvBgao4zZ7y1wXopjQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733956373; c=relaxed/simple;
-	bh=cVsBRq85rissDz94gS1APPLak1L31WJ3t5TGTSYE/as=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QZ1OYrjIuDJ7KNQRVYBVbyLFHeTZBG7pktYMmaVO1gVDjbt5EqKy4lui2wPIMExmcPFm+sCDqrfAV8CKdfD0LxYz/QIWff3zUhAfb33Z5sS4ARtieTSq9cAF+lBhJR+uEQj87IQ/M30U5bpwbe2ehX6tQTCFppOAvqIOUxCbzUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cqZ00nyo; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cqZ00nyo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AB1C4CED3;
-	Wed, 11 Dec 2024 22:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733956373;
-	bh=cVsBRq85rissDz94gS1APPLak1L31WJ3t5TGTSYE/as=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=cqZ00nyo1Apj+jfDOCjAb0Dxj/1hdrSgL4z0d1BQUgbsnfyS1cxj2Bs3BmSupO9YI
-	 ZrIs7UmW8cKEp43GKNoiniGEMwWKwmjdnER3WeCSCGcRBKWotkXLcx8jndR1TkSpRP
-	 uiVGhMx/F4anBNn2cXEIgvbbMNAcLgjaLi7WcLTW60LB7hq+FQhuXx3i6Ic5UlnfEU
-	 vzGsMum9i7o+4Bz2yDi5hvchzvThH3EecYX333iWDVqDeJrI5DcrWWqj0yc7VIBVVl
-	 GPNr0CGIC5KgEmOa8jzIJQb3v4R6rhXRyTCF1prrQpAlkKDu/E5iMLuOrlL7ULHRg3
-	 dPb253YfD0mvw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70CC8380A965;
-	Wed, 11 Dec 2024 22:33:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1734018772; c=relaxed/simple;
+	bh=6KvSWy/qvctLgXtiy34HcDw5CYN2RqavDCfoL9/qKKo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H7Ma528MAcEDGYJaCkBc1CLme8Iqlz2l0s9liViLIIFf/uOXhOXWvU77zvDEglzOgEYZGEv0ee1VO1FUgNST+wuUI8eU8vlHuJC398HMlqT55jrPFH8ZKaiwr2e/AhPt/sYbi/sERAzk+wpqwItDn3gzn7peZtNIN/qEUS4hin4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Thu, 12 Dec
+ 2024 23:52:41 +0800
+Received: from localhost.localdomain (192.168.10.10) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
+ Transport; Thu, 12 Dec 2024 23:52:41 +0800
+From: Kevin Chen <kevin_chen@aspeedtech.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<joel@jms.id.au>, <andrew@codeconstruct.com.au>, <tglx@linutronix.de>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <arnd@arndb.de>,
+	<olof@lixom.net>, <quic_bjorande@quicinc.com>, <geert+renesas@glider.be>,
+	<dmitry.baryshkov@linaro.org>, <konradybcio@kernel.org>,
+	<neil.armstrong@linaro.org>, <johan+linaro@kernel.org>,
+	<kevin_chen@aspeedtech.com>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, <soc@lists.linux.dev>
+Subject: [PATCH v3 0/6] Introduce ASPEED AST27XX BMC SoC
+Date: Thu, 12 Dec 2024 23:52:29 +0800
+Message-ID: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,60 +41,43 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] soc: Switch back to struct platform_driver::remove()
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <173395638899.1729195.5401091299734997866.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Dec 2024 22:33:08 +0000
-References: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
-In-Reply-To: <20241029074859.509587-2-u.kleine-koenig@baylibre.com>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40baylibre=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: linux-riscv@lists.infradead.org, arnd@arndb.de, olof@lixom.net,
- joel@jms.id.au, andrew@codeconstruct.com.au, christophe.leroy@csgroup.eu,
- herve.codina@bootlin.com, qiang.zhao@nxp.com, hasegawa-hitomi@fujitsu.com,
- lihuisong@huawei.com, linusw@kernel.org, kaloz@openwrt.org,
- kgugala@antmicro.com, mholenko@antmicro.com, gsomlo@gmail.com,
- zhuyinbo@loongson.cn, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, conor.dooley@microchip.com,
- daire.mcnamara@microchip.com, krzysztof.kozlowski@linaro.org,
- andersson@kernel.org, konradybcio@kernel.org, heiko@sntech.de,
- alim.akhtar@samsung.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
- nm@ti.com, ssantosh@kernel.org, michal.simek@amd.com,
- andriy.shevchenko@linux.intel.com, duje.mihanovic@skole.hr,
- broonie@kernel.org, david.wu@rock-chips.com, jay.xu@rock-chips.com,
- jay.buddhabhatti@amd.com, radhey.shyam.pandey@amd.com,
- izhar.ameer.shaikh@amd.com, naman.trivedimanojbhai@amd.com,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain
 
-Hello:
+---
+v3:
+  - Split clk and reset driver to other commits, which are in series of
+    "Add support for AST2700 clk driver".
+  - For BMC console by UART12, add uart12 using ASPEED INTC architecture.
 
-This patch was applied to riscv/linux.git (fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+aspeed,ast2700-intc.yaml
+  - Add minItems to 1 to fix the warning by "make dtbs_check W=1".
+  - Add intc1 into example.
 
-On Tue, 29 Oct 2024 08:48:58 +0100 you wrote:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
-> 
-> Convert all platform drivers below drivers/soc to use .remove(), with
-> the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
-> 
-> [...]
+Kconfig.platforms
+  - Remove MACH_ASPEED_G7.
 
-Here is the summary with links:
-  - soc: Switch back to struct platform_driver::remove()
-    https://git.kernel.org/riscv/c/511c06e39035
+Kevin Chen (6):
+  dt-bindings: interrupt-controller: Refine size/interrupt-cell usage.
+  dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+  arm64: aspeed: Add support for ASPEED AST27XX BMC SoC
+  arm64: dts: aspeed: Add initial AST27XX device tree
+  arm64: dts: aspeed: Add initial AST2700 EVB device tree
+  arm64: defconfig: Add ASPEED AST2700 family support
 
-You are awesome, thank you!
+ .../bindings/arm/aspeed/aspeed.yaml           |   6 +
+ .../aspeed,ast2700-intc.yaml                  |  60 ++++-
+ MAINTAINERS                                   |   1 +
+ arch/arm64/Kconfig.platforms                  |   6 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/aspeed/Makefile           |   4 +
+ arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi     | 236 ++++++++++++++++++
+ arch/arm64/boot/dts/aspeed/ast2700-evb.dts    |  57 +++++
+ arch/arm64/configs/defconfig                  |   1 +
+ 9 files changed, 359 insertions(+), 13 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
+ create mode 100644 arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
+ create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
