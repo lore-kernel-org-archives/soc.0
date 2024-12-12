@@ -1,50 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4571E223328
-	for <soc@lists.linux.dev>; Thu, 12 Dec 2024 18:38:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73386188713;
+	Thu, 12 Dec 2024 19:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734028688; cv=none; b=HcWUWhn2t520aRW7f/dDnZTSFRlcOqcayi/xB+0dRqRHSwcMS+xHOBq0A9P8aYIi15+/yODqrRJb1JLUKBcvWyookFj/jIYHWonEEzZbXNwutePaR7C+FGVhEiJD0TLZofvvoubabfvKk0RByfDGrxZaaZwq/NgIMHnBgKJAiu0=
+	t=1734032235; cv=none; b=Wl1o/GK1j9BlpiP1cRydXkAarxPWR/UOz501gvr/LJgePkpcqiQ0wjKQf5E279TcDG723u9SHvhRnzpYnMLMr2YRURQFioDbhUeNIr4sti6wuO51jfHv5GAeiTX7vfU3HtPq9p3Eay9ypGunjhdR1uPOLHIPOaUiUE4LwYjXrsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734028688; c=relaxed/simple;
-	bh=o6VGbM38GON/sJN/xa92Zh6V4Zo+f8EMhFUEc2b+Rhg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=S3di8N7vAqrxXap82/sAf9FyJ+QIH9iFcxGV/L39xM4XYE5gB1ZAy8BSwpQQ9anCZx10sD7UKsY8n6UIwAca1oqyDM4SEHGXNJUQQ4ddcy4oszt1y/9h9/vzydMOnRAiY3DvTxZKCkozFBxppI63uqBVJtMbbenVSWrDTOuXEfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPeEdbnm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734032235; c=relaxed/simple;
+	bh=hdcrKAYIIyPuFXXVZ8CmtrVulXK1wrD6wxFqvScjbIs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qNPOuM4OafJdwWlmEiOq/DKfaiB8oGPgNZmauh0vYrLloi8WaOHh76jROYDscgBiXTWyXlhyVdDkMLisRySRPGHFfGRxHhYD521HvUwiKD5p4XjtZcbKju8kAjx8mEdpZJdOzWuMIigY3U30MgW9Pp0w19LeGcod99JVszIweQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpplETQN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPeEdbnm"
-Received: by smtp.kernel.org (Postfix)
-	id 0A50BC4CEDD; Thu, 12 Dec 2024 18:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D482FC4CECE;
-	Thu, 12 Dec 2024 18:38:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpplETQN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6831DC4CECE;
+	Thu, 12 Dec 2024 19:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734028687;
-	bh=o6VGbM38GON/sJN/xa92Zh6V4Zo+f8EMhFUEc2b+Rhg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=gPeEdbnmf3G2S0k4t2SeS4H37yCg10e+kl08dA0pmGZ081TORVA3+lgkMKW56I+TF
-	 ZpeIqcUUxQVzNjEyCEo6kMrmOcRcmSdSaO9+gOmo1FxAA5NIupb4tAg6KpJaJsYRYV
-	 WtXuXgR14ZVjLduKubxjvAAAo/HEfi31lH+5zDp3uNqyyTWx+8PtEoQXTkKoSb99zy
-	 BtxXRdI983ratvCl8flWvSrV4LBS6KJTjTCsIeyZm1dUw8NWsFE3wRPjpDQbpoc+gH
-	 IykMOGuk3hn8/G6wG/EWhBMQPV/sbrlclWeuUarE+0gXy6YzCBO52qrsbdFmGg/mPo
-	 kONoHpihokyrQ==
-From: Lee Jones <lee@kernel.org>
-To: Lee Jones <lee@kernel.org>, 
- =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, 
- Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org, 
- Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Andrew Lunn <andrew@lunn.ch>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-In-Reply-To: <20241111100355.6978-1-kabel@kernel.org>
-References: <20241111100355.6978-1-kabel@kernel.org>
-Subject: Re: [PATCH leds v7 00/11] Turris Omnia LED driver changes
-Message-Id: <173402868459.2361547.14700129518355452742.b4-ty@kernel.org>
-Date: Thu, 12 Dec 2024 18:38:04 +0000
+	s=k20201202; t=1734032234;
+	bh=hdcrKAYIIyPuFXXVZ8CmtrVulXK1wrD6wxFqvScjbIs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=bpplETQNFBZv3HutxSMXgLIil1ThPMeD04QQ2DMOeJ0r+ScUdezfQzVwoT/VNS9eP
+	 UGaoiP+tUAn1WmE9KylxSd3hpasJ5E+RnIxke8vzzmPb4EmMDnsaLiYuJ1MWslCvQo
+	 2cJ74G7RR4AATxRP7UH9XIpxEO7b2nKfW6qWh8o/wfWuXOTKD4zyZfvINCYSSFdk+h
+	 d13ujdKmmUSJr+Adr3qNX/H4/KX36o3vWpr1+DPN6TG3Bt+U0vHaW0jSokCxRIprW6
+	 T7RElRY8Ea0rMVm81sUDYq2wHC0624fCmzwTAqpjI3DUjzT8b0Skw6uV9IaLfw4nvn
+	 JAqlAsxtozOtw==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 12 Dec 2024 19:36:32 +0000
+Subject: [PATCH] arm64: defconfig: Enable Amazon Elastic Network Adaptor
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -52,46 +35,58 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241212-arm64-defconfig-graviton-v1-1-86830c3d572b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAD87W2cC/x3MPQqAMAxA4atIZgO2/oBeRRyKSWsGW0lFBPHuF
+ sdveO+BzCqcYaoeUL4kS4oFpq5g3VwMjELFYBvbGWssOt2HDon9mqKXgEHdJWeK2DC5vuWezEh
+ Q8kPZy/2v5+V9Py/IZeZqAAAA
+X-Change-ID: 20241212-arm64-defconfig-graviton-0eda53e5d19d
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, soc@lists.linux.dev
+Cc: Ryan Roberts <ryan.roberts@arm.com>, 
+ Aishwarya TCV <aishwarya.tcv@arm.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1000; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=hdcrKAYIIyPuFXXVZ8CmtrVulXK1wrD6wxFqvScjbIs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnWztnQFh2ayZYX2jrI3ujSzKsagUwM5yM6SNHfzN8
+ whUygQWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ1s7ZwAKCRAk1otyXVSH0JSHB/
+ 9qvkdRV1j2ni2DdfrXhTXK9fN9RAJkPBJQW3U3g1If9M3Zi9mtWDNNwJniXHWGqIKtmEUdpJ19YglK
+ NdlpBuvkjC3OK0d1w0DPUBK5vxS5S7/0kM/TNPPRULWBs6PIeCuCUroeJsjQVBLwgOIF9N1iIy20eI
+ W7EwvbzdGeTl0xPHH9iGuYomwjpu3U9BUgV/K0ToWB66MK8vN7hkGJfM469nlk0suhiLi/lP6oKOHQ
+ XkKfUsijlTJK+6ZCAGV50tIg+calT0n3hpqV5OG5iFCZOZUH0j28XO1NxPZus3DHApjh8qTfi4+50O
+ ZID6ifE3LAyZ+c+DSLAzGyygywDjjD
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon, 11 Nov 2024 11:03:44 +0100, Marek Behún wrote:
-> this is v7 of Turris Omnia LED driver changes.
-> v1 to v6 can be found at
->   https://lore.kernel.org/linux-leds/20240902124104.14297-1-kabel@kernel.org/
->   https://lore.kernel.org/linux-leds/20240903101930.16251-1-kabel@kernel.org/
->   https://lore.kernel.org/linux-leds/20240913123103.21226-1-kabel@kernel.org/
->   https://lore.kernel.org/linux-leds/20241029135621.12546-1-kabel@kernel.org/
->   https://lore.kernel.org/linux-leds/20241104141924.18816-1-kabel@kernel.org/
->   https://lore.kernel.org/linux-leds/20241108132845.31005-1-kabel@kernel.org/
-> 
-> [...]
+The Graviton SoCs available in AWS use a custom network adaptor, enable
+support for this in defconfig so standard defconfig builds can be used more
+readily in CI. The driver is left as a module since it is relatively
+unlikely these will be netbooted.
 
-Applied, thanks!
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-[01/11] turris-omnia-mcu-interface.h: Move command execution function to global header
-        commit: 082e8f6db9092d19ae84549874daaef240c2207b
-[02/11] leds: turris-omnia: Use command execution functions from the MCU driver
-        commit: b4c3960da27dd91412e04bc263311c16e6c46fb0
-[03/11] turris-omnia-mcu-interface.h: Add LED commands related definitions to global header
-        commit: d665d7f2800fff5da9311e4c8c236966ba57d440
-[04/11] leds: turris-omnia: Use global header for MCU command definitions
-        commit: 5d2f88320c2f7d15830f2f3b51726ef6ba999195
-[05/11] dt-bindings: leds: cznic,turris-omnia-leds: Allow interrupts property
-        commit: 2b73a24f327070390f1a17570fcab35b61a92c24
-[06/11] leds: turris-omnia: Document driver private structures
-        commit: 8ca5bf8ad183e1b05034ccfd96d59e7b802d6335
-[07/11] leds: turris-omnia: Notify sysfs on MCU global LEDs brightness change
-        commit: d82e09d62b3bdbfa9dac2daf3c3c071b6a79d2aa
-[08/11] platform: cznic: turris-omnia-mcu: Inform about missing LED panel brightness change interrupt feature
-        commit: 1783b766940f37aeaf7c841f777be8cf68326908
-[09/11] leds: turris-omnia: Inform about missing LED gamma correction feature in the MCU driver
-        commit: 2de889e9cf25558bf12505b6827dcd435cbc1b11
-[10/11] leds: turris-omnia: Use dev_err_probe() where appropriate
-        commit: eda057c7c7c2c99c15b86bb5e3c1858b8650c074
-[11/11] leds: turris-omnia: Use uppercase first letter in all comments
-        commit: 4cc40bf45b6f6b6ae350e1f75ee0af49b81f9b1f
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index c62831e6158633f07c1f3532fba62f09b31e7448..b48940b3d100dd03945a29735b8ba26b145d51ad 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -330,6 +330,7 @@ CONFIG_VIRTIO_NET=y
+ CONFIG_MHI_NET=m
+ CONFIG_NET_DSA_BCM_SF2=m
+ CONFIG_NET_DSA_MSCC_FELIX=m
++CONFIG_ENA_ETHERNET=m
+ CONFIG_AMD_XGBE=y
+ CONFIG_NET_XGENE=y
+ CONFIG_ATL1C=m
 
---
-Lee Jones [李琼斯]
+---
+base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
+change-id: 20241212-arm64-defconfig-graviton-0eda53e5d19d
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
