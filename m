@@ -1,70 +1,96 @@
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE18223E80
-	for <soc@lists.linux.dev>; Thu, 12 Dec 2024 15:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077B8222D7D
+	for <soc@lists.linux.dev>; Thu, 12 Dec 2024 18:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734018790; cv=none; b=d8vqGmqFOi9YSzGvHgrITylU4TAj3VUrDoD/s29sguR5Vqenn2PysK/irfWaEKuNvS7/xQ/70CPi2J5AW05Za5KJWYKuOX6Lf8ZPyP6IIESdcqOyMud/2uk/ZY6972PHKcMJhxbzCz1PHu008EzpEAFatJd2nYlHyISGhL3PK0E=
+	t=1734028444; cv=none; b=UnHKgNbt3bf2qdAWA7VZXUdB/gAx9xKLmbbwQ2d3n0LHE/5Nh6DKKp+0JKQgO2MsXSuJpGeGCkNiL3XY3Nu/w95P4I6/E1tEAGpJKR9prNIjDAx7nD4/Qs+5TZnXlTdfkfhKFkr+Efuh2abocL+F71O+r1NsJiOtq248ITZgftA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734018790; c=relaxed/simple;
-	bh=sCfwn1vl381W37kWDW29ndnhO/jyYxada+x67UTn2z4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ChahpGUUU7x6q/oFt14humjCYvtiWV621iCM8KIDcjh1aYuLc72URQ8VOBqfgppJeCL+VLFDy155mBXHzj4uuiPuk4oTaYbEYmkRvyS96IT4101Ihm7VnN7rnegGf53mwUBWUWKdywy5dFl8HMmq9KHXxtk5tME399i3UzP5U90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Thu, 12 Dec
- 2024 23:52:42 +0800
-Received: from localhost.localdomain (192.168.10.10) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
- Transport; Thu, 12 Dec 2024 23:52:42 +0800
-From: Kevin Chen <kevin_chen@aspeedtech.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<joel@jms.id.au>, <andrew@codeconstruct.com.au>, <tglx@linutronix.de>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <arnd@arndb.de>,
-	<olof@lixom.net>, <quic_bjorande@quicinc.com>, <geert+renesas@glider.be>,
-	<dmitry.baryshkov@linaro.org>, <konradybcio@kernel.org>,
-	<neil.armstrong@linaro.org>, <johan+linaro@kernel.org>,
-	<kevin_chen@aspeedtech.com>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, <soc@lists.linux.dev>
-Subject: [PATCH v3 6/6] arm64: defconfig: Add ASPEED AST2700 family support
-Date: Thu, 12 Dec 2024 23:52:37 +0800
-Message-ID: <20241212155237.848336-9-kevin_chen@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
-References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
+	s=arc-20240116; t=1734028444; c=relaxed/simple;
+	bh=VFuqqsV6p5jUQLaL1yiL40jofl3gxXoUYZqAdo4dXEM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J+sVhlVieTb5rCmMfN9B2gRKviOHsKsy14m4iUinejiRjDyJTsTKPSsrGPUAKvRuFZW5a6Jh1rgRZg5LqAyJgTcJCDN2YAVhvf8nF0hSghVScATP57+mD4KbX3x8DF4WHvcVnzrUE8RtvICNZtfu/cwV9fyZ+9WoQULwiitAqvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lA2UjYyY; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lA2UjYyY"
+Received: by smtp.kernel.org (Postfix)
+	id C1DB7C4CEDD; Thu, 12 Dec 2024 18:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C330C4CED3;
+	Thu, 12 Dec 2024 18:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734028443;
+	bh=VFuqqsV6p5jUQLaL1yiL40jofl3gxXoUYZqAdo4dXEM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lA2UjYyYvZIh/OZwI7XZj7G9COLH6ZYmV/Mp6ptDf60lFXAt4fs0CYNHRdNLOZCz5
+	 Yw0fB76Ji2uD4kiTy58CJ+BBVvzhNqdNv4XFKDYD4uwi+XpvQy4DxCoB2kpjL5hUwW
+	 B/MNy8P5sG15QMNrasHoVyKpOflRw61nTFwiMa7T9aVJ+MnhtXWI160uqLCVzf6+Y+
+	 R85aRNYIQYWDqt9YkEirkky64bZmKSeyL17c230w/C363KmudVtkyHyAx3/eRJAGAH
+	 5OkqoADi9mS6E0MJ+oQ4AKpxQ5fGbVtEIlsjKZFUcqfVhhKmeoFU1Td/lsIafDlctD
+	 hWGiUvOvxygeg==
+Date: Thu, 12 Dec 2024 18:33:57 +0000
+From: Lee Jones <lee@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH leds v7 03/11] turris-omnia-mcu-interface.h: Add LED
+ commands related definitions to global header
+Message-ID: <20241212183357.GK7139@google.com>
+References: <20241111100355.6978-1-kabel@kernel.org>
+ <20241111100355.6978-4-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <20241111100355.6978-4-kabel@kernel.org>
 
-Enable CONFIG_ARCH_ASPEED in arm64 defconfig.
+On Mon, 11 Nov 2024, Marek Behún wrote:
 
-Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+> Add definitions for contents of the OMNIA_CMD_LED_MODE and
+> OMNIA_CMD_LED_STATE commands to the global turris-omnia-mcu-interface.h
+> header.
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+> ---
+>  include/linux/turris-omnia-mcu-interface.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/include/linux/turris-omnia-mcu-interface.h b/include/linux/turris-omnia-mcu-interface.h
+> index 7f24cc682780..06c94e032c6f 100644
+> --- a/include/linux/turris-omnia-mcu-interface.h
+> +++ b/include/linux/turris-omnia-mcu-interface.h
+> @@ -239,6 +239,18 @@ enum omnia_int_e {
+>  	OMNIA_INT_LAN5_LED1		= BIT(31),
+>  };
+>  
+> +enum omnia_cmd_led_mode_e {
+> +	OMNIA_CMD_LED_MODE_LED_MASK	= GENMASK(3, 0),
+> +#define OMNIA_CMD_LED_MODE_LED(_l)	FIELD_PREP(OMNIA_CMD_LED_MODE_LED_MASK, _l)
+> +	OMNIA_CMD_LED_MODE_USER		= BIT(4),
+> +};
+> +
+> +enum omnia_cmd_led_state_e {
+> +	OMNIA_CMD_LED_STATE_LED_MASK	= GENMASK(3, 0),
+> +#define OMNIA_CMD_LED_STATE_LED(_l)	FIELD_PREP(OMNIA_CMD_LED_STATE_LED_MASK, _l)
+> +	OMNIA_CMD_LED_STATE_ON		= BIT(4),
+> +};
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index c62831e61586..8826068c7c1d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -38,6 +38,7 @@ CONFIG_ARCH_AIROHA=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_ALPINE=y
- CONFIG_ARCH_APPLE=y
-+CONFIG_ARCH_ASPEED=y
- CONFIG_ARCH_BCM=y
- CONFIG_ARCH_BCM2835=y
- CONFIG_ARCH_BCM_IPROC=y
+I'm going to take this set now as-is, but can you submit a patch moving
+these #defines out of the enum block please?
+
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
