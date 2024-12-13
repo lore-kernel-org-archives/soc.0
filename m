@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B141E105B
-	for <soc@lists.linux.dev>; Fri, 13 Dec 2024 15:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCAC1E1C3F
+	for <soc@lists.linux.dev>; Fri, 13 Dec 2024 15:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734103412; cv=none; b=e+sr501U08eTqxG9i4TbdsuuzFPvZoYNR5lCfu7IkgvVkLlSAUiXG424+Ht9TVJDQuFusWT7NQeB3BSYkKX0NNnL6HIbDp6+LPlLKDk9dgTpr7FrUsvqL8Z37EEMLdK92j1+eLKXSIKDKZod5C+pIxN4A1C8TMWvhrRXEN8EWzU=
+	t=1734103414; cv=none; b=c8HkzO5zZM4I0EoxpIkR6lZ/t5zOMs+gioNHpNnlxWZFyZRUH7bjveaz1AXbD+kgzDCoqSh0B9rveBOxsWahoMqm0QwFejCKP0Q0xDegaWXrenWumA2rpsYOFXACoN50s1hYXZuOrs8L8yNPLmsuZO1MviKMvjpjDfvSDy4HfbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734103412; c=relaxed/simple;
-	bh=+UD3ZXaPdn72gi3nY7pBLIKzMNiCJt9F2Qtpl4dwtts=;
+	s=arc-20240116; t=1734103414; c=relaxed/simple;
+	bh=SffVnIZr0VPxDeGRm+CI6URD4Y9UfA4r8M3n2VF2CxE=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=b7+7R45Pbk7ts1ifCVaYafi5oPcXccrLIE3R+ShQWlq5Rfdu4SWZOKnVSle92cuZwIOjzJmYXMQxv7XcRd+j4ypmJehceCHWfRNfmFqSY04jgiWplZIM4/CU0apia4KOxxE6IelK6jYgekk8JbYowZkIfYNHXgMJEjwKx3vSr9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YtoZrKva; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=XJXqNIcGgOekIKIW1c/MCLtzVuwcJsyH0zUrY2Lo57L2pMMq8E9FxP8GGc4E3gN3jy2VepyswfuK7fiQPvomgPpXIEkZJdbr2UfS/2wbaw+mZF/bXpcozSbeM9JgtqtSTf98nr0DHgiRG/mcvE9RM5zOpsX2+ce5mNTMk4xVoMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u/qMLKLG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YtoZrKva"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u/qMLKLG"
 Received: by smtp.kernel.org (Postfix)
-	id 6A079C4CED7; Fri, 13 Dec 2024 15:23:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5409DC4CED6;
-	Fri, 13 Dec 2024 15:23:32 +0000 (UTC)
+	id ACD68C4CED7; Fri, 13 Dec 2024 15:23:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C44C4CED2;
+	Fri, 13 Dec 2024 15:23:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734103412;
-	bh=+UD3ZXaPdn72gi3nY7pBLIKzMNiCJt9F2Qtpl4dwtts=;
+	s=k20201202; t=1734103413;
+	bh=SffVnIZr0VPxDeGRm+CI6URD4Y9UfA4r8M3n2VF2CxE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YtoZrKva5UDIOWSlhSrOlwDYHhxYPuxHH1i1LTlbp6a4b3gT5Gsx0X71rCCKhN511
-	 MS9rYJJAxkha4zdALP0o5Np2wDpnpCMX6EWar97uzPL9k4mGqL4FWtIH8PLeqA8U+F
-	 DUdbM/G1vyejjPIzzgj0KkVe+KxJGnuBtLP0Tc9JI/hw548PU8MsCyeB8FYbQKEvMb
-	 Y+7t08SKuYvQaOB/6/oUnVSLc2t2z50OeUIx2LOrlynedOxH00T0pNwTerw1K3vd/c
-	 sUIO6OI+yms7/OKiqF2k4jyDckeCRWzFR87EThOmcOUm8KqBasula5o98VrpQwnasy
-	 nBVleUr/Pp+XQ==
+	b=u/qMLKLGaEz35AMmvk+lRLNdo7/mZeWJbwH158hu9w+8LszEwNdyrCpHfp7NAbYO2
+	 KNbZtphiHT9/zcKbqML5cM1mQl177SfMwYscDa5ffaBBJaKi8/DaRA3OeJ1404w0tb
+	 pjo2avQTdWzJQTaXugdrvCv1FkKlIJIJ4czQGXZ4Yh20ck8p0lxiAKXBSMMlhPVdjP
+	 QOfQvCV2q4wpOGWiOJ8MRxC64D+iJpWmVkAtjZ8JCAxMMfttnOZXoxBLsHYg7dWnQy
+	 fcqf1dtAk8HtEeB06piIZJN+3tb56XWQiD3mT4cVeBNW2nJiDWLX437GEDY31RCRsV
+	 VIC7HNUrnc/xg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACB5380A959;
-	Fri, 13 Dec 2024 15:23:49 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B52380A959;
+	Fri, 13 Dec 2024 15:23:51 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: dts: amd: Remove unused and undocumented
- "amd,zlib-support" property
+Subject: Re: [PATCH] reset: ep93xx: add AUXILIARY_BUS dependency
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173410342848.3014960.3589116660944460900.git-patchwork-notify@kernel.org>
-Date: Fri, 13 Dec 2024 15:23:48 +0000
-References: <20241115193740.3622591-2-robh@kernel.org>
-In-Reply-To: <20241115193740.3622591-2-robh@kernel.org>
-To: Rob Herring (Arm) <robh@kernel.org>
+ <173410342998.3014960.13558672849371022788.git-patchwork-notify@kernel.org>
+Date: Fri, 13 Dec 2024 15:23:49 +0000
+References: <20241111104418.3891756-1-arnd@kernel.org>
+In-Reply-To: <20241111104418.3891756-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
 This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+by Sebastian Reichel <sebastian.reichel@collabora.com>:
 
-On Fri, 15 Nov 2024 13:37:40 -0600 you wrote:
-> Remove "amd,zlib-support" property which is both unused in the kernel and
-> undocumented. Most likely they are leftovers from downstream.
+On Mon, 11 Nov 2024 11:44:12 +0100 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
-> SoC maintainers, please take this directly.
+> This fails to link when compile-testing and the auxiliary bus is not built-in:
+> 
+> x86_64-linux-ld: drivers/power/reset/ep93xx-restart.o: in function `ep93xx_reboot_driver_init':
+> ep93xx-restart.c:(.init.text+0x11): undefined reference to `__auxiliary_driver_register'
+> x86_64-linux-ld: drivers/power/reset/ep93xx-restart.o: in function `ep93xx_reboot_driver_exit':
+> ep93xx-restart.c:(.exit.text+0x8): undefined reference to `auxiliary_driver_unregister'
 > 
 > [...]
 
 Here is the summary with links:
-  - arm64: dts: amd: Remove unused and undocumented "amd,zlib-support" property
-    https://git.kernel.org/soc/soc/c/26bda0dff9ca
+  - reset: ep93xx: add AUXILIARY_BUS dependency
+    https://git.kernel.org/soc/soc/c/b6d445f6724d
 
 You are awesome, thank you!
 -- 
