@@ -1,75 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961171AD3F6;
-	Fri, 13 Dec 2024 09:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B37D1E00BF
+	for <soc@lists.linux.dev>; Fri, 13 Dec 2024 15:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734081058; cv=none; b=ORSOXCX13p6VU52+PLP562Qcu6SH01K/+IoAZ1H+4W37jbqru+dGV7/mhGimButW6jBlDzUW3FTbV2a03DKYh99IRGozhsjlZaAJsTT8rT3rrY+JdbcN/cvHaljKWuPKKCDUce1HetAw1ytjAkSaRXD9pHunBzdFqXXc091qc9w=
+	t=1734103409; cv=none; b=PcWuBXcx21O4BOGU2kPSOu1cmEfq2fiKWAcAwkZUawHGbfgj4b6gPrMwixB3kBFo0QwxCGtS2GRIQ5UYS1a+UqD4+VDT190KU6X91SeO3NTCx1PfDtqqzqBz4XQwLo6LyqposGHG6oAoY+UEgJtN6dm/FF1gnLgNyGpLO849vbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734081058; c=relaxed/simple;
-	bh=G+cTnuuCPd8OUrWtJFXbPhKcg/vWEnCq2zPfc22GuSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Du6qkrFl7cMrAVtSnwGdj5LMrChLtn0o4Wt844YNi0UO2tuvvGuTaye7hXS9Epseq/0Qh32GgKGgNA5zxFCobmzSvo9yiwvOMJqBn9gcJ4W88OTU+yVwIdX98GKxOdqT1wvPVnCeYTzDZ/+aQUarKqYp435d3Z1uJ40/bSfCkn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAbwKM7Q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734103409; c=relaxed/simple;
+	bh=Q/FpU9qp9aOoHN2c8tNloUjxv9O8bSuMjEiRVODhiDI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=NeTOASMdpGpoUcv9dqLYpdvnf+WKQU8otHssTKS3Jsq/KFHQXsxXycdbPyUDJejxHV/xRMxaNG3mXNZFap/HFKp3Bir6xrAdYFsOepGHDRYpFd6gqA2akG4X6r6E/QhQe1NtUkesVtVny1UjD/hMja1Y/cjTFiT1Ws29zvEldRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+63hLUC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAbwKM7Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5358EC4CED6;
-	Fri, 13 Dec 2024 09:10:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+63hLUC"
+Received: by smtp.kernel.org (Postfix)
+	id C8997C4CEE1; Fri, 13 Dec 2024 15:23:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB08C4CED2
+	for <soc@kernel.org>; Fri, 13 Dec 2024 15:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734081058;
-	bh=G+cTnuuCPd8OUrWtJFXbPhKcg/vWEnCq2zPfc22GuSo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GAbwKM7Ql8JlHQtvaxCAEjlrWi6IlQRqnJA8CZ04DwQrSfcb10h5+6cjzhldotnRh
-	 L2XSBgnBNZJUfO8crBg8MZlN8CfTvAifyk+GlvHyJiBZTVjivci1Qq01nMnxglh31v
-	 zi2eIA2ZMTu2jG9TIvc1Ivn5fZM3DHGSFcpIq8o1+3NB7mQAtUoaY5nAKzecFcPCyO
-	 J9jow5Rd3wWUjudv+BGCRohLkufEOp6fwOe3r/hPcHfEjlJ+YXmMmxWIju6dHjvMhR
-	 Jw4Xke+387YftU3lGl/YoX2Xk+UUsw0Rkspn2qa5yOkvs2yO2Ogw/NNIThpLB0r9xj
-	 +Wc8vdUS31j+A==
-Date: Fri, 13 Dec 2024 10:10:54 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Kevin Chen <kevin_chen@aspeedtech.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	joel@jms.id.au, andrew@codeconstruct.com.au, tglx@linutronix.de, 
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, olof@lixom.net, 
-	quic_bjorande@quicinc.com, geert+renesas@glider.be, dmitry.baryshkov@linaro.org, 
-	konradybcio@kernel.org, neil.armstrong@linaro.org, johan+linaro@kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH v3 1/6] dt-bindings: interrupt-controller: Refine
- size/interrupt-cell usage.
-Message-ID: <k7jftzlih6ss4yaxrv7r4dudhcu43iyu2qvkl2thb5wiaszto7@evzmwfxxzzt6>
-References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
- <20241212155237.848336-3-kevin_chen@aspeedtech.com>
+	s=k20201202; t=1734103408;
+	bh=Q/FpU9qp9aOoHN2c8tNloUjxv9O8bSuMjEiRVODhiDI=;
+	h=Subject:From:Date:To:Cc:From;
+	b=P+63hLUCZoEUlzrEEisQ5XlfDc+H2sVmGXT6mLgKmEfk6ZvRCK9pKInzPk7ZBEdUY
+	 iYaJFeyAOjVjLBEWh3NajMethl6Q+XMytRV2LtwtjuyN1mQxxIt8YxEumiBYNM2Qbr
+	 uDWeFuSqPCr1qgCexE8mtRohm0f3m88N7CByVNlw8UQbMKW9E3IKP21A1hPhhoh6jf
+	 Nqynmu43JJJQri9i+bGf4ismRT3lLyZNzfz4l2ztX1zu4q4b1OwuMzXABGW53XeDHF
+	 S/Ux4eceTXMGvoR4huXoPKh+f4LYIPOY8nIRu6gp7z8+7R2CVrmApfe802KuMWlDdA
+	 jRMdpIo880DZw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EFBB7380A959;
+	Fri, 13 Dec 2024 15:23:45 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241212155237.848336-3-kevin_chen@aspeedtech.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <173410342443.3014960.14765932946147445204.git-patchwork-summary@kernel.org>
+Date: Fri, 13 Dec 2024 15:23:44 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Thu, Dec 12, 2024 at 11:52:31PM +0800, Kevin Chen wrote:
-> 1. Because size-cells is no need to use 2, modify to 1 for use.
-> 2. Add minItems to 1 for interrupts for intc1.
-> 3. Add 1 interrupt of intc1 example into yaml file.
-> 4. Add intc1 sub-module of uart12 as example using the intc0 and intc1.
-> ---
->  .../aspeed,ast2700-intc.yaml                  | 60 +++++++++++++++----
->  1 file changed, 47 insertions(+), 13 deletions(-)
-> 
+Hello:
 
-As with all your patches, repeating since v1 the same comment, so one
-more last time:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-Please run scripts/checkpatch.pl and fix reported warnings. Then please
-run 'scripts/checkpatch.pl --strict' and (probably) fix more warnings.
-Some warnings can be ignored, especially from --strict run, but the code
-here looks like it needs a fix. Feel free to get in touch if the warning
-is not clear.
+Patch: arm: dts: spear13xx: Remove unused and undocumented "pl022,slave-tx-disable" property
+  Submitter: Rob Herring (Arm) <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=910122
+  Lore link: https://lore.kernel.org/r/20241115193835.3623725-1-robh@kernel.org
 
-Best regards,
-Krzysztof
+Patch: [RESEND] arm64: dts: apm: Remove unused and undocumented "bus_num" property
+  Submitter: Rob Herring (Arm) <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=910129
+  Lore link: https://lore.kernel.org/r/20241115195049.3637454-2-robh@kernel.org
+
+Patch: arm64: dts: amd: Remove unused and undocumented "amd,zlib-support" property
+  Submitter: Rob Herring (Arm) <robh@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=910121
+  Lore link: https://lore.kernel.org/r/20241115193740.3622591-2-robh@kernel.org
+
+Patch: reset: ep93xx: add AUXILIARY_BUS dependency
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Sebastian Reichel <sebastian.reichel@collabora.com>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=908353
+  Lore link: https://lore.kernel.org/r/20241111104418.3891756-1-arnd@kernel.org
+
+Patch: [GIT,PULL] SOC FSL for 6.13
+  Submitter: Christophe Leroy <christophe.leroy@csgroup.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=909651
+  Lore link: https://lore.kernel.org/r/c3c4961b-fe2a-4fcc-a7a1-f8b5352e09a2@csgroup.eu
+
+
+Total patches: 5
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
