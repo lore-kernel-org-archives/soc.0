@@ -1,115 +1,109 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85B8291E
-	for <soc@lists.linux.dev>; Fri, 13 Dec 2024 05:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6C9192D9D;
+	Fri, 13 Dec 2024 07:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734066488; cv=none; b=fKqzrB+hxDG/XMlx0ixIex9yi0XfZlSmYW4laugaciCCpZu/Aww2OIsFkAHXCNwZzFDiVVfjiIcqeLj1KgOyhB07Hud+Bfe7SX/D2G+blCjSaUutpp/lNOpvXz9poQyGhGnRga9UyE+tqvKpK7Ij+x6oBQ6EyZliGzEIXVQoojo=
+	t=1734076574; cv=none; b=IjZTwIvwkcZv5FH80qcams5m7VB7OY7GnmgCg29pnJ4xNuvBquJ9DYmuQ02Qw7ZON9xvmn7a1a01nt+bL1vVuHsCn5LI3HZiYBm5W3AqkEbOV7qMJGgnWzqk1uW5l0NS3mwK0ibPDRfnH+WuTYj88r4EesRvI3mop0d70uLMkZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734066488; c=relaxed/simple;
-	bh=9AEGl5ElwpjNS1/xC3yqlInieIsycY0WHHNck3fN87Y=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CSLcYtH0UX65EgXedzAv6tc9iXSiIncOm9rnqlHPYZWudOrNNKWV1yeLo/SOCTTTc5N/VW4KWaS3ctxjCISy3lccg5yBsvmzHY+fxNDvYV2GmWKf3mjuKMjTaKMS4SBCPpbmuK/2jByWHjGmknA+Nm2yZq3+ojHbFP50kxlZy0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=C86JtZ1z; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1734076574; c=relaxed/simple;
+	bh=hOvik/xLMeZGVKLpPOX0ZfkoCRuOe0+n3RqrbLlA+sM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=p+JL7nBVxYhAT+0l190CLIrlsi7VS8ot7gILfg59Fvskj6tGj9/CTT5fBiqK0P3ScE3PCqqCcpHmoAZ8NYGN+E0rfD5aXwq3OkU6AQMSfhptroKvKHmRlR0Eiu0jpVt+fU3Lz+EbeDWdH4a+O84I+QVndCmEBqSTyi+0RUK00XU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BwBYMH9n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="C86JtZ1z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1734066479;
-	bh=Ob6gfCfTJHcT1k8fkHYM0XMpgJYwAe0EV0uca1nDr9I=;
-	h=Subject:From:To:Date:In-Reply-To:References;
-	b=C86JtZ1z9ScLdE1lNtMuIngcOj/VqRvKOHDmgo896hr3259jdBQvgCmOjjv884YfA
-	 xAKjpd0m+DxSyccXXYzrkjQwe9L5cTwm+0F8hSoMyCQVtMV2I2e1mXWWbyawdizg/6
-	 a7qJyp73jmuPa7/ow/rx0Eh+W3D5DGKqh4Y+X/fpeEuZxfmRmX424WCai3N8oudT2a
-	 hW0hQAIxJiDgt+gv8OlIDTbIR3cqXI3k9m1qCPXHp3GCCWh4HsKYCzQbrrvN4yzbTW
-	 B3B6qG1Zsc8BEaI1gAecV+2VIE66oIGPX3VP7YRviJXYiCkdVJWRRw3jZ1xmekqMCg
-	 QuPaKtwScp9UA==
-Received: from [192.168.68.112] (203-173-6-153.dyn.iinet.net.au [203.173.6.153])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 9893B6E54C;
-	Fri, 13 Dec 2024 13:07:53 +0800 (AWST)
-Message-ID: <5d91b7a7169e6db27b2493213d0df2b77699a49e.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v3 0/6] Introduce ASPEED AST27XX BMC SoC
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
- krzk+dt@kernel.org,  conor+dt@kernel.org, joel@jms.id.au,
- tglx@linutronix.de, catalin.marinas@arm.com,  will@kernel.org,
- arnd@arndb.de, olof@lixom.net, quic_bjorande@quicinc.com, 
- geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
- konradybcio@kernel.org,  neil.armstrong@linaro.org,
- johan+linaro@kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
- linux-kernel@vger.kernel.org, soc@lists.linux.dev
-Date: Fri, 13 Dec 2024 15:37:52 +1030
-In-Reply-To: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
-References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BwBYMH9n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFADC4CED0;
+	Fri, 13 Dec 2024 07:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734076573;
+	bh=hOvik/xLMeZGVKLpPOX0ZfkoCRuOe0+n3RqrbLlA+sM=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=BwBYMH9n8F+NgtQxz92WnA4jRMRy6UvJdJCb2pxuk9jzGczJ3gBvPWlCtcRyNRzOm
+	 kuHNCDNyfTd+b0dPlkge+opZNo3Z0pczZiDL6SzIetkWEJ3fdnse5j5HQsJvUPHLvS
+	 Pk6atADnpjJdZKVc8kUS+SDbPIiGiSmlLxr4mzyHL0reIr0dLIuP20W7tny+LgvWEN
+	 9u0OGwEXPUG696eLeHUDyTI1e7wg5M6osqvv1xK5LO6Msta4YNkJKnxwTz7N/8qFua
+	 InYsnetroicK78/C86PsEMr8kFGP1BY986ueYikbaMVBZYQGXX3oleV1o8XQIXW699
+	 Wzq24lDa9KRBQ==
+Message-ID: <7aaeacd1-ecff-49ad-828c-1dcb22d11f05@kernel.org>
+Date: Fri, 13 Dec 2024 08:56:04 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
+ andrew@codeconstruct.com.au, tglx@linutronix.de, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, olof@lixom.net, quic_bjorande@quicinc.com,
+ geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+ konradybcio@kernel.org, neil.armstrong@linaro.org, johan+linaro@kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ soc@lists.linux.dev
+References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
+ <20241212155237.848336-2-kevin_chen@aspeedtech.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241212155237.848336-2-kevin_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Kevin,
-
-On Thu, 2024-12-12 at 23:52 +0800, Kevin Chen wrote:
+On 12/12/2024 16:52, Kevin Chen wrote:
+> Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
 > ---
-> v3:
-> =C2=A0 - Split clk and reset driver to other commits, which are in series
-> of
-> =C2=A0=C2=A0=C2=A0 "Add support for AST2700 clk driver".
-> =C2=A0 - For BMC console by UART12, add uart12 using ASPEED INTC
-> architecture.
->=20
-> aspeed,ast2700-intc.yaml
-> =C2=A0 - Add minItems to 1 to fix the warning by "make dtbs_check W=3D1".
-> =C2=A0 - Add intc1 into example.
->=20
-> Kconfig.platforms
-> =C2=A0 - Remove MACH_ASPEED_G7.
->=20
-> Kevin Chen (6):
-> =C2=A0 dt-bindings: interrupt-controller: Refine size/interrupt-cell
-> usage.
-> =C2=A0 dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
-> =C2=A0 arm64: aspeed: Add support for ASPEED AST27XX BMC SoC
-> =C2=A0 arm64: dts: aspeed: Add initial AST27XX device tree
-> =C2=A0 arm64: dts: aspeed: Add initial AST2700 EVB device tree
-> =C2=A0 arm64: defconfig: Add ASPEED AST2700 family support
+Please run scripts/checkpatch.pl and fix reported warnings. Then please
+run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
+Some warnings can be ignored, especially from --strict run, but the code
+here looks like it needs a fix. Feel free to get in touch if the warning
+is not clear.
 
-Do you mind sending a v4, because I received a confusing arrangement of
-patches:
-
-[PATCH v3 1/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
-[PATCH v3 1/6] dt-bindings: interrupt-controller: Refine size/interrupt-cel=
-l usage.
-[PATCH v3 2/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
-[PATCH v3 2/6] dt-bindings: interrupt-controller: Fix the size-cells in ast=
-2700-intc
-...
-
-Where the content of=20
-
-   [PATCH v3 1/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
-  =20
-and
-
-   [PATCH v3 2/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
-  =20
-Differs, as does the content of
-
-   [PATCH v3 1/6] dt-bindings: interrupt-controller: Refine size/interrupt-=
-cell usage.
-  =20
-and
-
-   [PATCH v3 2/6] dt-bindings: interrupt-controller: Fix the size-cells in =
-ast2700-intc
-
-Despite sounding like they might have the same intent
-
-Andrew
+Best regards,
+Krzysztof
