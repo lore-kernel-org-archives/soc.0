@@ -1,92 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73386188713;
-	Thu, 12 Dec 2024 19:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85B8291E
+	for <soc@lists.linux.dev>; Fri, 13 Dec 2024 05:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734032235; cv=none; b=Wl1o/GK1j9BlpiP1cRydXkAarxPWR/UOz501gvr/LJgePkpcqiQ0wjKQf5E279TcDG723u9SHvhRnzpYnMLMr2YRURQFioDbhUeNIr4sti6wuO51jfHv5GAeiTX7vfU3HtPq9p3Eay9ypGunjhdR1uPOLHIPOaUiUE4LwYjXrsk=
+	t=1734066488; cv=none; b=fKqzrB+hxDG/XMlx0ixIex9yi0XfZlSmYW4laugaciCCpZu/Aww2OIsFkAHXCNwZzFDiVVfjiIcqeLj1KgOyhB07Hud+Bfe7SX/D2G+blCjSaUutpp/lNOpvXz9poQyGhGnRga9UyE+tqvKpK7Ij+x6oBQ6EyZliGzEIXVQoojo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734032235; c=relaxed/simple;
-	bh=hdcrKAYIIyPuFXXVZ8CmtrVulXK1wrD6wxFqvScjbIs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qNPOuM4OafJdwWlmEiOq/DKfaiB8oGPgNZmauh0vYrLloi8WaOHh76jROYDscgBiXTWyXlhyVdDkMLisRySRPGHFfGRxHhYD521HvUwiKD5p4XjtZcbKju8kAjx8mEdpZJdOzWuMIigY3U30MgW9Pp0w19LeGcod99JVszIweQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpplETQN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734066488; c=relaxed/simple;
+	bh=9AEGl5ElwpjNS1/xC3yqlInieIsycY0WHHNck3fN87Y=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CSLcYtH0UX65EgXedzAv6tc9iXSiIncOm9rnqlHPYZWudOrNNKWV1yeLo/SOCTTTc5N/VW4KWaS3ctxjCISy3lccg5yBsvmzHY+fxNDvYV2GmWKf3mjuKMjTaKMS4SBCPpbmuK/2jByWHjGmknA+Nm2yZq3+ojHbFP50kxlZy0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=C86JtZ1z; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpplETQN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6831DC4CECE;
-	Thu, 12 Dec 2024 19:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734032234;
-	bh=hdcrKAYIIyPuFXXVZ8CmtrVulXK1wrD6wxFqvScjbIs=;
-	h=From:Date:Subject:To:Cc:From;
-	b=bpplETQNFBZv3HutxSMXgLIil1ThPMeD04QQ2DMOeJ0r+ScUdezfQzVwoT/VNS9eP
-	 UGaoiP+tUAn1WmE9KylxSd3hpasJ5E+RnIxke8vzzmPb4EmMDnsaLiYuJ1MWslCvQo
-	 2cJ74G7RR4AATxRP7UH9XIpxEO7b2nKfW6qWh8o/wfWuXOTKD4zyZfvINCYSSFdk+h
-	 d13ujdKmmUSJr+Adr3qNX/H4/KX36o3vWpr1+DPN6TG3Bt+U0vHaW0jSokCxRIprW6
-	 T7RElRY8Ea0rMVm81sUDYq2wHC0624fCmzwTAqpjI3DUjzT8b0Skw6uV9IaLfw4nvn
-	 JAqlAsxtozOtw==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 12 Dec 2024 19:36:32 +0000
-Subject: [PATCH] arm64: defconfig: Enable Amazon Elastic Network Adaptor
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="C86JtZ1z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1734066479;
+	bh=Ob6gfCfTJHcT1k8fkHYM0XMpgJYwAe0EV0uca1nDr9I=;
+	h=Subject:From:To:Date:In-Reply-To:References;
+	b=C86JtZ1z9ScLdE1lNtMuIngcOj/VqRvKOHDmgo896hr3259jdBQvgCmOjjv884YfA
+	 xAKjpd0m+DxSyccXXYzrkjQwe9L5cTwm+0F8hSoMyCQVtMV2I2e1mXWWbyawdizg/6
+	 a7qJyp73jmuPa7/ow/rx0Eh+W3D5DGKqh4Y+X/fpeEuZxfmRmX424WCai3N8oudT2a
+	 hW0hQAIxJiDgt+gv8OlIDTbIR3cqXI3k9m1qCPXHp3GCCWh4HsKYCzQbrrvN4yzbTW
+	 B3B6qG1Zsc8BEaI1gAecV+2VIE66oIGPX3VP7YRviJXYiCkdVJWRRw3jZ1xmekqMCg
+	 QuPaKtwScp9UA==
+Received: from [192.168.68.112] (203-173-6-153.dyn.iinet.net.au [203.173.6.153])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 9893B6E54C;
+	Fri, 13 Dec 2024 13:07:53 +0800 (AWST)
+Message-ID: <5d91b7a7169e6db27b2493213d0df2b77699a49e.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v3 0/6] Introduce ASPEED AST27XX BMC SoC
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
+ krzk+dt@kernel.org,  conor+dt@kernel.org, joel@jms.id.au,
+ tglx@linutronix.de, catalin.marinas@arm.com,  will@kernel.org,
+ arnd@arndb.de, olof@lixom.net, quic_bjorande@quicinc.com, 
+ geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+ konradybcio@kernel.org,  neil.armstrong@linaro.org,
+ johan+linaro@kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+ linux-kernel@vger.kernel.org, soc@lists.linux.dev
+Date: Fri, 13 Dec 2024 15:37:52 +1030
+In-Reply-To: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
+References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241212-arm64-defconfig-graviton-v1-1-86830c3d572b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAD87W2cC/x3MPQqAMAxA4atIZgO2/oBeRRyKSWsGW0lFBPHuF
- sdveO+BzCqcYaoeUL4kS4oFpq5g3VwMjELFYBvbGWssOt2HDon9mqKXgEHdJWeK2DC5vuWezEh
- Q8kPZy/2v5+V9Py/IZeZqAAAA
-X-Change-ID: 20241212-arm64-defconfig-graviton-0eda53e5d19d
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, soc@lists.linux.dev
-Cc: Ryan Roberts <ryan.roberts@arm.com>, 
- Aishwarya TCV <aishwarya.tcv@arm.com>, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-9b746
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1000; i=broonie@kernel.org;
- h=from:subject:message-id; bh=hdcrKAYIIyPuFXXVZ8CmtrVulXK1wrD6wxFqvScjbIs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnWztnQFh2ayZYX2jrI3ujSzKsagUwM5yM6SNHfzN8
- whUygQWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ1s7ZwAKCRAk1otyXVSH0JSHB/
- 9qvkdRV1j2ni2DdfrXhTXK9fN9RAJkPBJQW3U3g1If9M3Zi9mtWDNNwJniXHWGqIKtmEUdpJ19YglK
- NdlpBuvkjC3OK0d1w0DPUBK5vxS5S7/0kM/TNPPRULWBs6PIeCuCUroeJsjQVBLwgOIF9N1iIy20eI
- W7EwvbzdGeTl0xPHH9iGuYomwjpu3U9BUgV/K0ToWB66MK8vN7hkGJfM469nlk0suhiLi/lP6oKOHQ
- XkKfUsijlTJK+6ZCAGV50tIg+calT0n3hpqV5OG5iFCZOZUH0j28XO1NxPZus3DHApjh8qTfi4+50O
- ZID6ifE3LAyZ+c+DSLAzGyygywDjjD
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The Graviton SoCs available in AWS use a custom network adaptor, enable
-support for this in defconfig so standard defconfig builds can be used more
-readily in CI. The driver is left as a module since it is relatively
-unlikely these will be netbooted.
+Hi Kevin,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, 2024-12-12 at 23:52 +0800, Kevin Chen wrote:
+> ---
+> v3:
+> =C2=A0 - Split clk and reset driver to other commits, which are in series
+> of
+> =C2=A0=C2=A0=C2=A0 "Add support for AST2700 clk driver".
+> =C2=A0 - For BMC console by UART12, add uart12 using ASPEED INTC
+> architecture.
+>=20
+> aspeed,ast2700-intc.yaml
+> =C2=A0 - Add minItems to 1 to fix the warning by "make dtbs_check W=3D1".
+> =C2=A0 - Add intc1 into example.
+>=20
+> Kconfig.platforms
+> =C2=A0 - Remove MACH_ASPEED_G7.
+>=20
+> Kevin Chen (6):
+> =C2=A0 dt-bindings: interrupt-controller: Refine size/interrupt-cell
+> usage.
+> =C2=A0 dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+> =C2=A0 arm64: aspeed: Add support for ASPEED AST27XX BMC SoC
+> =C2=A0 arm64: dts: aspeed: Add initial AST27XX device tree
+> =C2=A0 arm64: dts: aspeed: Add initial AST2700 EVB device tree
+> =C2=A0 arm64: defconfig: Add ASPEED AST2700 family support
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index c62831e6158633f07c1f3532fba62f09b31e7448..b48940b3d100dd03945a29735b8ba26b145d51ad 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -330,6 +330,7 @@ CONFIG_VIRTIO_NET=y
- CONFIG_MHI_NET=m
- CONFIG_NET_DSA_BCM_SF2=m
- CONFIG_NET_DSA_MSCC_FELIX=m
-+CONFIG_ENA_ETHERNET=m
- CONFIG_AMD_XGBE=y
- CONFIG_NET_XGENE=y
- CONFIG_ATL1C=m
+Do you mind sending a v4, because I received a confusing arrangement of
+patches:
 
----
-base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
-change-id: 20241212-arm64-defconfig-graviton-0eda53e5d19d
+[PATCH v3 1/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+[PATCH v3 1/6] dt-bindings: interrupt-controller: Refine size/interrupt-cel=
+l usage.
+[PATCH v3 2/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+[PATCH v3 2/6] dt-bindings: interrupt-controller: Fix the size-cells in ast=
+2700-intc
+...
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+Where the content of=20
 
+   [PATCH v3 1/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+  =20
+and
+
+   [PATCH v3 2/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+  =20
+Differs, as does the content of
+
+   [PATCH v3 1/6] dt-bindings: interrupt-controller: Refine size/interrupt-=
+cell usage.
+  =20
+and
+
+   [PATCH v3 2/6] dt-bindings: interrupt-controller: Fix the size-cells in =
+ast2700-intc
+
+Despite sounding like they might have the same intent
+
+Andrew
