@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6637218DF7C;
-	Fri, 13 Dec 2024 08:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EC918DF7C;
+	Fri, 13 Dec 2024 08:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734076994; cv=none; b=gDp9XHfjj/GltNaqMeH1D1kPO4UvAIzfEN9F3R70OxCAL08BvMCsL/109fzbMd0KlQWQMBAIYrnTLwpzKbwNM9P4luDOQ1RYUbE2IAEJ8R3ihv4wl4Ipj0O3bqtM617oNiNqlTAqnirN4R3xzuI0YB5cHKkmhSX40g26zRlsiLw=
+	t=1734077036; cv=none; b=AwfB8o83Y6jjly7dCyBotZ3/zvsRzp7Wj//dllmI1ctbdz57tbwcY26AgMa5KIl8ULWCgoMHM1P2UIi8d9AJ6upXLvnqqPAySLPB7jKxUabDEsHS3TVFAqta/Qqdk+qL3I/6cPcmbV8IBj8eQZ2qm6m/Cr+iSAavff8HbE0SnTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734076994; c=relaxed/simple;
-	bh=cCfaLbDj76ucD+vK9e+MtqWGYwvp8M9DqjAGvbzG//o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=JztAhxOiFwshc4migJoe8ZHA/BTAoDI6M6W5Lafgd2jM1c7DAyIJzFLBtNczY9AllsiD+H+1VsYCuKAfDgINbOjqziAXA+rvTbLJEdgVk9kC5MRN5YiSwYCazpsdljho/PvKSReonDTG9cSqxlBeA6SqFRCJyqQawBE+dMKayPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EwV67xqq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734077036; c=relaxed/simple;
+	bh=a427peznSb9rd/430/QkT+uXHAFd5aCvLum2pl93qig=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
+	 In-Reply-To:Content-Type; b=F3JxiMqUR2bF1w8WrLyjQc5QcjgaVZlELgcd8mt7vN6haCNIr2g+bkaq5l7f45QFuPoZ5I3n8HAkNvvfXphrHOIZVNZvhmjgQVt4wS8GpSzebT5S6KRvhDaeo8Mk23/CVt4pLklypa0iiSFh0BTPGmzs4xVAe9s4uwlrz0kY9dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VCflS9Wq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EwV67xqq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A56C4CED0;
-	Fri, 13 Dec 2024 08:03:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VCflS9Wq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF10C4CED0;
+	Fri, 13 Dec 2024 08:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734076994;
-	bh=cCfaLbDj76ucD+vK9e+MtqWGYwvp8M9DqjAGvbzG//o=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=EwV67xqqK8+3K9vXVLo5cX7V4TaPvlNYwRndJpGG7E5X6pVvVaD20DDpngbCo1D4u
-	 UKtct4n546cJX9QbQi0s7oS6iqfi19ZfRWpuCRsWtIuJ7/X8OsAAVqr95TVvq8Lydx
-	 B9A8f/oHHYp90MavTu79v1JvSHijg8eyh97e8QxvSagkFJuCo2kovh1IikG34m1KrE
-	 y+q4SxnOh5VW4P7yltNH6tm4DnWFwO2Lukvie0TPpCHoAoIiOD2sTx4cVYJoTuqGqp
-	 8uNquwYdxa+TKkq14VjsyusAN4UCPnMSe3xHYaDxwcUpyPVBYh49p0x/f9wBCjzKjm
-	 TKOQYn45goflg==
-Message-ID: <3e5346a3-ad00-46e2-8af5-1ac5d60c27c8@kernel.org>
-Date: Fri, 13 Dec 2024 09:03:04 +0100
+	s=k20201202; t=1734077035;
+	bh=a427peznSb9rd/430/QkT+uXHAFd5aCvLum2pl93qig=;
+	h=Date:Subject:From:To:References:In-Reply-To:From;
+	b=VCflS9WqFIdAL12O6EMv/nY5QV0YiVxxWGfv9lb26mzyIccZ8nTm8zXNJMeels9T4
+	 GDo8sfUj5ycdYnH9L3cimdj+wqOD8KyKgPicfOtzOOJ1VUmacZMpXfxDlpaofGW2Hp
+	 l7egv5NduCSgMBV3P+kCpU1L6PhQNebemKo1yKktJfC0bJYSSqrn6HC/+3NkvXtSCg
+	 6nlyPoqSohERvegkJvdo4ieXfKHz5ULK33N7xEn9X7CeVAq8i9a6lWbHmob2SskDfw
+	 SmYTFz12ZBJoAJyRMRuSvY6tchjYU9OMik9tzhmwcrKXo95oT+JAyFUSIKMfYSmlBC
+	 46OrqHN4y/+8Q==
+Message-ID: <7b991fca-6e2f-454f-a94d-6a583854769b@kernel.org>
+Date: Fri, 13 Dec 2024 09:03:46 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/6] arm64: dts: aspeed: Add initial AST2700 EVB device
- tree
+Subject: Re: [PATCH v3 2/6] dt-bindings: arm: aspeed: Add ASPEED AST27XX SoC
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au, tglx@linutronix.de, catalin.marinas@arm.com,
@@ -47,8 +47,8 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  soc@lists.linux.dev
 References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
- <20241212155237.848336-8-kevin_chen@aspeedtech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20241212155237.848336-4-kevin_chen@aspeedtech.com>
+ <7289a50a-e139-453f-a512-3dd68a0839a2@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -93,92 +93,48 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241212155237.848336-8-kevin_chen@aspeedtech.com>
+In-Reply-To: <7289a50a-e139-453f-a512-3dd68a0839a2@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/12/2024 16:52, Kevin Chen wrote:
-> Add EVB board of AST2700 in ASPEED Architecture.
+On 13/12/2024 08:59, Krzysztof Kozlowski wrote:
+> On 12/12/2024 16:52, Kevin Chen wrote:
+>> Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
+>> ---
+>>  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+>> index 2f92b8ab08fa..20191fee1f5b 100644
+>> --- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+>> @@ -101,4 +101,10 @@ properties:
+>>                - ufispace,ncplite-bmc
+>>            - const: aspeed,ast2600
+>>  
+>> +      - description: AST2700 based boards
+>> +        items:
+>> +          - enum:
+>> +              - aspeed,ast2700-evb
+>> +          - const: aspeed,ast2700
+>> +
+>>  additionalProperties: true
 > 
-> Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
-> ---
->  arch/arm64/boot/dts/aspeed/Makefile        |  4 ++
->  arch/arm64/boot/dts/aspeed/ast2700-evb.dts | 57 ++++++++++++++++++++++
->  2 files changed, 61 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
->  create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
 > 
-> diff --git a/arch/arm64/boot/dts/aspeed/Makefile b/arch/arm64/boot/dts/aspeed/Makefile
-> new file mode 100644
-> index 000000000000..ffe7e15017cc
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/aspeed/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +dtb-$(CONFIG_ARCH_ASPEED) += \
-> +	ast2700-evb.dtb
-> diff --git a/arch/arm64/boot/dts/aspeed/ast2700-evb.dts b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-> new file mode 100644
-> index 000000000000..6dad88c98ce0
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +/dts-v1/;
-> +
-> +#include "aspeed-g7.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +
-> +/ {
-> +	model = "AST2700A1-EVB";
-> +	compatible = "aspeed,ast2700-evb", "aspeed,ast2700";
-> +
-> +	aliases {
-> +		serial12 = &uart12;
-> +	};
-> +
-> +	chosen {
-> +		bootargs = "console=ttyS12,115200n8";
-> +		stdout-path = &uart12;
+> 
+> This patchset is just corrupted. You already sent it as patch #1.
+> 
+> Please run scripts/checkpatch.pl and fix reported warnings. Then please
+> run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
+> Some warnings can be ignored, especially from --strict run, but the code
+> here looks like it needs a fix. Feel free to get in touch if the warning
+> is not clear.
+BTW, you already got here same comments before and this is third time
+you send exactly the same without implementing what we asked you.
 
-Nothing improved. You keep ignoring my comments: not responding, not
-addressing, not fixing the code.
+Three times same issue.
 
-> +	};
-> +
-> +	firmware {
-> +		optee: optee {
-> +			compatible = "linaro,optee-tz";
-> +			method = "smc";
-> +		};
-> +	};
-> +
-> +	memory@400000000 {
-> +		device_type = "memory";
-> +		reg = <0x4 0x00000000 0x40000000>;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		mcu_fw: mcu-firmware@42fe00000 {
-> +			reg = <0x4 0x2fe00000 0x200000>;
-> +			no-map;
-> +		};
-> +
-> +		atf: trusted-firmware-a@430000000 {
-> +			reg = <0x4 0x30000000 0x80000>;
-> +			no-map;
-> +		};
-> +
-> +		optee_core: optee_core@430080000 {
-
-Follow DTS Coding style document. That's the same comment as before.
-
+NAK
 
 Best regards,
 Krzysztof
