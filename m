@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF1C192D9D;
-	Fri, 13 Dec 2024 07:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE887187355;
+	Fri, 13 Dec 2024 08:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734076794; cv=none; b=aO/TQi0fAO9mJsDyd0GFbGx1gJRexBoxKuSSEzZt83RizwWWGwNFsv9W3SRGH9LyaH18JBt8GYfKRprhbkTti52iohfSwNMC4UdI7G8RUS1J8iWX3n+g5R0n/uVAbjTZPXTiSq8GDfUtsXrxpoDg/0zBvauuAaVeGmSP319XFCs=
+	t=1734076915; cv=none; b=CPBnsLGfn52KQKllEpJJT1Ai5m4e5yBlfrn9q9YcgPEW9vXEkDpKe2bt94cTgYKzhRZ50hwtNYugehfr6+GYkDUG+3wvdl2BaVHXQO3VrVTrFdeeoICAYHqr9JfwjGRPWLxm2H6cWYQ8IUsvtYBpwjMQ2dkAT3oTipSwhFq9+7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734076794; c=relaxed/simple;
-	bh=Zk2t2gNIqw1Fr3k0oMx9b92c0wRmzmcHtlYDobnwy5g=;
+	s=arc-20240116; t=1734076915; c=relaxed/simple;
+	bh=7LD54dmJDjftl31NJJcExHt1aZa+FMSTWfGvjuK1GAA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=rFB6c+Bo2iq7+Db3y8rm7scWIFu51NPTVRiAkO5FhNu3qspNyx8VofzTV8Xuu5pUqR1RRx716XIgBdPamE6W0CdvMYPuPvbaE6np08h8Bar4U/g6BXV6q0gstOTFu37rtQAPfuwnUy7ha3lOygz1omwzWsYTw5rEMC7YpLbbIco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dpGpeq7b; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=c4yu60gqbycKjtZQvy2Q3uGJHx8LUH/Q0Byp7ld/TBA602jgln1CpUOaEepSRzbGd009f6d4bgEuq5PL7O8imI7I501CakprqQ0Zz2PTABNp1BqDQQqsTHEeKMFDMYQ0VZkeVXTCPfrfRtKIiMguV+lvVDNPCzzEXtN3xsqHSJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5PdWI9A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dpGpeq7b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5073C4CED0;
-	Fri, 13 Dec 2024 07:59:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5PdWI9A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F060C4CED1;
+	Fri, 13 Dec 2024 08:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734076793;
-	bh=Zk2t2gNIqw1Fr3k0oMx9b92c0wRmzmcHtlYDobnwy5g=;
+	s=k20201202; t=1734076915;
+	bh=7LD54dmJDjftl31NJJcExHt1aZa+FMSTWfGvjuK1GAA=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=dpGpeq7bMlUF0fXGU/PpNaWDwNLPYp3mDzeqZb6lVpY5OgNCZzBCKi3ZvZAiZQqTc
-	 6WfTatWetFCdCRuq28PfGdPN8W85HhzbZCks3xZW3l/o+cxDopAej7rEVu+i4dOzkv
-	 aZCcYOPzuyXDH5fCtHfaU2z5snJMeCsBli3DYSUBIytLIEod6RE+5t5dWmUN3U/sTc
-	 jHZF3UjY95BqoyxwNqekTNYGAGwv6nut1rbWXdYOKACXFaDPq8kaYLSspymE99edCa
-	 JIBxtuPVF7t3qhZlNIjRykdseF9+GXElPk2xTDlblKafJj9tunusH6ijjJtCPcz5/T
-	 frcUQMuNibYTA==
-Message-ID: <7a1244db-7ab7-4374-b44d-e55a25d766a2@kernel.org>
-Date: Fri, 13 Dec 2024 08:59:44 +0100
+	b=M5PdWI9Ap51gOdghnXpW7Yj0LlUwGokHmPMqLNKuUoItSerMXxIGBc0H1YbuWOCVz
+	 sE45bhf0/u5jw4eOyNxzv9GhfTIGNmDOkR1Sv4fHrGbXyB2Bi1qeSBbldwiB4vfHhN
+	 IUf2qVnycb7ESTFjYv5hoO4xfkjszM2wpnecBLsaCJPYu1YLl4rhPaU3LdqNxoaoHD
+	 VYih3RLAfp6VhPjoTewg7U8/YyM5C01zrcNrIr/LwX8+sbUtUpgKB0WyHfHWe0fKjw
+	 zEwcTsEv4p5xbhvK6SCt/hPm+E0LuwJzHB/VfAXVQDVP8+swEadlHzFTncv2KqIIS5
+	 FWZrIi7lIRxmQ==
+Message-ID: <dbfe7c42-cc9b-4471-93ed-846260db42e6@kernel.org>
+Date: Fri, 13 Dec 2024 09:01:46 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/6] dt-bindings: interrupt-controller: Fix the
- size-cells in ast2700-intc
+Subject: Re: [PATCH v3 4/6] arm64: dts: aspeed: Add initial AST27XX device
+ tree
 To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au, tglx@linutronix.de, catalin.marinas@arm.com,
@@ -47,7 +47,7 @@ To: Kevin Chen <kevin_chen@aspeedtech.com>, robh@kernel.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  soc@lists.linux.dev
 References: <20241212155237.848336-1-kevin_chen@aspeedtech.com>
- <20241212155237.848336-5-kevin_chen@aspeedtech.com>
+ <20241212155237.848336-7-kevin_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -93,24 +93,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241212155237.848336-5-kevin_chen@aspeedtech.com>
+In-Reply-To: <20241212155237.848336-7-kevin_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/12/2024 16:52, Kevin Chen wrote:
-> It is no need to let size-cells to 2 for the ASPEED AST27XX INTC. Modify
-> the ast2700-intc example usage.
-
-Why?
-
-This just looks useless.
-
+> Add aspeed-g7.dtsi to be AST27XX device tree.
 > 
 > Signed-off-by: Kevin Chen <kevin_chen@aspeedtech.com>
+
+Where are all the bindings? Why are you silent about this? The patchset
+adding new SoC DTS, when separate, is supposed to explain where we can
+find the bindings.
+
 > ---
->  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml    | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+>  arch/arm64/boot/dts/Makefile              |   1 +
+>  arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi | 236 ++++++++++++++++++++++
+>  2 files changed, 237 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/aspeed/aspeed-g7.
 
 
 Best regards,
