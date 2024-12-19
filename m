@@ -1,99 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF34B145B1D
-	for <soc@lists.linux.dev>; Wed, 18 Dec 2024 16:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74082236FE
+	for <soc@lists.linux.dev>; Thu, 19 Dec 2024 12:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734537705; cv=none; b=J4px4cA0+i6Y8tF4gTdFRww4ldZtRbArZ+qr3hZz5+1mxmPZMCg3K5n8j4r2/04V73p9rJKpbmzMMJYYiPI5UZDiAyeCnou8u6ri+sT3Ey3ILCo30EbrC/hBM/WgW6UI5WJk0nN5WNCJdHyptZdZ/LiRecgM3IgyaPTJRPR5lhs=
+	t=1734612668; cv=none; b=bbjm4OBpRhvei2ahEY29b/6uesQC31iE/NeiuenMq/XgRpGBThqM4hxkAboKfxZgAq5IGSPKKCX5DQZf0ju6IdbJAw/lcOC26zjcerKO/xhak+BTcl24G9233GjhFkaq2cOpzBgLtD+a/ZwLDGi2TsudUkTXHXtQT0iutoHSRGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734537705; c=relaxed/simple;
-	bh=qdHW5otulf4HTDNiE0pQJd0SuyNYYOBuZ/0SONWab5E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kgJww3GreYG+xKFnpF8zVZoJQknTiEMHRv9W1e8QyJAdQwLPeSnHV62VnY8lw9gLnybZ3c4G17TC3FMyH1GWX2GJoPdTUNpSNXD/hXBU7f7u8RbigeVF9wQe79J0lHzUknaSnVCBAD7TuyqyNZBFbJok/V6PFMHKDmFYo+bbvqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lymIAex1; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lymIAex1"
+	s=arc-20240116; t=1734612668; c=relaxed/simple;
+	bh=9elqFnY83jjuID90mH7jMSoJJkPbogCc+dd/5PLYQ8A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t/bOMsjKPiZ0VZ53qa/xS+k/EwgxjiC0j7eMRZqK+RHCO0GKW9hK5MQkSvnXyiJ72Ps4QhpJZayjQphjWvCT4z4aOJj0RDF89iiRm6V3aq9FULNNo2Wtzl2UHaGi1u9N5ALm1gY7hpdzRyJ3zrgJbBgOC5BulPkXS5aZ/pkMDyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 75820C4CED4; Wed, 18 Dec 2024 16:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97471C4CECD;
-	Wed, 18 Dec 2024 16:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734537704;
-	bh=qdHW5otulf4HTDNiE0pQJd0SuyNYYOBuZ/0SONWab5E=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lymIAex14ih5MQHuwJMiehdr06kY5uLpWZHewta62uSRYgPnbaIVSkOQY8CII+IU2
-	 vjlqLx/XmFxNq3yqvHObuXWW/3pJd2y3MFVRL9lbMTpRmSc8dJNfYtqxqG6Fdvi/Sh
-	 9R+kHhVC6WsZauYlEJjngSfFFLMXcQXuOl7LU6UP0kfJsjA/eRyeHSDmddffi9pb0l
-	 +5sNQSIKvOJHf+Wpmb+quvsjV1RCAn7sxne6eym8v9nbPHEihk7GMGMLrqVuEoHIUZ
-	 fYsywgBsUg7snItv8PJWNxRiWLUcU89O7P6Sjafhx0lq/7a5axVN4Hp1ZxLF78jZGN
-	 DZehxgL4RkbIQ==
-Date: Wed, 18 Dec 2024 16:01:41 +0000
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V soc driver fixes for v6.13-rc4
-Message-ID: <20241218-suffrage-unfazed-fa0113072a42@spud>
+	id 53537C4CED6; Thu, 19 Dec 2024 12:51:08 +0000 (UTC)
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 67B2BC4CECE;
+	Thu, 19 Dec 2024 12:51:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 67B2BC4CECE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+From: Yixun Lan <dlan@gentoo.org>
+To: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Conor Dooley <conor@kernel.org>,
+	Yixun Lan <dlan@gentoo.org>
+Cc: Yangyu Chen <cyy@cyyself.name>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Jesse Taube <mr.bossman075@gmail.com>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Icenowy Zheng <uwu@icenowy.me>,
+	Meng Zhang <zhangmeng.kevin@spacemit.com>,
+	Meng Zhang <kevin.z.m@hotmail.com>,
+	soc@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2] MAINTAINERS: setup support for SpacemiT SoC tree
+Date: Thu, 19 Dec 2024 20:50:41 +0800
+Message-ID: <173461125325.241921.7669060101424869020.b4-ty@gentoo.org>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241028-00-k1-maintainer-v2-1-272c9834220d@gentoo.org>
+References: <20241028-00-k1-maintainer-v2-1-272c9834220d@gentoo.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="D+ozCC79uGWzFle7"
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 
---D+ozCC79uGWzFle7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, 28 Oct 2024 07:04:00 +0800, Yixun Lan wrote:
+> Add myself as maintainer of SpacemiT's SoC tree, which
+> suggested by Conor [1].
+> 
+> 
 
-Hey Arnd,
+Thanks, Applied to SpacemiT's SoC tree:
+ https://github.com/spacemit-com/linux/ (for-next)
 
-I know you sent a PR already this, so whenever you're sending another
-here's a patch for you :)
+[1/1] MAINTAINERS: setup support for SpacemiT SoC tree
+      commit: f187e72262c3245bc032a1a0f106784fb8562a0b
 
-Cheers,
-Conor.
+The for-next branch will be sent via a formal Pull Request to
+the Linux SoC maintainers for inclusion in next merge window.
 
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+Best regards,
+-- 
+Yixun Lan
 
-  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-fixes-for-v6.13-rc4
-
-for you to fetch changes up to 48808b55b07c3cea64805267a5547f03e6452a9f:
-
-  firmware: microchip: fix UL_IAP lock check in mpfs_auto_update_state() (2024-12-05 15:08:51 +0000)
-
-----------------------------------------------------------------
-RISC-V soc driver fixes for v6.13-rc4
-
-A single fix for the Auto Update driver, where a mistake in array
-indexing (accessing as a u32 rather than a u8) caused the driver to read
-the wrong feature disable bits.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-----------------------------------------------------------------
-Valentina Fernandez (1):
-      firmware: microchip: fix UL_IAP lock check in mpfs_auto_update_state()
-
- drivers/firmware/microchip/mpfs-auto-update.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
---D+ozCC79uGWzFle7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ2Lx5QAKCRB4tDGHoIJi
-0utfAP91310tbtmnNBMMiMB0g6+daa1t2HdSspG6/Nj0d9DTVgD/c8Uz3Dyv87nq
-SkbDI9ndbUCTJTu+k332RYcFqQJa8QU=
-=6CbS
------END PGP SIGNATURE-----
-
---D+ozCC79uGWzFle7--
