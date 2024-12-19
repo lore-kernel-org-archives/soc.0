@@ -1,126 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBF219CD1E
-	for <soc@lists.linux.dev>; Thu, 19 Dec 2024 17:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AAF155757
+	for <soc@lists.linux.dev>; Thu, 19 Dec 2024 17:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734629561; cv=none; b=XmibrKdYis4U2/rUACGhazHkX2+S/+MNsPmDPyigqivaskRf0cDCc7J3gWBngWES7A2tQRuCYfvM4maLgVfpVDlA2onJKHZmQ4pZv8ympNnrsqi092KYn4562Xx9m7O32GZxPFBRKhOS/ezZHm+opR2YFhvGoVnN0QdphznMxKE=
+	t=1734629767; cv=none; b=l61MKLM/kox9IK4tPIHc8lb40kxpBuMTr1R9GA48R9agtqgRMNK5mA46zc02bFYsL5W2h7oJjWlQSiZv7SDlVFxmt0nhZc563q1NF6u3xgevsHlh8dovaV7mMD+Vsz1zQ8cJQ52s9/X4B8VyaOEleabc1q+LbFK+feYdvxToO/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734629561; c=relaxed/simple;
-	bh=FlYwoCPiWOJAw1qZC49A0ee5OZAzOfjgs0cxhdlVUNA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KN+EEjX51VJ41XlQLwLgFnBM0o91Dh4sW9ClWPRmRH5mzydtAnZ6Yf53X1ZlMAwmrzfotppqE9llX8jJRIJY58j3CfAufUDS+/SydEy4a3QiPfQBig8VokBkrLdeTX90Nk+ePUdIIi4bDlD0EjkIPUYzfCD38N0G2DjeWlgB3aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=JnStwR6V; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734629767; c=relaxed/simple;
+	bh=lRlp/CKfeKLamC77DGDAhfboRWcs7T0IMZX+OMo+Dlo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=EWrv1FGwb7g4rjzBbjEeNSQ7xfTWmFvzF4tt54WCYlWbWfA4HYlNNgFFI1Gg6Vw+oApy3Ge31Qqc+cKeTmK50GBBHLkkG2CeCHBvAei3bFCk+3zrW/xjU/V2SXGts5/l2iq0dj4m68NTzLITluYVLYu/m37+w7YB4+whO3NOFbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=YPzuIoaD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UzdnWXAW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="JnStwR6V"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="YPzuIoaD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UzdnWXAW"
 Received: by smtp.kernel.org (Postfix)
-	id 804D9C4CED0; Thu, 19 Dec 2024 17:32:40 +0000 (UTC)
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E4694C4CED6; Thu, 19 Dec 2024 17:36:06 +0000 (UTC)
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AF57EC4AF09
-	for <soc@kernel.org>; Thu, 19 Dec 2024 17:32:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF57EC4AF09
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJD57pO023671;
-	Thu, 19 Dec 2024 18:32:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	8QjQJo0IASjGQ71YyUkuwEl4QEQBkgl8EgGu9PNaoxQ=; b=JnStwR6VczyKl0+u
-	STwY+qfYMV6AAzsVelVTMg5azwoa7Pe0HJbdmKG38pTZ8WmGy8Qs5O7NzO7sUDCx
-	r7x8ZZwBh7KjF9jGWSd3sySiewaROx3vjjOgVLESJ35lJZgBuRKjf5jns24P3ekG
-	cIanh3AnCMr8CKDfm4Px0h6wF81mlU+M19eIuXOUJPY+XMFtA6cLrxavMomTMr7V
-	QPYxJhlycHGH6e4crpdejWKi3Q2JhfZQ7K4ti90DhdBWD04R2T3Zo+3Nymo0nV3r
-	oY48xYH30bn9I7ImXeei4rovSIi0gRvrp3l/+O4Dc+ivBOc91bV9C2aBKzg/BzE/
-	Yua9Og==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 43mm2g9183-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 18:32:32 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 5229C40054;
-	Thu, 19 Dec 2024 18:31:06 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 187B2285EAC;
-	Thu, 19 Dec 2024 18:29:58 +0100 (CET)
-Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 19 Dec
- 2024 18:29:57 +0100
-From: <patrice.chotard@foss.st.com>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Petr Mladek <pmladek@suse.com>, Yoann Congal <yoann.congal@smile.fr>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>, <soc@kernel.org>,
-        Patrice Chotard
-	<patrice.chotard@foss.st.com>
-Subject: [PATCH 1/7] ARM: configs: stm32: run savedefconfig for STM32 defconfig
-Date: Thu, 19 Dec 2024 18:29:28 +0100
-Message-ID: <20241219172934.3010875-2-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241219172934.3010875-1-patrice.chotard@foss.st.com>
-References: <20241219172934.3010875-1-patrice.chotard@foss.st.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 08EFEC4CECE
+	for <soc@kernel.org>; Thu, 19 Dec 2024 17:36:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08EFEC4CECE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D4E531140166;
+	Thu, 19 Dec 2024 12:36:03 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Thu, 19 Dec 2024 12:36:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1734629763;
+	 x=1734716163; bh=iDfa2Muw1eLzXoysgvWlMJjmoDqf3WCXyr0RROwBOkU=; b=
+	YPzuIoaDiSpZYJkh2n3/LpZwJ3Qyv0dhBC5pzmq7f9kkSVaSBm6TmJ9h3sM8zJsJ
+	fg5D/BZXAdnkPuewHFtcStcYOfdZ4XjrBHHN2HoVoqWjaX8PE6f2fmPZ1Mrnd2mc
+	KFLHFCcz92WI1Iep3YkosX9ORHRxoJ6uln0w4r66GltrAQ1yZWoVKcqRiV79uPCk
+	YfMH7PWtsNs+QRExzJxowaP1NxPV1l9E+UCnse90m+xL2c6HUV1IRrkcf8HbLvB+
+	UKRrkU6cyFP+5xM6pWGIUBTw5uRjBRd5IA6gH88jm4/n7kE+3EnBrulLZXHu85UP
+	sIWJvVgcKytOFZcBHhji/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734629763; x=
+	1734716163; bh=iDfa2Muw1eLzXoysgvWlMJjmoDqf3WCXyr0RROwBOkU=; b=U
+	zdnWXAWCe6KM5NqiN4EpRODxTop7JWW3cP7JNEOqZPjMXUHc8ftDE67KPbOBKEtQ
+	ahe3VIlj8uEcb0+hTxIpb8iDZbEOwaZJyWdWF2WVqBjuWaAnzAPVh7iUjjKO3kon
+	Oe3oI6PrRUSxya4XWVRrZl0unUxavngzI0irIzGROkVNqw/3agIGWjoNrPHLxhTP
+	9U3y5p0aICsvS1ZadpiJ2Fq1SxIUaHVX5Ke6yuzwCix8aCH4tVDPgGFPNVLpEYkS
+	pmgCnXxcnMUjYSJ87dXWXdYlUZ4o0jhb4LYACodrFurC1doKDEg0DTYVL9JN8tXp
+	UOQenmJ13hvM5ESB0cCOQ==
+X-ME-Sender: <xms:gllkZ8IzIr1GOq4dhOtiaswaPEXPhFpWD-vvetnXUz4BRX2rAA0iWw>
+    <xme:gllkZ8Jx3nwyOqsNEVOD2wzzD3rqhcUKiTALk3kcXaYOEOsfaXbjs_on3fEw0DYZC
+    xcJPXGNLOso6me-fV0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddttddguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    uddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhinhhugiesrghrmhhlihhnuh
+    igrdhorhhgrdhukhdprhgtphhtthhopegrlhgvgigrnhgurhgvrdhtohhrghhuvgesfhho
+    shhsrdhsthdrtghomhdprhgtphhtthhopehprghtrhhitggvrdgthhhothgrrhgusehfoh
+    hsshdrshhtrdgtohhmpdhrtghpthhtohepmhgtohhquhgvlhhinhdrshhtmhefvdesghhm
+    rghilhdrtghomhdprhgtphhtthhopehsohgtsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdr
+    ohhrghdprhgtphhtthhopeholhhofheslhhigihomhdrnhgvthdprhgtphhtthhopeihoh
+    grnhhnrdgtohhnghgrlhesshhmihhlvgdrfhhrpdhrtghpthhtoheplhhinhhugidqshht
+    mhefvdesshhtqdhmugdqmhgrihhlmhgrnhdrshhtohhrmhhrvghplhihrdgtohhm
+X-ME-Proxy: <xmx:gllkZ8sTIxduK_5QK7eI7Le7J6ZDjBwwhAs4BRLwzcrpkJPKyg8tDw>
+    <xmx:gllkZ5Y7v-tnLgpqrZOgqQ7SoaDvmU3gJemn-Q84cNZH_2vY7fIygg>
+    <xmx:gllkZzbngG4eIUW0vd2_45NgebXn6yCAj7DBYsAmDmiKqOjTtA0BLQ>
+    <xmx:gllkZ1CSS1cFIGlPd3o-y0gd0nJv29lVI9rF5SE0iNUgOS-MOPGzUw>
+    <xmx:g1lkZwSzZ6XoDoQAShssJy-o93Id7cf2Fwx2clVd0HC9EkjKlv7ZgkJM>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A5A862220072; Thu, 19 Dec 2024 12:36:02 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Thu, 19 Dec 2024 18:35:42 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Patrice Chotard" <patrice.chotard@foss.st.com>,
+ "Olof Johansson" <olof@lixom.net>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+ "Petr Mladek" <pmladek@suse.com>, "Yoann Congal" <yoann.congal@smile.fr>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org
+Message-Id: <7c6dc57c-f33b-4a4b-9423-01ee2933f759@app.fastmail.com>
+In-Reply-To: <20241219172934.3010875-1-patrice.chotard@foss.st.com>
+References: <20241219172934.3010875-1-patrice.chotard@foss.st.com>
+Subject: Re: [PATCH 0/7] ARM: config: stm32: Disable useless flags
 Content-Type: text/plain
-X-ClientProxiedBy: SAFCAS1NODE2.st.com (10.75.90.13) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+Content-Transfer-Encoding: 7bit
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Thu, Dec 19, 2024, at 18:29, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>
+> *** BLURB HERE ***
+>
+> Patrice Chotard (7):
+>   ARM: configs: stm32: run savedefconfig for STM32 defconfig
+>   ARM: configs: stm32: Disable CONFIG_COMMON_CLK_STM32MP in STM32
+>     defconfig
+>   ARM: configs: stm32: Disable CONFIG_SUSPEND in STM32 defconfig
+>   ARM: configs: stm32: Disable CONFIG_ADVISE_SYSCALLS in STM32 defconfig
 
-Run 'make savedefconfig' in order to clean stm32_defconfig.
+I would structure these the other way round: you can combine patches
+2-7 and just explain why you do those changes in one commit. 
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- arch/arm/configs/stm32_defconfig | 6 ------
- 1 file changed, 6 deletions(-)
 
-diff --git a/arch/arm/configs/stm32_defconfig b/arch/arm/configs/stm32_defconfig
-index 3baec075d1ef..d62a0c0b7ce5 100644
---- a/arch/arm/configs/stm32_defconfig
-+++ b/arch/arm/configs/stm32_defconfig
-@@ -12,14 +12,11 @@ CONFIG_BASE_SMALL=y
- # CONFIG_SIGNALFD is not set
- # CONFIG_EVENTFD is not set
- # CONFIG_AIO is not set
--# CONFIG_BLK_DEV_BSG is not set
- # CONFIG_MMU is not set
- CONFIG_ARCH_STM32=y
- CONFIG_CPU_V7M_NUM_IRQ=240
- CONFIG_SET_MEM_PARAM=y
- CONFIG_DRAM_BASE=0x90000000
--CONFIG_FLASH_MEM_BASE=0x08000000
--CONFIG_FLASH_SIZE=0x00200000
- # CONFIG_ATAGS is not set
- CONFIG_XIP_KERNEL=y
- CONFIG_XIP_PHYS_ADDR=0x08008000
-@@ -74,10 +71,7 @@ CONFIG_NLS=y
- CONFIG_CRC_ITU_T=y
- CONFIG_CRC7=y
- CONFIG_PRINTK_TIME=y
--# CONFIG_ENABLE_MUST_CHECK is not set
- # CONFIG_DEBUG_BUGVERBOSE is not set
- CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- # CONFIG_SLUB_DEBUG is not set
--# CONFIG_SCHED_DEBUG is not set
--CONFIG_CRYPTO=y
--- 
-2.25.1
+For the things that have changed by themselves, you do need a lot
+more explanation, so we can see that you have checked that these
+don't accidentally break stuff. You can probably still do them
+in a single patch, but it would be nicer to have one patch
+per option that has become unavailable, changing all defconfig
+files that need the same change.
 
+     Arnd
