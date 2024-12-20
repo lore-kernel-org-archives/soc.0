@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062842BD04
-	for <soc@lists.linux.dev>; Fri, 20 Dec 2024 17:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195E62BD04
+	for <soc@lists.linux.dev>; Fri, 20 Dec 2024 17:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734714617; cv=none; b=oRD5H63tkLYDraKGe+a1RqnYfV2ZfUCO5xfdOOlYJtZ/RpdiRXR8tQebx8lPI1UUdxo7Eoip22vGz6vqNbf2dKyKV0QrRd7RgVUDZWl3nmqHeeAF0HcjXcIN4mlYHZ409tPyz4FCeiR/ck61xepq/d+4gdTVbqCaqpOrFxSvjhI=
+	t=1734714618; cv=none; b=sOR+AnI0fVZx/E1T7iGSeqWKYr1jNCKE/0HORwocloWC5Cf6wbZ25Z1nNkx9vQd1x3aIcjSQY9Nrr//Nhx0bVTwVVHQgRxYKVoo5vDS+0QnZWmc5MLwth6+gfuYUP5yC583jDMuMzaUeN9YEPhY8mnuXxcX7Q9Ptqzvi2dvTR7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734714617; c=relaxed/simple;
-	bh=JWQ4qGbcQiMqhyuyhwevZNmaD45TRDWG1n5WdO3tsk8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=LK6ZveeTK/WTGhFE2DFD0eYDYm8fx/kCZ2UtghmKUhRT72vWhI9MK8uRjk4F8yQ+BuI1AcM7aKlb2wFilX54oK4cLkrOoRLz9sBd4VQawvC2rjAA03lzzIM6QADqaWk3opL+D1GNdkJPwIbGyUyQpdEdq6as009EPoW31j7TDyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1+0S+9m; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734714618; c=relaxed/simple;
+	bh=+qZwhyKDOIlwebZBhfzq5DyCZ18gZwb0EofVokEKtPE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sZjRguqlz4zjwU5KQpTxWcyMAvSfL9U/CNdxBYz2oqdmL9UvE6DiEeOjknm+TrYoxfSAGGHWyK3A2mPE7/DgnvFsuwcwrTNfpH0DbEFdEa6fSgyTR71ygEme2yA+HRMSwm+LUc+02QcmvnQYUB/T7UzqBhpUTJt1kEeARe9CDW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dHf37UtC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1+0S+9m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dHf37UtC"
 Received: by smtp.kernel.org (Postfix)
-	id 9ED78C4CED7; Fri, 20 Dec 2024 17:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889BEC4CECD
-	for <soc@kernel.org>; Fri, 20 Dec 2024 17:10:16 +0000 (UTC)
+	id AFEDCC4CED3; Fri, 20 Dec 2024 17:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994C1C4CECD;
+	Fri, 20 Dec 2024 17:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734714616;
-	bh=JWQ4qGbcQiMqhyuyhwevZNmaD45TRDWG1n5WdO3tsk8=;
-	h=Subject:From:Date:To:Cc:From;
-	b=K1+0S+9mkZSv5bIa8XvdYT7TqF0qgJdrFAw1Ci9z7rXxEhaCXVnNVqb3oK8evS0zr
-	 quPRBiViZTAjsUrEASFz9v09mD8erF1I1e5sJVkRQroP0yPkZh5i6iGtao54vgIw+o
-	 5AXp/sFNJzN8XfiNfM1DInvQD8JIHYkQv0WqN2QAuBOM7RZTWLWNoUEkkX+iVyO9is
-	 cRnMjf6i99N0qasNoCsh2VUicaMla6BKjggvnn3OjNsJfe/UGQbzRN0rQ8a2jzI3Va
-	 eFrm3AxwuKoxPQQGw1Q+Njtnapr7XezZag+iNXVNb/OaFz/Q8ODM6PljhxRipwa0dQ
-	 DKOqCswmb2KIQ==
+	s=k20201202; t=1734714617;
+	bh=+qZwhyKDOIlwebZBhfzq5DyCZ18gZwb0EofVokEKtPE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=dHf37UtCQF/uMW/EY5oioDqs/7v+Oy5NiBxHXkr+8Wt4k2KJUeMPp2oUrDz3nEMDt
+	 TVzj6vLR+s+k7X9Fm16UGkfsly7hz4hNcUTliQFKG142rBUztgsQpvVI2xQHjcpjum
+	 Rqb9MVy21AJ/+MOoql8aNzm4TnlWSZ0ldBqK7LZmhFt4bKlP/Re0IkuqRN0sgDkAPp
+	 6h+l8+IdnDOKRUCgxDqwYTBsjX597OuRtKX8yWCYCPhofQVvEh30ociegG3bW7lPAf
+	 gJQb0ln+7N8Bg5WQxfT+B8sr9JhkrXlHQTw5bi4ajKd099xacIytnll2zXY/nttw+6
+	 Te04xzX4WT/rQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 72D2A3806656;
-	Fri, 20 Dec 2024 17:10:35 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE64F3806656;
+	Fri, 20 Dec 2024 17:10:36 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,34 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] RISC-V soc driver fixes for v6.13-rc4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173471463392.2963436.9904956720505293271.git-patchwork-summary@kernel.org>
-Date: Fri, 20 Dec 2024 17:10:33 +0000
-To: soc@kernel.org
+ <173471463550.2963436.14675157818795214389.git-patchwork-notify@kernel.org>
+Date: Fri, 20 Dec 2024 17:10:35 +0000
+References: <20241218-suffrage-unfazed-fa0113072a42@spud>
+In-Reply-To: <20241218-suffrage-unfazed-fa0113072a42@spud>
+To: Conor Dooley <conor@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] RISC-V soc driver fixes for v6.13-rc4
-  Submitter: Conor Dooley <conor@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=919195
-  Lore link: https://lore.kernel.org/r/20241218-suffrage-unfazed-fa0113072a42@spud
+On Wed, 18 Dec 2024 16:01:41 +0000 you wrote:
+> Hey Arnd,
+> 
+> I know you sent a PR already this, so whenever you're sending another
+> here's a patch for you :)
+> 
+> Cheers,
+> Conor.
+> 
+> [...]
 
-Patch: [GIT,PULL,1/1] Broadcom devicetree-arm64 fixes for 6.13
-  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=918799
-  Lore link: https://lore.kernel.org/r/20241217190547.868744-1-florian.fainelli@broadcom.com
+Here is the summary with links:
+  - [GIT,PULL] RISC-V soc driver fixes for v6.13-rc4
+    https://git.kernel.org/soc/soc/c/a61dae110138
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
