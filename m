@@ -1,30 +1,30 @@
 Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA081BDAB5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9A81BDAAA
 	for <soc@lists.linux.dev>; Fri, 20 Dec 2024 10:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734690661; cv=none; b=MhMK1LimMyskeF+TM//P2SqyWPl2fc2qNVIVlX31S5iF1KYOGLoNhiVSlifNnoFcdyDsnKXUGpi0Pean70I3Z15bDz0E/igvZc1gxTJFUE3uYHp+BwrnzJNaycYZWNUm4MRjNXWnRSuVdRWRT2dpbgvNr7vE0ym+UwPxX9Qr9JQ=
+	t=1734690662; cv=none; b=f+jQ5sY50hPl76ZOzHSC0PdT3ubDYw+KEDySGQuGSE4ewnUGwS6Tfka3tj0+lgFM/OGF5f9YG8nRMsc6Dh/lBEtSyq3u6KilvCj4K0HloPtUJlTr0tXSiRpS/qyr2U+megqaFr0vCl+c3Gy5z5Ni3WsmDxmyz6yU8ij/+rz4Buk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734690661; c=relaxed/simple;
-	bh=t2+p4vZ9XhVQstYCGbAjngiUKVItyKbWzDglfyWvzos=;
+	s=arc-20240116; t=1734690662; c=relaxed/simple;
+	bh=ZS4G1zTVu+DABX4wbH4YROlRVmjUlro4E03gSNpqA+E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JQSLixURRGbrvHEvLlwmAOSoIFM7MJkicYcVJ+SBGEmuy0PD6QtSCFQgWUsy5c6JmRJ3b5O1mTiyebRcspX8tG8F6kfDSAr05ySnbI11PmNyvFW1zX65mHrNiqWalzDpUutdReFC5FyF4FQYWEjKDJYgY94/M9afh5mlByYhOTc=
+	 MIME-Version:Content-Type; b=sXSVoLIp4Sfshxn9/l9iXRe0It+8TMUmhf/merqPvo8FXjliUk5Wp3IfEN0gSpF+diDaADsWdxvYg7FLntQDc/nphauhyqVWdJsV2R6zlWvMEIdN/CIIF0dLx+wX5TiOF6k6eNLf/L23oWuJS49z/MBNr4Jt6M4kAw3z87JG41Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:7a4e:e361:29f2:181c])
 	by laurent.telenet-ops.be with cmsmtp
-	id qyWq2D00U5V3mYk01yWq5l; Fri, 20 Dec 2024 11:30:52 +0100
+	id qyWq2D00G5V3mYk01yWq5g; Fri, 20 Dec 2024 11:30:52 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1tOaHN-001s3n-Gy;
+	id 1tOaHN-001s3g-Ax;
 	Fri, 20 Dec 2024 11:30:50 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1tOaFY-000gNB-Ev;
+	id 1tOaFY-000gNL-H9;
 	Fri, 20 Dec 2024 11:28:52 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: soc@lists.linux.dev
@@ -32,9 +32,9 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/3] Renesas ARM defconfig updates for v6.14
-Date: Fri, 20 Dec 2024 11:28:45 +0100
-Message-Id: <cover.1734689799.git.geert+renesas@glider.be>
+Subject: [GIT PULL 3/3] Renesas DTS updates for v6.14
+Date: Fri, 20 Dec 2024 11:28:47 +0100
+Message-Id: <cover.1734689803.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1734689797.git.geert+renesas@glider.be>
 References: <cover.1734689797.git.geert+renesas@glider.be>
@@ -44,6 +44,7 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
@@ -52,31 +53,111 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.14-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.14-tag1
 
-for you to fetch changes up to a40f02b2923b6d58e76cfef760b8ed61a00f1d53:
+for you to fetch changes up to acb247afab5bc2b4462f4dfc17a9d930e1153e52:
 
-  arm64: defconfig: Enable R9A09G047 SoC (2024-12-13 11:09:59 +0100)
-
-----------------------------------------------------------------
-Renesas ARM defconfig updates for v6.14
-
-  - Enable Watchdog support for the RZ/V2H(P) SoC and the RZ/V2H EVK
-    board in the ARM64 defconfig,
-  - Refresh shmobile_defconfig for v6.13-rc1,
-  - Enable support for the Renesas RZ/G3E (R9A09G047) SoC in the ARM64
-    defconfig.
+  arm64: dts: renesas: r9a09g047: Add I2C nodes (2024-12-17 09:42:52 +0100)
 
 ----------------------------------------------------------------
-Biju Das (1):
-      arm64: defconfig: Enable R9A09G047 SoC
+Renesas DTS updates for v6.14
 
-Geert Uytterhoeven (1):
-      ARM: shmobile: defconfig: Refresh for v6.13-rc1
+  - Add more serial (SCIF), power monitor, ADC, and sound support for
+    the RZ/G3S SoC and the RZ/G3S SMARC SoM and development board,
+  - Add support for the R-Car V4H ES3.0 (R8A779G3) SoC on the White Hawk
+    Single development board,
+  - Add display support for the R-Car V4M SoC and the Gray Hawk Single
+    development board,
+  - Add video capture support for the Gray Hawk Single development
+    board,
+  - Add initial support for the RZ/G3E (R9A09G047) SoC and the RZ/G3E
+    SMARC SoM and Carrier-II EVK development board,
+  - Add support for 5-port MATEnet on the Falcon Ethernet sub-board,
+  - Miscellaneous fixes and improvements.
 
-Lad Prabhakar (1):
-      arm64: defconfig: Enable Renesas RZ/V2H(P) Watchdog driver
+----------------------------------------------------------------
+Biju Das (8):
+      dt-bindings: soc: renesas: Document Renesas RZ/G3E SoC variants
+      dt-bindings: soc: renesas: Document RZ/G3E SMARC SoM and Carrier-II EVK
+      dt-bindings: clock: renesas: Document RZ/G3E SoC CPG
+      arm64: dts: renesas: Add initial DTSI for RZ/G3E SoC
+      arm64: dts: renesas: r9a09g047: Add OPP table
+      arm64: dts: renesas: Add initial support for RZ/G3E SMARC SoM
+      arm64: dts: renesas: Add initial device tree for RZ/G3E SMARC EVK board
+      arm64: dts: renesas: r9a09g047: Add I2C nodes
 
- arch/arm/configs/shmobile_defconfig | 1 +
- arch/arm64/configs/defconfig        | 2 ++
- 2 files changed, 3 insertions(+)
+Claudiu Beznea (9):
+      arm64: dts: renesas: r9a08g045: Add the remaining SCIF interfaces
+      arm64: dts: renesas: rzg3s-smarc: Fix the debug serial alias
+      arm64: dts: renesas: r9a08g045: Add ADC node
+      arm64: dts: renesas: rzg3s-smarc-som: Enable ADC
+      arm64: dts: renesas: r9a08g045: Add SSI nodes
+      arm64: dts: renesas: rzg3s-smarc-som: Add versa3 clock generator node
+      arm64: dts: renesas: Add da7212 audio codec node
+      arm64: dts: renesas: rzg3s-smarc: Enable SSI3
+      arm64: dts: renesas: rzg3s-smarc: Add sound card
+
+Geert Uytterhoeven (9):
+      dt-bindings: soc: renesas: Move R8A779G0 White Hawk up
+      dt-bindings: soc: renesas: Document R8A779G3 White Hawk Single
+      arm64: dts: renesas: Factor out White Hawk Single board support
+      arm64: dts: renesas: Add R8A779G3 SoC support
+      arm64: dts: renesas: r8a779g3: Add White Hawk Single support
+      arm64: dts: renesas: white-hawk-ard-audio: Drop SoC part
+      arm64: dts: renesas: white-hawk-single: Add R-Car Sound support
+      ARM: dts: renesas: r7s72100: Add DMA support to RSPI
+      Merge tag 'renesas-r9a09g047-dt-binding-defs-tag1' into renesas-dts-for-v6.14
+
+Kuninori Morimoto (1):
+      arm64: dts: renesas: ulcb: Add sample Audio Codec settings
+
+Niklas Söderlund (3):
+      arm64: dts: renesas: gray-hawk-single: Add video capture support
+      arm64: dts: renesas: r8a779a0: Remove address- and size-cells from AVB[1-5]
+      arm64: dts: renesas: falcon-ethernet: Describe PHYs connected on the breakout board
+
+Tomi Valkeinen (3):
+      arm64: dts: renesas: gray-hawk-single: Fix indentation
+      arm64: dts: renesas: r8a779h0: Add display support
+      arm64: dts: renesas: gray-hawk-single: Add DisplayPort support
+
+Wolfram Sang (1):
+      arm64: dts: renesas: rzg3s-smarc: Enable I2C1 and connected power monitor
+
+ .../bindings/clock/renesas,rzv2h-cpg.yaml          |  15 +-
+ .../devicetree/bindings/soc/renesas/renesas.yaml   |  33 +-
+ arch/arm/boot/dts/renesas/r7s72100.dtsi            |  10 +
+ arch/arm64/boot/dts/renesas/Makefile               |  12 +-
+ .../boot/dts/renesas/r8a779a0-falcon-ethernet.dtsi | 242 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  10 -
+ .../dts/renesas/r8a779g2-white-hawk-single.dts     |  62 +---
+ .../dts/renesas/r8a779g3-white-hawk-single.dts     |  16 +
+ arch/arm64/boot/dts/renesas/r8a779g3.dtsi          |  12 +
+ .../boot/dts/renesas/r8a779h0-gray-hawk-single.dts | 298 +++++++++++++++-
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |  73 ++++
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi         | 237 +++++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 374 +++++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g047e37.dtsi      |  18 +
+ arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts |  18 +
+ arch/arm64/boot/dts/renesas/r9a09g047e57.dtsi      |  13 +
+ arch/arm64/boot/dts/renesas/renesas-smarc2.dtsi    |  24 ++
+ arch/arm64/boot/dts/renesas/rzg3e-smarc-som.dtsi   |  28 ++
+ arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi   |  56 ++-
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi       |  83 ++++-
+ arch/arm64/boot/dts/renesas/ulcb-kf.dtsi           |  18 +-
+ arch/arm64/boot/dts/renesas/ulcb.dtsi              |   5 +
+ ...a7212.dtso => white-hawk-ard-audio-da7212.dtso} |   6 +-
+ arch/arm64/boot/dts/renesas/white-hawk-single.dtsi |  73 ++++
+ include/dt-bindings/clock/renesas,r9a09g047-cpg.h  |  21 ++
+ 25 files changed, 1644 insertions(+), 113 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779g3-white-hawk-single.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779g3.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047e37.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047e57.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/renesas-smarc2.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/rzg3e-smarc-som.dtsi
+ rename arch/arm64/boot/dts/renesas/{r8a779g0-white-hawk-ard-audio-da7212.dtso => white-hawk-ard-audio-da7212.dtso} (96%)
+ create mode 100644 arch/arm64/boot/dts/renesas/white-hawk-single.dtsi
+ create mode 100644 include/dt-bindings/clock/renesas,r9a09g047-cpg.h
