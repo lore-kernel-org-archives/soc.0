@@ -1,79 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D3519ADB0
-	for <soc@lists.linux.dev>; Sun, 29 Dec 2024 23:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3D925948E
+	for <soc@lists.linux.dev>; Mon, 30 Dec 2024 08:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735514921; cv=none; b=gDTthkHDomfJ36JcBIzPy2QmMO3j9UFtBrtJU63vvw/2dOtUS1wmeNTqd6hci60938Se7+/vG+JP/jzsuisBp7ODssvk6WeHgUgK3IwIS/SOwx9wt2VFcwW/QntDv3V19XdR/fmhrEdcv5493mLB1IXJg3F3bb9T8MP/RX7NFiE=
+	t=1735548932; cv=none; b=VIFJjBV73Iskv+9fUOpiifIhbKe/GOd62A7jteMa13roJ2DnQwvq7pSNAvUuNz0PmhFHoP52n41g/t1Xta+65JoGcQlV/xZxI1dd3hAFLwpwVu/YA4eiia8QEQ74zuO2pPiNp62nUymFb1N4gulLow7OMVnp6RnFV9Uo0CfcX3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735514921; c=relaxed/simple;
-	bh=BEQ8z1ut2cQHekD22fD5Tb5BXFAjsP0xhOK/q2xwRf8=;
+	s=arc-20240116; t=1735548932; c=relaxed/simple;
+	bh=HSPJudKip8xsAkK+VgHsqxznwELDFqQ8B5BLHxpggII=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ImfYksjCsJoT0ZX/2WA0qxblFTo3p30EnfL5W4S5tugqZShRcI3R5k+KEyExjDKthjfMzzBOuSF8R+8Vb8RDG24L6nuzQsXItw1wV5MECB4zvDUpWxG0/tgd2Gyf+pglVH+PHUWUHD7utC33seIRUL3rNB8Aov6W0wUGvOdcGsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=bDu/XLn2; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=TavxV00qik9xK6c3tzMaOrseKx+3k9a8NHLfUm3R/DWhe8MbNuJWFbSQEzfndKnPwSB6fFtXzHn1eOoyAvpyHLtRTyteKi3sLoZPu4Os9aLmOMjcc6Hkhdf6Brfg3CnHTrGLz4g+cCl920A1r/on7+egJ0VZW7meuX5h6dg8AXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=iFBnYqMJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="bDu/XLn2"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="iFBnYqMJ"
 Received: by smtp.kernel.org (Postfix)
-	id 663ECC4CEDE; Sun, 29 Dec 2024 23:28:41 +0000 (UTC)
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E2E6C4CEDC
-	for <soc@kernel.org>; Sun, 29 Dec 2024 23:28:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E2E6C4CEDC
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2165cb60719so111820615ad.0
-        for <soc@kernel.org>; Sun, 29 Dec 2024 15:28:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1735514919; x=1736119719; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Umzb/cpVkBSMsf5TuOtyuUgveg3g8v8YPbqtINmhT0k=;
-        b=bDu/XLn2ruq109JqE+mLK3gsfezrxE4/Yss+5TEC8cOKFDFXTnYQ4ImBYyJ2lmV2eY
-         dkF5+I096h6pGl+KjsVIyNa/KFdM5JjLmGNEEKo5K7Umm/G/ZzJhgU9PTrkHFyUesmY5
-         v7SdU3ybWVd70eW9gfTyCl2GxmQbp21LHppP9Wx0KfSdsPo5qXwLWzBla66NEJLT+GRh
-         LWVbjg+bVPLkNL9HQXvDR8TNfjxXbTfp2nXYpQk4wQMYGXC3zOfk31/dvPF70+gjnjqB
-         bz085g0YZw7gB4roVAerw5nfO6sJtOBBUqNiaPUwgFSSKe08qi2J3abSqPXOLniYyGw7
-         P3xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735514919; x=1736119719;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Umzb/cpVkBSMsf5TuOtyuUgveg3g8v8YPbqtINmhT0k=;
-        b=nnw4k98pJmO4rnWMZ46lebNUmHRjiAk5hYlAY+FPolpTmsaNhB+pNv0b0Dmlpb98IB
-         uvUZ84Q8VTZm4arhKS3sBOO7gD4AI7r3FTGbbRoSl/2X7VgtVk/M7PjGOBDF1Zos/gub
-         xBobnko+znGf66z/otjwyrxCaFDCAOUedCfu75Dbxmjhf570hFSAHu8JlWLBMfhr0s6+
-         xJYm6HYHQVq9+5gCBezLnfhtQlPorc4mAiqAcPB97bvXviNCoxLu9q0THB7d5M6VODoB
-         sXeSSTx00Prodai9vRt9xrxoeu5T1yMr9p6hsjxCY2KShDAibRMGi92ExRztKObwOkOd
-         dAkg==
-X-Gm-Message-State: AOJu0YxqKEGVtc5XvfdXkQFJINJQxEok4u24q72J0BDhTG/+Cc7HyC/Y
-	1ipc33ydb08MNBEfyQTklH0AmmETHKh6kRHjyr1hc9mYJPrrmoPG9QI0WU+EJ6TJQYmA4jmz3/2
-	u
-X-Gm-Gg: ASbGncszwQpjNebiMFnABg5bOqiF+rdqmt6xJffCbu/YUzX2YJfnxhzEkPujsMYUlKW
-	Ug+VnoBxe82XulpzrWPMx6dKfoduOVwgGxKz4awLWPEJxaDVm/JK0vNlca4HlZlEsGNBxRP/QUv
-	QjBLxnDMLMRQLv9Bx0Ugp5zu72UUQsBE0ek6gUPJhZNP9JhxxiawNHylKKvzHjLy8Co4RhQMZ4P
-	mFqjJjDy+2gdB2U//gSPQN5nS21XlNBOxh36ZCeV8masie1KLoQ4TAJHxO8AsEHkg==
-X-Google-Smtp-Source: AGHT+IHldvMkQufBuQX10YCQFp+ijImIhHav6sI7E20XU6PffBB8+yEkV3TBxa5dVe+iW9flE+V8GA==
-X-Received: by 2002:a05:6a21:3989:b0:1db:e3a2:ea47 with SMTP id adf61e73a8af0-1e5e0461d58mr55130767637.14.1735514919066;
-        Sun, 29 Dec 2024 15:28:39 -0800 (PST)
-Received: from x1 (75-164-218-15.ptld.qwest.net. [75.164.218.15])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad90c133sm18592573b3a.183.2024.12.29.15.28.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Dec 2024 15:28:38 -0800 (PST)
-Date: Sun, 29 Dec 2024 15:28:36 -0800
-From: Drew Fustini <drew@pdp7.com>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Conor Dooley <conor@kernel.org>,
-	Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RISC-V T-HEAD Devicetrees for v6.14
-Message-ID: <Z3HbJPwZB+siJuAR@x1>
+	id 83AC0C4AF09; Mon, 30 Dec 2024 08:55:31 +0000 (UTC)
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.15])
+	by smtp.kernel.org (Postfix) with ESMTP id 9EC52C4CED0;
+	Mon, 30 Dec 2024 08:55:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9EC52C4CED0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=IjhTyIk85EtpNPozN27xxdVmdA+yXi+gjfkzcQ6a74c=;
+	b=iFBnYqMJqaikGPTd2JOQK6c5ctUwkZKCAj9vBwTj7blaP+TXHq1si3Lt8oSX62
+	u1dAG78ZNumNWkhOBONf17DX1t2B4h7YYo79Wgi4HUaFhHJlaixvaXWV2GFZ1bOs
+	39CqSucAA9NAh3KYuKSabIsbGQhma5fmHn3r5uG+6XiQc=
+Received: from dragon (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id M88vCgC3WW33X3JnAhn5BQ--.60155S3;
+	Mon, 30 Dec 2024 16:55:21 +0800 (CST)
+Date: Mon, 30 Dec 2024 16:55:19 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	kernel@pengutronix.de, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.13
+Message-ID: <Z3Jf9zbv/xH3YzuB@dragon>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -82,14 +47,12 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-
-Hi Arnd,
-
-There is only one thead device tree change for this cycle. I have run
-W=1 dtbs_check, and it has been in linux-next for over 2 weeks.
-
-Thanks,
-Drew
+X-CM-TRANSID:M88vCgC3WW33X3JnAhn5BQ--.60155S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFy8AF1ktrWDtw18uF1xKrg_yoW8XFWDpF
+	sxCwsrGr48WFy5JrZrAr1vv3y5JwsrJFn8XrW5GrW8tr98Zw1UJF13Gr1ru3yUXry2gw4F
+	yF1rXrnFyr1DXw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jazuAUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBAfFZWdyVU0nLgAAsn
 
 The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
@@ -97,26 +60,39 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git@github.com:pdp7/linux.git tags/thead-dt-for-v6.14
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.13
 
-for you to fetch changes up to c95c1362e5bcd90c45987828bbef02236d181ffd:
+for you to fetch changes up to 5f122030061db3e5d2bddd9cf5c583deaa6c54ff:
 
-  riscv: dts: thead: Add mailbox node (2024-12-12 20:07:16 -0800)
-
-----------------------------------------------------------------
-thead-dt-for-v6.14: T-HEAD Devicetrees for v6.14
-
-Add mailbox node for the T-Head TH1520 RISC-V SoC. The mailbox bindings
-and driver were already merged in v6.13:
-
-b2cf36e4a2ac ("dt-bindings: mailbox: Add thead,th1520-mailbox bindings")
-5d4d263e1c6b ("mailbox: Introduce support for T-head TH1520 Mailbox driver")
-
-Signed-off-by: Drew Fustini <drew@pdp7.com>
+  ARM: dts: imxrt1050: Fix clocks for mmc (2024-12-09 20:40:23 +0800)
 
 ----------------------------------------------------------------
-Michal Wilczynski (1):
-      riscv: dts: thead: Add mailbox node
+i.MX fixes for 6.13:
 
- arch/riscv/boot/dts/thead/th1520.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+- Add fallback for i.MX8QM ESAI compatible to fix a dt-schema warning
+  caused by bindings update
+- Fix uSDHC1 clock for i.MX RT1050
+- Enable SND_SOC_SPDIF in imx_v6_v7_defconfig to fix a regression caused
+  by an i.MX6 SPDIF sound card change in DT
+- Fix address length of i.MX95 netcmix_blk_ctrl
+
+----------------------------------------------------------------
+Frank Li (1):
+      arm64: dts: imx8-ss-audio: add fallback compatible string fsl,imx6ull-esai for esai
+
+Jesse Taube (1):
+      ARM: dts: imxrt1050: Fix clocks for mmc
+
+Stefan Eichenberger (1):
+      ARM: imx_v6_v7_defconfig: enable SND_SOC_SPDIF
+
+Wei Fang (1):
+      arm64: dts: imx95: correct the address length of netcmix_blk_ctrl
+
+ arch/arm/boot/dts/nxp/imx/imxrt1050.dtsi           | 2 +-
+ arch/arm/configs/imx_v6_v7_defconfig               | 1 +
+ arch/arm64/boot/dts/freescale/imx8-ss-audio.dtsi   | 2 +-
+ arch/arm64/boot/dts/freescale/imx8qm-ss-audio.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/imx95.dtsi           | 2 +-
+ 5 files changed, 5 insertions(+), 4 deletions(-)
+
