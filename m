@@ -1,98 +1,167 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0412AA47
-	for <soc@lists.linux.dev>; Fri,  3 Jan 2025 02:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902E71C1F10
+	for <soc@lists.linux.dev>; Fri,  3 Jan 2025 07:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735872589; cv=none; b=g03QCzWOvRfcjmGfQBu+mjGhXxbUGG377tBYL9mJsM9NkP2Dj4EgBYrXEhvLWaWClYmw0tsM9Dwxeg906W5YjtpusmGEKu2MRPSHq2r1kIFL3tnXmyHtQNjbfd4YYLd/mePzMD1YgLGdP5c+NGx0yGv1PLJObpr8aXP1d26eKck=
+	t=1735889175; cv=none; b=LQZEU4hXexdyVq/8R65yLFwmhaHAmLAV2kkvfICjF/QrcPd44aqsdzeUVty5V66A+cr7Ua9VYOHBYSncHd9TQ5NXztdPuS4vmpzb8uFfzjCiexAt+eDzzgcwHoHHOCzrBXrNEs1m7HRl9vPykfYTMcItZ0JA9ugk5hCfS5mKjwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735872589; c=relaxed/simple;
-	bh=Ka1T8Z+8lX/trH3ErYbgl/v6NF3bsDw/cx4eBxax2oU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mWuxjKGlYKSdj2mEQB5nZWUFJNwmbB1pvuXbYhGtbDnwN1+KGbF66F59p1lG7t+vwUExvyBQ4ZUXljmWgYWPe+jk0Wqpai8Z0av6Edocw3JZwsPemkGLdr9kNGijS4iTw8XZWz2vf1s9oQg2YyAu3irh/6+Chgm7WrbpDpbirAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=scbIK8eT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735889175; c=relaxed/simple;
+	bh=tXCXbV9W8BnfoaSGUk44FzzzU/4A5uG0Yr4sKlH094M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JTlyMLQI27Ka3+h8h/eshjU5f3r91XKKswIaU83Q5uiRKGoEmisrJ+a8MbVfRHWTZXNH8kqCg3WnclogQ24NUk97sF081kslZMWJ10RU1qTAhGjoJFLJgkgNySXb43TKbfcrsuo7eOa2CztZBvAkv1bxLs7bnWdLk+QVAFwX7vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vhpi1QRP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="scbIK8eT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vhpi1QRP"
 Received: by smtp.kernel.org (Postfix)
-	id AA1E1C4CED1; Fri,  3 Jan 2025 02:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FD5C4CED0;
-	Fri,  3 Jan 2025 02:49:46 +0000 (UTC)
+	id 4E665C4CEDC; Fri,  3 Jan 2025 07:26:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1399DC4CECE;
+	Fri,  3 Jan 2025 07:26:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735872588;
-	bh=Ka1T8Z+8lX/trH3ErYbgl/v6NF3bsDw/cx4eBxax2oU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=scbIK8eTminIMtmXYnHqG7NFNMBX5oc7gyzYwhzoq++7XIc5VgtaPjnwXxMQtmeUT
-	 Tl8Pvyv5UmmcEKcLRTi/Dj4UFHwqVgLg5+frHoNTS0mrKZu74rYl4VHxietpZja7sG
-	 9L3oxVMkRRASC3a1HRyqEntF4vEcKqGwwe/12X0H56QZSuVG2W1MLDd/hwW/RYWh22
-	 MJbc9EZ1agBpYjtmhpDD84MV4WUgKJSXNVP1bpPsyoJqsdh3Hr3iauNZTCm0U7ebFr
-	 Nxl7M8sVbwUCapYlrcA7O8P/FGlHZK2vQVH4Cuax6qTCPX9INcjiOA5lxoKMFFe2n1
-	 sOpjIj6VisUlw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Jie Gan <quic_jiegan@quicinc.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Qiang Yu <quic_qianyu@quicinc.com>
-Subject: [GIT PULL] Qualcomm Arm64 DeviceTree fixes for v6.13
-Date: Thu,  2 Jan 2025 20:49:44 -0600
-Message-ID: <20250103024945.4649-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.47.1
+	s=k20201202; t=1735889175;
+	bh=tXCXbV9W8BnfoaSGUk44FzzzU/4A5uG0Yr4sKlH094M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Vhpi1QRPRiVIpQ5FPBFxUVEiEsK1UDwF7pWZcrKz3TceJEWqF2kqW3DAMS4dGFjQx
+	 LSuI1CInJMACJ8oRjHxmkPB9CEctQgE3XOWBPnfTdXo9j+XO9g7t1EvXeb6Oq5eeBs
+	 SSeTL5hzlCWQbm5GQxuDeWA4T6mUaqa2uAwW0n7xO+u+IGh87m0oTiNGmMynssKU9U
+	 N5S+V+QnYCHWc8uxxgyntExdp3GVSlmOiblCSeHIVRSxwFNhFcAr2cwQtCIBh3MOan
+	 l4yu9alCPSDN6oMFuc5ukpjaUNG6J6CKFMA9IrQIaS9Vo1Mx7e5xINGITAFXH1F8eu
+	 kdRL9l1ltckIw==
+Message-ID: <c80efae8-7f5c-4f2e-92c0-510511004ad1@kernel.org>
+Date: Fri, 3 Jan 2025 08:26:09 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 RESEND] soc: loongson: add Loongson Security Module
+ driver
+To: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, soc@lists.linux.dev,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, xry111@xry111.site,
+ christophe.jaillet@wanadoo.fr
+References: <20241224072500.15669-1-zhaoqunqin@loongson.cn>
+ <f9138082-1d17-4247-b365-7cb4eef88879@kernel.org>
+ <22cb222a-a34d-b2ff-88cf-2e9433aed310@loongson.cn>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <22cb222a-a34d-b2ff-88cf-2e9433aed310@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+On 03/01/2025 03:25, Zhao Qunqin wrote:
+> 
+> 在 2024/12/28 下午7:02, Krzysztof Kozlowski 写道:
+>> On 24/12/2024 08:25, Qunqin Zhao wrote:
+>>> This driver supports Loongson Security Module, which
+>>> provides the control for it's hardware encryption
+>>> acceleration child devices.
+>> Please wrap commit message according to Linux coding style / submission
+>> process (neither too early nor over the limit):
+>> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+> OK
+>>> Only ACPI firmware is supported.
+>>>
+>>> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+>> I don't get why you are sending this to soc. This is loongson specific
+>> and is supposed to go via Loongson maintainers.
+>>
+>> And why is this a resend?
+> 
+> There are no platform-specific maintainers, So I initially sent the 
+> patch to Arnd,
 
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+What do you mean by "no platform-specific maintainers"? This
+architecture and this platform is abandoned?
 
-  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+Then we should either drop it from the kernel or make it orphaned.
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.13
+> 
+> but didn't receive a response from Arnold, so I resent the patch and added
+> 
+> soc@kernel.org to the mailing list.
 
-for you to fetch changes up to 8a6442ec3437083348f32a6159b9a67bf66417bc:
+You shouldn't. This is patch for your maintainers to take. If you do not
+have them: either fix that or abandon/orphan the platform.
 
-  arm64: dts: qcom: sa8775p: fix the secure device bootup issue (2024-12-25 22:05:40 -0600)
 
-----------------------------------------------------------------
-Qualcomm Arm64 DeviceTree fixes for v6.13
+> 
+>>> ---
+>>> Changes in v2:
+>>> 	- Removed useless memset() in probe.
+>>> 	- Cleaned up coding style.
+>>> 	- Corrected the spelling.
+>>>
+>>>   MAINTAINERS                        |   7 +
+>>>   drivers/soc/loongson/Kconfig       |   9 +
+>>>   drivers/soc/loongson/Makefile      |   1 +
+>>>   drivers/soc/loongson/loongson_se.c | 523 +++++++++++++++++++++++++++++
+>>>   include/soc/loongson/se.h          | 135 ++++++++
+>>
+>> include/linux/soc/... or just keep it private to the driver. Why this
+>> has to be exposed to other users?
+> 
+> Looks like  include/linux/soc... is more suitable than include/soc/...
+> 
+> This driver is the base of other users,  one user will be added in next 
+> revision.
 
-Revert the enablement of OTG support on primary and secondary USB Type-C
-controllers of X1 Elite, for now, as this broke support for USB hotplug.
+No. Keep it private to the driver.
 
-Disable the TPDM DCC device on SA8775P, as this is inaccessible per
-current firmware configuration. Also correct the PCIe "addr_space"
-region to enable larger BAR sizes.
+Soc driver is usually not a "base for other users".
 
-Also fix the address space of PCIe6a found in X1 Elite.
+> 
+> And may I ask which one do you think is more suitable to place this 
+> basic driver under SOC or MFD ?
 
-----------------------------------------------------------------
-Jie Gan (1):
-      arm64: dts: qcom: sa8775p: fix the secure device bootup issue
+I was talking about the header.
 
-Johan Hovold (3):
-      Revert "arm64: dts: qcom: x1e78100-t14s: enable otg on usb-c ports"
-      Revert "arm64: dts: qcom: x1e80100-crd: enable otg on usb ports"
-      Revert "arm64: dts: qcom: x1e80100: enable OTG on USB-C controllers"
-
-Manivannan Sadhasivam (1):
-      arm64: dts: qcom: sa8775p: Fix the size of 'addr_space' regions
-
-Qiang Yu (1):
-      arm64: dts: qcom: x1e80100: Fix up BAR space size for PCIe6a
-
- arch/arm64/boot/dts/qcom/sa8775p.dtsi                      |  5 +++--
- arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts |  8 ++++++++
- arch/arm64/boot/dts/qcom/x1e80100-crd.dts                  | 12 ++++++++++++
- arch/arm64/boot/dts/qcom/x1e80100.dtsi                     |  8 +-------
- 4 files changed, 24 insertions(+), 9 deletions(-)
+Best regards,
+Krzysztof
