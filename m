@@ -1,48 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A44219F115
-	for <soc@lists.linux.dev>; Fri,  3 Jan 2025 02:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0412AA47
+	for <soc@lists.linux.dev>; Fri,  3 Jan 2025 02:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735871415; cv=none; b=SLLwE/5EzXkPs3Zez9rHl6P4ONKL0BUzzLftwdGoV+KpjNsk7gex7PloAjDPmQTz5nvbCuRb9NTVHtVcqn6jbiqd+0rsKQgAOGmxRXvrMuGG6UcbcKO3qMPZoymGKetp7AlP1RaBj+g2z20JMD+1GYdaK8csZFMDNpXpSu71vRc=
+	t=1735872589; cv=none; b=g03QCzWOvRfcjmGfQBu+mjGhXxbUGG377tBYL9mJsM9NkP2Dj4EgBYrXEhvLWaWClYmw0tsM9Dwxeg906W5YjtpusmGEKu2MRPSHq2r1kIFL3tnXmyHtQNjbfd4YYLd/mePzMD1YgLGdP5c+NGx0yGv1PLJObpr8aXP1d26eKck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735871415; c=relaxed/simple;
-	bh=eDa4cTns4ZpsC1KAed9K1B4poYLkM2NfiNQiiwEUVLc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ssPErtgR33GL3HDsxT5HuoAfVF6n53BEZpzRACFJ2cZx9ejOkUHPi4zv3uYP6n2+yi6KeO3WOJhfLugmcABU2/BZYCF4a2cYbZfGh+BrsGdIZQW/5+VKa2BngQ+2sCLJxCQnhj0ChD+2a/Id3ueEMKyX97JhP2t8+1dHWsB8OlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZIFvUl62; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735872589; c=relaxed/simple;
+	bh=Ka1T8Z+8lX/trH3ErYbgl/v6NF3bsDw/cx4eBxax2oU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mWuxjKGlYKSdj2mEQB5nZWUFJNwmbB1pvuXbYhGtbDnwN1+KGbF66F59p1lG7t+vwUExvyBQ4ZUXljmWgYWPe+jk0Wqpai8Z0av6Edocw3JZwsPemkGLdr9kNGijS4iTw8XZWz2vf1s9oQg2YyAu3irh/6+Chgm7WrbpDpbirAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=scbIK8eT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZIFvUl62"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="scbIK8eT"
 Received: by smtp.kernel.org (Postfix)
-	id C714FC4AF09; Fri,  3 Jan 2025 02:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA41C4CED0;
-	Fri,  3 Jan 2025 02:30:14 +0000 (UTC)
+	id AA1E1C4CED1; Fri,  3 Jan 2025 02:49:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FD5C4CED0;
+	Fri,  3 Jan 2025 02:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735871414;
-	bh=eDa4cTns4ZpsC1KAed9K1B4poYLkM2NfiNQiiwEUVLc=;
+	s=k20201202; t=1735872588;
+	bh=Ka1T8Z+8lX/trH3ErYbgl/v6NF3bsDw/cx4eBxax2oU=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ZIFvUl62tl7Md530nM6ZVvTLh4v2vol0cKi3Dvy8XJd8x1DHDZ5S23l0kGKLSDUaB
-	 7YYm40vE3+kORdebg4BzGVzYLFocv/x0yKhRgJ2r1VSqe/56upIEh18221zKsSLqKF
-	 OjG/xTF6zGEoMcqMNZV2fhA8xjNk8hOphO1BJ2oRloNtyR7XQdCS+AveIafC6BvyWt
-	 vts+prq4Uo4pNcCkwVG6d1llRqEJ+jxaZeKvqQZOzf0CBN3Nx1T8w8tH59s4mDGcLk
-	 MUC4ghzjk2njfO+E9Rv05kdMlms4cnsKtGEuwpDu7mZpnEJm3tn9HxirlviIpmW0m4
-	 w0kUTB45sZR6Q==
-From: Dinh Nguyen <dinguyen@kernel.org>
+	b=scbIK8eTminIMtmXYnHqG7NFNMBX5oc7gyzYwhzoq++7XIc5VgtaPjnwXxMQtmeUT
+	 Tl8Pvyv5UmmcEKcLRTi/Dj4UFHwqVgLg5+frHoNTS0mrKZu74rYl4VHxietpZja7sG
+	 9L3oxVMkRRASC3a1HRyqEntF4vEcKqGwwe/12X0H56QZSuVG2W1MLDd/hwW/RYWh22
+	 MJbc9EZ1agBpYjtmhpDD84MV4WUgKJSXNVP1bpPsyoJqsdh3Hr3iauNZTCm0U7ebFr
+	 Nxl7M8sVbwUCapYlrcA7O8P/FGlHZK2vQVH4Cuax6qTCPX9INcjiOA5lxoKMFFe2n1
+	 sOpjIj6VisUlw==
+From: Bjorn Andersson <andersson@kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] ARM: socfpga: updates for v6.14
-Date: Thu,  2 Jan 2025 20:30:12 -0600
-Message-Id: <20250103023012.1268627-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Jie Gan <quic_jiegan@quicinc.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Qiang Yu <quic_qianyu@quicinc.com>
+Subject: [GIT PULL] Qualcomm Arm64 DeviceTree fixes for v6.13
+Date: Thu,  2 Jan 2025 20:49:44 -0600
+Message-ID: <20250103024945.4649-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+
 
 The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
@@ -50,37 +58,41 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_v6.14
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.13
 
-for you to fetch changes up to 91e8b7cff8e9445c56b0e433a51f2fd360a9b070:
+for you to fetch changes up to 8a6442ec3437083348f32a6159b9a67bf66417bc:
 
-  arm64: dts: altera: Remove unused and undocumented "snps,max-mtu" property (2024-12-16 19:02:35 -0600)
-
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.14
-- Remove unused and undocumented property "snps,max-mtu"
-- Add gpio and spi node for Agilex5
-- Add VGIC maintenance interrupt for Agilex
-- Use correct reset name of "stmmaceth-ocp" instead of "ahb"
-- Drop unused #address-cells/#size-cells in the cyclone5-mcvevk
+  arm64: dts: qcom: sa8775p: fix the secure device bootup issue (2024-12-25 22:05:40 -0600)
 
 ----------------------------------------------------------------
-Mamta Shukla (1):
-      arm: dts: socfpga: use reset-name "stmmaceth-ocp" instead of "ahb"
+Qualcomm Arm64 DeviceTree fixes for v6.13
 
-Niravkumar L Rabara (2):
-      arm64: dts: socfpga: agilex: Add VGIC maintenance interrupt
-      arm64: dts: socfpga: agilex5: Add gpio0 node and spi dma handshake id
+Revert the enablement of OTG support on primary and secondary USB Type-C
+controllers of X1 Elite, for now, as this broke support for USB hotplug.
 
-Rob Herring (Arm) (1):
-      arm64: dts: altera: Remove unused and undocumented "snps,max-mtu" property
+Disable the TPDM DCC device on SA8775P, as this is inaccessible per
+current firmware configuration. Also correct the PCIe "addr_space"
+region to enable larger BAR sizes.
 
-Uwe Kleine-König (1):
-      ARM: dts: socfpga_cyclone5_mcvevk: Drop unused #address-cells/#size-cells
+Also fix the address space of PCIe6a found in X1 Elite.
 
- .../boot/dts/intel/socfpga/socfpga_arria10.dtsi    |  6 +++---
- .../dts/intel/socfpga/socfpga_cyclone5_mcvevk.dts  |  2 --
- .../boot/dts/altera/socfpga_stratix10_swvp.dts     |  1 -
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  3 +++
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     | 24 +++++++++++++++++++++-
- 5 files changed, 29 insertions(+), 7 deletions(-)
+----------------------------------------------------------------
+Jie Gan (1):
+      arm64: dts: qcom: sa8775p: fix the secure device bootup issue
+
+Johan Hovold (3):
+      Revert "arm64: dts: qcom: x1e78100-t14s: enable otg on usb-c ports"
+      Revert "arm64: dts: qcom: x1e80100-crd: enable otg on usb ports"
+      Revert "arm64: dts: qcom: x1e80100: enable OTG on USB-C controllers"
+
+Manivannan Sadhasivam (1):
+      arm64: dts: qcom: sa8775p: Fix the size of 'addr_space' regions
+
+Qiang Yu (1):
+      arm64: dts: qcom: x1e80100: Fix up BAR space size for PCIe6a
+
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi                      |  5 +++--
+ arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts |  8 ++++++++
+ arch/arm64/boot/dts/qcom/x1e80100-crd.dts                  | 12 ++++++++++++
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi                     |  8 +-------
+ 4 files changed, 24 insertions(+), 9 deletions(-)
