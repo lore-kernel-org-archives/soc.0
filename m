@@ -1,167 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902E71C1F10
-	for <soc@lists.linux.dev>; Fri,  3 Jan 2025 07:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59DFB1946B9;
+	Fri,  3 Jan 2025 08:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735889175; cv=none; b=LQZEU4hXexdyVq/8R65yLFwmhaHAmLAV2kkvfICjF/QrcPd44aqsdzeUVty5V66A+cr7Ua9VYOHBYSncHd9TQ5NXztdPuS4vmpzb8uFfzjCiexAt+eDzzgcwHoHHOCzrBXrNEs1m7HRl9vPykfYTMcItZ0JA9ugk5hCfS5mKjwY=
+	t=1735893411; cv=none; b=fXPppVJvsXtisl6HrQiPdNFLLmA+Z1iMFh12DE8XpOHMBNr/MAAaAqIohtjxNMAuTKKwDMwn+e712tsR8XLPd3XxMICaJvI3yX/nh2uabGIBBFJyvC51AJ4NCYU7Fo6s+zojMz0oJ1MGGJKagZju9P61E1fME5vc9lVML+G21pI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735889175; c=relaxed/simple;
-	bh=tXCXbV9W8BnfoaSGUk44FzzzU/4A5uG0Yr4sKlH094M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JTlyMLQI27Ka3+h8h/eshjU5f3r91XKKswIaU83Q5uiRKGoEmisrJ+a8MbVfRHWTZXNH8kqCg3WnclogQ24NUk97sF081kslZMWJ10RU1qTAhGjoJFLJgkgNySXb43TKbfcrsuo7eOa2CztZBvAkv1bxLs7bnWdLk+QVAFwX7vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vhpi1QRP; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vhpi1QRP"
-Received: by smtp.kernel.org (Postfix)
-	id 4E665C4CEDC; Fri,  3 Jan 2025 07:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1399DC4CECE;
-	Fri,  3 Jan 2025 07:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735889175;
-	bh=tXCXbV9W8BnfoaSGUk44FzzzU/4A5uG0Yr4sKlH094M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vhpi1QRPRiVIpQ5FPBFxUVEiEsK1UDwF7pWZcrKz3TceJEWqF2kqW3DAMS4dGFjQx
-	 LSuI1CInJMACJ8oRjHxmkPB9CEctQgE3XOWBPnfTdXo9j+XO9g7t1EvXeb6Oq5eeBs
-	 SSeTL5hzlCWQbm5GQxuDeWA4T6mUaqa2uAwW0n7xO+u+IGh87m0oTiNGmMynssKU9U
-	 N5S+V+QnYCHWc8uxxgyntExdp3GVSlmOiblCSeHIVRSxwFNhFcAr2cwQtCIBh3MOan
-	 l4yu9alCPSDN6oMFuc5ukpjaUNG6J6CKFMA9IrQIaS9Vo1Mx7e5xINGITAFXH1F8eu
-	 kdRL9l1ltckIw==
-Message-ID: <c80efae8-7f5c-4f2e-92c0-510511004ad1@kernel.org>
-Date: Fri, 3 Jan 2025 08:26:09 +0100
-Precedence: bulk
-X-Mailing-List: soc@lists.linux.dev
-List-Id: <soc.lists.linux.dev>
-List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
-List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	s=arc-20240116; t=1735893411; c=relaxed/simple;
+	bh=QwIsgMxn/U7WHEbneDjA8/ACMna/57h2AO14RVvcWC0=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ku7m2buEBe8lA3iF7h8sYAC4mpvE2PrBH5kjM+CeWD1RL8ckgWaqQwaTL0tBQM/+LbkjeiitnA4YDCQjhzVEnF8+c3KAseaCFP+v3KUnAzSA02PKwKKMJa4ztTmRYM97XeyaTEkPDwrdZAQSmLlYRSDoRNu7JOERUPaSlZsZ0zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8DxQK+eoXdnCo9dAA--.28749S3;
+	Fri, 03 Jan 2025 16:36:46 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMDxK8WboXdnkUkSAA--.1086S2;
+	Fri, 03 Jan 2025 16:36:45 +0800 (CST)
 Subject: Re: [PATCH V2 RESEND] soc: loongson: add Loongson Security Module
  driver
-To: Zhao Qunqin <zhaoqunqin@loongson.cn>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, soc@lists.linux.dev,
  linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, xry111@xry111.site,
  christophe.jaillet@wanadoo.fr
 References: <20241224072500.15669-1-zhaoqunqin@loongson.cn>
  <f9138082-1d17-4247-b365-7cb4eef88879@kernel.org>
  <22cb222a-a34d-b2ff-88cf-2e9433aed310@loongson.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <22cb222a-a34d-b2ff-88cf-2e9433aed310@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+ <c80efae8-7f5c-4f2e-92c0-510511004ad1@kernel.org>
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Message-ID: <ad63f9ab-90cb-abe7-8099-2666e9a65a56@loongson.cn>
+Date: Fri, 3 Jan 2025 16:35:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+Precedence: bulk
+X-Mailing-List: soc@lists.linux.dev
+List-Id: <soc.lists.linux.dev>
+List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
+List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+In-Reply-To: <c80efae8-7f5c-4f2e-92c0-510511004ad1@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMDxK8WboXdnkUkSAA--.1086S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7GF1kArW3KFyfCFy5KF15Awc_yoW8JrWUpr
+	4xJ3Z2kF4DCr1Skw4DKw4jyF4Yy3s3KFZrXrZ8W34UZF98ta45JF1xXa1jvr9xZr18Jr4I
+	yw43GrZxGa98ZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jU
+	sqXUUUUU=
 
-On 03/01/2025 03:25, Zhao Qunqin wrote:
-> 
-> 在 2024/12/28 下午7:02, Krzysztof Kozlowski 写道:
->> On 24/12/2024 08:25, Qunqin Zhao wrote:
->>> This driver supports Loongson Security Module, which
->>> provides the control for it's hardware encryption
->>> acceleration child devices.
->> Please wrap commit message according to Linux coding style / submission
->> process (neither too early nor over the limit):
->> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-> OK
->>> Only ACPI firmware is supported.
+
+在 2025/1/3 下午3:26, Krzysztof Kozlowski 写道:
+> On 03/01/2025 03:25, Zhao Qunqin wrote:
+>> 在 2024/12/28 下午7:02, Krzysztof Kozlowski 写道:
+>>>> Only ACPI firmware is supported.
+>>>>
+>>>> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+>>> I don't get why you are sending this to soc. This is loongson specific
+>>> and is supposed to go via Loongson maintainers.
 >>>
->>> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
->> I don't get why you are sending this to soc. This is loongson specific
->> and is supposed to go via Loongson maintainers.
+>>> And why is this a resend?
+>> There are no platform-specific maintainers, So I initially sent the
+>> patch to Arnd,
+> What do you mean by "no platform-specific maintainers"? This
+> architecture and this platform is abandoned?
+
+Sorry for my poor english. This architecture and this  platform is not 
+ababdoned.
+
+What I mean is that there are no Loongson staff to maintain 
+drivers/soc/loongson.
+
+The current maintainer  for drivers/soc/loongson is Arnd.
+
+
+Thanks for your response.
+
+> Then we should either drop it from the kernel or make it orphaned.
+>
+>
+>> but didn't receive a response from Arnold, so I resent the patch and added
 >>
->> And why is this a resend?
-> 
-> There are no platform-specific maintainers, So I initially sent the 
-> patch to Arnd,
+>> soc@kernel.org to the mailing list.
+> You shouldn't. This is patch for your maintainers to take. If you do not
+> have them: either fix that or abandon/orphan the platform.
+>
+>
+> Best regards,
+> Krzysztof
 
-What do you mean by "no platform-specific maintainers"? This
-architecture and this platform is abandoned?
-
-Then we should either drop it from the kernel or make it orphaned.
-
-
-> 
-> but didn't receive a response from Arnold, so I resent the patch and added
-> 
-> soc@kernel.org to the mailing list.
-
-You shouldn't. This is patch for your maintainers to take. If you do not
-have them: either fix that or abandon/orphan the platform.
-
-
-> 
->>> ---
->>> Changes in v2:
->>> 	- Removed useless memset() in probe.
->>> 	- Cleaned up coding style.
->>> 	- Corrected the spelling.
->>>
->>>   MAINTAINERS                        |   7 +
->>>   drivers/soc/loongson/Kconfig       |   9 +
->>>   drivers/soc/loongson/Makefile      |   1 +
->>>   drivers/soc/loongson/loongson_se.c | 523 +++++++++++++++++++++++++++++
->>>   include/soc/loongson/se.h          | 135 ++++++++
->>
->> include/linux/soc/... or just keep it private to the driver. Why this
->> has to be exposed to other users?
-> 
-> Looks like  include/linux/soc... is more suitable than include/soc/...
-> 
-> This driver is the base of other users,  one user will be added in next 
-> revision.
-
-No. Keep it private to the driver.
-
-Soc driver is usually not a "base for other users".
-
-> 
-> And may I ask which one do you think is more suitable to place this 
-> basic driver under SOC or MFD ?
-
-I was talking about the header.
-
-Best regards,
-Krzysztof
