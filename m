@@ -1,123 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405F8179BF
-	for <soc@lists.linux.dev>; Thu,  2 Jan 2025 17:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864DA2E401;
+	Fri,  3 Jan 2025 02:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735837627; cv=none; b=WKTIR4sN984GQgW3/H4pkTbgJ5pZUTdA7e59R3UlmwubfXrFrw7wSl95Yn4AczwH3hI6IUx7Wi02z2dMYGWrd6PfZ8K+3MpxiNZ0L/rG4uK4HHxXGUmo8nAUC1Pl67TttuPDNKx+3IqBCMyoLugQoNgL4EdJ5uHKPqcXn5KprKE=
+	t=1735871213; cv=none; b=cleNNJ4t+60NLguRmOsQxo7K1IYEGi4Gf7KmS7LNMPVNU7A4KoxzHCmUQ+sDRqIFfF4giDwen3X3hWjArj50vCwYo4FiJTLJpGF1dMAvl3LuodTBI+JtF/0veCs8OJRIbSPnvrJqkkq/EYeSpzXwze80Vp/jTAXUqpROtW0jWT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735837627; c=relaxed/simple;
-	bh=A/jKLLQ2J6Fyflbdq5Kq++6Lt6AAyiFrnl5swhh3tK8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sgSRUWyxhcuGRFE4+SHgAZJjB1YhQxt2s/Vxdhk4vdvhl9Jn9jOQnWzL3LOhDB6B+3xA778fORLJ0k7/fytYNBsSwFNFym0xB1BKGKMWCRR+u7O9vuw8jyZE79hxqQJPLwYBk0wtokHVdya9KE4FrdQWtV8VzH2PaU0Q61TsGrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FTM+LxJN; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTM+LxJN"
-Received: by smtp.kernel.org (Postfix)
-	id D47AAC4CED1; Thu,  2 Jan 2025 17:07:06 +0000 (UTC)
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C8D15C4CED0
-	for <soc@kernel.org>; Thu,  2 Jan 2025 17:07:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8D15C4CED0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6d884e8341bso83921686d6.0
-        for <soc@kernel.org>; Thu, 02 Jan 2025 09:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735837624; x=1736442424; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uF6C3Uxwx3s0wLTIUnGZktBanFJ1okTxJHcx44bIDLQ=;
-        b=FTM+LxJNfyP5KhX+cuBmAgUHkm7ciMQvVPIyyS58cY+gIA4u6HLhzsMSBoHc7Vi+YG
-         L2/vEVGdGhulJClPlLcSUOQr17g42VdXD9QhBsGw6YJ9WCSlp8aEyHzZh55vFztaAE9u
-         xUY77HJeCPxm91B6FUhe31QyMsFX1zzuRTj+lCTUH7w5tB3DymkIkFm9PGKUAQyrhsq4
-         GKiKrZqPF+XJc9+nu6dctfZ4SNgvhXh2ejFu6FH5Bb1TpuoZOS/izUncTktXO6+e7Z9m
-         f57qdSebtOKj0Rqc4+Z3+Gdg21eUA7bWbHjwhxkEMCYecNJbKL8eaZh1BeUHUzKXvusx
-         hWyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735837624; x=1736442424;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uF6C3Uxwx3s0wLTIUnGZktBanFJ1okTxJHcx44bIDLQ=;
-        b=r6S38E7OybQ0J9bd2X7+Lk08A/iBgPR1KHnY856QGmajOWze34gZaHUvlewB8g+Y/t
-         zIpvYV+tcMsezj1vkI9rOJTEAD5lLPdn9S1znVoZJiEx7rBLMEZj0peeorFCfCHSNl4r
-         3AVGl5mvjzOuWZeW8QIFrNaoBme9elIBxCenUlzUkTjuvfJkMdkBOK9nEqOmgOkfts2I
-         MQd/Oezt/tT8hm4GWCESA+h22oWl7zOUYRF5JplOmEnQUvmFCinFHDqyP6jHo2NZ/8NV
-         lUXjKnl9KPIQvo5MbhyvTWJtAXZpJVWnzUk7d3RS+SLvSplUaDkZg2EM+vIvCRK58tqn
-         PSng==
-X-Gm-Message-State: AOJu0YzIUnfPmAschcF9enz9IhJmOq4JqWwsTvloiDkULQgvq8uiDGjN
-	J/CwK7yIJbBILonaOry9hpLW9lBYq1eTXkFI+glPfbELgbPBvZi7h2v5JQ==
-X-Gm-Gg: ASbGnct12tgT8cBHdiwG36S8p+lii7IpbaQhq7uu6JtKaTZpdQF9THDm/YYfeDxT8t0
-	8G32GoIFVVnQcQ9SHNFNlXFxj6Vi2lw2z0GSb7iWrlukPenT1sNp8u2R5gDw5QkLe52rChzEEK5
-	MbpuTMXCWxZXKBvEP6J9tG2djHkhIKeU1f1xcQ2BkXhASI1iendERjInLWVZyyPgB7Xvgo9aoLE
-	IT1Om/blFFJjZx4fo+bQHmdP6oUbujp3Fw7H9YokR/LV5TB75kK0IL1o+U5mq8su5zJngkYdiX1
-	gNnovfiRv9eJN5Xn
-X-Google-Smtp-Source: AGHT+IEJSuglITp0TPYcJ05b3F0ySAnbLppzMQkCThxZJaMOx8J10QlRMrOS4nL80BA1aP3OKMPx6A==
-X-Received: by 2002:a05:6214:29c2:b0:6d8:a258:68bb with SMTP id 6a1803df08f44-6dd23309affmr756811806d6.6.1735837624265;
-        Thu, 02 Jan 2025 09:07:04 -0800 (PST)
-Received: from glsmbp.wifi.local.cmu.edu (cmu-device2.nat.cmu.net. [128.2.149.252])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dd1810e067sm132891486d6.45.2025.01.02.09.07.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 09:07:03 -0800 (PST)
-Date: Thu, 2 Jan 2025 12:06:57 -0500
-From: "Gabriel L. Somlo" <gsomlo@gmail.com>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
-	Karol Gugala <kgugala@antmicro.com>,
-	Mateusz Holenko <mholenko@antmicro.com>,
-	Joel Stanley <joel@jms.id.au>, Andrew Davis <afd@ti.com>
-Subject: [GIT PULL] litex changes for 2025-01-01
-Message-ID: <Z3bHsU4mJYM0xheO@glsmbp.wifi.local.cmu.edu>
+	s=arc-20240116; t=1735871213; c=relaxed/simple;
+	bh=YBbTTdEA3PpkpouTjoNS6ru/EpuCY6k40UOdzdPEnzc=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=YPfCVo//ZgHaMYoa9dagPIXItufeGsZ9OtJ+4BRAd+v5hb2ELMcYxVXwj+jwrrSHGXXrXlods53RnvFWyHHQUDfN7W0bCu8pRIhPgRQ4KxgX9w0ZnVvY68G6gyJT57/ESG0gYBe2ZeJmcUkRVJ794UDJD9vNWqxuPn8fQNAqqHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8CxC+LnSndndXFdAA--.52390S3;
+	Fri, 03 Jan 2025 10:26:47 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMBxnsfiSndnNQQSAA--.9934S2;
+	Fri, 03 Jan 2025 10:26:44 +0800 (CST)
+Subject: Re: [PATCH V2 RESEND] soc: loongson: add Loongson Security Module
+ driver
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, soc@lists.linux.dev,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, xry111@xry111.site,
+ christophe.jaillet@wanadoo.fr
+References: <20241224072500.15669-1-zhaoqunqin@loongson.cn>
+ <f9138082-1d17-4247-b365-7cb4eef88879@kernel.org>
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Message-ID: <22cb222a-a34d-b2ff-88cf-2e9433aed310@loongson.cn>
+Date: Fri, 3 Jan 2025 10:25:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Clacks-Overhead: GNU Terry Pratchett
+In-Reply-To: <f9138082-1d17-4247-b365-7cb4eef88879@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMBxnsfiSndnNQQSAA--.9934S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Kw1rAr47Zr17CFWxCry5WrX_yoW8Ar1rpF
+	4DtasayFZ8Gr1Skws3tw1IyFyrAayFkr47WFWagr1DZr98Za47XF1fCF45AFsrZryrGFyI
+	vFW3G3yqkFs8ZrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8xuctUU
+	UUU==
 
-Hi Arnd,
 
-Thanks for applying LiteX specific patches through `soc` in the past!
-There's one patch from 2024 that seems to have fallen through the
-cracks, and part of my 2025 new year's resolution is to figure out
-how to properly act as LiteX maintainer and send proper pull requests
-up the chain, so please excuse any mistakes in the PR below :)
+在 2024/12/28 下午7:02, Krzysztof Kozlowski 写道:
+> On 24/12/2024 08:25, Qunqin Zhao wrote:
+>> This driver supports Loongson Security Module, which
+>> provides the control for it's hardware encryption
+>> acceleration child devices.
+> Please wrap commit message according to Linux coding style / submission
+> process (neither too early nor over the limit):
+> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+OK
+>> Only ACPI firmware is supported.
+>>
+>> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+> I don't get why you are sending this to soc. This is loongson specific
+> and is supposed to go via Loongson maintainers.
+>
+> And why is this a resend?
 
-Happy New Year,
-Gabriel
+There are no platform-specific maintainers, So I initially sent the 
+patch to Arnd,
 
-The following changes since commit 56e6a3499e14716b9a28a307bb6d18c10e95301e:
+but didn't receive a response from Arnold, so I resent the patch and added
 
-  Merge tag 'trace-v6.13-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace (2025-01-01 11:22:07 -0800)
+soc@kernel.org to the mailing list.
 
-are available in the Git repository at:
+>> ---
+>> Changes in v2:
+>> 	- Removed useless memset() in probe.
+>> 	- Cleaned up coding style.
+>> 	- Corrected the spelling.
+>>
+>>   MAINTAINERS                        |   7 +
+>>   drivers/soc/loongson/Kconfig       |   9 +
+>>   drivers/soc/loongson/Makefile      |   1 +
+>>   drivers/soc/loongson/loongson_se.c | 523 +++++++++++++++++++++++++++++
+>>   include/soc/loongson/se.h          | 135 ++++++++
+>
+> include/linux/soc/... or just keep it private to the driver. Why this
+> has to be exposed to other users?
 
-  https://github.com/litex-hub/linux.git tags/litex-2025-01-01
+Looks like  include/linux/soc... is more suitable than include/soc/...
 
-for you to fetch changes up to 277380570a00b7f40703598a89f2f7e60b1966e2:
+This driver is the base of other users,  one user will be added in next 
+revision.
 
-  drivers/soc/litex: Use devm_register_restart_handler() (2025-01-02 11:23:25 -0500)
+And may I ask which one do you think is more suitable to place this 
+basic driver under SOC or MFD ?
 
-----------------------------------------------------------------
-litex patch(es) left over from 2024
 
-This is the one remaining for-upstream LiteX update from 2024 that
-has been reviewed and successfully tested against the latest Linus
-tree:
-	- drivers/soc/litex: Use devm_register_restart_handler()
+Thanks.
 
-Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> Best regards,
+> Krzysztof
 
-----------------------------------------------------------------
-Andrew Davis (1):
-      drivers/soc/litex: Use devm_register_restart_handler()
-
- drivers/soc/litex/litex_soc_ctrl.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
