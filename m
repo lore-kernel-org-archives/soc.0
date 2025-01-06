@@ -1,72 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E5F86327
-	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 14:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6711DE3C3
+	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 14:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736173395; cv=none; b=d0/AuyfDTE2XAtqezZuzYZ1XZvNO6NStj0oMl5cqtKusCV0RlOyuvbowAsznUodLnCwoa8q228ddAIuOfYqQ9DdeV43MyzYChDLXR25XEz+ySAuplfOKcu1QJpnQ8GnwkLT3xBBnh3mAQ9ex8vwsGwi6wp/mtSAATz6adF16QUM=
+	t=1736173511; cv=none; b=D40kG+kHMzXIkoxTkPJZkfP5uJCyUGbHz8rqarM8c1y2NO+TKdU96upGD3MU8SgViBnWWsK304Y/IjtreMq5mzoKrnO2R+mIruIuhKEAUjsWM7YixvOwDmKWno9u2D5yXsVkO1hvJXn9BN/VIL8uQOMs64IiR6ZGEso3HDfeCuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736173395; c=relaxed/simple;
-	bh=u5XPkTOpWqBQzHRn3Y5dQ7bV6cYbkigV4SQt/QljSOM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Ytov1VpuwMHVDIhMS8EpGScQ7vsnK4Yhq8LSqbfpsZCx0Zl2KV2lR40FDiMz/6PdNGPA/AQbbY+SXL4/Lu6/S1QzakLLACEJNa9fK5CnlabC+BMRaGTChA5ql5Z/ME151Hay+0Zu5EpBibyXVOiU//D4uoP6RGXLDTuqMvmI21Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xCnIrVbh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736173511; c=relaxed/simple;
+	bh=7J8MR3Rw76nWad7FZEfnxXrrY3M52LGLpYdfdKBjwsk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=DNIYJ6zivLcZenAjZNXmscr0pdX9DrBtDEYO5UafuPOnb3RZHaBDFOtOMNcMlRSQOY7ze7e8kZsoUzVs0Z3krzWHjN5a7HMNnDx/4apqYDLd5B+zx9QGZAhM0OND+8Wd/H0nWE/JdMbW+ZqHP8sZ+xg8PZYFUHWOgjsCsOCoDko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z326ND2g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xCnIrVbh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z326ND2g"
 Received: by smtp.kernel.org (Postfix)
-	id EE1B7C4CEE2; Mon,  6 Jan 2025 14:23:14 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	id B683DC4CEE5; Mon,  6 Jan 2025 14:25:10 +0000 (UTC)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D1571C4CEEC
-	for <soc@kernel.org>; Mon,  6 Jan 2025 14:23:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1571C4CEEC
+	by smtp.kernel.org (Postfix) with ESMTPS id A545FC4CEE1
+	for <soc@kernel.org>; Mon,  6 Jan 2025 14:25:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A545FC4CEE1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43623f0c574so99168825e9.2
-        for <soc@kernel.org>; Mon, 06 Jan 2025 06:23:13 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso95931315e9.3
+        for <soc@kernel.org>; Mon, 06 Jan 2025 06:25:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736173392; x=1736778192; darn=kernel.org;
+        d=linaro.org; s=google; t=1736173508; x=1736778308; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=v+ISvG17XlCRUc2+RRHh59wTwYCWMY/Hqwqq505SSb0=;
-        b=xCnIrVbhfATAdekw9q8X2Jl8xLEk/a2bv3hjL3uI2ZO3TxvK94H7YqOYtG1oYunRQa
-         CyjXGJk73ySGNsbrc1d1e4cBT3EyBV6w6Mx0hd3+uILSkuuNkKygCFEniXgfkqgVrabY
-         Kz5aQg/bUrIBPGrJP8PsCZPoFb33pki9Kt5DxP+hGO/M96ORq+rW0f6mCCE6fabH39vC
-         O6OHtZ+PCL9w1S/e9sg/OhZEU77f4ZjSzbeyvdaZM8k+8bvVGuGVmpXvLZouo9CqqS7Z
-         EZ3emc8ENCsFN9oa4wY2uAb7tWISPAhCvvLmm/KIJEIzlqEGGX9/n5f4dgiW/jdXg9h0
-         kCAg==
+        bh=7TIciRlELDCLEEoclqE+Kfoj3mhZ/N1C2qRWtIuv9OY=;
+        b=z326ND2g0CI7urG0d5eYgKsWkECe0qPsS6JZYDcC765yEqKkV33ICqTDOkXXi3PHSA
+         yH7yxSI5Q9asrQMijxWprrzlawoGQLep+wRknZ42rnLyrPQMfbGj58ES+74l+PjIqy2c
+         2u1d4AKgfUHpIr4k6D/Als3hu/oIUpMYCd9tIqRexZcyHsi0HwQDFDRZiSSPzcVxnqJ1
+         neKqEMZ79FkRYor6ZEeUujrgJCq4NAbMDej5lKL6V8ZzpneUythUQCV06o5w9u3KeUBE
+         GyHL+4LetHqSGq6BSQ3FgMBqvE5FIR+0mEz+WlaRSiwFx/Zk+QIf5m0bEavezlrpVIzL
+         PHrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736173392; x=1736778192;
+        d=1e100.net; s=20230601; t=1736173508; x=1736778308;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v+ISvG17XlCRUc2+RRHh59wTwYCWMY/Hqwqq505SSb0=;
-        b=W8DIevBP5wBM+tKKx6AYH6BAJ8CYvaiMT/wbQyRgyD/8fwGLWpcCmtURoZUhkVznO+
-         +Zr82LZHn8+yTGaMLEL8tSVYYLdz+CA4FzOmVJOTQQD+mPehE2ypLgaf0Lckr0dV9DYP
-         F+guqY4FKxYEnJ734vyLZUTIkO5ayXFKJRSzmojeNQlg5M0UE6Zhfizbsp01ciUAm9a7
-         MhHZPKj/TeZfD8G023p+VZ62JcO+jks99+dvSabz30pqGbKgLvqQ/kkij1Qcs4Z1IIGe
-         s5g3DOOZfn0rRYvmCNorlR9yFuCwpR+mrqe1oQbuw2r08lrpDIV8EEs4BFvGoBpqumDm
-         w5iQ==
-X-Gm-Message-State: AOJu0YxXyDsp4Z4nwoP0QgNfduYgiTf0ELVxciLldOVIUrq0YscH7Ta+
-	KSWaQyg2ElnAF5ADl8gllo6l3kIFXgVmb5je/Ntxh/oNw0p3+78tHSwFfINhFDjk7sG9hIg6E5Q
-	t
-X-Gm-Gg: ASbGncumvL2TTV5IOnrUfW5Y2ED9ZghWsZxeDwoTC8wmVYOCI0zfGoQUBdiXnRFUikJ
-	ekiLKMLV4A5vSEH+vkyJDOcFgqocu1HlOh9tsygoWKvgMMzyxAnJr80+0+yvZOyTZXk55sQNnuD
-	hHuaFOEqoZaE86nu5LfVpzNhIOURJ/gkF3olgPew8gQ9UbW7247hCmXqA4fa/2XZXfro01RVHwq
-	dZo0enGxmK3L4p2ah6vidai3xWXXhzI+jXqkgLrVWPRbosrugvpQx8XJBWyN1T63VS86tvojMlr
-	YEbMAbokdCIsWvguDvbtCZWdKF4m
-X-Google-Smtp-Source: AGHT+IFbQVoTEVhEDDdBwsowpTrnhU+0JKPMJ0XbhCvp1qdAqGclVtuhezzIVxR/+KsmGKTLOCnaDw==
-X-Received: by 2002:a05:600c:350b:b0:434:f131:1e6d with SMTP id 5b1f17b1804b1-43668643203mr623670995e9.10.1736173392034;
-        Mon, 06 Jan 2025 06:23:12 -0800 (PST)
+        bh=7TIciRlELDCLEEoclqE+Kfoj3mhZ/N1C2qRWtIuv9OY=;
+        b=JiEW7HjxV3NsHcn03uJ1K3ZRFkMVWdLHL+vKcoeLNOQTkpPyMWbsswDDrdohXxYPLw
+         9Qnch2EGxoHx3lpK0yPpYTIhBJIVrDG+exnMFLzJ7QF/NXE8aciG5TzsMFRnqy3Ez4Dn
+         4sFYYSe1PbmCZxlGn90KWiuteQ/pJHxaOW7OrYT5rF40bkfQhCJN+Zt27V/6rH3fj2rU
+         UPVoSb9eExbFoA56e/Kz1jUTcTT0SX+g7qBw5Gw+DnCg9R76m+AFID1Sg9AQJYmBxONF
+         4jchncAShsx51n9ftIHSN5Zfh7d3vjlPhoSa/Aqb5Ji2e/6XoBNeePKpZHrvDrsMypbA
+         39rw==
+X-Gm-Message-State: AOJu0Yz5+90hLpUfz5FDYxjik8bi7kvvH6kJVSoJV3MProzU9wHSK+u2
+	/BAt9mewt++4K7C3HscsNe2zYNvyN4dbQFLMThjqSdlgrVSg/HuPBY2JfvFBbsZ74TMHIbV5h0y
+	G
+X-Gm-Gg: ASbGncvBEqlOgWBZUYK7yYkqyHVzuEaUmFpOvG2R4s8GmQExrfGRKYqAaQ8K4OkNSFv
+	nqJUzWLB83rhqU/A7xDtCyb5seqDQp2s0beLWTcahoPc/TfynSNuI+rYa09YvuCbfB1XqaAC6I8
+	kKY5PS97luPe1wVYReGiNcq1KC1/jiMuhJosNp4xzM9NcqjeqVfb2jFLC49eMPEDG4YmyREAtHW
+	6zosEMY2mYrvuHnsCUN0BKFwocl5/9TH7VHps2oUHVGTVdtaISyZ7Ed3gRYTAuIXn4cXztPlAVr
+	OPIQ8Ec8y+vl0oyPmoR3gZ8dvFI7
+X-Google-Smtp-Source: AGHT+IFDv6yPrrMdiLufyHJiRsCS+tNLTAQN7y7Zs6wjnXNJFvDTqtBqNWJ/t9oqV6eZf1xaBL1XqA==
+X-Received: by 2002:a05:600c:1912:b0:434:a968:89a3 with SMTP id 5b1f17b1804b1-436686436f9mr515572745e9.9.1736173508239;
+        Mon, 06 Jan 2025 06:25:08 -0800 (PST)
 Received: from ?IPV6:2a01:e0a:982:cbb0:95:e905:1421:811c? ([2a01:e0a:982:cbb0:95:e905:1421:811c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43661289d3dsm575723455e9.41.2025.01.06.06.23.11
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366127c639sm564181945e9.31.2025.01.06.06.25.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 06:23:11 -0800 (PST)
-Message-ID: <72d71d3f-99c3-4767-8c80-8fa7a865c846@linaro.org>
-Date: Mon, 6 Jan 2025 15:23:10 +0100
+        Mon, 06 Jan 2025 06:25:07 -0800 (PST)
+Message-ID: <d22513cc-c326-443c-982b-78adf755d3dc@linaro.org>
+Date: Mon, 6 Jan 2025 15:25:07 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v6.14
+Subject: [GIT PULL] Amlogic drivers updates for v6.14
 Reply-To: neil.armstrong@linaro.org
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -110,10 +110,9 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a single change for Amlogic ARM64 DT, removing the broadcom wifi
-compatible from the SDIO subnode because the Amlogic GX reference
-board can be shipped with different brands of pin compatible SDIO
-chips.
+Here's the final DT bindings change that will give 100% success in Amlogic
+ARM64 & ARM64 DT Bindings checks, with the mmc-slot bindings change routed
+via the MMC tree.
 
 Thanks,
 Neil
@@ -124,24 +123,20 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.14
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.14
 
-for you to fetch changes up to 1ba1964a7f83daae7fdeaf2de584a7ba758c4491:
+for you to fetch changes up to 960a4140ade8f6ba44e78dc40b80bbf272027805:
 
-   arm64: dts: meson: remove broadcom wifi compatible from GX reference boards (2024-12-13 10:36:02 +0100)
-
-----------------------------------------------------------------
-Amlogic ARM64 DT changes for v6.13:
-- remove broadcom wifi compatible from GX reference boards
+   dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: Document the System Control registers found on early Meson SoC (2024-12-11 09:49:49 +0100)
 
 ----------------------------------------------------------------
-Christian Hewitt (1):
-       arm64: dts: meson: remove broadcom wifi compatible from GX reference boards
+Amlogic drivers changes for v6.14:
+- Document the System Control registers found on early Meson SoC
 
-  arch/arm64/boot/dts/amlogic/meson-gxbb-p20x.dtsi      | 3 +--
-  arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dts  | 3 +--
-  arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dts  | 3 +--
-  arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi | 3 +--
-  arch/arm64/boot/dts/amlogic/meson-gxm-q200.dts        | 3 +--
-  arch/arm64/boot/dts/amlogic/meson-gxm-q201.dts        | 3 +--
-  6 files changed, 6 insertions(+), 12 deletions(-)
+----------------------------------------------------------------
+Neil Armstrong (1):
+       dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: Document the System Control registers found on early Meson SoC
+
+  .../bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml | 14 ++++++++++++++
+  1 file changed, 14 insertions(+)
+
