@@ -1,142 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6711DE3C3
-	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 14:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF951DFD9B
+	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 16:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736173511; cv=none; b=D40kG+kHMzXIkoxTkPJZkfP5uJCyUGbHz8rqarM8c1y2NO+TKdU96upGD3MU8SgViBnWWsK304Y/IjtreMq5mzoKrnO2R+mIruIuhKEAUjsWM7YixvOwDmKWno9u2D5yXsVkO1hvJXn9BN/VIL8uQOMs64IiR6ZGEso3HDfeCuU=
+	t=1736181730; cv=none; b=T/WtpSHcI5vmiazWUoDyD+Wmd1yCwnEJUfFsGvmwIYKRBJPYOyCZikJYPaFV9cTO1z+3EEwFwM3fJkDBcFOchqR4+tTTzSQo5tWnW8vxGBd372VL1tWlL5rs42wtT0jcmENxnKpu8hzRWEkArfDO23STzjO2SrHXiaF3R0H5LLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736173511; c=relaxed/simple;
-	bh=7J8MR3Rw76nWad7FZEfnxXrrY3M52LGLpYdfdKBjwsk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=DNIYJ6zivLcZenAjZNXmscr0pdX9DrBtDEYO5UafuPOnb3RZHaBDFOtOMNcMlRSQOY7ze7e8kZsoUzVs0Z3krzWHjN5a7HMNnDx/4apqYDLd5B+zx9QGZAhM0OND+8Wd/H0nWE/JdMbW+ZqHP8sZ+xg8PZYFUHWOgjsCsOCoDko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z326ND2g; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z326ND2g"
+	s=arc-20240116; t=1736181730; c=relaxed/simple;
+	bh=Sb9bnWNlRYAXxzo56P48HJw0zLmj+ov1VyzsNp3iw5c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fmlRuOzbgMApTr0zBVpPCyvYi3dBTyqBVjg6zWUUFFDSwX1Wr/OLbchDnkVFhPaG9pb23yYEhntIsWV89mMeqkx85O0kSlbq5R/FJL1DSYXKeYTvJ4uFHcmSa3uzltNT7g/WNB9ZxTlNqBfvoY/iYna2eOY5jVb+czOYq/Ya1/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id B683DC4CEE5; Mon,  6 Jan 2025 14:25:10 +0000 (UTC)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 14913C4CED6; Mon,  6 Jan 2025 16:42:10 +0000 (UTC)
+Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A545FC4CEE1
-	for <soc@kernel.org>; Mon,  6 Jan 2025 14:25:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A545FC4CEE1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso95931315e9.3
-        for <soc@kernel.org>; Mon, 06 Jan 2025 06:25:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736173508; x=1736778308; darn=kernel.org;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7TIciRlELDCLEEoclqE+Kfoj3mhZ/N1C2qRWtIuv9OY=;
-        b=z326ND2g0CI7urG0d5eYgKsWkECe0qPsS6JZYDcC765yEqKkV33ICqTDOkXXi3PHSA
-         yH7yxSI5Q9asrQMijxWprrzlawoGQLep+wRknZ42rnLyrPQMfbGj58ES+74l+PjIqy2c
-         2u1d4AKgfUHpIr4k6D/Als3hu/oIUpMYCd9tIqRexZcyHsi0HwQDFDRZiSSPzcVxnqJ1
-         neKqEMZ79FkRYor6ZEeUujrgJCq4NAbMDej5lKL6V8ZzpneUythUQCV06o5w9u3KeUBE
-         GyHL+4LetHqSGq6BSQ3FgMBqvE5FIR+0mEz+WlaRSiwFx/Zk+QIf5m0bEavezlrpVIzL
-         PHrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736173508; x=1736778308;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TIciRlELDCLEEoclqE+Kfoj3mhZ/N1C2qRWtIuv9OY=;
-        b=JiEW7HjxV3NsHcn03uJ1K3ZRFkMVWdLHL+vKcoeLNOQTkpPyMWbsswDDrdohXxYPLw
-         9Qnch2EGxoHx3lpK0yPpYTIhBJIVrDG+exnMFLzJ7QF/NXE8aciG5TzsMFRnqy3Ez4Dn
-         4sFYYSe1PbmCZxlGn90KWiuteQ/pJHxaOW7OrYT5rF40bkfQhCJN+Zt27V/6rH3fj2rU
-         UPVoSb9eExbFoA56e/Kz1jUTcTT0SX+g7qBw5Gw+DnCg9R76m+AFID1Sg9AQJYmBxONF
-         4jchncAShsx51n9ftIHSN5Zfh7d3vjlPhoSa/Aqb5Ji2e/6XoBNeePKpZHrvDrsMypbA
-         39rw==
-X-Gm-Message-State: AOJu0Yz5+90hLpUfz5FDYxjik8bi7kvvH6kJVSoJV3MProzU9wHSK+u2
-	/BAt9mewt++4K7C3HscsNe2zYNvyN4dbQFLMThjqSdlgrVSg/HuPBY2JfvFBbsZ74TMHIbV5h0y
-	G
-X-Gm-Gg: ASbGncvBEqlOgWBZUYK7yYkqyHVzuEaUmFpOvG2R4s8GmQExrfGRKYqAaQ8K4OkNSFv
-	nqJUzWLB83rhqU/A7xDtCyb5seqDQp2s0beLWTcahoPc/TfynSNuI+rYa09YvuCbfB1XqaAC6I8
-	kKY5PS97luPe1wVYReGiNcq1KC1/jiMuhJosNp4xzM9NcqjeqVfb2jFLC49eMPEDG4YmyREAtHW
-	6zosEMY2mYrvuHnsCUN0BKFwocl5/9TH7VHps2oUHVGTVdtaISyZ7Ed3gRYTAuIXn4cXztPlAVr
-	OPIQ8Ec8y+vl0oyPmoR3gZ8dvFI7
-X-Google-Smtp-Source: AGHT+IFDv6yPrrMdiLufyHJiRsCS+tNLTAQN7y7Zs6wjnXNJFvDTqtBqNWJ/t9oqV6eZf1xaBL1XqA==
-X-Received: by 2002:a05:600c:1912:b0:434:a968:89a3 with SMTP id 5b1f17b1804b1-436686436f9mr515572745e9.9.1736173508239;
-        Mon, 06 Jan 2025 06:25:08 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:95:e905:1421:811c? ([2a01:e0a:982:cbb0:95:e905:1421:811c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366127c639sm564181945e9.31.2025.01.06.06.25.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 06:25:07 -0800 (PST)
-Message-ID: <d22513cc-c326-443c-982b-78adf755d3dc@linaro.org>
-Date: Mon, 6 Jan 2025 15:25:07 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id ADA11C4CED2
+	for <soc@kernel.org>; Mon,  6 Jan 2025 16:42:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ADA11C4CED2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4YRg253lZ5z4x2Xr
+	for <soc@kernel.org>; Mon, 06 Jan 2025 17:42:05 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:39d4:dc4e:b4ce:1377])
+	by laurent.telenet-ops.be with cmsmtp
+	id xshx2D00L3AZZFy01shxk2; Mon, 06 Jan 2025 17:41:57 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tUqAs-00000008NTv-3A5o;
+	Mon, 06 Jan 2025 17:41:57 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tUqAv-00000004YZR-0Irs;
+	Mon, 06 Jan 2025 17:41:57 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DTS updates for v6.14 (take two)
+Date: Mon,  6 Jan 2025 17:41:53 +0100
+Message-ID: <cover.1736180859.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] Amlogic drivers updates for v6.14
-Reply-To: neil.armstrong@linaro.org
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+	Hi SoC folks,
 
-Here's the final DT bindings change that will give 100% success in Amlogic
-ARM64 & ARM64 DT Bindings checks, with the mmc-slot bindings change routed
-via the MMC tree.
+This is my second pull request for the inclusion of Renesas SoC updates
+for v6.14.
 
-Thanks,
-Neil
+The following changes since commit acb247afab5bc2b4462f4dfc17a9d930e1153e52:
 
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-
-   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+  arm64: dts: renesas: r9a09g047: Add I2C nodes (2024-12-17 09:42:52 +0100)
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.14
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.14-tag2
 
-for you to fetch changes up to 960a4140ade8f6ba44e78dc40b80bbf272027805:
+for you to fetch changes up to c357e2295b7880b1d9d365c3389f06ef2eb464d0:
 
-   dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: Document the System Control registers found on early Meson SoC (2024-12-11 09:49:49 +0100)
-
-----------------------------------------------------------------
-Amlogic drivers changes for v6.14:
-- Document the System Control registers found on early Meson SoC
+  arm64: dts: renesas: white-hawk-csi-dsi: Define CSI-2 data line orders (2025-01-06 16:26:29 +0100)
 
 ----------------------------------------------------------------
-Neil Armstrong (1):
-       dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: Document the System Control registers found on early Meson SoC
+Renesas DTS updates for v6.14 (take two)
 
-  .../bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml | 14 ++++++++++++++
-  1 file changed, 14 insertions(+)
+  - Add pin control support for the RZ/G3E SoC and the RZ/G3E SMARC
+    Carrier-II EVK development board,
+  - Add Image Signal Processor helper block (FCPVX and VSPX) support for
+    the R-Car V4H SoC,
+  - Describe odd C-PHY wiring on the White Hawk CSI/DSI sub-board,
+  - Miscellaneous fixes and improvements.
 
+Note that this includes Pin Control DT binding and bindings definitions
+for the RZ/G3E and RZ/V2H SoCs, which are shared by DT source files and
+the pin control driver.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Biju Das (5):
+      dt-bindings: pinctrl: renesas: Add alpha-numerical port support for RZ/V2H
+      dt-bindings: pinctrl: renesas: Document RZ/G3E SoC
+      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Replace RZG2L macros
+      arm64: dts: renesas: r9a09g047: Add pincontrol node
+      arm64: dts: renesas: r9a09g047e57-smarc: Add SCIF pincontrol
+
+Geert Uytterhoeven (2):
+      Merge tag 'renesas-r9a09g057-dt-binding-defs-tag2' into renesas-dts-for-v6.14
+      Merge tag 'renesas-r9a09g047-dt-binding-defs-tag2' into renesas-dts-for-v6.14
+
+Jacopo Mondi (2):
+      arm64: dts: renesas: r8a779g0: Add FCPVX instances
+      arm64: dts: renesas: r8a779g0: Add VSPX instances
+
+Niklas Söderlund (1):
+      arm64: dts: renesas: white-hawk-csi-dsi: Define CSI-2 data line orders
+
+ .../bindings/pinctrl/renesas,rzg2l-pinctrl.yaml    |  7 ++--
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi          | 40 +++++++++++++++++++++
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 13 +++++++
+ arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts | 13 +++++++
+ .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    | 36 +++++++++----------
+ .../arm64/boot/dts/renesas/white-hawk-csi-dsi.dtsi |  2 ++
+ .../pinctrl/renesas,r9a09g047-pinctrl.h            | 41 ++++++++++++++++++++++
+ .../pinctrl/renesas,r9a09g057-pinctrl.h            | 31 ++++++++++++++++
+ 8 files changed, 163 insertions(+), 20 deletions(-)
+ create mode 100644 include/dt-bindings/pinctrl/renesas,r9a09g047-pinctrl.h
+ create mode 100644 include/dt-bindings/pinctrl/renesas,r9a09g057-pinctrl.h
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
