@@ -1,72 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F7C1487F4
-	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 14:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E5F86327
+	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 14:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736173271; cv=none; b=RQYxoTBXua7O+ENiMnH6Jjcy1X0MoNNibjSwqhZK5N0MdHI9wtLi9tRVWglFmylfG6a7FEITTOQJHyN9vr2mFmldaZWaZvT8kcQOsVaWkhuiKATUCM/GycZdPYul5H5KFUGK5dZFTfNf7S6XVQsmV3Qk+BLz1hh2wnV940Qz17A=
+	t=1736173395; cv=none; b=d0/AuyfDTE2XAtqezZuzYZ1XZvNO6NStj0oMl5cqtKusCV0RlOyuvbowAsznUodLnCwoa8q228ddAIuOfYqQ9DdeV43MyzYChDLXR25XEz+ySAuplfOKcu1QJpnQ8GnwkLT3xBBnh3mAQ9ex8vwsGwi6wp/mtSAATz6adF16QUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736173271; c=relaxed/simple;
-	bh=3Y7++z3fyuW+gP8adVwRq4swMfYPkU1+pLV0+rHHyD4=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=WuVWEbB8uRJUnqyxp5wIvlH1Cn8E+c+jsySY1dbqdcQAn8/pzT0Xg3jtbP4WLW34Eq4xWYO9ORHbEZg2Hl9QRr8vL30TTsLTuPT3UOlepDffRWIRZTwJZh8MQv/V6Y09/MQHT/ID9v0GYGNdcCVTiULqAfS6MpZGYH/AOSgqZxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wbmvgrho; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736173395; c=relaxed/simple;
+	bh=u5XPkTOpWqBQzHRn3Y5dQ7bV6cYbkigV4SQt/QljSOM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Ytov1VpuwMHVDIhMS8EpGScQ7vsnK4Yhq8LSqbfpsZCx0Zl2KV2lR40FDiMz/6PdNGPA/AQbbY+SXL4/Lu6/S1QzakLLACEJNa9fK5CnlabC+BMRaGTChA5ql5Z/ME151Hay+0Zu5EpBibyXVOiU//D4uoP6RGXLDTuqMvmI21Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xCnIrVbh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wbmvgrho"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xCnIrVbh"
 Received: by smtp.kernel.org (Postfix)
-	id 61B44C4CEE3; Mon,  6 Jan 2025 14:21:11 +0000 (UTC)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	id EE1B7C4CEE2; Mon,  6 Jan 2025 14:23:14 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4213EC4CED2
-	for <soc@kernel.org>; Mon,  6 Jan 2025 14:21:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4213EC4CED2
+	by smtp.kernel.org (Postfix) with ESMTPS id D1571C4CEEC
+	for <soc@kernel.org>; Mon,  6 Jan 2025 14:23:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1571C4CEEC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso95897515e9.3
-        for <soc@kernel.org>; Mon, 06 Jan 2025 06:21:10 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43623f0c574so99168825e9.2
+        for <soc@kernel.org>; Mon, 06 Jan 2025 06:23:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736173269; x=1736778069; darn=kernel.org;
+        d=linaro.org; s=google; t=1736173392; x=1736778192; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeHiTUaspxw3YHA9Av4He8MumgYB5Gh2jqQAtY0KVLI=;
-        b=wbmvgrhoR5B5yBKShUR3jmxmcQnM96eaUtPHnyXLUTiwmDqDiHdBSPl68A1WiodG+O
-         K7TSOl0dCXUhbs22Ko/IjfkmJQZ2Rkm3gpe3rNfcqBcvpxu4V3/1jGTWuYNUHyizs6n0
-         E2x4vsYxMUAzKWhFR37UhOCSQySBBvXNDM0E3nlKwa13HwatOT65kyNJoIDHCZCrm0Gr
-         zSGut7zpiIx98c4Y0Bl2oRLdoDBhyIpQsnClZKZEedb49dWT13QTLXBLvlCLZSrbMWWu
-         Lwx1G7e6SjvqpKHN3/XSGMO3CkRCMRfZlkBi/ctbBHe4m0qPhRJd5JS2Eb3PQLfHzdWG
-         6F+Q==
+        bh=v+ISvG17XlCRUc2+RRHh59wTwYCWMY/Hqwqq505SSb0=;
+        b=xCnIrVbhfATAdekw9q8X2Jl8xLEk/a2bv3hjL3uI2ZO3TxvK94H7YqOYtG1oYunRQa
+         CyjXGJk73ySGNsbrc1d1e4cBT3EyBV6w6Mx0hd3+uILSkuuNkKygCFEniXgfkqgVrabY
+         Kz5aQg/bUrIBPGrJP8PsCZPoFb33pki9Kt5DxP+hGO/M96ORq+rW0f6mCCE6fabH39vC
+         O6OHtZ+PCL9w1S/e9sg/OhZEU77f4ZjSzbeyvdaZM8k+8bvVGuGVmpXvLZouo9CqqS7Z
+         EZ3emc8ENCsFN9oa4wY2uAb7tWISPAhCvvLmm/KIJEIzlqEGGX9/n5f4dgiW/jdXg9h0
+         kCAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736173269; x=1736778069;
+        d=1e100.net; s=20230601; t=1736173392; x=1736778192;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeHiTUaspxw3YHA9Av4He8MumgYB5Gh2jqQAtY0KVLI=;
-        b=s1fmeVmmzK/D7lMv3nKSlorKBZSIXY0KUVHqm405Foua2FnYNW2tyNZu/TBTYWNIRd
-         tCtdzDX2+BW9opjaknd0dx4TfZ1grT/GOTac5Ck6cR6fybVp5Rv3jN+wx7lbKqKLB1Ub
-         sGwWYDCfgTsuAxsTrH+v8xVFmCE0f5ooTN0LQKccFdS5XqtBlsMb2yp9BEhLjGgbvQNi
-         8yGfR8p9FML81ZymkvyFJhmh94bZS/fGbKOfN5VOigQsKqn/xzeWGRbTypBCMdkEijYz
-         PL1AXQFv0RB6RWrnr9py8RRDb1OS1qppz45ZOqXDgSw9rAchFgtfjph4m+yncB7q2BZy
-         XMCQ==
-X-Gm-Message-State: AOJu0YyQM18hNfFqEiaIum0E9M0iE7GvGzPvnjcD0TEMyLDMLg6I0z7G
-	jnZcGegNh9rNyBoTdM0gSti/GqrJ/iJJfnhHpsJZl2mRKiBGisS5kVPcRSLa4xqJlG/MBUdER02
+        bh=v+ISvG17XlCRUc2+RRHh59wTwYCWMY/Hqwqq505SSb0=;
+        b=W8DIevBP5wBM+tKKx6AYH6BAJ8CYvaiMT/wbQyRgyD/8fwGLWpcCmtURoZUhkVznO+
+         +Zr82LZHn8+yTGaMLEL8tSVYYLdz+CA4FzOmVJOTQQD+mPehE2ypLgaf0Lckr0dV9DYP
+         F+guqY4FKxYEnJ734vyLZUTIkO5ayXFKJRSzmojeNQlg5M0UE6Zhfizbsp01ciUAm9a7
+         MhHZPKj/TeZfD8G023p+VZ62JcO+jks99+dvSabz30pqGbKgLvqQ/kkij1Qcs4Z1IIGe
+         s5g3DOOZfn0rRYvmCNorlR9yFuCwpR+mrqe1oQbuw2r08lrpDIV8EEs4BFvGoBpqumDm
+         w5iQ==
+X-Gm-Message-State: AOJu0YxXyDsp4Z4nwoP0QgNfduYgiTf0ELVxciLldOVIUrq0YscH7Ta+
+	KSWaQyg2ElnAF5ADl8gllo6l3kIFXgVmb5je/Ntxh/oNw0p3+78tHSwFfINhFDjk7sG9hIg6E5Q
 	t
-X-Gm-Gg: ASbGncvMIZEMhnggrVGGRxOBOd9z+WEBP9CKkTSV5Q48k90Qx/bTOqivwuQg+A1nHyL
-	QjDwMCUiZX/LXOsNuPHGuLApxIZ/+gzp6keNTbk9wqeW/2gi7D6Py/9QuCZAbPmvFh/M/5NIrCo
-	YgzPdgzPSchYOh+hHH5UFrcY/BpCkmt/O4aNIVbp9XXahm5wcQ8LfS0wxmVv2TQUTh3yjLYnRCG
-	zuhlijY+MtqJKDc2wYygBuOXGVSlpExwZKz0A1sH8xeaesZe87kXKnqs3J86r5P8eSUXsvtTBnZ
-	qlxGvhRF/YP4EbLDK5UrS0OQKRuL
-X-Google-Smtp-Source: AGHT+IF5Lh+oWFRck0Vw/8+lvOoj6CBwPIpbpPWwc94r3tUU4OIFk9lTAnr5Rp6BiofrhtN1DtywvQ==
-X-Received: by 2002:a05:600c:548e:b0:431:5e3c:2ff0 with SMTP id 5b1f17b1804b1-436686431a0mr463290275e9.8.1736173268595;
-        Mon, 06 Jan 2025 06:21:08 -0800 (PST)
+X-Gm-Gg: ASbGncumvL2TTV5IOnrUfW5Y2ED9ZghWsZxeDwoTC8wmVYOCI0zfGoQUBdiXnRFUikJ
+	ekiLKMLV4A5vSEH+vkyJDOcFgqocu1HlOh9tsygoWKvgMMzyxAnJr80+0+yvZOyTZXk55sQNnuD
+	hHuaFOEqoZaE86nu5LfVpzNhIOURJ/gkF3olgPew8gQ9UbW7247hCmXqA4fa/2XZXfro01RVHwq
+	dZo0enGxmK3L4p2ah6vidai3xWXXhzI+jXqkgLrVWPRbosrugvpQx8XJBWyN1T63VS86tvojMlr
+	YEbMAbokdCIsWvguDvbtCZWdKF4m
+X-Google-Smtp-Source: AGHT+IFbQVoTEVhEDDdBwsowpTrnhU+0JKPMJ0XbhCvp1qdAqGclVtuhezzIVxR/+KsmGKTLOCnaDw==
+X-Received: by 2002:a05:600c:350b:b0:434:f131:1e6d with SMTP id 5b1f17b1804b1-43668643203mr623670995e9.10.1736173392034;
+        Mon, 06 Jan 2025 06:23:12 -0800 (PST)
 Received: from ?IPV6:2a01:e0a:982:cbb0:95:e905:1421:811c? ([2a01:e0a:982:cbb0:95:e905:1421:811c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b11aecsm601987765e9.23.2025.01.06.06.21.07
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43661289d3dsm575723455e9.41.2025.01.06.06.23.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 06:21:08 -0800 (PST)
-Message-ID: <77c645b3-0cdf-49f4-84e9-11c74074b9a8@linaro.org>
-Date: Mon, 6 Jan 2025 15:21:07 +0100
+        Mon, 06 Jan 2025 06:23:11 -0800 (PST)
+Message-ID: <72d71d3f-99c3-4767-8c80-8fa7a865c846@linaro.org>
+Date: Mon, 6 Jan 2025 15:23:10 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM DT updates for v6.14
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.14
 Reply-To: neil.armstrong@linaro.org
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -110,8 +110,10 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a single change for Amlogic ARM DT, simply removing size and address cells
-from USB nodes when not needed.
+Here's a single change for Amlogic ARM64 DT, removing the broadcom wifi
+compatible from the SDIO subnode because the Amlogic GX reference
+board can be shipped with different brands of pin compatible SDIO
+chips.
 
 Thanks,
 Neil
@@ -122,19 +124,24 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm-dt-for-v6.14
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.14
 
-for you to fetch changes up to 3a4bb81850662bebab74f1ad27071652b1825d58:
+for you to fetch changes up to 1ba1964a7f83daae7fdeaf2de584a7ba758c4491:
 
-   ARM: dts: amlogic: meson: remove size and address cells from USB nodes (2024-12-30 11:00:12 +0100)
-
-----------------------------------------------------------------
-Amlogic ARM DT changes for v6.14:
-- remove size and address cells from USB nodes
+   arm64: dts: meson: remove broadcom wifi compatible from GX reference boards (2024-12-13 10:36:02 +0100)
 
 ----------------------------------------------------------------
-Martin Blumenstingl (1):
-       ARM: dts: amlogic: meson: remove size and address cells from USB nodes
+Amlogic ARM64 DT changes for v6.13:
+- remove broadcom wifi compatible from GX reference boards
 
-  arch/arm/boot/dts/amlogic/meson.dtsi | 4 ----
-  1 file changed, 4 deletions(-)
+----------------------------------------------------------------
+Christian Hewitt (1):
+       arm64: dts: meson: remove broadcom wifi compatible from GX reference boards
+
+  arch/arm64/boot/dts/amlogic/meson-gxbb-p20x.dtsi      | 3 +--
+  arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dts  | 3 +--
+  arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dts  | 3 +--
+  arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi | 3 +--
+  arch/arm64/boot/dts/amlogic/meson-gxm-q200.dts        | 3 +--
+  arch/arm64/boot/dts/amlogic/meson-gxm-q201.dts        | 3 +--
+  6 files changed, 6 insertions(+), 12 deletions(-)
