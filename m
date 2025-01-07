@@ -1,52 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF951DFD9B
-	for <soc@lists.linux.dev>; Mon,  6 Jan 2025 16:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9A91487F4
+	for <soc@lists.linux.dev>; Tue,  7 Jan 2025 08:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736181730; cv=none; b=T/WtpSHcI5vmiazWUoDyD+Wmd1yCwnEJUfFsGvmwIYKRBJPYOyCZikJYPaFV9cTO1z+3EEwFwM3fJkDBcFOchqR4+tTTzSQo5tWnW8vxGBd372VL1tWlL5rs42wtT0jcmENxnKpu8hzRWEkArfDO23STzjO2SrHXiaF3R0H5LLM=
+	t=1736237671; cv=none; b=ZWkI+XkXDGtlG06Gw4M9xj8hCmuFttc+zfU7y+QxEM7XYpFzFdUFYO29OvQpcHMe114KYsLw4uBchEAL6Ky8dGL6atF96PkZ1/5niHpewUCWZ3XhEzApr8gbsymSUZJoLJM3oiJRWubgmzp/SiUpN6OV70m0hsDgVwg2IUJJd9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736181730; c=relaxed/simple;
-	bh=Sb9bnWNlRYAXxzo56P48HJw0zLmj+ov1VyzsNp3iw5c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fmlRuOzbgMApTr0zBVpPCyvYi3dBTyqBVjg6zWUUFFDSwX1Wr/OLbchDnkVFhPaG9pb23yYEhntIsWV89mMeqkx85O0kSlbq5R/FJL1DSYXKeYTvJ4uFHcmSa3uzltNT7g/WNB9ZxTlNqBfvoY/iYna2eOY5jVb+czOYq/Ya1/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736237671; c=relaxed/simple;
+	bh=lFGW5mXyg/vcqXhvP3/bZO2ABE157nUXNtkxFWzJQXQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kQlf8O49l5aO4XhBwWJ0oB4686qElli7auz7KQCHvqUaK0UN09HRNrC05kpDoYSWWT74u8a94mzvB0f1eY7YNXEBZaPdxOOsm5DyZoTmGUDDrovuiLAzUl2UYrtTTqWU8t+mtl0nWxb3upIjAO0wivfiV6M0Dt8HzmIfMPIM3Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=eQzD1Lhb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="eQzD1Lhb"
 Received: by smtp.kernel.org (Postfix)
-	id 14913C4CED6; Mon,  6 Jan 2025 16:42:10 +0000 (UTC)
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id C29C0C4CEDE; Tue,  7 Jan 2025 08:14:30 +0000 (UTC)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ADA11C4CED2
-	for <soc@kernel.org>; Mon,  6 Jan 2025 16:42:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ADA11C4CED2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4YRg253lZ5z4x2Xr
-	for <soc@kernel.org>; Mon, 06 Jan 2025 17:42:05 +0100 (CET)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:39d4:dc4e:b4ce:1377])
-	by laurent.telenet-ops.be with cmsmtp
-	id xshx2D00L3AZZFy01shxk2; Mon, 06 Jan 2025 17:41:57 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tUqAs-00000008NTv-3A5o;
-	Mon, 06 Jan 2025 17:41:57 +0100
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tUqAv-00000004YZR-0Irs;
-	Mon, 06 Jan 2025 17:41:57 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] Renesas DTS updates for v6.14 (take two)
-Date: Mon,  6 Jan 2025 17:41:53 +0100
-Message-ID: <cover.1736180859.git.geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id 74E65C4CEE0
+	for <soc@kernel.org>; Tue,  7 Jan 2025 08:14:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 74E65C4CEE0
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-38632b8ae71so10663311f8f.0
+        for <soc@kernel.org>; Tue, 07 Jan 2025 00:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1736237668; x=1736842468; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+oROHsI0pGM+lBjY+EF7UPmjz7c08DPed5m+aIOE+A=;
+        b=eQzD1LhbBfkLMS5/XJmCSCo5VQIY/BTZEdPVLXI4stXbbw0go7qOy26t6/0vcaA6X4
+         dY6yb4N3ZXLDhlqYHTvYWGOGo++GuqogfNOOVEpwn54SjfJpdu9/WDVS2KvlrdGEwYMJ
+         8lyqYh480pFoSLRcPv275FZZbxwmaxHfvUuf/XT/LT9uQ9xCmIuifthXxgq7E/q25eOt
+         pbhZMA04c+siOULE1LOOQ9hZgsM0TPhVZxlP5yy8TWJkuIKqrwlRSP1xJBf3so/6sPbS
+         D8czhYbCTO4i/oGDtRkvFx7c6tOwckm/etIWRXtvmMjcq+yBrQPktUT32MZ8AE+Be6Sq
+         R7+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736237668; x=1736842468;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5+oROHsI0pGM+lBjY+EF7UPmjz7c08DPed5m+aIOE+A=;
+        b=sAsU2Ns3W5/pIZTNCHYsIO5Nffxsm1HTwt5+9zRSa082ftZMi9cbJWVhwvWPz3w1M3
+         mYyOIpy4UXoSjB49NyGc13HARO0KKdbcqi+VXkrcdZj/4ziAidfuEbFKlJygOtldEzGK
+         j43a6FTs3Zv4Yrpj4AqwWB8/GovEhBV2OEO1NH0fG7Y+mYRcAPAwhZRoQVe1f1YokdBP
+         WSf2Fl5XEag424XhCsQdoSYGY0gaWKVbEtXSeFNcEd+P0ma9X/Xy1Cc6zCZmZj5w+Mv4
+         If0VW4o2NylbBjyZyoWP14lDcApeiq1s/HLIkZZp2kEjnF7H6aW9l3y8+wvcRRDqZBBK
+         6rEw==
+X-Forwarded-Encrypted: i=1; AJvYcCXELe/i7UY3t9jV1yeXLluaJenprDQOHx4ZFLDxvmZ38anwbxN9WSDfDFmcqx2hi1pJHHY=@kernel.org
+X-Gm-Message-State: AOJu0Yyecb3IChf0oDg5eRi7mwf9mZm3aoZK47Fe1yTUR3TADqyhgMTx
+	RqYLQ1ioL38Gn0rX4MtOEfHIsYxJ94+I1UAsZIJZjrnN+P8/S6tMBuW1SY6E6Wg=
+X-Gm-Gg: ASbGncvieUgmN3V5QKBpsyv5BzIdCUj4Gda2n9hF0M68vAP12Ve+SsGQQOFwOzWVJQ4
+	pZikiKUy8Q8tFinRP80hM/kWuly91V2K21yDGiShmgCbyNG/Gzw7jMY6WE+gsm+YSD9+j1WAgEk
+	52+r+ti59hEfdrj9v75zNTuH4P4LugvBhqRHg6nmSRo0XTLnJXiSgspPkqigxMo/k2oUVPaDYDv
+	hxav13ELaIijollKzvEqp09a/L0I218mv3mqtbN2FUXGkkYkUR+wK5jNUuKbtx1FDmrAcISTDBs
+X-Google-Smtp-Source: AGHT+IHbtvTzjUvXOSpt74DKXaCeM1TDBc5BheKAfpOnexjqRQXkNQ5Iuxor26lOK06bUMotfiNTYA==
+X-Received: by 2002:a5d:5e09:0:b0:37c:d23f:e464 with SMTP id ffacd0b85a97d-38a223f75bdmr53924526f8f.38.1736237667518;
+        Tue, 07 Jan 2025 00:14:27 -0800 (PST)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.102])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a75a47943sm3541314f8f.87.2025.01.07.00.14.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2025 00:14:26 -0800 (PST)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: arnd@arndb.de,
+	olof@lixom.net,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	claudiu.beznea@tuxon.dev,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com
+Subject: [GIT PULL] Microchip AT91 defconfig updates for v6.14
+Date: Tue,  7 Jan 2025 10:14:22 +0200
+Message-ID: <20250107081424.758980-1-claudiu.beznea@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -54,80 +82,30 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
-This is my second pull request for the inclusion of Renesas SoC updates
-for v6.14.
-
-The following changes since commit acb247afab5bc2b4462f4dfc17a9d930e1153e52:
-
-  arm64: dts: renesas: r9a09g047: Add I2C nodes (2024-12-17 09:42:52 +0100)
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.14-tag2
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-6.14
 
-for you to fetch changes up to c357e2295b7880b1d9d365c3389f06ef2eb464d0:
+for you to fetch changes up to 221984deceee75846b8a132974683d33dab5a029:
 
-  arm64: dts: renesas: white-hawk-csi-dsi: Define CSI-2 data line orders (2025-01-06 16:26:29 +0100)
-
-----------------------------------------------------------------
-Renesas DTS updates for v6.14 (take two)
-
-  - Add pin control support for the RZ/G3E SoC and the RZ/G3E SMARC
-    Carrier-II EVK development board,
-  - Add Image Signal Processor helper block (FCPVX and VSPX) support for
-    the R-Car V4H SoC,
-  - Describe odd C-PHY wiring on the White Hawk CSI/DSI sub-board,
-  - Miscellaneous fixes and improvements.
-
-Note that this includes Pin Control DT binding and bindings definitions
-for the RZ/G3E and RZ/V2H SoCs, which are shared by DT source files and
-the pin control driver.
-
-Thanks for pulling!
+  ARM: configs: at91: sama7: add new SoC config (2024-12-08 18:55:42 +0200)
 
 ----------------------------------------------------------------
-Biju Das (5):
-      dt-bindings: pinctrl: renesas: Add alpha-numerical port support for RZ/V2H
-      dt-bindings: pinctrl: renesas: Document RZ/G3E SoC
-      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Replace RZG2L macros
-      arm64: dts: renesas: r9a09g047: Add pincontrol node
-      arm64: dts: renesas: r9a09g047e57-smarc: Add SCIF pincontrol
+Microchip AT91 defconfig updates for v6.14
 
-Geert Uytterhoeven (2):
-      Merge tag 'renesas-r9a09g057-dt-binding-defs-tag2' into renesas-dts-for-v6.14
-      Merge tag 'renesas-r9a09g047-dt-binding-defs-tag2' into renesas-dts-for-v6.14
+This update includes:
+- support for the SAMA7D65 SoC
 
-Jacopo Mondi (2):
-      arm64: dts: renesas: r8a779g0: Add FCPVX instances
-      arm64: dts: renesas: r8a779g0: Add VSPX instances
+----------------------------------------------------------------
+Ryan Wanner (1):
+      ARM: configs: at91: sama7: add new SoC config
 
-Niklas Söderlund (1):
-      arm64: dts: renesas: white-hawk-csi-dsi: Define CSI-2 data line orders
-
- .../bindings/pinctrl/renesas,rzg2l-pinctrl.yaml    |  7 ++--
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          | 40 +++++++++++++++++++++
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 13 +++++++
- arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts | 13 +++++++
- .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    | 36 +++++++++----------
- .../arm64/boot/dts/renesas/white-hawk-csi-dsi.dtsi |  2 ++
- .../pinctrl/renesas,r9a09g047-pinctrl.h            | 41 ++++++++++++++++++++++
- .../pinctrl/renesas,r9a09g057-pinctrl.h            | 31 ++++++++++++++++
- 8 files changed, 163 insertions(+), 20 deletions(-)
- create mode 100644 include/dt-bindings/pinctrl/renesas,r9a09g047-pinctrl.h
- create mode 100644 include/dt-bindings/pinctrl/renesas,r9a09g057-pinctrl.h
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ arch/arm/configs/sama7_defconfig    | 1 +
+ 2 files changed, 2 insertions(+)
