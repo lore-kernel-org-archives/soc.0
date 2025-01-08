@@ -1,108 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DFE190664
-	for <soc@lists.linux.dev>; Wed,  8 Jan 2025 12:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2EF8F6B
+	for <soc@lists.linux.dev>; Wed,  8 Jan 2025 14:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736338666; cv=none; b=XHDlYw9AArUxgMutWQg0CbJdPB4JCCMXlsDvDWdbO5TrYkkXjce4xXUgJcAiQHXwYwJqmnmVrYm6Bdlzw6PI9WKq8FatZUqca7kgVIswlbXIE3l99Kl6HSE2OoiJnWPljNcxyl2sI7Bw3F2IvfuiRejNLQzZ2BY+6AbycJmQwCg=
+	t=1736346090; cv=none; b=CgTxFzPlOSWL0J/RrHgjMk5tH0ckVPnwABn8IKPseRW9Nxux9ynMzVoHbBm3YYOL/xSOE2j0RQzVJPESSYuPKUGyfk6dqjojMEqASgNpd+st8uOjSAM0Bl8FvSqNrZtfX3kfH/ZG+rjE6lZ3XkoyJJoXS/5qmH3v3oxqNHNimGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736338666; c=relaxed/simple;
-	bh=Vnh+oOkgXUlVPFAt0gfMUQi6C8dArvTIpOxd/A+3DEQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OU+qrl3HMfT2PD9bWzfL/xqmUQIww4ZuQjpl+pb24r+PkvwyO+799hkqL+/yx8KKC8DcYoeYvQCkWqR89LtEp/u0uXDrNtkehPHljBPP5w9csVrnhTACuatIGir1+Fg/5LWPf1h59LDucLZktwT/L2KaPqhPOPW5NdErzpBNXaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dU295dGE; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dU295dGE"
+	s=arc-20240116; t=1736346090; c=relaxed/simple;
+	bh=JZhXDPXp0k+Z4X0i1LbD9BVeQy3SLuBrRNBkCLZMI8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Jd3+jn6wJDWsR3Uw0j4XrVjyOffKs6rRyM0fprxHXDBzOMRYgIkeQlQIJI+OmS/1cvmmjw5p0xNsFBa4+TgUGr9/iEvOvHXG7XM/GEmyNTYNQGE1mMlEh2g1f/s5hR0ZwPZpg8WMdtM78geSxxAz0yNQkNyLenGXe9mYIUOG49c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 4F7D2C4CEE0; Wed,  8 Jan 2025 12:17:46 +0000 (UTC)
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	id E10C6C4CEE0; Wed,  8 Jan 2025 14:21:29 +0000 (UTC)
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 856D7C4CEDD;
-	Wed,  8 Jan 2025 12:17:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 856D7C4CEDD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1736338657;
-	bh=Vnh+oOkgXUlVPFAt0gfMUQi6C8dArvTIpOxd/A+3DEQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dU295dGE/eDJDpTTubs/64hFUh5X8C63pJE+mfMiXgFSPA/yv+w2lDzzTP9SRAtyu
-	 AodPP0J2Bf0us0a5ys06bQw7+WTiviRm7d0bldGKEeNvis77LzZ/njhX1HvPKxsOrx
-	 JKV/ScD3hAUI+BeKv4+s5RbZ/a8MRhUHiKk+RJMlpSYNpWJtw3QocIEuPvN/rfioKG
-	 VWpITUd+sQYsrYwVOVkgbcQhO3Vx2q5Ggob7s4LPTQHk+YdaodE3J8B0thHs6EufvI
-	 B8U96UtQ0SDEhAoV5CQROyLMvcO5mAs4x+RdCvaFL4FOzH30hAJITyKI8z0M5RyGSk
-	 oI3gMxuyWwC1Q==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id F3FA017E152E;
-	Wed,  8 Jan 2025 13:17:36 +0100 (CET)
-Message-ID: <f79db33f-ecab-48e6-a2f2-47228183a273@collabora.com>
-Date: Wed, 8 Jan 2025 13:17:36 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id A975AC4CED3;
+	Wed,  8 Jan 2025 14:21:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A975AC4CED3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Date: Wed, 8 Jan 2025 22:21:22 +0800
+From: Yixun Lan <dlan@gentoo.org>
+To: soc@kernel.org
+Cc: Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Inochi Amaoto <inochiama@gmail.com>, Yangyu Chen <cyy@cyyself.name>,
+	Jesse Taube <mr.bossman075@gmail.com>,
+	Icenowy Zheng <uwu@icenowy.me>,
+	Meng Zhang <zhangmeng.kevin@linux.spacemit.com>,
+	linux-riscv <linux-riscv@lists.infradead.org>
+Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v6.14
+Message-ID: <20250108142122-GYA3300457@gentoo>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] MediaTek ARM32 DTS updates for v6.14
-To: Matthias Brugger <matthias.bgg@gmail.com>, arm-soc <arm@kernel.org>,
- SoC Team <soc@kernel.org>
-Cc: "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <rafal@milecki.pl>
-References: <ea93d0ea-a1a0-4d36-8880-4f05c85f0c1b@gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <ea93d0ea-a1a0-4d36-8880-4f05c85f0c1b@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Il 08/01/25 13:14, Matthias Brugger ha scritto:
-> Hi Arnd,
-> 
-> Would you mind to pull the following patches.
-> 
+Hi Arnd,
 
-Thanks Matthias, I admit I did actually forget about the dts32 change :-)
+Here is SpacemiT's device tree changes for 6.14 cycle.
+All patches have been merged in linux-next tree for testing.
 
-Cheers,
-Angelo
+Please pull, thanks
 
-> Regards,
-> Matthias
-> 
-> ---
-> The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-> 
->    Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-> 
-> are available in the Git repository at:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git/ tags/mtk- 
-> dts32-for-v6.14
-> 
-> for you to fetch changes up to 90234cf9b37c57201a24b78c217a91a8af774109:
-> 
->    ARM: dts: mediatek: mt7623: fix IR nodename (2025-01-08 13:08:20 +0100)
-> 
-> ----------------------------------------------------------------
-> mt7623: fix validation error of ir-receiver
-> 
-> ----------------------------------------------------------------
-> Rafał Miłecki (1):
->        ARM: dts: mediatek: mt7623: fix IR nodename
-> 
->   arch/arm/boot/dts/mediatek/mt7623.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+Yixun Lan (dlan)
 
+The following changes since commit 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8:
 
+  Linux 6.13-rc3 (2024-12-15 15:58:23 -0800)
 
+are available in the Git repository at:
+
+  https://github.com/spacemit-com/linux/ tags/spacemit-dt-for-6.14
+
+for you to fetch changes up to e7cd95ad8013bc232316bba0a52ea11ecd5c81bd:
+
+  riscv: dts: spacemit: add pinctrl property to uart0 in BPI-F3 (2025-01-04 10:28:18 +0800)
+
+----------------------------------------------------------------
+RISC-V SpacemiT DT changes for 6.14
+- basic device tree support
+- pinctrl dt node info
+- update MAINTAINERS info
+
+----------------------------------------------------------------
+Yangyu Chen (8):
+      dt-bindings: riscv: Add SpacemiT X60 compatibles
+      dt-bindings: riscv: add SpacemiT K1 bindings
+      dt-bindings: timer: Add SpacemiT K1 CLINT
+      dt-bindings: interrupt-controller: Add SpacemiT K1 PLIC
+      riscv: add SpacemiT SoC family Kconfig support
+      riscv: dts: add initial SpacemiT K1 SoC device tree
+      riscv: dts: spacemit: add Banana Pi BPI-F3 board device tree
+      riscv: defconfig: enable SpacemiT SoC
+
+Yixun Lan (3):
+      MAINTAINERS: setup support for SpacemiT SoC tree
+      dt-bindings: serial: 8250: Add SpacemiT K1 uart compatible
+      riscv: dts: spacemit: add pinctrl property to uart0 in BPI-F3
+
+ .../interrupt-controller/sifive,plic-1.0.0.yaml    |   1 +
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |   1 +
+ .../devicetree/bindings/riscv/spacemit.yaml        |  28 ++
+ Documentation/devicetree/bindings/serial/8250.yaml |   4 +-
+ .../devicetree/bindings/timer/sifive,clint.yaml    |   1 +
+ MAINTAINERS                                        |   9 +
+ arch/riscv/Kconfig.socs                            |   5 +
+ arch/riscv/boot/dts/Makefile                       |   1 +
+ arch/riscv/boot/dts/spacemit/Makefile              |   2 +
+ arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts    |  22 +
+ arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi       |  20 +
+ arch/riscv/boot/dts/spacemit/k1.dtsi               | 464 +++++++++++++++++++++
+ arch/riscv/configs/defconfig                       |   1 +
+ 13 files changed, 558 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/riscv/spacemit.yaml
+ create mode 100644 arch/riscv/boot/dts/spacemit/Makefile
+ create mode 100644 arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+ create mode 100644 arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+ create mode 100644 arch/riscv/boot/dts/spacemit/k1.dtsi
