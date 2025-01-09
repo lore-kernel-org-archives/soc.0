@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E71205502
-	for <soc@lists.linux.dev>; Thu,  9 Jan 2025 22:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522A3205507
+	for <soc@lists.linux.dev>; Thu,  9 Jan 2025 22:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736460720; cv=none; b=SXXdxWTS/3ERObmf7HHaZQ/t5hR8MqHOg2xq/SWfzVQPPFnrDRgk0UC/T9I+S1qWGKgVknNaEPnhxvr4GWvjWcxUaf+fYV7eKmKnzMbaDGARcm8DhcBUZu+ikW1+icKv+j/sNZNVexGT3EjFA7eXTOnv5auIEbPHg40C60mTDr0=
+	t=1736460720; cv=none; b=p9knO0cZ/gIyuC5psgLNSRt77ay4XnKG+oe8qnpNVFJ8TuuMvaijE9wqZH4YLhBSJPwrKoh+BRXqDEoPF60XMVEzqWirXdor5Ba1pr7jxmQQ5h7O6X3AjSd7V5bU1X9QWtDiAEierDg14BuMyM9dBkmlzdSDd5Dg1k4Xe9eSaz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736460720; c=relaxed/simple;
-	bh=rCk/Er5oP/MNAmTVLRsVcHfgjDLNuOsQLBY7wcfv2VY=;
+	bh=2bRbk6dZs3jUDnrmW9LkyrOjmBHZR2kOTzSX6OmXwYU=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fFp899WmU2ccyX1OU2rJL/n9ZQ4XR7X7sY3ow5KykoyB/lHRVZmReEW2tFynzUxiMoYhiXH0HkeAqGC4xjBa6890BFAKLj4TvkkpekVEeYZDYMT8GaLB6mMDwMtIxYIfCEt1WlApjnawgV8ssCC/ms7tHPxCZTH1eLISboF13B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMYZeUBa; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=XBjWV3W0jeAUc4ADsW6DPDAAKoPyCrT65fQXv1gwm7xUzYc2WqwQCSYstghGcOl/+ewZs1g8QFtmm2QtJYeVnSi3YNbtKOPfqDVvZWnVZjRGj+4GoY3wOflZpD15VdEA5ebiY789f6kdaoxru0hG3IYkFi8mMG77U+8dE3mgPzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWfqOCyp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMYZeUBa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWfqOCyp"
 Received: by smtp.kernel.org (Postfix)
-	id C88E8C4CEDF; Thu,  9 Jan 2025 22:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3378C4CED2;
-	Thu,  9 Jan 2025 22:11:58 +0000 (UTC)
+	id 1235FC4CEE1; Thu,  9 Jan 2025 22:12:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00CFC4CED2;
+	Thu,  9 Jan 2025 22:11:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736460718;
-	bh=rCk/Er5oP/MNAmTVLRsVcHfgjDLNuOsQLBY7wcfv2VY=;
+	s=k20201202; t=1736460720;
+	bh=2bRbk6dZs3jUDnrmW9LkyrOjmBHZR2kOTzSX6OmXwYU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=QMYZeUBaWwQAgydSXpNx32WZsnYi6mp4cyBpZGUJNpTb/MZqEOkpg2Meis1rUtDDv
-	 GbznCtm9tm8cJHlBx5cyUAae4Acj3Pgco1x3xmfJ7g0+0XG7tYVLOsNc5Hy32k2PbK
-	 B1K/zu0hTOlBuO2y/oVTbvX8Y8IqQJTS/5AoBBMEowjW+WI4pFFIxoCkfW+U1EwNSF
-	 HF1z2x9wgi9yuWtQLQzAQp5pvhmeq/iDHWMBFeBAiFtT5ySS6/lENP4hKGldmRTbu9
-	 K1b1R1E3GtZVefHZGt7Mxk5Dyl9urQOVZqo1/PJDq7HvaYOWCR+bru3F+QM87WcsrH
-	 /LW4aQwMxLnCA==
+	b=oWfqOCypcO0o6EP+Cl/IwIsuL3JQTb9qtEeTMyqdGsALHT32QSTD1kbS5VRilZL0h
+	 qfdc1G0IuKb3dkAlQIwvWzJxtEYe04Sq31As34YGiIT9muwrgMyrupAmsf8L7PeiQT
+	 hVOMsnPj1HzzmwYYf4I3eBdfctPQK1iQdgjJzw4jgxtPxbu9PnypRMY26u6hDCfZ/Z
+	 NSIQT76WgaO+7AqfS8yDhWHy33/PuGbl4Z8jCQHaR/GmHI1rqefvFMLUQ94T5Fg4rI
+	 VpTxPPO0xt71PhMooRh4FqbVWn/ziDRm+GVflV3KMBLikA08bap+RJ4TQKIgTmdJzQ
+	 zIkeFGAY0d5sg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD6E380A97F;
-	Thu,  9 Jan 2025 22:12:21 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEBC380A97F;
+	Thu,  9 Jan 2025 22:12:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,39 +39,34 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] firewall: remove misplaced semicolon from
- stm32_firewall_get_firewall
+Subject: Re: [PATCH] MAINTAINERS: Remove Olof from SoC maintainers
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173646074050.1523525.3744058414671292822.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Jan 2025 22:12:20 +0000
-References: <20241220083335.66350-1-alexandre.torgue@foss.st.com>
-In-Reply-To: <20241220083335.66350-1-alexandre.torgue@foss.st.com>
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+ <173646074173.1523525.1396535438676924531.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Jan 2025 22:12:21 +0000
+References: <20250102143003.169611-1-olof@lixom.net>
+In-Reply-To: <20250102143003.169611-1-olof@lixom.net>
+To: Olof Johansson <olof@lixom.net>
 Cc: soc@kernel.org
 
 Hello:
 
 This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-On Fri, 20 Dec 2024 09:33:35 +0100 you wrote:
-> From: guanjing <guanjing@cmss.chinamobile.com>
+On Thu,  2 Jan 2025 06:30:03 -0800 you wrote:
+> I haven't been an active participant for a couple of years now, and
+> after discussions at Linux Plumbers in 2024, Arnd is getting fresh help
+> from a few more participants.
 > 
-> Remove misplaced colon in stm32_firewall_get_firewall()
-> which results in a syntax error when the code is compiled
-> without CONFIG_STM32_FIREWALL.
-> 
-> Fixes: 5c9668cfc6d7 ("firewall: introduce stm32_firewall framework")
-> Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
-> Reviewed-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> It's time to remove myself, and spare myself from patches and pull
+> requests in my inbox.
 > 
 > [...]
 
 Here is the summary with links:
-  - firewall: remove misplaced semicolon from stm32_firewall_get_firewall
-    https://git.kernel.org/soc/soc/c/155c5bf26f98
+  - MAINTAINERS: Remove Olof from SoC maintainers
+    https://git.kernel.org/soc/soc/c/0bc21e701a6f
 
 You are awesome, thank you!
 -- 
