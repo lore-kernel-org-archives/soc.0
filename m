@@ -1,37 +1,59 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8F82046A3
-	for <soc@lists.linux.dev>; Thu,  9 Jan 2025 22:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFB24A1A
+	for <soc@lists.linux.dev>; Thu,  9 Jan 2025 22:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736460722; cv=none; b=Nov98o+2A8VqSYHEtYCeQJ9BLanUPCAOWK/yUo6JsC+PIwTH4iak7xWPbIVsH0KvBqOHs1N8H/Hg8nhkOaaewKXL+SSqIDjRT+1nvTC0AK3oxAIfosd4M3DDiTeYoIEfWTtdqCeRd02BfFSY/UHe6xQ79J77sItLLNgz/stbp94=
+	t=1736462892; cv=none; b=Hb9y763E6QwcYtiNecpTrxWtmTbCrzB37E+YxZK8biSvM2GdvsF1qWL3DvBmqGC9uMN0MEBijbQyil2mIm0+7FkfpyMHYgjjunGJhxWn2qH2JwStvPPiW8BNHtVh9DIQJyoWI3ax91Hs19M0FhFNf6DZ1gKXu+za8VoLnaJWVBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736460722; c=relaxed/simple;
-	bh=2tW9ezPrV4s5QlVwDNID4XvMAuyhwQOJbs8ZAv06do4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=RT0bJUPVQU1j8vv6Mmo7ll/Hqmz1CKX++bHR62/JKUWMCRgu9NlKr3kcF0dOSNyiDQ57VM0bexU01EYiF4VUEQLsLrEOJ5hHP+cNQjP7ufwr1ajsRj+EvFjmcFW+2RvxVp9jNaLywtUrmcyTv0yqNxqLvAWQHBLfjFLEfr5ypuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhmqTKkt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736462892; c=relaxed/simple;
+	bh=hzp/epZwqHQdLKQHRQ8aEtFi9PPvpMrlLjzgTmHUt+4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mXb/rnD4DIaVtciw0rixW0FnFtCTVK3qfo1kRVynaPpHWFCFowQHIk1vC8WD83w/2KbXSopDRJ0EM4Zly5923CINQt3DlHxl1MTrRrUysfkIsL18V0wSYhI+nx1fi02jMi/zcNoAcA5iEmLE3KsEdXN4Ik9mWr/29hAiY4TUKuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ovFziUVV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhmqTKkt"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ovFziUVV"
 Received: by smtp.kernel.org (Postfix)
-	id 0D9AEC4CEE1; Thu,  9 Jan 2025 22:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB568C4CED2;
-	Thu,  9 Jan 2025 22:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736460722;
-	bh=2tW9ezPrV4s5QlVwDNID4XvMAuyhwQOJbs8ZAv06do4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YhmqTKkt9+M26wcj7hF6ECnhpx9QX4Uo1EeieGwVBizOoy4hjtWlEqmL3E2YF4byK
-	 rURf9TgGmW7hSL00dUryE3frLMoySCh12GmFk8vsWN6v4eO+LQzZFjnJTIf/fwq+eI
-	 1S0KZRgMMBx9Vbeq5U8xmQ/5HHxq370wpUwNINUUUe9TKC2sHlnjPvCRzk+T0E95ru
-	 PJgoyMRQG3MnFMip/0FKQ6tB2H6VUIsSERRdVSB6JFiOBHyJ/V7YhBvoBnEQnoB3IO
-	 fmrylzS77C/BvjDWLp2+lxVoI9EqZ8LIgzdY/SMzd9UmU9adiMSaUo2fTSPEWMqO9c
-	 O+n8qx9ENKUIA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAF12380A97F;
-	Thu,  9 Jan 2025 22:12:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id B75F5C4CEE1; Thu,  9 Jan 2025 22:48:11 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6B036C4CED2;
+	Thu,  9 Jan 2025 22:48:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B036C4CED2
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 00F41C001A13;
+	Thu,  9 Jan 2025 14:48:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 00F41C001A13
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1736462882;
+	bh=hzp/epZwqHQdLKQHRQ8aEtFi9PPvpMrlLjzgTmHUt+4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ovFziUVVOYKOtnEToSdKAWOzaqdwuL8WH5doV1uaC+iBccwBWC/eOqMtQxj6kCos6
+	 4nyNQcVuH9tZFBvoVRM2QVmir0mjeVPYcDVAFUbvMMLQpdGYptTlpTW97ZUkhHEFTu
+	 ZQCNGVEDQ9YdVx8qs0II3xWiIhnOVXwqVS3ZcZl4=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 9827818041CAC6;
+	Thu,  9 Jan 2025 14:48:01 -0800 (PST)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: soc@kernel.org
+Cc: Rosen Penev <rosenp@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/2] Broadcom devicetree changes for 6.14
+Date: Thu,  9 Jan 2025 14:47:55 -0800
+Message-ID: <20250109224756.3632025-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,39 +61,66 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree fixes for v6.13
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <173646074342.1523525.13791694188959593696.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Jan 2025 22:12:23 +0000
-References: <20250103024945.4649-1-andersson@kernel.org>
-In-Reply-To: <20250103024945.4649-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 
-On Thu,  2 Jan 2025 20:49:44 -0600 you wrote:
-> The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-> 
->   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.13
-> 
-> [...]
+are available in the Git repository at:
 
-Here is the summary with links:
-  - [GIT,PULL] Qualcomm Arm64 DeviceTree fixes for v6.13
-    https://git.kernel.org/soc/soc/c/627522c8bf4b
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.14/devicetree
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+for you to fetch changes up to f167292c8d13d31cbe9ffaa8108edcb4e8b1c60f:
 
+  ARM: dts: meraki-mr26: set mac address for gmac0 (2024-12-17 10:23:28 -0800)
 
+----------------------------------------------------------------
+This pull request contains Broadcom ARM-based SoCs Device Tree updates
+for 6.14, please pull the following:
+
+- Rob removes some unused and undocumented properties pertaining to the
+  SPI flash controller on Broadcom boards
+
+- Linus adds a number of BCM6846 peripherals: HWRNG, watchdog, GPIO,
+  MDIO, LED controller, DMA and then proceeds with adding support for
+  the GEnexsis XG6846B PON router
+
+- Rosen sets the MAC address NVMEM reference on the Meraki MR26 platform
+
+----------------------------------------------------------------
+Linus Walleij (9):
+      ARM: dts: bcm6846: Add iproc rng
+      ARM: dts: bcm6846: Enable watchdog
+      ARM: dts: bcm6846: Add GPIO blocks
+      ARM: dts: bcm6846: Add MDIO control block
+      ARM: dts: bcm6846: Add LED controller
+      ARM: dts: bcm6846: Add ARM PL081 DMA block
+      dt-bindings: vendor-prefixes: Add Genexis
+      dt-bindings: arm: bcmbca: Add Genexis XG6846B
+      ARM: dts: broadcom: Add Genexis XG6846B DTS file
+
+Rob Herring (Arm) (1):
+      arm: dts: broadcom: Remove unused and undocumented properties
+
+Rosen Penev (1):
+      ARM: dts: meraki-mr26: set mac address for gmac0
+
+ .../devicetree/bindings/arm/bcm/brcm,bcmbca.yaml   |   1 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm/boot/dts/broadcom/Makefile                |   1 +
+ .../arm/boot/dts/broadcom/bcm53015-meraki-mr26.dts |  20 ++
+ .../dts/broadcom/bcm53340-ubnt-unifi-switch8.dts   |   1 -
+ .../boot/dts/broadcom/bcm6846-genexis-xg6846b.dts  | 244 +++++++++++++++++++++
+ arch/arm/boot/dts/broadcom/bcm6846.dtsi            | 120 ++++++++++
+ arch/arm/boot/dts/broadcom/bcm953012hr.dts         |   1 -
+ arch/arm/boot/dts/broadcom/bcm953012k.dts          |   1 -
+ arch/arm/boot/dts/broadcom/bcm958522er.dts         |   1 -
+ arch/arm/boot/dts/broadcom/bcm958525er.dts         |   1 -
+ arch/arm/boot/dts/broadcom/bcm958525xmc.dts        |   1 -
+ arch/arm/boot/dts/broadcom/bcm958622hr.dts         |   1 -
+ arch/arm/boot/dts/broadcom/bcm958623hr.dts         |   1 -
+ arch/arm/boot/dts/broadcom/bcm958625hr.dts         |   1 -
+ arch/arm/boot/dts/broadcom/bcm958625k.dts          |   1 -
+ arch/arm/boot/dts/broadcom/bcm988312hr.dts         |   1 -
+ 17 files changed, 388 insertions(+), 11 deletions(-)
+ create mode 100644 arch/arm/boot/dts/broadcom/bcm6846-genexis-xg6846b.dts
