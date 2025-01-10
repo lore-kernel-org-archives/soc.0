@@ -1,69 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273B6223324
-	for <soc@lists.linux.dev>; Fri, 10 Jan 2025 18:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03637214A61
+	for <soc@lists.linux.dev>; Fri, 10 Jan 2025 18:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736535251; cv=none; b=k2wAHk+UOw7rABHlZzs80G2HGpZS23PhLoYLy5pnYo383wcKoCoMV14nmJ8bkMxXCOkJ1dZ2E1j7A2k4HZ8bUD2z1M13FFzCsfsRAD1plQARk57HI2fyVS+vTKPdJZOStVJqXwZxGEcHIrd1/P9IuP6s8qhmSTfkj5jjo6sl4CA=
+	t=1736535253; cv=none; b=Rou8ytG8WpYLzPDgWaktZ0ROJ244XbMNk76+rpQpSYLq3Xcz3t3Y1Sg07mkknn3zc+dEydAg+8vkJlSuQsJjblvBMg0zKB7zeMmVKIldTgxTxGkymaJnX75TpIT19ZzkdKWPXFyXUXUGPwl4iXJ02m+Ek6bRyvRrKgSx9ZvkI3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736535251; c=relaxed/simple;
-	bh=ILhKQ2NtLIQeU0mxhYxB3F58THwtyCqd0wy7ClV+Bfw=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=J0PfA4VFwRkzip5V2LrYxRw6fG8Ic8biyPJntEj3lN6Fr8RROT4SJteBP5bzSb8okJsyK3KixQ2amy1nmvqMlbCo0mgeEqVbM0qXz8niDWENRvku9mlOvy+yDsuvNPeullotelaPSZxNOR9dvALyXlwGeGEkvf5lN26qoBCMr0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UI98YLal; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736535253; c=relaxed/simple;
+	bh=lgZ93V1ZItzIfHK+oQnk1OVdB2OMfuCTvCgeEgjvxXI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RPWOLTJMqgh9joyfFceLhx769VahaUcS7+HRZpsmR2zVzv9APyD+zfS1/ICZHlNcO9JgRK0JxyYDAVeyqweLhWL6oyDjf8bF9OPqEQvZIoAQxm3dusxJehYSWTD9J3DI+1NgkkLIZ7WXLEWfM7RoWig43TIDVHuECKwH/lDhmBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SX5VQ3Vl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UI98YLal"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SX5VQ3Vl"
 Received: by smtp.kernel.org (Postfix)
-	id CD659C4CEDF; Fri, 10 Jan 2025 18:54:10 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	id 9C9DEC4CEDF; Fri, 10 Jan 2025 18:54:12 +0000 (UTC)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F20CCC4CED6;
-	Fri, 10 Jan 2025 18:54:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F20CCC4CED6
+	by smtp.kernel.org (Postfix) with ESMTPS id C9C60C4CEDD;
+	Fri, 10 Jan 2025 18:54:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C9C60C4CEDD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-385e06af753so1338794f8f.2;
-        Fri, 10 Jan 2025 10:54:09 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38632b8ae71so1666643f8f.0;
+        Fri, 10 Jan 2025 10:54:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736535248; x=1737140048; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zf//n/LaJv+Bc7QR1tIn9d7aeT/G2u5n60hqMFCkMyg=;
-        b=UI98YLal59jrFRo06IkrbCUBc5rWeQQZ/37zN5JNBiuJjpcTef0wRkSnWY+IyNnDQL
-         31YAVmDKg6jgNi2rQ6Zq0pbGpiSOUE8wpga13tj7/u0YOkoW2FHDDRN0DvOYYIoVKFId
-         Fv/rzwLctsMXlyw6AlrMH/QlclH/2IGoLda0rMvisakwCTZqnQ+NYxqAwIafCezH5GC+
-         P7R3Kd4hZAk2Kt4e8xnP1fkxYEzVfrUlZM/Tw9hpGUavXxuRO2IpleCwShCl/Ulz85b6
-         QaxKAKWSpb2ZldZLoPFU7L8Z2hPP1jKVGu6SNsMK5+naIle6mC9YVxCDNCigg+Uqe798
-         EH0g==
+        d=gmail.com; s=20230601; t=1736535249; x=1737140049; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pPmvp85D7YhG3ldAMLMgkFeu1ZL96pzTRc6+3VKf0HA=;
+        b=SX5VQ3VlR354RjbEFLaWTXrQVQoBRbwi75eDYYP3SAM69HGLp/cjWDAh0UJQLQgbel
+         jWc8uSTA8mag+WC9L++YkRDC1DQckywC1IpDgqHTngMAdUh2mIPofPEP1wBCdh7+Uycs
+         yKXOe6PVZVNdW5r3hBrHjIFGLdQ6TQFwp47KDyoWMSPgmQIyLke6OBmH6eJ5dclJfQyf
+         /MRvREMXuRMhdbIbpe6oTS0ybpxeK4qab2YWF9dbcx3/kuE0NL2CGvVL6vYY9rwbDavS
+         ymOLk9egTbVIKpX3mHKGosw1Dzxpd0MX5jlc15usTEMkt9OCfmv7/JjqW1PBm0q0YoYk
+         99Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736535248; x=1737140048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zf//n/LaJv+Bc7QR1tIn9d7aeT/G2u5n60hqMFCkMyg=;
-        b=VJja26Lc9LG9MLgj30L/XSu6aHV6+TacjzXWfijfddRiuJSUvwUAR0oKz+Ts24K9tn
-         b4C3uxSz0lhXuc4iO8qVpbaB7XQSBA/zQP/8lHDmS71rNyCFLpmJOfInHHJ0oWhAiCQm
-         NQiocROBtcx0YgGA8wx1HLabtFCPOIEc4mjX8Uqkk1MtEwGR+5hl23EHlo5bnNSNoprD
-         PnUZk1tlqpZ39pPSJgBwyRghtqqPqXGjxorcmOUPhfucfoBDIHbO4pyKoYdd6yrnkR7b
-         9GC5egYXoxUtPSCUK/oMMuO4B1onCNJ+I9OJKddrHHCmY5m2JcykzH/NOT7H9NAj89zi
-         UPYA==
-X-Forwarded-Encrypted: i=1; AJvYcCWpXe+bvfRCb/erO54fooRma4xVbuse0zDaoIIdm/oGVSGeXBKtVzqugto3N5OJBoe9XNY=@kernel.org
-X-Gm-Message-State: AOJu0YyarQBmY0VDvZ2FiXcEF9XVR4lvoULxICBV6jWAcGJTBFu4g2ti
-	Nv8RXFZB8HY/f2YCs1SQAsrqE98ogG5f0oKIVA+DCk027x8G0+WDGtPjLQ==
-X-Gm-Gg: ASbGnctloRNhltJpX7ZPcEfVXUqJRXZ4zvWcUC52fzqRpAScm/Bs8vA+RdomrJolx+C
-	9gE2PGTnwUGnrlLSRhRLOW5sYPZXddVKFhSmLGI94vEzkOX+glY+/ZJh+gr3MP4LuZbJwEF6iFr
-	un+VJbzlBNAvLumNqd0qaOaLgDq22WO2xfF+5CfR+t4vocLZSbhgrfdNL6jhQvihSrZBg8HEBkB
-	WZ7wKZw53cG4kzSbSvq/0ogLLpkHQmtUlaquSudNP+C5vf0w0rM5E4LJYnjyEiMg7DjLoKrVnq5
-	VMlpnDq3GM5YefGT21o1gR3Y3DGrezDj573VfQPwKt5wLrlQ
-X-Google-Smtp-Source: AGHT+IGZ6hlN+WoHP63J5jrBDfHHz+4clyA9GOi0tEzZYmYd03alnmZ6mmb51FMSnEhVGza4yao5Dw==
-X-Received: by 2002:a05:6000:1446:b0:385:d7f9:f169 with SMTP id ffacd0b85a97d-38a872f6d09mr10013608f8f.12.1736535247484;
-        Fri, 10 Jan 2025 10:54:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736535249; x=1737140049;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pPmvp85D7YhG3ldAMLMgkFeu1ZL96pzTRc6+3VKf0HA=;
+        b=HONvF0LBi76oDdn7osQ22QI3EvF1Ld34H9qm8cRzk3K49wmtpuA2dTs6pT5WOD9Gi6
+         xpevLKmTw8M7WhpcGm/fHFtAACYcUyPCtTR04RrVb0PJvRNqfJHdGQD3arYg6u8+T6NO
+         1G55tLRfwfCROWNh9UxhbOqe/U9/8b6nM4gqDEZxGdnP4fJ0Hu6meYps/zGZk3pq3OAy
+         mo7QzBwvJoMVVbJO6QStVeZk1ky0UUsJ5aPbMCBZBWVe65Rire9oqTrIx8klOsolljCf
+         3F76HGmT1qooRAP1Q10XjIIHwS9jFwWGbuCQLCUPliVTeHb4X6hFx6GWFEQYhrfv9x1t
+         +nlg==
+X-Forwarded-Encrypted: i=1; AJvYcCXiVKpnCSyaic5MIUyceaX4Zp9K6kceBWEJBAJjngFaRFiRIaM4iGVqDL0Lu15IFIygIi4=@kernel.org
+X-Gm-Message-State: AOJu0YzUq9cz+stnFMtQvWgguzIr6bD8+nKVvXJfCfA8JLfu/jzoel+B
+	ev/8OjkL/XOyA8ABdpbaNXNUf0doKYjQG41+X0lPEK5w598u2B7dEKIkEQ==
+X-Gm-Gg: ASbGncsaseYPz7s9ppOtlUdaSAN5BfVMTJsktIzt0W9vWYNHKUdY1Hy/Fjh16k/z+/P
+	ywPTuQpfbEJ3fjhPu3a7MnxfobqeH69MF3cuquLhDQF3fpu3CMjtLv30WISnJphdsmU3cY0DxPu
+	q1+hTxRtYvcKmY4znh4GkQpatQ3K65zbp5AmWUoB7/B/uJ3LgUlTk9vN71M9qkbDzpbQdXnAvm0
+	5Ddiz27usJKZ9Q2E2TgOkSmEZCZq5k1jIq/HyxcwtVRTzCg7V2me+19DugnP0M3rwiLgKvJFUxX
+	STvw3Wi1jxD+r7PjR8O1QuJoQGFhLIF0mDzmbcVu0f8YiJwW
+X-Google-Smtp-Source: AGHT+IEFi3PtPR7G4voP3OPwlBAD74nU6hgLY1gXbKic/LuJz/motUj+soaJ5WE95z00Ob/Xtqkqjg==
+X-Received: by 2002:a5d:5f82:0:b0:385:e9ba:acda with SMTP id ffacd0b85a97d-38a872fc177mr10677053f8f.2.1736535249366;
+        Fri, 10 Jan 2025 10:54:09 -0800 (PST)
 Received: from localhost (p200300e41f281900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1900:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9dd1957sm59993665e9.16.2025.01.10.10.54.05
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4c1ce5sm5291450f8f.94.2025.01.10.10.54.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2025 10:54:06 -0800 (PST)
+        Fri, 10 Jan 2025 10:54:08 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -71,10 +73,12 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/3] soc/tegra: Cleanups for v6.14-rc1
-Date: Fri, 10 Jan 2025 19:53:51 +0100
-Message-ID: <20250110185355.4143505-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 2/3] ARM: tegra: Device tree fixes for v6.14-rc1
+Date: Fri, 10 Jan 2025 19:53:52 +0100
+Message-ID: <20250110185355.4143505-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250110185355.4143505-1-thierry.reding@gmail.com>
+References: <20250110185355.4143505-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -92,32 +96,24 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.14-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.14-arm-dt
 
-for you to fetch changes up to 836b341cc8dab680acc06a7883bfeea89680b689:
+for you to fetch changes up to cec785a7f25d9ebe3a151ddc4f3a4ede7fc0dab0:
 
-  soc/tegra: fuse: Update Tegra234 nvmem keepout list (2025-01-10 18:51:46 +0100)
+  ARM: tegra: nyan: Maintain power to USB ports on boot (2024-12-05 12:42:06 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Cleanups for v6.14-rc1
+ARM: tegra: Device tree fixes for v6.14-rc1
 
-This contains debugfs error handling cleanup, a typofix and an update to
-the FUSE block's keepout list to properly allow reading these registers.
+This contains a fix that makes sure the power to the USB ports is
+maintained during boot. This helps with booting from USB storage.
 
 ----------------------------------------------------------------
-Kartik Rajput (1):
-      soc/tegra: fuse: Update Tegra234 nvmem keepout list
+Michal Pecio (1):
+      ARM: tegra: nyan: Maintain power to USB ports on boot
 
-Krzysztof Kozlowski (1):
-      soc/tegra: cbb: Drop unnecessary debugfs error handling
-
-liujing (1):
-      soc/tegra: Fix spelling error in tegra234_lookup_slave_timeout()
-
- drivers/soc/tegra/cbb/tegra-cbb.c     | 20 ++++----------------
- drivers/soc/tegra/cbb/tegra234-cbb.c  |  2 +-
- drivers/soc/tegra/fuse/fuse-tegra30.c | 17 +++++++++++------
- 3 files changed, 16 insertions(+), 23 deletions(-)
+ arch/arm/boot/dts/nvidia/tegra124-nyan.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
