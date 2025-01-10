@@ -1,129 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87A4214236
-	for <soc@lists.linux.dev>; Fri, 10 Jan 2025 18:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28E4207E08
+	for <soc@lists.linux.dev>; Fri, 10 Jan 2025 21:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736535254; cv=none; b=WG3jkVJuIWux1l6MRHLfAaGLriwZWhuXWgXjX6/m8urbqsNNPPJl7vOrBB5ydX7YdjzpRN9WLiU0Xgk0pOPtEgVWre4IoQTJZZOiLA68/tE0vuw6gYTiEmWDUAr6ic+Ru1WHUD5W8ynIES2vwvUbavlPgObRMzMzJsZS8oa35/c=
+	t=1736543292; cv=none; b=U+rFh0wnkFAelSKMhJvk15xAaD7su2+Iogf4pbhvGysiKam9t/NB7sdHiZTnpeydwypi0B0eKjuPvUk/fdOLx7loYOqI7azzUhVUpI9kh7Pl/4zoMsfl2EV8BYsuu1I+sgKHfcL+rNmD7+DfFYuPiFX31ZnZ8IvFFnoh5wMno9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736535254; c=relaxed/simple;
-	bh=DndyNylIL+ZUCxEtjNb9q4yI0eEiTKy2w9nASbTZbxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gJIx589mzpH8ToslD4oLQBqnBw7aSipxJhZ6MivIlNodSoVY+wfGo0jUF/joUZhPbB+4X2lEiM8NohLFattKEKuUft2vPBTpwm/NPUuEEi0ICdpYsRqt0BBkiU93bbNnOaWQOmwO9S+pYhNMlEukjnk9tTeJaP8ggAUxAGnyQOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Aux6GaeK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736543292; c=relaxed/simple;
+	bh=AdzdgmAXlnALT2yqiYSKmAH591OGwWvnkSTknul7ABk=;
+	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FJN3mpbjmpl53OfY7RTzSN+dF+TOtTQf9xuqDFyP6sogm8QPmMPo0QQTt3Tl8jL+Ll3zFlsBrOiv5A+CgVm1g1hYPulPFmkbk3m16WbH/0Sx70EigzXIKPaJV70ZiIxPSkryUnOLvCsTwkbh0lRPqVfERFZ3xmwLxl4+QonmITU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=GJJ5XHpy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aux6GaeK"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="GJJ5XHpy"
 Received: by smtp.kernel.org (Postfix)
-	id 8A339C4CEDD; Fri, 10 Jan 2025 18:54:14 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 7E01EC4CEDF; Fri, 10 Jan 2025 21:08:11 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ABD29C4CEE4;
-	Fri, 10 Jan 2025 18:54:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ABD29C4CEE4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43622267b2eso25914395e9.0;
-        Fri, 10 Jan 2025 10:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736535251; x=1737140051; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CSzrQeseUUwDfAM8Q0k65Q1Koz1ieX1zSngb4j0vsQc=;
-        b=Aux6GaeKAkhZxaeipymIdnNDVCJ7Qytp6Y3fxETpeXOj9QT6QFJTxqOtJYp2LkhQNN
-         gsn4/FRveNLey8c0B+5zFPnBAu1qblux8RaTHX42PoCJgZIKNvwzdwpTo0dbV44qBSTD
-         qutm+y3x1dyednGSAjCowADi/AZtGphQ30MRevWaBXHEeWVrtl49acoOzbLYUiATcf5f
-         VpkWfUI0sJv0K18zLPFBccTbRQ/RSV2hb4Urz7RPqQUauUnUfycAW8hF2g7tNK00DX8g
-         2bg0j7BAf/vuzNmJYljEKbziRc00NbYGdQnb/Fm2tRvsaurJh7zFO2ohPxgP6LbFc0C9
-         9eUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736535251; x=1737140051;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CSzrQeseUUwDfAM8Q0k65Q1Koz1ieX1zSngb4j0vsQc=;
-        b=Q8B21GnaoEJq8Ox69ukMjHBBeSWZ6eWQhMZdnwh3otR+ZMXckFqEE8fxVGXchtvQF+
-         gLOtFSlNpNknSRfnwjmp4Y0d9eDTFccW7U59Ztl/wTVCuVRtb6nm8D61gaHS1myS7UMk
-         fogxhpwQI80Ww6VRHDOiGHHhxfhUdJOUmNfdyE3MRJ2dq3wi9XGHU1KvuFzOppivq1ow
-         J9CWRJ4l/MicxPFC+Xbcz9vIsSRq3hjiDHVrt759BWuWGHPnLVtQmo8YUfzNoNT6D4wE
-         P0/Wvu+rR7zEfuqlfgffDUD0fpaGcIZL4dOg2U7uf5obGDIqbwvg2jz8EtpzEMQFc2Qa
-         ixCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVd9PlnsmxyhGcare4PDbQAYv594SyLG/zw08D4KSVmVFhHg45ICdDPp9i0ccsgC0pFfT8=@kernel.org
-X-Gm-Message-State: AOJu0YzAOTIqal2/oA9NrNRGldyfbjTGXiEV1P/jc1VuyS9YyvausmRo
-	dP3VJ2tdRQOBrsWperP95wx5KRGMIhSa5mCpdAgiFklGImAXHoWxNnabyA==
-X-Gm-Gg: ASbGncvUxeuOCDteMGt4Ss8W8KlezHw3rDKW01OTchL1tbOsskBXmTehJ0ue1Wfd91+
-	Jik/rxxYSpZXNd7YuNzk37sqWxojUVedUFs8nSayA+P5cc2LmjpAZrvsn6lwVBRwIvs0Ig8cvn7
-	NbGSjl76cI95nTSc7yRa9W1BHtVMEGi60kOrnA0geUflfdFaEt6dirGFo8ss13LeRQPbo4N+djF
-	9L8EJxjSIiSlO0AREMWQ+mv/o6GcuJCa7IZNre/7wjPk2TGQAFXEqXaJQOULKlNiBrt7azhzghc
-	mU+cJv+vaOE6Pan21di81GTl2i4gj2NaD7L0s5JIyrUWWWI3
-X-Google-Smtp-Source: AGHT+IGL1UNuIWvfIXF5q1ZuB2NL1WSHb5lPRNZ4RnJeqXAHuM/DlevEFHezs0QM4/P/ttrkrToSEA==
-X-Received: by 2002:adf:a295:0:b0:38a:873f:e31f with SMTP id ffacd0b85a97d-38a873fe683mr8253747f8f.1.1736535251283;
-        Fri, 10 Jan 2025 10:54:11 -0800 (PST)
-Received: from localhost (p200300e41f281900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1900:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9dc895esm59818695e9.13.2025.01.10.10.54.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2025 10:54:10 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/3] arm64: tegra: Device tree fixes for v6.14-rc1
-Date: Fri, 10 Jan 2025 19:53:53 +0100
-Message-ID: <20250110185355.4143505-3-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250110185355.4143505-1-thierry.reding@gmail.com>
-References: <20250110185355.4143505-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.kernel.org (Postfix) with ESMTPS id 88C72C4CED6;
+	Fri, 10 Jan 2025 21:08:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88C72C4CED6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 50AL80RP005498;
+	Fri, 10 Jan 2025 15:08:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1736543280;
+	bh=c2vzOiHUmpA75QtQSimbJ3xsOFiWjDLHRAn+S8DaIMY=;
+	h=Date:From:To:CC:Subject;
+	b=GJJ5XHpyk+zbWJcZrsMrSwJ3lzf6OWRbsafgRoxid54y169EgVGUcjlfh0lqDf4Bx
+	 MCFTNPAPCPGV0xaDuFIJJWBEs/i66EdpVVKdYvQy7PoXo1Ps8hrZmoOuUjXFioJnCP
+	 Vk9YDLkJkOjNA41EzzoAKuF9gNdQVGrXYqgtZ6jA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 50AL80Mh089692
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 10 Jan 2025 15:08:00 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 10
+ Jan 2025 15:07:59 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 10 Jan 2025 15:07:59 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 50AL7xf0033690;
+	Fri, 10 Jan 2025 15:07:59 -0600
+Date: Fri, 10 Jan 2025 15:07:59 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Arnd <arnd@arndb.de>, SoC list <soc@lists.linux.dev>
+CC: <soc@kernel.org>, <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
+Subject: [GIT PULL 2/4] arm64: defconfig: Driver updates for TI K3 platforms
+ for v6.14
+Message-ID: <20250110210759.fd6a3ed7q52zkpnw@rogue>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hi ARM SoC maintainers,
+Hi SoC maintainers,
 
+Please pull
 The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.14-arm64-dt
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v6.14
 
-for you to fetch changes up to b615fbd70fce8582d92b3bdbbf3c9b80cadcfb55:
+for you to fetch changes up to 184caba444cfd4b90231de7d071b9966c115c29f:
 
-  arm64: tegra: Fix Tegra234 PCIe interrupt-map (2025-01-10 18:47:01 +0100)
-
-Thanks,
-Thierry
+  arm64: defconfig: Enable TI K3 M4 remoteproc driver (2025-01-08 09:46:14 -0600)
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree fixes for v6.14-rc1
+TI K3 defconfig updates for v6.14
 
-These patches fix up an issue with the DMA support on one of the SPI
-controllers, as well as properly identify the SCE fabric and disable
-it to prevent accessing registers that may not be accessible to the
-CPU. Finally, the GIC's #address-cells property is set to 0 to fix a
-problem in the PCIe interrupt-map property.
+- Enable M4F remote proc support for AM62x based platforms such as
+  BeaglePlay, phyboard, verdin, SK etc.
 
 ----------------------------------------------------------------
-Akhil R (1):
-      arm64: tegra: Fix DMA ID for SPI2
+Hari Nagalla (1):
+      arm64: defconfig: Enable TI K3 M4 remoteproc driver
 
-Brad Griffis (1):
-      arm64: tegra: Fix Tegra234 PCIe interrupt-map
-
-Sumit Gupta (2):
-      arm64: tegra: Fix typo in Tegra234 dce-fabric compatible
-      arm64: tegra: Disable Tegra234 sce-fabric node
-
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
