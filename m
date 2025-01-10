@@ -1,82 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC332B661
-	for <soc@lists.linux.dev>; Fri, 10 Jan 2025 04:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273B6223324
+	for <soc@lists.linux.dev>; Fri, 10 Jan 2025 18:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736481967; cv=none; b=EDEquigeHTlq8OLGMvxb/ycG9RO8VuF99I431WdXj08bWu20qIcIoD05nH9TlWZAg6Drl2DNPUYKcB+ziFpQ0it5f2l4bx1nDefxhLG8huFBecZqjVNuCU9EpEus7KK8s3P3SJUB423U81GHj19mEGFkYzHMvYIWR+PB9xcvi4g=
+	t=1736535251; cv=none; b=k2wAHk+UOw7rABHlZzs80G2HGpZS23PhLoYLy5pnYo383wcKoCoMV14nmJ8bkMxXCOkJ1dZ2E1j7A2k4HZ8bUD2z1M13FFzCsfsRAD1plQARk57HI2fyVS+vTKPdJZOStVJqXwZxGEcHIrd1/P9IuP6s8qhmSTfkj5jjo6sl4CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736481967; c=relaxed/simple;
-	bh=jPK9A5zkV0qlQUYAmADF+SVsetpkaQYUn4coc/FNqgk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ivF9ZAwQ56ATRE/2IcJR79LS8M4ahZIave5x1AxOxe0Moyx+od92ZI3J8QBaKf7L+SR8UBvOyN7WpmZ/CxWEkidA3kNUfAICnycFi4/eAA3QcfYxZCAihe/As8u5/csq50SsJBfeB/hj1kqfiQo8XBNYTV4lekQMo5AmjX9H7/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b=mZ8uM5TB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736535251; c=relaxed/simple;
+	bh=ILhKQ2NtLIQeU0mxhYxB3F58THwtyCqd0wy7ClV+Bfw=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=J0PfA4VFwRkzip5V2LrYxRw6fG8Ic8biyPJntEj3lN6Fr8RROT4SJteBP5bzSb8okJsyK3KixQ2amy1nmvqMlbCo0mgeEqVbM0qXz8niDWENRvku9mlOvy+yDsuvNPeullotelaPSZxNOR9dvALyXlwGeGEkvf5lN26qoBCMr0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UI98YLal; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="mZ8uM5TB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UI98YLal"
 Received: by smtp.kernel.org (Postfix)
-	id 7E6C8C4CEDD; Fri, 10 Jan 2025 04:06:06 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	id CD659C4CEDF; Fri, 10 Jan 2025 18:54:10 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D1D0CC4CED6
-	for <soc@kernel.org>; Fri, 10 Jan 2025 04:06:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1D0CC4CED6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+	by smtp.kernel.org (Postfix) with ESMTPS id F20CCC4CED6;
+	Fri, 10 Jan 2025 18:54:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F20CCC4CED6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so336226666b.3
-        for <soc@kernel.org>; Thu, 09 Jan 2025 20:06:04 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-385e06af753so1338794f8f.2;
+        Fri, 10 Jan 2025 10:54:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1736481962; x=1737086762; darn=kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e/24BpOBFggVP4Qf5Sk+TOwiRXODhNI6Ut5pVQz3vwE=;
-        b=mZ8uM5TB3woVWv/38tG2mv3T/V4ecsxy/Y8Ms2Oci6CE2BiDrypcp7Gi/0h7Yn25m8
-         vJ1Nk8OmfQUo9OXokKs38BG0YGGrfc6PaKYRw/OoWZcrAAx+eGZfJq5X6bEnA/Ur50Z9
-         1l7kb8YsNq6LjOR7amk/ZcWHNZxboO3GnCP3g=
+        d=gmail.com; s=20230601; t=1736535248; x=1737140048; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zf//n/LaJv+Bc7QR1tIn9d7aeT/G2u5n60hqMFCkMyg=;
+        b=UI98YLal59jrFRo06IkrbCUBc5rWeQQZ/37zN5JNBiuJjpcTef0wRkSnWY+IyNnDQL
+         31YAVmDKg6jgNi2rQ6Zq0pbGpiSOUE8wpga13tj7/u0YOkoW2FHDDRN0DvOYYIoVKFId
+         Fv/rzwLctsMXlyw6AlrMH/QlclH/2IGoLda0rMvisakwCTZqnQ+NYxqAwIafCezH5GC+
+         P7R3Kd4hZAk2Kt4e8xnP1fkxYEzVfrUlZM/Tw9hpGUavXxuRO2IpleCwShCl/Ulz85b6
+         QaxKAKWSpb2ZldZLoPFU7L8Z2hPP1jKVGu6SNsMK5+naIle6mC9YVxCDNCigg+Uqe798
+         EH0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736481962; x=1737086762;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e/24BpOBFggVP4Qf5Sk+TOwiRXODhNI6Ut5pVQz3vwE=;
-        b=rS7ulLlJFIlMFZzUDTwn81uziLcL+hSdV0rMl9nOiwTMYHTYIfXgBxaMK2ravUPepK
-         ZxssaZ9SpYo8jmxm2VRWPXuoGFP+spXrPZrpzDd9qNsVjcCbWVLVlg5MzSz7xFsFpnaQ
-         T/SnJAT30GPc3J5MyQxK6fVWfQKnon9DRhuHktOrdCv2ZTiFvHGDJ4tebHmvsYrjz2Br
-         BDRjcBbT54oOOU7P5quIFZ4aXoIJu8cHIe1Xlnr60S87FdJcOacfx0VUnqQWEkFQj3Vl
-         WV2j/puuOqwDNcjz7FA37sMyOoACrISFXZSzoU6j6zJo6KlAIC83AOuhyS5SfwQ/zSLb
-         lmKw==
-X-Gm-Message-State: AOJu0YwRl37m1iSGfMBv/QSU5fN65uOXiqVtuz5XYxufzK/L6xEDQRST
-	DDS1l59deBv3FNweZnrJfr25LqJ0pFrF2OoTypgXloTukLSDCJV+Gc5pelNLkBz/Om6CU3087qe
-	uR+c+DB0iywZWZ0jCXJRoqBdxqh70mFcy
-X-Gm-Gg: ASbGncsEdchtskQWZ1glnucnK0UTmrBUtCIdHYjTT3Q2WwEO1tZYakqKCidlaXiEn4d
-	OBqNpvsoIi5Sphrlm+fFSVF441yDmzByDXbmQ3W4=
-X-Google-Smtp-Source: AGHT+IGqymY4AvkBSU1XQNYWlZtUCEzdAxywQjDfebNLm1G7SLuFYvEUjUET31E/9WQZk30AzUm2yPHyCp7zotDgCes=
-X-Received: by 2002:a17:907:781:b0:aa6:995d:9ef1 with SMTP id
- a640c23a62f3a-ab2ab6a84d3mr845449566b.12.1736481962317; Thu, 09 Jan 2025
- 20:06:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736535248; x=1737140048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zf//n/LaJv+Bc7QR1tIn9d7aeT/G2u5n60hqMFCkMyg=;
+        b=VJja26Lc9LG9MLgj30L/XSu6aHV6+TacjzXWfijfddRiuJSUvwUAR0oKz+Ts24K9tn
+         b4C3uxSz0lhXuc4iO8qVpbaB7XQSBA/zQP/8lHDmS71rNyCFLpmJOfInHHJ0oWhAiCQm
+         NQiocROBtcx0YgGA8wx1HLabtFCPOIEc4mjX8Uqkk1MtEwGR+5hl23EHlo5bnNSNoprD
+         PnUZk1tlqpZ39pPSJgBwyRghtqqPqXGjxorcmOUPhfucfoBDIHbO4pyKoYdd6yrnkR7b
+         9GC5egYXoxUtPSCUK/oMMuO4B1onCNJ+I9OJKddrHHCmY5m2JcykzH/NOT7H9NAj89zi
+         UPYA==
+X-Forwarded-Encrypted: i=1; AJvYcCWpXe+bvfRCb/erO54fooRma4xVbuse0zDaoIIdm/oGVSGeXBKtVzqugto3N5OJBoe9XNY=@kernel.org
+X-Gm-Message-State: AOJu0YyarQBmY0VDvZ2FiXcEF9XVR4lvoULxICBV6jWAcGJTBFu4g2ti
+	Nv8RXFZB8HY/f2YCs1SQAsrqE98ogG5f0oKIVA+DCk027x8G0+WDGtPjLQ==
+X-Gm-Gg: ASbGnctloRNhltJpX7ZPcEfVXUqJRXZ4zvWcUC52fzqRpAScm/Bs8vA+RdomrJolx+C
+	9gE2PGTnwUGnrlLSRhRLOW5sYPZXddVKFhSmLGI94vEzkOX+glY+/ZJh+gr3MP4LuZbJwEF6iFr
+	un+VJbzlBNAvLumNqd0qaOaLgDq22WO2xfF+5CfR+t4vocLZSbhgrfdNL6jhQvihSrZBg8HEBkB
+	WZ7wKZw53cG4kzSbSvq/0ogLLpkHQmtUlaquSudNP+C5vf0w0rM5E4LJYnjyEiMg7DjLoKrVnq5
+	VMlpnDq3GM5YefGT21o1gR3Y3DGrezDj573VfQPwKt5wLrlQ
+X-Google-Smtp-Source: AGHT+IGZ6hlN+WoHP63J5jrBDfHHz+4clyA9GOi0tEzZYmYd03alnmZ6mmb51FMSnEhVGza4yao5Dw==
+X-Received: by 2002:a05:6000:1446:b0:385:d7f9:f169 with SMTP id ffacd0b85a97d-38a872f6d09mr10013608f8f.12.1736535247484;
+        Fri, 10 Jan 2025 10:54:07 -0800 (PST)
+Received: from localhost (p200300e41f281900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9dd1957sm59993665e9.16.2025.01.10.10.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 10:54:06 -0800 (PST)
+From: Thierry Reding <thierry.reding@gmail.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/3] soc/tegra: Cleanups for v6.14-rc1
+Date: Fri, 10 Jan 2025 19:53:51 +0100
+Message-ID: <20250110185355.4143505-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.47.1
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Joel Stanley <joel@jms.id.au>
-Date: Fri, 10 Jan 2025 14:35:50 +1030
-X-Gm-Features: AbW1kvZ_i72IdjrqMlOp7-vfRZRdXCzz7gff0Z42evFFJX0klOqybwJks_f63EA
-Message-ID: <CACPK8Xe8yZLXzEQPp=1D2f0TsKA7hBZG=pHHW6U51FMpp_BiRQ@mail.gmail.com>
-Subject: [GIT PULL] ARM: aspeed: soc changes for 6.14
-To: SoC Team <soc@kernel.org>
-Cc: Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello Arnd,
-
-Here are the aspeed changes for v6.14. Andrew has done most (all) of
-the work applying. We will get him set up to send the pull request in
-the future so we can share the load, and so he's not blocked by me if
-I'm not around to do it.
+Hi ARM SoC maintainers,
 
 The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
@@ -84,124 +92,32 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/aspeed-6.14-devicetree
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.14-soc
 
-for you to fetch changes up to 3540adcccc7179d243216bf488532a62c37d9007:
+for you to fetch changes up to 836b341cc8dab680acc06a7883bfeea89680b689:
 
-  ARM: dts: aspeed: yosemite4: adjust secondary flash name (2025-01-08
-10:57:53 +1030)
+  soc/tegra: fuse: Update Tegra234 nvmem keepout list (2025-01-10 18:51:46 +0100)
 
-----------------------------------------------------------------
-ASPEED device tree updates for 6.14
-
-- New machines
-
-  * IBM SPB1 AST2600 BMC machine, a Sapphire Rapids x86 server
-  * Ampre Mt Jefferson AST2600 BMC
-
- - Updates to mtmitchell, rainier, blueridge, everest, fuji, system1,
-   harma, catalina and minerva
-
- - A big rework of yosemite4
+Thanks,
+Thierry
 
 ----------------------------------------------------------------
-Chanh Nguyen (4):
-      ARM: dts: aspeed: mtmitchell: Add I2C FAN controllers
-      ARM: dts: aspeed: mtmitchell: Add gpio line names for io expanders
-      dt-bindings: arm: aspeed: add Mt. Jefferson board
-      ARM: dts: aspeed: Add device tree for Ampere's Mt. Jefferson BMC
+soc/tegra: Cleanups for v6.14-rc1
 
-Eddie James (4):
-      ARM: dts: aspeed: Fix Rainier and Blueridge GPIO LED names
-      arm: dts: aspeed: Everest and Fuji: Add VRM presence gpio expander
-      ARM: dts: aspeed: Blueridge and Fuji: Fix LED node names
-      arm: dts: aspeed: Blueridge and Rainer: Add VRM presence GPIOs
+This contains debugfs error handling cleanup, a typofix and an update to
+the FUSE block's keepout list to properly allow reading these registers.
 
-Manojkiran Eda (1):
-      ARM: dts: aspeed: Enable PECI and LPC snoop for IBM System1
+----------------------------------------------------------------
+Kartik Rajput (1):
+      soc/tegra: fuse: Update Tegra234 nvmem keepout list
 
-Naresh Solanki (1):
-      dt-bindings: arm: aspeed: add IBM SBP1 board
+Krzysztof Kozlowski (1):
+      soc/tegra: cbb: Drop unnecessary debugfs error handling
 
-Ninad Palsule (4):
-      ARM: dts: aspeed: system1: Bump up i2c busses freq
-      ARM: dts: aspeed: system1: Enable serial gpio0
-      ARM: dts: aspeed: system1: Add GPIO line names
-      ARM: dts: aspeed: system1: Use crps PSU driver
+liujing (1):
+      soc/tegra: Fix spelling error in tegra234_lookup_slave_timeout()
 
-Patrick Rudolph (1):
-      ARM: dts: aspeed: sbp1: IBM sbp1 BMC board
-
-Patrick Williams (1):
-      ARM: dts: aspeed: yosemite4: adjust secondary flash name
-
-Peter Yin (2):
-      ARM: dts: aspeed: Harma: add rtc device
-      ARM: dts: aspeed: Harma: revise sgpio line name
-
-Potin Lai (6):
-      ARM: dts: aspeed: catalina: add i2c-mux-idle-disconnect to all mux
-      ARM: dts: aspeed: catalina: move hdd board i2c mux bus to i2c5
-      ARM: dts: aspeed: catalina: enable mac2
-      ARM: dts: aspeed: catalina: update NIC1 fru address
-      ARM: dts: aspeed: catalina: revise ltc4287 shunt-resistor value
-      ARM: dts: aspeed: catalina: remove interrupt of GPIOB4 form all IOEXP
-
-Ricky CX Wu (23):
-      ARM: dts: aspeed: yosemite4: Remove temperature sensors on Medusa Board
-      ARM: dts: aspeed: yosemite4: Change eeprom for Medusa Board
-      ARM: dts: aspeed: yosemite4: Enable watchdog2
-      ARM: dts: aspeed: yosemite4: Enable adc15
-      ARM: dts: aspeed: yosemite4: Enable interrupt setting for pca9555
-      ARM: dts: aspeed: yosemite4: Revise to use adm1281 on Medusa board
-      ARM: dts: aspeed: yosemite4: Add gpio pca9506 for CPLD IOE
-      ARM: dts: aspeed: yosemite4: Revise adc128d818 adc mode on Spider Board
-      ARM: dts: aspeed: yosemite4: Enable spi-gpio setting for TPM
-      ARM: dts: aspeed: yosemite4: Revise quad mode to dual mode
-      ARM: dts: aspeed: yosemite4: revise flash layout to 128MB
-      ARM: dts: aspeed: yosemite4: Add i2c-mux for Management Board
-      ARM: dts: aspeed: yosemite4: correct the compatible string of adm1272
-      ARM: dts: aspeed: yosemite4: Remove IO expanders on I2C bus 13
-      ARM: dts: aspeed: yosemite4: add i2c-mux for all Server Board slots
-      ARM: dts: aspeed: yosemite4: Add i2c-mux for four NICs
-      ARM: dts: aspeed: yosemite4: Add i2c-mux for CPLD IOE on Spider Board
-      ARM: dts: aspeed: yosemite4: Add required properties for IOE on fan boards
-      ARM: dts: aspeed: yosemite4: correct the compatible string for max31790
-      ARM: dts: aspeed: yosemite4: Revise address of i2c-mux for two fan boards
-      ARM: dts: aspeed: yosemite4: Change the address of Fan IC on fan boards
-      ARM: dts: aspeed: yosemite4: Revise adc128d818 adc mode on Fan Boards
-      ARM: dts: aspeed: yosemite4: Add i2c-mux for ADC monitor on Spider Board
-
-Rob Herring (Arm) (1):
-      ARM: dts: aspeed: Fix at24 EEPROM node names
-
-Yang Chen (7):
-      ARM: dts: aspeed: minerva: Revise the SGPIO line name
-      ARM: dts: aspeed: minerva: change the i2c mux number for FCBs
-      ARM: dts: aspeed: minerva: add fru device for other blades
-      ARM: dts: aspeed: minerva: add i/o expanders on bus 0
-      ARM: dts: aspeed: minerva: add i/o expanders on each FCB
-      ARM: dts: aspeed: minerva: add bmc ready led setting
-      ARM: dts: aspeed: minerva: add second source RTC
-
- .../devicetree/bindings/arm/aspeed/aspeed.yaml     |    2 +
- arch/arm/boot/dts/aspeed/Makefile                  |    2 +
- .../dts/aspeed/aspeed-bmc-ampere-mtjefferson.dts   |  622 ++
- .../dts/aspeed/aspeed-bmc-ampere-mtmitchell.dts    |   18 +-
- .../dts/aspeed/aspeed-bmc-facebook-catalina.dts    |  191 +-
- .../boot/dts/aspeed/aspeed-bmc-facebook-harma.dts  |   45 +-
- .../dts/aspeed/aspeed-bmc-facebook-minerva.dts     |  998 +++-
- .../dts/aspeed/aspeed-bmc-facebook-yosemite4.dts   | 1011 +++-
- .../boot/dts/aspeed/aspeed-bmc-ibm-blueridge.dts   |   46 +-
- .../arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts |   27 +
- arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts   |  111 +-
- .../arm/boot/dts/aspeed/aspeed-bmc-ibm-rainier.dts |   17 +-
- arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts   | 6086 ++++++++++++++++++++
- .../arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts |   31 +-
- arch/arm/boot/dts/aspeed/aspeed-bmc-quanta-s6q.dts |    8 +-
- .../arm/boot/dts/aspeed/aspeed-bmc-vegman-rx20.dts |    6 +-
- arch/arm/boot/dts/aspeed/aspeed-bmc-vegman.dtsi    |    2 +-
- 17 files changed, 8802 insertions(+), 421 deletions(-)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ampere-mtjefferson.dts
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts
+ drivers/soc/tegra/cbb/tegra-cbb.c     | 20 ++++----------------
+ drivers/soc/tegra/cbb/tegra234-cbb.c  |  2 +-
+ drivers/soc/tegra/fuse/fuse-tegra30.c | 17 +++++++++++------
+ 3 files changed, 16 insertions(+), 23 deletions(-)
