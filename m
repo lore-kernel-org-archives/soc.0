@@ -1,62 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00DE4315E
-	for <soc@lists.linux.dev>; Sun, 12 Jan 2025 19:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4FA14E2E2
+	for <soc@lists.linux.dev>; Mon, 13 Jan 2025 16:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736710528; cv=none; b=ONrAAjwuX1LxtBFdIEExIc005n9IGO211G4KpMYb6d2I8giAIPFCCyYjsCaUWhabwhg7JyLYxtShm8fDbdVvvigt8Ku0hzhdo+5+0ciQCoiaPJESqv/DljlcrOOX2IyZV4aAOkyp3cqCRW9H462Ufdwc5UMO33EbrAek0Yav/so=
+	t=1736786207; cv=none; b=EYtYuIdTNgMrP/6TUNn0ejaR/MUq3DcgjVd33bwogxi0sDA04VQvM3c1SNJyxDegdTk72cLNNaRA+V5nXT6UZK1S8/rfmZhkBcpSwhXSHADknhjgle191i5euz8OdpwqMT5ovhF6xeYwDZ3kAxP+SHU4voEC7WN1kUqFvO11GGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736710528; c=relaxed/simple;
-	bh=IslOYzzEkkmhRdaVZhls3hZ2/afWKWvmHTgI9SDxulk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tM+vrAevCYSq1YlqHns7CAhF200ntSXqNUWPGmipGd1YMMnxfPd9xJteUXZOI10GbxS7O14n6jx5WDpUdQ3qxbUITpusKGKAykXaBnPYV/IUx9kAM7Np7U5oYi8u3gVT8cO6+gWwVOVDLXCgdU2bo+e5d2+VUJBp00YA0uuiwcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YaPPvibs; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YaPPvibs"
+	s=arc-20240116; t=1736786207; c=relaxed/simple;
+	bh=QCxQB095+VdojJc+b7HFeBCRx5uGO2LtCereuWTCRn0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tfUho4sOw4Gz+nWHNqztvR9RJxMLaZCduHnzGAtqWTVidw5SQt/+ANLUC1pYEYSS417md98JIWSityPsVT65jEBPqLZD3Bip+403jE8pYtWm/pV9Sb1xKMM8gBLuZQ0ZfjirVIr5sp88wiceMkaGAMhM4UfZ/WfGiFjQPQjRobo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 5A881C4CEE3; Sun, 12 Jan 2025 19:35:28 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id DFAA2C4CEE1; Mon, 13 Jan 2025 16:36:46 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8F0D0C4CEDF;
-	Sun, 12 Jan 2025 19:35:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F0D0C4CEDF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 842A4FF803;
-	Sun, 12 Jan 2025 19:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736710517;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=ZtBqhdvDtSMZSifwdEtbxuLavEcjAiJgqkWtN+G3/74=;
-	b=YaPPvibscYQZa+LJLSt5HaYahNFKdc9GFsiNmqWvpniX7X31YicBAri0U+ReH2HOOBSbW8
-	odWpyJzU0yKdPHxnS6c15XzH9qXCUePHMfC7QyJdPbnwonfFWbKSvyKgqV9+ky3PvFN1ox
-	13P9kT6Z2Aj2tw6eG35P2qKIErdbW/G4F1ZkWXT3JDVSXQBe5kkgbjNWQQcbHPK8cB/0RD
-	rlY0mQGhYgsFP01NYsPS3RK8kFO6hvw4mBEHJt4+cXJUpzpYNV25i0fqdMcccafq/Mkqpw
-	uF1c6UP2ioGgSBIfbAY4HpkpoCBoL4ZSdusPUReBB/2Z876HbvUET59ZU92UtA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v6.14 (#1)
-Date: Sun, 12 Jan 2025 20:35:16 +0100
-Message-ID: <87frlnygej.fsf@BLaptop.bootlin.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 06A90C4CEE2
+	for <soc@kernel.org>; Mon, 13 Jan 2025 16:36:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06A90C4CEE2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tXNQi-0001XT-Ck; Mon, 13 Jan 2025 17:36:44 +0100
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller fixes for v6.13
+Date: Mon, 13 Jan 2025 17:36:42 +0100
+Message-Id: <20250113163642.1757160-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-Hi,
-
-Here is the first pull request for dt64 for mvebu for v6.14.
-
-Gregory
+Dear arm-soc maintainers,
 
 The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
@@ -64,35 +55,21 @@ The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-6.14-1
+  git://git.pengutronix.de/pza/linux.git tags/reset-fixes-for-v6.13
 
-for you to fetch changes up to a34c9fac85b2fe9d2a4191b3d5cc3a459823124e:
+for you to fetch changes up to 1f8af9712413f456849fdf3f3a782cbe099476d7:
 
-  arm64: dts: marvell: drop additional phy-names for sata (2025-01-08 09:24:38 +0100)
-
-----------------------------------------------------------------
-mvebu dt64 for 6.14 (part 1)
-
-Fix errors reported by dtbs_check for sata related nodes
-Fix cp1 comphy link on Marvell CN913x platforms
+  reset: rzg2l-usbphy-ctrl: Assign proper of node to the allocated device (2024-12-06 16:51:28 +0100)
 
 ----------------------------------------------------------------
-Frank Wunderlich (2):
-      arm64: dts: marvell: only enable complete sata nodes
-      arm64: dts: marvell: drop additional phy-names for sata
+Reset controller fixes for v6.13
 
-Josua Mayer (1):
-      arm64: dts: marvell: cn9131-cf-solidwan: fix cp1 comphy links
+* Fix rzg2l-usb-vbus-regulator lookup by assigning the proper of node
+  to the allocated platform device in the rzg2l-usbphy-ctrl driver.
 
- arch/arm64/boot/dts/marvell/armada-7040-db.dts             | 1 +
- arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts       | 2 ++
- arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts | 1 +
- arch/arm64/boot/dts/marvell/armada-8040-db.dts             | 5 +++--
- arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi         | 3 +--
- arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts    | 2 ++
- arch/arm64/boot/dts/marvell/armada-cp11x.dtsi              | 2 ++
- arch/arm64/boot/dts/marvell/cn9130-crb-B.dts               | 1 +
- arch/arm64/boot/dts/marvell/cn9131-cf-solidwan.dts         | 4 ++--
- arch/arm64/boot/dts/marvell/cn9131-db.dtsi                 | 1 +
- arch/arm64/boot/dts/marvell/cn9132-db.dtsi                 | 1 +
- 11 files changed, 17 insertions(+), 6 deletions(-)
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      reset: rzg2l-usbphy-ctrl: Assign proper of node to the allocated device
+
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c | 1 +
+ 1 file changed, 1 insertion(+)
