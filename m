@@ -1,85 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D078F5D
-	for <soc@lists.linux.dev>; Wed, 15 Jan 2025 14:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03FA316A92E
+	for <soc@lists.linux.dev>; Wed, 15 Jan 2025 16:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736951248; cv=none; b=h5NF+7gcECzHRvjEa41zAzGR+gGQqmMmYWvvHtV59L+cUxeZd1Bt2LIj+k876Q8X6G+UQq4CT9T2CDkzJDdZjICHOTGFkz7DoimUhF7nDwO8zR16Ol4rES6b4TVfQaIdmno4ep+RBc5/Hloq4vANJRUthuYyDFgNV8pYziMLKLM=
+	t=1736957626; cv=none; b=TB4gRwoe543PPBddhpz0qjofBydLZ7R+jvzJoEpKG8O/oY7dxMrgTXDWRLHwn4tv7I9mDVeQDtzJgIxYq8MgShrfvikg2zIZ8qfk+aQT56cayXlc5l6G/BJ6BEWLnCekmqiUwGG8Wm8vSz9uLmXuvgTd7coG7KNC8+iKJZefBRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736951248; c=relaxed/simple;
-	bh=5cmJI8dDQZgwYUCjSDe+MbTfU7ztOqX5Aup1UmdV9sU=;
+	s=arc-20240116; t=1736957626; c=relaxed/simple;
+	bh=/HX1pKnHo4l3ueb55wf8odbF32bOWtqZiFigHYtN6QQ=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=HncDqCmNVuVIPQlGNXGJLKgJzLt2f7PVParuI9itD7/YIz1YCTOtnw0tFE7WEOggs9g9gmKCXHiKtezmqvDbiunKwgfn3a54kJOjS9vRHaHjI1Jk8PGTwLXP9EXVn0mbzM6brdxgp4FgJhnazHsGdDavkttxraAKAZX809ff2Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=zlnzjJHI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jXck41nM; arc=none smtp.client-ip=10.30.226.201
+	 Subject:Content-Type; b=hE4Mb+vDRpEkXLv+/jDyqZp5rCTXR5eZVR/bhPlS6kaB42CDN5RvIg9Hb7pF/LPBBXbjT1QH+ZM1hRWlRPS+OIt80b2WmS2G+5daGeHAnvy1iaSWXmUHwZn64sL9MCeRaIt1PjXTjvUwil0SGrxtZ9kPzwFiUllBVszgwcz07jE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ittFJ5JZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MmqhH0YA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="zlnzjJHI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jXck41nM"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ittFJ5JZ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MmqhH0YA"
 Received: by smtp.kernel.org (Postfix)
-	id D4F4CC4CEDF; Wed, 15 Jan 2025 14:27:25 +0000 (UTC)
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+	id 88E35C4CED1; Wed, 15 Jan 2025 16:13:45 +0000 (UTC)
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9D4AAC4CED1
-	for <soc@kernel.org>; Wed, 15 Jan 2025 14:27:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9D4AAC4CED1
+	by smtp.kernel.org (Postfix) with ESMTPS id 8CFE8C4CEDF
+	for <soc@kernel.org>; Wed, 15 Jan 2025 16:13:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8CFE8C4CEDF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 4A89F2540118;
-	Wed, 15 Jan 2025 09:27:22 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 6C3B525400DC;
+	Wed, 15 Jan 2025 11:13:42 -0500 (EST)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Wed, 15 Jan 2025 09:27:22 -0500
+  by phl-compute-10.internal (MEProxy); Wed, 15 Jan 2025 11:13:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1736951242;
-	 x=1737037642; bh=nSkTlQ8+HyMT54GNGl3HP3EHqUEYjgJY5ZhUbjRzHHU=; b=
-	zlnzjJHIxVfp6s2sqT/UywizFqgrKhyAjOFp6qTCBBmLHUjMNeq/cIwoFO+Vtm/u
-	J4isKtGaxHDo09CkHkfKEuDBwLh2U7OHvw9RiJXwcEKmNmdiAefUdF82n+FjAFv9
-	hyT89kL2kPRZDGae5Iu6/592Y9s9f8rOmp6VYwRcsCs5JajS6+Ku6bgAitD+/MCA
-	XU56BVxZEhg8u9VR6WlOYg3TQXOmlHDdnZFSiCCfcfLqqdRdV5u/CdWEmHRZi3yc
-	dBJTEC1/noemIFQfYtGdsioSx5ax4hV2dnG2JoQlXCFyPZoHc8IeLF7Kf2Brgxzw
-	hu9drCEWrNIVszbTn9OzaA==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1736957622;
+	 x=1737044022; bh=dkuohqVG+IvJc3quNTj2+aGrwlRPRoHWzyB5G/pyZzE=; b=
+	ittFJ5JZET32icpjQvUOHKu1zt061kyx8AkR4Xy8nLPA6dH3kId6BIJBsyKc28ha
+	gaVubIlTWIg8+A4WeBxR6+kMitEQz1fU3z/1RLpzN3sIPmWseYyPOPxvkIeEItub
+	gq9OO0fAhQvz0OsMkvYxRgXtgRVCailygsdYy1UpASyXI6C/DVTmCzhvs0XLzDph
+	+EKelDhcMoOAoJcIN0M+nuVvePM2NtIBDJ3GDb4dEa/LkQdo2oC1Ft7v9k1CVvyV
+	Cy6LjxRctYoetZtzUx6QijR39+4A6Ua8w30oKXagBXJJ/7x/+ggRwfUezc7E5719
+	1LYm2alYlgGGzyNdDLWgqA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736951242; x=
-	1737037642; bh=nSkTlQ8+HyMT54GNGl3HP3EHqUEYjgJY5ZhUbjRzHHU=; b=j
-	Xck41nMYvSQ9QDCbqJ0OWePtloei4kU9USBByEJr80VvYaoJCZCdnvk5eP4/lNNg
-	m81zOu0MI0fMwW6D7yNL2hXfWNFWYjkLM5SMd6DDcX44XKl1K6wyJ7fCnrgDNOH4
-	Wo9aVTOF+Ms2ph87t900R1XjrawMqNdhpqJX2qzsYEMQ5l8vBiQ8Aaqv71mr+lqC
-	UPcqXeWltfpIMWSZn1wNloKGPfbmx73J6thSSv6cdjG+7r7DzPPWr7TckqoEdmZq
-	HkaBeIUlHWfQeK5euxSmXzowusUqjOr5KAiRzq4JGmB1MxnF9GcF/ZgxG7XH2blL
-	uvkgL4Qr4B4ZNHq2t7WEQ==
-X-ME-Sender: <xms:ycWHZ8xYxRrPKE-21Jclq-Okd81qooSkPQ5I975N5I-5Da3QUVI2Kg>
-    <xme:ycWHZwQz1L-ZQBjchCH-Vr8Q0rOKTxJ44-lZ_xyBuOTY5O72-hYsadbLJX54V8s-u
-    g9t-5Y1XGjAp0EVZBo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehledgfeekucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736957622; x=
+	1737044022; bh=dkuohqVG+IvJc3quNTj2+aGrwlRPRoHWzyB5G/pyZzE=; b=M
+	mqhH0YAct+mQhrEbpmY8vpzv7DcHLcHhisCUEIhTwY0EWX3f4sec/TA7knIS51Wp
+	+PXkyiNBrK4xoGd4W9z/e/DVClRUbI3h+xCi72/cY5q/2tNc3mEy5VHN6blIol/8
+	o6XUdJ46PffJjam/n8lg62CNDJTABvpayIZ5XHMnDgzGJoOfcGlEvmavZTqaaLkh
+	wky23sGSueOKMxEvY+KUGTMjeWjZBc9ux1x6pA5mNmDHgTrJWmvT2+3VPizAvxBi
+	lFEprD3yDnScIoHc/0hXac9+6VCVGlKNelHu68ithaJ6h0WpPrHC6uBPyFHSCLug
+	6v4yMzhSws5VZGZoTR+Ug==
+X-ME-Sender: <xms:tt6HZ8eA7pGASXWm0mFlJk1IliEcZT0FcovugJ1mX8Wwd6qKQplWQg>
+    <xme:tt6HZ-O6qfvDWQ6Fs0iVFQv_DoHeAtOw4wfNunBgKn1lWazz_5FtCvUnQ5kkZGghk
+    bJhhe_q5zBnz7f5XpE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehledgheelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
     necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeek
-    keelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
-    nhgusgdruggvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehkghhughgrlhgrsegrnhhtmhhitghrohdrtghomhdprhgtphhtthhopehmhhho
-    lhgvnhhkohesrghnthhmihgtrhhordgtohhmpdhrtghpthhtohepghhsohhmlhhosehgmh
-    grihhlrdgtohhmpdhrtghpthhtohepjhhovghlsehjmhhsrdhiugdrrghupdhrtghpthht
-    ohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghfugesthhirdgtohhmpd
-    hrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:ycWHZ-WoP8q8z7_3MxFWOfrDrTIenyNwV4RjKImJE23lQ30DrNvoTg>
-    <xmx:ycWHZ6gT2Nz7jrNealhtvrcDYey9C4S2G6VmKDgmDiicGwCQRCai9A>
-    <xmx:ycWHZ-ASzTSCcy1Myfflwf_w9pKXO-wnc4BSBchZG1pZo7fbRMDHsw>
-    <xmx:ycWHZ7LlrOFQc74LnQJsSRWLxDiPelP8bCon46n9Wgb9tCilLszYGA>
-    <xmx:ysWHZw2Jqr7sL--8gzraEiv0ilT1m35AoT1YvcHwLf2YNUJEeWn6CEGR>
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohephedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgsrhhunhgvthessggrhihlihgsrh
+    gvrdgtohhmpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    lhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorh
+    hgpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphht
+    thhopehprdiirggsvghlsehpvghnghhuthhrohhnihigrdguvg
+X-ME-Proxy: <xmx:tt6HZ9jc0L_IFxp5ExAnEd34lrX0CKuyw7GybZQXJ_dvELb0rrg0pA>
+    <xmx:tt6HZx-EW34_rcrPVwEaE8bkLv_hV2ckN9xwNVq9h4l-6oup4hzwww>
+    <xmx:tt6HZ4vfgvBUsk7ocybqJISTig-aM4-GOMhSvtgiRr9bdZkjxkgOrg>
+    <xmx:tt6HZ4GsmhsqhzTaEhOtvJU4qKd_eyzqX9O5VoesiGjdOAWe1yFiCg>
+    <xmx:tt6HZ6I0rNHc_hWOMNnvRWafG6Sw4ExGcnYJOxeqXHbbApBKh8oZ8JI8>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4B38C2220072; Wed, 15 Jan 2025 09:27:21 -0500 (EST)
+	id E11272220072; Wed, 15 Jan 2025 11:13:41 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -87,58 +86,40 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Wed, 15 Jan 2025 15:27:00 +0100
+Date: Wed, 15 Jan 2025 17:13:11 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Gabriel L. Somlo" <gsomlo@gmail.com>, soc@kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- "Karol Gugala" <kgugala@antmicro.com>,
- "Mateusz Holenko" <mholenko@antmicro.com>, "Joel Stanley" <joel@jms.id.au>,
- "Andrew Davis" <afd@ti.com>
-Message-Id: <abcd6ce1-546a-4d49-abac-0f9b22b38ead@app.fastmail.com>
-In-Reply-To: <Z3bHsU4mJYM0xheO@glsmbp.wifi.local.cmu.edu>
-References: <Z3bHsU4mJYM0xheO@glsmbp.wifi.local.cmu.edu>
-Subject: Re: [GIT PULL] litex changes for 2025-01-01
+To: "Philipp Zabel" <p.zabel@pengutronix.de>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+ "Jerome Brunet" <jbrunet@baylibre.com>
+Message-Id: <d0e58f29-4e12-445f-b110-49dfbacf5b74@app.fastmail.com>
+In-Reply-To: <20250113163648.1757178-1-p.zabel@pengutronix.de>
+References: <20250113163648.1757178-1-p.zabel@pengutronix.de>
+Subject: Re: [GIT PULL] Reset controller updates for v6.14
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 2, 2025, at 18:06, Gabriel L. Somlo wrote:
-> Hi Arnd,
+On Mon, Jan 13, 2025, at 17:36, Philipp Zabel wrote:
+> Dear arm-soc maintainers,
 >
-> Thanks for applying LiteX specific patches through `soc` in the past!
-> There's one patch from 2024 that seems to have fallen through the
-> cracks, and part of my 2025 new year's resolution is to figure out
-> how to properly act as LiteX maintainer and send proper pull requests
-> up the chain, so please excuse any mistakes in the PR below :)
-
-Hi Gabriel,
-
-The pull request looks mostly fine, but I'd like you to resend this
-one in order to improve it a little more:
-
-- You have based on commit 56e6a3499e14 ("Merge tag 'trace-v6.13-rc5'
-  of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace"),
-  which is not an -rc release. Please rebase this on 6.13-rc1
-  instead (the earliest -rc release for the current merge cycle
-  that works as a base) in order to get a better git history
-
-- in the subject line, drop the date and instead add the kernel
-  release you want this to be merged into. In particular the
-  information I want is whether the contents are meant as bugfixes
-  for the current release (and possible backports) or as
-  improvements that are only needed in a future release.
-
-> ----------------------------------------------------------------
-> litex patch(es) left over from 2024
+> The following changes since commit 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8:
 >
-> This is the one remaining for-upstream LiteX update from 2024 that
-> has been reviewed and successfully tested against the latest Linus
-> tree:
-> 	- drivers/soc/litex: Use devm_register_restart_handler()
+>   Linux 6.13-rc3 (2024-12-15 15:58:23 -0800)
+>
+> are available in the Git repository at:
 
-The tag description ends up in the commit log above a list
-of the commits in it, so don't repeat that list here. A summary
-of the branch contents is always welcome, especially if it
-contains some background details, but it should not
-duplicate the things that are easy to see otherwise.
+Hi Philipp,
+
+I have no objections to the contents, but it would be good to
+avoid the back-merge of rc3 into my current branch that
+is based on -rc2.
+
+I see that the two patches for the reset driver depend on
+commit 5ae1a43486fb ("clk: amlogic: axg-audio: revert reset
+implementation"), which went into rc3, and this was clearly
+the reason for using that as the base.
+
+Would it be possible to rebase your branch directly on that
+5ae1a43486fb commit from upstream?
 
       Arnd
