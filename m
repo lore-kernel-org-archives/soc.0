@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439C212B169
-	for <soc@lists.linux.dev>; Wed, 15 Jan 2025 17:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54B912B169
+	for <soc@lists.linux.dev>; Wed, 15 Jan 2025 17:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736961067; cv=none; b=qASa1m1mYaPZydTuK6rmXvQxUs+KiPAtRtcUwkrZIeajso4GE3Y1tbuCCYWOD/WNaWYQDCY11LdHHTRDfDIYTHsoDGx+zOehoNNyoMz7IOabDJHZTPhbJAr12CFhOPysExkYnnsuSOC/VhmiRWCAQ/eZu3qYAhid6DDy9B1k0KY=
+	t=1736961069; cv=none; b=bFzr0fWAhw0YT3BIOqXUk/Aayd4gns1bgicQNxkPLepAI2tGoEga9coEcgenMfZw3hw/3QiKPThVA5v+cN/YmLzXbaF1BVlTJdQkwVVIM0/VRMeS60nYIgO3gBa7CA9r2lKTWkz5l4h+4P2iYaG2UjG6Iq0d5B/GhmxepySt2Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736961067; c=relaxed/simple;
-	bh=W4Zpj8IgURbym+YKveC6T9ah4KipdhNjKFI0923MxCM=;
+	s=arc-20240116; t=1736961069; c=relaxed/simple;
+	bh=I6lyTnUuM9xVyBc2Du74BMS4pKSush0+pcDRw7UOm94=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=tNIKaU5scXlQFtozKgDAkhB6heVVa+WY2RVpfORhA+nIdmqXPkSFpKUXhnZ5J5YR+KADvEBRSr8GNhpFtUKfrH3Wy5FJVg3mRJV3LdPuMIij1aQLuO7EiXOF3ARTbBwWAXnl5AKtW5OlVkiOCoJPtYs/Wu9Joy6LiTFFRp0Aylk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M7hUqciJ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=WwZjNf1RtkOHICc4VS2FD5iRWmvxkaD+dTKyzM+vFT+J/Dzqo8Q89hDIsF8O99sq9PDhOaNkH3ZMJZavGsKW+BklBA0ri+qE+8VhBg1h3KfjGBlRW8LSJ+y1t0muKrihIveGFOBHEpFeWwHZ3q4bOIOgkoe1D0W5/BxEZdmIwJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQ4N+EBP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M7hUqciJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQ4N+EBP"
 Received: by smtp.kernel.org (Postfix)
-	id E7549C4CEE0; Wed, 15 Jan 2025 17:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17E1C4CED1;
-	Wed, 15 Jan 2025 17:11:06 +0000 (UTC)
+	id 67F89C4CEDF; Wed, 15 Jan 2025 17:11:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D70C4CED1;
+	Wed, 15 Jan 2025 17:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736961066;
-	bh=W4Zpj8IgURbym+YKveC6T9ah4KipdhNjKFI0923MxCM=;
+	s=k20201202; t=1736961068;
+	bh=I6lyTnUuM9xVyBc2Du74BMS4pKSush0+pcDRw7UOm94=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=M7hUqciJzS6F0Hsd1HWjBNotbkr6hKAJ6SWCs3rI0NrR1W73M4NvMyx2T0z5jR0EY
-	 nVHD3T7uM4T/iYds/7otx4i0PPSfiN9HRv/BT41JY8zeSs8ipVFmu4S276ZukmmgDL
-	 tfjQRYtQplwCexJXaM+0EKwIB4zfMpvwV3g8P4ecEb56aceqasiDdZP6u2BkfznqvS
-	 HhUOpJaj+apHQceDYYRX1i632eotY1as9/DqI9sJArBEUK5HxmMlBRNmof6IlAI6vD
-	 IgUsa7upeKgCbxkAYDu/rNjXpCFZXM2dSQxw+YtAEvqZ5AP0+4+E2LR+PNwjeByDap
-	 AbSrNYNoMKHbA==
+	b=vQ4N+EBPH24xfjYABJ5/VmaRLMP9RVgZRsFzpT1XdzYrwyQsBlLLi/+O3LT4E8M5n
+	 HRW/AGzJo/24Mr4T7NJq161F+I6nMvjT0lMOTUjTQv5p4w9t7jYB2qZZ0p8o5wD3s6
+	 xH+iwXozR+t5icGYmzm03RuR3YnGYGsu7e/RTP66En8WHSqtCnz8vng/JEHhcZt8uL
+	 +XbpcPRaXAK8Ml3BX61AUKBgq7MJ8+I9afgzcRLFim0uG68lqJl1AaDsIEpICquRGk
+	 8BzIMoxfhzvSEU/Kk4WC2VF3ygAaUhD8OgrwpI8SysLXKZaH4Dhqz2l7R0cvIfDvGk
+	 MZC1s8JE0AZkg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAE47380AA5F;
-	Wed, 15 Jan 2025 17:11:30 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C63380AA5F;
+	Wed, 15 Jan 2025 17:11:32 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/4] soc: ti: Driver updates for v6.14
+Subject: Re: [GIT PULL] Reset controller fixes for v6.13
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173696108957.809051.7034558065440008472.git-patchwork-notify@kernel.org>
-Date: Wed, 15 Jan 2025 17:11:29 +0000
-References: <20250110210753.exsx5yxmxpcdn64y@amicably>
-In-Reply-To: <20250110210753.exsx5yxmxpcdn64y@amicably>
-To: Nishanth Menon <nm@ti.com>
+ <173696109100.809051.18287241482811013027.git-patchwork-notify@kernel.org>
+Date: Wed, 15 Jan 2025 17:11:31 +0000
+References: <20250115165404.1269500-1-p.zabel@pengutronix.de>
+In-Reply-To: <20250115165404.1269500-1-p.zabel@pengutronix.de>
+To: Philipp Zabel <p.zabel@pengutronix.de>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,25 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 10 Jan 2025 15:07:53 -0600 you wrote:
-> Hi SoC maintainers,
+On Wed, 15 Jan 2025 17:54:04 +0100 you wrote:
+> Dear arm-soc maintainers,
 > 
-> Please pull
-> The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+> The following changes since commit 5ae1a43486fb3febd5ce78da13eb354f16d049e0:
 > 
->   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+>   clk: amlogic: axg-audio: revert reset implementation (2024-12-02 17:21:03 -0800)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] soc: ti: Driver updates for v6.14
-    https://git.kernel.org/soc/soc/c/352bba6c19cd
-  - [GIT,PULL,2/4] arm64: defconfig: Driver updates for TI K3 platforms for v6.14
-    (no matching commit)
-  - [GIT,PULL,3/4] arm64: dts: ti: K3 devicetree updates for v6.14
-    (no matching commit)
-  - [GIT,PULL,4/4] MAINTAINERS: TI updates for v6.14
-    (no matching commit)
+  - [GIT,PULL] Reset controller fixes for v6.13
+    https://git.kernel.org/soc/soc/c/bc6a958d76f2
 
 You are awesome, thank you!
 -- 
