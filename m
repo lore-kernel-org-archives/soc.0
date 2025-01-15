@@ -1,95 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D2B70816
-	for <soc@lists.linux.dev>; Wed, 15 Jan 2025 16:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA74286348
+	for <soc@lists.linux.dev>; Wed, 15 Jan 2025 17:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736960290; cv=none; b=pBuSX2oeghtgHbL2zaNEu8/r+9Msc1CBf4lO+6k/yrzJvBV6Y4uHuyPw1nyAs/NHGBgDge1XVu0/d3Tuos5MjSHNfuntCwCMkzQG9XPVmM8ibtsD3L1I3tjf2NPVv6g5V8xFVkoKHvrvMFj/FR3R8pyyc+FLL2oTFc5/f5QCpfM=
+	t=1736960571; cv=none; b=pcpPV0C12kAK7uU3MlKDjvT7z1TreT6yZJJX+ayrSdo+M4J/xpBk5oCj0vXg5FSx9gV+Ll+74+RZZEJLKvUtzWSISlpSAof+OQ6KqszWSf//jiHKll4psKCuFCIeJ+52/OVhhLVatgU6h2KJdUlF+X4WhGHaKvXUlYChCMl+1K8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736960290; c=relaxed/simple;
-	bh=ufOj+uR0OmSTB+7U92kXpqttZaltEItJ30Vh9oMCLmQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AGA7zEZPCoyDpV1j7b2Z+sI05AwxGNdvNcRwoy671xVWshpUb4dEJ9we2Ov7Qoi8OFTsduSeDztGb8l+ztmvUGP98F9TWZLwR9vF4K8e30HGJa7VmIM1+9WDCcMuNIuxcf1S6alZw1Lx1v+Yp3KmCFYwWFfqbTeGn9d2O4vb2JA=
+	s=arc-20240116; t=1736960571; c=relaxed/simple;
+	bh=/QImiR29Jyxi4oNYY/XAB8WrkHO8rUmvRi6cscIpUe8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q2OVtrJu5usX+hRiwhKN8yWsk0KHzhlq+3DUWEUs1SXCLE/Vjnc+qSNLwa5hKXLk8vfyD5G+zPJbMueFZn9KQ1e4ObOZ8tjFbuhfYZpW7JviErXvgXcEDFuxN6LsGMjhv1eTf4RvZt+QQ52iyfJ+MGNzu+VwuUjl76WNRl/B3y0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 9DD98C4CEDF; Wed, 15 Jan 2025 16:58:10 +0000 (UTC)
+	id 571B3C4CEE5; Wed, 15 Jan 2025 17:02:51 +0000 (UTC)
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 66E89C4CED1
-	for <soc@kernel.org>; Wed, 15 Jan 2025 16:58:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 66E89C4CED1
+	by smtp.kernel.org (Postfix) with ESMTPS id 5156FC4CED1
+	for <soc@kernel.org>; Wed, 15 Jan 2025 17:02:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5156FC4CED1
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1tY6iU-000601-2A; Wed, 15 Jan 2025 17:58:06 +0100
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1tY6iT-00071r-2d;
-	Wed, 15 Jan 2025 17:58:05 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1tY6iT-000OEP-2R;
-	Wed, 15 Jan 2025 17:58:05 +0100
-Message-ID: <d265b2ad8d04c8e37b6fae2a312d0d1c9a3366a9.camel@pengutronix.de>
-Subject: Re: [GIT PULL] Reset controller updates for v6.14
+	id 1tY6n1-0006zS-JN; Wed, 15 Jan 2025 18:02:47 +0100
 From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, Pengutronix Kernel Team
-	 <kernel@pengutronix.de>, Jerome Brunet <jbrunet@baylibre.com>
-Date: Wed, 15 Jan 2025 17:58:05 +0100
-In-Reply-To: <d0e58f29-4e12-445f-b110-49dfbacf5b74@app.fastmail.com>
-References: <20250113163648.1757178-1-p.zabel@pengutronix.de>
-	 <d0e58f29-4e12-445f-b110-49dfbacf5b74@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller updates for v6.14 (v2)
+Date: Wed, 15 Jan 2025 18:02:47 +0100
+Message-Id: <20250115170247.1303656-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
 X-SA-Exim-Mail-From: p.zabel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: soc@kernel.org
 
-Hi Arnd,
+Dear arm-soc maintainers,
 
-On Mi, 2025-01-15 at 17:13 +0100, Arnd Bergmann wrote:
-> On Mon, Jan 13, 2025, at 17:36, Philipp Zabel wrote:
-> > Dear arm-soc maintainers,
-> >=20
-> > The following changes since commit 78d4f34e2115b517bcbfe7ec0d018bbbb6f9=
-b0b8:
-> >=20
-> >   Linux 6.13-rc3 (2024-12-15 15:58:23 -0800)
-> >=20
-> > are available in the Git repository at:
->=20
-> Hi Philipp,
->=20
-> I have no objections to the contents, but it would be good to
-> avoid the back-merge of rc3 into my current branch that
-> is based on -rc2.
->=20
-> I see that the two patches for the reset driver depend on
-> commit 5ae1a43486fb ("clk: amlogic: axg-audio: revert reset
-> implementation"), which went into rc3, and this was clearly
-> the reason for using that as the base.
->=20
-> Would it be possible to rebase your branch directly on that
-> 5ae1a43486fb commit from upstream?
+The following changes since commit 5ae1a43486fb3febd5ce78da13eb354f16d049e0:
 
-I've rebased=C2=A0and sent a PR for a new tag reset-fixes-for-v6.13-2.
+  clk: amlogic: axg-audio: revert reset implementation (2024-12-02 17:21:03 -0800)
 
-regards
-Philipp
+are available in the Git repository at:
+
+  git://git.pengutronix.de/pza/linux.git tags/reset-for-v6.14-2
+
+for you to fetch changes up to 72bb8275a3b0784a817e0371c49c0110d68bb7fb:
+
+  reset: amlogic: aux: drop aux registration helper (2025-01-15 17:59:31 +0100)
+
+----------------------------------------------------------------
+Reset controller updates for v6.14 (v2)
+
+* Add support for A1 SoC in amlogic reset driver.
+* Drop aux registration helper from amlogic reset driver.
+
+----------------------------------------------------------------
+Jan Dakinevich (2):
+      dt-bindings: reset: add bindings for A1 SoC audio reset controller
+      reset: amlogic: add support for A1 SoC in auxiliary reset driver
+
+Jerome Brunet (2):
+      reset: amlogic: aux: get regmap through parent device
+      reset: amlogic: aux: drop aux registration helper
+
+ drivers/reset/amlogic/reset-meson-aux.c            | 97 +++++-----------------
+ .../reset/amlogic,meson-a1-audio-reset.h           | 36 ++++++++
+ include/soc/amlogic/reset-meson-aux.h              | 23 -----
+ 3 files changed, 57 insertions(+), 99 deletions(-)
+ create mode 100644 include/dt-bindings/reset/amlogic,meson-a1-audio-reset.h
+ delete mode 100644 include/soc/amlogic/reset-meson-aux.h
