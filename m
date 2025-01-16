@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A93A22B8DA
-	for <soc@lists.linux.dev>; Thu, 16 Jan 2025 16:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBE022B8DA
+	for <soc@lists.linux.dev>; Thu, 16 Jan 2025 16:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043296; cv=none; b=UFQKsW06a9xP1rwuG4nMGTd1NIPRq0LKTmbnvIaRQK/MUyK/wnLDOVNcN/k7MjNB5dOAP6y4Bj9fo/YDoht469mEWE5OK57y7RTACWqm5Xqaukl/ong2VGeVuhy3z1F774i1g9CN5LX5pVRF88E494gEJ15RIHjs7Sv8OkirWoI=
+	t=1737043297; cv=none; b=udpMe7n/lWtaiOWmOQ3dIMB1NpG6jJC/nWd86HYYeaaSH9i16ma9AdmnjpAo5L9c1RSWgyc39jviwDqG1i1MfbcjZjPbPno7RIZ/dp1FqSoyOHhbEb3qXz+AMLExURb8om6S02Yzy6ZngNVuQO3K7rNr2lQ5cNnE6MCZrzGHfaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043296; c=relaxed/simple;
-	bh=LM0/vbe/bmi8FYRkPZelLtsbkoStg/gkNQWGiKZwTkM=;
+	s=arc-20240116; t=1737043297; c=relaxed/simple;
+	bh=nNDBtrYJ5hIkJ+iLp2tfqicgF7yGS3d2OQgx5PBPLfA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=NtqkY6v/kExxC4J1rGzTWpdjwO8bSgIHmzaxqi8hxtdiwSa1ACjVjr+sDeaZy8DTpWJV9eM5Xw+Bj6kYJSO5gxiq44UklvURBoPJ9bgI7pm0uoPYhq/Deo+czdnoD/gjdA1D3LN7MTagiM0gK1Mp/6XYDGOR341YbDmkI7zU5BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SpwexbHN; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=PmRMqX03hiUj3OoLAxIzPTLYDP8ZpGo4bjM08A8tvmKHNkSSe2pJOuV0xasFmyIEcmsRo8qKsq7uN70EtrBlhh/kqmtlwYl4mDtYyESn+NMf1ObfqtsyvKN552JsyUe8ccJ5/I7Fk+Qc/OMgHN8O1dQ+IgNSO0FOiGcbWyqrhbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=px38Jaun; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SpwexbHN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="px38Jaun"
 Received: by smtp.kernel.org (Postfix)
-	id 365C4C4CEE4; Thu, 16 Jan 2025 16:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A07C4CEE7;
-	Thu, 16 Jan 2025 16:01:35 +0000 (UTC)
+	id 3F72FC4CEE4; Thu, 16 Jan 2025 16:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285A0C4CEE1;
+	Thu, 16 Jan 2025 16:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737043296;
-	bh=LM0/vbe/bmi8FYRkPZelLtsbkoStg/gkNQWGiKZwTkM=;
+	s=k20201202; t=1737043297;
+	bh=nNDBtrYJ5hIkJ+iLp2tfqicgF7yGS3d2OQgx5PBPLfA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=SpwexbHNYRt7NPX8NS5lLinGLz1UfQILFOHNXEuNye55IjsCF3SV1Wh9sRAx15IIM
-	 J830ZMqBtTdjGYkav5N4qgn9z2o/husLXwI06EjR57gx8ohC5JBmHqknXP4WHr2eLY
-	 pYegNkOMxjvCj2z5H02iRs+5Uvv7NCxFlpxrn0la1+crTWmHGiIkYZ3LuRC5wIGA3f
-	 fLv0YIuyesB40igmY/mlJvczRgt4OtQLgTiDqFFyE8+ijxRagIc911+OMbxZczvXH8
-	 vu3HWphCYtrGS8xcB98T3tFsBoUfHpsrg5SWCdqjDblj7zDPSR0E1yGarwvbAxkhjR
-	 4xcVg6xk37zCw==
+	b=px38JaunL2+e0jX4/lqeF1xvXVXqrdeoOw7MemZ1mNDcVOFOVmGy2uB33894+pHJ3
+	 spPZev7K+DVZ9bKLt7mIXa987JZCiJMgC4Rs63W7Aq3StNRsMAtsuOb0n54/cOsv2v
+	 BtlzNfQANPs7qdFc8oIl1ai996RbCfuXTJRrP8EZMhtphHEC5vpIeHWF0hQT1SXjqz
+	 brQdZyo/fL55o+aj23euNgf6C+dD/n9v4zLBQXa9KssVXKBKF7tvNpKYPSg2RI4hXa
+	 Sa7C4PKBy8fCcqRQY4Lbrl8gLS//8lUJ7vuxrL1dERAFUuG6R35GrPSNFc5ebPNd8v
+	 39nKOdQPyayDQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E24380AA63;
-	Thu, 16 Jan 2025 16:02:00 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E71380AA63;
+	Thu, 16 Jan 2025 16:02:01 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT,PULL] arm64: dts: hisilicon dts updates for v6.14
+Subject: Re: [GIT PULL] Microchip AT91 DT updates for v6.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173704331898.1501791.18246303604944642159.git-patchwork-notify@kernel.org>
-Date: Thu, 16 Jan 2025 16:01:58 +0000
-References: <67767DCA.8060902@hisilicon.com>
-In-Reply-To: <67767DCA.8060902@hisilicon.com>
-To: Wei Xu <xuwei5@hisilicon.com>
+ <173704332023.1501791.12817837589678771323.git-patchwork-notify@kernel.org>
+Date: Thu, 16 Jan 2025 16:02:00 +0000
+References: <20250107081424.758980-2-claudiu.beznea@tuxon.dev>
+In-Reply-To: <20250107081424.758980-2-claudiu.beznea@tuxon.dev>
+To: Claudiu <claudiu.beznea@tuxon.dev>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 2 Jan 2025 19:51:38 +0800 you wrote:
-> Hi ARM SoC maintainers,
+On Tue,  7 Jan 2025 10:14:23 +0200 you wrote:
+> The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 > 
-> Please consider to pull the following changes.
-> Thanks!
+>   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 > 
-> Best Regards,
-> Wei
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.14
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: hisilicon dts updates for v6.14
-    https://git.kernel.org/soc/soc/c/596f35f9d3cf
+  - [GIT,PULL] Microchip AT91 DT updates for v6.14
+    https://git.kernel.org/soc/soc/c/6253c6357a49
 
 You are awesome, thank you!
 -- 
