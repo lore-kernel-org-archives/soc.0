@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D49D22B8DF
-	for <soc@lists.linux.dev>; Thu, 16 Jan 2025 16:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE9322B8DA
+	for <soc@lists.linux.dev>; Thu, 16 Jan 2025 16:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043304; cv=none; b=WyKUzwhfawaOra9QnCV6FEGTOPrgTMpF3AHXGZfEmlIRqh3nn7QLudmP2hHIc6Tb13wlTJ1J4r6kCDj4aT74Rzb7WHHnchA9PTnM/4r0PgHLquJu7xmwcQakZ9j04N83fhPYSRV8oHJqDYf7iHOfEhB26tTl7AK/LF3wuA23sxo=
+	t=1737043311; cv=none; b=TLTrNfFilDsn+20htfNIwSQOfqrl01XBvOBFVFZp97LTxxOh0oLmxeU2oxGe3Q1SngmhLJwxAX9DOeLQ1S23ztDBuaUkSz9x4CBWIkBds8qz7XwcHqHVOvlP95ge73yf4TRAKqFu4p9eXvx/zWtQDBsu36WsUdt2dsQNA6zr6NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043304; c=relaxed/simple;
-	bh=SzJrfMsamoxH05MCM/PHEcOEhxVYqb8f95vho7lbN1U=;
+	s=arc-20240116; t=1737043311; c=relaxed/simple;
+	bh=jn7+U3xpUaZm6rS5GUdFeT6lwfUTKX9bN7qEW95eZfw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QNqlMP19m5KCLkF/XITLV2x1AFZML4I9IlCycL/e7Ukv6hWFHFAGDaWqKypHjgcHAtZVFzszakkJarrsymhIeqgAaDTvhvUn0lNA7fPeF5owU3TGRqJjJD5bF0+izYzJzdsNoMlVJQeAioHyKWCSZ/p21pMCt8sYsma3tM+7oRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwOdo2JK; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=tOd+u7qJzRnVaopM3jZEjRO1cV+ROehAuO9NijtYi3NcO8K+xMON4iDfuSbP/9CeVWJnuFu3WQgaQ11/YZAIwf2GxKSh0q5XkkiYQduu9i7A451ahxfI4Q+t91JwW5Ypbi0n1u4V1F+8Bgfa/4enuHkqLu+NKi6aNxNtgXHaXNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HFQQqqWD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwOdo2JK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HFQQqqWD"
 Received: by smtp.kernel.org (Postfix)
-	id E583EC4CEE1; Thu, 16 Jan 2025 16:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF870C4CED6;
-	Thu, 16 Jan 2025 16:01:43 +0000 (UTC)
+	id 32637C4CEE2; Thu, 16 Jan 2025 16:01:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD84C4CED6;
+	Thu, 16 Jan 2025 16:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737043303;
-	bh=SzJrfMsamoxH05MCM/PHEcOEhxVYqb8f95vho7lbN1U=;
+	s=k20201202; t=1737043311;
+	bh=jn7+U3xpUaZm6rS5GUdFeT6lwfUTKX9bN7qEW95eZfw=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FwOdo2JKyW1f37RoCymt3bbLtIgHR/c1IPSc+0G5pChYiVDuPWcnKY/dWvozdMjM4
-	 Xb5d9Zmg2gsLcEYEC4rSjdvlupVheizCVPvwi7S9egAw/pGvNc+2csO0KOTtLui/g4
-	 T9mkUoWgozk01gbzpmkjOwVSDFejUbmsv8wS3YXU842EEfyMPE+i9k9QO5eJcXjhDR
-	 BTOkon3oSudgZ2SwBZvcX+Z0tv1V+ozPArZ0Vr+TGR7og148B5opgrvbjXeBkvTfhL
-	 ZHtixfPfit10jS2vgx/WaoiRTZeGIR2ipxDT5rFDllszfqsuI2dpl0Bl969WboFL3b
-	 HnHsSUFP1y83A==
+	b=HFQQqqWDnWyJTWkPJjJI40iJoIWQHuNGz1hRcznhUwdm1K1nS4H9pISqvEpbGL1vz
+	 3y7hsPvaJaxzWX1FDEiBCiRexPWsDVYHBuPYAds2a0dk4bdcWIy4e6gRD6ssoOXAYN
+	 n+qmb+OYfVnE0byL3bJbdmWbXMsmNfQJ8M7IKtBIqNVtMBlinO4BzjdPPMp0eaXQTC
+	 C4HssADxof8blvae6lu55BL6oMZXxzJKTw58mSessLWH195aruik06536CPvajJAb9
+	 2YkXeen8blomgwiPrsXm5bTJhuhqORFXvbsi3QKxmPooHMQx1v9m+F3XuOUN9vngsb
+	 HChOTnFpKYw9w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33ECC380AA63;
-	Thu, 16 Jan 2025 16:02:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C04380AA63;
+	Thu, 16 Jan 2025 16:02:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] Broadcom devicetree changes for 6.14
+Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v6.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173704332674.1501791.7446658966496077065.git-patchwork-notify@kernel.org>
-Date: Thu, 16 Jan 2025 16:02:06 +0000
-References: <20250109224756.3632025-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20250109224756.3632025-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
+ <173704333395.1501791.1148755085190066061.git-patchwork-notify@kernel.org>
+Date: Thu, 16 Jan 2025 16:02:13 +0000
+References: <20250111181025.394631-1-andersson@kernel.org>
+In-Reply-To: <20250111181025.394631-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,22 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu,  9 Jan 2025 14:47:55 -0800 you wrote:
+On Sat, 11 Jan 2025 12:10:24 -0600 you wrote:
 > The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 > 
 >   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 > 
 > are available in the Git repository at:
 > 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.14/devicetree
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.14
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Broadcom devicetree changes for 6.14
-    https://git.kernel.org/soc/soc/c/14d773bb96e2
-  - [GIT,PULL,2/2] Broadcom devicetree-arm64 changes for 6.14
-    https://git.kernel.org/soc/soc/c/ab6efed7ec87
+  - [GIT,PULL] Qualcomm Arm64 DeviceTree updates for v6.14
+    https://git.kernel.org/soc/soc/c/116eda2ec90a
 
 You are awesome, thank you!
 -- 
