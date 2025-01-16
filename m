@@ -1,58 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155BC156C76
-	for <soc@lists.linux.dev>; Thu, 16 Jan 2025 10:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5B5143736
+	for <soc@lists.linux.dev>; Thu, 16 Jan 2025 15:23:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737022412; cv=none; b=Pn6fbRyy4Bv8gIy7jJUCycfEeljbBpfbUBUvZOqdgjIBAgMOmOF9Mz0LLBKVFyHdoN/2jLyBzv/2whOiq+XRgZ3HXnfF7udR3Hclm87fgfSrACiNgAz/AxVVO+84isvr9ijY+f33FxyKX0zeK9VSEexnM1qvHFXifJqSWTGGaxk=
+	t=1737041012; cv=none; b=h83LuFLXDyl/gfTSJCVJT/w3F0A2WdSb9IhXVICTziCwrfNkCr2ks3fMqJ40vtDe8/wXXmOqjFSJZ5CUoxNNjN4oxoAEAp33GEYz+BKLTHdsItK9/JQlFlt7cvfkTvS9RaHjVUC9f8tT4WzgfsO0fv+gdhmPudfD0L4Lc1aoue4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737022412; c=relaxed/simple;
-	bh=6inQgk/tCitO0PowNsL1ePxD22FAZRMF38lHIBA10Os=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ai6vWHYRmIEttG8jh7Nb927C0s1VhsAIFRUnF4gR2I1Dphn9jlvGbPjXmcsjt5nIJSV6eey9Btt2dWk+/99PBg73MBrS1s/LnhrbZNizKW7mz7xwVoHzzXSE4cLwHaY1s74gG00LOB9n/+0HkD0kLo2JOqTnzoPWj9uQwNRJwgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=BYiUKqnM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737041012; c=relaxed/simple;
+	bh=P+gUs4RkecxZhOEy/kvf9gsvuNVc3o8um+ZDsf7TTL0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=l96TM+oFq/JAHzN3aQ2IhYsE79st3KXsOv4GMAzBZmWI5vSATFmxAu7G6CxXYJCb7Huc2abtcNHdaT4szDozTqLQqfUEogmP/c/5znNQFsbxEHTacIYct3FakSCUmQU9omGp6PkQSXFw1f9bO+dCsw4qmw0cy//yBjiI/R+Ju5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NbOgzuv0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="BYiUKqnM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NbOgzuv0"
 Received: by smtp.kernel.org (Postfix)
-	id A34C5C4CEE3; Thu, 16 Jan 2025 10:13:31 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 33004C4CED6; Thu, 16 Jan 2025 15:23:32 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5A8FCC4CED6;
-	Thu, 16 Jan 2025 10:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A8FCC4CED6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50G9p6mI027426;
-	Thu, 16 Jan 2025 11:13:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	kn3z9Oj680dJoU9+eAMtC0WxRMZrxRwontsz/ZPmtmA=; b=BYiUKqnMDS4Dkuq9
-	I5hhMuyA9CzU69RzFkFn+paQ2792xuz6WO68ubj/Vo1z5Op3kaux3NKHxc2soGtu
-	WktQ4yp7FkGEwDn1i8y5Gna+wHvcHQKjcyaojn9bmmhiLWXrN+4SUHBeiGB3B2u0
-	DW4MjtYswEe87sWv2ULU8E8gXu843qfRcewzF1hGkgoO3p2ZpOjUzDG0zYpRqvQo
-	9Lqdu1Dr3nqupNOgdXpnIWEdcpdakGhkqV8LEE4iJz8v+3HJbF5gfiTbJz87/WdL
-	HLzH9r5fV5hkgR3+8mWMokeXGi9+MYfUW7tVgkDKwKtA83t/kK2OnoEM6GO72KV+
-	w4SJGQ==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 446gbm36kh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 11:13:18 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 805E04005C;
-	Thu, 16 Jan 2025 11:12:30 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E35C27CBF1;
-	Thu, 16 Jan 2025 11:07:42 +0100 (CET)
-Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 16 Jan
- 2025 11:07:41 +0100
-Message-ID: <736426f7-2c4d-4627-8626-e9b8ed65ad32@foss.st.com>
-Date: Thu, 16 Jan 2025 11:07:41 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 25A82C4CEE2
+	for <soc@kernel.org>; Thu, 16 Jan 2025 15:23:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 25A82C4CEE2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-386329da1d9so607371f8f.1
+        for <soc@kernel.org>; Thu, 16 Jan 2025 07:23:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737041009; x=1737645809; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:from:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mlroyb/jMU2zXy9fkhNJx0reIXqOwAkc96UjIWcJbcc=;
+        b=NbOgzuv0DqNbro/Mhm6VRzF2dMFldVz96vgZYZ/yowKS0E1WuuvnksPrFzmH985yuD
+         FkWXsj6hQS3HiueZ9lF/GLCpR7bWu5JLx9WHc31ENWchLMjpDH8DtJtWSY6gmpdJi1c8
+         UdK/4+C766Zeau74UVDcr1nL7ihiotaviHOB9iCwIWWKhy1uEdlUBO5XfPoUrrF+gF5X
+         3VSogxyZH9457QMyyPd58TvjZNJrMRRSUPgDJ+WS+PUiyu8GWG9nic3UrjRYeSJwwoPO
+         GkDNdrxg1oxlq3HGC7jdJeNFvXX99GVZfVhri/oZZJPVqjXNdi9ibubOHmQJ8Tggo2MJ
+         iakw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737041009; x=1737645809;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:from:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mlroyb/jMU2zXy9fkhNJx0reIXqOwAkc96UjIWcJbcc=;
+        b=tt9s4tfbLQwnFbeLZLjzpycDp7iHpFHVeI9GbK/nb2hUE+fkxMYfENdcDS7TZ1YUx0
+         fXhFdZh2qd7gljer7z/YiARckhFXfkvsptbemHDonjByCZLDKPU5wkFGV+n3Rmnvs+ai
+         rMd5mlYumGAX6bD4iX+9B+sSbYp4VoeiZQtT5dd66tskRcFWRF1iA0vKHZPp5Kk0L7YX
+         O18XiMaepoL5JRlSSLQ2MYJjRbxx21NgGrtlyn9llRAiYGov1us//k5lbJUlgZtXWz83
+         mgYN35eHZQUKZ2D+p45IBM40i6fboJfDEkx53Ne3zE5P2LkX9JUSg3lTvkbZV33OAl1k
+         1tPg==
+X-Gm-Message-State: AOJu0YzNALpeURrszAzFg/w5YbEnOPTNVHIj4y+Y9SkVkxZdkwu8xfwT
+	KGJI9W43Z+WAQJ20s0HdB+oWjxORXu8Bp6QIF1FNkYNnBA3dWRRfUCr/Qa8wjRRY1ayS0GAjv1J
+	a
+X-Gm-Gg: ASbGncs16QYGdylSioPMdd1R8AwYjq7T6VzXuHonsA75e67ebzA6SvzKN/RB2+4Q4xp
+	lYzopp3S40UVdzRf/eXK231Wb0jTQPvO+mHBs5fZgxqt9yysW1j8062Lulx2THN0uqu+qLfU1Ji
+	54SNrVD16lFtvmC/qOgVnAd0X/Lz36oIzr7wld2ZDTcXLEKqdaIhIC4aE3eqUeefZGLVo+EFeFF
+	yNLU5Mz0tsKBbnoAw4Cc8Kv39B9Ey4gOw5Dj+phhEDj32Mc8F197V/OE0Ikop1OoJz7Vdd8gkMA
+	PHazNWbQwr7a2hsfjRERAooxgRBcXhvymQ==
+X-Google-Smtp-Source: AGHT+IH3ev2Y3m0geQ3OUPWjCKlIaWRioGBD546DlWZImq11tIxFW9OCinJY3Zz6eI2GrZ4WeAHyFw==
+X-Received: by 2002:a05:6000:1564:b0:38a:8d32:274e with SMTP id ffacd0b85a97d-38a8d322b18mr26448297f8f.5.1737041009433;
+        Thu, 16 Jan 2025 07:23:29 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:4adf:8d3f:1419:e65d? ([2a01:e0a:982:cbb0:4adf:8d3f:1419:e65d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c75298adsm63384035e9.30.2025.01.16.07.23.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jan 2025 07:23:28 -0800 (PST)
+Message-ID: <724c4e81-184a-489c-aaaa-85c21a19b64a@linaro.org>
+Date: Thu, 16 Jan 2025 16:23:28 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -60,61 +77,81 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] STi DT changes for v6.14 #1
-To: kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>,
-        "arm@kernel.org" <arm@kernel.org>, <soc@kernel.org>
-CC: Alain Volmat <avolmat@me.com>
-References: <f44cb1f0-4d91-4e25-8b1f-3dd9a7bed62b@foss.st.com>
-Content-Language: en-US
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <f44cb1f0-4d91-4e25-8b1f-3dd9a7bed62b@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-16_04,2025-01-16_01,2024-11-22_01
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [GIT PULL] Amlogic drivers updates for v6.14
+From: Neil Armstrong <neil.armstrong@linaro.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <d22513cc-c326-443c-982b-78adf755d3dc@linaro.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <d22513cc-c326-443c-982b-78adf755d3dc@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi 
+Hi,
 
-Any chance for this pull request to be merged for v6.14 ?
-
-Thanks
-Patrice
-
-
-On 1/6/25 12:16, Patrice CHOTARD wrote:
-> Hi ARM SoC maintainers,
+On 06/01/2025 15:25, Neil Armstrong wrote:
+> Hi,
 > 
-> Please consider this first round of STi DT changes for v6.14 cycle.
+> Here's the final DT bindings change that will give 100% success in Amlogic
+> ARM64 & ARM64 DT Bindings checks, with the mmc-slot bindings change routed
+> via the MMC tree.
+
+Gentle ping, it doesn't seem you pulled this PR.
+
+Thanks,
+Neil
+
 > 
-> Thanks
-> Patrice
-> 
+> Thanks,
+> Neil
 > 
 > The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 > 
->   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+>    Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 > 
 > are available in the Git repository at:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti.git tags/sti-dt-for-v6.14-round1
+>    https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.14
 > 
-> for you to fetch changes up to 3b6775857d7e8ec8887f632ad26351f2f9d826a8:
+> for you to fetch changes up to 960a4140ade8f6ba44e78dc40b80bbf272027805:
 > 
->   ARM: dts: st: enable the MALI gpu on the stih410-b2260 (2025-01-06 12:08:52 +0100)
-> 
-> ----------------------------------------------------------------
-> Add and enable MALI400 support for STiH410-b2260
+>    dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: Document the System Control registers found on early Meson SoC (2024-12-11 09:49:49 +0100)
 > 
 > ----------------------------------------------------------------
-> Alain Volmat (3):
->       dt-bindings: gpu: mali-utgard: Add st,stih410-mali compatible
->       ARM: dts: st: add node for the MALI gpu on stih410.dtsi
->       ARM: dts: st: enable the MALI gpu on the stih410-b2260
+> Amlogic drivers changes for v6.14:
+> - Document the System Control registers found on early Meson SoC
 > 
->  Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml |  1 +
->  arch/arm/boot/dts/st/stih410-b2260.dts                     |  4 ++++
->  arch/arm/boot/dts/st/stih410.dtsi                          | 34 ++++++++++++++++++++++++++++++++++
->  3 files changed, 39 insertions(+)
+> ----------------------------------------------------------------
+> Neil Armstrong (1):
+>        dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl: Document the System Control registers found on early Meson SoC
+> 
+>   .../bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+
