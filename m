@@ -1,120 +1,63 @@
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B371A0BF1
-	for <soc@lists.linux.dev>; Fri, 17 Jan 2025 16:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EFC1DC9BF;
+	Fri, 17 Jan 2025 23:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737132553; cv=none; b=oVRO9n2OQrajRY8Kt/C8SPscSELA8Pg2Zbjt92p4zM8HzkaTt3eBajVBdqepZe5mBIblfpNmHc+Qb4meJtE18K/YfSEa6YX+6cUygN6kKCigqUZuSleCquO55xHyxdESq5SvqRmdrqpfNwMyYPWorl0uJEFAtQZCPbPU/TWsis4=
+	t=1737157486; cv=none; b=GtFvaFX4e5GvFnDIX1/1QjdRmrniz76J0n4q2rQDjFpO+ih7s4XXyC+B8/RLANsBAeGL2BiKsp90xzPLa1H96VMfbrcsZe4bu9yqhUsQJ4FVNAUh8UPmdFo+vd7MDBcKQUWhDioadBHcLfe4ZiboY90RF+GU+LrqJA5u5UOfbCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737132553; c=relaxed/simple;
-	bh=JOhJJonjYjhUkWYLiBW0eb9Ioo3sLVx6lRC3R5Q/Pac=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=ds+/4DfrKovz8CmwREaiMscs/T1lz8Ef5J01/SV62iJPfQUoRKCjlkiikZqYAwBsl45g+w38P2HkEwfQvGAFtucYmUMPd1y5uTrujHYSZvv5jzlZpvc6l4LH/kbEoCqU1KX4h3jdpsJq9SHFddiuM0feJCjowrKZHQQ55apy9f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JLE5xpt8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vOhOfoQa; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1737157486; c=relaxed/simple;
+	bh=8dSUKblfap4Zb+tgdq45FLILJMcyqgtpVOvFFYvkdDc=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=E9w38bc/kxKScnPCoz3lOpZX1H5vKorRk856w7v3401TPQfGE5rppq9ydfagH7hYkSbbTXWYjveJGH7G0ssJ1XwHHcnCnBtI+cwLNknJ5nL1UYfvCW8UvkEcbWxTn+ScyB6ZrQbc/j6P9CFE4qzEMQKrBmC5p6mlHL2kkRzcktU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8zPiXyA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JLE5xpt8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vOhOfoQa"
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id A2F891140215;
-	Fri, 17 Jan 2025 11:49:09 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 17 Jan 2025 11:49:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1737132549; x=1737218949; bh=CX
-	LyQI6kaMX3IgzR2F4R+3bNoh5Bn8A/463KPWFiGpQ=; b=JLE5xpt8jIFYzYDl3G
-	ovNWt0YurgcHhrqCHL+vPU0jXzuCTki+fjVumnDoiHqENnGV1H0sDUADqWboKECL
-	yCf9blIP8X5uSG2KKzS51nF3/8mCytxP2vhQy70uNgi56E15NBZIBIcoNL/5n3yP
-	G68Rerg6bzrsLgKYBovXQlYA+gCFmbvpGZgJZm9UThp9SkGA0PFgS0XAqmPZflHA
-	I3E5DOnyyU/LVgHO6OGxi7D7kFQwn87r8+6cwiFvA3y7/ua3PBCWDnYgVS/0gbQC
-	aRSJVZVXwHZLvRYYKL/LlUg9sP3T7O8hRcv84bYNhqQMl7du+cqqYCZI+JSGQsl/
-	nBzw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1737132549; x=1737218949; bh=CXLyQI6kaMX3IgzR2F4R+3bNoh5B
-	n8A/463KPWFiGpQ=; b=vOhOfoQaX9ww/MCOpDvWWLoFfwilBvfP2ss0q+cxqJEV
-	C3ICsz7zL7FKvrqLISiukDm5oR3x8/xbsHl8SUgt+vHdn0wC/uMGb1gz2LVYp1tz
-	Es0WusqEvSBJ4zSETgVYqS9e1WQnDsZzV5VPL2kOSx/1YlUDJzYcyBarVCcROGPV
-	jo53Xq4f2Rupl+ELjNmRmES5J2uw9XiJPtX+bw9tUEBiAeycPmj6FdPVvxt9vpEK
-	HA5X3NKadIIAzAoKE0ZIJQuv9cYU7uSR3CqnbhAXCQnl2T2aLEjf9cusZybMn1dG
-	g7Vcv2eiOhYU2YFMmpttBV0tNAo6HnT7d94oaq3x4Q==
-X-ME-Sender: <xms:BYqKZ8hRMYhF8dZK5RW7MxJMS8sM-MeW7GzuyFLYl7yaguUJqKRfZQ>
-    <xme:BYqKZ1Cez2igmVjJu2ZTL0LHbkA5U07oDHDC4ISYVphJ_0Vhr0DdUwRWo8Ct5Bu1P
-    lIJSS_3O7vS6D12xNI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudeifedgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkffutgfgsehtjeertdertddtnecu
-    hfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvg
-    eqnecuggftrfgrthhtvghrnhepgefggefgieehieduffekieefheevteffueehgfehueet
-    gfevteejkeehfedvtdehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpphgvnhhguh
-    htrhhonhhigidruggvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
-    lhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedpmhhoug
-    gvpehsmhhtphhouhhtpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhu
-    nhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlh
-    eslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsohgtsehlihhs
-    thhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvgh
-    gvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:BYqKZ0GgwnFsuxdtQL3yWnX3vEM68B2si1phxFFEEkk7u7EhTy5BHg>
-    <xmx:BYqKZ9QNqKqodr6qGfpG3Ce-TIUGu6VbvSDWfomXl7y7eSXf1c5wZA>
-    <xmx:BYqKZ5wfrnn3DUB7Ag4u-AJL7RR2I0O1IkeSGRvPidkBl9bbat4PVw>
-    <xmx:BYqKZ745QCx0ugCRY4J23Ybs7U5d6zJ9UwoFvkiIrlNS6bgzjZd2-w>
-    <xmx:BYqKZx_ZQtjn4cKbB3YixZdGK9pSv8HgbJ97TpA-Elu0XGifsjA4vWrq>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2CA0B2220072; Fri, 17 Jan 2025 11:49:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8zPiXyA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A51C4CEDD;
+	Fri, 17 Jan 2025 23:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737157486;
+	bh=8dSUKblfap4Zb+tgdq45FLILJMcyqgtpVOvFFYvkdDc=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=O8zPiXyArCyo3MI5ua4pUBijNguGwZSSMLja15tVxoXXQ0aFV0G+buSLneNzJPAeA
+	 uaPfB0kxS2Ss+FrMkFR+ugdUmQjC/mQlbuPsWMtJH6Td5WRJ5bnaja3gVrP5qdFh3/
+	 Iqc9TZCi7WufIGpH+Z080LwLyJNg7YTDYGeKiGo8zn8XoQyWwHYVFfQvmg7nkBv2lG
+	 WDVqfNp3Jz2TPdw3bTF+sfYkP2wTdy60gsXH/Xz+r4d1R1ZN78tlTNlsPFGbU/m6lb
+	 s4l/S5GlikQocGkK0U7GoGpCh1qhDFq8eeh1ia09hHCMnYU8wgc4OJJhSiOh9RdxKB
+	 teK/n+fDvg2tg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE84F380AA62;
+	Fri, 17 Jan 2025 23:45:10 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: fixes for 6.13, part 4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
+References: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lists.linux.dev>
+X-PR-Tracked-Message-Id: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.13-4
+X-PR-Tracked-Commit-Id: 352bba6c19cdeac107e7fc1684548269e6b0f111
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ed9add2b32253b73d4909cc5cd4e7abcfdc0568b
+Message-Id: <173715750924.2291664.11872474582835471287.pr-tracker-bot@kernel.org>
+Date: Fri, 17 Jan 2025 23:45:09 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Date: Fri, 17 Jan 2025 17:47:32 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 6.13, part 4
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-The following changes since commit 5bc55a333a2f7316b58edc7573e8e893f7acb532:
+The pull request you sent on Fri, 17 Jan 2025 17:47:32 +0100:
 
-  Linux 6.13-rc7 (2025-01-12 14:37:56 -0800)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.13-4
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ed9add2b32253b73d4909cc5cd4e7abcfdc0568b
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.13-4
+Thank you!
 
-for you to fetch changes up to 352bba6c19cdeac107e7fc1684548269e6b0f111:
-
-  Merge tag 'ti-driver-soc-for-v6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/fixes (2025-01-15 15:56:24 +0100)
-
-----------------------------------------------------------------
-soc: fixes for 6.13, part 4
-
-Two last minute fixes: one build issue on TI soc drivers,
-and a regression in the renesas reset controller driver.
-
-----------------------------------------------------------------
-Arnd Bergmann (2):
-      Merge tag 'reset-fixes-for-v6.13' of git://git.pengutronix.de/pza/linux into arm/fixes
-      Merge tag 'ti-driver-soc-for-v6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/fixes
-
-Claudiu Beznea (1):
-      reset: rzg2l-usbphy-ctrl: Assign proper of node to the allocated device
-
-MD Danish Anwar (1):
-      soc: ti: pruss: Fix pruss APIs
-
- drivers/reset/reset-rzg2l-usbphy-ctrl.c |  1 +
- include/linux/pruss_driver.h            | 12 ++++++------
- 2 files changed, 7 insertions(+), 6 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
