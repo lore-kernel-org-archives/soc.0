@@ -1,63 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EFC1DC9BF;
-	Fri, 17 Jan 2025 23:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A51B18A6A6
+	for <soc@lists.linux.dev>; Sun, 19 Jan 2025 19:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737157486; cv=none; b=GtFvaFX4e5GvFnDIX1/1QjdRmrniz76J0n4q2rQDjFpO+ih7s4XXyC+B8/RLANsBAeGL2BiKsp90xzPLa1H96VMfbrcsZe4bu9yqhUsQJ4FVNAUh8UPmdFo+vd7MDBcKQUWhDioadBHcLfe4ZiboY90RF+GU+LrqJA5u5UOfbCA=
+	t=1737314182; cv=none; b=Wl/isy6rUyHeVzPbuCaSpDDmMeXPcYPAD+dMkHeFVGe6a34k+k0PFso7z0Y3LE+n7PbpLPODxHsRTIXEJtP3Mdb2aa4YiGo3qwsC2oAoF6rLeuk9SOT/v/WuQHPxLg+5blfX4q0fVP/GDO8EDg3xFTP5InlEJSfp6zMxJY2Khm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737157486; c=relaxed/simple;
-	bh=8dSUKblfap4Zb+tgdq45FLILJMcyqgtpVOvFFYvkdDc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=E9w38bc/kxKScnPCoz3lOpZX1H5vKorRk856w7v3401TPQfGE5rppq9ydfagH7hYkSbbTXWYjveJGH7G0ssJ1XwHHcnCnBtI+cwLNknJ5nL1UYfvCW8UvkEcbWxTn+ScyB6ZrQbc/j6P9CFE4qzEMQKrBmC5p6mlHL2kkRzcktU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8zPiXyA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737314182; c=relaxed/simple;
+	bh=PP4m4zqpwmd1ngg6HWN/umoJtUyT8y4HjYfNMdox2l0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=swafnpwn0YUH1PPN2gR/qAoQi0QNL1RGu6i96mivtDj2SvyDxVtm5a7W4Cayx0q+KcSeHm1V+1XkCEXjfod/HNFgKKx5MG89DEzwUmtu2xvliZV8xr/GVpwgLN9shLS4xlVIhBBPGr597KdFWhacYzc8SGMlOXArMICQZW6sMXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5mnHu9I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8zPiXyA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A51C4CEDD;
-	Fri, 17 Jan 2025 23:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737157486;
-	bh=8dSUKblfap4Zb+tgdq45FLILJMcyqgtpVOvFFYvkdDc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=O8zPiXyArCyo3MI5ua4pUBijNguGwZSSMLja15tVxoXXQ0aFV0G+buSLneNzJPAeA
-	 uaPfB0kxS2Ss+FrMkFR+ugdUmQjC/mQlbuPsWMtJH6Td5WRJ5bnaja3gVrP5qdFh3/
-	 Iqc9TZCi7WufIGpH+Z080LwLyJNg7YTDYGeKiGo8zn8XoQyWwHYVFfQvmg7nkBv2lG
-	 WDVqfNp3Jz2TPdw3bTF+sfYkP2wTdy60gsXH/Xz+r4d1R1ZN78tlTNlsPFGbU/m6lb
-	 s4l/S5GlikQocGkK0U7GoGpCh1qhDFq8eeh1ia09hHCMnYU8wgc4OJJhSiOh9RdxKB
-	 teK/n+fDvg2tg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE84F380AA62;
-	Fri, 17 Jan 2025 23:45:10 +0000 (UTC)
-Subject: Re: [GIT PULL] soc: fixes for 6.13, part 4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
-References: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lists.linux.dev>
-X-PR-Tracked-Message-Id: <99e7cf2a-2578-4b10-819a-16321a7739c7@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.13-4
-X-PR-Tracked-Commit-Id: 352bba6c19cdeac107e7fc1684548269e6b0f111
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ed9add2b32253b73d4909cc5cd4e7abcfdc0568b
-Message-Id: <173715750924.2291664.11872474582835471287.pr-tracker-bot@kernel.org>
-Date: Fri, 17 Jan 2025 23:45:09 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5mnHu9I"
+Received: by smtp.kernel.org (Postfix)
+	id ADF6FC4CEDF; Sun, 19 Jan 2025 19:16:21 +0000 (UTC)
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id D4ACCC4CED6
+	for <soc@kernel.org>; Sun, 19 Jan 2025 19:16:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4ACCC4CED6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-46b1d40ac6bso34122241cf.0
+        for <soc@kernel.org>; Sun, 19 Jan 2025 11:16:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737314179; x=1737918979; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xu41P9de773e/9cu60iL6PZJC3QjQtGofbu+cqUbtZk=;
+        b=S5mnHu9I8qnLKzWcu0ocE/Sfia+3iiPk8zSAMU2rPp2ZcgQJan+AE/ZgshuHoCj3u9
+         uo2TykCGca4mYD/3eI+jhWrgtcpYs9Pb6cpPoCO9YRceRwXx/LsftIW8t+qPwuLIVDzL
+         BFsPq/iI6ozepS6hD8bTofKcrO7z1W3isKSDBymS0FsJ5/gDYXw/suJrKh01/ZKALliV
+         HfS3GfR3YlItE3fflU4tyd0/v6r6VB3h0awI5KRM5whLuiGhjz8I+Rr5NYUAKocRCu9o
+         AlDQAV/Sj6v429wu6/Zs1/tdik4pU06ne9Pvy9iPMfamJMu/QbIm4jz5j3CjAm+0vzI0
+         4ceQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737314179; x=1737918979;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xu41P9de773e/9cu60iL6PZJC3QjQtGofbu+cqUbtZk=;
+        b=fREYa/sxotdXMkraaOrzrDaa7a2CDG63/aFQsbgZ+Im+6aSe3fCNz9ECqzXbUqlFFF
+         oEQsLPyLMH1R5OtOnjPyqm2SnsKF3PTNcNgwOkFl+B32XiL7fAp0KspuGzJANU+j/LlM
+         5yiBFp686PDGAcrjcYLQ8GhrO33ElzQfp8igRrQf/oPZCddm3/gyCI8HNhobFbPSy3+8
+         A0lbRiVXlYAVdP/vQKu7oRxL+hq/35CNph+RqA9aku9E8UE1eTxerQgOaHJVSSx/dIdV
+         8ZUFCesA62QWiIB7C/cSPe5gvXMQod7PAdbyDQfB2uLOI8gRlqXVnQOh+h/DAjSTQY8E
+         O0ew==
+X-Gm-Message-State: AOJu0YxZ8UYj99lPKVZent8rI0xv1CqWFSiiCz/TuARt6V14N/aP4rYQ
+	hmXImLVkPNDcG2aPyMPSk4KHd3D6GKmzgSjqT01ZvkelBeOTa9qK
+X-Gm-Gg: ASbGncvn6WLGNQwJ+7hvb+S29rZ1LixIyCbhHDTnAzlxgOg7mPRWGaVNR99ph32ppJj
+	SXZ0In4xlm4lMIskyrfKE5owrtQV+K+i8yr3NinQ3ynOJcuL6N8Pe2zJmjqkGh/dEWSELSW+0/e
+	q2W/XbneINs0wYQJwSo9TJJl5/WQxb+p0gOSZibkJpswz7N051jemmc1qKkfqRS1TwbAOdiNkw6
+	nVgZ68rAKZyy0aYRBj4fMJ7zzFu0HdCjY70P+ol/tGFurLJeEvTD16fvRhjLvpEIvf2kos5F0J2
+	PRzRgfmrWIrrLEZR9DBDC43Fuqu+6QCPeQUZh3rDp0yF
+X-Google-Smtp-Source: AGHT+IGCfUIzNwSMLrQhgicAN6TluHUnsi9cCJ5/wUUw8hAvgNFrNJgsYLTAYi7s3CuRpu9CwuXlJg==
+X-Received: by 2002:ac8:7e82:0:b0:462:b7c9:10e with SMTP id d75a77b69052e-46df56ad204mr294173671cf.13.1737314179611;
+        Sun, 19 Jan 2025 11:16:19 -0800 (PST)
+Received: from errol.ini.cmu.edu (pool-108-39-141-40.pitbpa.fios.verizon.net. [108.39.141.40])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e23430fa9sm16190081cf.4.2025.01.19.11.16.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jan 2025 11:16:18 -0800 (PST)
+Date: Sun, 19 Jan 2025 14:16:16 -0500
+From: "Gabriel L. Somlo" <gsomlo@gmail.com>
 To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: soc@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Joel Stanley <joel@jms.id.au>, Andrew Davis <afd@ti.com>
+Subject: [GIT PULL] LiteX updates for next
+Message-ID: <Z41PgCffqPUTyxkE@errol.ini.cmu.edu>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Clacks-Overhead: GNU Terry Pratchett
 
-The pull request you sent on Fri, 17 Jan 2025 17:47:32 +0100:
+Hi Arnd,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.13-4
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ed9add2b32253b73d4909cc5cd4e7abcfdc0568b
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 
-Thank you!
+are available in the Git repository at:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+  https://github.com/litex-hub/linux.git tags/litex-6.13-rc1
+
+for you to fetch changes up to c7345869aa382b1e22691d51cbbd218d7f488a55:
+
+  drivers/soc/litex: Use devm_register_restart_handler() (2025-01-19 14:05:35 -0500)
+
+----------------------------------------------------------------
+LiteX updates for next
+
+Remaining LiteX updates from 2024, reviewed and
+successfully tested against v6.13-rc1.
+
+Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+
+----------------------------------------------------------------
+Andrew Davis (1):
+      drivers/soc/litex: Use devm_register_restart_handler()
+
+ drivers/soc/litex/litex_soc_ctrl.c | 23 +++++------------------
+ 1 file changed, 5 insertions(+), 18 deletions(-)
