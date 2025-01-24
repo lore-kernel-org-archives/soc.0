@@ -1,77 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D624085D
-	for <soc@lists.linux.dev>; Fri, 24 Jan 2025 13:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59599154C0C
+	for <soc@lists.linux.dev>; Fri, 24 Jan 2025 15:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737725407; cv=none; b=akJo3SN7u+nnm7gzd3pTJ4h1Wtwi3j68on7mhJpePd51Fe8vk2Z48sjju9TvDZEz6XWKqZ2JT8AVbSB+tVBJYMGSskORBnvLAYnw6XX2Do+db32VObW4mnVBp6f58EDayGjFu7YnRx+oo189PKmfQx4yntUo8xgvO3ZWhuIJhLg=
+	t=1737730907; cv=none; b=FB3exROcQt9nZbXyGe6DQ9nlezEjkL2KjlZainVzf7WiSKzKT0o/wQTK67S0por2peqzt/jAcOqUFu8a20SF44rk88Gv4dulM7ojxYKKoEQThxdZ5DKFptOqPuDkK3MPy2JEaYdQv99YXMxeWsH6UkYNvWAuKYAfp1NHJDnlXoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737725407; c=relaxed/simple;
-	bh=vBJtY1tuE3ebPSI3Yo62wA+lE2iuEGU5P/Ek7gzUisM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=sRen1FLPQkpNBYxytdsS9SG8bUKKGHloPqbY2opX6thoD29TC8XE2759Umg3n6cW7EUumz9Evz7kUPHgJhtl6MwWit23iFo1l1JV5s4l+nCd2p8X6izD0eC8j4/qZDAc/KPs0hxD+hKjlg0ovdZqwjscC4fop/Nz5sGhtzGl44M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2ZOmPzt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737730907; c=relaxed/simple;
+	bh=WzSDDILJujwUN8q/TylS+oOgwu9Jw/LVN57EGknUC6U=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=A/Ju2Xi2yxmz7c2cBZnm84/3H1kPxopkzCOpFo5gJJa18hUf6hspaw1l6ukGGrTHwZL1Xdv+xOtHiVWmq139SYsgA9ulWPeJY38igAdolzL58XqFqgqbcYSyf9s8ijqFZt6IDOdtyaSs4NF8ovPKvSKG7eaj1T7n9qlUZwnoGrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=uurm+ATG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SAcx9BIZ; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2ZOmPzt"
-Received: by smtp.kernel.org (Postfix)
-	id B61F3C4CEE3; Fri, 24 Jan 2025 13:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB79C4CEDD;
-	Fri, 24 Jan 2025 13:30:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737725407;
-	bh=vBJtY1tuE3ebPSI3Yo62wA+lE2iuEGU5P/Ek7gzUisM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=B2ZOmPztJk/uL+8ZT9Ij7aHr2/virkbVaC1sFCgPv1ao+vnMg8LuFP1V5KTKY3iNC
-	 8Yuso41RPGpkTKbYIPFeky+ecqCA7X4Kb6KVkgl7PEOPcJRACD67+9SLhblaza+nBF
-	 4Qj/Btew25KNUHScRdYUeIvVoTQCTQZu6DS7B/qXIUy5NdI+W9TXLDKKCx4y4CAOr3
-	 4WKEXbgMDhoXZLdvIGX3wtvdUcPMbNc362DzutxBQpPY2mdNZmp1R4hQ+Cmig6Mbc8
-	 aYzRIRyaCGPcSMYt8WjHs3/4fZy5pkMJtsqdXrA4wgVbqpG3dJINNG/WaAzvSLj2yq
-	 eX9DSYylvpy3Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE250380AA79;
-	Fri, 24 Jan 2025 13:30:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="uurm+ATG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SAcx9BIZ"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 4202B11400FC;
+	Fri, 24 Jan 2025 10:01:44 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 24 Jan 2025 10:01:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1737730904; x=1737817304; bh=QP
+	GwMWujuyUFGWQ2AiU4lgYGxPGOA3tum5c0rNS1aFg=; b=uurm+ATGl0FLyUMdmy
+	hhqa68BeP30jH5+DFKLDn7zWXwIE9lr/r0FClSLXCU2xoknux/8yHjSVDfaM/IHz
+	hp0fM+kSY7ShwDYx3ytKzICeO3v9KcIJpo29zde0FblryZcL/nxH1bKF6EPJHDHH
+	VTxE3zKGG0tg46Gm2Mux0QrtFyZVqmHN5t8swb9BhBNmvQXM1OrCgcoUde/1hmg1
+	7J+gVCcUXJ2SINkrJheBayOrMjjIBrJRgVgxiuYVgOgfhRHsLSRphGXR94fx6Lay
+	/sGDHJIP2d+mMYDcWwJk5SCxMtFHrqLqwk66A4NU2T+vzeF7S/qGuyspjdSaveQ0
+	2WIg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1737730904; x=1737817304; bh=QPGwMWujuyUFGWQ2AiU4lgYGxPGO
+	A3tum5c0rNS1aFg=; b=SAcx9BIZsKuW7qFegVivLGGS0tMd72Nmk4XHZH+vpImV
+	9Tffm763s7mLutZ118ge4q6OWp3r8nCCDmPnlsZfPY9Eczz7H30elw1QKZ89z+rH
+	PfbPbX4PE4CocHq6yD9II54z+8gTm9NqlycDGDes97TXppCRK3hkEJzBILr5tQm5
+	P1/rDrFVsXCGeonrKz7DGE0QZBW1pSbjgzCRAcx6QCQxqmIusjEXzENUKvpBvVaH
+	dVejA5CGotzzlybfIL0qgcF/FXkyGpWPIWbyrtfQ7wQfN2/VCRtwwxFsha00zR0L
+	HYE+7I7gZRjY3eRPsbfo2nQglN1iGOfHSUHU5kapnQ==
+X-ME-Sender: <xms:V6uTZxEIJkpTq0Nnv5Cuz3RdzTwC886zEfda8HOm7tgt47i24imF4g>
+    <xme:V6uTZ2XREjPDtqCRSkfsX9Ku4fOoSC660dbM23BHm1TTQyG3VcdH0YnUOg2WU-3RL
+    qswBspf-8PFhD6squ8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedggeekvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkufgtgfesthejredtredttden
+    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
+    gvqeenucggtffrrghtthgvrhhnpeffffffheeugfefhfduvefgleeijeektdfffeeijedt
+    hfevgfeiieevjeeuteefvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhm
+    ohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfh
+    houhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhn
+    vghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslh
+    hishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhes
+    vhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:V6uTZzI-oD2BJvWT5ZsIFmooUGntW6tB-zqrxl5BITlgGaK-o7A0WQ>
+    <xmx:V6uTZ3HTFiyAl9IECETnSytqJ2rPZ8o4sgDt1kVCyJE0Az6fPzyMRA>
+    <xmx:V6uTZ3VRH25ZxQUaYOHRDrGCmXkH12N74kFFi0IJWdP75nmbtwKU7Q>
+    <xmx:V6uTZyNpRxVidMZyiR4zrIIU0ZwfWRLn5aMhkjSjAL7X7Vw6R6EK4g>
+    <xmx:WKuTZySwOO2zCA603S0aFj3aj4PwdIoYfZUHAOD1Al4DllDiXsD1HSDy>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A7F302220073; Fri, 24 Jan 2025 10:01:43 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Broadcom defconfig-arm64 changes for 6.14
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <173772543249.2032962.4304500111800518256.git-patchwork-notify@kernel.org>
-Date: Fri, 24 Jan 2025 13:30:32 +0000
-References: <20250123203302.1491843-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20250123203302.1491843-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: soc@kernel.org
+Date: Fri, 24 Jan 2025 16:00:39 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev
+Message-Id: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com>
+Subject: [GIT PULL 0/5] SoC changes for 6.14
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hello:
+Hi Linus,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This is my set of branches for 6.14, a bit delayed.
 
-On Thu, 23 Jan 2025 12:33:02 -0800 you wrote:
-> The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-> 
->   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.14/defconfig-arm64
-> 
-> [...]
+There are 743 non-merge changeset overall, so it's one of the
+smaller cycles for us. The Qualcomm updates make up about
+half of the patches and the source lines, after they had
+a few quieter releases.
 
-Here is the summary with links:
-  - [GIT,PULL] Broadcom defconfig-arm64 changes for 6.14
-    https://git.kernel.org/soc/soc/c/309f64469cd5
+Two new SoC platforms are added, the Blaize BLZP1600 and
+the SpacemiT K1, so there is a branch for just those two.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+There are also 11 other new SoCs in existing platform,
+which are all part of the devicetree updates.
 
+In the dirstat, the aspeed platfrom also sticks out, but
+that is just a single devicetree file for a particular
+complex machine.
 
+   0.5% Documentation/devicetree/bindings/arm/
+   0.6% Documentation/devicetree/bindings/clock/
+   0.2% Documentation/devicetree/bindings/interconnect/
+   0.3% Documentation/devicetree/bindings/
+  13.0% arch/arm/boot/dts/aspeed/
+   0.4% arch/arm/boot/dts/broadcom/
+   3.0% arch/arm/boot/dts/microchip/
+   0.2% arch/arm/boot/dts/nxp/imx/
+   0.9% arch/arm/boot/dts/st/
+   0.2% arch/arm/boot/dts/
+   0.6% arch/arm/
+   0.4% arch/arm64/boot/dts/blaize/
+   0.2% arch/arm64/boot/dts/broadcom/bcmbca/
+   0.4% arch/arm64/boot/dts/broadcom/
+   2.1% arch/arm64/boot/dts/exynos/
+   3.1% arch/arm64/boot/dts/freescale/
+   5.6% arch/arm64/boot/dts/mediatek/
+  47.4% arch/arm64/boot/dts/qcom/
+   2.7% arch/arm64/boot/dts/renesas/
+   9.4% arch/arm64/boot/dts/rockchip/
+   0.5% arch/arm64/boot/dts/st/
+   1.2% arch/arm64/boot/dts/ti/
+   0.2% arch/arm64/boot/dts/
+   0.9% arch/riscv/boot/dts/spacemit/
+   0.5% drivers/firmware/qcom/
+   0.4% drivers/memory/
+   0.2% drivers/soc/imx/
+   0.2% drivers/soc/qcom/
+   0.5% drivers/
+   2.0% include/dt-bindings/clock/
+   0.2% include/dt-bindings/interconnect/
+   0.4% include/
+
+214 people contributed patches, the most active ones by
+number of changesets are:
+
+     40 Krzysztof Kozlowski
+     29 Frank Wunderlich
+     27 Dmitry Baryshkov
+     23 Ricky CX Wu
+     15 Stephan Gerhold
+     15 Konrad Dybcio
+     15 Chen-Yu Tsai
+     15 Biju Das
+     14 Krishna Kurapati
+     13 Neil Armstrong
+     13 Geert Uytterhoeven
+     11 Prashanth K
+     10 Claudiu Beznea
+
+      ARnd
