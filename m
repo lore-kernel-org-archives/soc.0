@@ -1,73 +1,76 @@
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59599154C0C
-	for <soc@lists.linux.dev>; Fri, 24 Jan 2025 15:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA186CDBA
+	for <soc@lists.linux.dev>; Fri, 24 Jan 2025 15:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737730907; cv=none; b=FB3exROcQt9nZbXyGe6DQ9nlezEjkL2KjlZainVzf7WiSKzKT0o/wQTK67S0por2peqzt/jAcOqUFu8a20SF44rk88Gv4dulM7ojxYKKoEQThxdZ5DKFptOqPuDkK3MPy2JEaYdQv99YXMxeWsH6UkYNvWAuKYAfp1NHJDnlXoE=
+	t=1737730988; cv=none; b=LTLNYe0OhPbL9EwKXyWi74AKvdhLD1bb3erpSHeId4PNoRIhrt/Z9db8KiCMndfyPcynX64tevieFU23A9GkWRrxHv/6uGRCTxSkCmN5O2e04dz/2pVW40yIFLaRKDPZMdU4ApsGwPNEjZ4JBte/nmxDcCKZvaoCt8NBKpLZ4+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737730907; c=relaxed/simple;
-	bh=WzSDDILJujwUN8q/TylS+oOgwu9Jw/LVN57EGknUC6U=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=A/Ju2Xi2yxmz7c2cBZnm84/3H1kPxopkzCOpFo5gJJa18hUf6hspaw1l6ukGGrTHwZL1Xdv+xOtHiVWmq139SYsgA9ulWPeJY38igAdolzL58XqFqgqbcYSyf9s8ijqFZt6IDOdtyaSs4NF8ovPKvSKG7eaj1T7n9qlUZwnoGrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=uurm+ATG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SAcx9BIZ; arc=none smtp.client-ip=103.168.172.157
+	s=arc-20240116; t=1737730988; c=relaxed/simple;
+	bh=be1+89Jh89Rc79AdD8C3dhRf9clChboakPzPIAn7CVU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=SsgTHlt5pBaILcAfLiXEGukEUoNopoRzMogn94E9FSLxYByqVFh0wRwyoTY3+EIY4Da9WBXsXcEsqDqfAsXrks5MrOEuFD/zsp+nEso5IpNvpnxj124o39YdlmU+twfbTglYACez58QhZg3cga2SPcvoFKjeruI/MugdbWHD4fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JYqUo7Fu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DnY/p44H; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="uurm+ATG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SAcx9BIZ"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JYqUo7Fu";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DnY/p44H"
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 4202B11400FC;
-	Fri, 24 Jan 2025 10:01:44 -0500 (EST)
+	by mailfout.phl.internal (Postfix) with ESMTP id A129413801A3;
+	Fri, 24 Jan 2025 10:03:05 -0500 (EST)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 24 Jan 2025 10:01:44 -0500
+  by phl-compute-10.internal (MEProxy); Fri, 24 Jan 2025 10:03:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1737730904; x=1737817304; bh=QP
-	GwMWujuyUFGWQ2AiU4lgYGxPGOA3tum5c0rNS1aFg=; b=uurm+ATGl0FLyUMdmy
-	hhqa68BeP30jH5+DFKLDn7zWXwIE9lr/r0FClSLXCU2xoknux/8yHjSVDfaM/IHz
-	hp0fM+kSY7ShwDYx3ytKzICeO3v9KcIJpo29zde0FblryZcL/nxH1bKF6EPJHDHH
-	VTxE3zKGG0tg46Gm2Mux0QrtFyZVqmHN5t8swb9BhBNmvQXM1OrCgcoUde/1hmg1
-	7J+gVCcUXJ2SINkrJheBayOrMjjIBrJRgVgxiuYVgOgfhRHsLSRphGXR94fx6Lay
-	/sGDHJIP2d+mMYDcWwJk5SCxMtFHrqLqwk66A4NU2T+vzeF7S/qGuyspjdSaveQ0
-	2WIg==
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1737730985;
+	 x=1737817385; bh=LUh9um2eddIv6RoQa/yQugoax8kk1TNal/OqEBhRHG0=; b=
+	JYqUo7Fu6aCZFn9zAfN9uOiD2i5BeHmYVVE22PJlHgi3phhZ4p1hbZ94NyX/6c1R
+	fsYEb7J0Yha2T5ahjOFf/21AZ3Z7oSabj6eBuUaIQu1bzTIPBO0F3Hnt+qCA0sek
+	FALZWoNtiNepUZxR/OoxTNWdLgUpPBNxpRUL1lJSYPD8xmSOd5wOqFdIlaHEDFCz
+	5ESzEUI1mC/tCqN1w5sJ+CRP1Okpp/ybtKkwmbH8HO5LNdj4SMcIFSSnJT0wWyXl
+	LoDgL6Qmy0DOYaH9fCroF3BdXA6vbILYgo/YPP1ErolekGcnr3kvSs/sWt3lhY/C
+	oRrzalSE4fSUy/W0vNZ5GQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1737730904; x=1737817304; bh=QPGwMWujuyUFGWQ2AiU4lgYGxPGO
-	A3tum5c0rNS1aFg=; b=SAcx9BIZsKuW7qFegVivLGGS0tMd72Nmk4XHZH+vpImV
-	9Tffm763s7mLutZ118ge4q6OWp3r8nCCDmPnlsZfPY9Eczz7H30elw1QKZ89z+rH
-	PfbPbX4PE4CocHq6yD9II54z+8gTm9NqlycDGDes97TXppCRK3hkEJzBILr5tQm5
-	P1/rDrFVsXCGeonrKz7DGE0QZBW1pSbjgzCRAcx6QCQxqmIusjEXzENUKvpBvVaH
-	dVejA5CGotzzlybfIL0qgcF/FXkyGpWPIWbyrtfQ7wQfN2/VCRtwwxFsha00zR0L
-	HYE+7I7gZRjY3eRPsbfo2nQglN1iGOfHSUHU5kapnQ==
-X-ME-Sender: <xms:V6uTZxEIJkpTq0Nnv5Cuz3RdzTwC886zEfda8HOm7tgt47i24imF4g>
-    <xme:V6uTZ2XREjPDtqCRSkfsX9Ku4fOoSC660dbM23BHm1TTQyG3VcdH0YnUOg2WU-3RL
-    qswBspf-8PFhD6squ8>
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1737730985; x=
+	1737817385; bh=LUh9um2eddIv6RoQa/yQugoax8kk1TNal/OqEBhRHG0=; b=D
+	nY/p44H0GzO8ROQvJ6SvYyj+qUdkMuZQkbEBGuJtTu18wJci06lSqWjO4p1IK44g
+	hiMrPRf8pPuZjyhzgeUY+qOkAQKpwM9r50l0eN3HHRGeYLsf2oKwmspBZ4kjdkIh
+	0jIFgoMxfD+o07hRFwbreY0o3WMTwxbvAeaoCxmG1kHiD2oTdehXcrFh94C3kHGV
+	yDpI3OUDwWq0/t0LqRTn5huXyXEJXt+bwzPKAw+JWvbLtvFJD5aRTX9FggThJVWV
+	zePMfqQwIJ5idxEXjUcIvdOJPOOHWU/xoHPhmNJ/N/6R2UDCBmkl/1gXO/7jIGJC
+	aWbQn0L9jWGpX/py0GJ6Q==
+X-ME-Sender: <xms:qauTZ7ekDiR9ZFzCjyDQRxghWndYaL4ONu4wV1ww3ttgkn_88sZv9g>
+    <xme:qauTZxOo4lRS_kX4bd7LNaZH6t3URQKlBZgMNyT4iCFcLnIuN9EfzZ8bys-6Eri62
+    po_zRCfG6JDIyJg7yI>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedggeekvdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkufgtgfesthejredtredttden
-    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
-    gvqeenucggtffrrghtthgvrhhnpeffffffheeugfefhfduvefgleeijeektdfffeeijedt
-    hfevgfeiieevjeeuteefvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhm
-    ohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfh
-    houhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhn
-    vghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslh
-    hishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhes
-    vhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:V6uTZzI-oD2BJvWT5ZsIFmooUGntW6tB-zqrxl5BITlgGaK-o7A0WQ>
-    <xmx:V6uTZ3HTFiyAl9IECETnSytqJ2rPZ8o4sgDt1kVCyJE0Az6fPzyMRA>
-    <xmx:V6uTZ3VRH25ZxQUaYOHRDrGCmXkH12N74kFFi0IJWdP75nmbtwKU7Q>
-    <xmx:V6uTZyNpRxVidMZyiR4zrIIU0ZwfWRLn5aMhkjSjAL7X7Vw6R6EK4g>
-    <xmx:WKuTZySwOO2zCA603S0aFj3aj4PwdIoYfZUHAOD1Al4DllDiXsD1HSDy>
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeefhfehteffuddvgfeigefhjeetvdekteekjeef
+    keekleffjeetvedvgefhhfeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtg
+    hpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdp
+    rhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrg
+    guvggrugdrohhrghdprhgtphhtthhopehsohgtsehlihhsthhsrdhlihhnuhigrdguvghv
+    pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:qauTZ0j6ZiprxH_UyOzgACdSNUQTGTPbOKTunV7NhSJRnXbb-KIo7g>
+    <xmx:qauTZ8-s-AFRexwr7cp4Fz_tSLVLE_XHd784pKM53o6CqJHfWU9-ew>
+    <xmx:qauTZ3tSO0_mDfC1PZeDZIW6IMOyfZ0peH4d3EZwrs6-nJDR0ddacg>
+    <xmx:qauTZ7E8pzz-_oAnXU92_mQ7tbCf2hUurMVX8fsZxEV9L_ruk8GRXg>
+    <xmx:qauTZ3InfkoIujHeyOl0XIHjbD2EW3APjxQIVuDNdr5mTINeja8vWwtq>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A7F302220073; Fri, 24 Jan 2025 10:01:43 -0500 (EST)
+	id 1E3382220075; Fri, 24 Jan 2025 10:03:05 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -75,83 +78,63 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Fri, 24 Jan 2025 16:00:39 +0100
+Date: Fri, 24 Jan 2025 16:02:44 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Linus Torvalds" <torvalds@linux-foundation.org>
 Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  soc@lists.linux.dev
-Message-Id: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com>
-Subject: [GIT PULL 0/5] SoC changes for 6.14
+Message-Id: <f06cf7c8-9480-4cd4-9380-47161dc56d0b@app.fastmail.com>
+In-Reply-To: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com>
+References: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com>
+Subject: [GIT PULL 1/5] soc: arm platform code for 6.14
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0dca4:
 
-This is my set of branches for 6.14, a bit delayed.
+  Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
 
-There are 743 non-merge changeset overall, so it's one of the
-smaller cycles for us. The Qualcomm updates make up about
-half of the patches and the source lines, after they had
-a few quieter releases.
+are available in the Git repository at:
 
-Two new SoC platforms are added, the Blaize BLZP1600 and
-the SpacemiT K1, so there is a branch for just those two.
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.14
 
-There are also 11 other new SoCs in existing platform,
-which are all part of the devicetree updates.
+for you to fetch changes up to 2fd7a3f27892f1ca4fca24591a7a82fd0437e080:
 
-In the dirstat, the aspeed platfrom also sticks out, but
-that is just a single devicetree file for a particular
-complex machine.
+  Merge tag 'at91-soc-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into soc/arm (2025-01-17 12:57:00 +0100)
 
-   0.5% Documentation/devicetree/bindings/arm/
-   0.6% Documentation/devicetree/bindings/clock/
-   0.2% Documentation/devicetree/bindings/interconnect/
-   0.3% Documentation/devicetree/bindings/
-  13.0% arch/arm/boot/dts/aspeed/
-   0.4% arch/arm/boot/dts/broadcom/
-   3.0% arch/arm/boot/dts/microchip/
-   0.2% arch/arm/boot/dts/nxp/imx/
-   0.9% arch/arm/boot/dts/st/
-   0.2% arch/arm/boot/dts/
-   0.6% arch/arm/
-   0.4% arch/arm64/boot/dts/blaize/
-   0.2% arch/arm64/boot/dts/broadcom/bcmbca/
-   0.4% arch/arm64/boot/dts/broadcom/
-   2.1% arch/arm64/boot/dts/exynos/
-   3.1% arch/arm64/boot/dts/freescale/
-   5.6% arch/arm64/boot/dts/mediatek/
-  47.4% arch/arm64/boot/dts/qcom/
-   2.7% arch/arm64/boot/dts/renesas/
-   9.4% arch/arm64/boot/dts/rockchip/
-   0.5% arch/arm64/boot/dts/st/
-   1.2% arch/arm64/boot/dts/ti/
-   0.2% arch/arm64/boot/dts/
-   0.9% arch/riscv/boot/dts/spacemit/
-   0.5% drivers/firmware/qcom/
-   0.4% drivers/memory/
-   0.2% drivers/soc/imx/
-   0.2% drivers/soc/qcom/
-   0.5% drivers/
-   2.0% include/dt-bindings/clock/
-   0.2% include/dt-bindings/interconnect/
-   0.4% include/
+----------------------------------------------------------------
+soc: arm platform code for 6.14
 
-214 people contributed patches, the most active ones by
-number of changesets are:
+The updates here add code for the Microchip SAMA7D65 SoC,
+as well as minor bugfixes for OMAP.
 
-     40 Krzysztof Kozlowski
-     29 Frank Wunderlich
-     27 Dmitry Baryshkov
-     23 Ricky CX Wu
-     15 Stephan Gerhold
-     15 Konrad Dybcio
-     15 Chen-Yu Tsai
-     15 Biju Das
-     14 Krishna Kurapati
-     13 Neil Armstrong
-     13 Geert Uytterhoeven
-     11 Prashanth K
-     10 Claudiu Beznea
+----------------------------------------------------------------
+Aaro Koskinen (1):
+      ARM: omap1: Fix up the Retu IRQ on Nokia 770
 
-      ARnd
+Andreas Kemnade (1):
+      ARM: omap2plus_defconfig: enable charger of TWL603X
+
+Arnd Bergmann (2):
+      Merge tag 'omap-for-v6.14/soc-signed' of https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap into soc/arm
+      Merge tag 'at91-soc-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into soc/arm
+
+Christophe JAILLET (1):
+      ARM: OMAP2+: Fix a typo
+
+Javier Carrasco (1):
+      soc: atmel: fix device_node release in atmel_soc_device_init()
+
+Nicolas Ferre (1):
+      ARM: at91: pm: change BU Power Switch to automatic mode
+
+Ryan Wanner (1):
+      ARM: at91: add new SoC sama7d65
+
+ arch/arm/configs/omap2plus_defconfig |  1 +
+ arch/arm/mach-at91/Kconfig           | 11 +++++++++++
+ arch/arm/mach-at91/pm.c              | 31 ++++++++++++++++++++-----------
+ arch/arm/mach-omap1/board-nokia770.c |  2 +-
+ arch/arm/mach-omap2/powerdomain.c    |  2 +-
+ drivers/soc/atmel/soc.c              |  2 +-
+ 6 files changed, 35 insertions(+), 14 deletions(-)
