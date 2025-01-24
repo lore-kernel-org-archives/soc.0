@@ -1,77 +1,76 @@
 Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EC2154C04
-	for <soc@lists.linux.dev>; Fri, 24 Jan 2025 15:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9B9159209
+	for <soc@lists.linux.dev>; Fri, 24 Jan 2025 15:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737731351; cv=none; b=cMP2fjK9gWfBkf6A3u4BmMeu2hCXeMXipAUqSwa+JQvb/FIDd8JEPU91ScP4OAwESw/Tl/XJOisfZTR5+xC0wNT4/Tv4fepENGHpUNu+gOGOeFC3R4kmvxxFHL2BEkwO8d+TTyAUHZbxnd4u0j2oCVth+CCSkMmDjOd0hOilFHY=
+	t=1737731363; cv=none; b=WkWFH/Bbks+cB4uDd8Rdq0h7Xwz0WfEupHJTx4L3zkCT2Th6cgHd8Hg/r3XEyhWjHl7Vp+2de7Y2NtNhwce2zXor+/5bq9e7v/hYtG88TT4IBm6cffdfj+lt60kzH3lIhxuKvkqCAOKQpPb5MpqqVOmZDCb1oedBf8Kc+FN1HTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737731351; c=relaxed/simple;
-	bh=2is0L0tct8W8v0KCxxR88p56g5Ee5OPOHwnNiOzJTo4=;
+	s=arc-20240116; t=1737731363; c=relaxed/simple;
+	bh=ef7iNYq42cZXkauvrKbGI/FJ4Os6pDk5KTyzEh21XA4=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=IsuUBlY3yVbX7iHIXt0KI73uKnkvvXc0xStW9fBsp6K0aZ876rdmBpfTQwM3I94Syp2QuqUq+stteyCO4crDFEJcU08v/fA+BXKQnP/gDsj6i7IMxlmrObiQo/RHJrUHgKCimYIQLVpwjhuRH7n5kB85IwGtxJQksqQQSqu8CjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=lfjw9NFq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=wL7taxRQ; arc=none smtp.client-ip=103.168.172.157
+	 Subject:Content-Type; b=qJOrRzPyIFw3hWPitZ9SZgtgNdhqOxP3XEOZQpjC+AMv3kc2Ps5ACxpi1PA/1/9KL9BDio5WusuNhW+0Amm44IZtJ3SwOjrCuTOmh5cUDDUAHwkd8FXbRA8t5qcn9QUHfEMfcrjcSqM2Kez0aV+Fx/4B+rt90n55nzHTbLxAJ9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=djkfvsz8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dW1ufnZX; arc=none smtp.client-ip=103.168.172.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="lfjw9NFq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="wL7taxRQ"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="djkfvsz8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dW1ufnZX"
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 23D5211401A4;
-	Fri, 24 Jan 2025 10:09:08 -0500 (EST)
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 581E611401A8;
+	Fri, 24 Jan 2025 10:09:20 -0500 (EST)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 24 Jan 2025 10:09:08 -0500
+  by phl-compute-10.internal (MEProxy); Fri, 24 Jan 2025 10:09:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1737731348;
-	 x=1737817748; bh=ZJ4WtcWb4pGQvvZfqyG6MRraoEe/+wFppxa1Noh1do8=; b=
-	lfjw9NFqAAebimBslj45njcfoOL9yc9AcqOGdXddzqiSGzSKOGe6Qy/rrEZXnh1X
-	t73DgOCIi2WDgSbN86oVcVQ5Hh+jq8PFf1H2U4tpHFDpiRFnEegI0/zW2HOdWCu5
-	iruFFA1UFOliZL4F6+slpcNZofiqhdZ0p1h2m4gdHtxHqlyqhg7XXaPj5mqnfaag
-	lGUeUUGmFEHuf1N8ZJAg6s51ToTHPuAvs1ruPOyn7We04tSA8F1T7Drw95lEmlYT
-	C1FxAdHAzwaP+SzO2TvysQ/k9nH42+kBpNjXVMJ1hwV5rcC6umxFTPUniHMaQx48
-	i8OKVZMl7UUmsiUyZcNEYw==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1737731360;
+	 x=1737817760; bh=+0Mqs7iOlVquPP3UP3a2iTIsdV7BIk9K1d6vObYVMh0=; b=
+	djkfvsz8J8u3SJzI3ErSHCzD19Lq3r7BDohbMwF3iH8cb9KuDcO7a5jPhDn/0BgS
+	wLnMjqbbfLsct/NzzMBRPE+CF9nVXF+OUlaZWdV/Fl948iJp5aM+Z4APTq7uxTvL
+	svrZAXOC5L1fjyrI5whs1nCdBaJ5AVNLBMk5AH5lFT4ucG7GBStH1h8pGFoDu5o2
+	+XQhOvOy0JMa4tOIbVVjj7jIP0Q2FE6V0u8E10HDkM9nrgDoIkT8qN9BCueAhSNH
+	o1KRjSP/qEHZflVqgOMYvjuKlNJJdtCiwdkNTqrx51FZFFAhrBGz4SFUR/6CY2t2
+	Q7m9o5CSUAgCuNF7kGNrFQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1737731348; x=
-	1737817748; bh=ZJ4WtcWb4pGQvvZfqyG6MRraoEe/+wFppxa1Noh1do8=; b=w
-	L7taxRQgcnEdbvCEUx8nOxWd/A4rz+GTKepCyuTKjHVI8JdgzUNnPNtrE9KgB8Dr
-	HXjre+MxixX2PV+REvo/vJlHk/fnV7LQXlwb+ybBrn9kyi2JjcjGVGNIU1RCZcQs
-	2CbY8MgtlvWe+dC3iGxcI/dP3hOESALKtIyQZYqUpkXw0knR6/6VvB8aYeipsXjG
-	XolhYzRnzQ1wVdHTjeu2RSG5qKV3XbnendxLVlQ57Zo2H2vFwNEdxL66PUAA3HIl
-	UIaeMNuM3kEuU2AEmF8Bqn4byaJN7I6hK0BmVgN1+b6tC0E3Q1rQIy1Jlif2NOFg
-	K2hteLSvWy3z7oEB2gIZA==
-X-ME-Sender: <xms:E62TZ4rBzBP-9gbjt721ty4RdByw32qf2d8QQLyxAK8URsXdIF8rZA>
-    <xme:E62TZ-p_PsNKUelhrdsIT5lzoW5ET3jacbrpLkLyi3ON4Haw36EugIQUbTvroiCjW
-    MWr6VaqNpieCzuIJLQ>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1737731360; x=
+	1737817760; bh=+0Mqs7iOlVquPP3UP3a2iTIsdV7BIk9K1d6vObYVMh0=; b=d
+	W1ufnZXXMMFbPAc0NCL78MseC8HPfgVLzgN5JoLOlmWuyS5tedyuGxLouzCo5zYH
+	4OFJD+Q6zGNnwnT2fTlvyCZbP0SU9fu4tXYZx6TIKp4mMtpBZriNJzkbIU1axXNt
+	mj7kb0oBzRKqKNPACOFuEMizd0zUUHTFX7YcKxbHqW47+Ht2VD+87BZCjt88nmIy
+	Rbblw3vZdvYE/93rNIQnFB0vdWG882bcnp2zBCmKKMrN9mfnXiZn+HP4SJsIGPk8
+	OLMjLKT6YtHl7STOgb0jTV2JhHe87Bcvd7VZNVM+yag1ncnZAxb46zCXBYl6Txnl
+	a+PIBaX9StV97zuwD9H4A==
+X-ME-Sender: <xms:IK2TZwH_LWjuVyiXwxBKCFGlaGldp79co93BCOMMpoku8zBtp7mE9g>
+    <xme:IK2TZ5WVkunllhted929lVOlmKluITSSm2hvkYcoXvTquaZvKLhgQGfQQ01MEUqHE
+    sBj7IIVxz3EpgJ-X7s>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedggeekfecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpeejueeluedtteehvefhhedvueeivdeugffghedv
-    kedtgfdtheejudejieehleeuheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgih
-    hthhhusgdrtghomhdplhhinhgrrhhordhorhhgpdhpvghnghhuthhrohhnihigrdguvgen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorh
-    hgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhf
-    rhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidrug
-    gvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrgh
-X-ME-Proxy: <xmx:E62TZ9MKoRfXbQNdBzP-n9AJIWJfhyL6nJg878v8M3t6wxDdc3ingQ>
-    <xmx:E62TZ_6Zsvh7dhkhCllXRPCwmx7Fkds1A9kDVUTGMevUv_th7BB59A>
-    <xmx:E62TZ36J0dBPHuFLYMScDcJ9jHDj9OHXm-4YyQXHQMbQLLmcz1jziA>
-    <xmx:E62TZ_haza8c0Pk_eY7H9iCflFf2qogpYN7wa_O_42Cbs61OnegKPw>
-    <xmx:FK2TZ5kneUgG-pHHbkjHSd1vMZCcyRailzZFVeqtRA1jyJ0Q8bHULB5h>
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeefueegkeffveeugeehieehiedukeegfefhffeu
+    tdettdffteeluefhheetkeekvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgih
+    hthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvg
+    epshhmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhn
+    uggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlse
+    hlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishht
+    shdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:IK2TZ6LmiTif2T4YbPxQOWRNgt9mNOQ-sCTcJUDgxy8vuwDEh-9ChA>
+    <xmx:IK2TZyErKFYOqI7sru-xnnFM89F1gQQiUpS9eoueFIpnCRYyjC0a7w>
+    <xmx:IK2TZ2XHiWIcT5Pwc-2L4zbopl0ewukAEjFfI2vgpmJI7FC6Z5xmPg>
+    <xmx:IK2TZ1NA0aVyJiAXptAlJKoTVWltAc5iVThGAo6NNybQyd-qFxuA6w>
+    <xmx:IK2TZ1Q9lBVHBQxD-tJ7qW_MzKPhqYqTj8mRQ0kFxvuTepKmQ4qY_qsi>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A53E92220072; Fri, 24 Jan 2025 10:09:07 -0500 (EST)
+	id 202942220074; Fri, 24 Jan 2025 10:09:20 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -79,243 +78,143 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Fri, 24 Jan 2025 16:08:27 +0100
+Date: Fri, 24 Jan 2025 16:08:59 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Linus Torvalds" <torvalds@linux-foundation.org>
 Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  soc@lists.linux.dev
-Message-Id: <d968434a-4b23-4b81-8610-6588590e9da1@app.fastmail.com>
+Message-Id: <fdf46fd8-2449-4579-b85b-265c693addf8@app.fastmail.com>
 In-Reply-To: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com>
 References: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com>
-Subject: [GIT PULL 4/5] soc: driver updates for 6.14
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Subject: [GIT PULL 5/5] soc: defconfig updates for 6.14
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0dca4:
+The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0d=
+ca4:
 
   Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.14
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-d=
+efconfig-6.14
 
-for you to fetch changes up to 9ec80025030b0492512e01e2e667f4111c583b46:
+for you to fetch changes up to 309f64469cd5d09d5f1207e57d42f2eff9bd9311:
 
-  Merge tag 'litex-6.13-rc1' of https://github.com/litex-hub/linux into soc/drivers (2025-01-22 14:35:25 +0100)
-
-----------------------------------------------------------------
-soc: driver updates for 6.14
-
-These are changes to SoC specific drivers and DT bindings that don't have
-a separate subsystem tree, or that get grouped here for simplicity.
-Nothing out of the ordinary for the 6.14 release here:
-
- - Most of the updates are for Qualcomm specific drivers, adding support
-   for additional SoCs in the exssting drivers, and support for wrapped
-   encryption key access in the SCM firmware.
-
- - The Arm SCMI firmware code gains support for having multiple
-   instances of firmware running, and better module auto loading.
-
- - A few minor updates for litex, samsung, ti, tegra, mediatek, imx and
-   renesas platforms.
-
- - Reset controller updates for amlogic, to add support for the A1 soc
-   and clean up the existing code.
-
- - Memory controller updates for ti davinci aemif, refactoring the code
-   and adding a few interfaces to other drivers.
+  Merge tag 'arm-soc/for-6.14/defconfig-arm64' of https://github.com/Bro=
+adcom/stblinux into soc/defconfig (2025-01-24 13:08:51 +0100)
 
 ----------------------------------------------------------------
-Andrew Davis (1):
-      drivers/soc/litex: Use devm_register_restart_handler()
+soc: defconfig updates for 6.14
 
-Arnd Bergmann (13):
-      Merge tag 'renesas-drivers-for-v6.14-tag1' of https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/drivers
-      Merge tag 'optee-for-v6.14' of https://git.linaro.org/people/jens.wiklander/linux-tee into soc/drivers
-      Merge tag 'memory-controller-drv-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into soc/drivers
-      Merge tag 'memory-controller-drv-ti-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into soc/drivers
-      Merge tag 'scmi-updates-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into soc/drivers
-      Merge tag 'imx-drivers-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into soc/drivers
-      Merge tag 'mtk-soc-for-v6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux into soc/drivers
-      Merge tag 'tegra-for-6.14-soc' of https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into soc/drivers
-      Merge tag 'ti-k3-maintainer-for-v6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into soc/drivers
-      Merge tag 'qcom-drivers-for-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/drivers
-      Merge tag 'samsung-drivers-6.14' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into soc/drivers
-      Merge tag 'reset-for-v6.14-2' of git://git.pengutronix.de/pza/linux into soc/drivers
-      Merge tag 'litex-6.13-rc1' of https://github.com/litex-hub/linux into soc/drivers
+As usual, a number of new drivers get added to the defconfig to
+support additional hardware. The stm32 defconfig also turns off
+a few options to optimize for size.
 
-Bartosz Golaszewski (2):
-      soc: qcom: rmtfs: allow building the module with COMPILE_TEST=y
-      soc: qcom: rmtfs: constify rmtfs_class
+----------------------------------------------------------------
+Alexander Stein (1):
+      ARM: imx_v6_v7_defconfig: enable JC42 for TQMa7x
 
-Bastien Curutchet (6):
-      memory: ti-aemif: Store timings parameter in number of cycles - 1
-      memory: ti-aemif: Remove unnecessary local variables
-      memory: ti-aemif: Wrap CS timings into a struct
-      memory: ti-aemif: Create aemif_check_cs_timings()
-      memory: ti-aemif: Create aemif_set_cs_timings()
-      memory: ti-aemif: Export aemif_*_cs_timings()
+Andr=C3=A9 Draszik (1):
+      arm64: defconfig: enable Maxim TCPCI driver
+
+Arnd Bergmann (9):
+      Merge tag 'renesas-arm-defconfig-for-v6.14-tag1' of https://git.ke=
+rnel.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/defconfig
+      Merge tag 'imx-defconfig-6.14' of https://git.kernel.org/pub/scm/l=
+inux/kernel/git/shawnguo/linux into soc/defconfig
+      Merge tag 'at91-defconfig-6.14' of https://git.kernel.org/pub/scm/=
+linux/kernel/git/at91/linux into soc/defconfig
+      Merge tag 'mtk-defconfig-for-v6.14' of https://git.kernel.org/pub/=
+scm/linux/kernel/git/mediatek/linux into soc/defconfig
+      Merge tag 'ti-k3-config-for-v6.14' of https://git.kernel.org/pub/s=
+cm/linux/kernel/git/ti/linux into soc/defconfig
+      Merge tag 'v6.14-rockchip-defconfig64-1' of https://git.kernel.org=
+/pub/scm/linux/kernel/git/mmind/linux-rockchip into soc/defconfig
+      Merge tag 'qcom-arm64-defconfig-for-6.14' of https://git.kernel.or=
+g/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
+      Merge tag 'riscv-config-for-v6.14' of https://git.kernel.org/pub/s=
+cm/linux/kernel/git/conor/linux into soc/defconfig
+      Merge tag 'arm-soc/for-6.14/defconfig-arm64' of https://github.com=
+/Broadcom/stblinux into soc/defconfig
 
 Biju Das (1):
-      soc: renesas: Add RZ/G3E (R9A09G047) config option
+      arm64: defconfig: Enable R9A09G047 SoC
 
-Cristian Marussi (4):
-      firmware: arm_scmi: Allow transport properties for multiple instances
-      firmware: arm_scmi: Support vendor protocol modules autoloading
-      firmware: arm_scmi: Add module aliases to i.MX vendor protocols
-      firmware: arm_scmi: Add aliases to transport modules
+Cristian Ciocaltea (1):
+      arm64: defconfig: Enable Rockchip extensions for Synopsys DW HDMI =
+QP
 
-Dr. David Alan Gilbert (1):
-      memory: omap-gpmc: deadcode a pair of functions
+Drew Fustini (1):
+      riscv: defconfig: enable pinctrl and dwmac support for TH1520
 
-Eugen Hristev (1):
-      soc: qcom: Rework BCM_TCS_CMD macro
+Geert Uytterhoeven (1):
+      ARM: shmobile: defconfig: Refresh for v6.13-rc1
 
-Gaurav Kashyap (1):
-      firmware: qcom: scm: add calls for wrapped key support
+Hari Nagalla (1):
+      arm64: defconfig: Enable TI K3 M4 remoteproc driver
 
-Ivaylo Ivanov (1):
-      dt-bindings: soc: samsung: exynos-sysreg: add sysreg compatibles for exynos8895
+Igor Belwon (1):
+      dt-bindings: soc: samsung: exynos-pmu: Add exynos990-pmu compatible
 
-Jan Dakinevich (2):
-      dt-bindings: reset: add bindings for A1 SoC audio reset controller
-      reset: amlogic: add support for A1 SoC in auxiliary reset driver
+Jingyi Wang (1):
+      arm64: defconfig: enable clock controller, interconnect and pinctr=
+l for QCS8300
 
-Jens Glathe (2):
-      firmware: qcom: scm: Allow QSEECOM for HP Omnibook X14
-      firmware: qcom: scm: Allow QSEECOM for Windows Dev Kit 2023
+Krzysztof Kozlowski (1):
+      arm64: defconfig: Enable basic Qualcomm SM8750 SoC drivers
 
-Jerome Brunet (3):
-      clk: amlogic: axg-audio: revert reset implementation
-      reset: amlogic: aux: get regmap through parent device
-      reset: amlogic: aux: drop aux registration helper
-
-Joe Hattori (1):
-      memory: tegra20-emc: fix an OF node reference bug in tegra_emc_find_node_by_ram_code()
-
-Johan Hovold (1):
-      Revert "clk: Fix invalid execution of clk_set_rate"
-
-Kartik Rajput (1):
-      soc/tegra: fuse: Update Tegra234 nvmem keepout list
-
-Konrad Dybcio (3):
-      soc: qcom: pd-mapper: Add X1P42100
-      firmware: qcom: scm: Allow QSEECOM on X1P42100 CRD
-      soc: qcom: llcc: Enable LLCC_WRCACHE at boot on X1
-
-Krzysztof Kozlowski (13):
-      soc: qcom: pmic_glink: simplify locking with guard()
-      soc: qcom: smem_state: fix missing of_node_put in error path
-      soc: qcom: pmic_glink_altmode: simplify locking with guard()
-      dt-bindings: samsung: exynos-usi: Restrict possible samsung,mode values
-      soc: samsung: exynos-pmu: Fix uninitialized ret in tensor_set_bits_atomic()
-      firmware: qcom: scm: Fix missing read barrier in qcom_scm_is_available()
-      firmware: qcom: scm: Fix missing read barrier in qcom_scm_get_tzmem_pool()
-      firmware: qcom: scm: Cleanup global '__scm' on probe failures
-      firmware: qcom: scm: smc: Handle missing SCM device
-      firmware: qcom: scm: smc: Narrow 'mempool' variable scope
-      soc: mediatek: mtk-devapc: Fix leaking IO map on error paths
-      soc: mediatek: mtk-devapc: Fix leaking IO map on driver remove
-      soc/tegra: cbb: Drop unnecessary debugfs error handling
-
-Kyle Deng (1):
-      dt-bindings: soc: qcom,aoss-qmp: Document the qcs615
+Lad Prabhakar (1):
+      arm64: defconfig: Enable Renesas RZ/V2H(P) Watchdog driver
 
 Lijuan Gao (1):
-      dt-bindings: interconnect: qcom-bwmon: Document QCS615 bwmon compatibles
+      arm64: defconfig: enable clock controller, interconnect and pinctr=
+l for QCS615
 
-Luca Weiss (1):
-      soc: qcom: pd_mapper: Add SM7225 compatible
+Liu Ying (1):
+      arm64: defconfig: Enable ITE IT6263 driver
 
-MD Danish Anwar (1):
-      MAINTAINERS: Add entry for linux/pruss_driver.h
+Luo Jie (1):
+      arm64: defconfig: Enable Qualcomm IPQ CMN PLL clock controller
 
-Manikanta Mylavarapu (1):
-      dt-bindings: firmware: qcom,scm: Document ipq5424 SCM
+Mark Brown (1):
+      arm64: defconfig: Enable Amazon Elastic Network Adaptor
 
-Maud Spierings (1):
-      firmware: qcom: scm: Allow QSEECOM on the asus vivobook s15
+Nicolas Dufresne (1):
+      arm64: defconfig: Enable RFKILL GPIO
 
-Pengyu Luo (1):
-      firmware: qcom: scm: Allow QSEECOM on Huawei Matebook E Go (sc8280xp)
+N=C3=ADcolas F. R. A. Prado (3):
+      arm64: defconfig: Enable MediaTek STAR Ethernet MAC
+      arm64: defconfig: Enable sound for MT8188
+      arm64: defconfig: Enable MediaTek DWMAC
 
-Qingqing Zhou (1):
-      dt-bindings: firmware: qcom,scm: document QCS615 SCM
+Patrice Chotard (4):
+      ARM: configs: stm32: Remove FLASH_MEM_BASE and FLASH_SIZE in STM32=
+ defconfig
+      ARM: configs: stm32: Clean STM32 defconfig
+      ARM: configs: stm32: Remove CRYPTO in STM32 defconfig
+      ARM: configs: stm32: Remove useless flags in STM32 defconfig
 
-Sahil Malhotra (1):
-      optee: fix format string for printing optee build_id
+Ross Burton (1):
+      arm64: defconfig: remove obsolete CONFIG_SM_DISPCC_8650
 
-Stephan Gerhold (1):
-      soc: qcom: socinfo: Avoid out of bounds read of serial number
+Ryan Wanner (1):
+      ARM: configs: at91: sama7: add new SoC config
 
-Varadarajan Narayanan (2):
-      dt-bindings: cache: qcom,llcc: Add IPQ5424 compatible
-      soc: qcom: llcc: Update configuration data for IPQ5424
+Stefan Wahren (1):
+      arm64: defconfig: Enable pinctrl-based I2C mux
 
-Wasim Nazir (2):
-      dt-bindings: arm: qcom,ids: add SoC ID for QCS9075
-      soc: qcom: socinfo: add QCS9075 SoC ID
+Taniya Das (1):
+      arm64: defconfig: Enable sa8775p clock controllers
 
-alice.guo (1):
-      soc: imx: Add SoC device register for i.MX9
-
-liujing (1):
-      soc/tegra: Fix spelling error in tegra234_lookup_slave_timeout()
-
- .../devicetree/bindings/cache/qcom,llcc.yaml       |  20 +-
- .../devicetree/bindings/firmware/qcom,scm.yaml     |   2 +
- .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |   2 +
- .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   1 +
- .../bindings/soc/samsung/exynos-usi.yaml           |   1 +
- .../soc/samsung/samsung,exynos-sysreg.yaml         |   8 +
- MAINTAINERS                                        |   1 +
- drivers/clk/clk.c                                  |   2 +-
- drivers/clk/meson/Kconfig                          |   2 +-
- drivers/clk/meson/axg-audio.c                      | 109 ++++++++-
- drivers/firmware/arm_scmi/common.h                 |   4 +-
- drivers/firmware/arm_scmi/driver.c                 |  74 ++++--
- drivers/firmware/arm_scmi/transports/mailbox.c     |   1 +
- drivers/firmware/arm_scmi/transports/smc.c         |   1 +
- drivers/firmware/arm_scmi/transports/virtio.c      |   1 +
- drivers/firmware/arm_scmi/vendors/imx/imx-sm-bbm.c |   5 +-
- .../firmware/arm_scmi/vendors/imx/imx-sm-misc.c    |   5 +-
- drivers/firmware/qcom/qcom_scm-smc.c               |   6 +-
- drivers/firmware/qcom/qcom_scm.c                   | 271 +++++++++++++++++++--
- drivers/firmware/qcom/qcom_scm.h                   |   4 +
- drivers/memory/omap-gpmc.c                         |  33 +--
- drivers/memory/tegra/tegra20-emc.c                 |   8 +-
- drivers/memory/ti-aemif.c                          | 192 +++++++++------
- drivers/reset/amlogic/reset-meson-aux.c            |  97 ++------
- drivers/soc/imx/Makefile                           |   2 +-
- drivers/soc/imx/soc-imx9.c                         | 128 ++++++++++
- drivers/soc/litex/litex_soc_ctrl.c                 |  23 +-
- drivers/soc/mediatek/mtk-devapc.c                  |  19 +-
- drivers/soc/qcom/Kconfig                           |   2 +-
- drivers/soc/qcom/llcc-qcom.c                       |  58 ++++-
- drivers/soc/qcom/pmic_glink.c                      |  70 +++---
- drivers/soc/qcom/pmic_glink_altmode.c              |  11 +-
- drivers/soc/qcom/qcom_pd_mapper.c                  |   2 +
- drivers/soc/qcom/rmtfs_mem.c                       |   2 +-
- drivers/soc/qcom/smem_state.c                      |   3 +-
- drivers/soc/qcom/socinfo.c                         |   3 +-
- drivers/soc/renesas/Kconfig                        |   5 +
- drivers/soc/samsung/exynos-pmu.c                   |   2 +-
- drivers/soc/tegra/cbb/tegra-cbb.c                  |  20 +-
- drivers/soc/tegra/cbb/tegra234-cbb.c               |   2 +-
- drivers/soc/tegra/fuse/fuse-tegra30.c              |  17 +-
- drivers/tee/optee/smc_abi.c                        |   5 +-
- include/dt-bindings/arm/qcom,ids.h                 |   1 +
- .../reset/amlogic,meson-a1-audio-reset.h           |  36 +++
- include/linux/firmware/qcom/qcom_scm.h             |   8 +
- include/linux/memory/ti-aemif.h                    |  32 +++
- include/linux/omap-gpmc.h                          |   4 -
- include/linux/scmi_imx_protocol.h                  |   9 +-
- include/soc/amlogic/reset-meson-aux.h              |  23 --
- include/soc/qcom/tcs.h                             |  26 +-
- 50 files changed, 978 insertions(+), 385 deletions(-)
- create mode 100644 drivers/soc/imx/soc-imx9.c
- create mode 100644 include/dt-bindings/reset/amlogic,meson-a1-audio-reset.h
- create mode 100644 include/linux/memory/ti-aemif.h
- delete mode 100644 include/soc/amlogic/reset-meson-aux.h
+ .../bindings/soc/samsung/exynos-pmu.yaml           |  1 +
+ arch/arm/configs/imx_v6_v7_defconfig               |  1 +
+ arch/arm/configs/multi_v7_defconfig                |  1 +
+ arch/arm/configs/sama7_defconfig                   |  1 +
+ arch/arm/configs/shmobile_defconfig                |  1 +
+ arch/arm/configs/stm32_defconfig                   | 12 ++++-----
+ arch/arm64/configs/defconfig                       | 31 +++++++++++++++=
+++++++-
+ arch/riscv/configs/defconfig                       |  2 ++
+ 8 files changed, 43 insertions(+), 7 deletions(-)
