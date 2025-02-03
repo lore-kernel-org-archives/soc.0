@@ -1,63 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944D11F4713;
-	Fri, 24 Jan 2025 23:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C32D1C695
+	for <soc@lists.linux.dev>; Mon,  3 Feb 2025 02:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737760208; cv=none; b=ZEL+Iixz1AcO31I4gWD23UbzBaWO8KsAbtMfC9oqq3FDCPQp+ocKa9rUIOlItIQvD0i1CTDOEi1doTK+Xi8xS7UZGzWxdva1II4fDBRSU9+tal5ecyH4UVCp8xYbC6btRhxrB+T0YL18MR27zLHdDUlxXNnU9YMCCIoNj2/IETI=
+	t=1738551429; cv=none; b=cYT1vDrf8sRtvnv4qBvj6zpxfw94YMg3fzEDZBL4F16mPV6GUyNwpw9BCyEbBlZ068oA+mB1aNM4MvSLe46HGlGHK3i5o5b0zpKaWl/BzEJyvkTq1Dfks5LlNo3MOXFIMQrOuGYEk7yb3h7/lQYKSi+wAPjI6sPZRWijVgfykgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737760208; c=relaxed/simple;
-	bh=qzeVMbWdTSH3KrRvdyrA2/KRO/xdldCi2D9vpkpksxw=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=dYoqfjjxxo3jh+nU/UfEthZRKl/AGb8+TVpxDte9FsGSYz4f0HHAAEF0LDHWMJU5GGI1hZV1Nad7SUHZcDqyVKTsuwwklOA23RTasl5xxAUhPq0nC3/m0ptMXUeKMYX/P11qE9DjlxR/8PVyjnzH3/Nx2DyU3Bw4GagQUgRGLP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=apa81IbR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738551429; c=relaxed/simple;
+	bh=2PJ+HfT6jxBjaYedQuRdTS1BWxFPh1IRQorcDWQ3NdI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kgVepoDMALErAuGBvaE//1WQ8214CEAY4pUC1f8X2D4Jru1HM9+rwYuOwntpbfRdN9ug5abN24fKL2YpNljblUmY9v/dU7zIodWWldBoaDCN46XiBsT6ehpSmD/yFF+OC57UTzzFIXPnZM8+irbhnl4FE66eEeQj4MQKV37f/vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=keaaDwqB; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="apa81IbR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D07C4CED2;
-	Fri, 24 Jan 2025 23:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737760208;
-	bh=qzeVMbWdTSH3KrRvdyrA2/KRO/xdldCi2D9vpkpksxw=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=apa81IbRgHYWSIWCkU4grWP0m1XRBxwo85yOlRo4mMHv2WgS7DJBqMNkayan/VKV5
-	 U+tNnFjmFasA/kM2deH39zvG+fPBpWZA8Kpr0n9nyM7bxULCS8WsUdj8aZL568qQcN
-	 gr56AYJojeAf7IT2ANFFWNYpqC0LovJbe5wXsGuBT4GGt21CutNN/Ac30NNcjZTI4D
-	 RqYJNmHtZymjUL/VeUaW5V9GRfnAa2ypf8LtMhqRK8NzCQOB1zmATX7MwOwoJfQoOW
-	 6rgjACWuGrgev43RcZ+szBABtQDZdadW7UYVuHlmWoIMU1L29l6fa/jUDTNZn77yWq
-	 drnXBKaHDCy4g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AFB26380AA7A;
-	Fri, 24 Jan 2025 23:10:34 +0000 (UTC)
-Subject: Re: [GIT PULL 5/5] soc: defconfig updates for 6.14
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <fdf46fd8-2449-4579-b85b-265c693addf8@app.fastmail.com>
-References: <1f0939fd-1694-476e-954f-e58ff8650dd9@app.fastmail.com> <fdf46fd8-2449-4579-b85b-265c693addf8@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lists.linux.dev>
-X-PR-Tracked-Message-Id: <fdf46fd8-2449-4579-b85b-265c693addf8@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.14
-X-PR-Tracked-Commit-Id: 309f64469cd5d09d5f1207e57d42f2eff9bd9311
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 71088146704efcd13ab85ae00345c98526ccc87d
-Message-Id: <173776023363.2196000.700620592758688434.pr-tracker-bot@kernel.org>
-Date: Fri, 24 Jan 2025 23:10:33 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="keaaDwqB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1738551418;
+	bh=/M3u/UfzPn7K2j1tUy85ouRPJtHFLSPO1KCwoEDBz08=;
+	h=From:Date:Subject:To:Cc;
+	b=keaaDwqBcwuRr2sI322cGvM6QhW3T8VZUIxniSpkWNFtHxvEYmOnJqsDXFQTvVwij
+	 TV62XwwNM8Lny3y/GlktCxB2By33Y+iKiDyxrqh09BD3xef6UI5VFwY26s3weL4xaJ
+	 qrMrMhFX3YY9SHuv9T+JdhQrw/eV/nirx005KyFZBSSF+gTXotW0xcKu4itLfs2vuU
+	 8HXubwBXbJvZyBaO+s/GWRpfUvE8RdHjK87epWug2CxO+pQZABSg3tvZxx46F0G6J9
+	 64ZkKgFyBgnnAmohCv4wDPnkyP8flCNPAeAng42WH6+STBsZ+Fcgxm3nCgrbnQb5Dg
+	 ctkVcjJ6ugq3w==
+Received: from [127.0.1.1] (58-7-156-140.dyn.iinet.net.au [58.7.156.140])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id C2762703FB;
+	Mon,  3 Feb 2025 10:56:55 +0800 (AWST)
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+Date: Mon, 03 Feb 2025 13:26:31 +1030
+Subject: [PATCH] MAINTAINERS: Mark Andrew as M: for ASPEED MACHINE SUPPORT
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250203-aspeed-maintainer-v1-1-60bc3a5f0a7c@codeconstruct.com.au>
+X-B4-Tracking: v=1; b=H4sIAF4woGcC/x2MOwqAMBAFryJbG4jrp/AqYpG4T93CKImIIN7dY
+ DHFFDMPJURFor54KOLSpHvIUpUFTasLC4xKdmLLrWVbG5cOQMzmNJwZRCMi3oNZXNNR7o6IWe/
+ /OYzv+wGLOVJiYwAAAA==
+X-Change-ID: 20250203-aspeed-maintainer-dddbbe22da46
+To: joel@jms.id.au, linux-aspeed@lists.ozlabs.org, arnd@arndb.de, 
+ soc@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ Andrew Jeffery <andrew@codeconstruct.com.au>
+X-Mailer: b4 0.14.2
 
-The pull request you sent on Fri, 24 Jan 2025 16:08:59 +0100:
+From discussion in [1] and in-person with Joel, flip my entry from R:
+to M:.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.14
+Link: https://lore.kernel.org/all/CACPK8Xe8yZLXzEQPp=1D2f0TsKA7hBZG=pHHW6U51FMpp_BiRQ@mail.gmail.com/ [1]
+Cc: Joel Stanley <joel@jms.id.au>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@lists.linux.dev
+Cc: linux-aspeed@lists.ozlabs.org
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/71088146704efcd13ab85ae00345c98526ccc87d
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 896a307fa06545e2861abe46ea7029f9b4d3628e..305e5530560e53c10f0b610fa7b4456ca78fdfc2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2285,7 +2285,7 @@ F:	drivers/irqchip/irq-aspeed-i2c-ic.c
+ 
+ ARM/ASPEED MACHINE SUPPORT
+ M:	Joel Stanley <joel@jms.id.au>
+-R:	Andrew Jeffery <andrew@codeconstruct.com.au>
++M:	Andrew Jeffery <andrew@codeconstruct.com.au>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Supported
 
-Thank you!
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250203-aspeed-maintainer-dddbbe22da46
 
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Andrew Jeffery <andrew@codeconstruct.com.au>
+
