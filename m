@@ -1,88 +1,109 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C32D1C695
-	for <soc@lists.linux.dev>; Mon,  3 Feb 2025 02:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AC520DD71
+	for <soc@lists.linux.dev>; Tue,  4 Feb 2025 13:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738551429; cv=none; b=cYT1vDrf8sRtvnv4qBvj6zpxfw94YMg3fzEDZBL4F16mPV6GUyNwpw9BCyEbBlZ068oA+mB1aNM4MvSLe46HGlGHK3i5o5b0zpKaWl/BzEJyvkTq1Dfks5LlNo3MOXFIMQrOuGYEk7yb3h7/lQYKSi+wAPjI6sPZRWijVgfykgo=
+	t=1738674866; cv=none; b=lJwHntBzcKBHI0anweRz14Y2e8W0rUTFyoCcl6Z9NG+5O+lqkVd+AoZNIB0WgPDZIZNUQerSMBzucjYoCY1hZ9X6saz/59QpOKLNww4otbtXNawnZtbzrbaiYLVspA8ohD6Ib560fECyOwsvf4gXElRtURYz9IqHic+6AaFuzfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738551429; c=relaxed/simple;
-	bh=2PJ+HfT6jxBjaYedQuRdTS1BWxFPh1IRQorcDWQ3NdI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kgVepoDMALErAuGBvaE//1WQ8214CEAY4pUC1f8X2D4Jru1HM9+rwYuOwntpbfRdN9ug5abN24fKL2YpNljblUmY9v/dU7zIodWWldBoaDCN46XiBsT6ehpSmD/yFF+OC57UTzzFIXPnZM8+irbhnl4FE66eEeQj4MQKV37f/vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=keaaDwqB; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1738674866; c=relaxed/simple;
+	bh=sbChlCM5bLRd+p7rE7ABNpyo6f8eQeBuxvwx8M7mZYM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bS4cS26GJbHNI9qc57wFoXkUg8ofdiSf4/x0qgjXpq3SHh6nNiSAWj4T7+UIsLbtJKvN7jYjIZ7A2ZgZ4MPZnPjEhazDaLIQ6iS91hLZcLERBJg/MFLX8qxfWTPUGBI7z9WuYrPvryGv2aR7Qcorq7LxRvpFDp9vcVQ3MSxh3kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MV1HiJSv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="keaaDwqB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1738551418;
-	bh=/M3u/UfzPn7K2j1tUy85ouRPJtHFLSPO1KCwoEDBz08=;
-	h=From:Date:Subject:To:Cc;
-	b=keaaDwqBcwuRr2sI322cGvM6QhW3T8VZUIxniSpkWNFtHxvEYmOnJqsDXFQTvVwij
-	 TV62XwwNM8Lny3y/GlktCxB2By33Y+iKiDyxrqh09BD3xef6UI5VFwY26s3weL4xaJ
-	 qrMrMhFX3YY9SHuv9T+JdhQrw/eV/nirx005KyFZBSSF+gTXotW0xcKu4itLfs2vuU
-	 8HXubwBXbJvZyBaO+s/GWRpfUvE8RdHjK87epWug2CxO+pQZABSg3tvZxx46F0G6J9
-	 64ZkKgFyBgnnAmohCv4wDPnkyP8flCNPAeAng42WH6+STBsZ+Fcgxm3nCgrbnQb5Dg
-	 ctkVcjJ6ugq3w==
-Received: from [127.0.1.1] (58-7-156-140.dyn.iinet.net.au [58.7.156.140])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id C2762703FB;
-	Mon,  3 Feb 2025 10:56:55 +0800 (AWST)
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-Date: Mon, 03 Feb 2025 13:26:31 +1030
-Subject: [PATCH] MAINTAINERS: Mark Andrew as M: for ASPEED MACHINE SUPPORT
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MV1HiJSv"
+Received: by smtp.kernel.org (Postfix)
+	id 1D187C4CEE4; Tue,  4 Feb 2025 13:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB62C4CEDF;
+	Tue,  4 Feb 2025 13:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738674866;
+	bh=sbChlCM5bLRd+p7rE7ABNpyo6f8eQeBuxvwx8M7mZYM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MV1HiJSvwqd/OzZfUB2wbELoBiQkFXilHtChOkoJciTjyTrOK201Mpc/0RogDgTK+
+	 G+NqJIEDKrqJjBcQXcUlV9mdo/XOGIrAwHcWcGCZA51uzJ6VKkIAww2cvHb6n146PD
+	 xuYvamrogK3Hd7NH9CsKeuCut+eUD8oLivaJFrTblMGRrnexj0lTLVeBPQ4qvJC0yB
+	 m3+pdxCOf52BYdru+bP5l+EgwSVKiEFhnzo3OhFwDlq3+mOlGx7eMWIOwpt89O7aPl
+	 uzwn41MHDcHHuS0lj9CHJajpISHFCCSvEAE5PT3+JzjwKjeGcRKiqIh5L5Ra9q4v2j
+	 zgH7pNMtBhhoA==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org
+Cc: arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	linux-crypto@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 0/5] Turris ECDSA signatures via keyctl()
+Date: Tue,  4 Feb 2025 14:14:10 +0100
+Message-ID: <20250204131415.27014-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.45.3
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250203-aspeed-maintainer-v1-1-60bc3a5f0a7c@codeconstruct.com.au>
-X-B4-Tracking: v=1; b=H4sIAF4woGcC/x2MOwqAMBAFryJbG4jrp/AqYpG4T93CKImIIN7dY
- DHFFDMPJURFor54KOLSpHvIUpUFTasLC4xKdmLLrWVbG5cOQMzmNJwZRCMi3oNZXNNR7o6IWe/
- /OYzv+wGLOVJiYwAAAA==
-X-Change-ID: 20250203-aspeed-maintainer-dddbbe22da46
-To: joel@jms.id.au, linux-aspeed@lists.ozlabs.org, arnd@arndb.de, 
- soc@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- Andrew Jeffery <andrew@codeconstruct.com.au>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From discussion in [1] and in-person with Joel, flip my entry from R:
-to M:.
+Hi Arnd et al.,
 
-Link: https://lore.kernel.org/all/CACPK8Xe8yZLXzEQPp=1D2f0TsKA7hBZG=pHHW6U51FMpp_BiRQ@mail.gmail.com/ [1]
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@lists.linux.dev
-Cc: linux-aspeed@lists.ozlabs.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+this series adds support for generating ECDSA signatures with hardware
+stored private key on Turris Omnia and Turris MOX.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 896a307fa06545e2861abe46ea7029f9b4d3628e..305e5530560e53c10f0b610fa7b4456ca78fdfc2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2285,7 +2285,7 @@ F:	drivers/irqchip/irq-aspeed-i2c-ic.c
- 
- ARM/ASPEED MACHINE SUPPORT
- M:	Joel Stanley <joel@jms.id.au>
--R:	Andrew Jeffery <andrew@codeconstruct.com.au>
-+M:	Andrew Jeffery <andrew@codeconstruct.com.au>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
+This ability is exposed via the keyctl() syscall.
 
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250203-aspeed-maintainer-dddbbe22da46
+Patch 1 does a small refactor in the turris-omnia-mcu driver - a piece
+of code is moved to a separate function so that it can be reused in
+patch 3.
 
-Best regards,
+Patch 2 adds a new helper module turris-signing-key, which helps
+exposing the signing ability via the keyctl() syscall.
+
+Patch 3 adds the functionality into the turris-omnia-mcu driver.
+
+Patch 4 removes the old debugfs implementation of this functionality
+from turris-mox-rwtm driver. The debugfs implementation was intended
+to be temporary until a better userspace interface was introduced.
+
+Patch 5 adds the functionality into the turris-mox-rwtm driver.
+
+Marek
+
+Marek Behún (5):
+  platform: cznic: turris-omnia-mcu: Refactor requesting MCU interrupt
+  platform: cznic: Add keyctl helpers for Turris platform
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing with HW private key
+  firmware: turris-mox-rwtm: Drop ECDSA signatures via debugfs
+  firmware: turris-mox-rwtm: Add support for ECDSA signatures with HW
+    private key
+
+ .../ABI/testing/debugfs-turris-mox-rwtm       |  14 -
+ .../testing/sysfs-firmware-turris-mox-rwtm    |   9 -
+ MAINTAINERS                                   |   1 +
+ drivers/firmware/Kconfig                      |  17 ++
+ drivers/firmware/turris-mox-rwtm.c            | 260 +++++++++---------
+ drivers/platform/cznic/Kconfig                |  17 ++
+ drivers/platform/cznic/Makefile               |   3 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |   4 +
+ .../platform/cznic/turris-omnia-mcu-gpio.c    |  21 +-
+ .../platform/cznic/turris-omnia-mcu-keyctl.c  | 162 +++++++++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  17 +-
+ drivers/platform/cznic/turris-omnia-mcu.h     |  33 ++-
+ drivers/platform/cznic/turris-signing-key.c   | 192 +++++++++++++
+ include/linux/turris-signing-key.h            |  33 +++
+ 14 files changed, 608 insertions(+), 175 deletions(-)
+ delete mode 100644 Documentation/ABI/testing/debugfs-turris-mox-rwtm
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-keyctl.c
+ create mode 100644 drivers/platform/cznic/turris-signing-key.c
+ create mode 100644 include/linux/turris-signing-key.h
+
 -- 
-Andrew Jeffery <andrew@codeconstruct.com.au>
+2.45.3
 
