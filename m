@@ -1,46 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD7E218AC4
-	for <soc@lists.linux.dev>; Wed,  5 Feb 2025 12:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB5818FC90
+	for <soc@lists.linux.dev>; Wed,  5 Feb 2025 14:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738757527; cv=none; b=stIZjVlsRpNea4zifM1acFnpZPjmIrAx7rShsVzqlIcMxudhcbCZ+q2sapXNtDsqqIedaLXZoUt2nZ8hwDVtGssTeOIpWn4YsxC+j6kRjwJD/sSvHesUEhMBowZrt+8A8/HjL1+UdFJE2iO2GdGEXP0kxu7SzIE/SPbn9nWYZBE=
+	t=1738766534; cv=none; b=og9HQ0JVRm8DV6VFqDR5rqFVepD9QasHnKgfJbdsuhoUimEITfvAvDsu3Zmuav3iggbyCFCHNiKyrO+236H9w3bIUW7Ne4a/rp/TeIFt+8vMJF+atkB/um+Jm60cJS111aEcHOZW4ziAqViVXCZFwiGkeYO4rTId3R6kh5QwIhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738757527; c=relaxed/simple;
-	bh=GpkwFNg5/6LmBREM3eLpvMeWoLhkjuVeBNbukdiwObk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rhNX2qIGzeh/Hqis45tIaNY4hhHQ9+BisXUA77a6OvH3uj5SJB5Okm79n6kBF73QJHUzPbAvoNGEnCqWA18w2ai5WlWhNj9mtUczQcGy8kpky0azqu+WkyQkMiJOhyVtpncjqBykcIY0SdObOYX09mNhEtMbGOB000G0z8D3p2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4nPwlC7; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4nPwlC7"
-Received: by smtp.kernel.org (Postfix)
-	id 77A0AC4CED1; Wed,  5 Feb 2025 12:12:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BBCC4CEE2;
-	Wed,  5 Feb 2025 12:12:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738757527;
-	bh=GpkwFNg5/6LmBREM3eLpvMeWoLhkjuVeBNbukdiwObk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=H4nPwlC78ZmZC/hg/2dSZhmENcfZPzyV6fz4Q3YouKEfT4I36us1ZOI2pXR1vE6sr
-	 fZwqWui2BGUTOjktM3/Z72PvUM/3Xjk7mfbxyqhSRQrmGyUA5P8xJD1ef90SiK97NV
-	 h9O7jkRoaZXDA2a3/xDX6YczbmmmDj7CLvCEjEsQdFaFDhLIaHuWJZ62aV5nPDaHKo
-	 0REebMyWjgnWHXW8Rl1nvcEsPUJuGZqJ9N9+NEJ0begucrwIlgQOBBfwmvXh7cnpHK
-	 nYuMs99efG+xOx+rLQvOvec/67IgJctV0MVyMEwqeQreu6x0EFS6MBH6LH4bChAcom
-	 uENutqOQ990CQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc: soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Tony Lindgren <tony@atomide.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
+	s=arc-20240116; t=1738766534; c=relaxed/simple;
+	bh=LIAew11mhguTF2BX4IO3e9boWaQIZ0S/uz3h7V4gidE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lZpXtvpFEHNwbGgkYZif049CN0aSVvMRcLHKVOM1X/z0LaebWR3gN120nAW9vvDuK9jnLRjE9gxRopVG4RNIYYqDnypKNuuUI+VPoccleWj2VIVg7SRKiRZb/8ydgT59cesyQ7HpNwPYvEgZGTJChw235ky1i04P/6wZiqBWd/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:fa11:c14e:2df5:5273])
+	by michel.telenet-ops.be with cmsmtp
+	id 9qi72E00h3f221S06qi7MH; Wed, 05 Feb 2025 15:42:10 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tfgbD-0000000FwWi-36dR;
+	Wed, 05 Feb 2025 15:42:07 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tfgbP-00000006bUL-3Iq0;
+	Wed, 05 Feb 2025 15:42:07 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: soc@lists.linux.dev,
+	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP
-Date: Wed,  5 Feb 2025 13:11:33 +0100
-Message-Id: <20250205121151.289535-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH resend] firmware: imx: IMX_SCMI_MISC_DRV should depend on ARCH_MXC
+Date: Wed,  5 Feb 2025 15:41:43 +0100
+Message-ID: <9638976432d8dfcb0c4df9d454b661f9022a2d7b.1738766259.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -49,40 +50,29 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+The i.MX System Controller Management Interface firmware is only present
+on Freescale i.MX SoCs.  Hence add a dependency on ARCH_MXC, to prevent
+asking the user about this driver when configuring a kernel without
+Freescale i.MX platform support.
 
-When GENERIC_IRQ_CHIP is disabled, OMAP1 kernels fail to link:
-
-arm-linux-gnueabi-ld: arch/arm/mach-omap1/irq.o: in function `omap1_init_irq':
-irq.c:(.init.text+0x1e8): undefined reference to `irq_alloc_generic_chip'
-arm-linux-gnueabi-ld: irq.c:(.init.text+0x228): undefined reference to `irq_setup_generic_chip'
-arm-linux-gnueabi-ld: irq.c:(.init.text+0x2a8): undefined reference to `irq_gc_set_wake'
-arm-linux-gnueabi-ld: irq.c:(.init.text+0x2b0): undefined reference to `irq_gc_mask_set_bit'
-arm-linux-gnueabi-ld: irq.c:(.init.text+0x2b4): undefined reference to `irq_gc_mask_clr_bit'
-
-This has apparently been the case for many years, but I never caught it
-in randconfig builds until now, as there are dozens of other drivers
-that also 'select GENERIC_IRQ_CHIP' and statistically there is almost
-always one of them enabled.
-
-Fixes: 55b447744389 ("ARM: OMAP1: Switch to use generic irqchip in preparation for sparse IRQ")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 514b2262ade48a05 ("firmware: arm_scmi: Fix i.MX build dependency")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- arch/arm/mach-omap1/Kconfig | 1 +
+ drivers/firmware/imx/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-omap1/Kconfig b/arch/arm/mach-omap1/Kconfig
-index a643b71e30a3..08ec6bd84ada 100644
---- a/arch/arm/mach-omap1/Kconfig
-+++ b/arch/arm/mach-omap1/Kconfig
-@@ -8,6 +8,7 @@ menuconfig ARCH_OMAP1
- 	select ARCH_OMAP
- 	select CLKSRC_MMIO
- 	select FORCE_PCI if PCCARD
-+	select GENERIC_IRQ_CHIP
- 	select GPIOLIB
+diff --git a/drivers/firmware/imx/Kconfig b/drivers/firmware/imx/Kconfig
+index 907cd149c40a8b5f..c964f4924359fcd3 100644
+--- a/drivers/firmware/imx/Kconfig
++++ b/drivers/firmware/imx/Kconfig
+@@ -25,6 +25,7 @@ config IMX_SCU
+ 
+ config IMX_SCMI_MISC_DRV
+ 	tristate "IMX SCMI MISC Protocol driver"
++	depends on ARCH_MXC || COMPILE_TEST
+ 	default y if ARCH_MXC
  	help
- 	  Support for older TI OMAP1 (omap7xx, omap15xx or omap16xx)
+ 	  The System Controller Management Interface firmware (SCMI FW) is
 -- 
-2.39.5
+2.43.0
 
