@@ -1,89 +1,111 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5700C1519B1;
-	Wed,  5 Feb 2025 15:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1834813AD1C
+	for <soc@lists.linux.dev>; Thu,  6 Feb 2025 00:37:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738770650; cv=none; b=akexzXq1bOj8/xzxD5bItOL4J2jwRP1ExpYdZAj+5tv1X/zLVnE62TISMqnEhndVCagzrBLYTwfBe81v2VrEpPbMD/j6Y2zrNX2QgStMRPIJDGVK71El2ApTrGfX1u7ct5k5J9AHlJWkM1GidQBqt5cNP7iT/wJQPuq2CHth/pI=
+	t=1738802238; cv=none; b=QCS/qYpxgFUmiqygC9MOeXf3OBCFaCqR7Bg/KiS9Y5AiVH0Hh/Tspg1mzzn6IEiLos+A+b/hkCAZZKvmacF6HsUPil8lf2yenMIj7cBbAq824SzmPTinx99A9x40vxa90OqhJEAGQnHTMEomEvPcOmv5G4NFSclnANIg/2T5Z6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738770650; c=relaxed/simple;
-	bh=sYJYR75W/X4qiJx7MQ0584FcrNzNgCuv19cJ2nI5CB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iQqAI09t9qIWrHhTguaA79GOibqE+8b7ApfF9CHAPw9P91ksNq6q8+pxsaMksNGiKE/b08Mz2dL25OQf9CfBUgiIgf4ygPP4exJbEe2AJ30wjPh1pol3j7Fhez2RVaDwFoFTCIir7nrH0i7TQgAKA/IjEeAe64m7xSWWr/l2tnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HVk0ywNI; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738802238; c=relaxed/simple;
+	bh=9z/NlbEN8jSOw3hMYSM0ISuObqgiClju3/L+Fh35BN8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=RSWLDrv5qzSvcdyCbM1vP6oGjD3RnRGAbkdUYYgJIrggLAFCgtwp4LaGBGCmZFNImdDfoio2u2KFvWo5j1K4CHohQSR63QBXl60Ix7LZd9r444jvXQ3DOmcXw0qU3ySO4HwHfUKNoKJwreJAOApprNB2QV+IFfv1Dn6qD0U111M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=F8b+mRRm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HVk0ywNI"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5439a6179a7so1076599e87.1;
-        Wed, 05 Feb 2025 07:50:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="F8b+mRRm"
+Received: by smtp.kernel.org (Postfix)
+	id 9CF0CC4CEDD; Thu,  6 Feb 2025 00:37:17 +0000 (UTC)
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B7E1EC4CED6
+	for <soc@kernel.org>; Thu,  6 Feb 2025 00:37:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7E1EC4CED6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2f4448bf96fso424394a91.0
+        for <soc@kernel.org>; Wed, 05 Feb 2025 16:37:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738770646; x=1739375446; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1738802235; x=1739407035; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V5pjtlFBbyV2tkO66ddvoUngY8TmcZcq3HnlQUDSPEI=;
-        b=HVk0ywNIFcY6hPiyHZjaE0TR9N3Y5p+y6Hy2lLcTzWW/q00aMNZOCbuO/wa8snGi8E
-         9WOVjmwbjS1ILSkh0UuSUep2UQ2Y14mISy4/+NsnD8n+IXDSTOiWETkhvjX6pMbbYzjP
-         6PAWbUWFCYzL59IN/kchxNQq28Cs7FmLbrilh5qzEgl+n5Hs4/PXtCRqnUnnbPKxLfXw
-         fICycRNE4Dcjuu5p97pTsWrfwK9aUSkjN7NO53KRYjxKK3rcdzNGpxf95LKD0Lat4nx2
-         G32IST2bOZyowhv37mjKG3P7BI+ioyXWSya7JGZFbB6aioHQ+cLwPtTFZAglGezjZ6Wu
-         XP/Q==
+        bh=7u4XADLr/C5eZ7qkGhMI8Yv7tVqEObjjFDJ5fXQvZww=;
+        b=F8b+mRRmxfZ2avDmNvPSG2LNeGUf5o19LbaQyuINsYT6z4RuSJzfNB/z8tlM4NcSyg
+         X8bQoNyfM8mwyYub7a6ENbyTn6lCEdcObwGCJFRVjFWWU4AaxE/mxGqRw8CxOmPRaj1R
+         3J90y49KISGzBVCyDN79RF6zu9oPXKcVstMynmEKQ1jXvhoPprjUIK0g/3wgPOjaQZMN
+         CmVaPnirMQ6C5hW1nAvMJMOLlp3OlQAUdR6xtpGiOPsgvfsEoXjO2HUhNXiCejF9zgaU
+         EIBXNbQeXka/KHAFm4AjWF7JsKkM6n+wnq8arjEBqmzDCmecEgTv5BTJdRYPBlez4c/6
+         j1TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738770646; x=1739375446;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1738802235; x=1739407035;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V5pjtlFBbyV2tkO66ddvoUngY8TmcZcq3HnlQUDSPEI=;
-        b=i/WZvzL9U23yo9OE9wtQ8eBr6h+4OyY1BgMAwhGybDdg1imdBdwvHH22oOmgB7/KFO
-         p6WTi364Ww7cuJSR8SaWgIphqzYWoMtVgITeWaWFsJt8eMYheWGPLFJvQOhURH6nM64w
-         EtzF24+P7kLWd746ICk5KsVmsqyHYgKpLGr6IJ+8T2IoiawnMpVx+DfyDcsgjx9AFJwg
-         gVLPBK+oDA5YG+Q4y6ocsAaD2Ajvya/ls+Abt6qf8lj0Rb+RCGRJ9ybaWNZbSqwf9Z2H
-         +QJk4q0D0VUbmDDnZ0kjwyoMnpzlm3ednMmDjcaB/4dM4/zI00KTRZ9DrZGEwJsuWCpB
-         ug2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVYwNNsRvMyvEuFqqMm+vaEfe40PQefHf+62P2Eego/bANvZOt1DUHBYP8trwpJW0zVnmE=@lists.linux.dev, AJvYcCVscAqJ0STyyXE3OKcUtTDCF+irkJKsGKKDdO0xdOW3xbnGi3gdbAKzIkP52bQAxYgcnwrC@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzw6A+8+uVm1Xyd94rWEPPB/pJE+KnFKLOxHUVzUsRfTAx5YcXs
-	Ftt7W62JbSMtilBhuvsrETOsLGDnH2WPiBrgJey8P7vodDkrQIGM1jCCAX4b+tbN3UGSPRP/K5B
-	vQdAlHHrhSlAJlPpUI4hetG2iy4w=
-X-Gm-Gg: ASbGncutEho7sOTJfAfe3hHxHrkON/JI3MVq9Df7rR9spuBSmDkiKZR7YHzj5DIYqpP
-	v//Q4iC9YFWYWLQQImZr/lsuP5tklgWkrnjtj/GLhovfWEkV7V+Q+t2W+j/PsdJxip78yL32z2N
-	E37WTxB9sdcQFMA43sbFo5v4OY+Ww=
-X-Google-Smtp-Source: AGHT+IFDxYIl5oogc4aOzvhvY0HAoYIntif84wA755oePAmAkgyhvnAbag537ru1gnMM2wW5pU4RYFXtdOqt55rYnMU=
-X-Received: by 2002:a05:6512:3c8f:b0:543:bb69:c635 with SMTP id
- 2adb3069b0e04-54405836109mr1109351e87.15.1738770645990; Wed, 05 Feb 2025
- 07:50:45 -0800 (PST)
+        bh=7u4XADLr/C5eZ7qkGhMI8Yv7tVqEObjjFDJ5fXQvZww=;
+        b=vQT0EMMb/EshRnIauTQxAHFd7uVwfY4C6FUnMepiARMIpPFz/w0fiLEprDbhVUptjY
+         L08SJDBL2XVWeXXbkhyZ9OfOtQkHHy13P4l2f10CaYb4CPxkq4HZK98uNGjTZVKyE+Dp
+         qllMRBftHB00Kq/5AhVYA3Xkt2nPHsHOAUcW8UarSsTe4Y6l5oQgWS2ULA/xBe2qwSc7
+         z9qft24DCsP8vhT/kzU1TnVYKZProYVYOOhxuIAlWGNXpZKeJvyw7NQ0LK+7vySChcr9
+         4TzxfIKkwROPKfOIiulrr0SuckXIwRmixj2LScm0qhYIO1XDnCUFi71CDsNxBhZcA4vV
+         6Dpg==
+X-Gm-Message-State: AOJu0YzdT3tirLhakkOyAITNGL2ugsU+bX8mQyhexn4y/j4Y87s4uAcd
+	CFd4dInmsMMUMszj0OmAuyV+mEVqZSKOADmR1ceWpo2BvsTgpCExGgVTtuMZ6j0=
+X-Gm-Gg: ASbGncssQ77Xeu2B+V6OKhFEcD7wfBnNy2Iw8mQU/FJUUmXZTedYpIXKlmxLByZvnEk
+	CZybIhNXxJGDIHi+dJwuq+7a18qR1LLuD0LCibd7wqB8WdHHMkTCp2PLaD2DJj6jnkYdswYjhcD
+	c9M8w+J3aveibEcV8SWp9oP2aXmbMKJj8v7RuKbYnXsmTA9PQ8ysJI7JgW4jm/Hp20Ea8Mxyzjq
+	HVEuH51BhQONZwTR/cSyINmI3s6Pdnzvgx0euhwfVevBgA05JJLGQ8dplEZsghudUB8VJqKV5Wb
+	aSzCkhfniNvNrA==
+X-Google-Smtp-Source: AGHT+IECtRNllbLpK+x9JkKsoGM9WVGfThDVXSbLPfFhNXjo7Zhdyn7+h2ahM/Hfy/0Z08HwPXvJQg==
+X-Received: by 2002:a05:6a00:1942:b0:728:9d19:d2ea with SMTP id d2e1a72fcca58-7303513cbe8mr7280503b3a.13.1738802234722;
+        Wed, 05 Feb 2025 16:37:14 -0800 (PST)
+Received: from localhost ([97.126.182.119])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73048c15bb9sm61111b3a.122.2025.02.05.16.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2025 16:37:14 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Aaro Koskinen <aaro.koskinen@iki.fi>, 
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Arnd Bergmann <arnd@kernel.org>
+Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ Tony Lindgren <tony@atomide.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20250205121151.289535-1-arnd@kernel.org>
+References: <20250205121151.289535-1-arnd@kernel.org>
+Subject: Re: [PATCH] ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP
+Message-Id: <173880223388.2488567.3141490107424057794.b4-ty@baylibre.com>
+Date: Wed, 05 Feb 2025 16:37:13 -0800
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <9638976432d8dfcb0c4df9d454b661f9022a2d7b.1738766259.git.geert+renesas@glider.be>
-In-Reply-To: <9638976432d8dfcb0c4df9d454b661f9022a2d7b.1738766259.git.geert+renesas@glider.be>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 5 Feb 2025 12:50:34 -0300
-X-Gm-Features: AWEUYZlFLXiepv_yE9yXJ9KlWCIpZy_t6h9dHVFhvb1GQAbeKkvQGMigDUgxkZw
-Message-ID: <CAOMZO5Ar_-_H+Kwv_=ScoABqLzfEHX=3=JxrpPfiD2QmDt4=QQ@mail.gmail.com>
-Subject: Re: [PATCH resend] firmware: imx: IMX_SCMI_MISC_DRV should depend on ARCH_MXC
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Mark Brown <broonie@kernel.org>, soc@lists.linux.dev, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-94c79
 
-On Wed, Feb 5, 2025 at 11:52=E2=80=AFAM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> The i.MX System Controller Management Interface firmware is only present
-> on Freescale i.MX SoCs.  Hence add a dependency on ARCH_MXC, to prevent
-> asking the user about this driver when configuring a kernel without
-> Freescale i.MX platform support.
->
-> Fixes: 514b2262ade48a05 ("firmware: arm_scmi: Fix i.MX build dependency")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+On Wed, 05 Feb 2025 13:11:33 +0100, Arnd Bergmann wrote:
+> When GENERIC_IRQ_CHIP is disabled, OMAP1 kernels fail to link:
+> 
+> arm-linux-gnueabi-ld: arch/arm/mach-omap1/irq.o: in function `omap1_init_irq':
+> irq.c:(.init.text+0x1e8): undefined reference to `irq_alloc_generic_chip'
+> arm-linux-gnueabi-ld: irq.c:(.init.text+0x228): undefined reference to `irq_setup_generic_chip'
+> arm-linux-gnueabi-ld: irq.c:(.init.text+0x2a8): undefined reference to `irq_gc_set_wake'
+> arm-linux-gnueabi-ld: irq.c:(.init.text+0x2b0): undefined reference to `irq_gc_mask_set_bit'
+> arm-linux-gnueabi-ld: irq.c:(.init.text+0x2b4): undefined reference to `irq_gc_mask_clr_bit'
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP
+      commit: c2a5f8c4f28ffea8c93d10e509c5a6e61172cdca
+
+Best regards,
+-- 
+Kevin Hilman <khilman@baylibre.com>
+
