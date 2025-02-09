@@ -1,61 +1,61 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106F122F17D
-	for <soc@lists.linux.dev>; Sun,  9 Feb 2025 22:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D65241C86
+	for <soc@lists.linux.dev>; Sun,  9 Feb 2025 22:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739138834; cv=none; b=HQ37FHruolMdfkR3qV8JHpO9w2Kjl8o9UAwzieUC7W6zJZ2K5hsh7r/Zk0DUKQtK5cYQsUxRrdmPApFsF5kORXi4brVp0nEwGMWPeGHOoFWNhvlNKjq7P66JtRsXURPwUeXTIm4mC8ZeNRVe9VvvyHXcIebD8N23kwSqe5KumXc=
+	t=1739138835; cv=none; b=aIA4JvDDHPIA/IH8YAByrO7IDSp5V414AEt1UgWPsFO4tpvu/VnxAYwnngWp2wcjpdbaACEQ7/NNPPiXnkUXm0btvQlmbJw0aUfIk0W3+pol/mPj0LCeZDrelIebVBOc1XaZ3Fxt6blbm9iOjGPxMe9R3cb91ETpM0tYcHbfhAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739138834; c=relaxed/simple;
-	bh=7ZAGvUrrjx83yvWVf8ubIKKZh58Hvm4b115PNTRbOXQ=;
+	s=arc-20240116; t=1739138835; c=relaxed/simple;
+	bh=t+MEcyEDzmxjBv9SK0gxt9t3iAQ72gz4bhKsUugOYTs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=edLgR/Nhl16cYXcR1e8RXpokCKQSL7KB9EPDNdyJ+5oYceCE316cBQgZl2mSfFsHV8giycIlk72sk/lFb5T3Hi5uI6hOiT1aQnIBgQCjFtU2fyLAvwjC6p4y1qNpgC0N4Htm3Ka7MvpRH8DWpzDZuPteA0eE2NE8wi+En9bpBVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQzZdpJ9; arc=none smtp.client-ip=209.85.128.49
+	 MIME-Version; b=Ne0iCz2kORvxrNlw01KX4xxnBHlZ1enofFnXOojuKMFkdzqKChf5tHt1IDEix6WoEzv1tGVxMly14IktF8mp4P97Rd1hKIqya9h1Q+bPbzUy5n9Hvkm1oZOULK8sFNG3PyxscYl8IP/N6vXfL5jeHLaHcigZrBYL8uwfDZSpVzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IB1Zw+v0; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQzZdpJ9"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-439307d83f0so7329335e9.3
-        for <soc@lists.linux.dev>; Sun, 09 Feb 2025 14:07:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IB1Zw+v0"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38dd93a4e8eso640955f8f.1
+        for <soc@lists.linux.dev>; Sun, 09 Feb 2025 14:07:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739138831; x=1739743631; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1739138832; x=1739743632; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dVSwUzYyCuH/0EmC09Tuh6m4O6FbPIf1eRFL1KmeQ8U=;
-        b=MQzZdpJ9ty9q7WzI+RKB5mMuNlBJVCDLK5xoUNJ4HD41tPvMqLNmsKRISIE7O6J0y1
-         bIBVmlNGBB0EHvKwi9y0PAr0pqFDRJV5jQmGoILXAjsQ8VOBTL/Gy+7RXF4jbScTYcVh
-         +oz1dFjgsvnZythMUy8kwW0OXmNZnxvl4iBl5snI/5Y+6Dj2dwZQjnjeVeuE+c/g9G2y
-         2Z4JbDbGUHtPALK//ZeMricLpbjQdkUbdPjvHcHimVHTFjdEr2vOG7lfQ7c4nHGndJEV
-         xngTqjsGAk+IrmVtPULTqzUdKMAq/KdlWURzyne9i67BXmzd/jo9Fet2u4ZYNcvmy3ig
-         evhw==
+        bh=cKk1eBFoHmDcld3Lfx7t6YPL0jmbrCaQqUFUOUwjSIk=;
+        b=IB1Zw+v0S+cZgr4eWrOzAay8R1u+W62HEAWTSPhfMYacTykpQ4uL9CA1AqU/zyA60n
+         PXE//1mneJyee031y7+aagiifS0H92k8fWTYX569R4rTUK5U91xpzSEtqrrf+dKjSF1k
+         VggOdZyOcsscvVLk3zlTm44OQMToNNbWMySQsk+aqMUpqTRbtCiI+soBEAnQkOC7HuEE
+         PVxMT68MpdXULlq35RTQ2wMcAa4GdmPrgk3sguJom0CVc+ErU+s3lwnkdRaEdTbLDvup
+         sAddIRnb3JN48iGPU746WYmalap+8F7KDQfMFxAkRAzUgOcmhRvIro+n3mJ4OUskFc9J
+         sjoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739138831; x=1739743631;
+        d=1e100.net; s=20230601; t=1739138832; x=1739743632;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dVSwUzYyCuH/0EmC09Tuh6m4O6FbPIf1eRFL1KmeQ8U=;
-        b=g3E5PkKJ7SZkIoCojXOmWfeMo/QP2Tgi0Nvqz6kNDLxO8Fy6NOOQ58gnCSLOhjaA1Q
-         oZQP0c+P7DA60FlEzsmCNYnNn2gWdU0ckfdGvRpu6RAwTVF5pw2z3IyA3nHvJgcVXMQ7
-         hLnwZVwWh6yIghgLg44DFxPq3VUkounsLuPRZ1koGVJ2cz7c/8ocC5b6VsckazKYx/7d
-         WKYvVHl2IYcYIADrGUZNKgp9Y7kvjjPdEYYky8trjgIr6wLO/2PTWMLfC9WqA3EzZD7B
-         G9vE70NSKBLvyVMTctAAXEIMwl4AOow+O5U+KxmHqad/FzKHIaXKOjy+vc7ZHwKWkDag
-         gnCA==
-X-Gm-Message-State: AOJu0Yx5IEupni1/LfVOe5C913c7BmZxFT6/qy8V/+lLTUJIqflf6mEY
-	vbi+dPjtIuQKAF7bxQSe0oV7PY09ey2QihutOxkFzSA4uRO9QtEoFvEekSWM
-X-Gm-Gg: ASbGnctFRfBcqDL++ULmadkibd5VJEKdLAAITl5b6519YDj0vruh2Myy64LkqMO+cvx
-	xyqgxLZJl5R+HBxeIAB0PFImS/eDiWdcdFEUk/GvDAiGpzRdCt7xJbfCtbCYA0vIf9/QiqkuFVK
-	2QIEg1yrDI8hevYrFsN+YNqWnpmwYYxNNN9wpX9PohK6cGnK0v0/j7jO8giZgl38s9Wdw2AtYtI
-	ucv5a7dOKGdYR7OFG1whyXJ7i3+yZwH+WLqryBxhZKjohvkXMigdTpt8UzWqhJFycSGB4lSdpdp
-	cZr8BNIgyRdfD1u/U3Ep7gTwKhmK
-X-Google-Smtp-Source: AGHT+IH5vVna5qsuNt4fQZwckiVpOEaiuCCrF2lXcmMmNlYOm+Z+9AtnNGM3IMnM6VxBlfyTkVsF/Q==
-X-Received: by 2002:a05:600c:8705:b0:439:41dd:c061 with SMTP id 5b1f17b1804b1-43941ddc2a4mr22063795e9.31.1739138831167;
-        Sun, 09 Feb 2025 14:07:11 -0800 (PST)
+        bh=cKk1eBFoHmDcld3Lfx7t6YPL0jmbrCaQqUFUOUwjSIk=;
+        b=ojRFgQ/e2YSfEePC3Wh0iYHz6KG0TipvGT/cocP0gG3A2jbcW/ZKfP75r8O2/+yvEQ
+         gKwcJ+OSTZ3Kt92BwfAjfBy5sqakB5bMUYP9wrq7uKWH4l3cIExkH1T2fJmt+4GHu3hR
+         2zgcm+l0U3LzhcaSwQwnj5DLm3/ESn2Vsg67+t7v97eWNalfndVvGSPjXXbxNXLbvlJh
+         tIfsbafA/F5fkCB5Wx0KfviU+ptvrH/CgFkKeJBbnTnrGzrRi11p7/KOR8EPN8cR5lBH
+         f4yFMnWZkrOZ9ImU9Qw2PRwYH6o9A7h9KENa7JmGLlJ3r+gPmbKfCt35gP+QFNJxBBer
+         rs9g==
+X-Gm-Message-State: AOJu0YxNUVRqolVufFydfWQyLNFm3SvTx03Ev/u93JKTrTg5/j3hMYcc
+	T53SbbHo1Rmo4DR5unWzFnAI2Bqoi/xQe8dzUPEMS0MVoijZxfXY5IFFHnAb
+X-Gm-Gg: ASbGncu7MDbR0JEK8zvcYXM8zrRpqu7HsgcqX5ARH00iiOqZgkIz3leJZJZRu5N905J
+	eef3hm2MZDup/4Bqwg8spQfU/FhK6pPzRIbVPUJYshtNeV2kg5gdlhM5Anb11oXOLovLRfZrna9
+	6AtaiWXAIv3lD+ETGLMgq6EkAnfY8jPrEcENLN+jvOQscXbjEDU7JE2uDcbwRAgPIshpz1BejJ7
+	MX2NroHeaxU9r6jy3CfzWeBUWvfErFz2ok403i0R4oTnIOwZYoXbP6XCYqAE4Dh21L/4wgDdT8b
+	BVtoY7yy9DimOdRvPN4+KtnN8ZPp
+X-Google-Smtp-Source: AGHT+IF2Bns6I6YCSe2LhsETO1BYlvvXG98BlhUd8nZAEcFJtGt/bc67HK+7TnAd5oXHt9YnANZ3Nw==
+X-Received: by 2002:adf:f70b:0:b0:385:d7f9:f157 with SMTP id ffacd0b85a97d-38dc9135d53mr7026781f8f.36.1739138832176;
+        Sun, 09 Feb 2025 14:07:12 -0800 (PST)
 Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbf2ed900sm10386544f8f.53.2025.02.09.14.07.10
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbf2ed900sm10386544f8f.53.2025.02.09.14.07.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Feb 2025 14:07:10 -0800 (PST)
+        Sun, 09 Feb 2025 14:07:11 -0800 (PST)
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 To: soc@lists.linux.dev
 Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
@@ -73,9 +73,9 @@ Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Lee Jones <lee@kernel.org>
-Subject: [PATCH 07/10] dt-bindings: reset: sophgo: Add CV18xx reset controller
-Date: Sun,  9 Feb 2025 23:06:32 +0100
-Message-ID: <20250209220646.1090868-8-alexander.sverdlin@gmail.com>
+Subject: [PATCH 08/10] riscv/arm64: dts: cv18xx: Add sysctl and reset nodes
+Date: Sun,  9 Feb 2025 23:06:33 +0100
+Message-ID: <20250209220646.1090868-9-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
@@ -87,63 +87,39 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add DT bindings for CV18xx reset controller. The power/reboot driver is
-going to use only 4 bits from two different MMIO regions which can be
-potentially used by other subsystems/drivers, therefore the resources
-are not being claimed directly by the device/driver, but via syscons
-instead.
+Add reset controller node and required sysctl nodes.
 
-Link: https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- .../bindings/reset/sophgo,cv1800-reset.yaml   | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
+ arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml b/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
-new file mode 100644
-index 000000000000..4f058f99df5f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/reset/sophgo,cv1800-reset.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+index 53834b0658b2..d793b6db4ed1 100644
+--- a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
++++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+@@ -309,5 +309,21 @@ dmac: dma-controller@4330000 {
+ 			snps,data-width = <4>;
+ 			status = "disabled";
+ 		};
 +
-+title: Cvitek CV18xx/Sophgo SG2000 Reset Controller
++		rtcsys_ctrl: syscon@5025000 {
++			compatible = "sophgo,cv1800-rtcsys-ctrl", "syscon";
++			reg = <0x05025000 0x1000>;
++		};
 +
-+maintainers:
-+  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++		rtcsys_core: syscon@5026000 {
++			compatible = "sophgo,cv1800-rtcsys-core", "syscon";
++			reg = <0x05026000 0x1000>;
++		};
 +
-+properties:
-+  compatible:
-+    const: sophgo,cv1800-reset
-+
-+  sophgo,rtcsys-ctrl:
-+    description: phandle of the "RTCSYS_CTRL" syscon block
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  sophgo,rtcsys-core:
-+    description: phandle of the "RTCSYS_CORE" syscon block
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - sophgo,rtcsys-ctrl
-+  - sophgo,rtcsys-core
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    soc-reset {
-+        compatible = "sophgo,cv1800-reset";
-+        sophgo,rtcsys-ctrl = <&rtcsys_ctrl>;
-+        sophgo,rtcsys-core = <&rtcsys_core>;
-+    };
-+...
++		soc-reset {
++			compatible = "sophgo,cv1800-reset";
++			sophgo,rtcsys-ctrl = <&rtcsys_ctrl>;
++			sophgo,rtcsys-core = <&rtcsys_core>;
++		};
+ 	};
+ };
 -- 
 2.48.1
 
