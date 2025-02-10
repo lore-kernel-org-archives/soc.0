@@ -1,78 +1,74 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C8E23642A
-	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 14:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292A02528F4
+	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 14:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739197017; cv=none; b=tCe/t0VuZsD18oOfkz2lJZ8jki84wUpz4rp5IRmfZA42AINn+rwRL8U1o3453QiHvPMxpFpO8CUi6zlHPVRvOFqgmWnI7F5PgHar8Yam2MMJvRjpsgrSwsZ30gPHsjhVZmqJp9OqK4iBKwEg4R08t2OVMz5zq+al5EpfreiuArc=
+	t=1739197617; cv=none; b=BHeTiR7GegD0fVaTSfgj1AS2OMTmenREkwKxGeTz7s2JowAvNG0Ej9vEpHlCwF4hBCKwuishDazWpDbTU/QJXv4M+rcBoMPbHTSjWz5U6yMY4kzzLg9OavA5iIm7fY1ipKkd/xXReGjDpOekLwwD1zx9B+/BoqsEXpFgZK9RmUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739197017; c=relaxed/simple;
-	bh=2yxORkU0BwHhsffL3ulJIkwpSZLMqKG329zUxbYPPkQ=;
+	s=arc-20240116; t=1739197617; c=relaxed/simple;
+	bh=oASEPjHAaowh4iL42KmWLyDV/ZIihkVhkEpMzaq1FYw=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rYyV4s0dRUyKA+q4vHasKxhHPkQd1Q1zwazFWaJZp7W76o+6lYsHU6VJQwN0wwMB9iLaoAJVsV2LvH8X4sa5a25IJeENjYkskpbKFMm+CK1o7hiaKe71BwMAMtRq9stkS0ETxA0VqUscsc6NslNU7TrGIKME+lx73ot2XNFOB+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqxNs7ae; arc=none smtp.client-ip=209.85.128.50
+	 Content-Type:MIME-Version; b=gPSOppelTAZ85CbHJLN3PbFj+SY6ILwSbFATpDF/IgUfHCKuAxzvJeXffb7ED7oLAMOf3oyefqaz+meYAhQKQVzWauDjbl6Dq2/s2Jw2naXy9lSOlxDFpPUfDgpwomdaQeq/NrcuKJPs7Sd4Dir/sBIzfZ0ZxFya0/JkFDYlg8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AJPyGDl8; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqxNs7ae"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-436281c8a38so29165185e9.3
-        for <soc@lists.linux.dev>; Mon, 10 Feb 2025 06:16:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AJPyGDl8"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43934d6b155so11044035e9.1
+        for <soc@lists.linux.dev>; Mon, 10 Feb 2025 06:26:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739197013; x=1739801813; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1739197614; x=1739802414; darn=lists.linux.dev;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=2yxORkU0BwHhsffL3ulJIkwpSZLMqKG329zUxbYPPkQ=;
-        b=OqxNs7ae+c+gL5yH7amJ5JmvKAairHLOFK0rP8PPDo48vs4Kuj04JOPjU7B7cpkEKS
-         WB0v1zEMC0wdP5sPvjLNSHkP+Qh0/x0PrPuJLjoGPmonSUArVhy5rRqeUCIfTt4q324n
-         J/gAl8gDNsXdn7JWKv53wvOdXUyZV1Mp5+peHB96bza0NcUlqmwnxWeN+4wgyUsCHCBd
-         i+EodpaAhDdmCf2rcTBHOpYbELqc1yM6Tcao0osOt0FWL1NLv6e1seVGsWRPnPNp9t0j
-         Y2m0iaEWqpqEPB2J6T2ph0u17hA2UeSARizrGPJXq4n7fNQsjImqvmc/9xHvpih14IR8
-         y0jw==
+        bh=VgraRHso95F81B4DXSSaBLV0feh+tpXbSVAWbEyzHv4=;
+        b=AJPyGDl84vs1FGCa1TWT7sU3Q+KRsUPaT+8UyDD8Yv0fQCiVOwRRIoyKiWJnUhnPi5
+         nVND7kFTgJzZfUAI0Pz0JzjqZLSJnVF1KpRDP2GkCLvA6TFSIlOaXUVMUB1jDj60OFOw
+         kwNA0cw36aEKSsp9PmJ3pT55k2DdQZdZacCgnkyVRNiCKn5qR4xHTltesR3kdwfN23WL
+         7Y5C+W+0LLuZfBAikBNLeBhFgkI37udk0m9n3qi+oAV3QggZq0IAbOQ/nk7z9QYQ2nSb
+         800BKOxWqW3Rh/8i/Bq1uTFjKFa4tFfSFMrP4vpSjlaCe1xTLNOTo6idtpL230unitQG
+         C+mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739197013; x=1739801813;
+        d=1e100.net; s=20230601; t=1739197614; x=1739802414;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2yxORkU0BwHhsffL3ulJIkwpSZLMqKG329zUxbYPPkQ=;
-        b=r431aJ+1yEPyI+6EhZ7GgTriaZ6ZVyx7ITO1qzbv/y+Fg8I+XR8zQgfDU+bfz6bMdQ
-         xQz4Pmbbu0yeWbgYWW1YwLO3SKccBOyLx4VRBKytJb8xv4C7F965Kk8OS0zjruQ7i9AA
-         kfiD1R9/iFPhd+jyx2ptSQZCpWFEPa8RjN368upG+GtWG1Cs6iJTDLCFVZJ7URHttPDR
-         f2KJeoNqnlBxtnfL4sPAxq3JuCVDl2xlHbG1j/5wQr890a1+Qav77dakDMCDcpPmVZcm
-         q6QyZq4Q7KMxaCvy1NTnn2WMLciC0DrSsEaL/cFI+c8XKoOpjWjCCxhqWs45M8iIbrMm
-         3img==
-X-Forwarded-Encrypted: i=1; AJvYcCXWwnsItfJrmGg/BvDWK+yP7oh9N1Rcnnmb2ai0ik+AoumP1BFgh9C6M+EbxWUGf7GDslI=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyFUcg2dOv8GtcIlMz/JQL64YrHbzDp/ndQY0sIkXavRvXqdEIZ
-	Eh/F+uhRQdb0ee0m5XNnvzXQcqsFZaTR2mpdmcbizKusPdP23TNA
-X-Gm-Gg: ASbGnctqHRF5H2orBNsZUsMBcVcYxGL/OWt7OZ7us0BV9cxZT01hfUrm3cmFK4dXVFU
-	mt+y0ltqCFCwtix8uSh9Sb6X5IQVFTWKcXECKObLwEPF04HzDdHQZHMAs5oyxHPCmjYAlYjDD8l
-	d+7ivG6xvjhT7DPXdR/2JMEk36a+R+BSk3dbH6JkfqVBNCX3iAunTfivymoXTNobu01wKxtbHTN
-	TMHT6t92x6KgMW5UY9bNB/PaZGs3Bziiv+PJIEzML7Iwfe5+l8vOMQncW1QlDGiRMlL/XSp0HE0
-	i/Xx1WoHpfc4Qj4z/1qrZjrwacJaLCEx
-X-Google-Smtp-Source: AGHT+IHNOu5fBQbgxx/H3Ub0lE217C3Rg7B6vLrKoEEdX+bR5RhSjkNikHnqhQxwOe47XQ6szqa9EA==
-X-Received: by 2002:a05:600c:1913:b0:434:faa9:5266 with SMTP id 5b1f17b1804b1-43924991f73mr111581495e9.13.1739197012751;
-        Mon, 10 Feb 2025 06:16:52 -0800 (PST)
+        bh=VgraRHso95F81B4DXSSaBLV0feh+tpXbSVAWbEyzHv4=;
+        b=CAfH3Unc3QEx/byB8gP52w7m9INOrTNAs00F4p6Y9YnGpQ6DB0Oi0t5y/M08w5Tuo2
+         7oCn6TjO6yMNkYc+R5Foqx4zrjoXxQ01CIw2b99AoSID5IMZ5D/nSgctzLAg8NcVw14u
+         LwZz027prz7yaL2hNYYTgeW5+QUxnKcCg6P1eH0BplFa0ZoCyZxX3DTU+ES4qug+4A91
+         1CAND3M8whaRWHNVxuIixKaEl7a0YC/lAoUpCIV1KzBysdzD+gyK5KZulLdsBnOgafeq
+         mFG7xgE8+C87Tzwc6BAx/Ja4N5CQ42am2kRBdF/SWTgTUsiHWul1XljWASTTdwfz9/c0
+         jTyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWisJGabpSydsc3ySPfMFFNxaRaht9ThCzIJ0KmVB+kAo6vblzgDhHEGEEL/wW5r/yUZhs=@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywa0xSV2UNgVaG3Znilh2I8gJ4rXAwzDYQn3l+q9u4o1BGIIGKv
+	f3WUDSjlQb4IRlEK6tpAi7b+syiLYjcxwo/DIDivRBBWmhN7PaKs
+X-Gm-Gg: ASbGncuqYvipWLrivqTUFpUgVm7E4DAgAkYJvuU/ukST3ON0kOA++/KU8Gboe7+pA8y
+	oZU6HnDTKeUYwrC1eNTGtBA/SeSxh/2AUuN06sPu8ED6mfJ2nYuymcBWguwKD5APR8y9pornLKG
+	gcnf6RdZT5KEqbdOmoiDJRzZuskwSrr/L1KcYci2ottjn0IU9RNlLYXLMqR6MRtLiIj5vLtrtJN
+	cubmmaRCDT0AmtATImFN42OaIR14PiIO41ekysAb9Bv9+793PK37terD/LIfmCTmCerXIlisK+5
+	FsQtnLYbt72nAdDv4IyUceJcISvDn1J+
+X-Google-Smtp-Source: AGHT+IEYNgbdZHkRJU1UDHCBy9QezY1XmzJ1vuM2419I++2sRPB2lMGddbBAfie6JehAjN/mVPK+vg==
+X-Received: by 2002:a05:600c:5351:b0:439:3159:c33d with SMTP id 5b1f17b1804b1-4393159c5abmr70934525e9.13.1739197614251;
+        Mon, 10 Feb 2025 06:26:54 -0800 (PST)
 Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4390db110dfsm186220095e9.36.2025.02.10.06.16.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4393f202721sm49032005e9.21.2025.02.10.06.26.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 06:16:52 -0800 (PST)
-Message-ID: <5e08940e72d4669eac3d4090fec84c8a1ecb17c3.camel@gmail.com>
-Subject: Re: [PATCH 03/10] arm64: dts: sophgo: Add initial SG2000 SoC device
- tree
+        Mon, 10 Feb 2025 06:26:53 -0800 (PST)
+Message-ID: <4d171a4fdf7ce9bfbe6352b36d6b6791584f86c4.camel@gmail.com>
+Subject: Re: [PATCH 02/10] riscv: dts: sophgo: cv18xx: Split into CPU core
+ and peripheral parts
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Inochi Amaoto <inochiama@gmail.com>, soc@lists.linux.dev
-Cc: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
- <inochiama@outlook.com>, 	linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, Haylen Chu	 <heylenay@outlook.com>,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann	 <arnd@arndb.de>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>
-Date: Mon, 10 Feb 2025 15:16:50 +0100
-In-Reply-To: <g7gruyv5rczuqybblnxy7myh2rakk2dmldy3ks247evjb6k3zj@ffkzilxgp3gy>
+To: Krzysztof Kozlowski <krzk@kernel.org>, soc@lists.linux.dev
+Cc: Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date: Mon, 10 Feb 2025 15:26:52 +0100
+In-Reply-To: <dda5297c-fdf3-494f-854f-71a5000729e5@kernel.org>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
-	 <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
-	 <g7gruyv5rczuqybblnxy7myh2rakk2dmldy3ks247evjb6k3zj@ffkzilxgp3gy>
+	 <20250209220646.1090868-3-alexander.sverdlin@gmail.com>
+	 <dda5297c-fdf3-494f-854f-71a5000729e5@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.2 
@@ -83,30 +79,48 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 
-Hi Inochi,
+Hi Krzysztof!
 
-On Mon, 2025-02-10 at 13:05 +0800, Inochi Amaoto wrote:
-> > Add initial device tree for the SG2000 SoC by SOPHGO (from ARM64 PoV).
-> >=20
-> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+On Mon, 2025-02-10 at 09:43 +0100, Krzysztof Kozlowski wrote:
+> > diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi b/arch/riscv=
+/boot/dts/sophgo/cv18xx-periph.dtsi
+> > new file mode 100644
+> > index 000000000000..53834b0658b2
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+> > @@ -0,0 +1,313 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > +/*
+> > + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
+> > + * Copyright (C) 2023 Inochi Amaoto <inochiama@outlook.com>
+> > + */
+> > +
+> > +#include <dt-bindings/clock/sophgo,cv1800.h>
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +/ {
+> > +	osc: oscillator {
+> > +		compatible =3D "fixed-clock";
 >=20
-> Can you add a riscv version of the this file too? This also applies
-> to patch 4 and 5
+> I really doubt that external oscillator is a peripheral. This is either
+> part of board or the SoC.
+>=20
+>=20
+> > +		clock-output-names =3D "osc_25m";
+> > +		#clock-cells =3D <0>;
+> > +	};
+> > +
+> > +	soc {
+> > +		compatible =3D "simple-bus";
+> > +		#address-cells =3D <1>;
+> > +		#size-cells =3D <1>;
+>=20
+> No, override by phandle/label instead of duplicating SoC.
 
-this would require binary Sophgo RiscV toolchain, which was the whole
-point of my ARM64 BSP. So, while I could add RiscV counterparts, they
-would be completely untested.
-
-On the macro level that how I see the current state of upstream affairs:
-
-RiscV:
-There are necessary upstream packages available required to boot, but
-there is no upstream toolchain to build them.
-
-ARM64:
-There is an upstream toolchain, but the published U-Boot is being
-linked with ATF binaries -- I was planning to come up with pure
-U-Boot BSP for this, without binary blobs.
+Is this one critical? Otherwise I struggle in v2 to both keep
+SOC_PERIPHERAL_IRQ() in [a new] cv18xx-cpu.dtsi and reference &soc
+from cv18xx-cpu.dtsi. It's kind of circular-dependency.
 
 --=20
 Alexander Sverdlin.
