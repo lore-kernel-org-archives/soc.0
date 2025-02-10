@@ -1,176 +1,158 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D841CA84
-	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 15:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE522397A0;
+	Mon, 10 Feb 2025 15:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739199679; cv=none; b=mSRPxOkWSzTjTHZpsVxp7tLkJgnf0wWgbaOLnCQKZnlt4aE3m/XnffJ6znnEKoe69DprQUJNivbvQ5N7ZjH5Zhdp4y5duzdODlIgkXsPGOeXbOEyZopkCyH4slheKPMY4AVTu0CQDM3b9bfCx5meukuHyvSPhRqIHL76p4qMup0=
+	t=1739201509; cv=none; b=gvWj3Rx4QGY3JLOyIidy0cTwaKSRiElk46BZAAoJoF+oVyVrDP+yt8OKUbRL0H3ZfOVcYLU6avXRfYLOOytk9rr/zx6MhLrBSRoaxIhhtGcCYX4relVa+RACzc1/oLDlpRDyoOqlAeqpEycHcNCKL/E2bO1NeCHm7v9q4B+jRIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739199679; c=relaxed/simple;
-	bh=visb9O0lxlMa5DUWC3Bk2Q1mSoeQvsC0v7T9kKbj3yw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CRq8ZihevhEAtNtkSYbjUmeyRu3HXHTdBcMbOXpf0pgKYDYvKM8TtTknSQ6laYiDWq3r2tEkStdF7OkZaSu9NBjbC6kDs51Z+J8jF5UySzLV3Q4q7eswmJdODg3nrcz9Ma5XJ1bQA0u1b5UL53gosrEQqP0H7HAJ3kPxO2wE0xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=btPC3Jem; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739201509; c=relaxed/simple;
+	bh=ZwDJ0wYVxWq9z5KRz0NCZ9cLEb8iWGgDrmAEcJ43FGc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lREew3wQJU/CBrlYAkHAwBdOGW15Ux9TN0IvFp2IYlgDw9PaCWwbNgPU9y0Ilz0ZJO9VWwI4+XnJ0iH5F0nyfwF3b5LCGIe3ytshFA6Z6c31D8C6NqZ39+HELZ6oXD71Y+7s6xWLKXcnm3sIYEQxFM7obBjGL5KIsYYAPLhcACY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7SoGIuh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="btPC3Jem"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ab744d5e567so871950066b.1
-        for <soc@lists.linux.dev>; Mon, 10 Feb 2025 07:01:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739199675; x=1739804475; darn=lists.linux.dev;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3M5idA8N7HpwZKk/3+pcrUsB6D7VU4LeXOhWq3Jgugs=;
-        b=btPC3JemQhGCyFK5Apdtj39gy8VJlhhEQ7LRKTEto5oIodG+9LssJKt3NO43bJZtLf
-         qmrRc16hf9YXJH16VlITf+pPJ9ZhBPZGmUD0jw8Wd4riGrO31nh0ZOOMbbmKKpeKjGhQ
-         jjpSI5dbe7J/9gKEtUR+ifV3ShgQwbkAYVv9Wnu62CczIWK3uH9FpefCPIC5GIOQ5XjK
-         DtFUEF1qzt6wwI9HsYgSHTGO2feQuxLWBhQ42fwdYkhO4v7osJ80ZyJqEcejyVva2wU3
-         Bkkds7XDfDBTAz6iB3T//qQBU1K7dO+dxayOHDDKV6+QlksKKzik4PWAbWXXDfpFFOVA
-         yaUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739199675; x=1739804475;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3M5idA8N7HpwZKk/3+pcrUsB6D7VU4LeXOhWq3Jgugs=;
-        b=n400vzcPM8J87bI7DxMbc78NDeFGLOPZ2gdXDvToHUZ/VdyFPyVL1p1j3rdVUSGcHU
-         wk/s/tw7PAo418QlQHuK/1REcs8vLAPvPgsIr/Ez0KXlkC0+LWgn26h4idcRZnyb8P7k
-         0Qw6F0aeN/TwPfhNypBoxaLAUBW061eDEQrTFfkIz5uczT0zUX3Y1B4fAVktFuFs2cCK
-         FDEpRpB1crid0NVwyMeoeDioFri12E9/UlqINUZ/He4gVe+C2FBfgluSZTxcq828NPbr
-         DMyzkG/4uzY5whY2rOcj+dqSQIkxLIhfpcKtKoY3tEfzpnX4O25JZlt6nYnr20KOhfXY
-         c0/w==
-X-Forwarded-Encrypted: i=1; AJvYcCXEBeOBmd9RUVhgIC44EkvKod/zMXLzJN9so9yQLdbBjv9hUC9T+rkIn5w3IV7EbA5g4ZY=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyrfztSGbqbkKUQyEj6vWeh09otO5e0v7rMh1fHash0NlqAjka5
-	yVC5DfPU27Gx8bbxoBw10U0COypGxtzPSXDI8KAXPZGNkhRns1ZX
-X-Gm-Gg: ASbGncv//VpKToNCxZO5X2xb0+YWzgu/2CXTFx/YZYWVDuiURnOEjcsCNHEcbf9/KiB
-	GFW3W9CzwZc07rIFIf8pfHr5dtAPsOB9miGGakrS8yA4s7JLDjs9ksb6Oajc1jLnpNlX0OWnTw0
-	53wkheWQXiPcAvUqUsp9ubdDgYCZmi0AT7qTjgeyeAS6uG7ADae+nFnI5CF7vLQRgcLFTOu0pf3
-	ur5QumsR5N9OyS3eGdOm+JpSxh099cI+IUK1Kn6IAmxV8VTzpE3Qp+0iPiypBypwJxqW/GhnYNm
-	vuIEDPZSbEUma51jLtsX50PNZRAwcPJK
-X-Google-Smtp-Source: AGHT+IHDvJX3+ekZa4vY1LIl/WMEIul6AD+KtHvHZm/OrLAAq1fRlkjI0uEBHS/oueveFzGr668vsg==
-X-Received: by 2002:a17:906:6a29:b0:ab6:d4ce:5674 with SMTP id a640c23a62f3a-ab76e9dc14amr1858509166b.26.1739199672976;
-        Mon, 10 Feb 2025 07:01:12 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7cd7ffaa8sm122042766b.132.2025.02.10.07.01.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 07:01:12 -0800 (PST)
-Message-ID: <03ff407fe68e46df4844e5dd244e7c609331af71.camel@gmail.com>
-Subject: Re: [PATCH 03/10] arm64: dts: sophgo: Add initial SG2000 SoC device
- tree
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, soc@lists.linux.dev
-Cc: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
- <inochiama@outlook.com>, 	linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, Haylen Chu	 <heylenay@outlook.com>,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann	 <arnd@arndb.de>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>
-Date: Mon, 10 Feb 2025 16:01:10 +0100
-In-Reply-To: <0d5484d1-be83-4f38-befd-94d458b3aaa8@kernel.org>
-References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
-	 <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
-	 <0d5484d1-be83-4f38-befd-94d458b3aaa8@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7SoGIuh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288EBC4CED1;
+	Mon, 10 Feb 2025 15:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739201509;
+	bh=ZwDJ0wYVxWq9z5KRz0NCZ9cLEb8iWGgDrmAEcJ43FGc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Z7SoGIuhzGUt9ZodMmXD9pD9erQLR42hWX6ks7ABD3b3o0Rhg1Iv9V68JuZFD/fAM
+	 FYwCjruKIfiaH4Ljp0i6kTCfMYHdDheX65u52lP3Q+31BwOkv++RZTKCh7FiIStUW6
+	 +b0JrjjnN0rzWKmewCnXD2sTzNIJ++dPQcykY9Rjoyp/c8KqF0EjByv0TQhaCy2eTv
+	 cRCi0RZQ6iQwtla9OgRUDPCZIjOnofcoJTCQwWSbroVrFT4XZbSrLnpAcR1XqzgHV7
+	 DSULcDB9oh50bEHlNS+AabE29In+4N71fSjfQijgeD4uCuvi34iAdqb69sZGSQcnac
+	 tp2Q/qFiz242A==
+Message-ID: <d3ba0ea5-0491-42d5-a18e-64cf21df696c@kernel.org>
+Date: Mon, 10 Feb 2025 16:31:45 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/10] riscv: dts: sophgo: cv18xx: Split into CPU core and
+ peripheral parts
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
+Cc: Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-3-alexander.sverdlin@gmail.com>
+ <dda5297c-fdf3-494f-854f-71a5000729e5@kernel.org>
+ <4d171a4fdf7ce9bfbe6352b36d6b6791584f86c4.camel@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <4d171a4fdf7ce9bfbe6352b36d6b6791584f86c4.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof!
+On 10/02/2025 15:26, Alexander Sverdlin wrote:
+> Hi Krzysztof!
+> 
+> On Mon, 2025-02-10 at 09:43 +0100, Krzysztof Kozlowski wrote:
+>>> diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+>>> new file mode 100644
+>>> index 000000000000..53834b0658b2
+>>> --- /dev/null
+>>> +++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+>>> @@ -0,0 +1,313 @@
+>>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>>> +/*
+>>> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
+>>> + * Copyright (C) 2023 Inochi Amaoto <inochiama@outlook.com>
+>>> + */
+>>> +
+>>> +#include <dt-bindings/clock/sophgo,cv1800.h>
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/interrupt-controller/irq.h>
+>>> +
+>>> +/ {
+>>> +	osc: oscillator {
+>>> +		compatible = "fixed-clock";
+>>
+>> I really doubt that external oscillator is a peripheral. This is either
+>> part of board or the SoC.
+>>
+>>
+>>> +		clock-output-names = "osc_25m";
+>>> +		#clock-cells = <0>;
+>>> +	};
+>>> +
+>>> +	soc {
+>>> +		compatible = "simple-bus";
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <1>;
+>>
+>> No, override by phandle/label instead of duplicating SoC.
+> 
+> Is this one critical? Otherwise I struggle in v2 to both keep
 
-On Mon, 2025-02-10 at 09:45 +0100, Krzysztof Kozlowski wrote:
-> On 09/02/2025 23:06, Alexander Sverdlin wrote:
-> > Add initial device tree for the SG2000 SoC by SOPHGO (from ARM64 PoV).
-> >=20
-> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> > ---
-> > =C2=A0 arch/arm64/boot/dts/sophgo/sg2000.dtsi | 79 ++++++++++++++++++++=
-++++++
-> > =C2=A0 1 file changed, 79 insertions(+)
-> > =C2=A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
-> >=20
-> > diff --git a/arch/arm64/boot/dts/sophgo/sg2000.dtsi b/arch/arm64/boot/d=
-ts/sophgo/sg2000.dtsi
-> > new file mode 100644
-> > index 000000000000..4e520486cbe5
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
-> > @@ -0,0 +1,79 @@
-> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > +
-> > +#define SOC_PERIPHERAL_IRQ(nr)		GIC_SPI (nr)
-> > +
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +#include <riscv/sophgo/cv18xx-periph.dtsi>
-> > +#include <riscv/sophgo/cv181x.dtsi>
-> > +
-> > +/ {
+Yes, because duplicated definition is both pain and confusing. It is IMO
+semantically not correct - there is only one soc, not two SoCs. If you
+have two, then you miss proper unit address.
 
-[...]
+> SOC_PERIPHERAL_IRQ() in [a new] cv18xx-cpu.dtsi and reference &soc
 
-> > +	gic: interrupt-controller@1f01000 {
->=20
-> MMIO nodes are always in the soc.
+SOC_PERIPHERAL_IRQ() does not belong here, but to the base DTSI for your
+arch. I would rather recommend not to create fake DTSI structure
+reflecting some arbitrary choice. cv18xx-cpu.dtsi is not better - for
+example type of interrupts are rather arch or GIC specific, not the CPU.
+Unless you meant something else by CPU, but then it is getting more
+confusing.
 
-I think I've looked a wrong example (or a counter-example)...
-$ grep -R -P '^\t\tcompatible =3D "arm,cortex-a15-gic";' *
-arm/boot/dts/intel/axm/axm55xx.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm/boot/dts/ti/omap/dra7.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm/boot/dts/ti/omap/omap5.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm/boot/dts/nvidia/tegra124.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm/boot/dts/nvidia/tegra114.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm64/boot/dts/nvidia/tegra132.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm64/boot/dts/freescale/s32v234.dtsi:		compatible =3D "arm,cortex-a15-gic"=
-;
-arm64/boot/dts/apm/apm-storm.dtsi:		compatible =3D "arm,cortex-a15-gic";
-arm64/boot/dts/apm/apm-shadowcat.dtsi:		compatible =3D "arm,cortex-a15-gic"=
-;
+Look how others, e.g. Renesas, defines it - no problem overriding soc,
+no problem with SOC_PERIPHERAL_IRQ().
 
-But thanks for clarification!
+> from cv18xx-cpu.dtsi. It's kind of circular-dependency.
+> 
 
-> > +		compatible =3D "arm,cortex-a15-gic";
-> > +		interrupt-controller;
-> > +		#interrupt-cells =3D <3>;
-> > +		reg =3D <0x01f01000 0x1000>,
-> > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <0x01f02000 0x2000>;
-> > +	};
-> > +
-> > +	soc {
->=20
-> Override by phandle/label instead of duplicating.
->=20
-> > +		ranges;
-> > +
-> > +		pinctrl: pinctrl@3001000 {
-> > +			compatible =3D "sophgo,sg2000-pinctrl";
-> > +			reg =3D <0x03001000 0x1000>,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <0x05027000 0x1000>;
-> > +			reg-names =3D "sys", "rtc";
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +
-> > +&clk {
-> > +	compatible =3D "sophgo,sg2000-clk";
->=20
->=20
-> That's discouraged practice. If you need to define compatible, it means
-> the block is not shared between designs and must not be in common DTSI.
 
-That doesn't come from my series, that's how original cv18xx.dtsi has been
-designed. Same question as before: do I need to rework it if I will not be =
-able to
-test the changes (I don't even posess the relevant HW). But if not, I have
-to adapt the same pattern into the new sg2000.dtsi.
-
---=20
-Alexander Sverdlin.
-
+Best regards,
+Krzysztof
