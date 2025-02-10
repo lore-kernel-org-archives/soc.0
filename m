@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6661BD9DD;
-	Mon, 10 Feb 2025 08:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD7F18871F;
+	Mon, 10 Feb 2025 08:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177017; cv=none; b=bgNrcB062mekb109QZ4HFGSRCNIpjLIb+c/jdRmshWeQwYD49NP4PduKcZGhV1bgQuvk+CFbkY0gsmj/e/F7luwjsymbVmDA5MU+wZkqTFNr52u4C+s/6JCMWAf2DUDz6PLH/A55dzag4YsQAKwcANv+hHyrQ6LLpCjvzz1UzhA=
+	t=1739177161; cv=none; b=lQaMIWjTSGb4nDxS1QDPyKFVMkEZAyue/yDUuh6FRIZni5/pj61TQMcohXnYxRSvOb5KFcfRN+hQqfO0b6oJ/uE7EUonJDe4xAfWbSAKDNzyt+J44B84VWQFEvdH/KwiTLeta9gXHtku3gV2rRVx5yVwrkFZmZmzVRLSl/Dk+m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177017; c=relaxed/simple;
-	bh=f3W3+DD+fnUhsDUbSQpvlMcOtF++zEdBmzj/kZBj51g=;
+	s=arc-20240116; t=1739177161; c=relaxed/simple;
+	bh=xevKzlX8gYWPKusYYbNNPW0nJkGe7s9JK78VP6iMCLI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QKSbOSDauURIIsYCkMRQMLJN56FbOGep08OnpHpKqA/63uaf2N2ItNm+YZoLRyIkeMF9RefJMbeCCeiwbXuHQeCL5eVk5/loeUM6+V+SROSgWXjWtEBztt+yI5E07GkxgU91v+UKmNxm4gMRHK+dADDwZ2nOvh4jp96l1c5wCG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2mjrgiT; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=pFs7z2FkEVzZkBFdR1JEI4fmypOWhDIgAE6arFazC27R2n7hLo6QXU4J4sMbKARaPqp/we1LOTri4gCUC9oRLrgTRY2wys0WUydCVqnf/MzjfEBMBi8rv9nRq8Sb8qRK4w5PDnnXSEX+r2gaZw66z74RGZ8WLGUz7yARp+stqrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eb805ZDa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J2mjrgiT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F7FC4CEE4;
-	Mon, 10 Feb 2025 08:43:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eb805ZDa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A864C4CEE5;
+	Mon, 10 Feb 2025 08:45:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739177016;
-	bh=f3W3+DD+fnUhsDUbSQpvlMcOtF++zEdBmzj/kZBj51g=;
+	s=k20201202; t=1739177161;
+	bh=xevKzlX8gYWPKusYYbNNPW0nJkGe7s9JK78VP6iMCLI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=J2mjrgiTey8Xi6tHzbjTezOm6eEIRDFHBKgz1wLNz2RIn1aEnqErdyF64/r0wivoU
-	 wJT3qIDgPbtWPTklGV4tew0jCDgo+lH8G0R3pTXZNnFsWQLc29bdSrTPeZEreboiU9
-	 x/OtXce1NUR65SoP5xvrPI9Q7tE4D3ge3RL48mx+SQSXM71mxo8qfDgtgAsyKV6Edp
-	 voSF2oyirWndwWHM6XlenlRx+mxTH4lTK5XmoUip4kivlYkLYwkahthc9E7Im6V8ey
-	 9esogmCn1brLdlWdZ5bJzGUMarRdfUoOVMhZGLkYyI6mbLQz6yroNEfAeiTFQttiWX
-	 8bXal/R6I76ZA==
-Message-ID: <dda5297c-fdf3-494f-854f-71a5000729e5@kernel.org>
-Date: Mon, 10 Feb 2025 09:43:29 +0100
+	b=Eb805ZDa5Zldes8/HzYnvmXXfuIhPDnpkvX+VRdsKzsuTFAHECIMJzqadqJdkBsay
+	 vMVrKHu+rwTR4QyxikJhsPtnRpZg8YQgnMGA9WtS8kWAQ5xmKkOU1Yb2X2YdS3ZOHV
+	 +3tfS2tWbG1i7SK5NbP3oA46/Z84PnJ4Z1liiSj2iCeIIbw9ZWa8PueqqunZb1v2eP
+	 RJxiWjr2jUMLJuiI8Fm8n8ECekJ3glxPhhtLxwIrge3wY+kR3dflbiL5OqSlJRO9mE
+	 k0A6HU61TCOVwAOdvIB6p5msh5PCxdaw0TGqIe03r/MXbEy6Xh9sclAPTZgUntbfoQ
+	 TrAsXbw4SA8DA==
+Message-ID: <0d5484d1-be83-4f38-befd-94d458b3aaa8@kernel.org>
+Date: Mon, 10 Feb 2025 09:45:51 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,19 +35,17 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/10] riscv: dts: sophgo: cv18xx: Split into CPU core and
- peripheral parts
+Subject: Re: [PATCH 03/10] arm64: dts: sophgo: Add initial SG2000 SoC device
+ tree
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
 Cc: Chen Wang <unicorn_wang@outlook.com>,
  Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org,
  devicetree@vger.kernel.org, Haylen Chu <heylenay@outlook.com>,
- linux-arm-kernel@lists.infradead.org,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+ linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
- <20250209220646.1090868-3-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -93,72 +91,114 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250209220646.1090868-3-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 09/02/2025 23:06, Alexander Sverdlin wrote:
-> Make the peripheral device tree re-usable on ARM64 platform by splitting it
-> into CPU-core specific and peripheral parts.
-> 
-> Add SOC_PERIPHERAL_IRQ() macro which explicitly maps peripheral nubering
-> into "plic" interrupt-controller numbering.
+> Add initial device tree for the SG2000 SoC by SOPHGO (from ARM64 PoV).
 > 
 > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 > ---
->  arch/riscv/boot/dts/sophgo/cv181x.dtsi        |   2 +-
->  arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi | 313 ++++++++++++++++++
->  arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 305 +----------------
->  3 files changed, 317 insertions(+), 303 deletions(-)
->  create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+>  arch/arm64/boot/dts/sophgo/sg2000.dtsi | 79 ++++++++++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
 > 
-> diff --git a/arch/riscv/boot/dts/sophgo/cv181x.dtsi b/arch/riscv/boot/dts/sophgo/cv181x.dtsi
-> index 5fd14dd1b14f..bbdb30653e9a 100644
-> --- a/arch/riscv/boot/dts/sophgo/cv181x.dtsi
-> +++ b/arch/riscv/boot/dts/sophgo/cv181x.dtsi
-> @@ -11,7 +11,7 @@ soc {
->  		emmc: mmc@4300000 {
->  			compatible = "sophgo,cv1800b-dwcmshc";
->  			reg = <0x4300000 0x1000>;
-> -			interrupts = <34 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupts = <SOC_PERIPHERAL_IRQ(18) IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&clk CLK_AXI4_EMMC>,
->  				 <&clk CLK_EMMC>;
->  			clock-names = "core", "bus";
-> diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+> diff --git a/arch/arm64/boot/dts/sophgo/sg2000.dtsi b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
 > new file mode 100644
-> index 000000000000..53834b0658b2
+> index 000000000000..4e520486cbe5
 > --- /dev/null
-> +++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
-> @@ -0,0 +1,313 @@
+> +++ b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
+> @@ -0,0 +1,79 @@
 > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> + * Copyright (C) 2023 Inochi Amaoto <inochiama@outlook.com>
-> + */
 > +
-> +#include <dt-bindings/clock/sophgo,cv1800.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#define SOC_PERIPHERAL_IRQ(nr)		GIC_SPI (nr)
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <riscv/sophgo/cv18xx-periph.dtsi>
+> +#include <riscv/sophgo/cv181x.dtsi>
 > +
 > +/ {
-> +	osc: oscillator {
-> +		compatible = "fixed-clock";
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +	compatible = "sophgo,sg2000";
+> +	interrupt-parent = <&gic>;
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		reg = <0x80000000 0x20000000>;	/* 512MiB */
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu@0 {
+> +			compatible = "arm,cortex-a53";
+> +			device_type = "cpu";
+> +			reg = <0>;
+> +			i-cache-size = <32768>;
+> +			d-cache-size = <32768>;
+> +			next-level-cache = <&l2>;
+> +		};
+> +
+> +		l2: l2-cache {
+> +			compatible = "cache";
+> +			cache-level= <2>;
+> +			cache-size = <0x20000>;
+> +		};
+> +	};
+> +
+> +	pmu {
+> +		compatible = "arm,cortex-a53-pmu";
+> +		interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+> +		always-on;
+> +		clock-frequency = <25000000>;
+> +	};
+> +
+> +	gic: interrupt-controller@1f01000 {
 
-I really doubt that external oscillator is a peripheral. This is either
-part of board or the SoC.
+MMIO nodes are always in the soc.
 
-
-> +		clock-output-names = "osc_25m";
-> +		#clock-cells = <0>;
+> +		compatible = "arm,cortex-a15-gic";
+> +		interrupt-controller;
+> +		#interrupt-cells = <3>;
+> +		reg = <0x01f01000 0x1000>,
+> +		      <0x01f02000 0x2000>;
 > +	};
 > +
 > +	soc {
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
 
-No, override by phandle/label instead of duplicating SoC.
+Override by phandle/label instead of duplicating.
+
+> +		ranges;
+> +
+> +		pinctrl: pinctrl@3001000 {
+> +			compatible = "sophgo,sg2000-pinctrl";
+> +			reg = <0x03001000 0x1000>,
+> +			      <0x05027000 0x1000>;
+> +			reg-names = "sys", "rtc";
+> +		};
+> +	};
+> +};
+> +
+> +
+> +&clk {
+> +	compatible = "sophgo,sg2000-clk";
+
+
+That's discouraged practice. If you need to define compatible, it means
+the block is not shared between designs and must not be in common DTSI.
+
 
 Best regards,
 Krzysztof
