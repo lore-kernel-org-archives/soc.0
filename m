@@ -1,75 +1,75 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120FE8F49
-	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 05:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B7F14885B
+	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 05:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739165617; cv=none; b=MAeMfoTIyjQXbV1s4VPACQ7aFIML1Yifh7x9YK9AyoP09siSAiORPZowsONv3qUQJsOsIdY21D7LR/shrCvgpnPn7hVEE+k1ozyCaXIWf3T1I7MNW5ozQp+pBLf3Hn04wFNoO4ISxfW30p54ZTTxd5yJr4y895Gz3uCYprE25kw=
+	t=1739165781; cv=none; b=E5zGBtHfEKKQjXbk+BoXpRtxF6bsw4zYOdccoew20jlelROK8uksywwbTW0y0q8PMrjHi4RashyjnmCmOkhxCOezrrUwPozziLS8m1acATnSBYE5HvKpgKp3WiFOxPgDq5bcgFs73VRXEBLE7D5W9f+Q2xokaKSJQ9TFrvgI7yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739165617; c=relaxed/simple;
-	bh=BwJR/EZwNEsC8VKwj5lIILIBNa8OeA5xqpRWM56IWRc=;
+	s=arc-20240116; t=1739165781; c=relaxed/simple;
+	bh=urDld4RY+cYIO+TvMh385/JIv91I5yTnE2Iw1QXKAzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L4BuvySLDCeroYMaPVY9MafoQQYEEC5feQo9RGlnyi57qrQgumXvi2Ce+Butlynupv6wDAAaqtEAK6O03vCJmFOJIVzcROotCXKbMILSnEMyJYFE31b9pZbgHu//i183ACjme2aIvnaURrv/vPUOL0e0tjOp6a03IrEMwGgdTfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jJFGP827; arc=none smtp.client-ip=209.85.219.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=njI6LuGqAze8HWHj15Uog4OeXNm8yqtw3z74+YzbmFYLyW6OKU5nrZve1N7MqJI+mzRWgfhsUP7myY86p0jSPi+bnQlnou63LSo2brjP31LDZ3qp2ca3jw5JBev13PSMpbu5rhziKbuAp9wwK8D+aYph89iGmNdIKpgmYWWJh0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V1XaXdvH; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jJFGP827"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6e4565be0e0so15380646d6.3
-        for <soc@lists.linux.dev>; Sun, 09 Feb 2025 21:33:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1XaXdvH"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7be6fdeee35so703358885a.1
+        for <soc@lists.linux.dev>; Sun, 09 Feb 2025 21:36:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739165615; x=1739770415; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1739165779; x=1739770579; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QcxcTXxA+rFMlTOa3pgLfmdjd6Gb7RSOSP8Ix0+TbY4=;
-        b=jJFGP827x/5cRGNutmCdwy9HUIXgvMc+XneSoCTiOpgz53R78pya4UkCaZzBZmmDkR
-         AHTpnMgKMDhfA9KXtlU9SHM71/hd9xLbCXth+SawVRYsb0WoYQtAwVGIzgcWxUHr63Y5
-         nk15xq6wadcpQxhqOjfwb///nXiqof6kDSCWhcGEEYWpe7tIJR1BCicH69JwLfWepPgo
-         MyE34lgbS31pKmufIz8cj/Vks70iRlci74T0i8nsPPHCIUpAk1GM6wW1P+nr3EJVPgm9
-         D4nZFHZQH7UMIgR0z1qFxgX2wbxJJ7a1cduBZn0k6LeG7w10JnDGqPfa/E7j4iYmWuPB
-         n76Q==
+        bh=1ifdBl3NrYJonu6r4KpHBlucrHJcYm6tgOGSrXK8TmU=;
+        b=V1XaXdvHNtlctkYWL2Ku9OCDXYHkL/KLCQJXfwCTpECJskKltjdePwI8pQYlphW/FT
+         UCGbogb+NQiZFD0nKA5DqbSb4nQXGDMLkax18kzkR1XVz1SsEYlIrPTQ+jb7DB++vn7d
+         qmdlRlA7zD5Y3F9keTVdGMvHCFLtKehVQ6F8AS4R85ErKaPeXwwhesC8ufzuGhraf7sP
+         qlPDCllY1sNiMCYvxUVZuiBBRqtRqvhySg/0/Jq3rmSF5ndE7hg/5790yVahRfK1kTex
+         dsrzfbT3lkwiijtN11P0hFW0kKQhCq8MVBp+qAMkXXHPlbXbBdbQhEBzyKWS74N/teiW
+         r4AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739165615; x=1739770415;
+        d=1e100.net; s=20230601; t=1739165779; x=1739770579;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QcxcTXxA+rFMlTOa3pgLfmdjd6Gb7RSOSP8Ix0+TbY4=;
-        b=WEwZBL3FCT1vsjZXW2ieckyt1p7I32D/Rmj1SyN09BlAyHgobo/WkGUFpsFMKveciG
-         Njk9K+WudctH9XOiug3vh14qx8BCgmdXysmm58aUhpiokKa7a/h4BM5s0aNj9AViYlfu
-         px9BSN5YdGm0owDX4wDWO5/C/AvP2Rlx4fehXmiW44RQJ2oIVnFZQeDPHVhtOhLb8xoH
-         TicEVS93jLrdkvg4GCvGpVqbl4sBQpVvpOl89CqGFmUuT+6nzph+6XHff4d+c3K3on3j
-         VaPNx4HV+uMZ2ifOFQZa+8YnbnPedwSRptSha0PtxaiRaCqg+3w6IGIIMicMk8B/VrJ/
-         UY0A==
-X-Gm-Message-State: AOJu0YwDoIqJaOPjb/L3HL3Pl36r062Tc7M/Hroo3HKhOLDUCS/28Eu9
-	DXPetzOezZk8Xd2t7vwjYk6BMfPtKy3tnBoqsS8OdcVdrWUzwA+x
-X-Gm-Gg: ASbGncu9QhRTQJdjUuT1X5wQxbgl5xO8/cjABGyif89yqhKywEIBu0nZR3brewY7eiQ
-	rPNayr/b0v9LZNWeuPlsTJo48gCqXWSs9VlKlsYweSq2MjDjT9asWXxg2uAv8XL1rIgs07yYOaJ
-	ll5qiG/eqf6Dgk3vwtsgWXLeWck6Sy9+dP1aZd7yMcBMth5JLQhIMcdDceosQBgMtuEShM5jIJ+
-	YynPVToLJ4gjbCooO6Rq5VZRz0+un1NT6BKYCvTu9lZTGpF6UjSemS68+p8V7IObR0=
-X-Google-Smtp-Source: AGHT+IHOrT53o+O66ja4z7uaRdoPjEYG77YMak440BC7vH/+FiPz/BQZLFVDeZD1BTKSAYp8R+3oaQ==
-X-Received: by 2002:a05:6214:194d:b0:6d8:a258:68bb with SMTP id 6a1803df08f44-6e4455d8759mr131696556d6.6.1739165614939;
-        Sun, 09 Feb 2025 21:33:34 -0800 (PST)
+        bh=1ifdBl3NrYJonu6r4KpHBlucrHJcYm6tgOGSrXK8TmU=;
+        b=BpHQuGGZLtNCrnHksWxAjRPqqVI/f2tbpbLPs6aPLKdrYx60DzwLZDCryogDN5u5zr
+         m3Vwx+DSKLunkMoOVkGv7hecewfWJvcN/9Y9DspS1jSRNPWGXLwNCLv9IDetRjs9zLWH
+         HHWtLA3kJLG79GM7aaLBUPLceQvXlG9D5yFkR8qzmR2Vtzb99hDXoUI2hHmBLgE4Ws5s
+         +F9hMT4hFUs71hPL67zz5liKxK7QunlpCIo6UJAb46q53vjl1t/3flChN5XgwrXGgkaT
+         ZWfsU0I+jPeVd/awazHcQdgi2yTiFioqUfKkpedL3K01MalDqDclFnbmwWuRD/ReYwJn
+         QaeA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxppE1KIkYRBeeKFimo9xJY1lGzraZFO8Jr7AncB5PradD6CwXKivH/xeDYJ/Eg/0FoTc=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwuATcCMPERYC0fp4mT5AAaFYSVDj114TNpoIxkExxxygy8//28
+	V36tu0YhHZ3lS5oKCM+VS1cPZhLHeDLyObWedDHhhefYm4mMUpFk
+X-Gm-Gg: ASbGncsnHbN3GijjjqVvGU9rn3iJy+oB3F74X1saM5mnhz68DT3vKE8ipJGxCBP1UQc
+	MVuljoyOWJYnXYImXe21phsYPTQH+q7eIBQX1R2NL9qHcm+rnJ0iQJ9A8o5OYvqCVxYAvqnAX3+
+	vx7M//hh8+E317tmy1GLqxJjCMNdUNnjSfNt53nW9vGuU39+afcpylURZL2gUP18YOMuQmAnkX3
+	5J+IJ3yDeTY1d9J2Tchs2LEKczM+VRsiaRF0CEAEcvS8M5SaYDHbq7oWjLA5bPWMQk=
+X-Google-Smtp-Source: AGHT+IEWqO2pMAus1b90+jEl0xBixTJRuApL2Dml4vzHcusAiiCC0HuddoHfUyCUVXV1B1ACw5vOWg==
+X-Received: by 2002:a05:620a:2893:b0:7af:c60b:5acf with SMTP id af79cd13be357-7c047ba6b65mr1800335285a.10.1739165778925;
+        Sun, 09 Feb 2025 21:36:18 -0800 (PST)
 Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6e448819f8asm32926166d6.121.2025.02.09.21.33.34
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c041e9f4basm484915585a.67.2025.02.09.21.36.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Feb 2025 21:33:34 -0800 (PST)
-Date: Mon, 10 Feb 2025 13:33:29 +0800
+        Sun, 09 Feb 2025 21:36:18 -0800 (PST)
+Date: Mon, 10 Feb 2025 13:36:12 +0800
 From: Inochi Amaoto <inochiama@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	Yixun Lan <dlan@gentoo.org>
-Cc: soc@lists.linux.dev, Chen Wang <unicorn_wang@outlook.com>, 
-	Inochi Amaoto <inochiama@outlook.com>, Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org, 
-	Haylen Chu <heylenay@outlook.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org, Inochi Amaoto <inochiama@gmail.com>
-Subject: Re: [PATCH 00/10] arm64 support for Milk-V Duo Module 01 EVB
-Message-ID: <eoeyutuu4mrpsu7snkk5ll6kmm4344qsgbnncss6gerlcvvea7@usuf5v7w5ffp>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
+Cc: Chen Wang <unicorn_wang@outlook.com>, 
+	Inochi Amaoto <inochiama@outlook.com>, linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	devicetree@vger.kernel.org, Haylen Chu <heylenay@outlook.com>, 
+	linux-arm-kernel@lists.infradead.org, Sebastian Reichel <sre@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Inochi Amaoto <inochiama@gmail.com>
+Subject: Re: [PATCH 07/10] dt-bindings: reset: sophgo: Add CV18xx reset
+ controller
+Message-ID: <dlvmfdkxws6daxteiukdmce5rjr5vpcfey4tcpodq7d32rbj76@ikhlepkb26k7>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-8-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -78,26 +78,45 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250209220646.1090868-8-alexander.sverdlin@gmail.com>
 
-> It would probably make sense that the whole series would go into SOC tree,
-> even though technically nothing prevents the reboot/reset driver to come
-> in PM/reset tree. If everything would come together, `reboot` command would
-> work out of the box.
+On Sun, Feb 09, 2025 at 11:06:32PM +0100, Alexander Sverdlin wrote:
+> Add DT bindings for CV18xx reset controller. The power/reboot driver is
+> going to use only 4 bits from two different MMIO regions which can be
+> potentially used by other subsystems/drivers, therefore the resources
+> are not being claimed directly by the device/driver, but via syscons
+> instead.
 > 
-> [1] https://milkv.io/docs/duo/getting-started/duo-module-01
-> [2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
-> [3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
+> Link: https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  .../bindings/reset/sophgo,cv1800-reset.yaml   | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml b/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
+> new file mode 100644
+> index 000000000000..4f058f99df5f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/sophgo,cv1800-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cvitek CV18xx/Sophgo SG2000 Reset Controller
+> +
+> +maintainers:
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: sophgo,cv1800-reset
 
-This reboot implentment across the RTC and 8051 domain, which is
-still a big problem to be upstreamed. This should be designed 
-carefully and needs further discussion. Adding these two syscon
-compatiable may be not a good idea and cause some problem. I invite
-Yixun to this talk and he may give some useful suggestions.
-
-At last, I prefer this goes to an separate patch series, and
-implement with rtc device.
+Please use cv1800b, not cv1800. And this is a reboot device
+not reset device. Refer other bindings to write yours.
 
 Regards,
 Inochi
