@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52A21BEF64;
-	Mon, 10 Feb 2025 08:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4981B87EF;
+	Mon, 10 Feb 2025 08:48:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177297; cv=none; b=ewLx+d3FwTAGjIeh+LuNdhnsfj8IBcGexypaEGkr1TeGNOhu9AsvSJBqWUWQMRKI8dF7V/FH7cLNKPCD9Z0P+Via0mH85TlFETSXVGz4wosaoSwQ4YOC1P6oLJipcQGvBN5oP2KnPo0PkF6dRXeU5B6P4hBdNDnCoyWcEYbCIgs=
+	t=1739177329; cv=none; b=kadHgL8RBn7r16n3NxX1a29PBzZ3SQw9H8fsMYD+ss2HW5q/VyJdflmVqKwFx19QnIThZwVrz3/jh1VCmAimhNqHzxtg8Sc82mgtnjZsXY74ZoGh4Hx7YYEFG83+kAJ9AcNFESwO8b27eZ47U4uGoG7+SVyZWfPJ4OsYouQvenc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177297; c=relaxed/simple;
-	bh=i0ttGvEwil0vzis5X71aBv736uXOFYt6QJcn+KqlV8c=;
+	s=arc-20240116; t=1739177329; c=relaxed/simple;
+	bh=Csdi8n6yF0exFBFNZzRyKvad72rgIjHHmUgvSYicT+g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RA0mdhevLV7v6e/5xRHwaErGstan20V6N2D8Xu2N5/50SzUJL4Tfzze4JQIkB811YaI8ydfrbbgPbY59mj+wfLSTao5AG7tDLpImAZhXGGgCh6qvi3YxjzK2pQFnf1NcPufHdPbkAvwo4EOjcVh68+JJEXNIfVPd3Nei9yQNCQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nysupTaM; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=MKC0WE33CExmSQzmlF+S9W8r6Kdp/B9ieCWVAmjFY7KJ7DTrcsQfdmgmgVyhkIAIx2BfgMovEqfZ4nb7KOX/5ZOUY4hj+PYcf1pMvPci/D8g+7CQonbEFK5auIABZcLMwQKh/cKwoQg9lGWAkS9ZOpRtdqOGY+jls73Q+RTTfpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K2SDVJWL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nysupTaM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB22C4CED1;
-	Mon, 10 Feb 2025 08:48:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K2SDVJWL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16897C4CED1;
+	Mon, 10 Feb 2025 08:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739177297;
-	bh=i0ttGvEwil0vzis5X71aBv736uXOFYt6QJcn+KqlV8c=;
+	s=k20201202; t=1739177328;
+	bh=Csdi8n6yF0exFBFNZzRyKvad72rgIjHHmUgvSYicT+g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nysupTaMLyx7NNehDY6vp8S+dU5YWr2DGa6Z+m8GJTnoCRcFIJRCLGu/qCJ3r5HDT
-	 INuUJORktnGDwBf59US8IMNocdpoXgZGJQ7G8vOV/lb8SLbFHAa9p0DigfkCva46Ax
-	 HnAJnhfWtQx9YrxS55230n/EDn8Hhmvas5ppjvLRm7nNWzm9WfcBNJiwnt2Gx6Xnqq
-	 YVKodcJE+2fT0HGLIGfyCggZnXi9OiyvJYjpY80zKXiYG+UqKBk7bhP8JVQdIGbP6L
-	 QMrYQQ2Oi8TR3o2ROE6VcN6hy77DI7gETDFVXy8SpRts0E49JUZfLDmlp5maBDSKsL
-	 F2WX4pon3AUuQ==
-Message-ID: <feda5fbe-db91-4e3c-b3df-903cbd437007@kernel.org>
-Date: Mon, 10 Feb 2025 09:48:11 +0100
+	b=K2SDVJWL3iDIFLTdOXx05V3eh9pHZgqVaq2RSS2NfbnR+Ed0sjDCCOYIOQxsBIb/k
+	 Lc00YDkG2O1MMl3XtumOK/xcrASMskuEv/szomCEQ5q/xzG9TWnL4/NU/E5x+qiEDu
+	 ncFrMn2x/ZwNvLb7gL95N05dQYpST3q6yydtpUdXRCU8dcx6NGF/mdFzRP0hYCUmUy
+	 LITWkjoWODIzI9ZZ/soIgeW/DtibbGDOhclBXyKqQpJV/73I+Oce/IpZKF0XWle9YJ
+	 z+xhuCDCCdYkLXsgpTpeBR8RcNH31GiSCtgLeBmEGWjo+zK9l78GX4mqkImHc4reJz
+	 riU3eb9sOU3UA==
+Message-ID: <fe1fb66d-285d-41b6-af71-89f6f93d1cf0@kernel.org>
+Date: Mon, 10 Feb 2025 09:48:41 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,17 +35,19 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/10] arm64: dts: sophgo: Add Duo Module 01 Evaluation
- Board
+Subject: Re: [PATCH 06/10] dt-bindings: mfd: syscon: Add Cvitek CV18xx rtcsys
+ core and ctrl compatible
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
 Cc: Chen Wang <unicorn_wang@outlook.com>,
- Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, Haylen Chu <heylenay@outlook.com>,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
+ Inochi Amaoto <inochiama@outlook.com>, linux-pm@vger.kernel.org,
+ linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+ Haylen Chu <heylenay@outlook.com>, linux-arm-kernel@lists.infradead.org,
+ Sebastian Reichel <sre@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
- <20250209220646.1090868-6-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,36 +93,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250209220646.1090868-6-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 09/02/2025 23:06, Alexander Sverdlin wrote:
-> diff --git a/arch/arm64/boot/dts/sophgo/Makefile b/arch/arm64/boot/dts/sophgo/Makefile
-> new file mode 100644
-> index 000000000000..fcabaf0babf4
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/sophgo/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_SOPHGO) += sg2000_milkv_duo_module_01_evb.dtb
-> diff --git a/arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dts b/arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dts
-> new file mode 100644
-> index 000000000000..f3533892453d
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dts
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +
-> +/dts-v1/;
-> +
-> +#include "sg2000_milkv_duo_module_01.dtsi"
-> +
-> +/ {
-> +	model = "Milk-V Duo Module 01 Evaluation Board";
+> These syscon blocks will be used for CV18xx reset driver.
 
-Missing compatible.
 
+No, implement proper reset block instead of abusing syscon.
 
 Best regards,
 Krzysztof
