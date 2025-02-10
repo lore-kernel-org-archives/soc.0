@@ -1,172 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431212580C8;
-	Mon, 10 Feb 2025 16:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7895B12CD8B
+	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 20:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739204566; cv=none; b=S4Oi/Ivx3S2rhNE1Lh7VQ0mXo5mDv/nHSn9Qyctt0qaR534V5VWh/Oa55LVR0AcacUXZfx8s6SVgklHIMinY3+ngWxb3rFDfDtfTIJZwz6J02PTkFBvRPaaYiuSgy+7Ygv3rcki754uBhw68VGuWZoufziS1GfACG5ZhBEvcjRk=
+	t=1739219459; cv=none; b=djCxAd+y3hl+ecHpulJEca41ivVTk9/ql9LNhuEl4EVDsQCi1pugTk4Hz4c6Z043nm/z8cctUU0QpbgAXH9vzHG98+d6m6hlfmnYn3mF8K6U3aWxHxrts2wrB18jnC+E5sSxa6KdSw509eK4XLdu6b/xcs+QROJ8zET65EqtN2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739204566; c=relaxed/simple;
-	bh=5pue0C/bvY7Bi4z8DCyV8fK5Y7JUy3U4ZkaQjuaNTCw=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=TMAtOLaKc/x7lzq1Ettk+5EHDQAiSIsGCXUR9vTumW580vfF1rmWZqCTW621GZrnCgV9iRAm4qaXW6yZxD2dWIHOofNXcffHjWJh9hjB5gfy+8m0CgVRjgg44nAwVMVgPk2/M0cmSn2llQfXYwtqziGHAbZXXwtgkmIfLrbU89s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q7kOpbmS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739219459; c=relaxed/simple;
+	bh=m557/Jpvp5pp4+T1xIHiZmJOAkIv767CgIPPPqCBZEw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kCghfoo2CMOMnL95m2Puvvz68FTRtC+kUG3Z+lRNdQWzPLeataYHoE8aSdgak7gontKpd9aci15m2IxFIgzjFqSDpwInnun9vyIQkFlc0GYkkVt8RgztvhtXfI7AhtmUZf8/R8t+JhfW7aWfzqWQtw0nBrpurE2n6hep0v98EFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fXXrkMA5; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q7kOpbmS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FC0C4CEE6;
-	Mon, 10 Feb 2025 16:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739204565;
-	bh=5pue0C/bvY7Bi4z8DCyV8fK5Y7JUy3U4ZkaQjuaNTCw=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Q7kOpbmSvyikwdl0vxdtsvwh3aPlVJKtOKvBumplA6jZU96aNqOf/2VNQRZsxcpFi
-	 ivVRzLV+1fHR4GZ6yjJTQ9kSmhPHXHVPO7pEtbVEHdRPfwKNARwrG6CSzsdYEIipY5
-	 Z/Usfk1EIFx408e+8pO5fTi91IkqEvYYgHCDLz77yy4G6Ut0EW5i3F0gM6CRbHbxby
-	 Wtk8O7BufKk1n7g2d4WH37bPsPndpQtwmJU+Zpq9WIIFVIILD45ePkIrLB90FQrFQH
-	 qas1Frr4pWnbkvcyyzMEQ53fNsEJjoCo0tQaluzkHzxGOw2xym+NxbGUl0YIXkaWFO
-	 t1AdRCYX4NpsQ==
-Date: Mon, 10 Feb 2025 10:22:44 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fXXrkMA5"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38dc5764fc0so3522934f8f.3
+        for <soc@lists.linux.dev>; Mon, 10 Feb 2025 12:30:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739219456; x=1739824256; darn=lists.linux.dev;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m557/Jpvp5pp4+T1xIHiZmJOAkIv767CgIPPPqCBZEw=;
+        b=fXXrkMA5ZHVw378JaKqTBC0yvQ5HNLJcYrUTYtcBkpKUoeai3AeDPytk923k4DM7bq
+         Hf/YXyx3Ldnkw9je+zaqPjSYe+keYCRa7PrG9Tg2puRs5OPdxB+DB21ME+U+Xd+C1XfH
+         PseBm0IhdvY66uiY60sjGEO27nRZb3sJQ2ZY36115QLOKZwH2LCcWkFA987XIGGK7G7z
+         +o8AKVqoVlr8A68gSIv3LGWI9y3eBFC5gkbzzqP3d9ph6Tbn7qqmI+bCuyG57+gsOZBu
+         3WMFpNr7cPDaSiBlJQF+/8cQCJDNf2R+ZHfoInXHdp1LR3DFP2o3KrbtNDOb1EtD/SM0
+         Y3Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739219456; x=1739824256;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m557/Jpvp5pp4+T1xIHiZmJOAkIv767CgIPPPqCBZEw=;
+        b=W79xW/EjGL+ukYVox0+IjXa2m6j6U1heEzLrD301snYwoT0dhc2pxF3CI5tMHTmlGR
+         s2CafEix+kTSYyerM75NC9mnrw7A5nxpKZMk8PD0HmrsqdbhxLUScRjWsRQZhmSSlNKP
+         OlTvIZdCWZmAaIdBSV13TUQ4LQsVrgfV60gh5Dutp8iuwCHpN9MTOiA2QrtyCkCbyNB8
+         37q8iT3L5dgOaM+9OpzA/tikhc+peaLbuNaEh2X9qccP7mRex8uRrmwCyogcCqIhuMdy
+         /kklemL+lULsWD70G7iyaFcHP9AFKi3axBQ/RkuZywkbbIR4jdq8Yd3to1PS+c/3nwk4
+         kaNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWnpg/KJJ9Jcx4ycvTY0Apr4FHMR6lTFcWJ8Djz6ifQzHtX3uxr0MsmYMDjpr7QsFybWk=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwIYTwIAKRCXpAnXOjlLWHBTM12qVUf2X8ASXBXHLVh/nknrji8
+	DoUqeyTIZuGB3309rKzWUoCptly5Hcq4M8D/NQJ62J6wVn4ac5De
+X-Gm-Gg: ASbGnctqbQIL2gWkOm8dMqkJLoiowOdDSgISaUW0vGA7/RNq1GgrThsJOEeFvtgk6E9
+	9QemdzHsR0vkZG0UH742YipwaqoU3bZSnDtl7BMw1WtlCLct8TBEgRdcwPLkA1+uqkQ0q0ah4ss
+	U3nGWmNPUmvImXLuUp2mD2efzQO2x9v1PBhnMCLiNn0W1rb/SYYod00KlALgxSk8DvzX67tj7D9
+	NtBf5aqWPnRSy3pnPGgh2hDbSukgc3FhxWcmYeytlzZMll8XD22hKeC6xM1/WYiBhugci+51yfv
+	1pYFwgJdkV7Ht5yeFyxxsqGeoAIDgL6d
+X-Google-Smtp-Source: AGHT+IFvurPoS9MTaLS3PpCWAsYOJF7NzTYw7+2Z56lUplq4lRolzdbvYN3eBpQHiYgZPARX6B6e0g==
+X-Received: by 2002:a5d:64eb:0:b0:386:32ca:aa12 with SMTP id ffacd0b85a97d-38dc93745famr11388110f8f.49.1739219455327;
+        Mon, 10 Feb 2025 12:30:55 -0800 (PST)
+Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dd9c48173sm5389541f8f.37.2025.02.10.12.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 12:30:54 -0800 (PST)
+Message-ID: <e76da2aff03e9c788bc322d84d83b0e6c28f44b0.camel@gmail.com>
+Subject: Re: [PATCH 06/10] dt-bindings: mfd: syscon: Add Cvitek CV18xx
+ rtcsys core and ctrl compatible
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, soc@lists.linux.dev
+Cc: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
+ <inochiama@outlook.com>, 	linux-pm@vger.kernel.org,
+ linux-riscv@lists.infradead.org, 	devicetree@vger.kernel.org, Haylen Chu
+ <heylenay@outlook.com>, 	linux-arm-kernel@lists.infradead.org, Sebastian
+ Reichel <sre@kernel.org>,  Arnd Bergmann	 <arnd@arndb.de>, Philipp Zabel
+ <p.zabel@pengutronix.de>, Rob Herring	 <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley	 <conor+dt@kernel.org>, Lee
+ Jones <lee@kernel.org>
+Date: Mon, 10 Feb 2025 21:30:51 +0100
+In-Reply-To: <fe1fb66d-285d-41b6-af71-89f6f93d1cf0@kernel.org>
+References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+	 <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
+	 <fe1fb66d-285d-41b6-af71-89f6f93d1cf0@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Chen Wang <unicorn_wang@outlook.com>, 
- linux-arm-kernel@lists.infradead.org, Sebastian Reichel <sre@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
- Haylen Chu <heylenay@outlook.com>, linux-pm@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, soc@lists.linux.dev, 
- Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>, 
- Albert Ou <aou@eecs.berkeley.edu>, Inochi Amaoto <inochiama@outlook.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Catalin Marinas <catalin.marinas@arm.com>, Lee Jones <lee@kernel.org>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-In-Reply-To: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
-References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
-Message-Id: <173920412075.477254.10964125366963859194.robh@kernel.org>
-Subject: Re: [PATCH 00/10] arm64 support for Milk-V Duo Module 01 EVB
 
+Hi Krzysztof!
 
-On Sun, 09 Feb 2025 23:06:25 +0100, Alexander Sverdlin wrote:
-> This series adds very basic support for Milk-V Duo Module 01 EVB [1] in
-> arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latter has
-> been chosen because the upstream toolchain can be utilized.
-> 
-> Sophgo SG2000 seems to be a continuation of the Cvitek CV18xx series, same
-> peripherals with an addition of ARM64 core. Therefore it would be
-> beneficial not to copy-paste the peripherals' device-tree, but rather split
-> the most suitable riscv DT into ARCH-specific and peripherals parts and
-> just include the latter on the arm64 side.
-> 
-> This series adds the device-tree for Milk-V Duo Module 01 EVB, which
-> in turn contains Milk-V Duo Module 01 (separate .dtsi) on it, which has
-> SG2000 SoC inside (separate .dtsi).
-> 
-> This series has been tested with Sophgo-provided U-Boot binary [2]: it
-> boots from SD card, pinctrl, serial, GPIO drivers are functional (same
-> as for RiscV-based CV18xx SoCs).
-> New reset driver is provided as an alternative to the ATF PSCI handler,
-> which Sophgo only provides in binary form.
-> 
-> Partial SoC documentation is available [3].
-> 
-> This series lacks the support of:
-> - USB
-> - Audio
-> - Ethernet
-> - WiFi
-> - Bluetooth
-> - eMMC
-> - Video
-> 
-> It would probably make sense that the whole series would go into SOC tree,
-> even though technically nothing prevents the reboot/reset driver to come
-> in PM/reset tree. If everything would come together, `reboot` command would
-> work out of the box.
-> 
-> [1] https://milkv.io/docs/duo/getting-started/duo-module-01
-> [2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
-> [3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
-> 
-> Alexander Sverdlin (10):
->   arm64: Add SOPHGO SOC family Kconfig support
->   riscv: dts: sophgo: cv18xx: Split into CPU core and peripheral parts
->   arm64: dts: sophgo: Add initial SG2000 SoC device tree
->   arm64: dts: sophgo: Add Duo Module 01
->   arm64: dts: sophgo: Add Duo Module 01 Evaluation Board
->   dt-bindings: mfd: syscon: Add Cvitek CV18xx rtcsys core and ctrl
->     compatible
->   dt-bindings: reset: sophgo: Add CV18xx reset controller
->   riscv/arm64: dts: cv18xx: Add sysctl and reset nodes
->   power: reset: cv18xx: New driver
->   arm64: defconfig: Enable rudimentary Sophgo SG2000 support
-> 
->  .../devicetree/bindings/mfd/syscon.yaml       |   4 +
->  .../bindings/reset/sophgo,cv1800-reset.yaml   |  38 ++
->  MAINTAINERS                                   |   1 +
->  arch/arm64/Kconfig.platforms                  |  12 +
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/sophgo/Makefile           |   2 +
->  arch/arm64/boot/dts/sophgo/sg2000.dtsi        |  79 +++++
->  .../sophgo/sg2000_milkv_duo_module_01.dtsi    |  84 +++++
->  .../sophgo/sg2000_milkv_duo_module_01_evb.dts |  30 ++
->  arch/arm64/configs/defconfig                  |   3 +
->  arch/riscv/boot/dts/sophgo/cv181x.dtsi        |   2 +-
->  arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi | 329 ++++++++++++++++++
->  arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 305 +---------------
->  drivers/power/reset/Kconfig                   |  12 +
->  drivers/power/reset/Makefile                  |   1 +
->  drivers/power/reset/cv18xx-reset.c            |  89 +++++
->  16 files changed, 689 insertions(+), 303 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
->  create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01.dtsi
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dts
->  create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
->  create mode 100644 drivers/power/reset/cv18xx-reset.c
-> 
-> --
-> 2.48.1
-> 
-> 
-> 
+On Mon, 2025-02-10 at 09:48 +0100, Krzysztof Kozlowski wrote:
+> On 09/02/2025 23:06, Alexander Sverdlin wrote:
+> > These syscon blocks will be used for CV18xx reset driver.
+>=20
+>=20
+> No, implement proper reset block instead of abusing syscon.
 
+I don't think it's an abuse... You need to look into the corresponding TRM =
+[1].
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+4 bits I need to tweak (and one magic number into unlock register) are rand=
+omly
+placed at random memory adresses and otherwise adjacent bits have random
+unrelated functions from random unrelated subsystems.
+If it's not syscon, I don't know what it is.
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+It has a reset HW block, as you and Inochi have correctly pointed out, for =
+other
+purposes, for resetting the SoC IP blocks. The overall SoC reset is complet=
+e
+mamba jamba.
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+I was thinking now about a syscon driver, which will register_restart_handl=
+er()...
 
-  pip3 install dtschema --upgrade
+Inochi, do you have more insights into it? You've mentioned RTC and 8051...
+Looking into TRM I don't get it, why a thing blessed to do all the housekee=
+ping
+(and called "System Controller" in imx8, for instance) happen to have RTC_ =
+prefix...
+Would RTC subsystem maintainer be happy with a monster driver which has tie=
+s
+to all other subsystems?
 
+[1] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01=
+/sg2000_trm_en.pdf
+("rtc_ctrl_unlockkey", "rtc_ctrl0", "RTC_EN_WARM_RST_REQ", "RTC_EN_PWR_CYC_=
+REQ").
 
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/sophgo/' for 20250209220646.1090868-1-alexander.sverdlin@gmail.com:
-
-arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dtb: /: failed to match any schema with compatible: ['sophgo,sg2000']
-arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dtb: soc: soc-reset: 'ranges' is a required property
-	from schema $id: http://devicetree.org/schemas/simple-bus.yaml#
-arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dtb: l2-cache: 'cache-unified' is a dependency of 'cache-size'
-	from schema $id: http://devicetree.org/schemas/cache.yaml#
-arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dtb: l2-cache: 'cache-unified' is a required property
-	from schema $id: http://devicetree.org/schemas/cache.yaml#
-arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01_evb.dtb: l2-cache: Unevaluated properties are not allowed ('cache-level', 'cache-size' were unexpected)
-	from schema $id: http://devicetree.org/schemas/cache.yaml#
-
-
-
-
+--=20
+Alexander Sverdlin.
 
