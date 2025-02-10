@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD7F18871F;
-	Mon, 10 Feb 2025 08:46:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05CF1E4A9;
+	Mon, 10 Feb 2025 08:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177161; cv=none; b=lQaMIWjTSGb4nDxS1QDPyKFVMkEZAyue/yDUuh6FRIZni5/pj61TQMcohXnYxRSvOb5KFcfRN+hQqfO0b6oJ/uE7EUonJDe4xAfWbSAKDNzyt+J44B84VWQFEvdH/KwiTLeta9gXHtku3gV2rRVx5yVwrkFZmZmzVRLSl/Dk+m0=
+	t=1739177269; cv=none; b=eyB5kyAcCVx7EC7U34VIgDHOE/BNMaoRukbH9DzzJjpu3x0S5FXl5GGYjAPyiu4+FhvZZc7QzIwtcrH8/hQFQFCpFXXhTdFOlKyAc5d1m4dNeZ2vVT5dD+ZNzcLyoafFVCmpzKQAZt93nOTTSZoiGbs7rjxEu0hS7xgSWfNBHHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177161; c=relaxed/simple;
-	bh=xevKzlX8gYWPKusYYbNNPW0nJkGe7s9JK78VP6iMCLI=;
+	s=arc-20240116; t=1739177269; c=relaxed/simple;
+	bh=ZBZbHxRNMFgiveHG6Wn0QOXKe+t8dMzFAG+F2iXy3H0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pFs7z2FkEVzZkBFdR1JEI4fmypOWhDIgAE6arFazC27R2n7hLo6QXU4J4sMbKARaPqp/we1LOTri4gCUC9oRLrgTRY2wys0WUydCVqnf/MzjfEBMBi8rv9nRq8Sb8qRK4w5PDnnXSEX+r2gaZw66z74RGZ8WLGUz7yARp+stqrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eb805ZDa; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=eeup54+k5gN3aSm81P5egjEY4sAxZ1h/ylKR8YDePEJbNWULzwrmJhgZT1br+A15JNJKz+1wtYOJC9rmB7s61h+RdTIb0d/lq1P51ZpGp+mGZ43Cvf+DAe1catpPVqcBSc7/B8BDOLY5bAoSyJNL0/RDLYVQGxSe4G95ag12MDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqLnAMmE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eb805ZDa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A864C4CEE5;
-	Mon, 10 Feb 2025 08:45:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqLnAMmE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4B7C4CEE6;
+	Mon, 10 Feb 2025 08:47:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739177161;
-	bh=xevKzlX8gYWPKusYYbNNPW0nJkGe7s9JK78VP6iMCLI=;
+	s=k20201202; t=1739177269;
+	bh=ZBZbHxRNMFgiveHG6Wn0QOXKe+t8dMzFAG+F2iXy3H0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Eb805ZDa5Zldes8/HzYnvmXXfuIhPDnpkvX+VRdsKzsuTFAHECIMJzqadqJdkBsay
-	 vMVrKHu+rwTR4QyxikJhsPtnRpZg8YQgnMGA9WtS8kWAQ5xmKkOU1Yb2X2YdS3ZOHV
-	 +3tfS2tWbG1i7SK5NbP3oA46/Z84PnJ4Z1liiSj2iCeIIbw9ZWa8PueqqunZb1v2eP
-	 RJxiWjr2jUMLJuiI8Fm8n8ECekJ3glxPhhtLxwIrge3wY+kR3dflbiL5OqSlJRO9mE
-	 k0A6HU61TCOVwAOdvIB6p5msh5PCxdaw0TGqIe03r/MXbEy6Xh9sclAPTZgUntbfoQ
-	 TrAsXbw4SA8DA==
-Message-ID: <0d5484d1-be83-4f38-befd-94d458b3aaa8@kernel.org>
-Date: Mon, 10 Feb 2025 09:45:51 +0100
+	b=KqLnAMmERvOXl2wDd7PeHnHKlwitor9Gtz31+wfCN2pEzy68V72TsxVnXiBk13V/u
+	 JNKizEiyDsAEGAfwOJSbzRXNuRWg6b6qhAq8/751AZW0rAV6gBysUOQ9zVkCbK9a4e
+	 JR2wC7EcZsq41YFgPJYuLybN2fUyDs+H2LuExtbeQaxqBBHFWyyv46VnlFGAhbNXwN
+	 vSun3RLv8zfFKychWWRLcV+5qYkbHgPxs/RMhyU8z4+Te2n7tepLhRV2aqD1xWmdpR
+	 DThpUYtDHpATo7yvDJiZSqwyAHZEhOyW9GDNoDh6A802A/DelsJyPx1mQU+S1j3EV2
+	 LHzYW4XCImmAQ==
+Message-ID: <2a996249-5a53-4483-956c-a5880c880a19@kernel.org>
+Date: Mon, 10 Feb 2025 09:47:42 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/10] arm64: dts: sophgo: Add initial SG2000 SoC device
- tree
+Subject: Re: [PATCH 04/10] arm64: dts: sophgo: Add Duo Module 01
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
 Cc: Chen Wang <unicorn_wang@outlook.com>,
  Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org,
@@ -45,7 +44,7 @@ Cc: Chen Wang <unicorn_wang@outlook.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
- <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-5-alexander.sverdlin@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,113 +90,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250209220646.1090868-5-alexander.sverdlin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 09/02/2025 23:06, Alexander Sverdlin wrote:
-> Add initial device tree for the SG2000 SoC by SOPHGO (from ARM64 PoV).
+> The Duo Module 01 is a compact module with integrated SG2000,
+> WI-FI6/BTDM5.4, and eMMC.
+> Add only support for UART and SDHCI.
 > 
 > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 > ---
->  arch/arm64/boot/dts/sophgo/sg2000.dtsi | 79 ++++++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
+>  .../sophgo/sg2000_milkv_duo_module_01.dtsi    | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01.dtsi
 > 
-> diff --git a/arch/arm64/boot/dts/sophgo/sg2000.dtsi b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
+> diff --git a/arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01.dtsi b/arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01.dtsi
 > new file mode 100644
-> index 000000000000..4e520486cbe5
+> index 000000000000..7edcc4d03cc4
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
-> @@ -0,0 +1,79 @@
+> +++ b/arch/arm64/boot/dts/sophgo/sg2000_milkv_duo_module_01.dtsi
+
+Underscores are almost never used in DTS file names. Don't grow this
+pattern.
+
+> @@ -0,0 +1,84 @@
 > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 > +
-> +#define SOC_PERIPHERAL_IRQ(nr)		GIC_SPI (nr)
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <riscv/sophgo/cv18xx-periph.dtsi>
-> +#include <riscv/sophgo/cv181x.dtsi>
+> +#include <dt-bindings/pinctrl/pinctrl-sg2000.h>
+> +#include "sg2000.dtsi"
 > +
 > +/ {
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +	compatible = "sophgo,sg2000";
-> +	interrupt-parent = <&gic>;
+> +	model = "Milk-V Duo Module 01";
 > +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x20000000>;	/* 512MiB */
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu@0 {
-> +			compatible = "arm,cortex-a53";
-> +			device_type = "cpu";
-> +			reg = <0>;
-> +			i-cache-size = <32768>;
-> +			d-cache-size = <32768>;
-> +			next-level-cache = <&l2>;
-> +		};
-> +
-> +		l2: l2-cache {
-> +			compatible = "cache";
-> +			cache-level= <2>;
-> +			cache-size = <0x20000>;
-> +		};
-> +	};
-> +
-> +	pmu {
-> +		compatible = "arm,cortex-a53-pmu";
-> +		interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-> +		always-on;
-> +		clock-frequency = <25000000>;
-> +	};
-> +
-> +	gic: interrupt-controller@1f01000 {
-
-MMIO nodes are always in the soc.
-
-> +		compatible = "arm,cortex-a15-gic";
-> +		interrupt-controller;
-> +		#interrupt-cells = <3>;
-> +		reg = <0x01f01000 0x1000>,
-> +		      <0x01f02000 0x2000>;
-> +	};
-> +
-> +	soc {
-
-Override by phandle/label instead of duplicating.
-
-> +		ranges;
-> +
-> +		pinctrl: pinctrl@3001000 {
-> +			compatible = "sophgo,sg2000-pinctrl";
-> +			reg = <0x03001000 0x1000>,
-> +			      <0x05027000 0x1000>;
-> +			reg-names = "sys", "rtc";
-> +		};
+> +	aliases {
+> +		serial0 = &uart0;
+> +		serial1 = &uart1;
+> +		serial2 = &uart2;
+> +		serial3 = &uart3;
+> +		serial4 = &uart4;
 > +	};
 > +};
 > +
+> +&osc {
+> +	clock-frequency = <25000000>;
+> +};
 > +
-> +&clk {
-> +	compatible = "sophgo,sg2000-clk";
+> +&emmc {
 
-
-That's discouraged practice. If you need to define compatible, it means
-the block is not shared between designs and must not be in common DTSI.
+Keep ordering according to DTS coding style.
 
 
 Best regards,
