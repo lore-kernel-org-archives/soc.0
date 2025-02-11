@@ -1,55 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A1F26BD9A;
-	Tue, 11 Feb 2025 13:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887D01E282D;
+	Tue, 11 Feb 2025 18:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739281713; cv=none; b=IIpVMELnTK5JFdV21/yaH9mE6yi1KNPwNMS3zJMC1gay+1kCCUiGOC0uvo5xE/7RbcBZLzbnNjvduY2b74uiMkMb2Gcq2Zn4EXjfuSkH9isyrbgLG42rkpRJrq0pOMp91mBEFkY41sbroUhgplTpgX8HYsueuXIGeTimJe5hLFA=
+	t=1739297909; cv=none; b=bWSBsBvZSENQ+5IZYYSvUVdDYN04S4UTLzQwAFYYmpRl38DKny3ZtE+FNvRGquVf3qXbDbE0E0le3HqE+atDVfQ1I7YI63ASTY5E54NP4wGg4m+DkeTlWnYk7Cq2REf0Mq+4Oa7B0DCXnmfFkWItBmWTKA3f1zfw4Y206zdNLHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739281713; c=relaxed/simple;
-	bh=m4AD7l25AQkFx45miPWzhVwRxJcr7K3gU5TBHvJZg1g=;
+	s=arc-20240116; t=1739297909; c=relaxed/simple;
+	bh=cE4jcsAX2FB7uvZhLWO9AMcWcOaQ1ZV8xgeqqsLhxAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rpEHcns7mhbBwDBemp14qNOaQKmy6O+JKtgMct19eiRSxK/i/fAST9qoMDnwNrt8nrqvjgumR/N1SaH/FT8R3vh+CdukFUYMGemDqHj2ZJlF5M8+ptQT6lA6YAGtSD0UKHs+x9A/EuNHvRQxk5mLiYpSrl+AiMmIIYopwC04STQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mcVQPflK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=PeegjYS5KBfUtUnD9+BCY8LNNau5h1iRzefGo42GAToWWEFjC+C+E5KZNkQrzpShy5bEN7ueXmcXos+gI5scdNXh1XxkyOzLzuBjIWSQ2hHiG4Lbc9r+W9pMZRpnPawofIo/g2ZcTpmCp00fv99Xc8cmYbGlYWufEmE+IHXdCi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FO7tv1K6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mcVQPflK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55D5C4CEDD;
-	Tue, 11 Feb 2025 13:48:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FO7tv1K6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DA8C4CEDD;
+	Tue, 11 Feb 2025 18:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739281712;
-	bh=m4AD7l25AQkFx45miPWzhVwRxJcr7K3gU5TBHvJZg1g=;
+	s=k20201202; t=1739297909;
+	bh=cE4jcsAX2FB7uvZhLWO9AMcWcOaQ1ZV8xgeqqsLhxAo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mcVQPflKFMGoFzsFfHOsGL1PwQhEKzlleh8Z7aEpchFrTuDQWFtAEziZt/fYy546n
-	 nkK+3UAReOzjD1YMoeLjznwqK+e7DDZ+6lW9lq5yAhkG7vMloOP2UnFThpMo6kh0lB
-	 spnwOSgNPjHjnPxvTW7gzxLcU026tU/JychinezqD9mhQrevMGDezrweJsX99g0nHp
-	 PomcPn7yA4YRn3VBUoNgyAV7IZbR8GbLwIUlLK+6npQJvBObyzBReoxMNAI3Amh+vZ
-	 wc0nqLLs07OcGqhabSAMNURKk27r6PgeT4nXy51ARGH0Ndu3CifTgtPY/TL5BaLCSR
-	 jB0i3eDhRpoFw==
-Date: Tue, 11 Feb 2025 13:48:26 +0000
+	b=FO7tv1K6drxWVq7uoFgvOKH9m4xyJAD00rlHVuiIu/apLLCjiLCU2t0Z2ggEOEPCu
+	 rM2PBdCJsX7wTz/49XKW4//7sk6YXeF8JEwDlbxd5FK0O1tGGvxgY+DVa5IRRGlHnJ
+	 NKzJwKgcw1Hx2lyhPdbclbmVPpWcY7aNWDIJ8BaNlcPKPnXN7lRQ4EETZgevJWCCpG
+	 fABcr+pxuuSY9JyiaRnwivJ5x3MVGihPBLldfdLIzZKvL9hypU5VLNPnAbhIhGX6ZB
+	 KXh0m/92ptmm8D6NwXPnWEVt+p0WxBnF80K3Mad6OUVg3CCsANQJMBsQyhk3ztFSoL
+	 M29vTBxJN7ySA==
+Date: Tue, 11 Feb 2025 18:18:23 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc: soc@lists.linux.dev, Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+Cc: soc@lists.linux.dev, Jisheng Zhang <jszhang@kernel.org>,
+	Chao Wei <chao.wei@sophgo.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>, linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
 	Haylen Chu <heylenay@outlook.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>
-Subject: Re: [PATCH v2 0/7] arm64 support for Milk-V Duo Module 01 EVB
-Message-ID: <20250211-stubble-senate-0bbb0b04a989@spud>
+	Sebastian Reichel <sre@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v2 2/7] dt-bindings: soc: sophgo: Move SoCs/boards from
+ riscv into soc, add SG2000
+Message-ID: <20250211-squishy-blip-8ac4cf64d462@spud>
 References: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
- <20250211-backwash-jester-2fdd6740000e@spud>
- <b1f05bff1d6c3f0cb1b381c15dcf222ec4c7f1b1.camel@gmail.com>
+ <20250210220951.1248533-3-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -57,90 +53,74 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="MwDx1V044X6pY5Zr"
+	protocol="application/pgp-signature"; boundary="3/BNf11h93vTDDr6"
 Content-Disposition: inline
-In-Reply-To: <b1f05bff1d6c3f0cb1b381c15dcf222ec4c7f1b1.camel@gmail.com>
+In-Reply-To: <20250210220951.1248533-3-alexander.sverdlin@gmail.com>
 
 
---MwDx1V044X6pY5Zr
-Content-Type: text/plain; charset=iso-8859-1
+--3/BNf11h93vTDDr6
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 11, 2025 at 01:43:31PM +0100, Alexander Sverdlin wrote:
-> Hi Conor!
+On Mon, Feb 10, 2025 at 11:09:42PM +0100, Alexander Sverdlin wrote:
+> Move sophgo.yaml from riscv into soc/sophgo so that it can be shared for
+> all SoCs containing ARM cores as well. This already applies to SG2002.
 >=20
-> On Tue, 2025-02-11 at 10:50 +0000, Conor Dooley wrote:
-> > On Mon, Feb 10, 2025 at 11:09:40PM +0100, Alexander Sverdlin wrote:
-> > > This series adds very basic support for Milk-V Duo Module 01 EVB [1] =
-in
-> > > arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latte=
-r has
-> > > been chosen because the upstream toolchain can be utilized.
-> >=20
-> > > =A0 .../{riscv =3D> soc/sophgo}/sophgo.yaml=A0=A0=A0=A0=A0=A0=A0=A0 |=
-=A0 7 +-
-> > > =A0 arch/arm64/Kconfig.platforms=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |=A0 6 ++
-> > > =A0 arch/arm64/boot/dts/Makefile=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |=A0 1 +
-> > > =A0 arch/arm64/boot/dts/sophgo/Makefile=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- |=A0 2 +
-> >=20
-> > I'd expect this to be maintained alongside the riscv support, how come
-> > there's no maintainers entry change here?
+> Add SG2000 SoC, Milk-V Duo Module 01 and Milk-V Module 01 EVB.
 >=20
-> MAINTAINERS file has "K: sophgo" entry already, I suppose new files will
-> fall into this category? That's why I've ignored this specific checkpatch=
- warning
-> in all patches. Am I wrong?
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-Ah, I didn't realise.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+> ---
+>  .../devicetree/bindings/{riscv =3D> soc/sophgo}/sophgo.yaml  | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>  rename Documentation/devicetree/bindings/{riscv =3D> soc/sophgo}/sophgo.=
+yaml (80%)
 >=20
-> > > =A0 .../sophgo/sg2000-milkv-duo-module-01-evb.dts | 31 +++++++
-> > > =A0 .../sophgo/sg2000-milkv-duo-module-01.dtsi=A0=A0=A0 | 85 ++++++++=
-+++++++++
-> > > =A0 arch/arm64/boot/dts/sophgo/sg2000.dtsi=A0=A0=A0=A0=A0=A0=A0 | 75 =
-+++++++++++++++
-> > > =A0 arch/arm64/configs/defconfig=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 |=A0 5 +
-> > > =A0 arch/riscv/boot/dts/sophgo/cv1800b.dtsi=A0=A0=A0=A0=A0=A0 | 64 ++=
-++++++++---
-> > > =A0 arch/riscv/boot/dts/sophgo/cv1812h.dtsi=A0=A0=A0=A0=A0=A0 | 64 ++=
-++++++++---
-> > > =A0 arch/riscv/boot/dts/sophgo/cv181x.dtsi=A0=A0=A0=A0=A0=A0=A0 |=A0 =
-2 +-
-> > > =A0 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi=A0=A0=A0 | 57 ++++++++=
-++++
-> > > =A0 arch/riscv/boot/dts/sophgo/cv18xx.dtsi=A0=A0=A0=A0=A0=A0=A0 | 91 =
-+++++--------------
-> > > =A0 arch/riscv/boot/dts/sophgo/sg2002.dtsi=A0=A0=A0=A0=A0=A0=A0 | 64 =
-++++++++++---
-> > > =A0 14 files changed, 451 insertions(+), 103 deletions(-)
-> > > =A0 rename Documentation/devicetree/bindings/{riscv =3D> soc/sophgo}/=
-sophgo.yaml (80%)
-> > > =A0 create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
-> > > =A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-mo=
-dule-01-evb.dts
-> > > =A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-mo=
-dule-01.dtsi
-> > > =A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
-> > > =A0 create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi
->=20
+> diff --git a/Documentation/devicetree/bindings/riscv/sophgo.yaml b/Docume=
+ntation/devicetree/bindings/soc/sophgo/sophgo.yaml
+> similarity index 80%
+> rename from Documentation/devicetree/bindings/riscv/sophgo.yaml
+> rename to Documentation/devicetree/bindings/soc/sophgo/sophgo.yaml
+> index a14cb10ff3f0..5d73d0ccc547 100644
+> --- a/Documentation/devicetree/bindings/riscv/sophgo.yaml
+> +++ b/Documentation/devicetree/bindings/soc/sophgo/sophgo.yaml
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: http://devicetree.org/schemas/riscv/sophgo.yaml#
+> +$id: http://devicetree.org/schemas/soc/sophgo/sophgo.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+>  title: Sophgo SoC-based boards
+> @@ -26,6 +26,11 @@ properties:
+>            - enum:
+>                - sophgo,huashan-pi
+>            - const: sophgo,cv1812h
+> +      - items:
+> +          - enum:
+> +              - milkv,duo-module-01-evb
+> +          - const: milkv,duo-module-01
+> +          - const: sophgo,sg2000
+>        - items:
+>            - enum:
+>                - sipeed,licheerv-nano-b
 > --=20
-> Alexander Sverdlin.
+> 2.48.1
 >=20
 
---MwDx1V044X6pY5Zr
+--3/BNf11h93vTDDr6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6tVKgAKCRB4tDGHoIJi
-0ryCAQCUpDB6cCAXqj3ZVyMpBboraj1VJvvnCB34OKgyUALr6AEAqOw2FC6cSonT
-W2P4mgYpwfIsREbExnYGXzdSKPmwnAU=
-=5MES
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6uUbwAKCRB4tDGHoIJi
+0iP8AP9Mc/wlam2GgeEuieW+XaQ1w6dG0Bj4kXG2xUCIG5ayXgD/UBsEkKFcu+7I
+ozzxFKHl9x4z4ZZ2vx1qTuKO/mt7JA4=
+=SHXJ
 -----END PGP SIGNATURE-----
 
---MwDx1V044X6pY5Zr--
+--3/BNf11h93vTDDr6--
