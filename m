@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB8E1EBFE6;
-	Tue, 11 Feb 2025 08:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1111EE7A7;
+	Tue, 11 Feb 2025 08:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739261227; cv=none; b=jWPbeN6svvzxIkWtz+P2TDptotRNZQrdzW54Y27IzSmMBDH+IMURvC5EiT7Q0iApUbJMgh0u01dQNF3Yy5P+gip15mSjTdWOUJ5jKDzqSU7uohU0buUpfE9lILbYvs86E19LUm5RGEwXhMWO6PQW6osnUfIbncRjtZw3NEi+Cps=
+	t=1739261327; cv=none; b=CocDRFFuDoK+9QTn63plsKU2qt7BooMI3cUNwtnycGII0cJN9pCNX7Dz9zh84q9/673gGbrrRY7+dzmGDD2qkbD6/RuW/6wLJUAQU/WXw5MAsxmkgwn5+5eHxLLX6UzCNiw62ZiBy+1/O3TUZe8W8AfCV5DJCxumFUwRVjIS8BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739261227; c=relaxed/simple;
-	bh=EKdk/i/PYM3yiBMGtdjRxRYsmQllHsBKgApCUH0Smd0=;
+	s=arc-20240116; t=1739261327; c=relaxed/simple;
+	bh=g6TTE3m9NjTz7Ln6gbbV9EUq6t8mfTc4AEapJWltUgs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PtLKeUYvU9TJzJqaoRA2glcgxDgxXKWHN4F3a4yb0RBifPziXF62GhMBqU3TXhSIwTvfnHA/aTfmqODCUI7gdKG58u6io5LmyVR9g+ZBF9b+hiy4bQ/N3YHSw1wAtWOX5r5eKV+lTToA33b1/9d7KedC9N63PXMpZLtPGAwD5gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+0qzL21; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=NZMrzSseEgHOnL0ROwnKk+y/JvvLwtf1kXfKGfO24gNCUsxX0HV643b/p7+PTLcYoz0h3jTNhZLJkry9UNbL4NGR9lgwKxkGxXhR+ubhC98PIpjaQzjaBbD3rZQtpRqJ4ZJ/QHrs1YDwwDGxVA8ryAnkQ4+yZHAjxzzs1W5MAjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYQq3tj5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+0qzL21"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127E7C4CEDD;
-	Tue, 11 Feb 2025 08:07:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYQq3tj5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A78CEC4CEE4;
+	Tue, 11 Feb 2025 08:08:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739261227;
-	bh=EKdk/i/PYM3yiBMGtdjRxRYsmQllHsBKgApCUH0Smd0=;
+	s=k20201202; t=1739261326;
+	bh=g6TTE3m9NjTz7Ln6gbbV9EUq6t8mfTc4AEapJWltUgs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l+0qzL21BjGqGYnXkrT7a4kpupAYugKqawqCcjoPR0JzONwH69+uV7qKtyBZcoFNm
-	 0KgFfE3Q4zOJ2BN/Xz7jr1QbD1agG+qwTBMRifLzqzGPQnPK6vfTPDQlGLn+Cq49Os
-	 Phsyd8U9pEDGr3agyh1c2X5nMjzUnmLjcJNeXveEzBSFCF/AnFTrrb3GB5NWu/75TG
-	 RyUPT9WpeFbZMZryoJSnGI+dk+JdV2fVninZUie5wUcuQltbd0vqG020ThXLOa5Hpb
-	 x512kLXqc93tE7ZIEY5CJgiXBkxKfcN510E0VuLqibwVuYfAlpuPoEQBmKBaKRsKA3
-	 ObW//Bo9W3muA==
-Message-ID: <bf8f3ea1-6fb5-40d1-a823-b3bc272a2257@kernel.org>
-Date: Tue, 11 Feb 2025 09:07:00 +0100
+	b=FYQq3tj5+nT8FU9Y72jpY9LX81MJEntaazoLlM4HNq+QKkCSBKTn8EYvsBxqyjxfP
+	 wjOCrvy7ZDnI1NyQpjycTZimjI9JCHecXwNSFlxbYhFn1F5IEjNwW52SRy9CzNDxbe
+	 +mi1SEvvGASztHuhaupmvVUt02HEvsJeWxQoVgx/ui0lcHm3G40fxhJ+NbOSc9nghS
+	 XfjRxuSKdH8wSbDMolJKV2KyM7RoBGpNeg7ROguW9Cz0K45fvm53FSEqTML6WKOpeH
+	 AXMcvSCCA0pyMo5YVkfPhokbztq+RyldCoBtM2dAd+ITrWCoBZIlB2mNbARV+0mycj
+	 PPh62rQisdc0w==
+Message-ID: <3f548621-6f66-41ee-a23f-ae4a8345061a@kernel.org>
+Date: Tue, 11 Feb 2025 09:08:39 +0100
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,21 +35,23 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/10] arm64: dts: sophgo: Add initial SG2000 SoC device
- tree
+Subject: Re: [PATCH 02/10] riscv: dts: sophgo: cv18xx: Split into CPU core and
+ peripheral parts
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
 Cc: Chen Wang <unicorn_wang@outlook.com>,
  Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org,
  devicetree@vger.kernel.org, Haylen Chu <heylenay@outlook.com>,
- linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
+ linux-arm-kernel@lists.infradead.org,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
- <20250209220646.1090868-4-alexander.sverdlin@gmail.com>
- <0d5484d1-be83-4f38-befd-94d458b3aaa8@kernel.org>
- <03ff407fe68e46df4844e5dd244e7c609331af71.camel@gmail.com>
-Content-Language: en-US
+ <20250209220646.1090868-3-alexander.sverdlin@gmail.com>
+ <dda5297c-fdf3-494f-854f-71a5000729e5@kernel.org>
+ <7fa3501bd59697e65ab1387e25cb815180c3378c.camel@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -93,111 +95,57 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <03ff407fe68e46df4844e5dd244e7c609331af71.camel@gmail.com>
+In-Reply-To: <7fa3501bd59697e65ab1387e25cb815180c3378c.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 10/02/2025 16:01, Alexander Sverdlin wrote:
-> Hi Krzysztof!
+On 10/02/2025 14:45, Alexander Sverdlin wrote:
+> Thanks for quick review Krzysztof!
 > 
-> On Mon, 2025-02-10 at 09:45 +0100, Krzysztof Kozlowski wrote:
+> On Mon, 2025-02-10 at 09:43 +0100, Krzysztof Kozlowski wrote:
 >> On 09/02/2025 23:06, Alexander Sverdlin wrote:
->>> Add initial device tree for the SG2000 SoC by SOPHGO (from ARM64 PoV).
+>>> Make the peripheral device tree re-usable on ARM64 platform by splitting it
+>>> into CPU-core specific and peripheral parts.
+>>>
+>>> Add SOC_PERIPHERAL_IRQ() macro which explicitly maps peripheral nubering
+>>> into "plic" interrupt-controller numbering.
 >>>
 >>> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 >>> ---
->>>   arch/arm64/boot/dts/sophgo/sg2000.dtsi | 79 ++++++++++++++++++++++++++
->>>   1 file changed, 79 insertions(+)
->>>   create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/sophgo/sg2000.dtsi b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
->>> new file mode 100644
->>> index 000000000000..4e520486cbe5
+>>>   arch/riscv/boot/dts/sophgo/cv181x.dtsi        |   2 +-
+>>>   arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi | 313 ++++++++++++++++++
+>>>   arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 305 +----------------
+>                                  ^^^^^^^^^^^
+> [1]
+> 
 >>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/sophgo/sg2000.dtsi
->>> @@ -0,0 +1,79 @@
+>>> +++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+>>> @@ -0,0 +1,313 @@
 >>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>>> +/*
+>>> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
+>>> + * Copyright (C) 2023 Inochi Amaoto <inochiama@outlook.com>
+>>> + */
 >>> +
->>> +#define SOC_PERIPHERAL_IRQ(nr)		GIC_SPI (nr)
->>> +
->>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +#include <riscv/sophgo/cv18xx-periph.dtsi>
->>> +#include <riscv/sophgo/cv181x.dtsi>
+>>> +#include <dt-bindings/clock/sophgo,cv1800.h>
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/interrupt-controller/irq.h>
 >>> +
 >>> +/ {
-> 
-> [...]
-> 
->>> +	gic: interrupt-controller@1f01000 {
+>>> +	osc: oscillator {
+>>> +		compatible = "fixed-clock";
 >>
->> MMIO nodes are always in the soc.
+>> I really doubt that external oscillator is a peripheral. This is either
+>> part of board or the SoC.
 > 
-> I think I've looked a wrong example (or a counter-example)...
-> $ grep -R -P '^\t\tcompatible = "arm,cortex-a15-gic";' *
-> arm/boot/dts/intel/axm/axm55xx.dtsi:		compatible = "arm,cortex-a15-gic";
-> arm/boot/dts/ti/omap/dra7.dtsi:		compatible = "arm,cortex-a15-gic";
-> arm/boot/dts/ti/omap/omap5.dtsi:		compatible = "arm,cortex-a15-gic";
-> arm/boot/dts/nvidia/tegra124.dtsi:		compatible = "arm,cortex-a15-gic";
-> arm/boot/dts/nvidia/tegra114.dtsi:		compatible = "arm,cortex-a15-gic";
+> This is actually a problem of the original cv18xx.dtsi [1]. Do you think
+> I need to fix it as part of my series? This would touch all the pure
+> RiscV boards (using CV18xx SoCs, not SG200x SoCs), which I could avoid
+> otherwise.
 
-These are all old.
-
-> arm64/boot/dts/nvidia/tegra132.dtsi:		compatible = "arm,cortex-a15-gic";
-> arm64/boot/dts/freescale/s32v234.dtsi:		compatible = "arm,cortex-a15-gic";
-
-Well, it happens.
-
-> arm64/boot/dts/apm/apm-storm.dtsi:		compatible = "arm,cortex-a15-gic";
-> arm64/boot/dts/apm/apm-shadowcat.dtsi:		compatible = "arm,cortex-a15-gic";
-
-These are strong anti-patterns. Unmaintained.
-
-> 
-> But thanks for clarification!
-> 
->>> +		compatible = "arm,cortex-a15-gic";
->>> +		interrupt-controller;
->>> +		#interrupt-cells = <3>;
->>> +		reg = <0x01f01000 0x1000>,
->>> +		      <0x01f02000 0x2000>;
->>> +	};
->>> +
->>> +	soc {
->>
->> Override by phandle/label instead of duplicating.
->>
->>> +		ranges;
->>> +
->>> +		pinctrl: pinctrl@3001000 {
->>> +			compatible = "sophgo,sg2000-pinctrl";
->>> +			reg = <0x03001000 0x1000>,
->>> +			      <0x05027000 0x1000>;
->>> +			reg-names = "sys", "rtc";
->>> +		};
->>> +	};
->>> +};
->>> +
->>> +
->>> +&clk {
->>> +	compatible = "sophgo,sg2000-clk";
->>
->>
->> That's discouraged practice. If you need to define compatible, it means
->> the block is not shared between designs and must not be in common DTSI.
-> 
-> That doesn't come from my series, that's how original cv18xx.dtsi has been
-
-You can change the other file to match real hardware. But if original
-cv18xx.dtsi has incorrect or imprecise compatible, I wonder how does it
-work....
-
-> designed. Same question as before: do I need to rework it if I will not be able to
-> test the changes (I don't even posess the relevant HW). But if not, I have
-> to adapt the same pattern into the new sg2000.dtsi.
-
-
-
-
+You are moving the node out of cv18xx.dtsi, so you can move it to final
+place for example. But I do not insist, because I also do not know the
+final (truly correct) place - don't know the hardware here.
 
 Best regards,
 Krzysztof
