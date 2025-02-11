@@ -1,137 +1,186 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19010002.outbound.protection.outlook.com [52.103.68.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5017624E4CC
-	for <soc@lists.linux.dev>; Mon, 10 Feb 2025 22:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739225413; cv=none; b=sKwVAwSXzjX1DkMWuqti1GIgiHJ2UqDMs0NFqZcf9fqa+MFW1564eEoybWyLqdAB7IjEwpBHW+z2/wfWS3vn/zRnVuqcfY4cJBS5vFWngvTt7cQeZsOh120R868TFES/mrFHZVAmWZtbxKlDF6ANPB3HjvhHxoSTk4L0wQ5zvNo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739225413; c=relaxed/simple;
-	bh=s5oA+jHWEEIo9T7A2jUBsuRMhvrDdrSwYuhyM/IUmjg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tsLvE6klA3TmZ6xHtCjkaCuQoDYYVAPd7BEC383m55UPSMtQ7EYkqYj1wXQp031Njgu13DgydHhBDN3c2Ui5SKB+84vDYgvpX0Ie+3d2LHGWaC+SONYjlAykmSb1REYr+6YFCdAiI1WTTijbEAyIhnsRadGhGmKjZk2AjrBankc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nLvfgbQ5; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50D45223
+	for <soc@lists.linux.dev>; Tue, 11 Feb 2025 01:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.68.2
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739237169; cv=fail; b=nL8UBPxUUZz12LdHCZ6aFSvhW3ov+yPH+MFQOgVko0sdSfF0tRN8+65I94Tv/uFPvl0E9vxInAMsSfio27X1FGbxzIRVxdJZPgidjyrAFPGd4imfrLbGYhBc6hGsBk/44afamg9tMvlRaowfN5eSD10ittDyv6k6dWLPdcEYtc0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739237169; c=relaxed/simple;
+	bh=yhUXNIW8dzDgQg73eSPC/pTnR3w3i/tWyeoyysGa9lw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=RBLfAhasFKPakQbXmT5yzAiXEGO3UJg/8hsLJMJqPNeKUQZDyZZlLmvoWVrKHwOXwCcQXAhm+oppT8kkJ1nM1UAObVTQo/T3PZu1Nn7+Jc4s57VLJBLkwUSx/H2EXeps+8mA2vtJzP8jrLqY3UbxadWL3GiKtCbKLw8f2StSR8k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=dprPBSm4; arc=fail smtp.client-ip=52.103.68.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nLvfgbQ5"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38dcc6bfbccso1973886f8f.0
-        for <soc@lists.linux.dev>; Mon, 10 Feb 2025 14:10:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739225410; x=1739830210; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rLdsU1KFS3tVYEAjIFsi6WKlfhYjmE4PjmptYahFlqM=;
-        b=nLvfgbQ55tgD2Ntxx6tDaBJogTdnM2q4kIPbvqjgzYVlrw/ZWzdit2EyPAOLemK22M
-         FPrr9oZjgcy57Hx45Fdy03TU0+T5SJn1yeU+YOmy3+OSBhnNUMaa2iqVJYp/Pi+RTO8r
-         6RuxbTR1pxZcPN1veWvdqcFvUc9ayqYPGKKIXxqhqU2aX6StO3Or6ZJRrskvJgpxQkW0
-         PphadS5JA0RnepZjoITD5lShnmgn5RWHbYnx4nhXC2blmQwivAFHF5IV1BbpwOcgxXD0
-         alqujfsXNHvMf/ZyVuyWg0BXWvRM/QkQ5Ps6jknxPzQa8R1aVNyrzvOey4V2TxnmhIX0
-         VNrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739225410; x=1739830210;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rLdsU1KFS3tVYEAjIFsi6WKlfhYjmE4PjmptYahFlqM=;
-        b=OshWZCE6gIyPEsaowUQYUJGLOcac0rQI8rb2qoF/okMjljNI4X+yNzw3OJijzMF631
-         5AcPhvKnMEPgl50qY6Qdmukyth0CsbuNvn4y0Fqum1Xy4mk35U2zV7b9yd8BWIzmDAm1
-         6Yz5++s6FyB4Yctpg90m5yobRSNOJekVolAY3j5oXPEiZm+dXwANkBwWap07yFwDzCqg
-         X8ViS0t6Iq1cfUHbkl/KLYU4sHgnve9A5jv3H0bn99dM+snsqQ0Lj3TidxJDd9qBlJPj
-         4te50iWuz7of0mZSkkos+ZsDMWMEoaJV2lZqqQUOJnOD7FIxMfjauQND9UxEKOOd5ggO
-         hpWg==
-X-Gm-Message-State: AOJu0YwCW7+vLRMuvDud1pQ39RPZfd7Qlt5suO5rDc/DKQmOxMVc3uFE
-	ANw9t14exxTFqqV5UIuYrdK8vxPFmyc4P8A4VCrCK+DAV9/8df1D8QJowrGv
-X-Gm-Gg: ASbGncuneCbVr+A6M/5Xl3Ylf7E2mP99CKsaGtUvHRWk5YHj3afK1Tlz89gwH+gvqcV
-	LVYHvVxlvaFDrC9XO25ejo5K2Dl8zbKb6jTCDznXf5ggsUbeJswPnp3I8PBvlO9Kw4RrTtmB48g
-	UJV1FasRrmgaP1bjtIvliRn3Cp5vP8EOsSty5xOaF7Atz8FVVVeLNVoQhko5f2kWAz+9t6Lzpzu
-	gJ+O1dC/7jojg1MCOmTOAFCDmrjXkpW+ir/yaLsuMD2T0UgEL0cVaZ4zmwh1owTnfQsvp3M/67D
-	HgAr0lIlFKezF2ZDLaZ8Voo0pxeF
-X-Google-Smtp-Source: AGHT+IFfMKN2DVPrE11x3bqwtEzG+jwRwo/EFICUaXgsePAhWGKTTHB2d0A9/IHfN0+E/tAfD1+HjQ==
-X-Received: by 2002:a05:6000:188f:b0:385:dc45:ea26 with SMTP id ffacd0b85a97d-38dc8daf01bmr8379732f8f.12.1739225409620;
-        Mon, 10 Feb 2025 14:10:09 -0800 (PST)
-Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde1dfaesm13443450f8f.90.2025.02.10.14.10.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 14:10:09 -0800 (PST)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: soc@lists.linux.dev
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Chao Wei <chao.wei@sophgo.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	linux-riscv@lists.infradead.org,
-	Haylen Chu <heylenay@outlook.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Subject: [PATCH v2 7/7] arm64: defconfig: Enable rudimentary Sophgo SG2000 support
-Date: Mon, 10 Feb 2025 23:09:47 +0100
-Message-ID: <20250210220951.1248533-8-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="dprPBSm4"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Rb2sU+OhUxmGELK+l4kQkmIsoH/Ikxgno3Lv4gszQ5GcxV6dXfIpvk/SquCrT9QfIrhnEcviD4ZfoejNYV0xQD8H6SY4Km4Ue5Z3IeBI/WypCjzTFnH8GZm2qZXiwR7sb6wFJJXKh1xGc5ZYV9S6onby1Yk6EmKkzzcPGfHdBd765tQo/a9pqrry4kXqZxf3t2zccxWb7+uggOC4XBvuqieJLDpL0VTq19OeSlWyYgHKsyCXyN4yjdcFl+VAn6JqlhiY8UlZX6lJoONk75iT8POg9PCds6NKww5+4VqmwTlBiqRQjige9P0yXworc3TSCjAXw/wTEjydje6rbM0hNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I4ibtfOvsZAclWethUZi6XQYVYKnbQ1yMnwAVET4wkA=;
+ b=MVzA2x4aps5VUR52STp+yNzVmjBBYsipqnhXw0CzENl9d8Z1HwUfpgAW4Sv14NcD+XFlzPpfiEseecGxTPkGY2wsLjmPzkMzBAQjymBpRl3ruG/mOxF9C5yWwfIRnWAaWRvm/dk4wpwL0ir6yu3U7IfE71/H8fnGKYhYjsSbxulVRtUSVqZgmfxPQfJvKcGUyzN6Nb7upw/TbwcmXNy/U4CE6NsbdEF1k8JX0krEXwgHssp2u7I3APc/zwM5BX/vHMSSHB1XJp3SG3dCJF1XhYWBz8dRUsbL+QsgiZhAAmbGsKI2GxbkcwgpuTcllopT1Msq6lKEdIEkGn3L2DLuGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I4ibtfOvsZAclWethUZi6XQYVYKnbQ1yMnwAVET4wkA=;
+ b=dprPBSm4O9pYn9m/bk4/wOVpYeuj8dAcjLkb83z6WgEkMBIvnD0hGo/+9r859kTsDL3Q+cRyEgfMOvIo41W+i4nvKgmjN34q68U3gyGTDyellnrbtBQole9fjvObyGCxko785EzBHdrJiSXgpgfP7CpiaoyoV5Ly6fqy0ZoKld/g1mwpoJN0G3oTUlVk0s1GwLcRbE+uRlupRNNkCTjNDvQC2ho7AclBZh5/5qgildz2ZJIGenZlpTu/YPOHdaNrsY4KzCUdirhiaET/urazMAeJ1OvEeGEU5WXfVceez3UXTGXZTM5GXnKGXQX4Yj4vwnX+mvrH1DepG7c6n4aunA==
+Received: from BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:3a::19)
+ by PN2PR01MB4124.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:10::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.19; Tue, 11 Feb
+ 2025 01:25:59 +0000
+Received: from BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::2148:4778:79a3:ba71]) by BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::2148:4778:79a3:ba71%7]) with mapi id 15.20.8422.012; Tue, 11 Feb 2025
+ 01:25:59 +0000
+Message-ID:
+ <BMXPR01MB24408EA7681BDFB9E8D50079FEFD2@BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM>
+Date: Tue, 11 Feb 2025 09:25:52 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/7] arm64: Add SOPHGO SOC family Kconfig support
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
+Cc: Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
+ Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org,
+ Haylen Chu <heylenay@outlook.com>, linux-arm-kernel@lists.infradead.org,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Lee Jones <lee@kernel.org>
 References: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
+ <20250210220951.1248533-7-alexander.sverdlin@gmail.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <20250210220951.1248533-7-alexander.sverdlin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
+ (2603:1096:4:195::13) To BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:3a::19)
+X-Microsoft-Original-Message-ID:
+ <ec5668f8-0a7a-4573-9c68-fedcc3f6aad9@outlook.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BMXPR01MB2440:EE_|PN2PR01MB4124:EE_
+X-MS-Office365-Filtering-Correlation-Id: 87a165e2-977c-4a04-ed53-08dd4a3b08f5
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|15080799006|19110799003|461199028|7092599003|5072599009|6090799003|8060799006|3412199025|440099028;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?d3NReEhLb2ZVOVE5eVpSM2hrNmdaUjgwenRscnJ1cnRQaW5jNzBqclhOLzJ4?=
+ =?utf-8?B?ZmxncGs0VEc5SnYwb2JRQ09XNGVRYmJ4STRKR2lmYXJGalNCcWhvOTVNTmsz?=
+ =?utf-8?B?QU5pR1lSaURpV01GME1YWjlvcHJOaWRMaFVXdldjdDZlbGlvcUkwRnRpcGV1?=
+ =?utf-8?B?ajZla2J5cnZZaDBWSmlEaGtFZStGUzZ6Z0lObmI5MHNzeGpmWUI5aEJYOHZt?=
+ =?utf-8?B?WkMrdzZyM0VtTEVHSCs3eCtBUHQ1WnpsWTRwSXZJdWZYbjZLWTZrOFNGc1No?=
+ =?utf-8?B?TWpaVGk5KzhCOXJzOE90S1dCcVVuRzZzc3BnWGUxY0UzUDBZejFQTUd2eld1?=
+ =?utf-8?B?bU0weE9peDFabG8zZGVmbzJRNFpPQWdXRFp2cUNnMGs1T1NvUzZVMUZKRVZu?=
+ =?utf-8?B?S3hKUGtxbkhEdGYrOFlBNU56czFocllCVHB1ejQrcURjSURNaGNhQnpWVmFs?=
+ =?utf-8?B?MU9rNTRXUUdiZUtGODZtYjg2WnNmb0xld0F4bTZaQ0pZWXhndlpmRDRBcVBW?=
+ =?utf-8?B?RGFBZUYwMTQ4bU53b3ZhUDM3NDNXbWRZS3Zkc1FZYmRYK2VzbkwrNWdobXJ2?=
+ =?utf-8?B?Q3E4U3FmeGdRRUZKVWFGYktDSmNPUlVWNzNUdndtdjh3Y1lFTnQwWWx2M1VK?=
+ =?utf-8?B?RlVwWm0wOW9wS0QycFBlc2JmUVhLTU5kMWhsZFF4Sk03UkZaYUJsY1lKRUdw?=
+ =?utf-8?B?YkdOelA2YXZ6ZTNacVlqSFl0WmpHQUNzV0MrZ3JjSEFPdEYxRlJRd3RrZ25I?=
+ =?utf-8?B?cEJsa3pZdGh2L1JnZk5DbVllb2YvVmdPelptSlZTKzZTdUZ6VnNremFJK09r?=
+ =?utf-8?B?MlhhaWpGZ0hGeDRlaVJQR252K3pCVnp0TXl4c09LZitpNHIrclRiSS9HV1c1?=
+ =?utf-8?B?Yys0SHZ2TmhiaFNzNHVob2Q4VUdReHlXaE91dDgxZWwzeFZ0UDdLU0lQZHAr?=
+ =?utf-8?B?RkNKVThkc1FNUnRnUjBkNnZLamxNaUpoWmFVTWJNTXFLWUVhTUxScVAybzNq?=
+ =?utf-8?B?K2hjNEF6VnJFdlh3Z045ZkQwQnRzVHpyKy9PcjZuV084Zy9wNTlMcWdRdGxi?=
+ =?utf-8?B?Y0hpUGJKb2kyREtydkN2eGZsaWFrT2IzekNzdGZvb3VrcUVaeUxObmJBMDJm?=
+ =?utf-8?B?UmNOQVZlYmJKZ1lSeUhhV2pJd3F5Y2l6REptL25OYVFqMmNTYW8zd0l0bzF3?=
+ =?utf-8?B?SG0xV0tJT1YyVGRrNkpnNVJmZGovc0d5RmJPU0E5U3laM2xUcUdSNWJwSEk5?=
+ =?utf-8?B?RERoKzk5T3FxZFU5T2szNGhXU0psQXYvdFNSZTBSU05pcXZmSkxvaVF6cGtI?=
+ =?utf-8?B?Z3JITWtGY1pGRnJ6TUYyQzZHck5UWkNVdHk0djFFQmppZEtKRDhwelM4Y3I3?=
+ =?utf-8?B?L0VTY0NlOHJ3T1pHTFIwQThQSFJ5WkNPN2dmZlk2aS9yUHNWUUpaa2tYUm93?=
+ =?utf-8?B?TmkyRjlnT0RrbUJQUmxQTG9NaEQzTTg1R0JiWTNGcE1jeWVJOU1mWGs3eUc0?=
+ =?utf-8?Q?5TyrdA=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UEY4ZktvL0pOU0Q4TmhXNHBGL2h1TEdtTkZkR29oRDdFcFZZak9CQThDZ2Q3?=
+ =?utf-8?B?N2tJUG84b2swcS81WW55ZmVqQVlqR2sxcTVVVFV3Vm11ajdBeWNidzZORVZm?=
+ =?utf-8?B?QlVVWUhNNXAxTk9ic0ZYbmRGbXl6SXpIcExYTGExN01jWUtqbk44VzFVeURH?=
+ =?utf-8?B?VERwMGtjOXhkRU51by9nMkhvVjVkZ3JjbWJLUG5WYk9OSm1NZzRGMnR5aWVi?=
+ =?utf-8?B?K1lJeCtJanhDTTg2VDBQMkJ2bkZKdFo1ejVuNkFtNHpNQ2ViUGI1N0lmQjFz?=
+ =?utf-8?B?MlV3U21Xbmdrc1dyUFF1NjlXcUdKSUFXY1ppR3VDbGhLa3MvL0hBZER1UkVR?=
+ =?utf-8?B?V2JYbkN0SVJpT29lNlpFSnVkM09IWTlqbXQ5b3NhWnlUTm15Z3QycUd6ZnNx?=
+ =?utf-8?B?T05mbjd4R1RZNytFS3V0RDU1SnNhQVQxL0J0Z3IwdTJzbytMTzFCaFpvczZS?=
+ =?utf-8?B?K2NUUnhZN0pRS0xNNmxmTWtsd29BRm54bGxBdW9sc2EvUmhua28xbUc5TWNW?=
+ =?utf-8?B?SGFEQXRKOGNUNGI0eVNEMHA2bFdPbFdEck9MZUVGb2ZXbE9WL0VBMmVCaFA5?=
+ =?utf-8?B?SWFaVjlXQTVrcHVWRTNIN3c3QXd5QVJTMGR5YXptbE01ck9BNXVjZXBpNC9K?=
+ =?utf-8?B?YjF2MjlRaGF5KzRtMVlwV1pvUDQrUWlmdW1JeGlENnZ4MXRKN21yUDhMYitG?=
+ =?utf-8?B?dTE0VWtLZ3lnUjVQZXF6My81WEw2TlY0ZWlOejNYci9LUWJoVGFFa3hUWnhD?=
+ =?utf-8?B?dzlqR1l0ais4UXY1N01KMTJGMXZrdHFNYmlVL0tadlhGQ3V6L1ZMb3BBcStK?=
+ =?utf-8?B?UDdUWnVJQTdRejNDTXdmckYyYW8xKzZqcS9TdDVlNURHYnRxaVRqNXFCZW5Z?=
+ =?utf-8?B?MURFdm5tVWRRcWxTaVVBckJQTUpEdjJtTjM3UXNXOFBhMnc1ajVOZ1NGNVE0?=
+ =?utf-8?B?ZDc3VEdKQXVJdlU0eG0reERrU2d3RnA0SVJVYnJveGYyMTVQWUl6TUovc1dF?=
+ =?utf-8?B?bG01eG5FMGYrZXdLYjFFYThCakt6eDlkajg2eis1MUo5Uy9uNUVqOHl2dTVn?=
+ =?utf-8?B?MzArM2xZTGlYSXhiSmFLcFNSMEE0WSsrc083UVdGUU1aN1JpTDdIV2dsTThJ?=
+ =?utf-8?B?cE5hZ1hyZXlXeFRkb28zRmdUdGxiUUJqUWhGcnNDUU9FZWozMURzTkU3K0Fr?=
+ =?utf-8?B?MGtnTmJRMlUzcVd6cklCaVRTUk9NN20xdzVBMG1RSGpBMHFZWVhQQ2E0UlVl?=
+ =?utf-8?B?QTd3TnRQd05wYnpHRE1YZUVZRHYyd0Y2NXJ1eGt4TVlwRnRlQWxCUkZMTllP?=
+ =?utf-8?B?blI5cThvOXo1TXRVMTFYaFFHdHdCV1p1L29vVzhEWG05eVNXWUZlVXJrZVBu?=
+ =?utf-8?B?dmZad0V2V3U3VVlrOGRCMzJFaTFjZVlkcUFVVmZIc0F6cnNpb2lnUUtjc05M?=
+ =?utf-8?B?N21mbW1XQ0l5ZUxZZ1RQdi9JOStBRm5SOFR2V0lVZHZRV2UxK2taa1dVcmRR?=
+ =?utf-8?B?cjBYcGJkNHN2WkZSZXlLSnRNUjVXTGZEY3YyRFZpc3k1V3pBOFpnYWhKbHNZ?=
+ =?utf-8?B?ZWQzU2NZVWdWODZNOHMxc1E4ZXNOSEZEMkFHbUpIVWw0WEZGNUw1R2xONW5U?=
+ =?utf-8?B?OTlOa0VVZFo3WFJMUi9uL29naCtUOUxVUlVvVzUrZTRaOFUyTHI0M09RaGtt?=
+ =?utf-8?B?YWlpTFV6WFNJaW5qMDBxbUZjRDJCWWFoNHV5aFU2b3MrSTZyZVpkRTBzZVRu?=
+ =?utf-8?Q?awA4zAPrfhC0OtPvWcL0jVY/BfVK65rEyVKom5G?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87a165e2-977c-4a04-ed53-08dd4a3b08f5
+X-MS-Exchange-CrossTenant-AuthSource: BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2025 01:25:57.3776
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB4124
 
-Enable ARCH_SOPHGO, pinctrl (built-in, required to boot), ADC as module.
-This defconfig is able to boot from SD card on Milk-V Duo Module 01
-evalboard.
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
-Changelog:
-v2:
-- moved CLK_SOPHGO_CV1800 from Kconfig.platforms here;
+On 2025/2/11 6:09, Alexander Sverdlin wrote:
+> First user will be Aarch64 core within SG2000 SoC.
+>
+> Cc: Chen Wang <unicorn_wang@outlook.com>
+> Cc: Inochi Amaoto <inochiama@outlook.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
- arch/arm64/configs/defconfig | 6 ++++++
- 1 file changed, 6 insertions(+)
+Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index cb7da4415599..865625ccf2c3 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -66,6 +66,7 @@ CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
- CONFIG_ARCH_SEATTLE=y
- CONFIG_ARCH_INTEL_SOCFPGA=y
-+CONFIG_ARCH_SOPHGO=y
- CONFIG_ARCH_STM32=y
- CONFIG_ARCH_SYNQUACER=y
- CONFIG_ARCH_TEGRA=y
-@@ -650,6 +651,7 @@ CONFIG_PINCTRL_SM8450_LPASS_LPI=m
- CONFIG_PINCTRL_SC8280XP_LPASS_LPI=m
- CONFIG_PINCTRL_SM8550_LPASS_LPI=m
- CONFIG_PINCTRL_SM8650_LPASS_LPI=m
-+CONFIG_PINCTRL_SOPHGO_SG2000=y
- CONFIG_GPIO_ALTERA=m
- CONFIG_GPIO_DAVINCI=y
- CONFIG_GPIO_DWAPB=y
-@@ -1398,6 +1400,7 @@ CONFIG_QCOM_HFPLL=y
- CONFIG_CLK_GFM_LPASS_SM8250=m
- CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
- CONFIG_CLK_RENESAS_VBATTB=m
-+CONFIG_CLK_SOPHGO_CV1800=y
- CONFIG_HWSPINLOCK=y
- CONFIG_HWSPINLOCK_QCOM=y
- CONFIG_TEGRA186_TIMER=y
-@@ -1517,6 +1520,7 @@ CONFIG_QCOM_SPMI_VADC=m
- CONFIG_QCOM_SPMI_ADC5=m
- CONFIG_ROCKCHIP_SARADC=m
- CONFIG_RZG2L_ADC=m
-+CONFIG_SOPHGO_CV1800B_ADC=m
- CONFIG_TI_ADS1015=m
- CONFIG_TI_AM335X_ADC=m
- CONFIG_IIO_CROS_EC_SENSORS_CORE=m
--- 
-2.48.1
 
+> ---
+> Changelog:
+> v2:
+> - shortened the help message (mirrored from RiscV ARCH now);
+> - select ARCH_HAS_RESET_CONTROLLER instead of RESET_CONTROLLER;
+> - moved CLK_SOPHGO_CV1800 selection into defconfig;
+>
+>   arch/arm64/Kconfig.platforms | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index 02f9248f7c84..21b6a2bfb45a 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -307,6 +307,12 @@ config ARCH_INTEL_SOCFPGA
+>   	  Stratix 10 (ex. Altera), Stratix10 Software Virtual Platform,
+>   	  Agilex and eASIC N5X.
+>   
+> +config ARCH_SOPHGO
+> +	bool "Sophgo SoCs"
+> +	select ARCH_HAS_RESET_CONTROLLER
+> +	help
+> +	  This enables support for Sophgo SoC platform hardware.
+> +
+>   config ARCH_STM32
+>   	bool "STMicroelectronics STM32 SoC Family"
+>   	select GPIOLIB
