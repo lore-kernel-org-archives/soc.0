@@ -1,125 +1,130 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FC824502A
-	for <soc@lists.linux.dev>; Thu, 13 Feb 2025 18:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D5A23A9AC
+	for <soc@lists.linux.dev>; Thu, 13 Feb 2025 21:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739470945; cv=none; b=sHOn5Db+E6vlT4tdSkrT4yqUI1fjEv1jEl2k4XiAGABUaHaqNR+FJLahmzcmSKhqXB0Bv6HWfO0f/6dNlZ2Y9oQiNjT+jfcqPGFYGwn6XF+aKfmPbTWiPC5XSNwFVRDeFeKL0tDdu0Pw+aT4jnx2JIuxlN4KTgFeSb2Hm8wTD8U=
+	t=1739481705; cv=none; b=JSqbz7eH4fK2nPLelv6T/lkvO1WUYmCfKpYX1hBBSqWveO2BusyvRVGjxHn9sUmxOHumXSmWzjBPPPy1kxG33GiQpaYKblFuVHzIiztBTWepRoWlJ56hUR663zVb9DUQuqLGg6hslOaEPQRrmBoFBBYMonTAbK6BgEaZxYsi0mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739470945; c=relaxed/simple;
-	bh=UH0q9p++CLmMChIJjpemogpfA1CkyG0O0/eA9dZL2as=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gXh9IiIP++1QiIIOTSuBbuktEtYD7eFAEWWAGJff0vzwA4K4Es7SFHzNColnqIiD9Lg2YVmSjolV9t/cB4WfxiVAHZ0GHwbwvoJDm1BiLQXhOIUqiWkZxPmiR6FUhU4qLUObk2YQGACkdq5WUroMVTlEeHOiA7a7i8SIsY1JGRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUfH2x76; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739481705; c=relaxed/simple;
+	bh=OyaD1dq3+0aeOghqNTpyiGlINDSJlJcEwyWYYfERxdA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H6rGedBjAoSMKlpdZoiu68p71MzvUD/fM9aBpP59C6XdLScZdUzzUswPJ/ILN3fn0/OVA7bzEAfPlC2RgQ6TPmvCq9JxwFyQcKnVRpc3MBw6r4ud1CR47QrNZsrK2lvRO1ccc6OI4r8MckYhasRG9YpfeKoqhUtSiYb5SKh3XPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=vyZw3DCp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUfH2x76"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5de6c708315so1774225a12.0
-        for <soc@lists.linux.dev>; Thu, 13 Feb 2025 10:22:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739470942; x=1740075742; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FQItitSdgkiMJfSaAOy9tZBmfeo5kJAi4kSnHOl34Qg=;
-        b=CUfH2x76ANgP8d+/rO0kCJfceGEoUj7GrMCasPUtdMiGQhhEwMK2MbO6GI9rUqNova
-         ERJZi5UmdpEcFIrwzYWNSJiHbig0bKZE4LmWeInfsdKuPJll09fNRwCLVzO9DTcHWaKo
-         ERiyhzcbl7Gkhu8sO+5alxcGSppxgB5fm+mEg/XQTVeYurP4vRrtDiw3HPGkLaH5/vv7
-         23WFBOcDNOnzDQMbP6pQt9wi8qftDwSED646YOdSkyYmAFgcEjDIbWuIAeBtBAneVhvY
-         ZGkNzwaKSk1JtjjjRj/dUp/paHc/LJ02GNFJcZACSBAhhzj6kqq7hEFeBSRfXt9VSlOq
-         FPMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739470942; x=1740075742;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FQItitSdgkiMJfSaAOy9tZBmfeo5kJAi4kSnHOl34Qg=;
-        b=r4Bblvo36Jfv2ei1pakUOnIPGTDBT76ZwW9LEw2AgYeg7l+TsM9pO0T3kuPck5PltI
-         N2Q++HhYPu1ndB10eYQ16CCAh/nj5/4G8z6n58kuZayd8qu509aN5yrQ1sO2ow5H5UuV
-         hHAOXO+2WUVFT0tboQHAt2VgDTHVar5YdwA8bfDsT6WtAkP1W/3kjNEGMUpPjB+84z6M
-         Le7yWtV1MrVl7M+TQDn4nWNL3DstbDPuJ7UjCj/Bux22vn5D9Lmd6fFuIzjm6HI74PQ/
-         mJuRB1kJYGoNgGkVs7IHTxbbsyHb5A5Purx8YsMeOnJ/6DD7ceBXuaWSBMufMmzkEa5X
-         MCnQ==
-X-Gm-Message-State: AOJu0YxTFiQgMc4h2ZXtRAOpfMohd4vCUZDHMwI6+A3AV40KX4DsVk+G
-	7RgPv8Te4+lUywTSFcK/9KI3EEaVvRGKfpVylIP1/NJguODPfSRhAVIiAgbm
-X-Gm-Gg: ASbGncu+scVwEFEkof3mRorJp6B9xExQquHEfyRx/kHUrN5h+QMn69FP/hcLgLucy1F
-	OzMi8N4Td+W/iC2Rh49lpKHNTdW8cZ9T39tkqlZWG0RReVl8LoUgd4USYBmVngsinPRIyILK5Bn
-	euOk4hvP/K0V9wEC3rQ1JO4y1BWLRA15y7tDct1EzUZLyigOxKy1MRdLz/LQ+XVEBbkm4jRvf3d
-	rj9jMPOb9FjQWEawJkz9rhYlMFw0iWHw6PK548RR9YfWwLzJW5Q8djAvfT6oVrKv00LPE2Kzvr6
-	RvlPwtPHlif1odn7JEZpJpv5N2oR
-X-Google-Smtp-Source: AGHT+IEbd3n8MU55t3euCitcQQKFs6SunYb2MyFZGehEuglKNg6K9SJXp6KGY3aEsdTFbYirMQvuuA==
-X-Received: by 2002:a05:6402:5111:b0:5de:dc08:9cc5 with SMTP id 4fb4d7f45d1cf-5dedc08a138mr487236a12.7.1739470940344;
-        Thu, 13 Feb 2025 10:22:20 -0800 (PST)
-Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece270a66sm1559230a12.52.2025.02.13.10.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 10:22:20 -0800 (PST)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: soc@lists.linux.dev
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Chao Wei <chao.wei@sophgo.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	linux-riscv@lists.infradead.org,
-	Haylen Chu <heylenay@outlook.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Lee Jones <lee@kernel.org>
-Subject: [PATCH v4 6/7] arm64: Add SOPHGO SOC family Kconfig support
-Date: Thu, 13 Feb 2025 19:22:07 +0100
-Message-ID: <20250213182210.2098718-7-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250213182210.2098718-1-alexander.sverdlin@gmail.com>
-References: <20250213182210.2098718-1-alexander.sverdlin@gmail.com>
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="vyZw3DCp"
+Received: by smtp.kernel.org (Postfix)
+	id C7046C4CEE6; Thu, 13 Feb 2025 21:21:44 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E6010C4CED1;
+	Thu, 13 Feb 2025 21:21:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E6010C4CED1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=AAzGpmQaLH7sVclaZm3nGvic6C3AJbqc+WlMSefsOAw=; b=vyZw3DCpxWNkwL091vItEM+22M
+	UXlSTnznfZkHIUA0IPp4tLhY0gTIaiwFIcxizxaDmumUHi9rKvSfJRJAp5C9xbscr5WNCg7Tjkc83
+	Ii79BJBYzDa8oZ0Sv9j6c26DQJ4hMoqL63fwBTrTy7g72EPPq9WazoU8+eI/1iCc4VYxCnO6DAR/c
+	rLZuFmlc7GNtQ4Rsiqgyf8hto/shVd8fmmpaHVP6sPNf93Z17wIrOt48qKGn41Zxqz6zSTF0wbyHV
+	mUWtnYOuQtsNLWE3nWOrsfF8w3z9t9w+7GWTZglJUf7U8suVFNcqr4yZFUlyZ7s6LqTT8+SAquz02
+	hHi/C91w==;
+Received: from i53875bc0.versanet.de ([83.135.91.192] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1tigeT-0006eG-VR; Thu, 13 Feb 2025 22:21:42 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.14 #1
+Date: Thu, 13 Feb 2025 22:21:41 +0100
+Message-ID: <3004814.3ZeAukHxDK@diego>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-First user will be Aarch64 core within SG2000 SoC.
+Hi Arnd, Kevin, Olof,
 
-Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
-Changelog:
-v4:
-v3:
-v2:
-- shortened the help message (mirrored from RiscV ARCH now);
-- select ARCH_HAS_RESET_CONTROLLER instead of RESET_CONTROLLER;
-- moved CLK_SOPHGO_CV1800 selection into defconfig;
+please find a below some fixes for the current release 6.14 cycle.
 
- arch/arm64/Kconfig.platforms | 6 ++++++
- 1 file changed, 6 insertions(+)
+Please pull
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 02f9248f7c84..21b6a2bfb45a 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -307,6 +307,12 @@ config ARCH_INTEL_SOCFPGA
- 	  Stratix 10 (ex. Altera), Stratix10 Software Virtual Platform,
- 	  Agilex and eASIC N5X.
- 
-+config ARCH_SOPHGO
-+	bool "Sophgo SoCs"
-+	select ARCH_HAS_RESET_CONTROLLER
-+	help
-+	  This enables support for Sophgo SoC platform hardware.
-+
- config ARCH_STM32
- 	bool "STMicroelectronics STM32 SoC Family"
- 	select GPIOLIB
--- 
-2.48.1
+Thanks
+Heiko
+
+
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.14-rockchip-dtsfixes1
+
+for you to fetch changes up to 8546cfd08aa4b982acd2357403a1f15495d622ec:
+
+  arm64: dts: rockchip: adjust SMMU interrupt type on rk3588 (2025-02-11 21:28:13 +0100)
+
+----------------------------------------------------------------
+Fixes for the IOMMU used together with the PCIe controllers on rk3588,
+some board-level fixes for wrong pins, pinctrl and regulators, and
+disabling DMA on a board where the DMA+uart causes the dma controller to
+hang, as well as improved network stability for the OrangePi R1.
+
+----------------------------------------------------------------
+Alexander Shiyan (1):
+      arm64: dts: rockchip: Fix broken tsadc pinctrl names for rk3588
+
+Andy Yan (1):
+      arm64: dts: rockchip: Fix lcdpwr_en pin for Cool Pi GenBook
+
+Heiko Stuebner (1):
+      arm64: dts: rockchip: fix fixed-regulator renames on rk3399-gru devices
+
+Lukasz Czechowski (2):
+      arm64: dts: rockchip: Move uart5 pin configuration to px30 ringneck SoM
+      arm64: dts: rockchip: Disable DMA for uart5 on px30-ringneck
+
+Niklas Cassel (1):
+      arm64: dts: rockchip: disable IOMMU when running rk3588 in PCIe endpoint mode
+
+Patrick Wildt (1):
+      arm64: dts: rockchip: adjust SMMU interrupt type on rk3588
+
+Rob Herring (Arm) (1):
+      dt-bindings: rockchip: pmu: Ensure all properties are defined
+
+Tianling Shen (1):
+      arm64: dts: rockchip: change eth phy mode to rgmii-id for orangepi r1 plus lts
+
+ .../devicetree/bindings/arm/rockchip/pmu.yaml      |  8 +++++++-
+ .../boot/dts/rockchip/px30-ringneck-haikou.dts     |  1 -
+ arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi    |  6 ++++++
+ .../dts/rockchip/rk3328-orangepi-r1-plus-lts.dts   |  3 +--
+ .../boot/dts/rockchip/rk3328-orangepi-r1-plus.dts  |  1 +
+ .../boot/dts/rockchip/rk3328-orangepi-r1-plus.dtsi |  1 -
+ .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |  8 ++++----
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |  6 +++---
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi       | 22 +++++++++++-----------
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      | 22 +++++++++++-----------
+ .../dts/rockchip/rk3588-coolpi-cm5-genbook.dts     |  4 ++--
+ arch/arm64/boot/dts/rockchip/rk3588-extra.dtsi     |  1 -
+ .../boot/dts/rockchip/rk3588-rock-5b-pcie-ep.dtso  |  4 ++++
+ 13 files changed, 50 insertions(+), 37 deletions(-)
+
+
 
