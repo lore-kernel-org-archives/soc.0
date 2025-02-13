@@ -1,320 +1,180 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9474120AF66
-	for <soc@lists.linux.dev>; Wed, 12 Feb 2025 23:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE3324292E
+	for <soc@lists.linux.dev>; Thu, 13 Feb 2025 18:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739402945; cv=none; b=tOY68/wTiPzOMdWQ6Yhe5cNKgXLN983HdOJsNgKpukTVyxLvY/OBnL1Yddl/j/tn3ly+GyEk0wVn6VkCH0pX6IahHp4VU+AqZGmr9RauQum81gkMr3tR+Q4Qk+BlLzPOKx2wtSk0oiJEvDaDwQUW1NNiNaCcFLys3/S+rUH2yYY=
+	t=1739470939; cv=none; b=GNkCVdR4aQFHmYuco65rvjXJwUUwvKbiuAOTe3cHOadDw2eWJquiqASxgImzIsbJQfdXPG91FnRkRvbQpGr4WnPhHqw78xLrMI2nhLlzRlQ1IWRDWHX8b27YZpytURJxPwJyKSZE9q9OPUlFdTrjkiwHk70KFpPX47j0wJ8d3U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739402945; c=relaxed/simple;
-	bh=SbvllPME6RIfIRZ0dZ9A0sCS42m7c2rpURnrOiCFEVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aNrJ2E8VpkkzQgDszw5jhlRIp51b/Fg8Sq95oaZwdyFJ0dXA5SfX1vS5zRY6rc/g/jZ7Iw52ipELKFfuL92b0BNPL1cIEFLQPXwcz8l8cAPvLIA95CXpn/pqGTTBhrsyrXyyStk1yzGN2Q8Y8eVMfYCTS/xJVAR81Z+BAY9Y0kM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UxykS9aj; arc=none smtp.client-ip=209.85.160.175
+	s=arc-20240116; t=1739470939; c=relaxed/simple;
+	bh=8CBBywWLpZizJNj+z9ZtPQd+M4YuSb4aESlsynHJ0jA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fam7p770QuqHSXg/qjMg+o/DHLjca/KYEWm2lYPnCFmMKDqtwbxMFKPZ8ZQxxMOA1qDGpwtHYaPFECNOTqAiI+bRX92T5EIoJDfOvWgzLnZ6akCNDjMPKN9/S/WXs0fBXjxrrEM3F98lQZ9dgEfHaFusXtA5jrSY/Cb2SmSrfAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBa3XwXE; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UxykS9aj"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-46fcbb96ba9so2445321cf.0
-        for <soc@lists.linux.dev>; Wed, 12 Feb 2025 15:29:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBa3XwXE"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5de5e3729ecso2418353a12.0
+        for <soc@lists.linux.dev>; Thu, 13 Feb 2025 10:22:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739402942; x=1740007742; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Xf6FEOPlsQCKDeS8/VmOQ+ZlZJhwCDMgN7NaCKS7CYU=;
-        b=UxykS9ajGx3HjhReJw4E7qu60jDB5lWn34CPsdkvQZBsQUzEGBfBA1WQaaeEc2vpc2
-         Txk2zYh9Em0SXw6r+x3856Wp6KzCXbsK4rF8O7Mbq1JI4vhDSExTmLXnegIPy+DbWgp0
-         /wDNp2w9shhEclSU5entPhjUeVlTeMgwpcG/n12sqyidKbfgcliWvkcKpMknt5ByrqFD
-         DSGX5jZcEOIvNQj4mdSCZPyFIqTrkkIyIHlAjptgGlgigjnMnSLEJ5gDNq+2UVpw9+OT
-         NVFxX1conE+v+A/i65CuT7yyEYvSBti8U4s0c/Zmlc4rxNXPjC3TV4av3ohqAewdV9Z3
-         Rp6w==
+        d=gmail.com; s=20230601; t=1739470935; x=1740075735; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h/E+NEERZ+H3CAvZaK4gBU0W8710bx3dRofufwUO4os=;
+        b=HBa3XwXEk0/J27QxK+CpkjEMOtXZiM6gfEuRZ/hf2FaIQWqSOZI1wLG2GY0dEta0u8
+         OF8xPDUiQeYsJaD9bdkkMR9gYnbCq/abHw248lz13zXkd3V+R3M26lRhZz6xH+XW15kM
+         R9/r4+FdpQiYBHyT5OOlJuI1sg5iFKnS+TWY/9IE+oKUeca+QA4VItXas541hUy+QtCW
+         l+IDo/SYXr0eUbsEkquWokE6Q9PYJZDhRQLoaINjqWHHQ8WJYcRicIHzdcqbPGRYpyZL
+         Qz56eWVOew1u0qXWzt9IgFcQXzIx1/lNo6WOwIHdO3IGq5s33LF8tCtgdK1/ryf8qBuk
+         e3+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739402942; x=1740007742;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xf6FEOPlsQCKDeS8/VmOQ+ZlZJhwCDMgN7NaCKS7CYU=;
-        b=J80v+Ly+29hujk+9jD2aGP9Zr9naHVfIkpjqgjexhX4dJEsI8bM7yLWDRit/PJRL9y
-         VfyuRpqBhxOfbBMMNlWSO9d+DrJRk+iqwHRpi/SmB41OPQ5qKQCqRJVa5LqLXWw0LzJh
-         Axu6FRG3Qlw7D1ipmQvzJoBfs2x5kUguDVLrvw9zl/VtZ5mkI3iSKJWBgK4RbxlM5Tem
-         mDuFWvuWN5Gt5TwvT67X7soFBGChykKtwOS9fKUofKun1ZXxcR2GHv2JpSe26TEBcY+F
-         04dYjjmJLFTyiDWuY3QbOE38r6ESU6gXMB/wdwQIYXaDncsEPGCKyiiFIr/d/i1lwxvY
-         jUhA==
-X-Forwarded-Encrypted: i=1; AJvYcCWil+QjD9y28efSzZVmqFMTSMtQDJJSld/YELVohV+ilc9S7peN/vZYhCL7D3tatDm5tQ4=@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywaumi4JtkZUix/iqAqoJu/w1AfOsqzIw7lmIKWLL3JnHGrcGlc
-	GVhcH5N1+SIW65McPHBQ4P4SdxOkACQ0QrZL+dKZ1wCpRSGmj/Fs
-X-Gm-Gg: ASbGncuHnEgtwGE13LLi0ytHPJBeuwXIgZsipivw1baEKMjQylT9/qByfGVBbY6qvGg
-	xYOiWIEqyRwegtYODExBooMBQUkr817PBc0jhp2+A3e1xot0rtiNjod7ypbc96pbbp++R4/0xoy
-	v4dvVU+xk+D04kMsKBplfONKsIbMDzV816Aiue/v1G5uHUPRiDsBSlacDA0/M/2qnn5qpZNjBHk
-	kCGsE3GgO1bzYhpSXDXMM5ZKmPHr0D3OpHrW9xoxv18QSHlKbV0BKynA8NyKGEuO1w=
-X-Google-Smtp-Source: AGHT+IGYzAubSVFkMrhIoFfMHJkYJiaTIPTRSix5tqjfLli9V0CYVWf7rD0PEDyVMCJ7C/TQE8oE9A==
-X-Received: by 2002:a05:622a:8f1b:b0:467:8630:584f with SMTP id d75a77b69052e-471bee131b3mr18469391cf.36.1739402942343;
-        Wed, 12 Feb 2025 15:29:02 -0800 (PST)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-471c2a11e77sm605131cf.29.2025.02.12.15.29.01
+        d=1e100.net; s=20230601; t=1739470935; x=1740075735;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h/E+NEERZ+H3CAvZaK4gBU0W8710bx3dRofufwUO4os=;
+        b=jw7pe6esJjZCI4gkvYXHbG04xSLC2jCVV4f+hlcP6B7+uNUuo2pDbFVIjhn0S29JN+
+         UmNEq1YPHxOAL5d4VWC8kSbJRGKzi/LGzBcqsGbTAvCraFpHng15ObCmoHswhckWlXk2
+         WMlHiG1Bypac3Ilydo/ypN9t06X2mlxJi7RPkvmOFCAvBVznFJ+C9+LJK50HiDWwW82N
+         m4WcaoSEpe8EjdXmSJT4j2YbNqkPx8Fl2LDd1GlB0A1u4n3zXWNvMnnre/bUQ44LjeYk
+         UZSUUSiF2c4BDuiq0ZKAKn83PvCO5XYKkCQNO91PKEhNLg0ZL44wBargxVk4jCH0LE9B
+         K8sg==
+X-Gm-Message-State: AOJu0YyhQynEo0PnMdauoU7h97rVQKXxAL+oSi0tMXK8ky6Nj8FTwWWr
+	8c9p+xNDiMaEUhxnR/5yDAlOpxY8qlflYoWpylLOgxHjAU9b4bB4VAcoIvP2
+X-Gm-Gg: ASbGncuWYFVwL1hvwc5zujTbLx+XsGEnNGgJXcHRxP1vSg/333Ljr5KnMv2lg/WAm9l
+	iXVanIphZpc0SFiaSqZVr4kdp45Hjq6oy1tMcY+51cuU90snu6HuCb4jJcPxoCYgxm9yCu1mFRH
+	JYMvgYKmJ8ZBvEqQphQxPUHOo3zt24p3sWzGfBR764J+YqyuGqMdQGfjOkZuq2PKBn46Z8AfRli
+	9J8HlKXJ+LH2Glx6i4oXmajCIy+BkrFlRqYJLgQUGxAP4vlF252fIUaf7a56hGXZkFb0qrr27gy
+	JQzmY26lrDZOiYuutZUn6nVoz7bB
+X-Google-Smtp-Source: AGHT+IEINFZc6fZrjdeRXLHS2OjGj9ojjSsvveBDwdCRTKsop6kumf8PxLs+aNaP64+EA/5Ycanmxw==
+X-Received: by 2002:a05:6402:3905:b0:5de:be17:8 with SMTP id 4fb4d7f45d1cf-5debe17e091mr5905623a12.23.1739470935200;
+        Thu, 13 Feb 2025 10:22:15 -0800 (PST)
+Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece270a66sm1559230a12.52.2025.02.13.10.22.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 15:29:01 -0800 (PST)
-Date: Thu, 13 Feb 2025 07:28:54 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	Inochi Amaoto <inochiama@gmail.com>, soc@lists.linux.dev
-Cc: Chen Wang <unicorn_wang@outlook.com>, 
-	Inochi Amaoto <inochiama@outlook.com>, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	Haylen Chu <heylenay@outlook.com>, linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>
-Subject: Re: [PATCH v3 1/7] riscv: dts: sophgo: cv18xx: Move RiscV-specific
- part into SoCs' .dtsi files
-Message-ID: <e7veoogv7qlmjelxiu34a2yvbtb6umgqscwo44ti7k562n7ow5@7uadzl4oubzb>
-References: <20250212224347.1767819-1-alexander.sverdlin@gmail.com>
- <20250212224347.1767819-2-alexander.sverdlin@gmail.com>
- <x4zncooa3lmyf2bikowjw7oabz66dhhbxl44cmujzzkwaslcl5@tj3l2u7e4akx>
- <de4d99bf89f78a0a6e0a81dc6062af5e85d762aa.camel@gmail.com>
+        Thu, 13 Feb 2025 10:22:14 -0800 (PST)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: soc@lists.linux.dev
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Sebastian Reichel <sre@kernel.org>,
+	devicetree@vger.kernel.org,
+	Haylen Chu <heylenay@outlook.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Chao Wei <chao.wei@sophgo.com>
+Subject: [PATCH v4 0/7] arm64 support for Milk-V Duo Module 01 EVB
+Date: Thu, 13 Feb 2025 19:22:01 +0100
+Message-ID: <20250213182210.2098718-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <de4d99bf89f78a0a6e0a81dc6062af5e85d762aa.camel@gmail.com>
 
-On Thu, Feb 13, 2025 at 12:04:39AM +0100, Alexander Sverdlin wrote:
-> Hi Inochi!
-> 
-> On Thu, 2025-02-13 at 06:54 +0800, Inochi Amaoto wrote:
-> > On Wed, Feb 12, 2025 at 11:43:33PM +0100, Alexander Sverdlin wrote:
-> > > Make the peripheral device tree re-usable on ARM64 platform by moving CPU
-> > > core and interrupt controllers' parts into new cv18xx-cpu.dtsi and
-> > > cv18xx-intc.dtsi.
-> > > 
-> > > Add SOC_PERIPHERAL_IRQ() macro which explicitly maps peripheral nubering
-> > > into "plic" interrupt-controller numbering.
-> > > 
-> > > On RiscV side this patch has been dtc-compile-tested only. IRQ numbers
-> > > substitution with SOC_PERIPHERAL_IRQ() has been scripted in vim.
-> > > 
-> > > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> > > ---
-> > > Changelog:
-> > > v3:
-> > > - &cpus node has been moved into cv18xx-cpu.dtsi, &plic and &clint nodes
-> > > were moved into cv18xx-intc.dtsi to reduce code duplication;
-> > > v2:
-> > > - instead of carving out peripherals' part, carve out ARCH-specifics (CPU
-> > > core, interrupt controllers) and spread them among 3 SoC .dtsi files which
-> > > included cv18xx.dtsi;
-> > > - define a label for the "soc" node and use it in the newly introduced DTs;
-> > > 
-> > >   arch/riscv/boot/dts/sophgo/cv1800b.dtsi     | 28 ++++---
-> > >   arch/riscv/boot/dts/sophgo/cv1812h.dtsi     | 28 ++++---
-> > >   arch/riscv/boot/dts/sophgo/cv181x.dtsi      |  2 +-
-> > >   arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi  | 36 ++++++++
-> > >   arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi | 23 ++++++
-> > >   arch/riscv/boot/dts/sophgo/cv18xx.dtsi      | 91 ++++++---------------
-> > >   arch/riscv/boot/dts/sophgo/sg2002.dtsi      | 34 ++++----
-> > >   7 files changed, 137 insertions(+), 105 deletions(-)
-> > >   create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi
-> > >   create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi
-> > > 
-> > > diff --git a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
-> > > index aa1f5df100f0..9fb7dd2dab18 100644
-> > > --- a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
-> > > +++ b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
-> > > @@ -3,8 +3,12 @@
-> > >    * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> > >    */
-> > >   
-> > > +#define SOC_PERIPHERAL_IRQ(nr)	((nr) + 16)
-> > > +
-> > >   #include <dt-bindings/pinctrl/pinctrl-cv1800b.h>
-> > > +#include "cv18xx-cpu.dtsi"
-> > >   #include "cv18xx.dtsi"
-> > > +#include "cv18xx-intc.dtsi"
-> > >   
-> > >   / {
-> > >   	compatible = "sophgo,cv1800b";
-> > > @@ -13,17 +17,23 @@ memory@80000000 {
-> > >   		device_type = "memory";
-> > >   		reg = <0x80000000 0x4000000>;
-> > >   	};
-> > > +};
-> > > +
-> > 
-> > > +&soc {
-> > > +	dma-noncoherent;
-> > >   
-> > > -	soc {
-> > > -		pinctrl: pinctrl@3001000 {
-> > > -			compatible = "sophgo,cv1800b-pinctrl";
-> > > -			reg = <0x03001000 0x1000>,
-> > > -			      <0x05027000 0x1000>;
-> > > -			reg-names = "sys", "rtc";
-> > > -		};
-> > > +	pinctrl: pinctrl@3001000 {
-> > > +		compatible = "sophgo,cv1800b-pinctrl";
-> > > +		reg = <0x03001000 0x1000>,
-> > > +		      <0x05027000 0x1000>;
-> > > +		reg-names = "sys", "rtc";
-> > >   	};
-> > >   };
-> > >   
-> > 
-> > The origianl /soc path can be used to override things, 
-> > why change it to the reference archor? I see no change
-> > for it.
-> 
-> https://lore.kernel.org/soc/d3ba0ea5-0491-42d5-a18e-64cf21df696c@kernel.org/
-> The corresponding label is being introduced in cv18xx.dtsi.
-> 
+This series adds very basic support for Milk-V Duo Module 01 EVB [1] in
+arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latter has
+been chosen because the upstream toolchain can be utilized.
 
-Yes I know, but I wonder why you change it here, the url you provide
-told nothing about change existing structure.
+Sophgo SG2000 seems to be a continuation of the Cvitek CV18xx series, same
+peripherals with an addition of ARM64 core. Therefore it would be
+beneficial not to copy-paste the peripherals' device-tree, but rather split
+the most suitable riscv DT into ARCH-specific and peripherals parts and
+just include the latter on the arm64 side.
 
-The origianl struct:
+This series adds the device-tree for Milk-V Duo Module 01 EVB, which
+in turn contains Milk-V Duo Module 01 (separate .dtsi) on it, which has
+SG2000 SoC inside (separate .dtsi).
 
-/ {
-	soc {
-		...
-	};
-};
+This series has been tested with Sophgo-provided U-Boot binary [2]: it
+boots from SD card; pinctrl, serial, GPIO drivers are functional (same
+as for RiscV-based CV18xx SoCs).
 
-it can also be used to add things in /soc, renesa uses this in that
-form is not the reason for this change. I prefer to keep original
-structure so less change is introducted.
+Partial SoC documentation is available [3].
 
-> > > +&clk {
-> > > +	compatible = "sophgo,cv1800-clk";
-> > > +};
-> > > +
-> > >   &plic {
-> > >   	compatible = "sophgo,cv1800b-plic", "thead,c900-plic";
-> > >   };
-> > > @@ -31,7 +41,3 @@ &plic {
-> > >   &clint {
-> > >   	compatible = "sophgo,cv1800b-clint", "thead,c900-clint";
-> > >   };
-> > > -
-> > > -&clk {
-> > > -	compatible = "sophgo,cv1800-clk";
-> > > -};
-> > > diff --git a/arch/riscv/boot/dts/sophgo/cv1812h.dtsi b/arch/riscv/boot/dts/sophgo/cv1812h.dtsi
-> > > index 8a1b95c5116b..f23c4dd6687d 100644
-> > > --- a/arch/riscv/boot/dts/sophgo/cv1812h.dtsi
-> > > +++ b/arch/riscv/boot/dts/sophgo/cv1812h.dtsi
-> > > @@ -3,10 +3,14 @@
-> > >    * Copyright (C) 2023 Inochi Amaoto <inochiama@outlook.com>
-> > >    */
-> > >   
-> > > +#define SOC_PERIPHERAL_IRQ(nr)	((nr) + 16)
-> > > +
-> > >   #include <dt-bindings/interrupt-controller/irq.h>
-> > >   #include <dt-bindings/pinctrl/pinctrl-cv1812h.h>
-> > > +#include "cv18xx-cpu.dtsi"
-> > >   #include "cv18xx.dtsi"
-> > >   #include "cv181x.dtsi"
-> > > +#include "cv18xx-intc.dtsi"
-> > >   
-> > >   / {
-> > >   	compatible = "sophgo,cv1812h";
-> > > @@ -15,17 +19,23 @@ memory@80000000 {
-> > >   		device_type = "memory";
-> > >   		reg = <0x80000000 0x10000000>;
-> > >   	};
-> > > +};
-> > > +
-> > > +&soc {
-> > 
-> > > +	dma-noncoherent;
-> > 
-> > I think this can be moved into cv18xx-cpu.dtsi file, and let
-> > all SoCs share it.
-> 
-> https://lore.kernel.org/soc/d3ba0ea5-0491-42d5-a18e-64cf21df696c@kernel.org/
-> 
-> If SOC_PERIPHERAL_IRQ() doesn't belong to -cpu.dtsi, then "dma-noncoherent;"
-> probably neither...
-> 
+This series lacks the support of:
+- USB
+- Audio
+- Ethernet
+- WiFi
+- Bluetooth
+- eMMC
+- Video
+- "reboot" functionality
 
-This is OK for me.
+It would probably make sense that the series will go into ARM SOC tree.
 
-> > > -	soc {
-> > > -		pinctrl: pinctrl@3001000 {
-> > > -			compatible = "sophgo,cv1812h-pinctrl";
-> > > -			reg = <0x03001000 0x1000>,
-> > > -			      <0x05027000 0x1000>;
-> > > -			reg-names = "sys", "rtc";
-> > > -		};
-> > > +	pinctrl: pinctrl@3001000 {
-> > > +		compatible = "sophgo,cv1812h-pinctrl";
-> > > +		reg = <0x03001000 0x1000>,
-> > > +		      <0x05027000 0x1000>;
-> > > +		reg-names = "sys", "rtc";
-> > >   	};
-> > >   };
-> > >   
-> > > +&clk {
-> > > +	compatible = "sophgo,cv1810-clk";
-> > > +};
-> > > +
-> > >   &plic {
-> > >   	compatible = "sophgo,cv1812h-plic", "thead,c900-plic";
-> > >   };
-> > > @@ -33,7 +43,3 @@ &plic {
-> > >   &clint {
-> > >   	compatible = "sophgo,cv1812h-clint", "thead,c900-clint";
-> > >   };
-> > > -
-> > > -&clk {
-> > > -	compatible = "sophgo,cv1810-clk";
-> > > -};
-> > > 
-> > > [...]
-> > > 
-> > 
-> > > diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi
-> > > new file mode 100644
-> > > index 000000000000..90817993a326
-> > > --- /dev/null
-> > > +++ b/arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi
-> > > @@ -0,0 +1,23 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > > +/*
-> > > + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> > > + * Copyright (C) 2023 Inochi Amaoto <inochiama@outlook.com>
-> > > + */
-> > > +
-> > > +&soc {
-> > > +	interrupt-parent = <&plic>;
-> > > +
-> > > +	plic: interrupt-controller@70000000 {
-> > > +		reg = <0x70000000 0x4000000>;
-> > > +		interrupts-extended = <&cpu0_intc 11>, <&cpu0_intc 9>;
-> > > +		interrupt-controller;
-> > > +		#address-cells = <0>;
-> > > +		#interrupt-cells = <2>;
-> > > +		riscv,ndev = <101>;
-> > > +	};
-> > > +
-> > > +	clint: timer@74000000 {
-> > > +		reg = <0x74000000 0x10000>;
-> > > +		interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
-> > > +	};
-> > > +};
-> > 
-> > 
-> > I think this file can be merged in to cv18xx-cpu.dtsi.
-> > clint and plic is more like a core specific device.
-> 
-> Yes, this can be done now, as long as SOC_PERIPHERAL_IRQ() remains
-> outside of the -cpu-intc.dtsi...
-> 
-> -- 
-> Alexander Sverdlin.
-> 
+Changelog:
+v4:
+- minimized patch 1/7 (cleanups dropped)
+- cv18xx-cpu-intc.dtsi instead of cv18xx-cpu.dtsi+cv18xx-intc.dtsi in
+patch 1/7
+v3:
+- &cpus node has been moved into cv18xx-cpu.dtsi, &plic and &clint nodes
+were moved into cv18xx-intc.dtsi to reduce code duplication;
+v2:
+- dropped all patches related to the new reboot driver and corresponding DT
+and bindings;
+- grouped DT-related and config-related patches together;
+- added patch moving sophgo.yaml from riscv into soc (to share it with
+ARM); added SG2000 SoC and Milk-V Duo Module 01 EVB into it;
+- other changes are documented in the corresponding patches;
+
+[1] https://milkv.io/docs/duo/getting-started/duo-module-01
+[2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
+[3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
+
+Alexander Sverdlin (7):
+  riscv: dts: sophgo: cv18xx: Move RiscV-specific part into SoCs' .dtsi
+    files
+  dt-bindings: soc: sophgo: Move SoCs/boards from riscv into soc, add
+    SG2000
+  arm64: dts: sophgo: Add initial SG2000 SoC device tree
+  arm64: dts: sophgo: Add Duo Module 01
+  arm64: dts: sophgo: Add Duo Module 01 Evaluation Board
+  arm64: Add SOPHGO SOC family Kconfig support
+  arm64: defconfig: Enable rudimentary Sophgo SG2000 support
+
+ .../{riscv => soc/sophgo}/sophgo.yaml         |  7 +-
+ arch/arm64/Kconfig.platforms                  |  6 ++
+ arch/arm64/boot/dts/Makefile                  |  1 +
+ arch/arm64/boot/dts/sophgo/Makefile           |  2 +
+ .../sophgo/sg2000-milkv-duo-module-01-evb.dts | 31 +++++++
+ .../sophgo/sg2000-milkv-duo-module-01.dtsi    | 85 +++++++++++++++++
+ arch/arm64/boot/dts/sophgo/sg2000.dtsi        | 75 +++++++++++++++
+ arch/arm64/configs/defconfig                  |  4 +
+ arch/riscv/boot/dts/sophgo/cv1800b.dtsi       |  5 +
+ arch/riscv/boot/dts/sophgo/cv1812h.dtsi       |  5 +
+ arch/riscv/boot/dts/sophgo/cv181x.dtsi        |  2 +-
+ .../boot/dts/sophgo/cv18xx-cpu-intc.dtsi      | 54 +++++++++++
+ arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 91 +++++--------------
+ arch/riscv/boot/dts/sophgo/sg2002.dtsi        |  5 +
+ 14 files changed, 303 insertions(+), 70 deletions(-)
+ rename Documentation/devicetree/bindings/{riscv => soc/sophgo}/sophgo.yaml (80%)
+ create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01-evb.dts
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01.dtsi
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
+ create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu-intc.dtsi
+
+-- 
+2.48.1
+
