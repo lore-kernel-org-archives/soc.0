@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AE1266579
-	for <soc@lists.linux.dev>; Fri, 14 Feb 2025 15:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A59266EEC
+	for <soc@lists.linux.dev>; Fri, 14 Feb 2025 15:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739545803; cv=none; b=nExCzJ1sj8JkVmgE2QcD+4+GEOoYMW0usFcZd1FCP+Jq/VwFW7hlEUP81i9bOcYOuQJZAqmPar9PF2tNZaoqR79RIY4vdxEpQJN6oEA+qT2vY6HG20u+G6TN+96ePYTwuCikk+RTQcdONlWomp0fUanHOavotUeTrFQvrziSoe0=
+	t=1739545804; cv=none; b=Jy/EHTi3dA+3QMSF9NuRnt/iOCPB0tmaSknlzUPMZPqCXimi25ABY2HAZQg0VXZ2kVmR9wAaB/N3kqLRkng2Avg2WmJ3dMHO83GOSfLGnvL8A8rjFlVk6+VsVvUqFubWHKnDAxfe7cXpzjiVPBF2ZUDE3B3RNyKIjNEONhn38JQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739545803; c=relaxed/simple;
-	bh=wt/pHxaZ4KXygpT2jILvlPsiBDITB9cAQbr8yS4BAfg=;
+	s=arc-20240116; t=1739545804; c=relaxed/simple;
+	bh=y01sA4tQi4FMyW+MtVSdu0dpMWgl73hmZf8u03UfCXE=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Sn4Ljm4DMy0ls8Kr6OBp7hctEdQuCCLiZfXBZ2vFDpGPUQWmQ8zo1paoApSTiyJ8qB8DPGHbikKObfyHajUqzPtagnWJXBl02aELzOML/HNVqrQisIpWh1EzgPH4GADqUvzuesPJKtoX/5D+jmize9ZcWP3dZe94P1mUJQJ/8Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qkuzqo0t; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Mg/KNZ8zeoKJixwxEUrIaKISQiYj36kzTudJN0YEUk+EcltOY/kQrDZVzCKbcTXY6HZCwWw/cf8VDxbLQE5PbDXszOGl488VZ3meZcfDv511f6laqsEgk38cPIF+pXfbJlhgYt0DoWZ4uyRYak4BaaNMzritWHLYc2uGAip++oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2ZhSgg4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qkuzqo0t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2ZhSgg4"
 Received: by smtp.kernel.org (Postfix)
-	id E1E02C4CEDF; Fri, 14 Feb 2025 15:10:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7206C4CED1;
-	Fri, 14 Feb 2025 15:10:02 +0000 (UTC)
+	id 5FE86C4CEDF; Fri, 14 Feb 2025 15:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A727C4CED1;
+	Fri, 14 Feb 2025 15:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739545802;
-	bh=wt/pHxaZ4KXygpT2jILvlPsiBDITB9cAQbr8yS4BAfg=;
+	s=k20201202; t=1739545804;
+	bh=y01sA4tQi4FMyW+MtVSdu0dpMWgl73hmZf8u03UfCXE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Qkuzqo0t+5ELw6stKohIYc2uicaTY84roOHA+9ShBQz9gjBjt0svB0+JY12Z/XQ2m
-	 0S82BW77E01It0n8r+mUqfnd2DHmFecKcEiRhIOfO80nk0w6JcY9fmeZiDy3D7U9s9
-	 WvvHPjTjuQF5FFJQHDQSWcUmf4FTP/erZjTo77WFl3rx6MgRODkqOTAGQ0dkqFXo3x
-	 edgTlXKGQD5EccqhXKFoBnxm3DKh6VdedQyt+pxJ0X24zsoWTtGkTPD18IEs8WqBog
-	 zysk52wHmlFeWCqYo9b89HzlinMadvFlWB1SjOAHpEbPRIBKGw1WlVWQqZQRQNh+gF
-	 mPr9PkO9ELFUw==
+	b=o2ZhSgg49D8svsVI4GT2JJfM3SByZJQcdy2iTTgY2v9F2LO9W9cWV3ndAYCmJ7KO1
+	 cSBKL7vdC39/ob8+KlX7T1DU7UVvySv5Bsf4X02wsJUcoC/qBHAKvcO4Fr7nme3fWQ
+	 ggdQ2X7unpq2ZNx3Mqx28r050THSRsx2dFDhFYmW6w2iwDhrLcKTfBTAPO7QuFvECv
+	 m116K0OqoX1206oE7+wnm7eSgVgUOWw1M8Kgj160cK329vQfL53A0O8qIOzGn06TGn
+	 9vSCJb09sdU44CA0ZsItTKYFPiEogcwwUQ1R2THjOghAikftHLaTYlKUIvDZlBugJY
+	 JFT0fNNdXnKcA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7138E380CEE8;
-	Fri, 14 Feb 2025 15:10:33 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB608380CEE8;
+	Fri, 14 Feb 2025 15:10:34 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +39,35 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: Mark Andrew as M: for ASPEED MACHINE SUPPORT
+Subject: Re: [PATCH] MAINTAINERS: Remove myself
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <173954583199.1980112.14166027612629421937.git-patchwork-notify@kernel.org>
-Date: Fri, 14 Feb 2025 15:10:31 +0000
-References: <20250203-aspeed-maintainer-v1-1-60bc3a5f0a7c@codeconstruct.com.au>
-In-Reply-To: <20250203-aspeed-maintainer-v1-1-60bc3a5f0a7c@codeconstruct.com.au>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
+ <173954583349.1980112.2144707435921408289.git-patchwork-notify@kernel.org>
+Date: Fri, 14 Feb 2025 15:10:33 +0000
+References: <20250207-rm-maint-v1-1-10f069a24f3d@marcan.st>
+In-Reply-To: <20250207-rm-maint-v1-1-10f069a24f3d@marcan.st>
+To: Hector Martin <marcan@marcan.st>
 Cc: soc@kernel.org
 
 Hello:
 
 This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-On Mon, 03 Feb 2025 13:26:31 +1030 you wrote:
-> From discussion in [1] and in-person with Joel, flip my entry from R:
-> to M:.
+On Fri, 07 Feb 2025 03:21:46 +0900 you wrote:
+> I no longer have any faith left in the kernel development process or
+> community management approach.
 > 
-> Link: https://lore.kernel.org/all/CACPK8Xe8yZLXzEQPp=1D2f0TsKA7hBZG=pHHW6U51FMpp_BiRQ@mail.gmail.com/ [1]
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: soc@lists.linux.dev
-> Cc: linux-aspeed@lists.ozlabs.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> Apple/ARM platform development will continue downstream. If I feel like
+> sending some patches upstream in the future myself for whatever subtree
+> I may, or I may not. Anyone who feels like fighting the upstreaming
+> fight themselves is welcome to do so.
 > 
 > [...]
 
 Here is the summary with links:
-  - MAINTAINERS: Mark Andrew as M: for ASPEED MACHINE SUPPORT
-    https://git.kernel.org/soc/soc/c/5755eb0a8168
+  - MAINTAINERS: Remove myself
+    https://git.kernel.org/soc/soc/c/1b3291f00013
 
 You are awesome, thank you!
 -- 
