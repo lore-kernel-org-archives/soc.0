@@ -1,37 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A59266EEC
-	for <soc@lists.linux.dev>; Fri, 14 Feb 2025 15:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DD1223700
+	for <soc@lists.linux.dev>; Mon, 17 Feb 2025 15:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739545804; cv=none; b=Jy/EHTi3dA+3QMSF9NuRnt/iOCPB0tmaSknlzUPMZPqCXimi25ABY2HAZQg0VXZ2kVmR9wAaB/N3kqLRkng2Avg2WmJ3dMHO83GOSfLGnvL8A8rjFlVk6+VsVvUqFubWHKnDAxfe7cXpzjiVPBF2ZUDE3B3RNyKIjNEONhn38JQ=
+	t=1739807576; cv=none; b=kkQsmNMesjfMgCOJC7xJ3A/QKknveXsCzVon2cSaVTpfuzuY+3Y+4EtARrHGdAyvGihW9/T61yQCJ4aUS1BuUF1JCELUioEvBPsnRbNbB+QtN3My5H4Aarg/5cycWMGf7CEdp2bNzk+dcXV2x08lmAWGd9rkR77DDYwYIE5yko8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739545804; c=relaxed/simple;
-	bh=y01sA4tQi4FMyW+MtVSdu0dpMWgl73hmZf8u03UfCXE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Mg/KNZ8zeoKJixwxEUrIaKISQiYj36kzTudJN0YEUk+EcltOY/kQrDZVzCKbcTXY6HZCwWw/cf8VDxbLQE5PbDXszOGl488VZ3meZcfDv511f6laqsEgk38cPIF+pXfbJlhgYt0DoWZ4uyRYak4BaaNMzritWHLYc2uGAip++oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2ZhSgg4; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2ZhSgg4"
+	s=arc-20240116; t=1739807576; c=relaxed/simple;
+	bh=pBlYBZKaJrMhl24NOxKd26XIWBHpESzeFeP+woT+ahI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T7eQjYPE+AUJTSKr5g93nAciGtCNyD+5SuLwXA5Ue1XPAQloZ/cH7NUB8t2CGuJU1iU2asxf5OfjFcmFX4GEoEjxnbN5QUfvtoFxgTZlzoCla1NmAiblFKg2l2gDBC3yJHEX4kN5QS2/j6WNMi6CUTIrTE9YHNN0RT3aBN8DPXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 5FE86C4CEDF; Fri, 14 Feb 2025 15:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A727C4CED1;
-	Fri, 14 Feb 2025 15:10:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739545804;
-	bh=y01sA4tQi4FMyW+MtVSdu0dpMWgl73hmZf8u03UfCXE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=o2ZhSgg49D8svsVI4GT2JJfM3SByZJQcdy2iTTgY2v9F2LO9W9cWV3ndAYCmJ7KO1
-	 cSBKL7vdC39/ob8+KlX7T1DU7UVvySv5Bsf4X02wsJUcoC/qBHAKvcO4Fr7nme3fWQ
-	 ggdQ2X7unpq2ZNx3Mqx28r050THSRsx2dFDhFYmW6w2iwDhrLcKTfBTAPO7QuFvECv
-	 m116K0OqoX1206oE7+wnm7eSgVgUOWw1M8Kgj160cK329vQfL53A0O8qIOzGn06TGn
-	 9vSCJb09sdU44CA0ZsItTKYFPiEogcwwUQ1R2THjOghAikftHLaTYlKUIvDZlBugJY
-	 JFT0fNNdXnKcA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB608380CEE8;
-	Fri, 14 Feb 2025 15:10:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id D188CC4CEE4; Mon, 17 Feb 2025 15:52:54 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 65213C4CED1;
+	Mon, 17 Feb 2025 15:52:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65213C4CED1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB129152B;
+	Mon, 17 Feb 2025 07:53:11 -0800 (PST)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 63D0D3F5A1;
+	Mon, 17 Feb 2025 07:52:51 -0800 (PST)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: [GIT PULL] firmware: arm_scmi: Fix for v6.14
+Date: Mon, 17 Feb 2025 15:52:46 +0000
+Message-Id: <20250217155246.1668182-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,39 +43,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: Remove myself
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <173954583349.1980112.2144707435921408289.git-patchwork-notify@kernel.org>
-Date: Fri, 14 Feb 2025 15:10:33 +0000
-References: <20250207-rm-maint-v1-1-10f069a24f3d@marcan.st>
-In-Reply-To: <20250207-rm-maint-v1-1-10f069a24f3d@marcan.st>
-To: Hector Martin <marcan@marcan.st>
-Cc: soc@kernel.org
 
-Hello:
+Hi ARM SoC Team,
 
-This patch was applied to soc/soc.git (arm/fixes)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+Please pull !
 
-On Fri, 07 Feb 2025 03:21:46 +0900 you wrote:
-> I no longer have any faith left in the kernel development process or
-> community management approach.
-> 
-> Apple/ARM platform development will continue downstream. If I feel like
-> sending some patches upstream in the future myself for whatever subtree
-> I may, or I may not. Anyone who feels like fighting the upstreaming
-> fight themselves is welcome to do so.
-> 
-> [...]
+Regards,
+Sudeep
 
-Here is the summary with links:
-  - MAINTAINERS: Remove myself
-    https://git.kernel.org/soc/soc/c/1b3291f00013
+-->8
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fix-6.14
+
+for you to fetch changes up to ab027c488fc4a1fff0a5b712d4bdb2d2d324e8f8:
+
+  firmware: arm_scmi: imx: Correct tx size of scmi_imx_misc_ctrl_set (2025-02-13 14:27:37 +0000)
+
+----------------------------------------------------------------
+Arm SCMI fix for v6.14
+
+Just a single fix to address the incorrect size of the Tx buffer in the
+function scmi_imx_misc_ctrl_set() which is part of NXP/i.MX SCMI vendor
+extensions.
+
+----------------------------------------------------------------
+Peng Fan (1):
+      firmware: arm_scmi: imx: Correct tx size of scmi_imx_misc_ctrl_set
+
+ drivers/firmware/arm_scmi/vendors/imx/imx-sm-misc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
