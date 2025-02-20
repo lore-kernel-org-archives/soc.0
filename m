@@ -1,93 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDF11A724C
-	for <soc@lists.linux.dev>; Thu, 20 Feb 2025 08:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4091F4169
+	for <soc@lists.linux.dev>; Thu, 20 Feb 2025 12:48:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740039458; cv=none; b=OFL27/QRkZAjDQINkxZfcpFNUobs/boHp1lzSFglojJXeY6EZOD6kzePViY1poPa2lbDxe8bsj+noiKcp7wHPEAhehZxr1TU7Rw+Pkgxuj+FcCieiJ9KvCK1cBUl2njf9OivI35aDouV6bUNyOjUnsjmbKRdkylQCzlUQYbe9/A=
+	t=1740055682; cv=none; b=UndM8WAto0Gz2ItKv0iyBufz48evmsOXAHaqLrDgqSajErT9dwLJ8vyHGo3sHetQwgUVDH0XgtmcMjsM8PYKTjLiHaO2gFa9A4KG4nQtAYKQ6Xts7rzzti9fiOjE9zFjcDQUy6LVowY20DSZZbIbaDxQdPvvVdESoEPseY/3dsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740039458; c=relaxed/simple;
-	bh=oCazgK2J+JQNRdaJ2W40CLpySIyip95iAnugNazXwnE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cW3tsfzGe5msH+uvJZWNwtEvhEYJmxRzFarvDbUkZS0V2XkAr/4lq/J8wsPcz8fONlpFlB2jcGqQDCcRpk3dl5ynvtsEBVCcLbNinq+4g3Qplwid6vPmvVqmRbFKuKAISWy5c05q/6DyDNs0FreBpyIA5+iihGejOdjcfxX5T+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=S3MuI+AH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740055682; c=relaxed/simple;
+	bh=HfiQu/e9OYoDP5LE2IQ2WrA/SQR7aHF9x517fW1MTNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PREw2vW9F0PvfygsCOOGhrxUWav1mRKL3nqgCFG/ROS8LNeHTIp6z/fzbj6/pGL7f17L/qyW0J4rsBPYf2hE3MYcb5uhVrDa6X3nLw5Vgl0yeaOMQBfT8s2WSHZQ5py5G80weSUVI2dJEy5Hfp44sL5gfxna2/gDBVM1T3Ambcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lejZZhPD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="S3MuI+AH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lejZZhPD"
 Received: by smtp.kernel.org (Postfix)
-	id BD97AC4CEDD; Thu, 20 Feb 2025 08:17:37 +0000 (UTC)
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.kernel.org (Postfix) with ESMTP id F1740C4CED1
-	for <soc@kernel.org>; Thu, 20 Feb 2025 08:17:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F1740C4CED1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=i7pov
-	A4zdsdkdu9JehhxCixgUWiQ2gMIpi3PyPSESfA=; b=S3MuI+AH5uSmisdho40my
-	VkE3DOD0f5E6FypOnjiCpzowpK9HyoAR/mGCc+yqJOTCFB3ItGQ9FG8sdZWJ6CkI
-	RJivdpcGs58jy/ziTVGhljMQCNG0SX+nhqE7EyaoaE6E0XEWJ6y4qbNsQJ+FgbN2
-	GEn0BvMXBoEl4lIL+Y8rX0=
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wBnjX8O5bZnl9BpMw--.6425S4;
-	Thu, 20 Feb 2025 16:17:19 +0800 (CST)
-From: Haoxiang Li <haoxiang_li2024@163.com>
-To: zhuyinbo@loongson.cn,
-	arnd@arndb.de,
-	zhoubb.aaron@gmail.com
-Cc: loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org,
-	Haoxiang Li <haoxiang_li2024@163.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] soc: loongson: loongson2_guts: Add check for devm_kstrdup()
-Date: Thu, 20 Feb 2025 16:17:14 +0800
-Message-Id: <20250220081714.2676828-1-haoxiang_li2024@163.com>
-X-Mailer: git-send-email 2.25.1
+	id DBF00C4AF09; Thu, 20 Feb 2025 12:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1BEC4CED1;
+	Thu, 20 Feb 2025 12:47:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740055681;
+	bh=HfiQu/e9OYoDP5LE2IQ2WrA/SQR7aHF9x517fW1MTNw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lejZZhPDIwHImFW7BOYmqh4dFN+iFwFw8+uwl1macPt2Pzf+f5CX+w6vFF98BXaAG
+	 iK1Y1dhaPG9RT32XJuHHYV6wOq4nYqYfDAHlCzobRU+toCQpbr3yYnW+mWmdESE0g/
+	 T87SnQXhiNl+hfgmy4szFuOWTQ0SEOJR6kv8EWnPA2neTbkwQ7LKjrzETXDg8nrsd7
+	 ZVJBoKk2CgFhVzsfoK8wK9ZiMA+8I7DwAz5S8HKI5we6xAqKYBGIMVMEtzDzIzfD3w
+	 1ccfpqUmA+qQvNC5m1wMbH3jHh/LfJYk1g7GgIxGGbT21XvBOFUslhbR9LbK/Rn8d4
+	 0yU4zEmiam3ow==
+Date: Thu, 20 Feb 2025 13:47:56 +0100
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, soc@kernel.org, 
+	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	linux-crypto@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 0/5] Turris ECDSA signatures via keyctl()
+Message-ID: <owevknlvu3slxa5uyh6myz7qqpupwrqditsqvipwbw6k6z5sly@3rwki2sta4zl>
+References: <20250204131415.27014-1-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBnjX8O5bZnl9BpMw--.6425S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7XFykGF17tr1DXF4kAFWrKrg_yoW8JrWUpF
-	ZIy348WFWUXF1fZ3s8Ja48XFyYka45WasrXF4xXwnrWFykA3WUW343JFy0vw4fZry8Ga4j
-	qFykKrW3CFy5CrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE6pBsUUUUU=
-X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbB0gf5bme2z+Ai3QABsC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250204131415.27014-1-kabel@kernel.org>
 
-Add check for the return value of devm_kstrdup() in
-loongson2_guts_probe() to catch potential exception.
+Hi Arnd et al.,
 
-Fixes: b82621ac8450 ("soc: loongson: add GUTS driver for loongson-2 platforms")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
----
-Changes in v2:
-- modify the check position. Thanks, Binbin!
-- modify the title description.
----
- drivers/soc/loongson/loongson2_guts.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+any comments on this series?
 
-diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
-index ae42e3a9127f..16913c3ef65c 100644
---- a/drivers/soc/loongson/loongson2_guts.c
-+++ b/drivers/soc/loongson/loongson2_guts.c
-@@ -114,8 +114,11 @@ static int loongson2_guts_probe(struct platform_device *pdev)
- 	if (of_property_read_string(root, "model", &machine))
- 		of_property_read_string_index(root, "compatible", 0, &machine);
- 	of_node_put(root);
--	if (machine)
-+	if (machine) {
- 		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
-+		if (!soc_dev_attr.machine)
-+			return -ENOMEM;
-+	}
- 
- 	svr = loongson2_guts_get_svr();
- 	soc_die = loongson2_soc_die_match(svr, loongson2_soc_die);
--- 
-2.25.1
+Thanks,
 
+Marek
