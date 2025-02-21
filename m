@@ -1,87 +1,132 @@
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC64022579E
-	for <soc@lists.linux.dev>; Fri, 21 Feb 2025 16:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A875D229B2F;
+	Fri, 21 Feb 2025 17:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.63.210.85
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740157068; cv=none; b=dIPKTPBi5V+5Quv5Fjc9vwdBUj46kNei7O5HcHdWdy9cU76A1wfFJx8YN8XRP1xks36qRK+mFEql9CpTtLBBndUA8OgcpKMm+ScB66Ag9SY+ncsTPD2YXCWEKV3WfrZP9LYmAY2hY0sZ+GH9cvAi61pM/CQQDKlfJQMFaZ7CosA=
+	t=1740157574; cv=none; b=lHr43fDQ4icKyC0b8Ftm8d/0uoZpZx5jOJLiF+MUev2oBTbv4X7Q1GeG9rW5zrrgFPfKtOywSf0bzZGGxu0XiV9dfYFbTLHMGcU8bl8UfhbhV+xnUl8JihGMwqA/yWwUtATY8voOQ2UlpMe52IDhVE+TAVm+yTdh/Yvo6rTVdXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740157068; c=relaxed/simple;
-	bh=IUj9RMBLtpFFh2EaTRqD4ZwOnHj8W4mtlzJltudOrKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TnFx2B/9DmXNC9edpya9chISakAoB+GNMjmsEIjJ2eJuEwm9kQ/i81OsZSm6ibjjGMud8EkHQYA0F0nmTvYFlcT1dQmtAb70nztCel+sGNHxqSPGafDky3EuXG5dRHkane29+uzlMNsOFelWxhlrMQpseH52Lu0eyndw7sH3jW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4YzxBq2m19z4yhfG
-	for <soc@lists.linux.dev>; Fri, 21 Feb 2025 17:57:39 +0100 (CET)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:ae9a:419e:d123:9695])
-	by xavier.telenet-ops.be with cmsmtp
-	id GGxX2E0030y8aK501GxXRt; Fri, 21 Feb 2025 17:57:31 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tlWKs-0000000BMsb-3jyN;
-	Fri, 21 Feb 2025 17:57:31 +0100
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tlWLD-0000000EOqx-1IZ1;
-	Fri, 21 Feb 2025 17:57:31 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 4/5] Renesas DT binding updates for v6.15
-Date: Fri, 21 Feb 2025 17:57:25 +0100
-Message-ID: <cover.1740156745.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1740156736.git.geert+renesas@glider.be>
-References: <cover.1740156736.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1740157574; c=relaxed/simple;
+	bh=6aTAG33GXbthnOFm9BMutu45WRm+bikg09wcb56nqGQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hGUmgkbLfy39QK1lTDtzWHnid5bERY8sdIKZrmzpCH2609nj/8RwrbSnDxVp8Y9B4jikNu7mOugrt3A/zdeTXu+I0m6xXMV1O/oQS01sw/8WNDsHlhUK1S4UxTKarYFfGVyMogUaqOs3HDpyfrLbu5F0HGzeBogVXFMvqEinyqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st; spf=pass smtp.mailfrom=marcan.st; dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b=yFd8hA1e; arc=none smtp.client-ip=212.63.210.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marcan.st
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b="yFd8hA1e"
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id C9D854265F;
+	Fri, 21 Feb 2025 17:05:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1740157560; bh=6aTAG33GXbthnOFm9BMutu45WRm+bikg09wcb56nqGQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=yFd8hA1eSgRe4Ug0aYqGb7aycPGypHBBQk/E2E1VRzQLd6JVkGVyrAoP/YscN2mGc
+	 4hAQUZq8GpSFHGa9K+arnPQHbctCEgBL8ZAC0Epa2fFOYkTSXLP/U2KWYxY/qjDNPY
+	 Mg4x+MoSLAYrdd1GqRsCwF2iLC+EDOGkrJIXNhhlGDBAVgZte8p1bek9zMHy80ajE0
+	 HoTD8hDCN0x05ccySbXH5z9Q/Ti1jC0kv6XM6xetwWMgVzviSqWPa386XAu+593biT
+	 DOHi2820KsRXnN88gu+BGXSt2IzbzuyvDTyHHXobCZ9bJAF/C/zrFh+oiq6+zAmhHZ
+	 iVUsmCsljM2mg==
+Message-ID: <5f26b440-14ec-42f6-9d29-1657d88cf5a0@marcan.st>
+Date: Sat, 22 Feb 2025 02:05:58 +0900
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: Remove myself
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, asahi@lists.linux.dev, soc@lists.linux.dev,
+ David Airlie <airlied@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>
+References: <20250207-rm-maint-v1-1-10f069a24f3d@marcan.st>
+From: Hector Martin <marcan@marcan.st>
+Content-Language: en-US
+In-Reply-To: <20250207-rm-maint-v1-1-10f069a24f3d@marcan.st>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+On 2025/02/07 3:21, Hector Martin wrote:
+> I no longer have any faith left in the kernel development process or
+> community management approach.
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+As I was rather brief in my commit message, I feel like I should expand
+on my reasons for leaving (particularly given a bunch of people [1]
+think everything is resolved after Linus' latest proclamation and we
+should just move on).
 
-are available in the Git repository at:
+Many of you are probably familiar with my frustrations [2] with the
+kernel process, which form the background motivation, and I'm unlikely
+to have any desire to participate in kernel upstreaming again until some
+of them are resolved. Similarly, the issue of kernel maintainers
+attempting to block project progress, doing the Linux kernel version of
+Elon performing the nazi salute [3] (make no mistake, Ted knew exactly
+what he was doing with that line, and that it would be plausibly
+deniable by the actual nazis and those unaware of the cultural context
+or eager to grasp at straws to defend him), or generally being assholes,
+certainly had an impact.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.15-tag1
+However, I should clarify that what pushed me over the point of no
+return and to not only resign as a maintainer but also cease all
+commitments to work on kernel code [4] was, specifically:
 
-for you to fetch changes up to 00e3cb0d638ce70391470f894820d8442a155e95:
+- A pile-on [5] initiated by a kernel maintainer, which was apparently
+motivated by what can only be described as a blatant, deliberate
+mischaracterization of my words [6]. I can only assume this was a
+convenient excuse to lash out pent-up grudges against me in public.
+- The hypocrisy of complaining about posting on social media while
+posting and flaming about it on social media.
+- The mischaracterization of my social media posts as "brigading" (by
+three kernel maintainers including Linus, no less), which is a loaded
+term [7]. I have been the victim of *real* brigading by the kind of
+internet trolls who work to drive people to suicide, including
+successfully doing so to one of my friends [8], and it's not funny.
+- The accusation that the alleged brigading was a way of generating
+attention for donations [9], which is quite frankly disgusting.
+- Some even more disgusting stuff that came out in private and I will
+not elaborate on here.
+- The fact that all this came from kernel maintainers who I *thought* I
+could work with, have had multiple discussions with in public and
+private, and did not expect to privately hold grudges on me for a long
+time while putting on a face, only to release them all in public without
+so much as an attempt to discuss them in private.
 
-  dt-bindings: soc: renesas: Document MYIR Remi Pi board (2025-02-10 09:42:40 +0100)
+I can deal with overt assholes, but I cannot deal with people who put on
+a friendly face in private only to do a 180° later in public and stab
+you in the back.
 
-----------------------------------------------------------------
-Renesas DT binding updates for v6.15
+Sima, I wish you the best in "derailing, sabotaging and maybe improving
+the Linux kernel from within" [10], but I have no hope left for your
+approach. If you truly believe you've spent more time "handling the
+fallout from my brigading" [11] (without ever communicating that to me;
+also you really seem attached to that word, perhaps it's time to learn
+what it means) than working on your approach lately, maybe it's time to
+reflect on whether I'm actually the problem, or the problem is that your
+approach also doesn't work.
 
-  - Document support for the Yuridenki-Shokai Kakip (based on RZ/V2H)
-    and MYIR Remi Pi (based on RZ/G2L) boards,
-  - Document support for the RZ/G3E System Controller.
+Best of luck to this community and everyone part of it. I'm going to
+take a long, long break myself.
 
-----------------------------------------------------------------
-John Madieu (1):
-      dt-bindings: soc: renesas: Add RZ/G3E variant SYS binding
+[1] https://fosstodon.org/@airlied/114039656644172292
+[2]
+https://lore.kernel.org/lkml/208e1fc3-cfc3-4a26-98c3-a48ab35bb9db@marcan.st/
+[3] https://lore.kernel.org/lkml/20250208204416.GL1130956@mit.edu/
+[4] https://marcan.st/2025/02/resigning-as-asahi-linux-project-lead/
+[5] https://lore.kernel.org/lkml/Z6OzgBYZNJPr_ZD1@phenom.ffwll.local/
+[6] https://lwn.net/Articles/1009671/
+[7] https://hachyderm.io/@chandlerc/114001000657957325
+[8]
+https://www.vice.com/en/article/what-i-learned-from-near-an-emulation-legend-and-real-person/
+[9] https://lore.kernel.org/lkml/Z6YPfsDSNdRUskvp@phenom.ffwll.local/
+[10] https://chaos.social/@sima/113942119012147959
+[11] https://chaos.social/@sima/113962228220035362
 
-Julien Massot (1):
-      dt-bindings: soc: renesas: Document MYIR Remi Pi board
+- Hector
 
-Nobuhiro Iwamatsu (3):
-      dt-bindings: soc: renesas: Document more Renesas RZ/V2H SoC variants
-      dt-bindings: vendor-prefixes: Add Yuridenki-Shokai Co. Ltd.
-      dt-bindings: soc: renesas: Document Yuridenki-Shokai Kakip board
-
- .../bindings/soc/renesas/renesas,r9a09g057-sys.yaml      |  5 ++++-
- .../devicetree/bindings/soc/renesas/renesas.yaml         | 16 ++++++++++++++++
- Documentation/devicetree/bindings/vendor-prefixes.yaml   |  2 ++
- 3 files changed, 22 insertions(+), 1 deletion(-)
