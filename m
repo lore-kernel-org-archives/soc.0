@@ -1,61 +1,63 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CEE1A5BB8
-	for <soc@lists.linux.dev>; Tue, 25 Feb 2025 18:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02401C84C8
+	for <soc@lists.linux.dev>; Tue, 25 Feb 2025 18:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740509310; cv=none; b=GXWHdPOVhwx6VsY2sfqD3/+Ydz/JL1APjERhgAivD74a/LOfhTHBgnv0tn+RkAS4kNmor3AZxSTVACV0dKJXRsKrl2u91kfb9L9wNmClD0CQDc1B3tWstJegP6df1oCYy+JkVPuOE5YrNjqHwnbRovh/N0LCxZwhB1kS10JxtRk=
+	t=1740509311; cv=none; b=OJA/waa8fCwfQnD8ucRfugaYUy1NqZuaDd3bV6jjt6yMbwarMUFqH5IXx3QtT6PNjM6B8HoQrdYREghE/8m9gsCKXRozIRCkxFD4CuqVGHazhHblkfPFQnm/wxNdsJJ5hRkG04syR+lkjS5RTGTlcENhJSRlIji6XSG3q0dFSzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740509310; c=relaxed/simple;
-	bh=w+svvFUZeh+NUVQcPgIj5rGGXE1ylyMV4ce0O+x3V5Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nLegMVakefXZJR8mnADON0p81w1+QbIJFN1ApJCUhhGDqcMsL2oPnI2YojZOO622Kcw0sS8EIQR7UGUs6Fg9nOeYxWbDfVGYg5UShEC/+fIQ+FiyhTPm6i74JtJbIOdXb113uaC/KHuiDTONERqrjKamr3eYn27JKIzF7hlpqpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bYoDRQxs; arc=none smtp.client-ip=209.85.218.44
+	s=arc-20240116; t=1740509311; c=relaxed/simple;
+	bh=tCCjly+Qh5AY74QbK5LfS4mXEJXwkw/OWlEpJf5244k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=d0bNwWkmKTx9E6rvWiKKLRHu1T1sQC3Lrb9wvNpuMvCtTdpqKsU4JlHsNUyO4QoQ/9K5Ztjgz8uzTmYXEgnSTYCSvU2SSJYyYeG3E/Nt9q9eP5Y62/QsnitcMwhG/POz3TIji3r8oHF3rk1auCInAIJ8IHdAIa3119FdRlPbZRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RaO5FYDk; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bYoDRQxs"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ab7e08f56a0so106967166b.1
-        for <soc@lists.linux.dev>; Tue, 25 Feb 2025 10:48:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RaO5FYDk"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ab7d8953b48so95714166b.2
+        for <soc@lists.linux.dev>; Tue, 25 Feb 2025 10:48:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740509306; x=1741114106; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xonXqxvKrBNVv9VbDpJk9UUk6NvAaABwloKGPZx8qJg=;
-        b=bYoDRQxsKCRY7biSr9J0JC/S/75IRO9ODCw/PRt17LK9/GUIis9CG61O4PAhKkT/Pp
-         dUDV19PVdcg5JxHo//IMAhyXRDaOLjsVw13Hw5f8/A8l+t0+Y1ZALrrWb5hkeBiH8az8
-         IbnFT6jsCM5jP9NZXdVLKGlR6p8RMK6IHja/AzLpgSlsmmVY4a3StsdavxlgcCxLtctr
-         4V8m5kY30Ryb+wrM2xQMIyOZ+HzbKfARR0mdSXv7YwmEjjpp/2vxRhz5kyBCW6uV8Xh+
-         H3t/TlDtkFNeM8GFXxQSPDABfB8HQg8MJ/+KllatNnVHSs12ToMCG6wwh68cRzaYt0Os
-         3u2Q==
+        d=linaro.org; s=google; t=1740509308; x=1741114108; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/oN23gi/Cv1G/Zd8ve35VhHoD43rI+bSAAj2I1PX/Ag=;
+        b=RaO5FYDkMR4J3tgvZE32zCL8h0y2c0B0no9Zq6XQB0bmMchAUwtveZxyeF20W/yWZo
+         WE88PvJHXML730IzlHjgFJYqTDv9+7a3nCMSLKJu4Z240exRxDl7ZVxL0MYlezQbCpUG
+         /nnP3K7E4QEubLBjLeA1hmsICXRVQNZ/sYL29ALj4dQ2rrZAaKfRdf8jfpvM8sPg2h5K
+         zRVyTp5Pr7fqFlNSLNCGe0O6Bb7HqJeeimt3jykCcvcjBQ9Zl5ynhTGxnuDmEvEKOJ6P
+         A7bCb/gduCrUTcsWnA9jgzkicPgSU8OMihI/xYxKipc83wdl9psJQYXocMDz1SAV76vB
+         zxCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740509306; x=1741114106;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xonXqxvKrBNVv9VbDpJk9UUk6NvAaABwloKGPZx8qJg=;
-        b=d2aXS1w4/NKOeLtrj0wlSGBqVZf7+Yga9OrZC4FoZGcX3dvR9LgKneTfdmoBo9kWnT
-         9DA8q8xJCjAcW6dRMNlbmEAuLV3+1g8LqVfuJcHsNtZQ3vZuprm5Is95BYCXYFttBJpD
-         AjS+FSPc59L6xyf6T05h/NCrtQSNka//qpBXzkvq1iuZZ97fHAbpCXpAoJuw/pJNEe3p
-         CT7fNREgt4NYBx5AzPf7w8178HVO45mx1xVzyIJVmz5kvIio2QcusC5+5ilZD8z/LaHJ
-         AWXXt91rTJIPgVeudeSJn6KOSa+HDYqcALz+11z9cL795zU/hHEZMaYqg9jGbhNsf9Iy
-         qzVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVtNmTJv+gu4CaOJb2t/EWuFz3FVtCQTA+3gFT12gR8XH3lwvZfMnMQl7uy5Hx1pzQx1I=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzwqtYQ0rPuf0X7GAW8gLBZGgUr9NoxAkJx5lQqtyp9p5wJdhj/
-	eVaRXnCtRodFjJrKirgWGkUN0C9vqKOK9O/2U/1yTmM76N+NAb4vbZTkSNBWRd4=
-X-Gm-Gg: ASbGncsPq00pHlOxZ1FlYcGyRekwhvEJeBoMVfw/Zq0Fhi2xl/gVYcb1hG1xPGgvX6M
-	/8ZS4gFSTl990SS1yZjcCxuSybBfXXuM2O+A05+R3fiWRNLgNOyDKIruJGIF10d7c0IxoimGWZi
-	XJ+STl5gfytfWfC1hXhDbT1qbIhtTjPRENVyjqd6w3dN8VzA8dTkwOldzgcQgmA3LGjlnewrzfv
-	I2sTkpum8zxzJSf8SNvTVpirAPRmnRpruXndg2hIJFDoenVUa9o+Ome8vTuGvPltVaFAt+94MWu
-	ZtcKxWYhrVDRq212zmatDa7mfMZwAycjzPGPKlNf5/n8Oiwj2kSWA4F2/fy1ZKlzr2yZh15xFp4
+        d=1e100.net; s=20230601; t=1740509308; x=1741114108;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/oN23gi/Cv1G/Zd8ve35VhHoD43rI+bSAAj2I1PX/Ag=;
+        b=Ft3XcIx36Nfcc2UKMjC7h8uMqqHnLAkYd7BhrfVM+tFZXrawQC3msxb2ky7pMw+1fP
+         KYamkcwgj38Aftp/ZjcFMeqoo0UaHUqRXi4Dk28ZTLuHKj8x2t66hd/lUob7G69F2t9f
+         vfMitq10YQi8UsUTW7Rl2DniCM8QVuuO2971W6AHuIBT4+1BnPmFrX9nPtG+9IAozvpB
+         XWlvdQB49gvUBQ5TvIDfBJqVh//nKc3GKwMf3ETHBQvHiANfEL6QJw36C0B90KmY/BPF
+         8hq0fFqO2lNGRirAJkxJuoiUn7vMiSYFNk85fB4F+Is57iHSNHbr5uy0eNHrj6k9MfE7
+         AClA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJV6klU6L4kl/ioJd6Y3L9ZMU2GH9Q9/nxbB/IYdbc/tkYtTlbfktuVt2GgNDeS9ubj0w=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwHTEXtZw0f5ki27LciefRD3asong9zHe1ds6snUvwORdRmv8Rq
+	BHQ6HMKUhqXM98m5HoEuWPAIaiNGFHIYc/m4D8Iqx233+34HknmCHKCQ3CU7As8=
+X-Gm-Gg: ASbGncuyNW0DSmpPEd4+2h13bOFYtwamCTxe+ZY/7/JyTeCk+M65lx4fuQmNNpOH6Gq
+	rJck/YTuAR/HmVFd1zigbK8AdSoXAfs5OXk3VrS/yEFLbYN4XnaO0w4+xIZ7yd1eADPDwYUQVHQ
+	q36F2SbUCDQGYnBimjJRbM0h28dL4/5T6eiXRYZTdVCkeHyn0DcQhe1wWWpTxqQTr77WC4pbXpy
+	/EbZl2z/N7WO2Zeo4JrQxAPPQVRsUbxxKr5bWSMNJojlRW5MZh3wiHkMxZNVMOSMeqcxERLWrQ3
+	QDOKxHZo2S3rFYaitaTc2k2kd9+or0rzx7o+xcZzt0yaQiKTe4hIeGEoCqf9wOnjwMcDWPgBMVM
 	=
-X-Google-Smtp-Source: AGHT+IHgg2NfoJNIoVPeDVM+ZICkn7h+QLq/e1GcetAUMNdHAqmG1KBd1VC5Ah7e3zEn4CVbWsAd/g==
-X-Received: by 2002:a17:907:1c0d:b0:ab7:c28f:de59 with SMTP id a640c23a62f3a-abc09d2deb1mr534837166b.13.1740509306244;
-        Tue, 25 Feb 2025 10:48:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFKOZhRHtEHCCTN5BHVYVCPkFDsRkb7jCM4fs2ECH+kp2S3Jaa2qQ2qzrnOEoKDVZtT2N63uw==
+X-Received: by 2002:a17:907:2d20:b0:ab6:b8e0:4f25 with SMTP id a640c23a62f3a-abc09a14d0dmr792407366b.4.1740509307824;
+        Tue, 25 Feb 2025 10:48:27 -0800 (PST)
 Received: from krzk-bin.. (78-11-220-99.static.ip.netia.com.pl. [78.11.220.99])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed1cdbf55sm185359466b.15.2025.02.25.10.48.24
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed1cdbf55sm185359466b.15.2025.02.25.10.48.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 10:48:25 -0800 (PST)
+        Tue, 25 Feb 2025 10:48:27 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -69,10 +71,12 @@ To: Rob Herring <robh@kernel.org>,
 	workflows@vger.kernel.org,
 	linux-doc@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] docs: dt: submitting-patches: Document sending DTS patches
-Date: Tue, 25 Feb 2025 19:48:21 +0100
-Message-ID: <20250225184822.213296-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] docs: process: maintainer-soc-clean-dts: linux-next is decisive
+Date: Tue, 25 Feb 2025 19:48:22 +0100
+Message-ID: <20250225184822.213296-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250225184822.213296-1-krzysztof.kozlowski@linaro.org>
+References: <20250225184822.213296-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -81,64 +85,32 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document two rules already widely used and enforced by DT maintainers
-and SoC platform maintainers:
-
-1. DTS patches should be placed at the end of driver patchset to
-   indicate no dependencies of driver code on DTS.
-
-2. DTS patches should be applied via SoC platform maintainers, because
-   it is a driver-independent hardware description.  However some
-   driver maintainers are reluctant to pick up portions of patchsets and
-   prefer to take entire set at once.  For such cases, the DTS portion
-   should be split into separate patchset, so it will not end up in the
-   driver subsystem integration tree.
+Devicetree bindings patches go usually via driver subsystem tree, so
+obviously testing only SoC branches would result in new dtbs_check
+warnings.  Mention that linux-next branch is decisice for zero-warnings
+rule.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/submitting-patches.rst           | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ Documentation/process/maintainer-soc-clean-dts.rst | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/submitting-patches.rst b/Documentation/devicetree/bindings/submitting-patches.rst
-index a64f21a5f299..f3e23e69a638 100644
---- a/Documentation/devicetree/bindings/submitting-patches.rst
-+++ b/Documentation/devicetree/bindings/submitting-patches.rst
-@@ -54,11 +54,22 @@ I. For patch submitters
-      followed as of commit bff5da4335256513497cc8c79f9a9d1665e09864
-      ("checkpatch: add DT compatible string documentation checks"). ]
+diff --git a/Documentation/process/maintainer-soc-clean-dts.rst b/Documentation/process/maintainer-soc-clean-dts.rst
+index 1b32430d0cfc..5423fb7d6047 100644
+--- a/Documentation/process/maintainer-soc-clean-dts.rst
++++ b/Documentation/process/maintainer-soc-clean-dts.rst
+@@ -17,8 +17,9 @@ Strict DTS DT Schema and dtc Compliance
+ No changes to the SoC platform Devicetree sources (DTS files) should introduce
+ new ``make dtbs_check W=1`` warnings.  Warnings in a new board DTS, which are
+ results of issues in an included DTSI file, are considered existing, not new
+-warnings.  The platform maintainers have automation in place which should point
+-out any new warnings.
++warnings.  For series split between different trees (DT bindings go via driver
++subsystem tree), warnings on linux-next are decisive.  The platform maintainers
++have automation in place which should point out any new warnings.
  
--  7) If a documented compatible string is not yet matched by the
-+  7) DTS is treated in general as driver-independent hardware description, thus
-+     any DTS patches, regardless whether using existing or new bindings, should
-+     be placed at the end of patchset to indicate no dependency of drivers on
-+     the DTS.  DTS will be anyway applied through separate tree or branch, so
-+     different order would indicate the serie is non-bisectable.
-+
-+     If a driver subsystem maintainer prefers to apply entire set, instead of
-+     their relevant portion of patchset, please split the DTS patches into
-+     separate patchset with a reference in changelog or cover letter to the
-+     bindings submission on the mailing list.
-+
-+  8) If a documented compatible string is not yet matched by the
-      driver, the documentation should also include a compatible
-      string that is matched by the driver.
- 
--  8) Bindings are actively used by multiple projects other than the Linux
-+  9) Bindings are actively used by multiple projects other than the Linux
-      Kernel, extra care and consideration may need to be taken when making changes
-      to existing bindings.
- 
-@@ -79,6 +90,10 @@ II. For kernel maintainers
-   3) For a series going though multiple trees, the binding patch should be
-      kept with the driver using the binding.
- 
-+  4) The DTS files should however never be applied via driver subsystem tree,
-+     but always via platform SoC trees on dedicated branches (see also
-+     Documentation/process/maintainer-soc.rst).
-+
- III. Notes
- ==========
- 
+ If a commit introducing new warnings gets accepted somehow, the resulting
+ issues shall be fixed in reasonable time (e.g. within one release) or the
 -- 
 2.43.0
 
