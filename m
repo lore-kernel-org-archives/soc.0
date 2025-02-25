@@ -1,91 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5461DFD89
-	for <soc@lists.linux.dev>; Tue, 25 Feb 2025 19:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F347F214816
+	for <soc@lists.linux.dev>; Tue, 25 Feb 2025 20:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740512453; cv=none; b=XSEa8cwXysVY51rxbgq3F78AF4eBxBJNnxR2WkpvXIvQVYswO6rmfRzFElUdKuMluZ6RraMr3KRhILxoOrlOybBNQ7Sg/wTzpqkB29ZRP8WCDGpA4P46Kt97RS5YANCJdoohDImWNK019x8s8hYBbGfOVpBZaCxRhew8dlvsJPY=
+	t=1740515556; cv=none; b=jcAAWYSFv5Mz7kMcDJ5NxPUPULO6RZ6c3B5yGg2o8tt4zY9hp6oaceLyDOoZb8ES4g0PB3nL9RzBU0YBvKWefUG7uk6D/i55VR82Hn+YPNqjLtNxdsQY6PQumzBIoWO1BxA5lLOyC7hui3oZvUpohWETtWtXaNZoW/VBNta2niQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740512453; c=relaxed/simple;
-	bh=BtV/pAFsj+a8ILX/07KQdzLB7WNhO9wFph0/Tlu4Wog=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W06Xv65y8H/6mNFm4PcpC4tIH41ksh66Wo2OoKAbzHiJnzjkLK7J0HKtOl4OXTqm+ZmbW3IH7mNOard0qR63v4o01HV+mH5j1Q2AKQuyRJV/gDVbkd9yb2aLhSaIY8XKxGvpCGVwhASGxw7jv1pxhOF4EvkgUpYKMYAMCmWo7HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=byFWq+3q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740515556; c=relaxed/simple;
+	bh=wckgz3tdenQ9ZtBQpHOi8VCnc+yy0A2dSk2aV0Zjeqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uZH3MXBZhdswqm4iLZTgAD+lvzLIucPcvfmm8HWEql/Xlh4sEwwn72i88jjsPDnSKvC1PKZvD7D1mGzJ6y8TxK2CqM948E4Tx1gyoDkELNX4SV/jLnOgWAI8NciBZ4yiVdtGmyZGd2xQlCUB+7j/ew+8fWrb6+W+1OzAs35Ne/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=DIzpj0s9; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="byFWq+3q"
-Received: by smtp.kernel.org (Postfix)
-	id 820F8C4CEE2; Tue, 25 Feb 2025 19:40:53 +0000 (UTC)
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.209])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8955AC4CEDD;
-	Tue, 25 Feb 2025 19:40:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8955AC4CEDD
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 8F29DC00153F;
-	Tue, 25 Feb 2025 11:40:43 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 8F29DC00153F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1740512443;
-	bh=BtV/pAFsj+a8ILX/07KQdzLB7WNhO9wFph0/Tlu4Wog=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=byFWq+3qGRm/gPwqpnND++U9eyI+MxOG+TGPTGAj0SP8vas8Yq2HQYYnLEiQtuL4E
-	 JMwEd9ep6lgK7HY3p2ywiOI3rPYuwR14q/ufnF1hGnOHlQivic11K/XYsjHbQ8hZLf
-	 fG/iq1JyILKonXw7FQW+uE6LV8dALO26uBoD9f9I=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 3FE8718041CCB9;
-	Tue, 25 Feb 2025 11:40:43 -0800 (PST)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: soc@kernel.org
-Cc: Phil Elwell <phil@raspberrypi.com>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 2/2] Broadcom devicetree-arm64 fixes for 6.14
-Date: Tue, 25 Feb 2025 11:40:41 -0800
-Message-ID: <20250225194041.1063762-2-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250225194041.1063762-1-florian.fainelli@broadcom.com>
-References: <20250225194041.1063762-1-florian.fainelli@broadcom.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DIzpj0s9"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16745A30;
+	Tue, 25 Feb 2025 21:31:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1740515460;
+	bh=wckgz3tdenQ9ZtBQpHOi8VCnc+yy0A2dSk2aV0Zjeqw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DIzpj0s9msFhLOz+8bA185w8lDAvF6MScXRRMWToJGq11vaWb1/54GtxQCAOvXrqh
+	 RH6/pHRixNuKKM/vbBSymDEELXmkO1a88QHytPB+UlaV4YbeEwZQoZj2FNj2j1mVBb
+	 ZPMjQ1V5Q3I6kuMK4oLbVo7miOEkNBd2u6vXcsaE=
+Date: Tue, 25 Feb 2025 22:32:08 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev, workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] docs: dt: submitting-patches: Document sending DTS
+ patches
+Message-ID: <20250225203208.GG18866@pendragon.ideasonboard.com>
+References: <20250225184822.213296-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250225184822.213296-1-krzysztof.kozlowski@linaro.org>
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+Hi Krzysztof,
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+On Tue, Feb 25, 2025 at 07:48:21PM +0100, Krzysztof Kozlowski wrote:
+> Document two rules already widely used and enforced by DT maintainers
+> and SoC platform maintainers:
+> 
+> 1. DTS patches should be placed at the end of driver patchset to
+>    indicate no dependencies of driver code on DTS.
+> 
+> 2. DTS patches should be applied via SoC platform maintainers, because
+>    it is a driver-independent hardware description.  However some
+>    driver maintainers are reluctant to pick up portions of patchsets and
+>    prefer to take entire set at once.  For such cases, the DTS portion
+>    should be split into separate patchset, so it will not end up in the
+>    driver subsystem integration tree.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-are available in the Git repository at:
+This matches my understanding of the current (and best) practices, so
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.14/devicetree-arm64-fixes
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-for you to fetch changes up to 768953614c1c13fdf771be5742f1be573eea8fa4:
+> ---
+>  .../bindings/submitting-patches.rst           | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/submitting-patches.rst b/Documentation/devicetree/bindings/submitting-patches.rst
+> index a64f21a5f299..f3e23e69a638 100644
+> --- a/Documentation/devicetree/bindings/submitting-patches.rst
+> +++ b/Documentation/devicetree/bindings/submitting-patches.rst
+> @@ -54,11 +54,22 @@ I. For patch submitters
+>       followed as of commit bff5da4335256513497cc8c79f9a9d1665e09864
+>       ("checkpatch: add DT compatible string documentation checks"). ]
+>  
+> -  7) If a documented compatible string is not yet matched by the
+> +  7) DTS is treated in general as driver-independent hardware description, thus
+> +     any DTS patches, regardless whether using existing or new bindings, should
+> +     be placed at the end of patchset to indicate no dependency of drivers on
+> +     the DTS.  DTS will be anyway applied through separate tree or branch, so
+> +     different order would indicate the serie is non-bisectable.
+> +
+> +     If a driver subsystem maintainer prefers to apply entire set, instead of
+> +     their relevant portion of patchset, please split the DTS patches into
+> +     separate patchset with a reference in changelog or cover letter to the
+> +     bindings submission on the mailing list.
+> +
+> +  8) If a documented compatible string is not yet matched by the
+>       driver, the documentation should also include a compatible
+>       string that is matched by the driver.
+>  
+> -  8) Bindings are actively used by multiple projects other than the Linux
+> +  9) Bindings are actively used by multiple projects other than the Linux
+>       Kernel, extra care and consideration may need to be taken when making changes
+>       to existing bindings.
+>  
+> @@ -79,6 +90,10 @@ II. For kernel maintainers
+>    3) For a series going though multiple trees, the binding patch should be
+>       kept with the driver using the binding.
+>  
+> +  4) The DTS files should however never be applied via driver subsystem tree,
+> +     but always via platform SoC trees on dedicated branches (see also
+> +     Documentation/process/maintainer-soc.rst).
+> +
+>  III. Notes
+>  ==========
+>  
+> -- 
+> 2.43.0
+> 
+> 
 
-  arm64: dts: bcm2712: PL011 UARTs are actually r1p5 (2025-02-25 11:23:49 -0800)
+-- 
+Regards,
 
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SoCs Device Tree fixes
-for 6.14, please pull the following:
-
-- Phil fixes the Raspberry Pi 5 PL011 UART primecell ID to indicate it
-  is r1p5 and thus has a 32-byte FIFO
-
-----------------------------------------------------------------
-Phil Elwell (1):
-      arm64: dts: bcm2712: PL011 UARTs are actually r1p5
-
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Laurent Pinchart
