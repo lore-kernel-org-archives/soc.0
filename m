@@ -1,176 +1,102 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C113A25D520
-	for <soc@lists.linux.dev>; Wed, 26 Feb 2025 21:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A081C1487D5
+	for <soc@lists.linux.dev>; Thu, 27 Feb 2025 10:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740606391; cv=none; b=XWsnkDMcRH/Yjim8U25rFl+psqSV+Z67S19olf6E4rYK+/8jXnEY/sz6Snk19P3GSLRj0XndwnhZgZX0kA0DSAphiCZMVJn0MobBTEC32C+ioitQhIQajqz9O/75Vfcxm3bKyx3X7h0mVdqE9Ejs1nlLIOjlUw2qmohtStrdzWU=
+	t=1740652223; cv=none; b=agyRIGFU7LTayuLjRUvBQU2bKbIu0X1jscJx8tyzE7LUf9WYSHhizGhrVuHCJtzCdTnQtSLE+93Q2emIJfbcpBdRzfbDNHpLtLUS/vmPyZvtg4bSQbJ14ijHPpKiatRYPHt9FDRgI4lYxXh0OaEPLPzaMdqY1jzsJ7+ujt2SSo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740606391; c=relaxed/simple;
-	bh=ThhmSY4jBoAA9rtbe8PZn8mnnG6PPQqSANknf1zTY5U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VBaYiKd0SHitWuVk8U1+DMIk6xCiKOy76Y8tjJ75km/Wmv0Zdq3tcpCEEHAGArEeFblCD9yBzc0HPnTQaa8vrZR90L0HQRwzS5E/nuxmlqewtC5WhmQeZ7J0MDVP9rOSkJKVfCKpkDoBkq81fFcuVyIwvM8gzMjXmgnQNyyEr+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jf2/xRXc; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1740652223; c=relaxed/simple;
+	bh=GaSgLST/tBv0E/MPGw6ZCFKMm27+YvybP4d9v5gSsAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=RxCCQoqQPjeQ351Y4AT2q5q0E32g+0mEXscKH0DM3AuLrnqJe88mdRnd7HSvYpGfclRZ5+j9nFDj7HLjHSwJn+Ukz06j5BL07TrldmaDxwQioizKimUsBim52t7bSSomk0vISvammMK/ApzyntSyadn4IfTNJRuaWGqsDX1AAAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=de6IKaUW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jf2/xRXc"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43989d2afe1so367065e9.0
-        for <soc@lists.linux.dev>; Wed, 26 Feb 2025 13:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740606386; x=1741211186; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YFbakQilfrCFdJzAsEkSswfsOnqR/LYLZZiUe3xWbCI=;
-        b=Jf2/xRXcuQo7dxgPH1nZeeZ/AXURCF0a7AjORA3pObk7LzE7j1jvD9N8/VW8kyDxpi
-         jOR7jxiWjYMMKJHGX2HW78BsAb1iPETLm/DS08S24ONuRvPbac3Zg8kEOuvyiwwbnWl5
-         FCeUf056cSEx3dApBO2mKpqicW7sTc6r82jqwToWLNZIh4FrHzYiy8lHX2ZpemqcR3WU
-         mdWCKVJPCqdvhB2A+B0Z4Cws5Ln1/4TEckUH16PiGBG/RfCHCjqhtWhP9VFVzuwyf+TQ
-         VH/1+fkt8O8flbB0L7fALA4M97TVzbKA+Oy/dYjU66TTFxHxrPvS8tB7Fiq2zIx9DJAt
-         FzHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740606386; x=1741211186;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YFbakQilfrCFdJzAsEkSswfsOnqR/LYLZZiUe3xWbCI=;
-        b=AQCpZF+LS3uV94kNr9VwVUhDaTSrEE4jUK6SE79mpeDwrFqbz5TZ0Hv5KhhGGfsICs
-         trLGkbb8GWLf8xY5jwKIUSg1WMtyI/KMOKGnQL+HejWDzTL5QssX2qW/GLlRwqe17MYh
-         rgGsVRuOYcjOeZWcmbqwxf80mYUpnVtnpNiX63tOg+EDFPk/FjRDn9T4dCB/GsjQ06BQ
-         Ft8+KvTFNmK7TEh3Li+Eb/DvKfAdYTnKDAVn5COaKRoZVvCgOiS5DZu0yYV2UYA4j6KV
-         39RF/bUokZoccj9FedT63v8tR+Lu/frMwQgjoe5JqAf/iy4zDRIIPIifoBPNyo28gA2V
-         JBVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqq9ZoVn5WZjf5Acww1aWwMPaU6YwRfB8/RnIufsDJa3n4YZHECEmhbszXfAyzF2g1Mbw=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyL5NK/eS2xlbP++gtYVxkrtF7rN/B7rE6lZLwdBOJZ+2JCfTUu
-	BGzHmfOXLjjxDgPLvSJEEx+fRPnZLIrSywAmhtPhHriJnoWNxFOXZrD1S2vC8HognjNtJnvZ/Xp
-	frNx9cw==
-X-Gm-Gg: ASbGncv5vJMKi1S+HQA9KF1lvkkZgE1r/TicT4Uub8pu0ayr6uGRCUWMMIlcQGeKmW7
-	3cHaHf+kZAufkKbvB4GKtoWRN0EuFjLcVAqLwOqjwLB0jHpZxK4MUV0RHFEA0ey+plWl12f0s41
-	uddQoTiWD0Dka9OTELOMj+slLV/D8IhCieeaQyDcLQ6rlIL938/Nr5WjJ/fLjWLThiRcF7qWMCb
-	PlwW4lgnTCOk9PK7n3STPWeyjKnqHbrHugnQm60aG6lhMZltj4zaGLcBg9aOgHwd+eubZNwcEjH
-	AnChMqE1QxU7N1QY6fYTbmgBiRKFdrloSIdkR7SHbn8Icg==
-X-Google-Smtp-Source: AGHT+IEtK1mvKfE+Jrb2eiE9/ZRmv/XDdzfXvcs10OfwXomz3dm8J+yPkFC2Jsa9R+dhNmzu86YwxA==
-X-Received: by 2002:a05:600c:4f02:b0:439:930a:589b with SMTP id 5b1f17b1804b1-439ae21e0fdmr78223425e9.3.1740606386090;
-        Wed, 26 Feb 2025 13:46:26 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.206.225])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba5329besm33666575e9.15.2025.02.26.13.46.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 13:46:25 -0800 (PST)
-Message-ID: <455e8796-bf53-40d2-b3dc-13f583af0865@linaro.org>
-Date: Wed, 26 Feb 2025 22:46:22 +0100
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="de6IKaUW"
+Received: by smtp.kernel.org (Postfix)
+	id 32769C4AF0B; Thu, 27 Feb 2025 10:30:22 +0000 (UTC)
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
+	by smtp.kernel.org (Postfix) with ESMTP id CDB23C4CEDD;
+	Thu, 27 Feb 2025 10:30:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CDB23C4CEDD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=qd4HzO5DI05dF9t4EH+iv2z6iNBamypUQVWMX+idBZQ=;
+	b=de6IKaUWk4gJS58kgVUA8ARoMXnGwGbRNG4BeySV+MMY3ZiTd1W24oSrMyonRA
+	Xft550fi30swTpCZE7b9RAa4Ocbx4Uy9E6eIt/yF3FFcaezDzUwADcWLq5be/OcW
+	tZrTUTJXSNocCDhrCKPGcwGJnDFUzohLZBjyGa4rlgegU=
+Received: from dragon (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgC3EYquPsBnJxMcCg--.28199S3;
+	Thu, 27 Feb 2025 18:30:08 +0800 (CST)
+Date: Thu, 27 Feb 2025 18:30:06 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	kernel@pengutronix.de, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.14
+Message-ID: <Z8A+rihFV4K3l8QR@dragon>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] docs: process: maintainer-soc-clean-dts: linux-next
- is decisive
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Jonathan Corbet <corbet@lwn.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- soc@lists.linux.dev, workflows@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250225184822.213296-1-krzysztof.kozlowski@linaro.org>
- <20250225184822.213296-2-krzysztof.kozlowski@linaro.org>
- <20250226152910.GA2447540-robh@kernel.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20250226152910.GA2447540-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-CM-TRANSID:Ms8vCgC3EYquPsBnJxMcCg--.28199S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ArW7WF18WFykKFW8XF1UKFg_yoW8CFW3pF
+	4fArnxKr18JryfArnxXw48XF9xta1rJF45Wr13t3y8CF15CFn7Jr1jqryIgry2qryxAr43
+	tF17JryUCFy5Ww7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uu6wNUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBA8BZWfANJQmPgAAsw
 
-On 26/02/2025 16:29, Rob Herring wrote:
-> On Tue, Feb 25, 2025 at 07:48:22PM +0100, Krzysztof Kozlowski wrote:
->> Devicetree bindings patches go usually via driver subsystem tree, so
->> obviously testing only SoC branches would result in new dtbs_check
->> warnings.  Mention that linux-next branch is decisice for zero-warnings
->> rule.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/process/maintainer-soc-clean-dts.rst | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/process/maintainer-soc-clean-dts.rst b/Documentation/process/maintainer-soc-clean-dts.rst
->> index 1b32430d0cfc..5423fb7d6047 100644
->> --- a/Documentation/process/maintainer-soc-clean-dts.rst
->> +++ b/Documentation/process/maintainer-soc-clean-dts.rst
->> @@ -17,8 +17,9 @@ Strict DTS DT Schema and dtc Compliance
->>  No changes to the SoC platform Devicetree sources (DTS files) should introduce
->>  new ``make dtbs_check W=1`` warnings.  Warnings in a new board DTS, which are
->>  results of issues in an included DTSI file, are considered existing, not new
->> -warnings.  The platform maintainers have automation in place which should point
->> -out any new warnings.
->> +warnings.  For series split between different trees (DT bindings go via driver
->> +subsystem tree), warnings on linux-next are decisive.  The platform maintainers
->> +have automation in place which should point out any new warnings.
-> 
-> I see a lot of warnings due to dependencies (both bindings and other dts 
-> changes) not be applied yet (or applied but not in linux-next). I've 
-> been filtering those out, but maybe they're useful? Some are things like 
-> missing labels, so dtc fails. I think that gets run enough a failure 
-> report on it isn't too useful.
-Maintainer-soc-clean-dts is an opt-in and so far only two guys in kernel
-opted-in: for Arm/Arm64 one Samsung dude and for other archs only the
-Risc-v guy.
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-Total coincidence is that these two do the DT bindings reviews...
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
-I would say most of such warnings are very useful, just the question is
-how much of false positives you have. For example LKP (Kernel test
-robot) was sending reports on maintainer branches, but that had too many
-false reports due to missing bindings going via different tree, e.g.
-driver subsystem tree.
+are available in the Git repository at:
 
-Best regards,
-Krzysztof
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.14
+
+for you to fetch changes up to 2c1092823eb03f8508d6769e2f38eef7e1fe62a0:
+
+  arm64: dts: freescale: imx8mm-verdin-dahlia: add Microphone Jack to sound card (2025-02-23 16:13:33 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 6.14:
+
+- A tqma8mpql board fix from Alexander Stein to correct vqmmc-supply for
+  usdhc3
+- A change from Joe Hattori to fix OF node leak in imx-scu driver probe
+- A soc-imx8m driver fix from Peng Fan unregister cpufreq and soc device
+  in cleanup path
+- A couple of changes from Stefan Eichenberger to fix iMX6 Apalis
+  poweroff and iMX8M verdin-dahlia sound-card descriptions
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      arm64: dts: freescale: tqma8mpql: Fix vqmmc-supply
+
+Joe Hattori (1):
+      firmware: imx-scu: fix OF node leak in .probe()
+
+Peng Fan (1):
+      soc: imx8m: Unregister cpufreq and soc dev in cleanup path
+
+Stefan Eichenberger (3):
+      ARM: dts: imx6qdl-apalis: Fix poweroff on Apalis iMX6
+      arm64: dts: freescale: imx8mp-verdin-dahlia: add Microphone Jack to sound card
+      arm64: dts: freescale: imx8mm-verdin-dahlia: add Microphone Jack to sound card
+
+ arch/arm/boot/dts/nxp/imx/imx6qdl-apalis.dtsi      | 10 ++++-----
+ .../boot/dts/freescale/imx8mm-verdin-dahlia.dtsi   |  6 ++---
+ .../arm64/boot/dts/freescale/imx8mp-tqma8mpql.dtsi | 16 ++++---------
+ .../boot/dts/freescale/imx8mp-verdin-dahlia.dtsi   |  6 ++---
+ drivers/firmware/imx/imx-scu.c                     |  1 +
+ drivers/soc/imx/soc-imx8m.c                        | 26 ++++++++++++++++++++--
+ 6 files changed, 40 insertions(+), 25 deletions(-)
+
