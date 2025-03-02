@@ -1,58 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A081C1487D5
-	for <soc@lists.linux.dev>; Thu, 27 Feb 2025 10:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B79A1CAA90;
+	Sun,  2 Mar 2025 11:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740652223; cv=none; b=agyRIGFU7LTayuLjRUvBQU2bKbIu0X1jscJx8tyzE7LUf9WYSHhizGhrVuHCJtzCdTnQtSLE+93Q2emIJfbcpBdRzfbDNHpLtLUS/vmPyZvtg4bSQbJ14ijHPpKiatRYPHt9FDRgI4lYxXh0OaEPLPzaMdqY1jzsJ7+ujt2SSo0=
+	t=1740915535; cv=none; b=An/kmM7ISinZ+8fY0K8IY+gJErjbtv98C4JImNlsHPvw9ICHx/BlS36AX+cQHAgvq1BV95Mmb760qtGH9Ln+9CIbyM2HWbnWFwO9ttN3c6TC7Kz3T/YUxiPOShtQxsFF0G+HCKKqLq7ptmcfseNiiTlBUavY2nM5Wt6daL0Hhtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740652223; c=relaxed/simple;
-	bh=GaSgLST/tBv0E/MPGw6ZCFKMm27+YvybP4d9v5gSsAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RxCCQoqQPjeQ351Y4AT2q5q0E32g+0mEXscKH0DM3AuLrnqJe88mdRnd7HSvYpGfclRZ5+j9nFDj7HLjHSwJn+Ukz06j5BL07TrldmaDxwQioizKimUsBim52t7bSSomk0vISvammMK/ApzyntSyadn4IfTNJRuaWGqsDX1AAAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=de6IKaUW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740915535; c=relaxed/simple;
+	bh=AKKUuqE+qvGHOcveL7+kNvIIz2UbbpPTXNWMm9P1Xik=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=b32HhM+LGkZ2IWSFF8NQudV8jo/vXaGPgtRwB1xoEnEJOtIUJ4q02Ln6wCj22aoq1zZgYK9jTW1ZBFAYX2oWr5ZlAtVwCbN/HJqcQ1PfsgTcwXuGwS+GU/i3TewnO03AK2PZ+Fsj/iuW+gDpWVn9phiHSFp4m1ZeOZF7EI5K/X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=ijsAh4yD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Thwnl+G1; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="de6IKaUW"
-Received: by smtp.kernel.org (Postfix)
-	id 32769C4AF0B; Thu, 27 Feb 2025 10:30:22 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
-	by smtp.kernel.org (Postfix) with ESMTP id CDB23C4CEDD;
-	Thu, 27 Feb 2025 10:30:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CDB23C4CEDD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=qd4HzO5DI05dF9t4EH+iv2z6iNBamypUQVWMX+idBZQ=;
-	b=de6IKaUWk4gJS58kgVUA8ARoMXnGwGbRNG4BeySV+MMY3ZiTd1W24oSrMyonRA
-	Xft550fi30swTpCZE7b9RAa4Ocbx4Uy9E6eIt/yF3FFcaezDzUwADcWLq5be/OcW
-	tZrTUTJXSNocCDhrCKPGcwGJnDFUzohLZBjyGa4rlgegU=
-Received: from dragon (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgC3EYquPsBnJxMcCg--.28199S3;
-	Thu, 27 Feb 2025 18:30:08 +0800 (CST)
-Date: Thu, 27 Feb 2025 18:30:06 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	kernel@pengutronix.de, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.14
-Message-ID: <Z8A+rihFV4K3l8QR@dragon>
+	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="ijsAh4yD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Thwnl+G1"
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfout.stl.internal (Postfix) with ESMTP id 0A33C1140132;
+	Sun,  2 Mar 2025 06:38:52 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Sun, 02 Mar 2025 06:38:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm2; t=1740915531; x=1741001931; bh=Z7Y/TKSfcK
+	jLz+8BY7qiShSlDpuTu6NU1rFgchBJCvQ=; b=ijsAh4yDeENoiS+vJz+z5+exXs
+	FT3TIu9GqgbOBXZRb73E4TcQb2FaEnRnT30r1t5J8TRg2xNk7Lk7he3HsL1IvX8E
+	mANGlNaQHKpHmervHmqafCY3AdiNwS2lSk43baVh/XzczvQ2o/5LL2Y/GoGI8kg1
+	S6p9Qm1UzE0dUPDAwX2GtsRWXufhZk1W8E7Cxkoey/K5Rb/jnRiyFYuFfCoq99OZ
+	5mOQJ+khSrIyDKzFUxXhwwfAxucD40rbyXeiHckkOq6UwOevduaQ0c+ZhVV7WOLm
+	zaThmwkc2kT54/C/EerCOmVBC6wuEJbWfl249QRwRbzlFYHbfEPCC+NBBs5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1740915531; x=1741001931; bh=Z7Y/TKSfcKjLz+8BY7qiShSlDpuTu6NU1rF
+	gchBJCvQ=; b=Thwnl+G1wJ/fJM/Fx1BsZ25YSJGThHZa1pT03BGuEpPW5a40qzy
+	He1KBq/xDmBXtq5hwHrSTSYK3J8k1lCJCJ3bggctBvq/+2WLy36dYvpHrCNCUt3b
+	eycPB+vYjcFgvKuIIPM0vkKHWfMv5t5zouG2z9zuACm3fGywKZSZ16K0TN0wLI1s
+	2LAuftua4Zm2/TPyIa9PKExM52pXu9nty60NaJPsFfRV37tHe7M25sq+boClscAI
+	5IHMBvugl+xPn/QjpyWOzLtkB59OdW2P6TURlEpRMG1ZiS1pQH2L3WfeyMtsWdcD
+	lB5UlNYCip/4ndnjQBaFM4gaPHFfr0njrRA==
+X-ME-Sender: <xms:S0PEZyHLFxfCdY8wN8-nu41tgFU3C4wFlxBtvivA7EqcfEmpr_tZCg>
+    <xme:S0PEZzU_A15PH_ta0tbr_WRnZCwBCJPo5vPHPlZbOegBPO6mWmSCkZoecDh9L5ZQw
+    aNQ6np296170oORoRU>
+X-ME-Received: <xmr:S0PEZ8LfZyS478PA4J4OCbaz3M4ndGGlpby7rtYE0-jH9bNDcQqr99ssQnGyaZcylIlT5GpgrUEkv6VDs2tYrqYGLDmf0MYKDsT_qVna6vQaOB-Uzz7XtC6lFuMAdJs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelieduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhephffvve
+    fufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfrvghtvghruceoshhv
+    vghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrhhnpeduieeihfegte
+    fgkedtieffkefhjeegieekffdtgffhgeevgeekgeejteeuffdvieenucffohhmrghinhep
+    ghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggprhgtphhtthho
+    peegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehsohgtsehlihhsthhsrdhlih
+    hnuhigrdguvghvpdhrtghpthhtoheprghsrghhiheslhhishhtshdrlhhinhhugidruggv
+    vhdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfh
+    hrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:S0PEZ8H9_ZqYgeGp__YKoPT_aiX2gi4ga2cJe79FR64V2L54l7g7og>
+    <xmx:S0PEZ4U1ULgt9SaJPW4O3j0KDik3IYjQh8URDSO_iCgPAmpfupeHCw>
+    <xmx:S0PEZ_Pjvrf0sLpbu2zLoF-AsWV2UL_g463u2E8OFGClcQ5T23MmXQ>
+    <xmx:S0PEZ_3xtA1gDzJD_CFlchcgM1Ni_Nve8l8DCZfG7lALpJsZ960eCQ>
+    <xmx:S0PEZ2zjIZjNbN_UqBpiXntYgfHxkMctUo2js0cbu_bbqjge51_SsAU3>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 2 Mar 2025 06:38:50 -0500 (EST)
+From: Sven Peter <sven@svenpeter.dev>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Apple SoC RTKit IPC library updates for v6.15
+Date: Sun,  2 Mar 2025 12:38:42 +0100
+Message-Id: <20250302113842.58092-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-CM-TRANSID:Ms8vCgC3EYquPsBnJxMcCg--.28199S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ArW7WF18WFykKFW8XF1UKFg_yoW8CFW3pF
-	4fArnxKr18JryfArnxXw48XF9xta1rJF45Wr13t3y8CF15CFn7Jr1jqryIgry2qryxAr43
-	tF17JryUCFy5Ww7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uu6wNUUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiBA8BZWfANJQmPgAAsw
+Content-Transfer-Encoding: 8bit
+
+Hi,
+
+Please merge these Apple SoC RTKit IPC library updates for v6.15.
+This batch includes a bunch of minor improvements and bugfixes mostly
+required for our downstream drivers (e.g. DCP) which we are planning to
+upstream in the next months.
+There's one API change which requires a single line adjustment to our
+NVMe driver as well which has been reviewed by a NVMe maintainer.
+
+
+Best,
+
+
+Sven
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
@@ -60,43 +106,37 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.14
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-rtkit-6.15
 
-for you to fetch changes up to 2c1092823eb03f8508d6769e2f38eef7e1fe62a0:
+for you to fetch changes up to e210227f0259d2666cc41b28ed1b7b0b0a99ed4d:
 
-  arm64: dts: freescale: imx8mm-verdin-dahlia: add Microphone Jack to sound card (2025-02-23 16:13:33 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 6.14:
-
-- A tqma8mpql board fix from Alexander Stein to correct vqmmc-supply for
-  usdhc3
-- A change from Joe Hattori to fix OF node leak in imx-scu driver probe
-- A soc-imx8m driver fix from Peng Fan unregister cpufreq and soc device
-  in cleanup path
-- A couple of changes from Stefan Eichenberger to fix iMX6 Apalis
-  poweroff and iMX8M verdin-dahlia sound-card descriptions
+  soc: apple: rtkit: Cut syslog messages after the first '\0' (2025-02-28 21:36:45 +0000)
 
 ----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: freescale: tqma8mpql: Fix vqmmc-supply
+Apple SoC RTKit IPC library updates for 6.15:
 
-Joe Hattori (1):
-      firmware: imx-scu: fix OF node leak in .probe()
+- Additional logging for errors
+- A few minor improvements and bugfixes required for drivers that are
+  yet to be upstreamed
 
-Peng Fan (1):
-      soc: imx8m: Unregister cpufreq and soc dev in cleanup path
+----------------------------------------------------------------
+Asahi Lina (2):
+      soc: apple: rtkit: Check & log more failures
+      soc: apple: rtkit: Pass the crashlog to the crashed() callback
 
-Stefan Eichenberger (3):
-      ARM: dts: imx6qdl-apalis: Fix poweroff on Apalis iMX6
-      arm64: dts: freescale: imx8mp-verdin-dahlia: add Microphone Jack to sound card
-      arm64: dts: freescale: imx8mm-verdin-dahlia: add Microphone Jack to sound card
+Harshit Mogalapalli (1):
+      soc: apple: rtkit: Fix use-after-free in apple_rtkit_crashlog_rx()
 
- arch/arm/boot/dts/nxp/imx/imx6qdl-apalis.dtsi      | 10 ++++-----
- .../boot/dts/freescale/imx8mm-verdin-dahlia.dtsi   |  6 ++---
- .../arm64/boot/dts/freescale/imx8mp-tqma8mpql.dtsi | 16 ++++---------
- .../boot/dts/freescale/imx8mp-verdin-dahlia.dtsi   |  6 ++---
- drivers/firmware/imx/imx-scu.c                     |  1 +
- drivers/soc/imx/soc-imx8m.c                        | 26 ++++++++++++++++++++--
- 6 files changed, 40 insertions(+), 25 deletions(-)
+Hector Martin (1):
+      soc: apple: rtkit: Implement OSLog buffers properly
 
+Janne Grunau (3):
+      soc: apple: rtkit: Add and use PWR_STATE_INIT instead of _ON
+      soc: apple: rtkit: Use high prio work queue
+      soc: apple: rtkit: Cut syslog messages after the first '\0'
+
+ drivers/nvme/host/apple.c          |   2 +-
+ drivers/soc/apple/rtkit-internal.h |   1 +
+ drivers/soc/apple/rtkit.c          | 112 +++++++++++++++++++++++++------------
+ include/linux/soc/apple/rtkit.h    |   2 +-
+ 4 files changed, 78 insertions(+), 39 deletions(-)
