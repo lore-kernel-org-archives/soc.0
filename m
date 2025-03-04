@@ -1,40 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F4C20013E
-	for <soc@lists.linux.dev>; Tue,  4 Mar 2025 10:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A4B204695;
+	Tue,  4 Mar 2025 14:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741085975; cv=none; b=nq9kjlffLFxpwYpZYEO3zYRq/MytFlkFVCGET3/xztfPQesTsqwuSoe/9twyvvu0hpJb/CojQLLOURYVrZO4MBF1JZpqdiuOdUAUd1QpCJFjmImhxhCxV5B8umkoVWzxFVIgY8QjE80Ux6iQp9paTFa71C7vyugjP9/9oAPCgKo=
+	t=1741099431; cv=none; b=ly68vcM3L7LbF268FcewsgJjOCiA3LW7ULQZ26V2wxpwKJfMq0tGuDRIaUCp1FzcitSxBiADAAuo/arQx8NUtDMOUNIF+kwsMYXu6kMYzygyIQgFPYLm0aGUFoWHtrkOh2P+CIgNrH7nkxgZtbHYcFHicshaHuGLCs2oPgTuA1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741085975; c=relaxed/simple;
-	bh=P2QVEzoFF7m+9Gu2A8ukMaDplKtG6JaEE8mtO9ph+2Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N8hA4aCc47k3FBIOFFwKUq3VU+87dsbTk+KOPRRqVNaYhxV64DHF8+yCMFek+1zi3KMeMTxVBBgxTa961jCuAYfgLDwQjM5uHdY0w8UP1mRTB0XJyC+Aftf2gnBx+zQFppS9BGRn+wXbMudCe0eDreJMsw3fwfO/fH8beauwm8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id 997B5C4AF0D; Tue,  4 Mar 2025 10:59:34 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id E1306C4CEE9;
-	Tue,  4 Mar 2025 10:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E1306C4CEE9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D654BFEC;
-	Tue,  4 Mar 2025 02:59:45 -0800 (PST)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 22E313F5A1;
-	Tue,  4 Mar 2025 02:59:30 -0800 (PST)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: [GIT PULL] firmware: arm_ffa: Updates for v6.15
-Date: Tue,  4 Mar 2025 10:59:28 +0000
-Message-Id: <20250304105928.432997-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1741099431; c=relaxed/simple;
+	bh=XfSqRqYZsA+MUDEbRTfs5BMwtTnxrzx+0E/tO5qxzN0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B+7S24h2bTA2uEv31j7F/L136I0jX5N5HktXaMTEvNrpZLA7gkl15ZrnZmN6v+Q0em32ZKaOV0Dt4rmrTQC8pJ5xgeHtdeGxiYG6O2iJyCZwoIehwvqomZcokTugGRU9KpEiYUBMDQM4VeWXmmEsUmXSLkSxxwpKv33HQlkjvhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R5GulmQ+; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R5GulmQ+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B20C4CEED;
+	Tue,  4 Mar 2025 14:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741099430;
+	bh=XfSqRqYZsA+MUDEbRTfs5BMwtTnxrzx+0E/tO5qxzN0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=R5GulmQ+RL2iHOx2ATwQmKj/WdX6qgMFdeAbidKuBl8ZTCQo5UMrIKuC5y6h6MKMR
+	 bTBnvkBtU6K0yzZoSrWrCm5SSduKh/c/mYh7xFrut/IOCCdEV8H8X20YyX0/NCtBU3
+	 Mmq/613fgsVeVu52eMAUkHZ3g7THAsWyZlbf3wnKZOFG5rUgJHgjhwUzGvP1SylqDI
+	 2guAncPF+1nBF1cjhjki7w9ebw/L5Rq/K7xBYc1Y//7cMDhwX2FyiBrrpidjA/2x5n
+	 6ALc3bxyFvwHaibCCWfygsGYwxG2Bey40wnUrDu6v4eOZzlarpt9zG6PYnczEyDquj
+	 smzsF8NIBm8Yg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Cc: soc@lists.linux.dev,
+	Arnd Bergmann <arnd@arndb.de>,
+	Luke Parkin <luke.parkin@arm.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] firmware: arm_scmi: use ioread64() instead of ioread64_hi_lo()
+Date: Tue,  4 Mar 2025 15:43:34 +0100
+Message-Id: <20250304144346.1025658-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -43,115 +47,46 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+From: Arnd Bergmann <arnd@arndb.de>
 
-Please pull !
+The scmi_common_fastchannel_db_ring() function calls either ioread64()
+or ioread64_hi_lo() depending on whether it is compiler for 32-bit
+or 64-bit architectures.
 
-Regards,
-Sudeep
+The same logic is used to define ioread64() itself in the
+linux/io-64-nonatomic-hi-lo.h header file, so the special case
+is not really needed.
 
--->8
+The behavior here should not change at all.
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+Fixes: 6f9ea4dabd2d ("firmware: arm_scmi: Generalize the fast channel support")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/firmware/arm_scmi/driver.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+index 60050da54bf2..1c75a4c9c371 100644
+--- a/drivers/firmware/arm_scmi/driver.c
++++ b/drivers/firmware/arm_scmi/driver.c
+@@ -1997,17 +1997,7 @@ static void scmi_common_fastchannel_db_ring(struct scmi_fc_db_info *db)
+ 	else if (db->width == 4)
+ 		SCMI_PROTO_FC_RING_DB(32);
+ 	else /* db->width == 8 */
+-#ifdef CONFIG_64BIT
+ 		SCMI_PROTO_FC_RING_DB(64);
+-#else
+-	{
+-		u64 val = 0;
+-
+-		if (db->mask)
+-			val = ioread64_hi_lo(db->addr) & db->mask;
+-		iowrite64_hi_lo(db->set | val, db->addr);
+-	}
+-#endif
+ }
+ 
+ /**
+-- 
+2.39.5
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-updates-6.15
-
-for you to fetch changes up to cc0aac7ca17e0ea3ca84b552fc79f3e86fd07f53:
-
-  firmware: arm_ffa: Set dma_mask for ffa devices (2025-02-28 11:20:06 +0000)
-
-----------------------------------------------------------------
-Arm FF-A updates for v6.15
-
-This update primarily focuses on FF-A framework notification support
-along with other improvements, including UUID handling enhancements
-and various fixes.
-
-1. FF-A framework notification upport
-
-    - Adds support for multiple UUIDs per partition to register individual
-      SRI callbacks.
-    - Handles Rx buffer full framework notifications and provides a general
-      interface for future extensions.
-
-2. Improved multiple UUID/services per-partition handling
-
-    - Adds support for UUID passing in FFA_MSG_SEND2, improving multiple
-      UUID/service support in the driver.
-    - Introduces a helper function to check whether a partition can
-      receive REQUEST2 messages.
-
-3. Partition handling generic improvements
-
-    - Implements device unregistration for better partition cleanup.
-    - Improves handling of the host partition presence in partition info.
-
-4. FF-A version updates
-
-    - Upgrades the driver version to FF-A v1.2.
-    - Rejects major versions higher than the driver version as incompatible.
-
-5. Big-Endian support fixes
-
-    - Fixes big-endian issues in:
-        __ffa_partition_info_regs_get()
-        __ffa_partition_info_get()
-    - Big-endian support is still incomplete, and only these changes can
-      be verified without additional application/testing updates at the
-      moment. We can discover all the partitions correctly with big-endian
-      kernel now.
-
-6. Miscellaneous fixes
-
-    - Fixes function prototype misalignments in: sync_send_receive{,2}
-    - Adds explicit type casting for return values from: FFA_VERSION
-      and NOTIFICATION_INFO_GET
-    - Corrects vCPU list parsing in ffa_notification_info_get().
-
-7. UUID management in the driver and DMA mask updates
-
-    - Replaces UUID buffer with the standard UUID format in ffa_partition_info
-      structure.
-    - Fixes a typo in some FF-A bus macros.
-    - Sets dma_mask for FF-A devices.
-
-In short, this update enhances notification handling, UUID support, and
-overall robustness of the FF-A driver while addressing multiple fixes
-and cleanups.
-
-----------------------------------------------------------------
-Sudeep Holla (21):
-      firmware: arm_ffa: Replace SCMI by FF-A in the macro
-      firmware: arm_ffa: Replace UUID buffer to standard UUID format
-      firmware: arm_ffa: Align sync_send_receive{,2} function prototypes
-      firmware: arm_ffa: Fix big-endian support in __ffa_partition_info_get()
-      firmware: arm_ffa: Fix big-endian support in __ffa_partition_info_regs_get()
-      firmware: arm_ffa: Handle the presence of host partition in the partition info
-      firmware: arm_ffa: Unregister the FF-A devices when cleaning up the partitions
-      firmware: arm_ffa: Helper to check if a partition can receive REQUEST2 messages
-      firmware: arm_ffa: Add support for passing UUID in FFA_MSG_SEND2
-      firmware: arm_ffa: Upgrade FF-A version to v1.2 in the driver
-      firmware: arm_ffa: Reject higher major version as incompatible
-      firmware: arm_ffa: Remove unnecessary declaration of ffa_partitions_cleanup()
-      firmware: arm_ffa: Refactoring to prepare for framework notification support
-      firmware: arm_ffa: Stash ffa_device instead of notify_type in notifier_cb_info
-      firmware: arm_ffa: Add support for {un,}registration of framework notifications
-      firmware: arm_ffa: Add support for handling framework notifications
-      firmware: arm_ffa: Allow multiple UUIDs per partition to register SRI callback
-      firmware: arm_ffa: Handle ffa_notification_get correctly at virtual FF-A instance
-      firmware: arm_ffa: Explicitly cast return value from FFA_VERSION before comparison
-      firmware: arm_ffa: Explicitly cast return value from NOTIFICATION_INFO_GET
-      firmware: arm_ffa: Skip the first/partition ID when parsing vCPU list
-
-Viresh Kumar (2):
-      firmware: arm_ffa: Refactor addition of partition information into XArray
-      firmware: arm_ffa: Set dma_mask for ffa devices
-
- drivers/firmware/arm_ffa/bus.c    |  14 +-
- drivers/firmware/arm_ffa/driver.c | 532 ++++++++++++++++++++++++++++----------
- include/linux/arm_ffa.h           |  22 +-
- 3 files changed, 422 insertions(+), 146 deletions(-)
