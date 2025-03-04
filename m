@@ -1,76 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B44D1F03C4
-	for <soc@lists.linux.dev>; Mon,  3 Mar 2025 21:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5611FFC57
+	for <soc@lists.linux.dev>; Tue,  4 Mar 2025 10:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741037196; cv=none; b=RjPnJedl2Gtc1iRfsmAAFMWH7yuIJOvXcb/YPjZzXfjMyg5qAEq4zlRKThyI4vfNk7fVgrzcOl//oVaenKBIo/U6xq4G+4LnFo5rq0R9wW58JalZmDd/sxAeHqqW1yB0lDbgcg2F4AvnkzRMaKg89ID3+XyF5qiSGJ/tJ+65hIo=
+	t=1741085931; cv=none; b=DmNU8EPAKbEzRPRXk5jjW4daLf6e2R678dNbgq/wHdnN5Cwd/E5pcVQErpgHhT7918oaGxNO1RVXXFQqi62BdvglCFhvEm8sr+LB5nGxMGihRHat5Gd1Su69Oqz0eWPa0dBImo5GKUm/c39zN/QPCBQfZf21o+AMtkY+B+6R1os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741037196; c=relaxed/simple;
-	bh=QieX1f1ZpVBpFqEYiQLHTccw08+B74/nkI53Ml21MeU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VHVz7X14Kb4yUbBZ58bBRwv+2DkC1hz57hbPydUiv+P3rgjHOwXnk3ARMRPE7cjUdJqQ09g1fW61Nn3aA57qp0RaxzqmTWcHi6dS3/2kk+a1DnV6W6gf/8uaTCaYUhopdPSZgBlHcohYHCcl8zY+8PaTcNBKY71bDm9wo4qbENY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (0-bit key) header.d=mybundlepay.com header.i=@mybundlepay.com header.b=WyDy9xS2 reason="key not found in DNS"; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=mybundlepay.com header.i=@mybundlepay.com header.b="WyDy9xS2"
+	s=arc-20240116; t=1741085931; c=relaxed/simple;
+	bh=J3tqSLgEYbirjOuyzWRPm/+IlnWYcEkBO6pFiqZPvCE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=m8vH4vqsIc23+/W1uVvh6KM5Dd7JFJfdzrvLx92RjzWbCK1n5ugJy4urmW9Yp4/7RgcDay8RizyGFxqPk/PqJPXssJhbh5DF3zz0AunR6ZFClZC32zjRB8VHp9q/uwZGhomWWTHaTxqURL+kOUMjx4lVh/2x6jPJSgDr361FtFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 1EF17C4CEE5; Mon,  3 Mar 2025 21:26:36 +0000 (UTC)
-Received: from server54.mybundlepay.com (server54.mybundlepay.com [207.231.110.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 44324C4CED6
-	for <soc@kernel.org>; Mon,  3 Mar 2025 21:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44324C4CED6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=mybundlepay.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=mybundlepay.com
-Received: from mybundlepay.com (unknown [20.57.137.16])
-	by server54.mybundlepay.com (Postfix) with ESMTPSA id 3495719E9BB
-	for <soc@kernel.org>; Mon,  3 Mar 2025 21:05:26 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mybundlepay.com;
-	s=202411; t=1741035927;
-	bh=QieX1f1ZpVBpFqEYiQLHTccw08+B74/nkI53Ml21MeU=;
-	h=Reply-To:From:To:Subject:Date:From;
-	b=WyDy9xS2JYZU9Bsx0+Sb7PtA9ycq+Tkdft51rFE39ulUNI/ct9EJbsz2uVDDjXT68
-	 CVhlugWN4XldJHOod0KMquxd3tHP3021XzgytUW5dOU1GvJVhvjvQrLUGoFRu0z+KU
-	 UO97tZbsQH9Sjd98aYS7rIq1egELGGPm1GE7bXfyaeCzGDqnHJU4dottJeEYSL1hcu
-	 82adMERUzTWovdXc5lwTlOB9Q7DyfDpYLHcM0iIJFHQSo23TsN7o7AK68XlRw4tpSN
-	 rasYF4cx4LVYCLONtg8Rbvl8TW8TiA1CH0y9xC86JSmWjyVTnCQijYvvGjlbCKp5uB
-	 Mkrsp++Yt3CWQ==
-Reply-To: belliot.panfinconsulting@gmail.com
-From: Benjamin Elliot <do-not-reply-us@mybundlepay.com>
-To: soc@kernel.org
-Subject: INVESTMENT UPDATE
-Date: 03 Mar 2025 21:05:26 +0000
-Message-ID: <20250303210526.E98BC4EE0C00DD41@mybundlepay.com>
+	id 4739FC4CEEB; Tue,  4 Mar 2025 10:58:51 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 12797C4CEE5;
+	Tue,  4 Mar 2025 10:58:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12797C4CEE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 06972FEC;
+	Tue,  4 Mar 2025 02:59:03 -0800 (PST)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F3B823F5A1;
+	Tue,  4 Mar 2025 02:58:47 -0800 (PST)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: [GIT PULL] firmware: smccc: Update for v6.15
+Date: Tue,  4 Mar 2025 10:58:45 +0000
+Message-Id: <20250304105845.432813-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hello Dear,
+Hi ARM SoC Team,
 
-I am  Benjamin Elliot. I am a Financial Consultant. My company=20
-represent the investment portfolio of a consortium of investors=20
-willing and readily available to fund any sustainable project=20
-that can yield a reasonable return on investment. What we do is=20
-that, we broker discreet financial services for high net=20
-individuals/Companies. We connect you to legitimate portfolio=20
-financiers that are willing and readily available to divert funds=20
-into sustainable and profitable project or business with a=20
-reasonable ROI. Do you have any ongoing project or a startup?=20
-Please contact me if you are looking for funds to invest in or=20
-expand your project or business. We would be happy to work with=20
-you.
+Please pull !
 
-Look forward to your response.
+Regards,
+Sudeep
 
-Best Regards,
-Benjamin Elliot - MD
-PAN Financial Consultant
-Anna Blamansingel 72, Amsterdam 1102ST, Netherlands.
+-->8
+
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/smccc-update-6.15
+
+for you to fetch changes up to 5f9c23abc47744f2578af4a362655c31254c93b5:
+
+  firmware: smccc: Support optional Arm SMCCC SOC_ID name (2025-03-03 14:53:46 +0000)
+
+----------------------------------------------------------------
+Arm SMCCC update for v6.15
+
+Just a single update introducing the support for the optional SOC_ID
+name string from the Arm SMCCC v1.6 specification.
+
+If the SOC_ID name string is implemented, the machine field of the SoC
+Device Attributes will reflect it.
+
+The original intent of SOC_ID was to provide a JEP-106 code for the SiP
+and the SoC revision to uniquely identify the SoC. However, there has
+been a request to add this optional name so that SoC firmware can
+directly provide the SoC name to the OS.
+
+This change avoids the need for frequent updates to various tools that
+would otherwise require maintaining hardcoded model/machine name tables
+for new SoCs.
+
+----------------------------------------------------------------
+Paul Benoit (1):
+      firmware: smccc: Support optional Arm SMCCC SOC_ID name
+
+ drivers/firmware/smccc/soc_id.c | 80 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/arm-smccc.h       | 40 +++++++++++++++++++++
+ 2 files changed, 120 insertions(+)
