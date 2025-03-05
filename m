@@ -1,45 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C351FECCC
-	for <soc@lists.linux.dev>; Wed,  5 Mar 2025 21:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A4A1D8DEE
+	for <soc@lists.linux.dev>; Wed,  5 Mar 2025 22:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741209312; cv=none; b=QpkAkqDOCXTs66oUFXfd0nLHNjXZwXKLtOmbqK9xqs4LVBGla8sXGiEonfZTjx823vBF2uUslCip/YouvaB+C7F5TOe+lyTjILecw8xYfj+nV3bLmzrMWa8ko3HUHICnOcORIpxjt9f/+RiBxfpXuRBBKEgHS/iNx+AqoXcQCXo=
+	t=1741214978; cv=none; b=PAP8Hanj/Wv5MTQW4DUYAsohRZ0aLPl3n2cL+7vex6HCbXTIBbN0NbRQ7EHjwSzivHd0O13vMHZfsvtR+Mbcdm7aZoFe5mD3ZoUAuQ+iHsvhr0Lo5IhYi6gXRGUm6v4kNpPZfDEAsdOOltTkNQqBdI3tswt9t9+vvoKYFJWXMqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741209312; c=relaxed/simple;
-	bh=hXy+f0YJTclPY8w3PrHkFFWq1Rkkl1rvAIEfZmgyuH4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hP681k/qSPsUNbjYuYplkSF2gz31BqizRW/THQu8KtCarxXkpWlbzzM24Lt93SE5DWMFwp6fO3HcEpruX8k8IifPQQ8IUk3VHQ1CGUAxXk9OY2z2jfm7Hv1kRiLcreTW89zcoJ6GaTmiHr2HXygV4d7OpFOBvBnM3nktx5Nh+bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T7oLNEYj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741214978; c=relaxed/simple;
+	bh=tvF+6eR8G5nkdnPZOSey1KiCW0OiFUeol3JtDBnly/A=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=aUt/WVYN9piopOcYKKmasb4f36d/L4pJGk/0ftNPb70c67dhbZOfDAqak05vFcS1c/7WoeBz7fu62SxwYLERdDWsBdBX9hLkcQ8jJN41m+bxkjugGUdEn4EbRSRLDyLL8FQKazyajAFgPIRrD9Lz+2zKVkgGzMAraL0tIOcJIm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXiqaObF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T7oLNEYj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXiqaObF"
 Received: by smtp.kernel.org (Postfix)
-	id E12B9C4CEE0; Wed,  5 Mar 2025 21:15:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA16C4CED1;
-	Wed,  5 Mar 2025 21:15:09 +0000 (UTC)
+	id 1F7FFC4CEE7; Wed,  5 Mar 2025 22:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E12A4C4CEE0;
+	Wed,  5 Mar 2025 22:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741209311;
-	bh=hXy+f0YJTclPY8w3PrHkFFWq1Rkkl1rvAIEfZmgyuH4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=T7oLNEYjR/pVjUr6bwIyK+7nN/Ljobb3GgYk0N4zrPxf5xykSps2YAdd11pmT/QVd
-	 PM/0yn0ZZMvb8+mGhT7MYFjP+SB8a+NmbyE0g4ueNAEFFM96aC63EmovEgvylgKSmo
-	 LoNVkA+6vECTNwPfwd+lA86VyeMinhuGv1bU9NBnEBnQYhdrwYyt1/1h6XeMkJ//0j
-	 khxx6YxtiqnKqd3JEBRsJFOfGD/bsVtuQBpB3H34G4Xd83R/BmMD1LWkwXfoJWI+pn
-	 aS2V01RU4eXlN3yfbes6bIIlSarFJ5R6w5cSMEzEmaLiA9F03jeRgH34AEV9spxdjF
-	 TtQhGCOykRrEg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: samsung: include linux/array_size.h where needed
-Date: Wed,  5 Mar 2025 22:14:02 +0100
-Message-Id: <20250305211446.43772-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=k20201202; t=1741214978;
+	bh=tvF+6eR8G5nkdnPZOSey1KiCW0OiFUeol3JtDBnly/A=;
+	h=From:To:Subject:Date:From;
+	b=aXiqaObF5TXoXrrQpV/QRUdP/Os/nnuu3xBmA8Ebgbu4tqAlRgTIx9spxKiBko98N
+	 zBeI6bSlBn8d9O4qS3OWkRxtJp7B2OgHeqdagUUb3FFLDspxwKzlOJCWNIW5iSU5hT
+	 G9hDrTQT2bYJMVhlX3xIuBRw9rTlGFoMCEO8qhoKyeG/zwz5Cc3J1tzFnSjrtj7EH1
+	 uw0VPliHArNX3qzYfdn7ZcTZ1qQnE75u2/QRv/VhbGOmVUixtRLYGeVhQ4g8uSVsuf
+	 Ty0gAAigsnTUvEsD5b7c/r1IWHKqV/zOawIBMOq0xTWDo5O34BzzaBMhI9hpCftq1T
+	 AoMG3uyC7hGQw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: soc@kernel.org
+Subject: [PATCH] arm64: dts: nvidia: Remove unused and undocumented "regulator-ramp-delay-scale" property
+Date: Wed,  5 Mar 2025 16:49:36 -0600
+Message-ID: <20250305224936.2995519-1-robh@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -48,112 +41,98 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+Remove "regulator-ramp-delay-scale" property which is both unused in the
+kernel and undocumented. Most likely they are leftovers from downstream.
 
-This does not necessarily get included through asm/io.h:
-
-drivers/soc/samsung/exynos3250-pmu.c:120:18: error: use of undeclared identifier 'ARRAY_SIZE'
-  120 |         for (i = 0; i < ARRAY_SIZE(exynos3250_list_feed); i++) {
-      |                         ^
-drivers/soc/samsung/exynos5250-pmu.c:162:18: error: use of undeclared identifier 'ARRAY_SIZE'
-  162 |         for (i = 0; i < ARRAY_SIZE(exynos5_list_both_cnt_feed); i++) {
-      |                         ^
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- drivers/soc/samsung/exynos-asv.c     | 1 +
- drivers/soc/samsung/exynos-chipid.c  | 1 +
- drivers/soc/samsung/exynos-pmu.c     | 1 +
- drivers/soc/samsung/exynos-usi.c     | 1 +
- drivers/soc/samsung/exynos3250-pmu.c | 1 +
- drivers/soc/samsung/exynos5250-pmu.c | 1 +
- drivers/soc/samsung/exynos5420-pmu.c | 1 +
- 7 files changed, 7 insertions(+)
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/soc/samsung/exynos-asv.c b/drivers/soc/samsung/exynos-asv.c
-index 97006cc3b946..8e681f519526 100644
---- a/drivers/soc/samsung/exynos-asv.c
-+++ b/drivers/soc/samsung/exynos-asv.c
-@@ -9,6 +9,7 @@
-  * Samsung Exynos SoC Adaptive Supply Voltage support
-  */
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+index c56824d7f4d8..0ecdd7243b2e 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+@@ -266,7 +266,6 @@ vdd_soc: sd0 {
+ 					regulator-max-microvolt = <1170000>;
+ 					regulator-enable-ramp-delay = <146>;
+ 					regulator-ramp-delay = <27500>;
+-					regulator-ramp-delay-scale = <300>;
+ 					regulator-always-on;
+ 					regulator-boot-on;
  
-+#include <linux/array_size.h>
- #include <linux/cpu.h>
- #include <linux/device.h>
- #include <linux/energy_model.h>
-diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
-index 3f1a654c7e66..deb1d882cd4c 100644
---- a/drivers/soc/samsung/exynos-chipid.c
-+++ b/drivers/soc/samsung/exynos-chipid.c
-@@ -12,6 +12,7 @@
-  * Samsung Exynos SoC Adaptive Supply Voltage and Chip ID support
-  */
+@@ -281,7 +280,6 @@ vdd_ddr: sd1 {
+ 					regulator-max-microvolt = <1150000>;
+ 					regulator-enable-ramp-delay = <176>;
+ 					regulator-ramp-delay = <27500>;
+-					regulator-ramp-delay-scale = <300>;
+ 					regulator-always-on;
+ 					regulator-boot-on;
  
-+#include <linux/array_size.h>
- #include <linux/device.h>
- #include <linux/errno.h>
- #include <linux/mfd/syscon.h>
-diff --git a/drivers/soc/samsung/exynos-pmu.c b/drivers/soc/samsung/exynos-pmu.c
-index dd5256e5aae1..c40313886a01 100644
---- a/drivers/soc/samsung/exynos-pmu.c
-+++ b/drivers/soc/samsung/exynos-pmu.c
-@@ -5,6 +5,7 @@
- //
- // Exynos - CPU PMU(Power Management Unit) support
+@@ -296,7 +294,6 @@ vdd_pre: sd2 {
+ 					regulator-max-microvolt = <1350000>;
+ 					regulator-enable-ramp-delay = <176>;
+ 					regulator-ramp-delay = <27500>;
+-					regulator-ramp-delay-scale = <350>;
+ 					regulator-always-on;
+ 					regulator-boot-on;
  
-+#include <linux/array_size.h>
- #include <linux/arm-smccc.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-diff --git a/drivers/soc/samsung/exynos-usi.c b/drivers/soc/samsung/exynos-usi.c
-index 173b76720079..c5661ac19f7b 100644
---- a/drivers/soc/samsung/exynos-usi.c
-+++ b/drivers/soc/samsung/exynos-usi.c
-@@ -6,6 +6,7 @@
-  * Samsung Exynos USI driver (Universal Serial Interface).
-  */
+@@ -311,7 +308,6 @@ vdd_1v8: sd3 {
+ 					regulator-max-microvolt = <1800000>;
+ 					regulator-enable-ramp-delay = <242>;
+ 					regulator-ramp-delay = <27500>;
+-					regulator-ramp-delay-scale = <360>;
+ 					regulator-always-on;
+ 					regulator-boot-on;
  
-+#include <linux/array_size.h>
- #include <linux/clk.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
-diff --git a/drivers/soc/samsung/exynos3250-pmu.c b/drivers/soc/samsung/exynos3250-pmu.c
-index 30f230ed1769..26c9c6e9f551 100644
---- a/drivers/soc/samsung/exynos3250-pmu.c
-+++ b/drivers/soc/samsung/exynos3250-pmu.c
-@@ -7,6 +7,7 @@
+@@ -326,7 +322,6 @@ vdd_sys_1v2: ldo0 {
+ 					regulator-max-microvolt = <1200000>;
+ 					regulator-enable-ramp-delay = <26>;
+ 					regulator-ramp-delay = <100000>;
+-					regulator-ramp-delay-scale = <200>;
+ 					regulator-always-on;
+ 					regulator-boot-on;
  
- #include <linux/soc/samsung/exynos-regs-pmu.h>
- #include <linux/soc/samsung/exynos-pmu.h>
-+#include <linux/array_size.h>
+@@ -341,7 +336,6 @@ vdd_pex_1v05: ldo1 {
+ 					regulator-max-microvolt = <1050000>;
+ 					regulator-enable-ramp-delay = <22>;
+ 					regulator-ramp-delay = <100000>;
+-					regulator-ramp-delay-scale = <200>;
  
- #include "exynos-pmu.h"
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_NONE>;
+ 					maxim,active-fps-power-up-slot = <0>;
+@@ -354,7 +348,6 @@ vddio_sdmmc: ldo2 {
+ 					regulator-max-microvolt = <3300000>;
+ 					regulator-enable-ramp-delay = <62>;
+ 					regulator-ramp-delay = <100000>;
+-					regulator-ramp-delay-scale = <200>;
  
-diff --git a/drivers/soc/samsung/exynos5250-pmu.c b/drivers/soc/samsung/exynos5250-pmu.c
-index 7a2d50be6b4a..ae693d8d508b 100644
---- a/drivers/soc/samsung/exynos5250-pmu.c
-+++ b/drivers/soc/samsung/exynos5250-pmu.c
-@@ -7,6 +7,7 @@
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_NONE>;
+ 					maxim,active-fps-power-up-slot = <0>;
+@@ -371,7 +364,6 @@ vdd_rtc: ldo4 {
+ 					regulator-max-microvolt = <1100000>;
+ 					regulator-enable-ramp-delay = <22>;
+ 					regulator-ramp-delay = <100000>;
+-					regulator-ramp-delay-scale = <200>;
+ 					regulator-disable-active-discharge;
+ 					regulator-always-on;
+ 					regulator-boot-on;
+@@ -395,7 +387,6 @@ avdd_1v05_pll: ldo7 {
+ 					regulator-max-microvolt = <1050000>;
+ 					regulator-enable-ramp-delay = <24>;
+ 					regulator-ramp-delay = <100000>;
+-					regulator-ramp-delay-scale = <200>;
  
- #include <linux/soc/samsung/exynos-regs-pmu.h>
- #include <linux/soc/samsung/exynos-pmu.h>
-+#include <linux/array_size.h>
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_1>;
+ 					maxim,active-fps-power-up-slot = <3>;
+@@ -408,7 +399,6 @@ avdd_1v05: ldo8 {
+ 					regulator-max-microvolt = <1050000>;
+ 					regulator-enable-ramp-delay = <22>;
+ 					regulator-ramp-delay = <100000>;
+-					regulator-ramp-delay-scale = <200>;
  
- #include "exynos-pmu.h"
- 
-diff --git a/drivers/soc/samsung/exynos5420-pmu.c b/drivers/soc/samsung/exynos5420-pmu.c
-index 6fedcd78cb45..58a2209795f7 100644
---- a/drivers/soc/samsung/exynos5420-pmu.c
-+++ b/drivers/soc/samsung/exynos5420-pmu.c
-@@ -5,6 +5,7 @@
- //
- // Exynos5420 - CPU PMU (Power Management Unit) support
- 
-+#include <linux/array_size.h>
- #include <linux/pm.h>
- #include <linux/soc/samsung/exynos-regs-pmu.h>
- #include <linux/soc/samsung/exynos-pmu.h>
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_1>;
+ 					maxim,active-fps-power-up-slot = <6>;
 -- 
-2.39.5
+2.47.2
 
