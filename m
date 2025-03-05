@@ -1,37 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A4A1D8DEE
-	for <soc@lists.linux.dev>; Wed,  5 Mar 2025 22:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29251FC7FE
+	for <soc@lists.linux.dev>; Wed,  5 Mar 2025 22:51:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741214978; cv=none; b=PAP8Hanj/Wv5MTQW4DUYAsohRZ0aLPl3n2cL+7vex6HCbXTIBbN0NbRQ7EHjwSzivHd0O13vMHZfsvtR+Mbcdm7aZoFe5mD3ZoUAuQ+iHsvhr0Lo5IhYi6gXRGUm6v4kNpPZfDEAsdOOltTkNQqBdI3tswt9t9+vvoKYFJWXMqA=
+	t=1741215068; cv=none; b=le7mAKMslTCNVThWo6PhIaNmhs6vKLxKHsTStgdyb3v3xamsYUXD9bZjwO/oeZ5XyYWQ3VW0u/k2wlxvtwP7zqA+fY6cUSU2+9u3eZM8aZHqWzmeeV53nFjLpZCZjdJbX6cVwuYU7OnwNRTptCXPpeJHZyKzsfHDlv4c22xqUOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741214978; c=relaxed/simple;
-	bh=tvF+6eR8G5nkdnPZOSey1KiCW0OiFUeol3JtDBnly/A=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=aUt/WVYN9piopOcYKKmasb4f36d/L4pJGk/0ftNPb70c67dhbZOfDAqak05vFcS1c/7WoeBz7fu62SxwYLERdDWsBdBX9hLkcQ8jJN41m+bxkjugGUdEn4EbRSRLDyLL8FQKazyajAFgPIRrD9Lz+2zKVkgGzMAraL0tIOcJIm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXiqaObF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741215068; c=relaxed/simple;
+	bh=4kn0alaAsGGXPN7YZT7+IeoQ/dtwpPBvCEYm9hxAS+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i2qui6cMjBmqqFONR1yx8B93eotNBpo81QifFkpq9NT3FqrvC2I5AnHeZuspqcfAB1j5pc10o6dQ1xW2w2F4weGFWp2COuTEnshqLSh8kY/8/1mKgnljFAopsZUaT13ep4M+Q8BpFx7SHgNPFl7o9WcQ4GWlAYU7LsIyvFrcC2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uln1OaN8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXiqaObF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uln1OaN8"
 Received: by smtp.kernel.org (Postfix)
-	id 1F7FFC4CEE7; Wed,  5 Mar 2025 22:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E12A4C4CEE0;
-	Wed,  5 Mar 2025 22:49:37 +0000 (UTC)
+	id 85534C4CEE7; Wed,  5 Mar 2025 22:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FCEC4CED1;
+	Wed,  5 Mar 2025 22:51:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741214978;
-	bh=tvF+6eR8G5nkdnPZOSey1KiCW0OiFUeol3JtDBnly/A=;
-	h=From:To:Subject:Date:From;
-	b=aXiqaObF5TXoXrrQpV/QRUdP/Os/nnuu3xBmA8Ebgbu4tqAlRgTIx9spxKiBko98N
-	 zBeI6bSlBn8d9O4qS3OWkRxtJp7B2OgHeqdagUUb3FFLDspxwKzlOJCWNIW5iSU5hT
-	 G9hDrTQT2bYJMVhlX3xIuBRw9rTlGFoMCEO8qhoKyeG/zwz5Cc3J1tzFnSjrtj7EH1
-	 uw0VPliHArNX3qzYfdn7ZcTZ1qQnE75u2/QRv/VhbGOmVUixtRLYGeVhQ4g8uSVsuf
-	 Ty0gAAigsnTUvEsD5b7c/r1IWHKqV/zOawIBMOq0xTWDo5O34BzzaBMhI9hpCftq1T
-	 AoMG3uyC7hGQw==
+	s=k20201202; t=1741215067;
+	bh=4kn0alaAsGGXPN7YZT7+IeoQ/dtwpPBvCEYm9hxAS+Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uln1OaN8EPJRkG/4lBXIoKjv30iTN6/M4db/1cmIwCxcXDBwJ8SOm6Y9H0es7OpNH
+	 UsmxUM8G1algdX+Es2HLaRn7rjjQ8JmtVoiEJlTx+HL1cMnBPgHiFA2GeJOj+l5s05
+	 k1++sYg74Ytv9B3HM0cy/WUF1U6a7/ij0dKVMC40G64JBZ01ICmYVoo6EmVfNkNgn6
+	 Kp0wbcgYm1fNCt40sKBzDf3vxxAzzP0xlK0FOqj7d9DXFvm532KCdRHMfxUW3SVLMX
+	 TEgcfOEzqYc+rgwP3DLOXMbroHI+DMuBQ/yU04hxT3IitZ7BHkBj1IjkpnLMzF51d/
+	 H5rVjIvfPmIog==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: soc@kernel.org
-Subject: [PATCH] arm64: dts: nvidia: Remove unused and undocumented "regulator-ramp-delay-scale" property
-Date: Wed,  5 Mar 2025 16:49:36 -0600
-Message-ID: <20250305224936.2995519-1-robh@kernel.org>
+To: soc@kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>
+Cc: devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] arm64: dts: nvidia: Remove unused and undocumented "regulator-ramp-delay-scale" property
+Date: Wed,  5 Mar 2025 16:49:52 -0600
+Message-ID: <20250305224952.2995841-2-robh@kernel.org>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -46,6 +53,9 @@ kernel and undocumented. Most likely they are leftovers from downstream.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
+Arnd, please take this directly as the NVIDIA maintainers seem to be 
+AWOL.
+
  arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts | 10 ----------
  1 file changed, 10 deletions(-)
 
