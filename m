@@ -1,70 +1,96 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D7327F4DF
-	for <soc@lists.linux.dev>; Tue,  4 Mar 2025 15:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2D62046A8
+	for <soc@lists.linux.dev>; Wed,  5 Mar 2025 13:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741102119; cv=none; b=oBdwTetufbuKt5Q3s1/FUDCFI9Adc9XdA5ir/uNqUJZg6P4y/NTrw1OJncJF3TXItp62qKSle21+FHOY6Y/+nZPMRIaRaIfUKbEJTu3tOHAQMuWPiPb9SGrBHBh3+/adfEqSrAt1h77rJRx90SPe/Xf61+5ILgOIQFENa4Hyx1c=
+	t=1741180636; cv=none; b=H1IsqA39dpxsytJ8Q+X2Lc3UgU4rOzKKQo5HHMlawENrqolL4o0KQBxKK3G2uXB59YCtWICTQAufyBpKSwt3zF8ZUgj25FGlPkEjUCMpktQmkfNQ+uPDYX46pU5M9UOhjupS6873htNVRdknuUp6j4C83Tna6+QiytWEmM2+R6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741102119; c=relaxed/simple;
-	bh=xc4FEz4bXKZ8lIctaMZAYMrMWNeamvFBp6wijgRXR3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OF3c82cgplUn9kkJ0eja/FaJYWK/dsn2WdFAdf2A7AlQ/0ieaNHCBCZa4XShQJKgVmSuUQmAYQ9RIyuByuvdE5RbpGSnP6ij0j4skADz6IzE50iYR7JkaU9sJhU0RMEvsgoL5yQtfzotUbr85v60uVxY3u/e0G3r2LjtrvxAbi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D2A72B;
-	Tue,  4 Mar 2025 07:28:50 -0800 (PST)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 399773F66E;
-	Tue,  4 Mar 2025 07:28:35 -0800 (PST)
-Date: Tue, 4 Mar 2025 15:28:32 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Cristian Marussi <cristian.marussi@arm.com>, soc@lists.linux.dev,
-	Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@arndb.de>,
-	Luke Parkin <luke.parkin@arm.com>, Peng Fan <peng.fan@nxp.com>,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] firmware: arm_scmi: use ioread64() instead of
- ioread64_hi_lo()
-Message-ID: <Z8ccIBTgn6n7CYXh@bogus>
-References: <20250304144346.1025658-1-arnd@kernel.org>
+	s=arc-20240116; t=1741180636; c=relaxed/simple;
+	bh=AMygIzE1vjRKH3HQ1Hu0QrxXHQmeaOzjU6mxohILknI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Zn8WS6XxRLHj5fO+9RZZh3h8RMJMszGbzMk8Nf/LRoUu/1jb2OshbwaeA/fVzMnSyAjVG5W2DRknK6w0LtglnPeC2AVutOhCG3eflVcVlQVdavZ0wEN7NZ8iQE3Adw/tvRDSQ6cuCsQSY4kPD2uQIBGHhrFyg7nuQdhwBwbcoE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPZDmBOQ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPZDmBOQ"
+Received: by smtp.kernel.org (Postfix)
+	id 4A57FC4CEEB; Wed,  5 Mar 2025 13:17:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFC3C4CEE9;
+	Wed,  5 Mar 2025 13:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741180636;
+	bh=AMygIzE1vjRKH3HQ1Hu0QrxXHQmeaOzjU6mxohILknI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=gPZDmBOQA9TA7DuaY6VMCs6uQ7xmbXopI04ZVr9UiC6R26+fut/uWPmy//2x8pSEy
+	 8GWqRzyETLqG6dYg7VgexsbrO3u/VzGqMwbAIZQjjrEEQIebOlHAU6LNgu9UlID416
+	 CYb2DIOomkAvKabpNuSdYWhU4SM7LAm6gEGQga0EqgAHqfccP1QJfxKaiLCMwC7F+X
+	 gU1EgjkAvSohONkIlQKk2OQ2tBIXZF93II8Ee9kUHgO38O4jbbcu9/lcKd4gqzDBYz
+	 pr4QoR3+dDJdvdXp/wm1j25ajHzSYEzOQhv0LPLDcQOuX5COLoTeTUkmJoZXjlIDoC
+	 t2SUnoVs9Fn3Q==
+Date: Wed, 5 Mar 2025 13:17:12 +0000
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V Devicetree fixes for v6.14-rc6
+Message-ID: <20250305-sip-unable-d56ef7dbf86b@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MUTlGABqi+4r+qFP"
+Content-Disposition: inline
+
+
+--MUTlGABqi+4r+qFP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250304144346.1025658-1-arnd@kernel.org>
 
-Hi Arnd,
+Hey Arnd,
 
-On Tue, Mar 04, 2025 at 03:43:34PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The scmi_common_fastchannel_db_ring() function calls either ioread64()
-> or ioread64_hi_lo() depending on whether it is compiler for 32-bit
-> or 64-bit architectures.
-> 
-> The same logic is used to define ioread64() itself in the
-> linux/io-64-nonatomic-hi-lo.h header file, so the special case
-> is not really needed.
-> 
-> The behavior here should not change at all.
+Please pull a single fix.
 
-LGTM. I just sent PR for v6.15 this morning. Either I can redo PR with
-this included or you can just apply this directly. I am fine either way.
-If you go for the latter approach,
+Cheers,
+Conor.
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-If you prefer me to send updated PR, let me know. I don't want to create
-confusion by recalling by PR and sending an updated one without consulting
-you.
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
---
-Regards,
-Sudeep
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt-fixes-for-v6.14-rc6
+
+for you to fetch changes up to 1b133129ad6b28186214259af3bd5fc651a85509:
+
+  riscv: dts: starfive: Fix a typo in StarFive JH7110 pin function definitions (2025-02-04 20:31:30 +0000)
+
+----------------------------------------------------------------
+RISC-V Devicetree fix for v6.14-rc6
+
+A single fix for an incorrect define in the jh7110 pinctrl header.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+E Shattow (1):
+      riscv: dts: starfive: Fix a typo in StarFive JH7110 pin function definitions
+
+ arch/riscv/boot/dts/starfive/jh7110-pinfunc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--MUTlGABqi+4r+qFP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ8hO2AAKCRB4tDGHoIJi
+0p8MAQDqe9lHDoQy9MPkfxFlf9wZFQikZ4ZvZTub2KZRx8CDRwEAp78AaohE0U5V
+cg61m62REvCJ2Y7PZp8VATqDxOeX+w4=
+=xqAj
+-----END PGP SIGNATURE-----
+
+--MUTlGABqi+4r+qFP--
