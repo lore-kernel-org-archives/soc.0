@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5E721505F
-	for <soc@lists.linux.dev>; Thu,  6 Mar 2025 16:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574962135A5
+	for <soc@lists.linux.dev>; Thu,  6 Mar 2025 16:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741278704; cv=none; b=hRBw2miLq9THOK17ObXUD+wOOJydnDba9xbFzcEQPewsKgmg1mujMImpydkYCgpw1JemwCEf/ByRSLJLz/MJvCkw9Y4Ld2T7YZHGU6Ih4IAbECuOcQFSNYp/H+z80U77dtNClJLtl8uVOlybU9RpqWm0MXcdaAdEyK+nFaqey6U=
+	t=1741278705; cv=none; b=aiLA7uB9Y7ZB7FEFGFcYfvyetFkuZBs1m2MsrKqAStbIBJ5F2yPV+6lBMuTUovNppKYb7JiuiOF53BeDdoDcEHwJ4NxZ5Un3z/CEhJbP98oxjw2Y5HYw+iRPSTM8RnOZNcQZTll6u0drfzN31zG+3udCcGsKOgBCduqL2JUdNJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741278704; c=relaxed/simple;
-	bh=ZqI9EQNgOJckrR2o/QIuRhjkg7RNl509gXHNGSXwves=;
+	s=arc-20240116; t=1741278705; c=relaxed/simple;
+	bh=Qdqp7aMPSFhw0yldw3u/ZDlGCglv0dhoAtw5qqgthYs=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=h8zyC6bN+ueb7X8gL39Mp11mBkVYFfXulozOA0/K0u4echMPq4lxFPfkXFmDuHuhBmBl/8t+IUtCMLpM3+o/2KW9r9S30lmNKdsyim+KKznSn2wnQwwXPusKOtU9dhziAz1v+EZxUzVxO3pzXp8xFky0gC4YYOQnvhSko9UR80A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Syuk1s3d; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=AVoPqKrxY4LqRtPoP9KUfpQGSBlJcG18L2VkgvNrlA5z8mIJvcSN7P5LgzKvvkJ005oHlY2usovZrBrhahbUbPVzFuM7NL6gLcCosxR8e/vDFY41uJt6FmJhhqaYu4blNTOsgW3peQrERkFVc/B2KHk7ZzauXNRK9zypYyDftTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbwB7vdH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Syuk1s3d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbwB7vdH"
 Received: by smtp.kernel.org (Postfix)
-	id B76C4C4CEE8; Thu,  6 Mar 2025 16:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CA09C4CEE0;
-	Thu,  6 Mar 2025 16:31:43 +0000 (UTC)
+	id 3FB6DC4CEE8; Thu,  6 Mar 2025 16:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C07C4AF0D;
+	Thu,  6 Mar 2025 16:31:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741278703;
-	bh=ZqI9EQNgOJckrR2o/QIuRhjkg7RNl509gXHNGSXwves=;
+	s=k20201202; t=1741278705;
+	bh=Qdqp7aMPSFhw0yldw3u/ZDlGCglv0dhoAtw5qqgthYs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Syuk1s3dumPoRgliRxxRApQ4ZtxtCKGIy/sOwI2hD/acZhN+Cxja3NqI1hW6Cw0XO
-	 0maSjkc6A8SILTufNFV4z1BvdVV0ilmJqqjoiD941n1xRsy1iPSoKbtDUCIZypsema
-	 vPPZ+EIjpWEzLnpNuMjhkq9qSiGd03cKFOxMnMc9rvH6VBw6TexQVMAObLiWKmaE4p
-	 9kyclHIRe3YOlorBidxqdqjZwNuvkbHLxajpnstLA14OOlojwiIoYZR4BO4YWs51OT
-	 WvtoJAyij4mftQEJJ/d3ApfuOctWRV0jNfx/hbu9zSGxl9UEw6OONvCv1pVJuap5lP
-	 L7jPMwU7APlNA==
+	b=RbwB7vdH2IuohGUCREWGCHDma7fd6tu9sO32NXGgpjylMTbj/WR3CxPO9NjJdM2Ie
+	 wbuVqQpbVLo9lGPayHIbAaT3+7rKzNITlhgnS0t1MMDBny+SPL14V3kjoyTF8cCznq
+	 VBakbLV0ZsTvRr7z+X9zCSIeYwxI/JXQIvu7BqBNODWdUFJVwUKuj3+6QtxxauxSbi
+	 Q8VoBjwY2lzlRiBLNfsq0GqhwS6AX/kKCyv45bNoNnTDhHCktl7Y938bbp5wpuEkbx
+	 F3BU0+IL3TH6bZ/bLMUyPwcX3J2179uyocjeexiZ0/LV/dphpJa2fDn9pyUmBVWizy
+	 EADojDGnzHhbA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3403C380CEE6;
-	Thu,  6 Mar 2025 16:32:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE0E0380CEE6;
+	Thu,  6 Mar 2025 16:32:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT,PULL,1/2] MediaTek ARM64 DTS updates for v6.15
+Subject: Re: [GIT PULL] Apple SoC DT updates for v6.15
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174127873698.1655995.3421256901410879001.git-patchwork-notify@kernel.org>
-Date: Thu, 06 Mar 2025 16:32:16 +0000
-References: <20250306113540.148342-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20250306113540.148342-1-angelogioacchino.delregno@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+ <174127873827.1655995.6874038127102318388.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Mar 2025 16:32:18 +0000
+References: <20250209135558.8243-1-sven@svenpeter.dev>
+In-Reply-To: <20250209135558.8243-1-sven@svenpeter.dev>
+To: Sven Peter <sven@svenpeter.dev>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,22 +54,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu,  6 Mar 2025 12:34:52 +0100 you wrote:
-> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+On Sun,  9 Feb 2025 14:55:58 +0100 you wrote:
+> Hi,
 > 
->   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+> Please merge these DT changes for v6.15.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-dts64-for-v6.15
+> This batch adds device trees for Apple T2 SoCs used in pre-M1 x86 machines
+> as a co-processor and also adds cpufreq and PMGR nodes to a bunch of pre-M1
+> Apple iDevice SoC device trees.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] MediaTek ARM64 DTS updates for v6.15
-    https://git.kernel.org/soc/soc/c/c4991aabc1f9
-  - [GIT,PULL,2/2] MediaTek driver updates for v6.15
-    https://git.kernel.org/soc/soc/c/7d5a549a08de
+  - [GIT,PULL] Apple SoC DT updates for v6.15
+    https://git.kernel.org/soc/soc/c/5ce45ab10387
 
 You are awesome, thank you!
 -- 
