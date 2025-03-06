@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A3B21149F
-	for <soc@lists.linux.dev>; Thu,  6 Mar 2025 16:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A80212D6B
+	for <soc@lists.linux.dev>; Thu,  6 Mar 2025 16:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741278708; cv=none; b=R9mXzg4scVEIYZ7I6qigvsXamOorSh6VFvJaBAcUM6FWs9oZP4MTUwMmMDKnBmR/uQNcXb1+s8cTug5yzCRaKDQxlCBLjUUAwfkq++dnGprDd/O1mANrUYVlkfDRgLWwXr5uWfS7E0V1lxfIsrulsGLlv3kazSON33F7jwOOvAI=
+	t=1741278709; cv=none; b=C+qVgT7aVqgKqPzNak5Qold4xcvXP8D+UeoH1PbI/j36ktqR9t0hO2v3dw385BmBk2M6CY1mVN6Sl2t9jgNH+JqcmaN6hJqXXKJEGPgmyARjNOuXzZQgbgGFaCZFV/uMZqZbxviMxvFQSU5BW/9ccddC8+Zu2NkGWQvQPzrqDZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741278708; c=relaxed/simple;
-	bh=Qr0Sb8T0MfcOHQpr02cWt8/4a4ailGRzTQ+S2F+J2LY=;
+	s=arc-20240116; t=1741278709; c=relaxed/simple;
+	bh=gSFp9l+GV/YReusNeaeG27owtRQDpZ/EeHoxvGKsCUI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Aq6fr9u4ekwiceDOtPutkdKl1Znd6/0DR6/MueciCce8ev9N90wowcStEjQeLsEA1KNJO3qL4rEBB+PUOFpavKxKl1///7bJsfwf8SRmskJBIQZANJ54WHM2eYgt0islr6QBZxFLnY2KQVkP9XB7iT8vNTCHAjRxs3CNcm9Z34E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gj8UF0mc; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=FjbZluZsFCa7QqfXHNGY7EFsz9XsWRFXdinPKlgkAM1mThLZQo+SHVBhkIRPWNFRRJ4MG9r15Z2KG/at3vD9FDOEDe8euzobAoqOPoqJ2g5Z5OqN7+ttlWA5gfAAYK60yKYlRZPFdZRVySTbGgBMrY1C31/0d52oDrCtTs45d20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQ/jYNPc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gj8UF0mc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQ/jYNPc"
 Received: by smtp.kernel.org (Postfix)
-	id CE486C4CEE4; Thu,  6 Mar 2025 16:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C5EC4CEE0;
-	Thu,  6 Mar 2025 16:31:47 +0000 (UTC)
+	id 05523C4CEE4; Thu,  6 Mar 2025 16:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E40C4CEE0;
+	Thu,  6 Mar 2025 16:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741278707;
-	bh=Qr0Sb8T0MfcOHQpr02cWt8/4a4ailGRzTQ+S2F+J2LY=;
+	s=k20201202; t=1741278708;
+	bh=gSFp9l+GV/YReusNeaeG27owtRQDpZ/EeHoxvGKsCUI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Gj8UF0mcAYKB/ZsSMx8AyQjKnlrHxvwNhw4pMc9gIqfNCLyl70wxtrYsCs5l/A1c/
-	 /OydQqkzl0Sp5qHiX1AJgfznTOj2F0IfBVrDg+P2lL/pF7uzNajimekSdjM2hKhedy
-	 V8Lh6GUwzqKRJQ5B/vPof6uw4+cYXmlULKx1CWpIHCmkwbMS+p71pX+3EMIt3eu8GX
-	 KbPK0KIDKPRcVdXTSghzHX9s6x8Bbw9id1TJrHYrh1K5IkcWZ9xAFqZfSOWuCEjsDH
-	 wOgBFe9v/oKOtzDKeHm10y62/ixI+akK8nRBoX7utklqKNopmSP6ygtoxemQ9qbePl
-	 gyL6kTE5/kHLQ==
+	b=uQ/jYNPcCZWyJ29puHIdnfPDMVlrzSMex8Z1bd4/6tHk34/+KLThb+6jZBfQ8RbzS
+	 tZRiPvGFGIvHh1vnI/459Ba62fTByb1T1tV1CHRykGCJZPs4L/nqSV1N76oLFk5+Pf
+	 MhGkX3/dP5ne0qr7qp9qhqPKksPbby1ZlUxA3tPNxfOx2MUKOzzvdBs4WRFi1wMxgP
+	 ipzlTLpgMrVBtt2ccEaTMy0pReNXAYWYAhEKryNCh3yiP21i4l6dH6CcQeUg9ETud4
+	 RoiVV11wqH3A2UDeflHuYjRayMhR2ZpOrgExGSvLXUuLD1vp4lq2un0fQJthXkot1U
+	 Tbn42x++EzLPg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3549C380CEE6;
-	Thu,  6 Mar 2025 16:32:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71063380CEE6;
+	Thu,  6 Mar 2025 16:32:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +39,38 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Second batch of Apple SoC DT updates for v6.15
+Subject: Re: [PATCH] firmware: arm_scmi: use ioread64() instead of
+ ioread64_hi_lo()
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174127874098.1655995.15335481172568865749.git-patchwork-notify@kernel.org>
-Date: Thu, 06 Mar 2025 16:32:20 +0000
-References: <20250302115808.59172-1-sven@svenpeter.dev>
-In-Reply-To: <20250302115808.59172-1-sven@svenpeter.dev>
-To: Sven Peter <sven@svenpeter.dev>
+ <174127874224.1655995.5770719690686079153.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Mar 2025 16:32:22 +0000
+References: <20250304144346.1025658-1-arnd@kernel.org>
+In-Reply-To: <20250304144346.1025658-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun,  2 Mar 2025 12:58:08 +0100 you wrote:
-> Hi,
+On Tue,  4 Mar 2025 15:43:34 +0100 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> this is the second batch of device tree updates for Apple SoCs based
-> on the first PR sent earlier [1].
-> This one adds nodes for SPI controller, SPI NOR flash and NVRAM partitions
-> for M1 and M2 devices. The SPI controller driver has been merged for a while
-> already and we just forgot to pick the device tree changes up.
-> It also adds the touchbar digitizer nodes. The corresponding driver and
-> dt-bindings are already in -next and should be part of the 6.15 merge window
-> as well.
+> The scmi_common_fastchannel_db_ring() function calls either ioread64()
+> or ioread64_hi_lo() depending on whether it is compiler for 32-bit
+> or 64-bit architectures.
+> 
+> The same logic is used to define ioread64() itself in the
+> linux/io-64-nonatomic-hi-lo.h header file, so the special case
+> is not really needed.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Second batch of Apple SoC DT updates for v6.15
-    https://git.kernel.org/soc/soc/c/ca6db056106e
+  - firmware: arm_scmi: use ioread64() instead of ioread64_hi_lo()
+    https://git.kernel.org/soc/soc/c/3b8c56d80727
 
 You are awesome, thank you!
 -- 
