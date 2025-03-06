@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26E2148FF5
-	for <soc@lists.linux.dev>; Thu,  6 Mar 2025 15:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761231FCD05
+	for <soc@lists.linux.dev>; Thu,  6 Mar 2025 15:41:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741275687; cv=none; b=hOCSM6KMcNjFQm6YjhCiyoueUKFgiyK6F0Box2LE97NOsYwqRmvmktM69KP1fxI54azj/BUq1RKxZO23Mr/VsC90WoVlvO9njNZktHLSkAIIH5XR2nKq1bK3b4OyEmd2tt5kaSe6zxCy9+Lc+I2zi4MthrLlCcMWF+a3ppxfgis=
+	t=1741275688; cv=none; b=S7/iecuoV6yULprFvESRfM9zvqjwvsETGLZsPmWBUFp/aB3WPMYzKdrpLTOUltfcwMEHFUajzURu0carUfrzX1gqHD1IO2vd2QupAo9Khoolg6etM57dnac2J2lajr6SuNPzj/caWqHaMSuWG5FMKTgyDB4BzwxPHoz/fVrpSp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741275687; c=relaxed/simple;
-	bh=NFSdNRlRXpFbrZyVQJV/lDWfcp6x7QKUKGrb75ObD8w=;
+	s=arc-20240116; t=1741275688; c=relaxed/simple;
+	bh=j13REtYNJHCYe7e8o3pEniGxjpKWBAtz0AyO22Y1Boc=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=K+LErUa/FGCuuF8JfSeB+UON/UwKse2g794amiFVtmCusLR1iLZam0rNZq+Y4Bg7u0mH2FwMdGKxdfCBVhW7BoLgGDuqblYn9hradtUPMNPs54ky2ijD2uWaKWmm6E2+qkjm5yQlTtP6IDMKqi3NXQ+uH2BsjEBe/WlFJdZ28e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EstAl0p7; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=jK9SjTO/VdMglKW/AWkPHBWpO1ExMGQ+H5EwebMpTjJUvxQnVIB9WjP3jP84kp7GUJ/9vre/pE9s6QKmJPEtxA+sXn2vDU6kvwaaNcDr7c4OnCmrjfqpO9weSIYxJRQZmzTC47AYUJ7yGdL3162X9JeeQB+XH7Iz/1MK6UPfhhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5lamZdZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EstAl0p7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5lamZdZ"
 Received: by smtp.kernel.org (Postfix)
-	id 84011C4CEE9; Thu,  6 Mar 2025 15:41:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D00BC4CEE4;
-	Thu,  6 Mar 2025 15:41:26 +0000 (UTC)
+	id 0CF9AC4CEE8; Thu,  6 Mar 2025 15:41:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73B1C4CEE0;
+	Thu,  6 Mar 2025 15:41:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741275686;
-	bh=NFSdNRlRXpFbrZyVQJV/lDWfcp6x7QKUKGrb75ObD8w=;
+	s=k20201202; t=1741275688;
+	bh=j13REtYNJHCYe7e8o3pEniGxjpKWBAtz0AyO22Y1Boc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=EstAl0p7zVEl2kJVu9vbmzXutgG/EqadHXbZd6+lVsI6NAq5qqcZV5jhLg9HU60UD
-	 SnJXhaYp23tUh8p6g4RM/PMtIP5o5DOKsa4kxXS6jnpomoWSH1PTl2C/aKM45RDcy1
-	 WB65ouojEH3UojTtbS5SPFf96+rY28Dd5Vt7LeeRtd4yZgeulZOATgBXM1KYi8vyKg
-	 2VEHVdLQkNZNGNZ59YcrBbTndqNxhWbqy558jkPpdzEJJEnFJ1wEZsX4GUMm8Tkexc
-	 +DdFCa9xxRbhS6TRcXE4WlHT5LPXVnByMYa6zBUzSck/5l/T+L+xnTA0Unv3eOPX4B
-	 X519p2e/xuLhg==
+	b=V5lamZdZlkWTaHcj4oUAsHP7Ob6e/icMQtQmMIgtSkOD2wPCuVhlwlfJ9COc4O4Gh
+	 e0iFNB3xDD5eDX1ZWlftDCFRX4eD/MWAN80ZWFfmYM1bllFVN4D9yUMfZ91D/Ngal5
+	 cNLEr2ZOwRFVF6dgFpGSG2WCcRNKMj+1Rl5AafdbDXMF31M85pMT2iUbhuTSaGOzoa
+	 EQwMJE+SQ676JkzQo749AKj+xoA4VKtAVjk7dNQkJ1d01jWiTYaE6NOuqQGj9fUriA
+	 rda77SB5UrRlNJZy7Ja3nVVuf/+51/hl0olr2qslOkyA0UIUfAQD68+IixOBUnHcVp
+	 lbTqeK3gDPafg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAE9F380CEE6;
-	Thu,  6 Mar 2025 15:42:00 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71331380CEE6;
+	Thu,  6 Mar 2025 15:42:02 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,38 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP
+Subject: Re: [GIT PULL 1/2] Broadcom devicetree fixes for 6.14
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174127571951.1636926.9757148928978085469.git-patchwork-notify@kernel.org>
-Date: Thu, 06 Mar 2025 15:41:59 +0000
-References: <20250205121151.289535-1-arnd@kernel.org>
-In-Reply-To: <20250205121151.289535-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+ <174127572098.1636926.5149666153015614464.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Mar 2025 15:42:00 +0000
+References: <20250225194041.1063762-1-florian.fainelli@broadcom.com>
+In-Reply-To: <20250225194041.1063762-1-florian.fainelli@broadcom.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed,  5 Feb 2025 13:11:33 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 25 Feb 2025 11:40:40 -0800 you wrote:
+> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 > 
-> When GENERIC_IRQ_CHIP is disabled, OMAP1 kernels fail to link:
+>   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 > 
-> arm-linux-gnueabi-ld: arch/arm/mach-omap1/irq.o: in function `omap1_init_irq':
-> irq.c:(.init.text+0x1e8): undefined reference to `irq_alloc_generic_chip'
-> arm-linux-gnueabi-ld: irq.c:(.init.text+0x228): undefined reference to `irq_setup_generic_chip'
-> arm-linux-gnueabi-ld: irq.c:(.init.text+0x2a8): undefined reference to `irq_gc_set_wake'
-> arm-linux-gnueabi-ld: irq.c:(.init.text+0x2b0): undefined reference to `irq_gc_mask_set_bit'
-> arm-linux-gnueabi-ld: irq.c:(.init.text+0x2b4): undefined reference to `irq_gc_mask_clr_bit'
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.14/devicetree-fixes
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP
-    https://git.kernel.org/soc/soc/c/98f3ab18a0a5
+  - [GIT,PULL,1/2] Broadcom devicetree fixes for 6.14
+    https://git.kernel.org/soc/soc/c/170645f1adb5
+  - [GIT,PULL,2/2] Broadcom devicetree-arm64 fixes for 6.14
+    https://git.kernel.org/soc/soc/c/b86114f680f2
 
 You are awesome, thank you!
 -- 
