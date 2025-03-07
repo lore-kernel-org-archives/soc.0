@@ -1,86 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B398317B506
-	for <soc@lists.linux.dev>; Fri,  7 Mar 2025 01:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82EFDF71
+	for <soc@lists.linux.dev>; Fri,  7 Mar 2025 15:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741309687; cv=none; b=YiGLa4mdtHukhAwhDkBt+j6keInX6JWrLJWqT1pvfiK6mnFG4KAYXX/JwGbioL5vpBraRqehGYdbz5saI4FGllKAmSUlnsn4UJQZ8i+sIbB4LkmmbptzPQaqa3JyjcVC00nJekYnNxwLDeSVd+FMW++OBWEzqhjsKBVZtWhHGVs=
+	t=1741362462; cv=none; b=rZj9Lmas5wkBDafK0Q/L16TJkvIB56bsM2Y9vMJsdD13868wSyLoNN72gd1q8JyBEphl7kx0EjSiteVr59uPXO2lu0nVJ38Mb6x36o1SjNqUDZ1tBfBOkSVaqRCQ/BIqQRGIwoZcfor6+rpEHjXsHO+DEjn5+1Zb58kVWywD7mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741309687; c=relaxed/simple;
-	bh=ZCVNFRDSXRUDXXDBJrUUmwQobvHH8nnw4004/660Esc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sOGbIRtjTPOiXDfu8CmblnYUogoo/nezTqiYIefM8H036kXM0SIppNChoPh7z7UNEX166kuwK3NXit4mq0sb0HayWkee5zKLlDznjaaGGdqejBqlMUWXYJFK13f6icDDarqCFraN7Sg8EgKDYW8HV8yQ8PWTNizu6RSNljrJq/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4viKKi9; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4viKKi9"
-Received: by smtp.kernel.org (Postfix)
-	id 44627C4CEE9; Fri,  7 Mar 2025 01:08:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F500C4CEE0;
-	Fri,  7 Mar 2025 01:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741309687;
-	bh=ZCVNFRDSXRUDXXDBJrUUmwQobvHH8nnw4004/660Esc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=J4viKKi95ytYPjdBYZ6n3MS1mhk0DPLe7a1Muz1DQOrXoJ4r6i5GKf8EVERZwUH8v
-	 Qu3fpTjz3xMBYbcVJySNwIfWILQ15/0HSOxnHIwcZhpBv1mbse48zjYIJQ/egesL9H
-	 66v66zJ9sNH4x00ZS7RBD595eTlvHn+8opYF2sXmViz1nQkkUdRM9G18iMp1wg3M4E
-	 RAmknpkqIWaujCey21a4L0oFYb6EvkZvU+QRE7Gtsf2TGEnJUDzfRAzV3PteotgG/J
-	 tdj1IkS+oxzux+Y3yOIFWO8R34oa79BBYOZ2BuptxCa7SscGWzTQvbiguqP0jCmPOH
-	 XOMY1y2COR4QQ==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Date: Thu, 06 Mar 2025 19:07:46 -0600
-Subject: [PATCH 4/4] arm64: dts: amd/seattle: Drop undocumented
- "spi-controller" properties
+	s=arc-20240116; t=1741362462; c=relaxed/simple;
+	bh=O24OFtz8Xk9bsSxjTa6/ddRLJ80e8oz6n9UKypPCytk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LD/Ps2+QHjWttRVask3pemttAGWETslg4vcBI67UqxDKZJy2REPCFYMGvFuTJ51Es3Q5vXLLO1TRfnPXvmDSlffuNSybn1xi53BWW3e93cVK6Pub9Q2fmHGWx1Mxw8pFMvvTrx73qhAxd2OXc/ijOiD/lN68P+fIlAU94EDSxUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:d269:b36f:7a12:a76f])
+	by albert.telenet-ops.be with cmsmtp
+	id MrnY2E00K2m8Uyj06rnYRc; Fri, 07 Mar 2025 16:47:32 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tqZuk-0000000DBkj-1ep7;
+	Fri, 07 Mar 2025 16:47:27 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tqZv5-00000009sr7-1t7L;
+	Fri, 07 Mar 2025 16:47:27 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DTS updates for v6.15 (take two)
+Date: Fri,  7 Mar 2025 16:47:25 +0100
+Message-ID: <cover.1741362039.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250306-dt-amd-fixes-v1-4-011c423ba99a@kernel.org>
-References: <20250306-dt-amd-fixes-v1-0-011c423ba99a@kernel.org>
-In-Reply-To: <20250306-dt-amd-fixes-v1-0-011c423ba99a@kernel.org>
-To: soc@kernel.org, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, 
- Tom Lendacky <thomas.lendacky@amd.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
- Richard Cochran <richardcochran@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.15-dev
+Content-Transfer-Encoding: 8bit
 
-"spi-controller" is not a documented property nor used anywhere, so drop
-it.
+	Hi SoC folks,
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+This is my second pull request for the inclusion of Renesas SoC updates
+for v6.15.
 
-diff --git a/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi b/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
-index aa7fe884a458..a611f8288b3e 100644
---- a/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
-+++ b/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
-@@ -121,7 +121,6 @@ spi0: spi@e1020000 {
- 			status = "disabled";
- 			compatible = "arm,pl022", "arm,primecell";
- 			reg = <0 0xe1020000 0 0x1000>;
--			spi-controller;
- 			interrupts = <0 330 4>;
- 			clocks = <&uartspiclk_100mhz>, <&uartspiclk_100mhz>;
- 			clock-names = "sspclk", "apb_pclk";
-@@ -131,7 +130,6 @@ spi1: spi@e1030000 {
- 			status = "disabled";
- 			compatible = "arm,pl022", "arm,primecell";
- 			reg = <0 0xe1030000 0 0x1000>;
--			spi-controller;
- 			interrupts = <0 329 4>;
- 			clocks = <&uartspiclk_100mhz>, <&uartspiclk_100mhz>;
- 			clock-names = "sspclk", "apb_pclk";
+The following changes since commit 5f7ebb81112c3f50ffbb8e576e4d35cedd8aabb1:
 
--- 
-2.47.2
+  ARM: dts: renesas: r9a06g032: Fix UART dma channel order (2025-02-21 16:23:01 +0100)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.15-tag2
+
+for you to fetch changes up to 8bf8ad268e46403c7140ea5aaa85e9c659117dbc:
+
+  arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Enable Mali-G31 (2025-03-06 16:36:08 +0100)
+
+----------------------------------------------------------------
+Renesas DTS updates for v6.15 (take two)
+
+  - Add GPU support for the RZ/V2H(P) SoC and the RZ/V2H EVK board.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Lad Prabhakar (2):
+      arm64: dts: renesas: r9a09g057: Add Mali-G31 GPU node
+      arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Enable Mali-G31
+
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi         | 51 ++++++++++++++++++++++
+ .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    | 15 +++++++
+ 2 files changed, 66 insertions(+)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
