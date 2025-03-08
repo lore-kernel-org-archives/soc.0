@@ -1,102 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625C213DBA0
-	for <soc@lists.linux.dev>; Sat,  8 Mar 2025 15:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDB81DE2AA
+	for <soc@lists.linux.dev>; Sat,  8 Mar 2025 17:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741446342; cv=none; b=tX7TsOMPzsEnToBsbT2BboFqWHZceD5ffKTQcicE6aloIf1QVOITkha2IhhG22ykbmyzFH8KYxGlhN1WxM8pZBLuA29n3q7WA4D7wVL0dIhwhq24AGnKA5oqe3DsvuleB7fxhmNFPuuRulF/wkxmI6jJhi3K15f+0oCUq7mPInY=
+	t=1741455590; cv=none; b=MTLvG1c2zf12S2KxCDB7ZAb9kOnhMPAQPuj5SgjVq+4zfNfwdGOiqjpgjKJ5oDLoM6Yrx3INiW2swOzCIHfCyc5yhuowpleHQ8dImdsfL4fNkmuAB81jhe+LIipNJ+3cfX7xbMdT1/fBJdsbEzeiClqeBeu08zhc+ZmYEbL76sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741446342; c=relaxed/simple;
-	bh=B+Gq/2+MF8fl1OnIPd3GKAn4DQ0rzPiBBwdtmpyDsZ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qnXYjR1CbIcA4tVlk8SUCfNOzO40iN/P5wsfKZ/1Igz+EqoOqC1WZzLDEUyaspyWwJXDk0enrPe+DOWclgdUhzMwFeVxq5RInILeCmBnMb3P4BXKKkbqoLSo32Vh3kizhdDYD/W0Ia9KrMhT/xXk3+kPVz7WIlYjKKKc/SqFFgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=mwnpKLxA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741455590; c=relaxed/simple;
+	bh=byf8HBH0dWCW98Z4fIp5BZ8co/8YAfkX955US1kCgys=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YBtOUr53iWKEO8zEJ1iCLSIOntwTWgTdT70oUrEbUXJbIeFDjMO/cl9MABXxfd8ZsvlEoT391X8Sja6u5MejMUaXcXA7QxpVoaTszsTywVVaOGlwBpO+V5v3qWp2RssVyHPmgo7+Y9v2gebLkxx6yIRKYV3VxnnBjc6/EM1fm+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=glu/xNwZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="mwnpKLxA"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="glu/xNwZ"
 Received: by smtp.kernel.org (Postfix)
-	id DFFD0C4CEE8; Sat,  8 Mar 2025 15:05:40 +0000 (UTC)
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
+	id 820EBC4CEE8; Sat,  8 Mar 2025 17:39:49 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A29FEC4CEE0;
-	Sat,  8 Mar 2025 15:05:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A29FEC4CEE0
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 27291C003DF1;
-	Sat,  8 Mar 2025 07:05:32 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 27291C003DF1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1741446332;
-	bh=B+Gq/2+MF8fl1OnIPd3GKAn4DQ0rzPiBBwdtmpyDsZ4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mwnpKLxAzG+nX2ywY5/RN0cXhYU2n/mAakXUwREpQhtOO4mckC+JqV2hFvwAgL/li
-	 fqzRpzVLktbEljWVbQabIcZfnXJ5rovgX9XO8njs8j1C/hLkFeRk6pUOXwrg0Sg6Gb
-	 mKpWh/2dmiU7YKdKpRa+qpP8ezh50grhoUj+QRdw=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id B64D61800051A;
-	Sat,  8 Mar 2025 07:05:31 -0800 (PST)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: soc@kernel.org
-Cc: "Chester A . Unal" <chester.a.unal@arinc9.com>,
-	Tom Brautaset <tbrautaset@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL] Broadcom devicetree fixes for 6.14 part 2
-Date: Sat,  8 Mar 2025 07:05:28 -0800
-Message-ID: <20250308150528.1900822-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 25B8FC4CEE0;
+	Sat,  8 Mar 2025 17:39:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 25B8FC4CEE0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=nvOCa8TUyygxpNletdqlPdP/z6YHwnTBk1630GsnLOE=; b=glu/xNwZRkdSMG24w3s68Hzdcp
+	/v/OW1lmXWMMD3XiDE2yGV15hWunopjVarggcOlr7Mylb1gHfCoDBB9ys4p3RELwzIHA4dg/ajj1H
+	Gza2Y/YxnZyHPmig0ILUsRg9irZJQxfCtzSs6Gzpj8m2X+LMWUPLzu+a+2LPD1Lb7Us5MvlFP+15m
+	G4Ly8wXqwuBDzHCHHp9Uga9vKWK6hl/cAM9qy5qSn9TVGnrM7xeha5eVCO8ZRp0DJ7Ha+dp48zcV3
+	cv9jUDziFmqqLAXvhayxporqMqr/j/vlXI5J+hwEpf9Y/I4jfHdmRy59MClhkPa5T7paq9KBRh4hu
+	0LKwnKJA==;
+Received: from [194.95.143.137] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1tqy9K-0004cY-FI; Sat, 08 Mar 2025 18:39:46 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.14 #2
+Date: Sat, 08 Mar 2025 18:39:45 +0100
+Message-ID: <1990830.tdWV9SEqCh@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-The following changes since commit 7eb172143d5508b4da468ed59ee857c6e5e01da6:
+Hi Arnd, Kevin, Olof,
 
-  Linux 6.14-rc5 (2025-03-02 11:48:20 -0800)
+please find a below some additional fixes for the current
+release 6.14 cycle.
+
+
+Please pull
+
+Thanks
+Heiko
+
+
+The following changes since commit 8546cfd08aa4b982acd2357403a1f15495d622ec:
+
+  arm64: dts: rockchip: adjust SMMU interrupt type on rk3588 (2025-02-11 21:28:13 +0100)
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.14/devicetree-fixes-part2
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.14-rockchip-dtsfixes2
 
-for you to fetch changes up to 24d4c56dd68906bf55ff8fc2e2d36760f97dce5f:
+for you to fetch changes up to b36402e4a0772d1b3da06a4f5fbd1cfe4d6f1cc0:
 
-  ARM: dts: BCM5301X: Fix switch port labels of ASUS RT-AC3200 (2025-03-08 07:03:46 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
-6.14, please pull the following:
-
-- Chester fixes the switch port assignments on the ASUS RT-AC3200 and
-  RT-AC5300 routers
-
-- Phil removes a Device Tree property flagging the BCM2711 ARM timers as
-  not being configured which would have prevented the use of vDSO on the
-  Pi 4 running a 32-bit kernel
+  arm64: dts: rockchip: slow down emmc freq for rock 5 itx (2025-03-08 18:21:11 +0100)
 
 ----------------------------------------------------------------
-Chester A. Unal (2):
-      ARM: dts: BCM5301X: Fix switch port labels of ASUS RT-AC5300
-      ARM: dts: BCM5301X: Fix switch port labels of ASUS RT-AC3200
+A number of emmc fixes (removing CQE from Theobroma boards and slower
+freq on Rock-5-ITX) as well as some pinmux fixes and missing supplies.
 
-Phil Elwell (1):
-      ARM: dts: bcm2711: Don't mark timer regs unconfigured
+----------------------------------------------------------------
+Dragan Simic (2):
+      arm64: dts: rockchip: Add avdd HDMI supplies to RockPro64 board dtsi
+      arm64: dts: rockchip: Add missing PCIe supplies to RockPro64 board dtsi
 
- arch/arm/boot/dts/broadcom/bcm2711.dtsi                | 2 --
- arch/arm/boot/dts/broadcom/bcm4709-asus-rt-ac3200.dts  | 8 ++++----
- arch/arm/boot/dts/broadcom/bcm47094-asus-rt-ac5300.dts | 8 ++++----
- 3 files changed, 8 insertions(+), 10 deletions(-)
+Heiko Stuebner (2):
+      arm64: dts: rockchip: remove supports-cqe from rk3588 jaguar
+      arm64: dts: rockchip: remove supports-cqe from rk3588 tiger
+
+Jianfeng Liu (1):
+      arm64: dts: rockchip: slow down emmc freq for rock 5 itx
+
+Justin Klaassen (1):
+      arm64: dts: rockchip: fix u2phy1_host status for NanoPi R4S
+
+Quentin Schulz (2):
+      arm64: dts: rockchip: fix pinmux of UART0 for PX30 Ringneck on Haikou
+      arm64: dts: rockchip: fix pinmux of UART5 for PX30 Ringneck on Haikou
+
+Yao Zi (1):
+      arm64: dts: rockchip: Remove undocumented sdmmc property from lubancat-1
+
+ arch/arm64/boot/dts/rockchip/px30-ringneck-haikou.dts | 12 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dtsi   |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi    | 14 ++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts    |  1 -
+ arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts        |  1 -
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts    |  3 +--
+ arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi        |  1 -
+ 7 files changed, 28 insertions(+), 6 deletions(-)
+
+
+
