@@ -1,82 +1,74 @@
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0A12F28;
-	Sun,  9 Mar 2025 11:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD371A2C0E
+	for <soc@lists.linux.dev>; Sun,  9 Mar 2025 18:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741519950; cv=none; b=bQQ/hssfYfK+sJiWFTaW+UdpRB14FidJ/8hYsoEUpyPl9NH42C62bmRaRaNWeFtd9lG0l2s/aVh2bkpVJZE9sGcSSVuqGRUTaNPI5QR04NAWZWMJfPh7RiCe3n0wWJniyq7vTlZWyTzPTmz6YdQMWlD5Cu3E7orhGN0Mf8alPq0=
+	t=1741546570; cv=none; b=c9GuW1lSHXZkLFina6nMbFQmwg8ikt1wGXcYWP4zCQDSYpodS2dVKgu5VX3JtpW/UoVMVgPWa+T3HB18IaU1S6JpxH+VRV9+ew5B29GIQrnVHOsJlZrsCoo9hz+0J9zk2CFAOHbwb1nXG1mI9Zxtn4jjxznekTBva4OFFf+Q2nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741519950; c=relaxed/simple;
-	bh=KRY3h/y6Mm8gGXlg5rX8HYhOitbw1P/955MyYYkxzMo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MAVQStXGjbhY4FEfIoLI1zYLmfHyfmRIelyjNtbtKWLbIaUObKFC2xmb228DURQzmXRGU1SILxUJNxvXjSYAdJqAPSqlDKWMpIuaKLVAIdYbL/Kbu8mZGn93FgSewaY2IJj3hgu27VLLuySvH56KZ0sA5ZaS5IpsMk9Jj4usm3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=PQU72ehj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=u9EwQZBU; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
+	s=arc-20240116; t=1741546570; c=relaxed/simple;
+	bh=Wa7r3qkuu7xnz/VOd3o4Ss+BQayKG/5FMUt/lzJsU2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aHMa4tQrFXpkU3jJMSCNWR+NaNcEQhsx71Sgf1VjI4fZDVGFm4uYjt6FMC2NiRtL8/SEwJbrtUIrlv7It+HplwWp9HV2YgkM80xlBFGz3E8dwkvDce/VwCl7ESUPiKDl675PrWStnoQ2CJPex0jdNV1JssfLWERNPKfP/mvfQqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G+IjTn6W; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="PQU72ehj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="u9EwQZBU"
-Received: from phl-compute-13.internal (phl-compute-13.phl.internal [10.202.2.53])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6E2A9138277C;
-	Sun,  9 Mar 2025 07:32:26 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-13.internal (MEProxy); Sun, 09 Mar 2025 07:32:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to; s=fm2; t=1741519946; x=1741606346; bh=Cp91pbB5DN
-	2RZua8Qzi2EZ3MeEoU2r2L7P3lFPNnfBY=; b=PQU72ehjmMOLtRay+y0HSuFSMg
-	CJsQjmj6Xxn6dAsD2MFECU4nHG3PRAqH33ktLvgp+dmlQ/GP0K/4jDbL6Z4Lk4y9
-	ZWSD0oWQPitmZjueSe4B6BcuN7qHQwNfqLUxwrcUKv3NGqEtg50EIj2l3hxb+9Qn
-	gDd+3UEyeq2hFr/J2GhWBjwuxpvAF+7KAlKKTBwiPfA8XHy5xxsQ8zOTWPVmAmhv
-	b8qpo4UiCGJGkCs7a6cZ2pgogE7myPTBIa+06uwRqQTO1NknO4DqVK83pUK60nPN
-	a3jIobf1fNhkLjfSSQ0gSMWdXt11eRpEGn9cCtuXzsK94FXzhUk6zba7ti5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1741519946; x=1741606346; bh=Cp91pbB5DN2RZua8Qzi2EZ3MeEoU2r2L7P3
-	lFPNnfBY=; b=u9EwQZBU2ecARqRlwjNuXFotaZQIfFKVF7Eve4ypZ9BjdIUJaqA
-	a90V7dnjKUAStnU3atPwt1EvftBMCJqYpHufat0JVN/bZZ0ZwgKCL2MYq+Z+FSXf
-	cfa8bIgtc6KooCCoW30Rt8BrPmuAiN5vM/Lmk//qW7cEjcCKqb+4cqR67EDbn6s8
-	v8dug2SMkcimAmg7Fl9qVkNtBQbjZnl3zgFmNWyyzrB2cWKxcBlOx9FrV8jI/kvh
-	caxMTxA3Xf4XG6tRXJRVVr1nPorjW1DNedzyp88+ySdqtCd+IoXydxG1t+4/A9qT
-	yDh7KpPCxy8XZJi92JWXHFwFgonMHcffoAA==
-X-ME-Sender: <xms:SXzNZ25iLS_exPE_cN1I1JaG2f1JDlX9osjrHo3wonjzmRjksf32kQ>
-    <xme:SXzNZ_7YH0baFb4_jYaWuseCv0oQ1vvaTcnZ7kVRxKpTmQJSsWpIcTJ6579IXp27T
-    FGxL6yyXwOrVDNkZWg>
-X-ME-Received: <xmr:SXzNZ1fwC76ILiwN1yjLQJDR50RsJ-GhwvrWZZPfVK1wq_lMa_T2iYpJ47cFPJvPHK7hAoSV8UHIfYWXlm_md4frNjs28M7RplHrxpQDozOE7BiQNwmKAEWguVJMscw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudeifeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefhvf
-    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgvthgvrhcuoehs
-    vhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnhepjeelveffvd
-    efgeeuteefueetgeeghfelveevheeugefftdelleeuudefvefhieelnecuffhomhgrihhn
-    pehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdgu
-    vghvpdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
-    hsohgtsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheprghsrghhiheslhhi
-    shhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnh
-    gvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhig
-    qdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:SnzNZzLrGuwSnzZhhua0RIYir2QSycKhL4Nr0VfLVJi0kRiRSciAmQ>
-    <xmx:SnzNZ6LUICEe7rI2mDX8zXiVGzm3kOFOU2awiOoGMZQgYT7OZvScHA>
-    <xmx:SnzNZ0yxQpzmG6s-jypPAZftYb7FnRZjZRVgwKMfQCQV705_fjcRmg>
-    <xmx:SnzNZ-JWXUCxzguKEGVoLSGTM7WlBUrGX1zMSR2-SAWCV5b6VnwCqQ>
-    <xmx:SnzNZ_EfmoYfk3PkPkvj65VP3uGWSz83iIRnyv4w5J502ZWNWMMF9BG4>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Mar 2025 07:32:24 -0400 (EDT)
-From: Sven Peter <sven@svenpeter.dev>
-To: soc@lists.linux.dev
-Cc: asahi@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G+IjTn6W"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3912ebb8e88so239504f8f.0
+        for <soc@lists.linux.dev>; Sun, 09 Mar 2025 11:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741546567; x=1742151367; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZYpRuX79H42AyJwMpeb72MjPa6wN8mVoMbygXkMxqYc=;
+        b=G+IjTn6Wbii2jSCCF2P5DfLNUu8EFrcprnw0ljPPYyfQaitRsIAJ84yGVkMYFum+du
+         qt1m6tDIUv4Ttxe5hF1oToqE78Fd1Aw4+ljP+kY3vVF24aAa1V+Ni10fbohzehwjcRGD
+         du17Rj8I1h3PtoLTWsyv3XYvnnEypOX5MTl8GD3qWTiStRpz7HJPzvv8qOGX7usVwV2N
+         ZEIYoDv4ojgHExdwA3DZgBu6negalVYPRxecamisK2zlYzdaFa3yRlHzSgauCqG1rhj9
+         sxS6Jp6ZPjjzgKIkGkPGbRbB2xpf7J90/3xpBdoNM0bd9buxLQ0m/L+LCpAkhBJ4Qscu
+         4bRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741546567; x=1742151367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZYpRuX79H42AyJwMpeb72MjPa6wN8mVoMbygXkMxqYc=;
+        b=OTqYT5WUMFj+tTT+pt8Xmu2XY44ipfUJqHNNyDO+mtxoD+HUnbBPtWrQMReAAV4NqL
+         ZOpVjleINjokArWx7k+Oq53gUV71iy6tVpAOt51HucFqDsdgkb52380mI0vxtW9J6T2s
+         +SryvCJFdBN68I9gDaVcqKnSWn9DElkT0CxgZniSwXF8dGcZ1QfMyanKYZYnCOccwEAU
+         B8Guw6+Csv1KZjp1MyL0I/0tzA3g7yjfDm1RK1HFdkDFr32vy2VDtJ6a3K0J6znUQ0jl
+         ntv4i0hj5JHQQxSwXs1YFVbtl3zUGTkxH+ZmmbFoGL3a1l9JqbSdvqf5Ymo7ZYLsBTEu
+         ++Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCXNPQ3eBi/pCdXVuB7GDVZpNJ4DcGGYrj4oG2/8uYcOodwwj+Si2nQVtenzIxJFLp80tLU=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwwOoZkOMhNwOwhibWRtqOZq+sEllvtpGPpWTqq3u2MMTRtTAw2
+	3nKdRTmYxmBiVReKG1EwxiI7wzWhu/8ewhasQ1yLS3/9FWUpajS50mMXTisaOmo=
+X-Gm-Gg: ASbGncvePaNsqXxCYjQasQXlWDdamaGxNzVlOd1EvpoYZIzAHRiwK27VuZJV2HCKiBQ
+	VYF4Fc4RzMinsbLMPZzum1e8hwUfMPQMPlcMSWagV67rIZaz8m19kC8ewahNSJ/Nydy3uonBIlU
+	UO7dY8+qG2PkLy6qGftLAV1hmswknosAREsxl9tnV5zHb65IXF6nycORNNb0J3poM9zruGsgtBk
+	YDocitjD9o/vviDs7lO92T0rbTuzWTjnEl7movwPMqEqp1oiLieoTVc2XLjuc8jw5PNOROZSTYe
+	MzhOUnCW8D7YNVmWvA6b7RnEgUWrIvQ2LBkG3GqG8VGznD1NU+fX8BxvwsM=
+X-Google-Smtp-Source: AGHT+IGtaEQwIFc/6TYT3DLRhe8XehJ9zBv7aECl0lbGZTSP5NvnoXEhZ0PSYiVFLI7kcHS+u3EmMQ==
+X-Received: by 2002:a5d:6d8e:0:b0:38c:5d0b:71ca with SMTP id ffacd0b85a97d-3913ba438famr1345644f8f.0.1741546567145;
+        Sun, 09 Mar 2025 11:56:07 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.206.225])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43cee22c13fsm44263945e9.40.2025.03.09.11.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Mar 2025 11:56:06 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Third and final batch of Apple SoC DT updates for v6.15
-Date: Sun,  9 Mar 2025 12:32:12 +0100
-Message-Id: <20250309113212.48137-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/4] samsung: drivers for v6.15
+Date: Sun,  9 Mar 2025 19:55:55 +0100
+Message-ID: <20250309185601.10616-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -85,66 +77,95 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-This is our final pull request for Apple SoC device tree updates for v6.15
-based on the previous one [1].
-Drivers for the M1/M2 touchbar screen and pre-M1 (iPhone, etc.) backlight
-have been merged since then and this batch includes the required device tree
-nodes. Both drivers and these commits have been part of -next for at least a
-few days. The corresponding drivers are scheduled to be included in the 6.15
-merge window as well.
-
-
-
-Best,
-
-Sven
-
-
-[1] https://lore.kernel.org/soc/20250302115808.59172-1-sven@svenpeter.dev/
-
-The following changes since commit 44db68dee1f77260d7037319e911e9883a6ffe0e:
-
-  arm64: dts: apple: Add touchbar digitizer nodes (2025-02-26 15:33:46 +0000)
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
 are available in the Git repository at:
 
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.15-v3
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.15
 
-for you to fetch changes up to e1bc21d8f8fde47173073a2d6233f5faa4864cfc:
+for you to fetch changes up to 8f299df1b75ad0939f1340182c265de019eab438:
 
-  arm64: dts: apple: t8015: Add backlight nodes (2025-03-06 20:54:28 +0100)
-
-----------------------------------------------------------------
-Apple SoC DT updates for 6.15, final batch:
-
-- Added touchbar screen nodes for M1/M2 platforms
-- Added backlight nodes for iPhone, iPad and iPod touch
+  dt-bindings: soc: samsung: exynos-usi: Drop unnecessary status from example (2025-03-09 18:53:34 +0100)
 
 ----------------------------------------------------------------
-Nick Chan (5):
-      arm64: dts: apple: s5l8960x: Add backlight nodes
-      arm64: dts: apple: t7000: Add backlight nodes
-      arm64: dts: apple: s800-0-3: Add backlight nodes
-      arm64: dts: apple: t8010: Add backlight nodes
-      arm64: dts: apple: t8015: Add backlight nodes
+Samsung SoC drivers for v6.15
 
-Sasha Finkelstein (1):
-      arm64: dts: apple: Add touchbar screen nodes
+1. Add support for Exynos USI v1 serial engines.  Drivers already
+   supported newer IP blocks - USI v2 - present in Exynos850 and newer.
+   A bit older ARM64 designs, like Exynos8895 use older USI v1 block.
 
- arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi     |  4 ++
- arch/arm64/boot/dts/apple/s5l8960x.dtsi        |  7 +++
- arch/arm64/boot/dts/apple/s800-0-3-common.dtsi |  4 ++
- arch/arm64/boot/dts/apple/s800-0-3.dtsi        |  7 +++
- arch/arm64/boot/dts/apple/t7000-handheld.dtsi  |  4 ++
- arch/arm64/boot/dts/apple/t7000.dtsi           |  7 +++
- arch/arm64/boot/dts/apple/t8010-common.dtsi    |  4 ++
- arch/arm64/boot/dts/apple/t8010.dtsi           |  7 +++
- arch/arm64/boot/dts/apple/t8015-8.dtsi         |  4 ++
- arch/arm64/boot/dts/apple/t8015.dtsi           |  7 +++
- arch/arm64/boot/dts/apple/t8103-j293.dts       | 31 +++++++++++++
- arch/arm64/boot/dts/apple/t8103.dtsi           | 61 ++++++++++++++++++++++++++
- arch/arm64/boot/dts/apple/t8112-j493.dts       | 31 +++++++++++++
- arch/arm64/boot/dts/apple/t8112.dtsi           | 61 ++++++++++++++++++++++++++
- 14 files changed, 239 insertions(+)
+2. Add Exynos ACPM (Alive Clock and Power Manager) protocol driver
+   for Google GS101 SoC.  ACPM protocol allows communication between the
+   power management firmware and other embedded processors.
+
+3. Exynos2200: Add PMU, ChipID and SYSREG Devicetree bindings.
+
+4. Exynos7870: Add PMU and ChipID Devicetree bindings.
+
+5. Various cleanups.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      soc: samsung: include linux/array_size.h where needed
+
+Colin Ian King (1):
+      firmware: Exynos ACPM: Fix spelling mistake "Faile" -> "Failed"
+
+Ivaylo Ivanov (7):
+      dt-bindings: soc: samsung: usi: add USIv1 and samsung,exynos8895-usi
+      soc: samsung: usi: add a routine for unconfiguring the ip
+      soc: samsung: usi: implement support for USIv1 and exynos8895
+      dt-bindings: soc: samsung: exynos-sysreg: add sysreg compatibles for exynos2200
+      dt-bindings: soc: samsung: exynos-pmu: add exynos2200 compatible
+      dt-bindings: hwinfo: samsung,exynos-chipid: add exynos2200 compatible
+      soc: samsung: exynos-chipid: add exynos2200 SoC support
+
+Kaustabh Chakraborty (3):
+      dt-bindings: hwinfo: samsung,exynos-chipid: add exynos7870-chipid compatible
+      dt-bindings: soc: samsung: exynos-pmu: add exynos7870-pmu compatible
+      soc: samsung: exynos-chipid: add support for exynos7870
+
+Krzysztof Kozlowski (3):
+      soc: samsung: Use syscon_regmap_lookup_by_phandle_args
+      Merge branch 'for-v6.15/samsung-soc-dt-bindings' into next/drivers
+      dt-bindings: soc: samsung: exynos-usi: Drop unnecessary status from example
+
+Tudor Ambarus (3):
+      dt-bindings: firmware: add google,gs101-acpm-ipc
+      firmware: add Exynos ACPM protocol driver
+      MAINTAINERS: add entry for the Samsung Exynos ACPM mailbox protocol
+
+ .../bindings/firmware/google,gs101-acpm-ipc.yaml   |  50 ++
+ .../bindings/hwinfo/samsung,exynos-chipid.yaml     |   2 +
+ .../bindings/soc/samsung/exynos-pmu.yaml           |   2 +
+ .../bindings/soc/samsung/exynos-usi.yaml           | 100 ++-
+ .../soc/samsung/samsung,exynos-sysreg.yaml         |   5 +
+ MAINTAINERS                                        |  10 +
+ drivers/firmware/Kconfig                           |   1 +
+ drivers/firmware/Makefile                          |   1 +
+ drivers/firmware/samsung/Kconfig                   |  14 +
+ drivers/firmware/samsung/Makefile                  |   4 +
+ drivers/firmware/samsung/exynos-acpm-pmic.c        | 224 ++++++
+ drivers/firmware/samsung/exynos-acpm-pmic.h        |  29 +
+ drivers/firmware/samsung/exynos-acpm.c             | 769 +++++++++++++++++++++
+ drivers/firmware/samsung/exynos-acpm.h             |  23 +
+ drivers/soc/samsung/exynos-asv.c                   |   1 +
+ drivers/soc/samsung/exynos-chipid.c                |   3 +
+ drivers/soc/samsung/exynos-pmu.c                   |   1 +
+ drivers/soc/samsung/exynos-usi.c                   | 108 ++-
+ drivers/soc/samsung/exynos3250-pmu.c               |   1 +
+ drivers/soc/samsung/exynos5250-pmu.c               |   1 +
+ drivers/soc/samsung/exynos5420-pmu.c               |   1 +
+ include/dt-bindings/soc/samsung,exynos-usi.h       |  17 +-
+ .../linux/firmware/samsung/exynos-acpm-protocol.h  |  49 ++
+ 23 files changed, 1359 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/google,gs101-acpm-ipc.yaml
+ create mode 100644 drivers/firmware/samsung/Kconfig
+ create mode 100644 drivers/firmware/samsung/Makefile
+ create mode 100644 drivers/firmware/samsung/exynos-acpm-pmic.c
+ create mode 100644 drivers/firmware/samsung/exynos-acpm-pmic.h
+ create mode 100644 drivers/firmware/samsung/exynos-acpm.c
+ create mode 100644 drivers/firmware/samsung/exynos-acpm.h
+ create mode 100644 include/linux/firmware/samsung/exynos-acpm-protocol.h
