@@ -1,60 +1,62 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD371A2C0E
-	for <soc@lists.linux.dev>; Sun,  9 Mar 2025 18:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868461EA7EE
+	for <soc@lists.linux.dev>; Sun,  9 Mar 2025 18:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741546570; cv=none; b=c9GuW1lSHXZkLFina6nMbFQmwg8ikt1wGXcYWP4zCQDSYpodS2dVKgu5VX3JtpW/UoVMVgPWa+T3HB18IaU1S6JpxH+VRV9+ew5B29GIQrnVHOsJlZrsCoo9hz+0J9zk2CFAOHbwb1nXG1mI9Zxtn4jjxznekTBva4OFFf+Q2nc=
+	t=1741546572; cv=none; b=Akcuo+t5v7SPHUDqD3DqgKe1cQzKMBaa4/nRzpfdB1frXDrYBIWf1YW9dulH/zNp8VhvXcnr+QnNCVsrjO6u096su9QNR+uP1PGpG5oBEk7Go5nTHP8WjybK+w69Cx5x7H793OhHg7Zhw6RDJitTonn5E5bC0MrV+C9DGkGv9+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741546570; c=relaxed/simple;
-	bh=Wa7r3qkuu7xnz/VOd3o4Ss+BQayKG/5FMUt/lzJsU2A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aHMa4tQrFXpkU3jJMSCNWR+NaNcEQhsx71Sgf1VjI4fZDVGFm4uYjt6FMC2NiRtL8/SEwJbrtUIrlv7It+HplwWp9HV2YgkM80xlBFGz3E8dwkvDce/VwCl7ESUPiKDl675PrWStnoQ2CJPex0jdNV1JssfLWERNPKfP/mvfQqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G+IjTn6W; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1741546572; c=relaxed/simple;
+	bh=PMxfEyfyZ/xtzQEVKECKbubBazRu2cYpgYqd02Y9UV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eAfA5b5eDwIsDLdKDzgWJj2JHiRgaA0/zatqx4HHfogQHL1qcU8P5qM2yF0xkN9yB5HmqWMXy6e5GPt+NYXl09yAuJV/yUrGQlTF2iF/8Wy2iK63gVinBD7EgGo0ZdFgv136znQxzPu90/e32MAiRnfrU64tznUZdSYo/GHf6+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xFr/fAhc; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G+IjTn6W"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3912ebb8e88so239504f8f.0
-        for <soc@lists.linux.dev>; Sun, 09 Mar 2025 11:56:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xFr/fAhc"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43ce5cd91e5so1455005e9.2
+        for <soc@lists.linux.dev>; Sun, 09 Mar 2025 11:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741546567; x=1742151367; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYpRuX79H42AyJwMpeb72MjPa6wN8mVoMbygXkMxqYc=;
-        b=G+IjTn6Wbii2jSCCF2P5DfLNUu8EFrcprnw0ljPPYyfQaitRsIAJ84yGVkMYFum+du
-         qt1m6tDIUv4Ttxe5hF1oToqE78Fd1Aw4+ljP+kY3vVF24aAa1V+Ni10fbohzehwjcRGD
-         du17Rj8I1h3PtoLTWsyv3XYvnnEypOX5MTl8GD3qWTiStRpz7HJPzvv8qOGX7usVwV2N
-         ZEIYoDv4ojgHExdwA3DZgBu6negalVYPRxecamisK2zlYzdaFa3yRlHzSgauCqG1rhj9
-         sxS6Jp6ZPjjzgKIkGkPGbRbB2xpf7J90/3xpBdoNM0bd9buxLQ0m/L+LCpAkhBJ4Qscu
-         4bRQ==
+        d=linaro.org; s=google; t=1741546569; x=1742151369; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FKRLg92c6C6VQuMYXP20YZZyOfIPnqquJNnWGRCRNdM=;
+        b=xFr/fAhcSR/CZSdChBwNZHHiJts/RYGho5FHdEV7eWOhkzGVAfKuGxCh/QidtzQZIK
+         KegSdKBb+smlJx/hoVfOM0VvC0GpbqAgbvr3mnemsUJg6Aiy+KX4vFBlGiu2tmnxQPK4
+         xm+JelEwbqQnV3h4zeulxO5EKPkMJq/IywTS4omxMGZ7LjghgPBYKj0fl0zXh8wgFSkg
+         JeZdwRaPeJq/118fsr4qFJ+VCy+E0SckrZj7Ahg3TqGGZyd7kDO1JLKLDiBaty8EQWg/
+         PTsBsXrQMiu3CPxKMa7LdMF/DSDkgbHHmP2tKWGTpaOUPim5Uq6P0UB23tEjSE1NNISR
+         HIJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741546567; x=1742151367;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZYpRuX79H42AyJwMpeb72MjPa6wN8mVoMbygXkMxqYc=;
-        b=OTqYT5WUMFj+tTT+pt8Xmu2XY44ipfUJqHNNyDO+mtxoD+HUnbBPtWrQMReAAV4NqL
-         ZOpVjleINjokArWx7k+Oq53gUV71iy6tVpAOt51HucFqDsdgkb52380mI0vxtW9J6T2s
-         +SryvCJFdBN68I9gDaVcqKnSWn9DElkT0CxgZniSwXF8dGcZ1QfMyanKYZYnCOccwEAU
-         B8Guw6+Csv1KZjp1MyL0I/0tzA3g7yjfDm1RK1HFdkDFr32vy2VDtJ6a3K0J6znUQ0jl
-         ntv4i0hj5JHQQxSwXs1YFVbtl3zUGTkxH+ZmmbFoGL3a1l9JqbSdvqf5Ymo7ZYLsBTEu
-         ++Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCXNPQ3eBi/pCdXVuB7GDVZpNJ4DcGGYrj4oG2/8uYcOodwwj+Si2nQVtenzIxJFLp80tLU=@lists.linux.dev
-X-Gm-Message-State: AOJu0YwwOoZkOMhNwOwhibWRtqOZq+sEllvtpGPpWTqq3u2MMTRtTAw2
-	3nKdRTmYxmBiVReKG1EwxiI7wzWhu/8ewhasQ1yLS3/9FWUpajS50mMXTisaOmo=
-X-Gm-Gg: ASbGncvePaNsqXxCYjQasQXlWDdamaGxNzVlOd1EvpoYZIzAHRiwK27VuZJV2HCKiBQ
-	VYF4Fc4RzMinsbLMPZzum1e8hwUfMPQMPlcMSWagV67rIZaz8m19kC8ewahNSJ/Nydy3uonBIlU
-	UO7dY8+qG2PkLy6qGftLAV1hmswknosAREsxl9tnV5zHb65IXF6nycORNNb0J3poM9zruGsgtBk
-	YDocitjD9o/vviDs7lO92T0rbTuzWTjnEl7movwPMqEqp1oiLieoTVc2XLjuc8jw5PNOROZSTYe
-	MzhOUnCW8D7YNVmWvA6b7RnEgUWrIvQ2LBkG3GqG8VGznD1NU+fX8BxvwsM=
-X-Google-Smtp-Source: AGHT+IGtaEQwIFc/6TYT3DLRhe8XehJ9zBv7aECl0lbGZTSP5NvnoXEhZ0PSYiVFLI7kcHS+u3EmMQ==
-X-Received: by 2002:a5d:6d8e:0:b0:38c:5d0b:71ca with SMTP id ffacd0b85a97d-3913ba438famr1345644f8f.0.1741546567145;
-        Sun, 09 Mar 2025 11:56:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1741546569; x=1742151369;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FKRLg92c6C6VQuMYXP20YZZyOfIPnqquJNnWGRCRNdM=;
+        b=SB7sYZ7VeBJzkH2NTFp9BabCMu1fDV5nsnr7d3O8nnfHPE8JXYkofB5n3ThGhaMWKg
+         pqRkpnDfWUkmgDWNE4vIF/F2etq1WnpxdxHF9LtfCDzrAK6SSs65kRuTk/xAFS8BVHd3
+         4SSj/dfbWFRHb7MeX9ZKisDT3w7u7FQ/W6EVQOf/MHLToAHZU8CQ8//r3GUfofWNiWe5
+         awDtBV25fdID4DLUlFyVFIimRgelCzl2rhdv2AXpQZ4IdlElXsCPumHNH4wPkgQoZuGd
+         qEuXUs02Iz1TST8r+IYJKEEv6Ny2+vNvHdHmUPB8EDNl5xOuTmiAqh66zqSX3AMKFCkU
+         eTiA==
+X-Forwarded-Encrypted: i=1; AJvYcCVqy1M/S8E+ws6tTUkbWJQIBa3Q4tlVFdlrEbdO+NAeyAmMMNlYa5CGBHbsl19QkIcSyEo=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy4z8TcuPDbnFaT1MhkVmYiBlqeXWySdNtsf3CILi/j1c2eIW6A
+	DUxObMQXFlcI7paW6Gsc0MIhKUZqAP1k+QqH5V6fqttj4ioKu3QHgG7ObVIeAPU=
+X-Gm-Gg: ASbGncv7qft6dq/hi8xM2i4WhpQf74uo2bFDmNouy1FMbXVePin+omvKoKG11pn952E
+	RpIt9OQcWDapRKG1KI5307kc0n0SdiHZlV3k7Fr3YK3IHkOql1cajsBp0fjREswUu/lKIxrM88G
+	oVfrXxRZ4Vy9rNolwJU5V8i90BxfNLyLicV+td/hX6jH4MzucltNCPNEYkyHYOHVa5csc/9Cuwf
+	4GhPoixXtWoKi//x1/RJR+Z+WaYbdb5XrImKLETTl6C68oD8KdBpWBULCteKAmAOaXjS3LOB/C5
+	R9jVWjvTyvUBEuTHBqB4BYsiT3/zmcoPIoHfcfcPVlC2558QXNK9idAHHzg=
+X-Google-Smtp-Source: AGHT+IFgAZkZaPTg34kk+B+P+zg3fnOit9vmY6MmBLyv17DTPt6JikKSZWSxHbdBl0XNWFJgN8f7ow==
+X-Received: by 2002:a05:600c:1da2:b0:439:930a:58a6 with SMTP id 5b1f17b1804b1-43ce6ef2478mr13617275e9.8.1741546568817;
+        Sun, 09 Mar 2025 11:56:08 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.206.225])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43cee22c13fsm44263945e9.40.2025.03.09.11.56.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43cee22c13fsm44263945e9.40.2025.03.09.11.56.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Mar 2025 11:56:06 -0700 (PDT)
+        Sun, 09 Mar 2025 11:56:08 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@lists.linux.dev
@@ -65,16 +67,19 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/4] samsung: drivers for v6.15
-Date: Sun,  9 Mar 2025 19:55:55 +0100
-Message-ID: <20250309185601.10616-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/4] arm64: dts: samsung: DTS for v6.15
+Date: Sun,  9 Mar 2025 19:55:56 +0100
+Message-ID: <20250309185601.10616-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250309185601.10616-1-krzysztof.kozlowski@linaro.org>
+References: <20250309185601.10616-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
@@ -83,89 +88,99 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-6.15
 
-for you to fetch changes up to 8f299df1b75ad0939f1340182c265de019eab438:
+for you to fetch changes up to 056106b030b73c7d53749469bd1cdbc89b4d2daf:
 
-  dt-bindings: soc: samsung: exynos-usi: Drop unnecessary status from example (2025-03-09 18:53:34 +0100)
+  arm64: dts: tesla: Change labels to lower-case (2025-03-07 16:05:35 +0100)
 
 ----------------------------------------------------------------
-Samsung SoC drivers for v6.15
+Samsung DTS ARM64 changes for v6.15
 
-1. Add support for Exynos USI v1 serial engines.  Drivers already
-   supported newer IP blocks - USI v2 - present in Exynos850 and newer.
-   A bit older ARM64 designs, like Exynos8895 use older USI v1 block.
+1. Google GS101:
+ - Disable GSA core pinctrl because its registers are not available for
+   normal world.
+ - Add APM (Active Power Management) mailbox and the ACPM firmware nodes.
+ - Add new boards: Google Pixel 6 Pro (Raven).
+ - Enable framebuffer and reboot-mode.
 
-2. Add Exynos ACPM (Alive Clock and Power Manager) protocol driver
-   for Google GS101 SoC.  ACPM protocol allows communication between the
-   power management firmware and other embedded processors.
+2. Exynos990:
+ - Add PERIS clock controller, MCT timer
 
-3. Exynos2200: Add PMU, ChipID and SYSREG Devicetree bindings.
+3. Exynos8895:
+ - Define all remaining serial engine (USI) and syscon nodes, add MMC.
+ - Enable microSD and touchsreen on Samsung Galaxy S8 (dreamlte).
 
-4. Exynos7870: Add PMU and ChipID Devicetree bindings.
+4. ExynosAutov920: Add UFS and CPU cache information.
 
 5. Various cleanups.
 
+This includes two topic branches with DT bindings, which might be shared
+with other trees depending on needs:
+1. for-v6.15/samsung-clk-dt-bindings with Exynos990 clock controller
+   header constants.
+2. for-v6.15/samsung-soc-dt-bindings with Exynos USI serial engines
+   header constants rework.
+
 ----------------------------------------------------------------
-Arnd Bergmann (1):
-      soc: samsung: include linux/array_size.h where needed
+André Draszik (7):
+      dt-bindings: arm: google: add gs101-raven
+      arm64: dts: exynos: gs101-oriole: configure simple-framebuffer
+      arm64: dts: exynos: gs101-oriole: move common Pixel6 & 6Pro parts into a .dtsi
+      arm64: dts: exynos: gs101-raven: add new board file
+      arm64: dts: exynos: gs101: drop explicit regmap from reboot nodes
+      arm64: dts: exynos: gs101: align poweroff writes with downstream
+      arm64: dts: exynos: gs101: add reboot-mode support (SYSIP_DAT0)
 
-Colin Ian King (1):
-      firmware: Exynos ACPM: Fix spelling mistake "Faile" -> "Failed"
+Devang Tailor (1):
+      arm64: dts: exynosautov920: add CPU cache information
 
-Ivaylo Ivanov (7):
+Igor Belwon (3):
+      dt-bindings: clock: exynos990: Add CMU_PERIS block
+      arm64: dts: exynos990: Add CMU_PERIS and MCT nodes
+      arm64: dts: exynos990: Rename and sort PMU nodes
+
+Ivaylo Ivanov (6):
       dt-bindings: soc: samsung: usi: add USIv1 and samsung,exynos8895-usi
-      soc: samsung: usi: add a routine for unconfiguring the ip
-      soc: samsung: usi: implement support for USIv1 and exynos8895
-      dt-bindings: soc: samsung: exynos-sysreg: add sysreg compatibles for exynos2200
-      dt-bindings: soc: samsung: exynos-pmu: add exynos2200 compatible
-      dt-bindings: hwinfo: samsung,exynos-chipid: add exynos2200 compatible
-      soc: samsung: exynos-chipid: add exynos2200 SoC support
+      arm64: dts: exynos8895: add syscon nodes for peric0/1 and fsys0/1
+      arm64: dts: exynos8895: define all usi nodes
+      arm64: dts: exynos8895: add a node for mmc
+      arm64: dts: exynos8895-dreamlte: enable support for microSD storage
+      arm64: dts: exynos8895-dreamlte: enable support for the touchscreen
 
-Kaustabh Chakraborty (3):
-      dt-bindings: hwinfo: samsung,exynos-chipid: add exynos7870-chipid compatible
-      dt-bindings: soc: samsung: exynos-pmu: add exynos7870-pmu compatible
-      soc: samsung: exynos-chipid: add support for exynos7870
+Krzysztof Kozlowski (5):
+      Merge branch 'for-v6.15/samsung-clk-dt-bindings' into next/dt64
+      Merge branch 'for-v6.15/samsung-soc-dt-bindings' into next/dt64
+      arm64: dts: exynos8895: Rename PMU nodes to fixup sorting
+      arm64: dts: exynos: gs101: Change labels to lower-case
+      arm64: dts: tesla: Change labels to lower-case
 
-Krzysztof Kozlowski (3):
-      soc: samsung: Use syscon_regmap_lookup_by_phandle_args
-      Merge branch 'for-v6.15/samsung-soc-dt-bindings' into next/drivers
-      dt-bindings: soc: samsung: exynos-usi: Drop unnecessary status from example
+Peter Griffin (1):
+      arm64: dts: exynos: gs101: disable pinctrl_gsacore node
+
+Sowon Na (1):
+      arm64: dts: exynosautov920: add ufs phy for ExynosAutov920 SoC
 
 Tudor Ambarus (3):
-      dt-bindings: firmware: add google,gs101-acpm-ipc
-      firmware: add Exynos ACPM protocol driver
-      MAINTAINERS: add entry for the Samsung Exynos ACPM mailbox protocol
+      arm64: dts: exynos: gs101: add SRAM node
+      arm64: dts: exynos: gs101: add AP to APM mailbox node
+      arm64: dts: exynos: gs101: add ACPM protocol node
 
- .../bindings/firmware/google,gs101-acpm-ipc.yaml   |  50 ++
- .../bindings/hwinfo/samsung,exynos-chipid.yaml     |   2 +
- .../bindings/soc/samsung/exynos-pmu.yaml           |   2 +
- .../bindings/soc/samsung/exynos-usi.yaml           | 100 ++-
- .../soc/samsung/samsung,exynos-sysreg.yaml         |   5 +
- MAINTAINERS                                        |  10 +
- drivers/firmware/Kconfig                           |   1 +
- drivers/firmware/Makefile                          |   1 +
- drivers/firmware/samsung/Kconfig                   |  14 +
- drivers/firmware/samsung/Makefile                  |   4 +
- drivers/firmware/samsung/exynos-acpm-pmic.c        | 224 ++++++
- drivers/firmware/samsung/exynos-acpm-pmic.h        |  29 +
- drivers/firmware/samsung/exynos-acpm.c             | 769 +++++++++++++++++++++
- drivers/firmware/samsung/exynos-acpm.h             |  23 +
- drivers/soc/samsung/exynos-asv.c                   |   1 +
- drivers/soc/samsung/exynos-chipid.c                |   3 +
- drivers/soc/samsung/exynos-pmu.c                   |   1 +
- drivers/soc/samsung/exynos-usi.c                   | 108 ++-
- drivers/soc/samsung/exynos3250-pmu.c               |   1 +
- drivers/soc/samsung/exynos5250-pmu.c               |   1 +
- drivers/soc/samsung/exynos5420-pmu.c               |   1 +
+ Documentation/devicetree/bindings/arm/google.yaml  |   3 +-
+ .../bindings/clock/samsung,exynos990-clock.yaml    |  19 +
+ .../bindings/soc/samsung/exynos-usi.yaml           |  99 ++-
+ arch/arm64/boot/dts/exynos/exynos8895-dreamlte.dts |  72 ++
+ arch/arm64/boot/dts/exynos/exynos8895.dtsi         | 956 ++++++++++++++++++++-
+ arch/arm64/boot/dts/exynos/exynos990.dtsi          |  92 +-
+ arch/arm64/boot/dts/exynos/exynosautov920.dtsi     | 138 +++
+ arch/arm64/boot/dts/exynos/google/Makefile         |   1 +
+ arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 267 +-----
+ .../boot/dts/exynos/google/gs101-pixel-common.dtsi | 294 +++++++
+ arch/arm64/boot/dts/exynos/google/gs101-raven.dts  |  29 +
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi       |  66 +-
+ arch/arm64/boot/dts/tesla/fsd.dtsi                 |  26 +-
+ include/dt-bindings/clock/samsung,exynos990.h      |  21 +
  include/dt-bindings/soc/samsung,exynos-usi.h       |  17 +-
- .../linux/firmware/samsung/exynos-acpm-protocol.h  |  49 ++
- 23 files changed, 1359 insertions(+), 57 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/firmware/google,gs101-acpm-ipc.yaml
- create mode 100644 drivers/firmware/samsung/Kconfig
- create mode 100644 drivers/firmware/samsung/Makefile
- create mode 100644 drivers/firmware/samsung/exynos-acpm-pmic.c
- create mode 100644 drivers/firmware/samsung/exynos-acpm-pmic.h
- create mode 100644 drivers/firmware/samsung/exynos-acpm.c
- create mode 100644 drivers/firmware/samsung/exynos-acpm.h
- create mode 100644 include/linux/firmware/samsung/exynos-acpm-protocol.h
+ 15 files changed, 1721 insertions(+), 379 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-pixel-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-raven.dts
