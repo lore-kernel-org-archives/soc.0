@@ -1,259 +1,186 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC55A3D76
-	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 16:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7A156C62
+	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 17:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741795535; cv=none; b=qmuexNnqIBphK8+ViLPN2dHXsbIaY793BOt8m0Rwqtyo+S5DOh9uH7k+u7xtdFAbc86DXbD/aQ0ZKLLb5MXGPpQ9xPuYs8se4LNy7c6AIniMI4zsQsgbgTw8rjoulC2THHRZU0Roolg3VLuPzusKSu4MTbmE1nbmN/NQyuPh9GI=
+	t=1741801081; cv=none; b=U/18C+Dx2lfmIw7PhAaOrfxE+4UBak/sseKzMPww4gn/ZiDf+oVplnPokMkwc111OTZubwJmA6fyDA8RrxSW7d2UqTUags9pVscbapdbO36TTL7Mz8DNTIsilbAl7V5R9PSy1IeTjOoCdvwjoKhl3Js2Hrt5p1n8bCcjSXCfe0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741795535; c=relaxed/simple;
-	bh=lJxZXmWecmWrMwOG70/buymyI/zcvB/Lt7Qc5JAqYiw=;
-	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=ngrgs60OFXViM/VoWWUz2ez2GlwVhSWt22bNXj8HlYPTCPDFSK0Hs3josJ4Fk5TfeA2H1NQEQUo4Os3phsdAa6cQ+grVgTFpO1SXxzKXy/vCNKpbXUVDOHNs2wMsLomv+aAZtWqE30d/BrSUnrHJbVPFtvktcUZA4SPME9OZK9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=3MB5o7t5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741801081; c=relaxed/simple;
+	bh=KXWUgB7iJZ+25Z8Fa3tBBv5y9NRheQkr2bpg2yMJwcw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dTACUxSIOYn4nKckWU47eCgtygIQIEh2OQRZeKZR9cVP3Tl+KPvBtpghxr0kmYtyux94b5b8bpgGPug7muZfxDIcR9Tr3oiXZsWSwIDCd4tFIphQ5zBt5VHyCFgrk80FvwZLZU+uN5+rVgKNDquhty3QZM0yAv6XYCZOXoO0NeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=oimgX2lF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="3MB5o7t5"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="oimgX2lF"
 Received: by smtp.kernel.org (Postfix)
-	id 6934DC4CEED; Wed, 12 Mar 2025 16:05:34 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 6DB4FC4CEDD; Wed, 12 Mar 2025 17:38:01 +0000 (UTC)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C36CFC4CEDD;
-	Wed, 12 Mar 2025 16:05:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C36CFC4CEDD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52CFW9nS022206;
-	Wed, 12 Mar 2025 17:05:23 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=selector1; bh=JC0vlVDYxPGDljhE7HGvCc
-	VHMVuX6yZTY4KSm+G7ykc=; b=3MB5o7t5ai0gdgcU7oGcT6BqHHK3SL7R8sUPD/
-	7KupER3a3nRQ91G5SxjwwCMQ6eQ9z0JETkOXCNsss+gZ1RvUAIFn6TJn9MH2PHjR
-	V+CiABLz+tGBqWVMHZqC2lQK+iijWjBdoJ1ZxAbgs4MmjQTEiKsiOwufmG60H4xh
-	J3RJxdgIBOhaoJfp+bQg7KI5/i0b4feqTQG+p7fKDzCDMGoUAZsbj27gBkfFz6Nj
-	WJTOyhXbo1DpNDU2LuH2nKLFbyRmJ6C2wtg8HMFvzMTGT0g1EBVxkiihFS3z144L
-	dSGGLJ8vp7LQmrhGK3pQ7wlhZxN8WsuwWTjk9JqHSYmM6rEw==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45au3ncmpr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Mar 2025 17:05:23 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 19CB04004A;
-	Wed, 12 Mar 2025 17:04:32 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6DD4559591E;
-	Wed, 12 Mar 2025 17:04:10 +0100 (CET)
-Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 12 Mar
- 2025 17:04:09 +0100
-Message-ID: <b3f47ba9-04e4-4649-8f7e-9738757529b8@foss.st.com>
-Date: Wed, 12 Mar 2025 17:04:10 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id DFBD2C4CEEA
+	for <soc@kernel.org>; Wed, 12 Mar 2025 17:37:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DFBD2C4CEEA
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac29af3382dso20244566b.2
+        for <soc@kernel.org>; Wed, 12 Mar 2025 10:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1741801078; x=1742405878; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZo/Vf2nfNDcmG+nIAIhHl9y6tDEIrgynlevHozqoJM=;
+        b=oimgX2lF2FdJU4soTJrJeWf9G9cVZCY/QZq4djjboDLprcWhzKtUBuaLLZzWNi+t+k
+         3clilsTxChMogNS08GGiqISLRF1f9eQB+dyFMAC6qX9wPDq/7YjhtSxTw8Fk8N56Sgit
+         eShqIDO2xuSTjl8s+lHomJuiSOSCh83p4yiwFUN9xaqpSm9DUWnP6oGrA28QMKztFRcX
+         BHBd1uqWYvP7o9DKwefQwcipA+Z5mtRGL4/Ycj1y7gB+yVtOKidhg056fXGEL8ql7VBl
+         gazpgkeLLjrNusN48tGUw/1MVvU7R31KWVTZd+T8/QPSKFeBNl/hu+55ntlrRz+efbdB
+         wYeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741801078; x=1742405878;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HZo/Vf2nfNDcmG+nIAIhHl9y6tDEIrgynlevHozqoJM=;
+        b=QPkD7nLD4X40cb9gUpSMeyM8sXXmnMgrnHVItlgm+X4TJpj+RC5FXp1/BgOZFLmiRL
+         rpYD63Mc5Cju/veZKpZbKwc1hIa1bJ2NJc8W1QjZeHHlG8VwJbg7/LhtZmxtvZ6ZKE7w
+         lDpYRiMWXuXtm7gQ/kRhUeV7BiujD57g5YY30WmoqGbvhmPrI4HCQVrNzNiSMoUv3e1w
+         1Wdl3pJLRAanoEp32OmWig5eHGmQezJFvUevPiNprHCkQ8H3yT2EDxRtM90HfNzVsMdb
+         TFx2OMspheOq1JmtxMYuAKwINFA/JE6jsMrJkcn86J6lRp4sEVGq7f0bSnqYiim888mz
+         SIwg==
+X-Forwarded-Encrypted: i=1; AJvYcCVDlInIWyR6eD+ykQ9/Sov8fKd26rWoMMDavRWA0hfmRr/CqDUnGTtdEQuq+YLlLwXeC+k=@kernel.org
+X-Gm-Message-State: AOJu0YzQWu/7dJy87WxoBZCwpwEGcqEggRyf7AVfzpRUByqHX+B9kWNh
+	fJ0OKaHlN8tigjpk9FA+PhOcqEc+d8f/Ru8A4NnmqAnncZ3SiRI/UyAvmWChoyM=
+X-Gm-Gg: ASbGncuNT5B6OuVVWrOdbpTokRnc7rsJPlbXiZk6BlwYYrAs73UIOV1apmTZcSLHPQI
+	fFGQTHMExXOg83S5iZ1tynkaQMcSoSANmJpqQaceLg+6JO3fZDhfQia9YYp5Xvm6Eynwhvc3qwS
+	vGXXpR7zR6XuTuxBFWblNmdWfzCMkaJCa5pFbAmRv+4IwiHQT1f7ml3F/FyU8Am+0/sgry0ZnSs
+	3V6QFXoEtWIveETSE82v6IFx5cAGmab3D/gezjF0RHiGFw2IDXUQjP3F28Y+z/BrBy4EVTcJ9yN
+	oY7Z+PFDRjnfYdSUCmvnObz6IN91KwJO6vjTz/So5xSXl3ZiVI1rdO18d8xGIaVf
+X-Google-Smtp-Source: AGHT+IGHW6rlhJd7UC+xU0sUPHcpDtU+1R/5lMJkXMDs9qwKf5djMrhnun5gLlA5mSNp9l8ykGaf0g==
+X-Received: by 2002:a17:906:dac2:b0:ac2:c26:5608 with SMTP id a640c23a62f3a-ac252747d18mr2588907966b.8.1741801077846;
+        Wed, 12 Mar 2025 10:37:57 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.160])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2ede516d6sm92760866b.49.2025.03.12.10.37.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Mar 2025 10:37:57 -0700 (PDT)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: arnd@arndb.de,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev
+Subject: [GIT PULL] Microchip AT91 DT updates for v6.15
+Date: Wed, 12 Mar 2025 19:37:54 +0200
+Message-ID: <20250312173755.975074-1-claudiu.beznea@tuxon.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: <alexandre.torgue@foss.st.com>,
-        "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 DT changes for v6.15#1
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-12_05,2025-03-11_02,2024-11-22_01
-
-Hi ARM SoC maintainers,
-
-Please consider this first round of STM32 DT changes for v6.15 cycle (a 
-bit late sorry). Main changes are the add of new boards (OCTAVO, 
-Plymovent AQM, Priva E-Measuringbox) based on STM32MP1 SoC family but 
-also the add of new derivatives of STM32MP257 SoC with their associated 
-discovery boards.
-
-Thanks
-Alex
-
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
 are available in the Git repository at:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-dt-for-v6.15-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.15
 
-for you to fetch changes up to 65954899a157832f68536b488194cf698248a26e:
+for you to fetch changes up to 6aafec3d215f59e8c4b00d0c2a97988ed5edbb2a:
 
-   arm64: dts: st: add stm32mp215f-dk board support (2025-03-12 14:24:56 
-+0100)
+  ARM: dts: microchip: sama7g5: add ADC hw trigger edge type (2025-03-04 20:39:29 +0200)
 
 ----------------------------------------------------------------
-STM32 DT for v6.15, round 1
+Microchip AT91 device tree updates for v6.15
 
-Highlights:
-----------
-
-- MPU:
-   - STM32MP13:
-     - Add thermal support.
-     - Add Priva E-Measuringbox board support based on sTM32MP133C SoC.
-       It embeds Ethernet RMII with TI phy, SDCard, eMMC and some
-       sensors.
-     - Add support for DHCOR SoM and DHSBC rev.200 board:
-       TPM interrupts and gpio reset + LDO2/LDO5 support.
-
-   - STMP32MP15:
-     - Add new Octavo support: LXA FairyTux 2 based on OSD32MP153C SiP.
-       It contains eMMC for storage, a gigabit Ethernet, a CAN bus and
-       a RS485 transceiver.
-     - Add Plymovent AQM board based on STM32MP151 SoC. It embeds:
-       ETH RMII, WLAN, BT, Sensors (CO2, PM, pressure), Audio (I2S),
-       Storage (SDCard, eMMC).
-
-   - STM32MP25:
-     - Add STM32MP257F Discovery board: It embeds a STM32MP257FAL SoC,
-       with 4GB of LPDDR4, 2*USB typeA, 1*USB3 typeC, 1*ETH,
-       wifi/BT combo, DSI HDMI, LVDS connector ...
-
-     - Introduce STM32MP23 SoC and add STM32MP235F Discovery board:
-       It embeds a STM32MP235FAK SoC, with 4GB of LPDDR4, 2*USB typeA,
-       1*USB3 typeC, 1*ETH, wifi/BT combo, DSI HDMI, LVDS connector ...
-
-     - Introduce STM32MP21 SoC and STM32MP215F discovery board:
-       It embeds a STM32MP235FAN SoC, with 2GB of LPDDR4,
-       1*USB2 peripheral bus powered typeC, 1*ETH, wifi/BT combo,
-       LCD 18bit connector, CSI camera connector, ...
+This update includes:
+- more controllers enabled for SAMA7D65 SoC (DMA, reset controller,
+  shutdown controller, RTC, watchdog)
+- power monitor device enabled for SAMA7D65 Curiosity board
+- device tree cleanups
 
 ----------------------------------------------------------------
-Alexandre Torgue (3):
-       arm64: dts: st: add stm32mp257f-dk board support
-       arm64: dts: st: introduce stm32mp23 SoCs family
-       arm64: dts: st: introduce stm32mp21 SoCs family
+Mihai Sain (2):
+      ARM: dts: microchip: sama7d65: Add flexcom 10 node
+      ARM: dts: microchip: sama7d65_curiosity: Add power monitor support
 
-Amelie Delaunay (7):
-       dt-bindings: stm32: document stm32mp257f-dk board
-       arm64: Kconfig: expand STM32 Armv8 SoC with STM32MP21/STM32MP23 
-SoCs family
-       dt-bindings: stm32: add STM32MP21 and STM32MP23 compatibles for 
-syscon
-       dt-bindings: stm32: document stm32mp235f-dk board
-       arm64: dts: st: add stm32mp235f-dk board support
-       dt-bindings: stm32: document stm32mp215f-dk board
-       arm64: dts: st: add stm32mp215f-dk board support
+Nayab Sayed (1):
+      ARM: dts: microchip: sama7g5: add ADC hw trigger edge type
 
-Dario Binacchi (5):
-       ARM: dts: stm32: add led to stm32f746 Discovery board
-       ARM: dts: stm32: add push button to stm32f746 Discovery board
-       ARM: dts: stm32: rename LEDs nodes for stm32f769-disco
-       ARM: dts: stm32: add usr3 LED node to stm32f769-disco
-       ARM: dts: stm32: use IRQ_TYPE_EDGE_FALLING on stm32mp157c-dk2
+Ryan Wanner (9):
+      ARM: dts: microchip: sama7d65: Add chipID for sama7d65
+      ARM: dts: microchip: sama7d65: Add DMAs to sama7d65 SoC
+      ARM: dts: microchip: sama7d65: Enable DMAs
+      ARM: dts: microchip: sama7d65: Add Reset Controller to sama7d65 SoC
+      ARM: dts: microchip: sama7d65: Add Shutdown controller support
+      ARM: dts: microchip: sama7d65: Add RTC support for sama7d65
+      ARM: dts: microchip: sama7d65: Add SFRBU support to sama7d65
+      ARM: dts: microchip: sama7d65: Enable shutdown controller
+      ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
 
-Leonard Göhrs (2):
-       dt-bindings: arm: stm32: add compatible strings for Linux 
-Automation GmbH LXA FairyTux 2
-       ARM: dts: stm32: lxa-fairytux2: add Linux Automation GmbH FairyTux 2
+Wolfram Sang (7):
+      ARM: dts: at91: calao_usb: fix wrong polarity for LED
+      ARM: dts: at91: calao_usb: remove heartbeat for User LEDs
+      ARM: dts: at91: use correct vendor name for Calao boards
+      ARM: dts: at91: calao_usb: fix button nodes
+      ARM: dts: at91: usb_a9g20_lpw: use proper mmc node name
+      ARM: dts: microchip: usb_a9263: fix wrong vendor
+      ARM: dts: microchip: fix faulty ohci/ehci node names
 
-Marek Vasut (1):
-       ARM: dts: stm32: Add support for STM32MP13xx DHCOR SoM and DHSBC 
-rev.200 board
-
-Oleksij Rempel (6):
-       dt-bindings: vendor-prefixes: Add prefix for Priva
-       dt-bindings: arm: stm32: Add Priva E-Measuringbox board
-       dt-bindings: sound: convert ICS-43432 binding to YAML
-       dt-bindings: arm: stm32: Add Plymovent AQM board
-       ARM: dts: stm32: Add pinmux groups for Plymovent AQM board
-       ARM: dts: stm32: Add Plymovent AQM devicetree
-
-Roan van Dijk (2):
-       ARM: dts: stm32: Add thermal support for STM32MP131
-       ARM: dts: stm32: Add Priva E-Measuringbox devicetree
-
-  Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml |    2 +
-  Documentation/devicetree/bindings/arm/stm32/stm32.yaml           | 
-22 ++++
-  Documentation/devicetree/bindings/sound/ics43432.txt             | 
-19 ----
-  Documentation/devicetree/bindings/sound/invensense,ics43432.yaml | 
-51 +++++++++
-  Documentation/devicetree/bindings/vendor-prefixes.yaml           |    2 +
-  arch/arm/boot/dts/st/Makefile                                    |    4 +
-  arch/arm/boot/dts/st/stm32f746-disco.dts                         | 
-18 ++++
-  arch/arm/boot/dts/st/stm32f769-disco.dts                         |    7 +-
-  arch/arm/boot/dts/st/stm32mp131.dtsi                             | 
-35 ++++++
-  arch/arm/boot/dts/st/stm32mp133c-prihmb.dts                      | 
-496 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp135f-dhcor-dhsbc.dts                 | 
-30 +++++-
-  arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi                      | 
-292 ++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts                      | 
-376 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2-gen1.dts          | 
-103 ++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2-gen2.dts          | 
-147 ++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi              | 
-397 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp157c-dk2.dts                         |    2 +-
-  arch/arm64/Kconfig.platforms                                     |    4 +
-  arch/arm64/boot/dts/st/Makefile                                  |    6 +-
-  arch/arm64/boot/dts/st/stm32mp211.dtsi                           | 
-128 ++++++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp213.dtsi                           |    9 ++
-  arch/arm64/boot/dts/st/stm32mp215.dtsi                           |    9 ++
-  arch/arm64/boot/dts/st/stm32mp215f-dk.dts                        | 
-49 +++++++++
-  arch/arm64/boot/dts/st/stm32mp21xc.dtsi                          |    8 ++
-  arch/arm64/boot/dts/st/stm32mp21xf.dtsi                          |    8 ++
-  arch/arm64/boot/dts/st/stm32mp231.dtsi                           | 
-1214 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp233.dtsi                           | 
-94 +++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp235.dtsi                           | 
-16 +++
-  arch/arm64/boot/dts/st/stm32mp235f-dk.dts                        | 
-113 ++++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp23xc.dtsi                          |    8 ++
-  arch/arm64/boot/dts/st/stm32mp23xf.dtsi                          |    8 ++
-  arch/arm64/boot/dts/st/stm32mp257f-dk.dts                        | 
-113 ++++++++++++++++++++
-  32 files changed, 3765 insertions(+), 25 deletions(-)
-  delete mode 100644 Documentation/devicetree/bindings/sound/ics43432.txt
-  create mode 100644 
-Documentation/devicetree/bindings/sound/invensense,ics43432.yaml
-  create mode 100644 arch/arm/boot/dts/st/stm32mp133c-prihmb.dts
-  create mode 100644 arch/arm/boot/dts/st/stm32mp151c-plyaqm.dts
-  create mode 100644 arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2-gen1.dts
-  create mode 100644 arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2-gen2.dts
-  create mode 100644 arch/arm/boot/dts/st/stm32mp153c-lxa-fairytux2.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp211.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp213.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp215.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp215f-dk.dts
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp21xc.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp21xf.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp231.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp233.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp235.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp235f-dk.dts
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp23xc.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp23xf.dtsi
-  create mode 100644 arch/arm64/boot/dts/st/stm32mp257f-dk.dts
+ arch/arm/boot/dts/microchip/aks-cdu.dts            |  2 +-
+ arch/arm/boot/dts/microchip/animeo_ip.dts          |  2 +-
+ arch/arm/boot/dts/microchip/at91-foxg20.dts        |  2 +-
+ arch/arm/boot/dts/microchip/at91-qil_a9260.dts     |  2 +-
+ arch/arm/boot/dts/microchip/at91-sam9_l9260.dts    |  2 +-
+ .../boot/dts/microchip/at91-sama5d27_som1_ek.dts   |  4 +-
+ .../arm/boot/dts/microchip/at91-sama5d2_ptc_ek.dts |  4 +-
+ .../boot/dts/microchip/at91-sama5d2_xplained.dts   |  4 +-
+ .../boot/dts/microchip/at91-sama5d3_xplained.dts   |  4 +-
+ .../boot/dts/microchip/at91-sama5d4_ma5d4evk.dts   |  4 +-
+ .../boot/dts/microchip/at91-sama5d4_xplained.dts   |  4 +-
+ arch/arm/boot/dts/microchip/at91-sama5d4ek.dts     |  4 +-
+ .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 73 +++++++++++++++++
+ arch/arm/boot/dts/microchip/at91-sama7g5ek.dts     |  1 +
+ arch/arm/boot/dts/microchip/at91-vinco.dts         |  4 +-
+ arch/arm/boot/dts/microchip/at91rm9200.dtsi        |  2 +-
+ arch/arm/boot/dts/microchip/at91rm9200ek.dts       |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9260.dtsi       |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9260ek.dts      |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9261.dtsi       |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9261ek.dts      |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9263.dtsi       |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9263ek.dts      |  2 +-
+ .../boot/dts/microchip/at91sam9g20ek_common.dtsi   |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9g45.dtsi       |  4 +-
+ arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts   |  4 +-
+ arch/arm/boot/dts/microchip/at91sam9n12.dtsi       |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9n12ek.dts      |  2 +-
+ arch/arm/boot/dts/microchip/at91sam9x5.dtsi        |  4 +-
+ arch/arm/boot/dts/microchip/ethernut5.dts          |  2 +-
+ arch/arm/boot/dts/microchip/evk-pro3.dts           |  2 +-
+ arch/arm/boot/dts/microchip/mpa1600.dts            |  2 +-
+ arch/arm/boot/dts/microchip/pm9g45.dts             |  4 +-
+ arch/arm/boot/dts/microchip/sam9x60.dtsi           |  4 +-
+ arch/arm/boot/dts/microchip/sama5d2.dtsi           |  4 +-
+ arch/arm/boot/dts/microchip/sama5d3.dtsi           |  4 +-
+ arch/arm/boot/dts/microchip/sama5d3xmb.dtsi        |  4 +-
+ arch/arm/boot/dts/microchip/sama5d4.dtsi           |  4 +-
+ arch/arm/boot/dts/microchip/sama7d65.dtsi          | 95 ++++++++++++++++++++++
+ arch/arm/boot/dts/microchip/tny_a9260.dts          |  2 +-
+ arch/arm/boot/dts/microchip/tny_a9260_common.dtsi  |  2 +-
+ arch/arm/boot/dts/microchip/tny_a9263.dts          |  2 +-
+ arch/arm/boot/dts/microchip/tny_a9g20.dts          |  2 +-
+ arch/arm/boot/dts/microchip/usb_a9260.dts          |  2 +-
+ arch/arm/boot/dts/microchip/usb_a9260_common.dtsi  | 11 +--
+ arch/arm/boot/dts/microchip/usb_a9263.dts          | 11 +--
+ arch/arm/boot/dts/microchip/usb_a9g20-dab-mmx.dtsi | 10 +--
+ arch/arm/boot/dts/microchip/usb_a9g20.dts          |  2 +-
+ arch/arm/boot/dts/microchip/usb_a9g20_common.dtsi  |  2 +-
+ arch/arm/boot/dts/microchip/usb_a9g20_lpw.dts      |  4 +-
+ 50 files changed, 243 insertions(+), 82 deletions(-)
