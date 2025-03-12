@@ -1,85 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0221D63FF
-	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 11:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3BD4A01
+	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 13:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741779518; cv=none; b=Z665ggu0tUaG1/9YNrEpdkGvXXneZ8+bD/IrfHuTLF5pxZtmVvJU5XyN8zNg6Nn5JnOhEaJGuRb2sLBKrGEjAXaYtgfm1xghKd1YxxVVfqTNmh+LXcq+8BlNLcvckyFY9KswiQJzhpcjzjvHprEOwqa1n26tZqNeUOqxD/GLuc0=
+	t=1741785605; cv=none; b=CgXthNDQ2IgNYDTVnzYZRbLx7ho+525TouMkewz3mBOglSaGicm362AJ44aYmpNBFm3vgjQrPuFhWFCJ5l0c4Kz0USKu1mO7Z8Oc5fGqnmURmD6adqcWuAy0XRk5UED3j0f3wy3hVuBoaBqqHb5WMtF1DKE8ZMO9GLNB5JELZfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741779518; c=relaxed/simple;
-	bh=p9vmPAJ+IfD7JfIpR1rDY4RWu0cMfzDiYKuZriZ0KCs=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=moEwkdU93ZUY2txdvQ4/3IUt2QOYNu/duBg5xIkNOdbe2/qoBnSeD60sevbnPNXHC6KqG+uZLv1mfCcmxjez7nM7capotB75a/j1dXuOobDnWZdQ0i2a/bLM5/4txRTAkWBDJlOmvM6YsghSkL6JY+/VhCXBxt5AYwajb2GTOUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FJuhLKTU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FJuhLKTU"
-Received: by smtp.kernel.org (Postfix)
-	id CC41CC4CEED; Wed, 12 Mar 2025 11:38:37 +0000 (UTC)
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF5D8C4CEE3;
-	Wed, 12 Mar 2025 11:38:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF5D8C4CEE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52CBcR7D1047265
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Mar 2025 06:38:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1741779507;
-	bh=cyDhaKqlqsDkMfTnrMH67D5RQyLpYOtC8HL308/2ZoA=;
-	h=Date:From:To:CC:Subject;
-	b=FJuhLKTU1SrrTprGVp9zbhiLAdE1oVQVP4NpJtPmn0cFsayjxBZFBrW2pHTS7bqN0
-	 p/4am0f5yb0EJ7BJRAHFTf3gt+ZvX2rFb98lDIAM2u/3Xr4ZjcC2mLmtNdKwlt09pF
-	 ZTElQk3ZEjaxBnE/QQeqQONVPlyvUR5GFOBcmOUg=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 52CBcRmx014034
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 12 Mar 2025 06:38:27 -0500
-Received: from flwvowa02.ent.ti.com (10.64.41.53) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
- Mar 2025 06:38:27 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by flwvowa02.ent.ti.com
- (10.64.41.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Wed, 12 Mar
- 2025 06:38:26 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 12 Mar 2025 06:38:27 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52CBcQw1040494;
-	Wed, 12 Mar 2025 06:38:26 -0500
-Date: Wed, 12 Mar 2025 06:38:26 -0500
-From: Nishanth Menon <nm@ti.com>
-To: Arnd <arnd@arndb.de>, SoC list <soc@lists.linux.dev>
-CC: SoC <soc@kernel.org>, <arm@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [GIT PULL] soc: ti: Driver updates for v6.15
-Message-ID: <20250312113826.ka63nijuftgs6h52@mocker>
+	s=arc-20240116; t=1741785605; c=relaxed/simple;
+	bh=kNf0Cf+gfA3SraY4l1M3ix+9vGbLWtLRNVOQARgzRv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZoTnfE4ylvbSSYV0fHEdmwRH4FoxKYOTiwKqWQ+8YrDKRsonCBgKE8DTUPTQS+UakFZo/B10ryEv9YDdSMa0oWIb0plrzl8d2Yq+R01fkDl4X5SDcw8dXVaeiry1QwL4OKi8iWnWvrdFIgpr7C5sMgwr/lmAcddUccd7GxE7GFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:bb30:6286:99f4:5b9d])
+	by andre.telenet-ops.be with cmsmtp
+	id PpKu2E00D4xs17S01pKui4; Wed, 12 Mar 2025 14:19:54 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tsLze-0000000DhMT-1wJ6;
+	Wed, 12 Mar 2025 14:19:54 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tsM01-00000000bbj-3dAr;
+	Wed, 12 Mar 2025 14:19:53 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PULL] Renesas fixes for v6.14
+Date: Wed, 12 Mar 2025 14:19:51 +0100
+Message-ID: <cover.1741785482.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r5zummcjnd24hbjs"
-Content-Disposition: inline
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Transfer-Encoding: 8bit
 
---r5zummcjnd24hbjs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
+	Hi SoC folks,
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
@@ -87,57 +52,33 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
-er-soc-for-v6.15
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v6.14-tag1
 
-for you to fetch changes up to 9a9b7cd77b2427d0722fe52301fa270690928989:
+for you to fetch changes up to 379c590113ce46f605439d4887996c60ab8820cc:
 
-  firmware: config: ti-sci: Default set to ARCH_K3 for the ti sci driver (2=
-025-02-26 12:45:53 -0600)
+  ARM: shmobile: smp: Enforce shmobile_smp_* alignment (2025-03-12 09:15:37 +0100)
 
 ----------------------------------------------------------------
-TI SoC driver updates for v6.15
+Renesas fixes for v6.14
 
-- ti-sci: Default set to ARCH_K3 for the ti sci driver in preperation for
-  the driver to be default set as module in defconfig.
-- k3-socinfo: Explicitly build up regmap instead of depending on syscon
-  helper
+  - Fix possible misalignment breaking SMP bring-up.
+
+Thanks for pulling!
 
 ----------------------------------------------------------------
-Andrew Davis (1):
-      soc: ti: k3-socinfo: Do not use syscon helper to build regmap
+Geert Uytterhoeven (1):
+      ARM: shmobile: smp: Enforce shmobile_smp_* alignment
 
-Guillaume La Roque (1):
-      firmware: config: ti-sci: Default set to ARCH_K3 for the ti sci driver
+ arch/arm/mach-shmobile/headsmp.S | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/firmware/Kconfig    |  1 +
- drivers/soc/ti/k3-socinfo.c | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Gr{oetje,eeting}s,
 
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
+						Geert
 
---r5zummcjnd24hbjs
-Content-Type: application/pgp-signature; name="signature.asc"
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmfRciwACgkQ3bWEnRc2
-JJ2b3hAAll6igclF5cvAYpG52TUOQDPdUjfE4xC1qukOmbySKRxfES9LUDaV4Vsc
-swv6uBOhdxa/Rx44fEoS+VuNHUlyWcVvo2i1tqy13tlvfULEg/tXK0yEuYo4CBVq
-O4Z4GwESTzSG3BDdQNE7AeBrUXvZnIis1abcpkVvxBMaWPaIjBSkU9CkBryEocRb
-2P+pmEGZmsTo9+PLCcfh2rCR5qRup8Tn8urqP3BliUEQlOcJnXm0WsbUJbGjT8t1
-iVDTOoBm8WSpbJwWsL2PcC22N1uX2RVE36evnFlmhgO1UGECoUpN/8gBz2xIjjM9
-uGAW/j/1Y5gHz2MmnaajlgG8UPhFWrQsPqckY6sSxGC13Kb0At3PhxEF+p9Y+MNl
-elKSs+3ANhosdLRACurfR0yHlzrgnw3EJRhxVZ8NHPMlChXUIwIM/Gf/u8wtwCtJ
-z+IUf7VNosWzH1Bz6Cn6GCs4DLXM3f1RAcCgULcRcFbdgnmPomxPhJtt8nCHlRyO
-WnnX9AVZg70ixmYLdxMHPxS9ad8rzeWh4r1RXqKRR9WRerlEQAKdpD/FeRwQ/ZC/
-IgAjbYGhkX4efMKeSsGSkcUHAIcPwOAMwd/iJ0AuA9O1JshLB5Cc3OfCgNyixAkR
-dG1AbIYsJQClKkQp/QPf2OwmpK/7Ozcmy+H3/CXFAcHEbCTIPeo=
-=6rrW
------END PGP SIGNATURE-----
-
---r5zummcjnd24hbjs--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
