@@ -1,50 +1,77 @@
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3BD4A01
-	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 13:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4158B226861
+	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 13:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741785605; cv=none; b=CgXthNDQ2IgNYDTVnzYZRbLx7ho+525TouMkewz3mBOglSaGicm362AJ44aYmpNBFm3vgjQrPuFhWFCJ5l0c4Kz0USKu1mO7Z8Oc5fGqnmURmD6adqcWuAy0XRk5UED3j0f3wy3hVuBoaBqqHb5WMtF1DKE8ZMO9GLNB5JELZfQ=
+	t=1741787053; cv=none; b=cU70AQfQUZ48cAJOPl8StnHgB50Q5j9gNFZVBcJfDY1jOsiUwqdtnMzwLGEIDwfwLqV8KifJE+3JXVGNdMt/aMdlusOKvDrE6FyjQO9K3NyquemFlbQX1f5BJlmA2KW1lksClnr+8+VO8+KDxEHlvzzi6UNpkoSYxG/nCRUXiyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741785605; c=relaxed/simple;
-	bh=kNf0Cf+gfA3SraY4l1M3ix+9vGbLWtLRNVOQARgzRv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZoTnfE4ylvbSSYV0fHEdmwRH4FoxKYOTiwKqWQ+8YrDKRsonCBgKE8DTUPTQS+UakFZo/B10ryEv9YDdSMa0oWIb0plrzl8d2Yq+R01fkDl4X5SDcw8dXVaeiry1QwL4OKi8iWnWvrdFIgpr7C5sMgwr/lmAcddUccd7GxE7GFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:bb30:6286:99f4:5b9d])
-	by andre.telenet-ops.be with cmsmtp
-	id PpKu2E00D4xs17S01pKui4; Wed, 12 Mar 2025 14:19:54 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tsLze-0000000DhMT-1wJ6;
-	Wed, 12 Mar 2025 14:19:54 +0100
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tsM01-00000000bbj-3dAr;
-	Wed, 12 Mar 2025 14:19:53 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PULL] Renesas fixes for v6.14
-Date: Wed, 12 Mar 2025 14:19:51 +0100
-Message-ID: <cover.1741785482.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1741787053; c=relaxed/simple;
+	bh=CKwh8bZGL2+vYB9JbuDSLBR7JG4l/p3BknAMciDF/TI=;
+	h=Message-ID:Date:MIME-Version:From:To:CC:Subject:Content-Type; b=OSf/NWRi/AL2wzULObjIEXyYdZWQj5HM1L+BRooUtA2YuD2dpNX40VkMybtDhXRY+kFL7EqVrsb0BQ/Djh7LnzYiy9KcmLM6qP90OGkW6Hduswo9W13y9gGDgspSkKRx07G4GAynhTMBNhCny08mg+vX1T8uWjo0MsjOTDfuiDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=D9ogUIlD; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="D9ogUIlD"
+Received: by smtp.kernel.org (Postfix)
+	id 9A612C4CEEE; Wed, 12 Mar 2025 13:44:12 +0000 (UTC)
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 84381C4CEE3;
+	Wed, 12 Mar 2025 13:44:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 84381C4CEE3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52CDi1fd1043814
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 12 Mar 2025 08:44:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1741787041;
+	bh=2jVIV9DnO8Fj9z+Rk95dAiuUSZ3yPdEOI3Ck8BUljhc=;
+	h=Date:From:To:CC:Subject;
+	b=D9ogUIlDfQdlamfPolhwo+7G5hsowQGDbE3nVWbU/np0DpoQ5ynpV2GEmVz4CMiIz
+	 brMrHGxM32VEr8YYxpxBTI32Yjh8DmB8OwR9u3CkVj8nDk5GeiOm2YoT0Ps3oKioso
+	 Cd3bemEh3wzB3nUboWgEDFplrg9Ulc/rCm/R05Ng=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 52CDi1Mw107874
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 12 Mar 2025 08:44:01 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
+ Mar 2025 08:44:01 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 12 Mar 2025 08:44:00 -0500
+Received: from [10.24.68.192] (dhcp-10-24-68-192.dhcp.ti.com [10.24.68.192])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52CDhwc0054596;
+	Wed, 12 Mar 2025 08:43:59 -0500
+Message-ID: <5d612c0e-4cd4-469a-9856-dd4552d74412@ti.com>
+Date: Wed, 12 Mar 2025 19:13:57 +0530
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Vignesh Raghavendra <vigneshr@ti.com>
+Content-Language: en-US
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc
+	<arm@kernel.org>, SoC <soc@kernel.org>
+CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
+Subject: [GIT PULL 1/2] arm64: dts: ti: K3 devicetree updates for v6.15
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-	Hi SoC folks,
+Hi ARM SoC Maintainers,
+
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
@@ -52,33 +79,155 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-fixes-for-v6.14-tag1
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-for-v6.15
 
-for you to fetch changes up to 379c590113ce46f605439d4887996c60ab8820cc:
+for you to fetch changes up to 377fde74eae4abcbcd5475676d58fb595a07ff85:
 
-  ARM: shmobile: smp: Enforce shmobile_smp_* alignment (2025-03-12 09:15:37 +0100)
-
-----------------------------------------------------------------
-Renesas fixes for v6.14
-
-  - Fix possible misalignment breaking SMP bring-up.
-
-Thanks for pulling!
+  arm64: dts: ti: k3-am62a-phycore-som: Reorder properties per DTS coding style (2025-03-07 18:48:05 +0530)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      ARM: shmobile: smp: Enforce shmobile_smp_* alignment
+TI K3 device tree updates for v6.15
 
- arch/arm/mach-shmobile/headsmp.S | 1 +
- 1 file changed, 1 insertion(+)
+Generic Fixups/Cleanups:
 
-Gr{oetje,eeting}s,
+SoC Specific features and Fixes:
+AM62Ax:
+Enable MCU domain pinctrl node
 
-						Geert
+J784S4/J742S4:
+GICD reg size fixes
+Serdes lane ctrl reg mux mask fix
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+AM62P/J722s:
+Wakeup UART0 sysc updates for system wakeup
+pinctrl node fixes drop pinctrl-single,gpio-ranges
+BCDMA CSI-RX support
+Audio REFCLKx output support
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Board Specific:
+J784S4:
+EVM: Cleanup duplicate gpio-hogs
+
+J722S:
+TypeC port mux selection fix
+
+AM62Ax
+SK: boot-phase tag to support USB bootmode
+RTC support
+Aliases for wakeup and MCU serial UARTs
+
+AM62P
+SK: boot-phase tag to support USB bootmode
+USB wakeup support
+Aliases for wakeup and MCU serial UARTs
+
+AM62:
+verdin-dahila: microphone support
+SK: Aliases for wakeup and MCU serial UARTs
+BeaglePlay: reserved CMA region for Multimedia applications
+
+J721e:
+SK/EVM: boot-phase tags for Serdes for DFU boot
+
+Phytech board updates:
+Boot-phase tag updates for AM64/AM62/AM62A boards
+DTS coding style cleanups
+RTOS IPC reserved-memory additions
+DT overlay for X27 Connectors on AM64 SOMs
+
+J721S2 SOM:
+Add flash partitions
+
+----------------------------------------------------------------
+Daniel Schultz (1):
+      arm64: dts: ti: am64-phyboard-electra: Add DT overlay for X27 connector
+
+Francesco Dolcini (1):
+      arm64: dts: ti: k3-am62p: Enable AUDIO_REFCLKx
+
+Hrushikesh Salunke (1):
+      arm64: dts: ti: k3-j722s-evm: Fix USB2.0_MUX_SEL to select Type-C
+
+Jayesh Choudhary (1):
+      arm64: dts: ti: k3-j784s4-evm-quad-port-eth-exp1: Remove duplicate hogs
+
+Keerthy (1):
+      arm64: dts: ti: k3-j784s4-j742s2-main-common: Correct the GICD size
+
+Markus Schneider-Pargmann (2):
+      arm64: dts: ti: k3-am62x-sk-common: Add serial aliases
+      arm64: dts: ti: k3-am62a7-sk: Add serial alias
+
+Michael Walle (2):
+      arm64: dts: ti: k3-am62p: fix pinctrl settings
+      arm64: dts: ti: k3-j722s: fix pinctrl settings
+
+Nishanth Menon (1):
+      arm64: dts: ti: k3-am625-beagleplay: Reserve 128MiB of global CMA
+
+Sai Sree Kartheek Adivi (1):
+      arm64: dts: ti: k3-am62a-mcu: enable mcu domain pinmux
+
+Siddharth Vadapalli (6):
+      arm64: dts: ti: k3-am62a7-sk: Add boot phase tag for USB0
+      arm64: dts: ti: k3-am62p5-sk: Add boot phase tag for USB0
+      arm64: dts: ti: k3-j721e-common-proc-board: Add boot phase tag to SERDES3
+      arm64: dts: ti: k3-j721e-sk: Add boot phase tag to SERDES3
+      arm64: dts: ti: k3-am62p5-sk: Support SoC wakeup using USB1 wakeup
+      arm64: dts: ti: k3-j784s4-j742s2-main-common: Fix serdes_ln_ctrl reg-masks
+
+Stefan Eichenberger (1):
+      arm64: dts: ti: k3-am62-verdin-dahlia: add Microphone Jack to sound card
+
+Udit Kumar (1):
+      arm64: dts: ti: k3-j721s2-som-p0: Add flash partition details
+
+Vaishnav Achath (3):
+      arm64: dts: ti: k3-j722s-main: Add BCDMA CSI overrides
+      arm64: dts: ti: k3-j722s-main: Add CSI2RX nodes
+      arm64: dts: ti: k3-j722s-evm: Add camera peripherals
+
+Vibhore Vardhan (3):
+      arm64: dts: ti: k3-am62a7-sk: Add alias for RTC
+      arm64: dts: ti: k3-am62p-j722s-common-wakeup: Configure ti-sysc for wkup_uart0
+      arm64: dts: ti: k3-am62p5-sk: Add serial alias
+
+Wadim Egorov (7):
+      arm64: dts: ti: k3-am64-phycore-som: Reserve RTOS IPC memory
+      arm64: dts: ti: k3-am62-phycore-som: Reserve RTOS IPC memory
+      arm64: dts: ti: k3-am62x-phyboard-lyra: Add boot phase tags
+      arm64: dts: ti: k3-am62a-phycore-som: Add boot phase tags
+      arm64: dts: ti: k3-am642-phyboard-electra: Add boot phase tags
+      arm64: dts: ti: k3-am642-phyboard-electra: Reorder properties per DTS coding style
+      arm64: dts: ti: k3-am62a-phycore-som: Reorder properties per DTS coding style
+
+ arch/arm64/boot/dts/ti/Makefile                               |   3 +
+ arch/arm64/boot/dts/ti/k3-am62-phycore-som.dtsi               |  25 +-
+ arch/arm64/boot/dts/ti/k3-am62-verdin-dahlia.dtsi             |   6 +-
+ arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts                |   8 +
+ arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi                      |   1 -
+ arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi              |  19 +-
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts                       |   4 +
+ arch/arm64/boot/dts/ti/k3-am62p-j722s-common-mcu.dtsi         |   8 -
+ arch/arm64/boot/dts/ti/k3-am62p-j722s-common-wakeup.dtsi      |  36 +-
+ arch/arm64/boot/dts/ti/k3-am62p-main.dtsi                     |  26 +-
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts                       |   4 +-
+ arch/arm64/boot/dts/ti/k3-am62x-phyboard-lyra.dtsi            |   9 +
+ arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi                |   2 +
+ arch/arm64/boot/dts/ti/k3-am64-phycore-som.dtsi               |  33 +-
+ arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts      |  19 +-
+ .../ti/k3-am642-phyboard-electra-x27-gpio1-spi1-uart3.dtso    |  63 +++
+ arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts         |   1 +
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts                        |   1 +
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi                  |  41 ++
+ arch/arm64/boot/dts/ti/k3-j722s-evm.dts                       |  30 +-
+ arch/arm64/boot/dts/ti/k3-j722s-main.dtsi                     | 208 +++++++++-
+ arch/arm64/boot/dts/ti/k3-j784s4-evm-quad-port-eth-exp1.dtso  |   7 -
+ arch/arm64/boot/dts/ti/k3-j784s4-j742s2-main-common.dtsi      |   6 +-
+ 23 files changed, 488 insertions(+), 72 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-x27-gpio1-spi1-uart3.dtso
+-- 
+Regards
+Vignesh
+https://ti.com/opensource
+
