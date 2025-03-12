@@ -1,65 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D9C1F7092
-	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 07:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0221D63FF
+	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 11:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741765247; cv=none; b=NLfs/4qU9jLZJJsHbIY8785JkQAXwj1P1gOGqOjNwOK/aIZs0dv012ZfWIPWLfxMoVimLgYQBAXxShnxEPBklvv7Z5cjgbOXOCN6c/dJj83ilNJtz44hZlSWKpb4pJKfqg5nWK+t6sMGSVESlLeqqP6/uK3hNQ0VndSewM5Z2WY=
+	t=1741779518; cv=none; b=Z665ggu0tUaG1/9YNrEpdkGvXXneZ8+bD/IrfHuTLF5pxZtmVvJU5XyN8zNg6Nn5JnOhEaJGuRb2sLBKrGEjAXaYtgfm1xghKd1YxxVVfqTNmh+LXcq+8BlNLcvckyFY9KswiQJzhpcjzjvHprEOwqa1n26tZqNeUOqxD/GLuc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741765247; c=relaxed/simple;
-	bh=DEBfzBJ+3aotatap99JXA4AAYCmok3ICrUfF5HVCsDE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f1frAgDLOv/fa7fWBw/Gx9TiyAwCd6irYTKZuCp1YMJX37uIZESBS4vmpOPjQZBtTPkMcWrQHQezqmIkM4zxN8aza6HaIlaAThpeS2hnIk1X1396URS5stZk0QLN5LUGftAn/gmxu9rkzQVYaWAkwFsNkzZhKig1i+xTEnVVhIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=Vco/OHRK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741779518; c=relaxed/simple;
+	bh=p9vmPAJ+IfD7JfIpR1rDY4RWu0cMfzDiYKuZriZ0KCs=;
+	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=moEwkdU93ZUY2txdvQ4/3IUt2QOYNu/duBg5xIkNOdbe2/qoBnSeD60sevbnPNXHC6KqG+uZLv1mfCcmxjez7nM7capotB75a/j1dXuOobDnWZdQ0i2a/bLM5/4txRTAkWBDJlOmvM6YsghSkL6JY+/VhCXBxt5AYwajb2GTOUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FJuhLKTU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="Vco/OHRK"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FJuhLKTU"
 Received: by smtp.kernel.org (Postfix)
-	id CDB46C4CEEA; Wed, 12 Mar 2025 07:40:46 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.19])
-	by smtp.kernel.org (Postfix) with ESMTP id 45F5AC4CEF0;
-	Wed, 12 Mar 2025 07:40:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45F5AC4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=fHft6
-	4F3TLs6vn9uOrrKaF+BvY2zu4crhf+LJniOPRM=; b=Vco/OHRK4F0SUaFxW9hVm
-	L+qHjuOrDoHUClKhNdIHZvmh+gzffM3DmcqOR2nySTlZmHK1Ueamg/RygfgXGVjx
-	+K7oSqt65DsUs21dFZhcxOEweOBJ4szsVLcqAMWegLEf0/tvsXCinho29dX6hyQU
-	Pte3ijui+erR6s1d589s4I=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgAnwdRtOtFnQ6_FAA--.2767S4;
-	Wed, 12 Mar 2025 15:40:31 +0800 (CST)
-From: Shawn Guo <shawnguo2@yeah.net>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	kernel@pengutronix.de,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 3/5] i.MX dt-bindings changes for 6.15
-Date: Wed, 12 Mar 2025 15:40:03 +0800
-Message-Id: <20250312074005.663165-3-shawnguo2@yeah.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250312074005.663165-1-shawnguo2@yeah.net>
-References: <20250312074005.663165-1-shawnguo2@yeah.net>
+	id CC41CC4CEED; Wed, 12 Mar 2025 11:38:37 +0000 (UTC)
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id DF5D8C4CEE3;
+	Wed, 12 Mar 2025 11:38:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF5D8C4CEE3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52CBcR7D1047265
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 12 Mar 2025 06:38:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1741779507;
+	bh=cyDhaKqlqsDkMfTnrMH67D5RQyLpYOtC8HL308/2ZoA=;
+	h=Date:From:To:CC:Subject;
+	b=FJuhLKTU1SrrTprGVp9zbhiLAdE1oVQVP4NpJtPmn0cFsayjxBZFBrW2pHTS7bqN0
+	 p/4am0f5yb0EJ7BJRAHFTf3gt+ZvX2rFb98lDIAM2u/3Xr4ZjcC2mLmtNdKwlt09pF
+	 ZTElQk3ZEjaxBnE/QQeqQONVPlyvUR5GFOBcmOUg=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 52CBcRmx014034
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 12 Mar 2025 06:38:27 -0500
+Received: from flwvowa02.ent.ti.com (10.64.41.53) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
+ Mar 2025 06:38:27 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by flwvowa02.ent.ti.com
+ (10.64.41.53) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Wed, 12 Mar
+ 2025 06:38:26 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 12 Mar 2025 06:38:27 -0500
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52CBcQw1040494;
+	Wed, 12 Mar 2025 06:38:26 -0500
+Date: Wed, 12 Mar 2025 06:38:26 -0500
+From: Nishanth Menon <nm@ti.com>
+To: Arnd <arnd@arndb.de>, SoC list <soc@lists.linux.dev>
+CC: SoC <soc@kernel.org>, <arm@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [GIT PULL] soc: ti: Driver updates for v6.15
+Message-ID: <20250312113826.ka63nijuftgs6h52@mocker>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Ms8vCgAnwdRtOtFnQ6_FAA--.2767S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ArW7WrW5ur45ZFy5uw17Jrb_yoW8GF1rpF
-	nxCFnrGr1kJF1UJrnxtw1DAw18Xr17Aa17JF17Jw18Aas0yF1UXr1rtw1rury3JryxXF1S
-	yF17Cr1DKw1UX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jhpnPUUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCxcOZWfRB3jvOgAAsr
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="r5zummcjnd24hbjs"
+Content-Disposition: inline
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-From: Shawn Guo <shawnguo@kernel.org>
+--r5zummcjnd24hbjs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
@@ -67,35 +87,57 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.15
+  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driv=
+er-soc-for-v6.15
 
-for you to fetch changes up to 401735c5f28f41561f60dc11b67520479694f422:
+for you to fetch changes up to 9a9b7cd77b2427d0722fe52301fa270690928989:
 
-  dt-bindings: arm: fsl: Add VAR-SOM-MX6UL SoM and Concerto board (2025-03-11 11:35:54 +0800)
-
-----------------------------------------------------------------
-i.MX dt-bindings changes for 6.15:
-
-- Add compatibles for Skov i.MX8MP variants, VAR-SOM-MX6UL SoM and
-  Concerto, i.MX95 15x15 EVK, btt3 i.MX28
-- Drop Toradex SOMs compatibles
+  firmware: config: ti-sci: Default set to ARCH_K3 for the ti sci driver (2=
+025-02-26 12:45:53 -0600)
 
 ----------------------------------------------------------------
-Ahmad Fatoum (1):
-      dt-bindings: arm: fsl: add more compatibles for Skov i.MX8MP variants
+TI SoC driver updates for v6.15
 
-Antonin Godard (1):
-      dt-bindings: arm: fsl: Add VAR-SOM-MX6UL SoM and Concerto board
+- ti-sci: Default set to ARCH_K3 for the ti sci driver in preperation for
+  the driver to be default set as module in defconfig.
+- k3-socinfo: Explicitly build up regmap instead of depending on syscon
+  helper
 
-Francesco Dolcini (1):
-      dt-bindings: arm: fsl: drop usage of Toradex SOMs compatible alone
+----------------------------------------------------------------
+Andrew Davis (1):
+      soc: ti: k3-socinfo: Do not use syscon helper to build regmap
 
-Frank Li (1):
-      dt-bindings: arm: fsl: add i.MX95 15x15 EVK board
+Guillaume La Roque (1):
+      firmware: config: ti-sci: Default set to ARCH_K3 for the ti sci driver
 
-Lukasz Majewski (1):
-      dt-bindings: arm: Document the btt3 i.MX28 based board
+ drivers/firmware/Kconfig    |  1 +
+ drivers/soc/ti/k3-socinfo.c | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
- Documentation/devicetree/bindings/arm/fsl.yaml | 27 +++++++++++---------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
 
+--r5zummcjnd24hbjs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmfRciwACgkQ3bWEnRc2
+JJ2b3hAAll6igclF5cvAYpG52TUOQDPdUjfE4xC1qukOmbySKRxfES9LUDaV4Vsc
+swv6uBOhdxa/Rx44fEoS+VuNHUlyWcVvo2i1tqy13tlvfULEg/tXK0yEuYo4CBVq
+O4Z4GwESTzSG3BDdQNE7AeBrUXvZnIis1abcpkVvxBMaWPaIjBSkU9CkBryEocRb
+2P+pmEGZmsTo9+PLCcfh2rCR5qRup8Tn8urqP3BliUEQlOcJnXm0WsbUJbGjT8t1
+iVDTOoBm8WSpbJwWsL2PcC22N1uX2RVE36evnFlmhgO1UGECoUpN/8gBz2xIjjM9
+uGAW/j/1Y5gHz2MmnaajlgG8UPhFWrQsPqckY6sSxGC13Kb0At3PhxEF+p9Y+MNl
+elKSs+3ANhosdLRACurfR0yHlzrgnw3EJRhxVZ8NHPMlChXUIwIM/Gf/u8wtwCtJ
+z+IUf7VNosWzH1Bz6Cn6GCs4DLXM3f1RAcCgULcRcFbdgnmPomxPhJtt8nCHlRyO
+WnnX9AVZg70ixmYLdxMHPxS9ad8rzeWh4r1RXqKRR9WRerlEQAKdpD/FeRwQ/ZC/
+IgAjbYGhkX4efMKeSsGSkcUHAIcPwOAMwd/iJ0AuA9O1JshLB5Cc3OfCgNyixAkR
+dG1AbIYsJQClKkQp/QPf2OwmpK/7Ozcmy+H3/CXFAcHEbCTIPeo=
+=6rrW
+-----END PGP SIGNATURE-----
+
+--r5zummcjnd24hbjs--
