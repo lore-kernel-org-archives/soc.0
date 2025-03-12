@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946571F4E56
-	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 07:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D001F5434
+	for <soc@lists.linux.dev>; Wed, 12 Mar 2025 07:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741765244; cv=none; b=hQGtIuAGIEbeVlS2jPq5opKsiqZOxs3H+w39namDLhEDgFS4OtfZU6eD0gD4rmGb1BOW06IQ68GRIZEv3tfh5ov6g6V+WbHvOQ+vRySHs1/Jgm67+CQh5L9j/Nju7qekJ1/XmdguDi3EWhSnz4SepnltH+ujvyzbYfgEGmkV2xs=
+	t=1741765245; cv=none; b=YwSXi1q3Q3BJ6M98qoj7vLOpIQG6w8fIR+H6vGxk0qf46cV+1GljZW+7QQV8Ov8FXcjjiq0ejp/OhqkVnmVshQUg1NjZD6QJ8cAbgBk/eNOgEXrJMZDU+lqZ+DYu3dnPvBU/zQIG1sfJpnjPqUEFp+q3r6/tGKU966HHsCA3WX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741765244; c=relaxed/simple;
-	bh=tCdEES9u11zm/T58N0NHIUNEUu9NFiviNIgMZ0lT/Vs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cuQGw/sFdtbOGadhnW7d02aRSnViqIBxq/KU2sJr2Wp0vtUbEJ1BPaatdMwYnwBgnDD+bPzSlkOp3mGkeJC9cbjly03lE/KGAjxooWDfWxOf62B8Yu/cwJghP2GRULd1NAOR5/MD19x6uNQHktHsSsLPMZA7GbeFoqUoIu5y+mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=jmY8XlpZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741765245; c=relaxed/simple;
+	bh=4nvS7dRyv/387qRi27wK+ra0AvCXg+OhnGQ4t3534j0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YnMN9Y4Bbh6m5LUHOaaBhI5Mux7SbSHTHvwNKNQsEeGEJhJ5wvxt4KYdvIfsbljE/dOAy9YEQuYahrBBk/qWDsrWzan9Jgy0I67vUOlRgZDvsqY8JBo4ac1HxpQqv1YeQfcQ3xphCR3BKJbyDKFbIlkM0eNTi4+FazVAgNOoPeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=UF9CXpkg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="jmY8XlpZ"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="UF9CXpkg"
 Received: by smtp.kernel.org (Postfix)
-	id 2E0ABC4CEEE; Wed, 12 Mar 2025 07:40:44 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.18])
-	by smtp.kernel.org (Postfix) with ESMTP id 32A27C4CEEA;
-	Wed, 12 Mar 2025 07:40:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 32A27C4CEEA
+	id 77127C4CEF1; Wed, 12 Mar 2025 07:40:45 +0000 (UTC)
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
+	by smtp.kernel.org (Postfix) with ESMTP id EDF48C4CEED;
+	Wed, 12 Mar 2025 07:40:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EDF48C4CEED
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=d6Jsu
-	TDCsoktk2NTBO8xvdh4+TgE9AiIWgOBIevFlQI=; b=jmY8XlpZ2m5IH20gSI2Od
-	qTmN4Fcu6KnthEylmHcYfJ1Tf97hlm6PloC1vMGd2htYndIXMxyG6l+WqO0jNDDL
-	+kKOb0qo60vxbS5YpYr5PuhLCFxtNgsk9AWdcWhBslhP9P83Au2sX9GvK7JlrQDm
-	3ljmsgt4BPHqJUIqe2yK3w=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tkkCK
+	sKh/UBLJXGmcNKAUnu7X2uUkZ7nN1RHhS9lQiI=; b=UF9CXpkgHiOcl1Gt5AVNw
+	wArJ6q/yjwGJoAGbLWiX5TNsCb8grxL3BBoYVNfUZo8sB/L7vVfhbWRzAtWnIisx
+	dVpSj4s11CFcRknJiCYMoXPqGTdeN9m3hTh+GxBST2h3sZP4FJtTuoO/jrMIs89h
+	w6fxThEPwEkXFBwhv09swo=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgAnwdRtOtFnQ6_FAA--.2767S2;
-	Wed, 12 Mar 2025 15:40:30 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgAnwdRtOtFnQ6_FAA--.2767S5;
+	Wed, 12 Mar 2025 15:40:32 +0800 (CST)
 From: Shawn Guo <shawnguo2@yeah.net>
 To: soc@kernel.org,
 	arm@kernel.org
@@ -38,10 +39,12 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/5] i.MX drivers changes for 6.15
-Date: Wed, 12 Mar 2025 15:40:01 +0800
-Message-Id: <20250312074005.663165-1-shawnguo2@yeah.net>
+Subject: [GIT PULL 4/5] i.MX ARM device tree changes for 6.15
+Date: Wed, 12 Mar 2025 15:40:04 +0800
+Message-Id: <20250312074005.663165-4-shawnguo2@yeah.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250312074005.663165-1-shawnguo2@yeah.net>
+References: <20250312074005.663165-1-shawnguo2@yeah.net>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -49,12 +52,12 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Ms8vCgAnwdRtOtFnQ6_FAA--.2767S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZryrAF1DCrW5uFWrJr4xJFb_yoWfGFX_CF
-	WxJa18Xr4UJr1UJw48Wr12vr47Jr1xJFyUJF1DtrW7Xw13AF15tF1DXrZFgw1UXr1rGF4q
-	yr1UJr1kAr13ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUb8sqtUUUUU==
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCwgOZWfRB3jvNQAAs7
+X-CM-TRANSID:Ms8vCgAnwdRtOtFnQ6_FAA--.2767S5
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr4xAFy8WFWkZryrWr48WFg_yoWxtFy3pw
+	13urs3GFs7Gr1xK3srA34UK3s8Aa4UZrs5Zr15Jay8GFW3Za47Ar9aywn3t343ZFZ5Zw1S
+	qr1kur9rGFyUuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jwtxDUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCxcOZWfRB3jvOgABsq
 
 From: Shawn Guo <shawnguo@kernel.org>
 
@@ -64,22 +67,138 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-6.15
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-6.15
 
-for you to fetch changes up to d3ad803a97c7f53d872eb3e9782c2286cae6954b:
+for you to fetch changes up to 082f59a62474fbffe7e952082f6d265f11bc37a0:
 
-  MAINTAINERS: match mxc in file names by IMX / MXC entry (2025-02-19 17:45:43 +0800)
-
-----------------------------------------------------------------
-i.MX drivers changes for 6.15:
-
-- A MAINTAINERS update from Ahmad Fatoum to get mxc drivers matched by
-  i.MX entry
+  ARM: dts: apalis/colibri-imx6: Add support for v1.2 (2025-03-11 11:40:10 +0800)
 
 ----------------------------------------------------------------
-Ahmad Fatoum (1):
-      MAINTAINERS: match mxc in file names by IMX / MXC entry
+i.MX ARM device tree changes for 6.15:
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+- New boards support: Variscite VAR-SOM-MX6UL SoM/Concerto, i.MX6
+  apalis/colibri v1.2, i.MX28 based btt3
+- A bunch of TQMa6/7 cleanups from Alexander Stein and Markus Niebel,
+  ordering DT properties, correcting 3.3V supply, adding partitions
+  child node to spi-nor, etc.
+- A bunch of changes from Fabio Estevam to fix dt-schema warnings on
+  various boards
+- Other small and random changes
+
+----------------------------------------------------------------
+Alexander Stein (5):
+      ARM: dts: imx7s: Move csi-mux to below root
+      ARM: dts: imx6qdl-tqma6: Order DT properties
+      ARM: dts: imx6ul-tqma6ul: Order DT properties
+      ARM: dts: imx6ul-tqma6ul: Add vcc-supply for spi-nor
+      ARM: dts: imx7-tqma7: Add vcc-supply for spi-nor
+
+Antonin Godard (2):
+      ARM: dts: imx6ul: Add Variscite VAR-SOM-MX6UL SoM support
+      ARM: dts: imx6ul: Add Variscite Concerto board support
+
+Chancel Liu (2):
+      ARM: dts: imx6ul-14x14-evk: Complete WM8960 power supplies
+      ARM: dts: imx7d-sdb: Complete WM8960 power supplies
+
+Ernest Van Hoecke (2):
+      ARM: dts: apalis/colibri-imx6: Enable STMPE811 TS
+      ARM: dts: apalis/colibri-imx6: Add support for v1.2
+
+Fabio Estevam (8):
+      ARM: dts: imx53-ppd: Fix touchscreen reset-gpios
+      ARM: dts: vfxxx: Fix the CAAM job ring node names
+      ARM: dts: imx5: Fix the CCM interrupts description
+      ARM: dts: vf610-bk4: Use the more specific "lwn,bk4-spi"
+      ARM: dts: imx28-sps1: Fix GPIO LEDs description
+      ARM: dts: vfxxx: Fix the order of the DMA entries
+      ARM: dts: imx31: Use nand-controller as node name
+      ARM: dts: imx53-mba53: Fix the PCA9554 compatible
+
+Francesco Dolcini (2):
+      ARM: dts: imx6qdl-apalis/colibri: Remove compatible from SoM dtsi
+      ARM: dts: vf610-colibri: Remove compatible from SoM dtsi
+
+Krzysztof Kozlowski (1):
+      ARM: dts: nxp: vf: Align GPIO hog name with bindings
+
+Lukasz Majewski (1):
+      ARM: dts: mxs: Add descriptions for imx287 based btt3-[012] devices
+
+Markus Niebel (8):
+      ARM: dts: imx6qdl-mba6: change sound card model name
+      ARM: dts: imx7-mba7: change sound card model name
+      ARM: dts: mba6ul: change sound card model name
+      ARM: dts: imx6qdl-tqma6: limit PMIC SW4 to 3.3V
+      ARM: dts: imx6qdl-tqma6: use sw4_reg as 3.3V supply
+      ARM: dts: imx6qdl-tqma6: Add partitions subnode to spi-nor
+      ARM: dts: tqma6ul: Add partitions subnode to spi-nor
+      ARM: dts: tqma7: Add partitions subnode to spi-nor
+
+Max Merchel (1):
+      ARM: dts: imx6ul-tqma6ul1: Change include order to disable fec2 node
+
+ arch/arm/boot/dts/nxp/imx/Makefile                 |  10 +
+ arch/arm/boot/dts/nxp/imx/imx31.dtsi               |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx50.dtsi               |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx51.dtsi               |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx53-mba53.dts          |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx53-ppd.dts            |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx53.dtsi               |   2 +-
+ .../boot/dts/nxp/imx/imx6dl-colibri-v1.2-aster.dts |  11 +
+ .../dts/nxp/imx/imx6dl-colibri-v1.2-eval-v3.dts    |  11 +
+ .../dts/nxp/imx/imx6dl-colibri-v1.2-iris-v2.dts    |  11 +
+ .../boot/dts/nxp/imx/imx6dl-colibri-v1.2-iris.dts  |  11 +
+ .../dts/nxp/imx/imx6q-apalis-v1.2-eval-v1.2.dts    |  11 +
+ .../boot/dts/nxp/imx/imx6q-apalis-v1.2-eval.dts    |  11 +
+ .../dts/nxp/imx/imx6q-apalis-v1.2-ixora-v1.1.dts   |  11 +
+ .../dts/nxp/imx/imx6q-apalis-v1.2-ixora-v1.2.dts   |  11 +
+ .../boot/dts/nxp/imx/imx6q-apalis-v1.2-ixora.dts   |  11 +
+ arch/arm/boot/dts/nxp/imx/imx6qdl-apalis-v1.2.dtsi |  57 ++++
+ arch/arm/boot/dts/nxp/imx/imx6qdl-apalis.dtsi      |   2 -
+ .../arm/boot/dts/nxp/imx/imx6qdl-colibri-v1.2.dtsi |  57 ++++
+ arch/arm/boot/dts/nxp/imx/imx6qdl-colibri.dtsi     |   2 -
+ arch/arm/boot/dts/nxp/imx/imx6qdl-mba6.dtsi        |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6.dtsi       |  25 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6a.dtsi      |   4 +-
+ arch/arm/boot/dts/nxp/imx/imx6qdl-tqma6b.dtsi      |   4 +-
+ arch/arm/boot/dts/nxp/imx/imx6ul-14x14-evk.dtsi    |  32 +++
+ .../boot/dts/nxp/imx/imx6ul-tqma6ul-common.dtsi    |  11 +-
+ .../boot/dts/nxp/imx/imx6ul-tqma6ul1-mba6ulx.dts   |   3 +-
+ arch/arm/boot/dts/nxp/imx/imx6ul-tqma6ul1.dtsi     |   2 -
+ .../boot/dts/nxp/imx/imx6ul-var-som-concerto.dts   | 320 +++++++++++++++++++++
+ arch/arm/boot/dts/nxp/imx/imx6ul-var-som.dtsi      | 233 +++++++++++++++
+ arch/arm/boot/dts/nxp/imx/imx7-mba7.dtsi           |   2 +-
+ arch/arm/boot/dts/nxp/imx/imx7-tqma7.dtsi          |   7 +
+ arch/arm/boot/dts/nxp/imx/imx7d-sdb.dts            |  32 +++
+ arch/arm/boot/dts/nxp/imx/imx7s.dtsi               |  56 ++--
+ arch/arm/boot/dts/nxp/imx/mba6ulx.dtsi             |   2 +-
+ arch/arm/boot/dts/nxp/mxs/Makefile                 |   3 +
+ arch/arm/boot/dts/nxp/mxs/imx28-btt3-0.dts         |  12 +
+ arch/arm/boot/dts/nxp/mxs/imx28-btt3-1.dts         |   8 +
+ arch/arm/boot/dts/nxp/mxs/imx28-btt3-2.dts         |  39 +++
+ arch/arm/boot/dts/nxp/mxs/imx28-btt3.dtsi          | 313 ++++++++++++++++++++
+ arch/arm/boot/dts/nxp/mxs/imx28-sps1.dts           |  13 +-
+ arch/arm/boot/dts/nxp/vf/vf610-bk4.dts             |   4 +-
+ arch/arm/boot/dts/nxp/vf/vf610-colibri.dtsi        |   1 -
+ arch/arm/boot/dts/nxp/vf/vf610-zii-dev-rev-c.dts   |   4 +-
+ arch/arm/boot/dts/nxp/vf/vfxxx.dtsi                |  21 +-
+ 45 files changed, 1301 insertions(+), 91 deletions(-)
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-colibri-v1.2-aster.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-colibri-v1.2-eval-v3.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-colibri-v1.2-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6dl-colibri-v1.2-iris.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-apalis-v1.2-eval-v1.2.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-apalis-v1.2-eval.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-apalis-v1.2-ixora-v1.1.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-apalis-v1.2-ixora-v1.2.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6q-apalis-v1.2-ixora.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-apalis-v1.2.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-colibri-v1.2.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6ul-var-som-concerto.dts
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6ul-var-som.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/mxs/imx28-btt3-0.dts
+ create mode 100644 arch/arm/boot/dts/nxp/mxs/imx28-btt3-1.dts
+ create mode 100644 arch/arm/boot/dts/nxp/mxs/imx28-btt3-2.dts
+ create mode 100644 arch/arm/boot/dts/nxp/mxs/imx28-btt3.dtsi
 
