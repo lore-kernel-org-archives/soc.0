@@ -1,127 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E395268FCD
-	for <soc@lists.linux.dev>; Thu, 13 Mar 2025 15:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C54194A75
+	for <soc@lists.linux.dev>; Fri, 14 Mar 2025 08:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741880046; cv=none; b=mLJgWqZkYLu1yx6ys46BsQqAv3/YaHY1zsgEf9sbs6mFzSkm1YKPD2QgS5THQL54v0oRk8sn9IBbTtSYdJurkAySlvpa2KvWptI5Q1kFgjQ4gCv8/y+58dfyANLziAcZrQxxfSH3R2uWjhMf11AIWjc8Xkh0oc+CRRzbUyEgHm0=
+	t=1741941402; cv=none; b=a7QNxaCUiyV7Lmf3JDtlEF3/ZLJW9e558WNyRsogbslfeK+cJjDAjkc6hpGB7sAbmGvEG+VEgBsLF7nKoeUuhwUg4SSokESNdZXIzdDZXxbakXhgtlGEhtDgsEe6mUtbNKEVlHsuc4uLNOQs+O474qS7+TDpd+xSxuVAuThOsug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741880046; c=relaxed/simple;
-	bh=Toz2VTcsyobehQEDG0cJrm5RPXMUb2+0ksBhaQGMR1s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rpmgznjOkOhF4hqSuD8x4bg0CFur8sertLgcy5L3wIl9E6xPdHDaZb+5iLkQ+Zjj+0FW48zCKTKU+z50x6NGwNmzo6Do5cQYBjgjWYTXtSLiVhhPWKMKijTIxJCMmoOrlcDO6lQ7MqtA/jw5Ni2NURuT5uH53U/NnRiOzIxfXCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Po+cLDjd; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Po+cLDjd"
+	s=arc-20240116; t=1741941402; c=relaxed/simple;
+	bh=SrrfmRRllZqFek6rbG9nWhX6cTCKReG+Vak6XmvztYc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T2q7scMLVJVvbZJz5y5i1zYJkxMQJR9r0muZnLwgwaiOxFQGhrO1X5xLpbrAF2EEw2ekVmIuCAb2q+ARZlbyeQp/AtsDx9HxVw/4DkYtapxmRgTvA/gfe3XVmC9TfijcZ6vLoJIdApr9Jl8zl0S8rjQRp27zXNkG5f5toQ79+E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 3FF66C4CEEA; Thu, 13 Mar 2025 15:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A77C4CEDD;
-	Thu, 13 Mar 2025 15:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741880046;
-	bh=Toz2VTcsyobehQEDG0cJrm5RPXMUb2+0ksBhaQGMR1s=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Po+cLDjd3M11/1oitHJkKxim2mkT8imMEMuE+OdnPMUgOK9QKYXlkNiXEt8ud59GX
-	 xuFWFKGrTFQ1n0NBdKCP5tIFRGitLCYNX8af311yYSr/nc1uN0WqGT/NWmwFMLIXDt
-	 31HENkgVdVQcmrs9vn7jq8A3M+JoXJQyO5RNMLQ5lh+6XI7UBokSqMkc7Q9q7Bn6/l
-	 Rd7uY8uF8TcCtMWPfQe1PRZ5Fq5KXQJo4DAfitfv418Ivquyl8lWN6Gt+jbJNYGTvK
-	 CJp/WeZJRV4HPyMEwzR9yvN5YZJl8jWZK6H7wzMsGJz4IMhui+Y+ymHY+tewEEP0Fq
-	 iTOZ/9kUhwPnQ==
-Received: by wens.tw (Postfix, from userid 1000)
-	id BE0BC5FBF4; Thu, 13 Mar 2025 20:44:40 +0800 (CST)
-Date: Thu, 13 Mar 2025 20:44:40 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner device tree changes for 6.15
-Message-ID: <Z9LTOHJDY2p0lNG0@wens.tw>
+	id DE207C4CEEB; Fri, 14 Mar 2025 08:36:40 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0A13EC4CEE3
+	for <soc@kernel.org>; Fri, 14 Mar 2025 08:36:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A13EC4CEE3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ZDd0r21k7zCs9h;
+	Fri, 14 Mar 2025 16:33:00 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id ECE59180102;
+	Fri, 14 Mar 2025 16:36:33 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Fri, 14 Mar 2025 16:36:33 +0800
+Received: from localhost.localdomain (10.90.30.45) by
+ kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 14 Mar 2025 16:36:33 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <xuwei5@hisilicon.com>
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <Jonathan.Cameron@Huawei.com>,
+	<liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH] soc: hisilicon: kunpeng_hccs: Fix incorrect string assembly
+Date: Fri, 14 Mar 2025 16:28:56 +0800
+Message-ID: <20250314082856.3257783-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="V5GzvCGLWhTVTWN3"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
+String assembly should use sysfs_emit_at() instead of sysfs_emit().
 
---V5GzvCGLWhTVTWN3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ drivers/soc/hisilicon/kunpeng_hccs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+index 8aa8dec14911..444a8f59b7da 100644
+--- a/drivers/soc/hisilicon/kunpeng_hccs.c
++++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+@@ -1539,8 +1539,8 @@ static ssize_t used_types_show(struct kobject *kobj,
+ 	u16 i;
+ 
+ 	for (i = 0; i < hdev->used_type_num - 1; i++)
+-		len += sysfs_emit(&buf[len], "%s ", hdev->type_name_maps[i].name);
+-	len += sysfs_emit(&buf[len], "%s\n", hdev->type_name_maps[i].name);
++		len += sysfs_emit_at(buf, len, "%s ", hdev->type_name_maps[i].name);
++	len += sysfs_emit_at(buf, len, "%s\n", hdev->type_name_maps[i].name);
+ 
+ 	return len;
+ }
+-- 
+2.33.0
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi-dt-for-6.15
-
-for you to fetch changes up to a8181e6861fec3068f393d77ff81b2aaf4ea4203:
-
-  arm64: dts: allwinner: a100: Add CPU Operating Performance Points table (2025-02-22 21:17:50 +0800)
-
-----------------------------------------------------------------
-Allwinner device tree changes for 6.15
-
-- New board support: NetCube Systems Kumquat
-- Enable USB and LED on Anbernic RG35XX
-- Fix reboot GPIO detection logic on Anbernic RG35XX
-- Disable (non-existent) battery thermistor on Anbernic RG35XX
-- Add CPU OPP table for A100
-
-----------------------------------------------------------------
-Chris Morgan (4):
-      arm64: dts: allwinner: h700: Set cpusldo to always-on for RG35XX
-      arm64: dts: allwinner: h700: Add LED1 for Anbernic RG35XX
-      arm64: dts: allwinner: h700: Add USB Host for RG35XX-H
-      arm64: dts: allwinner: rg35xx: Add no-thermistor property for battery
-
-Lukas Schmid (4):
-      dt-bindings: vendor-prefixes: Add NetCube Systems Austria name
-      dt-bindings: arm: sunxi: Add NetCube Systems Kumquat board
-      ARM: dts: sunxi: add uart1_pe pinctrl for sun8i-v3s
-      ARM: dts: sunxi: add support for NetCube Systems Kumquat
-
-Shuosheng Huang (1):
-      arm64: dts: allwinner: a100: Add CPU Operating Performance Points table
-
- Documentation/devicetree/bindings/arm/sunxi.yaml   |   5 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm/boot/dts/allwinner/Makefile               |   2 +
- .../dts/allwinner/sun8i-v3s-netcube-kumquat.dts    | 276 +++++++++++++++++++++
- arch/arm/boot/dts/allwinner/sun8i-v3s.dtsi         |   6 +
- .../dts/allwinner/sun50i-a100-allwinner-perf1.dts  |   5 +
- .../boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi    |  90 +++++++
- arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi     |   8 +
- .../allwinner/sun50i-h700-anbernic-rg35xx-2024.dts |  18 +-
- .../allwinner/sun50i-h700-anbernic-rg35xx-h.dts    |  23 ++
- 10 files changed, 434 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v3s-netcube-kumquat.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
-
---V5GzvCGLWhTVTWN3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmfS0zYACgkQOJpUIZwP
-JDAj3A/+OXZAJYwn40wiIZodHuTKJ8g7AvWwn3yxuc4ocKPjYcbmCGFCCP2Szd8u
-hblBU6JZsJ6JUU0OhonF8Xum96pVCR/xTS14AaU7XzFLZothIynoKKmv9whyZ71k
-QVna86mkhROAWxNvO/HXrNkzXxXZUkYuDZ1yAu16mu3CesJ+hS3BSPEDovvETGDt
-NU0S2APZ610L0aA2odAq5B7MeROLfgv9cSIgTKRzRWA12G6a9yW4bZuSwnPXBi7U
-XiWYAD/yYjAZ0d5WfATamAQ8bixrPoHnQowHqQiNyRLh1gndKubOUAOM35VlrVFG
-ehqWj1H17pXSqqvIbQlTc3lxN1Sh3E8pxwhb5MHpvKCwfS2eRuZf5WNhGxorWkJK
-Xb/ks/vXgJsxr4TuYVW88Kl2j/V0WXVb1goFcqNMIXFkU0XNQrGpWgTXd4ErBRRs
-TQPZrINDX4/gwZieNBjA+WO7A7usTTp22vITs5XBXiUXOIoDsL0g1aP3DHj/9arG
-yPss8fgBfftvuNvpdCC7EoK6adF2Dny2qFxztmtUseP4/wk83R19v5eu6k/Zqpa4
-zAZ8XicEpd7l8lVrt7KXRpY1TUIG3ldNNI/vgP/t/GMlKh7uNMN8lGF92CXbc4X3
-cS2MB3vkGoJPya4U0zSq4FJvCylaAOXAWr/KC/k/gwcAeF8iles=
-=0w4i
------END PGP SIGNATURE-----
-
---V5GzvCGLWhTVTWN3--
