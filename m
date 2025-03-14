@@ -1,97 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB5B1F3BBF
-	for <soc@lists.linux.dev>; Fri, 14 Mar 2025 10:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A351F236B
+	for <soc@lists.linux.dev>; Fri, 14 Mar 2025 10:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741946902; cv=none; b=JInp/TfnTugpUE2jNtR9lu13N49FiTl5qy+54qfV7LXiJxfx9hlJBlqKI2U5UkZFnHgHuS2tWD3w3ZmXd6HruLZTFi/52PiNcmonrCJsY/QSgRfSkrelSDojIaW1Dr+kIPpn21L+7Da9fPboWrOWZGFRaG2SxWUrCeYv0q7sdfM=
+	t=1741946965; cv=none; b=L0d4RjoOBgxpjjTrPaL7mlwLYPQrFeYyL1mV5hgi8tlAZu6iBSLDz4Nq9RnoyIhJZKyREAllHKXyQ7sn+6i1l7pxXXOkI26bcj2P46HZ1kJIOq0XutH4AgYnboACKjd5uZ7AkhzJGzxdNzslPYRjyIbxoQfLjK/kHRQxAioE9LM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741946902; c=relaxed/simple;
-	bh=RMih/HcYSOexgEnx7WMII9r6Tptz6ObevW7PZ3gwI98=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ks0+eMzgjM7fTjNmnKydP/bfXqVnSnOh9X+tf3pY1wTiGlIJRicnVryOKCsrcPVrEZ3xm07IqGAEUu/tFSjaO7/QcgMW5YUXSfJHrt2f0JLfaX7ePLP7Z/EQO4XsaDHhyxT1wyTu1l/Dcx3RaQbsebtb4jwc4jqVy8KUPonnT34=
+	s=arc-20240116; t=1741946965; c=relaxed/simple;
+	bh=Ipiu4UcihF/H2I3k8ATRaM653+z5hfvop4r0YJgDL/w=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=riK2kKJSG5eVQw9VJAn59UDEd+QgAqdNubB8u4Zxdvgse4SglEzJxH98e8dOQsOFMpb+LAqpuscYHTjggLOEDes469hL0usvp3+Flg+l5BMs+1nkeybguU1dLYNsHxRfYyfZTtxbdhhYItrgfmDe8BtVB4PJZ2ovh1z/ZnSzfYA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 574FAC4CEE9; Fri, 14 Mar 2025 10:08:22 +0000 (UTC)
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	id 9834EC4CEE9; Fri, 14 Mar 2025 10:09:24 +0000 (UTC)
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F725C4CEE3
-	for <soc@kernel.org>; Fri, 14 Mar 2025 10:08:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F725C4CEE3
+	by smtp.kernel.org (Postfix) with ESMTPS id E1DB7C4CEE3
+	for <soc@kernel.org>; Fri, 14 Mar 2025 10:09:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E1DB7C4CEE3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4ZDg6d5BCHz1d08f;
-	Fri, 14 Mar 2025 18:08:09 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id C6C291800E4;
-	Fri, 14 Mar 2025 18:08:16 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4ZDg622dPyz1R6n8;
+	Fri, 14 Mar 2025 18:07:38 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 692B4180069;
+	Fri, 14 Mar 2025 18:09:20 +0800 (CST)
 Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 14 Mar 2025 18:08:16 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 14 Mar
- 2025 18:08:15 +0800
-Message-ID: <40b9c172-2bbb-a048-643b-1493aa874b65@huawei.com>
-Date: Fri, 14 Mar 2025 18:08:15 +0800
+ 15.1.2507.39; Fri, 14 Mar 2025 18:09:20 +0800
+Received: from localhost.localdomain (10.90.30.45) by
+ kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 14 Mar 2025 18:09:19 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <xuwei5@hisilicon.com>
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <Jonathan.Cameron@Huawei.com>,
+	<liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH v2] soc: hisilicon: kunpeng_hccs: Fix incorrect string assembly
+Date: Fri, 14 Mar 2025 18:01:43 +0800
+Message-ID: <20250314100143.3377268-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] soc: hisilicon: kunpeng_hccs: Fix incorrect string
- assembly
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC: <xuwei5@hisilicon.com>, <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <liuyonglong@huawei.com>
-References: <20250314082856.3257783-1-lihuisong@huawei.com>
- <20250314100136.0000416f@huawei.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20250314100136.0000416f@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemn100009.china.huawei.com (7.202.194.112)
 
+String assembly should use sysfs_emit_at() instead of sysfs_emit().
 
-在 2025/3/14 18:01, Jonathan Cameron 写道:
-> On Fri, 14 Mar 2025 16:28:56 +0800
-> Huisong Li <lihuisong@huawei.com> wrote:
->
->> String assembly should use sysfs_emit_at() instead of sysfs_emit().
->>
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> Fixes tag?
-ok, will add it.
->
-> Otherwise looks good to me.
->
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
->> ---
->>   drivers/soc/hisilicon/kunpeng_hccs.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
->> index 8aa8dec14911..444a8f59b7da 100644
->> --- a/drivers/soc/hisilicon/kunpeng_hccs.c
->> +++ b/drivers/soc/hisilicon/kunpeng_hccs.c
->> @@ -1539,8 +1539,8 @@ static ssize_t used_types_show(struct kobject *kobj,
->>   	u16 i;
->>   
->>   	for (i = 0; i < hdev->used_type_num - 1; i++)
->> -		len += sysfs_emit(&buf[len], "%s ", hdev->type_name_maps[i].name);
->> -	len += sysfs_emit(&buf[len], "%s\n", hdev->type_name_maps[i].name);
->> +		len += sysfs_emit_at(buf, len, "%s ", hdev->type_name_maps[i].name);
->> +	len += sysfs_emit_at(buf, len, "%s\n", hdev->type_name_maps[i].name);
->>   
->>   	return len;
->>   }
-> .
+Fixes: 23fe8112a231 ("soc: hisilicon: kunpeng_hccs: Add used HCCS types sysfs")
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ drivers/soc/hisilicon/kunpeng_hccs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
+index 8aa8dec14911..444a8f59b7da 100644
+--- a/drivers/soc/hisilicon/kunpeng_hccs.c
++++ b/drivers/soc/hisilicon/kunpeng_hccs.c
+@@ -1539,8 +1539,8 @@ static ssize_t used_types_show(struct kobject *kobj,
+ 	u16 i;
+ 
+ 	for (i = 0; i < hdev->used_type_num - 1; i++)
+-		len += sysfs_emit(&buf[len], "%s ", hdev->type_name_maps[i].name);
+-	len += sysfs_emit(&buf[len], "%s\n", hdev->type_name_maps[i].name);
++		len += sysfs_emit_at(buf, len, "%s ", hdev->type_name_maps[i].name);
++	len += sysfs_emit_at(buf, len, "%s\n", hdev->type_name_maps[i].name);
+ 
+ 	return len;
+ }
+-- 
+2.33.0
+
