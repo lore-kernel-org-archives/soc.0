@@ -1,152 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8896B32C8B
-	for <soc@lists.linux.dev>; Sun, 16 Mar 2025 17:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8D5151991;
+	Sun, 16 Mar 2025 18:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742145139; cv=none; b=tp0KICycX2dRPRbBDO8rxAlXWnRwGLJVbZKxK/3Ov7mNd93Lesuh3wIhGK8Hu/Xv6/hyuu7qyc2nO+EB3tfBxiv245MK5XaoNOfQwSdGlIBFVCKxOl1jrYfn+aPTFJ/I1DpMiMmkCXGE5ZV/4i/YSg0ZNKW11eyvvsHc2LemC+U=
+	t=1742151407; cv=none; b=CfPGeOa0Mj+qCjre7LJpTEZogGFcIq110vhhaI8XBmowM6D2XfNQ78Ou6JR1cbWCYE36gbGHT8zMSQTJLst/eszwtO29nHYyf2NdCIIMk0MWskrKICizJx/mhjENh9OLryyMesPRcLj4rgluWJhTAawpMZns5pX87zZrsI7AZ2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742145139; c=relaxed/simple;
-	bh=w8kE8KCLEtM1wG9p2cMn5v/g9TgoL1gw/+s+3FPTcys=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FmIu5ImYBOAyV5J5rQFcYZDDZVNUhdjqKSaHvuNy+Fbtp7xYrZpPSXWEA/Jj4KaI2Dw8/mU1UfiYFdz4bHV1iK55g03BFKQLCDrjgpqL4URKZh6z+JIipxYrHGfgvywC7olyEGe5U5/+4j7sa0WrPiT5gWap26bVG9uIt5zwqZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eCd+kXYD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742151407; c=relaxed/simple;
+	bh=8WFUVTiQW0AVi8fJj1eBXP/Pgith2cmt5T7KY2lRChg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=feHBbrS+5aLdBfWUCUXHcu1GBiOob30f9i3y2Q9JYP7SX1dwoTavLg52c+HyJ50+iRzMITDW5P4PA8M7GXWXhEYPPRGgBmjnxkZuPCwfOgltWjvEYnwef01WKfYZNaOpHNv5qc8znlmXrGd+ZhZBOMm0rNv3DyiNTbsbOjaZy3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZdA+4Gqr; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eCd+kXYD"
-Received: by smtp.kernel.org (Postfix)
-	id 1C3AAC4CEEE; Sun, 16 Mar 2025 17:12:19 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8AAC1C4CEDD;
-	Sun, 16 Mar 2025 17:12:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8AAC1C4CEDD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 43F734432F;
-	Sun, 16 Mar 2025 17:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742145133;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yx0/axecIJ9CO0OZjIvjDDWcStDKKm3iW/gx4ytCqac=;
-	b=eCd+kXYD71/An7LnPZjEN4Uaew9/P7NEvpJv+fUgf4qJSnHVjvfUb2DmMHFxnhPukmZhTV
-	fapxZfVo0GZ+Ko7BOa8WeVWCS78RAIx8B7tj0LWA2UOmbmGH4wOcS05uqmWAF/0RYab+3j
-	1HquRWmRWoDBUCFPWhTrKDYv0qiaHMpwTNeRJdQmaTHHNVFGbWIa11fD44OFXDMo0k4GfK
-	6yefBCAN50yhQfJ6rWtCFemZ1Zqv4mID/Cu2cQucwfIRoT+skNcHpNGE7V8MXX58P1scgd
-	4Wrumzg5JB0zS2sPa9T2Q7h8ENk2EtbWYWN4ySYnEOjF6qnr0ssYfIr1h+4kTg==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v6.15 (#1)
-Date: Sun, 16 Mar 2025 18:12:12 +0100
-Message-ID: <87wmco99xv.fsf@BLaptop.bootlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZdA+4Gqr"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cfb6e9031so12133405e9.0;
+        Sun, 16 Mar 2025 11:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742151404; x=1742756204; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eY5jcIBsf0b/NcKS1qmY9rRfEEXRP/Tca7u8ZAMu2m8=;
+        b=ZdA+4Gqr16Etz/CGIgKzy5EiBrRl8IaAQmBQCt+kxHCF50EYkVQrJnNUdPUQgizQ6m
+         gjaQ5+E5bzPthVbwm1Cg75zEcnb4dHWcYPd8b5CDK/D186xpsbhU5UuYqJ8ps5vMjhRQ
+         mr/4M6DeSTc/J/qcQ/Fh85ive0lqz4WJkVmCltxOUF22tgPt/GSg4soJvqJNtyKkfbe3
+         EKJFrFVFblNd7QZcaT3zhQ44DlYCMNFj7+gG37mZutFwUwoV1ApMkC6NUgqpTZiNe0iM
+         HitZcBfsdxJ98O9/cGy9AkCMCntv1HVIUEPelwqh2NYjtDMo8xr4D2Kb3T+ZSqBaM+Wv
+         fwjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742151404; x=1742756204;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eY5jcIBsf0b/NcKS1qmY9rRfEEXRP/Tca7u8ZAMu2m8=;
+        b=QTwU75R3e8kbjEgHRdT0HdR/ZCKeCiNAAOZH3E4V1e/PXZ9wWqMopPho0Y03On2796
+         xNV7cia5TMcLrWQz7LLK/kSjPGk4zKjt1TYajlB5Xp034bdHVD1tYM+mxahTXNsaEWe9
+         cau7SbDM0yHp3Ty98L7GzMIcjx0o0507bBRyc347iRCYzOkY66fLEC2AKNdom0JxUpZW
+         POtCSKzyFv5DrKLRfj3ZukR92Ik2X+hcuoeIrnZIESjONn34pHLw0CE0LNmw4ICB0HE7
+         q5oLRapzaL9p6/ZLKvxU7GTP25Zd3+Ne3eXQgGI3PFentMHdV3rfkHaUgIokS5sqwcb8
+         V4Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCVb9FFgzpfdrMT/FJd+Ksx7gFSN0K8hIWhnl0KkpjE3bm3n8/d0rKWtybHYF2XXG02kVSo=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw1pMAgXsIWiUjv3797Zujt87u3J/7wJf89W1+GV9pkJFvNxqP3
+	uHWNxqHRylttEQKcKYigFNud9NgbkjtUJwbK/y4ajInM8fSawzxUkt81ZycU
+X-Gm-Gg: ASbGncsyjO3j2iqyAdfLzk9O0WndzDcQUO9xK1Wn9M09GVH0mrSywjSJGc3x4eLcOQd
+	lvPl7umYnk0u5A2mjGm+ZcYrk8RnRufKRv5pn2gp5PzlxTwqqeo91tw47FZz9e/Na/ldY4wyc0P
+	Ca0YTag5mcsq1+KNbCDOUZreGssnL/Lwy7V0e45BVYjqvT0zzR8qwjF3LbPyDzGCO9VC0Mgkpk/
+	WpfL9Kk6i7xPrJ/DNNvTIubeR+C9G/mFHd3z3mbeLpkChevtkipUnWruE3pG4BfLjYHr+J2Nt4y
+	WdyjdHP9/AUtpZGfAJaMxeEvegxj9ZFi4wpNwzFm0M9/FpxYoaF9P5l5WD/Hl2TwZceT
+X-Google-Smtp-Source: AGHT+IFXrgw3XrN+TCApbWNShZJAs8R17s1faa0pLtE35kNdsan/Kt1j2yFVTODC5X/sjE+CaW5y1w==
+X-Received: by 2002:a05:600c:a21b:b0:43c:fcbc:968c with SMTP id 5b1f17b1804b1-43d1ef4b09amr110453495e9.7.1742151403732;
+        Sun, 16 Mar 2025 11:56:43 -0700 (PDT)
+Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffb6292sm84692335e9.1.2025.03.16.11.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Mar 2025 11:56:43 -0700 (PDT)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: sophgo@lists.linux.dev,
+	soc@lists.linux.dev
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Haylen Chu <heylenay@outlook.com>,
+	Chao Wei <chao.wei@sophgo.com>,
+	devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 0/7] arm64 support for Milk-V Duo Module 01 EVB
+Date: Sun, 16 Mar 2025 19:56:30 +0100
+Message-ID: <20250316185640.3750873-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufeejudejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteevffejteelkefhveetueeileethfekiefgvdetveevvdelgfdufedtgfeigeevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmeefuggtmegvvgektdemudefvggumehftdehleemrggsvgelmedufeegugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemfegutgemvggvkedtmedufegvugemfhdtheelmegrsggvleemudefgegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopeholhhofheslhhigihomhdrnhgvthdprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtp
- hhtthhopehsohgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehsvggsrghsthhirghnrdhhvghsshgvlhgsrghrthhhsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhg
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-Hi,
+This series adds very basic support for Milk-V Duo Module 01 EVB [1] in
+arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latter has
+been chosen because the upstream toolchain can be utilized.
 
-Here is the first pull request for dt64 for mvebu for v6.15.
+Sophgo SG2000 seems to be a continuation of the Cvitek CV18xx series, same
+peripherals with an addition of ARM64 core. Therefore it would be
+beneficial not to copy-paste the peripherals' device-tree, but rather split
+the most suitable riscv DT into ARCH-specific and peripherals parts and
+just include the latter on the arm64 side.
 
-Gregory
+This series adds the device-tree for Milk-V Duo Module 01 EVB, which
+in turn contains Milk-V Duo Module 01 (separate .dtsi) on it, which has
+SG2000 SoC inside (separate .dtsi).
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+This series has been tested with Sophgo-provided U-Boot binary [2]: it
+boots from SD card; pinctrl, serial, GPIO drivers are functional (same
+as for RiscV-based CV18xx SoCs).
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+Partial SoC documentation is available [3].
 
-are available in the Git repository at:
+This series lacks the support of:
+- USB
+- Audio
+- Ethernet
+- WiFi
+- Bluetooth
+- eMMC
+- Video
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt64-6.15-1
+Changelog:
+v5:
+- PSCI node in DT
+v4:
+- minimized patch 1/7 (cleanups dropped)
+- cv18xx-cpu-intc.dtsi instead of cv18xx-cpu.dtsi+cv18xx-intc.dtsi in
+patch 1/7
+v3:
+- &cpus node has been moved into cv18xx-cpu.dtsi, &plic and &clint nodes
+were moved into cv18xx-intc.dtsi to reduce code duplication;
+v2:
+- dropped all patches related to the new reboot driver and corresponding DT
+and bindings;
+- grouped DT-related and config-related patches together;
+- added patch moving sophgo.yaml from riscv into soc (to share it with
+ARM); added SG2000 SoC and Milk-V Duo Module 01 EVB into it;
+- other changes are documented in the corresponding patches;
 
-for you to fetch changes up to ed9c2b28ebef3333f25cefdc2ef37ee1f05cad95:
+[1] https://milkv.io/docs/duo/getting-started/duo-module-01
+[2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
+[3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
 
-  arm64: dts: marvell: Use preferred node names for "simple-bus" (2025-03-1=
-5 11:27:04 +0100)
+Alexander Sverdlin (7):
+  riscv: dts: sophgo: cv18xx: Move RiscV-specific part into SoCs' .dtsi
+    files
+  dt-bindings: soc: sophgo: Move SoCs/boards from riscv into soc, add
+    SG2000
+  arm64: dts: sophgo: Add initial SG2000 SoC device tree
+  arm64: dts: sophgo: Add Duo Module 01
+  arm64: dts: sophgo: Add Duo Module 01 Evaluation Board
+  arm64: Add SOPHGO SOC family Kconfig support
+  arm64: defconfig: Enable rudimentary Sophgo SG2000 support
 
-----------------------------------------------------------------
-mvebu dt64 for 6.15 (part 1)
+ .../{riscv => soc/sophgo}/sophgo.yaml         |  7 +-
+ arch/arm64/Kconfig.platforms                  |  6 ++
+ arch/arm64/boot/dts/Makefile                  |  1 +
+ arch/arm64/boot/dts/sophgo/Makefile           |  2 +
+ .../sophgo/sg2000-milkv-duo-module-01-evb.dts | 31 +++++++
+ .../sophgo/sg2000-milkv-duo-module-01.dtsi    | 85 +++++++++++++++++
+ arch/arm64/boot/dts/sophgo/sg2000.dtsi        | 81 +++++++++++++++++
+ arch/arm64/configs/defconfig                  |  4 +
+ arch/riscv/boot/dts/sophgo/cv1800b.dtsi       |  5 +
+ arch/riscv/boot/dts/sophgo/cv1812h.dtsi       |  5 +
+ arch/riscv/boot/dts/sophgo/cv181x.dtsi        |  2 +-
+ .../boot/dts/sophgo/cv18xx-cpu-intc.dtsi      | 54 +++++++++++
+ arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 91 +++++--------------
+ arch/riscv/boot/dts/sophgo/sg2002.dtsi        |  5 +
+ 14 files changed, 309 insertions(+), 70 deletions(-)
+ rename Documentation/devicetree/bindings/{riscv => soc/sophgo}/sophgo.yaml (80%)
+ create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01-evb.dts
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01.dtsi
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
+ create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu-intc.dtsi
 
-device tree clean-up fomr DT maintainers
+-- 
+2.48.1
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (3):
-      arm64: dts: marvell: armada-8040: Align GPIO hog name with bindings
-      ARM: dts: marvell: kirkwood-openrd: Align GPIO hog name with bindings
-      ARM: dts: marvell: armada: Align GPIO hog name with bindings
-
-Rob Herring (Arm) (9):
-      dt-bindings: marvell: armada-37xx: Add glinet,gl-mv1000 compatible
-      dt-bindings: marvell: armada-7k-8k: Move Armada 8KPlus to schema
-      dt-bindings: marvell: armada-7k-8k: Add missing 7040 and 8040 board c=
-ompatibles
-      arm64: dts: marvell: Drop incomplete root compatible/model properties
-      arm64: dts: marvell: Fix missing/incorrect "marvell,armada3710" compa=
-tible
-      arm64: dts: marvell: Add missing board compatible for IEI-Puzzle-M801
-      arm64: dts: marvell: Move arch timer and pmu nodes to top-level
-      arm64: dts: marvell: Drop unused CP11X_TYPE define
-      arm64: dts: marvell: Use preferred node names for "simple-bus"
-
- .../bindings/arm/marvell/armada-37xx.yaml          |  1 +
- .../bindings/arm/marvell/armada-7k-8k.yaml         | 25 ++++++++++++++++
- .../devicetree/bindings/arm/marvell/armada-8kp.txt | 15 ----------
- .../boot/dts/marvell/armada-385-clearfog-gtr.dtsi  |  8 +++---
- .../boot/dts/marvell/armada-388-clearfog-base.dts  |  2 +-
- arch/arm/boot/dts/marvell/kirkwood-openrd.dtsi     |  4 +--
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi      |  2 +-
- arch/arm64/boot/dts/marvell/armada-371x.dtsi       | 17 -----------
- arch/arm64/boot/dts/marvell/armada-3720-db.dts     |  2 +-
- .../dts/marvell/armada-3720-espressobin-emmc.dts   |  2 +-
- .../dts/marvell/armada-3720-espressobin-ultra.dts  |  2 +-
- .../marvell/armada-3720-espressobin-v7-emmc.dts    |  2 +-
- .../dts/marvell/armada-3720-espressobin-v7.dts     |  2 +-
- .../boot/dts/marvell/armada-3720-espressobin.dts   |  2 +-
- .../boot/dts/marvell/armada-3720-gl-mv1000.dts     |  2 +-
- .../boot/dts/marvell/armada-3720-turris-mox.dts    |  2 +-
- arch/arm64/boot/dts/marvell/armada-372x.dtsi       |  3 --
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi       |  4 +--
- arch/arm64/boot/dts/marvell/armada-7020.dtsi       |  6 ----
- arch/arm64/boot/dts/marvell/armada-7040.dtsi       |  6 ----
- arch/arm64/boot/dts/marvell/armada-8020.dtsi       |  6 ----
- .../dts/marvell/armada-8040-clearfog-gt-8k.dts     |  8 +++---
- .../boot/dts/marvell/armada-8040-puzzle-m801.dts   |  2 +-
- arch/arm64/boot/dts/marvell/armada-8040.dtsi       |  6 ----
- arch/arm64/boot/dts/marvell/armada-8080.dtsi       |  6 ----
- arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi |  3 --
- arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi |  3 --
- arch/arm64/boot/dts/marvell/armada-ap806.dtsi      |  6 ----
- arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi |  3 --
- arch/arm64/boot/dts/marvell/armada-ap807.dtsi      |  6 ----
- arch/arm64/boot/dts/marvell/armada-ap80x.dtsi      | 33 +++++++++++-------=
-----
- .../dts/marvell/armada-ap810-ap0-octa-core.dtsi    |  1 -
- arch/arm64/boot/dts/marvell/armada-ap810-ap0.dtsi  | 24 ++++++++--------
- arch/arm64/boot/dts/marvell/armada-cp110.dtsi      |  4 ---
- arch/arm64/boot/dts/marvell/armada-cp115.dtsi      |  4 ---
- arch/arm64/boot/dts/marvell/armada-cp11x.dtsi      |  4 +--
- arch/arm64/boot/dts/marvell/cn9130-sr-som.dtsi     |  3 --
- 37 files changed, 78 insertions(+), 153 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-8k=
-p.txt
- delete mode 100644 arch/arm64/boot/dts/marvell/armada-371x.dtsi
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
