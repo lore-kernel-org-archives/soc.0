@@ -1,139 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63BD204597
-	for <soc@lists.linux.dev>; Sat, 15 Mar 2025 15:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B37E27702
+	for <soc@lists.linux.dev>; Sun, 16 Mar 2025 14:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742053622; cv=none; b=Q7Heful8mBD7CfW/omtt8feApjYMS0ahfJTUFii5PnVYRNucPQRm/qKpHFavCUwdtPlJ/OHzDBLxHIgykusWHM1iy4QTFAZSfgGT+R5+01oKyDAu/APgKwZrNC8gH43LKk8jmlgAI9rvcwWPlJGM4VmLU0nOlnrkuWbgHbmoPgQ=
+	t=1742135711; cv=none; b=WsG8gm5gtz7gIgkLu0QpAW2nxcWGXa9A02biXURNIE6QOn8lnzTmVTKRb4h43sFGHco/nPEAS0iBO+RbIZRvyPaYPcti6Aqv2+mL6GZEHQP6iDsbL7vSDr1oW0WrnEWZ8H4lLA6b2kY64EXW4ww1D6Ul7OpiMkadMu2QIrxgSx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742053622; c=relaxed/simple;
-	bh=QpxED8BgW22+M5fkPJXnixWQj26m4WRh7cJny1W0uQA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AAlA8XpXcFoKm3hmVsjxAAfbMhYJVhU0pn0BjFfQGN9ItKQqjK4BONPyJDXOaWqmiHOYOWqeBnHaGPqjvLhoEHHeSoou9CbEBvIVgj0u1Epxb9GSOtONhnF1GOVT3HnfouVkc2frFOTBMW1uHIuywKgKw+WVw7Sfm4xg3XdE0wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=bvFFYx/+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742135711; c=relaxed/simple;
+	bh=aiWwqXClDI29wp152Atw0mqy74j2Tu4jTQhO5oypHY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JLAPx5Zi8/mHytYJzXYC0Lrb4zjotEqzsqtAZo51w2bGOnDzDl/nRzIfsy6DB4CzGOdxZ+d6gbXoqSZQopzsOaXxsuhAwjzsdOp7efiiYQ6v8c7ZUxjriKvQu/Zo8oAWavR6VfheNx4mySYm8hMjN9y8pyv61B2DK11WU8lV0Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hvxvygw0; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="bvFFYx/+"
-Received: by smtp.kernel.org (Postfix)
-	id 3C86BC4CEEA; Sat, 15 Mar 2025 15:47:02 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 82C41C4CEE5;
-	Sat, 15 Mar 2025 15:46:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82C41C4CEE5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=1VeO5hr1KTtCeq/vjZzvAaFvuU/CjtDmvpB7mrE5/C4=; b=bvFFYx/+tc7xY5119MNFQ24BzH
-	p5GW/e2RPUGfl6YbHvUc3gEWbnzaqzRFeHVtnACjnxRKvnLyhWNeAwPM2SxHcLFRM9GhNUXdpW5+/
-	zs37wl9m4gD9tAPdcqyfQSdxkVoK17w7J/7+CQ5WSqnbkIIdInBy7wB6rNsHJRG+LScgrirpKVKoI
-	hsBhK+s+/3jdgmGd4fmMfAFPXEF55g+01xjFLjo4Qr+uY4JOlm0rtImyR09CJ8CAASE4dpH+bTud0
-	kItcxsoQ0a/kgn5kMfvmFwcP8aWylJZDveXAOz9f9yxQuUO7bPRmM95uzGBjq/v9g+iTco8ccvlaE
-	ekRAHjbQ==;
-Received: from [194.95.143.137] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ttTiz-0008Tk-UU; Sat, 15 Mar 2025 16:46:57 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 6.15 #2
-Date: Sat, 15 Mar 2025 16:46:57 +0100
-Message-ID: <23866869.6Emhk5qWAg@phil>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hvxvygw0"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43d0953d3e1so1407675e9.2
+        for <soc@lists.linux.dev>; Sun, 16 Mar 2025 07:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742135707; x=1742740507; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iZTnPcKiX3WQla8ra0bJdBCPKBZDqCAqRVNy0t/Nug8=;
+        b=hvxvygw09LYDqY4+hU2nWTL3y6HG1/Cg2CLxoewmFvwqGfGjMYI/3+EFHWtSiXLkOh
+         ftczeY9bu3FPVcSTiwh4o3DXoz4WoENvRTIC/cDJTY7hDDAP94Ft6bfzzw2UNU4rkn1Q
+         rj02jFKGY6AcLbw4Hwc22ii9yVTmKQFlIY/fqAj2akGemYxEKeYFO9tW4Q9mMDWCTMqR
+         ODk1d/QlcmOCBBKuTDqgQtXn079IwKaPhchCDzcMM8Cl9V1p6kI2fYXBy99eW/zhtfjI
+         ARGYJ1GujENC7+oTuFWmtJw3V2v6cpBJW0Z1ee+gHDppW3wNNE+l0eJNx4rEm42gD9ct
+         M3Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742135707; x=1742740507;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iZTnPcKiX3WQla8ra0bJdBCPKBZDqCAqRVNy0t/Nug8=;
+        b=ChddnZV0PZ4DUf1D8OZj0AB0IiUspVO15/h//5sQ952E7nWKFr/kIGf5tnKRpVFkum
+         X5h5go8K3DOTconhZO2UmE4RaPkF63PnX8eNVCh4AtVVrdY4LVyxgbfZL6a5UIxaLSiz
+         M3bI1hb/f7bDVtJxmnsovG2BOzu9p04GDw4f0W7YUxN4UHFYqI6WDrTCuE4vltOM8QFG
+         TblhR53gOMBkUu04mFCLi4jrl9NH3D+Hyn8Z3VN1/6Ntrut3taia2mkRoLdumzlMJu5K
+         DoiodHZRNICKan0zG37N49Lt8ksqgdbEDApJx1oDBABHg0ayRLrR3SPCk5UdCjPoKA0T
+         Nk8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWrWbqdUV5hoe9UHl/p7XBGLx1c49cHmbZqJyDPvOO4hDpGsaowJtsku5/vBG8ir0doW6s=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzJrr1rMH3TudikA12ZoLzpOji4anHvnMdVC/q5pKeEuzSAQdFl
+	Hq5hCPc1AZOjLqTbOKgMQbb3Njn3ewGeLLqmcz0+myt58jFJRrxsOeuuxuZMHaI=
+X-Gm-Gg: ASbGncvawpqqSdZr5Ot+vCo3hH6GTmr782SFUX96UQMMra6rW0sx8KJ8JJdIvoFcliQ
+	orm13zjdWeWT5TuXI0EJ8Ts7RQQytM5dQmjfbnV+zNFgNrBMGvEDMKAqLX1Wuwbqj//Q8qJehwK
+	kEMj1ITC57hF20tlPtFHT7uqeYpFPKW4EVdhMLG8mufptApw2YSOee7ecNdgLCJ5Yy2aomORbqE
+	/zsIAnCT6fjcpXhAVgOmpe0tr38t9G8ta4nxhdANZx0YP69PNiJ0eRZDUfY7B15sJYaIFtQxYZi
+	XUX6rykuSuJ4Psn6bALWXdUmx9E+EurldPsUvmXNPbW9Mj4oIYSnBXpr2bQ4Rs1tTPNs
+X-Google-Smtp-Source: AGHT+IEjZUE3rI1hZ2BrgUwthxLukTEiV/0aM6N061MV+389eG1w1p0htt/ZIDPTn2KdSk5qkOG68g==
+X-Received: by 2002:a05:600c:6994:b0:439:94f8:fc7b with SMTP id 5b1f17b1804b1-43d1ebfc1afmr41782705e9.0.1742135707545;
+        Sun, 16 Mar 2025 07:35:07 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffbcf00sm78451835e9.10.2025.03.16.07.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Mar 2025 07:35:07 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v6.15
+Date: Sun, 16 Mar 2025 15:35:02 +0100
+Message-ID: <20250316143503.17620-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi soc maintainers,
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-please find below some additional Rockchip changes for for 6.15 .
-And I think with that I'll call it done, and have everything else
-wait for after the merge-window.
-
-
-Please pull.
-Thanks
-Heiko
-
-
-The following changes since commit ba82f56bbf20e4166c988621cd0507509872848e:
-
-  arm64: dts: rockchip: Add SPI NOR device on the ROCK 4D (2025-03-08 18:19:59 +0100)
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.15-rockchip-dts64-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.15
 
-for you to fetch changes up to 73d246b4402c3356f6b3d13665de3a51eea7b555:
+for you to fetch changes up to 90a0fbaac4a588a1116a191521c3c837c25582ee:
 
-  arm64: dts: rockchip: remove ethm0_clk0_25m_out from Sige5 gmac0 (2025-03-15 15:49:00 +0100)
-
-----------------------------------------------------------------
-New peripheral the sdhci controller on rk3528. Enablement of hdmi and hdmi
-audio on a number of additional boards. Better handling for scmi shared
-memory on rk3568 and a fix for the used SCMI clock ids on rk3576.
-As well as some fixes that were a bit late for trying to stuff them into
-6.14 at this late stage of the cycle.
+  memory: mtk-smi: Add ostd setting for mt8192 (2025-03-10 15:18:18 +0100)
 
 ----------------------------------------------------------------
-Chen-Yu Tsai (1):
-      arm64: dts: rockchip: Remove bluetooth node from rock-3a
+Memory controller drivers for v6.15
 
-Chukun Pan (1):
-      arm64: dts: rockchip: Move rk356x scmi SHMEM to reserved memory
+1. Minor cleanup in Nvidia Tegra20 EMC.
+2. Extend support for Mediatek MT8192 to match recommended by vendor and
+   improve VENC hardware behavior during stress testing.
 
-Jianfeng Liu (3):
-      arm64: dts: rockchip: Add AP6275P wireless support to ArmSoM Sige7
-      arm64: dts: rockchip: Enable HDMI audio output for ArmSoM Sige7
-      arm64: dts: rockchip: Fix pcie reset gpio on Orange Pi 5 Max
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      memory: tegra20-emc: Drop redundant platform_get_irq() error printk
 
-Jimmy Hon (4):
-      arm64: dts: rockchip: Enable HDMI0 audio output for Orange Pi 5/5B
-      arm64: dts: rockchip: Enable HDMI audio outputs for Orange Pi 5 Max
-      arm64: dts: rockchip: Enable HDMI1 on Orange Pi 5 Plus
-      arm64: dts: rockchip: Enable HDMI audio outputs for Orange Pi 5 Plus
+Xueqi Zhang (1):
+      memory: mtk-smi: Add ostd setting for mt8192
 
-Jonas Karlman (2):
-      arm64: dts: rockchip: Add SDHCI controller for RK3528
-      arm64: dts: rockchip: Enable onboard eMMC on Radxa E20C
-
-Nicolas Frattaroli (3):
-      dt-bindings: clock: rk3576: add SCMI clocks
-      arm64: dts: rockchip: fix RK3576 SCMI clock IDs
-      arm64: dts: rockchip: remove ethm0_clk0_25m_out from Sige5 gmac0
-
-Yao Zi (1):
-      arm64: dts: rockchip: Fix PWM pinctrl names
-
- arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts     |  2 +-
- arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts    |  4 +-
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |  2 +-
- arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts | 15 ++++++
- arch/arm64/boot/dts/rockchip/rk3528.dtsi           | 24 ++++++++++
- arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts    | 14 ------
- arch/arm64/boot/dts/rockchip/rk356x-base.dtsi      | 25 +++++-----
- .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |  3 +-
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           | 18 ++++----
- .../boot/dts/rockchip/rk3588-armsom-sige7.dts      | 24 ++++++++++
- .../dts/rockchip/rk3588-orangepi-5-compact.dtsi    |  2 +-
- .../boot/dts/rockchip/rk3588-orangepi-5-max.dts    | 16 +++++++
- .../boot/dts/rockchip/rk3588-orangepi-5-plus.dts   | 54 ++++++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts |  2 +-
- .../boot/dts/rockchip/rk3588s-orangepi-5.dtsi      |  8 ++++
- include/dt-bindings/clock/rockchip,rk3576-cru.h    |  5 ++
- 16 files changed, 174 insertions(+), 44 deletions(-)
-
-
-
+ drivers/memory/mtk-smi.c           | 33 +++++++++++++++++++++++++++++++++
+ drivers/memory/tegra/tegra20-emc.c |  4 +---
+ 2 files changed, 34 insertions(+), 3 deletions(-)
