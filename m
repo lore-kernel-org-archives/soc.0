@@ -1,89 +1,69 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889DC1A2547
-	for <soc@lists.linux.dev>; Sun, 16 Mar 2025 14:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8896B32C8B
+	for <soc@lists.linux.dev>; Sun, 16 Mar 2025 17:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742136148; cv=none; b=HQHwPU08Wmz0mh0+qQBBKeYuCbShDwSlLzhzYuaOvSeYWmpF85v5yZw1PSsEYyGco7ABSSwqt45Y0HUwLc0V2G8ucdnVHTpbGd1Zkcwamoc+PQ+3d2RjKpeJTNboS0fAanVg5RoSjX/46LwDCvCrspYNUzDtbBODd+qLYZitKxw=
+	t=1742145139; cv=none; b=tp0KICycX2dRPRbBDO8rxAlXWnRwGLJVbZKxK/3Ov7mNd93Lesuh3wIhGK8Hu/Xv6/hyuu7qyc2nO+EB3tfBxiv245MK5XaoNOfQwSdGlIBFVCKxOl1jrYfn+aPTFJ/I1DpMiMmkCXGE5ZV/4i/YSg0ZNKW11eyvvsHc2LemC+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742136148; c=relaxed/simple;
-	bh=hAwIMSzK0uCAG8yRC35L5MzxIb1ccJ6Q76LufHUuaYQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WOY72nCzAzFazaWimzR+rojvm3DWSZv2Yk3mQugi3JsU9aZnZzF+DL6W0XwpjQOSJ/ygb56FFGuYzL2IvMUOt7RpPUA4dZ8Feg4ABcr+o7yHwXTg+jBblPAKXDI4xSNAaDYTRmfybpOp8W4eLCsdTfsXCh3fbBuWkHgqojx6h60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q5bh1IPj; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1742145139; c=relaxed/simple;
+	bh=w8kE8KCLEtM1wG9p2cMn5v/g9TgoL1gw/+s+3FPTcys=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FmIu5ImYBOAyV5J5rQFcYZDDZVNUhdjqKSaHvuNy+Fbtp7xYrZpPSXWEA/Jj4KaI2Dw8/mU1UfiYFdz4bHV1iK55g03BFKQLCDrjgpqL4URKZh6z+JIipxYrHGfgvywC7olyEGe5U5/+4j7sa0WrPiT5gWap26bVG9uIt5zwqZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eCd+kXYD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q5bh1IPj"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-39123ad8a9fso429114f8f.2
-        for <soc@lists.linux.dev>; Sun, 16 Mar 2025 07:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742136145; x=1742740945; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jJriuSV/8IJe5ycqkpE6UDdCuNRLNCnL4O9Y8I+CLA4=;
-        b=q5bh1IPjdjgU/01WKuG3IIVo1Lq9G/X27j6/TFf7WmvNvx493KfjAw12EsfR2LBk/m
-         FUunIc257I2CTzJ7XJ6cCFZ0Vquxqkiy/iwLwPysVSkHRRM8HnWIkcxM6Gy7rWLPtFQc
-         56PfksMQD4v49KyHa//qo392IKbiyQEi10sW4dGldFp1ULP1twiFjTNT9aW/P5/whYSR
-         UNDQGO/OEG9HYd8m95OAQ3uE15SAFVI4XTZ+kg7q40tHSseWKLHUcG2WM5U2NBgsDiic
-         5GAetceXVRrWmCWrbTUA0vcDdh5M4HO8TYKfPrc40C2ZrLzP5VhbDqOtHgf5GUX5D/VW
-         WCuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742136145; x=1742740945;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jJriuSV/8IJe5ycqkpE6UDdCuNRLNCnL4O9Y8I+CLA4=;
-        b=SXg2DBfKpAVIyTmgJFjAEbb8SSOEIY7inzfa2iKdpVR5L3OqDax9IFgm6k/QLXhIti
-         CgFMu220CM9r6SsJ/IhngOMFGDkGn7jJX1Y9+qNz8l/CehL6ZEMmKWq/yhSChJoOrAbZ
-         Hla/9WwuEvhIT5aBG1UFk9A58AsA1tQHUp7a9zQ8rXSzM9QPLtq3gatA+h3Nmn+BN67L
-         O2EaurAp79HDTRPbVuGIFT0JwvSLrpQdTJ0Ww8EU84K9+8doGQKXR7mt4zMsWJPoMD1P
-         w/WjWKC/c0VNwOi4iBdWiUeg23DA3kJ7RdW6Bh75RDRYrUYV27PgBdv1nGWz4CIxFFY/
-         VqfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgmUZ7xGK67NaErVNH/GalpCYIKF3tN6HOjvPmD6wn5eeHVgrBRoNCsGq3puSKVzUNpYo=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyNTkHWrV3cQ0FETkJcX6hIYmy9hTHWk/qkrqGWVb3tKKtw1TEn
-	RYmJOng6mDBNbcaUftY1Kpv2iiZvP+/3tGQp57MGpPODuiqZTOulpTIcbpa7Ftk=
-X-Gm-Gg: ASbGncveNiRQ9fMMTUmP3C+deh3whCTzvVV78AfUoU6lGrNVa8K8DaPpbMlkOFVFiU3
-	gfRYyX2Bhi7Bh3hdk75aC41PLENEMLHxF+RV+1ZZTvL8c1Y0Y0XE49JZtQ99ITm2CaXwuqE37Su
-	qglyr4yLA/g6TmQasfLGQrleVfECwiRDRtvSvr8wV/GdKyd3oWTpb2tL/q9z8/PzLkI9YG/chdX
-	GeJmK7sYD/HKcTAl/ol16sjR30zR/XdVg65lJpifTcA3f4NemHfh7eieQ+6eFRHkYuYUU/zarSh
-	mWcyWwWnonyTUkcnmRZ+MYswtoHweJfjWaa3XTJ/27ONjvMSiXcsiwK+uoYnxDcvRjUh
-X-Google-Smtp-Source: AGHT+IFN+HWoJ/RvheSs9Qe6ufnnQM/Id6b6C6RXmbLnvuIy+0v8jxxH3K/QTk+P9kPHsJxT6hIFLw==
-X-Received: by 2002:a05:600c:4e8e:b0:439:9c0e:36e6 with SMTP id 5b1f17b1804b1-43d1ecca06cmr40418265e9.3.1742136144846;
-        Sun, 16 Mar 2025 07:42:24 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffb62d7sm79591825e9.6.2025.03.16.07.42.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Mar 2025 07:42:24 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] dts: cleanups for v6.15
-Date: Sun, 16 Mar 2025 15:42:20 +0100
-Message-ID: <20250316144221.18240-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eCd+kXYD"
+Received: by smtp.kernel.org (Postfix)
+	id 1C3AAC4CEEE; Sun, 16 Mar 2025 17:12:19 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8AAC1C4CEDD;
+	Sun, 16 Mar 2025 17:12:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8AAC1C4CEDD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 43F734432F;
+	Sun, 16 Mar 2025 17:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1742145133;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yx0/axecIJ9CO0OZjIvjDDWcStDKKm3iW/gx4ytCqac=;
+	b=eCd+kXYD71/An7LnPZjEN4Uaew9/P7NEvpJv+fUgf4qJSnHVjvfUb2DmMHFxnhPukmZhTV
+	fapxZfVo0GZ+Ko7BOa8WeVWCS78RAIx8B7tj0LWA2UOmbmGH4wOcS05uqmWAF/0RYab+3j
+	1HquRWmRWoDBUCFPWhTrKDYv0qiaHMpwTNeRJdQmaTHHNVFGbWIa11fD44OFXDMo0k4GfK
+	6yefBCAN50yhQfJ6rWtCFemZ1Zqv4mID/Cu2cQucwfIRoT+skNcHpNGE7V8MXX58P1scgd
+	4Wrumzg5JB0zS2sPa9T2Q7h8ENk2EtbWYWN4ySYnEOjF6qnr0ssYfIr1h+4kTg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v6.15 (#1)
+Date: Sun, 16 Mar 2025 18:12:12 +0100
+Message-ID: <87wmco99xv.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufeejudejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteevffejteelkefhveetueeileethfekiefgvdetveevvdelgfdufedtgfeigeevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmeefuggtmegvvgektdemudefvggumehftdehleemrggsvgelmedufeegugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemfegutgemvggvkedtmedufegvugemfhdtheelmegrsggvleemudefgegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopeholhhofheslhhigihomhdrnhgvthdprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtp
+ hhtthhopehsohgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehsvggsrghsthhirghnrdhhvghsshgvlhgsrghrthhhsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhg
+X-GND-Sasl: gregory.clement@bootlin.com
 
 Hi,
 
-One ARM and one Loongson cleanup. I gave half a year for Loongson to explain
-the spidev, but no responses were posted, so I just applied the patch:
-https://lore.kernel.org/all/20240717-preacher-sandal-2aeffa322b9f@spud/
+Here is the first pull request for dt64 for mvebu for v6.15.
 
-Best regards,
-Krzysztof
-
+Gregory
 
 The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
@@ -91,32 +71,82 @@ The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.15
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
+bu-dt64-6.15-1
 
-for you to fetch changes up to 854a080f0b73ff966a813ec2dc53891831daa28d:
+for you to fetch changes up to ed9c2b28ebef3333f25cefdc2ef37ee1f05cad95:
 
-  loongarch: dts: remove non-existent DAC from 2k1000-ref (2025-02-12 21:48:51 +0100)
-
-----------------------------------------------------------------
-Minor improvements inDTS for v6.15
-
-1. ARM Cirrus EP7211: Align GPIO node name to match what bindings
-   expect.
-
-2. Loongson 2K1000: Drop incorrect spidev description, by pretending to
-   have there something else.  This will have impact on the users of
-   DTS, because spidev will stop working, however no counter-proposals
-   of fixing this or even explaining this were proposed for half a year
-   after the patch was posted.  Therefore drop incorrect hardware
-   description, hoping affected users will come if proper one, if needed.
+  arm64: dts: marvell: Use preferred node names for "simple-bus" (2025-03-1=
+5 11:27:04 +0100)
 
 ----------------------------------------------------------------
-Conor Dooley (1):
-      loongarch: dts: remove non-existent DAC from 2k1000-ref
+mvebu dt64 for 6.15 (part 1)
 
-Krzysztof Kozlowski (1):
-      ARM: dts: cirrus: ep7211: Align GPIO hog name with bindings
+device tree clean-up fomr DT maintainers
 
- arch/arm/boot/dts/cirrus/ep7211-edb7211.dts     | 2 +-
- arch/loongarch/boot/dts/loongson-2k1000-ref.dts | 5 -----
- 2 files changed, 1 insertion(+), 6 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      arm64: dts: marvell: armada-8040: Align GPIO hog name with bindings
+      ARM: dts: marvell: kirkwood-openrd: Align GPIO hog name with bindings
+      ARM: dts: marvell: armada: Align GPIO hog name with bindings
+
+Rob Herring (Arm) (9):
+      dt-bindings: marvell: armada-37xx: Add glinet,gl-mv1000 compatible
+      dt-bindings: marvell: armada-7k-8k: Move Armada 8KPlus to schema
+      dt-bindings: marvell: armada-7k-8k: Add missing 7040 and 8040 board c=
+ompatibles
+      arm64: dts: marvell: Drop incomplete root compatible/model properties
+      arm64: dts: marvell: Fix missing/incorrect "marvell,armada3710" compa=
+tible
+      arm64: dts: marvell: Add missing board compatible for IEI-Puzzle-M801
+      arm64: dts: marvell: Move arch timer and pmu nodes to top-level
+      arm64: dts: marvell: Drop unused CP11X_TYPE define
+      arm64: dts: marvell: Use preferred node names for "simple-bus"
+
+ .../bindings/arm/marvell/armada-37xx.yaml          |  1 +
+ .../bindings/arm/marvell/armada-7k-8k.yaml         | 25 ++++++++++++++++
+ .../devicetree/bindings/arm/marvell/armada-8kp.txt | 15 ----------
+ .../boot/dts/marvell/armada-385-clearfog-gtr.dtsi  |  8 +++---
+ .../boot/dts/marvell/armada-388-clearfog-base.dts  |  2 +-
+ arch/arm/boot/dts/marvell/kirkwood-openrd.dtsi     |  4 +--
+ arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi      |  2 +-
+ arch/arm64/boot/dts/marvell/armada-371x.dtsi       | 17 -----------
+ arch/arm64/boot/dts/marvell/armada-3720-db.dts     |  2 +-
+ .../dts/marvell/armada-3720-espressobin-emmc.dts   |  2 +-
+ .../dts/marvell/armada-3720-espressobin-ultra.dts  |  2 +-
+ .../marvell/armada-3720-espressobin-v7-emmc.dts    |  2 +-
+ .../dts/marvell/armada-3720-espressobin-v7.dts     |  2 +-
+ .../boot/dts/marvell/armada-3720-espressobin.dts   |  2 +-
+ .../boot/dts/marvell/armada-3720-gl-mv1000.dts     |  2 +-
+ .../boot/dts/marvell/armada-3720-turris-mox.dts    |  2 +-
+ arch/arm64/boot/dts/marvell/armada-372x.dtsi       |  3 --
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi       |  4 +--
+ arch/arm64/boot/dts/marvell/armada-7020.dtsi       |  6 ----
+ arch/arm64/boot/dts/marvell/armada-7040.dtsi       |  6 ----
+ arch/arm64/boot/dts/marvell/armada-8020.dtsi       |  6 ----
+ .../dts/marvell/armada-8040-clearfog-gt-8k.dts     |  8 +++---
+ .../boot/dts/marvell/armada-8040-puzzle-m801.dts   |  2 +-
+ arch/arm64/boot/dts/marvell/armada-8040.dtsi       |  6 ----
+ arch/arm64/boot/dts/marvell/armada-8080.dtsi       |  6 ----
+ arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi |  3 --
+ arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi |  3 --
+ arch/arm64/boot/dts/marvell/armada-ap806.dtsi      |  6 ----
+ arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi |  3 --
+ arch/arm64/boot/dts/marvell/armada-ap807.dtsi      |  6 ----
+ arch/arm64/boot/dts/marvell/armada-ap80x.dtsi      | 33 +++++++++++-------=
+----
+ .../dts/marvell/armada-ap810-ap0-octa-core.dtsi    |  1 -
+ arch/arm64/boot/dts/marvell/armada-ap810-ap0.dtsi  | 24 ++++++++--------
+ arch/arm64/boot/dts/marvell/armada-cp110.dtsi      |  4 ---
+ arch/arm64/boot/dts/marvell/armada-cp115.dtsi      |  4 ---
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi      |  4 +--
+ arch/arm64/boot/dts/marvell/cn9130-sr-som.dtsi     |  3 --
+ 37 files changed, 78 insertions(+), 153 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-8k=
+p.txt
+ delete mode 100644 arch/arm64/boot/dts/marvell/armada-371x.dtsi
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
