@@ -1,46 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EE622E40E
-	for <soc@lists.linux.dev>; Mon, 17 Mar 2025 10:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E759236426
+	for <soc@lists.linux.dev>; Mon, 17 Mar 2025 10:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742206206; cv=none; b=tlYw3b/SKEO0Q5MGLdEzHVY52vtKhgUPiOWBz/5dd0x+Szk4OrGcCk/XEyEpmpsFKJs/lpxUYNVC+GWAD/+o94hVVRxhcHqOnEVycBvqCi7JpyYhKiN+Tko23x2zdiVTEAnIKoSw5AqZMRyr2h8aCjojbTgvUHTN+AYQpmFSd/E=
+	t=1742206483; cv=none; b=ZvRRMhCAJFoL+J52ceJU+QAi0eQRDWJJoBcBUxpsPz/sHJMPKf5YPMXtc+AyYjANT0JRpwL31wmu4cS9bTGwklPB8esUCgIjjeoyDQsRcDT0t9b7Lm4+QCAD/QSpEVDGQhmv/O7uDD+o3RqiM/s2JT3wkxR3PKQRjpyrxaTBRMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742206206; c=relaxed/simple;
-	bh=3Szj5wF5ZbUz39jIYuPbndv9xsYb6DgjUSNqDwEMsNg=;
+	s=arc-20240116; t=1742206483; c=relaxed/simple;
+	bh=1gZtLBxayCdf5ZFM8fCyYmj67ZQlt8beW6Ly4XUj3qM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YiWvmS5VmHf2OKZ7t+x4qLSKCuYS7q8tQ8E0MUR6L4bO5lIRa7IFynD4/u95wJJlVq/Gv/ToPF+Cdlm9e7cGVGU+7iaepGL9WHsuZ+FQGL/nuEExaP+szGwzdYnEWT7jjCl0hT+ym8DJTkH91AJ5zDwSNdhTYzmjItgsMrgTZ9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=Dlo/SJqL; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="Dlo/SJqL"
+	 Content-Type:Content-Disposition:In-Reply-To; b=gE2wXBtSBor0RgvEcfCWsgdO8a9Uucd2gNjkCNRoSPt9mR6nghwOCTGLLCaTZ0jmkJS0YiTkhibZb1pMKtR7vpoJinsbG7+Cipp0jXcc7awgS/5S9fHRqyB7CgEGydp3Dwz1Huus8K17jw66zBEHD61lnHAy+owLyzlT3SCZIPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 9BEB9C4AF0B; Mon, 17 Mar 2025 10:10:04 +0000 (UTC)
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 8AF66C4CEE3; Mon, 17 Mar 2025 10:14:42 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 48A87C4CEE3;
-	Mon, 17 Mar 2025 10:10:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 48A87C4CEE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id A721A1F9C6;
-	Mon, 17 Mar 2025 11:08:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1742206197;
-	bh=P8Ujcum6E5ZyBkLtNFz3d+3PSE+5NcMmFP0XdAoXkTA=; h=From:To:Subject;
-	b=Dlo/SJqLa+P+LMV5xO6L6O/4+Ulk9QlNrapzC/mGCPVv4EPNTRkIi7xFRujd8aXvV
-	 L6OogSWKuRxLz1pWGMTNDGYJmf6KVwqAsSweu+JlYnyeVDyGtQ/Td5tnRSrmOWNx5S
-	 1NODWvTgYktH8wGHQhNARQ3YppG3kjL8cyPX25UPJF1rixCB7JmlMIKGtvE1DV0hlC
-	 soj3iSTa4h28gbj4B9av3+Df1z3xswRFberuFnM2N0AImutvfUNrrBvjcw8ExgjCIC
-	 zV0CqPAC95+EusZxmOjzDwaMI+MUZvbQN413zE9DfhFCKYTWnNJrkOmXBaJVBYsnxH
-	 KRvz1a9quwdnQ==
-Date: Mon, 17 Mar 2025 11:08:56 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
+	by smtp.kernel.org (Postfix) with ESMTPS id 56954C4CEE9;
+	Mon, 17 Mar 2025 10:14:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 56954C4CEE9
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: Ju17TKEbSfKf02hY3up+xQ==
+X-CSE-MsgGUID: PXisr1AETuqBxNHWF6Vrgg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11375"; a="43426471"
+X-IronPort-AV: E=Sophos;i="6.14,253,1736841600"; 
+   d="scan'208";a="43426471"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 03:14:40 -0700
+X-CSE-ConnectionGUID: nu+r8NFwSt21pzBBJiyiug==
+X-CSE-MsgGUID: vgoUrolKS1CIjqT885NVtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,253,1736841600"; 
+   d="scan'208";a="126761470"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 03:14:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andy@kernel.org>)
+	id 1tu7UP-00000003HEL-1Ug0;
+	Mon, 17 Mar 2025 12:14:33 +0200
+Date: Mon, 17 Mar 2025 12:14:32 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Hans de Goede <hdegoede@redhat.com>,
 	Emanuele Ghidoli <ghidoliemanuele@gmail.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -49,13 +52,14 @@ Cc: Francesco Dolcini <francesco@dolcini.it>,
 	Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, Andy Shevchenko <andy@kernel.org>,
+	soc@kernel.org,
 	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Subject: Re: [RFC PATCH v1 0/2] platform: toradex: Add toradex embedded
  controller
-Message-ID: <20250317100856.GC17428@francesco-nb>
+Message-ID: <Z9f2CE7cI4ODkM8O@smile.fi.intel.com>
 References: <20250313144331.70591-1-francesco@dolcini.it>
  <4596db59-51fc-4497-9e94-670e9533e7aa@redhat.com>
+ <20250317100856.GC17428@francesco-nb>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -64,91 +68,32 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4596db59-51fc-4497-9e94-670e9533e7aa@redhat.com>
+In-Reply-To: <20250317100856.GC17428@francesco-nb>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hello Hans,
-first thanks for the feedback.
+On Mon, Mar 17, 2025 at 11:08:56AM +0100, Francesco Dolcini wrote:
+> On Thu, Mar 13, 2025 at 04:08:14PM +0100, Hans de Goede wrote:
+> > On 13-Mar-25 3:43 PM, Francesco Dolcini wrote:
 
-On Thu, Mar 13, 2025 at 04:08:14PM +0100, Hans de Goede wrote:
-> On 13-Mar-25 3:43 PM, Francesco Dolcini wrote:
-> > From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > 
-> > This series adds support for the Toradex Embedded Controller, currently used
-> > on Toradex SMARC iMX95 and iMX8MP boards, with more to come in the future.
-> > 
-> > The EC provides board power-off, reset and GPIO expander functionalities.
-> > 
-> > Sending it as an RFC to gather initial feedback on it before investing more
-> > time in testing and adding the remaining functionalities, with that said both
-> > the code and the binding are in condition to be wholly reviewed.
-> > 
-> > Emanuele Ghidoli (2):
-> >   dt-bindings: firmware: add toradex,embedded-controller
-> >   platform: toradex: add preliminary support for Embedded Controller
+...
+
+> > 1. A drivers/mfd/ MFD driver with the regmap stuff,
+> >    registering "board-reset" and "gpio" cells
 > 
-> Thank you for your patches.
+> So, we considered the idea of going with an MFD driver, but looking at
+> drivers/platform/cznic, that is doing something relatively close to what
+> we are doing (just more feature rich, as of now), drivers/platform/
+> seemed a better fit.
 > 
-> 2 remarks, as Andy already hinted at drivers/platform/arm64/ likely
-> is a better location for this.
+> I am not 100% sure what's Andy opinion on this topic, from what I can
+> understand his concerns are about the toradex directory (that we'll get
+> rid of), not the drivers/platform/ parent you are concerned about.
 
-Ack.
+Yes, my point is to have this inside existing folder whatever you decide
+with the maintainers of the respective subsystem to be.
 
-This driver is not going to be specific of ARM64, but today we have only
-ARM64 systems that would benefit from it. We might as well use it on a
-RISCV based SoM in a few years.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-With that said we'll move it there, we can always move it out if
-anything changes on this regard.
-
-> The reason for having ARM EC drivers there is that these are for
-> x86-pc-like laptops with all the typical laptops bells and whistles
-> like EC handled battery charging limits / spk/mic mute-leds built
-> into keys on the keyboards. Special key handling (like mute, kbd
-> backlight) done by the EC etc.
-> 
-> Since all the experience for dealing with those laptop-esque features
-> and exporting them to userspace with a consistent userspace API is
-> in hands of the maintainers of drivers/platform/x86 it was decided to
-> add a new drivers/platform/arm64 directory maintained by the same folks.
-> 
-> If this EC driver's only functionality is: "The EC provides board
-> power-off, reset and GPIO expander functionalities." I'm not sure
-> that drivers/platform/arm64 is the best place for this.
-
-The directory decision / architecture was mainly inspired by
-`drivers/platform/cznic`.
-
-This EC is used on a SMARC SoM [1][2], so we are not talking about a
-laptop nor a device with a keyboard.
-
-But we do have a power button, a LID switch, some handling and
-coordination of low power mode and more.
-This device is between the SOC, the PMIC, and various IOs used for
-low-power, power-up/down, boot configuration (selecting the boot
-device), ...
-
-The short term goal is just the 2 basic functionalities mentioned in
-the cover letter available to the driver:
- - power/reset (already implemented)
- - GPIO (working on it as we speak)
-
-Starting small, and adding features when/if required.
-
-> Also you mention GPIO expander, but that does not seem to be
-> supported yet?
-Correct, coming soon.
-
-> 1. A drivers/mfd/ MFD driver with the regmap stuff,
->    registering "board-reset" and "gpio" cells
-
-So, we considered the idea of going with an MFD driver, but looking at
-drivers/platform/cznic, that is doing something relatively close to what
-we are doing (just more feature rich, as of now), drivers/platform/
-seemed a better fit.
-
-I am not 100% sure what's Andy opinion on this topic, from what I can
-understand his concerns are about the toradex directory (that we'll get
-rid of), not the drivers/platform/ parent you are concerned about.
-
-Francesco
 
