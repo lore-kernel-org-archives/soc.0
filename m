@@ -1,77 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A4021A453
-	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 22:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AEF1E521A
+	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 22:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742422318; cv=none; b=rFnP5qPpDrGL7NCiE8wBq+QfpYrU/KKCukvZP/d35IE4OyAms72WqHKD2sgYOHlJS38zbyj4r2hLUWkNL9FfwWjt/sXDgEz+2qKbWxph882VfpQ7L7KLo96ZiChgXX1GuCpmIZQ/777yxRLPNQNSqyElUqGLmOOnsrE8V6LQDCY=
+	t=1742424384; cv=none; b=Q+6Hu9j1/ud0BEjB5HFSfxkx+ye1dswcSLn7SQE8PMdNTOpyyBPKNAbhlhGofcWawZOc2UWSo5cQ2BrHS+TuYyzsQSuLH5MkMnzA7uE2yLxOtuQOioGqSp9zFKJSyzR6T/ssgiZjJN5NKL1qkZiD3oedc6EIhYVr3c9x3mJY9Do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742422318; c=relaxed/simple;
-	bh=j2xycXPU7qrDNwUq1NESsX+7G3BLeXLehtQKYO/QyUM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=K8pE6mBhnQY98Bv3IWztJR1uyXQaXfVJ8bImMDiW95SaUVshuUmzrfFjqn7v7CWAaJUUIiw6OIZ8zaytIp7N4l0tV31pueiBQonT3R+J5PmK1yhB90Yoba5L1w12Hu5QngqCsaPTxOLc6Ia5kxmWeJieopGDoHHbfTaW+dr3tpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAWs5RF6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742424384; c=relaxed/simple;
+	bh=bRQIvZ3jaUBwceFPvK/o3Jqmpa0wMuq6j3XaA0hEZLI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dcV/SL4A20kViqwT7DUAa7W2w9DtqAgrNdfTu9w2wwMLddEKx8aHQFgbZG+seyCo5y4mtjEr2m5qVfkDQ1dTk5GH3JaNyDoVqBUr47XbwghO31yN6VrcHNXEX0SUEeNCggabinFI8bQsMMFG1gUFEA1zpaIdtRxrANYjOzgyFwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=f0ss3yx+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAWs5RF6"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="f0ss3yx+"
 Received: by smtp.kernel.org (Postfix)
-	id CA20CC4CEEA; Wed, 19 Mar 2025 22:11:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3ADCC4CEE4;
-	Wed, 19 Mar 2025 22:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742422317;
-	bh=j2xycXPU7qrDNwUq1NESsX+7G3BLeXLehtQKYO/QyUM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gAWs5RF6zbDhaYWxbC41Y7SfQHlwKSvZ6Bt9B46yqRYqynQejT/sTLnAWufne4YNR
-	 g3T9Zkf8xvPiTT7CIykzYUDok5/pVs5U0p5aQiLI7+lsg4CWhzZOzMBYjIOk2jyacB
-	 foZJBXeAJ7CFj+paBChoiQe64pmIRKBxHDyeOcGRrD838nlay2Urz0mUjV1Zg0ywIR
-	 4YY+4ktPbrdC59/vJBdRQtf5Xdmr/E7HsVHzdsBm3x/82y73Ma8YkxbsTggMhGnJaj
-	 B62BQ1JBfGDlcvND9C8P7/Wja5SE15iWV/At9LmJhs9Jl5EgMi9iIlRYWYfXwsrmAU
-	 tAaOIFqcIqKmQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD8D3806654;
-	Wed, 19 Mar 2025 22:12:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 2D3FFC4CEE7; Wed, 19 Mar 2025 22:46:24 +0000 (UTC)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1E57CC4CEE4;
+	Wed, 19 Mar 2025 22:46:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E57CC4CEE4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22435603572so1331235ad.1;
+        Wed, 19 Mar 2025 15:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1742424382; x=1743029182; darn=kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bRQIvZ3jaUBwceFPvK/o3Jqmpa0wMuq6j3XaA0hEZLI=;
+        b=f0ss3yx+vg7JKFhak1sUAdCOng0VOCuSMMQaMEZ0kCDCs94a4YnMtTzF960owGVNFU
+         TmCBbDyPj61Q0zdivTwp5/y1tiYW1ss2dnl8xwZNIOKdVdkN7lYWlU0qxxESrFqQ9tJc
+         38n9SL7XyF+F3d4sKy/6ooZeHlVJtxF9QWdvfnUORgkpeYta1H0RV8hyt/Gq3WA1DaGy
+         pODDHlCih3uv4THk7WH7hhLwnickjbF7ifTgZ47pm0vmlo3fMjNiXp120NoSCaMVpRgU
+         FknsuTO7WASaTDQmLvNcQoNrFu/kdKOSe+nsr+wzVtIiPnmmm7dV4HQLecJoRcd2z63Y
+         OFiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742424382; x=1743029182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bRQIvZ3jaUBwceFPvK/o3Jqmpa0wMuq6j3XaA0hEZLI=;
+        b=Ho4K7/Teku7NlSZD2YGBX1AYfgWu3VUc4YsR1XHsH9gbFBhcBPAAj7xMegD7fW5U4D
+         iKzmohznkHJ8wju4bZCID+7osNOYp6LcG9Mhx3JY9IHZDfpgkfIok0F24JXH7KyPbmWQ
+         pYRfFP4cvIwkITmD6Z4GPFEkoh1YrV3vonSdxUGksxrlpHVhKJYIU3OUfpzWOx9ET51g
+         SgePExoykrzN5aqRGlqeKqgEA8Lepu7wPI4k0e2wqqOBmS1itQ7HgQBhzGctnP64++y/
+         jh9iMRTgWL9ptpKOwOHyrkyrqYMqTRuWVzjklSOwSl1JB5eOkZErBoKd+X9OoKhAFDHE
+         C4Lw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTtrTjkTbavcv9stBiXwc32nvEIRNYmVi9QoBW+Z+ZXtSNsYZucRbKdmDSmYgXWlylZ0jP@kernel.org, AJvYcCWE2w/ZF2gKMqEZb2VhSq2SwxUswb/jur03gvv37WZobjSOwFc6rRBkUSfuTIrq6pgC+iE=@kernel.org
+X-Gm-Message-State: AOJu0Yw3gPtVoigFabtVLqlFv47BjO4XKtVRJ9ZKLFLQVrWqnhDH8mtJ
+	+V8VokE4rcHXbqlKF1hyF0GwXC6EcCZoY/4K/uBKi9mD8flx2Jnm1r+JsRugclAEBvJnAvx9wEu
+	6WIHWqAUWWPEtI4ZNzmwSDFPnHAs1sI31
+X-Gm-Gg: ASbGncu6AI1tkJkg83/uAP/D2v4b3Dd58VOYB8soQ2MhHFiWv8ijKI22DHLQb4g9Gkx
+	X9Q9qw51WdX3a4yZysz4Lz3mMlr7TpwfEyWERqQpzsLbG7Xo8TtebERPkmEevz5PwZBI+UVb7xs
+	fwB8FNhIQVnWF3az4lLbFGaHxGkhYAWLcrG0yzUZqeIeah57aZ4tLZvqfUnrI=
+X-Google-Smtp-Source: AGHT+IG8GiaDjf3sdv7Ye3FkTV+AEaDW7f6KYxRvPyZsM3yaqLJDqBbKlA9xkI4sNwT7OOGxYzetDJTJZ5N5BHjlaJM=
+X-Received: by 2002:a17:903:32ce:b0:224:2a6d:55ae with SMTP id
+ d9443c01a7336-2265ee924fbmr16165715ad.48.1742424382296; Wed, 19 Mar 2025
+ 15:46:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Allwinner device tree changes for 6.15
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <174242235325.1211847.10829799089937617839.git-patchwork-notify@kernel.org>
-Date: Wed, 19 Mar 2025 22:12:33 +0000
-References: <Z9LTOHJDY2p0lNG0@wens.tw>
-In-Reply-To: <Z9LTOHJDY2p0lNG0@wens.tw>
-To: Chen-Yu Tsai <wens@kernel.org>
-Cc: soc@kernel.org
+References: <41ced8db-caeb-4deb-9193-9802fc603180@linaro.org> <47683e40-aa0e-4d86-9226-94f7d56f34ae@app.fastmail.com>
+In-Reply-To: <47683e40-aa0e-4d86-9226-94f7d56f34ae@app.fastmail.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Wed, 19 Mar 2025 23:46:11 +0100
+X-Gm-Features: AQ5f1JpBHXJRBsjDf382ohz1oHEzy_ztXE_MKlrqlUkHAd_fr7KlcjqRE5tCQhw
+Message-ID: <CAFBinCCY4-sETrXoi5ELjXhnUYB+6q+A3M2FqaGCFprBxe31kA@mail.gmail.com>
+Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.15
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, soc@kernel.org, arm <arm@kernel.org>, 
+	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi Arnd,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+On Wed, Mar 19, 2025 at 9:58=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Mon, Mar 17, 2025, at 17:13, Neil Armstrong wrote:
+> > Hi,
+> >
+> > Here's a changeset for Amlogic ARM64 DT, also switching to the new PWM =
+bindings,
+> > adding pinctrl support for Amlogic A4 SoC with a brand new binding styl=
+e then
+> > finally gpio_intc node for Amlogic A4 & A5 SoCs.
+>
+> I'll skip this one for 6.15, seeing that the branch contains both
+> driver and devicetree changes, which messes up the way I send
+> the contents.
+There's an immutable branch in the linux-pinctrl tree from Linus.
+I'm not sure on the exact process here (whether the contents of the
+tag are fine and we're "just" missing a description, ...) so I'll let
+Neil comment on this.
 
-On Thu, 13 Mar 2025 20:44:40 +0800 you wrote:
-> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
-> 
->   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi-dt-for-6.15
-> 
-> [...]
+> From the description I also can't tell to what degree there is
+> backwards compatibility in the new binding, I assume the changed
+> PWM and pinctrl drivers continue to work find with the old dts
+> but not the other way round, which is why you sent them together?
+The PWM part is backwards compatible. The bindings are upstream since
+commit 5fd61cc28171 ("dt-bindings: pwm: amlogic: Add a new binding for
+meson8 pwm types").
+The mentioned pinctrl binding / driver is completely new for the A4
+SoCs, so there's nothing to be backwards compatible with.
 
-Here is the summary with links:
-  - [GIT,PULL] Allwinner device tree changes for 6.15
-    https://git.kernel.org/soc/soc/c/877fb9a3ca78
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Neil, for me it's fine to skip this one for 6.15 if it causes too much
+work on your side.
+Using the old PWM bindings for another release won't hurt anyone.
+And I think the same goes for A4 pinctrl support as well as GPIO
+interrupt controller nodes for A4/S5.
 
 
+Best regards,
+Martin
+
+
+[0] https://lore.kernel.org/linux-gpio/CACRpkdZg-9Zr3f7zG36x7jGvT46FRfRJ40k=
+hNZDdYb01-BGigw@mail.gmail.com/
