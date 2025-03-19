@@ -1,64 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C33E10E0
-	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 20:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBC620C47B
+	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 21:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742417871; cv=none; b=UvL/X+C307jYuyUrVzyIMDldJN7ac/IyPN9oZstES1aRE7XmciW44IVOlM41ZaGgvA96Gn4yl8Ifxi/ku386SOMbjBm7oVi0yG/2kFA7bTbH18RjDVDIDcSXKz5CM/BIRsD9XKGnG9nTu3oeN4gyVC6jo886TnRZy5YyzvxtYqs=
+	t=1742418658; cv=none; b=pjZW/L6KaJGMwWfI1fx7WawEgSMU/zlY0z9K2pxTGWoXrstvOOIcMghGFaPyKnl+4Z91hLTeJ9uSqN50vgszIEmDkoJlMKpOXHTG5HpYtxpb4s3ittLYf73hL+KzhobVrIszSLQfCI2oZ3cEG7eBc75UV+nf5N+lrsEWf4iLJ20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742417871; c=relaxed/simple;
-	bh=didVpRF8etF3lv/r5tR3PtYFbmfadjQwYcaXhqGPTyo=;
+	s=arc-20240116; t=1742418658; c=relaxed/simple;
+	bh=MgD3HLY2HGIP0HqnoemlcRxxKSFENiGEGKcBl0GOzPI=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=lc5o8YgHA4RcgNydAV867rnhU+2/Jji8FxtVAApv8UQ0ib5UVUt+W1OZJmHHhOUmhrmruo4kGTNrIPFShCnatunaoF7AXyp8CLeKGF+qjXVIA10EyVCKL193rkIL0e0vU1/pj3yM8JZTlwAA9NgqW3WW8nXQWi4OocsDnB8HwiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Y3U9stg7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=b3vwGiTD; arc=none smtp.client-ip=10.30.226.201
+	 Subject:Content-Type; b=Ds1ejl7sHj31vMCc3ieFRNcYqGrTUt+m9YaY+FFC3+ipm6Om2XgoIVAunJoTCoznYhY5NlG35dIFamSRXUj6QS7ZIC2SEJEBxl9eUtOQ5hA5o9s/JSYQt6sBU1vRvHRN/X0TdYOlELVbak37lhPA5bZXNjM46A8T4FEA2ms4CQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NKKATCAn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Z5NzrRAA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Y3U9stg7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="b3vwGiTD"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NKKATCAn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z5NzrRAA"
 Received: by smtp.kernel.org (Postfix)
-	id 0880DC4CEEA; Wed, 19 Mar 2025 20:57:51 +0000 (UTC)
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+	id E56E6C4CEED; Wed, 19 Mar 2025 21:10:57 +0000 (UTC)
+Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01757C4CEE4;
-	Wed, 19 Mar 2025 20:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01757C4CEE4
+	by smtp.kernel.org (Postfix) with ESMTPS id 53CE8C4CEE4;
+	Wed, 19 Mar 2025 21:10:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53CE8C4CEE4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfout.stl.internal (Postfix) with ESMTP id A92C9114008E;
-	Wed, 19 Mar 2025 16:57:47 -0400 (EDT)
+	by mailflow.stl.internal (Postfix) with ESMTP id 39ABA1D41694;
+	Wed, 19 Mar 2025 17:10:54 -0400 (EDT)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Wed, 19 Mar 2025 16:57:47 -0400
+  by phl-compute-07.internal (MEProxy); Wed, 19 Mar 2025 17:10:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742417867;
-	 x=1742504267; bh=HBQaX6usdhvuzJxt9TKGHGOwd1AovcnWdd6AKE2CtsA=; b=
-	Y3U9stg7L1Fvfl5tP+f2BIWNxWWVW5b+XvzccjxM5viokZMXdFHIYCilADloh58S
-	SCYtVAvNEKA2aYxiprSoyIlNNTl6cI7boUawoHZqnKQIw3OhHdVMuqCmUyorgtIf
-	70ZjKjjdsK/wWj+PxHgDW73BomaYAUJAcidjjxiB8Sa2M35Z0IXK5f5jx4BRqZia
-	VO/+i20HX+hbJLgm7Jy9kK/CbNqDlIYWSIBSKjR7GDn7SpxKINQWRE2AHxhWiY5C
-	tCsBGrnAEgCi/hJZ3bszjwppm7LPnuIHUmC/QeomIL84WUtqNQMiemgD9mVPEGdc
-	IWAgQd8uRZQE30LxTouznw==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742418653;
+	 x=1742425853; bh=W/CPU9v6dAGBa5E9dwjyEzCj7Km+PD0nJH8uf/bu4jo=; b=
+	NKKATCAn0VX7Ihv8xuf0fnvj3bsQiQRRutFV6XkWJ65/pq1IM7ThfVy33XYOSJHt
+	dTDVg11aJs6+wHWPjkTwKztahAbtZfGgYI/Q9R0oVDlJb0PyuAukPh72Aw4qu0LS
+	hZaCF0F5kqgavg/UgZuqAPsGuIG2dLI2E9mdvMttzItimqPxrAYFHoYQ0LLQ2yvT
+	JlEZ3qmhFBW5gVKtkqca3GZ/V0qr/5gq8Zpp8U/jlRqrlSQ7KqdJskc2/3CyFA9I
+	GaTaT9htC8gHzQp6n+EtcGEAEOmvdSzI2Ruzk/kdxk4FDfX8FePSP1G7kFUeyE4g
+	3fy4xGqdZFDKu9ewGeyHqQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742417867; x=
-	1742504267; bh=HBQaX6usdhvuzJxt9TKGHGOwd1AovcnWdd6AKE2CtsA=; b=b
-	3vwGiTDMtYSBsKz34GB5iokG2K5fYzTdfEpMUJxLuod1zww4FMk69r3oVRtg6jbp
-	vpFPYEZviPElLob0DfvlcTbXjgTZbpa0d9JtHBJp2wdH4wrTseKTRh7WCrcTsPIk
-	P5LjpIHJ+ntTroJJvi9cJUMA8m1AlFATfWYeQlHmdqVBhd4M0mh9br5eTxZIAIr/
-	Hq796XvYUcowIoyLbTHf6wpD4+yULSufrzz+knLTB/O7xMtI7LSLJcRU2SEegGHk
-	q4IYAQavRVzG1S7x8RrbmQRTLyHmwH9tavIpRuVe06Lfcr3U2x+aVe0ypvhjiFTt
-	EpF1HGXVNdrWS+8iRfSmw==
-X-ME-Sender: <xms:yy_bZ0Ro8AKP90Dnn3cx82OgcXZJA6IoTHCmJ2Sfs3B-QOa3a_FonQ>
-    <xme:yy_bZxyZr5ydY9o2W3Ait5DFtFry3Ls0bhTgd-lKxtlU7oUjtgfyhSvb0thni1_B4
-    WwXKHc0-vbx8B7d1eU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeeifeehucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742418653; x=
+	1742425853; bh=W/CPU9v6dAGBa5E9dwjyEzCj7Km+PD0nJH8uf/bu4jo=; b=Z
+	5NzrRAAgQzF65e6QYHOxMfnHavEdq6p0phDF1GDyt0rEeArdNaTBDLRpZrIVg2iM
+	YNlJuwL6VFyQkhfyG6jyraO0G8KanVyapFXV2jxJCGDKXyVkPnJ6nYmEMEjCyHMc
+	i7dvwasL11mVWV/XdMlR67/wylB1MFcO/cNEL0YrEwMxRGmARJhjbUvuLDHrrM5G
+	QmOLjoZEkHWXkP2rhs4v39PbM4hrBiEau6hGWbcsxxRHyI1infxc4Qc04hY/jJib
+	tbykM6tdlalgl/dki7SqjkqC/rhEIvMQNC5bhSE8+aA7TY3vt4r7J1MG/CK87RUY
+	MmLkcbhcUl/JbX0AGR3fQ==
+X-ME-Sender: <xms:2zLbZ8TYWBr923ILGRDI4nXzyCFBKFUI9qP2-kpihxcdNzLKPwZU0A>
+    <xme:2zLbZ5x_Oh_JENN_Y10KBTs6n3d94KDEk4kWEiY1h9bwfCQBAWgZ15iSE-f8QEmHw
+    _ItovvA8C-4bqbSpnE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeeifeejucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
     gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
@@ -66,20 +66,22 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeeifeehucetufdote
     gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
     fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
     hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghrmheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvihhl
-    rdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqd
-    grmhhlohhgihgtsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohep
-    lhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorh
-    hg
-X-ME-Proxy: <xmx:yy_bZx2xg99sRZ9LVUvC4WvR7jrZa8Kj24vDhgO-Ra1rf0odXTZUBw>
-    <xmx:yy_bZ4Dj0S2SDPqefK-Fer9GKjWsFosQVmdXr0Sa4QFKIAydV-gRHw>
-    <xmx:yy_bZ9ihBgsrPkPiIzHMNVe3YwqiD4_S5hSI-oRl1olTAr1ITlpP-w>
-    <xmx:yy_bZ0qVQavu-oJxO9eN1zr6JOVGDkucIY0r7wWybtjpE0aepZp9xA>
-    <xmx:yy_bZ9fldrYOTNY9XYK7C8UFvg5CkZpbF1lloWWiVfaV7IgDNqDLSutD>
+    fedupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehluhgtrgdrfigvihhsshesfh
+    grihhrphhhohhnvgdrtghomhdprhgtphhtthhopegrlhgvgidrvhhinhgrrhhskhhishes
+    ghhmrghilhdrtghomhdprhgtphhtthhopehmihhtlhhtlhgrthhlthhlsehgmhgrihhlrd
+    gtohhmpdhrtghpthhtohepfihojhgtihgvtghhrdhslhgvnhhskhgrsehgmhgrihhlrdgt
+    ohhmpdhrtghpthhtohepuggrnhhilhgrsehjihgrgiihghgrrdgtohhmpdhrtghpthhtoh
+    eprghmrgguvghushesjhhmuhdrvgguuhdrtghnpdhrtghpthhtoheprghnuggvrhhsshho
+    nheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrmheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepkhhonhhrrgguhigstghioheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:2zLbZ53Vvr2l6NIOm3qKZGZyvVj-CyCoqEwprSlhiIi_9rXNm9SFmA>
+    <xmx:2zLbZwBuy5UzuJ3S6L-dwBAver38lEXufQES6EfCaHYLBmO8XQfZrQ>
+    <xmx:2zLbZ1iatTC3rBPg_gDfxAFQUdiKwQe9GR5ePUCssPi2ixaUYZsZrA>
+    <xmx:2zLbZ8pjBAAMXHJ4L6Kw2yipjWmIv5bol3F_QuOtnErVO_SzuM4q5g>
+    <xmx:3TLbZ5A9xvJcehRcNbNvP1fAi4uRuiZm9MbXa3iN9Q3C1txCmT0H9S7C>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EA0922220073; Wed, 19 Mar 2025 16:57:46 -0400 (EDT)
+	id 933112220072; Wed, 19 Mar 2025 17:10:51 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -87,33 +89,81 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T9389b2994c5a6e59
-Date: Wed, 19 Mar 2025 21:57:26 +0100
+X-ThreadId: Tb672cc3182dc66af
+Date: Wed, 19 Mar 2025 22:10:31 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Neil Armstrong" <neil.armstrong@linaro.org>, soc@kernel.org,
- arm <arm@kernel.org>
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Message-Id: <47683e40-aa0e-4d86-9226-94f7d56f34ae@app.fastmail.com>
-In-Reply-To: <41ced8db-caeb-4deb-9193-9802fc603180@linaro.org>
-References: <41ced8db-caeb-4deb-9193-9802fc603180@linaro.org>
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.15
+To: "Bjorn Andersson" <andersson@kernel.org>, arm <arm@kernel.org>,
+ soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Chukun Pan" <amadeus@jmu.edu.cn>,
+ "Stephan Gerhold" <stephan.gerhold@linaro.org>,
+ "Aleksandrs Vinarskis" <alex.vinarskis@gmail.com>,
+ "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>,
+ "Luca Weiss" <luca@lucaweiss.eu>, "Pengyu Luo" <mitltlatltl@gmail.com>,
+ "Alexey Minnekhanov" <alexeymin@postmarketos.org>,
+ "Danila Tikhonov" <danila@jiaxyga.com>,
+ "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+ "Manikanta Mylavarapu" <quic_mmanikan@quicinc.com>,
+ "Nikita Travkin" <nikita@trvn.ru>,
+ "Praveenkumar I" <quic_ipkumar@quicinc.com>,
+ "Tingguo Cheng" <quic_tingguoc@quicinc.com>,
+ "Cheng Jiang" <quic_chejiang@quicinc.com>,
+ "Janaki Ramaiah Thota" <quic_janathot@quicinc.com>,
+ "Konrad Dybcio" <konradybcio@kernel.org>,
+ "Lijuan Gao" <quic_lijuang@quicinc.com>,
+ "Luca Weiss" <luca.weiss@fairphone.com>,
+ "Mark Kettenis" <kettenis@openbsd.org>,
+ "Maulik Shah" <maulik.shah@oss.qualcomm.com>,
+ "Rajendra Nayak" <quic_rjendra@quicinc.com>,
+ "Rakesh Kota" <quic_kotarake@quicinc.com>,
+ "Viken Dadhaniya" <quic_vdadhani@quicinc.com>,
+ "Wojciech Slenska" <wojciech.slenska@gmail.com>
+Message-Id: <a2132f78-f113-460a-b7ea-022a39e4e64b@app.fastmail.com>
+In-Reply-To: <20250317215921.2031880-1-andersson@kernel.org>
+References: <20250317215921.2031880-1-andersson@kernel.org>
+Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v6.15
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 17, 2025, at 17:13, Neil Armstrong wrote:
-> Hi,
+On Mon, Mar 17, 2025, at 22:59, Bjorn Andersson wrote:
 >
-> Here's a changeset for Amlogic ARM64 DT, also switching to the new PWM bindings,
-> adding pinctrl support for Amlogic A4 SoC with a brand new binding style then
-> finally gpio_intc node for Amlogic A4 & A5 SoCs.
+> Krzysztof Kozlowski (17):
+>       arm64: dts: qcom: sa8775p: Partially revert "arm64: dts: qcom: 
+> sa8775p: add QCrypto nodes"
+>       arm64: dts: qcom: qcs8300: Partially revert "arm64: dts: qcom: 
+> qcs8300: add QCrypto nodes"
+>       arm64: dts: qcom: x1e80100-slim7x: Drop incorrect 
+> qcom,ath12k-calibration-variant
+>       arm64: dts: qcom: msm8998: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: qrb2210-rb1: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: qrb4210-rb2: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sc7180: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sdm845: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sda660-ifc6560: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sm6115: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sm8150-hdk: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: qcm6490: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sa8775p-ride: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sc8280xp: Switch to undeprecated 
+> qcom,calibration-variant
+>       arm64: dts: qcom: sm8250-elish: Switch to undeprecated 
+> qcom,calibration-variant
 
-I'll skip this one for 6.15, seeing that the branch contains both
-driver and devicetree changes, which messes up the way I send
-the contents.
+This seeems to remove the properties that the drivers expect
+even in 6.14-rc7, so the branch is currently broken and I'll
+skip it for 6.15. Let's see how we should handle this properly
+in the next cycle, since it's too late now to fix it.
 
-From the description I also can't tell to what degree there is
-backwards compatibility in the new binding, I assume the changed
-PWM and pinctrl drivers continue to work find with the old dts
-but not the other way round, which is why you sent them together?
-
-     Arnd
+      Arnd
