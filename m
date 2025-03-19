@@ -1,128 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AEF1E521A
-	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 22:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F74219A7E
+	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 23:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742424384; cv=none; b=Q+6Hu9j1/ud0BEjB5HFSfxkx+ye1dswcSLn7SQE8PMdNTOpyyBPKNAbhlhGofcWawZOc2UWSo5cQ2BrHS+TuYyzsQSuLH5MkMnzA7uE2yLxOtuQOioGqSp9zFKJSyzR6T/ssgiZjJN5NKL1qkZiD3oedc6EIhYVr3c9x3mJY9Do=
+	t=1742428446; cv=none; b=r/TDqkRmF11ih0J9s3excYHtoy8aZoeBzim8YBrJAqYdiLsb4Hjo4fbNjspA67avmnnZPQ+gbcuZtNSXlhgIvhb3ylLF7e++UcYM2u414QmQXtw9cHyufWbSqjO+hk0D8CWgyAVlIjSDcYKVyjcsfG657SY7KRG1DYkzPnpGEYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742424384; c=relaxed/simple;
-	bh=bRQIvZ3jaUBwceFPvK/o3Jqmpa0wMuq6j3XaA0hEZLI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dcV/SL4A20kViqwT7DUAa7W2w9DtqAgrNdfTu9w2wwMLddEKx8aHQFgbZG+seyCo5y4mtjEr2m5qVfkDQ1dTk5GH3JaNyDoVqBUr47XbwghO31yN6VrcHNXEX0SUEeNCggabinFI8bQsMMFG1gUFEA1zpaIdtRxrANYjOzgyFwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=f0ss3yx+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742428446; c=relaxed/simple;
+	bh=7RekwUfkoHYK7xoBSfoTC6PWgqYTLBcv9i3XxayHMrg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AS0Ap4XH4zLXDrtrXRjSBbzw+UImweMFTTmAQ5M39SbE2AsnHHooFo7J1dnBsCxTzAIx+fyAmPoISEHSJgIfZhrYifNHgI6Gm1uW8UvT3l/BHQRijr2fhutjgnJWTYvZ60a91O4ITzz+8BruLjHuAKy/oaC6YPvT/N/hbNMHo0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=bOIei5bP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="f0ss3yx+"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="bOIei5bP"
 Received: by smtp.kernel.org (Postfix)
-	id 2D3FFC4CEE7; Wed, 19 Mar 2025 22:46:24 +0000 (UTC)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 4C2AAC4CEEA; Wed, 19 Mar 2025 23:54:06 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E57CC4CEE4;
-	Wed, 19 Mar 2025 22:46:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E57CC4CEE4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22435603572so1331235ad.1;
-        Wed, 19 Mar 2025 15:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1742424382; x=1743029182; darn=kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bRQIvZ3jaUBwceFPvK/o3Jqmpa0wMuq6j3XaA0hEZLI=;
-        b=f0ss3yx+vg7JKFhak1sUAdCOng0VOCuSMMQaMEZ0kCDCs94a4YnMtTzF960owGVNFU
-         TmCBbDyPj61Q0zdivTwp5/y1tiYW1ss2dnl8xwZNIOKdVdkN7lYWlU0qxxESrFqQ9tJc
-         38n9SL7XyF+F3d4sKy/6ooZeHlVJtxF9QWdvfnUORgkpeYta1H0RV8hyt/Gq3WA1DaGy
-         pODDHlCih3uv4THk7WH7hhLwnickjbF7ifTgZ47pm0vmlo3fMjNiXp120NoSCaMVpRgU
-         FknsuTO7WASaTDQmLvNcQoNrFu/kdKOSe+nsr+wzVtIiPnmmm7dV4HQLecJoRcd2z63Y
-         OFiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742424382; x=1743029182;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bRQIvZ3jaUBwceFPvK/o3Jqmpa0wMuq6j3XaA0hEZLI=;
-        b=Ho4K7/Teku7NlSZD2YGBX1AYfgWu3VUc4YsR1XHsH9gbFBhcBPAAj7xMegD7fW5U4D
-         iKzmohznkHJ8wju4bZCID+7osNOYp6LcG9Mhx3JY9IHZDfpgkfIok0F24JXH7KyPbmWQ
-         pYRfFP4cvIwkITmD6Z4GPFEkoh1YrV3vonSdxUGksxrlpHVhKJYIU3OUfpzWOx9ET51g
-         SgePExoykrzN5aqRGlqeKqgEA8Lepu7wPI4k0e2wqqOBmS1itQ7HgQBhzGctnP64++y/
-         jh9iMRTgWL9ptpKOwOHyrkyrqYMqTRuWVzjklSOwSl1JB5eOkZErBoKd+X9OoKhAFDHE
-         C4Lw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTtrTjkTbavcv9stBiXwc32nvEIRNYmVi9QoBW+Z+ZXtSNsYZucRbKdmDSmYgXWlylZ0jP@kernel.org, AJvYcCWE2w/ZF2gKMqEZb2VhSq2SwxUswb/jur03gvv37WZobjSOwFc6rRBkUSfuTIrq6pgC+iE=@kernel.org
-X-Gm-Message-State: AOJu0Yw3gPtVoigFabtVLqlFv47BjO4XKtVRJ9ZKLFLQVrWqnhDH8mtJ
-	+V8VokE4rcHXbqlKF1hyF0GwXC6EcCZoY/4K/uBKi9mD8flx2Jnm1r+JsRugclAEBvJnAvx9wEu
-	6WIHWqAUWWPEtI4ZNzmwSDFPnHAs1sI31
-X-Gm-Gg: ASbGncu6AI1tkJkg83/uAP/D2v4b3Dd58VOYB8soQ2MhHFiWv8ijKI22DHLQb4g9Gkx
-	X9Q9qw51WdX3a4yZysz4Lz3mMlr7TpwfEyWERqQpzsLbG7Xo8TtebERPkmEevz5PwZBI+UVb7xs
-	fwB8FNhIQVnWF3az4lLbFGaHxGkhYAWLcrG0yzUZqeIeah57aZ4tLZvqfUnrI=
-X-Google-Smtp-Source: AGHT+IG8GiaDjf3sdv7Ye3FkTV+AEaDW7f6KYxRvPyZsM3yaqLJDqBbKlA9xkI4sNwT7OOGxYzetDJTJZ5N5BHjlaJM=
-X-Received: by 2002:a17:903:32ce:b0:224:2a6d:55ae with SMTP id
- d9443c01a7336-2265ee924fbmr16165715ad.48.1742424382296; Wed, 19 Mar 2025
- 15:46:22 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 57340C4CEE4;
+	Wed, 19 Mar 2025 23:54:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57340C4CEE4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=SNQOcy+R7mQ4cPTc59VSSVwJu1ScZnlp/qvs/mXts1k=; b=bOIei5bPNo+tiyuP9SAapPEBko
+	UQI5znglXHZ4wa4igSaIgMbcKwbIcJWZK/mpf9Q/R6XGEYpJuGVFYPwq/yV+OG/XfDuHm4+7YvTzS
+	rbk6vgXu7620BldduyefDk0sdxXy3BuPuKUuHPKAU3VebZPe3NE0q9ZCtlQpj+9YRnR+7++/x59r0
+	GB5IVyl/mGgxf8SIsxqEkw8xJMyEuP9qVyn0WvVUjNNyLjjwJCKya1X+oU5zRQ1Y0YzkdbYNdQXS0
+	jAxHUVpPN/33+mMa+ZNS6uPriVepPGyMrjLEanecRrZUtih/QKsGQovmOG6mPLGhaD2FYpEYakXHC
+	2Y6QVr6A==;
+Received: from i53875bc6.versanet.de ([83.135.91.198] helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1tv3EZ-00021P-Bl; Thu, 20 Mar 2025 00:54:03 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 6.15 #3
+Date: Thu, 20 Mar 2025 00:54:02 +0100
+Message-ID: <5552256.Sb9uPGUboI@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <41ced8db-caeb-4deb-9193-9802fc603180@linaro.org> <47683e40-aa0e-4d86-9226-94f7d56f34ae@app.fastmail.com>
-In-Reply-To: <47683e40-aa0e-4d86-9226-94f7d56f34ae@app.fastmail.com>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Wed, 19 Mar 2025 23:46:11 +0100
-X-Gm-Features: AQ5f1JpBHXJRBsjDf382ohz1oHEzy_ztXE_MKlrqlUkHAd_fr7KlcjqRE5tCQhw
-Message-ID: <CAFBinCCY4-sETrXoi5ELjXhnUYB+6q+A3M2FqaGCFprBxe31kA@mail.gmail.com>
-Subject: Re: [GIT PULL] amlogic ARM64 DT updates for v6.15
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, soc@kernel.org, arm <arm@kernel.org>, 
-	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-Hi Arnd,
+Hi soc maintainers,
 
-On Wed, Mar 19, 2025 at 9:58=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Mon, Mar 17, 2025, at 17:13, Neil Armstrong wrote:
-> > Hi,
-> >
-> > Here's a changeset for Amlogic ARM64 DT, also switching to the new PWM =
-bindings,
-> > adding pinctrl support for Amlogic A4 SoC with a brand new binding styl=
-e then
-> > finally gpio_intc node for Amlogic A4 & A5 SoCs.
->
-> I'll skip this one for 6.15, seeing that the branch contains both
-> driver and devicetree changes, which messes up the way I send
-> the contents.
-There's an immutable branch in the linux-pinctrl tree from Linus.
-I'm not sure on the exact process here (whether the contents of the
-tag are fine and we're "just" missing a description, ...) so I'll let
-Neil comment on this.
-
-> From the description I also can't tell to what degree there is
-> backwards compatibility in the new binding, I assume the changed
-> PWM and pinctrl drivers continue to work find with the old dts
-> but not the other way round, which is why you sent them together?
-The PWM part is backwards compatible. The bindings are upstream since
-commit 5fd61cc28171 ("dt-bindings: pwm: amlogic: Add a new binding for
-meson8 pwm types").
-The mentioned pinctrl binding / driver is completely new for the A4
-SoCs, so there's nothing to be backwards compatible with.
-
-Neil, for me it's fine to skip this one for 6.15 if it causes too much
-work on your side.
-Using the old PWM bindings for another release won't hurt anyone.
-And I think the same goes for A4 pinctrl support as well as GPIO
-interrupt controller nodes for A4/S5.
+I made an error and accidentially applied a patch that was meant for
+the mfd tree. Thankfully Stephen noticed that when the duplicate
+commit appeared in linux-next.
 
 
-Best regards,
-Martin
+Please pull.
+Thanks
+Heiko
 
 
-[0] https://lore.kernel.org/linux-gpio/CACRpkdZg-9Zr3f7zG36x7jGvT46FRfRJ40k=
-hNZDdYb01-BGigw@mail.gmail.com/
+The following changes since commit 73d246b4402c3356f6b3d13665de3a51eea7b555:
+
+  arm64: dts: rockchip: remove ethm0_clk0_25m_out from Sige5 gmac0 (2025-03-15 15:49:00 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.15-rockchip-dts64-3
+
+for you to fetch changes up to cee24bc73d4f3f47344a1a54100a69c72f1db061:
+
+  Revert "dt-bindings: mfd: syscon: Add rk3528 QoS register compatible" (2025-03-19 00:22:18 +0100)
+
+----------------------------------------------------------------
+Revert of one commit that was applied accidentially and should instead
+go through the MFD tree. It is already part of that tree as
+commit 7f3e3e7228bb ("dt-bindings: mfd: syscon: Add rk3528 QoS register
+compatible").
+
+----------------------------------------------------------------
+Heiko Stuebner (1):
+      Revert "dt-bindings: mfd: syscon: Add rk3528 QoS register compatible"
+
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 2 --
+ 1 file changed, 2 deletions(-)
+
+
+
