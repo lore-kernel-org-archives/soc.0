@@ -1,109 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD7320C48C
-	for <soc@lists.linux.dev>; Tue, 18 Mar 2025 15:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3EE18C322
+	for <soc@lists.linux.dev>; Wed, 19 Mar 2025 14:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742311671; cv=none; b=l1ehm6GKTRiqCT5Ebyu3jMJ38gBudLyCZub9I7+lGbCl39wJB739BzqWePqXzOPfFOUubQwD8V/8VRi5DsQ70bzmFTh0QHmzNGKRG8/AV13uQhtgzD86eMj81F1BHxvovzCps3R0EYGRsXRKw71X5QnaqD+NdTA147vxqFp9emE=
+	t=1742394290; cv=none; b=WoWxHxTjja38aHUTs6H6FGxC056FDS7u25XuZ0VjABgGAahHTTPLsw0Ch0xmIYFwoRoaKG7PVq9PWDIm0jf0A3284kh3YHiN48GkCab+KuCGhYTYgULdhmQNc0YaqKVmZGmEuzfHqMfBg5+NgFQW6JZNNP4bLgCdXNKEhdsU5fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742311671; c=relaxed/simple;
-	bh=s9zh/0nQb62u7isnT7ZTZOjoOHQLd+KLI5aGXQFTu20=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=iIpkzL8t+bLFn9w2kNc1sijrBvB+pnJqqc1JpVx5nOL1sf5u3WexF4ExJ7jy8m48YnQMiVljZIXi4rjvWUGEaDjKMC5qcLLk/wZQ15Jb2ttcnJ1UsS75LSA9hj1yJKOfWVwcA/zNfML+rAcV/FBNF3F0YZwPSOTpa8VJWpDJCKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bEByj3aX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742394290; c=relaxed/simple;
+	bh=V/SLhvo9gcRcf9Q62gLBwK9RH73pmO1Sb6lYQDSl+Wk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sJacUaxDSzv7lVx003NPvX71IPmYS0xaBHQXpvVuc8I11F2gHnF723pCfNu4h0N4qjaPWZJMsdViSxDLRSoSscGjcWB0viWK80dMfnYt5IK5IFHPochqhDwPuM7ixex9aQaeiCMvNdCKabErdzRhgLQWYZxhBV8U3m+XoK8KH/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXGLAktP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bEByj3aX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXGLAktP"
 Received: by smtp.kernel.org (Postfix)
-	id 4FEFCC4CEE3; Tue, 18 Mar 2025 15:27:51 +0000 (UTC)
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4C7DEC4CEDD
-	for <soc@kernel.org>; Tue, 18 Mar 2025 15:27:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C7DEC4CEDD
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2254e0b4b79so6591845ad.2
-        for <soc@kernel.org>; Tue, 18 Mar 2025 08:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1742311667; x=1742916467; darn=kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9UzD1Ky2bx9uaDef0qVlKrUGPVh+KVmS6RPxnxKCs8=;
-        b=bEByj3aXTIbUlqLk7Y09HhGKxx+IQV/MAKf8Du4dZJNSLqrm/fPkrzSC+7XDXmhWLI
-         kMYjvax9A69t7AaakBt11YeWvVOJCIkH1GmDbTCLOjzJizJ++vgtGsYLnc+j1dvarIWW
-         oL+FlSUQ6FI0qGk4sW+ASj2KPTXARO/DVcy9n1WpP4wqIT8XVvbfdoKgrs8x39k7OAHT
-         yQJs6nF1fbThiNieegCtcY3FbZtIOjNY0yi8WsiNnsIRjQsyPHO0ZTRmE55WGzuFwzR1
-         pbGaZChOE8n+cSndD/eLxAPWUv554AXkpAR+JGmeaqqpf0MqSKofRW5NGkZJ2+LyWarp
-         iuaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742311667; x=1742916467;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9UzD1Ky2bx9uaDef0qVlKrUGPVh+KVmS6RPxnxKCs8=;
-        b=Xp6tQ4MayilcRoCoFzR8ZZh01lj/4/vzyyQ4ykKOBxTDgP1gLqUt47Da17WFvpG15L
-         zJQq2nPGlBXLNrRh3MWjY/I6xXxSp6Ee3Pe39YYyOHx56ErHqKafteXwCMK77YWPshU6
-         XZ8I0B/GRP8IR6Ui75KZyjSRcIjt8OTIOxjt8A0qixW9eX3ATMc9QDDVI1CvPBaw+W09
-         y/5N2QqS6hYGmeeLr6N5bJZcWWpj4SCr/nLPChujcQ/E04zpfUk5qXUP2lNoBg2alct1
-         k4P881rga2CJRvhp5l9tgPqHXbQojPAfamaL2debKA67i6UGuRBIibjW6G192lsdp3Db
-         PP4w==
-X-Gm-Message-State: AOJu0Yz7aROufbBxwUxDdYpm/1rdTk0juQ7xIwHk5kfHu9GTb0uIOJJ9
-	bEU2gRINvv+hdoOH8XQdV7VMf3lMZZri8nftO4b+gKBvOLjePERv6dXBMHNNtaXfvoY2Ht/GXwA
-	tdJ4m6g==
-X-Gm-Gg: ASbGnctC/0KIE5rA6OU5znaAE2VhsNNm0L+HUmXulTXjUuY2dfqgPnQM15shs1mLd6V
-	mAVbA/iAQSUeub8lbyCFb/6zXIZ5KKugFyiy79+ZquLDX1D4HBx+QigtCLoo7IuN8lpRUg2FyZi
-	6yJUf/UXNpSmuoDLJvt0tUVVNRZSK+xq0Ot/c60z/vhT0hXNz+seAOfhReWfsXyXyUjUvuXlHpf
-	gJLzT+xNKWt5c60nTA4SofS5F+t7xIAe5T/vcN0Snzst9wg6ZgI5CFAjNxHLdZaBrNTmVlxpkNl
-	ivrbg6GIno1xxuSJlxzj50lZ1aPiVwKG4PX++YhWZRScKJOwCfQRqQ==
-X-Google-Smtp-Source: AGHT+IE2D/VJp57Hxl9axDzo6oJNvumHjtvBrJ+oZN2PEHsYJkVXPJxJR8fnVya7s6LHOzxTsDuPTw==
-X-Received: by 2002:a17:903:40ce:b0:224:2717:7993 with SMTP id d9443c01a7336-225e0b0ed1dmr230864945ad.45.1742311667265;
-        Tue, 18 Mar 2025 08:27:47 -0700 (PDT)
-Received: from localhost ([97.126.182.119])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6ba6913sm95848435ad.142.2025.03.18.08.27.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 08:27:46 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: soc@kernel.org
-Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] ARM: OMAP1: defconfig updates for v6.15
-In-Reply-To: <7hcyefqzt2.fsf@baylibre.com>
-References: <7hcyefqzt2.fsf@baylibre.com>
-Date: Tue, 18 Mar 2025 08:27:46 -0700
-Message-ID: <7h4izqqryl.fsf@baylibre.com>
+	id 1BA9CC4CEEA; Wed, 19 Mar 2025 14:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A545C4CEE9;
+	Wed, 19 Mar 2025 14:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742394290;
+	bh=V/SLhvo9gcRcf9Q62gLBwK9RH73pmO1Sb6lYQDSl+Wk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iXGLAktPqySm/IOVownGzFPBorVEpFDIFoz1zL57oLU4u2TXJasxt9ZojKLE28i7v
+	 wAu6Oyq0+zqM4HcZQ+yrSwM2CHwNTcp+i0s6Dbh2ktUODtabONDNspV6szP07pNu1q
+	 N5GL0bhfgqP07AXCIUGL5EDQL/N5jRGivHTNZqXIvVoQDCkHjM0RRkHmcD3riB2Gle
+	 XGer4OTQD9MvijoWPJYxfKrh2JQKB9Kwn3sZ0lBT/KupP+X8v0RTk+eB7BKIG4SuTR
+	 zGO4l7SrNxCVPDZ7SldoQZEQjFcMkRJzY2BqJAVFnJzwpypA2jhlhawXnF635mjoDi
+	 ON0MsVARpJIxA==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Alexey Minnekhanov <alexeymin@postmarketos.org>,
+	Rayyan Ansari <rayyan.ansari@linaro.org>,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: [GIT PULL] More Qualcomm driver updates for v6.15
+Date: Wed, 19 Mar 2025 09:24:47 -0500
+Message-ID: <20250319142448.2279164-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
 
-Kevin Hilman <khilman@baylibre.com> writes:
+The following changes since commit 2e14c17a2e3d697bef6b5bf49b253d6e52f3d186:
 
-> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
->
->   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.15/soc-signed
->
-> for you to fetch changes up to c2a5f8c4f28ffea8c93d10e509c5a6e61172cdca:
->
->   ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP (2025-02-05 16:31:37 -0800)
->
-> ----------------------------------------------------------------
-> ARM: OMAP1: defconfig updates for v6.15
->
-> ----------------------------------------------------------------
-> Arnd Bergmann (1):
->       ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP
+  soc: qcom: Do not expose internal servreg_location_entry_ei array (2025-02-14 11:37:30 -0600)
 
-I see now this one was already included in the arm/fixes branch of the
-soc tree, so you can igore this PR.
+are available in the Git repository at:
 
-Kevin
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.15-2
+
+for you to fetch changes up to 65f330ade7daec740ed8dbdf33ccfbfcc5fbf5c8:
+
+  dt-bindings: power: qcom,kpss-acc-v2: add qcom,msm8916-acc compatible (2025-03-13 17:50:04 -0500)
+
+----------------------------------------------------------------
+More Qualcomm driver updates for v6.15
+
+Introduce Devicetree binding for providing board-specific firmware-name
+for the GENI serial engine block. Add SDM630/636 support in pd-mapper.
+Clean up and fix error handling in the SSC block bus driver.
+Add missing msm8916-acc compatible to resolve a number of Devicetree
+validation errors.
+
+----------------------------------------------------------------
+Alexey Minnekhanov (1):
+      soc: qcom: pd-mapper: Add support for SDM630/636
+
+Christophe JAILLET (2):
+      bus: qcom-ssc-block-bus: Remove some duplicated iounmap() calls
+      bus: qcom-ssc-block-bus: Fix the error handling path of qcom_ssc_block_bus_probe()
+
+Rayyan Ansari (1):
+      dt-bindings: power: qcom,kpss-acc-v2: add qcom,msm8916-acc compatible
+
+Viken Dadhaniya (1):
+      dt-bindings: qcom: geni-se: Add 'firmware-name' property for firmware loading
+
+ .../bindings/power/qcom,kpss-acc-v2.yaml           |  4 ++-
+ .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml |  5 ++++
+ drivers/bus/qcom-ssc-block-bus.c                   | 34 ++++++++++++----------
+ drivers/soc/qcom/qcom_pd_mapper.c                  | 12 ++++++++
+ 4 files changed, 39 insertions(+), 16 deletions(-)
