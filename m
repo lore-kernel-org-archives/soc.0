@@ -1,112 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7EE1E9B02
-	for <soc@lists.linux.dev>; Thu, 20 Mar 2025 16:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB5C188915
+	for <soc@lists.linux.dev>; Thu, 20 Mar 2025 17:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742489802; cv=none; b=QpVvdFVdk+DUl/oNC2wNumw7vwe4ILibzxlsZn2KNsdv2zHrNGrkxsWIiVsYEFO4sV1OMiOStkOXqGG0ljcfv/QEiTLTcoLrkb3msLcaz+4SQqX6aV+HJZM5w91tQyEyLvYqQUnq0guA57UJfNpkpwhr+RX+Av4b6zdVV6b/Kxk=
+	t=1742490604; cv=none; b=IjWaKoARV69ZoM259Qg0qj0hI/VgiSDUg1KtgROxiipQ+1NWxX/ucb2alqyJ0ZjzOcHlgwe+cGMTRnF5pzr6HKw3YaB88y7CMr/E/GOXSIRX7vjT8nf5fIhu70rO0w/iZf7PsiYdnS62v5lwxy8DAULdEEY9VeEUHYcfDpXEhJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742489802; c=relaxed/simple;
-	bh=q+IeQ8/ESh5rf+qzsf+KECfiCFZQenJ76BHXW6oyuk4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tXg4UrVfYgD3wty8osiu3SeK7XPYSApp2ccyTgZTOYC2vYzWU6tslz+zGDNRxwXrvZBTU0gOBQcxCVVOwt7gsrgBeDYOPakzXSgbtNASybdMIsoXxZQgab+piqkG/BrPHsQujKVRsCbypLUpY/D/g7FfD8zj+ZuqRQtcf6+l1UE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfN9oUvM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742490604; c=relaxed/simple;
+	bh=UErEZRgmDQU76V2aRal5bh2llpK2ODdl4M8Yd0ZADIM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=QCfvOWr7kM+8LaGVJmEpmc8sUBpVMRhtLh0rdv9q7KbD80v0X97EsL29p4PG2QNcMy+iH6t92rIwxZc0EEp7F3fXmfIJg8AQHtUJdo3qTpoV7UnnqgQ8Gc9CMsc7+ZeHXc+jlAJbijcxJjFrq/wsAZatO2jJnhyxzKxi4+0Jj8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TqK7vLqF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfN9oUvM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TqK7vLqF"
 Received: by smtp.kernel.org (Postfix)
-	id E352BC4CEED; Thu, 20 Mar 2025 16:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA57CC4CEDD;
-	Thu, 20 Mar 2025 16:56:39 +0000 (UTC)
+	id CC348C4CEE7; Thu, 20 Mar 2025 17:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6503C4CEDD
+	for <soc@kernel.org>; Thu, 20 Mar 2025 17:10:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742489801;
-	bh=q+IeQ8/ESh5rf+qzsf+KECfiCFZQenJ76BHXW6oyuk4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QfN9oUvMuCbSejQdSZ8tHkyue9mySPL+JPDxJNFyATnpwpkD31gWUfZQ5XkRX45HH
-	 gJd+0WYbErcyhIVvSdpS/r3d5m6r7Bps6jep6RY9dE+ypP3BHSekh2H5dS3Qn4KKeD
-	 uve3FVFeQNVdoIBsA8GOyvz8+pThvrf5RtGKAWFZdYr6BYV6oFyuWhULd/tw6baWbK
-	 r4nIsQFij5gulOdTpWdBcfxwVeBBeW3Gcygsiw6UNSTe7VShTOj0+7vol9uk6UDPWO
-	 d0h4YsWfzN1Q5NbVntFR9j26QshcDgoT2KOd1nvRimAsGRpLzsL+3jckwBOWu6FhA8
-	 EJ2FbRJqal54Q==
-Date: Thu, 20 Mar 2025 11:56:37 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: arm <arm@kernel.org>, soc@kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Chukun Pan <amadeus@jmu.edu.cn>, 
-	Stephan Gerhold <stephan.gerhold@linaro.org>, Aleksandrs Vinarskis <alex.vinarskis@gmail.com>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Luca Weiss <luca@lucaweiss.eu>, 
-	Pengyu Luo <mitltlatltl@gmail.com>, Alexey Minnekhanov <alexeymin@postmarketos.org>, 
-	Danila Tikhonov <danila@jiaxyga.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, Nikita Travkin <nikita@trvn.ru>, 
-	Praveenkumar I <quic_ipkumar@quicinc.com>, Tingguo Cheng <quic_tingguoc@quicinc.com>, 
-	Cheng Jiang <quic_chejiang@quicinc.com>, Janaki Ramaiah Thota <quic_janathot@quicinc.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Lijuan Gao <quic_lijuang@quicinc.com>, 
-	Luca Weiss <luca.weiss@fairphone.com>, Mark Kettenis <kettenis@openbsd.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Rajendra Nayak <quic_rjendra@quicinc.com>, 
-	Rakesh Kota <quic_kotarake@quicinc.com>, Viken Dadhaniya <quic_vdadhani@quicinc.com>, 
-	Wojciech Slenska <wojciech.slenska@gmail.com>
-Subject: Re: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v6.15
-Message-ID: <i7x76sr4njtoijtte453b7bhubiirpot3hzck7j6umyjhmay5h@ui77ajauxmzc>
-References: <20250317215921.2031880-1-andersson@kernel.org>
- <a2132f78-f113-460a-b7ea-022a39e4e64b@app.fastmail.com>
+	s=k20201202; t=1742490603;
+	bh=UErEZRgmDQU76V2aRal5bh2llpK2ODdl4M8Yd0ZADIM=;
+	h=Subject:From:Date:To:Cc:From;
+	b=TqK7vLqFnmR1T6SJCxmErWSet7spSLRPSWyFeeJRNZrlGk1HnU9g6DVEsxPjeRH3u
+	 NEDZmZK+DX0sOS9xTQLnYiFdsbHEsBX+cIhcYmFA6pIT+02c6xutmbOfWApPnPGXGp
+	 enBws1Mjkv0YwSbw+QMiWd+BfbrxupB2uESg8CXUMvn4768rHqJyf8372MRuphAZXY
+	 fi1eoqe6TGJ2dBnse73gMAA5xCJyda3zFTpHw5Ky7d3fRuQlpTYjJeFI+rwtLq4M7P
+	 DghSiR8XE2d4Qw/lKQdRqlLU+q2dpaDeZGyEKsiYCDcylt3l1eErcFW6vFPGHrms4u
+	 Wv16OzMs0hDRQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43F53806654;
+	Thu, 20 Mar 2025 17:10:40 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a2132f78-f113-460a-b7ea-022a39e4e64b@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <174249063908.1843567.13234706400502366908.git-patchwork-summary@kernel.org>
+Date: Thu, 20 Mar 2025 17:10:39 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Wed, Mar 19, 2025 at 10:10:31PM +0100, Arnd Bergmann wrote:
-> On Mon, Mar 17, 2025, at 22:59, Bjorn Andersson wrote:
-> >
-> > Krzysztof Kozlowski (17):
-> >       arm64: dts: qcom: sa8775p: Partially revert "arm64: dts: qcom: 
-> > sa8775p: add QCrypto nodes"
-> >       arm64: dts: qcom: qcs8300: Partially revert "arm64: dts: qcom: 
-> > qcs8300: add QCrypto nodes"
-> >       arm64: dts: qcom: x1e80100-slim7x: Drop incorrect 
-> > qcom,ath12k-calibration-variant
-> >       arm64: dts: qcom: msm8998: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: qrb2210-rb1: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: qrb4210-rb2: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sc7180: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sdm845: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sda660-ifc6560: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sm6115: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sm8150-hdk: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: qcm6490: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sa8775p-ride: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sc8280xp: Switch to undeprecated 
-> > qcom,calibration-variant
-> >       arm64: dts: qcom: sm8250-elish: Switch to undeprecated 
-> > qcom,calibration-variant
-> 
-> This seeems to remove the properties that the drivers expect
-> even in 6.14-rc7, so the branch is currently broken and I'll
-> skip it for 6.15. Let's see how we should handle this properly
-> in the next cycle, since it's too late now to fix it.
-> 
+Hello:
 
-Sorry about that. I didn't spot the comment(s) that these patches
-shouldn't be merged until v6.16.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-I think for this case it's okay not to provide more forwards
-compatibility than a single release, so picking them up then should be
-fine.
+Series: Turris ECDSA signatures via keyctl()
+  Submitter: Marek Behún <kabel@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=930440
+  Lore link: https://lore.kernel.org/r/20250204131415.27014-1-kabel@kernel.org
+    Patches: [1/5] platform: cznic: turris-omnia-mcu: Refactor requesting MCU interrupt
+             [2/5] platform: cznic: Add keyctl helpers for Turris platform
+             [3/5] platform: cznic: turris-omnia-mcu: Add support for digital message signing with HW private key
+             [4/5] firmware: turris-mox-rwtm: Drop ECDSA signatures via debugfs
+             [5/5] firmware: turris-mox-rwtm: Add support for ECDSA signatures with HW private key
 
-Regards,
-Bjorn
+Series: [1/2] docs: dt: submitting-patches: Document sending DTS patches
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=937654
+  Lore link: https://lore.kernel.org/r/20250225184822.213296-1-krzysztof.kozlowski@linaro.org
+    Patches: [1/2] docs: dt: submitting-patches: Document sending DTS patches
+             [2/2] docs: process: maintainer-soc-clean-dts: linux-next is decisive
+
+Patch: [GIT,PULL] amlogic ARM DT updates for v6.15
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=944768
+  Lore link: https://lore.kernel.org/r/8632a8fa-7af6-4fb7-ba87-297df4f084f5@linaro.org
+
+Patch: [GIT,PULL,v2] amlogic ARM64 DT updates for v6.15
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=945835
+  Lore link: https://lore.kernel.org/r/f6fb1b2b-955d-4271-b772-0a75fdba1e48@linaro.org
+
+Patch: [GIT,PULL] arm64: ZynqMP SoC changes for v6.15
+  Submitter: Michal Simek <monstr@monstr.eu>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=944035
+  Lore link: https://lore.kernel.org/r/CAHTX3d+T+_zvwAVqGO+J_+Yia+wXAGsaEbPi1ye1AUYXoq6dmw@mail.gmail.com
+
+
+Total patches: 10
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
