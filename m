@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03359188915
-	for <soc@lists.linux.dev>; Thu, 20 Mar 2025 17:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FA322155C
+	for <soc@lists.linux.dev>; Thu, 20 Mar 2025 17:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742490608; cv=none; b=erehWzHrJZt1WfmJDivOcfuUdyypzlMEMJEYeQOdQIJdvsZWY9s64vS9d1nbqTS93DHGzWql1sichvir/sVoQ/EyLaBZErSDnDkTORrhBBCVSr+V6FT5lr7a0wUHdWJFyWXnid1dlZkd3HG9PYPfjMRSmqaw85ETda2zuH04i4E=
+	t=1742490609; cv=none; b=RfW779nreai3zjKTXYguNpK9uBhtnosqWsXV3rdEv/JKXrspNp7Pj4gU0Fh0q7pCFglGeWcafVi4DlJmrsd7T9gf1t0bVkNeKwBQ+zmabWeOMItcUnQNpjKxg9si3saivwuPJ596CxsXAYdFNXn9pFgR/iLw9fhgXjY55SgjPxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742490608; c=relaxed/simple;
-	bh=JO/Kl+yMU/OLygWJbeHhQNz2q5Q9amGroDj3N8Xd8+E=;
+	s=arc-20240116; t=1742490609; c=relaxed/simple;
+	bh=mdnFpd3JT/MdY7M5BdRR+At7g2x0+G/M1gcfe1IxEUs=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BU7PxRVIMsRNtw5WE+qUhvXiyUHTC86tIv0OS3uY7gr5lxEgHklImpRi/TM4XjGG7f2rM59Mvcdiv/bLKypSN1TSnerXLkrrsv+JUV0wDgKRJZkOl1u7+ve8tTY7U3E6gU0FIea9AFXwIF9+JYHPh2WdHqndwsSjZOJofbfJwcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8jIuX2D; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=VWw4B5m3kgWD3RoZs1bTeDVONFD4oDwQQbpAOZrjH9SSNTl6cqjYlr7/kWiOOiQQBYzHlb0OVd6oixmppQJWUoNgYEL4osxFV18kVTf1mFXUN6EAyAIv+3GG0J+qihplffvy+RiOC46Ymf4bHhvj7AvmDGx9L6wOPCTV0g1UC40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VOm+fzkT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8jIuX2D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VOm+fzkT"
 Received: by smtp.kernel.org (Postfix)
-	id EACDAC4CEE7; Thu, 20 Mar 2025 17:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4991C4CEDD;
-	Thu, 20 Mar 2025 17:10:07 +0000 (UTC)
+	id 6CAD5C4CEE7; Thu, 20 Mar 2025 17:10:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5708BC4CEDD;
+	Thu, 20 Mar 2025 17:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742490607;
-	bh=JO/Kl+yMU/OLygWJbeHhQNz2q5Q9amGroDj3N8Xd8+E=;
+	s=k20201202; t=1742490609;
+	bh=mdnFpd3JT/MdY7M5BdRR+At7g2x0+G/M1gcfe1IxEUs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=S8jIuX2DJcBQhDbi5Ur5p3OOESFX27mrJzr7b80r/upnSuXgNC4/xg3oO4oTzqAsA
-	 bOAbqF8cOp6yWy1c4/ePmLYR4q5D/dyQpzaZWu8y9GaPypooDAa9mA+zILSRNf9xfG
-	 RWxtmDzZaCC9MpkjHdWEppuWiq26XHEMygbxnw5NOZhZDSWjMmCP80swCJ30Lw1qcy
-	 VAy9JmsMkDHZq1am+iSF9mdO5zE9JyLRK8dQ2PDQHMJVwWgugDfByUFRVcDb6s2g4X
-	 5LUe3tOn+tRaKKjIUnMhqiaMPoWe8bdz64N6uV8jfsj5JQ6dJFEbJGWZsOTufI3Rfe
-	 Wf3wNrj6sfimg==
+	b=VOm+fzkTPTzRJ8GS+YnYAHsk3tjsm50X9WE1n7NaLWb/7RrobrNBL+YGFi9NG8/pk
+	 HrDSJL+fpptM3XzWkGvqm0Wd+C1AUPX5QtYb931QqWU3hzc/FW0OxJB8ppJyJmm47I
+	 ZOGDpeVmp60fZy3cIe5jeyHRb44gbQxQ2cuSpK3zvBEwLbcMxI8jCDDyZKdHw9Ixbv
+	 E5oZ8u0DJVQZS3lIjkPRABfsKSqwUmqy2jDERCKATNUtfOGuoAxvRINGgbQNBI+gr7
+	 q4LmuFVgT3JHk87DVK5RDMCFV7RiUSBsjuWNmKXprwWeAwarVFQfACHmenR9oo0NiU
+	 gShEA7JjRLgLw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB3E33806654;
-	Thu, 20 Mar 2025 17:10:44 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DF63806654;
+	Thu, 20 Mar 2025 17:10:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,13 +39,13 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] amlogic ARM DT updates for v6.15
+Subject: Re: [GIT PULL v2] amlogic ARM64 DT updates for v6.15
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174249064351.1843567.10896240273687224186.git-patchwork-notify@kernel.org>
-Date: Thu, 20 Mar 2025 17:10:43 +0000
-References: <8632a8fa-7af6-4fb7-ba87-297df4f084f5@linaro.org>
-In-Reply-To: <8632a8fa-7af6-4fb7-ba87-297df4f084f5@linaro.org>
+ <174249064500.1843567.2220171915519940414.git-patchwork-notify@kernel.org>
+Date: Thu, 20 Mar 2025 17:10:45 +0000
+References: <f6fb1b2b-955d-4271-b772-0a75fdba1e48@linaro.org>
+In-Reply-To: <f6fb1b2b-955d-4271-b772-0a75fdba1e48@linaro.org>
 To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: soc@kernel.org
 
@@ -54,19 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 17 Mar 2025 17:10:44 +0100 you wrote:
+On Thu, 20 Mar 2025 09:42:46 +0100 you wrote:
 > Hi,
 > 
-> Here's a simple changeset for Amlogic ARM DT to switch to the new PWM controller bindings.
-> 
-> Thanks,
-> Neil
+> Here's a changeset for Amlogic ARM64 DT, switching to the new PWM bindings
+> which has been in -next for the last 3 months and the driver was designed to
+> fully support the old and new bindings, and finally adding gpio_intc
+> node for Amlogic A4 & A5 SoCs.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] amlogic ARM DT updates for v6.15
-    https://git.kernel.org/soc/soc/c/b82310b5729e
+  - [GIT,PULL,v2] amlogic ARM64 DT updates for v6.15
+    https://git.kernel.org/soc/soc/c/519b8dfd8a5f
 
 You are awesome, thank you!
 -- 
