@@ -1,108 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7CFAD2F
-	for <soc@lists.linux.dev>; Fri, 21 Mar 2025 11:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB66F225761;
+	Fri, 21 Mar 2025 12:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742556006; cv=none; b=Pfh3rGQO3Rt37woD1KWpyVwCKKiZgczUiIaAcDnhjAAFe+7ODKn0B/jfhBUGUlmBbxjCTiz2Fw/+Q/YhzDsBd23JeE/y4jDOllpo6qZtuSYrGlR5iXkZkkvalfpcAIZGyyy7l8l4gEACLRYFThhinHyy+k2ne6qufKUUb9TfQFo=
+	t=1742560151; cv=none; b=RVGvlOp7+vxoc40nh19lBUgWQ/WOODt1HZzNOhfGZYe0HbLmEeesRy8tDB6iWZL5U/6z/R2Tgm7zz51/hN5KO6rom4SeQOwXgI8vxeSwyydCiCtqDerWPqTot+vwvoqoPM+TsLaRI72U2LNoDxs+ufS21FVUCko+PN0fkygzoIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742556006; c=relaxed/simple;
-	bh=YFEfA3a/EPpaoRweBRoLldvePe/W9+0Mq/r+V3uEVEo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=OkgUvWaUJTL3rHBDnAN8cHQYULCqO8qeR04rK3j6QsOLm21JpMevaKhkb6vCMVPeU9AeDxLLLlj8N8rCcutbLnBqgeVbYI2LMbpvT8IUh5TiHVkLqf8W7CKrd0mC9c9AmB9F01bpH/k0/cHZ0x1ZJ9QKwutKHVH5HTY3o82p05s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id BC72AC4CEE7; Fri, 21 Mar 2025 11:20:05 +0000 (UTC)
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.kernel.org (Postfix) with ESMTP id 508CAC4CEE3;
-	Fri, 21 Mar 2025 11:20:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 508CAC4CEE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4ZK0B25DGHz9sRr;
-	Fri, 21 Mar 2025 12:11:06 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wP-_Bw1qImbH; Fri, 21 Mar 2025 12:11:06 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4ZK09y3kw9z9sPd;
-	Fri, 21 Mar 2025 12:11:02 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 6FA0A8B79C;
-	Fri, 21 Mar 2025 12:11:02 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id ljt2SZDW7QiL; Fri, 21 Mar 2025 12:11:02 +0100 (CET)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1AE398B763;
-	Fri, 21 Mar 2025 12:11:02 +0100 (CET)
-Message-ID: <2dea9d3d-ef48-4799-b3cb-df4658ae6e29@csgroup.eu>
-Date: Fri, 21 Mar 2025 12:11:01 +0100
+	s=arc-20240116; t=1742560151; c=relaxed/simple;
+	bh=lfdiISzEEgrO+slIfnGzPTZpHHwZmhdB5j/bOmU0rqs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=c2NubGeY04kvGjD9mRyKTRW/W03KiMWKaQVY0psTZvjv5qgQmVYXv2zXyzxPNSAPVupAmOONh2TodnUmxuLSSPBcMIrzOWLfQBVW23wZ7HE7ahrSvzQvmxKanOrZstooUgbh+2+B2+QCN7VhWz8Qwl9s+Xp1LkO75Q+RKwOw3wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=i57tvl4V; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lT051Oi2; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="i57tvl4V";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lT051Oi2"
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id BBD171383770;
+	Fri, 21 Mar 2025 08:29:08 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-09.internal (MEProxy); Fri, 21 Mar 2025 08:29:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742560148;
+	 x=1742646548; bh=N6kPZ0cFTmXIpixMnN6tF81nr1APN9wNYIh/tOxWbbw=; b=
+	i57tvl4VKDF5ha2G2v+8lAQuw6M4b1rAcdwypJljRX1jdQIIhzz0E6CEgVlFkLRO
+	QtFqzhLS998HFqJWRmkKelAQcaTcK0YLNtn49PmynzG8d5BS7EsoRVNiuYIoIn9I
+	cOiZVhYwtpQWmD2njqRcpGywgdu5+SQt/nPTb4yf8gMJbbwX9oQWrK8AkMTvoVOB
+	L9FmDRNfEoZgW12ShA0klsJ9QMNk9FrVQlr6W4xkhkSf5eGpp8IdkbpOJuEE/Qmg
+	lCPFhIGP50Wykl2lHlJ8xEpJHVYiNbUhYAS/6s/Ue5lmvLZ1GGZpHTY+Et+Yq5tZ
+	OE8D5fzFZEcdRDWUcd+hqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742560148; x=
+	1742646548; bh=N6kPZ0cFTmXIpixMnN6tF81nr1APN9wNYIh/tOxWbbw=; b=l
+	T051Oi2UrKbm70CTM0+WU3RQEBl8O2InYlf0qdnaHHzwk5G/DKmvmQY4V+YoDLdm
+	QJB0kaHQp9VLye/2Xf+xPqSWKQXyi08/ivcZ8uo6Mjm7/UXyd4jeDd8oB94FhdAa
+	aC2Y99wIkKUoxgxQP84BNTei34kdy6grBEl3jybYMlOFcPhV2LExykGvfGQg7QXH
+	P5QYIGouVKBsllY6pY33yrQvIxGDFhPJFKGTV00z6bwu67sOPPpsFCxVuqIIVKfM
+	Qs66jVGIffYzvn79RakI8Q67HJVtLeA8bZT2RhUYwT+Cx7EXXNC2exbfSZPdwyak
+	fA7bufMcB9yyYIgUYf9Bg==
+X-ME-Sender: <xms:kVvdZ-dvlNxtgCueP5K-X9LrgmPY6bqsjmhT2RPPYtEaSwAWAGAdAQ>
+    <xme:kVvdZ0gcXISmmqq1VzvW-zdk0qyp2ODnRZoy7qxoIXaKjL5LU_X1LWe1jWEw4F8_G
+    dd1P2hZMkrAJWbSSTA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheduudduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    feeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigsegrrhhmlhhinh
+    hugidrohhrghdruhhkpdhrtghpthhtohepthhonhihsegrthhomhhiuggvrdgtohhmpdhr
+    tghpthhtohepkhhhihhlmhgrnhessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtoheprg
+    hnuhhpsegsrhgrihhnfhgruhhlthdrohhrghdprhgtphhtthhopegstghmqdhkvghrnhgv
+    lhdqfhgvvggusggrtghkqdhlihhsthessghrohgruggtohhmrdgtohhmpdhrtghpthhtoh
+    epfhhlohhrihgrnhdrfhgrihhnvghllhhisegsrhhorggutghomhdrtghomhdprhgtphht
+    thhopehrjhhuihessghrohgruggtohhmrdgtohhmpdhrtghpthhtohepshgsrhgrnhguvg
+    hnsegsrhhorggutghomhdrtghomhdprhgtphhtthhopehhvghinhhrihgthhdrshgthhhu
+    tghhrghrughtsegtrghnohhnihgtrghlrdgtohhm
+X-ME-Proxy: <xmx:kVvdZyTE_63LDgMM7nvl4LCgcIFqy_9iCOFIBpOZarDifNQuZnO2iA>
+    <xmx:kVvdZ9x64sGPKdZ2VIrCvWv-1MNkOWAp6cmotk7ZALObl9LtLLnk7A>
+    <xmx:kVvdZ9ft6EbGWl4xG5AO97oQzboLTu8b0zu7dl5RWqGY1OfLFgpFBA>
+    <xmx:kVvdZ5K36lITbTqEtI95TI43l1OeBmYuUxwKKiur1-FWuKwrE3_V5Q>
+    <xmx:lFvdZ0kCqZVFDyJTIxAcWCLqQ8EY8hX7Vh8b8wygXH59ssdCdw-ftcuY>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id CB0352220073; Fri, 21 Mar 2025 08:29:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [GIT PULL] SOC FSL for 6.15
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Jiri Slaby <jirislaby@kernel.org>, Ioana Ciornei <ioana.ciornei@nxp.com>,
- "Dr. David Alan Gilbert" <linux@treblig.org>
-Content-Language: fr-FR
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ThreadId: Td2a26421dc1a91fa
+Date: Fri, 21 Mar 2025 13:28:43 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Thierry Reding" <thierry.reding@gmail.com>
+Cc: "Celeste Liu" <uwu@coelacanthus.name>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>, guoren <guoren@kernel.org>,
+ "Anup Patel" <anup@brainfault.org>,
+ "Heinrich Schuchardt" <heinrich.schuchardt@canonical.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
+ "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+ "Rich Felker" <dalias@libc.org>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Florian Fainelli" <florian.fainelli@broadcom.com>,
+ "Broadcom internal kernel review list"
+ <bcm-kernel-feedback-list@broadcom.com>, "Ray Jui" <rjui@broadcom.com>,
+ "Scott Branden" <sbranden@broadcom.com>,
+ "Tony Lindgren" <tony@atomide.com>, "Jon Hunter" <jonathanh@nvidia.com>,
+ "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+ "Andreas Kemnade" <andreas@kemnade.info>,
+ "Kevin Hilman" <khilman@baylibre.com>,
+ "Roger Quadros" <rogerq@kernel.org>,
+ "Palmer Dabbelt" <palmer@rivosinc.com>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-sh@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rpi-kernel@lists.infradead.org,
+ Linux-OMAP <linux-omap@vger.kernel.org>, linux-tegra@vger.kernel.org,
+ "Stefan Wahren" <wahrenst@gmx.net>,
+ "Thierry Reding" <treding@nvidia.com>, soc@lists.linux.dev
+Message-Id: <5fd4f314-e570-4b37-b7c2-af5b4bc85a39@app.fastmail.com>
+In-Reply-To: 
+ <t2dustbykx2qd24wazjeiw5hch5nwr6z2ewmaf4srg6r2grwrf@rdw47chzkef2>
+References: 
+ <20250115-fix-riscv-rt_group_sched-v4-0-607606fe73a5@coelacanthus.name>
+ <20250115-fix-riscv-rt_group_sched-v4-4-607606fe73a5@coelacanthus.name>
+ <t2dustbykx2qd24wazjeiw5hch5nwr6z2ewmaf4srg6r2grwrf@rdw47chzkef2>
+Subject: Re: [PATCH v4 4/4] arm: defconfig: drop RT_GROUP_SCHED=y from
+ bcm2835/tegra/omap2plus
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+On Thu, Mar 6, 2025, at 20:19, Thierry Reding wrote:
+> On Wed, Jan 15, 2025 at 04:41:23AM +0800, Celeste Liu wrote:
+>> ---
+>>  arch/arm/configs/bcm2835_defconfig   | 1 -
+>>  arch/arm/configs/omap2plus_defconfig | 1 -
+>>  arch/arm/configs/tegra_defconfig     | 1 -
+>>  3 files changed, 3 deletions(-)
+>
+> Hi Arnd,
+>
+> is this something that you could pick up? I think so far only the RISC-V
+> patch was picked up, but nobody seems to feel responsible for the ARM
+> patch here.
 
-Please pull the following Freescale Soc Drivers changes for 6.15
+I've merged it now after going through stuff in my inbox. It's
+generally ok for patches like this one to be forwarded to
+soc@lists.linux.dev where they end up in patchwork for me to apply,
+in case you don't want it to get lost.
 
-Thanks
-Christophe
-
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
-
-   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
-
-are available in the Git repository at:
-
-   https://github.com/chleroy/linux.git tags/soc_fsl-6.15-1
-
-for you to fetch changes up to c25951eb7518844fcb7fc9ec58e888731e8c46d0:
-
-   bus: fsl-mc: Remove deadcode (2025-03-21 09:46:08 +0100)
-
-----------------------------------------------------------------
-FSL SOC Changes for 6.15:
-
-- irqdomain cleanups from Jiry
-
-- Add Ioana as Maintainer of fsl-mc bus and remove Laurentiu and Stuart
-
-- Remove deadcode from fsl-mc bus
-
-----------------------------------------------------------------
-Dr. David Alan Gilbert (1):
-       bus: fsl-mc: Remove deadcode
-
-Ioana Ciornei (3):
-       MAINTAINERS: add myself as maintainer for the fsl-mc bus
-       MAINTAINERS: fix nonexistent dtbinding file name
-       MAINTAINERS: add the linuppc-dev list to the fsl-mc bus entry
-
-Jiri Slaby (SUSE) (1):
-       irqdomain: soc: Switch to irq_find_mapping()
-
-  MAINTAINERS                           |  6 +++---
-  drivers/bus/fsl-mc/dpmcp.c            | 22 ----------------------
-  drivers/bus/fsl-mc/fsl-mc-allocator.c |  5 -----
-  drivers/bus/fsl-mc/fsl-mc-private.h   |  6 ------
-  drivers/bus/fsl-mc/mc-io.c            | 20 --------------------
-  drivers/soc/fsl/qe/qe_ic.c            |  4 ++--
-  include/linux/fsl/mc.h                |  2 --
-  7 files changed, 5 insertions(+), 60 deletions(-)
+     Arnd
