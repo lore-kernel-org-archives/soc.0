@@ -1,76 +1,412 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39010A93D
-	for <soc@lists.linux.dev>; Tue, 25 Mar 2025 06:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1654ABA36
+	for <soc@lists.linux.dev>; Tue, 25 Mar 2025 10:52:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742884798; cv=none; b=S9dT8Q86QhyaOeg9RvSYMZJX85WLvojT29frVGeLDe0TU9PXsyLbIY5s5V25CQj2x9kIml905NjVe242ay6azbzD6QcV02SR1MQzrnbwaUbcykl3cwXgODV/FOsx7hArfsm6wykv08bqq9+IZ/cGgBvosOqfvCaFTDOWTcTl12Q=
+	t=1742899934; cv=none; b=ia7x52bxfnD7QG06hlOm4/pqz7laloQzQKEwzw8sDWQBLSPjfVAe+KmNvEc69oE314WIMFkG2O+X84QNW9cvHLa5N4ZF+uLPhHGOMjtZVc/RW4/qKXKmBko7eRZ7PMzlHHSFZ8qZk74V2+dr2gTXwZX/KxdhPzc7N3IX0LErSCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742884798; c=relaxed/simple;
-	bh=Bc8CRbIbQLE1lG+MUbsOgj/sCTJzDozvAlJLpVj5gAk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=uYDRPoLImu9hEEsZQrBB7ejC9h/4SmgD2ExkasjRuR1dJmvcJ5i+QPj/kePjWB8F1iHH6HO4oddapvBdoWxY3EQF1f5bbFid8fG2IMKIyIC78B9CNpAH3O9RH150SbE1tgDWaKEIVFbwjGZDx/z0QEf5U9Sw8naCcscoXqgNSdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9wviOnW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742899934; c=relaxed/simple;
+	bh=6ypNKE5ZUkZr30q3QrGqJ1AyK2lvJpMFRFKd+k+UQyU=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PJn1iU06AgUdk8qkWjfsrYX64QtJfkikK9TciR7otefWXJALKhrGJIfPCpK2T0KWKPC0J/LLIx3q6JQkzDkDleAqftrTaKt1RS9yQsEBKotz9EOP/8KqlcseRpnRXKVXDlSFcMsAQXQNOX1Lq39ZmjLCOPh05hguOkj4Iydg7Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkD8segM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9wviOnW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkD8segM"
 Received: by smtp.kernel.org (Postfix)
-	id D0A40C4CEED; Tue, 25 Mar 2025 06:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B948FC4CEE8;
-	Tue, 25 Mar 2025 06:39:57 +0000 (UTC)
+	id A9608C4CEED; Tue, 25 Mar 2025 10:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C622C4CEE4;
+	Tue, 25 Mar 2025 10:52:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742884797;
-	bh=Bc8CRbIbQLE1lG+MUbsOgj/sCTJzDozvAlJLpVj5gAk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Q9wviOnWIX5zksHIbW1UUnq0ei4DQU09+g0ht+P4nxW3MZ6mf4mWQJdjZ8Zxmsp92
-	 KP751dbOvi1rDJGJkJWXUIYWUgML8JcloB2622KG9W6Ws/p+Jyl9z66SmjXgHGJKt+
-	 j95iBkqS8RmR21K5rP1iksfKYxwjCpEbGSCLZY9BkP2Z+kl6lJVyKKMI+tXGBxlVwN
-	 3rxWIlpdfDW2nyjPcMhignJmO3Mo52oAO4ErZ8BS9InYw6tSne3u9fHRRyP06ZbWN8
-	 rIvbIFwlI3WxUUshq3IW8aXnqlgqJRa0fhd+oC2kTh0by2jEvyw40eug9zvatXOJ28
-	 3BSJW1q1VgjGw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E0B380DBCD;
-	Tue, 25 Mar 2025 06:40:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1742899933;
+	bh=6ypNKE5ZUkZr30q3QrGqJ1AyK2lvJpMFRFKd+k+UQyU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BkD8segMa744iDyhseiLZSyYO++pLVPKksXKGq0lrMcSObF8AAQblZfunBnZ+AwOO
+	 1ZsSTTTnPunwep0L3Ul0I/kR0DomSdk7QTyhRhYA4He7+DdIn8TNSCYX3MniWc0ebJ
+	 dGXZBJRTCXDjhHdgpkH9M86de2Aa2o6glPo/FQH1PXar4DTrakLKCVKpJ+lrk7aIzL
+	 ux83Fa0/BWBjlyDOxEFA04du4r749a/f8rUh50LLZ+ePF+4A0WsY4N1i7H17xFXvJ8
+	 kV/uIt2XaNQ9fWrwppPag4o+IUlo51rTF4O0IOyYldXL0TUR7qkcugyiwxCdKJ7oqH
+	 +sCDvndX0Woog==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1tx1tD-00Gsvq-CI;
+	Tue, 25 Mar 2025 10:52:11 +0000
+Date: Tue, 25 Mar 2025 10:52:10 +0000
+Message-ID: <865xjxmlgl.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Peter Chen <peter.chen@cixtech.com>
+Cc: soc@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	cix-kernel-upstream@cixtech.com,
+	marcin@juszkiewicz.com.pl,
+	kajetan.puchalski@arm.com,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Fugang Duan <fugang.duan@cixtech.com>
+Subject: Re: [PATCH v5 5/6] arm64: dts: cix: add initial CIX P1(SKY1) dts support
+In-Reply-To: <20250324062420.360289-6-peter.chen@cixtech.com>
+References: <20250324062420.360289-1-peter.chen@cixtech.com>
+	<20250324062420.360289-6-peter.chen@cixtech.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] SOC FSL for 6.15
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <174288483403.118982.6032800020167945000.git-patchwork-notify@kernel.org>
-Date: Tue, 25 Mar 2025 06:40:34 +0000
-References: <2dea9d3d-ef48-4799-b3cb-df4658ae6e29@csgroup.eu>
-In-Reply-To: <2dea9d3d-ef48-4799-b3cb-df4658ae6e29@csgroup.eu>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: soc@kernel.org
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: peter.chen@cixtech.com, soc@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com, marcin@juszkiewicz.com.pl, kajetan.puchalski@arm.com, krzysztof.kozlowski@linaro.org, fugang.duan@cixtech.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Fri, 21 Mar 2025 12:11:01 +0100 you wrote:
-> Hi Arnd,
+On Mon, 24 Mar 2025 06:24:19 +0000,
+Peter Chen <peter.chen@cixtech.com> wrote:
 > 
-> Please pull the following Freescale Soc Drivers changes for 6.15
+> CIX SKY1 SoC is high performance Armv9 SoC designed by Cixtech,
+> and Orion O6 is open source motherboard launched by Radxa.
+> See below for detail:
+> https://docs.radxa.com/en/orion/o6/getting-started/introduction
 > 
-> Thanks
-> Christophe
+> In this commit, it only adds limited components for running initramfs
+> at Orion O6.
 > 
-> [...]
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Fugang Duan <fugang.duan@cixtech.com>
+> Signed-off-by: Peter Chen <peter.chen@cixtech.com>
+> ---
+> Changes for v5:
+> - Delete pmu-spe node which need to refine, and add it in future
+> 
+> Changes for v4:
+> - Add ppi-partition entry for gic-v3 node, and let pmu-a520 and pmu-a720's interrupt entry
+> get its handle
+> - Remove gic-v3's #redistributor-regions and redistributor-stride properties
+> - Change gic-v3's #interrupt-cells as 4, and change all interrupt specifiers accordingly
+> - Remove "arm,no-tick-in-suspend" for timer due to global counter is at always-on power domain
+> - Remove timer's clock frequency due to firmware has already set it
+> - Add Krzysztof Kozlowski's reviewed-by
+> 
+> Changes for v3:
+> - Fix two dts coding sytle issues 
+> 
+> Changes for v2:
+> - Corrects the SoF tag's name
+> - Fix several coding sytle issues
+> - move linux,cma node to dts file
+> - delete memory node, memory size is passed by firmware
+> - delete uart2 node which will be added in future patches
+> - Improve for pmu and cpu node to stands for more specific cpu model
+> - Improve the timer node and add hypervisor virtual timer irq
+> - Pass "make O=$OUTKNL CHECK_DTBS=y W=1 cix/sky1-orion-o6.dtb"
+> 
+>  arch/arm64/boot/dts/Makefile              |   1 +
+>  arch/arm64/boot/dts/cix/Makefile          |   2 +
+>  arch/arm64/boot/dts/cix/sky1-orion-o6.dts |  26 +++
+>  arch/arm64/boot/dts/cix/sky1.dtsi         | 217 ++++++++++++++++++++++
+>  4 files changed, 246 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/cix/Makefile
+>  create mode 100644 arch/arm64/boot/dts/cix/sky1-orion-o6.dts
+>  create mode 100644 arch/arm64/boot/dts/cix/sky1.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+> index 79b73a21ddc2..8e7ccd0027bd 100644
+> --- a/arch/arm64/boot/dts/Makefile
+> +++ b/arch/arm64/boot/dts/Makefile
+> @@ -13,6 +13,7 @@ subdir-y += bitmain
+>  subdir-y += blaize
+>  subdir-y += broadcom
+>  subdir-y += cavium
+> +subdir-y += cix
+>  subdir-y += exynos
+>  subdir-y += freescale
+>  subdir-y += hisilicon
+> diff --git a/arch/arm64/boot/dts/cix/Makefile b/arch/arm64/boot/dts/cix/Makefile
+> new file mode 100644
+> index 000000000000..ed3713982012
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/cix/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_ARCH_CIX) += sky1-orion-o6.dtb
+> diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
+> new file mode 100644
+> index 000000000000..78f4fcd87216
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright 2025 Cix Technology Group Co., Ltd.
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "sky1.dtsi"
+> +/ {
+> +	model = "Radxa Orion O6";
+> +	compatible = "radxa,orion-o6", "cix,sky1";
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		linux,cma {
+> +			compatible = "shared-dma-pool";
+> +			reusable;
+> +			size = <0x0 0x28000000>;
+> +			linux,cma-default;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
+> new file mode 100644
+> index 000000000000..5bfeeea454e0
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/cix/sky1.dtsi
+> @@ -0,0 +1,217 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright 2025 Cix Technology Group Co., Ltd.
+> + *
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/ {
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	cpus {
+> +		#address-cells = <2>;
+> +		#size-cells = <0>;
+> +
+> +		cpu0: cpu@0 {
+> +			compatible = "arm,cortex-a520";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x0>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <403>;
+> +		};
+> +
+> +		cpu1: cpu@100 {
+> +			compatible = "arm,cortex-a520";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x100>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <403>;
+> +		};
+> +
+> +		cpu2: cpu@200 {
+> +			compatible = "arm,cortex-a520";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x200>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <403>;
+> +		};
+> +
+> +		cpu3: cpu@300 {
+> +			compatible = "arm,cortex-a520";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x300>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <403>;
+> +		};
+> +
+> +		cpu4: cpu@400 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x400>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu5: cpu@500 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x500>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu6: cpu@600 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x600>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu7: cpu@700 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x700>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu8: cpu@800 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x800>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu9: cpu@900 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0x900>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu10: cpu@a00 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0xa00>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu11: cpu@b00 {
+> +			compatible = "arm,cortex-a720";
+> +			enable-method = "psci";
+> +			reg = <0x0 0xb00>;
+> +			device_type = "cpu";
+> +			capacity-dmips-mhz = <1024>;
+> +		};
+> +
+> +		cpu-map {
+> +			cluster0 {
+> +				core0 {
+> +					cpu = <&cpu0>;
+> +				};
+> +				core1 {
+> +					cpu = <&cpu1>;
+> +				};
+> +				core2 {
+> +					cpu = <&cpu2>;
+> +				};
+> +				core3 {
+> +					cpu = <&cpu3>;
+> +				};
+> +				core4 {
+> +					cpu = <&cpu4>;
+> +				};
+> +				core5 {
+> +					cpu = <&cpu5>;
+> +				};
+> +				core6 {
+> +					cpu = <&cpu6>;
+> +				};
+> +				core7 {
+> +					cpu = <&cpu7>;
+> +				};
+> +				core8 {
+> +					cpu = <&cpu8>;
+> +				};
+> +				core9 {
+> +					cpu = <&cpu9>;
+> +				};
+> +				core10 {
+> +					cpu = <&cpu10>;
+> +				};
+> +				core11 {
+> +					cpu = <&cpu11>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	pmu-a520 {
+> +		compatible = "arm,cortex-a520-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW &ppi_partition0>;
+> +	};
+> +
+> +	pmu-a720 {
+> +		compatible = "arm,cortex-a720-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW &ppi_partition1>;
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-1.0";
+> +		method = "smc";
+> +	};
+> +
+> +	soc@0 {
+> +		compatible = "simple-bus";
+> +		ranges = <0 0 0 0 0x20 0>;
+> +		dma-ranges;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +
+> +		gic: interrupt-controller@e010000 {
+> +			compatible = "arm,gic-v3";
+> +			reg = <0x0 0x0e010000 0 0x10000>,	/* GICD */
+> +			      <0x0 0x0e090000 0 0x300000>;       /* GICR * 12 */
+> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW 0>;
+> +			#interrupt-cells = <4>;
+> +			interrupt-controller;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			gic_its: msi-controller@e050000 {
+> +				compatible = "arm,gic-v3-its";
+> +				reg = <0x0 0x0e050000 0x0 0x30000>;
+> +				msi-controller;
+> +				#msi-cells = <1>;
+> +			};
+> +
+> +			ppi-partitions {
+> +				ppi_partition0: interrupt-partition-0 {
+> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
+> +				};
+> +
+> +				ppi_partition1: interrupt-partition-1 {
+> +					affinity = <&cpu4 &cpu5 &cpu6 &cpu7 &cpu8 &cpu9 &cpu10 &cpu11>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupt-names = "sec-phys", "phys", "virt", "hyp-phys", "hyp-virt";
+> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>,
+> +			     <GIC_PPI 12 IRQ_TYPE_LEVEL_LOW 0>;
+> +	};
+> +};
 
-Here is the summary with links:
-  - [GIT,PULL] SOC FSL for 6.15
-    https://git.kernel.org/soc/soc/c/cf2ae5e5b68b
+I don't think there is anything wrong here, but it is also a pretty
+useless DT. There isn't even a UART to interact with the machine and
+find out whether it has actually booted.
 
-You are awesome, thank you!
+I reckon this should be part of the initial DT, as this otherwise
+serves little purpose.
+
+Thanks,
+
+	M.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Without deviation from the norm, progress is not possible.
