@@ -1,132 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2753C15E5AE
-	for <soc@lists.linux.dev>; Wed, 26 Mar 2025 09:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D3914D2A0
+	for <soc@lists.linux.dev>; Wed, 26 Mar 2025 12:11:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742980382; cv=none; b=mNobakUzCe6VeKL5WjrZyp6M1/LNJd4CVXEdfr9Truw0Gnjoft/IeObXSpAMczIuRgW0JRCiXx58sXBGOrF8zoNEcapSe+WNKROZWxCtbVWqmJLvZkjIwarlMKBuStjr/wfb/coT3If59BEw5qoYudmSG13BOmCaLfyiVLJA+Hs=
+	t=1742991116; cv=none; b=l6wYouTSA2tlJLeDWiB5HZ0g9csCWUbhS+1dXxG9wJgqF3z8f54v8g1m1MsFQTH7w2m63xlN28GxtkkBd8orwBAAfIUiVqhS5rJw0C5o2mnDEtK+4prx2zSylDVgzCTmqwlTBwMpkymHBgclKsfZ2mINCGDoVWp0OgBCLicYaRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742980382; c=relaxed/simple;
-	bh=aN+g0071I7Vt/PENJP2xKw1ev/MOlfvCtYEPMiSMFoo=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=irouq8/UuoZFd1kKS2fgw+nKub3f/QbD8T/aXsZ/VkhAzBRrLmigY698/dg1FG50znGuY6DALVYHvlDDEu1+iwu1nPsLvgnpJvBO4t8e0UwzIVsZOP9NnxbCYwLy+lhwwPJ9R0dXNJyeldsaws19e61i9faYJJzfltnyb9TBrzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KO4GxINV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742991116; c=relaxed/simple;
+	bh=aLc0K5b/b7l/twdPf626SKCCJoK+Eb6ypuMv1ZrAMbs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Jtnc35KQ4uc6dAnnMgE1gLM4PU082RcWB3FeXTYPUcEC+ZDDJ355rj2LHy7DJNQNXCX7t2DRIettiFVqP0o/m5fn4/OWO3pipUEnc52PytJoViTmeJ8czJ/mkxsv8l5QYFI2SvJOqdtM6weelLmyqGROvLn87RELltJTn6RlRco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jd2xddbB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KO4GxINV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jd2xddbB"
 Received: by smtp.kernel.org (Postfix)
-	id BD216C4AF09; Wed, 26 Mar 2025 09:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A119EC4CEE2;
-	Wed, 26 Mar 2025 09:13:01 +0000 (UTC)
+	id C7459C4CEEF; Wed, 26 Mar 2025 12:11:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA56C4CEEA;
+	Wed, 26 Mar 2025 12:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742980381;
-	bh=aN+g0071I7Vt/PENJP2xKw1ev/MOlfvCtYEPMiSMFoo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KO4GxINV6olNF2UQXuKkU8PE7klKPjHGZdg2MCcNmhwRPQWiGhojXXelfplsWVCi+
-	 AM9jbm6mLHrSoRMiDVMT7lMk/u4nAD0eRkb32dhblMEll6b/F0/n1KumF+aeY3y0s3
-	 OneulYbDcLOrIjrwP+JJRIpN7Sn7xkLXqM/3DvbVzq4hEe0XgcesrU3psE3OUe6wBP
-	 pm/l64u3LGqEdzkZ0p0+LieV00X7THRVODBGW+vRK6jzmvs/sonuyGcUgEjsQBParA
-	 d7RxtjIu8b5r9gvi+O4JYO7lDvRoLkNFN4HJMXm05vh42ep74Rj00961kpa78jfY14
-	 ExyrBH2W51E/g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1txMol-00HEBK-5u;
-	Wed, 26 Mar 2025 09:12:59 +0000
-Date: Wed, 26 Mar 2025 09:12:58 +0000
-Message-ID: <861pukm9yd.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Peter Chen <peter.chen@cixtech.com>
-Cc: soc@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	arnd@arndb.de,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	cix-kernel-upstream@cixtech.com,
-	marcin@juszkiewicz.com.pl,
-	kajetan.puchalski@arm.com,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Fugang Duan <fugang.duan@cixtech.com>
-Subject: Re: [PATCH v5 5/6] arm64: dts: cix: add initial CIX P1(SKY1) dts support
-In-Reply-To: <Z-Nz0DU441Wwj1i4@nchen-desktop>
-References: <20250324062420.360289-1-peter.chen@cixtech.com>
-	<20250324062420.360289-6-peter.chen@cixtech.com>
-	<865xjxmlgl.wl-maz@kernel.org>
-	<Z-Nz0DU441Wwj1i4@nchen-desktop>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1742991113;
+	bh=aLc0K5b/b7l/twdPf626SKCCJoK+Eb6ypuMv1ZrAMbs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Jd2xddbB8PdhZUBm5P8vWLfzCBcAAmC8YV8QdkFILLHHh9ByygVKktKj0yVb5Q3Lt
+	 WFVCeMnejjO833pmKrkBCvZXqXJCFUCHtloZ0/1GXXFEoX6uY6ChxWJIXXgD5mQb/3
+	 ZFKZQEwg7EwlxRQRPjdp8ow64WNOcyZYG90is7+DkgepAqgli9tiHHzxesmOEFTpu1
+	 KRcPevmR+YDg5HuRotJ2ILtx84BauQrKorH4KmcwasW753ag0aqecaX3vOd/KfEzIj
+	 yK6jrLDCcsyoTSqCwHDtknYUq7xFJrxrkQIHZ4VBD45clThNe1Kfyhp02ORRcEubOO
+	 sI6jw+ZExDtDw==
+From: Dinh Nguyen <dinguyen@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: dinguyen@kernel.org
+Subject: [GIT PULL] ARM: socfpga: updates for v6.15
+Date: Wed, 26 Mar 2025 07:11:52 -0500
+Message-Id: <20250326121152.1739873-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: peter.chen@cixtech.com, soc@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com, marcin@juszkiewicz.com.pl, kajetan.puchalski@arm.com, krzysztof.kozlowski@linaro.org, fugang.duan@cixtech.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 26 Mar 2025 03:26:08 +0000,
-Peter Chen <peter.chen@cixtech.com> wrote:
-> 
-> On 25-03-25 10:52:10, Marc Zyngier wrote:
-> > > +     timer {
-> > > +             compatible = "arm,armv8-timer";
-> > > +             interrupt-names = "sec-phys", "phys", "virt", "hyp-phys", "hyp-virt";
-> > > +             interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
-> > > +                          <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
-> > > +                          <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
-> > > +                          <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>,
-> > > +                          <GIC_PPI 12 IRQ_TYPE_LEVEL_LOW 0>;
-> > > +     };
-> > > +};
-> > 
-> > I don't think there is anything wrong here, but it is also a pretty
-> > useless DT. There isn't even a UART to interact with the machine and
-> > find out whether it has actually booted.
-> > 
-> 
-> UEFI uses the same UART, so we could see all kernel boot logs until
-> switch to use kernel UART driver for printk. If you would like boot
-> to the console at initramfs, just add uart node like patchset v1.
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-What's the point in upstreaming something that requires extra changes
-just to boot it? It only outlines these patches are not useful as they
-stand.
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
->
-> > I reckon this should be part of the initial DT, as this otherwise
-> > serves little purpose.
-> > 
-> 
-> Without this initial support, we can't add some base drivers, like
-> mailbox. The dt_binding_check will report warnings/errors [1].
+are available in the Git repository at:
 
-Of course you can. You just add additional patches to this series,
-making it something that is actually useful. So far, this series only
-serves as marketing material.
+  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.15
 
-> Full UART support depends on clock, clock control needs mailbox
-> to talk with FW using SCMI protocol.
+for you to fetch changes up to e417c5b196bbde4acac1fcad014fe9212d96f97d:
 
-Then do it. You obviously have existing DT support for it already.
+  arm64: dts: socfpga: agilex: Add dma channel id for spi (2025-03-26 06:47:04 -0500)
 
-> There is no any support for CIX SoC, so we had to add one small step by
-> step.
+----------------------------------------------------------------
+SoCFPGA DTS updates for v6.15
+- Updates to dt-bindings
+        - Document Agilex5 NAND daughter board
+        - Convert Stratix10 FPGA Manager to json-schema
+        - Convert Stratix10 Service Layer to json-schema
+        - Add document for Terasic's DE10-nano board
+- Add support for Agilex5 NAND daughter board
+- Add basic support for Terasic's DE10-nano board
 
-No, you are deliberately choosing to make this platform useless.
+----------------------------------------------------------------
+Mahesh Rao (2):
+      dt-bindings: fpga: stratix10: Convert to json-schema
+      dt-bindings: firmware: stratix10: Convert to json-schema
 
-That's a bit sad, and a waste of everybody's time.
+Matthew Gerlach (1):
+      arm64: dts: intel: socfpga_agilex: add frequencies to internal oscillators
 
-	M.
+Niravkumar L Rabara (6):
+      dt-bindings: intel: document Agilex5 NAND daughter board
+      arm64: dts: socfpga: agilex5: add NAND daughter board
+      arm64: dts: socfpga: agilex5: fix gpio0 address
+      arm64: dts: socfpga: agilex5: add qspi flash node
+      arm64: dts: socfpga: agilex5: add led and memory nodes
+      arm64: dts: socfpga: agilex: Add dma channel id for spi
 
--- 
-Without deviation from the norm, progress is not possible.
+Uwe Kleine-König (2):
+      dt-bindings: altera: Add compatible for Terasic's DE10-nano
+      ARM: dts: socfpga: Add basic support for Terrasic's de10-nano
+
+ Documentation/devicetree/bindings/arm/altera.yaml  |  1 +
+ .../devicetree/bindings/arm/intel,socfpga.yaml     |  1 +
+ .../bindings/firmware/intel,stratix10-svc.txt      | 57 -------------
+ .../bindings/firmware/intel,stratix10-svc.yaml     | 93 +++++++++++++++++++++
+ .../fpga/intel,stratix10-soc-fpga-mgr.yaml         | 36 ++++++++
+ .../bindings/fpga/intel-stratix10-soc-fpga-mgr.txt | 18 ----
+ arch/arm/boot/dts/intel/socfpga/Makefile           |  1 +
+ .../intel/socfpga/socfpga_cyclone5_de10nano.dts    | 95 ++++++++++++++++++++++
+ arch/arm64/boot/dts/intel/Makefile                 |  1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  6 ++
+ arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     |  4 +-
+ .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts | 51 ++++++++++++
+ .../boot/dts/intel/socfpga_agilex5_socdk_nand.dts  | 89 ++++++++++++++++++++
+ 13 files changed, 376 insertions(+), 77 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/firmware/intel,stratix10-svc.txt
+ create mode 100644 Documentation/devicetree/bindings/firmware/intel,stratix10-svc.yaml
+ create mode 100644 Documentation/devicetree/bindings/fpga/intel,stratix10-soc-fpga-mgr.yaml
+ delete mode 100644 Documentation/devicetree/bindings/fpga/intel-stratix10-soc-fpga-mgr.txt
+ create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10nano.dts
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_nand.dts
