@@ -1,108 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D3914D2A0
-	for <soc@lists.linux.dev>; Wed, 26 Mar 2025 12:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561EC1E25F7
+	for <soc@lists.linux.dev>; Wed, 26 Mar 2025 17:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742991116; cv=none; b=l6wYouTSA2tlJLeDWiB5HZ0g9csCWUbhS+1dXxG9wJgqF3z8f54v8g1m1MsFQTH7w2m63xlN28GxtkkBd8orwBAAfIUiVqhS5rJw0C5o2mnDEtK+4prx2zSylDVgzCTmqwlTBwMpkymHBgclKsfZ2mINCGDoVWp0OgBCLicYaRc=
+	t=1743011955; cv=none; b=rGZsv+mTFX2qIF3n47zFSdQ/3AeIrt+NsLgSzd3WuEIVlus3HE/qlthT/0YGdjMcwnw8PiL0Ay0ShONaiyqsNgVvV1fMuxDluHFzW3oYPS6EuYluuSLdp5Sa69S1CqpAXT+a1sZMiD2cM412nOBDTVqGCxEVbT5eOWzUlEaD0xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742991116; c=relaxed/simple;
-	bh=aLc0K5b/b7l/twdPf626SKCCJoK+Eb6ypuMv1ZrAMbs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Jtnc35KQ4uc6dAnnMgE1gLM4PU082RcWB3FeXTYPUcEC+ZDDJ355rj2LHy7DJNQNXCX7t2DRIettiFVqP0o/m5fn4/OWO3pipUEnc52PytJoViTmeJ8czJ/mkxsv8l5QYFI2SvJOqdtM6weelLmyqGROvLn87RELltJTn6RlRco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jd2xddbB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743011955; c=relaxed/simple;
+	bh=1wJZtJcA231/5rdekLdowq+LaWaUkK482BPfA9qzTRM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=RF7QIqDvpprWD/9xcHlJm0fkrMhzLVd8fbw4uW4VCIdekZzwD/ebcMZqJs8K6ifgMcK8KZn6HHGgNb6fti6Xu9FBKyesVQIU5DDBKKUUNfZAzzYarFDgA9bVKMnFQntr4//GU7/mRj4soM7OafGXkJBMUV57JJ7q0QL9UfqTKAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=dhLqSs8D; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=o1lA6Uqt; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jd2xddbB"
-Received: by smtp.kernel.org (Postfix)
-	id C7459C4CEEF; Wed, 26 Mar 2025 12:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA56C4CEEA;
-	Wed, 26 Mar 2025 12:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742991113;
-	bh=aLc0K5b/b7l/twdPf626SKCCJoK+Eb6ypuMv1ZrAMbs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Jd2xddbB8PdhZUBm5P8vWLfzCBcAAmC8YV8QdkFILLHHh9ByygVKktKj0yVb5Q3Lt
-	 WFVCeMnejjO833pmKrkBCvZXqXJCFUCHtloZ0/1GXXFEoX6uY6ChxWJIXXgD5mQb/3
-	 ZFKZQEwg7EwlxRQRPjdp8ow64WNOcyZYG90is7+DkgepAqgli9tiHHzxesmOEFTpu1
-	 KRcPevmR+YDg5HuRotJ2ILtx84BauQrKorH4KmcwasW753ag0aqecaX3vOd/KfEzIj
-	 yK6jrLDCcsyoTSqCwHDtknYUq7xFJrxrkQIHZ4VBD45clThNe1Kfyhp02ORRcEubOO
-	 sI6jw+ZExDtDw==
-From: Dinh Nguyen <dinguyen@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] ARM: socfpga: updates for v6.15
-Date: Wed, 26 Mar 2025 07:11:52 -0500
-Message-Id: <20250326121152.1739873-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="dhLqSs8D";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="o1lA6Uqt"
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.stl.internal (Postfix) with ESMTP id 50A171140159;
+	Wed, 26 Mar 2025 13:59:12 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Wed, 26 Mar 2025 13:59:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1743011952; x=1743098352; bh=+n
+	NwjWzuvNkREHvvhvrO0eWUH9hc78f5a/5U12q4Geo=; b=dhLqSs8Dx4HmtnzqHo
+	WT9tMYJ56QcYmspFLoPDJP06hKHaqRIQ6/enR5vOdotiY/FHC3tJSjiwQTtdKlCN
+	spOUuinfHaGy5dojne5iqfDIeNj6XsPwmSij5c2OcsRsSRdW89PceEwip3wHxf71
+	lZlqfu3qCLo0gt98HfWToYw1xfm0KV0M9eJ1RV3YwipuS8zg0ZBve+syMI+OJRiz
+	3erSUATSafjPVnQ7ZCpDQH3mrsMTzjCogleolNt66f/reUttBNSyTNG6QWIjWkkw
+	L0tnMhMA3G7KtiHvUMK6DAyyR51ojE+LTFiVukNGnwTKtRRVPS7SLB1tegcHchKp
+	vomQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1743011952; x=1743098352; bh=+nNwjWzuvNkREHvvhvrO0eWUH9hc
+	78f5a/5U12q4Geo=; b=o1lA6Uqtp4ptLbg1ZvB2oPp5JENe4g71FlV5Oe12yMoU
+	uwUNa1D3JMYVZo902OPblrpBqFbPqADOYZn/mMEfYX7FVOwVMiJVHIerHEcGefKP
+	Dfqqc06ThvxKIP+A38iywCCniIluribv/lugfqA1bHVnX53huoH+AJq9jAW/pk20
+	3DzHJ6YJlsGSN7MkYtv7atX0q9R8iH8mRbDcWDe+3Ls5uVVm64kcapgfA7KLCcOp
+	AhC813FnORc577T8/OmQRzxoAK/2C1oT40vol4AC7rFUgAfsCp4VdNcjKj005s50
+	JhWCvRgaywAvqlSuSOl7aJPvDvE6GxucGz9+u0oPMg==
+X-ME-Sender: <xms:b0DkZ5ul_BsbNOD6BQRaIAfs7-BnGEqf2nXlVoEPa2iQ4zhXtpQWsw>
+    <xme:b0DkZyfhNUTvWTeYYOsByAFrtR4abtQtvGPYwwBq7a529B43pOVpIHVe1LpoFf43u
+    O9RZsRfuZO5cQZNYIk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeiudelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkffutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepffffffehuefgfefhudevgfelieejkedtffefieej
+    tdfhvefgieeiveejueetfedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqd
+    hfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghr
+    nhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsohgtse
+    hlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghl
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:b0DkZ8w_jsxseN7UOMPTyF0-gD6ce-KOYK8NnkgDHnZklv_MLaKreg>
+    <xmx:b0DkZwPe1eJMYCxfRUIDlYW1QLXCiR3LDN4PReguRdKRSljhsSJwqA>
+    <xmx:b0DkZ5_9jTusg8zwzjNGItnYRFRbUWaijqrgqxjY8SMwXpOqKJ2ULw>
+    <xmx:b0DkZwVzzB4q51t_t4xL1jO2iOJDlaXBZ7mehw9GxQqGoPSCFSRgvg>
+    <xmx:cEDkZ0ZULJQ5O0lotlhr0XWi2MoyHu4QQguYbUC7BiSgkttNUbEeQW68>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B87142220073; Wed, 26 Mar 2025 13:59:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Wed, 26 Mar 2025 18:58:50 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev
+Message-Id: <1ef00af5-0196-46c4-95f3-7c6b90f3e293@app.fastmail.com>
+Subject: [GIT PULL 0/4] SoC updates for 6.15
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+These are the majority of the SoC tree updates for 6.15, with a
+handful of patches still waiting for a build regression fix.
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+There are a total of 658 non-merges patches from 165 developers,
+the most active ones being:
 
-are available in the Git repository at:
+     29 Nick Chan
+     24 Sudeep Holla
+     19 Krzysztof Kozlowski
+     19 AngeloGioacchino Del Regno
+     19 Alexander Stein
+     17 Quentin Schulz
+     16 Michal Simek
+     15 Frank Li
+     14 Ryan Wanner
+     14 Rob Herring (Arm)
+     14 Ahmad Fatoum
+     12 Oleksij Rempel
+     12 Ivaylo Ivanov
+     10 Tudor Ambarus
+     10 Markus Niebel
+     10 Jimmy Hon
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.15
+The overall dirstat that this time the largest updates are for
+Apple's T2 BMC based machines, as well as boards with rockchip
+and mediatek socs:
 
-for you to fetch changes up to e417c5b196bbde4acac1fcad014fe9212d96f97d:
+   0.1% Documentation/devicetree/bindings/arm/marvell/
+   0.7% Documentation/devicetree/bindings/arm/
+   0.1% Documentation/devicetree/bindings/clock/
+   0.1% Documentation/devicetree/bindings/firmware/
+   0.2% Documentation/devicetree/bindings/soc/samsung/
+   0.1% Documentation/devicetree/bindings/soc/
+   0.1% Documentation/devicetree/bindings/sound/
+   0.2% Documentation/devicetree/bindings/
+   0.5% arch/arm/boot/dts/allwinner/
+   0.1% arch/arm/boot/dts/amlogic/
+   0.1% arch/arm/boot/dts/intel/ixp/
+   0.7% arch/arm/boot/dts/microchip/
+   0.2% arch/arm/boot/dts/nvidia/
+   2.0% arch/arm/boot/dts/nxp/imx/
+   0.7% arch/arm/boot/dts/nxp/mxs/
+   0.1% arch/arm/boot/dts/renesas/
+   3.8% arch/arm/boot/dts/st/
+   0.8% arch/arm/boot/dts/xilinx/
+   0.1% arch/arm/boot/dts/
+   0.3% arch/arm/mach-at91/
+   0.1% arch/arm/mach-shmobile/
+   0.2% arch/arm64/boot/dts/airoha/
+   0.3% arch/arm64/boot/dts/allwinner/
+   0.2% arch/arm64/boot/dts/amd/
+   0.6% arch/arm64/boot/dts/amlogic/
+  22.0% arch/arm64/boot/dts/apple/
+   1.2% arch/arm64/boot/dts/arm/
+   1.4% arch/arm64/boot/dts/exynos/google/
+   3.2% arch/arm64/boot/dts/exynos/
+   8.2% arch/arm64/boot/dts/freescale/
+   0.4% arch/arm64/boot/dts/marvell/
+   8.0% arch/arm64/boot/dts/mediatek/
+   0.2% arch/arm64/boot/dts/nvidia/
+   3.0% arch/arm64/boot/dts/renesas/
+  14.6% arch/arm64/boot/dts/rockchip/
+   4.5% arch/arm64/boot/dts/st/
+   1.1% arch/arm64/boot/dts/ti/
+   2.4% arch/arm64/boot/dts/xilinx/
+   0.1% arch/arm64/boot/dts/
+   0.2% arch/riscv/boot/dts/
+   1.4% drivers/firmware/arm_ffa/
+   0.2% drivers/firmware/arm_scmi/
+   2.6% drivers/firmware/samsung/
+   0.2% drivers/firmware/smccc/
+   0.1% drivers/irqchip/
+   0.1% drivers/memory/
+   0.2% drivers/reset/
+   0.4% drivers/soc/apple/
+   5.1% drivers/soc/mediatek/
+   0.2% drivers/soc/qcom/
+   1.0% drivers/soc/renesas/
+   0.3% drivers/soc/samsung/
+   0.1% drivers/
+   1.2% include/dt-bindings/clock/
+   0.6% include/dt-bindings/reset/
+   0.1% include/linux/firmware/samsung/
+   0.2% include/linux/
 
-  arm64: dts: socfpga: agilex: Add dma channel id for spi (2025-03-26 06:47:04 -0500)
+New SoC support this time is for variations of chips
+from ST, Apple, Mediatek, and Microchip and AMD, as well
+as the Morello chip from Arm.
 
-----------------------------------------------------------------
-SoCFPGA DTS updates for v6.15
-- Updates to dt-bindings
-        - Document Agilex5 NAND daughter board
-        - Convert Stratix10 FPGA Manager to json-schema
-        - Convert Stratix10 Service Layer to json-schema
-        - Add document for Terasic's DE10-nano board
-- Add support for Agilex5 NAND daughter board
-- Add basic support for Terasic's DE10-nano board
-
-----------------------------------------------------------------
-Mahesh Rao (2):
-      dt-bindings: fpga: stratix10: Convert to json-schema
-      dt-bindings: firmware: stratix10: Convert to json-schema
-
-Matthew Gerlach (1):
-      arm64: dts: intel: socfpga_agilex: add frequencies to internal oscillators
-
-Niravkumar L Rabara (6):
-      dt-bindings: intel: document Agilex5 NAND daughter board
-      arm64: dts: socfpga: agilex5: add NAND daughter board
-      arm64: dts: socfpga: agilex5: fix gpio0 address
-      arm64: dts: socfpga: agilex5: add qspi flash node
-      arm64: dts: socfpga: agilex5: add led and memory nodes
-      arm64: dts: socfpga: agilex: Add dma channel id for spi
-
-Uwe Kleine-König (2):
-      dt-bindings: altera: Add compatible for Terasic's DE10-nano
-      ARM: dts: socfpga: Add basic support for Terrasic's de10-nano
-
- Documentation/devicetree/bindings/arm/altera.yaml  |  1 +
- .../devicetree/bindings/arm/intel,socfpga.yaml     |  1 +
- .../bindings/firmware/intel,stratix10-svc.txt      | 57 -------------
- .../bindings/firmware/intel,stratix10-svc.yaml     | 93 +++++++++++++++++++++
- .../fpga/intel,stratix10-soc-fpga-mgr.yaml         | 36 ++++++++
- .../bindings/fpga/intel-stratix10-soc-fpga-mgr.txt | 18 ----
- arch/arm/boot/dts/intel/socfpga/Makefile           |  1 +
- .../intel/socfpga/socfpga_cyclone5_de10nano.dts    | 95 ++++++++++++++++++++++
- arch/arm64/boot/dts/intel/Makefile                 |  1 +
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  6 ++
- arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi     |  4 +-
- .../arm64/boot/dts/intel/socfpga_agilex5_socdk.dts | 51 ++++++++++++
- .../boot/dts/intel/socfpga_agilex5_socdk_nand.dts  | 89 ++++++++++++++++++++
- 13 files changed, 376 insertions(+), 77 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/firmware/intel,stratix10-svc.txt
- create mode 100644 Documentation/devicetree/bindings/firmware/intel,stratix10-svc.yaml
- create mode 100644 Documentation/devicetree/bindings/fpga/intel,stratix10-soc-fpga-mgr.yaml
- delete mode 100644 Documentation/devicetree/bindings/fpga/intel-stratix10-soc-fpga-mgr.txt
- create mode 100644 arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10nano.dts
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_nand.dts
+      Arnd
