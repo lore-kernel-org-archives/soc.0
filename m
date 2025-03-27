@@ -1,193 +1,169 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E876156228
-	for <soc@lists.linux.dev>; Thu, 27 Mar 2025 07:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690E72046A0
+	for <soc@lists.linux.dev>; Thu, 27 Mar 2025 08:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743059801; cv=none; b=d5EbeWRoB/IU9VYnoK7K0tmbQHh0YO4rAuNUirtwwRPSnXXeX+TyjImzJrJxkDOa5e9bUX+AK8RGmlm7JdkoBo2uOYyWf7V+WOugDgXFjbozTG7juTp5QL1JWo9oAacaFuIFRMQ3ZnVmWGigaz5zt35dd7wSEkASPW8WudaSOIQ=
+	t=1743063547; cv=none; b=diJYWGOVm1oBKar+PvH4YiHOfCgYVN5eshLYiqfmFD+4yJK23davBD/Xh5FStX4oZF3l/kUZgEEFcLvZQu35LczyQHabmC4WlCU18uKRo6pD+2nzbsOKvqP/lksmiXO7yPFyEDVfrngjWbBR9PTDaGgXog2a2Wg6e3Z4Jb2Cj2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743059801; c=relaxed/simple;
-	bh=6MsLFXJTO1nHRU7fxYGjWw4YNdH3bXJp7NDPTR8FanM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=korslbKJS/X6Uq9tlToRC9c6x/mX2WFuLty4xc4f3hz8IuaCoi2ns+U6zrNhcw7hBoAKxVXzOiQMjwbafGm42lz65u/AHi7OCCssGIS/znCLAujj35NXruOIIX++TqtOFOolr64h9a7KTKlFN681YZrMLvNXrPUFHFlPf/XLOj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rfmlQaWl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743063547; c=relaxed/simple;
+	bh=1EDgCYPwyVrzxCUuEyGz2PU5ARY6WYfsdCN11arE1/Q=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=jB+mDZPS7jCdF1i/670fDfPEvoCrrRkr6SCreY1pFc4S5my39aadpLmjOUC6S37HrRWszU+EzQLR6hpvUFPZ/S0INrE/BQvdA5Ey0/ufHTiFJEkichgGH2mJHLPg4glt+nGB3eizBkPnUYwZz7mnTcmafBQL5ncJCUNCUBRWub8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Rwlc+XKi; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qVWwO4V0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rfmlQaWl"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Rwlc+XKi";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qVWwO4V0"
 Received: by smtp.kernel.org (Postfix)
-	id 2EAC2C4AF0C; Thu, 27 Mar 2025 07:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE92AC4CEDD;
-	Thu, 27 Mar 2025 07:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743059801;
-	bh=6MsLFXJTO1nHRU7fxYGjWw4YNdH3bXJp7NDPTR8FanM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rfmlQaWlXP/aVoSXq9kgeLjNE7tRfLq0IHl/9h0PxFlaiIZ6J3yq1FMzN7FuS0v3v
-	 TBr8wJwKxrN1uA85rwpEXdytFMKbfAiLfZQmHY30vWG/+5k2yNZzReX3LcVUxOOdvt
-	 rbEGrSXoTriIViqdSIiJExP4BREY3TTpRPgEWbZ+Lm8PMe5vKWzxDM5K+eth+//smd
-	 wjKF8A3z/0xGem/0wwl9DZfoIpXx5o50RbdPRKFVY1Lo2q//m+mnAI8v4eRnwdt6BX
-	 eT0QjWJwkvwTbD6r2rC200BgzcxSNQ7s7yStryWKepIOQBdLXrDthNzK8CT3PUep3+
-	 3c9qpSlN1vPPw==
-Message-ID: <e43b1a00-b221-413b-a36a-3a65e17f800f@kernel.org>
-Date: Thu, 27 Mar 2025 08:16:33 +0100
+	id 50B9EC4AF09; Thu, 27 Mar 2025 08:19:07 +0000 (UTC)
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 86463C4CEDD;
+	Thu, 27 Mar 2025 08:19:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86463C4CEDD
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.stl.internal (Postfix) with ESMTP id 14711114010C;
+	Thu, 27 Mar 2025 04:19:04 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Thu, 27 Mar 2025 04:19:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743063543;
+	 x=1743149943; bh=9CynTm7hEp1Sfyl9DtODjpswo0hQrqnUILQztZwn5tU=; b=
+	Rwlc+XKizpvtB2gg5LBo4xpET6CBjMmd5x6igfpbBF82pkYTeo9t6mdsx1ouqG2Q
+	cKigO+SPb7GiYEu3Njt20InVl6mIyJVRZVhAQH7/MCCu5C0prN2J+MkBycXFqQUV
+	BZl2gxqSJIfFNa4Yx3YPzyZ1wvO1kgRX4cQSZA+r2Qvp3ZCH0HSeev6D55Er6imI
+	7qmlvcEEI2JRkY8TueyXIhsBdfMg5zd9PZqS5i5iRemIcoBQ0ytp7hsuIw3zztgP
+	ieLTeTiYBcfmscCoQAafQyu4QrV3kChHfeHTLV6SsKnqeQ8mAUwk8hfqOChQtc+J
+	/eHxXi4uiFMhqxFIt8B/IA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743063543; x=
+	1743149943; bh=9CynTm7hEp1Sfyl9DtODjpswo0hQrqnUILQztZwn5tU=; b=q
+	VWwO4V0EnTZmRZY3r939TQclGvc6Mw9DGKO/CdZP8hSYgXZJUOm4qd6shgByn29a
+	UNezciFeqk1M60E6zMJCaD1KDkSltlzyezr8JP4EhbEkYEAVcvcw84mgRRV7Gaok
+	yzq8z5Waw1tknHsgiYuKfPPZe9vBGA5BhigoS6DoU38jCGlLJX5YMpuArSNnJ6UK
+	N5L27AQhTNCi77H8tWkXq8jHvIZtiNDCht+jbUgvCVkIUmmzr+P3QSIzj/bqyYBK
+	oA32ffJ2+goe8pXu89jcTQEGwH5RKus0+30Jv6fsc2kTMR+8q3t2/wF2MMzouyOj
+	UbUEml98pJIt1xra1uZHw==
+X-ME-Sender: <xms:9wnlZ7GYFqNl-VXkOIIxhgBpZHLoYL__WEALLu--ESHHaqC4L2AzAA>
+    <xme:9wnlZ4Ul8EausyYLZI9-F3FuiIa1pt6KxQkoGNtxDMfTUlRX5kkgK1gxlq5kMguNd
+    CXwilcelZeCWjTeDLA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieejleduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeej
+    feekkeelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggvpdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhhtpd
+    hrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphht
+    thhopehkrghjvghtrghnrdhpuhgthhgrlhhskhhisegrrhhmrdgtohhmpdhrtghpthhtoh
+    eptghigidqkhgvrhhnvghlqdhuphhsthhrvggrmhestghigihtvggthhdrtghomhdprhgt
+    phhtthhopehfuhhgrghnghdrughurghnsegtihigthgvtghhrdgtohhmpdhrtghpthhtoh
+    epphgvthgvrhdrtghhvghnsegtihigthgvtghhrdgtohhmpdhrtghpthhtohepmhgrrhgt
+    ihhnsehjuhhsiihkihgvfihitgiirdgtohhmrdhplhdprhgtphhtthhopegtohhnohhrod
+    gutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:9wnlZ9LP8dmJIVo3AvCyikQqbOhgmJKbQZUiPgbJvWb4Zfmao3La0Q>
+    <xmx:9wnlZ5GUJwPkXDjtYRhY1AniLv0vNlvXinHvW02A-wjsCow0OxtQXQ>
+    <xmx:9wnlZxVMRNdwZvTuCMEbINhEbyxZSupnOIW6lERPVNSoDwPXUK1QaQ>
+    <xmx:9wnlZ0Pfsd7x_8j3b7QcWs1HyyTioCqYvW5dzr47bw-QEePbT594MQ>
+    <xmx:9wnlZ1k8xkWClOaeTCGYWJHwrI_5DGo3jOuLm6ZGZ76xeBgXpBMQ6_0E>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1170B2220072; Thu, 27 Mar 2025 04:19:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/6] arm64: dts: cix: add initial CIX P1(SKY1) dts
- support
-To: Peter Chen <peter.chen@cixtech.com>, Marc Zyngier <maz@kernel.org>
-Cc: soc@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+X-ThreadId: T24bcb56938053d3a
+Date: Thu, 27 Mar 2025 09:18:42 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Peter Chen" <peter.chen@cixtech.com>, "Marc Zyngier" <maz@kernel.org>
+Cc: soc@kernel.org, "Rob Herring" <robh@kernel.org>, krzk+dt@kernel.org,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
  linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com,
  marcin@juszkiewicz.com.pl, kajetan.puchalski@arm.com,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Fugang Duan <fugang.duan@cixtech.com>
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Fugang . duan" <fugang.duan@cixtech.com>
+Message-Id: <422deb4d-db29-48c1-b0c9-7915951df500@app.fastmail.com>
+In-Reply-To: <e43b1a00-b221-413b-a36a-3a65e17f800f@kernel.org>
 References: <20250324062420.360289-1-peter.chen@cixtech.com>
  <20250324062420.360289-6-peter.chen@cixtech.com>
  <865xjxmlgl.wl-maz@kernel.org> <Z-Nz0DU441Wwj1i4@nchen-desktop>
  <861pukm9yd.wl-maz@kernel.org> <Z-Tz1moMNozx23k6@nchen-desktop>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <Z-Tz1moMNozx23k6@nchen-desktop>
-Content-Type: text/plain; charset=UTF-8
+ <e43b1a00-b221-413b-a36a-3a65e17f800f@kernel.org>
+Subject: Re: [PATCH v5 5/6] arm64: dts: cix: add initial CIX P1(SKY1) dts support
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 27/03/2025 07:44, Peter Chen wrote:
->>>
->>> On 25-03-25 10:52:10, Marc Zyngier wrote:
->>>>> +     timer {
->>>>> +             compatible = "arm,armv8-timer";
->>>>> +             interrupt-names = "sec-phys", "phys", "virt", "hyp-phys", "hyp-virt";
->>>>> +             interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
->>>>> +                          <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
->>>>> +                          <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
->>>>> +                          <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>,
->>>>> +                          <GIC_PPI 12 IRQ_TYPE_LEVEL_LOW 0>;
->>>>> +     };
->>>>> +};
->>>>
->>>> I don't think there is anything wrong here, but it is also a pretty
->>>> useless DT. There isn't even a UART to interact with the machine and
->>>> find out whether it has actually booted.
->>>>
->>>
->>> UEFI uses the same UART, so we could see all kernel boot logs until
->>> switch to use kernel UART driver for printk. If you would like boot
->>> to the console at initramfs, just add uart node like patchset v1.
->>
->> What's the point in upstreaming something that requires extra changes
->> just to boot it? It only outlines these patches are not useful as they
->> stand.
->>
->>>
->>>> I reckon this should be part of the initial DT, as this otherwise
->>>> serves little purpose.
->>>>
->>>
->>> Without this initial support, we can't add some base drivers, like
->>> mailbox. The dt_binding_check will report warnings/errors [1].
->>
->> Of course you can. You just add additional patches to this series,
->> making it something that is actually useful. So far, this series only
->> serves as marketing material.
->>
->>> Full UART support depends on clock, clock control needs mailbox
->>> to talk with FW using SCMI protocol.
->>
->> Then do it. You obviously have existing DT support for it already.
->>
->>> There is no any support for CIX SoC, so we had to add one small step by
->>> step.
->>
->> No, you are deliberately choosing to make this platform useless.
->>
->> That's a bit sad, and a waste of everybody's time.
->>
-> 
-> Hi Marc,
-> 
-> Thanks for your interesting of our platform, and your comments
-> help us a lot. But I don't think it wastes reviewers and maintainers
-> time, a clean patch set saves everyone's time during upstream process.
-> 
-> For how to organize the patch set for SoC, Krzysztof gave good summary
-> at [1]. We are going on upstream [2], this patch set is just a start
-> and base but not like you said for marketing purpose.
+On Thu, Mar 27, 2025, at 08:16, Krzysztof Kozlowski wrote:
+> On 27/03/2025 07:44, Peter Chen wrote:
+>>>> On 25-03-25 10:52:10, Marc Zyngier wrote:
+>> 
+>> Thanks for your interesting of our platform, and your comments
+>> help us a lot. But I don't think it wastes reviewers and maintainers
+>> time, a clean patch set saves everyone's time during upstream process.
+>> 
+>> For how to organize the patch set for SoC, Krzysztof gave good summary
+>> at [1]. We are going on upstream [2], this patch set is just a start
+>> and base but not like you said for marketing purpose.
+>
+>
+> I do not think I suggested in [1] to ever send new SoC containing only
+> CPUs and interrupt controller, without even serial. My instruction [1]
+> was how to organize it. The DTS can be even fully complete, see the
+> upstreaming example I have been using all the time - Qualcomm SM8650:
+>
+> https://lore.kernel.org/all/20231124-topic-sm8650-upstream-dt-v4-0-e402e73cc5f0@linaro.org/
 
+It is easier if there are other SoCs in the same family that are
+already supported than an entire new platform, but we have certainly
+done it for new SoC families as well.
 
-I do not think I suggested in [1] to ever send new SoC containing only
-CPUs and interrupt controller, without even serial. My instruction [1]
-was how to organize it. The DTS can be even fully complete, see the
-upstreaming example I have been using all the time - Qualcomm SM8650:
+> Entire SoC sent to mailing list on the day one of public release of that
+> flagship Qualcomm SoC. The SoC DTSI and board DTS have almost complete
+> picture, except few trickier pieces... but it even has full display and
+> GPU! Plus, as I explained on my email on samsung-soc, that DTS/DTSI
+> patchset references all other bindings with their state, so SoC
+> maintainers can understand what is the overall progress and what will be
+> the result in DT schema checks, if they apply the patchset.
+>
+> The minimum, absolute minimum submission is with the serial nodes. I
+> would prefer to have some storage or any other interface as well, but
+> that's fine.
 
-https://lore.kernel.org/all/20231124-topic-sm8650-upstream-dt-v4-0-e402e73cc5f0@linaro.org/
+Agreed. The usual arrangement for a new SoC family is to have
+the minimum set of drivers (uart, clk, pinctrl, regulator,
+iommu, irqchip) along with the DT bindings and the dts files
+in one branch and have that go through the SoC tree as part of
+the soc/newsoc branch. It sounds like in this case we only need
+uart and a mailbox since the rest are shared with existing
+firmware based drivers, so this isn't even the worst case
+but still requires some coordination between subsystem maintainers
+to ensure that all patches have been properly reviewed before
+I merge them.
 
-Entire SoC sent to mailing list on the day one of public release of that
-flagship Qualcomm SoC. The SoC DTSI and board DTS have almost complete
-picture, except few trickier pieces... but it even has full display and
-GPU! Plus, as I explained on my email on samsung-soc, that DTS/DTSI
-patchset references all other bindings with their state, so SoC
-maintainers can understand what is the overall progress and what will be
-the result in DT schema checks, if they apply the patchset.
+Any peripheral drivers that are not essential for booting
+(typically mmc, ufs, spi, i2c, gpu, sound, pci) can get
+submitted at the same time, as there is no dependency on
+the platform being merged first.
 
-The minimum, absolute minimum submission is with the serial nodes. I
-would prefer to have some storage or any other interface as well, but
-that's fine.
-
-
-> 
-> [1] https://lore.kernel.org/linux-samsung-soc/CADrjBPq_0nUYRABKpskRF_dhHu+4K=duPVZX==0pr+cjSL_caQ@mail.gmail.com/T/#m2d9130a1342ab201ab49670fa6c858ee3724c83c
-> [2] https://lore.kernel.org/lkml/20250325101807.2202758-1-guomin.chen@cixtech.com/
-> 
-
-
-Best regards,
-Krzysztof
+     Arnd
