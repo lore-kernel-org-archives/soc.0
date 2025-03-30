@@ -1,63 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FBF21ADBC;
-	Thu, 27 Mar 2025 19:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85F419AA63
+	for <soc@lists.linux.dev>; Sun, 30 Mar 2025 12:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743102614; cv=none; b=cux6I+Z3qWdC+3rMV4Hg35nPTphX0yqVZde6WZFsi0WaxqzIlVUTBoyKiAekX8n1Y9/F7q+vkjGAIgD0eN5t9khmUL/ICClnANnxURrRv1nsWiu7O4l1/zI8JtDVS3TeVggMzOoB3aLelckuB4vtyZ/Z4hxeVN+9ss8Z2g5UgiA=
+	t=1743336859; cv=none; b=Cijaddx3Qp429/8tmDY8a6yLymAehoYkziH/s1rk2UCfznqQ+zdGDczneXs16hEmn/ujpZPw/K7YqUPXkhKJvctdV/i8ci3jJB9B7Vcg9auxvKixZ6Ga0KodZK+AQtPwWB40fUuBQQnfNKebHgMCh8mYFRPQafe+e+3Kj/cZsyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743102614; c=relaxed/simple;
-	bh=b2oXZnPzsIum4K6TXMGqWU1F5vMP9hIiJKyV23xpD4A=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=kD8tb5UpVQl8e1Nw5vbj22JE+gUAO/kUDP7UlgyPfwIH9thHJ/ue1mpjPlte2NpsvZN2R4wP0PXndkxEn8BEovqQnu+u1v6pcXqaJ2xZCIwsKhx4WCTwT5IBpg7drREGQrkKwhCRVSodkyI4+frcK1WD72zDLR/AjTRiEIbeTe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q11eVxxl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743336859; c=relaxed/simple;
+	bh=ctuZ+NNnUO/ZMdUUYMIQYarAEHDOulCK90vRC8Ygtek=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mxu6F/a71RJxKy8q1J3BjUZ0ZC3O2M2jmTjk4Hn7UUoUziWU05WQI6DvxMcA6s0Qt93ZTWuz263CiMLJx8UooPcNnXIGoft/FI4v8vMwvt14y9f9IEndz0LMwJtGiW7txqZrw5Qp9uIDo/QrFwtvsl7T/Ld8AsUFs7FhpPKZC+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=PCNNhs+p; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q11eVxxl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9540FC4CEEA;
-	Thu, 27 Mar 2025 19:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743102614;
-	bh=b2oXZnPzsIum4K6TXMGqWU1F5vMP9hIiJKyV23xpD4A=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=q11eVxxlT2mMfu/SemfDhLr8oPIVcypJuO+4feKNi05V8rjEQDbQl5IPsOrvuv6xG
-	 WTtI4B83NLp1fIt3AiOPOx/L18hZyR7GxTpiCbdI2cpWBHTzuRypHpuMTenjxdp7bu
-	 mWB9R2zrckjkcfejlvitfp03T7mg/wwFotMZVb/yaOInQI0EyZ7r/5Ha2CsQ/qKnI3
-	 9adMWrbQIvInxYa93IAbCsiUfClT/VkO7R8+8RT8yk9x/tkrDZzNiI9qQIX7FBWqvy
-	 Q4MBiJ6H6ONnLgfrddKXwNA6EIHDfkZi/eAI2G8LvejLyMOSIyvsyCBMwQMktkfsu0
-	 ys1GVUPdnYxIw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33F1F380AAFD;
-	Thu, 27 Mar 2025 19:10:52 +0000 (UTC)
-Subject: Re: [GIT PULL 4/4] soc: arm platform changes for 6.15
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ba5bc4de-e264-41f4-81b2-757ed275fa53@app.fastmail.com>
-References: <1ef00af5-0196-46c4-95f3-7c6b90f3e293@app.fastmail.com> <ba5bc4de-e264-41f4-81b2-757ed275fa53@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lists.linux.dev>
-X-PR-Tracked-Message-Id: <ba5bc4de-e264-41f4-81b2-757ed275fa53@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.15
-X-PR-Tracked-Commit-Id: 46367f09b2203f7c63f89293aea9279b875d0ff2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3536cb1e5753a832f88c268e328c644f6e367980
-Message-Id: <174310265091.2176831.2744875539352981808.pr-tracker-bot@kernel.org>
-Date: Thu, 27 Mar 2025 19:10:50 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="PCNNhs+p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=akAZcCXApKmwr9
+	fL0Nee5K8HyD7g2IZvIQTiXZJTi2A=; b=PCNNhs+pernjiTV4Rzfbu6uVHuFdqP
+	K5HUKrHhpGf2jjok2afE8zgj2nFb2VNSJ7+uYsGQvXx5et+J+ecyFIpy13zmZ3d+
+	+twwoqwFFD1kl4XJXgVzRRwGFlljf7HO/aWMS2d+PeWEvwbR7ogYYGv8cqrynwW9
+	Ihmp5tT+kT/HIzFUqfbTNXO5cBe5IXR4qfkCD0tphtOt/J8ZDGdLCEOOG+42asfv
+	gYJHUoor4EF4IGNdHUmfdMx0CC14tw2EjRkcqxlO9D7QMnTc4JABBT39WwxnKwT0
+	10Md+hgP77Mh0hy3fcjlaRPZKnT0kgPIv25VK8PpQClp8VTKA6skeVnQ==
+Received: (qmail 855621 invoked from network); 30 Mar 2025 14:14:09 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Mar 2025 14:14:09 +0200
+X-UD-Smtp-Session: l3s3148p1@ouCSPY4xTjBtKjBa
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-arm-kernel@lists.infradead.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alexey Charkov <alchark@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-omap@vger.kernel.org,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@lists.linux.dev,
+	Tony Lindgren <tony@atomide.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Vladimir Zapolskiy <vz@mleia.com>
+Subject: [PATCH 0/5] ARM: dts: fix faulty ohci/ehci node names
+Date: Sun, 30 Mar 2025 14:13:23 +0200
+Message-ID: <20250330121326.9069-7-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Wed, 26 Mar 2025 19:03:55 +0100:
+After I fixed this for the at91-boards I was interested in, I let the
+scripts run for the other boards, too, of course. Here is the outcome.
+49 less dtbs_check errors. Build bots were happy. No dependencies, I
+suggest sub-trees apply them on their own. Thanks!
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.15
+Happy hacking,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3536cb1e5753a832f88c268e328c644f6e367980
+   Wolfram
 
-Thank you!
+Wolfram Sang (5):
+  ARM: dts: marvell: fix faulty ohci/ehci node names
+  ARM: dts: nxp: lpc: fix faulty ohci/ehci node names
+  ARM: dts: st: fix faulty ohci/ehci node names
+  ARM: dts: ti: omap: fix faulty ohci/ehci node names
+  ARM: dts: vt8500: fix faulty ohci/ehci node names
+
+ arch/arm/boot/dts/marvell/kirkwood-db.dtsi             | 2 +-
+ arch/arm/boot/dts/marvell/kirkwood-dir665.dts          | 2 +-
+ arch/arm/boot/dts/marvell/kirkwood-mv88f6281gtw-ge.dts | 2 +-
+ arch/arm/boot/dts/marvell/kirkwood.dtsi                | 2 +-
+ arch/arm/boot/dts/marvell/orion5x.dtsi                 | 4 ++--
+ arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi                 | 2 +-
+ arch/arm/boot/dts/st/spear1310-evb.dts                 | 8 ++++----
+ arch/arm/boot/dts/st/spear1340-evb.dts                 | 8 ++++----
+ arch/arm/boot/dts/st/spear13xx.dtsi                    | 8 ++++----
+ arch/arm/boot/dts/st/spear300-evb.dts                  | 6 +++---
+ arch/arm/boot/dts/st/spear310-evb.dts                  | 6 +++---
+ arch/arm/boot/dts/st/spear320-evb.dts                  | 6 +++---
+ arch/arm/boot/dts/st/spear320-hmi.dts                  | 6 +++---
+ arch/arm/boot/dts/st/spear3xx.dtsi                     | 6 +++---
+ arch/arm/boot/dts/st/spear600.dtsi                     | 8 ++++----
+ arch/arm/boot/dts/ti/omap/omap3.dtsi                   | 4 ++--
+ arch/arm/boot/dts/ti/omap/omap4-l4.dtsi                | 4 ++--
+ arch/arm/boot/dts/ti/omap/omap5-l4.dtsi                | 4 ++--
+ arch/arm/boot/dts/vt8500/vt8500.dtsi                   | 2 +-
+ arch/arm/boot/dts/vt8500/wm8505.dtsi                   | 2 +-
+ arch/arm/boot/dts/vt8500/wm8650.dtsi                   | 2 +-
+ arch/arm/boot/dts/vt8500/wm8750.dtsi                   | 2 +-
+ arch/arm/boot/dts/vt8500/wm8850.dtsi                   | 2 +-
+ 23 files changed, 49 insertions(+), 49 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.47.2
+
