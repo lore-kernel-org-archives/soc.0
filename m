@@ -1,157 +1,63 @@
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106D81F3BA8
-	for <soc@lists.linux.dev>; Fri,  4 Apr 2025 15:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BEF2135C9;
+	Fri,  4 Apr 2025 16:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743779401; cv=none; b=GLxha+1DPpNMyabmKzQ++OOqqfpk+npXzu4IafXOSqmcyhNamnLOGpNM+2F4vufY6pLjKPvseU73twiVPWys0j8MyVPqZ2l9ZX3EvreKEcA9Eo8NW1eDNyTNkZtiAxzZNYybkfB6s1zir2eQo7ezGbRXpZgfzRLRPmL4X7koRcA=
+	t=1743785998; cv=none; b=PV/ol/fLDpRS8ixBgIUaXpapNzo3GR3usIimvM2MUaKeNGNSQ2CpifKnPfDPHpRM3ZK3E6nA3nxg+7xfLs4uGMkAwyP8o+HyAKsyS1eNb8DhUnDa5OOEcY3zPF3GqZI/Umm9RLAMOntWghCMB7ZfqF9QWGtDytDNDQv5ND6fFAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743779401; c=relaxed/simple;
-	bh=oKLbeOTFd8BHwF7Nezk8vluZK3LVk21rmvApN9Aeu7c=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=RGkvpc07ojbRWzU1afEnZux+KhV6lQRPEkr1ZsUv2v/8k/OCvu9rNneFKW/r63Xi4IS7CAbLv97cg5RpWgykSbRHlYKN3C3sYpZZmErl5iE6aGEuLZ37nH9FMbomltEKKjm5RbUgO6KhitLCIwW20tz6HrzXB2w19TwHhPVTLyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BFcPvZNM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RY3UsWRb; arc=none smtp.client-ip=202.12.124.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1743785998; c=relaxed/simple;
+	bh=dfIttBr1UBv1XFNCaNT+D9E45dvWVGkJ4fwbbwmxtlY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=qfGWe99HddKXZYMQLguARYBA6G1dPqccppOilV2WJvHRqdU4cbOSA63WT5JrD+1U//DX53JgyCtM1XfmRV+CL976izW5snibTXqb/Dpa69Q/MiawhWfrDkN1zNsPglWUqstNSaR6OhlSMgVCFj7U5eqTSmMJ9eM5sjYnOAyVkLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WclBQcBD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BFcPvZNM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RY3UsWRb"
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id 0780B1140160;
-	Fri,  4 Apr 2025 11:09:57 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-12.internal (MEProxy); Fri, 04 Apr 2025 11:09:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1743779396; x=1743865796; bh=0U
-	N1zEQHh+3iAICbKR3Qfw/BEbHddaeGqLeTAPFJgLU=; b=BFcPvZNMxp2G07QEFC
-	FtfCRHKf+y7LDSSgX+wqoiMVxUXkaLaRkdFb47Ukfi8p7xvPeKPy58b2e+NNiTe+
-	Ag/exsVsBFEqP4MjS8AH6KqTlprvCJzecQtlMH8FGak7IpjI4xEezbdiKdOUOLe/
-	rijhD7a12hlTpSY6Cx6L6FPRae+eJ2SLhBW0yC0Pvdb+Wb7pEL7YIwhBcP48D/CY
-	3v2tnT46KknvqnCcjig+ofeZEdnWtSWkRTeGNJPb8hqaiJQu2unKeT5Lu+lg7JsF
-	k5THmSjWw3vpB+iOKojLG38HX0mOe2MwWDfF2H/pJjX2uxM4pkILkZEJD6m3QoxS
-	hQJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1743779396; x=1743865796; bh=0UN1zEQHh+3iAICbKR3Qfw/BEbHd
-	daeGqLeTAPFJgLU=; b=RY3UsWRb+2UHgffX4xV8KUskbOLVlIBBE6Zi/G0i5h4L
-	CPdOkfqzBnhAcLlTK+EDb5yNJ9R/8vpdORrElVWVHjILQqq16p18Hba4wyWbz2EW
-	7MrTseMQb5i2RH/60amsC6x5oGF4/wwBzeSZRnVugIQBo4MhM/H7XNrLK+AnJHbI
-	qHS0RJ/tZlpQNQPBwgiRoSTrdgVm8777HUaSVycpkAkJUq7coUAI5onPwNcDIP9W
-	tNM4UbGVzRhMDi6HvC3m+emo+mGdrcGg1NaE/zp9Slh2O9twOpVJLgyVQ7eUSGLD
-	QJD7JiSSOtFigQaYCfceTDj6yxiFNRZgotF99/+W2w==
-X-ME-Sender: <xms:RPbvZ2MvkEFU3wDt8I_5tJMnPUqqbN3E1xNgw6sUKnYRrPC1lLaqVA>
-    <xme:RPbvZ087MUYdSuFHlB4jcRNttrnvZ3JQW5xiTRzVqT8svOMhBs85gf63mMMJyMEOK
-    8-UdNrJo-20ShyE3jA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduledujeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkffutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepudfgfeeuheelheehfeeigeeigeeiveevheelteel
-    leeijeeikeekvddthfejieffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhith
-    hhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepiedpmhhouggvpe
-    hsmhhtphhouhhtpdhrtghpthhtohepkhgrsggvlheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprh
-    gtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrggu
-    vggrugdrohhrghdprhgtphhtthhopehsohgtsehlihhsthhsrdhlihhnuhigrdguvghvpd
-    hrtghpthhtohepihhorghnrgdrtghiohhrnhgvihesnhigphdrtghomhdprhgtphhtthho
-    pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:RPbvZ9SSc0SvdTZwEYcJ1NaoSvJmt7rBZrYYbUcXv91eAFCFIMH96w>
-    <xmx:RPbvZ2toc3OhQomFrsi6iWeeCwJNulPM-FUSyjVk37CluQhcQ81p-g>
-    <xmx:RPbvZ-db2yB5F3Z44XPWC_YRW7PJ9kfrarFTNENa4A_8PmXfttoNnQ>
-    <xmx:RPbvZ61H0p1E6P8uzNRolZOp8tDb-W4E7e4UFNZSlB_QU1OwfuG_PQ>
-    <xmx:RPbvZ8utDE_4OumfRF9zjijdevK9Kgw_cCjKo0eSPjxRanvNK5GXru2E>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 60F592220074; Fri,  4 Apr 2025 11:09:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WclBQcBD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9410BC4CEE8;
+	Fri,  4 Apr 2025 16:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743785997;
+	bh=dfIttBr1UBv1XFNCaNT+D9E45dvWVGkJ4fwbbwmxtlY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=WclBQcBDFqtTubjvXxw+Kpg3f2FSKObSD1fAOYFtOhuHU23c+BXV4Lnjuy4B9sXKA
+	 W81nXUKhY+QpqRzf32hyd6mu0lpHND90EB3H2yA5iB3j0o/XocG5fbhJuyy575kdF5
+	 WAbB4Mz0/bsd8BUMIYUakXbFgdq1KVD8KzIK31p9wGVVqNDNzrJgWmmoLaMtAxNbIz
+	 5DJeMYBLLT7m7liuvmob4EKejx9JtBAMPJjN35rNo+kq6lNIWb7Vryy6js4XWGSK4N
+	 Q8PNIVdikC+Rz1OtdvMy4pfgrlK4TWxP+7QhENIUgOlebLc8jrVWP2FzxSZ1rI5lUY
+	 JA3EEsIAFwsiQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4BD63822D28;
+	Fri,  4 Apr 2025 17:00:35 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: drivers for 6.15, part 2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <cfc8fd0d-9d32-432b-a5ba-1477265670e0@app.fastmail.com>
+References: <cfc8fd0d-9d32-432b-a5ba-1477265670e0@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <cfc8fd0d-9d32-432b-a5ba-1477265670e0@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.15-2
+X-PR-Tracked-Commit-Id: af34290cdc60a289e43f38a87621a3e9dd63c67b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a05c6e6694c1601bdefd160332d3deba8393644f
+Message-Id: <174378603455.3328120.9533370932633245120.pr-tracker-bot@kernel.org>
+Date: Fri, 04 Apr 2025 17:00:34 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Ioana Ciornei <ioana.ciornei@nxp.com>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Date: Fri, 04 Apr 2025 17:09:35 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: "Ioana Ciornei" <ioana.ciornei@nxp.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
-Message-Id: <cfc8fd0d-9d32-432b-a5ba-1477265670e0@app.fastmail.com>
-Subject: [GIT PULL] soc: drivers for 6.15, part 2
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
+The pull request you sent on Fri, 04 Apr 2025 17:09:35 +0200:
 
-  Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.15-2
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a05c6e6694c1601bdefd160332d3deba8393644f
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.15-2
+Thank you!
 
-for you to fetch changes up to af34290cdc60a289e43f38a87621a3e9dd63c67b:
-
-  Merge tag 'omap-for-v6.14/drivers-signed' of https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap into soc/drivers-2 (2025-04-04 14:37:41 +0200)
-
-----------------------------------------------------------------
-soc: drivers for 6.15, part 2
-
-This is the promised follow-up to the soc drivers branch, adding minor
-updates to omap and freescale drivers.
-
-Most notably, Ioana Ciornei takes over maintenance of the DPAA bus
-driver used in some NXP (originally Freescale) chips.
-
-----------------------------------------------------------------
-
-I had a hard time deciding whether to include the platforms/cznic
-driver changes in the pull request or not: The driver changes had
-caused some build time regressions and I actually made fixes for
-all of them but wasn't quite happy with them either.
-
-In the end I decided to send out everything else but skip the
-cznic driver since my fixes (finally sent today) hadn't been
-part of linux-next or properly reviewed so far, and the merge
-window is basically over. Sorry Marek, I should have been
-more active in making sure they branch was in shape. Let's
-make sure we get a new version into linux-next after the merge
-window. I have uploaded the current version to
-https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=cznic/platform
-and I think we should just rebase that and squash my three
-fixups into the original commits.
-
-Andreas Kemnade (1):
-      Input: tsc2007 - accept standard properties
-
-Arnd Bergmann (2):
-      Merge tag 'soc_fsl-6.15-1' of https://github.com/chleroy/linux into soc/drivers-2
-      Merge tag 'omap-for-v6.14/drivers-signed' of https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap into soc/drivers-2
-
-Dr. David Alan Gilbert (1):
-      bus: fsl-mc: Remove deadcode
-
-Ioana Ciornei (3):
-      MAINTAINERS: add myself as maintainer for the fsl-mc bus
-      MAINTAINERS: fix nonexistent dtbinding file name
-      MAINTAINERS: add the linuppc-dev list to the fsl-mc bus entry
-
-Jiri Slaby (SUSE) (1):
-      irqdomain: soc: Switch to irq_find_mapping()
-
- MAINTAINERS                              |  6 +++---
- drivers/bus/fsl-mc/dpmcp.c               | 22 ----------------------
- drivers/bus/fsl-mc/fsl-mc-allocator.c    |  5 -----
- drivers/bus/fsl-mc/fsl-mc-private.h      |  6 ------
- drivers/bus/fsl-mc/mc-io.c               | 20 --------------------
- drivers/input/touchscreen/tsc2007.h      |  2 ++
- drivers/input/touchscreen/tsc2007_core.c |  5 ++---
- drivers/soc/fsl/qe/qe_ic.c               |  4 ++--
- include/linux/fsl/mc.h                   |  2 --
- 9 files changed, 9 insertions(+), 63 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
