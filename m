@@ -1,153 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C181D8DF6
-	for <soc@lists.linux.dev>; Tue,  8 Apr 2025 14:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1480725A2D0
+	for <soc@lists.linux.dev>; Wed,  9 Apr 2025 08:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744121972; cv=none; b=LCxiH+sso2JabNgB5DBbXqOjXiuB6A4x5n3OyNNzGGRYSXPrYt1Zj4LfE+Yf+fnJxVuWGKtYrWqT/LvgKPzaorSssJsA/mL0VfSfCocNrNmKKGXYGLxcpfwriFz7C0r23fZ+NfBfy+o/4B94LbM/Ud1ztUGf2tU8c8o+bsHRwoc=
+	t=1744187722; cv=none; b=LJ2PzxAwmarKjfGnoJlxsY2E4U4LaIYlg0c/u9zMt/uy8yTMJk1D8cC9GDwweZ6xjogmPQ9rOcR/hQ7c7afGbu2HnGOM6vY88kgT8HL6DdS7TPE/mqyZXLalh5xFbmvap9RrKQpRH8ea035BQLDaTIR6ctUM959orhjfbINopUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744121972; c=relaxed/simple;
-	bh=YOxUvMH6Zjumv6uHhZAYRdSZLUXfa/+e73bmK4g3BQ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MozI9xLFAZSWUZVqTqE6SabRtTXiZxysiy8XDSYVx/IToiGbBhZQ/RWoWWaB92FUSaeQap2D9sn/oXL9zBTB+TXSF48HMUPwf+aclZpHvffK3MkmRkIpdnELtMxosDPQ/W5gj2z2D9ja6NO3OpUNdeiP3zqcW0GaKCWK0QbO1yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=ePGC82kz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744187722; c=relaxed/simple;
+	bh=jC8F5u77YmXdyJ6CJbVRPG/gEReRuohDwTIVtgdLG/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Amx7sIQ96Qegb/oAqVaWHlLrpDj0TyFpE7k984pYjWFl0LbHcIc1kXGQFrjf8+I1hmE4IDnBK1bb+AzYlJjYLz5eCxxmDStkXINzxErV6i7PnNd3/fwbk6sTrVF8gEdmfbaqOq5Qsd+hDpXc8tD8jvP2fjvTpZL7ko2Oe5UzDD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=MHDa9pLZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="ePGC82kz"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="MHDa9pLZ"
 Received: by smtp.kernel.org (Postfix)
-	id BBF52C4CEE7; Tue,  8 Apr 2025 14:19:31 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 8BCBCC4CEE3; Wed,  9 Apr 2025 08:35:20 +0000 (UTC)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC5A4C4CEEA;
-	Tue,  8 Apr 2025 14:19:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC5A4C4CEEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=YOxUvMH6Zjumv6uHhZAYRdSZLUXfa/+e73bmK4g3BQ8=; b=ePGC82kzJBY/yq1PD5kMYbXCXg
-	pvjT/0wBdmPg69EVUa5+WAk+HJaPIMT17bcZxqeuKBXgEgs09ZW7ZKoVOIHy1Bsb1dJ+csPHrfY8Y
-	IFTp0IMWG7r0E+9wv0Bu8Cr3K3KrASy5tAirBVK5wIA8o+3Oly8KXH3i8nZ+kGJsSAXkppFZ9MR8Y
-	z88RLyu8ZYI/BaFMoEId/t5P5xdK68B/vs6S/eTi0VafM5Ydv91RicAz0/3UhkEi2IpwfKrLY7s1R
-	Bo4VedZS7BO5+goFyYngm8hIPI9ms3vIfZsE1ZIQS6ZbyG0Z4TdMngAzVkLdVzBSYBuYWvm1SotIK
-	ZC4LHAcA==;
-Received: from i53875b95.versanet.de ([83.135.91.149] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1u29nT-0004Js-C2; Tue, 08 Apr 2025 16:19:27 +0200
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Rob Herring <robh@kernel.org>
-Cc: arm@kernel.org, soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.15 #3
-Date: Tue, 08 Apr 2025 16:19:26 +0200
-Message-ID: <2021039.usQuhbGJ8B@diego>
-In-Reply-To:
- <CAL_Jsq+EwYZYYePusUZbOh+n6-MVt2AFGEiPg8AzHR73K-9-BQ@mail.gmail.com>
-References:
- <5552256.Sb9uPGUboI@phil> <2000188.PYKUYFuaPT@diego>
- <CAL_Jsq+EwYZYYePusUZbOh+n6-MVt2AFGEiPg8AzHR73K-9-BQ@mail.gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0F98DC4CEEB
+	for <soc@kernel.org>; Wed,  9 Apr 2025 08:35:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F98DC4CEEB
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3912fdddf8fso316455f8f.1
+        for <soc@kernel.org>; Wed, 09 Apr 2025 01:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1744187716; x=1744792516; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=23h330mvwmMPaZW8Skt8X7vh3SKfShoYxDlivAwr5wM=;
+        b=MHDa9pLZGoCGKtSWj8S4A67rLekW16pKGdwrwTi5y6j3VS3klklM9K+igRTXyD3l2H
+         x09nwsXiX00+VXF24Csot+ibg+3jM79DIkMi/X0hM0jLszjWYtkp4oTFejy0Iu47h+4+
+         FNJldyPHoygW0zXOUfV5OCZ/dzXOB1fP4L67dS5WXeuTlfFh0sG2ouW34wgDE4P2ublT
+         1S7+zvzTPv+KchN2erTHWpQow4IKUBbWiuRtfepbfos/uPgXoq/6KP2oJe5E8zS22He4
+         K4gaWXBXmCIBghV8k/xw8diLqArxUbfCkP0vsOw/tYKZJeKVr8JDXLPcsLv0HznSUsnw
+         wXXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744187716; x=1744792516;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=23h330mvwmMPaZW8Skt8X7vh3SKfShoYxDlivAwr5wM=;
+        b=CpOzKUhfpnwBMLScXpxFC5pgy3Tf6GZC43z2KD6P/uKJtg30egVd8O9Khs0z6WV8zA
+         +keOT1SRtztNbklxzMuA0tRa0RoUmmcjOOBe726oGCr8Wcef9S8RZE2eOSB5YfdD2Amf
+         mGUb9ptpoL4kxxYuBJ9smw2IgxhkLUcZs8kijp95/+SQlQqf8EtV1jhw9JAj0zX6Hkdb
+         Q7cthHkQ4yO3X19MhjxPJwoX1mtgiaNpjKmipkXeiV3Y7lrPnBuGporItXMzzKk9OjUS
+         NoJEC58VYDSa3CcPuuCUS5sP/gOLurAtkPeRUZ+MLsE6MxgzSiOfsu4l42GJuZ/sIcai
+         f84g==
+X-Forwarded-Encrypted: i=1; AJvYcCX2OKzZ2n2VFsteaKo4EvYE922LhLxfBJAmuTbkmhgiXOKGjiAFC79iBToEUxeRB1xl7Sk=@kernel.org
+X-Gm-Message-State: AOJu0Yzv1+rNPmfOLhAuEBAUgZZmHdA0xOXq5agqRKbwrJBOthF9dHeB
+	d/Nr6UcgcgUCace9JohF2ozyUf8NpUn0KcIlZyqgbRDQJlaElxnnyAfJn6paNfM=
+X-Gm-Gg: ASbGncuc+rHOiDY9XWmmnUN09yKVjtifgA7SRCn/fQoAa/V+uMsG75oirJ/JBiitnYX
+	IZFmhvpqh20shbFr8WGWYpGr1bNSs672eOFOgkexKo19oBCo0KKKEsqQVjLt7l3zxt2ghj3f7PV
+	G7hr9XASLJscVf3WKHacF/wynVibioLDAZlLmhcL4lcXFoNIun7mSyVmzYre7LD1/Z/PTwPG0t3
+	g/JPsl3/k5ZUqlKvib9OU48eCpds/vd7Nw3Bmt0SpkYGxFCQQVD/C7pfC0o1Biks/DNU78UGfyx
+	LAamXrGPlWXfV3Z0N+g3YiieKUVkdaTfA3yV10iE
+X-Google-Smtp-Source: AGHT+IEn1yvBB7exNZb7FHApiQ8xOI92TeGlvD29xSjj0MDZHF6MjvnUpIu9t/EpRfwIr/nwRnc2RQ==
+X-Received: by 2002:a05:6000:22c7:b0:39c:13fd:e6cd with SMTP id ffacd0b85a97d-39d821127fcmr5430572f8f.29.1744187716262;
+        Wed, 09 Apr 2025 01:35:16 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:7880:1c3f:3ac3:7c62])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d893611dcsm941303f8f.9.2025.04.09.01.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 01:35:15 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: arm@kernel.org,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [GIT PULL] ARM: convert board-file GPIO chips to using new value setters
+Date: Wed,  9 Apr 2025 10:35:13 +0200
+Message-ID: <20250409083513.21115-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Am Dienstag, 8. April 2025, 16:01:21 Mitteleurop=C3=A4ische Sommerzeit schr=
-ieb Rob Herring:
-> On Mon, Apr 7, 2025 at 11:49=E2=80=AFAM Heiko St=C3=BCbner <heiko@sntech.=
-de> wrote:
-> >
-> > Am Montag, 7. April 2025, 18:43:54 Mitteleurop=C3=A4ische Sommerzeit sc=
-hrieb Rob Herring:
-> > > On Mon, Apr 7, 2025 at 11:40=E2=80=AFAM Heiko St=C3=BCbner <heiko@snt=
-ech.de> wrote:
-> > > >
-> > > > Hi Rob,
-> > > >
-> > > > Am Montag, 7. April 2025, 17:56:37 Mitteleurop=C3=A4ische Sommerzei=
-t schrieb Rob Herring:
-> > > > > On Wed, Mar 19, 2025 at 6:56=E2=80=AFPM Heiko Stuebner <heiko@snt=
-ech.de> wrote:
-> > > > > >
-> > > > > > Hi soc maintainers,
-> > > > > >
-> > > > > > I made an error and accidentially applied a patch that was mean=
-t for
-> > > > > > the mfd tree. Thankfully Stephen noticed that when the duplicate
-> > > > > > commit appeared in linux-next.
-> > > > >
-> > > > > Both commits are in v6.15-rc1 now and the revert is not, so this
-> > > > > should not get applied/pulled. Or you will need to revert the rev=
-ert.
-> > > >
-> > > > yes, that was the intention.
-> > > >
-> > > > Back when I submitted this PR, I talked with Arnd on IRC the next d=
-ay.
-> > > >
-> > > > As both commits are identical sans some Signed-off-by lines, he sug=
-gested
-> > > > not trying to put a revert in, but instead let git solve it itself,=
- because
-> > > >
-> > > > arnd on IRC:
-> > > > > [...], but I worry that this would make things worse if 'git merg=
-e'
-> > > > > ends up doing the revert on top of the original commit once it ge=
-ts to
-> > > > > torvalds. Not sure if that's still a problem in git these days, b=
-ut
-> > > > > I've seen it happen in the past.
-> > > > > if two identical patches are in different branches, just leaving =
-them
-> > > > > there is usually easier
-> > > >
-> > > > So this PR was already marked as "superseeded" in patchwork back
-> > > > on march 20th.
-> > > >
-> > > >
-> > > > Nevertheless, thanks for making sure no funky revert happens now.
-> > >
-> > > The commit is still in linux-next though. That's how I happened upon =
-this.
-> >
-> > Ah right. I've recreated my next branch earlier today, after the -rc1
-> > release, so this should be gone with the next linux-next.
->=20
-> Still there today and now we have:
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Not much luck for me this week it seems.
+Arnd,
 
-So I've now re-created the for-next branch again, especially without the
-stuff from below. I guess the Revert slipped in again via that miss-merged
-branch.
+As discussed: please pull the following set of changes that convert the
+GPIO drivers under arch/arm/ to using the new line value setters that
+allow to indicate failures to callers.
 
-Looking at the rec-created
-https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/lo=
-g/Documentation/devicetree?h=3Dfor-next
+Thanks,
+Bartosz
 
-that revert should be finally gone now and not reappear.
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
-> ['tsd,px30-cobra-ltk050h3146w', 'rockchip,px30-cobra', 'rockchip,px30']
-> ['tsd,px30-cobra-ltk050h3146w-a2', 'rockchip,px30-cobra', 'rockchip,px30']
-> ['tsd,px30-cobra-ltk500hd1829', 'tsd,px30-cobra', 'rockchip,px30']
->=20
-> Which appear on no list.
+are available in the Git repository at:
 
-And I've also fixed my scripts to not miss-merge branches not actually
-intended for next.
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/arm-gpio-set-conversion-for-v6.16-rc1
 
-Heiko
+for you to fetch changes up to fb52f3226cab41b94f9e6ac92b1108bce324e700:
 
+  ARM: s3c/gpio: use new line value setter callbacks (2025-04-09 10:25:26 +0200)
 
+----------------------------------------------------------------
+ARM: convert board-file GPIO chips to using new value setters
+
+struct gpio_chip now has callbacks for setting line values that return
+an integer, allowing to indicate failures. We're in the process of
+converting all GPIO drivers to using the new API. This series converts
+all ARM board-file level controllers.
+
+----------------------------------------------------------------
+Bartosz Golaszewski (4):
+      ARM: orion/gpio: use new line value setter callbacks
+      ARM: sa1100/gpio: use new line value setter callbacks
+      ARM: scoop/gpio: use new line value setter callbacks
+      ARM: s3c/gpio: use new line value setter callbacks
+
+ arch/arm/common/sa1111.c         | 6 ++++--
+ arch/arm/common/scoop.c          | 7 +++++--
+ arch/arm/mach-s3c/gpio-samsung.c | 8 +++++---
+ arch/arm/plat-orion/gpio.c       | 6 ++++--
+ 4 files changed, 18 insertions(+), 9 deletions(-)
