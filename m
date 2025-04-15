@@ -1,42 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE60D1993BD
-	for <soc@lists.linux.dev>; Fri, 11 Apr 2025 09:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744363987; cv=none; b=bFip3MuVe7al99HYplonfe1zj49tRbJGFsR+TKOjVXPEKTF6HLAl75YLU0Z3IodScpQxCjfC6KG5nrApyOdFO6v3tMcCQn3rEdH3ltSdY1RBAsaarXFK2eMuySM7pxN9wT3dy3sVPTs4WIqZECSN5P8n2Q+NHIcfxx1u2yjYpyA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744363987; c=relaxed/simple;
-	bh=BYGMpUK6fucoGv2pU86frMAwJnWjLsqYYKE+kzTbT4w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EZtINABYl9GMrRLI3kh3haJlliwFD1QXhgpxkOBFwR5ZPgIc0mta31831GILmJc6dw9ugeLRMo54uedz1PcKBWO3o4DDrWSCwsM5dJK4LTRuiqizEWqDAEtl4IdiBtJZIbirV4qR8JLKN1/rPg3+iRgszFS3Vyy8+QMPrChpv4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5516C27A120
+	for <soc@lists.linux.dev>; Tue, 15 Apr 2025 07:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744702053; cv=fail; b=VJCgn/NUzzEsesoO1M0QYk5diBi3v/aGQWPpyDKwWlbDIBg0ddfgPw9h8Jni5TELKG1XggOtrXurYAMnBPR6JEf4Xtw7dFYvE4VkjUGZHXYCzum/FkM69gkJxp4ZleQ4HjnVGes1jxzoJm0fuKZcDAsBP4+BQ2FHTUqPZf6V05M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744702053; c=relaxed/simple;
+	bh=ookEEVVPxGGz0GzooZW2aGyy3lAFuIRmAd5/0JUZw9Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cTIdskuR76RKPERZ5rZPlDJ38SOfC+XpMhl2NaFbX/521xkO2SWhT13EQmyPihXkPnr0cWpOfd+Oj+oTpw80ljMskrExglTFGnOzKD39YuuVvqX1ZMjySmPRrEqM/dCDuSKTE6qfvGHsHnMUUc5lv/qoRuSF3J7GfI04K/veVfs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 79CFAC4CEE8; Fri, 11 Apr 2025 09:33:06 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 5332EC4CEE2;
-	Fri, 11 Apr 2025 09:33:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5332EC4CEE2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9346D106F;
-	Fri, 11 Apr 2025 02:33:04 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7A60E3F6A8;
-	Fri, 11 Apr 2025 02:33:03 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>
-Subject: [GIT PULL] arm64: dts: morello: Fix for v6.15
-Date: Fri, 11 Apr 2025 10:33:01 +0100
-Message-Id: <20250411093301.1060540-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	id C5E89C4AF0D; Tue, 15 Apr 2025 07:27:32 +0000 (UTC)
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2106.outbound.protection.outlook.com [40.107.255.106])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4E873C4CEDD;
+	Tue, 15 Apr 2025 07:27:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E873C4CEDD
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=flLNF6L89AZQo38YV6k24tV8PnXkwAgseaAipjmL5XBUZr1POb0NlVuxYaYO6KAxO6DNuRW/EQGryhGgb4p0QcB32IxSK34QSqFyDNchYAzRcJGjh+Iz9RDIIBJ9uLPcE20t6qfbRU36XG97zxcAo2EAEU5EAfbVGcquKNzjH4sVd0p/QcHM+PSOYJQYqIHE4qYpjS9jxAO3HsN71QGd+c4sJe6zFNNsaC3kERKYPo/NLdTa7yT0FnVnF6sNbk1OZFAYgaDomjXyG16TKGccapBI9juplMQBz6oZIaDXZIIWiCaj79R+9PNESYBQHzUaJW07R2v87vibPWPFDlDgHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LVpSZdDFsCHY8ZMtKH5F1+nDRJuSrIJos7FNpfoAwZg=;
+ b=TPf5N/fYr4sga2uEDGPKvon4PpJ/V16nZIUIJjGn67t4reCl/I0HBmIN6m7OGUVS3g9Mp/EavToaQvELLyMVqYBxFuMlvJgaryfIQd+xdmpx/5ZvkhNbiuIzh5xL6YcRe9YTZd+sbKsBHtCGYM8WA1G56nzGxIciDtwuecJ0haJI6lK5uhW+r2FGX+kgMCn2T/rbJRiUft9wpqpUv6bE2Z36104P5FPrEYJ3vXQ12MfzeGcN3VUQBBheXc2wr3677uh2gIbK3VSZ8PgR3KEEQaNiqeunlzwIpzAeVL2EUXhRRsTN1PT7l7WL0uGyfICiNGfeQnWa1J1FkMDU5WVW7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 222.71.101.198) smtp.rcpttodomain=arm.com smtp.mailfrom=cixtech.com;
+ dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
+ not signed); arc=none (0)
+Received: from KL1PR0401CA0033.apcprd04.prod.outlook.com (2603:1096:820:e::20)
+ by KL1PR06MB6553.apcprd06.prod.outlook.com (2603:1096:820:f1::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.31; Tue, 15 Apr
+ 2025 07:27:26 +0000
+Received: from HK3PEPF0000021B.apcprd03.prod.outlook.com
+ (2603:1096:820:e:cafe::57) by KL1PR0401CA0033.outlook.office365.com
+ (2603:1096:820:e::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.32 via Frontend Transport; Tue,
+ 15 Apr 2025 07:27:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
+ smtp.mailfrom=cixtech.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
+Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
+ 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
+Received: from smtprelay.cixcomputing.com (222.71.101.198) by
+ HK3PEPF0000021B.mail.protection.outlook.com (10.167.8.37) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8655.12 via Frontend Transport; Tue, 15 Apr 2025 07:27:25 +0000
+Received: from localhost.localdomain (unknown [172.16.64.25])
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 7B19D4160CA2;
+	Tue, 15 Apr 2025 15:27:24 +0800 (CST)
+From: Peter Chen <peter.chen@cixtech.com>
+To: soc@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	jassisinghbrar@gmail.com
+Cc: linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	cix-kernel-upstream@cixtech.com,
+	maz@kernel.org,
+	kajetan.puchalski@arm.com,
+	Peter Chen <peter.chen@cixtech.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Fugang Duan <fugang.duan@cixtech.com>
+Subject: [PATCH v6 01/10] dt-bindings: vendor-prefixes: Add CIX Technology Group Co., Ltd.
+Date: Tue, 15 Apr 2025 15:27:15 +0800
+Message-Id: <20250415072724.3565533-2-peter.chen@cixtech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250415072724.3565533-1-peter.chen@cixtech.com>
+References: <20250415072724.3565533-1-peter.chen@cixtech.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -44,40 +88,77 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK3PEPF0000021B:EE_|KL1PR06MB6553:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 10bff7a5-763d-477a-9af6-08dd7beef866
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?pd5iCuc2XpOtLgVDgEEK/NWg3zNvYGpOIh8gUesI6fcMgSGQB0Swb+hYhMZb?=
+ =?us-ascii?Q?Qez/41sJXUH/LL/scu603WZnSJIwqYq4Q39dDKpYs8ZS+hvrVjBkZDRmTOUa?=
+ =?us-ascii?Q?EN/TdDSa9zXPTsulcVNCmqA/D+UNkQtm7NNE+7X8CPADZRscd9ONRia4hTCU?=
+ =?us-ascii?Q?H2BnloFWf1yPeoxmpTfLT69ZdG76SiVWVHaVVhQjr/FH334Vu24q9UFtaW21?=
+ =?us-ascii?Q?RgE8jskft8dn50SPSroDyy9Hf2dzRLOvKWWWD7dF2HPSgYbSpP2+rcNCflRn?=
+ =?us-ascii?Q?CFPDWBZVs/bDbMLGR9dc53fYrOxjOaJe0GQgvvtQSbdH5pCU2jTI1S1mfeNt?=
+ =?us-ascii?Q?OQ2GhT8E6yydr5yq416I4HzkfIbfvmJM6SEG4oDVLDf+QO3KIjjMUFMUSot9?=
+ =?us-ascii?Q?O/mRlkJaBYIRzYUO4qh00nw5GkaLds3y+5obsWnDlLRkEMLfOq66l9Qe1IoD?=
+ =?us-ascii?Q?OTj7ea2bqKveukb1M5tddi7bpf3WE9OYZiuA0PruTgr1mm2gFmLbhWNXeDK7?=
+ =?us-ascii?Q?zhB7ua9z8xIsDKPRSOlEYhl4DHnpVHkHomQM8OZXcVwjJEOweeDL3eYRH1Ps?=
+ =?us-ascii?Q?fUWOLfoziqnHdAyvIyhIp3osA5vWfPTQ0+sXbkrUyn5YJs3ZWaEaHodCVzLw?=
+ =?us-ascii?Q?H6Nx7tnxxTBMk2oqiAFsPPWvbEFa3963lXffmMSXalnzvchHWozxp5qiKZRc?=
+ =?us-ascii?Q?qlAm8S+V/eQul1ZWJVrOS/MGWoGDSvqUOiweu+XbrmML2i5z8fDQO8RjylH8?=
+ =?us-ascii?Q?BaShmAsRV7VrSNjXOmyjJ3sdMq77GE2OjXCJnBiPkUIf3PfE8jA/DmNQ6fFf?=
+ =?us-ascii?Q?bCG3x9l3hGajYi/51vPn17VZ7gJZtFBoRaI8tk6pmAnj1jToAq4FiIQf3iTW?=
+ =?us-ascii?Q?0y6SjIakQghBKW+m6ERMI3bconEy24ZXf83Ow32wigt7+uLFwuG/0KJmcOsv?=
+ =?us-ascii?Q?RIhwHKIjUENrwrvRoI4VYuFnUq5eEAu5hKcmpmPfEZZHWcbBNFqJqxlRFf6I?=
+ =?us-ascii?Q?d9gFRWHttajQmOmCsiB+TBxrJQ21iDlIwm0lRmLxB3Y4H1phZwv5ztagS5DP?=
+ =?us-ascii?Q?MOUVOKewed8E6dUSPYbfN87pFNtORg2Fc5BkCBPkMeVmu/pel/9E+xXvFFV6?=
+ =?us-ascii?Q?YG3ex5hJ2T7diFxk4pGDClPXdQjvdh1wVGkAHGWwyVYF7ntmLs5Gw1uUo0pM?=
+ =?us-ascii?Q?nf5uHL9D2YBCHPzwIN2C2QMqaQ9p+6bvOwRIXYHebgljVkTFUs12nLQEACGD?=
+ =?us-ascii?Q?JMxO8crcja1HTxjt88Lb87H/EBZYtd/HMkAZgCET1BJVNq/tLIE5Pz0kEw09?=
+ =?us-ascii?Q?BvFRsllYeFgxZyWMBqe0iAdwUW8c/OM21qTVSNxNDR1CcT4+wLezaK7vFMA0?=
+ =?us-ascii?Q?202BdTmil3asJcZK5SFQT1KL8QWUmU8dHe3SGJRCfkBLZZXo0ZVarzPJpMW6?=
+ =?us-ascii?Q?DBPuJH4i9fjzGThe+b1aHtH1z3jNh5P9+LSwe2fvqUMj83SYTYlqBQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1102;
+X-OriginatorOrg: cixtech.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2025 07:27:25.4041
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10bff7a5-763d-477a-9af6-08dd7beef866
+X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
+X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF0000021B.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6553
 
-Hi ARM SoC Team,
+CIX Technology Group Co., Ltd. is a high performance Arm SoC design
+company. Link: https://www.cixtech.com/.
 
-Please pull !
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Fugang Duan <fugang.duan@cixtech.com>
+Signed-off-by: Peter Chen <peter.chen@cixtech.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Sudeep
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 86f6a19b28ae..661c8c0d76b6 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -304,6 +304,8 @@ patternProperties:
+     description: Cirrus Logic, Inc.
+   "^cisco,.*":
+     description: Cisco Systems, Inc.
++  "^cix,.*":
++    description: CIX Technology Group Co., Ltd.
+   "^clockwork,.*":
+     description: Clockwork Tech LLC
+   "^cloos,.*":
+-- 
+2.25.1
 
--->8
-
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/juno-fix-6.15
-
-for you to fetch changes up to 0c562281199f225a849dbb5b9a40b079ee31dc0e:
-
-  arm64: dts: morello: Fix-up cache nodes (2025-04-10 14:04:03 +0100)
-
-----------------------------------------------------------------
-Armv8 Morello fix for v6.15
-
-Just a single fix addressing the cache node inconsistencies. It removed
-unnecessary CPU number from L2 cache node names since they are local to
-CPU nodes and should simply be named "l2-cache" and relocates the shared
-L3 cache node from under cpu@0/l2-cache to the /cpus node, which is the
-standard location for shared caches.
-
-----------------------------------------------------------------
-Rob Herring (Arm) (1):
-      arm64: dts: morello: Fix-up cache nodes
-
- arch/arm64/boot/dts/arm/morello.dtsi | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
