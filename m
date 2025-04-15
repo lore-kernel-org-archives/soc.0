@@ -1,45 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA081527B1
-	for <soc@lists.linux.dev>; Tue, 15 Apr 2025 13:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A856422C35E
+	for <soc@lists.linux.dev>; Tue, 15 Apr 2025 18:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744724933; cv=none; b=J8yY+o86H37dZyv5jE8z6EQnqV2t5MJigTLX7louS2/o2OtyDh/PDovsmwT/UQuDgbYkxDq/BF7us1fy0LYi7LSGso4LX6/CKhvsdWMjyYP/PwhP7LgPrF1zISZegTvuao7A5sa0bnhaLPiAbxivg/KlO2aSYsHJvRvTQKEh5JA=
+	t=1744742379; cv=none; b=oLGDfMbG5JSwLkO60tAVQTXubj/X/iwG7+9P/BlROnnvl1/v47r1f6gHQSAqF0FKHGzCrqGvyHmqMosWOft+hzzel2qoXkve2H9ryswduOpy6V1RuhmFOSXEegXlZ3IloA6qwOoB/W3ghh5/ggc0QnYddAxACc8IBBLbdMBT3Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744724933; c=relaxed/simple;
-	bh=f+I+70mvDeUxlvE287MehxIaRGNimM4VHnTJL/puwjU=;
+	s=arc-20240116; t=1744742379; c=relaxed/simple;
+	bh=/QYShN7IRJ3g7iXE3mqIafeBXdL5DRR76aNqimwoUxw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ibf9o+NWI2F1qXc1GQmeEfnPu5Xqj5unFKbC1cRa5666Illydg13O2cuOzYIAOYyVs3df0zSVK+vWQ9Lk/rHKiFwt/iWqFMdL2iEIoKKkcRxcrG6rWVhppji223bpKqcq4V53nKHbAdiqQmcGXYD+GcPb2uBJYwNAWh9DonZjwk=
+	 Content-Type:Content-Disposition:In-Reply-To; b=jJRP1JUMg71neYXtm8fv8XMGGs3Vm6/mZ9lXmmiOF57P6cnIEPYeO7dTuJPH/TGOImnSsMfj6WBNH/upZoi91klpI4pwT5xPJtoV94PHuPWN8Qs6kxIaZwb/Wb1BVMiQdKP0XQf1ocAdr7l0XeG+DtNt5cNOao/QCY2Fst7wdIQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 636E3C4CEDD; Tue, 15 Apr 2025 13:48:53 +0000 (UTC)
+	id 2E500C4AF09; Tue, 15 Apr 2025 18:39:39 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 73114C4CEEB;
-	Tue, 15 Apr 2025 13:48:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73114C4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.kernel.org (Postfix) with ESMTP id A5103C4CEE9;
+	Tue, 15 Apr 2025 18:39:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5103C4CEE9
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6344015A1;
-	Tue, 15 Apr 2025 06:48:45 -0700 (PDT)
-Received: from gentoo-vm (unknown [10.57.44.57])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B2B13F59E;
-	Tue, 15 Apr 2025 06:48:44 -0700 (PDT)
-Date: Tue, 15 Apr 2025 13:48:38 +0000
-From: Kajetan Puchalski <kajetan.puchalski@arm.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6CE51756;
+	Tue, 15 Apr 2025 11:39:34 -0700 (PDT)
+Received: from bogus (unknown [10.163.48.215])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23D2A3F694;
+	Tue, 15 Apr 2025 11:39:26 -0700 (PDT)
+Date: Tue, 15 Apr 2025 19:39:21 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
 To: Peter Chen <peter.chen@cixtech.com>
-Cc: soc@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	jassisinghbrar@gmail.com, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com, maz@kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Fugang Duan <fugang.duan@cixtech.com>, 
-	Guomin Chen <Guomin.Chen@cixtech.com>, Gary Yang <gary.yang@cixtech.com>
-Subject: Re: [PATCH v6 09/10] arm64: dts: cix: add initial CIX P1(SKY1) dts
- support
-Message-ID: <7cnhezft5jzvtdjx6m2vjmtaxgla33j4fynd6ef4c6b7dh5pvo@4cbxewawilqp>
+Cc: soc@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, jassisinghbrar@gmail.com,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com,
+	maz@kernel.org, kajetan.puchalski@arm.com,
+	Guomin Chen <Guomin.Chen@cixtech.com>,
+	Gary Yang <gary.yang@cixtech.com>,
+	Lihua Liu <Lihua.Liu@cixtech.com>
+Subject: Re: [PATCH v6 06/10] mailbox: add CIX mailbox driver
+Message-ID: <20250415-beryl-malamute-of-kindness-7fba06@sudeepholla>
 References: <20250415072724.3565533-1-peter.chen@cixtech.com>
- <20250415072724.3565533-10-peter.chen@cixtech.com>
+ <20250415072724.3565533-7-peter.chen@cixtech.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -48,69 +50,22 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415072724.3565533-10-peter.chen@cixtech.com>
-User-Agent: NeoMutt/20250109-134-7b7c50
+In-Reply-To: <20250415072724.3565533-7-peter.chen@cixtech.com>
 
-On Tue, Apr 15, 2025 at 03:27:23PM +0800, Peter Chen wrote:
-> CIX SKY1 SoC is high performance Armv9 SoC designed by Cixtech,
-> and Orion O6 is the motherboard launched by Radxa. See below for
-> detail:
-> https://docs.radxa.com/en/orion/o6/getting-started/introduction
-> In this commit, it adds sky1 base, mailbox, clock (scmi firmware baseed)
-> and uart, and the kernel could boot up to console.
+On Tue, Apr 15, 2025 at 03:27:20PM +0800, Peter Chen wrote:
+> From: Guomin Chen <Guomin.Chen@cixtech.com>
+> 
+> The CIX mailbox controller, used in the Cix SoCs, like sky1.
+> facilitates message transmission between multiple processors
+> within the SoC, such as the AP, PM, audio DSP, SensorHub MCU,
+> and others.
+> 
 
-The commit message style is supposed to be in imperative tone, i.e. "Add sky1 base".
+Do you have a specification for this mailbox ?
+I see lot of resemblance with Arm MHUv3. Is this a variant of it ?
+I just don't want to see a separate driver for a small tweak of MHU v3 IP
+itself.
 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Fugang Duan <fugang.duan@cixtech.com>
-> Signed-off-by: Guomin Chen <Guomin.Chen@cixtech.com>
-> Signed-off-by: Gary Yang <gary.yang@cixtech.com>
-> Signed-off-by: Peter Chen <peter.chen@cixtech.com>
-> ---
-
-I've tested this on my own Orion O6 with 6.15-rc2, the UART does work and the kernel
-does boot up to the expected point. Feel free to add the tag if you'd like.
-
-Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-
-> +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright 2025 Cix Technology Group Co., Ltd.
-> + *
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sky1.dtsi"
-> +/ {
-> +	model = "Radxa Orion O6";
-> +	compatible = "radxa,orion-o6", "cix,sky1";
-> +
-> +	aliases {
-> +		serial2 = &uart2;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = &uart2;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		linux,cma {
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-> +			size = <0x0 0x28000000>;
-> +			linux,cma-default;
-> +		};
-> +	};
-> +
-> +};
-> +
-> +&uart2 {
-> +	status = "okay";
-> +};
+-- 
+Regards,
+Sudeep
