@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DD23597A
-	for <soc@lists.linux.dev>; Wed, 16 Apr 2025 06:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4EC1DB34E
+	for <soc@lists.linux.dev>; Wed, 16 Apr 2025 06:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744785366; cv=none; b=EMvEpDbRMxZHjgwLCwnRz7Mknl3EAap/9eXBBvnDSSffok1RP3FzOMX7HRE9ahdmzsyUIQE0FN5unzabxbsvnlKduJwGeSbG9fl/k9ALELYTTEVdnp2CI7lRX8KTxRg3qCYusqn2awrKni1WGv79o11d2kAeHjxSYaW+oInSlK8=
+	t=1744785541; cv=none; b=UKBi+DafSoUIdfYbngR2949dCegBhRD0LTj2jQQnBwmUrLUajQH5tmHTEfQ5Sn6YuFthdJbX5Su0BLP3XVyvv47wOik/+/wtQfwwCd+0iZtyeyVSqssW/kTA/sW/jDcUbzIEAFjWSDISmMiqoc8m1YTky/6935djELqUvPAWCNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744785366; c=relaxed/simple;
-	bh=Mr6Zpb9zcG0OVnCwKGCHTpusBfiHnAqZ4PqIGzO8FB0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CnieNvJPu2ZzWutrtnZeveiqYF/Q3YGZhEZpr/ZCl034V+l+c7HCH4H1MoTunBmJQLVJucYon/IMTr1DAl42SHfhfzsJ7dbkBxUxAQOZMtg1tqqlkLBpxhrQUK6xl/Bq/NmOL6pO3YfGTQJczbTXGVV+VAiBrlcfiEJAHGagn4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2c2T/rV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744785541; c=relaxed/simple;
+	bh=Gpd3SFotmB4WTuWj5qWFEhtWxeboUbelP19sKnAgqqU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=LUtzeUtYC+lvyKfyc9CEbQd158CReMi99IWb5EBrGezyKzazzRPxKUT22gtwPYZHGTVEqZn8ctwycXyp6HOg2SsuKAX1dE2HIvY+IJVoJQMSdtlQkZFIi8XrdL9CO1OlQI1F6qAz2WFSky4cmNDl/f06TVKxlRrvOCbEMNTzHT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqER21T5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2c2T/rV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqER21T5"
 Received: by smtp.kernel.org (Postfix)
-	id CB298C4CEEE; Wed, 16 Apr 2025 06:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B35DC4CEE2;
-	Wed, 16 Apr 2025 06:36:02 +0000 (UTC)
+	id 73B48C4CEF1; Wed, 16 Apr 2025 06:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED17C4CEE2;
+	Wed, 16 Apr 2025 06:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744785365;
-	bh=Mr6Zpb9zcG0OVnCwKGCHTpusBfiHnAqZ4PqIGzO8FB0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=M2c2T/rV1WpJls8mY2WiS06WJ3CbdfassisBM8F8oFz+YOl7xnKaMBW1Faq2GvLFD
-	 j43gbDMnkDGl90ODJJl/abwi3XUR0ZEj4z/3JYkyDN0OyZynnc0oSrkNS0LLd3Qx+6
-	 M1zymk54/0SG6OLsvS389CYUzUJb/OAUI3Bis50xRhLsJYqFNDIH83DydG7rkrZ7uO
-	 lX65zZK2whmhH8CSocv7kpl8BdH/WYpkSXI/ps3NWfQ8IF6dGnmyLu4iUTLk/K7HK+
-	 TMvkDCS5O3Vc6Ir+EhpiMfb0nQ5jPf9gNNpk0q+breOivzhXgwZfNZlr/r+Ch/2P9o
-	 Ix+G+fQLCwIAg==
-Message-ID: <bdfe0108-7ac3-4f2c-b7f2-97943ee85235@kernel.org>
-Date: Wed, 16 Apr 2025 08:35:58 +0200
+	s=k20201202; t=1744785541;
+	bh=Gpd3SFotmB4WTuWj5qWFEhtWxeboUbelP19sKnAgqqU=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=oqER21T5pCp5Cl/GFalGvsf/IAayAiWVtbiGxE1uU7Y8ytEyiN6Lle4D6Zc/MZnuy
+	 xp1bo6XYu7BZnHnojQ4UAkAghrYfr9JIDq3OpD5DopQ6NF0ZlZY58A7UB2EMofYhBr
+	 Twg1Ou3Pfa9sZQxbP1PVD7NUKe9vct0MseMW94/A7AuNFVpCc1ELm7tiiZtczbME4h
+	 gcr+jyQe5525JrxmBmKMGSLxgESF/DYR73UG0bJ+iyVrEF7N2dZdJpLsfa+Pcms+so
+	 JPaijPGBYiekOl6l4TNH2rzdBh4TtgNV7+4PkxHZOw1avY1DIcmbiy9El7iEcRUXEm
+	 eHXJstf3rGg3g==
+Message-ID: <2f05420b-0c6f-4336-9854-036edf8d28fa@kernel.org>
+Date: Wed, 16 Apr 2025 08:38:55 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,6 +39,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v6 08/10] dt-bindings: clock: cix: Add CIX sky1 scmi clock
  id
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Peter Chen <peter.chen@cixtech.com>, soc@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, catalin.marinas@arm.com,
  will@kernel.org, arnd@arndb.de, jassisinghbrar@gmail.com
@@ -47,7 +48,7 @@ Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
  maz@kernel.org, kajetan.puchalski@arm.com, Gary Yang <gary.yang@cixtech.com>
 References: <20250415072724.3565533-1-peter.chen@cixtech.com>
  <20250415072724.3565533-9-peter.chen@cixtech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <bdfe0108-7ac3-4f2c-b7f2-97943ee85235@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -92,32 +93,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250415072724.3565533-9-peter.chen@cixtech.com>
+In-Reply-To: <bdfe0108-7ac3-4f2c-b7f2-97943ee85235@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/04/2025 09:27, Peter Chen wrote:
-> From: Gary Yang <gary.yang@cixtech.com>
+On 16/04/2025 08:35, Krzysztof Kozlowski wrote:
+> On 15/04/2025 09:27, Peter Chen wrote:
+>> From: Gary Yang <gary.yang@cixtech.com>
+>>
+>> Add device tree bindings for the scmi clock id on
+>> Cix sky1 platform.
+>>
+>> Reviewed-by: Peter Chen <peter.chen@cixtech.com>
+>> Signed-off-by: Gary Yang <gary.yang@cixtech.com>
 > 
-> Add device tree bindings for the scmi clock id on
-> Cix sky1 platform.
+> Incomplete SoB chain.
 > 
-> Reviewed-by: Peter Chen <peter.chen@cixtech.com>
-> Signed-off-by: Gary Yang <gary.yang@cixtech.com>
-
-Incomplete SoB chain.
-
-> ---
->  include/dt-bindings/clock/sky1-clk.h | 279 +++++++++++++++++++++++++++
-
-Filename matching compatible.
-
-
->  1 file changed, 279 insertions(+)
->  create mode 100644 include/dt-bindings/clock/sky1-clk.h
-
-Missing actual bindings.
-
+>> ---
+>>  include/dt-bindings/clock/sky1-clk.h | 279 +++++++++++++++++++++++++++
+> 
+> Filename matching compatible.
+> 
+> 
+>>  1 file changed, 279 insertions(+)
+>>  create mode 100644 include/dt-bindings/clock/sky1-clk.h
+> 
+> Missing actual bindings.
+So that's SCMI, then only two, first comments are valid.
 
 Best regards,
 Krzysztof
