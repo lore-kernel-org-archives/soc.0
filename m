@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440CC1FDE02
-	for <soc@lists.linux.dev>; Wed, 16 Apr 2025 06:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E7414B08E
+	for <soc@lists.linux.dev>; Wed, 16 Apr 2025 06:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744785278; cv=none; b=pnXw8c5rhxJQ3bpungtGZVnJcTCVcfGgdJgeXTiZnsPZa4KnQZZKxix3E5Kqfmif/dwP9Axh0+R/0ZFaIwnvD6YFpxsUhHgvB2tEzZH01ti1Vqj/hwc7+QFvvajK6Lu8t1swIl0dLt7lI0xSO5/e2+2Sta//clY6k8P3pfdK+qU=
+	t=1744785310; cv=none; b=iXaQ075d2NvlUe3lEJud8JjE2Vuk6605sv2BmYgx79F/fJRGyNrDYiuvOWap3SEQcnE/JQpYyfYDmTsM00/DPvOehwVIU2XoSc9K1jEE3qB2+HAFvMzX4mmcUotl+ZQ3+OZNOB/fNzseqBgaze0zoxx+EMAzIf+kXz7S5+zp6+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744785278; c=relaxed/simple;
-	bh=1QxOJVgWyciJ/qL4McywBtv10cRnPx5zxSGGNinnLWM=;
+	s=arc-20240116; t=1744785310; c=relaxed/simple;
+	bh=JrmENTow3eU1JgLnFTACI/p8XRxovgR2TtFW5Z9K0sI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=prsCrO5v9j6/xMRdv79TflUclcCa1DPxfoWm77327ONzkxNc4lbIuFr2b3qFiygiPwomhIs7NkS35SqDut+SJjhUXZR+vSlH02ey62EcHiNL0hCXzy+Rl8navVMdEfbw9aHqH9jjEnUiYXvSBz50tcSphAK8hFp5KPnVTyTlvTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fv2ijAWt; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=hxRo/Z7hjzXzKCJZZCvczLDdRXtlHJqPVFXV0SRjQqOKe79OsxXY4helpJeDAIzqVAaF9i55xZp97a0flfrvDOKZEg1UPQ4sNsfSaRFqt04H3irjes2zu53mXBSDrkuSpdN3JzxRJui9lIbFZZHvhwuEaCR1ihi15hIK+uxY1ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cJDltrYZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fv2ijAWt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cJDltrYZ"
 Received: by smtp.kernel.org (Postfix)
-	id E177FC4CEEF; Wed, 16 Apr 2025 06:34:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51EC9C4CEE2;
-	Wed, 16 Apr 2025 06:34:34 +0000 (UTC)
+	id 1C485C4CEED; Wed, 16 Apr 2025 06:35:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9B9C4CEE2;
+	Wed, 16 Apr 2025 06:35:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744785277;
-	bh=1QxOJVgWyciJ/qL4McywBtv10cRnPx5zxSGGNinnLWM=;
+	s=k20201202; t=1744785310;
+	bh=JrmENTow3eU1JgLnFTACI/p8XRxovgR2TtFW5Z9K0sI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fv2ijAWtDjWif6GzTunwzHG38MoGaYgKe4SKUI5lmBeb10xyxnmJ45dDCXi6oKYgS
-	 x3XZME2vi11W0RxwwR2cLeNErdhux82K2Te+0fHa3Vs4YjoMa80Nzgs1Emi7OOjpb5
-	 t8t64XA9aUtDSoTPEqUHa8yYUg7dA+S0vhChL0kReV4V8OgnKIdx46fsIEPAQUkH70
-	 7FmFp2lhhRwwH++SY2cTunxoYuY46HT0xILbfOXoob83v4yK7M6d1HL60sn6QsS5YB
-	 ot/FG4LDobboNVTRX+ayyYWTyNI1e4Z9IhDPnmcibdfGhxNRozlsA+6XZ7SZ/0+t06
-	 c2yK7vsEvjyQw==
-Message-ID: <47583cb5-d211-407c-8b7e-d79934a90b28@kernel.org>
-Date: Wed, 16 Apr 2025 08:34:32 +0200
+	b=cJDltrYZLIudHpg5OiqO9jvqGZ+H5sMSUNlQnnGCHwSsIaexVPn1KNXzNHAQv7FOw
+	 K5DHtWGeaXvl2aLpI3Qc8Cwezv4YfdiWoQREmtSrNasQ/WlyN+tZJ43AGp6SefMgsy
+	 l/pqyByDXrC8T/LJSbDYuk5rtEu3/RvvmfUwp+bcGWtVqKorgur1wQxR0skGxKEfpM
+	 RUZKaR1cwdeGEWbBW1Ih1JsPaIbVUsgRzZ6RTXvgxib9IayXIN02ZueYrH2B+O+dhO
+	 2VhvoggRhVaBEo0eYUO0QEXINm7xBR0c5kufYsLzBv3wPQHlSX0yUdsSUwgeYL9Wda
+	 8MFt26+IjN/aA==
+Message-ID: <954d6efb-b660-450e-974f-dc89d777bb45@kernel.org>
+Date: Wed, 16 Apr 2025 08:35:03 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,16 +37,15 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 05/10] dt-bindings: mailbox: add cix,sky1-mbox
+Subject: Re: [PATCH v6 07/10] arm64: defconfig: enable CIX mailbox
 To: Peter Chen <peter.chen@cixtech.com>, soc@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, catalin.marinas@arm.com,
  will@kernel.org, arnd@arndb.de, jassisinghbrar@gmail.com
 Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com,
- maz@kernel.org, kajetan.puchalski@arm.com,
- Guomin Chen <Guomin.Chen@cixtech.com>, Lihua Liu <Lihua.Liu@cixtech.com>
+ maz@kernel.org, kajetan.puchalski@arm.com
 References: <20250415072724.3565533-1-peter.chen@cixtech.com>
- <20250415072724.3565533-6-peter.chen@cixtech.com>
+ <20250415072724.3565533-8-peter.chen@cixtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -92,36 +91,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250415072724.3565533-6-peter.chen@cixtech.com>
+In-Reply-To: <20250415072724.3565533-8-peter.chen@cixtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/04/2025 09:27, Peter Chen wrote:
-> From: Guomin Chen <Guomin.Chen@cixtech.com>
+> At CIX SoC platforms, the clock handling uses Arm SCMI protocol,
+> the physical clock access is at sub processor, so it needs to enable
+> mailbox by default.
 > 
-> Add a dt-binding for the Cixtech Mailbox Controller.
-> 
-> Reviewed-by: Peter Chen <peter.chen@cixtech.com>
-> Signed-off-by: Lihua Liu <Lihua.Liu@cixtech.com>
-> Signed-off-by: Guomin Chen <Guomin.Chen@cixtech.com>
-
-You send patches to soc@ AFTER you get community review, not during.
-Look again at document I linked some time ago. New files are not sent to
-review to soc@.
-
+> Signed-off-by: Peter Chen <peter.chen@cixtech.com>
 > ---
-> Changes for v3:
-> - Replace the direction attribute of the mailbox with the strings "rx" and "tx"
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->  .../bindings/mailbox/cix,sky1-mbox.yaml       | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
-
-That's a completely new file? If you add new patches, mention in the
-changelog.
-
-And keep the changelog from the other patchset. What changed here? were
-my comments resolved or not?
-
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index c8a8fdb0bedb..4e9805c5bcc3 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1424,6 +1424,7 @@ CONFIG_BCM2835_MBOX=y
+>  CONFIG_QCOM_APCS_IPC=y
+>  CONFIG_MTK_ADSP_MBOX=m
+>  CONFIG_QCOM_IPCC=y
+> +CONFIG_CIX_MBOX=y
+Squash the patch. Don't create one patch per one config change.
 
 Best regards,
 Krzysztof
