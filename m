@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387891A2554
-	for <soc@lists.linux.dev>; Thu, 17 Apr 2025 06:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0689E1F582C
+	for <soc@lists.linux.dev>; Thu, 17 Apr 2025 06:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744870730; cv=none; b=s7U92HwwfpYEHxWsHcUqAqsn4yERsQE85FVoUje9SFlnPU8sEJ12YOVjE1gDvgG0/SWFQ/A6cqChxLyYdcGXJ7jM0+XRfcyBLJhIvinkHuOdnwMX1brBdT7c6SNlavVJLjJQCx4IwvbhX3UvfKXrie4kpoAigIAAfoMEBnWkPBc=
+	t=1744870807; cv=none; b=uF+AxcQK9A/MVEbSxwIcIXvIFauNM595HEPng6jDU3XaV0KRgeT/7pv/rRI4CzkTwrP5lXQnhpGu1ebV/ApNlEvpdwssB/+00jLy009Bi9nMWlMVzJY8iHx2pc5ekZqEB+7fNoHmW7IaP9eLYtEmfu2KuBqYCEQKJkKQN2stffo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744870730; c=relaxed/simple;
-	bh=r8GtcWK3tridKFdZYvRzgMzTzOOLw37Wb47MgdLtIh8=;
+	s=arc-20240116; t=1744870807; c=relaxed/simple;
+	bh=VxT2po+NrQ8fXUrsS07RF7B08VPOX96rVFAn6InJZkY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WPAc+FVeTtPA/S9KaTsn6hcki/8CC0jKYc8rO/mjH93BA6Vo6eH3PV0DI6yqMmI9UM5mVSTqqOcyYasHIgbcN0P2tXoEZPslTu9YpYCXMHMoemBBKqK2GdZvToBKmPDZ68Ytqepwi7+2WdaO4tJhUiJFNE9SpywSlk7BSXEOXW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3Iwxctd; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=KjPPGPO4Tv+r7w9y83XZZthliMlh1r41p12zNoNRYBhSEFjDGQB8l/lBwKgs1qWbo/uKm42uHGp+pwH5Ayg3cWH0k/EH87rtF1GjSG+YbEzCFvuMMQUiXeMJTjlhicLGC+REs7cBALhlFQ5eSNqA+KrDZ+PZQj0VVZPDF1DL4zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bD5bEvTO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3Iwxctd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bD5bEvTO"
 Received: by smtp.kernel.org (Postfix)
-	id D1E4CC4AF09; Thu, 17 Apr 2025 06:18:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC836C4CEE4;
-	Thu, 17 Apr 2025 06:18:45 +0000 (UTC)
+	id 8DC62C4CEE7; Thu, 17 Apr 2025 06:20:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCC9C4CEE4;
+	Thu, 17 Apr 2025 06:20:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744870729;
-	bh=r8GtcWK3tridKFdZYvRzgMzTzOOLw37Wb47MgdLtIh8=;
+	s=k20201202; t=1744870806;
+	bh=VxT2po+NrQ8fXUrsS07RF7B08VPOX96rVFAn6InJZkY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=C3IwxctdMuWmUWdbEdhL/4DFwG5O15bDeY5U1G/ShvEB5cUuafzZ3vzFFPg85xx8u
-	 6eSLIRF5GQTDlGfIOw9P/OzT51dohdiVYMJt1NZGJx9sOoRXdE8RQlYjOQFVYFdQd4
-	 iNH0g2y71LbiF66Sv/fG9NJEoQR7lTTV5XwQ9pL/hUUI9nsYt6q9P06wc5LThLvwFX
-	 D0hla/u/Dxe7pU6ISRZDoC5DmEJxZPfMVwndiVEWQRgJzX5MxYttWhlynHUSyDqofN
-	 dXEVuHq1IYunIY4SR4eZNc9PGhu0GrJw02PP0083MJ235t8uAo/3QKttIPSjVCeIYZ
-	 tTw/p61tXgtAg==
-Message-ID: <74b9fc25-0815-4ece-845a-5f730c87fe78@kernel.org>
-Date: Thu, 17 Apr 2025 08:18:44 +0200
+	b=bD5bEvTOOBmNe2dEZDW+QRm1ApRTTLCQx2B4FxjwMtQ6pgWHQlAomv/5WQiPVL+Ve
+	 DW74XatObh8k6eqy9RP3IV7WHmWnXJtzjdKeKAYGd+UvOcjNEVb+i/taZlm5fhPDI3
+	 ORhW5Nx7/YkWOVXdtEOintxXHGpcAgr33iOaoDwBogHCG/qP9GH6nilAPgC7kpXSZQ
+	 0vvbWSGwHc4vjf9Rykpa47g/ZqdPCVFXwMyGOm3Gq2Qj6X+paPGP+wTJ+/7Vy3NUn0
+	 5uwzvAWZncF4xk0fPTRTHxoYFfvdCuN/l+cHwXvAsBUHt69Pwd4FRMPeFja5G1H2pG
+	 JGB7lnNLRhkrg==
+Message-ID: <cef48ecc-94b6-40a0-9f9c-a616814878fb@kernel.org>
+Date: Thu, 17 Apr 2025 08:19:59 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -100,24 +100,24 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/04/2025 09:27, Peter Chen wrote:
-> +
-> +		mbox_ap2pm: mailbox@6590080 {
-> +			compatible = "cix,sky1-mbox";
-> +			reg = <0x0 0x06590080 0x0 0xff80>;
-> +			interrupts = <GIC_SPI 363 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			#mbox-cells = <1>;
-> +			cix,mbox-dir = "tx";
-> +		};
-> +
-> +		pm2ap_scmi_mem: pm2ap-shmem@65a0000 {
-> +			compatible = "arm,scmi-shmem";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			reg-io-width = <4>;
-> +			reg = <0x0 0x065a0000 0x0 0x80>;
+> CIX SKY1 SoC is high performance Armv9 SoC designed by Cixtech,
+> and Orion O6 is the motherboard launched by Radxa. See below for
+> detail:
+> https://docs.radxa.com/en/orion/o6/getting-started/introduction
+> 
+> In this commit, it adds sky1 base, mailbox, clock (scmi firmware baseed)
+> and uart, and the kernel could boot up to console.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Messed order of properties. Keep it consistent (see DTS conding style).
-Other nodes also have oddly placed reg.
+You added several new device nodes, so obviously this is not true anymore.
+
+This is explained in submitting patches - you must drop the review when
+making substantial changes. Adding several nodes is a substantial change.
+
+> Acked-by: Fugang Duan <fugang.duan@cixtech.com>
+
+And this as well
 
 
 
