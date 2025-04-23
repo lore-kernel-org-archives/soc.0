@@ -1,175 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9FC1E32C6
-	for <soc@lists.linux.dev>; Thu, 17 Apr 2025 08:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744878289; cv=fail; b=aP1CK412n5h51Z6P+XVmeqihqnwyTVR42GVBvB+thaHEaDeNcp4CS/BJh8FTqenywKFaHYG5K4bAM0AkZzu1Cc3edGcT+ovhp9HLGjOoxzXzXBD6MbejtKidlrnYTTuJxjILXXBRoXlDd6iDJ8dtk8n5szIehJ304WAbX6lpqUA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744878289; c=relaxed/simple;
-	bh=dli42XGPqK5fJTP8Mu+ILOHcqClrs0m2TP/uLd+wCMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d+iuxde6S6UF/3MYEOBfi6A9PxUNECGdEeiziC9929lRZGRNSxd1cUJAb8bkM+cS7YIX9wMEoz4U3zqNxQ6znmzIg8k+ziQ8gH0fS1Tktag+gWHmFA9Bv1nsLxVgFKmF/e6tq/+4KzzTmdw0C1ny8glDBRvnz93iEJQbd0cgx6o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id 407B0C4AF0D; Thu, 17 Apr 2025 08:24:49 +0000 (UTC)
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023081.outbound.protection.outlook.com [40.107.44.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8758FC4CEE7;
-	Thu, 17 Apr 2025 08:24:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8758FC4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cixtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nHsq+OKE1svzvzcFlg7+yovHYlUbImDCHGyMhvLFpgDzNoZq00w0uSCg5MSeP2fzWvXvfpbjjpfZxruktDzf7wbwHpZlMPVUajAL+Oc0qXZ3FO8CtIfQVk+FK67VouHv8IohXNLkGZ9mv4cFuOryg5n+cRIdQtD8vU+/TwL8Q4J3jsYvk4JQn8nHsYWJ9CN8MMJUwmrIJZa9U6gVcfq1KM89us/j5qa54rPx5RSk6A+xAb8Gb/HvIlr2JZITtXvNAhRtQrxivGfqxbWesdSFi/uAV6+fA8SQk0E51DhdxTKes859CGM9ZX/Fv4+h4OvWIEroQAxHCIMN5MXD/HVPtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A0+3axhg6wpwFtwVrZK4tPqjbKFcgPMltM/8+QVmRwk=;
- b=kSbIBdJou/fHppeBHfV1FIEAJvqLLxr+znt2Ku3+OOyGg+6psf+230RpEihvhjx9exf8Wf9MQU/gHXhLIvPcbZdVi3iOY1dKBEN7zKBipPhmo+kjFTPtS4w/z7ih/CY0Ar4OYD3coOmBMjTSQZ6UhGtTJemDKunGjk2dJ4SnPiAXdaHYl0J9rK5aHpitrsSz4Wu/Jz1aWs0LdbIC3Dx/8NDjtrGMV3mdgLXd8JBzfIfGBcUlJgyZvXi52s2PeXuNcy6aszWrXEf68xVQ/2N8ziH+P9UWcgCVYvJb/1uuuhPn5hnXPzZ1HIc5vtjeNu1m0+wvMtYtTnUDaWgPvhp7kA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=arm.com smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from SL2P216CA0205.KORP216.PROD.OUTLOOK.COM (2603:1096:101:19::15)
- by TYSPR06MB7297.apcprd06.prod.outlook.com (2603:1096:405:96::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.22; Thu, 17 Apr
- 2025 08:24:11 +0000
-Received: from HK3PEPF0000021A.apcprd03.prod.outlook.com
- (2603:1096:101:19:cafe::7d) by SL2P216CA0205.outlook.office365.com
- (2603:1096:101:19::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.22 via Frontend Transport; Thu,
- 17 Apr 2025 08:24:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- HK3PEPF0000021A.mail.protection.outlook.com (10.167.8.36) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.12 via Frontend Transport; Thu, 17 Apr 2025 08:24:10 +0000
-Received: from nchen-desktop (unknown [172.16.64.25])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 206804160CA0;
-	Thu, 17 Apr 2025 16:24:09 +0800 (CST)
-Date: Thu, 17 Apr 2025 16:24:08 +0800
-From: Peter Chen <peter.chen@cixtech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: soc@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, jassisinghbrar@gmail.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, cix-kernel-upstream@cixtech.com,
-	maz@kernel.org, kajetan.puchalski@arm.com,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Fugang Duan <fugang.duan@cixtech.com>,
-	Guomin Chen <Guomin.Chen@cixtech.com>,
-	Gary Yang <gary.yang@cixtech.com>
-Subject: Re: [PATCH v6 09/10] arm64: dts: cix: add initial CIX P1(SKY1) dts
- support
-Message-ID: <aAC6qM1LnNZnHrCI@nchen-desktop>
-References: <20250415072724.3565533-1-peter.chen@cixtech.com>
- <20250415072724.3565533-10-peter.chen@cixtech.com>
- <74b9fc25-0815-4ece-845a-5f730c87fe78@kernel.org>
- <aAChkWPn4ThMx44A@nchen-desktop>
- <b90c05e9-feb7-4569-b79a-b623e535c1d0@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D753127FD56;
+	Wed, 23 Apr 2025 14:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745419863; cv=none; b=RNnYAdvpWQpd/EvEsOKgaDoobD7lYLZtV/A3gcCpOKLXidgIZxfnUpCmx2Vb3WPMEoG5MsCu0KtcBJN9L2jdp3liMLhWLCYggkbz9vZRr8Na4SUH1/v8wfk6yXZQSd7EdqJmtMKqOXzcQaMEGfiZloDybHjS24qB30O3Lfv6Mvk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745419863; c=relaxed/simple;
+	bh=TJPTDQFz2u94NfPN6dhTJuABRU2xSEH29n4F2CZio+0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=K+o+/vP2oBRv/Fn8dRZ71irZWvPni70UQjaPUultrS8aoiMPFHLXcWwpYSld9+MvPXlpfMJ0vQcC02A/V4eAZUZ6N7PrKN5IfRSGg4sn1NLR36j+EumjDeh9Uar9thbSmd5qTFxqW+GWY0fTSEv/VzPIjx0mCqEtfeo92PSQXXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=vIdrmn72; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Zl/3LmPy; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="vIdrmn72";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Zl/3LmPy"
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id C963D11401F7;
+	Wed, 23 Apr 2025 10:50:59 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Wed, 23 Apr 2025 10:50:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm3; t=1745419859; x=1745506259; bh=G7fJXu4jyQ
+	dtN3N4XbnGyi2XfxpE/vrFhi3nZwuRLSs=; b=vIdrmn72Zr+p9bSfnB40Za/1py
+	6k4fhm7awpAbIxEvDkgtiaFuleqPolPAyAAoxVjOG6Ke8IBP+6+yF6llloG9b+GT
+	rTg5ZRZTHcmd/d8GeRnYG99dM93C+XUjPSX3tLL0uAVvJv+MQUXnBJlhZ73V+MTv
+	AEW0n+r+4Ucwuti2mNHUZ/G3X+ytrjCFNbgsS3gPjNGnkIGIzCEWhQ6ldb7b5mLG
+	DMUVcEYLtQ1XbphIv75JOWA9cyjNL42Uetp6Se0BTaC+CxUkqqyjVB2B4h41D0op
+	lKyagDd/D97fB+gyDMfIW5vHjOMhqHPBgGNegCQOyMHYcaSIHugqBx7XPuFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1745419859; x=1745506259; bh=G7fJXu4jyQdtN3N4XbnGyi2XfxpE/vrFhi3
+	nZwuRLSs=; b=Zl/3LmPyjVCeKjXPtq6oJGCQtVf67lqX1Je9LiVGwcmjl57ELjZ
+	hf3eWfEnMZR+6RPejr5DXNlxs4PEbSraUbDbkOe15uGJ2OAoxb6tBFTv6OVOOZ4+
+	O9RkjG0lwJcHKmd+r4xqxSC+xfbG+n/O/bo36on7JJz5FPWnDz5iGJ3IpkuV7tLr
+	ErxALos37LQnUY1lgdZMDw4PyWf9gFGsMQkK6T8L1pcXKXpIjXdOGnIHeYlpiYrI
+	SYYpRdTKFsZI0TIGC0bCPvrB439g1zW4EP8Z4pkEnYVCwSDmyJM9Fda7tpUBoNcx
+	73CWqd06OXdOpG99g+waGV2Sfa4HlxP7OyQ==
+X-ME-Sender: <xms:U_4IaE3ZmKovaZ4BzZB9PCSu3MSVdHkdT5eWtdtM_E5mPTcfVRxLNQ>
+    <xme:U_4IaPHPQVcln5jUAEZYsBwG0I5xsSF5KCZQU7tma0-nt4SKItDYjNLD_dgAPjHyM
+    9aNiDSMHjbuhmZsf9o>
+X-ME-Received: <xmr:U_4IaM5nZO9r6Qf9T0grvbOx7WPWvKTVpV_fmWPVZ-IiRFLNIPLgQY0Xdy6AS2MDGQ7N-Ko-zccZHIOynQ1nE_jZ_Qjrq82pOJeRUEOim5hJzuFGMOQJJsSNHDqUUXk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeeikeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefhvf
+    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgvthgvrhcuoehs
+    vhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnhepudeiiefhge
+    etgfektdeiffekhfejgeeikefftdfghfegveegkeegjeetueffvdeinecuffhomhgrihhn
+    pehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvhdpnhgspghrtghpthht
+    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepshhotgeslhhishhtshdrlh
+    hinhhugidruggvvhdprhgtphhtthhopegrshgrhhhisehlihhsthhsrdhlihhnuhigrdgu
+    vghvpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinh
+    hfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:U_4IaN2yzr0umJZVNR_dt1n3AbJiiOqv41ZBAv-oSidEkM6YKebL0w>
+    <xmx:U_4IaHF6tEtAKgauoUr14PbJnw93bcwPnfedWnKTJzrvlbGUr1JsOQ>
+    <xmx:U_4IaG9E7MC7yr-n9nCPfs67URyXrRBiMeMSozxOjUoaUfc9aqEQGw>
+    <xmx:U_4IaMluBjXclKO0rWpDVfT2ezHmG87WP3jsAe6ZJYkT3UW7KTOtog>
+    <xmx:U_4IaNRtDswWqhEf1HvsBLkEEcwd0AanCfD617GQRKZMZJPE4WfriCI7>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 23 Apr 2025 10:50:58 -0400 (EDT)
+From: Sven Peter <sven@svenpeter.dev>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Apple SoC fixes for v6.15
+Date: Wed, 23 Apr 2025 16:50:47 +0200
+Message-Id: <20250423145047.3098-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b90c05e9-feb7-4569-b79a-b623e535c1d0@kernel.org>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF0000021A:EE_|TYSPR06MB7297:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6fd984ca-5243-4fd4-7cd3-08dd7d893aa7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?W/nS0gD6qWTNMcUx34FXSjpsO5mvTDHwbcdstuqs+Wd0QQv/du9hztrueHWW?=
- =?us-ascii?Q?NpxpYkyyGHmqZltmMYTDDa4uxR8twlMUiyuCQ/KC/aIM0BAPmrWC9DhkzED1?=
- =?us-ascii?Q?ceTpyemU3wZ+PttaBOOwzs1ekZjkt6pSJOr4FMi61WvKbdhOPJ5IRswTAlCC?=
- =?us-ascii?Q?vB2xWBuIFx+aefDfQ3BYHFqbgnAP7t4wfGXzz3UciKdyNS37S08GM7Xnp4tI?=
- =?us-ascii?Q?T4H1tba/c/YTt/ugWm+NqNsqo8pr6zP6eItjjTmIGhGi4xdmfPY3eqEM6PcU?=
- =?us-ascii?Q?HaG+JbsRcXW/N1Q86tGfWM2URfVFTvF543+c1cdxjmeXqgWdHnwA/vZwj6N+?=
- =?us-ascii?Q?hFjqYefd59XORKmTUf0+LFGU3qsIDoslqoy/u9bpWpdnJNBor4FV4K8DJbDC?=
- =?us-ascii?Q?CuE4lFpsb0WiJNwOuB13cfzIF35BmV+WE0wb7JzbHIgRDQqlYgc+nQ2vq6X3?=
- =?us-ascii?Q?puNDgZ2dUBosU8+qijdXY6q1r+N8LLU7Xs16nk2Odh3an1MdyFS1ojawP7Ce?=
- =?us-ascii?Q?NvFY8yWJkP8cikqrwqZS+QVxlJk4ic0OqT0u7nd1deT0RWUXgFAzTmpJhgkX?=
- =?us-ascii?Q?27I+Pa2om6zLyyZgx8IGkaqBL8oB4Ua5uPXXtqCTawHeSXJ7lCR2PYzFVQdm?=
- =?us-ascii?Q?ZuX2ZRCA/SPU3MZ39RIa5aw/4rWWbTm5lVMAKAFwwVT2C9vnRivtqtUbvPX9?=
- =?us-ascii?Q?nLFO/hRtOSyI3f2dJ5z1W9q5ei+l5zOMDz3G36ora4kTQQy1spyq2jQaVXk7?=
- =?us-ascii?Q?PTFPvSr8sHTlVD+VqLkOUj2Unj6hEiH5IVIpxAizg4jTIQV/IHRx+tTsucyP?=
- =?us-ascii?Q?VrWcltg7NYMqrUBC5WkjLV3NtroWddpLG16LPXEAg5IFQ88AREnobeZvj4Lq?=
- =?us-ascii?Q?2hup36Ctz1+St0Jmlzdgu3qcBdri6q1b0jN2LDkaucBhQL88AtH66zYuAl3k?=
- =?us-ascii?Q?QA7GUaXzjlVes2jchk9f9dn8Ns3MymaXgQC7NcZADTcNOpwo+MItpJBbLfpz?=
- =?us-ascii?Q?XU/iJ/AkEPVW43hTc347ttotWK4r4FTSniZ2JJpWLWqF1g+GIEEJqkjJydOz?=
- =?us-ascii?Q?zbYQ2YnwqkQ9sdaDy/jabvYmyEYxAJxqYk42bcWmIMsHYKJGebzfoxFUaLvU?=
- =?us-ascii?Q?slfZJd0fHpCnxKaa9znEpOshc8nErJRmi6KVpii2Z9h7ds0+hrUU0So3dqn7?=
- =?us-ascii?Q?ZXoOSJHVgTdnnYKmjWEsCVgmQspKGEmF07V55Ix+/aki/PlAP9n/WGAnZwGY?=
- =?us-ascii?Q?NhpjFKyYW0nEXHIDjiyfwhsWwebEW8JeDGAzbuVa7GNdALd+RNqFC/Y4QQac?=
- =?us-ascii?Q?b1wcfTRN8NHIiJGh/uZofUqlbDr15xY6SUJg3kwEJUckGGaY2p5t7/Cj0w0w?=
- =?us-ascii?Q?YS73eK+cFnhU6DAibAG5MgsmV15hwDDJDuN9+0H/nPwRAP94V7EJatw/fAtW?=
- =?us-ascii?Q?y/KsVl9ExxpYfv1Ue3yvjZ2oJ7u4aJKUJ0z0zg59sXSB7kqWWD8l50R1mVdz?=
- =?us-ascii?Q?GsNZcBWy4LiMzUkpnFouIFP2SwLfDJNABx9m?=
-X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1102;
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2025 08:24:10.0462
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fd984ca-5243-4fd4-7cd3-08dd7d893aa7
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF0000021A.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB7297
+Content-Transfer-Encoding: 8bit
 
-> >>
-> >> On 15/04/2025 09:27, Peter Chen wrote:
-> >>> +
-> >>> +             mbox_ap2pm: mailbox@6590080 {
-> >>> +                     compatible = "cix,sky1-mbox";
-> >>> +                     reg = <0x0 0x06590080 0x0 0xff80>;
-> >>> +                     interrupts = <GIC_SPI 363 IRQ_TYPE_LEVEL_HIGH 0>;
-> >>> +                     #mbox-cells = <1>;
-> >>> +                     cix,mbox-dir = "tx";
-> >>> +             };
-> >>> +
-> >>> +             pm2ap_scmi_mem: pm2ap-shmem@65a0000 {
-> >>> +                     compatible = "arm,scmi-shmem";
-> >>> +                     #address-cells = <2>;
-> >>> +                     #size-cells = <2>;
-> >>> +                     reg-io-width = <4>;
-> >>> +                     reg = <0x0 0x065a0000 0x0 0x80>;
-> >>
-> >> Messed order of properties. Keep it consistent (see DTS conding style).
-> >> Other nodes also have oddly placed reg.
-> >
-> > Thanks for your reviewing, Krzysztof.
-> >
-> > All the nodes mailbox and shmem (in mailbox) are on the same bus, so
-> > I keep it by unit address in ascending order like DTS coding sytle
-> > says. I think below rules are two options, isn't it?
-> 
-> You speak about nodes I wrote about properties. I don't understand how
-> your question is relevant to my comment.
-> 
-> 
+Hi Arnd,
 
-Sorry, we will update the sequence of properties in node.
+Here are two small fixes which should go into v6.15 from our side,
+see the tag description for details. They've already been added to -next.
 
--- 
 
-Best regards,
-Peter
+Thanks,
+
+
+Sven
+
+
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-fixes-6.15
+
+for you to fetch changes up to dc5befecbe2683ac49fc8dc76aade35e62f4cf30:
+
+  arm64: dts: apple: touchbar: Mark ps_dispdfr_be as always-on (2025-04-19 08:40:33 +0200)
+
+----------------------------------------------------------------
+Apple SoC fixes for 6.15
+
+This tag contains two small commits since rc1:
+- Add a .mailmap entry requested by Asahi Lina to better filter her
+  emails
+- Mark the power domains for the touchbar support introduced with 6.15
+  as always on since the driver cannot initialize the touchbar from
+  scratch after the domains are powered off (e.g. during suspend).
+
+----------------------------------------------------------------
+Asahi Lina (1):
+      mailmap: Update email for Asahi Lina
+
+Janne Grunau (1):
+      arm64: dts: apple: touchbar: Mark ps_dispdfr_be as always-on
+
+ .mailmap                                 |  1 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts | 10 ++++++++++
+ arch/arm64/boot/dts/apple/t8112-j493.dts | 10 ++++++++++
+ 3 files changed, 21 insertions(+)
