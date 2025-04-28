@@ -1,111 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22132757F3
-	for <soc@lists.linux.dev>; Mon, 28 Apr 2025 12:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C31B1D6DAA;
+	Mon, 28 Apr 2025 22:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745842163; cv=none; b=Cuqoo2bcNnySI4uPP91JlQkpZCz6xHcWbqsEUwFEZ3QE1Rg+9utx86Gpi2Blx3nVkx9QnrEe6bRw1p2WBVgdv/PYfp+gL90lyZ+vZhndUfxbV86Ih0pynFPziQNztf9H+ATVz9eww3RAhjpZ4oQEUA1BR0Vc3J3M4mPh6BFkAik=
+	t=1745879755; cv=none; b=YAjgIbHAn9fl0G04GYGdEDqHkr0WaMTeFZf6XtH1J9FGe6F7FdWZjkCIQkU1vNW8hWMe+xAc1fFXFmNU4LZnQ16GcvmaREPHgTmDNWaKw8rj+9kJ+f2r7gcMcm47MHTOgUk4F2hQlM/sTkBz1d8AQr7aQ9uX8c8nILS6sUBAVoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745842163; c=relaxed/simple;
-	bh=cGyL80VGPDmQ9WdBrfP8/aR2yDohAnOKiCjzllaex+A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FpBWv3xp0wentYymb6LukWWU3df85K9MQbSUr2gkhr/Lqf1F0Vnnzqt7HOEBP6gSBcrKaCyp9h+nOE3wXpLH+zvQSB4HtBAG/gLCxNMG67QtwU6AsRvIRN3AHcAU57FyZR8a1rTj4tXLzQpJFVcjx5z+4nQxeTBJK6bzuN77drk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=w/mg2uRF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745879755; c=relaxed/simple;
+	bh=dsHMaLy+Slj0qyE+mOUjzDl6VBT8UBQJQxWjTqxbQxA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VB7C6S8tZ7sb/5EGahopXi+P8pU2oC0TWCHzXNa9zWVu6oBA/1Um4W3TN4D9BXmiIfXtyVXYcfBAxHHuxCn2FuvA9ACulEM9zB4poUWIExvxFva+X8+TEBy9N4/cNlvrXYAVEGvtXav2t5MGCPydRugOVpa6dp/aorhsAt6BMkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pb8aHXV6; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="w/mg2uRF"
-Received: by smtp.kernel.org (Postfix)
-	id E68A5C4CEE9; Mon, 28 Apr 2025 12:09:22 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF133C4CEE4;
-	Mon, 28 Apr 2025 12:09:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF133C4CEE4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53S9aHNk021436;
-	Mon, 28 Apr 2025 14:09:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	VDepB8SehSi6GXRffHPKudonq+tQNkNItAJbzLTxasQ=; b=w/mg2uRFKNG+caQa
-	qgICNZAIeYpVyz7HYyMUuBNH167mKZp4AMXzw3BXZBOH4WmbEr5uCiFaASUi6Shk
-	nGfZ9G8Kfr66tVhBvE7uY5Y749KWy4obZnrd2x2Jpyrdhc5/8IxzgXycugz9cqCR
-	G1mWwnO7wwzgTS/SNRzmsjQ1oZGYv+6/Bi/7nta4YaiGwqXHxNIqUn/5TSpP3ycL
-	y2pnTV1zaNOcjMyd9v2my2YEnHN5wBI+q4bSJxTbmUON1Sy8FNDzcbEtsQrxvojo
-	MbxwGTelU9EAGwkUzN4TIn2myWu1l5WOFE27gSGvl7/ZBsV1WsXYrMfv2D72l2nx
-	jEhq+g==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 468mm9enr6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 14:09:15 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 04F7240047;
-	Mon, 28 Apr 2025 14:08:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AEC26A59537;
-	Mon, 28 Apr 2025 14:08:17 +0200 (CEST)
-Received: from localhost (10.48.86.79) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 28 Apr
- 2025 14:08:17 +0200
-From: Alexandre Torgue <alexandre.torgue@foss.st.com>
-To: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
-        <soc@kernel.org>, <arm@kernel.org>
-CC: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Subject: [PATCH 6/6] arm64: dts: st: Use 128kB size for aliased GIC400 register access on stm32mp23 SoCs
-Date: Mon, 28 Apr 2025 14:07:03 +0200
-Message-ID: <20250428120703.1392456-8-alexandre.torgue@foss.st.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250428120703.1392456-1-alexandre.torgue@foss.st.com>
-References: <20250428120703.1392456-1-alexandre.torgue@foss.st.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pb8aHXV6"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4766631a6a4so65259311cf.2;
+        Mon, 28 Apr 2025 15:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745879751; x=1746484551; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X/kdZu5lZfOsUl8WyU/NEfAG1LYXxMtniBa4sTIJjM8=;
+        b=Pb8aHXV6R7Mo8upSRb5yCegk+aUUF0rDHxCv9cscwo+b1vmbz7eVdf3OMNu2gxILly
+         4f1wEEgMAL2tWZLl/fESApgw1ID1xZvORfvqsh9kt3UrAMa/aH0AsxE5zBeXiJ8JNZDJ
+         gMJEZxWyJ/t+DXpmdWh4TezxEQFZi1GtzXHxxJILrpMb4xeV09FgJPvQ0Db+HRhantu1
+         VraPq0buZ6D58/dUgSlflfZrjlo1kAcmyhu6+YxKF541zIC9NAN96fskm+7LzVzx5hUE
+         rTbX4mfwiSzVzwA/jshbdzYWqIuGl4egVbeHN36pry7kNbJpSjcnJB6aWuW/Ziqsi6jU
+         84+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745879751; x=1746484551;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X/kdZu5lZfOsUl8WyU/NEfAG1LYXxMtniBa4sTIJjM8=;
+        b=HuaPAZotag7ASYSftfpFP7y+DUS4s82u64wc0XagWuEEbeOV4Or1J7jxbW6BeeJa8c
+         ltXYwClJ8fP1cUA+NNuv7Gzo5q0G4OQS5zRDnRjrRMv74wfFnsq/g9r7gFyipkNrf/l7
+         NyfbA/0Nbm5/C9sOXGnjqj6CGqMKy2wgPINjXJ50zesnD8nDbcKk/aSSJrexEPetoNIU
+         hNNwjxM9h0YjkMIRwAC17c21L9nCtKPQAy5Bj1sS71CiL2X0jwvYt6hQvSe6LnEUFJl2
+         Tumz6qhPoqRNooCpnU4vn3b06b9j2oPqzDqFfWeokszP+SIE9FGKLx1BT5r4MF0ZarQw
+         2U/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUT5a0XXBcBAT2jFmVjwIVhf35Sr5NEr4vKeEMsI0+UcymbZyrF3tj6kuU8lQZPiXi5gzg=@lists.linux.dev, AJvYcCVt5x6TkeRkb6UPZqln8cD5RcsY/dFsZcHcvwUrICMsXD4chWrxtNGHyP3+jK/Z7nQF2TkEhNLO@lists.linux.dev
+X-Gm-Message-State: AOJu0YwKmCciRZxJCKbl9DANSpZ3C0+BrgJvkeyil89sxNlyLTLUgmoW
+	/TjYWWD5VINoHOgAYhWZ+x/Mp5qB7iQY5lgCoYW8EBjE+Y8q+G8e
+X-Gm-Gg: ASbGnct2I1Dsp9p9G0dwMYyn0T5gr9amae57J5FHdA9TwOzflA8tKClyqD2uhBfXqOx
+	envWFDa4DSxp6v4UO9YqvOpTbh3bZCdobo+iZ2MBiZnNAECfJlgNkv30drIK2NrJRNHlNErm7Il
+	6s+P2IkJ7/syOZMX5lzxTB5yPeli3x8yOk81rBz+ZvJRyJ5V0qdXd4p5FY2UKZo60aLCPtRIGM5
+	rkv5Tt0kK/GeOlWQ2ZDkvazzm1oFxZuv4BwYiSf6U39a3bG1I8j9ya3IUQ32BVpzRYxUKdDqRB7
+	YyjRIs9WXT8ijp+h
+X-Google-Smtp-Source: AGHT+IES8nRDFDh7fd98mGNj9hoSaWm8gTLVtNkYmiW/3xaJ8gUBVINczQj4gDLHG/EkZEFrUlpH2w==
+X-Received: by 2002:a05:622a:1f17:b0:477:6e8e:138e with SMTP id d75a77b69052e-4886ff51bafmr17662271cf.2.1745879751334;
+        Mon, 28 Apr 2025 15:35:51 -0700 (PDT)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-47e9efda2c0sm73859921cf.20.2025.04.28.15.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Apr 2025 15:35:50 -0700 (PDT)
+Date: Tue, 29 Apr 2025 06:35:36 +0800
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+	sophgo@lists.linux.dev, soc@lists.linux.dev
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Jisheng Zhang <jszhang@kernel.org>, Haylen Chu <heylenay@outlook.com>, 
+	Chao Wei <chao.wei@sophgo.com>, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/7] riscv: dts: sophgo: cv18xx: Move RiscV-specific
+ part into SoCs' .dtsi files
+Message-ID: <6wlgfvc3rkhv4s3ou67fjl6j4a26vocqck5727cg6muxlz2erj@kivndcjcqc7m>
+References: <20250316185640.3750873-1-alexander.sverdlin@gmail.com>
+ <20250316185640.3750873-2-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-28_04,2025-04-24_02,2025-02-21_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250316185640.3750873-2-alexander.sverdlin@gmail.com>
 
-From: Christian Bruel <christian.bruel@foss.st.com>
+On Sun, Mar 16, 2025 at 07:56:31PM +0100, Alexander Sverdlin wrote:
+> Make the peripheral device tree re-usable on ARM64 platform by moving CPU
+> core and interrupt controllers' parts into new cv18xx-cpu.dtsi and
+> cv18xx-intc.dtsi.
+> 
+> Add SOC_PERIPHERAL_IRQ() macro which explicitly maps peripheral nubering
+> into "plic" interrupt-controller numbering.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+> Changelog:
+> v5:
+> v4:
+> - cleanups dropped
+> - cv18xx-cpu-intc.dtsi instead of cv18xx-cpu.dtsi+cv18xx-intc.dtsi
+> v3:
+> - &cpus node has been moved into cv18xx-cpu.dtsi, &plic and &clint nodes
+> were moved into cv18xx-intc.dtsi to reduce code duplication;
+> v2:
+> - instead of carving out peripherals' part, carve out ARCH-specifics (CPU
+> core, interrupt controllers) and spread them among 3 SoC .dtsi files which
+> included cv18xx.dtsi;
+> - define a label for the "soc" node and use it in the newly introduced DTs;
+> 
+>  arch/riscv/boot/dts/sophgo/cv1800b.dtsi       |  5 +
+>  arch/riscv/boot/dts/sophgo/cv1812h.dtsi       |  5 +
+>  arch/riscv/boot/dts/sophgo/cv181x.dtsi        |  2 +-
+>  .../boot/dts/sophgo/cv18xx-cpu-intc.dtsi      | 54 +++++++++++
+>  arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 91 +++++--------------
+>  arch/riscv/boot/dts/sophgo/sg2002.dtsi        |  5 +
+>  6 files changed, 93 insertions(+), 69 deletions(-)
+>  create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu-intc.dtsi
+> 
 
-Adjust the size of 8kB GIC regions to 128kB so that each 4kB is mapped 16
-times over a 64kB region.
-The offset is then adjusted in the irq-gic driver.
+It is a hard time for now to do some change across the cv18xx 
+series, and it has become a mess. Due to the fact, I think it
+is time to do some work like split some device (clk, pinctrl,
+plic, intc) from cv18xx.dtsi to avoid override, and make room
+for arm64 device.
 
-see commit 12e14066f4835 ("irqchip/GIC: Add workaround for aliased GIC400")
+Since this change contains some change similar to this patch. 
+Would you mind me to take content of this patch, and add you
+as the a co-author?
 
-Fixes: e9b03ef21386e ("arm64: dts: st: introduce stm32mp23 SoCs family")
-Suggested-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Christian Bruel <christian.bruel@foss.st.com>
-Link: https://lore.kernel.org/r/20250415111654.2103767-7-christian.bruel@foss.st.com
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-
-diff --git a/arch/arm64/boot/dts/st/stm32mp231.dtsi b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-index 3f73cf1d443d..75697acd1345 100644
---- a/arch/arm64/boot/dts/st/stm32mp231.dtsi
-+++ b/arch/arm64/boot/dts/st/stm32mp231.dtsi
-@@ -1203,9 +1203,9 @@ exti2: interrupt-controller@46230000 {
- 		intc: interrupt-controller@4ac10000 {
- 			compatible = "arm,gic-400";
- 			reg = <0x4ac10000 0x1000>,
--			      <0x4ac20000 0x2000>,
--			      <0x4ac40000 0x2000>,
--			      <0x4ac60000 0x2000>;
-+			      <0x4ac20000 0x20000>,
-+			      <0x4ac40000 0x20000>,
-+			      <0x4ac60000 0x20000>;
- 			#interrupt-cells = <3>;
- 			interrupt-controller;
- 		};
--- 
-2.34.1
+Regards,
+Inochi
 
