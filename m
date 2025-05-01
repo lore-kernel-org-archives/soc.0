@@ -1,192 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298C81F5833
-	for <soc@lists.linux.dev>; Wed, 30 Apr 2025 07:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745998152; cv=fail; b=uky/I9AGLrzEgQFDXANz3x44Ywe2+4i6fDOm7N9pcSkGwZgj+hLACIDhjxhDcawivgDwOnL7dX3J7FEe7tfOuSE8w8hD5ObJ/s7Oj/4qv1NDefw6WI9fXA/iu4HqWaKiD2NQ0Aqpx9a7vHUQ15hL5YOsCxpAg38/eewMg9ZwrJU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745998152; c=relaxed/simple;
-	bh=nm/HWnu0cdvuf36T6yDPvLWYmQW6KmF+fm+fsytLQvM=;
-	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=XcSg61dMAgY5rDXQe+abushg2igVU6SP+KEZlaK57yLTKmgwH2EKrvZj4BwAGjGTqgkVCXjz+uJzLTjcJOfCUiOQvOJWxpKifHrhRZEKT4U+/IuBf2QUeqcTGuFT4AkfNgVZ5s365zrr3y4ZUx5SFt+277TLdA5191y2i+g/QbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=bTWNdlOd; arc=fail smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA391FFC4F
+	for <soc@lists.linux.dev>; Thu,  1 May 2025 10:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746095751; cv=none; b=dR81xlteHGRHYRJLqjYVNKFU6QVU/iaTjrYLNMZlPUb9/j2U/FXn6bIm/aiaXLz70/dlngKHRdCIx6YvI0GBn5US9kSvdy2sjLL38CqUuzvCvGW4mi/RpuxCUbfyiHrwQPTUjWJR5xAVJZJz/d0gn3If1UVDRNYiF6dGHm4mSYk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746095751; c=relaxed/simple;
+	bh=vNYmWvhVJQY/AqblF9NK9uhqlpRYbUIbtdpo5XR+1to=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hVrhlhe2MTXbcxiek/cHgmGxQaJNyzAU2bNHp5Vwxakvj7szJIpCIzbOq6haP5UqDW0+ZXE9JJ8gqYXvadewfyg1WaGY1QUW8aTUHYqFXcYTtaUsCfAdDPJh48jA0H2IPmUvjFUIW3GLbh/M0r0HC0QN683txEKpEkUiB8IgTR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f97rOYcj; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="bTWNdlOd"
-Received: by smtp.kernel.org (Postfix)
-	id B1043C4CEE9; Wed, 30 Apr 2025 07:29:11 +0000 (UTC)
-Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazolkn19011026.outbound.protection.outlook.com [52.103.67.26])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 69150C4CEEA;
-	Wed, 30 Apr 2025 07:29:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 69150C4CEEA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=py46PXwE46QLhm0MktWZS63FCJqcvTzWNh7NmVljwq6uXe4AOqere4mts78QZ+zKAvYgtNY8yEKGpkOKlNJ27/qg7fpF/OWgjRsX5SHNnsqhoZ3jqs4iPVvb2/EZN0HdFjxZCrrzBpQqJAPIS7dTexvv/WXn3uMwzGOj39I5+dD4f7CkWq3tA6v4FlUBbRnT7WGci0tJ8krUMwb3b/Q9kLYdC2MxMme/LtGvO/8n+w+wvy0sW79stVjA+08LkcgQeAoCD0JWuLHjbx8dkkjeLIMpxm8tCiBDkTUz2XTnePKrveEQBrS0crpX6w7L6lzOyc9tWcQchCxk9FWQT2ixGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cq0OkZCM4NvWqI7l52vAB0yZqeic5UlySv4Iz7q5Lco=;
- b=aWMmR4Y5gwr7ZYsDBM090wHFAimtcWafpMslWeusNuMPK8mwj7h+9+aM++ZLGUwL9CUQILmwWEHB6ALbNrwF91KNpv3HhGwqdXtAVIhQpJmcpHHqEJHU0+ZatXUZ5gg5zalsv+wFX5vakGueOPAHWcNlXwU/fXpmiYHNItfuBKoSHXhxH6Tqa4VmLz2K2pXZkIRrYcMhqhV07noLytUidOx+yaAtmjSIkGT7TD9EmgpoVcqbRJP/yMqH7xiJktPvLFAuTti2u8VwK6jY2XLFzqFwaWXNiANEQ+OyZelaZL6PwsZEDx1Fw87BJRgJm9WNADhkiDqeeKr103t8qHd/9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cq0OkZCM4NvWqI7l52vAB0yZqeic5UlySv4Iz7q5Lco=;
- b=bTWNdlOdvFI5dwvZTosupOzvxoX8HSGZ1WJLNOqROdkQXgpRwFkhCzRM/b/wISGaQ5YQVq3Pqoplz0ZgFztPXZpq1is3bTtlvCuzP2Xvqb6ExI8R5Diccm9g8ml3XoGJJG59Lj0imuFuPcw55C6Mw5BHgwbG69dbRSsBTzcyTtWAQx/6/XziAgIHu/Pzgg6YQyarfJPaZxjzAqJSv/UElJb6WZZez91pt5WhqMrdWWImOoL0hhet7kablZkcDww7LSj6pdZ/mzX10f7yy5OAppRLAhkN9EtcSWnkzSkx19UHT83X2xzbX0tZC2AAM/sZWbV2eUbdWiWJqCjs37wV3A==
-Received: from MA0P287MB2262.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:100::6)
- by PN0P287MB2130.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1b9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.21; Wed, 30 Apr
- 2025 07:29:05 +0000
-Received: from MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
- ([fe80::ca81:3600:b1e4:fcf4]) by MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
- ([fe80::ca81:3600:b1e4:fcf4%5]) with mapi id 15.20.8699.019; Wed, 30 Apr 2025
- 07:29:05 +0000
-Message-ID:
- <MA0P287MB2262454C19B8899BC1694D04FE832@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
-Date: Wed, 30 Apr 2025 15:29:00 +0800
-User-Agent: Mozilla Thunderbird
-To: soc@kernel.org
-Cc: Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Inochi Amaoto <inochiama@gmail.com>, Yu Yuan <yu.yuan@sjtu.edu.cn>,
- Ze Huang <huangze@whut.edu.cn>, sophgo@lists.linux.dev,
- unicorn_wang@outlook.com
-From: Chen Wang <unicorn_wang@outlook.com>
-Subject: [GIT PULL] RISC-V Sophgo Devicetrees fixes for v6.15-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0009.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::10) To MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:100::6)
-X-Microsoft-Original-Message-ID:
- <6fb285e0-911d-4a54-9ec3-ea35e3bfcf32@outlook.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f97rOYcj"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43d16a01deaso977405e9.2
+        for <soc@lists.linux.dev>; Thu, 01 May 2025 03:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746095748; x=1746700548; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0JnUeJrEz2QMwYoW3OD7Syx9Jdxy3i/s9a5E6cIdqNg=;
+        b=f97rOYcjj03tZelNtRoy8fjogH+JnFsPZT2xkgSDoRwmBo0PCJJGsgoYCFM2ddCVHC
+         KcegBiNJ/IOjf/N+GeeIQHiw6ragU3zYiA2EbsQ3jQ2PJc6AFmYJuk9r4eecsvzCTi9W
+         ZEOEonHnCp67z+UPbqHkat6QEI1ViqYA2nei3LHdoVXhygk6hi6uqKNKLbnykHUx/+kT
+         rOFdpDO1uPSskZzZVRkbMSMRn21PdvOs3DwUGA409zKh6V9L6mSVmRi+DxEHoBYjdRED
+         vPDqTTAunywlQML2Fpd6Ju+7Y8arbY/ks3hf/3UKtSKAeVNbYC5WXf6Z4XTMXuaAQN1/
+         19FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746095748; x=1746700548;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0JnUeJrEz2QMwYoW3OD7Syx9Jdxy3i/s9a5E6cIdqNg=;
+        b=rmanOpeOUe2bJUcn2COfCsLxXGuYX84sdZTCgKdiEIED+nFMJ50lAm30e2JT0+xTtw
+         mi4kzKXrqLDjOLznZTElvKhvBpYgyBMo8YrQzQtF1BKzVp31e6Y8gMwOvrdmevsNP6P3
+         UMruIehhTT1KBlh+UzcT1kbMIB1vv7sPkmeQRMn4i4dt5p9S0yOXgiZK3zIithzrF1yp
+         7+apBfsCu9jX4CQJkqs4H3uovqJ4LekU7GGyMKID2d/PKlgHZzGmgqHnyeFcMQhisahG
+         tsl/f1nSGeGEclZ6k4G2MFmuq2uky0LQ9DyotcWhwMxvKPY0Vn4ga1hJBQJBhUuYNIG0
+         4Zzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVgtyVRZJ3OCoMDnoR94WvDK1DfnkxE+k1ciQ2nlp+I5o13ZqtVDEs8IrF5d0//vmDZVgo=@lists.linux.dev
+X-Gm-Message-State: AOJu0YyQ40NIk+XN1FGwb4XWhSa6TddDy1/GMereo5UhiSXojxG303Mf
+	WHLHYJqpbmSU/uNcnyV1AkuXxiZZbMw8w7ZOxRf6yUL8EaCmlVdq0RWLcmy7QNg=
+X-Gm-Gg: ASbGncsmEYmqVN0RPR6fWBmXqOqgelolhAZAF4x2A25gp8QllswUlsFCJjhi7ijRR+1
+	Obr8KzrPQehPlYRzFbl7DpzIlwlAZpilCOQM6BRFh9bp6FOtKMG6e+IpGlFwtlxohiNMgaarXc0
+	QM2O9Q8pkGlZtXe/L+uSVXALwODYH40XSNEyyDbzHfBb1Zdw5E4g3Mw+CsFugImbhpxlyIE+Lcy
+	wfUP/Z2iHPxgqbDSj2eCyTPazkrqt0rbjRF1JXPDnBkzNXvSUS/dFVbHWu1abeynPcx1NNY2JDw
+	pyX2t6bzzOnsvYlCXlYv3gGPR0W1gMiP+MiiMFYbY9VEYu86lg==
+X-Google-Smtp-Source: AGHT+IHpYbP0/kmTUa86knuxCp0uPFuqoZHphNnA+x+8xxOAP7htntUULz8OHSqI0KW/OuRv2E6e8g==
+X-Received: by 2002:a5d:59ab:0:b0:3a0:7119:cefa with SMTP id ffacd0b85a97d-3a0900a0a99mr1574177f8f.16.1746095748358;
+        Thu, 01 May 2025 03:35:48 -0700 (PDT)
+Received: from kuoka.. ([178.197.207.88])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a095a88218sm486646f8f.78.2025.05.01.03.35.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 May 2025 03:35:47 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev,
+	Lee Jones <lee@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] samsung: drivers for v6.16
+Date: Thu,  1 May 2025 12:35:41 +0200
+Message-ID: <20250501103541.13795-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB2262:EE_|PN0P287MB2130:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82246b3d-ea20-4b43-1e73-08dd87b8afa3
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|19110799003|461199028|5072599009|8060799006|6090799003|7092599003|5062599005|15080799006|10035399004|440099028|3412199025|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cXdZSTFWY0hOUGZ5ajlaUzM2QWN6clp3TjhpSmNhNDF0cVlXUTdzbTZ3dWFS?=
- =?utf-8?B?clNKUlZ5U2h4dXo5THdQbjRpYk9aQm5udHJ1L3dhTDBaa3FuSHFmM2JiRG5Y?=
- =?utf-8?B?bmdUaVhyZUM5azZvbC9JOWRoRi9jdEJMMlFFWWpGNGhLUUl2aS9kZzFDTHpG?=
- =?utf-8?B?L0dFbzBtVzcyY3dkR1lmZWtab3lVNHh0K0p5UWtud0pCQ25qM0JaeENsSmRn?=
- =?utf-8?B?MDNyMmVQZ1d2d1hrc29YbE1JTU1oejZlNjhXVmZtVFVlcEVsWVpBSlNDaVN2?=
- =?utf-8?B?b0tJNjdmVU0xT2FrRlRwcVl2RklkRmFTN1hsSzBFQzBYYWZsL2Y1UU01R2tq?=
- =?utf-8?B?UjUwRGgwcEFmajMzOXBjanpIckdpT0lpbm45QW5Kamh4emg5UFM3MXlqRC9K?=
- =?utf-8?B?cXNaYzN2bEtKSmtFckdsT1c2dVRGMGJCRTBsNFhmMURVNUd6aWFjTzFDMndv?=
- =?utf-8?B?R1ZHWGdnTGx4WjJBUkRIb3htQXlGWkJETXN5QUROWlp5NFBtSkpkM2dUdDdh?=
- =?utf-8?B?ZWZrTGYrQktqVzZZZ2lRQnQ1N1RhVW9HUnk2YVp3M3NXejBjK2tPbG1qWWdI?=
- =?utf-8?B?dlFZZ0FnbXF2ek9WUEF3L0ZUUktiWEVzc3JGeGlCa2RtMlVDYlEybkg4TWFm?=
- =?utf-8?B?SngwS05seVh1aXhQU3FVbmxncThBRXRQOGFkZUZTZnFaaGZNRm5uNEhpZ0ZT?=
- =?utf-8?B?bUNsU2JWaTF4c0JqWDZ4K1NWenlUSUM5c0hjVHN6ODBYM05yK3BGZnJVTDRZ?=
- =?utf-8?B?UmUwMTh4MCtYaHloTENURVk5UXVjVU1VNDNoR1k5N2dSRUdBdXoxUlg1TDZ3?=
- =?utf-8?B?WVJwU0JOb3FSaTRwQkhwQ202enhUVHRoVkVmZXViVnF0aVNHZXFyYnB0Rzdh?=
- =?utf-8?B?dUpxbk1FeXNaY05TRW1tSG45aWxreXhBK1VNR2YvWDRkV3BTYS95RUlMVy9D?=
- =?utf-8?B?aGxHbHp6MFdSaVl0RXlBVmhnYVNLQWNTMmRZbkkrN2crMDZkelVmZHBRRmNX?=
- =?utf-8?B?OWJsc2gwekRoYWVtWUFzcUFKVUhubTVuN0ttMWlVUGZUczBZbHUrcXEwRlJw?=
- =?utf-8?B?Y2Y2dnpqaTdZYW9VaW1PY2pXQzYzTUI3NUdZVVA2d3dod1kwcTlObTFWYlIz?=
- =?utf-8?B?ck00T2s4bGZXT2VMaXN3WGhjaXdidC8vZ1FzSWZWbU1scXhGclFsc09hKzNk?=
- =?utf-8?B?UndZOTFNTXgvcnRhWUVpWnJLL2JqYkl0cG4xY01HOWd6Z1F4MG1vUXBkVlAz?=
- =?utf-8?B?TVlKcGhIMzdOWDJydXhNcHA0VFo3SGFBRmFWL1Jqb2tkajgxZXFyMXNMYm92?=
- =?utf-8?B?L1l4YkhWOExUZ3hTc3hIa3h0RVY5Q1VpenRCbjFGa215R1ZrQk9GcFJWRnNp?=
- =?utf-8?B?MDRkc3YxL2l4all1RUZKbG85SlVEbEFwbWgyeG91cmNLemc3dXduZzRLaHlm?=
- =?utf-8?B?K09zeXZFZEFYNmVsY01HTlBxcmVLYm5ZTURGSVJSbDUzOFhVQUtReTNGWGxK?=
- =?utf-8?B?WFdrL0NydXZpTmU4SUdjUFVjNXJNTk1iYWNCTEVlT01XWG1Rc1VKbFNSa09u?=
- =?utf-8?B?cEFYR281cmlMRWdCNjZTYVlUT2N4aUI0V0U0dWRabXJHUjRzemkyTWUxYlcx?=
- =?utf-8?B?RU1BZG4rLzcrK3dETWhxTlIvb0laa0VTRlJrWHF1TnZscFJ3RTJZRUhhOTEz?=
- =?utf-8?Q?90d1cMZtSBlVvflyCpLl?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Y3VSbVFYaHVKTG50NjNhVG03eHhNelNVWU5FOTZzcm8wZXpkVjg4ZWg5b3JI?=
- =?utf-8?B?Sm82Ykc4QUhrR2UvQzBjVGlHUzZWelRsVmV2cENnK2N1RHBGdEc3NHpoQTVj?=
- =?utf-8?B?TnZVM0lrclBGV1Nvck16cVRTK25yNWVSVHBBeWZjRW9LbzhTQXVYcU1jNVRF?=
- =?utf-8?B?M2xpc1owNU11OC81MU9lNHNDdUZxelkrY2ZweDFkU1ZXSkFuQzZQaDdWRklY?=
- =?utf-8?B?SHVMb3RJUDlhejlwakMveGMrNlJOTzVnY2xmUjBpcnhrNjN5OUdMQjU5VWlr?=
- =?utf-8?B?VkQyL1FIaDlLaDU5NlIwR1h6b3VHMk9VNGJsMXp2cHZMNWN4T1Fid1pxNXhm?=
- =?utf-8?B?YTQzV0ljMGt6cmZaQjBjKytPS1pBbkxJT0gyaTNYL2FReVVqOFE4RkRWUHhV?=
- =?utf-8?B?SHhqRWVRbFJrb2J4OTYvbWF6MWhhRjlyUVVHdGZFeVF5REZwcW5kRGZpRzZl?=
- =?utf-8?B?dWFUMWV1N0xDNmVPQ3psbDBHcWcvb0trNHd6ejJVdmwyU2ZFa1hnWXI0eDAz?=
- =?utf-8?B?aFRaZjErRDFFQWFVdzNvUktuMFR0S3krdmsvdktoMmQveHE5bTBsOElDYmF0?=
- =?utf-8?B?ZUQrL2NNY1BjaDBVdGhtL3pNUkRUUTl3d3BUZ3hEcEJwZnZQSG1kTXJIcjYz?=
- =?utf-8?B?WkpGYzUraTdqeVVZcEtCS2gwdGdNRnhSWkFRWVNSU0pkRXBjTTRWVFJ4cHdF?=
- =?utf-8?B?bi9oSWNPUmRTQzF1dWhTQTQ5VWpvdDhuckthZDFXQWc2TDh4K0hJYW8xRDlE?=
- =?utf-8?B?dkFKMy9SVk1scWdEclZHclh2bXBkRXYvcHBLdWRobENXOGc2cE53bTR5QWtS?=
- =?utf-8?B?RDgwR3JjWTZud01wVTYzbGVRTlhWYmFrSEVUbVJXTmZxaGpGZUZLUjZJbmow?=
- =?utf-8?B?TnVnMnhhMm1VcGl0MGpZblAwVkgvRWNuNTVOQ090cmsyQWprZGNkM0Z1RDA5?=
- =?utf-8?B?d2NSZ0UyajRtVGVSL0hBN0R5TDhLb3hRUmdLZGkwWnFpZmhIQkR1Q1ZMc2J6?=
- =?utf-8?B?S2I0b0t0UVRyREFCSFZWem1aS0prLzVrTXMwN1pWVkxCTWFRQmlsTkZRUUNV?=
- =?utf-8?B?aWRnYTRycTVVTGQ3UGxCWmRGMDd0REZ4Q2Q1eTFkKzd0cGhLTEk0RUxTeWVQ?=
- =?utf-8?B?OFNyalN5TFNsN3VlTE1oZ2hqQUd0NHdvNU4rRmZrY3ZhVFNBVlZveUtsdDZ5?=
- =?utf-8?B?bm1CYmMzTXpCbFpNKzBsVHFIZmxkc0wrWkpwZEJHODl4am44ZVVRMFRkQnJN?=
- =?utf-8?B?M2ZsaWZuY3FPTDhTREkraktHR2dOSDF3UXdWQXlrZXVFZ2xTYXBETEFwdVgy?=
- =?utf-8?B?aDVoL0NtdGwwZ2RiZVdpYUVFODdLbHFTamVMeUFPQUNpQWtEZ29icjNUbE1I?=
- =?utf-8?B?dE9xTlRuc1lKREE5YVFscVE3d0E3OEsxeHNFQW1Bb1dyc0dUSVVVbnhJL0xx?=
- =?utf-8?B?YnZWR0NNV1ZINk1VTVQ4UjFFdlhzUUlnaWFzZ1dUb1pBNjVaVjUxMmIrVmhh?=
- =?utf-8?B?Z0EzVWs1d0p2VDZxbjBUVlV0V0RpVTNwVUVHd2ZzckgwUzN5akFaT3JoQXBI?=
- =?utf-8?B?SU5vZkNmVUJFK2dWU2IydCtSd3VPaFdoZk4vYklONVlQNHJrWjNtR0lTQVpQ?=
- =?utf-8?B?Tjd2aFAwaExEc3FMTlEyZ3JJRkVseXE1SmNSU1hCNHJpcFhVL3dxZ0F3M2Jh?=
- =?utf-8?B?UWo5NUpRUmRLT2U5ZTlWU3pVclVsZDFlZjRIdFNwc1h6YzFDZXdkVEFVbXl5?=
- =?utf-8?Q?ZfDu+Vb0ou+k8tYv3PMdFlPOMSKiFSs7e6gwI+s?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82246b3d-ea20-4b43-1e73-08dd87b8afa3
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 07:29:04.9569
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB2130
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2160; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=vNYmWvhVJQY/AqblF9NK9uhqlpRYbUIbtdpo5XR+1to=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoE059ULjeHoIezM1OAEcRIkI9/eVyLkGHFQs+g
+ 7rpEZaMWx2JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaBNOfQAKCRDBN2bmhouD
+ 12nUD/9GGensklaBc7M71nRyVAyLRtoLji6ft/Ict9H+mJZDnuu0b8HD7g+Bd8cQXxq/QEfpTpU
+ 3eZ2eHhGVRZjLwvIl29slEjPUmSCfJt0/FwGAvs4CS0S4J4Cz/NiemKpg/4e8Eew6EF40LceTHj
+ 4nZkclCbJ9W5znA6QdShYnsvijNEOLhZQsCNNSEQqIfXdzpnozs/QhftGoV9hT4tAqLSVU2f6Hn
+ jmsyfqT4JENOwsmtDN8j9YQYOrs3vGAKzcOcUDfiFbQ8DDWfVE7F1LRzzUR7XfQ/JoplAGqJv5w
+ 98STFW/3tbErQKmmTxGmJRd7k5b5s81O8DH2VR+kFZ41Iaz7bH5ui2cPJ3ollez7MA8bbP3yZT1
+ sZR7s6lOYvLV4sNQ/1v0+JoMkc9F4S2fl3NO3Bm65SW2K9Nu7QGVotAkKCYTLasz0ifE8Rady64
+ oPew0HeOVHkHLteSdmusZZmR/o+dlbVXsmqIFZ93b6xs/cb03KGr1uRj8YiVf4swVqTa4zpG/a8
+ oNbXpNyOht6RernZ4dKaL93ynESVArjwMoLvKetKMbM7DOXbqThhhUDSABqUfRc4LpEZzAk90FW
+ M9IRpcYQOZn2KX/e38M8x0F9wQBL0fY6A9Bk93WsBf7nV/8QLoAgsFBey9UQvZl6Kn7GIBFNNFh fsgUW3E/TP11+PA==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hey Arnd,
+Hi Lee,
+That's the stable tag for you to base MFD patches on top.
 
-Please pull dt fixes for RISC-V/Sophgo.
 
-Thanks,
-Chen.
+Hi Arnd,
+Please pull it as regular drivers pull. Note this will be also shared with MFD
+tree.
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
-   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
 are available in the Git repository at:
 
-   https://github.com/sophgo/linux.git 
-tags/riscv-sophgo-dt-fixes-for-v6.15-rc1
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.16
 
-for you to fetch changes up to 3e6244429ba38f8dee3336b8b805948276b281ab:
+for you to fetch changes up to 2c2e5e908ea2b53aa0d21fbfe4d1dab527a7703e:
 
-   riscv: dts: sophgo: fix DMA data-width configuration for CV18xx 
-(2025-04-30 14:51:43 +0800)
+  firmware: exynos-acpm: Correct kerneldoc and use typical np argument name (2025-04-25 11:41:03 +0200)
 
 ----------------------------------------------------------------
-RISC-V Sophgo Devicetree fixes for v6.15-rc1
+Samsung SoC drivers for v6.16
 
-Just one minor fix to correct DMA data-width
-configuration for CV18xx.
-
-Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
+Several improvements to Exynos ACPM (Alive Clock and Power Manager)
+driver:
+1. Handle communication timeous better.
+2. Avoid sleeping, so users (PMIC) can still transfer during system
+   shutdown.
+3. Fix reading longer messages from them firmware.
+4. Deferred probe improvements.
+5. Model the user of ACPM - PMIC - a as child device and export
+   devm_acpm_get_by_node() for such use case.
 
 ----------------------------------------------------------------
-Ze Huang (1):
-       riscv: dts: sophgo: fix DMA data-width configuration for CV18xx
+André Draszik (6):
+      firmware: exynos-acpm: use ktime APIs for timeout detection
+      firmware: exynos-acpm: allow use during system shutdown
+      dt-bindings: firmware: google,gs101-acpm-ipc: add PMIC child node
+      firmware: exynos-acpm: fix reading longer results
+      firmware: exynos-acpm: silence EPROBE_DEFER error on boot
+      firmware: exynos-acpm: introduce devm_acpm_get_by_node()
 
-  arch/riscv/boot/dts/sophgo/cv18xx.dtsi | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+Krzysztof Kozlowski (1):
+      firmware: exynos-acpm: Correct kerneldoc and use typical np argument name
 
+Tudor Ambarus (1):
+      firmware: exynos-acpm: populate devices from device tree data
 
-
-
+ .../bindings/firmware/google,gs101-acpm-ipc.yaml   | 35 +++++++++++++
+ drivers/firmware/samsung/exynos-acpm-pmic.c        | 16 +++---
+ drivers/firmware/samsung/exynos-acpm.c             | 58 +++++++++-------------
+ .../linux/firmware/samsung/exynos-acpm-protocol.h  |  6 ++-
+ 4 files changed, 70 insertions(+), 45 deletions(-)
