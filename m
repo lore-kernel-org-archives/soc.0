@@ -1,127 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF842AD2A
-	for <soc@lists.linux.dev>; Sun,  4 May 2025 22:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EB2170A37
+	for <soc@lists.linux.dev>; Mon,  5 May 2025 08:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746396619; cv=none; b=Bbej2rCT+zCe6HR6oho3I/Qlewl1Q6QMC3x6VmeKDdWpkjh3JwZ7weT3LadxqjHEwIGfkd43IEMiPyGOtmccNE1fmtr/aR/y6FtT55nap3KaVm3NaFpIUrTxfYarmbF/dbaR1iRhxE5kNbXFFM2UrnURl2DYieJIDHOnh3OJSRg=
+	t=1746432215; cv=none; b=izBAHMcHbzTY04n9OEhNwSqMh4hLj1oPqESSt5pgxwai5gV7o3ypwgktffNW+uAz2mAYMcUylD2pDsLdpDYsERlqC6l8FZlVYGAzRgYoK8kLB0D5Y4mIHoAAP9YT21wqZgurbbtKyHoJBBdhPszZZKRoLRIlPZJBVRAQKyg1STE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746396619; c=relaxed/simple;
-	bh=JjwroW+Sz58FnbQF2NHoe15WcGhpfs+l5hST+/6w2ik=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aeN9vMJPYEsPLakyKEKR64nVdjHHCin7PdrpRvUJl+5rVAb4j9kMSmGejSzqqexmwiTsRoxmK3lBhT9D1I95Xg64abDAM4v0yvH2+O3TeUbZVIMdh6dQJGeg7H3qH3PXdcPbxf16utHBW+JhtHD6is4zAmcL5HGymbqglRTflN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=AKeciERU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746432215; c=relaxed/simple;
+	bh=Sos2AnAItqRrbPjNaTr+ezuNIMT7xXdaV4EYtzNBCvo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=pzYRD8Q0sroMbY19sfJaqS9va2JMeHGmGG96vEl/lOzq1hNW7DdZe29O8ZvQSVqqpw/OuHjdJJ11LWKMLoTAOFI2Tf0zjxtiedsz9xunjhSi3h5iaiDRRZIVqmbWy1iigQ0OALsZsOcqdbZS9ZsV9A4LeF4gGW3cX176Sdq5SRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Iq9755XJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ot+ID1JJ; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="AKeciERU"
-Received: by smtp.kernel.org (Postfix)
-	id 6A802C4CEE9; Sun,  4 May 2025 22:10:15 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24A46C4CEE7;
-	Sun,  4 May 2025 22:10:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24A46C4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=sLpW6jTBTWl6wB5elGwC1n2v3ZUSHcQl9rZfk83A14c=; b=AKeciERUlG++PembkUMAJdd63H
-	3v1llWiYQP4DTT+yzeVR18isqNCTLiYN73K/RLwsG4gwH7VGxUbAeGBHTikmXrWXFaAfdhphARTI+
-	4vP4VxsE3YTbUKJxOhF1izBTda2CCbcgDStmw9sxeCvVyOnUIuotfNTm3OcP6jlw6pbi6yEjKrEdG
-	zcS+HVUibELouIA/ic+R3zVAW8V/JTWI6nEWmZQGntlw6Rt1E2B3Yk0/NWEbZAQPk221arAWeYrne
-	5uvqYzip67fbqn4o6MYsI6rhQe6RWDBQK0A/RzDqQ0juzeYsCS35km+qvq6kmPebeqXbocQyad5Im
-	J+h66POQ==;
-Received: from i53875bbc.versanet.de ([83.135.91.188] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uBhXI-0006CM-6R; Mon, 05 May 2025 00:10:12 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts fixes for 6.15 #1
-Date: Mon, 05 May 2025 00:10:11 +0200
-Message-ID: <2923598.88bMQJbFj6@diego>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Iq9755XJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ot+ID1JJ"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 2D10713801A0;
+	Mon,  5 May 2025 04:03:31 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Mon, 05 May 2025 04:03:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1746432211; x=1746518611; bh=Ru
+	i5mVOszWTl9nD8tHKJPtp+GnylKLvgNMk68Qak7tE=; b=Iq9755XJ9slZfwpsZp
+	6mhzBEikF59TI9nci47XG9RDz7u77pelDBVhoTGtmVPL/gBcEgl08GMwfV8Yt+tc
+	8U5h5xwq0TZd82rgv/hPXnOvffw9a5ZpGeOJgaYPwmpkVz2W63TIzh6kaNDW3GWp
+	4aoy9VYiysthp39DVN0Kv9j4qrP0A7p+RZ6DWfyOScKRdBYiyItoJIwE9Nt29s/m
+	Q70dxKPFdM7mHYnhpQfo8wCG3sP32e+FZujLlkWsmxzn3Rhi/uUogZGg7CiYH39h
+	ijTJaSpdaBlK/5KyLdKumvzhZueOzpQsk6+RMCLGhSrY3DKy9jI0lVPp1lsCfeIi
+	yIlw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1746432211; x=1746518611; bh=Rui5mVOszWTl9nD8tHKJPtp+Gnyl
+	KLvgNMk68Qak7tE=; b=ot+ID1JJWQoB88mzxHWIXGSIfIvrWJslB3TPaBtKtMhk
+	l1c6YlOWiF9h3nt/DJlffCyUxhiPIUNWGdDMJ5OZVGC197SGakvjCSazAjk64zDY
+	BJxW3Jt6aCwqDzmwwXBFu4hxrm3k2BRgkeVlFw4hNhAZHp4Xi6pJBIKks+ydeXb8
+	aCJ8BHxaBoNPyJexoiP8PWTNy1VZhSTN0OfvqpiBqFJ1uuPOKYZGBKmx955uIirj
+	NL0qZVE885Ct/95CQceR5uapJgd+4xlu0Lev+PmbId+Q/CzqQ/uredWmfjlAVWiQ
+	rXSf+F8hUCLIkF0eR4Cnaii8/35EOPtQAliUqmrWsQ==
+X-ME-Sender: <xms:0nAYaEBKioN405oYGv-9UsVC-pqZylewYNn6HmEQf8mitrunopBxGg>
+    <xme:0nAYaGg5jXvEU9juFVf_yLrqLGs6k5CGJ9y6q0He18ySm_78jKcA8LPaSIOAJ5lLz
+    DSS01MjnrEDK9AaMU8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkedtheeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkffutgfgsehtqhertdertdej
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepvdeigeeghffhhffguedvvdelvdfftdfgvdfftddv
+    gfeggefhkedtfeeutddvuefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
+    nhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtph
+    htthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhr
+    tghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgrug
+    gvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdp
+    rhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:0nAYaHk59Y-qAk-cg5luwpsN-Mk6KGapJqkO4yTGmQR81xsvroE34A>
+    <xmx:0nAYaKyae8s6GxJrDoadQbyLuvuIxwhnZbT4Ot60cYcPBtnOL_26Ng>
+    <xmx:0nAYaJQna6uP1EaLOvXP0-u_P7SnlOjp5AFAfUsNOwY_rACcJY2toA>
+    <xmx:0nAYaFZuhZck2d1jNSH6tNRDElImuNnq4YIGF1eSVV-trZujUIl7Tw>
+    <xmx:03AYaEbE-r-MT_Y0f8qo0gmivHXuCJyBuYDpcNmXeZqX6pFGg0JCF0ry>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9BE1B1C20068; Mon,  5 May 2025 04:03:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Date: Mon, 05 May 2025 10:03:30 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ soc@lists.linux.dev
+Message-Id: <a080c802-52fb-4601-8178-990494c87e5c@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 6.14
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 
-Hi Arnd, Kevin, Olof,
+The following changes since commit 9c32cda43eb78f78c73aee4aa344b777714e2=
+59b:
 
-please find a below some fixes for the current 6.15 release-cycle.
-
-Please pull
-
-Thanks
-Heiko
-
-
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+  Linux 6.15-rc3 (2025-04-20 13:43:47 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git ta=
-gs/v6.15-rockchip-dtsfixes1
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-f=
+ixes-6.15
 
-for you to fetch changes up to 4bf593be2e462623c4c34c7e3b604eb3f8f9de45:
+for you to fetch changes up to 2ef5c66cba6171feab05e62e1b22df970b238544:
 
-  arm64: dts: rockchip: fix Sige5 RTC interrupt pin (2025-04-29 23:21:49 +0=
-200)
+  arm64: dts: st: Use 128kB size for aliased GIC400 register access on s=
+tm32mp23 SoCs (2025-04-29 18:16:28 +0200)
 
-=2D---------------------------------------------------------------
-Removal of operating-points above what the rk3588j soc is rated for, and
-a number of smaller fixes: Turing RK1 fan can spin down again, fixed pins,
-pinmuxing and clocks and some devicetree-correctnes improvements.
+----------------------------------------------------------------
+soc: fixes for 6.14
 
-=2D---------------------------------------------------------------
-Dragan Simic (1):
-      arm64: dts: rockchip: Remove overdrive-mode OPPs from RK3588J SoC dtsi
+The main changes are once more for the NXP i.MX platform, addressing
+multiple regressions in recent devicetree updates for the i.MX8MM
+and i.MX6ULL SoCs, a PCIe fix for i.MX9 and a MAINTAINERS file update
+to disambiguate NXP i.MX SoCs from Sony IMX image sensors.
 
-Krzysztof Kozlowski (1):
-      arm64: dts: rockchip: Align wifi node name with bindings in CB2
+The stm32 platform devicetree files get some compatibility fixes
+for the interrupt controller node.
 
-Nicolas Frattaroli (1):
-      arm64: dts: rockchip: fix Sige5 RTC interrupt pin
+Another compatibility fix is done for the Arm Morello platform's
+cache controller node.
 
-Rob Herring (Arm) (2):
-      arm64: dts: rockchip: Use "regulator-fixed" for btreg on px30-engicam=
- for vcc3v3-btreg
-      arm64: dts: rockchip: Fix mmc-pwrseq clock name on rock-pi-4
+The code changes are all for firmware drivers, fixing kernel-side
+bugs on the Arm FF-A and SCMI drivers.
 
-Sam Edwards (1):
-      arm64: dts: rockchip: Allow Turing RK1 cooling fan to spin down
+----------------------------------------------------------------
+Ahmad Fatoum (1):
+      arm64: dts: imx8mp: configure GPU and NPU clocks in nominal DTSI
 
-Tom Vincent (1):
-      arm64: dts: rockchip: Assign RT5616 MCLK rate on rk3588-friendlyelec-=
-cm3588
+Arnd Bergmann (4):
+      Merge tag 'scmi-fixes-6.15' of https://git.kernel.org/pub/scm/linu=
+x/kernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'ffa-fix-6.15' of https://git.kernel.org/pub/scm/linux/k=
+ernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'juno-fix-6.15' of https://git.kernel.org/pub/scm/linux/=
+kernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'imx-fixes-6.15' of https://git.kernel.org/pub/scm/linux=
+/kernel/git/shawnguo/linux into arm/fixes
 
-Uwe Kleine-K=C3=B6nig (1):
-      arm64: dts: rockchip: Add pinmuxing for eMMC on QNAP TS433
+Christian Bruel (6):
+      arm64: dts: st: Adjust interrupt-controller for stm32mp25 SoCs
+      arm64: dts: st: Use 128kB size for aliased GIC400 register access =
+on stm32mp25 SoCs
+      arm64: dts: st: Adjust interrupt-controller for stm32mp21 SoCs
+      arm64: dts: st: Use 128kB size for aliased GIC400 register access =
+on stm32mp21 SoCs
+      arm64: dts: st: Adjust interrupt-controller for stm32mp23 SoCs
+      arm64: dts: st: Use 128kB size for aliased GIC400 register access =
+on stm32mp23 SoCs
 
- .../boot/dts/rockchip/px30-engicam-common.dtsi     |  3 +-
- .../boot/dts/rockchip/px30-engicam-ctouch2.dtsi    |  2 +-
- .../rockchip/px30-engicam-px30-core-edimm2.2.dts   |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |  2 +-
- .../boot/dts/rockchip/rk3566-bigtreetech-cb2.dtsi  |  2 +-
- arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts |  2 +
- .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |  2 +-
- .../dts/rockchip/rk3588-friendlyelec-cm3588.dtsi   |  4 ++
- .../arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi |  2 +
- arch/arm64/boot/dts/rockchip/rk3588j.dtsi          | 53 +++++++-----------=
-=2D---
- 10 files changed, 31 insertions(+), 43 deletions(-)
+Cristian Marussi (2):
+      firmware: arm_scmi: Balance device refcount when destroying devices
+      firmware: arm_scmi: Fix timeout checks on polling path
 
+Michael Riesch (1):
+      MAINTAINERS: add exclude for dt-bindings to imx entry
 
+Richard Zhu (1):
+      arm64: dts: imx95: Correct the range of PCIe app-reg region
 
+Rob Herring (Arm) (1):
+      arm64: dts: morello: Fix-up cache nodes
+
+Sudeep Holla (1):
+      firmware: arm_ffa: Skip Rx buffer ownership release if not acquired
+
+S=C3=A9bastien Szymanski (1):
+      ARM: dts: opos6ul: add ksz8081 phy properties
+
+Wojciech Dubowik (1):
+      arm64: dts: imx8mm-verdin: Link reg_usdhc2_vqmmc to usdhc2
+
+ MAINTAINERS                                        |  1 +
+ .../boot/dts/nxp/imx/imx6ul-imx6ull-opos6ul.dtsi   |  3 +++
+ arch/arm64/boot/dts/arm/morello.dtsi               | 22 +++++++++------=
+---
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi   | 25 +++++++++++++++=
++-----
+ arch/arm64/boot/dts/freescale/imx8mp-nominal.dtsi  | 26 +++++++++++++++=
++++++++
+ arch/arm64/boot/dts/freescale/imx95.dtsi           |  8 +++----
+ arch/arm64/boot/dts/st/stm32mp211.dtsi             |  8 +++----
+ arch/arm64/boot/dts/st/stm32mp231.dtsi             |  9 ++++----
+ arch/arm64/boot/dts/st/stm32mp251.dtsi             |  9 ++++----
+ drivers/firmware/arm_ffa/driver.c                  |  3 ++-
+ drivers/firmware/arm_scmi/bus.c                    |  3 +++
+ drivers/firmware/arm_scmi/driver.c                 | 13 ++++++-----
+ 12 files changed, 90 insertions(+), 40 deletions(-)
