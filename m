@@ -1,132 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D0426D4E7;
-	Mon,  5 May 2025 14:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9432CA8
+	for <soc@lists.linux.dev>; Mon,  5 May 2025 16:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746456491; cv=none; b=GUQ/oVNNV9JkgrRO39721Y69pRIf1Glc8mqGAbJcxpd02uTYqkYg+OMuXm2x/D1zFsDA7lFXSZVjVT8PF2HBeg0L4xq4rwsX/REo0csMC65eob2iRfkBReLP70Hu5VvTGwYTrYKyfffv2bYFCLmniA3/V703bnjrLWmmSgdTdX4=
+	t=1746464298; cv=none; b=Uj5TU/ANr6Cpo+eHeNrhRNIGskkcAx8LvlkLM+AFr2evuSCjvQB8MbCACQn2XeUvKgS+ajUlMUHiPFyEYL/ucUXax7nepjvqPGAjAcBrjOrpOuT3gq51Nar+jOUJOc92dmFJgSpZRD1lJOjCg50POg9CbZJlvLMETwl3UYbX17o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746456491; c=relaxed/simple;
-	bh=V3sQjltkyNZEzYbWw38xZkGNV2RmOehd5wqn1mHCVeg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SKuJ2vDZNCwfELGzYtemuEJb9h1ECiCf6ZSiLJ8jRVKhvEjNMyNKCIwfmeSuVWw72vv8fb0SdgVOEJSaYBfroU/1NlZRnRx4qNfyjdBILRAFF+HtLSulucdTwge6R/YUPLeR42MZn8u4t9yXwj7gpoRlfynnJRpmTtItWSR36UE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEZNHBKS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746464298; c=relaxed/simple;
+	bh=r8I8dxX64lKddPXDq8tyZRhDh3NOo88oDYad4mGy5sw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=L+BPcLUm8lz8/CiDAw2MGzjLRFDZYTFZkn6HUfLbmbzzAbsDueYNzPOCtRDKIP0wNn2zYEtNH+m0fCqW4y0TiYNPQsL5tmEmBm7YYZw5oJj1tWLWGLifluvEtn2CmcA0W2Ug5xQoxT5P+IbvflUoflX+MLOMJ9OSQbdUmKklZ+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Fw76ZqY3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEZNHBKS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A8EC4CEE4;
-	Mon,  5 May 2025 14:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746456491;
-	bh=V3sQjltkyNZEzYbWw38xZkGNV2RmOehd5wqn1mHCVeg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oEZNHBKS2kdcKuvOP36HaM5JVkD3LQobucCswZ0oADtWWPpdEbJxdV7ihIRDCw4Ro
-	 qKHjppZ1s2dI93oRghXtDzwI2gTziyaNd1tBT7SvwTEwXPBlYs9TK7lfo034vAX8fy
-	 juJSyb8OV/RAwM59LawNUA/4SKCZ0qNj29tSw6T//nfBRnLkeBFlrpsXG8xOAo9xOc
-	 R/lKQobtIzpmqFfpvam7wd/EMVnxCQg7WvShu6gx9QwVhWXbRr0XmlplLKGJEtiWCt
-	 g6wybEcVJ3ijiiwPHhqgnAlGqGeJOPgcpHFO2DnRjYoBxLgfKy92Qj6tO3iXPv3sNt
-	 AtHmg/pax1DDw==
-Message-ID: <997b40d5-c96c-4587-a9c2-88ac0e561870@kernel.org>
-Date: Mon, 5 May 2025 16:48:06 +0200
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Fw76ZqY3"
+Received: by smtp.kernel.org (Postfix)
+	id 67800C4CEEE; Mon,  5 May 2025 16:58:15 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 76C37C4CEE4;
+	Mon,  5 May 2025 16:58:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76C37C4CEE4
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 52E53C0042FD;
+	Mon,  5 May 2025 09:58:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 52E53C0042FD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1746464292;
+	bh=r8I8dxX64lKddPXDq8tyZRhDh3NOo88oDYad4mGy5sw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Fw76ZqY30z3N9stYbx9mRU7xlNZJB0drVVyLGKcw0GO79eZ4foGBynWajay/5+m4O
+	 u1bbf0fQ81d8iX+/F6W59T86PZbgEMVBjsxXT4VLdfuA/CScKTNcTzrPrYSrWhWRcE
+	 tunXL4oZjfWQqACUr1oLYkwV1xySs/WHeK+Ig3FM=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 040A4180008FB;
+	Mon,  5 May 2025 09:58:12 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: soc@kernel.org
+Cc: Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Stanimir Varbanov <svarbanov@suse.de>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 2/3] Broadcom devicetree-arm64 changes for 6.16
+Date: Mon,  5 May 2025 09:58:09 -0700
+Message-ID: <20250505165810.1948927-2-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250505165810.1948927-1-florian.fainelli@broadcom.com>
+References: <20250505165810.1948927-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: arm64: dts: blaize-blzp1600: Enable GPIO support
-To: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, James Cowgill
- <james.cowgill@blaize.com>, Matt Redfearn <matthew.redfearn@blaize.com>,
- Neil Jones <neil.jones@blaize.com>, "soc@lists.linux.dev"
- <soc@lists.linux.dev>
-Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-References: <20250327-kernel-upstreaming-add_gpio_support-v2-0-2c45a1acdc0c@blaize.com>
- <20250327-kernel-upstreaming-add_gpio_support-v2-3-2c45a1acdc0c@blaize.com>
- <32d9f0c5-5648-4cc2-9db6-f5165d20d20c@kernel.org>
- <b35c8727-f6bf-4024-9e83-dfe12ac4400f@blaize.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <b35c8727-f6bf-4024-9e83-dfe12ac4400f@blaize.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/05/2025 16:43, Nikolaos Pasaloukos wrote:
->>
->>> ---
->>>
->>> I am re-sending the patch to include the soc list. The original patchset
->>>
->>> has already been applied but not this patch.
->>>
->>> Arnd, could you please apply or do I need someone to review?
->> Platform maintainers are responsible for the patches for their platform.
->> Any reason why this is not working for blaize?
->>
->> Best regards,
->> Krzysztof
-> 
-> I am the platform maintainer for blaize but I haven't created an account
-> yet on the kernel.org and according to Arnd it should be OK to submit the
-> patches for inclusion (until I get an account) by sending them to the
-> soc@lists.linux.dev.
-> 
-> So, what would be preferable? To send only this patch with b4 or resend
-> the v2 patchset which have been accepted and add the soc list?
-soc@ is for applying patches, but your Cc list here suggest you send
-something for review. These are two different processes, see soc
-maintainer profile.
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
-You need to handle the patches (collect them) after community review
-*and then* you send these to soc@, without ccing again entire community.
-See any other pull requests or patch-pull emails.
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
-Best regards,
-Krzysztof
+are available in the Git repository at:
+
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.16/devicetree-arm64
+
+for you to fetch changes up to c9e81198a750870fcd806b853177108e982a1db6:
+
+  arm64: dts: broadcom: bcm2712: Use "l2-cache" for L2 cache node names (2025-04-11 16:35:45 -0700)
+
+----------------------------------------------------------------
+This pull request contains Broadcom ARM64-based SoCs Device Tree updates
+for 6.16, please pull the following:
+
+- Stanimir adds and enables the PCIe root complex Device Tree nodes present on the
+  Raspberry Pi 5
+
+- Rob updates the BCM2712 L2 cache node names to use a more comforming
+  name
+
+----------------------------------------------------------------
+Rob Herring (Arm) (1):
+      arm64: dts: broadcom: bcm2712: Use "l2-cache" for L2 cache node names
+
+Stanimir Varbanov (2):
+      arm64: dts: broadcom: bcm2712: Add PCIe DT nodes
+      arm64: dts: broadcom: bcm2712-rpi-5-b: Enable PCIe DT nodes
+
+ arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts |   8 ++
+ arch/arm64/boot/dts/broadcom/bcm2712.dtsi        | 155 ++++++++++++++++++++++-
+ 2 files changed, 159 insertions(+), 4 deletions(-)
