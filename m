@@ -1,59 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041DD288CAF
-	for <soc@lists.linux.dev>; Wed,  7 May 2025 13:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103B71C2324;
+	Wed,  7 May 2025 16:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746625642; cv=none; b=ZJ+eEP+W12vfmbDw2p2aT1EQBoBwGIaP/Pu+/Y/TkXcp0JydsVMBmMExW0E+WSHV7sR+KoHbU3/CyezJllTti6CK9z9IxyX+KOUCBU4/3HwgkfJJRhiAfjy7Zr9QtbKzlEDY4QI3dkT8m3GIoOd0s3Mwb8pBugZ/X7GXqcvkzoE=
+	t=1746634126; cv=none; b=SQACgVnHDowBOME7oyAXfBjb9r3rElkhNGIc/dhsiLYBFREJ3euc0S6LryiF6r4QIYwUm5vOHvLprLasHGJCWZss76PyHgGx6uwWoLq1CU6Pz6mTdG/NHdZGw5dSKNOfXnmc6E38CYksiCWb4n7FPI5IP+UEuFIJR6xLDZNgJu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746625642; c=relaxed/simple;
-	bh=BvTKUmqfasOGTvCTWXbsN5B6frEC7Jsv/NsiqAr61jk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=g+m1mazJL9+cANZu/jxLvtfuMo3Po/GXJFOqpOG+DJ/SiUVtqkDHSoMS/b+hJohKeEaejh8GkuNDBdg6f7YN0XSquLokYGvMSmZZyPxEhJZIAV8Ht4L5oy20wFIQeIPcDyzJaEzsg89uWUlifyb+fNt/eep6kfG7E4YnwffURNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id 85C35C4CEEE; Wed,  7 May 2025 13:47:21 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id B5C07C4CEEB;
-	Wed,  7 May 2025 13:47:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5C07C4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4B43339;
-	Wed,  7 May 2025 06:47:08 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B1A973F58B;
-	Wed,  7 May 2025 06:47:17 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	arm-scmi@vger.kernel.org,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.16
-Date: Wed,  7 May 2025 14:47:13 +0100
-Message-Id: <20250507134713.49039-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1746634126; c=relaxed/simple;
+	bh=mlnnCW7IHjCAEgRBhdsidNc1tK2Ui7lRyZeuljTOhSA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VHQYvq5m2KKxvFCqEeYWUGNRbM85b6qbKPPDDQ3JpLBp2Slg7Pa1dt5MQrzKGqyUJdBZfWIAei0i8IjOGqjBKyQOOWUOJq1NbAyHgVu5/2WkEKiH2v2F+BAlwmVJ5HC/54FI4z5rnLRbnoYdHQYsN3AO0kVp4jOzdOTFpnqgtgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=QhMACibK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mkxzDmZ8; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="QhMACibK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mkxzDmZ8"
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 01F8F1380109;
+	Wed,  7 May 2025 12:08:42 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 07 May 2025 12:08:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm1; t=1746634121; x=1746720521; bh=SPLHEnL32V
+	Mztrcnb47sdOOIp8DhV7sAw4bVApA3vKY=; b=QhMACibKXCS8SvOVvp9KFMJlP1
+	MdVstuoK/2maW98xhdrSHmGTefSHzOafHR6zmnfhUFNkbL6EaTtno5pGGcfYFzHR
+	r7yJsjSzRZS2cwII8Bp2fjnO8FUPcyD5sXRUPoLjyQ7seupCQG8E6ao57DomT9F8
+	V7Ije9Gkz8xidSbA9/8uKgV1mGHoUXVqAbqH9wg35Oky0h6yffY3y+ciOeVHsb/v
+	PD01ln6VdrTOqU8AR4+AyI//ZQSIOAs8tQQEdFN2pBFQlm5dWE0G3LSK15PeWRje
+	nuKWiKRCKfpGAd8biDyNuC4jyLxctrsSDX1OS5+vWlfdG7JlcMeYMhBbVk1w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1746634121; x=1746720521; bh=SPLHEnL32VMztrcnb47sdOOIp8DhV7sAw4b
+	VApA3vKY=; b=mkxzDmZ8c5cNiWRimD4kpXn6TbwfU9L2hM4u8KzEaDWkStygyXW
+	amvVUFC4CWtBk679jVeXvjJy7n0LLPiDq7SqmQudZns12koLJxC4oNhb+ervOgTY
+	vhv8l0r+7OONw+nhTooXYmE5MurVv0ii/+S1fvuyKI7WpBvh0SBiQ+yh3tVMBta6
+	BBxfBCeEGFXXWa/xD/YafG2pd7VF2LPtpSo8qAUcbhINvMl+RVahXZBY5RPIjHRD
+	U3Mim/2Oi+ZG/fVVIzLm/frDGHw3lsjxCBqAQFg1z/uYdKCg8zpnHmOqosg0SFtD
+	NBpGxvLE0kXaKy+UYtLDa4Fv2HHseOPQm/g==
+X-ME-Sender: <xms:iYUbaJ-f4ynyr0duQ0NK1-s_20X7n5hea9NM_3uWC5RVHwdpFBnZpA>
+    <xme:iYUbaNvs3adPGwEt8GcFVnRlEmPmkcV3GG3kcNwzcLLYD_LeuIykFFUbhRIA64Awu
+    bCQehxRYnyAFkYXJQc>
+X-ME-Received: <xmr:iYUbaHDzjhc2aSkqmnTZo9kgIt9oKh84dzhQMOfhMD1RZyJya5CLLJXdCXVDC5J9ZBk6WFpGx6zqGl_HUSVu7a3r6BRBTJykoyHt6LDA-t6HWhJ5JkOYkD33cwm-BmA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeejfedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefhvf
+    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgvthgvrhcuoehs
+    vhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnhepudeiiefhge
+    etgfektdeiffekhfejgeeikefftdfghfegveegkeegjeetueffvdeinecuffhomhgrihhn
+    pehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvhdpnhgspghrtghpthht
+    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepshhotgeslhhishhtshdrlh
+    hinhhugidruggvvhdprhgtphhtthhopegrshgrhhhisehlihhsthhsrdhlihhnuhigrdgu
+    vghvpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinh
+    hfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:iYUbaNeyt0ZG1Q8MCrTSfYOCJ0NcDgwxgzdgbYft1MROwcE33qAH_Q>
+    <xmx:iYUbaOMTXLPi46aDtpUhs8FjnitPBOerVKyj1PpWiT9Vo_Mkn6K34Q>
+    <xmx:iYUbaPkFPchA1eIDLOg5XMsREvxHAHUqyCIvlfgVvwdX_orjJfJGlQ>
+    <xmx:iYUbaIvSgveeEMG-gH1--iA_vVQ5bcA34jBf2pcP8e05_dsspQx7pA>
+    <xmx:iYUbaGadBcbcWUBvCbatA9_Gf59U8DfRjDasAWulVFf-Ktdl2uCimStI>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 May 2025 12:08:40 -0400 (EDT)
+From: Sven Peter <sven@svenpeter.dev>
+To: soc@lists.linux.dev
+Cc: asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Apple SoC device tree updates for v6.16
+Date: Wed,  7 May 2025 18:08:27 +0200
+Message-Id: <20250507160827.87725-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+Hi Arnd,
 
-Please pull !
+Here are our device tree updates for 6.16, details are in the signed tag.
+As usual, these have been part of -next for a while already.
+Please pull.
 
-Regards,
-Sudeep
 
--->8
+Thanks,
+
+
+Sven
+
 
 The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
@@ -61,130 +104,48 @@ The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.16
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.16
 
-for you to fetch changes up to 397f802d06c418efa636e46083edbeb00c91369e:
+for you to fetch changes up to d8bf82081c9e5a4f0f239cdd01296377ba490471:
 
-  firmware: arm_scmi: quirk: Force perf level get fastchannel (2025-05-06 11:12:30 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.16
-
-1. Quirk framework to handle buggy firmware
-
-   With SCMI gaining broader adoption across arm64 platforms, it's
-   increasingly important to address how we consistently manage out-of-spec
-   SCMI firmware already deployed in the field. This change introduces a
-   lightweight quirk framework built around static_keys, enabling developers to:
-    - Define quirks and their match criteria, which can include:
-       o A list of compatibles ({ comp, comp2, NULL })
-       o Vendor ID / Sub-Vendor ID
-       o Firmware implementation version ranges ([Min_Vers, Max_Vers])
-
-   Matching proceeds from the most specific (longest match) to the least
-   specific. NULL entries are treated as wildcards (i.e., match any value).
-   This flexibility allows matching very specific combinations or just a
-   general compatible string.
-
-   The quirk code blocks/snippets implementing the workaround are placed near
-   their intended usage and guarded by a static_key that's tied to the quirk.
-   Once the SCMI core stack is initialized and retrieves platform info via the
-   base protocol, any matching quirks will have their associated static_keys
-   enabled.
-
-2. Quirk for Qualcomm X1E platforms
-
-   On some Qualcomm X1E platforms, such as the Lenovo ThinkPad T14s, the
-   SCMI firmware fails to set the FastChannel support bit for PERF_LEVEL_GET,
-   yet it crashes when the driver attempts to fall back to standard messaging
-   which is clearly out-of-spec behavior.
-
-   To work around this, the new SCMI quirk framework is used to
-   unconditionally enable FC initialization for this firmware version.
-
-   In the future, once the fixed firmware version is identified, an upper
-   version bound can be added to the quirk match criteria. Alternatively,
-   matching can be further restricted using a SoC-specific compatible string
-   if always enabling FC proves problematic elsewhere.
-
-3. Support for NXP i.MX LMM/CPU vendor protocol extensions
-
-   The i.MX95 System Manager (SM) implements Logical Machine Management (LMM)
-   and a CPU protocol to manage Logical Machines (LM) and CPUs (e.g., M7).
-
-   These changes integrate the vendor-specific protocol extensions
-   implementing the LMM and CPU protocols for the i.MX95, facilitating
-   standardized communication between the operating system and the platform's
-   firmware, which will be used by remoteproc drivers. The changes also
-   include the necessary device tree bindings.
-
-4. Miscellaneous cleanups/changes
-
-   These mainly include polling support in SCMI raw mode. The cleanups
-   centralize error logging for SCMI device creation into a single helper
-   function, consolidate the device matching logic into a single function, and
-   ensure that devices must have a name for registration—removing support for
-   unnamed devices when matching drivers and devices for probing. Transport
-   devices are now excluded from bus matching, and the correct assignment of
-   the parent device for the arm-scmi platform device is ensured in the
-   transport drivers.
+  arm64: dts: apple: Add PMIC NVMEM (2025-05-01 12:03:53 +0200)
 
 ----------------------------------------------------------------
-Cristian Marussi (3):
-      firmware: arm_scmi: Add polling support to raw mode
-      firmware: arm_scmi: Add common framework to handle firmware quirks
-      firmware: arm_scmi: quirk: Fix CLOCK_DESCRIBE_RATES triplet
+Apple SoC Device Tree updates for 6.16:
 
-Johan Hovold (1):
-      firmware: arm_scmi: quirk: Force perf level get fastchannel
+- A-series SoCs: CPU cache information has been added to device trees
+- M-series SoCs: SPMI controller and SPMI NVMEM nodes have been added
 
-Peng Fan (7):
-      firmware: arm_scmi: imx: Add LMM and CPU documentation
-      dt-bindings: firmware: Add i.MX95 SCMI LMM and CPU protocol
-      firmware: arm_scmi: imx: Add i.MX95 LMM protocol
-      firmware: arm_scmi: imx: Add i.MX95 CPU Protocol
-      firmware: imx: Add i.MX95 SCMI LMM driver
-      firmware: imx: Add i.MX95 SCMI CPU driver
-      MAINTAINERS: add entry for i.MX SCMI extensions
+----------------------------------------------------------------
+Hector Martin (1):
+      arm64: dts: apple: Add PMIC NVMEM
 
-Sibi Sankar (1):
-      firmware: arm_scmi: Ensure that the message-id supports fastchannel
+Nick Chan (9):
+      arm64: dts: apple: s5l8960x: Add CPU caches
+      arm64: dts: apple: t7000: Add CPU caches
+      arm64: dts: apple: t7001: Add CPU caches
+      arm64: dts: apple: s800-0-3: Add CPU caches
+      arm64: dts: apple: s8001: Add CPU caches
+      arm64: dts: apple: t8010: Add CPU caches
+      arm64: dts: apple: t8011: Add CPU caches
+      arm64: dts: apple: t8012: Add CPU caches
+      arm64: dts: apple: t8015: Add CPU caches
 
-Sudeep Holla (5):
-      firmware: arm_scmi: Ensure scmi_devices are always matched by name as well
-      firmware: arm_scmi: Refactor device matching logic to eliminate duplication
-      firmware: arm_scmi: Refactor error logging from SCMI device creation to single helper
-      firmware: arm_scmi: Assign correct parent to arm-scmi platform device
-      firmware: arm_scmi: Exclude transport devices from bus matching
+Sasha Finkelstein (1):
+      arm64: dts: apple: Add SPMI controller nodes
 
- Documentation/ABI/testing/debugfs-scmi-raw         |  91 +++
- .../bindings/firmware/nxp,imx95-scmi.yaml          |  23 +
- MAINTAINERS                                        |   9 +
- drivers/firmware/arm_scmi/Kconfig                  |  13 +
- drivers/firmware/arm_scmi/Makefile                 |   1 +
- drivers/firmware/arm_scmi/bus.c                    |  79 +-
- drivers/firmware/arm_scmi/clock.c                  |  33 +-
- drivers/firmware/arm_scmi/common.h                 |   1 +
- drivers/firmware/arm_scmi/driver.c                 | 119 +--
- drivers/firmware/arm_scmi/protocols.h              |   2 +
- drivers/firmware/arm_scmi/quirks.c                 | 322 ++++++++
- drivers/firmware/arm_scmi/quirks.h                 |  52 ++
- drivers/firmware/arm_scmi/raw_mode.c               |  72 +-
- drivers/firmware/arm_scmi/vendors/imx/Kconfig      |  24 +
- drivers/firmware/arm_scmi/vendors/imx/Makefile     |   2 +
- drivers/firmware/arm_scmi/vendors/imx/imx-sm-cpu.c | 276 +++++++
- drivers/firmware/arm_scmi/vendors/imx/imx-sm-lmm.c | 263 +++++++
- drivers/firmware/arm_scmi/vendors/imx/imx95.rst    | 828 +++++++++++++++++++++
- drivers/firmware/imx/Kconfig                       |  22 +
- drivers/firmware/imx/Makefile                      |   2 +
- drivers/firmware/imx/sm-cpu.c                      |  85 +++
- drivers/firmware/imx/sm-lmm.c                      |  91 +++
- include/linux/firmware/imx/sm.h                    |  19 +
- include/linux/scmi_imx_protocol.h                  |  42 ++
- 24 files changed, 2371 insertions(+), 100 deletions(-)
- create mode 100644 drivers/firmware/arm_scmi/quirks.c
- create mode 100644 drivers/firmware/arm_scmi/quirks.h
- create mode 100644 drivers/firmware/arm_scmi/vendors/imx/imx-sm-cpu.c
- create mode 100644 drivers/firmware/arm_scmi/vendors/imx/imx-sm-lmm.c
- create mode 100644 drivers/firmware/imx/sm-cpu.c
- create mode 100644 drivers/firmware/imx/sm-lmm.c
+ arch/arm64/boot/dts/apple/s5l8960x.dtsi   | 13 +++++++
+ arch/arm64/boot/dts/apple/s800-0-3.dtsi   | 13 +++++++
+ arch/arm64/boot/dts/apple/s8001.dtsi      | 13 +++++++
+ arch/arm64/boot/dts/apple/t6001.dtsi      |  1 +
+ arch/arm64/boot/dts/apple/t6002.dtsi      |  1 +
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi | 57 ++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/apple/t7000.dtsi      | 13 +++++++
+ arch/arm64/boot/dts/apple/t7001.dtsi      | 16 +++++++++
+ arch/arm64/boot/dts/apple/t8010.dtsi      | 13 +++++++
+ arch/arm64/boot/dts/apple/t8011.dtsi      | 16 +++++++++
+ arch/arm64/boot/dts/apple/t8012.dtsi      | 13 +++++++
+ arch/arm64/boot/dts/apple/t8015.dtsi      | 32 +++++++++++++++++
+ arch/arm64/boot/dts/apple/t8103.dtsi      | 58 +++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/apple/t8112.dtsi      | 57 ++++++++++++++++++++++++++++++
+ 14 files changed, 316 insertions(+)
