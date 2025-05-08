@@ -1,157 +1,143 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E971D221542
-	for <soc@lists.linux.dev>; Thu,  8 May 2025 09:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78828229B2C
+	for <soc@lists.linux.dev>; Thu,  8 May 2025 13:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746696912; cv=none; b=O2Ie99aHCdLxySF9QCanoCP+Pfb6iPdv6KcQ13ACtH6pxqxjN9QdkHsSfM1iA003bi/j0dYrBNA64hDR/7ovIO2Qh3/9nzg1UpzsYjWAg8xrPznaUyhMCr8yh0DsuR92ajTpSAb+lvRAHkcYbu40dBMk24RFRxNJD+xUHUNRJfs=
+	t=1746710429; cv=none; b=a/M5vzvoZu1yhOyV8A3hR6s5kHxppnT1WOsNfUDwdqUX9M81m46mpneNuO3Z0HQv+fcg22c5SyL6L49QvtyR722WUg5USHBmy74eaXyoOPlB9pobJ9ubUc0yKMqimeJynje1mwJ8dVXpCmyMUr+rIvKv5ckRUQct60lLgpHpo2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746696912; c=relaxed/simple;
-	bh=w+eLW9auwjDVDQmdClgKq8DsjVn63PgGnWOaMjVULMk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GMDEKwauxVWscAPIos4aIschNaU5G9Xwt7iXxl4CyTqW8T6j/AwJ/6KcEThzCRW931jQOJzTa7JhNRz1fR8fgH5YmXH5Rln/vIrsARRVN7croki9EzXUpQdnnNyT93toP0k/2EhsK16DBjo65E0Xsyh4y1KkXgBLTsQpwkOK9X8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jEcrilh2; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1746710429; c=relaxed/simple;
+	bh=Ggq7sLTVtObPJWu9TR8xbrcUROsW0mIC4OEmuNAJ6Sk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=tulU50RD7CE+iE/f3b3ZOmnpkq44zInkKUqGHdeUo7W/uoNp3A4NeHo0XnBI/9wDWXBEVsEyP9MMNi+LjtKI6tcWoZgGhzMVKiklogi6hsg2burs1RHSPtI7aAOZcNak55Bgq4wH1sflNxRs+yMA8jKhCU8a42ItWZdbSSzgAUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0k61FJ1i; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jEcrilh2"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a0b3f62d1aso108487f8f.1
-        for <soc@lists.linux.dev>; Thu, 08 May 2025 02:35:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0k61FJ1i"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-74019695377so726105b3a.3
+        for <soc@lists.linux.dev>; Thu, 08 May 2025 06:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746696909; x=1747301709; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=66+08GOmfkIp+d63lAxnda85Ee3dq/w26jYeNGjKn28=;
-        b=jEcrilh2B3vMQS67ewRHh4KslchxA0yRQnI8Tgwhn/NY2EA0BbMlJaqSWGmjsl26gR
-         CgSDmU35OstibCTL2fa+HFQAuEWgZjuYFG8u2OZvsQ7IEoBwYP2TUkb6yW1ug7g7q2Rx
-         C3tR2pJr/7WDe8eLXtVyv3G+Lj22L135fNpkfPLU0vmBIsB2p4ve7qSY5U2EbCwhhdzE
-         nxJ7FRTldxzghWGZUJ++ySy1e0EwqxqHCHJduyaFeQ/lA91+qiNSLfmd+oFHvnMhvJUE
-         obTMy4kORc5X9N93FP1yo07Ipgf4uiQLd3/9jXKBtU87nlCdmKUmCEeTWBnuGw+d/1f0
-         ySMg==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1746710426; x=1747315226; darn=lists.linux.dev;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jyuniMudFryF3hn/u/aLddug+sED3jw9d54qmOZEBFQ=;
+        b=0k61FJ1iU9/PGyqAqDgh8gT7dPAjWNuIXfpIccEIkYq0PDsuxk2uh2ISafSGh1L/9T
+         VB8cUPhaFiqZkvx4V+Dv8HuAc72xCMI1HI+jMCI72cP4uYZz6gBlAlfRx4o8j6XTvOVc
+         vRtPvC7yjxTlQ4dNZCHRXXYPumgSgghlyLG1y1zTSS7BMNxl/vX9QUmPSDPeGyGKuwnw
+         S8XH1av32VP6DomWUWENk3K92YWu9jxQl66dKjVlLLTk7riFoExy5djcS4Z56l6pgCRI
+         IP6qS4UH8+815Utfixn2pqaj1jq7LZVHFL0i0Bql9mVI6wlwau5pZ+/GeJduAmzo3r9u
+         pjDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746696909; x=1747301709;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=66+08GOmfkIp+d63lAxnda85Ee3dq/w26jYeNGjKn28=;
-        b=Xg+VfhrOl7j4Vsk3/xRuh2FrP3eV+OFAaLIgu2iABfipyxSE+13ANN395KEr15PWfl
-         V2tJPEIT+kiwPjAqdGKixQxM21cxftQ5pgfnweZG8THrHFmDWrW2MbFu712pFYD3vzUM
-         k8Ou/W62bD9s7dRGoBBrOldHFh/dKJyLypf47jbEcxHcnXc/Ks7YUtNyq4Dhvrnoiv12
-         SiRQQbC8z/31S4eECUTGdqQoIsT8mLyB4i7kdGTnSolI1RW66ZmDiDN7/jcDYQwwBf5J
-         CJgDdy3PLUVJVdXphj1W//H7/z9I5cOQnubh4FtolAgOQjheNhQLlJcS3OH6AOd9+r3l
-         zCFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUyMx1mU6hw285xGQkSiU5a93uCzAQpie804AHSWwJX1RLEMxuBvBaxnYpWq87CXxnEphA=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzG6cMqFj2OWNYDtiXQX+mRxJcCeJpcr3NCzNwUGSm2qKl83OWK
-	s3CUJFfcd6sF+XSVdfYP0SdShTSvcB8FevzMAqTd8SLKPVMBgWrb1KdXv2Dna9l3m+p7bKs3Bjv
-	c
-X-Gm-Gg: ASbGncsBvl37IrUXnS9miYiiq37mUv5wSlDmzx1szeB+1bjw2LbL1QcXIsJFw4v3lW8
-	FLO98nNnJ1PEgdv1vKBtTnatl4hwXVfM7c5PMf6AbCZ/xFYoE23Iv2uEq2BoVI7PWjplyhuUoaj
-	f4ixRsxP8Fvu+tp597v3wDsSVVqRUcHx41kURGljwkC7ZcLo96sTXbRuozarS+ambSlJzyqn197
-	D4DIx+l3rDOPk02R7aw3se1l7IorIdlKeteTU4JyPB2GI7KxN95FHRE/lkjx5SZumpiIJGEQcpL
-	txtzHCYLCWhAZjKuZgK/dumCpPTkzNDTqk+0vLCFg3HpgXMWeiWSrTK2Hbhn
-X-Google-Smtp-Source: AGHT+IFMs6OflZWzGX96ZOUuS4c7PORYbzX2TjndIa7eJTh7JJuY1McTllEyFdftg4Snan/Quvod/A==
-X-Received: by 2002:a5d:5c84:0:b0:391:277e:c400 with SMTP id ffacd0b85a97d-3a0b4a3fc56mr1830914f8f.13.1746696909266;
-        Thu, 08 May 2025 02:35:09 -0700 (PDT)
-Received: from kuoka.. ([178.197.207.88])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b17017sm20006746f8f.92.2025.05.08.02.35.08
+        d=1e100.net; s=20230601; t=1746710426; x=1747315226;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jyuniMudFryF3hn/u/aLddug+sED3jw9d54qmOZEBFQ=;
+        b=k2jz4hLwyLQL94SDWrqc7fZIiDyoT2tDn9UqyWfjKZyvGpfQXlXTT/9yjrDvpSU14q
+         VesRtpQzZshJBNpImPggjCW01mdHC9PsGu001CRmo7fp5ZFDW150lpFHPECeTKR6xjr4
+         FOIpDFbEc8ge/kGNFzTFFIlqJSQ186RQMMDJWNXIc5NXwuomAmlIR0c4mahdR94t5da+
+         0zW92aMwPgrBsASj6MZScHdmzVYBhQ9wer5SQyvQQAYgm5rsUM9id9oKDtSWBI8CPQUU
+         jFv2s8AS8niT+7dwocdlZxL4G4LDcSCZk9kdW829jgQrJmdwpkN6f0zec3J3zhtb0Gjx
+         l+nw==
+X-Forwarded-Encrypted: i=1; AJvYcCW3bvNbPHHA50BXw1MmZ004xP2r0/ITCW3nRLDy+U2I4e+Q2uWiywqe6NxluDKEKWo/OWA=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzRpGjHIQrIVesKf1nj4EdHweQfef/UgbQNTP00NXNpqCgWL7NC
+	E3gTfRr6s1ymvhQZI1SuXmi8lRPgYBU1DgpJkMwmqqT89+Ci2HdBISYvbWDBZak=
+X-Gm-Gg: ASbGnctSnIkmSWZHVhVzZS3jKpE1lqSwEhrQa23PUhsSr+cUfuu+nCPpzvXEmeeew2o
+	ZfRoGUREUa3/n2igVSGOA5qsElkWufti2fg6YvmrkNy2g9AVIBI9HyoNMou56joJOYrZwZn6mCA
+	Ds/DKUHfU2SrhIzYHr7SDPjomLolDGmC1SLbdIZeqG4vf+1q19ET6FEEymbaJmAQmg+QiAiXMwF
+	ZQ1NGV+FMLpcrGbY99EjV5b2FkfNFUDeQUHd3mUemgYRbvluE+ycFS7Apg5czp4iXz40w92prxE
+	bSQJR1m7kn6OcFbKTCKVfYA1Fe0OJxI4QNKdWlg=
+X-Google-Smtp-Source: AGHT+IET79Nq5FMlY1YATt34uIy9W6bQc0RASasVjOkYJxKwtGwvC9A4L+o3Stc03w0qdqPEQha4oQ==
+X-Received: by 2002:a05:6a20:3d92:b0:1f5:8072:d7f3 with SMTP id adf61e73a8af0-2159b04ebd7mr5425027637.30.1746710425718;
+        Thu, 08 May 2025 06:20:25 -0700 (PDT)
+Received: from localhost ([97.126.182.119])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-740b0d154b5sm1350253b3a.56.2025.05.08.06.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 May 2025 02:35:08 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.16
-Date: Thu,  8 May 2025 11:34:51 +0200
-Message-ID: <20250508093451.55755-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.45.2
+        Thu, 08 May 2025 06:20:24 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Sukrut Bellary <sbellary@baylibre.com>, Russell King
+ <linux@armlinux.org.uk>, Rob Herring <robh@kernel.org>, Tony Lindgren
+ <tony@atomide.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Nishanth
+ Menon <nm@ti.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ soc@lists.linux.dev
+Cc: Sukrut Bellary <sbellary@baylibre.com>, Aaro Koskinen
+ <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, Roger
+ Quadros <rogerq@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Santosh
+ Shilimkar <ssantosh@kernel.org>, Bajjuri Praneeth <praneeth@ti.com>,
+ Raghavendra Vignesh <vigneshr@ti.com>, Bin Liu <b-liu@ti.com>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH 4/4] ARM: multi_v7_defconfig: Enable am335x PM configs
+In-Reply-To: <20250318230042.3138542-5-sbellary@baylibre.com>
+References: <20250318230042.3138542-1-sbellary@baylibre.com>
+ <20250318230042.3138542-5-sbellary@baylibre.com>
+Date: Thu, 08 May 2025 06:20:24 -0700
+Message-ID: <7hbjs3tf1j.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2873; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=w+eLW9auwjDVDQmdClgKq8DsjVn63PgGnWOaMjVULMk=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoHHq7dCWWAexsOGNo4ZJ6g5koZezIcO6BM+nXS
- N4wvCmGJF2JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaBx6uwAKCRDBN2bmhouD
- 16z8D/9iBJLTaiL7RdNYe2/PCm9/oajdVyDOjDpsGkhvC1OGIO1OCi5weZ4en3nbnR8IhdNSv+7
- EUaxUSftoa0pTQG8fAS4UvtASzawNTAJqf+HvJaO72KZEZB2mU166It1xph9yIzGJnBXR7mugff
- 6N33OmbgjewYhm0Rug+46X0FKBDJfSjM3KzsrkanBphVXGqdPNmnN521gvOn8vtBalMH2VytanW
- AGIf5sqPtRy/oeKNwkD5f1p/Z4b/ve3rqE4SuoE535puok3qzeMyh9dDdiFGUIt1retxe0pg0Xw
- 9s02PZPmmvYYpUCpkNgfS4mTdalBHRrb9yWpSAHI1arzoCV8HxMp4Jsp6gv7yE5wSuwIJhHTTtn
- PsDzbvqx4pPycV1Ok73olZIad8wF93x41WUCFDu2d3ghhQP3Y0RA9zkpvR/c93GBCQ6oqaReip2
- uRgrKfkJZGXDSwZFrlpQbiNiKG5GYEl2yQzuKhc9KaW1XnpEaYJA9gpx5+dDtRSIItSEMqBcoEV
- KIZgVMkI7U8zvieu+slKXYLqJ221t+ugSatTFPKIhnwgdWJUTb9k+8JNHcGDz9X4mluBbuwX8t7
- G0yEXjcyN7au7QpK0WsoM0FK6ERZAx6XfWFIPwYvEktOFIsmFk6pkC8E4XaRNQ/fv38cl9xoOq7 uAO60K+I8khtsgA==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi Arnd,
+Sukrut Bellary <sbellary@baylibre.com> writes:
 
-Rest of memory controller drivers.  Note: this pull *does not* contain previous
-Renesas memctrl drivers, so please pull *both*.
+> Enable Power management related defconfigs for TI AM335x[1].
+>
+> [1] AM335x TRM - https://www.ti.com/lit/ug/spruh73q/spruh73q.pdf
+>
+> Signed-off-by: Sukrut Bellary <sbellary@baylibre.com>
 
-Best regards,
-Krzysztof
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+
+Arnd, can you take this via the SoC tree please?
+
+Kevin
 
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.16
-
-for you to fetch changes up to 02eaee70babd860d76dc23f9165f4496d0ffe77f:
-
-  MAINTAINERS: add entry for STM32 OCTO MEMORY MANAGER driver (2025-05-07 11:27:03 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.16
-
-1. Mediatek: Add support for MT6893 MTK SMI.
-2. STM32: Add new driver for STM32 Octo Memory Manager (OMM), which
-   manages muxing between two OSPI busses.
-3. Several cleanups and minor improvements (OMAP GPMC, Kconfig entries,
-   BT1 L2).
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (2):
-      dt-bindings: memory: mtk-smi: Add support for MT6893
-      memory: mtk-smi: Add support for Dimensity 1200 MT6893 SMI
-
-Bartosz Golaszewski (2):
-      memory: omap-gpmc: use the dedicated define for GPIO direction
-      memory: omap-gpmc: remove GPIO set() and direction_output() callbacks
-
-Krzysztof Kozlowski (3):
-      memory: Simplify 'default' choice in Kconfig
-      memory: tegra: Do not enable by default during compile testing
-      bus: firewall: Fix missing static inline annotations for stubs
-
-Patrice Chotard (3):
-      dt-bindings: memory-controllers: Add STM32 Octo Memory Manager controller
-      memory: Add STM32 Octo Memory Manager driver
-      MAINTAINERS: add entry for STM32 OCTO MEMORY MANAGER driver
-
-Salah Triki (1):
-      memory: bt1-l2-ctl: replace scnprintf() with sysfs_emit()
-
- .../memory-controllers/mediatek,smi-common.yaml    |   1 +
- .../memory-controllers/mediatek,smi-larb.yaml      |   1 +
- .../memory-controllers/st,stm32mp25-omm.yaml       | 226 ++++++++++
- MAINTAINERS                                        |   6 +
- drivers/memory/Kconfig                             |  23 +-
- drivers/memory/Makefile                            |   1 +
- drivers/memory/bt1-l2-ctl.c                        |   2 +-
- drivers/memory/mtk-smi.c                           |  52 +++
- drivers/memory/omap-gpmc.c                         |  15 +-
- drivers/memory/stm32_omm.c                         | 476 +++++++++++++++++++++
- drivers/memory/tegra/Kconfig                       |   8 +-
- include/linux/bus/stm32_firewall_device.h          |  15 +-
- 12 files changed, 798 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
- create mode 100644 drivers/memory/stm32_omm.c
+> ---
+>  arch/arm/configs/multi_v7_defconfig | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+> index 37e3baa33b67..1d2600b5f975 100644
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@ -985,6 +985,7 @@ CONFIG_EDAC=y
+>  CONFIG_EDAC_LAYERSCAPE=y
+>  CONFIG_EDAC_HIGHBANK_MC=y
+>  CONFIG_EDAC_HIGHBANK_L2=y
+> +CONFIG_RTC_DRV_OMAP=y
+>  CONFIG_RTC_CLASS=y
+>  CONFIG_RTC_DRV_AC100=y
+>  CONFIG_RTC_DRV_AS3722=y
+> @@ -1095,6 +1096,7 @@ CONFIG_TEGRA_IOMMU_SMMU=y
+>  CONFIG_EXYNOS_IOMMU=y
+>  CONFIG_QCOM_IOMMU=y
+>  CONFIG_REMOTEPROC=y
+> +CONFIG_WKUP_M3_RPROC=m
+>  CONFIG_OMAP_REMOTEPROC=m
+>  CONFIG_OMAP_REMOTEPROC_WATCHDOG=y
+>  CONFIG_KEYSTONE_REMOTEPROC=m
+> @@ -1146,6 +1148,8 @@ CONFIG_ARCH_TEGRA_3x_SOC=y
+>  CONFIG_ARCH_TEGRA_114_SOC=y
+>  CONFIG_ARCH_TEGRA_124_SOC=y
+>  CONFIG_SOC_TI=y
+> +CONFIG_AMX3_PM=m
+> +CONFIG_WKUP_M3_IPC=m
+>  CONFIG_KEYSTONE_NAVIGATOR_QMSS=y
+>  CONFIG_KEYSTONE_NAVIGATOR_DMA=y
+>  CONFIG_RASPBERRYPI_POWER=y
+> @@ -1162,6 +1166,7 @@ CONFIG_EXTCON_MAX77693=m
+>  CONFIG_EXTCON_MAX8997=m
+>  CONFIG_EXTCON_USB_GPIO=y
+>  CONFIG_TI_AEMIF=y
+> +CONFIG_TI_EMIF_SRAM=m
+>  CONFIG_STM32_FMC2_EBI=y
+>  CONFIG_EXYNOS5422_DMC=m
+>  CONFIG_IIO=y
+> -- 
+> 2.34.1
