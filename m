@@ -1,41 +1,43 @@
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E6420F07B
-	for <soc@lists.linux.dev>; Fri,  9 May 2025 14:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B692147F1
+	for <soc@lists.linux.dev>; Fri,  9 May 2025 14:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746800579; cv=none; b=kW8YSKWX01utXZ2CtbkQgwOJAT4b/d3KQgQw1N03aUBYIFxVFBHkzDRfPIXOhmsQqXe2k6oSQczkg+cGyNzHj4Ght1/6JMLyc0k8xY113MEox2xDzIdrYPWGOyAXIUYEJin6QCJ9Z7dqS2DtoN43KLXimaMFGYtnqG8yEJo1nAA=
+	t=1746800580; cv=none; b=NP28SucmIVZ+9+elpND47jCE0iw7FlAhpitnSKlhewc/pALpJ2zjpbr5D5GAGrat1/LrG55N0CWl4jsdz6ylrxW8uShHNu67OHXoGX2YdVCjjxLNQSKY6dSxX6/YY2w9tetz72LKnI4BBSfl8uqXcWEjHoxRogDluQrYztyYuxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746800579; c=relaxed/simple;
-	bh=Z59UhVkh8HpVo25aLUl3L3YHpjAvvbvfcmFIMoWyezE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WU7GSzZPRPIhijFbvznP/WR/ywh6AAczKVoh8dkBcsdJN49MIl8VkLa1lPx+0F8irTRUEESrrCP6cFuIw+MjX7bhs910YyFYf9o769pAFS9xYcPOyPvmlZ/3qIVW4c5F1VIYQJPBCXkYDYH8mcYlMyJi3LFxxDLnW9XQNygObOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
+	s=arc-20240116; t=1746800580; c=relaxed/simple;
+	bh=k1dN9wcNvLXks+RQKAdBk055UYUiDUHfoy1BOBw/reg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XmAAPMvwPb9T4lKXuVcDZZs4xLPxam7cOHOrtrd1aL6QKIU9RdrjmI1y1IloxonoQ5OOOnXaQpoTERIJKnd8I7HldNdXSOTz1fSzGDqfWvriP9LAr9X5jz24YXdWB1pni39NZZS9YRIuEb2qQte3WB9cYId5DKUp436MWJbdGkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:805c:3876:152c:485c])
-	by albert.telenet-ops.be with cmsmtp
-	id n2No2E00T3X0DE5062NoaL; Fri, 09 May 2025 16:22:48 +0200
+	by michel.telenet-ops.be with cmsmtp
+	id n2No2E00F3X0DE5062NomD; Fri, 09 May 2025 16:22:50 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1uDOca-000000012Nh-3HGe;
+	id 1uDOca-000000012Ni-3KEr;
 	Fri, 09 May 2025 16:22:48 +0200
 Received: from geert by rox.of.borg with local (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1uDOci-00000003ADD-1V9W;
+	id 1uDOci-00000003ADG-1i5Q;
 	Fri, 09 May 2025 16:22:48 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev,
-	soc <soc@kernel.org>
+To: soc@lists.linux.dev
 Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/3] Renesas ARM defconfig updates for v6.16 (take two)
-Date: Fri,  9 May 2025 16:22:27 +0200
-Message-ID: <cover.1746798748.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/3] Renesas ARM defconfig updates for v6.16 (take two)
+Date: Fri,  9 May 2025 16:22:28 +0200
+Message-ID: <cover.1746798750.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1746798748.git.geert+renesas@glider.be>
+References: <cover.1746798748.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -44,45 +46,35 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit 33d5bf70fff43fbc612450164bd0bab6b9ada261:
 
-This is my second pull request for the inclusion of Renesas SoC updates
-for v6.16.
+  arm: multi_v7_defconfig: Drop individual Renesas SoC entries (2025-04-09 14:56:03 +0200)
 
-It consists of 3 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/3] Renesas ARM defconfig updates for v6.16 (take two)
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.16-tag2
 
-    - Enable modular support for the Renesas RZ/G2L GPT and MSIOF sound in
-      the ARM64 defconfig,
-    - Enable more support for RZN1D-DB/EB in shmobile_defconfig.
+for you to fetch changes up to 976c4626c5f57d9a0eea0f4618ce58e68102bee3:
 
-  [GIT PULL 2/3] Renesas driver updates for v6.16 (take two)
+  ARM: shmobile: defconfig: Enable more support for RZN1D-DB/EB (2025-05-06 14:51:56 +0200)
 
-    - Cover all R-Car drivers in the ARM/RISC-V/RENESAS ARCHITECTURE
-      maintainer entry,
-    - Identify the Renesas RZ/V2N (R9A09G056) SoC.
+----------------------------------------------------------------
+Renesas ARM defconfig updates for v6.16 (take two)
 
-  [GIT PULL 3/3] Renesas DTS updates for v6.16 (take two)
+  - Enable modular support for the Renesas RZ/G2L GPT and MSIOF sound in
+    the ARM64 defconfig,
+  - Enable more support for RZN1D-DB/EB in shmobile_defconfig.
 
-    - Add CANFD support for the RZ/G3E SoC and the RZ/G3E SMARC Carrier-II
-      EVK development board,
-    - Add support for Ethernet port A, 9-pin D-sub serial, and USB on the
-      RZN1D-DB and RZN1D-EB development and expansion boards,
-    - Add sound support for the Retronix Sparrow Hawk board,
-    - Add General PWM Timer (GPT) support for the RZ/G2L and RZ/V2L SoCs
-      and SMARC EVK boards,
-    - Miscellaneous fixes and improvements.
+----------------------------------------------------------------
+Biju Das (1):
+      arm64: defconfig: Enable Renesas RZ/G2L GPT config
 
-Thanks for pulling!
+Geert Uytterhoeven (1):
+      ARM: shmobile: defconfig: Enable more support for RZN1D-DB/EB
 
-Gr{oetje,eeting}s,
+Kuninori Morimoto (1):
+      arm64: defconfig: Add Renesas MSIOF sound support
 
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ arch/arm/configs/shmobile_defconfig | 7 ++++++-
+ arch/arm64/configs/defconfig        | 2 ++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
