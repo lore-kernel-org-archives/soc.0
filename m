@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A95D2367DD
-	for <soc@lists.linux.dev>; Fri,  9 May 2025 16:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CD9239E74
+	for <soc@lists.linux.dev>; Fri,  9 May 2025 16:09:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746806997; cv=none; b=RmHTppM9rwBVgsE5jse3DeMzAxeqfWHSMa2UPLZtu8c93vGJuglU7q2NmwktKyYYsTi/ZBvmu8I8rsMImJMLPy28icmBLqhhMm/YDsaqfm7wRQw6d7lAfLTBS++l7nKguqaUUKdWvJaMTYdLMs5U1Zv4WCj5k/vCbKOwDpxLJ4o=
+	t=1746806999; cv=none; b=Pb/n08mG72maQiAuMyfhqxBuRg/U3lZJ1hl/CXHVZRrT3sFOLT0C98vl15iBiAOEpz4GdBPZWFtQi3X0kC6ZqId7VqH15lDRwV/GgVmmcRP2Z0YXfiaI2CaL4ZjJgmdMUAKmSqwpCZHYDZs2BYAlpAbD9E4V0162e3s3DJPb+J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746806997; c=relaxed/simple;
-	bh=BDT5OgH6pRAdJkQu1I2d+GZiz3PjE4ikf0lK6Zq9d5Y=;
+	s=arc-20240116; t=1746806999; c=relaxed/simple;
+	bh=gdK/4dJvl6Eq3YBxxY/kFALaRdRtDUVCBD8vmqRd6v8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=RL31u67tbVeDED7ozWIV0qF3oVPql/sl0XA03Z1f2qEtXbM5IE+RR50jPnKj5mByCtR6Ivcdeh56r0lRF7h+i00XTyeFGkiB5vr/50zvBh6HCM5dzpMhDfN9Miw2ILJH5NlnZlEA4NGi7svQmRqsOsNfUDGxXtoXJYReeUQ3ne4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEFP1PX1; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=UJodtWpdxpmFMoXxXIr/hJ3tx0Rs9G7dTTEmp10hdwoPkMpkvdcijYGxCkE6l815yo1/l/rh4Va59mlOj6vcoYL6kTnj2p4urlBNCHTZH6GJKYvnIgy5RODF38mui0iMj7XVEb5ZPkpcS/Pu8t4IpehofY19a3mEu/D60OI4UqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcpwYOVh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEFP1PX1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcpwYOVh"
 Received: by smtp.kernel.org (Postfix)
-	id 1F8B8C4CEED; Fri,  9 May 2025 16:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C07C4CEE4;
-	Fri,  9 May 2025 16:09:57 +0000 (UTC)
+	id 1892EC4CEEE; Fri,  9 May 2025 16:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03318C4CEE4;
+	Fri,  9 May 2025 16:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746806997;
-	bh=BDT5OgH6pRAdJkQu1I2d+GZiz3PjE4ikf0lK6Zq9d5Y=;
+	s=k20201202; t=1746806999;
+	bh=gdK/4dJvl6Eq3YBxxY/kFALaRdRtDUVCBD8vmqRd6v8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FEFP1PX1oCH3HnTZSZdLdBasFIqQb2A0lJZooI20cUYqxfcDeurMwk9LvH1hIcuio
-	 +gi7MrB8JEs2JG86B7OoM9Ap0Dgeul/myhuzkHm8skfA44ypbXHv6Ww2xkd9QhKkWt
-	 pN555CoLCwo8GwFmzPcMjibuFU2H9QxW56EDww9uzGD3FME9AJtiorcYlqRKNmTcJo
-	 Zdogot3ek289H2V5eDcx7OLDs1w682/tBt1xrrw+7UOx1W5RIeVXymkSh5FuWzcLgz
-	 81AkaF0LcFzLx4UVsoMxH/0E1oofYDUvjmOtNz6NlBsZNCEtNOLlVRiZOCUXWOc/aq
-	 8fvdW2T94zSpA==
+	b=TcpwYOVhN9uVTLllmyTFMZDdnvXkA0iBbMz/1r7kgtlSQYwRZDzRenUuKhOT4LPsA
+	 bFx6LLSoqtVSlH5ydtgKWFt9HOZrJYLtoJuC3+prY8/2Y9cJHvSjcUuQZW1Xo4QHtF
+	 H+ZIxfH1zcuaIJIbdxUdNBmYd6zssBmR3velKZpt6mVVxZr6i8o8EpaXV/P21D4TaR
+	 5fFdSMKll/desfPD1czy7zC9ZDb3avWOWNt9pc0jr1NzBvwaTl8PLVPf3Hnyl4Oj5x
+	 sAy8Iv87wm0KpnByqPLXju5bqmed2Ex3zxd39VA7NCmJ8pFf7BwK+d3+udjCuJaB/Y
+	 FGmoiGCPO5WGg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD77380CFFB;
-	Fri,  9 May 2025 16:10:36 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADDD4380CFFB;
+	Fri,  9 May 2025 16:10:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Amlogic fixes for v6.15
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees fixes for v6.15-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174680703518.3673480.7314253860379202368.git-patchwork-notify@kernel.org>
-Date: Fri, 09 May 2025 16:10:35 +0000
-References: <e9c520a1-b986-49e1-b9b1-67511c187716@linaro.org>
-In-Reply-To: <e9c520a1-b986-49e1-b9b1-67511c187716@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+ <174680703718.3673480.14977600965554828034.git-patchwork-notify@kernel.org>
+Date: Fri, 09 May 2025 16:10:37 +0000
+References: <MA0P287MB2262454C19B8899BC1694D04FE832@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <MA0P287MB2262454C19B8899BC1694D04FE832@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
+To: Chen Wang <unicorn_wang@outlook.com>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,19 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 9 May 2025 17:45:41 +0200 you wrote:
-> Hi,
+On Wed, 30 Apr 2025 15:29:00 +0800 you wrote:
+> Hey Arnd,
 > 
-> Here's a set of DT fixes for the new PWM bindings migration, and missing
-> audio nodes enabling for the dreambox DTs.
+> Please pull dt fixes for RISC-V/Sophgo.
 > 
 > Thanks,
-> Neil
+> Chen.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Amlogic fixes for v6.15
-    https://git.kernel.org/soc/soc/c/e36f6de6adec
+  - [GIT,PULL] RISC-V Sophgo Devicetrees fixes for v6.15-rc1
+    https://git.kernel.org/soc/soc/c/6053915252d7
 
 You are awesome, thank you!
 -- 
