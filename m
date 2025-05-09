@@ -1,64 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C6222D9E3
-	for <soc@lists.linux.dev>; Fri,  9 May 2025 20:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DFE5464E
+	for <soc@lists.linux.dev>; Fri,  9 May 2025 21:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746824121; cv=none; b=A675aep9Y9Bg8X/gy9fvog27YD5p5Zm3qbOhXphOuRMhfsyaQSL0mUhTlgK6jsSGkHA7/36/kMmAZWTTFY7YQ0dv1o6gQ0WBkYkXyrR1ikS9n1n56m2I8RgykMUT85k1oQNiQDq3QzzLOn5+M0YnYHS78BsTB8kOhZq+fTaPlUs=
+	t=1746824662; cv=none; b=XsI2OjpM23DSdApRUQD6GTYNdeB3qWlx5hoKBrr4UmTt5HCR93+bhfJbR8sdZWFAj1j8mmzMv6uhI41AVkKf18K959qAa69CZI/m7qGaCvgyf77uN0HTGSSzTf28JQt2U5kLx32CB+/oNBX9n82t5cbisjEpCTzPPrfRejd22I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746824121; c=relaxed/simple;
-	bh=iWzTi6F8jC1N2zJrEfIb6TyNnhdMr7NfeEAwGRKOq54=;
+	s=arc-20240116; t=1746824662; c=relaxed/simple;
+	bh=tkG8j5azIbiDaWcgJyjMm+A/nRbEckwyHOPwh7oG/r0=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=SC8zvwOswTPS9t4ncywVC6KdgxemkceX1cPIBRpMPegwC2ouFtoWkyoac/3sCYtqVu8gSWzZ6Mi4+XbopzLXyQZ88qb9J62beWsS73P7QQsxF0QfjtxnITFB0dW2weynco9LYnhg4/Y/6PXg8sfxGCpVkOsFwcpHbmxyFm84jwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fsIVmiSM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WnfJHMrO; arc=none smtp.client-ip=10.30.226.201
+	 Subject:Content-Type; b=K8OK4NBldg50G+f0HzChQ2yAatwlln3TCojkq3/Zxhiz8njg2iRMixuTAWr8wEKaO6pOn1+R6nuByxJBSuaYa0OOJtBu6LU4hUwBzmPkfi0srO6Pe5md+vdLAnj4dDV84CvskrCmKweq0pcAIts9xNbsaoqHDyhBxwG1sqFBsqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=sWha1hs6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=q0c9tA68; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fsIVmiSM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WnfJHMrO"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="sWha1hs6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="q0c9tA68"
 Received: by smtp.kernel.org (Postfix)
-	id DBEA6C4CEEB; Fri,  9 May 2025 20:55:20 +0000 (UTC)
+	id BA366C4CEEB; Fri,  9 May 2025 21:04:20 +0000 (UTC)
 Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5EC64C4CEE4;
-	Fri,  9 May 2025 20:55:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5EC64C4CEE4
+	by smtp.kernel.org (Postfix) with ESMTPS id 11FFDC4CEE4;
+	Fri,  9 May 2025 21:04:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 11FFDC4CEE4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 0167511400AB;
-	Fri,  9 May 2025 16:55:14 -0400 (EDT)
+	by mailfhigh.phl.internal (Postfix) with ESMTP id DE44B11400A9;
+	Fri,  9 May 2025 17:04:16 -0400 (EDT)
 Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-05.internal (MEProxy); Fri, 09 May 2025 16:55:14 -0400
+  by phl-compute-05.internal (MEProxy); Fri, 09 May 2025 17:04:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1746824113;
-	 x=1746910513; bh=zgmYvXadLes/aaQVGDqBlJcqTMY0YA4Y28DDv3jcOmo=; b=
-	fsIVmiSM4GKMMNKiZWvJLuRcTRRNszlucN7FmoVf2Vga4OXXSEMn3BuvkPLsf/uj
-	nzyVmMZNVwllFHmgeD0BD0a7p8tMNoOuqdyUlkaNdAO6MXnd4Sfj8/9FAFnxyzry
-	abLGRXqrq06DtoTaopdQ9dw3p3/m4LGjcBnOBIQfCjN/Ozfcxe21lRHbLcV4rowO
-	wCaf+0ae5zxYC5+YHYrhTQX+RWkWIjT3qQsdhaKsDu9WF1T1pCYUQot+bf6ftLr4
-	M4ExVJXgJtYhm5Ger7lYs8J63jGIisP66eqSv2+WCKnlOy3T/8J+CMNmFtYWEbIs
-	2CQsP1r3OxbYXl+e/ps/CA==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1746824656;
+	 x=1746911056; bh=A1ZumDxuGmpXUjlvvZI3hOnnT1685l9jUF3247k5dyA=; b=
+	sWha1hs6PFJJi6uC/F6rQ/iAJeevO8Y4siw7Z7Lt0B9SDv9KlH4AbfQ1cMBX/g+m
+	eyqkxkmGzStRub4lIdqfJUfoAI5AlfkGugr1avdqdtdwVAnoY5y7KNCMPKJ+G2Xi
+	xjLUBqXCNpMtIlLZZbCmpzc6+7c2KN7l9wX3PYk36sTcXsw1anhoVYCTmQfBKBUb
+	QK9Sc7VfbZMeR30PwdgptUqI0l9DfYizdUmaGm9ob2gIArWeQNl/sDrQZfIy0Wn8
+	QiQaqqViRu67pbcM7YgYE5RJ5LdrDbSbJD/UlqpccocyCRODe3pv2qOkY+ndQY/8
+	aDYg97/RxnOjFQIed9wEKw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746824113; x=
-	1746910513; bh=zgmYvXadLes/aaQVGDqBlJcqTMY0YA4Y28DDv3jcOmo=; b=W
-	nfJHMrON2XFRbUJS4T8+5OwwjjJ4rrgFwot8GFyode6oPwZAJ5Fvfhm8H2HwlhJ4
-	MtBPh5+pwRmyNneTiHcCGmmvkzvxP/p/fpO5E3KMISsVZ08mGSTnN5+Kd3sBwI0a
-	egRxZOIFb4ngZu3iPaUkQzLBHjSdt61NGv5/X1WFX/JS+w2NQYACriJf7aHuHoQ4
-	l9RQ44WI0Xo1e2/Qi+W8cYIHNcljC9ICLfPKoK5J/WvkAlbrKr6i8DJOjFQbE327
-	zNNyyec02On8HMb//eDXxfVwwc//yGzp4xwnqBhnKeGvJjTB6De7KVFj2aru08fw
-	TMgmJBnFJx7OyAuwQpNNg==
-X-ME-Sender: <xms:sWseaIbOb3soMwrIbDfzPWKMc6t5IjINtUTrWO53ZKPkJaODIu2-gg>
-    <xme:sWseaDZvpeFqNzj4hsjw_Dx2yIQxN6zyDBDSHuG3qiotiZE9fdfYVeVqCDAS-gBZv
-    mHhnGq0fmzigN3rLlM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleefieefucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746824656; x=
+	1746911056; bh=A1ZumDxuGmpXUjlvvZI3hOnnT1685l9jUF3247k5dyA=; b=q
+	0c9tA685PpwzRYFdGuv3DSQ8cH1X5KpXAntPbnFItACP+T31hmnG3r/3hdjQohx6
+	590uPW8hKirfHT262feIB2y5IBWtru1gj+b7XxVkOoUP79XOtRG/n5siovL7DQUj
+	3AksghhXakhDgoWkQ6cODu1EL5ejXFql3XikwVTlYX6tEpxXn2xtm3dOxMYU3m7a
+	mWUfUjKangduSJ2VJOruFsVH57PahCJjRbofWYYQfEQrkasW+S2953E45sd8PFNX
+	7PS9q/2e3VM3VFrXGVOsixOj70arprWzI0/XRYcjNXYrq7yyvjHLXLSwTdHt9130
+	9y5y+E3eWAudo3YSCpMwQ==
+X-ME-Sender: <xms:0G0eaFAIEC69H_JVLhTXpNtNmmtFvJsdce2Dd8iTSo64ngbIFv9-Mg>
+    <xme:0G0eaDiGAVadl-YyJr-MDND9SP3ByBCIJza8tN9LVdH3OXht-NpMsgfekZ-8ccC21
+    2UnfZW4MIEHj89j8ms>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleefieehucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
     gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
@@ -66,21 +66,20 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleefieefucetufdote
     gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
     fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
     hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnghgvlhhoghhiohgrtggthh
-    hinhhordguvghlrhgvghhnohestgholhhlrggsohhrrgdrtghomhdprhgtphhtthhopegr
-    rhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghtthhhihgrshdrsghggheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrg
-    gurdhorhhgpdhrtghpthhtoheplhhinhhugidqmhgvughirghtvghksehlihhsthhsrdhi
-    nhhfrhgruggvrggurdhorhhg
-X-ME-Proxy: <xmx:sWseaC82gwYE0RATIolHnlqRKjrYUTKkbDNRu3Gyz-lIjLMV0qPT8A>
-    <xmx:sWseaCq4w6L_fDMsB1G0IgIZP0-6cWBgIX8VYPt2KvBnjaHVZXvhdA>
-    <xmx:sWseaDrqxpNjezemPCREIFT100etOLcbirUOrzynxXyIKaSszQp1xw>
-    <xmx:sWseaARzgFxupy2JqEB0FVlATP9cBBD9QMud8MFeQrsnyaDhNGK14A>
-    <xmx:sWseaIB_vIpA2tRWCJl6GxdVgLTd-aICtuIrrLbgT9FPeQHvgAVTrGAl>
+    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepiihihigrohesughishhrohhoth
+    drohhrghdprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehs
+    ohgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnh
+    gvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhig
+    qdhrohgtkhgthhhipheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtth
+    hopehhvghikhhosehsnhhtvggthhdruggv
+X-ME-Proxy: <xmx:0G0eaAnOPEDxNA0b1DUJk0rVAe_pkDNfMBL7-PtvqA4PexsC3MkM4g>
+    <xmx:0G0eaPw7L_75BzAVUbqaWuGH8LvmeTDPT0hnonqyG8AEhv36TkBryg>
+    <xmx:0G0eaKS2lLr5pnIMlkySGxa9CHdeZR2magNJs4xzEO9p2J4hRvo91A>
+    <xmx:0G0eaCa4fyWDPWQGX0TPEYvi7nQq1Ns6zCJyfwTukHKOIbRH430gBA>
+    <xmx:0G0eaOfgl2h4WI-uDqQLd4VFjdyAe9yjuHfKgWMRya_xSRCuc5MCz81R>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 71A271C20067; Fri,  9 May 2025 16:55:13 -0400 (EDT)
+	id 275BE1C20068; Fri,  9 May 2025 17:04:16 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -88,42 +87,61 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T486ad80ea708375f
-Date: Fri, 09 May 2025 22:54:53 +0200
+X-ThreadId: T8d120477412db8f8
+Date: Fri, 09 May 2025 23:03:54 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- arm <arm@kernel.org>, soc <soc@kernel.org>
-Cc: matthias.bgg@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Message-Id: <7e8718b0-df78-44a6-a102-89529d6abcce@app.fastmail.com>
-In-Reply-To: 
- <20250506091736.125733-1-angelogioacchino.delregno@collabora.com>
-References: <20250506091736.125733-1-angelogioacchino.delregno@collabora.com>
-Subject: Re: [GIT,PULL,1/2] MediaTek ARM64 DTS updates for v6.16
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, arm <arm@kernel.org>
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, "Yao Zi" <ziyao@disroot.org>
+Message-Id: <c142bdf4-3910-48bb-ba5e-8accbdb32a00@app.fastmail.com>
+In-Reply-To: <2307187.iZASKD2KPV@diego>
+References: <2307187.iZASKD2KPV@diego>
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.16 #1
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Tue, May 6, 2025, at 11:17, AngeloGioacchino Del Regno wrote:
+On Thu, May 8, 2025, at 00:04, Heiko Stuebner wrote:
+> Hi soc maintainers,
+>
+> please find below and in a subsequent pull-requests
+> Rockchip changes for for 6.16 .
+>
+> Even some arm32 boards got some love (in the next PR)
 
->    - Since SCP firmwares are available on linux-firmware, the
->      necessary nodes for the dual-core SCP were added to devicetree
->      along with the firmware-name property in mt8390-genio-common,
->      enabling hardware video encoders and decoders on the MediaTek
->      Genio 510 and Genio 700 EVKs.
+One small issue stuck out here:
 
-This looks wrong to me: the devicetree should never care about
-particular file names in a Linux repository.
 
-Usually what happens is that the device driver must work with
-a particular firmware version, so the driver is the one that
-constructs a name based on what firmware is knows and what
-hardware it is running on, so a newer version of the driver
-can attempt to load a newer firmware that may be incompatible
-with the old driver.
+> Yao Zi (2):
+>       arm64: dts: rockchip: Add I2C controllers for RK3528
 
-The other patches in the branch all look fine to me.
+This creates a lot of new aliases in the dtsi file:
 
-Can you resend the pull request without these patches and
-try to come up with a different approach?
+index 826f9be0be19..2c9780069af9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3528.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
+@@ -24,6 +24,14 @@ aliases {
+                gpio2 = &gpio2;
+                gpio3 = &gpio3;
+                gpio4 = &gpio4;
++               i2c0 = &i2c0;
++               i2c1 = &i2c1;
++               i2c2 = &i2c2;
++               i2c3 = &i2c3;
++               i2c4 = &i2c4;
++               i2c5 = &i2c5;
++               i2c6 = &i2c6;
++               i2c7 = &i2c7;
+                serial0 = &uart0;
+                serial1 = &uart1;
 
-     Arnd
+but the corresponding nodes are left at disabled. I see
+that the same mistake is present in the uart nodes.
+
+Please send a fixup to remove these from the .dtsi file
+here and the similar chips, unless you are sure that every
+board will have them enabled (like e.g. the gpio nodes).
+
+The aliases are not meant to refer to soc-internal names,
+but the identifiers on board.
+
+      Arnd
