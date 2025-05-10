@@ -1,85 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223841C6FE8
-	for <soc@lists.linux.dev>; Sat, 10 May 2025 10:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6987D1C1F13
+	for <soc@lists.linux.dev>; Sat, 10 May 2025 20:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746872898; cv=none; b=o9MBx7kWbLbKvVoa03AFM4RJeJY5PHyzmymBc/rZO0mtnvnqh44sN8hQSMAc4KBi944XKr0LN0BbX069V6lkf1lOH32ENx1ZI2sjsqGff1SZQcjAqhOV3rqcJ8Qqy3hdOtrWavt2KYOYSJ5DoJ88U81reDEB9eu5XFdOPK0Mvsk=
+	t=1746908359; cv=none; b=FqhnHPjLgO/985hMGtkJWc8YlS3AnN1yn/lmVeCWds3/hlcVTgasjVDHXJfPItGv2sI+vSuyEuuDEfOBQmCTLI626Kt6udK3BFu0VCyDwaCE+TP1YwwprY3XwVW7ngPzx0MZIZhsI5FX7pADXBLmn7jTRGZ+YntqCjOWenEHkEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746872898; c=relaxed/simple;
-	bh=8Xp68fNHtcN7IoK8G7HO5fJDiwLA5HKwwb/6791EC/8=;
+	s=arc-20240116; t=1746908359; c=relaxed/simple;
+	bh=y7mnAbRPruqWS5VuDDQTyrIYvsqL3H8uRFdPkPiYEno=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=WJ//qUY234aqVfYJMNzL2pg5bcfhmfT8oiHkX78LE0dHiFyHJCQF0nLiVVSyDV7Xyb7Um1/CREjySD1ZXz08MiAX2jIDMrnkjadWpkU2/l0ce0CZTS2nrsDke8VrU5+12l5nR7kMZyiIWzaMmevgmg8J7ARDPvy7OmBCWq4FLRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=e5Dg9tsl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=majWOhSC; arc=none smtp.client-ip=10.30.226.201
+	 Subject:Content-Type; b=m2yAUUvnASQSjP9IM3tusYahi0JD/XDzyDfZTNDGH62FYbz6gp9dVAoAWb41zxQycu2Y3DM9LospWCiOzgwNtIkDGMpyi5G6LpUTPtqVKcnbdwRT+6/ZM1HFT7Pe5FgHslielYA9xKmnkAsaZvvJ09k/HDfbRQPHh9XXtrYJB4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=W1roBAZH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KSH/bjor; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="e5Dg9tsl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="majWOhSC"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="W1roBAZH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KSH/bjor"
 Received: by smtp.kernel.org (Postfix)
-	id 9D37AC4CEEE; Sat, 10 May 2025 10:28:17 +0000 (UTC)
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	id D9C4FC4CEF0; Sat, 10 May 2025 20:19:18 +0000 (UTC)
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DC822C4CEE2;
-	Sat, 10 May 2025 10:28:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC822C4CEE2
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F425C4CEE2;
+	Sat, 10 May 2025 20:19:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F425C4CEE2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 761F6114010F;
-	Sat, 10 May 2025 06:28:13 -0400 (EDT)
+	by mailfout.stl.internal (Postfix) with ESMTP id ECAAE1140080;
+	Sat, 10 May 2025 16:19:14 -0400 (EDT)
 Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-05.internal (MEProxy); Sat, 10 May 2025 06:28:13 -0400
+  by phl-compute-05.internal (MEProxy); Sat, 10 May 2025 16:19:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1746872893;
-	 x=1746959293; bh=X2T/oegJiDpCtk+u192Wpv5GLasrylGVwYnEKe857cQ=; b=
-	e5Dg9tslb70FSgFH7y58OQ4B4u9YYjxW8d+CW63SIcHaxlNPLUd3R3LcB5bfh3GM
-	pL3JJ3th1U9iXp+fFum/4igCVLoDDd/RoVvpGiEgCeG1HUbe3JNxMFnjUK6lpikY
-	hwnkWVSAtCpo9G1YBktSv6R7E3HppDX7MRKyeDutDRPqsXg+fVeoDsuxsrd/nvbP
-	cocF/T+ibNPPCUthF+Gfl4//Ra79cjcIQMxge8FQlrl5JqP6w9gsN6iVLbskIoaU
-	PTrLJdjBwKzYQk0P0cG5zZySCaWTyetGd9XpFMdKoXwUrJJDv7pFQeHYZVcxaAAK
-	1VpXru0JBtlI4iadoMJXgQ==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1746908354;
+	 x=1746994754; bh=uMTY9qFogQa0Mq320HhUniBejxmAeYawCBgAAg59X50=; b=
+	W1roBAZHchvU7brkv5sM+bEPS6+gPBxpN9gdQRR3tsG+7vbQDJ7sw+IsjKONi9Ea
+	p2+m8URLPJxGPTz8V5ODbG65PFYHpk9OXKz6ZsKcfAGYcfEYQWN9RgqQH4hfigFN
+	+gfMQRVA85DY/vc03Vf92KVAslm+wH1qX3IWJ//Soql3A3Z2ZW581gR/cql0Umqa
+	K/yX7gYK3h5ESrbzyohgP2rC8xF8+vcxj0CTpIWOjXe6Rp5x4kHNhjOdys2cNXCP
+	IeMOz5TZBFOv1yLWC9Ud0vZI/GWHxmN4wFCZoJ8Vbi/U6ilI45uIlyc4vu0rEjZe
+	PikbmnQ1GSFSzhJ8DTx4Eg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746872893; x=
-	1746959293; bh=X2T/oegJiDpCtk+u192Wpv5GLasrylGVwYnEKe857cQ=; b=m
-	ajWOhSCnTYOyf0j7pWaTcBcFZJGV0oQL4zcFVPGDybm6YQnbbUPCSSw5YJWBq4ac
-	K0inKcGWx41MUXkdyPBTNST9O22kjz5XN2y+/+ag7p1bsTeeaByGtnmUpw8zJuHT
-	FJGx1gtm7AXF+7EOt1ECvzgP1QCRPOkVOdOLmGEYB0oV8/brHO9DspGK9xpCgLY0
-	i4XU51zabQGAIh9F2hZqVii6qgwSyfNLx3AZfA6xSLQGX/uQEIbH/5YnMm9+BOWm
-	UiITCZme9F+WfEjBa1/22SEB4OSY2FPgcLeZdBk/DBtUR7MgnLYATXnLCyiZTXjH
-	A7NIW6QKpuNLR+MfsmWYg==
-X-ME-Sender: <xms:PCofaN1p5fLVuQcydEQBsrKko1uzy4Fu30szH70TMNhjRwVaPP_p8Q>
-    <xme:PCofaEG9fA6Rt8XGjudjSKHk56NZHQv2qc36PjJN139DE9wkbH4rXqcXl41q6AxHn
-    L_b0jUCzUmIQp9inK0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleehvdehucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746908354; x=
+	1746994754; bh=uMTY9qFogQa0Mq320HhUniBejxmAeYawCBgAAg59X50=; b=K
+	SH/bjorPMgfh4SJiCT2jhxZ89WsG0wowhuT3ljJKMy4M30LEDPQaAU/W6I47T16K
+	RdA7wd88tpcVJMk3v+eOO93VNew4UtFc6mQbIb3QHXaJ/9rBZz77MHBiW63sjtWA
+	8Qa4PDpiUU/jgHYW7QnqNb1Nbwo2z6fvd1nrWrxBDq5qOyfEgIStSTmr+/3pbLww
+	e46aRDzdYq3NU1+YOg26BDADq785/fWHTEMYGKf/u+d8MsNYgpIJrzaXHh+gTyps
+	3xlYfy1KUmwjXFEWaIEHDZCxmjVQymLG4Kv59kGP18O+/lmd1l0aevRblu35taCY
+	wh4tUqYym5ncdszs1reLw==
+X-ME-Sender: <xms:wrQfaI5-GTxu5-SAYyEQ2M-xFj3rYxxFjMWdoGh90jGnI6RhXsyGpA>
+    <xme:wrQfaJ6SbJVb6Xret8fhE70NUWTQJZzvOgXnV4HtyhtXLj2ty8AGaUaCSWScuvnVu
+    0H0FRUNSpuUjSM1RiA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleeigeegucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedv
-    vdegjedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepiihihigrohesughishhrohhoth
-    drohhrghdprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehs
-    ohgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnh
-    gvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhig
-    qdhrohgtkhgthhhipheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtth
-    hopehhvghikhhosehsnhhtvggthhdruggv
-X-ME-Proxy: <xmx:PCofaN5ScQrh0BVH8rBShpCvy78tDbcnjCl7_Sf4r7pJrBe8aOGCNA>
-    <xmx:PCofaK0oP3BuKsEyg3ApgaZYF2fctU0gnX4HaSNnHtMhwaqEmo8tnQ>
-    <xmx:PCofaAGEL0v5WIzhq5QuNysH3MTKQNN9HLG1eTwPTAb75ZbabcTmFA>
-    <xmx:PCofaL-2psMyUrmyxpVhm6x8o9oknUd8TrN3D5brGw9uSmWvOGsnGw>
-    <xmx:PSofaGBKzYe3jvv7FDQtrCKYrb1YcHP91RT0FnRfmVtn1uwKhb50Cfnq>
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeej
+    feekkeelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeguihhnghhuhigv
+    nheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgr
+    uggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:wrQfaHe5_E_y10KKiRmwHJuBabKD2gu8Xp85cPArkxajpCWSGiuHIg>
+    <xmx:wrQfaNJN0437e2noiJoV9lDzMFQeLmVlDCYyyKYDh5vTXXugiZn3zw>
+    <xmx:wrQfaMKSvlDq5RY9pUROEQDT7xMKeH-gAETfOufv13J9RW3-f0a4Qw>
+    <xmx:wrQfaOxkvaCKoj54Ft0LhQUvWgRezYwnCBpTmkj7gDeiESCHI12XKA>
+    <xmx:wrQfaMskA1r8DApt5puWdB5-BIdb_mfBiGK5ZdJHOFRIR2O6LWR-ycKX>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 896B41C20067; Sat, 10 May 2025 06:28:12 -0400 (EDT)
+	id 52FD41C20067; Sat, 10 May 2025 16:19:14 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -87,64 +86,57 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T8d120477412db8f8
-Date: Sat, 10 May 2025 12:27:52 +0200
+Date: Sat, 10 May 2025 22:18:54 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, arm <arm@kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, "Yao Zi" <ziyao@disroot.org>
-Message-Id: <df6003e3-7fc3-4e50-a702-f0aa8d663dff@app.fastmail.com>
-In-Reply-To: <2857184.BEx9A2HvPv@diego>
-References: <2307187.iZASKD2KPV@diego>
- <c142bdf4-3910-48bb-ba5e-8accbdb32a00@app.fastmail.com>
- <2857184.BEx9A2HvPv@diego>
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.16 #1
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: "Dinh Nguyen" <dinguyen@kernel.org>, arm <arm@kernel.org>, soc@kernel.org
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Message-Id: <b8257b35-04b7-400b-bc58-948dd5fdf799@app.fastmail.com>
+In-Reply-To: <20250506004825.134929-1-dinguyen@kernel.org>
+References: <20250506004825.134929-1-dinguyen@kernel.org>
+Subject: Re: [GIT PULL] ARM: socfpga: updates for v6.16
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 9, 2025, at 23:37, Heiko St=C3=BCbner wrote:
-> Am Freitag, 9. Mai 2025, 23:03:54 Mitteleurop=C3=A4ische Sommerzeit sc=
-hrieb=20
->>=20
->> but the corresponding nodes are left at disabled. I see
->> that the same mistake is present in the uart nodes.
->>=20
->> Please send a fixup to remove these from the .dtsi file
->> here and the similar chips, unless you are sure that every
->> board will have them enabled (like e.g. the gpio nodes).
->>=20
->> The aliases are not meant to refer to soc-internal names,
->> but the identifiers on board.
+On Tue, May 6, 2025, at 02:48, Dinh Nguyen wrote:
+> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 >
-> For the uarts and i2c (and spi), all the identifiers are always numeri=
-cal
-> both in the SoC documentation as well as on the boards and board
-> schematics.
+>   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 >
-> If you look in a random Rockchip schematic file, the lines for the i2c0
-> controller will be called i2c0_scl_foo, i2c0_sda_foo, etc.
-> Similar uart0_tx, uart0_rx, etc.
+> are available in the Git repository at:
 >
-> So while I fully understand that mmc0 -> emmc, mmc1 -> sd-card are very
-> much board specific, somehow repeating the very same i2c aliases for e=
-very
-> board feels strange. The 7th i2c controller on the soc, will never be
-> called anything else than i2c7 afterall.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git 
+> tags/socfpga_dts_updates_for_v6.16
+>
+> for you to fetch changes up to 8dbffe5f5dd531a3c3f9d603462e499085449277:
+>
+>   dt-bindings: clock: socfpga: convert to yaml (2025-05-03 13:33:23 -0500)
+>
+> ----------------------------------------------------------------
+> SoCFPGA DTS updates for v6.16
+> - Updates to dt-bindings
+> 	- Document Agilex5 NAND daughter board
+> 	- Convert Stratix10 FPGA Manager to json-schema
+> 	- Convert Stratix10 Service Layer to json-schema
+> 	- Add document for Terasic's DE10-nano board
+> - Add support for Agilex5 NAND daughter board
+> - Add basic support for Terasic's DE10-nano board
 
-It's usually most important for the uart, since that tends to go
-to an external connector on the board that may use a different
-numbering, or may not even use the one you named serial0, so these are
-renumbered most of the time.
+Hi Dinh,
 
-For i2c, I can see a reason for keeping the numbering the same
-as the on-chip pins, but only have an alias for those that are
-actually enabled. We should probably have dtc check that there
-are no aliases to disabled devices, but that requires cleaning
-up a load of board files first.
+I'm not sure exactly what happened, but I see that this is
+almost the same as the previous pull request that you had sent
+for 6.15 in late march.
 
-> But ok, if you feel strongly about that, I'll move the i2c and uart al=
-iases.
+I had already pulled in the previous version, and if I pull
+this one now it would result in duplicate commits. Would
+it work for you if I just cherry-pick the "dt-bindings:
+clock: socfpga: convert to yaml" patch on top, to avoid
+rebasing everything else?
 
-Yes, please do.
+Note: the list address has changed again, so please send
+future pull requests to soc@lists.linux.dev, cc:linux-arm-kernel.
+The arm@kernel.org and soc@kernel.org aliases still work
+for the moment, but the real address is the @lists.linux.dev
+one.
 
-      Arnd
+     Arnd
