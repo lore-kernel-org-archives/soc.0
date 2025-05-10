@@ -1,91 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F3B634EC
-	for <soc@lists.linux.dev>; Sat, 10 May 2025 00:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D39E1EA7C2
+	for <soc@lists.linux.dev>; Sat, 10 May 2025 09:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746838026; cv=none; b=MnKCzYrDfPI+P1FWBvYjV6MHk3hDgp9wzddvMiKPQG0i7es8+BTAWZPbXySsB7XP7HXiTf7V9+xPzayBhkslyI0ASO7XwUaY8p7pEHgXx2U6CRZsXyYrPt9uxvezX0eGkm999A3usplTCq61uNa8LvUGJ25oTxZcJUHxYdX1cN4=
+	t=1746868235; cv=none; b=gprojrj/ug6PEncqyrMw8EYzIVxWIXTKkm4YuZ5dVSFOdg9eZzvQOBjUhWu18DfQ2sRs/Rql+DBk1NnyrUxjo0uJdWzs+PB80M5jlVtO3PE4hM/ThVZSGJn4uRN4zy91QYKg+1scm35pVbpaNWcKlCdkydUTHWVgw92YzJloecE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746838026; c=relaxed/simple;
-	bh=onXJkqf9B/dgI1onUvhrUUIygXzUBladJ1FPRg+XXqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=j08QhoSzVvw1RcwNHo2a/xI3kODOufM5of344hsglyhaGFi5SzBtaJl1mrFn25EW4BamSGdD52AVEx77NSeh3e+rdQQDu6XZSrGIzTJC+/kEq761FxSslFVdXlcHkcRxI++XKUjSuofh/sMjKG1vEl+8JGRbaboWJ5RdaqpwUH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=eWducVhs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746868235; c=relaxed/simple;
+	bh=PZRHZy+ByjIBVYSql3k2lpizr50zfU+ErO3joXOqMfY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=epQsfxgTfS9inHZYhsnbbwjNBZpSsu53R+qfkv2ZEOEv6YkymkK7UL+9j2hWDsJYaJEX6R8R+j01mK3fgHkJjgsSLQEvAe0qIQWtqV/kVDIeNjzG361n+0QVbyuhIvPtmweNmH1mLRrvoZCUP1HmmHy4SBweoj4Ug/xuuxHr8Qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=vV3ddkgF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KUUV0YFq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="eWducVhs"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="vV3ddkgF";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KUUV0YFq"
 Received: by smtp.kernel.org (Postfix)
-	id 1D502C4CEED; Sat, 10 May 2025 00:47:06 +0000 (UTC)
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
+	id B6E71C4CEEF; Sat, 10 May 2025 09:10:34 +0000 (UTC)
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6E64FC4CEE4;
-	Sat, 10 May 2025 00:47:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E64FC4CEE4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=ygNenFQSlWZKHuaoFHsCRPZl844027GugW0JBaYx3TE=;
-	b=eWducVhsMtl+BPa+5dmA1AnRPO73y7sQ/tAANPwwIjYRIWPbm4n9YOIQyShTO1
-	FBozbGCKSyZI8c9IjmkUrDvFRufPvQnFrY0HE2pYRzO2IxW1CbSKcZr/RKXVTa0Z
-	geTuyUeUptz5M73C6j/N+N0ea/1FSJduxByuijTpQJr+c=
-Received: from dragon (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id Mc8vCgD3NyX_oR5oLaCwAA--.3659S3;
-	Sat, 10 May 2025 08:46:57 +0800 (CST)
-Date: Sat, 10 May 2025 08:46:55 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	kernel@pengutronix.de, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.15, 2nd round
-Message-ID: <aB6h/woeyG1bSo12@dragon>
+	by smtp.kernel.org (Postfix) with ESMTPS id 34978C4CEE2;
+	Sat, 10 May 2025 09:10:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 34978C4CEE2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id B19C51380219;
+	Sat, 10 May 2025 05:10:30 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Sat, 10 May 2025 05:10:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1746868230;
+	 x=1746954630; bh=J/usAa3ugAZIjJYLsxHYOSULEojmL5VZ0pEYBLSRHXM=; b=
+	vV3ddkgFKEHcfcSZGSYqSQqBLf6vZ4iKq3ArwPPWSFEkEcooheiQMZh4IJm+1SrE
+	qJprdl8STpQiMS/MeVePuQ6Old43lRhBxctrvQyD6q2A5e+2Pdv9jrV/tXp3TRZa
+	sqSBOoxaooKWLwdwuS5c507KNqYZYBldVvm7nEZl7juL2cLEWO93/Tfqcv8LKFYG
+	RNImc0MXgia9uMgAdt6aW91TaybRdMLYb/zSYUT/O3aTpAd2n7eWH+/KGzhtmCCI
+	QpuTWIOnAJkUUm75KjSQwfdLL87KGPCs5kRvzA/5/pmNZRf4kkBJPaRGHAV2qoUM
+	OtkOmxphNEd/re7Q8zXMPA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746868230; x=
+	1746954630; bh=J/usAa3ugAZIjJYLsxHYOSULEojmL5VZ0pEYBLSRHXM=; b=K
+	UUV0YFquy39Yyrr3cst2+NOpWgEyVwRnBk9b4x4kipuElGUiEGtZNHbe+4PBthVz
+	SK15zHtrZGvuXFsbIvf5KvC9qMzvlHEJlhicl+BuJ7zcd5BYjxfOrU2tk6zMsa95
+	+JP8bKPqqGAeTVaEv146ql6NVXScV+gf6hHuDJ3RlqAOUwHWY2REAOR+v1ezFAfL
+	z81f/AQlB1Lo8UM/dbc3R/cM/E24pJvrWkRCr9gouHZ0Me0IWgIsPtjdJHY7y/Ch
+	5QzMRP8JnCEANDEDYHBn8fxdoXp/bAChq3Px3oPHhPDQeEUmBsI+s2iCGwWOB05k
+	OOx90weO7+olmGYSv2pMA==
+X-ME-Sender: <xms:BhgfaE7jcImWtG4v_bO_B3AdW4GF2xx1CytJfUBduyHIMb_y1MkM9A>
+    <xme:BhgfaF74JmmW1H9Hro8TizIQYIYwH8whhG7-7AE-6vpKfBgbN0qmTnwP38BOvUGfR
+    IY7eI97KvL1Bk5270Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleehuddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
+    tdejnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedv
+    vdegjedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgrnhhnhhesghhoohhglhgvrd
+    gtohhmpdhrtghpthhtoheprghrmheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshho
+    tgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgvnhhsrdifihhklhgrnhguvghrse
+    hlihhnrghrohdrohhrghdprhgtphhtthhopehophdqthgvvgeslhhishhtshdrthhruhhs
+    thgvughfihhrmhifrghrvgdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlh
+    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:BhgfaDeMxDowa-e2xFoudRsyu_3jAxrrMMIw66E5ZznlbYphQc3TPA>
+    <xmx:BhgfaJKJQNVK0THZ3_k6ByEeRLqD4yCqX6tjZkSmNvfmQiB6GqlW5g>
+    <xmx:BhgfaIKD73Lf5m_af6LvA_-wtVx5wzuPg3JD_O4nOS8kRio-Y4uYYA>
+    <xmx:BhgfaKxm4Jhhb0tA4aFHeeEkvvQTjtuEXFj-dAKXuPBz9ZV4lvAV6Q>
+    <xmx:BhgfaB5bzj2YVdxPCIHRwxoXV2hx504ISgEJQEXye-3FYyzdhqyINrtj>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 424191C20067; Sat, 10 May 2025 05:10:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-CM-TRANSID:Mc8vCgD3NyX_oR5oLaCwAA--.3659S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFykCw45tFWfAF4fWw4fuFg_yoW8JFy7pF
-	4akrZrJr1DJr47AFnrXr1DKF98tw48CF1UGr47Jry0kr1YyFy8XFn8Kr95GrW7J347Xw4r
-	KF1UJryUKF15ZF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UuT5LUUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiERdJZWgeoekASQAAsd
+X-ThreadId: T91d942121878fe31
+Date: Sat, 10 May 2025 11:10:10 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jann Horn" <jannh@google.com>
+Cc: "Jens Wiklander" <jens.wiklander@linaro.org>, arm <arm@kernel.org>,
+ soc@kernel.org, "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ op-tee@lists.trustedfirmware.org
+Message-Id: <a877f411-f6df-45dd-9cf2-351d785db4c2@app.fastmail.com>
+In-Reply-To: 
+ <CAG48ez3JEg11GZTzmSHeXEDVz9vN68vWjTH+2sq_6+8eK0zkig@mail.gmail.com>
+References: <20250509065114.GA4188600@rayden>
+ <e5bfb069-6adb-4757-a52c-bb3635990686@app.fastmail.com>
+ <CAG48ez3JEg11GZTzmSHeXEDVz9vN68vWjTH+2sq_6+8eK0zkig@mail.gmail.com>
+Subject: Re: [GIT PULL] TEE updates for 6.16
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 5591ce0069ddda97cdbbea596bed53e698f399c2:
+On Fri, May 9, 2025, at 23:22, Jann Horn wrote:
+> On Fri, May 9, 2025 at 11:14=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> The second patch looks like it should be a bugfix for 6.15 instead,
+>> any reason to have it only in 6.16?
+>
+> FWIW, it's more of a cleanup than a real bugfix; there is an unsigned
+> integer wraparound, but if that occurs, we're guaranteed to hit a
+> memory allocation bailout pretty much immediately afterwards. So I
+> think putting it in 6.16 is reasonable.
 
-  arm64: dts: imx8mm-verdin: Link reg_usdhc2_vqmmc to usdhc2 (2025-04-27 21:49:30 +0800)
+Ok, I see. Merged now.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.15-2
-
-for you to fetch changes up to c6888983134e2ccc2db8ffd2720b0d4826d952e4:
-
-  arm64: dts: imx8mp-var-som: Fix LDO5 shutdown causing SD card timeout (2025-05-09 22:48:35 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 6.15, 2nd round:
-
-- One more i.MX8MP nominal drive mode DT fix from Ahmad Fatoum to use
-  800MHz NoC OPP
-- A imx8mp-var-som DT change from Himanshu Bhavani to fix SD card
-  timeout caused by LDO5
-
-----------------------------------------------------------------
-Ahmad Fatoum (1):
-      arm64: dts: imx8mp: use 800MHz NoC OPP for nominal drive mode
-
-Himanshu Bhavani (1):
-      arm64: dts: imx8mp-var-som: Fix LDO5 shutdown causing SD card timeout
-
- arch/arm64/boot/dts/freescale/imx8mp-nominal.dtsi |  2 ++
- arch/arm64/boot/dts/freescale/imx8mp-var-som.dtsi | 12 +++++++++++-
- arch/arm64/boot/dts/freescale/imx8mp.dtsi         |  6 ++++++
- 3 files changed, 19 insertions(+), 1 deletion(-)
-
+     Arnd
