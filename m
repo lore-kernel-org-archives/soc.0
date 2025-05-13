@@ -1,73 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA6525523C
-	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C3F27057D
+	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747131517; cv=none; b=BQvgTOkFxOZV5ypzV+5H8uz4ZT743cq5L5gKpRjw2SClq9KfB2d+W6o6hLDTo7u6uCWHo2hPnTWCVlcpjfns7ngxFV0aeZuHXRHQdOAT67YcImdE7olJ7fpif8r2VtNTSi0W/mfZOrN6NWR0RrnY4WXqu7L/qw7hyRQGzNDu4Hw=
+	t=1747131952; cv=none; b=r9JYtSoRVLA4+JCJilj1Oi7AtKCA8RpbqESH5o3ECQaKOC0LJKI13tUzap5Wpu3vb8tdowMromgR34t1eIKLxfJrhzHR0ubZxrMcsB6ZluZZMUALZNvB9Py7ZK/GVmDNGU/mBFk7yBlYPND5zMGrILef1pH5qbIc8UkE9mdY5mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747131517; c=relaxed/simple;
-	bh=9uhQCusVzrpJrxpxq7u0aMvdeuDozsO8iTOKYTN4dvM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=tJfahHRTmDNp86XijI3gujZMn3/BAxq7uQ1c5Np4sufYaYkgYL4vypYAv7m8LCgnRLV/c+4GM+keAllK9qbOiIxAC9X2aABkgYuYQzmoZV1gnu5IhM1B1YFUYBPx5BRV1iKhaiSKgw5iQP1yQ88NyAa0aEclq/c7sAKGxgl++dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jf96U9g8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747131952; c=relaxed/simple;
+	bh=MfwSwymuW5o3cDyznvJVzkYRE4aYTDBp+a6iR6rCP8E=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=CFf9LLaqsBM/QA3sfTPa0a5GtzvboqklW/5BbQGDPUNeJkjY80wgIN0j8HVtJ/R+hCoqGZTcXomHFvXPNJHCD9dSRhe23k/RSDMgjO8UaILv9cUrc9OI1SMdS889NB6tyxY7bq5DMbJu8sDkMulb5W2yZ6jMtfrTwQahgi3M6dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w6aLuM6T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jf96U9g8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w6aLuM6T"
 Received: by smtp.kernel.org (Postfix)
-	id 2DE12C4CEEF; Tue, 13 May 2025 10:18:37 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	id E0B64C4CEF2; Tue, 13 May 2025 10:25:51 +0000 (UTC)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F0E18C4CEE4
-	for <soc@kernel.org>; Tue, 13 May 2025 10:18:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F0E18C4CEE4
+	by smtp.kernel.org (Postfix) with ESMTPS id AD101C4CEF0
+	for <soc@kernel.org>; Tue, 13 May 2025 10:25:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD101C4CEF0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso54254035e9.2
-        for <soc@kernel.org>; Tue, 13 May 2025 03:18:35 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43ea40a6e98so55300825e9.1
+        for <soc@kernel.org>; Tue, 13 May 2025 03:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747131514; x=1747736314; darn=kernel.org;
+        d=linaro.org; s=google; t=1747131949; x=1747736749; darn=kernel.org;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XbgIPmxFtVM1BGwhXr/tVxdvgWwhEB3gww1YRaGjATo=;
-        b=jf96U9g8F2lucn6E9XYK17fOB6cQ3jcMwY0h8MvAnb2bpdjOV/a18sZ3M4DkHn0mT5
-         1BYVxh+7sLcngtSoIHhTiiSwNPtQ+byd6YcwrHxgcBkrnOzPzPtxIqKtX9StZiAJ7Gcc
-         nWowhxeohrmcQqJ9OmwamjpnRVrQDsVUcPJoUscsbSck8kDgN7RXVXe+gvNXp8Tw91yy
-         MBaYuInkm2aDOHoVNn93GoINI4oMqqa8frU1pKRl6pVUKWFzlf8VKHsqNwiGbC4VYErH
-         gVfIx2cxzedLM9gOAs6g5KliCk/G4VvuDiUq23Qxhucj8D8trMaCs+kbdf6aFM6IE7ex
-         NbwQ==
+        bh=xOAW4/y1I7dlyrGJJ9emafCDdB62k/71A+ZzQQXgDR8=;
+        b=w6aLuM6TvvxbTYrkBsXaPq1dNXkz1zGjZ+8drRQQGzJjK0Hn2EMppPP1CPcHGrzFgv
+         mbZS45uYIRaCdF7f3z6sr7pSo0mlU0qcQUm9MfAvPaYIIPCH0w3CrnqbG8FP7lnqN1G7
+         RCS4NaJU/t4kRoO0lc9LsLB1FA4/PY7ZN0ZlxnxyfdAyXcWiMqzq/D6RwVWkVEk9WEK6
+         7sSCu1jN21/D6ZIAvO4XyAZ9KD/0dkK9/Wvziie2OBOJQh26sSzgNKWzvWEKs851fgyf
+         62wGZrEVLgudAYIebPKYKLAJSD6r2e5Htt94XW1PIIapSSirpQ4G31ZWhkpls0xpPPWX
+         HEMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747131514; x=1747736314;
+        d=1e100.net; s=20230601; t=1747131949; x=1747736749;
         h=content-transfer-encoding:organization:autocrypt:content-language
          :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XbgIPmxFtVM1BGwhXr/tVxdvgWwhEB3gww1YRaGjATo=;
-        b=i3KqT41hpCBH4hXAXplFqDwhv17PB0ri2kOCNLb9nwN5OwacFhJEeodYSKCMhfSnU8
-         vGEYmjKi4E0+b4H1KVIpvgLh5I9s2BBL/YpGbiiYwTPxQNNth/Y8SmHK0eo5+UbT2svY
-         zuQtu0kdDXduBgE1yEmepoRNzWkLzjy9UE/v/2TFa+WYvXmD2cQr0gwHL9Q7TZSoRBpg
-         29bBic+1z8GCbj++6eKiyzktGUHUpeUCp8iDUJB8iUzz44zAX1pKDxgxMjQwFzdOPaQv
-         r9ny4dV5uBL3SQFRwb2IfVF7M8IH6yJ2uLolTfcBxfMvp0IIOp9TIstDkhTswWYW9EuD
-         qvKg==
-X-Gm-Message-State: AOJu0YyPnAXPQI7/BEvAxfcbufxFNM8Tx765u2VI4zYlNr+hsaV/riK3
-	L1Mc9LEpQjq3EBM4+//kAmtDqtvo6e6FSaaKLS7iHO1mnxEPu4H8QTRuUE0ojYFKskICpwx6Unt
-	Q5ZQ=
-X-Gm-Gg: ASbGnctUVoH37wIs/En2IPS5qLfO576udEbwSRyiflsHUHAorTfAFk2e3b3kHk2wMGl
-	L+x2NuFcmGOojesWN9lktjEq2TBTD4Y2Tki6tqFQCQWTTwXdgBOhSgMVW6p/JNPnaZEj4nCOsCK
-	NbYLeAxRLeuKsTGwbFl73PQINZNlu4cyN9UnOQiMdgjFsKnRX8FnSIgHekuuctcJkz8Yfp44n9e
-	MNzXRzXIqzzQFRCji/E8tNOG/S0RiYtOevR+osLg/yh56jlJrTd5D9n894K+hy6vuF2D1toY6WL
-	TrXv+akIey0nvqLeN91zwwilAN6JezLPtQa3p7YUIprgA2EbU96xqfgx4zSLpMZDw72zWvG++cO
-	C7B2tOX9z9x1bLMS4zJ7ICns=
-X-Google-Smtp-Source: AGHT+IELqlGYEyz0bgUWVEOHjILw2+jZZTXNzra6IJ+FQuqp14XzoRo/D2dnZ8V6LTyFM6eKT8E8lQ==
-X-Received: by 2002:a05:6000:2509:b0:3a2:133:b1b2 with SMTP id ffacd0b85a97d-3a20133b622mr9093752f8f.31.1747131514243;
-        Tue, 13 May 2025 03:18:34 -0700 (PDT)
+        bh=xOAW4/y1I7dlyrGJJ9emafCDdB62k/71A+ZzQQXgDR8=;
+        b=bRIUihJBc5torKYPB478wB8rAjZri4t50lOgyzZ1dLeUHCsudMmnZ3+/m4gpVrwBcb
+         LEJlhkFPSRJGYaBFjBtRwNcprq5GSNsmsH4LBWSfo6NGqNrv9uMecxs4YRF7Ucogqb6i
+         74PcH5kaJusiM4R6HvLvVhkWoL3HvSmCoe6U29LTG9N/VKpBTg15S4pUfcs+uIVmZokw
+         I2KXPS3ldCWZ5wVX5X/fPho5eHNGY12Hweudo4L06oNg38jUMMIF9HIX2BBkBs882TUF
+         LMRejvlJLF+pilkxXZLVLOigNu20PCC3vKR9BK2DeQy0ZrtYQmb1nPjK3710eKmHK1Hb
+         cXCw==
+X-Gm-Message-State: AOJu0YyOrySgvlISgXG9fakCu5uubDYn3nN3uSeHD2R614+FYSowiziM
+	ZifxrhkxXS+UvosXE01+kplA5g4Ztx54IblHLJdUMUijReB/AAOXVokcbQThmA6p3iHRheUQAWA
+	445c=
+X-Gm-Gg: ASbGncs0/naLFlysQIM2HYcpveXewHI7Z/aMSOtK7PtjbprXkMtvd8eJ1UGuColrRDE
+	XIM5QD6fTjstLrxZ5Nmj0jalX632IdfTxXMS64M4sjk+d3ni4fb3oodbK0Qd+uJhe317aOgEAeI
+	+WHK8kDV6CjOvWSwSL0WcdXARWPSN3b7p1jCEMiVSkyjGvuQRtPgZTaxslIyvG2FiQ6TM7q1lTM
+	sAFbfIeORS+9typCLR5lrG9ty/vPlPHB/OyKOXq8wJmj0yU6OTYvn+vSIqFYD7Ma0nIWDeXuKd1
+	5i/zfEzIqObXcmRYENoyADKIHkdP9JowFilcD8OFXxrZlIYSGlrUowCM4/oIoQWKFLnKLuY4rdm
+	6Akm12uie0whbHllKiNvbRXM=
+X-Google-Smtp-Source: AGHT+IER23BQik5Lx2zoekeA+pdHljoqfbrl4jmtmT7/sMAlqJykMtKsTIOYUE8EH690KnhP8BAxRw==
+X-Received: by 2002:a05:600c:3ba8:b0:43d:300f:fa1d with SMTP id 5b1f17b1804b1-442eaa9ba15mr37237455e9.31.1747131948908;
+        Tue, 13 May 2025 03:25:48 -0700 (PDT)
 Received: from [10.61.1.139] (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f57dde0esm15899431f8f.18.2025.05.13.03.18.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd3b7b83sm198972445e9.33.2025.05.13.03.25.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 May 2025 03:18:33 -0700 (PDT)
-Message-ID: <5f7d3fa4-2d9d-450b-b384-abdd903284dc@linaro.org>
-Date: Tue, 13 May 2025 12:18:32 +0200
+        Tue, 13 May 2025 03:25:48 -0700 (PDT)
+Message-ID: <04908842-4c55-44a0-b74c-3aca82a1f204@linaro.org>
+Date: Tue, 13 May 2025 12:25:47 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -76,7 +76,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM64 DT updates for v6.16
+Subject: [GIT PULL] Amlogic drivers updates for v6.16
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
 To: soc@kernel.org, arm@kernel.org
 Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
@@ -111,14 +111,9 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
-Here's a quite large changeset for ARM64 based Amlogic SoC introducing pinctrl
-for the A4 SoCs with new bindings, UART RX/TX default pull-up to avoid issues
-with debug uart connectors, same for I2C on GXL based boards, finally SARADC
-support for the S905L board, clock measure support for the S4 & C3 SoCs and
-Reset support for A4 & A5 SoCs.
-The new Amlogic S6, S7 & S7D SoCs initial support are introduced with the
-corresponding Reference Boards.
-Finally the S805Y Mi TV stick, known as xiami-aquaman, support is added.
+Here's drivers updates for Amlogic SoCs, refactoring the clk-measure driver to
+move more structures to const and support C3 & S4 SoCs.
+With Philips' ack, I also picked the A4/A5 reset controller bindings.
 
 Thanks,
 Neil
@@ -129,119 +124,31 @@ The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
 are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.16
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-driver-for-v6.16
 
-for you to fetch changes up to f0911f29478992f37e91c208fe44c2ea5b378b61:
+for you to fetch changes up to 87b480e04af45833deb5af1584694b0077805ea6:
 
-   arm64: dts: amlogic: Add A5 Reset Controller (2025-05-05 14:37:43 +0200)
+   dt-bindings: reset: Add compatible for Amlogic A4/A5 Reset Controller (2025-05-09 17:34:10 +0200)
 
 ----------------------------------------------------------------
-Amlogic ARM64 DT for v6.16:
-- Amlogic A4 Pinctrl support
-- UART RX/TX pull-up pinconf properties for all SoCs
-- SARADC support for the S905L SoC variant
-- Drop clock-latency in CPU node
+Amlogic Driver for v6.16:
+- Amlogic clk measure memory usage optimization
 - Amlogic clk measure support for S4 & C3 Socs
-- Amlogic S6/S7/S7D initial support
-- I2C default pull-up bias pinconf property on Amlogic GXL based boards
-- Amlogic A4 & A5 Reset Controller support
-- New Boards:
-   - Amlogic S6 BL209 Reference Board
-   - Amlogic S7 BP201 Reference Board
-   - Amlogic S7D BM202 Reference Board
-   - Amlogic S805Y xiaomi-aquaman/Mi TV Stick
+- Amlogic A4/A5 reset controller bindings
 
 ----------------------------------------------------------------
-Christian Hewitt (1):
-       arm64: dts: amlogic: gxlx-s905l-p271: add saradc compatible
+Chuan Liu (6):
+       soc: amlogic: clk-measure: Optimize the memory size of clk-measure
+       soc: amlogic: clk-measure: Define MSR_CLK's register offset separately
+       dt-bindings: soc: amlogic: C3 supports clk-measure
+       dt-bindings: soc: amlogic: S4 supports clk-measure
+       soc: amlogic: clk-measure: Add support for C3
+       soc: amlogic: clk-measure: Add support for S4
 
-Chuan Liu (2):
-       arm64: dts: amlogic: C3: Add clk-measure controller node
-       arm64: dts: amlogic: S4: Add clk-measure controller node
+Zelong Dong (1):
+       dt-bindings: reset: Add compatible for Amlogic A4/A5 Reset Controller
 
-Da Xue (1):
-       arm64: dts: amlogic: gxl: set i2c bias to pull-up
-
-Ferass El Hafidi (2):
-       dt-bindings: arm: amlogic: add S805Y and Mi TV Stick
-       arm64: dts: amlogic: add support for xiaomi-aquaman/Mi TV Stick
-
-Martin Blumenstingl (5):
-       arm64: dts: amlogic: gxbb: enable UART RX and TX pull up by default
-       arm64: dts: amlogic: gxl: enable UART RX and TX pull up by default
-       arm64: dts: amlogic: g12: enable UART RX and TX pull up by default
-       arm64: dts: amlogic: axg: enable UART RX and TX pull up by default
-       arm64: dts: amlogic: a1: enable UART RX and TX pull up by default
-
-Rob Herring (Arm) (1):
-       arm64: dts: amlogic: Drop redundant CPU "clock-latency"
-
-Xianwei Zhao (7):
-       arm64: dts: amlogic: a4: add pinctrl node
-       dt-bindings: arm: amlogic: add S6 support
-       dt-bindings: arm: amlogic: add S7 support
-       dt-bindings: arm: amlogic: add S7D support
-       arm64: dts: add support for S6 based Amlogic BL209
-       arm64: dts: add support for S7 based Amlogic BP201
-       arm64: dts: add support for S7D based Amlogic BM202
-
-Zelong Dong (2):
-       arm64: dts: amlogic: Add A4 Reset Controller
-       arm64: dts: amlogic: Add A5 Reset Controller
-
-  Documentation/devicetree/bindings/arm/amlogic.yaml |  25 ++
-  arch/arm64/boot/dts/amlogic/Makefile               |   4 +
-  arch/arm64/boot/dts/amlogic/amlogic-a4-reset.h     |  93 ++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi        | 133 +++++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-a5-reset.h     |  95 ++++++++
-  arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |   8 +
-  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        |   5 +
-  .../boot/dts/amlogic/amlogic-s6-s905x5-bl209.dts   |  42 ++++
-  arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi        |  97 ++++++++
-  .../boot/dts/amlogic/amlogic-s7-s805x3-bp201.dts   |  41 ++++
-  arch/arm64/boot/dts/amlogic/amlogic-s7.dtsi        |  99 ++++++++
-  .../boot/dts/amlogic/amlogic-s7d-s905x5m-bm202.dts |  41 ++++
-  arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi       |  99 ++++++++
-  arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   1 +
-  arch/arm64/boot/dts/amlogic/meson-axg.dtsi         |  12 +-
-  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  10 +-
-  arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts  |   4 -
-  .../boot/dts/amlogic/meson-g12a-radxa-zero.dts     |   4 -
-  arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts  |   4 -
-  arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    |   4 -
-  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |   4 -
-  arch/arm64/boot/dts/amlogic/meson-g12a.dtsi        |   1 +
-  .../dts/amlogic/meson-g12b-a311d-libretech-cc.dts  |   6 -
-  arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi  |   2 +
-  .../boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi  |   6 -
-  .../boot/dts/amlogic/meson-g12b-bananapi.dtsi      |   6 -
-  .../boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi   |   6 -
-  .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     |   6 -
-  arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi |   6 -
-  .../boot/dts/amlogic/meson-g12b-radxa-zero2.dts    |   6 -
-  arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi  |   2 +
-  arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi   |   6 -
-  arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi        |  10 +-
-  .../dts/amlogic/meson-gxl-s805y-xiaomi-aquaman.dts | 262 +++++++++++++++++++++
-  arch/arm64/boot/dts/amlogic/meson-gxl-s805y.dtsi   |  10 +
-  arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         |  22 +-
-  .../boot/dts/amlogic/meson-gxlx-s905l-p271.dts     |   4 +
-  arch/arm64/boot/dts/amlogic/meson-s4.dtsi          |   5 +
-  arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi   |   4 -
-  .../arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi |   4 -
-  .../boot/dts/amlogic/meson-sm1-khadas-vim3l.dts    |   4 -
-  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi  |   4 -
-  .../dts/amlogic/meson-sm1-s905d3-libretech-cc.dts  |   4 -
-  arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts   |   4 -
-  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi         |   1 +
-  45 files changed, 1097 insertions(+), 119 deletions(-)
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a4-reset.h
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-a5-reset.h
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-s6-s905x5-bl209.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-s7-s805x3-bp201.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-s7.dtsi
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-s7d-s905x5m-bm202.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s805y-xiaomi-aquaman.dts
-  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s805y.dtsi
+  .../bindings/reset/amlogic,meson-reset.yaml        |  22 +-
+  .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  |   2 +
+  drivers/soc/amlogic/meson-clk-measure.c            | 461 +++++++++++++++++++--
+  3 files changed, 438 insertions(+), 47 deletions(-)
