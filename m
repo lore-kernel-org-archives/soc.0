@@ -1,157 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA5924F5A0
-	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:12:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8A225B684
+	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747131138; cv=none; b=nfLmAK8+IL7ugYpKnzohd8wXp/gfihyttKbau0fux14YQ0IRsMw+8/kZwb55hbDmK7ju2/T+lhK48X3piW7C/CcqRLv9Soiw4VY7RedqMsrHR0KdwJsBYdiVvtEbLFBSk2o12AiBpNukl5vx0/YAvRomC7tDUMT9HLUJsEVpUAk=
+	t=1747131487; cv=none; b=jY1CRM7Y07IhpB/3+2mbgwCn4/Zs39nX9VbmTDRJeGNGAp6Hd7uA4jtAlof3F+zRmRjBd2dy42bXvzUpDRi2/4xbhyX35jFN7SbOeRp8N6TXroLHTxK4LGT1JQjmdau5DcGtlhqDMLheHKo+izekO7A0xztCK3nyvDl8q6NYB20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747131138; c=relaxed/simple;
-	bh=39PJWrgol/Y6KgPadKjlisKAa+NSY9vqr8MZ+EEEZws=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=YXf/t3fiS5W+7P9eGlr/7IDUYCvYcpHdL3mN6Tq3MTu5qveno5sVjVbK4DQZmSLyPwT7fAfuWEZ2otxds4i/5ekIQm1s6xj+hKrW/QTZ1Kd707SXJBjkVZ1aOZxtwOMNUrfZA9a3m1whayuiOUwkajYW20VAwC7m0LuA6DYHuhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Sdm6W+H/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747131487; c=relaxed/simple;
+	bh=+2q8Agc8OAUp6ljVH2smijkPt4WizUEwcy8s1vXQJ20=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tCY8bmc7OJwqY0AvhB2H++3RLoGkAqvFH96ioEO8vfwOfZio8Ttl2ulwhd6TCW7V61EMWYXTtFywM3uMcwJjK7YiokwuPsImydU7xIPkHKoLfaczWh/HpvHjTA1hXD6EjanGFjvcgXusDZSJJvX5I/mkUhKeqw1lts+cvvkgv9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n2JdauHp; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sdm6W+H/"
-Received: by smtp.kernel.org (Postfix)
-	id 52FC4C4CEF1; Tue, 13 May 2025 10:12:18 +0000 (UTC)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B5E39C4CEF0
-	for <soc@kernel.org>; Tue, 13 May 2025 10:12:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5E39C4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43edecbfb94so56149895e9.1
-        for <soc@kernel.org>; Tue, 13 May 2025 03:12:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n2JdauHp"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-442cd12d28cso1535195e9.3
+        for <soc@lists.linux.dev>; Tue, 13 May 2025 03:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747131135; x=1747735935; darn=kernel.org;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JJeqmvQf3UAL4kCovc4gGHXLVQH6Y8/QOMAb9LY1twk=;
-        b=Sdm6W+H/HffjQyYt2YVZ/wX17msUNXFfrweG8r9BrHx1g2SNNZbU77zun5c4JVkhp1
-         zQkCVNGZApUEauovdGrsbVhCM8lGRkKBKB1iqgNxKf4QY7phBQfjo7IoUq1bZR326Iwh
-         3rjKTE9jWVXKMPCOGMDTWgIO8zA+RTvj2Z2pKKJ/CLXrU7hlUSutPM8qHhtm5a64n4Jc
-         qXB5y2kfLzqtVCfe/8VFLVRtuZv3nOAFePzN/11BCdYwgbawL2B5UzZxXWI9l7r0pDEn
-         KlSC1rrf+lShQmfmnuAlEz3ZSU9r1UBWrP8kbPU4xE8u1+O3+gLgBr2EgCwlfqWwaq84
-         Dxjg==
+        d=linaro.org; s=google; t=1747131483; x=1747736283; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GpW/hDUMz7zX4tvSsgRzaXUuXymLo1IwYeqOqY+OOaY=;
+        b=n2JdauHpe2r7g7ZMAQAB7wLXjBa4DN53PYOLti3YdtxuSmfu7w+PmtV3cIiRwnnYuv
+         25UXAxJ5Ehdshg5AC+C7scKQvxYC+tDTixFqfID27FKiCDyiimwLH9JB9kzeDt5nJS7d
+         CyNZznmhmeAaWwRJ/xvDCH9bLE0KU0s9Qm+qZJx0cyidlvqfz+A0LCVz9FmeuxoMLrNN
+         s0pMc+0tJCh8ggucKxYXaIMbJZ8qCewxf02IfBf92zbDUcyx6hwHdwNR08rWCQOj4gnS
+         2fp/6x/1uEIoqPg8ngbMOT4Hh+vjvZ2VizwW5uVVwIMmi5KGQmtX+IhctrIuiL814I02
+         n8rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747131135; x=1747735935;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JJeqmvQf3UAL4kCovc4gGHXLVQH6Y8/QOMAb9LY1twk=;
-        b=Smo+PIhgUYiWsoDoJtef87w4sSvsixppHcpvJ22u57xACyhuCDOJU0KQkzTGuZthkL
-         rYebmc+uXOmCDbhwJ7ErMSnFTwP9idF9FWll0zK3kqwkt+v8PYyHCDqJ5ohsIZBPI18H
-         ZI4CJDcv1Dybmpi+4bGYTUTTvlBFjzkCnjki6LJr8eTdeL5nYXCQfstIWfF6WUc+77cF
-         lV1YxqbXH72kQiPGIfsSXo8nXvayQGEerJ+9oV2NKlGZi07GwSeoOV0mEiBzBvROdcuy
-         /cUGdBrgmqCxVUgnCzA01WQQNmLKJlsFPTqXZWd2Bg5L52JHujCxm+F50jkdUW+STWlt
-         sMeA==
-X-Gm-Message-State: AOJu0YzuXo3Aa5TegZk4qHFjCPKa3uMZ7r8mg8ru/3Tj73oi2TuLnXZK
-	GwCkG87vViqf5OvE9+mbOvoQvNaQZi2vhSA4Yu0JGSYcOmA3RiFP/e6wQ+KrfgG98Be7baRAzvU
-	RzmI=
-X-Gm-Gg: ASbGncvDBo/BxNXmJR5WAeq7miCXUN0eWuf3zS2vzsekg8AlgHItLgQCULN8m21VWEG
-	rfT2sZu6dgHUhCVTYNxX/17zmopTsxR2wngAIOCRtAtoU10gK4TRLyUyxk+0ynbAWQ/bSpJf1b+
-	aCHpZVy3j2i9qGupkZb0GFcXVFS0Gkl620lyubksMAKjx0gH/i1ydQ+IQYcq0KRc47gjTF5VR+r
-	K9nFvN+Cn20CQSwYNi2/B0H/TF6gthrZd86wFDdBo7OpnxcWfpgdg6uUXrYQzK+owmNz/+sF1Xb
-	riK87LjIlgFxm834CiosgaKnaGcPFFQzMpWJx1PmxtW5PJTjc/1QZrEPSs7hTvXD6iSdHTNqeGz
-	vTRPR2/4aD40V
-X-Google-Smtp-Source: AGHT+IGkA3sY3L4MfFT9frruBvb5if6+w/Gw4kde8Il5ntffLfGLugxuM3zv1UQFvt6KFoEpgM+QbQ==
-X-Received: by 2002:a05:600c:4e90:b0:442:e147:bea7 with SMTP id 5b1f17b1804b1-442e17571eemr76287125e9.29.1747131134966;
-        Tue, 13 May 2025 03:12:14 -0700 (PDT)
-Received: from [10.61.1.139] (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd3aeb6esm207550715e9.25.2025.05.13.03.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 May 2025 03:12:14 -0700 (PDT)
-Message-ID: <838c5305-5c5b-4232-b7fe-86598dc50ace@linaro.org>
-Date: Tue, 13 May 2025 12:12:13 +0200
+        d=1e100.net; s=20230601; t=1747131483; x=1747736283;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GpW/hDUMz7zX4tvSsgRzaXUuXymLo1IwYeqOqY+OOaY=;
+        b=C/SYY1pLmpyRiWMfz3bCbONDDztq5q0jMW9V6F1P8nN19CoRvjcHRgrFK+xcpYaYig
+         qmqakn2pN49vi6v0Q793TSABmcpTE6dRj4dObfHPlTliwRp96QQnf9zP9sUBrAkWB+vV
+         /GOYkNcKWcKZPl3X8rISmkr1FptKw7wWMwraaaONjdPegz+6L+mrVbNAhYRK1AKKiRXn
+         tKxiIA+tt2OpeBpjQPFuzjI3rTuepHsXmP0lR+jLThh9S74Uovuc0doTPIYg5YVSkCj/
+         udS0zLDO5ltjB+6D3haLpfivhYhp6gvEpQ51Y145Z5g2tp/36c8KOiDQiCiMbkVDMP+r
+         +X7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWN6Fh253xGIQMW1gIWRf9+7SK37HFKCCu/isMIIzBqHMzTrbne1jHt+ruIChpLwMBEM1k=@lists.linux.dev
+X-Gm-Message-State: AOJu0YypgSSlrrBCQtWRIP1Bv5+NWtmmvyDvPaisZ8DIGW9NAXQSVynM
+	lkaTzElDihKcnvETi3ikdvyJWWPHTRRmiittlKdxRstPxYmpzTBIMtz8TXXOvoA=
+X-Gm-Gg: ASbGncs6ML/01Exp4eRgyVWsiaeq2WCtXIvjz7YQ6qb4MRs7Tmf7hOQhG69ucFwQu+C
+	y6JGPgPXiGTgEvCwwfvXEyixbmpySRhvpIA7FggG2q9jLC2Vm5a9cl8WkmpBottRJoJaCZKaYVx
+	+L1F6pW3kcgyCQSoy0KRZcIP/uh8s0a50GB/KAdxkgbpQ2cO83FU/UqeYT4ZGzEsT/OfwWeCnIa
+	7iWkYAoKdSKHjkaBOIk33tp/Wv6JzM0eAXP/HcqvAv+U+G7mRtIbbnY20b7o41t2nT0qKdYU3c1
+	6DcqZX0KwK8G8FXcY2bvRnf/xjsH5zY3RPR33ZFVpc/AKKP7ExdAM6/oWFxBZUGLa73kPtbXvnZ
+	/PZTrurxaXf49OFKeVhtP6hHN9wiwR3pCLEOfi7g=
+X-Google-Smtp-Source: AGHT+IExUE1z2q+MGTB1BjX3tNGd6iZlgfApNxaHiNcVQa6gR897h0allbxYsieVlwmVMw+6ixRyLQ==
+X-Received: by 2002:a5d:59a8:0:b0:3a0:9dd1:bb59 with SMTP id ffacd0b85a97d-3a1f64a1f8dmr4843504f8f.15.1747131482665;
+        Tue, 13 May 2025 03:18:02 -0700 (PDT)
+Received: from kuoka.c.hoisthospitality.com (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f5a2d37fsm15914997f8f.68.2025.05.13.03.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 May 2025 03:18:02 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH PULL 5/5] arm64: defconfig: enable ACPM protocol and Exynos mailbox
+Date: Tue, 13 May 2025 12:17:54 +0200
+Message-ID: <20250513101754.23158-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
+Reply-To: <20250513101023.21552-5-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic ARM DT updates for v6.16
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1161; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=FwRadgPxJRm5xEAehJ8JywumbY0idjddVQyEPezOekk=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoIxxSNRzisqVNsQAPPyyKC0GMYtidRZ+mahC2q
+ 7a1kCi49W+JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaCMcUgAKCRDBN2bmhouD
+ 1w3qD/9sV5S/8zWHdb9HmJxyJzng+j2RQ2MTrzMvGp10HAMWKOtVz9EDQHAJMQMdafDO+uf0Rcn
+ +BEeZ1ux9bk0u+rnA6dUyLWCOj24BWQE1C7RdSLNJkxclO+6Hw9SGS+RXnfOTFibwP9+dVgAyXE
+ VVyYEWajD26bKBNBuE3UZjRnT/6J4z6V/tOZtQHJ+13yYFIrHSjLL0btX7NYRXxET4WD4LsgWHe
+ 374UyWm0OSfJSjFUbcaHZmBAnG2pRtYvt1nCQkkKFsNRnIGEwWWu7PuyUjIXpRX1f0kOwHdy2ve
+ wdxqllBxYV+WuXXVdwXxE/bqEmhzRpkYpywjtbdle1n74T2y/xXSbTDrvJUSCcHC9GUl9RRZh4f
+ IewbY7pR7uJz1FACllnaVt530k0XgjglyNAddTkdg/dyfCw89dXLU98eFZS1TmJAWv9BJDdkfh2
+ rGF1BubmwZZlS0Fsk8W6axywjM6j8Lbnyz5R3kZlUDA/vxOC+oFkuEGljRkELxTDOh2NgoF8grQ
+ YCatdNfWkqRROfgpNl4Qd3o4tD7SzQ8rRmy3/l0Ooyl1NtsYotU5osF9iYZd3CFpH1I/nfPz239
+ qFYG/WtuE2OOjlNc2Mlk+acCDrCiGU7c6f2OmCM6NXc5N8LZzm03jpLphu5Wn3UQjk7XgqU2ncP zt+WBUBpI6quNpQ==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-Here's ARM Dt changes for Amlogic SoCs, setting pull-up for UART RX/TX lines by
-default for avoid issues with debug connectors, and introducing the Meson8 based
-TCU Fernsehfee 3.0 board.
+Enable the Samsung Exynos ACPM protocol and its transport layer, the
+Exynos mailbox driver. Samsung Exynos platforms implement ACPM to
+provide support for PMIC, clock frequency scaling, clock configuration
+and temperature sensors.
 
-Thanks,
-Neil
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Link: https://lore.kernel.org/r/20250207-gs101-acpm-dt-v4-4-230ba8663a2d@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 5bb8f09422a2..5c85e5da152f 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -265,6 +265,7 @@ CONFIG_IMX_SCU=y
+ CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE=y
+ CONFIG_QCOM_QSEECOM=y
+ CONFIG_QCOM_QSEECOM_UEFISECAPP=y
++CONFIG_EXYNOS_ACPM_PROTOCOL=m
+ CONFIG_GNSS=m
+ CONFIG_GNSS_MTK_SERIAL=m
+ CONFIG_MTD=y
+@@ -1416,6 +1417,7 @@ CONFIG_HWSPINLOCK_QCOM=y
+ CONFIG_TEGRA186_TIMER=y
+ CONFIG_RENESAS_OSTM=y
+ CONFIG_ARM_MHU=y
++CONFIG_EXYNOS_MBOX=m
+ CONFIG_IMX_MBOX=y
+ CONFIG_OMAP2PLUS_MBOX=m
+ CONFIG_PLATFORM_MHU=y
+-- 
+2.45.2
 
-   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm-dt-for-v6.16
-
-for you to fetch changes up to 2c1879a440315e0b292bbff0fa63a73bd8a52e34:
-
-   ARM: dts: amlogic: meson8-fernsehfee3: Describe regulators (2025-05-09 17:37:05 +0200)
-
-----------------------------------------------------------------
-Amlogic ARM DT for v6.16:
-- UART RX/TX pull-up pinconf properties for all SoCs
-- New Boards:
-   - Meson8 TCU Fernsehfee 3.0
-
-----------------------------------------------------------------
-J. Neuschäfer (4):
-       dt-bindings: vendor-prefixes: Add TC Unterhaltungselektronik AG
-       dt-bindings: arm: amlogic: Add TCU Fernsehfee 3.0 board
-       ARM: dts: amlogic: Add TCU Fernsehfee 3.0
-       ARM: dts: amlogic: meson8-fernsehfee3: Describe regulators
-
-Martin Blumenstingl (2):
-       ARM: dts: amlogic: meson8: enable UART RX and TX pull up by default
-       ARM: dts: amlogic: meson8b: enable UART RX and TX pull up by default
-
-  Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
-  .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
-  arch/arm/boot/dts/amlogic/Makefile                 |   1 +
-  arch/arm/boot/dts/amlogic/meson8-fernsehfee3.dts   | 306 +++++++++++++++++++++
-  arch/arm/boot/dts/amlogic/meson8.dtsi              |  22 +-
-  arch/arm/boot/dts/amlogic/meson8b.dtsi             |   4 +-
-  6 files changed, 332 insertions(+), 4 deletions(-)
-  create mode 100644 arch/arm/boot/dts/amlogic/meson8-fernsehfee3.dts
