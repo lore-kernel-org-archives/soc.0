@@ -1,61 +1,63 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADA621FF43
-	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D3F23909F
+	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747132946; cv=none; b=lsBNGOhycJjAyTCDgjvaQmm0UF0/jqchSjl/RQCPHhU4szHBIu7eDsWwrfAyT/S2TjoidsMZzNH8eKrB7+seDJMe/hzMgRdAa1EtUh/7VCs+4PQc/wdulepV4X7OfHbLQCWG2zSMHzb6HLb7Szwhie/xgiUIkLoxvLTYb/1SgiM=
+	t=1747132949; cv=none; b=Z1oCFpRajwcRTIKt+b3qUxwv81769hrMETQ+lS8ykIE3b9r+TTV/L9jchoNBXxDCJ5sw3WYR18syQ9UJCi/zbXaCLedpgiEXOMHr782UA2iGeWvbq1XKXJQSuFmVx4ZqMKVrwIJK6BGwJ6lipoRT0veItRiiVSX2D0DMKWK+Pt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747132946; c=relaxed/simple;
-	bh=pSmfcyWrGiF4xpTJTeN86T0ysr03H5rq6eBj1nDatnc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ClgIdAktwDtWxt8bIMDp92+3pscUenrXeGY86E8BM9YFQOE0f21X24/BLZODYqS+pHRFkdTe6DQws/CTKRSw+K6B24ksu2Ar/apptm6R+CZNfgi1R25AvYrOTe/2kM04fHakLbTNvGTyQSd7yP7ZlnZwgSYR05mjsVN5VnsYDZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sd5Dcvc+; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1747132949; c=relaxed/simple;
+	bh=D7BFaN6Gc6SPGnvwqk3SshdNgmJRuNAQWzUgSNJfDXQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uwwRJ9qtGMOmosS0hZ/NaS0+SUylWGXxsUQt2WCahQ4ydzfZLbiAKLP6UArv48TJKYfqgeybdVMU42Zh/C55szaVve8j4Zy5suj3abmrX47GtYaI5SvlvfNFODjf/Hh5odQW5WNC6s4Hgr/Mw8rjv8pokPpnuxwNg8WCtl3f8gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MNnQeykN; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sd5Dcvc+"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cfe99f2a7so6618405e9.2
-        for <soc@lists.linux.dev>; Tue, 13 May 2025 03:42:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MNnQeykN"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-440668acbf3so2726855e9.0
+        for <soc@lists.linux.dev>; Tue, 13 May 2025 03:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747132943; x=1747737743; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yg1c07mHuEVEndX1mN4EPyk/YfVVe6WLz5FXdYEWUKk=;
-        b=sd5Dcvc+lIqaDLy9ThBpLRXiBY1bDLeXgFo2vnHxVpzhPepSJsA5jPJP6di44JTsX+
-         eNT7U/KPCH4/jgXZw0jvKzoJRwBwma1d/UIqWTBrknMD3+jQNwxiuB6FWnBNzWSndTtI
-         pyyU6A8I8W4K2nBSvCOVRUJoEhtlcIfvcr18YH0d4jtxDh6q7mS3OCpaZJfRoYCr0Xh2
-         VPDeN5mIvNDSZq40fNc+tCZPvZp5J2Uj5VN10GpTpVu795EeOFUIViKdQ2iteh6OZd8y
-         vTdWEhebJ9SjEca2/6+KxJ3W3+x6OGVVzXCcckdk5Gyhs0+fCeT4eS37EFqVHb7/1Voh
-         rESA==
+        d=linaro.org; s=google; t=1747132946; x=1747737746; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xRAq4ALgPaeQIqebqipJbrANRQd/TsurkWOFmFAlemA=;
+        b=MNnQeykNnpxZDZsQsfmXspgvcK/XbIg58KdmzcBzlaSfVEBV8pvtf9e/fGP79r/4QK
+         9KHFoAJ30AdRTZ+MCmLCcj3VE61ZsJy3tcQmEg8oVd9pBXc6d90AjBOjDItynbYr+BJR
+         PTSpXWPD0pWJlhfhyVdyYVr8ya/4Z/94kJakaOlD0IdwFeUxZ33PNeIAGYdRGMU7rZ6r
+         8lZnpHOzM321qfBN0x1QqpvTyxLi0ZiI+9goN9E5Hz4RBquYYmIb1YqlFPs3XuNSOrHq
+         doFS/PMgbrFX8y1Rfnag/1D9Y4M6hh54Ke3560jgQjlIB6X5BJrOU9nFnCiH5LU9SzDQ
+         ItUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747132943; x=1747737743;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yg1c07mHuEVEndX1mN4EPyk/YfVVe6WLz5FXdYEWUKk=;
-        b=kQGADCVxe+7cmcHTHIc/ro74jzSxbGvOKhImzuaZxQbmS5EZlb+9dNw/kvZCI+hBHB
-         DrbJB5CX3+eTUsSHTyhnRdyAdjUWMijo2gJ/GRwmriFTPoOJl+3m+pxlqNZEUdwXsZCD
-         1J6K5uBwrPjOYL8b2Pu7/NAgsrewOnBHXWE0esY2aEweBoZgCXaTjDep7QKZ2TnDta3K
-         ow1z6ulVxsuc35gfmBiPrcoWXBf6dExRoJdERKxzRs9FtbbgHLgRNcLxJcnu7tOJRzJE
-         CtBsBorh60wvZ691iFprwUL2xZsIvS0uAyt7+GDDWgffPMc989f3vDkxXF+o/eWWYWsK
-         UBGw==
-X-Forwarded-Encrypted: i=1; AJvYcCXnysLEZapcXKrmsrCdHCZ+1EqfnhE+jiadCGu5Bq7cnhvJpEP+n+4ToWPHWQLqmuWbAvk=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz9qdT02QJsvDtr0E6amoKEldI+EZ2Bt4RsirxDAYpqpU+KrYym
-	bL7QNoYrA//FTPhM4nW3EEvC0REbNQJqU8OOZJvBHurjvcDo48n2266t/Rkw9w4=
-X-Gm-Gg: ASbGncuWZAZkmgC/fjsWMtDcpXfY3qR8x4jNtryuNrlPQE8uoRtvDx/jP7kmlwJ3Fyi
-	oq8w+iczwNWT2eDumne7Zh2iOIGzFWyk03NqHxum3ZHGROGIDvFuk3BAYtA7N7Ve5Qu/bSCvXbE
-	BLH5rgZ+apRL6szen2fvZ/i6rVduy2xNwmEgKmu5y+H27Eb9cZ7x5F88ck6YK4xxmoNXrKKsgjY
-	6FkJpghvUAtYKRcFgKH3Bw6A3DxEjvw3QTk2E2Sf+5HFREUdyJiVj44fPa0llYxk5tLtPSmtiHF
-	inDmehhAw1z5gRym2BeC/sGG3Q2N0D2tVCWvqJ35Az/2aT9AhtCYGpktLrjVZ2wW2fMczSoOhOr
-	6qfE6DiAPH7c28yCQ/FhZUan5Pm/d2gQkdAERlP4=
-X-Google-Smtp-Source: AGHT+IFoNiPxCt+CMN4614Hku32Rt1pWZtS1Ab8LgzEA8q/WGFVYaj4V1uUDGQcXU9uLbt/oeGpLVg==
-X-Received: by 2002:a5d:648f:0:b0:3a0:ba77:fde with SMTP id ffacd0b85a97d-3a1f64589camr4267133f8f.8.1747132942873;
-        Tue, 13 May 2025 03:42:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747132946; x=1747737746;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xRAq4ALgPaeQIqebqipJbrANRQd/TsurkWOFmFAlemA=;
+        b=Mpjil7JfhZXLH/YB3Qs6RxkuBkIoPxVM0GKKU+0+PnjrLesnaQFUOADNRbJrExayAv
+         gnXOEjRBF5q5eM47yVyAXPPYyvbzWb7KQocs4qny0L1pNlkv62kmjaxdTmjt1B/doQhL
+         GhjkDZD3MwJm/bqbXi/6d5PbgrnXO7tqib56+vnXZ+AKwMVgg55HqUfjIcaeW4T711bF
+         FgmsEpEg4Znz6iAoGOfIyrkAjy6YL1CYr8IJoqN0WMn68jlc7Tmij8WMvMOrDFSiPQfj
+         jFKQZxMFDaTz0OW7eY4dZxfn9XgIOYOcXRbVQdda1Inhc3cdPASESIogWTStR+jQw95S
+         72Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCWjI4GQ4g/l6GFzCYadMOaYCE5BbsHl0SAg7gtGstO3ycL5vBuHzmUkPzPnAvBX7EjZPxE=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwTRPDepZ1BqKqRGAnhxo3X47iYHIUgXHHhaMHlQhN1vpxN82eK
+	S+JPIPh31uyk0L2uiwffrTxvyi6nue5tAjZ3M3YF8LkpbtpAZMKE9G7m0b+B0NU=
+X-Gm-Gg: ASbGnctMBA3Tj4ixrfNP9tQIChO0dL+PeBCXZkYMEgWG09+mAC7qEmg5C3G0Xh/9PCx
+	Uo9Db9SbSlxqsQsNhOzpghpIh3ioo1meoT00BdZPT5ZfeTlU5J2YcE1Z/a25tz4K4SHVJGnCFFo
+	YaXB6GTKKGp1mSpL3cqsaZ2yuxSqCXQE0IdieumKx1eJ5CfmiuAEnG2yDk3OOIza5fAjVkKNJ5g
+	QIp84ZJ9SNOm7ieVcHyUCEESypKsmfbFoZ2Oz/RP1sX5PhXoMaF8OPONX8KKniDwC7z5wldM6c9
+	HnzSnVYPwlulYdwPlkm9tLhPQixaKd0HWz0TbsAJVsDI4HYXKIG1ZopF4O49RWktWmmW9uW5V81
+	wv6U9ejMAtSN9CNbHUWwyrdGYUycBhUPKAmniKfI=
+X-Google-Smtp-Source: AGHT+IHNVUCjFg7HrwuiKvG5+jPLvxkbHOntgjhYx8tbn11qUKDZNDS/EyFDT0F94zfQs0ixdCFIPQ==
+X-Received: by 2002:a05:600c:3b95:b0:43d:fa5d:2675 with SMTP id 5b1f17b1804b1-442d6de96b1mr49643205e9.9.1747132945724;
+        Tue, 13 May 2025 03:42:25 -0700 (PDT)
 Received: from kuoka.c.hoisthospitality.com (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d687ae10sm161002435e9.37.2025.05.13.03.42.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d687ae10sm161002435e9.37.2025.05.13.03.42.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 03:42:22 -0700 (PDT)
+        Tue, 13 May 2025 03:42:25 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@lists.linux.dev
@@ -64,29 +66,31 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/3] arm64: dts: Cleanup DTS for v6.16
-Date: Tue, 13 May 2025 12:42:15 +0200
-Message-ID: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/3] ARM: dts: VT8500 for v6.16
+Date: Tue, 13 May 2025 12:42:16 +0200
+Message-ID: <20250513104216.25803-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
+References: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1132; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=pSmfcyWrGiF4xpTJTeN86T0ysr03H5rq6eBj1nDatnc=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoIyII5bO9UDNY2UW41YhzGm3W79e2lPorMhsUM
- 8laVWkGUX6JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaCMiCAAKCRDBN2bmhouD
- 18KQD/9duw6hJzlxO6+orDMVLJW8i9K8mDq48xhYYD9+R3ihDIi4P0VwpwYzTj1V9UGm62DpLQ1
- TbVa4C+bY6Kbs9ZzECfRFcJjHsowemsuuxSTB3juYMXN6gtZmrplovDL+vSRZqtlr1kKQ8dTYB3
- Lk2QQ1SPFsBxsAghduP0jhgtecoLh/BfM0piYXXhL2LtYaOV/ZYQVL3USecXb5gdEbBmcW8Dh4+
- QOhSl2NTx4cKibXliq18QZa74cDUdPVOFyoJp54xu2YdlQAUTSodJs9hzZAAg+0kKOTKZisvzaQ
- xI1Kvn16BVz2c2vAdkEDj4ldOk8MD7o5eHN0/uiZiRACZBducpnUW1fvBWGKvMlXJ6zBOmGaygf
- DNrXGI4m/sDJKfV0YVSDH+lnWexQk6cn+3tL/kS+Nr9+xmVPEKOVry3kqlpfbPDMOW7c4XJPulJ
- bdKm4tMUQIyxja3vOvsZbH5m5D/JLzlC5y9wEm8gqpPkS3GmCIgHf/5fOMe5W1LJbDAEnpIS6lo
- akRuP1GMrDwesERkU7c50LPyO95SMWPIN8PFIaAiBroR326pTIAg9tugvdEoGW+dRj3Cov0JxN5
- 8zMa/TlEt+HKeOBQdScbgr+b1yl2z3r1ODgttSs8vbjqMDv2hUqUDPoOfuTAQ8UCI0qyC8Q7PcB JLuiWgou0/eQqdg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1740; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=D7BFaN6Gc6SPGnvwqk3SshdNgmJRuNAQWzUgSNJfDXQ=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoIyIJbw7VpDum2ZoNWQ6N9G3/MtLdNmncQjeRC
+ +5gwhHHQPOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaCMiCQAKCRDBN2bmhouD
+ 1/FRD/9SHJs9/n0riKbtCAfMiWIEwmA4nkcIEyt0wmgoXKAA4tj3QchnLVYdRKfIRiqOOGb1KIL
+ Bwo97js2G9shOs4KPah8nLqeR1NipSDjYmU6UiC9+xtrAhYpXpbLl/+yt2sLQ6FupbUx9h2ZGI4
+ fPX7h6IS1C7P/akWY8j+zRaQRdRQuzmK/6eJoyZ7ViR4lKVxfQo8TBC8dAt5wrRjIDcSqb5GTLy
+ XikLvqMu34/Ixux7rewqwHbvfh5dTV2+vjr0Crv4GbgqUqPv9XxmzFDUufw9HCCSrPVonr/qunm
+ eOHuNs4G69RPr12zqzOuUICTVKLCGKV5P07FqddQHB5L9emq+bnNyxBKWLuB+tuLBz+yGCVWLPC
+ k65sr+ji9vaUzX4lKlpkberXue67j6q2VikoJRIExYwFd5OnMlF8/pGWfbvwQvTRWUzSZ3b5ueP
+ 5Ugu0kwY3kghbgAp4MW6zxxhRbGAyqjEJehnmX0VIff2lCx3HhVK8JoH/kow7qSWCMBpMzzDPZl
+ K2lEXzOK6P4KI6UFpEzBYBxH6AA+GqY93xX2T0QyqSYG5IFv34UV8GeP/DSZJkZkMz56E5wlT8W
+ zqIrU5u9wcEFgSb8p2JDP4FVY546IsNnP+P5uyiCTV7EVSsPkozLaepUZcBX32KbVRjnquZ/cgW W1BSJZOl6iMJ3xw==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
@@ -96,23 +100,35 @@ The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.16
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-vt8500-6.16
 
-for you to fetch changes up to 04e7638dd64af20e4e81b7569abea9673e337098:
+for you to fetch changes up to e58afb3e1f365badd69aad6f0d53a2c66a63f689:
 
-  arm64: tegra: tegra210-p2894: Align GPIO hog node name with preferred style (2025-05-05 21:22:25 +0200)
-
-----------------------------------------------------------------
-Minor improvements in ARM64 DTS for v6.16
-
-Two cleanups which were missed on mailing lists - align GPIO node names
-with DT bindings for Mediatek mt7622 and Nvidia Tegra210-p2894.
+  ARM: dts: vt8500: list all four timer interrupts (2025-05-12 08:35:24 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      arm64: dts: mediatek: mt7622: Align GPIO hog name with bindings
-      arm64: tegra: tegra210-p2894: Align GPIO hog node name with preferred style
+VT8500 DTS ARM changes for v6.16
 
- arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 2 +-
- arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+1. New board: VIA APC Rock/Paper.
+2. Add SCC ID register/socinfo node.
+3. List all timer interrupts.
+
+----------------------------------------------------------------
+Alexey Charkov (4):
+      dt-bindings: arm: vt8500: Add VIA APC Rock/Paper boards
+      ARM: dts: vt8500: Add VIA APC Rock/Paper board
+      ARM: dts: vt8500: add DT nodes for the system config ID register
+      ARM: dts: vt8500: list all four timer interrupts
+
+ Documentation/devicetree/bindings/arm/vt8500.yaml | 10 +++++++---
+ arch/arm/boot/dts/vt8500/Makefile                 |  3 ++-
+ arch/arm/boot/dts/vt8500/vt8500.dtsi              |  7 ++++++-
+ arch/arm/boot/dts/vt8500/wm8505.dtsi              |  7 ++++++-
+ arch/arm/boot/dts/vt8500/wm8650.dtsi              |  7 ++++++-
+ arch/arm/boot/dts/vt8500/wm8750.dtsi              |  7 ++++++-
+ arch/arm/boot/dts/vt8500/wm8850.dtsi              |  7 ++++++-
+ arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts      | 21 +++++++++++++++++++++
+ arch/arm/boot/dts/vt8500/wm8950.dtsi              | 11 +++++++++++
+ 9 files changed, 71 insertions(+), 9 deletions(-)
+ create mode 100644 arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts
+ create mode 100644 arch/arm/boot/dts/vt8500/wm8950.dtsi
