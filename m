@@ -1,61 +1,63 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA50D242936
-	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6644D244697
+	for <soc@lists.linux.dev>; Tue, 13 May 2025 10:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747131040; cv=none; b=ebZlzBMJvzG2Y6kjGe6KbiNla/zqOA77Q7uHmLn84Eu8J6iSOXFHDm+Fu2ijnhdKnqhJnhy7R0vOfHL2CCi6I05DZQuAsxfCQe/j8hkwVkQ8n/nZJyIOFQGB9+c8hR/mLzFEbreSONJTSOsSTGX7/CZ7WAN5TYdVtlYQ/pdFuMI=
+	t=1747131042; cv=none; b=mIh6R7b1JVVZRMeO5QyVcsF+jqCiU56D7mZKOCg+ohl9oOSa33KDoXC0MraKGneB9VMWn00ztfyaL5xDQtM2wf4Aw3dJcbNBRTA1K6tlo590/45MIDTSE8miRiHjdtMAWM8AwXKZP6C5qTF6rt05KR8myoHYLOt4AEH9fJvctbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747131040; c=relaxed/simple;
-	bh=S2iTrSKyId8Z4Fz+KFg97dcG4QI+SgeyYQ5rhg6W4Fk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mKqNkho+gvh+832YUht8BArgYrkpYU8uvenCcTfbvzQGLjqNK6TvHFgkXqJaQGxO230sTwgAt+iVXkTxsJh++FqJllZbXQZF7bxIdSccwFwUp5myJQJAH76hIRCDxVe6qaOc4ED8aJR2hZtTGSXw0Z+D3XLaxbOP4TGhV3YMRy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uykWL+yV; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1747131042; c=relaxed/simple;
+	bh=FV6lUS1VQZkp1LlugzR82qxxAdBsO/kVg1ZGJpHO5Ss=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ppHK/99BRcXpm9zVbTMMvPryCrMKWV/PodqzPh3tRkRqoh5Ddd7C1iSJ53sSXiiEPsGPUYNo/IR/hVB5bUNUckhknKwhCC8wk0/VH01e+5LM22uGadku5/nCYfkJxRooQXJveMVKhf4XSe6S9yKEPgLWu7I8aKG3oiBjZk1nTIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vt5kfuHg; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uykWL+yV"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-44069f5f3aaso2724515e9.2
-        for <soc@lists.linux.dev>; Tue, 13 May 2025 03:10:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vt5kfuHg"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf89f81c5so4652235e9.2
+        for <soc@lists.linux.dev>; Tue, 13 May 2025 03:10:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747131036; x=1747735836; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eT4RifiabCn3jNXGZ/1SUNp8XFTerXnwE9dw2ciCKO8=;
-        b=uykWL+yVtPQONOcKScObH//vQt2oiF8MGCjuM1xaKek5YIkak0PLrz0CMWxPJa172R
-         vvH4YRYIF4ZRdeKp+iWni1XZP8U+gQHUmCJtppvl31BIXNyaTtCdSB7US+XuQNP6X4f9
-         tlZIPYqenVG/JLE5e4Y1xZDYw+65imFYlmFUhoS6DmyIv/ZPuWd28OC+W0SXseJvZCeA
-         vwPHc8xXAJGg/v0n3bJ8/tz8bHHGtuZFkzLimYM3q/XvyHkh4Mf42hlUePXCp/C2b92i
-         w+udMrTJi+TvWVgC7OvC+xyfjFaY/y2OFsIRZmtt4XeFOoAI2y18GOdCfVHWzSB6ke8l
-         6+jw==
+        d=linaro.org; s=google; t=1747131039; x=1747735839; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8LDU3E7ugNL0CY6R17fTrojKGk0DUzjv1ic5ywPvNUA=;
+        b=vt5kfuHg3TADqzUBtqb2lP0pr/XIG4RsrJqEYXuEwi026EsWk4p5wOTo1TIdmZzAPM
+         SuoROAGiTeJ0kvvuLs9NJ27B36nme0N5HFeDCvnMVPqAx4cjSf+gOIBGH2DHY12zWRoa
+         J7yltyDQK/12iWPL31gILz37u+rZ0xz7FESIZTKGot9UwGpgpb4zFtu8w7CrPnn/R0eC
+         ErLO9KU8eweyjBVPjErByswjyeAt3GA/N7WOfkMFOw1ik6FVNd72ciAYmtcXL2lUsUn5
+         TIVk0i1GJlGQzNx0W1IFMTLXbihty6Wjf3z8gwMlgYzmObFz7VutVegURSseMiW283sb
+         VNOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747131036; x=1747735836;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eT4RifiabCn3jNXGZ/1SUNp8XFTerXnwE9dw2ciCKO8=;
-        b=NlbmQ6qeDwrZqDYSMQgxBNP9JvV0eFh1jCfsmrroTaMW2bBmPRCPrI+fN7jlNBP+Vh
-         U+kJ56oj7AmLgB6+yazdvk/YIoFIyIg05sEeX6KTxIXHTnrF61X9CztrT9Un7fQZcpw/
-         +3r98/XXUdj7inH0BqiMfoioKuDeKhw2wCTYz1FUS6CNuALaTdcCs2/FHfhAviMVHzwf
-         Doi9xaasYzrjOYW8qd5PAQlHYnRbrDVtYXGZWe5EkqtBxTgYRXS/PqwV2Kz99oYOaIOk
-         2rt2eyqheDMUWHF5WXfqHBVUh5KKe+PWD4phwZRbpqwBLKlIxR5e4hRFDRe3TkgBdDam
-         y8Ng==
-X-Forwarded-Encrypted: i=1; AJvYcCWP/6dh8jKRs59H2UvhOShxVwzXL9e6RjiSZxwxunz576w/o2bJ0iUkrrB+CksJ/nPvMQA=@lists.linux.dev
-X-Gm-Message-State: AOJu0YyNasgeViv3G3MRfENwwEgui4qc3Lqzqc1TuySvemitgP2Vzipl
-	r3yGWPR0wvaRk94te+i+Xtwb/nIrzj8RWFmfViS7wEmUCZUdG5qkg8lk3gC2/qM=
-X-Gm-Gg: ASbGncveRzjqhMDTIpQ2MM4C2gZoFmJUCJ27KOr927WvsyFLy2otFSY6Lymwb7EHl2u
-	1d1y5nfqa50JOffnVdNLnn941vLgctQ7RUE19cJbDK1LUe5cTgRca5PNPBCM0NSXctBkMfD0W8i
-	X5djyRwHxl6LItzRG/jkUQC4mwlt+Q+oT/x3p6ANVmbRBWc+W9IFzOBr3kkWtZCfMTIdyV1TYvA
-	tItVVlIiKKoWYZCKCz2f8l4iBC8BZcfGxGHGgTc4HSNuMxGa72fowXLT6Z7Qzwf9/MX1xV4Zqtg
-	xAgZ24gyL16XLcTuZMp/+6W/G16/EiTSNS+tIikSv7UHuarYEyOdqg0cUSDIAmLx+d/4d7TMixZ
-	x3Y8k4r4MIJbC2t34Z9Cb6+q3xv97nrA9iYFdQ5A=
-X-Google-Smtp-Source: AGHT+IEMONG7o+2qqLec3J40u8cxE5Hikn1gleQY4dduRgG1LUtg8CN8da8I9rkzzSsfliL822Q/Vw==
-X-Received: by 2002:a05:600c:4f43:b0:439:8294:2115 with SMTP id 5b1f17b1804b1-442d6de79b0mr53581305e9.8.1747131036030;
-        Tue, 13 May 2025 03:10:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747131039; x=1747735839;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8LDU3E7ugNL0CY6R17fTrojKGk0DUzjv1ic5ywPvNUA=;
+        b=DVIqzFfsu09M0CUQNWFnRZNUCgHMK+H1ldo1wRy0inl9A2Ee5cxD//7kAV3cc6iKLK
+         nqMAapbjb44csmNl55LHOZpoUh+cPWQXoJ2crJ4aIsGGhPhh6h0cTSmO51gKmAHtpQ+6
+         OrHEcOIs9AOq8Rp6Hr/VsUGyYSEUrfjmiY+CH0II4GS0g+7maGUN4BT1c56+MKAw9Scj
+         9vURlhEKk5phtCW2299aK2X/2qZPTHPcp/n0wtOJM5rrSM8BhVG8lfu7FcJepnNM+N5P
+         SXi1m8qAXKt7Mh/DhEbIafEGutGoLlOBQ9L/mXgW0j6aeCPTWfn2/5hxTSSY7RYERCFS
+         x7EA==
+X-Forwarded-Encrypted: i=1; AJvYcCVhqBtS7wrpaljvrWzrotBN4SwSG9icIX3vo+ew6QONOEiC+tQ7zrXq5Y7HnmUSuJrQWdE=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxv+5h+8Mq6vyclFYAib400P0Z+Es02sKhQN4kONEg3ABJSCNhr
+	qQuBxjMrSMz1yG7qEK0fhxuSLbwZJaXtb+2miPo5frlyEa5fdygcjv/ozbaSURQ=
+X-Gm-Gg: ASbGncvEbSFs5c0RwyXjG6hX4lTgotLU9GXEVO4dVAFPXomJEYaiOG2teZctX5Ytkar
+	1u0wZC/SC4fEJggpYTG8qnd5bu3iqpDXF86cv0FbAujDArpBjGdXT/9/z3rK/hC6kOgtQtmkCUP
+	m/4si78+sA11eclgw+DSk2eLDIIIm1AFthDmD5nXaSSngkc2DO8hEhyoamSTfvJD4n62xucX0sG
+	nY+4lIoeUZwexAMGVyfGKyXCF4xdGoGIgEVqJfiUd+d4vYlGVT6xQLZe+tZgNYAVebtGx38gwIS
+	u4Im05ykt3edT4LlmqnQH2l0luSz4ySCEwvP+IDrbvNRnv/nYQ6j9H9KLqveQKd5zP8JPWY/wRM
+	N2+apLhQb1aQpQNyxMYN/30kgF8LZJ2NoFNxsDHM=
+X-Google-Smtp-Source: AGHT+IHby+uH+9SrUe0Mcr5B37Co4treeOqApvNmT3ZzjxOsvuWSMZ2/x9YLsSi2DmbWlz1SlUQrbw==
+X-Received: by 2002:a05:600c:1c90:b0:43d:fa5e:50e6 with SMTP id 5b1f17b1804b1-442d6de97f0mr50703025e9.9.1747131038625;
+        Tue, 13 May 2025 03:10:38 -0700 (PDT)
 Received: from kuoka.c.hoisthospitality.com (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d67df574sm159683635e9.11.2025.05.13.03.10.34
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d67df574sm159683635e9.11.2025.05.13.03.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 03:10:35 -0700 (PDT)
+        Tue, 13 May 2025 03:10:38 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@lists.linux.dev
@@ -66,69 +68,57 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/4 fixes] samsung: drivers: fixes for v6.15
-Date: Tue, 13 May 2025 12:10:22 +0200
-Message-ID: <20250513101023.21552-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH PULL 3/4] ARM: dts: samsung: sp5v210-aries: Align wifi node name with bindings
+Date: Tue, 13 May 2025 12:10:24 +0200
+Message-ID: <20250513101023.21552-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250513101023.21552-5-krzysztof.kozlowski@linaro.org>
+References: <20250513101023.21552-5-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1359; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=S2iTrSKyId8Z4Fz+KFg97dcG4QI+SgeyYQ5rhg6W4Fk=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoIxqPmFvw4YlLZILw8ztH+LBScalD7xKqIX+Ch
- i/m/UIVK92JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaCMajwAKCRDBN2bmhouD
- 1/eqD/9MbCSa5fsTfL4M6Msdl6XVHg9QIaMp8B66liyP+bBooJn55w6uXhxdlwHF9ySGKC641F8
- 0Q1O0VRsta3YWmVqQswD9tO22ySzkEyzl0q4aKLWMuasrAHJcQcVIdgOQC0yNNJip17k1LvXj3Z
- UHxJULw7Td0SC9sdIVsYgteRyMVemT8dZK5zpNGPLwTN5oKFrDtiJgyDI24sFknyq745ownKXvX
- WZ2iukaUZ8tQIe2JiOy63Sc4OHe3Aqca4auvoJtF3k3o3+u0kO0wN4DeyNubrYXKjm2zgCTLP6F
- l0CyTXp6qLXSXc8FhOwM0TLdrJvfyYDSGsqI1FnXyGJ+xlZOKkZQ6WOKILmPVA4DqSbvIpPpXFZ
- PDq9RJBQt9ryi5c2neECV2UWcAEhvfuWf/A1M7g6MyKofT8qf9bWbAyCBDV1qlqWRm1HbWQmOF/
- IeEgAn4K3cl0l4xRZ9FuxhRxTk9peYXqenF/s+o4vnGHsewyHM8EAKzRbWejkywbwTHsE2Wj7s5
- qUHiYm79dBT3JNWbYJA3c71y65aW96Uz7nH/T33/sKRbmHDAnaFxvwzcOUl/y1ZDntKGKW+Wl6E
- E1u3eXEFPjrr1v+0gRTvgG1vGf8uFKkN+fZM9uBSQezJZCkwjVxr+Gv3ly/VRKhcIvnUjtLBrBK A/ZSg49r/gysgUA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=907; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=FV6lUS1VQZkp1LlugzR82qxxAdBsO/kVg1ZGJpHO5Ss=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoIxqREOlMZHUTEeB8rGJ1Gc38+QkgIxsOYpihB
+ PhNb4GFzH+JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaCMakQAKCRDBN2bmhouD
+ 133pEACOMqgFZZYU1knd0BczssaCxOXwa3oD5FfktfyjygqFRCU+/WCNPLPHgURFsa0Hdph5dcP
+ JdqF7642k+Zs7eid+yD15R7KnkgoSnoLxyVoTnvaqp+feC5HXpyqn16hFkXQgUdwgYOMDY68eFa
+ hYaeGheo32dCD0XdeHBBG4gruHd2lhofAaiBwAAM32+I8dcF1ps1TURLduOC6uD0YHrykUjeg6+
+ 0ttqgCx1Eem6RPzY+H/Ih9FWGYsgOira9T2NrTxIGzNHEyTQRaaSjvz5ytncrkcv/kWsXL/PWYI
+ dxJRaUUjFUZM4POvZXp9LVXijH+Nh+jZEK4rAsR+B4EdyVZxCZ/O6uv4Uxqrts2BEYFpTPaS3Kv
+ 4X7DniL1Mcs2cpw/N2wRa9kjaiuo0c9CrQXe6l+NwQ1mJ5CpHVj61IPvK+gP1hT/dbUeIFLuYNL
+ zrRtKPzqDY7MFOtgspDImw2QLvnavEPi3LeaTWpLmSP84u6uHGaAwjZrgXa9Dcw4x9TsOCUGSSP
+ kKNtoKqxj/ocKIaU9mBlGBiAgFWQoYIHqjLWQWdPgdM898/9xsIdJ9Esz5qD7HOEXyOLzkRbBtz
+ ZElPdomkvmpOSvlz8CGDOOfzixnJ8vHLi/fr3zSK9sJY4dcChhWTjDc0YNetEUCcAldWlRdwR1/ 4ub3HTmQFrpqPuw==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Recently DT bindings expect 'wifi' as node name:
 
-Please pull for current cycle. Both commits fix issues introduced in this merge
-window.
+  s5pv210-fascinate4g.dtb: wlan@1: $nodename:0: 'wlan@1' does not match '^wifi(@.*)?$'
 
-Best regards,
-Krzysztof
+Link: https://lore.kernel.org/r/20250424084655.105011-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/boot/dts/samsung/s5pv210-aries.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/arm/boot/dts/samsung/s5pv210-aries.dtsi b/arch/arm/boot/dts/samsung/s5pv210-aries.dtsi
+index f628d3660493..153514e80c9a 100644
+--- a/arch/arm/boot/dts/samsung/s5pv210-aries.dtsi
++++ b/arch/arm/boot/dts/samsung/s5pv210-aries.dtsi
+@@ -855,7 +855,7 @@ &sdhci1 {
+ 	assigned-clock-rates = <0>, <50000000>;
+ 	assigned-clock-parents = <&clocks MOUT_MPLL>;
+ 
+-	wlan@1 {
++	wifi@1 {
+ 		reg = <1>;
+ 		compatible = "brcm,bcm4329-fmac";
+ 		interrupt-parent = <&gph2>;
+-- 
+2.45.2
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-fixes-6.15
-
-for you to fetch changes up to dd303e021996a0e43963d852af8a3277e6f5ed88:
-
-  soc: samsung: usi: prevent wrong bits inversion during unconfiguring (2025-04-14 08:51:18 +0200)
-
-----------------------------------------------------------------
-Samsung SoC driver fixes for v6.15
-
-1. Exynos ACPM driver (used on Google GS101): Fix timeout due to missing
-   responses from the firmware part.
-
-2. Samsung USI (serial engines) driver: Correct ineffective
-   unconfiguring of the interface during probe removal.
-
-----------------------------------------------------------------
-Ivaylo Ivanov (1):
-      soc: samsung: usi: prevent wrong bits inversion during unconfiguring
-
-Tudor Ambarus (1):
-      firmware: exynos-acpm: check saved RX before bailing out on empty RX queue
-
- drivers/firmware/samsung/exynos-acpm.c | 44 +++++++++++++++++++++++-----------
- drivers/soc/samsung/exynos-usi.c       |  2 +-
- 2 files changed, 31 insertions(+), 15 deletions(-)
