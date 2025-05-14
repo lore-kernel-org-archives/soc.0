@@ -1,102 +1,236 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCEA4400
-	for <soc@lists.linux.dev>; Wed, 14 May 2025 04:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4BD20CCD9
+	for <soc@lists.linux.dev>; Wed, 14 May 2025 08:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747198128; cv=none; b=NYbSQWa2vLU6pSgDCcLyv/zoDI7+w+HvLXFVvIQ40bZR7sQTKwMpnsHMOaI0u7dnQ/2mR32e0PkAn5j2MaNZHAgM0Mkj5Ja77pb7F/xMyLY32WBd7O0+EJ7QRyJvW40K0N0ccktJz+Yfmx4Gc2UzkUYBptrVBveaARYFek0H6PY=
+	t=1747210122; cv=none; b=S0jDHEKywOwvIQM4oG5nRolwjk0VpaKe8p5XnL1gCWUqzMkYqC1LOFXPxwypudrN7/Ywb1EchCvKSe4trAzDmO08Q1RwRuqezFFCsVbJ+urcOx0HZfP78hcv3Ba2mZlWJsIpTnlsfKSg85JtCtTqn0pAC4RO8XKYtRvuBRxveHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747198128; c=relaxed/simple;
-	bh=GxaUcFGYaz+B0AiRsGQ/HWk9RekqZ44abVdxA5e2Lsg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=X5/Xh+mrchi7zX1uwnGp5G5rRg19lysb4uh40ZwRwMFcIm0mirpN2Fdn/J+C/DGlCXrNAHY7dD2k2noOhIcdGeiUXxgm5yfs1WY0QlH0uNxoMLUIaIawaQskL5+QYC5H3bGuJZTttEzLCmVS+x/KIXhFVfNNIDbCqHPA1uA68jM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747210122; c=relaxed/simple;
+	bh=3iw0vx7AIT2wlzPokwDnRY5c+iOCJC9NuNU2SCSpKxs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=AM3iHPvjSwVwtPceR0Qq3NXhJ5fxPn6vmUK9v/nZam0KU9a0SBEC8n6iaroMyLKee8Ph8el1Bsc2hFZEZXzdk/LVUurI5z/6sDgeqxUOfeVDEm9ZxfS9RQk6/m+0SywDYz6r1pMS6A+4XEbfYgQ9exMTj6VcLvRPGq0Z94kVQzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=j8lRNJgD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a7lnlvvB; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="j8lRNJgD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a7lnlvvB"
 Received: by smtp.kernel.org (Postfix)
-	id 167D6C4CEEF; Wed, 14 May 2025 04:48:48 +0000 (UTC)
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	id 234A6C4CEEB; Wed, 14 May 2025 08:08:42 +0000 (UTC)
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3948FC4CEED
-	for <soc@kernel.org>; Wed, 14 May 2025 04:48:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3948FC4CEED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [116.232.18.143])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id C761234348B;
-	Wed, 14 May 2025 04:48:45 +0000 (UTC)
-Date: Wed, 14 May 2025 04:48:41 +0000
-From: Yixun Lan <dlan@gentoo.org>
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: spacemit@lists.linux.dev, linux-riscv@lists.infradead.org
-Subject: [GIT PULL] RISC-V SpacemiT Devicetrees for v6.16
-Message-ID: <20250514044841-GYA524674@gentoo>
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C462C4CEE9
+	for <soc@kernel.org>; Wed, 14 May 2025 08:08:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C462C4CEE9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 5588113801E0;
+	Wed, 14 May 2025 04:08:38 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Wed, 14 May 2025 04:08:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1747210118; x=1747296518; bh=8k
+	HsaoCbnmz2MgVuxSTzK+1NmqxlS+HUS7BsLkQjvdo=; b=j8lRNJgDrN6R1Q14nZ
+	EVc593KlChl0krY9iCnvyayMu8QEFJyBiKo4h4DEGdOQHCs7I7W6fRMUHYaAnPtw
+	6TJALqVmKaNgsx8UXbOWvYlwgLfX179vpGHp+Wu6SthRruaFoE7oiqtv4PuGm2sc
+	D05w96tfxjL6c4XcDjbXXiiSJbfuYNjsORI6OKEd94Ahdy/ArvW5l+4eHBJudV7X
+	nX01GlOoQpvfK82Zw///vhIFV9jIp4V9MvVaF1xx4CmLOkpPiBe7MK3FfpcXVPzX
+	+OS30VRa+9sLwe/Oou4A7RhF7L3VNvbE1WbAofHi5gGCu+2n2fxuoUNJdeqsSLUQ
+	5m8w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1747210118; x=1747296518; bh=8kHsaoCbnmz2MgVuxSTzK+1Nmqxl
+	S+HUS7BsLkQjvdo=; b=a7lnlvvBAMzsWQ/9vZx+QqCKA150lWqlZOWwwQ2gfauz
+	RJMDo67lksD4cuEgAE/os45cUDk4gmwIPihQzBu2ZDYgbJ8Ptmsbk598ucc1T5I1
+	kzkmEXeQvZo8g1YwwJMmfLOIthfmqF6pNv5lde8n42UBeprmJ5vCnvhQVCFxEzdL
+	x0kr4tYTZ4pET0vlRVnTTCG1lEhVPEg25jXUgmoUin7UC0p4iohN/KLmcR/zygW6
+	XL42cpCw1JVQVtkkV2XuAjDUr2842ybrSM/mXZp3yn7xuD055/GvBR5pUsCAc2br
+	xVuwhnecVHViPq/XtbXKWWS/+YJa1IkxX/gbqEYY2g==
+X-ME-Sender: <xms:hU8kaNtOZaBO3FOFNuYklBiVq28n3MTZUiaLV-m9OkB4vKxjV3W9jA>
+    <xme:hU8kaGdx1TMerLYngZFPBNdsYDk8gohM_5T90xnS4OIJdZTJ5cu87t2UdDB4ndFuB
+    ZiU7kejN72rNhFjh9A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdeigeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkffutgfgsehtqhertdertdej
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepjefhgfeugfdvvdegffeifefgleefkeehjeefteei
+    ieelvdelgeelkefhtdehtdehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhith
+    hhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtohepshhotgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    ohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtph
+    htthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggr
+    ugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrgh
+X-ME-Proxy: <xmx:hk8kaAwrGKqL2Q85bsl2nnDya_gNM7BUYD6iFTzSMPb-ImFqWsbQ_Q>
+    <xmx:hk8kaEOI6n7Hx_5g0gsa21Bo5rycuyTb7z6gzsVtcSVJy31QV1UjIA>
+    <xmx:hk8kaN_6T7RfTlhJb45vbVBsEcZiCxoIEXtQMZG9neCZeVZxPkRpQA>
+    <xmx:hk8kaEXH7MnZEMY4hdO1bsM28qq6nOZdX38u_U5hMBXXFz5PfZtDlA>
+    <xmx:hk8kaMelvn8oBydj7daLjhraacgjohhERTLNI79EPyS2ZvlcqZQnRvxb>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E42701C20068; Wed, 14 May 2025 04:08:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Date: Wed, 14 May 2025 10:07:54 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <660e30e8-7ae7-4a55-a136-9b0aa4e5ad0b@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 6.15, part 2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+The following changes since commit 2ef5c66cba6171feab05e62e1b22df970b238=
+544:
 
-  Please pull SpacemiT's device tree changes for v6.16, thanks
-
-  Please note, there are clock dt-binding dependencies which also included 
-in this PR, they are exactly same commits (same hash) which already queued
-at clock's tree[1].
-
-  Let me know if this works for you.
-
-Link: https://lore.kernel.org/all/a28e4eca6e2a9522cb8e707845a9117b@kernel.org/ [1]
-
-Yixun Lan (dlan)
-
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+  arm64: dts: st: Use 128kB size for aliased GIC400 register access on s=
+tm32mp23 SoCs (2025-04-29 18:16:28 +0200)
 
 are available in the Git repository at:
 
-  https://github.com/spacemit-com/linux tags/spacemit-dt-for-6.16-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-f=
+ixes-6.15-2
 
-for you to fetch changes up to 3aa64cd126b4fd298ba5d28227ea3f82cd6f541c:
+for you to fetch changes up to 15eaaa71e8ef142b122942b35653d513cfb90050:
 
-  riscv: dts: spacemit: add gpio LED for system heartbeat (2025-05-14 11:43:59 +0800)
-
-----------------------------------------------------------------
-RISC-V SpacemiT DT changes for 6.16
-
-- Add clock driver, fix for pinctrl/uart
-- Add gpio support, enable LED heartbeat
+  Merge tag 'imx-fixes-6.15-2' of https://git.kernel.org/pub/scm/linux/k=
+ernel/git/shawnguo/linux into arm/fixes (2025-05-10 11:10:38 +0200)
 
 ----------------------------------------------------------------
-Haylen Chu (3):
-      dt-bindings: soc: spacemit: Add spacemit,k1-syscon
-      dt-bindings: clock: spacemit: Add spacemit,k1-pll
-      riscv: dts: spacemit: Add clock tree for SpacemiT K1
+soc: fixes for 6.15, part 2
 
-Yixun Lan (5):
-      Merge tag 'spacemit-clk-binding-for-6.16' of https://github.com/spacemit-com/linux into spacemit-dt-for-6.16
-      riscv: dts: spacemit: Acquire clocks for pinctrl
-      riscv: dts: spacemit: Acquire clocks for UART
-      riscv: dts: spacemit: add gpio support for K1 SoC
-      riscv: dts: spacemit: add gpio LED for system heartbeat
+These all address issues in devicetree files:
 
- .../devicetree/bindings/clock/spacemit,k1-pll.yaml |  50 +++++
- .../bindings/soc/spacemit/spacemit,k1-syscon.yaml  |  80 +++++++
- arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts    |  11 +
- arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi       |   3 +
- arch/riscv/boot/dts/spacemit/k1.dtsi               | 132 ++++++++++-
- include/dt-bindings/clock/spacemit,k1-syscon.h     | 247 +++++++++++++++++++++
- 6 files changed, 514 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/spacemit,k1-pll.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-syscon.yaml
- create mode 100644 include/dt-bindings/clock/spacemit,k1-syscon.h
+- The Rockchip rk3588j are now limited the same way as the vendor
+  kernel, to allow room for the industrial-grade temperature
+  ranges.
+
+- Seven more Rockchip fixes address minor issues with
+  specific boards
+
+- Invalid clk controller references in multiple amlogic
+  chips, plus one accidentally disabled audio on clock
+
+- Two devicetree fixes for i.MX8MP boards, both for incorrect
+  regulator settings
+
+- A power domain change for apple laptop touchbar, fixing
+  suspend/resume problems
+
+- An incorrect DMA controller setting for sophgo cv18xx
+  chips
+
+----------------------------------------------------------------
+Ahmad Fatoum (1):
+      arm64: dts: imx8mp: use 800MHz NoC OPP for nominal drive mode
+
+Arnd Bergmann (5):
+      Merge tag 'v6.15-rockchip-dtsfixes1' of https://git.kernel.org/pub=
+/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+      Merge tag 'amlogic-fixes-for-v6.15' of https://git.kernel.org/pub/=
+scm/linux/kernel/git/amlogic/linux into arm/fixes
+      Merge tag 'riscv-sophgo-dt-fixes-for-v6.15-rc1' of https://github.=
+com/sophgo/linux into arm/fixes
+      Merge tag 'asahi-soc-fixes-6.15' of https://github.com/AsahiLinux/=
+linux into arm/fixes
+      Merge tag 'imx-fixes-6.15-2' of https://git.kernel.org/pub/scm/lin=
+ux/kernel/git/shawnguo/linux into arm/fixes
+
+Asahi Lina (1):
+      mailmap: Update email for Asahi Lina
+
+Christian Hewitt (1):
+      arm64: dts: amlogic: dreambox: fix missing clkc_audio node
+
+Dragan Simic (1):
+      arm64: dts: rockchip: Remove overdrive-mode OPPs from RK3588J SoC =
+dtsi
+
+Himanshu Bhavani (1):
+      arm64: dts: imx8mp-var-som: Fix LDO5 shutdown causing SD card time=
+out
+
+Janne Grunau (1):
+      arm64: dts: apple: touchbar: Mark ps_dispdfr_be as always-on
+
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: Align wifi node name with bindings in CB2
+
+Martin Blumenstingl (4):
+      ARM: dts: amlogic: meson8: fix reference to unknown/untested PWM c=
+lock
+      ARM: dts: amlogic: meson8b: fix reference to unknown/untested PWM =
+clock
+      arm64: dts: amlogic: gx: fix reference to unknown/untested PWM clo=
+ck
+      arm64: dts: amlogic: g12: fix reference to unknown/untested PWM cl=
+ock
+
+Nicolas Frattaroli (1):
+      arm64: dts: rockchip: fix Sige5 RTC interrupt pin
+
+Rob Herring (Arm) (3):
+      arm64: dts: rockchip: Use "regulator-fixed" for btreg on px30-engi=
+cam for vcc3v3-btreg
+      arm64: dts: rockchip: Fix mmc-pwrseq clock name on rock-pi-4
+      arm64: dts: amazon: Fix simple-bus node name schema warnings
+
+Sam Edwards (1):
+      arm64: dts: rockchip: Allow Turing RK1 cooling fan to spin down
+
+Tom Vincent (1):
+      arm64: dts: rockchip: Assign RT5616 MCLK rate on rk3588-friendlyel=
+ec-cm3588
+
+Uwe Kleine-K=C3=B6nig (1):
+      arm64: dts: rockchip: Add pinmuxing for eMMC on QNAP TS433
+
+Wolfram Sang (1):
+      MAINTAINERS: delete email for Shiraz Hashim
+
+Ze Huang (1):
+      riscv: dts: sophgo: fix DMA data-width configuration for CV18xx
+
+ .mailmap                                           |  1 +
+ MAINTAINERS                                        |  1 -
+ arch/arm/boot/dts/amlogic/meson8.dtsi              |  6 +--
+ arch/arm/boot/dts/amlogic/meson8b.dtsi             |  6 +--
+ arch/arm64/boot/dts/amazon/alpine-v2.dtsi          |  2 +-
+ arch/arm64/boot/dts/amazon/alpine-v3.dtsi          |  2 +-
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  6 +--
+ .../boot/dts/amlogic/meson-g12b-dreambox.dtsi      |  4 ++
+ arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi        |  6 +--
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         |  6 +--
+ arch/arm64/boot/dts/apple/t8103-j293.dts           | 10 ++++
+ arch/arm64/boot/dts/apple/t8112-j493.dts           | 10 ++++
+ arch/arm64/boot/dts/freescale/imx8mp-nominal.dtsi  |  2 +
+ arch/arm64/boot/dts/freescale/imx8mp-var-som.dtsi  | 12 ++++-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  6 +++
+ .../boot/dts/rockchip/px30-engicam-common.dtsi     |  3 +-
+ .../boot/dts/rockchip/px30-engicam-ctouch2.dtsi    |  2 +-
+ .../rockchip/px30-engicam-px30-core-edimm2.2.dts   |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi |  2 +-
+ .../boot/dts/rockchip/rk3566-bigtreetech-cb2.dtsi  |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts |  2 +
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts      |  2 +-
+ .../dts/rockchip/rk3588-friendlyelec-cm3588.dtsi   |  4 ++
+ .../arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi |  2 +
+ arch/arm64/boot/dts/rockchip/rk3588j.dtsi          | 53 +++++++--------=
+-------
+ arch/riscv/boot/dts/sophgo/cv18xx.dtsi             |  2 +-
+ 26 files changed, 93 insertions(+), 63 deletions(-)
