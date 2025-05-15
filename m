@@ -1,174 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567C81C27
-	for <soc@lists.linux.dev>; Thu, 15 May 2025 06:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20601218821
+	for <soc@lists.linux.dev>; Thu, 15 May 2025 15:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747291569; cv=none; b=qxincMe7JmJlwLExB0ZE9wEWlhDsOKCNYDbj/qr0lr+w91Bx5MEXGnU9WROeFq0BzPBXC3ANhLDbXPpdqc3dHpoxuml/FgbWqT/SO85SzKJCh4L0xYuJxZlwx2F7sGpPvtPG+6tw5uYPkmNRi95c5cgbKsokYtxWvAIEPI9sCww=
+	t=1747323716; cv=none; b=ObTDbM011aPB0GSaWjDoKv6ems6VjqkWicm+88FMnMfNyWvvpw/4EfoaXkGEoXGxRocMc00Jw9hpJd+HW/4dp+Wa3zUMw2t0x9T+zHrJvfGI+zGvLSsMOMpkteGcc0iQwc9beLR4zLmyIBOfS9Q/HtekIiswYmkQIAaGgcgkZBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747291569; c=relaxed/simple;
-	bh=VD40nnz2Q3fEqp8Lf4pjdFXKaBfwG5zJtnxvZ1NMZ8A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aVJAwscDCOOD18SVP9QXs0SbOU7A6zkn7Ny/RsnS5THeYRJDLYfUBFlW6nCOCroab7BGT45gK65MJy0T2K+Btblac3wt52O7NVHbZrjaK4RHVC3kdgIkmtl0wXNlTt+iDBuNDcI1TkaYWrghNqPKs2ryU7tWCB+EcJsFQX2ZcEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=QQ/PQWjB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747323716; c=relaxed/simple;
+	bh=xV1dbMZK9MCyNkJXgITmp1T7PFqANkxmG/+ISQAZkBM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iiosYiuMukWTBS+34vbHQ7JPBBVUTCEOyA6Ibk5DsLDXH12YXeh+xd6sAuIoBOvMrElAoJoD6Ga55Ff27m7yi6soTJTEehYtTv5zhnJZ2XOMgyjeXmvjhp5FobZegJ4VWziMeGQk4yQH2CIfkf6DDUBo1SAhAOiR8D0NVvRA+sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g/QvkcMQ; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="QQ/PQWjB"
-Received: by smtp.kernel.org (Postfix)
-	id E3CE5C4CEE7; Thu, 15 May 2025 06:46:08 +0000 (UTC)
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0EB8CC4CEED
-	for <soc@kernel.org>; Thu, 15 May 2025 06:46:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0EB8CC4CEED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g/QvkcMQ"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6f6e6ec07f0so11013106d6.3
+        for <soc@lists.linux.dev>; Thu, 15 May 2025 08:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1747291564;
-	bh=7nw+HlTIlWD8r897NZrPp+2GXXpiMojWhbPO2BFQqEk=;
-	h=From:Date:Subject:To:Cc;
-	b=QQ/PQWjB739jjeVEei2V30b5Iags/9SIVIOF3EF3ZhryDpZA77EaraxeaFnJZ/YMg
-	 GN/4r40ECPO8azyreGVV8p7Pf/0o2bGfpuSNtZyh86MCkEXkzbBTDtoGCsyg4XSrW7
-	 wFgsegBkQjtp7DKaRyZ2LJjq6klwgQCFzZkKG82CzmXsY/06ZLAtgBNDEDWll9Xwz9
-	 oCpTOEl+zUTYov3Yjcu03XH+9mDilvAVssA2A0glrFI8pCqg+5VYt7WDJqY98B5kbw
-	 nJn6OgUr8v5anTGlZOBabetJc47YjoynVrGo/j7snEjOcq0J3Tyy/qN8NptPmSn9MY
-	 s9eZMzqrM7S3Q==
-Received: from [127.0.1.1] (unknown [180.150.112.225])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 932297B9DE;
-	Thu, 15 May 2025 14:46:04 +0800 (AWST)
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-Date: Thu, 15 May 2025 16:15:54 +0930
-Subject: [PATCH] arm64: dts: nuvoton: Add pinctrl
+        d=gmail.com; s=20230601; t=1747323714; x=1747928514; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEHeE/LsGpP7MauSUuR1G6rmRo9uEtgsUB/PM7XoDEM=;
+        b=g/QvkcMQT9X4jMzHCLHNBs2SKE//El8yaQkBQk9Vfc7SgEzCAXiUeDwIJRGk1++JXv
+         Nnk7jITfp3QruALqfVKVo4wu4EBSd932uo8GBh1mlMOO9x//Pe1LbA813vIRtg9MoJJG
+         maZx17uCiGXw5fO8E8a2wHfQYhonwgORUUn6eC2VaGrSv7mVdtrNVmUBlqh3r9ncDzKa
+         2rdbSaoy/PwO4+fFIZjtH8eNxmKuVqz3xv5lSfIgz60QQ/CEGUfYli31zLkaFmATi40v
+         PXA23hqjfGdkvuxz188gMoU3wjrtcNQxsZgNpYiriTZ8ARxNjQ2bGNe02CZw5f9Akf1s
+         kzGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747323714; x=1747928514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zEHeE/LsGpP7MauSUuR1G6rmRo9uEtgsUB/PM7XoDEM=;
+        b=KtkjGgiN1VYzaPk/tscuuk1sfrAnv/GsZT5FfPob886BAPOy764kqKfRkfUb46f68k
+         PKzFMsLepsxCPSvHIIfHUDEWUIqzNdRAZs/YmOA9R/1d2318WeamxAbV+MSAxHHBnicm
+         pUULBx34Vv7FBZ9EWPiVMiw1qDT2fXFfpr1JnhRXZ7QudP2OIsRDasAxItFiFmJwW6sJ
+         EeyFACHNiiChboPX0q9hFFORtAEjMxszyr/wzcCKQRpNgRY//F8lU1rlud3K4fDYr1UV
+         uAbD+Fb7ehqNJ0UtSKY5Yv+vWsN2FiU0QFnDi6o2VnrcnxgUKRNaSM61MvbyunjyV7yM
+         HtUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUYAEroBd6+GjrFhRjEPdiZNIDfXcNAzXjVUN7GweVtiGPy1qSkXFqOYtOxUDZU6LvtqDo=@lists.linux.dev
+X-Gm-Message-State: AOJu0YweUTHfj2nfK1GiStB9FY9rOXQnKWZy7ZneQMxiqPlkwy6uwKN3
+	eOmVqd8xwoAkhTkiFK2KB/OrXQVqI/o09zQRB5mBISNoS72MvR0K++6J
+X-Gm-Gg: ASbGncvYevkIJgpXPnJnTHLEtrnRFb7mRd1uY9tt2709s2oqeW813wx45ko6tt7CmSq
+	umezCF8VJ2+vs0TlgVZMu7CSL9ShXlN6tHEIlX5gyhrtPDb22ZD5IiY72SxmpBCFk+xi6qiAw/U
+	F71b0H4S3Z4cI0jUS9oXomznwIJITJEhtiY0vzcBXpGj0QEi5jVpuVMBChvfe4lnE8l9UBZNmu6
+	U3CfOVqNNTowPEElD+M9MIh/FSgiMauGu7Jj7souH0bEALqg+w1pU2R7JNGC3vzbQ5KR54I0gZ/
+	qdzZXWt5bh6jm8qocnF8Enpa9m13KOqKjFHmxa60viRjH0UDHDlHhpvXYOFKTlHB
+X-Google-Smtp-Source: AGHT+IGDFyA8q8aqTgi49SZ0JI3d12lh/ntac+FRmn1YMbs2jnYtuoRsDMJOVw0+g1Nr6tlxa3g6Xw==
+X-Received: by 2002:a05:6214:d6f:b0:6f5:46b0:7d11 with SMTP id 6a1803df08f44-6f8b093a666mr2699706d6.36.1747323713728;
+        Thu, 15 May 2025 08:41:53 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:83e:4807:376c:1d4d])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87bec10c9f0sm95682241.1.2025.05.15.08.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 May 2025 08:41:53 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: arnd@kernel.org
+Cc: herbert@gondor.apana.org.au,
+	ebiggers@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	soc@lists.linux.dev,
+	Fabio Estevam <festevam@denx.de>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2] arm64: defconfig: Ensure CRYPTO_CHACHA20_NEON is selected
+Date: Thu, 15 May 2025 12:41:36 -0300
+Message-Id: <20250515154136.435685-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-nuvoton-arm64-dt-v1-1-25769b8c1509@codeconstruct.com.au>
-X-B4-Tracking: v=1; b=H4sIAKGNJWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDU0NT3bzSsvyS/DzdxKJcMxPdlBJdCxMLiyTjRKPkpDQjJaC2gqLUtMw
- KsJHRsbW1ADcTKkZiAAAA
-X-Change-ID: 20250515-nuvoton-arm64-dt-8488b3a2cbf2
-To: soc@kernel.org
-Cc: joel@jms.id.au
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3168;
- i=andrew@codeconstruct.com.au; h=from:subject:message-id;
- bh=Y0bfLmNmOx1b7BUYnb6TlVW6atDiFzqVHFmiCXcsWaw=;
- b=owGbwMvMwCG22PjiTL8dD5cxnlZLYshQ7V1hLL4g1k9D8XLjcvs+65M1Ps4cM1ZXPi6dso+VK
- 6fMUU+xo5SFQYyDQVZMkWVFoG3h3c2T4n8eyD4GM4eVCWQIAxenAEzkqz/DHx7pNr4p6Y1vLzXw
- XC3JZ7Quuux+xJX9jfTHxokLfsi9fcDwv4Y7uup+nheTQVTP3WA+xmtLIhn2nP608FyPgnBvzKs
- P7AA=
-X-Developer-Key: i=andrew@codeconstruct.com.au; a=openpgp;
- fpr=C0F5E25A7D30ECBBF3BE3CEC3B837651FC0D8CF4
+Content-Transfer-Encoding: 8bit
 
-From: "William A. Kennington III" <william@wkennington.com>
+From: Fabio Estevam <festevam@denx.de>
 
-This is critical to support multifunction pins shared between devices as
-well as generic GPIOs.
+Since commit 17ec3e71ba79 ("crypto: lib/Kconfig - Hide arch options from
+user"), the CRYPTO_CHACHA20_NEON option is no longer selected by default
+due to changes in how crypto library options are exposed and selected.
 
-Signed-off-by: William A. Kennington III <william@wkennington.com>
-Link: https://patch.msgid.link/20250416015902.2091251-1-william@wkennington.com
-Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+To restore the previous behavior and ensure CRYPTO_CHACHA20_NEON is
+enabled, explicitly select CONFIG_CRYPTO_CHACHA20 in the defconfig. This
+pulls in CRYPTO_LIB_CHACHA_INTERNAL and allows CRYPTO_CHACHA20_NEON to be
+selected automatically as before.
+
+Fixes: 17ec3e71ba79 ("crypto: lib/Kconfig - Hide arch options from user")
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Acked-by: Arnd Bergmann <arnd@arndb.de> 
 ---
-Hello SoC maintainers,
+Changes since v1:
+- Added Arnd's Acked-by.
+- Added soc@lists.linux.dev on Cc.
+ 
+ arch/arm64/configs/defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is the single accepted change in the BMC tree for the Nuvoton ARM64
-devicetrees (NPCM8XX) for v6.16. There were others on the lists but they
-were sent as independent series and caused conflicts. We'll leave those
-for next cycle when they're in better shape.
-
-Cheers,
-
-Andrew
----
- .../boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-index ecd171b2feba488b486cdc72708420fca6fc11c8..fead4dde590dfff3f7d28a47c2b883462a6e51eb 100644
---- a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-+++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-@@ -176,4 +176,69 @@ watchdog2: watchdog@a01c {
- 			};
- 		};
- 	};
-+
-+	pinctrl: pinctrl@f0010000 {
-+		compatible = "nuvoton,npcm845-pinctrl";
-+		ranges = <0x0 0x0 0xf0010000 0x8000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		nuvoton,sysgcr = <&gcr>;
-+		status = "okay";
-+		gpio0: gpio@f0010000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x0 0xB0>;
-+			interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 0 32>;
-+		};
-+		gpio1: gpio@f0011000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x1000 0xB0>;
-+			interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 32 32>;
-+		};
-+		gpio2: gpio@f0012000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x2000 0xB0>;
-+			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 64 32>;
-+		};
-+		gpio3: gpio@f0013000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x3000 0xB0>;
-+			interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 96 32>;
-+		};
-+		gpio4: gpio@f0014000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x4000 0xB0>;
-+			interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 128 32>;
-+		};
-+		gpio5: gpio@f0015000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x5000 0xB0>;
-+			interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 160 32>;
-+		};
-+		gpio6: gpio@f0016000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x6000 0xB0>;
-+			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 192 32>;
-+		};
-+		gpio7: gpio@f0017000 {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			reg = <0x7000 0xB0>;
-+			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
-+			gpio-ranges = <&pinctrl 0 224 32>;
-+		};
-+	};
- };
-
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250515-nuvoton-arm64-dt-8488b3a2cbf2
-
-Best regards,
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 04619fe7e22a..7856db7dcfca 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1723,11 +1723,11 @@ CONFIG_NLS_ISO8859_1=y
+ CONFIG_SECURITY=y
+ CONFIG_CRYPTO_USER=y
+ CONFIG_CRYPTO_BENCHMARK=m
++CONFIG_CRYPTO_CHACHA20=m
+ CONFIG_CRYPTO_ECHAINIV=y
+ CONFIG_CRYPTO_MICHAEL_MIC=m
+ CONFIG_CRYPTO_ANSI_CPRNG=y
+ CONFIG_CRYPTO_USER_API_RNG=m
+-CONFIG_CRYPTO_CHACHA20_NEON=m
+ CONFIG_CRYPTO_GHASH_ARM64_CE=y
+ CONFIG_CRYPTO_SHA1_ARM64_CE=y
+ CONFIG_CRYPTO_SHA512_ARM64_CE=m
 -- 
-Andrew Jeffery <andrew@codeconstruct.com.au>
+2.34.1
 
