@@ -1,98 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AB9182D2
-	for <soc@lists.linux.dev>; Fri, 16 May 2025 14:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F080D27D79F
+	for <soc@lists.linux.dev>; Fri, 16 May 2025 18:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747405915; cv=none; b=F17NyyC5nWavNv6FHv7gM2U5OYdw7YJVw5ERwIXMKrJ+wOlyge4hmuIXuCqdAbpCa7cxhPW+PNMPDTVcC+9GjcwnIdW9c49pTvhCJeuMIV+NyIX+at7i2dPiZs1EdnObIcgZ9qQKAaSXjIVsjgIlIhqJY6WhGOGxpQmOsFJ4OTo=
+	t=1747420263; cv=none; b=IBtWGxzHQPmifEl984AhdEwq2ot9F1JB201TBkLmNBjY6OIuP5f2Fx+DDoGEb+XnHUXEUbMYyxQM35bXsFY8h2uAtJJlv6EJzFuP0L8niD1xBN3b+FFikNTQhCG2TnQus8jbJdcVU7moPO5mC64JqiZmZyzycX1r69TxtzI5lpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747405915; c=relaxed/simple;
-	bh=EA3kgRIW/kXdotEASNSFBbWjcg5axE/TwNpcWRDM740=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G6qrWiyhJvaNECx4F3L4icD0D3uFSs9Dh9tnJZhLov382biWCKULU/VXrKjcbzyibFsM3q56ffmIcSu84v6qF7VBmENiTb5kwQHrL/kUeE0uIyw5LlLtVZBNtgaCe0YUJopeSe/uIlzboUraH4wdIFb6NUQGAtYJwnk7mZjrGUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pvloXY/Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747420263; c=relaxed/simple;
+	bh=E5HAH9f2vgQ7awdooyEeBJ8OA/ElHg+RECh6OV29pXk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ASj4zwixdBBMjFh9RVGhTxE+jCPedkN4/S4J99WsJIVuUDrFvMV0eSFGSgpp5Pkuu5bt4/7zgcDvfC1JLcBl7uwHZ6K63cxp1G3R7qGMDILTsarHwFeWsaD1j9LtY1U4xc23fQaEoocTZAz4WfXKRlCYHtDKrq6bbdBidkrUKgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=axXDsFxo; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pvloXY/Y"
-Received: by smtp.kernel.org (Postfix)
-	id B6D84C4CEED; Fri, 16 May 2025 14:31:54 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B84F8C4CEE4;
-	Fri, 16 May 2025 14:31:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B84F8C4CEE4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23D0943B63;
-	Fri, 16 May 2025 14:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1747405905;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7zJ0YMWeCxiz69RUpFjzpIYlW/9jMemkPNPbCPfYxVM=;
-	b=pvloXY/Yhu5p/KpjsQCONOIYpbm13sppl0IsaNP03tYfcBA9SqkZpImFghVveO75vAAEfT
-	8ivH6vk0Vm+F34axgEQBqCTqXfv8dx027EAVKRv8+RXayrmEJGH1Ks+XyjYewpsslQvHde
-	JCn/Bj7yGVhFqc/mzZ+UZy2+qlfM0auB1IqH4ruWwPUg42c6x1IE1+u9gCahD9pZQycSdM
-	+boJ2ftxNXzKwaL6Lu/TdkU3ypQG6Ek9XrRi7oBwnLTufMh1pBmh0pzMnk+Cn7oGcQGgz1
-	jtWfe4Ugosfd45V4HP0Lm2vaaHUaNvEt1kJGSIhjxpsDK3ns5yg4MOKoy0f08Q==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>, <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v6.16 (#1)
-Date: Fri, 16 May 2025 16:31:42 +0200
-Message-ID: <87tt5kpqy9.fsf@BLaptop.bootlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="axXDsFxo"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-87be2373596so615082241.1
+        for <soc@lists.linux.dev>; Fri, 16 May 2025 11:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747420261; x=1748025061; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LjIRRc3m/VAxY73bP0A+3mCsvKJgmOnqJyXLSLT8exU=;
+        b=axXDsFxoyd8ojI4i68E5CiR9UR3dRcKhbXOoXjPTpbKGdaBmD8A4bEw6HM3ory1JAu
+         S+RUH95gpXHPau+XchlmIafS8iMLIwTeQ9pbsMkK6acoTVj28WgvB6l0Nez3S/z7TI0d
+         Ts7JqGTLMhY85JvDTGjbA3rPI8mI18uJvSk9GHmuMHvjmM5fWsqW2HSq2U9Dg+xFuMyt
+         3UzWXc5G0EkeCt2GoRxZ7f6Fdp8DeiSyQKtvtt5oMH//3ammOkvYJ9h2d5EJnSzCYBFn
+         oLTLdu/FG6z2AW+VcMx/hc4HQC9aioan4RhUWcu3U5gbZaASf9gOV7pKD9OeInmykYO5
+         93iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747420261; x=1748025061;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LjIRRc3m/VAxY73bP0A+3mCsvKJgmOnqJyXLSLT8exU=;
+        b=w0nq7GM8nPWXgODsK1do9rkX4bvnfvnciKUp4oDYdBSeA/u2tPxrIXD1uIlZiNzEzY
+         2OdBBMOEynpdCJCaZX3jXXztHBtjbQ6P/YIqLNx3hjjdCXHZwalZuAYtOOnhnhq6M3K0
+         bBy+8vCuwylszL6khGDPajOsTJUJKShGSmXWCaInLtESTWhTOXCterIf+wsmpEsJrQOg
+         /4B/IiZCrwJMWJmWGOIcgr4m0O3JLZaWFgxhVmKTjqrk1lcEeVpK1aVwz5QiX4nUrowr
+         nm7NJLh7nJBVV0P2UDuRYzJNlvGwOOSfqY/1BS8TnE0tJ/nB2pIfLFzcTN+386x1tyj0
+         597w==
+X-Gm-Message-State: AOJu0Ywlpk6Hw8Nz2WNW2Mx4KQC+VJLnyh6tTRTR9BU7KfdTJ88Xk8+w
+	PcDx4sn5+suWREzzND8jGB0CpiOIaCjPYiBxRR43/kd6BoDvxvyfIrjvU0U2dA==
+X-Gm-Gg: ASbGncvtSL9k3kBWcxqMDy0MyEHRuQtwxaN9+9FHsFBkwkMSV4/IUSNaHOgRPBLTPa2
+	qKGpZm165aAM7K9w09lii+/0M+0qmRocub2j1oM9wCgMgkgjrVYNn1qBPqht/kieurbX+IkwyJm
+	L+JAqCGbZkX/ZnyQu5QmQZrOJWGPt1AMkOMLGi9MPsvdww1SB5GYeWyhLiWdVhIYsp5RcX4DN+9
+	a3Vo/7AZxxTghpXz2oS6g7hYYF6VZrsCalAfD2Xa0UitPrCI/EGwmPs0wQwnp3I9l+qRUv8IWzA
+	1OvDfnAwAdTYzR1HwLhoxq6F6gHXpho4YANo+xD1lvicaqUjm6f937KwvYs8QnCNUQ==
+X-Google-Smtp-Source: AGHT+IGP2sbYwMDlV+BPtSVT09uB94OWwAidwDuga4z6Yn2RSTFy2x8+4ClJoDXh6bPPZjOSVZIjSg==
+X-Received: by 2002:a05:6102:6c2:b0:4da:e719:e7f8 with SMTP id ada2fe7eead31-4e053d6333fmr5003602137.24.1747420260003;
+        Fri, 16 May 2025 11:31:00 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:93a1:94a9:517a:f69c])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87bec225c3bsm2119351241.29.2025.05.16.11.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 May 2025 11:30:59 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: arnd@arndb.de
+Cc: soc@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] MAINTAINERS: Add ARM64 defconfig to its section
+Date: Fri, 16 May 2025 15:30:35 -0300
+Message-Id: <20250516183035.685914-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefuddvleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteevffejteelkefhveetueeileethfekiefgvdetveevvdelgfdufedtgfeigeevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegrfeehmeelleehtdemvggttdefmeeiudehleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemrgefheemleelhedtmegvtgdtfeemieduheelpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsohgtsehkvghrnhgvlhdrohhrghdprhgtp
- hhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehsvggsrghsthhirghnrdhhvghsshgvlhgsrghrthhhsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhg
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Fabio Estevam <festevam@denx.de>
 
-Here is the first pull request for dt64 for mvebu for v6.16.
+Add arch/arm64/configs/defconfig to the ARM64 MAINTAINERS section so that
+changes to this file are automatically sent to the appropriate maintainers
+and mailing lists.
 
-Gregory
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 20e07e61a148..82bd864b1972 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1937,6 +1937,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+ F:	Documentation/process/maintainer-soc*.rst
+ F:	arch/arm/boot/dts/Makefile
+ F:	arch/arm64/boot/dts/Makefile
++F:	arch/arm64/configs/defconfig
+ 
+ ARM ARCHITECTED TIMER DRIVER
+ M:	Mark Rutland <mark.rutland@arm.com>
+-- 
+2.34.1
 
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt64-6.16-1
-
-for you to fetch changes up to 9179e4a26bf25722714afcdb6a1e632ad52e443b:
-
-  arm64: dts: marvell: Drop unused "pinctrl-names" (2025-04-14 16:32:17 +02=
-00)
-
-----------------------------------------------------------------
-mvebu dt64 for 6.16 (part 1)
-
-Clean up unused pinctrl-names in pca9555 nodes
-
-----------------------------------------------------------------
-Rob Herring (Arm) (1):
-      arm64: dts: marvell: Drop unused "pinctrl-names"
-
- arch/arm64/boot/dts/marvell/armada-7040-db.dts | 1 -
- arch/arm64/boot/dts/marvell/armada-8040-db.dts | 2 --
- arch/arm64/boot/dts/marvell/cn9130-db.dtsi     | 1 -
- 3 files changed, 4 deletions(-)
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
