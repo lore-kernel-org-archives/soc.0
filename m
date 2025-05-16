@@ -1,111 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A47013790B
-	for <soc@lists.linux.dev>; Fri, 16 May 2025 11:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127FF235069
+	for <soc@lists.linux.dev>; Fri, 16 May 2025 12:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747393303; cv=none; b=Oq1nr6qjEyK9tGrTgqjrQcRm/wSUxfKFSjbpLFPW5iocfDGm4RXOGXHmmlzRbW/4YYHsZqIwO6Y5xeZYVuOUJdoH+fxAeFQLia04QuGPoGTnZ4EmenDAfrlOsjD2kpFWOHOVr10XrITr6+wqmRQsMd1DVoCNMetA2JP1gZ56kPg=
+	t=1747400119; cv=none; b=Pj4PfxMyE6CzazfyIRvbMhJOqJOKqliFOGPZO5JyTveSMZu39AUWdmB1qt0nbWl+dBBzpjrSzYT6SpD/rXniqfCGk1fRcij8etGunkmZ/qxC8F06jSbdhV1+QQN5Yqc0xx3kaQMw7YOZp9mWhpj2XTzQc+cNuRrH8Cr/QrnicPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747393303; c=relaxed/simple;
-	bh=Vq+12IYot7g5r+2zqoGU+kI4hthH7/3l7cf08q+d388=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gdcSbiw2Mz68O6Ede7e15IPYwYRKO0k6OcqRxyoENfe/Dd9GMQsIMDjdbQwD46yM2wsqsr70SzhHjAB5cRs4/fPszaoGhhbzqxXK+JP9habaVcGXOqZUOb7O0gsBUNhz53MEcSCh76d2RwYeNRELYK8iDOWxvNWAwygeLrH8KBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgyhdOX+; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgyhdOX+"
-Received: by smtp.kernel.org (Postfix)
-	id 99602C4CEED; Fri, 16 May 2025 11:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B62B4C4CEE4;
-	Fri, 16 May 2025 11:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747393302;
-	bh=Vq+12IYot7g5r+2zqoGU+kI4hthH7/3l7cf08q+d388=;
-	h=Date:From:To:Cc:Subject:From;
-	b=EgyhdOX+CJ2vlu031JvYZH+rZ/QwLZNiko7qrjukTDrmR939JSyd7QGd/9qyzESHi
-	 66wlcn28ZvP4bBn5k29LdKz6ICPGh5uZyfxJUf34Eu0VWBv6EvcnXQk/pT0dRWqsUg
-	 p7/3kMRguCIgAKwr3t5J2wKa5hlgtc3ZPZSKSETkawUCFhQpvdeOAHyuqo+zR7nlKa
-	 2jS3gJZfts2gZcCAbYwIQ4rzCuj89+t5p1+5zThEz5lMA1ku9W/BSPSz7axOLtOn/W
-	 0GHDeiBpLejKNL4X58bKt6M5MJ/Yq+eUAMj7C+WaFLXQRTuceFiKtu7nGUt+ir+Yo6
-	 QAO1j0Pn+H7sQ==
-Date: Fri, 16 May 2025 12:01:39 +0100
-From: Conor Dooley <conor@kernel.org>
-To: soc@kernel.org
-Cc: conor@kernel.org, linux-riscv@lists.infradead.org
-Subject: [GIT PULL 3/3] RISC-V Devicetrees for v6.16
-Message-ID: <20250516-gap-exploring-f8f516ab4e1c@spud>
+	s=arc-20240116; t=1747400119; c=relaxed/simple;
+	bh=U5oH/qMNOUHhFZyDoJQVqdmcnhE1SOh1XkoNyNxpvqU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DTK8tcEEQ5u4ZXOKs27sOFRWT3sUHVDwCfnkOLVMdAfZswCSNhPCotqZqy7c0TTzXar/2X3kajFrX18wKRlJ9/1hjRvMYjwjA/qJtzAsqQn2lMxnikYfIsKGCePl0oozW9LdACXOK8WDM7QV6Az6fpJ25XszgIq8VqwPBKdOlVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:b0d6:ccd4:58dc:70fd])
+	by baptiste.telenet-ops.be with cmsmtp
+	id pov82E00M3S8nz401ov8UX; Fri, 16 May 2025 14:55:09 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uFuaX-000000020ZE-1lBj;
+	Fri, 16 May 2025 14:55:08 +0200
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uFuai-000000013QW-3I6B;
+	Fri, 16 May 2025 14:55:08 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DTS updates for v6.16 (take three)
+Date: Fri, 16 May 2025 14:55:07 +0200
+Message-ID: <cover.1747399860.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="2IJr7IMmKSXyj3sE"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+	Hi SoC folks,
 
---2IJr7IMmKSXyj3sE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This is my third pull request for the inclusion of Renesas SoC updates
+for v6.16, containing only fixes.
 
-Hey Arnd
+The following changes since commit b280613d480aa170e51029d5582bb4b666982b7c:
 
-Please pull some ~RISC-V~Starfive updates for 6.16. They're a bit late
-and only went into linux-next today, cos I was stalling out for some
-acks before picking them up.
-
-Thanks,
-Conor.
-
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
-
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+  ARM: dts: renesas: r9a06g032-rzn1d400-eb: Enable USB host port (2025-05-08 20:23:33 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-dt-for-v6.16
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.16-tag3
 
-for you to fetch changes up to d50108706a63dfd896db42172bf9f6aebec219c5:
+for you to fetch changes up to 1064013303c6dd59f1586656f853765c6e870f8b:
 
-  riscv: dts: starfive: jh7110-common: bootph-pre-ram hinting needed by boot loader (2025-05-15 21:08:27 +0100)
-
-----------------------------------------------------------------
-RISC-V Devicetrees for v6.16
-
-Starfive:
-All Starfive this time (again), enabling the usb3 port on the framework
-laptop mainboard, and a few cleanup patches that are syncing things with
-the dts used by U-Boot.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  riscv: dts: renesas: Add specific RZ/Five cache compatible (2025-05-14 13:30:06 +0200)
 
 ----------------------------------------------------------------
-E Shattow (4):
-      riscv: dts: starfive: jh7110-common: add CPU BUS PERH QSPI clocks to syscrg
-      riscv: dts: starfive: jh7110-common: qspi flash setting read-delay 2 cycles max 100MHz
-      riscv: dts: starfive: jh7110-common: add eeprom node to i2c5
-      riscv: dts: starfive: jh7110-common: bootph-pre-ram hinting needed by boot loader
+Renesas DTS updates for v6.16 (take three)
 
-Icenowy Zheng (1):
-      riscv: dts: starfive: jh7110-common: use macros for MMC0 pins
+  - Silence a DTC warning,
+  - Add an extra compatible value to avoid future issues.
 
-Sandie Cao (1):
-      riscv: dts: starfive: fml13v01: enable USB 3.0 port
+Thanks for pulling!
 
- arch/riscv/boot/dts/starfive/jh7110-common.dtsi    | 52 ++++++++++++++++------
- .../dts/starfive/jh7110-deepcomputing-fml13v01.dts | 19 ++++++++
- 2 files changed, 57 insertions(+), 14 deletions(-)
+----------------------------------------------------------------
+Conor Dooley (1):
+      riscv: dts: renesas: Add specific RZ/Five cache compatible
 
---2IJr7IMmKSXyj3sE
-Content-Type: application/pgp-signature; name="signature.asc"
+Geert Uytterhoeven (1):
+      arm64: dts: renesas: sparrow-hawk: Disable dtc spi_bus_bridge check
 
------BEGIN PGP SIGNATURE-----
+ arch/arm64/boot/dts/renesas/Makefile        | 1 +
+ arch/riscv/boot/dts/renesas/r9a07g043f.dtsi | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaCcbEwAKCRB4tDGHoIJi
-0pzoAQDcMeUjjl0jWfUF3Z+3zScNmhO6A2N3lq3xsK3VLEH2vwD+LdAfnMEhjgtn
-F6YEEBh7DUs3v7gQqbV5gfvWv/zx0g8=
-=KifE
------END PGP SIGNATURE-----
+Gr{oetje,eeting}s,
 
---2IJr7IMmKSXyj3sE--
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
