@@ -1,80 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524E6221F04
-	for <soc@lists.linux.dev>; Fri, 16 May 2025 05:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E10139E
+	for <soc@lists.linux.dev>; Fri, 16 May 2025 05:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747374818; cv=none; b=FPd2R2DtuCq/+CKKd9XhBAIVWO47VUDH4/Zqq0f1s5KtbKCE96DfzZR/lVbLtWqjBHZYUlx5JuYmHMJWRdNa79Ra8cXOZdrd0ZdTxYWWLqocu9JYAAKGvDFM5iOP04g4VwUDCDlPBvBZr9okOCpVr/w9mXeDcuhNjegRvvx9yvA=
+	t=1747374972; cv=none; b=pBPLpFdfA9IZjS+jGL78h3GIngjuY4vy1mgL+aWE3HnUAjRBkm1k//xKlYoPMTaoW+2xaT36f8UN5DLkVkHMj1Hn6/dyBIu0JoaOPOufOLDmNUU6Jbnii4/o2ImOAtOrfgl5PTq6chpELFPRRAy8pTeg75nbGL+bhP4LI9HpJaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747374818; c=relaxed/simple;
-	bh=9eio0ee7vY9Q07cdF26s+6B3n0T5Y3myrjYBHbudpHI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OAN455Ei6A9udsXKmsFZ9PrPPZ+7FJcMoahmovbAFqCRYUxz6yjAIGuYCkbgj96nY3uU0RNNhwh6aDDtaiKTj2G/V/cDP1+IKMKW650mz59ajzgX5diKWDaWrNlLLu/kjojoMsgti3xy9fNBMmHd+5UCkIcPac7WGhvufJ0Z1mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qTQZf6gH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747374972; c=relaxed/simple;
+	bh=PZmhJA6QE4OvbbRGFZOb6Do7iZjjwGhAurwCX9bImoI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WYPhYfiFK3FYYGPQbfgZPRxLGimR2dlJyD0ftyez7TjOn1Zr7K8K2I/CGXdZx3fmPSHzrKqb/vzmnfAXZXeicp3YOcEjK5kPkTqGniQAHjjSP2odkEWYB+VxIiHcwDsGkJx4cr2iMF/4Pl98G664iVg5MOJ+2P0+PsB+nJaSPsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=PZxQnTdv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qTQZf6gH"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="PZxQnTdv"
 Received: by smtp.kernel.org (Postfix)
-	id C8FF3C4CEE4; Fri, 16 May 2025 05:53:37 +0000 (UTC)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	id 0A349C4CEEF; Fri, 16 May 2025 05:56:12 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 362B1C4CEE9
-	for <soc@kernel.org>; Fri, 16 May 2025 05:53:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 362B1C4CEE9
+	by smtp.kernel.org (Postfix) with ESMTPS id 90022C4CEE9
+	for <soc@kernel.org>; Fri, 16 May 2025 05:56:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 90022C4CEE9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-441d437cfaaso9996285e9.1
-        for <soc@kernel.org>; Thu, 15 May 2025 22:53:34 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a0b9303998so1109451f8f.0
+        for <soc@kernel.org>; Thu, 15 May 2025 22:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1747374813; x=1747979613; darn=kernel.org;
+        d=tuxon.dev; s=google; t=1747374969; x=1747979769; darn=kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysgHzHUJXzI0JJ26R9GmqoNNUsJzhyB8GzW0gLV0Nww=;
-        b=qTQZf6gH06fK+QB36F6tlooPKX3zhSZ7vZ8OjmTsXyKwpZcT9yWEULIcK02PK0tWU3
-         Z7hwwdAZJxSEE8Jjh4RGIjHmFSsBGWapQmjK9+VWcxcHJkQsLQW//eqtpF8u1nMZ/V4f
-         5b50FEW5VbQrrCuWhzS1lDzJ8JQJ9Lopks+2uFAUTV5v0c3O75hw88WwHAwSHG6bCJmH
-         ZqFiZjayv6L0x5hXNIRMIh2GU+R0czEYk+lkYURwvzbkjgSLr8D04FPsXXdTTJOR6fIx
-         oWjyZmTR/LEF+n7zIMnwaeNev+0FWou/rhO2B5steSoJrdde9Gfba2F01Vobc3Go5Iws
-         TI2g==
+        bh=P+K6u+qS4LSYc/nHb/eBW61Vv87dsLXyYUJoS3HMuo8=;
+        b=PZxQnTdv+tQwmiDUYOFpBXJgiCh0Wft5Nuy6NlpOlu5shwAXO7vskhRSo6CYgehxDn
+         JfqRWvsvGDTC2YMY0yvFSdZdhk5DglwEnlBmxq1Nb0AHy4uNzdhGw4k5MttLMajjrMz6
+         lVSxRgHIOiXZq9WYZlYSleAG/4h/cmfo/JosDW6UUE3iIvs1yh1cxQ9HBDqD+iL2/XDN
+         +TJ3n5oCw5oZtIVIn7XBpGvnHPJGsuWIvKdxPgo6huQXZxI5IRHANFtbS5nvSOmf9aT7
+         VAbOY++wRGOd837oKs+7xWoRUAr3hPU+YzquEhasdrQ43ML5lBOzcUXSNriZJno24LAm
+         MhFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747374813; x=1747979613;
+        d=1e100.net; s=20230601; t=1747374969; x=1747979769;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ysgHzHUJXzI0JJ26R9GmqoNNUsJzhyB8GzW0gLV0Nww=;
-        b=OZt5xrQzqu5GFcgJLVOFHnAaVpyGBEEBYYvsw7Qoyk1EvgzlAThRRAecG0mhy2Ias9
-         wMpHKwTrpSuPXzVKeVVVotxHHZol99tocmTgBZmA/Yy0h73C47F7PCkjnAST3oYvtX5L
-         mGfL1w3d7ks4GlIcUkqz3prEw4qq7vBzbtRLDvXdctGT/eEJa3RJKASKfr2mwfhi34fx
-         ynnG+MrY6rNRwPW8U2IqG9df6TmpgZ8PTLVRiiblB5nuhFu87VdM+5rEzJGAcZyub8U2
-         GnBCN6ySVRlAnwhrfXyur1sIMnoyPGFCFobt0FMhI/kdqHHnHNt6k5wdB+wZTSMreNH4
-         wX7g==
-X-Forwarded-Encrypted: i=1; AJvYcCWBVN+6k6JoV5x8rxgbHOhQ7eqZZUIXZaMz3VMs7pkbIkfnMSOVcLzNWzPMloM7bnnsju0=@kernel.org
-X-Gm-Message-State: AOJu0Yy/H7N2atbFahIl4Sfign2OWhIEUxQzdczJqD1YZGniCjAqxLKC
-	8EFcOgveRPG5GI2bg8KSVyaDCCghdyFoAqL3Nt2nMWZ1He/HFPtjAPkAH4otWNEZ3lc=
-X-Gm-Gg: ASbGncueFh0EGgxyM5brJH8xzvWhX4ZCZHWhMgTD/LFL1xywo7I19vm0TZ2b7FtqZkc
-	DheNu79vgY7+a3E4MfE++lPQMBOUKp2FRGzxg6bS8JI2Nb80jVoI7u4CO3xDELy5gywCWXfWwSN
-	/Ink6ZzQ66p/T8f7hLQfFaUGPw8h3QrSQO4L0Ms11f7f8pmExrGf142rRY9v6EXe0V7EOMP5nVS
-	Cjg4QhS8hu3F6FlRaoC1IhuM2DJ1vg4ec3vg1aZ/0HJny6+oD8czvjr3Ag7UI+n+htgUdK01vwV
-	bBGt7suRYgRhO1r1neF6sZOKB0MsLP253Q0g4mOH5zehbJ4ez7+xYpwmRXB3wZL6K26Tfw==
-X-Google-Smtp-Source: AGHT+IE06yhwIrfWMR3nQ7nz3IOMaiLivNnlRQajJq9CYMFATW7m0104XfpAAx5jbw6vts7hRg7ArA==
-X-Received: by 2002:a05:600c:1d28:b0:43d:ea:51d2 with SMTP id 5b1f17b1804b1-442fefee236mr8833645e9.14.1747374812978;
-        Thu, 15 May 2025 22:53:32 -0700 (PDT)
+        bh=P+K6u+qS4LSYc/nHb/eBW61Vv87dsLXyYUJoS3HMuo8=;
+        b=Uk7KdyB69aI2q0UOh+p6FTV8YBYPytyeCKCihQDGfruemaOy7KEACq+wwXzMNSI38P
+         c8JxPZZBjqWk+93AkTRvecJfw36q5dIowGF0mcGyL8G718vuxyZSMgfUs6Df2rrO9IYO
+         BUcV1hkRRme5gV3z4986SsOdSqsBpjvGdLN5/jOWmLoe/QsXjGa4LlDtACSR1fnSyj7t
+         g12AtQuJbZ6nJCXluOGdjic+/oEBwwJ7h4Y0jtbPGJqCaEqfPAV2qUYIOXEGibg8OQWk
+         FgBtuD9SslW397cinONeDcjVKcl8nc3LkaN9kvJFuWna/gqOlVTyTDTXfNaqZBjoHsXQ
+         j5Zw==
+X-Forwarded-Encrypted: i=1; AJvYcCXUliCAGhvU0loYEJsPMC44mLg8nPEc26ikjWqXiWuxQ9zYZ/FDIaLfpELwQcvOk7y5R1I=@kernel.org
+X-Gm-Message-State: AOJu0Yz1cAgJll3SXO0cHuF9H09T5dlDSYvbTMfrK8MMYnn2UrYHv7PC
+	2kDmaW6zNQVAVnMixIPr4EjgDNVkeHDopsMRKfMdmrDGyUUjx1gGUupBshfXwNAVwQw=
+X-Gm-Gg: ASbGnctJlvMDu436JOjAmO8OkwpVC4mhpmMNsMzgc+xvDqNexblNiEWGssIFHepH8hm
+	gD56B8gah2KOzjnRZWDKjSER+JMu1DJLhRJxDlNKzCD8YG4yBsJtRki1x8kQQIkvPjvdFePXoHj
+	sfnxdfaM0+ecnibQ0njXwtBNeLx0dvYiDBkJM4+XRsNVDYNOdQ9k/ios7R26W4Cp9ZrCA598HgZ
+	Tfcq2zngRyrjZy/dpL9XkPOgvpix0blw/+zpyvptTDdo5a7WiHS/tnYeTq5779w8u+yleIIu9Gb
+	+KrLmB+06QcdhufxhRJZKN0j7dDBKxiBlZQKJRiunKqRUHZWYBgEe+6QYuRf4XOG8E9NAQ==
+X-Google-Smtp-Source: AGHT+IFeUbR/oRAievxGGOL7Ute+w3SGan2dAe/2cFQESS8zNaK4mJcC+xdPCx24Pvqngoelfm+bCQ==
+X-Received: by 2002:a05:6000:220d:b0:3a3:5a95:a2a0 with SMTP id ffacd0b85a97d-3a35ca8217fmr1640934f8f.17.1747374968820;
+        Thu, 15 May 2025 22:56:08 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.58])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd4fdcccsm21672275e9.6.2025.05.15.22.53.31
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca5a03fsm1687478f8f.22.2025.05.15.22.56.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 22:53:32 -0700 (PDT)
+        Thu, 15 May 2025 22:56:08 -0700 (PDT)
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 To: arnd@arndb.de,
 	arm@kernel.org,
 	soc@kernel.org
 Cc: linux-arm-kernel@lists.infradead.org,
+	conor@kernel.org,
 	nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
 	claudiu.beznea@tuxon.dev
-Subject: [GIT PULL] Microchip AT91 DT updates for v6.16
-Date: Fri, 16 May 2025 08:53:30 +0300
-Message-ID: <20250516055330.10852-1-claudiu.beznea@tuxon.dev>
+Subject: [GIT PULL] Microchip ARM64 DT updates for v6.16
+Date: Fri, 16 May 2025 08:56:07 +0300
+Message-ID: <20250516055607.11248-1-claudiu.beznea@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -90,53 +90,21 @@ The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.16
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/microchip-dt64-6.16
 
-for you to fetch changes up to 36e9e1ab594519972b0b468aec9b8e9591ddd0ac:
+for you to fetch changes up to ec32344d2a3b841d096c12cffe8e620ad117a6a0:
 
-  ARM: dts: microchip: sama7g54_curiosity: Add fixed-partitions for spi-nor flash (2025-05-16 08:31:29 +0300)
+  arm64: dts: microchip: sparx5: Fix CPU node "enable-method" property dependencies (2025-04-07 16:02:43 +0100)
 
 ----------------------------------------------------------------
-Microchip AT91 device tree updates for v6.16
+Microchip ARM64 device tree updates for v6.16
 
 This update includes:
-- more controllers enabled for SAMA7D65 SoC (Ethernet, Flexcoms,
-  SRAM, DRAM, RTC, RTT, GBPR)
-- cleanups and fixes for Calao boards
+- fix CPU node "enable-method" property dependencies
 
 ----------------------------------------------------------------
-Mihai Sain (1):
-      ARM: dts: microchip: sama7g54_curiosity: Add fixed-partitions for spi-nor flash
+Rob Herring (Arm) (1):
+      arm64: dts: microchip: sparx5: Fix CPU node "enable-method" property dependencies
 
-Ryan Wanner (8):
-      ARM: dts: microchip: sama7d65: Add gmac interfaces for sama7d65 SoC
-      ARM: dts: microchip: sama7d65: Add FLEXCOMs to sama7d65 SoC
-      ARM: dts: microchip: sama7d65: Enable GMAC interface
-      ARM: dts: microchip: sama7d65: Add MCP16502 to sama7d65 curiosity
-      ARM: dts: microchip: sama7d65_curiosity: add EEPROM
-      ARM: dts: microchip: sama7d65: Add SRAM and DRAM components support
-      ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65 SoC
-      ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
-
-Wolfram Sang (7):
-      ARM: dts: at91: usb_a9g20: add SPI EEPROM
-      ARM: dts: at91: usb_a9263: fix GPIO for Dataflash chip select
-      ARM: dts: at91: calao_usb: simplify memory node
-      ARM: dts: at91: usb_a9260: use 'stdout-path'
-      ARM: dts: at91: calao_usb: simplify chosen node
-      ARM: dts: at91: usb_a9g20: move wrong RTC node
-      ARM: dts: at91: at91sam9263: fix NAND chip selects
-
- .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 209 +++++++++++++
- .../boot/dts/microchip/at91-sama7g54_curiosity.dts |  32 ++
- arch/arm/boot/dts/microchip/at91sam9263ek.dts      |   2 +-
- arch/arm/boot/dts/microchip/sama7d65.dtsi          | 346 +++++++++++++++++++++
- arch/arm/boot/dts/microchip/tny_a9263.dts          |   2 +-
- arch/arm/boot/dts/microchip/usb_a9260.dts          |   8 -
- arch/arm/boot/dts/microchip/usb_a9260_common.dtsi  |   9 +
- arch/arm/boot/dts/microchip/usb_a9263.dts          |   4 +-
- arch/arm/boot/dts/microchip/usb_a9g20.dts          |  17 +-
- arch/arm/boot/dts/microchip/usb_a9g20_common.dtsi  |  27 --
- arch/arm/boot/dts/microchip/usb_a9g20_lpw.dts      |  10 +-
- 11 files changed, 625 insertions(+), 41 deletions(-)
- delete mode 100644 arch/arm/boot/dts/microchip/usb_a9g20_common.dtsi
+ arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
