@@ -1,57 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED09F79EA
-	for <soc@lists.linux.dev>; Fri, 16 May 2025 02:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524E6221F04
+	for <soc@lists.linux.dev>; Fri, 16 May 2025 05:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747361383; cv=none; b=OhL9YFAhUbJyuOy2pV2eLB9RyI2X5FXBjS+9CH2pMVmqo/hdR6/JBmRObRgeCeIqmzAs0lMVDC+wq8X+HHG0Z4SoSJ7uEcYZbkeTbfol8Jra5iJqMZsmNbiSHVAWHDbNvbzU60GrVsGyYmjyzCxjwZs1/i/ED0jwkSiI017BP2Y=
+	t=1747374818; cv=none; b=FPd2R2DtuCq/+CKKd9XhBAIVWO47VUDH4/Zqq0f1s5KtbKCE96DfzZR/lVbLtWqjBHZYUlx5JuYmHMJWRdNa79Ra8cXOZdrd0ZdTxYWWLqocu9JYAAKGvDFM5iOP04g4VwUDCDlPBvBZr9okOCpVr/w9mXeDcuhNjegRvvx9yvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747361383; c=relaxed/simple;
-	bh=2QMpH+1tYcp+bIDmafH4ExXh1FN987xDfFaUiG51mQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BvXpd7j4gUlDtc1R9tlEMzL6F0Y0/HI4FlZ+31B8CQHhW8RSnYDvQQsuzLUpVpV+Z9NbTlPqI2xW1nYS18noQpU1Zs7Q1q7OiHS9bVkTDMwn2AwhjIv0ybxv/XncgRz/eOukkpUhksw4fcJy//qVRKjCSRqrRi8c2mFyEnSdZfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AbLQmgO+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747374818; c=relaxed/simple;
+	bh=9eio0ee7vY9Q07cdF26s+6B3n0T5Y3myrjYBHbudpHI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OAN455Ei6A9udsXKmsFZ9PrPPZ+7FJcMoahmovbAFqCRYUxz6yjAIGuYCkbgj96nY3uU0RNNhwh6aDDtaiKTj2G/V/cDP1+IKMKW650mz59ajzgX5diKWDaWrNlLLu/kjojoMsgti3xy9fNBMmHd+5UCkIcPac7WGhvufJ0Z1mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qTQZf6gH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AbLQmgO+"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qTQZf6gH"
 Received: by smtp.kernel.org (Postfix)
-	id 843EBC4CEE9; Fri, 16 May 2025 02:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DAAC4CEE7;
-	Fri, 16 May 2025 02:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747361382;
-	bh=2QMpH+1tYcp+bIDmafH4ExXh1FN987xDfFaUiG51mQ0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=AbLQmgO+7HMAyKDj3t+9iI9R2yXdg8ZtaDTDVI+bc2P5agcsyHpi/bLoA5lbCoSgZ
-	 rFtcImXD2Db+lGkufZbLW5LjU7HK35SeAwtMaBG/jeJYWa0NkcLBYHz1rgrTihHAIR
-	 Sugss5H0Oh76tRiB4coIALuCS2XvB+cVl26J4wDJBX1Ekx2LIQh+jw0xqBNOCZENkG
-	 AAdWCG3mOTYB7FTRTJdGSXK0fW24ZonUqCib33FGMdTWnJJnc3KqLrRy5tGFEMNftI
-	 Uyjg49EvRdW/VADre0y/OrzbmeLU8MU6KD5T74neoue93T8Lk3PlHKwwyCqsEmcTW4
-	 J3kRqWkQoCo6A==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 6A9E15FEC5; Fri, 16 May 2025 10:09:40 +0800 (CST)
-Date: Fri, 16 May 2025 10:09:40 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: soc@kernel.org
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Allwinner device tree changes for 6.16
-Message-ID: <aCaeZJ2t4S_xhgjp@wens.tw>
+	id C8FF3C4CEE4; Fri, 16 May 2025 05:53:37 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 362B1C4CEE9
+	for <soc@kernel.org>; Fri, 16 May 2025 05:53:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 362B1C4CEE9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-441d437cfaaso9996285e9.1
+        for <soc@kernel.org>; Thu, 15 May 2025 22:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1747374813; x=1747979613; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ysgHzHUJXzI0JJ26R9GmqoNNUsJzhyB8GzW0gLV0Nww=;
+        b=qTQZf6gH06fK+QB36F6tlooPKX3zhSZ7vZ8OjmTsXyKwpZcT9yWEULIcK02PK0tWU3
+         Z7hwwdAZJxSEE8Jjh4RGIjHmFSsBGWapQmjK9+VWcxcHJkQsLQW//eqtpF8u1nMZ/V4f
+         5b50FEW5VbQrrCuWhzS1lDzJ8JQJ9Lopks+2uFAUTV5v0c3O75hw88WwHAwSHG6bCJmH
+         ZqFiZjayv6L0x5hXNIRMIh2GU+R0czEYk+lkYURwvzbkjgSLr8D04FPsXXdTTJOR6fIx
+         oWjyZmTR/LEF+n7zIMnwaeNev+0FWou/rhO2B5steSoJrdde9Gfba2F01Vobc3Go5Iws
+         TI2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747374813; x=1747979613;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ysgHzHUJXzI0JJ26R9GmqoNNUsJzhyB8GzW0gLV0Nww=;
+        b=OZt5xrQzqu5GFcgJLVOFHnAaVpyGBEEBYYvsw7Qoyk1EvgzlAThRRAecG0mhy2Ias9
+         wMpHKwTrpSuPXzVKeVVVotxHHZol99tocmTgBZmA/Yy0h73C47F7PCkjnAST3oYvtX5L
+         mGfL1w3d7ks4GlIcUkqz3prEw4qq7vBzbtRLDvXdctGT/eEJa3RJKASKfr2mwfhi34fx
+         ynnG+MrY6rNRwPW8U2IqG9df6TmpgZ8PTLVRiiblB5nuhFu87VdM+5rEzJGAcZyub8U2
+         GnBCN6ySVRlAnwhrfXyur1sIMnoyPGFCFobt0FMhI/kdqHHnHNt6k5wdB+wZTSMreNH4
+         wX7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWBVN+6k6JoV5x8rxgbHOhQ7eqZZUIXZaMz3VMs7pkbIkfnMSOVcLzNWzPMloM7bnnsju0=@kernel.org
+X-Gm-Message-State: AOJu0Yy/H7N2atbFahIl4Sfign2OWhIEUxQzdczJqD1YZGniCjAqxLKC
+	8EFcOgveRPG5GI2bg8KSVyaDCCghdyFoAqL3Nt2nMWZ1He/HFPtjAPkAH4otWNEZ3lc=
+X-Gm-Gg: ASbGncueFh0EGgxyM5brJH8xzvWhX4ZCZHWhMgTD/LFL1xywo7I19vm0TZ2b7FtqZkc
+	DheNu79vgY7+a3E4MfE++lPQMBOUKp2FRGzxg6bS8JI2Nb80jVoI7u4CO3xDELy5gywCWXfWwSN
+	/Ink6ZzQ66p/T8f7hLQfFaUGPw8h3QrSQO4L0Ms11f7f8pmExrGf142rRY9v6EXe0V7EOMP5nVS
+	Cjg4QhS8hu3F6FlRaoC1IhuM2DJ1vg4ec3vg1aZ/0HJny6+oD8czvjr3Ag7UI+n+htgUdK01vwV
+	bBGt7suRYgRhO1r1neF6sZOKB0MsLP253Q0g4mOH5zehbJ4ez7+xYpwmRXB3wZL6K26Tfw==
+X-Google-Smtp-Source: AGHT+IE06yhwIrfWMR3nQ7nz3IOMaiLivNnlRQajJq9CYMFATW7m0104XfpAAx5jbw6vts7hRg7ArA==
+X-Received: by 2002:a05:600c:1d28:b0:43d:ea:51d2 with SMTP id 5b1f17b1804b1-442fefee236mr8833645e9.14.1747374812978;
+        Thu, 15 May 2025 22:53:32 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.58])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd4fdcccsm21672275e9.6.2025.05.15.22.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 May 2025 22:53:32 -0700 (PDT)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: arnd@arndb.de,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev
+Subject: [GIT PULL] Microchip AT91 DT updates for v6.16
+Date: Fri, 16 May 2025 08:53:30 +0300
+Message-ID: <20250516055330.10852-1-claudiu.beznea@tuxon.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="n4QPW7IGwpuGyd62"
-Content-Disposition: inline
-
-
---n4QPW7IGwpuGyd62
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
 The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
@@ -59,144 +90,53 @@ The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.16
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.16
 
-for you to fetch changes up to a3cd12acb7b74d9b243cd893209972fc657d0bd3:
+for you to fetch changes up to 36e9e1ab594519972b0b468aec9b8e9591ddd0ac:
 
-  arm64: dts: allwinner: a100: add Liontron H-A133L board support (2025-05-14 22:14:07 +0800)
-
-----------------------------------------------------------------
-Allwinner device tree changes for 6.16
-
-Introduce Allwinner A523 / A527 / T527 SoC family w/ three new devices:
-- Radxa Cubie A5E
-- X96Q-Pro+
-- Avaota-A1
-
-Also enable EMAC0 ethernet MAC on A523 family for Cubie A5E & Avaota-A1.
-Note: the SoC has two different ethernet controllers.
-
-Changes to existing SoCs:
-- Enable GPU on H616 with all boards enabled
-- Set maximum MMC frequency for the A100
-
-Changes to existing boards:
-- Add WiFi/BT header on PINE64 A64 boards
-- Add hp-det-gpios for Anbernic RG35XX
-- Add support for PHY LEDs on Bananapi (the original one)
-
-Add new devices for existing SoCs:
-- YuzukiHD Chameleon based on H6
-- Liontron H-A133L based on A133 (compatible with A100)
-
-Tree wide cleanups:
-- Use preferred node names for cooling maps
-- Align wifi node name with bindings
-- Drop spurious 'clock-latency-ns' properties for H5 & H6
+  ARM: dts: microchip: sama7g54_curiosity: Add fixed-partitions for spi-nor flash (2025-05-16 08:31:29 +0300)
 
 ----------------------------------------------------------------
-Andre Przywara (14):
-      arm64: dts: allwinner: Add Allwinner A523 .dtsi file
-      dt-bindings: vendor-prefixes: Add YuzukiHD name
-      dt-bindings: arm: sunxi: Add new board names for A523 generation
-      arm64: dts: allwinner: a523: add Avaota-A1 router support
-      arm64: dts: allwinner: a523: add X96Q-Pro+ support
-      arm64: dts: allwinner: a523: add Radxa A5E support
-      dt-bindings: arm: sunxi: Add YuzukiHD Chameleon board name
-      arm64: dts: allwinner: h616: add YuzukiHD Chameleon support
-      arm64: dts: allwinner: h616: Add Mali GPU node
-      arm64: dts: allwinner: h616: enable Mali GPU for all boards
-      arm64: dts: allwinner: a100: set maximum MMC frequency
-      dt-bindings: vendor-prefixes: Add Liontron name
-      dt-bindings: arm: sunxi: Add Liontron H-A133L board name
-      arm64: dts: allwinner: a100: add Liontron H-A133L board support
+Microchip AT91 device tree updates for v6.16
 
-Chris Morgan (1):
-      arm64: dts: allwinner: h700: Add hp-det-gpios for Anbernic RG35XX
+This update includes:
+- more controllers enabled for SAMA7D65 SoC (Ethernet, Flexcoms,
+  SRAM, DRAM, RTC, RTT, GBPR)
+- cleanups and fixes for Calao boards
 
-Chukun Pan (1):
-      arm64: dts: allwinner: correct the model name for Radxa Cubie A5E
+----------------------------------------------------------------
+Mihai Sain (1):
+      ARM: dts: microchip: sama7g54_curiosity: Add fixed-partitions for spi-nor flash
 
-Krzysztof Kozlowski (2):
-      arm64: dts: allwinner: Align wifi node name with bindings
-      ARM: dts: allwinner: Align wifi node name with bindings
+Ryan Wanner (8):
+      ARM: dts: microchip: sama7d65: Add gmac interfaces for sama7d65 SoC
+      ARM: dts: microchip: sama7d65: Add FLEXCOMs to sama7d65 SoC
+      ARM: dts: microchip: sama7d65: Enable GMAC interface
+      ARM: dts: microchip: sama7d65: Add MCP16502 to sama7d65 curiosity
+      ARM: dts: microchip: sama7d65_curiosity: add EEPROM
+      ARM: dts: microchip: sama7d65: Add SRAM and DRAM components support
+      ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65 SoC
+      ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
 
-Michael Klein (1):
-      ARM: dts: bananapi: add support for PHY LEDs
+Wolfram Sang (7):
+      ARM: dts: at91: usb_a9g20: add SPI EEPROM
+      ARM: dts: at91: usb_a9263: fix GPIO for Dataflash chip select
+      ARM: dts: at91: calao_usb: simplify memory node
+      ARM: dts: at91: usb_a9260: use 'stdout-path'
+      ARM: dts: at91: calao_usb: simplify chosen node
+      ARM: dts: at91: usb_a9g20: move wrong RTC node
+      ARM: dts: at91: at91sam9263: fix NAND chip selects
 
-Peter Robinson (2):
-      arm64: dts: allwinner: a64: Add WiFi/BT header on PINE A64
-      arm64: dts: allwinner: a64: Add WiFi/BT header on SOPINE Baseboard
-
-Rob Herring (Arm) (2):
-      arm/arm64: dts: allwinner: Use preferred node names for cooling maps
-      arm64: dts: allwinner: h5/h6: Drop spurious 'clock-latency-ns' properties
-
-Yixun Lan (4):
-      dt-bindings: sram: sunxi-sram: Add A523 compatible
-      arm64: dts: allwinner: a523: Add EMAC0 ethernet MAC
-      arm64: dts: allwinner: a527: add EMAC0 to Radxa A5E board
-      arm64: dts: allwinner: t527: add EMAC0 to Avaota-A1 board
-
- Documentation/devicetree/bindings/arm/sunxi.yaml   |  25 +
- .../sram/allwinner,sun4i-a10-system-control.yaml   |   1 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   4 +
- arch/arm/boot/dts/allwinner/sun7i-a20-bananapi.dts |  27 +
- arch/arm/boot/dts/allwinner/sun8i-a83t.dtsi        |   4 +-
- .../boot/dts/allwinner/sun8i-h3-nanopi-neo-air.dts |   2 +-
- arch/arm/boot/dts/allwinner/sun8i-h3.dtsi          |   2 +-
- arch/arm/boot/dts/allwinner/sun8i-r40.dtsi         |   2 +-
- arch/arm64/boot/dts/allwinner/Makefile             |   5 +
- arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi     |   3 +
- .../dts/allwinner/sun50i-a133-liontron-h-a133l.dts | 211 +++++++
- .../arm64/boot/dts/allwinner/sun50i-a64-pine64.dts |  12 +
- .../dts/allwinner/sun50i-a64-sopine-baseboard.dts  |  19 +
- .../boot/dts/allwinner/sun50i-h313-tanix-tx1.dts   |   5 +
- arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi       |   6 +-
- .../boot/dts/allwinner/sun50i-h6-orangepi-3.dts    |   2 +-
- .../dts/allwinner/sun50i-h6-orangepi-lite2.dts     |   2 +-
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi       |   4 -
- .../dts/allwinner/sun50i-h616-bigtreetech-cb1.dtsi |   5 +
- .../dts/allwinner/sun50i-h616-orangepi-zero.dtsi   |   4 +
- .../dts/allwinner/sun50i-h616-orangepi-zero2.dts   |   4 +
- .../boot/dts/allwinner/sun50i-h616-x96-mate.dts    |   5 +
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     |  21 +
- .../allwinner/sun50i-h618-longan-module-3h.dtsi    |   5 +
- .../dts/allwinner/sun50i-h618-orangepi-zero2w.dts  |   5 +
- .../dts/allwinner/sun50i-h618-orangepi-zero3.dts   |   4 +
- .../allwinner/sun50i-h618-transpeed-8k618-t.dts    |   5 +
- .../allwinner/sun50i-h618-yuzukihd-chameleon.dts   | 222 +++++++
- .../allwinner/sun50i-h700-anbernic-rg35xx-2024.dts |  10 +-
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi     | 639 +++++++++++++++++++++
- .../boot/dts/allwinner/sun55i-a527-cubie-a5e.dts   | 318 ++++++++++
- .../boot/dts/allwinner/sun55i-h728-x96qpro+.dts    | 287 +++++++++
- .../boot/dts/allwinner/sun55i-t527-avaota-a1.dts   | 327 +++++++++++
- 33 files changed, 2180 insertions(+), 17 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a133-liontron-h-a133l.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h618-yuzukihd-chameleon.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
- create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a527-cubie-a5e.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-h728-x96qpro+.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts
-
---n4QPW7IGwpuGyd62
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmgmnmQACgkQOJpUIZwP
-JDA7jBAAiFt6qeQQnBcym4QPcGsMYtQYInq9iArr8TuPGHw3NjIHJvO9lAMOb03e
-TkhLr5oHt/a+OkQVdR9m/tPbQqotSIgbUb77VvxHne9hTaeo51po4FAnHBjIEIcS
-XphHdpFCdEd5g1gyMwpBFaa4Ukefzx6w49Jtg+GnOGNO5H5jIU4tyxsXFeGX9Lvm
-tcdXCoagZhrJAuIZ+gYhZAfCthdgAr5zYDcJfdfgRax2JWDmHRip0PYdBj9XFdnq
-PSQ/gz97DYVbGDtlVhETT22IAauJZDqLMmC+MMYmlRF+s2JYYgpE37MSwJQGXGp4
-hTRKLw4sHn8jLzivQP89BN7T/QiEH08GYR8+EpKBSv/HnKsdwcfvBI/+W+/iCuof
-jMHCN4ZepaWWF+3n+/gkIYdzvRElOMYkXB8dhZnBkIqshUNZ+jYrFdT3Ra2XfxPx
-tFINWjAmkXVV9H3OI+ABDTNGnt3P1diQTyfRMKMkF04JNs3Ub+mTO5PoAZABFjqH
-tSpdi2RJJagEB0+GbLGy9wz+N3j+IxI8GMQ7lStv4fjWSma2i5urYtl6oz4WcNK/
-Wpvqh8t7t50R4NZ0kVOySK3YpqjXT0fVgFMmXOGPZMSx+Kws1CmX7+fLD5Lc3j+4
-pG4avzKslKRv7CiIfMA6BqoqYXFeCXIIyFgUeln/v1kL8h+9Ot0=
-=YBYw
------END PGP SIGNATURE-----
-
---n4QPW7IGwpuGyd62--
+ .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 209 +++++++++++++
+ .../boot/dts/microchip/at91-sama7g54_curiosity.dts |  32 ++
+ arch/arm/boot/dts/microchip/at91sam9263ek.dts      |   2 +-
+ arch/arm/boot/dts/microchip/sama7d65.dtsi          | 346 +++++++++++++++++++++
+ arch/arm/boot/dts/microchip/tny_a9263.dts          |   2 +-
+ arch/arm/boot/dts/microchip/usb_a9260.dts          |   8 -
+ arch/arm/boot/dts/microchip/usb_a9260_common.dtsi  |   9 +
+ arch/arm/boot/dts/microchip/usb_a9263.dts          |   4 +-
+ arch/arm/boot/dts/microchip/usb_a9g20.dts          |  17 +-
+ arch/arm/boot/dts/microchip/usb_a9g20_common.dtsi  |  27 --
+ arch/arm/boot/dts/microchip/usb_a9g20_lpw.dts      |  10 +-
+ 11 files changed, 625 insertions(+), 41 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/microchip/usb_a9g20_common.dtsi
