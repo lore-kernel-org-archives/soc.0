@@ -1,99 +1,127 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F080D27D79F
-	for <soc@lists.linux.dev>; Fri, 16 May 2025 18:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93F61EDA0F
+	for <soc@lists.linux.dev>; Sat, 17 May 2025 10:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747420263; cv=none; b=IBtWGxzHQPmifEl984AhdEwq2ot9F1JB201TBkLmNBjY6OIuP5f2Fx+DDoGEb+XnHUXEUbMYyxQM35bXsFY8h2uAtJJlv6EJzFuP0L8niD1xBN3b+FFikNTQhCG2TnQus8jbJdcVU7moPO5mC64JqiZmZyzycX1r69TxtzI5lpw=
+	t=1747477236; cv=none; b=I9Zg2Vu31eEHUoYi/Jyeb09xEwyhk1If40cdz48nMMmOvOfzMfb58lS/VlGt6xVGsbT+3i6R4srPmr2mfIfUL1RVSOt8s2eC8TY10JcGq/HVfDw0TCQSofP/6UKuRvJQ4nwyojwQUkv71iPF91lZv16FO22AhP2w1d84sfD/XVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747420263; c=relaxed/simple;
-	bh=E5HAH9f2vgQ7awdooyEeBJ8OA/ElHg+RECh6OV29pXk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ASj4zwixdBBMjFh9RVGhTxE+jCPedkN4/S4J99WsJIVuUDrFvMV0eSFGSgpp5Pkuu5bt4/7zgcDvfC1JLcBl7uwHZ6K63cxp1G3R7qGMDILTsarHwFeWsaD1j9LtY1U4xc23fQaEoocTZAz4WfXKRlCYHtDKrq6bbdBidkrUKgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=axXDsFxo; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="axXDsFxo"
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-87be2373596so615082241.1
-        for <soc@lists.linux.dev>; Fri, 16 May 2025 11:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747420261; x=1748025061; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LjIRRc3m/VAxY73bP0A+3mCsvKJgmOnqJyXLSLT8exU=;
-        b=axXDsFxoyd8ojI4i68E5CiR9UR3dRcKhbXOoXjPTpbKGdaBmD8A4bEw6HM3ory1JAu
-         S+RUH95gpXHPau+XchlmIafS8iMLIwTeQ9pbsMkK6acoTVj28WgvB6l0Nez3S/z7TI0d
-         Ts7JqGTLMhY85JvDTGjbA3rPI8mI18uJvSk9GHmuMHvjmM5fWsqW2HSq2U9Dg+xFuMyt
-         3UzWXc5G0EkeCt2GoRxZ7f6Fdp8DeiSyQKtvtt5oMH//3ammOkvYJ9h2d5EJnSzCYBFn
-         oLTLdu/FG6z2AW+VcMx/hc4HQC9aioan4RhUWcu3U5gbZaASf9gOV7pKD9OeInmykYO5
-         93iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747420261; x=1748025061;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LjIRRc3m/VAxY73bP0A+3mCsvKJgmOnqJyXLSLT8exU=;
-        b=w0nq7GM8nPWXgODsK1do9rkX4bvnfvnciKUp4oDYdBSeA/u2tPxrIXD1uIlZiNzEzY
-         2OdBBMOEynpdCJCaZX3jXXztHBtjbQ6P/YIqLNx3hjjdCXHZwalZuAYtOOnhnhq6M3K0
-         bBy+8vCuwylszL6khGDPajOsTJUJKShGSmXWCaInLtESTWhTOXCterIf+wsmpEsJrQOg
-         /4B/IiZCrwJMWJmWGOIcgr4m0O3JLZaWFgxhVmKTjqrk1lcEeVpK1aVwz5QiX4nUrowr
-         nm7NJLh7nJBVV0P2UDuRYzJNlvGwOOSfqY/1BS8TnE0tJ/nB2pIfLFzcTN+386x1tyj0
-         597w==
-X-Gm-Message-State: AOJu0Ywlpk6Hw8Nz2WNW2Mx4KQC+VJLnyh6tTRTR9BU7KfdTJ88Xk8+w
-	PcDx4sn5+suWREzzND8jGB0CpiOIaCjPYiBxRR43/kd6BoDvxvyfIrjvU0U2dA==
-X-Gm-Gg: ASbGncvtSL9k3kBWcxqMDy0MyEHRuQtwxaN9+9FHsFBkwkMSV4/IUSNaHOgRPBLTPa2
-	qKGpZm165aAM7K9w09lii+/0M+0qmRocub2j1oM9wCgMgkgjrVYNn1qBPqht/kieurbX+IkwyJm
-	L+JAqCGbZkX/ZnyQu5QmQZrOJWGPt1AMkOMLGi9MPsvdww1SB5GYeWyhLiWdVhIYsp5RcX4DN+9
-	a3Vo/7AZxxTghpXz2oS6g7hYYF6VZrsCalAfD2Xa0UitPrCI/EGwmPs0wQwnp3I9l+qRUv8IWzA
-	1OvDfnAwAdTYzR1HwLhoxq6F6gHXpho4YANo+xD1lvicaqUjm6f937KwvYs8QnCNUQ==
-X-Google-Smtp-Source: AGHT+IGP2sbYwMDlV+BPtSVT09uB94OWwAidwDuga4z6Yn2RSTFy2x8+4ClJoDXh6bPPZjOSVZIjSg==
-X-Received: by 2002:a05:6102:6c2:b0:4da:e719:e7f8 with SMTP id ada2fe7eead31-4e053d6333fmr5003602137.24.1747420260003;
-        Fri, 16 May 2025 11:31:00 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:93a1:94a9:517a:f69c])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87bec225c3bsm2119351241.29.2025.05.16.11.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 May 2025 11:30:59 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
-To: arnd@arndb.de
-Cc: soc@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH] MAINTAINERS: Add ARM64 defconfig to its section
-Date: Fri, 16 May 2025 15:30:35 -0300
-Message-Id: <20250516183035.685914-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1747477236; c=relaxed/simple;
+	bh=JWODGwLtdv+77yvZZJdsXJ8qFeJKioaZG583PVldo9w=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Y6AE+7cpLBq7bdf6ft2irgY+ay10281tHWBKkX9C3gnyaKbSGE6ZEVdfi1JpxnaX/xDOXlMA9rX3huxglv4gA5lavGCdarV9SjnrYuTRXMbzWegu0U0QK+cgEdu8CFp+AK7miVxm74u9Xhnr6VupuNw9zRUf1S4RwYRtPEYYzgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix)
+	id 3F6D6C4CEE9; Sat, 17 May 2025 10:20:36 +0000 (UTC)
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	by smtp.kernel.org (Postfix) with ESMTP id D007FC4CEE3
+	for <soc@kernel.org>; Sat, 17 May 2025 10:20:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D007FC4CEE3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4Zzzk40Ph1z9sSD;
+	Sat, 17 May 2025 11:51:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8jyheiksRlMl; Sat, 17 May 2025 11:51:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4Zzzk36cXFz9sFT;
+	Sat, 17 May 2025 11:51:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id D9BF88B767;
+	Sat, 17 May 2025 11:51:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 0xRvE50RE-Xh; Sat, 17 May 2025 11:51:39 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9EA4C8B763;
+	Sat, 17 May 2025 11:51:39 +0200 (CEST)
+Message-ID: <9e5b3e8e-3280-4ff9-915b-9a8b934bac22@csgroup.eu>
+Date: Sat, 17 May 2025 11:51:39 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [GIT PULL] SOC FSL for 6.16
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Language: fr-FR
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Fabio Estevam <festevam@denx.de>
+Hi Arnd,
 
-Add arch/arm64/configs/defconfig to the ARM64 MAINTAINERS section so that
-changes to this file are automatically sent to the appropriate maintainers
-and mailing lists.
+Please pull the following Freescale Soc Drivers changes for 6.16
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Thanks
+Christophe
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 20e07e61a148..82bd864b1972 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1937,6 +1937,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
- F:	Documentation/process/maintainer-soc*.rst
- F:	arch/arm/boot/dts/Makefile
- F:	arch/arm64/boot/dts/Makefile
-+F:	arch/arm64/configs/defconfig
- 
- ARM ARCHITECTED TIMER DRIVER
- M:	Mark Rutland <mark.rutland@arm.com>
--- 
-2.34.1
+The following changes since commit 8ffd015db85fea3e15a77027fda6c02ced4d2444:
 
+   Linux 6.15-rc2 (2025-04-13 11:54:49 -0700)
+
+are available in the Git repository at:
+
+   https://github.com/chleroy/linux.git tags/soc_fsl-6.16-1
+
+for you to fetch changes up to 695d702f42bf4bd335e30f542ca710af081ee2a3:
+
+   soc: fsl: qe: Consolidate chained IRQ handler install/remove 
+(2025-05-17 11:01:55 +0200)
+
+----------------------------------------------------------------
+FSL SOC Changes for 6.16:
+   - Various fixes and cleanups from Ioana on fsl-mc bus driver
+   - Other misc fixes on fsl-mc bus driver
+   - A build fix on DPAA2 driver
+   - Some preparation work from Kees on qbman driver
+   - Some cleanup on FSL qe interrupt driver init
+
+----------------------------------------------------------------
+Chen Ni (1):
+       soc: fsl: qe: Consolidate chained IRQ handler install/remove
+
+Ioana Ciornei (3):
+       bus: fsl-mc: fix double-free on mc_dev
+       bus: fsl-mc: do not add a device-link for the UAPI used DPMCP device
+       bus: fsl-mc: add the dprc_get_mem() command to the whitelist
+
+Kees Cook (1):
+       soc: fsl: qbman: Remove const from portal->cgrs allocation type
+
+Krzysztof Kozlowski (1):
+       soc: fsl: Do not enable DPAA2_CONSOLE by default during compile 
+testing
+
+Laurentiu Tudor (2):
+       bus: fsl-mc: drop useless cleanup
+       bus: fsl-mc: increase MC_CMD_COMPLETION_TIMEOUT_MS value
+
+Robin Murphy (1):
+       bus: fsl_mc: Fix driver_managed_dma check
+
+Thorsten Blum (1):
+       bus: fsl-mc: Use strscpy() instead of strscpy_pad()
+
+Wan Junjie (1):
+       bus: fsl-mc: fix GET/SET_TAILDROP command ids
+
+  drivers/bus/fsl-mc/dprc-driver.c      |  2 --
+  drivers/bus/fsl-mc/dprc.c             |  4 ++--
+  drivers/bus/fsl-mc/fsl-mc-allocator.c | 21 ---------------------
+  drivers/bus/fsl-mc/fsl-mc-bus.c       | 12 +++++++-----
+  drivers/bus/fsl-mc/fsl-mc-private.h   |  2 --
+  drivers/bus/fsl-mc/fsl-mc-uapi.c      | 11 +++++++++--
+  drivers/bus/fsl-mc/mc-io.c            | 19 +++++++++++++------
+  drivers/bus/fsl-mc/mc-sys.c           |  2 +-
+  drivers/soc/fsl/Kconfig               |  2 +-
+  drivers/soc/fsl/qbman/qman.c          |  2 +-
+  drivers/soc/fsl/qe/qe_ic.c            | 10 ++++------
+  11 files changed, 38 insertions(+), 49 deletions(-)
