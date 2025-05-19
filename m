@@ -1,113 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51CE1E833D
-	for <soc@lists.linux.dev>; Mon, 19 May 2025 17:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E832882BC
+	for <soc@lists.linux.dev>; Mon, 19 May 2025 18:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747676273; cv=none; b=WSmvJpt2M/MD8JWsR53N776WAdNyuN2FaLDujJupMa/MTJ5Vvj3b6+00VPzEqL0fbEFG1Lp+Q3iY/7AdcBGHNabpV6fmhlgIxGtbmDU1Ml/XhnIPH3rQ3HJALlBFM02t0BDXsipwBdslMst398s1OfsI49pjtvTZVNRU9HhrW0o=
+	t=1747678032; cv=none; b=AxUUI2sQc9oBGrGbwGUNOmhmzv/Tsp7ZdvXJuDV88ygEmeQKkzLfQLYQq/8P6ZhPA2gn6dHw8dSTrn950DtPGN20mOtnKCIRDnr9rZC+QH+tB9yzOjvDFi9P8EL/A6G5CsFzqfkrmLywzNw+2rXHf7UKQ4jyQa11HIY6/z2NBtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747676273; c=relaxed/simple;
-	bh=Nfmp7mFuXH9LfuvtQW+51Xv/BmuwSYOxqWrP/++uJw8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=K3EFWMI3Cpfpy/1fjawunGkowN2ENZIB+Hj0fwXQbVgR65AYBVcKp3Sp+95s2iR3ur6eGk78Xr2r8LF7rJ+B/0TdnXSw3zgLA2gb4X0AzNe6jjhqzjQmXIUlwerr8kLb/06g6L1i/pFgWeZw/tC8Bxa1gftBB+ZGvTR4Vc0yMCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZOi0V2H; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747678032; c=relaxed/simple;
+	bh=zK5nIPF/0gbJ8aVna8ILvsLahrjnTgQt/3wJwhoSzZM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sOP7rqgrjtXVUY6Ouf8gOOYiNjL+JHzx/uOjuHdQHjx3VJm11pnURKJJWqIw40U1rSgMW6H+eAutoPJ8H/jGzyStp60EbvzBreaEa73Q3O9VPEuI7kfQmngPzhB8pgm6NO4Q4OvZfNGOYTkwX3hcInHEKZ95ER04ONwW2Ynvjt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EtRE8e7N; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZOi0V2H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E677EC4CEE4;
-	Mon, 19 May 2025 17:37:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747676272;
-	bh=Nfmp7mFuXH9LfuvtQW+51Xv/BmuwSYOxqWrP/++uJw8=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=hZOi0V2HDQDS7JGtP2nsbNA5cfPHxWqdCAs8Mcld9tZTYgacgU88Rm2zgoCC9otSa
-	 n6ZY6v9eDLIHfUuGwHJ6Mx99i9o7qqG0TOVJ3g7iy+Y9WiAhL5/2mviyYMcgdaC387
-	 Vgd3f972LLlnSh6rNv0eHqGwZR5x/KUs4Jp1a+8aivfNV9KB6BKoF0bFNGHPd/RtEL
-	 CEnbHFgONtxP8SW22553Yd6k46ZaM7tBSlsMWe8Z7IOzhEUwo3QMrJ4x78SMK8rHh9
-	 Y5xWBqWMU7yZOWNuoPR7ScMxHWaMPoEkVxzYxluvfxmm/WGxdTrk7YUn94nDYLXkSl
-	 7l3tVpBOsvhbQ==
-Message-ID: <2c72c0a3-6b30-4525-b27f-6627f6a078c2@kernel.org>
-Date: Mon, 19 May 2025 19:37:49 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EtRE8e7N"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55168f56120so3454994e87.2
+        for <soc@lists.linux.dev>; Mon, 19 May 2025 11:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747678028; x=1748282828; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zK5nIPF/0gbJ8aVna8ILvsLahrjnTgQt/3wJwhoSzZM=;
+        b=EtRE8e7NhVKuhXNWL8OTrm64UQjwZD1rm3YfdB7qZJgYN5pt3ej3GVWPJP8Q5iB+7c
+         zzvZeYmew33RAFhkurn81RpY0Sft5AZgk2IvMA7DfS7HdajH0E124rVAg4T/7AyZQmUM
+         7dNfQL1Bd9BjTCwnGIGKAKOXA/gdSIAA27Ep+OsgeAuo1qmZbbCwBBsZzGR8k4P0B8qa
+         4zGEqwE/yELG0VTfAx07YkwDOr+Fa3MOoGdSLQx+co12A98MLkL91VgS8ohNXY0QdjQW
+         CNzuww2tTU1Kpr4WulFE0SSnz57wcd96pTrBd27xPPNihufuFiD2LuXNGqCWgPiUH+bI
+         mlRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747678028; x=1748282828;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zK5nIPF/0gbJ8aVna8ILvsLahrjnTgQt/3wJwhoSzZM=;
+        b=dPwjyLbdh9OMbm0gTtqBgYquXXT9qK00CByY9diUy/hurRk7ObbiPgmMIWQeC0tAd/
+         GLmai/CS/294FVCB5WcO1mgVa51QqfcNT3UzQd51CTQK9VmzDwy3N7voKVimWqL2UGQB
+         3+ktkeyG7D107rcWFjxqBsrc1sflo9uEfSexoORU61sqgjuRuwLn/8thiJOpIC3xOX9z
+         jYKnzbmDmC9sfYsGenkAX22TyYUqv71GLC4/M2/TsVYtHOS3iTZbV87C6CdrpxC2DgHZ
+         7kBVPmIP5w85yAq5fVz1WrPqEH250Kr7oMS2i4i02knU+x32Vhcwa/O7skVCzyYj9JtV
+         H3ag==
+X-Forwarded-Encrypted: i=1; AJvYcCXhm/CGoyBJFV1gSpZ3yHqAhEHyKVb0wZPFIayTXW0mWkiBeIG/KyefnDUL1pPyx7GkXEs=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzqwigiVIZNhMyCajovmCIbKfc64eWu5/buLtAFiH+1wHv0KDXO
+	j3F6JRASWkvY+FLS/4ZUG09qKeXT2HFirRbq3xanCJNRATOZLPpqxg7hSlewO6wFpYiG7uTRNgC
+	19X9ErCoEYc5VLSNADnIhn2BxWtj/QOY=
+X-Gm-Gg: ASbGncvUHoB+qRwEjGV4WbNYRF0+77L7rx6Ej3dplVvcibkhz69AMgnRi95UJaHOMi1
+	w3dxmwOD0Ha5+Lgy0jJMWZus0LWXnI0lDe4BPTObfyuOTl64VeY+FlvthEl2Ek/JkFUjI5SFYBw
+	+EBpRXhAAqovpx8AXRP69rtcQvEWyiJJy0dev1YuyovfK1+uYu61pKy86yXQuQoNso
+X-Google-Smtp-Source: AGHT+IEsSwerskMF1f0teqna3+W64qx/F+SHnETSbfNu4VgAGrNqP/iI7wOGAZG3FONb2MQddBp41/ErEDylJVM2fuc=
+X-Received: by 2002:a05:6512:6289:b0:54e:8172:fb6e with SMTP id
+ 2adb3069b0e04-550e7245433mr5044522e87.54.1747678027829; Mon, 19 May 2025
+ 11:07:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20250516183035.685914-1-festevam@gmail.com> <175cdb8a-4fcb-4492-8d64-e59896b2448f@kernel.org>
+ <2c72c0a3-6b30-4525-b27f-6627f6a078c2@kernel.org>
+In-Reply-To: <2c72c0a3-6b30-4525-b27f-6627f6a078c2@kernel.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 19 May 2025 15:06:56 -0300
+X-Gm-Features: AX0GCFtgNbJvBkLBJhWeCag0_i7WeLTSB5s2uo3e3mQxSC2xrjXARxvge8DDKzg
+Message-ID: <CAOMZO5CZvjrXV3k3hHWCWo2CRsOvR7Epw+RW8=Q=Y1qjGctVmg@mail.gmail.com>
 Subject: Re: [PATCH] MAINTAINERS: Add ARM64 defconfig to its section
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Fabio Estevam <festevam@gmail.com>, arnd@arndb.de
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- Fabio Estevam <festevam@denx.de>
-References: <20250516183035.685914-1-festevam@gmail.com>
- <175cdb8a-4fcb-4492-8d64-e59896b2448f@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <175cdb8a-4fcb-4492-8d64-e59896b2448f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: arnd@arndb.de, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Fabio Estevam <festevam@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19/05/2025 19:22, Krzysztof Kozlowski wrote:
-> On 16/05/2025 20:30, Fabio Estevam wrote:
->> From: Fabio Estevam <festevam@denx.de>
->>
->> Add arch/arm64/configs/defconfig to the ARM64 MAINTAINERS section so that
->> changes to this file are automatically sent to the appropriate maintainers
->> and mailing lists.
-> I don't think that's correct. As always stated, the defconfig goes via
-> soc vendor tree. It was always like that, so if you intend to change it,
-> provide some rationale and make it explicit (and considering you did not
-> Cc other soc maintainers how can we even know that policy changed?).
-> Putting it here will unnecessarily include soc on every random arm64
-> defconfig change.
+On Mon, May 19, 2025 at 2:37=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
 
+> P.S. We have it explicitly documented in maintainer-soc profile, so with
+> this change probably you need to update that document (with its own
+> rationale).
 
-P.S. We have it explicitly documented in maintainer-soc profile, so with
-this change probably you need to update that document (with its own
-rationale).
+The reason I submitted this change was that Arnd asked me to resend a
+patch that touched arm64 defconfig with soc@lists.linux.dev on Cc:
 
-Best regards,
-Krzysztof
+https://lore.kernel.org/linux-arm-kernel/ece2df8d-acaa-4554-8c82-24ed45f3a8=
+a4@app.fastmail.com/
