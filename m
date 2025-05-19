@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF62B286417
-	for <soc@lists.linux.dev>; Mon, 19 May 2025 17:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51CE1E833D
+	for <soc@lists.linux.dev>; Mon, 19 May 2025 17:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747675345; cv=none; b=gK41ba2eQumt0OexfzpxdfpMKehUYs1+euHw2/ysh1bt3lfOE8X2/LrRkyKMb1u23Q6Swvhlam3vtju9OTkwS0HcYnQ8pHf5yNHJbBlCW9iNziBKlPzh1u8CL+7q4I9G4U93jFnzlC0cvCpy7HESNck/saqw86Nf2n8auQstvFU=
+	t=1747676273; cv=none; b=WSmvJpt2M/MD8JWsR53N776WAdNyuN2FaLDujJupMa/MTJ5Vvj3b6+00VPzEqL0fbEFG1Lp+Q3iY/7AdcBGHNabpV6fmhlgIxGtbmDU1Ml/XhnIPH3rQ3HJALlBFM02t0BDXsipwBdslMst398s1OfsI49pjtvTZVNRU9HhrW0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747675345; c=relaxed/simple;
-	bh=2lDMRp1gUwqmeNja8/oMTTucL5VJz+H/mIXGrKsY388=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DUtJ4fuo1HwnFLDXHzidSf1n83rj6oxU5liNSrlI4+TqFi+VqEI/B3pwkFFx0d5DjZ25KgQOptp3dnQx7PNkuHxlgU1wSZRJKGC+h5gJbC6Ohts7cCfuvpMgOV/76XXr+X0sm//Dx3rqNMOeyzEofP7CBvgipK7ze/Yg8RZ1XGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qyj8t1hE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747676273; c=relaxed/simple;
+	bh=Nfmp7mFuXH9LfuvtQW+51Xv/BmuwSYOxqWrP/++uJw8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=K3EFWMI3Cpfpy/1fjawunGkowN2ENZIB+Hj0fwXQbVgR65AYBVcKp3Sp+95s2iR3ur6eGk78Xr2r8LF7rJ+B/0TdnXSw3zgLA2gb4X0AzNe6jjhqzjQmXIUlwerr8kLb/06g6L1i/pFgWeZw/tC8Bxa1gftBB+ZGvTR4Vc0yMCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZOi0V2H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qyj8t1hE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF624C4CEE4;
-	Mon, 19 May 2025 17:22:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZOi0V2H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E677EC4CEE4;
+	Mon, 19 May 2025 17:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747675345;
-	bh=2lDMRp1gUwqmeNja8/oMTTucL5VJz+H/mIXGrKsY388=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Qyj8t1hEFK8yQFzlORynvEwb0hE9DDY5dLAOnbochX5ECH/gurMX0jVi1lo+CIy/l
-	 HtGQLlLMxQYkr0l9ZocEzYHjUgc6gxtmt9NIQTHE426WhPL+Wnenz3ebOseA0CQsgg
-	 Uh2WBx2oX+HGtxR7GxPqvH2u0Ouy5u+Xp+P6pye816tecPzRnumcbMVac3I6UbboeF
-	 EkdBvY0KXZq7GgLJzded38ZlrMFfdHkMiFFByRAjd41BXDuFEflst8qnAnHJit18OV
-	 TRVDXR7iNZBOuSgbvyhasPHeJXGxmL48p9y4Y0TIEDmmjnNy82AxeOpEmncxG7Mb+m
-	 DTVNk/bys3+LA==
-Message-ID: <175cdb8a-4fcb-4492-8d64-e59896b2448f@kernel.org>
-Date: Mon, 19 May 2025 19:22:21 +0200
+	s=k20201202; t=1747676272;
+	bh=Nfmp7mFuXH9LfuvtQW+51Xv/BmuwSYOxqWrP/++uJw8=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=hZOi0V2HDQDS7JGtP2nsbNA5cfPHxWqdCAs8Mcld9tZTYgacgU88Rm2zgoCC9otSa
+	 n6ZY6v9eDLIHfUuGwHJ6Mx99i9o7qqG0TOVJ3g7iy+Y9WiAhL5/2mviyYMcgdaC387
+	 Vgd3f972LLlnSh6rNv0eHqGwZR5x/KUs4Jp1a+8aivfNV9KB6BKoF0bFNGHPd/RtEL
+	 CEnbHFgONtxP8SW22553Yd6k46ZaM7tBSlsMWe8Z7IOzhEUwo3QMrJ4x78SMK8rHh9
+	 Y5xWBqWMU7yZOWNuoPR7ScMxHWaMPoEkVxzYxluvfxmm/WGxdTrk7YUn94nDYLXkSl
+	 7l3tVpBOsvhbQ==
+Message-ID: <2c72c0a3-6b30-4525-b27f-6627f6a078c2@kernel.org>
+Date: Mon, 19 May 2025 19:37:49 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -36,11 +36,12 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] MAINTAINERS: Add ARM64 defconfig to its section
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Fabio Estevam <festevam@gmail.com>, arnd@arndb.de
 Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  Fabio Estevam <festevam@denx.de>
 References: <20250516183035.685914-1-festevam@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <175cdb8a-4fcb-4492-8d64-e59896b2448f@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -85,23 +86,28 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250516183035.685914-1-festevam@gmail.com>
+In-Reply-To: <175cdb8a-4fcb-4492-8d64-e59896b2448f@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/05/2025 20:30, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
-> 
-> Add arch/arm64/configs/defconfig to the ARM64 MAINTAINERS section so that
-> changes to this file are automatically sent to the appropriate maintainers
-> and mailing lists.
-I don't think that's correct. As always stated, the defconfig goes via
-soc vendor tree. It was always like that, so if you intend to change it,
-provide some rationale and make it explicit (and considering you did not
-Cc other soc maintainers how can we even know that policy changed?).
-Putting it here will unnecessarily include soc on every random arm64
-defconfig change.
+On 19/05/2025 19:22, Krzysztof Kozlowski wrote:
+> On 16/05/2025 20:30, Fabio Estevam wrote:
+>> From: Fabio Estevam <festevam@denx.de>
+>>
+>> Add arch/arm64/configs/defconfig to the ARM64 MAINTAINERS section so that
+>> changes to this file are automatically sent to the appropriate maintainers
+>> and mailing lists.
+> I don't think that's correct. As always stated, the defconfig goes via
+> soc vendor tree. It was always like that, so if you intend to change it,
+> provide some rationale and make it explicit (and considering you did not
+> Cc other soc maintainers how can we even know that policy changed?).
+> Putting it here will unnecessarily include soc on every random arm64
+> defconfig change.
+
+
+P.S. We have it explicitly documented in maintainer-soc profile, so with
+this change probably you need to update that document (with its own
+rationale).
 
 Best regards,
 Krzysztof
-
