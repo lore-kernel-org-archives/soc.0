@@ -1,186 +1,301 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83190212B3B
-	for <soc@lists.linux.dev>; Mon, 19 May 2025 19:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747683901; cv=fail; b=oV69qMM3anggJYG4GUmM3cFkROfXlOW4uKUb38k1wi9HnKFf10CMGJizixX+Ls4GJR493T7xcRzNFV8gGsvUCuTIL0YXKuuLJodXS4XYpKlCEJMs6k/N5a6l0Fi3tb+RiBIHougfomjF3hjFxZ4cCi/JPCcvA4Uaa3txCA114JI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747683901; c=relaxed/simple;
-	bh=KjRmqDRG2iifXO0wb4pQIAth4OqYLG+LZYc28fDM6ug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=l2o0VnX/3dTGEiyf1m/FKzzkTN9ZCR5Rqmc+qQZvYNQJLCqj8xZ9aLZBVn/tcksqZIfFUWA20k4Su0lzlPFnfZGCMWEfs6gxHraOhr0dhk5qt+wThdJEjljIePdjsLmBqXzmtPmyhUpxfIFjDj+qzPNiN/K6DLKQp8L+SUQ3KAk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JJskm3JI; arc=fail smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0137B2571BA
+	for <soc@lists.linux.dev>; Tue, 20 May 2025 02:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747708973; cv=none; b=rianNEQDEZTrXLsIygUdcFozXXGPVEpDAFlzaBTIOoFjAFzP2rpRjk3/LtJCckaqqs84dpT64zchjx1hxnUTH2YDWIjbgxa1w2UcEJoN6+VT/tGbbdOus6yQ/0rglg1D6xC2MPbqhnLjj2gCXMVjcb4VE6go+O9552GdMwMyMCs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747708973; c=relaxed/simple;
+	bh=zQpunA4UKCo0q3mvvJsKk1YpJ4ueKKrLShl1Ahbk5gA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Woe9jEFr0VNHBJoxg3xtcQRWVFXB6i3LV2RyfvN/csnILAQSz4ppfx+7ryJmg0nz7kmTf5S8U9PUIBLfKh4cItXeSltMG9ztGIlUgo3lm2fLBCMUExGuZ4tDJ8Loj1EIEXebXW64lFNSKk5nhl2cgjOv8QT1SLS+uZQX4fkxYIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVUfasAe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JJskm3JI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVUfasAe"
 Received: by smtp.kernel.org (Postfix)
-	id 0E471C4CEEB; Mon, 19 May 2025 19:45:01 +0000 (UTC)
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2083.outbound.protection.outlook.com [40.107.21.83])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4757DC4CEE4;
-	Mon, 19 May 2025 19:44:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4757DC4CEE4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NosAfaKcy1t0wv3drsUIbjSp/QffcWNSMt7/qrfv0eRpYc/9rwvl6WZ4nuipdMnl3lKI4S64cgnTAlx/WXMBxnXH51U8/XWgt7Yg03p9sGvcGi5/i/DyMjPIXD9Jn55OdFslbBrJf6t4jzQwKQ7GQwhFcsIHdDnaOJImCyUW17FX58gs13aQYasO39xZQGwE6kLoWDZe66dEhj/08JdvWCcpODj0a5ljsoti0TQ5COe2ZWrdhLmtVXgcEvvxLZjKIXGV5g60qx1aou4ggSyh6BTwS5a64YTBehRAKbaoATG6gwJbjmdrcmLPSMCjYgRuCi2lpfXOaW6Bo4a1Y6RvVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uAnqbqeOXypcWYXTzO+7pRNgPv9rv/Y5Kq3to4IxPEw=;
- b=DRv8oNUt9yQFKj/EpT4di8r0mZL0PTG4LpmLpb0bAezozX2i5mzcHr2pJwLE1eAgWu284NM+Kw9/HMODZzOIgD5vArOZQvaoHwRG6I9iUO8N+xUVnaSal+5tmqEbv2LRr6pzeVQuIs1YCGUgx2V7BGjXhW29ZesG32N2WQew+iq0PerrYHrB1RQOgl5y4A5qyDnKo0VcJiVWQ2PjTvkGGtUNCNd5sLmpjAldXVbGL4BG1lNqLwIvzOQZ+OozsoO+VnFbj7+JcHjZnLG9Dvil0XFdsSo/dwIhtUqaRIDtIMG75fOtPtTz0ODuVBiysvvbw0OpLXmQM99U6H3bc9Xtlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uAnqbqeOXypcWYXTzO+7pRNgPv9rv/Y5Kq3to4IxPEw=;
- b=JJskm3JICY45zvCrPnHYnI5fCPtTUP62umbV3fFnvOdImPvjC031WI1Aktfg9J1VwhB55oMuoXG3u0LYL9/SC3Ttg0/zYrpvPh5R/qyrVlvimOTV1/FBMHO/WCjVSr+vdL8UTVhgT04G4yIsTZbtwVtqJN1GoTs0rgWprNP1kC45uxipK6deDbllvNvAC6tttrmGQJIAhV0iOM/cfJpeL0RazHf7fKuTow5wsCNQhoId9OpY72r8wK45TwnMKku4rWtMBjSSiZgeG1bvPUKActGup+orID7J9myIiwTVPTyTV51L/HjaT4wfHBj6xnYMk2bI5dr6m16nOgRgXgdDhQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DUZPR04MB9948.eurprd04.prod.outlook.com (2603:10a6:10:4dd::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Mon, 19 May
- 2025 19:44:56 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.8746.030; Mon, 19 May 2025
- 19:44:55 +0000
-Date: Mon, 19 May 2025 15:44:48 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Shawn Guo <shawnguo@kernel.org>
-Cc: soc@kernel.org, arm@kernel.org, Fabio Estevam <festevam@gmail.com>,
-	kernel@pengutronix.de, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 4/5] i.MX arm64 device tree change for 6.16
-Message-ID: <aCuKMGMzhzOXsmQl@lizhi-Precision-Tower-5810>
-References: <20250512103858.50501-1-shawnguo@kernel.org>
- <20250512103858.50501-4-shawnguo@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250512103858.50501-4-shawnguo@kernel.org>
-X-ClientProxiedBy: SJ0PR03CA0167.namprd03.prod.outlook.com
- (2603:10b6:a03:338::22) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	id 781BDC4AF0C; Tue, 20 May 2025 02:42:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B478CC4CEE4;
+	Tue, 20 May 2025 02:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747708972;
+	bh=zQpunA4UKCo0q3mvvJsKk1YpJ4ueKKrLShl1Ahbk5gA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hVUfasAeSsMQGkML85hMA/TUkaXE1JpZQkwp5qeMMgQx9qYwN9/M4FA9aU3aDqgHi
+	 qhbkcoXqqKcxA1KT8MiIe4QbbWzsul12ObTQmTmuwdRkCRU4AVBG3/V4grQ2Z9+ohV
+	 bfhh80CyDvPa+weCiGL+s7BANJl58eO7BkrsbSyvjb8jcgMJfVamBiDSh671icD3kN
+	 UhdghL3TRpVyaiYVCLHZ1ZiXLoTY21CVTRAFjgYMalqfdVnxpcwEIErm7OFTjxYd96
+	 nbrEywOEj5inr5+5MxRDYsneMEXUTsu8F8WK8PDROQTnfUn4tlYHAhuiHE5vo66c/J
+	 SezwbTjgP/Uvg==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Juerg Haefliger <juerg.haefliger@canonical.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Dzmitry Sankouski <dsankouski@gmail.com>,
+	Kaushal Kumar <quic_kaushalk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+	Nitheesh Sekar <quic_nsekar@quicinc.com>,
+	Praveenkumar I <quic_ipkumar@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Abhinaba Rakshit <quic_arakshit@quicinc.com>,
+	Ajit Pandey <quic_ajipan@quicinc.com>,
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	George Moussalem <george.moussalem@outlook.com>,
+	Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	Loic Poulain <loic.poulain@oss.qualcomm.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Maud Spierings <maud_spierings@hotmail.com>,
+	Melody Olvera <melody.olvera@oss.qualcomm.com>,
+	Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>,
+	Pengyu Luo <mitltlatltl@gmail.com>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Varadarajan Narayanan <quic_varada@quicinc.com>,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	Xilin Wu <sophon@radxa.com>
+Subject: [GIT PULL] More Qualcomm Arm64 DeviceTree updates for v6.16
+Date: Mon, 19 May 2025 21:42:47 -0500
+Message-ID: <20250520024248.38904-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DUZPR04MB9948:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1151e070-881f-4f4c-6240-08dd970da178
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hUtQe8jd0Af+dGh6J0g30An0ORM39YgMw9GQVsuXk8oBdj6+pLiJSVJHpgJu?=
- =?us-ascii?Q?FCpsUPk149FsIit67AHfI4tWFW2+0D/4hCehAsS7wM94rLEgyLjuiEU2npER?=
- =?us-ascii?Q?E/+TEjImFW1oxdL+bpXZqacVbjFZGdSoxU8zQ7TnKnwwmuB4sS8yAfFDYKwZ?=
- =?us-ascii?Q?Og+rCeVmm8vMj7pJIQRZitGUI+D+g+HVV7gWFnCWcvDFpb25M/omPDdikCCL?=
- =?us-ascii?Q?xLhnNTS0kIkfWCchbCybOVG0mUUHoiz3+l4CBeld8bqkMYxcKbYG4WGmBdBu?=
- =?us-ascii?Q?DNkt+IFaDNwLDr4KIoqYVuyQWdTM13yzbypj53DQAF87UhSC2WptQ6mYOJem?=
- =?us-ascii?Q?xUypgfOPKuk2T0VZeNsMGw5Mf194QV0FZfzjG5AK07sKx01hqqn5tFxaMHd5?=
- =?us-ascii?Q?f1X4xmVuA1yfjKcUAdXRBzW69+/toiKI3qrfFlKx4E4kNKu7uV56GdRQHcDN?=
- =?us-ascii?Q?8yu0zkauCkkVKlxXtkeLi4Zjw6DqJqAC83bM57Xru7CclW1Obn39q4Vbo17v?=
- =?us-ascii?Q?jkHTQscT60L6Bjl2yEkx53qUo4S38agDrdnMh8dxrvQPc8ype4VKeuxxscMF?=
- =?us-ascii?Q?5pClmkEBqtsajovUW4/BrIP4+SEy+ZoCNRhbFPx2FOkWYZb9PnZ/bgCVZ+un?=
- =?us-ascii?Q?HaX9sBO/jeRpKFoXhy1IfNwkrDfspatsbRqPVR3iEu2tModR7Lft5OVuwad7?=
- =?us-ascii?Q?nFFcc6zfxbl0JS+t3iqdhOozXzwOy5bDDZRcDB49vVkXaUrwlOrCUQMxb5xt?=
- =?us-ascii?Q?99EHBtSVz4zQWFOyxgRFiPGjdgJxbLKlwHwTj9ZU2XnfmwIyariDxvQLhON6?=
- =?us-ascii?Q?K2ZoEuKLoGFDhcY1pD09+rnipaewzq9MCqAYSXfZHTYied7ziAzdWLcowzCc?=
- =?us-ascii?Q?uSKyZmiLumlVVUhSsphbidnmFb04iLshFbqiyh/eTkpxUgT9DadlSujQVwr3?=
- =?us-ascii?Q?Cju3whH7imu87gTGgxmlWdXh2vMly63RaVR2B5VGsf7IDQWxZV3rVwGrk6Wd?=
- =?us-ascii?Q?wHqd/pukeTwYyRigyzMc3+gSOZxtpVrl+kkoUKEXPhVNm4kl7VBctrUjPuh6?=
- =?us-ascii?Q?BDM/wEHBe4IG/Hm5VEDCe05N5VCwrPwd5GytEYeNhGYJJaHzOGvZtqY+y/ih?=
- =?us-ascii?Q?Jcemic/GLKh80crDjo8vCsngJhy8d0ycIKZ7WlssJbdg0NM9+u9G4N/U0Mwd?=
- =?us-ascii?Q?9Bcbr9g2qSWKKwxdRIElwNdlY4MFpS5SWoI669Fd/Kdj06/iE/Y7OmsmEhf5?=
- =?us-ascii?Q?d0tKxxhtVV+lnByn4GCjnCMIQINOvC/WWL8kDXGXnYQslCMqTLNQSGbDCfBM?=
- =?us-ascii?Q?Hi9V40WX+eYT6q9eyl9HAIu6/oxS/Orphq6BDZ/filyiFi4wZkZM354dWsEj?=
- =?us-ascii?Q?JEP5ME+UJTKTnFGLyCrXxic2TQfefBuVeue4HiSrX2peEuZmC4QEzFiFU2Qv?=
- =?us-ascii?Q?pGJaNX/QrnRVtjbHGXo6J3pjkFQincrUkw/HzpQAbHNmUFSloYCWKQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?8d9yKtmXwTSP6ezmoJgBhd+hAHsCTov1bG8u7hlOtC7vkjKijvy6ZYVBVXZD?=
- =?us-ascii?Q?Z4q6FhK3nFYLqlCkHGxPPm2XtMPFV3F+ykUdQP9yEBcnBNoIDCewduqpAm94?=
- =?us-ascii?Q?HrnGx5rnGJypfVCk/oPHYOPUAvmWtJrz0R3EI/9rDoNDtLgm+/7Lwf+iGXhY?=
- =?us-ascii?Q?VZ92mzA7hp+Y0H1N46Acc54HJGcTcvJNfuCQctJceeTtdU92933n6qi06epQ?=
- =?us-ascii?Q?n+CjDwGkg6NwJZhwrBPjdJpohpOvFpM80mw96cfvAXmOz0QEcaKJDrjMmKpO?=
- =?us-ascii?Q?YunZ7Qb7EsZVHQh8Nn/G/Pzko1/H4QGSPwlGI+C3MAZv/K7gBxu/JT4wILwT?=
- =?us-ascii?Q?XVNO3htPBdILooSfBSy59g16ue7H7UxZnQyrdu3ihFFME+NNLjYWQxUI64SC?=
- =?us-ascii?Q?KIv8DIPIUxm0FTMeeQDXZTgnDh0108o8SCLCYhmw32gOeDzJn867BPIcp1Wy?=
- =?us-ascii?Q?JD9IFbjNmLvLSHYHqmvzsIbS4ZC5Ynen6RKXvFJyTFgo9tY4Kqe/QQbr5+RR?=
- =?us-ascii?Q?gjzSI8wTjS/xOejSxuQaonqEcPbms2Q75RJeAq6SepKk3tsMBnBzbzoz8hBL?=
- =?us-ascii?Q?Xwr1MZq2eB6uA1h2vTdqgDOJY2W1idc9tgyEYBR7xbr1bgRIhYmUBEBYR5UD?=
- =?us-ascii?Q?bEzX1/L3Yn97KjEtWPx94fDUVBY2IDk9UBFgDNvGzDpK72dnuawv3cBEMz3H?=
- =?us-ascii?Q?RlHzMg9HqBH2qYPcSWxlT08JSiB0iE/TOFgiNKwJ8xmtx6rzEJWgEP6lHSck?=
- =?us-ascii?Q?Mr3TwFSNV5vgYX90Z1jhDpjZjjXAapZ+3C6BtFjWuOUDX4yC3bHlFFyX9uIS?=
- =?us-ascii?Q?E6ej1UfXNk4drTKr5MqYtPMOcpOu6ICPRy0EVG+8C+dd2x2Vin20GoT7FAFP?=
- =?us-ascii?Q?WWa020a4on6q79p+aWYrMvM+Wjt5HJNFotEc6Wdo37v0GlJCeFNb6SN5K/VV?=
- =?us-ascii?Q?0CJjzOKYuEcEBO7GZr6ILizmq2JsMONyAYAwEQFqOIXIMMK2yARTEuub9Ywv?=
- =?us-ascii?Q?0y7drGU463wfDIoVqyippuCvBCt6VUIXn5Cp7npiHMzH3yXidPp6hU+UW+a2?=
- =?us-ascii?Q?3E3AqvbMFsa3hr9zhG3uda3KKO+ERJBpyAF8yOCGsSqKcBQpKEjdfYh04HA5?=
- =?us-ascii?Q?yOYCXkP6LDX5cUD8mFsjzuYfDS4DVuUx/Ixm0qhShT0z8ebcAddy3uMA53JF?=
- =?us-ascii?Q?CqIWA80WLYoBRGAYOuhMOMYi3j0ROympusYpx3It38JW9v2b3G04QTIjy7aB?=
- =?us-ascii?Q?FxtLHBIfyMX1q7tl+MysqLWVhcWck5vCJ/MIsRxoswiANNUUVOiZhKMNwLuD?=
- =?us-ascii?Q?pfgPSa8lsW5UQlQ0SW1UFuHoT2o1G72qXYLCnYV0eZjAAFEeI1NsXn9i3n24?=
- =?us-ascii?Q?jnOSA5ZKCHoKmAh4SagQGzH94/eiEf6NDYjHH1FOQHUZdkCCiWiIkraufuNg?=
- =?us-ascii?Q?WiIVzX/4GhSv6vgHuBTqMRUOu3TxpuPsQuVEjQ4SD5CPbsuvlhWvy/0W/NJH?=
- =?us-ascii?Q?FEvV/wujm2/YPFSYGN1k0pMnrExyrCCtlteLda6ACVV90VbNYrOwNjFjOK2c?=
- =?us-ascii?Q?diwgemvRRDr33GiAuHv9lSIcFBUOIMgvTlccI9kD?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1151e070-881f-4f4c-6240-08dd970da178
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2025 19:44:55.8816
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZOeD8M0BvEb6ePLFNp0NOUCHpQR5Z7ZKZd90AmyKEoXzTQKXxWwn/WtzrUHmXzrwv5/OzEO7ew7WUMwzXpgHnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB9948
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 12, 2025 at 11:38:57AM +0100, Shawn Guo wrote:
-> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
->
->   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-6.16
->
-> for you to fetch changes up to 1f6c8626527257db05c09022e94a5cd4e162c45d:
->
->   arm64: dts: freescale: Add PHYTEC phyBOARD-Nash-i.MX93 support (2025-05-09 22:51:06 +0800)
->
-> ----------------------------------------------------------------
-> i.MX arm64 device tree change for 6.16:
->
-...
->
-> Alexander Stein (3):
->       arm64: dts: imx8mp-tqma8mpql-mba8mp-ras314: Add Raspberry Pi Camera V2 overlay
->       arm64: dts: freescale: add initial device tree for TQMa8XxS
->       arm64: dt: imx95: Add TQMa95xxSA
 
-Not sure if it is too late. typo here
-should be "arm64: dts: imx95: Add TQMa95xxSA"
+The following changes since commit a18226be95c7ae7c9ec22fd31a6124bef5675c64:
 
-Frank
+  arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce touchscreen support (2025-05-11 17:34:23 -0500)
 
->
-> Andrej Picej (1):
->       arm64: dts: imx8mm-phyboard-polis-peb-av-10: Set lvds-vod-swing
->
-> Ciprian Marian Costea (1):
+are available in the Git repository at:
 
-...
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.16-2
 
+for you to fetch changes up to 654ac800d4ac6bd4bffa7e98997a1e0d336999b1:
+
+  arm64: dts: qcom: sm4450: Add RPMh power domains support (2025-05-19 15:33:51 -0500)
+
+----------------------------------------------------------------
+More Qualcomm Arm64 DeviceTree updates for v6.16
+
+Support for CPU frequency scaling is enabled on the X Elite platform.
+Also on X Elite, support for the HP EliteBook Ultra G1q is introduced.
+
+Support for the QCS6490 RB3gen2 Industrial Mezzanine is also added.
+
+PCIe controllers and PHYs are described and enabled across IPQ5018,
+IPQ5332, and IPQ5424. On IPQ9474 the missing MHI register range is
+added. The TCSR block is described and used to enable download mode
+flags on IPQ5018.
+
+The venus video encoder/decoder is enabled on the MSM8998-based Lenovo
+Miix 630 laptop.
+
+The crypto engine is enabled on QCM2290 and QCS615. Bluetooth is enabled
+on the QCM2210-based RB1 board.
+
+The Fairphone FP5 gains Displayport sound support.
+
+SAR2130P display nodes are added.
+
+On 8cx Gen3 the sensor remoteproc (SLPI) is introduced and this is
+enabled on Lenovo Thinkpad X13s and the CRD.
+
+The SDM845-based Samsung Galaxy S9 gains graphics, modem and initial
+sound support.
+
+On SDX75 the QPIC BAM and NAND support is added, and these are enabled
+on the IDP board.
+
+LLCC is added for SM8750. SM8550 gains Iris video decoder support.
+
+For X Elite, Lenovo ThinkPad T14s support for the SDX62 modem, as well
+as audio headset, is added. ASUS Vivobook S 15 gains Bluetooth support,
+Microsoft Surface Laptop 7 models gets support for DP over USB Type-C,
+HP Omnibook X 14 gains audio support. The devkit gets the USB multiport
+controller and the two USB Type-A ports described.
+
+Additionally a variety of Devicetree fixes are introduced, primarily
+identified through binding validation.
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      arm64: dts: qcom: x1e001de-devkit: Enable support for both Type-A USB ports
+
+Abhinaba Rakshit (1):
+      arm64: dts: qcom: qcs615: add QCrypto nodes
+
+Ajit Pandey (1):
+      arm64: dts: qcom: sm4450: Add RPMh power domains support
+
+Alok Tiwari (1):
+      arm64: dts: qcom: sm8350: Fix typo in pil_camera_mem node
+
+Dikshita Agarwal (1):
+      arm64: dts: qcom: sm8550: add iris DT node
+
+Dmitry Baryshkov (5):
+      arm64: dts: qcom: msm8998-lenovo-miix-630: add Venus node
+      arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: enable sensors DSP
+      arm64: dts: qcom: qcm2290: fix (some) of QUP interconnects
+      arm64: dts: qcom: qrb2210-rb1: add Bluetooth support
+      arm64: dts: qcom: sar2130p: add display nodes
+
+Dzmitry Sankouski (3):
+      arm64: dts: qcom: sdm845-starqltechn: add initial sound support
+      arm64: dts: qcom: sdm845-starqltechn: add graphics support
+      arm64: dts: qcom: sdm845-starqltechn: add modem support
+
+George Moussalem (1):
+      arm64: dts: qcom: ipq5018: enable the download mode support
+
+Jens Glathe (1):
+      arm64: dts: qcom: x1e80100-lenovo-yoga-slim7x: add retimers, dp altmode support
+
+Johan Hovold (2):
+      arm64: dts: qcom: x1e78100-t14s: enable SDX62 modem
+      arm64: dts: qcom: x1e80100-hp-x14: drop bogus USB retimer
+
+Juerg Haefliger (4):
+      arm64: dts: qcom: x1e80100-hp-omnibook-x14: Enable SMB2360 0 and 1
+      arm64: dts: qcom: x1e80100-hp-omnibook-x14: add sound label
+      dt-bindings: arm: qcom: Document HP EliteBook Ultra G1q
+      arm64: dts: qcom: x1e80100-hp-elitebook-ultra-g1q: DT for HP EliteBook Ultra G1q
+
+Kaushal Kumar (3):
+      arm64: dts: qcom: sdx75: Add QPIC BAM support
+      arm64: dts: qcom: sdx75: Add QPIC NAND support
+      arm64: dts: qcom: sdx75-idp: Enable QPIC BAM & QPIC NAND support
+
+Konrad Dybcio (15):
+      arm64: dts: qcom: x1e80100-romulus: Enable DP over Type-C
+      arm64: dts: qcom: sc8280xp: Fix node order
+      arm64: dts: qcom: sc8280xp: Add SLPI
+      arm64: dts: qcom: sc8280xp-crd: Enable SLPI
+      arm64: dts: qcom: sc7180: Add specific APPS RSC compatible
+      arm64: dts: qcom: sdm845: Add specific APPS RSC compatible
+      arm64: dts: qcom: msm8998: Remove mdss_hdmi_phy phandle argument
+      arm64: dts: qcom: qcs615: Remove disallowed property from AOSS_QMP node
+      arm64: dts: qcom: msm8998-fxtec: Add QUSB2PHY VDD supply
+      arm64: dts: qcom: msm8998-mtp: Add QUSB2PHY VDD supply
+      arm64: dts: qcom: msm8998-yoshino: Add QUSB2PHY VDD supply
+      arm64: dts: qcom: sm6350-pdx213: Wire up USB regulators
+      arm64: dts: qcom: msm8996-oneplus: Add SLPI VDD_PX
+      arm64: dts: qcom: sa8775p: Clean up the PSCI PDs
+      arm64: dts: qcom: qcs615: Fix up UFS clocks
+
+Krishna Chaitanya Chundru (1):
+      arm64: dts: qcom: x1e80100: Add PCIe lane equalization preset properties
+
+Loic Poulain (1):
+      arm64: dts: qcom: qcm2290: Add crypto engine
+
+Luca Weiss (1):
+      arm64: dts: qcom: qcm6490-fairphone-fp5: Add DisplayPort sound support
+
+Manikanta Mylavarapu (2):
+      arm64: dts: qcom: ipq5424: Add PCIe PHYs and controller nodes
+      arm64: dts: qcom: ipq5424: Enable PCIe PHYs and controllers
+
+Maud Spierings (1):
+      arm64: dts: qcom: x1e80100-vivobook-s15: Add bluetooth
+
+Melody Olvera (1):
+      arm64: dts: qcom: sm8750: Add LLCC node
+
+Nirmesh Kumar Singh (1):
+      arm64: dts: qcom: Add industrial mezzanine support for qcs6490-rb3gen2
+
+Nitheesh Sekar (2):
+      arm64: dts: qcom: ipq5018: Add PCIe related nodes
+      arm64: dts: qcom: ipq5018: Enable PCIe
+
+Pengyu Luo (1):
+      arm64: dts: qcom: sm8650: add the missing l2 cache node
+
+Praveenkumar I (2):
+      arm64: dts: qcom: ipq5332: Add PCIe related nodes
+      arm64: dts: qcom: ipq5332-rdp441: Enable PCIe phys and controllers
+
+Sibi Sankar (2):
+      arm64: dts: qcom: x1e80100: Add cpucp mailbox and sram nodes
+      arm64: dts: qcom: x1e80100: Enable cpufreq
+
+Srinivas Kandagatla (1):
+      arm64: dts: qcom: x1e78100-t14s: Enable audio headset support
+
+Varadarajan Narayanan (1):
+      arm64: dts: qcom: ipq9574: Add MHI to pcie nodes
+
+Viken Dadhaniya (1):
+      arm64: dts: qcom: sa8775p: Add default pin configurations for QUP SEs
+
+Xilin Wu (1):
+      arm64: dts: qcom: sc7280: Mark FastRPC context banks as dma-coherent
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   4 +
+ arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts     |  40 ++
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi              | 246 ++++++-
+ arch/arm64/boot/dts/qcom/ipq5332-rdp441.dts        |  76 +++
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi              | 252 ++++++-
+ arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts        |  41 +-
+ arch/arm64/boot/dts/qcom/ipq5424.dtsi              | 525 +++++++++++++-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  40 +-
+ .../boot/dts/qcom/msm8996-oneplus-common.dtsi      |   5 +
+ arch/arm64/boot/dts/qcom/msm8996-oneplus3.dts      |   2 +
+ arch/arm64/boot/dts/qcom/msm8996-oneplus3t.dts     |   2 +
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts    |   1 +
+ .../boot/dts/qcom/msm8998-lenovo-miix-630.dts      |   6 +
+ arch/arm64/boot/dts/qcom/msm8998-mtp.dts           |   1 +
+ .../boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi |   1 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |   2 +-
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi              |  40 +-
+ arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts |  31 +
+ arch/arm64/boot/dts/qcom/qcs615.dtsi               |  40 +-
+ .../qcom/qcs6490-rb3gen2-industrial-mezzanine.dtso |  21 +
+ arch/arm64/boot/dts/qcom/qrb2210-rb1.dts           |  83 +++
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dtsi         | 133 ++--
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi              | 757 ++++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sar2130p.dtsi             | 394 +++++++++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  15 +
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |   6 +
+ .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |   6 +
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 709 ++++++++++---------
+ .../boot/dts/qcom/sdm845-samsung-starqltechn.dts   | 329 +++++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sdx75-idp.dts             |  18 +
+ arch/arm64/boot/dts/qcom/sdx75.dtsi                |  33 +
+ arch/arm64/boot/dts/qcom/sm4450.dtsi               |  68 ++
+ .../dts/qcom/sm6350-sony-xperia-lena-pdx213.dts    |   7 +
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm8550-hdk.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sm8550-qrd.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |  81 +++
+ arch/arm64/boot/dts/qcom/sm8650.dtsi               |   9 +-
+ arch/arm64/boot/dts/qcom/sm8750.dtsi               |  18 +
+ arch/arm64/boot/dts/qcom/x1e001de-devkit.dts       |  86 +++
+ .../dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtsi    |  90 +++
+ .../boot/dts/qcom/x1e80100-asus-vivobook-s15.dts   | 167 +++++
+ .../dts/qcom/x1e80100-hp-elitebook-ultra-g1q.dts   |  30 +
+ .../boot/dts/qcom/x1e80100-hp-omnibook-x14.dts     | 156 +----
+ .../boot/dts/qcom/x1e80100-lenovo-yoga-slim7x.dts  | 476 ++++++++++++-
+ .../boot/dts/qcom/x1e80100-microsoft-romulus.dtsi  |  18 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 100 ++-
+ 51 files changed, 4574 insertions(+), 610 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/qcs6490-rb3gen2-industrial-mezzanine.dtso
+ create mode 100644 arch/arm64/boot/dts/qcom/x1e80100-hp-elitebook-ultra-g1q.dts
