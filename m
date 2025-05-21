@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A72C1D5151
-	for <soc@lists.linux.dev>; Wed, 21 May 2025 22:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5170237180
+	for <soc@lists.linux.dev>; Wed, 21 May 2025 22:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747866678; cv=none; b=PLvF/5z9ksdjiWANUBd5Sn75X3QQdQRMFx9hAqvtJZtzY+TIe+AcAYKGwPC6EdmuX1myDBAwCRDGnRQn0pVq4I+fmD8bjQkEac2SoyQnllL5PNnAY5zxABOKuW/1zEsrsoPIVj0oor8+LNwwRUoJWCHL3ljR5dZ4dhZ+28c5mxw=
+	t=1747866679; cv=none; b=AoOOp2UASFceNtwue6K2NbQKtUlIHfWDa3h7oh04JdUUUrePv55MFW/WE8Rtc7Xwa7qteoi44C7kKAw/Wja/nQBhE+yF2oCj1hPTj7GOdnshlEUTmArlD/4g5pCV32k4fY103vnElla+1eS53EwNUdIZ/32rvAYrDB5kAq2/uGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747866678; c=relaxed/simple;
-	bh=zyHGZtGosIBRCtDW0iIlGXT/DgWTNFmKODvCL/b21+Q=;
+	s=arc-20240116; t=1747866679; c=relaxed/simple;
+	bh=fbFKw7KWB776eBefTyydxcxWucuhdKEFd/zFkOHasrw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Ksp3gLGY6HCoiajIl8v9W43D9ROjp1VN2eF+4PyAv6HIyxfPxlGfHwoYId1GAk3bOIJseyvIKGb/tMcIVI9vqQ9Z730t/qLpX9JM2YIbC5xDqg4gP8xAOpacTo4ER2o/WUww9lC4tbCj/GFfr6efMBl7dfZ2cxNCnZI4l4vF0Vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2uhAjqV; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=erYFvKjrecXcIB7Ol5ot0U8lz6lTZun7W4ZY5H5B4HmDdkhed1vE0qJJEyXNuSm350231n4Z4qq38QnEZOKE9rlzK+IbJf4o8tY7xL9IQwS7ej8wKYS516Nev34EBl9kXsZhOteqRm6PWacM1acv54kIAVMgsHq8GCYzZPfyHUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KKw0G6nm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2uhAjqV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KKw0G6nm"
 Received: by smtp.kernel.org (Postfix)
-	id 22200C4CEEB; Wed, 21 May 2025 22:31:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CDDFC4CEEA;
-	Wed, 21 May 2025 22:31:18 +0000 (UTC)
+	id 9D2CFC4CEF1; Wed, 21 May 2025 22:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C4EC4CEE4;
+	Wed, 21 May 2025 22:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747866678;
-	bh=zyHGZtGosIBRCtDW0iIlGXT/DgWTNFmKODvCL/b21+Q=;
+	s=k20201202; t=1747866679;
+	bh=fbFKw7KWB776eBefTyydxcxWucuhdKEFd/zFkOHasrw=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=H2uhAjqVSoj6v1mGjwZ10PDglB/hmgoPgetVhdMHbZVtZdLKPxVt1WmRVlnCWCUYf
-	 i3jkx2tXq9opF61jflcPVat0jdfA78Kk/CgUE50QmQvkkPU92hNkPHppycn0FZaj2X
-	 F6eduI1ZRUlGXIUfjNW3GsVo1tWQQBYQfxEpEfAovJGNp0SDM7DLdDD3LFGpCV+9Vg
-	 CkmXewNKCOCvpROhG1HU+/fGj9n3ccJrJNBpP7aVLrdKnGAQ60858j/w133t2RMmWO
-	 TvQKdmy9ZZ6mW7fJF8P8PRdTnHLPePg+uizaKnJnFfzVshV5aITilB5t7lSDH4l2oz
-	 xAlCF4vzrfFoA==
+	b=KKw0G6nmHRDib4wqymf56OwkOwl5ty2LFFEfuTRJkCxnQDnS0D8DG9n595q3fVjsd
+	 zVe18pm2fKtJ5NcCa0CEhjvLWN/3diZZQG8NT99dSnTpPiE38L43MIDbOfqqpaT3VR
+	 5HJFJa1KxMFtxDli+G33jnBsTbWuG/cIpkddIfEVRc6ZScR/iaerZQzLcVwONnaCn0
+	 70QlWhhfWE2u7VDED9YgDkeIH/Wpr91QS6WvIdOORjakvAzv9ab99jJoDZQdjJ1/T3
+	 3RX8de6kSk/OJWcNMGgRu6pgu58yqdUamiQ87UszbYbi1ZA7NPT1+4zC7TRt08/Mqm
+	 dLy1M83k/vDDw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAB80380CEEF;
-	Wed, 21 May 2025 22:31:54 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70BC1380CEEF;
+	Wed, 21 May 2025 22:31:56 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,36 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Microchip AT91 DT updates for v6.16
+Subject: Re: [PATCH] arm64: dts: nuvoton: Add pinctrl
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174786671348.2299459.6074981573628757235.git-patchwork-notify@kernel.org>
-Date: Wed, 21 May 2025 22:31:53 +0000
-References: <20250516055330.10852-1-claudiu.beznea@tuxon.dev>
-In-Reply-To: <20250516055330.10852-1-claudiu.beznea@tuxon.dev>
-To: Claudiu <claudiu.beznea@tuxon.dev>
+ <174786671507.2299459.14723353091056467781.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 22:31:55 +0000
+References: <20250515-nuvoton-arm64-dt-v1-1-25769b8c1509@codeconstruct.com.au>
+In-Reply-To: <20250515-nuvoton-arm64-dt-v1-1-25769b8c1509@codeconstruct.com.au>
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 16 May 2025 08:53:30 +0300 you wrote:
-> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+On Thu, 15 May 2025 16:15:54 +0930 you wrote:
+> From: "William A. Kennington III" <william@wkennington.com>
 > 
->   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+> This is critical to support multifunction pins shared between devices as
+> well as generic GPIOs.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.16
+> Signed-off-by: William A. Kennington III <william@wkennington.com>
+> Link: https://patch.msgid.link/20250416015902.2091251-1-william@wkennington.com
+> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Microchip AT91 DT updates for v6.16
-    https://git.kernel.org/soc/soc/c/ea15963b2653
+  - arm64: dts: nuvoton: Add pinctrl
+    https://git.kernel.org/soc/soc/c/7e1a0dfb3f59
 
 You are awesome, thank you!
 -- 
