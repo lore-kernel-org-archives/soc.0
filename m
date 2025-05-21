@@ -1,105 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0759E27B50C
-	for <soc@lists.linux.dev>; Tue, 20 May 2025 11:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577E923815B
+	for <soc@lists.linux.dev>; Wed, 21 May 2025 09:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747741445; cv=none; b=CPYxhYe03f+fzpi80RD4326G+eKKC3KnXDlsahY9TTCXZjVpG77FBbd1zEMs6LdNxWFyyFTiJ21Iu1Ho+G5kv6ym26JLKeBQ/j3b42qa53RSjsSBniIDZDgiv7lNOKDfjDaq5f/WM+qj3Re6Sa7cYWi9QspMdA1RqSxOlLxYyWk=
+	t=1747818021; cv=none; b=Tf/KXeJ7ng0+aljWj7DJ29pHJ/hT33q0J+Xl3ML2x4vqujFOOkDrvqw9sDoddc9H1yK4OQTPBmXydLnw9hgO1iZIHIDd/qMF5lbO/ZGAshiSYp+Y21cfLBpQ4wybb2MdiE8x34cC1YNEs06eX8c8oX9Hs5KopZUp1IfG4+tKjPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747741445; c=relaxed/simple;
-	bh=0reCPQbdTGw1NjQ0NvjfPr/9W8uADPNGHMLSJN9cyeo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TrpXM29+TjB4MmyLYJWkTH4DoFz0w5oEgV9qkSKbCb3n4Vy8kl+6GOBUJ+Rwio1rTdhKlhA3g1jLE+di1RTrOhzfMyndGegftTGtpKXKwNptPz0K5f6YOXzxCdYnM+wYpGZ8BNrtWO62mbqO3lcrD8eGearj1PY4t+W5ZejNqbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CcinnoKG; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CcinnoKG"
+	s=arc-20240116; t=1747818021; c=relaxed/simple;
+	bh=9q+hyRHXohHqDSLnLvFvFUAnzd0H8twh56Uq+QEEVLg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B6JHtf+ZT/EpcYjT+zhVujzdD5vX+C/RAPiXju1QncUXFpGw1zH6DSWkklajC8iXy7Td0P9wMapnD/i8KFjULv9bA4MPPosEjeIfcTA2YtQcTCz6/acy4ZOI8WoMVYdH0WRIoztTVxy5FpWdKejmX5L0nGPOpBhhrkwMi8Pe64c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 9A0C2C4CEF1; Tue, 20 May 2025 11:44:04 +0000 (UTC)
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	id D0F87C4CEEF; Wed, 21 May 2025 09:00:20 +0000 (UTC)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1977FC4CEEB;
-	Tue, 20 May 2025 11:44:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1977FC4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1747741441;
-	bh=0reCPQbdTGw1NjQ0NvjfPr/9W8uADPNGHMLSJN9cyeo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CcinnoKGIXH6RWXq0MfdR/4J1GoUl5wR6fLOhJa7D1vaee3Ulrt/mWq9niBpts65K
-	 T//eWPLtHAroDs+mOm6OW8yNRfrkTT0gd4zCkshOilF40yzuRxqcIc8TGxJzXvMbPC
-	 Ggs/7ezLg37ZH7RF6DNvNWHUHUk3jEJrHuixEWvRHSQJ+6iF2zP4tllIsslukHD+T3
-	 HYoQ6Eo4639ISKGYk2/1OA87ISOCBLm+NZBKnqi8aq76L5Am34ep3RS/o/NKmG3gXu
-	 zG2SXxZr36+bXvRLIXynwFolPF8lIIXNty01VTFVlsS0tn/jlB7IfmlZVpgxopHyKO
-	 e64heN/6ynZeA==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B90E917E0E2D;
-	Tue, 20 May 2025 13:44:00 +0200 (CEST)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: arm-soc <arm@kernel.org>,
+	by smtp.kernel.org (Postfix) with ESMTPS id D4E4DC4CEEA
+	for <soc@kernel.org>; Wed, 21 May 2025 09:00:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4E4DC4CEEA
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:2bba:d77b:9240:3c4e])
+	by michel.telenet-ops.be with cmsmtp
+	id rl0G2E0024GqtyW06l0GUC; Wed, 21 May 2025 11:00:16 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uHfIw-00000002i7H-3gyx;
+	Wed, 21 May 2025 11:00:16 +0200
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uHfJA-00000002ch9-02Wf;
+	Wed, 21 May 2025 11:00:16 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
 	soc <soc@kernel.org>
-Cc: matthias.bgg@kernel.org,
+Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [GIT,PULL,2/2] MediaTek defconfig updates for v6.16
-Date: Tue, 20 May 2025 13:43:52 +0200
-Message-ID: <20250520114356.1194450-2-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250520114356.1194450-1-angelogioacchino.delregno@collabora.com>
-References: <20250520114356.1194450-1-angelogioacchino.delregno@collabora.com>
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DTS updates for v6.16 (take four)
+Date: Wed, 21 May 2025 11:00:13 +0200
+Message-ID: <cover.1747817851.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+	Hi SoC folks,
 
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+This is my fourth pull request for the inclusion of Renesas SoC updates
+for v6.16, containing just a fix.
+
+The following changes since commit 1064013303c6dd59f1586656f853765c6e870f8b:
+
+  riscv: dts: renesas: Add specific RZ/Five cache compatible (2025-05-14 13:30:06 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-defconfig-for-v6.16
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.16-tag4
 
-for you to fetch changes up to 543e0ecee19ec6fe7bca894057f7f9ae063dd5a4:
+for you to fetch changes up to 652eea251dd852f02cef6223f367220acb3d1867:
 
-  arm64: defconfig: Enable configs for MediaTek Genio EVK boards (2025-05-14 15:47:58 +0200)
-
-----------------------------------------------------------------
-MediaTek ARM64 defconfig updates for v6.16
-
-This enables some drivers as modules to enable fully booting
-some of the supported MediaTek boards;
-
-In particular, this enables the following drivers as module:
- - PHYs for PCIe, HDMI, DSI and DisplayPort for all boards
- - MediaTek UART DMA Controller, also for all boards
- - MDP3 driver for MT8186/88/95 (Chromebooks and Genio variants)
- - Auxiliary ADC for the MT6357/58/59 PMICs found on both Genio EVK
-   and Chromebooks based on designs with MT8183/86/88/92/95 SoCs
- - iTE IT5205 Type-C USB Alternate Mode Passive MUX, found
-   on both Chromebooks and Genio EVKs with MT8188/95
- - Richtek RT1715 Type-C PD Controller, found on all Genio boards
- - Himax HX8279 DSI panel DriverIC and KD070FHFID015 panel, found
-   on various revisions of the Genio Evaluation Kit boards.
+  arm64: dts: renesas: white-hawk-ard-audio: Fix TPU0 groups (2025-05-20 09:31:11 +0200)
 
 ----------------------------------------------------------------
-Nícolas F. R. A. Prado (1):
-      arm64: defconfig: Enable configs for MediaTek Genio EVK boards
+Renesas DTS updates for v6.16 (take four)
 
-Vignesh Raman (1):
-      arm64: defconfig: mediatek: enable PHY drivers
+  - Fix White Hawk ARD Audio breakage.
 
- arch/arm64/configs/defconfig | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Thanks for pulling!
 
+----------------------------------------------------------------
+Thuan Nguyen (1):
+      arm64: dts: renesas: white-hawk-ard-audio: Fix TPU0 groups
+
+ arch/arm64/boot/dts/renesas/white-hawk-ard-audio-da7212.dtso | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
