@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3991D5151
-	for <soc@lists.linux.dev>; Wed, 21 May 2025 22:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6136C23BCFF
+	for <soc@lists.linux.dev>; Wed, 21 May 2025 22:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747866669; cv=none; b=ViP1I478fttnfu/J0v2muaFuvglzkKMQnGLULUyPJbLQ8Bwwd4L5Fo7UppVvKiATavqtWPMvKY97XhbKiavWu7WzGP+/eb1zEOMqeXeKs9+1WRTFAC94343KsSMrhFORqV/tor74xG/oodk79Ardy0jdoGNn47Ldr3JeQg8IClE=
+	t=1747866670; cv=none; b=TajyIP9D1HRapY20vLybVMIkcezW9Ovjb24sHKdYWLZ0FAWuQ+kLrzQq3ZcQeq66b835JQzfreMq1Al82QhIkYRNTIZLP+BeTvnMAy3ZY+1Q4cO1Zsrn8XNsnzwURzmCQ/D2tfVdzKegAm722bYPgOOinft9dSooITi6NpV1pFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747866669; c=relaxed/simple;
-	bh=wP1ALFJqE5U1jBb/YRekpkqX2pckGvOKhF/e9j4+A+Y=;
+	s=arc-20240116; t=1747866670; c=relaxed/simple;
+	bh=geO7NLH9VM3SbfuajR2Xt1BxYdo7H8fUkaVGCivneL8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qrP3OEIxn5Nt20E52Ps66lSFf/8VJ7l4X+jUPK4cqnvoGNaSGFT7lJeR9h2Rr6y4VOcx/4NaxF4rSg4vCAIQeFrbchaT/+P1rK6dt8Adcc5ewLmXaRHPwau7QsT2z5ykQSNGpAAknLnnLFRgWAdoY49M1JZhtZgesvu0LjZGzPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rVCSf7Es; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=eLxKAdx7P7jPCfCxUQYVAv36BGSP4tx86lcKof8pUO1I3zuqPNtpWRIHTzUqKomGgFkDIIWbyWNed+TpXOhB+6jbP5WHzASfbE7iqVxnBoC4uSNR9Lv54NzeXKf2J9rJwOdKnwrN8dZYTN34WjPV62sPdAOA5GHAwd0FJiUIMS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVsceUKl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rVCSf7Es"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVsceUKl"
 Received: by smtp.kernel.org (Postfix)
-	id 6D4B0C4CEEF; Wed, 21 May 2025 22:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57AE5C4CEEA;
-	Wed, 21 May 2025 22:31:08 +0000 (UTC)
+	id DF133C4CEEF; Wed, 21 May 2025 22:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D13C4CEE4;
+	Wed, 21 May 2025 22:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747866668;
-	bh=wP1ALFJqE5U1jBb/YRekpkqX2pckGvOKhF/e9j4+A+Y=;
+	s=k20201202; t=1747866669;
+	bh=geO7NLH9VM3SbfuajR2Xt1BxYdo7H8fUkaVGCivneL8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rVCSf7Eszs10hKsDIvIVsm1fBvvG+ElJdIeb6WuWvvhvBuXOTs6VHr80N93iSYMml
-	 S8tJuHivthqyMuSgVunPB4dG9D7KSEhBuGilVavuVZLUoO5QoPBbYW9m7vKlxiqSzR
-	 ShCCX0XZNVOktyVLqQHzfbDtDbdahXs+AKS4QyW/1LYEblptk5y19v+LH4wxE2wUaF
-	 mnOhuwvYKz9nh4v4pjuGmHFQeHklmVO0MjvP4w+Xzj4ELnptDwwaxSsU7z2nSxjzan
-	 hXpp3N8VyLdzi5lzDFXxqAMZ3y82A2N4t5l/ZnMk2CN+xtHrlaaq5RiPTpjfmvbGoo
-	 hM9QjevWWD0Kg==
+	b=bVsceUKl+Qatorf3EnsQ75eWc57DRmM94aXPTOxbrRKttesoGnTuFLphy5jkawI3C
+	 nA2qGzKdG2C43BoKp/jR+pcCXiu+auo2xPlEImrMxyjwa7/YjTnQUh9n9aSXCfrNJC
+	 V/Yw50/VLHSl/S5zKUp4emktVri7zMIZcuF82xkoOkAvif9vjWLOOxDSXGLzzvWDvK
+	 p4HQl3NSMMrQOyq15Rr39olxq1JLqkyafMuUZW68sstiIbIdLtaiYC/l+6Ldfj6veZ
+	 734dUPvsT0vL9d2mRjFLDiZq0wDHujIJwaQbRLtB1r/01jedCooIL+N21Nrh43a3ih
+	 yx5G9kWNVYC9g==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33AB8380CEEF;
-	Wed, 21 May 2025 22:31:45 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE4C380CEEF;
+	Wed, 21 May 2025 22:31:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] More Qualcomm Arm64 DeviceTree updates for v6.16
+Subject: Re: [GIT PULL 1/3] arm64: dts: Cleanup DTS for v6.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174786670398.2299459.9723218528529581778.git-patchwork-notify@kernel.org>
-Date: Wed, 21 May 2025 22:31:43 +0000
-References: <20250520024248.38904-1-andersson@kernel.org>
-In-Reply-To: <20250520024248.38904-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <174786670523.2299459.16473600079638439636.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 22:31:45 +0000
+References: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,20 +54,24 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 19 May 2025 21:42:47 -0500 you wrote:
-> The following changes since commit a18226be95c7ae7c9ec22fd31a6124bef5675c64:
+On Tue, 13 May 2025 12:42:15 +0200 you wrote:
+> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 > 
->   arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce touchscreen support (2025-05-11 17:34:23 -0500)
+>   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.16-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.16
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] More Qualcomm Arm64 DeviceTree updates for v6.16
-    https://git.kernel.org/soc/soc/c/12a75f2d9f73
+  - [GIT,PULL,1/3] arm64: dts: Cleanup DTS for v6.16
+    (no matching commit)
+  - [GIT,PULL,2/3] ARM: dts: VT8500 for v6.16
+    https://git.kernel.org/soc/soc/c/2b183108bcbd
+  - [GIT,PULL,3/3] drivers: soc for v6.16
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
