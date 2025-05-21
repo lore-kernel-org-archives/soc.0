@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B309136351
-	for <soc@lists.linux.dev>; Wed, 21 May 2025 22:31:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA2A136351
+	for <soc@lists.linux.dev>; Wed, 21 May 2025 22:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747866663; cv=none; b=oNGZ+8nGjKrGjckMgb8SUxzlBTPWEKr0w1TF6kaiLoIwMG4ZYFkmN8+0c/lDam0fwm4ejE1rTnsXCLAMjuKlfUyG2YvmWpwxNL0h82bfAwgfU5JBH5HaECP6CmhN2y2nJf/LIH4Y3JThW4px4H44bTgogZHYR3H/ohUk4O7BZXc=
+	t=1747866664; cv=none; b=AmookwxPk52gLNY3ygtAvQtfdlsSwxD0rW6Jl3jIiVZWwGiDs3mM/92QlLfIyX5VWgPLwXxOTSUPOUKqkfvaWs0UDzxLYTOgvZzlEl0nD8R6ysuTD1a3JjViluaKliX2vULyVKi04v2XUvcX/JfSr49qJH0hVa2QajDeuwGCDRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747866663; c=relaxed/simple;
-	bh=zs4TGgWFRUTovhFkWqOofV1uukvjUdwOQNskexCgAVU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=PVzlYosfd9JMefIRRI0PanhMMhxAe/pc1F2B3N1ruDiXluotgTUp4IYdCcxmD/q0saq3YSJVFIvxIr7rD6Ma5xF9zP8OO77BqslOjKUo6A7Zw0n8KKalzSqP5QiHGXLedCLdP/GwbYjp0TcpibHcrAFRfMOz/DA5228ETpuAEPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UxFWcQwt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747866664; c=relaxed/simple;
+	bh=d7FrYkpeQJrffe1gdGY2g4sHCp8HKktN52AFkiV+I6Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=cVDx34A7+syZhZ9vh129XKKIIYmMWOF3a1g9zrdjrBp5nOyZx9pkn/IQQc3WCM6C3bZcWKON5dt3kdShhhpBvXkPcRb9AOnywz740wQfgq1lLqnC5owd3K5y5oCojtNPw4curOrt8KG5ymgXFL+JsAFtz2iBczU645thtb3NKbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=thuXkQLU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UxFWcQwt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="thuXkQLU"
 Received: by smtp.kernel.org (Postfix)
-	id 4ED8BC4CEEB; Wed, 21 May 2025 22:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38753C4CEE4
-	for <soc@kernel.org>; Wed, 21 May 2025 22:31:03 +0000 (UTC)
+	id 6C887C4CEEB; Wed, 21 May 2025 22:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D48C4CEE4;
+	Wed, 21 May 2025 22:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747866663;
-	bh=zs4TGgWFRUTovhFkWqOofV1uukvjUdwOQNskexCgAVU=;
-	h=Subject:From:Date:To:Cc:From;
-	b=UxFWcQwt0KzTBXZTn8dTY1NlFW6cypf3DoO/YSMWqP03l/QyTVuBcfTZ1uBn354a6
-	 +N7/c0oTdKUGFoDu7eY3ywKxDcZCLz0fpjAekgJ/XvphJ0srotbzIDjHDAc5V4+ZuU
-	 2p8QCFEHxhb8F64rtm5HZGa08yuyhPX8F8BUzDgNFxNXRyVnUQY6NaPuSjSqWRaeOp
-	 /cSZCfUEXGNdoO0cTJnuYb83fuvy3RHQuh/oLnGTfLrW+WrLGDNCWh0ldkzSsbrZUx
-	 F/XJ6nuPLQqEKB7xmtJfu2p+h9OADbT4tk7nsqruhLBG0ulPXlV7ALH1hdxU9gHMWM
-	 2N1bO6/SwGWhg==
+	s=k20201202; t=1747866664;
+	bh=d7FrYkpeQJrffe1gdGY2g4sHCp8HKktN52AFkiV+I6Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=thuXkQLU8MZoxSbe3KV5VugBSHo1YlfXfSSrv31Ni7O5wkgmwCGmlyM1TxvQcQMTE
+	 ytRo+Gig8OmsbMJty5AFXnxdBDCSg4YTCrZJFASe5mrxzfEIAvU9iVdw7ZRF9Oe2j9
+	 XLfKn8Q4EsAs3BKGUi8El1Qin8Ie0fx4Iz0zoxZ71OtYUBsZSwYRx7VMImlDYRdZ7K
+	 OIVsgMiK8gnMxMi+D3hcB0Xo8l8XnQj9yTyd8ULQVHM526uHKRZTkzsu20pVpplBPF
+	 rYnTMJYB6Jfer6TDNb731PbIFUQOqg9O6CmKwiDI3dwd8EM39rIhsHhgyJzIkQAJsT
+	 vWk0fMci58dEw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EFC12380CEEF;
-	Wed, 21 May 2025 22:31:39 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D6D380CEEF;
+	Wed, 21 May 2025 22:31:41 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,96 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] More Arm32 DeviceTree updates for v6.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174786669855.2299459.10627911205981770512.git-patchwork-summary@kernel.org>
-Date: Wed, 21 May 2025 22:31:38 +0000
-To: soc@kernel.org
+ <174786670001.2299459.4846722551631009775.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 22:31:40 +0000
+References: <20250520024716.39418-1-andersson@kernel.org>
+In-Reply-To: <20250520024716.39418-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] More Arm32 DeviceTree updates for v6.16
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=964386
-  Lore link: https://lore.kernel.org/r/20250520024716.39418-1-andersson@kernel.org
+On Mon, 19 May 2025 21:47:14 -0500 you wrote:
+> The following changes since commit f2420037d90a8354594b3da541e19dcbb60c75e1:
+> 
+>   ARM: dts: qcom: apq8064: move replicator out of soc node (2025-05-13 17:00:59 +0100)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm32-for-6.16-2
+> 
+> [...]
 
-Patch: [GIT,PULL] Microchip ARM64 DT updates for v6.16
-  Submitter: Claudiu <claudiu.beznea@tuxon.dev>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963476
-  Lore link: https://lore.kernel.org/r/20250516055607.11248-1-claudiu.beznea@tuxon.dev
+Here is the summary with links:
+  - [GIT,PULL] More Arm32 DeviceTree updates for v6.16
+    https://git.kernel.org/soc/soc/c/13649a41bec2
 
-Patch: [GIT,PULL] Qualcomm Arm32 DeviceTree updates for v6.16
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=962571
-  Lore link: https://lore.kernel.org/r/20250513214111.43401-1-andersson@kernel.org
-
-Patch: [GIT,PULL] More Qualcomm Arm64 DeviceTree updates for v6.16
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=964382
-  Lore link: https://lore.kernel.org/r/20250520024248.38904-1-andersson@kernel.org
-
-Series: [GIT,PULL,1/3] arm64: dts: Cleanup DTS for v6.16
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=962386
-  Lore link: https://lore.kernel.org/r/20250513104216.25803-4-krzysztof.kozlowski@linaro.org
-    Patches: [GIT,PULL,1/3] arm64: dts: Cleanup DTS for v6.16
-             [GIT,PULL,2/3] ARM: dts: VT8500 for v6.16
-
-Series: [GIT,PULL,1/2] Additional MediaTek ARM64 DTS updates for v6.16
-  Submitter: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=964560
-  Lore link: https://lore.kernel.org/r/20250520114356.1194450-1-angelogioacchino.delregno@collabora.com
-    Patches: [GIT,PULL,1/2] Additional MediaTek ARM64 DTS updates for v6.16
-
-Patch: [GIT,PULL] ARM: nuvoton: soc changes for 6.14
-  Submitter: Joel Stanley <joel@jms.id.au>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963993
-  Lore link: https://lore.kernel.org/r/CACPK8Xe=f_hNNWUGL670x4-OeKgDB+2P+mxp5BaTLW==T5jE_A@mail.gmail.com
-
-Patch: [GIT,PULL] RISC-V SpacemiT Devicetrees for v6.16
-  Submitter: Yixun Lan <dlan@gentoo.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=962643
-  Lore link: https://lore.kernel.org/r/20250514044841-GYA524674@gentoo
-
-Patch: None
-  Submitter: Conor Dooley <conor@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963577
-  Lore link: https://lore.kernel.org/r/20250516-gap-exploring-f8f516ab4e1c@spud
-
-Patch: [GIT,PULL] Allwinner device tree changes for 6.16
-  Submitter: Chen-Yu Tsai <wens@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963441
-  Lore link: https://lore.kernel.org/r/aCaeZJ2t4S_xhgjp@wens.tw
-
-Patch: [GIT,PULL] Microchip AT91 DT updates for v6.16
-  Submitter: Claudiu <claudiu.beznea@tuxon.dev>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963475
-  Lore link: https://lore.kernel.org/r/20250516055330.10852-1-claudiu.beznea@tuxon.dev
-
-Patch: arm64: dts: nuvoton: Add pinctrl
-  Submitter: Andrew Jeffery <andrew@codeconstruct.com.au>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963080
-  Lore link: https://lore.kernel.org/r/20250515-nuvoton-arm64-dt-v1-1-25769b8c1509@codeconstruct.com.au
-
-
-Total patches: 13
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
