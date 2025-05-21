@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FAA82BD58E
-	for <soc@lists.linux.dev>; Wed, 21 May 2025 21:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFCB22F744
+	for <soc@lists.linux.dev>; Wed, 21 May 2025 21:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747863017; cv=none; b=psv/dCt989qjnQj14l6L3X2psUJlf3aJpWzDvZ+AK2NXL5VEFb2OxRbWBdPCkGdX/r1gdbOExll2MHlMQUE6hURsSZExo2LRlGHVeYl6xEjcwJz5tjbfVjOQo+LtJJ9fHFS/MnoGwP6h7tn2Ogghd0klTtp4A1G0mL1HLM7f3bs=
+	t=1747863018; cv=none; b=Jh8Z+YaEmiAz+RnbV36bYQDRGzWE4OMULu4h4hENr6qgV3QyB/iHxmg6G/C4PVHhGbG3iWbuNPgS4NbOJ19p0pcPWInatT7Wcl6L1bFxI5ktCGQxVngcLFBd+9mgLhegzbJ1rGrGVfTek63QVHfAoAkstB66Ia68NaL79GCe28o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747863017; c=relaxed/simple;
-	bh=6ua6Y8AsIdlQ5TV68BvEs2nqz7u8cfYroGx1I54RhvA=;
+	s=arc-20240116; t=1747863018; c=relaxed/simple;
+	bh=J4tsXoHoaWs4GyIyR/XPU/Yll8MbC4XoYXWpRlykTA4=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qlH1ErEuIchw4cWxP3NQzLMaydCw245s28ZWjBnKQAJnkHaiIJAXcvW7I7yZgUTe8gjtezL8vSDhm7+NHyEC/854EpG2Cm1eNU8vjrwtmUL5dpKbudJbyvIXeaZT0JiiZfJxZfDYJIBv5e0OWE+ZcpTwE1qabklVLjYtTIIau6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojivn8oF; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=SCgnKHmCFdEWCkyroZGa3NTYjA+r2pLK0EAGrBLOw57ot70c2wSJFi5jQL5lPQmvjVSEMtCa7KGDqKbzTQxCmoFNcPht5xVEUr1f4KP29CKqx2zQKUH2Nw3F5WpwuCCMxlbjGmXbwwwkKM60zVJdpCeS//u9NE/g2I2gRsaWMUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nTAVTrpN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojivn8oF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nTAVTrpN"
 Received: by smtp.kernel.org (Postfix)
-	id 26999C4CEEB; Wed, 21 May 2025 21:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110F8C4CEE4;
-	Wed, 21 May 2025 21:30:17 +0000 (UTC)
+	id A1AEAC4CEEB; Wed, 21 May 2025 21:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4DDC4CEE4;
+	Wed, 21 May 2025 21:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747863017;
-	bh=6ua6Y8AsIdlQ5TV68BvEs2nqz7u8cfYroGx1I54RhvA=;
+	s=k20201202; t=1747863018;
+	bh=J4tsXoHoaWs4GyIyR/XPU/Yll8MbC4XoYXWpRlykTA4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ojivn8oFgCM3lCkHCz4zLImoRe166y9PCIyDK6Mxnwx39Jynow6kLWVLjhLKwxY4T
-	 J0uQUl2BHezktcKUPJynOUAVu40L7EwiQ51wMPFl2hnSoRekoi+m+qHuN6CVd8AIjx
-	 dd/ZvsLX8qOTXbemHmqeD8AIjIdoIqUSa//0tRittrJKygQszJTZFtKOot4cHWNJwU
-	 LP6SlZ6ekc6FtgTzkiT1hBZGljxZxaJKzh1xant+SXYTCoOT9+Xb2utrEtxGIsf/7f
-	 Ne8wLR2mihPIE7iDfN+6b98InUnWbt9q5qN899QVReMAryg07h5GtkDsl8PWoZmyQI
-	 bS8XnCPmXpH4g==
+	b=nTAVTrpN1/L7q5fXYMOP8nzKA0Ley23pknODs6UnOLP6UPKc1LUZorC64W92NYNLi
+	 D9WgLG7dnPoJcPdK7pyh8ZTRieZumwceC+wsTpA8P95GZUxFDCqPRnm5cSiFHCFHVp
+	 09rm5ZE3P/k2xZGfbT4mAc4Y3QbnfKPvR1s9mGTzHKi7uQWeCwX5zFpZaF99DF9332
+	 mTn7LC7yXLpPGgvmakgoh3Sn+XLVG2aTocvt5hwqeHcLrMn8hXHCWQbTKouGWLSGut
+	 oWjIZ3LP/cqPlFFtCgpJiSrgQs+gS/VZLCJpWvdJ6IM7Sx1HRFfodP8L+gTmwss/rd
+	 t7InOPRLr5bwA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ECCC0380CEEF;
-	Wed, 21 May 2025 21:30:53 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E8C380CEEF;
+	Wed, 21 May 2025 21:30:55 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] arm64: dts: Cleanup DTS for v6.16
+Subject: Re: [GIT PULL] Amlogic drivers updates for v6.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <174786305249.2284637.9133266705528096927.git-patchwork-notify@kernel.org>
-Date: Wed, 21 May 2025 21:30:52 +0000
-References: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20250513104216.25803-4-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <174786305400.2284637.15853608150086054723.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 21:30:54 +0000
+References: <04908842-4c55-44a0-b74c-3aca82a1f204@linaro.org>
+In-Reply-To: <04908842-4c55-44a0-b74c-3aca82a1f204@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,24 +54,21 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 13 May 2025 12:42:15 +0200 you wrote:
-> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
+On Tue, 13 May 2025 12:25:47 +0200 you wrote:
+> Hi,
 > 
->   Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
+> Here's drivers updates for Amlogic SoCs, refactoring the clk-measure driver to
+> move more structures to const and support C3 & S4 SoCs.
+> With Philips' ack, I also picked the A4/A5 reset controller bindings.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.16
+> Thanks,
+> Neil
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] arm64: dts: Cleanup DTS for v6.16
-    (no matching commit)
-  - [GIT,PULL,2/3] ARM: dts: VT8500 for v6.16
-    (no matching commit)
-  - [GIT,PULL,3/3] drivers: soc for v6.16
-    https://git.kernel.org/soc/soc/c/5bba2c467568
+  - [GIT,PULL] Amlogic drivers updates for v6.16
+    https://git.kernel.org/soc/soc/c/382af529bec4
 
 You are awesome, thank you!
 -- 
