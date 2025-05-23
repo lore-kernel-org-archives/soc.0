@@ -1,110 +1,144 @@
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8852478F24
-	for <soc@lists.linux.dev>; Fri, 23 May 2025 07:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C57C2920A8
+	for <soc@lists.linux.dev>; Fri, 23 May 2025 13:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747985519; cv=none; b=p0DlYGyLr7HmY8iZ3IbR8/SJzkzeblFFMW1KQpXbG1hG88Y33dFiGmtwi10kWYDUuyuGgIkj8S39zwL85oCyLN+AVNIy+2N6MDIWmE3Id/U083qF29nmhyxjpUBOI1k33tnMkbFZiUuvg/aDK5lkJHFr5zeFE8LuElnn/02CgTk=
+	t=1748007089; cv=none; b=dazJ9UDbuhFVgimaxOErR/t+Hui4u1uQYHXDBbAP2YkVoudIAC2Nbu6nvpI5wQ7+k3/8PxAHcOVLR1vfL25vvoWCtlC/irNPv6NpjDnBGjPr3Nkjm7K1qKDkdeOK4b12e1SuYh5kXnk8gkFfXgjnv/bguz2B8QoOIVGHuOWX1j8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747985519; c=relaxed/simple;
-	bh=1rU8KfdpOw/wwgN/qzAFAUH/2Puusqm5B5r9ppRAw14=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cXOX0SVwVCuPu6EcY7g4i1LXYY9sx6nRVTb2VCmufnhuc6Htf/4/mE4cwoOb2Uf47cqV5Eei7sDRsQPTL/XRPdCLRUI+XPgmP1vIFzypg3n1R6Nh70Dx3XxEY7/aKVXnmebY81Zuo+dhBc/IuVD+nS55h3xMtlXnsGL21CxfIsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-87bf9d00e1bso1760545241.0
-        for <soc@lists.linux.dev>; Fri, 23 May 2025 00:31:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747985516; x=1748590316;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FD+nL4yd2I4+cbDko5AOqUkYfXfG+wQm1GId2A/CBdM=;
-        b=gm2xP/TdnYaccBYzCjRvucuvgZ6s26tJkG2kqAUMNIenDX45zx9M2CJ3/G8G6q6h4R
-         MXr62NEWYaGeAJBeu5M1wR2L8b2EZAqyAtzHaV3DWwH3/ZpsJ8bolo4xnj6WldtT/WNY
-         SxNdmaNpotyv3QAFoXKky1PGi/1BYfXzwmrXufDahpEJTSn6/2LUAO4LKYCze4Q45xsU
-         gX5zDN8dsni7tuUBsHg6biqB85jnI6b/R76K+ZfZFbcjvWvSPsXD3PKOku8jQjoApnb1
-         MhyFMwGNsb6NNUhZAkNEWVi3BwTdqdWjgWG9cYsXlDEGLd1NXv2oM4sBevJJf/tU46ea
-         6RtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXtcu4vb5So8EVG2OprNZOJ5kGCYAg4GsQO70Hm0rz/eG4t5BB4Vp73c2tWyWl9LEYXgV0=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSItsSw7vHijCOWlSE0M06rDLwh3Jx0ydPlShPjKb437Oos1aO
-	/jdCfHJU9qS3Qw7exFwhQRukNt/4ZcUAxqEWLy1yhIMdNia8W7JTR4B5SRWNfVSh
-X-Gm-Gg: ASbGncvwmyWIXahOuk0HigEvwTJlSaJE9e5WW998rhkz+7HY317Vm9jq7VLddBygcTn
-	0aiCif5UHR7PZPQSqrk6EXl2OK78KxSRoIdF71qG8Midw7N5PbokKErJkoZOzrkbw2GSC+SsAzX
-	x8WljQ7fjAtprSDuKM9vfA/qK6UG9Cte9MtlJxnZvGtTwqL2Gjo+JOgEJpTZdQeXpMR0dML3eY8
-	Y2h79xrROMfUB99ctTVoXWdJ4GgiLKNWxjJMzA8Alp8grA4SGK1FD8xB9DdoLDlN6AbCjFM2h6/
-	QjU4XkiUF3fyZI5Z9kK8JCWdmFQP0oXFABXIdBHO4SpMI5Gb5SZ13upq1qOHqy+tfdCsYLCwGTi
-	N0QWKpEEb6UWGjw==
-X-Google-Smtp-Source: AGHT+IHi6M6/zFCVXKgA0ZV2zTy1lkRNjNIeX8ssg8NOzLpjdi2VHXmfFZKpMhw1YczPAIWIcZWdUg==
-X-Received: by 2002:a05:6102:4b13:b0:4c3:7f7:92f4 with SMTP id ada2fe7eead31-4e049d5899cmr23559711137.6.1747985514647;
-        Fri, 23 May 2025 00:31:54 -0700 (PDT)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4dfa682e51fsm12245943137.24.2025.05.23.00.31.54
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 May 2025 00:31:54 -0700 (PDT)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-87be2373596so2655438241.1
-        for <soc@lists.linux.dev>; Fri, 23 May 2025 00:31:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVL3whs92uM/8aZsHhL+OdNrKRDzmN62MQwEjk99JgNMRegDK0/H6HBw3nIhMbj5MLgBcI=@lists.linux.dev
-X-Received: by 2002:a05:6102:8005:b0:4dd:ad20:a334 with SMTP id
- ada2fe7eead31-4e049d57331mr26428808137.7.1747985514143; Fri, 23 May 2025
- 00:31:54 -0700 (PDT)
+	s=arc-20240116; t=1748007089; c=relaxed/simple;
+	bh=hmeGEPMh9P5skLJdhS+l7SxgL11YyT/5iYaaGyCECY0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=VBrqGHhyrmQ6qct8oVsz3VraHQ8jdVKUUK6AOtMHdldYJAZFs/E7L8R/WETM3YdEzV6crrGzeGYT7fjK1u5lHTGu0pWt8EOJBESgFB1A3wFJOKT881qW2nmLa7+F67KwXzuUSj7/k47edaBAzm73RlEjVK8GEE7Usm+oTnXnUWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=xatwRtGR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CnPGWYEN; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="xatwRtGR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CnPGWYEN"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 62D6F138011E;
+	Fri, 23 May 2025 09:31:25 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Fri, 23 May 2025 09:31:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1748007085; x=1748093485; bh=KU
+	5b0C5IBMALgRXRMDkd/wslgmOMlnTPEARvynr96Po=; b=xatwRtGRZBM9O+Y8N8
+	Lw9IwwlKk8b3km7GogUxi6tSffyD9oa6d+omzaLvLKd/spStaU7oERIKeoOVsh9J
+	GSoeeW6AO9SQQ4fGclXIzde86IJknc61NAGH7IiTtZzw25pEkgA9RBRZeafe1BLt
+	hWY9mm1a/yB3tjr8GQCRyAURLjNCXNJt0e2se5vCfWG+ZepxZ8HOsCTRgu39AYCy
+	NY+xoJ9X7h21wwUqG72wrdHXK2W/Q/rluJ5rLB2rwQs5yv64ZtN8FlIfdCqiez7+
+	pOJcDh+t6Echlir9h3Lm/hBAZwsyhxTEq7uYlh+7W3o1iIuVG0Pa3gKrY07oBR16
+	6XoA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1748007085; x=1748093485; bh=KU5b0C5IBMALgRXRMDkd/wslgmOM
+	lnTPEARvynr96Po=; b=CnPGWYENOcYcVcJNc8P+TW4yEXryyZOU7AHUWWl83Vqa
+	eC6bTdF9+lIUdGvh2rfelPo4WSa6DPVtL3GtoEBcfnOgZaCaVtV+oCCck+CF3Jh3
+	iODlX7bhUF8s+jSBQUHwxakUehunJUl4NsY+rxR2exXzsaRJGE8yDvXfxYYH/7vY
+	CfyPtlOJ/FTuZsd2dGdC/tYIAkDN1LwJ0OP5Qpd8J8dpYDMYFzZZKWwg/J6U3Nby
+	cVGp5hdQEEitoSS1NupVuz4Tz4ZXdgIsF08L4uno6MnAN0WK5sOE1jhV9BfN3jqf
+	0Ceks12xvh59P+g9yn14GzQkyGrP9qxBEwqi5B6Nig==
+X-ME-Sender: <xms:rXgwaEm2-k9BaSIfXS2lBbpW6jlScIC9XXyl03wuNs7pmFVL0I_kMg>
+    <xme:rXgwaD1Px-6j_DOyCEqgSDLYusLSoGNVxnu7hbVpwqzZnDYVMesCJsAfCZuMtuYk6
+    vbeqASnUZcdmvDZR4w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdekleekucdltddurdegfedvrddttd
+    dmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgf
+    nhhsuhgsshgtrhhisggvpdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttd
+    enucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkffu
+    tgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorg
+    hrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepudelieegkeevueegtedt
+    jedttdelgeehhfdvhfeuheethfduleffuddvueelveetnecuffhomhgrihhnpehkvghrnh
+    gvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvgepsh
+    hmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggr
+    thhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlih
+    hsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdr
+    lhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
+    hkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:rXgwaCrjqaWgV3MuBFWHYPZeDNuSLDdSNqVwS8cRNFy7Nn8u9IaRZg>
+    <xmx:rXgwaAnhCEesldGpxZ49V9b5c1wUYdPBn8RHkBnavH8Y5GVCa4VBZw>
+    <xmx:rXgwaC2rhbcfe0RdYIZVYhcCAZzpGbhzqfvzUyGRaMeA9ss9A9-zvQ>
+    <xmx:rXgwaHvsFpBZX2poYYmiU9IfcrvcJFf-yFQ4DMQBTtUb9gsGOgln_Q>
+    <xmx:rXgwaLPNCVxQOutr0YMZvj-24PRWueJHZTSUiQSQaW6sHxsT6TPCQffQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1EE161060060; Fri, 23 May 2025 09:31:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250331190731.5094-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20250331190731.5094-2-wsa+renesas@sang-engineering.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 23 May 2025 09:31:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXmQ2uGR1ntERG7rS=VtNNZ734BMCQu=GaYgQ3sOMpd6g@mail.gmail.com>
-X-Gm-Features: AX0GCFtFv5fcH5b31peoUctAzpCxkK7VzeLvAUvdWARN-L5YJkESt2RHNq335aI
-Message-ID: <CAMuHMdXmQ2uGR1ntERG7rS=VtNNZ734BMCQu=GaYgQ3sOMpd6g@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: delete email for Shiraz Hashim
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	soc@lists.linux.dev, Shiraz Hashim <quic_shashim@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Date: Fri, 23 May 2025 15:31:03 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Message-Id: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 6.13, part 3
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-CC the address last used in Oct 2024
+The following changes since commit 15eaaa71e8ef142b122942b35653d513cfb90050:
 
-On Mon, 31 Mar 2025 at 21:09, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> The email address bounced. I couldn't find a newer one in recent git
-> history (last activity 9 years ago), so delete this email entry.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  MAINTAINERS | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9bb1db9979f1..32f15c2ce531 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22627,7 +22627,6 @@ F:      drivers/accessibility/speakup/
->
->  SPEAR PLATFORM/CLOCK/PINCTRL SUPPORT
->  M:     Viresh Kumar <vireshk@kernel.org>
-> -M:     Shiraz Hashim <shiraz.linux.kernel@gmail.com>
->  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  L:     soc@lists.linux.dev
->  S:     Maintained
+  Merge tag 'imx-fixes-6.15-2' of https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes (2025-05-10 11:10:38 +0200)
 
-This is now commit 3238532ba55c9bf9 ("MAINTAINERS: delete email for
-Shiraz Hashim") upstream.
+are available in the Git repository at:
 
-Gr{oetje,eeting}s,
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.15-3
 
-                        Geert
+for you to fetch changes up to 070d04f002ddc308b053df4723e83cf43719fda0:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+  Merge tag 'mvebu-fixes-6.15-1' of https://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into arm/fixes (2025-05-21 23:26:54 +0200)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+----------------------------------------------------------------
+soc: fixes for 6.13, part 3
+
+A few last minute fixes:
+
+ - two driver fixes for samsung/google platforms, both addressing
+   mistakes in changes from the 6.15 merge window
+
+ - a revert for an allwinner devicetree change that caused problems
+
+ - a fix for an older regression with the LEDs on Marvell Armada 3720
+
+ - a defconfig change to enable chacha20 again after a crypto
+   subsystem change in 6.15 inadventently turned it off
+
+----------------------------------------------------------------
+Arnd Bergmann (3):
+      Merge tag 'samsung-fixes-6.15' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/fixes
+      Merge tag 'sunxi-fixes-for-6.15' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into arm/fixes
+      Merge tag 'mvebu-fixes-6.15-1' of https://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into arm/fixes
+
+Fabio Estevam (1):
+      arm64: defconfig: Ensure CRYPTO_CHACHA20_NEON is selected
+
+Gabor Juhos (1):
+      arm64: dts: marvell: uDPU: define pinctrl state for alarm LEDs
+
+Ivaylo Ivanov (1):
+      soc: samsung: usi: prevent wrong bits inversion during unconfiguring
+
+Jernej Skrabec (1):
+      Revert "arm64: dts: allwinner: h6: Use RSB for AXP805 PMIC connection"
+
+Tudor Ambarus (1):
+      firmware: exynos-acpm: check saved RX before bailing out on empty RX queue
+
+ .../boot/dts/allwinner/sun50i-h6-beelink-gs1.dts   | 38 +++++++++----------
+ .../boot/dts/allwinner/sun50i-h6-orangepi-3.dts    | 14 +++----
+ .../boot/dts/allwinner/sun50i-h6-orangepi.dtsi     | 22 +++++------
+ arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi  |  8 +++-
+ arch/arm64/configs/defconfig                       |  2 +-
+ drivers/firmware/samsung/exynos-acpm.c             | 44 +++++++++++++++-------
+ drivers/soc/samsung/exynos-usi.c                   |  2 +-
+ 7 files changed, 75 insertions(+), 55 deletions(-)
