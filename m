@@ -1,144 +1,63 @@
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C57C2920A8
-	for <soc@lists.linux.dev>; Fri, 23 May 2025 13:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAE4625;
+	Fri, 23 May 2025 15:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748007089; cv=none; b=dazJ9UDbuhFVgimaxOErR/t+Hui4u1uQYHXDBbAP2YkVoudIAC2Nbu6nvpI5wQ7+k3/8PxAHcOVLR1vfL25vvoWCtlC/irNPv6NpjDnBGjPr3Nkjm7K1qKDkdeOK4b12e1SuYh5kXnk8gkFfXgjnv/bguz2B8QoOIVGHuOWX1j8=
+	t=1748013649; cv=none; b=k6Q5K5iGXT9inoOzOSRRE4e32+SGvF18iPKcSUwH9s4GZyjjcqtrpmAbAL9cNlAxeVSWY4RdDvJJEEmCckVDCW062Oiup2lW/PGKN1gOqOlAAr/f2PgL4l0xsWCuf2ZEF3hgOIv7zbmdaDyEGsqWLGSaABd0MSLwKbn3ucYk4Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748007089; c=relaxed/simple;
-	bh=hmeGEPMh9P5skLJdhS+l7SxgL11YyT/5iYaaGyCECY0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=VBrqGHhyrmQ6qct8oVsz3VraHQ8jdVKUUK6AOtMHdldYJAZFs/E7L8R/WETM3YdEzV6crrGzeGYT7fjK1u5lHTGu0pWt8EOJBESgFB1A3wFJOKT881qW2nmLa7+F67KwXzuUSj7/k47edaBAzm73RlEjVK8GEE7Usm+oTnXnUWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=xatwRtGR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CnPGWYEN; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1748013649; c=relaxed/simple;
+	bh=3Lpdxu2P1pQksYRfoU0u0T1LOQxcymB4tTW3NjdCxks=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FSmI0m6MVNJbYwv7U8cUxxmIvvoIvR3lI6tf8TeoqmdCuO9y0SaQHGjRgRaWq7zSZL9T1qO65QJIxST6LSGzrm6CAHVYUI+d+df3txkwMpsBlj4fwsU6N68+Mp73rd+ttvuUiN9Xac8ZL0yYADqNBOBAv75+N23krzg4AYxMH5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tOby1dcs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="xatwRtGR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CnPGWYEN"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 62D6F138011E;
-	Fri, 23 May 2025 09:31:25 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-05.internal (MEProxy); Fri, 23 May 2025 09:31:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm3; t=1748007085; x=1748093485; bh=KU
-	5b0C5IBMALgRXRMDkd/wslgmOMlnTPEARvynr96Po=; b=xatwRtGRZBM9O+Y8N8
-	Lw9IwwlKk8b3km7GogUxi6tSffyD9oa6d+omzaLvLKd/spStaU7oERIKeoOVsh9J
-	GSoeeW6AO9SQQ4fGclXIzde86IJknc61NAGH7IiTtZzw25pEkgA9RBRZeafe1BLt
-	hWY9mm1a/yB3tjr8GQCRyAURLjNCXNJt0e2se5vCfWG+ZepxZ8HOsCTRgu39AYCy
-	NY+xoJ9X7h21wwUqG72wrdHXK2W/Q/rluJ5rLB2rwQs5yv64ZtN8FlIfdCqiez7+
-	pOJcDh+t6Echlir9h3Lm/hBAZwsyhxTEq7uYlh+7W3o1iIuVG0Pa3gKrY07oBR16
-	6XoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1748007085; x=1748093485; bh=KU5b0C5IBMALgRXRMDkd/wslgmOM
-	lnTPEARvynr96Po=; b=CnPGWYENOcYcVcJNc8P+TW4yEXryyZOU7AHUWWl83Vqa
-	eC6bTdF9+lIUdGvh2rfelPo4WSa6DPVtL3GtoEBcfnOgZaCaVtV+oCCck+CF3Jh3
-	iODlX7bhUF8s+jSBQUHwxakUehunJUl4NsY+rxR2exXzsaRJGE8yDvXfxYYH/7vY
-	CfyPtlOJ/FTuZsd2dGdC/tYIAkDN1LwJ0OP5Qpd8J8dpYDMYFzZZKWwg/J6U3Nby
-	cVGp5hdQEEitoSS1NupVuz4Tz4ZXdgIsF08L4uno6MnAN0WK5sOE1jhV9BfN3jqf
-	0Ceks12xvh59P+g9yn14GzQkyGrP9qxBEwqi5B6Nig==
-X-ME-Sender: <xms:rXgwaEm2-k9BaSIfXS2lBbpW6jlScIC9XXyl03wuNs7pmFVL0I_kMg>
-    <xme:rXgwaD1Px-6j_DOyCEqgSDLYusLSoGNVxnu7hbVpwqzZnDYVMesCJsAfCZuMtuYk6
-    vbeqASnUZcdmvDZR4w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdekleekucdltddurdegfedvrddttd
-    dmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgf
-    nhhsuhgsshgtrhhisggvpdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttd
-    enucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkffu
-    tgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorg
-    hrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepudelieegkeevueegtedt
-    jedttdelgeehhfdvhfeuheethfduleffuddvueelveetnecuffhomhgrihhnpehkvghrnh
-    gvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvgepsh
-    hmthhpohhuthdprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggr
-    thhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlih
-    hsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhotgeslhhishhtshdr
-    lhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:rXgwaCrjqaWgV3MuBFWHYPZeDNuSLDdSNqVwS8cRNFy7Nn8u9IaRZg>
-    <xmx:rXgwaAnhCEesldGpxZ49V9b5c1wUYdPBn8RHkBnavH8Y5GVCa4VBZw>
-    <xmx:rXgwaC2rhbcfe0RdYIZVYhcCAZzpGbhzqfvzUyGRaMeA9ss9A9-zvQ>
-    <xmx:rXgwaHvsFpBZX2poYYmiU9IfcrvcJFf-yFQ4DMQBTtUb9gsGOgln_Q>
-    <xmx:rXgwaLPNCVxQOutr0YMZvj-24PRWueJHZTSUiQSQaW6sHxsT6TPCQffQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1EE161060060; Fri, 23 May 2025 09:31:25 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tOby1dcs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301EBC4CEE9;
+	Fri, 23 May 2025 15:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748013649;
+	bh=3Lpdxu2P1pQksYRfoU0u0T1LOQxcymB4tTW3NjdCxks=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=tOby1dcs4I7pXdlHINc6jzHVW3wVS2qs+54bqx1bDzACGwqbW+cCFQO+XOHg8oH9I
+	 itE9VM0xN+nVSXhNYAVrXQaFEF1/js3MSuQxqNa5PcdRK24jAhHZwmz716l4hlfbPz
+	 QolH8YpiJbIXNkgMjiXffcMzhaLdl9kj1Ld4MWLMoNXVgyXao5pEM6uYIW2oUP+99p
+	 XENDQl0I1hFRoCjuA7uptEiW/d3NCs6Dbip0kDnMsv5IswD4Ao3XfcKERHmB/JVln9
+	 HN+W+SuUdJ7ULMIYlsMWZdrHKITC4KAyndQQ1TMbzgCc5S3FPr2LKcyl9GMZeKSlq/
+	 Nr7yuNrMhQ5UQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE43E3810902;
+	Fri, 23 May 2025 15:21:25 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: fixes for 6.13, part 3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
+References: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lists.linux.dev>
+X-PR-Tracked-Message-Id: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.15-3
+X-PR-Tracked-Commit-Id: 070d04f002ddc308b053df4723e83cf43719fda0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3d0ebc36b0b3e8486ceb6e08e8ae173aaa6d1221
+Message-Id: <174801368435.3634038.13556567875278893073.pr-tracker-bot@kernel.org>
+Date: Fri, 23 May 2025 15:21:24 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Date: Fri, 23 May 2025 15:31:03 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 6.13, part 3
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-The following changes since commit 15eaaa71e8ef142b122942b35653d513cfb90050:
+The pull request you sent on Fri, 23 May 2025 15:31:03 +0200:
 
-  Merge tag 'imx-fixes-6.15-2' of https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes (2025-05-10 11:10:38 +0200)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.15-3
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3d0ebc36b0b3e8486ceb6e08e8ae173aaa6d1221
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.15-3
+Thank you!
 
-for you to fetch changes up to 070d04f002ddc308b053df4723e83cf43719fda0:
-
-  Merge tag 'mvebu-fixes-6.15-1' of https://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into arm/fixes (2025-05-21 23:26:54 +0200)
-
-----------------------------------------------------------------
-soc: fixes for 6.13, part 3
-
-A few last minute fixes:
-
- - two driver fixes for samsung/google platforms, both addressing
-   mistakes in changes from the 6.15 merge window
-
- - a revert for an allwinner devicetree change that caused problems
-
- - a fix for an older regression with the LEDs on Marvell Armada 3720
-
- - a defconfig change to enable chacha20 again after a crypto
-   subsystem change in 6.15 inadventently turned it off
-
-----------------------------------------------------------------
-Arnd Bergmann (3):
-      Merge tag 'samsung-fixes-6.15' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/fixes
-      Merge tag 'sunxi-fixes-for-6.15' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into arm/fixes
-      Merge tag 'mvebu-fixes-6.15-1' of https://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into arm/fixes
-
-Fabio Estevam (1):
-      arm64: defconfig: Ensure CRYPTO_CHACHA20_NEON is selected
-
-Gabor Juhos (1):
-      arm64: dts: marvell: uDPU: define pinctrl state for alarm LEDs
-
-Ivaylo Ivanov (1):
-      soc: samsung: usi: prevent wrong bits inversion during unconfiguring
-
-Jernej Skrabec (1):
-      Revert "arm64: dts: allwinner: h6: Use RSB for AXP805 PMIC connection"
-
-Tudor Ambarus (1):
-      firmware: exynos-acpm: check saved RX before bailing out on empty RX queue
-
- .../boot/dts/allwinner/sun50i-h6-beelink-gs1.dts   | 38 +++++++++----------
- .../boot/dts/allwinner/sun50i-h6-orangepi-3.dts    | 14 +++----
- .../boot/dts/allwinner/sun50i-h6-orangepi.dtsi     | 22 +++++------
- arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi  |  8 +++-
- arch/arm64/configs/defconfig                       |  2 +-
- drivers/firmware/samsung/exynos-acpm.c             | 44 +++++++++++++++-------
- drivers/soc/samsung/exynos-usi.c                   |  2 +-
- 7 files changed, 75 insertions(+), 55 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
