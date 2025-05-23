@@ -1,63 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAE4625;
-	Fri, 23 May 2025 15:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A251F1515
+	for <soc@lists.linux.dev>; Fri, 23 May 2025 22:11:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748013649; cv=none; b=k6Q5K5iGXT9inoOzOSRRE4e32+SGvF18iPKcSUwH9s4GZyjjcqtrpmAbAL9cNlAxeVSWY4RdDvJJEEmCckVDCW062Oiup2lW/PGKN1gOqOlAAr/f2PgL4l0xsWCuf2ZEF3hgOIv7zbmdaDyEGsqWLGSaABd0MSLwKbn3ucYk4Iw=
+	t=1748038311; cv=none; b=JNbdiz3FexehtkuPqvUBcUkAxjM7tbQPJZG1MMiz6pWxeRhZQ/+eZXr9+RTcDFHLBzR7LIfuDki5V6RIBOeuLMXW9fiKtYcfsv0ekIb4CvCy0GoTD1I6HA43AsLuaWb6VHsRdvC60OmI+qqBMKHRGfnveBKNoqwSqoWbhhFTdhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748013649; c=relaxed/simple;
-	bh=3Lpdxu2P1pQksYRfoU0u0T1LOQxcymB4tTW3NjdCxks=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FSmI0m6MVNJbYwv7U8cUxxmIvvoIvR3lI6tf8TeoqmdCuO9y0SaQHGjRgRaWq7zSZL9T1qO65QJIxST6LSGzrm6CAHVYUI+d+df3txkwMpsBlj4fwsU6N68+Mp73rd+ttvuUiN9Xac8ZL0yYADqNBOBAv75+N23krzg4AYxMH5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tOby1dcs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748038311; c=relaxed/simple;
+	bh=MzG276KTq82wicmIsy0N30QHN+s2My7nMWT+u+3mF+c=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=R54p3erAHSsxZGphYeR35POQfYPZLjutbMcxDY1aytr4jFWKQM0Lllwm85aYhTLvCyEIkCRgnQIsnsGfSBwQhjHyaBlP5rnMnRyJlIt4xegRueMgRZdvOeeELHlzcBwVUpVY+pc0Gv8EbPmpRch+te1hs+KoeLGslb9+LiR7fTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tPTZz4HV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tOby1dcs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301EBC4CEE9;
-	Fri, 23 May 2025 15:20:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tPTZz4HV"
+Received: by smtp.kernel.org (Postfix)
+	id 8FB26C4CEEF; Fri, 23 May 2025 22:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7974EC4CEE9
+	for <soc@kernel.org>; Fri, 23 May 2025 22:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748013649;
-	bh=3Lpdxu2P1pQksYRfoU0u0T1LOQxcymB4tTW3NjdCxks=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=tOby1dcs4I7pXdlHINc6jzHVW3wVS2qs+54bqx1bDzACGwqbW+cCFQO+XOHg8oH9I
-	 itE9VM0xN+nVSXhNYAVrXQaFEF1/js3MSuQxqNa5PcdRK24jAhHZwmz716l4hlfbPz
-	 QolH8YpiJbIXNkgMjiXffcMzhaLdl9kj1Ld4MWLMoNXVgyXao5pEM6uYIW2oUP+99p
-	 XENDQl0I1hFRoCjuA7uptEiW/d3NCs6Dbip0kDnMsv5IswD4Ao3XfcKERHmB/JVln9
-	 HN+W+SuUdJ7ULMIYlsMWZdrHKITC4KAyndQQ1TMbzgCc5S3FPr2LKcyl9GMZeKSlq/
-	 Nr7yuNrMhQ5UQ==
+	s=k20201202; t=1748038310;
+	bh=MzG276KTq82wicmIsy0N30QHN+s2My7nMWT+u+3mF+c=;
+	h=Subject:From:Date:To:Cc:From;
+	b=tPTZz4HVCpSTBfpwCm7N4ri7PrAo9HVlRlBUow33MoNemuDSmcrwYOQekFjfwmWP1
+	 qowAdpfATL9Mogvx7sXpqN93PLj8R1c6ObUM/dSdg3VgmuXphxeVKFf7aJtXb1GLxO
+	 xUHFNNwz7cUY2dRfm813h9NwcXbJZimsi2GWochO9uI/FGCcmfF0k42G1DI6PXQZ4W
+	 A4GxPc7Wb5fGU9OM4vHEPyEA2hTuNMH4hQDCOzEzPMgwLQJUVeAlsD1HZiQfV/A/+Z
+	 1d1Px/2jYeMUKPtJ4GyI6KiJCbr1mkYfOFanjRnUJY12cTNp2tE9OrXLDAP5lDII1C
+	 A9hZ/G5blrddA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE43E3810902;
-	Fri, 23 May 2025 15:21:25 +0000 (UTC)
-Subject: Re: [GIT PULL] soc: fixes for 6.13, part 3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
-References: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lists.linux.dev>
-X-PR-Tracked-Message-Id: <de1a7a9e-7823-4f98-bf9e-99d8722c28b8@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.15-3
-X-PR-Tracked-Commit-Id: 070d04f002ddc308b053df4723e83cf43719fda0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3d0ebc36b0b3e8486ceb6e08e8ae173aaa6d1221
-Message-Id: <174801368435.3634038.13556567875278893073.pr-tracker-bot@kernel.org>
-Date: Fri, 23 May 2025 15:21:24 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B21B8380DBEB;
+	Fri, 23 May 2025 22:12:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <174803834534.3742914.13789370827683369616.git-patchwork-summary@kernel.org>
+Date: Fri, 23 May 2025 22:12:25 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-The pull request you sent on Fri, 23 May 2025 15:31:03 +0200:
+Hello:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.15-3
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3d0ebc36b0b3e8486ceb6e08e8ae173aaa6d1221
+Patch: [GIT,PULL] RISC-V Sophgo Devicetrees for v6.16
+  Submitter: Chen Wang <unicorn_wang@outlook.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=963982
+  Lore link: https://lore.kernel.org/r/MA0P287MB22622FA23ECF9B9216735FA0FE9CA@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
 
-Thank you!
+
+Total patches: 1
 
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
