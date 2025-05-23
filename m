@@ -1,79 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7843236453
-	for <soc@lists.linux.dev>; Thu, 22 May 2025 11:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8852478F24
+	for <soc@lists.linux.dev>; Fri, 23 May 2025 07:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747912800; cv=none; b=NG0uHTHV45Qy/tYTyv2P+K2u04MW2T5E64Ps5LSyz+1E5wDBeU5nMmKz1pIUsuZ1P2oczfKnZ54oHE1CnOmQrtnnQ0iFcgfVVUgkybBbrj2X93YvZb5N22OVliohmyuu39gHW4v7wKbwn6yFGPVdbaOX0v2FmELxA6yunJwwtNY=
+	t=1747985519; cv=none; b=p0DlYGyLr7HmY8iZ3IbR8/SJzkzeblFFMW1KQpXbG1hG88Y33dFiGmtwi10kWYDUuyuGgIkj8S39zwL85oCyLN+AVNIy+2N6MDIWmE3Id/U083qF29nmhyxjpUBOI1k33tnMkbFZiUuvg/aDK5lkJHFr5zeFE8LuElnn/02CgTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747912800; c=relaxed/simple;
-	bh=e2zOknMOkk1d1kFwnCy2I0qrk6iaA609SEcr750SxYQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mcfl7gTVqRR9T38zKGY4G2951eiD/S7Nwi4TPnK0997G8ZzlI4Jf+rgYz7DJ9cY1Vgn/QAKB4kO8iLPnGA3Kigs337/6RoFizd5xfHRQ72mfCuEEwHIzG0rz9VF9F8WerPkXIqAoUNKsogpCRnji8KFH7xkVb9OlQQJa0+MY1qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aLfIhljC; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aLfIhljC"
-Received: by smtp.kernel.org (Postfix)
-	id 58368C4CEED; Thu, 22 May 2025 11:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6F3C4CEE4;
-	Thu, 22 May 2025 11:20:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747912800;
-	bh=e2zOknMOkk1d1kFwnCy2I0qrk6iaA609SEcr750SxYQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=aLfIhljCKBd/0RPNLmKPqSYAzwDMkC4SsqZi1JjML7oXeWm1huhA/kJgOLpK8W+Dp
-	 SOcdNUHJD2LeOh+J2JabTX9xxmNLONTPGTXKksfd4ULjOGfvYVIh28unEBoJnWpGQK
-	 +cGObg729TScJAID1EWyb/ReMRPGKK/ka6nIMkr33j/nSWkqDefLa1PZSJgC+8dJ4G
-	 ok+c8k7AJXIumBirWG25vMj4pl9VLfn5RkmNCop0ungWzmVjGcfg8BK6+Bjf23fMFx
-	 TIHu4DkiAbQcaFgKmO+X3m07ElbMXCwfNVDRdiSGlVuiaL9n6nt+VPA0wHToi9vbpf
-	 hz2aWDTc6CEMA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAFE43805D89;
-	Thu, 22 May 2025 11:20:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1747985519; c=relaxed/simple;
+	bh=1rU8KfdpOw/wwgN/qzAFAUH/2Puusqm5B5r9ppRAw14=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cXOX0SVwVCuPu6EcY7g4i1LXYY9sx6nRVTb2VCmufnhuc6Htf/4/mE4cwoOb2Uf47cqV5Eei7sDRsQPTL/XRPdCLRUI+XPgmP1vIFzypg3n1R6Nh70Dx3XxEY7/aKVXnmebY81Zuo+dhBc/IuVD+nS55h3xMtlXnsGL21CxfIsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-87bf9d00e1bso1760545241.0
+        for <soc@lists.linux.dev>; Fri, 23 May 2025 00:31:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747985516; x=1748590316;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FD+nL4yd2I4+cbDko5AOqUkYfXfG+wQm1GId2A/CBdM=;
+        b=gm2xP/TdnYaccBYzCjRvucuvgZ6s26tJkG2kqAUMNIenDX45zx9M2CJ3/G8G6q6h4R
+         MXr62NEWYaGeAJBeu5M1wR2L8b2EZAqyAtzHaV3DWwH3/ZpsJ8bolo4xnj6WldtT/WNY
+         SxNdmaNpotyv3QAFoXKky1PGi/1BYfXzwmrXufDahpEJTSn6/2LUAO4LKYCze4Q45xsU
+         gX5zDN8dsni7tuUBsHg6biqB85jnI6b/R76K+ZfZFbcjvWvSPsXD3PKOku8jQjoApnb1
+         MhyFMwGNsb6NNUhZAkNEWVi3BwTdqdWjgWG9cYsXlDEGLd1NXv2oM4sBevJJf/tU46ea
+         6RtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXtcu4vb5So8EVG2OprNZOJ5kGCYAg4GsQO70Hm0rz/eG4t5BB4Vp73c2tWyWl9LEYXgV0=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzSItsSw7vHijCOWlSE0M06rDLwh3Jx0ydPlShPjKb437Oos1aO
+	/jdCfHJU9qS3Qw7exFwhQRukNt/4ZcUAxqEWLy1yhIMdNia8W7JTR4B5SRWNfVSh
+X-Gm-Gg: ASbGncvwmyWIXahOuk0HigEvwTJlSaJE9e5WW998rhkz+7HY317Vm9jq7VLddBygcTn
+	0aiCif5UHR7PZPQSqrk6EXl2OK78KxSRoIdF71qG8Midw7N5PbokKErJkoZOzrkbw2GSC+SsAzX
+	x8WljQ7fjAtprSDuKM9vfA/qK6UG9Cte9MtlJxnZvGtTwqL2Gjo+JOgEJpTZdQeXpMR0dML3eY8
+	Y2h79xrROMfUB99ctTVoXWdJ4GgiLKNWxjJMzA8Alp8grA4SGK1FD8xB9DdoLDlN6AbCjFM2h6/
+	QjU4XkiUF3fyZI5Z9kK8JCWdmFQP0oXFABXIdBHO4SpMI5Gb5SZ13upq1qOHqy+tfdCsYLCwGTi
+	N0QWKpEEb6UWGjw==
+X-Google-Smtp-Source: AGHT+IHi6M6/zFCVXKgA0ZV2zTy1lkRNjNIeX8ssg8NOzLpjdi2VHXmfFZKpMhw1YczPAIWIcZWdUg==
+X-Received: by 2002:a05:6102:4b13:b0:4c3:7f7:92f4 with SMTP id ada2fe7eead31-4e049d5899cmr23559711137.6.1747985514647;
+        Fri, 23 May 2025 00:31:54 -0700 (PDT)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4dfa682e51fsm12245943137.24.2025.05.23.00.31.54
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 May 2025 00:31:54 -0700 (PDT)
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-87be2373596so2655438241.1
+        for <soc@lists.linux.dev>; Fri, 23 May 2025 00:31:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVL3whs92uM/8aZsHhL+OdNrKRDzmN62MQwEjk99JgNMRegDK0/H6HBw3nIhMbj5MLgBcI=@lists.linux.dev
+X-Received: by 2002:a05:6102:8005:b0:4dd:ad20:a334 with SMTP id
+ ada2fe7eead31-4e049d57331mr26428808137.7.1747985514143; Fri, 23 May 2025
+ 00:31:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT,PULL,1/2] Additional MediaTek ARM64 DTS updates for v6.16
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <174791283574.2837630.10962175722468029753.git-patchwork-notify@kernel.org>
-Date: Thu, 22 May 2025 11:20:35 +0000
-References: <20250520114356.1194450-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20250520114356.1194450-1-angelogioacchino.delregno@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: soc@kernel.org
+References: <20250331190731.5094-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20250331190731.5094-2-wsa+renesas@sang-engineering.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 23 May 2025 09:31:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXmQ2uGR1ntERG7rS=VtNNZ734BMCQu=GaYgQ3sOMpd6g@mail.gmail.com>
+X-Gm-Features: AX0GCFtFv5fcH5b31peoUctAzpCxkK7VzeLvAUvdWARN-L5YJkESt2RHNq335aI
+Message-ID: <CAMuHMdXmQ2uGR1ntERG7rS=VtNNZ734BMCQu=GaYgQ3sOMpd6g@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: delete email for Shiraz Hashim
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	soc@lists.linux.dev, Shiraz Hashim <quic_shashim@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+CC the address last used in Oct 2024
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+On Mon, 31 Mar 2025 at 21:09, Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> The email address bounced. I couldn't find a newer one in recent git
+> history (last activity 9 years ago), so delete this email entry.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9bb1db9979f1..32f15c2ce531 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22627,7 +22627,6 @@ F:      drivers/accessibility/speakup/
+>
+>  SPEAR PLATFORM/CLOCK/PINCTRL SUPPORT
+>  M:     Viresh Kumar <vireshk@kernel.org>
+> -M:     Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+>  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  L:     soc@lists.linux.dev
+>  S:     Maintained
 
-On Tue, 20 May 2025 13:43:51 +0200 you wrote:
-> The following changes since commit 1fe38d2a19950fa6dbc384ee8967c057aef9faf4:
-> 
->   arm64: dts: mt6359: Add missing 'compatible' property to regulators node (2025-05-06 10:35:45 +0200)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-dts64-for-v6.16-2
-> 
-> [...]
+This is now commit 3238532ba55c9bf9 ("MAINTAINERS: delete email for
+Shiraz Hashim") upstream.
 
-Here is the summary with links:
-  - [GIT,PULL,1/2] Additional MediaTek ARM64 DTS updates for v6.16
-    (no matching commit)
-  - [GIT,PULL,2/2] MediaTek defconfig updates for v6.16
-    https://git.kernel.org/soc/soc/c/5c9876f9d1b7
+Gr{oetje,eeting}s,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
