@@ -1,37 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD64D1F1515
-	for <soc@lists.linux.dev>; Fri, 23 May 2025 22:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D8625484A
+	for <soc@lists.linux.dev>; Tue, 27 May 2025 19:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748038311; cv=none; b=rffb3ZcYbYxOKf/7Vp5lVfun7aqfoj+IGX7BWwt+K5eDdE8bCEWgMEgVs3G4iAP4v0HE0oIZZJqPYhhbY02Az3TtOBMq25dTQxdL9eAtNU/vPwWPhZBOEKnv9/QReWnVDPMOiGTUIOiYzgz+d/STnn1iA3zH4pOJHtv9cWTRW5E=
+	t=1748374502; cv=none; b=kw8VmIzs1LIrsjPVxMMbam2e0jq+0DOu9OZg3NVKeWIbPDgKY+lrGOjnUdLV+wCJxMn7517LoIKFfZZ2X/cmJJfR6S2Uui94sF8UR4c1He8lDs21NdM2EYlpA7xMD79gYg8yVZk2z/mvGDOoBzkiCjcJRYQpTDBJFn8T8qAE67s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748038311; c=relaxed/simple;
-	bh=uUXZwVN9D9sxXGHZBHN2TvtPAv5hsZTjIaDQ1FgnLYM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=R/oViRe7RZuIiL17xeQCGqRERlYoOG4CzqL+Mapdn0prh+a57F5oqa4DYkCqeBBbWv4/pv0EMuFNtP/XxrwXlPmWj3H1g0s3r6VrsG3Z5RZbuLy9ri/ns0s3CT9irxglZljL42GlW1MDkrZuSs+nkfapQs2vMgwsX4TX5uetSMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aa8ck1DN; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aa8ck1DN"
-Received: by smtp.kernel.org (Postfix)
-	id 9CA25C4CEF1; Fri, 23 May 2025 22:11:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872E6C4CEEA;
-	Fri, 23 May 2025 22:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748038311;
-	bh=uUXZwVN9D9sxXGHZBHN2TvtPAv5hsZTjIaDQ1FgnLYM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Aa8ck1DNInHDtCyQS3AH21gnJXUYECd4EksRJDpXqJwLzz9Uuh1fs/l7tfV9o3+6c
-	 1MTKdsk5CpznIpSNsJhVNJYUq5cLkfQ0A6pRPgGOh75w17C2QdFCDPXcYnPKQ3++8E
-	 9LMkYa5onjd7LtPmpIaqQhhsDdF2jwWe8FcKdYg1+5nYK6Ew4TLEVGtoj2+tlBCRnO
-	 oPVR3kmZhH4BcGXFawZ7J11M8Kx6wbodHDWoSgP1yfymZlVZtgXmDMRi9jerHboQfh
-	 bj1c7pHF9qvJA7Hz7jSm84TZ11W+cgt9Rx7jnpDTSkBBR+OMyRQXkzUjIK6Aq9Xpud
-	 cY4XykrklSWQw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADD3380DBEB;
-	Fri, 23 May 2025 22:12:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1748374502; c=relaxed/simple;
+	bh=OlAB+JCKLcfOL+LfdBc8fLSIe4f/4QqXEJtAvYyj2t0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CVytEVeZhRvMROU6xmHEbcZBrWri6gJyvqRh1WYsfY9xcmoU+BktkwOHPwuQo5sRrG5NXD9/Oplp+cVXicvRXlsTWSIyMh7OXDeShWpDQCGoH5ln0/3RhSKRsNM8WUk48/goep3ExYV9svnPqPGsGFk41EAE7dgDH6/6Cl/2k9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan2 ([IPv6:2a02:1810:ac12:ed80:9962:836e:244b:c4d7])
+	by laurent.telenet-ops.be with cmsmtp
+	id uKar2E0090Y7Yez01KarLX; Tue, 27 May 2025 21:34:51 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan2 with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uK04Z-00000003oJJ-24WQ;
+	Tue, 27 May 2025 21:34:51 +0200
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uK04Z-00000003WiW-1gKl;
+	Tue, 27 May 2025 21:34:51 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: soc@lists.linux.dev,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] Renesas DTS updates for v6.16 (take five)
+Date: Tue, 27 May 2025 21:34:47 +0200
+Message-ID: <cover.1748355530.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -39,39 +43,45 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.16
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <174803834675.3742914.12586448566370506020.git-patchwork-notify@kernel.org>
-Date: Fri, 23 May 2025 22:12:26 +0000
-References: <MA0P287MB22622FA23ECF9B9216735FA0FE9CA@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
-In-Reply-To: <MA0P287MB22622FA23ECF9B9216735FA0FE9CA@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
-To: Chen Wang <unicorn_wang@outlook.com>
-Cc: soc@kernel.org
 
-Hello:
+	Hi SoC folks,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This is my fifth pull request for the inclusion of Renesas SoC updates
+for v6.16, containing just a fix.
 
-On Mon, 19 May 2025 08:54:42 +0800 you wrote:
-> Hey Arnd,
-> 
-> Please pull dt changes for RISC-V/Sophgo.  Hope this PR is not too late
-> for you.
-> 
-> In addition, I also sent a PR for sophgo/soc last week, listed here for
-> your quick reference:
-> 
-> [...]
+The following changes since commit 652eea251dd852f02cef6223f367220acb3d1867:
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V Sophgo Devicetrees for v6.16
-    https://git.kernel.org/soc/soc/c/9bba618694cc
+  arm64: dts: renesas: white-hawk-ard-audio: Fix TPU0 groups (2025-05-20 09:31:11 +0200)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.16-tag5
 
+for you to fetch changes up to f62bb41740462bf9fde4b110df5c7d3bc223fb3c:
+
+  arm64: dts: renesas: rzg3e-smarc-som: Reduce I2C2 clock frequency (2025-05-26 12:07:27 +0200)
+
+----------------------------------------------------------------
+Renesas DTS updates for v6.16 (take five)
+
+  - Reduce I2C2 clock frequency on the RZ/G3E SMARC SoM.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+John Madieu (1):
+      arm64: dts: renesas: rzg3e-smarc-som: Reduce I2C2 clock frequency
+
+ arch/arm64/boot/dts/renesas/rzg3e-smarc-som.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
