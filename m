@@ -1,169 +1,117 @@
-Received: from mail-m32115.qiye.163.com (mail-m32115.qiye.163.com [220.197.32.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524F6277016
-	for <soc@lists.linux.dev>; Wed, 28 May 2025 09:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE9E2857DD;
+	Wed, 28 May 2025 12:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748423377; cv=none; b=Bb452Q01NFfj0F5GLtnf0zRuqlvFMi7wEM3PAacuC4o53keHgUtkoWgQdRHuU++gfXDe5CtmELErCqhxYUiby9HsiYaxxp9odEtA/gNkUjbZcopA7oQ5C0kvrnct6sWNLT/GMo0JLG2rP48YuqGdvx6Xn4m9wQMjKjE5hLI6q7g=
+	t=1748435843; cv=none; b=U4ZT/rSqG7LIdhvsofsMmf8F8oJJRv/vB4ZeykKsjLTDBjUEh+7WTxdQ1uqgtPxtlZDnMBhUp01iVYUHF/bv8s8Ux85cLo0045vd2HePWgRYNshFf4fJXOLQCrTjgb2fYaK/5nQHdE+GGhGk3jcjvhIJvnCtx70OeiKAHSL1dbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748423377; c=relaxed/simple;
-	bh=yWhuVxMPiOKdsI/vKCGMniZKg4uK/kBT2UHZ49fzVi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JlqMuIgCk+kszwN0WhBjVPpVMSGVLvz2Y9ry6vAsOpZRmP4ebBwSRzZ3wXUNJxx6wMcPbKUzwqy4sp5mpYXua2XYv4Uu2zjChEzuq/v3NX+W3OgzV+gcUQ3EuOhLwnml/IavttGAWcYbSvFcIVo5XcI1/IevF29WvieibJzm8fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=X92BVYze; arc=none smtp.client-ip=220.197.32.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
+	s=arc-20240116; t=1748435843; c=relaxed/simple;
+	bh=SwIjqVSvohQeuyiIN8uNmg4HfM55OQFRpt3e7TbxcD8=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=gqzSjVl8jKfAJENx+sbZFb0cgWCVuuK66soIaDa5M5pr3EVLxcc+p2xihVvoR/CEvvJiaKJ0l9I8TA+AlAoyw4n1zy4SFNz4wEM2dt3RSgjblC3PHutycujEIDIFjOzbma1QQ/IwJjCRy4voyRd+8fGbWHSxses9qs0+b1qb/Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l6LFxqXi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="X92BVYze"
-Received: from localhost.localdomain (unknown [117.184.129.134])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 16b13e7e0;
-	Wed, 28 May 2025 16:54:07 +0800 (GMT+08:00)
-From: Albert Yang <yangzh0906@thundersoft.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ge Gordon <gordon.ge@bst.ai>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Adrian Hunter <adrian.hunter@intel.com>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Junhao Xie <bigfoot@classfun.cn>,
-	Kever Yang <kever.yang@rock-chips.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	BST Linux Kernel Upstream Group <bst-upstream@bstai.top>,
-	linux-mmc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Victor Shih <victor.shih@genesyslogic.com.tw>,
-	Shan-Chun Hung <shanchun1218@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	Ben Chuang <ben.chuang@genesyslogic.com.tw>,
-	soc@lists.linux.dev,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Eric Biggers <ebiggers@google.com>,
-	Ross Burton <ross.burton@arm.com>,
-	Elinor Montmasson <elinor.montmasson@savoirfairelinux.com>,
-	Albert Yang <yangzh0906@thundersoft.com>
-Subject: [PATCH v1 0/9] arm64: Introduce Black Sesame Technologies C1200 SoC and CDCU1.0 board 
-Date: Wed, 28 May 2025 16:54:03 +0800
-Message-Id: <20250528085403.481055-1-yangzh0906@thundersoft.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l6LFxqXi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C89C4CEED;
+	Wed, 28 May 2025 12:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748435842;
+	bh=SwIjqVSvohQeuyiIN8uNmg4HfM55OQFRpt3e7TbxcD8=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=l6LFxqXiYbmvXE3d5oHFaMP/IYEtmIuQvHyEgP6i6Es59vyX6G2tFH2EcmgX7USz/
+	 Zu6iviFZKESD6T/0kAU3SH4M36aqdUcxo8UgN23bVEa8j/It5Wsa+vhJiiJAbEz1KB
+	 eNxeZhYiuxt98pGsccMpFYSxY5unPEoP5HwZZyvyJ/516Bg8dWHj2vVg/rryoi//cn
+	 d0LrmR94N9X0hEen2iqLYbHl64HvCktAfuzI8nm7On4v2iFbYvlfFrUmWr8MyBGKYj
+	 KABb26JvVbeuD3QnC/YcYfKG6nZOZArcd2miZTJ4gVuBVYSqDL0wiL8dAVDu5hY6JH
+	 XyqFwilZK4pqQ==
+Date: Wed, 28 May 2025 07:37:20 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDQ0gdVk1KGRhIGksfTUlNS1YVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE5VSk
-	tLVUpCS0tZBg++
-X-HM-Tid: 0a971619533c09cckunm56b16e873977ff
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PxA6PQw4QzExLkg8UQ4POg8#
-	MhUaCTxVSlVKTE9DT0lJT05LS0JNVTMWGhIXVQIaFRwBE0tCS007DxMOFR8eCQgUHQ9VGBQWRVlX
-	WRILWUFZSkpMVUpDT1VKSUJVSkhPWVdZCAFZQU1LTU83Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=X92BVYze+FDykM3ZBObdOjojJQdlAV/2cTwFjvMT6/Xgl+LBFpnnRmsVeWD2scpXayORmz8+50gqzdjr1gNbbReYh/8o5rT662nj8gQ6IDydF+kW+TT58ZO0myp6ezLKEn5ZS4CyzQ8goN/RWjGTyxBPofsBe9CPgz/ExxoIK60=; c=relaxed/relaxed; s=default; d=thundersoft.com; v=1;
-	bh=aq3WV+O2bYKN04nPLa/IM/y7JcSQg3FEsNEEzJZKpcs=;
-	h=date:mime-version:subject:message-id:from;
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: soc@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, Ge Gordon <gordon.ge@bst.ai>, 
+ linux-kernel@vger.kernel.org, 
+ BST Linux Kernel Upstream Group <bst-upstream@bstai.top>, 
+ Arnd Bergmann <arnd@arndb.de>, Conor Dooley <conor+dt@kernel.org>, 
+ devicetree@vger.kernel.org
+To: Albert Yang <yangzh0906@thundersoft.com>
+In-Reply-To: <20250528085457.481372-1-yangzh0906@thundersoft.com>
+References: <20250528085457.481372-1-yangzh0906@thundersoft.com>
+Message-Id: <174843567439.3636671.2589475239055731550.robh@kernel.org>
+Subject: Re: [PATCH v1 6/9] arm64: dts: bst: add support for Black Sesame
+ Technologies C1200 CDCU1.0 board
 
-Black Sesame Technologies C1200 is a high-performance Armv8 SoC designed for automotive
-and industrial applications. The CDCU1.0 (Central Domain Control Unit) board is the
-development platform built by Black Sesame Technologies. You can find more information
-about the SoC and related boards at:
-https://bst.ai
 
-Currently, to run the upstream kernel on the CDCU1.0 board, you need to use the
-bootloader provided by Black Sesame Technologies. The board supports various
-interfaces including MMC/SD card, which is implemented using the BST C1200 DWCMSHC
-SDHCI controller.
+On Wed, 28 May 2025 16:54:57 +0800, Albert Yang wrote:
+> Add device tree support for the Black Sesame Technologies (BST) C1200
+> CDCU1.0 ADAS 4C2G platform. This platform is based on the BST C1200 SoC
+> family.
+> 
+> The changes include:
+> - Adding a new BST device tree directory
+> - Adding Makefile entries to build the BST platform device trees
+> - Adding the device tree for the BST C1200 CDCU1.0 ADAS 4C2G board
+> 
+> This board features a quad-core Cortex-A78 CPU, and various peripherals
+> including UART, MMC, watchdog timer, and interrupt controller.
+> 
+> Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
+> Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
+> ---
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  arch/arm64/boot/dts/bst/Makefile              |  10 ++
+>  .../dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts    |  44 ++++++
+>  arch/arm64/boot/dts/bst/bstc1200.dtsi         | 130 ++++++++++++++++++
+>  4 files changed, 185 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/bst/Makefile
+>  create mode 100644 arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts
+>  create mode 100644 arch/arm64/boot/dts/bst/bstc1200.dtsi
+> 
 
-In this series, we add initial SoC and board support for kernel building. The series
-includes:
 
-Patch 1: Add Black Sesame Technologies vendor prefix in vendor-prefixes.yaml
-- Adds "bst" vendor prefix for Black Sesame Technologies Co., Ltd.
-- Required for device tree bindings to properly identify BST hardware
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Patch 2: Add device tree bindings for BST SoC platforms
-- Creates new binding file Documentation/devicetree/bindings/arm/bst.yaml
-- Defines compatible strings for BST C1200 family and C1200 CDCU1.0 board
-- Documents BST's focus on automotive-grade SoCs for ADAS applications
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-Patch 3: Add ARCH_BST configuration for BST silicon support
-- Adds Kconfig option for BST architecture support
-- Enables building kernel for BST platforms
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-Patch 4: Add device tree binding for BST DWCMSHC SDHCI controller
-- Documents the BST C1200 SDHCI controller binding
-- Required for MMC/SD card support on BST platforms
+  pip3 install dtschema --upgrade
 
-Patch 5: Add BST C1200 SDHCI controller driver
-- Implements the MMC host controller driver for BST C1200
-- Enables SD card support on BST platforms
 
-Patch 6: Add device tree support for BST C1200 CDCU1.0 board
-- Adds device tree source files for C1200 SoC and CDCU1.0 board
-- Configures hardware components including MMC controller
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/next-20250528 (exact match)
 
-Patch 7: Enable BST SoC in arm64 defconfig
-- Adds ARCH_BST configuration to default arm64 config
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
 
-Patch 8: Enable BST C1200 DWCMSHC controller in defconfig
-- Enables MMC controller driver in default arm64 config
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/bst/' for 20250528085457.481372-1-yangzh0906@thundersoft.com:
 
-Patch 9: Update MAINTAINERS for BST support
-- Adds maintainer information for BST ARM SoC support
-- Consolidates BST-related entries
+arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dtb: /: failed to match any schema with compatible: ['bst,c1200']
+arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dtb: cpu@0 (arm,cortex-a78): Unevaluated properties are not allowed ('freq-domain' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dtb: cpu@1 (arm,cortex-a78): Unevaluated properties are not allowed ('freq-domain' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dtb: cpu@2 (arm,cortex-a78): Unevaluated properties are not allowed ('freq-domain' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dtb: cpu@3 (arm,cortex-a78): Unevaluated properties are not allowed ('freq-domain' was unexpected)
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dtb: /soc@0/dwmmc0@22200000: failed to match any schema with compatible: ['bst,dwcmshc-sdhci']
 
-Albert Yang (9):
-  dt-bindings: vendor-prefixes: Add Black Sesame Technologies Co., Ltd.
-  dt-bindings: arm: add Black Sesame Technologies (bst) SoC
-  arm64: Kconfig: add ARCH_BST for bst silicons
-  dt-bindings: mmc: add binding for BST DWCMSHC SDHCI controller
-  mmc: sdhci: add Black Sesame Technologies BST C1200 controller driver
-  arm64: dts: bst: add support for Black Sesame Technologies C1200
-    CDCU1.0 board
-  arm64: defconfig: Enable BST SoC
-  arm64: defconfig: enable BST C1200 DWCMSHC SDHCI controller
-  MAINTAINERS: add and consolidate Black Sesame Technologies (BST) ARM
-    SoC support
 
- .../devicetree/bindings/arm/bst.yaml          |  34 +
- .../bindings/mmc/bst,dwcmshc-sdhci.yaml       | 115 +++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- MAINTAINERS                                   |  10 +
- arch/arm64/Kconfig.platforms                  |  19 +
- arch/arm64/boot/dts/Makefile                  |   1 +
- arch/arm64/boot/dts/bst/Makefile              |  10 +
- .../dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts    |  44 +
- arch/arm64/boot/dts/bst/bstc1200.dtsi         | 130 +++
- arch/arm64/configs/defconfig                  |   3 +
- drivers/mmc/host/Kconfig                      |  11 +
- drivers/mmc/host/Makefile                     |   1 +
- drivers/mmc/host/sdhci-of-bst-c1200.c         | 920 ++++++++++++++++++
- 13 files changed, 1300 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/bst.yaml
- create mode 100644 Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml
- create mode 100644 arch/arm64/boot/dts/bst/Makefile
- create mode 100644 arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts
- create mode 100644 arch/arm64/boot/dts/bst/bstc1200.dtsi
- create mode 100644 drivers/mmc/host/sdhci-of-bst-c1200.c
 
--- 
-2.25.1
+
 
