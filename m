@@ -1,63 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02661242900;
-	Sat, 31 May 2025 15:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0996613790B
+	for <soc@lists.linux.dev>; Sat, 31 May 2025 19:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748705425; cv=none; b=MBGcmmZ0sFrVCjRF85xXQuimiUPvzphvgpZ8VANXVOD+1hsZyquCOB9Kk0V/a5E2zLefsl4bTj25N/qgSrlRbpR8th12fg9yEVkeFSyqNFHvphTmi0F5jcUWcdrAdEw58JyKWRynivzIKr76nMf3e6+oHrupEQOw3RUJ2v6034M=
+	t=1748720489; cv=none; b=tYiTvx3wG/NA3zSao1oR6jbQJsLb6cjQuVujLtq9NbQLfo8fLSm3hAgbLscY4hHtdVYl0JYkj2kyYHtTJ5w22r8nx8aCGEsYiNqK+zpZdNFY54CefoYBowUSBfjMYQ7C4l04zFj+k/DsayRDBoJq/tAyaf3jZkjHQTNvJJXtxuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748705425; c=relaxed/simple;
-	bh=iiL5VxW3Twj1IIHwwMPR65Wl/S/cUTQU/lOhciGZy9g=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Qj7Mr5v6dZI1XmxzLmHXkYr/GfRbBs11QINzvlV4qGGCPoZaLSG4KI3GMg1GzL87VyZvwBJxMKbsLtWoccysrmMozgUWE52yc5ZD1WtjjFlVo6Mx6aO5YbP2d8EEZ0jFJRkhGv/y2eBvDr/LXRnFXwWruskCkqau3OMf68fItlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khq+2SyK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748720489; c=relaxed/simple;
+	bh=Tc6i91jv4D6JPTrOu0U8fXhsABJE+HG6hiR88UajpIE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=V/5fBJLvHkRUTjxX7Niqf2VJ2uXnNx8Ptki6lfR8ClRdPWbc3i81MayQjen3MjFCCPJgojPl1LLodWCPkhyt+HHnvN0XUUsqTLJac10fbftkExv2Fz+5B9rhVTJGFhKu2My1nZZnA/nx8hcZUnqqOk+kHkxFhei/kYD4LvJQbEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gBEYy4N5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lEkohKbf; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khq+2SyK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB99C4CEE3;
-	Sat, 31 May 2025 15:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748705424;
-	bh=iiL5VxW3Twj1IIHwwMPR65Wl/S/cUTQU/lOhciGZy9g=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=khq+2SyKs9dPTLUaY0jJZzmH8OgkAySXMuGx6bADtwkTT42aUJ45lNIUMS8N/jgGC
-	 sWHt0Hcel+D3jGA34xiAlh2jRJdZ3iiMai+5pSbkUKt/b4OQhligXaK+N0grYy0ZUm
-	 5JNcMxZdnxE2HX5vAm1DMUytk73mdRtZo3ebmcmc36bqDUH3YVD+MChBiG+Ey930O+
-	 xUmXq4frg1BsGB/jmM1nWNh22UvJL5SIh+R3kw/LRNGXIH49nJ5fhRItkIUgCsZYbW
-	 8oG110uWvjIHjSl9DwzZqxXe9vejnYnIFrHfZXUPzKU75XpVtrXdmeDhyeyo0lnwBf
-	 kmi9x5DQ3t5QQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAAE5380AA70;
-	Sat, 31 May 2025 15:30:58 +0000 (UTC)
-Subject: Re: [GIT PULL 5/5] soc: sophgo devicetree updates for 6.16
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <d98adabb-a26a-4962-af9d-5707e1cb3715@app.fastmail.com>
-References: <28a4c0cf-7978-4547-bf89-42804975c848@app.fastmail.com> <d98adabb-a26a-4962-af9d-5707e1cb3715@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <d98adabb-a26a-4962-af9d-5707e1cb3715@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-newsoc-6.16
-X-PR-Tracked-Commit-Id: 9bba618694cc905b898661c18e3e40955573ef5e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 31848987f177a6c0944fd0254a55ffd7c52a8c50
-Message-Id: <174870545744.163157.4670024390186583728.pr-tracker-bot@kernel.org>
-Date: Sat, 31 May 2025 15:30:57 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gBEYy4N5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lEkohKbf"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E310111400E8;
+	Sat, 31 May 2025 15:41:25 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Sat, 31 May 2025 15:41:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1748720485;
+	 x=1748806885; bh=lGyxiWQu246vWq6BDCxMPVmSxDCFx4n0GPMaz0otyRM=; b=
+	gBEYy4N5RrRnL55M+SEhI8sgMTbEwGw2Mp8z3wyb003JS/4a2OtDNuQTGfTH2H4d
+	+ynBrm3uUjTVRUKofXZQSxp/KSTenAqLGwIkufGrRwl9t4L03t2VuzopJZ5s9Ysz
+	ZXgi6V4fHTiw9dbd3jEHo0q75wgxMmsGvrx1mw75DdMZ+fdzkNq5dHJTAHId1UA3
+	b7e2Z2ez3Z2ZfQnDG0omdQRAw3w1/LBtV/F0htxCNR6Y7lfu23a7ghq5luKgo8hv
+	NqVaECm6Pd73yGoWsjk/mI0DhAEvlfDs2XLvXnC5E65rNB8QHS8caRkS5oK0YC5O
+	Q9dGiR/osUlWCtWlZKz4Ow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1748720485; x=
+	1748806885; bh=lGyxiWQu246vWq6BDCxMPVmSxDCFx4n0GPMaz0otyRM=; b=l
+	EkohKbfTe4PhtyMv152UftnIuF/lvYa+EqBTmz27UO1JT2Xj8SLeFXWNhXU2sUAB
+	uIjKwbJkntGC6lujkGJQnBHcfCb9iTGt5afydayP4SF926luB5/DGhkPCYwCuZNc
+	wVxc5tO1CtI8EIdunFhFG+szfR4Axf7sBflfBilNhpWAWPbVuCK4VksoZSLgcB5Z
+	wxpAXrThLxBK4RTEVmu+6xp7wGzZ0agYEMzWftScV3m0tNtK+vliDMonfHOJ0FXX
+	brFDFIO/XThUzGsAY0L0I3nLDNcFKk92UZVWp6oDfgwWTCb5bU3H/LtaQ8MKfn94
+	lGfZpAfgi/FyvpcdfIOnA==
+X-ME-Sender: <xms:ZVs7aLFi20kOcjITXYO6R76E1m9ZZijnFa-anCtS9jqQeUGXLkEnew>
+    <xme:ZVs7aIUnNk5xrYGQyzIYbmJW8DI94DW-tieVVgGyeC5ckKCY2UwYnlGPX7HxSouDU
+    3fAedPdkvXFIfznbF8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefvdejjeculddtuddrgeefvddrtd
+    dtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggft
+    fghnshhusghstghrihgsvgdpuffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftd
+    dtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefk
+    jghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfd
+    cuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeeh
+    udekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+    pdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtoh
+    hrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohep
+    lhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorh
+    hgpdhrtghpthhtohepshhotgeslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthho
+    pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:ZVs7aNKpjLDa1aeJbB-w18mBxHQKnqxXdd1LsuTluYlYkW1g1Ylzmg>
+    <xmx:ZVs7aJFm8nqNo55ni2jyl5kRid-cS5FNhgKC61FeeZPlIKdRy4r-FQ>
+    <xmx:ZVs7aBW2S6l8i2NkWn5x-Zs7w9AiQEEHtwZesoM9nBUx3tUovY2vFA>
+    <xmx:ZVs7aEMBFq2gN0M6rey7SzWHDVrGW756B6ciXOxKF_XwY1ASDCoaDQ>
+    <xmx:ZVs7aLv9tRsBXX6fPBFYDezR00vfJlBvbAGhDlLT7eHv7FsWAo_HQ4BR>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4AA27700060; Sat, 31 May 2025 15:41:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-ThreadId: Td417e939653861c2
+Date: Sat, 31 May 2025 21:41:05 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <8b69d0ec-448c-4552-b445-a5f387bef459@app.fastmail.com>
+In-Reply-To: 
+ <CAHk-=wgHeidY7Y65-4N9AJEy69jEJRo1S9yQzEJ7_J6jpJMfVg@mail.gmail.com>
+References: <28a4c0cf-7978-4547-bf89-42804975c848@app.fastmail.com>
+ <ae82a64f-fe42-4abc-b298-1570ed17771e@app.fastmail.com>
+ <CAHk-=wgHeidY7Y65-4N9AJEy69jEJRo1S9yQzEJ7_J6jpJMfVg@mail.gmail.com>
+Subject: Re: [GIT PULL 4/5] soc: devicetree updates for 6.16
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Sat, 31 May 2025 11:07:48 +0200:
+On Sat, May 31, 2025, at 17:14, Linus Torvalds wrote:
+> On Sat, 31 May 2025 at 02:07, Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> There are 11 newly supported SoCs [...]
+>
+> .. and then you go on to list ten of them. Or 12 if you count Amlogic
+> S6/S7/S7D individually.
+>
+> Just checking that I'm awake?
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-newsoc-6.16
+I'll pretend that this was intentional and the number included
+the extra SoC from [GIT PULL 5/5]...
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/31848987f177a6c0944fd0254a55ffd7c52a8c50
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+     Arnd
