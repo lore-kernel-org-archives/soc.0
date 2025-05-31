@@ -1,91 +1,63 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3A074C14
-	for <soc@lists.linux.dev>; Sat, 31 May 2025 15:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC33E23E340;
+	Sat, 31 May 2025 15:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748704470; cv=none; b=DtQLAkDYz9gzuXJRdLzYB6z1pXLsb4hpvbmve3c1zE0+CRELP+da/dKFbu6gyp0ySHJBvd2TrA26EcHczbRgm65TPk13hO2f0x3pTgxm/l7wzWo4+QmG0wEfx2++rFgmSlo0EvOMAsjobzNhaucACALL9iu0HR9d82n2H5kOBH4=
+	t=1748705416; cv=none; b=YFWQaYyInyGfUjayF07+P/IbaWAdp/q3HStknxHVMgIZ8180V3dmhpoi9MBRwId26d8RRStkouCok6Gkly7z5LNrhnRAz0uOQtDqA6ykCUyar+W/OBZNwspRKcen27mVkrxKkmxEA6dnMCzGGNLg6sFs6LfW93m7NEFHjDjH/Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748704470; c=relaxed/simple;
-	bh=T1nOel4UvVfsq0pDQKlA8OugRmHexP8T6OeA7iXIDdQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M5XdNngdTzeSSrt4cTTdsBLx16fzu9HStca6P9aZBlUsu0JMkW4VIRLXs+KxZi+Ka2DcjBhggkOdA8rdsKH2XzyYOFxLUpu9RdW4rnmo6BFYFX/ws5sEsshdwyWNFcc3ucCUfkfWATDh9KVtvvtayIKrT8oaSYkSkpL7eLoJWB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DDtE3/CQ; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1748705416; c=relaxed/simple;
+	bh=QZs8cZpTJY2GYyXFmJ1cbxgzHKLLlva4Qev0J55Op7s=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Z1gXPOu7ag9s7OGoDjar0jYfQS/lnabFwIFO9dJ1DAeng3xg8/KH5YQxgzBMhUTwFx6eP2KO4cuvTGNPeT5t9BHdeeMgsRVO7AMn88XuB8d5B8JEAOYWqxHXKkxMgALlAWMbs7UNM7/8DByi/TT3+j1qdpYuQ9KtW9vTp6b2UPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kr+NmFCM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DDtE3/CQ"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-604e2a2f200so5601235a12.1
-        for <soc@lists.linux.dev>; Sat, 31 May 2025 08:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1748704466; x=1749309266; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSSawh4TJNRt/0sWPEPpqG3dCXsETs6+b32NUQaU2jQ=;
-        b=DDtE3/CQkJrIfENMN3KuAAXvunDXcVSBx4vVE+xEcSZ9MnUAtqdNLPg+OqhIet+L8E
-         WKJVeSIO5/ZU+tU0/pgWl7ruedyQC2RYIy/T63hmc6fwB13Qg3XpMGfp2dmiLM5aLdzh
-         W5m0KQSUvBAD1UGhRTk8qrs4ZGptqnpiNpIqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748704466; x=1749309266;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lSSawh4TJNRt/0sWPEPpqG3dCXsETs6+b32NUQaU2jQ=;
-        b=C15BXFmJg85UXjjhkYmYRdKJmVqk84CbcrGflGJFhu8iOwTNenxh9gwyT8PvqIz3is
-         8gIAHbowM7vBRBxE8dlLj5aRZA/afhwJyNLr3GDDd5TTBVAi1aiOZK1AhbMyC2uhAOZv
-         tE3ouYKLIe16Pi4U4n7aqHuVsf4FDAxLziOicKLkObiR0LcOQoTpsY5wnyzvMAVCDhSO
-         TFIFncXwFgjvtz+O54b05qVCiTXst1zncIVP7sKB7PsENErDiej/19qOyRFWEHYanXhj
-         WkaF0XVjZJkxWxbfzeZZvUrJSl4KaeWJ8sySTnT1lOpPSs/S/RiTcdms8TL0cWqk/vtF
-         HV2A==
-X-Gm-Message-State: AOJu0Yz8LHatZ9dyAh467JxkPZOGQb05G4UzfYtApB94W6Axc/SjIQmm
-	XOdLfc7hJwlQmyAM7lNLUD7kHw8lssrqScPxU9X7Mr55mOcnesZa0Hb0Y6/lxTrvyQVEybCAprF
-	/GSFNjQM=
-X-Gm-Gg: ASbGnctPCrjHXW8rhTnA9pLDh2LSCw734lgSbcHK2Jp8B+QJu04oY2bkBhgPo2SJNiK
-	DOepM+uB1taLD0H6GJ3Jg2MGDU014pmnhDqLoid9O7xf3A2o3mAxw55gVXkui9jaJtCQBPnE9iX
-	2eB9f5bONHTDNT0LNlVvK1Str6jsBOlTDmra6icMFFBK8087M5j+4gTSocclz2CJP0rfgs+h7SK
-	tOCY5MNoKoTalhxHXCGdH3glaLUSL+Xlc+dNik2U2KYtnCEicaqFv5r8BgVP5OPhBWcnplreAWn
-	mUL0Kt7WDkDKd6buO+tFVfTaVCxOIjYjPnze0nRw2mhRimolLYwDCeCqmR0mVYUMuSNgpw2kF/Q
-	DEhWiUvU2j+eHOKQmOWuMIwmDfw==
-X-Google-Smtp-Source: AGHT+IGq/jCKC4NokdSvCuJuUpscVIMtxhnRPjttvtF9wb4ZgrvBtkbvm5ZjsEZimzPDCgquuHOLsg==
-X-Received: by 2002:a17:907:96a2:b0:adb:335b:decb with SMTP id a640c23a62f3a-adb493e14d1mr204078766b.24.1748704465920;
-        Sat, 31 May 2025 08:14:25 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ada5d850d88sm508729966b.77.2025.05.31.08.14.24
-        for <soc@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 May 2025 08:14:24 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6021b8b2c5fso5578046a12.2
-        for <soc@lists.linux.dev>; Sat, 31 May 2025 08:14:24 -0700 (PDT)
-X-Received: by 2002:a05:6402:42cb:b0:601:dc49:a99f with SMTP id
- 4fb4d7f45d1cf-605b7748f23mr2083379a12.18.1748704464453; Sat, 31 May 2025
- 08:14:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kr+NmFCM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDFFC4CEE3;
+	Sat, 31 May 2025 15:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748705415;
+	bh=QZs8cZpTJY2GYyXFmJ1cbxgzHKLLlva4Qev0J55Op7s=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=kr+NmFCMehV0biK5Tk/hYTvrUWCfaRfbB6pR2M32fEEPwPKGvlv5SQnUk78m/VKMM
+	 NR8bnHd47rrCysdN57DkNNPiQv4l9HN/jIVpskyTJaBuo8FqIfghcUf0hj2yAkODZB
+	 XIB8nOGwyR2Ts1l86LvrBMRLrhNnxYzz8vWfhD2ZZz54cjjMy5gUOPyhQrdFohoVeE
+	 yqpoEtTBNDalgh5++XtYpBS7E7fZeMeMqHMCLI9Hf4KGbV7r+Bi+dAGKykOrrU71s0
+	 mVU64Kg9RwXkMSJCn+Jvj5/8wzpHXos2ecwthnyH+NdgPANq9VoN/a9VWKzX2yaCyn
+	 w80lDZYDzXBgA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33DFD380AA70;
+	Sat, 31 May 2025 15:30:50 +0000 (UTC)
+Subject: Re: [GIT PULL 1/5] soc: drivers for 6.16
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <f44d3ad7-b518-4679-8f7b-949680b26ef7@app.fastmail.com>
+References: <28a4c0cf-7978-4547-bf89-42804975c848@app.fastmail.com> <f44d3ad7-b518-4679-8f7b-949680b26ef7@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <f44d3ad7-b518-4679-8f7b-949680b26ef7@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.16
+X-PR-Tracked-Commit-Id: 5963edd98a2159f2114b08e402a7341c1e7dd293
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 297d9111e9fcf47dd1dcc6f79bba915f35378d01
+Message-Id: <174870544866.163157.4319179356868633377.pr-tracker-bot@kernel.org>
+Date: Sat, 31 May 2025 15:30:48 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <28a4c0cf-7978-4547-bf89-42804975c848@app.fastmail.com> <ae82a64f-fe42-4abc-b298-1570ed17771e@app.fastmail.com>
-In-Reply-To: <ae82a64f-fe42-4abc-b298-1570ed17771e@app.fastmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 31 May 2025 08:14:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgHeidY7Y65-4N9AJEy69jEJRo1S9yQzEJ7_J6jpJMfVg@mail.gmail.com>
-X-Gm-Features: AX0GCFuT43-u4qtV8M_qs-fcu_pSqgRGcd6qMnD3Ro4tTsTKzf_cc8MjRwFbJzA
-Message-ID: <CAHk-=wgHeidY7Y65-4N9AJEy69jEJRo1S9yQzEJ7_J6jpJMfVg@mail.gmail.com>
-Subject: Re: [GIT PULL 4/5] soc: devicetree updates for 6.16
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 31 May 2025 at 02:07, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> There are 11 newly supported SoCs [...]
+The pull request you sent on Sat, 31 May 2025 11:01:20 +0200:
 
-.. and then you go on to list ten of them. Or 12 if you count Amlogic
-S6/S7/S7D individually.
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.16
 
-Just checking that I'm awake?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/297d9111e9fcf47dd1dcc6f79bba915f35378d01
 
-           Linus
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
