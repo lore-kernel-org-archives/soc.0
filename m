@@ -1,96 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CD525A642
-	for <soc@lists.linux.dev>; Mon,  9 Jun 2025 10:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A74221CC41
+	for <soc@lists.linux.dev>; Mon,  9 Jun 2025 21:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749466345; cv=none; b=VNxBHWsE6erhF65p2Rc2W3hzPVpgVngvXTe1w6wiqoWODvkm/ZH009OSypo0aSffqgiNmsR4J0NGu8+uD3LBZ4SMrKFXHWQMqJlatymO9PnZTF3vMHGgJZT9lCqPkkgGThofRD6GqtIVbU7STeSGP8gX+r+ruqY4vfknzN7SQR8=
+	t=1749506107; cv=none; b=r4matr1ZVy6RnOvWbPO4RXOrwKsy/LaogFAg7hvMv3QAaLceYVqAiWZ56qHrHBWtJQbXDGHfrJf9EFcWdhTP/LmPSUmX8Gd57kjHE7z2sgJCUEk8KBqssuKFB2Mf6d3ss7eWO50oCn8KlqhCWk5yVIQWkoTCWxsJOU69uREESu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749466345; c=relaxed/simple;
-	bh=IuDm8fHHc3aTOLw83+uoTcmN9YosnPP283b36QWBLz4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NXVmTIsPcfSCbO/i7iSUKv+TPZdDWenJNtpJoZBNBm3S3VrqYigV3SQSFg13e98jr3mkgIRxt8RMyn+B8MlpDcpjT5+XNDsKY9+WjV6SDqeQczmxk0bb+Jy10HD3MBVgiwJydpAJg50ZDD5KtDLujnCP4vkcg5ss5x62ClubiyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749506107; c=relaxed/simple;
+	bh=tEg6PR5QER8nznaQf7QFJoHg+OzeWOX4wO8uqnYGdc8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oi92qOncAt1BwpPA9QLoriWfjdjdA/KHe/B838nVEoIrtx5rf+tp5cL6s9Bab7HHJ3hKTCKcjbB6SOyWZ6a3R06aIRDPT12NbbFBTpeytuUk+SP3C/tGVTAI3++TZTh62jWDUgb/hIMZdlJFLry0qX580iw0wodUmbYFBn5sbxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mctYzr1b; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mctYzr1b"
 Received: by smtp.kernel.org (Postfix)
-	id 916C5C4CEED; Mon,  9 Jun 2025 10:52:24 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 9619EC4CEEB;
-	Mon,  9 Jun 2025 10:52:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9619EC4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1100150C;
-	Mon,  9 Jun 2025 03:52:03 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 92BB93F59E;
-	Mon,  9 Jun 2025 03:52:21 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: [GIT PULL] firmware: arm_ffa: Fixes for v6.16
-Date: Mon,  9 Jun 2025 11:52:07 +0100
-Message-Id: <20250609105207.1185570-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	id 0A332C4CEED; Mon,  9 Jun 2025 21:55:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A6BC4CEEB;
+	Mon,  9 Jun 2025 21:55:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749506106;
+	bh=tEg6PR5QER8nznaQf7QFJoHg+OzeWOX4wO8uqnYGdc8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=mctYzr1b6Khssu2nuC9T6oTY4Wv9Ij2j01N71eP93PVIafVh24HP4ThErGwYQgmAU
+	 DpCX11HIdFJT/6CNTzyZ3oyE6L0k8vAaIOcXMK4PyPGQv/uODIdrrFEfyazJAZxJEH
+	 Wv5F8T2eTRalwVxuTMw74l1DIq5btwGE8PcbOCoV4fYA5BipxJy9wn99+CC/b2E83F
+	 PXrVb9FYZs1aYIhGRu5xMPGwx7er6YF+D57kDSUtx1GjSnhYrmeP74cgfAS1P4UrOP
+	 bhQc38u9vavH3eAmG6OfKX1wWY/gNYgBzznH2R4AlOhLXVt9sZUY0PeCQnQ++TjdSX
+	 Twx/jrXTLWFxw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Subject: [PATCH 0/2] arm64: dts: lg: DT cleanups
+Date: Mon, 09 Jun 2025 16:54:55 -0500
+Message-Id: <20250609-dt-lg-fixes-v1-0-e210e797c2d7@kernel.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC9YR2gC/x3LQQqAIBBA0avIrBtQQaGuEi0sRxsIC40IxLsnL
+ R+fX6FQZiowiQqZHi58pg41CNh2lyIh+27QUhtp5Yj+xiNi4JcKOq+CtaRWIw3048r0hz7MS2s
+ f9O1Wml0AAAA=
+X-Change-ID: 20250609-dt-lg-fixes-ad1f66e1b505
+To: soc@kernel.org, Chanho Min <chanho.min@lge.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.15-dev
 
-Hi ARM SoC Team,
+This short series fixes some arm,pl011 DT schema warnings. I noticed 
+that the lg1312 and lg1313 .dtsi files are almost identical, so I've 
+refactored them to make the fix once instead of twice.
 
-Please pull !
+Arnd, You probably need to take this directly if LG maintainers don't 
+respond.
 
-Regards,
-Sudeep
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+Rob Herring (Arm) (2):
+      arm64: dts: lg: Refactor common LG1312 and LG1313 parts
+      arm64: dts: lg: Add missing PL011 "uartclk"
 
--->8
+ arch/arm64/boot/dts/lg/lg1312.dtsi                 | 324 +--------------------
+ arch/arm64/boot/dts/lg/lg1313.dtsi                 | 324 +--------------------
+ .../arm64/boot/dts/lg/{lg1312.dtsi => lg131x.dtsi} |  35 +--
+ 3 files changed, 11 insertions(+), 672 deletions(-)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250609-dt-lg-fixes-ad1f66e1b505
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+Best regards,
+-- 
+Rob Herring (Arm) <robh@kernel.org>
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fixes-6.16
-
-for you to fetch changes up to 4c46a471be12216347ba707f8eadadbf5d68e698:
-
-  firmware: arm_ffa: Fix the missing entry in struct ffa_indirect_msg_hdr (2025-06-09 11:24:43 +0100)
-
-----------------------------------------------------------------
-Arm FF-A fixes for v6.16
-
-Couple of fixes to address:
-
-1. The safety and memory issues in the FF-A notification callback handler:
-
-   The fixes replaces a mutex with an rwlock to prevent sleeping in atomic
-   context, resolving kernel warnings. Memory allocation is moved outside
-   the lock to support this transition safely. Additionally, a memory leak
-   in the notifier unregistration path is fixed by properly freeing the
-   callback node.
-
-2. The missing entry in struct ffa_indirect_msg_hdr:
-
-   The fix adds the missing 32 bit reserved entry in the structure as
-   required by the FF-A specification.
-
-----------------------------------------------------------------
-Sudeep Holla (3):
-      firmware: arm_ffa: Fix memory leak by freeing notifier callback node
-      firmware: arm_ffa: Move memory allocation outside the mutex locking
-      firmware: arm_ffa: Replace mutex with rwlock to avoid sleep in atomic context
-
-Viresh Kumar (1):
-      firmware: arm_ffa: Fix the missing entry in struct ffa_indirect_msg_hdr
-
- drivers/firmware/arm_ffa/driver.c | 71 ++++++++++++++++++++-------------------
- include/linux/arm_ffa.h           |  1 +
- 2 files changed, 37 insertions(+), 35 deletions(-)
