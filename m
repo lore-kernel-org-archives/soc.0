@@ -1,97 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8D577111
-	for <soc@lists.linux.dev>; Tue,  3 Jun 2025 10:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CD525A642
+	for <soc@lists.linux.dev>; Mon,  9 Jun 2025 10:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748945180; cv=none; b=VHKn7vP8teBfY7RvWV3epcGqYKfIxXT90XLndJ9g2NSG5LdzDpvUxHXCG4hLtMh//SESZMwFnmG8hubpd88lFQgHQhk62zu929QUvokE1UkJFuT7v8Mm8tRwovNLaP0gZF9jStIXuG8bS+gW223cfr7SVFtW3z/HU/f8mLfjrxE=
+	t=1749466345; cv=none; b=VNxBHWsE6erhF65p2Rc2W3hzPVpgVngvXTe1w6wiqoWODvkm/ZH009OSypo0aSffqgiNmsR4J0NGu8+uD3LBZ4SMrKFXHWQMqJlatymO9PnZTF3vMHGgJZT9lCqPkkgGThofRD6GqtIVbU7STeSGP8gX+r+ruqY4vfknzN7SQR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748945180; c=relaxed/simple;
-	bh=gi3oft0WXr5q3unDMkBIoaq0APtn0DLl7D3nsEpEc84=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dwybECPkBPVfLcbTD2QCdWgqGdzSMIrgVHjIbw7p24lvTAbUIYmOVYjys6q7c9p5f7aVo4nQz6qLdTXKijxuUI27gYqMtzfRks/ZvtrW+UHgMFX4IATJyBwLBvCAlNFKp6GWi8VROKiMYu89Dvzj2JqdCE/MYnu8j+q7Ov9iQXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cki1LqXL; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cki1LqXL"
+	s=arc-20240116; t=1749466345; c=relaxed/simple;
+	bh=IuDm8fHHc3aTOLw83+uoTcmN9YosnPP283b36QWBLz4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NXVmTIsPcfSCbO/i7iSUKv+TPZdDWenJNtpJoZBNBm3S3VrqYigV3SQSFg13e98jr3mkgIRxt8RMyn+B8MlpDcpjT5+XNDsKY9+WjV6SDqeQczmxk0bb+Jy10HD3MBVgiwJydpAJg50ZDD5KtDLujnCP4vkcg5ss5x62ClubiyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id CB587C4AF09; Tue,  3 Jun 2025 10:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0064C4CEED;
-	Tue,  3 Jun 2025 10:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748945179;
-	bh=gi3oft0WXr5q3unDMkBIoaq0APtn0DLl7D3nsEpEc84=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cki1LqXLNSaVM17Fheel8BhlA2LKQfwpzuEihn19HWH5/oI3cAjk/TyxkHG2xLtk5
-	 T86Hr0V+OGRmjOKIPOFe+/LCfFafydPPZttwDg4Gu+8LBdiQhWVkNUaQqLFRQRtq0F
-	 DSNJlOvstEBfy+f9Nfbnsv1UXmD/uG2QGiBv9/CxM1E9NeSZIrAWdulWi61uNpZuBC
-	 Zs+yn1d7DoTcfl0Akt8zRAv7Yc+pFNN+2h1qLMqw6rsz8svATxk0XrWuC1aBnYd6Dl
-	 DVdVILU0WCYwte8lrFswLQ/Zr3HQ6VoW2wZpd/MYUn9Woi8bSdtoidIJyzVO4M8aBm
-	 eWhSC9lmGjdkQ==
-Date: Tue, 3 Jun 2025 11:06:15 +0100
-From: Lee Jones <lee@kernel.org>
-To: George Moussalem <george.moussalem@outlook.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, arm@kernel.org, soc@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Unnathi Chalicheemala <unnathi.chalicheemala@oss.qualcomm.com>
-Subject: Re: [GIT PULL] More Qualcomm driver updates for v6.16
-Message-ID: <20250603100615.GF7758@google.com>
-References: <20250520024916.39712-1-andersson@kernel.org>
- <20250603084615.GA1728274@google.com>
- <DS7PR19MB8883BFF2E80F50F4F6CCC5E09D6DA@DS7PR19MB8883.namprd19.prod.outlook.com>
+	id 916C5C4CEED; Mon,  9 Jun 2025 10:52:24 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 9619EC4CEEB;
+	Mon,  9 Jun 2025 10:52:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9619EC4CEEB
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1100150C;
+	Mon,  9 Jun 2025 03:52:03 -0700 (PDT)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 92BB93F59E;
+	Mon,  9 Jun 2025 03:52:21 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: [GIT PULL] firmware: arm_ffa: Fixes for v6.16
+Date: Mon,  9 Jun 2025 11:52:07 +0100
+Message-Id: <20250609105207.1185570-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DS7PR19MB8883BFF2E80F50F4F6CCC5E09D6DA@DS7PR19MB8883.namprd19.prod.outlook.com>
 
-On Tue, 03 Jun 2025, George Moussalem wrote:
+Hi ARM SoC Team,
 
-> Hi Lee, please see inline.
-> 
-> On 6/3/25 12:46, Lee Jones wrote:
-> > On Mon, 19 May 2025, Bjorn Andersson wrote:
-> > 
-> > > 
-> > > The following changes since commit 2c04e58e30ce858cc2be531298312c67c7d55fc3:
-> > > 
-> > >    soc: qcom: llcc-qcom: Add support for SM8750 (2025-05-12 22:26:21 +0100)
-> > > 
-> > > are available in the Git repository at:
-> > > 
-> > >    https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.16-2
-> > > 
-> > > for you to fetch changes up to 936badf282388be78094e55bd5e2c96f86635e48:
-> > > 
-> > >    docs: firmware: qcom_scm: Fix kernel-doc warning (2025-05-19 18:04:28 -0500)
-> > > 
-> > > ----------------------------------------------------------------
-> > > More Qualcomm driver updates for v6.16
-> > > 
-> > > Allow HP EliteBook Ultra G1q to use QSSECOM for UEFI variable acecss.
-> > > Add missing compatible for IPQ5018 TCSR block. Fix a kernel-doc warning
-> > > in SCM driver.
-> > > 
-> > > ----------------------------------------------------------------
-> > > George Moussalem (1):
-> > >        dt-bindings: mfd: qcom,tcsr: Add compatible for ipq5018
-> > 
-> > Why is this commit in here?
-> > 
-> > Where and when did you pick this up?  I don't see anything in LORE.
-> 
-> https://lore.kernel.org/all/20250512-ipq5018-syscon-v1-1-eb1ad2414c3c@outlook.com/
+Please pull !
 
-This is the thread confirming that I had accepted this into the mfd tree.
+Regards,
+Sudeep
 
-I'm asking how / why this was applied to arm-soc via the qcom tree.
+-->8
 
--- 
-Lee Jones [李琼斯]
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fixes-6.16
+
+for you to fetch changes up to 4c46a471be12216347ba707f8eadadbf5d68e698:
+
+  firmware: arm_ffa: Fix the missing entry in struct ffa_indirect_msg_hdr (2025-06-09 11:24:43 +0100)
+
+----------------------------------------------------------------
+Arm FF-A fixes for v6.16
+
+Couple of fixes to address:
+
+1. The safety and memory issues in the FF-A notification callback handler:
+
+   The fixes replaces a mutex with an rwlock to prevent sleeping in atomic
+   context, resolving kernel warnings. Memory allocation is moved outside
+   the lock to support this transition safely. Additionally, a memory leak
+   in the notifier unregistration path is fixed by properly freeing the
+   callback node.
+
+2. The missing entry in struct ffa_indirect_msg_hdr:
+
+   The fix adds the missing 32 bit reserved entry in the structure as
+   required by the FF-A specification.
+
+----------------------------------------------------------------
+Sudeep Holla (3):
+      firmware: arm_ffa: Fix memory leak by freeing notifier callback node
+      firmware: arm_ffa: Move memory allocation outside the mutex locking
+      firmware: arm_ffa: Replace mutex with rwlock to avoid sleep in atomic context
+
+Viresh Kumar (1):
+      firmware: arm_ffa: Fix the missing entry in struct ffa_indirect_msg_hdr
+
+ drivers/firmware/arm_ffa/driver.c | 71 ++++++++++++++++++++-------------------
+ include/linux/arm_ffa.h           |  1 +
+ 2 files changed, 37 insertions(+), 35 deletions(-)
