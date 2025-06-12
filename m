@@ -1,135 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7ED223DDA;
-	Thu, 12 Jun 2025 10:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A2324500A
+	for <soc@lists.linux.dev>; Thu, 12 Jun 2025 13:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749723616; cv=none; b=gZXbs61ESYv0g9B7sSDo/pYJjLTZIhaQjKx+3CuQzPt1jE8uhXndbbnk7YaIgtxGVdaYtSrTj/NC2HLX6UjJbWVIiVTpRXmvKJzZZsvIl+/v1/5AcYsfFyy/4DzT300MwKy1PPXp5CLd/HPmw3jdLb7MfkD1C9xLscaCKeg/brQ=
+	t=1749734125; cv=none; b=KkmyIHLnWX3u+j9+wwbeEUVMzyy49J48t2Hs9uJwBEMvgFjfplvJ0qSV4W84iVxQVhKTMcuU50JO94ZsDjB850b1eBOCb/nCbZ6V85v4jX3/BDp2C3kcY2L0Tnx3CZep/ijU4MgQKlZwpQkOoe1OReBgIXJHXb5H/b0dEBAtFXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749723616; c=relaxed/simple;
-	bh=Yhd51y2BToO+EORWMdmoesfgplnRX9zyXUOsExCwkLI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FKDTsoHREIjillDt/QF7ObospUWqe3qTGSGWDmp5IFHtm2f5psomgItwmsv9oPfAvBtWIER4aKXMdWS27+wYVpCkVBDxkOda7upgrbehQ13EsSf52RYUT4kcYIpeFJg5k+F/Qk2UCL4OaeU43dW8qRgQyot0XXg2EygwXt9fZmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvKQkxBU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749734125; c=relaxed/simple;
+	bh=r0qYcU16DOOXB/L65/ELIol1UcVjLdmj6pz7lcDecA4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=oX65ZIjx+lX3nN2eq3nrE2Rlmr/m6dep+78sZuYDmcy1vaWYXAnQ2CwbqzUoZPYhTjFbwcxpELbh7HPgSIhLy6g2H0tFsOaUBxQQO4GR6OcWb28psaG4FYmrt2UaQmv86Ot8OSJIP6UuP0wQTT7sKtuy3jiBJD/MJj3DZSIjpMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=O22PwNfp; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvKQkxBU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D46C4CEF2;
-	Thu, 12 Jun 2025 10:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749723615;
-	bh=Yhd51y2BToO+EORWMdmoesfgplnRX9zyXUOsExCwkLI=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=kvKQkxBUKnFZxiGaeU9WfTuDrfatbON3icHVza+D/Ln3Y34hSoL8wFsxj9dovP4W7
-	 JMSS85arZBXmE7d89NVpHzvIYFx6R4JckvNdiMbnpyUxoM8Z4njYAPLg8KXA0MTiX+
-	 Sz9Julpv2SaC8C/WzfFJjcH/gihCAEnqnRJSNAZra90q8sdDgG4vfTLjTSblKcjcbB
-	 uX3NYFngwUOY6xYBbeAr4xQKtkmzy2oh+UolVm09KUKNSR16+G+HQBJrTyEhxm4pjk
-	 94ZOuyoEQMJaxEAX5XvjOgia0L8Do4DSiGgNkTe48RKSdJv/XvVQX3ps9M6ibKktPH
-	 eoUoH1oDgBSdw==
-Message-ID: <f635caf3-a93f-4a31-9957-4f455f4eafc9@kernel.org>
-Date: Thu, 12 Jun 2025 12:20:07 +0200
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="O22PwNfp"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43edecbfb94so11213905e9.1
+        for <soc@lists.linux.dev>; Thu, 12 Jun 2025 06:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1749734122; x=1750338922; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zmZkKLxN2UmLakt+dPeotcVOQqoR98FTAzfeh6JlZVI=;
+        b=O22PwNfphtBKDcsjbts9sPI/1I09EFNtAI1GTkcXrOMwzbyU1Ht4aghwN518/fWSyl
+         d8GbWEd6Dw8gjd42HjFtVwOr8hFFd6tbsXKM2dGfVKjqoCyy9Ne0ENaYYvNNA/5I7rWF
+         mNjEcmBWfnXVZmA1QLVTBy7NBL4ryCGXE+qOQ4ITstfnaqKE/XneP84Y5TCWe2AQI0pJ
+         knJLp8RsYOUlqxSp5HzbQeBMmGjfvn43yiVtWqVSN3CB8cH8FkRBecGPngFpSjiymHsg
+         EgSsEfZsp4mWHQQL7l4tOg07FG8aQgjXpdJaPcG9tdG67bTYynb+nGHP5EWIxqbjE464
+         Zxng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749734122; x=1750338922;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zmZkKLxN2UmLakt+dPeotcVOQqoR98FTAzfeh6JlZVI=;
+        b=kkqrXwgL/8llzSmzpdHY7nYxkGXZuwnpUUvPtkoFJRO/h0gqmSezgZ/CIIArf+vvsM
+         7yyVXFSYlJOsWVyHHwiwCHalfcQ1ML4bVo7rI7qJQXfoxqmWo1rHV5MxDmJvjSQihODh
+         g2xRT3C70avpDlVE3CpxAPAp+BbeksB1AdWQ963MoAHSrcLE0iYRV7BbxpXg5V95olqV
+         rbJQSxR2+RxTT+MU4r26Wlx1PGCR2nGFHsh7Bg5e/yon4uyCe5HRCQXqo7AWWLHWxFdI
+         B/bo7Rhjs47kbgxoOp71VKmy1TVPTKHTXHec6Bs87rcyeSptdbjRP90+i+chsn/k13y9
+         pLuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxcC9Z0YWnBIJX2MP77HYlYFPBtGp5nCgMM2GBfYDqQvK76DCdSQ7gCCKom4DylCsJugY=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz2Bdbn0HlDyNZmCjBxyAWCwDzWU+IxXZhfhFLzqiwUPvZjTiag
+	EDekC8KdJsUIYucBLZIkcoPCLX+0JDyl4Uo/RXozZbKgnERVaJGBTVDSlnkoL5r0Q4w=
+X-Gm-Gg: ASbGncvWNiUzUGGTJtmGZnnCsKGvVglzuJgMQVJJrzTrbkFBD5H6ruJg038C1trbJ3M
+	ptwrekNsSOOQ0VBV744S2zxL6N0FuDBBlQ8DYOH5yjnBaSLa8uv+W712hApr5IJIJT83Lbk/fID
+	HuYee6phSJnhf0CIZZNSOOKtk0nrffC2hN5rwp/RJ6W0mwHCo+ciKJz/Ct+zj+dX8QYdGc0lLLK
+	OBGF959oopv97ltTSW097gt6eKNPNeTTnXws8gEiYtEuO/EeBCvEPdod+e5RJiYSiDDbdCe5+s4
+	wRDyz+LZ9FJQ7W35mwN0y0EiOSHytYIJqdOuJXEtSAYlc16nGR9B4nI=
+X-Google-Smtp-Source: AGHT+IFdr6eiKmLNU1U7PCiAyyEcaNtod1q+PU6cBesinlO+7E1MRjBPyMho7YxEmPTyFNNlQJ5EIQ==
+X-Received: by 2002:a05:600c:c16a:b0:450:d61f:dd45 with SMTP id 5b1f17b1804b1-4532d37700emr31586985e9.4.1749734122088;
+        Thu, 12 Jun 2025 06:15:22 -0700 (PDT)
+Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:8b99:9926:3892:5310])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532dea17d7sm20619795e9.10.2025.06.12.06.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jun 2025 06:15:21 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 12 Jun 2025 15:15:10 +0200
+Subject: [PATCH 01/16] pinctrl: sppctl: use new GPIO line value setter
+ callbacks
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700 SoC device
- tree
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
- nfraprado@collabora.com, Taniya Das <quic_tdas@quicinc.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Eric Biggers <ebiggers@google.com>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, soc@lists.linux.dev,
- Mo Elbadry <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
- William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
- wthai@nvidia.com, leohu@nvidia.com, dkodihalli@nvidia.com,
- spuranik@nvidia.com
-References: <20250612100933.3007673-1-ryan_chen@aspeedtech.com>
- <20250612100933.3007673-4-ryan_chen@aspeedtech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250612100933.3007673-4-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-1-556b0a530cd4@linaro.org>
+References: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-0-556b0a530cd4@linaro.org>
+In-Reply-To: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-0-556b0a530cd4@linaro.org>
+To: Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Patrice Chotard <patrice.chotard@foss.st.com>, 
+ Support Opensource <support.opensource@diasemi.com>, 
+ Baruch Siach <baruch@tkos.co.il>, Sven Peter <sven@kernel.org>, 
+ Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+ Neal Gompa <neal@gompa.dev>, Viresh Kumar <vireshk@kernel.org>, 
+ Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, asahi@lists.linux.dev, soc@lists.linux.dev, 
+ linux-sunxi@lists.linux.dev, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1728;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=LieHmje5ivI5luNfORERBIvPNT4Z77mh5n845VHvScA=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBoStLk4RH7GPVp8SssQRxQJp6gzZ2YETuVm14Kq
+ ofe5DUznf6JAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaErS5AAKCRARpy6gFHHX
+ cr/lEACI6ET2WlvZ9cyQDzGwOdmiCfZct2usLbI+rS53HlFtmhOQcNkSmaUGnwVPfPHX1OKG7u8
+ dbqcNZIdDG6lrAjwrodXYH7a1vrgYl4fLrudzgfzXyx/pyT+4NJZvRWfprR4w4TraR6/W9iQzdO
+ wP3bL6aoNjJQjxz3P0ey6wN/zPuvQJaxjAh+lJDMEFh8mz5P0UDMZ4D66yIKi2Cm6Ea0xZgGJyR
+ KJOGz4mct+SIxm358x4VzGpQckl5dZF0hqK3CfjD+MAe595dVdFJ2m9NghpyjJV+xYYUrA/tl6T
+ yHMxNVVaczWBNyvrynetjzEFh0LHJ1lK3woV+mzoiFeXT5PaWXJBhxTJeXBSdXAs1EdF5DWjeb3
+ gf1xcSBfd9eqV2bTnSYtjsgobI3JYLTeFl7LT9h9GtJ4HfD39BuzyA0Ss0+ZAkP+0RbhARTf8Dd
+ LNOqMPmFirJVka+ELdb1qNf56x2cFpRETLOdZ2OtNsAS151YAwJDiLLKBI8FLDvUqxbNK1sST+S
+ 4M6hYV9k3URKnrim10RgFTxPcQrCuW5q62+1mTRUjg7XxpIUlrSdX6TtvPqWmtMoY1zM71OwHl7
+ f4ZCx+47It/Y0/pIQzZWm31bgsmNv2MW2oIhK/1QHFPK/JDVZtvJPYUtr8AXF+ZEHgJcPqFCZ8s
+ MScuhzi/9MgLUwQ==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-On 12/06/2025 12:09, Ryan Chen wrote:
-> +
-> +	soc0: soc@10000000 {
-> +		compatible = "simple-bus";
-> +		reg = <0x0 0x10000000 0x10000000>;
-> +		#address-cells = <2>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		syscon0: syscon@12c02000 {
-> +			compatible = "aspeed,ast2700-scu0", "syscon", "simple-mfd";
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-This makes no sense - no children here.
+struct gpio_chip now has callbacks for setting line values that return
+an integer, allowing to indicate failures. Convert the driver to using
+them.
 
-> +			reg = <0x0 0x12c02000 0x1000>;
-> +			ranges = <0x0 0x0 0 0x12c02000 0x1000>;
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/pinctrl/sunplus/sppctl.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Neither this.
+diff --git a/drivers/pinctrl/sunplus/sppctl.c b/drivers/pinctrl/sunplus/sppctl.c
+index ae156f779a16b8c4bb91c4cb0d5d4363ebd15d25..3c3357f80889a95c46557b3f8129882d2ce96f6e 100644
+--- a/drivers/pinctrl/sunplus/sppctl.c
++++ b/drivers/pinctrl/sunplus/sppctl.c
+@@ -461,13 +461,15 @@ static int sppctl_gpio_get(struct gpio_chip *chip, unsigned int offset)
+ 	return (reg & BIT(bit_off)) ? 1 : 0;
+ }
+ 
+-static void sppctl_gpio_set(struct gpio_chip *chip, unsigned int offset, int val)
++static int sppctl_gpio_set(struct gpio_chip *chip, unsigned int offset, int val)
+ {
+ 	struct sppctl_gpio_chip *spp_gchip = gpiochip_get_data(chip);
+ 	u32 reg_off, reg;
+ 
+ 	reg = sppctl_prep_moon_reg_and_offset(offset, &reg_off, val);
+ 	sppctl_gpio_out_writel(spp_gchip, reg, reg_off);
++
++	return 0;
+ }
+ 
+ static int sppctl_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
+@@ -545,7 +547,7 @@ static int sppctl_gpio_new(struct platform_device *pdev, struct sppctl_pdata *pc
+ 	gchip->direction_input  = sppctl_gpio_direction_input;
+ 	gchip->direction_output = sppctl_gpio_direction_output;
+ 	gchip->get              = sppctl_gpio_get;
+-	gchip->set              = sppctl_gpio_set;
++	gchip->set_rv           = sppctl_gpio_set;
+ 	gchip->set_config       = sppctl_gpio_set_config;
+ 	gchip->dbg_show         = IS_ENABLED(CONFIG_DEBUG_FS) ?
+ 				  sppctl_gpio_dbg_show : NULL;
 
-> +			#address-cells = <2>;
-> +			#size-cells = <1>;
+-- 
+2.48.1
 
-Nor this.
-
-
-Best regards,
-Krzysztof
