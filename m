@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDC91F8753;
-	Thu, 12 Jun 2025 10:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7ED223DDA;
+	Thu, 12 Jun 2025 10:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749723537; cv=none; b=qV1GP+zGPK2qalzO1AhVxGwiEggWpRZVKdYsmrakbipxw57mzzzuu3TxUOjCwi1hJwkziu4KOxdaN0+CtMwa62eql3BKKvZeON8UvgYGmv5lSSrc1uo04Rmd+bUwtGR5K8BpfZYLyyKA69NqcM5ebsRj6CybaCC0i+u+uoKER/E=
+	t=1749723616; cv=none; b=gZXbs61ESYv0g9B7sSDo/pYJjLTZIhaQjKx+3CuQzPt1jE8uhXndbbnk7YaIgtxGVdaYtSrTj/NC2HLX6UjJbWVIiVTpRXmvKJzZZsvIl+/v1/5AcYsfFyy/4DzT300MwKy1PPXp5CLd/HPmw3jdLb7MfkD1C9xLscaCKeg/brQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749723537; c=relaxed/simple;
-	bh=VTa4Ro0Wz6mnKuHxnSTJzW2oiJlhqXG0bH43lvgxYvM=;
+	s=arc-20240116; t=1749723616; c=relaxed/simple;
+	bh=Yhd51y2BToO+EORWMdmoesfgplnRX9zyXUOsExCwkLI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=rLbCbJqGw2X1hjlejTISQJpOaYGGHPuWaUMlYNppxbIdCgHruKTtkaYGl5A/EhTPCnPpuimpI82M1fNK7XqQjYBMlHDIizH9lK2jkGJK0zNFrOGYUqTuXdac4BWQz83Tivk9imA1FRfVcBJLIkSbRGfhvpVcLsYnHXO2i3uys6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jAxGOsBy; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=FKDTsoHREIjillDt/QF7ObospUWqe3qTGSGWDmp5IFHtm2f5psomgItwmsv9oPfAvBtWIER4aKXMdWS27+wYVpCkVBDxkOda7upgrbehQ13EsSf52RYUT4kcYIpeFJg5k+F/Qk2UCL4OaeU43dW8qRgQyot0XXg2EygwXt9fZmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvKQkxBU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jAxGOsBy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2772C4CEEA;
-	Thu, 12 Jun 2025 10:18:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvKQkxBU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D46C4CEF2;
+	Thu, 12 Jun 2025 10:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749723537;
-	bh=VTa4Ro0Wz6mnKuHxnSTJzW2oiJlhqXG0bH43lvgxYvM=;
+	s=k20201202; t=1749723615;
+	bh=Yhd51y2BToO+EORWMdmoesfgplnRX9zyXUOsExCwkLI=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=jAxGOsByLHV8XjWgZU1BvmIWd2QEVHYNeXAwNDZMTfwXXMVXkQW2n35se3CjHusHj
-	 3uN8l3SmQQudP97K1v5JAaVzJl7F4D7gxnTnBcyKIATLt/oKImbg5mot5Q5r/fORwa
-	 kKu5KiwQ5G7PoEntbBG1oczF5Z1aECfV6OVjYljM4W8REk50Sw5Atgpskqty1MZLwg
-	 llvfDK6qGvM9cDUdbs0y8f8K4z6kZm4ZKX4kI9BnXIz4+sMKFQ8DwJUlT+S5NWoJ8C
-	 nfUeMNPN9WY496b+cIhKfyALR81HvqRiyc4/oXyKm/Pnf5XASwOid/4QpqtUNOLzwu
-	 TTTer+gAr9tJA==
-Message-ID: <648e548d-2aae-4210-a0a1-c378c7a81df9@kernel.org>
-Date: Thu, 12 Jun 2025 12:18:49 +0200
+	b=kvKQkxBUKnFZxiGaeU9WfTuDrfatbON3icHVza+D/Ln3Y34hSoL8wFsxj9dovP4W7
+	 JMSS85arZBXmE7d89NVpHzvIYFx6R4JckvNdiMbnpyUxoM8Z4njYAPLg8KXA0MTiX+
+	 Sz9Julpv2SaC8C/WzfFJjcH/gihCAEnqnRJSNAZra90q8sdDgG4vfTLjTSblKcjcbB
+	 uX3NYFngwUOY6xYBbeAr4xQKtkmzy2oh+UolVm09KUKNSR16+G+HQBJrTyEhxm4pjk
+	 94ZOuyoEQMJaxEAX5XvjOgia0L8Do4DSiGgNkTe48RKSdJv/XvVQX3ps9M6ibKktPH
+	 eoUoH1oDgBSdw==
+Message-ID: <f635caf3-a93f-4a31-9957-4f455f4eafc9@kernel.org>
+Date: Thu, 12 Jun 2025 12:20:07 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0 5/5] arm64: configs: Update defconfig for AST2700
- platform support
+Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700 SoC device
+ tree
 To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
@@ -56,7 +56,7 @@ To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
  wthai@nvidia.com, leohu@nvidia.com, dkodihalli@nvidia.com,
  spuranik@nvidia.com
 References: <20250612100933.3007673-1-ryan_chen@aspeedtech.com>
- <20250612100933.3007673-6-ryan_chen@aspeedtech.com>
+ <20250612100933.3007673-4-ryan_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,17 +102,34 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250612100933.3007673-6-ryan_chen@aspeedtech.com>
+In-Reply-To: <20250612100933.3007673-4-ryan_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/06/2025 12:09, Ryan Chen wrote:
-> - Enable options for ASPEED AST2700 SoC.
+> +
+> +	soc0: soc@10000000 {
+> +		compatible = "simple-bus";
+> +		reg = <0x0 0x10000000 0x10000000>;
+> +		#address-cells = <2>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		syscon0: syscon@12c02000 {
+> +			compatible = "aspeed,ast2700-scu0", "syscon", "simple-mfd";
 
-Why is this "-"? Is this a patch format?
+This makes no sense - no children here.
 
-Look at other commits to this file. You can use `git log -- PATH` to
-understand how people write commits.
+> +			reg = <0x0 0x12c02000 0x1000>;
+> +			ranges = <0x0 0x0 0 0x12c02000 0x1000>;
+
+Neither this.
+
+> +			#address-cells = <2>;
+> +			#size-cells = <1>;
+
+Nor this.
+
 
 Best regards,
 Krzysztof
