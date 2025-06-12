@@ -1,148 +1,100 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4B02571C9;
-	Thu, 12 Jun 2025 13:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B012F4317
+	for <soc@lists.linux.dev>; Thu, 12 Jun 2025 16:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749734922; cv=none; b=t3yrSQB6SP6dlEoyQUvEWmvtTWvVzNMfhE0rL8YU+PDDg4O8oZFb2hA3hREgFi8FzsHvD6MZMufk5Sk9URsbZZSqRt2clwqC5NpxB+YvWsmTmhOelGb6KXZDGlfqWHH9QhCbiTdR3xTMkE+OBhPFLYWhsPS9eFYlTN7/lUEjVLg=
+	t=1749744411; cv=none; b=D/plVpQkYagDLbs5XK6NYTVxA5Fs7WKNtDkPwrJ13ZluAQT4dQxqfCoY5lklSz7x+cdI3ByZWb6kexPTubyQG5QqntBL3CDJLiL6dE+cGLLUlAT8od5ZX1O5uiyDQiGiI9MM3jrE8blWBLzfzTPVYMV702zDoq44xsWHAlaHJRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749734922; c=relaxed/simple;
-	bh=NzF8D+jscEUsAE/1/Fd1SPvbvgtFxlYHFfAZNNIr8K8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S9uOaz2atTOj+zWAzHBvN1QYqEVWVTMsixwcckHUf4Xn5sFud9Q0HAO/DcryD9EgdRnKMmaSEMdsyRsH9BM1z14R+FYcQq3rQ0gFZadXQu+L7HWao2mtumt0b38IXeFthagQDC0DVzlkXtvpSO54MNyaJ4sukCt4t96qgqIEWPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2u1L2rO; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2u1L2rO"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a525eee2e3so808298f8f.2;
-        Thu, 12 Jun 2025 06:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749734919; x=1750339719; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m0Nsk7L1UKeSgGVwlEzlmQB/17oGC9kEiuXWeGaDs0s=;
-        b=R2u1L2rOqhKGh97p8K/C7o5ewFgr5acZJVRj1YmLwDB3kV7igLkrt3JDQQqmoWY2e5
-         Z+hXuFNQ10WUwr45DKAMcFhNzy8Nl5OpH9YFGfccXV1vANM34BTwWWbLWDu5uHm0Evkx
-         7ztUpJRgQ/VyfMqiDZ5EBQhcKFNXXUfUyaujzIfVmNKC2R9ytpH1xrOTMsVQ/3j+qda4
-         v/3OpreqGHb2y17Jj8vEmjsH3sa++iIxWkG9TTKpzsTX5nb/K9Ez1hEg/Fd55rmvfrWM
-         Mngs2Zv6FqrUeVTHhEUy15H1Pgv9cReF9+1AP3htzKYO+SLZpBCvnUEEB8e/lMgeHMGr
-         4o1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749734919; x=1750339719;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m0Nsk7L1UKeSgGVwlEzlmQB/17oGC9kEiuXWeGaDs0s=;
-        b=pSrCU3Rl1yt5IGxrWAU/+bAbN6fruXu0RJztvVE92pGPlxwxKIFOEJBUotokO0cn3S
-         Y3U7CoXqD2sExLzGZKUkwUz9PVhGCj84rnkLijb7sa+gKG9nZ7jpyZlf34s2bWl/6iQQ
-         wRLBiaHpO+Pekl8meF40lVXIbxFMDUi3q1sHSuT+nzgAMt2dAyQ+wVHdyr8qvtpMZdnJ
-         6OPquWu9vdFAfTweKJTRz2RpmF5YF9Q6GLefLfx7XebjsHpeeJVHKhe4Xp+usCR0WIke
-         eMBGd7p/pZ6uydt8ruIfRRTmDAioaBZteh8Ppzqxm+SSz4C9hTGg5kGwRQ4e38X3y2eB
-         A/dA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMDf3HOAK8GyDhrolpLlBZrO55eoO5uBC8tQBXwI4xKm97o4AeJCZuczlcKpAslNT2Ar4=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSaIcI00kb5e2DNurysbRPRvKJJOiMq8nuPzUbQgE8rACkDTvn
-	Spr/fKwmPRt0OOo9lSbh7T1lcxjaCdfXtmfOL2Wi8DkSXO7qs1gSEvaPtTmSCH7E7nc=
-X-Gm-Gg: ASbGncsx0G0bAwR6OT52MIoE06eZGZqlR+oVXE8RQTxs1dezzhTuWQVW5nRMQV2pKnC
-	FxecQMbT9217kmgvT87sR+sNiOQL1p1iXGnO6rUiMdPhK8tnAsKqJ5AkBN17JIm731FZrIeAdqj
-	6jREXfdrWcA9X7cOMLQp7+Bz1kfSCer3wHbBqMean9EZrex/CFTPXhO8FyYtA8+IOgMQbFlC8nO
-	B76ohvTc1R3rM1fntWCepoBhfkC4ixKKQWeEl+C/1UOwNN0DZUS6u242YxIRBzHFFTnVcssuIp8
-	+6NYyqgEfSisu64KF4fn2KYVeE9Jo83gftizGaKGKNPC6o7yP6SP0XYsIeYH13eN/AH/q/yiK5a
-	H2aMsAyj+CQ==
-X-Google-Smtp-Source: AGHT+IHcFVWEX+KjeW3ppd6At7eyZ4IER05LLmIVtxkWrdoTFMl7T38r6NDDqCMPQK/Fvj5rzzGoqA==
-X-Received: by 2002:a05:6000:26c7:b0:3a4:f70d:dec3 with SMTP id ffacd0b85a97d-3a5606c7a11mr2662391f8f.16.1749734919190;
-        Thu, 12 Jun 2025 06:28:39 -0700 (PDT)
-Received: from giga-mm.. ([2a02:1210:8608:9200:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a561b653d5sm1982809f8f.86.2025.06.12.06.28.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 06:28:38 -0700 (PDT)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: sophgo@lists.linux.dev,
-	soc@lists.linux.dev
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Haylen Chu <heylenay@outlook.com>,
-	Chao Wei <chao.wei@sophgo.com>,
-	devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v8 6/6] arm64: defconfig: Enable rudimentary Sophgo SG2000 support
-Date: Thu, 12 Jun 2025 15:28:14 +0200
-Message-ID: <20250612132844.767216-7-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250612132844.767216-1-alexander.sverdlin@gmail.com>
-References: <20250612132844.767216-1-alexander.sverdlin@gmail.com>
+	s=arc-20240116; t=1749744411; c=relaxed/simple;
+	bh=ZAakH7JY2J4n18h6E+SokHqphhMulroZXjK6ElSbnnc=;
+	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=punq0+Kp8KDoudqhbN+Fc5MsDQRsMsD4OSoaQoJw+7Ma/6I2lv1WFvNg0zNCp9L7/JZZ35eaJZl/mSJe4ZZZmLGJwgCL7nvto3il4+STNDWrEpxDTHNmIvNN9Qoh+gr0ppLbemF910Xm0JFqeL2YD56smOBmvvQCac6RYjBeqrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
+Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
+	by Atcsqr.andestech.com with ESMTPS id 55CG6DsO080874
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+	Fri, 13 Jun 2025 00:06:13 +0800 (+08)
+	(envelope-from ben717@andestech.com)
+Received: from atctrx.andestech.com (10.0.15.173) by ATCPCS34.andestech.com
+ (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 13 Jun
+ 2025 00:06:13 +0800
+Date: Fri, 13 Jun 2025 00:06:13 +0800
+From: Ben Zong-You Xie <ben717@andestech.com>
+To: <soc@lists.linux.dev>
+CC: <paul.walmsley@sifive.com>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <alex@ghiti.fr>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <tglx@linutronix.de>,
+        <samuel.holland@sifive.com>, <daniel.lezcano@linaro.org>,
+        <arnd@arndb.de>, <tim609@andestech.com>, <ben717@andestech.com>
+Subject: [GIT PULL] Andes Voyager board patches for v6.17
+Message-ID: <aEr69QIikSuD+iCf@atctrx.andestech.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
+ ATCPCS34.andestech.com (10.0.1.134)
+X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:Atcsqr.andestech.com 55CG6DsO080874
 
-Enable ARCH_SOPHGO, pinctrl (built-in, required to boot), ADC as module.
-This defconfig is able to boot from SD card on Milk-V Duo Module 01
-evalboard.
+The following changes since commit 0bb71d301869446810a0b13d3da290bd455d7c78:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Inochi Amaoto <inochiama@gmail.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
- arch/arm64/configs/defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+  Add linux-next specific files for 20250612 (2025-06-12 14:07:02 +1000)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 897fc686e6a9..b43f9502acce 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -66,6 +66,7 @@ CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
- CONFIG_ARCH_SEATTLE=y
- CONFIG_ARCH_INTEL_SOCFPGA=y
-+CONFIG_ARCH_SOPHGO=y
- CONFIG_ARCH_STM32=y
- CONFIG_ARCH_SYNQUACER=y
- CONFIG_ARCH_TEGRA=y
-@@ -654,6 +655,7 @@ CONFIG_PINCTRL_SM8450_LPASS_LPI=m
- CONFIG_PINCTRL_SC8280XP_LPASS_LPI=m
- CONFIG_PINCTRL_SM8550_LPASS_LPI=m
- CONFIG_PINCTRL_SM8650_LPASS_LPI=m
-+CONFIG_PINCTRL_SOPHGO_SG2000=y
- CONFIG_GPIO_ALTERA=m
- CONFIG_GPIO_DAVINCI=y
- CONFIG_GPIO_DWAPB=y
-@@ -1430,6 +1432,7 @@ CONFIG_QCOM_HFPLL=y
- CONFIG_CLK_GFM_LPASS_SM8250=m
- CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
- CONFIG_CLK_RENESAS_VBATTB=m
-+CONFIG_CLK_SOPHGO_CV1800=y
- CONFIG_HWSPINLOCK=y
- CONFIG_HWSPINLOCK_OMAP=m
- CONFIG_HWSPINLOCK_QCOM=y
-@@ -1530,6 +1533,7 @@ CONFIG_QCOM_SPMI_VADC=m
- CONFIG_QCOM_SPMI_ADC5=m
- CONFIG_ROCKCHIP_SARADC=m
- CONFIG_RZG2L_ADC=m
-+CONFIG_SOPHGO_CV1800B_ADC=m
- CONFIG_TI_ADS1015=m
- CONFIG_TI_AM335X_ADC=m
- CONFIG_IIO_CROS_EC_SENSORS_CORE=m
--- 
-2.49.0
+are available in the Git repository at:
 
+  git@github.com:ben717-linux/linux.git tags/andes-newsoc-6.17
+
+for you to fetch changes up to 8909a9795ed9991e9ed12d7bf21c9648b2c2f22f:
+
+  riscv: dts: andes: add Voyager board device tree (2025-06-12 15:45:26 +0800)
+
+----------------------------------------------------------------
+Andes Voyager board patches for v6.17
+
+The patchset [1] for the Andes Voyager board (including the Andes QiLai SoC)
+has been tested on the latest linux-next/master branch and reviewed on the
+relevant mailing lists.
+
+[1] https://lore.kernel.org/all/20250602060747.689824-1-ben717@andestech.com/
+
+----------------------------------------------------------------
+Ben Zong-You Xie (7):
+      riscv: add Andes SoC family Kconfig support
+      dt-bindings: riscv: add Andes QiLai SoC and the Voyager board bindings
+      dt-bindings: interrupt-controller: add Andes QiLai PLIC
+      dt-bindings: interrupt-controller: add Andes machine-level software interrupt controller
+      dt-bindings: timer: add Andes machine timer
+      riscv: dts: andes: add QiLai SoC device tree
+      riscv: dts: andes: add Voyager board device tree
+
+ Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml  |  54 +++++++++++++++++
+ Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml |   1 +
+ Documentation/devicetree/bindings/riscv/andes.yaml                            |  25 ++++++++
+ Documentation/devicetree/bindings/timer/andestech,plmt0.yaml                  |  53 +++++++++++++++++
+ MAINTAINERS                                                                   |   9 +++
+ arch/riscv/Kconfig.errata                                                     |   2 +-
+ arch/riscv/Kconfig.socs                                                       |   9 +++
+ arch/riscv/boot/dts/Makefile                                                  |   1 +
+ arch/riscv/boot/dts/andes/Makefile                                            |   2 +
+ arch/riscv/boot/dts/andes/qilai-voyager.dts                                   |  28 +++++++++
+ arch/riscv/boot/dts/andes/qilai.dtsi                                          | 186 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 11 files changed, 369 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
+ create mode 100644 Documentation/devicetree/bindings/riscv/andes.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
+ create mode 100644 arch/riscv/boot/dts/andes/Makefile
+ create mode 100644 arch/riscv/boot/dts/andes/qilai-voyager.dts
+ create mode 100644 arch/riscv/boot/dts/andes/qilai.dtsi
