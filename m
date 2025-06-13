@@ -1,365 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FFA2AE68;
-	Fri, 13 Jun 2025 06:16:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5F520010A;
+	Fri, 13 Jun 2025 07:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749795376; cv=none; b=Nj7hgk6fq1IQC7J5u15YHLaayK3iPZFs4ZrKDjiUWZ/veQMHDEHmOmRLhUQcYNduqwwhiB74r44EWKgKWYLSncpIlC+zTYFq+WtPSba3RrFBosPlgTdeuCw/VsH/iEcA8XOIHtOFbcFs6PsbPeYoh5/nr5YRBRTImWOeGnffa0E=
+	t=1749799233; cv=none; b=asDyV8b34XXG4KKwNfb4DX9wQRIHBPA/DqtNFyhVmu8GllJDyk1deNP7NsKcc+5lcPrBiiOKPtji5sKeJc7dArEpoQ032TdMhrG9LeKM2/15hc/2YJiQgYF2YRpkBsCIQzECcSLIH/DYIo4QajoXz/jGeJEpNuypMyeeVJy7yJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749795376; c=relaxed/simple;
-	bh=LDowsZjTisnENRW4Zn7Q4eTu221JSNSVoxDBbay443M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BXpEwJTxJzfVrhZxJuClDERpwStlvlwrybHMl4OMlAHsvGq/CLzJiWbQgMFA+VzhAWV7+SkMH4dQrPC2do/dnrljWpZP/XPj8ORplLMqPDhPtMspHwllVL4zhgCVa8gBsjyQqNLCnIjaWc7WUkc2bHbzoSijsosJyDnROgU6M5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p0EEjyNN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749799233; c=relaxed/simple;
+	bh=+YjpX3ehJBzFyIlBBXVZgihirAzVPRAt2FcAqpuOgFA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m+1BxY0SQGmd9bP1hhzJ+Evjx9h3llVJCu/YXWLtVS0dIxBzzN3mg61bfojz3LvzaMo98R1WIzDfJva6TClzPPTt1rK5lFEN0+lL/AgmqN8D/NybbPTLs8+K85FUsMogZaRFv1+OmjbZczMYfWXnFucntopDYyD0Ii6ZjXiiMFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=P1vjmPIW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aJDF6bH9; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p0EEjyNN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6DFC4CEE3;
-	Fri, 13 Jun 2025 06:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749795376;
-	bh=LDowsZjTisnENRW4Zn7Q4eTu221JSNSVoxDBbay443M=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=p0EEjyNNYNNUXw9BDQHuScNWevEGP3VSXiDrTR6/5rGE3V4bqZ3GKs4UpwDKeLqmN
-	 7rlQ0eJyK96vBZgdjhMTxR28pYZMQRlsydkDC7rdhB3NYiThf/34P1qTXKmnXg0ihj
-	 8DwesiLrXaLehrhfaOiJfSE5U9rYYGSHz/nMYFG8q9An7T7MpzlbB9e6mzXZv+q6aW
-	 jq1OcReKDnB9jdYu1N6ohLwmW39GERw6GYdeIcChblOOgntz3tq+TpXwEmm+ZfflsW
-	 JLd/kVOXnvFvDEZDQGwSIju7+K18kCTEN7ccvzEOhxyel6Pcfh83ydxDMiJJgb4O18
-	 RwTFvB8c4+P1Q==
-Message-ID: <749c581e-cc00-428f-8eb9-222f9d574486@kernel.org>
-Date: Fri, 13 Jun 2025 08:16:07 +0200
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="P1vjmPIW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aJDF6bH9"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 650B91140176;
+	Fri, 13 Jun 2025 03:20:29 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Fri, 13 Jun 2025 03:20:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1749799229; x=1749885629; bh=jG3O/Ud05M
+	Zx4jdqboGk4v0NA5OIKt/wUnoKzAyvNxg=; b=P1vjmPIW2/wAUEeA7U/tXdD8iO
+	X2gFnzTYmpSLkVbC09w7bT6bPL1TULq8W2sUytLHHqJJ4aI0qfqwkpBqqo7q6w+v
+	a4ZHk6WXcFmwc2WPo9lyZCkx+u8Y/b+3YOlz1U1JWnCYeqPK9rF5mGZ4mzJYVWiF
+	A1c0n+byiXnzx0u/cTlX4daS5hB61IqB5DzXn0pSZ0svhFE7jSCbiy1lYy0KsGI6
+	nMMcRQ/Pi3oq7K89ZwjgmxFbeMhEhTJArNSb04t9Rd0AJSAYpwRQ1tGQsvvBj18f
+	JS2eTa6EAZhrLgZ/mimYfOFD3ZLrXAEAtU/b1qiCUau14sMkRX9Xz+pp3StA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1749799229; x=1749885629; bh=jG3O/Ud05MZx4jdqboGk4v0NA5OIKt/wUno
+	KzAyvNxg=; b=aJDF6bH96UoECz7OWyAzTsE/qMXwjlqUqMqdgelSBR4u823P+lA
+	OuIyyyna2iMtA+W+U5lFIt7HQwyx2w14Ve+gORg6fMrT/3ngWMY9mTAgrv2qgmAZ
+	TmyPb2cFdF7DtNdUbvw8lnK2Kd5oQ38Czjg5XXt0ZbJxebF/yAXygAk6r/243gkv
+	PQq+3hfhnC98ELI/3H19HjbTUm6s5YVUvYzt6D0uBT9Hp819sEFnFUcMVrX70PZ4
+	HVO36Qv2TaL+S4uiExs0XvgWXgmHSS7mQcMHpfv0dREkGJDIC07yCJM5R4AWwTOj
+	hQlV0rjzXHZKIj6cGNgjNUb7+Sz0ThOR6TQ==
+X-ME-Sender: <xms:OtFLaFzKONTfZkXILH3XYzZEUfG55o5HOePR8cyOYqgjQEheeXElRA>
+    <xme:OtFLaFTtwv46-jgC8eQlBk675fBDJDGwFoAGiEn6nElhmiFF-pJZg4bjG7pCyUo7P
+    bifV4GMC71OkTG2vzs>
+X-ME-Received: <xmr:OtFLaPXcCDMRRp9eE7KY1wBc1Thy0_u1RF6WWc0Bu6CQaDc08Ls5Xz72R7GZJoSuGa2FEalZSMpX0L-OqRD2ZTaK_VLLYkpSIjk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddujeefgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
+    necuhfhrohhmpeflrghnnhgvucfirhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqne
+    cuggftrfgrthhtvghrnhepgfdvffevleegudejfeefheehkeehleehfefgjefffeetudeg
+    tefhuedufeehfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhesjhgrnhhnrghurdhnvghtpdhnsggprhgtphhtthhopedvvddpmhhouggv
+    pehsmhhtphhouhhtpdhrtghpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtth
+    hopeguvhhorhhkihhnsehtihgssghordgtohhmpdhrtghpthhtohepfigvlhhlshhluhht
+    fiesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhhsrdifrghllhgvihhjsehlih
+    hnrghrohdrohhrghdprhgtphhtthhopehprghtrhhitggvrdgthhhothgrrhgusehfohhs
+    shdrshhtrdgtohhmpdhrtghpthhtohepshhuphhpohhrthdrohhpvghnshhouhhrtggvse
+    guihgrshgvmhhirdgtohhmpdhrtghpthhtohepsggrrhhutghhsehtkhhoshdrtghordhi
+    lhdprhgtphhtthhopehsvhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlhi
+    hsshgrsehrohhsvghniiifvghighdrihho
+X-ME-Proxy: <xmx:OtFLaHieCR7i3mjNcCHPqOC39MqmdSV6LhCiKBfiFb-q64TIIB5YUQ>
+    <xmx:OtFLaHANXNHonW-Il6-KF7ktKwZkTU5LCJT5a6FVkmtn9vomjsSZ3Q>
+    <xmx:OtFLaAL1atxc5kXngDg_VktyWDUvEDvh4xA-SzMkDl8AkEhtXk3jhw>
+    <xmx:OtFLaGCvH_4PXKngaqe3MEnUmB4JVoNxMqDElPwknNqXKyWeOim_ZA>
+    <xmx:PdFLaHUFclZvZJTCtf0C2rxGbtX2fEn1ZeQ73ehog305zlAuCf063FOc>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Jun 2025 03:20:26 -0400 (EDT)
+Date: Fri, 13 Jun 2025 09:20:24 +0200
+From: Janne Grunau <j@jannau.net>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Baruch Siach <baruch@tkos.co.il>, Sven Peter <sven@kernel.org>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Viresh Kumar <vireshk@kernel.org>,
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+	soc@lists.linux.dev, linux-sunxi@lists.linux.dev,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 10/16] pinctrl: apple: use new GPIO line value setter
+ callbacks
+Message-ID: <20250613072024.GE3141695@robin.jannau.net>
+References: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-0-556b0a530cd4@linaro.org>
+ <20250612-gpiochip-set-rv-pinctrl-remaining-v1-10-556b0a530cd4@linaro.org>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700 SoC device
- tree
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
- "nfraprado@collabora.com" <nfraprado@collabora.com>,
- Taniya Das <quic_tdas@quicinc.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Eric Biggers <ebiggers@google.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "soc@lists.linux.dev" <soc@lists.linux.dev>, Mo Elbadry
- <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
- William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
- "wthai@nvidia.com" <wthai@nvidia.com>, "leohu@nvidia.com"
- <leohu@nvidia.com>, "dkodihalli@nvidia.com" <dkodihalli@nvidia.com>,
- "spuranik@nvidia.com" <spuranik@nvidia.com>
-References: <20250612100933.3007673-1-ryan_chen@aspeedtech.com>
- <20250612100933.3007673-4-ryan_chen@aspeedtech.com>
- <485749d4-b3c4-4965-9714-ad534d37e8c9@kernel.org>
- <OS8PR06MB7541A100B918AAA84D1ABDCAF277A@OS8PR06MB7541.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <OS8PR06MB7541A100B918AAA84D1ABDCAF277A@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-10-556b0a530cd4@linaro.org>
 
-On 13/06/2025 04:29, Ryan Chen wrote:
->> Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700 SoC device
->> tree
->>
->> On 12/06/2025 12:09, Ryan Chen wrote:
->>> This add the initial device tree support for the ASPEED AST2700 SoC.
->>>
->>> - Add top-level compatible string "aspeed,ast2700" and set up
->>> address-cells/size-cells for 64-bit address space.
->>> - Describe a quad-core ARM Cortex-A35 CPU cluster with L2 cache,
->>> including cache properties and PSCI enable-method.
->>> - Add PMU and ARMv8 timer nodes with correct PPI interrupt wiring.
->>> - Model the dual-SoC architecture with two simple-bus nodes:
->>> soc0 (@0x10000000) and soc1 (@0x14000000).
->>> - Add syscon nodes for both SoCs (syscon0, syscon1) with clock/reset
->>> cell definitions and address mapping.
->>> - Add GICv3 interrupt controller node under soc0, with full register
->>> mapping and interrupt properties.
->>> - Hierarchical interrupt controller structure:
->>>   - intc0 under soc0, with child intc0_11 node.
->>>   - intc1 under soc1, with child intc1_0~intc1_5 nodes.
->>> - Add serial4 node under soc0, others serial node under soc1.
->>>
->>> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
->>> ---
->>>  arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi | 380
->>> ++++++++++++++++++++++
->>>  1 file changed, 380 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
->>> b/arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
->>> new file mode 100644
->>> index 000000000000..d197187bcf9f
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/aspeed/aspeed-g7.dtsi
->>> @@ -0,0 +1,380 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later #include
->>> +<dt-bindings/clock/aspeed,ast2700-scu.h>
->>> +#include <dt-bindings/reset/aspeed,ast2700-scu.h>
->>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +
->>> +/ {
->>> +	#address-cells = <2>;
->>> +	#size-cells = <1>;
->>> +	interrupt-parent = <&gic>;
->>> +
->>> +	cpus {
->>> +		#address-cells = <2>;
->>> +		#size-cells = <0>;
->>> +
->>> +		cpu0: cpu@0 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a35";
->>> +			reg = <0x0 0x0>;
->>> +			enable-method = "psci";
->>> +			i-cache-size = <0x8000>;
->>> +			i-cache-line-size = <64>;
->>> +			i-cache-sets = <256>;
->>> +			d-cache-size = <0x8000>;
->>> +			d-cache-line-size = <64>;
->>> +			d-cache-sets = <128>;
->>> +			next-level-cache = <&l2>;
->>> +		};
->>> +
->>> +		cpu1: cpu@1 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a35";
->>> +			enable-method = "psci";
->>> +			reg = <0x0 0x1>;
->>> +			i-cache-size = <0x8000>;
->>> +			i-cache-line-size = <64>;
->>> +			i-cache-sets = <256>;
->>> +			d-cache-size = <0x8000>;
->>> +			d-cache-line-size = <64>;
->>> +			d-cache-sets = <128>;
->>> +			next-level-cache = <&l2>;
->>> +		};
->>> +
->>> +		cpu2: cpu@2 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a35";
->>> +			enable-method = "psci";
->>> +			reg = <0x0 0x2>;
->>> +			i-cache-size = <0x8000>;
->>> +			i-cache-line-size = <64>;
->>> +			i-cache-sets = <256>;
->>> +			d-cache-size = <0x8000>;
->>> +			d-cache-line-size = <64>;
->>> +			d-cache-sets = <128>;
->>> +			next-level-cache = <&l2>;
->>> +		};
->>> +
->>> +		cpu3: cpu@3 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a35";
->>> +			enable-method = "psci";
->>> +			reg = <0x0 0x3>;
->>> +			i-cache-size = <0x8000>;
->>> +			i-cache-line-size = <64>;
->>> +			i-cache-sets = <256>;
->>> +			d-cache-size = <0x8000>;
->>> +			d-cache-line-size = <64>;
->>> +			d-cache-sets = <128>;
->>> +			next-level-cache = <&l2>;
->>> +		};
->>> +
->>> +		l2: l2-cache0 {
->>> +			compatible = "cache";
->>> +			cache-level = <2>;
->>> +			cache-unified;
->>> +			cache-size = <0x80000>;
->>> +			cache-line-size = <64>;
->>> +			cache-sets = <1024>;
->>> +		};
->>> +	};
->>> +
->>> +	arm-pmu {
->>> +		compatible = "arm,cortex-a35-pmu";
->>> +		interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_HIGH)>;
->>> +	};
->>> +
->>> +	psci {
->>> +		compatible = "arm,psci-1.0";
->>> +		method = "smc";
->>> +	};
->>> +
->>> +	timer {
->>> +		compatible = "arm,armv8-timer";
->>> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_LOW)>,
->>> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_LOW)>,
->>> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_LOW)>,
->>> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_LOW)>;
->>> +		arm,cpu-registers-not-fw-configured;
->>> +		always-on;
->>> +	};
->>> +
->>> +	soc0: soc@10000000 {
->>> +		compatible = "simple-bus";
->>> +		reg = <0x0 0x10000000 0x10000000>;
->>> +		#address-cells = <2>;
->>> +		#size-cells = <1>;
->>> +		ranges;
->>> +
->>> +		syscon0: syscon@12c02000 {
->>> +			compatible = "aspeed,ast2700-scu0", "syscon", "simple-mfd";
->>> +			reg = <0x0 0x12c02000 0x1000>;
->>> +			ranges = <0x0 0x0 0 0x12c02000 0x1000>;
->>> +			#address-cells = <2>;
->>> +			#size-cells = <1>;
->>> +			#clock-cells = <1>;
->>> +			#reset-cells = <1>;
->>> +		};
->>> +
->>> +		gic: interrupt-controller@12200000 {
->>> +			compatible = "arm,gic-v3";
->>> +			reg = <0 0x12200000 0x10000>, /* GICD */
->>> +			      <0 0x12280000 0x80000>, /* GICR */
->>> +			      <0 0x40440000 0x1000>;  /* GICC */
->>> +			#interrupt-cells = <3>;
->>> +			interrupt-controller;
->>> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_HIGH)>;
->>> +			interrupt-parent = <&gic>;
->>> +		};
->>> +
->>> +		serial4: serial@12c1a000 {
->>> +			compatible = "ns16550a";
->>> +			reg = <0x0 0x12c1a000 0x1000>;
->>> +			clocks = <&syscon0 SCU0_CLK_GATE_UART4CLK>;
->>> +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
->>> +			reg-shift = <2>;
->>> +			status = "disabled";
->>> +		};
->>> +	};
->>> +
->>> +	soc1: soc@14000000 {
->>> +		compatible = "simple-bus";
->>> +		reg = <0x0 0x14000000 0x10000000>;
->>> +		#address-cells = <2>;
->>> +		#size-cells = <1>;
->>> +		ranges;
->>> +
->>> +		syscon1: syscon@14c02000 {
->>> +			compatible = "aspeed,ast2700-scu1", "syscon", "simple-mfd";
->>> +			reg = <0x0 0x14c02000 0x1000>;
->>> +			ranges = <0x0 0x0 0x0 0x14c02000 0x1000>;
->>> +			#address-cells = <2>;
->>> +			#size-cells = <1>;
->>> +			#clock-cells = <1>;
->>> +			#reset-cells = <1>;
->>> +		};
->>> +
->>> +		serial12: serial@14c33b00 {
->>> +			compatible = "ns16550a";
->>> +			reg = <0x0 0x14c33b00 0x100>;
->>> +			clocks = <&syscon1 SCU1_CLK_GATE_UART12CLK>;
->>> +			interrupts-extended =
->>> +				<&intc1_4 18 (GIC_CPU_MASK_SIMPLE(4) |
->> IRQ_TYPE_LEVEL_HIGH)>;
->>> +			reg-shift = <2>;
->>> +			status = "disabled";
->>> +		};
->>> +	};
->>> +};
->>> +
->>> +&soc0 {
->>
->> This is the base DTSI, there is no existing node to override. Just define
->> complete SoC node in one place like every other vendor.
+On Thu, Jun 12, 2025 at 03:15:19PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> My original is use this way, but when I do checkpatch, get
-> CHECK: line length of 106 exceeds 100 columns.
-> interrupts = <GIC_SPI 192 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>,
-> That the reason modify by this way.
-
-Look how other recent, most developed platforms do it and learn from
-them instead of coming with own, confusing style.
-
+> struct gpio_chip now has callbacks for setting line values that return
+> an integer, allowing to indicate failures. Convert the driver to using
+> them.
 > 
->>
->>
->>> +	intc0: interrupt-controller@12100000 {
->>> +		compatible = "simple-mfd";
->>
->> NAK, never tested.
->>
->> Not allowed, see bindings. And test it next time.
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  drivers/pinctrl/pinctrl-apple-gpio.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> Got it, will update by following. 
-> Intc0: bus@12100000 {
->         compatible = "simple-bus";
->         #address-cells = <2>;
->         #size-cells = <1>;
->         reg = <0 0x12100000 0x4000>;
-> 		ranges = <0x0 0x0 0x0 0x12100000 0x4000>;
-> 		#address-cells = <2>;
+> diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
+> index 0f551d67d482d96c7a1e4c28a6db580f0db6452e..dcf3a921b4df54250194403f06a3c1fb40110eaa 100644
+> --- a/drivers/pinctrl/pinctrl-apple-gpio.c
+> +++ b/drivers/pinctrl/pinctrl-apple-gpio.c
+> @@ -217,11 +217,13 @@ static int apple_gpio_get(struct gpio_chip *chip, unsigned offset)
+>  	return !!(reg & REG_GPIOx_DATA);
+>  }
+>  
+> -static void apple_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
+> +static int apple_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
+>  {
+>  	struct apple_gpio_pinctrl *pctl = gpiochip_get_data(chip);
+>  
+>  	apple_gpio_set_reg(pctl, offset, REG_GPIOx_DATA, value ? REG_GPIOx_DATA : 0);
+> +
+> +	return 0;
+>  }
+>  
+>  static int apple_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
+> @@ -376,7 +378,7 @@ static int apple_gpio_register(struct apple_gpio_pinctrl *pctl)
+>  	pctl->gpio_chip.direction_input = apple_gpio_direction_input;
+>  	pctl->gpio_chip.direction_output = apple_gpio_direction_output;
+>  	pctl->gpio_chip.get = apple_gpio_get;
+> -	pctl->gpio_chip.set = apple_gpio_set;
+> +	pctl->gpio_chip.set_rv = apple_gpio_set;
+>  	pctl->gpio_chip.base = -1;
+>  	pctl->gpio_chip.ngpio = pctl->pinctrl_desc.npins;
+>  	pctl->gpio_chip.parent = pctl->dev;
 
-Does not follow DTS coding style and anyway, what sort of bus is this?
+apple_gpio_set_reg() could pass the return value of regmap_update_bits()
+but I suppose this change to switch to the new callback is ok on its
+own.
 
+Reviewed-by: Janne Grunau <j@jannau.net>
 
-
-Best regards,
-Krzysztof
+Janne 
