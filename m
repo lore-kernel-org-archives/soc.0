@@ -1,155 +1,222 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2115.outbound.protection.outlook.com [40.107.101.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5F520010A;
-	Fri, 13 Jun 2025 07:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749799233; cv=none; b=asDyV8b34XXG4KKwNfb4DX9wQRIHBPA/DqtNFyhVmu8GllJDyk1deNP7NsKcc+5lcPrBiiOKPtji5sKeJc7dArEpoQ032TdMhrG9LeKM2/15hc/2YJiQgYF2YRpkBsCIQzECcSLIH/DYIo4QajoXz/jGeJEpNuypMyeeVJy7yJg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749799233; c=relaxed/simple;
-	bh=+YjpX3ehJBzFyIlBBXVZgihirAzVPRAt2FcAqpuOgFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m+1BxY0SQGmd9bP1hhzJ+Evjx9h3llVJCu/YXWLtVS0dIxBzzN3mg61bfojz3LvzaMo98R1WIzDfJva6TClzPPTt1rK5lFEN0+lL/AgmqN8D/NybbPTLs8+K85FUsMogZaRFv1+OmjbZczMYfWXnFucntopDYyD0Ii6ZjXiiMFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=P1vjmPIW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aJDF6bH9; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950EB14F98
+	for <soc@lists.linux.dev>; Sun, 15 Jun 2025 01:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.115
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749950001; cv=fail; b=r9qNztXtLFZBt2l9XbDx/eA1Lhk86YTSGvP8k8Po3aUPyIMgfB8s1MfnkuS1NdEs7D4hxbD9Ate2C7FgyZShVWxak4QKbD8Xd+DAqT1zW3ZsEPItza3y6UlsGw3eEJiHdDYN/wdSgYs8EUE0LR8Ipfb63lr0uEFwnjI8BK2du/0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749950001; c=relaxed/simple;
+	bh=wbJwYkxQuX4n6ye9d64Qta+ZfJLLaApkRNuSLkCEjy4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=g7AQhNJkM4boGyVAzzx7hbefn6kUFQECCnclNPh4hhYDKrmmiYM0ouGfELC6TdT/0OwDmxMitquzLfA7tFX7QlpZDcpLy/DyjzpGG5Ky6NDSSDHf+5/qBeiwrZ9+4Zg/OE/+V43M9d3OKbiCkAHIDucixsy+aDNpqnLUya9mznk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com; spf=pass smtp.mailfrom=axiado.com; dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b=Cm4H0+xr; arc=fail smtp.client-ip=40.107.101.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axiado.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="P1vjmPIW";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aJDF6bH9"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 650B91140176;
-	Fri, 13 Jun 2025 03:20:29 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Fri, 13 Jun 2025 03:20:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1749799229; x=1749885629; bh=jG3O/Ud05M
-	Zx4jdqboGk4v0NA5OIKt/wUnoKzAyvNxg=; b=P1vjmPIW2/wAUEeA7U/tXdD8iO
-	X2gFnzTYmpSLkVbC09w7bT6bPL1TULq8W2sUytLHHqJJ4aI0qfqwkpBqqo7q6w+v
-	a4ZHk6WXcFmwc2WPo9lyZCkx+u8Y/b+3YOlz1U1JWnCYeqPK9rF5mGZ4mzJYVWiF
-	A1c0n+byiXnzx0u/cTlX4daS5hB61IqB5DzXn0pSZ0svhFE7jSCbiy1lYy0KsGI6
-	nMMcRQ/Pi3oq7K89ZwjgmxFbeMhEhTJArNSb04t9Rd0AJSAYpwRQ1tGQsvvBj18f
-	JS2eTa6EAZhrLgZ/mimYfOFD3ZLrXAEAtU/b1qiCUau14sMkRX9Xz+pp3StA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1749799229; x=1749885629; bh=jG3O/Ud05MZx4jdqboGk4v0NA5OIKt/wUno
-	KzAyvNxg=; b=aJDF6bH96UoECz7OWyAzTsE/qMXwjlqUqMqdgelSBR4u823P+lA
-	OuIyyyna2iMtA+W+U5lFIt7HQwyx2w14Ve+gORg6fMrT/3ngWMY9mTAgrv2qgmAZ
-	TmyPb2cFdF7DtNdUbvw8lnK2Kd5oQ38Czjg5XXt0ZbJxebF/yAXygAk6r/243gkv
-	PQq+3hfhnC98ELI/3H19HjbTUm6s5YVUvYzt6D0uBT9Hp819sEFnFUcMVrX70PZ4
-	HVO36Qv2TaL+S4uiExs0XvgWXgmHSS7mQcMHpfv0dREkGJDIC07yCJM5R4AWwTOj
-	hQlV0rjzXHZKIj6cGNgjNUb7+Sz0ThOR6TQ==
-X-ME-Sender: <xms:OtFLaFzKONTfZkXILH3XYzZEUfG55o5HOePR8cyOYqgjQEheeXElRA>
-    <xme:OtFLaFTtwv46-jgC8eQlBk675fBDJDGwFoAGiEn6nElhmiFF-pJZg4bjG7pCyUo7P
-    bifV4GMC71OkTG2vzs>
-X-ME-Received: <xmr:OtFLaPXcCDMRRp9eE7KY1wBc1Thy0_u1RF6WWc0Bu6CQaDc08Ls5Xz72R7GZJoSuGa2FEalZSMpX0L-OqRD2ZTaK_VLLYkpSIjk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddujeefgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
-    necuhfhrohhmpeflrghnnhgvucfirhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqne
-    cuggftrfgrthhtvghrnhepgfdvffevleegudejfeefheehkeehleehfefgjefffeetudeg
-    tefhuedufeehfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhesjhgrnhhnrghurdhnvghtpdhnsggprhgtphhtthhopedvvddpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtth
-    hopeguvhhorhhkihhnsehtihgssghordgtohhmpdhrtghpthhtohepfigvlhhlshhluhht
-    fiesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhhsrdifrghllhgvihhjsehlih
-    hnrghrohdrohhrghdprhgtphhtthhopehprghtrhhitggvrdgthhhothgrrhgusehfohhs
-    shdrshhtrdgtohhmpdhrtghpthhtohepshhuphhpohhrthdrohhpvghnshhouhhrtggvse
-    guihgrshgvmhhirdgtohhmpdhrtghpthhtohepsggrrhhutghhsehtkhhoshdrtghordhi
-    lhdprhgtphhtthhopehsvhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlhi
-    hsshgrsehrohhsvghniiifvghighdrihho
-X-ME-Proxy: <xmx:OtFLaHieCR7i3mjNcCHPqOC39MqmdSV6LhCiKBfiFb-q64TIIB5YUQ>
-    <xmx:OtFLaHANXNHonW-Il6-KF7ktKwZkTU5LCJT5a6FVkmtn9vomjsSZ3Q>
-    <xmx:OtFLaAL1atxc5kXngDg_VktyWDUvEDvh4xA-SzMkDl8AkEhtXk3jhw>
-    <xmx:OtFLaGCvH_4PXKngaqe3MEnUmB4JVoNxMqDElPwknNqXKyWeOim_ZA>
-    <xmx:PdFLaHUFclZvZJTCtf0C2rxGbtX2fEn1ZeQ73ehog305zlAuCf063FOc>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Jun 2025 03:20:26 -0400 (EDT)
-Date: Fri, 13 Jun 2025 09:20:24 +0200
-From: Janne Grunau <j@jannau.net>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Baruch Siach <baruch@tkos.co.il>, Sven Peter <sven@kernel.org>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Viresh Kumar <vireshk@kernel.org>,
-	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-	soc@lists.linux.dev, linux-sunxi@lists.linux.dev,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 10/16] pinctrl: apple: use new GPIO line value setter
- callbacks
-Message-ID: <20250613072024.GE3141695@robin.jannau.net>
-References: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-0-556b0a530cd4@linaro.org>
- <20250612-gpiochip-set-rv-pinctrl-remaining-v1-10-556b0a530cd4@linaro.org>
+	dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b="Cm4H0+xr"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CvnNLDo4PdRnpsQ/nCI5gF/QJJuqELiEVdb47XJ0ZwuskLRy9bFcnr9WLNjRy6idSQXjLRGjm85YPREkIQ4XuK8xmKEpD0aGOGSnJejF3nzv6e+O20UOGGlTQiSZxbqKHpdjfkrrRsQMtwxA+4FtNoi8Z0aXs4O6SkRS7INsg12vB7SOTWP2NM7+VneyX9Ql+F1yiigK8CZTQSiFX/3B+BW3DZQ+d5AKDp+dAaL3+RMBDmcodeocx4olFCA+5cGcH2X5LjHkunpmaQ8SNZFa3qJSnxNatLBXQAsc83HPeDPSflMcDvSWEtWcSdsa0RwX4EddNOP2Xy1/kE9v7oCMLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=elwLs9ZjXxhMbUsm/5qE2cgP7Dcng+evA1SnF8RuY0s=;
+ b=MF/wfLCHxEUCgSgM05IQY9++TQqtDA4HEI5iINMSj1B7TtbFgHGcaaBrSR9UACJ59OgXixDwzxQWzltSCNSZ3aRx4YNDMj18rolW7j2Fhkf1Qgd8VKrWJnnnIJFKY3g470yb2VjH8LuAdPl7gunQQFyk7vQhT6pgFgYIQAAU4xAwI8pixTYgGyhOatkXItCzhsCCLAaVVgOaFwS3htnu0LV7VzwcFg40Heuk6AicuBDSWTz6eaGA86DnQC7vvZFhECiLfx4PXU7gxqPnyHhZq2KeSwPp5f8m6LIZBKH9nKR2sSRlUu0aFxc2VhrRiOVvuc3qiMZ86jECkrB6ZbSceQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 50.233.182.194) smtp.rcpttodomain=arndb.de smtp.mailfrom=axiado.com;
+ dmarc=none action=none header.from=axiado.com; dkim=none (message not
+ signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axiado.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=elwLs9ZjXxhMbUsm/5qE2cgP7Dcng+evA1SnF8RuY0s=;
+ b=Cm4H0+xr5ooZ5g1LDcZdgxw/0iv8+4g8MkOgjYCkajmUcEz2FtbQm7FLfRxDZVTsTUeAMH1E2UrlJIZFbF+W/B7yitFXANb1Zjg0bVCEbC3h4f6H8F79T5/SVbQjll2wTy92KH+waKTf1aVGurTT3dHUOluOHYFfywhZxCMIrwFUMbL4aWkKvH18hMjrKu4Ej+LcR+OjCne29w2gp4O7MDIoNEcbz+qvtHzkVAY/aETuQqrL4wP4aPmEMxRnP7PM0rXcrkZ5mXrfKpbviyrcAAadtSndkVK0IxQvi4XYwR0BLrMCTBMGyPYBonhUmmqoencSazJI+NAZOJ4M1zq6fw==
+Received: from BY3PR05CA0013.namprd05.prod.outlook.com (2603:10b6:a03:254::18)
+ by IA2PR18MB5911.namprd18.prod.outlook.com (2603:10b6:208:4b9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.27; Sun, 15 Jun
+ 2025 01:13:15 +0000
+Received: from MWH0EPF000989E7.namprd02.prod.outlook.com
+ (2603:10b6:a03:254:cafe::e) by BY3PR05CA0013.outlook.office365.com
+ (2603:10b6:a03:254::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.23 via Frontend Transport; Sun,
+ 15 Jun 2025 01:13:14 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 50.233.182.194)
+ smtp.mailfrom=axiado.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axiado.com;
+Received-SPF: Fail (protection.outlook.com: domain of axiado.com does not
+ designate 50.233.182.194 as permitted sender)
+ receiver=protection.outlook.com; client-ip=50.233.182.194; helo=[127.0.0.1];
+Received: from [127.0.0.1] (50.233.182.194) by
+ MWH0EPF000989E7.mail.protection.outlook.com (10.167.241.134) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.15
+ via Frontend Transport; Sun, 15 Jun 2025 01:13:13 +0000
+From: Harshit Shah <hshah@axiado.com>
+Subject: [PATCH 0/6] Axiado AX3000 SoC and Evaluation Board Support
+Date: Sat, 14 Jun 2025 18:12:46 -0700
+Message-Id: <20250614-axiado-ax3000-soc-and-evaluation-board-support-v1-0-327ab344c16d@axiado.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-10-556b0a530cd4@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA8eTmgC/x2NQQrDMAwEvxJ0rkBO09D2K6UH2VZbQbGNnYRAy
+ N8jchrmMLsbNKkqDZ7dBlUWbZqTibt0EH6cvoIazaGn/kajG5BX5ZgNVyLClgNyiigL/2eeLEa
+ fuUZscym5Tuj8ffQDPyJzABstVT66noev974flzekN4AAAAA=
+X-Change-ID: 20250614-axiado-ax3000-soc-and-evaluation-board-support-1b86b4a9daac
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+ soc@lists.linux.dev, Harshit Shah <hshah@axiado.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3067; i=hshah@axiado.com;
+ h=from:subject:message-id; bh=wbJwYkxQuX4n6ye9d64Qta+ZfJLLaApkRNuSLkCEjy4=;
+ b=owEB7QES/pANAwAKAfFYcxGhMtX7AcsmYgBoTh4jaJKwIz1a0YzSuc1+KtPS/iVhr4+4tgIua
+ fifkHt0gE+JAbMEAAEKAB0WIQRO3pC/7SkLS2viWOvxWHMRoTLV+wUCaE4eIwAKCRDxWHMRoTLV
+ +3sxC/9OZKAUgefh42e/+MfIL3S29duR1359cxR7GGmOOSQ54EAgWjkKKpyu18C+dK+Svc4B3la
+ Gepw2TBsY8eX2KB8iEYYnleBxzk0QrOhg3EFbu6xdC091bJ+A8SBCJfDHCAcKK5Jj81klLl0cFv
+ +TsK7IsxOpA3rt3F7SxN7nc730XltUDW7fpguEqVbX5g31bGxLhFueE/FYLbO3D2hixXi/lZPT7
+ JLT87VNl7v5h7Ju3Szgsdnudq2hkrvrcIPYMh+dawFk1Sz0Od0B4AUBWxTbqu+55joP1AIqcjOZ
+ ELfFhOzAzVdXSuCSfYmENEj2afT3fHkOcmfj9+v2yMrW/F8h6irtfauqTRYe4+hmAaWUL/RDzwc
+ WugjWHSHGdIlnVspXKJ0Ml6GvPdWH4gq8zldSbe9Cbq28mKXPIzOls1gzK65KeJS7KCNjWZAqfG
+ AoYjCjYHR8cR6ddTz8izgsMZya9WguwFeZz8KhzEgOg385DloC7OUALee9AuQYKDiKTVE=
+X-Developer-Key: i=hshah@axiado.com; a=openpgp;
+ fpr=4EDE90BFED290B4B6BE258EBF1587311A132D5FB
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E7:EE_|IA2PR18MB5911:EE_
+X-MS-Office365-Filtering-Correlation-Id: 706ca5c5-c553-41c7-8d0a-08ddaba9cd8b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WkhsMlZBeFdRQk8wOEt5eVFCNDA0T0lUeGtaWGl1NGtqYU80cjRqY0VNc1I4?=
+ =?utf-8?B?bU1FM1dDRERrTzFTLzBoci9jL1dyTENqOVFIWmFkRFMvN05RNVZBSTUxbU56?=
+ =?utf-8?B?MExOa2sxYVlGREhScmpBUDdBaVQybVkxWitsSVBEQjJUSnVQNkdLSXh1Zk85?=
+ =?utf-8?B?UllEak1XVnhMTXFMZnNrR2R3T0hGVE5DL1BsM012QUZ5ejZpa0VzTllNUEg5?=
+ =?utf-8?B?cm9ZUDZINmQ2VE52UEgwZUlLaW05SHlQeFZYc2R3YmJSR3JMNWNReW8wbnBp?=
+ =?utf-8?B?eXpUWW5adW9tRGw2ajR3V0ZON245bGVNc09RbHdnVEx4VXdPV3BLblN0bi9J?=
+ =?utf-8?B?SjNWbVNpZlY4UlBuRTZTUE9lRUg5TWtJNnhWYmdnd0YwQytqRUR1ZzVZMkJU?=
+ =?utf-8?B?ZVphTTNWL2NwdEtlN1IybXRlb1Awb2NhdGxodVl2MFRXVk5hUkVkU290M1hW?=
+ =?utf-8?B?NXJnZkUvdEVzNEkyV1lKenplcWdIeXQ3bHVGczN0TVFaSkdXZ0pOblovU2Rj?=
+ =?utf-8?B?b29STFAvNmRFSGNjWlpGNEl5SkNYRW1WMHl2aEtoWnJXRWFvNjE3cmdTWVpU?=
+ =?utf-8?B?UEIzS0ExRWphYTdjbUdiZHNKUGxUUWZzQW90eWtXUzRzMjN6WGpkc0hFL2po?=
+ =?utf-8?B?V2pBY2thQ09QR0lSWjI5YnpNbjF2cHF1NlFvaXhoQU44bE5pQXRiTk9LWnBw?=
+ =?utf-8?B?K2FPUEpxeDF0aTk2M1JhMk9zNGFqVnFNRVdyanVHTDBMZU9qSDhNL2xKSHpE?=
+ =?utf-8?B?NkRSWElmSUwvS0t2cjl0R21OOHJsbFRZNnNqbFpmTlFiWHlKZW9saUF3cDZp?=
+ =?utf-8?B?SjVVMDk0NGZ0R0lGdm44ZkVPN1FYREFBaWF2SXNpVkFQd202VzBPWDZCeDls?=
+ =?utf-8?B?U09nRlhkOS8yVklmVVZ2WDMxOWY5a1BYcm9vdGdoQnd3TlNwZGhuM0RPcm5Y?=
+ =?utf-8?B?dEtZcUpmS1FNT2Q4K0xDMDd4ZTNCNVdsL1ZjUHNNZkhSYi9IenBzY2dSbCsx?=
+ =?utf-8?B?YXMxS1M4R2FpZ3NXODdWckJxTUJPUGFVc2MvbVV0K3BOYTU3ZHNGQW1tdVl1?=
+ =?utf-8?B?R3o0ZjY1U3B6eFViMTZyN0k2L2NiMEhaSHVic2JmQ2dadnVRQ2NHTnFhSm5j?=
+ =?utf-8?B?Uk9sRlg1SldBNkZyMDZoOENzYjJMeVJaMnlIWWZHZ2xSZFRRTkpNQzN4dnNP?=
+ =?utf-8?B?ZTlEeU5uU0JleGI1Sk14WlFFY2xqT0RoYnpKNktzeTlTOU82RFpzZHZLOGpL?=
+ =?utf-8?B?N1FINE9oL3ZtcTlQRFpJc05jR1JmT2ZBMkp2Sk9ncGVBV3Nuc0w1MjRTekJ6?=
+ =?utf-8?B?WVNXb1M4aHRhWnpnS3JxWWsraXRvRE1idWpaT0x6MnJ3bnkwUnE0dEdDMThK?=
+ =?utf-8?B?RTdUS2NsN243eGpCNmY5WUVmbUhXZlNlR29PZWdiMkxuNzg4emtRZ2VqcDZ6?=
+ =?utf-8?B?UlFhY0lMUXAyVU5QWHl4RHZaZGIwMEQ3cWFVOXVYSnlHWC8wVkhVZUFRRmhY?=
+ =?utf-8?B?THp1Q0cwWitiOGlGL2dOYUd2WXRMdVJWRWhRNlhLVWJsSkRlbHFtdkVoTHk5?=
+ =?utf-8?B?SUloSFh6T3RJZDNITGdwc0ppMyt4S29RL3BzR3cyTUxVYjhYQjY5cnc5NTdH?=
+ =?utf-8?B?eldCbUs5QzREeXNUQk9GMFVQbE9xdHk2bGk2SXZTeFhFYUYzMkRGNUxQcUNX?=
+ =?utf-8?B?Z0VDWkpxVkZzVTBQdVU3d05qb2JxVEthcEFqVEV3UHVRcHpHcHNKU1NRcXhB?=
+ =?utf-8?B?UXlJSWFFYUdvbUY3QVp3MmtybTY3NlhaNFVUSG42WFY0alJ6VmxhWHFvQjJX?=
+ =?utf-8?B?cjZQUFg4TlhiSzl6WkJzdWNSOU9Kd2ZpYnRFUldPeTN5TklJU1dFa2xtQzlC?=
+ =?utf-8?B?SFVGcjBRVEhaQlpIQVQrVU5TckRUaFpHbjVGb09OZTVqT1QrNkZxaUg4WVpV?=
+ =?utf-8?B?WFNiYUk4L0hhenhNOVhQS1hlN0o2cGFadUdlWmx5b0VUYkY3TmZqZnU0M1N2?=
+ =?utf-8?B?aSsvUTh2TlFOZFpyQzVsNlJiWHd5SkUrbFVjaitjZWIwUDdmTTY0WXFDYndu?=
+ =?utf-8?Q?tK4tAm?=
+X-Forefront-Antispam-Report:
+	CIP:50.233.182.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:[127.0.0.1];PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014)(7053199007);DIR:OUT;SFP:1102;
+X-OriginatorOrg: axiado.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2025 01:13:13.8984
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 706ca5c5-c553-41c7-8d0a-08ddaba9cd8b
+X-MS-Exchange-CrossTenant-Id: ff2db17c-4338-408e-9036-2dee8e3e17d7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=ff2db17c-4338-408e-9036-2dee8e3e17d7;Ip=[50.233.182.194];Helo=[[127.0.0.1]]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000989E7.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA2PR18MB5911
 
-On Thu, Jun 12, 2025 at 03:15:19PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> struct gpio_chip now has callbacks for setting line values that return
-> an integer, allowing to indicate failures. Convert the driver to using
-> them.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/pinctrl/pinctrl-apple-gpio.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
-> index 0f551d67d482d96c7a1e4c28a6db580f0db6452e..dcf3a921b4df54250194403f06a3c1fb40110eaa 100644
-> --- a/drivers/pinctrl/pinctrl-apple-gpio.c
-> +++ b/drivers/pinctrl/pinctrl-apple-gpio.c
-> @@ -217,11 +217,13 @@ static int apple_gpio_get(struct gpio_chip *chip, unsigned offset)
->  	return !!(reg & REG_GPIOx_DATA);
->  }
->  
-> -static void apple_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
-> +static int apple_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
->  {
->  	struct apple_gpio_pinctrl *pctl = gpiochip_get_data(chip);
->  
->  	apple_gpio_set_reg(pctl, offset, REG_GPIOx_DATA, value ? REG_GPIOx_DATA : 0);
-> +
-> +	return 0;
->  }
->  
->  static int apple_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
-> @@ -376,7 +378,7 @@ static int apple_gpio_register(struct apple_gpio_pinctrl *pctl)
->  	pctl->gpio_chip.direction_input = apple_gpio_direction_input;
->  	pctl->gpio_chip.direction_output = apple_gpio_direction_output;
->  	pctl->gpio_chip.get = apple_gpio_get;
-> -	pctl->gpio_chip.set = apple_gpio_set;
-> +	pctl->gpio_chip.set_rv = apple_gpio_set;
->  	pctl->gpio_chip.base = -1;
->  	pctl->gpio_chip.ngpio = pctl->pinctrl_desc.npins;
->  	pctl->gpio_chip.parent = pctl->dev;
+This patch series adds initial support for the Axiado AX3000 SoC and its
+evaluation board.
 
-apple_gpio_set_reg() could pass the return value of regmap_update_bits()
-but I suppose this change to switch to the new callback is ok on its
-own.
+The AX3000 is a multi-core system-on-chip featuring four ARM Cortex-A53
+cores, secure vault, hardware firewall, and AI acceleration engines. This
+initial support enables basic bring-up of the SoC and evaluation platform
+with CPU, timer, UART, and I3C functionality.
 
-Reviewed-by: Janne Grunau <j@jannau.net>
+The series begins by adding the "axiado" vendor prefix and compatible
+strings for the SoC and board. It then introduces the device tree files
+and minimal ARCH_AXIADO platform support in arm64.
 
-Janne 
+Patch breakdown:
+  - Patch 1 add the vendor prefix entry
+  - Patch 2 document the SoC and board bindings
+  - Patch 3 convert cdns,gpio.txt to gpio-cdns.yaml
+  - Patch 4 add SoC and board DTS files
+  - Patch 5 enable the ARCH_AXIADO platform and defconfig support
+  - Patch 6 update MAINTAINERS file
+
+Note: A few checkpatch.pl warnings appear due to DT binding conversions and
+MAINTAINERS update. The binding conversion and includes were kept together in 
+patch 3/6 due to their close relationship, but we are happy to split them if 
+preferred.
+
+Feedback and suggestions are welcome.
+
+Signed-off-by: Harshit Shah <hshah@axiado.com>
+
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-gpio@vger.kernel.org
+Cc: soc@lists.linux.dev
+
+Signed-off-by: Harshit Shah <hshah@axiado.com>
+---
+Harshit Shah (6):
+      dt-bindings: vendor-prefixes: Add Axiado Corporation
+      dt-bindings: arm: axiado: add AX3000 EVK compatible strings
+      dt-bindings: gpio: gpio-cdns: convert to YAML
+      arm64: dts: axiado: Add initial support for AX3000 SoC and eval board
+      arm64: add support for ARCH_AXIADO
+      MAINTAINERS: Add entry for AXIADO
+
+ .../devicetree/bindings/arm/axiado/axiado.yaml     |  23 +
+ .../devicetree/bindings/gpio/cdns,gpio.txt         |  43 --
+ .../devicetree/bindings/gpio/gpio-cdns.yaml        |  81 +++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   8 +
+ arch/arm64/Kconfig.platforms                       |   6 +
+ arch/arm64/boot/dts/Makefile                       |   1 +
+ arch/arm64/boot/dts/axiado/Makefile                |   2 +
+ arch/arm64/boot/dts/axiado/ax3000.dtsi             | 584 +++++++++++++++++++++
+ arch/arm64/boot/dts/axiado/ax3000_evk.dts          |  72 +++
+ arch/arm64/configs/defconfig                       |   1 +
+ 11 files changed, 780 insertions(+), 43 deletions(-)
+---
+base-commit: 8c6bc74c7f8910ed4c969ccec52e98716f98700a
+change-id: 20250614-axiado-ax3000-soc-and-evaluation-board-support-1b86b4a9daac
+
+Best regards,
+-- 
+Harshit Shah <hshah@axiado.com>
+
