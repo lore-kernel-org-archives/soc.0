@@ -1,243 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CD62877CA
-	for <soc@lists.linux.dev>; Mon, 16 Jun 2025 13:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403AD1F91E3
+	for <soc@lists.linux.dev>; Mon, 16 Jun 2025 14:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750082260; cv=none; b=F1v1Cll742yvFFip+XH5C0iGMHCit0Ritlozu9y8MA8mBB/e3utJuFjsVXuDDL5Ph80PFb0vL81JIesVtApONqlgUru8L8Tmb0rIzb3xnLbxAXVcI3WfGbFBDqmykk5zJw8AVI0t/JyRx393IxMnTA2RCemeGZX3gvguPURhv70=
+	t=1750084735; cv=none; b=dV1FqKQC9ogi8mSrkgGwRNvC1/6181newiCJrqxH29IT2OUX+BgiliXGgHqLVAzbHfTa8Zp4c2o/x5tdir9pxi2wBFxTbj7XKkXwJDTH1t70HheQaUZY8bqTJhpmgGNZ0zWMt9KYVNMzRbRgRd4aNYOyHjIiJPTbrldURapJVAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750082260; c=relaxed/simple;
-	bh=NyizBTDfDWXK6sw8uHD082UVWglR8ES2/VkYsuwaR4w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sm4rxNXAhttsOerwuPaZ8lu5cwfImgC5dxr6MpwHpMbHeI1EOaOeVqKeLCSlMoNcRv/sjLoo9YJcYxyVK+1qkn0Stp9xIUipPdS0y78P5ghlcgHAt17pkQXUMo+7JtEb75R9JhOvN+BoKGU8D6C5Tsqq37+7RTgRnZGZTnfF6vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8ULzQPh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750084735; c=relaxed/simple;
+	bh=ytjfmtK/XdCP2wuHUwDkdi5kPia1J9R+DeT4RG9dGAA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UHOqbSCVup99DVlzIv4mi5qyAJVYBmCpmIJjh4WH8UigUKaWFmuliuxEvL2YmlbWiV1GiSeofDl1JRjHOI8juX9pCDEI4+4/lUQm5u4KDmUdQDXcuM9kCD6Pwdktxocm02NGG9wQ5zuXNzBEB+bZnxfnBs+o3LC3wJFtz+/xndI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=iioV0Q9a; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8ULzQPh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43680C4CEF9
-	for <soc@lists.linux.dev>; Mon, 16 Jun 2025 13:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750082260;
-	bh=NyizBTDfDWXK6sw8uHD082UVWglR8ES2/VkYsuwaR4w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=H8ULzQPh/xdtTiMfI3eihUsGI91soNyJ6AwSVhjKDO4IOJN3V4MbJf8Fy4Hjq/oPp
-	 2Nz2B/U4yIFMJwmnbkUKrRHPQlmnGxkQzpjpiCeObGnKgdgWNzsVdGM/wnAIfKzp77
-	 OsClgdjfqK9hC7ntKJziHbTNlOcBTkzZtkxBTl+MoNrw4Prth4u5dv8z+GPcY3x8+Z
-	 U2k1ZLAOc0Hf27lZEchtd7fnehD5vtVw0ubzu82UT3OAUYvJ2sHBVW6ZPHM2SMa5/b
-	 3BkA+Ysg02RQ/8M/W2p7dGMiij+LRkAAw0f9T5daEgcrGL2oTSRbJk3qI+xDTglt9P
-	 Rxa8e8y8zLkiw==
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-adeaa4f3d07so898375866b.0
-        for <soc@lists.linux.dev>; Mon, 16 Jun 2025 06:57:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXm/I1nctQ3bJn1UztOTB59j7ToWt1QAmsXwFGZTqOsD9+vDBdeguVoXstWCaUX0WCj0QM=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw7svbB50vOmtC+u63qjfOV3a9uyhRHSq7bM9gvz6b1DhppRqeF
-	bcA43zhk43gYMYNt/qGV09L2mjaiNj+Z9wf42iCS7/R0/xMkdevdCgxftfkI86Wp7kwhZCE7ZML
-	c2+1yqt6oUB5/1wn9NAymG4dUAo0G7A==
-X-Google-Smtp-Source: AGHT+IHpdF6x/V/pazyqhO2sJpaXwkib8ZBd2w1M4Ij3Nkk6Wn/WfgezoqePwqWHQsTrHmBU64Y1n8FFZazVHIrz33o=
-X-Received: by 2002:a17:907:7241:b0:ad2:3f9a:649f with SMTP id
- a640c23a62f3a-adfad60d405mr821849566b.42.1750082258737; Mon, 16 Jun 2025
- 06:57:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="iioV0Q9a"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a4e742dc97so3706277f8f.0
+        for <soc@lists.linux.dev>; Mon, 16 Jun 2025 07:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750084730; x=1750689530; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gWToLPQVitiBw5bzYj/kjSaIU+PcrpH2/GQkA5MT3qo=;
+        b=iioV0Q9a+PT9/BHc6MJzDjU1QjFoSOFyW682IO6FOlYJhqvSqxPo7xBO+zUiEXjnsJ
+         UJ7cP1U0arQbo96A/JhmDSNeK+zwymAB1iJPND6NIEqZ/F3zW1iRu5qlBOSr8BgKY2Q1
+         yGxYJoz0b3Bv5cccni3O7h39WTO9FC3GGGXvOscRVUPI8KCym8nJiutnl0INdsy2zI+l
+         TIVrr8extPZOpDxIAKHb7qyPJbqYOCgfnE9jn//Wp2x8j7tolfRtJe5q2NHXGMilsdaB
+         gwXNQ4of13LKk6lpVrtMNcW+At/7lf2NiNBXqSih2uCzDauYZTq0FCz9VqVCCSwRfP52
+         2cKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750084730; x=1750689530;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gWToLPQVitiBw5bzYj/kjSaIU+PcrpH2/GQkA5MT3qo=;
+        b=Vr8pe9NVyY9HF4UE116suWFu9/Bt9LbyQTdD420X02gi1Wq/cS4AXDnVKLHHa+IzLD
+         KXcIedJG+eCyChA2CB882vSUdkffRnSscks2NC5o8OcMGuttsMZJl61aDlv3vNyHI2TY
+         P5TVNb58nkgkqkZZgl/ElIF0gRffCfm8RDVOikeswCGnqPjPtihs2reDqqdkMJoDlkaw
+         KFTC/u2q9rkHd3vqkT3m/TlsuE2XASjYE1+UFdPyW+WFfp/pgGpWTAKrAIZ1+XaBtcI9
+         4NT9XnyO59CMbgPP7F7I8e/TaPt0K3sePxU4+6TauTJc2FYtHlNhWwCvtONyqBa9UWhM
+         g97w==
+X-Forwarded-Encrypted: i=1; AJvYcCVv6YD13WqoZFA+BW7AerWmb9mKEFX/gOGyJgYp7LdjeomZy10e2BNpBrY6ri7zlBUXJnA=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzJfQPf5912JtLEtUIbrESiIgLo21VIYjfBBA/y7aRbsx8lvjkA
+	bBh0Pt2BeyVG0Td+j/MF7c6RA5gsPIlPUNJVTtR7wbBJSxJQgeAPdXkEau7l2E8luQY=
+X-Gm-Gg: ASbGnct7IkIH5Wa/rdqBHm6UwI6Tdm9LczKF9OZc9z+mvX+QxPiVH6uZrx49/iYM9DU
+	0OyVeIqzrVLSqFgPjyEQZi6ehetWslIFdJT/3RtExuhT75Ed9EXgcOSD8T1JLYKuMOzGdjgFUKO
+	8JwC59iXImRHfV5dId5GfuSOPtuSInKTrYmGCwO5Ynzgw4QDIhTbSMpd6JGRfvbJENZ6PhudKJv
+	bmwkgy776Q1wlIDOfDxaCi1MzxDdDivxB35cE97+1hqUWykzPKCwFnLeH3UBUfxyR05sVcN2el4
+	1tNZbcJKTpU8+Opeh8BEj0IRG6STT4jky4cMieO1OBCTXirzbMX7fGR6xl34mbmP5ahCbMRuWu7
+	FMUBrqHaZwzYKjT471PU8MCpdRAivT1K0LaQ=
+X-Google-Smtp-Source: AGHT+IEGRmeB3oMKleC3pKBVMBYu/8jfqnCCDOYSgFOyYxzD5mJZV1fg44FKowdo55Cr1jLuHCyDjw==
+X-Received: by 2002:a5d:5f54:0:b0:3a5:1397:51a7 with SMTP id ffacd0b85a97d-3a56d7cd5b7mr9274661f8f.7.1750084730495;
+        Mon, 16 Jun 2025 07:38:50 -0700 (PDT)
+Received: from [192.168.42.1] (88-127-185-231.subs.proxad.net. [88.127.185.231])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4533fc6578csm77990485e9.19.2025.06.16.07.38.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 07:38:50 -0700 (PDT)
+From: Alexandre Mergnat <amergnat@baylibre.com>
+Date: Mon, 16 Jun 2025 16:38:28 +0200
+Subject: [PATCH] arm64: defconfig: enable Startek KD070FHFID015 panel
+ support for mt8365-evk
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250615-axiado-ax3000-soc-and-evaluation-board-support-v2-0-341502d38618@axiado.com>
- <20250615-axiado-ax3000-soc-and-evaluation-board-support-v2-4-341502d38618@axiado.com>
-In-Reply-To: <20250615-axiado-ax3000-soc-and-evaluation-board-support-v2-4-341502d38618@axiado.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 16 Jun 2025 08:57:26 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJpb7wFw3DqX504LyS2PGbQxQfbBKh9VfCY8j7G9YKXiw@mail.gmail.com>
-X-Gm-Features: AX0GCFuQPys5Thxu-nqBA43dpX9szemYIEtdKd5xHzL7MleeMvIzogZHZdn5g7w
-Message-ID: <CAL_JsqJpb7wFw3DqX504LyS2PGbQxQfbBKh9VfCY8j7G9YKXiw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] arm64: dts: axiado: Add initial support for AX3000
- SoC and eval board
-To: Harshit Shah <hshah@axiado.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, soc@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250616-display-defconf-v1-1-c9c269c9c27b@baylibre.com>
+X-B4-Tracking: v=1; b=H4sIAGMsUGgC/x3MQQqAIBBA0avErBNSSqirRItRxxoIFYUopLsnL
+ d/i/wqFMlOBpauQ6eLCMTTIvgN7YNhJsGsGNahp0FILxyWd+AhH3sbgxTTibJCkMyNCq1Imz/d
+ /XLf3/QDaGjrrYQAAAA==
+X-Change-ID: 20250616-display-defconf-54a9bae1db4a
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1487; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=ytjfmtK/XdCP2wuHUwDkdi5kPia1J9R+DeT4RG9dGAA=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBoUCx5eXjdcOVffnq7WXqqYRnDsTdZZj1URCBrdgGb
+ xUNVAA6JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCaFAseQAKCRArRkmdfjHURbu8EA
+ DHfrZk940Kjkbb7HO3M0y+77ll7StOw6cYtUFU60Y3f0qJy5Uzt49F0AcaoWOICKDrI5rsE0R9CoJ+
+ rarUxHOdagpMdKzJe+NbD14e7yujy5McG2KgSe93nPok6kt4Vb1POkq8sb1tbPS3gojF3Gf1mCPN9I
+ zEM0mW3pMX29/LOiRnbfRFVU5hXbUh7uIVIzrnYH044y7F9sWochwHdCTKnkCg7z6i4gqbyhpf5f9t
+ /UGOE0UxEdJSMWGQZWFkV+OwoPiew+VUWeg6qnJJrNt+S4+bIXftIpGc1UwMmQSeRkamV+ZMMtKD5u
+ bOuQlkODD9zAiI+9MMwyBEu42Y1Jiv+4tNARQrtLUKDS4Up2soTHjqyMpzxZ9brKcQZhhdGFpxjV7H
+ KhjArSXiUQS9IivhhJJfQufiMlZmpB50pB0jALEzfa9v/pH8QLAqbMQSSpl3znRsq8ixBLP5UIBnPJ
+ Xcvk6+6bniS+K+oK87xGvuTJGSnaxXqESOwgp6wssmvRQCzzh75Y495vK5Mmw5HLtDwbUqtrprgzik
+ gMN4yU94JQaUBup/uwfZ3hb/S5VgqGYXx3FY9mU3GzjyICzGlCEmHTYfv1lwLR0MPqEKzkax/9IUv7
+ fthBOcdg5fZGwwWFLcmUCUWN1oGPhm0ctSoS1WGVlUW7uL7iiqiO4neOMqag==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 
-On Sun, Jun 15, 2025 at 11:32=E2=80=AFPM Harshit Shah <hshah@axiado.com> wr=
-ote:
->
-> Add initial device tree support for the AX3000 SoC and its evaluation
-> platform. The AX3000 is a multi-core SoC featuring 4 Cortex-A53 cores,
-> Secure Vault, AI Engine and Firewall.
->
-> This commit adds support for Cortex-A53 CPUs, timer, UARTs, and I3C
-> controllers on the AX3000 evaluation board.
->
-> Signed-off-by: Harshit Shah <hshah@axiado.com>
-> ---
->  arch/arm64/boot/dts/Makefile              |   1 +
->  arch/arm64/boot/dts/axiado/Makefile       |   2 +
->  arch/arm64/boot/dts/axiado/ax3000.dtsi    | 584 ++++++++++++++++++++++++=
-++++++
->  arch/arm64/boot/dts/axiado/ax3000_evk.dts |  72 ++++
->  4 files changed, 659 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-> index 79b73a21ddc22b17308554e502f8207392935b45..47dd8a1a7960d179ee28969a1=
-d6750bfa0d73da1 100644
-> --- a/arch/arm64/boot/dts/Makefile
-> +++ b/arch/arm64/boot/dts/Makefile
-> @@ -9,6 +9,7 @@ subdir-y +=3D amlogic
->  subdir-y +=3D apm
->  subdir-y +=3D apple
->  subdir-y +=3D arm
-> +subdir-y +=3D axiado
->  subdir-y +=3D bitmain
->  subdir-y +=3D blaize
->  subdir-y +=3D broadcom
-> diff --git a/arch/arm64/boot/dts/axiado/Makefile b/arch/arm64/boot/dts/ax=
-iado/Makefile
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..eb5e08ba0f39c32cdbfd586d9=
-82849a80da30160
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/axiado/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_AXIADO) +=3D ax3000_evk.dtb
-> diff --git a/arch/arm64/boot/dts/axiado/ax3000.dtsi b/arch/arm64/boot/dts=
-/axiado/ax3000.dtsi
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..d5d84986d18efe9dfbb446cee=
-e42fc4e4dbf95d0
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/axiado/ax3000.dtsi
-> @@ -0,0 +1,584 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (c) 2021-25 Axiado Corporation (or its affiliates). All rig=
-hts reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +/memreserve/ 0x3c0013a0 0x00000008;    /* cpu-release-addr */
-> +/ {
-> +       compatible =3D "axiado,ax3000";
+Enable the MIPI-DSI display Startek KD070FHFID015 panel to have it
+working on the mt8365-evk board.
 
-Drop. As this is not valid and overridden anyways.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+This patch come from another serie [1]. Since doesn't depend to the
+remaining patches, the defconfig change has been splitted to this
+new serie.
 
-> +       interrupt-parent =3D <&gic500>;
-> +
-> +       aliases {
-> +               i3c0 =3D &i3c0;
-> +               i3c1 =3D &i3c1;
-> +               i3c2 =3D &i3c2;
-> +               i3c3 =3D &i3c3;
-> +               i3c4 =3D &i3c4;
-> +               i3c5 =3D &i3c5;
-> +               i3c6 =3D &i3c6;
-> +               i3c7 =3D &i3c7;
-> +               i3c8 =3D &i3c8;
-> +               i3c9 =3D &i3c9;
-> +               i3c10 =3D &i3c10;
-> +               i3c11 =3D &i3c11;
-> +               i3c12 =3D &i3c12;
-> +               i3c13 =3D &i3c13;
-> +               i3c14 =3D &i3c14;
-> +               i3c15 =3D &i3c15;
-> +               i3c16 =3D &i3c16;
-> +               serial0 =3D &uart0;
-> +               serial1 =3D &uart1;
-> +               serial2 =3D &uart2;
-> +               serial3 =3D &uart3;
-> +       };
-> +
-> +       cpus {
-> +               #address-cells =3D <2>;
-> +               #size-cells =3D <0>;
-> +
-> +               cpu0: cpu@0 {
-> +                       device_type =3D "cpu";
-> +                       compatible =3D "arm,cortex-a53";
-> +                       reg =3D <0x0 0x0>;
-> +                       enable-method =3D "spin-table";
-> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
-> +                       d-cache-size =3D <0x8000>;
-> +                       d-cache-line-size =3D <64>;
-> +                       d-cache-sets =3D <128>;
-> +                       i-cache-size =3D <0x8000>;
-> +                       i-cache-line-size =3D <64>;
-> +                       i-cache-sets =3D <256>;
-> +                       next-level-cache =3D <&l2>;
-> +               };
-> +
-> +               cpu1: cpu@1 {
-> +                       device_type =3D "cpu";
-> +                       compatible =3D "arm,cortex-a53";
-> +                       reg =3D <0x0 0x1>;
-> +                       enable-method =3D "spin-table";
-> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
-> +                       d-cache-size =3D <0x8000>;
-> +                       d-cache-line-size =3D <64>;
-> +                       d-cache-sets =3D <128>;
-> +                       i-cache-size =3D <0x8000>;
-> +                       i-cache-line-size =3D <64>;
-> +                       i-cache-sets =3D <256>;
-> +                       next-level-cache =3D <&l2>;
-> +               };
-> +
-> +               cpu2: cpu@2 {
-> +                       device_type =3D "cpu";
-> +                       compatible =3D "arm,cortex-a53";
-> +                       reg =3D <0x0 0x2>;
-> +                       enable-method =3D "spin-table";
-> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
-> +                       d-cache-size =3D <0x8000>;
-> +                       d-cache-line-size =3D <64>;
-> +                       d-cache-sets =3D <128>;
-> +                       i-cache-size =3D <0x8000>;
-> +                       i-cache-line-size =3D <64>;
-> +                       i-cache-sets =3D <256>;
-> +                       next-level-cache =3D <&l2>;
-> +               };
-> +
-> +               cpu3: cpu@3 {
-> +                       device_type =3D "cpu";
-> +                       compatible =3D "arm,cortex-a53";
-> +                       reg =3D <0x0 0x3>;
-> +                       enable-method =3D "spin-table";
-> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
-> +                       d-cache-size =3D <0x8000>;
-> +                       d-cache-line-size =3D <64>;
-> +                       d-cache-sets =3D <128>;
-> +                       i-cache-size =3D <0x8000>;
-> +                       i-cache-line-size =3D <64>;
-> +                       i-cache-sets =3D <256>;
-> +                       next-level-cache =3D <&l2>;
-> +               };
-> +
-> +               l2: l2-cache0 {
-> +                       compatible =3D "cache";
-> +                       cache-size =3D <0x100000>;
-> +                       cache-unified;
-> +                       cache-line-size =3D <64>;
-> +                       cache-sets =3D <1024>;
-> +                       cache-level =3D <2>;
-> +               };
-> +       };
-> +
-> +       timer:timer {
-> +               compatible =3D "arm,armv8-timer";
-> +               interrupt-parent =3D <&gic500>;
-> +               interrupts =3D <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
-> +                          <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
-> +                          <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
-> +                          <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
-> +               arm,cpu-registers-not-fw-configured;
+CONFIG_DRM_DISPLAY_CONNECTOR=m has been removed after rebasing because
+is it already on the mainline.
 
-Drop. Not valid for arm64. And new platforms should fix the firmware anyway=
-s.
+[1] https://lore.kernel.org/all/20231023-display-support-v8-1-c2dd7b0fb2bd@baylibre.com/
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Rob
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 5bb8f09422a22116781169611482179b10798c14..319d1899348bf6b6c26362c9b4fe7f1da917769a 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -914,6 +914,7 @@ CONFIG_DRM_PANEL_NOVATEK_NT36672E=m
+ CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
+ CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20=m
+ CONFIG_DRM_PANEL_SITRONIX_ST7703=m
++CONFIG_DRM_PANEL_STARTEK_KD070FHFID015=m
+ CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
+ CONFIG_DRM_PANEL_VISIONOX_VTDR6130=m
+ CONFIG_DRM_DISPLAY_CONNECTOR=m
+
+---
+base-commit: 0d8d44db295ccad20052d6301ef49ff01fb8ae2d
+change-id: 20250616-display-defconf-54a9bae1db4a
+
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
+
