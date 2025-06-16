@@ -1,239 +1,243 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B82D26D4E8;
-	Mon, 16 Jun 2025 10:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CD62877CA
+	for <soc@lists.linux.dev>; Mon, 16 Jun 2025 13:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750069787; cv=none; b=d+mE9jDT+JMK7MZzqQWCitp1YbVSJ/3U/ON/crpBS/QSJSxZY5Jne9vKxozxcoFWmR2LTElAzX8L9TxASDBYm3oM9W8BulK9d5dQefA+6egjTILBOyUnuF8XpTtUWfB6DifaS0KW9pRi5zwwXXGqPPcccC6t1kWpMFogowqvcZo=
+	t=1750082260; cv=none; b=F1v1Cll742yvFFip+XH5C0iGMHCit0Ritlozu9y8MA8mBB/e3utJuFjsVXuDDL5Ph80PFb0vL81JIesVtApONqlgUru8L8Tmb0rIzb3xnLbxAXVcI3WfGbFBDqmykk5zJw8AVI0t/JyRx393IxMnTA2RCemeGZX3gvguPURhv70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750069787; c=relaxed/simple;
-	bh=S+LifadTGthAmCCjRwrc0cxTJlh7M1pbwmsA1BOiIlI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=n1FkHF7lY+gYzXkB1OWzUTufMb/w6auWB/z9sWEiwJ8TsuGAFM754ltiTdtvJgaABrBeryInP2vqVRZnY34GN/B5Jzq+v5K9jianvrmQpsGDxuJ/fCT+hra8cT17Ie5hUCpWZnubVGfwWUeReYgR7i9L4InoSbna9GKcMYSPGH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uddyuec+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750082260; c=relaxed/simple;
+	bh=NyizBTDfDWXK6sw8uHD082UVWglR8ES2/VkYsuwaR4w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Sm4rxNXAhttsOerwuPaZ8lu5cwfImgC5dxr6MpwHpMbHeI1EOaOeVqKeLCSlMoNcRv/sjLoo9YJcYxyVK+1qkn0Stp9xIUipPdS0y78P5ghlcgHAt17pkQXUMo+7JtEb75R9JhOvN+BoKGU8D6C5Tsqq37+7RTgRnZGZTnfF6vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8ULzQPh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uddyuec+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E9BC4CEEA;
-	Mon, 16 Jun 2025 10:29:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8ULzQPh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43680C4CEF9
+	for <soc@lists.linux.dev>; Mon, 16 Jun 2025 13:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750069786;
-	bh=S+LifadTGthAmCCjRwrc0cxTJlh7M1pbwmsA1BOiIlI=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=uddyuec+cranzqbmYGkHlHD7EtAJhyPXnfPNCG5PStUAXj6qO3ta+CxTniEpaJ+/K
-	 tLu7ZM1OnqrXmMkfC4dPSnjhcEk4moPsbCjCCKFallqzgBAbx/+RaXpx/JDdgZFSiY
-	 KdIt8Ok9pZeLbSvKX/xuaA4/RO59JATDLF501Sm7AdjyT1aRWCDQI7fBPFlV4G7QBF
-	 rV3fOH3/paUfPH1VvDFifXqH817CF6zqVZTIOb/Z24w2Rxk8TihV9LVwRkIgRsvRxZ
-	 +mFZbguENHhVcauTy+VAW2AJ/7+9t3j8TD8kobg783zGc2Fef2yfRW0ohLAzD9iU0X
-	 0c8iyHYhpmyrw==
-Message-ID: <ce3044aa-2b62-4516-99ff-88dcb56b128b@kernel.org>
-Date: Mon, 16 Jun 2025 12:29:38 +0200
+	s=k20201202; t=1750082260;
+	bh=NyizBTDfDWXK6sw8uHD082UVWglR8ES2/VkYsuwaR4w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=H8ULzQPh/xdtTiMfI3eihUsGI91soNyJ6AwSVhjKDO4IOJN3V4MbJf8Fy4Hjq/oPp
+	 2Nz2B/U4yIFMJwmnbkUKrRHPQlmnGxkQzpjpiCeObGnKgdgWNzsVdGM/wnAIfKzp77
+	 OsClgdjfqK9hC7ntKJziHbTNlOcBTkzZtkxBTl+MoNrw4Prth4u5dv8z+GPcY3x8+Z
+	 U2k1ZLAOc0Hf27lZEchtd7fnehD5vtVw0ubzu82UT3OAUYvJ2sHBVW6ZPHM2SMa5/b
+	 3BkA+Ysg02RQ/8M/W2p7dGMiij+LRkAAw0f9T5daEgcrGL2oTSRbJk3qI+xDTglt9P
+	 Rxa8e8y8zLkiw==
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-adeaa4f3d07so898375866b.0
+        for <soc@lists.linux.dev>; Mon, 16 Jun 2025 06:57:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXm/I1nctQ3bJn1UztOTB59j7ToWt1QAmsXwFGZTqOsD9+vDBdeguVoXstWCaUX0WCj0QM=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw7svbB50vOmtC+u63qjfOV3a9uyhRHSq7bM9gvz6b1DhppRqeF
+	bcA43zhk43gYMYNt/qGV09L2mjaiNj+Z9wf42iCS7/R0/xMkdevdCgxftfkI86Wp7kwhZCE7ZML
+	c2+1yqt6oUB5/1wn9NAymG4dUAo0G7A==
+X-Google-Smtp-Source: AGHT+IHpdF6x/V/pazyqhO2sJpaXwkib8ZBd2w1M4Ij3Nkk6Wn/WfgezoqePwqWHQsTrHmBU64Y1n8FFZazVHIrz33o=
+X-Received: by 2002:a17:907:7241:b0:ad2:3f9a:649f with SMTP id
+ a640c23a62f3a-adfad60d405mr821849566b.42.1750082258737; Mon, 16 Jun 2025
+ 06:57:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700 SoC device
- tree
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Nishanth Menon <nm@ti.com>,
- "nfraprado@collabora.com" <nfraprado@collabora.com>,
- Taniya Das <quic_tdas@quicinc.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Eric Biggers <ebiggers@google.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "soc@lists.linux.dev" <soc@lists.linux.dev>, Mo Elbadry
- <elbadrym@google.com>, Rom Lemarchand <romlem@google.com>,
- William Kennington <wak@google.com>, Yuxiao Zhang <yuxiaozhang@google.com>,
- "wthai@nvidia.com" <wthai@nvidia.com>, "leohu@nvidia.com"
- <leohu@nvidia.com>, "dkodihalli@nvidia.com" <dkodihalli@nvidia.com>,
- "spuranik@nvidia.com" <spuranik@nvidia.com>
-References: <20250612100933.3007673-1-ryan_chen@aspeedtech.com>
- <20250612100933.3007673-4-ryan_chen@aspeedtech.com>
- <485749d4-b3c4-4965-9714-ad534d37e8c9@kernel.org>
- <OS8PR06MB7541A100B918AAA84D1ABDCAF277A@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <749c581e-cc00-428f-8eb9-222f9d574486@kernel.org>
- <OS8PR06MB7541FFCA9E28E5767791D869F270A@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <e39b5259-db92-4269-84c9-d51e8e4f327e@kernel.org>
- <OS8PR06MB7541645F6A0638FC250B1272F270A@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <a2ca2f58-f648-43f9-8d23-4111e4eb1f1d@kernel.org>
- <OS8PR06MB75412D391E7D10958E70C100F270A@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <e623aad6-726b-405e-be94-25f188749349@kernel.org>
- <OS8PR06MB754181823BC03DADBF0A9B82F270A@OS8PR06MB7541.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <OS8PR06MB754181823BC03DADBF0A9B82F270A@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250615-axiado-ax3000-soc-and-evaluation-board-support-v2-0-341502d38618@axiado.com>
+ <20250615-axiado-ax3000-soc-and-evaluation-board-support-v2-4-341502d38618@axiado.com>
+In-Reply-To: <20250615-axiado-ax3000-soc-and-evaluation-board-support-v2-4-341502d38618@axiado.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 16 Jun 2025 08:57:26 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJpb7wFw3DqX504LyS2PGbQxQfbBKh9VfCY8j7G9YKXiw@mail.gmail.com>
+X-Gm-Features: AX0GCFuQPys5Thxu-nqBA43dpX9szemYIEtdKd5xHzL7MleeMvIzogZHZdn5g7w
+Message-ID: <CAL_JsqJpb7wFw3DqX504LyS2PGbQxQfbBKh9VfCY8j7G9YKXiw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] arm64: dts: axiado: Add initial support for AX3000
+ SoC and eval board
+To: Harshit Shah <hshah@axiado.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-gpio@vger.kernel.org, soc@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 16/06/2025 09:52, Ryan Chen wrote:
-> 
->> Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700 SoC device
->> tree
->>
->> On 16/06/2025 08:54, Ryan Chen wrote:
->>>> Subject: Re: [PATCH v0 3/5] arm64: dts: aspeed: Add initial AST2700
->>>> SoC device tree
->>>>
->>>> On 16/06/2025 08:32, Ryan Chen wrote:
->>>>>>>
->>>>>>> But I don't know your previous "NAK, never tested" mean.
->>>>>>> I did make CHECK_DTBS=y arch/arm64/boot/dts/aspeed/ don't see the
->>>>>>> fail with
->>>>>>> intc0: interrupt-controller@12100000 {
->>>>>>> 	compatible = "simple-mfd";
->>>>>>>
->>>>>>> So, could you point me more test instruction for this?
->>>>>> See syscon.yaml. And writing bindings or talks on conferences:
->>>>>> simple-mfd cannot be alone.
->>>>>>
->>>>>
->>>>>         intc0: interrupt-controller@12100000 { Sorry, do you mean
->>>>> add by following?
->>>>> 				 compatible = "aspeed,intc-controller", "simple-mfd";
->>>>>  					.....
->>>>>                  intc0_11: interrupt-controller@1b00 {
->>>>> 					compatible = "aspeed,ast2700-intc-ic";
->>>>>  					......
->>>>>                  };
->>>>>          };
->>>>
->>>> Maybe, but you said this is base address, so how can it be some
->>>> separate device?
->>>>
->>>> I mean really, don't add fake nodes just to satisfy some device instantiation.
->>>> Describe what this really is. That is the job of DTS. Not some fake nodes.
->>>
->>>
->>> Understood. Let me explain more about the hardware layout.
->>> The interrupt controller space is decoded starting from 0x12100000,
->>> which includes both a set of global configuration registers and
->>> individual interrupt controller instances.
->>>
->>> The region at 0x12100000 contains global interrupt control registers
->>> (e.g., protect config, interrupt routing etc.).
->>
->> This does not explain me why global controller registers are a BUS or MFD as
->> you claimed here.
->>>
->>> The actual interrupt controller logic starts at 0x12101b00, where each
->>> sub-controller instance (e.g., intc0_11, intc0_12, etc.) has its own set of
->> registers.
->>
->> I don't know what is a "global controller register" and "own set of registers". If
->> you have device spanning over multiple memory blocks, device takes multiple
->> 'reg' entries for example. There are many other configurations, depending on
->> real hardware and relationships. Just look at other DTS.
-> 
-> 
-> Here are two possible representations of the interrupt controller layout for the AST2700 platform:
-> Please advise which approach would be more appropriate or preferred? 
-> 
-> Option 1: Hierarchical representation with a parent node
-> This models the entire interrupt controller registers space (start from 0x12100000), 
-> where the parent node includes the global register area and acts as a container for per-instance sub-controllers:
-> 
->     intc0: interrupt-controller@12100000 {
->         compatible = "aspeed,intc-controller";
->         reg = <0 0x12100000 0x4000>;
-> 		...................
->         intc0_11: interrupt-controller@1b00 {
->             compatible = "aspeed,ast2700-intc-ic";
->             reg = <0x1b00 0x100>;
-> 			...................        };
->     };
-> And I find the others dtsi have global register use syscon ex.
-> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/sprd/ums512.dtsi#L177-L192
-> 
-> Option 2: Flat representation with only the per-domain node
-> This focuses on just the interrupt controller logic at 0x12101b00, skipping the global register modeling:
-> 
->     intc0_11: interrupt-controller@12101b00 {
->         compatible = "aspeed,ast2700-intc-ic";
->         reg = <0 0x12101b00 0x100>;
-> 		...................
->     };
-> 
+On Sun, Jun 15, 2025 at 11:32=E2=80=AFPM Harshit Shah <hshah@axiado.com> wr=
+ote:
+>
+> Add initial device tree support for the AX3000 SoC and its evaluation
+> platform. The AX3000 is a multi-core SoC featuring 4 Cortex-A53 cores,
+> Secure Vault, AI Engine and Firewall.
+>
+> This commit adds support for Cortex-A53 CPUs, timer, UARTs, and I3C
+> controllers on the AX3000 evaluation board.
+>
+> Signed-off-by: Harshit Shah <hshah@axiado.com>
+> ---
+>  arch/arm64/boot/dts/Makefile              |   1 +
+>  arch/arm64/boot/dts/axiado/Makefile       |   2 +
+>  arch/arm64/boot/dts/axiado/ax3000.dtsi    | 584 ++++++++++++++++++++++++=
+++++++
+>  arch/arm64/boot/dts/axiado/ax3000_evk.dts |  72 ++++
+>  4 files changed, 659 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+> index 79b73a21ddc22b17308554e502f8207392935b45..47dd8a1a7960d179ee28969a1=
+d6750bfa0d73da1 100644
+> --- a/arch/arm64/boot/dts/Makefile
+> +++ b/arch/arm64/boot/dts/Makefile
+> @@ -9,6 +9,7 @@ subdir-y +=3D amlogic
+>  subdir-y +=3D apm
+>  subdir-y +=3D apple
+>  subdir-y +=3D arm
+> +subdir-y +=3D axiado
+>  subdir-y +=3D bitmain
+>  subdir-y +=3D blaize
+>  subdir-y +=3D broadcom
+> diff --git a/arch/arm64/boot/dts/axiado/Makefile b/arch/arm64/boot/dts/ax=
+iado/Makefile
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..eb5e08ba0f39c32cdbfd586d9=
+82849a80da30160
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/axiado/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_ARCH_AXIADO) +=3D ax3000_evk.dtb
+> diff --git a/arch/arm64/boot/dts/axiado/ax3000.dtsi b/arch/arm64/boot/dts=
+/axiado/ax3000.dtsi
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..d5d84986d18efe9dfbb446cee=
+e42fc4e4dbf95d0
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/axiado/ax3000.dtsi
+> @@ -0,0 +1,584 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright (c) 2021-25 Axiado Corporation (or its affiliates). All rig=
+hts reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/memreserve/ 0x3c0013a0 0x00000008;    /* cpu-release-addr */
+> +/ {
+> +       compatible =3D "axiado,ax3000";
 
+Drop. As this is not valid and overridden anyways.
 
-I don't understand this: you already have a binding for this, you
-already described the device, so why now this is being changed?
+> +       interrupt-parent =3D <&gic500>;
+> +
+> +       aliases {
+> +               i3c0 =3D &i3c0;
+> +               i3c1 =3D &i3c1;
+> +               i3c2 =3D &i3c2;
+> +               i3c3 =3D &i3c3;
+> +               i3c4 =3D &i3c4;
+> +               i3c5 =3D &i3c5;
+> +               i3c6 =3D &i3c6;
+> +               i3c7 =3D &i3c7;
+> +               i3c8 =3D &i3c8;
+> +               i3c9 =3D &i3c9;
+> +               i3c10 =3D &i3c10;
+> +               i3c11 =3D &i3c11;
+> +               i3c12 =3D &i3c12;
+> +               i3c13 =3D &i3c13;
+> +               i3c14 =3D &i3c14;
+> +               i3c15 =3D &i3c15;
+> +               i3c16 =3D &i3c16;
+> +               serial0 =3D &uart0;
+> +               serial1 =3D &uart1;
+> +               serial2 =3D &uart2;
+> +               serial3 =3D &uart3;
+> +       };
+> +
+> +       cpus {
+> +               #address-cells =3D <2>;
+> +               #size-cells =3D <0>;
+> +
+> +               cpu0: cpu@0 {
+> +                       device_type =3D "cpu";
+> +                       compatible =3D "arm,cortex-a53";
+> +                       reg =3D <0x0 0x0>;
+> +                       enable-method =3D "spin-table";
+> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
+> +                       d-cache-size =3D <0x8000>;
+> +                       d-cache-line-size =3D <64>;
+> +                       d-cache-sets =3D <128>;
+> +                       i-cache-size =3D <0x8000>;
+> +                       i-cache-line-size =3D <64>;
+> +                       i-cache-sets =3D <256>;
+> +                       next-level-cache =3D <&l2>;
+> +               };
+> +
+> +               cpu1: cpu@1 {
+> +                       device_type =3D "cpu";
+> +                       compatible =3D "arm,cortex-a53";
+> +                       reg =3D <0x0 0x1>;
+> +                       enable-method =3D "spin-table";
+> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
+> +                       d-cache-size =3D <0x8000>;
+> +                       d-cache-line-size =3D <64>;
+> +                       d-cache-sets =3D <128>;
+> +                       i-cache-size =3D <0x8000>;
+> +                       i-cache-line-size =3D <64>;
+> +                       i-cache-sets =3D <256>;
+> +                       next-level-cache =3D <&l2>;
+> +               };
+> +
+> +               cpu2: cpu@2 {
+> +                       device_type =3D "cpu";
+> +                       compatible =3D "arm,cortex-a53";
+> +                       reg =3D <0x0 0x2>;
+> +                       enable-method =3D "spin-table";
+> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
+> +                       d-cache-size =3D <0x8000>;
+> +                       d-cache-line-size =3D <64>;
+> +                       d-cache-sets =3D <128>;
+> +                       i-cache-size =3D <0x8000>;
+> +                       i-cache-line-size =3D <64>;
+> +                       i-cache-sets =3D <256>;
+> +                       next-level-cache =3D <&l2>;
+> +               };
+> +
+> +               cpu3: cpu@3 {
+> +                       device_type =3D "cpu";
+> +                       compatible =3D "arm,cortex-a53";
+> +                       reg =3D <0x0 0x3>;
+> +                       enable-method =3D "spin-table";
+> +                       cpu-release-addr =3D <0x0 0x3c0013a0>;
+> +                       d-cache-size =3D <0x8000>;
+> +                       d-cache-line-size =3D <64>;
+> +                       d-cache-sets =3D <128>;
+> +                       i-cache-size =3D <0x8000>;
+> +                       i-cache-line-size =3D <64>;
+> +                       i-cache-sets =3D <256>;
+> +                       next-level-cache =3D <&l2>;
+> +               };
+> +
+> +               l2: l2-cache0 {
+> +                       compatible =3D "cache";
+> +                       cache-size =3D <0x100000>;
+> +                       cache-unified;
+> +                       cache-line-size =3D <64>;
+> +                       cache-sets =3D <1024>;
+> +                       cache-level =3D <2>;
+> +               };
+> +       };
+> +
+> +       timer:timer {
+> +               compatible =3D "arm,armv8-timer";
+> +               interrupt-parent =3D <&gic500>;
+> +               interrupts =3D <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
+> +                          <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
+> +                          <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
+> +                          <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
+> +               arm,cpu-registers-not-fw-configured;
 
-You are supposed to send complete bindings for your device (see writing
-bindings). Not some half-baked parts and then half year later different
-DTS which points that your bindings were just incomplete.
+Drop. Not valid for arm64. And new platforms should fix the firmware anyway=
+s.
 
-Look how a completely new SoC is supposed to be upstreamed, on the day
-of public announcement of the hardware:
-
-https://lore.kernel.org/all/20231121-topic-sm8650-upstream-dt-v3-0-db9d0507ffd3@linaro.org/
-
-Are all or most bindings posted? Yes
-Is DTS for all devices from above bindings posted? Yes
-Do we see complete picture? Yes
-
-I still have no clue what is global interrupt registers. I already said
-it, but you keep repeating the same. I have no clue.
-
-Why this would be a parent?
-
-Why this would not be a parent?
-
-Best regards,
-Krzysztof
+Rob
