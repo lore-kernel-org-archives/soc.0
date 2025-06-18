@@ -1,117 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA64728C85A
-	for <soc@lists.linux.dev>; Tue, 17 Jun 2025 07:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187D42C3258
+	for <soc@lists.linux.dev>; Wed, 18 Jun 2025 12:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750145537; cv=none; b=KAT+vioxS2AsFgr0XUDQUcKuXxF8wtlpotAkxWsXgVMbW1FQ7DZjsE5nmek0drnzWsFz+fk8iZ7Bq/0w9BwzLZoOJ0C5q67QZFO6QRQNUqzaywDVIZvJqIYxvhca1rglbPXac9necbfBTPT9URUi3rYiRN4bSBj9AOCEFcqKrbM=
+	t=1750248558; cv=none; b=ttp/R8ufeGIBz9uIdBidgVi0Q6LQITLa+scwKb50cmI8t+1IIneVdzibaDSfvWWZx7AaiE2KgX1SPcaOxTtQmrE+qUMMvBXK6BVX4oPmzWCH/pIsXs1jIgMQAUWVAfh1JblunXW+m3ErNpLlIFpiwxI1hp5cf0nj8RyKRJdnZkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750145537; c=relaxed/simple;
-	bh=rMddHsA3nzBTFN0QMqBt9MpSn7HX6CFwqw9BP1SyU0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EsUWw8H6aaT60GItah7fzbecAJlPbsHC401K4IIy7M3xJPJKA9S7CYIHgeBF7tnoHbTsJcfBjKOojw7eKZ93fcOCz/hXdjC8tsjG7locMap/WIpOABABd73xx6MFQznCwUp2qEt1ke5akQtecHukhayFZxRA7VLJG3plOVTYG4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ueQuu83y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750248558; c=relaxed/simple;
+	bh=eus1GwfPuFQtn6OQ9v3rF0J21GjEHtkdFtWAPZQVNsA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LKMPu9tzrQTF8KfaYtnjw2yoGhA0AaA+5GddaJyryVijOLKaLE5RRitEy0Ta5HZz3kp6GVYvd7XixoL6ijbkiOb0Apu0iOfAU3wRvExvbb++FPhjdubDz9okul3atnBHBBf2AftQNib41wnBDA9Q9fxnte3jC5Jbv2pMRViWlF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hbewhQG0; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ueQuu83y"
-Received: by smtp.kernel.org (Postfix)
-	id 80919C4CEED; Tue, 17 Jun 2025 07:32:16 +0000 (UTC)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 728E4C4CEE3
-	for <soc@kernel.org>; Tue, 17 Jun 2025 07:32:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 728E4C4CEE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-606b6dbe316so11294579a12.3
-        for <soc@kernel.org>; Tue, 17 Jun 2025 00:32:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hbewhQG0"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5534edc646dso7282759e87.1
+        for <soc@lists.linux.dev>; Wed, 18 Jun 2025 05:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750145534; x=1750750334; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DitCPFk6i35uURXkN5+J10Jk6mGckO0efyDQ/Ffatgo=;
-        b=ueQuu83yUd1yI+3LfbVErws6Qykv57F/j1WeBsXbPIky5kSdkjVJCBsqLzVrg8x197
-         qZ+Zqz0jFrjWcgGYzSab4DaODhDdxYkZh3BQwB/67qOPrFMGecX5qgjMY+0nKodCdYFQ
-         igjeCv/sGfsWHdd8xFzUDsXtR7y9ZcM620IyNpX/wvB3dahaZLk0mPbU79X1N8LPh422
-         T7fyXbXT+q5a90hr5L0S5WI5UcYpiQlrJEEEZIK12M+QxRgdb/QUZn9UuCg95OkIeNtc
-         A7fR3sNwmtB754OryQuk04Lv6BX3Ijfvo1duzUx3hsAxYHpoeC1+DTG5vSXNibhsjed6
-         hHAQ==
+        d=linaro.org; s=google; t=1750248554; x=1750853354; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eus1GwfPuFQtn6OQ9v3rF0J21GjEHtkdFtWAPZQVNsA=;
+        b=hbewhQG039c5DhiaXZDJ+3zgifzkZVBHTyXDLMPmDABAsyjpX7RnBbckFQeO2GWaZu
+         IMyXem/X1XTv0LSkSloVJeVe5vUS4shfPF98M/isyijMiQneo+AahNrODov6Un/t1i7D
+         xJw21hHGurSW2Xy/Cequ66DbSBWcH3ecfg9rtDaWdMURUyJJR2GHaH+lTOy+6SMxFmIF
+         6Ah1DJ/Dfs1pTKoCbvlqunSRCYxHQkatGnOj4I6F1R/HyOoi4O2xa2B2qhU/+rt3oFuX
+         j3W8v6+WHyov+2fIOP74NEdfI8tzk07AwlkhdjuXf+hb24vZTWeDNusjG6s+JF6dhFPi
+         q/BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750145534; x=1750750334;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DitCPFk6i35uURXkN5+J10Jk6mGckO0efyDQ/Ffatgo=;
-        b=YeC4StWgS6NGjrlEsLkq3/Vha5Py6U/5zCqQSCxdX1zAyWpM5Q0OT3209r2zQm5/eM
-         FgKSrRn+0XP8uLnx9eygFa88nSEZUKDYhG/7WRzlFKOY3IerH+VOeStVnKpXvkkd5tUg
-         2pvuqQC6F1r5Ky8OdJ/zY6O20CC5QokJ7GBLKUL4rRxztjjHPSAUgVa8WoAc0SHerKkk
-         BUdmZrpjlPcKlbJmHHOWUDAmpYt0Y49AJng1j5tWk5EmsMUcz7rU27e+Aeje8+dmWLTY
-         EpuXDBzlTUYZdqdtcZ5ncaIs6uWbLjFWoeWMmcTKUPHFsMxi7OohaaFuOVN3ouPjS8sH
-         /E2g==
-X-Forwarded-Encrypted: i=1; AJvYcCWGLTKjymawVwTVjraVZclILZ5WFkXmXLN7JXVITMoQ2slWQNf91CaUL0qIIF7Je3uiO/U=@kernel.org
-X-Gm-Message-State: AOJu0YxJGJxhZ0UK50qinkUAE+Otr76bocLFhgP0UBSpIpsHk3Ccq8FZ
-	ErgDpqOQ/6zV0Jso5A1JpP/Q5NHwnWhZuYJkoeVNiOInMW7gXKz0W3LczGOGrjXUGYU=
-X-Gm-Gg: ASbGnctCCwjQms+GeOmEVG0VXJ+uj+o3/2k0lfG9sl8VYVX5EofBDE0e+ZEL7Xg1VGb
-	Ajk9yRQS0pn5noaQLCVbGehDyphxG8lR0leACpTHJY0/NcZ087u4oe94tzDVwwRVrbHIEKJj4wi
-	netCUB9PPoH0uNs5GT/+1NQwezrsHnhGZKp7FNxRr1cWXjVTQXecny7BbSYvsHFNNNCBgyS5TR8
-	W1BOBmILeWwspS5JyZzThEJyo1DrecPuNf0YYNUrz9le5EvRn5dSXJu6nCK65SImprINax9wdh4
-	T8OT7iAnf3gwtUtUQaA7iQmC1SulOhXganPun9N/pP4g0Jwlb5+JxcbPBSs7tADWcpdPGMTmS/F
-	oE+hqudY0mQ1/BoF8p471mSjZz0MC
-X-Google-Smtp-Source: AGHT+IH9/yGt1B2R5aOqGlO4giU7a4MpvEhipVbdlnV+bODahZF4ciyHZm2yTFfr8OIZsO0wiR54nQ==
-X-Received: by 2002:a05:6402:4402:b0:607:d234:7d8f with SMTP id 4fb4d7f45d1cf-608d09af98emr11886262a12.33.1750145533721;
-        Tue, 17 Jun 2025 00:32:13 -0700 (PDT)
-Received: from rayden (h-98-128-140-123.A175.priv.bahnhof.se. [98.128.140.123])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b4a5e72csm7605436a12.48.2025.06.17.00.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 00:32:13 -0700 (PDT)
-Date: Tue, 17 Jun 2025 09:32:11 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE fix for 6.16
-Message-ID: <20250617073211.GA1005592@rayden>
+        d=1e100.net; s=20230601; t=1750248554; x=1750853354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eus1GwfPuFQtn6OQ9v3rF0J21GjEHtkdFtWAPZQVNsA=;
+        b=OM7pc1KA1Z+6Z8SKTcDRMmbnefzct7cTXvhvXZjBfKk5vlhdgnZye6HRe/slC64HsU
+         dZalLdS3R2PKymkF2uARBAjG404PWqyOVdoKHNp7V9JauHPQhQlZVtG7+V2aOOUxMHzM
+         OeJYnOWB7VN9X19gFQnvknfnaoTZHEQ7h+BxndhdRA/U0Ws4pwtYFQatDazzGMFlbRoK
+         W0c5NKMcAJoRKzJCDhWb8VSFEu3YATcoMJLQ9TcDkubJ32bZh0m+PqFKzvFKujYgwWd2
+         zQEV/cV72VC2nPnr/0bJYjDU9BJvT8aedT8h0d2zL2gcmhy7/mzp96pYpoyANo0Pb5X7
+         BJfg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/hdR3/FgcJNI3a+W9nERFFbLTnVdCL3R6A7FOy/mN4pkQ67QOuYv8oKPdxA8BYkq0wY4=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx3lgZuEvf0p0Z2NgA5XiYvHz0Tdyh0vFlIbUUTDyri29szKmRI
+	mUknzmwposC2ZFo5MGXpgugxi3Y4Dl0mzdg3KcpBLexO0aCbezNA5pdYBhsYAFnb9SvcGEOwmZb
+	6cx5/nH74fF3EFQ+tQ3Op8jtDzTDh1TKqao4Qy+us7A==
+X-Gm-Gg: ASbGnctqjomU/0oF8DvKtndp4FxwW6C/k0DWqJ2fu5EGY4szAGquJ9JMvK4FXZQt5Jg
+	K+O0LZ/D0G9AidYsXxunW4NpvPch7k7jIQAvUzM3HEJMF0lJVD+0YGV0MX2MzwBd+aSpbHVDRoW
+	zSue67pQ3uzPMvJ8IWO5Lh3kCRNIkpt1Y0YQ9jCY2j9uw=
+X-Google-Smtp-Source: AGHT+IGC0m4FXYYQm+k0AXFCSy3bx6F7/2cTaiKhBBnuAbB+6N8ybTZnHZCukOOueaHxtyfLbUpPRBURy2oO4IVfhl0=
+X-Received: by 2002:a19:5f17:0:b0:553:ca33:46f with SMTP id
+ 2adb3069b0e04-553ca330808mr1234493e87.29.1750248554215; Wed, 18 Jun 2025
+ 05:09:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-0-556b0a530cd4@linaro.org>
+In-Reply-To: <20250612-gpiochip-set-rv-pinctrl-remaining-v1-0-556b0a530cd4@linaro.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 18 Jun 2025 14:09:03 +0200
+X-Gm-Features: AX0GCFtzAwHH-ht5UUznh81aEY-DCCdnUYFURG79_8pBHXv4vb2M7QItIyT5tQE
+Message-ID: <CACRpkdb3+uQ=PG+ne48hyvdTFeEQBxXtq3CwxpqEmd1m9o9fNA@mail.gmail.com>
+Subject: Re: [PATCH 00/16] pinctrl: use new GPIO line value setter callbacks
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>, 
+	Patrice Chotard <patrice.chotard@foss.st.com>, 
+	Support Opensource <support.opensource@diasemi.com>, Baruch Siach <baruch@tkos.co.il>, 
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Neal Gompa <neal@gompa.dev>, Viresh Kumar <vireshk@kernel.org>, 
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, asahi@lists.linux.dev, soc@lists.linux.dev, 
+	linux-sunxi@lists.linux.dev, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello arm-soc maintainers,
+On Thu, Jun 12, 2025 at 3:15=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
 
-Please pull this patch for the optee driver. It relates to the FF-A driver
-PR https://lore.kernel.org/all/20250609105207.1185570-1-sudeep.holla@arm.com
-but it makes sense on its own and can be applied independently.
+> Commit 98ce1eb1fd87e ("gpiolib: introduce gpio_chip setters that return
+> values") added new line setter callbacks to struct gpio_chip. They allow
+> to indicate failures to callers. We're in the process of converting all
+> GPIO controllers to using them before removing the old ones. This series
+> converts remaining pinctrl drivers that still use old APIs.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Thanks,
-Jens
+Patches applied!
 
-The following changes since commit 0ff41df1cb268fc69e703a08a57ee14ae967d0ca:
-
-  Linux 6.15 (2025-05-25 16:09:23 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-fix-for-v6.16
-
-for you to fetch changes up to 312d02adb959ea199372f375ada06e0186f651e4:
-
-  optee: ffa: fix sleep in atomic context (2025-06-12 12:04:57 +0200)
-
-----------------------------------------------------------------
-A fix in the OP-TEE driver for v6.16
-
-Fixing a sleep in atomic context in the FF-A notification callback by
-adding a work queue to process in a non-atomic context.
-
-----------------------------------------------------------------
-Jens Wiklander (1):
-      optee: ffa: fix sleep in atomic context
-
- drivers/tee/optee/ffa_abi.c       | 41 ++++++++++++++++++++++++++++++---------
- drivers/tee/optee/optee_private.h |  2 ++
- 2 files changed, 34 insertions(+), 9 deletions(-)
+Yours,
+Linus Walleij
