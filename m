@@ -1,110 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A90442065;
-	Tue, 24 Jun 2025 06:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B92F23E336
+	for <soc@lists.linux.dev>; Tue, 24 Jun 2025 18:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750747556; cv=none; b=iPRwSIVv07lGoGD8bdQiT/TZMusa9rMDz7pHJUEbxcu6sxteyNiMWH4clnXMm3/pe0dursFa/dY+qSAN1hmPPBfmylJmXwkC8OMnFhCAbWANWTMlPkuSOerpfYzOp36K/pj5R4931ntyFLMOm23PKch16ioH2tZFz7EZXyyfGLk=
+	t=1750790592; cv=none; b=XQK0Cdr2q/+4TUD/XypZy0JmUfFNKcg83Q+0RLvv+9LfDpmDAE4OKbqlHYcFAgx4D1sikgwQlELvzramG1RQ4+cEBxmMvOT/DFph+tMDxIGIzUNiv3iZdln/ryBebQNZB9SK6LioAx0F0BIAOmYszdh0Q92BhrzD1sI4QrLBels=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750747556; c=relaxed/simple;
-	bh=Ht83Vts5Nikx4Hos0A9Sqa+RdgKYjKb5+54OxdwWUZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tRcwKzZRUts5sCV0CxD/sCjGSjJ8aA/V+0/gdjdtfGm4MUc4V0ov7Wn+O73LnhpKLrlGiK1xtaTiHGxaWiuczBvqctUNewk+7s3IdBAvLdB/zkDs9JNp2SalcqJ9tLVqBPkr0W5CUmXHU0JlxK4VkqBdz/ZPpENL8AFdCZZa9Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kspPuAEQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750790592; c=relaxed/simple;
+	bh=cU77tYeAJdnVrMFTAssZhAGd56A1kHptmmuN18KkZ6E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qGF3wHm14IfntvLj5Z9IlL6crOhi3Lp/EjtcntHIa/LvhKf/Am7u26FQjIl62AOi75vxv7Wul4BFhbzvnpWwyZ7FiQOYG8SrI3XmgikcoSSXQR+c5E8gPmXBitugicgMXEp6cvnX55qsMXeDhOu4U2fnPPzUe191ABle18liSJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=nAAHio8Z; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kspPuAEQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF9EC4CEE3;
-	Tue, 24 Jun 2025 06:45:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750747555;
-	bh=Ht83Vts5Nikx4Hos0A9Sqa+RdgKYjKb5+54OxdwWUZM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kspPuAEQWHNFErWEKu3JBLy9IsjWT68yYgf9pNlpUs5YStXbsxE/vCzGZPzOYwCwl
-	 qLx2IRXVMDtFc71BkbFYAz5DteRFOiWYA/uqOTmyW+N00M/1gj41DwoZ2klWY971gB
-	 Gd56qzqUd1y9fn+IN/pL8YFqX4uPYwCOkPl/p/Lg/Smu1q8LATiVa99GjyqN5I35px
-	 fg0YTX1ty9FYrCXtBrLHX7HyHc/WOPCAcFuOe8kvUgZH0Fcfkx9wewbZ3uZ9DKocuI
-	 igUnwp34x5dUWWS+lRBjBL1GLZJ1UiXBjKniSXJHyi5z5ofOUV/R3TIrOi3qkIfOjj
-	 jm/Am+Il1S4bw==
-Message-ID: <085d5ebd-515c-4608-825b-b3319bc3bf7d@kernel.org>
-Date: Tue, 24 Jun 2025 08:45:50 +0200
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="nAAHio8Z"
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55OIglKf1238390;
+	Tue, 24 Jun 2025 13:42:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1750790567;
+	bh=d7RyoS9Xq2SqZl1k6ym5o4fjIiCYNNVYuTiU+w0N+C0=;
+	h=From:To:CC:Subject:Date;
+	b=nAAHio8ZNDbgN+CYEXlSX8ptbbLOIUV6HwBmawy1Tb5LqOjTZyTThqn9KBwzs0vJw
+	 5Xit6sT2Nz66hLxFPPfb+0zrNEE5Pwz9STdGo0+4IXBT+JxmV2UAcMsLP6d6/nR5F2
+	 7hCnBVlC1srj0C2ojrFRhd6buTHEga2/CVW9o7D4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55OIgluT1799620
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Tue, 24 Jun 2025 13:42:47 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 24
+ Jun 2025 13:42:47 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Tue, 24 Jun 2025 13:42:46 -0500
+Received: from lelvem-mr05.itg.ti.com ([10.249.42.149])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55OIgkxh1989825;
+	Tue, 24 Jun 2025 13:42:46 -0500
+From: Andrew Davis <afd@ti.com>
+To: Arnd Bergmann <arnd@arndb.de>, Andre Przywara <andre.przywara@arm.com>,
+        Russell King <linux@armlinux.org.uk>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik
+	<robert.jarzmik@free.fr>,
+        Alexey Charkov <alchark@gmail.com>,
+        Krzysztof
+ Kozlowski <krzk@kernel.org>,
+        Stefano Stabellini <sstabellini@kernel.org>
+CC: <soc@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+        <xen-devel@lists.xenproject.org>, <linux-kernel@vger.kernel.org>,
+        Andrew
+ Davis <afd@ti.com>
+Subject: [PATCH v6] ARM: Switch to new sys-off handler API
+Date: Tue, 24 Jun 2025 13:42:45 -0500
+Message-ID: <20250624184245.343657-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/7] MAINTAINERS: Add entry for Axiado
-To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Jan Kotas <jank@cadence.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
- soc@lists.linux.dev
-References: <20250623-axiado-ax3000-soc-and-evaluation-board-support-v3-0-b3e66a7491f5@axiado.com>
- <20250623-axiado-ax3000-soc-and-evaluation-board-support-v3-7-b3e66a7491f5@axiado.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250623-axiado-ax3000-soc-and-evaluation-board-support-v3-7-b3e66a7491f5@axiado.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 23/06/2025 19:28, Harshit Shah wrote:
-> Add entry for Axiado maintainer and related files
-> 
-> Signed-off-by: Harshit Shah <hshah@axiado.com>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Kernel now supports chained power-off handlers. Use
+register_platform_power_off() that registers a platform level power-off
+handler. Legacy pm_power_off() will be removed once all drivers and archs
+are converted to the new sys-off API.
 
-Best regards,
-Krzysztof
+Signed-off-by: Andrew Davis <afd@ti.com>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+Acked-by: Alexey Charkov <alchark@gmail.com>
+---
+
+Changes for v6:
+ - Rebased on v6.16-rc3
+ - Squashed series and sent to soc@lists.linux.dev as suggested by Arnd
+
+Changes for v5:
+ - Rebase on v6.15-rc1
+
+Changes for v4:
+ - Drop already taken patches
+ - Rebase on latest master
+
+Changes for v3:
+ - Rebase on v6.12-rc1
+
+Changes for v2:
+ - Collect Reviewed/Acked-bys
+ - Rebase on v6.11-rc1
+
+ arch/arm/mach-highbank/highbank.c | 2 +-
+ arch/arm/mach-pxa/spitz.c         | 2 +-
+ arch/arm/mach-sa1100/generic.c    | 2 +-
+ arch/arm/mach-vt8500/vt8500.c     | 2 +-
+ arch/arm/xen/enlighten.c          | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/mach-highbank/highbank.c b/arch/arm/mach-highbank/highbank.c
+index 5d4f977ac7d2a..47335c7dadf8d 100644
+--- a/arch/arm/mach-highbank/highbank.c
++++ b/arch/arm/mach-highbank/highbank.c
+@@ -143,7 +143,7 @@ static void __init highbank_init(void)
+ 	sregs_base = of_iomap(np, 0);
+ 	WARN_ON(!sregs_base);
+ 
+-	pm_power_off = highbank_power_off;
++	register_platform_power_off(highbank_power_off);
+ 	highbank_pm_init();
+ 
+ 	bus_register_notifier(&platform_bus_type, &highbank_platform_nb);
+diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
+index 33533e35720f8..c0b1f7e6be874 100644
+--- a/arch/arm/mach-pxa/spitz.c
++++ b/arch/arm/mach-pxa/spitz.c
+@@ -1096,7 +1096,7 @@ static void __init spitz_init(void)
+ 		software_node_register(&spitz_scoop_2_gpiochip_node);
+ 
+ 	init_gpio_reset(SPITZ_GPIO_ON_RESET, 1, 0);
+-	pm_power_off = spitz_poweroff;
++	register_platform_power_off(spitz_poweroff);
+ 
+ 	PMCR = 0x00;
+ 
+diff --git a/arch/arm/mach-sa1100/generic.c b/arch/arm/mach-sa1100/generic.c
+index 0c586047d130f..5383a26f51169 100644
+--- a/arch/arm/mach-sa1100/generic.c
++++ b/arch/arm/mach-sa1100/generic.c
+@@ -298,7 +298,7 @@ static struct platform_device *sa11x0_devices[] __initdata = {
+ static int __init sa1100_init(void)
+ {
+ 	struct resource wdt_res = DEFINE_RES_MEM(0x90000000, 0x20);
+-	pm_power_off = sa1100_power_off;
++	register_platform_power_off(sa1100_power_off);
+ 
+ 	regulator_has_full_constraints();
+ 
+diff --git a/arch/arm/mach-vt8500/vt8500.c b/arch/arm/mach-vt8500/vt8500.c
+index 0ab40087ae1cc..1d294255d7083 100644
+--- a/arch/arm/mach-vt8500/vt8500.c
++++ b/arch/arm/mach-vt8500/vt8500.c
+@@ -141,7 +141,7 @@ static void __init vt8500_init(void)
+ 			pr_err("%s:ioremap(power_off) failed\n", __func__);
+ 	}
+ 	if (pmc_base)
+-		pm_power_off = &vt8500_power_off;
++		register_platform_power_off(vt8500_power_off);
+ 	else
+ 		pr_err("%s: PMC Hibernation register could not be remapped, not enabling power off!\n", __func__);
+ }
+diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
+index a395b6c0aae2a..8655bc3d36347 100644
+--- a/arch/arm/xen/enlighten.c
++++ b/arch/arm/xen/enlighten.c
+@@ -541,7 +541,7 @@ static int __init xen_late_init(void)
+ 	if (!xen_domain())
+ 		return -ENODEV;
+ 
+-	pm_power_off = xen_power_off;
++	register_platform_power_off(xen_power_off);
+ 	register_restart_handler(&xen_restart_nb);
+ 	if (!xen_initial_domain()) {
+ 		struct timespec64 ts;
+-- 
+2.39.2
+
