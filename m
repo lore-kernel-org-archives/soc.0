@@ -1,258 +1,188 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2C441A8F
-	for <soc@lists.linux.dev>; Fri, 27 Jun 2025 04:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632541DF27D;
+	Fri, 27 Jun 2025 05:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750999325; cv=none; b=JHg/0Php8V/Tn5jI2BIfScU1hRUoVWE3KIpUEWVvUiOTkX8sdqIYrZp8h4qcxgdHKuLpRpF3yG1yAQJue0J78Lch2jsul9m46NFNC0wcws3PAlOiK6c5KX5VJupwbrLgff/E9wArumXUIpPMunlwhFg/eapDEuJaS6G/Tgf2A80=
+	t=1751003924; cv=none; b=E9QnVlVU/+vKSJyZxZSIDwAmlrXLCUie10E6uywOR0NLXXExaOrQ9x7l4Vjg1kDhRDJh1RwofV+w4aiZpeJ95PMyazIVzAiCplR0yNwuGm29YX4239tob4vIYDdpm8QK3njTVcJO3/ocmYupfP6GkPLEVWWNBLqupoUtobu2KZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750999325; c=relaxed/simple;
-	bh=8Z997JSisHQ67twUlk0vPzrE/fLRQguD8Os4aDa4fmQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rt2AmLWtxMhnCasZ05L7qc9CypuzrMS4tgxiWmaoDU3NbD0YwQtja/9IUJUPDv4opjD+XcPZJzve3aQsC6n5koJm3fC7CV4JN9jrYuP4ItWd88sQkuChwh18QAckNQXcdtf7WCCra153gO1XfAARgZ+MCaRsF0f5uaxSRswoUEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=VRiJMeAn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751003924; c=relaxed/simple;
+	bh=W8ESEOvTnzlaauZxXbpvnooPguT5UJB6hx9dfTe2kLQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MjLZPNHyJRxgIUFohvo3iwTyUBksl0w9aXwSMr2QBSZtXr+evv2CV0j99AZFnGX33aGsJNaT9ZnIMcKZ3tfs4B2aCvrcJ87fEmd02i7mbD3UNyGYCH8TCBmDMgCC4DmClp11yyBwXLmebFxGDjiEA5iU7knQUO6npYy2szfTTl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tHM4yWQb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="VRiJMeAn"
-Received: by smtp.kernel.org (Postfix)
-	id 24076C4CEEB; Fri, 27 Jun 2025 04:42:05 +0000 (UTC)
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 74449C4CEE3;
-	Fri, 27 Jun 2025 04:42:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 74449C4CEE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1750999321;
-	bh=8Z997JSisHQ67twUlk0vPzrE/fLRQguD8Os4aDa4fmQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VRiJMeAn1mpG/VpNerO+d3E5Q8feoyKzgT0MLdcWbO4EXksqB8k8uzVgXf8OGXhv7
-	 B3sJDtLJ3N+uf4/UCCQfw1HaUiTimA7YNKkGj1wPFgmnHN/Oq0A8n+LCPXWetI/rW3
-	 tyK4sV8NWZ6ZUMtawV82sNgblceoslE5uWXqjj1WOOEfkrI4Gz5dd/R+EqRfDWNIbc
-	 lXP3TSUAF7TEbxnl5DZzEPK0QhRhIr9uyq+PV88ECSUU1v7rUMjZG7BVZ7M7pVExcH
-	 XBHIbxp28V7BWG5KocE+jRP7Uo6ApfPjofuRQcXJFhqgAamVXFIIrJ2leRuR678fTL
-	 TpCN992Ed5zgA==
-Received: from [192.168.68.112] (unknown [180.150.112.166])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 8C8186443C;
-	Fri, 27 Jun 2025 12:41:59 +0800 (AWST)
-Message-ID: <2b301def81460b686ecb9e0fa05f42e8122419b6.camel@codeconstruct.com.au>
-Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 6.16
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>
-Cc: arm <arm@kernel.org>, soc <soc@kernel.org>
-Date: Fri, 27 Jun 2025 14:11:58 +0930
-In-Reply-To: <CACPK8XdYLf6s=GtB5bsEw4zj0JjUBob-6GhdJzivX51y+E=KEA@mail.gmail.com>
-References: 
-	<CACPK8XdYLf6s=GtB5bsEw4zj0JjUBob-6GhdJzivX51y+E=KEA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tHM4yWQb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D65E2C4CEE3;
+	Fri, 27 Jun 2025 05:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751003924;
+	bh=W8ESEOvTnzlaauZxXbpvnooPguT5UJB6hx9dfTe2kLQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=tHM4yWQb1Li4Zxbg/miQ5CF3lxTnBWVX22rDl0hIbKjudFVrqwM7ZJ4ktt2XvvJ7n
+	 MQuLLHS+3FvLlFcXRxA01U9/CTyY8C1QznX/3SxC3uBKgDAwZekBJW9sLpTt/ajfMK
+	 NwM/tR7XANh5qs2cYs887oIwH2ILDsIE4KRaqjd4q/qosaH26iWdvjgG34BFvoSsQX
+	 UigC8OlJV4tNWB2H2plxaTTUSDmV2i4V9/PRJPo+EiK/qHrsGcbqIxfhQ10msqp5mN
+	 amObNoMI1sh3Odld7Fnw3W4+AHk3Sw5e87d5+bWKIcqz16DZcC1/7DZ0OJjsWRIZgF
+	 zN0n51nW89IFg==
+Message-ID: <4d4bf02a-4c0a-4051-bed2-8a089d310ad2@kernel.org>
+Date: Fri, 27 Jun 2025 07:58:36 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 5/7] arm64: dts: axiado: Add initial support for AX3000
+ SoC and eval board
+To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Jan Kotas <jank@cadence.com>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+ "soc@lists.linux.dev" <soc@lists.linux.dev>
+References: <20250623-axiado-ax3000-soc-and-evaluation-board-support-v3-0-b3e66a7491f5@axiado.com>
+ <20250623-axiado-ax3000-soc-and-evaluation-board-support-v3-5-b3e66a7491f5@axiado.com>
+ <0709a0a6-1313-452c-85e7-2926a6a03741@kernel.org>
+ <19d78e69-4a38-420b-b9f8-d0eb90cdcaf6@axiado.com>
+ <a0feb67f-3a73-4247-8383-7255616cb22b@kernel.org>
+ <a6e27c0e-0703-4444-b6e7-d4db1340e802@axiado.com>
+ <3660b275-8513-4017-aba4-5c4432eb5b6b@kernel.org>
+ <72ac73e7-a201-4001-a3ca-b13fb78c980b@axiado.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <72ac73e7-a201-4001-a3ca-b13fb78c980b@axiado.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
+On 27/06/2025 02:47, Harshit Shah wrote:
+>>> Is this name look good?
+>> No, all compatibles for SoC must be SoC specific. Take any recent
+>> Qualcomm SM8650 or SM8750 as example.
+>>
+>> I asked to read writing bindings. Did you read it? It covers exactly
+>> this case.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> 
+> Extremely sorry for the last reply. It got messed up in formatting, 
+> re-sending the same.
+> 
+> 
+> Thank you for the references.
+> 
+> Yes, I missed the point in the writing bindings doc. It says the following:
+> 
+> 
+> "For sub-blocks/components of bigger device (e.g. SoC blocks) use rather 
+> device-based compatible (e.g. SoC-based compatible),
+> 
+>   instead of custom versioning of that component. For example use 
+> "vendor,soc1234-i2c" instead of "vendor,i2c-v2"."
+> 
+> 
+> (Ref: 
+> https://elixir.bootlin.com/linux/v6.15.3/source/Documentation/devicetree/bindings/writing-bindings.rst#L79) 
+> 
+> 
+> # We need to add the full SoC name instead of versioning. e.g. 
+> compatible should contain full SoC name ax3000.
 
-On Mon, 2025-05-19 at 11:42 +0930, Joel Stanley wrote:
-> Hi Arnd,
->=20
-> Here's the Aspeed pull request for 6.16. Andrew has prepared the
-> patches and created the tag, so all credit goes to him.
->=20
-> There's a change that Andrew calls out in the tag I didn't really
-> like: it breaks old userspace by moving things around. The argument is
-> that userspace was "wrong" to be using the paths under /sys. I think
-> the cart is leading the horse if we let the yaml checking take a
-> higher priority than breaking userspace. But I haven't the time to
-> fight that battle, so here we are.
->=20
-> The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089a=
-c8:
->=20
-> =C2=A0 Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
->=20
-> are available in the Git repository at:
->=20
-> =C2=A0 https://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc
-> tags/aspeed-6.16-devicetree
->=20
-> for you to fetch changes up to 13c9c6eabf033ed4f369ad4d29bdc58ed4a411e3:
->=20
-> =C2=A0 ARM: dts: aspeed: Rework APB nodes (2025-04-08 10:58:33 +0930)
+Yes.
+
+> 
+> 
+> Another example, we have seen is the designware I2C IP is used by MSCC, 
+> ocelot chipset.
+> 
+> It is showing as below in the following: 
+> (https://elixir.bootlin.com/linux/v6.16-rc3/source/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml) 
+> 
+> 
+>      i2c@100400 {
+> 
+>        compatible = "mscc,ocelot-i2c", "snps,designware-i2c";
+> 
+>        reg = <0x100400 0x100>, <0x198 0x8>;
+> 
+>        pinctrl-0 = <&i2c_pins>;
+> 
+>        pinctrl-names = "default";
+> 
+>        interrupts = <8>;
+> 
+>        clocks = <&ahb_clk>;
+> 
+>      };
+> 
+> 
+> # We will add this compatible in the existing driver 
+> (drivers/tty/serial/xilinx_uartps.c) &
+> 
+> bindings (Documentation/devicetree/bindings/serial/cdns,uart.yaml) since 
+> the IP is common.
+> 
+> 
+> As per the above examples,  I see two types of bindings.
+> 
+> 1. compatible = "axiado,ax3000-uart", "cdns,uart-r1p12"
 
 
-I'm looking to get ahead of things for the next merge window. The
-ASPEED PR didn't end up getting pulled for v6.16 - possibly it was a
-combination of a few things: I expect it came a bit late in the cycle,
-Joel expressed some concerns about the changes to the APB DTS nodes,
-and well after the fact I noticed it was sent to arm@ rather than soc@
-(though Joel suggested these were aliases, at least in the past).
+This one. Thank you.
 
-Were any of these factors? I'm hoping we can avoid the same pitfalls
-this time around.
 
-Cheers,
-
-Andrew
-
->=20
-> ----------------------------------------------------------------
-> ASPEED devicetree updates for v6.16
->=20
-> Significant changes:
->=20
-> - The APB nodes in the ASPEED SoC DTSIs were reworked to eliminate a larg=
-e
-> =C2=A0 volume of warnings from `make dtbs_check`. The changes to the node=
- names are
-> =C2=A0 naturally reflected in sysfs, which may impact some userspace appl=
-ications.
-> =C2=A0 The impacts are called out in the commit message, along with argum=
-ents for
-> =C2=A0 the change.
->=20
-> Removed platforms:
->=20
-> - IBM's Swift BMC
->=20
-> New platforms:
->=20
-> - NVIDIA's GB200NVL BMC
->=20
-> =C2=A0 NVIDIA GB200 NVL72 connects 36 Grace CPUs and 72 Blackwell GPUs in=
- an NVIDIA
-> =C2=A0 NVLink-connected, liquid-cooled, rack-scale design.
->=20
-> Updated BMC platforms:
->=20
-> - Bletchley (Meta): Fixes for GPIO hog name, remove ethernet-phy node
-> - Catalina (Meta): Various sensors added, MCTP support for NIC management
-> - System1 (IBM): IPMB and various GPIO-related updates
->=20
-> The System1 series includes a devicetree binding patch for IPMI IPMB devi=
-ces.
->=20
-> ----------------------------------------------------------------
-> Andrew Jeffery (1):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: Rework APB nodes
->=20
-> Joel Stanley (1):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: Remove swift machine
->=20
-> Krzysztof Kozlowski (1):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: Align GPIO hog name with=
- bindings
->=20
-> Ninad Palsule (8):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dt-bindings: ipmi: Add binding for IPMB de=
-vice
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Add IPMB device
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Add GPIO line n=
-ame
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Reduce sgpio sp=
-eed
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Update LED gpio=
- name
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Remove VRs max8=
-952
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Mark GPIO line =
-high/low
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: system1: Disable gpio pu=
-ll down
->=20
-> Potin Lai (11):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: bletchley: remove unused=
- ethernet-phy node
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Add IO Mezz bo=
-ard thermal sensor nodes
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Add Front IO b=
-oard remote thermal sensor
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Add MP5990 pow=
-er sensor node
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Add fan contro=
-ller support
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Add second sou=
-rce fan controller support
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Add second sou=
-rce HSC node support
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Remove INA238 =
-and INA230 nodes
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Enable multi-m=
-aster on additional I2C buses
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Update CBC FRU=
- EEPROM I2C bus and address
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: catalina: Enable MCTP su=
-pport for NIC management
->=20
-> Willie Thai (2):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dt-bindings: arm: aspeed: add Nvidia's GB2=
-00NVL BMC
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARM: dts: aspeed: Add device tree for Nvid=
-ia's GB200NVL BMC
->=20
-> =C2=A0.../devicetree/bindings/arm/aspeed/aspeed.yaml=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0 1 +
-> =C2=A0.../devicetree/bindings/ipmi/ipmb-dev.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 56 +
-> =C2=A0arch/arm/boot/dts/aspeed/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
-=A0=C2=A0=C2=A0 2 +-
-> =C2=A0.../boot/dts/aspeed/aspeed-bmc-ampere-mtjade.dts=C2=A0=C2=A0 |=C2=
-=A0=C2=A0=C2=A0 2 +-
-> =C2=A0.../aspeed/aspeed-bmc-arm-stardragon4800-rep2.dts=C2=A0 |=C2=A0=C2=
-=A0=C2=A0 4 +-
-> =C2=A0.../dts/aspeed/aspeed-bmc-asrock-e3c246d4i.dts=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0 2 +-
-> =C2=A0.../boot/dts/aspeed/aspeed-bmc-bytedance-g220a.dts |=C2=A0=C2=A0=C2=
-=A0 4 +-
-> =C2=A0.../boot/dts/aspeed/aspeed-bmc-delta-ahe50dc.dts=C2=A0=C2=A0 |=C2=
-=A0=C2=A0=C2=A0 2 +-
-> =C2=A0.../dts/aspeed/aspeed-bmc-facebook-bletchley.dts=C2=A0=C2=A0 |=C2=
-=A0=C2=A0=C2=A0 5 -
-> =C2=A0.../dts/aspeed/aspeed-bmc-facebook-catalina.dts=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 197 +++-
-> =C2=A0.../arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts |=C2=A0=C2=A0=C2=
-=A0 2 +-
-> =C2=A0.../arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts |=C2=A0=C2=A0=C2=
-=A0 2 +-
-> =C2=A0.../arm/boot/dts/aspeed/aspeed-bmc-ibm-rainier.dts |=C2=A0=C2=A0=C2=
-=A0 4 +-
-> =C2=A0.../arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts |=C2=A0 139 ++-
-> =C2=A0.../boot/dts/aspeed/aspeed-bmc-lenovo-hr630.dts=C2=A0=C2=A0=C2=A0 |=
-=C2=A0=C2=A0 46 +-
-> =C2=A0.../boot/dts/aspeed/aspeed-bmc-lenovo-hr855xg2.dts |=C2=A0=C2=A0 68=
- +-
-> =C2=A0.../dts/aspeed/aspeed-bmc-nvidia-gb200nvl-bmc.dts=C2=A0 | 1128 ++++=
-++++++++++++++++
-> =C2=A0.../arm/boot/dts/aspeed/aspeed-bmc-opp-lanyang.dts |=C2=A0=C2=A0 14=
- +-
-> =C2=A0arch/arm/boot/dts/aspeed/aspeed-bmc-opp-nicole.dts |=C2=A0=C2=A0 10=
- +-
-> =C2=A0.../boot/dts/aspeed/aspeed-bmc-opp-palmetto.dts=C2=A0=C2=A0=C2=A0 |=
-=C2=A0=C2=A0 40 +-
-> =C2=A0.../arm/boot/dts/aspeed/aspeed-bmc-opp-romulus.dts |=C2=A0=C2=A0=C2=
-=A0 6 +-
-> =C2=A0arch/arm/boot/dts/aspeed/aspeed-bmc-opp-swift.dts=C2=A0 |=C2=A0 974=
- -----------------
-> =C2=A0arch/arm/boot/dts/aspeed/aspeed-bmc-opp-zaius.dts=C2=A0 |=C2=A0=C2=
-=A0=C2=A0 8 +-
-> =C2=A0arch/arm/boot/dts/aspeed/aspeed-g4.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 93 +-
-> =C2=A0arch/arm/boot/dts/aspeed/aspeed-g5.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 109 +-
-> =C2=A0arch/arm/boot/dts/aspeed/aspeed-g6.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 249 +++--
-> =C2=A026 files changed, 1773 insertions(+), 1394 deletions(-)
-> =C2=A0create mode 100644 Documentation/devicetree/bindings/ipmi/ipmb-dev.=
-yaml
-> =C2=A0create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-nvidia-gb200=
-nvl-bmc.dts
-> =C2=A0delete mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-opp-swift.dt=
-s
-
+Best regards,
+Krzysztof
