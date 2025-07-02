@@ -1,109 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53CD13B590
-	for <soc@lists.linux.dev>; Wed,  2 Jul 2025 01:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157B51CFBC;
+	Wed,  2 Jul 2025 06:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751419468; cv=none; b=DsuTcjelqD17SZ7Sj7ACCa2QU9plvU/vi+cV5T5l+PrddroqQYIi4e0yb2jcHEfhLJzF3zc7/IzcGypksIj6RrTnVaf371DzOeu3ELd6KTiBICxsSHmNpq0UeM28klQSP0seNcTSXo593OCiqPGWM03hEMVj4lwIjnNkG4+alpQ=
+	t=1751437130; cv=none; b=N3ewVyT6jUcYIb8J8pffPmfgzFDMqGHLlQIaTK3eWG2iw9hrCcomwBiV3TJHcLPkK0Pg9hX5F04AlY3oIC2Moom/KmYILh8yu2My1+MYdRCvDCVhz2umqHnnnnXPSkZllcIbiiw9gFdIwvf0W/ZFn1dohoI5qRHJqVmqwFugYYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751419468; c=relaxed/simple;
-	bh=gQXNDlKtiwItGVQoQQmPChI9TajdcpMw23001kg7pts=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=D/z5Z6IdwBrDKCJGKPeKuB4MdFt1o5uLIgdxe3XsmYLByVKMGBRgzBdNP/Ewozx6qvTaRCUrHmbSSp+FgZffHTWMpiz8PPN0yUaWLbluSQBI0hNRcDLgyYxCBEqWSU0Uxj7NIdA7f2JXvthhuFDY9OXVxt7CdGCb585WuWUxvUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=jEMMyiHt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751437130; c=relaxed/simple;
+	bh=7Dap5Kr9JrVWd5RcwGXtfLjL+/ToP513+Z/kw+YoSIo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BFkLqHBWRAWEeQ/pQfrKxsidkmhT1l9Jv0ArYMmgICqO8gq9eO8WYEI21S46DJyl1+W+5sN2CnF27fiGN7Nv7OhTUTxBNOKxwZMNfrfW80fDjK8J0dhibinqcvYSFtpiU8UAwd2AyerjQEei8u22ezjx7bcVke7Vm9njk+Sqj5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i5Y6uk0N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="jEMMyiHt"
-Received: by smtp.kernel.org (Postfix)
-	id 81714C4CEEF; Wed,  2 Jul 2025 01:24:28 +0000 (UTC)
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 19691C4CEEB
-	for <soc@kernel.org>; Wed,  2 Jul 2025 01:24:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 19691C4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1751419458;
-	bh=lqupIVmUfM/FwKL2CtGRCLXKXJXt++c24hQ1CeX4PTg=;
-	h=From:Date:Subject:To:Cc;
-	b=jEMMyiHttf9+780o3EE1L0TRtmlzNa50LTyif7nkuZquu0MMdgyPMQXZIdm7MNFA6
-	 EPsT3n/sTdRIh2VMmtQ+I3K5YD0AhQntiv1/9WmfCsLsS7aC2elVM39SUpsaC14FT/
-	 wrAeaNGbm4ZjuqaSP34+E2pQVgt+Z3LoZPRXXS3ysQozss7vN4+crr3VhCMqMklN/B
-	 8OmnudSbGaRM/j+DB/p1PYqkHp1hSQOBX2w3gp0MXqiilY42vKId8mtoPXI2BCK7n+
-	 Zr/fWEUcM1L4Y7YVOCkEPLBR6K6x5uWKnIDDbHWHlfYP5tNOeUOf+TOQIcKKaerPD8
-	 HAmJAM88iNKoQ==
-Received: from [127.0.1.1] (unknown [180.150.112.153])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id C1B25640B4;
-	Wed,  2 Jul 2025 09:24:17 +0800 (AWST)
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-Date: Wed, 02 Jul 2025 10:53:54 +0930
-Subject: [PATCH] MAINTAINERS: Switch ASPEED tree to shared BMC repository
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i5Y6uk0N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785A5C4CEEE;
+	Wed,  2 Jul 2025 06:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751437129;
+	bh=7Dap5Kr9JrVWd5RcwGXtfLjL+/ToP513+Z/kw+YoSIo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=i5Y6uk0NIEQlDGTNdzumCvd4l04wWXsYs6izEJoOy+J1AbzEC+0S02WaRChyBhkbX
+	 HdxuMDV/RmLkKVsjkiLm1flkjX1BBf7INHtKtLHETsd7IPmHHAkoXk/L1rxL3jbMSR
+	 iR2J1HJspvuqerbvnb+C6iLpD0MJAeWPlH/eW0n/nzTuTo8WJqTMwcZXdo/7ECrfYG
+	 bVRJ0BOosRYKbyRcYhRSM5kGoz4VFai72iSODP3RCgDO4VHxiHAQO6AIg/o06ODB6B
+	 qng7AU1Kzf9ICJDhz6pbl/ZaiUW/L0ngpxOnwEsC8EfR44v5rDXBQ6W0wDlsilyP7g
+	 ORFztZZhUOsrQ==
+Message-ID: <b741e3fc-1376-4498-92e7-4e366f28f8ec@kernel.org>
+Date: Wed, 2 Jul 2025 08:18:42 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 04/10] dt-bindings: gpio: cdns: add Axiado AX3000 GPIO
+ variant
+To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Jan Kotas <jank@cadence.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?=
+ <pgaj@cadence.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Frank Li <Frank.Li@nxp.com>, Boris Brezillon <bbrezillon@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+ soc@lists.linux.dev, linux-serial@vger.kernel.org,
+ linux-i3c@lists.infradead.org
+References: <20250701-axiado-ax3000-soc-and-evaluation-board-support-v4-0-11ba6f62bf86@axiado.com>
+ <20250701-axiado-ax3000-soc-and-evaluation-board-support-v4-4-11ba6f62bf86@axiado.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250701-axiado-ax3000-soc-and-evaluation-board-support-v4-4-11ba6f62bf86@axiado.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-bmc-tree-update-v1-1-c270cd8af0ab@codeconstruct.com.au>
-X-B4-Tracking: v=1; b=H4sIACmKZGgC/x3MOwqAMBBF0a3I1A7EwR9uRSw0eeoUfkhUBHHvB
- stT3PtQgFcEapKHPC4Nuq0RWZqQnft1AquLJjFSmMoID4vlwwN87q4/wJUMYh3y2pQjxWr3GPX
- +j233vh+kq9TyYQAAAA==
-X-Change-ID: 20250702-bmc-tree-update-72b2cde4806f
-To: soc@kernel.org, Joel Stanley <joel@jms.id.au>
-Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
- openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
- Andrew Jeffery <andrew@codeconstruct.com.au>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1313;
- i=andrew@codeconstruct.com.au; h=from:subject:message-id;
- bh=gQXNDlKtiwItGVQoQQmPChI9TajdcpMw23001kg7pts=;
- b=owGbwMvMwCG22PjiTL8dD5cxnlZLYshI6bLNPv7N3WJ/3tYN1979qjZaz311JuOeK3ZfHnyVX
- /0ya/e76I5SFgYxDgZZMUWWFYG2hXc3T4r/eSD7GMwcViaQIQxcnAIwEb63DH/Fnd33nn1Q89lA
- t/A7l7mcff5slg0XGRgFP7p/2bpOLH4NI8OpZ96qGzZ0mUjzxS4WnqbypixYSXEfn7wJ74fpmrv
- c2rgB
-X-Developer-Key: i=andrew@codeconstruct.com.au; a=openpgp;
- fpr=C0F5E25A7D30ECBBF3BE3CEC3B837651FC0D8CF4
 
-We now have a shared repo with write access provided to M:s for the
-ASPEED SoCs.
+On 01/07/2025 22:27, Harshit Shah wrote:
+> Add binding for Axiado AX3000 GPIO controller. So far, no changes
+> are known, so it can fallback to default compatible.
+> 
+> Signed-off-by: Harshit Shah <hshah@axiado.com>
+> ---
+>  Documentation/devicetree/bindings/gpio/cdns,gpio.yaml | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/cdns,gpio.yaml b/Documentation/devicetree/bindings/gpio/cdns,gpio.yaml
+> index f1a64c17366500cb0e02a0ca90da691fd992fe7d..16c311a252921ba65d2f9f1b34a07a4a940432f3 100644
+> --- a/Documentation/devicetree/bindings/gpio/cdns,gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/cdns,gpio.yaml
+> @@ -11,7 +11,13 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    const: cdns,gpio-r1p02
+> +    oneOf:
+> +      - description: Cadence GPIO controller
+> +        const: cdns,gpio-r1p02
+> +      - description: Axiado AX3000 GPIO controller
 
-Cc: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
----
-Hello SoC maintainers,
+Drop both descriptions, obvious.
 
-Joel and I are chipping away at the workflow for shared maintenance of
-ASPEED and Nuvoton BMC SoCs. The latest is this shared tree from which
-we'll do future pull-requests.
+> +        items:
+> +          - const: axiado,ax3000-gpio
 
-Andrew
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This should be enum, it will grow.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a92290fffa163f9fe8fe3f04bf66426f9a894409..a4b8e52ace9fff3c7f43b67b288c5a2c8ec3efa4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2408,7 +2408,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
- Q:	https://patchwork.ozlabs.org/project/linux-aspeed/list/
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git
- F:	Documentation/devicetree/bindings/arm/aspeed/
- F:	arch/arm/boot/dts/aspeed/
- F:	arch/arm/mach-aspeed/
+> +          - const: cdns,gpio-r1p02
+>  
+>    reg:
+>      maxItems: 1
+> 
 
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250702-bmc-tree-update-72b2cde4806f
 
 Best regards,
--- 
-Andrew Jeffery <andrew@codeconstruct.com.au>
-
+Krzysztof
