@@ -1,187 +1,127 @@
-Received: from mail-m49196.qiye.163.com (mail-m49196.qiye.163.com [45.254.49.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437282517B9
-	for <soc@lists.linux.dev>; Wed,  2 Jul 2025 10:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB258226CE1;
+	Wed,  2 Jul 2025 10:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751451732; cv=none; b=SEX04oZL17zCvMusllw7x26HZ8hSM3J0ojM9ztVvlBRm5ffS2tyBBA5da1Rw/jo2E5YKlWDZcEP4XCfpPI4U6d0PIYyzxxdiC9vEfX6Iy58lwOxXXPbtNyBUL2/Ufr3ZlWEpwUxZt9rVH4cN0VXwsbz6jc1vV087Dn+IRK0AmW8=
+	t=1751451859; cv=none; b=lIqXtVpjseaeef0OzYGnjCdv4T0aQqnScbgd1nhgUz9r3KvVfAEsdaZuN/NupUypuEm511NXD1UJrDQn2UA/ykN8IYsv99e0i+3it878v48XV8s5aKjaC5+7cPSHVdjp9Ukr6t0vHLlr62J9ola7dG1++jKaQFWcEZJIIYmPHxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751451732; c=relaxed/simple;
-	bh=1EDFj4goj5CsQ5wj3psPIN+ghrdp1Uo32Zl1NGBk7fg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=h7BoGoymZbLMT9kcmcQ9MePRetD7Nact174EZB01E2mjznIt7qjn+V/MzcDDdHAUQULj2VBI6FHHm1qtN3ZTEtN28+K8hH+QOv6BasBthfSzpax7p/XHAbF5+wE/t9bEJ4VRbdivHrQgDmyokTVSVK64pBfvM7UTcEeBZA3vF0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=joicoOyL; arc=none smtp.client-ip=45.254.49.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
+	s=arc-20240116; t=1751451859; c=relaxed/simple;
+	bh=UsmMxrbxBsbKyiArM7KRaDTrVIVqy9Mb7Xi3fjN+Fgk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MZNPe2Q4pJqHmKnlOWGcLoWSIZK6b76Kp3d+wsWwyQB5TZqag9shu6zt1jD+WKchIFJT8l6OxKCZqHtDflziAXUQi5aUV2aLu4U1FHvgmelItVUIuI54Cw7NaTkGVLlZOsiINdbBlHzwOnwIt7NWCUOLeYR2aYTAfrIPEmBaLeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sy4gjWkt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="joicoOyL"
-Received: from localhost.localdomain (unknown [117.184.129.134])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1aaa9ed49;
-	Wed, 2 Jul 2025 17:46:35 +0800 (GMT+08:00)
-From: Albert Yang <yangzh0906@thundersoft.com>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	krzk@kernel.org,
-	conor+dt@kernel.org,
-	gordon.ge@bst.ai,
-	catalin.marinas@arm.com,
-	geert.uytterhoeven@gmail.com,
-	will@kernel.org,
-	ulf.hansson@linaro.org,
-	adrian.hunter@intel.com,
-	arnd@arndb.de
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	soc@lists.linux.dev,
-	bst-upstream@bstai.top,
-	neil.armstrong@linaro.org,
-	jonathan.cameron@huawei.com,
-	bigfoot@classfun.cn,
-	kever.yang@rock-chips.com,
-	mani@kernel.org,
-	geert+renesas@glider.be,
-	andersson@kernel.org,
-	nm@ti.com,
-	nfraprado@collabora.com,
-	quic_tdas@quicinc.com,
-	ebiggers@google.com,
-	victor.shih@genesyslogic.com.tw,
-	shanchun1218@gmail.com,
-	ben.chuang@genesyslogic.com.tw,
-	Albert Yang <yangzh0906@thundersoft.com>
-Subject: [PATCH v2 4/8] dt-bindings: mmc: add binding for BST DWCMSHC SDHCI controller
-Date: Wed,  2 Jul 2025 17:44:40 +0800
-Message-Id: <20250702094444.3523973-5-yangzh0906@thundersoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250702094444.3523973-1-yangzh0906@thundersoft.com>
-References: <20250528085403.481055-1-yangzh0906@thundersoft.com>
- <20250702094444.3523973-1-yangzh0906@thundersoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sy4gjWkt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1A3C4CEED;
+	Wed,  2 Jul 2025 10:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751451858;
+	bh=UsmMxrbxBsbKyiArM7KRaDTrVIVqy9Mb7Xi3fjN+Fgk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sy4gjWktF2eOQn1Onxy8QfsZqy5IEKNW4Blt/5ZfCEOj6k7yZic23QjjnnlkMHtBk
+	 0wSDelUsD6efXFANDXvGe2I63DxT6KgXwUWq4GNLXVqVfkS0CylAIog2EPih2YxrJ+
+	 AizBjWdzehnJtDe7LG83kXFcTPEoXwwqGJJWO2sNfsSwIsP0NJPuFvt7PM1ntdLEPu
+	 vPkbKFqTUWAtAnvLCzSAWN/3zshtwMnxse8OY0Db9FwEa5E1oEBeBWndEJKw+1Rw55
+	 F8tbujyVhS+5Qs53uKTWSsUL8xLTdAEbcVPmFXGL17SpeRqZ3XhQBxM+Cp5EBUpezY
+	 182zxPxBUYd9A==
+Message-ID: <c9160561-3792-4230-a7f6-57caf35f9a1d@kernel.org>
+Date: Wed, 2 Jul 2025 12:24:08 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDGhhKVkgdS08YGExNTk5IQlYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE5VSk
-	tLVUpCS0tZBg++
-X-HM-Tid: 0a97ca87ec9609cckunmee1cabff3ebb45
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MDo6Ejo6LDE3Ck8iHSE0HQIC
-	NQwKCzNVSlVKTE5KT09CTkJMSk5CVTMWGhIXVQIaFRwBE0tCS007DxMOFR8eCQgUHQ9VGBQWRVlX
-	WRILWUFZSkpMVUpDT1VKSUJVSkhPWVdZCAFZQU9ITkw3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=joicoOyLfPcI5Htb1jQL3vfoaIeY1lc6q9SmjGU0vYGNsKgX5FlzEe//fUMFt+F2Dt5msY0bIJHRnbNv2d+Ki7OV8xn3wNKMXXvBaG4Q66kys7HQLCJrgjS6tDstwINmLA7RWk/T5myjQBO8memOyK9cx2gDTqhwHD5Wld7+YVM=; c=relaxed/relaxed; s=default; d=thundersoft.com; v=1;
-	bh=TfcFw4Er+lRQGjZg8dmF9mso3a6O4zW0NF5yIyCmuEU=;
-	h=date:mime-version:subject:message-id:from;
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/8] dt-bindings: vendor-prefixes: Add Black Sesame
+ Technologies Co., Ltd.
+To: Albert Yang <yangzh0906@thundersoft.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, gordon.ge@bst.ai,
+ catalin.marinas@arm.com, geert.uytterhoeven@gmail.com, will@kernel.org,
+ ulf.hansson@linaro.org, adrian.hunter@intel.com, arnd@arndb.de
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-mmc@vger.kernel.org, soc@lists.linux.dev,
+ bst-upstream@bstai.top, neil.armstrong@linaro.org,
+ jonathan.cameron@huawei.com, bigfoot@classfun.cn, kever.yang@rock-chips.com,
+ mani@kernel.org, geert+renesas@glider.be, andersson@kernel.org, nm@ti.com,
+ nfraprado@collabora.com, quic_tdas@quicinc.com, ebiggers@google.com,
+ victor.shih@genesyslogic.com.tw, shanchun1218@gmail.com,
+ ben.chuang@genesyslogic.com.tw
+References: <20250528085403.481055-1-yangzh0906@thundersoft.com>
+ <20250702094444.3523973-1-yangzh0906@thundersoft.com>
+ <20250702094444.3523973-2-yangzh0906@thundersoft.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250702094444.3523973-2-yangzh0906@thundersoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add device tree binding documentation for the Black Sesame Technologies
-(BST) DWCMSHC SDHCI controller.
+On 02/07/2025 11:44, Albert Yang wrote:
+> Black Sesame Technologies Co., Ltd.s a leading automotive-grade
+> computing SoC and SoC-based
+> intelligent vehicle solution provider. Link: https://bst.ai/.
+> 
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
+> Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
+> ---
+Why is this attached to v1?
 
-This binding describes the required and optional properties for the
-bst,dwcmshc-sdhci compatible controller, including register layout,
-interrupts, bus width, clock configuration, and other controller-specific
-features.
+Where is the changelog?
 
----
-Changes for v2:
-- Simplified description, removed redundant paragraphs
-- Updated $schema to reference mmc-specific scheme
-- Corrected compatible to add soc name
-(bst,c1200-dwcmshc-sdhci)
-- Removed all redundant property descriptions
-- Dropped invalid mmc_crm_base/size properties, use reg for all address
-ranges
-- Cleaned up required properties to only essential entries
-- Standardized example DTS format, fixed reg syntax and property
-ordering
-- Removed additionalProperties: true
+Most of your emails did not reach mailing list. I also did not get them.
 
-Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
-Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
----
- .../bindings/mmc/bst,dwcmshc-sdhci.yaml       | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml
+... and the huge amount of CC list, mostly redundant and not relevant to
+this work, could explain that. Don't Cc random people.
 
-diff --git a/Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml b/Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml
-new file mode 100644
-index 000000000000..699dc404caac
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml
-@@ -0,0 +1,67 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mmc/bst,dwcmshc-sdhci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Black Sesame Technologies DWCMSHC SDHCI Controller
-+
-+maintainers:
-+  - Ge Gordon <gordon.ge@bst.ai>
-+
-+allOf:
-+  - $ref: mmc-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: bst,c1200-dwcmshc-sdhci
-+
-+  reg:
-+    maxItems: 2
-+    description: |
-+      Register base addresses and sizes for the SDHCI controller.
-+      First entry is the core SDHCI registers, second entry is the
-+      CRM registers.
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: core
-+
-+  memory-region:
-+    maxItems: 1
-+
-+  dma-coherent: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    mmc@22200000 {
-+        compatible = "bst,c1200-dwcmshc-sdhci";
-+        reg = <0x0 0x22200000 0x0 0x1000>,
-+              <0x0 0x23006000 0x0 0x1000>;
-+        interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clk_mmc>;
-+        clock-names = "core";
-+        memory-region = <&mmc0_reserved>;
-+        max-frequency = <200000000>;
-+        bus-width = <8>;
-+        non-removable;
-+        dma-coherent;
-+        status = "disabled";
-+    };
--- 
-2.25.1
+Anyway, fix above points - all three - and resend after 24h at least. Or
+consider using b4 relay, if this hits rejections/spam.
+
+Best regards,
+Krzysztof
 
