@@ -1,24 +1,24 @@
-Received: from mail-m3275.qiye.163.com (mail-m3275.qiye.163.com [220.197.32.75])
+Received: from mail-m15595.qiye.163.com (mail-m15595.qiye.163.com [101.71.155.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA11246BD9
-	for <soc@lists.linux.dev>; Wed,  2 Jul 2025 10:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E071E254AFF
+	for <soc@lists.linux.dev>; Wed,  2 Jul 2025 10:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751450525; cv=none; b=gHvE62jw6foXZunQOXRUcuzCw4Ht/rZn83NXv0Fx6mT9ff/ABxtXSnk7fi9bH2a7JZWQ0UuUhkEmbQYbbGTA9zox1F/X0yVe1spXgKIHmHHVS6wJVnNSQ52sCuauD5QtwCv8Jn1yyQ/BEJYA1ehdUWkVUnNd5af4T/hbaWvRH7M=
+	t=1751451723; cv=none; b=qkY5/4W2jOI+CIVxHujvA9dbCdkR2FU6HsXKlDCYBp4+pD9rlEFj4LEaSJaKlgJK+RUWM9tZqHFgwikhzFa1Qek1ATBwywaYvIHbigJYpPnDcsKUw5dMxZrBKU/p6zn/hdEhmEcsvXqxvfD70JFSO2RBaGLMjpnr+FKRvrRakx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751450525; c=relaxed/simple;
-	bh=lPb9dIxD5+q4ZIVxyYI/lgNb35z0XDJuRZgexaTKPl0=;
+	s=arc-20240116; t=1751451723; c=relaxed/simple;
+	bh=i9OB2XoW87G6P7CVuqhw+Zp1R6CIsj11Qr8nH7WUQ4k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VEd9PBcqYmG/V0L44Rc2/0B6EnToWdpbcO12lSt3Qngz1XuR7e0nqhKw6LawKpq5yp5wsfwDkEpgmPDay5VvIHnayohWnDlO1OZA56BfKR6k0oFZEnG8u8PzufURWe5T+06488z/57xuJhXpGrtfofVbe7rkq1Q8ioyqjXgKV+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=k/yCuMJx; arc=none smtp.client-ip=220.197.32.75
+	 MIME-Version; b=YxOIvMf4gagrXNpkGiNOl2gf7xkFhy/NLpIneZXDvVy59QKNrYqaegSl3VTgsMH5NsQ0+S91nPHsMQNf5A2dEILN8qun4fgAOed3CddrEy/FjrEEJBUTiWcVapmHsFOszXycgTNuofxepc1A6BgEenNq0CdjI4qPfrZ291QOAYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=CCVhNbF0; arc=none smtp.client-ip=101.71.155.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="k/yCuMJx"
+	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="CCVhNbF0"
 Received: from localhost.localdomain (unknown [117.184.129.134])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1aaa9ed79;
-	Wed, 2 Jul 2025 17:46:43 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1aaa9ed42;
+	Wed, 2 Jul 2025 17:46:33 +0800 (GMT+08:00)
 From: Albert Yang <yangzh0906@thundersoft.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -52,9 +52,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	shanchun1218@gmail.com,
 	ben.chuang@genesyslogic.com.tw,
 	Albert Yang <yangzh0906@thundersoft.com>
-Subject: [PATCH v2 8/8] MAINTAINERS: add and consolidate Black Sesame Technologies (BST) ARM SoC support
-Date: Wed,  2 Jul 2025 17:44:44 +0800
-Message-Id: <20250702094444.3523973-9-yangzh0906@thundersoft.com>
+Subject: [PATCH v2 3/8] arm64: Kconfig: add ARCH_BST for bst silicons
+Date: Wed,  2 Jul 2025 17:44:39 +0800
+Message-Id: <20250702094444.3523973-4-yangzh0906@thundersoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250702094444.3523973-1-yangzh0906@thundersoft.com>
 References: <20250528085403.481055-1-yangzh0906@thundersoft.com>
@@ -67,50 +67,58 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSB0YVk9CGE8ZGUxOHh8fTlYVFAkWGhdVEwETFh
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCHkNOVk9LQktMGRpOSBgYH1YVFAkWGhdVEwETFh
 	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCS0NVSk
 	tLVUpCWQY+
-X-HM-Tid: 0a97ca880db309cckunmee1cabff3ebc57
+X-HM-Tid: 0a97ca87e53409cckunmee1cabff3ebb07
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ojo6TCo6OTE0KE8xQiEqHUoj
-	DRxPFDJVSlVKTE5KT09CTUtOT01MVTMWGhIXVQIaFRwBE0tCS007DxMOFR8eCQgUHQ9VGBQWRVlX
-	WRILWUFZSkpMVUpDT1VKSUJVSkhPWVdZCAFZQUlNSko3Bg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nxg6DAw5HjE5LE9RQiIzHUkP
+	TC8aCi5VSlVKTE5KT09CTkJPQkxPVTMWGhIXVQIaFRwBE0tCS007DxMOFR8eCQgUHQ9VGBQWRVlX
+	WRILWUFZSkpMVUpDT1VKSUJVSkhPWVdZCAFZQUlMSU43Bg++
 DKIM-Signature:a=rsa-sha256;
-	b=k/yCuMJxVeOXaX4UC8xJi8N4oYoHJBUgI1LfpKFjPnB0IpJl5J+ZvP1CeNHd5xPvj8sBdGPHEl5OeI/GNiObheVCq98z6l4Hw7F/B6KMhgVIlpNsRy5+0mWzl6SfnEY1pagXQRbRF+bJDcH1Q70fM5B+IBaK9MIBcLl45KFJN0A=; c=relaxed/relaxed; s=default; d=thundersoft.com; v=1;
-	bh=p49bABjbEnShhniwT4G/iwpGc59+QIBwBwIG2CyY6WA=;
+	b=CCVhNbF0z/nZNzKXzKPmTCziV/mfP8r7/JXYSuX3+o352hI3g6Kd+ZBKmVA2IicGO6JRd2Fv501c/80xty3Xoc6C9D1Fk8SXqWl+jay/xIqLslItLvj1HV/8BynCZlGPmq7wpK9nT9EFSJP0rrE9PrdQfzgP4wfgYZcHo+W1q0c=; c=relaxed/relaxed; s=default; d=thundersoft.com; v=1;
+	bh=+mZ281H0S02t7176D+bqxjl4chkVEj1RFfKyhGtpJ7c=;
 	h=date:mime-version:subject:message-id:from;
 
-Add and consolidate the MAINTAINERS entry for Black Sesame Technologies
-ARM SoC support. This entry covers device tree bindings, drivers, and board
-files for BST SoCs, including MMC, and platform support.
+Add ARCH_BST for bst SoC series support.
 
 Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
 Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
 ---
- MAINTAINERS | 10 ++++++++++
+Changes for v2:
+- Placed the configuration entry in correct alphabetical order
+- Used generic family name (ARCH_BST) instead of SoC-specific naming
+- Followed upstream kernel naming and description conventions
+---
+ arch/arm64/Kconfig.platforms | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index efb51ee92683..e3236384c28a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2441,6 +2441,16 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/arm/blaize.yaml
- F:	arch/arm64/boot/dts/blaize/
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index a541bb029aa4..4412d54b224d 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -106,6 +106,14 @@ config ARCH_BLAIZE
+ 	help
+ 	  This enables support for the Blaize SoC family
  
-+ARM/BST SOC SUPPORT
-+M:	Ge Gordon <gordon.ge@bst.ai>
-+R:	BST Linux Kernel Upstream Group <bst-upstream@bstai.top>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/arm/bst.yaml
-+F:	Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml
-+F:	arch/arm64/boot/dts/bst/
-+F:	drivers/mmc/host/sdhci-of-bst-c1200.c
++config ARCH_BST
++	bool "Black Sesame Technologies SoC Family"
++	help
++	  This enables support for Black Sesame Technologies (BST) SoC family.
++	  BST produces automotive-grade system-on-chips for intelligent driving,
++	  focusing on computer vision and AI capabilities. The BST C1200 family
++	  includes SoCs for ADAS and autonomous driving applications.
 +
- ARM/CALXEDA HIGHBANK ARCHITECTURE
- M:	Andre Przywara <andre.przywara@arm.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ config ARCH_EXYNOS
+ 	bool "Samsung Exynos SoC family"
+ 	select COMMON_CLK_SAMSUNG
+@@ -402,4 +410,6 @@ config ARCH_ZYNQMP
+ 	help
+ 	  This enables support for Xilinx ZynqMP Family
+ 
++
++
+ endmenu # "Platform selection"
 -- 
 2.25.1
 
