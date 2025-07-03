@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C332F0034
-	for <soc@lists.linux.dev>; Thu,  3 Jul 2025 15:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F051A2F0C58
+	for <soc@lists.linux.dev>; Thu,  3 Jul 2025 15:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751558388; cv=none; b=Ls8/Y5gRbvJu1ADcAQb0xIlEP3KBGY57fd3wM1od8rFp+eqUyqIOEvgOAQu6XL6lHlptBp+Y2P3rLHoykTF3axSVtnPzRFPdla5Ozh7yeCIUMu4R9Hikc6WDhTLBmkKIIwhXwKjefrWVx2BZ9o15DnaBl4jezkLgf5tCI+mzVpA=
+	t=1751558390; cv=none; b=ZSUknpXlzJ5/Nz5qxHnkxKjB9LTA12kq3kmUaf3H14LAP5lOLT1Oa95u+KnZFVb2ln+L2sV13xCdteWHqL2MCNNfjm6jT0iqTmUqoF3+PWf8z7B5wlOPGvn9ezz1PAZzzr4NN1+JsYJPx+DzRWVnkKD5eP0QW1ye42lPttq1q7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751558388; c=relaxed/simple;
-	bh=JzhrF16qL+zT7B/Le3eoGJ3SkziJ1yvC4uzV8Ge31nw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=Yh5ArXwxYGqYK/pmUaMhL6tMyeFygZAPLYBMG3EIdoPhTOUVeVi5jN459BTEl/OqXogUeho1L/MRgMiXbEqfZSdQnfgCpcORGOexWxBRF73K/eTXp4ODjHaoYTZH+CvAliFTOb8so4FSW4+rZBLdaIgO6J4U7dlFP2Zo9KnER8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULFshXoN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751558390; c=relaxed/simple;
+	bh=hoGsQ29xQ4a7cOUhv2vyKzaZNvR/nRGILxEeH04t+8k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uspEFMNnCODzCdOYB3h2d7fhmanJMy5Sw1ElAhPvl8lZdnoGh9m+6TEY8qZQWhipMQpozaBWIv6KhC+CObrNXka0O2udoreLu3/+mgVIQxB2wLVZF9wcCn7iEc838k+ddHrpUOd0Veq4Ok72pGiSM9CPXCxIkGIbUTD8XKnAwl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WZ3UuPvJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULFshXoN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WZ3UuPvJ"
 Received: by smtp.kernel.org (Postfix)
-	id 1B712C4CEF2; Thu,  3 Jul 2025 15:59:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065E7C4CEE3
-	for <soc@kernel.org>; Thu,  3 Jul 2025 15:59:47 +0000 (UTC)
+	id 90992C4CEEE; Thu,  3 Jul 2025 15:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76230C4CEE3;
+	Thu,  3 Jul 2025 15:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751558388;
-	bh=JzhrF16qL+zT7B/Le3eoGJ3SkziJ1yvC4uzV8Ge31nw=;
-	h=Subject:From:Date:To:Cc:From;
-	b=ULFshXoN/iMrzZ6jJwN3BEm1o5xX0Kuv7P1SYxU6wtZ00DhOstEkAf+Vco+ehcEVa
-	 WqL5xQpTwJfYclUlBwDls1NuW7VESufR+mCDrFjaGreozvfFN6w1VyiOPgiTknBhxo
-	 Ba2s8wG+dpAf+23R2SPvbvEjmKIsNblEATI9iXxn5ubZkYQ0037s/KlNF/2qLMHNGe
-	 CBuVpA5LvYTgebv3uDDuco8Kuj9m5/YDARgTRzGukXXS+907lYTAIJLdbST+tTzkPg
-	 myUz/TCLC2ADqkRpvs6eXXLGST0ad6PFCgejlWH1ga5mP1DXMcc0XQozr3UUxB7E/j
-	 qbTSw2v5IZhNA==
+	s=k20201202; t=1751558389;
+	bh=hoGsQ29xQ4a7cOUhv2vyKzaZNvR/nRGILxEeH04t+8k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=WZ3UuPvJ3Pw4QOE43hTQQ4ZtLL5gunhMr4xrq5efGq2yJJ0C21jJNxfZmV5tupNdz
+	 8J4T9sqBsEnH7Md2H8SS8ezbDAFTZc0inHhDUwtaWqdeL/JzCYbjYp+7YjxpblWPRz
+	 5m/468FibuapTOHW4FkC05RboMO5v1L9eivZVgAX+pUlyp9Q+S5p4bjAgaLn2xEmRr
+	 5qd0JkkRRDN1O/ufdW0FeZzXNB/sgwMTOHekKJccPGjzrvFKJDyGx7MZxfOT7iofXX
+	 YUfqfB7HwyS8Ki/qVIS8c5hx5iOxbzct4vi7H4Rz63SUA42NwOJr1tWQF6/mT2qk9z
+	 kxQNwYAtI5c5Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7509D383B274;
-	Thu,  3 Jul 2025 16:00:13 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB231383B274;
+	Thu,  3 Jul 2025 16:00:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,61 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH] MAINTAINERS: Switch ASPEED tree to shared BMC repository
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175155841191.1537604.11785300419449661144.git-patchwork-summary@kernel.org>
-Date: Thu, 03 Jul 2025 16:00:11 +0000
-To: soc@kernel.org
+ <175155841356.1537604.18411181185850265749.git-patchwork-notify@kernel.org>
+Date: Thu, 03 Jul 2025 16:00:13 +0000
+References: <20250702-bmc-tree-update-v1-1-c270cd8af0ab@codeconstruct.com.au>
+In-Reply-To: <20250702-bmc-tree-update-v1-1-c270cd8af0ab@codeconstruct.com.au>
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: MAINTAINERS: Switch ASPEED tree to shared BMC repository
-  Submitter: Andrew Jeffery <andrew@codeconstruct.com.au>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=977972
-  Lore link: https://lore.kernel.org/r/20250702-bmc-tree-update-v1-1-c270cd8af0ab@codeconstruct.com.au
+On Wed, 02 Jul 2025 10:53:54 +0930 you wrote:
+> We now have a shared repo with write access provided to M:s for the
+> ASPEED SoCs.
+> 
+> Cc: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> ---
+> Hello SoC maintainers,
+> 
+> [...]
 
-Series: arm64: dts: lg: DT cleanups
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=970028
-  Lore link: https://lore.kernel.org/r/20250609-dt-lg-fixes-v1-0-e210e797c2d7@kernel.org
-    Patches: [1/2] arm64: dts: lg: Refactor common LG1312 and LG1313 parts
-             [2/2] arm64: dts: lg: Add missing PL011 "uartclk"
+Here is the summary with links:
+  - MAINTAINERS: Switch ASPEED tree to shared BMC repository
+    https://git.kernel.org/soc/soc/c/df5e674c7a99
 
-Patch: [GIT,PULL,fixes] ARM: samsung: soc fixes for v6.16
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=972430
-  Lore link: https://lore.kernel.org/r/20250616094538.33256-2-krzysztof.kozlowski@linaro.org
-
-Patch: [v2] ARM: dts: lpc32xx: Add #pwm-cells property to the two SoC PWMs
-  Submitter: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=977770
-  Lore link: https://lore.kernel.org/r/20250701145803.140004-2-u.kleine-koenig@baylibre.com
-
-Series: [GIT,PULL,1/5] Broadcom defconfig-arm64 changes for 6.17
-  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=977453
-  Lore link: https://lore.kernel.org/r/20250630190216.1518354-1-florian.fainelli@broadcom.com
-    Patches: [GIT,PULL,1/5] Broadcom defconfig-arm64 changes for 6.17
-             [GIT,PULL,3/5] Broadcom devicetree-arm64 changes for 6.17
-
-Patch: arm64: dts: cavium: thunder2: Add missing PL011 "uartclk"
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=970029
-  Lore link: https://lore.kernel.org/r/20250609215706.3009692-2-robh@kernel.org
-
-
-Total patches: 8
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
