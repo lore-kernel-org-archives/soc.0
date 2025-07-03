@@ -1,115 +1,178 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F21F294A06;
-	Thu,  3 Jul 2025 06:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DAB126BFF
+	for <soc@lists.linux.dev>; Thu,  3 Jul 2025 14:49:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751524934; cv=none; b=tC2DerSmXp9d/EB4To1ly52joq2JkqNHVhDQbQkBXvM+/40GE+s37qLHyF23q02jnvffK9mF+M0LMDutB+xwv3ZgPdtRUsz5SCqg/W7ZlBJ8w49K6h3/wHms3D6SqC2+CfDVowaRW/qfcan8ALtrq8E89z0sx3pmKnQo6YMYE04=
+	t=1751554196; cv=none; b=Vabi5V+elkgJItD1H6x91GhZv0z05FV8YE44dUoyZgSFHXjUNyYB2hW3atoy1taevebGVIujwwOvJMBvxwpQaFi2RFq+m1np5+y5/ZPtRROcIxqRr1Y50FYOUvKQ1NJlDNnbH1QwGbw6Ax7lHkxAo/icrrU08iIm/Bb/3f5gd9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751524934; c=relaxed/simple;
-	bh=IYtPmTW5mKb9jqmjmSEpJYzVhdXnmtMgUhd++8DKChs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ffONGQRwAdxIuex+4tcIVfRU+jDAfBu79Xzyqqgd07r1kJvZe5p7pQaMRrzREue5pQUHGXf6rTeDowmEmlWfJjiQvrgaZ8Sn761rNEmJ+gnZTykbkB44j0K46FQdaJ0QKZFXgVYtyfBlOx4m4b/8V/r90aeURIhst1AomrVZv6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sgRmw5cg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751554196; c=relaxed/simple;
+	bh=IBb03LzhHn70N8MYPhBI4r9uXy2t8eFSnxdMGW9Qfos=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=g33kCARaGZlN9kbcEdZ1OxEGiFCjKBMzgyKBS+TnnFjIATUV6zDPdg9ZwGh0IhYMOlpNRBPCtx81/HdX/xYcagTdwcnv00Zz4R8hys9aJpxrV5YqKxe1NJ6BW0rVcBHiXw++UFmgDbDRdwaxEWpyjjbJ/MMIaPmG1YPW1uDU43g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=RGevdiXG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YeCPG7E+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sgRmw5cg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E083AC4CEE3;
-	Thu,  3 Jul 2025 06:42:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751524933;
-	bh=IYtPmTW5mKb9jqmjmSEpJYzVhdXnmtMgUhd++8DKChs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sgRmw5cgUZF1k3xHdNWYgMCmG0lbvjY5bneMeHwpnD98GGkf7NsFwyLLbhJgt49Co
-	 7w8vfeI9gJ6iONRKExTlNmO38CKRgc4TuKdKi60aXpaEXtVND0OnTTUfNzKiyBxh/d
-	 Uc2Bp2lB+v/Ne6zW2sLNGOgVCHFP8bn3S3W+xb96+dshBDPzH+vhgB1MIbLn+RG2Ja
-	 zZWzhW5I+A3n+vRbrO78JgaRutyZLXjBYo/A2mEmcE3wjdY1V/ZvoQaX9lx0xWRgS8
-	 J2DxQ32n/NwBtJOAsXldV9DXvDmWgK+WObtKzlnvGWEkJMAm04sm8uEgRwO/fyrccy
-	 b/W4V1N/21YFg==
-Message-ID: <0a5c5a72-6004-4c69-9430-d75d0d1d410b@kernel.org>
-Date: Thu, 3 Jul 2025 08:42:04 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="RGevdiXG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YeCPG7E+"
+Received: by smtp.kernel.org (Postfix)
+	id 1C3A3C4CEE3; Thu,  3 Jul 2025 14:49:56 +0000 (UTC)
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 45F1DC4CEED;
+	Thu,  3 Jul 2025 14:49:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45F1DC4CEED
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 6012FEC01CB;
+	Thu,  3 Jul 2025 10:49:52 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 03 Jul 2025 10:49:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1751554192;
+	 x=1751640592; bh=ZbJcCjFCtRk/1l8GPiYM3fyRUmcs+/3Vp/l26Pa7Vds=; b=
+	RGevdiXGHyA0qiAJ/i9quvhvBoPMt1SOO/qSUIAlfbmzBAMMErzmIxhZCqLvQL3g
+	tAySSnF+9kuJ9Me818DxQVWWDAcjxg4q6mYPt6J4sqoI6FJMDxvDhAxX0lokR9cM
+	THuhU2t9nOC5VMk9JJw4xpcqgSX4z+lu97lAJa4yHxgFWEhglhE7TmZHB0ThMnjf
+	B/G7Nt6A8tPj59Ytxl5nvIorgj3/4OPyoYs4+XEM2FjgCZKaGnzuZ+34LSQMNnsi
+	ZvTEvIZ00+nxh4Xmq40bIX7dLnA856C1hotv2lO+DNLlxCxlo5gvZxyioqJr4qZ3
+	aJSqe5nlKg6AvelUrNXqiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751554192; x=
+	1751640592; bh=ZbJcCjFCtRk/1l8GPiYM3fyRUmcs+/3Vp/l26Pa7Vds=; b=Y
+	eCPG7E+Uf2AtdFusDuAs2mtFH85I5YdPu7eXt83LnnRQtdQKdHxRg5BGuxTfS65m
+	hKGaMkovl6UFJcRdVYoyZe5OGHPliuER03T/8AkxWOarDy5U1OSFOHrXjXrmosdt
+	pk5Z3MWsuzYZF0okkixZ7CxsmUflygeiJ9BN/5yc3M76MBtVpqk+pItKTjDFRKyS
+	2b5jP5aviZsbpVdhNyO6Dy1T7dlJF1hGQnxNtFkwfGVdaILPphwYxtk2iLHVCZ2j
+	dfOX5dv/H+T+0apVpZZIKLKoiEhcu94BcoxDcRu2C0SnpDBEzQCm84icBOD/TYWe
+	OQ/scGhwJIN5TvURYBP2w==
+X-ME-Sender: <xms:j5hmaE67LeqS0Xi3tFNYkXk3ZtT23jQdxRgtzPaIxZD9VpejgQKHCA>
+    <xme:j5hmaF7wnmO6LT6mrfee94hHcfVEevTtdPWqzkbcoEm4G42C9aGg_AohXPcTrMWNL
+    Qjro52T1zKFLuQW7Q0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvtdehiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeekleffjeetvedvgefhhfeihfen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
+    thhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnughrvgifsegtoh
+    guvggtohhnshhtrhhutghtrdgtohhmrdgruhdprhgtphhtthhopehjohgvlhesjhhmshdr
+    ihgurdgruhdprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hsohgtsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:j5hmaDckqUhw9OanEIHhiRMgHQHjaipAgo-3aHEH4nsHHE-uJZrAAw>
+    <xmx:j5hmaJJBJUCkAYtDw2Ixkwh17lOaPEl1g2c-0s6yOWXgj7Rj0HXNzg>
+    <xmx:j5hmaILboRMSkBaQ2JFnif3qP50CgsMNDZKCMdwjNyUVpDx_8xSuJg>
+    <xmx:j5hmaKze31_g_I1FFgsobNVexZbCB9jo-DpTJ40n8ZDgfOUu_G-sMw>
+    <xmx:kJhmaIPm1TcDl3zfaFOfhkZg35MWNFGap4gJRnXG5cBCTdvPmOQAo-Km>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 3C3BE700069; Thu,  3 Jul 2025 10:49:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/10] dt-bindings: i3c: cdns: add Axiado AX3000 I3C
- controller
-To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Jan Kotas <jank@cadence.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>,
- Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?=
- <pgaj@cadence.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Frank Li <Frank.Li@nxp.com>, Boris Brezillon <bbrezillon@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
- soc@lists.linux.dev, linux-serial@vger.kernel.org,
- linux-i3c@lists.infradead.org
-References: <20250702-axiado-ax3000-soc-and-evaluation-board-support-v5-0-6ade160ea23b@axiado.com>
- <20250702-axiado-ax3000-soc-and-evaluation-board-support-v5-6-6ade160ea23b@axiado.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250702-axiado-ax3000-soc-and-evaluation-board-support-v5-6-6ade160ea23b@axiado.com>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: T25b3463ad7eb9185
+Date: Thu, 03 Jul 2025 16:49:30 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andrew Jeffery" <andrew@codeconstruct.com.au>,
+ "Joel Stanley" <joel@jms.id.au>
+Cc: arm <arm@kernel.org>, soc <soc@kernel.org>
+Message-Id: <f650e0dc-43aa-41ba-9ae2-8edd0ed70f64@app.fastmail.com>
+In-Reply-To: 
+ <2b301def81460b686ecb9e0fa05f42e8122419b6.camel@codeconstruct.com.au>
+References: 
+ <CACPK8XdYLf6s=GtB5bsEw4zj0JjUBob-6GhdJzivX51y+E=KEA@mail.gmail.com>
+ <2b301def81460b686ecb9e0fa05f42e8122419b6.camel@codeconstruct.com.au>
+Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 6.16
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 03/07/2025 02:22, Harshit Shah wrote:
-> Add binding for AX3000 I3C controller. So far, no changes known,
-> so it can fallback to default compatible.
-> 
-> Signed-off-by: Harshit Shah <hshah@axiado.com>
-> ---
+On Fri, Jun 27, 2025, at 06:41, Andrew Jeffery wrote:
+> On Mon, 2025-05-19 at 11:42 +0930, Joel Stanley wrote:
+>>
+>> Here's the Aspeed pull request for 6.16. Andrew has prepared the
+>> patches and created the tag, so all credit goes to him.
+>> 
+>> There's a change that Andrew calls out in the tag I didn't really
+>> like: it breaks old userspace by moving things around. The argument is
+>> that userspace was "wrong" to be using the paths under /sys. I think
+>> the cart is leading the horse if we let the yaml checking take a
+>> higher priority than breaking userspace. But I haven't the time to
+>> fight that battle, so here we are.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I would agree that compatibility with applications is more
+important here. There is a very limited set of users (in terms
+of what type of userland they run), so you can claim that this
+is under control wiht newer openbmc versions, but it does
+give a bad feeling.
 
-Best regards,
-Krzysztof
+I also think that the new node is not quite right either:
+
+-               apb {
++               apb@1e6e0000 {
+                        compatible = "simple-bus";
++                       reg = <0x1e6e0000 0x00010000>;
+                        #address-cells = <1>;
+                        #size-cells = <1>;
+                        ranges;
+
+A "simple-bus" should not have a "reg" property but should
+list the registers in the "ranges" (with the children
+being adapted accordingly). Can you try that instead?
+
+> I'm looking to get ahead of things for the next merge window. The
+> ASPEED PR didn't end up getting pulled for v6.16 - possibly it was a
+> combination of a few things: I expect it came a bit late in the cycle,
+> Joel expressed some concerns about the changes to the APB DTS nodes,
+> and well after the fact I noticed it was sent to arm@ rather than soc@
+> (though Joel suggested these were aliases, at least in the past).
+
+The main thing is that I did not see the pull request at all, for
+some reason it did not show up in patchwork at
+
+https://patchwork.kernel.org/project/linux-soc/list/?series=&submitter=&state=*&q=aspeed&archive=&delegate=
+
+I think the old arm@kernel.org address still works in theory, but
+that may have caused it if the forward did not happen for some
+reason.
+
+Note that the correct address is now soc@lists.linux.dev, so
+please start using that in case the other ones stop working
+in the future.
+
+> Were any of these factors? I'm hoping we can avoid the same
+> pitfalls this time around.
+
+Feel free to ping me on IRC, sometimes that is easier than email
+because I do miss stuff in my inbox. If you see a pull request
+in patchwork, that means I will get to it eventually though.
+
+For this release, can you send the remaining contents (anything but
+the APB node changes) first, as that should be uncontroversial.
+Please send the patch separately, so we can hopefully get the
+DT maintainers to review it first. I would like to see an Ack
+from Krzysztof or Rob on this.
+
+We should also talk about the ast2700 merge, I assume we will
+do this in a separate branch that contains all the patches
+for ast2700 rather than splitting that up by dt/config/code/...
+branches. I expect to merge a couple of new SoC platforms this
+time, and would plan to have these in one "New SoC" branch
+that I send to Linus. In future releases I would want them
+split up again.
+
+    Arnd
