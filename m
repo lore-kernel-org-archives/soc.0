@@ -1,26 +1,27 @@
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FF12FD895
-	for <soc@lists.linux.dev>; Fri,  4 Jul 2025 08:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485652FD590
+	for <soc@lists.linux.dev>; Fri,  4 Jul 2025 08:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751616964; cv=none; b=Uf3x0Vwz4xN5pe5vgNpDO5aFWloXxvwePzpWJnBxAxCtfsUWcfK7JaYzzJgGw+lTJzZ9JWY3XBujzGXcViGqDPcBlRn2doKOeHXRLD5HTlBKfcgB/AkqaqFg98OarfnpLg2NfS1P1v8EH043s6K1loKx15Ql7mMJA8nZFSebLCw=
+	t=1751616966; cv=none; b=s2M6MCHU48kCBjimEIJEz8IV1YsJH6+22VgTb/TCK+js4Bhk2mvvAUlA25OcRe1a2lXZlj7w53lWOUiRY8d2UUwJ0h6TliSOK3wNXeBe7qBtJHKXOCVJnm33yue2jr7juKWo9FlWIb84f8KIRHUPru2hJcrpphiSRkAF7EXGVIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751616964; c=relaxed/simple;
-	bh=xOF5Lbc2dDo0aSXmf+xSOjQdeqKApmGtYWTXzj8IsSY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WtKO/nGSWzffXJnCAuUmpuoupX6VOCxaqtUSf3UFy3EEAJytJ9YVb+ckGU9fKcPOPFkVYiDDJqI5usLvZ+RKs8FVaVgQMHBAFxTlz+h4XGnEKY0c4TzjLXB3ddtHBrbH69ROt05wXfXMTH+pLj2J7MhPGH54R3SVz7N2/32WR38=
+	s=arc-20240116; t=1751616966; c=relaxed/simple;
+	bh=f0cWmRh8vEcOj3FBAwwVohl3BHuBe7namHx9h1hwwqk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bj173qOP8pw6UcIej7CZg80fCfqDaUksN1hCEzhILGONAezGjsVQZmeX+jMI2+KRFbzBPEdSuGTtyeDUNfIgfJSWRT7yryTTEVTynl8ziP6Tt7TyJ29BzEzvD4Bn4nOEgXezyeG86hbf0Vrt55+W0nEYd9s63KN8+ldnJFdGKww=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
 Received: from mail.andestech.com (ATCPCS31.andestech.com [10.0.1.89])
-	by Atcsqr.andestech.com with ESMTPS id 5648EsjV091875
+	by Atcsqr.andestech.com with ESMTPS id 5648F65U092211
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 4 Jul 2025 16:14:54 +0800 (+08)
+	Fri, 4 Jul 2025 16:15:06 +0800 (+08)
 	(envelope-from ben717@andestech.com)
 Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS31.andestech.com
  (10.0.1.89) with Microsoft SMTP Server id 14.3.498.0; Fri, 4 Jul 2025
- 16:14:54 +0800
+ 16:15:06 +0800
 From: Ben Zong-You Xie <ben717@andestech.com>
 To:
 CC: <arnd@arndb.de>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
@@ -30,69 +31,246 @@ CC: <arnd@arndb.de>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <soc@lists.linux.dev>,
         <tim609@andestech.com>, Ben Zong-You Xie <ben717@andestech.com>
-Subject: [PATCH 0/8] add Voyager board support
-Date: Fri, 4 Jul 2025 16:14:43 +0800
-Message-ID: <20250704081451.2011407-1-ben717@andestech.com>
+Subject: [PATCH 6/8] riscv: dts: andes: add QiLai SoC device tree
+Date: Fri, 4 Jul 2025 16:14:49 +0800
+Message-ID: <20250704081451.2011407-7-ben717@andestech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250704081451.2011407-1-ben717@andestech.com>
+References: <20250704081451.2011407-1-ben717@andestech.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-DKIM-Results: atcpcs31.andestech.com; dkim=none;
 X-DNSRBL: 
 X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5648EsjV091875
+X-MAIL:Atcsqr.andestech.com 5648F65U092211
 
-The Voyager is a 9.6” x 9.6” Micro ATX form factor development board
-including Andes QiLai SoC. This patch series adds minimal device tree
-files for the QiLai SoC and the Voyager board [1].
+Introduce the initial device tree support for the Andes QiLai SoC.
 
-Now only support basic uart drivers to boot up into a basic console. Other
-features will be added later.
-
-The original patchset [2] has been reviewed positively in relevant mailing
-lists. Thus, send a new patchset to soc@lists.linux.dev .
-
-Also, there is a patch dependency in this patchset:
-Patch 2 <- Patch 4 <- Patch 5 <- Patch 6
+For further information, you can refer to [1].
 
 [1] https://www.andestech.com/en/products-solutions/andeshape-platforms/qilai-chip/
-[2] https://lore.kernel.org/all/20250602060747.689824-1-ben717@andestech.com/
 
-Ben Zong-You Xie (8):
-  riscv: add Andes SoC family Kconfig support
-  dt-bindings: riscv: add Andes QiLai SoC and the Voyager board bindings
-  dt-bindings: interrupt-controller: add Andes QiLai PLIC
-  dt-bindings: interrupt-controller: add Andes machine-level software
-    interrupt controller
-  dt-bindings: timer: add Andes machine timer
-  riscv: dts: andes: add QiLai SoC device tree
-  riscv: dts: andes: add Voyager board device tree
-  riscv: defconfig: enable Andes SoC
-
- .../andestech,plicsw.yaml                     |  54 +++++
- .../sifive,plic-1.0.0.yaml                    |   1 +
- .../devicetree/bindings/riscv/andes.yaml      |  25 +++
- .../bindings/timer/andestech,plmt0.yaml       |  53 +++++
- MAINTAINERS                                   |   9 +
- arch/riscv/Kconfig.errata                     |   2 +-
- arch/riscv/Kconfig.socs                       |   9 +
- arch/riscv/boot/dts/Makefile                  |   1 +
- arch/riscv/boot/dts/andes/Makefile            |   2 +
- arch/riscv/boot/dts/andes/qilai-voyager.dts   |  28 +++
- arch/riscv/boot/dts/andes/qilai.dtsi          | 186 ++++++++++++++++++
- arch/riscv/configs/defconfig                  |   1 +
- 12 files changed, 370 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
- create mode 100644 Documentation/devicetree/bindings/riscv/andes.yaml
- create mode 100644 Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
- create mode 100644 arch/riscv/boot/dts/andes/Makefile
- create mode 100644 arch/riscv/boot/dts/andes/qilai-voyager.dts
+Signed-off-by: Ben Zong-You Xie <ben717@andestech.com>
+---
+ MAINTAINERS                          |   2 +
+ arch/riscv/boot/dts/andes/qilai.dtsi | 186 +++++++++++++++++++++++++++
+ 2 files changed, 188 insertions(+)
  create mode 100644 arch/riscv/boot/dts/andes/qilai.dtsi
 
---
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 07a7abc9729c..ede4e21127f6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21288,9 +21288,11 @@ F:	include/linux/irqchip/riscv-imsic.h
+ RISC-V ANDES SoC Support
+ M:	Ben Zong-You Xie <ben717@andestech.com>
+ S:	Maintained
++T:	git: https://github.com/ben717-linux/linux
+ F:	Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
+ F:	Documentation/devicetree/bindings/riscv/andes.yaml
+ F:	Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
++F:	arch/riscv/boot/dts/andes/
+ 
+ RISC-V ARCHITECTURE
+ M:	Paul Walmsley <paul.walmsley@sifive.com>
+diff --git a/arch/riscv/boot/dts/andes/qilai.dtsi b/arch/riscv/boot/dts/andes/qilai.dtsi
+new file mode 100644
+index 000000000000..de3de32f8c39
+--- /dev/null
++++ b/arch/riscv/boot/dts/andes/qilai.dtsi
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright (C) 2025 Andes Technology Corporation. All rights reserved.
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/interrupt-controller/irq.h>
++
++/ {
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		timebase-frequency = <62500000>;
++
++		cpu0: cpu@0 {
++			compatible = "andestech,ax45mp", "riscv";
++			device_type = "cpu";
++			reg = <0>;
++			riscv,isa-base = "rv64i";
++			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
++					       "zicntr", "zicsr", "zifencei",
++					       "zihpm", "xandespmu";
++			mmu-type = "riscv,sv39";
++			clock-frequency = <100000000>;
++			i-cache-size = <0x8000>;
++			i-cache-sets = <256>;
++			i-cache-line-size = <64>;
++			d-cache-size = <0x8000>;
++			d-cache-sets = <128>;
++			d-cache-line-size = <64>;
++			next-level-cache = <&l2_cache>;
++
++			cpu0_intc: interrupt-controller {
++				compatible = "andestech,cpu-intc", "riscv,cpu-intc";
++				#interrupt-cells = <1>;
++				interrupt-controller;
++			};
++		};
++
++		cpu1: cpu@1 {
++			compatible = "andestech,ax45mp", "riscv";
++			device_type = "cpu";
++			reg = <1>;
++			riscv,isa-base = "rv64i";
++			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
++					       "zicntr", "zicsr", "zifencei",
++					       "zihpm", "xandespmu";
++			mmu-type = "riscv,sv39";
++			clock-frequency = <100000000>;
++			i-cache-size = <0x8000>;
++			i-cache-sets = <256>;
++			i-cache-line-size = <64>;
++			d-cache-size = <0x8000>;
++			d-cache-sets = <128>;
++			d-cache-line-size = <64>;
++			next-level-cache = <&l2_cache>;
++
++			cpu1_intc: interrupt-controller {
++				compatible = "andestech,cpu-intc",
++					     "riscv,cpu-intc";
++				#interrupt-cells = <1>;
++				interrupt-controller;
++			};
++		};
++
++		cpu2: cpu@2 {
++			compatible = "andestech,ax45mp", "riscv";
++			device_type = "cpu";
++			reg = <2>;
++			riscv,isa-base = "rv64i";
++			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
++					       "zicntr", "zicsr", "zifencei",
++					       "zihpm", "xandespmu";
++			mmu-type = "riscv,sv39";
++			clock-frequency = <100000000>;
++			i-cache-size = <0x8000>;
++			i-cache-sets = <256>;
++			i-cache-line-size = <64>;
++			d-cache-size = <0x8000>;
++			d-cache-sets = <128>;
++			d-cache-line-size = <64>;
++			next-level-cache = <&l2_cache>;
++
++			cpu2_intc: interrupt-controller {
++				compatible = "andestech,cpu-intc",
++					     "riscv,cpu-intc";
++				#interrupt-cells = <1>;
++				interrupt-controller;
++			};
++		};
++
++		cpu3: cpu@3 {
++			compatible = "andestech,ax45mp", "riscv";
++			device_type = "cpu";
++			reg = <3>;
++			riscv,isa-base = "rv64i";
++			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
++					       "zicntr", "zicsr", "zifencei",
++					       "zihpm", "xandespmu";
++			mmu-type = "riscv,sv39";
++			clock-frequency = <100000000>;
++			i-cache-size = <0x8000>;
++			i-cache-sets = <256>;
++			i-cache-line-size = <64>;
++			d-cache-size = <0x8000>;
++			d-cache-sets = <128>;
++			d-cache-line-size = <64>;
++			next-level-cache = <&l2_cache>;
++
++			cpu3_intc: interrupt-controller {
++				compatible = "andestech,cpu-intc",
++					     "riscv,cpu-intc";
++				#interrupt-cells = <1>;
++				interrupt-controller;
++			};
++		};
++	};
++
++	soc {
++		compatible = "simple-bus";
++		ranges;
++		interrupt-parent = <&plic>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++
++		plmt: timer@100000 {
++			compatible = "andestech,qilai-plmt", "andestech,plmt0";
++			reg = <0x0 0x00100000 0x0 0x100000>;
++			interrupts-extended = <&cpu0_intc 7>,
++					      <&cpu1_intc 7>,
++					      <&cpu2_intc 7>,
++					      <&cpu3_intc 7>;
++		};
++
++		l2_cache: cache-controller@200000 {
++			compatible = "andestech,qilai-ax45mp-cache",
++				     "andestech,ax45mp-cache", "cache";
++			reg = <0x0 0x00200000 0x0 0x100000>;
++			interrupts = <16 IRQ_TYPE_LEVEL_HIGH>;
++			cache-line-size = <64>;
++			cache-level = <2>;
++			cache-sets = <2048>;
++			cache-size = <0x200000>;
++			cache-unified;
++		};
++
++		plic_sw: interrupt-controller@400000 {
++			compatible = "andestech,qilai-plicsw",
++				     "andestech,plicsw";
++			reg = <0x0 0x00400000 0x0 0x400000>;
++			interrupts-extended = <&cpu0_intc 3>,
++					      <&cpu1_intc 3>,
++					      <&cpu2_intc 3>,
++					      <&cpu3_intc 3>;
++		};
++
++		plic: interrupt-controller@2000000 {
++			compatible = "andestech,qilai-plic",
++				     "andestech,nceplic100";
++			reg = <0x0 0x02000000 0x0 0x2000000>;
++			#address-cells = <0>;
++			#interrupt-cells = <2>;
++			interrupt-controller;
++			interrupts-extended = <&cpu0_intc 11>, <&cpu0_intc 9>,
++					      <&cpu1_intc 11>, <&cpu1_intc 9>,
++					      <&cpu2_intc 11>, <&cpu2_intc 9>,
++					      <&cpu3_intc 11>, <&cpu3_intc 9>;
++			riscv,ndev = <71>;
++		};
++
++		uart0: serial@30300000 {
++			compatible = "andestech,uart16550", "ns16550a";
++			reg = <0x0 0x30300000 0x0 0x100000>;
++			interrupts = <9 IRQ_TYPE_LEVEL_HIGH>;
++			clock-frequency = <50000000>;
++			reg-offset = <32>;
++			reg-shift = <2>;
++			reg-io-width = <4>;
++			no-loopback-test;
++		};
++	};
++};
+-- 
 2.34.1
+
