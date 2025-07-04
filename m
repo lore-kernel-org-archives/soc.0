@@ -1,197 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D495C221739
-	for <soc@lists.linux.dev>; Fri,  4 Jul 2025 06:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296C71E47AD;
+	Fri,  4 Jul 2025 07:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751609663; cv=none; b=bYuZWKeXG64ut7qVxiUhIQZnH6CHzoZ+aZyxtweNdlXwwzs4IMYrNy6JoFa7lOGC7MZA5ModRXHFasCf+t8QOjsecw2+Sdf21xgtjuYCVT/PMF6r4bzHQhh00asEfk/mXXji45CErJUngPhRB+2IcYcG2jrokqp9sj5oxnryjJs=
+	t=1751612543; cv=none; b=gV591XSbxpgB6ZvQ14w2tLOEm5rSvM0tpIoQeZ2wrxvxnE08eQ++YwIDfJjebkJkp9C9tKB1Bu4oC7kmZoDm5rAwLT1qqQYnfC0C5RmV06Tnn+LjaLzgXvrfehn808AssPfLRSNOAMeUXnv46Idq9EuWxm4tW7IgZEjzanSmu8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751609663; c=relaxed/simple;
-	bh=b7KThyfeNmUSWa4tqY0wM2x6LwBm/68E9EK8yCkG8oY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bCOjm/O9Mx06LpMifjzOI6ne6BCcX7bPLIae9bnejgI6IJYWH6nM1e414oU0Hugzeh7NPpztoOc6uQCXjUibipr/GYaxHwmrYQ7bybDcMOrVAW71bhc+1JYOPvuOI/khrqnW3FFvmboDwQA6UFyP4sJp+sR9YSqBXkoimi8SCxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=I/L/BLQx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751612543; c=relaxed/simple;
+	bh=jr9AGxZaoLH141StMmIlo99XBnkohTJbr+5ZlwGj9dA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HFrznZi9qhh9hVU0Ah8D9uEVvr/GVOlvEyqbFPnpPieNTx0s8prmo4itRLik3qgyCMWPRgCXM2og5QulMqaihlIibKvHsa3UauHy1TVlbEwrKFqCjQc+aqHs49BTVj7/zY9deow2722Y4khQtRARZFvcTgtbY2EkBPC2DC+RtY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUAlVfzH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="I/L/BLQx"
-Received: by smtp.kernel.org (Postfix)
-	id 8EB68C4CEEF; Fri,  4 Jul 2025 06:14:23 +0000 (UTC)
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6E0D3C4CEEB;
-	Fri,  4 Jul 2025 06:14:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E0D3C4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1751609657;
-	bh=7bXrPY3H94g7YXg0H9ndWtt+CBCWKcz0VdnTPz/W2PY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=I/L/BLQx8EPDv/dljMtyfKF3uXgaD99LfGihR1GlpNNuOreHi7DEHI6QsWkUaUjr2
-	 UckOObdSfN8sFHkvFJvnBwmIUwYz9nfveAEsPLMy/3vgzbPSuzkrR12GgFmcIDmLyF
-	 UM79N7mUQGQ7ancmkQgpcBQSPXxF1cPK3LlLkRjGF3X5AMw8M+CS++pA8VinB3fHT4
-	 4B7rht7pjXNK9s9ifHWeR4ke2uBCPKpf9sJd2/eno8peKBrR+QsyEYI9ttGK0yBaII
-	 qTk0a5Q9ZSwhaTMxz77Mnqn5hfoS5EcUbG/3b2KGlX12fx9y0XQQQlp/8Jyhi9JtYE
-	 2j54MlIrZFHGg==
-Received: from [192.168.68.112] (unknown [180.150.112.153])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 1C83C640A2;
-	Fri,  4 Jul 2025 14:14:15 +0800 (AWST)
-Message-ID: <ef04b779397a28f8b3a4ff3148848d1e5f08f32a.camel@codeconstruct.com.au>
-Subject: Re: [GIT PULL] ARM: aspeed: devicetree changes for 6.16
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>
-Cc: arm <arm@kernel.org>, soc <soc@kernel.org>
-Date: Fri, 04 Jul 2025 15:44:14 +0930
-In-Reply-To: <f650e0dc-43aa-41ba-9ae2-8edd0ed70f64@app.fastmail.com>
-References: 
-	<CACPK8XdYLf6s=GtB5bsEw4zj0JjUBob-6GhdJzivX51y+E=KEA@mail.gmail.com>
-	 <2b301def81460b686ecb9e0fa05f42e8122419b6.camel@codeconstruct.com.au>
-	 <f650e0dc-43aa-41ba-9ae2-8edd0ed70f64@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUAlVfzH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 621C7C4CEE3;
+	Fri,  4 Jul 2025 07:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751612542;
+	bh=jr9AGxZaoLH141StMmIlo99XBnkohTJbr+5ZlwGj9dA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qUAlVfzHgfyFoB8PVvqTpAgLx6sTUU0ZH07cQC9eUnwi3WV4nxe41FUxoLH8lWvSC
+	 YFdNaLVuNHO1wR4kbWJwaTPje+kin7Sz8f0w0JRSueQ3DTAYeiw3p0Wa1h3uSfv00d
+	 a3diaR3WXLGSKlQOnVN1ebAGfnIz5wtfXKVj0c6FtDJfwYRQrLcJmSdSmAXmExCT+e
+	 JARZstyIsuEV308BHKJcxzOkkmaL2QihP4v54OfZc5DwSt0K0CCLpzE4hneFD026Hk
+	 ZNKYSOmGFketj1YxW6cIczAZ8RASEzeeafLQxt51uWkzFn5Dw3XQ6KwaxwUeRScaoK
+	 gj4k2piXiXuIw==
+Message-ID: <9ca025e9-c6ad-4ecb-803b-73d2aded86d4@kernel.org>
+Date: Fri, 4 Jul 2025 09:02:15 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 05/10] dt-bindings: serial: cdns: add Axiado AX3000
+ UART controller
+To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Jan Kotas <jank@cadence.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?=
+ <pgaj@cadence.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Frank Li <Frank.Li@nxp.com>, Boris Brezillon <bbrezillon@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+ soc@lists.linux.dev, linux-serial@vger.kernel.org,
+ linux-i3c@lists.infradead.org
+References: <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-0-cebd810e7e26@axiado.com>
+ <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-5-cebd810e7e26@axiado.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-5-cebd810e7e26@axiado.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+On 03/07/2025 20:20, Harshit Shah wrote:
+> Add binding for AX3000 UART controller. So far, no changes known,
+> so it can fallback to default compatible.
+> 
+> Signed-off-by: Harshit Shah <hshah@axiado.com>
+> ---
 
-On Thu, 2025-07-03 at 16:49 +0200, Arnd Bergmann wrote:
-> On Fri, Jun 27, 2025, at 06:41, Andrew Jeffery wrote:
-> > On Mon, 2025-05-19 at 11:42 +0930, Joel Stanley wrote:
-> > >=20
-> > > Here's the Aspeed pull request for 6.16. Andrew has prepared the
-> > > patches and created the tag, so all credit goes to him.
-> > >=20
-> > > There's a change that Andrew calls out in the tag I didn't really
-> > > like: it breaks old userspace by moving things around. The argument i=
-s
-> > > that userspace was "wrong" to be using the paths under /sys. I think
-> > > the cart is leading the horse if we let the yaml checking take a
-> > > higher priority than breaking userspace. But I haven't the time to
-> > > fight that battle, so here we are.
->=20
-> I would agree that compatibility with applications is more
-> important here. There is a very limited set of users (in terms
-> of what type of userland they run), so you can claim that this
-> is under control wiht newer openbmc versions, but it does
-> give a bad feeling.
->=20
-> I also think that the new node is not quite right either:
->=20
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 apb {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 apb@1e6e0000 {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatib=
-le =3D "simple-bus";
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x1e6=
-e0000 0x00010000>;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address=
--cells =3D <1>;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-ce=
-lls =3D <1>;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ranges;
->=20
-> A "simple-bus" should not have a "reg" property but should
-> list the registers in the "ranges" (with the children
-> being adapted accordingly). Can you try that instead?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Oh, definitely. Thanks for the feedback there, unfortunately no-one
-responded on the list at the time to point out that mistake.
-
->=20
-> > I'm looking to get ahead of things for the next merge window. The
-> > ASPEED PR didn't end up getting pulled for v6.16 - possibly it was a
-> > combination of a few things: I expect it came a bit late in the cycle,
-> > Joel expressed some concerns about the changes to the APB DTS nodes,
-> > and well after the fact I noticed it was sent to arm@ rather than soc@
-> > (though Joel suggested these were aliases, at least in the past).
->=20
-> The main thing is that I did not see the pull request at all, for
-> some reason it did not show up in patchwork at
->=20
-> https://patchwork.kernel.org/project/linux-soc/list/?series=3D&submitter=
-=3D&state=3D*&q=3Daspeed&archive=3D&delegate=3D
-
-Ah, I've added a note to check patchwork after we send a PR. Thanks.
-
->=20
-> I think the old arm@kernel.org=C2=A0address still works in theory, but
-> that may have caused it if the forward did not happen for some
-> reason.
->=20
-> Note that the correct address is now soc@lists.linux.dev, so
-> please start using that in case the other ones stop working
-> in the future.
-
-Ack. So I was wondering why I'd been sending to soc@kernel.org. Looking
-at MAINTAINERS, Konstantin updated the entry for 6.12. I think I may
-have been using the old address because soc@kernel.org is still
-mentioned in Documentation/process/maintainer-soc.rst (as of linux-
-next/master @ 8d6c5833).
-
-I've made a note to use the soc@lists.linux.dev address in the future.
-
->=20
-> > Were any of these factors? I'm hoping we can avoid the same
-> > pitfalls this time around.
->=20
-> Feel free to ping me on IRC, sometimes that is easier than email
-> because I do miss stuff in my inbox.
->=20
-
-Will do.
-
->  If you see a pull request
-> in patchwork, that means I will get to it eventually though.
->=20
-> For this release, can you send the remaining contents (anything but
-> the APB node changes) first, as that should be uncontroversial.
-> Please send the patch separately, so we can hopefully get the
-> DT maintainers to review it first. I would like to see an Ack
-> from Krzysztof or Rob on this.
-
-I've dropped the APB patch from the aspeed/dt branch, so the 6.17 PR
-won't contain it. I will rework it for next cycle and try to get the
-attention of Krzysztof and Rob again.
-
-My goal is to make it as easy as we can for people to check their
-devicetrees against the bindings, and having to wade through massive
-amounts of fairly spurious output doesn't help anyone (on top of the
-remaining warnings that the ASPEED devicetrees unfortunately produce).
-
->=20
-> We should also talk about the ast2700 merge, I assume we will
-> do this in a separate branch that contains all the patches
-> for ast2700 rather than splitting that up by dt/config/code/...
-> branches.
->=20
-
-Yep, makes sense.
-
->  I expect to merge a couple of new SoC platforms this
-> time, and would plan to have these in one "New SoC" branch
-> that I send to Linus. In future releases I would want them
-> split up again.
-
-I don't expect to be merging any of the AST2700 bits for 6.17, the
-feedback on the existing series suggests a few more iterations might be
-required before its ready.
-
-Regardless, when we do get around to applying that work, I'll get in
-touch and we can coordinate it as you prefer.
-
-Thanks for the response!
-
-Andrew
+Best regards,
+Krzysztof
