@@ -1,27 +1,27 @@
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5502FD879
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA712FD898
 	for <soc@lists.linux.dev>; Fri,  4 Jul 2025 08:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751616966; cv=none; b=cXi5AhbnU9E1sXK1ilRGmKSdHBhVFhZxahMIHYZAKvA2VPO263S69/wvXOQnhf1jAybCVPE3elNftOTR7V79eNAzKaQcfzE8hJIcpRxHGB/5KYOE4f4uFa14KxIG5b4wMcIOMcOGJaCSewF2rMc7gCiL4eVZLk1VJ4A4b9Xkvfw=
+	t=1751616966; cv=none; b=gzItufzliLDJqHLFf39Ot6VDPHmQKjApwtkWg7qa/IUXlZpDtWO2e9mXMwcHGvcmkGJ+6T0WO05WXR2+a7amO5vbjYHNjdNPZd124kIYZOE/jXfsOFjkHR53VeVKWyjZXXzjwQDOEiEOODSOzFnDwGfakjxKxGe8hhGJeRC5SWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751616966; c=relaxed/simple;
-	bh=DPzQSTJp/MgbbfE2UjHSoFsHM/mpFKBTXQhQWE9UqM8=;
+	bh=zylAOvDJUdBHWCYEsmH/F3qbW1VoaC4/zwHAJ5vXbps=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JDlmY1xdQEbmNO4NbVKV4H1kWShYVQCNU6wHyGVjl8AOyb5e2EhILuUbfFaBBsOqW5mYwDXEVxyPC5yKMHAEAGshx7DwLhRmmY9JMsOSkvGT8aukKyLfBwGkjBL3AqCxhfnuHs5nD6m8ySt8k5Glb9krOCGDsTGfs56m/lXe7zY=
+	 MIME-Version:Content-Type; b=rzVlj9Ktt9RmMuKlCP+qRust8/tW/6stOfCZ+btxpQVNQdOqsd3EH9Z5/ftaDwVDc90Z55Ytvhr5592M09Gnbr39RRrH4Y+65vVz/er/8KKIDSYHp7a6VAZ8cF6KAfxJlvnKcNWFKGwbpajd0tt7BJ2EvqzciMw3ltX06X135M0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
 Received: from mail.andestech.com (ATCPCS31.andestech.com [10.0.1.89])
-	by Atcsqr.andestech.com with ESMTPS id 5648F1xE092102
+	by Atcsqr.andestech.com with ESMTPS id 5648EwqC091878
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 4 Jul 2025 16:15:01 +0800 (+08)
+	Fri, 4 Jul 2025 16:14:58 +0800 (+08)
 	(envelope-from ben717@andestech.com)
 Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS31.andestech.com
  (10.0.1.89) with Microsoft SMTP Server id 14.3.498.0; Fri, 4 Jul 2025
- 16:15:01 +0800
+ 16:14:57 +0800
 From: Ben Zong-You Xie <ben717@andestech.com>
 To:
 CC: <arnd@arndb.de>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
@@ -30,12 +30,10 @@ CC: <arnd@arndb.de>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
         <daniel.lezcano@linaro.org>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <soc@lists.linux.dev>,
-        <tim609@andestech.com>, Ben Zong-You Xie <ben717@andestech.com>,
-        Conor Dooley
-	<conor.dooley@microchip.com>
-Subject: [PATCH 5/8] dt-bindings: timer: add Andes machine timer
-Date: Fri, 4 Jul 2025 16:14:48 +0800
-Message-ID: <20250704081451.2011407-6-ben717@andestech.com>
+        <tim609@andestech.com>, Ben Zong-You Xie <ben717@andestech.com>
+Subject: [PATCH 2/8] dt-bindings: riscv: add Andes QiLai SoC and the Voyager board bindings
+Date: Fri, 4 Jul 2025 16:14:45 +0800
+Message-ID: <20250704081451.2011407-3-ben717@andestech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250704081451.2011407-1-ben717@andestech.com>
 References: <20250704081451.2011407-1-ben717@andestech.com>
@@ -50,94 +48,66 @@ Content-Type: text/plain
 X-DKIM-Results: atcpcs31.andestech.com; dkim=none;
 X-DNSRBL: 
 X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5648F1xE092102
+X-MAIL:Atcsqr.andestech.com 5648EwqC091878
 
-Add the DT binding documentation for Andes machine timer.
+Add DT binding documentation for the Andes QiLai SoC and the
+Voyager development board.
 
-The RISC-V architecture defines a machine timer that provides a real-time
-counter and generates timer interrupts. Andes machiner timer (PLMT0) is
-the implementation of the machine timer, and it contains memory-mapped
-registers (mtime and mtimecmp). This device supports up to 32 cores.
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Ben Zong-You Xie <ben717@andestech.com>
 ---
- .../bindings/timer/andestech,plmt0.yaml       | 53 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 54 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
+ .../devicetree/bindings/riscv/andes.yaml      | 25 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/andes.yaml
 
-diff --git a/Documentation/devicetree/bindings/timer/andestech,plmt0.yaml b/Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
+diff --git a/Documentation/devicetree/bindings/riscv/andes.yaml b/Documentation/devicetree/bindings/riscv/andes.yaml
 new file mode 100644
-index 000000000000..90b612096004
+index 000000000000..aa1edf1fdec7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
-@@ -0,0 +1,53 @@
++++ b/Documentation/devicetree/bindings/riscv/andes.yaml
+@@ -0,0 +1,25 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/timer/andestech,plmt0.yaml#
++$id: http://devicetree.org/schemas/riscv/andes.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Andes machine-level timer
-+
-+description:
-+  The Andes machine-level timer device (PLMT0) provides machine-level timer
-+  functionality for a set of HARTs on a RISC-V platform. It has a single
-+  fixed-frequency monotonic time counter (MTIME) register and a time compare
-+  register (MTIMECMP) for each HART connected to the PLMT0. A timer interrupt is
-+  generated if MTIME >= MTIMECMP.
++title: Andes SoC-based boards
 +
 +maintainers:
 +  - Ben Zong-You Xie <ben717@andestech.com>
 +
++description:
++  Andes SoC-based boards
++
 +properties:
++  $nodename:
++    const: '/'
 +  compatible:
-+    items:
-+      - enum:
-+          - andestech,qilai-plmt
-+      - const: andestech,plmt0
++    oneOf:
++      - items:
++          - enum:
++              - andestech,voyager
++          - const: andestech,qilai
 +
-+  reg:
-+    maxItems: 1
-+
-+  interrupts-extended:
-+    minItems: 1
-+    maxItems: 32
-+    description:
-+      Specifies which harts are connected to the PLMT0. Each item must points
-+      to a riscv,cpu-intc node, which has a riscv cpu node as parent. The
-+      PLMT0 supports 1 hart up to 32 harts.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts-extended
-+
-+examples:
-+  - |
-+    interrupt-controller@100000 {
-+      compatible = "andestech,qilai-plmt", "andestech,plmt0";
-+      reg = <0x100000 0x100000>;
-+      interrupts-extended = <&cpu0intc 7>,
-+                            <&cpu1intc 7>,
-+                            <&cpu2intc 7>,
-+                            <&cpu3intc 7>;
-+    };
++additionalProperties: true
 diff --git a/MAINTAINERS b/MAINTAINERS
-index df309a360615..07a7abc9729c 100644
+index 6135a36a54a8..f4b4261d3c44 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -21290,6 +21290,7 @@ M:	Ben Zong-You Xie <ben717@andestech.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
- F:	Documentation/devicetree/bindings/riscv/andes.yaml
-+F:	Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
+@@ -21285,6 +21285,11 @@ F:	drivers/irqchip/irq-riscv-intc.c
+ F:	include/linux/irqchip/riscv-aplic.h
+ F:	include/linux/irqchip/riscv-imsic.h
  
++RISC-V ANDES SoC Support
++M:	Ben Zong-You Xie <ben717@andestech.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/riscv/andes.yaml
++
  RISC-V ARCHITECTURE
  M:	Paul Walmsley <paul.walmsley@sifive.com>
+ M:	Palmer Dabbelt <palmer@dabbelt.com>
 -- 
 2.34.1
 
