@@ -1,79 +1,73 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC5578F5D
-	for <soc@lists.linux.dev>; Fri,  4 Jul 2025 15:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419FB21D3F5
+	for <soc@lists.linux.dev>; Fri,  4 Jul 2025 18:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751642678; cv=none; b=W9eW0LN0HrQgjLYhu/LdbwWB2/Y2O76LitdRi1fM6sTzgog+dIKnVSINIbcb4xOnwCdD+Q+rFhU+0avB9LD1/aGw86TZFZlXw3IWbCgB6Sk4F87ClZPAnjI5tHGwYZ6pKXtqfDRdX98klxtQpO3vp07BGZ0CPWVSpqU/CRrmjFw=
+	t=1751652839; cv=none; b=ftLZPrarGrtZxmynOeqCWvo7mBAJ0zUzMFFfB7DxMdfshv3lSeuNwYWQPPiD3bqZbrduUmmQoSvt1jN6xR4QQa+exIp+8JIsNaqV1LpxjrqrOFkn0f9oZ7PqhmErniv3Y4DysQdiV6jYpkQcvSXGz8quE+qQTHz6LkqPYMTb3sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751642678; c=relaxed/simple;
-	bh=1RaZjBaFK4O9m2hUkR0ejRqsoogZr8wxydc4okUFd4k=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=sgNFiXAanOZmNttTNDJzKEC/vJykDJG6eW3Io8MBSzxjmidjbmDaLojmH5lGEgt7HLQkOh/qbX2Ds/9dwaySE3WmRmmhXANweOi9y85DEk7chDJzHBIfr4Ki4wTuv32737kj4qROfFcyzAxAX0D8XMwK2WGym2VbUjM6ygN/LkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Lza9JkLP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dxiUTf/1; arc=none smtp.client-ip=103.168.172.151
+	s=arc-20240116; t=1751652839; c=relaxed/simple;
+	bh=WDYS8T9JY6Hv2PXLaAlNFU54KtY4q3YaUISk0Bhzznk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=Grtqem5yl5gp804NCbrdwoo1ofsWYmFZO/wM4EVQ2dMc7ZToNZy/9476W1pWSP7wOB+AUYjmLCLMJCa6j2JEM6GU6im80WEhwvVmOEYHenW+ur+VLsWahIUDVafo3EFEyF1zPr2QUQoFwBqCYTipeKEn9ey8AAFKOMAFTR/2loY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SN3Kefkv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PVMRW+K+; arc=none smtp.client-ip=202.12.124.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Lza9JkLP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dxiUTf/1"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SN3Kefkv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PVMRW+K+"
 Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 5ABB2EC0B7C;
-	Fri,  4 Jul 2025 11:24:35 -0400 (EDT)
+	by mailfout.stl.internal (Postfix) with ESMTP id 583D31D0011E;
+	Fri,  4 Jul 2025 14:13:56 -0400 (EDT)
 Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Fri, 04 Jul 2025 11:24:35 -0400
+  by phl-compute-05.internal (MEProxy); Fri, 04 Jul 2025 14:13:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1751642675;
-	 x=1751729075; bh=OxkN8U0d6DLuyWGhk7/eLOhPT1m1WWG0eL9XC0pIFr0=; b=
-	Lza9JkLPgRTi72q0CeUE1aSO92cBDepyIq07HiZRYm49g0ed9gUJ5WwPIbg03Agx
-	ETl0ivARZlgi2RYninbmTmiJmbP4pCXjqVrW8cFUEMMe8tQ/Cyq0gEz7uBLn6Icg
-	Mi1k12uBxYwgsaL0v2FmBijBfYLNjBOiOAvq1Hpt9Ajw+a39wKnbePKYdLbmv6au
-	v2RIIEYMqfWQAYuO31E39j1KzAd2EGrvUQgoSZxqziEx2lJQ0+KbfqjZ0wmc7m/J
-	meqj5rmsGeyOuSsF9+Pwm/noCawjF2I4kRlmRnQMCM7/JfzDE5iyA3BMsA0yk3cz
-	R86QvRN9PYsxUavWRgzk1A==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1751652836; x=1751739236; bh=1v
+	OdhhKTssMqYb+9TXbU/Ao2WvskkronR7j77XIUqVQ=; b=SN3Kefkvk1WfRS2fcq
+	LPbOvAjYZWFV7lBIEuWybWjfJtAXnI29jW3U02FLd5SoYUvTWE0aK6++Uc534IqS
+	83NfN/YbkA8Qq4bH86jPJL8hMUALCz5aWJyl9bWXq8SSY6a4SmpF13L4qA7IXtyo
+	6v2glerpi7IHNUUpGZ9tczfu8i997Ad4xNk8jERo+LEPVowRaisWiguhI5wpx7+q
+	XXqherd722nIeBPqtRjzWQF0XiqPVHTgBysxZ2ikI/9iSdjp2nsBXnDK/Y5Qz7cz
+	Ty/pWwambaxBjCt3J3YNOq6gva8aX0V3NfXHbkZWKlKV1UbdIQbhtU0HNo9DCW2U
+	wU5A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751642675; x=
-	1751729075; bh=OxkN8U0d6DLuyWGhk7/eLOhPT1m1WWG0eL9XC0pIFr0=; b=d
-	xiUTf/1s9MLiP438ZHeuS+7xaEEutv9Mn3/TdWRxhYadPIaMe7EWFZXPZclHpqra
-	RKz6rmVnOKyO1GgbACZ6IlCdfoNhcjdsT4FUMUnjb4wDO6uWLuLeGsTr6/IyELim
-	ZpoZhm3wIHOi/E/LMRooNtxfO7yuOD+YC64iDzxQWX31EcrSB9Gl1wwPHnVZEXeF
-	9dYRW1v1Dzlprpa3tdCGrh14EshhswUvwhD6QYBC6dJ8Rc322PT4hBsJRIgWbtZP
-	83tMUkLiDSQRsy0LxCrSy00LrUEHZXYiCSghv5pMH5e+U0KubT45xqc+4MJxGcaa
-	rfNZ6rCQCW+0fXJTmfkAQ==
-X-ME-Sender: <xms:MfJnaNvN37HV7zgfq6jdTA8JpiW-nE2rx-WKJkpWyg7mvpap_M0SVA>
-    <xme:MfJnaGeEF8cn4ICmeJVjqmjyQZLiMCOScRoieyHFnp9MrngymApUVSrPFgsgQmbKt
-    Q1otTNuPvQW6D0aGGU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvfeehudcutefuodetggdotefrod
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1751652836; x=1751739236; bh=1vOdhhKTssMqYb+9TXbU/Ao2Wvsk
+	kronR7j77XIUqVQ=; b=PVMRW+K+hf0EQQBSs8Xkhyq/8L8jbYfS8ZiCI9AiyjVH
+	hmxvfHt6Qs5GlOBRvwnHQWVuqFCVHzbWX51caPImV78ZO/ndijlWoVcGm3nIsHsn
+	PDQ4psb5Dd0txIr5jF4y28ov7rcIsbFiJ4V2PgCGskDCEvimhxnvAph/X7Eod+62
+	42Hy6/e8MW7Obdr7zMWCRJUZuNRsTGvpZdWLsxAyFZXZhz9rFOW8CGBnbS1qvGCU
+	wweTmKtm8ozzAD4fpR2aVbTbN0IMY9dxEkSvQ4OJv1CEa5SnT6S8X3tjDOYG9sPh
+	hE1JKY5nXIGMtoqjN3S8D4ZxhHxW8kLYcw+oc0jntA==
+X-ME-Sender: <xms:4xloaNStHarFI8YGcJ8KdGmsA8TQowNjo5cPvXmpNpwiTSlFD7v-jQ>
+    <xme:4xloaGyXNXhCvQ_LSszag2QSLVe01y1qVx2WwIv6HvUUoUIHJqytzdleM-XMoUs5d
+    moVLY0wOTZlFy-yGiY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvfeekhecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeekvdeuhfeitdeuieejvedtieeijeefleevffefleekieetjeffvdekgfetuefhgfen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
-    thhtohepvdegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrd
-    hmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohepghhrvghgohhrhidrtghlvghm
-    vghnthessghoohhtlhhinhdrtghomhdprhgtphhtthhopeguuhhjvgesughujhgvmhhihh
-    grnhhovhhitgdrgiihiidprhgtphhtthhopehsvggsrghsthhirghnrdhhvghsshgvlhgs
-    rghrthhhsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghhpihgttgholhhisehighgrlh
-    hirgdrtghomhdprhgtphhtthhopehtohhnhidrlhhutghksehinhhtvghlrdgtohhmpdhr
-    tghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkvg
-    gvsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghl
-    rdhorhhg
-X-ME-Proxy: <xmx:MfJnaAxCTD5GLVOvef9h-xijbwlCKGjDQPooOQ9DsoQJ0-bnQyfE8g>
-    <xmx:MfJnaENTwpkQ739gsNO-gNbeGdk_tRKEoXqiGjI-ufMAEDIpjF88eQ>
-    <xmx:MfJnaN9pkyb4X-XNQ35bfM296M3Ectl9NE9XYjtHFlkWMgdmYd9yzA>
-    <xmx:MfJnaEUKXVpOXcgkgxq-JQ0wG5cu-cG3-Cp1eCGhTUovMkmqfJ01fQ>
-    <xmx:M_JnaEPhlG2tNQv7xOmXCRaxq_6QiJPS3simNK2BQ7SokKX2A-erjzIr>
+    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
+    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
+    duleeigeekveeugeettdejtddtleeghefhvdfhueehtefhudelffduvdeuleevteenucff
+    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthht
+    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhorhhvrghlughssehlih
+    hnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhm
+    qdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhope
+    hsohgtsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgv
+    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:4xloaC3ZzIt5-GKYKHMJRttiab8B5ITsQIMZcRl2xOOtKBG9w3WRig>
+    <xmx:4xloaFBSthHMWoB3X8zyug4qrOTW1rNraYlteZGaIKNmg0d4cvsh0A>
+    <xmx:4xloaGiwmNagUydV9_evHPKDQ1Rb7xG-gIf2PsgHLQTXIhauMYXxuw>
+    <xmx:4xloaJooR95pO3QyD4f_23w8ZdeX925Ps_Iz13osyUazueHiKCaaBg>
+    <xmx:5BloaCqXORqigdBE-Ub9aZGYfl3SeSD3Q6l08nywVRRRib-kkVTUvRj8>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CBABA700065; Fri,  4 Jul 2025 11:24:33 -0400 (EDT)
+	id DF28F700065; Fri,  4 Jul 2025 14:13:55 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -81,47 +75,79 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T2c71400495fa2685
-Date: Fri, 04 Jul 2025 17:24:13 +0200
+Date: Fri, 04 Jul 2025 20:13:20 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Lubomir Rintel" <lkundrak@v3.sk>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Andrew Lunn" <andrew@lunn.ch>,
- "Gregory Clement" <gregory.clement@bootlin.com>,
- "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
- "Kees Cook" <kees@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
- "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
- =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Cc: "David Wronek" <david@mainlining.org>, "Karel Balej" <balejk@matfyz.cz>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
- phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
- soc@lists.linux.dev, "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Message-Id: <89072b80-09c0-418d-b104-668f7fdeae82@app.fastmail.com>
-In-Reply-To: <20250407-pxa1908-lkml-v15-0-e83ef101f944@skole.hr>
-References: <20250407-pxa1908-lkml-v15-0-e83ef101f944@skole.hr>
-Subject: Re: [PATCH v15 0/4] Initial Marvell PXA1908 support
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Message-Id: <01889b2c-3a49-4510-9e25-b4becc0e4a2e@app.fastmail.com>
+Subject: [GIT PULL] soc: fixes for 6.16
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 7, 2025, at 22:02, Duje Mihanovi=C4=87 via B4 Relay wrote:
->
-> This series adds initial support for the Marvell PXA1908 SoC and
-> "samsung,coreprimevelte", a smartphone using the SoC.
->
-...
->
-> Andreas F=C3=A4rber attempted to upstream support for this SoC in 2017:
-> https://lore.kernel.org/lkml/20170222022929.10540-1-afaerber@suse.de/
->
-> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+The following changes since commit 86731a2a651e58953fc949573895f2fa6d456841:
 
-Hi Duje,
+  Linux 6.16-rc3 (2025-06-22 13:30:08 -0700)
 
-I see you last posted this a few months ago and there was only
-a small warning that Rob reported. Are you planning to send
-an updated v16 of the series for it?
+are available in the Git repository at:
 
-       Arnd
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.16
+
+for you to fetch changes up to 3f3fb97374308993dbe8884f44c2579a81b90bfa:
+
+  Merge tag 'apple-soc-fixes-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux into arm/fixes (2025-07-03 16:27:31 +0200)
+
+----------------------------------------------------------------
+soc: fixes for 6.16
+
+A couple of fixes for firmware drivers have come up, addressing kernel
+side bugs in op-tee and ff-a code, as well as compatibility issues
+with exynos-acpm and ff-a protocols.
+
+The only devicetree fixes are for the Apple platform, addressing issues
+with conformance to the bindings for the wlan, spi and mipi nodes
+
+----------------------------------------------------------------
+Arnd Bergmann (4):
+      Merge tag 'ffa-fixes-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
+      Merge tag 'samsung-fixes-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/fixes
+      Merge tag 'optee-fix-for-v6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee into arm/fixes
+      Merge tag 'apple-soc-fixes-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux into arm/fixes
+
+Casey Connolly (1):
+      arm64: defconfig: update renamed PHY_SNPS_EUSB2
+
+Janne Grunau (1):
+      arm64: dts: apple: t8103: Fix PCIe BCM4377 nodename
+
+Jens Wiklander (1):
+      optee: ffa: fix sleep in atomic context
+
+Sudeep Holla (3):
+      firmware: arm_ffa: Fix memory leak by freeing notifier callback node
+      firmware: arm_ffa: Move memory allocation outside the mutex locking
+      firmware: arm_ffa: Replace mutex with rwlock to avoid sleep in atomic context
+
+Sven Peter (2):
+      arm64: dts: apple: Drop {address,size}-cells from SPI NOR
+      arm64: dts: apple: Move touchbar mipi {address,size}-cells from dtsi to dts
+
+Tudor Ambarus (1):
+      firmware: exynos-acpm: fix timeouts on xfers handling
+
+Viresh Kumar (1):
+      firmware: arm_ffa: Fix the missing entry in struct ffa_indirect_msg_hdr
+
+ arch/arm64/boot/dts/apple/spi1-nvram.dtsi |  2 -
+ arch/arm64/boot/dts/apple/t8103-j293.dts  |  2 +
+ arch/arm64/boot/dts/apple/t8103-jxxx.dtsi |  2 +-
+ arch/arm64/boot/dts/apple/t8103.dtsi      |  2 -
+ arch/arm64/boot/dts/apple/t8112-j493.dts  |  2 +
+ arch/arm64/boot/dts/apple/t8112.dtsi      |  2 -
+ arch/arm64/configs/defconfig              |  2 +-
+ drivers/firmware/arm_ffa/driver.c         | 71 ++++++++++++++++---------------
+ drivers/firmware/samsung/exynos-acpm.c    | 25 ++++-------
+ drivers/tee/optee/ffa_abi.c               | 41 ++++++++++++++----
+ drivers/tee/optee/optee_private.h         |  2 +
+ include/linux/arm_ffa.h                   |  1 +
+ 12 files changed, 86 insertions(+), 68 deletions(-)
