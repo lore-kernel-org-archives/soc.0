@@ -1,71 +1,71 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EEA291C3D
-	for <soc@lists.linux.dev>; Mon,  7 Jul 2025 09:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946CC293C46
+	for <soc@lists.linux.dev>; Mon,  7 Jul 2025 09:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751881869; cv=none; b=N22rDnNK0VC7k3jPZDTVs5VwxlENQCf5q3pJrxNQUvJAzBdhbPj4XcnmFAp1OieDEgDZQxbDyhKJ3Hgw/yUs0BBiu72hNxCkkjGhd5HLWb6bYwrvjhIpMO0Q3mwbfCpCMAJJTc6tJzXQiFfH2RcQ3W0NVG8hyU/5KSTMVgJjuzQ=
+	t=1751881944; cv=none; b=NEhOiPbVg/1eIbQoNHRbjP5MRUCa3v8ADpv+VlqFhqxk9j0V2q4sWZFriP//F4DcgKPmePiczr1D7MXcvJaUVVllzYN4JsShteia+t9GlW/9famBC1Hc/BNfg/ekZZRU9ywQlQhUqacLwnN7KsUUN/jqSSLHrcH/wCjhb69DIJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751881869; c=relaxed/simple;
-	bh=+HetFi1ExroIsOoN5/lcGI2lk74GVglG+0Rv3wYS/5E=;
+	s=arc-20240116; t=1751881944; c=relaxed/simple;
+	bh=g7c3NUc4IT5dshb3pb/tBZWnh6ur52gnuT95JaH4Vpc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZsPJKuyKvEE96Z86lwfkJoSU1GPjri1J8JYTbc8qHJMIx0ceTlKRUvQLrTMnNrIYQHRtg/kKKQDTB4q1ZXw7k00uuBSdfn7eKuzm4C4VeP80TFNqp7qNCbl6DA/zJXfy22t8rPZxbRTbjEbAE0mgCOnUWbPOL5RWgNrcwsQphM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCs+h/kL; arc=none smtp.client-ip=209.85.221.53
+	 To:Cc:Content-Type; b=Hyi2eNVs/1CFyTz6Ws5AkKp5R1n2bf0v2pWMbg/XfGsPyHaSsFMFVlmuezfJig7smCIq3bFGxqcBhF83x7y4KO/pD0EgMQqZ3bl94MdurEvCbQBg5N7tBuwk1gVWp7xB3oaw2yYbuATG0MaiXm08pUpCrvG+sFokRktdVkqeI40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eGQtO9pF; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCs+h/kL"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a4f379662cso2591988f8f.0
-        for <soc@lists.linux.dev>; Mon, 07 Jul 2025 02:51:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eGQtO9pF"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a5123c1533so1310656f8f.2
+        for <soc@lists.linux.dev>; Mon, 07 Jul 2025 02:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751881866; x=1752486666; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1751881941; x=1752486741; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gVjxdqHTuMJYD+Ho2g5ihe5EvWRJ3OhfB9FF+ZiWNvg=;
-        b=jCs+h/kLCOWR2yF2THlmp0pj6cuq2OvzKzUNj8Dma6XSyFXapM5beBZAQwEWv/FO7d
-         WTSFZnq+/tRHMkmCdPM0sjDzEckQTfi1KOyghOf1CIzr1x6QafbkYjKfPuskbnpQYwvh
-         0cOz7E0KS9gBz5nmYJZ/WvpzvIWbUefD2jwh6l8tzfEQsk6KSD7L458QdYWDoD3nbj49
-         PBdbbAgwdzfOEWES+FgJlum1nCG4M2i93KTBquZp8rA9uSiKUxrdFWQBet302jmlAWlM
-         97Oz2+CB6hjDfU5+UFRl3xDkIoWiwuo5sEhUmIr/N6IY4lpi1TMkIvB0vj0yI1kB0fE2
-         muug==
+        bh=LXqFqGPfF+AW+wteaTEiwFi6gfdID37R12FXEDON8Cg=;
+        b=eGQtO9pFwwIB5e4KmOgQEkkaYmuj41AO82uhM9zdMp7LNcX+BpL6S0EsoBD/LZGUN5
+         lMT6A1ZeXk/UIARC9YPPzy/SyFAlWWt5mHh7g6CwbGRwO/LSUcIRksATrr+d/hT+nd1y
+         iTR90preEYaQOe0K76h1Q03wnXEuqidY2Y49al5dGCXEmXVgzNG6+DAst3r+kXIf7abb
+         41J+to4Mm836cL/Zj9rWEPUPZAeiI64WieyKymGXRT6VLaV5p9VWQxHGNm2EMkxRLXqe
+         knIY5U7Hv45w0L/KuNYgU2CfI/NVtOb0qTi5MX5eor7HZOjbJgm0cBbc6BiwAd+7xiDN
+         ycSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751881866; x=1752486666;
+        d=1e100.net; s=20230601; t=1751881941; x=1752486741;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gVjxdqHTuMJYD+Ho2g5ihe5EvWRJ3OhfB9FF+ZiWNvg=;
-        b=Xp0qD1UpB6td021D/TkQtEwdTYxSAiFaP0OtbdYLv+kk1y2vCtpX64NyRVMTKHox32
-         8QN6YAOx7Fg7xzYA8+0F0LaSusPjMgFQerLpPCfx80i/SxJ5G64C3uoCAca5+KdjquJm
-         Dxlk3nqNLB18iD1cjzLN2lGFd06HRbcGcGSwfvJkWO16fJ5AyZmxV1jFLUIZMPplgCt8
-         zglZBwQGUia0Pc77WHWqBxlxZ8vKI58n0UFGYIbyylTLJ5Pl9g7vkUqLenXKehn0KfVJ
-         /Cyn80GRtTIFMsDe+JcCWLW8TW58vZTrnasi/94Sjkem3m1AUtLbFoglpscxv8XgBxLT
-         2wDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVve80NKJDoC42RXzKHpj8ydP+a4UPBFr4gy4wjR0d7qdlJJgqwpe3xM3fPvZamI2yXk+I=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxrEgRQxtVNEHKDT8o9k1oMNzFB/pABL/LqcnFamuDLp3AQNUzu
-	JkZzMovtZls6atj1vzUwn7fkGzZQ/qbADsF6RL0tfXUSDBDAzRm4oKYLUsmSZGlKIKPJ3Spsj/t
-	50fsI7zCL77YmsCZ7jjHk73BOGpwck0o=
-X-Gm-Gg: ASbGncvTFe29zln8YkN1kXwMysq06ejzd53+La4iFQAeOShwb0d7I9Vk/qII+pR2Mo9
-	9jxNW949mBrZspvQCe6MAXAE7RsobOe/wScKGdMbdzZj9gwVXVfhBSjfac8BJNcUllfgLcc10rS
-	t/J53csGz9R8KRXf5rErZ80b8T2BcT8vlB6a5yiuTUic4nDQ==
-X-Google-Smtp-Source: AGHT+IHaemfV7Yc8MYTOKmXHmjBgPc678uQXZOdUIfyot5vgXXAe6u2p/8rl0gl5MOdA1YcH9Rs+GNziSjER+UHyVSs=
-X-Received: by 2002:a05:6000:1449:b0:3b3:9c75:a4fb with SMTP id
- ffacd0b85a97d-3b497029621mr9832614f8f.33.1751881865712; Mon, 07 Jul 2025
- 02:51:05 -0700 (PDT)
+        bh=LXqFqGPfF+AW+wteaTEiwFi6gfdID37R12FXEDON8Cg=;
+        b=d7grRIUREbd+f7zL59ukSfDlE/HCnjBk6s30T3ywBdGedKTSN259To1x1jJ3cEZrHw
+         J7/OJ8SkXtRe/szS4smgN1A06mZ2hfa2ihE9YsJGrBsVyFD751t9tajSIBbGwkE7y9GI
+         8Y0KcSfkgK4VRDhg4FNm5Z5+9zpYQgZ2cYRHIdcIZZqM304bHQDvnlgljAHARi8p7Vbl
+         yAU8uEs34Orp97rFxzKZGVx4rNDa2O4lqlgP+x/digF5dztZiwjzknVgkS+o0Bnge/JC
+         YbQJAW5HLE23LVlSUn4d8iEwbJqa++MzhjxEClr1kUSTQBeceSp7XpZa4DXSA2xXNwcW
+         ikww==
+X-Forwarded-Encrypted: i=1; AJvYcCUUlbOP61XZ2qWy9VN3KVX3e9dqZY01fGjrUvU2ZHZtNKbZYNFGeGH1JcX4zH/1TXnT7Jk=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz88MAhz1438RikxqHd2ibab/ZD1Dh2eI03VuJiCgkcOBHD68lE
+	1d2VRapOEyJ6s62kq9Y9kPujmWhBYg4zAUtYZWYIhreZpDL06VSaA0sjPnptyQwddoAJB3rpsGe
+	bXNgrv/EKkLhGlZLlZtd7p6SeNqydIiU=
+X-Gm-Gg: ASbGncsCG7CPiW6aWjt6f/zqn4n0F5wrB4bsrFLUTLG2NdWcp0PLkR5Jg+A56ryhFGN
+	nD7AkZAm9fMGFDKOc0FUWjHuBVPeIIln35zJI3r/yl3LXN/AbokhDR5Ce88/Hp4JqzlX2E4Pzp4
+	WEEgjxmum6xR092elx/tCb7DV//4yVH+ai2HfDMllmJAmL0A==
+X-Google-Smtp-Source: AGHT+IGCWmZhb0r9sYITwhkx4phvDYGw0yLaPOftSXO4F/VMYxZRVNmoGGfSVxUPKVSCtCXeM9hZJCmRyjyHgQZxDpM=
+X-Received: by 2002:a05:6000:208a:b0:3a5:2698:f65d with SMTP id
+ ffacd0b85a97d-3b4964dedf7mr8113866f8f.27.1751881940919; Mon, 07 Jul 2025
+ 02:52:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250704081451.2011407-1-ben717@andestech.com> <20250704081451.2011407-2-ben717@andestech.com>
-In-Reply-To: <20250704081451.2011407-2-ben717@andestech.com>
+References: <20250704081451.2011407-1-ben717@andestech.com> <20250704081451.2011407-4-ben717@andestech.com>
+In-Reply-To: <20250704081451.2011407-4-ben717@andestech.com>
 From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Mon, 7 Jul 2025 10:50:38 +0100
-X-Gm-Features: Ac12FXx7rJuxVDh4Pe2HacJlhHB6J3LpsyU6J4KL8NZ4EBGUAf2JV3T_SbkKDpM
-Message-ID: <CA+V-a8unFMmA2NdwuofTL1fx8vVHtD8Y9QbW2ec8B656DK6AAw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] riscv: add Andes SoC family Kconfig support
+Date: Mon, 7 Jul 2025 10:51:53 +0100
+X-Gm-Features: Ac12FXzomKy393V9aXimk4vifIzB-hw8ENrGJMrYh6XFujGnzhanbBX2A8ZFbvk
+Message-ID: <CA+V-a8tdtRNh6WMV7RUyr4h99o3OqOU1HnajU0t4i7GHFKykTA@mail.gmail.com>
+Subject: Re: [PATCH 3/8] dt-bindings: interrupt-controller: add Andes QiLai PLIC
 To: Ben Zong-You Xie <ben717@andestech.com>
 Cc: arnd@arndb.de, paul.walmsley@sifive.com, palmer@dabbelt.com, 
 	aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org, 
@@ -76,56 +76,43 @@ Cc: arnd@arndb.de, paul.walmsley@sifive.com, palmer@dabbelt.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ben,
-
-Thank you for the patch.
-
 On Fri, Jul 4, 2025 at 10:02=E2=80=AFAM Ben Zong-You Xie <ben717@andestech.=
 com> wrote:
 >
-> The first SoC in the Andes series is QiLai. It includes a high-performanc=
-e
-> quad-core RISC-V AX45MP cluster and one NX27V vector processor.
+> Add a new compatible string for Andes QiLai PLIC.
 >
-> For further information, refer to [1].
->
-> [1] https://www.andestech.com/en/products-solutions/andeshape-platforms/q=
-ilai-chip/
->
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
 > Signed-off-by: Ben Zong-You Xie <ben717@andestech.com>
 > ---
->  arch/riscv/Kconfig.errata | 2 +-
->  arch/riscv/Kconfig.socs   | 9 +++++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
+>  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-> index e318119d570d..be76883704a6 100644
-> --- a/arch/riscv/Kconfig.errata
-> +++ b/arch/riscv/Kconfig.errata
-> @@ -12,7 +12,7 @@ config ERRATA_ANDES
->
->  config ERRATA_ANDES_CMO
->         bool "Apply Andes cache management errata"
-> -       depends on ERRATA_ANDES && ARCH_R9A07G043
-> +       depends on ERRATA_ANDES && (ARCH_R9A07G043 || ARCH_ANDES)
->         select RISCV_DMA_NONCOHERENT
->         default y
->         help
-> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> index a9c3d2f6debc..1bf5637f2601 100644
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -1,5 +1,14 @@
->  menu "SoC selection"
->
-> +config ARCH_ANDES
-> +       bool "Andes SoCs"
-> +       depends on MMU && !XIP_KERNEL
-> +       select ERRATA_ANDES
-> +       select ERRATA_ANDES_CMO
-> +       select AX45MP_L2_CACHE
-Do all the Andes SoCs require all the above three configs? (If not I
-would add it based on the SoC which requires it.)
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 Cheers,
 Prabhakar
+
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifiv=
+e,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/=
+sifive,plic-1.0.0.yaml
+> index ffc4768bad06..5b827bc24301 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
+1.0.0.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
+1.0.0.yaml
+> @@ -53,6 +53,7 @@ properties:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - andestech,qilai-plic
+>                - renesas,r9a07g043-plic
+>            - const: andestech,nceplic100
+>        - items:
+> --
+> 2.34.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
