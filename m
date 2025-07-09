@@ -1,119 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx.olsak.net (unknown [37.205.8.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984F91FDA8C
-	for <soc@lists.linux.dev>; Wed,  9 Jul 2025 12:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC231E835B
+	for <soc@lists.linux.dev>; Wed,  9 Jul 2025 17:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752064153; cv=none; b=tEt8FkzAWl08odkWaVpy1IJalYWWCZcQrUsuhEK3mKve9UdvybTqA3/kH2wq4eut7joJyuXQ2MO2m2WcfpCIGpmfaKn2pCUcPgW7RCxjOYLgtSNgA4PtdDs3A/zCXzRdA+IgZ3qHjjD1zKmrTWDHSaNLdX6S29gsBvZHJI0EDG0=
+	t=1752082507; cv=none; b=rohU++IQ6s2ip2CHGMLC2KapL+6mvfJfYlOPnMiaE73pSdK5ydKYIqN7PGn5skRPVT7e2w4hnIueU+66pfG8w2ZwtlkA44Jqt6YghMgkJyNXberUSCLpPIVK49rDRj0Og2rpSFeI2kyrkb/6XvR6St9DVvsCeUfJEm0v/0deIK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752064153; c=relaxed/simple;
-	bh=s7+KeLSw1Xzx1gEJv7HHmXLpVuvLWDViGU38eeCOjTA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=F+LvyqEvHfVzzZImvHi0m8JPC498+ZTH4Cwoi1Q2Mh7+66tH53uTY4IpAEtyHVomU2u8Pk7gd0ue6x6gCKlCgJooTYG1obRGrOrAFLZkaSxzfJ/tbX4i5yiHTYIDFIi7BsUD8BBYvO1cyCVoL5PEHWfFyX47wqs55l0QGNt96+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix)
-	id 52A09C4CEF6; Wed,  9 Jul 2025 12:29:13 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 68B82C4CEEF;
-	Wed,  9 Jul 2025 12:29:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 68B82C4CEEF
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9506152B;
-	Wed,  9 Jul 2025 05:28:59 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 554063F694;
-	Wed,  9 Jul 2025 05:29:10 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.17
-Date: Wed,  9 Jul 2025 13:29:07 +0100
-Message-Id: <20250709122907.1171913-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1752082507; c=relaxed/simple;
+	bh=+64fnXIXSgNnCIG6if9Uadk28NbjJVWxSfgeT94QG74=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gF6q8gyTZEBXhwbOFTwHIYcQIUqMcTZ9JIFM7bddx/WOxV9RL1kRBxapVSUvYzGlM2RsBz98u90FyPPGcefcIQpyXdduzwElpETeoPkbmf+ety9S9Ta1nWHfpiIj5k8CJ9m6efEDq9+y+AWXKZGFj/WZWVSBzvPFQTiIYbD1cF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=Ot9uvKj8; arc=none smtp.client-ip=37.205.8.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="Ot9uvKj8"
+DKIM-Signature: a=rsa-sha256; bh=+64fnXIXSgNnCIG6if9Uadk28NbjJVWxSfgeT94QG74=;
+ c=relaxed/relaxed; d=dujemihanovic.xyz;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@dujemihanovic.xyz; s=default; t=1752082383; v=1; x=1752514383;
+ b=Ot9uvKj88SCNKZXhCwSLc7Mlc+19lqQn3riLUfvGUlHkwpR12dYtzxqtfXX5WgIcETyoHYb7
+ 3zAcaawntNY5dakJuNcoE1wSv36nxkOGQeX3JcxmCalOcx9b7noP7k3FmYytVXu75jbrtsusvQ2
+ B9ukt85xBF8QA8e7X0pQZTdQF37Slb82WPUM6haiBwPokSNNZNNYi6g0qG2RJnAia1gg02HeNAc
+ +bbAWjg+znV+Km5vvE31WZ2KBKK/w0Pm3p/T8N4WCbfgnvTkBlbC/NoAmYOng2vON81cbUVH5ma
+ 4sWmXdFHX1qlpqj/hc2csN530rcCW308NmGI7SLoylq9A==
+Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
+ ESMTPS id 66672483; Wed, 09 Jul 2025 19:33:03 +0200
+From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lubomir Rintel <lkundrak@v3.sk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, David Wronek <david@mainlining.org>,
+ Karel Balej <balejk@matfyz.cz>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hardening@vger.kernel.org, phone-devel@vger.kernel.org,
+ ~postmarketos/upstreaming@lists.sr.ht, soc@lists.linux.dev,
+ linux-mmc@vger.kernel.org
+Subject:
+ Re: [PATCH v16 1/5] dt-bindings: mmc: sdhci-pxa: restrict pinctrl to pxav1
+Date: Wed, 09 Jul 2025 19:33:01 +0200
+Message-ID: <3379810.44csPzL39Z@radijator>
+In-Reply-To: <20250709-spectacular-goat-of-tenacity-ced55a@krzk-bin>
+References:
+ <20250708-pxa1908-lkml-v16-0-b4392c484180@dujemihanovic.xyz>
+ <20250708-pxa1908-lkml-v16-1-b4392c484180@dujemihanovic.xyz>
+ <20250709-spectacular-goat-of-tenacity-ced55a@krzk-bin>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-Hi ARM SoC Team,
+On Wednesday, 9 July 2025 09:32:06 Central European Summer Time Krzysztof=20
+Kozlowski wrote:
+> On Tue, Jul 08, 2025 at 07:09:46PM +0200, Duje Mihanovi=C4=87 wrote:
+> > The current pinctrl properties apply only to the pxav1 controller.
+>=20
+> Why they are not applicable for pxav3?
 
-Please pull !
+state_cmd_gpio is used for working around a PXA168 SDIO erratum. That SoC u=
+ses=20
+the pxav1 controller and no such erratum exists on any of the other PXA SoC=
+s.
+
+> > Adding one default pinctrl node to a pxav3 controller therefore causes
+> > a schema warning.
+> >=20
+> > Check the existing properties only on pxav1. pxav2 and pxav3 may add
+> > their own set of pinctrl properties if and when needed.
+>=20
+> This should be rather made complete here, because properties should be
+> defined in top-level, not in allOf: block. Strictly speaking pinctrl-xxx
+> are defined in core schema, but still the binding should follow same
+> rule - define them in top.
+
+Would it then be acceptable to declare the pinctrl properties in the top le=
+vel=20
+and define each controller's respective description: and items: in the allO=
+f:=20
+block?
 
 Regards,
-Sudeep
+=2D-
+Duje
 
--->8
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
-
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.17
-
-for you to fetch changes up to 62d6b81e8bd207ad44eff39d1a0fe17f0df510a5:
-
-  firmware: arm_scmi: Convert to SYSTEM_SLEEP_PM_OPS (2025-07-09 10:49:58 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.17
-
-1. A fix is introduced to correct turbo frequency marking for 64-bit
-   devices with sustained frequencies over 4GHz, ensuring accurate turbo
-   frequency identification.
-
-2. Debug capabilities are being improved by introducing in-flight transfer
-   tracking using debug counters, which help diagnose transfer congestion
-   and behavior. Additional tracepoints are added to log in-flight counts
-   at transfer begin and end, offering better runtime insight. The debug
-   counters now support decrement operations using a newly added
-   scmi_dec_count helper, making counter tracking symmetric and more robust.
-
-3. A race condition in suspend-resume logic is being resolved by ensuring
-   SCMI_SYSPOWER_IDLE state is set early during resume, improving suspend
-   reliability under certain conditions. New suspend and resume operations
-   are added to the scmi_bus_type to enable finer power management control
-   for SCMI-based devices.
-
-4. Finally enhancements are also made to avoid registering notifiers for
-   events that a platform does not support, reducing unnecessary overhead
-   by checking for unsupported event types during protocolinitialization.
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      firmware: arm_scmi: Convert to SYSTEM_SLEEP_PM_OPS
-
-Cristian Marussi (1):
-      firmware: arm_scmi: Avoid notifier registration for unsupported events
-
-Peng Fan (2):
-      firmware: arm_scmi: Add power management operations to SCMI bus
-      firmware: arm_scmi: power_control: Ensure SCMI_SYSPOWER_IDLE is set early during resume
-
-Philip Radford (3):
-      firmware: arm_scmi: Add support for debug counter decrement
-      firmware: arm_scmi: Track number of inflight SCMI transfers
-      include: trace:  Add tracepoint support for inflight xfer count
-
-Sibi Sankar (1):
-      firmware: arm_scmi: Fix up turbo frequencies selection
-
- drivers/firmware/arm_scmi/bus.c                | 26 +++++++++++++++++
- drivers/firmware/arm_scmi/common.h             |  8 ++++++
- drivers/firmware/arm_scmi/driver.c             | 28 ++++++++++++++++--
- drivers/firmware/arm_scmi/notify.c             | 39 ++++++++++++++++++++------
- drivers/firmware/arm_scmi/perf.c               |  2 +-
- drivers/firmware/arm_scmi/raw_mode.c           |  6 ++--
- drivers/firmware/arm_scmi/scmi_power_control.c | 22 +++++++++++----
- include/trace/events/scmi.h                    | 24 +++++++++-------
- 8 files changed, 126 insertions(+), 29 deletions(-)
