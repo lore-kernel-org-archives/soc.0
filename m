@@ -1,112 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4BC267B89;
-	Wed,  9 Jul 2025 10:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DBD2D97BD
+	for <soc@lists.linux.dev>; Wed,  9 Jul 2025 12:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752056608; cv=none; b=bU/8H2B+Du4eQqs5aVpGl4lcQelYtkBGlwUAQAWFsA0G6C3fO23ZqFAkWO93reVRfOvVtfp60U56qv03Ot5P5nBOSlMgJrrkzrgDWjwCS11Cn0oufkSVu+1f7SR4K0vHNC2gpVcZbUE4ObqmL4a6BPPNipvZyUhQX+BVBEH+oVs=
+	t=1752063985; cv=none; b=uGMoRn3v+MsfjEd36VJpNhNv4d+PBpzZtPcWytSNsdLKva0UqysHdIz5n5h//52PddlAK1HLsd4iKwCbLCSOVzb5aNB3CkMzSOhR5f20dzOLDK4IjHcOe+hyu+3PWRCDnJgH2xINe6mYNGmCRs2pmx7206QlYjnV2QH+CsDVUb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752056608; c=relaxed/simple;
-	bh=2+N4smsYfrl5HTf8MH0tIEMC4qA9EcZ/1I6Yj3gLik4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kkcyusRNtFmKCbFjDo1wRDV8l8kU7enI9eD0CSVdDpFgdKfHz4czOvOgp0jcLp4uw7AuX2YnPzEJiORUjoLgRXVDO0WntwqTxLm5EI2nmbUJB0aQgoLAbzDSwEuKAwM81URxsaay3CW7l/UrPsf7iHQYARZALt/32daGodBY7Z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k837bwEF; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k837bwEF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752056607; x=1783592607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2+N4smsYfrl5HTf8MH0tIEMC4qA9EcZ/1I6Yj3gLik4=;
-  b=k837bwEFQCPuYd2DS1m+4vSJdVcy1zcFNo3Z35MkwIt2oFyq/tBgbIZT
-   RRxUGnT5HDEAsHnDfLMMskZmOGj0SR6idSmcwsqw2SqboCLP0FCh29IRN
-   3vVYmZ9mXkTt5Whtcr0sD3JXwbuW5Ov7/n2H3V1+l+eHbsdHfi8gQJNZ0
-   tnxRv4yfuO4abSeF9oD+nCw9SyTn298OUbwQcm+6NhVJwwK1MoneOWJw5
-   GJZgCu+ubKP4fBn4e5gbc+ofSby6qo/4SOvzvhxh/wI1MgsaTlpvLl2Ny
-   MC0MnMKC2e1jlXkUGAfj4Pm+AtLqdET1Sy9aIiAUmPWq8x9tuAm6BNvtE
-   g==;
-X-CSE-ConnectionGUID: qckYPUKLTQSKbJGvv7a4wg==
-X-CSE-MsgGUID: U8DrPye3SW6aR4lJd3Vf8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="79750717"
-X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="79750717"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2025 03:23:19 -0700
-X-CSE-ConnectionGUID: nA7HpcjlRkSUBS07mOfahw==
-X-CSE-MsgGUID: 2ZH4Zb0hTQCxpOErnia7Jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="160057178"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 09 Jul 2025 03:23:13 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uZRxG-0003OT-0W;
-	Wed, 09 Jul 2025 10:23:10 +0000
-Date: Wed, 9 Jul 2025 18:22:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje@dujemihanovic.xyz>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lubomir Rintel <lkundrak@v3.sk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, David Wronek <david@mainlining.org>,
-	Karel Balej <balejk@matfyz.cz>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-hardening@vger.kernel.org, phone-devel@vger.kernel.org,
-	~postmarketos/upstreaming@lists.sr.ht, soc@lists.linux.dev,
-	linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v16 3/5] arm64: Kconfig.platforms: Add config for Marvell
- PXA1908 platform
-Message-ID: <202507091803.RBsXE3aX-lkp@intel.com>
-References: <20250708-pxa1908-lkml-v16-3-b4392c484180@dujemihanovic.xyz>
+	s=arc-20240116; t=1752063985; c=relaxed/simple;
+	bh=qKJnaUMVZ5rqKLbnhV1HbmlOTMjc+tkBstAgHgOi+z0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HM3UHJBHboi0tFbGyfgja+GnmObI/WeTfuSoiyYikPNjJWf8axFIa7T1BGkQEbQzCqtK+Pom6gjvUiH4E5kog/6BEEP188XVKvA0ivMbSTBtUfDbqwdOsmBlt2ty1YOwEdWyBqGuiXYpPk4IzRb5M/xDB/1oBUJP2oaffE4Q8g8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix)
+	id C1606C4CEF4; Wed,  9 Jul 2025 12:26:24 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 74AFBC4CEEF;
+	Wed,  9 Jul 2025 12:26:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 74AFBC4CEEF
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C0E7152B;
+	Wed,  9 Jul 2025 05:26:11 -0700 (PDT)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9510B3F694;
+	Wed,  9 Jul 2025 05:26:21 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: [GIT PULL] firmware: smccc: Update for v6.17
+Date: Wed,  9 Jul 2025 13:26:15 +0100
+Message-Id: <20250709122615.1171419-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250708-pxa1908-lkml-v16-3-b4392c484180@dujemihanovic.xyz>
+Content-Transfer-Encoding: 8bit
 
-Hi Duje,
+Hi ARM SoC Team,
 
-kernel test robot noticed the following build warnings:
+Please pull !
 
-[auto build test WARNING on d7b8f8e20813f0179d8ef519541a3527e7661d3a]
+Regards,
+Sudeep
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Duje-Mihanovi/dt-bindings-mmc-sdhci-pxa-restrict-pinctrl-to-pxav1/20250709-011510
-base:   d7b8f8e20813f0179d8ef519541a3527e7661d3a
-patch link:    https://lore.kernel.org/r/20250708-pxa1908-lkml-v16-3-b4392c484180%40dujemihanovic.xyz
-patch subject: [PATCH v16 3/5] arm64: Kconfig.platforms: Add config for Marvell PXA1908 platform
-config: arm64-kismet-CONFIG_I2C_GPIO-CONFIG_VIDEO_MMP_CAMERA-0-0 (https://download.01.org/0day-ci/archive/20250709/202507091803.RBsXE3aX-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20250709/202507091803.RBsXE3aX-lkp@intel.com/reproduce)
+-->8
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507091803.RBsXE3aX-lkp@intel.com/
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for I2C_GPIO when selected by VIDEO_MMP_CAMERA
-   WARNING: unmet direct dependencies detected for I2C_GPIO
-     Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && (GPIOLIB [=n] || COMPILE_TEST [=n])
-     Selected by [y]:
-     - VIDEO_MMP_CAMERA [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && I2C [=y] && VIDEO_DEV [=y] && (ARCH_MMP [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y]
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/smccc-updates-6.17
+
+for you to fetch changes up to 1733432638f323d80ec3d6ba411794cc20e2465f:
+
+  firmware: smccc: Support both smc and hvc conduits for getting hyp UUID (2025-06-11 13:55:41 +0100)
+
+----------------------------------------------------------------
+firmware: smccc: Update for v6.17
+
+Just a single update extending arm_smccc_hypervisor_has_uuid() to
+support both SMC and HVC conduits, enabling UUID retrieval when Linux
+runs as the root partition under Microsoft Hypervisor (MSHV), where
+SMC is used. It leverages arm_smccc_1_1_invoke() to dynamically select
+the appropriate conduit, enhancing compatibility beyond just HVC.
+
+----------------------------------------------------------------
+Anirudh Rayabharam (Microsoft) (1):
+      firmware: smccc: Support both smc and hvc conduits for getting hyp UUID
+
+ drivers/firmware/smccc/smccc.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
