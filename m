@@ -1,72 +1,74 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9677A23B637
-	for <soc@lists.linux.dev>; Wed,  9 Jul 2025 18:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E449143756
+	for <soc@lists.linux.dev>; Wed,  9 Jul 2025 19:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752086889; cv=none; b=hbmdIa0cBeHMtqkoRB28LloY0eE6c9GCxekRg1xshjcQ31XfQD+805mjL574jyvw7QsjeZBhJ6fbJEmQxR5frHyLEDpOdKhALZYwfVWy0oJmt/AAdQ9ZWQa7mtsB2naZVEoZGdWKem3JtntLEd3+vEkQ4sWh+YNpC915X0YCecY=
+	t=1752088533; cv=none; b=MHXwcOSIIYuYvDXnV1XB23JNbxm7BUcoNC1VA10VxPuiKPwSMJ3Lj7+bkpiS2iw2Jr+5J1C+cZx86+FALs25oIS/p799o1n9J2USANVlrnEtGYyByGW6Ku0gtuCmJ6t/Rkh+jcJFJtDn3GbBx4ksPp+6iCamhEEkBWth29SQXVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752086889; c=relaxed/simple;
-	bh=u3Hc3nQp0O5WYAc3HQ6CtOu++sD7TDGjIrpQ003ybJ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EUy+5zia+jxm17ywAyC0lt+nZptlH/Fzj8KWQBv0q4WaBTSypsEKXl+zCF0QMuhsAaY/kL0WV0Fj7/sLexjW5OoPTcwfsnWM0KnQFHcTXM9xLKQ1EYtMzNglMZdN7oIhQj7lao5snD0NxK0pVBQqw2G5w6wmdu3xcPHigSs3+H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xelGK3a6; arc=none smtp.client-ip=209.85.221.53
+	s=arc-20240116; t=1752088533; c=relaxed/simple;
+	bh=Vg3SYFcxbZhfxzHwdzewVgAiginzpLipvsLFtGoX06g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AncCl4iP4aw60hVSgrIuvRFuhvW8+tZ6fPR7sJN84HvZHYdsbRiSFs9SjC5Op4qzJbwqnudqhP+Kt2uPZf+6WhvtAzZ8NVSAm2ucyAWg9PO0oGUAJ6wCfuBcGunmqHrga2zFNTNhn2SFQqQQrvfAYZnBwEZRviaXDPe/pUqfBj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p4t2n/mh; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xelGK3a6"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3b39c46e1cfso29741f8f.3
-        for <soc@lists.linux.dev>; Wed, 09 Jul 2025 11:48:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p4t2n/mh"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3b39c46e1cfso33716f8f.3
+        for <soc@lists.linux.dev>; Wed, 09 Jul 2025 12:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752086886; x=1752691686; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1752088530; x=1752693330; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzY/wkRIsQfHZQP8v4qsHJxPM4X7h0KVostvHPrFTLg=;
-        b=xelGK3a6RXHq0isteeDKKQGFzCFXyqbDeakm7HATcfByYXdzWushxuVFnNcB6x65C/
-         Nq3XuPMfa6q4Xp0T+LprNs/LWQZ/PbwQScjWYxImqWvzHrTNND2ewjr9cwsS93FG9/Y+
-         CHVA6iY9SqcjHLFsTiAuEf3V0rqXm3Fl2ic7VZetodFozHRDnC7k8AOENoIKmjhoZyis
-         CENQsGVGkLof2czwe/PwXZpsY3rnDoKw3z3lF6vZ+CoKg28g9p6vI8kw9ojE5RsyQ5XI
-         J8n254pnzDr0OOKZ7xIy7JJwPd2d55eCSF6AadtP2O9NX+5FEJ0FQYr4fpNFGVpUIqKE
-         EQKg==
+        bh=IOUI37vOvArNOMfbDlU1r5BFH53BMkpjGIGFBJa2WR4=;
+        b=p4t2n/mhQYrQ9sCRhBMqLxd/7Lfwh97asL2IUs9OoNrwBa8dwO1zd3+Nd4qWouPxsD
+         g4wZ8z1R7JJX78niJY3ec2AN4uoOLyv6piW1XRu/EUKbZGQTtp4u9A87bQWRN5v2VjKH
+         ausXcLj+rjZf+dsmn8H/1yOnSg7b76AU2YqzEZBozJDXvcW+w/UfJdhM0BqSFOLBozP8
+         bQwwobs+im4rUBm35lexYHWC2cGmYopjogmU48zLvPELWInzMT2Qw9lQSOODtq/x9p2K
+         LfzjXzTYI9TMHRsBvdjxZQVmGTNfbEo0urdfMwCuMbhNoDEThWCkjoNbKQ7WrhD5RZv3
+         KGMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752086886; x=1752691686;
+        d=1e100.net; s=20230601; t=1752088530; x=1752693330;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lzY/wkRIsQfHZQP8v4qsHJxPM4X7h0KVostvHPrFTLg=;
-        b=AW0NJ2RyqWKaViSSpREJIlOiH46RBTwDRq7olfM4YamuA6gYPVND26UPiiuzZeeu2G
-         OixNLUwsXhbQyoHWyhIKWxQjcvqqX8BO4e/k9M/kzsVrHpzxifs4gO3IepUmxbzm+K1Q
-         xl/KbLHd5k75PQOyki9ogqrk6uIfS5WJCp1UZuhqx7k/3Opun+YM9SJDg2PChmvTtE0U
-         Lb2Sim4KvC4kmObSSkIw8g3xyemGmzH26I6uRzdYQvplrUbP+T1ELySAUJSMKZcf4PWF
-         ZWFUbnBeVHDNN2CxQLbk5kVYEvDiQC4Vn2ux+b8gX0qaFQ8+xOJ9swem7gJLKMZKTf2S
-         IEdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjWUrXrAXyfXzr6QFwZiQT+mNZmvp5PlUr+KC2yM56wux79m/w64SANz94QxXcdyvP1+w=@lists.linux.dev
-X-Gm-Message-State: AOJu0YwfDJpsGwYXhIdfDyn+vL19I1x7Pi76gxaLegwXdC7uhY3WkSN3
-	CVjzO6TK/DAFFIbi6dWsQhWK/MkKrXfhV1lxKN569Efhml5BSSsDhNim0zF6XOI/eI8=
-X-Gm-Gg: ASbGnctH4rrd7ZkRERk59Bj1HSndVjfd4NSIoDtpvXSxaE+UEQ4k+2pmIups1x63De5
-	gc1axsxqL/h38oc/UVcXC6dhn5FYLwRhcMfl9n2Bq7PMeEjqaQ9jvZHHyD/ADZrj3c6Rfz/Z+VO
-	R0+ni1G1XQmva9tAA9oq7ZTDE87WThHSlW58vSQqrG9zzAA9/1tlioB6xyGweZMvXYwX5J1FIPp
-	ultHDtJx7TyxWLOXIReqr8OzJ2rLMucAadERrRrN9mVqDQsd2Og8FINw6jPh1BPRRi+d+B4y73/
-	ZNwcWEBN5DXwcakPFTE5ORc69J2II2MSuHJ2iAQQrF4rWLgn8rAmdyhlY+QI/o1Rfj0K548Tg2a
-	Qh30V0dAFpg==
-X-Google-Smtp-Source: AGHT+IFjKA2bgIqGaBqRLesEX9wcoaMoKB/p6ZG4Z389Kueb42crYAklSyrFhdYRjHDnMQwyszNa9Q==
-X-Received: by 2002:a05:6000:1acc:b0:3a4:f8a9:a03e with SMTP id ffacd0b85a97d-3b5e44d4291mr904572f8f.3.1752086885818;
-        Wed, 09 Jul 2025 11:48:05 -0700 (PDT)
+        bh=IOUI37vOvArNOMfbDlU1r5BFH53BMkpjGIGFBJa2WR4=;
+        b=mYOPTZW3o2Fgn+ZbTiBMKjuC+ABCDadgQzlnUpxcSpzTFO2Nhsagg5gi3IIYSpCUTV
+         etL4dTgmtlbNnFEdb0tLzWONjjM0bo6p+knIbbhR63EFVTraDVInrjGHBLPkQCNNYWsW
+         Roie/iyKvKFORJLGXsoMOq0J2U00phVyzYQXCTJXr+Q1krxtCYto/B+W+is8oP2XKytr
+         wXBQet/DpX5y7wJMq0wE1t0XMrV4PrZRW/ceKO9TdE6Z2ruVT6++nrqFcIzzOk9HQr3G
+         8belyGCoywqA/zsYnwt2MUx2PBdknCVMz+lKa7W0/n3ZhwnHY3H4fTqaYfBu8QwHPQ20
+         XSgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/55fnkyOQEwnxjIFMnWJuFFDK3pjJ0JJSsCs4WPLv6ZuUc3owTXF4rnmrFkrIgKuaUnI=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwbXxbiAhyxvPZc6PjkX/+dM7ar9938kl9dDJOEAzAYQxDgFxQi
+	hTPU6+z8+9a5YAT1mkCG9MBf0NodtIKUMrYOyHiUwwDSVz+5uusLKEgJ252uDvngk8Y=
+X-Gm-Gg: ASbGncs/ovEC/Af2CqkF7/8apLwicQZkSOBojKAx/hWm8WBgX0+hzbkADL4amPbGyNV
+	LsnjbSPtukuhuVc3MTjqbfAMogHzMF+Bl3BWHgR5ZX4m6R+xtVwisTI4qIThCQnhexAy3d5btGD
+	AUWfqINSJdiF7umHhvwgJe5JjK/ef3MOuboMBZ2v5wcmXHTD95jg86gTSPI393hmZFMf6orCVFv
+	WVU/Rt6bYtsbvArvgcsWRb/wCQwcS43Dmg8X3oQvmEAL/lZG2qhc1hczoOWPIWnOx0MxytXah0Q
+	FKFgYUx3GwFFCzin06SJShLwWXz+DqIlIkmcWJoh6lj55qXAlHsNpDIwdVHJr6pIw/A2suciMi0
+	=
+X-Google-Smtp-Source: AGHT+IF5fQuSnWVC1+1FSPZh+mnfL3zRfmekTmST3Oxxmhd4JajNQiGduP450T3HuQ8hjxFtcBtDTA==
+X-Received: by 2002:a05:6000:2888:b0:3a4:d4a0:1315 with SMTP id ffacd0b85a97d-3b5e44e107cmr1444727f8f.6.1752088529780;
+        Wed, 09 Jul 2025 12:15:29 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.222.89])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b47030baa5sm17171045f8f.12.2025.07.09.11.48.04
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b47285dc08sm17159588f8f.98.2025.07.09.12.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 11:48:05 -0700 (PDT)
+        Wed, 09 Jul 2025 12:15:29 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@lists.linux.dev
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] ARM: dts: vt8500: for v6.17
-Date: Wed,  9 Jul 2025 20:48:01 +0200
-Message-ID: <20250709184800.168462-2-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 1/3] arm64: defconfig: for v6.17
+Date: Wed,  9 Jul 2025 21:15:20 +0200
+Message-ID: <20250709191523.171359-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -74,20 +76,21 @@ List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1745; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=u3Hc3nQp0O5WYAc3HQ6CtOu++sD7TDGjIrpQ003ybJ8=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBobrlgVC0ilF996/5GTTUNwBoZFaYVvZ5ULFp4m
- G/hCGPoMsOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaG65YAAKCRDBN2bmhouD
- 19zOD/9i+E2GOi/b039lg98NNZcohGuoXIVSRC44kihPhyF5fktFrk/DYRA34Z97HujEDDnMHZ+
- 5EtZNNNIWw8FuyuAWLGSElMQkrjbj1rf1iDE8+cvXFOWDCKrLSeCijgz+hkkBUAwhzA3KplHhq2
- ZgcttfJOK37Shz4j04++7ApseLxU75w9ou6ELjVcMB6wly+eWO4G7MiYkWnWXrp/tT7yj4sBxoS
- U/SbufyU9eNMZZFqdaLUAwF3fXPMCgiMcyvNab97TamLWvQM6ixfCHChj0Q3G7ZAD1l8YUk7Nkj
- +hceANY6G3tkzjZnmsfh0Ti0+/fKZ7Gj/qK0GepilBUyO994ZfExWdLyXPV3MmbpA5NJ8lAqVuY
- EaQ+58rT7omHCIO87qynp4FH9QDWpJ1/QjDABkO8kwNCVzfau6GOeQgYCe4xud9lY+ArFwQEiB2
- n5N05oj4H7VfqWpJtG0S/waFWpeH4gCidQ7CE3bHTcqIfBWYQ59tvK8nn/PnJ1Hs0fYb1LhrVga
- LCO5uXg4nEXPLUSQGFS7B1IXoOiKOF/9djhL3PJAcKzi1QjF4mDOa9YgnQGbakhDqgAaj829iC+
- 0n5aePn0OMpoFv687cCUiDgzh8diioDXnEbvfYovugu+4Ij5nNpSjr9JZL80/JKvgKRrtmOMUv3 JAHzaOEGLKT6Zrw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1262; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=Vg3SYFcxbZhfxzHwdzewVgAiginzpLipvsLFtGoX06g=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBobr/LrlRRiB7NlTXa7KpRiF8ppNyVSL6muQZyc
+ U/nnYOJbbOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaG6/ywAKCRDBN2bmhouD
+ 1631D/9+mUsRGRHWiIdpYnSIndM3CR/VSb5CpOedsp/WMUAxCfvyYm+cNPdqWe68MxqUBliQTxh
+ 1luK/jO2yNlAMjmvD96Q/UOLXSlS4g7NdpSePbKoaT3isLHiX8n972jvmX1pE684SlPD+rAl8Wt
+ BflVWx59w+n0qWa66Hc+lMgBw58NXoJ2daiG2t2w50XLSdskrcF/Oadi1bwI5f00HEywZMPxKnj
+ QkquXmlnBi6dyHdHfFGHu3c7k/Zjg9Qcy5F7ut+IOUC4wdJkHSsnAS5xgRC9nnjB5holPin6heD
+ ozlaZ5iKoM25cHC3GxOJnmDjQBaRrMbb7vIdJkEVuQlr5HAFmKbPiZHusiVlJgVYMcu9nt4Axme
+ fGeQkPXLKa6wxYWeS9QI+IrZEVm/Oai3bSurC/PZeyvoJu1w6pHZebKXR3FoPsLR0klnTkGBbL4
+ zenZDZRqCT6Nq0kS8FAy0rAIyPykug3COaM4NCi7WsbJWpHXhM4hlrLXG5Rqtxo63beki5kfn3K
+ yOoWXlfEQ6J9zcesgUhIyAFhgqvATrlJVJG318inhKHYbiR5YgeWikUbEeJGNlwgXDb6P2kITWk
+ y2Hpg1qxObvXjVB6wKFdAVf++28TEW/v9h5UVrsnsxt4X5nEidEK+72Amfzl0J6zxKZ1N1/gLw+ ol9EG7e7CPuRbbg==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
@@ -96,34 +99,30 @@ The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-vt8500-6.17
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-defconfig-6.17
 
-for you to fetch changes up to 6cd594ed969d5cfc7f97029f8ca0d240637ebb8d:
+for you to fetch changes up to a7d7aebed4005b9c287f9bd9d22c273da63c9028:
 
-  ARM: dts: vt8500: Add L2 cache controller on WM8850/WM8950 (2025-06-12 17:25:18 +0200)
-
-----------------------------------------------------------------
-VT8500 DTS ARM changes for v6.17
-
-1. Several dtbs_check cleanups.
-2. Add missing cache topology - L2 cache controller on WM8850/WM895.
+  arm64: defconfig: enable Samsung PMIC over ACPM (2025-06-30 08:03:28 +0200)
 
 ----------------------------------------------------------------
-Alexey Charkov (5):
-      ARM: dts: vt8500: Add node address and reg in CPU nodes
-      ARM: dts: vt8500: Move memory nodes to board dts and fix addr/size
-      ARM: dts: vt8500: Use generic node name for the SD/MMC controller
-      ARM: dts: vt8500: Fix the unit address of the VT8500 LCD controller
-      ARM: dts: vt8500: Add L2 cache controller on WM8850/WM8950
+Samsung SoC defconfig changes for v6.17
 
- arch/arm/boot/dts/vt8500/vt8500-bv07.dts    |  5 +++++
- arch/arm/boot/dts/vt8500/vt8500.dtsi        | 12 ++++--------
- arch/arm/boot/dts/vt8500/wm8505-ref.dts     |  5 +++++
- arch/arm/boot/dts/vt8500/wm8505.dtsi        | 12 ++++--------
- arch/arm/boot/dts/vt8500/wm8650-mid.dts     |  5 +++++
- arch/arm/boot/dts/vt8500/wm8650.dtsi        | 12 ++++--------
- arch/arm/boot/dts/vt8500/wm8750-apc8750.dts |  5 +++++
- arch/arm/boot/dts/vt8500/wm8750.dtsi        | 12 ++++--------
- arch/arm/boot/dts/vt8500/wm8850-w70v2.dts   |  5 +++++
- arch/arm/boot/dts/vt8500/wm8850.dtsi        | 21 +++++++++++++++------
- 10 files changed, 56 insertions(+), 38 deletions(-)
+1. Multiple SoCs (including Samsung, Apple): switch sound to module from
+   a built-in, because it is not necessary for booting.  Also drop
+   redundant sound codec options.
+
+2. Enable PMIC drivers for Google GS101 Pixel 6 phones: MAX77759 and
+   Samsung PMIC over ACPM protocol.
+
+----------------------------------------------------------------
+André Draszik (2):
+      arm64: defconfig: enable Maxim max77759 driver
+      arm64: defconfig: enable Samsung PMIC over ACPM
+
+Krzysztof Kozlowski (2):
+      arm64: defconfig: Switch SOUND to module
+      arm64: defconfig: Drop unneeded unselectable sound drivers
+
+ arch/arm64/configs/defconfig | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
