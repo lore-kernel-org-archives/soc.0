@@ -1,72 +1,51 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF67A2750FD
-	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 15:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD69C2E5B2A
+	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 17:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752162643; cv=none; b=ZAzL2C48Ckep7jr2O92WAg8a61V6gKl+zR0extQNImvuLQk9zYIYMiscUZvlO1CzyqpFzP/zSrQ4OkUufQdAXMYTvdBOTDY2HL+TNBPI5gBW/xuIxJgbwevdoI4RCR8DpePyTtAX7eDy3DGxDEX1HjcfHGs5OjvId0ewTEZJ/6Q=
+	t=1752170075; cv=none; b=SlteLSMJnrDJ2jdQJ1LAdltgM8Uk0gkiV+Mcx6m1NfEoH0oe1TGiRZWMugKAHDM+9JfiXtv/TjEvCnp47nkuv+WZFeBbrF5UWK5l2ByDGvk6rT1FT8h9pXBYXhtRaF3wLgxdq5EdtjGSa/b04iCcxDVdEVMoTIPnH2rwMOsQPx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752162643; c=relaxed/simple;
-	bh=TE3e5FsAUhJEBT92C10WueG0f7MngB2CVy4WNOoUKW8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uqt4WT5jpXawmHoU12fvW2FLtXYfG2s7Jge5XYRQf+S672mY3Pk35AJfvH4RGfZLuk97NI9GAlGJllCbmUlGpi8U3bujDJROA5AqeDACcpj19O+bTkJ71JLUti2M63k3TUnp/LEigYAsjpEPiVCsB4SyVbyUtx/uh0ortQYCjPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=eh2XwafX; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1752170075; c=relaxed/simple;
+	bh=F05HSydP5BNA2szlMLXA5Y3OXlzOycAxUT/KLRoTscg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I8qr6Qf8KQX8tkZd1Gkx1fcthX6adk9K4ikIwkeKT4aJ9ZlArdA8it950YwEPmzRRm0d4+0WFTmYjh76hUiBBRln937Tr/iTX1U38G14eKQmXXKBNFMvyFNAtpMbn6+HaX/zitlUwwYZtSTlt/q8zPijFSu8t9h0jvFfUGYuR30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3LbuAwo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="eh2XwafX"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-23602481460so12273175ad.0
-        for <soc@lists.linux.dev>; Thu, 10 Jul 2025 08:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1752162641; x=1752767441; darn=lists.linux.dev;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aYCsUZOP5qNPTOsZnio5Vd12LO4J07mmm0n3y5FcLYM=;
-        b=eh2XwafXDRUvhTzKfxDDMw7KFwjwJvKgAv0+iAnDYVwfO8raRqlJCTISHpifRg8djK
-         yjS4BDQN5vYwLjX8R3qqzB1R5dA3acKDltj4FwtoYIJz5uPCi+koz6x6gEaU/PO2N6ev
-         q9V3L2YhkQ+y4OmAkb18P28XoybDrfkMlMISEyYpdFpMUcU1kFyfLWke1AYDLWlsy4TN
-         GfSDr/dub+Pa2syvX5hA99QG+HwB+CSPRigSpAe8zoia78cknsZNRooDt2lDN/YCbzcO
-         BijbE0gpQVKsShEdeP9YsWib5tKsxNjTp7ZQA0Vd8wGWjdCJwGVkGA3kU8uK/HDXIj+u
-         xT1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752162641; x=1752767441;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aYCsUZOP5qNPTOsZnio5Vd12LO4J07mmm0n3y5FcLYM=;
-        b=j7WQ4X+6LaPmJqJxtmnxdR2q4quw4VJXW9c+QJ4qxntgpCFMGIFnJ8ZirEPEaCps+0
-         F+sFy+jmDhrWz3Tb7NW+CUWsU79YrSa8HRbZkAiEXOtLVoQtYjmE1RxhfabckfHaPgEV
-         OE3TiBQe2mrHYdjm907Yh3Vmtg+Mp7/xarz6aJ+KGj8qGgovEb3gGjt1lGwDsh+20gIs
-         Vvxi/Ot9lna/TMRavw6UBX6GPikN4WJyfuixjIoE42v6qAwgl9vGg9Gq+OdOHDyHRpPe
-         ZpZ56l1nSoH72mS+mVRA488v3smP4sovFDwIWmJ1IXIR+0pdT123EqbefMocv5vE3clp
-         htoQ==
-X-Gm-Message-State: AOJu0Yyl/xc7U+0ePqrOe4LyduJBwGJo10llmU80+1A8krfOuHdJdMQz
-	SPDN8cUVjUZcTFXmaKhVzPkTI96ug6GqEfrkzeVoUeeyhlT1Esw42mMQQ0h/c5nchcgCw7n087O
-	A4THzMJWLTg==
-X-Gm-Gg: ASbGncvXp/wFxsn/7kaRGQ8vR0ToP7Hj1unHqKaXJgK/YT3slhg0kvn5mai91t0tLGQ
-	agQVWn/3Vflaarf1AvKh7QxzAWyuWJndvvDVn6wZE71aE5PIXR2Fu+E7xMapLUbPaqHGCGqY1jM
-	hbMIt4D1V7ZvKcLioLcUOMeOzs54Y9DEtmQ0p6An6L03N15lrRCifkAjffWXah7QLLAL2hdHzPc
-	h26cI2qtAmMpBXTSB7c8WhEcDYm7jP/iXfy8l1V4JxzBF3HoUDvH9ZFA+ZdRZ1XNnnQHY15EaTr
-	XHAfYAPPgmSCYBzoyR9pKzjU8AwOmiK7BKVFaOjotaF6O6pcvYswOBFIiLmiejat4vCQJoA=
-X-Google-Smtp-Source: AGHT+IElU/0L8KxnCYNK56yG6cNhASLXsy7y2GFyTBpCgYpyDu8yUDmzKCFyTB8rlNo1biXYsiwnZw==
-X-Received: by 2002:a17:902:ea07:b0:234:a66d:ccf5 with SMTP id d9443c01a7336-23ddb31593emr119964355ad.49.1752162640915;
-        Thu, 10 Jul 2025 08:50:40 -0700 (PDT)
-Received: from localhost ([71.212.208.158])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4284898sm24954395ad.24.2025.07.10.08.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 08:50:40 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: soc@lists.linux.dev
-Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] soc: OMAP updates for v6.17
-Date: Thu, 10 Jul 2025 08:50:40 -0700
-Message-ID: <7h34b4xcxb.fsf@baylibre.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3LbuAwo"
+Received: by smtp.kernel.org (Postfix)
+	id 7EB8BC4CEF4; Thu, 10 Jul 2025 17:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AE3C4CEE3;
+	Thu, 10 Jul 2025 17:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752170075;
+	bh=F05HSydP5BNA2szlMLXA5Y3OXlzOycAxUT/KLRoTscg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q3LbuAwoJH303RGl9w6tdCBvhbsnhmPEP1AoD7Zgvxr3jjKZZEahWEn5kfOOgRzg3
+	 uXNvRxochNO5B4GWmiMekfeS4CLN+yXxAPOX7ovTZL6bS9ov8knLtjm2ugiMGlkwhE
+	 TjsvhqYunKmc+jjG9i5jJ+YlQRmRj7ZUp061kz/G1B30yKB40HtcYzy7hfxMYwYVgC
+	 z+Hua1xqkR1JkYjiNJn/QjvHd1jIXid87P61P8w56wV9ZV6WCY0Oig9CQCkI0KB37a
+	 Ra/jSRojD49hb2W6qdNOKWUw2ujO9pXCXhu+vUPsYpp0GDiNgLrq9dtqN6Zi17Qxb2
+	 U0ZzgQmulJUeQ==
+From: Bjorn Andersson <andersson@kernel.org>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [GIT PULL] Qualcomm DeviceTree fixes for v6.16
+Date: Thu, 10 Jul 2025 12:54:33 -0500
+Message-ID: <20250710175434.6201-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+
 
 The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
@@ -74,25 +53,27 @@ The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags/omap-for-v6.17/soc-signed
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.16
 
-for you to fetch changes up to 0711a8dcea2a928a54bfb40b064d6cab4b327edb:
+for you to fetch changes up to e8d3dc45f2d3b0fea089e0e6e351d1287a5a2a29:
 
-  bus: del unnecessary init var (2025-07-07 14:17:51 -0700)
-
-----------------------------------------------------------------
-soc: OMAP updates for v6.17
+  arm64: dts: qcom: x1e80100: describe uefi rtc offset (2025-06-10 09:14:58 -0500)
 
 ----------------------------------------------------------------
-Kory Maincent (2):
-      arm: omap2plus_defconfig: Enable TPS65219 regulator
-      arm: multi_v7_defconfig: Enable TPS65219 regulator
+Qualcomm DeviceTree fixes for v6.16
 
-Li Jun (1):
-      bus: del unnecessary init var
+The RTC DeviceTree binding was changed in v6.16, to require an explicit
+flag indicating that we store RTC offset in in an UEFI variable.
 
- arch/arm/configs/multi_v7_defconfig  | 3 +++
- arch/arm/configs/omap2plus_defconfig | 3 +++
- drivers/bus/ti-sysc.c                | 3 +--
- 3 files changed, 7 insertions(+), 2 deletions(-)
+The result sent X Elite and Lenovo Thinkpad X13s users back to 1970, add
+the flag to explicitly select the correct configuration for these
+devices.
 
+----------------------------------------------------------------
+Johan Hovold (2):
+      arm64: dts: qcom: sc8280xp-x13s: describe uefi rtc offset
+      arm64: dts: qcom: x1e80100: describe uefi rtc offset
+
+ arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 2 ++
+ arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi               | 1 +
+ 2 files changed, 3 insertions(+)
