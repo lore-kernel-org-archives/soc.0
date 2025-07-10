@@ -1,183 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C6026FA7B
-	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 15:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F72274B27
+	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 15:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752161798; cv=none; b=jQ5k2rJSHhM6zUAfjC6qap7TcXG1dTKmqk/WS/C61nMWawD3dsg/E4UmLj/GqfJaTlpKMBbzIG7pIxJI4KVFf6E5zdRKUs+A+6UFWLzMpvaNgb7g6vEdpMXqeMBOBZPVfqc65Dq4oQ4ZzvpG4MxGo+G5ml3nbMvnn+GN5+8WiJc=
+	t=1752162548; cv=none; b=LICRKY20Jc6eGpKcDLT+UXVhNtJzsmFuk4DNQENvtJsxK56pSX8FJSlMTnlMfMMBJk0sR3xjpzijv4/OpkxQsEFCfButeeK7YtPuUqXvzocsVg1m5lOzuzIj3AkkRiV42vRYzFl5tqYREKz3jlQjZ1jj2IBDtQD6v/XLutbKWh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752161798; c=relaxed/simple;
-	bh=kloJDvnk5TssDi2bhZ5O7aDFQDka/31Rwq/YcMH0hfE=;
-	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=Ii97/4DxPRXJxSHv6ixAKzX+uFAd5sMbq+BED7R9vBNvOhh9a7AekX8I3X3cMcoxrQA8+9hmhiCHvdYWBdBRWoEUUPsgaAfnzs7YEH43glvsmV+VJlExWmRXn7LhQAY1nNxUTfO/qH49hXBGw/2YFIaYQk72sCDn0Dmgn/jlV5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=lsxCRHRb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752162548; c=relaxed/simple;
+	bh=NUas53vpoAk6VP6qKkOKtFSjta/i003A560bDDh3vDU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nBBIn7UB70oreJWqgBfdpi56zKwrIr3un7myB5ofNlb+JNIzU2ES7gg2rTz/jCS578RAdCdE+4mjotQDUFodKJntp5dgfm3qCAZC5C/ZNNX6B5Y0muQ41URsb9tQHoXPoGfQHN5m1rWofFKIDqJlKKHsUyy4aMy2R1UR4ryzAMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=1Tjdc/dv; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="lsxCRHRb"
-Received: by smtp.kernel.org (Postfix)
-	id C02C6C4CEF6; Thu, 10 Jul 2025 15:36:35 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7341BC4CEE3;
-	Thu, 10 Jul 2025 15:36:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7341BC4CEE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56AFPij1003754;
-	Thu, 10 Jul 2025 17:36:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=selector1; bh=KzAzOUNX3up9WMQCB7MqOT
-	zOvJNFeyyub5F+P4jf5qM=; b=lsxCRHRbNjQ/9zQewQtP0wwHl9RzC2qQeY9/7Y
-	EhODSKMa4ySHAbtwKLDOltmwzZHNBLs6dnrESG1atSpDh+RcHAfC8zGopS0eMgdW
-	Jzt0L13iNu8MWFfZfotWAVJ3s+WR6nOr4d4zw4XI/2wDpi1F47tA0CcrEb3ITsTO
-	U/rn01DbiAJgahsL9r2Axz3K72gxfXmyR0VcQioCRzpWkH92MMhI9Mx/e5/VynS+
-	SEOXn7GXBW0PJsvhxyS1Iy92c+AEgrIoeuzn0cU8mb62dd/rphstUnV32PQEHRaD
-	+Q0N0abltr1bbWWqbp4u5H7DTt+z3zogCuPg5X6IvyI43o6w==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47pud3j4y1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 17:36:22 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 542B04005B;
-	Thu, 10 Jul 2025 17:35:20 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0C05BB1F9A8;
-	Thu, 10 Jul 2025 17:33:08 +0200 (CEST)
-Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 10 Jul
- 2025 17:33:07 +0200
-Message-ID: <b3e3363b-1ea5-457c-b244-2cbe26f7d6e4@foss.st.com>
-Date: Thu, 10 Jul 2025 17:33:07 +0200
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="1Tjdc/dv"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-23c8f179e1bso13567495ad.1
+        for <soc@lists.linux.dev>; Thu, 10 Jul 2025 08:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1752162546; x=1752767346; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i9xR3mb1kxP9itCBHwNObW7nPNgFeA20Kv8/YjFmav0=;
+        b=1Tjdc/dvOudjT5p9p/j+adGeSugjzqzDMBPNLXdIAKrAuuumBwkl7UbDGHsP5Bs/XG
+         d7qIfjEJQr7eUwk1KnrWmQwgmZ/zCQBB6PI0nl9ADoSTIe9SM4LXB4sr7RIMQRRwAk+s
+         Z/8fs2KG+5eac2muxDOsKKZJjzOnrEQ68HvucL2h+Mh+epg2xYLucyx1pbmCG/Zveg7Q
+         kxDcoVXTjigvWjM/wnFsIOP1dJAWyqFkjrNVH52phThoqM36CObFKfzWbSc+hgng08G4
+         bsvJ2PhpU+qv85gaStfEK5efoNFr183QiOw6M0oOfIZP4rlHfhL+jkpUa+wIY40PHBpG
+         ji4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752162546; x=1752767346;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i9xR3mb1kxP9itCBHwNObW7nPNgFeA20Kv8/YjFmav0=;
+        b=taM5Vp2aE2LXB15EzmpvcBdOjprqPER5tjo/6c/kK0vl+fXudVj1WeMv4OchtOgXDo
+         TUH5HQ00WtDw4Uul8CR3enlCzgds6XYx+ZDY4nxXZVaw719JtKh5rXwhfBYB+ZbcWYWP
+         LmhIzV2i5q/tl4Qq1xvuz36KDrfFOKQ9tPRQjXkcNqo/qeB6RIESghFQp3Ps9VN6Smk3
+         lzx2IKGlkPpgT9xdxqTXRgaHXuknJG7A4rY6MZYEClq62DBH+v2+vtyMT7aCabbddh1T
+         mUEnGF4AuD8yhyceUuFFWTPQp3Jydm5MB73vCuoyoOM3TzibbCx2WbjEEdh+CbTGpgwa
+         b6pw==
+X-Gm-Message-State: AOJu0Yzvytb1LE5MOuiqSvEyITXHVNioGV87Lr4gY3hOnrTnmENgioJG
+	Vc7l+1Ypkpb/hL11DzHxq5x/W2HuXWMEQMjZ9byg7Gn6o7Lvdb3vttOuno3Tq7hepf7/ksrpual
+	As8x8p+Goxw==
+X-Gm-Gg: ASbGncs+Dnut+tOPlv5HX2WaomPUXZainy/3r/vAC1/QyzCAv5FlelPcjPveKiM520I
+	hoBxS8dmj/qR8JVDWAM/zaMRdSBbFgxAPnb04tM1BU0xG1p39eHVJYaavOIsnfd+JlSyfCj0ijl
+	MogO3dpcyirBsUOhj4Un5pQjssWWp7PNmF7h+avUJc1rAEMlX94C6BCQFt6XVke4WOC4RIBpqZX
+	s5rHGNJR1yJc5aBf/Gzm/pvi1S+vDLQD6JmQkGU3+HdJI8BA9PlxFC4Wc2WMQK+zjpKeIPsPgNX
+	/DzS9xSg9eMH8NNe/o9kVDozdODNeb0NxR+iyBE2bHxleVOBqFLxo1ipRVvFTzTc9ELgzN8=
+X-Google-Smtp-Source: AGHT+IGl3lYbN2pRFYA0zQWbsg56J/yom0bWzs4fTRL3F5wEm5er1i3GzM8I8xWM5o1Eo43mIynm6Q==
+X-Received: by 2002:a17:902:dacc:b0:237:e818:30f2 with SMTP id d9443c01a7336-23de489588fmr41446345ad.50.1752162546029;
+        Thu, 10 Jul 2025 08:49:06 -0700 (PDT)
+Received: from localhost ([71.212.208.158])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de43313d3sm26855165ad.144.2025.07.10.08.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jul 2025 08:49:05 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: soc@lists.linux.dev
+Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] arm: dts: OMAP updates for v6.17
+Date: Thu, 10 Jul 2025 08:49:05 -0700
+Message-ID: <7h7c0gxczy.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: <alexandre.torgue@foss.st.com>,
-        "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 DT changes for v6.17#1
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-10_04,2025-07-09_01,2025-03-28_01
-
-Hi ARM SoC maintainers,
-
-Please consider this first round of STM32 DT changes for v6.17 cycle.
-I added a config patch inside.
-
-Thanks
-Alex
-
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
 are available in the Git repository at:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-dt-for-v6.17-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git tags=
+/omap-for-v6.17/dt-signed
 
-for you to fetch changes up to 1a32f7427eb3d1248bc64cd745b93f88cc838933:
+for you to fetch changes up to a3a4be32b69c99fc20a66e0de83b91f8c882bf4c:
 
-   arm64: dts: st: remove empty line in stm32mp251.dtsi (2025-07-10 
-17:05:56 +0200)
-
-----------------------------------------------------------------
-STM32 DT for v6.17, round 1
-
-Highlights:
-----------
-
-- MPU:
-   - STM32MP13:
-     -Add Ethernet MAC adress efuse support.
-
-   - STMP32MP15:
-     - Add stm32mp157f-DK2 board support. This board embedds the same
-       conectivity devices, DDR ... than stm32mp157c-dk2.
-       However there are two differences: STM32MP157F SoC which allows
-       overdrive OPP and the SCMI support for system features like
-       clocks and regulators.
-
-   - STM32MP25:
-     - Fix tick timer for low power use cases.
-     - Add timer support.
+  arm: dts: ti: omap: Fixup pinheader typo (2025-07-07 14:24:57 -0700)
 
 ----------------------------------------------------------------
-Alexandre Torgue (1):
-       ARM: dts: stm32: fullfill diversity with OPP for STM32M15xF SOCs
+arm: dts: OMAP updates for v6.17
+- new board support: Seeed BeagleBone Green Eco
+- misc. fixups / cleanups
 
-Amelie Delaunay (3):
-       ARM: dts: stm32: use 'typec' generic name for stusb1600 on 
-stm32mp15xx-dkx
-       ARM: dts: stm32: use internal regulators bindings for MP15 scmi 
-variants
-       ARM: dts: stm32: add stm32mp157f-dk2 board support
+----------------------------------------------------------------
+Albin T=C3=B6rnqvist (1):
+      arm: dts: ti: omap: Fixup pinheader typo
 
-Etienne Carriere (2):
-       dt-bindings: regulator: Add STM32MP15 SCMI regulator identifiers
-       ARM: dts: stm32: optee async notif interrupt for MP15 scmi variants
+Felix Brack (1):
+      ARM: dts: am335x-pdu001: Fix RS-485 transceiver switching
 
-Fabrice Gasnier (4):
-       arm64: dts: st: add timer nodes on stm32mp251
-       arm64: dts: st: add timer pins for stm32mp257f-ev1
-       arm64: dts: st: add timer nodes on stm32mp257f-ev1
-       arm64: defconfig: enable STM32 timers drivers
+Frank Li (1):
+      Revert "ARM: dts: Update pcie ranges for dra7"
 
-Himanshu Bhavani (1):
-       dt-bindings: arm: stm32: add STM32MP157F-DK2 board compatible
+Kory Maincent (3):
+      arm: dts: omap: am335x-bone-common: Rename tps to generic pmic node
+      dt-bindings: omap: Add Seeed BeagleBone Green Eco
+      arm: dts: omap: Add support for BeagleBone Green Eco board
 
-Olivier Moysan (1):
-       ARM: dts: stm32: add system-clock-direction-out on stm32mp15xx-dkx
+Krzysztof Kozlowski (1):
+      ARM: dts: omap: am335x: Use non-deprecated rts-gpios
 
-Patrice Chotard (1):
-       arm64: defconfig: Enable STM32 Octo Memory Manager and OcstoSPI 
-driver
-
-Patrick Delaunay (2):
-       arm64: dts: st: fix timer used for ticks
-       arm64: dts: st: remove empty line in stm32mp251.dtsi
-
-Uwe Kleine-König (1):
-       ARM: dts: stm32: Add nvmem-cells to ethernet nodes for constant 
-mac-addresses
-
-  Documentation/devicetree/bindings/arm/stm32/stm32.yaml |   1 +
-  arch/arm/boot/dts/st/Makefile                          |   3 +-
-  arch/arm/boot/dts/st/stm32mp131.dtsi                   |   2 +
-  arch/arm/boot/dts/st/stm32mp133.dtsi                   |   2 +
-  arch/arm/boot/dts/st/stm32mp15-scmi.dtsi               |  10 ++-
-  arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi         | 196 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp157f-dk2.dts               | 179 
-++++++++++++++++++++++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/st/stm32mp15xf.dtsi                  |  17 +++++
-  arch/arm/boot/dts/st/stm32mp15xx-dkx.dtsi              |   3 +-
-  arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi          |  61 
-++++++++++++++++++
-  arch/arm64/boot/dts/st/stm32mp251.dtsi                 | 527 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
-  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts             |  58 
-+++++++++++++++++
-  arch/arm64/configs/defconfig                           |   6 ++
-  include/dt-bindings/regulator/st,stm32mp15-regulator.h |  40 ++++++++++++
-  14 files changed, 1098 insertions(+), 7 deletions(-)
-  create mode 100644 arch/arm/boot/dts/st/stm32mp157f-dk2-scmi.dtsi
-  create mode 100644 arch/arm/boot/dts/st/stm32mp157f-dk2.dts
-  create mode 100644 arch/arm/boot/dts/st/stm32mp15xf.dtsi
-  create mode 100644 include/dt-bindings/regulator/st,stm32mp15-regulator.h
+ Documentation/devicetree/bindings/arm/ti/omap.yaml |   1 +
+ arch/arm/boot/dts/ti/omap/Makefile                 |   1 +
+ arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi  |   2 +-
+ arch/arm/boot/dts/ti/omap/am335x-boneblack.dts     |   2 +-
+ arch/arm/boot/dts/ti/omap/am335x-bonegreen-eco.dts | 169 +++++++++++++++++=
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+++
+ arch/arm/boot/dts/ti/omap/am335x-nano.dts          |   8 ++++----
+ arch/arm/boot/dts/ti/omap/am335x-pdu001.dts        |   3 ++-
+ arch/arm/boot/dts/ti/omap/dra7.dtsi                |  29 +++++++++++------=
+------------
+ 8 files changed, 190 insertions(+), 25 deletions(-)
+ create mode 100644 arch/arm/boot/dts/ti/omap/am335x-bonegreen-eco.dts
