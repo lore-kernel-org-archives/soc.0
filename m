@@ -1,145 +1,89 @@
-Received: from spam.coasia.com (mail2.coasia.com [112.168.119.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92459125B2
-	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 00:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=112.168.119.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A01B27F170
+	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 02:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752107264; cv=none; b=rV5ccD7QQQ12fRVrIBQ6jCbAbsEC2ZxcGOG5H1/0nIJUoJuJd8CuoDAYnntcTsk/Y+PaoEgDgRR40eUIwOKMEWltEr8q4ovHP3ZWbKtxXZvsoudjw1IXFonabcO0nIL+QYE3mmwYf2shOrH8gLwUV9Nh8zvgVbvQu6AVGYCp01k=
+	t=1752114262; cv=none; b=mbXDh2gPMv9ymMZ8ip9KwCbgeW81e3mfzHBpPh5KbE+pcjliDh/R+a9wc1NtoyXsr426UrfAtTPrrVqBuIZ2p068cLdiTECMZl9+Iq81VSlkzX+wtiDYRXD088bp2JP+/f3lvMQn70Cq/pqGum0AHr69K+bHYYqy3e76OOQ5GfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752107264; c=relaxed/simple;
-	bh=HzX1zisBeXJccCKCkQDSqJxMFj7T5nTRdM+oS4si8Qo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UOW9foKMYLXq35OaVRHmdSVfs8KL809u37j0AcauvTzBN92vYhQSzUu+HzY06oYwUyrVujlQYp/JO+0FcohST3feBda2EoY7Ye0VkS8f21CU9YSvd05pkDtF3XxORPppXjOoqcffVbn+3qh/9UEK9xKlG8LHud+ivQZjuwmr8gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=coasia.com; spf=pass smtp.mailfrom=coasia.com; dkim=pass (1024-bit key) header.d=coasia.com header.i=@coasia.com header.b=eAhzeI/B; arc=none smtp.client-ip=112.168.119.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=coasia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coasia.com
+	s=arc-20240116; t=1752114262; c=relaxed/simple;
+	bh=/5k29OQG3+cl0g0MxRk70gG+2eKmdFtzpYOa/bQR91o=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=VzqO3K4jPnFj7TBDM+JWvP21MTWvo/er76TpyMetVm7EmYYx8Y0hfkyX80TX+BfBw7tcrf9+k1dRTGZ4DqI+7gdt657qRng098Cf+dTt3fZK2DDpDxRkDdWAakG9mQAbuy23Mv4GqHAx2+aOzjuqENlh986MRpKqRG6pV8pMnoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=O3MbPEDV; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=coasia.com header.i=@coasia.com header.b="eAhzeI/B"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=coasia.com; s=coasia;
-	t=1752106861; bh=HzX1zisBeXJccCKCkQDSqJxMFj7T5nTRdM+oS4si8Qo=;
-	l=851; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=eAhzeI/BWxU0N8PYUoP2HPb+YsE/NFasQXlmLamrkQHw2D53N1YfcvYBx6rHySTce
-	 df/YnIvZ70hCXKDTat1uWIyC9VS87yAy2dUbTi66Dy5O28V0q7Gf1iJ6Pjuc8f4dwL
-	 jw1/OrzdNodRfp9e10xVEU7TFRBE+1C1XdIfkikY=
-Received: from unknown (HELO kangseongu..) (ksk4725@coasia.com@115.23.218.194)
-	by 192.168.10.159 with ESMTP; 10 Jul 2025 09:21:01 +0900
-X-Original-SENDERIP: 115.23.218.194
-X-Original-SENDERCOUNTRY: KR, South Korea 
-X-Original-MAILFROM: ksk4725@coasia.com
-X-Original-RCPTTO: jesper.nilsson@axis.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	krzk@kernel.org,
-	s.nawrocki@samsung.com,
-	cw00.choi@samsung.com,
-	alim.akhtar@samsung.com,
-	linus.walleij@linaro.org,
-	tomasz.figa@gmail.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	arnd@arndb.de,
-	kenkim@coasia.com,
-	pjsin865@coasia.com,
-	gwk1013@coasia.com,
-	ksk4725@coasia.com,
-	hgkim05@coasia.com,
-	mingyoungbo@coasia.com,
-	smn1196@coasia.com,
-	pankaj.dubey@samsung.com,
-	shradha.t@samsung.com,
-	ravi.patel@samsung.com,
-	inbaraj.e@samsung.com,
-	swathi.ks@samsung.com,
-	hrishikesh.d@samsung.com,
-	dj76.yang@samsung.com,
-	hypmean.kim@samsung.com,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@axis.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	soc@lists.linux.dev
-From: ksk4725@coasia.com
-To: Jesper Nilsson <jesper.nilsson@axis.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: kenkim <kenkim@coasia.com>,
-	Jongshin Park <pjsin865@coasia.com>,
-	GunWoo Kim <gwk1013@coasia.com>,
-	SeonGu Kang <ksk4725@coasia.com>,
-	HaGyeong Kim <hgkim05@coasia.com>,
-	GyoungBo Min <mingyoungbo@coasia.com>,
-	SungMin Park <smn1196@coasia.com>,
-	Pankaj Dubey <pankaj.dubey@samsung.com>,
-	Shradha Todi <shradha.t@samsung.com>,
-	Ravi Patel <ravi.patel@samsung.com>,
-	Inbaraj E <inbaraj.e@samsung.com>,
-	Swathi K S <swathi.ks@samsung.com>,
-	Hrishikesh <hrishikesh.d@samsung.com>,
-	Dongjin Yang <dj76.yang@samsung.com>,
-	Sang Min Kim <hypmean.kim@samsung.com>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@axis.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	soc@lists.linux.dev
-Subject: [PATCH 11/16] dt-bindings: pinctrl: samsung: Add compatible for ARTPEC-8 SoC
-Date: Thu, 10 Jul 2025 09:20:41 +0900
-Message-Id: <20250710002047.1573841-12-ksk4725@coasia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250710002047.1573841-1-ksk4725@coasia.com>
-References: <20250710002047.1573841-1-ksk4725@coasia.com>
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="O3MbPEDV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1752114257;
+	bh=lFaBzW/UFNKRDOoKgOilQk2+bD1ofG50x/0d54hiwwo=;
+	h=Subject:From:To:Cc:Date;
+	b=O3MbPEDV8Vl5EyZd0IlS9GM7zFbwanUKbgi8uw38SA+/7kAG7A5I3K6ne6QLYVQ5W
+	 QYE7yjtnUqcs6SXZNOQoj/kRpTxPpnbabtnuBeHjf6ZqZO/Xow2zMoyTTtz8/x2YZz
+	 mM3u9e1zWiE7P7qvwU1e+DhY4ykrkeIJVcCIA+Tcvw4N6nsHPwoGnT2d6yo92Oeztn
+	 dUMJODDPBsu0MHHxcO39SIobpy3QdatzTOhVNLX4+hJ2N52Vr4KpGrQp/64oXoNuGm
+	 8YsAJQzi05wkBJqBKvptPYI5gftXk3EvuiRymsscENZpuzd6NoJk0g4po/FpHeRPRC
+	 Av0g/SX3FK7OA==
+Received: from [192.168.68.112] (unknown [180.150.112.70])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D972E6508A;
+	Thu, 10 Jul 2025 10:24:14 +0800 (AWST)
+Message-ID: <d119a7b44b25a1e55a710adec7fce3e9a9fc898e.camel@codeconstruct.com.au>
+Subject: [GIT PULL] aspeed: drivers: changes for 6.16-rc6
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: soc <soc@lists.linux.dev>
+Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, linux-aspeed
+ <linux-aspeed@lists.ozlabs.org>, linux-kernel
+ <linux-kernel@vger.kernel.org>,  Joel Stanley <joel@jms.id.au>
+Date: Thu, 10 Jul 2025 11:54:13 +0930
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: SeonGu Kang <ksk4725@coasia.com>
+Hello SoC maintainers,
 
-Document the compatible string for ARTPEC-8 SoC pinctrl block,
-which is similar to other Samsung SoC pinctrl blocks.
+Here are two fixes to the ASPEED LPC snoop driver for the 6.16 release
+cycle.
 
-Signed-off-by: SeonGu Kang <ksk4725@coasia.com>
----
- Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Cheers,
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-index de8460856141..9386dcd418c2 100644
---- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-@@ -35,6 +35,7 @@ properties:
- 
-   compatible:
-     enum:
-+      - axis,artpec8-pinctrl
-       - google,gs101-pinctrl
-       - samsung,s3c2412-pinctrl
-       - samsung,s3c2416-pinctrl
--- 
-2.34.1
+Andrew
+
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494=
+:
+
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed=
+-6.16-fixes-0
+
+for you to fetch changes up to 56448e78a6bb4e1a8528a0e2efe94eff0400c247:
+
+  soc: aspeed: lpc-snoop: Don't disable channels that aren't enabled (2025-=
+07-02 11:05:20 +0930)
+
+----------------------------------------------------------------
+ASPEED SoC driver fixes for 6.16
+
+Address concerns in the ASPEED LPC snoop driver identified in the first two
+patches of the cleanup series at [1].
+
+[1]: https://lore.kernel.org/all/20250616-aspeed-lpc-snoop-fixes-v2-0-3cdd5=
+9c934d3@codeconstruct.com.au/
+
+----------------------------------------------------------------
+Andrew Jeffery (2):
+      soc: aspeed: lpc-snoop: Cleanup resources in stack-order
+      soc: aspeed: lpc-snoop: Don't disable channels that aren't enabled
+
+ drivers/soc/aspeed/aspeed-lpc-snoop.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
