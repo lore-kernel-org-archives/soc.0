@@ -1,190 +1,226 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9326D2D6628;
-	Thu, 10 Jul 2025 10:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9092D0C93
+	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 11:29:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752142460; cv=none; b=Dro31YAFQ7HfbBEuyeZNW/wWflRYzaK6krr52m3J0R9i7IKGVGd/tGcYdC2OwGaxaJRLYwaRnwbD0tx2MoQFdJJXYoUq33HS0yUK8+kzoaXiJNcq+LXZfdKYHIS6hfBQ60U2NYf4ydPogAEIGRTrN1qjoVnEUJEUcwybTSjQrII=
+	t=1752146989; cv=none; b=Vj8S0uKRoYoKhqmaTYYw3U1byzulUC5Jf3CDQbfg4L8nmJPmLWn63Jb8KaPseR3mFtWgkMNhdK5IWvkIRMeDKu9cQHV5ro46BHAYbXxXZtaqZFMQFaXleSihDR4k1c66vXEFbYBlK0bCWHoiPNDza9iU4CLumXfq5nIJt+RJrMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752142460; c=relaxed/simple;
-	bh=qATw6ZD37x/XT/B5MCjb1qOwnXiW8HLBo9mIN9I0R3g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eBY+eo5BgshJrVdLmnNfH3MlH6roc/cFeNNjOKj3+rvDCDImsss8M26VYC3IQzwzeo3MANR7UO8Lfxkvrf5Rh6YS1V9cVuK6FQmC9A2pqVEoM1lQi8gDEbAFMa6v1aTtZPpF5uQa8u0NceGjDpF73bws4xcf1BP6SX1KERI2Q9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyQIaiUs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752146989; c=relaxed/simple;
+	bh=/osK/bBy3pTJ4UNHciHNVoknbLXXNW6Lo7iPp3uPb5c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Li1bIH7YjB4whuM+t037F6sQD8R8adlpM5ib99v6hHt+n7M1Ned9Rlw4a/IaB5iv/NJCGQMhtyBO7mY/4e+/kfznAXI+Kbju7UuIvQwjDp6rMY8qVD+xA02uIbGE+VpBYiL8XoioXmyge5F00Hbp58n1Ra0CDuggtXpDgzdNcOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=jO79uTOS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyQIaiUs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02EFC4CEF5;
-	Thu, 10 Jul 2025 10:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752142460;
-	bh=qATw6ZD37x/XT/B5MCjb1qOwnXiW8HLBo9mIN9I0R3g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DyQIaiUs1pOLCr6gIs/azzr6zC2/moryuNU3UAInevb5nD5O/dcuT8sE8gp8d5ZFl
-	 5VNvilLKEPrcZ2R75ojm5IYNV91VLqeOC9kW1B8ZmPpR96HVwZqqE93AofpeH2az7U
-	 I/M5XovAKqh3MfW3pt/G59uIxMzKQxKjfK+Z5GbEFZdFeZcosU5kTrGDUj+qHKCKfM
-	 quueYdCtq7I9FgyFob+ymo3624rGscjBcGF+IWhRZXA7D6FQYh69zMJMOz7vWzNV8U
-	 nTUKsPC5maC1U4GukMIC1sg5fg0fGy6PhNFuiuimPiXm5Ea8SYYncPv9FQrBUguvub
-	 DvcK8vYFUJFgA==
-Message-ID: <53130960-e054-4de9-b62a-cde384444a78@kernel.org>
-Date: Thu, 10 Jul 2025 12:14:10 +0200
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="jO79uTOS"
+Received: by smtp.kernel.org (Postfix)
+	id B20B6C4CEF6; Thu, 10 Jul 2025 11:29:48 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 76E48C4CEF5;
+	Thu, 10 Jul 2025 11:29:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76E48C4CEF5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=1EgepSYSqMC2d+tiMF08mf9aOpOjLIUIm5ANMd7Ncp0=; b=jO79uTOS8NQh0rwX2mm2tH1mbf
+	5k3Sy+I3gn4FafoeluVnGsiCFxpMN9rnzVJOCdoTmr6o+2xAPaRMQcwHd8KqjFYHU7SIUMbl32qh6
+	tE5uK/3QWIsbCBuTLMUY1jQgpOUYlWalOSe/lmHAPokmVTTDLYj+Iyw+rorZz2P0RFysRGDCyV0sJ
+	aAE4lKQgr8+AualDp2KON+qmW/I52wg4i4W0kh+y+wx1ctp0sN1jIgbwnZx3dKa6Rw9oHDWq7ljdw
+	0BpQtgYcIHVRUsRW+3dG0xA0yZvmdRb5VXA/Csrx5QQe7VLykOGWGr1e+PR5ZBZ8w4SJMH/ve96nj
+	VUWP6zSQ==;
+Received: from [194.95.143.137] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uZpTF-0004WL-Hb; Thu, 10 Jul 2025 13:29:45 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 6.17 #1
+Date: Thu, 10 Jul 2025 13:29:45 +0200
+Message-ID: <15465458.uLZWGnKmhe@phil>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/16] arm64: dts: axis: Add initial device tree support
-To: Arnd Bergmann <arnd@arndb.de>, ksk4725@coasia.com,
- Jesper Nilsson <jesper.nilsson@axis.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Linus Walleij <linus.walleij@linaro.org>, Tomasz Figa
- <tomasz.figa@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Ravi Patel <ravi.patel@samsung.com>,
- SungMin Park <smn1196@coasia.com>
-Cc: kenkim <kenkim@coasia.com>, Jongshin Park <pjsin865@coasia.com>,
- GunWoo Kim <gwk1013@coasia.com>, HaGyeong Kim <hgkim05@coasia.com>,
- GyoungBo Min <mingyoungbo@coasia.com>,
- Pankaj Dubey <pankaj.dubey@samsung.com>, Shradha Todi
- <shradha.t@samsung.com>, Inbaraj E <inbaraj.e@samsung.com>,
- Swathi K S <swathi.ks@samsung.com>, Hrishikesh <hrishikesh.d@samsung.com>,
- Dongjin Yang <dj76.yang@samsung.com>, Sang Min Kim
- <hypmean.kim@samsung.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-arm-kernel@axis.com, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, soc@lists.linux.dev
-References: <20250710002047.1573841-1-ksk4725@coasia.com>
- <20250710002047.1573841-15-ksk4725@coasia.com>
- <5494bedb-6907-43dc-8580-04ef1e47c8d0@app.fastmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <5494bedb-6907-43dc-8580-04ef1e47c8d0@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On 10/07/2025 09:48, Arnd Bergmann wrote:
-> On Thu, Jul 10, 2025, at 02:20, ksk4725@coasia.com wrote:
->> From: sungminpark <smn1196@coasia.com>
->>
->> Add initial device tree support for Axis ARTPEC-8 SoC and Grizzly board.
->> This SoC contains four cores of cortex-a53 CPUs and other various
->> peripheral IPs.
-> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index fa1e04e87d1d..371005f3f41a 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -2320,6 +2320,20 @@ F:	drivers/crypto/axis
->>  F:	drivers/mmc/host/usdhi6rol0.c
->>  F:	drivers/pinctrl/pinctrl-artpec*
->>
->> +ARM/ARTPEC ARM64 MACHINE SUPPORT
->> +M:	Jesper Nilsson <jesper.nilsson@axis.com>
->> +M:	Ravi Patel <ravi.patel@samsung.com>
->> +M:	SeonGu Kang <ksk4725@coasia.com>
->> +M:	SungMin Park <smn1196@coasia.com>
->> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->> +L:	linux-samsung-soc@vger.kernel.org
->> +L:	linux-arm-kernel@axis.com
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/clock/axis,artpec*-clock.yaml
->> +F:	arch/arm64/boot/dts/axis/
->> +F:	drivers/clk/samsung/clk-artpec*.c
->> +F:	include/dt-bindings/clock/axis,artpec*-clk.h
-> 
-> I'm trying to understand the SoC family tree here. I see that
-> you have an entry for ARTPEC SoCs above it, which currently
-> covers artpec6 (Cortex-A9, apparently not Samsung based).
-> 
-> Is the reason for having two entries here that artpec6/7 and
-> artpec8/9 are two separate SoC families, or is this just because
-> they are using 32-bit and 64-bit cores, respectively?
+Hi soc maintainers,
 
-These should be entirely different families. Artpec6 was not done by
-Samsung and this one - Artpec 8 - is basically Samsung SoC, just like
-they did designs for Tesla and Google GS101.
-
-I don't know about Artpec 9.
-
-All this should be explained in DTS or bindings commit msg, btw.
-
-> 
->>
->> +config ARCH_ARTPEC
->> +	bool "Axis Communications ARTPEC SoC Family"
->> +	help
->> +	   This enables support for the ARMv8 based ARTPEC SoC Family.
->> +
->> +config ARCH_ARTPEC8
->> +	bool "Axis ARTPEC-8 SoC Platform"
->> +	depends on ARCH_ARTPEC
->> +	depends on ARCH_EXYNOS
->> +	select ARM_GIC
->> +	help
->> +	  This enables support for the Axis ARTPEC-8 SoC.
->> +
-> 
-> I would prefer to be less fine-grained here, especially as
-> it seems that ARTPEC9 is again quite similar to ARTPEC8, as
-> far as I can guess from public information.
-> 
-> Could you fold both entries into a single ARCH_ARTPEC?
-
-So far ARCH_ARTPEC = ARCH_ARTPEC8, so obviously it can be folded. I
-don't know if Artpec 9 will ever be upstreamed. This Artpec 8 is like 4
-or 5 year effort - they sent first patches some years ago, but DTS was
-not ready. Therefore I think we should not assume there will be Artpec 9
-yet. If it comes, we can always split things.
+please find below Rockchip changes for for 6.17 .
 
 
-Best regards,
-Krzysztof
+Please pull.
+Thanks
+Heiko
+
+
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git ta=
+gs/v6.17-rockchip-dts64-1
+
+for you to fetch changes up to 6e3071f4e03997ca0e4388ca61aa06df2802dcd1:
+
+  arm64: dts: rockchip: Enable eMMC HS200 mode on Radxa E20C (2025-06-30 11=
+:44:12 +0200)
+
+=2D---------------------------------------------------------------
+New boards: ROC-RK3588S-PC, Luckfox Omni3576, Radxa Rock 5T,
+Sakura Pi RK3308B - all of them have the used soc in their name.
+
+New overlays: RockPro64 screen, optional Sige5 Wifi/BT module,
+ethernet-switch addon for Jaguar.
+
+Added peripherals on rk3528 (spi, power-domain controller, gpu)
+and sdio controller on rk3576.
+
+DSI display support for the Gameforce-ACE handheld, a fix for the
+cover-detection (closed/open) on the PineNote, camera support for
+the Haikou Video Demo overlay on PX30 Ringneck as well as a number
+of other newly enabled peripherals on a number of boards.
+
+=2D---------------------------------------------------------------
+Alexey Charkov (3):
+      arm64: dts: rockchip: add SDIO controller on RK3576
+      arm64: dts: rockchip: add version-independent WiFi/BT nodes on Sige5
+      arm64: dts: rockchip: add overlay for the WiFi/BT module on Sige5 v1.2
+
+Andy Yan (1):
+      arm64: dts: rockchip: Enable gpu on rk3576-evb1-v10
+
+Chris Morgan (2):
+      arm64: dts: rockchip: Add DSI panel support for gameforce-ace
+      arm64: dts: rockchip: Document unused device on i2c1
+
+Chukun Pan (1):
+      arm64: dts: rockchip: Add spi nodes for RK3528
+
+Cristian Ciocaltea (2):
+      arm64: dts: rockchip: Enable HDMI PHY clk provider on rk3576
+      arm64: dts: rockchip: Add HDMI PHY PLL clock source to VOP2 on rk3576
+
+Diederik de Haas (1):
+      arm64: dts: rockchip: Fix cover detection on PineNote
+
+Heiko Stuebner (1):
+      arm64: dts: rockchip: convert rk3562 to their dt-binding constants
+
+Hsun Lai (5):
+      dt-bindings: vendor-prefixes: Add SakuraPi prefix
+      dt-bindings: arm: rockchip: Add Sakura Pi RK3308B
+      arm64: dts: rockchip: add DTs for Sakura Pi RK3308B
+      dt-bindings: arm: rockchip: Add Firefly ROC-RK3588S-PC
+      arm64: dts: rockchip: add DTs for Firefly ROC-RK3588S-PC
+
+Jianfeng Liu (1):
+      arm64: dts: rockchip: Add bluetooth support to ArmSoM Sige7
+
+John Clark (4):
+      arm64: dts: rockchip: Use standard PHY reset properties for RK3576 Ar=
+mSoM Sige5
+      dt-bindings: vendor-prefixes: Add luckfox prefix
+      dt-bindings: arm: rockchip: Add Luckfox Omni3576 and Core3576 bindings
+      arm64: dts: rockchip: Add Luckfox Omni3576 Board support
+
+Jonas Karlman (4):
+      arm64: dts: rockchip: Add power controller for RK3528
+      arm64: dts: rockchip: Add GPU node for RK3528
+      arm64: dts: rockchip: Enable GPU on Radxa E20C
+      arm64: dts: rockchip: Enable eMMC HS200 mode on Radxa E20C
+
+Nicolas Frattaroli (6):
+      dt-bindings: arm: rockchip: add RADXA ROCK 5T
+      arm64: dts: rockchip: rename rk3588-rock-5b.dtsi
+      arm64: dts: rockchip: move common ROCK 5B/+ nodes into own tree
+      arm64: dts: rockchip: add ROCK 5T device tree
+      arm64: dts: rockchip: enable USB on Sige5
+      arm64: dts: rockchip: enable PCIe on ROCK 4D
+
+Olivier Benjamin (1):
+      arm64: dts: rockchip: Update the PinePhone Pro panel description
+
+Peter Robinson (2):
+      arm64: dts: rockchip: drop touch panel display from rockpro64
+      arm64: dts: rockchip: add overlay for RockPro64 screen
+
+Quentin Schulz (4):
+      arm64: dts: rockchip: support Ethernet Switch adapter for RK3588 Jagu=
+ar
+      arm64: dts: rockchip: fix endpoint dtc warning for PX30 ISP
+      arm64: dts: rockchip: add label to first port of ISP on px30
+      arm64: dts: rockchip: support camera module on Haikou Video Demo on P=
+X30 Ringneck
+
+Sam Edwards (1):
+      arm64: dts: rockchip: Remove workaround that prevented Turing RK1 GPU=
+ power regulator control
+
+Valentin H=C4=83loiu (1):
+      arm64: dts: rockchip: Enable HDMI receiver on CM3588
+
+ .../devicetree/bindings/arm/rockchip.yaml          |  22 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   4 +
+ arch/arm64/boot/dts/rockchip/Makefile              |  23 +
+ arch/arm64/boot/dts/rockchip/px30-evb.dts          |   3 +-
+ arch/arm64/boot/dts/rockchip/px30-pp1516.dtsi      |   3 +-
+ .../rockchip/px30-ringneck-haikou-video-demo.dtso  |  53 ++
+ arch/arm64/boot/dts/rockchip/px30.dtsi             |   4 +-
+ .../boot/dts/rockchip/rk3308-sakurapi-rk3308b.dts  | 265 +++++++
+ .../boot/dts/rockchip/rk3399-pinephone-pro.dts     |  33 +-
+ .../boot/dts/rockchip/rk3399-rockpro64-screen.dtso |  86 ++
+ arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi |  64 --
+ arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts |   6 +
+ arch/arm64/boot/dts/rockchip/rk3528.dtsi           | 150 ++++
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi           |  37 +-
+ .../boot/dts/rockchip/rk3566-anbernic-rgxx3.dtsi   |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi  |   2 +-
+ .../rockchip/rk3576-armsom-sige5-v1.2-wifibt.dtso  |  49 ++
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts      | 253 +++++-
+ arch/arm64/boot/dts/rockchip/rk3576-evb1-v10.dts   |   5 +
+ .../boot/dts/rockchip/rk3576-luckfox-core3576.dtsi | 749 ++++++++++++++++++
+ .../boot/dts/rockchip/rk3576-luckfox-omni3576.dts  |  51 ++
+ arch/arm64/boot/dts/rockchip/rk3576-rock-4d.dts    |  15 +
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  23 +-
+ .../boot/dts/rockchip/rk3588-armsom-sige7.dts      |  36 +
+ .../rockchip/rk3588-friendlyelec-cm3588-nas.dts    |  17 +
+ .../rockchip/rk3588-jaguar-ethernet-switch.dtso    | 195 +++++
+ .../boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi   | 878 +++++++++++++++++=
+++++
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dtsi   | 875 +----------------=
+=2D--
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts    | 105 +++
+ .../arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi |  11 -
+ .../boot/dts/rockchip/rk3588s-gameforce-ace.dts    |  66 +-
+ arch/arm64/boot/dts/rockchip/rk3588s-roc-pc.dts    | 840 +++++++++++++++++=
++++
+ 32 files changed, 3923 insertions(+), 1002 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3308-sakurapi-rk3308b.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-rockpro64-screen.dt=
+so
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5-v1.2-w=
+ifibt.dtso
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-luckfox-core3576.dt=
+si
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-luckfox-omni3576.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-jaguar-ethernet-swi=
+tch.dtso
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-roc-pc.dts
+
+
+
