@@ -1,109 +1,96 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCC12236F4
-	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 03:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DF72882B4
+	for <soc@lists.linux.dev>; Thu, 10 Jul 2025 06:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752117007; cv=none; b=LPI8MWEoQ4WJl+pEdcMmiSlsHzsrNOs+SAOFzZbQWU4X868nyTCRFyLWYPekYYKrH5e2ps9P5sFc+UgfEriUrG7wkEub4ZSsMZ2T1KEFalc/eaXduCAVdiVVAKCpNM+8j5pQmRBWNSyJne8jwXZMtsh1r6Y+CpboMG1SR4OnhMo=
+	t=1752130240; cv=none; b=ejNdXP3nfT8pBmvkfoft5MP81eofnf/G0sRPVcRZ/F4zFGMo7hpVqGdy7YWUDBH8FMcFEViTF9P+gG/92mbuJe0WdfhGDgSYQev+sl/3itB5/mCUA2kiqDYywiQN8c8Rz5GhitzcrJz6pHmsc2X2AmRQbbnEubw77fLpIKCpM6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752117007; c=relaxed/simple;
-	bh=9roJPBu5NgwEkFWftC/g+gkxvfrnvaVVzZ8XyuQb4EI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WNkyyEEAzPi4sG/fOo72CDu5zr/EpcvJZuw5qdWllJn9V2KU81RW3bqAcylWBfpcZcgNPmIs6Oexp48v9NYYTrnGqs9yiyXssODG7E3yQ49PEmcs+dfAewcuQB9l/3GgDOcky8XewNPYjDTeMShyxMg00EuL6F/PdCSVSiK55Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=m4nwFfwi; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="m4nwFfwi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1752117004;
-	bh=NNTEHVI/EtXITM6uGwBQFJUdeyIR3mX2TfdlMLKu8Uo=;
-	h=From:Date:Subject:To:Cc;
-	b=m4nwFfwiYFz4NjS4yEViZLzwFxj6e/TpHJyfz/aoJmdIDXdYkLS1fb6lWt8m/zOaj
-	 9pTdN19BD1fCHNiRiDVexw0CO2DHxPqCr/D6zVl2lyOalhcFgL3p9bzyORUEMlFl2R
-	 EbJaJP4YiDGUNI9Qgvzz56Q/KGAQdHCHSUBSQgA8KSXUbjI51JaaHyw8FcPRxDhaJv
-	 0uitVtNXVVUgc2CnV98RSEqylTNnvKbEQhfbhuaU2S6N0WW8Ng087HZGoVjVmE9c3w
-	 vOR9uQwMx1bqZji92rZH+/ZfRPxx6yN9DAhiUyVgC4oeX4Hei0eUPRdQZH+dP3mj7f
-	 ilIvIgJ5TnZmA==
-Received: from [127.0.1.1] (unknown [180.150.112.70])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id ABD056508A;
-	Thu, 10 Jul 2025 11:10:03 +0800 (AWST)
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-Date: Thu, 10 Jul 2025 12:39:38 +0930
-Subject: [PATCH] arm64: dts: nuvoton: npcm8xx: Drop the GIC
- "ppi-partitions" node
+	s=arc-20240116; t=1752130240; c=relaxed/simple;
+	bh=KnGAdQxEVp5FaRAYi/FCTRHf4G7dnqfhDf42/ixgYCk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=I5YM4f01OKRQ4KrT3SpnQmmN7EcAawVOAvEm+EXlsapZqIP8KsZiOllsnyZs+P9y2Y7hWHM4Bbu2qWGPIrSsR3grlXHc4WyBOXIHlpXGrfUfJJIYJ3D3rhXxiyIj0SnDw8Wuz6aOwtrEhF3L12JBjSDPrTYYRVjYZxk/o3phWQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix)
+	id 78531C4CEF5; Thu, 10 Jul 2025 06:50:40 +0000 (UTC)
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	by smtp.kernel.org (Postfix) with ESMTP id 3B74EC4CEE3
+	for <soc@kernel.org>; Thu, 10 Jul 2025 06:50:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B74EC4CEE3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4bd51H2snqz9tZl;
+	Thu, 10 Jul 2025 08:44:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PD7tMD8jOn9n; Thu, 10 Jul 2025 08:44:35 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4bd5145bZgz9tHZ;
+	Thu, 10 Jul 2025 08:44:24 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id B8A8E8B76D;
+	Thu, 10 Jul 2025 08:44:24 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id TUROZSHQu4HZ; Thu, 10 Jul 2025 08:44:24 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 842D18B763;
+	Thu, 10 Jul 2025 08:44:24 +0200 (CEST)
+Message-ID: <c947d537-cae5-44f0-abd8-0c558bac46d2@csgroup.eu>
+Date: Thu, 10 Jul 2025 08:44:23 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [GIT PULL] SOC FSL for 6.17
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Language: fr-FR
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-nuvoton-arm64-dt-v1-1-ec7db96ea507@codeconstruct.com.au>
-X-B4-Tracking: v=1; b=H4sIAPEub2gC/x3MTQqAIBBA4avIrBtQsd+rRAvJqWaRhpYE0d2Tl
- t/ivQcSRaYEg3ggUubEwReoSsC8Wb8SsisGLXUtWyXRXzmcwaONe2PQnWit60wvtdGmhZIdkRa
- +/+U4ve8HdMLBf2IAAAA=
-X-Change-ID: 20250710-nuvoton-arm64-dt-aad849024247
-To: soc@lists.linux.dev
-Cc: joel@jms.id.au, "Rob Herring (Arm)" <robh@kernel.org>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1481;
- i=andrew@codeconstruct.com.au; h=from:subject:message-id;
- bh=Zl68KHFjZADCyy1oIT4jduHf3mRmCqe1uMb7yHWiiRQ=;
- b=owGbwMvMwCG22PjiTL8dD5cxnlZLYsjI12e/sWnThy1XpjfI7f/1MvLT1ddu7Yb6d9lun0yX5
- 8r4f1o/qaOUhUGMg0FWTJFlRaBt4d3Nk+J/Hsg+BjOHlQlkCAMXpwBMhO0ZI8O2DyuMEozqV7/9
- lfRZ+OJG4a58gY5I5aaUZT9fPs/aHdjByLAu7lCiypqHC/MFf5XcnP5Q5kyZWM2KuOKgBToBIcy
- WRhwA
-X-Developer-Key: i=andrew@codeconstruct.com.au; a=openpgp;
- fpr=C0F5E25A7D30ECBBF3BE3CEC3B837651FC0D8CF4
 
-From: "Rob Herring (Arm)" <robh@kernel.org>
+Hi Arnd,
 
-The Arm GIC "ppi-partitions" node is only relevant to GICv3 and makes no
-sense for GICv2 implementations which the GIC-400 is. PPIs in GICv2 have
-no CPU affinity.
+Please pull the following Freescale Soc Drivers changes for 6.17
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-Link: https://patch.msgid.link/20250609203721.2852879-1-robh@kernel.org
-Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
----
-Hello SoC maintainers,
+The tegra change is outside soc/fsl tree but it is acked by maintainer 
+of DRM DRIVERS FOR NVIDIA TEGRA.
 
-We have a single devicetree patch for v6.17 for the Nuvoton ARM64 BMC
-SoCs. Perhaps it could be picked up as a fix, but I don't consider it
-urgent.
+Thanks
+Christophe
 
-Cheers,
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-Andrew
----
- arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi | 5 -----
- 1 file changed, 5 deletions(-)
+   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
-diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-index fead4dde590dfff3f7d28a47c2b883462a6e51eb..acd3137d2464aef4224df62fe840ff6fe4db37ca 100644
---- a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-+++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-@@ -32,11 +32,6 @@ gic: interrupt-controller@dfff9000 {
- 			#interrupt-cells = <3>;
- 			interrupt-controller;
- 			#address-cells = <0>;
--			ppi-partitions {
--				ppi_cluster0: interrupt-partition-0 {
--					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
--				};
--			};
- 		};
- 	};
- 
+are available in the Git repository at:
 
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250710-nuvoton-arm64-dt-aad849024247
+   https://github.com/chleroy/linux.git tags/soc_fsl-6.17-1
 
-Best regards,
--- 
-Andrew Jeffery <andrew@codeconstruct.com.au>
+for you to fetch changes up to 76760b9dbbf8088ef31afb60d92b955f88ad1288:
 
+   soc: Use dev_fwnode() (2025-07-08 10:29:28 +0200)
+
+----------------------------------------------------------------
+FSL SOC Changes for 6.17:
+- Use dev_fwnode() instead of of_fwnode_handle()
+- Use new GPIO line value setter callbacks
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+       soc: fsl: qe: use new GPIO line value setter callbacks
+
+Jiri Slaby (SUSE) (1):
+       soc: Use dev_fwnode()
+
+  drivers/soc/fsl/qe/gpio.c  | 6 ++++--
+  drivers/soc/fsl/qe/qe_ic.c | 3 +--
+  drivers/soc/tegra/pmc.c    | 3 +--
+  3 files changed, 6 insertions(+), 6 deletions(-)
