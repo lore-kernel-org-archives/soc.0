@@ -1,73 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF0E21E0BA
-	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 22:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B6E21FF45
+	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 22:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752271802; cv=none; b=pRL9z6gpJ9Ltz0AhRx8M4NxkFnQaFdiHC2IUtxIprb2Xp7Kq5GrltvJTrHMJPdRkA1zlMBa36yZ8bvw9gYZahMFn2eTUQBwerioROHjQirrVmL40oPpVzu9W1+B1k/5HpHIGwKg3fhc8Rc6snLgNvKKcXbcHDDuGpxn/b2pGoUY=
+	t=1752271803; cv=none; b=KRplaTNq3NeQrO5/KpSQUovG8tDGPzVT+DIt0hpwsONdgpXrTgc4JrjVE8JhbOsM8Y5XBR3zo/V9+HWZKXsaQBh1EMzHb054u1kDDkjaHoBJ+fBkg5N8o5iazqWMMviF9CJLlNH8UD4glUfzr6AztDtzM0WsnwTui70F8EkwL6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752271802; c=relaxed/simple;
-	bh=Ysff8lfY5O5wvaYZOOIF1evBmJpKFGjjjhLAY7PokHc=;
+	s=arc-20240116; t=1752271803; c=relaxed/simple;
+	bh=7V/JDvNgecmuUjPR+2RtoXSC7jjQ5Q4Vx3eF/7R+ohw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lLCBB+YX11khqZdfoqojMUFtKYsoFm5HPv8pewvHCUF3rkHB2mgaAiNnz5CzApxZvzzY4dKK5ra8DnjAFoUdWe7I7Ky6qwixghfniCxmhYTcLKF7X5CJl0POW2C2+F6q/zeIvG+gVHF/NqIzgfDs6q0TahB+WyDDr8LYHYfXwwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KagsbaZT; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:MIME-Version; b=ZKqWcKCHu1hksuVEB8e6rOxk5u0MpW+MxtLN2vwYLJAWSvxZ93xGlsgziJRsrCkyOyOhbRy7ofpkCfYkpkI8ZxWAovoIdAFng/5twIpZA0aKnAjFmeG0PohZ8Z37NDGknHKny0LLgJ+Q1F2CCVP/I57Zytc7/Q9KYIuy6f/yxtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ecUqr0PD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KagsbaZT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ecUqr0PD"
 Received: by smtp.kernel.org (Postfix)
-	id B031DC4CEF5; Fri, 11 Jul 2025 22:10:00 +0000 (UTC)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	id CF3FBC4CEF5; Fri, 11 Jul 2025 22:10:02 +0000 (UTC)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DE8F3C4CEED;
-	Fri, 11 Jul 2025 22:09:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DE8F3C4CEED
+	by smtp.kernel.org (Postfix) with ESMTPS id EA087C4CEED;
+	Fri, 11 Jul 2025 22:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA087C4CEED
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a4fd1ba177so1709786f8f.0;
-        Fri, 11 Jul 2025 15:09:59 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a5123c1533so1359417f8f.2;
+        Fri, 11 Jul 2025 15:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752271798; x=1752876598; darn=kernel.org;
+        d=gmail.com; s=20230601; t=1752271800; x=1752876600; darn=kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ku+08PMO7/vjq2Tw85ozrppxDpvyl6Hgmrcst5Ryypw=;
-        b=KagsbaZT2lxa66c1DTRqBygnB9dpxPtFFq65uxp5xmpUJlmPzaqJ5SFh5O+O41L2Ec
-         LB0qoA77boFDmebHKcOnVFnwJemUvfk3skF3Z10B6N5AD4HzIa3utWW0HvRypck34RpY
-         15pOzR+si7au8tMuQaRfLvbiv4bIeC5KfEi449IyHWFmQUdkCC4h3aUZRviYJCtwkbUO
-         IIU29SpvJXL8LLyJ6zh6nt/z/dcUJmKdYXheu/BSF5Ym/4hih8J7c9VArKPhKoBUZmuW
-         hCN3mpd7jRcSmfiQBeClJIWZtz4LFLEWO7xJRx0x4osom19SxKW86Emd9Er2R6CHf/qD
-         kcXA==
+        bh=kbtR0HiiakPIrzdYCLsFZ7Pb8EfrjpxSPtZBTo8vi/M=;
+        b=ecUqr0PDgo5WJ8FsMJl+qu3aHV0OifHOfasGUwMOYg/JsyFrbaB44eI5qScqn6XI9b
+         M6klWGyqmfWRyNqCUK+ilXf7oFqbKnxcGgrMZOuttyO+It9UUDn5NezS270X+lTRD90l
+         Ack4JjtKznUBWgDINVdu4C8IQDaGctCMiiHRrq9uuO3dOxKS0Id2kjkSuWvA6ZUOgKvj
+         /d+lL8pZwvETj7N/9pMwsOWTG4S0Wu8QWLgE5KTZVuZ5yeFoqhrwsncRWN/F9JwGy8zi
+         TIBPRtzgsH9Dkw9Sgs7458E0qy8E3y5LdSpKk2WZMAFyNi+W9DMg1fPdZ4G99/T5mB00
+         5LpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752271798; x=1752876598;
+        d=1e100.net; s=20230601; t=1752271800; x=1752876600;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ku+08PMO7/vjq2Tw85ozrppxDpvyl6Hgmrcst5Ryypw=;
-        b=AQCDoVbNz+0lFt1FjGfdoY526Jky0CHuvGi8CeZgbrOSefwaMkf+rdSwxDz4vEDmsX
-         aqNervOvqOlVuBtkccUzW5nPH91H2nOaLkpf7YIOFOyDgdTwkgSd0V9hznR8X2+x4H7C
-         dgUB+Q2VxB39jXrtUYzY0seY8de1tQlsiyNTW90kVpAF2Cy8aAplcy+U0sKczS9PGmTk
-         r4s3A4FckN4QwlxkVsbiCrv0gwB0zTj7i1UhCk4Y9bWrtacV9a6Q+wmmp6lGcmyOd/FS
-         P3VzzQdJb46XzktH+e0jKOm6+Lvy6LAAlBMSQiXBU+tGsY225T9j5lumgpvt2YVQ0jmq
-         CXHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXTISwFZEBNxgxa9JOT3rxro1MAIr09lYvUSRKXcAQv58rQH1BuigNVOmjtiUwIjZ0anfo=@kernel.org
-X-Gm-Message-State: AOJu0YwFznPeUg7hxNgpz7vI5LJxGbiBTTZm81oEbGhWPQ3b4GFWgylD
-	uwY8Nc/CMmLUkxl/DU0CRytrUn+2QMhvWDUwf60rF7z5aNjZwd0SK4zj3c3lCw==
-X-Gm-Gg: ASbGnctu1D3eMFbq5gWFZuyAoT/QT1hfdHpEpEHrLG67AJhYT34T5poUjx3rD15pp4k
-	vHSD3bFm/2E8dBPAdKn6FbpZIhJCjhfrzyysfqr2n+yirBWoN4Mq4KyxJ1aOisFa52VipU3RDhw
-	wzuZZ5kTCs4KZX7zWh7w3xM+A6NCSL/Rs0gz+KZhblx2cP6va4IKzVOxNH7hcMvsYvEN2FQyMb9
-	UvluZWCuBkEgG/yUnXRABXFc4XGgQfGuumjsYlw2GtRDZiV9mfpoV4bzJSojQpMySDnO3yuJ6Lt
-	i/+XxtNxqyE9+X8HKioE3Nwf+kRPsiHEZixPvlVUj7DWg8gwuHI4a2CR7OhY4g1krenjGTwQZe8
-	E33ThsI2Dw+pKuq+17Ju93U783uA6jD6IWQUr4/mke440+Atgl4ZNDOIUhg83mqH9xoyVwqY78e
-	PkmCG/Spw+DYVorA==
-X-Google-Smtp-Source: AGHT+IHipbiPzHtHT9lAlbF3iUj7vcZpxHsOY228G614wvileARaAiUqQeN6JuMPlvDPl0+rJezgFQ==
-X-Received: by 2002:a05:6000:2706:b0:3a4:d9d3:b7cc with SMTP id ffacd0b85a97d-3b5e7f3d0c4mr5790806f8f.28.1752271797634;
-        Fri, 11 Jul 2025 15:09:57 -0700 (PDT)
+        bh=kbtR0HiiakPIrzdYCLsFZ7Pb8EfrjpxSPtZBTo8vi/M=;
+        b=d7c5rKMMKCPZWFcNNPDYB7NiS1xLlF1UZfO3l2crrniTutAtzkdiVl74PJZx33KfhF
+         C9btrIL+sl48Fh5otyUXKZYKswkNs9QFzNzWM0WIEiSPjWaJJDuwHZYOh3mNZSD4bjNi
+         zzNzl5C0Tk9DNkmT+meiHdTlyX1+ryFXlyrKHruynildfH+z9Ex5s+QBF4ZpCzzOJ3T/
+         fkkSwvWOsw6FDd/cDoux48f3BrS/YmS9rDSMWdlsuKMQIe83raRKTtBtqFNTJkcbYbn4
+         19RG12JuVTo6B9HGO1uWSXSj+6PzMX19uwW0b2C8yDx7jCh1SpUnhsDQOK/A252KmL8T
+         Qufw==
+X-Forwarded-Encrypted: i=1; AJvYcCV6iwTF1ds2jaT/rRe55UP2tgIQOo4hz8huYidW60jYSdBG1JwH5rAk/KlkcHPz0FVK07w=@kernel.org
+X-Gm-Message-State: AOJu0YxPyrUwSIDRfUvKzmavJufy9ToTxTwj+REt8hhpZbEOkhACW5dz
+	KY4QGnrnNPKq94KDbbyLX63KLZqv6G+LGpWGnxQuCcYuBtXeDZ4Hh20KwmyYew==
+X-Gm-Gg: ASbGncvu60mtVa50gw7hgz/d3r4E8IpamXr7hdDozVtLn1lXTSX0ie/ZN2U5fnnjBgw
+	qaRw23p8Kf7zPHQ4l4fdpAb2vsJcaKEzReMnRF6+mDqtSJsL8D3ex/1tA6EFB8RXp6PIwoFITHs
+	TkeekTdT2pzvdE9tR2Kz6QRvhSBaC5z0v1Fd9cO9C/QrMsJzWa5YY7+kjWCSCsyCidZtmkS2+ln
+	92k2KBgkNsyedyDLU9d2GccKb3E48wdCDQ4Y53EpjbQpgf6SpMaJbkMoKTfChgb8vujJ6cRfRDU
+	2IGsj+W0kJ2ssXVUoUxlGrd6T+ukAoSp+oF9SKqPEXDLj8K2oCiKYkTNnlufFxdYIq0beub+2Li
+	BBNeqAGap+cnZSEuRmJHYtFF2B2Dy7CDQFyrkRKF7HOZ1kEJY2ebrYmOE9L23hwLBQ9ipu9+dd7
+	4p+s7wo6nOivgZ2w==
+X-Google-Smtp-Source: AGHT+IHVLhu9sQqqVzUADbZibqpiOXQmra1YzYG8sZbz+5Usd1b/VVnMLyp9rN8lFuXsffC1HiqoUQ==
+X-Received: by 2002:a05:6000:4108:b0:3a8:38b4:1d55 with SMTP id ffacd0b85a97d-3b5f18dc7dfmr4258546f8f.28.1752271799602;
+        Fri, 11 Jul 2025 15:09:59 -0700 (PDT)
 Received: from localhost (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b5e8e0d5f5sm5633411f8f.56.2025.07.11.15.09.56
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b5e8dc9349sm5520827f8f.45.2025.07.11.15.09.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 15:09:56 -0700 (PDT)
+        Fri, 11 Jul 2025 15:09:58 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -75,9 +75,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/8] ARM: tegra: Device tree changes for v6.17-rc1
-Date: Sat, 12 Jul 2025 00:09:39 +0200
-Message-ID: <20250711220943.2389322-6-thierry.reding@gmail.com>
+Subject: [GIT PULL 7/8] arm64: tegra: Changes for v6.17-rc1
+Date: Sat, 12 Jul 2025 00:09:40 +0200
+Message-ID: <20250711220943.2389322-7-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250711220943.2389322-1-thierry.reding@gmail.com>
 References: <20250711220943.2389322-1-thierry.reding@gmail.com>
@@ -98,31 +98,47 @@ The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.17-arm-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.17-arm64-dt
 
-for you to fetch changes up to 3c2c00572fc3e0b128f75c7ce9c3f70ca457cc3b:
+for you to fetch changes up to d01e4f1e7aa8833f549ac61a0bbcdc395533269b:
 
-  ARM: tegra: chagall: Add embedded controller node (2025-07-11 17:11:18 +0200)
+  arm64: tegra: Add p3971-0089+p3834-0008 support (2025-07-11 16:57:47 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Device tree changes for v6.17-rc1
+arm64: tegra: Changes for v6.17-rc1
 
-Add support for two Tegra30 ASUS devices and enable the embedded
-controller on Pegatron Chagall.
+Add support for the Tegra264 SoC and the corresponding engineering
+reference hardware (P3971-0089+P3834-0008).
 
 ----------------------------------------------------------------
-Svyatoslav Ryhel (3):
-      ARM: tegra: Add device-tree for ASUS VivoTab RT TF600T
-      ARM: tegra: Add device-tree for Asus Portable AiO P1801-T
-      ARM: tegra: chagall: Add embedded controller node
+Sumit Gupta (1):
+      dt-bindings: memory: tegra: Add Tegra264 support
 
- arch/arm/boot/dts/nvidia/Makefile                  |    2 +
- arch/arm/boot/dts/nvidia/tegra30-asus-p1801-t.dts  | 2087 ++++++++++++++++
- arch/arm/boot/dts/nvidia/tegra30-asus-tf600t.dts   | 2500 ++++++++++++++++++++
- .../boot/dts/nvidia/tegra30-pegatron-chagall.dts   |   16 +
- 4 files changed, 4605 insertions(+)
- create mode 100644 arch/arm/boot/dts/nvidia/tegra30-asus-p1801-t.dts
- create mode 100644 arch/arm/boot/dts/nvidia/tegra30-asus-tf600t.dts
+Thierry Reding (4):
+      Merge branch 'for-6.17/dt-bindings' into for-6.17/arm64/dt
+      arm64: tegra: Add Tegra264 support
+      arm64: tegra: Add memory controller on Tegra264
+      arm64: tegra: Add p3971-0089+p3834-0008 support
+
+ .../memory-controllers/nvidia,tegra186-mc.yaml     |  84 ++++-
+ arch/arm64/boot/dts/nvidia/Makefile                |   2 +
+ .../arm64/boot/dts/nvidia/tegra264-p3834-0008.dtsi |   7 +
+ arch/arm64/boot/dts/nvidia/tegra264-p3834.dtsi     |  30 ++
+ .../dts/nvidia/tegra264-p3971-0089+p3834-0008.dts  |  11 +
+ .../boot/dts/nvidia/tegra264-p3971-0089+p3834.dtsi |  14 +
+ .../arm64/boot/dts/nvidia/tegra264-p3971-0089.dtsi |   3 +
+ arch/arm64/boot/dts/nvidia/tegra264-p3971.dtsi     |   4 +
+ arch/arm64/boot/dts/nvidia/tegra264.dtsi           | 415 +++++++++++++++++++++
+ include/dt-bindings/memory/nvidia,tegra264.h       | 136 +++++++
+ 10 files changed, 704 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3834-0008.dtsi
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3834.dtsi
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971-0089+p3834-0008.dts
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971-0089+p3834.dtsi
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971-0089.dtsi
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971.dtsi
+ create mode 100644 arch/arm64/boot/dts/nvidia/tegra264.dtsi
+ create mode 100644 include/dt-bindings/memory/nvidia,tegra264.h
