@@ -1,104 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FEB1EC018;
-	Fri, 11 Jul 2025 07:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203B9201034
+	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 08:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752219119; cv=none; b=PGuyCPZzLZh9s2IQ4N94t61/7YdpAXQ1XJ9k/GwZ/8pwezA4xiHtyk/86IqfxsI1zBxNQpJW/XHT1e6On1eyFKwxBLJhwL5z7oo0+YQggTxaCzNxEAMqzs/ayG5mvtQcS4kzWvG1A7JU7/6QEjGR60GGuBPPAN6RgdYnVtN9PSo=
+	t=1752223028; cv=none; b=R9HDwvJv2TrJ2mrFGKmy69gctblbxatvoowhTWEu1HDUIyFvBVcY47MQjWomJGgVGmuxDSMvCbtEWLsucjku2CeEWYZbxRy8JEM0AWuzHXgfkPbKaz0771sABgZYgdU7kzBgZl0Gi3up5z7bYExEroVw0RS0tiyZCycyzBU36zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752219119; c=relaxed/simple;
-	bh=hVZTyegMOGHIfgb5zVAoq2b3YHNpgXqcGdsYOw+nS44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R/vu2L9EATmtL4rnNBi9sjd2QyQgXWucB8cJ1E8QUrLKqVglbo2xBQ08rUxu+XPfZFWtriJEZKsaN53epls/MYPK15so/OUqwvcQcnqUgeiTx3tD6zy4cDeMeSog+xD1zVyZMdvOU3syM1igvFqxV2JPeCEcPZeDY0ioOd0/7y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSHD/9Q8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752223028; c=relaxed/simple;
+	bh=hAaORvtwWlpuxH12pfYKOOV0L21hWokW/goaLX76tHw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=q8m/56XEi6b30FBDFhZXgPrH6e1SDbLX1laGyu8SYo+OFsaFT0nNXdg2SW+D5gKovJAyugQUpMoOnI0qRBR6okQPA3aMNJrBHuE1EO1ybbo6PBxbLBz5UT7IXmEsChJvEIJtdUFPrEwnO0XzaXseSIRl5Y8SaPqK3AlNtVVnJaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VJyS6C/7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSHD/9Q8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D64EC4CEED;
-	Fri, 11 Jul 2025 07:31:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752219118;
-	bh=hVZTyegMOGHIfgb5zVAoq2b3YHNpgXqcGdsYOw+nS44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kSHD/9Q8xLGAYm9t0kngcck+7CL4v2e7cdoLWjILBqtSCcBC5RdsIN7I1WFAYm+GK
-	 yl+AW+l0V/mLAZpZO06utBp+rUdqN3ufgSVqjxK0Xz+4nITgZzOWu6DU9ug9jLOcvI
-	 bmx4dFNpeRv/VtW+C1OWY6eDKSFc9+DfkRdcx9qw5HoFh3BIvyg3XTARYpEzDgkPzn
-	 uATVjVMJtGWoHCnilfze+nQPr1izPUphbLuT5c/kN+h1+quoL3jZMXjDkb2JUz3LB9
-	 DjQipdLVktQUNyisCzjlNqAhXevWDuJIN3/7Md1QSLn1mlXGMZM5itLqUCjaCNYffJ
-	 IzAKHNb7JaIpQ==
-Date: Fri, 11 Jul 2025 09:31:55 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Lubomir Rintel <lkundrak@v3.sk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-hardening@vger.kernel.org, phone-devel@vger.kernel.org, 
-	~postmarketos/upstreaming@lists.sr.ht, soc@lists.linux.dev, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v16 1/5] dt-bindings: mmc: sdhci-pxa: restrict pinctrl to
- pxav1
-Message-ID: <20250711-hypnotic-aloof-nuthatch-f3761c@krzk-bin>
-References: <20250708-pxa1908-lkml-v16-0-b4392c484180@dujemihanovic.xyz>
- <20250708-pxa1908-lkml-v16-1-b4392c484180@dujemihanovic.xyz>
- <20250709-spectacular-goat-of-tenacity-ced55a@krzk-bin>
- <3379810.44csPzL39Z@radijator>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VJyS6C/7"
+Received: by smtp.kernel.org (Postfix)
+	id 14344C4CEF9; Fri, 11 Jul 2025 08:37:08 +0000 (UTC)
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A6817C4CEEF;
+	Fri, 11 Jul 2025 08:37:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A6817C4CEEF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1752223019;
+	bh=hAaORvtwWlpuxH12pfYKOOV0L21hWokW/goaLX76tHw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=VJyS6C/7HScUQBY7HlIASQgdYBNtKqNZ/T+dwmsDb/qoqmJIhLqQOazYiH8FTdkja
+	 Yz0W7bokegZr0DV1vqZInUARQ5edJ7YSKIx/hhYp/CGFv+GWyx2VuN0qKcg6q0hgLg
+	 xthFHibCzzLUZtFZoBhdv2gZpzjMA7YtZCaOiAtzlOF9ntbSVFL33Yk86cS7wY1/xD
+	 9+fZ2rpJt3lMWrxvf9C5t75o3nNJy1vemHHSlQCj6xPoB6ypIZJUmTmiatSel+rZ7t
+	 06mTl/iCsPPo3RTkx77RMGX9Iasr+DUWJ5T9lC5j5jaY+ZSM12F5348BlfsScysez4
+	 RiljspQoOZNMg==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2E33217E0FA8;
+	Fri, 11 Jul 2025 10:36:59 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: matthias.bgg@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [GIT,PULL,2/4] MediaTek ARM32 DTS updates for v6.17
+Date: Fri, 11 Jul 2025 10:36:46 +0200
+Message-ID: <20250711083656.33538-2-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250711083656.33538-1-angelogioacchino.delregno@collabora.com>
+References: <20250711083656.33538-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <3379810.44csPzL39Z@radijator>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 09, 2025 at 07:33:01PM +0200, Duje Mihanovi=C4=87 wrote:
-> On Wednesday, 9 July 2025 09:32:06 Central European Summer Time Krzysztof=
-=20
-> Kozlowski wrote:
-> > On Tue, Jul 08, 2025 at 07:09:46PM +0200, Duje Mihanovi=C4=87 wrote:
-> > > The current pinctrl properties apply only to the pxav1 controller.
-> >=20
-> > Why they are not applicable for pxav3?
->=20
-> state_cmd_gpio is used for working around a PXA168 SDIO erratum. That SoC=
- uses=20
-> the pxav1 controller and no such erratum exists on any of the other PXA S=
-oCs.
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-I really don't get whether you are describing problem with schema or
-actual state of hardware, especially considering this patch. You use
-here present tense, which usually means state before this patch, but
-your patch is changing this. IOW, if current pinctrl properties apply
-only to pxav1, this matches what you said about hardware, so job is
-done. No need for this patch.
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
->=20
-> > > Adding one default pinctrl node to a pxav3 controller therefore causes
-> > > a schema warning.
-> > >=20
-> > > Check the existing properties only on pxav1. pxav2 and pxav3 may add
-> > > their own set of pinctrl properties if and when needed.
-> >=20
-> > This should be rather made complete here, because properties should be
-> > defined in top-level, not in allOf: block. Strictly speaking pinctrl-xxx
-> > are defined in core schema, but still the binding should follow same
-> > rule - define them in top.
->=20
-> Would it then be acceptable to declare the pinctrl properties in the top =
-level=20
-> and define each controller's respective description: and items: in the al=
-lOf:=20
-> block?
+are available in the Git repository at:
 
-just min/maxItems should be enough in each allOf:if:then: sections.
+  https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git tags/mtk-dts32-for-v6.17
 
-Best regards,
-Krzysztof
+for you to fetch changes up to 5a8e7b4eaaa232d747517fe34ba6867139a4cea8:
+
+  ARM: dts: mediatek: add basic support for Lenovo A369i board (2025-07-11 10:31:43 +0200)
+
+----------------------------------------------------------------
+MediaTek mach ARM32 updates
+
+This adds support for the MediaTek MT6572 SoC, found in various
+old smartphones and tablets from various manufacturers.
+
+In particular, this adds a board_dt_compat entry for this SoC
+and its SMP bring up sequence to enable secondary cores.
+
+----------------------------------------------------------------
+Max Shevchenko (7):
+      dt-bindings: interrupt-controller: mediatek,mt6577-sysirq: add MT6572
+      dt-bindings: watchdog: mediatek,mtk-wdt: add MT6572
+      dt-bindings: vendor-prefixes: add JTY
+      dt-bindings: arm: mediatek: add boards based on the MT6572 SoC
+      ARM: dts: mediatek: add basic support for MT6572 SoC
+      ARM: dts: mediatek: add basic support for JTY D101 board
+      ARM: dts: mediatek: add basic support for Lenovo A369i board
+
+ Documentation/devicetree/bindings/arm/mediatek.yaml                                |   5 +++
+ Documentation/devicetree/bindings/interrupt-controller/mediatek,mt6577-sysirq.yaml |   1 +
+ Documentation/devicetree/bindings/vendor-prefixes.yaml                             |   2 +
+ Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml                   |   1 +
+ arch/arm/boot/dts/mediatek/Makefile                                                |   2 +
+ arch/arm/boot/dts/mediatek/mt6572-jty-d101.dts                                     |  61 +++++++++++++++++++++++++++
+ arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts                                 |  56 +++++++++++++++++++++++++
+ arch/arm/boot/dts/mediatek/mt6572.dtsi                                             | 108 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 236 insertions(+)
+ create mode 100644 arch/arm/boot/dts/mediatek/mt6572-jty-d101.dts
+ create mode 100644 arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts
+ create mode 100644 arch/arm/boot/dts/mediatek/mt6572.dtsi
 
