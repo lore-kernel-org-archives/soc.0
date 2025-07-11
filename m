@@ -1,71 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF621D619F
-	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 22:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6922E21FF35
+	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 22:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752271790; cv=none; b=N9J5Ut+KJh7WLDK4nc05xyNd7/hqQ280g0hcwlew5SWysDX/V1WiNs1SLPBddMXMI+svCDcxwz8U1FbgU1Kf0Qk9aaUVZnK8pvrtwDzdbnnLlpYOf/r5bjJ1UxR3rGFJDjp0KHKOf3FoZiFu9b0nvLVou0u/hETtNLPKmDTwMnw=
+	t=1752271792; cv=none; b=PjiH5VXRXkYMOkQs4QpFcl1blmdYWekj750/+9EYe5C+BYadrAyqLY+zIuqNcfrAcOoRIrv+PX7nssEaceliFlI4YGEgoWC5h/TU1nmliJz8AuaTpqgEicEOURvQFXRib0v8+THKP7n4BJedBLaL/S2eJZH9v0aeANTx6AXOuQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752271790; c=relaxed/simple;
-	bh=OF2fvSBQt8Kwt2cLY42rrO9+nYIxWQ7baxFlnrzghvs=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=fgQStcRd96c0RNqmwmvmIpY2kf2frPIrSVkkEU3yzZaStGQmrrOeNVfNgvPM+3JwjaMu+4fwELsWTbGXurWrpNFHM1+knDjYI8YsTXNszg6q+0fJr4qefxyyn8XBlVOq69eUPtKXPgYkdMJPxQVS6gsXT4Ae3AeXH6hejD1KzjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQTlF1uO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752271792; c=relaxed/simple;
+	bh=pvllP0ZkWi2ON6gFXmzcXPaJmOGF7rmVV+x23nVmWfE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dw2qlKamTWfl32aPlFLDZ7DO3o9xl3yd5dw4IRaJg3IGRi8AtG+IVHwypjZ0V6XrdfxNixqj8qt/OXoKW00DSWsuvtitPjiDIjhH1lF8Xwo2ssGrRYCs32WJi3M1cWCoSXqe2CdqgYWPejSzgqaRIVFRJybLYAloFrM38MJaSyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYIF0tYT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQTlF1uO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYIF0tYT"
 Received: by smtp.kernel.org (Postfix)
-	id 1FB62C4CEF4; Fri, 11 Jul 2025 22:09:50 +0000 (UTC)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	id 050D3C4CEF4; Fri, 11 Jul 2025 22:09:52 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 36980C4CEED;
-	Fri, 11 Jul 2025 22:09:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36980C4CEED
+	by smtp.kernel.org (Postfix) with ESMTPS id 3378FC4CEED;
+	Fri, 11 Jul 2025 22:09:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3378FC4CEED
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-454f426b3e5so5384085e9.0;
-        Fri, 11 Jul 2025 15:09:48 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a4fb9c2436so1645113f8f.1;
+        Fri, 11 Jul 2025 15:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752271787; x=1752876587; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2XRjRf3KPKq6plJUx5qROmCq+MxLh+MWsTiiu/eEjI8=;
-        b=ZQTlF1uOYsOHfbaeY1AbEtxSFkF8EZD13YbAsIJDjQkHvNob4Eh8TQk9Y8te/RGndK
-         JlYRWH4+cGvcNa9JJj7Ar2ljjwT1B3ZZJ8Bd1Iq7cywOxdPf3Uutfk+2mVKUEd1oer6s
-         +Dw1UqnTtRy2HfE7szJsPhQxLFmiDdyak/KS9qHl9b+c4cydM8PNrbuVjW936vJn11Um
-         QuXnJW7ZGSryBP3CwBpBt7KzfTeSDyUafS5q/8+ER5Wj0xSNprhsqNaLe4xYNWYcVhLo
-         mc4tls88nFPyfzEOFHmrJ14YOQwARg5QD6RLP7wALMhV5ISBsK+oBTKbCE40QMpuCrJz
-         7CgA==
+        d=gmail.com; s=20230601; t=1752271789; x=1752876589; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WiEoirSuxHsjo9/zUoypts93ySUADZW6qbVGNgsxEik=;
+        b=XYIF0tYTnqSuJga8XNOoH514J+BOCCblDgOVTpdwlQhCOkRVKt8nG4tBHRbiRCR2+a
+         dluSy2Id5o7svlLzQsUtsmlyx2Fq40kbZ9qrHZjc4VnQLqz+qhNpjcjnoS1G2udhWQeT
+         E1Zi93/GZ9J8KJ1tiw1HCnfh5j3h3VM+lKcHaIWg62Jgl29yvC0bSZE/qzOZu7+ASiAo
+         T1tXYFiXYfbaCUd4/k0UQ+h8BVkmp9bZuXbSxvcduuO+1yhq+afTRhfQxnYIGWzbCQqV
+         pfh4oTa9Pkl2FhQNcMQ1Q178g9/OhnXZTgoum0Sc694Rfb4/HnqIMXtQklRylLXHsNRi
+         tEJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752271787; x=1752876587;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2XRjRf3KPKq6plJUx5qROmCq+MxLh+MWsTiiu/eEjI8=;
-        b=KTrlT/Hg9C6rFvWvUO/jk04Eg54lEiferl+ZIOEIlCF7HhXP2mR8we7TWr+3cfqfq4
-         1H3GR0zOzdrPIVfYWGRi7K9bMVAB/Jwc4DM2ytX8OhoGheFa3EPz8Akn+r8Uf28Fqp0g
-         svTNOexKet25MDDPVYPIkBuACZJJ8hEVpFn3c5rgPXsa0VkJac9XZogZeLWTCzcAMY00
-         70DFQA16qacsGv4WBkoCJ5vfIPBHz2dsoWtE5kZLw9Qj3Hd0uqvoKSyjY4jZpJGJzmi2
-         wlmag+C9F+ofjxU1hYX50aScTrWZQUkyhcYC3vQO0E9BWTMZR1ISU3xVwWUH3bGFQeIE
-         ZvIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUO4iZMAGjQIhj1Pz5NpMyS/0nlM3Gvc5kR+awXsGZqNstypbuc0SnVV+SqxvTRU0lvKw=@kernel.org
-X-Gm-Message-State: AOJu0Yz/cT2YgZqWStzFMzZriL/EJCmDQq4lIy6B8DHNHPbr62JBE9T+
-	49wnn/oZIiWG03dHSXnMa9IL1/5uqYXwOpfOHulyY8IyvbJWSQdbk2+Ab6umsg==
-X-Gm-Gg: ASbGncuMna7M8bVzUPQ0IkxFHljSE5gWD3BAsz95vR7Tkum1BZziEyyT4TGHIMIyVBn
-	jn4DIJMXZQsQ9sehJ3Vy9ru8tJomvgc+P0h9L5GKVMhYSteRYy0p7m0sox2cZo/cmna3UsCE7Po
-	6hGYBHSXsAMdYCVp/FL5m5v0x0iqoQLkqbxbOTP/TIh++KrOHUQ9uhNRGt93rbJczMlOzsg+oju
-	oLHsQg6Hnz78V1uQak1HJZfFEx7cxd5cPR923JBXZWxqTkvIczEddWqQDxvN0+At4DYg2KnKFH1
-	6u6vUkHGVuB4Y+hK9DDwoyGHSk6tw0Tp2DkKMaQs1LTK0ZnJds8/VOn9HmEM8gDCds+Na0HglPT
-	f0V4EfJxwHfkMZdd7H4Dz/hC5FUV3pWvabx0s/9y7kKZtWM3QLIbQpSh2vFg3qeN6Qsx7k32X5U
-	52pIYKZk4Gj9OEt1ZVaBIGZq//
-X-Google-Smtp-Source: AGHT+IHrGSJEVHvFUI6eRcGDZsY//Wte+nfUWJkxTasa3dS16xTpTNIVm+Sxvs8R3stSO6Lru3p9+Q==
-X-Received: by 2002:a05:600c:8483:b0:440:6a1a:d89f with SMTP id 5b1f17b1804b1-455bd87a4a2mr37140335e9.4.1752271786729;
-        Fri, 11 Jul 2025 15:09:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752271789; x=1752876589;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WiEoirSuxHsjo9/zUoypts93ySUADZW6qbVGNgsxEik=;
+        b=djWbEcRE6VWO9Vw7YnTv/crCiXa6i4QMy38RT+nQHXTBb1jE7HnyV79tMhmf/71a6+
+         BRGB4m3+pY2fZgi+c5aLuyTpCBd6IBFhqaKdsYfuy1mVG6BogVEy1yB8R9WHB12t1SH5
+         bHM5t6gwfzJ39RCB5kc2wX/q3wUgiewmupfUNzBTBjHEe7kDA62FZvL1Zh8Tsf6Yo6Ev
+         kYxXIRTWpUucHAm7kD1KixyfsqVPTiWmcnnWGmhDttNGWWMs0zYS9h/LqhCDyuBVCN6c
+         Aks/6/wseSnhJXa1FP/caM1p346Dck2riGgw3c3J8RmQABtLhFoG/VJiz/Cn7gW9LI1S
+         hfvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMQg0Ag7ESGHLwEUT8Zeez+o2gPsWA4BsBs+2kEfOVIaT1X7HxDIhT4EuZpOQcrOtUif4=@kernel.org
+X-Gm-Message-State: AOJu0YwosjsGDHJbMiqJLK7OkQ4AQ2aEEMUl84gYl3TY+a5xctWBbK4J
+	jUfktKT4kh8KpzYlfFyu5YJ0OVaHn6KlR0dgzmbw76J7bYgXxpGcWZrfnFODxA==
+X-Gm-Gg: ASbGncv6VTD7WX1avNXqSATp7m9tRluDRTAr+PKYOMK7oT4AJAtjHEvYMhxy6/snTkc
+	qCD9cX/ERTHvWCbm43FywooO0veL6ZQY7LaIiDyIfPdVd9SSdZrtsCXxzUsaQ2zq4wh5xZ//XRQ
+	qfb5zYhCMtRaxaDgMjnC8BP7trqQdoavR4ayr4cuZb7gWKi0qYzsXq8ZNmbeCnQoTN2CL9io4TK
+	fy0SF8TlGnS+fO/EMtCwUK6Jzp1NOB+lktSMA4K+v/y3T/KC72BvAPqpffv/1QnNEJzDiR0Yg8m
+	JgTsgbS5a/fy82TKkWjxbsT250yS6FUu576rQscsEodrYeIL9iLUNDMpmR5Y+KP+G8kWXOOv90W
+	s/MzXosAjrS9P0mihmEav6tvN86Eo471zuQWIrQP0clvZgjRnPq3I6mGApIAr9YVldw7bKFItVV
+	f0WVnqsS3lfQTeWw==
+X-Google-Smtp-Source: AGHT+IH1Nwmj1nJTt0Sx523oF3zbT+IqMBHza1/CIgwExgeLZ19zMtKml+bp6x6d1S9hslRC9/KXMw==
+X-Received: by 2002:adf:fc11:0:b0:3b3:a6d1:6b57 with SMTP id ffacd0b85a97d-3b5f18d96e8mr3631673f8f.44.1752271788727;
+        Fri, 11 Jul 2025 15:09:48 -0700 (PDT)
 Received: from localhost (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-454dd439051sm59230325e9.8.2025.07.11.15.09.44
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b5e8e1e1a5sm5495462f8f.74.2025.07.11.15.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 15:09:45 -0700 (PDT)
+        Fri, 11 Jul 2025 15:09:47 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: arm@kernel.org,
 	soc@kernel.org
@@ -73,10 +75,12 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/8] soc/tegra: Updates for v6.17-rc1
-Date: Sat, 12 Jul 2025 00:09:34 +0200
-Message-ID: <20250711220943.2389322-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 2/8] firmware: tegra: Updates for v6.17-rc1
+Date: Sat, 12 Jul 2025 00:09:35 +0200
+Message-ID: <20250711220943.2389322-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.50.0
+In-Reply-To: <20250711220943.2389322-1-thierry.reding@gmail.com>
+References: <20250711220943.2389322-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -94,40 +98,35 @@ The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.17-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.17-firmware
 
-for you to fetch changes up to 84daa158bb5e72ec279ab168892df86a25d3c459:
+for you to fetch changes up to 83f96a7eaaf0e3ac1b1447f74a8d3b2213187b6e:
 
-  soc/tegra: cbb: Add support for CBB fabrics in Tegra254 (2025-07-09 14:29:19 +0200)
+  firmware: tegra: bpmp: Fix build failure for tegra264-only config (2025-07-11 14:50:35 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Updates for v6.17-rc1
+firmware: tegra: Updates for v6.17-rc1
 
-The bulk of this is the addition of Tegra264 support for various low-
-level components. This also adds fabric descriptors for the new Tegra254
-and Tegra264 chips.
+Add Tegra264 support for the BPMP, fix some dependency issues and clean
+up some code using new OF helpers.
 
 ----------------------------------------------------------------
-Sumit Gupta (7):
-      soc/tegra: cbb: Clear ERR_FORCE register with ERR_STATUS
-      soc/tegra: cbb: Change master/slave to initiator/target
-      soc/tegra: cbb: Make error interrupt enable and status per SoC
-      soc/tegra: cbb: Improve handling for per SoC fabric data
-      soc/tegra: cbb: Support HW lookup to get timed out target address
-      soc/tegra: cbb: Add support for CBB fabrics in Tegra264
-      soc/tegra: cbb: Add support for CBB fabrics in Tegra254
+Arnd Bergmann (1):
+      firmware: tegra: bpmp: Fix build failure for tegra264-only config
 
-Thierry Reding (3):
-      soc/tegra: Enable support for Tegra264
-      soc/tegra: pmc: Add Tegra264 support
-      soc/tegra: Add Tegra264 APBMISC compatible string
+Rob Herring (Arm) (1):
+      firmware: tegra: bpmp: Use of_reserved_mem_region_to_resource() for "memory-region"
 
- drivers/soc/tegra/Kconfig              |   8 +
- drivers/soc/tegra/cbb/tegra194-cbb.c   |  34 +-
- drivers/soc/tegra/cbb/tegra234-cbb.c   | 758 +++++++++++++++++++++++++--------
- drivers/soc/tegra/fuse/tegra-apbmisc.c |   1 +
- drivers/soc/tegra/pmc.c                | 121 ++++++
- 5 files changed, 732 insertions(+), 190 deletions(-)
+Thierry Reding (2):
+      firmware: tegra: Fix IVC dependency problems
+      firmware: tegra: bpmp: Add support on Tegra264
+
+ drivers/firmware/tegra/Kconfig         | 5 +++--
+ drivers/firmware/tegra/Makefile        | 1 +
+ drivers/firmware/tegra/bpmp-private.h  | 6 ------
+ drivers/firmware/tegra/bpmp-tegra186.c | 9 ++-------
+ drivers/firmware/tegra/bpmp.c          | 6 ++++--
+ 5 files changed, 10 insertions(+), 17 deletions(-)
