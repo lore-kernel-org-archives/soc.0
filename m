@@ -1,27 +1,27 @@
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C631C288C06
-	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 13:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAA02D3EE1
+	for <soc@lists.linux.dev>; Fri, 11 Jul 2025 13:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752240680; cv=none; b=uaVf1JvHtAwsg49oi5rGDyK+ZUQnnea/npwnaLUt728q+AlE3z7/uxMFkya5nuz7D8fmUsM8m+rPm+veO9CqSbVCGKyqmwmxJTeIY+bd8LseKEXpeaUNxj/+UfMFbmoANLDVjF+Up/xXWHbuf3XdZIPsSOl8UYSBTW0lly5WIW8=
+	t=1752240684; cv=none; b=e70KfIbXDHhWkxPlsNvZpb6a8BetGKGHvEhh5YkyrSj3ovkklCyQG6wlLq/nqrXxnroi6qSNtMMUWAceZPlVq86HaG5dGVNTtBiPUnJRxwzeAGjzbo/yQ7mly4jhOkDu8QHgXnrdlpR/9Klr4NM5jHc+4sb052a7U+VwzmZPmxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752240680; c=relaxed/simple;
-	bh=tfivQdEPw+EfuvP9NQwvevYGfhSqWskGfENeczM1YzU=;
+	s=arc-20240116; t=1752240684; c=relaxed/simple;
+	bh=78SlwqOo1S3UzP+6/6pMeB/ujJsd3h62Dte053oiZgw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iqvqvvF2q1jF4k6613rKCtPfYsCu58GlP5J1TfkngmBeyQ5/3SlH3SmNW2g2WDhLxFYMOWYkLjjxyWhBxaDAowbmPY2DcSrDqy8nUpm+Pf38xhoUw+sDytPrkK48F+dgop2jwiAfPiEvhy0gbXAISBDaKXIK21HVypcffKdl3MU=
+	 MIME-Version:Content-Type; b=tLBACyzbPoRbbGbXYYZTZ+r2N4idPv3ogqGsvTI5vTdsNxiSI8chjnPA31LEplib4Db5GnM2pJLFn2DThMEbTLuqtC8aRGl5UggpmsBSTeaA9p+VgIqENmXdZgmaRC51DiwYCKWaDgyf0a5wmNlZW0w9VANWgk3RS2/Ktu9a/xw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
 Received: from mail.andestech.com (ATCPCS31.andestech.com [10.0.1.89])
-	by Atcsqr.andestech.com with ESMTPS id 56BDUbOp013878
+	by Atcsqr.andestech.com with ESMTPS id 56BDUdai014106
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 11 Jul 2025 21:30:37 +0800 (+08)
+	Fri, 11 Jul 2025 21:30:39 +0800 (+08)
 	(envelope-from ben717@andestech.com)
 Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS31.andestech.com
  (10.0.1.89) with Microsoft SMTP Server id 14.3.498.0; Fri, 11 Jul 2025
- 21:30:37 +0800
+ 21:30:39 +0800
 From: Ben Zong-You Xie <ben717@andestech.com>
 To:
 CC: <arnd@arndb.de>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
@@ -30,10 +30,12 @@ CC: <arnd@arndb.de>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
         <daniel.lezcano@linaro.org>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <soc@lists.linux.dev>,
-        <tim609@andestech.com>, Ben Zong-You Xie <ben717@andestech.com>
-Subject: [PATCH v2 3/9] dt-bindings: interrupt-controller: add Andes QiLai PLIC
-Date: Fri, 11 Jul 2025 21:30:19 +0800
-Message-ID: <20250711133025.2192404-4-ben717@andestech.com>
+        <tim609@andestech.com>, Ben Zong-You Xie <ben717@andestech.com>,
+        Conor Dooley
+	<conor.dooley@microchip.com>
+Subject: [PATCH v2 4/9] dt-bindings: interrupt-controller: add Andes machine-level software interrupt controller
+Date: Fri, 11 Jul 2025 21:30:20 +0800
+Message-ID: <20250711133025.2192404-5-ben717@andestech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250711133025.2192404-1-ben717@andestech.com>
 References: <20250711133025.2192404-1-ben717@andestech.com>
@@ -48,29 +50,83 @@ Content-Type: text/plain
 X-DKIM-Results: atcpcs31.andestech.com; dkim=none;
 X-DNSRBL: 
 X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 56BDUbOp013878
+X-MAIL:Atcsqr.andestech.com 56BDUdai014106
 
-Add a new compatible string for Andes QiLai PLIC.
+Add the DT binding documentation for Andes machine-level software
+interrupt controller.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+In the Andes platform such as QiLai SoC, the PLIC module is instantiated a
+second time with all interrupt sources tied to zero as the software
+interrupt controller (PLICSW). PLICSW can generate machine-level software
+interrupts through programming its registers.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Ben Zong-You Xie <ben717@andestech.com>
 ---
- .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml         | 1 +
- 1 file changed, 1 insertion(+)
+ .../andestech,plicsw.yaml                     | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-index ffc4768bad06..5b827bc24301 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-@@ -53,6 +53,7 @@ properties:
-     oneOf:
-       - items:
-           - enum:
-+              - andestech,qilai-plic
-               - renesas,r9a07g043-plic
-           - const: andestech,nceplic100
-       - items:
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml b/Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
+new file mode 100644
+index 000000000000..eb2eb611ac09
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/andestech,plicsw.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/andestech,plicsw.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Andes machine-level software interrupt controller
++
++description:
++  In the Andes platform such as QiLai SoC, the PLIC module is instantiated a
++  second time with all interrupt sources tied to zero as the software interrupt
++  controller (PLIC_SW). PLIC_SW directly connects to the machine-mode
++  inter-processor interrupt lines of CPUs, so RISC-V per-CPU local interrupt
++  controller is the parent interrupt controller for PLIC_SW. PLIC_SW can
++  generate machine-mode inter-processor interrupts through programming its
++  registers.
++
++maintainers:
++  - Ben Zong-You Xie <ben717@andestech.com>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - andestech,qilai-plicsw
++      - const: andestech,plicsw
++
++  reg:
++    maxItems: 1
++
++  interrupts-extended:
++    minItems: 1
++    maxItems: 15872
++    description:
++      Specifies which harts are connected to the PLIC_SW. Each item must points
++      to a riscv,cpu-intc node, which has a riscv cpu node as parent.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts-extended
++
++examples:
++  - |
++    interrupt-controller@400000 {
++      compatible = "andestech,qilai-plicsw", "andestech,plicsw";
++      reg = <0x400000 0x400000>;
++      interrupts-extended = <&cpu0intc 3>,
++                            <&cpu1intc 3>,
++                            <&cpu2intc 3>,
++                            <&cpu3intc 3>;
++    };
 -- 
 2.34.1
 
