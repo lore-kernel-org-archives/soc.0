@@ -1,150 +1,196 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E23E23C50C
-	for <soc@lists.linux.dev>; Tue, 15 Jul 2025 09:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4DD2E2EF3
+	for <soc@lists.linux.dev>; Tue, 15 Jul 2025 13:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752573203; cv=none; b=sXUwPOA/i4WInhEIJ/gKHtZa9oaMe+dQSbJyfcS+v6u0Ff2hMdnKDCm5cbivwFHs4xwxfL27I75E1oYiKzgmnVmNZp7Opsh5K/x5+3F/uW47oShssyWnK6yo+tVdCzRMWJes1qyYpNShi9RHsAVUB6p7Bit3PgY5YkkGWE78ssI=
+	t=1752585237; cv=none; b=i+N+rfCQ/Vt3uDpjNXuka8txxT0upQRKPxj4UTZP59DgCijRqDWjyBp9SF48kJEP6oPHldCQEzfOsATFj6id4qCnCnAKwniAyAJYRMFeVv66Xe5vwoz72XGfX6ElnYdOiJtZ2VHOvmQ8xCUMZAjgetantYtcVM8mEQwvKkELHA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752573203; c=relaxed/simple;
-	bh=hdNF87GV2fWePmslMU1NtQufudv4sfo++yaOq7Dlqlk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M+sh5cpYg3ehHIGUg3z7WvDW6x1a4q8XgrP9laVdWl4r2K24M3tWn8h6VDABsQ2VmBil2aNAmn5ZBy4KNSJuHFy1cvJUmVKdUV45uoh8he5gM8jg+Dr+AXM6TLoQqIm4lfSA7xO+QF3jDkjXQjcUcKCj5RofvGt7iiswJ8Rfslg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H63LA/OO; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1752585237; c=relaxed/simple;
+	bh=mNnsSuLBbG4Lej1hhvgedugGK2ZQl0xADRRD++s98uQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=D7rSu547nmE9Sl8yGo7Bc8gaJQWDKaJvwufT0wbdEG7Bd776mzGhiHDvXBT+37wesUzD4AuVkpWx5lAwcp5aNWHOzx/SocGrcw9iAEcCLcFnlSzSnbFEMlc4PKGT2Zgkzn2WdDQ27TsnCKuuwgivxs48Ppc1pWCRfOkJTOPr/qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=YWJCkD9+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TKDo87+O; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H63LA/OO"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-456127fa3d6so826135e9.1
-        for <soc@lists.linux.dev>; Tue, 15 Jul 2025 02:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752573199; x=1753177999; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VQFCrQS+5bGchAPhyltjjz6iBpc703vtRLaUH4uJQU=;
-        b=H63LA/OOlPq4LHPQzvqMXrX0nxByTZnvwB1XrOHLA20Lt8J4LI1koEvohsx3CMOIGP
-         muXcTR47B3C7jjHeV2Ei44ZssIdylfJosUGEVmcGiG3LFKA/vxusJ6xRTFAufaIFYZaK
-         dmBVuwckXD1+jwfKoWjZF9IzKU/x+EmnxEsxnOJHAJwEfAN3bSQ1aHdLX60Z9ChoYhWI
-         PjoVhkRlZV6eeX0Wgzp9uoLn6vIKrUCctyXz0p1fLwGOM5wubyGP9VzAZPiV6PlM1qeR
-         m41/6H0qrMA6wrF3G+bzb4yibMs790TbYOjzbwG2UCueX5QL5whj7+kF1EfvpbF7XhXH
-         CDxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752573199; x=1753177999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/VQFCrQS+5bGchAPhyltjjz6iBpc703vtRLaUH4uJQU=;
-        b=M4+qh4HwCqVVcg1M2N08PL23TXQSUCt8dEUWEYH5Sr2KMl74gAAoX+sHBNpFkC1w03
-         8KdYV+OFIuoooh+cuGDuV6fTS2roxIN0Sfotirn89sY8h9zwJp4k9v2C7FC6mGpBs7hX
-         +MT1MSMon9mNktIgy++iKJ2ikq8qAQN3mjWYIqUd77p5sBzc0JvHgRdn/D7+SGGjNKiI
-         iwtDLeXalXMxcQ2rGFtTVDW23AFON5U5BaWkocdlOIfEKB5SPtchVwCedVHZErAwlS7A
-         UaxarghxrkVLVlqF/rQmr8gaaOQBNeMJY3KVtEoz69BjdC1W+I54gE7H09/4i8fzH8bU
-         EvpA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlzSzWM2oGaFAlC0tm2ncMGo7kN40teYvmHJzDyjhi8bZ099xgUtb5iYEwB0n7Cr08BeI=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxJSaHV/0lSTjA6smCGvtW6nzakyzIgq5BPv+U3F7ZGskO5jDkj
-	pO0qLjPWouYbn/LYyK6WHX4B3ur+CI9nN9KKh1Oi4L/VpQcr/D/4kui8B1Or0oLoNUM=
-X-Gm-Gg: ASbGncvqeenTg4TFQniW3HryL7EZCAdvZ++SksgU9pc8Euw05RUZCTh7pm9iUQgwgQm
-	ToXgk2+IX5aEAy4ixhiqnRf69zLtNhNzNqQ+Qvg4F+9vYAoLEwEM2gbUYAyASiYrkmA0rZqchZu
-	PRwtfEV5vubCP1Nm9fGWLrt+2WQIHYZBcBXYKmt/BXcY4mFGX9RWMsOa9o0N6P6UgAnkFhNw4wL
-	c78ALOI+fCyVn/E+fab7HLzCtWRn0diY4V0IsjjvxkDYntSoGEq69ASPSqmmioy/nwDb7dHAiIz
-	q2+HdK96h6eROi6wI4BuAyhoO9mZGAu4FN2ToZ+/XX7skfjNaKTs1dZ0K24+y1Qkmvc0gc/Fgev
-	nra9PZuswh2k9GeKTVymqMmR5ofy+42+yz38=
-X-Google-Smtp-Source: AGHT+IGs2CckTXIolbdnM6YkcGeVbCoECGd88RrOnR/Gtlb5TjwgUc93KCulizhEe3JrwuaSZK5Kwg==
-X-Received: by 2002:a05:600c:3b88:b0:453:7011:fcdb with SMTP id 5b1f17b1804b1-45629127ce8mr4377775e9.1.1752573199432;
-        Tue, 15 Jul 2025 02:53:19 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.222.89])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-456114a417csm78548155e9.25.2025.07.15.02.53.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 02:53:18 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.17
-Date: Tue, 15 Jul 2025 11:53:15 +0200
-Message-ID: <20250715095315.59299-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="YWJCkD9+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TKDo87+O"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id A05E7EC0E90;
+	Tue, 15 Jul 2025 09:13:52 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 15 Jul 2025 09:13:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1752585232; x=1752671632; bh=Jl
+	2/Bme3dggXyQm6j2e6aTPj1gIVCZq+ikrQ9R6HsWo=; b=YWJCkD9+jFiUq8njuW
+	Xil6uP+eA+UhZgKWH1Ae0cSVGSUOB4/VIeU0zxKRAmcZ7HxR9FPU4Zz9Bdnub+gc
+	qfNcJaIj1Zy55qS0WiwY/o7RDwrVG1GS+sI2bifziqQbLotNPwdN+Iu3/gFoYg9C
+	Cnvi5QsGKFfoUhUKHGjC6L/dkDstw27V8Ptc3a6i6vmd881wAzFfFJ0+EeNISEWx
+	qSMRCOHeEd5EqTaey5ggevPOX+Yl/AiNzJpU0eW7iBhsfWBQTodGf9akTqmSMuIY
+	MPAUbTdthVT96Cb/oclY4rLourF7pqgHxiNZnJMmazkMvIsuQCxZTxSKUOM6I9rs
+	FB2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1752585232; x=1752671632; bh=Jl2/Bme3dggXyQm6j2e6aTPj1gIV
+	CZq+ikrQ9R6HsWo=; b=TKDo87+OdmGx4e81bbWK1skBP2sM9vFfNX/eV0JNEfYJ
+	9ixUmxx4P+04R/eYeGztZXCZyheIzJUoedwcRtfOSeRSVlTVNaEs0DB+2Gn13azu
+	TgB8/AESROjLwIeX2F78bNRiWbVkGuKMFcR83LPeSrHuys7RVTdNO9zqMxTEA1Ot
+	gmHUt8Q7nx0mJqs9ZLVboojAU3TpD+ercHA6pp0bjlwsBGTfq7ujFUolaOjRy/SA
+	nOkYDYkQdaZpgCRhpDb7qFj7/MD22Jul1odQBlK7SGDl2hVzonq4d5Gspcbof7ll
+	RL4vEN9TEKfzDXr6Z7uiqG37Pv/iqWCQkkUm2TLe6Q==
+X-ME-Sender: <xms:EFR2aMQ5F-LQjDcnHHfBbtu4-qBZwkwdvzDp8lmnYFofWWiDLv8_jw>
+    <xme:EFR2aJzMb6IwIdlYPYe9-YozNEcLmbHgNUkJ-rZEKRFGBiMJN_LtoNQfhmwltXy6J
+    3pI7bz6zREY6oRgv5c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehgeelvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
+    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
+    duleeigeekveeugeettdejtddtleeghefhvdfhueehtefhudelffduvdeuleevteenucff
+    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthht
+    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhorhhvrghlughssehlih
+    hnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhm
+    qdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhope
+    hsohgtsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgv
+    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:EFR2aASGoGyY7XXes0xjcPeoQBPokPJRfpswH4YpHKrL4E5wTxiVuQ>
+    <xmx:EFR2aJQ6gx9OGwUiDeJqufoA-Urt6HIqnn3ILLArJMedxzdzKWu_Fg>
+    <xmx:EFR2aEQTki8U0Xfe-BDIiMN1hJ7fzUPbU3h5YHMAHc4Jj6ACR0BO4A>
+    <xmx:EFR2aO4IR266-QluDydF5lz0iNolTbTiFocyv-RaNcQC4vMqJtmMYA>
+    <xmx:EFR2aKh_chE7ibYhv7IQQckOU9OUYCuTm68ZtKFnSDvcP7wmdeEoXbWG>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 26369700065; Tue, 15 Jul 2025 09:13:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2613; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=hdNF87GV2fWePmslMU1NtQufudv4sfo++yaOq7Dlqlk=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBodiULNenkUQzM1iNZM10NYbU29gK+VYrKrcqI5
- bqU+sYZxmmJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaHYlCwAKCRDBN2bmhouD
- 1+muD/wKwp0dL06Y4+v06hD2jgWUNk+0uO91jiBFPuDw8bI/Y4jbeJlAupBVow45cte6n2nTYdk
- gQrK1sUHtYff37PyuzZX6NSylw+aiZYHxS1zMvLtCERSxHdrIcqUSfvGekYRCp+pL3NVTrk8Jfd
- DG/2nXJt0eHZ45Y3KjwrgAwYOyoSqsj1TH0iY/gbaAOOZQB59x5EKNhcUD6GY/BS9VtJmQhEB00
- IUnaWplezZlGIW4v/5gh9BJaXJve32NYN6F9jKDznp50kMdWUoaDMnMmBjnQ4LNhrFo0XE2bKU7
- 7ZWt6DRtyQReyRZHRf67lMlswn+ZHbc7h/sJAsgATBHn6l3BKNUENhWYoJc7LKGM1RIKd1Q6Pxx
- XZEx4vDDGlOcZS6Wj1FOWK0tN1L95+J+JoOTPm6YLJ/Cs/hk+PKBQpRcyIZ9L1wJrtyPEV7OIj5
- eAxgdgT2mRUnXCFxqh292qRWle+V4vXltrAtaVbkQ3gG8KxS6yNHYiiIq0wLCdQ6miOh9AhFKQf
- db8kct4PNZMahckb6Lqxs0xjB8TAXcOQF+WF/MuiDeRV0i7IHUXXqvnREDSNEFXJimfVGVybxeX
- SadcZMByUEfmicTKb5XbSF0AC2LoLQxSoRhuarMcDsihO+on4/UylTqDi6HhFEI7LAk2m+LS07b tVEZQgYXYsP/jdg==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+Date: Tue, 15 Jul 2025 15:13:31 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ soc@lists.linux.dev
+Message-Id: <5f8e6b26-01ee-4941-9609-ed761a23f4d1@app.fastmail.com>
+Subject: soc: fixes for 6.16, part 2
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+The following changes since commit 3f3fb97374308993dbe8884f44c2579a81b90bfa:
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+  Merge tag 'apple-soc-fixes-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/sven/linux into arm/fixes (2025-07-03 16:27:31 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.17
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.16-2
 
-for you to fetch changes up to 93a7aedc4cc4476da54ea45f3ed5308aabafef75:
+for you to fetch changes up to 8f0837fdc5d832f0cd953f66db0cbfb2fa8909d2:
 
-  dt-bindings: memory: renesas,rzg3e-xspi: Document RZ/V2H(P) and RZ/V2N support (2025-07-09 20:23:59 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.17
-
-1. Several cleanups: Use dev_fwnode() in OMAP GPMX, convert
-   arm,pl172.txt DT bindings to DT schema, use
-   syscon_regmap_lookup_by_phandle_args() wrapper, correct kerneldoc.
-
-2. Mediatek MT8186 SMI: Extend hardware bandwidth limits to fix VENC
-   hardware during stress testing.
-
-3. Broadcom brcmstb_memc: Add additional fallback compatible and
-   simplify device driver matching.  The change comes from Broadcom
-   SoC maintainer (Florian Fainelli), thus its ABI impact is
-   acknowledged.
+  Merge tag 'qcom-arm64-defconfig-fixes-for-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2025-07-11 13:41:10 +0200)
 
 ----------------------------------------------------------------
-Florian Fainelli (2):
-      dt-bindings: memory-controller: Define fallback compatible
-      memory: brcmstb_memc: Simplify compatible matching
+soc: fixes for 6.16, part 2
 
-Frank Li (1):
-      dt-bindings: memory-controllers: convert arm,pl172.txt to yaml format
+There are 18 devicetree fixes for three arm64 plaforms: Qualcomm Snapdragon,
+Rockchips and NXP i.MX. These get updated to more correctly describe the
+hardware, fixing issues with:
 
-Friday Yang (1):
-      memory: mtk-smi: Add ostd setting for mt8186
+ - real-time clock on Snapdragon based laptops
+ - SD card detection, PCI probing and HDMI/DDC communication on
+   Rockchips
+ - Ethernet and SPI probing on certain i.MX based boards
+ - A regression with the i.MX watchdog
 
-Jiri Slaby (SUSE) (1):
-      memory: omap-gpmx: Use dev_fwnode()
+Aside from the devicetree fixes, there are two additional fixes for the
+merged ASPEED LPC snoop driver that saw some changes in 6.16, and one
+additional driver enabled in arm64 defconfig to fix CPU frequency scaling.
 
-Krzysztof Kozlowski (2):
-      memory: emif: Add missing kerneldoc for lpmode
-      memory: stm32_omm: Use syscon_regmap_lookup_by_phandle_args
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Lad Prabhakar (1):
-      dt-bindings: memory: renesas,rzg3e-xspi: Document RZ/V2H(P) and RZ/V2N support
+----------------------------------------------------------------
+Alexey Charkov (1):
+      arm64: dts: rockchip: list all CPU supplies on ArmSoM Sige5
 
- .../bindings/memory-controllers/arm,pl172.txt      | 127 ------------
- .../bindings/memory-controllers/arm,pl172.yaml     | 222 +++++++++++++++++++++
- .../memory-controllers/brcm,brcmstb-memc-ddr.yaml  |  54 +++--
- .../memory-controllers/renesas,rzg3e-xspi.yaml     |   9 +-
- drivers/memory/brcmstb_memc.c                      |  56 +-----
- drivers/memory/emif.c                              |   1 +
- drivers/memory/mtk-smi.c                           |  33 +++
- drivers/memory/omap-gpmc.c                         |   4 +-
- drivers/memory/stm32_omm.c                         |  21 +-
- 9 files changed, 308 insertions(+), 219 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/memory-controllers/arm,pl172.txt
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/arm,pl172.yaml
+Andrew Jeffery (2):
+      soc: aspeed: lpc-snoop: Cleanup resources in stack-order
+      soc: aspeed: lpc-snoop: Don't disable channels that aren't enabled
+
+Andy Yan (3):
+      arm64: dts: rockchip: Adjust the HDMI DDC IO driver strength for rk3588
+      arm64: dts: rockchip: Add cd-gpios for sdcard detect on Cool Pi CM5
+      arm64: dts: rockchip: Add cd-gpios for sdcard detect on Cool Pi 4B
+
+Arnd Bergmann (5):
+      Merge tag 'imx-fixes-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
+      Merge tag 'v6.16-rockchip-dtsfixes1' of https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+      Merge tag 'aspeed-6.16-fixes-0' of https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'qcom-arm64-defconfig-fixes-for-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+
+Bjorn Andersson (1):
+      arm64: defconfig: Enable Qualcomm CPUCP mailbox driver
+
+Diederik de Haas (1):
+      arm64: dts: rockchip: Add missing fan-supply to rk3566-quartz64-a
+
+Francesco Dolcini (1):
+      arm64: dts: freescale: imx8mm-verdin: Keep LDO5 always on
+
+Jakob Unterwurzacher (1):
+      arm64: dts: rockchip: use cs-gpios for spi1 on ringneck
+
+Johan Hovold (2):
+      arm64: dts: qcom: sc8280xp-x13s: describe uefi rtc offset
+      arm64: dts: qcom: x1e80100: describe uefi rtc offset
+
+Meng Li (1):
+      arm64: dts: add big-endian property back into watchdog node
+
+Richard Zhu (1):
+      arm64: dts: imx95: Correct the DMA interrupter number of pcie0_ep
+
+Shawn Lin (1):
+      arm64: dts: rockchip: fix rk3576 pcie1 linux,pci-domain
+
+Tim Harvey (4):
+      arm64: dts: imx8mp-venice-gw71xx: fix TPM SPI frequency
+      arm64: dts: imx8mp-venice-gw72xx: fix TPM SPI frequency
+      arm64: dts: imx8mp-venice-gw73xx: fix TPM SPI frequency
+      arm64: dts: imx8mp-venice-gw74xx: fix TPM SPI frequency
+
+Wei Fang (2):
+      arm64: dts: imx95-19x19-evk: fix the overshoot issue of NETC
+      arm64: dts: imx95-15x15-evk: fix the overshoot issue of NETC
+
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |  3 +-
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi   |  1 +
+ .../boot/dts/freescale/imx8mp-venice-gw71xx.dtsi   |  2 +-
+ .../boot/dts/freescale/imx8mp-venice-gw72xx.dtsi   |  2 +-
+ .../boot/dts/freescale/imx8mp-venice-gw73xx.dtsi   |  2 +-
+ .../boot/dts/freescale/imx8mp-venice-gw74xx.dts    |  2 +-
+ arch/arm64/boot/dts/freescale/imx95-15x15-evk.dts  | 20 ++++++-------
+ arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts  | 12 ++++----
+ arch/arm64/boot/dts/freescale/imx95.dtsi           |  2 +-
+ .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |  2 ++
+ arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi       |  1 +
+ arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi    | 23 ++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts |  1 +
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts      | 28 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  2 +-
+ .../boot/dts/rockchip/rk3588-base-pinctrl.dtsi     | 20 ++++++-------
+ .../arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi |  1 +
+ .../boot/dts/rockchip/rk3588-extra-pinctrl.dtsi    |  5 ++--
+ arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts |  1 +
+ arch/arm64/boot/dts/rockchip/rockchip-pinconf.dtsi | 35 ++++++++++++++++++++++
+ arch/arm64/configs/defconfig                       |  1 +
+ drivers/soc/aspeed/aspeed-lpc-snoop.c              | 13 +++++++-
+ 22 files changed, 143 insertions(+), 36 deletions(-)
