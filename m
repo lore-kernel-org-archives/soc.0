@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9054119F42D
-	for <soc@lists.linux.dev>; Tue, 15 Jul 2025 01:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC8B1B042E
+	for <soc@lists.linux.dev>; Tue, 15 Jul 2025 01:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752541716; cv=none; b=qV47hChmEyJ5Qiq8yH8UHvBpOnW1la7iNzkbSHNb9aQF3EIHODMxwE71SHPCujnGI2UU591tWCSy2Lgt0oQh6ZYI/0EI/E2tmQwixcquyRkY62HFTxaLGNp1SdTWxU3N0gx1koU9CLojwtcAdzwT9I7wV43rsu9a3F3cflrgIa0=
+	t=1752543742; cv=none; b=hsLvHY8FAltDSjv8ZI/twLRfYCUDkdeWAIsTUbhZwRq5m4wM+Bx4MXKe/ZdPqu74MC8SlvSVhcJTjSOb1aUgRYREnWJ2PRXPROD+x6OByKcB1zLPyAKyvC2Ghpkdg04ueHKI4eWZszz6lj0mLtf1+4mFoH8tNh40EyYTgyLlFzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752541716; c=relaxed/simple;
-	bh=Fu5ixB0hPokbF97TZn3PHSr6gdbMKZ9P5xNxYJ48qfA=;
+	s=arc-20240116; t=1752543742; c=relaxed/simple;
+	bh=BRWhdu9BZAZMFd2tUBpnf/IlIUgJ08AuKoejisfBhqE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kAWS5wnLdzsQXrOTCNbzKRFjMVgUmEWVey+VJDepognuA8AWGE4m9WB0I4ewtpa+LHtypUpTQOU0Oj2w1lOvUWEh5v8lZl1dh6EeIe3skC6le/nsjVofJ2z3OsetlldapnMqm0TQKW/nAhNkI9Gc/XGGVmgh8f1dxqTxtrxGXbg=
+	 Content-Disposition; b=Zbm+gOEj/ZhAxlVOIAbowTKEzAhVgSNa11UWy5OtdGceRd5vxYt8Ebtq5mKvRwEwZcQ6NyLzCFY+sENSkGkJo7l0285ZGQ9JMU8ylEXT/vQS7dLlR2hMZTmEJ/D6HRN2zc1PK7nW5LKIP3mw/EOSOLwSACHboATPXQegjxNEP+U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 Received: by smtp.kernel.org (Postfix)
-	id 490A9C4CEF0; Tue, 15 Jul 2025 01:08:36 +0000 (UTC)
+	id 1C916C4CEF0; Tue, 15 Jul 2025 01:42:22 +0000 (UTC)
 Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1D069C4CEED
-	for <soc@kernel.org>; Tue, 15 Jul 2025 01:08:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1D069C4CEED
+	by smtp.kernel.org (Postfix) with ESMTPS id 44307C4CEED
+	for <soc@kernel.org>; Tue, 15 Jul 2025 01:42:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44307C4CEED
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gentoo.org
 Received: from localhost (unknown [116.232.48.207])
@@ -28,16 +28,16 @@ Received: from localhost (unknown [116.232.48.207])
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id AC25E340E39;
-	Tue, 15 Jul 2025 01:08:33 +0000 (UTC)
-Date: Tue, 15 Jul 2025 01:08:22 +0000
+	by smtp.gentoo.org (Postfix) with ESMTPSA id DEDD1340E65;
+	Tue, 15 Jul 2025 01:42:18 +0000 (UTC)
+Date: Tue, 15 Jul 2025 01:42:14 +0000
 From: Yixun Lan <dlan@gentoo.org>
 To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
 Cc: Alex Elder <elder@riscstar.com>, Guodong Xu <guodong@riscstar.com>,
 	Vivian Wang <wangruikang@iscas.ac.cn>, spacemit@lists.linux.dev,
 	linux-riscv@lists.infradead.org
-Subject: pll
-Message-ID: <20250715010822-GYA539814@gentoo>
+Subject: [GIT PULL RESEND] RISC-V SpacemiT Devicetrees for v6.17
+Message-ID: <20250715014214-GYA540030@gentoo>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -52,6 +52,9 @@ Hi Arnd,
   Please pull SpacemiT's device tree changes for v6.17,
 Note, I've included an immutable shared tag of reset-binding
 in this PR.
+
+  Sorry, I've missed the email title in previous PR, so resend
+to fix this ..
 
   Thanks
 
@@ -101,4 +104,3 @@ Yixun Lan (2):
  arch/riscv/boot/dts/spacemit/k1.dtsi               | 485 ++++++++++++++++-----
  include/dt-bindings/clock/spacemit,k1-syscon.h     | 141 ++++++
  5 files changed, 558 insertions(+), 113 deletions(-)
-
