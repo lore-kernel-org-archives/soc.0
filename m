@@ -1,310 +1,170 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067FC17ADF8
-	for <soc@lists.linux.dev>; Wed, 16 Jul 2025 03:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7B028C01F
+	for <soc@lists.linux.dev>; Wed, 16 Jul 2025 07:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752635463; cv=none; b=uusZ9nMjzoLKHRYjuRHDhXBk6NrCTd23fx9Ia6YgjA00GgQXcOdQ8qVTodSQ2+gGG9Gty3XBQ5tQ6O4+SEPqWAwVfpXnYK0vQVwna6EZYMlubCO7T+Xrt68/wWw/lSz38eRlQXHK6s2j46NTP27weksd3LV10b0oh8jViPAWPPA=
+	t=1752651502; cv=none; b=GPZxlULc9skXaYU8gMpcvgg8/HawxfljsFXU5xaCaXfvg1TyNaqasdFQ/N6kQ8HN1DZuRP5cwOO/aktNZIFRvg38YUftPXgo6xl8z/IUbqg76rR24qDjnR1BB4Z8fqF0Zu4oKPRFDX2S3CiqiLBUD56wq+KI7Mwm5yY230tmYeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752635463; c=relaxed/simple;
-	bh=nBjyQ5BHE+tuIIT/DAP5dnbdYgNuHRwX1DkTrChMN78=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BRO0V3eeznVRpdH3ydiJCVu1ctqLeqwuVYRvAcExYcV32BqMGnLQ13HZ8gWI/Fh5lm+jxjUtCq3uJ5EZd7tLw6jnSBOmmdqkRzzb7f9pV2ZoL6lknfbSRPpt1iIse7qwtgN5pgMwdh15JZaLjEeVkCqw2O2o8TOgb3gXPTSM+LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpB1X5pa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752651502; c=relaxed/simple;
+	bh=zqj2WXvRznVAb+0N5curnFTpIfqMowCZorxpVkcw3oA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Sg9wAUm4fajfu9LYjPWazKKF9i5xH0iyz/KPT8DgWAde0PAQ+h7dD1GnAPAqoyoBgjGtM+hAr7fU4QCNQXm7/n/tciWSzAgO9pPkHokdHzXOVeBY77GCj9xtFuUh8hfpOnHS4pLdNANzmkqCuMaKL6szo3rdQCsblhbkXs811Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m5vB9Ga0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpB1X5pa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m5vB9Ga0"
 Received: by smtp.kernel.org (Postfix)
-	id AF816C4CEF4; Wed, 16 Jul 2025 03:11:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804C5C4CEE3;
-	Wed, 16 Jul 2025 03:11:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752635462;
-	bh=nBjyQ5BHE+tuIIT/DAP5dnbdYgNuHRwX1DkTrChMN78=;
-	h=From:To:Cc:Subject:Date:From;
-	b=WpB1X5pa1J3JbdHTgn1GJBt5blAM5v2CUyNGVKi060YI+nsdXp/mciQWgfLVPkc7+
-	 6kqMIwnCVmiO09jRtCoLWsNAr1iWj89E1E/QoL74HW6AdxonjTuXxbsOy7tuctEtxT
-	 Wuv46/bBMKH2ogbSFhz6fjoZkeMm0yk7h6PEPNtgPOoAPQCEl0HGC2KZsfvGopTszV
-	 OnVgoHQpJAK1n+giwOEsr8TP+izDk1K4gccHX6Ej5hN6VFiWDXOHMrzLfc0cv8w0cV
-	 cDb+LgAWejKUSfs+mnjJ9kr1r8euH0JxPsEARqT2q4I01ErT+7nhG/sTW7nYN3mBpq
-	 eRFi1RxvY8ZwQ==
-From: Bjorn Andersson <andersson@kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Aleksandrs Vinarskis <alex.vinarskis@gmail.com>,
-	=?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Lijuan Gao <quic_lijuang@quicinc.com>,
-	Nitin Rawat <quic_nitirawa@quicinc.com>,
-	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-	Ayushi Makhija <quic_amakhija@quicinc.com>,
-	Jie Gan <jie.gan@oss.qualcomm.com>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Eugen Hristev <eugen.hristev@linaro.org>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	Kyle Deng <quic_chunkaid@quicinc.com>,
-	Lijuan Gao <lijuan.gao@oss.qualcomm.com>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Maulik Shah <maulik.shah@oss.qualcomm.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Pengyu Luo <mitltlatltl@gmail.com>,
-	Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Wenmeng Liu <quic_wenmliu@quicinc.com>
-Subject: [GIT PULL] Qualcomm Arm64 DeviceTree updates for v6.17
-Date: Tue, 15 Jul 2025 22:10:57 -0500
-Message-ID: <20250716031059.76348-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.49.0
+	id 21C9EC4CEF0; Wed, 16 Jul 2025 07:38:22 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 13C6FC4CEF7
+	for <soc@kernel.org>; Wed, 16 Jul 2025 07:38:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 13C6FC4CEF7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4538bc52a8dso46800265e9.2
+        for <soc@kernel.org>; Wed, 16 Jul 2025 00:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752651499; x=1753256299; darn=kernel.org;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JTZyE17KIP8MeS2UO3NBP08211fLukiUHXp1mSFEsMA=;
+        b=m5vB9Ga0FnyrxbAlD4z+RhUA1iFAhXKVBfJtgZ7kplb1wCjyc319Q8uIFt+LrUrOHI
+         lxBrKRxsLDcb6LgbqZyka5Kno1XhzvfCtKMYb5DyyZ5KEih9ANj5vYm3ibVKsBDgmTrw
+         abFjkUsig4TLgd0Q2a8SMJ5i2LFdEF1HJ5iS7V4fj3NAtB0wwWUqVV6mxR5ULAuvR/BC
+         f5CD3vSWcMRGN9wGUgm9/25rBUU/JDdUbu/iUKSUlE7rmZ03DC5Fv+C2R4q7L0IPiRGQ
+         tEZdKtkr/YNTyjUq9ysmVJamm1jFGsWRD0D8OQ6hLhIMn6smVnySXLzWEnrz03vAqcFW
+         rq6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752651499; x=1753256299;
+        h=content-transfer-encoding:organization:autocrypt:content-language
+         :cc:to:reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JTZyE17KIP8MeS2UO3NBP08211fLukiUHXp1mSFEsMA=;
+        b=AqgTJySVaonVFwaeINWI8CIkCLxZBMrw5uHr7QO6Qe9xJmhjBThshBI++xglfgPCxe
+         hnk7/NuOeRtrpcFM1IanNiUb5Ek7Nase9pl2DaZ8RqadwenFvvkWisXYgOElPbGvGSvM
+         +F3SDvZuF4ct/dBgyEwgnVmqTsxR2Q/U5L73T3iyJPuPI4skhvkeaL1yu/1oPtoMBwek
+         TWqUkDN756og2vX05dAxZNbOn1jOoWktVYp9o/w9kJn+arp5iAAgKnfHi0g8AIDKMRT3
+         oFu2CxWPG3GP/i+Y2QKrU/7kYyWWG8jMPjyxH+ghEEHH1ExPqINvRa78O1EHtjllqeCk
+         MYRg==
+X-Gm-Message-State: AOJu0Yye4/TJ96KIKwGBBoEGEZbu8dcdQKfRXnfev6PXDIvWRoaoSwqC
+	As9kJ0v/gMZxZe9iHYTfVbYpAw7lvkoMPldFqZgf4BQ2KUgMlSQV59Jk0F/ZT4BxBFSaAtz6sFN
+	cvTHz
+X-Gm-Gg: ASbGncs30yhi3D5j3x+hcDolDlX+ATQB+jkvmXbtlbLZJIKP4etDLkzQNeZXb+kpk6D
+	0qziByQA6haXHbNbI0OgVhn1ZHIMeb0GihindttLnwhNzkYd2Yd96A6hiGsIqNPNEx7w/w8Qjfi
+	al5p78ONE3MHC4FMqlOMMGJm/z+vf8wDssuyacdVldArUQPqMLwxBQsZWFN+mnygqgrXamoWEhU
+	KJchQ02lCRiKSkTUXaxYkJeQzMOOGIT3qdMekqw5H1X61S8NfI7rnKwI9i6zjv3YqVOPiK3OTo0
+	NI5UyjBabcHMeVoKQoee3FSsU52yTd/oARH9Vyy3TIsYsZU0sucesN6BT8ImljBsp7bomE5HFP7
+	Zd5m2tRPYWA2xukgYhI+2OR5frxwkksjj0/3O/qXdxAhwFhRjDFDM6fwPHzq20+dYflL5LqufRt
+	4=
+X-Google-Smtp-Source: AGHT+IF5VHjUdfZNwYUlg6vQGhBqdvVW29xEpVXshvZF1iijy/MsoFJlMDLl1aBwa+n3fGJrEvN4ig==
+X-Received: by 2002:a05:600c:3b29:b0:453:7713:546a with SMTP id 5b1f17b1804b1-4562f164b1bmr11491165e9.14.1752651499326;
+        Wed, 16 Jul 2025 00:38:19 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:91d5:1399:613c:fd4a? ([2a01:e0a:3d9:2080:91d5:1399:613c:fd4a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e1e135sm17207431f8f.72.2025.07.16.00.38.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Jul 2025 00:38:19 -0700 (PDT)
+Message-ID: <3d93b621-9544-4a68-85db-6f87a9e8fa5c@linaro.org>
+Date: Wed, 16 Jul 2025 09:38:18 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic ARM64 DT updates for v6.17
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Hi,
+
+Here's small but late PR for the Amlogic ARM64 DT changes, adding the S912 based Ugoos AM3
+board, adding pinctrl support for new SoCs and finally enabling the NPU on the Alta
+and VIM3 Amlogic G12B based boards now the kernel driver and userspace mesa supports
+the NPU correctly.
+
+Thanks,
+Neil
 
 The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.17
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-arm64-dt-for-v6.17
 
-for you to fetch changes up to 7de0d60f6345e701ca8b9a05fe2faa03ad868ccf:
+for you to fetch changes up to 587c1c00f75565567d1f26a333a3392f7a21c28c:
 
-  arm64: dts: qcom: sm8150: Drop unrelated clocks from PCIe hosts (2025-07-03 15:58:23 -0500)
-
-----------------------------------------------------------------
-Qualcomm Arm64 DeviceTree updates for v6.17
-
-79b896e7da7e arm64: dts: qcom: msm8976-longcheer-l9360: Add initial device tree
-6516961352a1 arm64: dts: qcom: Add support for X1-based Asus Zenbook A14
-
-The DB410c D3 camera mezzanine is converted to an overlay.
-
-On MSM8976 SDC2 pinctrl definitions are introduced and BLSP DMA
-controller is marked to be managed by another entity.
-
-Add camera subsystem on the QCM2290 platform.
-
-Add and enable remoteproc and related devices on QCS615.
-
-Add and enable Video encoder/decoder on QCS8300 and SA8775P.
-Also on SA8775P add CPU OPP tables for scaling DDR/L3 bandwidth based on
-CPU frequency, add L3 interconnect definitions, DSI and video
-encoder/decoder support.
-
-Enable the SLPI remoteproc on SDM850-based Lenovo Yoga C630.
-
-On SM6350, add the video clock controller, APR and some audio related
-services.
-
-Describe the camera subsystem on SM8550 and add Iris video
-encoder/decoder node for SM8650.
-
-On SM8750 introduce UFS and Soundwire support, enable these and describe
-the sound hardware on MTP and QRD.
-
-Add camera clock controller on SC8180X.
-
-On X Elite, for the Dell XPS13, add WiFi and Bluetooth pwrseq and enable
-the fingerprint sensor. For HP Omnibook X14  USB1 SS1 SBU mux and do
-some misc cleanup.
-
-Replace the thermal zones inherited from X Elite with X Plus-specific
-ones.
-
-Add missing interrupts and clean up unrelated clocks for PCIe
-controllers across a variety of platforms.
+   arm64: dts: amlogic: Enable the npu node for Alta and VIM3 (2025-07-04 17:10:16 +0200)
 
 ----------------------------------------------------------------
-Aleksandrs Vinarskis (4):
-      arm64: dts: qcom: x1e80100-dell-xps-9345: Add WiFi/BT pwrseq
-      arm64: dts: qcom: Add support for X1-based Asus Zenbook A14
-      arm64: dts: qcom: x1-asus-zenbook: fixup GPU nodes
-      arm64: dts: qcom: x1-asus-zenbook: support sound
+Amlogic ARM64 DT for v6.17:
+- Align wifi node name with bindings
+- Add pinctrl nodes for Amlogic S7/S7D/S6 nodes
+- Enable the NPU nodes on Alta & VIM3
+- New boards:
+   - Ugoos AM3
 
-André Apitzsch (4):
-      arm64: dts: qcom: msm8976: Make blsp_dma controlled-remotely
-      dt-bindings: arm: qcom: Add MSM8976 BQ Aquaris X5 Plus
-      arm64: dts: qcom: msm8976: Add sdc2 GPIOs
-      arm64: dts: qcom: msm8976-longcheer-l9360: Add initial device tree
+----------------------------------------------------------------
+J. Neuschäfer (2):
+       dt-bindings: arm: amlogic: Add Ugoos AM3
+       arm64: dts: amlogic: Add Ugoos AM3
 
-Ayushi Makhija (2):
-      arm64: dts: qcom: sa8775p: add Display Serial Interface device nodes
-      arm64: dts: qcom: sa8775p-ride: add anx7625 DSI to DP bridge nodes
+Krzysztof Kozlowski (1):
+       arm64: dts: amlogic: Align wifi node name with bindings
 
-Bartosz Golaszewski (1):
-      arm64: dts: qcom: sm6115: add debug UART pins
+Tomeu Vizoso (1):
+       arm64: dts: amlogic: Enable the npu node for Alta and VIM3
 
-Bjorn Andersson (2):
-      arm64: dts: qcom: x1e80100-dell-xps13-9345: Enable fingerprint sensor
-      Merge branch '20250512-sc8180x-camcc-support-v4-2-8fb1d3265f52@quicinc.com' into arm64-for-6.17
+Xianwei Zhao (3):
+       dts: arm64: amlogic: add S7 pinctrl node
+       dts: arm64: amlogic: add S7D pinctrl node
+       dts: arm64: amlogic: add S6 pinctrl node
 
-Dmitry Baryshkov (1):
-      arm64: dts: qcom: sdm850-lenovo-yoga-c630: enable sensors DSP
-
-Eugen Hristev (1):
-      arm64: dts: qcom: sm8750: Trivial stray lines removal
-
-Jagadeesh Kona (1):
-      arm64: dts: qcom: sa8775p: Add CPU OPP tables to scale DDR/L3
-
-Jens Glathe (3):
-      arm64: dts: qcom: x1e80100-hp-x14: add usb-1-ss1-sbu-mux
-      arm64: dts: qcom: x1e80100-hp-x14: remove unused i2c buses
-      arm64: dts: qcom: x1e80100-hp-x14: amend order of nodes
-
-Jie Gan (2):
-      arm64: dts: qcom: qcs615: fix a crash issue caused by infinite loop for Coresight
-      arm64: dts: qcom: qcs615: disable the CTI device of the camera block
-
-Konrad Dybcio (5):
-      arm64: dts: qcom: x1p42100: Fix thermal sensor configuration
-      arm64: dts: qcom: sdm845: Expand IMEM region
-      arm64: dts: qcom: sc7180: Expand IMEM region
-      arm64: dts: qcom: sc8180x: Drop unrelated clocks from PCIe hosts
-      arm64: dts: qcom: sm8150: Drop unrelated clocks from PCIe hosts
-
-Krzysztof Kozlowski (3):
-      arm64: dts: qcom: sm8750: Add Soundwire nodes
-      arm64: dts: qcom: sm8750-mtp: Add sound (speakers, headset codec, dmics)
-      arm64: dts: qcom: sm8750-qrd: Add sound (speakers, headset codec, dmics)
-
-Kyle Deng (1):
-      arm64: dts: qcom: qcs615: Add mproc node for SEMP2P
-
-Lijuan Gao (4):
-      arm64: dts: qcom: qcs615: Add IMEM and PIL info region
-      arm64: dts: qcom: qcs615: add ADSP and CDSP nodes
-      arm64: dts: qcom: qcs615-ride: enable remoteprocs
-      arm64: dts: qcom: sa8775p: Correct the interrupt for remoteproc
-
-Loic Poulain (1):
-      arm64: dts: qcom: qcm2290: Add CAMSS node
-
-Luca Weiss (2):
-      arm64: dts: qcom: sm6350: Add video clock controller
-      arm64: dts: qcom: sm6350: add APR and some audio-related services
-
-Manivannan Sadhasivam (13):
-      arm64: dts: qcom: sm8150: Add 'global' PCIe interrupt
-      arm64: dts: qcom: sm8250: Add 'global' PCIe interrupt
-      arm64: dts: qcom: sm8350: Add 'global' PCIe interrupt
-      arm64: dts: qcom: sa8775p: Add 'global' PCIe interrupt
-      arm64: dts: qcom: sc7280: Add 'global' PCIe interrupt
-      arm64: dts: qcom: sdm845: Add missing MSI and 'global' IRQs
-      arm64: dts: qcom: msm8996: Add missing MSI SPI interrupts
-      arm64: dts: qcom: msm8998: Add missing MSI and 'global' IRQs
-      arm64: dts: qcom: ipq8074: Add missing MSI and 'global' IRQs
-      arm64: dts: qcom: ipq6018: Add missing MSI and 'global' IRQs
-      arm64: dts: qcom: sc8180x: Add 'global' PCIe interrupt
-      arm64: dts: qcom: sar2130p: Add 'global' PCIe interrupt
-      arm64: dts: qcom: x1e80100: Add missing 'global' PCIe interrupt
-
-Maulik Shah (1):
-      arm64: dts: qcom: Add QMP handle for qcom_stats
-
-Neil Armstrong (1):
-      arm64: dts: qcom: sm8650: add iris DT node
-
-Nitin Rawat (3):
-      arm64: dts: qcom: sm8750: Add UFS nodes for SM8750 SoC
-      arm64: dts: qcom: sm8750: Add UFS nodes for SM8750 MTP
-      arm64: dts: qcom: sm8750: Add UFS nodes for SM8750 QRD board
-
-Pengyu Luo (1):
-      arm64: dts: qcom: sm8650: remove unused reg
-
-Raviteja Laggyshetty (1):
-      arm64: dts: qcom: sa8775p: add EPSS l3 interconnect provider
-
-Satya Priya Kakitapalli (3):
-      dt-bindings: clock: qcom: Add missing bindings on gcc-sc8180x
-      dt-bindings: clock: Add Qualcomm SC8180X Camera clock controller
-      arm64: dts: qcom: Add camera clock controller for sc8180x
-
-Stephan Gerhold (1):
-      arm64: dts: qcom: apq8016-sbc-d3-camera: Convert to DT overlay
-
-Vikash Garodia (4):
-      arm64: dts: qcom: qcs8300: add video node
-      arm64: dts: qcom: qcs8300-ride: enable video
-      arm64: dts: qcom: sa8775p: add support for video node
-      arm64: dts: qcom: sa8775p-ride: enable video
-
-Vladimir Zapolskiy (2):
-      arm64: dts: qcom: sm8250: enable camcc clock controller by default
-      arm64: dts: qcom: qrb5165-rb5-vision-mezzanine: remove camcc status property
-
-Wenmeng Liu (1):
-      arm64: dts: qcom: sm8550: Add support for camss
-
- Documentation/devicetree/bindings/arm/qcom.yaml    |    5 +
- .../bindings/clock/qcom,sc8180x-camcc.yaml         |   67 +
- arch/arm64/boot/dts/qcom/Makefile                  |   10 +-
- ...ne.dts => apq8016-sbc-d3-camera-mezzanine.dtso} |   12 +-
- arch/arm64/boot/dts/qcom/ipq6018.dtsi              |   20 +-
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |   40 +-
- .../boot/dts/qcom/msm8976-longcheer-l9360.dts      |  490 +++++++
- arch/arm64/boot/dts/qcom/msm8976.dtsi              |   38 +
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |   54 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi              |   20 +-
- arch/arm64/boot/dts/qcom/qcm2290.dtsi              |  103 ++
- arch/arm64/boot/dts/qcom/qcs615-ride.dts           |   12 +
- arch/arm64/boot/dts/qcom/qcs615.dtsi               |  148 ++
- arch/arm64/boot/dts/qcom/qcs8300-ride.dts          |    4 +
- arch/arm64/boot/dts/qcom/qcs8300.dtsi              |   71 +
- .../dts/qcom/qrb5165-rb5-vision-mezzanine.dtso     |    4 -
- arch/arm64/boot/dts/qcom/sa8775p-ride.dtsi         |  238 ++++
- arch/arm64/boot/dts/qcom/sa8775p.dtsi              |  515 ++++++-
- arch/arm64/boot/dts/qcom/sar2130p.dtsi             |   12 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |   10 +-
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |   14 +-
- arch/arm64/boot/dts/qcom/sc8180x.dtsi              |   70 +-
- arch/arm64/boot/dts/qcom/sdm845.dtsi               |   50 +-
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |    6 +
- arch/arm64/boot/dts/qcom/sm6115.dtsi               |    9 +
- arch/arm64/boot/dts/qcom/sm6350.dtsi               |   73 +
- arch/arm64/boot/dts/qcom/sm8150.dtsi               |   28 +-
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |   19 +-
- arch/arm64/boot/dts/qcom/sm8350.dtsi               |   12 +-
- arch/arm64/boot/dts/qcom/sm8450.dtsi               |    1 +
- arch/arm64/boot/dts/qcom/sm8550.dtsi               |  211 +++
- arch/arm64/boot/dts/qcom/sm8650-hdk.dts            |    4 +
- arch/arm64/boot/dts/qcom/sm8650-mtp.dts            |    4 +
- arch/arm64/boot/dts/qcom/sm8650-qrd.dts            |    4 +
- arch/arm64/boot/dts/qcom/sm8650.dtsi               |   97 +-
- arch/arm64/boot/dts/qcom/sm8750-mtp.dts            |  233 +++
- arch/arm64/boot/dts/qcom/sm8750-qrd.dts            |  243 ++++
- arch/arm64/boot/dts/qcom/sm8750.dtsi               |  230 ++-
- arch/arm64/boot/dts/qcom/x1-asus-zenbook-a14.dtsi  | 1496 ++++++++++++++++++++
- .../boot/dts/qcom/x1e80100-asus-zenbook-a14.dts    |   37 +
- .../boot/dts/qcom/x1e80100-dell-xps13-9345.dts     |  203 ++-
- .../boot/dts/qcom/x1e80100-hp-omnibook-x14.dts     |   98 +-
- arch/arm64/boot/dts/qcom/x1e80100.dtsi             |   20 +-
- .../boot/dts/qcom/x1p42100-asus-zenbook-a14.dts    |  141 ++
- arch/arm64/boot/dts/qcom/x1p42100.dtsi             |  556 ++++++++
- include/dt-bindings/clock/qcom,gcc-sc8180x.h       |   10 +
- include/dt-bindings/clock/qcom,sc8180x-camcc.h     |  181 +++
- 47 files changed, 5758 insertions(+), 165 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc8180x-camcc.yaml
- rename arch/arm64/boot/dts/qcom/{apq8016-sbc-d3-camera-mezzanine.dts => apq8016-sbc-d3-camera-mezzanine.dtso} (89%)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8976-longcheer-l9360.dts
- create mode 100644 arch/arm64/boot/dts/qcom/x1-asus-zenbook-a14.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/x1e80100-asus-zenbook-a14.dts
- create mode 100644 arch/arm64/boot/dts/qcom/x1p42100-asus-zenbook-a14.dts
- create mode 100644 include/dt-bindings/clock/qcom,sc8180x-camcc.h
+  Documentation/devicetree/bindings/arm/amlogic.yaml |  1 +
+  arch/arm64/boot/dts/amlogic/Makefile               |  1 +
+  arch/arm64/boot/dts/amlogic/amlogic-s6.dtsi        | 97 ++++++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-s7.dtsi        | 81 ++++++++++++++++++
+  arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi       | 90 ++++++++++++++++++++
+  .../dts/amlogic/meson-g12b-a311d-khadas-vim3.dts   |  4 +
+  .../dts/amlogic/meson-g12b-a311d-libretech-cc.dts  |  4 +
+  .../arm64/boot/dts/amlogic/meson-gx-p23x-q20x.dtsi |  2 +-
+  arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dts |  2 +-
+  .../arm64/boot/dts/amlogic/meson-gxm-ugoos-am3.dts | 91 ++++++++++++++++++++
+  10 files changed, 371 insertions(+), 2 deletions(-)
+  create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxm-ugoos-am3.dts
