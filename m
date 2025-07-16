@@ -1,50 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5DF2EA473
-	for <soc@lists.linux.dev>; Wed, 16 Jul 2025 09:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56860157493
+	for <soc@lists.linux.dev>; Wed, 16 Jul 2025 09:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752657344; cv=none; b=Badze8y9s2xWJBX2C1vTcMUQNATOHoogMmd+Vt8y6y0qEGq49MbB5pfviRgUuJ+F9kwkOYSZcwzY7+n1naJbakmHDuqNawbODfwxWQQFAfdniuvSbkPdcFCcIKvqDxdA8ua1jlqW/wr13Lbo7dfbRgYNBhlD8gaH5JYfCarzh+E=
+	t=1752657401; cv=none; b=WEI3b3yE3jEiwFbddRco9l/ZmJk5SFWp3Aagc20hQHWVaVy0eRzYdEPWwhLRbhEUt8aq6Ufi2jfmeUN6Sg1EVHuWUDnPMU5bcoYxPZMF5CS9R/sK8TsEUESaMZNUuU0236KAQAQ1ItQKoZeCBdxziN3WN+SMG646XIvm8gfYANY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752657344; c=relaxed/simple;
-	bh=JWaMtePsbauiL1bx17+TOWMyVBEPr9djf22Eh0db+YQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WrPTD9BZWoNeR/pH75TncQ5G2LkXBqY3FT3ANks5UgWJJTtFqR5v7NfAy3MPreSnynhnsuES1N7y8hBPP5HUiUNTAu6Ax2bPgYlA2QnLO+KCZD5JOxhjTqglYBQBiA3F0UW8CcEtGBiEwq2B1dmVFE/cFbPIKzZ22jl6KXaopSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fwo+84hi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752657401; c=relaxed/simple;
+	bh=+pVRVk51JXdM7vuc1FumP+dt3XGyFir4XYxGhjmfqvc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jGWicLaF7oGMpM9sN9J/l5J8yLVBlX9zrYqz+Ag3OzSrw/aSZTM4KesyvcIyAJuhQxsU/aEFw4KShjYYUfw+DEHDxVZbFuBo0XXiWKBxOsuEbm4mHb7STt9lwiwXQ7r1X9yWZRh1EWd0GrtEgqrBclpxkTMSH7J1R1kttEBwCjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lqRfvKRn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fwo+84hi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lqRfvKRn"
 Received: by smtp.kernel.org (Postfix)
-	id 5722DC4AF09; Wed, 16 Jul 2025 09:15:44 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	id E0AF9C4CEF6; Wed, 16 Jul 2025 09:16:40 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5EB26C4CEFA;
-	Wed, 16 Jul 2025 09:15:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5EB26C4CEFA
+	by smtp.kernel.org (Postfix) with ESMTPS id 612B0C4CEF0;
+	Wed, 16 Jul 2025 09:16:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 612B0C4CEF0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E8FAE43910;
-	Wed, 16 Jul 2025 09:15:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B8904439F6;
+	Wed, 16 Jul 2025 09:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752657340;
+	t=1752657385;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=XKdPjGREMhHnPm2jzF6U9g4NxAEYWuR7203feVL7b+I=;
-	b=fwo+84hiEy//cwSOvSatw5mHuBYtrqDF7qWkUdjGdCBlngiPm3iivjTK7KxIfzBBso0/g4
-	L9W5vbs3BueM5L5G8CM6TJTm7sxEGS62JlURuMBdHraajnFLdJM/VcwB4mSd4vZoerNdKk
-	gaRuy72r56zS8NyXQC7n5bm62zamnGwrMOSRI9WbS7y2ZVm1F9S7MWoZfscnJl+DYp9yXs
-	cfuruP5hz/nKTVuXCYRMx7SgRVZudSLodeD9Jmt19sGrWmazb6JgQbHIaP9nPMx+iPBB5b
-	wiuXH9AxAhoSYdZOnhQCl7Kah04LDe433eaW5E+g2j7bhQx3+iei3FXa3EGeWg==
+	bh=A2KxxqWr8JNX9hy2Bf9nMD05wlS7tKZsKHYvufU/tb0=;
+	b=lqRfvKRn46rfX7ZYdAlc+ReKvOCdB7/io2VGMAmSz6p2BZxfdZqYg0hY4TwB22Ng7SsDZU
+	/No+bSDoUObLmZ4lyn34bKSVFZQHN8gLHb53ylH+sBKADmw0FG4qId2VohADi00eY9CvQw
+	9dEO9TD6Lp6vUD0QAccJ/upeKdG6YOblP4E9SJ66DY+In/PF4BgS48/Vq9pS2APa1quyDm
+	W/0EGVGVeo518ugfcJ2uMcfTQCyCuj7TzKwA09w2BxGwsdhQgFx+a3MFj6T7mZYkiB4NdC
+	pWx7a8gsp+v9ohzU1Wxg6dhqIM93bRwPAvwZId9J6ePP/idVPmbnB3SiMR7r5g==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v6.17 (#1)
-Date: Wed, 16 Jul 2025 11:15:39 +0200
-Message-ID: <87ms94xzr8.fsf@BLaptop.bootlin.com>
+Subject: [GIT PULL] ARM: mvebu: arm for v6.17 (#1)
+Date: Wed, 16 Jul 2025 11:16:24 +0200
+Message-ID: <87jz48xzpz.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -61,7 +61,7 @@ X-GND-Sasl: gregory.clement@bootlin.com
 
 Hi,
 
-Here is the first pull request for dt for mvebu for v6.17.
+Here is the first pull request for arm for mvebu for v6.17.
 
 Gregory
 
@@ -72,25 +72,24 @@ The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 are available in the Git repository at:
 
   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt-6.17-1
+bu-arm-6.17-1
 
-for you to fetch changes up to 28254bcf96bf93b9089540490c2f8081bf4e4d45:
+for you to fetch changes up to 90ec89d68ffaf36d7abfcc14908edd6e4803c4ea:
 
-  ARM: dts: marvell: kirkwood: use recent scl/sda gpio bindings (2025-07-07=
- 16:58:42 +0200)
-
-----------------------------------------------------------------
-mvebu dt for 6.17 (part 1)
-
-Use recent scl/sda gpio bindings on kirkwood boards (Keymile ones)
+  arm: orion: use string choices helper (2025-07-07 16:56:04 +0200)
 
 ----------------------------------------------------------------
-Wolfram Sang (1):
-      ARM: dts: marvell: kirkwood: use recent scl/sda gpio bindings
+mvebu arm for 6.17 (part 1)
 
- arch/arm/boot/dts/marvell/kirkwood-km_common.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Use string choices helper in GPIO support code for legacy Orion based
+platforms.
 
+----------------------------------------------------------------
+Kuninori Morimoto (1):
+      arm: orion: use string choices helper
+
+ arch/arm/plat-orion/gpio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 --=20
 Gr=C3=A9gory CLEMENT, Bootlin
