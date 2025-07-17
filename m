@@ -1,102 +1,161 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5264D2F6FB4
-	for <soc@lists.linux.dev>; Thu, 17 Jul 2025 15:05:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7639F20ED
+	for <soc@lists.linux.dev>; Thu, 17 Jul 2025 18:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752764757; cv=none; b=SDQKBv1vpiN9U0L9sWmDWlTdPnRGPKqnuWNWDpxOU6PhUDHiP4NKx6V3YFhaehtjqSTnXlOD6R2JfyD4CSDNuU5ObnjFbJKgTDcluylcJyB5Y91L+YuPSpZrokqZ7tJX9xCwsnpOxafK8PFabYFJVRvz+2p+TV84YyXi3ebvjv0=
+	t=1752777428; cv=none; b=XhUnxcV9GyPh1BWmVa29nhd+P5oNuhaAF20mo0nDk+6lKORFXsTK+pDjuvPYjCp+Ahc2YuM3IywecMGO+zjUv3DyF+0LTenuOX13JCN+Vjva64I4dNf6Vlk0/kgPEawLVq6NSpQGgspp2fZs8Pp0B6Os84p5Deg7C4KImz/P09k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752764757; c=relaxed/simple;
-	bh=PiEt0WUNVAcC4VA3CIqOQac/Mlmo+xQ0LJdAMNjG2IU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wvr1RLudQmqEf0jv61g+7gimJERTnhXqUjiMDS1myD7GGAqL7DJ5i27bNcaVfzX3dxUiBPqLWxKyngLfabyWmwbgUMROqr8bl3xyVQQ79pxVeumSPz3+xIF7HUXkAavfufMNrKwj94To30bb839lGGs6x4HfykvXH+HPHRftj6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PakBZkh3; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1752777428; c=relaxed/simple;
+	bh=w7yGuY+gT4KAKbucKE6yGntCo/ScU+bxYuVIXkD28uw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=drYUS52QJ3xIPx9rw2METe7oVbGL327jr7kux1Uxj5xAe0G2FQ7qehrF8rZnitXQr9lixysjsNBhoI3AgtqiqURAfUkmdSKlHUB4cIoXNdXt9cVDJaRiDbdWAaM2VwYLQ00VZ8ty8OG8FNl3/LCGmB9hLIi5yTY7/RyJI3LV31c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=HAhact4g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PakBZkh3"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b31e076f714so1564348a12.0
-        for <soc@lists.linux.dev>; Thu, 17 Jul 2025 08:05:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="HAhact4g"
+Received: by smtp.kernel.org (Postfix)
+	id F1EC6C4CEED; Thu, 17 Jul 2025 18:37:07 +0000 (UTC)
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 31963C4CEE3
+	for <soc@kernel.org>; Thu, 17 Jul 2025 18:37:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31963C4CEE3
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7e33d36491dso168380685a.3
+        for <soc@kernel.org>; Thu, 17 Jul 2025 11:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752764755; x=1753369555; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRGgDk68DjbbOF0Mf8ErVPDVdO2Wa0CpF/l7W27oV/0=;
-        b=PakBZkh36zPWGwXb26tFAXknv49Ly6lKL0nsaUC/WeMdm/aGKfVFHo0PEJjMn+z6VC
-         YKwbc1weyDTJT+mtSWQyuc24Yv0V8fvsiGezAgEItKOSohpGNAyOWgVJYXeqDAwOwqmR
-         3ENqAn1PanczZAPn4bSVGCOhqqQkJczNhbaCFi70yd4Xe1M9eAnYa7TECc1Uh9eY3KNf
-         f9kmvexSVcA5b+x7K3nqVJkIr/gHgYRLYwTGOQxzrVMQfphikx1ig3YR6NilgVU112uq
-         DANz9CKbe5T6hachXUv9khGEtltVWB3HC7FkiLupA0otyNx2vpZ6loL+0ELA42qF7FI5
-         I3Ow==
+        d=broadcom.com; s=google; t=1752777426; x=1753382226; darn=kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=eSD2tpJzY9C76IOQTT5NSlNvSbDvEKD1q4r4RfEzT2M=;
+        b=HAhact4gHChDLPwcfxL1HPIs3T3UtsKGbtzGnpnM77xtS5FWL51bLh/i3OXHe9WTmR
+         kVoyynIC76uV5Ukeybf35priJi0z3heKMiin31C2qgE8eFy2u4sQgPCNyfDCTUB4KZVT
+         bG4hprj7PzzsTlRovL19gqIAaj1WEvu3gatqM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752764755; x=1753369555;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GRGgDk68DjbbOF0Mf8ErVPDVdO2Wa0CpF/l7W27oV/0=;
-        b=LBC1nWo1D7zsJIAKETOgBOJZ489jT55upoXfEM7GFBIF6gS0QOPohKrt83XQl3rJpH
-         gEJOrAVqIyL3mMzkOMJQf08/UCurYFwbeDGjNv+rUBG/LGvbUGjAqUaw9xcxO2CjtUJA
-         QbsrjgRM2T4dpUxhF4bdgQNm8/0ZDCQqf/MgDtjgwgHdGw93ndDIN18Jxgf02XXmpAAV
-         s9R+zRFdmO/lHuUedM2dbzsdW4mRcHYBPrgSTxLoHHhtahCYGdzkeOAUBBI32GyeAHa+
-         BmyIxQY8g1PPwYWgXZ+B58cD9sSuFq7bevhcysXnic1psa5JISc6Hv0v0X7Q1tPqHz/H
-         gZqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRDuSmxbycS+B/e+0OZfxb/XAaS4ATLktraUCqIR1ec8BcVLnoBSAdko6NkEMeHj2mPKs=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx0AThGWhVJCHeF8NYRdcFKoKn6NMgE88XNRcUZnQ9M4IOPI8kD
-	t0YytehzhlDvVLFvWixco/Rq20VBfhnBNoSbjVyX3PLOe3sL13xPXMY2ZhmFKNFCcqdI/KAAUTL
-	McKGi
-X-Gm-Gg: ASbGncuoWiIB4NXdjVC5nGJPl82qYxn7zRCISqD4ALIVFPt9JbATcHqpFH8i8e+tZcV
-	MnhGdnBXfUcatnME4hhWwHlYRsNQpd6/PlHA8YPOjE9gcLRGaP6DeiP/nXaEq3Fk78i3bSyqNsY
-	++ha9HZjHHZh5C0C1w4NSYXITyZz7K0i/2HJLPatQAealigSFqCOQ4xhZFKlYFNiryv81ucIbpx
-	wqBtOYzIcEWluj89uVaQI865HuC0ROXfobb39Zvq3GrnUvhaAcNQVAt1+2pNQigKDkz9IMTf025
-	VylCCup7V66nj1aYSRzOH4ctgrH5DtKzfSzF2uBZRygQDQ4rouK85vyX/Tt5CedEXyU+cQen/ku
-	U+0Uh3SiUZGfG3G3/6CQ6MnQ=
-X-Google-Smtp-Source: AGHT+IHlh4bBfrPfyZ+HtoQSqJqUSTaWT2KGepkcnD7iDpNKpIyWaajI2q3Ei5DglAzRDFNmmwxtvg==
-X-Received: by 2002:a17:90b:2804:b0:312:dbcd:b93d with SMTP id 98e67ed59e1d1-31cc045a7b9mr187971a91.14.1752764755374;
-        Thu, 17 Jul 2025 08:05:55 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f2874f9sm3475334a91.24.2025.07.17.08.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 08:05:54 -0700 (PDT)
-Date: Thu, 17 Jul 2025 20:35:52 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, soc@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: st: spear: Use generic "ethernet" as node name
-Message-ID: <20250717150552.6kj6xqksc2xxpxli@vireshk-i7>
-References: <20250717142245.92492-2-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1752777426; x=1753382226;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eSD2tpJzY9C76IOQTT5NSlNvSbDvEKD1q4r4RfEzT2M=;
+        b=DsESRmonYhf+3lUQVV973gd/8xQx6uGKmeRui0Ub+3F9H8nnQ1vwGIn/+O2PtHsYpj
+         jooxVHu7l8NYqTp+S1Bvr/NDQ3v/2pIwBxS/gFzMrn5gfBFd5l4OqKWIsDl2jXYWVOeg
+         038YAVSWT7WI3vmOTCXMUy1pmQmug2WcrboDXdizS8YNS6n37xcxccmdI9qwtz17yp0V
+         UzO7CkpQ0NOsNGOQil4n6/8JqTtC8SEDcLzJwLxiTutN1s7RLjuf1LlnUgRrZP/aLzwQ
+         PsyO2kLsNAymKNoYIcUHdwmgkZvke7RZ5rNoB8WEpd+ybsolkZYygLczW2XgP30s9fQv
+         7KFQ==
+X-Gm-Message-State: AOJu0YwGiwjFjgq7TNbgfKdsXaz1o/8CModX5j4VH0aaV0AZMoX+cF69
+	oZApTOZRdXJpMjlL7DmJ8OJfsbVe0+V1tC9dSvToN87RxvT8c7jsnWueqXH/dZabOA==
+X-Gm-Gg: ASbGncusba/4o1bUQaVq56/NwsC4ebIbA/uKWIyfYyzPch3E25LODriEK9aKcLPikhk
+	SXVozWiRPiA46lULaF7JB90OlOYs74NCDzah+12id1SY25YTkftwGyhGTGQiOqybWpvNN+k0RrT
+	ITGqzt1KWGMozRnfFHAvFPS4M6TqoQa+F4sfTyqkx0eOSNX0ODc7p9/PPi+b28/5uj+pSY3i1nC
+	10Yuz8ThJ9OvUSLRg5ct1GRJui6GFHPIvnlsTznr6fLPFoiOyXmfGTfH/fRkQuIdeInO4oBo1/J
+	vKS0Bf7VRqqh6N/kzsHGgmPLHm9sMhTrs7ZZKT+Xw6kv/rXeNnBjTYZuF07SGMUQWtBjLf0EJ/k
+	mNBI/t916YoYZgmtZFfkulPDLUF+ikFImeL9Y+VtXPXoLO1eHhaRdvgcmtBM1QQ==
+X-Google-Smtp-Source: AGHT+IEdJJAEAUpLsjb1fWH3dJkpQExaxSMZ/KDnIr4KPAdE/iheS1fNVwgPbQ7C374uve7a4Q6R6Q==
+X-Received: by 2002:a05:620a:414a:b0:7d4:38f:a7b3 with SMTP id af79cd13be357-7e342b5236bmr1137514685a.29.1752777425955;
+        Thu, 17 Jul 2025 11:37:05 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7dcde8fd40esm928330385a.96.2025.07.17.11.37.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 11:37:05 -0700 (PDT)
+Message-ID: <b20e997c-015d-44f9-87ce-943381793fa9@broadcom.com>
+Date: Thu, 17 Jul 2025 11:37:01 -0700
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250717142245.92492-2-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL 1/5] Broadcom defconfig-arm64 changes for 6.17
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: patchwork-bot+linux-soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Cc: soc@kernel.org
+References: <20250630190216.1518354-1-florian.fainelli@broadcom.com>
+ <175162020751.1782818.1640014464017504198.git-patchwork-notify@kernel.org>
+ <f6df4328-f3c6-4326-a4b6-326685aebaeb@broadcom.com>
+Content-Language: en-US
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <f6df4328-f3c6-4326-a4b6-326685aebaeb@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 17-07-25, 16:22, Krzysztof Kozlowski wrote:
-> Common name for Ethernet controllers is "ethernet", not "eth", also
-> recommended by Devicetree specification in "Generic Names
-> Recommendation".  Verified lack of impact using dtx_diff.
+On 7/11/25 14:38, Florian Fainelli wrote:
+> On 7/4/25 02:10, patchwork-bot+linux-soc@kernel.org wrote:
+>> Hello:
+>>
+>> This pull request was applied to soc/soc.git (for-next)
+>> by Arnd Bergmann <arnd@arndb.de>:
+>>
+>> On Mon, 30 Jun 2025 12:02:12 -0700 you wrote:
+>>> The following changes since commit 
+>>> 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+>>>
+>>>    Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+>>>
+>>> are available in the Git repository at:
+>>>
+>>>    https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.17/ 
+>>> defconfig-arm64
+>>>
+>>> [...]
+>>
+>> Here is the summary with links:
+>>    - [GIT,PULL,1/5] Broadcom defconfig-arm64 changes for 6.17
+>>      https://git.kernel.org/soc/soc/c/241a3be47756
+>>    - [GIT,PULL,2/5] Broadcom devicetree changes for 6.17
+>>      (no matching commit)
+>>    - [GIT,PULL,3/5] Broadcom devicetree-arm64 changes for 6.17
+>>      (no matching commit)
+>>    - [GIT,PULL,4/5] Broadcom drivers changes for 6.17
+>>      (no matching commit)
+>>    - [GIT,PULL,5/5] Broadcom maintainers changes for 6.17
+>>      (no matching commit)
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/st/spear1310-evb.dts | 2 +-
->  arch/arm/boot/dts/st/spear1310.dtsi    | 8 ++++----
->  arch/arm/boot/dts/st/spear1340-evb.dts | 2 +-
->  arch/arm/boot/dts/st/spear13xx.dtsi    | 2 +-
->  arch/arm/boot/dts/st/spear300-evb.dts  | 2 +-
->  arch/arm/boot/dts/st/spear310-evb.dts  | 2 +-
->  arch/arm/boot/dts/st/spear320-evb.dts  | 2 +-
->  arch/arm/boot/dts/st/spear3xx.dtsi     | 2 +-
->  8 files changed, 11 insertions(+), 11 deletions(-)
+> Arnd, can you also take the 3 other pull requests, it looks like only 2 
+> have been applied: devicetree-arm64 and defconfig-arm64. Please let me 
+> know if we need to do something different here, thanks!
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Arnd, can we get the other pull requests to be applied, or have they 
+somehow been applied and the notification email simply was not sent out?
 
+Thanks!
 -- 
-viresh
+Florian
