@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DE0217719
-	for <soc@lists.linux.dev>; Fri, 18 Jul 2025 09:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6076A298270
+	for <soc@lists.linux.dev>; Fri, 18 Jul 2025 09:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752829798; cv=none; b=WKPuWwGUP+wlbePRlGxkKnP4jMy7FbEvgS+MfYpf06jIMjLqOM5i5svhLRWzd2hwfoUr7CkJcl4cpKk38RRyPF+FIrxh/VWWz56sTuN1I2H2cRndGPyKrrz3lE868XJm0ijGjySDE5DPlrB197La4w+n6pQxSuI9VIrHyKc4l5Y=
+	t=1752830630; cv=none; b=DvErMxdRDohljezCEUle5U+GVfIJDeGUabuX6DxKTLT/V59Tjp3E/NhJyCipqleAjMIUNDelf8MOBb9uRgk4XP6wtq2TBqp3aK+925iHWsY7JFavkfpE4Hg3Uzq0BUTbnfA569JNJEGKGOmCUkZrTjx5IfG5qEs05FdQ08BmtwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752829798; c=relaxed/simple;
-	bh=YNxin7KVpbP9YbV5JZdN9eEdy0O9eoTaqLvUjV/Qp4o=;
+	s=arc-20240116; t=1752830630; c=relaxed/simple;
+	bh=xcqaNl2blKJF0r8jU93GnY3/h2PA0nW+rf8lGTK4DFk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HupHKUxa2mxLA1Olg2lcW90qg8tJx8+eGWhEo8gNwc1MZJ0Uy/gZbXt0xywqROBYC6i5H2itJsFtxt21MjDAlBnuY7wDRDwavypYQ5i/5tqNbU6bc4xv7a3dsk6bc7OVJAvPQYdAzruVan+YXoIbJrohoo5GDf5uKCTk8z24qvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNW111+A; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=jtaQyc/UDJd4SRk6j5JDyez9f2aUrAdYK5lzmQkqj3KGJbwSXhm4qcj4uO1XTEINGentMVkGQA8TAtf8IPvJSL/gxYMbFpDCzNOcMab7Nm59QPEUgdNT9NdyFzs95kC+vbjinGhXP6ADW+F6jW8gsVDhg2rmiO5ZVukUqAM9X20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MhEj0T3T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNW111+A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MhEj0T3T"
 Received: by smtp.kernel.org (Postfix)
-	id 9F740C4CEED; Fri, 18 Jul 2025 09:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEAC1C4CEF0;
-	Fri, 18 Jul 2025 09:09:53 +0000 (UTC)
+	id 1936BC4CEED; Fri, 18 Jul 2025 09:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D42C4CEEB;
+	Fri, 18 Jul 2025 09:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752829797;
-	bh=YNxin7KVpbP9YbV5JZdN9eEdy0O9eoTaqLvUjV/Qp4o=;
+	s=k20201202; t=1752830630;
+	bh=xcqaNl2blKJF0r8jU93GnY3/h2PA0nW+rf8lGTK4DFk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hNW111+AcwTaeFn6MJ7C18VbS5fj5DQtiX1NsoMX9X7liSPhLFQHQg2DKxZPAlI9V
-	 FyBxCCO4SNWcEd/sjfOwjZ+lOQeokCYAw5nW5kxhEhQi5vqKpcU7VW2l0Dzaq/3HE4
-	 y+RpqcX2mqOY78gf7gwmnVbVi7dQubZpnEKtl/UAyg8iOcKuJ8b5KIXVePq46VpOoS
-	 3qQWPHLVE5S2WaAy/N0JT0YK+wR6djc4WA1I86tr4RO6k3wFUZDAuH6VnDxLA/cS9o
-	 QYt/RS7JepO4vuXg3vMDRtfBc8bLqsVJiWm/G9FxlpRLqqcY0gpmEYaqj0n4Tg5Tmz
-	 NCbGh2eRlWKFQ==
-Message-ID: <c524c5ae-c6a4-400e-a024-5665f60efc92@kernel.org>
-Date: Fri, 18 Jul 2025 11:09:51 +0200
+	b=MhEj0T3T7fBKFDYTn3A4Bc5PSSu/3zHQQmC3FVu5Lgk3CiQuQ2dEKCTOjLHpb0sCx
+	 93skD0oOd6dhS+rNMBcjtdd526QhFqlA36RFxfPHUqJGrKpWi26WSVQ42DAVSPoRms
+	 mM5d3AGXic0CJswgpHB0W4zty8XL6RYwInzs0RTKpTTIzyL6GZWVMP7w8scA33n3XY
+	 9uQXjgCKhThCnt8mospCfyQek/zqPZPkJrJNphcSPwhBUR6TNsynW0CrCb/Y/kzA6l
+	 ig+swWiDnvo7VOoAiDnnlK1iwyh+XYnvSSRBklaKHcvmiXg2rQ5W3IJEDZcsVNPVnU
+	 7AeLbDJM3NZhQ==
+Message-ID: <cb913a0a-0f3f-4890-aa1f-1b01ec9c564e@kernel.org>
+Date: Fri, 18 Jul 2025 11:23:46 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -37,16 +37,11 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT,PULL] hisilicon: driver updates for v6.17
-To: Wei Xu <xuwei5@hisilicon.com>, soc@kernel.org, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
- zhangyi.ac@huawei.com, tangkunshan@huawei.com, wuliebao@huawei.com,
- daniel.shen@huawei.com, huangdaode@huawei.com, liguozhu@hisilicon.com,
- "Zengtao (B)" <prime.zeng@hisilicon.com>,
- "lihuisong (C)" <lihuisong@huawei.com>,
- Jonathan Cameron <Jonathan.Cameron@Huawei.com>, shiju.jose@huawei.com,
- salil.mehta@huawei.com
-References: <6879FFED.1050002@hisilicon.com>
+Subject: Re: [GIT PULL] SOC FSL for 6.17
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, soc@kernel.org,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <c947d537-cae5-44f0-abd8-0c558bac46d2@csgroup.eu>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -92,30 +87,41 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <6879FFED.1050002@hisilicon.com>
+In-Reply-To: <c947d537-cae5-44f0-abd8-0c558bac46d2@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/07/2025 10:03, Wei Xu wrote:
-> Hi ARM SoC maintainers,
+On 10/07/2025 08:44, Christophe Leroy wrote:
+> Hi Arnd,
 > 
-> Please consider to pull the following changes.
-> Thanks!
+> Please pull the following Freescale Soc Drivers changes for 6.17
 > 
-> Best Regards,
-> Wei
-
-...
-
+> The tegra change is outside soc/fsl tree but it is acked by maintainer 
+> of DRM DRIVERS FOR NVIDIA TEGRA.
+> 
+> Thanks
+> Christophe
+> 
+> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+> 
+>    Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    https://github.com/chleroy/linux.git tags/soc_fsl-6.17-1
+> 
+> for you to fetch changes up to 76760b9dbbf8088ef31afb60d92b955f88ad1288:
+> 
+>    soc: Use dev_fwnode() (2025-07-08 10:29:28 +0200)
 > 
 > ----------------------------------------------------------------
-> Huisong Li (1):
->       soc: hisilicon: kunpeng_hccs: Fix incorrect log information
-> 
+> FSL SOC Changes for 6.17:
+> - Use dev_fwnode() instead of of_fwnode_handle()
+> - Use new GPIO line value setter callbacks
 
-
-I do not see this patch in linux-next. Please confirm that you properly
-feed linux-next and for how long this patch was sitting there.
+It has been many days and I still do not see this patch in linux-next.
+Please confirm that you properly feed linux-next and for how long this
+patch was sitting there (BEFORE you send them to upstream maintainer).
 
 Best regards,
 Krzysztof
