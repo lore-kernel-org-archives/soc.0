@@ -1,180 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2135.outbound.protection.outlook.com [40.107.220.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D109418E20
-	for <soc@lists.linux.dev>; Fri, 18 Jul 2025 21:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752872712; cv=none; b=OD8SJG3OonfgE7VDEd8KOjvqbNlNwWBWEjXa1isW87iHmCMvXC5BGZ3siTyHBjh5B3vS/0mojy8On8UyHaB3PZ46DlnjTEDS8P9KvINfcHRDRotOGNYJKTSQSxmbl76SsoBfsZf19HDIO7fbrq55fGUiR4uOC6Zn00EqnC410es=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752872712; c=relaxed/simple;
-	bh=2KwjtL9JkcxmeRQ74GoSx7kU1fszmOv3PgEI+XLu/iM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z0nRm6+6bUTL3UI4dpP+ynBgYpcba+HO6B4C5fjlYhwCs3H+VcmToNTM26M+saI9Liy27ADGxtmUR/enLi+5pfWKNvNaFvpT+MXhSLM3LA1UTZUIUYK6WsG2Jg215J34lXanhV/nAz/gO054PwsFUjmxYolE1MxOTRb5KsXaJcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=CDct+Af1; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541DA450F2
+	for <soc@lists.linux.dev>; Sat, 19 Jul 2025 01:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.135
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752887379; cv=fail; b=A5h2K25/34i2l/NiT0WYl44Ek9T0CA5ayDBl7Qg7S9d20f/kP3zTSO+t/SxJ/kJF6J9Zfs4L+wx4H8iHPulC1k0nzezNXhlYn6y8bSj2J8teQn/wERmpTLb+2AFgFd9yB/HSqlIdiWn+fBc4JyYx/8p89me0wwPGfKdTBbwi6ik=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752887379; c=relaxed/simple;
+	bh=2I3sRDIucHXyv2SaoIsCqmShiYk+zEXLxR4d6dra/7s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=J89NtpcvlFZ5ae3K4GTYhQyWn4xveFZFk/S7ejCUF0FIbbf/NISyxVTpgRXNF9feE2WNnb8zrukIXeNITUZJz84rvQ3o1+NbovIPJppv8xW/0EOkx74Z4b4IYsnFy4fPg2ZmzHi8gGNvZZIEjnjCg9Pfn3GtWIpkf5C0vBtMUzI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com; spf=pass smtp.mailfrom=axiado.com; dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b=uucYd04w; arc=fail smtp.client-ip=40.107.220.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axiado.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="CDct+Af1"
-Received: by smtp.kernel.org (Postfix)
-	id BA8B1C4CEF5; Fri, 18 Jul 2025 21:05:12 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A8833C4CEEB;
-	Fri, 18 Jul 2025 21:05:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8833C4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=p0AQ/pfCwCFwh7DZjPjtzQLjW1PeoXmZB6t7fDajNAI=; b=CDct+Af1Mv3r59/nKIRFbz2Q/b
-	ki0sFoOhX06FEnQ0HGrd0viEnh2epIWmv28HaRdpav2DY/cma8yN5EjZxesB2SWLpAMSUfGoQeMug
-	tt8/tXpIRZp/GsL8Go8X7eoLLAjq8A4p1rljbiY+DLQlbbaPPquGO3QKE1qqjVeeHEbNCfR8Zl8yJ
-	Gzknghi3YOqcFwfKo1nTAYfT/RKDaSv+NEPkiQYmHwUzRK+GXC5brXi5TDzyHyQyYezIK5Y2BCl9F
-	qRZVhNX8xeUyHX0vs5w5exCBO/3X0NAIxUefQxDfR/PtIt0mIVcTx4J9Wxbz3gYGm48jt2Soq9EMS
-	JX6K98kQ==;
-Received: from cst-prg-35-241.cust.vodafone.cz ([46.135.35.241] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ucsGT-0007G6-CH; Fri, 18 Jul 2025 23:05:09 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts64 changes for 6.17 #2
-Date: Fri, 18 Jul 2025 23:05:08 +0200
-Message-ID: <11552292.NyiUUSuA9g@phil>
+	dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b="uucYd04w"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tzKk8uqtofR1pEW95qEUxcwK+x8WFcz3nhe4anfvF57zDo1ZOkeBCmarZ2cAx/XfN603M64+EcCw59Kh4DvS6VrS8/B81rmtY7wraI9KQBYIcDjv6w2FV4I/6w37T8VSJdhQYu5RGaeGhVe01k7CmvOSBZM3FSuyeTObMqlnCBaKayj3gWAbyFZ9ziyjBSR73PNuEjTw0ApCXvDZhhf+vvH7ImKEfUJb4R3OU8XRYt71a95czi8mfSsAl+ZvQt4wsI7yw1cLq1JdJGEUfFBedyW61TffRo7x1qEfPd+M2f/SMX1uQZlxCTipLnh1nwn9lGuAgyNZJ3DYqXq61QpFVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2I3sRDIucHXyv2SaoIsCqmShiYk+zEXLxR4d6dra/7s=;
+ b=SZT/kdhcpCje7HUm168xu2DmaeQ/dJ/dQGxBRZ1rGwGtwTThbOcZ4pMXgBhQKOsvxoj1T+4nSzN7/gm+Oc5WkdSGkwd2qtq6bJzH+xhiRBTCWdLidql1+jh9xp6FFGnI1nlNF3yLxi20HJZYrEO4q42Gy82uqdE0W1ter2HAN46fBEYRnz4T4pHlkfh5xJZ90pMtKhn7yOs0LEgHqAX+GTSHrHaLIKjvf9b6HKKShMx+Bky0KmDuJSADgjumOHMJmRBdQmLZ/ZWf2XoNEez2x2lXyJCNdaYwz45EFeD/2pkdGuHIckL+D4sKqk9wNbzudUhG2VhpkoH3d5DyDxmopQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axiado.com; dmarc=pass action=none header.from=axiado.com;
+ dkim=pass header.d=axiado.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axiado.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2I3sRDIucHXyv2SaoIsCqmShiYk+zEXLxR4d6dra/7s=;
+ b=uucYd04wNkhhmPIVBeYmE+Nu/1pZxgl01o9XWWVpqyVIgrUZjkKU8kstNBi97mc6L9rabN8CIFKFNr27CMvGH/RCrXLC8V/uYJtK9NVuxrXSumNjW0aHIxTSAFe0feFtHLPzYIxS8yaBt68tDkAuoYCqdaXeUfs67LnM0IHX0BooRnu9Vnn3BT8aQXgeWME7Ovx5JPxcZkUFnwKY8DbPrj9ytLsJjnsJxvjJwGCHjwcUz4qPqiPFAWs0eg3GOqVMYSX/iVa9bG79W70NkQXBO5dzBM/Z5dJ52OT5Me9rJdlDNPV0IajsAd6UfgyiE0aEecuBwLyVzPibTqapjACmug==
+Received: from IA0PPFBEC4B1F8E.namprd18.prod.outlook.com
+ (2603:10b6:20f:fc04::c3d) by CH3PR18MB5859.namprd18.prod.outlook.com
+ (2603:10b6:610:1d8::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.39; Sat, 19 Jul
+ 2025 01:09:32 +0000
+Received: from IA0PPFBEC4B1F8E.namprd18.prod.outlook.com
+ ([fe80::ca34:e235:13d9:3f5d]) by IA0PPFBEC4B1F8E.namprd18.prod.outlook.com
+ ([fe80::ca34:e235:13d9:3f5d%5]) with mapi id 15.20.8922.037; Sat, 19 Jul 2025
+ 01:09:32 +0000
+From: Harshit Shah <hshah@axiado.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
+ Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Jan Kotas
+	<jank@cadence.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri
+ Slaby <jirislaby@kernel.org>, Michal Simek <michal.simek@amd.com>,
+	=?utf-8?B?UHJ6ZW15c8WCYXcgR2Fq?= <pgaj@cadence.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Frank Li <Frank.Li@nxp.com>, Boris Brezillon
+	<bbrezillon@kernel.org>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-gpio@vger.kernel.org"
+	<linux-gpio@vger.kernel.org>, "soc@lists.linux.dev" <soc@lists.linux.dev>,
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+	"linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>
+Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
+Thread-Topic: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
+Thread-Index: AQHb7Ec2EpmYZb1fLEiBSh0CfO/MD7Q3Ee0AgABr+YCAAT0bgA==
+Date: Sat, 19 Jul 2025 01:09:32 +0000
+Message-ID: <06f00d05-b8ca-41fa-9e5e-9cee3cfcfae1@axiado.com>
+References:
+ <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-0-cebd810e7e26@axiado.com>
+ <b7322d03-2ff9-48a3-bdc6-0e95382ed83f@axiado.com>
+ <e461e5ed-f512-4d3b-9903-8092dab7f81d@linaro.org>
+In-Reply-To: <e461e5ed-f512-4d3b-9903-8092dab7f81d@linaro.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axiado.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA0PPFBEC4B1F8E:EE_|CH3PR18MB5859:EE_
+x-ms-office365-filtering-correlation-id: 86caa818-044d-409f-cb63-08ddc660eb4c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|38070700018|921020;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?K0piSkpFNldDU3JKWEM0WkZ4Mi9lT1dNMjlGMFBOSFR2R3V0Ky9PMG9EbDV5?=
+ =?utf-8?B?cm1LL2ttaHZvQlhJbUJzTDREZVp2QTN1NE5HWmNYWHNLemk2WGlRWElvem8v?=
+ =?utf-8?B?VWpQYTZhc2dOWW16ZTdWdkNwTTNQei9LNXRTajRScXd4SXNPeWVEUG8reXRH?=
+ =?utf-8?B?MEUxVUFKOU9RZUxaOUVYcTJWNGUvbFVhOXc2MzBKRU1uNy9IazF2RTNFcUNP?=
+ =?utf-8?B?N3lBVGxZVHo5YjRhdnZrYWk2aGlReGJETjdzTXJnQU9ibmt4eXVqMzBVL3dU?=
+ =?utf-8?B?ZDZGNjhVWW9YT1YvNGtlOUNiM1ZSbndkbUxvcjdJa3ZCUXorUDZ4dFVhYlJm?=
+ =?utf-8?B?bjM0cFBzdnBxVjYvVHduakdaS2RtdyszWUdpdS9oQjkrSEZzTS9kbkRBWExY?=
+ =?utf-8?B?Zmh1UEQ1eW1QeUdZWUFVTTE0U2ZoTGZ6Vnc1eGxuUjZyaFdaUzI2dDRRR2NX?=
+ =?utf-8?B?TWZyUkFLNXVYbDJMMStOQ2FNUE9UUEo3MGQ3ZEJOZlFTZTdLdzZyQjFkVVZ1?=
+ =?utf-8?B?cm5aU2NVb3p0d1FjQ2tGRGFkRHg5K2tVNHpSS3NtaS9jN3VRdWxXcDNSVmVr?=
+ =?utf-8?B?ZDhIcStuVS8rdFVRK0U1aVhhK1BmUEphR1dXY1lzakZYdUdCOStBQ2Ryc0px?=
+ =?utf-8?B?MFNPb3I3RExaWlZDNmpudXVUblBhdkRKZ2psL2Zxc25RNmpCeFRJamRsREc0?=
+ =?utf-8?B?a2ZxcVNuM2g3WERhNXNTcm9PVFZRQlVjRFFncFlHOXMyNnc5T3krYXNSNVdq?=
+ =?utf-8?B?UTc2b0VEL1h6MlJObWlzYlZYeS9FYWRZYlZEZG1jUGNRcUp0S1l2ODU2QlJP?=
+ =?utf-8?B?SXIwTWpXWkk0Wlh2OE9pNk5QWWhNUVh2OWY5ODVGaXZ0Q1ZYOGNTQ29ySWJ0?=
+ =?utf-8?B?NloyaW9iNHJWZmhqcjQvTjl4clNPZldmbVpuYzFBWnpoNzl1T2t3T2NYLzk4?=
+ =?utf-8?B?eVZYQkNPVk1hRE9XRFF1TjlkVVpvcFE4eENLaFZicGtZK2dkV1hYVFFudkhm?=
+ =?utf-8?B?bWx3SHlFeEdMZWxkK2cwRklNd05Qd25PSUNuc0lrMkZuTnNBVm11cE9hUkFa?=
+ =?utf-8?B?UjNWbU5zWHljYWMzaEdlSm8wMFFDOUt5Umh5Z3AyOEVCa3doZnk1Rmk5V0FE?=
+ =?utf-8?B?RWp5aTh5VHNRbWFEdHNpT0ZmTjNGMnhsRDVLenRWcEIzT3ArNUtNaDNtaTZi?=
+ =?utf-8?B?WG1mM3NMbnNkTGd5azB5MWFQdWF0L2Qwd2crNDVNMXZ1cDljdWdRSWF3ZnFs?=
+ =?utf-8?B?MnluV0VCcUROS09SYnowUmQ2cWVKTFQxT0xYVnZ1bUdwT2RVNUlxMXZybnJ3?=
+ =?utf-8?B?L2ZBVUtXa1IxaExOR3dmZExzdkVGazdBYmxncEcxcmV0WkppdGlVdnNyaCtp?=
+ =?utf-8?B?YWZzaWZuYkovVC9XcDhwZGNGS04yMmJqdWJJZlBGNVhaMjQyTDlMSVU0MFZ4?=
+ =?utf-8?B?QzZIMlVYOVcwNXo4WXRocldJRDZwMkhGTFJ4U29BMkRjV1VkNCtUMUdiRWZ0?=
+ =?utf-8?B?UlI3a0NNbC9QTTd4VXpjZWVFQWNPbG45a1QvTnZ2eUNzakQzN0MvU2NRaVE3?=
+ =?utf-8?B?UGFkY3grby9jdm9LcUx4cHJiVXcvSWJ2Q0J2OGo5RVZpZnh0R0dsR1ZLcklW?=
+ =?utf-8?B?a1JodGtONTJtTWplNWxUMkxkcXY1ZlI3aUlsWFRyK1dkYWRpclMyZkc3Y0V6?=
+ =?utf-8?B?VFRueGlQU0c3UElBa3piOTcrang2NmRqd1Q5ejliWDBTaFlWRlFsSVAvVXBQ?=
+ =?utf-8?B?bW5lb0ZBbkFhekZTc1g1SnJIcWFNSmdiTjhSRUFOZEFUazA3ZFpiMWtqZE5F?=
+ =?utf-8?B?eW5Cd1hzdElBRWFRWWFTOERCTlNYOWVoNXpKVXBlSy9CbjNhNlhjc21ocGVy?=
+ =?utf-8?B?elBINnlCOG5QMWZ3QTVYdTFiZDNTaU1SRkY4TXI3bFh6WUhQTHQzUncwM1JR?=
+ =?utf-8?B?RHlvNTJ1ZW5lYlp2d0RyeENMMEI2QS8ySXZ3RFJRU0ZGWEVsZU1FaXJpUDNO?=
+ =?utf-8?B?OUxGaElTU2loS0FPS2NYNnpLM2pyMHluTjhRKy9ZVGx4Q3JqU1dMMkNWcyt0?=
+ =?utf-8?Q?Cj9bxM?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PPFBEC4B1F8E.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(38070700018)(921020);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bHFOVWlLNHZpVjVOamVqekk0aGVzYVhWeHMxRFVuUm9uWnEzYW9SWmovYlF5?=
+ =?utf-8?B?RW1YdlYxbEZHTlNKdy9kdk5VaUxnS2VvMlNkREVnNUpkQ0YvUGtGU1o5UTZv?=
+ =?utf-8?B?RmswWXdZdzUycGhUa2JVUUlyNnJyS2JBSWJpbkRsUGdLbW9RT24yL2ZrbWov?=
+ =?utf-8?B?MlBXQ2hlNFozdUtrcEJKU09hOFJ5NG9QQmpKNUxTcUJRSnprSE1NdktjU0xp?=
+ =?utf-8?B?ZU1KdVh0MGYzSXdidFhtQUg4bDM2bWVaeVozQ3NyNTBBV1NLSGxqL3NvNmE5?=
+ =?utf-8?B?dlBPTVJpYXhkM3BEYVNhZzMwUll4dVZjbFlaL2hDdStQZGY0TGZjcFFzSzNR?=
+ =?utf-8?B?Zm0wYnFKME9ZVGxJZkx6bHY0ZDNmVzA0aUNta1ROVmRDbjg5M1NBZjZLNzNQ?=
+ =?utf-8?B?N0pzN0djdlpQMkZoK2FiRmRFNTh4SmVFcGIxMndwRzNNVnNBcVdhZytQVVIw?=
+ =?utf-8?B?NXdnajBHL1huNTQ0R0d6bDF1YTVSRWFSdVlVWGw4dUdLb052K2lyMGdlRzFM?=
+ =?utf-8?B?ZElra2dSZjVrQ1JvT3YveVZnZXZKZHdIdU9mUDlVcFhiZzJ6MlpLUklpK1dq?=
+ =?utf-8?B?RFVCZ3Vvc2JhQWh4NGVoTXYrWXNrUldFYWtnRGpTeDZWWTMwRVFuWXFYYzkx?=
+ =?utf-8?B?UWF6UWhKbDdoMElMaGs0NFZUbGViZm5vRjVVUEZiMGVUN1YxVnJNSmdFQXVV?=
+ =?utf-8?B?ZUJhUFhDREh6K1UxTFh4amlQY01jczdOL0hIbnZGdklKL0l1T0hhV3F4WHJw?=
+ =?utf-8?B?OEgvSmF6VjBDQ2ZmRERrQ1E5RlhBNnRFb3pRaXNaYU4veHdhdmlPTEFQTk40?=
+ =?utf-8?B?ZHdMUmlKL1lkbUlLN1FxVGd4OVBaa0k2M1VQZ3MzTHU4NC8zVU1hb215WXBQ?=
+ =?utf-8?B?bjAxQ3lCcHdzejlKWVIvWGh1RFVGRktpSEhwTDFuM01Ca3B3dHRKTkdIZHds?=
+ =?utf-8?B?WlgrTEpPT0x0dFEwS0F6ak1DQTJDUEJ0SysvVVozRHY0UHdyc2FMcG9TTHJl?=
+ =?utf-8?B?dnpmbnRxK2szbTFBbnJWdjJOazYvZ2tCWFdtSkpvYlc1S09OUHZQWEFhbVR3?=
+ =?utf-8?B?RXFCa0hWTmRzNDU1ZjVIWVMxNkdyVEdZdEtCT3YzaHdRR2ROYlI1ZHZBOFJR?=
+ =?utf-8?B?WFNmRGhaKzduVUlXVnd3enB4Qy9IVFJSQXF6SjBvZHRPL21WTnFKaHN2VXpu?=
+ =?utf-8?B?R1FuUmVkaDJPM3lGMmt2MDA5cUdWdmFiR0NNUlpHYm5VRGQ3dE1BRmdCYWtw?=
+ =?utf-8?B?b1JrSTVFY3dFeDVFZDBVQ0ZVeGlpYmRQbEtrelFDdmlUOHY4TFBZUDNQSEhV?=
+ =?utf-8?B?dko0cS9LY3FwazlZREYvSiszMlNDcDErZmp2bXVTZ2pkV1h3ejh3ZUF6aHhF?=
+ =?utf-8?B?djVsZVNCckZhbkZ2bUtGbTN0dkRFcFFaRmVzc3ROSzhuczZIQytLZ3hWS2tn?=
+ =?utf-8?B?cHhhWkdSUGJ0ZW9hSlp3VzF1bGF1ejVYR3dRVU9kaWxyYWZIbk9KTWlRajR6?=
+ =?utf-8?B?RlpkczNqdkJpY3FuMzZqTnpWeWdBaHVlV2tyQlZIVEZFVE5va0cvYWdBcGxD?=
+ =?utf-8?B?RW0zMFpLYi9BazRPZWtpbExCdmttcE42TTVuVmcyOW9ORGRNV1lHNjFaekQv?=
+ =?utf-8?B?ZUdRa0RRT2V0T1RVYzlRK09QZFNVSFBzOWtGaGZKdjdMVmJWZHJId0phcE5U?=
+ =?utf-8?B?ZUdKajNxS2luL3dndGxrQmNDT1FWeENHZjQ4ckNqNFhhOTZid25LR29SQ0Rl?=
+ =?utf-8?B?amFkVXU5elQwcDU5YzJLcXM4YTh2QzBoUmZBbWxURHZkTlM0ZGVWaDhWTmZR?=
+ =?utf-8?B?UWpKeHdhYWVlRUZkR3ltRFdJOGJ0TlBqMDJMVXcwN1NOeWo2MUJVTmhpTEt6?=
+ =?utf-8?B?aXdhZDJQcHhGQVV5Y2xFWUlsZGp0azhkZ1VVUE8vbDFTWHptaUNaT0l1WTU1?=
+ =?utf-8?B?RWRyekdNaUt5ZXYwd2FsMmpLWjNmZWxDQ1F6MjVRWGE1a1ZNT0tZU1diVHJW?=
+ =?utf-8?B?YUxYNUNtZElQSm5nb3BGWS8xSlhRc1FGSCtaSzlkZ3pxelRPeDEvT04vd0ZM?=
+ =?utf-8?B?TDdySHJLa1cvMytCYmcwZXFlZFRPWlFBSFVQSGc2TEQrSFJ3SWlkUGtMSEhq?=
+ =?utf-8?Q?H4ik=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1D88173927764F41839FD378225038A1@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+X-OriginatorOrg: axiado.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA0PPFBEC4B1F8E.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86caa818-044d-409f-cb63-08ddc660eb4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2025 01:09:32.2900
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ff2db17c-4338-408e-9036-2dee8e3e17d7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QhZYgn7446TEByb4Nmzq1a0EA7ixQyDuf5uGubS1NpxXvH3k76lNfJv1IvTr8kfk79FckL/qNOlD9tLMw3qRUA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR18MB5859
 
-Hi soc maintainers,
-
-please find below some more Rockchip 64bit dt changes for for 6.17 .
-To go on top of the first set.
-
-
-Please pull.
-Thanks
-Heiko
-
-
-The following changes since commit 6e3071f4e03997ca0e4388ca61aa06df2802dcd1:
-
-  arm64: dts: rockchip: Enable eMMC HS200 mode on Radxa E20C (2025-06-30 11:44:12 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.17-rockchip-dts64-2
-
-for you to fetch changes up to 07e04c071a35abe12957b575cd1453ccafc02eb6:
-
-  arm64: dts: rockchip: Add maskrom button to NanoPi R5S + R5C (2025-07-17 10:52:16 +0200)
-
-----------------------------------------------------------------
-New board: FriendlyElec NanoPi M5
-Camera support for the PinePhone Pro.
-A bunch of cleanups to make DTC happier, fix ordering of DMA uart
-channels on rk3528 and some video output enablement as well as some
-button definitions.
-An interesting tidbit is the reset behaviour addition in that some
-boards have specific requirements as to how the PMIC needs to do the
-restart. DT-maintainers did not consider the header with helper-constants
-as part of the binding, so that header ended up in the Rockchip directory
-
-----------------------------------------------------------------
-Andy Yan (1):
-      arm64: dts: rockchip: Enable mipi dsi on rk3568-evb1-v10
-
-Detlev Casanova (1):
-      arm64: dts: rockchip: Add UFS support on the ROCK 4D
-
-Diederik de Haas (12):
-      arm64: dts: rockchip: Add rtc0 alias for NanoPi R5S + R5C
-      arm64: dts: rockchip: Add reset button to NanoPi R5S
-      arm64: dts: rockchip: Move dsi address+size-cells from SoC to px30 boards
-      arm64: dts: rockchip: Move dsi address+size-cells from SoC to rk3399 boards
-      arm64: dts: rockchip: Simplify VOP port definition on rk3328
-      arm64: dts: rockchip: Simplify edp endpoints on several rk3399 boards
-      arm64: dts: rockchip: Simplify mipi_out endpoint on rk3399 RP64 dtso
-      arm64: dts: rockchip: Move mipi_out node on rk3399 haikou demo dtso
-      arm64: dts: rockchip: Fix LCD panel port on rk3566-pinetab2
-      arm64: dts: rockchip: Drop unneeded address+size-cells on px30
-      arm64: dts: rockchip: Drop regulator-compatible property on rk3399
-      arm64: dts: rockchip: Add maskrom button to NanoPi R5S + R5C
-
-John Clark (2):
-      dt-bindings: arm: rockchip: add FriendlyElec NanoPi M5 board
-      arm64: dts: rockchip: Add FriendlyElec NanoPi M5 support
-
-Jonas Karlman (2):
-      arm64: dts: rockchip: Fix pinctrl node names for RK3528
-      arm64: dts: rockchip: Fix UART DMA support for RK3528
-
-Nicolas Frattaroli (4):
-      arm64: dts: rockchip: adjust dcin regulator on ROCK 4D
-      arm64: dts: rockchip: complete USB nodes on ROCK 4D
-      arm64: dts: rockchip: theoretically enable Wi-Fi on ROCK 4D
-      arm64: dts: rockchip: add HDMI audio on ROCK 4D
-
-Olivier Benjamin (2):
-      arm64: dts: rockchip: describe I2c Bus 1 and IMX258 world camera on PinePhone Pro
-      arm64: dts: rockchip: describe the OV8858 user camera on PinePhone Pro
-
-Quentin Schulz (3):
-      arm64: dts: rockchip: add header for RK8XX PMIC constants
-      arm64: dts: rockchip: force PMIC reset behavior to restart PMU on RK3588 Jaguar
-      arm64: dts: rockchip: force PMIC reset behavior to restart PMU on RK3588 Tiger
-
-Sebastian Reichel (2):
-      arm64: dts: rockchip: fix PHY handling for ROCK 4D
-      arm64: dts: rockchip: Enable HDMI receiver on RK3588 EVB1
-
- .../devicetree/bindings/arm/rockchip.yaml          |   6 +
- arch/arm64/boot/dts/rockchip/Makefile              |   1 +
- .../dts/rockchip/px30-cobra-ltk050h3146w-a2.dts    |   2 +
- .../boot/dts/rockchip/px30-cobra-ltk050h3146w.dts  |   2 +
- .../boot/dts/rockchip/px30-cobra-ltk050h3148w.dts  |   2 +
- .../boot/dts/rockchip/px30-cobra-ltk500hd1829.dts  |   2 +
- arch/arm64/boot/dts/rockchip/px30-evb.dts          |   2 +
- .../dts/rockchip/px30-pp1516-ltk050h3146w-a2.dts   |   2 +
- .../boot/dts/rockchip/px30-pp1516-ltk050h3148w.dts |   2 +
- arch/arm64/boot/dts/rockchip/px30.dtsi             |   6 -
- .../boot/dts/rockchip/rk3326-anbernic-rg351m.dtsi  |   2 +
- .../boot/dts/rockchip/rk3326-gameforce-chi.dts     |   2 +
- arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi |   2 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi           |   6 +-
- arch/arm64/boot/dts/rockchip/rk3399-base.dtsi      |   4 -
- .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |  15 +-
- .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |   4 +-
- arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dts |   2 -
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  15 +-
- .../boot/dts/rockchip/rk3399-pinephone-pro.dts     | 141 +++
- .../rockchip/rk3399-puma-haikou-video-demo.dtso    |  12 +-
- .../boot/dts/rockchip/rk3399-rock-4c-plus.dts      |   2 -
- .../boot/dts/rockchip/rk3399-rockpro64-screen.dtso |  22 +-
- .../dts/rockchip/rk3399-sapphire-excavator.dts     |  16 +-
- arch/arm64/boot/dts/rockchip/rk3528-pinctrl.dtsi   |  20 +-
- arch/arm64/boot/dts/rockchip/rk3528.dtsi           |  16 +-
- arch/arm64/boot/dts/rockchip/rk3566-pinetab2.dtsi  |   6 +-
- arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   |  66 +-
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts |  19 +
- .../arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi |  15 +
- arch/arm64/boot/dts/rockchip/rk3576-nanopi-m5.dts  | 941 +++++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3576-rock-4d.dts    | 101 ++-
- arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts   |  17 +
- arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts     |   2 +
- arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi     |   2 +
- arch/arm64/boot/dts/rockchip/rk8xx.h               |  18 +
- 36 files changed, 1387 insertions(+), 108 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-nanopi-m5.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk8xx.h
-
-
-
+T24gNy8xNy8yMDI1IDExOjE0IFBNLCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPj4gSGkg
+YWxsLA0KPj4NCj4+IFRoaXMgcGF0Y2ggc2VyaWVzIHdhcyByZXZpZXdlZCBieSBLcnp5c3p0b2Ys
+IGFuZCBJIGFtIHdvbmRlcmluZyBpZiBpdOKAmXMNCj4+IHF1ZXVlZCBmb3IgdGhlIG5leHQgbWVy
+Z2Ugd2luZG93LiBUaGFua3MgaW4gYWR2YW5jZSENCj4gSXQncyBub3QsIHVubGVzcyB5b3UgcmVj
+ZWl2ZWQgY2xlYXIgbm90aWNlIGFib3V0IGl0LiBQbGVhc2UgcmVhZA0KPiBtYWludGFpbmVyIHNv
+YyBwcm9maWxlIGhvdyB0byBzZW5kIHBhdGNoZXMgZm9yIG1lcmdpbmcuDQoNClRoYW5rIHlvdSBL
+cnp5c3p0b2YgZm9yIHRoZSByZWZlcmVuY2UuDQoNCldlIHdlbnQgdGhyb3VnaCBtYWludGFpbmVy
+LXNvYy5yc3QgDQooaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9n
+aXQvdG9ydmFsZHMvbGludXguZ2l0L3RyZWUvRG9jdW1lbnRhdGlvbi9wcm9jZXNzL21haW50YWlu
+ZXItc29jLnJzdD9oPXY2LjE2LXJjMSNuNzMpIA0KDQoNCkl0IG1lbnRpb25zIGFib3V0IHRoZSBz
+cGVjaWFsIGNhc2Ugd2hlcmUgIkludHJvZHVjaW5nIGEgY29tcGxldGVseSBuZXcgDQpTb0MgcGxh
+dGZvcm0uIiB3ZSBjYW4gc3VibWl0IHBhdGNoZXMgdG/CoHNvY0BrZXJuZWwub3JnIGRpcmVjdGx5
+Lg0KDQpIb3dldmVyIEkgc2VlIHR3byBkaWZmZXJlbnQgcG9pbnRzIGluIHRoZSBkb2MuDQoNCjEu
+IFN1Ym1pdHRpbmcgcGF0Y2hlcyBkaXJlY3RseSB0byBzb2NAa2VybmVsLm9yZyB3aXRoIGVtYWls
+DQoNCjIuIFRoZXJlIGlzIGFsc28gbWVudGlvbiBhYm91dCB0aGUgIkJyYW5jaGVzIGFuZCBQdWxs
+IHJlcXVlc3RzIg0KDQooaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5l
+bC9naXQvdG9ydmFsZHMvbGludXguZ2l0L3RyZWUvRG9jdW1lbnRhdGlvbi9wcm9jZXNzL21haW50
+YWluZXItc29jLnJzdD9oPXY2LjE2LXJjMSNuMTg2KS4gDQoNCg0KSSB0aGluayBpZiB3ZSBuZWVk
+IHRvIHVzZSB0aGlzIGFwcHJvYWNoIHRoZW4gd2UgbmVlZCB0byBjcmVhdGUgYSBuZXcgDQpicmFu
+Y2ggb24gc29jIGFuZCBjcmVhdGUgYSBwdWxsIHJlcXVlc3QgYmFzZWQgb24gdGhlIHNhbWUuICh3
+aXRoIHRoZSBzb2MgDQp0cmVlWzFdKQ0KDQoNCldlIGFyZSBub3Qgc3VyZSBpZiB3ZSBzaG91bGQg
+Zm9sbG93IHdoaWNoIG1ldGhvZCBmb3IgdGhpcyBwdXJwb3NlLiBDYW4gDQp5b3UgcGxlYXNlIGhl
+bHAgb24gdGhlIHNhbWU/IEFwb2xvZ2llcyBmb3IgdG9vIGxvbmcgcXVlc3Rpb25zLg0KDQoNClsx
+XSBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zb2Mvc29j
+LmdpdC8NCg0KUmVnYXJkcywNCg0KSGFyc2hpdC4NCg0K
