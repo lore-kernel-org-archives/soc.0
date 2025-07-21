@@ -1,172 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F90E28DB45
-	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 10:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D245416F841
+	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 14:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753092551; cv=none; b=KbEOK47L+KJz8NPHdhPlRwB/DRZv6oMXWWa0z4L6Qkl+H1YSkBVxkHfThuCIHXMgsG4EKBJ/DUvvbHFvnbAiBfpLoMcb9oW5ee5t7iURFOnGNaYFO2gmEu+Qlud8vLbcvEhpl3ffl0QeS4c/VPYiKTE7jSWbG+XklO3+55TKBy0=
+	t=1753108331; cv=none; b=tV09WHi6LCQ7zki0eVU3ZdXzzyuikqEXNGj/8InkQr6r4PAIyeZbW9G0nippPsM6JrZ2nMRPF2jw9sgD0W3aamoNKwdagp1/kTuv8sMYE5QaN0vHUnb/wKW273A3iORmVk1BLWC3KCMXb8KyJx27R3DMuz3QJeLwsvyZOdbJSS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753092551; c=relaxed/simple;
-	bh=bIAPqEZhrV40kZAdZWtcnmooYJI45uzdmMq5yp9OOpU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SY1teZnqvmujEbbaJfaORHMFvzlFJg4ipzWbFAbT8ZEurMOT7WuqeJDb9Hby6j5fNSRhqkah0l55f80Wq62eR1myVIxPdygDvyZ0afRqUa0yTkMyUSisZSW3+P3keaGWTDDRhm3Byq4L5ioqvAOmgK48Au518zS3IpTPUf7EGZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Z5R6zbDH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753108331; c=relaxed/simple;
+	bh=pE4d2LeBSURR3ZsVuztA3qO4aVwxujLn3qVhRl01dLE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=SUNerOh2dOysn4XJRJhhlc1iHw2WFvpFuaMUvu4vtCpMk7vwYFxqQMlFgcCJPzS4+a7QfS3MR2iUGSBZBgu7Vlk3LtDlFjYthrNhKSf2/rHb+CRAR1PAtgdCT0WQHir3b1uQfQ0j1Gd4pjOrCTqQWvzF5I9C6qPKIF+ElqCEmiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=D8gMn+Uk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dqpzkqFJ; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Z5R6zbDH"
-Received: by smtp.kernel.org (Postfix)
-	id AC936C4CEF1; Mon, 21 Jul 2025 10:09:10 +0000 (UTC)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F1E88C4CEF5
-	for <soc@kernel.org>; Mon, 21 Jul 2025 10:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F1E88C4CEF5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60c60f7eeaaso7194043a12.0
-        for <soc@kernel.org>; Mon, 21 Jul 2025 03:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1753092547; x=1753697347; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KcFckvzN7xNx2cFpkfKVkI9GXO+rMAPN2eeDe+pzM/0=;
-        b=Z5R6zbDHK8QZPPma0nc61RzaIZWouz9dMxys//pyV2hWHqclnLCktY8OPQYbows5OZ
-         4hPurYpM+yk3ivx3HJmUf3BEbxafAwA1yI31Pfytb9p60TZ081G0XV5eRzvy+ia9SWdr
-         sx2ksqg9FxCQrkgVIL3rRx73SL4QAnc3LNkrgvy+IOAl7D+jitJWSzld16n0SxLdxFwI
-         61wORTB5tZEBQItD8DacqP/GiaV/u7JhWW94PhTwlbXuS2KEkxIDSWmxGAfrv70BEcDN
-         iq4I4n6slmbWKOtCLhcn04JuxxtOfELY8viXlhHAy9b4Befb5knhCq6V3oF5N2Ad19BF
-         z1Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753092547; x=1753697347;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KcFckvzN7xNx2cFpkfKVkI9GXO+rMAPN2eeDe+pzM/0=;
-        b=fppv5NHcAsgDv1xkT6rL+iBqlMj9u0VCuyAaqalT4i+5W0xMYrBE+u/LJk30YSjJGH
-         IONXchxaka9hFYw9msHMDkwrDVaEsszR8GHtM7gLaamc64xRVeLGOmYAilGZeOZppZRg
-         zvqAKLGVZDtgXA2kfYyku75UTTy+yFlJmXT4VWuZKRdoxE5z05Fr5qkTBsJH5hvrM8T/
-         8/jsGdz5teSqWeRcA6ntJOkdc+gTQW8MfTRuyQhWFOHeehEC4T0UeSbNvu4Su3rvubPf
-         AY+0LZ5o+7VrWTmlGiOelUjPSb4D6YTt6ACg3vjPsJMInsI0jb097YS8+DYUlvSQ1n1p
-         t25w==
-X-Forwarded-Encrypted: i=1; AJvYcCVrAu7NzcuEz4Kiu813PQawu+Ka2YXBTNvzxB3zZtLnwAvz2/zSaqdZQX5CD9UfoQrEs6E=@kernel.org
-X-Gm-Message-State: AOJu0YzfAbZzJ2N/cBhPfdBZ0gwmfKXJMf7nOn/rXUAnkqYxaMUYRfc0
-	bwPYa5o5KnFOqYyTQdn42W0FlrSx4RzEBEZp1c+m4hn+T+h1i4MzY0LFUFybH58aIBs=
-X-Gm-Gg: ASbGnctQACVnP7cNLJTKANGxeEB/4j8CPfYvKfr0XwYtrnx8HxHjsdS1fA8OSubScO7
-	0LHv+zZha4LaXlF84x3S97DjqDlUZHum9e5bsLqW3jtAgxe/UThdEDaX8ppXeUHmvKii/Y4xYo6
-	gysamOLqGbUpr/5uZPYQMpxlaamzkdQYmguWwywHnUR/Sy0gkOoPXWULCXk9BvCKWOSC1usbDQo
-	Azf1BF4tyfFhhXhORrlfcdHFQ6/4Gpw4C/egvjf/UFdMxRKWl2BJxnQDxPRoTFwBTdiCFjhhMMx
-	SFCG7ooVphIBjwH6btDmRC/1Cl7GOWhY15vIxqkMRHfAzCKfjzrhvsI5Vn7AcXOI2wfnw8sUVZz
-	Ygjqx8yi3n/KyM/U3l00FAJGaZB194RLpuNlTkTYk
-X-Google-Smtp-Source: AGHT+IED4lOeP8lkzQuySSoVCpa3i6O3/wuUDVMHTM4Hv/8XoOUOgJ3qHR/ltSfjecD9vA8E53VDcg==
-X-Received: by 2002:a17:907:1c1e:b0:ae2:60ba:da91 with SMTP id a640c23a62f3a-ae9c99872f5mr2078243266b.15.1753092547094;
-        Mon, 21 Jul 2025 03:09:07 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6c7d68a1sm647649766b.46.2025.07.21.03.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 03:09:06 -0700 (PDT)
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-To: arnd@arndb.de,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev
-Subject: [GIT PULL] Microchip AT91 DT updates for v6.17
-Date: Mon, 21 Jul 2025 13:09:04 +0300
-Message-ID: <20250721100904.568575-2-claudiu.beznea@tuxon.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250721100904.568575-1-claudiu.beznea@tuxon.dev>
-References: <20250721100904.568575-1-claudiu.beznea@tuxon.dev>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="D8gMn+Uk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dqpzkqFJ"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 4693F1D001C8;
+	Mon, 21 Jul 2025 10:32:08 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 21 Jul 2025 10:32:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1753108328;
+	 x=1753194728; bh=gMKNAupfMStz/V14NuXYIcF11MwYemPMaLcl28atUqQ=; b=
+	D8gMn+UkuxGqmrnLQ8bKSYVeDWgcBIbWu6AQ3cAH8vk5ZZeoHYrQ2Pcez4NqUHyW
+	keGowtEEmy/h+fGLJZB7U6oVrgjYq4j1f90Hdeg58Wiv6yS2D6kfWQR3hbjNyW9/
+	SOWX53LBxhRhVUKVg3WsWwIOLj1L88dvT1nEN9eL+P+V4MYg8716mIUz4JjH6Zj2
+	6zJtMfcWOd7afHBeYULRaqT0HZXAfe77NiqSKoFcrUffoGAgHuMXY4J5EOxDzrl+
+	powGW0OTCDyRnzj4F20Rrq6QwrfkMFeYb35nwSMM/TVEBfXUXBSdu+/TbJCUnZvb
+	duE8X8xA/x1gs6j7xq/5bg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1753108328; x=
+	1753194728; bh=gMKNAupfMStz/V14NuXYIcF11MwYemPMaLcl28atUqQ=; b=d
+	qpzkqFJ4nN223b4dzhJW/uWLduEPQJOVtqauWsi6LMG3z18YOFf8da+Thgqs6hpP
+	H4TwLWJ1qt8hspX7c7MG/Nq9CK5v9ST1pElq2fjgAiXEWCoyWaF9u475yxVKcam5
+	EtK9YvcUBVRKpYtVeojHMWOM/5kpxMRqq5kGAhyzc/+1A3Farq5qOE1Atz1uwEmW
+	WOcKHUuf1AweS5eB/w7QDllMGUa3GnhG+rmsqYMZLT/eoR65aPpKzCdATaQxJ/6n
+	lUkyXAG8tF4ePsMx+rDOVS7JzlMd0AYtoM7UBxt+fuWLiAHNl3HjSQ1eJQOe8mqY
+	1UkTPfUY9le4me4oRoNog==
+X-ME-Sender: <xms:Z09-aDjoAtbt4oz_hquLOelYW_hgx3M6__B8GSSDGjYt5jVrjjJLtw>
+    <xme:Z09-aABMdafwrWxno0W-vFk2Iet2VVNakLnH87WDZ27kI6n0GCygNLSskDXRMwCj3
+    q43b51q_U9LmU6re-c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejvdeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeekvdeuhfeitdeuieejvedtieeijeefleevffefleekieetjeffvdekgfetuefhgfen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
+    thhtohepvdegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihgthhgrlhdrsh
+    himhgvkhesrghmugdrtghomhdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghs
+    segrrhhmrdgtohhmpdhrtghpthhtohephhhshhgrhhesrgigihgrughordgtohhmpdhrtg
+    hpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrlhgvgigrnhgurhgv
+    rdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepjhgrnhhksegtrg
+    guvghntggvrdgtohhmpdhrtghpthhtohepphhgrghjsegtrgguvghntggvrdgtohhmpdhr
+    tghpthhtohepsggsrhgviihilhhlohhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    gtohhnohhrodgutheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:Z09-aCOaJXULvBvv--IOW8a2yzp5R56DSAKQvyjkEmnC22NyLjA_wg>
+    <xmx:Z09-aKAIMXXASTcUjjEauq50E7V1A-C-J-4qyc57zycYXV4qJifdZg>
+    <xmx:Z09-aCXJjKsNb0OiDfTt1jzNPILfa04Qfx5G5aQCs8B2TMvOSZ7IiA>
+    <xmx:Z09-aOdhpyzR93WWZFbPrLM4vIdzDHha7ZGCG6DUIfqgNQ5XWWh9KA>
+    <xmx:aE9-aO3UqGV5yUTEmzfniPMEzUG6vhDrmrVmbYvdXHAs_euJ3YD_4gDq>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 598F7700068; Mon, 21 Jul 2025 10:32:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: T10195641ff6473d7
+Date: Mon, 21 Jul 2025 16:31:37 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Harshit Shah" <hshah@axiado.com>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Jan Kotas" <jank@cadence.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Jiri Slaby" <jirislaby@kernel.org>, "Michal Simek" <michal.simek@amd.com>,
+ =?UTF-8?Q?Przemys=C5=82aw_Gaj?= <pgaj@cadence.com>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Frank Li" <Frank.Li@nxp.com>,
+ "'bbrezillon@kernel.org'" <bbrezillon@kernel.org>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ "soc@lists.linux.dev" <soc@lists.linux.dev>,
+ "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+ "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>
+Message-Id: <4f836d88-80a7-402b-9af0-f0d002e2145d@app.fastmail.com>
+In-Reply-To: <7ddb77bf-173a-4117-80ac-d0f32bf067ee@linaro.org>
+References: 
+ <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-0-cebd810e7e26@axiado.com>
+ <b7322d03-2ff9-48a3-bdc6-0e95382ed83f@axiado.com>
+ <e461e5ed-f512-4d3b-9903-8092dab7f81d@linaro.org>
+ <06f00d05-b8ca-41fa-9e5e-9cee3cfcfae1@axiado.com>
+ <7ddb77bf-173a-4117-80ac-d0f32bf067ee@linaro.org>
+Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+On Sun, Jul 20, 2025, at 14:09, Krzysztof Kozlowski wrote:
+> On 19/07/2025 03:09, Harshit Shah wrote:
+>> On 7/17/2025 11:14 PM, Krzysztof Kozlowski wrote:
+>>=20
+>> It mentions about the special case where "Introducing a completely ne=
+w=20
+>> SoC platform." we can submit patches to=C2=A0soc@kernel.org directly.
+>>=20
+>> However I see two different points in the doc.
+>>=20
+>> 1. Submitting patches directly to soc@kernel.org with email
+>>=20
+>> 2. There is also mention about the "Branches and Pull requests"
+>>=20
+>> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
+ree/Documentation/process/maintainer-soc.rst?h=3Dv6.16-rc1#n186).=20
+>>=20
+>>=20
+>> I think if we need to use this approach then we need to create a new=20
+>> branch on soc and create a pull request based on the same. (with the =
+soc=20
+>> tree[1])
+>
+> You do not create branches on other poeple's trees (like soc). You
+> create branch on your own tree.
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+Yes, ideally the base should be -rc1, as for any other pull request.
 
-are available in the Git repository at:
+> You can go with 1 or 2, up to you, I don't know which one is preferred
+> by Arnd for new boards.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.17
+Separate patches (1) tend to work better for the first contribution
+from a new maintainer, since there is less to know in advance.
 
-for you to fetch changes up to 314862edb13d52c481ecc330c9d3fec0507cd9bb:
-
-  ARM: dts: microchip: sama7g5: Add cache configuration for cpu node (2025-07-05 10:43:31 +0300)
-
-----------------------------------------------------------------
-Microchip AT91 device tree updates for v6.17
-
-This update includes:
-- controllers enabled for SAMA7D65 SoC (crypto controllers, PWM, CAN)
-- controllers enabled for SAM9X7 SoC (LCD, LVDS)
-- cache configuration updates for SAMA5D2, SAMA5D3, SAMA5D4, SAMA7G5,
-  SAMA7D65
-- cleanups
-
-----------------------------------------------------------------
-Dharma Balasubiramani (2):
-      ARM: dts: microchip: sam9x7: Add HLCD controller
-      ARM: dts: microchip: sam9x7: Add LVDS controller
-
-Ezra Buehler (1):
-      ARM: dts: microchip: gardena-smart-gateway: Fix power LED
-
-Fabio Estevam (1):
-      ARM: dts: at91-sama5d27_wlsom1: Improve the Wifi compatible
-
-Manikandan Muralidharan (4):
-      ARM: dts: microchip: sam9x60ek: rename spi-cs-setup-ns property to spi-cs-setup-delay-ns
-      ARM: dts: microchip: sama5d27_som1: rename spi-cs-setup-ns property to spi-cs-setup-delay-ns
-      ARM: dts: microchip: sama5d27_wlsom1: rename spi-cs-setup-ns property to spi-cs-setup-delay-ns
-      ARM: dts: microchip: sama5d2_icp: rename spi-cs-setup-ns property to spi-cs-setup-delay-ns
-
-Mihai Sain (5):
-      ARM: dts: microchip: sama5d2: Update the cache configuration for CPU
-      ARM: dts: microchip: sama5d3: Update the cache configuration for CPU
-      ARM: dts: microchip: sama5d4: Update the cache configuration for CPU
-      ARM: dts: microchip: sama7d65: Add cache configuration for cpu node
-      ARM: dts: microchip: sama7g5: Add cache configuration for cpu node
-
-Ryan Wanner (8):
-      ARM: dts: microchip: sama7d65: Add crypto support
-      ARM: dts: microchip: sama7d65: Add PWM support
-      ARM: dts: microchip: sama7d65: Add CAN bus support
-      ARM: dts: microchip: sama7d65: Clean up extra space
-      ARM: dts: microchip: sama7d65: Enable CAN bus
-      ARM: dts: microchip: sama7g5: Adjust clock xtal phandle
-      ARM: dts: microchip: sama7d65: Add clock name property
-      ARM: dts: microchip: sam9x7: Add clock name property
-
-Wolfram Sang (1):
-      ARM: dts: microchip: use recent scl/sda gpio bindings
-
- arch/arm/boot/dts/microchip/at91-sam9x60ek.dts     |   2 +-
- .../arm/boot/dts/microchip/at91-sama5d27_som1.dtsi |   2 +-
- .../boot/dts/microchip/at91-sama5d27_wlsom1.dtsi   |   4 +-
- arch/arm/boot/dts/microchip/at91-sama5d2_icp.dts   |   2 +-
- .../boot/dts/microchip/at91-sama7d65_curiosity.dts |  35 ++++++
- arch/arm/boot/dts/microchip/at91-sama7g5ek.dts     |  18 ++-
- arch/arm/boot/dts/microchip/at91rm9200.dtsi        |   5 +-
- arch/arm/boot/dts/microchip/at91sam9260.dtsi       |   5 +-
- arch/arm/boot/dts/microchip/at91sam9261.dtsi       |   4 +-
- arch/arm/boot/dts/microchip/at91sam9263.dtsi       |   5 +-
- .../at91sam9g25-gardena-smart-gateway.dts          |   2 +-
- arch/arm/boot/dts/microchip/at91sam9g45.dtsi       |   5 +-
- arch/arm/boot/dts/microchip/at91sam9n12.dtsi       |   5 +-
- arch/arm/boot/dts/microchip/at91sam9rl.dtsi        |   8 +-
- arch/arm/boot/dts/microchip/at91sam9x5.dtsi        |  15 +--
- arch/arm/boot/dts/microchip/sam9x7.dtsi            |  37 ++++++
- arch/arm/boot/dts/microchip/sama5d2.dtsi           |   3 +
- arch/arm/boot/dts/microchip/sama5d3.dtsi           |   2 +
- arch/arm/boot/dts/microchip/sama5d4.dtsi           |   3 +
- arch/arm/boot/dts/microchip/sama7d65.dtsi          | 140 +++++++++++++++++++++
- arch/arm/boot/dts/microchip/sama7g5.dtsi           |  19 ++-
- 21 files changed, 272 insertions(+), 49 deletions(-)
+      Arnd
