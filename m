@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A940DDBC
-	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 15:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926B717993
+	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 15:31:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753111902; cv=none; b=hB1BQzCDtnum7JOntklXBLLiAayEhgBOYc8cogeD4CvE42+F/ab1zL6wQdu3CzKhguvQgn/c3OMlgcJbHoEWvVLzym0vHWp8CDkOHY37qL0PHrDkl2DAagni3+Ac2tPrLN45HtFg1pv/d2vMXc7O6E2BL9sz7NctA+wsuOjMbpE=
+	t=1753111903; cv=none; b=EsSRmbd0lbWcSlxUs27bDdIqd80vfmo4/rS+dYHgqXA/JuTAyJYczL4y3BJb4GRH27WqGXhYjl9/sUiDv0r1tzaEa3l9CPECy2nsPtWCy/IY5awF5wr9TlRBvjIw2ywFjYuTwwpNs8U0nlkb6QxnIcbHPTccgGz5+yR+WtJdcGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753111902; c=relaxed/simple;
-	bh=BIET4wu4GV2tbOzp3MpscqyZfJaU42PwnNDJvllNIf8=;
+	s=arc-20240116; t=1753111903; c=relaxed/simple;
+	bh=934DGwLfHcqUc3d4+En+JiPWvsDJco6+KJr6dEjjsTY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PclE0qKNVgu/z/B8eNre9HpPKMIHjH92q2+ce5Lj3P6i60oF5w3vwaUZVwm1TaQ5YhXQ7jENjcCgZKCYvPnZY3VVeLCSXWrf9l2+TQlospn63OByVfCgtmUbItIm10ijNltb01QsYAYuKhf+nGmKEu+4qBYg33Y4tj8/AMbo4dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuJkPGLo; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=J9a3t5Y7aAWanE+iCvKG/PIPsflyRQeLn4Mf023ZXDckKVUfnTKcGX98Yk+sTxY93mnHYd6yRhRrTCXpH4tgIygKC+ciB+AvhyeCu/iyS+MvC+wn5SNQNHRiOn4/VDhQqkjz7uQevZdhqRREnpeE0G4seJeA6mQN+Jy+5G21bAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s5PiPrzx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuJkPGLo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s5PiPrzx"
 Received: by smtp.kernel.org (Postfix)
-	id 802E5C4CEF4; Mon, 21 Jul 2025 15:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A62DC4CEED;
-	Mon, 21 Jul 2025 15:31:42 +0000 (UTC)
+	id 2E234C4CEF6; Mon, 21 Jul 2025 15:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18663C4CEED;
+	Mon, 21 Jul 2025 15:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753111902;
-	bh=BIET4wu4GV2tbOzp3MpscqyZfJaU42PwnNDJvllNIf8=;
+	s=k20201202; t=1753111901;
+	bh=934DGwLfHcqUc3d4+En+JiPWvsDJco6+KJr6dEjjsTY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=EuJkPGLoG0oHLhgfoRPuULHXBA2ziLl5jHTdHfsbpUciv7iUxUEklXJ5fgEwvtlsA
-	 FXUGSGosSkWYANF+8Hp1I+dTsfREguyFUGB5Nm+BvBft15SziEMvf8aGoEpy3AqcBo
-	 lF6ivVaY0ptfMQD9p3eDIY+ZnzlsxnxyqXGx33DiliraREG+IfD4ALJEvGtTIRweh+
-	 9yduTzzxloxzYBSPuWwZna4XG0tE/IdSQoPzDvTLVQI4PwAXejYy5uPgHQLMOr29/f
-	 8YFQdgDiacuR6KNN3bGT3WrLyXeqMj97vilXkMaV26AHkcU4OL74LInxmtzDG0Dlra
-	 ST4f/5XjTGJUw==
+	b=s5PiPrzxjnrdI37/Db/Xh0b1ga8Q9nvRe86RcU8pYEz7eN7vjmCjyOO64pGCQQ+r5
+	 MAxNgbYNKIDx+xHyLj2tV62dk1NQMKfNGbQY9UDR0MAuEh5xFz8rajC4xQb9LaoRip
+	 GV5BxJpLlYlDHs4cQA4NtfSl/W0emton0/Jdu3GfwVKiOqORV6hV7jJZD0ChsXzZQO
+	 cHKcTVkuVCKXIOnXg0cE+Es6iJ51dJL3AeyEtkUp+Ed9y23XsZn5tbIcd1KS9tOPdL
+	 2/sLC+6dWzBVMuFOPNKuAbjzLze0ah2aUN9TaanCiSc0hQ1CPHQNYKJLpr9AX1Cbms
+	 4Y/1gZ0axFYdA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 77086383B266;
-	Mon, 21 Jul 2025 15:32:02 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 24A31383B266;
+	Mon, 21 Jul 2025 15:32:01 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,39 +39,50 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: dts: nuvoton: npcm8xx: Drop the GIC
- "ppi-partitions" node
+Subject: Re: [PATCH v2 0/9] add Voyager board support
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175311192118.94241.15426072950480740787.git-patchwork-notify@kernel.org>
-Date: Mon, 21 Jul 2025 15:32:01 +0000
-References: <20250710-nuvoton-arm64-dt-v1-1-ec7db96ea507@codeconstruct.com.au>
-In-Reply-To: 
- <20250710-nuvoton-arm64-dt-v1-1-ec7db96ea507@codeconstruct.com.au>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
+ <175311191974.94241.14490941012792423343.git-patchwork-notify@kernel.org>
+Date: Mon, 21 Jul 2025 15:31:59 +0000
+References: <20250711133025.2192404-1-ben717@andestech.com>
+In-Reply-To: <20250711133025.2192404-1-ben717@andestech.com>
+To: Ben Zong-You Xie <ben717@andestech.com>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 10 Jul 2025 12:39:38 +0930 you wrote:
-> From: "Rob Herring (Arm)" <robh@kernel.org>
+On Fri, 11 Jul 2025 21:30:16 +0800 you wrote:
+> The Voyager is a 9.6” x 9.6” Micro ATX form factor development board
+> including Andes QiLai SoC. This patch series adds minimal device tree
+> files for the QiLai SoC and the Voyager board [1].
 > 
-> The Arm GIC "ppi-partitions" node is only relevant to GICv3 and makes no
-> sense for GICv2 implementations which the GIC-400 is. PPIs in GICv2 have
-> no CPU affinity.
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> Link: https://patch.msgid.link/20250609203721.2852879-1-robh@kernel.org
-> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> Now only support basic uart drivers to boot up into a basic console. Other
+> features will be added later.
 > 
 > [...]
 
 Here is the summary with links:
-  - arm64: dts: nuvoton: npcm8xx: Drop the GIC "ppi-partitions" node
-    https://git.kernel.org/soc/soc/c/8e7e63fc479a
+  - [v2,1/9] riscv: add Andes SoC family Kconfig support
+    https://git.kernel.org/soc/soc/c/00dba19aa005
+  - [v2,2/9] dt-bindings: riscv: add Andes QiLai SoC and the Voyager board bindings
+    https://git.kernel.org/soc/soc/c/12d8c15992c4
+  - [v2,3/9] dt-bindings: interrupt-controller: add Andes QiLai PLIC
+    https://git.kernel.org/soc/soc/c/6eeee4fb1930
+  - [v2,4/9] dt-bindings: interrupt-controller: add Andes machine-level software interrupt controller
+    https://git.kernel.org/soc/soc/c/1f5ff8c363cf
+  - [v2,5/9] dt-bindings: timer: add Andes machine timer
+    https://git.kernel.org/soc/soc/c/65bbf10b934a
+  - [v2,6/9] riscv: dts: andes: add QiLai SoC device tree
+    https://git.kernel.org/soc/soc/c/609496af55ca
+  - [v2,7/9] riscv: dts: andes: add Voyager board device tree
+    https://git.kernel.org/soc/soc/c/9d462f56db7a
+  - [v2,8/9] riscv: defconfig: enable Andes SoC
+    https://git.kernel.org/soc/soc/c/ad087c91eb87
+  - [v2,9/9] MAINTAINERS: Add entry for Andes SoC
+    https://git.kernel.org/soc/soc/c/bf40c1a5b956
 
 You are awesome, thank you!
 -- 
