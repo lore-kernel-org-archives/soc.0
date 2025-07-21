@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596A5B67A
-	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 14:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685B2B67A
+	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 14:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753109505; cv=none; b=gGeTpTUwnluN1xo9TDS/0awOOvsmfnQmDS2jlSQodc6Eu5nOphxV/rmpvqP17ug1Mq45NJJF8BcJc8WHj5NIu+4cERGaFYPjEMvY7CbLNhRcp9x4nV6CkJU7gmUIlIRiDkN6Zg3y84/CaaXbV4bXM1B+KvSkPaL58hE5kCMpUTs=
+	t=1753109506; cv=none; b=TnnRdIZnkZeuyBMfNhLnmLs8lHtiAi3avwhGTK+elmLgNuhB+8JFl0d22zbAji+KGdKxevyuM5Auf215jPjoMpIwVABLZT8qnKFBDgjXtkW7mts1KZXUYoaa3LVq9yoCZQjMwqLlPwlPQJKWbge8E7lBlPJPLRHal7YtkGIG/MI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753109505; c=relaxed/simple;
-	bh=DyvAfgWzioQHUZ4aJF2ZYimbi5yWGntCTaE3tvPFUK4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=DvMffJvpHCr2TaK9aMd55T8oHxOQT1Sg3Tm6oR0TQwjLYIZuZf1V0dfh4GIz23t4GslwjSmLSMwIqfTXzjLV84h18nYQkCUk1lSjvLkbz4gyUKUqeUb7cq3jzjQTZp2lV0zTY7/PP3JKKcyYll0TSchQS9/TrTta8hz4Pz+solU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mbac0Pvz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753109506; c=relaxed/simple;
+	bh=Hfrle/0U0nT56vcCQvhW5E/oG9JEFonh3YNry6LGRzM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ZJvObeJUj3XuVWGz8rEcl1ZhpUg7pPC3YSKFEct52zUE0utByWhvUFBy51MaU+K/XP/YyidCB4ZbzKltFaZwpEcPlPcg56eRrKka81kav5xJk8PtKqEN04ZCvMnU7ZhNPfnUY7BXhqKSL38ejLHHQrN0XjlqqNBPzbXhc+kLpwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qw16HtdU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mbac0Pvz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qw16HtdU"
 Received: by smtp.kernel.org (Postfix)
-	id D9791C4CEF8; Mon, 21 Jul 2025 14:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2EB3C4CEED
-	for <soc@kernel.org>; Mon, 21 Jul 2025 14:51:44 +0000 (UTC)
+	id 101FEC4CEF6; Mon, 21 Jul 2025 14:51:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED790C4CEED;
+	Mon, 21 Jul 2025 14:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753109504;
-	bh=DyvAfgWzioQHUZ4aJF2ZYimbi5yWGntCTaE3tvPFUK4=;
-	h=Subject:From:Date:To:Cc:From;
-	b=mbac0PvzbYCHHHI0P5XF21Hr8oBYFX4JxqA7d2UeK0CgQEasz+NIACbelzSsH10hS
-	 gG4yOZy2X6tC9HqSgpTADDi1hTNQrz3+EnNjB6YPN8SyVcuY7EI6BTGFqRPH1eKOON
-	 aQcqU64/F4i2NHyEoW2ikINBbizGAVBxokjo7iQ7lrU5EL8lrMdhW1m1+M4WqMnKwK
-	 uJZPz+kU/QPlk0XqAfEnAVp028XPbTJZAe1yqbRpl1+Og3Ys06M/sbCqhojpnDuWTd
-	 jKRyj74CRllND4U5UcOj4oXOzItuKNabO0aICHul1l3l3MUFXcAYyouQcRS1tkyCGh
-	 iJxCaFzamTk/g==
+	s=k20201202; t=1753109506;
+	bh=Hfrle/0U0nT56vcCQvhW5E/oG9JEFonh3YNry6LGRzM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=qw16HtdUevg6eKoaf7WQX37x6rTKOwQzjFrqAT1YgTDooY7rVF5G4t8UXL0fMCVP5
+	 zJdnsHw0w3GJUhZZuHp4rp7u5QU4c10zSNq+nIaaoLKmaGZ7T9NMAz/XAg4A4Ozwdy
+	 q+R511H8qFNOIrB18cf3IkXTc8ohfO8l9uf7zIRkUBPab8xNEYhGRaQ0A+2234fkJz
+	 20uTR6TWrR69eCmRTqthSyZGsRrl4nGKvOBDjV303LXXHj3IV1WqR1VoHg0NTRc/Ow
+	 hBNlMtKxFbnw8lkFa7qsoHkIMUfyx0/+/DfsM/6FgV9jqXA3MgiMSIHi2vOHxJg7HE
+	 EsmGR5bc5Xrgw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B1641383BF5D;
-	Mon, 21 Jul 2025 14:52:04 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD20383BF5D;
+	Mon, 21 Jul 2025 14:52:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,28 +39,37 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Allwinner fixes for 6.16
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175310952335.77297.17564525176060832531.git-patchwork-summary@kernel.org>
-Date: Mon, 21 Jul 2025 14:52:03 +0000
-To: soc@kernel.org
+ <175310952476.77297.13924813419143512673.git-patchwork-notify@kernel.org>
+Date: Mon, 21 Jul 2025 14:52:04 +0000
+References: <aHaJp8ut6z9Ds_qn@wens.tw>
+In-Reply-To: <aHaJp8ut6z9Ds_qn@wens.tw>
+To: Chen-Yu Tsai <wens@kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Allwinner fixes for 6.16
-  Submitter: Chen-Yu Tsai <wens@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982619
-  Lore link: https://lore.kernel.org/r/aHaJp8ut6z9Ds_qn@wens.tw
+On Wed, 16 Jul 2025 01:02:31 +0800 you wrote:
+> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+> 
+>   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-fixes-for-6.16
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] Allwinner fixes for 6.16
+    https://git.kernel.org/soc/soc/c/816309d500ac
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
