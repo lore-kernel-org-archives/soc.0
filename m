@@ -1,211 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D126BA36;
-	Mon, 21 Jul 2025 07:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38C28DF0F
+	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 10:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753082284; cv=none; b=iFa7xMfc2XpXmttFMTKKqwENDxeKEx6g3Jo0ALQ/oNPS2wfLLlsV8Ts7GZUecVQ6879AWSDD2yj4c/mG9fIQZC7jRCD754ukR0xdsaAH2Zy2ha3IHXqAt5Hu71vPIaJcX29H05arCaPM5G4w72KElEXAdpsfSTzaeb0WUnpeqRI=
+	t=1753092550; cv=none; b=qy5uw/6PqQJoPy7DFHj04kr4nJvKD7Mu5QwZIE1GemfDxZOc/FswMG8Ce4KnrbSaVyLnIK7Onbqla5q+N2yIuI6er2G7cWTJ7XDLvqTTQsfNljOGT1t+4ScUGjQtrpAIljC3RPNQ9zfsMO4H+E9ZIw6GdGPAyAwaZ6HFTTxttUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753082284; c=relaxed/simple;
-	bh=1s2KWA7tcb/MOyIOVFgvc6VCEGCoanOpC0pWVed+jWM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lKjpRYRR0PBPzO58bB4jo//xnkHkWTQzOqfguIGJ2RwIIShk7Kbh4Eepycu/pWmO8+jLwMXKH9o3otqi3imegWxBf40HWwcBYdvvk/CnyN5CKg65kqKrUGTlf/M6vJebFBr3pnRP0uDSV4g63AAAiHAlshQET0bn3o6Lwv429MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HT2WtPZp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753092550; c=relaxed/simple;
+	bh=vjqOI8zpfW+DrHMfMI3ikiOZgwR7NpLlwVHPK4dHE3I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BfEsmNyNeUwd7Tn6lCpzvNodTuwipm9QkP6luQoX1U75njPH86o/pSHn8Z4t72tZZuDCAWIvgBNXRsP/Z5ijjOo+lk8ksGvYUM+Oe7GcMj9/v4igDW6hdb9eohXSETLUzX5aA219OcIZyqnOC7JjLRNTgIBvqtEUF7pKsjNy4/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=SS+CVHZF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HT2WtPZp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07355C4CEED;
-	Mon, 21 Jul 2025 07:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753082283;
-	bh=1s2KWA7tcb/MOyIOVFgvc6VCEGCoanOpC0pWVed+jWM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HT2WtPZpN58l+taN0yRBydcUEukBxJNSQtelllZMQs6BB2IaOMCXK16LojQHy2Kpw
-	 bJxJ3eN9z3TPTYq064MEcEZneXeSq2mh7Y1ejCTVk1Uh0XwTlUPhQYkAdVPC/Ieix3
-	 gUjnvYWMD/PDEz7UGfjmdE6cDJWoekgKEC51yAL4dhsLmWedWbcau5zxiY2KnTSV/a
-	 AbpeD0MWRzGjrg8QGI+FPtObFMJzFq35ZLYJ7DM0Pa0PsMPwLkRGkkOdEqpNBXVAir
-	 mLJKMM1CvCuTLtxAr8bCFPw6nCq/FBTIrL3F/a4V0EOrU6mCEWD+7etGruH4dNKbmc
-	 +lhuZ2h2rUGNQ==
-Message-ID: <d0d55fe7-27d5-47e2-9c64-aa0f01eaa772@kernel.org>
-Date: Mon, 21 Jul 2025 09:17:53 +0200
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="SS+CVHZF"
+Received: by smtp.kernel.org (Postfix)
+	id 14CA7C4CEF1; Mon, 21 Jul 2025 10:09:10 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CDEADC4CEF4
+	for <soc@kernel.org>; Mon, 21 Jul 2025 10:09:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CDEADC4CEF4
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ae3be3eabd8so792397466b.1
+        for <soc@kernel.org>; Mon, 21 Jul 2025 03:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1753092546; x=1753697346; darn=kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hOPi555g1R1nQnwbYf65VIBf8GYSuV0PguYr5CDG9HE=;
+        b=SS+CVHZFHAGEAUrMJ3RO3c7t5u3Wzg5oOOnk+L2bbdejl/Dwl7ijMAWHa1oQMa52ch
+         PtcV2sIy4KONzvrt4ypxRk39+3rvqq5PLNt6F67cFWQrVM+6Ka9eOuqianxxZ/zWpUiT
+         ZYJilXv34kGOp/B8J2THFuSym2Lc6silh49mbJVfUSFwZItFRcPESkJcp6vlN15K1mIt
+         Zi4wwegWGNEIF4EK0KtZIHp5pTLLbSta6XsCP0Xu9X8HEw9H+wACZcs7sXOn9aEhkK/B
+         xIOA1XJfkOxg67NOaCSf9/mZq8Nrgqmt122EUc3TMGHjF7hMtoigbYnwoxAsk9wmEY8I
+         kZBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753092546; x=1753697346;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hOPi555g1R1nQnwbYf65VIBf8GYSuV0PguYr5CDG9HE=;
+        b=Gu9GQBOu2eqycsaykVor8OMENMQiLGoCkQeaTeP8OLZN4jCjNogS5FyvxhhM4c3Fcz
+         m7Rrzfzj8gwvAg2WRyzvS66uI2Ug5K56HxhRDEJdrntPn0c8dvOmLkFWNNhhYTDiJ8vR
+         5IzRgNSFGdWY1FMX5KkJ1Qaw6cjcG9w4Ir3IGq1xjwO7RpAZvz3CLm/Mduvnc5ZI1K4S
+         5hi1EcntIOJJ3/ffdyZrJx4BohjiC4NN3A68qpi3E5KCe9qw+UKk6GTNSi6mbIz6CqLn
+         YdiqqRQ8zw0szNfp7xU0DHtTfmt5p9nwjMdxqvwbqO9Ko6l7lPqdVJQgkYnNNR+nUwwR
+         QTzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhijsnRHzAuUMamFtny9gL9y/al+bo8mwNazlpNt9XUVb+pYJgTRHqWOFYDtnrhdijL6Q=@kernel.org
+X-Gm-Message-State: AOJu0Yxu//hxaO6alzFg2Fs9Oijgk63ckG9EY67odUPKwReqgNbFllnV
+	hM0c4t7MFejqUJmTd0U8BlU1LDxt15VCN5MYC9ut4vubs3dJ9QcllfzBPKCCnToPDDM=
+X-Gm-Gg: ASbGncsQL7KroBD9Vkf4nmEfhYRckx77aY7nCZfn4g+CiqK3LLeVszTOpl79Pa88461
+	hBxSi7DEpoAGE02PFs/auqV9niB9hdgS04Mx24aRGM2gv3QOkYAanHbI6aVKukoh03IFGe/BN0B
+	uDuLL1cYvR1DqIj1EIhA5fSWB51NRo74136d9JnSBe3+86lw1FRH9uP6+oPtDxor6NbTrZtz/Id
+	n7kGbHYgkvgCq2gCZldo9DHULrb/vRAsTC0kBdSwto23N2zzN5r6V6IxfFqoJUhFzv6WMQIdZM1
+	//cNqezEU82Xefdp4KCzpuYeE7a3ck/2MoI825dEsArWuaIgzv9yYi8fRkLUo8VzCwQ3zB6EyDK
+	VVxNF9O8b5fPywwOKBvaRgZ/BjHmz4veJ497ucQ17
+X-Google-Smtp-Source: AGHT+IG/sZ0fRnLRzNDazSyxk5d4XUySLdxtGzOE7Ju/SX6SozwXYOit0mXXfrFc3DkmltPmuHnQ5w==
+X-Received: by 2002:a17:907:5ce:b0:aca:95eb:12e with SMTP id a640c23a62f3a-aec4df004a1mr1302412266b.24.1753092545787;
+        Mon, 21 Jul 2025 03:09:05 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.30])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6c7d68a1sm647649766b.46.2025.07.21.03.09.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jul 2025 03:09:05 -0700 (PDT)
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: arnd@arndb.de,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev
+Subject: [GIT PULL] Microchip AT91 defconfig updates for v6.17
+Date: Mon, 21 Jul 2025 13:09:03 +0300
+Message-ID: <20250721100904.568575-1-claudiu.beznea@tuxon.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/16] arm64: dts: axis: Add initial device tree support
-To: sungmin park <smn1196@coasia.com>, ksk4725@coasia.com,
- Jesper Nilsson <jesper.nilsson@axis.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Linus Walleij <linus.walleij@linaro.org>, Tomasz Figa
- <tomasz.figa@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Ravi Patel <ravi.patel@samsung.com>
-Cc: kenkim <kenkim@coasia.com>, Jongshin Park <pjsin865@coasia.com>,
- GunWoo Kim <gwk1013@coasia.com>, HaGyeong Kim <hgkim05@coasia.com>,
- GyoungBo Min <mingyoungbo@coasia.com>,
- Pankaj Dubey <pankaj.dubey@samsung.com>, Shradha Todi
- <shradha.t@samsung.com>, Inbaraj E <inbaraj.e@samsung.com>,
- Swathi K S <swathi.ks@samsung.com>, Hrishikesh <hrishikesh.d@samsung.com>,
- Dongjin Yang <dj76.yang@samsung.com>, Sang Min Kim
- <hypmean.kim@samsung.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-arm-kernel@axis.com, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, soc@lists.linux.dev
-References: <20250710002047.1573841-1-ksk4725@coasia.com>
- <20250710002047.1573841-15-ksk4725@coasia.com>
- <5998de2a-f3ae-46bf-a975-081da20bab03@kernel.org>
- <79482a4ec841743af1ef13ea9eea58bada47c42f.camel@coasia.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <79482a4ec841743af1ef13ea9eea58bada47c42f.camel@coasia.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 21/07/2025 09:08, sungmin park wrote:
->>> index fa1e04e87d1d..371005f3f41a 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -2320,6 +2320,20 @@ F:       drivers/crypto/axis
->>>  F:     drivers/mmc/host/usdhi6rol0.c
->>>  F:     drivers/pinctrl/pinctrl-artpec*
->>>  
->>> +ARM/ARTPEC ARM64 MACHINE SUPPORT
->>
->> This is samsung soc, so I need a pattern for that as well as I will
->> be
->> handling patches.
-> 
-> Can you please explain what you mean to say?
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
-Something like I sent for Tesla the same day or shortly after I
-commented on this.
+are available in the Git repository at:
 
->  
->>
->>> +M:     Jesper Nilsson <jesper.nilsson@axis.com>
->>> +M:     Ravi Patel <ravi.patel@samsung.com>
->>> +M:     SeonGu Kang <ksk4725@coasia.com>
->>> +M:     SungMin Park <smn1196@coasia.com>
->>
->> Please keep only maintainers who will actually perform reviews of the
->> code. I am not even sure if this is worth separate entry outside of
->> Samsung. Please list the IP blocks which are not Samsung here.
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-6.17
 
-Are you going to implement this in the next patch?
+for you to fetch changes up to fac62e76b870292648c62522efd1cfb72aefc079:
 
-> 
-> Is it fine if I merge the list with existing ARTPEC entry?
+  ARM: configs: sama5_defconfig: Select CONFIG_WILC1000_SDIO (2025-06-24 10:06:38 +0300)
 
-No. Did you read my message? I am not maintainer of existing ARTPEC SoC.
+----------------------------------------------------------------
+Microchip AT91 defconfig updates for v6.17
 
+This update includes:
+- the WILC1000 SDIO module
 
-> Samsung and Coasia entry can be removed from list as Axis will be only
-> maintaining the ARTPEC-8 SoC in future.
-> Please suggest your opinion here.
-> 
->>
->>> +L:     linux-arm-kernel@lists.infradead.org (moderated for non-
->>> subscribers)
->>> +L:     linux-samsung-soc@vger.kernel.org
->>> +L:     linux-arm-kernel@axis.com
->>> +S:     Maintained
->>> +F:     Documentation/devicetree/bindings/clock/axis,artpec*-
->>> clock.yaml
->>> +F:     arch/arm64/boot/dts/axis/
->>> +F:     drivers/clk/samsung/clk-artpec*.c
->>> +F:     include/dt-bindings/clock/axis,artpec*-clk.h
->>> +
->>>  ARM/ASPEED I2C DRIVER
->>>  M:     Ryan Chen <ryan_chen@aspeedtech.com>
->>>  R:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
->>> diff --git a/arch/arm64/Kconfig.platforms
->>> b/arch/arm64/Kconfig.platforms
->>> index 8b76821f190f..418ee47227c1 100644
->>> --- a/arch/arm64/Kconfig.platforms
->>> +++ b/arch/arm64/Kconfig.platforms
->>> @@ -40,6 +40,19 @@ config ARCH_APPLE
->>>           This enables support for Apple's in-house ARM SoC family,
->>> such
->>>           as the Apple M1.
->>>  
->>> +config ARCH_ARTPEC
->>> +       bool "Axis Communications ARTPEC SoC Family"
->>> +       help
->>> +          This enables support for the ARMv8 based ARTPEC SoC
->>> Family.
->>> +
->>> +config ARCH_ARTPEC8
->>
->> No, drop. One ARCH symbol.
->>
->>> +       bool "Axis ARTPEC-8 SoC Platform"
->>> +       depends on ARCH_ARTPEC
->>> +       depends on ARCH_EXYNOS
->>
->> And that's the proof that this is Samsung SoC.
-> 
-> Should I move the axis folder inside exynos just like google did? In
-> that case we don't need separate ARCH entry anymore.
-> Or should I follow the tesla FSD style to add axis folder outside
-> exynos? In that case I will keep ARCH_ARTPEC entry only.
-> Please suggest your opinion here.
+----------------------------------------------------------------
+Fabio Estevam (1):
+      ARM: configs: sama5_defconfig: Select CONFIG_WILC1000_SDIO
 
-
-You did not describe the hardware really. Neither in commit msg, nor in
-cover letter nor here where I asked to list the non-Samsung IP blocks. I
-will not provide you guidelines based on magic crystal ball guesses.
-
-
-Best regards,
-Krzysztof
+ arch/arm/configs/sama5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
