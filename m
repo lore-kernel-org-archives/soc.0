@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D8BDDBC
-	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 15:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6A8DDBC
+	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 15:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753111905; cv=none; b=EOtptzsLR8vyIsnBN1emERBilYJBQwSurMinw6X8hj/1+M92EabCL8Sp090z+JA+uY5LQK7m9tNOAV78c6HhIgkLpmH1eT+9S4SIBjMClxCxkj+cfVYNhxCkZ9r7s0ItAC4x+MFaH3ztqhgh7nSKjjWs0elYa4dfks6lxEKLLa0=
+	t=1753111907; cv=none; b=Xlyjy7zQYeYWsCTrkhezPlIFvDL2eZtbxZUnapSneRJjCUQx6Xj1O3POVbhpX7wsNgm9hHOKgHJXJS8gfLaXdrVJijszCHpHBBkA0i+xx3vzedhbtIN5BLFn2Cb+p0Abj9PKExhyho9eCbbYMbfJqYN2DxVrXpgN9EgZf1uYaLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753111905; c=relaxed/simple;
-	bh=NtJPhRbNhnk7nYcjQ+wp7ibmBQ2F373jVwcHDCtZLhc=;
+	s=arc-20240116; t=1753111907; c=relaxed/simple;
+	bh=g0UG6Xck7/RIqnfdz0eVdpvX/zsvjV+fg3xsDiZhYqQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ZvQ6AOIju1ENdvU4XTRi+tTiP1eXtnA5QZLPuGJ6Mj4sac/tSbbwjzGoXnIvS9zcKuEuIFqFVGdyQrkG2B8uHTcHNRApj+EUSTPYY23Fs6r3JvG1fOsYhbtYqnpkSPNAcWu1ONw8Ng93kbSrC2LWUuBcSFzpJp0m647OVbWPzCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LIR1daCH; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=j3MUDXhsTRhAvc9i0hLyrCtrVXFdA/fIVfT532f09L69oIrnNDJicHsltcEaUn7i1XYWJ5+NYt36ekn1pIB8emDgc0Q8YZ+Gmudik7ErrMi2C16uDHzRdUWnfzBtiBUd9tq3Agw9CxeCSqmA6UlzpKvvq/eftmHwnQ+6F7KkSdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=En/VgrpI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LIR1daCH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="En/VgrpI"
 Received: by smtp.kernel.org (Postfix)
-	id 73A53C4CEF6; Mon, 21 Jul 2025 15:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E29FC4CEED;
-	Mon, 21 Jul 2025 15:31:45 +0000 (UTC)
+	id 04D73C4CEF6; Mon, 21 Jul 2025 15:31:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3726C4CEED;
+	Mon, 21 Jul 2025 15:31:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753111905;
-	bh=NtJPhRbNhnk7nYcjQ+wp7ibmBQ2F373jVwcHDCtZLhc=;
+	s=k20201202; t=1753111906;
+	bh=g0UG6Xck7/RIqnfdz0eVdpvX/zsvjV+fg3xsDiZhYqQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LIR1daCH5kq5N/QyO0uoJNL4vzxFx6+RdaDO+8NAX8SIoRhVqHC6qw5LVRvh5V52G
-	 OFpX2RJfF+kuwFpy01HgItO8kXj3844RAFyuySGjGs3JybjN0ZgwABTl1wm8jrhQlG
-	 i0EnHS1L7mf7SoYLgRdDlkNiwRs0U7GYL5DxdJmGV6F1JcLdrHRzSMFOdWJo64c4xL
-	 v8bchdiJSEEnt/2ubZJ5Ld2ein1XMWZGdHKkmht6dDJtNeu9sevvb1OUkYEtJiVlpP
-	 s5NdJJpCkiEIU5lyL8vDs1HU963b/eRKcJEZyOUuCUC/Va9l6YGs9mzhcDYOOe+WEn
-	 s4U0Qhj2B+bUw==
+	b=En/VgrpIJ1+G8o+4dUg3VDppUTX04n231NX2Dj4DpM30MaTw+Ol+a+mGYFhcVJafF
+	 dOCgyrLGITbRSryPsuMFPhJLfuB/pUQDKL5Oa9/zdLhBs7G+DByaw8+J6haZ9WWSMt
+	 KDDbTqUjxLSOpcbSkgn39S5odJT+O9HzDclU4BAGqwjE9nBrleACMAF2sH1nQQELqm
+	 SJ7vPwc/2mmAF6wisrovJG8WHCwmyeoFuvni5R+LF0DqILiabU2Yh8eY+Mrwgkt/QJ
+	 qZkzesSHQLqPXvTkXQn/X1GIDxxPeYvPujtX1svEeXbtjfz8Qs6DfgVlTZXXS0eoVg
+	 TEISt8T8XjWfA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 69486383B266;
-	Mon, 21 Jul 2025 15:32:05 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACD3383B266;
+	Mon, 21 Jul 2025 15:32:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,14 +39,14 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] SOC FSL for 6.17
+Subject: Re: [GIT PULL 1/3] arm64: defconfig: for v6.17
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175311192400.94241.8046337745344453454.git-patchwork-notify@kernel.org>
-Date: Mon, 21 Jul 2025 15:32:04 +0000
-References: <c947d537-cae5-44f0-abd8-0c558bac46d2@csgroup.eu>
-In-Reply-To: <c947d537-cae5-44f0-abd8-0c558bac46d2@csgroup.eu>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
+ <175311192546.94241.11691724763064058302.git-patchwork-notify@kernel.org>
+Date: Mon, 21 Jul 2025 15:32:05 +0000
+References: <20250709191523.171359-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250709191523.171359-4-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
@@ -54,19 +54,24 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 10 Jul 2025 08:44:23 +0200 you wrote:
-> Hi Arnd,
+On Wed,  9 Jul 2025 21:15:20 +0200 you wrote:
+> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 > 
-> Please pull the following Freescale Soc Drivers changes for 6.17
+>   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 > 
-> The tegra change is outside soc/fsl tree but it is acked by maintainer
-> of DRM DRIVERS FOR NVIDIA TEGRA.
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-defconfig-6.17
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] SOC FSL for 6.17
-    https://git.kernel.org/soc/soc/c/d60b1224b905
+  - [GIT,PULL,1/3] arm64: defconfig: for v6.17
+    (no matching commit)
+  - [GIT,PULL,2/3] ARM: dts: samsung: dts for v6.17
+    https://git.kernel.org/soc/soc/c/ad6d5af8bb01
+  - [GIT,PULL,3/3] arm64: dts: samsung: dts for v6.17
+    https://git.kernel.org/soc/soc/c/e65761ff6b79
 
 You are awesome, thank you!
 -- 
