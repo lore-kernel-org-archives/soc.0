@@ -1,184 +1,292 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from spam.coasia.com (mail2.coasia.com [112.168.119.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8B81A8401
-	for <soc@lists.linux.dev>; Sun, 20 Jul 2025 12:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021EA80C1C
+	for <soc@lists.linux.dev>; Mon, 21 Jul 2025 04:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=112.168.119.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753013368; cv=none; b=t+mvkU2ehLhDgXoJjRZiaiUU10guALEOpS5sCEf3cDNZLhmoI2cgKDZBrRvyXZafmjyQqqkyxZYqQodgAUTMjIdrZ13HLKRHGCti1CD+WYgDp0LGj+O8k04gYHj9EFOQGBSgNLngFjfU4a3F+Z2yeiFx0Wl3XX3LA9bf9HQsvCQ=
+	t=1753072319; cv=none; b=HxrdzQM6LnnXXlIx4wxchAjR9QfJjgavWkyBDYBcGs90kCsHT7wapIGYUfb/thSUpJysLhG0vwxMezC23sme2kP4tuaP+Nx3TesYIwg6BoNbTcQNqhi/cxcz2cTs/JSDlxoPKzg6lk2NnSWA9Ojuh8Eu3Hh92cJtiEFK5M1kAiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753013368; c=relaxed/simple;
-	bh=Jopo4UGC0hzZfenG92CWK76ypqMqLd8YZPeM7hLeq+I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QVfnvgb3FTQTCaIjsbqG1d8ECbgNo6kdaJxkfDX3Zur+BaXn12pHH8dLkcrhx86x6MWfxDqQPHYav9FyOWASm3TNGKrx1vpXyWiLvWnilbcqWiT2NBYp1zDuHhjon1+dxU5dApItb+jhT/wt7w4iPNeyN54Tq1iZFrZxoqrn6HE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y6oWiULn; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1753072319; c=relaxed/simple;
+	bh=lxa9Bn6EeyGmj6jcfCOacOxEWNI2oVNDRLzi09fzPQc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pJi+EUlANq1wHB7Yhsbhg2qPvRp/X1z8AZ1SqG+pjjVKwkzTvsvsDbDVHhUVgIcUw9eW8Xmfcadd0JUzl1HBDHxnaGpx4n7/9eHr+8KOCsA+9DPjXfe772rwll8zDmHPvrX0vXmbZD6v7Kr8CcqaBo5w+UqJQStWhtEBiEd8/Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=coasia.com; spf=pass smtp.mailfrom=coasia.com; dkim=pass (1024-bit key) header.d=coasia.com header.i=@coasia.com header.b=Curs6hNq; arc=none smtp.client-ip=112.168.119.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=coasia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coasia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y6oWiULn"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-612a45284e1so501112a12.2
-        for <soc@lists.linux.dev>; Sun, 20 Jul 2025 05:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753013365; x=1753618165; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5dngmF7RxUnwp2FFulLPbgAhN03C1hWVB9WfkRY014U=;
-        b=Y6oWiULnPccJ2ILnpkBhb8J5MpKFTNNZNcHn9/IbFo5VEZhJw+ZDP7SmrX8EjhnXeV
-         ymlZIJ4dmORa6+wXT6AYShoB+0zV/YCrGk0aVj4zJwhgZWERHml69URjwmrot+YsTeug
-         ho46ziDC5hHM4ulxp0E2wh4Mo9Q7wQvU1+3/2O3kvVL3oDxtrn8cXpARYMa+PwQHY5Od
-         MyMejWVrzzUvEszkScOz79x2pOEvj34/DsRuijX+fBQGN/lMfMXIF/iX8CIJLKG8NYsu
-         CyiytO38ZLFjdPzkOpa29hb91zT60u+hsAkVfhvKPuqYBbVls4zdN2YUvptBBAW1e7AI
-         4PIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753013365; x=1753618165;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5dngmF7RxUnwp2FFulLPbgAhN03C1hWVB9WfkRY014U=;
-        b=pnWL+DVuLbvgV8FwKny9dBejCyhPHc5bpURNYBuV9cEQp7n+gs7hm7CpC4qJ4ujB3j
-         IJerrjH/ETInltbPZ1YvGOWMg6BzKBbSTM0trcJGfS78JGEvFZ3iA0bZc0onHON1tbSs
-         /HTxFs/8pm28qXtQ3WAfMVYbjbEfl+ubA5waWzn5oGHue9KmShQA0x5WI7wfDEhvxK/e
-         rVluTJB4icj3fEIQZJOmwtkQSXzhdJIa39750M2ldGzirCvi8rgC1jts6za2b7d7PY/A
-         DfOdIDBOW7yyAEblxrwoZ32YxazNEEAcxC/mK35d/yRVaKCPr8C9JzmmUubeZvFBMFv/
-         TwjA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwScpORjj/uYTiD5p+LUL+ftDJCw4zcgFkygsgPPPn8IKpLFwtDLlxU6zyhBdIa8REmcg=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy+ofbqBPfJnrmnx1qm3NjJY0W5/ExSIep30UYJo20szeHqwD4f
-	wJcCHzMx2SGnrFDHCwJVP/Vq7WBgxuLHs1uv0I9iTQNrvzCkbA+CC3+RLaJquTm2BLc=
-X-Gm-Gg: ASbGncu9+MTHDW3RbvEfdRwG6177U8O9l1jGYrsw4H1pXOX78Ohsa8eOBOZTQeztDb6
-	bTm+V523v2WTIieXoe0BcDJ6HwDlp/xSl0s6HQrJ0WimfpZSRF8hWZXq/wNXQN2dDBuan+5LAhw
-	Z5DjAuJsQMpUwvQhFauzNLHyVtv7NuzTXYuSVkdpSbIrxYPIUc22ns3XzXkZQD7G10To7z4letJ
-	P1s5tzkvRgA09INdIPI5Pkaz0nTV2uvWwfAnE5wpTdqH80OLWbSMIcs2Wyjt1xfJ/vp6yvxbJKR
-	pDhLOtflVBKwmP4fnXUlijsMyETMhaYdYVJS5GoNto2+LtAaMb2wW8QdRgoA1yj3Uw4sdZDgmBb
-	GPoP4IePnFlr9U5qt8Myw6PqRuOlm2Nam2CgZY1q3ig==
-X-Google-Smtp-Source: AGHT+IHrzefygyqO9fMmkmrMFf9WOiacpbBxnamcgRCXplTdrv6UqBqckrEEpwbLnx+lw/ADNTQtQQ==
-X-Received: by 2002:a17:907:3c8d:b0:ade:902e:7b4b with SMTP id a640c23a62f3a-ae9c99ed384mr626193366b.7.1753013364927;
-        Sun, 20 Jul 2025 05:09:24 -0700 (PDT)
-Received: from [192.168.1.29] ([178.197.222.89])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6cafa958sm480360466b.166.2025.07.20.05.09.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Jul 2025 05:09:23 -0700 (PDT)
-Message-ID: <7ddb77bf-173a-4117-80ac-d0f32bf067ee@linaro.org>
-Date: Sun, 20 Jul 2025 14:09:20 +0200
+	dkim=pass (1024-bit key) header.d=coasia.com header.i=@coasia.com header.b="Curs6hNq"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=coasia.com; s=coasia;
+	t=1753072312; bh=lxa9Bn6EeyGmj6jcfCOacOxEWNI2oVNDRLzi09fzPQc=;
+	l=6608; h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
+	b=Curs6hNqcd4XWL8v1kjNDlXYBEUW0tiNmTWzWVlVaKxxneP3Fmy0RQYFxUEM9u+3/
+	 y+b9y4Ms51gFqH8Earjp2LxtNS3DQRLPEoqRzxbqaatiE0Rcf9XXUZYObJ9WKv7egT
+	 1yxJzgoL1p+c7xzoS9n/TaaK8ZYAOy0MSaYrBrQw=
+Received: from unknown (HELO ?192.168.1.65?) (119.65.249.123)
+	by 192.168.10.159 with ESMTP; 21 Jul 2025 13:31:52 +0900
+X-Original-SENDERIP: 119.65.249.123
+X-Original-SENDERCOUNTRY: KR, South Korea 
+X-Original-MAILFROM: hgkim05@coasia.com
+X-Original-RCPTTO: krzk@kernel.org,
+	ksk4725@coasia.com,
+	jesper.nilsson@axis.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	s.nawrocki@samsung.com,
+	cw00.choi@samsung.com,
+	alim.akhtar@samsung.com,
+	linus.walleij@linaro.org,
+	tomasz.figa@gmail.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	ravi.patel@samsung.com,
+	smn1196@coasia.com,
+	kenkim@coasia.com,
+	pjsin865@coasia.com,
+	gwk1013@coasia.com,
+	mingyoungbo@coasia.com,
+	pankaj.dubey@samsung.com,
+	shradha.t@samsung.com,
+	inbaraj.e@samsung.com,
+	swathi.ks@samsung.com,
+	hrishikesh.d@samsung.com,
+	dj76.yang@samsung.com,
+	hypmean.kim@samsung.com,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@axis.com,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	soc@lists.linux.dev
+Message-ID: <fd261b5b4452cc797f50bb3fc8cfe93e4a38e477.camel@coasia.com>
+Subject: Re: [PATCH 02/16] dt-bindings: clock: Add ARTPEC-8 CMU bindings
+From: Hakyeong Kim <hgkim05@coasia.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, ksk4725@coasia.com, Jesper
+ Nilsson <jesper.nilsson@axis.com>, Michael Turquette
+ <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
+ <conor+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo
+ Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>,  Ravi Patel <ravi.patel@samsung.com>,
+ SungMin Park <smn1196@coasia.com>
+Cc: kenkim <kenkim@coasia.com>, Jongshin Park <pjsin865@coasia.com>, GunWoo
+ Kim <gwk1013@coasia.com>, GyoungBo Min <mingyoungbo@coasia.com>, Pankaj
+ Dubey <pankaj.dubey@samsung.com>, Shradha Todi <shradha.t@samsung.com>,
+ Inbaraj E <inbaraj.e@samsung.com>, Swathi K S <swathi.ks@samsung.com>,
+ Hrishikesh <hrishikesh.d@samsung.com>, Dongjin Yang
+ <dj76.yang@samsung.com>, Sang Min Kim <hypmean.kim@samsung.com>,
+ linux-kernel@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org,  linux-arm-kernel@axis.com,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, soc@lists.linux.dev
+Date: Mon, 21 Jul 2025 13:31:53 +0900
+In-Reply-To: <7b9a8203-2d66-4735-a6a2-762f57fb5cef@kernel.org>
+References: <20250710002047.1573841-1-ksk4725@coasia.com>
+	 <20250710002047.1573841-3-ksk4725@coasia.com>
+	 <7b9a8203-2d66-4735-a6a2-762f57fb5cef@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
-To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Jan Kotas <jank@cadence.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>,
- Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?=
- <pgaj@cadence.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Frank Li <Frank.Li@nxp.com>, Boris Brezillon <bbrezillon@kernel.org>
-Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
- "soc@lists.linux.dev" <soc@lists.linux.dev>,
- "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
- "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>
-References: <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-0-cebd810e7e26@axiado.com>
- <b7322d03-2ff9-48a3-bdc6-0e95382ed83f@axiado.com>
- <e461e5ed-f512-4d3b-9903-8092dab7f81d@linaro.org>
- <06f00d05-b8ca-41fa-9e5e-9cee3cfcfae1@axiado.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- 2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <06f00d05-b8ca-41fa-9e5e-9cee3cfcfae1@axiado.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 19/07/2025 03:09, Harshit Shah wrote:
-> On 7/17/2025 11:14 PM, Krzysztof Kozlowski wrote:
->>> Hi all,
->>>
->>> This patch series was reviewed by Krzysztof, and I am wondering if it’s
->>> queued for the next merge window. Thanks in advance!
->> It's not, unless you received clear notice about it. Please read
->> maintainer soc profile how to send patches for merging.
-> 
-> Thank you Krzysztof for the reference.
-> 
-> We went through maintainer-soc.rst 
-> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/maintainer-soc.rst?h=v6.16-rc1#n73) 
-> 
-> 
-> It mentions about the special case where "Introducing a completely new 
-> SoC platform." we can submit patches to soc@kernel.org directly.
-> 
-> However I see two different points in the doc.
-> 
-> 1. Submitting patches directly to soc@kernel.org with email
-> 
-> 2. There is also mention about the "Branches and Pull requests"
-> 
-> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/maintainer-soc.rst?h=v6.16-rc1#n186). 
-> 
-> 
-> I think if we need to use this approach then we need to create a new 
-> branch on soc and create a pull request based on the same. (with the soc 
-> tree[1])
+On Thu, 2025-07-10 at 09:10 +0200, Krzysztof Kozlowski wrote:
+> On 10/07/2025 02:20, ksk4725@coasia.com=C2=A0wrote:
+> > From: Hakyeong Kim <hgkim05@coasia.com>
+> >=20
+> > Add dt-schema for ARTPEC-8 SoC clock controller.
+> >=20
+> > Add device-tree binding definitions for following CMU blocks:
+> > - CMU_CMU
+> > - CMU_BUS
+> > - CMU_CORE
+> > - CMU_CPUCL
+> > - CMU_FSYS
+> > - CMU_IMEM
+> > - CMU_PERI
+> >=20
+> > Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
+> > Signed-off-by: Hakyeong Kim <hgkim05@coasia.com>
+>=20
+> Confusing order, unless you really understand this, but considering
+> you
+> did not add your own SoB I claim you do not understand this. What
+> does
+> Ravi's SoB mean here?
 
-You do not create branches on other poeple's trees (like soc). You
-create branch on your own tree.
+Ok, I will update the SoB section in all the patches.
 
-You can go with 1 or 2, up to you, I don't know which one is preferred
-by Arnd for new boards.
+>=20
+> > ---
+> > =C2=A0.../bindings/clock/axis,artpec8-clock.yaml=C2=A0=C2=A0=C2=A0 | 22=
+4
+> > ++++++++++++++++++
+> > =C2=A01 file changed, 224 insertions(+)
+> > =C2=A0create mode 100644
+> > Documentation/devicetree/bindings/clock/axis,artpec8-clock.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/clock/axis,artpec8-
+> > clock.yaml b/Documentation/devicetree/bindings/clock/axis,artpec8-
+> > clock.yaml
+> > new file mode 100644
+> > index 000000000000..baacea10599b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/axis,artpec8-
+> > clock.yaml
+> > @@ -0,0 +1,224 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/axis,artpec8-clock.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Axis ARTPEC-8 SoC clock controller
+> > +
+> > +maintainers:
+> > +=C2=A0 - Jesper Nilsson <jesper.nilsson@axis.com>
+> > +
+> > +description: |
+> > +=C2=A0 ARTPEC-8 clock controller is comprised of several CMU units,
+> > generating
+> > +=C2=A0 clocks for different domains. Those CMU units are modeled as
+> > separate device
+> > +=C2=A0 tree nodes, and might depend on each other. The root clock in
+> > that root tree
+> > +=C2=A0 is an external clock: OSCCLK (25 MHz). This external clock must
+> > be defined
+> > +=C2=A0 as a fixed-rate clock in dts.
+> > +
+> > +=C2=A0 CMU_CMU is a top-level CMU, where all base clocks are prepared
+> > using PLLs and
+> > +=C2=A0 dividers; all other clocks of function blocks (other CMUs) are
+> > usually
+> > +=C2=A0 derived from CMU_CMU.
+> > +
+> > +=C2=A0 Each clock is assigned an identifier and client nodes can use
+> > this identifier
+> > +=C2=A0 to specify the clock which they consume. All clocks available
+> > for usage
+> > +=C2=A0 in clock consumer nodes are defined as preprocessor macros in
+> > +=C2=A0 'include/dt-bindings/clock/axis,artpec8-clk.h' header.
+> > +
+> > +properties:
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 enum:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-cmu
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-bus
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-core
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-cpucl
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-fsys
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-imem
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - axis,artpec8-cmu-peri
+> > +
+> > +=C2=A0 clocks:
+> > +=C2=A0=C2=A0=C2=A0 minItems: 1
+> > +=C2=A0=C2=A0=C2=A0 maxItems: 5
+> > +
+> > +=C2=A0 clock-names:
+> > +=C2=A0=C2=A0=C2=A0 minItems: 1
+> > +=C2=A0=C2=A0=C2=A0 maxItems: 5
+> > +
+> > +=C2=A0 "#clock-cells":
+> > +=C2=A0=C2=A0=C2=A0 const: 1
+> > +
+> > +=C2=A0 reg:
+> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
+>=20
+> reg goes second, after compatible (Samsung bindings are not the best
+> example because I converted them long time ago before many coding
+> style
+> practices were encouraged)
 
+Ok, I will move the reg property.
 
+>=20
+> > +
+> > +required:
+> > +=C2=A0 - compatible
+> > +=C2=A0 - reg
+> > +=C2=A0 - "#clock-cells"
+> > +=C2=A0 - clocks
+> > +=C2=A0 - clock-names
+> > +
+> > +allOf:
+> > +=C2=A0 - if:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 contains:
+>=20
+> Drop contains.
 
-Best regards,
-Krzysztof
+Ok, I will remove the contains wherever applicable.
+
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 con=
+st: axis,artpec8-cmu-cmu
+> > +
+> > +=C2=A0=C2=A0=C2=A0 then:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - d=
+escription: External reference clock (25 MHz)
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - c=
+onst: fin_pll
+> > +
+> > +=C2=A0 - if:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 contains:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 con=
+st: axis,artpec8-cmu-bus
+> > +
+> > +=C2=A0=C2=A0=C2=A0 then:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - d=
+escription: External reference clock (25 MHz)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - d=
+escription: CMU_BUS BUS clock (from CMU_CMU)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - d=
+escription: CMU_BUS DLP clock (from CMU_CMU)
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - c=
+onst: fin_pll
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - c=
+onst: dout_clkcmu_bus_bus
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - c=
+onst: dout_clkcmu_bus_dlp
+>=20
+> All these names should be changed to match what is the input. Look at
+> latest bindings, we moved away from that style.
+
+Ok, I will modify clock-names to "bus" and "dlp" and will update at the
+other related places also.
+
+Thanks,
+Hakyeong Kim
+
+>=20
+>=20
+>=20
+> Best regards,
+> Krzysztof
+
