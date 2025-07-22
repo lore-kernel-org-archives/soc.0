@@ -1,110 +1,128 @@
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402402853F2
-	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 20:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE703225A31
+	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 20:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753215966; cv=none; b=f2red7r+lHmQcI7gJxdMmmT40kO3sRo6KsK9a9peAr+J1KlRwKvieHlaiVsdccf+ZmWs9IisSQ6vg6Tt5ef1zgYo74/81UVruWtBmP1mJw/9YVOHdwW8NXJIe+eJrzz/7rYs4D2uuA5FLkXvrWeID17auM5WfFNuOwKXNGm3B08=
+	t=1753217423; cv=none; b=G3P7u57X3BaBnJyOi3JP7BIBxFoU6CwLZi70gJSird6fyXHq2H+d0Dh6dnGKOo3vopR628DM22v/GqwpQ/hibZ1kv5RscfeRcapsBuWb1kAFsnxrF4dh+DE5k927aXpRkOhM/63koFG3COJ+BDiN1J3QqoLAqyOimzdhC3zyQ3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753215966; c=relaxed/simple;
-	bh=W/bAgLR8ME2Pde2JaM5U+DcHtwE1H3uxp+kz01tcaag=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=mNuSag6Oy/Z/3k27rg2ZmSyRIp8o8jftS5IyXhzRVzu+uNEMDYng8sHv2V3K6FVSNlZIli4T84NeIkvrOzwgBQq6ObktxLnKQhFxYaEtEUgVKQwe8FEeous+olxq3NpTegPyufaIpqDdKhqN8h6PxTEAnbBUrnNzILjDk4QwN5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Rd52q2Bf; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HKrle+RS; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1753217423; c=relaxed/simple;
+	bh=f/I8/fIH0xU5nAu3HC77uSsvJqxvUNcTGIKRn1NEDCc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=QRCX6UZUDOaSuGTE2A5qmzz/Sb8Gbyyi7/nV1G9nMyKt7FxJSu8OWrGsJ1rMp3OWifo91UsKcdDiAzCyT+0EIhkXHpdjz5as2HsRuQzhhVnzTom6w1Zd0oPsHMvO//tScgKul6jChq9Y+1FoOGThpsLx26qWd47ZFGM553sbLyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQCzqO/G; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Rd52q2Bf";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HKrle+RS"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 755BDEC0496;
-	Tue, 22 Jul 2025 16:26:04 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Tue, 22 Jul 2025 16:26:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1753215964;
-	 x=1753302364; bh=MPEMmEf06EwqkDHW4zrUmLX7eAmlPmYFpIvUGPbMw7U=; b=
-	Rd52q2BfCL9/WIb19/Ysv8UGZ9WK2HNVOX2Ey9x/s0HqweP0jYNyn7Q30j86Jyz/
-	7CF70njPB9GVR2qrqGrUkTYROhK+krc25ZRhpKhKkS6owDpiws1xKZyJ0WKaNoH9
-	4iem1FH9Ip488NgaR/BtEV6IBdx/6lqO7G0VKV0TvvGfUmt3HXIM6tG+Rbm/MPZh
-	QZBeHHDR2pN9csn7aHzlCbRRAnsFZbCi++sePtC3X3Fx4Y/wsnv4skNZXwzNpuPz
-	uW/lWbyLzhhxLb1RRN5isACPfh1C8MJyDky8jbssKZLBbzn1r+TjG/oTJxMDUuWO
-	x13cnNR7lYq+nRftU9QlkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1753215964; x=
-	1753302364; bh=MPEMmEf06EwqkDHW4zrUmLX7eAmlPmYFpIvUGPbMw7U=; b=H
-	Krle+RSR9rlUkkLlbsHvYazh9bnORgBW3Ptun03Rn8DBtmu+7qLuWz6Ec+2sIkdf
-	ftWm14RvJCnVNhnvi07AzQ5HTa8PEV2qbt/E6gpMIc7+rfrYMZxHlmTEDqMU0mMI
-	sWMFaKdwa8cvkV3Ji82GEld4Jf9NZIbp6qCkko5/95INV0rmvctHoQ+okzmehnuD
-	W66mPIs7+MXhzkRA60xgC54gz9/xlq9I6Rs8sGXwHcgZCykp+MtjJlcDr4Dz5k04
-	bJJNX9WlrQs7DUFNOCyM39OJSUiMprnGz8eVG8cGrWKys2Vkj5sp7qeABaq66hX9
-	VwF1pOWEnv8eMqHl1lp4g==
-X-ME-Sender: <xms:2_N_aLPMzpfikfdmv8xVlSV_TZCO10pf9ZZhU4ol_6YTuEryAy-4lQ>
-    <xme:2_N_aF8W8KVR9sO-aPd2MWLIKJ7ViLWGroBdfazZtkhU5JCUfOXN2KT3ex_2mWyst
-    l4f5j6bXGnhpacXIto>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejheekhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopehkhhhilhhmrghnsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhope
-    hlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhr
-    ghdprhgtphhtthhopehsohgtsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoh
-    eplhhinhhugidqohhmrghpsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:3PN_aHM83_J50gnp6V0Ph2bL-JK6lWO6KCToQpcVUH8rbOLRg9n4XA>
-    <xmx:3PN_aNehchB_5QVS6ARKphS_Iw4kAtWBO3j03SKen2C5-0Maoy_vXg>
-    <xmx:3PN_aMs8Cyj35T7ZtPmy6o1_AT-4tXY_PkLx2RxcbMQ2kIwOxwJ7ow>
-    <xmx:3PN_aGkBoW_i_fcRJSZ1L-Zhnq5OSPdONC4bhAHEsH5bF2p_jHIh_g>
-    <xmx:3PN_aBZiQD9s7Pi5XJvKPPmXagN2SE7nx7sN9pA2iYeFlXiKuQU9JC5Y>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E0A63700069; Tue, 22 Jul 2025 16:26:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQCzqO/G"
+Received: by smtp.kernel.org (Postfix)
+	id 897E9C4CEF6; Tue, 22 Jul 2025 20:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F667C4CEEB
+	for <soc@kernel.org>; Tue, 22 Jul 2025 20:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753217423;
+	bh=f/I8/fIH0xU5nAu3HC77uSsvJqxvUNcTGIKRn1NEDCc=;
+	h=Subject:From:Date:To:Cc:From;
+	b=eQCzqO/GTav+pjkU26TrT3xy92LYB4tDPFHCye98HMaJUlE4WfvDqZzgjA582abMg
+	 RNlp4Ok/39Y0qoGP67RO60K0PznXCbLC36c5rGVWWhEelqYGz+sst5b3iqmX5LvMOo
+	 BGE878qvon3NjZoR2KjGGBSopBovXANa10xDRPJ7GHN+Xbb9P6nHrIj+p0ECQsANH/
+	 ls7tYQ5lDPaQjYWw1cDw6KEUxo2f0hNsH+JNYRYosDqyyKOHpPiCoOJjmhDkX8YchJ
+	 pwDP8gT+O9iQl0PO7fodxQlF0YYy2AXaKpxyxqiCqHboIFrR5W+mV+wJdmq8UXSt2Y
+	 sZ3t+WrXW1XBQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EE8D3383BF5D;
+	Tue, 22 Jul 2025 20:50:42 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T977abbae7a5b9ff8
-Date: Tue, 22 Jul 2025 22:25:42 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kevin Hilman" <khilman@baylibre.com>, soc@lists.linux.dev
-Cc: Linux-OMAP <linux-omap@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <42241d2a-bf66-4ef0-a083-b0d4f0c3f9b2@app.fastmail.com>
-In-Reply-To: <7h34b4xcxb.fsf@baylibre.com>
-References: <7h34b4xcxb.fsf@baylibre.com>
-Subject: Re: [GIT PULL] soc: OMAP updates for v6.17
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <175321744158.949540.5554961953760118970.git-patchwork-summary@kernel.org>
+Date: Tue, 22 Jul 2025 20:50:41 +0000
+To: soc@kernel.org
+Cc: soc@kernel.org
 
-On Thu, Jul 10, 2025, at 17:50, Kevin Hilman wrote:
-> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
->
-> ----------------------------------------------------------------
-> Kory Maincent (2):
->       arm: omap2plus_defconfig: Enable TPS65219 regulator
->       arm: multi_v7_defconfig: Enable TPS65219 regulator
->
-> Li Jun (1):
->       bus: del unnecessary init var
+Hello:
 
-Unfortunately these are changes that I really want in separate
-branches, for defconfig and drivers respectively.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-Since all three changes are trivial, I ended up cherry-picking
-the commits to where I want them. I hope that's ok with you,
-let me know if you need the stable commit IDs.
+Series: Axiado AX3000 SoC and Evaluation Board Support
+  Submitter: Harshit Shah <hshah@axiado.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=984867
+  Lore link: https://lore.kernel.org/r/20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com
+    Patches: [v6,01/10] dt-bindings: vendor-prefixes: Add Axiado Corporation
+             [v6,02/10] dt-bindings: arm: axiado: add AX3000 EVK compatible strings
+             [v6,03/10] dt-bindings: gpio: cdns: convert to YAML
+             [v6,04/10] dt-bindings: gpio: cdns: add Axiado AX3000 GPIO variant
+             [v6,05/10] dt-bindings: serial: cdns: add Axiado AX3000 UART controller
+             [v6,06/10] dt-bindings: i3c: cdns: add Axiado AX3000 I3C controller
+             [v6,07/10] arm64: add Axiado SoC family
+             [v6,08/10] arm64: dts: axiado: Add initial support for AX3000 SoC and eval board
+             [v6,09/10] arm64: defconfig: enable the Axiado family
+             [v6,10/10] MAINTAINERS: Add entry for Axiado
 
-     Arnd
+Patch: [GIT,PULL] More Qualcomm Arm32 DeviceTree updates for v6.17
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=984048
+  Lore link: https://lore.kernel.org/r/20250720030959.285762-1-andersson@kernel.org
+
+Series: [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.17
+  Submitter: Vignesh Raghavendra <vigneshr@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982586
+  Lore link: https://lore.kernel.org/r/a0401460-8c67-4c29-a6cf-fa4bdf33bc7d@ti.com
+    Patches: [GIT,PULL,1/2] arm64: dts: ti: K3 devicetree updates for v6.17
+             [GIT,PULL,2/2] arm64: Kconfig: Updates for v6.17 for TI K3 platforms
+
+Patch: [GIT,PULL] Allwinner device tree changes for 6.17
+  Submitter: Chen-Yu Tsai <wens@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982623
+  Lore link: https://lore.kernel.org/r/aHaQFe3Lr8Qzyb1M@wens.tw
+
+Patch: [GIT,PULL] RISC-V SoC defconfig for v6.17
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=983052
+  Lore link: https://lore.kernel.org/r/20250716-defrost-regime-20a55ed925ad@spud
+
+Patch: [GIT,PULL] amlogic ARM64 DT updates for v6.17
+  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982831
+  Lore link: https://lore.kernel.org/r/3d93b621-9544-4a68-85db-6f87a9e8fa5c@linaro.org
+
+Patch: [GIT,PULL] Qualcomm Arm64 DeviceTree updates for v6.17
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982777
+  Lore link: https://lore.kernel.org/r/20250716031059.76348-1-andersson@kernel.org
+
+Patch: [GIT,PULL,RESEND] RISC-V SpacemiT Devicetrees for v6.17
+  Submitter: Yixun Lan <dlan@gentoo.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982278
+  Lore link: https://lore.kernel.org/r/20250715014214-GYA540030@gentoo
+
+Series: [GIT,PULL,1/4] MediaTek arm32 updates for v6.17
+  Submitter: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=981411
+  Lore link: https://lore.kernel.org/r/20250711083656.33538-1-angelogioacchino.delregno@collabora.com
+    Patches: [GIT,PULL,1/4] MediaTek arm32 updates for v6.17
+
+
+Total patches: 19
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
