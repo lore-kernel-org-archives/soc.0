@@ -1,98 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2095.outbound.protection.outlook.com [40.107.220.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B205927A92B
-	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 19:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753211423; cv=none; b=B4+2ZMEIVcM5VOf3gsHXrSxAvEmi3xz4E4eya3SXLomksbxPUC9LKyE6EgsLcYLRc0oJI9DxXpDxtYjwjEEzbmu0ik33McXdFZamVEmxFKKi2xpTeY0J3uXEdzyyTXiIMYqgF+xGJOec8GBGaDvMGGmmeN9WheNUA2coca2XD9I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753211423; c=relaxed/simple;
-	bh=SdugJy50Q4TMTrjMhlSAZ994LuuvER2A06jpAWhGgJU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hvaWhgDNZjguKET8yOZyYE+2LszAoOpsbyhdx4Y4NN8C+N+8azVh6owpY5Xkloka1ov/uxgCAYHYm25qYcK9Kfi7VHnlC/qC+G4CP3uE62KjeKotb+r/n8sqOeh8X+aSMXaqCi7Tz1jE/pBFWkfpU15y2Q2JwdevO6ZI1GpeB3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=a8Qktq1z; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DBC40BF5
+	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 20:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753215373; cv=fail; b=PvSSoOHcT4fisTog/cQWL1hU8m5Y/2ERdms7Ys1MiHbM90B/k+1xUAoFqQysZLNjtLyQmrIyEe/xULauYRJdGR9tWyfjXd2nfbKFW/EoYfCmFLncL8z8aS+0tZd/gD6HpK29xOTn5LRbgXkAq3ZHbQDVmyS56tGsTbpwrgQ/uZI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753215373; c=relaxed/simple;
+	bh=2P0fqQ4rK4FrrY5jP0Z+4ts52LSAML5KAClXxLndh0k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iTXbZf808kaSE4U1tuMA1UC/J+1D4TcdSUDST2fv0CclKjnhQpUmYenFEPfX9v9aL0Mv2x5ll917wFawOi2Ob0hTQ+oQ4yeXI+1Ul2byZA7TTzPyYi0seE+qDucZDkqVykd+ZtYy+s16fE9yr86mr83OW1xTI03YJXgUQlM49SY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com; spf=pass smtp.mailfrom=axiado.com; dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b=Y/sYZMjb; arc=fail smtp.client-ip=40.107.220.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axiado.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="a8Qktq1z"
-Received: by smtp.kernel.org (Postfix)
-	id 5D486C4CEF6; Tue, 22 Jul 2025 19:10:23 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 803EBC4CEEB;
-	Tue, 22 Jul 2025 19:10:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 803EBC4CEEB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
-	bh=9frWBqg+9ABHbKCRSF6hDwgCj340VYF0PN8eIRHYKXo=; b=a8Qktq1z7Iyx92raGpzD4E0N1G
-	LQF4L8yD+Q5WzmxTbpmX6ltLOeo2Qia45RVqu70ZGrdtSBBBwOhs2tzVE35do/p3QXgcq8R7VMiwW
-	/03RfQDkxo5tLQQri/W54X8dnDx8JvOELSkXGZqp+da4/lHYBQ8Pr2tOf40jc71f71WEk9ywgkXB3
-	7G6nQzlSPAC8pGubLCxxEV3rLDTmnJniDMPtjaS/kDd0MI2DLXixqmH6iwUo3TrDzL132G7O82jHG
-	xinQELQB0nvB5LDv5YOUvHTiua0+pOD6L6mHFn1Z0KeMF9hYRYbhZUAVTDRZgQI6vr0c7avo43FOU
-	F67p7Q5A==;
-Received: from i53875ad2.versanet.de ([83.135.90.210] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ueINX-0006hu-IO; Tue, 22 Jul 2025 21:10:19 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts fixes for 6.16 #2
-Date: Tue, 22 Jul 2025 21:10:18 +0200
-Message-ID: <1927555.tdWV9SEqCh@diego>
+	dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b="Y/sYZMjb"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EeiN8zQ8Pz799J/cpRtcp3878CphwUQjqNcf3SW9v9MRVXjLz2qQwcSuJDaUm1PwymzoAcwQQh3+TJpB0nfM48wFKi33zBWh/zeRdt4xpbGbAPc93EGjeGaHkIygBYnZmVjYnQj2dnvO4Eo2uK8GK1uirFSrbL1Y64Mr18soBIZ+39Q0ruXt+CjK0qZ8RjPx5QNzLbWW8TQ260W96HVg3528jFxbnS3s+N2+yKvAIHPzrkYp7sz76Ye7kO2hoRjVNG0R8VxKuEVuWZZfFvxuJdtY4Vy+LSXM2nnNZx5KdtcPj6JacznK70ZNMvRMlCFDfh3qglQytqsUD2XR47WhJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=84FxozLh+z3Mz5Az4nAW/8Rmh+SGSo1C4c0QaxoJcYs=;
+ b=AAyttlb51m8/muxw3ljYLdODbk1Sr71GQRhTF+tF9YhLz3TM3VRpRi9U1E2JxK1ovu30UGQ0CfIdA32rPia/k0d1mEd5PQd5yl0NmCmkYu3QdyuQLZU1st2hK65K80KXMKHAB/5k5LuDEz39CgopBFXyjl756ys6Y852MDBURRLdxzTVvXfjp/O11SPespGeR+u7SWOhUeuz5Abfw9eI2NGmlU14aDTBG+4NghqAXNRaiW9SDz3iecpzjz+iHDDah5iSqrf9BSmCPDacoE4dhkgVPLjgEP6WwClnfF192PrmwbtfQeZPg3LPBxv6SQIf/lkL8+BqK71fel1Y/rJxWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 50.233.182.194) smtp.rcpttodomain=arndb.de smtp.mailfrom=axiado.com;
+ dmarc=none action=none header.from=axiado.com; dkim=none (message not
+ signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axiado.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=84FxozLh+z3Mz5Az4nAW/8Rmh+SGSo1C4c0QaxoJcYs=;
+ b=Y/sYZMjb4GgKzJt0KOivAohjHTnqrOEbMJHmnmH5sFcUNFv9EN8PXdAoDMRga170Pi7yiz117xBRGkGvFFVrwJesWxXfsAgSnSD+dtSEI3c7h1daZFkfKbiCQBHlccXlBPdrk0QLpc3CH8MUrYi2hlUPe4pgj0jrqNqdbDCddiykTicES/tdyT+7RZqFQrum/w3HA9Q8eEdhdHxdhfrGby8EXUOhhSW3+wtuXRuJ9DgcZIItU8WPZ1wk+q+v+GpKwFeh801Nn7JjNOpfTOBbXL2zCDKtKgfiufMAK41UgATmANo+bAO1TdejfMOXN8WAyc4VioSKUXGTeM5GGhTqmw==
+Received: from CH0PR03CA0014.namprd03.prod.outlook.com (2603:10b6:610:b0::19)
+ by CH0PR18MB4209.namprd18.prod.outlook.com (2603:10b6:610:bc::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Tue, 22 Jul
+ 2025 20:16:08 +0000
+Received: from CY4PEPF0000EDD7.namprd03.prod.outlook.com
+ (2603:10b6:610:b0:cafe::2a) by CH0PR03CA0014.outlook.office365.com
+ (2603:10b6:610:b0::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.21 via Frontend Transport; Tue,
+ 22 Jul 2025 20:16:08 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 50.233.182.194)
+ smtp.mailfrom=axiado.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axiado.com;
+Received-SPF: Fail (protection.outlook.com: domain of axiado.com does not
+ designate 50.233.182.194 as permitted sender)
+ receiver=protection.outlook.com; client-ip=50.233.182.194; helo=[127.0.1.1];
+Received: from [127.0.1.1] (50.233.182.194) by
+ CY4PEPF0000EDD7.mail.protection.outlook.com (10.167.241.203) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.20
+ via Frontend Transport; Tue, 22 Jul 2025 20:16:07 +0000
+From: Harshit Shah <hshah@axiado.com>
+Date: Tue, 22 Jul 2025 13:15:30 -0700
+Subject: [PATCH v6 02/10] dt-bindings: arm: axiado: add AX3000 EVK
+ compatible strings
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-2-543979a60ccf@axiado.com>
+References: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
+In-Reply-To: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Michal Simek <michal.simek@amd.com>, 
+ =?utf-8?q?Przemys=C5=82aw_Gaj?= <pgaj@cadence.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Frank Li <Frank.Li@nxp.com>, Boris Brezillon <bbrezillon@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ soc@lists.linux.dev
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+ Jan Kotas <jank@cadence.com>, linux-serial@vger.kernel.org, 
+ linux-i3c@lists.infradead.org, Harshit Shah <hshah@axiado.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=hshah@axiado.com;
+ h=from:subject:message-id; bh=2P0fqQ4rK4FrrY5jP0Z+4ts52LSAML5KAClXxLndh0k=;
+ b=owEB7QES/pANAwAKAfFYcxGhMtX7AcsmYgBof/GCLbQbEnjQAsxiyOVVeqw4Tg7dbu7EOX3UA
+ lQG1o/cVamJAbMEAAEKAB0WIQRO3pC/7SkLS2viWOvxWHMRoTLV+wUCaH/xggAKCRDxWHMRoTLV
+ +3eiC/9mOqb0FtVNnEOGOy2qIuMa3N+EfIBjkKDU4OL8T6Zg4NIk5CzNYnuMnv3BNycWCTXL77f
+ 3EaGsDEbhKv1wt5jJNwBhMgSuACMSeTnibpR/osVniTViu+tdNTR6oxu2qhhxOQQn4EvLv3L7+Z
+ pehhKAdXQ4A3BkwhaD6DRPN5tzIfy9ByIO5XN8dsalFBRo83gV1LPZ66FLPImNUpuu1+ediYZQK
+ ZMtP5+vZy7hX0rFBX6rXcy96lDpOOt3KURDHFKdA+lPVno/eNBNHxrZzfipVkmq2MDiCRJ60Sky
+ A4aPP8TSuYp+BbiwpLvQdTvMVKnVX7kTsL/0BDP5u2rCF14969fljw39FvYxoOmt1rDBb789Hmb
+ EVWLBCuiFbbByi2X9izler5YOKAqxFMAqKApeqk8hz0Q0mpBY/nn9EQJtmYmPINBRv8/BBhw3Vn
+ 4ya/5KNkOjwaZzkHEh1hN+4Q73Yslt7eDSbzuLBQAxL4VHGIxL0MfToiOuZk26FYRiXGU=
+X-Developer-Key: i=hshah@axiado.com; a=openpgp;
+ fpr=4EDE90BFED290B4B6BE258EBF1587311A132D5FB
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD7:EE_|CH0PR18MB4209:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca15ff05-2f73-4e92-ac5a-08ddc95c9816
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Ly84U2ZXanhTUmkvSmlHWTUwaHJqeVNMV0VoTmUrVUhGazRONTZDbjRyZUpK?=
+ =?utf-8?B?TytDQzk5K1pQckJjVnBTT0VhMzYwWjVONXRIbFpoK0c0SmxCYXUwN2xhSnRW?=
+ =?utf-8?B?dFJBcFpBRWw1QWdEb3BlUWRSdFFIUmZXaVhWTWhuZ211di9nbzR4VWRXb1h2?=
+ =?utf-8?B?ZklsVGk2dmtDSHNiNXF5bURZa0xPUWQ1V3d1UXNNZS9OejUyeHB2L2pyQVJo?=
+ =?utf-8?B?ZS9hK0l6ZmdxQWxSSVdvT2U0amlzRWl1ZTl6KzBYcExaOGphaGNEZUd5ak5J?=
+ =?utf-8?B?OEIrZzdZT3dJcERLZ2JtS1hVTzFNa3FTUnBZMzFESkRiem1IbVMzaGVRa2dl?=
+ =?utf-8?B?b2pxcmpoUmRpUUFLQnJxSWNrSHdNa0tVcG8yVUttRXczWTU2ZkpGTDMxLzJk?=
+ =?utf-8?B?YkNuNnpGM0IzVXFzM1d0VjZuOGI1NE5qNmNFWStvZkFTZkZYanBuTDB1RW84?=
+ =?utf-8?B?ZFBxTHpQMzVDcU0vTE53Ym5ldUMzd2E1R3pSSkw3eksxNURUTk9ac05sSEw4?=
+ =?utf-8?B?cDNSSEQ3K1ZGR3NmUTdjTTE1ald3Wk5Gd05wSTIvTXlLUXRCTkpKSHluQVNY?=
+ =?utf-8?B?WUdmR3E5NWd5OVZ5M1RyWUtCQlhuRXFkKytuZjQ2bjdVOUhTQ1RNWFM3WDZU?=
+ =?utf-8?B?Qzk3RnJXdnNqWXlsNG4waUlTb01tVElGdVNTUUk3THBXSm1zNHVnYk9PY3Js?=
+ =?utf-8?B?b2dEMEpPWDZEQkFONEE5eFlnVGpxQW00cjJ1bHd3V05keHo4U1BzcFNMVUY5?=
+ =?utf-8?B?bnFJM1pSTzNrdTJjVlcxbWV2Y3ZTYUxUcEx0b2tmNTVCMkZ4ditSWENqemdP?=
+ =?utf-8?B?cDR2d085TmJ6d3RZZlJ5aTcwSUlYSjJrZXVuTkVmdFlhZ0Y3cTNlYnFocDVk?=
+ =?utf-8?B?NElzNnpGVUpQL0dkekloMVM5YkZkTDN6cjJrTHVqNlg5WFdSL2pMdURncGNE?=
+ =?utf-8?B?S2FmM01PdGNoVEJhVnIrZGVIMklmTW4rQ3RwMC9SbzdKK0JhMEUvODBLTnQy?=
+ =?utf-8?B?NzBXb2VDQjRmeS96VzBwSDJvcnlCQUt5L1E5S0JsTGlRTk83eEZHSXpXeDF5?=
+ =?utf-8?B?UnVQSUZHUGVnS2ppM2ZuUHBaNytCVWY0R0RhSG9uc1BTT0xJRHNubUhUcWZR?=
+ =?utf-8?B?RjRmTFFoZ3hzMnhBZEtncEpoM3k3T0p0N3hvTUZOdXRHZ25NTVJ0aTZIU0dY?=
+ =?utf-8?B?dlhYaFJ4aUlpY3hHUUxGZTltMVQySEN6Umd3N1BuZzRTS2NFUEFKQWFmUHg3?=
+ =?utf-8?B?NTVoMW1mTW1qQXAvdjFkTmltYzhMWjUrNmphSk4wSlV3ZnJrbjIyU2F6ZlFO?=
+ =?utf-8?B?alo2RTQzRk9IcjlIYXdGNGVEWmpkZGJBUWM5MGxLVlhUZE42MVZJTnJUbWJj?=
+ =?utf-8?B?Y2JjNW9aaWFMUkN2QUoyMk9PdTI1eWF4ZHhGSjM2enRsTlJDSjYyODdQZnJo?=
+ =?utf-8?B?OU9MSnFCZ2xpdURXQzJZMUtMbjNjV0dtQ1FXdmhzZDdtOWFUQkdKa1Vwempo?=
+ =?utf-8?B?emhSc1grTXNhOFdVZ0kvY3JjMXBCUGZJeHBEU042VHFMVEg5ei9XcVdFR1lK?=
+ =?utf-8?B?K3UydXZwQlNsOEpLVjNQVDVkWXl2aVU5a1ZEelRtQXNETC9wYkxlN2ttUjdL?=
+ =?utf-8?B?bWQ5VGlPZ2k3QTlLWHdaVk5SeXcxNmdpU2dFUkhPWjVDeUVSaUExTXZDZmJp?=
+ =?utf-8?B?a1NCdjMyYXdXcjJleHp1MEdEU3FmTTAyQzVNSHBQaXlQY292Q1NNZUorN0Qz?=
+ =?utf-8?B?QStPbU9pZm1mTk9tTXg5OVJkbjVMaVBLSkNDYlZCUXF1dTFxV2J2Vmx3M01B?=
+ =?utf-8?B?S3Z4UUdUSXA2RHc5VDhsa0xTMjlyMTh1a2tjL3NvMVMvNVVwRHdhUUtNV2hN?=
+ =?utf-8?B?cjRRSGJ5bDlwZGsyeWFxbnR6eFMwVGM5UFdNNFArbi9KZXdpTG9oMWovSndD?=
+ =?utf-8?B?UWNtaHJlVjhPRUx4TUFkMmhBa1l6Wll4N05YN0dQaUNyL3N3Tmx5NDZBTDBI?=
+ =?utf-8?Q?HMA29/AFTrtYHgxSGb0XChaAofUVco=3D?=
+X-Forefront-Antispam-Report:
+	CIP:50.233.182.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:[127.0.1.1];PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026)(921020);DIR:OUT;SFP:1102;
+X-OriginatorOrg: axiado.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2025 20:16:07.4970
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca15ff05-2f73-4e92-ac5a-08ddc95c9816
+X-MS-Exchange-CrossTenant-Id: ff2db17c-4338-408e-9036-2dee8e3e17d7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=ff2db17c-4338-408e-9036-2dee8e3e17d7;Ip=[50.233.182.194];Helo=[[127.0.1.1]]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR18MB4209
 
-Hi Arnd, Kevin, Olof,
+Add device tree binding schema for Axiado platforms, specifically the
+AX3000 SoC and its associated evaluation board. This binding will be
+used for the board-level DTS files that support the AX3000 platforms.
 
-a somewhat interesting issue came up, in that the added netdev
-led-triggers seem to cause lockups on the board that is using them.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Harshit Shah <hshah@axiado.com>
+---
+ Documentation/devicetree/bindings/arm/axiado.yaml | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-So while this gets investigated further, the default trigger setting
-should be gone.
+diff --git a/Documentation/devicetree/bindings/arm/axiado.yaml b/Documentation/devicetree/bindings/arm/axiado.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..bfabe7b32e65fb06d1f4faecfad032219f95dfca
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/axiado.yaml
+@@ -0,0 +1,23 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/axiado.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Axiado Platforms
++
++maintainers:
++  - Harshit Shah <hshah@axiado.com>
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++      - description: AX3000 based boards
++        items:
++          - enum:
++              - axiado,ax3000-evk       # Axiado AX3000 Evaluation Board
++          - const: axiado,ax3000       # Axiado AX3000 SoC
++
++additionalProperties: true
 
-Sorry for being this late, but please still pull
-
-Thanks
-Heiko
-
-
-The following changes since commit 9037532ab893635a46afe88542cd747a4a846497:
-
-  arm64: dts: rockchip: Add missing fan-supply to rk3566-quartz64-a (2025-06-30 11:08:36 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.16-rockchip-dtsfixes2
-
-for you to fetch changes up to 60d89a256079895a154d0f714caee8c64de586f7:
-
-  arm64: dts: rockchip: Drop netdev led-triggers on NanoPi R5S (2025-07-22 21:01:21 +0200)
-
-----------------------------------------------------------------
-Drop netdev led triggers from Nano Pi R5S.
-Came in today and it seems the netdev led trigger causes locking
-issues and has the ability to deadlock the board.
-So while this gets further investigated, dropping the default
-trigger for the affected LEDs
-
-----------------------------------------------------------------
-Diederik de Haas (1):
-      arm64: dts: rockchip: Drop netdev led-triggers on NanoPi R5S
-
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts | 3 ---
- 1 file changed, 3 deletions(-)
-
-
+-- 
+2.25.1
 
