@@ -1,77 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D960927EFFA
-	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 21:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB25326A0FD
+	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 22:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753218609; cv=none; b=PxZP5ks386UEvN4SiA9UhwCmqcn+QmHA9/O5TmlEXxPIbsfSJ5lMD8iRQ2X5BVfPDJsvSkzCrKFT77ZnJJM6ZDjlj0/gL5dLpp9nYS+iJBbKhRn11CG88sSkrKm69Dv95BP0qUr37YmktyWUz04qmBE/IYu1SdkMQ/pvUfKd5tA=
+	t=1753224141; cv=none; b=VBYcB75dINq0DtfznHP+rdD5BCZXwAbOmAdau9YW3B8292wxHudIPeHmjbCF+tZsYGbO66rV+RQ0c47eiMiCPnyrAv8K5vh6arIiA20uDQritQTrpF1ORRU7JukZlEJhROew/b1Znf3bqm6hSeOXS9HMAaP5yjU4Tpm0auXkFJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753218609; c=relaxed/simple;
-	bh=pE7XLBOh+T+hxD26YxwQfT+MpIlHQJkOx8+pjQy+KEc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=AZsJDhjS5eJNLbxhCZWnJ5HCDmyGe4fNVZJr/wF3liMIb+BTMyu/NidtpS59CHEOR32zq6XLmMNIhkT1TEApyybfucHqYRDFJUjEfRDVIBr1p++lRfOMxKUkFYmKcFGLGXJjFyBlpElMFkyV5zRvFtBmlJY3bWXugmc4VylPNnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lwZtASsR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753224141; c=relaxed/simple;
+	bh=ldaHuURYnlqZqVA1+U4sCKk5t6+FG1lj5JJep03e6hg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m9jii7WSFCYbEM6xBBwWsGyipk6teiC3gC7v7InFA8iz8NbT5N+EWk4EL+xMv95fCtjZfSGjq4dHDIt0kgAz9tR6r/Gc5u4CXIGvKAe+Xh6Ny5O9t7Tr82A763grVKQcLzUbUSbPzDqpXWFDBo7kGvmMCzjhozsvoSAZQllctwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OiwP4pKb; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lwZtASsR"
-Received: by smtp.kernel.org (Postfix)
-	id D0485C4CEF6; Tue, 22 Jul 2025 21:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAB9C4CEEB;
-	Tue, 22 Jul 2025 21:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753218607;
-	bh=pE7XLBOh+T+hxD26YxwQfT+MpIlHQJkOx8+pjQy+KEc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=lwZtASsRnVVkaMz1xyB7PmwhoS4JrGuGPW16+40GWMn+L0G/tRHUKONnBpnN2YcB4
-	 BhS2jKqJW+V3w7AGdohZn334AM4+1LI7vBYHBzmhi2aPV6WQ5en+EjI3E/G2M5diua
-	 PAEhONp09irUy6bhvMEGnCiIwGayAvSRBbFhJRFO2lydjBlu+lSui+AY2jq/pFxHs8
-	 HzQgy/cmwKUA+k44PYCVRFXgLoZtgRCLmV8iJofhc1QchwAjPjp//04olnhIpiPqKL
-	 i333tItK+El7fxW/S03eUnCVQx4BhBK8rjC7l8Q+EqERFHWZJBVPSXIQ0QbpBs7zKN
-	 9+c0Hr8QFw2Bg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70B1F383BF5D;
-	Tue, 22 Jul 2025 21:10:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OiwP4pKb"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69C9943275;
+	Tue, 22 Jul 2025 22:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1753224136;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b5Yg+pdTXpo6t0O7UQl+RIbiB4LOKOnIdXdXoBOJyck=;
+	b=OiwP4pKbiIk4mcSLaL9RdN2P/6K+rHryH62SPWAsZd52iz5Z/rFoylJzCtRSvzA2tb7on4
+	Cc+C1huFf+QizyFqpxlSeHww+c27B+NZbxavUsmSYrsFLRmzmwATEOBRdHu/X4+i8rNedF
+	2Rt+a/ijrDx8kZhxNeKML482g2M6o/w7sLBzT7INqvxOROp87kjKZhylh0BO0pXsSKSaAm
+	8TCPBtxwgM1FWhZWQj5TMO6jTubmAUh0Ad+QSa1VcFrFdJ291BxVmw0E+cYdPHvpUTuVT3
+	uHDpKLgC1+i+WXdaDsm52o61H8G7VrwA+8WYRlDT/vS+J283lNr85hBFHGxudw==
+Date: Wed, 23 Jul 2025 00:42:14 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Harshit Shah <hshah@axiado.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, soc@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	Jan Kotas <jank@cadence.com>, linux-serial@vger.kernel.org,
+	linux-i3c@lists.infradead.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 06/10] dt-bindings: i3c: cdns: add Axiado AX3000 I3C
+ controller
+Message-ID: <20250722224214cd72ae8b@mail.local>
+References: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
+ <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-6-543979a60ccf@axiado.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Microchip AT91 DT updates for v6.17
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <175321862610.955963.3852400945512508250.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Jul 2025 21:10:26 +0000
-References: <20250721100904.568575-2-claudiu.beznea@tuxon.dev>
-In-Reply-To: <20250721100904.568575-2-claudiu.beznea@tuxon.dev>
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: soc@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-6-543979a60ccf@axiado.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejiedufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegieduueethefhkeegjeevfefhiedujeeuhffgleejgfejgeekueejuefgheeggfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmegsieehmegsvdhftdemkegsleekmeejledtheemrggsvgelmeduhedvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemsgeiheemsgdvfhdtmeeksgelkeemjeeltdehmegrsggvleemudehvddvpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvgedprhgtphhtthhopehhshhhrghhsegrgihirgguohdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehjihhrihhsl
+ hgrsgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihgthhgrlhdrshhimhgvkhesrghmugdrtghomhdprhgtphhtthhopehpghgrjhestggruggvnhgtvgdrtghomhdprhgtphhtthhopefhrhgrnhhkrdfnihesnhigphdrtghomhdprhgtphhtthhopegssghrvgiiihhllhhonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Mon, 21 Jul 2025 13:09:04 +0300 you wrote:
-> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+On 22/07/2025 13:15:34-0700, Harshit Shah wrote:
+> Add binding for AX3000 I3C controller. So far, no changes known,
+> so it can fallback to default compatible.
 > 
->   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.17
-> 
-> [...]
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Harshit Shah <hshah@axiado.com>
 
-Here is the summary with links:
-  - [GIT,PULL] Microchip AT91 DT updates for v6.17
-    https://git.kernel.org/soc/soc/c/dc56e105c540
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-You are awesome, thank you!
+
+
+> ---
+>  Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+> index cad6d53d0e2e35ddaaad35215ec93dd182f28319..6fa3078074d0298d9786a26d7f1f2dd2c15329a7 100644
+> --- a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+> +++ b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+> @@ -14,7 +14,12 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    const: cdns,i3c-master
+> +    oneOf:
+> +      - const: cdns,i3c-master
+> +      - items:
+> +          - enum:
+> +              - axiado,ax3000-i3c
+> +          - const: cdns,i3c-master
+>  
+>    reg:
+>      maxItems: 1
+> 
+> -- 
+> 2.25.1
+> 
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
