@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73C327EFFA
-	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 21:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0969727EFFA
+	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 21:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753218603; cv=none; b=aPNZ5M+EdPDxkdZDcLI21iD45FtPrsiRtKJiorc3NppF1E5B4lTUwwbwz5ankh6jrDKARAo8KbDsWzyeSDC7Hb39fA80CzD7nsXnDJm9AUswVhL+0G5L8qxTvflTzVR7u3DvSi/hFDMierLa1ycTy6PcsKB1VpeEHsdfCsiKUJM=
+	t=1753218605; cv=none; b=D0c59s8eqXRrdkvG1ocWsuAEOO/RZsEB6wPAWCn+ATaKdrGe063mnbEDNXPHr7G0K72CVr71sChdX8BjDoRWR51EsfQH73Ut1u31K+XIQ7Fdp5OhndRinbr2VSzYt6laJQyktV25YGpIYiz4mp9qPhU9RwWpjzt/fWid55ZcOlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753218603; c=relaxed/simple;
-	bh=YmrjnBmesamu21eGqvUYShnDuKJo8hDj3VwJt5pHe78=;
+	s=arc-20240116; t=1753218605; c=relaxed/simple;
+	bh=T8xp69z+S+QPjJEFGQSxjXqb+35vcQQe1nmPeu5s2kU=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=US6PzFY9hnJRCWV5mFYm7woeRXE+AO9dJlF6oeG3QHrXcNyBRT/o/qrwy6Pxvr35TgMm68jQH1hdmcYlmQ5gCm2wcZ0cWfHL5futOVQXGCk2zk6exXXkjjo8x8FInhz7Hk2q5pMH6i55caaVjPQTrwhuBEjwSZdD4nbeb+io1xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9Fqlbfb; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=saE2+DYCBBf0sqnorjzUHiUkx0pGVFI4YkAufAxnx2fOdQJdj6il1aUgV2NjIK8LzZCLWk7DBDFKaKiFLGygzDMGn93eVNnHqw4V0ztqgtqRMk+rArLh8Gap6OFhX2VfjQXDi9K2D/ok18lSlj5MuUxYpQOYmSPlVIKCyMJO9Gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hedW8eZz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9Fqlbfb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hedW8eZz"
 Received: by smtp.kernel.org (Postfix)
-	id 600F5C4CEF6; Tue, 22 Jul 2025 21:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A3BBC4CEEB;
-	Tue, 22 Jul 2025 21:10:03 +0000 (UTC)
+	id A3513C4CEF4; Tue, 22 Jul 2025 21:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE2CC4CEEB;
+	Tue, 22 Jul 2025 21:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753218603;
-	bh=YmrjnBmesamu21eGqvUYShnDuKJo8hDj3VwJt5pHe78=;
+	s=k20201202; t=1753218604;
+	bh=T8xp69z+S+QPjJEFGQSxjXqb+35vcQQe1nmPeu5s2kU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=n9Fqlbfb91EHYJHrL0GjGwWNXZefU0EV4JBzM+f9AGsTmJ+Uw3B44rUURSuxjqRnH
-	 anviI69GSV06Nk3CoMfOuCManeOgnaq6ieyO/vyXqFIFNxosZX8Va+iAlEJa8GAs6G
-	 zfzRqPwRe0+kDsLsYLuePLvAk9ykCj5BGt7DRWhr/mOTu4Oux7KimaM8t+cZd8vWEO
-	 3bjMdPxmCpV2aLgnURVYcOKmjMzaDKQ73t32qspHJ1rQ2Hd/SIQw9S6cvsmklTATUu
-	 ywEB2uKokftk5/9+95ev/mZF0T/nk39lWrmnUXxwg9+tYKTau4cyw+a3mlDpSU0A8s
-	 gkOG4zSiclaJg==
+	b=hedW8eZz03/Rr/iKkI8kBnL5ztYSWl5hbH0YfBEstwUL+4YkjYNicGp+TyPLc/Wg4
+	 eR3DlrrSGKP3XQsL+zqf1DyXS+oo2obgoKK25e07kDMvxhA8pDVAPNnbQIwNzm16dE
+	 WV0lvwrVdmU4mHa+Kti2iRx0elc2c1poHHaKglgPzGfrBs9Y29zWN1qJYIbySJE7Pp
+	 iXo1j9POswCmH850pCWHfbNuvR5yU1fQ3go0JDRduVCwkkcJj55t+ti85GUeuUTSpZ
+	 dwZIvdAK/j7nkEfuInJ023u7WnM7I1Hr9CmwmUh7DId7k0TnzCB8ZcqvU+6gGK3qFm
+	 kMl5khJL9iMWw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEB0383BF5D;
-	Tue, 22 Jul 2025 21:10:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BCC383BF5D;
+	Tue, 22 Jul 2025 21:10:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -39,35 +39,41 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] More Qualcomm driver updates for v6.17
+Subject: Re: [PATCH] ARM: dts: st: spear: Use generic "ethernet" as node name
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175321862150.955963.13816713180844790314.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Jul 2025 21:10:21 +0000
-References: <20250720030743.285440-1-andersson@kernel.org>
-In-Reply-To: <20250720030743.285440-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <175321862300.955963.12564081831445774401.git-patchwork-notify@kernel.org>
+Date: Tue, 22 Jul 2025 21:10:23 +0000
+References: <20250717142245.92492-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250717142245.92492-2-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 19 Jul 2025 22:07:41 -0500 you wrote:
-> The following changes since commit 9f35ab0e53ccbea57bb9cbad8065e0406d516195:
+On Thu, 17 Jul 2025 16:22:46 +0200 you wrote:
+> Common name for Ethernet controllers is "ethernet", not "eth", also
+> recommended by Devicetree specification in "Generic Names
+> Recommendation".  Verified lack of impact using dtx_diff.
 > 
->   soc: qcom: mdt_loader: Fix error return values in mdt_header_valid() (2025-06-25 14:31:31 -0500)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.17-2
-> 
-> [...]
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/st/spear1310-evb.dts | 2 +-
+>  arch/arm/boot/dts/st/spear1310.dtsi    | 8 ++++----
+>  arch/arm/boot/dts/st/spear1340-evb.dts | 2 +-
+>  arch/arm/boot/dts/st/spear13xx.dtsi    | 2 +-
+>  arch/arm/boot/dts/st/spear300-evb.dts  | 2 +-
+>  arch/arm/boot/dts/st/spear310-evb.dts  | 2 +-
+>  arch/arm/boot/dts/st/spear320-evb.dts  | 2 +-
+>  arch/arm/boot/dts/st/spear3xx.dtsi     | 2 +-
+>  8 files changed, 11 insertions(+), 11 deletions(-)
 
 Here is the summary with links:
-  - [GIT,PULL] More Qualcomm driver updates for v6.17
-    https://git.kernel.org/soc/soc/c/5b8141596b06
+  - ARM: dts: st: spear: Use generic "ethernet" as node name
+    https://git.kernel.org/soc/soc/c/dda1d84a0c74
 
 You are awesome, thank you!
 -- 
