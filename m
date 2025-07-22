@@ -1,97 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CD72797AE;
-	Tue, 22 Jul 2025 16:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B205927A92B
+	for <soc@lists.linux.dev>; Tue, 22 Jul 2025 19:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753201992; cv=none; b=Bqc3r7tR7MfGAOCGr5P1b8Cf4jzECuZDSE8JYc/rUrnQIolq5gAUZUb3YLIdtFr20Jpx1zNJMOSG4GI7AfYPHi+/ToOZ42DmkBmCk9W6GcWKImtwTZKIqNhaYzhFmp9eisPhGmwjPnjL2EI3OC0h/hsvGhkwPW3UsW7Nr1nH8c8=
+	t=1753211423; cv=none; b=B4+2ZMEIVcM5VOf3gsHXrSxAvEmi3xz4E4eya3SXLomksbxPUC9LKyE6EgsLcYLRc0oJI9DxXpDxtYjwjEEzbmu0ik33McXdFZamVEmxFKKi2xpTeY0J3uXEdzyyTXiIMYqgF+xGJOec8GBGaDvMGGmmeN9WheNUA2coca2XD9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753201992; c=relaxed/simple;
-	bh=w2/ci76DUFL6xmng0J7+GpGfL1XTqIZLE6fWvpruW3E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fJGaWGRCiXPI/yjssJqx1BSRsFXKavnjPVhrxojCrBBSIMTcSvRvweSqhCmKpGQ4TojALYWOsOURGJHAu4ITB4fPXNy+d9+4rGZSGMGYJeVLFa1hYC9U2+SbaDTEWaCQwG8L3hVOgV5iXfyrZvNdzugMjvyiHW0EJ5QPYXYRuNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bUyjQbFB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753211423; c=relaxed/simple;
+	bh=SdugJy50Q4TMTrjMhlSAZ994LuuvER2A06jpAWhGgJU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hvaWhgDNZjguKET8yOZyYE+2LszAoOpsbyhdx4Y4NN8C+N+8azVh6owpY5Xkloka1ov/uxgCAYHYm25qYcK9Kfi7VHnlC/qC+G4CP3uE62KjeKotb+r/n8sqOeh8X+aSMXaqCi7Tz1jE/pBFWkfpU15y2Q2JwdevO6ZI1GpeB3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=a8Qktq1z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bUyjQbFB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BACEC4CEF1;
-	Tue, 22 Jul 2025 16:33:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753201990;
-	bh=w2/ci76DUFL6xmng0J7+GpGfL1XTqIZLE6fWvpruW3E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bUyjQbFBa25rFaLtI4a0MJ5dF3CtVjOjO1VnuRONqZFsfylOqgw9EWCznMyAtut+n
-	 HmGR4XlEeSKSarrlab1rJP6884OW0moewIKrS7/wMe6SMWv44dBSMhr9+RWE+nM3EY
-	 O408prv1drYa44V5ouupdWBZyPyQhVmX1IrBzBF2ZsAParjPo91irK663P7fxEcohq
-	 UtuZhd48iUXNpfM7MiAPKKZ4CqhHXiR9L8tpws4Vh4dHWSMvuWsEdjN9tYPd47HjeH
-	 iC04WAlYI1fgpuIG80ZVlSDmq5YgVFX5Kx8gDh29Om5rnaOIQ5DPLI7EhbE879fXCD
-	 us4qRREgbyG+w==
-From: Sven Peter <sven@kernel.org>
-To: soc@lists.linux.dev
-Cc: asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Sven Peter <sven@kernel.org>
-Subject: [GIT PULL 2/2] Apple SoC device tree changes for v6.17
-Date: Tue, 22 Jul 2025 18:32:58 +0200
-Message-Id: <20250722163258.62424-2-sven@kernel.org>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250722163258.62424-1-sven@kernel.org>
-References: <20250722163258.62424-1-sven@kernel.org>
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="a8Qktq1z"
+Received: by smtp.kernel.org (Postfix)
+	id 5D486C4CEF6; Tue, 22 Jul 2025 19:10:23 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 803EBC4CEEB;
+	Tue, 22 Jul 2025 19:10:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 803EBC4CEEB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Reply-To:In-Reply-To:References;
+	bh=9frWBqg+9ABHbKCRSF6hDwgCj340VYF0PN8eIRHYKXo=; b=a8Qktq1z7Iyx92raGpzD4E0N1G
+	LQF4L8yD+Q5WzmxTbpmX6ltLOeo2Qia45RVqu70ZGrdtSBBBwOhs2tzVE35do/p3QXgcq8R7VMiwW
+	/03RfQDkxo5tLQQri/W54X8dnDx8JvOELSkXGZqp+da4/lHYBQ8Pr2tOf40jc71f71WEk9ywgkXB3
+	7G6nQzlSPAC8pGubLCxxEV3rLDTmnJniDMPtjaS/kDd0MI2DLXixqmH6iwUo3TrDzL132G7O82jHG
+	xinQELQB0nvB5LDv5YOUvHTiua0+pOD6L6mHFn1Z0KeMF9hYRYbhZUAVTDRZgQI6vr0c7avo43FOU
+	F67p7Q5A==;
+Received: from i53875ad2.versanet.de ([83.135.90.210] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1ueINX-0006hu-IO; Tue, 22 Jul 2025 21:10:19 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.16 #2
+Date: Tue, 22 Jul 2025 21:10:18 +0200
+Message-ID: <1927555.tdWV9SEqCh@diego>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+Hi Arnd, Kevin, Olof,
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+a somewhat interesting issue came up, in that the added netdev
+led-triggers seem to cause lockups on the board that is using them.
+
+So while this gets investigated further, the default trigger setting
+should be gone.
+
+Sorry for being this late, but please still pull
+
+Thanks
+Heiko
+
+
+The following changes since commit 9037532ab893635a46afe88542cd747a4a846497:
+
+  arm64: dts: rockchip: Add missing fan-supply to rk3566-quartz64-a (2025-06-30 11:08:36 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sven/linux.git apple-soc-dt-6.17
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.16-rockchip-dtsfixes2
 
-for you to fetch changes up to 76f3ffeb41d8700c22005211521bf692f2551668:
+for you to fetch changes up to 60d89a256079895a154d0f714caee8c64de586f7:
 
-  arm64: dts: apple: Add Apple SoC GPU (2025-07-21 15:22:10 +0000)
-
-----------------------------------------------------------------
-Apple SoC device tree changes for v6.17
-
-- Added the bindings and nodes for Apple SoC GPU. The driver itself
-  isn't ready for upstreaming yet due to rust dependencies but we're
-  confident that the bindings are stable at this point.
-- Added a missing node for the touchbar framebuffer to Apple T2 device
-  trees, which is the BMC for some x86 Macs
-- Fixed a W=1 warning by adding bit offsets to NVMEM node names. This
-  required a change to the generic NVMEM cell binding which will be part
-  of 6.17 through the NVMEM tree.
-
-Signed-off-by: Sven Peter <sven@kernel.org>
+  arm64: dts: rockchip: Drop netdev led-triggers on NanoPi R5S (2025-07-22 21:01:21 +0200)
 
 ----------------------------------------------------------------
-Nick Chan (1):
-      arm64: dts: apple: t8012-j132: Include touchbar framebuffer node
+Drop netdev led triggers from Nano Pi R5S.
+Came in today and it seems the netdev led trigger causes locking
+issues and has the ability to deadlock the board.
+So while this gets further investigated, dropping the default
+trigger for the affected LEDs
 
-Sasha Finkelstein (2):
-      dt-bindings: gpu: Add Apple SoC GPU
-      arm64: dts: apple: Add Apple SoC GPU
+----------------------------------------------------------------
+Diederik de Haas (1):
+      arm64: dts: rockchip: Drop netdev led-triggers on NanoPi R5S
 
-Sven Peter (1):
-      arm64: dts: apple: Add bit offset to PMIC NVMEM node names
+ arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts | 3 ---
+ 1 file changed, 3 deletions(-)
 
- .../devicetree/bindings/gpu/apple,agx.yaml         | 94 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- arch/arm64/boot/dts/apple/t6000.dtsi               |  4 +
- arch/arm64/boot/dts/apple/t6001.dtsi               |  4 +
- arch/arm64/boot/dts/apple/t6002.dtsi               |  4 +
- arch/arm64/boot/dts/apple/t600x-common.dtsi        | 34 ++++++++
- arch/arm64/boot/dts/apple/t600x-die0.dtsi          | 34 +++++++-
- arch/arm64/boot/dts/apple/t8012-j132.dts           |  1 +
- arch/arm64/boot/dts/apple/t8103.dtsi               | 68 +++++++++++++++-
- arch/arm64/boot/dts/apple/t8112.dtsi               | 68 +++++++++++++++-
- 10 files changed, 303 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpu/apple,agx.yaml
+
+
