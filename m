@@ -1,211 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAAE2737FD
-	for <soc@lists.linux.dev>; Wed, 23 Jul 2025 07:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753255119; cv=fail; b=bt32I8l9Gh0VJYQXfXtThKXH+p6Dbn3zR+5NWkAXos+nKUyLrlnGigQHuq91q0j1PaCk/H54m6/eJtnyZpfII8XhrHZfpKyMDabHDeF5Yk3GD5FkXOyYeAuqj5aZNuoGuNqFVBaXdj6MFJpU+GVMjaadHh6YO7oNWGntVJZSX5k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753255119; c=relaxed/simple;
-	bh=9NyYzMaEFJ3phZFSZWSBOJFsZk24vlYTs1h3IqkR8lQ=;
-	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=qwYPQQvSou1yxF3D6w0Njm5ArBgo9XpZEySYP+rFLzygnEwcQS7mRxtTm3MyeVjviCzZVUcOh+5PZwWdX+YNKNkS/bU1bvA27PgYI5yPcfsHb9CL003TXxzpFXI7zGrt+SSpya/T3HWHyr4amw+3K4Osox8Qn94TW9VZJjyftaA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=bRYIzVmy; arc=fail smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BE027780C
+	for <soc@lists.linux.dev>; Wed, 23 Jul 2025 08:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753259160; cv=none; b=WFm/stkWJV+9sCxjQ4xW2r6dfQ/rcDgghnPZnXEnjPgRBXNAigGzS7pLHansa8ilj54pI5KXFoF98//oPy01o9xVN5P6J3bKExbwFcvza/Gu9xnCLdaDuc2M4BhrIsucuI2EX7IKYAm8QdSu2vwndiPLC0inhEBUfHobJ0jhDR4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753259160; c=relaxed/simple;
+	bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bsd53EtDroOfsRQrQzCqCXB66SkQUgGuR+QgTAcNCS21rLho9M40A2NUlBzajtvVTT/qYk9XbVS7Xw4P0dWh9Oxs/ILgf266RnI+YCREb/jiEQhon/Qm67y9M/yTTrZ+gbzEFNpB9QHnfYvnfEfQzVsuAyKfeFJy1A6oY/8OCaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=i2dDM1qV; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="bRYIzVmy"
-Received: by smtp.kernel.org (Postfix)
-	id 9EAD7C4CEF5; Wed, 23 Jul 2025 07:18:39 +0000 (UTC)
-Received: from PNZPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19011028.outbound.protection.outlook.com [52.103.68.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51615C4CEE7;
-	Wed, 23 Jul 2025 07:18:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51615C4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wAxyViXT6NW9DaGnzcM9L54mFWv4hr8nvvyvHLUA5khY2SnnUe5hrlLz53TBgzxVvO0dLJTv3H25MId5KeRs8qGadyOhVuvtz6N8bt1TYCvxEc63pBh35XpY1sj1S7D3ERzQPwhFJiQb1hAAgIU8GQ7i9AcOkP0lDHg5Da50hwa2BSI1E4qQxFFaCJb9t0NGmKCOPaWp8Ehdbqyjx5xiGaRP1KU7p3Kdir9Ni8qmTDbyC7TuiNSHUEIdsLOUXpsDhdVfSZwYlYAV0O873+2tCX+Qb5bHObBDmG9BRlfUWzqXSC9U314+GgbOrvlDkNXcoLGnn/9g2SNAX0cJ08Darg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZTv7tDefwb/rAII53srZch53NWWTOcMAO+tH9oIHhQM=;
- b=hMaDr76Q6oqVP71GssrX87JAA00rfHDQoMxVM5neMdXjJOtAmB45psjTcEjAPSnoolIBEh4p2S4EYmVJiNGV2+zrHmp7wqY50X1EFiGbeoG9huHXQFn+CLlKtyF1aBIF0IVRTKY9XldbQkY3GNnLszW4+5yr5VsIX20c3nuyQCxbnSv2Z7v+fqv4gJtXmPM+MOCyImYGi/6zizXrNQfcCbY9kcXNZzBoxbR19kIi+CA53sQATsJTO7xgVyXxQZowaJEM5bHKlf1lW4uEOysVi2ZUfC1q0MHWOmAkAXOSBr95c/jY8QWZhxRkJS6woOlEFnZlIRkjhHpbjzKKhD8OQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZTv7tDefwb/rAII53srZch53NWWTOcMAO+tH9oIHhQM=;
- b=bRYIzVmysIQQwGiUH8hXXDnYtbIjd3WkEHqcNl+cMmJUKojtiNaJn2AhqO8p3n8HoXY3zjopMGWpQwtQIWj9fibrGAsyX433ijQol7zqimKRIAMo8lQs2dl9GgBUvIhYk1OTW1AOOZIUpldp4PLhUTxsYU+s/HNI6vqFVmdNf21oF5OFkONT5LEvsZrvrE5OMerP2d/KdJtONakCoVm+G46+Eh8QQt02KfW5GUEooCAtU9+qiVQl8/qFmqB2Gg/HCce6xtd5Nz4odbU9GSBLCbpXAsGefEW9WlSJgRb5mlc0+StjR1Lvw477Z9x0DrkwyeT8CKSK+u12upx8XkphnQ==
-Received: from MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:16f::16) by MAUPR01MB11024.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:171::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.21; Wed, 23 Jul
- 2025 07:18:26 +0000
-Received: from MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::5dff:3ee7:86ee:6e4b]) by MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::5dff:3ee7:86ee:6e4b%4]) with mapi id 15.20.8964.019; Wed, 23 Jul 2025
- 07:18:26 +0000
-Message-ID:
- <MAUPR01MB11072C4B088AAC02268044E95FE5FA@MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM>
-Date: Wed, 23 Jul 2025 15:18:21 +0800
-User-Agent: Mozilla Thunderbird
-To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
- "sophgo@lists.linux.dev" <sophgo@lists.linux.dev>,
- Chen Wang <unicorn_wang@outlook.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>
-From: Chen Wang <unicorn_wang@outlook.com>
-Subject: [GIT PULL] ARM Sophgo Devicetrees for v6.17
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0028.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::6) To MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:16f::16)
-X-Microsoft-Original-Message-ID:
- <c971bf61-b857-4da0-9dde-0d787703cf2f@outlook.com>
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="i2dDM1qV"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-311e2cc157bso5497437a91.2
+        for <soc@lists.linux.dev>; Wed, 23 Jul 2025 01:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753259158; x=1753863958; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
+        b=i2dDM1qVy6ffMfEx23gV4FTyCYtFve+KsI7StyDnu735zmI4bbwPjCRoqwTz979+97
+         4odjBXZadp/mCXoqJ0WNWXgiiz+jarjpOeWK5wyR1IS0BQRCADdFAjD7mFDEucSZAL6I
+         FC662jmN3rjq7aLrge19FU1jICe3OtD395z9mKZLLv4oNLREyRwaxflEILLJz/DTFw+P
+         FtuohjqMKra0/hbobCwpw1P5kUu/zJ22N87xJvXG3+vfXv5zDc26h13qTxT3u3WVUB3q
+         IP/SdF7Bz20/KTYuKcxHL19fK9ThOGG+uGsxFnHAAWc2ur2Vwco76cV8puLLnQ0jc2IW
+         JB/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753259158; x=1753863958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
+        b=DV/C4GkYXAt6vIpcMTwXaCAj9SVq9BCrGS0JzO9fehGxGpWxq36yLn6WyVOHXDrA4A
+         9136vZdscw8X8nh9CNnG5kCRoQA9CeUKbLr5NvPIb3RSMnFVxE01HE/2SGvuLj5MC7Kp
+         nJ8Sptfho+7FUVaJGMpqyMj+Im7vOOxBpgERFoZsw1rA12phHqdH8omcQ/4Uv4g6P1pw
+         7WlD/1ei18Pd2YM9IfGdCWKUyzn83qYLh1dHWfeWgUxpafJDQpdCu940loIHUbPZM89S
+         r9MPlZrfmL5vkt2Ca0TdJTXiIWJ1y6WbRoxDtZHNVlDCfsvavijqwkClLiE+tAn4grtS
+         JgeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6z+qB+ad5zIlJ2BJvhB5REhz7tpSA09VfuqbuJWaBCHDwQ1IOVfdXIiHqTDVhPlXNOU4=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwsjfZzEi3zsezIR2eiDY7t6F6i1PlN/ftb9njjQvlY7Wb2SFH6
+	IqVUCHRBtvKB+7ddTjlPvE9+AUMXjo143VDziFqhkIrDtYElMpACga51BFYTjo1MpTwY9b9V3VF
+	PtBCSufLxQeC/lwWPYQ/4OucLZlvfQh9JHABhZu84aw==
+X-Gm-Gg: ASbGncup5EMMhKi7agYQTAH9Fx+8qeZiKQJSiy9OKRUDK7P5cXs+KUzwonKMNtcqbZP
+	xBPPcIcAsVL6i0vOV8NqIRnhyPuKdHtVoR2npmwTPgIYrgorkvdDFT5UQ8LhKUZBiS0oV5FvZLC
+	H6igM7xfqcJ8bRLl1zqH/Qj2H9VOOiFL+3IPWZmDaWyJ9G8kkkG6LdDlxrjFPzZX5nQf0THLwj2
+	cRYqyuXnIPGVbOvjhxZWJg+c3+ndH97DzmC4GlGSrxzMgd7
+X-Google-Smtp-Source: AGHT+IFzwCafFosCdx131zbcEFY3D64m+7mo0loj5vAsYVkMFUgy5UAHuuRGjg5yAkxctR2cI5zO8+e+kqhHgdsFxCw=
+X-Received: by 2002:a17:90b:53d0:b0:315:aa28:9501 with SMTP id
+ 98e67ed59e1d1-31e507dc7b4mr4498294a91.24.1753259157929; Wed, 23 Jul 2025
+ 01:25:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MAUPR01MB11072:EE_|MAUPR01MB11024:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9f319c7-4afb-42a4-accf-08ddc9b91d46
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|6090799003|461199028|5062599005|5072599009|19110799012|15080799012|8060799015|440099028|40105399003|3412199025|10035399007|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YmU4U01CbUZDRE53OVFNaHVYSFZVVzAvRVZ0eGdJNUk4VWp0b2JBVXExdFVU?=
- =?utf-8?B?RjhQV2VBcS96SmU0amFLbGZ0bUVTcFlJR3lrWTJaeTNtSDZkZnkyUnYwL2xP?=
- =?utf-8?B?bnNzNmR1WVc3V2NUekwycjZUd3YyNzFWK0x4a2VuaGpOb1hZYnZvZjIzay9K?=
- =?utf-8?B?eFNZRjdPdFJscjEwekxMQ0g1Mm5VMDV4WjNyQU9qN1VHR0RDN2RneEV4Zlk2?=
- =?utf-8?B?QWZHRzd6TkZ4VWY0OHVPSHZ5Sm5WNlhWaW81dXZodm5hVVRWa3ZPdy91eVY0?=
- =?utf-8?B?d0RXMVBXM2Z6NGY4TnBOWHJDem1tYTBOYTNmWkZ0WVBKMlZ0WUtCOVBuc0Zn?=
- =?utf-8?B?bjNiYkRLdGVOWW1Camw1QzBrYkpYbEh3WHFKTkhKeGVhakI3UmdCUkVxbEZz?=
- =?utf-8?B?Z0o0d3lPQXNEUitNVHdER1hRZVNITi9oNWVSUGIrd3ZMOGZsQ1M0RnhyKzZv?=
- =?utf-8?B?R3Jpamtza21PTy8ramNKd3FmMFdZbjZCRUYwZGYwT1dXeXFGYnpKSmYyeWd0?=
- =?utf-8?B?d3dLQzFIK0doVTRFRU9ScnZkMWd1UUE2NFFiTWgzdkxjNEl2anltL1U2czEz?=
- =?utf-8?B?MUFhUmh4eU5lZEoxK1hGMHhoMGVWanZWc0ludmMzRGRsdG95NGUvaFBVOUlu?=
- =?utf-8?B?cDM5TndaSjE2MEZSR3drR25oTGplQ1FJZXZDcUlBUkt2am10aXlnM0ZDblZS?=
- =?utf-8?B?WUhDM1p0UTdacXRFVmdaQzI5am5PNUQrNFZEdWNVNEZkSzZmUlU1SEptQnp0?=
- =?utf-8?B?V2NjRVlnSlNSdTROZTRzUGdaL3dFb2YvRUlPVDIyQW5FbnZ0QU93NlBqd2xm?=
- =?utf-8?B?ZmN3bHJlZGlsU1FoaHl2emc1THdGSXE0dmk5NE84K3JoeWsvdEpuZGs2S0Qv?=
- =?utf-8?B?dFREN1YvUG9TN0tWR3JzVFcrb0hoQWpHeFd2VHlvQTJaQVRmbnRnRFBRVHlZ?=
- =?utf-8?B?bmhPd09DenR3eXJEeVpCTzR4bk9nNmdNRzdUaEk0Q3NjUWhLazlmbkcwNnpn?=
- =?utf-8?B?cW1uNll4YmYxSmpWNHJQdk01MFQ5aCtuci9EckFyVG5Rb0RnYnU4VURORDR5?=
- =?utf-8?B?ZGpLZVVYY0NZVnNwdnE0NVpBS3hjQVR5Tm9WSUZPcFNrcDFMU0NJZ25DVjho?=
- =?utf-8?B?UmdiclZaci9yaDZBRXdYMXRjOUZuc1NrTWJjaERCemdvREMwRXNtZzQ1UWsv?=
- =?utf-8?B?aHluTzlkM05JenNDc2JaTHJtQitOLzcvQStCME92RlZ6bFRaSU05YnQxRWlQ?=
- =?utf-8?B?K3ZTM3dqM0VxVjhMc1ZMM0NnSTIrMWI5amZKTmZKNzd2WTJkZmNZbXBHUDll?=
- =?utf-8?B?K1ZETEI5UkFZdUhlYXVwV2dVbmNZclZDQ1dobW1ON3grbDFoQWZuSVg0b0lV?=
- =?utf-8?B?akxnUG1WNENITHlRbkhZL0xDN1d2S25IS3hKbTRpNkxycXJYOTNuMjV1ZHRp?=
- =?utf-8?B?T0Z6U3VMWEN4U3hjY094VXQvdVdCcnRBMUg0ZW1IcElVSnBoc21pa0VhcENi?=
- =?utf-8?B?YndTaW5ocXlSbUJXYkZHdTdRYThBRGdTWnRiNGxUSUVSby9TcFM0NTd0V0tJ?=
- =?utf-8?B?QkpxTkR2Sm9janMvWHAyQlZ2UVVNZTVoMUxjV0RyMkxpcmk4KzJwZGMyOTZC?=
- =?utf-8?B?eVZ6L21KK3prSHlXOERid2YvVGFDR3c9PQ==?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NEtURmE5RHNuYkk3QUIvMENyZjNUMXQzMXdpRDM2dVI0aTFvZHNpcm5mSkNa?=
- =?utf-8?B?c1ppRzBmNmplOForaHJwbHl6eW1Oai9oUWhURmpCQjZMdXZzN1Foam9PV3cz?=
- =?utf-8?B?S2xjQWczR0RleU93UlFOZ2Jnbnl5VjNoR3BXekE2aWt2ajZOdDBVd1lsU0hl?=
- =?utf-8?B?WG5PT2UxWko3Y3FFczh4b1FNVjFkNWtEVk41KzROcUtUbzlRTVdURDY2U3Jv?=
- =?utf-8?B?d0Zqdnl4c2lEUWEyeHRCRjJwaWVIWUZvOVlkbUdxc3VwWUVCQWF3M1lxcDIx?=
- =?utf-8?B?Z1h6OFJldHR3TUNPV0dyNTRlOFFERmdLUnoxZjlHeVM4OGZnWWlJa0ZyQVJR?=
- =?utf-8?B?SDJuWjkwWkFCcTlCQXB3REg2NFZ4czRrZ1lSelFRaVZ1enZkUy9lclgrckhj?=
- =?utf-8?B?ZStUdEV6T1MweG1LVy9KOVprNjRtMUZiYlZBazA0QUZFVkMwdkhmMDBjT2Fi?=
- =?utf-8?B?enBGMXVxMUVsRjY5T081VEZEMjBTVDJPMGJtcTc0VktSMHY1bldKK05ES1Rt?=
- =?utf-8?B?SVVLQjhWVm5yQnhyaWJMVkRjSEQ2WmtXamc1cmUxMWYzWVRxZFdZWmxEYVVq?=
- =?utf-8?B?eFJpYVhSWHdzbXJCbVprSEFvR1dFdCtwbnlzQ1VrTnVFNFpHb0hiUC9kN0wr?=
- =?utf-8?B?dHFlUWUvYjQvRXllVi9KR0V5dWNrWmp4WDhuRW1ic3M3Z2JaKzlXQm1Ca2pX?=
- =?utf-8?B?UmNuRVJHZXZDVGlSdDlZclZDcEN4TlNSQy9kZ3Z2UVJBKzFKd3IvZXJkMmFj?=
- =?utf-8?B?SW9jSVJ6SlpVWTc5SWo4dmdXRDJFV2c3VGJsMDRNSlJlbTNneUU1UHUyVitB?=
- =?utf-8?B?aXcxK01ZMGFOR2JqRGtPV00vak9TVkpYZzFEUkE0ay9zWkpPV0ZlYURxS0pO?=
- =?utf-8?B?bCsvS0dhM0lWdkh5RUV0NWdoSk5Wa2p4aWY2Y2k2M09TQXV3VEVTL0d1bWxz?=
- =?utf-8?B?UHRBQyt6ZXQwdWtGR3BxZTkwQ01GQnJZL1JOdE1JQ2ZoamZxNUpNbzZ5YTE0?=
- =?utf-8?B?N0pJWURpU1FTKzc2dzhLb01MYkNvMW9zM0swU1N2QTd2SVNHSkxzblM3dEN0?=
- =?utf-8?B?Z2FKQ1haOXpMQ3JueW5IbjNZYU40ZnRoWTNaNllTalpLNkx6TFErOUV4TG9r?=
- =?utf-8?B?bXJBcU1DcUdwbGtSS3l1WGt6N2dCMHgvVEwzRDZlVUFmeUdTRE80dEVLeXh3?=
- =?utf-8?B?ZnM1L0JWZENyUnVEU3FhVnRVZk0vemhYZ2RYaG9hOVBuQ2hzcnFwSGpmMndT?=
- =?utf-8?B?Qi9DVENmdEdyVkY5QXhnK2g1RlhPMDVKVGFOcStCYngwK3NoVGtucDZNczJS?=
- =?utf-8?B?cVE5STRHNnZlWFVkdklJTkIyVzVkdFpFKzcvOWNNRzRqM1h0eUZQSHlTL01n?=
- =?utf-8?B?TTZOUDdVNkZaSUFmaXFseEVCa280bXYzK2JZSkFSem1WclQxRi8ydy9FQUR5?=
- =?utf-8?B?K0ZHYzdMc0VVTXZRczFYaGc3WFRSTFBMSTl4Qmo5OEJaRkdCMlJOR2xNSEZG?=
- =?utf-8?B?ZndEYzY2MThUalVYODBNS0d2SEFHcVQwT2tMRVZoK0RVRXQ2ZWlJUE9wZjRk?=
- =?utf-8?B?bjMxVFFRZkZXL3JqYyt6UnlWYVVuTDcxS0xJa1dldURCQzdUeFVLVEM5NHpG?=
- =?utf-8?B?UDhBb2VvcC9wTFZtdUxaSUNmVnlNN041enhNUDFCcy85UXEvWVVOaGhsV3p3?=
- =?utf-8?B?S1lrTXJIVDUveWd5SFBBMW9tOVYzdUxmKzF6VC9qSFJyU05NckRHNjVsaFpK?=
- =?utf-8?Q?1IMJX0+6BLD7XTUhDO/rI/ZvhSYPW6D/Dn6qZmg?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9f319c7-4afb-42a4-accf-08ddc9b91d46
-X-MS-Exchange-CrossTenant-AuthSource: MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2025 07:18:25.8325
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAUPR01MB11024
+References: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
+In-Reply-To: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 23 Jul 2025 10:25:43 +0200
+X-Gm-Features: Ac12FXyLbBDcOzrp8fBxUqR9jIu-gUOTaGAF4LxjwERQBqGacqdoGbliH_T9iv8
+Message-ID: <CAMRc=MdFoAa2omJgL__4mRqX5CYyhZ3VU_Uy-Tf1oPSuZdV93g@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
+To: Harshit Shah <hshah@axiado.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?= <pgaj@cadence.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Frank Li <Frank.Li@nxp.com>, 
+	Boris Brezillon <bbrezillon@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, soc@lists.linux.dev, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	Jan Kotas <jank@cadence.com>, linux-serial@vger.kernel.org, 
+	linux-i3c@lists.infradead.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hey Arnd,
+On Tue, Jul 22, 2025 at 10:16=E2=80=AFPM Harshit Shah <hshah@axiado.com> wr=
+ote:
+>
+> -------------------------------
+> Hello SoC maintainers,
+>
+> This patch series adds initial support for the Axiado AX3000 SoC and its
+> evaluation board.
+>
+> Change from v6
+> - Ran "b4 trailer -u" and add reviewed by Krzysztof
+>
+> Add soc@lists.linux.dev in the to list and send this series again as per
+> suggestion by Krzysztof and Arnd. Thank you.
+>
+> Checked locally and able to apply these patchset to soc git.
+> (git/soc/soc.git, for-next, checked commit: 7dfbf3176d886ff9a0c7786942d3a=
+89809d0641e)
+>
+> Sorry for late request, please consider this series for the 6.17.
+>
 
-Please pull this dt changes for ARM/Sophgo.
+I can't speak for the rest but do you want me to take the GPIO
+dt-bindings patches through the GPIO tree for v6.17 separately?
 
-Thanks,
-
-Chen
-
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
-
-   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
-
-are available in the Git repository at:
-
-   https://github.com/sophgo/linux.git tags/arm-sophgo-dt-for-v6.17
-
-for you to fetch changes up to fe4fd701938197c2bceeeff670da3ace9b488d09:
-
-   arm64: defconfig: Enable rudimentary Sophgo SG2000 support 
-(2025-07-23 09:56:27 +0800)
-
-----------------------------------------------------------------
-ARM Devicetrees for v6.17
-
-Sophgo:
-
-Add support for Duo Module 01 Evaluation Board.
-This board uses SG2000(old codename CV181xH),
-which is dual-arch, RISC-V and ARM64. This
-patch add the support for ARM64.
-
-Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
-
-----------------------------------------------------------------
-Alexander Sverdlin (5):
-       arm64: dts: sophgo: Add initial SG2000 SoC device tree
-       arm64: dts: sophgo: Add Duo Module 01
-       arm64: dts: sophgo: Add Duo Module 01 Evaluation Board
-       arm64: Add SOPHGO SOC family Kconfig support
-       arm64: defconfig: Enable rudimentary Sophgo SG2000 support
-
-  arch/arm64/Kconfig.platforms                       |  6 ++
-  arch/arm64/boot/dts/Makefile                       |  1 +
-  arch/arm64/boot/dts/sophgo/Makefile                |  2 +
-  .../dts/sophgo/sg2000-milkv-duo-module-01-evb.dts  | 76 
-+++++++++++++++++++
-  .../dts/sophgo/sg2000-milkv-duo-module-01.dtsi     | 40 ++++++++++
-  arch/arm64/boot/dts/sophgo/sg2000.dtsi             | 86 
-++++++++++++++++++++++
-  arch/arm64/configs/defconfig                       |  4 +
-  7 files changed, 215 insertions(+)
-  create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
-  create mode 100644 
-arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01-evb.dts
-  create mode 100644 
-arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01.dtsi
-  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
-
-
+Bartosz
