@@ -1,111 +1,130 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BE027780C
-	for <soc@lists.linux.dev>; Wed, 23 Jul 2025 08:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4CA1F94A
+	for <soc@lists.linux.dev>; Wed, 23 Jul 2025 09:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753259160; cv=none; b=WFm/stkWJV+9sCxjQ4xW2r6dfQ/rcDgghnPZnXEnjPgRBXNAigGzS7pLHansa8ilj54pI5KXFoF98//oPy01o9xVN5P6J3bKExbwFcvza/Gu9xnCLdaDuc2M4BhrIsucuI2EX7IKYAm8QdSu2vwndiPLC0inhEBUfHobJ0jhDR4=
+	t=1753261506; cv=none; b=oCdT+GxlUzhDPf49z2KBt6jbPu2xCRHPnGowGp/RFFUNbp2w0dMGdXQ/jMxittlJo3Xo4YT5CKK+09PL64sHqJWKOVVF9swtZKAfgp5dU0TjhNSD4ZTIqfBWjrOPf0T46X1e0z9OdeBaCMc16S4MRwwL44VZZiQCVo2wgnFoHuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753259160; c=relaxed/simple;
-	bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bsd53EtDroOfsRQrQzCqCXB66SkQUgGuR+QgTAcNCS21rLho9M40A2NUlBzajtvVTT/qYk9XbVS7Xw4P0dWh9Oxs/ILgf266RnI+YCREb/jiEQhon/Qm67y9M/yTTrZ+gbzEFNpB9QHnfYvnfEfQzVsuAyKfeFJy1A6oY/8OCaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=i2dDM1qV; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+	s=arc-20240116; t=1753261506; c=relaxed/simple;
+	bh=jKxS63Re37hcFm6L5FR0wOlWb0i7sX+Y/k5+Rp76jT4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AeO9lgFrDHCaulJVyLLbb3rZLijhc/Qy3ONemOom00gj56gnZ30X3P9+r8KNR343sapSZDLWmh29I25zoIJCZhCpMgj89INvFmwRTVtzoj6S/VB+iFUB/iXZzhN3WyBFcYnoNeRUN7niUZ8Jq6gg/Fa6Q7NjYigyoXLvQRIObjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kNWZ97rd; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="i2dDM1qV"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-311e2cc157bso5497437a91.2
-        for <soc@lists.linux.dev>; Wed, 23 Jul 2025 01:25:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kNWZ97rd"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-608964359f9so696313a12.1
+        for <soc@lists.linux.dev>; Wed, 23 Jul 2025 02:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753259158; x=1753863958; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
-        b=i2dDM1qVy6ffMfEx23gV4FTyCYtFve+KsI7StyDnu735zmI4bbwPjCRoqwTz979+97
-         4odjBXZadp/mCXoqJ0WNWXgiiz+jarjpOeWK5wyR1IS0BQRCADdFAjD7mFDEucSZAL6I
-         FC662jmN3rjq7aLrge19FU1jICe3OtD395z9mKZLLv4oNLREyRwaxflEILLJz/DTFw+P
-         FtuohjqMKra0/hbobCwpw1P5kUu/zJ22N87xJvXG3+vfXv5zDc26h13qTxT3u3WVUB3q
-         IP/SdF7Bz20/KTYuKcxHL19fK9ThOGG+uGsxFnHAAWc2ur2Vwco76cV8puLLnQ0jc2IW
-         JB/A==
+        d=linaro.org; s=google; t=1753261502; x=1753866302; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CoZCnvfP/rwehZqm543p76Ydsjj+4/YJqR0zDLYGaAE=;
+        b=kNWZ97rdsuOzWmHH26TMs24y0j2OXvva5k0azGhELiC2htI7/VFGK5f4P6iY/Wbs/h
+         L1jdPwW0I/cKe3+sheBQDX+v0RhtRKBHgHr9nOtOxUk4uTRCGFxRHFrRttF6BX21nTi7
+         sI+2EqeHIuXkSVuQu1bekDbFXwheH+vf0EKNGITXyB/rT7sxG8vr3bEFeJ/RrQNQmUx2
+         Vx3E9rgtkVJ6L3u0tkyjjZ+u76n4CjCIYl5kqRpWgTsCtr0hNZyeFuNs2LGGcbSYPwgR
+         jI7TLwr1bP076MynkOUwad+MiO6CYxwiB71fkGzQopxYOEhMBwfrZeOV3yxZkvaaB9Nx
+         A0UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753259158; x=1753863958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
-        b=DV/C4GkYXAt6vIpcMTwXaCAj9SVq9BCrGS0JzO9fehGxGpWxq36yLn6WyVOHXDrA4A
-         9136vZdscw8X8nh9CNnG5kCRoQA9CeUKbLr5NvPIb3RSMnFVxE01HE/2SGvuLj5MC7Kp
-         nJ8Sptfho+7FUVaJGMpqyMj+Im7vOOxBpgERFoZsw1rA12phHqdH8omcQ/4Uv4g6P1pw
-         7WlD/1ei18Pd2YM9IfGdCWKUyzn83qYLh1dHWfeWgUxpafJDQpdCu940loIHUbPZM89S
-         r9MPlZrfmL5vkt2Ca0TdJTXiIWJ1y6WbRoxDtZHNVlDCfsvavijqwkClLiE+tAn4grtS
-         JgeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6z+qB+ad5zIlJ2BJvhB5REhz7tpSA09VfuqbuJWaBCHDwQ1IOVfdXIiHqTDVhPlXNOU4=@lists.linux.dev
-X-Gm-Message-State: AOJu0YwsjfZzEi3zsezIR2eiDY7t6F6i1PlN/ftb9njjQvlY7Wb2SFH6
-	IqVUCHRBtvKB+7ddTjlPvE9+AUMXjo143VDziFqhkIrDtYElMpACga51BFYTjo1MpTwY9b9V3VF
-	PtBCSufLxQeC/lwWPYQ/4OucLZlvfQh9JHABhZu84aw==
-X-Gm-Gg: ASbGncup5EMMhKi7agYQTAH9Fx+8qeZiKQJSiy9OKRUDK7P5cXs+KUzwonKMNtcqbZP
-	xBPPcIcAsVL6i0vOV8NqIRnhyPuKdHtVoR2npmwTPgIYrgorkvdDFT5UQ8LhKUZBiS0oV5FvZLC
-	H6igM7xfqcJ8bRLl1zqH/Qj2H9VOOiFL+3IPWZmDaWyJ9G8kkkG6LdDlxrjFPzZX5nQf0THLwj2
-	cRYqyuXnIPGVbOvjhxZWJg+c3+ndH97DzmC4GlGSrxzMgd7
-X-Google-Smtp-Source: AGHT+IFzwCafFosCdx131zbcEFY3D64m+7mo0loj5vAsYVkMFUgy5UAHuuRGjg5yAkxctR2cI5zO8+e+kqhHgdsFxCw=
-X-Received: by 2002:a17:90b:53d0:b0:315:aa28:9501 with SMTP id
- 98e67ed59e1d1-31e507dc7b4mr4498294a91.24.1753259157929; Wed, 23 Jul 2025
- 01:25:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753261502; x=1753866302;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CoZCnvfP/rwehZqm543p76Ydsjj+4/YJqR0zDLYGaAE=;
+        b=cdFPwZnY4nn4Mi7QqjPLWEbg1/kjzVL4YX2FMzVsXFvX77sZaGgFmd8k1NmAlOjMur
+         pks5myusnxOCivg3w9zMhnGhXZdM0dPojijII6cmVo0gEsB0To9hvtjqt8r5lxvdI1rB
+         xQI1I4kaeYXSY0biwgIGkN8M4MbDKE7j5LqmejIrxcQKNoudrzZfNGq0LEhkcVCTafPq
+         ZtH9y5rTZbcTZoNxjCyNsxKR4/jLoTD+wVGpEYYsAp1ZM68S7DuqayYRVsEnET20AD7Z
+         GkW0tRDFkDMC8hdeZvHfZQfQuYuw0pm8tMIGNIG7A9dJmOt+tx7rWARALMQK9LSYyM7y
+         h3vw==
+X-Forwarded-Encrypted: i=1; AJvYcCX9my8aqeTsQEWaByYqjTYu7fDCcqeOxWUJv2luR6dVMpSkAEQa/xrv6kVOaIFt1Cbrtsk=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwiB+ATbCiNgDWIEedGMI2+eELapiGkEkI65Xa527JPanG/cNas
+	AgeT7jK5IdfEAOZWP8DOJ8efweFzGT0QVo4hn79lk2AShwy5jhW+GpCHpu8rvid8Bps=
+X-Gm-Gg: ASbGncv8oLJcoSdTG3AHwE9B2VOVY07tjKxp5JngOEo0Y0kzfwlAKfFYyk4C/NX6L1N
+	ew7m/lu/xW8l6QsAZsrGT8aHxehOXvy4bV+lqpdNlnwVm+SNRxY4dTdeCVHnpvXOc0qlYrgO2A7
+	9xlNiY5lkz0UEIk5b9ExXSruFHlVAGXWAf5FURwMZdhyx848VwWIxWU9GgGWT96j4av0zgl1XMK
+	Mkqzkmb5GurHnuRjAEh0Kp4G3MxC7QkP70RDIWFYeMqkI8Jv6EM8E8cRYNFqF/HjnDeqeTPoqND
+	LHmP2qZqRqgdqGZACLEXVoYuAF2ZS3jw1xZu3XD3eWCVn3F+qlpaXnQ1yuVXmbSkyec3zqaLOpa
+	s80NRqfD8J/YlmK2kMCVpaG6av7Y6ud1w
+X-Google-Smtp-Source: AGHT+IEfzsllmY1ddx+Lz3lhSzSUYagxITt83zhZt/m63TVAuXGg4evDnAWl67hB8SYpI35/gQ1tAw==
+X-Received: by 2002:a17:907:8688:b0:ae3:617a:c52 with SMTP id a640c23a62f3a-af2f64c62aamr72965566b.2.1753261502178;
+        Wed, 23 Jul 2025 02:05:02 -0700 (PDT)
+Received: from kuoka.. ([178.197.203.90])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af22f6fa6afsm208165466b.120.2025.07.23.02.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jul 2025 02:05:01 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	soc@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] samsung: drivers for v6.17
+Date: Wed, 23 Jul 2025 11:04:55 +0200
+Message-ID: <20250723090455.25295-3-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
-In-Reply-To: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 23 Jul 2025 10:25:43 +0200
-X-Gm-Features: Ac12FXyLbBDcOzrp8fBxUqR9jIu-gUOTaGAF4LxjwERQBqGacqdoGbliH_T9iv8
-Message-ID: <CAMRc=MdFoAa2omJgL__4mRqX5CYyhZ3VU_Uy-Tf1oPSuZdV93g@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
-To: Harshit Shah <hshah@axiado.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?= <pgaj@cadence.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Frank Li <Frank.Li@nxp.com>, 
-	Boris Brezillon <bbrezillon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, soc@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
-	Jan Kotas <jank@cadence.com>, linux-serial@vger.kernel.org, 
-	linux-i3c@lists.infradead.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1184; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=jKxS63Re37hcFm6L5FR0wOlWb0i7sX+Y/k5+Rp76jT4=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBogKW3mDzwNTJovQ3V2taqJr+0T0EUFr4aTJQrU
+ U2eCAEqgvCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaICltwAKCRDBN2bmhouD
+ 1yR5D/wLSF3mWxeCh6hr0nA8CzfZto/VRm7x52o6glrfAIZHQ/zaOZ1570ojQRpZeJP5mZm4qGY
+ eCpgfc3Cl1f3osmJKLI+ojFPlK2gH/ipqWahqcUL3RsUoLEivfyXNMYgVXTlWkTORjB418lS8G4
+ fC+/aTu3X6UgYmwLBP8r10DUaCbsZDfBDbr0mNCU1VMLKphSgTRHrJ7Fg8HVk8mXucjIsd0J/5t
+ Wl9bVoa0hc/QJMAZO9hG2pK0KaAuIHgs/9GSO9HpcyHnlMKbMOvg09YptLZkXDUDs2zTlRF5wnB
+ NQXTtkM/pqAfz3z9cWqPeRK4OkEILvtOIFeYAIO+qd8n3Pa3B7DyBhlf2r/xLCh6FOKtNtHp1dX
+ tk1JND/+6NxXlw4Zt9WkiAj6vA4vu7Do4i1DEdR2dlB/C28jltww4CsTGu48nkO66/6iD1vCAA3
+ ZMeQciN0yfxEl7fRNBiHs5JSXdSW8axGHEtdSU8PkD71n0nSR0Fwxf4RY1JSEk7vFdeFJlUUuio
+ z03+FSDx3pT2g/B3sbq/trspGQa3YpomiGIBGJvvId9fUwkUa4CHy5DxEbDObIScg4zIs3oZ8W8
+ GikDwiW3shZzRPhee2lB943Ur5FpLQDYG1LGPmjsUY7oMlNhTaPs2mEsEmIWjvC7ivChoKGwVrB R22rNCovyB27l2A==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 22, 2025 at 10:16=E2=80=AFPM Harshit Shah <hshah@axiado.com> wr=
-ote:
->
-> -------------------------------
-> Hello SoC maintainers,
->
-> This patch series adds initial support for the Axiado AX3000 SoC and its
-> evaluation board.
->
-> Change from v6
-> - Ran "b4 trailer -u" and add reviewed by Krzysztof
->
-> Add soc@lists.linux.dev in the to list and send this series again as per
-> suggestion by Krzysztof and Arnd. Thank you.
->
-> Checked locally and able to apply these patchset to soc git.
-> (git/soc/soc.git, for-next, checked commit: 7dfbf3176d886ff9a0c7786942d3a=
-89809d0641e)
->
-> Sorry for late request, please consider this series for the 6.17.
->
+Hi,
 
-I can't speak for the rest but do you want me to take the GPIO
-dt-bindings patches through the GPIO tree for v6.17 separately?
+Late pull with minor things.
 
-Bartosz
+Best regards,
+Krzysztof
+
+
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.17
+
+for you to fetch changes up to 687d974a218a719f7e729bef9c498ec36f18115e:
+
+  dt-bindings: soc: samsung: exynos-sysreg: add hsi2 for ExynosAutov920 (2025-07-16 10:41:42 +0200)
+
+----------------------------------------------------------------
+Samsung SoC drivers for v6.17
+
+1. Google GS101: Minor improvement PMU binding.
+2. ExynosAutov920: Add HSI2 system registers binding.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      dt-bindings: soc: samsung: exynos-pmu: Constrain google,pmu-intr-gen-syscon
+
+Sowon Na (1):
+      dt-bindings: soc: samsung: exynos-sysreg: add hsi2 for ExynosAutov920
+
+ Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml          | 3 +++
+ .../devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml         | 1 +
+ 2 files changed, 4 insertions(+)
