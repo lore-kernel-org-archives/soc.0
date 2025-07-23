@@ -1,135 +1,108 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BE22836B5
-	for <soc@lists.linux.dev>; Wed, 23 Jul 2025 09:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54D02E8E05
+	for <soc@lists.linux.dev>; Wed, 23 Jul 2025 14:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753261508; cv=none; b=md0oE6vyPXk8O8alH+i+xGLDcHBll2dYVVzz/tURHSXnsA21mpuiB739LrolWOBM5i/UgB9la2KY7i0wMa8ZwDShN+aMqx4e3TOgjwhtStoEBKZJeGbfyLlZZTmbDNwsAsYjG+uV+FMGOqRhanjo/SJf/9kBgHcQdypEE86ms9U=
+	t=1753281764; cv=none; b=f6/9ivhkb5IvIY7tdMJ/OA0rTb7hgy4yFzmQcvbWl6uxQ3QGCqoDZ6lrROYx+rRvIfstEj3E7s6eyQOvv5yUhnfvHCQ6a3JKPJJl0ZQvxUSmTQEbzHKZfUBIarnkNKSUR2lFI0vK/beFtaGYChgunmq6gf23o+RoJwD6bPZdLWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753261508; c=relaxed/simple;
-	bh=k3GjnkVYrP1B4aQik37L6qakXOv0eTA+cuGhbBu9yp4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VzOiy5VNCcE9LCOdLAFmCksQ1TBSzJYXkR4J6/ha2hNsEEpXhkxknjYdkAcH2sRaV5vR8TSAnwSGNOOuJxrHoljIDWI3yU5tu2YQmAKIHjsuJyo66FJcPEtkhUZJYzmdHIx1T8+yWaRc92ac1BFxAi0bIkKTnrrew29OUx5/MP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wpLwwq3J; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1753281764; c=relaxed/simple;
+	bh=R4TxTD7vqNgpLn4WFjTeF2OU0nVam8d8lfKzLvG+H+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bey0aQoq4a4UWKhpIWSj9/HuoaJwJfbtiF5eVr3EcxOlnz4fKbZirZiA7ZT9L7QqyDbZYjihe+gxufuZermEmUmDP4OdJwpZ119JgzaBNaZTfoSEa66Z3yVrTNbV0ZSDC6fAlFy6BXTwc6L6UPHGreEdWd50RmTZ8pOiagYJsDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dG7Qzn0M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wpLwwq3J"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ae35eb87810so127705866b.1
-        for <soc@lists.linux.dev>; Wed, 23 Jul 2025 02:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753261504; x=1753866304; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZCgbja/gOTY6PAB9qzS6fOz3VhDsGQwTh8VHxpGStNo=;
-        b=wpLwwq3JLhOEfCd9zft+ZFcML1iu0XckaEfpP/Q8YiHscY7LjUcdptTePfGv8tu1Md
-         yOoUZUPDu9kqQXS1E+uV+8NCncGNoBFRxHC2GSh1ObVsBcJLszCaXh8T/7ThD4VVepW0
-         yfdAirDNKIBB0UzTGtAi7k8eMYfIW6jHKkdsDpmemHBDY1tF305VCTIaMVSwyoh3h3IE
-         BaHr+g+gey7rJP2yu19RMhe0XW7OgAbztduo96weHoLH8dMWnQoozwzbOGKROzjMqAAU
-         TD61qirsIPVwJ8QGkTfevXe2GnqdfUond7bkIE+9LNYGEPa9lirAXFdWP4JIV6ERSrmp
-         Iosg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753261504; x=1753866304;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZCgbja/gOTY6PAB9qzS6fOz3VhDsGQwTh8VHxpGStNo=;
-        b=FzDvf450DttjcCWKzs6WI1SoYygf0s8zui3LqkZqs7t4X6hnIGcYjZRni//C3Kc4qx
-         7ZGoWFWJpXJZXxzw9iXxGQnBM0wAfEroVzIKLz6IksxswdFUPdz4NZSK6fogeqw2EkyU
-         Zh/8YyaOhtfZwKZAbvrbVkPEMjI4bPV+8hi1uBTyKtt+jAK5IF++R7lQyes5s2I0cGBs
-         kXrlVc2AHofj9c8J8mH23YICb7lTYAsL5nCbopIzyhVc6CiQRQwwOH75aDV3VrE2vOSY
-         XB0PYGR/lXnHZwBVOjwzm4VOpBmTjG9Q8eUQi0pxmvUYLE3pSXw76rd4XNlntDvSahMj
-         9nkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXsu1HWWlye4Ppyez/zGb6JyPnrmKDpwKS/OQGvls/N8C3UX6tcpEflpgm7rQPpB1xxfg4=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy2W2RM3n/fPxRvcboaU1bkrIL30z5rlBFkBnvRct34mrNRQ45i
-	I1k/wcegBZNUeMJbyx5B3+2F0a2wIEx4O8ze7ycC26wJx8ardh+eKr99BU95Gov1oVg=
-X-Gm-Gg: ASbGncuxKC96u3veODpG5H4mkPKxa0A6M+0rUSq3xDydN2mmKM6xaPkA9Cx4aDHGzMT
-	+bermuTJTcnKy1iQR+a4Yv5M3KmeBciTPVgQc8+Gj2aWUOHh3QUysa1IGKP2s+2uYpBXZT0Ks++
-	btTfqHvlTaEc6G0+cqO0jvAg4mjCOqiSsvDsHYB1MJdU8QUOwsgykGVpysAZYUrccAvEIXkYHca
-	Op2jZgR4WjmPciKH/cAY+O5ZGSpcKvD3Sk6uvjz1TgftJUWhlWY9DDR1A+vRgaQvdRVsd1uCN5G
-	1mOBu29mPlZrmmXa3gaQMKErw/Zmbq41RJpvZK+vSpXOC+adWIY1fz4o4tWbIvfkLqIaDVZzW35
-	tGrYlZd00mDbZX4mxkEoCk++bFIURVdEm
-X-Google-Smtp-Source: AGHT+IGDvi6weUHt1zBLFFABHti+LtpFg4sB/fcxjNLis7RjEwnRTt3JzWNz/nbQdoKPmX82/bVYRA==
-X-Received: by 2002:a17:907:a07:b0:ade:9b52:4d84 with SMTP id a640c23a62f3a-af2f9171be3mr83211566b.15.1753261503791;
-        Wed, 23 Jul 2025 02:05:03 -0700 (PDT)
-Received: from kuoka.. ([178.197.203.90])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af22f6fa6afsm208165466b.120.2025.07.23.02.05.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jul 2025 02:05:03 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	soc@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 2/2] arm64: dts: samsung: dts late for v6.17, part two
-Date: Wed, 23 Jul 2025 11:04:56 +0200
-Message-ID: <20250723090455.25295-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250723090455.25295-3-krzysztof.kozlowski@linaro.org>
-References: <20250723090455.25295-3-krzysztof.kozlowski@linaro.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dG7Qzn0M"
+Received: by smtp.kernel.org (Postfix)
+	id 4DF39C4CEF1; Wed, 23 Jul 2025 14:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70BC7C4CEE7;
+	Wed, 23 Jul 2025 14:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753281764;
+	bh=R4TxTD7vqNgpLn4WFjTeF2OU0nVam8d8lfKzLvG+H+A=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dG7Qzn0MGSjMZIKcv9BOFVqz1e8A458pQkakADr8f0WiYJYfNFvQdtV4SPnS5WlXi
+	 ocTOzwd6OLtPAlx1yfVwHOXwz8ksJUNpuzOx1lSyv6jjyldwJI/DpHA2vrxwhvMqbO
+	 bSn5kKLMKlOH27/X0tn1yjiVCX4TCMj6VXs+x4ybPtCofx1EcV/d73UjzZG6VWrn0d
+	 ruoDgHSJkM7NAfPXwTSlbqbgcePQ+AXN0ZmV32+zWTM0peOYQ5f+IBECu5JpYV+MJS
+	 RsUicaBgf6zrAFd6ANJxONoRXjwGwo9DGSV7z1n4g6/WzDE1MOfVXqMOIsydB3IdX5
+	 ZeUjwSIXoUwwg==
+Date: Wed, 23 Jul 2025 15:42:41 +0100
+From: Conor Dooley <conor@kernel.org>
+To: soc@kernel.org
+Cc: conor@kernel.org, linux-riscv@lists.infradead.org
+Subject: [GIT PULL] RISC-V Misc Devicetrees for v6.17
+Message-ID: <20250723-postage-skylight-597377b5f8e4@spud>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1277; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=k3GjnkVYrP1B4aQik37L6qakXOv0eTA+cuGhbBu9yp4=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBogKW4P0UvirWoR64QHVT8sGAC5b3VZtif/zjju
- Tcgt15OsOCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaICluAAKCRDBN2bmhouD
- 1/8/D/9g5Op+GBYMMSso3IjQEbVlUOXL50H08DRw5IhgOD8/JEC2MB9HI9A27GE+SOvvAuMn95N
- yAiQz2hEVZVBMhZRjSMvA/GgGL68YsFXodGDzrrohbVaQBX1Tt8O8pNZQg0un1MdSGlQk+xmEEz
- VAydxdgmYXNjp7x0DPiOKXgmUTtCBF2SI7l2gDJxZXbHeqx4J88M4eKos3AsLn/UPhiqOSbtOf/
- Vf/1i3bnQvPYiUYb/j+RJsA8O0Z1VsrZn+S81zDu+YmShmJ5K3hXRBPyhhFNvFiDSkEfAcfzh16
- ZhNgr+hH3eLnEBurn/mVIK3C86dvHdYHRRabzt907PbYvYewMqEHyciTIikc77zvJFcemeaKIn7
- NdTymOl0yn1JpbBmqQp3sz77KNHp872fGEBnPjNSW2GcrSERXkEYCjMi4MFD4QqTw/91G7z9AAv
- 7jnvOxIoBDk3osWnb2TMCZgTgCm9pKnCyWsBfnm2KrgNVzAknGozS9iMV454DIR2b5Q+QiCltVb
- 6/ZrFsnOuREufeR9O9esdGUlIh4T0uEawlYXyPN7/El2KsAWBhWLa3CxYFlBR6KF7p9Lmp9UQzi
- 4YSy9Fs/jY70dFp+NG1E5y9nbX1sxvpyRYn0aCzBg+v3p2TqaMgjD/i43Z53S1X86c9er7h6DJg 1IkmyPCm1CfKkZw==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
-
-Hi,
-
-On top of previous pull request. Late pull with minor things.
-
-Best regards,
-Krzysztof
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="oh9VrmaBMOxopwqN"
+Content-Disposition: inline
 
 
-The following changes since commit 49a27c6c392dec46c826ee586f7ec8973acaeed7:
+--oh9VrmaBMOxopwqN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  arm64: dts: exynos7870-j6lte: reduce memory ranges to base amount (2025-07-05 10:23:36 +0200)
+Hey Arnd,
+
+Since Linus didn't release v6.17 on Sunday, here's the dts PR I
+mentioned. Not too much here, so hopefully not too late to pick it up.
+
+Cheers,
+Conor.
+
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-6.17-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ riscv-dt-for-v6.17
 
-for you to fetch changes up to 8e5bf103b3ada972ea890ae6aa2118ff9b8c321c:
+for you to fetch changes up to 28fa0dcb571ab8f3be4d919f0e20e01d4e44bcb1:
 
-  arm64: samsung: MAINTAINERS: Add Tesla FSD DTS to Exynos entry (2025-07-15 11:03:41 +0200)
-
-----------------------------------------------------------------
-Samsung DTS ARM64 changes for v6.17, part two
-
-Tesla FSD and Google GS101 DTS are handled via Samsung SoC tree, so the
-clean dtbs_check rule applies there as well - mention this in their
-maintainer entries.
-
-Also, include Tesla FSD DTS patterns in Samsung SoC tree to document how
-the patches actually travel.
+  dt-bindings: riscv: cpus: Add AMD MicroBlaze V 64bit compatible (2025-07-22 21:45:40 +0100)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      arm64: tesla/google: MAINTAINERS: Reference "SoC clean" maintainer profile
-      arm64: samsung: MAINTAINERS: Add Tesla FSD DTS to Exynos entry
+RISC-V Misc Devicetrees for v6.17
 
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+StarFive:
+Sort properties on the MilkV Mars and add the power status LED to all
+jh7110 boards.
+
+AMD:
+Add 64-bit Microblaze V cpu compatible.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+E Shattow (2):
+      riscv: dts: starfive: jh7110-milkv-mars sort properties
+      riscv: dts: starfive: jh7110-common: add status power led node
+
+Michal Simek (1):
+      dt-bindings: riscv: cpus: Add AMD MicroBlaze V 64bit compatible
+
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |  1 +
+ arch/riscv/boot/dts/starfive/jh7110-common.dtsi    |  9 +++++++++
+ arch/riscv/boot/dts/starfive/jh7110-milkv-mars.dts | 12 ++++++------
+ 3 files changed, 16 insertions(+), 6 deletions(-)
+
+--oh9VrmaBMOxopwqN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaID04QAKCRB4tDGHoIJi
+0q7QAPwIGUV/7xxkp/U0km4y5s9VEE8dTgMXY3SmLLo9HvIjxgD/dxAOeeNn1YK4
+DBibLFyvnuZODCO4wqZS/vBmEJBqJQ0=
+=uzv9
+-----END PGP SIGNATURE-----
+
+--oh9VrmaBMOxopwqN--
