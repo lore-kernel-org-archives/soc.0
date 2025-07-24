@@ -1,164 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9475719A
-	for <soc@lists.linux.dev>; Thu, 24 Jul 2025 06:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD6E26CE2C
+	for <soc@lists.linux.dev>; Thu, 24 Jul 2025 12:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753336930; cv=none; b=Xh7J/ekfRdmq68AyJlbKB/stT5ITZ8J9NOAvKJ21xkbNS6QE8BzeLFjktNqBPnqZquWw0TZD6c3vM9tTXHmHgQqIoLaYVyWArFVgYT2/QDcOXDGxoDVBqWKaR9ZXe0e60jGik0PrDkQCjyfsNBTtkV1BTC05d+3qekvfOHSyDTs=
+	t=1753359455; cv=none; b=uxicKkWzmmEavSQfQTFgMZFB/Jj6m9peazxUJBzJNASpSe202EqQTOFu9WBkNXktDat7ACPoWDjBSGNr6wUdajR0RaplUPaPsTSFA7MNnAYZ91JwLqHlzICELgp9A8MV/ocSOngIW0r5KBn92VW6V2+YjnfMI4NyiLbqdj0wC3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753336930; c=relaxed/simple;
-	bh=LhryfFJ9dvApZxfQJIe8VWX1eu+JA20rxCddQlLHJvY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C4NkQ8ZXy/rAIqMvRnIaECaMoitv78jww1FoqfH/RIZ902Mq6nUBUJTFPe83gc/7RsbMjWpZsICKcg9h8RnMQV5knkctpONA7KcaTbcwHtfB59qFvT3ELcON341crz3tbuRMDkkBeGHwGdWBoxAsn6Hj3D+tqhggN9RzVnjd9+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e6xBEcdj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753359455; c=relaxed/simple;
+	bh=m7JbZvMoAIlPW0dGDc5nDGqiDkrmkt29Jf4xODLXe/0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=uds6FN/eihbqvSpSHJmXy3wZKJEcBQfxl401dPyfrYs3pxBsB0/jakW25V0d1Xfw9fwzV5Kj+/gQJhnM9Z0RorQjOrL2fpnoot3SfPyQGUXrbzSJneg+GBSaXdQkAvGlV3sgunMhEdtA2KWnv/c8CAiD+dD2fN0XTTQHyyBDXQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SgX+V9Kk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VMKqn3Mv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e6xBEcdj"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SgX+V9Kk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VMKqn3Mv"
 Received: by smtp.kernel.org (Postfix)
-	id 399A9C4CEF1; Thu, 24 Jul 2025 06:02:09 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 8D34AC4CEF6; Thu, 24 Jul 2025 12:17:34 +0000 (UTC)
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 52A75C4CEED;
-	Thu, 24 Jul 2025 06:02:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52A75C4CEED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so5755515e9.1;
-        Wed, 23 Jul 2025 23:02:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753336926; x=1753941726; darn=kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=md7ezImaC8aEPMY35qFAjPwWsP8CSm3ceVQj6sefxsg=;
-        b=e6xBEcdjA0bbp5JAugzWbFzca/BPkKL268tVZlefG7hwYsR5DPGBd3iP5WzWI2eosi
-         jHLAZ5KtxBjMemiwmzui7eZPXVEjZucHxalr2AlY4tynpvs7PpUN18yBk9hrv2HE8UCj
-         juYwIW0dv/MYWuDkgulwjxb0yn7unk+I+kMdXl3CUtmYOSTnK2m4Jpfkast9ZXc8RXCz
-         lgjo1EamwfkXBRE7nAGd9WC3KBeTo6Q4fSrahpLJR5cGuFzTlVi0SrZayNw/vO2FC29M
-         HoDjFwttmh4aoAu0LyQTM8z9S399i+WBLE6opyAisuD2q5Kys6OM5TdWyZpjhG6EFcHb
-         9W2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753336926; x=1753941726;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=md7ezImaC8aEPMY35qFAjPwWsP8CSm3ceVQj6sefxsg=;
-        b=FxPzZJHf6TIA1dhidpbwYfBOqDrMUE+VbGsp5+LN1TrXJjtxfExs2dkcauC7z79Rls
-         4T2wTQuESD0a7pQqhdktMpw3Y1jvuhqejE0bMVOgm2YTYSGT0u7xKHi1uTSJZlUtPXHJ
-         vnyygKG+Xw9R/01yw2dzcD7Cx6Jfy1JY6LUcZ8MqEWRgiO/TW/lODpi3/RIjaRCSGhyI
-         nJ719vKDMFinXKnDxvM/MlK6IkvcmUtQ+KT67x5DdvQ/CBdeyKXgxcBn2B/sIJhAgmcr
-         yqI6NHvQRV6V5Y+dtaMzuuCjOyWMkZ29Mad3gVWGN9ydFc64IjTednJmyHlZbttdB/ub
-         jzoA==
-X-Forwarded-Encrypted: i=1; AJvYcCVxFGbT++AjU8Qdn9HZF8F6LRBIGgZaRqiCNUvg2Qv/CVlPt9g32YcsOgBrmLGu3NXuiLI=@kernel.org
-X-Gm-Message-State: AOJu0YwVyIjmYe9GifOJi19BuZfCWGEu+hsK+aFP0LnD6nYu4V6jO0ad
-	B+ELX08GQt6itE1hRCAwWvt8QeCd5JbmnADppc2OV6pC0nRtNrPhLWfEHCfKhw==
-X-Gm-Gg: ASbGnctjfWb+qNJYX/Y7e+IfTWeFIECsGSTByDwewc/lO1KTYTSDb9xr+ezgtpXKbLg
-	r2epk2Wmg0jhWeAfDdEB958BAW8MsQsK/zndLHo6ZDLPgOlhZ0yqdOEr0seclMSkDwRaOsEwX5A
-	pLPg3TVfPb/NT0s+Xd2DX4gDl3ItZSF/J56HmDGJYHPpeh9f9914LFARV2OAb4WJEOjQ90Oa50U
-	VtmM+qpdDKGSSBActO3PvHPP2/0MgWuTBknTvqTeeeVA3Qd0/Qtl+0JVBdctuzGxfgOUVrSHAEn
-	w+hcWg2qDoS8b/UPT38r1eAjcevJsIuu7ve44nSn7Uz1AZqPKpFSbewsRU0rcEeBfJOKhkkc9la
-	I6QjC1LsLbGxqqaCwJWsHVavKqkoHeTZdNcQq45YTKGZDr6BqDaGnSDhURZBeJpio0YqIMAH1dB
-	IOZm6TcYM4YgiSTA==
-X-Google-Smtp-Source: AGHT+IEk5vZ1UKWFwNAblqDfd6t+N0Mkjayt6bORHiyfg+et25uqHOWyD2FkHhqLkZP7Mco8q9JdgQ==
-X-Received: by 2002:a05:6000:1ac6:b0:3a4:f8e9:cef2 with SMTP id ffacd0b85a97d-3b768f1e40cmr4157399f8f.36.1753336925465;
-        Wed, 23 Jul 2025 23:02:05 -0700 (PDT)
-Received: from localhost (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b76fcad0f1sm1046656f8f.41.2025.07.23.23.02.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jul 2025 23:02:03 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL v2] arm64: tegra: Changes for v6.17-rc1
-Date: Thu, 24 Jul 2025 08:02:02 +0200
-Message-ID: <20250724060202.2942616-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250711220943.2389322-7-thierry.reding@gmail.com>
-References: <20250711220943.2389322-7-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.kernel.org (Postfix) with ESMTPS id 1EAADC4CEED;
+	Thu, 24 Jul 2025 12:17:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1EAADC4CEED
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 0B5EE1D00113;
+	Thu, 24 Jul 2025 08:17:30 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 24 Jul 2025 08:17:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1753359449;
+	 x=1753445849; bh=4mmZ8ZhV6vN83FB+JRl0HEi96SFfXJj0YFQB8fvIjNE=; b=
+	SgX+V9KkQiLAfyAY+sP3WRPce1B6LjHXtz3k/lS0/ppRY1F1eLmAC9ZI+XTrBEPm
+	gPpBhYaBG2hen9mPwhEUrBA8gtxehEqhSp9N4f7ARE5ZluMLt+b7VWtsFkfDf6Et
+	ZyeZtrz8lbr6b52aH0Y1RR4AXPxq72AtFqcvdJiDh/FuLfhiwXYYV21M4o7QxAYJ
+	XonFetmYOIZU4L3f9ndHAyduOmXl/rK8KyFkrHj4mrM96jeuWosS2hiMgikoV+tk
+	7D87wQXzZJRkczJqei7jjRH9iPA0q6ohryPNY9b44+79yYk97oDGM1YXRsp4WbXt
+	DF6jDMD2oWDpl0i7RuSZvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1753359449; x=
+	1753445849; bh=4mmZ8ZhV6vN83FB+JRl0HEi96SFfXJj0YFQB8fvIjNE=; b=V
+	MKqn3Mvj5R2QMw8z1BbCxChtslDAwxFjoMAAYXvNb0b8qQ+7mlairQm1ZyvtOFgm
+	AZuQA170zUmgd/s2/DUoxG71ZnuQguUBSyFs/08ObcUA4pmpi8GZnASJsq5rK0Wf
+	wtVuP/Tkd1a6tFCXNq48GbM0wU7lRoxxYiXgSBOtMl6Mpy7XcySoXbCV5ZoBqryb
+	VSvWpjYl2rZKJx8xp+Pc87MXzF/3D4ZTwqWxYWbawjFXfZbE1P7amCZ4j/7u0xER
+	g8atSohmliC+VWDRcMQOAHR4CyHCj+/USMbwjFwCcnGSOZxTmL02vQGZVa0K+1aX
+	4lrpLwbc7ThfuRaeZf5xA==
+X-ME-Sender: <xms:WSSCaIPxJ82o-d3Clb6Qhbn8VKHbHQdCfhyqIx5KHAw1srWPI5oWrw>
+    <xme:WSSCaO-it8OZI22_lCZ2xuv7pb3hAu1a4SVZBy_1BFiaYXfQ2IM8lHCsZJk3uSTp-
+    aeoBC3rr6xq2P8aOnk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdektdeifecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopehthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomhdprhgtph
+    htthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsohgtsehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtsh
+    drihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehjohhnrghthhgrnhhhsehnvhhi
+    ughirgdrtghomhdprhgtphhtthhopehlihhnuhigqdhtvghgrhgrsehvghgvrhdrkhgvrh
+    hnvghlrdhorhhg
+X-ME-Proxy: <xmx:WSSCaNW3S2Ut8RCnODSbj91mvNXi4QEftlNOUcGWgcAaCfnxJEF9oQ>
+    <xmx:WSSCaE8ay2SRprM7gjjephoI-P1CWSdCxF9QRnYY6bGSzD3fD6D8sQ>
+    <xmx:WSSCaO8xvyV1yy7zYBtaxmMjRC4CjCCtWErshXdqYH9WBcMplsHSvA>
+    <xmx:WSSCaMTY3A6ODBlN_Y0VChVSngCoshMNyTYDQL2MJT5-Sv3PcQ_kGQ>
+    <xmx:WSSCaHxO4JLgK6RTTVcSvzGqqGg1btCQm2lNU7ur5m8EtJc2w8mWccWr>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 29986700068; Thu, 24 Jul 2025 08:17:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: T5d762c921204b368
+Date: Thu, 24 Jul 2025 14:17:08 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Thierry Reding" <thierry.reding@gmail.com>, arm <arm@kernel.org>,
+ soc@kernel.org
+Cc: "Jon Hunter" <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Message-Id: <ba53e8c1-b097-4b02-947f-06a8e0c8ad5c@app.fastmail.com>
+In-Reply-To: 
+ <izdiwbkuipbzunqot7zhillohtfcm32xrk5ydu54bamumfgkpx@p6ikuhkv3bkj>
+References: <20250711220943.2389322-1-thierry.reding@gmail.com>
+ <20250711220943.2389322-7-thierry.reding@gmail.com>
+ <izdiwbkuipbzunqot7zhillohtfcm32xrk5ydu54bamumfgkpx@p6ikuhkv3bkj>
+Subject: Re: [GIT PULL 7/8] arm64: tegra: Changes for v6.17-rc1
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi ARM SoC maintainers,
+On Tue, Jul 22, 2025, at 14:21, Thierry Reding wrote:
+> On Sat, Jul 12, 2025 at 12:09:40AM +0200, Thierry Reding wrote:
+>> for you to fetch changes up to d01e4f1e7aa8833f549ac61a0bbcdc395533269b:
+>> 
+>>   arm64: tegra: Add p3971-0089+p3834-0008 support (2025-07-11 16:57:47 +0200)
+>
+> Hi Arnd,
+>
+> it looks like you haven't pulled this yet, in which case, please hold
+> off for a little. There's a missing dependency on another branch, so I
+> need to redo this. I'll send an updated pull request ASAP.
+>
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+Sorry I missed your message here and ended up pulling v1, which now
+conflicted with v2. Can you change v2 into an incremental series instead?
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.17-arm64-dt-v2
-
-for you to fetch changes up to 5897c161dc59e8d5237917406ac4be2d88e942bf:
-
-  arm64: tegra: Add p3971-0089+p3834-0008 support (2025-07-24 07:53:46 +0200)
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-arm64: tegra: Changes for v6.17-rc1
-
-Add support for the Tegra264 SoC and the corresponding engineering
-reference hardware (P3971-0089+P3834-0008).
-
-----------------------------------------------------------------
-Sumit Gupta (1):
-      dt-bindings: memory: tegra: Add Tegra264 support
-
-Thierry Reding (13):
-      dt-bindings: tegra: pmc: Add Tegra264 compatible
-      dt-bindings: mailbox: tegra-hsp: Bump number of shared interrupts
-      dt-bindings: mailbox: tegra-hsp: Properly sort compatible string list
-      dt-bindings: firmware: Document Tegra264 BPMP
-      dt-bindings: misc: Document Tegra264 APBMISC compatible
-      dt-bindings: dma: Add Tegra264 compatible string
-      dt-bindings: rtc: tegra: Document Tegra264 RTC
-      dt-bindings: tegra: Document P3971-0089+P3834-0008 Platform
-      dt-bindings: Add Tegra264 clock and reset definitions
-      Merge branch 'for-6.17/dt-bindings' into for-6.17/arm64/dt
-      arm64: tegra: Add Tegra264 support
-      arm64: tegra: Add memory controller on Tegra264
-      arm64: tegra: Add p3971-0089+p3834-0008 support
-
- Documentation/devicetree/bindings/arm/tegra.yaml   |   5 +
- .../bindings/arm/tegra/nvidia,tegra186-pmc.yaml    |   1 +
- .../bindings/dma/nvidia,tegra186-gpc-dma.yaml      |   1 +
- .../bindings/firmware/nvidia,tegra186-bpmp.yaml    |   1 +
- .../bindings/mailbox/nvidia,tegra186-hsp.yaml      |  28 +-
- .../memory-controllers/nvidia,tegra186-mc.yaml     |  84 +++-
- .../bindings/misc/nvidia,tegra186-misc.yaml        |   1 +
- .../bindings/rtc/nvidia,tegra20-rtc.yaml           |   1 +
- arch/arm64/boot/dts/nvidia/Makefile                |   2 +
- .../arm64/boot/dts/nvidia/tegra264-p3834-0008.dtsi |   7 +
- arch/arm64/boot/dts/nvidia/tegra264-p3834.dtsi     |  30 ++
- .../dts/nvidia/tegra264-p3971-0089+p3834-0008.dts  |  11 +
- .../boot/dts/nvidia/tegra264-p3971-0089+p3834.dtsi |  14 +
- .../arm64/boot/dts/nvidia/tegra264-p3971-0089.dtsi |   3 +
- arch/arm64/boot/dts/nvidia/tegra264-p3971.dtsi     |   4 +
- arch/arm64/boot/dts/nvidia/tegra264.dtsi           | 412 ++++++++++++++++++
- include/dt-bindings/clock/nvidia,tegra264.h        | 466 +++++++++++++++++++++
- include/dt-bindings/memory/nvidia,tegra264.h       | 136 ++++++
- include/dt-bindings/reset/nvidia,tegra264.h        |  92 ++++
- 19 files changed, 1293 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3834-0008.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3834.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971-0089+p3834-0008.dts
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971-0089+p3834.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971-0089.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264-p3971.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra264.dtsi
- create mode 100644 include/dt-bindings/clock/nvidia,tegra264.h
- create mode 100644 include/dt-bindings/memory/nvidia,tegra264.h
- create mode 100644 include/dt-bindings/reset/nvidia,tegra264.h
+      Arnd
