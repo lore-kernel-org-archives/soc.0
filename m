@@ -1,122 +1,63 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10DC22259B
-	for <soc@lists.linux.dev>; Sat, 26 Jul 2025 10:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DBB78F4C;
+	Sat, 26 Jul 2025 17:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753526239; cv=none; b=pUnlsU5UpbLP3aRL8xbE0E+OoFYjIQg6mD7BJrpCl2MKtQiAUH0BW0LaCgNLFPf+j9P9ISIMAyiospxQy6YohIzAmgqDMb+YKdz3jd+q1+nu2+tXPG2RvY+MUQPhT7w28UR5pM4oXwHFJFUSPESWPKVT6T/sIgLZl3f2GdIgca0=
+	t=1753552477; cv=none; b=TXxTVWirIQ+9T1OlMP0GgfyfX2Zetck2VDOBoO2lWKI/6yKp5HIC+PYqFZsiTwJq1FcrfAKz00BC8PNEvcc2VPqbj3cruU90rWTjMlbOTTFjq83jF3N/6MHeQdMFsPzB2V5WrHaLlt8KlvN3qQcmmgqgvaDe2+nssLzLYJX5CAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753526239; c=relaxed/simple;
-	bh=8MCddCGTksS5iRZsvioLx3Znb1q02NvkE3cJ686F5ZQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=YxaqlEfWo6k/LLPub87KXxRdENf9wQT8n6c/8brQzLZKIc5MjmGU/kil0YyaMM78yGgQ+YHgw00lhw+GWES9VFXTSgA5Tcb86jIU4W/ix//NPw+ezaYBt9lgzSTkh34gbQTXgk1zgM7qqYBlyyBXbG+KwF6Izk+msyXeTfFKqnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=RbVY++RX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lG10jkql; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1753552477; c=relaxed/simple;
+	bh=O8XDFXfBTuXvwGLH4OtMQytQ38kkabiKqv6gfOmh8Ho=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=QfsY7mhARFwPPX2V4Q1MZqKIdFJjQds74l7v9soLkCTVag7hsO0s+xfg1Kv5mqxQD2QkcmQAQbOo+7W/MLyDy8VotbJip6BtwtnyF8qvjbpTEoSTtE1Xo4lid32NagtRd+CdDPJgbC2wqbJHNss2kFbPzYPGZnUcwumPxH3jiVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AeVwA3de; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="RbVY++RX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lG10jkql"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 15AEC14001E4;
-	Sat, 26 Jul 2025 06:37:17 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Sat, 26 Jul 2025 06:37:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1753526237; x=1753612637; bh=8M
-	eKRW79IYnH4GmCMwZac8sROuaBWd8QIywAI0eiGP8=; b=RbVY++RXdJx77DF9rh
-	WKMtopbEOcKoL8FuypvlkMHSla0WgzWU6ayHwavRcwdDa+ffLpD21UbmE9MXZLpc
-	FjIktSrw6VNsPpP2gcNH6NcoVE7r1y8FRlZmvXcSzNIL+94atLyTQwV2swWwsaqc
-	Xxqq734HVYX2HWqIGKgFCbBr9gbyvTtrOrc/HH7icWH15Evkn/u1eAnU0F2E3I0j
-	rO1Yu5/qL9RAWNx+CGgSMYkOW63hkivyjx/x4iUt5gLukYptcqhDy+8xendcti66
-	bBWgduBereID+MGUz0w+OTIq5gdRZ3MpzhUdCgdIlCMcb7goiAss1mt7cCdyOucC
-	GqlQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1753526237; x=1753612637; bh=8MeKRW79IYnH4GmCMwZac8sROuaB
-	Wd8QIywAI0eiGP8=; b=lG10jkql0H5b1l6254Rop4sICnkc8NFfxb1LDu0zZ/O3
-	FOc/UI2sfoLgrZ9yQFKcqligkAMbUuRD/YGMlZTWvB1t5PtbsMpgx0jv2+9eH8b2
-	ont6Z2Qv8+hxC36s8UtSoKn2duMMMpBqRihehLBkPc4iDDG0AeSKsafw900nYyEi
-	6UA4mn1GUJjRSUr8oQz5ePOiUJkQqjONJtx4JEeAn+gOmk6Do1xlvEQZqkg1Zapz
-	XuVcezxYm6cmzZP5rCI30C0zcCzN42v0nmicouCqTr7x6FP350foIT+9FoV4MCgH
-	JmJ+humfXRUUYT787rE16nHJjtWRaVb9tggT4aZxiQ==
-X-ME-Sender: <xms:3K-EaFdM1zXVqqDzXJOPCh0AG-fFWJpUcE9FVRDNEXwSDc9BsJAfHg>
-    <xme:3K-EaDPHa3UqeBl2XRtInF25ijwH4EO0b6V2ZHIg_2TwXVSllpytfo2MeCdyov478
-    1fhR-SdJk0mFV0IAW4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdekiedulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
-    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
-    duleeigeekveeugeettdejtddtleeghefhvdfhueehtefhudelffduvdeuleevteenucff
-    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthht
-    ohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhorhhvrghlughssehlih
-    hnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhm
-    qdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhope
-    hsohgtsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgv
-    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:3K-EaBde9NHgLkQ2rhd3bfJHSoeis6eHrxjxD6BlN1BXD3hiRCyEeg>
-    <xmx:3K-EaKtM20ONWgtDGVzYe4_pjOg0R9voKPogl4ocjoU9q8AwXbRaMg>
-    <xmx:3K-EaA9xhmhhWv1PNLnj44eLUu2SMLISk6ZvwZqN2EDJTdJfLdG6Ew>
-    <xmx:3K-EaF1au7tPFyorF1yb3uTe37M_bhynb6s_UiCkrcIc0I81t41zrA>
-    <xmx:3a-EaO-KZVuyqnSLm9bQMREgIicVfYPlEc1mYgq96eE9XXwbC02B08Vo>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C9398700065; Sat, 26 Jul 2025 06:37:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AeVwA3de"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2661C4CEED;
+	Sat, 26 Jul 2025 17:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753552476;
+	bh=O8XDFXfBTuXvwGLH4OtMQytQ38kkabiKqv6gfOmh8Ho=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=AeVwA3der4qU1luIdSmKdWNi8DBP6jldHwxGX0f0t8Xn5q4lR8BYhCsjkSQLdudAM
+	 QQFfIqDuHnPX3V7kXRYO1Jw/YTuLJr6VzRpW6jbHCeYytGlh38rj/DXPGhrrtE7Fjq
+	 W83+ySkg8BAXz0Jo6pMhoa3BzIYlehPY7+/LrQKcH+Hdc3kI5C9v2TMX5N3crcgvyo
+	 irqupxkIrUNz29ygon7VRaaNmouhCO4Jj49Icox5iOdVph3bdMjCoC9g90x5YBOKos
+	 oWcoB8Au0/M+JHXPufqUN7JRCMCLf75LjJ1bG9s2ebyrYk87ZaQ0tkg+h74O5SfqbK
+	 XCPYh6o2zHnvw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E3A383BF4E;
+	Sat, 26 Jul 2025 17:54:55 +0000 (UTC)
+Subject: Re: [GIT PULL] soc: fixes for 6.16, part 3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <94f09700-cebd-4270-840f-219ef14bf2ee@app.fastmail.com>
+References: <94f09700-cebd-4270-840f-219ef14bf2ee@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lists.linux.dev>
+X-PR-Tracked-Message-Id: <94f09700-cebd-4270-840f-219ef14bf2ee@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.16-3
+X-PR-Tracked-Commit-Id: 912b1f2a796ec73530a709b11821cb0c249fb23e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6121f69c36337076fb0ffaa23acee3cf8cc5c931
+Message-Id: <175355249373.3655743.9316066633007495504.pr-tracker-bot@kernel.org>
+Date: Sat, 26 Jul 2025 17:54:53 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Date: Sat, 26 Jul 2025 12:36:06 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <94f09700-cebd-4270-840f-219ef14bf2ee@app.fastmail.com>
-Subject: [GIT PULL] soc: fixes for 6.16, part 3
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-The following changes since commit 347e9f5043c89695b01e66b3ed111755afcf1911:
+The pull request you sent on Sat, 26 Jul 2025 12:36:06 +0200:
 
-  Linux 6.16-rc6 (2025-07-13 14:25:58 -0700)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.16-3
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6121f69c36337076fb0ffaa23acee3cf8cc5c931
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.16-3
+Thank you!
 
-for you to fetch changes up to 912b1f2a796ec73530a709b11821cb0c249fb23e:
-
-  arm64: dts: rockchip: Drop netdev led-triggers on NanoPi R5S (2025-07-22 22:33:36 +0200)
-
-----------------------------------------------------------------
-soc: fixes for 6.16, part 3
-
-These are two fixes that came in late, one addresses a regression
-on a rockchips based board, the other is for ensuring a consistent
-dt binding for a device added in 6.16 before the incorrect one
-makes it into a release.
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      Merge tag 'sunxi-fixes-for-6.16' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into arm/fixes
-
-Chen-Yu Tsai (1):
-      arm64: dts: allwinner: a523: Rename emac0 to gmac0
-
-Diederik de Haas (1):
-      arm64: dts: rockchip: Drop netdev led-triggers on NanoPi R5S
-
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi          | 6 +++---
- arch/arm64/boot/dts/allwinner/sun55i-a527-cubie-a5e.dts | 4 ++--
- arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts | 4 ++--
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts      | 3 ---
- 4 files changed, 7 insertions(+), 10 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
