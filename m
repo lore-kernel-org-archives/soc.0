@@ -1,63 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C24F29551E;
-	Tue, 29 Jul 2025 18:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0E4BA45
+	for <soc@lists.linux.dev>; Tue, 29 Jul 2025 20:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753814419; cv=none; b=XgRXR4soFEVmg9T8WGvXaCA2wQWe6GuADJiuRz4MZuDzQYPTWCVul8/3NIT35N4/Mm8QKvazNt4oOXq/StEwbqfSHwLHX3046yT1xBf4fsUvniX/ysE4ecnEJgBzPgMhyjlsj8SGRLamkazbyZ3Y7fEjDXAZlZB04Qmeu28577I=
+	t=1753822635; cv=none; b=jLsd1bBfzmUkf98h4n4aKsnak34ZW2SZ9iIayN9k1Eq2x+8JsZnKm3JS1Q8T4AiyHH0t1Z5t4YNZOWB1HZexSoHTmk6WTt22Sag5G4LDRTSzFA4NkCOYnoEC90B6JaoTQualoOMb02nxLCvZgi9fa6r9Ml0SOPhip0klp7PKyPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753814419; c=relaxed/simple;
-	bh=1dmaPs+FhXJ+7saYTQxgTlhRkjHB2WJxPj19M/N+jCE=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=t4J0l4x/EIVG0CiocMx8A/rdiyPQbzhrhiaaIUoufuBSd8FAe+S+mqsYufNRK/bI7SIawrw+zs9IAgKoiPn/XpVGA5y2htXWp1vlTFR5k+fiq/0Tg/bRsiwXMHfqCUBGaoYT85DnIA6HiXk/lS36ghVym4P+3glEgwM73al50Ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bulPrY77; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753822635; c=relaxed/simple;
+	bh=ckxxI0pEhUoNwFhENigVXMswGZJ3obdfkxnF7idf7f0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u1Onm4e75LilXskWHUq+0NBv0Hbq7SJ1bbgCmYORPO4VGrNu06roZUEz4O/Tz7HgbzVwYr5ddBeWq5b6SErvR5Us+1Ft6OXV+tRQbFx0rLq7uFwDjuo65cIlCOw4iM4Uv5fsU9W9ykqAYwBkKjaqQqROlcbUU68mAp5axP/0Yrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ZBXG1ZIp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bulPrY77"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1910C4CEF6;
-	Tue, 29 Jul 2025 18:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753814418;
-	bh=1dmaPs+FhXJ+7saYTQxgTlhRkjHB2WJxPj19M/N+jCE=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=bulPrY77kGPrqj/hCo7gi8ql5Didf5Oz2elUjF/zVthzKlzKJh2In4iuSC1aiqi9i
-	 LnITHoO6Cur882dajCgn/XAg90WFtkGP7qXb1DliDQRMyisSl/Gl17aSbgyI2bhTSe
-	 spY6XJsqEx6HcwR5DseGVm0zY1cA1kZZgfHOWM8eQrT4znZdmLtPIuZpps1iZoruwp
-	 VMbSPflfwHcOfUNf9uE1U9VvU37pW1vF5GaBzOBeSL4w6D4uK1XqKW14VP/0ze2wls
-	 mrr7tBKYYCswkhXJYNik4y7hns24uJfsv6UdJgmZxE8PeQC9hxJwg5DJV0o4iiMukb
-	 bNf+XJG6pOazQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 73BE5383BF61;
-	Tue, 29 Jul 2025 18:40:36 +0000 (UTC)
-Subject: Re: [GIT PULL 5/5] soc: arm code changes for 6.17
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <fa83a407-a48b-4a91-8b06-6c9b6074f735@app.fastmail.com>
-References: <564b7ace-bb5f-430e-a7f1-9f6a41305e10@app.fastmail.com> <fa83a407-a48b-4a91-8b06-6c9b6074f735@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <fa83a407-a48b-4a91-8b06-6c9b6074f735@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.17
-X-PR-Tracked-Commit-Id: 8c1f5a11dad0a9043c17c4c0240f394e481baca6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0919a5b3b11c699d23bc528df5709f2e3213f6a9
-Message-Id: <175381443534.1585410.6519242830135316351.pr-tracker-bot@kernel.org>
-Date: Tue, 29 Jul 2025 18:40:35 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ZBXG1ZIp"
+Received: by smtp.kernel.org (Postfix)
+	id 89DE4C4CEF9; Tue, 29 Jul 2025 20:57:14 +0000 (UTC)
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.231])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A1E07C4CEF8;
+	Tue, 29 Jul 2025 20:57:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1E07C4CEF8
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id F2A86C0000E2;
+	Tue, 29 Jul 2025 13:57:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com F2A86C0000E2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1753822633;
+	bh=ckxxI0pEhUoNwFhENigVXMswGZJ3obdfkxnF7idf7f0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZBXG1ZIp4dGKZ6WWka60on0NSyHGtz87i3UjF1qPsnoManPmBNTFZbOAGtOA5Icd/
+	 OTxtjZ42b2e0SiXmpJCJ2zoGP1Y1+W+HS77lSzo8YFcwrPV3vo4qMiOm8PGAfwQCNe
+	 6BcdifUimrhsuiGSSDdDKrUFpdqfTb8uv+P9PLAo=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id D6000180004FC;
+	Tue, 29 Jul 2025 13:57:12 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: soc@kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	kernel test robot <lkp@intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/1] Broadcom devicetree fixes for 6.16
+Date: Tue, 29 Jul 2025 13:57:11 -0700
+Message-ID: <20250729205711.3393417-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Sat, 26 Jul 2025 12:32:56 +0200:
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-arm-6.17
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0919a5b3b11c699d23bc528df5709f2e3213f6a9
+are available in the Git repository at:
 
-Thank you!
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.16/devicetree-fixes
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+for you to fetch changes up to 0c927d478486fbc96a225aeae6705e7152700c87:
+
+  ARM: dts: broadcom: Fix bcm7445 memory controller compatible (2025-07-15 10:42:18 -0700)
+
+----------------------------------------------------------------
+This pull request contains Device Tree fixes for Broadcom ARM-based SoC
+platforms, please pull the following:
+
+- Florian fixes the bcm7445.dtsi file to conform to the
+  brcm,brcm,brcmstb-memc-ddr.yaml binding after 501be7cecec9
+  ("dt-bindings: memory-controller: Define fallback compatible")
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      ARM: dts: broadcom: Fix bcm7445 memory controller compatible
+
+ arch/arm/boot/dts/broadcom/bcm7445.dtsi | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
