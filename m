@@ -1,47 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCD11E5B7C
-	for <soc@lists.linux.dev>; Wed, 30 Jul 2025 06:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7711DED53
+	for <soc@lists.linux.dev>; Wed, 30 Jul 2025 06:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753856437; cv=none; b=TPsn0NbYW1DlykpyPuiAzibEWDCmQoggEoPIVh4GCYq4kuXhqGouRsaZ1ZdzmEyffSSEBjR80gCqhW6e6MCFUI7CtBGOmhPV9ldkURjM+GWv6PfsNYfeM3y4JvrwSfd/s1FK7wJWgG5NV47EHxTgc3nI4J6Lcj9kdosmTAZD/sE=
+	t=1753856623; cv=none; b=mE9xLf4FvDZHHnjNCixQTEIYI5dUyIH7j+ZcUwMsCeuinXvGj362A/q3CRsFTR+GU2LTb/eopVA/SRgvLyVcGyaFclrKp8v4cwN+j7VnNoND5pXiPAHFYxw4etRPUy8/1kOHrDrDc0LmtqKVFFXUN/txSNfCTvpzA6lRuD7oOZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753856437; c=relaxed/simple;
-	bh=nKY0YqG4t9mznqNAUvd95M6TzmSQjIk5LRlskSPR1Ik=;
+	s=arc-20240116; t=1753856623; c=relaxed/simple;
+	bh=NbabGEf45tBsmggcwEmmzNXhofnzWcIPDbRNYRqSgho=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LhN5JFyxu/qM79fkMRO+Pl7I4OgxqrX27AXGb6jRncgeyEf9a1LQ8wIptikzVcFWca7ykzNBH7CU/2PKy5HhIjbqO2QR8z8sPR08zTYQ7e7RJistODhGTIEf3BK9rGyAQL4/Gy0mn9YWdxrPfiuQIM28AMzUdQNoo18DVE0j24E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=RCOLSLljs9I7/bF/NPY2GRDbOu4JEr7KCUBTKXTq+DCEJWsB145ajM7BmCECPHOLUJe2BPaq+eLe+ew1whSsWsj8FHFXuUOoRbJ4d8QlmI2rAMf0tfRPfiN+TUJm5nCZHSe+r3eNlYXSwN6CLDrhvaMh+kZ+6JvTaYtNwGTKhOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btUaptIF; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btUaptIF"
 Received: by smtp.kernel.org (Postfix)
-	id D5507C4CEF6; Wed, 30 Jul 2025 06:20:36 +0000 (UTC)
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	by smtp.kernel.org (Postfix) with ESMTP id 836BDC4CEE7;
-	Wed, 30 Jul 2025 06:20:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 836BDC4CEE7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4bsMJX4rC6z9sN6;
-	Wed, 30 Jul 2025 08:10:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kvx3b491i35a; Wed, 30 Jul 2025 08:10:20 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4bsMJX41K8z9s92;
-	Wed, 30 Jul 2025 08:10:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7FE3B8B76C;
-	Wed, 30 Jul 2025 08:10:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 3j76NxDL4snr; Wed, 30 Jul 2025 08:10:20 +0200 (CEST)
-Received: from [10.25.207.160] (unknown [10.25.207.160])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 57D8F8B763;
-	Wed, 30 Jul 2025 08:10:20 +0200 (CEST)
-Message-ID: <b885d194-dee0-4cc8-ad85-25949baf02b3@csgroup.eu>
-Date: Wed, 30 Jul 2025 08:10:20 +0200
+	id 2AD01C4CEF7; Wed, 30 Jul 2025 06:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB74DC4CEE7;
+	Wed, 30 Jul 2025 06:23:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753856623;
+	bh=NbabGEf45tBsmggcwEmmzNXhofnzWcIPDbRNYRqSgho=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=btUaptIFcmmIIUTW3bIM7hX1JY9njYYr61NV+eg9ZmP2tvoHFbdT8uoTYnR99Gvso
+	 Ljxx7j1HEh0Z7yMxbUXQZmytufdxYMWmPf5ttm1a2SJ/gber39TORLVsuTUApt39nb
+	 +jxGV/MYd/2ZZ9ELCR+Y2yo8iSQ1CMDxApZNKxFAIg0lZz2g7S3ysqEXqx+8vpCE9A
+	 x5LYqW0KhhlFj//exxWesvDQAXTtmFdMB77AmqxsrQkphJ7XiRLbGRy/L5YbCqevsG
+	 E3bg+GKvk45vPdMhUfjY30U1Xg+2GyUjN3mZHxd1GM4wzcuFwIzutKK5bOwYWfvx4M
+	 vln8fKez13wZQ==
+Message-ID: <fb454b30-9229-4095-91ba-62906d3bd276@kernel.org>
+Date: Wed, 30 Jul 2025 08:23:39 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -50,55 +38,74 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [GIT PULL] SOC FSL for 6.17
-To: Krzysztof Kozlowski <krzk@kernel.org>, soc@kernel.org,
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, soc@kernel.org,
  Arnd Bergmann <arnd@arndb.de>
 Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 References: <c947d537-cae5-44f0-abd8-0c558bac46d2@csgroup.eu>
  <cb913a0a-0f3f-4890-aa1f-1b01ec9c564e@kernel.org>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <cb913a0a-0f3f-4890-aa1f-1b01ec9c564e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <b885d194-dee0-4cc8-ad85-25949baf02b3@csgroup.eu>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <b885d194-dee0-4cc8-ad85-25949baf02b3@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-Le 18/07/2025 à 11:23, Krzysztof Kozlowski a écrit :
-> On 10/07/2025 08:44, Christophe Leroy wrote:
->> Hi Arnd,
+On 30/07/2025 08:10, Christophe Leroy wrote:
+>>> - Use new GPIO line value setter callbacks
 >>
->> Please pull the following Freescale Soc Drivers changes for 6.17
->>
->> The tegra change is outside soc/fsl tree but it is acked by maintainer
->> of DRM DRIVERS FOR NVIDIA TEGRA.
->>
->> Thanks
->> Christophe
->>
->> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
->>
->>     Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
->>
->> are available in the Git repository at:
->>
->>     https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fchleroy%2Flinux.git&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C2a2edd9aede449ece30d08ddc5dccf65%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638884274336423091%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=t2mexcfPjeKLqozoB28iCbWbrQY40jEdaaJ%2FHnyKSEY%3D&reserved=0 tags/soc_fsl-6.17-1
->>
->> for you to fetch changes up to 76760b9dbbf8088ef31afb60d92b955f88ad1288:
->>
->>     soc: Use dev_fwnode() (2025-07-08 10:29:28 +0200)
->>
->> ----------------------------------------------------------------
->> FSL SOC Changes for 6.17:
->> - Use dev_fwnode() instead of of_fwnode_handle()
->> - Use new GPIO line value setter callbacks
+>> It has been many days and I still do not see this patch in linux-next.
+>> Please confirm that you properly feed linux-next and for how long this
+>> patch was sitting there (BEFORE you send them to upstream maintainer).
 > 
-> It has been many days and I still do not see this patch in linux-next.
-> Please confirm that you properly feed linux-next and for how long this
-> patch was sitting there (BEFORE you send them to upstream maintainer).
+> Until recently I was relying on my branch poping up into linux-next once 
+> merged into the soc tree.
+> 
+> Since monday last week it is now included in linux-next independently.
+> 
+Thank you!
 
-Until recently I was relying on my branch poping up into linux-next once 
-merged into the soc tree.
-
-Since monday last week it is now included in linux-next independently.
-
-Christophe
+Best regards,
+Krzysztof
