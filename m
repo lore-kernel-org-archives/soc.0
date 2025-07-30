@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057D77262D
-	for <soc@lists.linux.dev>; Wed, 30 Jul 2025 06:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DE97262D
+	for <soc@lists.linux.dev>; Wed, 30 Jul 2025 06:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753858633; cv=none; b=cgilSTvJ1Vu2CCbLdAYx45/FdvgGGYTBU8brXDQSi5uhxsPy4FyaZjjU/67Eb38Orh8U2AR+h2/Lc2QXl76yodaYp3drFBbq63aY7sGLesdMHrKnG6ENsd61GtHRg15kyc6S0Qxjk/Aec2CN23YUFZXukGrFkKC9FLtvLgyS4l8=
+	t=1753858634; cv=none; b=CF/g9V6RdRaK65Zw0CvpglBx9EBEvIpxAV0U01cPHeCm7U1Qf7BelhB/35ZDLt2IWx176qI+KivVXqhG0SD90MTlS/VcYhlMP0sY8XQVI2bgabG2/ao/7OUObCbyN2GJ+VpHro6h6lLOGuW4WUdPZPC+1WqDZs0yjDFFb5ontqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753858633; c=relaxed/simple;
-	bh=wA0AzLqvw2ErtK0ifOln8ACj7JpchhYzRjH5RDHXzLY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To:Cc; b=Y8RlJBimoaZlIReghGCzYEGSr64ob9iOn2ru0HvOspaSdbbkcX9/xqsnrtljYF0TFK7/UQpjPvWO3cy6cp6wfaK5L+XU0em1DZGRPSWnTsZJMwKdaCHEZ/8L1sobHAOC6IHw3emRy6vmAYu7UgOZzSbNMVRGE70CQq0ST/MZjps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iA7JZrBj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753858634; c=relaxed/simple;
+	bh=bZ9x92+/JG5sz94nMlz0R46s9R2SaV0yMl4tYBCWTlw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kgyqq6j8T4Ze//EQZD2XfAc0/gy55TVr5eSP/G2LpD2Yy+/0ZP0Q5fc7q27xfB0zie+GFcNCyUFjH590m96wsx5XXmTvQhHVWaaCBClEd5Y8D3DFR7GK4Hs11XKDnOPNEYXpsv/yS2DgQna71dfXffliJqrwAvgcf2NUltzTvxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uoy4zBpX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iA7JZrBj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uoy4zBpX"
 Received: by smtp.kernel.org (Postfix)
-	id A2420C4CEF5; Wed, 30 Jul 2025 06:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 884A6C4CEE7
-	for <soc@kernel.org>; Wed, 30 Jul 2025 06:57:12 +0000 (UTC)
+	id AEF08C4CEF6; Wed, 30 Jul 2025 06:57:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99192C4CEE7;
+	Wed, 30 Jul 2025 06:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753858632;
-	bh=wA0AzLqvw2ErtK0ifOln8ACj7JpchhYzRjH5RDHXzLY=;
-	h=Subject:From:Date:To:Cc:From;
-	b=iA7JZrBjHZXTqwZIzjfr87u4FazpLft+ZikgBg9/5pO19VQtwxUMcfUGN8R6WnHAr
-	 EudATKhURZk0ivj+PqFn2QlDrsxBhHrRr47I/3HFuYB9ZJlSDkUihEAsx6l6t2ODD5
-	 PFArl//p6jBbxWxqIhsyGq1AafFzAw1XPd50QmWqRmP3FLUAvyPLQL8ztDBNG7l0fD
-	 rZ9XmMCwZkc4CpOj/plLXmlBGswBbNGO/G8rUaqm7j1OpvTHsw0UkaosrLb5Sk/Ak8
-	 OyEgSrTN39wNKWUX22ttMa+KnYCOq4wZwwJDgvH89cmF0KlzpNam+qkI+oq+7MC+FQ
-	 dSV/hDKbaH00Q==
+	s=k20201202; t=1753858633;
+	bh=bZ9x92+/JG5sz94nMlz0R46s9R2SaV0yMl4tYBCWTlw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Uoy4zBpXSCFhZxRsVeybgUPDnIJYIVBhKIRiohPGxW5SH/ovDLbSmTgc54lbw9uJ4
+	 q+tuxfNwh28wvZriqjiHwJn84IJdrF/sFpgmChcFGUnIJ1jlho45nplUpo9PgY7QPa
+	 gcR6RjHqV7sodVAHALufutXtt7HX+602w24pnKsIGSHr4Bw9cD34V8v/v72n9u4qaU
+	 V2agNhZxOzUgWdI1mfLbQy73Dyu6Kgzn6KalhCxHEiACr553yWoymPYdufZNJBQSuj
+	 fUuBvtJvOvvkpsdIc8ccTW/NSYOsCKDRcVGCK+ZfPIpsrqeHTCp1++4YakH65CyjoZ
+	 cS/ap42xuP69w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B15F3383BF5F;
-	Wed, 30 Jul 2025 06:57:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD80383BF5F;
+	Wed, 30 Jul 2025 06:57:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -38,46 +39,39 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] RISC-V Sophgo Devicetrees for v6.17
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <175385864828.1808741.3434747779658717977.git-patchwork-summary@kernel.org>
-Date: Wed, 30 Jul 2025 06:57:28 +0000
-To: soc@kernel.org
+ <175385864976.1808741.10162989699260855684.git-patchwork-notify@kernel.org>
+Date: Wed, 30 Jul 2025 06:57:29 +0000
+References: 
+ <MAUPR01MB1107297124C9DA0CD77DA3DC1FE5FA@MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM>
+In-Reply-To: 
+ <MAUPR01MB1107297124C9DA0CD77DA3DC1FE5FA@MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM>
+To: Chen Wang <unicorn_wang@outlook.com>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] RISC-V Sophgo Devicetrees for v6.17
-  Submitter: Chen Wang <unicorn_wang@outlook.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=984995
-  Lore link: https://lore.kernel.org/r/MAUPR01MB1107297124C9DA0CD77DA3DC1FE5FA@MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
+On Wed, 23 Jul 2025 15:13:21 +0800 you wrote:
+> Hey Arnd,
+> 
+> Please pull this dt changes for RISC-V/Sophgo.
+> 
+> Thanks,
+> 
+> Chen
+> 
+> [...]
 
-Patch: [GIT,PULL,1/1] Broadcom devicetree fixes for 6.16
-  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=986854
-  Lore link: https://lore.kernel.org/r/20250729205711.3393417-1-florian.fainelli@broadcom.com
+Here is the summary with links:
+  - [GIT,PULL] RISC-V Sophgo Devicetrees for v6.17
+    https://git.kernel.org/soc/soc/c/11949d263a56
 
-Patch: [GIT,PULL] Qualcomm driver updates for v6.17
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982284
-  Lore link: https://lore.kernel.org/r/20250715021454.14516-1-andersson@kernel.org
-
-Patch: [GIT,PULL] Qualcomm Arm32 DeviceTree updates for v6.17
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=982288
-  Lore link: https://lore.kernel.org/r/20250715021838.14751-1-andersson@kernel.org
-
-
-Total patches: 4
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
