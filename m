@@ -1,66 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C150288CA1;
-	Wed,  6 Aug 2025 09:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CCB292B36
+	for <soc@lists.linux.dev>; Wed,  6 Aug 2025 15:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754472211; cv=none; b=SbeGXjyvSddYWJtPPBXN0XUArPb0ONp+ju1RQ8ifPtLJJ9FyV5uZrxbXaAGi7EOAUWN11Xf44GlzOWwDz8ZT4WQfwAw6p3B52FFmCHew6cICmPOOAbu2onRoE3Ee8rhicGLdHcGONkmy9nWfV/Oyg+OezvAHwE7x/AdRJIy8pxs=
+	t=1754494979; cv=none; b=Q7e+h40NeZe05/yfiFD1ddBWWvHZS+b2zIvuGP4bG2nWuGbfCFuk+s+PqSdmzuNtrvqRB9Sw+5mWQ1jGaUdI5xCMYv4Lh2yz2P+MgtRSbp0MTq1FgIRQttHzU/ImDfvWRBezaA0aK+YBgCdOyNLW7PCFuGBa/Sx4uf6cW3RFTsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754472211; c=relaxed/simple;
-	bh=Hwk7vf4HuAvJ7UE5NKvVA2XssqjK1pHzEDmND+upm+w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VEVXopUZC1whf1Ep4dwsY0gac/ojTUMe+ljCGbnwDvecb74hNoaw81X8L34tjcrqamRBwvyUomhRVG6Db+Wr+B5hqGkwFoTEC6JBl1AWsj+1MPK3J1NVfF7JinhNGKaS1TMKb+ygSYoi6+SnadY9ZRyiczsmyRkVfmqoAxDe4VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i6GNOto+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754494979; c=relaxed/simple;
+	bh=jyRgJSWPbO3PnUVVeAzfDnOq8adELheV/kLaL+kk5ew=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=UBRxx/nYhXmwtRBK2XbSrMonpyVG/yEFoP5BHtS2bOpJ1vqG1SQluWArNkogTGt5MyUJ6OX4/yV8CRwzYupyiLRhL7+A2Elgl1kQd2XL+xrFyMqZ5Uw18F/cQJjzTRGm2fJYcQdlpnjQ6/S/MxLU8C5bjeuODH6iZKOxY6bgcZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Shsce62z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SlR+myEi; arc=none smtp.client-ip=202.12.124.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i6GNOto+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538D7C4CEE7;
-	Wed,  6 Aug 2025 09:23:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754472210;
-	bh=Hwk7vf4HuAvJ7UE5NKvVA2XssqjK1pHzEDmND+upm+w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=i6GNOto+ufwZENyRkRe/0U2+uH/1sJM9g0wsZ61Ffeoees9k2birWd0oPEd/qr7QX
-	 1tErIhLbKSjseupyE4qMugARknExUz+FDgWq06s5mJgRN+me57kwAzEVm0KZYfg66X
-	 JR/AN8nU2UsLuJZ5fJiaHI5tnfKTm7F/R+/2ZfwkjBA/orFv19vzXWuh/lNh6qXWqq
-	 KOqOS37KyZXWVmoYqRuvUXX4Okpne/HTVHYwLhGJnGcRx9DR2UCyrdy7sLTroDbI1c
-	 VcexKBfRy5HQB8mHPo/seo5c8xMfa9x8ETmEaKwUcoC160BsgykC0u6Ke6n1wA9v7c
-	 etW7oMX8cjHZw==
-Message-ID: <ef3b8e12-0677-4e49-bf2c-b8136c9a6908@kernel.org>
-Date: Wed, 6 Aug 2025 11:23:21 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Shsce62z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SlR+myEi"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 25E1A1D0008D;
+	Wed,  6 Aug 2025 11:42:56 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 06 Aug 2025 11:42:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1754494976;
+	 x=1754581376; bh=tOn4t6RQtKYJOiy4GjdNdZL8fCaJIQVkOeOeYM78T9w=; b=
+	Shsce62z7ccdFezFEX0ljLJTYYZo8Sj/bFUVQu1aAmq//x3Dr9sVOfgEmY7qXnll
+	d7/0igJlw2TsRXbULIquZAJJGp1Klw+RH+HKgC+hdQJ2dxxSB779j/XDbTtO4waP
+	HBtlaJMW4NLFRdhm0Bmec57qu5kz9IhfvLcnQu3VW7drQpeQp2kQNQn0ymJ3mhyp
+	Tno3XVRsyqNRxu7QRW1JDzJHdLIDU1fhCkYl5jY3hvKMrGIYM4TUdRcGTXBFkxW3
+	fGXw71ZPwx0guOUbGPCmebkdUqUWAc45kzL6GF4uLEkXGBe7bIwCs6osx4TNKe1w
+	k62wtFPvsuBSj4o8QCyipg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1754494976; x=
+	1754581376; bh=tOn4t6RQtKYJOiy4GjdNdZL8fCaJIQVkOeOeYM78T9w=; b=S
+	lR+myEibV8ZuD3LZrxezPsVhRSJDJ3iQYJ22AQTZCMgp0OQAG/TMpLX8ynHngT9e
+	OxMi5eLac0YYJpiq9pPfy/HwkJVr9V/FUmLgc35jADR3OUTAm/ki+SCniptT61fQ
+	J4PGivd/N7Rlwjjwv+dSmCWC+aHzl6NrX9bjOh1KtAt++WtFDfPoM9hfn2wRJXmH
+	fieBtpKNEeqZAFI2qcYNU1I3zYAjVou4DeOWrAzzKDX+sJj/O8ixsCI1Qo4CpD9F
+	VuXN4NRx9fjbX07caRXMZc/udaaIs6eoi/W0yQ/cUNrMnEMpUldGRMYBYeUnw7Bn
+	EuJiXAuR6vIhIz9BZ9iuQ==
+X-ME-Sender: <xms:_neTaAIPbMToyVFjVCzhY_3AHIxEeueKJk4PgLrsAYmzXQRWnt7dLg>
+    <xme:_neTaAJMTJEZ8ui8qTj2uwGWmUn3QBkTQD_2KCDNmqOsbv9l44sCDua3P3SDlit6I
+    WDfl38Xx_sSvS7pyJA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudekgeegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfeejpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtg
+    hpthhtohepjhgvshhpvghrrdhnihhlshhsohhnsegrgihishdrtghomhdprhgtphhtthho
+    pehlihhnuhigqdgrrhhmqdhkvghrnhgvlhesrgigihhsrdgtohhmpdhrtghpthhtohepmh
+    htuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhopehgfihkuddt
+    udefsegtohgrshhirgdrtghomhdprhgtphhtthhopehhghhkihhmtdehsegtohgrshhirg
+    drtghomhdprhgtphhtthhopehkvghnkhhimhestghorghsihgrrdgtohhmpdhrtghpthht
+    ohepkhhskhegjedvheestghorghsihgrrdgtohhmpdhrtghpthhtohepmhhinhhghihouh
+    hnghgsohestghorghsihgrrdgtohhm
+X-ME-Proxy: <xmx:_neTaMyQha4lWXE4lnfH10oTn7U5V7ZNVO7HRNP5Sh8rhCkGz197OA>
+    <xmx:_neTaCHarrhUi7SS3lsNUWCcs7zA21ELnaKANtAhm3udo3oPuqo9Gg>
+    <xmx:_neTaAGwPQ13TlH-W68kdH_hvmRV15_tjZDRb3_AMdF7uUncH9yDpA>
+    <xmx:_neTaLugcvZe_3BQ1_GvdspWP5DyXXIhogioBm8zi9LhHsUMRS7UZQ>
+    <xmx:_3eTaP4CvdJzy5tREUVbfv-NACFAbM6q6Gp5RicN6WQAd1u5qmZS1Gh->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9D0F7700065; Wed,  6 Aug 2025 11:42:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/16] Add support for the Axis ARTPEC-8 SoC
-To: Pankaj Dubey <pankaj.dubey@samsung.com>,
- 'SeonGu Kang' <ksk4725@coasia.com>,
- 'Jesper Nilsson' <jesper.nilsson@axis.com>,
- 'Michael Turquette' <mturquette@baylibre.com>,
- 'Stephen Boyd' <sboyd@kernel.org>, 'Rob Herring' <robh@kernel.org>,
- 'Krzysztof Kozlowski' <krzk+dt@kernel.org>,
- 'Conor Dooley' <conor+dt@kernel.org>,
- 'Sylwester Nawrocki' <s.nawrocki@samsung.com>,
- 'Chanwoo Choi' <cw00.choi@samsung.com>,
- 'Alim Akhtar' <alim.akhtar@samsung.com>,
- 'Linus Walleij' <linus.walleij@linaro.org>,
- 'Tomasz Figa' <tomasz.figa@gmail.com>,
- 'Catalin Marinas' <catalin.marinas@arm.com>, 'Will Deacon'
- <will@kernel.org>, 'Arnd Bergmann' <arnd@arndb.de>
-Cc: 'kenkim' <kenkim@coasia.com>, 'Jongshin Park' <pjsin865@coasia.com>,
- 'GunWoo Kim' <gwk1013@coasia.com>, 'HaGyeong Kim' <hgkim05@coasia.com>,
- 'GyoungBo Min' <mingyoungbo@coasia.com>, 'SungMin Park'
- <smn1196@coasia.com>, 'Shradha Todi' <shradha.t@samsung.com>,
- 'Ravi Patel' <ravi.patel@samsung.com>, 'Inbaraj E' <inbaraj.e@samsung.com>,
- 'Swathi K S' <swathi.ks@samsung.com>, 'Hrishikesh'
- <hrishikesh.d@samsung.com>, 'Dongjin Yang' <dj76.yang@samsung.com>,
- 'Sang Min Kim' <hypmean.kim@samsung.com>, linux-kernel@vger.kernel.org,
+X-ThreadId: T8d5032a2d74658ad
+Date: Wed, 06 Aug 2025 17:42:24 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Pankaj Dubey" <pankaj.dubey@samsung.com>, ksk4725 <ksk4725@coasia.com>,
+ "Jesper Nilsson" <jesper.nilsson@axis.com>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "'Krzysztof Kozlowski'" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+ "Chanwoo Choi" <cw00.choi@samsung.com>,
+ "Alim Akhtar" <alim.akhtar@samsung.com>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Tomasz Figa" <tomasz.figa@gmail.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
+Cc: kenkim <kenkim@coasia.com>, "Jongshin Park" <pjsin865@coasia.com>,
+ "GunWoo Kim" <gwk1013@coasia.com>, "HaGyeong Kim" <hgkim05@coasia.com>,
+ "GyoungBo Min" <mingyoungbo@coasia.com>, "SungMin Park" <smn1196@coasia.com>,
+ "Shradha Todi" <shradha.t@samsung.com>,
+ "'Ravi Patel'" <ravi.patel@samsung.com>, "Inbaraj E" <inbaraj.e@samsung.com>,
+ "Swathi K S" <swathi.ks@samsung.com>, Hrishikesh <hrishikesh.d@samsung.com>,
+ "Dongjin Yang" <dj76.yang@samsung.com>,
+ "Sang Min Kim" <hypmean.kim@samsung.com>, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  linux-arm-kernel@axis.com, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, soc@lists.linux.dev
+ devicetree@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, soc@lists.linux.dev
+Message-Id: <5584937d-0941-487a-859b-b3c55aceaf37@app.fastmail.com>
+In-Reply-To: <ef3b8e12-0677-4e49-bf2c-b8136c9a6908@kernel.org>
 References: <20250710002047.1573841-1-ksk4725@coasia.com>
  <847e908b-1073-46ea-93f3-1f36cc93d8b8@kernel.org>
  <bfdc2eddde554e1d1808dd8399bc6a693f681c9b.camel@coasia.com>
@@ -69,157 +118,28 @@ References: <20250710002047.1573841-1-ksk4725@coasia.com>
  <000501dc06ab$37f09440$a7d1bcc0$@samsung.com>
  <e334f106-d9f3-4a21-8cdd-e9d23dd2755d@kernel.org>
  <002001dc06b1$540dc980$fc295c80$@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <002001dc06b1$540dc980$fc295c80$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+ <ef3b8e12-0677-4e49-bf2c-b8136c9a6908@kernel.org>
+Subject: Re: [PATCH 00/16] Add support for the Axis ARTPEC-8 SoC
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 06/08/2025 11:05, Pankaj Dubey wrote:
-> 
->> Also SAME strict DT compliance profile will be applied. (see more on
->> that below)
->>
->>>
->>> Given that ARTPEC-8 is a distinct SoC with its own set of IPs, we believe it's
->> reasonable
->>> to create a separate directory for it, similar to FSD.
->>
->> No. It was a mistake for FSD to keep it separate why? Because there is
->> no single non-Samsung stuff there. I am afraid exactly the same will
->> happen there.
->>
-> 
-> I am not sure, why you are saying this as a mistake, in case next version of FSD
+On Wed, Aug 6, 2025, at 11:23, Krzysztof Kozlowski wrote:
+> On 06/08/2025 11:05, Pankaj Dubey wrote:
+>> 
+>> or ARTPEC is manufactured (ODM) by another vendor in that case, won't it
+>> create problems? 
+>
+>
+> No problems here. Non-Samsung Artpec/Axis soc will not go there. It will
+> go the top-level axis directory, just like artpec-6
 
+Agreed. We did have a case where something gradually changed
+instead of changing ODMs entirely:
 
-My mistake that I agreed on that, based on promise that "there will be
-non Samsung stuff" and that "non Samsung stuff" never happened.
+Apple A4 was mostly an Exynos-family chip but A18 is not.
+If Axis turns into the next Apple and ARTPEC-23 is far enough
+removed from ARTPEC-9 to no longer fit into the same family
+as Exynos/Tensor/FSD, we can still reconsider the decision
+in a decade.
 
-> or ARTPEC is manufactured (ODM) by another vendor in that case, won't it
-> create problems? 
-
-
-No problems here. Non-Samsung Artpec/Axis soc will not go there. It will
-go the top-level axis directory, just like artpec-6
-
-
-> 
-> For example ARTPEC-6/7 (ARM based) have their own directories as "arch/arm/boot/dts/axis/"
-> These were not Samsung (ODM) manufactures SoCs. 
-> 
-> But ARTPEC-8/9 (ARM64) based SoCs are samsung manufactured. What if the next version say
-> ARTPEC-10 is not samsung manufactured, so different version of products (SoCs) from
-> same vendor (OEM), in this case Axis, will have code in separate directories and with different maintainers? 
-
-It will be the same with Google Pixel for whatever they decide in the
-future. dts/exynos/google/ + dts/google/.
-
-I know that this is not ideal, but for me grouping samsung stuff
-together is far more important, because there is much, much more to
-share between two SoCs designed by Samsung, than Axis-9 and future
-non-Samsung Axis-10. And I have `git grep` as argument:
-git grep compatible -- arch/arm64/boot/dts/tesla/
-
-and point me to any Tesla IP. Zero results.
-
-
-> 
->> Based on above list of blocks this should be done like Google is done,
->> so it goes as subdirectory of samsung (exynos). Can be called axis or
->> artpec-8.
-> 
-> I will suggest to keep axis, knowing the fact that sooner after artpec-8 patches gets approved and merged
-> we have plan to upstream artpec-9 (ARM64, Samsung manufactured) as well.
-> 
->>
->> To clarify: Only this SoC, not others which are not Samsung.
->>
->>>
->>> We will remove Samsung and Coasia teams from the maintainers list in v2
->> and only
->>> Axis team will be maintainer.
->>
->> A bit unexpected or rather: just use names of people who WILL be
->> maintaining it. If this is Jesper and Lars, great. Just don't add
->> entries just because they are managers.
-> 
-> AFAIK, Jesper will be taking care. 
-> 
->>
->>>
->>> Maintainer list for previous generation of Axis chips (ARM based) is already
->> present,
->>> so this will be merged into that.
->>
->> Existing Artpec entry does not have tree mentioned, so if you choose
->> above, you must not add the tree, since the tree is provided by Samsung SoC.
->>
-> 
-> OK
-> 
->> OTOH, how are you going to add there strict DT compliance? Existing axis
->> is not following this, but artpec-8, as a Samsung derivative, MUST
->> FOLLOW strict DT compliance. And this should be clearly marked in
->> maintainer entry, just like everywhere else.
->>
-> 
-> As I said this is tricky situation, though artpec-8 is derivative of samsung, we can't confirm 
-> if future versions (> 9) will be samsung derivative. 
-> 
-> But this would be case for all such custom ASIC manufactured by samsung, so I would like to
-> understand how this will be handled? 
-
-
-I suggest to do the same as Google and when I say Google in this email,
-I mean Pixel/GS101. Google was easier because there was no prior entry
-and Axis has, so you will have two Axis entries. But I don't see how we
-can add clean-dts profiles to the existing Axis entry, if you decide to
-include Artpec-8 in that one.
-
-
-Best regards,
-Krzysztof
+     Arnd
