@@ -1,242 +1,179 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013010.outbound.protection.outlook.com [52.101.83.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A947221F26
-	for <soc@lists.linux.dev>; Thu,  7 Aug 2025 06:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754549811; cv=none; b=gtJqV91DfQlkm6bxFXoEsNBcoLNAp5nbFKWRWROHhzO0LACqvzxDLLeR50iei3pemqsw5U7s3F31+jDSPWzO+BDSXCVBCYAtDr1/sAKAhme2JUrDLRTO5s+2JDCqx+UW6606pQ+SdOuN5z0uudJZVSuA1QMoUmwna59Bqk8TQks=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754549811; c=relaxed/simple;
-	bh=0tHwYlbjNv+IOAqOwfpjCekQ4CCu0rh6z3eMye582FE=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=BnFyY1O5C3uvmcYJZT81rxRbaS9RKJsJmaDAejTczpBiK3sreaQYnHQX+Rb7SQb6nmvauGf/wpR/YjQFj64vuWLOqsSMe7Ca0ZCvhQE0B8BwaAFLppYElW27fj2L/Mg0ubgNoSDGx1i/JkS+Ptf3574R10AbqJWA3VfxDaqyQh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=YIPPEn/6; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E5520ED
+	for <soc@lists.linux.dev>; Fri,  8 Aug 2025 13:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754659132; cv=fail; b=EpJmRTR9H8tN6f41t03PwQd451bHGXV6bLMTsvJ4AqWj7Xczbjn+tsbNHBKuewQCWLxqh7qa/qlHkHAoP4iXw1ZHmt4ZRgM7juTlbqrvYQo6IoX15mdijy5I09eD6iuBdxq24K2YjHcnrL9JmjrpsYvsiJcjWC9osB+WCml5UgM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754659132; c=relaxed/simple;
+	bh=lSz9Jk8mMAL2oLS8seyjMELpd2SCBQ/GyzAwfoPmuhk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MreP6IiH4K3ZMN3AV1S2mKscCeNKFcmx+6yrQbhQbFb34h0ZZxQvH9EQKJXzHoaoEeJ/Xx2sO/nHgSJUa3AN8GszWLB9ISlmackWffGOpfiQ3DiTJVBAzE7Q4gOKQImYcXSTi2UEO5mxNaFzJDdGtCipSxEFJ6nt31khfPU3zio=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=LgW4hyTX; arc=fail smtp.client-ip=52.101.83.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="YIPPEn/6"
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250807065647epoutp01220c317cceba03f84b4f447513cdacd6~ZacDoLFQ-0821608216epoutp01J
-	for <soc@lists.linux.dev>; Thu,  7 Aug 2025 06:56:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250807065647epoutp01220c317cceba03f84b4f447513cdacd6~ZacDoLFQ-0821608216epoutp01J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1754549807;
-	bh=0tHwYlbjNv+IOAqOwfpjCekQ4CCu0rh6z3eMye582FE=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=YIPPEn/6tzYnoC0dr0ncPgF6DHzVE5UwPkucWuTHP+PvLngOhnXKfFpvzOJNvsTEc
-	 2EtCMCs9m59R9uGm9EagqckaCdcjNv08McNBsfcd1YANyyn8nVMZXu9/xvhWxLqXNt
-	 BSpxbf7A8MKBigow3FVNEoa1e8aVZaRPHmYas3CU=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20250807065646epcas5p17687f208b8b43806346e6bc2c9967e99~ZacCrN9OP0038200382epcas5p1W;
-	Thu,  7 Aug 2025 06:56:46 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.92]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4byHyP0GMqz6B9m5; Thu,  7 Aug
-	2025 06:56:45 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250807065644epcas5p125fc65c6d04e995d92f2afd90b7b1ade~ZacA7TA-d2200722007epcas5p1A;
-	Thu,  7 Aug 2025 06:56:44 +0000 (GMT)
-Received: from INBRO001561 (unknown [107.122.12.6]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250807065638epsmtip203f2ebd5a413ef0d6985fa5abfd83190~Zab8DqqO-1646416464epsmtip2T;
-	Thu,  7 Aug 2025 06:56:38 +0000 (GMT)
-From: "Pankaj Dubey" <pankaj.dubey@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, "'SeonGu Kang'"
-	<ksk4725@coasia.com>, "'Jesper Nilsson'" <jesper.nilsson@axis.com>,
-	"'Michael	Turquette'" <mturquette@baylibre.com>, "'Stephen Boyd'"
-	<sboyd@kernel.org>, "'Rob Herring'" <robh@kernel.org>, "'Krzysztof
- Kozlowski'" <krzk+dt@kernel.org>, "'Conor Dooley'" <conor+dt@kernel.org>,
-	"'Sylwester Nawrocki'" <s.nawrocki@samsung.com>, "'Chanwoo Choi'"
-	<cw00.choi@samsung.com>, "'Alim	Akhtar'" <alim.akhtar@samsung.com>, "'Linus
- Walleij'" <linus.walleij@linaro.org>, "'Tomasz Figa'"
-	<tomasz.figa@gmail.com>, "'Catalin	Marinas'" <catalin.marinas@arm.com>,
-	"'Will Deacon'" <will@kernel.org>, "'Arnd	Bergmann'" <arnd@arndb.de>
-Cc: "'kenkim'" <kenkim@coasia.com>, "'Jongshin Park'" <pjsin865@coasia.com>,
-	"'GunWoo Kim'" <gwk1013@coasia.com>, "'HaGyeong Kim'" <hgkim05@coasia.com>,
-	"'GyoungBo Min'" <mingyoungbo@coasia.com>, "'SungMin Park'"
-	<smn1196@coasia.com>, "'Shradha Todi'" <shradha.t@samsung.com>, "'Ravi
- Patel'" <ravi.patel@samsung.com>, "'Inbaraj E'" <inbaraj.e@samsung.com>,
-	"'Swathi K S'" <swathi.ks@samsung.com>, "'Hrishikesh'"
-	<hrishikesh.d@samsung.com>, "'Dongjin	Yang'" <dj76.yang@samsung.com>, "'Sang
- Min Kim'" <hypmean.kim@samsung.com>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-arm-kernel@axis.com>, <linux-clk@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<soc@lists.linux.dev>
-In-Reply-To: <ef3b8e12-0677-4e49-bf2c-b8136c9a6908@kernel.org>
-Subject: RE: [PATCH 00/16] Add support for the Axis ARTPEC-8 SoC
-Date: Thu, 7 Aug 2025 12:26:27 +0530
-Message-ID: <013301dc0768$6f58dc40$4e0a94c0$@samsung.com>
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="LgW4hyTX"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ERTFnSVqJ32W1QL7Fy/+3+Blcqv4+pVaJaiTlonFEPH+2QVpEZ2PFLf2aiTAWwCOyiJx3+ovziUwbQ+8Y03GgStzn9xNxOLdClKmFEB4LpAZfa03+VM8LSqCk8tWwT/QsghwSzvFLQzU9i8hsITdLQCeP5SUQHHuCQ42r1OiYRRCYn4Ojm+XaOi1VMQQUrNlgqRbbUIvyFcxdiwW4ecp7bismyJsVQ0A1bLG7jQlAGyhC4i4ORLalqBILlIsRdnSFm3+6VnZJ82kUfOOrpT9LbJxvWJnJchtcy9gODoPeT8Zl5mjCuK+Febl5kl5cIet/boD9rmw2jMxwKh+hIyVHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vgJDZCrVoLajcVIH79KWLg42KL023a89GVuuHlu4zq4=;
+ b=M5qRXoXASVNJ34DQa+snaHD7fJsg80Y/tcuHRB317qygETPvaYdLEek5/rSvfnzeVbVxukzxTzUAIW0dsLNIzPiw+580suCwKwseaTK/BdR8vIbsDZ7oTv9onLDHvcScNxV6bKOyu44cZIvP/S8f0vKduN0zLgF0GOoDkmYSAumjkUi/QSb+o2VFY60pUwhQvHCgnb3vuECwreMRFgTI9t5cUvhjQvYcu+/yqt4zCIrVjH4qN0IDa46PKLbXsN64qLRTIzgiN81T65YKnqs557RCtCs+nYa/Wfv1yeZWXRKrzBSgtT4b4hz61GPz3FOQYFc3JKPjCyyJusNXHeNF0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=arm.com smtp.mailfrom=axis.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=axis.com; dkim=none (message
+ not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vgJDZCrVoLajcVIH79KWLg42KL023a89GVuuHlu4zq4=;
+ b=LgW4hyTXmc/JAiYWsN0w7LOfpyvBBKUMVnbi4IV0jJzZnVrr2/EhKUWzFZIR3Qzvi4Oqp7I9kndIFlt8U54NjDxvz3B+0OvJn3tiUfpbV3xjOlozFqm0u4UQbWTnJsSHc80LJJgCKJ1ARiYQstzum38SMYbFzklx/Sr+FL8Nsr4=
+Received: from PR0P264CA0284.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100:1::32) by
+ AS4PR02MB8768.eurprd02.prod.outlook.com (2603:10a6:20b:580::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.18; Fri, 8 Aug
+ 2025 13:18:42 +0000
+Received: from AM4PEPF00025F9A.EURPRD83.prod.outlook.com
+ (2603:10a6:100:1:cafe::d) by PR0P264CA0284.outlook.office365.com
+ (2603:10a6:100:1::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9009.18 via Frontend Transport; Fri,
+ 8 Aug 2025 13:18:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ AM4PEPF00025F9A.mail.protection.outlook.com (10.167.16.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9031.0 via Frontend Transport; Fri, 8 Aug 2025 13:18:42 +0000
+Received: from se-mail01w.axis.com (10.20.40.7) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Fri, 8 Aug
+ 2025 15:18:41 +0200
+Received: from se-intmail02x.se.axis.com (10.4.0.28) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Fri, 8 Aug 2025 15:18:41 +0200
+Received: from pc36611-1939.se.axis.com (pc36611-1939.se.axis.com [10.88.125.175])
+	by se-intmail02x.se.axis.com (Postfix) with ESMTP id CE1AD17E9;
+	Fri,  8 Aug 2025 15:18:41 +0200 (CEST)
+Received: by pc36611-1939.se.axis.com (Postfix, from userid 363)
+	id C8ADB60C1D; Fri,  8 Aug 2025 15:18:41 +0200 (CEST)
+Date: Fri, 8 Aug 2025 15:18:41 +0200
+From: 'Jesper Nilsson' <jesper.nilsson@axis.com>
+To: Pankaj Dubey <pankaj.dubey@samsung.com>
+CC: 'Krzysztof Kozlowski' <krzk@kernel.org>, 'SeonGu Kang'
+	<ksk4725@coasia.com>, 'Jesper Nilsson' <jesper.nilsson@axis.com>, "'Michael
+ Turquette'" <mturquette@baylibre.com>, 'Stephen Boyd' <sboyd@kernel.org>,
+	"'Rob Herring'" <robh@kernel.org>, 'Krzysztof Kozlowski'
+	<krzk+dt@kernel.org>, 'Conor Dooley' <conor+dt@kernel.org>, 'Sylwester
+ Nawrocki' <s.nawrocki@samsung.com>, 'Chanwoo Choi' <cw00.choi@samsung.com>,
+	"'Alim Akhtar'" <alim.akhtar@samsung.com>, 'Linus Walleij'
+	<linus.walleij@linaro.org>, 'Tomasz Figa' <tomasz.figa@gmail.com>, "'Catalin
+ Marinas'" <catalin.marinas@arm.com>, 'Will Deacon' <will@kernel.org>, "'Arnd
+ Bergmann'" <arnd@arndb.de>, 'kenkim' <kenkim@coasia.com>, 'Jongshin Park'
+	<pjsin865@coasia.com>, 'GunWoo Kim' <gwk1013@coasia.com>, 'HaGyeong Kim'
+	<hgkim05@coasia.com>, 'GyoungBo Min' <mingyoungbo@coasia.com>, 'SungMin Park'
+	<smn1196@coasia.com>, 'Shradha Todi' <shradha.t@samsung.com>, 'Ravi Patel'
+	<ravi.patel@samsung.com>, 'Inbaraj E' <inbaraj.e@samsung.com>, 'Swathi K S'
+	<swathi.ks@samsung.com>, 'Hrishikesh' <hrishikesh.d@samsung.com>, "'Dongjin
+ Yang'" <dj76.yang@samsung.com>, 'Sang Min Kim' <hypmean.kim@samsung.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-samsung-soc@vger.kernel.org>, <linux-arm-kernel@axis.com>,
+	<linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-gpio@vger.kernel.org>, <soc@lists.linux.dev>
+Subject: Re: [PATCH 00/16] Add support for the Axis ARTPEC-8 SoC
+Message-ID: <aJX5MStJwpQENOSE@axis.com>
+References: <20250710002047.1573841-1-ksk4725@coasia.com>
+ <847e908b-1073-46ea-93f3-1f36cc93d8b8@kernel.org>
+ <bfdc2eddde554e1d1808dd8399bc6a693f681c9b.camel@coasia.com>
+ <CGME20250721064006epcas5p4617b0450e69f72c94d2b3ae7b1d200e7@epcas5p4.samsung.com>
+ <99977f38-f055-46ed-8eb0-4b757da2bcdd@kernel.org>
+ <000501dc06ab$37f09440$a7d1bcc0$@samsung.com>
+ <e334f106-d9f3-4a21-8cdd-e9d23dd2755d@kernel.org>
+ <002001dc06b1$540dc980$fc295c80$@samsung.com>
+ <ef3b8e12-0677-4e49-bf2c-b8136c9a6908@kernel.org>
+ <013301dc0768$6f58dc40$4e0a94c0$@samsung.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGJY/8wx4BImu0YLFPVfwpfqUmFNgKXZrJuAgeQag4A83Fv2QHBXkcOAZGX7yoCWvFQXwHgUMUuAOJp+3+0i+6vkA==
-Content-Language: en-us
-X-CMS-MailID: 20250807065644epcas5p125fc65c6d04e995d92f2afd90b7b1ade
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-541,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250721064006epcas5p4617b0450e69f72c94d2b3ae7b1d200e7
-References: <20250710002047.1573841-1-ksk4725@coasia.com>
-	<847e908b-1073-46ea-93f3-1f36cc93d8b8@kernel.org>
-	<bfdc2eddde554e1d1808dd8399bc6a693f681c9b.camel@coasia.com>
-	<CGME20250721064006epcas5p4617b0450e69f72c94d2b3ae7b1d200e7@epcas5p4.samsung.com>
-	<99977f38-f055-46ed-8eb0-4b757da2bcdd@kernel.org>
-	<000501dc06ab$37f09440$a7d1bcc0$@samsung.com>
-	<e334f106-d9f3-4a21-8cdd-e9d23dd2755d@kernel.org>
-	<002001dc06b1$540dc980$fc295c80$@samsung.com>
-	<ef3b8e12-0677-4e49-bf2c-b8136c9a6908@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <013301dc0768$6f58dc40$4e0a94c0$@samsung.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM4PEPF00025F9A:EE_|AS4PR02MB8768:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fc9d923-e847-47f8-88f0-08ddd67e18d7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|30052699003|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?0bQPACZp9g8lQ/qsGehobkwro6PF7+b3+LaqzOcYS2BPXhQDo3tGvABxunWN?=
+ =?us-ascii?Q?aeR+ICLxee3b6FxRmFpC1RPYKNTo4I1qoN78KLxnVc6FWaq1moVDC1IcqNsH?=
+ =?us-ascii?Q?UKfbTEW/hV0JJCVh2zJYCx0Zi2pGsQBbR5oV2LfF5dRLxFHcJ/kc0tEa4dGZ?=
+ =?us-ascii?Q?o0yeeoEe33dA2N4fpnHvvRcu1PKycQ4kkYeaCl/kxsyy12NUr4qhzReZIE+1?=
+ =?us-ascii?Q?Gq4qkmJcqb6xxG28r+Lzglqu+/m8xqP5kAWLwH6cHK0EL71vTR5bUIxJ5YsH?=
+ =?us-ascii?Q?l62MoxxkB6C03VAfU3QhnTKI50sPc8vwdpTZAKl4St8bPMTTqIqbq18jPXeR?=
+ =?us-ascii?Q?Gk6B8mhPPqAhpKs5YlJO11NeZIkuYDnSV6PaZEit8HOyUk51zo5Nlkw+y0Ss?=
+ =?us-ascii?Q?39+6oIgkUo/j+Za8MmkTJxGzeLfjS4PLOQdvhYboE1x/elJpKlP+D0hKgqU5?=
+ =?us-ascii?Q?xZ0OO10wu/+LDWIwfhE9HaRfRJMHG2MAybU40OJpnRxamZ1lRFe6j04PpVqI?=
+ =?us-ascii?Q?HIUZ9O3Wf0QhshIl1faMPqkRUCI6BYNY7S90tF3XqwspC/972vg1/S8sc2UL?=
+ =?us-ascii?Q?D11wrfy/VFUlBLquYTNA/4ma74nUV6YGiuUhiHlP9v4z9ewGPC4hFwIyi+zu?=
+ =?us-ascii?Q?JcB1rdIDf4xxfGyIb5nSfbRGIhfmVUqMtyrIN7FR86eKdAs7yU1x/pF17R0E?=
+ =?us-ascii?Q?SeL26GFql4sCxLjPg3td8P6Tf3RYRHX1ZolQtyAbrs4emeZYrVAYm84cjAUd?=
+ =?us-ascii?Q?wFw/Ex6iFJWZHN4yKNfo4bxWKiZe0YH3AhPOuQRONijtetdXkn5Q5mPaPomx?=
+ =?us-ascii?Q?rpa7Bvt3Vr4gx0dUSeBc65rx6Zs0m0r/anS/4jH6wfVwJk+1e3JsPG9UmXXZ?=
+ =?us-ascii?Q?F73UwOtYWKd2p5GfvbOef79dJQl2YimOGjGC2+2T9/8nTa3zK+ZfX2jJkOf6?=
+ =?us-ascii?Q?GuDLY8bOWZlSeiIMZ5SWrYqsPUtoxD5mCVdLGJzYU06njjjbL+4VLzRFQzLp?=
+ =?us-ascii?Q?S8jo+a8eYZSghKXtgCf4Qd3gZTgr3kcnImvhKKCU8Mo9lTx+z7Yi61aNMlS7?=
+ =?us-ascii?Q?JCOIOKGdUT2VPmNPDajcRth/wireH3cRvkpipsZgaLD1OlHcuxBZnyld5vXR?=
+ =?us-ascii?Q?HmCdJIR4INf/Eov3uKrnyYXAiuhiWn2ZChUFSAmLI5W5t9z/GyD7LNfGNEpM?=
+ =?us-ascii?Q?wJwAemnEE8ZqcYSMhijVdAiSxE/6Ankw7ZpvBU4+ukeBRT5cE3FG4kzO32Iu?=
+ =?us-ascii?Q?b8tOYSa1nH4zhP0kbSgoy/0v1nFhPXZO3n2+qoHwvDZDjV3xnJw/MkoNm5sU?=
+ =?us-ascii?Q?zZBUQGmwMq2giMF5/xKznCE0g1DYnVgOoMXQIcYi8My16moO22sCQZhdaMeG?=
+ =?us-ascii?Q?HdEoAUYb5S6hdEovD68F+Mzhm6ZWUitPoC7Zyze4Vyi6/jkcjRfQJPRZSE6K?=
+ =?us-ascii?Q?t97HYBgkf/SG1xJmNfbGLiX2ZOkGnVcYAQDkzYdB7euRu4gpLdtVHAFmdx3c?=
+ =?us-ascii?Q?Pz2LJ/v1Izz2ljOiclP0Cice9NIC1PtFyFm9?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(30052699003)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2025 13:18:42.7039
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fc9d923-e847-47f8-88f0-08ddd67e18d7
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00025F9A.EURPRD83.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR02MB8768
 
-> Subject: Re: =5BPATCH 00/16=5D Add support for the Axis ARTPEC-8 SoC
->=20
-> On 06/08/2025 11:05, Pankaj Dubey wrote:
+On Thu, Aug 07, 2025 at 12:26:27PM +0530, Pankaj Dubey wrote
+> > Subject: Re: [PATCH 00/16] Add support for the Axis ARTPEC-8 SoC
+> > On 06/08/2025 11:05, Pankaj Dubey wrote:
+> > > or ARTPEC is manufactured (ODM) by another vendor in that case, won't it
+> > > create problems?
 > >
-> >> Also SAME strict DT compliance profile will be applied. (see more on
-> >> that below)
-> >>
-> >>>
-> >>> Given that ARTPEC-8 is a distinct SoC with its own set of IPs, we bel=
-ieve
-> it's
-> >> reasonable
-> >>> to create a separate directory for it, similar to FSD.
-> >>
-> >> No. It was a mistake for FSD to keep it separate why? Because there is
-> >> no single non-Samsung stuff there. I am afraid exactly the same will
-> >> happen there.
-> >>
 > >
-> > I am not sure, why you are saying this as a mistake, in case next versi=
-on of
-> FSD
->=20
->=20
-> My mistake that I agreed on that, based on promise that =22there will be
-> non Samsung stuff=22 and that =22non Samsung stuff=22 never happened.
->=20
+> > No problems here. Non-Samsung Artpec/Axis soc will not go there. It will
+> > go the top-level axis directory, just like artpec-6
+> >
+> 
+> Okay, understood. I assume Axis team will be fine with this approach.
+> Let me align with them internally and address all the review comments in v2.
 
-I am not authorized to comment on FSD's non Samsung stuff at this moment.
-But I got your point.
+Just for the record, Axis has no problem in having the ARTPEC-8 / ARTPEC-9
+in the Samsung directory, while the older ARTPEC-6 / ARTPEC-7 and
+any other future chips will be separate.
 
-> > or ARTPEC is manufactured (ODM) by another vendor in that case, won't i=
-t
-> > create problems?
->=20
->=20
-> No problems here. Non-Samsung Artpec/Axis soc will not go there. It will
-> go the top-level axis directory, just like artpec-6
->=20
-
-Okay, understood. I assume Axis team will be fine with this approach.
-Let me align with them internally and address all the review comments in v2=
-.=20
-
->=20
-> >
-> > For example ARTPEC-6/7 (ARM based) have their own directories as
-> =22arch/arm/boot/dts/axis/=22
-> > These were not Samsung (ODM) manufactures SoCs.
-> >
-> > But ARTPEC-8/9 (ARM64) based SoCs are samsung manufactured. What if
-> the next version say
-> > ARTPEC-10 is not samsung manufactured, so different version of products
-> (SoCs) from
-> > same vendor (OEM), in this case Axis, will have code in separate direct=
-ories
-> and with different maintainers?
->=20
-> It will be the same with Google Pixel for whatever they decide in the
-> future. dts/exynos/google/ + dts/google/.
->=20
-> I know that this is not ideal, but for me grouping samsung stuff
-> together is far more important, because there is much, much more to
-> share between two SoCs designed by Samsung, than Axis-9 and future
-> non-Samsung Axis-10. And I have =60git grep=60 as argument:
-> git grep compatible -- arch/arm64/boot/dts/tesla/
->=20
-> and point me to any Tesla IP. Zero results.
->=20
->=20
-> >
-> >> Based on above list of blocks this should be done like Google is done,
-> >> so it goes as subdirectory of samsung (exynos). Can be called axis or
-> >> artpec-8.
-> >
-> > I will suggest to keep axis, knowing the fact that sooner after artpec-=
-8
-> patches gets approved and merged
-> > we have plan to upstream artpec-9 (ARM64, Samsung manufactured) as
-> well.
-> >
-> >>
-> >> To clarify: Only this SoC, not others which are not Samsung.
-> >>
-> >>>
-> >>> We will remove Samsung and Coasia teams from the maintainers list in
-> v2
-> >> and only
-> >>> Axis team will be maintainer.
-> >>
-> >> A bit unexpected or rather: just use names of people who WILL be
-> >> maintaining it. If this is Jesper and Lars, great. Just don't add
-> >> entries just because they are managers.
-> >
-> > AFAIK, Jesper will be taking care.
-> >
-> >>
-> >>>
-> >>> Maintainer list for previous generation of Axis chips (ARM based) is
-> already
-> >> present,
-> >>> so this will be merged into that.
-> >>
-> >> Existing Artpec entry does not have tree mentioned, so if you choose
-> >> above, you must not add the tree, since the tree is provided by Samsun=
-g
-> SoC.
-> >>
-> >
-> > OK
-> >
-> >> OTOH, how are you going to add there strict DT compliance? Existing ax=
-is
-> >> is not following this, but artpec-8, as a Samsung derivative, MUST
-> >> FOLLOW strict DT compliance. And this should be clearly marked in
-> >> maintainer entry, just like everywhere else.
-> >>
-> >
-> > As I said this is tricky situation, though artpec-8 is derivative of sa=
-msung, we
-> can't confirm
-> > if future versions (> 9) will be samsung derivative.
-> >
-> > But this would be case for all such custom ASIC manufactured by samsung=
-,
-> so I would like to
-> > understand how this will be handled?
->=20
->=20
-> I suggest to do the same as Google and when I say Google in this email,
-> I mean Pixel/GS101. Google was easier because there was no prior entry
-> and Axis has, so you will have two Axis entries. But I don't see how we
-> can add clean-dts profiles to the existing Axis entry, if you decide to
-> include Artpec-8 in that one.
->=20
-
-Okay we will have separate dts profile aligned with Exynos DT compliance fo=
-r
-ARM64 based Axis SoCs which are manufactured by Samsung at this moment.=20
-
->=20
-> Best regards,
-> Krzysztof
-
+/^JN - Jesper Nilsson
+-- 
+               Jesper Nilsson -- jesper.nilsson@axis.com
