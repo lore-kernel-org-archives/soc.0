@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEEE2EACF2;
-	Mon, 11 Aug 2025 15:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6006B2E7186;
+	Mon, 11 Aug 2025 15:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925513; cv=none; b=nzVycskvN+cBSYGdH2DgztoNv5G5eHClJQuhJ0ASRgeryY9bNkuq4MZyNtBzEU9EobA6z1F1YXh09QdGRLMqePHOgGrrOmzcSGBB1tf2rDlpit38GSY36kV7FzTyn3VVOfGQcu75LNjaFpTpKbunN8ujGjiA7ahuA1m2E3Q0n34=
+	t=1754925514; cv=none; b=S38VNEZyKpwepsZBLIO+WuBpGW3NKkoesZvOLo4zDo7nrXI3RSKabLw54nuOFIE7idofuntUf3c40vXlKtqRUiCJaBa74yWVpdTlAwYdk9qkptLO+eW/QUA+rJ/HKEB95PbAtxWPnwayBfSXSJXFp7y4Etmbe1ksyfakqAwDHx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754925513; c=relaxed/simple;
-	bh=0OqBX4LLQTS0U+t92bhSLCgqewxshRwkp4Ke9oQ+5qQ=;
+	s=arc-20240116; t=1754925514; c=relaxed/simple;
+	bh=OpZx/iplDnGkLBoiPyBHZFgdrbKK0ZveU1UXkfHX+Nw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DsUtQ1SGPV5UCfhB95/EyQVy9oe4LuEDt8S6zKBDCi09ZWsU28Kj1t4/QKRFbQDLi8hATrdkH+7i1LpElYEnqQj4vUROy14YiPK3WJjbt3lgkfNh8uitLfoefgxlIseSr6nllaWzgV1wc04794V/q3aUdex3W3zGMgpLzDmjyJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hLH1CM17; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=idCWpniIuM7UQjdE3tTrQtUvD78vsMILo6XcwjbfKJ13HuWR5eLUlFv/yckZU4RbA3xNwdixAVdwevQ8nBoLx5+NCIgZgytFLjbVtMqIYSyqRBtlC6yvk9NtLmm9Ltw65v+EAMnUzi/HX0zg45tNNRIlNscdOPpFTicG5fNxKm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d+y38EIe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hLH1CM17"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD2ACC4FEFF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d+y38EIe"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFBBEC4AF09;
 	Mon, 11 Aug 2025 15:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754925511;
-	bh=0OqBX4LLQTS0U+t92bhSLCgqewxshRwkp4Ke9oQ+5qQ=;
+	s=k20201202; t=1754925512;
+	bh=OpZx/iplDnGkLBoiPyBHZFgdrbKK0ZveU1UXkfHX+Nw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=hLH1CM17epPxTQt7vFekgKgojEwK0NXjbEC5DahA7snqJhe44o3oRYnPEUqnvEEDY
-	 E2OgNRwMNPA+1yZ944Xqs1xp9l1mwEwIzqXXxQJ2LK3Vxh2V2h8lSUYpEKgHLmOd/X
-	 FB1tlbawC/Qj7OaJeMq7hsk6kcTtzESIxidAmboTVIHl7QYWpNTapHG+oXw/tQNpEZ
-	 MV9xKfNNtAtrdzKQ37GjMVYwAOk+TI3C5QUZNPV4rCyljYpUBt+4dPdIhoeRZ4V3fx
-	 daDuiIdWxVX0rN8f8D3e8B/xTa4YwmwzS4PMb7VW6vfZmtieivZlP4eIQRKo9P+aZ0
-	 NfPqdO/GhvYag==
+	b=d+y38EIeQ6kCnMrYZ01dKW2JvLFaAiczo6Mbyyd3C42+ltEz2F2lHn/khDNU6Ok1D
+	 6peI5ifpMu6Q1ISCi6rFS/PPjFawwmlBRKMyLqB3X0DdsMxCHnmpK7DS7mNG82WlYp
+	 kOLeLaLl0mxps/93O/vse8xfS/nUFMc/pMBombY4QMuic2azX4zpDpkrAn2ryi7PRo
+	 aOImbYDrxe3QJhw2Xv1LKQetEKoBQNv4J9EXzdqjEPaSS13cqD4jWeUpfFLk0SDtPd
+	 sVn2KE3qvlL8IsPjw0bmHIzbUIRaMFLLmpFWKaLWrflfDKuQtQp4sICTPlMAWMT7LB
+	 sLAjLyIDdrA8A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE5ACA0ED1;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD1F6C87FD2;
 	Mon, 11 Aug 2025 15:18:31 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:18:56 -0400
-Subject: [PATCH 064/114] clk: x86: cgu: convert from round_rate() to
- determine_rate()
+Date: Mon, 11 Aug 2025 11:18:58 -0400
+Subject: [PATCH 066/114] clk: xilinx: xlnx-clock-wizard: convert from
+ round_rate() to determine_rate()
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-64-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-66-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -107,11 +107,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=3471;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=5292;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=2RBCUExrTQRGIMW73rBPsDh5zLe+IgAz/gGOGsl4Yp8=;
- b=loelU/WUdJANpcU9iSvl5G2LK6liGfDBslwXfM311k9G69yL9FzODuTNtumS/YheMTfIibkp6
- BlkwtsPcmP2DuD3s5QllMy6dYHv9W+x+/Y1Tiui3Qv1exlFhdQugBIz
+ bh=BWOB+xAtAII8SggUbIYHLjNCW0927ZNtUJkwA7KOXIM=;
+ b=ryZ+IQSP039uUqGz9z1Fkzb2PsZcnEcVVnTU95hN1WUhS0L0na/UMu0rIlaHj+f1yfuU3xXrE
+ B+XuvWRrdEmBUDiMSTgEGz6AOA09az87Gg6hZyzcFIGWbUFJQ0d5W4N
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -127,103 +127,149 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/x86/clk-cgu.c | 35 ++++++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
+ drivers/clk/xilinx/clk-xlnx-clock-wizard.c | 55 ++++++++++++++++--------------
+ 1 file changed, 30 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/clk/x86/clk-cgu.c b/drivers/clk/x86/clk-cgu.c
-index 89b53f280aee03b7838e4656eae3571f00eaa263..177e2a8f5bba354c07a524f9175e2cb51f08258a 100644
---- a/drivers/clk/x86/clk-cgu.c
-+++ b/drivers/clk/x86/clk-cgu.c
-@@ -132,14 +132,15 @@ lgm_clk_divider_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 				   divider->flags, divider->width);
+diff --git a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
+index 0295a13a811cf8e00fd49879eefc5bcf4fb89228..3ee14770212a9f241d49123b25cee7abca350194 100644
+--- a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
++++ b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
+@@ -322,8 +322,8 @@ static int clk_wzrd_dynamic_reconfig(struct clk_hw *hw, unsigned long rate,
+ 	return err;
  }
  
--static long
--lgm_clk_divider_round_rate(struct clk_hw *hw, unsigned long rate,
--			   unsigned long *prate)
-+static int lgm_clk_divider_determine_rate(struct clk_hw *hw,
-+					  struct clk_rate_request *req)
+-static long clk_wzrd_round_rate(struct clk_hw *hw, unsigned long rate,
+-				unsigned long *prate)
++static int clk_wzrd_determine_rate(struct clk_hw *hw,
++				   struct clk_rate_request *req)
  {
- 	struct lgm_clk_divider *divider = to_lgm_clk_divider(hw);
+ 	u8 div;
  
--	return divider_round_rate(hw, rate, prate, divider->table,
--				  divider->width, divider->flags);
-+	req->rate = divider_round_rate(hw, req->rate, &req->best_parent_rate, divider->table,
-+				       divider->width, divider->flags);
+@@ -331,9 +331,11 @@ static long clk_wzrd_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	 * since we don't change parent rate we just round rate to closest
+ 	 * achievable
+ 	 */
+-	div = DIV_ROUND_CLOSEST(*prate, rate);
++	div = DIV_ROUND_CLOSEST(req->best_parent_rate, req->rate);
+ 
+-	return *prate / div;
++	req->rate = req->best_parent_rate / div;
 +
 +	return 0;
  }
  
- static int
-@@ -182,7 +183,7 @@ static void lgm_clk_divider_disable(struct clk_hw *hw)
- 
- static const struct clk_ops lgm_clk_divider_ops = {
- 	.recalc_rate = lgm_clk_divider_recalc_rate,
--	.round_rate = lgm_clk_divider_round_rate,
-+	.determine_rate = lgm_clk_divider_determine_rate,
- 	.set_rate = lgm_clk_divider_set_rate,
- 	.enable = lgm_clk_divider_enable,
- 	.disable = lgm_clk_divider_disable,
-@@ -487,15 +488,14 @@ lgm_clk_ddiv_set_rate(struct clk_hw *hw, unsigned long rate,
- 	return 0;
+ static int clk_wzrd_get_divisors_ver(struct clk_hw *hw, unsigned long rate,
+@@ -642,14 +644,14 @@ static unsigned long clk_wzrd_recalc_rate_all_ver(struct clk_hw *hw,
+ 			divider->flags, divider->width);
  }
  
--static long
--lgm_clk_ddiv_round_rate(struct clk_hw *hw, unsigned long rate,
--			unsigned long *prate)
-+static int lgm_clk_ddiv_determine_rate(struct clk_hw *hw,
+-static long clk_wzrd_round_rate_all(struct clk_hw *hw, unsigned long rate,
+-				    unsigned long *prate)
++static int clk_wzrd_determine_rate_all(struct clk_hw *hw,
 +				       struct clk_rate_request *req)
  {
- 	struct lgm_clk_ddiv *ddiv = to_lgm_clk_ddiv(hw);
- 	u32 div, ddiv1, ddiv2;
- 	u64 rate64;
+ 	struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+ 	u32 m, d, o;
+ 	int err;
  
--	div = DIV_ROUND_CLOSEST_ULL((u64)*prate, rate);
-+	div = DIV_ROUND_CLOSEST_ULL((u64) req->best_parent_rate, req->rate);
+-	err = clk_wzrd_get_divisors(hw, rate, *prate);
++	err = clk_wzrd_get_divisors(hw, req->rate, req->best_parent_rate);
+ 	if (err)
+ 		return err;
  
- 	/* if predivide bit is enabled, modify div by factor of 2.5 */
- 	if (lgm_get_clk_val(ddiv->membase, ddiv->reg, ddiv->shift2, 1)) {
-@@ -503,14 +503,17 @@ lgm_clk_ddiv_round_rate(struct clk_hw *hw, unsigned long rate,
- 		div = DIV_ROUND_CLOSEST_ULL((u64)div, 5);
- 	}
+@@ -657,19 +659,20 @@ static long clk_wzrd_round_rate_all(struct clk_hw *hw, unsigned long rate,
+ 	d = divider->d;
+ 	o = divider->o;
  
--	if (div <= 0)
--		return *prate;
-+	if (div <= 0) {
-+		req->rate = req->best_parent_rate;
-+
-+		return 0;
-+	}
- 
- 	if (lgm_clk_get_ddiv_val(div, &ddiv1, &ddiv2) != 0)
- 		if (lgm_clk_get_ddiv_val(div + 1, &ddiv1, &ddiv2) != 0)
- 			return -EINVAL;
- 
--	rate64 = *prate;
-+	rate64 = req->best_parent_rate;
- 	do_div(rate64, ddiv1);
- 	do_div(rate64, ddiv2);
- 
-@@ -520,7 +523,9 @@ lgm_clk_ddiv_round_rate(struct clk_hw *hw, unsigned long rate,
- 		rate64 = DIV_ROUND_CLOSEST_ULL(rate64, 5);
- 	}
- 
--	return rate64;
-+	req->rate = rate64;
-+
+-	rate = div_u64(*prate * (m * 1000 + divider->m_frac), d * (o * 1000 + divider->o_frac));
+-	return rate;
++	req->rate = div_u64(req->best_parent_rate * (m * 1000 + divider->m_frac),
++			    d * (o * 1000 + divider->o_frac));
 +	return 0;
  }
  
- static const struct clk_ops lgm_clk_ddiv_ops = {
-@@ -528,7 +533,7 @@ static const struct clk_ops lgm_clk_ddiv_ops = {
- 	.enable	= lgm_clk_ddiv_enable,
- 	.disable = lgm_clk_ddiv_disable,
- 	.set_rate = lgm_clk_ddiv_set_rate,
--	.round_rate = lgm_clk_ddiv_round_rate,
-+	.determine_rate = lgm_clk_ddiv_determine_rate,
+-static long clk_wzrd_ver_round_rate_all(struct clk_hw *hw, unsigned long rate,
+-					unsigned long *prate)
++static int clk_wzrd_ver_determine_rate_all(struct clk_hw *hw,
++					   struct clk_rate_request *req)
+ {
+ 	struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+ 	unsigned long int_freq;
+ 	u32 m, d, o, div, f;
+ 	int err;
+ 
+-	err = clk_wzrd_get_divisors_ver(hw, rate, *prate);
++	err = clk_wzrd_get_divisors_ver(hw, req->rate, req->best_parent_rate);
+ 	if (err)
+ 		return err;
+ 
+@@ -678,36 +681,38 @@ static long clk_wzrd_ver_round_rate_all(struct clk_hw *hw, unsigned long rate,
+ 	o = divider->o;
+ 
+ 	div = d * o;
+-	int_freq =  divider_recalc_rate(hw, *prate * m, div, divider->table,
++	int_freq =  divider_recalc_rate(hw, req->best_parent_rate * m, div,
++					divider->table,
+ 					divider->flags, divider->width);
+ 
+-	if (rate > int_freq) {
+-		f = DIV_ROUND_CLOSEST_ULL(rate * WZRD_FRAC_POINTS, int_freq);
+-		rate = DIV_ROUND_CLOSEST(int_freq * f, WZRD_FRAC_POINTS);
++	if (req->rate > int_freq) {
++		f = DIV_ROUND_CLOSEST_ULL(req->rate * WZRD_FRAC_POINTS,
++					  int_freq);
++		req->rate = DIV_ROUND_CLOSEST(int_freq * f, WZRD_FRAC_POINTS);
+ 	}
+-	return rate;
++	return 0;
+ }
+ 
+ static const struct clk_ops clk_wzrd_ver_divider_ops = {
+-	.round_rate = clk_wzrd_round_rate,
++	.determine_rate = clk_wzrd_determine_rate,
+ 	.set_rate = clk_wzrd_ver_dynamic_reconfig,
+ 	.recalc_rate = clk_wzrd_recalc_rate_ver,
  };
  
- int lgm_clk_register_ddiv(struct lgm_clk_provider *ctx,
+ static const struct clk_ops clk_wzrd_ver_div_all_ops = {
+-	.round_rate = clk_wzrd_ver_round_rate_all,
++	.determine_rate = clk_wzrd_ver_determine_rate_all,
+ 	.set_rate = clk_wzrd_dynamic_all_ver,
+ 	.recalc_rate = clk_wzrd_recalc_rate_all_ver,
+ };
+ 
+ static const struct clk_ops clk_wzrd_clk_divider_ops = {
+-	.round_rate = clk_wzrd_round_rate,
++	.determine_rate = clk_wzrd_determine_rate,
+ 	.set_rate = clk_wzrd_dynamic_reconfig,
+ 	.recalc_rate = clk_wzrd_recalc_rate,
+ };
+ 
+ static const struct clk_ops clk_wzrd_clk_div_all_ops = {
+-	.round_rate = clk_wzrd_round_rate_all,
++	.determine_rate = clk_wzrd_determine_rate_all,
+ 	.set_rate = clk_wzrd_dynamic_all,
+ 	.recalc_rate = clk_wzrd_recalc_rate_all,
+ };
+@@ -769,14 +774,14 @@ static int clk_wzrd_dynamic_reconfig_f(struct clk_hw *hw, unsigned long rate,
+ 				WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
+ }
+ 
+-static long clk_wzrd_round_rate_f(struct clk_hw *hw, unsigned long rate,
+-				  unsigned long *prate)
++static int clk_wzrd_determine_rate_f(struct clk_hw *hw,
++				     struct clk_rate_request *req)
+ {
+-	return rate;
++	return 0;
+ }
+ 
+ static const struct clk_ops clk_wzrd_clk_divider_ops_f = {
+-	.round_rate = clk_wzrd_round_rate_f,
++	.determine_rate = clk_wzrd_determine_rate_f,
+ 	.set_rate = clk_wzrd_dynamic_reconfig_f,
+ 	.recalc_rate = clk_wzrd_recalc_ratef,
+ };
 
 -- 
 2.50.1
