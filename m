@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21ED12EE607;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662AE2EF653;
 	Mon, 11 Aug 2025 15:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925517; cv=none; b=DfWkMrY0KFCZBpaZUGrBkzzcjox9JOU/pBf19O/jIW1sTyJLeg03jnZuCguXhV1aZZr428InYZ/eKXsy9kufYhCjKFselTzI5KFSkCUGIf7gD6DiKTjguA89cITMbBies6W4Ysb4H3uOKK9T02kRmX38DsaD5q6iW5XEpMN+rhM=
+	t=1754925517; cv=none; b=cqdkbFujCvnadOPlXPpPvYGQbjOjkya9Qi35Cqw3S03RKsBmzRxFLzEo4Rsatk9rRmhfUR1yqpR1WjHyRKLl8QV16xO78vjyIQfS7EpIV/aJbKICAKjX8YM2PRwzWVu3gFABrV+NX0LW1N+isDpDsFNzpCis+iPemGJr1BrCmhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754925517; c=relaxed/simple;
-	bh=YVvs3bG2bTHITrJ/ai/lFZ/Z9DsBljL7Dypd8sAs9lw=;
+	bh=HuIn4Ga+8SS6ztxFD4gVOCgnhND6VnRr7SuOoks1eEo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eUcfbeVBiGyBxd01E/Hxj/x4IYmlqCbUh10TUZG6t4tzpllS4Qo84D0Z2GHa2vsBqo41uiXU7s3PKRJtgab+se3oDyGsLRrnj2qMnNTn4hOpWuz4+IOkLXAgSxB8ahabdAfv4ZEMJ2dD/cpvN19eIYsJjAPh3wiZ9ZTtdtxSETA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8JD9ywz; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=XNjHp4VNufi/HXvRwIlPBUx/TPwKJrhQicDpGtdTbv2dXUa4nutXJa8qdUkb8+mmVvQMDDb0tIm6VHEdsZDXZ0z2xY2RNG0ZD3nIqDFCofhJnAqsDqnoR7+W6i7uFc8RgVWbkGoguoiQGfadRsn/xHNRI0UU35fmwrmPcT6t8uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZsBPD5y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8JD9ywz"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07AC0C2BC86;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZsBPD5y"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4CBAAC567D1;
 	Mon, 11 Aug 2025 15:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925515;
-	bh=YVvs3bG2bTHITrJ/ai/lFZ/Z9DsBljL7Dypd8sAs9lw=;
+	bh=HuIn4Ga+8SS6ztxFD4gVOCgnhND6VnRr7SuOoks1eEo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=E8JD9ywziiTZmy0pYAW4uoTJdCtLc8UQ1NXE/K2Za/KlhHjgaqqlbjt8bEmVJ2HUp
-	 qK2QEyIz/MyLdbkSh3atugUzBurmSmItBJEcL6PpDfty4sZd7ANf33+Gms0HOe11A3
-	 qJPGsmTK0sszjufqhosLCLBYd0PS5e14zHY9004HgBSfGliPO3+pQGa1fTvzsILwph
-	 6leypFwQdD7J0ENaCzFJeBFfWChk3fmssCKsngWFjDjMmbIQIJoDowHTU/6ZUKFZDr
-	 7tXXF9xEQf4jzwltMkcfSUVQYKGnsSAkjsEbMFVHNhXmqB8gHyN6tp5+hacLyT0uiY
-	 5k12JToa0GcQw==
+	b=kZsBPD5yJ8i+lKeYnrYLhcOVmRAYoyJYMXjrxILxi4E/NlBi7q5PUuNBlkpjH5y0K
+	 TKxTZE3baOFiB+23Kc43O3IUq4OJO4OWqJWEAzfzVmS8ubkDTspjYUh0FN1bF0EMEf
+	 yWGvQUm1q0ig8R3n8pHRUG7sMCENstOxHxZgT8qCJg0/AZ7wWEdGszoHRAfl/q9vuR
+	 OvYveWdLX70BNNheEeVFuTSvk6/96Lb7SvlmVKlhqMj+vbkADLiTAG9xvmjAixygeD
+	 udL+k7lqljELkQtEHVNjHvDhq0LxNO9TS4xMQg70i0cwnxWZRWRUqchPZDy5JTAguh
+	 MNrEfHxtml+JQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0E12CA0ED3;
-	Mon, 11 Aug 2025 15:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 378A2CA0ED1;
+	Mon, 11 Aug 2025 15:18:35 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:19:28 -0400
-Subject: [PATCH 096/114] clk: rockchip: pll: convert from round_rate() to
+Date: Mon, 11 Aug 2025 11:19:31 -0400
+Subject: [PATCH 099/114] clk: samsung: pll: convert from round_rate() to
  determine_rate()
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-96-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-99-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -107,11 +107,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=3272;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=5057;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=ozLcWHNUlN5cz95mC8kyE0nFxgESg5zBVnr4Uv4HoiI=;
- b=1VudDsoEbAYTazTrlleaAasjo4cGf70uuPQ168XfNmrz6GbLa819j6V8dhAxLadWHvB5C9mgf
- NvwT5p8PJV8C3UtgF4lj1b1oLNKXkn/4gwXC8Xkf4rHdbcmkDEvbHNf
+ bh=bsJ0S2YlN+Q/3g0XO5U/IhgIQBKwRSKYutlWFigyhKE=;
+ b=Dc7hWjrwwirMj+0PVv/AthEP5h1ngg3LCNMH4rzmIwx/MdalTpUcgn92sAhNZIgEX2Ou/KxkM
+ jil/8agAwA1AA03jfTcJFoX70STKB/VREbbUbizxQMNqNxV15RLiKoY
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -127,25 +127,25 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/rockchip/clk-pll.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/clk/samsung/clk-pll.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/clk/rockchip/clk-pll.c b/drivers/clk/rockchip/clk-pll.c
-index c9d599c31923fc6a7f6a25a2296cd5853c881c60..86dba3826a77ef303c18c5a7b1ea1a54531786be 100644
---- a/drivers/clk/rockchip/clk-pll.c
-+++ b/drivers/clk/rockchip/clk-pll.c
-@@ -61,8 +61,8 @@ static const struct rockchip_pll_rate_table *rockchip_get_pll_settings(
+diff --git a/drivers/clk/samsung/clk-pll.c b/drivers/clk/samsung/clk-pll.c
+index e4faf02b631e07dea69be0bb7d141f52fa9900ae..3c04a0388ff9c6cec5b9b5779ad0c3be2b11cf07 100644
+--- a/drivers/clk/samsung/clk-pll.c
++++ b/drivers/clk/samsung/clk-pll.c
+@@ -49,8 +49,8 @@ static const struct samsung_pll_rate_table *samsung_get_pll_settings(
  	return NULL;
  }
  
--static long rockchip_pll_round_rate(struct clk_hw *hw,
--			    unsigned long drate, unsigned long *prate)
-+static int rockchip_pll_determine_rate(struct clk_hw *hw,
-+				       struct clk_rate_request *req)
+-static long samsung_pll_round_rate(struct clk_hw *hw,
+-			unsigned long drate, unsigned long *prate)
++static int samsung_pll_determine_rate(struct clk_hw *hw,
++				      struct clk_rate_request *req)
  {
- 	struct rockchip_clk_pll *pll = to_rockchip_clk_pll(hw);
- 	const struct rockchip_pll_rate_table *rate_table = pll->rate_table;
-@@ -70,12 +70,17 @@ static long rockchip_pll_round_rate(struct clk_hw *hw,
+ 	struct samsung_clk_pll *pll = to_clk_pll(hw);
+ 	const struct samsung_pll_rate_table *rate_table = pll->rate_table;
+@@ -58,12 +58,17 @@ static long samsung_pll_round_rate(struct clk_hw *hw,
  
  	/* Assuming rate_table is in descending order */
  	for (i = 0; i < pll->rate_count; i++) {
@@ -165,43 +165,88 @@ index c9d599c31923fc6a7f6a25a2296cd5853c881c60..86dba3826a77ef303c18c5a7b1ea1a54
 +	return 0;
  }
  
- /*
-@@ -352,7 +357,7 @@ static const struct clk_ops rockchip_rk3036_pll_clk_norate_ops = {
+ static bool pll_early_timeout = true;
+@@ -298,7 +303,7 @@ static int samsung_pll35xx_set_rate(struct clk_hw *hw, unsigned long drate,
  
- static const struct clk_ops rockchip_rk3036_pll_clk_ops = {
- 	.recalc_rate = rockchip_rk3036_pll_recalc_rate,
--	.round_rate = rockchip_pll_round_rate,
-+	.determine_rate = rockchip_pll_determine_rate,
- 	.set_rate = rockchip_rk3036_pll_set_rate,
- 	.enable = rockchip_rk3036_pll_enable,
- 	.disable = rockchip_rk3036_pll_disable,
-@@ -571,7 +576,7 @@ static const struct clk_ops rockchip_rk3066_pll_clk_norate_ops = {
+ static const struct clk_ops samsung_pll35xx_clk_ops = {
+ 	.recalc_rate = samsung_pll35xx_recalc_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.set_rate = samsung_pll35xx_set_rate,
+ 	.enable = samsung_pll3xxx_enable,
+ 	.disable = samsung_pll3xxx_disable,
+@@ -411,7 +416,7 @@ static int samsung_pll36xx_set_rate(struct clk_hw *hw, unsigned long drate,
+ static const struct clk_ops samsung_pll36xx_clk_ops = {
+ 	.recalc_rate = samsung_pll36xx_recalc_rate,
+ 	.set_rate = samsung_pll36xx_set_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.enable = samsung_pll3xxx_enable,
+ 	.disable = samsung_pll3xxx_disable,
+ };
+@@ -514,7 +519,7 @@ static int samsung_pll0822x_set_rate(struct clk_hw *hw, unsigned long drate,
  
- static const struct clk_ops rockchip_rk3066_pll_clk_ops = {
- 	.recalc_rate = rockchip_rk3066_pll_recalc_rate,
--	.round_rate = rockchip_pll_round_rate,
-+	.determine_rate = rockchip_pll_determine_rate,
- 	.set_rate = rockchip_rk3066_pll_set_rate,
- 	.enable = rockchip_rk3066_pll_enable,
- 	.disable = rockchip_rk3066_pll_disable,
-@@ -836,7 +841,7 @@ static const struct clk_ops rockchip_rk3399_pll_clk_norate_ops = {
+ static const struct clk_ops samsung_pll0822x_clk_ops = {
+ 	.recalc_rate = samsung_pll0822x_recalc_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.set_rate = samsung_pll0822x_set_rate,
+ 	.enable = samsung_pll3xxx_enable,
+ 	.disable = samsung_pll3xxx_disable,
+@@ -612,7 +617,7 @@ static int samsung_pll0831x_set_rate(struct clk_hw *hw, unsigned long drate,
+ static const struct clk_ops samsung_pll0831x_clk_ops = {
+ 	.recalc_rate = samsung_pll0831x_recalc_rate,
+ 	.set_rate = samsung_pll0831x_set_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.enable = samsung_pll3xxx_enable,
+ 	.disable = samsung_pll3xxx_disable,
+ };
+@@ -735,7 +740,7 @@ static int samsung_pll45xx_set_rate(struct clk_hw *hw, unsigned long drate,
  
- static const struct clk_ops rockchip_rk3399_pll_clk_ops = {
- 	.recalc_rate = rockchip_rk3399_pll_recalc_rate,
--	.round_rate = rockchip_pll_round_rate,
-+	.determine_rate = rockchip_pll_determine_rate,
- 	.set_rate = rockchip_rk3399_pll_set_rate,
- 	.enable = rockchip_rk3399_pll_enable,
- 	.disable = rockchip_rk3399_pll_disable,
-@@ -1036,7 +1041,7 @@ static const struct clk_ops rockchip_rk3588_pll_clk_norate_ops = {
+ static const struct clk_ops samsung_pll45xx_clk_ops = {
+ 	.recalc_rate = samsung_pll45xx_recalc_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.set_rate = samsung_pll45xx_set_rate,
+ };
  
- static const struct clk_ops rockchip_rk3588_pll_clk_ops = {
- 	.recalc_rate = rockchip_rk3588_pll_recalc_rate,
--	.round_rate = rockchip_pll_round_rate,
-+	.determine_rate = rockchip_pll_determine_rate,
- 	.set_rate = rockchip_rk3588_pll_set_rate,
- 	.enable = rockchip_rk3588_pll_enable,
- 	.disable = rockchip_rk3588_pll_disable,
+@@ -880,7 +885,7 @@ static int samsung_pll46xx_set_rate(struct clk_hw *hw, unsigned long drate,
+ 
+ static const struct clk_ops samsung_pll46xx_clk_ops = {
+ 	.recalc_rate = samsung_pll46xx_recalc_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.set_rate = samsung_pll46xx_set_rate,
+ };
+ 
+@@ -1093,7 +1098,7 @@ static int samsung_pll2550xx_set_rate(struct clk_hw *hw, unsigned long drate,
+ 
+ static const struct clk_ops samsung_pll2550xx_clk_ops = {
+ 	.recalc_rate = samsung_pll2550xx_recalc_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.set_rate = samsung_pll2550xx_set_rate,
+ };
+ 
+@@ -1185,7 +1190,7 @@ static int samsung_pll2650x_set_rate(struct clk_hw *hw, unsigned long drate,
+ 
+ static const struct clk_ops samsung_pll2650x_clk_ops = {
+ 	.recalc_rate = samsung_pll2650x_recalc_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ 	.set_rate = samsung_pll2650x_set_rate,
+ };
+ 
+@@ -1277,7 +1282,7 @@ static int samsung_pll2650xx_set_rate(struct clk_hw *hw, unsigned long drate,
+ static const struct clk_ops samsung_pll2650xx_clk_ops = {
+ 	.recalc_rate = samsung_pll2650xx_recalc_rate,
+ 	.set_rate = samsung_pll2650xx_set_rate,
+-	.round_rate = samsung_pll_round_rate,
++	.determine_rate = samsung_pll_determine_rate,
+ };
+ 
+ static const struct clk_ops samsung_pll2650xx_clk_min_ops = {
 
 -- 
 2.50.1
