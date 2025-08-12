@@ -1,24 +1,24 @@
-Received: from mail-m49210.qiye.163.com (mail-m49210.qiye.163.com [45.254.49.210])
+Received: from mail-m49233.qiye.163.com (mail-m49233.qiye.163.com [45.254.49.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006CA7E792
-	for <soc@lists.linux.dev>; Tue, 12 Aug 2025 12:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32189AD51
+	for <soc@lists.linux.dev>; Tue, 12 Aug 2025 12:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755002819; cv=none; b=uj7rjBE+SHS2OgeugbwFh79PEoZhLjrUI2N9iULgmc7g0oHBW88MmWiRdWYd94ah1E7IAaeuxli74HMNXb1umAldL12qwaQL0e83DxsUuwLbh9NsFs28NQLcQydS3579oV4A8OIQrR1U0rTo/u6G+Xd/tmo4RG1zRBsVjHgnLS0=
+	t=1755002823; cv=none; b=d99DldBXmUEIGuNYumyH2/zLCrWCYfqe/nBIjatz5VWIBJhXqvuwio0o5X+Agf/m0TEVA/JyJc++q+ivO613gWjHEXutcT0VovA/LXvSv/LG+9iy4qFzFhfI1qJG+S91BqrBmKEe8/BJn2e6ZnkUo4qygH2fdXK0qFZZa7+a4TE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755002819; c=relaxed/simple;
-	bh=m4KdOj5xs0GNkk6sX0iq2XyjWYDT3glUUVHC57AbgyE=;
+	s=arc-20240116; t=1755002823; c=relaxed/simple;
+	bh=stMMaO5wLaUCV4mB05syLNssHPpeCsNJDHr689x5/8Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JAIPUMuzjQXGugjdfdY4GzcwMbNc0kPVok4resy1DQfpGQgQfj6r8rNEj8wAx0+3QMBWZ/AfTakf4ZJLa6OtBTZMxSqOF8qQo3DMPxS2WnUDs+qtHd2wvMLOrBt6FbK8lCD5r2Z4aJDrMB7RvJ8AB79sd5Relm3uRlIeq4HI1IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=UnZiAkF8; arc=none smtp.client-ip=45.254.49.210
+	 MIME-Version; b=r7sQ1giZJHJBtvRyLGQOjmHJoFLTchjHp53QH2fw5LVC5Phz/wPjOYx6Yidi5tUH3RhJxt1DjHr1A8/T3gvKrG+g00KNgB+JLA0Q6ZK4IP12hcH+75q2oU3/ER49chSh3NKDGAXYxt1RwzE3C7/vG+Q5G5l8cWq24qoBFSuQncE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=TlyYPy41; arc=none smtp.client-ip=45.254.49.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="UnZiAkF8"
+	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="TlyYPy41"
 Received: from albert-OptiPlex-7080.. (unknown [117.184.129.134])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1f211b6d5;
-	Tue, 12 Aug 2025 20:31:34 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1f211b6d9;
+	Tue, 12 Aug 2025 20:31:39 +0800 (GMT+08:00)
 From: Albert Yang <yangzh0906@thundersoft.com>
 To: krzk@kernel.org,
 	robh@kernel.org,
@@ -39,9 +39,9 @@ Cc: bst-upstream@bstai.top,
 	soc@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Albert Yang <yangzh0906@thundersoft.com>
-Subject: [PATCH v3 6/8] arm64: dts: bst: add support for Black Sesame Technologies C1200 CDCU1.0 board
-Date: Tue, 12 Aug 2025 20:31:08 +0800
-Message-ID: <20250812123110.2090460-7-yangzh0906@thundersoft.com>
+Subject: [PATCH v3 8/8] MAINTAINERS: add and consolidate Black Sesame Technologies (BST) ARM SoC support
+Date: Tue, 12 Aug 2025 20:31:10 +0800
+Message-ID: <20250812123110.2090460-9-yangzh0906@thundersoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250812123110.2090460-1-yangzh0906@thundersoft.com>
 References: <20250812123110.2090460-1-yangzh0906@thundersoft.com>
@@ -52,250 +52,54 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a989e43b80909cckunm52c5de628443a1
+X-HM-Tid: 0a989e43c9c809cckunm52c5de628443e3
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGR9KVktJTU1NTR5CQk0ZH1YVFAkWGhdVEwETFh
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCS04dVkpITUpKTUJPTkxLHlYVFAkWGhdVEwETFh
 	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0hVSk
 	tLVUpCS0tZBg++
 DKIM-Signature: a=rsa-sha256;
-	b=UnZiAkF8OZuGRlSIc/9rcuYUmjLpOaGzWqjjZ+VMUbMY60dk0SAsuqK3rftpJuMaihQKuktXid82Ej+jPJGizcoRQJehqNmcQ2LWlpXuL8PoCSNHGWXjs/Ecp1Y7mwmM6s+7CcQgpJLqOLKfqCopZLsIiN9ZPkbavdYOclX5bpw=; s=default; c=relaxed/relaxed; d=thundersoft.com; v=1;
-	bh=3HpFPSzH5BMSx25qJxY63JWzAKDMBMOt+NibaE+k1AM=;
+	b=TlyYPy41p0fjSOSw/DXJYeY/u7nlf4/zwGoyL9ES27467blCjCHPRGpDBoOBehWgMXuHNftPWscE0sinYV7Y0m+A6A+fJMCbMhpju+CZV/pdmdCkTmtWZ6Tq7r85YIe1U3jqxD+Kdw2Zro8+kaBWI6OS80dWjux6NqDDP8utsuU=; s=default; c=relaxed/relaxed; d=thundersoft.com; v=1;
+	bh=5XY1+cf0NTb0xRpC03OIMhJWcVNtQLjQy5avmpN1TZY=;
 	h=date:mime-version:subject:message-id:from;
 
-Add device tree support for the Black Sesame Technologies (BST) C1200
-CDCU1.0 ADAS 4C2G platform. This platform is based on the BST C1200 SoC
-family.
-
-The changes include:
-- Adding a new BST device tree directory
-- Adding Makefile entries to build the BST platform device trees
-- Adding the device tree for the BST C1200 CDCU1.0 ADAS 4C2G board
-
-This board features a quad-core Cortex-A78 CPU, and various peripherals
-including UART, MMC, watchdog timer, and interrupt controller.
+Add and consolidate the MAINTAINERS entry for Black Sesame Technologies
+ARM SoC support. This entry covers device tree bindings, drivers, and board
+files for BST SoCs, including MMC, and platform support.
 
 Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
 Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
 ---
-Changes for v3:
-- Split defconfig enablement out into a dedicated defconfig patch
-- Refine memory description: consolidate ranges in memory node and
-  delele unused memory ranges
-- Adjust the order of nodes
-- remove mask of gic
+Change for v3:
+- No changes
 
-Changes for v2:
-1. Reorganized memory map into discrete regions
-2. Updated MMC controller definition:
-   - Split into core/CRM register regions
-   - Removed deprecated properties
-   - Updated compatible string
-3. Standardized interrupt definitions and numeric formats
-4. Removed reserved-memory node (superseded by bounce buffers)
-5. Added root compatible string for platform identification
-6. Add soc defconfig
+Change for v2:
+- No changes
 ---
- arch/arm64/boot/dts/Makefile                  |   1 +
- arch/arm64/boot/dts/bst/Makefile              |   2 +
- .../dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts    |  42 +++++++
- arch/arm64/boot/dts/bst/bstc1200.dtsi         | 117 ++++++++++++++++++
- 4 files changed, 162 insertions(+)
- create mode 100644 arch/arm64/boot/dts/bst/Makefile
- create mode 100644 arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts
- create mode 100644 arch/arm64/boot/dts/bst/bstc1200.dtsi
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 79b73a21ddc2..a39b6cafb644 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -12,6 +12,7 @@ subdir-y += arm
- subdir-y += bitmain
- subdir-y += blaize
- subdir-y += broadcom
-+subdir-y += bst
- subdir-y += cavium
- subdir-y += exynos
- subdir-y += freescale
-diff --git a/arch/arm64/boot/dts/bst/Makefile b/arch/arm64/boot/dts/bst/Makefile
-new file mode 100644
-index 000000000000..4c1b8b4cdad8
---- /dev/null
-+++ b/arch/arm64/boot/dts/bst/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_BST) += bstc1200-cdcu1.0-adas_4c2g.dtb
-diff --git a/arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts b/arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts
-new file mode 100644
-index 000000000000..d8fb07b0bc80
---- /dev/null
-+++ b/arch/arm64/boot/dts/bst/bstc1200-cdcu1.0-adas_4c2g.dts
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index efb51ee92683..e3236384c28a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2441,6 +2441,16 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/arm/blaize.yaml
+ F:	arch/arm64/boot/dts/blaize/
+ 
++ARM/BST SOC SUPPORT
++M:	Ge Gordon <gordon.ge@bst.ai>
++R:	BST Linux Kernel Upstream Group <bst-upstream@bstai.top>
++L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
++S:	Maintained
++F:	Documentation/devicetree/bindings/arm/bst.yaml
++F:	Documentation/devicetree/bindings/mmc/bst,dwcmshc-sdhci.yaml
++F:	arch/arm64/boot/dts/bst/
++F:	drivers/mmc/host/sdhci-of-bst-c1200.c
 +
-+#include "bstc1200.dtsi"
-+
-+/ {
-+	model = "BST C1200-96 CDCU1.0 4C2G";
-+	compatible = "bst,c1200-cdcu1.0-adas-4c2g", "bst,c1200";
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@810000000 {
-+		device_type = "memory";
-+		reg = <0x8 0x10000000 0x0 0x30000000>,
-+		      <0x8 0xc0000000 0x1 0x0>,
-+		      <0xc 0x00000000 0x0 0x40000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		mmc0_reserved: mmc0-reserved@5160000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x0 0x5160000 0x0 0x10000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&mmc0 {
-+	status = "okay";
-+	memory-region = <&mmc0_reserved>;
-+};
-+
-diff --git a/arch/arm64/boot/dts/bst/bstc1200.dtsi b/arch/arm64/boot/dts/bst/bstc1200.dtsi
-new file mode 100644
-index 000000000000..5e9ca0ee17cf
---- /dev/null
-+++ b/arch/arm64/boot/dts/bst/bstc1200.dtsi
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	compatible = "bst,c1200";
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	clk_mmc: clock-4000000 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <4000000>;
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "arm,cortex-a78";
-+			device_type = "cpu";
-+			enable-method = "psci";
-+			next-level-cache = <&l2_cache>;
-+			reg = <0>;
-+		};
-+
-+		cpu@1 {
-+			compatible = "arm,cortex-a78";
-+			device_type = "cpu";
-+			enable-method = "psci";
-+			next-level-cache = <&l2_cache>;
-+			reg = <0x100>;
-+		};
-+
-+		cpu@2 {
-+			compatible = "arm,cortex-a78";
-+			device_type = "cpu";
-+			enable-method = "psci";
-+			next-level-cache = <&l2_cache>;
-+			reg = <0x200>;
-+		};
-+
-+		cpu@3 {
-+			compatible = "arm,cortex-a78";
-+			device_type = "cpu";
-+			enable-method = "psci";
-+			next-level-cache = <&l2_cache>;
-+			reg = <0x300>;
-+		};
-+
-+		l2_cache: l2-cache {
-+			compatible = "cache";
-+			cache-level = <2>;
-+			cache-unified;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		interrupt-parent = <&gic>;
-+
-+		uart0: serial@20008000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0x0 0x20008000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 211 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-frequency = <25000000>;
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		mmc0: mmc@22200000 {
-+			compatible = "bst,c1200-dwcmshc-sdhci";
-+			reg = <0x0 0x22200000 0x0 0x1000>,
-+			      <0x0 0x23006000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk_mmc>;
-+			clock-names = "core";
-+			max-frequency = <200000000>;
-+			bus-width = <8>;
-+			non-removable;
-+			dma-coherent;
-+			status = "disabled";
-+		};
-+
-+		gic: interrupt-controller@32800000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			interrupt-controller;
-+			ranges;
-+			reg = <0x0 0x32800000 0x0 0x10000>,
-+			      <0x0 0x32880000 0x0 0x100000>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		always-on;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
+ ARM/CALXEDA HIGHBANK ARCHITECTURE
+ M:	Andre Przywara <andre.przywara@arm.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 -- 
 2.43.0
 
