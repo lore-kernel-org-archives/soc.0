@@ -1,24 +1,24 @@
-Received: from mail-m3288.qiye.163.com (mail-m3288.qiye.163.com [220.197.32.88])
+Received: from mail-m32102.qiye.163.com (mail-m32102.qiye.163.com [220.197.32.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562BB266595
-	for <soc@lists.linux.dev>; Tue, 12 Aug 2025 12:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF9AAD51
+	for <soc@lists.linux.dev>; Tue, 12 Aug 2025 12:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755002218; cv=none; b=eV5fOmh59GyCwumEsMrpgDvgw6BHbNE65bMMhp3L4MKh5Ti97n8g0XHlAICdacNKI5a6c10Py7NcHbL/NmzyDRakfzVkeyC+ctHEW8KQ6VAX7phyAD6GlZ0++wSIOyhXSARv+OQaTIgnPWCPE5C5ASyLTFTuNObvWxb2WZJ34g4=
+	t=1755002819; cv=none; b=kMKfX5gFGcCS2R3VTBiLcj8EvAbW8y14xCibNoYvaQ58Ulg7ZgAwjavY3MvH2+qIOA7nBI4PD0r/QMCx9BJqQ0n1TBJknHqf6xCjtX5WmsannW1LyoCPAyDi/3u7mQlKdiTTUyQRwLlRh0Hu251e8iFkY/HysqZT0zLViq9qzaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755002218; c=relaxed/simple;
-	bh=zTgB+HkIWxyZXYFmwnQgvESXKIPYQxN69x/bv377KDI=;
+	s=arc-20240116; t=1755002819; c=relaxed/simple;
+	bh=C19Qypf3MdiVdmYT5r6F4/GjE1+TeoyXiFf4jgLAP60=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YikRNAvOLZS8zEkxyVND7i87dsq+XscL2tm9YYWp2O+YydtmpBq4o3KFctEZ5uVpwsyIQREkMi/2+UT2mvMg3WWHJgsBkyBZezSDo/wYUTNgRA7JM87QkiiStKqPW3dobN0Ov0E9vIIrp+KTyYd/DzwQHGXBpfKYa9gNWxeWw/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=OIOieOab; arc=none smtp.client-ip=220.197.32.88
+	 MIME-Version; b=VVNZBpEmipSgEnvNvACZ0pQovnsXqucBqeJ52vlJnPFCV0BoVmFEkzhS6iHmJzyYt0Y6eR/m3DYxXqkcn1YLx3AzA1ic2Pk1R2S/eMy2r1vqNz1YubsLBWafvBR0NwEZEy/Q8IDSpvRspQW7DDLUJVN5M9KzXkr0tfsgBVOS6iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com; spf=pass smtp.mailfrom=thundersoft.com; dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b=McbTzGke; arc=none smtp.client-ip=220.197.32.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thundersoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="OIOieOab"
+	dkim=pass (1024-bit key) header.d=thundersoft.com header.i=@thundersoft.com header.b="McbTzGke"
 Received: from albert-OptiPlex-7080.. (unknown [117.184.129.134])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 1f211b6d7;
-	Tue, 12 Aug 2025 20:31:37 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1f211b6ce;
+	Tue, 12 Aug 2025 20:31:28 +0800 (GMT+08:00)
 From: Albert Yang <yangzh0906@thundersoft.com>
 To: krzk@kernel.org,
 	robh@kernel.org,
@@ -39,9 +39,9 @@ Cc: bst-upstream@bstai.top,
 	soc@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Albert Yang <yangzh0906@thundersoft.com>
-Subject: [PATCH v3 7/8] arm64: defconfig: enable BST platform and SDHCI controller support
-Date: Tue, 12 Aug 2025 20:31:09 +0800
-Message-ID: <20250812123110.2090460-8-yangzh0906@thundersoft.com>
+Subject: [PATCH v3 3/8] arm64: Kconfig: add ARCH_BST for Black Sesame Technologies SoCs
+Date: Tue, 12 Aug 2025 20:31:05 +0800
+Message-ID: <20250812123110.2090460-4-yangzh0906@thundersoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250812123110.2090460-1-yangzh0906@thundersoft.com>
 References: <20250812123110.2090460-1-yangzh0906@thundersoft.com>
@@ -52,60 +52,59 @@ List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a989e43c28509cckunm52c5de628443cc
+X-HM-Tid: 0a989e439eab09cckunm52c5de62844346
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZQ0JMVk0aTRlOSxhMShkZSVYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0hVSk
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDQx9PVktKQkpPQkoeHU1OTVYVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlKSkxVSkNPVUpJQlVKSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE5VSk
 	tLVUpCS0tZBg++
 DKIM-Signature: a=rsa-sha256;
-	b=OIOieOabStHm2JazoXydk/fhydRg4Q9mi/tfK3CChPUTmplGxJk27odPBGKfsxD7nu91J4PvuPOkcLMmPYdDuylEgKLRb3AaDn2I3Bz1YJ+G8nCZ7sG/LEWXd98fDgulxIDWrQ7rJ8hQxFqTv19mvXVzbaZl9jfFgmc3HTpZ8Q8=; s=default; c=relaxed/relaxed; d=thundersoft.com; v=1;
-	bh=kJ742w8ZJVIuGW3jnwo9Rh3GEZ+ujaREsWARlA26Ou4=;
+	b=McbTzGke7qRrlKTuxiDsOwdTXAQmdvv0q9YnddOnQOYYWYa3bE00ayXsLDWMo8KiAkITrltpt46MfXAp+c8ZDqwjqoTy+KLv8ki/cuUpjtzCr922cl7deSFYHSmbfJoVJjXSZFDyvKnoXCrZpb+22NUmayt5HDfrmTQ1nvL0/tU=; s=default; c=relaxed/relaxed; d=thundersoft.com; v=1;
+	bh=5azJ5qEoVzNoXa2DOglubsbylWr8QeDyzeiW7uUhUmU=;
 	h=date:mime-version:subject:message-id:from;
 
-Enable support for Black Sesame Technologies (BST) platform and drivers
-in the ARM64 defconfig:
+Add ARCH_BST configuration option to enable support for Black Sesame
+Technologies SoC family. BST produces automotive-grade system-on-chips
+for intelligent driving, focusing on computer vision and AI capabilities.
 
-- CONFIG_ARCH_BST: Enable BST SoC platform support
-- CONFIG_MMC_SDHCI_BST: Enable BST C1200 DWCMSHC SDHCI controller driver
-
-This enables eMMC/SD card access on Black Sesame Technologies C1200 series
-SoCs. The SDHCI driver provides hardware-specific implementation for the
-Synopsys DesignWare Mobile Storage Host Controller integrated in BST SoCs.
+The BST C1200 family includes SoCs for ADAS and autonomous driving
+applications.
 
 Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
 Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
 ---
-Change for v3:
-- Also enable CONFIG_ARCH_BST in arm64 defconfig (in addition to
-CONFIG_MMC_SDHCI_BST)
+Changes for v3:
+- Reword subject from "for bst silicons" to "for Black Sesame Technologies
+SoCs"
+- drop unrelated whitespace hunk
 
-Change for v2:
-- No changes.
+Changes for v2:
+- Placed the configuration entry in correct alphabetical order
+- Used generic family name (ARCH_BST) instead of SoC-specific naming
+- Followed upstream kernel naming and description conventions
 ---
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/Kconfig.platforms | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 897fc686e6a9..8daf8cf3dc97 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -45,6 +45,7 @@ CONFIG_ARCH_BCMBCA=y
- CONFIG_ARCH_BRCMSTB=y
- CONFIG_ARCH_BERLIN=y
- CONFIG_ARCH_BLAIZE=y
-+CONFIG_ARCH_BST=y
- CONFIG_ARCH_EXYNOS=y
- CONFIG_ARCH_SPARX5=y
- CONFIG_ARCH_K3=y
-@@ -1187,6 +1188,7 @@ CONFIG_MMC_SDHCI_CADENCE=y
- CONFIG_MMC_SDHCI_ESDHC_IMX=y
- CONFIG_MMC_SDHCI_TEGRA=y
- CONFIG_MMC_SDHCI_F_SDH30=y
-+CONFIG_MMC_SDHCI_BST=y
- CONFIG_MMC_MESON_GX=y
- CONFIG_MMC_SDHCI_MSM=y
- CONFIG_MMC_SPI=y
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index a541bb029aa4..b078b70ded0c 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -106,6 +106,14 @@ config ARCH_BLAIZE
+ 	help
+ 	  This enables support for the Blaize SoC family
+ 
++config ARCH_BST
++	bool "Black Sesame Technologies SoC Family"
++	help
++	  This enables support for Black Sesame Technologies (BST) SoC family.
++	  BST produces automotive-grade system-on-chips for intelligent driving,
++	  focusing on computer vision and AI capabilities. The BST C1200 family
++	  includes SoCs for ADAS and autonomous driving applications.
++
+ config ARCH_EXYNOS
+ 	bool "Samsung Exynos SoC family"
+ 	select COMMON_CLK_SAMSUNG
 -- 
 2.43.0
 
