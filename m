@@ -1,187 +1,98 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120B41FE44B
-	for <soc@lists.linux.dev>; Thu, 14 Aug 2025 04:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC53528C5A4
+	for <soc@lists.linux.dev>; Thu, 14 Aug 2025 07:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755146152; cv=none; b=j34styTUamKtLxF46pCqcEQ+sqqiTtCVkButMX5iDKiNa7clYr8wSn0HWExAL4XZ9V1TVRYHWwpZl7/akl2ZatKeslmBhWrz428mVDC/Skuy7MoWQzS4XYaLhwIgoUh5k7+zv8YDbJHIOORvYNbDjomZEg1l49tkmgQK/+ConZ0=
+	t=1755158361; cv=none; b=k4j+Kg2Xfbo5/TApCen3rgIJ8Htoo2iYDJKRxOdaChApJReiPBfkj9EQyxynq9XS4WjghvAlsT4tR9umrP7qdwlo5hCGnRikIyr4ga69rBf6NY5kvsp2qcplPLBJWqJtRyyIPr/AUF1VfwYocQe6TUtnQjcSfKRJ8skNE0N9cro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755146152; c=relaxed/simple;
-	bh=QGb/WSxQrkoalS0PQR6chjMqXIC8l1e9Dtd3KAUUo7U=;
+	s=arc-20240116; t=1755158361; c=relaxed/simple;
+	bh=VpKIa8LgibfoJADpoNgeGgl5dJ2VMP4Uoi/rmo0dahI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BQcPfmvrLxtWka4jxabHX6tpq1TTFLpYdumO9Nl+fS18ChKU2Lkdw6nSlI34Z6JYONCxosLfdqwPYaFoVWd4fpz9r0IRzVYX+APNIa8M+/3pqUm5tOJgAu97ARvlD9v7+O3krxMa7mMMtH2ZwNHRRE+8HpnT0IHY+PTl0qBEkis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thingy.jp; spf=pass smtp.mailfrom=0x0f.com; dkim=pass (1024-bit key) header.d=thingy.jp header.i=@thingy.jp header.b=ER0DAD3v; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thingy.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x0f.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=thingy.jp header.i=@thingy.jp header.b="ER0DAD3v"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-323266d2d9eso486823a91.0
-        for <soc@lists.linux.dev>; Wed, 13 Aug 2025 21:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thingy.jp; s=google; t=1755146148; x=1755750948; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W68wJmIpwZKYrhZj9rQMZlkUfiQu51PmIXBdt9PMw2k=;
-        b=ER0DAD3vlV0+A5sT1jqWhiuGH4w+tHGERv2otSVgzwPkDkBDRusvHWSGUUkq8btmPb
-         FRA53J8QupTO1CfCKayHcKaamSKY1n/NqErah5k2BHfOVf/siaSm+A/FlsJdFWbTpJ1o
-         cK/XI4MuccxuiKjaWo6uuvkdPN3aiQBS7/9Us=
+	 To:Cc:Content-Type; b=V4Yfjhns1nidDun4KgN1mC7BLoQOyyiEOLwfykE4MCO0VLpncw8j9E8KjSYBEqwqmegnD9JIC84b44Ag99sG1mA2oTEWbT6encyUckmY5At/zmTTqn1tj2lj7m/jdlU34GFuchC+QGyFYdCjlICn6HjK7egXH5AMydulSRkP6WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-89018ea8f7cso357785241.0
+        for <soc@lists.linux.dev>; Thu, 14 Aug 2025 00:59:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755146148; x=1755750948;
+        d=1e100.net; s=20230601; t=1755158357; x=1755763157;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=W68wJmIpwZKYrhZj9rQMZlkUfiQu51PmIXBdt9PMw2k=;
-        b=BycHqzbf9Z5ISHDJOWv8ldxABCFD3VymIX2C7Tnvg/TzUdfk8MUyM9OyM02x1pRa/P
-         wkVZ/vW6WquUWAyDdAYAYkKElQ3nOWEM6HmXoI7hW7iVjgQiBcovXGcsI+bSB16k16GU
-         dG1W4rwalYpgNkGMu51JnHhRKAlvGijZMwAYzglGMi+LFcUJNoRNWLkG7OKGCl9qi0zz
-         X7QaA/e7n3KhatpSEtZQ5bHCm9paQtJl/ie6zXkZRACIHLDyCLHiIt7RAb9zT1OZo4bD
-         McsnxvljrP0kXL0ppR5eKBYEOv0AFbsiupn/imI/Y76VuEZy5v4ywfXZuXEcmAOc9zZ/
-         FmAg==
-X-Forwarded-Encrypted: i=1; AJvYcCVG06DxWLzOeUdNx1/xYBBN0edUFces06almuBFJOE/j0ARWw2OlJ/XNxHTKwlMKtcvc58=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxc6f9z32JyRCkzodGVbOSLSRgds+g4tRPY0yoQzjnG2zMxNdLQ
-	w20rq5dbVIUt1PC24hfXDCkhlamhPDvZZiTkmPeK+XGSoT5/7LrlnNU2yHIlASKJ95X5NbhsbWj
-	9mcGeiXwNGk7Bm+TFDsDH+1Tqbal81zVBxkoVWpSuYg==
-X-Gm-Gg: ASbGncuAKBNvMzF9GrOs/LRM6XGCviFZkcvIsn3sz86dQ7AmfE6cPyngh3dzpdj4i/X
-	drfwaws+ybDv05HdRs+S9u31rOUn3GfAKS2Wx2AFDUFMFAq+cl5L93UzRISlnl6laYN/PG6+bwv
-	mlFHL9Nm4s/6Np4uZZm3G8vq1lxc8zZg+qzlJv2ud8KBS6TP5IZUZXel4LEQWs5+EwavMuSgnd1
-	ibs4x/yEMeH
-X-Google-Smtp-Source: AGHT+IFjwIWeQGe9GR6r4b2M90JJvm8sY4wwHgdbP9dAwNnEibxW+RtNYUEdWU1EXNpbiBYlhjSbLxcOxiikHu61EP4=
-X-Received: by 2002:a17:90b:58e7:b0:31f:6682:bd28 with SMTP id
- 98e67ed59e1d1-32327a52880mr2616043a91.16.1755146147789; Wed, 13 Aug 2025
- 21:35:47 -0700 (PDT)
+        bh=h+i7bCdgaRO4PJGywSV9WTbQBb+KITW5yzAKza8+ctg=;
+        b=MWL1IAZ1RjLgj+4SouCl70tmDgMws6ilSW4QhSC3DNABO24DA0/n1m2/ryPM9KioD1
+         2VmCQ/zzauddlhfyGlsvxMjYkIUcnODiP7i2WzA62te41B0IHAmCjXJwndigH1+1diGx
+         0xhZgGJTa4CkEZjFY5LWGA6dL6xb0iLDfO7oMph5urIwQCsDKUqTWHittF+LuAC6SZOx
+         35Gb+9/voewIVRwe2mIoSKfB8yjjqsn+L+LgbocyIRBS4Cy5smGKTcX21Th7Gy2i51MO
+         up8nAYywnEAk/OF6TkmyHO9SiXqw44E0Y5b7blgeBS2EDJVCymHXnuy6/skak0EFEMBF
+         ZZKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5LV8wzyb85N2IvpkUi4OqwEGrmKB9A7kH2WoXQXgvpZy7b2PPGdqmBR93jLirYZEdLRY=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwPTtCgL2eCtQqFyRVH6R3/q2SvN+wY4L3bvmz9CvBTpE1+kUkw
+	qOPmelDahMLD8riIcQ0O37iu/ZfWB6ktTNiCvmnv4giFjW9zRu4E7QQexcq2SDsv
+X-Gm-Gg: ASbGncsxWKe5fu1uShf2+qzruEVTtPERAph5X6/+a3GokG7d2VfPOwg6iM414XqF3hN
+	CjDV+VZvpgbhxwS8SYWDjbv3NEoCBmrJ88z+nrvdNorNfYVajcTKI+cTOM3JDNmA8aksidnQrty
+	zbBWh8ObaRK9Y+mGlNATpaun0dMzq/GdPaQZdv4xyFP/GTQXzgRcUVAcbSU+Xhusgnwf8fztWbt
+	sKg5Fc9BcCIfoUs5lVDH8+9tqsIXbVLapmg4APLKZJxCVl87bef26BZvY23Sm6+UrOSMVjAkRNK
+	FdB2cK3/VQhLRK27UV+PyRgd5/2frsxd/mWj/TlixDdKBxyFZ6g7ycngfXraXHcbfye9CokIrOv
+	LqyNefyH142ati9vAigEGFXY9zUUjwgSkzkNU/ToywJjKZasdpY3U1rYe9kue
+X-Google-Smtp-Source: AGHT+IGHrvfg/Q2tWpjDkPqz1O1mT7ziIoGrNgNWpylNtx0fubaTT0KtpcV6sdXhR3O1HrgdYhG7IQ==
+X-Received: by 2002:a05:6102:2ad3:b0:4fd:5c41:bfbf with SMTP id ada2fe7eead31-50fdf8e5c2bmr679477137.7.1755158357321;
+        Thu, 14 Aug 2025 00:59:17 -0700 (PDT)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88e0268c86dsm2937875241.1.2025.08.14.00.59.17
+        for <soc@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Aug 2025 00:59:17 -0700 (PDT)
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-50f88bd4b96so518589137.1
+        for <soc@lists.linux.dev>; Thu, 14 Aug 2025 00:59:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWj71kBBt1Z6hIU1qzplYOZxgEdZZgh6Px6NWi/IkjZ+8lw+iqDxNIhoObfU/hz2nMNdKs=@lists.linux.dev
+X-Received: by 2002:a05:6102:4192:b0:4f3:1731:8c01 with SMTP id
+ ada2fe7eead31-50fe9f8ba91mr647723137.19.1755158357000; Thu, 14 Aug 2025
+ 00:59:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com> <20250811-clk-for-stephen-round-rate-v1-84-b3bf97b038dc@redhat.com>
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-84-b3bf97b038dc@redhat.com>
-From: Daniel Palmer <daniel@thingy.jp>
-Date: Thu, 14 Aug 2025 13:35:36 +0900
-X-Gm-Features: Ac12FXxr3rvVXpJVntmlzZatJLppeB52b6KjThcDVumW6l6FaIvxvyr3Ex-UBYM
-Message-ID: <CAFr9PXn=jJPKzMcTa-TJSNuNQknauEttNZg=jV3sBwkTYqxLcw@mail.gmail.com>
-Subject: Re: [PATCH 084/114] clk: mstar: msc313-cpupll: convert from
- round_rate() to determine_rate()
-To: bmasney@redhat.com
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Paul Cercueil <paul@crapouillou.net>, Keguang Zhang <keguang.zhang@gmail.com>, 
-	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Yixun Lan <dlan@gentoo.org>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
-	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Chunyan Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek <michal.simek@amd.com>, 
-	Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Romain Perier <romain.perier@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Heiko Stuebner <heiko@sntech.de>, 
-	Andrea della Porta <andrea.porta@suse.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Alex Helms <alexander.helms.jy@renesas.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Liviu Dudau <liviu.dudau@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, sophgo@lists.linux.dev, 
-	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com, 
-	linux-actions@lists.infradead.org, asahi@lists.linux.dev, 
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+References: <20250812104154.42289-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250812104154.42289-2-krzysztof.kozlowski@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 14 Aug 2025 09:59:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXz60tBNh3DemVOmdYA9YT+aLGfKR-AGp7OT72gGkNOnQ@mail.gmail.com>
+X-Gm-Features: Ac12FXyFisZ5qsOIsDXr4nfrcLgkkLJm5dx-Z9otnKfuIczkkZJm2xxpNDB0tU8
+Message-ID: <CAMuHMdXz60tBNh3DemVOmdYA9YT+aLGfKR-AGp7OT72gGkNOnQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation/process: maintainer-soc: Use "DTS" instead
+ of "devicetree"
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>, linux-arm-kernel@lists.infradead.org, 
+	soc@lists.linux.dev, workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Brian,
+On Thu, 14 Aug 2025 at 00:55, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Devicetree is a data structure and it is a bit generic term, because
+> some treat Devicetree bindings as Devicetree.  What the SoC maintainers
+> profile is mentioning in ABI stability are the Devicetree sources, so
+> DTS files.  It is also more common during reviews to refer to these as
+> per "DTS" instead "devicetree".
+>
+> Clarify that by using "DTS" name in few more places.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Tue, 12 Aug 2025 at 00:18, Brian Masney via B4 Relay
-<devnull+bmasney.redhat.com@kernel.org> wrote:
->
-> From: Brian Masney <bmasney@redhat.com>
->
-> The round_rate() clk ops is deprecated, so migrate this driver from
-> round_rate() to determine_rate() using the Coccinelle semantic patch
-> on the cover letter of this series.
->
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> ---
->  drivers/clk/mstar/clk-msc313-cpupll.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/clk/mstar/clk-msc313-cpupll.c b/drivers/clk/mstar/clk-msc313-cpupll.c
-> index a93e2dba09d3523199263494efd2bf6987bb4156..3e643be02fe2a79c043c1b79a5e95c869b757ba1 100644
-> --- a/drivers/clk/mstar/clk-msc313-cpupll.c
-> +++ b/drivers/clk/mstar/clk-msc313-cpupll.c
-> @@ -140,20 +140,22 @@ static unsigned long msc313_cpupll_recalc_rate(struct clk_hw *hw, unsigned long
->                                              parent_rate);
->  }
->
-> -static long msc313_cpupll_round_rate(struct clk_hw *hw, unsigned long rate,
-> -                                    unsigned long *parent_rate)
-> +static int msc313_cpupll_determine_rate(struct clk_hw *hw,
-> +                                       struct clk_rate_request *req)
->  {
-> -       u32 reg = msc313_cpupll_regforfrequecy(rate, *parent_rate);
-> -       long rounded = msc313_cpupll_frequencyforreg(reg, *parent_rate);
-> +       u32 reg = msc313_cpupll_regforfrequecy(req->rate, req->best_parent_rate);
-> +       long rounded = msc313_cpupll_frequencyforreg(reg, req->best_parent_rate);
->
->         /*
->          * This is my poor attempt at making sure the resulting
->          * rate doesn't overshoot the requested rate.
->          */
-> -       for (; rounded >= rate && reg > 0; reg--)
-> -               rounded = msc313_cpupll_frequencyforreg(reg, *parent_rate);
-> +       for (; rounded >= req->rate && reg > 0; reg--)
-> +               rounded = msc313_cpupll_frequencyforreg(reg, req->best_parent_rate);
->
-> -       return rounded;
-> +       req->rate = rounded;
-> +
-> +       return 0;
->  }
->
->  static int msc313_cpupll_set_rate(struct clk_hw *hw, unsigned long rate, unsigned long parent_rate)
-> @@ -168,7 +170,7 @@ static int msc313_cpupll_set_rate(struct clk_hw *hw, unsigned long rate, unsigne
->
->  static const struct clk_ops msc313_cpupll_ops = {
->         .recalc_rate    = msc313_cpupll_recalc_rate,
-> -       .round_rate     = msc313_cpupll_round_rate,
-> +       .determine_rate = msc313_cpupll_determine_rate,
->         .set_rate       = msc313_cpupll_set_rate,
->  };
->
->
-> --
-> 2.50.1
->
->
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Only visually inspected but seems correct.
+Gr{oetje,eeting}s,
 
-Reviewed-by: Daniel Palmer <daniel@thingy.jp>
+                        Geert
 
-Thanks,
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Daniel
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
