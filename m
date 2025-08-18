@@ -1,252 +1,439 @@
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1120.securemx.jp [210.130.202.128])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C844E1799F;
-	Mon, 18 Aug 2025 01:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=210.130.202.128
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755481722; cv=fail; b=GsxGI2rGZCRYyHMARv3dLVLoqrItF+C1rFfkazciluDIFNmGyDsWtJKD3t5huhF+2am/pjf5UlTTsshgpeYeILH3JPgOGf6edpZ1BHoSFA2TjHfVZmZH3qvXq2SDDoTg2e6A4UG5CFsTOK4qCbpAe/4xitHRwJyEEmhUepCdtdM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755481722; c=relaxed/simple;
-	bh=kJ5saMxYroPXmCdJgJ8gydfKe/Gr3Nhtu4+meZnknnk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=KwdwzCR2EveII81WQWQTMd55+TX8KeJuHg5lsuLinbPS8cCEyjbqn9Ft+2WLZIBZQPM79Yky67tSYJsbSyvBA/Gv5fIuVVQl+BMNaF14cXVuL2FopfTdi278X0Xj1qVddeT99KWWH50kTMmlPJd35zHJPm4sXgXetRmL8EV54z0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=nobuhiro1.iwamatsu@toshiba.co.jp header.b=XmVC6EBC; arc=fail smtp.client-ip=210.130.202.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835C92765EA
+	for <soc@lists.linux.dev>; Mon, 18 Aug 2025 10:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755514158; cv=none; b=Ne5VfqYO73TfWMroO04nD0sX7uc6PBW7XXs9XPIFKcke34Mn/Q7kFoafJxZ66tJFGb7APtJjZUsZeLFyFVLicz/VWfiSBItGwYpTxn52sxpZEkw3Xv88lLYFtUt5BuJrHnlhKTzp0dQZjHcFKtu9bo21DZ6sHMqrbHmO6DR97/w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755514158; c=relaxed/simple;
+	bh=IAEOM6wFG+JjnMSUmO9V1dy6UtYDEU6ikDrtJGuCMNA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Un86jQ/ZNUpjMJU2zSAFujnMoccpi7WRTYgYS1E36ZDcbUPd/49zXMsveJv0LGEvZWJt3iwifHdNNxkNAWQycw1dIFdAsITmDHze7j6D4M7F2FTzwc0VLatRSY/chLmq3PsJCqniSV7yWc7/R75sf4oivEBLw478MGNBtmu86cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vFYU/y2H; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=nobuhiro1.iwamatsu@toshiba.co.jp header.b="XmVC6EBC"
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1120) id 57I0p2hp184660; Mon, 18 Aug 2025 09:51:02 +0900
-DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:CC
-	:Subject:Date:Message-ID:References:In-Reply-To:Content-Type:
-	Content-Transfer-Encoding:MIME-Version;i=nobuhiro1.iwamatsu@toshiba.co.jp;s=
-	key1.smx;t=1755478109;x=1756687709;bh=kJ5saMxYroPXmCdJgJ8gydfKe/Gr3Nhtu4+meZn
-	knnk=;b=XmVC6EBCSJYhX2545eqpQO4Y4ApLxgiBnNqItyEQ3fzBrk+0GgD4jJypAoM42xeY763Lu
-	Se3C68Qt6mxXZkIlR9eVo7qlW05AP7jpShBOQ3lmjlqi3u1La/dPBdsCdZ89CI0Wft0q97nX8Mpkf
-	wI8ezDykrBO48fkmXgfgOA7mGnyjVFcgMe2mssfwqixZ6dZiZVta2w2d+UYK3JRUo73Yzcw7Mg1Ds
-	xnDYYpzDxMnN/J5PShcYwszW9n14BU1fuSHOby0LEhMLOrEh07pQQ6Em0vClDKPnPsJV/KPaaNzrc
-	KM9rgRFGSPPoWi14uu18m3NQAsMKCrfsS8s2l+RcEA==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1122) id 57I0mN2C1915990; Mon, 18 Aug 2025 09:48:23 +0900
-X-Iguazu-Qid: 2rWhEqwpnybRjZXjV2
-X-Iguazu-QSIG: v=2; s=0; t=1755478103; q=2rWhEqwpnybRjZXjV2; m=efwhAJJY78nlc/B5ka0y/xvG04dfY5AXnfbXz4QLzTQ=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-	by relay.securemx.jp (mx-mr1120) id 57I0mHFq2853706
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 18 Aug 2025 09:48:17 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VnnuxizrIIv5dnzlisoY4J8w3jce3X79DsmGDMrwouRaHXJ/pZ8m9CQo7fssM9PrcZaVD2Q3Q7p8S+oqL9MNBzXXJuWiVPJIvX0IqnrS92baVdYba9BZhn6/0S0868Tzf0SYXtHllRkkdj9gzSPg9803GFN9OSFhCgCEUuTD2jqvSzYSCXtEroW129yri6JilIJY/LPEtzXn7M9bVJ5HiMALVGoSff/zdf1t/QJW0yNZhKDRyjklh6v7t7cWnHA0dToXcQefrfGZeDhXelvGIwqR39GVPHp8jWVbUCUMg2g/yGqgW/Op7whHzOVDryUPxU/9bAd6u1ed8bXst1hPhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kJ5saMxYroPXmCdJgJ8gydfKe/Gr3Nhtu4+meZnknnk=;
- b=Z1Pg51MZFKzB9lkee5rbJ1me8/iiTxph21NhOxTqb5nyinr3d9Bczpn7bMqAt03zTWBQ5kSMGw/7dKI+2rUtaRptehW3Xz6Y+tgUk9cA7aqZPJgnnsT3X3B4CEu3SUouXQqaQhzMsmh9OjuHy/kjV/fJTVvWP8Bc6Wiq53kUjRQ9qTNKCnMKJBJafVEdpcnql6VcG1w7Qsu8+T2xvCn2epRz68Yw0gycloca7Hc+/XfQeUYjOAnOcjFAWY0zaJVxWAKv4Ml0sN0TewOzGbwTPN43K2F0+SUCszKYetJvax1RUcXD0ZLWnZMKmelx2asu3NvpLvPGyejtaqP6J9PyKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
- header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
-From: <nobuhiro1.iwamatsu@toshiba.co.jp>
-To: <bmasney@redhat.com>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
-        <unicorn_wang@outlook.com>, <inochiama@gmail.com>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@tuxon.dev>, <paul@crapouillou.net>,
-        <keguang.zhang@gmail.com>, <sugaya.taichi@socionext.com>,
-        <orito.takao@socionext.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
-        <festevam@gmail.com>, <ychuang3@nuvoton.com>, <schung@nuvoton.com>,
-        <vz@mleia.com>, <piotr.wojtaszczyk@timesys.com>,
-        <paul.walmsley@sifive.com>, <samuel.holland@sifive.com>,
-        <dlan@gentoo.org>, <Steen.Hegelund@microchip.com>,
-        <daniel.machon@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <orsonzhai@gmail.com>, <baolin.wang@linux.alibaba.com>,
-        <zhang.lyra@gmail.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <michal.simek@amd.com>,
-        <mripard@kernel.org>, <afaerber@suse.de>, <mani@kernel.org>,
-        <sven@kernel.org>, <j@jannau.net>, <alyssa@rosenzweig.io>,
-        <neal@gompa.dev>, <Eugeniy.Paltsev@synopsys.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <jcmvbkbc@gmail.com>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>, <daniel@thingy.jp>,
-        <romain.perier@gmail.com>, <andrew@lunn.ch>,
-        <gregory.clement@bootlin.com>, <sebastian.hesselbarth@gmail.com>,
-        <andersson@kernel.org>, <geert+renesas@glider.be>, <heiko@sntech.de>,
-        <andrea.porta@suse.com>, <krzk@kernel.org>, <s.nawrocki@samsung.com>,
-        <cw00.choi@samsung.com>, <alim.akhtar@samsung.com>,
-        <qinjian@cqplus1.com>, <vireshk@kernel.org>, <ulf.hansson@linaro.org>,
-        <luca.ceresoli@bootlin.com>, <alexander.helms.jy@renesas.com>,
-        <linus.walleij@linaro.org>, <liviu.dudau@arm.com>,
-        <lpieralisi@kernel.org>
-CC: <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <sophgo@lists.linux.dev>, <linux-mips@vger.kernel.org>,
-        <imx@lists.linux.dev>, <linux-riscv@lists.infradead.org>,
-        <spacemit@lists.linux.dev>, <linux-stm32@st-md-mailman.stormreply.com>,
-        <patches@opensource.cirrus.com>, <linux-actions@lists.infradead.org>,
-        <asahi@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <soc@lists.linux.dev>
-Subject: RE: [PATCH 110/114] clk: visconti: pll: convert from round_rate() to
- determine_rate()
-Thread-Topic: [PATCH 110/114] clk: visconti: pll: convert from round_rate() to
- determine_rate()
-Thread-Index: AQHcCtNP/Kr8d+feX0isN0PWy9vzprRnnQow
-Date: Mon, 18 Aug 2025 00:48:10 +0000
-X-TSB-HOP2: ON
-Message-ID: 
- <TY7PR01MB14818C45588C929ECBFD51F5A9231A@TY7PR01MB14818.jpnprd01.prod.outlook.com>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <20250811-clk-for-stephen-round-rate-v1-110-b3bf97b038dc@redhat.com>
-In-Reply-To: 
- <20250811-clk-for-stephen-round-rate-v1-110-b3bf97b038dc@redhat.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY7PR01MB14818:EE_|TYCPR01MB10228:EE_
-x-ms-office365-filtering-correlation-id: 58c16ff9-bc79-4938-cdbf-08ddddf0e7d1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: 
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|921020|38070700018;
-x-microsoft-antispam-message-info: 
- =?utf-8?B?c3QyQjhSTDFFRWtrL2tVVm0wK0Ria2lKd1RCVE1MbzZQOGdEenFyb3RrWE56?=
- =?utf-8?B?Q3hiTytCZm10ZFFhOFFrbENjYWVhZk12UWZIZk5nRE1zcW1vdjRseHBtbk1w?=
- =?utf-8?B?Rk5uelVld2JSL2F4bi9ldmp4U294MkJZaFE5THNCVGs3WmtWaVIwNnlpelpS?=
- =?utf-8?B?c05ablhlOHRyTlpKRmFkc1RrcHZONTh2dEFxdGNWN1ZCUW1uUjJmTTdKYjA0?=
- =?utf-8?B?S0MvVFpIMVp1NzIvRTE5ZUUzeGwxbmw0VUpndFpacVhrNmRjeTRRZHEwcjQz?=
- =?utf-8?B?WmtQOTcxVElNK2QxMDFDWXFpaEVEVU9tU1dhVFRzVmgvN0tnaS9ZTlA4VE5N?=
- =?utf-8?B?Wkc2eEJzRnhSR2I2OGpqbXVQdlF2ZkVOQTNWNTFTQVRyeHBTcngyaytOZkJz?=
- =?utf-8?B?R05ob0tHUC9kOWpRdkNPSCtQTVFNZi9XSHp4QTdNTFVIS0l2cW5BL1BPMWx1?=
- =?utf-8?B?QzdPb1pwbE0yWTRxQittNzY2bWNUNk1nNTJ3OGpqRjJqTmI4QWdvSDJaMTBS?=
- =?utf-8?B?cmlZZlJkTGowSVZSSk9zNmNmOExpaEhuV1NNdktRMGJLWTFRTzJnMEYyL0Z5?=
- =?utf-8?B?eWxGMkFJSXdPUzg3UHMrMk1KRGZtb2ZDK2xzV3pNTVFKc2xPdXljVFk2MFcx?=
- =?utf-8?B?OVFVTGFZZ1psdUJmNnNNV3BxL3JCSWMzeFZ1WStVbm04dXhKS3ZBMUh1TVU0?=
- =?utf-8?B?V2NsclZ3dDFBb294cVBmbXk1bDdFbmFXL3dZZStMNVpmcnNTZzJhbmx0eTAw?=
- =?utf-8?B?WHl0bkEzODNGVFBNOWNmV2tOeU5GS1Q2K29QRlR6NjZsVHB6bHNRSmZFb3Va?=
- =?utf-8?B?VlczOFdqUTZuYmZiUnVpNFFDazBBUE1iNHJ4bEcrRXlxd3c2dkN1NERhOHU3?=
- =?utf-8?B?U1BTTVhSRTVOeEF5emEvWEhkOXhaN01NakJnbkorc0g4YzBlNi9tK2V1bzY1?=
- =?utf-8?B?cEtjWXZrOStsMDh3K2xTRzhjdVdjVzNIOWd2ZEtSL25vOGxRc2w1Qkk4aUhF?=
- =?utf-8?B?STBrbGdCR0J3UE9LVGd3N2pSMS9tYW54Nnc1NElrZTlEeFRtc0FJQUUxaHBT?=
- =?utf-8?B?eHlUWm1BMlQ0OXZFcE9LRERQMEt1M0ZZMjhOQjhkZzRoa3M1SzdNb2FRUVZo?=
- =?utf-8?B?b1dqaEl3bCtDcWlDcEoyLzVFa3ExeGhzeS9UUWU1NDRNbVo5eHN1dlVYTVJm?=
- =?utf-8?B?YlJKWDVBZzZJMWRnam5nQkkwcDA1ZHVmUk5aZVVENHBLUHJ2cjdrcjZ0bDd3?=
- =?utf-8?B?VTlQQ0tML1N2RHZJMzdIUHdoQ1lnZ3lidklRSlgycFVobEQ2dmVoV2ZGaU13?=
- =?utf-8?B?K0JaNDBSZVNwTXZxZVdlQ0NFbkFvM29zUWRaQXBoa3VDdWNxMDJuSXRuakFI?=
- =?utf-8?B?a1JhczYyWUxhV2kvQTA5dW9JNHBwSFh2RVdtODNveHZsQ0RpOVhVQ3JLWG9P?=
- =?utf-8?B?YTFvaDdiZzE0VzhHb1prVnJuL3BoT28rT1FLUWFsWjdDckY1TE9BWjg0cGt4?=
- =?utf-8?B?a2hkSW5OeWZrYjQyT2xNQjJlTks2RllPdXJUNzR5blBHY0E4R3NSL1hSNFlu?=
- =?utf-8?B?SGllV2hUTEd1NnU3SHpmWnZ3RGoyU1VDUkE0UGtRMUhZNkoxTGM4MnM5SkFT?=
- =?utf-8?B?aHFkTHo2MHptSWR0MkNTOFpPUnNsVG1tYUpkcUNwT2pzYlByME8wMEExMFk1?=
- =?utf-8?B?azBZaldHemxsYU9QQTZXb09YYWM3WU11V0l3WGFDem1WTytCZUhUMUZOQUNR?=
- =?utf-8?B?QUZ5VFQvMlZybWtyMFovdWFpY28ydVBVWnFTUjZ0MnE2dVFpUG1ZQkR2dmYy?=
- =?utf-8?B?RTJhajdTWXkzS1ZONkxrTW9OM0dKM2pwajdMY1p6U3pOcHVnaW1od1ZSbXAx?=
- =?utf-8?B?ZnRlZ3Q4YUVMTS96bVlPM1hvSEt6TjJNSHYrMVdibnJCTDNySHNKdlNNOGYx?=
- =?utf-8?B?cGZKWW9XM0Q5MzRjdThlY0JRR3R1eE55NTBQQ0tuRG85WmhoTXhFL1E3OSt4?=
- =?utf-8?Q?Meyl6GHfnZo2OLhryT+cVNUtVKj+vY=3D?=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7PR01MB14818.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(921020)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?L0ZPdG50c24rK2pDcTJ3OVZzYXluUFpaaXBZbmxBOWtsN1JzRzYrVXZJQzFq?=
- =?utf-8?B?NTJ3cG8rR2p5R3hJZ0pSYlgvaVlkZ2ZIZXVrellyQmhVT2NQdzJDbXVUdXVG?=
- =?utf-8?B?amNScXNQU2J3N0Vjbzk0YitiMERpSjZ3MWFRdFBrZ1R6cG1mOFBsVUtNSXd5?=
- =?utf-8?B?bklOVldUTERvc1pZNHlIdDZ0UERLTkhuTk9Bamo1VkZPWlRvV083NitsSjBp?=
- =?utf-8?B?Y0NUU0FXK0dwclJSSXd6Mkh0YUh5NHBQQXBxTmNlTk94SGlsNGZsY3Y2dkZ6?=
- =?utf-8?B?SkQ4ZXZxVGVGdGRVZTExNXpGU0t6aUloZXNkVEJyRUhuOUhESWRpZllLVHRB?=
- =?utf-8?B?ZnZoRSsySXZOQVdNYXNSTUpOa0d6WU9NZUxmc002OXFRRmQ5em9vUzVPQ3Bz?=
- =?utf-8?B?WnVCUUVCQ2dHbXAzWVNkcmFvamRObTlkdEdjWTRPRWVzRE42VERPYWU3cExO?=
- =?utf-8?B?MVU0MDZuV1pwUnZlYlFaTm9NaU5xM0c5N0x3cEc3azZrZVhTcExPOGpFcDFw?=
- =?utf-8?B?MzJUamdudElUT0ZMQ3liamxpbjdBc1BmZEhmRXlURjhVaUJPd0FhR1cxbEZK?=
- =?utf-8?B?NS84R2t6b1V0SDB4VDdEZzR4SHhKanlMTXc2bTY3ZHZVakV1UXVYMGtHNmNr?=
- =?utf-8?B?NHM4Z29mcjhBZHlDNVVOcm1vUm5UZHdMS1lmc1krTXQzblMvWUJvdDZXcUE3?=
- =?utf-8?B?aVZza29ESEY0QjhQN3dzeC9ib2pGR2dIZy91R1dkc3RKM2RtNDFlVjZZVGtx?=
- =?utf-8?B?YnVoeW4yVlB3dzhkeHhXcnZ4N0tlalNCRWpwWDRsa05rQ3ZuNHhickJCOHNn?=
- =?utf-8?B?WldtcnBZMHhCY080RmNtSlh2NFVLVGlYZlZXM1R6SGNOMWpEMnU2azdKYXk0?=
- =?utf-8?B?MHRMZEJGVTNXNXBVcXZYak81aURMcGJ2VkVITHNRVzVJS1d3SXoyUXhGdXha?=
- =?utf-8?B?MXFvNXl5bUg1aHhNWEI5T3NRK2dodE1Edy9DSFdOa2ZCNUJQN2hSRzVmSUQ5?=
- =?utf-8?B?TlpacWxBQmtuL0FlZG01V21VNndwTnMrQmdQWmpra0lDZFpRbGpZcFFQQkVW?=
- =?utf-8?B?NDNXOFZKV0tsSndCdThCUjltNGp0M2VuRkp6VEkrc1BOeWVSOUNKRWtnY1R4?=
- =?utf-8?B?V1FHVWkvVmt6d0R0d0l2UmkrQ2RRQnFpbyszREtiNzk2Skt5RFNYYzhmcVVy?=
- =?utf-8?B?SHMvY25hS01EUnpQaGtqSlYxQUplcWtaS1grcUxCUEE3M21XMzRMQ2lVK2M1?=
- =?utf-8?B?M3hUOGo4dWRKbTNzbE4rRG9qdXl0OHlsanlDYlNhb2w3cHJWSERYRmJJTUdW?=
- =?utf-8?B?ZjJEVWxRclJlRUhIK2xyRkpYbWJ2R0w1TmVRZWtaeGJQYUJWN2VhdEcrTDJC?=
- =?utf-8?B?QkhESG1jK1FJamhkM0RlVGN5MURSVnFSeXpSaG9vbm9qUzBDREZOK2hqdUR3?=
- =?utf-8?B?UDlmVStDWFRBbjhBTUxnQU1UVi9MQXI3K044YTRXMDJqem5mYW1mZU9hRVg0?=
- =?utf-8?B?NHpaWjh6U2tZbEZYTHJTUTVUUGpjZnNNOXd2V2lKdWRDNDBNekxnMFhkcjJi?=
- =?utf-8?B?Z2hyalh0d0dYY2w1UnAyQ0d2VlpnU3EvekxmVG1tcTR2TWZiUXRFWjhFekxm?=
- =?utf-8?B?eXpaOGUvajR0UG5QaEhQdFRPVnVuemlxcnAyKzFRblp6cTBlRnBLaHBhdHI0?=
- =?utf-8?B?TTJqS2RMaHBMM2FpMEFYc0VwaEJ2dGlsMEZqbkg3VUxGRnV3ZzQwNHB1VlFU?=
- =?utf-8?B?NFJQZ0ltUTAzdExsZHVBaC9KbE5iWGpkaTJORWxWd3lSUDF4US9HY3hvc0M5?=
- =?utf-8?B?OVBTem5Nb1VrMU5iMCs1TjNNUmRlaDd0dENlaG9yK0xxY1NxR0wxY1lnRXdn?=
- =?utf-8?B?RndSakVMK2NkOE1sVjFXOGpkQnl0NG96VEU0UlVQcFo4UW82TVBTbTZaRVZF?=
- =?utf-8?B?Tkt4WUs3VEpPRG5uQ1ZoTGdXc1JndGRRczRaY3pySGFVT3YzZnQ4TnhHRGZh?=
- =?utf-8?B?azBXS2k1L3F3WTNIbEhtRGNXanVFQ1hiVnNjRmZIeWJIRkxYMHkvT1hDNk1x?=
- =?utf-8?B?bkRUaFpMTU1oK1JQUmFVR0ZFL2FnT2tKcFYzeVd5M3ZDWXlJUWxNUTVjOXFl?=
- =?utf-8?B?Z3o3ZktTeWlBNDZIaHB0WFI5T0J2b25nT3RjeDMycFp1M0ozMEJsd2duV2Iv?=
- =?utf-8?B?VHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vFYU/y2H"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-71d6083cc69so32395447b3.2
+        for <soc@lists.linux.dev>; Mon, 18 Aug 2025 03:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755514155; x=1756118955; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rsgBw0jCb6w00Tew/2kEPPc7DZ1CJpSeSzBPZVy1z1c=;
+        b=vFYU/y2HZQRH/EbbQIMhWHxmYNMYXV5F9fjIordG+W9j/20JHqZinTDs4teqN+DcxS
+         PkoA74umSllYNlq9rxgQ57YH+fys1KvNW+RRGoJOan2YdowtIQLqlSwXyan/SwcsF1Ax
+         VwAvWiv6liMPzBh5CZ1gn6ujbHP8C0mxBJ0wNTI5B/0kf0hoVewRdmS8ZWOiYtVthIfD
+         3jz1jqvOt/B6mKSZe3oWa6WnVInk+THopT2VYLqtIJm6L4h8HydEJ/gFdxGaxbjLHh1n
+         6mAyDvSHeZ7tYxDv/6SMdD0bvxkPshQFmVsM9jW/enb3Pg6RXoEvTkqSXFqRhQ8OefCD
+         WTBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755514155; x=1756118955;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rsgBw0jCb6w00Tew/2kEPPc7DZ1CJpSeSzBPZVy1z1c=;
+        b=TY01+XI0gz5rsisQD2V1ZKMp1MOy6Cehr9IucBsnj5JveQCI14iKjIKuG0jcjz8/s/
+         HY5ZMeWqZ8nqlb+IM+5ynwEoJ/MQiJka1afTXIDDo29xItwOANA2mWpW/ifoOkfvF6K3
+         BvRE2uX/64Fl41y+xK/Pa2dectP3L/0ZdeWrn7cxzXSvsvNW9CeKDZXvocNWA91LOvFh
+         hiVlxCgrkvXGmjMCnhFRMPiPAg3WldsljV4UrOyz28/V94w8tIex3AikxRkocm8NCLkO
+         mPSl9dLllhnEeD/G2CiOO6Mi+FynCvacdmKF04dVxP9rivFBFbMjFFsieRDPfsQ79XG7
+         Cmqg==
+X-Forwarded-Encrypted: i=1; AJvYcCWK4cVuqjazJcU8satMzq1E1YVsP6UWmxiReR7Snn8RHpxWL/CaacNRReSPoIYp0hLwZ5c=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyhg5LFGBd32uUSBinjClZJ71cFgLNeRL/2jasznEu3/fF+pdFa
+	17Mx5cGTpHbBUw242mANpYkwNBsh+hxwrN8arE02/PVdap1SD7YlzHgn0UZ5n8FzC0Tq+YtD4pZ
+	QNgxXEbsrEYLvj13zrfsFEX32Ll6aqjekHzQP3liTzw==
+X-Gm-Gg: ASbGnctUpdcK2A/6/a9VPuwlunB6R+ir/g2Eys0KldLcui45stvk9DjCbZfDlQFSDog
+	RSQbjlTGs0WMC8uhHovyrvsWP3ylJYKRYv7a+zk5d618CYG21/vXSf0eEkZfWzAlcAH5s/7cqbC
+	dbp5RgH4irfb+iha0fV1qrMW/wn/LZMNkopaG80RnRHCug4BAAyffeI5KwjvHdE7O32DOEPLUTd
+	SZOm3eY
+X-Google-Smtp-Source: AGHT+IEQ5PAJ4E2MJ+RFp/vP7SFnTECMSFB5weGhPlm12BRaWfgE5t1lY9Zr2miit8j/tOc4AIdQ75NrG+fq+kHyFjI=
+X-Received: by 2002:a05:690c:f82:b0:71c:1754:269b with SMTP id
+ 00721157ae682-71e6ddeae92mr122547007b3.27.1755514155297; Mon, 18 Aug 2025
+ 03:49:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: toshiba.co.jp
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY7PR01MB14818.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58c16ff9-bc79-4938-cdbf-08ddddf0e7d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2025 00:48:10.7276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ydr84mLLyO3KO1Lz06wzghS/ObD1xDrYxqdqElagoJdLcBUdI6xvATwWNSEe395ehTf9n3yhc3scYEe3gh6BZpwiqHrfMvvHxZKvXPszruQGd+n+Mfad/wHGsAn182qW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10228
+References: <20250812123110.2090460-1-yangzh0906@thundersoft.com> <20250812123110.2090460-6-yangzh0906@thundersoft.com>
+In-Reply-To: <20250812123110.2090460-6-yangzh0906@thundersoft.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 18 Aug 2025 12:48:39 +0200
+X-Gm-Features: Ac12FXxjKi3b8yfDU1lEnhhcDgUF2rL-OaQszzKJu25a5rk-Ae9QC1wQeMPNpMc
+Message-ID: <CAPDyKFon7Q2UHOJbbVtPTHvqxYeOJr8HK5BOk6TAJaph8FcwvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 5/8] mmc: sdhci: add Black Sesame Technologies BST
+ C1200 controller driver
+To: Albert Yang <yangzh0906@thundersoft.com>
+Cc: krzk@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
+	adrian.hunter@intel.com, robin.murphy@arm.com, ding.wang@bst.ai, 
+	gordon.ge@bst.ai, bst-upstream@bstai.top, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, soc@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-PiBTdWJqZWN0OiBbUEFUQ0ggMTEwLzExNF0gY2xrOiB2aXNjb250aTogcGxsOiBjb252ZXJ0IGZy
-b20gcm91bmRfcmF0ZSgpIHRvDQo+IGRldGVybWluZV9yYXRlKCkNCj4gDQo+IEZyb206IEJyaWFu
-IE1hc25leSA8Ym1hc25leUByZWRoYXQuY29tPg0KPiANCj4gVGhlIHJvdW5kX3JhdGUoKSBjbGsg
-b3BzIGlzIGRlcHJlY2F0ZWQsIHNvIG1pZ3JhdGUgdGhpcyBkcml2ZXIgZnJvbQ0KPiByb3VuZF9y
-YXRlKCkgdG8gZGV0ZXJtaW5lX3JhdGUoKSB1c2luZyB0aGUgQ29jY2luZWxsZSBzZW1hbnRpYyBw
-YXRjaCBvbiB0aGUNCj4gY292ZXIgbGV0dGVyIG9mIHRoaXMgc2VyaWVzLg0KPiANCj4gU2lnbmVk
-LW9mZi1ieTogQnJpYW4gTWFzbmV5IDxibWFzbmV5QHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5
-OiBOb2J1aGlybyBJd2FtYXRzdSA8bm9idWhpcm8xLml3YW1hdHN1QHRvc2hpYmEuY28uanA+DQoN
-Cj4gLS0tDQo+ICBkcml2ZXJzL2Nsay92aXNjb250aS9wbGwuYyB8IDE3ICsrKysrKysrKysrLS0t
-LS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkN
-Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Nsay92aXNjb250aS9wbGwuYyBiL2RyaXZlcnMv
-Y2xrL3Zpc2NvbnRpL3BsbC5jIGluZGV4DQo+IDhjYTFiYWQ2MTg2NDIwNDAyN2I3YWZmOTAyMGYx
-Y2I5ZTdkMTk4ZDMuLjY4MTcyMWQ4NTAzMjAzZGU5YWM0OWFjMzINCj4gMDdlMTIxYmI1YmYyMTYz
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2Nsay92aXNjb250aS9wbGwuYw0KPiArKysgYi9kcml2
-ZXJzL2Nsay92aXNjb250aS9wbGwuYw0KPiBAQCAtMTAwLDggKzEwMCw4IEBAIHN0YXRpYyB1bnNp
-Z25lZCBsb25nDQo+IHZpc2NvbnRpX2dldF9wbGxfcmF0ZV9mcm9tX2RhdGEoc3RydWN0IHZpc2Nv
-bnRpX3BsbCAqcGxsLA0KPiAgCXJldHVybiByYXRlX3RhYmxlWzBdLnJhdGU7DQo+ICB9DQo+IA0K
-PiAtc3RhdGljIGxvbmcgdmlzY29udGlfcGxsX3JvdW5kX3JhdGUoc3RydWN0IGNsa19odyAqaHcs
-DQo+IC0JCQkJICAgIHVuc2lnbmVkIGxvbmcgcmF0ZSwgdW5zaWduZWQgbG9uZyAqcHJhdGUpDQo+
-ICtzdGF0aWMgaW50IHZpc2NvbnRpX3BsbF9kZXRlcm1pbmVfcmF0ZShzdHJ1Y3QgY2xrX2h3ICpo
-dywNCj4gKwkJCQkgICAgICAgc3RydWN0IGNsa19yYXRlX3JlcXVlc3QgKnJlcSkNCj4gIHsNCj4g
-IAlzdHJ1Y3QgdmlzY29udGlfcGxsICpwbGwgPSB0b192aXNjb250aV9wbGwoaHcpOw0KPiAgCWNv
-bnN0IHN0cnVjdCB2aXNjb250aV9wbGxfcmF0ZV90YWJsZSAqcmF0ZV90YWJsZSA9IHBsbC0+cmF0
-ZV90YWJsZTsgQEANCj4gLTEwOSwxMSArMTA5LDE2IEBAIHN0YXRpYyBsb25nIHZpc2NvbnRpX3Bs
-bF9yb3VuZF9yYXRlKHN0cnVjdCBjbGtfaHcgKmh3LA0KPiANCj4gIAkvKiBBc3N1bWluZyByYXRl
-X3RhYmxlIGlzIGluIGRlc2NlbmRpbmcgb3JkZXIgKi8NCj4gIAlmb3IgKGkgPSAwOyBpIDwgcGxs
-LT5yYXRlX2NvdW50OyBpKyspDQo+IC0JCWlmIChyYXRlID49IHJhdGVfdGFibGVbaV0ucmF0ZSkN
-Cj4gLQkJCXJldHVybiByYXRlX3RhYmxlW2ldLnJhdGU7DQo+ICsJCWlmIChyZXEtPnJhdGUgPj0g
-cmF0ZV90YWJsZVtpXS5yYXRlKSB7DQo+ICsJCQlyZXEtPnJhdGUgPSByYXRlX3RhYmxlW2ldLnJh
-dGU7DQo+ICsNCj4gKwkJCXJldHVybiAwOw0KPiArCQl9DQo+IA0KPiAgCS8qIHJldHVybiBtaW5p
-bXVtIHN1cHBvcnRlZCB2YWx1ZSAqLw0KPiAtCXJldHVybiByYXRlX3RhYmxlW2kgLSAxXS5yYXRl
-Ow0KPiArCXJlcS0+cmF0ZSA9IHJhdGVfdGFibGVbaSAtIDFdLnJhdGU7DQo+ICsNCj4gKwlyZXR1
-cm4gMDsNCj4gIH0NCj4gDQo+ICBzdGF0aWMgdW5zaWduZWQgbG9uZyB2aXNjb250aV9wbGxfcmVj
-YWxjX3JhdGUoc3RydWN0IGNsa19odyAqaHcsIEBAIC0yMzIsNw0KPiArMjM3LDcgQEAgc3RhdGlj
-IGNvbnN0IHN0cnVjdCBjbGtfb3BzIHZpc2NvbnRpX3BsbF9vcHMgPSB7DQo+ICAJLmVuYWJsZSA9
-IHZpc2NvbnRpX3BsbF9lbmFibGUsDQo+ICAJLmRpc2FibGUgPSB2aXNjb250aV9wbGxfZGlzYWJs
-ZSwNCj4gIAkuaXNfZW5hYmxlZCA9IHZpc2NvbnRpX3BsbF9pc19lbmFibGVkLA0KPiAtCS5yb3Vu
-ZF9yYXRlID0gdmlzY29udGlfcGxsX3JvdW5kX3JhdGUsDQo+ICsJLmRldGVybWluZV9yYXRlID0g
-dmlzY29udGlfcGxsX2RldGVybWluZV9yYXRlLA0KPiAgCS5yZWNhbGNfcmF0ZSA9IHZpc2NvbnRp
-X3BsbF9yZWNhbGNfcmF0ZSwNCj4gIAkuc2V0X3JhdGUgPSB2aXNjb250aV9wbGxfc2V0X3JhdGUs
-DQo+ICB9Ow0KPiANCj4gLS0NCj4gMi41MC4xDQoNCg0KQmVzdCByZWdhcmRzLA0KICBOb2J1aGly
-bw0K
+On Tue, 12 Aug 2025 at 14:31, Albert Yang <yangzh0906@thundersoft.com> wrote:
+>
+> Add SDHCI controller driver for Black Sesame Technologies C1200 SoC.
+>
+> This driver supports the DWCMSHC SDHCI controller with BST-specific
+> enhancements including:
+> - Custom clock management and tuning
+> - Power management support
+> - BST-specific register configurations
+> - Support for eMMC and SD card interfaces
+> - Hardware limitation workaround for 32-bit DMA addressing
+>
+> The driver addresses specific hardware constraints where:
+> - System memory uses 64-bit bus, eMMC controller uses 32-bit bus
+> - eMMC controller cannot access memory through SMMU due to hardware bug
+> - All system DRAM is configured outside 4GB boundary (ZONE_DMA32)
+> - Uses SRAM-based bounce buffer within 32-bit address space
+>
+> Signed-off-by: Ge Gordon <gordon.ge@bst.ai>
+> Signed-off-by: Albert Yang <yangzh0906@thundersoft.com>
 
+
+
+> ---
+> Change for v3:
+> Code improvements based on review feedback:
+> - Simplified dwcmshc_priv structure by removing unused fields
+> - Improved helper functions with better encapsulation
+> - Used devm_platform_ioremap_resource() for resource management
+> - Updated Kconfig description and alphabetical ordering
+> - clarify documentation on hardware limitations and bounce buffer
+> approach
+> - remove duplicate sdhci_writew SDHCI_CLOCK_CONTROL
+>
+> Changes for v2:
+> 1.  Dependency Simplification :
+>    - Removed COMMON_CLK dependency from Kconfig (MMC_SDHCI_BST)
+>    - Add ARCH_BST || COMPILE_TEST dependency from Kconfig (MMC_SDHCI_BST)
+>
+> 2.  Resource Management Improvements :
+>    - Replaced temporary ioremap with persistent mapping
+>      * Mapped CRM registers once during probe instead of per-access
+>      * Added proper cleanup in remove callback
+>    - Refactored bounce buffer allocation:
+>      * Simplified error handling and memory management
+>      * Removed unnecessary DMA configuration layers
+>
+> 3.  Code Cleanup & Optimization :
+>    - Pruned unused headers and legacy vendor debug code
+>    - Removed deprecated sdhci_bst_print_vendor() export
+>    - Converted internal functions to static scope
+>    - Standardized naming conventions:
+>      * Renamed DRIVER_NAME to match kernel standards
+>      * Changed default_max_freq to DEFAULT_MAX_FREQ
+>    - Optimized clock configuration routines
+>
+> 4.  Hardware Integration Fixes :
+>    - Fixed register access macros for EMMC_CTRL
+>      * Added proper offset calculation via SDHCI_VENDOR_PTR_R
+>    - Corrected device tree compatibility string to:
+>      "bst,c1200-dwcmshc-sdhci"
+>
+> 5.  Error Handling Enhancements :
+>    - Added robust ioremap error checking
+>    - Improved bounce buffer allocation failure handling
+>    - Streamlined probe/remove flow
+>
+> 6.  Maintainability :
+>    - Updated MODULE_DESCRIPTION and AUTHOR fields
+>    - Added explanatory comments for hardware limitations
+>    - Removed redundant multi-host setup infrastructure
+>
+> 7. fix build warnings from lkp
+>   | Reported-by: kernel test robot <lkp@intel.com>
+>   | Closes:
+>   https://lore.kernel.org/oe-kbuild-all/202505290615.GZzN5rNL-lkp@intel.com/
+> ---
+>  drivers/mmc/host/Kconfig              |  14 +
+>  drivers/mmc/host/Makefile             |   1 +
+>  drivers/mmc/host/sdhci-of-bst-c1200.c | 510 ++++++++++++++++++++++++++
+>  3 files changed, 525 insertions(+)
+>  create mode 100644 drivers/mmc/host/sdhci-of-bst-c1200.c
+>
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index c3f0f41a426d..fb057c46949b 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -429,6 +429,20 @@ config MMC_SDHCI_BCM_KONA
+>
+>           If you have a controller with this interface, say Y or M here.
+>
+> +config MMC_SDHCI_BST
+> +       tristate "SDHCI support for Black Sesame Technologies BST C1200 controller"
+> +       depends on ARCH_BST || COMPILE_TEST
+> +       depends on MMC_SDHCI_PLTFM
+> +       depends on OF
+> +       help
+> +         This selects the Secure Digital Host Controller Interface (SDHCI)
+> +         for Black Sesame Technologies BST C1200 SoC. The controller is
+> +         based on Synopsys DesignWare Cores Mobile Storage Controller but
+> +         requires platform-specific workarounds for hardware limitations.
+> +
+> +         If you have a controller with this interface, say Y or M here.
+> +         If unsure, say N.
+> +
+>  config MMC_SDHCI_F_SDH30
+>         tristate "SDHCI support for Fujitsu Semiconductor F_SDH30"
+>         depends on MMC_SDHCI_PLTFM
+> diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
+> index 75bafc7b162b..bb5df05c3174 100644
+> --- a/drivers/mmc/host/Makefile
+> +++ b/drivers/mmc/host/Makefile
+> @@ -13,6 +13,7 @@ obj-$(CONFIG_MMC_MXS)         += mxs-mmc.o
+>  obj-$(CONFIG_MMC_SDHCI)                += sdhci.o
+>  obj-$(CONFIG_MMC_SDHCI_UHS2)   += sdhci-uhs2.o
+>  obj-$(CONFIG_MMC_SDHCI_PCI)    += sdhci-pci.o
+> +obj-$(CONFIG_MMC_SDHCI_BST)            += sdhci-of-bst-c1200.o
+>  sdhci-pci-y                    += sdhci-pci-core.o sdhci-pci-o2micro.o sdhci-pci-arasan.o \
+>                                    sdhci-pci-dwc-mshc.o sdhci-pci-gli.o
+>  obj-$(CONFIG_MMC_SDHCI_ACPI)   += sdhci-acpi.o
+> diff --git a/drivers/mmc/host/sdhci-of-bst-c1200.c b/drivers/mmc/host/sdhci-of-bst-c1200.c
+> new file mode 100644
+> index 000000000000..6d2ba4232306
+> --- /dev/null
+> +++ b/drivers/mmc/host/sdhci-of-bst-c1200.c
+
+[...]
+
+> +/**
+> + * sdhci_bst_timeout - Set timeout value for commands
+> + * @host: SDHCI host controller
+> + * @cmd: MMC command
+> + *
+> + * Sets the timeout control register to maximum value (0xE).
+> + */
+> +static void sdhci_bst_timeout(struct sdhci_host *host, struct mmc_command *cmd)
+> +{
+> +       sdhci_writeb(host, 0xE, SDHCI_TIMEOUT_CONTROL);
+> +}
+> +
+> +/**
+> + * sdhci_bst_set_power - Set power mode and voltage
+> + * @host: SDHCI host controller
+> + * @mode: Power mode to set
+> + * @vdd: Voltage to set
+> + *
+> + * Sets power mode and voltage, also configures MBIU control register.
+> + */
+> +static void sdhci_bst_set_power(struct sdhci_host *host, unsigned char mode,
+> +                               unsigned short vdd)
+> +{
+> +       sdhci_set_power(host, mode, vdd);
+> +       sdhci_writeb(host, 0xF, SDHCI_POWER_CONTROL);
+> +       sdhci_writew(host,
+> +                    (sdhci_readw(host, MBIU_CTRL) & (~0xf)) | BURST_EN,
+> +                    MBIU_CTRL);
+> +}
+> +
+> +/**
+> + * bst_sdhci_execute_tuning - Execute tuning procedure
+> + * @host: SDHCI host controller
+> + * @opcode: Opcode to use for tuning
+> + *
+> + * Performs tuning procedure by trying different values and selecting the best one.
+> + *
+> + * Return: 0 on success, negative errno on failure
+> + */
+> +static int bst_sdhci_execute_tuning(struct sdhci_host *host, u32 opcode)
+> +{
+> +       struct sdhci_pltfm_host *pltfm_host;
+> +       unsigned int clk = 0, timeout;
+> +       int ret = 0, error;
+> +       int start0 = -1, end0 = -1, best = 0;
+> +       int start1 = -1, end1 = -1, flag = 0;
+> +       int i;
+> +
+> +       pltfm_host = sdhci_priv(host);
+> +
+> +       for (i = 0; i < SDHCI_TUNING_COUNT; i++) {
+> +               /* Protected write */
+> +               bst_crm_write(pltfm_host, REG_WR_PROTECT, REG_WR_PROTECT_KEY);
+> +               /* Write tuning value */
+> +               bst_crm_write(pltfm_host, DELAY_CHAIN_SEL, (1ul << i) - 1);
+> +
+> +               timeout = 20;
+> +               while (!((clk = sdhci_readw(host, SDHCI_CLOCK_CONTROL)) &
+> +                       SDHCI_CLOCK_INT_STABLE)) {
+> +                       if (timeout == 0) {
+> +                               dev_err(mmc_dev(host->mmc), "Internal clock never stabilised\n");
+> +                               return -EBUSY;
+> +                       }
+> +                       timeout--;
+> +                       usleep_range(1000, 1100);
+> +               }
+
+Please convert into using some of the readx_poll_timeout functions
+instead of the loop above. Moreover, please add defines to specify the
+period/timeout.
+
+> +
+> +               ret = mmc_send_tuning(host->mmc, opcode, &error);
+> +               if (ret != 0) {
+> +                       flag = 1;
+> +               } else {
+> +                       if (flag == 0) {
+> +                               if (start0 == -1)
+> +                                       start0 = i;
+> +                               end0 = i;
+> +                       } else {
+> +                               if (start1 == -1)
+> +                                       start1 = i;
+> +                               end1 = i;
+> +                       }
+> +               }
+> +       }
+> +
+> +       /* Calculate best tuning value */
+> +       if (end0 - start0 >= end1 - start1)
+> +               best = ((end0 - start0) >> 1) + start0;
+> +       else
+> +               best = ((end1 - start1) >> 1) + start1;
+> +
+> +       if (best < 0)
+> +               best = 0;
+> +
+> +       bst_crm_write(pltfm_host, DELAY_CHAIN_SEL, (1ul << best) - 1);
+> +       timeout = 20;
+> +
+> +       while (!((clk = sdhci_readw(host, SDHCI_CLOCK_CONTROL)) &
+> +               SDHCI_CLOCK_INT_STABLE)) {
+> +               if (timeout == 0) {
+> +                       dev_err(mmc_dev(host->mmc), "Internal clock never stabilised\n");
+> +                       return -EBUSY;
+> +               }
+> +               timeout--;
+> +               usleep_range(1000, 1100);
+> +       }
+
+Ditto.
+
+> +
+> +       return 0;
+> +}
+> +
+
+[...]
+
+> +
+> +static int bst_sdhci_reallocate_bounce_buffer(struct sdhci_host *host)
+> +{
+> +       struct mmc_host *mmc = host->mmc;
+> +       unsigned int max_blocks;
+> +       unsigned int bounce_size;
+> +       int ret;
+> +
+> +       /*
+> +        * Cap the bounce buffer at 32KB. Using a bigger bounce buffer
+> +        * has diminishing returns, this is probably because SD/MMC
+> +        * cards are usually optimized to handle this size of requests.
+> +        */
+> +       bounce_size = SZ_32K;
+> +       /*
+> +        * Adjust downwards to maximum request size if this is less
+> +        * than our segment size, else hammer down the maximum
+> +        * request size to the maximum buffer size.
+> +        */
+> +       if (mmc->max_req_size < bounce_size)
+> +               bounce_size = mmc->max_req_size;
+> +       max_blocks = bounce_size / 512;
+> +
+> +       ret = of_reserved_mem_device_init_by_idx(mmc_dev(mmc), mmc_dev(mmc)->of_node, 0);
+> +       if (ret) {
+> +               dev_err(mmc_dev(mmc), "Failed to initialize reserved memory\n");
+> +               return ret;
+> +       }
+> +
+> +       host->bounce_buffer = dma_alloc_coherent(mmc_dev(mmc), bounce_size,
+> +                                                &host->bounce_addr, GFP_KERNEL);
+> +       if (!host->bounce_buffer)
+> +               return -ENOMEM;
+> +
+> +       host->bounce_buffer_size = bounce_size;
+> +
+> +       /* Lie about this since we're bouncing */
+> +       mmc->max_segs = max_blocks;
+> +       mmc->max_seg_size = bounce_size;
+> +       mmc->max_req_size = bounce_size;
+> +
+> +       return 0;
+> +}
+> +
+> +static int dwcmshc_probe(struct platform_device *pdev)
+> +{
+> +       struct sdhci_pltfm_host *pltfm_host;
+> +       struct sdhci_host *host;
+> +       struct dwcmshc_priv *priv;
+> +       int err;
+> +
+> +       host = sdhci_pltfm_init(pdev, &sdhci_dwcmshc_pdata,
+> +                               sizeof(struct dwcmshc_priv));
+> +       if (IS_ERR(host))
+> +               return PTR_ERR(host);
+> +
+> +       pltfm_host = sdhci_priv(host);
+> +       priv = sdhci_pltfm_priv(pltfm_host);
+> +
+> +       err = mmc_of_parse(host->mmc);
+> +       if (err)
+> +               goto err;
+> +
+> +       sdhci_get_of_property(pdev);
+> +
+> +       /* Get CRM registers from the second reg entry */
+> +       priv->crm_reg_base = devm_platform_ioremap_resource(pdev, 1);
+> +       if (IS_ERR(priv->crm_reg_base)) {
+> +               err = PTR_ERR(priv->crm_reg_base);
+> +               goto err;
+> +       }
+> +
+> +       err = sdhci_add_host(host);
+> +       if (err)
+> +               goto err;
+> +
+> +       /*
+> +        * Silicon constraints for BST C1200:
+> +        * - System RAM base is 0x800000000 (above 32-bit addressable range)
+> +        * - The eMMC controller DMA engine is limited to 32-bit addressing
+> +        * - SMMU cannot be used on this path due to hardware design flaws
+> +        * - These are fixed in silicon and cannot be changed in software
+> +        *
+> +        * Bus/controller mapping:
+> +        * - No registers are available to reprogram the address mapping
+> +        * - The 32-bit DMA limit is a hard constraint of the controller IP
+> +        *
+> +        * Given these constraints, an SRAM-based bounce buffer in the 32-bit
+> +        * address space is required to enable eMMC DMA on this platform.
+> +        */
+> +       err = bst_sdhci_reallocate_bounce_buffer(host);
+> +       if (err) {
+> +               dev_err(&pdev->dev, "Failed to allocate bounce buffer: %d\n", err);
+> +               goto err_remove_host;
+> +       }
+
+FYI, I will be awaiting a confirmation from Arnd to be with the above
+hack, before I queue this up.
+
+> +
+> +       return 0;
+> +
+> +err_remove_host:
+> +       sdhci_remove_host(host, 1);
+> +err:
+> +       sdhci_pltfm_free(pdev);
+> +       return err;
+> +}
+> +
+
+[...]
+
+Kind regards
+Uffe
