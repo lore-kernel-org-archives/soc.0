@@ -1,77 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E6B305046
-	for <soc@lists.linux.dev>; Tue, 19 Aug 2025 12:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14047305052
+	for <soc@lists.linux.dev>; Tue, 19 Aug 2025 12:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755606408; cv=none; b=U0ioajyNdWt285cBr+IcQ+K3D+pL1hKk3+MPRycSS0UcJSwxp08PsMAyU8JYnb4+2fdDU3kjsdSsuAPBU2C84Via/6CB0bjgXzFaV5McUqLI013tmIV9g/CsAHzriVdfnQPl0QmYxBmUgllGDxlBoSCsMoJGMyfrutJq18SmtM0=
+	t=1755606563; cv=none; b=LaD720PEGMOpf4DG2Q0bgV1ViX2xS6d2A5jelpFIq2BGt9eScETsBaEoI8oDciJxBclJukly37QLTGano6jcIPPTQm9h4GvcVIKh3DDsCdBWhZAXnjcEmAU9fMccEu+sxfDe+B8yE1L3d50u+Bmvw2FiyaXQM6q8Sqw8bU1Uq+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755606408; c=relaxed/simple;
-	bh=Vlqa1gfi8PbIVJ0ZFQ+7x7C5YgAYhufkg+Cs5+SorG4=;
+	s=arc-20240116; t=1755606563; c=relaxed/simple;
+	bh=VzpI30UkeawZmaVqAnif/Xf8jsvVOdlincz/DMcQfeA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gb/9Nh3YSSNSSbKvy+qLAJ6AAF8DSb2YeQhDibYC8q7VZXSurwiFpxhKPp+sfUoeUJ9D/3WZ6ANjPKKchYUvKRYDqwGZU/fxJui7pAYbstlo61j4/rjSiBzUj8bDwTGQV8C/f9YI98N+FIkfuXbHdodOexgPmJHwe4Wh67MdSt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YE5cMEuk; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=bDZVoqorI+6wswZypeWkHHYULQ241WigLrhZHIKCsWWmXmci8s+gBnE4hrC/oGfkunIE7V+S9maYVk49a1J4yMKAAPx4gu9QhGSIY+bWbTeXl1N4eQgphSsu3Jxs2Nc6/8IPU81dh85So57ZsvrWoQdMIjJupSttGw9M+5gRtBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ag+vHwuV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YE5cMEuk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ag+vHwuV"
 Received: by smtp.kernel.org (Postfix)
-	id 9BF91C113D0; Tue, 19 Aug 2025 12:26:47 +0000 (UTC)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	id B2586C116B1; Tue, 19 Aug 2025 12:29:22 +0000 (UTC)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C1E0BC4CEF1
-	for <soc@kernel.org>; Tue, 19 Aug 2025 12:26:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C1E0BC4CEF1
+	by smtp.kernel.org (Postfix) with ESMTPS id D32B4C4CEF1
+	for <soc@kernel.org>; Tue, 19 Aug 2025 12:29:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D32B4C4CEF1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-333f7ebc44dso46222101fa.0
-        for <soc@kernel.org>; Tue, 19 Aug 2025 05:26:45 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55ce526ac04so4924252e87.2
+        for <soc@kernel.org>; Tue, 19 Aug 2025 05:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755606404; x=1756211204; darn=kernel.org;
+        d=linaro.org; s=google; t=1755606560; x=1756211360; darn=kernel.org;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RH/C3wXmNI2h8jF1q3m0CdjAwRtlpdk2fFUGk3Jm2jU=;
-        b=YE5cMEukt+DFil65uBEZ3t3zQedtNGAlpjeZjZMOEOpVqSlycGfay38D8LfL+aDKjq
-         PC8Cgy/XDePGOR07ybZjYmGnD5N++D6Ms0fRrrOa6Vm6L2viNiET6arofevqLhZ2LUon
-         SZFC8D3mDFfP46rgK+VyRlFO1Ql3iiS5Tg3EwEJnbF4Dwv8I6zW4c+WipDlBwa+ckzjk
-         yN9+w5U//yFqJ4OkxfpYNW0LCL7D4F6pabMILnhtJXuM+I6rbfK9jWPrcQY2BcWDb8t5
-         e0qUrZLkcppnggHLD1UT9u67RPygMUHDVQmgGT9oxdg3p7mC9BCHSdty82O1VNdbDUdG
-         u2Gg==
+        bh=UipPaNtmeiclDOI6M9CPZuTeZBFQiA+rXuvCoDGD8Ek=;
+        b=Ag+vHwuVIqhIDfXc83OIpLAEKHEa9+bnMYQNssfu7UUAIE35cWylTzgYn3nlynjjeB
+         ButzyBqeOhiAz8f81/MtU2qOfXtnxjMo9yZkFHw42ncEBVXxad9GToo1qD6NiE5lq3uT
+         jywcl4YuCgwMNa+GziJ27kZs9Yxsx00242hziKYwpp0zsglbmngWGFrG0de/pdhQpTlv
+         QxQ19skwe0rBm0tqnlqASXiS67g/SYA350DG18X6C8PA7MyJ6IFeUUt7CbrzeI9MbOvq
+         3AkO1o8otjXeseXkb/P8z7vOp7Fn19pVWacOgzSC7ws+b55yxMyp535O1jJboSpgmbFg
+         ygKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755606404; x=1756211204;
+        d=1e100.net; s=20230601; t=1755606560; x=1756211360;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RH/C3wXmNI2h8jF1q3m0CdjAwRtlpdk2fFUGk3Jm2jU=;
-        b=GvPX+9lj0vNQlOFwUYqTeWk429d2gZhgXQJVt1RT2w/Z+ehjig8eAog6h+xjtTrA45
-         /FbhDTjvL/HaRQN494YQsR+ouL92RotvIpjtUnlPUUXx1mqp6REbk6I+F8jkJUI/QNUz
-         JpN/TNtpwXJUdebduM3adBUDrEus5BFIs9t2BeOpMlt0ke9lmPA9wEj7mqPIlq51DF9h
-         N8aBbHeOhBGDNl/zFUPwTGiYyBFcXwV1Vgb4Gc3o9AYnF6Yy+udjXsC/NzTMrRTRpPI2
-         yX82fikGXL82BhaLdW/qnSesNnt0QW5slKvvA4yYRLsQi0cPCjPbacndZ4xa/1Al65Bk
-         U38A==
-X-Forwarded-Encrypted: i=1; AJvYcCXpIJtOF7bQdv+J6daZ76Pi/XDQMdJ4ulybKZd/rWzFbexrTPUvlE2CxPndwyVgExfllSg=@kernel.org
-X-Gm-Message-State: AOJu0YyVFCdu22YPQLbdA+QWN2UNPFw1nfWw/EljQboh8oLTQYasYGD0
-	yrlFNtzNnODqk25QF9NX2CbyOAMCAXJGunwlh7Pm4RuYjXWnORDtvbs5TFMXC2+mW/k=
-X-Gm-Gg: ASbGncvdzSbJx8sxBCtLErRXAsXvplFsuHsFn+/v4zZgL4n4uRIPzDTFG/6IAoYuT/F
-	vO+YE3kLaWRW9tKc1SgcHAYMKDHszplZ/SHRSkIFBOWfhqh7D/73yulDHeUtgT6v4geaWOv9BL3
-	1wyrckVdkqWG9gjlrwIDuWzcGmMhCkeBtbAQjscaO/wCoDNpUgRZCQyY+mfnxc4GRlmD0GHlyDs
-	uuLLpc7D6Bb4dleb6z1ivpLikztlguS8nspGnvqJfa9ARz0bRuQIppe+lPkJaUSbtvcPXKsMqv/
-	BNoHcco5tSTsDIA5x71SEpmiEbZA3mYm8kFwdA2OpWyVCMkzXLGFx7oGOk3YzRNBHs4If/koO6D
-	uVmYE36jh8mJQc1SG9YL3lg==
-X-Google-Smtp-Source: AGHT+IEopm7tKy//PR6tAZKXugwig1BvugMkJB89GGGoq3IMTwHV3jdUe5FZw58ERsomp4iOogHlRA==
-X-Received: by 2002:a05:651c:54d:b0:333:ad65:c512 with SMTP id 38308e7fff4ca-335317ae048mr6645961fa.13.1755606403774;
-        Tue, 19 Aug 2025 05:26:43 -0700 (PDT)
+        bh=UipPaNtmeiclDOI6M9CPZuTeZBFQiA+rXuvCoDGD8Ek=;
+        b=G5+wT3ILXyEJIN/PHktviwQq0ZyP4eHW/1aWU8yMhcovK1h/WQ6Pyj0qm7n9SbX7QV
+         e90mi2TCjn9DQkgQLU0qq0JtiKM3nY36mYyoJvbPnNLmAnMUlFdzuVvaLALuFJiegq+C
+         gsCwYcMbn5Ve5bOYRVctQbcC4lJqcupi62b4oM7J5PN3kQyEXWXXz9r9F3TtAu7oxJkT
+         Rm4LrI/ghligA338Xy21lnajdz5+HqqeRdQ2sgWQ+cjbrqZIRvfERET+T9ZL317znXtb
+         BDyzPd/Xzuad/qMhs/O84A+5NopTgnWbkAQHAIJeRPM3T57nt/aIpDs4RBg5fsXksofq
+         T2XA==
+X-Forwarded-Encrypted: i=1; AJvYcCXujc66XSMCK1fjM217PZ3ERwP8A8fTAWwIOUypTtiEXuwJPrC0msb1qyJeSfIvFLbSNVk=@kernel.org
+X-Gm-Message-State: AOJu0Yz3ig0ZzGxjQfvqNDbJ9vB6K0zf7jW3BHLTD9SCcVGxXy2w1mLW
+	yIAVSJXyUOSbqe3yAhAknbM0ZZuGEoiUKG0Nu4mxbsPs7zBKlPC9SR357V9GHOZPw+w=
+X-Gm-Gg: ASbGnct4ENnuKSv0CZr/i8xE1qkCCKNPJsxkquLSksxi7T90Wg+irzFreHSfR9w9RUi
+	YRAporFfzkQpL/nxTQLwiFIeryl0cCtu7OXGTZEYnP2DSP3s4sOslrdUMuCPgY5ykPBfW9TG0kP
+	F9IdhxbsBz6au/Q/hoAQCCzpUwmAQ7sRSWkBsz703vZD2wJhxrXVsI++UoSNWq7Ke7XGJKbINb4
+	3YCwXoPPprTS8ocqLf7GfS2ZwPlP+L1T2gnRDhVYqWDeug+pu82nnyLO4ZetWECwR/fO8W7PNy4
+	MHPGwoHMRLYzE09f/shrR8cdyXbaHb15Czh3ApGPQ1ix6fxZ779uqi5HU+PDo6LlJmCjD0mJ6w5
+	t7Db5F76bKHEdVL6ZEFsjEg==
+X-Google-Smtp-Source: AGHT+IFha8J313pxWbqhKQOw7U03tO4cI6VgHA9135xIQnSuHavKRTIlRfvQUn8KhNwo4cxLJh4h8A==
+X-Received: by 2002:a05:6512:6318:b0:55c:c98b:39d3 with SMTP id 2adb3069b0e04-55e0086a835mr622415e87.52.1755606559962;
+        Tue, 19 Aug 2025 05:29:19 -0700 (PDT)
 Received: from rayden ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3340a43a051sm22503801fa.18.2025.08.19.05.26.42
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef35145csm2136867e87.26.2025.08.19.05.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 05:26:43 -0700 (PDT)
-Date: Tue, 19 Aug 2025 14:26:41 +0200
+        Tue, 19 Aug 2025 05:29:19 -0700 (PDT)
+Date: Tue, 19 Aug 2025 14:29:17 +0200
 From: Jens Wiklander <jens.wiklander@linaro.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE fixes for v6.17
-Message-ID: <20250819122641.GA3486750@rayden>
+Subject: [GIT PULL] OP-TEE typo fix for v6.17
+Message-ID: <20250819122917.GB3486750@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
@@ -81,36 +81,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 
-Hello arm-soc maintainers
+Hello arm-soc maintainers,
 
-Please pull these two small patches fixing a NULL pointer dereference and
-memory leak in the TEE subsystem.
+Please pull this small patch fixing a recently introduced typo in the
+OP-TEE driver.
 
 Thanks,
 Jens
 
-The following changes since commit 038d61fd642278bab63ee8ef722c50d10ab01e8f:
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-  Linux 6.16 (2025-07-27 14:26:38 -0700)
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-fixes-for-v6.17
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-typo-fix-for-v6.17
 
-for you to fetch changes up to 50a74d0095cd23d2012133e208df45a298868870:
+for you to fetch changes up to 75dbd4304afe574fcfc4118a5b78776a9f48fdc4:
 
-  tee: fix memory leak in tee_dyn_shm_alloc_helper (2025-08-04 14:28:04 +0200)
-
-----------------------------------------------------------------
-TEE fixes for v6.17
-
-- Fixing a memory leak in the error path for tee_dyn_shm_alloc_helper()
-- Fixing a NULL pointer dereference in tee_shm_put()
+  tee: optee: ffa: fix a typo of "optee_ffa_api_is_compatible" (2025-08-18 15:05:49 +0200)
 
 ----------------------------------------------------------------
-Pei Xiao (2):
-      tee: fix NULL pointer dereference in tee_shm_put
-      tee: fix memory leak in tee_dyn_shm_alloc_helper
+OP-TEE driver fix for v6.17
 
- drivers/tee/tee_shm.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Fixing a typo in a function name.
+
+----------------------------------------------------------------
+Sungbae Yoo (1):
+      tee: optee: ffa: fix a typo of "optee_ffa_api_is_compatible"
+
+ drivers/tee/optee/ffa_abi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
