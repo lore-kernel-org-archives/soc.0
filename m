@@ -1,134 +1,116 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C5331E0E3
-	for <soc@lists.linux.dev>; Tue, 19 Aug 2025 09:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E6B305046
+	for <soc@lists.linux.dev>; Tue, 19 Aug 2025 12:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755596994; cv=none; b=UpA6xJW/Re/ZRh5F/IrYyk03AsOGR11EFvJypOew9aL817U9ab86pCaW6U++8zTIMgabrVzGpvXTnAS0q4dXTT2qjzNQKkCF6TSYJ0o9DiM3rL8hHKavRJl50wRXMYcz8VI5hDPWyhyigb+zj0nobOegOFBOmHt1YBHj+uJtq94=
+	t=1755606408; cv=none; b=U0ioajyNdWt285cBr+IcQ+K3D+pL1hKk3+MPRycSS0UcJSwxp08PsMAyU8JYnb4+2fdDU3kjsdSsuAPBU2C84Via/6CB0bjgXzFaV5McUqLI013tmIV9g/CsAHzriVdfnQPl0QmYxBmUgllGDxlBoSCsMoJGMyfrutJq18SmtM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755596994; c=relaxed/simple;
-	bh=tV6Flkuo2P/+55L7Kh0T7daOZ9uv2yK47XAxZBt9LOQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EmYbCaEqw5JXwIkPZKJwRaPcgmGoNOrj/oYtxYO0qzcKGkNTFWHh0C8AGXYPcFM8DGO1uQbdmN7lBd81+WOTsHj5Kz/g1YxfNMLoKGOH6hA+dBu4OAtnW+1AvfplgIXxJ0rXKT+GfMGOp5a9cANyC0lG4sg7yMhiqt+wNiC5AfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=E6nirs/M; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1755606408; c=relaxed/simple;
+	bh=Vlqa1gfi8PbIVJ0ZFQ+7x7C5YgAYhufkg+Cs5+SorG4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gb/9Nh3YSSNSSbKvy+qLAJ6AAF8DSb2YeQhDibYC8q7VZXSurwiFpxhKPp+sfUoeUJ9D/3WZ6ANjPKKchYUvKRYDqwGZU/fxJui7pAYbstlo61j4/rjSiBzUj8bDwTGQV8C/f9YI98N+FIkfuXbHdodOexgPmJHwe4Wh67MdSt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YE5cMEuk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E6nirs/M"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55ce510b4ceso5792332e87.1
-        for <soc@lists.linux.dev>; Tue, 19 Aug 2025 02:49:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YE5cMEuk"
+Received: by smtp.kernel.org (Postfix)
+	id 9BF91C113D0; Tue, 19 Aug 2025 12:26:47 +0000 (UTC)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C1E0BC4CEF1
+	for <soc@kernel.org>; Tue, 19 Aug 2025 12:26:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C1E0BC4CEF1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-333f7ebc44dso46222101fa.0
+        for <soc@kernel.org>; Tue, 19 Aug 2025 05:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755596990; x=1756201790; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tV6Flkuo2P/+55L7Kh0T7daOZ9uv2yK47XAxZBt9LOQ=;
-        b=E6nirs/MtzlWYvtWnhT7OFhxYxoTiNgtZAFtP3PfVlJvA8N+EDp4Gp5ZGEj/TBn5XT
-         v9HgnBzetGo8P/3ecfIcu451INUltPDST2Ag5VeVkGr8eWulXkY9V3nxa1FdGSfhtma8
-         Mj2Na2p+l/h0Ce4WRFCOMd0r3BcaPRO9sVDnz2NQv1+pbnyCcJVlUYgW0zt0sn/JhceT
-         UhVxSgpuj4aldbnV/k+8SUPmGq3HHKVpUSNMpu5jGAAj62CYGtWk+xJz3oIHGkklcM6V
-         oGztqacdk5CBjdJMRLe0LEoLMh83GUWsd7GxEwzMyXqj8w5nowlP1wuDqk7YytcapywS
-         ftqA==
+        d=linaro.org; s=google; t=1755606404; x=1756211204; darn=kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RH/C3wXmNI2h8jF1q3m0CdjAwRtlpdk2fFUGk3Jm2jU=;
+        b=YE5cMEukt+DFil65uBEZ3t3zQedtNGAlpjeZjZMOEOpVqSlycGfay38D8LfL+aDKjq
+         PC8Cgy/XDePGOR07ybZjYmGnD5N++D6Ms0fRrrOa6Vm6L2viNiET6arofevqLhZ2LUon
+         SZFC8D3mDFfP46rgK+VyRlFO1Ql3iiS5Tg3EwEJnbF4Dwv8I6zW4c+WipDlBwa+ckzjk
+         yN9+w5U//yFqJ4OkxfpYNW0LCL7D4F6pabMILnhtJXuM+I6rbfK9jWPrcQY2BcWDb8t5
+         e0qUrZLkcppnggHLD1UT9u67RPygMUHDVQmgGT9oxdg3p7mC9BCHSdty82O1VNdbDUdG
+         u2Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755596990; x=1756201790;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tV6Flkuo2P/+55L7Kh0T7daOZ9uv2yK47XAxZBt9LOQ=;
-        b=Vqkmc6a48yWl6h/5yF4Mid4gQS7JqqvoWn0FLUzcVcQSHGOm3D8HNb/bfr90W82dgy
-         CybrIqmeJbcG8/jMOA7tgtyJa1+TU2ZGpC5m0P0spCxcfeB9P4npQwnedhcRHvHoBNVb
-         B9Hf1tgpnFc+OW5k1ENAGMJA7SvCkvGQmo9Ad3VzcGjA9L1OIlqEWVRLYT86dg3gdtXG
-         SNNaYvm25SoTURYYtxWlflgwaXpRPSv4gchE7ayKgZGMqVf9wEpAsQh0ab/jdy4x/3Sf
-         O9DyedGLaiN8Z51ghRB7F9iRz3NPwJ363JYwTcFDfpH4xU/Nksd9jDdAvx6nfQ59Rj8j
-         CMhg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVbNhJ5IJvo26C1pvabdnxbJuRh+J0/lMTQOp8FsCkklwGcl/IOyp3p1IGloHCbIiEe6U=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxy8kxKPrU9L4DfkH8tq6oDOULNQ6nyHPphxgE4b/imU7qq8wyZ
-	Yw8w7kROmN7oXhpm0U+2TV5EoGndSqg6N5gJcy8SBOjFm0b0fFIQBygRNFdfib2yUixpD0bnnHm
-	1o7i2VQAFidIGlXpFQOIDl6FgtLjltLtAjSh44kCVTA==
-X-Gm-Gg: ASbGnct1HTybZ2obfrW5Yi7Ba5au762HEAaxL0fpLw3jyYZM1BVwPyEZeSjjfzc17Jr
-	F5anZn8WYXfkcIUZkhykCbMab+x8ZHKaHNguK/mfZ6vWOlgEChx1iv6CxxLh6n7mL2L0+AcG0xn
-	VCH2R+J3rs1BBhbwgx85LXQ/RRu8mxsOaxjZJwxrQlaPOi6ClRyivSEDN+bEwsC0NNtFR4vgpCl
-	3CGts6mHYPX
-X-Google-Smtp-Source: AGHT+IEt8RlqWWvwC2uqrmb7EU75OBtpQ0q0kJ1zr3PFW1jsKW7QqgA/pBKXOLyxKfth/q0XXJuPhRlLhC58Y7ZaIjE=
-X-Received: by 2002:a05:6512:ac9:b0:553:51a2:4405 with SMTP id
- 2adb3069b0e04-55e00850835mr590681e87.45.1755596989499; Tue, 19 Aug 2025
- 02:49:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755606404; x=1756211204;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RH/C3wXmNI2h8jF1q3m0CdjAwRtlpdk2fFUGk3Jm2jU=;
+        b=GvPX+9lj0vNQlOFwUYqTeWk429d2gZhgXQJVt1RT2w/Z+ehjig8eAog6h+xjtTrA45
+         /FbhDTjvL/HaRQN494YQsR+ouL92RotvIpjtUnlPUUXx1mqp6REbk6I+F8jkJUI/QNUz
+         JpN/TNtpwXJUdebduM3adBUDrEus5BFIs9t2BeOpMlt0ke9lmPA9wEj7mqPIlq51DF9h
+         N8aBbHeOhBGDNl/zFUPwTGiYyBFcXwV1Vgb4Gc3o9AYnF6Yy+udjXsC/NzTMrRTRpPI2
+         yX82fikGXL82BhaLdW/qnSesNnt0QW5slKvvA4yYRLsQi0cPCjPbacndZ4xa/1Al65Bk
+         U38A==
+X-Forwarded-Encrypted: i=1; AJvYcCXpIJtOF7bQdv+J6daZ76Pi/XDQMdJ4ulybKZd/rWzFbexrTPUvlE2CxPndwyVgExfllSg=@kernel.org
+X-Gm-Message-State: AOJu0YyVFCdu22YPQLbdA+QWN2UNPFw1nfWw/EljQboh8oLTQYasYGD0
+	yrlFNtzNnODqk25QF9NX2CbyOAMCAXJGunwlh7Pm4RuYjXWnORDtvbs5TFMXC2+mW/k=
+X-Gm-Gg: ASbGncvdzSbJx8sxBCtLErRXAsXvplFsuHsFn+/v4zZgL4n4uRIPzDTFG/6IAoYuT/F
+	vO+YE3kLaWRW9tKc1SgcHAYMKDHszplZ/SHRSkIFBOWfhqh7D/73yulDHeUtgT6v4geaWOv9BL3
+	1wyrckVdkqWG9gjlrwIDuWzcGmMhCkeBtbAQjscaO/wCoDNpUgRZCQyY+mfnxc4GRlmD0GHlyDs
+	uuLLpc7D6Bb4dleb6z1ivpLikztlguS8nspGnvqJfa9ARz0bRuQIppe+lPkJaUSbtvcPXKsMqv/
+	BNoHcco5tSTsDIA5x71SEpmiEbZA3mYm8kFwdA2OpWyVCMkzXLGFx7oGOk3YzRNBHs4If/koO6D
+	uVmYE36jh8mJQc1SG9YL3lg==
+X-Google-Smtp-Source: AGHT+IEopm7tKy//PR6tAZKXugwig1BvugMkJB89GGGoq3IMTwHV3jdUe5FZw58ERsomp4iOogHlRA==
+X-Received: by 2002:a05:651c:54d:b0:333:ad65:c512 with SMTP id 38308e7fff4ca-335317ae048mr6645961fa.13.1755606403774;
+        Tue, 19 Aug 2025 05:26:43 -0700 (PDT)
+Received: from rayden ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3340a43a051sm22503801fa.18.2025.08.19.05.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 05:26:43 -0700 (PDT)
+Date: Tue, 19 Aug 2025 14:26:41 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] TEE fixes for v6.17
+Message-ID: <20250819122641.GA3486750@rayden>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com> <20250811-clk-for-stephen-round-rate-v1-109-b3bf97b038dc@redhat.com>
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-109-b3bf97b038dc@redhat.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 19 Aug 2025 11:49:38 +0200
-X-Gm-Features: Ac12FXyEOw7KCbkbFT2OqCP4TngpQPKLbvy9M6n90z-zmlM7tVP9PQNq8vVGJnI
-Message-ID: <CACRpkdaW=f7xm+rsD8XUUx-qhuh8sk1mCU-erve-_9S4uUpHbA@mail.gmail.com>
-Subject: Re: [PATCH 109/114] clk: versatile: vexpress-osc: convert from
- round_rate() to determine_rate()
-To: bmasney@redhat.com
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Paul Cercueil <paul@crapouillou.net>, Keguang Zhang <keguang.zhang@gmail.com>, 
-	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Yixun Lan <dlan@gentoo.org>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
-	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Chunyan Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek <michal.simek@amd.com>, 
-	Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Daniel Palmer <daniel@thingy.jp>, 
-	Romain Perier <romain.perier@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Heiko Stuebner <heiko@sntech.de>, 
-	Andrea della Porta <andrea.porta@suse.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Alex Helms <alexander.helms.jy@renesas.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, sophgo@lists.linux.dev, 
-	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com, 
-	linux-actions@lists.infradead.org, asahi@lists.linux.dev, 
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Mon, Aug 11, 2025 at 5:21=E2=80=AFPM Brian Masney via B4 Relay
-<devnull+bmasney.redhat.com@kernel.org> wrote:
+Hello arm-soc maintainers
 
-> From: Brian Masney <bmasney@redhat.com>
->
-> The round_rate() clk ops is deprecated, so migrate this driver from
-> round_rate() to determine_rate() using the Coccinelle semantic patch
-> on the cover letter of this series.
->
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
+Please pull these two small patches fixing a NULL pointer dereference and
+memory leak in the TEE subsystem.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks,
+Jens
 
-Yours,
-Linus Walleij
+The following changes since commit 038d61fd642278bab63ee8ef722c50d10ab01e8f:
+
+  Linux 6.16 (2025-07-27 14:26:38 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/tee-fixes-for-v6.17
+
+for you to fetch changes up to 50a74d0095cd23d2012133e208df45a298868870:
+
+  tee: fix memory leak in tee_dyn_shm_alloc_helper (2025-08-04 14:28:04 +0200)
+
+----------------------------------------------------------------
+TEE fixes for v6.17
+
+- Fixing a memory leak in the error path for tee_dyn_shm_alloc_helper()
+- Fixing a NULL pointer dereference in tee_shm_put()
+
+----------------------------------------------------------------
+Pei Xiao (2):
+      tee: fix NULL pointer dereference in tee_shm_put
+      tee: fix memory leak in tee_dyn_shm_alloc_helper
+
+ drivers/tee/tee_shm.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
