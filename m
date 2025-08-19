@@ -1,40 +1,27 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E4A21ABBB;
-	Tue, 19 Aug 2025 08:39:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9508C31076E;
+	Tue, 19 Aug 2025 08:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755592775; cv=none; b=NtQIeDQ2EfMQK4EOgODhW66BA1Jt2vBFWDc5Ti0X7RCEIcG1CeR5rp/op5ogdK6p7SF74CJZfPc2Noa2heiO91dbDoR+4VMiO7P3xAo5QzHYTodnV3lCe21QFHXXzgNDt93JquGzONaj8WIyBNqwCEAPDHYDd1NuenmY7NrU8Nw=
+	t=1755593051; cv=none; b=bBbcR9uOI9AnDlkOEcQE1xU6uowR6s/tasfAQ9ldK8u+YZrq1+4JT4qCaNmmdUxAsBG2dCUEatVqJTandnAnQ3T6uOp9jcFzenLFT2WiY+WP49kZwfEGLms+wY2IPdlX/6lm5m2UAjquyupbw8JFGUXsu5VmrXAB7jdEW07cTiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755592775; c=relaxed/simple;
-	bh=S/iXwuz8N0uwMCfHp+T12qa3ce4k79eljimBk6WuzjQ=;
+	s=arc-20240116; t=1755593051; c=relaxed/simple;
+	bh=itEin/IS3TvghTDl9BoFjp/1pLUR8ohmvrFyeI+tsAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kkggADO2tJGiAoPzMH4uSNosCU29DuqfQ0VOKmcTITiLAWPlk9SYRP1zcEhiRRrPEnhX7GSiW9P5AjYkGtLDhBq9UI0kB9Te32uLZ4pyNuG2ZEFrjBhKsoufzMBYXavANrZ9GT1jXUT/28IPTnhw8+NVQ+NeUjUW/vJHZp9hSbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNt8FFRJ; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNt8FFRJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B700C4CEF1;
-	Tue, 19 Aug 2025 08:39:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755592774;
-	bh=S/iXwuz8N0uwMCfHp+T12qa3ce4k79eljimBk6WuzjQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oNt8FFRJnA96OKeSLKP2MFsA3PbVp2Pbq7DnODQ3ldCYJEyR8gQ1JkdMYSdH0nBUi
-	 J0fqhfqnq39Ral5NVj8NMSMgsjx/6hftzdv5/wWbB316pzpyYMFhajiZ2mivEFdWVv
-	 dWYiG2y0HmO77VM+RsG8rVciewaTX+HtnW67wEdX0i5yjvcxfcJISp9q8fTcKEH85M
-	 1ZI6iMsEo31AWAqzvfFG8ba95as+0t+Eelh8ETSCvTQNIuVK52lZjmwD+wbBbPx7Q7
-	 QfAVBlchlqBNcI81b9sgaFZnl4LRWsgHO5oYvvlZOOziCcZZ8q7Mk2aRbmKyFcbRT4
-	 rb2XVczqFiKhg==
-Date: Tue, 19 Aug 2025 09:39:29 +0100
-From: Will Deacon <will@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=d6EZOPj1m4w1YsTTQcZ/YCEbJ80UfMQVahF/o4Cf7YO16OdD1b7sYmMi10IJH3ngJWvHqsQ1FiiiknaxwB9guQtK7lqP/r9UACqi5hKwxOUSDLsTLKJg+5sBtIsOxCkA9QkyPlKYsrJzzoUA5iKj8T+mjfGHHWsXaPuyUM1xuEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BF8C4CEF1;
+	Tue, 19 Aug 2025 08:44:09 +0000 (UTC)
+Date: Tue, 19 Aug 2025 09:44:07 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
 To: Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kernel@collabora.com
+	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kernel@collabora.com
 Subject: Re: [PATCH] MAINTAINERS: exclude defconfig from ARM64 PORT
-Message-ID: <aKQ4QSAqT7OLIBf1@willie-the-truck>
+Message-ID: <aKQ5V8iWQ7tqSnq9@arm.com>
 References: <20250818-arm64-defconfig-v1-1-f589553c3d72@collabora.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
@@ -61,20 +48,5 @@ On Mon, Aug 18, 2025 at 11:08:04PM +0200, Sebastian Reichel wrote:
 > ARM64 defconfig.
 > 
 > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index daf520a13bdf6a991c0160a96620f40308c29ee0..b6466a628381bf40ebcf7e3638ec65fabf6ad357 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3667,6 +3667,7 @@ F:	drivers/virt/coco/arm-cca-guest/
->  F:	drivers/virt/coco/pkvm-guest/
->  F:	tools/testing/selftests/arm64/
->  X:	arch/arm64/boot/dts/
-> +X:	arch/arm64/configs/defconfig
 
-Acked-by: Will Deacon <will@kernel.org>
-
-Will
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
