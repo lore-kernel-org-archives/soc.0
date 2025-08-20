@@ -1,114 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mo-csw.securemx.jp (mo-csw1802.securemx.jp [210.130.202.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14047305052
-	for <soc@lists.linux.dev>; Tue, 19 Aug 2025 12:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9AB241664;
+	Wed, 20 Aug 2025 04:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755606563; cv=none; b=LaD720PEGMOpf4DG2Q0bgV1ViX2xS6d2A5jelpFIq2BGt9eScETsBaEoI8oDciJxBclJukly37QLTGano6jcIPPTQm9h4GvcVIKh3DDsCdBWhZAXnjcEmAU9fMccEu+sxfDe+B8yE1L3d50u+Bmvw2FiyaXQM6q8Sqw8bU1Uq+Q=
+	t=1755663797; cv=none; b=MQkDMBBy7Wej+n3/fwtnkyFpNbHqQWd2RyWDt0vQc6gyIUfKiMz7pab7Ps8BvnBkqQCni6Jq7rHAqNqKob16+MUccV4wO+SCX2c/jpuaDBF+tece8ryUzDRpSHan638+GyD/dJXeh4ipYn6yT/zN1GdeRcXx5KDUZcXjtcKpmZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755606563; c=relaxed/simple;
-	bh=VzpI30UkeawZmaVqAnif/Xf8jsvVOdlincz/DMcQfeA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bDZVoqorI+6wswZypeWkHHYULQ241WigLrhZHIKCsWWmXmci8s+gBnE4hrC/oGfkunIE7V+S9maYVk49a1J4yMKAAPx4gu9QhGSIY+bWbTeXl1N4eQgphSsu3Jxs2Nc6/8IPU81dh85So57ZsvrWoQdMIjJupSttGw9M+5gRtBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ag+vHwuV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755663797; c=relaxed/simple;
+	bh=1sLVmJEVELm+3EaQx5S5Fb5yqH/hy5nMB0COk6qZdDw=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=dAOzoUPvdx2X3TnSuILA87C8td28+v9RDu+/CKK044FcAm8ge3Cd/b9A8BIxVAqxVynBxasaqSbxP7bWi0/8NQEWNcv/a7AqV7rp+ZtUd+CwEvXxxQe5U9rZ5ffPdEybXfhcl4DxLLg5Zk9uVJtWAZeyl4DPs8lLqwaS7Mum91Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba; spf=pass smtp.mailfrom=mail.toshiba; dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b=Sqk71vEa; arc=none smtp.client-ip=210.130.202.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.toshiba
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ag+vHwuV"
-Received: by smtp.kernel.org (Postfix)
-	id B2586C116B1; Tue, 19 Aug 2025 12:29:22 +0000 (UTC)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D32B4C4CEF1
-	for <soc@kernel.org>; Tue, 19 Aug 2025 12:29:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D32B4C4CEF1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55ce526ac04so4924252e87.2
-        for <soc@kernel.org>; Tue, 19 Aug 2025 05:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755606560; x=1756211360; darn=kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UipPaNtmeiclDOI6M9CPZuTeZBFQiA+rXuvCoDGD8Ek=;
-        b=Ag+vHwuVIqhIDfXc83OIpLAEKHEa9+bnMYQNssfu7UUAIE35cWylTzgYn3nlynjjeB
-         ButzyBqeOhiAz8f81/MtU2qOfXtnxjMo9yZkFHw42ncEBVXxad9GToo1qD6NiE5lq3uT
-         jywcl4YuCgwMNa+GziJ27kZs9Yxsx00242hziKYwpp0zsglbmngWGFrG0de/pdhQpTlv
-         QxQ19skwe0rBm0tqnlqASXiS67g/SYA350DG18X6C8PA7MyJ6IFeUUt7CbrzeI9MbOvq
-         3AkO1o8otjXeseXkb/P8z7vOp7Fn19pVWacOgzSC7ws+b55yxMyp535O1jJboSpgmbFg
-         ygKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755606560; x=1756211360;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UipPaNtmeiclDOI6M9CPZuTeZBFQiA+rXuvCoDGD8Ek=;
-        b=G5+wT3ILXyEJIN/PHktviwQq0ZyP4eHW/1aWU8yMhcovK1h/WQ6Pyj0qm7n9SbX7QV
-         e90mi2TCjn9DQkgQLU0qq0JtiKM3nY36mYyoJvbPnNLmAnMUlFdzuVvaLALuFJiegq+C
-         gsCwYcMbn5Ve5bOYRVctQbcC4lJqcupi62b4oM7J5PN3kQyEXWXXz9r9F3TtAu7oxJkT
-         Rm4LrI/ghligA338Xy21lnajdz5+HqqeRdQ2sgWQ+cjbrqZIRvfERET+T9ZL317znXtb
-         BDyzPd/Xzuad/qMhs/O84A+5NopTgnWbkAQHAIJeRPM3T57nt/aIpDs4RBg5fsXksofq
-         T2XA==
-X-Forwarded-Encrypted: i=1; AJvYcCXujc66XSMCK1fjM217PZ3ERwP8A8fTAWwIOUypTtiEXuwJPrC0msb1qyJeSfIvFLbSNVk=@kernel.org
-X-Gm-Message-State: AOJu0Yz3ig0ZzGxjQfvqNDbJ9vB6K0zf7jW3BHLTD9SCcVGxXy2w1mLW
-	yIAVSJXyUOSbqe3yAhAknbM0ZZuGEoiUKG0Nu4mxbsPs7zBKlPC9SR357V9GHOZPw+w=
-X-Gm-Gg: ASbGnct4ENnuKSv0CZr/i8xE1qkCCKNPJsxkquLSksxi7T90Wg+irzFreHSfR9w9RUi
-	YRAporFfzkQpL/nxTQLwiFIeryl0cCtu7OXGTZEYnP2DSP3s4sOslrdUMuCPgY5ykPBfW9TG0kP
-	F9IdhxbsBz6au/Q/hoAQCCzpUwmAQ7sRSWkBsz703vZD2wJhxrXVsI++UoSNWq7Ke7XGJKbINb4
-	3YCwXoPPprTS8ocqLf7GfS2ZwPlP+L1T2gnRDhVYqWDeug+pu82nnyLO4ZetWECwR/fO8W7PNy4
-	MHPGwoHMRLYzE09f/shrR8cdyXbaHb15Czh3ApGPQ1ix6fxZ779uqi5HU+PDo6LlJmCjD0mJ6w5
-	t7Db5F76bKHEdVL6ZEFsjEg==
-X-Google-Smtp-Source: AGHT+IFha8J313pxWbqhKQOw7U03tO4cI6VgHA9135xIQnSuHavKRTIlRfvQUn8KhNwo4cxLJh4h8A==
-X-Received: by 2002:a05:6512:6318:b0:55c:c98b:39d3 with SMTP id 2adb3069b0e04-55e0086a835mr622415e87.52.1755606559962;
-        Tue, 19 Aug 2025 05:29:19 -0700 (PDT)
-Received: from rayden ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef35145csm2136867e87.26.2025.08.19.05.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 05:29:19 -0700 (PDT)
-Date: Tue, 19 Aug 2025 14:29:17 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE typo fix for v6.17
-Message-ID: <20250819122917.GB3486750@rayden>
+	dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b="Sqk71vEa"
+DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=mail.toshiba;h=From:To:Cc:
+	Subject:Date:Message-Id;i=nobuhiro.iwamatsu.x90@mail.toshiba;s=key1.smx;t=
+	1755663782;x=1756873382;bh=1sLVmJEVELm+3EaQx5S5Fb5yqH/hy5nMB0COk6qZdDw=;b=Sqk
+	71vEahlIjYAB6jJU5K3fqbBg04X8dM6fUUDTP8Z5/VeP1PJZj2sE91UgTdiX+szGZTCl+/MzTG9+U
+	Q71klbwyazhPx5Wm3d+xka7xt1WeEC5fvSLN/pY/pHi60aWl67BcIjQ4vrMTQiuT9T6T7NUbFCLAl
+	dQQ6AtwgeNadcluUj+YNNZSeBTdXJ2dSSZcjG9KeCfl6m+aLkuSaXnFoeNKlASr8Rh7yvByFAZNnd
+	j82fOw26SyrKfNMph6f0RkTqc+vLsSwEZrvoFGxEc4W4XC34sRxtFNWmvqDph8ReZYsRSeaWKrbXN
+	gJlRrdgoiMwNKH47Wizlfmvz08ggS1A==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1802) id 57K4N2KP2103061; Wed, 20 Aug 2025 13:23:02 +0900
+X-Iguazu-Qid: 2yAbaKzOl4H8PZRSai
+X-Iguazu-QSIG: v=2; s=0; t=1755663781; q=2yAbaKzOl4H8PZRSai; m=AQ2Y70863fIkF40ki8y3XRx/yrNIO1xMVjEI7bcmleU=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+	by relay.securemx.jp (mx-mr1800) id 57K4Mx7T1451794
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 20 Aug 2025 13:23:00 +0900
+From: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
+Subject: [PATCH] MAINTAINERS: Update Nobuhiro Iwamatsu's email address
+Date: Wed, 20 Aug 2025 13:22:47 +0900
+X-TSB-HOP2: ON
+Message-Id: <1755663767-1612-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 
-Hello arm-soc maintainers,
+The company's email address has been changed, so update my email
+address in MAINTAINERS and .mailmap files.
 
-Please pull this small patch fixing a recently introduced typo in the
-OP-TEE driver.
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
+---
+ .mailmap    | 1 +
+ MAINTAINERS | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Thanks,
-Jens
+diff --git a/.mailmap b/.mailmap
+index 4bb3a7f253b9b..328b04f82dac7 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -585,6 +585,7 @@ Nikolay Aleksandrov <razor@blackwall.org> <nikolay@redhat.com>
+ Nikolay Aleksandrov <razor@blackwall.org> <nikolay@cumulusnetworks.com>
+ Nikolay Aleksandrov <razor@blackwall.org> <nikolay@nvidia.com>
+ Nikolay Aleksandrov <razor@blackwall.org> <nikolay@isovalent.com>
++Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba> <nobuhiro 1.iwamatsu@toshiba.co.jp>
+ Odelu Kukatla <quic_okukatla@quicinc.com> <okukatla@codeaurora.org>
+ Oleksandr Natalenko <oleksandr@natalenko.name> <oleksandr@redhat.com>
+ Oleksij Rempel <linux@rempel-privat.de> <bug-track@fisher-privat.net>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c0b444e5fd5ad..47d059d5878a9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3431,7 +3431,7 @@ F:	Documentation/devicetree/bindings/arm/ti/nspire.yaml
+ F:	arch/arm/boot/dts/nspire/
+ 
+ ARM/TOSHIBA VISCONTI ARCHITECTURE
+-M:	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
++M:	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
+-- 
+2.50.0
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git tags/optee-typo-fix-for-v6.17
-
-for you to fetch changes up to 75dbd4304afe574fcfc4118a5b78776a9f48fdc4:
-
-  tee: optee: ffa: fix a typo of "optee_ffa_api_is_compatible" (2025-08-18 15:05:49 +0200)
-
-----------------------------------------------------------------
-OP-TEE driver fix for v6.17
-
-Fixing a typo in a function name.
-
-----------------------------------------------------------------
-Sungbae Yoo (1):
-      tee: optee: ffa: fix a typo of "optee_ffa_api_is_compatible"
-
- drivers/tee/optee/ffa_abi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
