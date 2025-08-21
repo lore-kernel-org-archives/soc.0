@@ -1,16 +1,16 @@
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4D62EA749
-	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 08:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10A32EAB80
+	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 08:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755763346; cv=none; b=D3dizWps4MwV/wyhjLrtTEhQ8HWzKWv07BhbjXUJ71NUTQ/ggSSSQmw+xvNyr8Hezqqzl2RDPYI3iOKp/XiGArMfJyCaXJLC50U6r2lSYM6IVLq6gVV3rBJaC4BMA9AwV+BjgeKo+ak2McnOAU63VraCKBivRthAaoGkkUIA5O4=
+	t=1755763348; cv=none; b=QUp6uisirV95Gv3/lTixuOpxv4lqN5B7dPD5igYwXCk/LU+3F0/xK1SgS130ft++QyZxrANtXQNrMJlRQgix1tLGvHia0tLjmmUFYPojhdU7XkxyIaUQmEIO7omlXAbQ0kf7fJJn6ewrpY1nWRFroeBoGa7M4RtL46RTGDXu86A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755763346; c=relaxed/simple;
-	bh=cPjqfdJrZGPUqbcMerEjKTPEAY7lBVPtkCGDUQYUjwM=;
+	s=arc-20240116; t=1755763348; c=relaxed/simple;
+	bh=tm3xCUjka8QQlURenrEVc9mlc+Uxa4SXF2NrSxVFsjk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fXqwW04C2efY5BRdR/pjhwHvjbjHUxmYjlQ79zmtsElWPTnXj5WTNXoOvzkyLrUU9+ZlVaPQZw+1RLNBofOsmiiX/RxhEQ4aZGnTenJ7yCyJBleHcEEQTJlPsj5nYD1csXOvKXBEQZtCxQ5hRNAncw3FpZMnd2YNSgkT6IdjOmE=
+	 MIME-Version:Content-Type; b=Q+Bl8YonrZ33OE8CwpRR57rUfExONOHr03BzvTm+0H5/fe4Hdn+zRcDV+hWfQ125irmhSEnuyq4UoIaGkYi+vyxox9UX2+QdbNS2gEBway7gUoCh0QvypESsI1j+0GfK3O57ayvIYahtAwkng9WhId/iqfQJsaovIwXw1TMvDes=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -38,9 +38,9 @@ To: ryan_chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
 	<romlem@google.com>, William Kennington <wak@google.com>, Yuxiao Zhang
 	<yuxiaozhang@google.com>, <wthai@nvidia.com>, <leohu@nvidia.com>,
 	<dkodihalli@nvidia.com>, <spuranik@nvidia.com>
-Subject: [PATCH v4 4/5] arm64: dts: aspeed: Add AST2700 Evaluation Board
-Date: Thu, 21 Aug 2025 16:02:13 +0800
-Message-ID: <20250821080214.513090-5-ryan_chen@aspeedtech.com>
+Subject: [PATCH v4 5/5] arm64: configs: Update defconfig for AST2700 platform support
+Date: Thu, 21 Aug 2025 16:02:14 +0800
+Message-ID: <20250821080214.513090-6-ryan_chen@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250821080214.513090-1-ryan_chen@aspeedtech.com>
 References: <20250821080214.513090-1-ryan_chen@aspeedtech.com>
@@ -53,65 +53,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-ASPEED AST2700 EVB is prototype development board based
-on AST2700 SOC.
+Enable options for ASPEED AST2700 SoC.
 
 Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 ---
- arch/arm64/boot/dts/Makefile               |  1 +
- arch/arm64/boot/dts/aspeed/Makefile        |  4 ++++
- arch/arm64/boot/dts/aspeed/ast2700-evb.dts | 22 ++++++++++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 arch/arm64/boot/dts/aspeed/Makefile
- create mode 100644 arch/arm64/boot/dts/aspeed/ast2700-evb.dts
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 79b73a21ddc2..d9c3e58b9ca5 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -35,3 +35,4 @@ subdir-y += tesla
- subdir-y += ti
- subdir-y += toshiba
- subdir-y += xilinx
-+subdir-y += aspeed
-diff --git a/arch/arm64/boot/dts/aspeed/Makefile b/arch/arm64/boot/dts/aspeed/Makefile
-new file mode 100644
-index 000000000000..ffe7e15017cc
---- /dev/null
-+++ b/arch/arm64/boot/dts/aspeed/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+dtb-$(CONFIG_ARCH_ASPEED) += \
-+	ast2700-evb.dtb
-diff --git a/arch/arm64/boot/dts/aspeed/ast2700-evb.dts b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-new file mode 100644
-index 000000000000..654b36ec24de
---- /dev/null
-+++ b/arch/arm64/boot/dts/aspeed/ast2700-evb.dts
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+/dts-v1/;
-+#include "aspeed-g7.dtsi"
-+
-+/ {
-+	model = "AST2700 EVB";
-+	compatible = "aspeed,ast2700-evb", "aspeed,ast2700";
-+
-+	chosen {
-+		stdout-path = "serial12:115200n8";
-+	};
-+
-+	memory@400000000 {
-+		device_type = "memory";
-+		reg = <0x4 0x00000000 0x0 0x40000000>;
-+	};
-+};
-+
-+&uart12 {
-+	status = "okay";
-+};
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7e04a2905ce4..fe354c91cb7f 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -38,6 +38,7 @@ CONFIG_ARCH_AIROHA=y
+ CONFIG_ARCH_SUNXI=y
+ CONFIG_ARCH_ALPINE=y
+ CONFIG_ARCH_APPLE=y
++CONFIG_ARCH_ASPEED=y
+ CONFIG_ARCH_BCM=y
+ CONFIG_ARCH_BCM2835=y
+ CONFIG_ARCH_BCM_IPROC=y
 -- 
 2.34.1
 
