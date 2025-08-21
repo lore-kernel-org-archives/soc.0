@@ -1,107 +1,105 @@
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FCA321F58
-	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 12:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A4F2E427B
+	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 16:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755780071; cv=none; b=fROUyjyANXcYxR87OjWn0vngW8t80gQsLZ74md3MAKE1ctnqjj0xC6hIvdRvCNzfw3AgXRYwKJs+uu/rjFCpZZWnMG6iArZDvWLOE/LmpeVyL7AZSqApBmggOYy6VAih6P2ZQjbZZFzVfEGmoKqHi3fJezH+anwpu5u50DFPR7Q=
+	t=1755795053; cv=none; b=drkNyMztmkHgVB/yIgWb6uys5JO5gwiU7D1Aj+X66lykjhahrhfpM4JdD2zz/+7JOS7MLigfpYd04yUKfsD7g4CVZmF+EdCNXDgfgQHRuEFZ7S0c3UZJamVi8VcbATQHg4h9V7tPNzFOsNJ9AggEscRQiXvTzCy+7J0ZdK9b6kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755780071; c=relaxed/simple;
-	bh=9jpgKSSMok4duRe0b+RWtWp7OmcmSdefUa27stJuCIs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=lVPs79bIetO7LpLTmznGxdbtPQ/uvAoNKdSUs4uyrJAT+9YdCrpbhOI0/dSaPI8n8vE1vp7QUAhr1oF2aFXwsHcUS382erWBiL/dUceA1ouHomYl6UxxBAsgE3IdfOadgeMFgoOnxutUjJTkoFjBUf1w0lPDVnCnwmPPRJ33dCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=QWXx8Tb2; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1755795053; c=relaxed/simple;
+	bh=MA5CoRznscTD/9JPv2I1fgD+UFpMWzRT7Bcr37nG6ws=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lQXUqU+8wbPVRbi0ZNgvdivnhrbbjAzCcBi2SOlBcHL5C+4uYV+8TEIELb+FwgHIQDNdjeiVCBeUKqNxpRk1UzFeYxnrT2n/GQyRsMPHzkadSlCPYbPEcO0mgdQvbmOBSkpTR4PtlAnV3pQ7Z8+zDEglizAEMKsJLj+Bh6Y86/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gfKLSEIr; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="QWXx8Tb2"
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250821124108epoutp0461f944b1c3271f3223023b6e1d323337~dyKt0LLKq1755517555epoutp04g
-	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 12:41:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250821124108epoutp0461f944b1c3271f3223023b6e1d323337~dyKt0LLKq1755517555epoutp04g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755780068;
-	bh=YSW64KWlEWguGEP5S6aHwmfVaZSZlb36SUEt3aN4gtI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QWXx8Tb211F14jUMSrcwT07DY7tg/o+idoGrQraXOqpAfx+TwGAeM9Y8kBjDv+4Ox
-	 4YDHdVWNmCKBzze9otwaUXMP8wH8BEAlYTNhm4ENoecs6qsA0141K6a97exhYIgwd+
-	 uZFv1gmF08usf6AqhXs0eeQlC3tr4Wt7o80yXL7M=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250821124107epcas5p3d0165e6d8c4fefbe9990d4ed54b437af~dyKtBAz0d1592915929epcas5p37;
-	Thu, 21 Aug 2025 12:41:07 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.95]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4c72xG4gNtz3hhT3; Thu, 21 Aug
-	2025 12:41:06 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250821124105epcas5p402a0f6ec6a893d0e5e305547976e4c80~dyKrZpFEa1534115341epcas5p41;
-	Thu, 21 Aug 2025 12:41:05 +0000 (GMT)
-Received: from cheetah.samsungds.net (unknown [107.109.115.53]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250821124100epsmtip24bf607fee6cda2466f7f16b0c3a40894~dyKmvfG7k2624826248epsmtip2b;
-	Thu, 21 Aug 2025 12:41:00 +0000 (GMT)
-From: Ravi Patel <ravi.patel@samsung.com>
-To: jesper.nilsson@axis.com, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, krzk@kernel.org,
-	s.nawrocki@samsung.com, cw00.choi@samsung.com, alim.akhtar@samsung.com,
-	linus.walleij@linaro.org, tomasz.figa@gmail.com, catalin.marinas@arm.com,
-	will@kernel.org, arnd@arndb.de
-Cc: ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com,
-	gwk1013@coasia.com, hgkim05@coasia.com, mingyoungbo@coasia.com,
-	smn1196@coasia.com, pankaj.dubey@samsung.com, shradha.t@samsung.com,
-	ravi.patel@samsung.com, inbaraj.e@samsung.com, swathi.ks@samsung.com,
-	hrishikesh.d@samsung.com, dj76.yang@samsung.com, hypmean.kim@samsung.com,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@axis.com,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org, soc@lists.linux.dev
-Subject: [PATCH v2 10/10] arm64: defconfig: Enable Axis ARTPEC SoC
-Date: Thu, 21 Aug 2025 18:02:54 +0530
-Message-ID: <20250821123310.94089-11-ravi.patel@samsung.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250821123310.94089-1-ravi.patel@samsung.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gfKLSEIr"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-55ce510f4f6so1274888e87.1
+        for <soc@lists.linux.dev>; Thu, 21 Aug 2025 09:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755795049; x=1756399849; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MA5CoRznscTD/9JPv2I1fgD+UFpMWzRT7Bcr37nG6ws=;
+        b=gfKLSEIrSzkO5z8PRUh+uOqo+nDCXKGNtPaZuc8oTFQJ7ZBTXBFi+x2ah6cNntMLbb
+         VO5yW8txjK9qYG4c5aWziG4VjVy7qe8HViRLVN/T0/t0Xgt1Zuf9+bczJ0pVkyEUaydj
+         hrWN1ahx4JTM2qHFpjP+0ifCIDHriPxHk0WjNOiJLaPUbjfvnKjprJTA5SAgZHJeHfMQ
+         gysLlCD+NEr2u082Uw/2fHBIPCzIQ5gGTNR3bxoN94OTzswCU9Fe8v2pAxG+6iZivEzq
+         kmAmF4x6Mwo69ng2Nl2mjctECWCQ2McA1diI9ZCZF5da5J1U+XiwtUOknQL81bW8Sdb7
+         kJVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755795049; x=1756399849;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MA5CoRznscTD/9JPv2I1fgD+UFpMWzRT7Bcr37nG6ws=;
+        b=TszKWd+3oia5FCS4TjS7PBQ5ISlMphGSTlBGD/VrwUHFgsQNP4rLx5wIf68cFbPkmK
+         urexwGMFyFp0MV+p3rKbvHLK+aLJ89dCKPRr8CrP6hhE/2uPmdec/NpJkXESAXpkLKGn
+         RejmWw9zGfyuYJqVr6O73ztTkWVQQ3ruir96zrUKvz+BgSSfftR9grabC00mwdeC25/I
+         iZtWHW6x+qLf7+Qsx1wdlGXlt/8ng5wi7d3dPY0VOCTeR8BiWoaUcnYBsZZCCCcNPBfg
+         wj668g47t1JL0hd3xU52GE2YIALCax6Up3kk4VTTiKx9rQT0IrHRDuik+GQAD50v+Y82
+         tAvg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxXqo7DZESKccG30ARbc2R7kbjQ/HyFFHk+h9Vvz4z62baVKyDJUffQaaSe6KGSZJUpq0=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxZXoku5kFOVDBchxKQWIonkitWH2RM8eZ33eWFjgoinCh9x1vf
+	4CzISwnYus6FXNAP31etML2B5cBTVGl7waYRce+2TzUGkf0IrXmBUtE4xnRyWTjV77g5SGIFcd8
+	kcGpLrWGphlppUYD9VpGNnydlYeljxo0vl4usEV/2rw==
+X-Gm-Gg: ASbGncsT/H8EcBuivD7Iv0l5bb2MrKOROCPGzJ9H6A/IFOqXvR+oTQvRnUrZB5PjqYB
+	beH/WUuJuLucD80pHPHcLtRMV22lTbraXwQZJGGdcvnehvVvGxpjuiEIfO8M5OCUZZqQ+LoAxvI
+	tOjr8wCwbusguRfmyWMfx7ZwGzrYG6JCTrlYqgAEJ2zcnhjzPoWhXwCxv5xrYoiCqjQfIPFb95r
+	9bkU4AW3uEXD2blow==
+X-Google-Smtp-Source: AGHT+IHXxJmnZpxwlzV39CihpI1fip8jHsQ3wqrQIPStR8+WqibfCJ2j76EEt47pzZKFul7hhblBfkLJ4pGoe6B1jMM=
+X-Received: by 2002:a05:651c:23c8:20b0:32a:78f7:9bef with SMTP id
+ 38308e7fff4ca-33549e3ad61mr6524161fa.8.1755795049223; Thu, 21 Aug 2025
+ 09:50:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250821124105epcas5p402a0f6ec6a893d0e5e305547976e4c80
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-541,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250821124105epcas5p402a0f6ec6a893d0e5e305547976e4c80
-References: <20250710002047.1573841-1-ksk4725@coasia.com>
-	<20250821123310.94089-1-ravi.patel@samsung.com>
-	<CGME20250821124105epcas5p402a0f6ec6a893d0e5e305547976e4c80@epcas5p4.samsung.com>
+References: <20250710002047.1573841-1-ksk4725@coasia.com> <CGME20250821124039epcas5p34b77813c9936b8b70c801e0e1b67891a@epcas5p3.samsung.com>
+ <20250821123310.94089-1-ravi.patel@samsung.com> <20250821123310.94089-6-ravi.patel@samsung.com>
+In-Reply-To: <20250821123310.94089-6-ravi.patel@samsung.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 21 Aug 2025 18:50:38 +0200
+X-Gm-Features: Ac12FXwqIo6zLlw0fIpSEAb-CCiAQ7nCYe-8wPk85-SMsx3heqK_K_zSrsS4110
+Message-ID: <CACRpkdbdpcPBC8mwazoXHy+HE+hH-XWDkfHV4Uz38YhZU7UH7w@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] pinctrl: samsung: Add ARTPEC-8 SoC specific configuration
+To: Ravi Patel <ravi.patel@samsung.com>
+Cc: jesper.nilsson@axis.com, mturquette@baylibre.com, sboyd@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, krzk@kernel.org, 
+	s.nawrocki@samsung.com, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tomasz.figa@gmail.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com, 
+	gwk1013@coasia.com, hgkim05@coasia.com, mingyoungbo@coasia.com, 
+	smn1196@coasia.com, pankaj.dubey@samsung.com, shradha.t@samsung.com, 
+	inbaraj.e@samsung.com, swathi.ks@samsung.com, hrishikesh.d@samsung.com, 
+	dj76.yang@samsung.com, hypmean.kim@samsung.com, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@axis.com, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, soc@lists.linux.dev, 
+	Priyadarsini G <priya.ganesh@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: SungMin Park <smn1196@coasia.com>
+On Thu, Aug 21, 2025 at 2:40=E2=80=AFPM Ravi Patel <ravi.patel@samsung.com>=
+ wrote:
 
-Enable the Axis ARTPEC-8 SoC in arm64 defconfig.
+> From: SeonGu Kang <ksk4725@coasia.com>
+>
+> Add Axis ARTPEC-8 SoC specific configuration data to enable pinctrl.
+>
+> Signed-off-by: SeonGu Kang <ksk4725@coasia.com>
+> Signed-off-by: Priyadarsini G <priya.ganesh@samsung.com>
+> Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
 
-Signed-off-by: SungMin Park <smn1196@coasia.com>
-Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Looks good to me.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5bb8f09422a2..f94c1357d6f5 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -38,6 +38,7 @@ CONFIG_ARCH_AIROHA=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_ALPINE=y
- CONFIG_ARCH_APPLE=y
-+CONFIG_ARCH_ARTPEC=y
- CONFIG_ARCH_BCM=y
- CONFIG_ARCH_BCM2835=y
- CONFIG_ARCH_BCM_IPROC=y
--- 
-2.49.0
+I expect that Krzysztof will queue this and send
+to me with a pull request once he's happy with it.
 
+Yours,
+Linus Walleij
