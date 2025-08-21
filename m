@@ -1,16 +1,16 @@
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AC82E9ECA
-	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 08:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4672E9ECE
+	for <soc@lists.linux.dev>; Thu, 21 Aug 2025 08:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755763340; cv=none; b=Ra5uzeWfsFZZZ+ZNMr2NIr5APZP7ERSz/+Cja0PvW8Oxbk/L6DaPj3/r7anBXVTRrbyVP8oLGT+QshzXiZylJlyOuBg/Pxunx0tJSV0bVG0x69m2LhHnhQAQ7260E/fP1SYDciQAyBh/CxaCPRKCXRKJsnOmm0wpZaal7wY7B8M=
+	t=1755763342; cv=none; b=UKNDzmjtIKtARUG1vmeM2J0zZWcmGekGLP1jB/q7kBEeObSXbUhAc3Ch3TWuxZ1QjN2LU1/G1O+VXS7D+KrGRWBQs+YHb1Huyr0ioBhmNlyrKjy4KG63Z47zWkwO+fVemaqpbxL9bkwOzT0OnaDoYoEZcT1feJqIjwXCM9NbF7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755763340; c=relaxed/simple;
-	bh=/mkYOGjEhJNL1kZ3i9RqYk9WHfeEYu7oyXYZCYnaFx8=;
+	s=arc-20240116; t=1755763342; c=relaxed/simple;
+	bh=Iq4mmOtGSSjEKpXNS0iuIDEK646QBYukk1bKWByyf8I=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m/79Bi2dhzCB7p66Z9F8gDA9Eusb3Ed/2+bspG2VK5/DyWv49bK0bzaOFQFTnWv7kyhjslEzaauc7lYhzSEeFjM5pfyEZmDiaeGNLydqvKjZavnFgukKPJBlk7fyIEOTJqvuY5ZcpWRCRTy0ek8dBa6W4DrN7684sfTNN6GNmk8=
+	 MIME-Version:Content-Type; b=AY/Q4ZsKxcqYT4yPV37NnfniPkr9nRmXFaGkHP/TbsI7C0feZZ69LFwbPj9OhlteZYfKZamlcRhTn+cV4CWDeiMqzSad5yVXxJEsGO9Ag3A7ZCQV5HK8amm7Kv3nV3+Mi9Gj+6PgPq6Jv/AgflzxHAQK0cDMMr7iqsVeBEbl0MY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -38,9 +38,9 @@ To: ryan_chen <ryan_chen@aspeedtech.com>, Rob Herring <robh@kernel.org>,
 	<romlem@google.com>, William Kennington <wak@google.com>, Yuxiao Zhang
 	<yuxiaozhang@google.com>, <wthai@nvidia.com>, <leohu@nvidia.com>,
 	<dkodihalli@nvidia.com>, <spuranik@nvidia.com>
-Subject: [PATCH v4 1/5] dt-bindings: arm: aspeed: Add AST2700 board compatible
-Date: Thu, 21 Aug 2025 16:02:10 +0800
-Message-ID: <20250821080214.513090-2-ryan_chen@aspeedtech.com>
+Subject: [PATCH v4 2/5] arm64: Kconfig: Add Aspeed SoC family (ast27XX) Kconfig support
+Date: Thu, 21 Aug 2025 16:02:11 +0800
+Message-ID: <20250821080214.513090-3-ryan_chen@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250821080214.513090-1-ryan_chen@aspeedtech.com>
 References: <20250821080214.513090-1-ryan_chen@aspeedtech.com>
@@ -53,31 +53,30 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add device tree compatible string for AST2700 based boards
-("aspeed,ast2700-evb" and "aspeed,ast2700") to the Aspeed SoC
-board bindings. This allows proper schema validation and
-enables support for AST2700 platforms.
+Support for Aspeed ast27XX 7th generation Aspeed BMCs.
 
 Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 ---
- Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/Kconfig.platforms | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-index 01333ac111fb..660529c81af9 100644
---- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-+++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-@@ -102,5 +102,10 @@ properties:
-               - quanta,s6q-bmc
-               - ufispace,ncplite-bmc
-           - const: aspeed,ast2600
-+      - description: AST2700 based boards
-+        items:
-+          - enum:
-+              - aspeed,ast2700-evb
-+          - const: aspeed,ast2700
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index a541bb029aa4..f426be639c4b 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -40,6 +40,12 @@ config ARCH_APPLE
+ 	  This enables support for Apple's in-house ARM SoC family, such
+ 	  as the Apple M1.
  
- additionalProperties: true
++config ARCH_ASPEED
++	bool "Aspeed SoC family"
++	help
++	  Say yes if you intend to run on an Aspeed ast27XX 7th generation
++          Aspeed BMCs.
++
+ menuconfig ARCH_BCM
+ 	bool "Broadcom SoC Support"
+ 
 -- 
 2.34.1
 
