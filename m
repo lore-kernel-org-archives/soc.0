@@ -1,205 +1,93 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655542D7DDC
-	for <soc@lists.linux.dev>; Fri, 22 Aug 2025 13:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C50E15E90;
+	Fri, 22 Aug 2025 19:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755868158; cv=none; b=oZ4n6AlgZAWgnxnt2rLuGMFeQL+dww0HxiiAVYqFjdf8FZLm4t5lJ12J3ospZbKgvzDaRSENnGtE4cLIFU8yKL141oFyyf4zKHjImgquIDojnwN4soqporP9c8EURB8l3bMbCSfXDxppoCg272dIWsMDVJZLY+PfdzRqxUZvHkY=
+	t=1755891592; cv=none; b=SSd759AGR0M8rI7PI9FnkG9z2HZoe6PZnRj4VF6Zcg0KVDKUr66TzvhsPnsNTy05g7LXNQ3hfoTq3UfVgWwd4L+Wy6GA3aQ5mX+caK2X511HpVHE3FfYs6gUdJ+Zb8T5JG7PrJ43KXb+JDgnjiqR+3Wd/EusO9txhVIAZeuSJDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755868158; c=relaxed/simple;
-	bh=O0asdK8SeOVtorPLNtX9IHFVw5PwpWz+Y/IXMS4KmCU=;
+	s=arc-20240116; t=1755891592; c=relaxed/simple;
+	bh=dg74KSkRhAtNHcxY1z8fkqMzfxeeOVWbECFvFRXHLSM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=anZcDfUf6eiUJI7JLCLYFHbXi/WGZOou3ZFWrMenYFP3wzN90Roc9m/PaaXRkpFHQt/obvoU8kf7LEl7seOxmFilGL9iIMXKQhyXikpyB6DIGsCcdhw8/hrt8fS6S31o6mVXL2lfh+EO6RwX0+1SVzlNbuoMnSp37Aj1Fdz6Kp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UrmG3rbF; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=SJQVpmHC2W710oGsR7yVTFCp51NAk1pgw8SP876HBqye+maz6Hp/g/kOe6fM7D8m6Potc5y4DEong+oxYHWucVabd20LbVzxcxFlH6XfXivHaIjFmt7XqfMpQdLLNqNCP5szDG9YBdbY2SL94htjVTtgvgWXiKXlwah5iDiQO6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rXpJdOxL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UrmG3rbF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755868155;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a26YwWriI/cAZNSFk7MZK1EJDFmLtTh5uMUvUQRBu1c=;
-	b=UrmG3rbF+cZwUatOZFwNx15Y2LAg9wnjz8Qgz5w9HwYJ/HdtfyZ1HqDNMn4JEoHE3RTguY
-	q2oHD4TodulO7+2EhTaE8/OlCHmxXbmckJOe4TieMK2/+OuyAA6lbjq0H15wQo1blrlHyp
-	v2cX4pnILIDakXS3pf5yFLcAiy8/7Os=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-YDNZYuBKO9qOb44aH7cexw-1; Fri, 22 Aug 2025 09:09:14 -0400
-X-MC-Unique: YDNZYuBKO9qOb44aH7cexw-1
-X-Mimecast-MFC-AGG-ID: YDNZYuBKO9qOb44aH7cexw_1755868153
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7e87068f8afso530492385a.3
-        for <soc@lists.linux.dev>; Fri, 22 Aug 2025 06:09:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755868153; x=1756472953;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a26YwWriI/cAZNSFk7MZK1EJDFmLtTh5uMUvUQRBu1c=;
-        b=UaC7GvIa6KIOKiqcK7Y7v9h9Due3h+cvW7a3MF6JL/QeqXDUVq9k0DdGQjNxxHvT8X
-         AqNfm67KwMWdKJ78H9w5yH3hUiKJhrBu6xRNjQGyDKHf+vIrbhTtwsRoMZe1OwFUw5jD
-         c6Tn2YkWtmwhxXsiNmd4C5sqZD6vX83Pove80RYuGvG+RRjKGWDbE05YQHXfFRLl25AP
-         8lIp5vQRORSqctBWVToYb34Z6jKdq5KiPTd/GqFmqK6gg6cCXq6iUu6v4MlErJ7sH7/u
-         HgUSVBxy5sGNCcmY1V98/6/Q74gY3a042lYr0FB2xC9O/XAaUERnA8ByrkjctQNE3+jW
-         HI3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUA3z1mn3+yAoH0dlVNwx2bXbiniyTwBCbo2jTi5lYMYSuKxisHUrWRMc8t4E8naIIK+uU=@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywtf1C4AFncpudYfOTBU2Bkxt+hYXSVC0FdzJ9E+o3dCJ0/ciq1
-	R75qbtnCCudYYb6ouVxr9cfNj6TOkxmJJKHy48+G9MRe+P6+eRcDYcjevKWCsdXn5Ib+iAG6GBx
-	lI4vZxAY/n1yJUbpIH0yCSh01YL5cIftYDGadvbQdpgwkrLJ1VaHA6w==
-X-Gm-Gg: ASbGncvM1eKhKU0LXU2lyEc5U+UQK/rmWJG0GVsr8wcJ/ADSqdGt8Esnsd26i61Q+Ni
-	Bg0JcqvRnmBd3LWph8DPkMay5KP/07wy3ICuVVRGZwMsZrlHmit+bCcKEVa7cEWsyxgaLUbEd1K
-	XvdUVOtRphYoTOtVC8MyE4WkSkohdC3TS2raWfu9WpZSJVE8Pvb4704MNJsJJ2UUzWQyA+43ykx
-	Mo/KkaMNhsebN4x+F4Uiafm1VcM6IYyAW8Iglact/GCd1aAk22GxWiJFasOz1bwfuVo7BwLNsgo
-	P+x0TPpoTDegYALZ9e2M2yHcYt6SxB8ChoJyEnoB1onrglBZeEsHv9r0WbJI50YYltDIYUL30gH
-	5o9UMCoDxIXdVvMk8iqs=
-X-Received: by 2002:a05:620a:6cc2:b0:7e3:6a01:e6ba with SMTP id af79cd13be357-7ea10f538ddmr299219385a.8.1755868152172;
-        Fri, 22 Aug 2025 06:09:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEW1uvjDvOlgb0eZoGZSzJHV+ZTat1aB9dEJTqNDB/h4VuJNJ3Q109+V4G1CkIe7Ilb4zQPqA==
-X-Received: by 2002:a05:620a:6cc2:b0:7e3:6a01:e6ba with SMTP id af79cd13be357-7ea10f538ddmr299210885a.8.1755868151398;
-        Fri, 22 Aug 2025 06:09:11 -0700 (PDT)
-Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e1c9b9dsm1332247685a.70.2025.08.22.06.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Aug 2025 06:09:10 -0700 (PDT)
-Date: Fri, 22 Aug 2025 09:09:04 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Yixun Lan <dlan@gentoo.org>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Alex Helms <alexander.helms.jy@renesas.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
-	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
-	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
- round_rate() to determine_rate()
-Message-ID: <aKhr8NYhei59At0s@x1>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <1907e1c7-2b15-4729-8497-a7e6f0526366@kernel.org>
- <aKhVVJPEPxCoKKjI@x1>
- <4d31df9e-62c9-4988-9301-2911ff7de229@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rXpJdOxL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5934C4CEED;
+	Fri, 22 Aug 2025 19:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755891592;
+	bh=dg74KSkRhAtNHcxY1z8fkqMzfxeeOVWbECFvFRXHLSM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rXpJdOxLNycUvIsw2gMPg9zMyrLykVSU8bb4RU5BVW/xSq/Vls3DtK2GulvNfNh9p
+	 /rpm9efCsTWFz55az9lBRAVaMmZiGzjSsotLl8YIGj4dj0OL1EqiXNjVaBvR/chQHn
+	 FJwOBlmJrRSZv1V9sGHuFLwlhgpHSqv3rIKsjVAOvH/4dU0x0AWtCEAxY9LzMV8N8T
+	 lOEPz2/kOoJUySu0oi7CU5zLpNuTGEadrKYU279/tloaEh9YOUYVRhJmsPl6CKPWmx
+	 SC8vBb2xd29j9VoS+ye0Hqo7k0xubgxT4jOs15OBMDOUSw0agE3Ivnzt8NlGqhTNQu
+	 uk8aLClwGeRfg==
+Date: Fri, 22 Aug 2025 14:39:51 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Ravi Patel <ravi.patel@samsung.com>
+Cc: swathi.ks@samsung.com, linux-arm-kernel@axis.com, krzk@kernel.org,
+	conor+dt@kernel.org, linux-gpio@vger.kernel.org,
+	hypmean.kim@samsung.com, linux-kernel@vger.kernel.org,
+	krzk+dt@kernel.org, hrishikesh.d@samsung.com, pjsin865@coasia.com,
+	pankaj.dubey@samsung.com, linux-samsung-soc@vger.kernel.org,
+	kenkim@coasia.com, linus.walleij@linaro.org, soc@lists.linux.dev,
+	dj76.yang@samsung.com, linux-arm-kernel@lists.infradead.org,
+	cw00.choi@samsung.com, smn1196@coasia.com, jesper.nilsson@axis.com,
+	shradha.t@samsung.com, catalin.marinas@arm.com, arnd@arndb.de,
+	mingyoungbo@coasia.com, gwk1013@coasia.com, tomasz.figa@gmail.com,
+	s.nawrocki@samsung.com, will@kernel.org, linux-clk@vger.kernel.org,
+	mturquette@baylibre.com, hgkim05@coasia.com, ksk4725@coasia.com,
+	devicetree@vger.kernel.org, inbaraj.e@samsung.com, sboyd@kernel.org,
+	alim.akhtar@samsung.com
+Subject: Re: [PATCH v2 01/10] dt-bindings: clock: Add ARTPEC-8 clock
+ controller
+Message-ID: <175589159077.191700.15798343255656756009.robh@kernel.org>
+References: <20250710002047.1573841-1-ksk4725@coasia.com>
+ <20250821123310.94089-1-ravi.patel@samsung.com>
+ <CGME20250821124019epcas5p42ac6e6abe1d3c8c9d69331596e51ad48@epcas5p4.samsung.com>
+ <20250821123310.94089-2-ravi.patel@samsung.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <4d31df9e-62c9-4988-9301-2911ff7de229@kernel.org>
-User-Agent: Mutt/2.2.14 (2025-02-20)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 9uyh74iWuVltBQv0y4dCRssxbxfUd69UlI6_XwwzBj4_1755868153
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250821123310.94089-2-ravi.patel@samsung.com>
 
-On Fri, Aug 22, 2025 at 02:23:50PM +0200, Krzysztof Kozlowski wrote:
-> On 22/08/2025 13:32, Brian Masney wrote:
-> > 7 of the 114 patches in this series needs a v2 with a minor fix. I see
-> > several paths forward to merging this. It's ultimately up to Stephen how
-> > he wants to proceed.
-> > 
-> > - I send Stephen a PULL request with all of these patches with the minor
-> >   cleanups to the 7 patches. Depending on the timing, Stephen can merge
-> >   the other work first, and I deal with cleaning up the merge conflicts.
-> >   Or he can if he prefers to instead.
-> > 
-> > - Stephen applies everyone else's work first to his tree, and then the
-> >   good 107 patches in this series. He skips anything that doesn't apply
-> >   due to other people's work and I follow up with a smaller series.
+
+On Thu, 21 Aug 2025 18:02:45 +0530, Ravi Patel wrote:
+> From: Hakyeong Kim <hgkim05@coasia.com>
 > 
-> Both cause cross tree merge conflicts. Anyway, please document clearly
-> the dependencies between patches.
+> Add dt-schema for Axis ARTPEC-8 SoC clock controller.
+> 
+> The Clock Management Unit (CMU) has a top-level block CMU_CMU
+> which generates clocks for other blocks.
+> 
+> Add device-tree binding definitions for following CMU blocks:
+> - CMU_CMU
+> - CMU_BUS
+> - CMU_CORE
+> - CMU_CPUCL
+> - CMU_FSYS
+> - CMU_IMEM
+> - CMU_PERI
+> 
+> Signed-off-by: Hakyeong Kim <hgkim05@coasia.com>
+> Signed-off-by: SeonGu Kang <ksk4725@coasia.com>
+> Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
+> ---
+>  .../bindings/clock/axis,artpec8-clock.yaml    | 213 ++++++++++++++++++
+>  include/dt-bindings/clock/axis,artpec8-clk.h  | 169 ++++++++++++++
+>  2 files changed, 382 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/axis,artpec8-clock.yaml
+>  create mode 100644 include/dt-bindings/clock/axis,artpec8-clk.h
+> 
 
-This series only touches drivers/clk, so it shouldn't cause any issues
-with other subsystems, unless there's a topic branch somewhere, or I'm
-missing something?
-
-There are some drivers under drivers/clk/ where there is an entry in the
-MAINTAINERS file that's not Stephen, although it wasn't clear to me if
-all of those people will send PULL requests to Stephen. I described on
-the cover how how the series was broken up.
-
-  - Patches 4-70 are for drivers where there is no clk submaintainer
-  - Patches 71-110 are for drivers where this is an entry in MAINTAINERS
-    (for drivers/clk)
-
-For the clk subdirectories that had say more than 3 patches, I sent
-those off as separate patch series. The ones in this series have an
-entry in MAINTAINERS only have a few patches for each maintainer.
-
-As for patch dependencies, patches 111 (clk/divider) and
-114 (clk/fixed-factor) should go in last. It doesn't matter the order
-everything else goes in.
-
-Brian
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
