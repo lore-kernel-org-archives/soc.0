@@ -1,40 +1,40 @@
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FF58834
-	for <soc@lists.linux.dev>; Mon, 25 Aug 2025 01:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE86422A4DB
+	for <soc@lists.linux.dev>; Mon, 25 Aug 2025 01:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756085099; cv=none; b=t+qb8abXXhy2c8pPWOqoWdRJc+Hm5gDpXJDpdWFA/18jgdgBi6Bhgtu84fiG6pTid/DiQogFKx+LeUjgHdTOmyt55nlWHtB+RAlHfZT6vEpSr/FSwyBJc8s2qFQqpG9vOjNXPBG2WOpleFFkMw65nIhwDn5cEAIgoRYvqY1A670=
+	t=1756085783; cv=none; b=WCNmeOixQ1QHuyN0HN3kw25Cj4uArrFcd41QlWoGzOg4Dj9wofUioPYZQumNtAD6ckQUQzNL9VwnfuHyJgUHGEigx32AZGOJ6tiQ+XyF8eAkET6LKmEPgecf7Rzf1A+WCxJyVGx2qaGp/xDG4WjTx3h1T56s646tQfOPYEPU2P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756085099; c=relaxed/simple;
-	bh=3Ffe4JhicSR+c460QtABlIMWYofFkx0O34b53xiizTU=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=blz6BwENwTfH48mUIrNG/vtqEFKLB+7K1b1MM6slQLpex1RSFQCp64FpH4G2HfJWjujYhnLVEH9GtJ08YbQrLFMTOff7836D3GsGblJuTkHQ3uVk7sShECcxdgLzXOfe4FksYHXQ/tsxzUDLIxzwKnA8nIxJjH6TZmz89OMleC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=Pc9r9rdw; arc=none smtp.client-ip=203.29.241.158
+	s=arc-20240116; t=1756085783; c=relaxed/simple;
+	bh=GhygJecCQvm3mzcdYSI9+jCmwk7K/3IYFL9Y1pDOE64=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=u5SM3yjTkUg1agU5i2LK9PCvSnHXot+IhdPmxkUTxxWULIKOmX2f4pFygLHlfR9fLcCMB6i4JQzzLPKrk/3Ok17HzfjTobQIcAn9qp2IEJSb4X63R0W+CIfrD7e1UpoeYP2OSXSpMq/R8Y0aTB7/CUyLwC+9+J14q7q05O/3/0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=hYDQYF7I; arc=none smtp.client-ip=203.29.241.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="Pc9r9rdw"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="hYDQYF7I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1756085087;
-	bh=9eI//ifONMcYx8OuZ4RyDvs/wIE713deTiuA/p5E0LQ=;
+	d=codeconstruct.com.au; s=2022a; t=1756085780;
+	bh=4788WmMOb8QcQZCKza1zlDpD6qQhfOULV+R7eq25UYE=;
 	h=Subject:From:To:Cc:Date;
-	b=Pc9r9rdwKIaqaqFzHA42xd2Qij0DYpICdtD6inYMnMEaNit74E9HeNCQSjMXPJfuw
-	 BXaPrlnESDziCtFHqGheuy67ZBJ09aJE44B4x6OcsQxbR8GLAuTn4HLAxfzVDapRwn
-	 uwMR3ac0XAQBt8vgVXVaY1k5uLYYgrM/P0yeSOZNFoG2Agl0iv7iGK+9lG3fXWGwe1
-	 8HPmxKn7y90ohEJmUF6d6UCE815cSOs8Tt3umXNPMUNToPZZr4LzLJcQVP23+QLWZ8
-	 bXPQvlvPbzQnimiYxIIYisQwU3KvWt99aE/fSVg+okhGF+V4EVR7keS5+01VdvvKEL
-	 mGM4DjglucP8w==
+	b=hYDQYF7ICrPQbbVsQ9aGIrolwpB1J3Xl7bPdu3NyuDciq9+EM38ftWyhio1x04cJR
+	 l10v8DPXE3dwOsJVLgYzpCaS/0QhKlpj1ZkX8ydz/89wJ5mLmWEExbZudHAf/mjZE5
+	 yxPCl7gn7ruTzxoRtVfORyVa4ete4LN6Amw3kuEnS0QTFz38c6JHcYa6xdismMexyc
+	 3wn22phg3f22RIhMQSVQW87dmNmu8V3FbOdMe+TEsc/AhHtbBDS6hIFOk3LJXDe3PF
+	 zuYm9BPlJBE3w7gYVxjrJTwnAiTJD/muy1kJbz9OVfznWS9iK91Mq786Ke9RlORuur
+	 u8oGISEBNos1Q==
 Received: from [192.168.68.112] (unknown [180.150.112.213])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 7653064C1A;
-	Mon, 25 Aug 2025 09:24:45 +0800 (AWST)
-Message-ID: <cb634cffaf0db9d25fb3062f0eee41e03955321f.camel@codeconstruct.com.au>
-Subject: [GIT PULL] aspeed: early devicetree changes for 6.18
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 9E95964C1A;
+	Mon, 25 Aug 2025 09:36:19 +0800 (AWST)
+Message-ID: <2d122b5c4a19261148993b66e4b98371a684ba74.camel@codeconstruct.com.au>
+Subject: [GIT PULL] aspeed: early driver changes for 6.18
 From: Andrew Jeffery <andrew@codeconstruct.com.au>
 To: soc <soc@lists.linux.dev>
 Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
 	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Date: Mon, 25 Aug 2025 10:54:44 +0930
+Date: Mon, 25 Aug 2025 11:06:19 +0930
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4-2 
@@ -55,134 +55,29 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585=
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed=
--6.18-devicetree-0
+-6.18-drivers-0
 
-for you to fetch changes up to b785b5d88cc27a521ea22b3afd85804c4c321d4a:
+for you to fetch changes up to c30dcfd4b5a0f0e3fe7138bf287f6de6b1b00278:
 
-  ARM: dts: aspeed: x570d4u: convert NVMEM content to layout syntax (2025-0=
-8-11 09:37:48 +0930)
-
-----------------------------------------------------------------
-Early ASPEED devicetree updates for 6.18
-
-Notable changes:
-
-- Meta's Wedge400 and Fuji boards have had parallel devicetrees added for a
-  transition to a new static flash layout. The original layout is deprecate=
-d and
-  I anticipate removing related devicetrees in future releases.
-
-New platforms:
-
-- Darwin (Meta)
-
-  Darwin is Meta's rack switch platform with an AST2600 BMC integrated for
-  health monitoring purpose.
-
-Updates and fixes:
-
-- GB200NVL (Nvidia): Networking, I2C, regulators, GPIOs
-- Wedge400, Fuji (Meta): Fix warnings from devicetree bindings
-- Use fixed-layout for NVMEM on Asrock platforms
-- Various: minor fixes for warnings from FSI devicetree bindings
+  soc: aspeed: socinfo: Add AST27xx silicon IDs (2025-08-11 09:37:53 +0930)
 
 ----------------------------------------------------------------
-Rob Herring (Arm) (3):
-      ARM: dts: aspeed: Drop "no-gpio-delays"
-      ARM: dts: aspeed: Drop "fsi-master" compatibles
-      ARM: dts: aspeed: Add missing "ibm,spi-fsi" compatibles
+Early ASPEED driver updates for 6.18
 
-Tan Siewert (4):
-      ARM: dts: aspeed: e3c246d4i: convert NVMEM content to layout syntax
-      ARM: dts: aspeed: e3c256d4i: convert NVMEM content to layout syntax
-      ARM: dts: aspeed: romed8hm3: convert NVMEM content to layout syntax
-      ARM: dts: aspeed: x570d4u: convert NVMEM content to layout syntax
+Two small changes, the most interesting being the addition of the silicon I=
+Ds
+for ASPEED's AST2700 SoC family.
 
-Tao Ren (13):
-      ARM: dts: aspeed: wedge400: Fix DTB warnings
-      ARM: dts: aspeed: fuji: Fix DTB warnings
-      ARM: dts: aspeed: Fix DTB warnings in ast2600-facebook-netbmc-common.=
-dtsi
-      ARM: dts: aspeed: Move eMMC out of ast2600-facebook-netbmc-common.dts=
-i
-      ARM: dts: aspeed: Add facebook-bmc-flash-layout-128-data64.dtsi
-      dt-bindings: arm: aspeed: add Facebook Wedge400-data64 board
-      ARM: dts: aspeed: Add Facebook Wedge400-data64 (AST2500) BMC
-      ARM: dts: aspeed: wedge400: Include wedge400-data64.dts
-      dt-bindings: arm: aspeed: add Facebook Fuji-data64 board
-      ARM: dts: aspeed: Add Facebook Fuji-data64 (AST2600) Board
-      ARM: dts: aspeed: facebook-fuji: Include facebook-fuji-data64.dts
-      dt-bindings: arm: aspeed: add Facebook Darwin board
-      ARM: dts: aspeed: Add Facebook Darwin (AST2600) BMC
+----------------------------------------------------------------
+Rob Herring (Arm) (1):
+      soc: aspeed: Use of_reserved_mem_region_to_resource() for "memory-reg=
+ion"
 
-Willie Thai (4):
-      ARM: dts: aspeed: nvidia: gb200nvl: Add VCC Supply
-      ARM: dts: aspeed: nvidia: gb200nvl: Enable i2c3 bus
-      ARM: dts: aspeed: nvidia: gb200nvl: Repurpose the HMC gpio pin
-      ARM: dts: aspeed: nvidia: gb200nvl: Enable MAC0 for BMC network
+Ryan Chen (1):
+      soc: aspeed: socinfo: Add AST27xx silicon IDs
 
- Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml           |    3 =
-+
- arch/arm/boot/dts/aspeed/Makefile                                  |    3 =
-+
- arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-e3c246d4i.dts           |   12 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-e3c256d4i.dts           |   12 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-romed8hm3.dts           |   12 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts             |   18 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-darwin.dts            |   72 =
-+++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-elbert.dts            |   12 =
-+
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-fuji-data64.dts       | 1256 =
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-fuji.dts              | 1247 =
-+--------------------------------------------------------------------------=
--------
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400-data64.dts   |  375 =
-+++++++++++++++++++++++++
- arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts          |  366 =
-+-----------------------
- arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts                |   24 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-inspur-fp5280g2.dts            |    3 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-nvidia-gb200nvl-bmc.dts        |   54 =
-+++-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-lanyang.dts                |    2 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-mowgli.dts                 |    2 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-nicole.dts                 |    3 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-palmetto.dts               |    2 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-romulus.dts                |    3 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-witherspoon.dts            |    2 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-zaius.dts                  |    2 =
-+-
- arch/arm/boot/dts/aspeed/aspeed-g6.dtsi                            |    4 =
-+-
- arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi       |   22 =
-+-
- arch/arm/boot/dts/aspeed/facebook-bmc-flash-layout-128-data64.dtsi |   60 =
-++++
- arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi                     |   12 =
-+-
- arch/arm/boot/dts/aspeed/ibm-power10-quad.dtsi                     |   12 =
-+-
- 27 files changed, 1925 insertions(+), 1670 deletions(-)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-darwin.dts
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-fuji-data6=
-4.dts
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400-d=
-ata64.dts
- create mode 100644 arch/arm/boot/dts/aspeed/facebook-bmc-flash-layout-128-=
-data64.dtsi
+ drivers/soc/aspeed/aspeed-lpc-ctrl.c | 14 +++-----------
+ drivers/soc/aspeed/aspeed-p2a-ctrl.c | 14 +++-----------
+ drivers/soc/aspeed/aspeed-socinfo.c  |  4 ++++
+ 3 files changed, 10 insertions(+), 22 deletions(-)
 
