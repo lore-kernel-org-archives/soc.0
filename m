@@ -1,103 +1,188 @@
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0842C747F
-	for <soc@lists.linux.dev>; Sun, 24 Aug 2025 18:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FF58834
+	for <soc@lists.linux.dev>; Mon, 25 Aug 2025 01:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756060892; cv=none; b=kWeDqLmHY4H5QidVvY75K79exRHq+xiW4+jHgc2bYglpvw5D5pJ9Zoe1MFlBcVYfP02O98wcXJ8CEGTTGuAWMzJu0DB4kF3VRW+2tvc12JMXzhvi3zFt5HaemN0tvUeqKrENaEVYBsgvTXTjie+CsBuDTt2S9oL78ArLN9OyHGw=
+	t=1756085099; cv=none; b=t+qb8abXXhy2c8pPWOqoWdRJc+Hm5gDpXJDpdWFA/18jgdgBi6Bhgtu84fiG6pTid/DiQogFKx+LeUjgHdTOmyt55nlWHtB+RAlHfZT6vEpSr/FSwyBJc8s2qFQqpG9vOjNXPBG2WOpleFFkMw65nIhwDn5cEAIgoRYvqY1A670=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756060892; c=relaxed/simple;
-	bh=aldXpSXFZsf1b9WUi1tbuAPhB1ZbzKICQCaFkopUWH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AvRGmDZdfu91Qb3U4C7WxZaZKT+8eyvD/R7AZaegA2SxqGfNBFuEqj7lpkw1e2BGwwGP895GdQ/WjjabuVSdJ3wVWQ4eCSIHscRWFGiLad/DvAdAJd98vPsR4//NvYTuJQKgG/yrUgoAXylVGExvcpW6i0Nxjm5ecT2IyIYx2Xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=B4VU3iGT; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
+	s=arc-20240116; t=1756085099; c=relaxed/simple;
+	bh=3Ffe4JhicSR+c460QtABlIMWYofFkx0O34b53xiizTU=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=blz6BwENwTfH48mUIrNG/vtqEFKLB+7K1b1MM6slQLpex1RSFQCp64FpH4G2HfJWjujYhnLVEH9GtJ08YbQrLFMTOff7836D3GsGblJuTkHQ3uVk7sShECcxdgLzXOfe4FksYHXQ/tsxzUDLIxzwKnA8nIxJjH6TZmz89OMleC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=Pc9r9rdw; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="B4VU3iGT"
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 9666C1C008E; Sun, 24 Aug 2025 20:34:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1756060451;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Eq1PAeKV1s4YmLBR80pZHsmgpoZjucg9Fy7oCVrjUFc=;
-	b=B4VU3iGTH9nM/JqJF4J+vybBadFPzi6y5LR/UqbO4j3SefwKu6bw86OHvi0Hv4THWNA5LM
-	Xh+5LbdIoGBkbgLUoj3Xl6l9W81w1Bwq6uM52kYhR5p1QB43MKEksANjoZXZNa9yTeWCWl
-	ZoErlrdWU2y/VUduG+HDJh9sCQaBLPM=
-Date: Sun, 24 Aug 2025 20:34:03 +0200
-From: Pavel Machek <pavel@ucw.cz>
-To: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Update Nobuhiro Iwamatsu's email address
-Message-ID: <aKtbG1xk/8sbyHmW@duo.ucw.cz>
-References: <1755663767-1612-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba>
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="Pc9r9rdw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1756085087;
+	bh=9eI//ifONMcYx8OuZ4RyDvs/wIE713deTiuA/p5E0LQ=;
+	h=Subject:From:To:Cc:Date;
+	b=Pc9r9rdwKIaqaqFzHA42xd2Qij0DYpICdtD6inYMnMEaNit74E9HeNCQSjMXPJfuw
+	 BXaPrlnESDziCtFHqGheuy67ZBJ09aJE44B4x6OcsQxbR8GLAuTn4HLAxfzVDapRwn
+	 uwMR3ac0XAQBt8vgVXVaY1k5uLYYgrM/P0yeSOZNFoG2Agl0iv7iGK+9lG3fXWGwe1
+	 8HPmxKn7y90ohEJmUF6d6UCE815cSOs8Tt3umXNPMUNToPZZr4LzLJcQVP23+QLWZ8
+	 bXPQvlvPbzQnimiYxIIYisQwU3KvWt99aE/fSVg+okhGF+V4EVR7keS5+01VdvvKEL
+	 mGM4DjglucP8w==
+Received: from [192.168.68.112] (unknown [180.150.112.213])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 7653064C1A;
+	Mon, 25 Aug 2025 09:24:45 +0800 (AWST)
+Message-ID: <cb634cffaf0db9d25fb3062f0eee41e03955321f.camel@codeconstruct.com.au>
+Subject: [GIT PULL] aspeed: early devicetree changes for 6.18
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: soc <soc@lists.linux.dev>
+Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
+Date: Mon, 25 Aug 2025 10:54:44 +0930
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="moKA/m+8I1Jc/KOW"
-Content-Disposition: inline
-In-Reply-To: <1755663767-1612-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba>
 
+Hello SoC maintainers,
 
---moKA/m+8I1Jc/KOW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585=
+:
 
-Hi!
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-> The company's email address has been changed, so update my email
-> address in MAINTAINERS and .mailmap files.
->=20
-> Signed-off-by: Nobuhiro Iwamatsu
-> <nobuhiro.iwamatsu.x90@mail.toshiba>
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/aspeed=
+-6.18-devicetree-0
 
-> index 4bb3a7f253b9b..328b04f82dac7 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -585,6 +585,7 @@ Nikolay Aleksandrov <razor@blackwall.org> <nikolay@re=
-dhat.com>
->  Nikolay Aleksandrov <razor@blackwall.org> <nikolay@cumulusnetworks.com>
->  Nikolay Aleksandrov <razor@blackwall.org> <nikolay@nvidia.com>
->  Nikolay Aleksandrov <razor@blackwall.org> <nikolay@isovalent.com>
-> +Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba> <nobuhiro 1.iwama=
-tsu@toshiba.co.jp>
->  Odelu Kukatla <quic_okukatla@quicinc.com> <okukatla@codeaurora.org>
+for you to fetch changes up to b785b5d88cc27a521ea22b3afd85804c4c321d4a:
 
-There seems to be typo (extra space) in <nobuhiro 1.iwamatsu@toshiba.co.jp>.
+  ARM: dts: aspeed: x570d4u: convert NVMEM content to layout syntax (2025-0=
+8-11 09:37:48 +0930)
 
-Best regards,
-											Pavel
+----------------------------------------------------------------
+Early ASPEED devicetree updates for 6.18
 
->  ARM/TOSHIBA VISCONTI ARCHITECTURE
-> -M:	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> +M:	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visc=
-onti.git
+Notable changes:
 
---=20
-I don't work for Nazis and criminals, and neither should you.
-Boycott Putin, Trump, Netanyahu and Musk!
+- Meta's Wedge400 and Fuji boards have had parallel devicetrees added for a
+  transition to a new static flash layout. The original layout is deprecate=
+d and
+  I anticipate removing related devicetrees in future releases.
 
---moKA/m+8I1Jc/KOW
-Content-Type: application/pgp-signature; name="signature.asc"
+New platforms:
 
------BEGIN PGP SIGNATURE-----
+- Darwin (Meta)
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCaKtbGwAKCRAw5/Bqldv6
-8j3iAJwJWCnZC/1x6bmybPkhEm68FTqfXgCggl6QXqnEit2A6S8N/QTn8TOCtG0=
-=trmY
------END PGP SIGNATURE-----
+  Darwin is Meta's rack switch platform with an AST2600 BMC integrated for
+  health monitoring purpose.
 
---moKA/m+8I1Jc/KOW--
+Updates and fixes:
+
+- GB200NVL (Nvidia): Networking, I2C, regulators, GPIOs
+- Wedge400, Fuji (Meta): Fix warnings from devicetree bindings
+- Use fixed-layout for NVMEM on Asrock platforms
+- Various: minor fixes for warnings from FSI devicetree bindings
+
+----------------------------------------------------------------
+Rob Herring (Arm) (3):
+      ARM: dts: aspeed: Drop "no-gpio-delays"
+      ARM: dts: aspeed: Drop "fsi-master" compatibles
+      ARM: dts: aspeed: Add missing "ibm,spi-fsi" compatibles
+
+Tan Siewert (4):
+      ARM: dts: aspeed: e3c246d4i: convert NVMEM content to layout syntax
+      ARM: dts: aspeed: e3c256d4i: convert NVMEM content to layout syntax
+      ARM: dts: aspeed: romed8hm3: convert NVMEM content to layout syntax
+      ARM: dts: aspeed: x570d4u: convert NVMEM content to layout syntax
+
+Tao Ren (13):
+      ARM: dts: aspeed: wedge400: Fix DTB warnings
+      ARM: dts: aspeed: fuji: Fix DTB warnings
+      ARM: dts: aspeed: Fix DTB warnings in ast2600-facebook-netbmc-common.=
+dtsi
+      ARM: dts: aspeed: Move eMMC out of ast2600-facebook-netbmc-common.dts=
+i
+      ARM: dts: aspeed: Add facebook-bmc-flash-layout-128-data64.dtsi
+      dt-bindings: arm: aspeed: add Facebook Wedge400-data64 board
+      ARM: dts: aspeed: Add Facebook Wedge400-data64 (AST2500) BMC
+      ARM: dts: aspeed: wedge400: Include wedge400-data64.dts
+      dt-bindings: arm: aspeed: add Facebook Fuji-data64 board
+      ARM: dts: aspeed: Add Facebook Fuji-data64 (AST2600) Board
+      ARM: dts: aspeed: facebook-fuji: Include facebook-fuji-data64.dts
+      dt-bindings: arm: aspeed: add Facebook Darwin board
+      ARM: dts: aspeed: Add Facebook Darwin (AST2600) BMC
+
+Willie Thai (4):
+      ARM: dts: aspeed: nvidia: gb200nvl: Add VCC Supply
+      ARM: dts: aspeed: nvidia: gb200nvl: Enable i2c3 bus
+      ARM: dts: aspeed: nvidia: gb200nvl: Repurpose the HMC gpio pin
+      ARM: dts: aspeed: nvidia: gb200nvl: Enable MAC0 for BMC network
+
+ Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml           |    3 =
++
+ arch/arm/boot/dts/aspeed/Makefile                                  |    3 =
++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-e3c246d4i.dts           |   12 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-e3c256d4i.dts           |   12 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-romed8hm3.dts           |   12 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-asrock-x570d4u.dts             |   18 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-darwin.dts            |   72 =
++++++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-elbert.dts            |   12 =
++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-fuji-data64.dts       | 1256 =
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+++++++++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-fuji.dts              | 1247 =
++--------------------------------------------------------------------------=
+-------
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400-data64.dts   |  375 =
++++++++++++++++++++++++++
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts          |  366 =
++-----------------------
+ arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts                |   24 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-inspur-fp5280g2.dts            |    3 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-nvidia-gb200nvl-bmc.dts        |   54 =
++++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-lanyang.dts                |    2 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-mowgli.dts                 |    2 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-nicole.dts                 |    3 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-palmetto.dts               |    2 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-romulus.dts                |    3 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-witherspoon.dts            |    2 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-zaius.dts                  |    2 =
++-
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi                            |    4 =
++-
+ arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi       |   22 =
++-
+ arch/arm/boot/dts/aspeed/facebook-bmc-flash-layout-128-data64.dtsi |   60 =
+++++
+ arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi                     |   12 =
++-
+ arch/arm/boot/dts/aspeed/ibm-power10-quad.dtsi                     |   12 =
++-
+ 27 files changed, 1925 insertions(+), 1670 deletions(-)
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-darwin.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-fuji-data6=
+4.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400-d=
+ata64.dts
+ create mode 100644 arch/arm/boot/dts/aspeed/facebook-bmc-flash-layout-128-=
+data64.dtsi
+
