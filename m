@@ -1,91 +1,84 @@
-Received: from mo-csw.securemx.jp (mo-csw1802.securemx.jp [210.130.202.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ABD15C158
-	for <soc@lists.linux.dev>; Mon, 25 Aug 2025 02:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA112101AE
+	for <soc@lists.linux.dev>; Mon, 25 Aug 2025 04:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756087583; cv=none; b=Bgeto+HoddcluYUZjpH4fl+ORzH47m3H7+AjuWuD4g86R5mT6GNlaQjQP4oICxuLt/Rer8Q7MVeL6Rl3BcW1GT4TsXQLfJ73VavOCn3MV3r3rpS8qVWmWxVWTgtXiGLzIJQNHkUFPpTT7P0HGeCVrsLb0N0YeMmp85czGKDNuA8=
+	t=1756096509; cv=none; b=oacUeSUhQFkJcckdfWhtfu51lkOKFC0PpdwJ+wZnOqGu2ZNnD2ILtqkeC8pmOUaKwwvhQzC9DnMARNuIa20YJorSvgovW4VWWwXKOIdhIF6QSPZ+D8+Uw9ZYOgm7Rf9pvg+OoEjSnBYFRqVdX5WXDen45EJOXCZKPGiiJ4rj53k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756087583; c=relaxed/simple;
-	bh=z6qlv8kuwCIMObmOi1417vC0z1UI8429u9UiX5kj+UA=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=PlIKECCEMvFYSM6EsiRwk8TQyQF7FGoMCBq2JX5LDU0iqhKnAgTkhuwJuq9arzxm++zvdyKvgBsUgX4eNpu1SlZGVDvJEJ4e16iexiVrfavmmGdqOMUdgKHv4ZchDOczI12BSP4Iqjw/tqj1fVee4t9nI9/IgZB9Th6pPBwamsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba; spf=pass smtp.mailfrom=mail.toshiba; dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b=qn60oGs5; arc=none smtp.client-ip=210.130.202.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.toshiba
+	s=arc-20240116; t=1756096509; c=relaxed/simple;
+	bh=JAqJ6khWb3E1YjDk3jiUxTFsZIZ44UhIJxCJQRSWPBc=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=EsWTjjV8uGBgdZxt6Co/ivOVsv0UrW9T7XZG51di8CrsqxeegMSd67xLQHLcWIPkNceirvHjFC100z4TRlEpDE1mtxbLzxQZPIZ0GTv39dgqfbyKSErSEVFYCok3FeHrihLAagToeVD8lXYW2JZFj5iWvT/16GgelJ6RJLFeN4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=migGjffZ; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b="qn60oGs5"
-DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=mail.toshiba;h=From:To:Cc:
-	Subject:Date:Message-Id;i=nobuhiro.iwamatsu.x90@mail.toshiba;s=key1.smx;t=
-	1756087567;x=1757297167;bh=z6qlv8kuwCIMObmOi1417vC0z1UI8429u9UiX5kj+UA=;b=qn6
-	0oGs5StkPt3jP4IG4J0i9xXxNK0G8NjxDaRDZe4B/TZRU1QmGcITpMGw86RuP4i9SxsExkSAR8X0s
-	pXy7OhhDncdib9ppguXrqmViW1nqS/6m2wgun52kOs8Ycq6OnyCQZSytCm600/qTp17jX62vMgqn2
-	ir6WryviG7HPePW9CJM+M+dC7bQeTRX98gyDtDLaxcfUXnDNBuU8fcDwW4cJBHkTofUpsAK+18Pj+
-	2/shKd1bxUEA74vseJTZyUac8zHeVhEw4DN2aoUvan9uqEwe4dCmiqpcJAMnnoAduZ1bxa5A7mCZp
-	KHUd1EoikBSaTW2EQ6t/+2gZEHDFl5w==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1802) id 57P266eh109129; Mon, 25 Aug 2025 11:06:06 +0900
-X-Iguazu-Qid: 2yAb5t3M3txZn3UtiZ
-X-Iguazu-QSIG: v=2; s=0; t=1756087566; q=2yAb5t3M3txZn3UtiZ; m=9m84xjz33U/vViEszGDPSDB4VoIwlPs7yd4w8uiZTKE=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	 id 4c9Dfh5l6nzyPc; Mon, 25 Aug 2025 11:06:04 +0900 (JST)
-From: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: soc@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
-Subject: [PATCH v2] MAINTAINERS: Update Nobuhiro Iwamatsu's email address
-Date: Mon, 25 Aug 2025 11:05:56 +0900
-X-TSB-HOP2: ON
-Message-Id: <1756087556-25424-1-git-send-email-nobuhiro.iwamatsu.x90@mail.toshiba>
-X-Mailer: git-send-email 2.7.4
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="migGjffZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1756096505;
+	bh=KRq/IwotzLLYuVj7PpxaygrL44sgkinwI3pjoy5upqE=;
+	h=Subject:From:To:Cc:Date;
+	b=migGjffZRA8dfDHH3+sAjmK/q1cv6bIL74ULtRDFN4fleamO+S7VfU1iVs73cw2eG
+	 Hhad4DV03Lc3c3k3DdISvGbgygzgVJXRkD9w34lcbiQEaGqAvzj4rw5tRG42P8neKq
+	 B96gwzXu3tu7TlesGJafzo3oPV4LZKB2IzzMh1869QVs6TDbjTi45UMpSQ0sOaSrFJ
+	 8R3tJ4wQyfp1Y8cnm2vhaI4LkfIqqT5Gq1jiy6O9iKz98HV5xaFxRej5Rc0M9NZPFV
+	 Radu8EiQmbWWrVgj2YX1O0Q3HBvzQ8lwu0U82giBbxbMnPzh45GBmqSnd6p+1wBvAc
+	 3B4G9FiNf2JNw==
+Received: from [192.168.68.112] (unknown [180.150.112.213])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 179C0640BB;
+	Mon, 25 Aug 2025 12:35:03 +0800 (AWST)
+Message-ID: <bf3734aab62a5fcc8959261551bb4b1fa636efbd.camel@codeconstruct.com.au>
+Subject: [GIT PULL] nuvoton arm64: early devicetree changes for 6.18
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: soc <soc@lists.linux.dev>
+Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
+Date: Mon, 25 Aug 2025 14:05:03 +0930
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
 
-The company's email address has been changed, so update my email
-address in MAINTAINERS and .mailmap files.
+Hello SoC maintainers,
 
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
----
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585=
+:
 
-v2:
-  Remove extra space.
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
- .mailmap    | 1 +
- MAINTAINERS | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/.mailmap b/.mailmap
-index 4bb3a7f253b9b..328b04f82dac7 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -585,6 +585,7 @@ Nikolay Aleksandrov <razor@blackwall.org> <nikolay@redhat.com>
- Nikolay Aleksandrov <razor@blackwall.org> <nikolay@cumulusnetworks.com>
- Nikolay Aleksandrov <razor@blackwall.org> <nikolay@nvidia.com>
- Nikolay Aleksandrov <razor@blackwall.org> <nikolay@isovalent.com>
-+Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba> <nobuhiro1.iwamatsu@toshiba.co.jp>
- Odelu Kukatla <quic_okukatla@quicinc.com> <okukatla@codeaurora.org>
- Oleksandr Natalenko <oleksandr@natalenko.name> <oleksandr@redhat.com>
- Oleksij Rempel <linux@rempel-privat.de> <bug-track@fisher-privat.net>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c0b444e5fd5ad..47d059d5878a9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3431,7 +3431,7 @@ F:	Documentation/devicetree/bindings/arm/ti/nspire.yaml
- F:	arch/arm/boot/dts/nspire/
- 
- ARM/TOSHIBA VISCONTI ARCHITECTURE
--M:	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-+M:	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
--- 
-2.50.0
+  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoto=
+n-arm64-6.18-devicetree-0
 
+for you to fetch changes up to 13587befb34ffa5d605196494c243420e045f28e:
+
+  arm64: dts: nuvoton: add refclk and update peripheral clocks for NPCM845 =
+(2025-08-11 09:38:08 +0930)
+
+----------------------------------------------------------------
+Early Nuvoton arm64 devicetree updates for 6.18
+
+Integrate changes from Tomer reworking devicetree pinctrl, reset, and clk n=
+odes
+for NPCM845-based platforms.
+
+----------------------------------------------------------------
+Tomer Maimon (3):
+      arm64: dts: nuvoton: npcm845: Add pinctrl groups
+      arm64: dts: nuvoton: combine NPCM845 reset and clk nodes
+      arm64: dts: nuvoton: add refclk and update peripheral clocks for NPCM=
+845
+
+ arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi | 669 ++++++++++++=
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+++++++--
+ arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts     |   6 +
+ 2 files changed, 663 insertions(+), 12 deletions(-)
 
