@@ -1,84 +1,184 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA112101AE
-	for <soc@lists.linux.dev>; Mon, 25 Aug 2025 04:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460C7242D96;
+	Mon, 25 Aug 2025 08:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756096509; cv=none; b=oacUeSUhQFkJcckdfWhtfu51lkOKFC0PpdwJ+wZnOqGu2ZNnD2ILtqkeC8pmOUaKwwvhQzC9DnMARNuIa20YJorSvgovW4VWWwXKOIdhIF6QSPZ+D8+Uw9ZYOgm7Rf9pvg+OoEjSnBYFRqVdX5WXDen45EJOXCZKPGiiJ4rj53k=
+	t=1756111246; cv=none; b=XPwwMh2UtelS2wdDAQLkbplqkKzvIrU7MGKZc547SRvCR/f6bw48sB0WreSmoBfBFxUmhFhKH49BI4cqk5d0VqVaCdh3PvA6LOsGH6WgO74rWdjhDcthUsTcyMY0fuM1D6OOfX2AsUQePtQ06NDfETSwXChor0u1JqdRp6SWJrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756096509; c=relaxed/simple;
-	bh=JAqJ6khWb3E1YjDk3jiUxTFsZIZ44UhIJxCJQRSWPBc=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=EsWTjjV8uGBgdZxt6Co/ivOVsv0UrW9T7XZG51di8CrsqxeegMSd67xLQHLcWIPkNceirvHjFC100z4TRlEpDE1mtxbLzxQZPIZ0GTv39dgqfbyKSErSEVFYCok3FeHrihLAagToeVD8lXYW2JZFj5iWvT/16GgelJ6RJLFeN4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=migGjffZ; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1756111246; c=relaxed/simple;
+	bh=aL0MAVPP+baLaUpSwr0jfz0k4rjTubYNQV6vSJB6OP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QumvMAJyCeQvjT3ebz/RN5jOtAa3tW0NOm+MmPCbZS50TTSujzJ4hKx7dtb8jKs9ehrlr8BOGHYFAnkyyV1sCCFUixylZ2LHsDfRyPHHLFxMf50hkQzPhVwUIZ76/ShhwLxzpdFkwH4Z3N1UVmp3/VhvhAyS6peHGEVKanXFEzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FhTSsXLt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="migGjffZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1756096505;
-	bh=KRq/IwotzLLYuVj7PpxaygrL44sgkinwI3pjoy5upqE=;
-	h=Subject:From:To:Cc:Date;
-	b=migGjffZRA8dfDHH3+sAjmK/q1cv6bIL74ULtRDFN4fleamO+S7VfU1iVs73cw2eG
-	 Hhad4DV03Lc3c3k3DdISvGbgygzgVJXRkD9w34lcbiQEaGqAvzj4rw5tRG42P8neKq
-	 B96gwzXu3tu7TlesGJafzo3oPV4LZKB2IzzMh1869QVs6TDbjTi45UMpSQ0sOaSrFJ
-	 8R3tJ4wQyfp1Y8cnm2vhaI4LkfIqqT5Gq1jiy6O9iKz98HV5xaFxRej5Rc0M9NZPFV
-	 Radu8EiQmbWWrVgj2YX1O0Q3HBvzQ8lwu0U82giBbxbMnPzh45GBmqSnd6p+1wBvAc
-	 3B4G9FiNf2JNw==
-Received: from [192.168.68.112] (unknown [180.150.112.213])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 179C0640BB;
-	Mon, 25 Aug 2025 12:35:03 +0800 (AWST)
-Message-ID: <bf3734aab62a5fcc8959261551bb4b1fa636efbd.camel@codeconstruct.com.au>
-Subject: [GIT PULL] nuvoton arm64: early devicetree changes for 6.18
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: soc <soc@lists.linux.dev>
-Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>
-Date: Mon, 25 Aug 2025 14:05:03 +0930
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FhTSsXLt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A433C4CEED;
+	Mon, 25 Aug 2025 08:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756111245;
+	bh=aL0MAVPP+baLaUpSwr0jfz0k4rjTubYNQV6vSJB6OP8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FhTSsXLtwO6EYA8rIZFKJgEf1O0j/6AFVpaIb7+0szOlxeqEkxITba+wS9KfZ+kjH
+	 dJ4D0usUwHPH2GWzU3dXYRelvBK6F/Z+h883XsJq3lJG4gwBDPoq7M/8L4HEjQ78Vz
+	 uw/bRo0VNtHxfdkgkl90Rnhxn0zOB4RalzhxYxbJGexY8w9QaG1wwgcVo4YigkvXdQ
+	 HQavQb3MOaV1ehg5AV6v7VNw85VJa0JTCzNxPuL1pTIJOwcfLGwF2EeUKXrxIt0vRt
+	 UCzCy8PTNnoYCOQUG/lUyh80qq0nQtE3jstm5jDssnnjYRZ8hsuFayTUr3+h+B+cyD
+	 ob0l8lzfNS6fA==
+Date: Mon, 25 Aug 2025 16:40:43 +0800
+From: Yixun Lan <dlan@kernel.org>
+To: bmasney@redhat.com
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Alex Helms <alexander.helms.jy@renesas.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
+	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
+	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Subject: Re: [PATCH 049/114] clk: spacemit: ccu_ddn: convert from
+ round_rate() to determine_rate()
+Message-ID: <20250825084043-GYA1096417@kernel.org>
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
+ <20250811-clk-for-stephen-round-rate-v1-49-b3bf97b038dc@redhat.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-49-b3bf97b038dc@redhat.com>
 
-Hello SoC maintainers,
+Hi Brian,
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585=
-:
+  Thanks for doing this
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+  I will give my rb to 49-51 for SpacemiT, and here we face same
+issue as Krzysztof did for samsung, to avoid potential conflicts
+we will route the clk patches through SpacemiT SoC tree..
 
-are available in the Git repository at:
+On 11:18 Mon 11 Aug     , Brian Masney via B4 Relay wrote:
+> From: Brian Masney <bmasney@redhat.com>
+> 
+> The round_rate() clk ops is deprecated, so migrate this driver from
+> round_rate() to determine_rate() using the Coccinelle semantic patch
+> on the cover letter of this series.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bmc/linux.git tags/nuvoto=
-n-arm64-6.18-devicetree-0
+Reviewed-by: Yixun Lan <dlan@kernel.org>
 
-for you to fetch changes up to 13587befb34ffa5d605196494c243420e045f28e:
+> ---
+>  drivers/clk/spacemit/ccu_ddn.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/clk/spacemit/ccu_ddn.c b/drivers/clk/spacemit/ccu_ddn.c
+> index be311b045698e95a688a35858a8ac1bcfbffd2c7..02b68ea84db9bd3ecdde41f8013c48263edbd917 100644
+> --- a/drivers/clk/spacemit/ccu_ddn.c
+> +++ b/drivers/clk/spacemit/ccu_ddn.c
+> @@ -39,13 +39,16 @@ static unsigned long ccu_ddn_calc_best_rate(struct ccu_ddn *ddn,
+>  	return ccu_ddn_calc_rate(prate, *num, *den);
+>  }
+>  
+> -static long ccu_ddn_round_rate(struct clk_hw *hw, unsigned long rate,
+> -			       unsigned long *prate)
+> +static int ccu_ddn_determine_rate(struct clk_hw *hw,
+> +				  struct clk_rate_request *req)
+>  {
+>  	struct ccu_ddn *ddn = hw_to_ccu_ddn(hw);
+>  	unsigned long num, den;
+>  
+> -	return ccu_ddn_calc_best_rate(ddn, rate, *prate, &num, &den);
+> +	req->rate = ccu_ddn_calc_best_rate(ddn, req->rate,
+> +					   req->best_parent_rate, &num, &den);
+> +
+> +	return 0;
+>  }
+>  
+>  static unsigned long ccu_ddn_recalc_rate(struct clk_hw *hw, unsigned long prate)
+> @@ -78,6 +81,6 @@ static int ccu_ddn_set_rate(struct clk_hw *hw, unsigned long rate,
+>  
+>  const struct clk_ops spacemit_ccu_ddn_ops = {
+>  	.recalc_rate	= ccu_ddn_recalc_rate,
+> -	.round_rate	= ccu_ddn_round_rate,
+> +	.determine_rate = ccu_ddn_determine_rate,
+>  	.set_rate	= ccu_ddn_set_rate,
+>  };
+> 
+> -- 
+> 2.50.1
+> 
+> 
 
-  arm64: dts: nuvoton: add refclk and update peripheral clocks for NPCM845 =
-(2025-08-11 09:38:08 +0930)
-
-----------------------------------------------------------------
-Early Nuvoton arm64 devicetree updates for 6.18
-
-Integrate changes from Tomer reworking devicetree pinctrl, reset, and clk n=
-odes
-for NPCM845-based platforms.
-
-----------------------------------------------------------------
-Tomer Maimon (3):
-      arm64: dts: nuvoton: npcm845: Add pinctrl groups
-      arm64: dts: nuvoton: combine NPCM845 reset and clk nodes
-      arm64: dts: nuvoton: add refclk and update peripheral clocks for NPCM=
-845
-
- arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi | 669 ++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++--
- arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts     |   6 +
- 2 files changed, 663 insertions(+), 12 deletions(-)
-
+-- 
+Yixun Lan (dlan)
