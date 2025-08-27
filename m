@@ -1,73 +1,27 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2B42F2917
-	for <soc@lists.linux.dev>; Wed, 27 Aug 2025 13:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024CB3568F7;
+	Wed, 27 Aug 2025 13:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756300420; cv=none; b=X6L9plB/cylMQEqMPO7Xz7BkFf2vs85yqEJjE87qmiP03a/WfIRgiTCkS/VfzBlzh4oFpn4Vrkp9SALg1JFk1UzvKESWVXnBjCa3AZmpaEa9CrAwfMknjKZsWI2tujxW+GUrZQwAcGLIN62gRS+lygby6qjov2QnmIEYVDS9nD0=
+	t=1756302631; cv=none; b=bc9h+gGGyZ/ohefJtj25jaExmeN0UpW35lBCbimGbcRsGY9EQSZr0b5n+WQOlj4wihDQzWTxt7aAZYmNnrWYQFLJBgETU/Jspn+hASSp+pugOR9tNjcwBpYIbKNlj17472tC1uN5qd2WSWI1dXptI9fLM5dVhAKq2yXj8ByGPBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756300420; c=relaxed/simple;
-	bh=eRhLjVe67iKErrxJ74pmlvZqDh8RQqKX7+TmAocxpuc=;
+	s=arc-20240116; t=1756302631; c=relaxed/simple;
+	bh=sjDy2yPaMyRUWRHA7zNCNkrYIPM6l4g0nDQeVISxPDs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=lz6+uc5gU6KBDZz0LSYSw70tlj7XwBOo7qJSSg3CSkOdgA5sZGjnrE1dxGkFECuP270ZzEWGImtWRgN8h/YSD8BTgDuulIqOScMgB0bUvPZnDNleaO28Z6yYGnQFCjbhK407eMtCfx/wMcQdYi0PSuuLtXL9k+FJ+FPdZhiAyuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A8SQDFlh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A8SQDFlh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756300417;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=13LJOrVZbt5/bZNb1010AyPGLHEYUJgw1i+wJLdf1Rs=;
-	b=A8SQDFlhg/ova23HLpDJ9MA0tTUa6MHqBg5sTfIbKr0uG8T1O5g5s386O1MWIiK+MG9jEx
-	jdyxPWCORr4PHjEN1BLGA5RCFEh+vZAQbeisN6r+XVAlddjSX7W9x6ceb9b1knfkNcGboe
-	GDeNSV4DpWUCJxaMGKa9W+avZfmFr4I=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-1-G6yYRV6LPYuUtA9Q2VAYrA-1; Wed, 27 Aug 2025 09:13:36 -0400
-X-MC-Unique: G6yYRV6LPYuUtA9Q2VAYrA-1
-X-Mimecast-MFC-AGG-ID: G6yYRV6LPYuUtA9Q2VAYrA_1756300416
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7e86499748cso248869285a.1
-        for <soc@lists.linux.dev>; Wed, 27 Aug 2025 06:13:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756300406; x=1756905206;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=13LJOrVZbt5/bZNb1010AyPGLHEYUJgw1i+wJLdf1Rs=;
-        b=hhUY//Hy3ZkVZ3X05/22lIRySMWyfp6+gDpWKmaTB2o19ASvDryxk8j1vpqn25cZyF
-         4HhvYoFIc1k6AWzXZbmvwA/5/LBZO75NissaWUW9Vt0Ms1F0ficvt4ymbAX6EkxG1aC8
-         N8Mez7Avh6xn+wYC/qwBhCXRqD87xjDGLW62Sy/eRkLw1XSavFFjx2NE3cHDP1uAAQOh
-         2EQ8N9ct7Fd5nJRxZd6sK3AxlGMhkDmvlkDBJnbDRIzfCf1jZacQMldg5tPOd7hjeI7L
-         3cmZeNG0iVMZV5UG83FHHEM9a9M5WGweSdKN4yVp1bnRfxxWI9FrWb68hk+Qg+K4kn5u
-         VOrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLd1xEBuIqxer5G9R1dOj1uUeMOufaLqVXeB3jLS91gE2mQmLEPbEIXK3PxrnlDxO6emE=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw0+3YJkUUNkypGChXEskWv9AaxMbTVQHYQ77+LR6CE74w/ASR+
-	Bzd7se12Bt+Be/fsMyLzKGuYu4zkWIcSaX/8RvRV4VT4RsDHY/g0ze5lZJrv8shS2afyrhLsr0B
-	GPqkbd0TT89WeHthYMTmm3iFphsTNYwKa1x7X/eoTh7+3zl0VSTNRdA==
-X-Gm-Gg: ASbGncs5TQuEOyp4EO81QmGjul8CSr3bwi+hQgnrMzrCw0y5+dFJE+iWBHfBztPwA04
-	GnGnhS3/+4drOrbSUlUF5JUrqXSWeLmThXZ9uMaTmVeI7QLsznUSeNfgtO5mV0uTYHid98Ky1V5
-	Fqr3Ri34EpIvb4Mxnm/wqjR/C4K36sVA/pGm5jKwVa+TpqPcEAYB4zMLxDo1kWWBNsqG7c8Y1n+
-	htMMUalJ5JarZ5CR8healFCAoWflQsnDvyV85HprdTuob5gz6wlb5cFO9620srUVRF5rtfaOY5n
-	mCHlInZg4Sf1oRmBEHL0KTGg2OCC6ja0j4I/5L+sO2uKoVCNYL5zqXaSvsqIOpzviFADpNSY+Uq
-	MmuslpenjZyVYqBqW6CI=
-X-Received: by 2002:a05:620a:7101:b0:7ed:92c8:7d16 with SMTP id af79cd13be357-7f58d941f59mr592251485a.31.1756300404941;
-        Wed, 27 Aug 2025 06:13:24 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG//kDH7SoWg5eCSBiMLHP3nCnmfnmaReGS2V45T15TfIErjBPeekutHDc1uHZhw0fUtcQytQ==
-X-Received: by 2002:a05:620a:7101:b0:7ed:92c8:7d16 with SMTP id af79cd13be357-7f58d941f59mr592238785a.31.1756300403878;
-        Wed, 27 Aug 2025 06:13:23 -0700 (PDT)
-Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ebeca23e10sm885475785a.6.2025.08.27.06.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 06:13:22 -0700 (PDT)
-Date: Wed, 27 Aug 2025 09:13:17 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=VvLjF50lMH9BSuMKY/T0ifYiu9BvZ9cOl5k7gZaEOMdlVu7hNVjMY+LLOvtvLKbsV9m/MjIAwQ7d9WPFuzzMuXPGB5Z73mcC/HTaQFguerZhp7GLSzOEsM5jbgU9U0O7aaj1x4c+U7gEezTN1/gqIlOd69QCOx2KAlSMkcOe0IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D431D2720;
+	Wed, 27 Aug 2025 06:50:20 -0700 (PDT)
+Received: from bogus (unknown [10.57.57.52])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A11B23F694;
+	Wed, 27 Aug 2025 06:50:11 -0700 (PDT)
+Date: Wed, 27 Aug 2025 14:49:48 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Brian Masney <bmasney@redhat.com>
+Cc: Peng Fan <peng.fan@oss.nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
 	Cristian Marussi <cristian.marussi@arm.com>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -100,7 +54,7 @@ Cc: Sudeep Holla <sudeep.holla@arm.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Michal Simek <michal.simek@amd.com>,
 	Maxime Ripard <mripard@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
 	Manivannan Sadhasivam <mani@kernel.org>,
 	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
 	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -144,84 +98,92 @@ Cc: Sudeep Holla <sudeep.holla@arm.com>,
 	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
 Subject: Re: [PATCH 112/114] clk: scmi: remove round_rate() in favor of
  determine_rate()
-Message-ID: <aK8EbcEHz3Yzpa1W@x1>
+Message-ID: <20250827-abstract-maize-tanuki-d1bdcb@sudeepholla>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
  <20250811-clk-for-stephen-round-rate-v1-112-b3bf97b038dc@redhat.com>
  <20250827070933.GB18994@nxa18884-linux.ap.freescale.net>
+ <aK8EbcEHz3Yzpa1W@x1>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250827070933.GB18994@nxa18884-linux.ap.freescale.net>
-User-Agent: Mutt/2.2.14 (2025-02-20)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ABjZGCp2uHdXI5m7asmd9dEDEBCvUeUNTq45RmW4K1U_1756300416
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aK8EbcEHz3Yzpa1W@x1>
 
-On Wed, Aug 27, 2025 at 03:09:33PM +0800, Peng Fan wrote:
-> Hi Brian, Sudeep, Cristian
-> 
-> On Mon, Aug 11, 2025 at 11:19:44AM -0400, Brian Masney via B4 Relay wrote:
-> >From: Brian Masney <bmasney@redhat.com>
-> >
-> >This driver implements both the determine_rate() and round_rate() clk
-> >ops, and the round_rate() clk ops is deprecated. When both are defined,
-> >clk_core_determine_round_nolock() from the clk core will only use the
-> >determine_rate() clk ops, so let's remove the round_rate() clk ops since
-> >it's unused.
-> >
-> >Signed-off-by: Brian Masney <bmasney@redhat.com>
-> >---
-> > drivers/clk/clk-scmi.c | 30 ------------------------------
-> > 1 file changed, 30 deletions(-)
-> >
-> >diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
-> >index d2408403283fc72f0cf902e65f4c08bcbc7b4b0b..6c6ddb92e7cf6a0cfac2c7e19c0f15f777bb8c51 100644
-> >--- a/drivers/clk/clk-scmi.c
-> >+++ b/drivers/clk/clk-scmi.c
-> >@@ -54,35 +54,6 @@ static unsigned long scmi_clk_recalc_rate(struct clk_hw *hw,
-> > 	return rate;
-> > }
+On Wed, Aug 27, 2025 at 09:13:17AM -0400, Brian Masney wrote:
+> On Wed, Aug 27, 2025 at 03:09:33PM +0800, Peng Fan wrote:
+> > Hi Brian, Sudeep, Cristian
 > > 
-> >-static long scmi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
-> >-				unsigned long *parent_rate)
-> >-{
+> > On Mon, Aug 11, 2025 at 11:19:44AM -0400, Brian Masney via B4 Relay wrote:
+> > >From: Brian Masney <bmasney@redhat.com>
+> > >
+> > >This driver implements both the determine_rate() and round_rate() clk
+> > >ops, and the round_rate() clk ops is deprecated. When both are defined,
+> > >clk_core_determine_round_nolock() from the clk core will only use the
+> > >determine_rate() clk ops, so let's remove the round_rate() clk ops since
+> > >it's unused.
+> > >
+> > >Signed-off-by: Brian Masney <bmasney@redhat.com>
+> > >---
+> > > drivers/clk/clk-scmi.c | 30 ------------------------------
+> > > 1 file changed, 30 deletions(-)
+> > >
+> > >diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
+> > >index d2408403283fc72f0cf902e65f4c08bcbc7b4b0b..6c6ddb92e7cf6a0cfac2c7e19c0f15f777bb8c51 100644
+> > >--- a/drivers/clk/clk-scmi.c
+> > >+++ b/drivers/clk/clk-scmi.c
+> > >@@ -54,35 +54,6 @@ static unsigned long scmi_clk_recalc_rate(struct clk_hw *hw,
+> > > 	return rate;
+> > > }
+> > > 
+> > >-static long scmi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+> > >-				unsigned long *parent_rate)
+> > >-{
+> > 
+> > I see the point of round_rate is not used if determine_rate is there.
+> > But reading the code of round_rate, It might be better to rename
+> > scmi_clk_round_rate to scmi_clk_determine_rate.
+> > 
+> > Anyway, need Sudeep and Cristian to comment.
 > 
-> I see the point of round_rate is not used if determine_rate is there.
-> But reading the code of round_rate, It might be better to rename
-> scmi_clk_round_rate to scmi_clk_determine_rate.
+> In this case, yes the round_rate implementation is filled out, whereas
+> the determine_rate lets the firmware handle it, and
+> scmi_clk_recalc_rate() will later populate the rate the clock is running
+> at.
 > 
-> Anyway, need Sudeep and Cristian to comment.
+> I can convert round_rate over to determine_rate in this case, however it
+> would be a change to what's there now, and risks a regression. Here's
+> the relevant code from drivers/clk/clk.c where the determine_rate and
+> round_rate ops are called:
 
-In this case, yes the round_rate implementation is filled out, whereas
-the determine_rate lets the firmware handle it, and
-scmi_clk_recalc_rate() will later populate the rate the clock is running
-at.
+I am inclined towards this. Determine rate was added recently when the
+clock parent support was added IIUC, so I don't think it should regress
+anything.
 
-I can convert round_rate over to determine_rate in this case, however it
-would be a change to what's there now, and risks a regression. Here's
-the relevant code from drivers/clk/clk.c where the determine_rate and
-round_rate ops are called:
+> 
+>     static int clk_core_determine_round_nolock(struct clk_core *core,
+>                                                struct clk_rate_request *req)
+>     {
+>     	...
+>             if (clk_core_rate_is_protected(core)) {
+>                     req->rate = core->rate;
+>             } else if (core->ops->determine_rate) {
+>                     return core->ops->determine_rate(core->hw, req);
+>             } else if (core->ops->round_rate) {
+>                     rate = core->ops->round_rate(core->hw, req->rate,
+>                                                  &req->best_parent_rate);
+>     	...
+> 
+> If Sudeep / Cristian want the round rate converted to determine rate in
+> this driver, then I can do that in a v2.
+> 
 
-    static int clk_core_determine_round_nolock(struct clk_core *core,
-                                               struct clk_rate_request *req)
-    {
-    	...
-            if (clk_core_rate_is_protected(core)) {
-                    req->rate = core->rate;
-            } else if (core->ops->determine_rate) {
-                    return core->ops->determine_rate(core->hw, req);
-            } else if (core->ops->round_rate) {
-                    rate = core->ops->round_rate(core->hw, req->rate,
-                                                 &req->best_parent_rate);
-    	...
+Yes please. Also please post it independent if it doesn't have to be in
+the series. To many in cc and lots of patches to respin all.
 
-If Sudeep / Cristian want the round rate converted to determine rate in
-this driver, then I can do that in a v2.
-
-Brian
-
+-- 
+Regards,
+Sudeep
