@@ -1,189 +1,205 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024CB3568F7;
-	Wed, 27 Aug 2025 13:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756302631; cv=none; b=bc9h+gGGyZ/ohefJtj25jaExmeN0UpW35lBCbimGbcRsGY9EQSZr0b5n+WQOlj4wihDQzWTxt7aAZYmNnrWYQFLJBgETU/Jspn+hASSp+pugOR9tNjcwBpYIbKNlj17472tC1uN5qd2WSWI1dXptI9fLM5dVhAKq2yXj8ByGPBY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756302631; c=relaxed/simple;
-	bh=sjDy2yPaMyRUWRHA7zNCNkrYIPM6l4g0nDQeVISxPDs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VvLjF50lMH9BSuMKY/T0ifYiu9BvZ9cOl5k7gZaEOMdlVu7hNVjMY+LLOvtvLKbsV9m/MjIAwQ7d9WPFuzzMuXPGB5Z73mcC/HTaQFguerZhp7GLSzOEsM5jbgU9U0O7aaj1x4c+U7gEezTN1/gqIlOd69QCOx2KAlSMkcOe0IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D431D2720;
-	Wed, 27 Aug 2025 06:50:20 -0700 (PDT)
-Received: from bogus (unknown [10.57.57.52])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A11B23F694;
-	Wed, 27 Aug 2025 06:50:11 -0700 (PDT)
-Date: Wed, 27 Aug 2025 14:49:48 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Peng Fan <peng.fan@oss.nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Yixun Lan <dlan@gentoo.org>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Alex Helms <alexander.helms.jy@renesas.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
-	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
-	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 112/114] clk: scmi: remove round_rate() in favor of
- determine_rate()
-Message-ID: <20250827-abstract-maize-tanuki-d1bdcb@sudeepholla>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <20250811-clk-for-stephen-round-rate-v1-112-b3bf97b038dc@redhat.com>
- <20250827070933.GB18994@nxa18884-linux.ap.freescale.net>
- <aK8EbcEHz3Yzpa1W@x1>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677CD273D9F
+	for <soc@lists.linux.dev>; Thu, 28 Aug 2025 18:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=10.30.226.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756405690; cv=fail; b=LBSUCliwapdy2FRr3QBDLBd9eInF+okAKsQM02yWIxB289/YnzwpSM5mz0A6/iZXa70ZWwoFicCHQhDppuNo9CdTdqH6YSHYOEWYXkW0gqbA/l9o7Ip2L2G/4wbmhnRmNA06fmwD4+0iJDUiDqPQDiTkydzT6jLAaM6m35z617Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756405690; c=relaxed/simple;
+	bh=IVKUlhOkRjcNjSgmz4ZhSExnmqKjWnXAbKSsxIQgonM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dv/UW943KT039XVl8qxkgkDDNjhx0jtsPIiTk9V6ebVVTthnUxmQ5zfdzL4slf6xzqQbFfX5fcwHZwgW7GAO+4+lWgQORuzshh1ZbcxdtYP7b4pqNbIfMLY/mkHjCHKvYVo9k/1aOEV0pOdkRN3GTTTOxbvvkzD1xmgpSHDamHM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b=AIi/HGMg; arc=fail smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=axiado.com header.i=@axiado.com header.b="AIi/HGMg"
+Received: by smtp.kernel.org (Postfix)
+	id 0330EC4CEED; Thu, 28 Aug 2025 18:28:10 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2091.outbound.protection.outlook.com [40.107.220.91])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E85E9C4CEEB;
+	Thu, 28 Aug 2025 18:28:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E85E9C4CEEB
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=axiado.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=axiado.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PQ4gYezfx4LrcCf8EqDMzRZEApxT0ZOAbUprEw/ip23hwViXIHxgIlBVSkwkquPFiB3sGeF6r1uKBHX4YKho8qwR273kE2fuykVbVfWzRTSIvK8q1xDc7NvJhqWBQX+gHPlqHF0bVV6xJz/TIYMY/9lK6/GoWia551QXzcBjHVuHTIuI5XQ++V6qehrWyf4sPh32jo+4AdBgub+D6Z4MOOoUkmM3V4xt7Gx+CExJEVALY+PVbHooYIpoXdxaiDEbaNahxc951Hihy6I0vC7qKqL6d0ZFQ7WjFeNyXDaS/kZsHDSxEwkY/R3DiGZ7dNXH8TqITNRarR/mKLe0PiSFWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FgtGp6xwB51XYeRFlMtatE/h7ACYG/gUGnSieq4FwhA=;
+ b=U+A8Eeh3a36BhoV5q0QrgRpbfWlm46PGDFryh9wjuqiWSLX0PjACPQtGoNlRBHpRRuhX8+1QS4OPAnUsek+KuTsoxTJrvU5wOu3EaAz/8jqpBqLWSOaO1Ai8lixgdwok1NHA8RXG5+BDpCfa0f7FVO8+bJSepgec2iIod7S+PjGYWds4wi1/2X31jmGlesLM+pIEBNHDcuipjNmc8n2oi8p1j55U5yOJ0fe29H10EkNYf9tK9lggWGM1HlqYnE0H+g/p8YfQGLMreJ7IkK1P70AoTd4z4xENOfu17tRPHtvI8Gp/yhQ5hSP+/rwMe6n2H9FFiC9U84R6JRzREquv6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 50.233.182.194) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=axiado.com;
+ dmarc=none action=none header.from=axiado.com; dkim=none (message not
+ signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axiado.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FgtGp6xwB51XYeRFlMtatE/h7ACYG/gUGnSieq4FwhA=;
+ b=AIi/HGMgjwjjqe+MNfXeWLGaFpKRPVhfVT6EHRF3wobTODk/qRPEwM6/p/U+6kMiMJALDotOR+KoSwbB4f6TLNKsfPUYBDVM0ZnvdZ0qzue3iXH6y3Hx46sHjdFe9KLezx5jsTuOc8ejRNq9ikVa49y+2MsPIIHScs27VgRGNwyR29lYROswtAgj5YpPdIrysG5IT+TbTIjLuzRfFn9mqsN5uxuuZvl12XCCc8W8OsmSFA4gc9IOn8kz2gsINjR8F6gKzMghs7062zSzHSLe/N8kvhQEhaPBatZ4UhdGsxfHv7XMrCKb9XkMmoJPYsVgrdLDUU03Pvo21GxKDS12uw==
+Received: from PH8P223CA0016.NAMP223.PROD.OUTLOOK.COM (2603:10b6:510:2db::35)
+ by SJ0PR18MB4107.namprd18.prod.outlook.com (2603:10b6:a03:2e6::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.20; Thu, 28 Aug
+ 2025 18:28:04 +0000
+Received: from CY4PEPF0000E9D4.namprd03.prod.outlook.com
+ (2603:10b6:510:2db:cafe::45) by PH8P223CA0016.outlook.office365.com
+ (2603:10b6:510:2db::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.21 via Frontend Transport; Thu,
+ 28 Aug 2025 18:28:04 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 50.233.182.194)
+ smtp.mailfrom=axiado.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axiado.com;
+Received-SPF: Fail (protection.outlook.com: domain of axiado.com does not
+ designate 50.233.182.194 as permitted sender)
+ receiver=protection.outlook.com; client-ip=50.233.182.194; helo=[127.0.1.1];
+Received: from [127.0.1.1] (50.233.182.194) by
+ CY4PEPF0000E9D4.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.11
+ via Frontend Transport; Thu, 28 Aug 2025 18:28:02 +0000
+From: Harshit Shah <hshah@axiado.com>
+Date: Thu, 28 Aug 2025 11:27:49 -0700
+Subject: [PATCH v3] arm64: dts: axiado: Add missing UART aliases
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aK8EbcEHz3Yzpa1W@x1>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250828-axiado-ax3000-missing-serial-alias-v3-1-393111f4bd9e@axiado.com>
+X-B4-Tracking: v=1; b=H4sIAKSfsGgC/43OQQ7CIBAF0Ks0rMUAQ6W48h7GBS3UTqKtgjaap
+ ncXWhM1brqa/Enm/RlIcB5dINtsIN71GLBrY4BVRqrGtEdH0cZMBBM5KzhQ80BjuziAMUbPGAK
+ 2R5oUc6LmhCZQ0JUsNChWGk0idPGuxsdUsj/M2bvrPXbdPssGw63zz+mRnqftu1PwJZ09p5zmQ
+ lmtdAXOsN18tK66M0l+L75NscgUyZQsF1blcqPKPxO+TbnIhGTaUnIJZc0L/WOO4/gCDJExtZI
+ BAAA=
+X-Change-ID: 20250813-axiado-ax3000-missing-serial-alias-39c489370ba9
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ soc@lists.linux.dev, soc@kernel.org
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Harshit Shah <hshah@axiado.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1603; i=hshah@axiado.com;
+ h=from:subject:message-id; bh=IVKUlhOkRjcNjSgmz4ZhSExnmqKjWnXAbKSsxIQgonM=;
+ b=owEB7QES/pANAwAKAfFYcxGhMtX7AcsmYgBosJ+xIh1Be2Ma676rmSE3Y78gLVFuojK1BdWow
+ yQEJ8TX7OuJAbMEAAEKAB0WIQRO3pC/7SkLS2viWOvxWHMRoTLV+wUCaLCfsQAKCRDxWHMRoTLV
+ +4aLC/9lBNDspmLJ5/OPjzDoUXcH8Yh26YXxpGWjWJO/e9RhTr1Kb+VEHnBpye9idrwSvjRa28d
+ czr7KzuW6yqQo1c+hAsI80BzUmS7Cf2qf8cmegUCOx1fEpYUdPxRYrzmY3z1rqbcgWUJD8ZmePN
+ Sv7/Sm64F8AjW/WBTcAu/aCeOboSwfj6PaSZetLOlnE48OHnLg+TcPowKLsVz9pGI/2E3BEXCrK
+ 9zK1t/rlaVRordZO16g2BouAxAkMioEU/Hxmer4D1tIJ7To91rjLjgB75oLCGoM6zd+YokySGiG
+ uISTQaEUp7DbcT84q/OQHoo1LHElPNDpFSK0CwLfH37c6VK6t37+MrVVlFS/31uIMenmYnU61zU
+ Cd7P1YnfPXM1NiWULVR0elaRKdbXvZAwLLzUpRIcy9LbL6HTvOTffpOPnOmhGQbNNinJ6N/os0A
+ L7I6wMRIgxrVHAAm97PRD8Hr7kPuWoZOAiAQ2LmxwbXAFeritWoEunfG0M+M2GysrwM2U=
+X-Developer-Key: i=hshah@axiado.com; a=openpgp;
+ fpr=4EDE90BFED290B4B6BE258EBF1587311A132D5FB
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D4:EE_|SJ0PR18MB4107:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f620188-04e8-48e2-5147-08dde6609f93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?LzJqSTdmMjNkUDRJemo5UnUzZ29NSnIxejhtZmQxbmFjNkpHNEh3K3N6dGFB?=
+ =?utf-8?B?MWZLRFJFOVB5RTlKRHUvaDk2dUJQY1R3VzNNd1AyeTM2ejNGazkzRFZseUE3?=
+ =?utf-8?B?RkxwZ3EwNmFnZm03M0xnTkhtaDBxcHlGTHZqVElETFRvTXcvQ2NieUxZaGU2?=
+ =?utf-8?B?NjFGNTBYaXBDallVR0VaN0RKLzRlSjljblRZQi9zTTV2NjRDVFRUUFhDMGRG?=
+ =?utf-8?B?ZnZZUGE5YUtUci9EZ3FEc1NkL3pmS2J2dHJYZXJlaSt1UGp2N2diTGc0QXE3?=
+ =?utf-8?B?Tm91dnFzZGFzTHJCSHk3V1JlYnJzelhUOHFkQ3kwVzFaOHd4WUVRSjhWbHN6?=
+ =?utf-8?B?Y3ZsZG9NeTBja2NpZU1FT1dUTVBiemtBemlkOHFEdWNENFdybldsQ2p0dXNi?=
+ =?utf-8?B?UlpTVjhVMVpyUUJhZ2MyUnlyWXQwcjRBVmRlaUtUbnE1bjVYREQvUWthYVZT?=
+ =?utf-8?B?NlVzUGhJTXc5OXVTclUyRkkxaWUwQU1NNUIrbXh3cE9TNnltdVUrSmM4M0g5?=
+ =?utf-8?B?ZnBxODZiVGp6MTBWNWdQZVFhOVBhRVd1Si9iZll4bm1HNE5IbFlYamlIYkwx?=
+ =?utf-8?B?S0Rxc2VHc1B4VUxsSEdPSjFqSkNGQm44SGx0VXM1RTR4TlgrU2U5c2puZS8z?=
+ =?utf-8?B?emtJK0dzMlhmclF1aU5rNXhaZkNMazVGRldrTENBQ3ZEVU1EQUN4eWtQT1BY?=
+ =?utf-8?B?M1Z0QU1HQlVodExVOXJNRlZLSmJDVEhOZzczdUFBRXRGWkQvOS9Oc3lGU2xt?=
+ =?utf-8?B?TEk5QWx5Y2hJVVNydUNpTUxJWDFackRZZFBDMTBldXZualRIZDNLNmNKemRi?=
+ =?utf-8?B?b3ZnOEZRaGRXNy9JNWY3amova3J2MHhQYk4vMkVxOGY2TFladi9UWGFjb1cy?=
+ =?utf-8?B?ZkFDSHJTcndkNGZRc3JzWStCQ3Bzd3dxK2FGZ3FNNSt2eGRBcHFEcHFmaFha?=
+ =?utf-8?B?S3daM1JkU1Y1VUNVZ3dTSDYyVTNTQi83bU9MRWNxNW5iWWszNVkxV1R4bGhR?=
+ =?utf-8?B?M1Rjb01qMVpBdDJqMS9qZzd2WmxhWE9BbFBKVVMzTEc4cXlKOHZyM1F4UzBW?=
+ =?utf-8?B?NUMrYlhhbDNtQmZUa2FJZFFMenk3K0dCUTY5MWtuRVRBbHlMU21aTkVjTGda?=
+ =?utf-8?B?UFlTSjlVdlUzS0VaaEZtUDh1NTJJYlBHejFneUVOK0M1bmZiLzVONktrWG9n?=
+ =?utf-8?B?UmphNDZiSTVmNmhweFVvcEhJRklGcGl4amVuMFdOdDRpOTQwSEh5S1BsR1Bp?=
+ =?utf-8?B?a0dVT1BmaWVwa1hjVnI3MDBhM2pTc1AvamM4OHY3WkxqVTRqOFQxYzdHNkI2?=
+ =?utf-8?B?YlJ4SG54MG9tTHhGYk41OUpDMHBFaE85aTRvNDZIcUJuWE4yN29zMEh5d2NJ?=
+ =?utf-8?B?aWpQd05idVl0THNTM3NLcHExN0lCWWs0ckFuTTc4Vlh4ZmVwaDVaODlldTBM?=
+ =?utf-8?B?ZlI5c2c1ODMvNFNVVDV0Qlhjayt1amcrN04zanluSkJqTVlkV1RpMmR2L0k5?=
+ =?utf-8?B?L2Y4aGFUaHhDUmNoKzZjR2F3d2JqRkxGZHBOZ21abzMxcUZZZ3R5bDRSRmRM?=
+ =?utf-8?B?U1l2MlJmNUtFTEdrK3kweVFaaG1lMVIzNjAvV0VaUXIwVTBuR1NEZW1lWDlB?=
+ =?utf-8?B?TzFDV1BPY05jL1RuV1VQd3M4ZVBnUTVTUk1YN3lKV2dQcVQyVnVhUFdRWVRz?=
+ =?utf-8?B?c2kzWXJzWkJTeVh5YS9uOW43ZGtMakdmcUY5emVlYlQ3ME1NZjJNWlZLck9l?=
+ =?utf-8?B?cHdtV2lVbDF2djFqWDR0aTFFM2JBdW1RNUpGOWFYa3IzaXU1cDNBY3VPTnAr?=
+ =?utf-8?B?SmtWOS9oSTRRdVM5QldXRjFEV3dxMFRsaEczVXh0UEE5aHU1VkVXVjBFUXhS?=
+ =?utf-8?B?cnZVQmF5UWtXZ2xHRzQ5L1ZQeGR6TDZweW1sZDNNa0dNT2xHeEZsUGRsRThz?=
+ =?utf-8?B?dkl4eVlwRWVJTVoxTFVmR3Q5YWxmT09SclRiMzZmSUxBMk45bm1WRVN1Mllz?=
+ =?utf-8?B?Q2kycnRTYkxmY3BYM1F5eG5yWDFsSmlmM3RzZnFHOGcvSUxrRTVRZzlSMTZM?=
+ =?utf-8?Q?WxG1TA?=
+X-Forefront-Antispam-Report:
+	CIP:50.233.182.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:[127.0.1.1];PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1102;
+X-OriginatorOrg: axiado.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 18:28:02.1271
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f620188-04e8-48e2-5147-08dde6609f93
+X-MS-Exchange-CrossTenant-Id: ff2db17c-4338-408e-9036-2dee8e3e17d7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=ff2db17c-4338-408e-9036-2dee8e3e17d7;Ip=[50.233.182.194];Helo=[[127.0.1.1]]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR18MB4107
 
-On Wed, Aug 27, 2025 at 09:13:17AM -0400, Brian Masney wrote:
-> On Wed, Aug 27, 2025 at 03:09:33PM +0800, Peng Fan wrote:
-> > Hi Brian, Sudeep, Cristian
-> > 
-> > On Mon, Aug 11, 2025 at 11:19:44AM -0400, Brian Masney via B4 Relay wrote:
-> > >From: Brian Masney <bmasney@redhat.com>
-> > >
-> > >This driver implements both the determine_rate() and round_rate() clk
-> > >ops, and the round_rate() clk ops is deprecated. When both are defined,
-> > >clk_core_determine_round_nolock() from the clk core will only use the
-> > >determine_rate() clk ops, so let's remove the round_rate() clk ops since
-> > >it's unused.
-> > >
-> > >Signed-off-by: Brian Masney <bmasney@redhat.com>
-> > >---
-> > > drivers/clk/clk-scmi.c | 30 ------------------------------
-> > > 1 file changed, 30 deletions(-)
-> > >
-> > >diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
-> > >index d2408403283fc72f0cf902e65f4c08bcbc7b4b0b..6c6ddb92e7cf6a0cfac2c7e19c0f15f777bb8c51 100644
-> > >--- a/drivers/clk/clk-scmi.c
-> > >+++ b/drivers/clk/clk-scmi.c
-> > >@@ -54,35 +54,6 @@ static unsigned long scmi_clk_recalc_rate(struct clk_hw *hw,
-> > > 	return rate;
-> > > }
-> > > 
-> > >-static long scmi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
-> > >-				unsigned long *parent_rate)
-> > >-{
-> > 
-> > I see the point of round_rate is not used if determine_rate is there.
-> > But reading the code of round_rate, It might be better to rename
-> > scmi_clk_round_rate to scmi_clk_determine_rate.
-> > 
-> > Anyway, need Sudeep and Cristian to comment.
-> 
-> In this case, yes the round_rate implementation is filled out, whereas
-> the determine_rate lets the firmware handle it, and
-> scmi_clk_recalc_rate() will later populate the rate the clock is running
-> at.
-> 
-> I can convert round_rate over to determine_rate in this case, however it
-> would be a change to what's there now, and risks a regression. Here's
-> the relevant code from drivers/clk/clk.c where the determine_rate and
-> round_rate ops are called:
+Axiado AX3000 EVK has total of 4 UART ports. Add missing alias for uart0,
+uart1, uart2.
 
-I am inclined towards this. Determine rate was added recently when the
-clock parent support was added IIUC, so I don't think it should regress
-anything.
+This fixes the probe failures on the remaining UARTs.
 
-> 
->     static int clk_core_determine_round_nolock(struct clk_core *core,
->                                                struct clk_rate_request *req)
->     {
->     	...
->             if (clk_core_rate_is_protected(core)) {
->                     req->rate = core->rate;
->             } else if (core->ops->determine_rate) {
->                     return core->ops->determine_rate(core->hw, req);
->             } else if (core->ops->round_rate) {
->                     rate = core->ops->round_rate(core->hw, req->rate,
->                                                  &req->best_parent_rate);
->     	...
-> 
-> If Sudeep / Cristian want the round rate converted to determine rate in
-> this driver, then I can do that in a v2.
-> 
+Fixes: 1f7055779001 ("arm64: dts: axiado: Add initial support for AX3000 SoC and eval board")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Harshit Shah <hshah@axiado.com>
+---
+- Run "b4 trailes -u"
+- Link to v3: https://lore.kernel.org/r/20250824-axiado-ax3000-missing-serial-alias-v3-1-5db4143bf189@axiado.com
 
-Yes please. Also please post it independent if it doesn't have to be in
-the series. To many in cc and lots of patches to respin all.
+Changes in v3:
+- move "Fixes:" tag before Signed-off-by in commit (Krzysztof)
+- Link to v2: https://lore.kernel.org/r/20250822-axiado-ax3000-missing-serial-alias-v2-1-54052d75467b@axiado.com
 
+Changes in v2:
+- Add missing "Fixes:" tag in commit msg
+- Link to v1: https://lore.kernel.org/r/20250821-axiado-ax3000-missing-serial-alias-v1-1-527d979c3ea0@axiado.com
+---
+ arch/arm64/boot/dts/axiado/ax3000-evk.dts | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/axiado/ax3000-evk.dts b/arch/arm64/boot/dts/axiado/ax3000-evk.dts
+index 92101c5b534bfac8b463adaa1c4f0d4367d01e21..b86e969625573bf92bdd5e4435ea571dd7500de2 100644
+--- a/arch/arm64/boot/dts/axiado/ax3000-evk.dts
++++ b/arch/arm64/boot/dts/axiado/ax3000-evk.dts
+@@ -14,6 +14,9 @@ / {
+ 	#size-cells = <2>;
+ 
+ 	aliases {
++		serial0 = &uart0;
++		serial1 = &uart1;
++		serial2 = &uart2;
+ 		serial3 = &uart3;
+ 	};
+ 
+
+---
+base-commit: 8742b2d8935f476449ef37e263bc4da3295c7b58
+change-id: 20250813-axiado-ax3000-missing-serial-alias-39c489370ba9
+
+Best regards,
 -- 
-Regards,
-Sudeep
+Harshit Shah <hshah@axiado.com>
+
