@@ -1,129 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7EA277003
-	for <soc@lists.linux.dev>; Fri, 29 Aug 2025 09:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F04D286413
+	for <soc@lists.linux.dev>; Fri, 29 Aug 2025 10:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756459584; cv=none; b=q/FPUV9BVDiiGPhwYKe+VnwCGgYnbErEq54AjpEDqi0jt1579twwokFPPILbhATCzNKPT1WibAboB6krz4nuENzxF7H/e6j5ZKISKulQ5Q+sY2h2LaeqePFV4JcQYecZqIZ1OSf5sVr8yHlpQj9jyY3oGBFJV5RQv4AFVCUNAXw=
+	t=1756462294; cv=none; b=mk35t0Gmws35Ci0VoZQryQAQl+qSURy6KpWSIe17kaTtw6A75VPOV03nAkqlHVeFpMn+WZV//EY2F/ndNBhy2Gq8/3YjH3D4+g9/HrifXlL5tTo1AE1PLgv2I3J2F4wbTjaxJKYHcHfr03cUd2+gqKNX3ONQYsquJ8IAv9huDLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756459584; c=relaxed/simple;
-	bh=uYsAQkNL9FlDnhB0WAk0oZ0SRFbXvinmzWx0htGozcQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=iXMt435KPocC0WCqhu+Hq8Rbr//1OBGfrP3xFwQbvRsvALENfLXbTIpdPRpM2C7Hout8naRFiGT81h53yjOCC1lbEoSdeQtP7HKKVZUfJvO/p/LJLfokhbPSUE6b1BJ4PPvU4S1dDD64Y7htJMfcko/6+TIMBlrc2yFv9EAtK2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TOD5OtWs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756462294; c=relaxed/simple;
+	bh=Xjnj6nPS6qYYbzWCdNkcP1fjnBYRMWrLTWZgkTJjBnY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e1zuyyDRMhbi8dLomP8OBQ+NkFhzcVg8k9/RjElTjydZEHN8Q6ghGOXKGDRXFXrnsNI3GQrb234/rKIysk10inH8qNjCqRkB/PRtf5psfinLSP8phhJ2Cg9XyS/22ih1RxIklTwlxp0By4v2maIKz7+VrC+GxeYuuzVm2L/OVZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R+N1SKod; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TOD5OtWs"
-Received: by smtp.kernel.org (Postfix)
-	id C14ABC4CEF4; Fri, 29 Aug 2025 09:26:22 +0000 (UTC)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C068CC4CEF0
-	for <soc@kernel.org>; Fri, 29 Aug 2025 09:26:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C068CC4CEF0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3367144d19cso17066671fa.2
-        for <soc@kernel.org>; Fri, 29 Aug 2025 02:26:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R+N1SKod"
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-336b63d2e56so5457131fa.2
+        for <soc@lists.linux.dev>; Fri, 29 Aug 2025 03:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756459579; x=1757064379; darn=kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9O6/n2KCZah3+n6ZdMwuaNRQX5T9KrxQ3HhsaEAylUY=;
-        b=TOD5OtWswNCO942fWOb57QPdW0SIFqYpBNxGV8ljx3KP0i9srnSNoQl5+zC2veQDfX
-         K5R++zIH6nAUVZNTjgEI5TpuiYbRI7clK8aecxcoQu7o06bENca6jbtFITPMiHpuvk/2
-         i6/F3oaht4EaTppnAvVoLEivZxz8WBBDFm7wCYv2FeFtOGVmlRe67YiwULli3PHOi2YH
-         3QDBnVZ37Fwx5JvgYjeD+WGliY1mFdQnKV8PR3DxINYwZhMEkViv7pSnnVaNKaXbLIiw
-         5MJG9+w1pPnEEqiKk473tRIMc/NJi5RlsLUjPMXlPynfkKl+6nOqVIScOLhhH3BXrypb
-         rlAg==
+        d=linaro.org; s=google; t=1756462290; x=1757067090; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xjnj6nPS6qYYbzWCdNkcP1fjnBYRMWrLTWZgkTJjBnY=;
+        b=R+N1SKod45LYrTOLiIdtvuE0S4OT+T5cZKvaFiTdmrUn9R4qYUMFYH+osEUWqzBx66
+         IR8Rj6wMRzsXN9d9bInXL8Zj3bRky5VWSFk+yzJNokfGpZhNzV+IWywadHluhReYMhuS
+         VsXfSWfrZXLwBzCQRAUpOEHuDzh13C1uIf+/jETl3CxDb/cBPoonAHicJ5YnUjYQX0qF
+         swetWgtgbAAOnF8sgCXnIQXVBR7zDfR4jTAMl/W1KU5HmHI/VmXAeQoQJavlwqfT8n9j
+         FzRY5Z9yHkomZ+2pDYwAgt6PKmHyfxh3kPWDOhk/d8NXNrBHpmUhSWJZYYJ6bzaC/8uK
+         2GnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756459579; x=1757064379;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9O6/n2KCZah3+n6ZdMwuaNRQX5T9KrxQ3HhsaEAylUY=;
-        b=WiDB2VUc+JKATbnVletLL76TsZWBZvNsFipSnEyQ+bsf0kM+8VR5sUHH9MT03mCBbc
-         najMVoqn9H9euk1828r1+50UmZxfLn+rmI3fG6h57DU8jRGsM5Pba8xWBGmH3wqaYJxZ
-         wWj3e+487WZ0Yp2G+S1ONSxwbFaP/LMsOv+mAv75Ed0n9DjwXVn4V7lMR2eyYBEkLFIg
-         xvNu7In3AIUT7Ca1q4PkPQSDY4/Ct7kZG6nN7snkn9tI13ATG89uNAzFmmL/HqQr4TnR
-         M79IeofbsGOreddl8lLo+5M4NgyntVSjOvCZn4L/J2pUuAsSqyTcIGQUTecaW7+QT0sw
-         2Tsw==
-X-Gm-Message-State: AOJu0YzxEKsOQeQUgJpWpRnTXhWjxQYxLP9EZWWah24yL1GPAj5W3ZAS
-	CAuEnrIcmlRLheHN8KygI69wJuFP74FZPObg2i6uwCtIiGyv3qZsbEtbgCBHdaAumY5uJcIY2pb
-	bGAaZbSO/lXrmmM3iotgh9fPwpbq3SdIb6TPL0aozmLCRIaHn+Yl/L8w=
-X-Gm-Gg: ASbGncudPFOQwbxYJF5VsGNAhx9/Pxtu3PNFxd4tbe/ojlMC2k63C7XxslPp0zLmbCE
-	rXR977GJ642/0zIQoWGzbKFqRBA3w0SEV1f1thSnNC6iu7NBIDl5XWaz195xFz1KXLdzcLoG/EZ
-	UM/ZmW//Mzq4xXex57UeLnaLD8dyogotsmLqVN6wD6hbRuejjP9NwT9Rio0LqYWibQ7ZRkn5hdj
-	AdHeAD2vYOALnQfnA==
-X-Google-Smtp-Source: AGHT+IG2Y/yvinXG3SveXVTS3E4dOcqRyzaP5pP1vCw3YCfBefM9vtg00uC7kbMlsPRTk0S/XI+T7CjFpTkr1xe+Ipc=
-X-Received: by 2002:a2e:a990:0:b0:336:80e3:b15e with SMTP id
- 38308e7fff4ca-33680e3c715mr33252411fa.14.1756459578832; Fri, 29 Aug 2025
- 02:26:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756462290; x=1757067090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xjnj6nPS6qYYbzWCdNkcP1fjnBYRMWrLTWZgkTJjBnY=;
+        b=vBuB8kjGKVKALPwoS0v+FpVHPLDlgDmgFpR0PC+6LhTfEiqNl59orRDSOaUw8j8vix
+         Y4bznWLcfkJ027E6kRbZBBRiDa8+hx+ybUbLB9d7bilaUfrw2aTo7OL7O1Z4ze01tX52
+         0GgZehWW6yVuWbSfYwdP3YAIujcu04N9K7IU7n1QUtD/issNWYwtczb6V7B3XNrdQKt1
+         bPX8A3o4OtsiYcrOS9PiuBndpt/RJCewf/HzvEB10/r41rrU3deNDxp4qoWLsK1K0OeP
+         tPMsF+7knZSAmBI1QSK1A5E5s77eO51Z2VhArowKaOE1pQaX0kLA8bZfxITrgYU+RTwS
+         7JKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAS6AvSVlIqSJUNRDmxQs6OYeUcnfawRCTeigiuLq2opt8a6WF9l7pbO1nDpTZsuf9ffo=@lists.linux.dev
+X-Gm-Message-State: AOJu0YzIfpdQJ+9lc/keiYXfniSe8Lf0/eUg18Y5i/vr2HOf6w+Rl1Ej
+	KWLrY4U04sf2kLrbCFI0puMyacQSnBrf0Sh6rRY+PnNS8lTKP0FQ+mntW64SUWOcFNW3xpsPxOY
+	W6CGJ4RmtW1PFFWAAyT9eUpm7XGdAFcENo38X7J7Chw==
+X-Gm-Gg: ASbGncul4EsSDbT4u54zznZk5rqUFHRJ9jeSr2em1DGN/VWb7THsW8Kimr8p+jTxL1x
+	fFajdminDq5NXpLUAHDsGpzwXBHf2+JDtV04OuNT0Seubaa1pK1zXUs8RwidPE7swuXMD8L13/f
+	5Czf3jh/BHJvumxjmQEOaP3V650QY7rNE9DSlKq7PscHHJSQGuofbfh8SQxQKoaeFtttoTscLGU
+	JeppLY=
+X-Google-Smtp-Source: AGHT+IF2rckuWDB0N8TfxkqBuz+CSPuYoKPwq0L/OKD+eFOshcmaXOwCLTHg9xCg7qGXInQk7y2zM1fsjZxdnfUASAE=
+X-Received: by 2002:a05:651c:1544:b0:336:a8fb:937a with SMTP id
+ 38308e7fff4ca-336a8fb9b93mr12812201fa.19.1756462290440; Fri, 29 Aug 2025
+ 03:11:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+References: <CGME20250825120720epcas5p491e16bbfbdbcd751acbb0c0e55f9e2a2@epcas5p4.samsung.com>
+ <20250825114436.46882-1-ravi.patel@samsung.com> <20250825114436.46882-6-ravi.patel@samsung.com>
+In-Reply-To: <20250825114436.46882-6-ravi.patel@samsung.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 29 Aug 2025 11:26:07 +0200
-X-Gm-Features: Ac12FXz5AhVWqTqfSCc-_ezjIR0S-3TDTGfQoqqCuB3znbSZAu9_qlMQEko1w4Q
-Message-ID: <CACRpkdZoDCXgsTGzUUWABbp_r1Xjv7vp7_NjEnEWzMmDQG+UJQ@mail.gmail.com>
-Subject: [GIT PULL] IXP4xx device tree updates for v6.18
-To: SoC Team <soc@kernel.org>
+Date: Fri, 29 Aug 2025 12:11:18 +0200
+X-Gm-Features: Ac12FXxjnbVzeqW8L95iuuSr2TZOHM52rnOiOuvqvFvgSGHYE7jxXOy75cPjyPs
+Message-ID: <CACRpkdZwz8C=MRgo1tQrkQzNtKMLV+P-LK8XyRA3eSFW-cbFCg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/10] pinctrl: samsung: Add ARTPEC-8 SoC specific configuration
+To: Ravi Patel <ravi.patel@samsung.com>
+Cc: jesper.nilsson@axis.com, mturquette@baylibre.com, sboyd@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, krzk@kernel.org, 
+	s.nawrocki@samsung.com, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tomasz.figa@gmail.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com, 
+	gwk1013@coasia.com, hgkim05@coasia.com, mingyoungbo@coasia.com, 
+	smn1196@coasia.com, pankaj.dubey@samsung.com, shradha.t@samsung.com, 
+	inbaraj.e@samsung.com, swathi.ks@samsung.com, hrishikesh.d@samsung.com, 
+	dj76.yang@samsung.com, hypmean.kim@samsung.com, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@axis.com, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, soc@lists.linux.dev, 
+	Priyadarsini G <priya.ganesh@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi SoC folks,
+Hi Ravi / SeonGu,
 
-these are some new DTS stuff for the IXP4xx, it builds
-on bindings merged into the networking and GPIO git
-trees, look at the signed tag for more details.
+thanks for your patch!
 
-Please pull it in!
+On Mon, Aug 25, 2025 at 2:07=E2=80=AFPM Ravi Patel <ravi.patel@samsung.com>=
+ wrote:
+
+> From: SeonGu Kang <ksk4725@coasia.com>
+>
+> Add Axis ARTPEC-8 SoC specific configuration data to enable pinctrl.
+>
+> Signed-off-by: SeonGu Kang <ksk4725@coasia.com>
+> Signed-off-by: Priyadarsini G <priya.ganesh@samsung.com>
+> Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
+
+Please avoid CC to soc@kernel.org on these patches, they end up in the
+patchwork for immediate merging for SoC:
+https://patchwork.kernel.org/project/linux-soc/patch/20250825114436.46882-6=
+-ravi.patel@samsung.com/
+
+I think this is not you intention, the pinctrl portions will be merged by
+Krzysztof who sends it to me once that part is finished reviewing.
 
 Yours,
 Linus Walleij
-
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-tags/ixp4xx-dts-v6.18
-
-for you to fetch changes up to 85ac6b806993200fe117f4fd047c74784ec6b515:
-
-  ARM: dts: Add ixp4xx Actiontec MI424WR device trees (2025-08-29
-11:18:15 +0200)
-
-----------------------------------------------------------------
-IXP4xx DTS updates for v6.18:
-
-Add the Actiontec router MI424WR A/C and D device trees.
-
-Prerequisite DT bindings have been merged in networking and
-GPIO git trees:
-https://lore.kernel.org/netdev/175106401649.2079310.16035106613106076029.git-patchwork-notify@kernel.org/
-https://lore.kernel.org/linux-gpio/175614780274.8817.4717113656972710108.b4-ty@linaro.org/
-
-----------------------------------------------------------------
-Linus Walleij (3):
-      dt-bindings: Add Actiontec vendor prefix
-      dt-bindings: arm: ixp4xx: List actiontec devices
-      ARM: dts: Add ixp4xx Actiontec MI424WR device trees
-
- .../devicetree/bindings/arm/intel-ixp4xx.yaml      |   2 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm/boot/dts/intel/ixp/Makefile               |   2 +
- .../ixp/intel-ixp42x-actiontec-mi424wr-ac.dts      |  37 +++
- .../intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts |  38 +++
- .../intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi  | 272 +++++++++++++++++++++
- 6 files changed, 353 insertions(+)
- create mode 100644
-arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-ac.dts
- create mode 100644
-arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr-d.dts
- create mode 100644
-arch/arm/boot/dts/intel/ixp/intel-ixp42x-actiontec-mi424wr.dtsi
