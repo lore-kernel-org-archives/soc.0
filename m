@@ -1,117 +1,193 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BDA315772
-	for <soc@lists.linux.dev>; Thu, 28 Aug 2025 18:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5C318A93F
+	for <soc@lists.linux.dev>; Fri, 29 Aug 2025 00:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756407162; cv=none; b=rnHJ0c/LAoN/+BJ/YF88uUcUaGXFl4tfDZ1wUmKmuhNwJxLYC60Kc8JsngIHkz54O9U73+TatJaIuNaUBIUwUKhByQ4yAk3K32MqRinidBwszYFCyU/7TqzH7HspZvUhdCd4HJEdAdSSZaI47IeaE1czs8HSTMO33E/p8avkbd8=
+	t=1756428479; cv=none; b=KVqRa4lfN7D2zrThIGJ0rmiyJJGRFS32Cay6/eqOnuc8CigRWaCxp1wwytk78oC5n0dN32Zhy/nHFOiLh0Dv75MDVgJA0ejRMFpwOPiRMIIgt8v28CB+SF7KTX01R1E4+ZYXblbI95HmkaDFhh2aFzGdaWAqsd6sC9ySTqzkPJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756407162; c=relaxed/simple;
-	bh=f6iClZMo1Awkj9nM7rVP3osja0R7sgrBDFMdGTnjrdo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=ctAxNrEHXWIfIfncBTlq8/y9oT7O9nmMis/ixfftbRjjXMCVduOdlAl/Bt2YIfwnNy7GxHoOpzKevKlMOlYD7ymfFPX/LVZi9rqpAYcETGTJg/SZ64vJ0DdZ2JI43alBiUl1oU8juHqH0sBaSSttUVAROVvdN4YmCiYYc6rVhWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d8YJhAXz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756428479; c=relaxed/simple;
+	bh=2hr2jy4IpoCDgvk7s9IjtfXTVDQh1mDXQrhhYPQBqgs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=VTPxYHfuco5bOZA4lD6QQmucYKzxp+LZWbVMM31XWgj3pGVGJiB127Ck1nJe4qIyA3HYHgWXdHHn3QuD6JgsQIli6tJjmnw/gu/8nJq/nyBR5hRl9YUZ5yIdNfVoFdRSS+Gb0VaLGODa/Kljdij72FRdoA/n5NgwudDQO03Du7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eRIyUMrs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d8YJhAXz"
-Received: by smtp.kernel.org (Postfix)
-	id 720A2C4CEF4; Thu, 28 Aug 2025 18:52:42 +0000 (UTC)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7FA11C4CEED
-	for <soc@kernel.org>; Thu, 28 Aug 2025 18:52:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7FA11C4CEED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-55f48d61ea2so1677784e87.1
-        for <soc@kernel.org>; Thu, 28 Aug 2025 11:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756407159; x=1757011959; darn=kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+Y+IcKar04FZc1GFw8b9dtYgfURpAIh1uHn9Vk64dg0=;
-        b=d8YJhAXzTaqSVbWOxErmxn4OQjnRDs9yL5hPmjzK3t15G0sHl1hy8geyKjmTbJsODD
-         uG05cp1FGgfq+O7n3DHLIA7U+W1pV9dUkMsByK7L1xFqsaLCvHFppB6AQ8tQbH3pin4A
-         PAipyoshXzr72zFZFmMhfron2FiAiK+iw1KIgOsjDRT1M+dgXFral//f1gxMvHzc4hqY
-         IHBD7yzBsGkQuRCl47HtfX7Tjbh7nARwFFMxFTx4bczXLrpOi1K6qEtxmfyY5ZqbJSW6
-         k4NA6/xXvT3xQO7VdF0zPiD/EqKhNpgiNSWmrLMZlTsYKxw3eAhsmtJyIXkH4IbmgNhO
-         +5jA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eRIyUMrs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756428477;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MySjf1dNQ+QFblxbzgcBLucxms+md0OmiOz5lWF0b/w=;
+	b=eRIyUMrsdAYkfHt4XKCp6uZVcaF8eYVW5PQTWDPnRfcFh/fZ/OCQknkdaU2gTo+kNSqclk
+	KzFj050q9fo6aXu7Xs7kbYSaiSI49YudDmWSTgD9iJoxx+XvlV4TYN/0OL56J4V7l+IoYq
+	yJFrdmdnuvJZ5NGYRkAj9b78M2tCnOs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-CozcDDOsNE-NH4yAOrAEHw-1; Thu, 28 Aug 2025 20:47:55 -0400
+X-MC-Unique: CozcDDOsNE-NH4yAOrAEHw-1
+X-Mimecast-MFC-AGG-ID: CozcDDOsNE-NH4yAOrAEHw_1756428475
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7f7dd47f712so546656985a.1
+        for <soc@lists.linux.dev>; Thu, 28 Aug 2025 17:47:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756407159; x=1757011959;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+Y+IcKar04FZc1GFw8b9dtYgfURpAIh1uHn9Vk64dg0=;
-        b=lNbdpgXC5IXl8rGXXnqsHC6O6jmlKEry4ZNYh41bZDeYpXQWsGIHczEoK2qiRjCdxm
-         MG1/td+xQ3Iqr+FRyaiDfh8MMROczlYAG3U/K18ND+ABhhs5Qk43J0SLQunvtVqdMtJv
-         fLQvoyLXmF/Q9uqBqFt4oLooQwXpVLcma5CT3Ysht9iXe4nJWW5INhhq892Pz3lgTQtG
-         stkhnBoByegLoiwRgCvxZa/TYDyxHUX5AvvU1u1J8+bC6b+UbeUaQrv8vx38AxOkRuLt
-         FspdYmy/x4rS48Bz4RnlSUTgWEJX5LKXKvWPgd6swwZLiOPr0zeigEja3JajbgDUN0Sp
-         E1Hw==
-X-Gm-Message-State: AOJu0YzH+lDVsZuF1GlGif/X4b7tiCa9vrJ5TUn8GYzvJ2CE5DvF6YOW
-	UdVi2zZmbDFadNe4elIcWOnCKTvrsIVFnptLcJlSbyBN0EKFSL75nN1YMi6blxLeul/rQsAgra0
-	lthBLDyP27Fn0ugFJwdlQ4M8/dvPyJJTB7EU12o4lf/3hII3w4L44PWo=
-X-Gm-Gg: ASbGnctaowL8WWqLRzuGiJ7Ats+ieYuiojK65JEjpT7E5ucfvzDzoflED0YuL4g44c7
-	vQmX1+tTxQquJBagSSC2zCNUwfWVfapXuMeDMhlK3Mfa4x9SUDDsYRhMmgwZKILa5XBslovPpEz
-	Kd0l8j/TTQ4TvLOPsNj3Uh266zcT9b5H+LT7ZmVWeG3XuK8K8vL3tYbmgQQOEZXxSJGAes+eeDA
-	uINWh8Y2ZXaziVLaQ==
-X-Google-Smtp-Source: AGHT+IEx3UntxBHvCtJM2iUoHNvbw7GSdp/b9rbJWabNIOs/rkdaufeKCKc3tzall8DSDrchtTbnG7iUoYBG9KgSc3k=
-X-Received: by 2002:a05:6512:6282:b0:55f:4953:ae91 with SMTP id
- 2adb3069b0e04-55f4953b230mr4834573e87.5.1756407159136; Thu, 28 Aug 2025
- 11:52:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756428475; x=1757033275;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MySjf1dNQ+QFblxbzgcBLucxms+md0OmiOz5lWF0b/w=;
+        b=SRnTQ9hWFE2ECcTqZ70dmrmwgCXS7cr9OHoYOVLx8C5I5n9T5FUv4yNJPrihy0Qrr6
+         tYYS/+1FQbx4YIy7MBnbeNVZzqlW6IdRpnLQmDRdBRPcazEvX6y8E/ZVK1iOOcRSMh55
+         ph2wn0k05E936fbGF9bbsS58JpqBf1pqmrMyVAbAZvSE5Kbh5PkgMppcPTbXqiL0aIKa
+         ecrH2vJ7yFjKya7jNIvXnGjj9Da8ZFerFVupXPgXN2gntxwl0XfuUhUqyQm+CFaDgt5U
+         6u34hv4htLJ8n9iljvvcQTmt0r42PxvYFJWglke6eqopvV+141MvMlSSAgzsIsob+TCE
+         DK8w==
+X-Forwarded-Encrypted: i=1; AJvYcCUUkqMghjpBt9AwRNmT1KBKWxEiiuKPj4R8aW3TvjUAB3+Rh5APMyvrSBkA0N3d1qjwEmA=@lists.linux.dev
+X-Gm-Message-State: AOJu0YxAPAKu/IaE0ruUjWaYqoGrnDDFmn/Fair8bCYYQ3A9GOapg7ep
+	gAUnwTSOgzuLY2ZvS5/mQXsGkdYtSmsD5GoXq2k+OB0C8gW8S0WekT0fBNVz7i/mMaipamLxrTn
+	IvyWzmFU70nQEGqsrsNt+Ff5WXfYAFN2uZx0uohlPwUeGbmahqOhLlg==
+X-Gm-Gg: ASbGncuI38PHRnJs+p0EQTj4j7g2KElNtyCYYSl89jgd1bb7OKwqOfCnsu2SRdYHBsO
+	jXMtbOnQQoK1SYFVeLNKb/apAS72bByJl0RknjEd/GrCF7PsfMAtxSL4AeY5FQxbDZWGwQ2CTRk
+	rnI94DBGOqmGxVj2L9RsiHWevznd3Em1stp+a6P9NB06fPJBLX9V1cWOO0rQPgHHpseV+SAIYsi
+	RaQx3Nqxn9uXe/96Rwr0hN57cDo0slkZ1GY3VX0gsOtfO2c8yd6Eon0+cE+JqjlpdyWvXSP0aB5
+	5PClyNPVXN4s+zWRjuUAF7I7I/3jdGJEHQ5qgD8zyqnNgJmwkDuOHqHa8p7Udf1NJyrKmsCWGWE
+	5FYRzP9TWEAZMmRZfFyU=
+X-Received: by 2002:a05:620a:408a:b0:7f3:caf0:8412 with SMTP id af79cd13be357-7f3caf08452mr1587635585a.46.1756428474365;
+        Thu, 28 Aug 2025 17:47:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEjCgf4If/yLnG9xLRPpSvaRiEUxzvfevF39cHGHA+NM0Oih06WQG6xkNf8xHsAsX5EmFe8lQ==
+X-Received: by 2002:a05:620a:408a:b0:7f3:caf0:8412 with SMTP id af79cd13be357-7f3caf08452mr1587627285a.46.1756428473789;
+        Thu, 28 Aug 2025 17:47:53 -0700 (PDT)
+Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7fc14754ee8sm80548485a.32.2025.08.28.17.47.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Aug 2025 17:47:53 -0700 (PDT)
+Date: Thu, 28 Aug 2025 20:47:47 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Alex Helms <alexander.helms.jy@renesas.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
+	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
+	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
+ round_rate() to determine_rate()
+Message-ID: <aLD4s0sGEaQKD9PQ@x1>
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Aug 2025 20:52:27 +0200
-X-Gm-Features: Ac12FXzN6CxVJT1Mqe_grYO8bbFDfmy1_1T7RUN8NAobiy7Zt2q_nB-I99oG-h4
-Message-ID: <CACRpkdaGWVe7TNVz_L=gFh3AfzqnEq4rrOLo8x6gXUORA+MMpw@mail.gmail.com>
-Subject: [GIT PULL] Ux500 DTS changes for v6.18
-To: SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: RvzvGsQq--CWYHfQQ_QYkpTglpo8wuBfJHp7JL_T9Po_1756428475
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Two minor Ux500 DTS fixes from my git, details in
-the changed tag.
+On Mon, Aug 11, 2025 at 11:17:52AM -0400, Brian Masney wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() clk ops, so let's go ahead and convert the
+> various clk drivers using the Coccinelle semantic patch posted below.
+> I did a few minor cosmetic cleanups of the code in a few cases.
 
-Please pull them in!
+I posted a v2 patch series with 8 patches from this series that needed a
+v2 to:
 
-Yours,
-Linus Walleij
+https://lore.kernel.org/linux-clk/20250828-clk-round-rate-v2-v1-0-b97ec8ba6cc4@redhat.com/T/
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+Sorry I didn't put PATCH v2 in the subject. I noticed as soon as it
+started to send.
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+In summary, it fixes one merge conflict introduced in linux-next, remove
+one case of &*, fix a comment, and removes unnecessary space after a
+cast on 5 patches.
 
-are available in the Git repository at:
+There are currently 7 patches from this series that's currently in
+linux-next (renesas, spacemit, samsung). 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ux500-dts-v6.18
+The relevant remaining 99 patches from this series waiting to be merged
+can be grabbed with this command:
 
-for you to fetch changes up to 9c66753641765cc2f5ee1528a23f3fd2fd77cb93:
+b4 am --add-link \
+	--cherry-pick 1-37,39-47,52-63,65-67,69-89,91-91,94-94,96-96,100-112,114-114 \
+	20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com
 
-  ARM: dts: ste-ux500-samsung: dts bluetooth wakeup interrupt
-(2025-08-28 20:39:17 +0200)
+There's no dependencies with the other series.
 
-----------------------------------------------------------------
-Ux500 DTS changes for v6.18
+Brian
 
-- Fix a GPIO hog name.
-
-- Move custom wakeup GPIO to a proper GPIO IRQ
-  line rising edge wakeup.
-
-----------------------------------------------------------------
-Alex Tran (1):
-      ARM: dts: ste-ux500-samsung: dts bluetooth wakeup interrupt
-
-Krzysztof Kozlowski (1):
-      ARM: dts: st: ste-nomadik: Align GPIO hog name with bindings
-
- arch/arm/boot/dts/st/ste-nomadik-s8815.dts            | 2 +-
- arch/arm/boot/dts/st/ste-ux500-samsung-codina-tmo.dts | 5 +++--
- arch/arm/boot/dts/st/ste-ux500-samsung-codina.dts     | 5 +++--
- arch/arm/boot/dts/st/ste-ux500-samsung-janice.dts     | 5 +++--
- 4 files changed, 10 insertions(+), 7 deletions(-)
