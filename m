@@ -1,193 +1,149 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5C318A93F
-	for <soc@lists.linux.dev>; Fri, 29 Aug 2025 00:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D5E1A5BBC
+	for <soc@lists.linux.dev>; Fri, 29 Aug 2025 05:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756428479; cv=none; b=KVqRa4lfN7D2zrThIGJ0rmiyJJGRFS32Cay6/eqOnuc8CigRWaCxp1wwytk78oC5n0dN32Zhy/nHFOiLh0Dv75MDVgJA0ejRMFpwOPiRMIIgt8v28CB+SF7KTX01R1E4+ZYXblbI95HmkaDFhh2aFzGdaWAqsd6sC9ySTqzkPJk=
+	t=1756447145; cv=none; b=ZzKGvNKlipYVFyYSLTUHyzzmEpFgm0BjLx6IuO4z6Cmwmw/mN6CRqeAqZkGCCzCVW64td1ghldO/KJWzIQlEuq1popsmiHMDs793hJmMJYjqin42qhF7dui0YovpEzGTPmxpflAfnSvZRQ3zrlpCjA2lYh3Jn0Ow+j1VoYGkbcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756428479; c=relaxed/simple;
-	bh=2hr2jy4IpoCDgvk7s9IjtfXTVDQh1mDXQrhhYPQBqgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=VTPxYHfuco5bOZA4lD6QQmucYKzxp+LZWbVMM31XWgj3pGVGJiB127Ck1nJe4qIyA3HYHgWXdHHn3QuD6JgsQIli6tJjmnw/gu/8nJq/nyBR5hRl9YUZ5yIdNfVoFdRSS+Gb0VaLGODa/Kljdij72FRdoA/n5NgwudDQO03Du7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eRIyUMrs; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1756447145; c=relaxed/simple;
+	bh=kCfQ8ISGxKI+1ym5WMCNEewc5989yFoQC7vkJ/V7emA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=apa21pTUXvW1WO62YETe/DvlXqRw7K/AlOeqP0SWFe3LK9EEdr3ba3X1iWetLNungMj2hjymfPG2rUXZT18Gin0yex6k7/iutDJdNvjuA8y9bYxqH3rxagwtYpR/8qtsylOtReY6aHRKHAdZ9mHqw1P5NzFwdbl0S58xsXj17BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GuCRrQqP; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eRIyUMrs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756428477;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MySjf1dNQ+QFblxbzgcBLucxms+md0OmiOz5lWF0b/w=;
-	b=eRIyUMrsdAYkfHt4XKCp6uZVcaF8eYVW5PQTWDPnRfcFh/fZ/OCQknkdaU2gTo+kNSqclk
-	KzFj050q9fo6aXu7Xs7kbYSaiSI49YudDmWSTgD9iJoxx+XvlV4TYN/0OL56J4V7l+IoYq
-	yJFrdmdnuvJZ5NGYRkAj9b78M2tCnOs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-638-CozcDDOsNE-NH4yAOrAEHw-1; Thu, 28 Aug 2025 20:47:55 -0400
-X-MC-Unique: CozcDDOsNE-NH4yAOrAEHw-1
-X-Mimecast-MFC-AGG-ID: CozcDDOsNE-NH4yAOrAEHw_1756428475
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7f7dd47f712so546656985a.1
-        for <soc@lists.linux.dev>; Thu, 28 Aug 2025 17:47:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GuCRrQqP"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-afe80ff97adso28634166b.2
+        for <soc@lists.linux.dev>; Thu, 28 Aug 2025 22:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756447142; x=1757051942; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=a8nLSUsm88QMj2KXiJKv/xrkbZBm4Zb7nYR0CSmM3jI=;
+        b=GuCRrQqPcQdhVLWBx+MK2LhPC71/fWSvkB7JHvHpfsH8b1cogukScb1mSo5Vx8YDc1
+         vmtIM+RAshNXe/OL7i6eaH/G+nnBfT6rABXcJpk37vcJmBB++I/bwrJkj/AsIHQGUAFe
+         cLrCOAlM0jgCiysWIIDvpknnQ94T49OdrcYVtdlyJaGJzi4kYrr+vme87+Go7VoVhlyu
+         0ILKJH5i74Wn03iAfjR9sgJLnIpBxlV6kx4FTOVq5IU9+HeSpYe+33FPPC4i7QBfLCv/
+         ZnGvgUWzLdjvGNyghnrYzIe0CpzZ7hPztYOd5zFoIkYy6PnQ5R/i7I9gM/HWHDDQ0uPo
+         fBvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756428475; x=1757033275;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MySjf1dNQ+QFblxbzgcBLucxms+md0OmiOz5lWF0b/w=;
-        b=SRnTQ9hWFE2ECcTqZ70dmrmwgCXS7cr9OHoYOVLx8C5I5n9T5FUv4yNJPrihy0Qrr6
-         tYYS/+1FQbx4YIy7MBnbeNVZzqlW6IdRpnLQmDRdBRPcazEvX6y8E/ZVK1iOOcRSMh55
-         ph2wn0k05E936fbGF9bbsS58JpqBf1pqmrMyVAbAZvSE5Kbh5PkgMppcPTbXqiL0aIKa
-         ecrH2vJ7yFjKya7jNIvXnGjj9Da8ZFerFVupXPgXN2gntxwl0XfuUhUqyQm+CFaDgt5U
-         6u34hv4htLJ8n9iljvvcQTmt0r42PxvYFJWglke6eqopvV+141MvMlSSAgzsIsob+TCE
-         DK8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUUkqMghjpBt9AwRNmT1KBKWxEiiuKPj4R8aW3TvjUAB3+Rh5APMyvrSBkA0N3d1qjwEmA=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxAPAKu/IaE0ruUjWaYqoGrnDDFmn/Fair8bCYYQ3A9GOapg7ep
-	gAUnwTSOgzuLY2ZvS5/mQXsGkdYtSmsD5GoXq2k+OB0C8gW8S0WekT0fBNVz7i/mMaipamLxrTn
-	IvyWzmFU70nQEGqsrsNt+Ff5WXfYAFN2uZx0uohlPwUeGbmahqOhLlg==
-X-Gm-Gg: ASbGncuI38PHRnJs+p0EQTj4j7g2KElNtyCYYSl89jgd1bb7OKwqOfCnsu2SRdYHBsO
-	jXMtbOnQQoK1SYFVeLNKb/apAS72bByJl0RknjEd/GrCF7PsfMAtxSL4AeY5FQxbDZWGwQ2CTRk
-	rnI94DBGOqmGxVj2L9RsiHWevznd3Em1stp+a6P9NB06fPJBLX9V1cWOO0rQPgHHpseV+SAIYsi
-	RaQx3Nqxn9uXe/96Rwr0hN57cDo0slkZ1GY3VX0gsOtfO2c8yd6Eon0+cE+JqjlpdyWvXSP0aB5
-	5PClyNPVXN4s+zWRjuUAF7I7I/3jdGJEHQ5qgD8zyqnNgJmwkDuOHqHa8p7Udf1NJyrKmsCWGWE
-	5FYRzP9TWEAZMmRZfFyU=
-X-Received: by 2002:a05:620a:408a:b0:7f3:caf0:8412 with SMTP id af79cd13be357-7f3caf08452mr1587635585a.46.1756428474365;
-        Thu, 28 Aug 2025 17:47:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEjCgf4If/yLnG9xLRPpSvaRiEUxzvfevF39cHGHA+NM0Oih06WQG6xkNf8xHsAsX5EmFe8lQ==
-X-Received: by 2002:a05:620a:408a:b0:7f3:caf0:8412 with SMTP id af79cd13be357-7f3caf08452mr1587627285a.46.1756428473789;
-        Thu, 28 Aug 2025 17:47:53 -0700 (PDT)
-Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7fc14754ee8sm80548485a.32.2025.08.28.17.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 17:47:53 -0700 (PDT)
-Date: Thu, 28 Aug 2025 20:47:47 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Yixun Lan <dlan@gentoo.org>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Alex Helms <alexander.helms.jy@renesas.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
-	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
-	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
- round_rate() to determine_rate()
-Message-ID: <aLD4s0sGEaQKD9PQ@x1>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
+        d=1e100.net; s=20230601; t=1756447142; x=1757051942;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a8nLSUsm88QMj2KXiJKv/xrkbZBm4Zb7nYR0CSmM3jI=;
+        b=RU5gkK0dRsuCJ9iYGS/UJnUqHMNSarDWAt5n7bp0szG6M+7ojoTeUK6Pe59D31jMU/
+         S4b21UHjGpCHFiua0iRiwq843GnRAJ4cJXfFaLEHrM+bew+1K1URO+kEe34G+3tIBkAM
+         hWk62NOHnoH9lf1GDv9jyQ0mUjNh7f8OTdYXpPvl0omjkdZOhS62pfY5igT3hIOzXLQc
+         ulGJAWhaY21wmgMqSL76pxvzRjumB5oSzXcWLakNnOtyNcRmJSNISRhfTecAyw0pKQbg
+         GBiJ9z1DgWGJ2PgDyKXshZCQcCuqbNZS6dCG2BmDftSusyJSNzZsTrM0xk1sVgGEP7x/
+         FLnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVDmyjuVi6NVkKVt3R8y/SE5D6f9w26n1EZnSvp4zvSpkVDP5oBLyKi0KiwJKzjN2GmXgU=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzn+8fD1OcyrGgL5O4c1qkMr3w4RzJlagSmFzY1bQbiuwANntwr
+	HcPQBuNwyGNGTiNajlvto28Pw4KejziiSvplDsyhs8pcHRAu3QoIvQR7pUOQT7Wxuv8=
+X-Gm-Gg: ASbGncvUm4CwHsHKlGSpIQm5leQW4qJXidfSU+9DQwjFuOlWKhM9KSuP7z9tPCpgU4S
+	yoVGVtsPF1L2WFvTqpeKHjpr3hcLPToVc7wxxUSfbpGDCudqTCccdSU5Jr9NSYz6VKYm+0/b+OL
+	dMEoix45/4XjbIZ6xtLsGhOLDzVwrrNabAVIlbzQdliLDV0p+HqSg71bVIA8LZ9RDlu9yJuY/Zi
+	O6YgkZ9nWbQ5Cb0XV3OQgtgEWZzEri/T2gziBBrjv2dGLbbTmzUIYsJAuNTy6mD8MuWsNk0YQ8o
+	8z8ttqMSE95N6x5JNuda1lBjSzAFDPZKsJDwNBU6XtnkcZIaVI8kD5M979VBW7rr99JzeKEJHNq
+	ULDFWqoTy5za5xum33sSp3nZzPSQQR8U09FJYKQyq0IRJeOlJ1uaxXg==
+X-Google-Smtp-Source: AGHT+IFJoBS+3mvK22Fgj6iGPN4/Io1Wtp2BF5CgdO2geYPYBqSJlkS1FUSI5IVAmVO8bCseZE6bPw==
+X-Received: by 2002:a17:907:3c95:b0:afe:ee31:4b93 with SMTP id a640c23a62f3a-aff0e28a1demr8112766b.0.1756447142009;
+        Thu, 28 Aug 2025 22:59:02 -0700 (PDT)
+Received: from [192.168.1.29] ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aff00a5e96esm99362866b.88.2025.08.28.22.59.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Aug 2025 22:59:01 -0700 (PDT)
+Message-ID: <4e51bbdc-744b-4a23-a695-a6c49d82e779@linaro.org>
+Date: Fri, 29 Aug 2025 07:58:59 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: RvzvGsQq--CWYHfQQ_QYkpTglpo8wuBfJHp7JL_T9Po_1756428475
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] arm64: dts: axiado: Add missing UART aliases
+To: Harshit Shah <hshah@axiado.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, soc@lists.linux.dev,
+ soc@kernel.org
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20250828-axiado-ax3000-missing-serial-alias-v3-1-393111f4bd9e@axiado.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ 2+47PN9NZAOyb771QoVr8A==
+In-Reply-To: <20250828-axiado-ax3000-missing-serial-alias-v3-1-393111f4bd9e@axiado.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 11, 2025 at 11:17:52AM -0400, Brian Masney wrote:
-> The round_rate() clk ops is deprecated in the clk framework in favor
-> of the determine_rate() clk ops, so let's go ahead and convert the
-> various clk drivers using the Coccinelle semantic patch posted below.
-> I did a few minor cosmetic cleanups of the code in a few cases.
+On 28/08/2025 20:27, Harshit Shah wrote:
+> Axiado AX3000 EVK has total of 4 UART ports. Add missing alias for uart0,
+> uart1, uart2.
+> 
+> This fixes the probe failures on the remaining UARTs.
+> 
+> Fixes: 1f7055779001 ("arm64: dts: axiado: Add initial support for AX3000 SoC and eval board")
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Harshit Shah <hshah@axiado.com>
+> ---
+> - Run "b4 trailes -u"
+> - Link to v3: https://lore.kernel.org/r/20250824-axiado-ax3000-missing-serial-alias-v3-1-5db4143bf189@axiado.com
 
-I posted a v2 patch series with 8 patches from this series that needed a
-v2 to:
+Please don't do this. It just generates unnecessary traffic. See my
+instructions you receive on your first submissions.... unless you want
+to send patches to soc@ (which looks added here) but then this is also
+wrong - we do not send patch by patch. Collect *all* the patches for the
+next merge window and send them around rc5 (rc6 being the latest).
 
-https://lore.kernel.org/linux-clk/20250828-clk-round-rate-v2-v1-0-b97ec8ba6cc4@redhat.com/T/
-
-Sorry I didn't put PATCH v2 in the subject. I noticed as soon as it
-started to send.
-
-In summary, it fixes one merge conflict introduced in linux-next, remove
-one case of &*, fix a comment, and removes unnecessary space after a
-cast on 5 patches.
-
-There are currently 7 patches from this series that's currently in
-linux-next (renesas, spacemit, samsung). 
-
-The relevant remaining 99 patches from this series waiting to be merged
-can be grabbed with this command:
-
-b4 am --add-link \
-	--cherry-pick 1-37,39-47,52-63,65-67,69-89,91-91,94-94,96-96,100-112,114-114 \
-	20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com
-
-There's no dependencies with the other series.
-
-Brian
-
+Best regards,
+Krzysztof
