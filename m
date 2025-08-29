@@ -1,38 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64135298CC4;
-	Fri, 29 Aug 2025 12:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF082D9ECB
+	for <soc@lists.linux.dev>; Fri, 29 Aug 2025 14:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756469910; cv=none; b=uOo9MGhwko4msxW6B0lp+r3+pyrQkRe1GJo7l+NhvJ3NkeFao603zSDbJzbeeO3PG+FT+02pqxfdrX5wuWXHk7UNqyOrKlD78XIsjMMCuTS5PJXuV73nDrXjfuk1a8SwrPvyTdM/PlOic3CEo/lzUPo5Vtw5w89fAdrvWvkZAcY=
+	t=1756476850; cv=none; b=WdgKtW0QJnROBbPrThjPo/AqH8MZxd/Rugd2S5B2S/J4sQRrph7u9Us3L3ZWa1Mz08pTf6RP8dOMt8k4AwmB+mot4GtBG6JY0Fzu9hxpDehNBdTGhPw0roasankS9lzvXtZ7QU6BR03/pMMpTac2Gio+QpnXcS9v9HOrxQIUPpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756469910; c=relaxed/simple;
-	bh=3T5a1M4CafKehoG6JBvA2rX4uqymqtaD5IqtUyLlklU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tW2EQnDSbzQvY9tdAewxLT560s7UDDmKnXWdNEeH5pE9YZoXk6MDayZQWcQt6fvO7GdZGVIdbvfYsJx/o9D0QP8+svLXzQLH/BEchERCRDnLmscGUIX2UPGdhMJc083sdgu5vcuykY+cbpy/Gf8S19IxwkLs4uWj7yURZBkdvlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B54C4CEF0;
-	Fri, 29 Aug 2025 12:18:28 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: soc@lists.linux.dev
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 4/4] Renesas DTS updates for v6.18
-Date: Fri, 29 Aug 2025 14:18:15 +0200
-Message-ID: <cover.1756468048.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1756468041.git.geert+renesas@glider.be>
-References: <cover.1756468041.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1756476850; c=relaxed/simple;
+	bh=6RaX0eX4LLNEfVwtvvY1OBTMq0stmpcckK4HXXbVylc=;
+	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=l44SrYlKQhrT8PFSzxZ4fMTL12MFC4k+wrhuBKZ+QckBv2D+bhVUgHGDj5xDkuhZSZVcgO2UQxnNfkjp7l0s7flBRtPRyXspWSO/NxLB2km4Rw4uw4kXmvklih31D9gAm8t3oJ1vzTF8vjXyJ/J4d1nh9CDYJKZxmLmqun/xX+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=ngE2T5kB; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="ngE2T5kB"
+Received: by smtp.kernel.org (Postfix)
+	id 6B4BAC4CEF7; Fri, 29 Aug 2025 14:14:10 +0000 (UTC)
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0BC57C4CEF0;
+	Fri, 29 Aug 2025 14:14:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0BC57C4CEF0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57TCLngL028927;
+	Fri, 29 Aug 2025 16:13:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=w2lS6fwJuQLoO12+V3h5B9
+	xobNeEFnA0eJP95u8I9Gc=; b=ngE2T5kB567+wnquMd+O8Pb3YkYxsmuc1HH0Xy
+	+tw9O7/pA+xz2vybSlCuFBAD9+29hFaqhkEZyAhPjRaoMIFMIvj21F2q5B9ZROG4
+	jQUIkz4wNWk4efNBSxQfdjgD2T1QmG+CJJYOP6uXuWbs43kLqIdbd5RE5mql0gFF
+	FY8fB60V2zz0+MH+WkAJVS2KtcBDAPl70nN/68OPh/olW2NH+Sv9ZGie8Eyp0eFH
+	PubupkBFErCjvsZriexXq2U2jV/qt0Qh4xdDj8K9dPtXq3n0EPYDH2rP6p+qrO7Q
+	ue2UO4J/FahycwHsGLlxDM6ybSf7hpFaZi46hElN/Wl2jwYw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 48qrkmy2a3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Aug 2025 16:13:53 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 6B38740047;
+	Fri, 29 Aug 2025 16:13:08 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EBC4E748615;
+	Fri, 29 Aug 2025 16:12:45 +0200 (CEST)
+Received: from [10.252.2.233] (10.252.2.233) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57; Fri, 29 Aug
+ 2025 16:12:45 +0200
+Message-ID: <e4703e99-e44e-41d2-b744-a12ed4cb6692@foss.st.com>
+Date: Fri, 29 Aug 2025 16:12:44 +0200
 Precedence: bulk
 X-Mailing-List: soc@lists.linux.dev
 List-Id: <soc.lists.linux.dev>
 List-Subscribe: <mailto:soc+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:soc+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>,
+        "arm@kernel.org" <arm@kernel.org>, <soc@kernel.org>
+CC: <patrice.chotard@foss.st.com>,
+        Raphael Gallais-Pou
+	<rgallaispou@gmail.com>,
+        Alain Volmat <avolmat@me.com>
+From: Patrice CHOTARD <patrice.chotard@foss.st.com>
+Subject: [GIT PULL] STi DT changes for v6.18 #1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-29_05,2025-08-28_01,2025-03-28_01
+
+Hi 
+
+Please consider this first round of STi DT changes for v6.18 cycle.
+
+Thanks
+Patrice
 
 The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
@@ -40,119 +88,38 @@ The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.18-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti.git tags/sti-dt-for-v6.18-round1
 
-for you to fetch changes up to 115b557b6f61ca279a4754b20b8686039fdb5234:
+for you to fetch changes up to dee546e1adefd75acf0d69ddc04dc9627d745986:
 
-  arm64: dts: renesas: Minor whitespace cleanup (2025-08-20 09:07:05 +0200)
-
-----------------------------------------------------------------
-Renesas DTS updates for v6.18
-
-  - Add initial support for the RZ/T2H (R9A09G077) and RZ/N2H
-    (R9A09G087) SoCs and their evaluation boards,
-  - Add SPI support for the RZ/V2H SoC,
-  - Add DMAC and I3C support for the RZ/G3E SoC,
-  - Add I3C support for the RZ/G3S SoCs,
-  - Miscellaneous fixes and improvements.
+  ARM: sti: drop B2120 board support (2025-08-18 15:49:33 +0200)
 
 ----------------------------------------------------------------
-Biju Das (1):
-      arm64: dts: renesas: rzg2lc-smarc: Disable CAN-FD channel0
+STi dt fixes:
+ - Drop STiH407/10-B2120 DT boards and bindings.
+ - Remove remaining STiH415/6 reference from STi machine.
+ - Fix phy-names value for stih407-family.dtsi.
 
-Fabrizio Castro (1):
-      arm64: dts: renesas: r9a09g057: Add RSPI nodes
+----------------------------------------------------------------
+Alain Volmat (1):
+      ARM: sti: removal of stih415/stih416 related entries
 
-Geert Uytterhoeven (5):
-      arm64: dts: renesas: r9a09g057h48-kakip: Fix misplaced article
-      ARM: dts: renesas: porter: Fix CAN pin group
-      arm64: dts: renesas: rcar-gen3: Increase CANFD clock rates
-      arm64: dts: renesas: rzg2: Increase CANFD clock rates
-      Merge tag 'renesas-r9a09g077-dt-binding-defs-tag3' into renesas-dts-for-v6.18
+Raphael Gallais-Pou (3):
+      ARM: dts: sti: rename SATA phy-names
+      dt-bindings: arm: sti: drop B2120 board support
+      ARM: sti: drop B2120 board support
 
-Krzysztof Kozlowski (1):
-      arm64: dts: renesas: Minor whitespace cleanup
-
-Lad Prabhakar (10):
-      arm64: dts: renesas: Add initial SoC DTSI for the RZ/N2H SoC
-      dt-bindings: clock: renesas,r9a09g077/87: Add USB_CLK clock ID
-      dt-bindings: pinctrl: renesas: Document RZ/T2H and RZ/N2H SoCs
-      arm64: dts: renesas: r9a09g077: Add I2C controller nodes
-      arm64: dts: renesas: r9a09g087: Add I2C controller nodes
-      arm64: dts: renesas: r9a09g077: Add SDHI nodes
-      arm64: dts: renesas: r9a09g087: Add SDHI nodes
-      arm64: dts: renesas: r9a09g077: Add DT nodes for SCI channels 1-5
-      arm64: dts: renesas: r9a09g087: Add DT nodes for SCI channels 1-5
-      arm64: dts: renesas: r9a09g077m44-rzt2h-evk: Enable I2C0 and I2C1 support
-
-Marek Vasut (5):
-      arm64: dts: renesas: sparrow-hawk: Describe generic SPI NOR support
-      ARM: dts: renesas: r7s72100: Add boot phase tags
-      arm64: dts: renesas: sparrow-hawk: Update thermal trip points
-      arm64: dts: renesas: sparrow-hawk: Invert microSD voltage selector on EVTB1
-      arm64: dts: renesas: sparrow-hawk: Set VDDQ18_25_AVB voltage on EVTB1
-
-Paul Barker (3):
-      arm64: dts: renesas: Refactor RZ/T2H EVK device tree
-      arm64: dts: renesas: Add DTSI for R9A09G087M44 variant of RZ/N2H
-      arm64: dts: renesas: Add initial support for the RZ/N2H EVK
-
-Quynh Nguyen (1):
-      arm64: dts: renesas: r9a08g045: Add I3C node
-
-Thierry Bultel (3):
-      arm64: dts: renesas: Add initial support for the Renesas RZ/T2H SoC
-      arm64: dts: renesas: Add initial support for the Renesas RZ/T2H eval board
-      arm64: dts: renesas: r9a09g077: Add pinctrl node
-
-Tommaso Merciai (2):
-      arm64: dts: renesas: r9a09g047: Add DMAC nodes
-      arm64: dts: renesas: r9a09g047: Add I3C node
-
- .../pinctrl/renesas,r9a09g077-pinctrl.yaml         | 172 ++++++++++++
- arch/arm/boot/dts/renesas/r7s72100-genmai.dts      |   4 +-
- arch/arm/boot/dts/renesas/r7s72100-gr-peach.dts    |   4 +-
- arch/arm/boot/dts/renesas/r7s72100-rskrza1.dts     |   3 +
- arch/arm/boot/dts/renesas/r7s72100.dtsi            |   3 +
- arch/arm/boot/dts/renesas/r8a7791-porter.dts       |   2 +-
- arch/arm64/boot/dts/renesas/Makefile               |   4 +
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77970.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   2 +-
- arch/arm64/boot/dts/renesas/r8a77990.dtsi          |   2 +-
- .../boot/dts/renesas/r8a779g3-sparrow-hawk.dts     | 149 ++++++++++-
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi         |  36 +++
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi         | 205 +++++++++++++++
- arch/arm64/boot/dts/renesas/r9a09g056.dtsi         |  16 +-
- .../boot/dts/renesas/r9a09g056n48-rzv2n-evk.dts    |   2 +-
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi         |  79 +++++-
- .../boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts    |   2 +-
- arch/arm64/boot/dts/renesas/r9a09g057h48-kakip.dts |   4 +-
- arch/arm64/boot/dts/renesas/r9a09g077.dtsi         | 292 +++++++++++++++++++++
- .../boot/dts/renesas/r9a09g077m44-rzt2h-evk.dts    |  52 ++++
- arch/arm64/boot/dts/renesas/r9a09g077m44.dtsi      |  13 +
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi         | 279 ++++++++++++++++++++
- .../boot/dts/renesas/r9a09g087m44-rzn2h-evk.dts    |  16 ++
- arch/arm64/boot/dts/renesas/r9a09g087m44.dtsi      |  13 +
- arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |   5 +-
- .../boot/dts/renesas/rzt2h-n2h-evk-common.dtsi     |  26 ++
- .../dt-bindings/clock/renesas,r9a09g077-cpg-mssr.h |   1 +
- .../dt-bindings/clock/renesas,r9a09g087-cpg-mssr.h |   1 +
- .../pinctrl/renesas,r9a09g077-pinctrl.h            |  22 ++
- 37 files changed, 1390 insertions(+), 37 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/renesas,r9a09g077-pinctrl.yaml
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g077.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g077m44-rzt2h-evk.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g077m44.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g087.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g087m44-rzn2h-evk.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g087m44.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzt2h-n2h-evk-common.dtsi
- create mode 100644 include/dt-bindings/pinctrl/renesas,r9a09g077-pinctrl.h
+ Documentation/devicetree/bindings/arm/sti.yaml |   4 ---
+ arch/arm/boot/dts/st/Makefile                  |   2 --
+ arch/arm/boot/dts/st/stih407-b2120.dts         |  27 --------------------
+ arch/arm/boot/dts/st/stih407-family.dtsi       |   4 +--
+ arch/arm/boot/dts/st/stih407.dtsi              | 145 ---------------------------------------------------------------------------------------------------------
+ arch/arm/boot/dts/st/stih410-b2120.dts         |  66 ------------------------------------------------
+ arch/arm/boot/dts/st/stihxxx-b2120.dtsi        | 206 ------------------------------------------------------------------------------------------------------------------------------------------------------
+ arch/arm/mach-sti/Kconfig                      |  20 +--------------
+ arch/arm/mach-sti/board-dt.c                   |   2 --
+ 9 files changed, 3 insertions(+), 473 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/st/stih407-b2120.dts
+ delete mode 100644 arch/arm/boot/dts/st/stih407.dtsi
+ delete mode 100644 arch/arm/boot/dts/st/stih410-b2120.dts
+ delete mode 100644 arch/arm/boot/dts/st/stihxxx-b2120.dtsi
